@@ -6,11 +6,12 @@
 //! one direct bounded sample and no prover-selectable counter or compact-
 //! frontier candidate loop.
 
+use crate::field::QM31;
 use crate::transcript::Transcript;
 use crate::v6_onefold::{
-    binary_frontier_nodes, validate_packed_m31, V6WireError, V6_C1_LIMBS_PER_QUERY,
+    binary_frontier_nodes, packed_qm31_at, validate_packed_m31, V6WireError, V6_C1_LIMBS_PER_QUERY,
     V6_C1_PACKED_BYTES_PER_QUERY, V6_C2_LIMBS_PER_QUERY, V6_C2_PACKED_BYTES_PER_QUERY,
-    V6_FIXED_QM31_VALUES, V6_WORK_NONCE_BYTES,
+    V6_FIXED_QM31_VALUES, V6_OOD_QM31_OFFSET, V6_WORK_NONCE_BYTES,
 };
 use crate::v7_onefold::{V7_COMPACT_DIGEST_BYTES, V7_COMPACT_PRIVATE_SALT_BYTES};
 
@@ -27,6 +28,9 @@ pub const V8_A100_FRONTIER_MAX_PER_TREE: usize = 296;
 /// component-wise vectors of 29 QM31 values each.
 pub const V8_A100_FIXED_QM31_VALUES: usize =
     V6_FIXED_QM31_VALUES - 2 + V8_A100_OOD_POINTS * V8_A100_COMPONENTS;
+pub const V8_A100_COMPONENT_VECTOR_QM31_OFFSET: usize = V6_OOD_QM31_OFFSET;
+pub const V8_A100_RELATION_QM31_OFFSET: usize =
+    V8_A100_COMPONENT_VECTOR_QM31_OFFSET + V8_A100_OOD_POINTS * V8_A100_COMPONENTS;
 pub const V8_A100_FIXED_M31_LIMBS: usize = 4 * V8_A100_FIXED_QM31_VALUES;
 pub const V8_A100_FIXED_PACKED_FIELD_BYTES: usize = (V8_A100_FIXED_M31_LIMBS * 31 + 7) / 8;
 pub const V8_A100_C1_BYTES_PER_QUERY: usize = V6_C1_PACKED_BYTES_PER_QUERY;
@@ -55,6 +59,8 @@ pub const V8_A100_PROFILE_BINDING: [u8; 32] = [
 // break compilation here instead of silently changing the research report.
 const _: () = assert!(V6_FIXED_QM31_VALUES == 641);
 const _: () = assert!(V8_A100_FIXED_QM31_VALUES == 697);
+const _: () = assert!(V8_A100_COMPONENT_VECTOR_QM31_OFFSET == 359);
+const _: () = assert!(V8_A100_RELATION_QM31_OFFSET == 417);
 const _: () = assert!(V8_A100_FIXED_PACKED_FIELD_BYTES == 10_804);
 const _: () = assert!(V8_A100_C1_BYTES_PER_QUERY == 403);
 const _: () = assert!(V8_A100_C2_BYTES_PER_QUERY == 186);
@@ -225,6 +231,24 @@ impl<'a> V8A100Wire<'a> {
             c2_packed: &self.query_section[c1_end..c2_end],
             salt: self.query_section[c2_end..end].try_into().ok()?,
         })
+    }
+
+    /// Decode the two component-wise pre-gamma OOD vectors from the exact
+    /// fixed-field positions which replace V6's two scalar OOD values.
+    /// Canonicality is established by `parse_for_schedule` before this view
+    /// can be used by an accepting verifier path.
+    pub fn component_ood_vectors(
+        &self,
+    ) -> Option<[[QM31; V8_A100_COMPONENTS]; V8_A100_OOD_POINTS]> {
+        let mut vectors = [[QM31::ZERO; V8_A100_COMPONENTS]; V8_A100_OOD_POINTS];
+        for (sample, vector) in vectors.iter_mut().enumerate() {
+            for (component, value) in vector.iter_mut().enumerate() {
+                let index =
+                    V8_A100_COMPONENT_VECTOR_QM31_OFFSET + sample * V8_A100_COMPONENTS + component;
+                *value = packed_qm31_at(self.fixed_fields_packed, index)?;
+            }
+        }
+        Some(vectors)
     }
 }
 
