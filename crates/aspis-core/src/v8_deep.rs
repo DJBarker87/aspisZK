@@ -461,6 +461,8 @@ pub fn v8_deep_quotients_optimized_wire(
 
 #[cfg(test)]
 mod tests {
+    extern crate std;
+
     use super::*;
     use crate::field::P;
     use crate::transcript::label;
@@ -739,5 +741,69 @@ mod tests {
     fn direct_sampler_constant_remains_bounded_and_counter_free() {
         assert_eq!(V8_A100_MAX_QUERY_DRAWS, 64);
         assert_eq!(V8_A100_PROFILE_BINDING[28..30], [0, 0]);
+    }
+
+    /// Host-only attribution aid.  These timings are not Solana CU evidence;
+    /// they make regressions between the independent reference and intended
+    /// one-pass/batch-inversion paths visible while an SBF build is pending.
+    #[test]
+    #[ignore = "explicit host profiling gate"]
+    fn host_profile_reference_and_optimized_deep_phases() {
+        use std::hint::black_box;
+        use std::time::Instant;
+
+        fn nanos_per(iterations: u32, mut operation: impl FnMut()) -> u128 {
+            let started = Instant::now();
+            for _ in 0..iterations {
+                operation();
+            }
+            started.elapsed().as_nanos() / u128::from(iterations)
+        }
+
+        let (body, challenges) = populated_wire();
+        let wire = V8A100Wire::parse_for_schedule(
+            &body,
+            V8_A100_MAX_FRONTIER_FIXTURE,
+            crate::v8_a100::V8_A100_FRONTIER_MAX_PER_TREE,
+        )
+        .unwrap();
+        let query = wire.query(0).unwrap();
+        let transcript = {
+            let mut transcript = Transcript::new(test_hash);
+            transcript.absorb(label::PROFILE, &V8_A100_PROFILE_BINDING);
+            transcript.absorb(label::STATEMENT, &[0x5a; 32]);
+            transcript
+        };
+
+        let prefix_ns = nanos_per(1_000, || {
+            black_box(
+                derive_v8_a100_ood_prefix(&transcript, &challenges.component_evaluations).unwrap(),
+            );
+        });
+        let prepare_ns = nanos_per(10_000, || {
+            black_box(prepare_deep(&challenges).unwrap());
+        });
+        let decode_ns = nanos_per(10_000, || {
+            black_box(decode_v8_query_components_optimized(query).unwrap());
+        });
+        let circle_points_ns = nanos_per(2_000, || {
+            black_box(query_circle_points(V8_A100_MAX_FRONTIER_FIXTURE).unwrap());
+        });
+        let optimized_ns = nanos_per(500, || {
+            black_box(
+                v8_deep_quotients_optimized_wire(&wire, V8_A100_MAX_FRONTIER_FIXTURE, &challenges)
+                    .unwrap(),
+            );
+        });
+        let reference_ns = nanos_per(20, || {
+            black_box(
+                v8_deep_quotients_reference_wire(&wire, V8_A100_MAX_FRONTIER_FIXTURE, &challenges)
+                    .unwrap(),
+            );
+        });
+
+        std::println!(
+            "{{\"kind\":\"host-only-not-cu\",\"ood_prefix_and_vector_absorption_ns\":{prefix_ns},\"gamma_power_and_two_ood_dots_ns\":{prepare_ns},\"one_query_one_pass_decode_ns\":{decode_ns},\"all_query_circle_points_ns\":{circle_points_ns},\"optimized_full_deep_ns\":{optimized_ns},\"reference_full_deep_ns\":{reference_ns},\"optimized_batch_inversions\":1,\"reference_inversions\":88}}"
+        );
     }
 }
