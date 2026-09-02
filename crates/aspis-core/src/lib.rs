@@ -58,6 +58,7 @@ pub mod v7_merkle208;
 pub mod v7_onefold;
 pub mod v7_profile;
 pub mod v7_staged_pair;
+pub mod v8_a100;
 pub mod verify;
 
 pub use params::{FoldPayload, MerkleMode, Profile, PROFILES};
