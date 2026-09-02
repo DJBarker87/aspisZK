@@ -214,6 +214,7 @@ import AspisFormal.V6RelationFold
 import AspisFormal.V6Width29CorrelatedAgreement
 import AspisFormal.V6FirstCompactSampler
 import AspisFormal.V6BinaryFrontier
+import AspisFormal.V8A100DirectSchedule
 import AspisFormal.V6CompactFrontierCertificate
 import AspisFormal.V6QueryBatchSoundness
 import AspisFormal.V6HidingFinalFactorization
