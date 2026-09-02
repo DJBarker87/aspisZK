@@ -217,6 +217,7 @@ import AspisFormal.V6BinaryFrontier
 import AspisFormal.V8A100DirectSchedule
 import AspisFormal.V8A100TwoPointDeep
 import AspisFormal.V8A100FixedTupleFingerprint
+import AspisFormal.K1.V8A100PreGammaTupleBinding
 import AspisFormal.V6CompactFrontierCertificate
 import AspisFormal.V6QueryBatchSoundness
 import AspisFormal.V6HidingFinalFactorization

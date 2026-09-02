@@ -31,6 +31,7 @@ namespace AspisV8A100FixedTupleFingerprint
 open Polynomial
 open AspisV5FriCircleEncoderDistance
 open AspisV5FriInitialCircleEncoderIdentity
+open AspisV6Width29CorrelatedAgreement
 open AspisV8A100TwoPointDeep
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7C1ConcreteProjectionBinding
@@ -213,6 +214,51 @@ theorem eq_of_two_component_vectors_of_not_collision
       rw [Finset.mem_filter]
       exact ⟨Finset.mem_univ _, finite1, secondEqual⟩
 
+/-! ## The exact post-binding gamma root count -/
+
+/-- Nonzero gammas for which two fixed component tuples produce the same
+1024-coefficient batched message. -/
+noncomputable def tupleBadGammaSet
+    (left right : Width29TupleK (K := K)) : Finset K :=
+  (Finset.univ.erase 0).filter fun gamma =>
+    width29BatchMessage left gamma = width29BatchMessage right gamma
+
+/-- Once the complete component tuple is fixed before gamma, an incorrect
+tuple can agree with the correct width-29 batch for at most 28 nonzero gamma
+values.  This is the desired degree-28 statement; it does not use the old
+adaptive correlated-curve cap. -/
+theorem tupleBadGammaSet_card_le_28
+    (left right : Width29TupleK (K := K)) (different : left ≠ right) :
+    (tupleBadGammaSet left right).card ≤ 28 := by
+  classical
+  have laneDifferent : ∃ lane, left lane ≠ right lane := by
+    simpa only [Function.ne_iff] using different
+  obtain ⟨lane, laneDifferent⟩ := laneDifferent
+  have rowDifferent : ∃ row, left lane row ≠ right lane row := by
+    simpa only [Function.ne_iff] using laneDifferent
+  obtain ⟨row, rowDifferent⟩ := rowDifferent
+  let values : Fin 29 → K := fun column => left column row - right column row
+  have valuesNonzero : values ≠ 0 := by
+    intro zero
+    have atLane := congrFun zero lane
+    apply rowDifferent
+    exact sub_eq_zero.mp atLane
+  have subset : tupleBadGammaSet left right ⊆
+      width29NonzeroCollisionSet values := by
+    intro gamma member
+    have source := (Finset.mem_filter.mp member)
+    have gammaNonzero : gamma ≠ 0 := by
+      simpa only [Finset.mem_erase, Finset.mem_univ, and_true] using source.1
+    have messageEqual := congrFun source.2 row
+    have batchZero : width29Batch values gamma = 0 := by
+      unfold values
+      rw [width29Batch_sub]
+      exact sub_eq_zero.mpr messageEqual
+    rw [width29NonzeroCollisionSet, Finset.mem_filter]
+    exact ⟨Finset.mem_erase.mpr ⟨gammaNonzero, Finset.mem_univ _⟩, batchZero⟩
+  exact (Finset.card_le_card subset).trans
+    (width29_nonzero_collision_card_le values valuesNonzero)
+
 end GenericExtension
 
 /-! ## Exact V7/V8 fixed-family specialization -/
@@ -278,6 +324,7 @@ theorem fixedWidth29_eq_of_two_component_vectors
 #print axioms tupleTwoPointCollisions_card_le
 #print axioms familyTwoPointCollisions_card_le
 #print axioms eq_of_two_component_vectors_of_not_collision
+#print axioms tupleBadGammaSet_card_le_28
 #print axioms fixedWidth29TwoPointCollisions_card_le_10485760000
 #print axioms fixedWidth29_eq_of_two_component_vectors
 
