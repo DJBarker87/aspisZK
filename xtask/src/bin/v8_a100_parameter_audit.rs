@@ -22,6 +22,25 @@ use serde_json::{json, Value};
 const DOMAIN_SIZE: usize = 1 << 18;
 const BAD_AGREEMENT_SET: usize = 9_557;
 const COMPONENTS: usize = 29;
+const P: u32 = 2_147_483_647;
+
+// This is a deliberately named research envelope, not a source theorem.  The
+// current exact V7 compiler leaves Q and R parameterised.  Q=2^36 covers the
+// three visible honest work spaces (2^35 + 2^31 + 2^34) with room for the
+// non-work transcript calls; R=259 is the smallest integer satisfying every
+// current `518 <= 2 * forkRequestCap` capstone premise.  The JSON keeps this
+// provenance explicit so these conditional figures cannot be mistaken for a
+// deployed resource certificate.
+const RESEARCH_Q1_SHA_CALL_CAP: usize = 1usize << 36;
+const RESEARCH_FORK_REQUEST_CAP: usize = 259;
+const FULL256_VERIFIER_CALL_CAP: usize = 1_511;
+const VISIBLE_HONEST_WORK: usize = (1usize << 35) + (1usize << 31) + (1usize << 34);
+const FIXED_K15_NUMERATOR: usize = 396_430;
+const GAMMA_DEGREE: usize = COMPONENTS - 1;
+const ONE_FOLD_NUMERATOR: usize = 3;
+const LATER_ALPHA_NUMERATOR: usize = 18;
+const TUPLE_LIST_CAP: usize = 100;
+const CLEARED_COMPONENT_DEGREE: usize = 1_024;
 
 #[derive(Clone)]
 struct Rational {
@@ -44,6 +63,10 @@ impl Rational {
             &self.numerator * &other.denominator + &other.numerator * &self.denominator,
             &self.denominator * &other.denominator,
         )
+    }
+
+    fn from_usize_ratio(numerator: usize, denominator: BigUint) -> Self {
+        Self::new(BigUint::from(numerator), denominator)
     }
 
     fn negative_log2(&self) -> f64 {
@@ -127,6 +150,72 @@ fn packed_m31_bytes(limbs: usize) -> usize {
     (31 * limbs + 7) / 8
 }
 
+fn research_compiler_caps() -> (usize, usize) {
+    let q = RESEARCH_Q1_SHA_CALL_CAP;
+    let r = RESEARCH_FORK_REQUEST_CAP;
+    let f = q + FULL256_VERIFIER_CALL_CAP + r * (q + FULL256_VERIFIER_CALL_CAP) + 2 * r;
+    let g = q + FULL256_VERIFIER_CALL_CAP + r * (2 * q + FULL256_VERIFIER_CALL_CAP);
+    (f, g)
+}
+
+fn full_raw_ledger(q: usize, digest_bytes: usize) -> Value {
+    let field = BigUint::from(P).pow(4);
+    let nonzero_field = &field - BigUint::one();
+    let secure_circle_parameters = &field - BigUint::from(P).pow(2);
+    let query = query_probability(q);
+    let algebraic_numerator =
+        ONE_FOLD_NUMERATOR + q + LATER_ALPHA_NUMERATOR + FIXED_K15_NUMERATOR + GAMMA_DEGREE;
+    let algebraic = Rational::from_usize_ratio(algebraic_numerator, nonzero_field);
+    let deep_numerator =
+        TUPLE_LIST_CAP * TUPLE_LIST_CAP * CLEARED_COMPONENT_DEGREE * CLEARED_COMPONENT_DEGREE;
+    let deep_denominator = &secure_circle_parameters * (&secure_circle_parameters - 1u8);
+    let deep = Rational::from_usize_ratio(deep_numerator, deep_denominator);
+
+    let (fresh_exposures, global_calls) = research_compiler_caps();
+    let k12_numerator =
+        BigUint::from(FULL256_VERIFIER_CALL_CAP * 2 * q) + choose(fresh_exposures, 2);
+    let k12 = Rational::new(k12_numerator, BigUint::one() << (8 * digest_bytes));
+    let compiler_numerator = BigUint::from(fresh_exposures)
+        + choose(fresh_exposures, 2)
+        + BigUint::from(fresh_exposures) * BigUint::from(global_calls);
+    let compiler = Rational::new(compiler_numerator, BigUint::one() << 256usize);
+    let total = query.add(&algebraic).add(&deep).add(&k12).add(&compiler);
+    let proves_100 = &total.numerator * (BigUint::one() << 100usize) <= total.denominator;
+    let proves_104 = &total.numerator * (BigUint::one() << 104usize) <= total.denominator;
+
+    json!({
+        "status": "conditional: exact arithmetic under the named research Q/R envelope; current source theorem leaves Q and R symbolic",
+        "research_resource_envelope": {
+            "q1_sha_call_cap": RESEARCH_Q1_SHA_CALL_CAP.to_string(),
+            "fork_request_cap": RESEARCH_FORK_REQUEST_CAP,
+            "full256_verifier_call_cap": FULL256_VERIFIER_CALL_CAP,
+            "visible_honest_work": VISIBLE_HONEST_WORK.to_string(),
+            "visible_honest_work_fits_q": VISIBLE_HONEST_WORK < RESEARCH_Q1_SHA_CALL_CAP,
+            "unified_fresh_exposures_F": fresh_exposures.to_string(),
+            "global_full256_calls_G": global_calls.to_string(),
+        },
+        "terms": {
+            "query_consistency": query.json(),
+            "algebraic_nonzero_qm31": {
+                "numerator_breakdown": {
+                    "one_fold": ONE_FOLD_NUMERATOR,
+                    "query_batch": q,
+                    "later_alpha": LATER_ALPHA_NUMERATOR,
+                    "fixed_k15": FIXED_K15_NUMERATOR,
+                    "gamma": GAMMA_DEGREE,
+                },
+                "total": algebraic.json(),
+            },
+            "two_point_tuple_collision": deep.json(),
+            "k12_merkle_digest": k12.json(),
+            "full256_compiler": compiler.json(),
+        },
+        "total": total.json(),
+        "proves_100_bit_arithmetic_inequality": proves_100,
+        "proves_104_bit_arithmetic_inequality": proves_104,
+    })
+}
+
 fn profile_size(q: usize, digest_bytes: usize, ood_points: usize) -> Value {
     let fixed_qm31 = fixed_qm31_values(ood_points);
     let fixed_bytes = packed_m31_bytes(4 * fixed_qm31);
@@ -140,7 +229,7 @@ fn profile_size(q: usize, digest_bytes: usize, ood_points: usize) -> Value {
     // This intentionally excludes K1.2 resource-dependent hash terms and the
     // not-yet-established two-point tuple-separation term.  It is the exact
     // optimistic algebraic subtotal under bad-gamma cardinality 28.
-    let p = BigUint::from(2_147_483_647u32);
+    let p = BigUint::from(P);
     let field_nonzero = p.pow(4) - BigUint::one();
     let algebraic_numerator = BigUint::from(3usize + q + 18usize + 396_430usize + 28usize);
     let optimistic = query_error.add(&Rational::new(algebraic_numerator, field_nonzero));
@@ -170,8 +259,13 @@ fn profile_size(q: usize, digest_bytes: usize, ood_points: usize) -> Value {
             + POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
         "query_consistency": query_error.json(),
         "optimistic_algebraic_subtotal_excluding_k12_and_deep": optimistic.json(),
-        "raw_security_status": "unclosed: excludes exact K1.2 resources and two-point candidate separation",
-        "hiding_status": "unclosed: existing six-mask probe covers only one frozen q16 schedule",
+        "conditional_complete_raw_ledger": full_raw_ledger(q, digest_bytes),
+        "raw_security_status": "arithmetic closed only under named research Q/R envelope; source resource instantiation and event composition remain open",
+        "mask_profile": {
+            "candidate": "unchanged production 26 M31 C1 columns plus 3 QM31 C2 columns",
+            "enlargement_bytes": 0,
+            "status": "concrete q22/two-OOD pair and pair-forest nonzero-minor witnesses; all-schedule/OOD surjectivity theorem remains open",
+        },
     })
 }
 
