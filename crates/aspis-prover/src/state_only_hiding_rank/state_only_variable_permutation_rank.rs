@@ -415,6 +415,7 @@ impl AtomicProfile21VariablePermutationP0Probe {
                 RowPublicMaps {
                     layer0_m31: self.layer0_rows[row].clone(),
                     terminal: core::array::from_fn(|point| eq_weight(&points[point], row)),
+                    pre_gamma_circle_ood: Vec::new(),
                     pcs_tail,
                 }
             })

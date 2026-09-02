@@ -353,6 +353,7 @@ fn compact_row_public_maps(
         rows.push(RowPublicMaps {
             layer0_m31,
             terminal: core::array::from_fn(|point| eq_weight(&points[point], row)),
+            pre_gamma_circle_ood: Vec::new(),
             pcs_tail: compact_row_pcs_tail_sparse(
                 encoder,
                 domain_log,

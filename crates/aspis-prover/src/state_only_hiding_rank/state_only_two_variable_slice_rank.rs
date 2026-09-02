@@ -401,6 +401,7 @@ fn physical_basis_public_maps(
     Ok(RowPublicMaps {
         layer0_m31,
         terminal: core::array::from_fn(|point| eq_weight_slice(&terminal_points[point], row)),
+        pre_gamma_circle_ood: Vec::new(),
         pcs_tail: two_variable_row_pcs_tail(
             encoder,
             domain_log,
@@ -507,6 +508,7 @@ fn dense_physical_basis_public_maps(
     Ok(RowPublicMaps {
         layer0_m31,
         terminal: core::array::from_fn(|point| eq_weight_slice(&terminal_points[point], row)),
+        pre_gamma_circle_ood: Vec::new(),
         pcs_tail,
     })
 }
@@ -610,6 +612,7 @@ fn two_variable_logical_maps(
         let mut base = RowPublicMaps {
             layer0_m31: vec![M31::ZERO; layer0],
             terminal: [QM31::ZERO; 3],
+            pre_gamma_circle_ood: Vec::new(),
             pcs_tail: vec![QM31::ZERO; pcs_tail],
         };
         let mut mask_rows: [Qm31RowPublicMaps; RESTRICTION_KERNEL_MASKS] =

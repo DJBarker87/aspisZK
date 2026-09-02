@@ -157,6 +157,7 @@ fn row_public_maps_with_tau(
         rows.push(RowPublicMaps {
             layer0_m31,
             terminal: core::array::from_fn(|point| eq_weight(&terminal_points[point], row)),
+            pre_gamma_circle_ood: Vec::new(),
             pcs_tail: row_pcs_tail_sparse_with_tau(
                 encoder,
                 domain_log,

@@ -265,6 +265,7 @@ fn affine_slice_physical_rows(
         rows.push(RowPublicMaps {
             layer0_m31,
             terminal: core::array::from_fn(|point| eq_weight_slice(&terminal_points[point], row)),
+            pre_gamma_circle_ood: Vec::new(),
             pcs_tail: affine_slice_row_pcs_tail(
                 encoder,
                 domain_log,
@@ -304,6 +305,12 @@ fn pair_combination_rows(
                         .mul_m31(pair[0])
                         .add(physical[row1].terminal[point].mul_m31(pair[1]))
                 }),
+                pre_gamma_circle_ood: physical[row0]
+                    .pre_gamma_circle_ood
+                    .iter()
+                    .zip(&physical[row1].pre_gamma_circle_ood)
+                    .map(|(&left, &right)| left.mul_m31(pair[0]).add(right.mul_m31(pair[1])))
+                    .collect(),
                 pcs_tail: physical[row0]
                     .pcs_tail
                     .iter()
