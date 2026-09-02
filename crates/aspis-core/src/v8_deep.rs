@@ -197,24 +197,44 @@ fn gamma_dot_reference(gamma: QM31, values: &[QM31; V8_A100_COMPONENTS]) -> QM31
 
 #[inline(always)]
 fn two_point_interpolant(
-    t: QM31,
-    parameters: [QM31; 2],
+    point: SecureCirclePoint,
+    points: [SecureCirclePoint; 2],
     values: [QM31; 2],
     inverse_difference: QM31,
+    use_x: bool,
 ) -> QM31 {
-    // I(t) = A*(t-t1)/(t0-t1) + B*(t-t0)/(t1-t0).
+    // I(P) is the affine circle function obtained from a separating
+    // coordinate h: A*(h-h1)/(h0-h1) + B*(h-h0)/(h1-h0).
+    let coordinate = if use_x { point.x } else { point.y };
+    let coordinates = if use_x {
+        [points[0].x, points[1].x]
+    } else {
+        [points[0].y, points[1].y]
+    };
     values[0]
-        .mul(t.sub(parameters[1]))
-        .sub(values[1].mul(t.sub(parameters[0])))
+        .mul(coordinate.sub(coordinates[1]))
+        .sub(values[1].mul(coordinate.sub(coordinates[0])))
         .mul(inverse_difference)
 }
 
 #[inline(always)]
-fn two_point_zerofier(t: QM31, parameters: [QM31; 2]) -> QM31 {
-    t.sub(parameters[0]).mul(t.sub(parameters[1]))
+fn two_point_chord_zerofier(point: SecureCirclePoint, points: [SecureCirclePoint; 2]) -> QM31 {
+    // The affine chord through z0,z1:
+    // det [[1,x,y],[1,x0,y0],[1,x1,y1]].  Restricted to the circle it has
+    // exactly those two roots.  This, rather than (t-t0)(t-t1), is the
+    // degree-one circle factor compatible with the existing fold basis.
+    let constant = points[0]
+        .x
+        .mul(points[1].y)
+        .sub(points[0].y.mul(points[1].x));
+    let x_coefficient = points[0].y.sub(points[1].y);
+    let y_coefficient = points[1].x.sub(points[0].x);
+    constant
+        .add(x_coefficient.mul(point.x))
+        .add(y_coefficient.mul(point.y))
 }
 
-fn validate_challenges(challenges: &V8A100TwoPointChallenges) -> Result<[QM31; 2], V8DeepError> {
+fn validate_challenges(challenges: &V8A100TwoPointChallenges) -> Result<(bool, QM31), V8DeepError> {
     if challenges.points[0] == challenges.points[1] {
         return Err(V8DeepError::DuplicateOodPoint);
     }
@@ -225,32 +245,38 @@ fn validate_challenges(challenges: &V8A100TwoPointChallenges) -> Result<[QM31; 2
     if parameters[0] == parameters[1] {
         return Err(V8DeepError::DuplicateOodPoint);
     }
-    Ok(parameters)
+    let use_x = challenges.points[0].x != challenges.points[1].x;
+    let difference = if use_x {
+        challenges.points[0].x.sub(challenges.points[1].x)
+    } else {
+        challenges.points[0].y.sub(challenges.points[1].y)
+    };
+    let inverse_difference = difference.try_inv().ok_or(V8DeepError::DuplicateOodPoint)?;
+    Ok((use_x, inverse_difference))
 }
 
-/// Literal per-opening quotient with independent gamma loops and inversion.
-pub fn v8_two_point_quotient_reference(
+/// Literal per-opening circle quotient with independent gamma loops and
+/// inversion.  The denominator is the affine chord through the two OOD
+/// points, not the product of their stereographic-parameter differences.
+pub fn v8_two_point_circle_quotient_reference(
     component_values: &[QM31; V8_A100_COMPONENTS],
-    query_parameter: QM31,
+    query_point: SecureCirclePoint,
     challenges: &V8A100TwoPointChallenges,
 ) -> Result<QM31, V8DeepError> {
-    let parameters = validate_challenges(challenges)?;
-    let inverse_difference = parameters[0]
-        .sub(parameters[1])
-        .try_inv()
-        .ok_or(V8DeepError::DuplicateOodPoint)?;
+    let (use_x, inverse_difference) = validate_challenges(challenges)?;
     let combined = gamma_dot_reference(challenges.gamma, component_values);
     let evaluations = [
         gamma_dot_reference(challenges.gamma, &challenges.component_evaluations[0]),
         gamma_dot_reference(challenges.gamma, &challenges.component_evaluations[1]),
     ];
     let numerator = combined.sub(two_point_interpolant(
-        query_parameter,
-        parameters,
+        query_point,
+        challenges.points,
         evaluations,
         inverse_difference,
+        use_x,
     ));
-    let inverse_zerofier = two_point_zerofier(query_parameter, parameters)
+    let inverse_zerofier = two_point_chord_zerofier(query_point, challenges.points)
         .try_inv()
         .ok_or(V8DeepError::ZeroDenominator)?;
     Ok(numerator.mul(inverse_zerofier))
@@ -259,17 +285,14 @@ pub fn v8_two_point_quotient_reference(
 #[derive(Clone)]
 struct PreparedDeep {
     powers: [QM31; V8_A100_COMPONENTS],
-    parameters: [QM31; 2],
+    points: [SecureCirclePoint; 2],
+    use_x: bool,
     inverse_difference: QM31,
     evaluations: [QM31; 2],
 }
 
 fn prepare_deep(challenges: &V8A100TwoPointChallenges) -> Result<PreparedDeep, V8DeepError> {
-    let parameters = validate_challenges(challenges)?;
-    let inverse_difference = parameters[0]
-        .sub(parameters[1])
-        .try_inv()
-        .ok_or(V8DeepError::DuplicateOodPoint)?;
+    let (use_x, inverse_difference) = validate_challenges(challenges)?;
     let powers = qm31_power_table(challenges.gamma);
     let evaluations = [
         qm31_dot(&powers, &challenges.component_evaluations[0]),
@@ -277,7 +300,8 @@ fn prepare_deep(challenges: &V8A100TwoPointChallenges) -> Result<PreparedDeep, V
     ];
     Ok(PreparedDeep {
         powers,
-        parameters,
+        points: challenges.points,
+        use_x,
         inverse_difference,
         evaluations,
     })
@@ -302,25 +326,26 @@ fn batch_inverse<const N: usize>(values: &[QM31; N]) -> Result<[QM31; N], V8Deep
     Ok(output)
 }
 
-fn base_circle_parameter(point: BaseCirclePoint) -> Result<QM31, V8DeepError> {
-    let x = embed_m31(point.x.0);
-    let y = embed_m31(point.y.0);
-    let inverse = QM31::ONE
-        .add(x)
-        .try_inv()
-        .ok_or(V8DeepError::CircleGeometry)?;
-    Ok(y.mul(inverse))
+fn embed_base_circle_point(point: BaseCirclePoint) -> SecureCirclePoint {
+    SecureCirclePoint {
+        x: embed_m31(point.x.0),
+        y: embed_m31(point.y.0),
+    }
 }
 
-fn query_parameters(
+fn query_circle_points(
     queries: [u32; V8_A100_QUERY_COUNT],
-) -> Result<[[QM31; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT], V8DeepError> {
+) -> Result<[[SecureCirclePoint; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT], V8DeepError> {
     let slot_zero = selected_circle_fiber_points_shared(V8_A100_CIRCLE_DOMAIN_LOG_SIZE, &queries)
         .map_err(|_| V8DeepError::CircleGeometry)?;
     if slot_zero.len() != V8_A100_QUERY_COUNT {
         return Err(V8DeepError::CircleGeometry);
     }
-    let mut parameters = [[QM31::ZERO; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
+    let zero = SecureCirclePoint {
+        x: QM31::ZERO,
+        y: QM31::ZERO,
+    };
+    let mut points = [[zero; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
     for (query, point) in slot_zero.into_iter().enumerate() {
         let slots = [
             point,
@@ -338,10 +363,10 @@ fn query_parameters(
             },
         ];
         for (slot, point) in slots.into_iter().enumerate() {
-            parameters[query][slot] = base_circle_parameter(point)?;
+            points[query][slot] = embed_base_circle_point(point);
         }
     }
-    Ok(parameters)
+    Ok(points)
 }
 
 /// Slow end-to-end wire reference: random-access component decoding, repeated
@@ -354,7 +379,7 @@ pub fn v8_deep_quotients_reference_wire(
     if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
         return Err(V8DeepError::ComponentVectorMismatch);
     }
-    let parameters = query_parameters(queries)?;
+    let points = query_circle_points(queries)?;
     let mut output = [[QM31::ZERO; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
     for query in 0..V8_A100_QUERY_COUNT {
         let record = wire
@@ -362,9 +387,9 @@ pub fn v8_deep_quotients_reference_wire(
             .ok_or(V8DeepError::Wire(V6WireError::WrongLength))?;
         let components = decode_v8_query_components_reference(record)?;
         for slot in 0..V8_A100_FIBRE_SLOTS {
-            output[query][slot] = v8_two_point_quotient_reference(
+            output[query][slot] = v8_two_point_circle_quotient_reference(
                 &components[slot],
-                parameters[query][slot],
+                points[query][slot],
                 challenges,
             )?;
         }
@@ -384,7 +409,7 @@ pub fn v8_deep_quotients_optimized_wire(
         return Err(V8DeepError::ComponentVectorMismatch);
     }
     let mut prepared = prepare_deep(challenges)?;
-    let parameters = query_parameters(queries)?;
+    let points = query_circle_points(queries)?;
     let mut numerators = [[QM31::ZERO; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
     let mut denominators = [QM31::ZERO; V8_A100_DEEP_DENOMINATORS];
 
@@ -410,15 +435,16 @@ pub fn v8_deep_quotients_optimized_wire(
             } else {
                 qm31_dot(&prepared.powers, &components[slot])
             };
-            let parameter = parameters[query][slot];
+            let point = points[query][slot];
             numerators[query][slot] = combined.sub(two_point_interpolant(
-                parameter,
-                prepared.parameters,
+                point,
+                prepared.points,
                 prepared.evaluations,
                 prepared.inverse_difference,
+                prepared.use_x,
             ));
             denominators[query * V8_A100_FIBRE_SLOTS + slot] =
-                two_point_zerofier(parameter, prepared.parameters);
+                two_point_chord_zerofier(point, prepared.points);
         }
     }
 
@@ -571,7 +597,11 @@ mod tests {
         let mut duplicate = valid;
         duplicate.points[1] = duplicate.points[0];
         assert_eq!(
-            v8_two_point_quotient_reference(&[QM31::ZERO; V8_A100_COMPONENTS], q(999), &duplicate),
+            v8_two_point_circle_quotient_reference(
+                &[QM31::ZERO; V8_A100_COMPONENTS],
+                secure_ood_circle_point_from_parameter(q(999)).unwrap(),
+                &duplicate,
+            ),
             Err(V8DeepError::DuplicateOodPoint)
         );
 
@@ -583,9 +613,12 @@ mod tests {
             recover_secure_circle_parameter(in_domain),
             Err(V8DeepError::InvalidOodPoint)
         );
-        let parameter0 = recover_secure_circle_parameter(valid.points[0]).unwrap();
         assert_eq!(
-            v8_two_point_quotient_reference(&[QM31::ZERO; V8_A100_COMPONENTS], parameter0, &valid),
+            v8_two_point_circle_quotient_reference(
+                &[QM31::ZERO; V8_A100_COMPONENTS],
+                valid.points[0],
+                &valid,
+            ),
             Err(V8DeepError::ZeroDenominator)
         );
     }
@@ -612,21 +645,22 @@ mod tests {
         for case in 1..=128u32 {
             let components: [QM31; V8_A100_COMPONENTS] =
                 core::array::from_fn(|index| q(case * 10_003 + index as u32 * 211));
-            let parameter = q(50_000 + case * 19);
-            if two_point_zerofier(parameter, prepared.parameters) == QM31::ZERO {
+            let point = secure_ood_circle_point_from_parameter(q(50_000 + case * 19)).unwrap();
+            if two_point_chord_zerofier(point, prepared.points) == QM31::ZERO {
                 continue;
             }
             let expected =
-                v8_two_point_quotient_reference(&components, parameter, &challenges).unwrap();
+                v8_two_point_circle_quotient_reference(&components, point, &challenges).unwrap();
             let combined = qm31_dot(&prepared.powers, &components);
             let numerator = combined.sub(two_point_interpolant(
-                parameter,
-                prepared.parameters,
+                point,
+                prepared.points,
                 prepared.evaluations,
                 prepared.inverse_difference,
+                prepared.use_x,
             ));
             let actual = numerator.mul(
-                two_point_zerofier(parameter, prepared.parameters)
+                two_point_chord_zerofier(point, prepared.points)
                     .try_inv()
                     .unwrap(),
             );

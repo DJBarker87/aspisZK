@@ -140,6 +140,80 @@ def twoPointDeepQuotient
   (received t - twoPointInterpolant t0 t1 a b t) /
     twoPointZerofier t0 t1 t
 
+/-! ## Correct circle chord factor
+
+The parameter product above is useful for collision counting, but it is not
+itself a degree-one function in the circle coordinate ring.  The virtual
+oracle consumed by circle FRI must divide by the affine chord through the two
+OOD points.  On the stereographic chart the chord equals the parameter
+product times a nonconstant `1 / (1+t^2)` factor; omitting that factor does
+not establish compatibility with the deployed circle fold basis. -/
+
+def circleChordZerofier (t0 t1 t : K) : K :=
+  rationalCircleX t0 * rationalCircleY t1 -
+      rationalCircleY t0 * rationalCircleX t1 +
+    (rationalCircleY t0 - rationalCircleY t1) * rationalCircleX t +
+    (rationalCircleX t1 - rationalCircleX t0) * rationalCircleY t
+
+def affineCoordinateInterpolant (h0 h1 a b h : K) : K :=
+  a + (b - a) * (h - h0) / (h1 - h0)
+
+def affineChordDeepQuotient
+    (received h0 h1 a b h chord : K) : K :=
+  (received - affineCoordinateInterpolant h0 h1 a b h) / chord
+
+theorem affineCoordinateInterpolant_at_first
+    (h0 h1 a b : K) :
+    affineCoordinateInterpolant h0 h1 a b h0 = a := by
+  simp [affineCoordinateInterpolant]
+
+theorem affineCoordinateInterpolant_at_second
+    (h0 h1 a b : K) (distinct : h0 ≠ h1) :
+    affineCoordinateInterpolant h0 h1 a b h1 = b := by
+  have denominator : h1 - h0 ≠ 0 := sub_ne_zero.mpr distinct.symm
+  unfold affineCoordinateInterpolant
+  field_simp [denominator]
+  ring
+
+/-- Exact chart identity for the chord used by the corrected Rust prototype.
+It exposes the nonconstant denominator that the first parameter-product
+prototype omitted. -/
+theorem circleChordZerofier_rational_identity [NeZero (2 : K)]
+    (t0 t1 t : K)
+    (finite0 : circleDenominator t0 ≠ 0)
+    (finite1 : circleDenominator t1 ≠ 0)
+    (finite : circleDenominator t ≠ 0) :
+    circleChordZerofier t0 t1 t =
+      4 * (t1 - t0) * (t - t0) * (t - t1) /
+        (circleDenominator t0 * circleDenominator t1 *
+          circleDenominator t) := by
+  unfold circleChordZerofier rationalCircleX rationalCircleY
+  field_simp [finite0, finite1, finite]
+  simp only [circleDenominator]
+  ring
+
+theorem circleChordZerofier_ne_zero [NeZero (2 : K)]
+    (t0 t1 t : K)
+    (finite0 : circleDenominator t0 ≠ 0)
+    (finite1 : circleDenominator t1 ≠ 0)
+    (finite : circleDenominator t ≠ 0)
+    (distinct : t0 ≠ t1)
+    (notFirst : t ≠ t0) (notSecond : t ≠ t1) :
+    circleChordZerofier t0 t1 t ≠ 0 := by
+  rw [circleChordZerofier_rational_identity t0 t1 t finite0 finite1 finite]
+  have twoNe : (2 : K) ≠ 0 := NeZero.ne 2
+  have fourEq : (4 : K) = 2 * 2 := by norm_num
+  have fourNe : (4 : K) ≠ 0 := by
+    rw [fourEq]
+    exact mul_ne_zero twoNe twoNe
+  exact div_ne_zero
+    (mul_ne_zero
+      (mul_ne_zero
+        (mul_ne_zero fourNe (sub_ne_zero.mpr distinct.symm))
+        (sub_ne_zero.mpr notFirst))
+      (sub_ne_zero.mpr notSecond))
+    (mul_ne_zero (mul_ne_zero finite0 finite1) finite)
+
 /-! ## Actual 1024-coefficient circle messages and width-29 batching -/
 
 noncomputable def initialCircleValue (message : Fin 1024 → K) (t : K) : K :=
@@ -355,6 +429,60 @@ theorem twoPointInterpolant_width29
       funext lane
       ring
 
+theorem affineCoordinateInterpolant_width29
+    (h0 h1 : K)
+    (a b : Fin 29 → K) (gamma h : K) :
+    affineCoordinateInterpolant h0 h1 (width29Batch a gamma)
+        (width29Batch b gamma) h =
+      width29Batch
+        (fun lane => affineCoordinateInterpolant h0 h1 (a lane) (b lane) h)
+        gamma := by
+  unfold affineCoordinateInterpolant
+  calc
+    width29Batch a gamma +
+        (width29Batch b gamma - width29Batch a gamma) * (h - h0) /
+          (h1 - h0) =
+      width29Batch a gamma +
+        width29Batch (fun lane => b lane - a lane) gamma *
+          ((h - h0) / (h1 - h0)) := by
+      rw [width29Batch_sub]
+      ring
+    _ = width29Batch a gamma +
+        width29Batch
+          (fun lane => (b lane - a lane) * ((h - h0) / (h1 - h0)))
+          gamma := by
+      rw [width29Batch_scale]
+    _ = width29Batch
+        (fun lane => a lane +
+          (b lane - a lane) * ((h - h0) / (h1 - h0))) gamma := by
+      rw [width29Batch_add]
+    _ = width29Batch
+        (fun lane => a lane + (b lane - a lane) * (h - h0) /
+          (h1 - h0)) gamma := by
+      congr 1
+      funext lane
+      ring
+
+/-- Batching commutes with the corrected affine-chord quotient.  The chord is
+common to all 29 components, so an authenticated component opening plus the
+two pre-gamma evaluation vectors determines the virtual quotient opening. -/
+theorem width29Batch_affineChordDeepQuotient
+    (received a b : Fin 29 → K)
+    (h0 h1 gamma h chord : K) (chordNonzero : chord ≠ 0) :
+    affineChordDeepQuotient (width29Batch received gamma) h0 h1
+        (width29Batch a gamma) (width29Batch b gamma) h chord =
+      width29Batch
+        (fun lane => affineChordDeepQuotient (received lane)
+          h0 h1 (a lane) (b lane) h chord)
+        gamma := by
+  unfold affineChordDeepQuotient
+  rw [affineCoordinateInterpolant_width29 h0 h1 a b gamma h]
+  unfold width29Batch
+  rw [← Finset.sum_sub_distrib, Finset.sum_div]
+  apply Finset.sum_congr rfl
+  intro lane _
+  field_simp [chordNonzero]
+
 /-- Batching and the complete two-point quotient commute.  Consequently the
 verifier can derive the quotient at an authenticated opening from the same
 29 opened component values and the two public component-evaluation vectors;
@@ -460,6 +588,12 @@ theorem polynomialTwoPointQuotient_degree_drop
 #print axioms twoPointInterpolant_at_first
 #print axioms twoPointInterpolant_at_second
 #print axioms twoPointZerofier_eq_zero_iff
+#print axioms affineCoordinateInterpolant_at_first
+#print axioms affineCoordinateInterpolant_at_second
+#print axioms circleChordZerofier_rational_identity
+#print axioms circleChordZerofier_ne_zero
+#print axioms affineCoordinateInterpolant_width29
+#print axioms width29Batch_affineChordDeepQuotient
 #print axioms initialCircleValue_width29BatchMessage
 #print axioms circleNumerator_eval_initialCircleValue
 #print axioms width29Batch_twoPointDeepQuotient
