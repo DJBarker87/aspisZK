@@ -18,9 +18,9 @@ const LITESVM_VERSION: &str = "0.16.0";
 const AGAVE_RUNTIME_VERSION: &str = "4.2.1";
 const COMPUTE_UNIT_LIMIT: u32 = 1_400_000;
 const V8_MAX_BODY_BYTES: usize = 39_934;
-const EXPECTED_ARTIFACT_BYTES: usize = 182_008;
+const EXPECTED_ARTIFACT_BYTES: usize = 190_432;
 const EXPECTED_ARTIFACT_SHA256: &str =
-    "6dd166e8d57018c6204edbacd73fdb140ebb30b847ad114249f1599913476e0a";
+    "b0ad304444c678036437d86205806b21b8b4deff48189243429ae7fd66ac8db7";
 const VERIFIER_ID: &str = "7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue";
 
 fn sha256_hex(bytes: &[u8]) -> String {
@@ -162,6 +162,14 @@ fn main() -> Result<()> {
         1,
         "pointwise_88_inversions",
     )?;
+    let canonical_parse = run_mode(
+        &mut svm,
+        &payer,
+        program_id,
+        proof,
+        2,
+        "canonical_parse_only",
+    )?;
     if heap_batched["checksum_log"] != pointwise["checksum_log"] {
         bail!("equivalent implementations returned different checksums");
     }
@@ -180,7 +188,7 @@ fn main() -> Result<()> {
             "bytes": artifact.len(),
             "sha256": artifact_sha256,
         },
-        "runs": [heap_batched, pointwise],
+        "runs": [heap_batched, pointwise, canonical_parse],
         "assertions": {
             "both_transactions_accepted": true,
             "checksums_equal": true,
