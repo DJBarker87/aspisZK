@@ -1,0 +1,102 @@
+{
+  "schema": "aspis.v8-a100.hiding-galois-counterexample.v1",
+  "observed_date": "2026-09-07",
+  "status": "ambient-surjectivity conjecture refuted; exact hiding remains open on the legal image",
+  "classification": {
+    "established": "The currently accepted distinct secure Frobenius-conjugate OOD pair makes every M31-component two-point OOD view a four-dimensional Frobenius graph, so the existing raw-C1 ambient rank target 108 is unattainable and the measured rank is 104.",
+    "not_established": "This is not a zero-knowledge counterexample: the honest witness view and mask view obey the same Frobenius relation. Exact hiding requires image containment on the legal same-statement witness-difference image, not surjectivity onto the ambient serialized-coordinate product."
+  },
+  "source_revisions": {
+    "image_criterion_and_pair_witness": "0276264f514c01ac293e3db1df3d1698e5a551a2",
+    "pair_forest_extension": "cf787f7f77a30dfc112418509a804717868ac4f4"
+  },
+  "frobenius_orbit": {
+    "base_field_prime_P": "2147483647",
+    "secure_parameter_support_size_P4_minus_P2": "21267647892944572732387174255555510272",
+    "conditional_second_draw_support_after_distinctness": "21267647892944572732387174255555510271",
+    "other_nontrivial_frobenius_conjugates": 3,
+    "exact_conditional_probability": "3/21267647892944572732387174255555510271",
+    "negative_log2_probability": 122.41503749659161,
+    "conditioning": "Given one uniformly sampled secure QM31 parameter, the second accepted distinct parameter is uniform on the remaining P^4-P^2-1 secure parameters. Exactly its three other Frobenius-orbit elements produce a nontrivial conjugate pair. The excluded CM31 subfield already contains the singular +/-i roots rejected by the circle parameter map.",
+    "consequence": "The bad pair is rare but legal. A universal exact-hiding theorem must cover it, or the sampler must add an explicitly analysed orbit rejection rule."
+  },
+  "source_level_obstruction": {
+    "row_storage": "crates/aspis-prover/src/state_only_hiding_rank.rs:1766 stores pre_gamma_circle_ood as ambient QM31 coordinates.",
+    "coordinate_expansion": "crates/aspis-prover/src/state_only_hiding_rank.rs:3590-3608 c1_raw_difference expands every OOD value into four independent M31 coordinates.",
+    "ambient_target": "crates/aspis-prover/src/state_only_hiding_rank.rs:5534-5536 sets c1_raw_m31 = layer0_m31 + 12 + 4*pre_gamma_circle_ood, hence 108 for q22 and two OOD values.",
+    "premature_failure": "crates/aspis-prover/src/state_only_hiding_rank.rs:5689 returns RawC1Rank before the later mask/source containment calculation whenever CarryEchelon rank is not the ambient target.",
+    "missing_model": "The source harness constructs mask-column images and ambient rank targets but no linear map for the legal same-statement witness-difference image and no quotient by deterministic OOD relations. Therefore it cannot distinguish leakage from redundant public coordinates."
+  },
+  "rank_counterexamples": [
+    {
+      "layout": "PoolPairV1",
+      "command": "/usr/bin/time -l cargo test --locked --release -p aspis-prover --test v8_hiding_galois_rank v8_pair_ambient_rank_rejects_legal_frobenius_pair -- --exact --ignored --nocapture",
+      "exit_status": 0,
+      "wall_seconds_including_cached_or_incremental_compilation": 21.41,
+      "test_seconds": 0.18,
+      "maximum_resident_set_bytes": 553762816,
+      "swap_outs": 0,
+      "result": "RawC1Rank { column: 0, got: 104, want: 108 }"
+    },
+    {
+      "layout": "PoolPairForestV1",
+      "command": "/usr/bin/time -l cargo test --locked --release -p aspis-prover --test v8_hiding_galois_rank v8_pair_forest_ambient_rank_rejects_legal_frobenius_pair -- --exact --ignored --nocapture",
+      "exit_status": 0,
+      "wall_seconds_including_cached_or_incremental_compilation": 19.35,
+      "test_seconds": 0.18,
+      "maximum_resident_set_bytes": 606928896,
+      "swap_outs": 0,
+      "result": "Pool pair-forest raw-C1 recovery column=0 start=104 rows=[]; RawC1Rank { column: 0, got: 104, want: 108 }"
+    }
+  ],
+  "core_evaluator_check": {
+    "command": "/usr/bin/time -l cargo test --locked -p aspis-core --test v8_hiding_galois -- --nocapture",
+    "exit_status": 0,
+    "wall_seconds_including_compilation": 3.09,
+    "test_seconds": 0.01,
+    "maximum_resident_set_bytes": 363298816,
+    "swap_outs": 0,
+    "result": "The source circle evaluator commutes with P-power Frobenius for all 26 C1 component evaluators at the explicit secure distinct conjugate pair."
+  },
+  "lean_evidence": {
+    "source": "AspisFormal/AspisFormal/V8A100HidingImageCriterion.lean",
+    "command": "env LEAN_PATH=\"$(cd /Users/dominic/ZK/AspisFormal && lake env printenv LEAN_PATH)\" /usr/bin/time -l /Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -o /tmp/V8A100HidingImageCriterion.olean AspisFormal/AspisFormal/V8A100HidingImageCriterion.lean",
+    "exit_status": 0,
+    "wall_seconds": 31.32,
+    "maximum_resident_set_bytes": 4877451264,
+    "peak_footprint_bytes": 874327920,
+    "swap_outs": 0,
+    "proved": [
+      "exists_mask_translation",
+      "affine_view_pmf_eq_of_image_containment",
+      "v8_hiding_of_image_obligation",
+      "image_containment_postcomp",
+      "conjugatePairView_not_surjective",
+      "conjugatePairView_hides_its_legal_image"
+    ],
+    "print_axioms": {
+      "affine_view_pmf_eq_of_image_containment": ["propext", "Classical.choice", "Quot.sound"],
+      "v8_hiding_of_image_obligation": ["propext", "Classical.choice", "Quot.sound"],
+      "image_containment_postcomp": ["propext", "Classical.choice", "Quot.sound"],
+      "conjugatePairView_not_surjective": ["propext", "Classical.choice", "Quot.sound"],
+      "conjugatePairView_hides_its_legal_image": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    "forbidden_placeholders": "No sorry, admit, new axiom, opaque unproved constant, or unsafe declaration."
+  },
+  "precise_remaining_theorem": {
+    "required_definitions": [
+      "LegalSameStatementWitnessDifference layout schedule: the M31-linear subspace of physical witness differences satisfying the selected pair or pair-forest statement and relation constraints.",
+      "completeSameStatementWitnessView layout schedule: LegalSameStatementWitnessDifference layout schedule ->_M31 CompleteV8PublicView schedule.",
+      "completeMaskView layout schedule: CompleteMaskSpace layout ->_M31 CompleteV8PublicView schedule."
+    ],
+    "signature": "theorem v8_pool_complete_hiding_image_containment (layout : RankLayout) (hLayout : layout = RankLayout.PoolPairV1 \\/ layout = RankLayout.PoolPairForestV1) (schedule : StateOnlyTranscriptScheduleResult) (hLegal : ValidV8A100Schedule schedule) : LinearMap.range (completeSameStatementWitnessView layout schedule) <= LinearMap.range (completeMaskView layout schedule)",
+    "minimum_source_connected_proof_path": [
+      "Replace each per-C1 requirement raw.rank = 108 with containment of the physical legal witness image in the relation-free semantic mask image; for a conjugate pair both have rank 104 and the same Frobenius graph.",
+      "Prove that the H generator cancels the remaining root-message residual after the per-C1 containments.",
+      "Reuse the mask-only/G argument for the masked-sumcheck kernel, but state it as image containment rather than ambient rank.",
+      "Apply image_containment_postcomp to folds, final disclosures, duplicate/equality cases, and serialization.",
+      "Instantiate v8_hiding_of_image_obligation for both PoolPairV1 and PoolPairForestV1 and audit its axioms."
+    ],
+    "alternative_sampler_change": "Rejecting all nontrivial Frobenius-orbit pairs would remove this particular ambient-rank witness, but would add a transcript rejection event and does not establish universal ambient independence: other legal evaluation-functional coincidences must still be covered. Legal-image containment is the robust release theorem."
+  }
+}
