@@ -1,5 +1,11 @@
 # Decision at the investigated revisions: no-go for a certified V8
 
+Subsequent review: [coverage-review.md](coverage-review.md) adds the q23
+bounded-family control, quintic q22 margin comparison, a proved relaxed
+joint-family theorem and newer isolated SBF evidence. The no-go on a complete
+100-bit/CU-parity claim remains; historical frame failures below are superseded
+for the tested kernels, not for a complete V8 entrypoint.
+
 2026-09-07. Own source base `6f7edda9d9f64dee2fc7e7f852c85ac350c237ac`;
 the experiments accompanying this document are additional research-only source.
 Separate V8 branch audited through `ec74d86f114b53715fa3691aac87763fe72e4e26`.
