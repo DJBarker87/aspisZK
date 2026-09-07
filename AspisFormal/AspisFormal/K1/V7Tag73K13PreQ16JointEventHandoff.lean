@@ -30,6 +30,7 @@ open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
 open AspisK1.V7Tag73ExactFixedK13K14Classifier
+open AspisK1.V7Tag73ExactConcreteK13K14Events
 open AspisK1.V7Tag73ExactFixedQ16JointEventHandoff
 open AspisK1.V7Tag73ExactFixedQ16VerifierAnchorInvariant
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
@@ -39,6 +40,7 @@ open AspisK1.V7Tag73FinalWorkDigestProbability
 open AspisK1.V7Tag73K13PreQ16MerkleWordSource
 open AspisK1.V7Tag73K13PreQ16QueryHandoff
 open AspisK1.V7Tag73K13PreQ16TargetProbability
+open AspisK1.V7Tag73K13PreQ16ViewAgreement
 open AspisK1.V7Tag73OperationalQ16ForestHandoff
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73Q16FirstCompactUniformity
@@ -50,10 +52,15 @@ open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7C1ConcreteProjectionBinding
 open AspisPool.V7C1SubfieldRecovery
+open AspisPool.V7CoherentTraceExtraction
+open AspisPool.V7ExtractedLaneWords
 open AspisPool.V7MerkleQueryGrammar
+open AspisPool.V7MerkleQueryExtractor
 open AspisV5ComponentCQM31TowerExact
+open AspisV5ComponentCConcreteFoldLinearity
 open AspisV5WithoutReplacementQuerySoundness
 open AspisV6OneFoldCandidateExtraction
+open AspisV6QueryBatchSoundness
 
 noncomputable section
 
@@ -329,6 +336,7 @@ structure ExactPreQ16K13StageCertificate
   words : AspisPool.V7MerkleQueryExtractor.ExtractedWords
   wordsExact : words =
     preQ16PrefixWords anchor.prior (exactK12Roots input)
+  projections : disclosuresAreProjections words (exactK12Openings input)
   parsed : ParsedK13Certificate decoder words (exactK13ParsedProof input)
 
 /-- The corrected one-fold branch retains the same complete chronological
@@ -438,9 +446,18 @@ theorem accepted_input_has_preQ16_stage_certificate_or_error
         (.machineFresh pivotActor pivotInput pivotAnswer) rootExact accepts with
     classified | lateOrCollision
   · rcases classified with certificate | queryOrFold
-    · exact Or.inl ⟨anchor,
-        preQ16PrefixWords prior (exactK12Roots input), rfl,
-        Classical.choice certificate⟩
+    · rcases exact_accepted_openings_yield_preQ16_projections_or_counted_failure
+          input prior later
+            (.machineFresh pivotActor pivotInput pivotAnswer) rootExact
+            k12.openingsAccepted k12.suppliedCovered with
+        projections | late | collision
+      · exact Or.inl ⟨anchor,
+          preQ16PrefixWords prior (exactK12Roots input), rfl, projections,
+          Classical.choice certificate⟩
+      · exact Or.inr ⟨.lateTarget ⟨input, trial, prior, later,
+          pivotActor, pivotInput, pivotAnswer, actual, rootExact, trialExact,
+          late⟩⟩
+      · exact Or.inr ⟨.collision collision⟩
     · rcases queryOrFold with queryFailure | foldFailure
       · exact Or.inr ⟨.q16
           (Classical.choice
@@ -590,6 +607,103 @@ noncomputable def classifyPreQ16K14Stage
   | .inl certificate => .inl ⟨certificate⟩
   | .inr error => .inr ⟨error⟩
 
+/-! ## Exact authenticated-vector transport -/
+
+/-- The sixteen once-folded values read from an arbitrary parser-data word.
+-/
+def parsedK13AuthenticatedQueryVector
+    (words : ExtractedWords) (proof : Tag73K12ParsedProof) :
+    QueryVector QM31Exact :=
+  fun ordinal =>
+    circleFoldLayer 262144 proof.schedule.alpha proof.schedule.circleInv2x
+      proof.schedule.circleInv2y (parsedK13Transcript words proof).initial
+      (proof.queries ordinal)
+
+/-- Two words which project the same paired opening have the same once-folded
+value at that opening's position. -/
+theorem circleFoldLayer_eq_of_shared_projected_opening
+    (schedule : OneFoldSchedule M31Exact QM31Exact)
+    (left right : ExtractedWords) (opening : PairedOpening)
+    (leftProjection : openingIsProjection left opening)
+    (rightProjection : openingIsProjection right opening)
+    (gamma : QM31Exact) (disclosedFinal : FinalMessage QM31Exact)
+    (query : Fin 262144)
+    (positionExact : query.val = opening.position.val) :
+    circleFoldLayer 262144 schedule.alpha schedule.circleInv2x
+        schedule.circleInv2y
+        (extractedIdealTranscript left gamma disclosedFinal).initial query =
+      circleFoldLayer 262144 schedule.alpha schedule.circleInv2x
+        schedule.circleInv2y
+        (extractedIdealTranscript right gamma disclosedFinal).initial query := by
+  rw [circleFoldLayer_apply, circleFoldLayer_apply]
+  apply congrArg
+  funext slot
+  have childExact : childIndex query slot =
+      childIndex opening.position slot := by
+    apply Fin.ext
+    simp only [childIndex_val]
+    omega
+  rw [childExact]
+  exact projected_opening_batched_fibre_eq left right opening leftProjection
+    rightProjection gamma slot
+
+theorem parsedK13AuthenticatedQueryVector_eq_of_shared_projections
+    (left right : ExtractedWords) (proof : Tag73K12ParsedProof)
+    (openings : Fin 16 → PairedOpening)
+    (leftProjection : disclosuresAreProjections left openings)
+    (rightProjection : disclosuresAreProjections right openings)
+    (positions : ∀ ordinal,
+      (proof.queries ordinal).val = (openings ordinal).position.val) :
+    parsedK13AuthenticatedQueryVector left proof =
+      parsedK13AuthenticatedQueryVector right proof := by
+  funext ordinal
+  simpa [parsedK13AuthenticatedQueryVector, parsedK13Transcript] using
+    circleFoldLayer_eq_of_shared_projected_opening proof.schedule left right
+      (openings ordinal) (leftProjection ordinal) (rightProjection ordinal)
+      proof.gamma proof.disclosedFinal (proof.queries ordinal)
+      (positions ordinal)
+
+set_option maxHeartbeats 1000000 in
+/-- The corrected pre-q16 word and the established K1.2 word yield exactly
+the same authenticated q16 vector because both project the literal accepted
+paired openings at the source-bound selected positions. -/
+theorem ExactPreQ16K13StageCertificate.authenticatedQueryVector_eq_exact
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample}
+    {decoded : Fin 641 → QM31Exact}
+    (certificate : ExactPreQ16K13StageCertificate decoder input)
+    (k12 : ExactPrefixK12Certificate input)
+    (parsedSource : ExactParsedProofSourceBinding input decoded)
+    (positions : ExactOpeningPositionsSourceBinding input) :
+    parsedK13AuthenticatedQueryVector certificate.words
+        (exactK13ParsedProof input) =
+      exactTag73K13AuthenticatedQueryVector decoder input k12 := by
+  have positionsExact : ∀ ordinal,
+      ((exactK13ParsedProof input).queries ordinal).val =
+        (exactK12Openings input ordinal).position.val := by
+    intro ordinal
+    rw [parsedSource.selectedQueriesExact]
+    exact (positions ordinal).symm
+  calc
+    parsedK13AuthenticatedQueryVector certificate.words
+        (exactK13ParsedProof input) =
+        parsedK13AuthenticatedQueryVector k12.words
+          (exactK13ParsedProof input) :=
+      parsedK13AuthenticatedQueryVector_eq_of_shared_projections
+        certificate.words k12.words (exactK13ParsedProof input)
+        (exactK12Openings input) certificate.projections k12.projections
+        positionsExact
+    _ = exactTag73K13AuthenticatedQueryVector decoder input k12 := rfl
+
 #print axioms preQ16_query_failure_has_joint_trial_witness
 #print axioms actual_joint_trial_has_preQ16_anchor
 #print axioms accepted_input_classifies_through_preQ16_trial
@@ -597,6 +711,9 @@ noncomputable def classifyPreQ16K14Stage
 #print axioms classifyAcceptedInputThroughPreQ16Stage
 #print axioms classifyInputThroughPreQ16Stage
 #print axioms classifyPreQ16K14Stage
+#print axioms circleFoldLayer_eq_of_shared_projected_opening
+#print axioms parsedK13AuthenticatedQueryVector_eq_of_shared_projections
+#print axioms ExactPreQ16K13StageCertificate.authenticatedQueryVector_eq_exact
 
 end
 

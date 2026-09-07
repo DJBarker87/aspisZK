@@ -219,12 +219,12 @@ certificate.  It is the corrected-word counterpart of
 semantic, transcript and source equality is unchanged except for the word
 index carried by the coherent extraction. -/
 theorem operational_parsed_k14_source_implies_decoded_witness_or_k15_failure
-    {HiddenTape TapeIdentity Observation Payload : Type}
+    {HiddenTape TapeIdentity Observation Payload Result : Type}
     {parameters : ExactCompilerResourceParameters}
     {transitionFuel : Nat}
     {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
       Observation V5PublicStatement Tag73K12ParsedProof Payload
-      DecodedSpendWitness parameters}
+      Result parameters}
     {projection : AcceptedTapeProjection V5PublicStatement Tag73K12ParsedProof
       Payload}
     {fixedInstance : PublicInstance V5PublicStatement}
