@@ -25,10 +25,13 @@ open AspisK1.V7Tag73AdaptiveQ16TrialAccounting
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73CausalFoldAlphaFinalWorkQ16Coordinates
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
+open AspisK1.V7Tag73ExactAdversaryAnchorSelectedInputInvariant
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedInstanceEvent
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
+open AspisK1.V7Tag73ExactFixedFullRunFactorization
+open AspisK1.V7Tag73ExactFixedQ16JointEventHandoff
 open AspisK1.V7Tag73ExactFixedQ16VerifierAnchorInvariant
 open AspisK1.V7Tag73ExactDagVerifierAnchorPrefix
 open AspisK1.V7Tag73ExactFoldAlphaFinalWorkQ16RootRouting
@@ -360,6 +363,139 @@ theorem exact_restored_clean_pair_verifier_anchor_semantics_eq
     (restoredOperationalK13View rightData).disclosedFinal
   exact congrArg decodedFinalMessage decodedExact
 
+/-- On the adversary-first branch, the sound 518-coordinate fibre fixes the
+literal combined-root prefix preceding final work.  This is the critical
+cache-hit chronology fact: it transports actors and SHA inputs, not merely the
+answer list. -/
+theorem exact_restored_clean_pair_adversary_anchor_root_priors_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (anchor : ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    ∃ leftPrior leftLater rightPrior rightLater leftInput rightInput
+        leftAnswer rightAnswer rightActor,
+      exactFixedRootRecords leftWitness.joint.input.package.root =
+        leftPrior ++
+          (.machineFresh .adversary leftInput leftAnswer :
+            UnifiedExposureRecord) :: leftLater ∧
+      exactFixedRootRecords rightWitness.joint.input.package.root =
+        rightPrior ++
+          (.machineFresh rightActor rightInput rightAnswer :
+            UnifiedExposureRecord) :: rightLater ∧
+      finalTrial.val = leftPrior.length ∧
+      finalTrial.val = rightPrior.length ∧
+      leftPrior = rightPrior := by
+  obtain ⟨leftPrior, leftLater, leftInput, leftAnswer, leftRootExact,
+      leftTrialExact⟩ := anchor
+  obtain ⟨rightPrior, rightLater, rightActor, rightInput, rightAnswer,
+      _rightDigest, _rightBase, _rightAbsorbActor, rightRootExact,
+      rightTrialExact, _rightPrefix, _rightPrefinal, _rightBaseExact,
+      _rightAbsorbMember⟩ :=
+    exact_fixed_k13_actual_trial_has_selected_prefinal_prefix
+      rightWitness.joint.input finalTrial rightWitness.joint.actualTrial
+  obtain ⟨rightRemaining, rightTapeFromLeft⟩ :=
+    exact_fold_armed_coordinates_force_pre_final_tape_prefix
+      leftWitness.joint.input foldTrial finalTrial leftPrior
+      ((.machineFresh .adversary leftInput leftAnswer :
+        UnifiedExposureRecord) :: leftLater)
+      (by simpa only [List.cons_append] using leftRootExact) leftTrialExact
+      programmedCover right contextExact foldExact
+  rw [fold_alpha_final_work_q16_named_slot_tape_preserves_master_list]
+    at rightTapeFromLeft
+  have priorExact : leftPrior = rightPrior :=
+    exact_fixed_k13_selected_root_priors_eq_of_right_tape_prefix finalTrial
+      hidden left right leftWitness.joint.input rightWitness.joint.input
+      leftPrior leftLater rightPrior rightLater .adversary rightActor leftInput
+      rightInput leftAnswer rightAnswer leftRootExact rightRootExact
+      leftTrialExact rightTrialExact ⟨rightRemaining, rightTapeFromLeft⟩
+  exact ⟨leftPrior, leftLater, rightPrior, rightLater, leftInput, rightInput,
+    leftAnswer, rightAnswer, rightActor, leftRootExact, rightRootExact,
+    leftTrialExact, rightTrialExact, priorExact⟩
+
+/-- The only chronology branch still requiring a source proof: the selected
+final-work input was first exposed by the adversary and later read by the
+verifier as an immutable cache hit. -/
+def ExactRestoredRootCleanK13PairSemanticInvariantOnAdversaryAnchors
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters)
+    (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
+    (fixedInstance : PublicInstance Statement)
+    (decoder : ExactDecoderInstantiation QM31Exact) : Prop :=
+  ∀ (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+      (hidden : HiddenTape)
+      (left right : FreshAnswerTape Digest256
+        (exactCompilerTargetCaps parameters).length)
+      (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+        configuration projection fixedInstance decoder (hidden, left)
+          foldTrial finalTrial)
+      (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+        configuration projection fixedInstance decoder (hidden, right)
+          foldTrial finalTrial),
+    ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial →
+    (let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+      transitionFuel foldTrial.val finalTrial.val
+      (exactPlainRomCursor configuration hidden).erase
+    (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+        left).1 =
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+        right).1) →
+    (let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+      transitionFuel foldTrial.val finalTrial.val
+      (exactPlainRomCursor configuration hidden).erase
+    (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+        left).2.1 =
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+        right).2.1) →
+    (let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+      transitionFuel foldTrial.val finalTrial.val
+      (exactPlainRomCursor configuration hidden).erase
+    (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+        left).2.2.1 =
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+        right).2.2.1) →
+    leftWitness.joint.k12.words = rightWitness.joint.k12.words ∧
+      (exactRestoredRootK13View leftWitness.joint.input).gamma =
+        (exactRestoredRootK13View rightWitness.joint.input).gamma ∧
+      (exactRestoredRootK13View leftWitness.joint.input).disclosedFinal =
+        (exactRestoredRootK13View rightWitness.joint.input).disclosedFinal ∧
+      (exactRestoredRootK13View leftWitness.joint.input).schedule =
+        (exactRestoredRootK13View rightWitness.joint.input).schedule
+
 /-- The precise source theorem left after the 518-coordinate factorization.
 The restored consistency set reads exactly these four fields. -/
 def ExactRestoredRootCleanK13PairSemanticInvariant
@@ -409,6 +545,33 @@ def ExactRestoredRootCleanK13PairSemanticInvariant
         (exactRestoredRootK13View rightWitness.joint.input).disclosedFinal ∧
       (exactRestoredRootK13View leftWitness.joint.input).schedule =
         (exactRestoredRootK13View rightWitness.joint.input).schedule
+
+/-- The first-exposure actor split is exhaustive.  The verifier branch is now
+kernel-closed above, so the explicitly named adversary/cache-hit endpoint is
+sufficient for the complete sound pair semantic invariant. -/
+theorem exact_restored_clean_pair_semantic_invariant_of_adversary_anchors
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (adversaryInvariant :
+      ExactRestoredRootCleanK13PairSemanticInvariantOnAdversaryAnchors
+        transitionFuel configuration projection fixedInstance decoder) :
+    ExactRestoredRootCleanK13PairSemanticInvariant transitionFuel configuration
+      projection fixedInstance decoder := by
+  intro foldTrial finalTrial hidden left right leftWitness rightWitness
+    contextExact foldExact workExact
+  rcases leftWitness.joint.anchorActorCases with verifierAnchor | adversaryAnchor
+  · exact exact_restored_clean_pair_verifier_anchor_semantics_eq foldTrial
+      finalTrial hidden left right leftWitness rightWitness verifierAnchor
+        programmedCover contextExact foldExact
+  · exact adversaryInvariant foldTrial finalTrial hidden left right leftWitness
+      rightWitness adversaryAnchor contextExact foldExact workExact
 
 /-- The semantic source endpoint is exactly sufficient for the pointwise bad
 set invariant consumed by the probability package. -/
@@ -503,8 +666,13 @@ theorem exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
 
 #print axioms ExactRestoredRootCleanK13PairSemanticInvariant
 #print axioms
+  ExactRestoredRootCleanK13PairSemanticInvariantOnAdversaryAnchors
+#print axioms
+  exact_restored_clean_pair_semantic_invariant_of_adversary_anchors
+#print axioms
   exact_restored_clean_pair_verifier_anchor_preserves_prover_runtime
 #print axioms exact_restored_clean_pair_verifier_anchor_semantics_eq
+#print axioms exact_restored_clean_pair_adversary_anchor_root_priors_eq
 #print axioms exact_restored_clean_k13_pair_coordinate_invariant_of_semantic
 #print axioms
   exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
