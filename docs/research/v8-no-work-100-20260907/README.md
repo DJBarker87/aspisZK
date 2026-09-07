@@ -11,6 +11,10 @@ records the exact full-dimension quotient prototype, algebraic derivation,
 reverse-membership counterexample and revised research decision. It does not
 upgrade the earlier conditional security figures to proved security.
 
+Next continuation: [relation-link.md](relation-link.md) gives explicit sparse
+membership constraints, the natural-tensor relation transpose, exact optimized
+tests and host timing. Security composition and full-transaction CU remain open.
+
 Branch: research/v8-no-work-100-20260907. Worktree:
 `/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907`.
 Base: `4c91f97ac6576201f90d41c2a575e54c026e3796`. Date: 2026-09-07.

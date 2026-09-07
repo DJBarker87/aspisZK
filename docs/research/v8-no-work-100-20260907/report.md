@@ -181,6 +181,12 @@ relations and coherent-extraction existence remain unresolved. Canonical q22 is
 now the primary size-acceptable model, **not** a demonstrated 100-bit protocol.
 The original thresholds below are retained as historical categories.
 
+Further progress: [relation-link.md](relation-link.md) constructs both membership
+constraints using only the last three tensor coefficients, and verifies the
+relation transpose on all basis vectors. This removes an algebraic ambiguity,
+not the adaptive extraction or CU gate. No extra bytes are necessary for these
+known-zero linear claims alone; the complete protocol is still unimplemented.
+
 ## Answers to the seven decision questions
 
 1. Strongest implementation-backed prospect: QM31 two-point tuple binding; strongest
