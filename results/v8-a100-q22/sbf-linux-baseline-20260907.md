@@ -98,6 +98,13 @@ After that refactor, the SBF analyzer must show every reachable frame below
 
 ## Matched strict-work V7 transaction baseline
 
+The selected `v7-pair-forest-one-tx-candidate` feature includes the default-off
+`v7-pair-forest-fixed-canonical-exact-once-audit`.  It serializes the same 641
+fixed QM31 values as 10,256 canonical bytes instead of 9,936 packed bytes:
+exactly +320 bytes.  Its body without frontiers is therefore 20,268, not the
+production packed grammar's 19,948.  Roots, nonces, query records, salts and
+frontiers are otherwise copied byte-for-byte.
+
 Harness command shape:
 
 ```text
@@ -109,10 +116,10 @@ cargo run --release --locked --offline \
   success 1400000 asq8 <populated-pairs> withdrawal
 ```
 
-| Shape | Populated pairs | Proof payload | Proof body | TxV1 bytes | Total CU | Verifier CPI CU | Pool reported CU |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| withdrawal, same page | 13 | 31,512 | 30,824 | 1,010 | 1,153,267 | 1,085,276 | 1,153,211 |
-| withdrawal, rollover | 255 | 31,460 | 30,772 | 1,043 | 1,218,981 | 1,084,747 | 1,218,925 |
+| Shape | Populated pairs | Proof payload | Canonical-audit body | Packed equivalent | Frontier/tree | TxV1 bytes | Total CU | Verifier CPI CU | Pool reported CU |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| withdrawal, same page | 13 | 31,512 | 30,824 | 30,504 | 203 | 1,010 | 1,153,267 | 1,085,276 | 1,153,211 |
+| withdrawal, rollover | 255 | 31,460 | 30,772 | 30,452 | 202 | 1,043 | 1,218,981 | 1,084,747 | 1,218,925 |
 
 The harness maximum RSS was 539,436 KiB for same-page and 541,352 KiB for
 rollover; both reported zero swaps.
@@ -121,6 +128,12 @@ Both transactions accepted with all 35/31/34-bit work checks. The harness
 confirmed exact lane, history, nullifier-marker, and token-balance changes;
 registry, proof, checkpoint, master, mint, and vault-authority state remained
 unchanged as required.
+
+The harness's `proof_bytes` subtracts the 688-byte candidate afterstate from
+the payload, so the +320 delta is neither an account header nor Pool framing.
+The exact identities are `20268 + 2*203*26 = 30824` and
+`20268 + 2*202*26 = 30772`; subtracting the canonical-fixed delta recovers the
+packed bodies above.  This resolves the apparent 30,504-byte source mismatch.
 
 Remote evidence identities:
 
