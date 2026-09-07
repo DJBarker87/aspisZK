@@ -1105,6 +1105,8 @@ theorem exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
         leftPrior ++ leftAnchorRecord :: leftLater ∧
       exactFixedRootRecords rightInput.package.root =
         rightPrior ++ rightAnchorRecord :: rightLater ∧
+      finalTrial.val = leftPrior.length ∧
+      finalTrial.val = rightPrior.length ∧
       (.machineFresh .adversary
           (bytes leftBefore.digest ++ [domAbsorb,
             (AspisK1.V7Tag73TranscriptSchedule.Payload.final256
@@ -1132,7 +1134,17 @@ theorem exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
         (literalFinalWorkKey digest
           (exactOperationalTape rightInput).messages.finalGrinding.selected).absorbInput
         rightBase : UnifiedExposureRecord) ∈
-        exactFixedRootRecords rightInput.package.root := by
+        exactFixedRootRecords rightInput.package.root ∧
+      ∃ rightAnchorActor leftAnchorInput leftAnchorAnswer rightAnchorInput
+          rightAnchorAnswer,
+        leftAnchorRecord =
+          (.machineFresh .adversary leftAnchorInput leftAnchorAnswer :
+            UnifiedExposureRecord) ∧
+        rightAnchorRecord =
+          (.machineFresh rightAnchorActor rightAnchorInput rightAnchorAnswer :
+            UnifiedExposureRecord) ∧
+        HasLiteralStatePrefix digest leftAnchorInput ∧
+        HasLiteralStatePrefix digest rightAnchorInput := by
   obtain ⟨leftRootPrior, leftRootMiddle, leftRootLater, leftProducerInput,
       leftAnchorInput, leftAnchorAnswer, leftDigest, leftBase, leftAbsorbActor,
       leftRootExact, leftTrialExact, _leftProducerLookup, leftAnchorPrefix,
@@ -1273,8 +1285,11 @@ theorem exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
     (.machineFresh .adversary leftAnchorInput leftAnchorAnswer),
     (.machineFresh rightActor rightAnchorInput rightAnchorAnswer),
     leftProducerCanonical.symm.trans producerInputExact, ?_, ?_, priorExact,
-    leftSelectedExact, rightRootExact, ?_, ?_, leftBaseExact, rightBaseExact,
-    leftAbsorbMember, ?_⟩
+    leftSelectedExact, rightRootExact, leftTrialExact', rightTrialExact,
+    ?_, ?_, leftBaseExact, rightBaseExact,
+    leftAbsorbMember, ?_, ⟨rightActor, leftAnchorInput, leftAnchorAnswer,
+      rightAnchorInput, rightAnchorAnswer, rfl, rfl, leftAnchorPrefix,
+      by simpa [digestExact] using rightAnchorPrefix⟩⟩
   · simpa [leftCanonicalInput] using leftLookup
   · simpa [rightCanonicalInput, digestExact] using rightLookup
   · simpa [leftCanonicalInput] using leftProducerPriorMember
@@ -1328,8 +1343,9 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_before_final256_digest_eq
       _leftAbsorbActor, _rightAbsorbActor, _leftPrior, _rightPrior, _leftLater,
       _rightLater, _leftAnchorRecord, _rightAnchorRecord, inputExact,
       _leftLookup, _rightLookup, _priorExact, _leftRootExact, _rightRootExact,
+      _leftTrialExact, _rightTrialExact,
       _leftProducerMember, _rightProducerMember, _leftBaseExact,
-      _rightBaseExact, _leftAbsorbMember, _rightAbsorbMember⟩ :=
+      _rightBaseExact, _leftAbsorbMember, _rightAbsorbMember, _anchorShape⟩ :=
     exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
       transitionRoom foldTrial finalTrial hidden left right leftWitness.joint.input
       rightWitness.joint.input leftWitness.joint.actualTrial
@@ -1448,9 +1464,10 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_alpha_terminal_eq
       rightBase, leftAbsorbActor, rightAbsorbActor, leftPrior, rightPrior,
       leftLater, rightLater, leftAnchorRecord, rightAnchorRecord,
       canonicalInputExact, leftCanonicalLookup, rightCanonicalLookup,
-      priorExact, leftRootExact, rightRootExact, leftProducerMember,
+      priorExact, leftRootExact, rightRootExact, leftTrialExact, rightTrialExact,
+      leftProducerMember,
       rightProducerMember, leftBaseExact, rightBaseExact, leftAbsorbMember,
-      rightAbsorbMember⟩ :=
+      rightAbsorbMember, _anchorShape⟩ :=
     exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
       transitionRoom foldTrial finalTrial hidden left right leftWitness.joint.input
       rightWitness.joint.input leftWitness.joint.actualTrial
@@ -2049,8 +2066,9 @@ theorem exact_fixed_clean_pair_k13_final256_record_mem_shared_priors
       _leftAbsorbActor, _rightAbsorbActor, leftPrior, rightPrior, leftLater,
       rightLater, leftAnchorRecord, rightAnchorRecord, inputExact,
       leftLookup, _rightLookup, priorExact, leftRootExact, rightRootExact,
+      _leftTrialExact, _rightTrialExact,
       leftMember, rightMember, _leftBaseExact, _rightBaseExact,
-      _leftAbsorbMember, _rightAbsorbMember⟩ :=
+      _leftAbsorbMember, _rightAbsorbMember, _anchorShape⟩ :=
     exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
       transitionRoom foldTrial finalTrial hidden left right leftWitness.joint.input
       rightWitness.joint.input leftWitness.joint.actualTrial
@@ -2119,8 +2137,9 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_final_values_eq
       _leftAbsorbActor, _rightAbsorbActor, _leftPrior, _rightPrior, _leftLater,
       _rightLater, _leftAnchorRecord, _rightAnchorRecord, inputExact,
       _leftLookup, _rightLookup, _priorExact, _leftRootExact, _rightRootExact,
+      _leftTrialExact, _rightTrialExact,
       _leftProducerMember, _rightProducerMember, _leftBaseExact,
-      _rightBaseExact, _leftAbsorbMember, _rightAbsorbMember⟩ :=
+      _rightBaseExact, _leftAbsorbMember, _rightAbsorbMember, _anchorShape⟩ :=
     exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
       transitionRoom foldTrial finalTrial hidden left right leftWitness.joint.input
       rightWitness.joint.input leftWitness.joint.actualTrial
