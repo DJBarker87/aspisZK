@@ -3,6 +3,7 @@ import AspisFormal.K1.V7Tag73ExactRestoredQ16SemanticNoninterference
 import AspisFormal.K1.V7Tag73ExactPairCoordinateProfileInvariant
 import AspisFormal.K1.V7Tag73ExactPairRootAbsorbChainClosure
 import AspisFormal.K1.V7Tag73ExactRestoredQ16VerifierRuntimeInvariant
+import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
 
 /-!
 # Semantic endpoint for the sound restored K1.3 pair factorization
@@ -59,6 +60,7 @@ open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73ProjectedMachineNativeRequestPrefix
 open AspisK1.V7Tag73K12BudgetedSchedulerTree
 open AspisK1.V7Tag73K13PreQ16MerkleWordSource
+open AspisK1.V7Tag73K13BoundChallengeClosure
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedAlignedRecordReplay
 open AspisK1.V7Tag73Q16DigestDrawReindex
@@ -66,12 +68,14 @@ open AspisK1.V7Tag73Q16FirstCompactUniformity
 open AspisK1.V7Tag73Q16RawENNRealProbability
 open AspisK1.V7Tag73Q16SemanticFrontierBridge
 open AspisK1.V7Tag73SchedulerNativePlainRomExperiment
+open AspisK1.V7Tag73SecureCircleMap
 open AspisK1.V7Tag73SqueezeInputStateInjectivity
 open AspisK1.V7Tag73CanonicalOneFoldSchedule
 open AspisK1.V7Tag73RestoredK12CanonicalWordCongruence
 open AspisK1.V7Tag73RestoredDerivedK13View
 open AspisK1.V7Tag73RestoredNodeK13Classifier
 open AspisK1.V7Tag73RootAbsorbInputInjectivity
+open AspisK1.V7Tag73RawChallengeBinding
 open AspisK1.V7Tag73ExactK12UntypedVerifierSuffix
 open AspisPool.V7MerkleQueryExtractor
 open AspisPool.V7MerkleQueryGrammar
@@ -691,8 +695,9 @@ theorem exact_restored_clean_pair_adversary_anchor_final_values_eq
       _leftAbsorbActor, _rightAbsorbActor, _leftPrior, _rightPrior, _leftLater,
       _rightLater, _leftAnchorRecord, _rightAnchorRecord, inputExact,
       _leftLookup, _rightLookup, _priorExact, _leftRootExact, _rightRootExact,
+      _leftTrialExact, _rightTrialExact,
       _leftProducerMember, _rightProducerMember, _leftBaseExact,
-      _rightBaseExact, _leftAbsorbMember, _rightAbsorbMember⟩ :=
+      _rightBaseExact, _leftAbsorbMember, _rightAbsorbMember, _anchorShape⟩ :=
     exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
       transitionRoom foldTrial finalTrial hidden left right
       leftWitness.joint.input rightWitness.joint.input
@@ -962,6 +967,152 @@ theorem exact_restored_clean_pair_adversary_anchor_pre_q16_words_eq
       (.machineFresh rightActor rightInput rightAnswer) leftRootExact
       rightRootExact leftTrialExact rightTrialExact priorExact rootsExact
 
+/-- The alpha-zero value is already bound in the common pre-q16 chronology.
+This restored-source theorem uses the witness-neutral binding lemma: neither
+the obsolete completed-q16 word nor either K1.3 bad set participates. -/
+theorem exact_restored_clean_pair_adversary_anchor_alpha_zero_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (anchor : ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    exactOperationalChallenge leftWitness.joint.input (.alpha 0) =
+      exactOperationalChallenge rightWitness.joint.input (.alpha 0) := by
+  classical
+  obtain ⟨leftBefore, rightBefore, digest, _leftBase, _rightBase,
+      _leftAbsorbActor, _rightAbsorbActor, leftPrior, rightPrior, leftLater,
+      rightLater, leftAnchorRecord, rightAnchorRecord, canonicalInputExact,
+      leftCanonicalLookup, rightCanonicalLookup, priorExact, leftRootExact,
+      rightRootExact, leftTrialExact, rightTrialExact, leftCanonicalMember,
+      rightCanonicalMember, _leftBaseExact, _rightBaseExact,
+      _leftAbsorbMember, _rightAbsorbMember, anchorShape⟩ :=
+    exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
+      transitionRoom foldTrial finalTrial hidden left right
+      leftWitness.joint.input rightWitness.joint.input
+      leftWitness.joint.actualTrial rightWitness.joint.actualTrial anchor
+      programmedCover contextExact foldExact
+  obtain ⟨rightAnchorActor, leftAnchorInput, leftAnchorAnswer,
+      rightAnchorInput, rightAnchorAnswer, leftAnchorExact, rightAnchorExact,
+      leftCanonicalPrefix, rightCanonicalPrefix⟩ := anchorShape
+  rw [leftAnchorExact] at leftRootExact
+  rw [rightAnchorExact] at rightRootExact
+  obtain ⟨leftAfterSample, leftRaw, leftValue, leftBindActor,
+      _leftBindLookup, leftBindMember, _leftRawExact, leftDecode,
+      leftOperational⟩ :=
+    exact_actual_alpha_binding_record_mem_prior transitionRoom foldTrial
+      finalTrial leftWitness.joint.input leftWitness.joint.actualTrial
+      leftPrior leftLater .adversary leftAnchorInput leftAnchorAnswer
+      leftRootExact leftTrialExact leftBefore digest .adversary
+      (by simpa only [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.data] using
+          leftCanonicalLookup)
+      (by simpa only [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.data] using
+          leftCanonicalMember)
+      leftCanonicalPrefix
+  obtain ⟨rightAfterSample, rightRaw, rightValue, rightBindActor,
+      _rightBindLookup, rightBindMember, _rightRawExact, rightDecode,
+      rightOperational⟩ :=
+    exact_actual_alpha_binding_record_mem_prior transitionRoom foldTrial
+      finalTrial rightWitness.joint.input rightWitness.joint.actualTrial
+      rightPrior rightLater rightAnchorActor rightAnchorInput rightAnchorAnswer
+      rightRootExact rightTrialExact rightBefore digest .adversary
+      (by simpa only [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.data] using
+          rightCanonicalLookup)
+      (by simpa only [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.data] using
+          rightCanonicalMember)
+      rightCanonicalPrefix
+  have predecessorExact : leftBefore.digest = rightBefore.digest := by
+    apply digest_bytes_injective
+    have prefixExact := congrArg (List.take 32) canonicalInputExact
+    simpa using prefixExact
+  let leftBindInput : ShaInput := bytes leftAfterSample.digest ++
+    [domAbsorb, challengeBindLabel] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+        leftRaw).data
+  let rightBindInput : ShaInput := bytes rightAfterSample.digest ++
+    [domAbsorb, challengeBindLabel] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+        rightRaw).data
+  have rightBindMemberCommon :
+      (.machineFresh rightBindActor rightBindInput leftBefore.digest :
+        UnifiedExposureRecord) ∈ leftPrior := by
+    rw [priorExact]
+    simpa [rightBindInput, predecessorExact] using rightBindMember
+  have priorAnswersNodup :
+      (leftPrior.map UnifiedExposureRecord.answer).Nodup := by
+    have fullNodup := exact_root_record_answers_nodup leftWitness.joint.input
+    rw [leftRootExact, List.map_append, List.map_cons] at fullNodup
+    exact (List.nodup_append.mp fullNodup).1
+  have bindInputExact : leftBindInput = rightBindInput := by
+    have recordExact :
+        (.machineFresh leftBindActor leftBindInput leftBefore.digest :
+            UnifiedExposureRecord) =
+          .machineFresh rightBindActor rightBindInput leftBefore.digest :=
+      List.inj_on_of_nodup_map priorAnswersNodup
+        (by simpa [leftBindInput] using leftBindMember)
+        rightBindMemberCommon rfl
+    injection recordExact
+  let leftState : MachineState :=
+    { digest := leftAfterSample.digest, oracleHistory := [] }
+  let rightState : MachineState :=
+    { digest := rightAfterSample.digest, oracleHistory := [] }
+  let leftBinding : RawChallengeBinding := actualBinding .alphaZero leftRaw
+  let rightBinding : RawChallengeBinding := actualBinding .alphaZero rightRaw
+  have rawBindingInputExact : rawChallengeBindInput leftState leftBinding =
+      rawChallengeBindInput rightState rightBinding := by
+    simpa [leftBindInput, rightBindInput, leftState, rightState, leftBinding,
+      rightBinding, rawChallengeBindInput, RawChallengeBinding.data,
+      actualBinding, AspisK1.V7Tag73TranscriptSchedule.Payload.data] using
+        bindInputExact
+  have bindingExact : leftBinding = rightBinding :=
+    raw_challenge_bind_input_eq_implies_binding_eq leftState rightState
+      leftBinding rightBinding rawBindingInputExact
+  have rawExact : leftRaw = rightRaw := by
+    simpa [leftBinding, rightBinding, actualBinding] using
+      congrArg RawChallengeBinding.value bindingExact
+  have valueExact : leftValue = rightValue := by
+    apply Option.some.inj
+    calc
+      some leftValue = decodeTagQM31ExactLE leftRaw := leftDecode.symm
+      _ = decodeTagQM31ExactLE rightRaw := by rw [rawExact]
+      _ = some rightValue := rightDecode
+  exact leftOperational.trans (valueExact.trans rightOperational.symm)
+
 /-- The only chronology branch still requiring a source proof: the selected
 final-work input was first exposed by the adversary and later read by the
 verifier as an immutable cache hit. -/
@@ -1185,6 +1336,7 @@ theorem exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
 #print axioms ExactRestoredRootCleanK13PairSemanticInvariant
 #print axioms
   ExactRestoredRootCleanK13PairSemanticInvariantOnAdversaryAnchors
+#print axioms exact_restored_clean_pair_adversary_anchor_alpha_zero_eq
 #print axioms
   exact_restored_clean_pair_semantic_invariant_of_adversary_anchors
 #print axioms
