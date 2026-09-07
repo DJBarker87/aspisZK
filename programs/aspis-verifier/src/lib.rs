@@ -113,6 +113,22 @@ compile_error!(
 compile_error!("V7_CU_PROBE_FORBIDS_OTHER_PROBES: select exactly one local probe entrypoint");
 
 #[cfg(all(
+    feature = "v8-deep-cu-probe",
+    any(
+        feature = "spend-production",
+        feature = "v5-production-tag67",
+        feature = "v6-production-tag72",
+        feature = "v7-production-tag73",
+        feature = "v5-cu-probe",
+        feature = "v6-cu-probe",
+        feature = "v7-cu-probe",
+        feature = "v7-pool-cu-profile"
+    ),
+    not(feature = "no-entrypoint")
+))]
+compile_error!("V8_DEEP_CU_PROBE_FORBIDS_OTHER_ENTRYPOINTS: select only the local V8 DEEP probe");
+
+#[cfg(all(
     feature = "v7-pool-cu-profile",
     any(
         feature = "spend-production",
@@ -187,6 +203,8 @@ pub mod v7_transaction;
     test
 ))]
 pub mod v7_verifier;
+#[cfg(feature = "v8-deep-cu-probe")]
+pub mod v8_deep_cu_probe;
 pub mod verify;
 pub mod wire;
 
