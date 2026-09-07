@@ -1,5 +1,11 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [adaptive query-boundary review](adaptive-tail-review.md). Source timing
+permits a prefix-defined mathematical width29 event. A pre-OOD T_512 oracle
+nevertheless gives perfect V8 chord-query agreement outside the original code:
+image/relation accounting is indispensable. This is not actual full acceptance
+or a claimed H_width29(T)=1. The adaptive upper bound remains open.
+
 Latest continuation: [Lean repair ZIP review](lean-repair-review.md). The generic
 fixed-target query-support theorem and root-product instance are kernel-checked;
 the actual adaptive discarded-branch coverage remains unresolved. All supplied

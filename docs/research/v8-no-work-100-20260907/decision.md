@@ -1,5 +1,10 @@
 # Decision at the investigated revisions: no-go for a certified V8
 
+Latest: [adaptive-tail-review.md](adaptive-tail-review.md) rejects a query-only
+recovery shortcut using a pre-OOD full-degree oracle, while leaving actual
+accepted image/relation and adaptive outside probabilities unresolved. The
+generic query-last identity survives; no complete security claim is upgraded.
+
 Latest review: [lean-repair-review.md](lean-repair-review.md) kernel-checks the
 generic fixed-target joint-query bound and root-product instance. The actual
 adaptive accepted-provider-none obligation remains open. Current primary is

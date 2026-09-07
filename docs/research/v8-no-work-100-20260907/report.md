@@ -1,5 +1,12 @@
 # Decision: no investigated candidate is green on all requirements
 
+Latest: [adaptive-tail-review.md](adaptive-tail-review.md) identifies a causal
+pre-OOD full-degree oracle whose chord quotient passes every pointwise query
+while original-code recovery is impossible. Its image residual is nonzero;
+no full accepted forgery or actual scheduler tail of one is asserted. A separate
+high-agreement root control has an image-valid zero target and a 107.156-bit
+pointwise outside subevent. There is still no universal adaptive upper bound.
+
 Latest: [Lean repair review](lean-repair-review.md) proves the symbolic
 fixed-target wrong-query-support bound and instantiates the root-product/zero
 reference family. It does not prove adaptive extraction, full-view ZK or CU

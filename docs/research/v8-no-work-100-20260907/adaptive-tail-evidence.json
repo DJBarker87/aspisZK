@@ -1,0 +1,126 @@
+{
+  "date": "2026-09-07",
+  "research_parent": "1803896acf5d8c4ebe769b3927010031faf40e0e",
+  "v8_audit": "07b66afc22288a6ff460180242b73de4f341e02d",
+  "cache": {
+    "workspace": "/Users/dominic/ZK/AspisFormal",
+    "revision_observed_at_completion": "00dccf39d7a1f8876c916a6b0aa1da97edf10e34",
+    "note": "Concurrent main work advanced only K1 semantic modules from preceding bff78d6e snapshot. Imported V5 module source matches research parent; main dirty files preserved.",
+    "imported_module": "AspisFormal.V5FriConcreteEncoderApplicability",
+    "source_sha256": "91d8d7a2d8e1ea832459a439482aa858e970cba1608ab7652bdfce3eede632d3",
+    "olean_sha256": "2ed1ef913f2baaeffd2e0ad289e750ba2b1e2c7282d783de8fedb8904464d8d6"
+  },
+  "archive": {
+    "name": "aspis_v8_adaptive_query_review.zip",
+    "sha256": "dcc6ff045b570f3f74ae5394b1722e7ec82d1a8e21a5d1597e3bd4337ec66019",
+    "regular_files": 4,
+    "uncompressed_bytes": 24793,
+    "fully_reviewed_before_execution": true,
+    "retained_copy_byte_equal": true
+  },
+  "package_run": {
+    "command": "/usr/bin/time -l python3 -c 'import json,subprocess; from pathlib import Path; p=Path(\"/tmp/aspis-v8-adaptive-review.zlgqO0/aspis_v8_adaptive_query_review\"); got=json.loads(subprocess.check_output([\"python3\",str(p/\"check_adaptive_queries.py\")])); expected=json.loads((p/\"results.json\").read_text()); assert got==expected; print(json.dumps(got[\"query_last_tests\"],indent=2)); print(\"full JSON and q22 root example: exact match\")'",
+    "exit_code": 0,
+    "wall_seconds": 0.16,
+    "peak_rss_bytes": 18481152,
+    "swaps": 0,
+    "exact_json_match": true,
+    "match_set_cases": 3586,
+    "weighted_prefix_cases": 4096,
+    "shifted_batch_roots": 22
+  },
+  "rust": {
+    "compile_command": "rustc --edition=2021 -O docs/research/v8-no-work-100-20260907/experiments/adaptive_outside.rs -o /tmp/aspis-v8-adaptive-outside",
+    "run_command": "/usr/bin/time -l /tmp/aspis-v8-adaptive-outside",
+    "execution_scope": "1024-scale coefficient algebra and 1280 fold checks; no full prover, full-domain arrays or SBF",
+    "exit_code": 0,
+    "wall_seconds": 0.94,
+    "peak_rss_bytes": 2441216,
+    "swaps": 0,
+    "ood_pairs": 4,
+    "lanes": [
+      0,
+      25
+    ],
+    "gammas": 4,
+    "alphas": 4,
+    "base_domain_fibres_per_case": 10,
+    "fold_checks": 1280,
+    "nonzero_overflow_checks": 32,
+    "source_sha256": "6bf63f1cfc4e1d27181a8fe10c364d358653a2295bea7783c9b5db61faaffffc",
+    "log": "experiments/adaptive-outside.log"
+  },
+  "lean": {
+    "command": "/usr/bin/time -l lake env lean /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/FullDegreeOutside.lean",
+    "cwd": "/Users/dominic/ZK/AspisFormal",
+    "toolchain": "4.32.0",
+    "exit_code": 0,
+    "wall_seconds": 29.64,
+    "peak_rss_bytes": 4670128128,
+    "swaps": 0,
+    "audited_declarations": 4,
+    "axioms_union": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "new_axioms": false,
+    "sorry": false,
+    "source_sha256": "ad28aa3907edeb7ec7e982d8fe6eaa0b6cb5838f05b90ec1ae6d1ae50dde12f7",
+    "scope": "universal polynomial endpoint and original-code agreement obstruction; not a full Lean quotient/transcript instance",
+    "log": "experiments/full-degree-outside.log"
+  },
+  "arithmetic": {
+    "command": "/usr/bin/time -l python3 docs/research/v8-no-work-100-20260907/experiments/adaptive_tail.py",
+    "exit_code": 0,
+    "wall_seconds": 0.17,
+    "peak_rss_bytes": 20512768,
+    "swaps": 0,
+    "monotonicity_checks": 990,
+    "historical_crosschecks": 2,
+    "log": "experiments/adaptive-tail.log",
+    "results": "adaptive-tail-results.json"
+  },
+  "development": [
+    {
+      "stage": "Rust compile",
+      "exit_code": 1,
+      "issue": "M31 has no square method.",
+      "replacement": "Use its existing optimized mul(self) kernel."
+    },
+    {
+      "stage": "Rust narrower prototype",
+      "exit_code": 0,
+      "wall_seconds": 0.69,
+      "peak_rss_bytes": 2457600,
+      "swaps": 0,
+      "scope": "640 checks; mask-only lane.",
+      "replacement": "Add semantic lane control; 1280 checks in final changed-source run."
+    },
+    {
+      "stage": "Lean first leaf",
+      "exit_code": 1,
+      "wall_seconds": 63.13,
+      "peak_rss_bytes": 4342579200,
+      "swaps": 0,
+      "issue": "Missing explicit coeff_C simplification at symbolic positive n.",
+      "replacement": "Use Polynomial.coeff_C; no large exponent reduction or cap increase."
+    }
+  ],
+  "status": {
+    "query_only_original_component_cover_tail": "obstructed; algebraic model permits H(T)=1",
+    "actual_scheduler_tail": "unresolved",
+    "literal_k14_width29_tail": "unresolved; H(T)=1 is NOT asserted for this narrower event",
+    "full_accepted_extraction_failure_bound": "unresolved",
+    "full_view_hiding": "unresolved",
+    "full_transaction_cu": "unmeasured",
+    "production_changed": false,
+    "paid_or_remote_jobs": false
+  },
+  "environment": {
+    "hardware": "Apple M3 / Mac15,13",
+    "os": "Darwin 25.5.0 arm64",
+    "rust": "1.93.0",
+    "scope": "small optimized Rust and focused cached Lean only"
+  }
+}
