@@ -19,6 +19,7 @@ use crate::v8_a100::{
     V8A100QueryRecord, V8A100Wire, V8_A100_COMPONENTS, V8_A100_FIXED_M31_LIMBS, V8_A100_OOD_POINTS,
     V8_A100_QUERY_COUNT,
 };
+use alloc::vec;
 
 pub const V8_A100_CIRCLE_DOMAIN_LOG_SIZE: u32 = 20;
 pub const V8_A100_FIBRE_SLOTS: usize = 4;
@@ -372,6 +373,32 @@ fn batch_inverse<const N: usize>(values: &[QM31; N]) -> Result<[QM31; N], V8Deep
     Ok(output)
 }
 
+/// Heap-backed Montgomery batch inversion for the SBF research path.
+///
+/// `batch_inverse` above intentionally remains the simple fixed-array host
+/// reference. Its three 88-element arrays make the LLVM SBF frame exceed the
+/// 4 KiB VM limit. This variant owns only the prefix table on the heap and
+/// replaces `values` with its inverses in place.
+#[inline(never)]
+fn batch_inverse_heap_in_place(values: &mut [QM31]) -> Result<(), V8DeepError> {
+    let mut prefixes = vec![QM31::ONE; values.len()];
+    let mut product = QM31::ONE;
+    for (index, value) in values.iter().copied().enumerate() {
+        if value == QM31::ZERO {
+            return Err(V8DeepError::ZeroDenominator);
+        }
+        prefixes[index] = product;
+        product = product.mul(value);
+    }
+    let mut inverse = product.try_inv().ok_or(V8DeepError::ZeroDenominator)?;
+    for index in (0..values.len()).rev() {
+        let value = values[index];
+        values[index] = inverse.mul(prefixes[index]);
+        inverse = inverse.mul(value);
+    }
+    Ok(())
+}
+
 fn embed_base_circle_point(point: BaseCirclePoint) -> SecureCirclePoint {
     SecureCirclePoint {
         x: embed_m31(point.x.0),
@@ -415,8 +442,28 @@ fn query_circle_points(
     Ok(points)
 }
 
+#[inline(always)]
+fn circle_fibre_slots(point: BaseCirclePoint) -> [SecureCirclePoint; V8_A100_FIBRE_SLOTS] {
+    [
+        embed_base_circle_point(point),
+        embed_base_circle_point(BaseCirclePoint {
+            x: point.x,
+            y: point.y.neg(),
+        }),
+        embed_base_circle_point(BaseCirclePoint {
+            x: point.x.neg(),
+            y: point.y.neg(),
+        }),
+        embed_base_circle_point(BaseCirclePoint {
+            x: point.x.neg(),
+            y: point.y,
+        }),
+    ]
+}
+
 /// Slow end-to-end wire reference: random-access component decoding, repeated
 /// gamma loops, and one field inversion per quotient.
+#[cfg(not(target_os = "solana"))]
 pub fn v8_deep_quotients_reference_wire(
     wire: &V8A100Wire<'_>,
     queries: [u32; V8_A100_QUERY_COUNT],
@@ -446,6 +493,7 @@ pub fn v8_deep_quotients_reference_wire(
 /// Intended no-new-tree verifier path. All inputs come from the two existing
 /// authenticated query records and the fixed component vectors. Exactly one
 /// QM31 inversion handles all 88 query zerofiers.
+#[cfg(not(target_os = "solana"))]
 pub fn v8_deep_quotients_optimized_wire(
     wire: &V8A100Wire<'_>,
     queries: [u32; V8_A100_QUERY_COUNT],
@@ -503,6 +551,141 @@ pub fn v8_deep_quotients_optimized_wire(
         }
     }
     Ok(output)
+}
+
+/// Stack-safe SBF candidate A: caller-owned output plus heap-backed
+/// numerator/denominator scratch and one Montgomery batch inversion.
+///
+/// This keeps the intended one-inversion arithmetic while moving the three
+/// q22-wide temporaries out of the 4 KiB SBF stack. On error, `output` must be
+/// treated as unspecified and discarded.
+#[inline(never)]
+pub fn v8_deep_quotients_heap_batched_in_place(
+    wire: &V8A100Wire<'_>,
+    queries: [u32; V8_A100_QUERY_COUNT],
+    challenges: &V8A100TwoPointChallenges,
+    output: &mut [[QM31; V8_A100_FIBRE_SLOTS]],
+) -> Result<(), V8DeepError> {
+    if output.len() != V8_A100_QUERY_COUNT {
+        return Err(V8DeepError::Wire(V6WireError::WrongLength));
+    }
+    if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
+        return Err(V8DeepError::ComponentVectorMismatch);
+    }
+    let mut prepared = prepare_deep(challenges)?;
+    let slot_zero = selected_circle_fiber_points_shared(V8_A100_CIRCLE_DOMAIN_LOG_SIZE, &queries)
+        .map_err(|_| V8DeepError::CircleGeometry)?;
+    if slot_zero.len() != V8_A100_QUERY_COUNT {
+        return Err(V8DeepError::CircleGeometry);
+    }
+    let mut numerators = vec![QM31::ZERO; V8_A100_DEEP_DENOMINATORS];
+    let mut inverse_zerofiers = vec![QM31::ZERO; V8_A100_DEEP_DENOMINATORS];
+
+    for (query, base_point) in slot_zero.into_iter().enumerate() {
+        let record = wire
+            .query(query)
+            .ok_or(V8DeepError::Wire(V6WireError::WrongLength))?;
+        let components = decode_v8_query_components_optimized(record)?;
+        let points = circle_fibre_slots(base_point);
+        for slot in 0..V8_A100_FIBRE_SLOTS {
+            let combined = if query == 0 && slot == 0 {
+                let shared = qm31_dot3(
+                    &prepared.powers,
+                    [
+                        &components[slot],
+                        &challenges.component_evaluations[0],
+                        &challenges.component_evaluations[1],
+                    ],
+                );
+                prepared.evaluations = [shared[1], shared[2]];
+                shared[0]
+            } else {
+                qm31_dot(&prepared.powers, &components[slot])
+            };
+            let flat = query * V8_A100_FIBRE_SLOTS + slot;
+            numerators[flat] = combined.sub(two_point_interpolant(
+                points[slot],
+                prepared.points,
+                prepared.evaluations,
+                prepared.inverse_difference,
+                prepared.use_x,
+            ));
+            inverse_zerofiers[flat] = two_point_chord_zerofier(points[slot], prepared.points);
+        }
+    }
+
+    batch_inverse_heap_in_place(&mut inverse_zerofiers)?;
+    for query in 0..V8_A100_QUERY_COUNT {
+        for slot in 0..V8_A100_FIBRE_SLOTS {
+            let flat = query * V8_A100_FIBRE_SLOTS + slot;
+            output[query][slot] = numerators[flat].mul(inverse_zerofiers[flat]);
+        }
+    }
+    Ok(())
+}
+
+/// Stack-safe SBF candidate B: stream one authenticated opening at a time
+/// and invert its zerofier immediately.
+///
+/// This is deliberately a different CU/stack tradeoff from candidate A: it
+/// has no q22-wide quotient scratch and performs 88 independent inversions.
+/// It is useful as a low-stack control and as a precise attribution point for
+/// the value of batch inversion.
+#[inline(never)]
+pub fn v8_deep_quotients_pointwise_in_place(
+    wire: &V8A100Wire<'_>,
+    queries: [u32; V8_A100_QUERY_COUNT],
+    challenges: &V8A100TwoPointChallenges,
+    output: &mut [[QM31; V8_A100_FIBRE_SLOTS]],
+) -> Result<(), V8DeepError> {
+    if output.len() != V8_A100_QUERY_COUNT {
+        return Err(V8DeepError::Wire(V6WireError::WrongLength));
+    }
+    if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
+        return Err(V8DeepError::ComponentVectorMismatch);
+    }
+    let mut prepared = prepare_deep(challenges)?;
+    let slot_zero = selected_circle_fiber_points_shared(V8_A100_CIRCLE_DOMAIN_LOG_SIZE, &queries)
+        .map_err(|_| V8DeepError::CircleGeometry)?;
+    if slot_zero.len() != V8_A100_QUERY_COUNT {
+        return Err(V8DeepError::CircleGeometry);
+    }
+
+    for (query, base_point) in slot_zero.into_iter().enumerate() {
+        let record = wire
+            .query(query)
+            .ok_or(V8DeepError::Wire(V6WireError::WrongLength))?;
+        let components = decode_v8_query_components_optimized(record)?;
+        let points = circle_fibre_slots(base_point);
+        for slot in 0..V8_A100_FIBRE_SLOTS {
+            let combined = if query == 0 && slot == 0 {
+                let shared = qm31_dot3(
+                    &prepared.powers,
+                    [
+                        &components[slot],
+                        &challenges.component_evaluations[0],
+                        &challenges.component_evaluations[1],
+                    ],
+                );
+                prepared.evaluations = [shared[1], shared[2]];
+                shared[0]
+            } else {
+                qm31_dot(&prepared.powers, &components[slot])
+            };
+            let numerator = combined.sub(two_point_interpolant(
+                points[slot],
+                prepared.points,
+                prepared.evaluations,
+                prepared.inverse_difference,
+                prepared.use_x,
+            ));
+            let inverse = two_point_chord_zerofier(points[slot], prepared.points)
+                .try_inv()
+                .ok_or(V8DeepError::ZeroDenominator)?;
+            output[query][slot] = numerator.mul(inverse);
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -870,6 +1053,24 @@ mod tests {
             v8_deep_quotients_optimized_wire(&wire, V8_A100_MAX_FRONTIER_FIXTURE, &challenges)
                 .unwrap();
         assert_eq!(optimized, reference);
+        let mut heap_batched = [[QM31::ZERO; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
+        v8_deep_quotients_heap_batched_in_place(
+            &wire,
+            V8_A100_MAX_FRONTIER_FIXTURE,
+            &challenges,
+            &mut heap_batched,
+        )
+        .unwrap();
+        assert_eq!(heap_batched, reference);
+        let mut pointwise = [[QM31::ZERO; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
+        v8_deep_quotients_pointwise_in_place(
+            &wire,
+            V8_A100_MAX_FRONTIER_FIXTURE,
+            &challenges,
+            &mut pointwise,
+        )
+        .unwrap();
+        assert_eq!(pointwise, reference);
         assert_eq!(
             wire.component_ood_vectors(),
             Some(challenges.component_evaluations)
