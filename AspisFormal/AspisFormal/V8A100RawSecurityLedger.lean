@@ -1,4 +1,4 @@
-import Mathlib
+import AspisFormal.V8A100ScalarFingerprintGammaBound
 
 /-!
 # V8-A100 conditional raw-security arithmetic
@@ -82,6 +82,23 @@ def conditionalRawError (q digestBits : Nat) : ℚ :=
   queryError q + algebraicError q + twoPointTupleCollisionError +
     k12Error q digestBits + compilerError
 
+/-- The concrete scalar-DEEP theorem which licenses the `100 * 28` ledger
+numerator.  Keeping this bridge in the arithmetic leaf prevents the displayed
+constant from drifting away from the actual fixed width-29 family theorem. -/
+theorem fixed_family_scalar_deep_fits_ledger_numerator
+    (decoder : AspisPool.AlgorithmicCircleDecoderV7.ExactDecoderInstantiation
+      AspisV5ComponentCQM31TowerExact.QM31Exact)
+    (lanes : AspisPool.V7Width29ComponentExtraction.Width29InitialWords
+      AspisV5ComponentCQM31TowerExact.QM31Exact)
+    (parameter0 parameter1 : AspisV5ComponentCQM31TowerExact.QM31Exact)
+    (public0 public1 : Fin 29 →
+      AspisV5ComponentCQM31TowerExact.QM31Exact) :
+    (AspisV8A100ScalarFingerprintGammaBound.nonmatchingTupleScalarGammaSet
+      (AspisPool.V7FixedWidth29TupleList.fixedWidth29TupleList decoder lanes)
+      parameter0 parameter1 public0 public1).card ≤ 100 * 28 := by
+  exact AspisV8A100ScalarFingerprintGammaBound.fixedWidth29_nonmatching_scalar_gamma_card_le_2800
+      decoder lanes parameter0 parameter1 public0 public1
+
 theorem unified_exposure_pairs_exact :
     unifiedFreshExposureCap.choose 2 = unifiedExposurePairs := by
   rw [Nat.choose_two_right]
@@ -138,6 +155,7 @@ theorem q23_digest208_conditional_raw_error_le_two_pow_neg105 :
 #print axioms research_resource_envelope_exact
 #print axioms unified_exposure_pairs_exact
 #print axioms visible_honest_work_fits_researchQ
+#print axioms fixed_family_scalar_deep_fits_ledger_numerator
 #print axioms q21_digest208_conditional_raw_error_le_two_pow_neg100
 #print axioms q22_digest208_conditional_raw_error_le_two_pow_neg104
 #print axioms q22_digest208_conditional_raw_error_not_le_two_pow_neg105
