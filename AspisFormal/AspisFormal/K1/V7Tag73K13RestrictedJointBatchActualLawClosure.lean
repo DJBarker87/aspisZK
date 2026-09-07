@@ -1,7 +1,7 @@
-import AspisFormal.K1.V7Tag73CausalGammaPrefixCoordinates
 import AspisFormal.K1.V7Tag73ExactConcreteK13K14Events
 import AspisFormal.K1.V7Tag73K13IdealErrorLedger
 import AspisFormal.K1.V7Tag73K15FixedActualLawAdapters
+import AspisFormal.K1.V7Tag73QueryBatchPrefixCausalController
 
 /-!
 # Compiler-clean actual-law closure for the Tag-73 joint query batch
@@ -34,6 +34,7 @@ open AspisK1.V7Tag73HiddenTapeAveraging
 open AspisK1.V7Tag73JointQueryBatchSoundness
 open AspisK1.V7Tag73K13IdealErrorLedger
 open AspisK1.V7Tag73K15FixedActualLawAdapters
+open AspisK1.V7Tag73QueryBatchPrefixCausalController
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisK1.V7Tag73VariablePrefixGammaFactorization
@@ -68,10 +69,10 @@ theorem guardedJointQueryBatchTarget_card_le_sixteen
         preQueryDiscrepancy expected authenticated different
   · simp [guardedJointQueryBatchTarget, different]
 
-/-- Exact pre-query-batch source data on one compiler-clean slice. The
-coordinate equivalence is explicit: constructing it from the literal
-query-batch scheduler is a source-alignment obligation, not a hidden
-probability hypothesis. -/
+/-- Exact pre-query-batch source data on one compiler-clean slice. Coordinates
+are fixed by the literal pre-answer query-batch scheduler controller; this
+record supplies only the remaining deterministic algebraic data and event
+inclusion. -/
 structure ExactTag73RestrictedK13JointBatchSource
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
     {parameters : ExactCompilerResourceParameters}
@@ -84,9 +85,6 @@ structure ExactTag73RestrictedK13JointBatchSource
     (k13Source : ExactTag73K13SourceObligations transitionFuel configuration
       projection fixedInstance decoder)
     (clean : Set (ExactCompilerSample HiddenTape parameters)) where
-  coordinates : HiddenTape →
-    FreshAnswerTape Digest256 (exactCompilerTargetCaps parameters).length ≃
-      ExactCompilerGammaPrefixResidual parameters × TotalGammaDuplexTape
   preQueryDiscrepancy : HiddenTape →
     ExactCompilerGammaPrefixResidual parameters →
       VariableGammaCompleteSkeleton → QM31Exact
@@ -98,7 +96,8 @@ structure ExactTag73RestrictedK13JointBatchSource
     jointEventSlice
         (clean ∩ exactTag73K13JointQueryBatchCollisionEvent transitionFuel
           configuration projection fixedInstance decoder k13Source) hidden ⊆
-      (coordinates hidden) ⁻¹'
+      (exactCompilerQueryBatchPrefixCoordinates parameters transitionFuel
+          (exactPlainRomCursor configuration hidden).erase) ⁻¹'
         dependentSuccessfulSubtypeEvent GammaPrefixSucceeds (fun residual ↦
           successfulGammaPrefixSkeletonDependentEvent (fun skeleton ↦
             guardedJointQueryBatchTarget
@@ -133,7 +132,9 @@ theorem exact_tag73_restricted_k13_joint_batch_probability_le
           configuration projection fixedInstance decoder k13Source) ≤
       (16 : ENNReal) / ((P ^ 4 - 1 : Nat) : ENNReal)
   apply exact_compiler_joint_law_dependent_variable_prefix_event_probability_le
-    hiddenLaw parameters source.coordinates
+    hiddenLaw parameters
+    (fun hidden ↦ exactCompilerQueryBatchPrefixCoordinates parameters
+      transitionFuel (exactPlainRomCursor configuration hidden).erase)
     (fun hidden residual skeleton ↦
       guardedJointQueryBatchTarget
         (source.preQueryDiscrepancy hidden residual skeleton)
