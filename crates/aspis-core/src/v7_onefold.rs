@@ -39,7 +39,7 @@ pub const V7_COMPACT_PROFILE_BINDING: [u8; 32] = [
     b'A', b'V', b'7', b'O', b'F', b'0', b'0', b'1', // magic/version
     26, 3, 10, 16, 0xcb, 0x00, 26, 32, // widths, q, cap203, digest/salt bytes
     27, 4, 6, 35, 31, 34, 0x71, 0xf1, // transcript widths, work, tree tags
-    0x81, 0x02, 8, 20, 18, 1, 64, 1, // 641 fields, logs, stream/cap, full-C2 rev
+    0x81, 0x02, 8, 20, 18, 1, 64, 2, // 641 fields, logs, stream/cap, causal-bind rev
 ];
 
 pub const V7_COMPACT_C2_QM31_PER_QUERY: usize = 12;
