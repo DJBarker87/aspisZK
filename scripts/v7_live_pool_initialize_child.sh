@@ -27,6 +27,8 @@ readonly OPERATION=${ASPIS_V7_LIVE_OPERATION:-transfer}
 readonly CIPHERTEXT_CASE=${ASPIS_V7_LIVE_CIPHERTEXT_CASE:-canonical}
 readonly WITHDRAWAL_CPI_CASE=${ASPIS_V7_LIVE_WITHDRAWAL_CPI_CASE:-none}
 readonly SELECTED_LANE_CASE=${ASPIS_V7_LIVE_SELECTED_LANE_CASE:-none}
+readonly START_ACTION=${ASPIS_V7_LIVE_START_ACTION:-initialize}
+readonly RESUME_INITIALIZE_EVIDENCE=${ASPIS_V7_LIVE_RESUME_INITIALIZE_EVIDENCE:-}
 readonly PUBLIC_DEVNET_ACK=${ASPIS_TXV1_PUBLIC_DEVNET_MODE:-}
 readonly DEVNET_GENESIS_HASH=EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG
 readonly TXV1_FEATURE=txv1aq4pp281K9um3tnPgkfX8UqtFT6wcVW3hNezGLL
@@ -66,6 +68,12 @@ if [[ "$SELECTED_LANE_CASE" != none ]]; then
   [[ "$OPERATION" == transfer && "$CIPHERTEXT_CASE" == canonical && "$WITHDRAWAL_CPI_CASE" == none ]] \
     || fail "selected-lane testing requires canonical transfer mode"
 fi
+[[ "$START_ACTION" == initialize || "$START_ACTION" == deposit ]] \
+  || fail "ASPIS_V7_LIVE_START_ACTION must be initialize or deposit"
+if [[ "$START_ACTION" == deposit ]]; then
+  [[ "$RESUME_INITIALIZE_EVIDENCE" == /* && -d "$RESUME_INITIALIZE_EVIDENCE" ]] \
+    || fail "deposit resume requires absolute initialize evidence"
+fi
 [[ -f "$PAYER_KEYPAIR" && -x "$BUILDER" ]] || fail "ephemeral payer or prebuilt builder unavailable"
 [[ "$EVIDENCE_DIR" == /* && "$EVIDENCE_DIR" != / && ! -e "$EVIDENCE_DIR" ]] \
   || fail "evidence directory must be new, absolute and non-root"
@@ -93,7 +101,10 @@ rpc() {
 }
 
 file_mode() {
-  stat -f %Lp "$1" 2>/dev/null || stat -c %a "$1"
+  case "$(uname -s)" in
+    Darwin) stat -f %Lp "$1" ;;
+    *) stat -c %a "$1" ;;
+  esac
 }
 
 if [[ -n "$PUBLIC_DEVNET_ACK" ]]; then
@@ -157,46 +168,57 @@ token_state() {
     | od -An -j108 -N1 -tu1 | tr -d '[:space:]'
 }
 
-slot=$(rpc '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[{"commitment":"finalized"}]}' | jq -er '.result')
-blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
-  '{jsonrpc:"2.0",id:2,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
-  | jq -er '.result.value.blockhash')
-jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" --arg hash "$blockhash" \
-  --argjson slot "$slot" \
-  '{schema:"aspis.v7.live-pool-initialize-input.v1",config:$config,payerKeypair:$payer,
-    recentBlockhash:$hash,minContextSlot:$slot,requestId:100}' >"$WORK_DIR/input.json"
-"$BUILDER" "$WORK_DIR/input.json" >"$EVIDENCE_DIR/signed-request.json"
-jq -e '.schema == "aspis.v7.live-pool-signed-request.v1" and
-  .operation == "initialize" and .serializedTransactionBytes < 1232 and
-  (.signedWireSha256 | test("^[0-9a-f]{64}$")) and
-  (.initializedAccounts | length) == 10' "$EVIDENCE_DIR/signed-request.json" >/dev/null \
-  || fail "signed initialize request failed validation"
+if [[ "$START_ACTION" == initialize ]]; then
+  slot=$(rpc '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[{"commitment":"finalized"}]}' | jq -er '.result')
+  blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
+    '{jsonrpc:"2.0",id:2,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
+    | jq -er '.result.value.blockhash')
+  jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" --arg hash "$blockhash" \
+    --argjson slot "$slot" \
+    '{schema:"aspis.v7.live-pool-initialize-input.v1",config:$config,payerKeypair:$payer,
+      recentBlockhash:$hash,minContextSlot:$slot,requestId:100}' >"$WORK_DIR/input.json"
+  "$BUILDER" "$WORK_DIR/input.json" >"$EVIDENCE_DIR/signed-request.json"
+  jq -e '.schema == "aspis.v7.live-pool-signed-request.v1" and
+    .operation == "initialize" and .serializedTransactionBytes < 1232 and
+    (.signedWireSha256 | test("^[0-9a-f]{64}$")) and
+    (.initializedAccounts | length) == 10' "$EVIDENCE_DIR/signed-request.json" >/dev/null \
+    || fail "signed initialize request failed validation"
 
-simulation=$(rpc "$(jq -c '.simulationRequest' "$EVIDENCE_DIR/signed-request.json")")
-jq . <<<"$simulation" >"$EVIDENCE_DIR/simulation.json"
-jq -e '.error | not' <<<"$simulation" >/dev/null
-jq -e '.result.value.err == null' <<<"$simulation" >/dev/null || fail "initialize simulation failed"
-send=$(rpc "$(jq -c '.sendRequest' "$EVIDENCE_DIR/signed-request.json")")
-jq . <<<"$send" >"$EVIDENCE_DIR/send.json"
-signature=$(jq -er '.result' <<<"$send")
-[[ "$signature" == "$(jq -er '.signature' "$EVIDENCE_DIR/signed-request.json")" ]] \
-  || fail "submitted transaction was not byte-identical"
+  simulation=$(rpc "$(jq -c '.simulationRequest' "$EVIDENCE_DIR/signed-request.json")")
+  jq . <<<"$simulation" >"$EVIDENCE_DIR/simulation.json"
+  jq -e '.error | not' <<<"$simulation" >/dev/null
+  jq -e '.result.value.err == null' <<<"$simulation" >/dev/null || fail "initialize simulation failed"
+  send=$(rpc "$(jq -c '.sendRequest' "$EVIDENCE_DIR/signed-request.json")")
+  jq . <<<"$send" >"$EVIDENCE_DIR/send.json"
+  signature=$(jq -er '.result' <<<"$send")
+  [[ "$signature" == "$(jq -er '.signature' "$EVIDENCE_DIR/signed-request.json")" ]] \
+    || fail "submitted transaction was not byte-identical"
 
-finalized=false
-for _ in $(seq 1 600); do
-  status=$(rpc "$(jq -nc --arg signature "$signature" \
-    '{jsonrpc:"2.0",id:300,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
-  if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
-    <<<"$status" >/dev/null; then
-    finalized=true
-    break
-  fi
-  sleep 1
-done
-[[ "$finalized" == true ]] || fail "initialize did not finalize"
-rpc "$(jq -nc --arg signature "$signature" \
-  '{jsonrpc:"2.0",id:400,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
-  | jq . >"$EVIDENCE_DIR/finalized-transaction.json"
+  finalized=false
+  for _ in $(seq 1 600); do
+    status=$(rpc "$(jq -nc --arg signature "$signature" \
+      '{jsonrpc:"2.0",id:300,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
+      <<<"$status" >/dev/null; then
+      finalized=true
+      break
+    fi
+    sleep 1
+  done
+  [[ "$finalized" == true ]] || fail "initialize did not finalize"
+  rpc "$(jq -nc --arg signature "$signature" \
+    '{jsonrpc:"2.0",id:400,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$EVIDENCE_DIR/finalized-transaction.json"
+else
+  for file in signed-request.json simulation.json send.json finalized-transaction.json; do
+    [[ -f "$RESUME_INITIALIZE_EVIDENCE/$file" ]] || fail "resume initialize evidence missing $file"
+    cp "$RESUME_INITIALIZE_EVIDENCE/$file" "$EVIDENCE_DIR/$file"
+  done
+  jq -e '.schema == "aspis.v7.live-pool-signed-request.v1" and .operation == "initialize" and
+    (.initializedAccounts | length) == 10' "$EVIDENCE_DIR/signed-request.json" >/dev/null \
+    || fail "resume initialize request invalid"
+  signature=$(jq -er '.signature' "$EVIDENCE_DIR/signed-request.json")
+fi
 jq -e '.result != null and .result.meta.err == null' "$EVIDENCE_DIR/finalized-transaction.json" >/dev/null \
   || fail "finalized initialize failed"
 
@@ -210,6 +232,15 @@ while IFS= read -r address; do
     || fail "initialized account missing: $address"
   account_index=$((account_index + 1))
 done < <(jq -r '.initializedAccounts[]' "$EVIDENCE_DIR/signed-request.json")
+if [[ "$START_ACTION" == deposit ]]; then
+  for account_index in $(seq 0 9); do
+    [[ -f "$RESUME_INITIALIZE_EVIDENCE/account-$account_index.json" ]] \
+      || fail "resume initialize account snapshot missing"
+    [[ "$(account_data_hash "$EVIDENCE_DIR/account-$account_index.json")" == \
+      "$(account_data_hash "$RESUME_INITIALIZE_EVIDENCE/account-$account_index.json")" ]] \
+      || fail "initialized Pool state changed before deposit resume"
+  done
+fi
 
 if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
   [[ -x "$SECRET_BUILDER" && -x "$DEPOSIT_BUILDER" && -x "$CHECKPOINT_BUILDER" ]] \
