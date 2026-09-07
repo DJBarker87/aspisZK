@@ -65,6 +65,20 @@ impl Rational {
         )
     }
 
+    fn sub_nonnegative(&self, other: &Self) -> Option<Self> {
+        let left = &self.numerator * &other.denominator;
+        let right = &other.numerator * &self.denominator;
+        (left >= right).then(|| Self::new(left - right, &self.denominator * &other.denominator))
+    }
+
+    fn mul_biguint(&self, factor: &BigUint) -> Self {
+        Self::new(&self.numerator * factor, self.denominator.clone())
+    }
+
+    fn floor(&self) -> BigUint {
+        &self.numerator / &self.denominator
+    }
+
     fn from_usize_ratio(numerator: usize, denominator: BigUint) -> Self {
         Self::new(BigUint::from(numerator), denominator)
     }
@@ -158,6 +172,38 @@ fn research_compiler_caps() -> (usize, usize) {
     (f, g)
 }
 
+fn maximum_gamma_numerator(q: usize, digest_bytes: usize, target_bits: usize) -> Option<BigUint> {
+    let field = BigUint::from(P).pow(4);
+    let nonzero_field = &field - BigUint::one();
+    let secure_circle_parameters = &field - BigUint::from(P).pow(2);
+    let algebraic_without_gamma =
+        ONE_FOLD_NUMERATOR + q + LATER_ALPHA_NUMERATOR + FIXED_K15_NUMERATOR;
+    let deep_denominator = &secure_circle_parameters * (&secure_circle_parameters - 1u8);
+    let (fresh_exposures, global_calls) = research_compiler_caps();
+    let other = query_probability(q)
+        .add(&Rational::from_usize_ratio(
+            algebraic_without_gamma,
+            nonzero_field.clone(),
+        ))
+        .add(&Rational::from_usize_ratio(
+            TUPLE_LIST_CAP * TUPLE_LIST_CAP * CLEARED_COMPONENT_DEGREE * CLEARED_COMPONENT_DEGREE,
+            deep_denominator,
+        ))
+        .add(&Rational::new(
+            BigUint::from(FULL256_VERIFIER_CALL_CAP * 2 * q) + choose(fresh_exposures, 2),
+            BigUint::one() << (8 * digest_bytes),
+        ))
+        .add(&Rational::new(
+            BigUint::from(fresh_exposures)
+                + choose(fresh_exposures, 2)
+                + BigUint::from(fresh_exposures) * BigUint::from(global_calls),
+            BigUint::one() << 256usize,
+        ));
+    Rational::new(BigUint::one(), BigUint::one() << target_bits)
+        .sub_nonnegative(&other)
+        .map(|remaining| remaining.mul_biguint(&nonzero_field).floor())
+}
+
 fn full_raw_ledger(q: usize, digest_bytes: usize) -> Value {
     let field = BigUint::from(P).pow(4);
     let nonzero_field = &field - BigUint::one();
@@ -211,6 +257,12 @@ fn full_raw_ledger(q: usize, digest_bytes: usize) -> Value {
             "full256_compiler": compiler.json(),
         },
         "total": total.json(),
+        "maximum_gamma_cardinality_compatible_with_target": {
+            "100_bits": maximum_gamma_numerator(q, digest_bytes, 100)
+                .map(|value| value.to_str_radix(10)),
+            "104_bits": maximum_gamma_numerator(q, digest_bytes, 104)
+                .map(|value| value.to_str_radix(10)),
+        },
         "proves_100_bit_arithmetic_inequality": proves_100,
         "proves_104_bit_arithmetic_inequality": proves_104,
     })
