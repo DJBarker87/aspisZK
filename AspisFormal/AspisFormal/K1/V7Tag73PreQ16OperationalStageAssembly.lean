@@ -21,6 +21,7 @@ open AspisFormal.HashMerkleModel
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactAdversaryAnchorFinalProfile
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
 open AspisK1.V7Tag73ExactFixedK13K14Classifier
@@ -139,6 +140,36 @@ theorem ExactPreQ16OperationalStageEnvironment.k13Decoded_eq_k15Decoded
   fixedFieldDecodeExact_unique (environment.k13Source sample input).fixedDecode
     (environment.k15Environment.material sample input k12 k13 k14).data.fixedDecode
 
+/-- The shared K1.3 source record directly supplies the decoded/parsed source
+provider consumed by the corrected q16 coordinate theorem. -/
+theorem ExactPreQ16OperationalStageEnvironment.toDecodedParsedSourceProvider
+    {HiddenTape TapeIdentity Observation Payload : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation V5PublicStatement Tag73K12ParsedProof Payload
+      DecodedSpendWitness parameters}
+    {projection : AcceptedTapeProjection V5PublicStatement Tag73K12ParsedProof
+      Payload}
+    {fixedInstance : PublicInstance V5PublicStatement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {decoderBinding : InitialProjectionBinding decoder}
+    {basis : Basis (Fin 4) F QM31Exact} {rc : RoundConstants}
+    {deployedOwner : Digest → Digest}
+    {deployedNote : Digest → F → F → Digest → Digest}
+    {deployedNullifier : Digest → Digest → Digest}
+    {deployedNode : Digest → Digest → Digest}
+    {poseidon : Poseidon2Faithful rc deployedOwner deployedNote
+      deployedNullifier deployedNode}
+    (environment : ExactPreQ16OperationalStageEnvironment transitionFuel
+      configuration projection fixedInstance decoder decoderBinding basis rc
+      poseidon) :
+    ExactFixedK13DecodedParsedSourceProvider transitionFuel configuration
+      projection fixedInstance := by
+  intro sample input
+  let source := environment.k13Source sample input
+  exact ⟨source.decoded, source.fixedDecode, source.parsed⟩
+
 /-- Narrow operational K1.3 classifier.  The older broad `ExactK13Error`
 type contains branches that this chronological classifier never returns; using
 that broad type in the proof-relevant event would nevertheless count every
@@ -239,6 +270,8 @@ noncomputable def exactTag73PreQ16OperationalStages
       environment.k15Environment sample input k12 k13 k14
 
 #print axioms ExactPreQ16OperationalStageEnvironment.k13Decoded_eq_k15Decoded
+#print axioms
+  ExactPreQ16OperationalStageEnvironment.toDecodedParsedSourceProvider
 #print axioms classifyPreQ16OperationalK13
 #print axioms exactTag73PreQ16OperationalStages
 
