@@ -6,17 +6,22 @@ import AspisFormal.K1.V7Tag73SchedulerNativePreGammaFamily
 # Exact boundary of the V8 pre-gamma tuple-binding argument
 
 The current source pipeline constructs a restoration-wide K1.3 provider from
-the exact scheduler replay.  K1.4 coherent extractions, however, live in the
-separate `RestoredK14BranchProvider` interface.  No current theorem constructs
-that latter provider from every legal compiler continuation; the selected
-source bridge proves only the actual-gamma branch and explicitly leaves
-cached/advance replay outside the fresh-only scheduler.
+the exact scheduler replay.  The legacy K1.4 provider also demands a genuine
+fallback extraction even though unavailable branches never consume it.  Such
+a fallback is post-gamma evidence and is therefore the wrong interface for a
+family fixed before gamma.  This file uses the strictly weaker partial
+provider needed by the V8 argument: one executable `gamma -> Option branch`.
 
 This file states that missing interface exactly and proves everything after
 it.  It does not postulate an axiom and does not claim that the exact compiler
 supplies the structure.  A future source theorem must construct
 `ExactCompilerPreGammaTupleObligation` with `sourceFamily` instantiated by
-`exactCompilerRestoredSelectedProvider`.
+`exactCompilerRestoredSelectedProvider`.  A separate source module constructs
+the partial K1.4 family and its K1.3 refinement.  The production V8 verifier
+checks only the two gamma-compressed component-vector equalities, so literal
+component-wise prefix replay is a deliberately stronger conditional result,
+not the remaining release theorem.  The release argument instead needs the
+separate scalar-fingerprint bad-gamma union bound.
 -/
 
 set_option autoImplicit false
@@ -77,6 +82,26 @@ structure V8TwoPointComponentPrefix where
   finite0 : circleDenominator parameter0 ≠ 0
   finite1 : circleDenominator parameter1 ≠ 0
 
+/-- The causal K1.4 data actually needed by V8.  Unlike the legacy
+`RestoredK14BranchProvider`, rejecting/unavailable challenges require no
+fabricated coherent extraction. -/
+structure PartialRestoredK14BranchProvider
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (binding : InitialProjectionBinding decoder)
+    (words : AspisPool.V7MerkleQueryExtractor.ExtractedWords) where
+  branch : (gamma : QM31Exact) →
+    Option (RestoredK14Branch decoder binding words gamma)
+
+/-- Forget the legacy fallback.  This adapter is useful for old callers, but
+the exact-compiler V8 construction does not need to manufacture one. -/
+def partialProviderOfLegacy
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {binding : InitialProjectionBinding decoder}
+    {words : AspisPool.V7MerkleQueryExtractor.ExtractedWords}
+    (provider : RestoredK14BranchProvider decoder binding words) :
+    PartialRestoredK14BranchProvider decoder binding words :=
+  ⟨provider.branch⟩
+
 /-- Every available K1.4 continuation consumes the same proof-carried prefix.
 This is the semantic conclusion that parsing plus replay must establish; it
 is stronger than merely asserting that the values occur somewhere in a raw
@@ -85,7 +110,7 @@ def RestoredK14ProviderMatchesTwoPointPrefix
     {decoder : ExactDecoderInstantiation QM31Exact}
     {binding : InitialProjectionBinding decoder}
     {words : AspisPool.V7MerkleQueryExtractor.ExtractedWords}
-    (provider : RestoredK14BranchProvider decoder binding words)
+    (provider : PartialRestoredK14BranchProvider decoder binding words)
     (componentPrefix : V8TwoPointComponentPrefix) : Prop :=
   ∀ (gamma : QM31Exact)
     (branch : RestoredK14Branch decoder binding words gamma),
@@ -103,7 +128,7 @@ structure RestoredK14ProviderRefinesK13Provider
     {binding : InitialProjectionBinding decoder}
     {words : AspisPool.V7MerkleQueryExtractor.ExtractedWords}
     (k13 : RestoredSelectedBranchProvider decoder words)
-    (k14 : RestoredK14BranchProvider decoder binding words) : Prop where
+    (k14 : PartialRestoredK14BranchProvider decoder binding words) : Prop where
   branchRefines : ∀ (gamma : QM31Exact)
     (later : RestoredK14Branch decoder binding words gamma),
     k14.branch gamma = some later →
@@ -115,17 +140,18 @@ structure RestoredK14ProviderRefinesK13Provider
 
 For the production proof this structure must be built with `sourceFamily`
 definitionally equal to the `exactCompilerRestoredSelectedProvider` obtained
-from one source pause and nuisance skeleton.  The current repository has no
-constructor for `k14Family` from that replay, so this is recorded as a data
-obligation rather than introduced as a theorem hypothesis under another
-name. -/
+from one source pause and nuisance skeleton.  The replay/classifier supplies
+the partial K1.4 family and refinement.  This strong structure is useful for
+stating the ideal fixed-tuple implication, but it cannot be derived from a
+verifier which checks only the two gamma dots without first excluding an
+explicit scalar-fingerprint bad-gamma set. -/
 structure ExactCompilerPreGammaTupleObligation
     {decoder : ExactDecoderInstantiation QM31Exact}
     {binding : InitialProjectionBinding decoder}
     {words : AspisPool.V7MerkleQueryExtractor.ExtractedWords}
     (sourceFamily : RestoredSelectedBranchProvider decoder words)
     (componentPrefix : V8TwoPointComponentPrefix) where
-  k14Family : RestoredK14BranchProvider decoder binding words
+  k14Family : PartialRestoredK14BranchProvider decoder binding words
   sourceRefinement :
     RestoredK14ProviderRefinesK13Provider sourceFamily k14Family
   prefixReplay :
@@ -139,7 +165,7 @@ theorem restored_k14_branches_use_one_fixed_tuple
     {binding : InitialProjectionBinding decoder}
     {words : AspisPool.V7MerkleQueryExtractor.ExtractedWords}
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
-    (provider : RestoredK14BranchProvider decoder binding words)
+    (provider : PartialRestoredK14BranchProvider decoder binding words)
     (componentPrefix : V8TwoPointComponentPrefix)
     (prefixReplay : RestoredK14ProviderMatchesTwoPointPrefix
       provider componentPrefix)
