@@ -105,6 +105,7 @@ fn absorb_component_vector(
 /// The returned transcript has not sampled gamma. This makes it impossible
 /// for this helper to accidentally move gamma ahead of the existing batch
 /// work stage.
+#[inline(never)]
 pub fn derive_v8_a100_ood_prefix(
     transcript: &Transcript,
     component_evaluations: &[[QM31; V8_A100_COMPONENTS]; V8_A100_OOD_POINTS],
@@ -380,8 +381,8 @@ fn decode_v8_query_gamma_dots_streaming(
     let mut combined = [QM31::ZERO; V8_A100_FIBRE_SLOTS];
     for column in 0..V6_C1_COLUMNS {
         for slot in 0..V8_A100_FIBRE_SLOTS {
-            combined[slot] = combined[slot]
-                .add(powers[column].mul_m31(M31(c1[slot * V6_C1_COLUMNS + column])));
+            combined[slot] =
+                combined[slot].add(powers[column].mul_m31(M31(c1[slot * V6_C1_COLUMNS + column])));
         }
     }
     for helper in 0..V6_C2_COLUMNS {

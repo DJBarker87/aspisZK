@@ -13,7 +13,7 @@ use aspis_core::v8_a100::{
 };
 use aspis_core::v8_deep::{
     derive_v8_a100_ood_prefix, v8_deep_quotients_heap_batched_in_place,
-    v8_deep_quotients_pointwise_in_place, V8_A100_FIBRE_SLOTS,
+    v8_deep_quotients_pointwise_in_place, V8A100TwoPointChallenges, V8_A100_FIBRE_SLOTS,
 };
 use solana_program::{
     account_info::AccountInfo,
@@ -39,22 +39,9 @@ fn q(values: [u32; 4]) -> QM31 {
 }
 
 #[inline(never)]
-fn run_probe(proof: &[u8], mode: u8) -> ProgramResult {
-    if mode == V8_DEEP_CANONICAL_PARSE_MODE {
-        msg!("aspis-v8-deep:canonical-parse-start");
-        sol_log_compute_units();
-        V8A100Wire::parse_for_schedule(
-            proof,
-            V8_A100_MAX_FRONTIER_FIXTURE,
-            V8_A100_FRONTIER_MAX_PER_TREE,
-        )
-        .map_err(|_| ProgramError::InvalidAccountData)?;
-        sol_log_compute_units();
-        sol_log_data(&[&[0u8; 16]]);
-        return Ok(());
-    }
-    let wire = V8A100Wire::parse_deferred_canonicality(proof, V8_A100_FRONTIER_MAX_PER_TREE)
-        .map_err(|_| ProgramError::InvalidAccountData)?;
+fn derive_probe_challenges(
+    wire: &V8A100Wire<'_>,
+) -> Result<V8A100TwoPointChallenges, ProgramError> {
     let component_evaluations = wire
         .component_ood_vectors()
         .ok_or(ProgramError::InvalidAccountData)?;
@@ -63,7 +50,29 @@ fn run_probe(proof: &[u8], mode: u8) -> ProgramResult {
     transcript.absorb(label::STATEMENT, &[0x5a; 32]);
     let prefix = derive_v8_a100_ood_prefix(&transcript, &component_evaluations)
         .map_err(|_| ProgramError::InvalidArgument)?;
-    let challenges = prefix.challenges(q([101, 307, 509, 701]));
+    Ok(prefix.challenges(q([101, 307, 509, 701])))
+}
+
+#[inline(never)]
+fn run_canonical_parse_probe(proof: &[u8]) -> ProgramResult {
+    msg!("aspis-v8-deep:canonical-parse-start");
+    sol_log_compute_units();
+    V8A100Wire::parse_for_schedule(
+        proof,
+        V8_A100_MAX_FRONTIER_FIXTURE,
+        V8_A100_FRONTIER_MAX_PER_TREE,
+    )
+    .map_err(|_| ProgramError::InvalidAccountData)?;
+    sol_log_compute_units();
+    sol_log_data(&[&[0u8; 16]]);
+    Ok(())
+}
+
+#[inline(never)]
+fn run_deep_probe(proof: &[u8], mode: u8) -> ProgramResult {
+    let wire = V8A100Wire::parse_deferred_canonicality(proof, V8_A100_FRONTIER_MAX_PER_TREE)
+        .map_err(|_| ProgramError::InvalidAccountData)?;
+    let challenges = derive_probe_challenges(&wire)?;
     let mut output: Vec<[QM31; V8_A100_FIBRE_SLOTS]> = vec![[QM31::ZERO; V8_A100_FIBRE_SLOTS]; 22];
 
     msg!("aspis-v8-deep:kernel-start");
@@ -97,6 +106,15 @@ fn run_probe(proof: &[u8], mode: u8) -> ProgramResult {
     checksum.write_le_bytes(&mut checksum_bytes);
     sol_log_data(&[&checksum_bytes]);
     Ok(())
+}
+
+#[inline(never)]
+fn run_probe(proof: &[u8], mode: u8) -> ProgramResult {
+    match mode {
+        V8_DEEP_HEAP_BATCHED_MODE | V8_DEEP_POINTWISE_MODE => run_deep_probe(proof, mode),
+        V8_DEEP_CANONICAL_PARSE_MODE => run_canonical_parse_probe(proof),
+        _ => Err(ProgramError::InvalidInstructionData),
+    }
 }
 
 pub fn process_v8_deep_cu_probe_instruction(
