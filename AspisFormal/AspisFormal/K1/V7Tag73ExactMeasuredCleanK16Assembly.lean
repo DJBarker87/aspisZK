@@ -4,7 +4,7 @@ import AspisFormal.K1.V7Tag73ExactPairAdversaryProfileClosure
 import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
 import AspisFormal.K1.V7Tag73K14BoundGammaClosure
 import AspisFormal.K1.V7Tag73K15BoundGammaClosure
-import AspisFormal.K1.V7Tag73K15RelationAlphaActualLawClosure
+import AspisFormal.K1.V7Tag73K15SemanticActualLawClosure
 
 /-!
 # Exact measured Tag-73 closure from the clean work-dependent q16 theorem
@@ -63,6 +63,7 @@ open AspisK1.V7Tag73K14BoundGammaClosure
 open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73K15BoundGammaClosure
 open AspisK1.V7Tag73K15RelationAlphaActualLawClosure
+open AspisK1.V7Tag73K15SemanticActualLawClosure
 open AspisK1.V7Tag73ProofRelevantUpstreamInterface
 open AspisK1.V7Tag73Q16FirstCompactUniformity
 open AspisK1.V7Tag73Q16SemanticFrontierBridge
@@ -166,9 +167,16 @@ theorem exact_tag73_measured_clean_k16_aok_raw
           (exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
             projection fixedInstance decoder k13Source) ≤
         exactLaterRelationAlphaIdealRawError)
-    (remainingFixedK15Bounds : FixedK15EventBoundsExceptRelationAlpha
+    (remainingFixedK15Bounds : FixedK15EventBoundsExceptSemanticRelationAlpha
       (exactCompilerJointLaw hiddenLaw parameters)
       (exactTag73RestoredFixedK15Events environment))
+    (k15SemanticLanes : ExactTag73SemanticLanes HiddenTape parameters)
+    (k15SemanticTerminal : ExactTag73SemanticTerminal HiddenTape parameters
+      decoder k15SemanticLanes)
+    (k15SemanticSumcheck : ExactTag73SemanticSumcheck HiddenTape parameters
+      decoder k15SemanticLanes)
+    (k15SemanticCover : ExactTag73SemanticCover environment k15SemanticLanes
+      k15SemanticTerminal k15SemanticSumcheck)
     (k15RelationAlphaSource : ExactTag73K15RelationAlphaSource transitionFuel
       configuration projection fixedInstance decoder decoderBinding basis rc
       poseidon environment)
@@ -223,8 +231,9 @@ theorem exact_tag73_measured_clean_k16_aok_raw
   have restoredK15Bound :=
     exact_tag73_restored_k15_residual_probability_le_of_bound_gamma_source
       hiddenLaw publishedInitialWidth29 k15ResidualSource
-  have fixedK15Bounds := fixed_k15_event_bounds_of_relation_alpha_source
-    hiddenLaw remainingFixedK15Bounds k15RelationAlphaSource
+  have fixedK15Bounds := fixed_k15_event_bounds_of_semantic_relation_sources
+    hiddenLaw remainingFixedK15Bounds k15SemanticLanes k15SemanticTerminal
+    k15SemanticSumcheck k15SemanticCover k15RelationAlphaSource
   have k15Measure := exact_restored_k15_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance decoder
     decoderBinding basis rc poseidon environment fixedK15Bounds
