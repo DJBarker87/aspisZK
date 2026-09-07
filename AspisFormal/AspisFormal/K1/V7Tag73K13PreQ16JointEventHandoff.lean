@@ -49,6 +49,7 @@ open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7C1ConcreteProjectionBinding
+open AspisPool.V7C1SubfieldRecovery
 open AspisPool.V7MerkleQueryGrammar
 open AspisV5ComponentCQM31TowerExact
 open AspisV5WithoutReplacementQuerySoundness
@@ -528,12 +529,74 @@ noncomputable def classifyInputThroughPreQ16Stage
       frontierExact accepts).map id Sum.inr
   · exact .inr (.inl (.idealRejected accepts))
 
+/-! ## K1.4 on the same corrected word -/
+
+/-- Coherent-chain extraction on exactly the word retained by corrected K1.3.
+The certificate is indexed by the K1.3 object, so downstream code cannot
+substitute the later completed-prover word. -/
+structure ExactPreQ16K14StageCertificate
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (binding : InitialProjectionBinding decoder)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k13 : ExactPreQ16K13StageCertificate decoder input) : Type where
+  parsed : ParsedK14Certificate decoder binding k13.words
+    (exactK13ParsedProof input)
+
+/-- The sole K1.4 failure on the corrected K1.3 word. -/
+structure ExactPreQ16K14StageError
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k13 : ExactPreQ16K13StageCertificate decoder input) : Type where
+  parsed : ParsedK14Error decoder k13.words (exactK13ParsedProof input)
+
+/-- Total width-29 classifier, run on the same pre-q16 word carried by K1.3.
+-/
+noncomputable def classifyPreQ16K14Stage
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (binding : InitialProjectionBinding decoder)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k13 : ExactPreQ16K13StageCertificate decoder input) :
+    ExactPreQ16K14StageCertificate decoder binding input k13 ⊕
+      ExactPreQ16K14StageError decoder input k13 :=
+  match classifyParsedK14 decoder binding k13.words
+      (exactK13ParsedProof input) k13.parsed with
+  | .inl certificate => .inl ⟨certificate⟩
+  | .inr error => .inr ⟨error⟩
+
 #print axioms preQ16_query_failure_has_joint_trial_witness
 #print axioms actual_joint_trial_has_preQ16_anchor
 #print axioms accepted_input_classifies_through_preQ16_trial
 #print axioms accepted_input_has_preQ16_stage_certificate_or_error
 #print axioms classifyAcceptedInputThroughPreQ16Stage
 #print axioms classifyInputThroughPreQ16Stage
+#print axioms classifyPreQ16K14Stage
 
 end
 
