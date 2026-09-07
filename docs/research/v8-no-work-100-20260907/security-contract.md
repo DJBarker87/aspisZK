@@ -3,6 +3,13 @@
 Status: no candidate has a complete 100-bit certificate. This directory is
 research only; selected acceptance, deployment and payment semantics are unchanged.
 
+The [joint image/relation game](joint-image-review.md) now has a proved restricted
+ideal bound `(q+2)/(k-1)+24/k+choose(255,q)/choose(262144,q)`, 118.4150 bits at
+q22. This covers exact polynomial quotients with invalid image under a proposed
+fresh-tau gate, not arbitrary oracles or the actual FS execution. Its four
+relation repairs must not be double counted in the other inventory. The gate
+is not installed in the pinned V8 implementation. No whole-protocol upgrade.
+
 The [query-last audit](adaptive-tail-review.md) separates the prefix-defined
 width29 event from query-dependent classifier rejection and from the V8 chord
 image/source bridge. In the algebraic chord/query model, absence of an original

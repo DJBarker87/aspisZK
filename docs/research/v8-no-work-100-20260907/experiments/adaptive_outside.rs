@@ -183,6 +183,13 @@ fn main() {
             let scale=pow(gamma,lane); assert_ne!(scale,K::ZERO);
             let scaled:Vec<K>=q.iter().map(|v|v.mul(scale)).collect();
             assert_eq!(hi.mul(scaled[2*N-2]).add(lo.mul(scaled[0])),scale);
+            // New joint-image continuation: top natural-tensor coefficients.
+            // Leading Chebyshev/tensor ratio is 256; B's degree is <=510,
+            // hence q[1023]=0. This checks the explicit E2=512*gamma^lane,
+            // not merely an unspecified Laurent endpoint overflow.
+            let top_a=scaled[2*N-2].add(scaled[0]).mul(scalar(256));
+            let next_b=i.mul(scaled[2*N-2].sub(scaled[0])).mul(scalar(256));
+            assert_eq!(b.mul(top_a).sub(c.mul(next_b)),scalar(512).mul(scale));
             for alpha in alphas {check_fold(&scaled,i,alpha); fold_checks+=10;}
         }}
     }
@@ -198,6 +205,7 @@ fn main() {
     println!("PASS exact coefficientwise chord division/reconstruction for precommitted T_512");
     println!("PASS {fold_checks} actual-domain nested-fold comparisons against degree<=255 final polynomials");
     println!("PASS all 32 gamma-scaled overflow residuals nonzero; semantic lane 0 and mask-only lane 25; zero alpha included");
+    println!("PASS all 32 natural-tensor E2=512*gamma^lane residual identities (new image-gate continuation)");
     println!("UNIVERSAL DERIVATION: Q is in Laurent[-511,511], f is outside W; M=T for every legal OOD pair and nonzero gamma and every alpha");
     println!("This is a query-only obstruction. Required image/relation checks may reject it. NOT full verifier acceptance.");
 }

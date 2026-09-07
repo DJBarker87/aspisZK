@@ -1,5 +1,11 @@
 # Decision at the investigated revisions: no-go for a certified V8
 
+Latest: [joint-image-review.md](joint-image-review.md) proves the restricted
+causal image/relation bound (118.4150 ideal bits) and confirms that installing
+the gate requires a research-only verifier change. It adds no scalar values
+to the 40,282-byte model. The full no-go remains: image-valid non-polynomial
+adaptive recovery, source integration, full-view ZK and matched CU are open.
+
 Latest: [adaptive-tail-review.md](adaptive-tail-review.md) rejects a query-only
 recovery shortcut using a pre-OOD full-degree oracle, while leaving actual
 accepted image/relation and adaptive outside probabilities unresolved. The

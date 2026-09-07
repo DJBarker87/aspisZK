@@ -1,5 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [joint image/relation review](joint-image-review.md). A new Lean causal
+game proves the restricted exact-polynomial/invalid-image bound, 118.4150 bits
+at q22 under ideal sampling, including adaptive finals and sequential responses.
+The pinned V8 kernels do not install this gate. Research-only prototype/checks
+pass; source integration, non-polynomial recovery, full-view ZK and full CU
+remain unresolved. See [exact ledger](joint-image-results.json) and
+[replay evidence](joint-image-evidence.json). No production change.
+
 Latest: [adaptive query-boundary review](adaptive-tail-review.md). Source timing
 permits a prefix-defined mathematical width29 event. A pre-OOD T_512 oracle
 nevertheless gives perfect V8 chord-query agreement outside the original code:
