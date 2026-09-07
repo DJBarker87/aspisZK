@@ -17,6 +17,7 @@ set_option maxRecDepth 100000
 namespace AspisK1.V7Tag73ExactPairRootAbsorbChainClosure
 
 open AspisK1.V7FsAokExperiment
+open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AdaptiveQ16TrialAccounting
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73CausalDagFinalWorkQ16Controller
@@ -339,6 +340,164 @@ theorem exact_actual_trial_retains_root_chains
         simpa [final256Input, nonceInput] using finalBeforeNonce)).2, ?_⟩
     simp [HasLiteralStatePrefix, nonceInput]
 
+/-- Witness-independent core of the cross-fibre root-chain argument.  Given
+two actual accepted trials cut at one common chronological prefix, their C1
+and C2 absorb inputs agree.  No residual bad set or q16 membership appears. -/
+theorem exact_pair_k13_root_absorb_inputs_eq_of_common_prior
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftInput : ExactK12OperationalInput transitionFuel configuration
+      projection fixedInstance (hidden, left))
+    (rightInput : ExactK12OperationalInput transitionFuel configuration
+      projection fixedInstance (hidden, right))
+    (trial : ExactCompilerExposureTrial parameters)
+    (leftActual : ExactFixedK13ActualJointTrial leftInput trial)
+    (rightActual : ExactFixedK13ActualJointTrial rightInput trial)
+    (leftPrior leftLater rightPrior rightLater : List UnifiedExposureRecord)
+    (leftActor rightActor : QueryActor)
+    (leftSelectedInput rightSelectedInput : ShaInput)
+    (leftAnswer rightAnswer : Digest256)
+    (leftRootExact : exactFixedRootRecords leftInput.package.root =
+      leftPrior ++ (.machineFresh leftActor leftSelectedInput leftAnswer :
+        UnifiedExposureRecord) :: leftLater)
+    (rightRootExact : exactFixedRootRecords rightInput.package.root =
+      rightPrior ++ (.machineFresh rightActor rightSelectedInput rightAnswer :
+        UnifiedExposureRecord) :: rightLater)
+    (leftTrialExact : trial.val = leftPrior.length)
+    (rightTrialExact : trial.val = rightPrior.length)
+    (priorExact : leftPrior = rightPrior) :
+    let leftMessages := (exactK12Runtime leftInput).adversaryValue.rawMessages
+    let rightMessages := (exactK12Runtime rightInput).adversaryValue.rawMessages
+    (∃ leftBefore rightBefore leftSalt rightSalt : Digest256,
+        bytes leftBefore ++ [domAbsorb, c1RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+              leftMessages.c1Root leftSalt).data =
+          bytes rightBefore ++ [domAbsorb, c1RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+              rightMessages.c1Root rightSalt).data) ∧
+      (∃ leftBefore rightBefore leftSalt rightSalt : Digest256,
+        bytes leftBefore ++ [domAbsorb, c2RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+              leftMessages.c2Root leftSalt).data =
+          bytes rightBefore ++ [domAbsorb, c2RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+              rightMessages.c2Root rightSalt).data) := by
+  subst rightPrior
+  let controller := exactDagTrialController transitionFuel trial
+  let initial := exactDagCandidateInitialState leftInput
+  have leftAlignedRaw := exact_root_records_aligned_for_dag_controller
+    leftInput trial.val
+  have rightAlignedRaw := exact_root_records_aligned_for_dag_controller
+    rightInput trial.val
+  have leftAligned : IndexedRecordsAligned transitionFuel controller initial
+      (exactFixedRootRecords leftInput.package.root) := by
+    simpa [controller, initial, exactDagTrialController] using leftAlignedRaw
+  have rightAligned : IndexedRecordsAligned transitionFuel controller initial
+      (exactFixedRootRecords rightInput.package.root) := by
+    simpa [controller, initial, exactDagTrialController,
+      exactDagCandidateInitialState] using rightAlignedRaw
+  have leftSelectedAligned := leftAligned leftPrior
+    (.machineFresh leftActor leftSelectedInput leftAnswer) leftLater leftRootExact
+  have rightSelectedAligned := rightAligned leftPrior
+    (.machineFresh rightActor rightSelectedInput rightAnswer) rightLater
+      rightRootExact
+  have leftInputAtCursor := aligned_machine_record_has_exact_input
+    transitionFuel
+    (indexedStateAfterRecords transitionFuel controller leftPrior initial).cursor
+    leftActor leftSelectedInput leftAnswer leftSelectedAligned
+  have rightInputAtCursor := aligned_machine_record_has_exact_input
+    transitionFuel
+    (indexedStateAfterRecords transitionFuel controller leftPrior initial).cursor
+    rightActor rightSelectedInput rightAnswer rightSelectedAligned
+  have selectedInputExact : leftSelectedInput = rightSelectedInput :=
+    Option.some.inj (leftInputAtCursor.symm.trans rightInputAtCursor)
+  obtain ⟨leftC1Before, leftC2Before, leftC1Salt, leftC2Salt,
+      leftC1Answer, leftC2Answer, leftTerminal, leftC1Chain, leftC2Chain,
+      leftTerminalPrefix⟩ :=
+    exact_actual_trial_retains_root_chains transitionRoom leftInput trial
+      leftActual leftPrior leftLater leftActor leftSelectedInput leftAnswer
+      leftRootExact leftTrialExact
+  obtain ⟨rightC1Before, rightC2Before, rightC1Salt, rightC2Salt,
+      rightC1Answer, rightC2Answer, rightTerminal, rightC1Chain,
+      rightC2Chain, rightTerminalPrefix⟩ :=
+    exact_actual_trial_retains_root_chains transitionRoom rightInput trial
+      rightActual leftPrior rightLater rightActor rightSelectedInput rightAnswer
+      rightRootExact rightTrialExact
+  have terminalExact : leftTerminal = rightTerminal :=
+    literal_prefix_input_eq_fixes_digest leftTerminalPrefix
+      rightTerminalPrefix selectedInputExact
+  subst rightTerminal
+  have priorAnswersNodup :
+      (leftPrior.map UnifiedExposureRecord.answer).Nodup := by
+    have fullNodup := exact_root_record_answers_nodup leftInput
+    rw [leftRootExact, List.map_append, List.map_cons] at fullNodup
+    exact (List.nodup_append.mp fullNodup).1
+  have leftC1DataNonempty :
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+        (exactOperationalTape leftInput).messages.c1Root leftC1Salt).data ≠ [] := by
+    intro empty
+    have lengths := congrArg List.length empty
+    simp [AspisK1.V7Tag73TranscriptSchedule.Payload.data] at lengths
+  have rightC1DataNonempty :
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+        (exactOperationalTape rightInput).messages.c1Root rightC1Salt).data ≠ [] := by
+    intro empty
+    have lengths := congrArg List.length empty
+    simp [AspisK1.V7Tag73TranscriptSchedule.Payload.data] at lengths
+  have c1InputExact := exact_retained_digest_chains_boundary_input_eq
+    priorAnswersNodup leftC1Chain rightC1Chain
+    (absorb_input_avoids_post_root_state_input c1RootLabel leftC1Before _
+      leftC1DataNonempty)
+    (absorb_input_avoids_post_root_state_input c1RootLabel rightC1Before _
+      rightC1DataNonempty)
+  have c2InputExact := exact_retained_digest_chains_boundary_input_eq
+    priorAnswersNodup leftC2Chain rightC2Chain
+    (c2_absorb_input_avoids_post_c2_state_input leftC2Before leftC2Salt
+      (exactOperationalTape leftInput).messages.c2.root)
+    (c2_absorb_input_avoids_post_c2_state_input rightC2Before rightC2Salt
+      (exactOperationalTape rightInput).messages.c2.root)
+  have leftC1RootExact :
+      (exactK12Runtime leftInput).adversaryValue.rawMessages.c1Root =
+        (exactOperationalTape leftInput).messages.c1Root := by
+    change leftInput.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c1Root =
+      leftInput.package.root.fixedRoot.base.tape.messages.c1Root
+    rw [← leftInput.package.root.fixedRoot.base.rawMessagesExact]
+    rfl
+  have rightC1RootExact :
+      (exactK12Runtime rightInput).adversaryValue.rawMessages.c1Root =
+        (exactOperationalTape rightInput).messages.c1Root := by
+    change rightInput.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c1Root =
+      rightInput.package.root.fixedRoot.base.tape.messages.c1Root
+    rw [← rightInput.package.root.fixedRoot.base.rawMessagesExact]
+    rfl
+  have leftC2RootExact :
+      (exactK12Runtime leftInput).adversaryValue.rawMessages.c2Root =
+        (exactOperationalTape leftInput).messages.c2.root := by
+    change leftInput.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c2Root =
+      leftInput.package.root.fixedRoot.base.tape.messages.c2.root
+    rw [← leftInput.package.root.fixedRoot.base.rawMessagesExact]
+    rfl
+  have rightC2RootExact :
+      (exactK12Runtime rightInput).adversaryValue.rawMessages.c2Root =
+        (exactOperationalTape rightInput).messages.c2.root := by
+    change rightInput.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c2Root =
+      rightInput.package.root.fixedRoot.base.tape.messages.c2.root
+    rw [← rightInput.package.root.fixedRoot.base.rawMessagesExact]
+    rfl
+  exact ⟨⟨leftC1Before, rightC1Before, leftC1Salt, rightC1Salt,
+      by simpa [leftC1RootExact, rightC1RootExact] using c1InputExact⟩,
+    ⟨leftC2Before, rightC2Before, leftC2Salt, rightC2Salt,
+      by simpa [leftC2RootExact, rightC2RootExact] using c2InputExact⟩⟩
+
 /-- Equal controller state after the common adversary-anchor prefix fixes the
 selected input in both executions.  The retained chains therefore share their
 pre-final terminal and reverse to identical literal C1/C2 absorb inputs. -/
@@ -497,6 +656,7 @@ theorem exact_fixed_clean_pair_k13_pre_q16_words_invariant
 
 #print axioms exact_actual_pair_digest_eq_canonical_prefinal
 #print axioms exact_actual_trial_retains_root_chains
+#print axioms exact_pair_k13_root_absorb_inputs_eq_of_common_prior
 #print axioms exact_fixed_clean_pair_k13_root_absorb_inputs_invariant
 #print axioms exact_fixed_clean_pair_k13_pre_q16_words_invariant
 

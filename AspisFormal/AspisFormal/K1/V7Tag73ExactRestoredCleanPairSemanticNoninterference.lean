@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactRestoredCleanPairFactorization
 import AspisFormal.K1.V7Tag73ExactRestoredQ16SemanticNoninterference
 import AspisFormal.K1.V7Tag73ExactPairCoordinateProfileInvariant
+import AspisFormal.K1.V7Tag73ExactPairRootAbsorbChainClosure
 import AspisFormal.K1.V7Tag73ExactRestoredQ16VerifierRuntimeInvariant
 
 /-!
@@ -38,6 +39,7 @@ open AspisK1.V7Tag73ExactDagVerifierAnchorPrefix
 open AspisK1.V7Tag73ExactFoldAlphaFinalWorkQ16RootRouting
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactPairCoordinateProfileInvariant
+open AspisK1.V7Tag73ExactPairRootAbsorbChainClosure
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactFinal256DigestRootOrigin
 open AspisK1.V7Tag73ExactRestoredCleanPairFactorization
@@ -68,6 +70,7 @@ open AspisK1.V7Tag73CanonicalOneFoldSchedule
 open AspisK1.V7Tag73RestoredK12CanonicalWordCongruence
 open AspisK1.V7Tag73RestoredDerivedK13View
 open AspisK1.V7Tag73RestoredNodeK13Classifier
+open AspisK1.V7Tag73RootAbsorbInputInjectivity
 open AspisK1.V7Tag73ExactK12UntypedVerifierSuffix
 open AspisPool.V7MerkleQueryExtractor
 open AspisPool.V7MerkleQueryGrammar
@@ -827,6 +830,76 @@ theorem exact_restored_clean_pair_adversary_anchor_disclosed_final_eq
   rw [rawFinalExact] at leftDecode
   exact Option.some.inj (leftDecode.symm.trans rightDecode)
 
+/-- The same adversary-anchor prefix contains both complete C1/C2 absorb
+chains.  Fixed-layout parsing of their equal boundary inputs therefore fixes
+the two authenticated 208-bit Merkle roots without a hash-injectivity axiom. -/
+theorem exact_restored_clean_pair_adversary_anchor_roots_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (anchor : ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    exactK12Roots leftWitness.joint.input =
+      exactK12Roots rightWitness.joint.input := by
+  obtain ⟨leftPrior, leftLater, rightPrior, rightLater, leftInput, rightInput,
+      leftAnswer, rightAnswer, rightActor, leftRootExact, rightRootExact,
+      leftTrialExact, rightTrialExact, priorExact⟩ :=
+    exact_restored_clean_pair_adversary_anchor_root_priors_eq foldTrial
+      finalTrial hidden left right leftWitness rightWitness anchor
+        programmedCover contextExact foldExact
+  obtain ⟨⟨leftC1Before, rightC1Before, leftC1Salt, rightC1Salt,
+      c1InputExact⟩,
+      ⟨leftC2Before, rightC2Before, leftC2Salt, rightC2Salt,
+      c2InputExact⟩⟩ :=
+    exact_pair_k13_root_absorb_inputs_eq_of_common_prior transitionRoom hidden
+      left right leftWitness.joint.input rightWitness.joint.input finalTrial
+      leftWitness.joint.actualTrial rightWitness.joint.actualTrial leftPrior
+      leftLater rightPrior rightLater .adversary rightActor leftInput rightInput
+      leftAnswer rightAnswer leftRootExact rightRootExact leftTrialExact
+      rightTrialExact priorExact
+  have c1Exact := c1_root_eq_of_absorb_input_eq leftC1Before rightC1Before
+    (exactK12Runtime leftWitness.joint.input).adversaryValue.rawMessages.c1Root
+    (exactK12Runtime rightWitness.joint.input).adversaryValue.rawMessages.c1Root
+    leftC1Salt rightC1Salt c1InputExact
+  have c2Exact := c2_root_eq_of_absorb_input_eq leftC2Before rightC2Before
+    (exactK12Runtime leftWitness.joint.input).adversaryValue.rawMessages.c2Root
+    (exactK12Runtime rightWitness.joint.input).adversaryValue.rawMessages.c2Root
+    leftC2Salt rightC2Salt c2InputExact
+  simp only [exactK12Roots]
+  rw [c1Exact, c2Exact]
+
 /-- The only chronology branch still requiring a source proof: the selected
 final-work input was first exposed by the adversary and later read by the
 verifier as an immutable cache hit. -/
@@ -1058,6 +1131,7 @@ theorem exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
 #print axioms exact_restored_clean_pair_adversary_anchor_root_priors_eq
 #print axioms exact_restored_clean_pair_selected_root_priors_eq
 #print axioms exact_restored_clean_pair_selected_input_and_digest_eq
+#print axioms exact_restored_clean_pair_adversary_anchor_roots_eq
 #print axioms exact_restored_clean_pair_adversary_anchor_final_values_eq
 #print axioms exact_restored_clean_pair_adversary_anchor_disclosed_final_eq
 #print axioms exact_restored_clean_k13_pair_coordinate_invariant_of_semantic
