@@ -60,6 +60,12 @@ operational stage measures must be instantiated before quoting a number.
 
 ## Primary: component-wise OOD tuple binding, retained QM31
 
+Continuation status: user accepts the canonical q22 40,282-byte model.
+`chord-verdict.md` derives honest quotient/code-space closure and records exact
+basis tests, while exposing reverse-image and transformed-relation obligations.
+The restored coherent-extraction provider below is still missing; its uniqueness
+theorem does not prove existence. No security applicability flag is upgraded.
+
 Research specification: keep semantic order through the 87 point claims and
 terminal check. Then sample secure circle point zeta0 and absorb a 29-K vector;
 sample a distinct secure zeta1 (bounded retries) and absorb its 29-K vector.
