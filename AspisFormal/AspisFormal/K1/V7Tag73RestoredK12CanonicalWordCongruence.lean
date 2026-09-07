@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactRestoredQ16SemanticNoninterference
+import AspisFormal.Pool.V7MerkleTypedTruncateCongruence
 import AspisFormal.Pool.V7MerkleUntypedErasureStability
 
 /-!
@@ -22,6 +23,7 @@ open AspisK1.V7Tag73ExactRestoredQ16SemanticNoninterference
 open AspisK1.V7Tag73RestoredNodeK13Classifier
 open AspisPool.V7MerkleQueryExtractor
 open AspisPool.V7MerkleQueryGrammar
+open AspisPool.V7MerkleTypedTruncateCongruence
 open AspisPool.V7MerkleUntypedErasureStability
 
 noncomputable section
@@ -306,6 +308,103 @@ theorem restored_root_common_complete_candidate_of_typed_source
   · simpa [exactRestoredRootCompleteWords, rightNode, wordsExact] using
       rightGraph
 
+/-- Pointwise typed-input form of the canonical candidate theorem.  The two
+hash views may differ on transcript-only SHA inputs; complete Merkle traversal
+observes only the retained typed log and canonical typed default-subtree
+preimages. -/
+theorem restored_root_common_complete_candidate_of_typed_hash_agreement
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : AspisK1.V7Tag73ExactCompilerResources.ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : AspisK1.V7Tag73ExactPlainRomRun.ExactPlainRomConfiguration
+      HiddenTape TapeIdentity Observation Statement Tag73K12ParsedProof Payload
+      Result parameters}
+    {projection :
+      AspisK1.V7Tag73ExactSourceAcceptanceModel.AcceptedTapeProjection Statement
+        Tag73K12ParsedProof Payload}
+    {fixedInstance : AspisK1.V7FsAokExperiment.PublicInstance Statement}
+    {leftSample rightSample :
+      AspisK1.V7Tag73ExactCompilerResources.ExactCompilerSample HiddenTape
+        parameters}
+    (left : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance leftSample)
+    (right : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance rightSample)
+    (leftK12 : RestoredNodeK12Certificate
+      left.package.root.fixedRoot.base.runtime.node)
+    (rightK12 : RestoredNodeK12Certificate
+      right.package.root.fixedRoot.base.runtime.node)
+    (truncateAgree : ∀ input, parseTypedPreimage input ≠ none →
+      restoredNodeK12Truncate
+          left.package.root.fixedRoot.base.runtime.node input =
+        restoredNodeK12Truncate
+          right.package.root.fixedRoot.base.runtime.node input)
+    (rootsExact : restoredNodeK12Roots
+        left.package.root.fixedRoot.base.runtime.node =
+      restoredNodeK12Roots right.package.root.fixedRoot.base.runtime.node)
+    (typedQueriesExact :
+      retainTypedMerkleQueries (deduplicateFirst (restoredNodeK12OrderedQueries
+        left.package.root.fixedRoot.base.runtime.node)) =
+      retainTypedMerkleQueries (deduplicateFirst (restoredNodeK12OrderedQueries
+        right.package.root.fixedRoot.base.runtime.node))) :
+    ∃ candidate : ExtractedWords,
+      exactRestoredRootCompleteWords left = .words candidate ∧
+      exactRestoredRootCompleteWords right = .words candidate := by
+  let leftNode := left.package.root.fixedRoot.base.runtime.node
+  let rightNode := right.package.root.fixedRoot.base.runtime.node
+  let typedLog := retainTypedMerkleQueries
+    (deduplicateFirst (restoredNodeK12OrderedQueries leftNode))
+  have typedLogAll : ∀ input ∈ typedLog,
+      parseTypedPreimage input ≠ none := by
+    intro input member
+    have filtered := List.mem_filter.mp member
+    exact of_decide_eq_true filtered.2
+  have leftTyped := extractV7Words_success_yields_typed_complete
+    (restoredNodeK12Truncate leftNode) (restoredNodeK12Roots leftNode)
+    (restoredNodeK12Openings leftNode) (restoredNodeK12OrderedQueries leftNode)
+    leftK12.words leftK12.extracted
+  have rightTyped := extractV7Words_success_yields_typed_complete
+    (restoredNodeK12Truncate rightNode) (restoredNodeK12Roots rightNode)
+    (restoredNodeK12Openings rightNode)
+    (restoredNodeK12OrderedQueries rightNode) rightK12.words rightK12.extracted
+  have rightTypedAtLeftSource :
+      extractCompleteWords (restoredNodeK12Truncate rightNode)
+          (restoredNodeK12Roots leftNode) typedLog = .words rightK12.words := by
+    simpa [typedLog, leftNode, rightNode, rootsExact, typedQueriesExact] using
+      rightTyped
+  have hashCongruence :
+      extractCompleteWords (restoredNodeK12Truncate leftNode)
+          (restoredNodeK12Roots leftNode) typedLog =
+        extractCompleteWords (restoredNodeK12Truncate rightNode)
+          (restoredNodeK12Roots leftNode) typedLog := by
+    apply extractCompleteWords_eq_of_agree_on_typed
+    · exact typedLogAll
+    · intro input typed
+      exact truncateAgree input typed
+  have wordsExact : leftK12.words = rightK12.words := by
+    have rightAtLeft :
+        extractCompleteWords (restoredNodeK12Truncate leftNode)
+            (restoredNodeK12Roots leftNode) typedLog = .words rightK12.words :=
+      hashCongruence.trans rightTypedAtLeftSource
+    have leftAtTyped :
+        extractCompleteWords (restoredNodeK12Truncate leftNode)
+            (restoredNodeK12Roots leftNode) typedLog = .words leftK12.words := by
+      simpa [typedLog, leftNode] using leftTyped
+    rw [leftAtTyped] at rightAtLeft
+    injection rightAtLeft
+  have leftGraph := extractV7Words_success_yields_complete
+    (restoredNodeK12Truncate leftNode) (restoredNodeK12Roots leftNode)
+    (restoredNodeK12Openings leftNode) (restoredNodeK12OrderedQueries leftNode)
+    leftK12.words leftK12.extracted
+  have rightGraph := extractV7Words_success_yields_complete
+    (restoredNodeK12Truncate rightNode) (restoredNodeK12Roots rightNode)
+    (restoredNodeK12Openings rightNode)
+    (restoredNodeK12OrderedQueries rightNode) rightK12.words rightK12.extracted
+  refine ⟨leftK12.words, ?_, ?_⟩
+  · simpa [exactRestoredRootCompleteWords, leftNode] using leftGraph
+  · simpa [exactRestoredRootCompleteWords, rightNode, wordsExact] using
+      rightGraph
+
 /-- The exact remaining pre-q16 source condition after canonical-word
 pinning.  It asks for one common committed-tree resolution and equality of
 the three verifier-derived transcript fields; q16-selected openings and
@@ -500,6 +599,8 @@ theorem exact_restored_root_residual_invariant_of_committed_invariant
 #print axioms restored_root_k12_truncate_eq_exact
 #print axioms restored_root_k12_certificate_words_eq_of_exact_source
 #print axioms restored_root_common_complete_candidate_of_typed_source
+#print axioms
+  restored_root_common_complete_candidate_of_typed_hash_agreement
 #print axioms ExactRestoredRootTypedPreQ16SourceInvariant
 #print axioms exact_restored_committed_invariant_of_typed_source
 #print axioms exact_restored_pre_q16_semantics_of_committed_invariant

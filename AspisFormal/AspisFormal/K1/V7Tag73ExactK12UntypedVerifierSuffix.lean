@@ -1,5 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactFixedK12PrefixClassifier
+import AspisFormal.K1.V7Tag73K12BudgetedSchedulerTree
 import AspisFormal.K1.V7Tag73SharedShaGrammar
+import AspisFormal.K1.V7Tag73CumulativeReplayHistory
 import AspisFormal.Pool.V7MerkleCompletePrefixStability
 
 /-!
@@ -26,8 +28,13 @@ open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73RawFutureFreeDriver
 open AspisK1.V7Tag73RawProverMessages
+open AspisK1.V7Tag73RawVerifierExecution
 open AspisK1.V7Tag73SharedShaGrammar
 open AspisK1.V7Tag73SharedOracleVerifierRunner
+open AspisK1.V7Tag73CumulativeReplayHistory
+open AspisK1.V7Tag73K12BudgetedSchedulerTree
+open AspisK1.V7Tag73VerifierOracleStability
+open AspisK1.V7Tag73TotalizedMachineReflection
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.V7MerkleQueryExtractor
 open AspisPool.V7MerkleQueryGrammar
@@ -204,7 +211,227 @@ theorem future_free_operational_trace_inputs_untyped
         | stutter noSubmission noAction => simp at headMember
       · exact ih pair tailMember
 
+/-! ## Exact root-history decomposition -/
+
+/-- The exact K1.2 query log is the completed prover history followed by a
+suffix containing only transcript-machine inputs.  This is stronger than a
+mere prefix statement: it identifies every post-prover raw input as outside
+the deployed Merkle grammar. -/
+theorem exact_k12_ordered_queries_eq_prover_prefix_append_untyped
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) :
+    ∃ suffix : OrderedRawQueryLog,
+      exactK12OrderedQueries input =
+          exactK12ProverPrefixQueries input ++ suffix ∧
+        ∀ rawInput ∈ suffix, parseTypedPreimage rawInput = none := by
+  let runtime := exactK12Runtime input
+  let projected := input.package.root.fixedRoot.base.projected
+  let execution := projected.execution
+  obtain ⟨adversarySteps, _verifierSteps, adversaryRun, _verifierRun⟩ :=
+    input.package.root.full.projection.projectedRuns
+  have reflectedAdversary := run_machine_totalized_ok_reflects
+    (rootAdversaryProjectedController runtime)
+    configuration.machine.adversaryLimits .adversary
+    configuration.machine.adversaryFuel emptyOracle
+    (configuration.machine.blackBox.start sample.1
+      configuration.machine.observation)
+    runtime.adversaryValue runtime.proverFinalOracle adversarySteps adversaryRun
+  have proverOracleExact :
+      (projectedRootSource configuration.machine sample.1 runtime).firstExecution.oracle =
+        runtime.proverFinalOracle := by
+    change
+      (runMachine (rootAdversaryProjectedController runtime)
+        configuration.machine.adversaryLimits .adversary
+        configuration.machine.adversaryFuel emptyOracle
+        (configuration.machine.blackBox.start sample.1
+          configuration.machine.observation)).oracle =
+      runtime.proverFinalOracle
+    rw [reflectedAdversary]
+  have verifierOracleExact : execution.verifierRun.oracle =
+      runtime.verifierFinalOracle := by
+    exact projected.finalOracleExact
+  obtain ⟨pairs, historyExact, operational⟩ :=
+    raw_verifier_execution_has_operational_trace execution
+  have pairsUntyped := future_free_operational_trace_inputs_untyped
+    execution.environment execution.adversaryValue.rawMessages
+    _ _ pairs operational
+  have chronological := run_machine_history_since_is_chronological_suffix
+    execution.verifierController execution.verifierLimits .verifier
+    execution.verifierFuel
+    (projectedRootSource configuration.machine sample.1 runtime).firstExecution.oracle
+    (initialRawFutureFreeProgram execution.environment
+      execution.adversaryValue.rawMessages execution.driverFuel)
+  let suffix : OrderedRawQueryLog := execution.verifierHistory.map
+    (fun record => runtimeInputToRawHashInput record.input)
+  refine ⟨suffix, ?_, ?_⟩
+  · unfold exactK12OrderedQueries exactK12ProverPrefixQueries
+    change runtime.verifierFinalOracle.history.map _ =
+      runtime.proverFinalOracle.history.map _ ++ suffix
+    have historyAppend : runtime.verifierFinalOracle.history =
+        runtime.proverFinalOracle.history ++ execution.verifierHistory := by
+      have exact := chronological.1
+      change execution.verifierRun.oracle.history =
+        (projectedRootSource configuration.machine sample.1 runtime).firstExecution.oracle.history ++
+          execution.verifierHistory at exact
+      rw [proverOracleExact, verifierOracleExact] at exact
+      exact exact
+    rw [historyAppend, List.map_append]
+  · intro rawInput member
+    obtain ⟨record, recordMember, rfl⟩ := List.mem_map.mp member
+    have pairMember : (record.input, record.output) ∈ pairs := by
+      rw [← historyExact]
+      exact List.mem_map.mpr ⟨record, recordMember, rfl⟩
+    exact pairsUntyped (record.input, record.output) pairMember
+
+/-- The canonical 208-bit view frozen at prover return, before any verifier
+transcript query is made. -/
+def exactK12ProverTruncate
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) : RawHashInput →
+        AspisPool.V7MerkleQueryGrammar.Digest208 :=
+  truncateAtOracleState (exactK12Runtime input).proverFinalOracle
+
+/-- The verifier-final and prover-final views agree on every input accepted by
+the Merkle grammar.  A genuinely new verifier table entry has a matching
+operational verifier call, and the exact driver theorem makes that call
+untyped; cached entries already belong to the prover-final table. -/
+theorem exact_k12_truncate_eq_prover_truncate_on_typed
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) (rawInput : RawHashInput)
+    (typed : parseTypedPreimage rawInput ≠ none) :
+    exactK12Truncate input rawInput = exactK12ProverTruncate input rawInput := by
+  let runtime := exactK12Runtime input
+  let projected := input.package.root.fixedRoot.base.projected
+  let execution := projected.execution
+  obtain ⟨adversarySteps, _verifierSteps, adversaryRun, _verifierRun⟩ :=
+    input.package.root.full.projection.projectedRuns
+  have reflectedAdversary := run_machine_totalized_ok_reflects
+    (rootAdversaryProjectedController runtime)
+    configuration.machine.adversaryLimits .adversary
+    configuration.machine.adversaryFuel emptyOracle
+    (configuration.machine.blackBox.start sample.1
+      configuration.machine.observation)
+    runtime.adversaryValue runtime.proverFinalOracle adversarySteps adversaryRun
+  have proverOracleExact :
+      (projectedRootSource configuration.machine sample.1 runtime).firstExecution.oracle =
+        runtime.proverFinalOracle := by
+    change
+      (runMachine (rootAdversaryProjectedController runtime)
+        configuration.machine.adversaryLimits .adversary
+        configuration.machine.adversaryFuel emptyOracle
+        (configuration.machine.blackBox.start sample.1
+          configuration.machine.observation)).oracle =
+      runtime.proverFinalOracle
+    rw [reflectedAdversary]
+  have proverOracleExactInput :
+      (projectedRootSource configuration.machine sample.1
+        input.package.root.fixedRoot.base.runtime).firstExecution.oracle =
+      input.package.root.fixedRoot.base.runtime.proverFinalOracle := by
+    change
+      (projectedRootSource configuration.machine sample.1 runtime).firstExecution.oracle =
+        runtime.proverFinalOracle
+    exact proverOracleExact
+  have verifierOracleExact : execution.verifierRun.oracle =
+      runtime.verifierFinalOracle := projected.finalOracleExact
+  have verifierOracleExactRun :
+      (runMachine execution.verifierController execution.verifierLimits
+        .verifier execution.verifierFuel runtime.proverFinalOracle
+        (initialRawFutureFreeProgram execution.environment
+          execution.adversaryValue.rawMessages execution.driverFuel)).oracle =
+        runtime.verifierFinalOracle := by
+    have exact := verifierOracleExact
+    unfold RawVerifierExecution.verifierRun at exact
+    rw [proverOracleExactInput] at exact
+    exact exact
+  obtain ⟨pairs, historyExact, operational⟩ :=
+    raw_verifier_execution_has_operational_trace execution
+  have pairsUntyped := future_free_operational_trace_inputs_untyped
+    execution.environment execution.adversaryValue.rawMessages
+    _ _ pairs operational
+  let tableSuffix := verifierFreshTableEntries
+    runtime.proverFinalOracle runtime.verifierFinalOracle
+  have tableExtension := (run_machine_exact_fresh_extension execution.verifierController
+      execution.verifierLimits .verifier execution.verifierFuel
+      (projectedRootSource configuration.machine sample.1 runtime).firstExecution.oracle
+      (initialRawFutureFreeProgram execution.environment
+        execution.adversaryValue.rawMessages execution.driverFuel)).1
+  have tableExtension' : runtime.verifierFinalOracle.table =
+      runtime.proverFinalOracle.table ++ tableSuffix := by
+    rw [proverOracleExact] at tableExtension
+    rw [verifierOracleExactRun] at tableExtension
+    simpa [tableSuffix] using tableExtension
+  let runtimeInput := rawHashInputToRuntimeInput rawInput
+  cases beforeLookup : lookupEntry runtime.proverFinalOracle runtimeInput with
+  | some entry =>
+      have afterLookup := lookupEntry_preserved_by_table_extension
+        runtime.proverFinalOracle runtime.verifierFinalOracle tableSuffix
+        tableExtension' runtimeInput entry beforeLookup
+      simp [exactK12Truncate, exactK12ProverTruncate, truncateAtOracleState,
+        runtime, runtimeInput, beforeLookup, afterLookup]
+  | none =>
+      cases afterLookup : lookupEntry runtime.verifierFinalOracle runtimeInput with
+      | none =>
+          simp [exactK12Truncate, exactK12ProverTruncate,
+            truncateAtOracleState, runtime, runtimeInput, beforeLookup,
+            afterLookup]
+      | some entry =>
+          have newMember := lookupEntry_new_suffix_member
+            runtime.proverFinalOracle runtime.verifierFinalOracle tableSuffix
+            tableExtension' runtimeInput entry beforeLookup afterLookup
+          have newEntry := run_machine_new_entry_is_fresh_and_initially_absent
+            execution.verifierController execution.verifierLimits .verifier
+            execution.verifierFuel
+            (projectedRootSource configuration.machine sample.1 runtime).firstExecution.oracle
+            (initialRawFutureFreeProgram execution.environment
+              execution.adversaryValue.rawMessages execution.driverFuel)
+            entry (by
+              rw [proverOracleExact, verifierOracleExactRun]
+              exact newMember)
+          obtain ⟨record, recordMember, _actor, _fresh, recordInput,
+              _recordOutput, _entryExact⟩ := newEntry.2.2
+          have pairMember : (record.input, record.output) ∈ pairs := by
+            rw [← historyExact]
+            have recordMember' : record ∈ execution.verifierHistory := by
+              unfold RawVerifierExecution.verifierHistory
+              exact recordMember
+            exact List.mem_map.mpr ⟨record, recordMember', rfl⟩
+          have untyped := pairsUntyped (record.input, record.output) pairMember
+          have entryInput : entry.input = runtimeInput := by
+            unfold lookupEntry at afterLookup
+            exact of_decide_eq_true
+              (List.find?_eq_some_iff_append.mp afterLookup).1
+          have rawExact : runtimeInputToRawHashInput record.input = rawInput := by
+            rw [recordInput, entryInput]
+            exact runtimeInputToRawHashInput_roundtrip rawInput
+          exact False.elim (typed (by simpa [rawExact] using untyped))
+
 #print axioms raw_query_role_input_is_untyped
+#print axioms exact_k12_ordered_queries_eq_prover_prefix_append_untyped
+#print axioms exact_k12_truncate_eq_prover_truncate_on_typed
 
 end
 
