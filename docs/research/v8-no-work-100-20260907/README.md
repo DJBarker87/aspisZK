@@ -1,4 +1,17 @@
-# V8 no-work 100-bit research — bounded screen and prototypes
+# V8 no-work 100-bit research — decision and reproducible prototypes
+
+**Current decision:** [decision.md](decision.md). No investigated implementation
+meets every requirement. A new full-fibre counterexample rejects extending the
+2,800-root fixed-family bound to unconditional recovery even after both agreement
+gates. The current 40,282-byte q22 certificate is not established. This is not a
+sub-100-bit forgery or a proof that a repaired protocol is impossible.
+
+[joint-results.json](joint-results.json) records the new optimized Rust checks,
+14,739 tiny exhaustive query cases, 255 fold cases and eight axiom-free finite
+Lean arithmetic facts. The fixed-target query-aware bound is promising but does
+not establish adaptive target existence. Primary research remains QM31 q22;
+the fallback control is now full quintic q21 with its explicit 1,410-byte miss
+against the accepted allowance.
 
 Latest decisive finding: [recovery-counterexample.md](recovery-counterexample.md)
 refutes the unconditional 28-gamma recovery shortcut. The 99.246-bit isolated
@@ -33,8 +46,9 @@ tests and host timing. Security composition and full-transaction CU remain open.
 Branch: research/v8-no-work-100-20260907. Worktree:
 `/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907`.
 Base: `4c91f97ac6576201f90d41c2a575e54c026e3796`. Date: 2026-09-07.
-No deployment, push, remote build, production mutation, witness upload, paid
-infrastructure or subagents. Concurrent main/V8 work was preserved.
+The research branch is committed and pushed at the user's request. No deployment,
+remote build, production mutation, witness upload, paid infrastructure or subagents.
+Concurrent main/V8 work was preserved.
 
 Host: Apple M3 / Mac15,13, Darwin 25.5.0 arm64, 25,769,803,776 RAM bytes.
 Rust/cargo 1.93.0. gh, Python3, jq, curl, pdftotext, cargo-build-sbf and elan
@@ -100,8 +114,11 @@ job was retried with a larger memory cap.
   prior two-OOD rank evidence reused. No new dense elimination.
 - Gate 3: not entered; cryptographic predecessors have not passed, and a matched
   Linux SBF environment is unavailable locally.
-- Gate 4: not entered; no Lean changes or formal release/axiom replay claimed.
+- Gate 4: no expanded protocol formalisation or release replay; small standalone
+  arithmetic leaves were checked, with empty axioms. They are not a V8 theorem.
 
-Next: the exact chord quotient-to-circle-encoder/fold experiment in report.md,
-then restored tuple-family/source and privacy proofs if it survives. Only then
-obtain authorized capped Linux four-shape complete-transaction measurements.
+The chord and structured/grouped-weight experiments are complete in their stated
+scope; do not repeat them unchanged. The next deciding gate is query-aware
+adaptive recovery covering discarded provider branches, as defined in decision.md.
+Only after security/privacy applicability passes should the stack-safe complete
+V8 implementation and matched four-shape transaction measurements proceed.

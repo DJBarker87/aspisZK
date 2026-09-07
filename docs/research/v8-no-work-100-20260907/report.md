@@ -1,11 +1,18 @@
 # Decision: no investigated candidate is green on all requirements
 
-Recommend **QM31 component-wise two-point OOD tuple binding**, with q21 canonical
-fixed fields as the hard-40,000-byte control and q22 as the stronger-margin control.
-Fallback: **selective p^8 PCS lifting**, using the new 16×/q16/cap272 model only
-after its exact decoder, descent and full-view masking obligations are resolved.
-Full quintic replacement is a useful simpler field-size control but currently
-misses bytes and gives no evidence for unchanged CU.
+The authoritative continuation is [decision.md](decision.md), with
+[joint-results.json](joint-results.json). The 40,282-byte q22 size is now accepted,
+but its proposed recovery certificate is not established. A full-fibre boundary
+refutes the unconditional 2,800-root replacement even when both agreement gates
+are passed. This does not establish a sub-100-bit forgery.
+
+Primary research: **QM31 two-point OOD with query-aware adaptive recovery**.
+Fallback control is now **full quintic q21**, accepting that its canonical model
+misses the user's allowance by 1,410 bytes. This supersedes the initial octic
+fallback ranking: quintic retains the older recovery architecture without a
+selective subfield-descent theorem or multi-gigabyte dense arrays. It still needs
+the theorem/source port and measured CU. The initial screen below is retained
+as evidence, not a statement that these gaps have been closed.
 
 These are research priorities, not protocol selections or security claims.
 There is no complete V8 theorem, simulator or full-transaction CU result in this
@@ -143,6 +150,9 @@ a concrete engineering experiment, not a promised 2–5-second fix.
 
 ## Stop conditions and next decision
 
+Historical initial gate description below; the chord gate has since passed in
+its documented scope. See decision.md for the current query-aware recovery gate.
+
 The single most useful next experiment is a **focused exact circle-encoder
 bridge/counterexample for the existing two-point chord quotient**, followed by
 the restored pre-gamma tuple-family construction if it survives. Use the actual
@@ -230,6 +240,11 @@ known-zero linear claims alone; the complete protocol is still unimplemented.
    without earning security bits. Search can reduce frontiers only with enforced
    selection and its loss/resources charged; no full-CU saving is established.
 6. Executed exact combinatorics, independent field certificates, optimized host
-   field/parser/sampler/hint tests, and SHA schedule scans. Reused prior Lean/rank/CU
-   evidence. No new Lean proof, full-view ZK proof, V8 prover or SBF measurement.
-7. Decide the exact two-point chord-to-circle-encoder/fold bridge first.
+   field/parser/sampler/hint tests, SHA schedule scans, full-basis chord/transpose
+   checks, ZIP cross-language checks, aggregate structured/grouped contractions,
+   and the stronger full-fibre recovery falsifier. Small standalone Lean arithmetic
+   facts passed with empty axioms. No full-view ZK proof, complete V8 prover,
+   composed V8 theorem or new SBF measurement.
+7. Prove or falsify query-aware adaptive recovery covering the partial provider's
+   discarded branches. The honest chord and arithmetic contraction tests are
+   already complete in scope; rerunning them will not decide that security gate.
