@@ -172,6 +172,15 @@ CU relaxation is known without full measurements. Missing mathematical and priva
 steps are not a reason to invent one. Failure of these investigated families is
 not a general impossibility result.
 
+## Continuation: accepted 40,282-byte allowance
+
+See [chord-verdict.md](chord-verdict.md) for the subsequent exact experiment and
+updated decision. Honest chord division fits the released space and final256;
+2048 basis cases and 32 fold checks passed. Reverse image membership, transformed
+relations and coherent-extraction existence remain unresolved. Canonical q22 is
+now the primary size-acceptable model, **not** a demonstrated 100-bit protocol.
+The original thresholds below are retained as historical categories.
+
 ## Answers to the seven decision questions
 
 1. Strongest implementation-backed prospect: QM31 two-point tuple binding; strongest

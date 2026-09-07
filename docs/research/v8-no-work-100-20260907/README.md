@@ -6,6 +6,11 @@ and [sources.md](sources.md) for the contract, pins, applicability and primary s
 [candidates.json](candidates.json) retains exact rationals and flags;
 [candidates.csv](candidates.csv) is the compact index. Unmeasured is never zero cost.
 
+Continuation: the user accepted 40,282 bytes. [chord-verdict.md](chord-verdict.md)
+records the exact full-dimension quotient prototype, algebraic derivation,
+reverse-membership counterexample and revised research decision. It does not
+upgrade the earlier conditional security figures to proved security.
+
 Branch: research/v8-no-work-100-20260907. Worktree:
 `/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907`.
 Base: `4c91f97ac6576201f90d41c2a575e54c026e3796`. Date: 2026-09-07.
