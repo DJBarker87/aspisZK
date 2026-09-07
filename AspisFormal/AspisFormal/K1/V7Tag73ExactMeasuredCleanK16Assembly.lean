@@ -6,6 +6,7 @@ import AspisFormal.K1.V7Tag73K14BoundGammaClosure
 import AspisFormal.K1.V7Tag73K15BoundGammaClosure
 import AspisFormal.K1.V7Tag73K15SemanticActualLawClosure
 import AspisFormal.K1.V7Tag73K15RestrictedSemanticActualLawClosure
+import AspisFormal.K1.V7Tag73K15RestrictedBoundGammaClosure
 
 /-!
 # Exact measured Tag-73 closure from the clean work-dependent q16 theorem
@@ -64,7 +65,9 @@ open AspisK1.V7Tag73K14BoundGammaClosure
 open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73K15RestrictedMeasureLedger
 open AspisK1.V7Tag73K15BoundGammaClosure
+open AspisK1.V7Tag73K15RestrictedBoundGammaClosure
 open AspisK1.V7Tag73K15RelationAlphaActualLawClosure
+open AspisK1.V7Tag73K15RestrictedRelationAlphaActualLawClosure
 open AspisK1.V7Tag73K15SemanticActualLawClosure
 open AspisK1.V7Tag73K15RestrictedSemanticActualLawClosure
 open AspisK1.V7Tag73ProofRelevantUpstreamInterface
@@ -185,12 +188,17 @@ theorem exact_tag73_measured_clean_k16_aok_raw
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance)
       k15SemanticLanes k15SemanticTerminal k15SemanticSumcheck)
-    (k15RelationAlphaSource : ExactTag73K15RelationAlphaSource transitionFuel
+    (k15RelationAlphaSource :
+      ExactTag73RestrictedK15RelationAlphaSource transitionFuel
       configuration projection fixedInstance decoder decoderBinding basis rc
-      poseidon environment)
-    (k15ResidualSource : ExactTag73K15BoundGammaSource transitionFuel
+      poseidon environment
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance))
+    (k15ResidualSource : ExactTag73RestrictedK15BoundGammaSource transitionFuel
       configuration projection fixedInstance decoder decoderBinding basis rc
-      poseidon environment) :
+      poseidon environment
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance)) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (exactFixedSourceRefinementEvent transitionFuel configuration projection
           fixedInstance) ≤
@@ -237,16 +245,10 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     transitionFuel configuration projection fixedInstance relation decoder
     decoderBinding k15 width29Bound
   have restoredK15Bound :=
-    exact_tag73_restored_k15_residual_probability_le_of_bound_gamma_source
-      hiddenLaw publishedInitialWidth29 k15ResidualSource
-  have restrictedRestoredK15Bound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-              projection fixedInstance ∩
-            exactTag73RestoredK15ResidualEvent environment) ≤
-        exactK14IdealRawError :=
-    ((exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
-      Set.inter_subset_right).trans restoredK15Bound
+    exact_tag73_restricted_restored_k15_residual_probability_le hiddenLaw
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance)
+      publishedInitialWidth29 k15ResidualSource
   have fixedK15Bounds :=
     restricted_fixed_k15_event_bounds_of_semantic_relation_sources
       hiddenLaw
@@ -259,7 +261,7 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     decoderBinding basis rc poseidon environment
     (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
       fixedInstance)
-    fixedK15Bounds restrictedRestoredK15Bound
+    fixedK15Bounds restoredK15Bound
   have k12TransitionRoom : 2 ≤ transitionFuel := q16TransitionRoom
   have k12Measure := exact_tag73_assembled_k12_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance relation decoder
