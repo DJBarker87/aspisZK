@@ -80,22 +80,26 @@ theorem exact_preQ16_k13_alpha_terminal_digest_eq
     exact_preQ16_k13_common_final256_record transitionRoom programmedCover
       trial hidden left right leftWitness rightWitness residualExact
   obtain ⟨_leftProducer, leftFinal256Input, _leftBeforeAlpha,
-      leftAfterAlpha, _leftAfterBlocks, leftAfterFinal256, _leftOutputs,
+      _leftAfterAlphaSample, leftAfterAlpha, _leftAfterBlocks,
+      leftAfterFinal256, _leftOutputs,
       _leftAdvances, _leftValue, _leftWorkAnswer, leftQ16Base,
       _leftProducerLookup, _leftProducerBoundary, _leftOrdered,
       _leftOutputsLength, _leftOutputsPositive, _leftAdvancesLength,
-      _leftTerminalExact, _leftAfterAlphaExact, leftFinal256InputExact,
+      _leftTerminalExact, _leftAfterSampleExact, _leftAlphaBindLookup,
+      leftFinal256InputExact,
       leftFinal256Lookup, _leftWorkLookup, _leftWorkAccepted,
       leftFinalNonceLookup, leftQ16BaseExact, _leftAcceptedParameter,
       _leftDecode, _leftOperational⟩ :=
     exact_compiler_alpha_zero_chain_has_root_order transitionRoom
       leftWitness.input
   obtain ⟨_rightProducer, rightFinal256Input, _rightBeforeAlpha,
-      rightAfterAlpha, _rightAfterBlocks, rightAfterFinal256, _rightOutputs,
+      _rightAfterAlphaSample, rightAfterAlpha, _rightAfterBlocks,
+      rightAfterFinal256, _rightOutputs,
       _rightAdvances, _rightValue, _rightWorkAnswer, rightQ16Base,
       _rightProducerLookup, _rightProducerBoundary, _rightOrdered,
       _rightOutputsLength, _rightOutputsPositive, _rightAdvancesLength,
-      _rightTerminalExact, _rightAfterAlphaExact, rightFinal256InputExact,
+      _rightTerminalExact, _rightAfterSampleExact, _rightAlphaBindLookup,
+      rightFinal256InputExact,
       rightFinal256Lookup, _rightWorkLookup, _rightWorkAccepted,
       rightFinalNonceLookup, rightQ16BaseExact, _rightAcceptedParameter,
       _rightDecode, _rightOperational⟩ :=

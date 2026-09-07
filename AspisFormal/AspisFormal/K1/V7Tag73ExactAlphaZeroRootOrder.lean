@@ -104,7 +104,7 @@ theorem exact_compiler_alpha_zero_chain_has_root_order
     (input : ExactK12OperationalInput transitionFuel configuration projection
       fixedInstance sample) :
     ∃ (producerInput final256Input : ShaInput)
-      (beforeAlpha afterAlpha afterBlocks afterFinal256 : EvalState)
+      (beforeAlpha afterAlphaSample afterAlpha afterBlocks afterFinal256 : EvalState)
       (outputs advances : List Digest256) (exactValue : QM31Exact)
       (workAnswer q16Base : Digest256),
       tableLookup (exactOperationalTable input) producerInput =
@@ -126,7 +126,13 @@ theorem exact_compiler_alpha_zero_chain_has_root_order
       advances.length = outputs.length ∧
       afterBlocks.digest =
           gammaTerminalDigest beforeAlpha.digest advances ∧
-      afterAlpha.digest = afterBlocks.digest ∧
+      afterAlphaSample.digest = afterBlocks.digest ∧
+      tableLookup (exactOperationalTable input)
+          (bytes afterAlphaSample.digest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+              ((exactOperationalTape input).messages.challengeValue
+                (.alpha 0))).data) =
+        some afterAlpha.digest ∧
       final256Input =
         bytes afterAlpha.digest ++
           [domAbsorb,
@@ -156,9 +162,11 @@ theorem exact_compiler_alpha_zero_chain_has_root_order
         some exactValue ∧
       exactOperationalChallenge input (.alpha 0) = exactValue := by
   obtain ⟨_evaluator, _segments, beforeAlphaProducer, beforeAlpha,
-      afterAlpha, afterBlocks, afterFinal256, outputs, advances, exactValue,
+      afterAlphaSample, afterAlpha, afterBlocks, afterFinal256, outputs, advances,
+      exactValue,
       _producerPrefixRun, _boundaryRun, boundaryLookup, _squeezeRun,
-      afterAlphaExact, _final256Run, outputsLength, advancesLength,
+      afterAlphaSampleExact, _alphaBindRun, alphaBindLookup, _final256Run,
+      outputsLength, advancesLength,
       coordinates, terminalExact, _callsExact, acceptedParameter, exactDecode,
       operationalValue, final256Lookup, alphaFinalNonceLookup,
       alphaQ16BaseExact⟩ :=
@@ -186,8 +194,8 @@ theorem exact_compiler_alpha_zero_chain_has_root_order
     gamma_table_coordinate_chain_has_exact_root_order transitionRoom input
       producerInput beforeAlpha.digest (by
         simpa [producerInput] using boundaryLookup) coordinates
-  have afterDigest : afterAlpha.digest = afterBlocks.digest := by
-    simpa using congrArg EvalState.digest afterAlphaExact
+  have afterSampleDigest : afterAlphaSample.digest = afterBlocks.digest := by
+    simpa using congrArg EvalState.digest afterAlphaSampleExact
   have outputsPositive : 0 < outputs.length := by
     rw [outputsLength]
     exact ((exactOperationalTape input).messages.challengeUse
@@ -198,13 +206,15 @@ theorem exact_compiler_alpha_zero_chain_has_root_order
     · simpa [strictQ16BaseExact, alphaQ16BaseExact] using
         alphaFinalNonceLookup
     · exact strictFinalNonceLookup
-  refine ⟨producerInput, final256Input, beforeAlpha, afterAlpha, afterBlocks,
-    afterFinal256, outputs, advances, exactValue, workAnswer, q16Base, ?_,
+  refine ⟨producerInput, final256Input, beforeAlpha, afterAlphaSample,
+    afterAlpha, afterBlocks, afterFinal256, outputs, advances, exactValue,
+    workAnswer, q16Base, ?_,
     ⟨beforeAlphaProducer.digest, rfl⟩, ordered, outputsLength, outputsPositive,
     advancesLength, terminalExact,
-    afterDigest, rfl, ?_, ?_, workAccepted, ?_, strictQ16BaseExact,
+    afterSampleDigest, ?_, rfl, ?_, ?_, workAccepted, ?_, strictQ16BaseExact,
     acceptedParameter, exactDecode, operationalValue⟩
   · simpa [producerInput] using boundaryLookup
+  · simpa using alphaBindLookup
   · simpa [final256Input] using final256Lookup
   · simpa [prefinalExact] using workLookup
   · simpa [prefinalExact] using strictFinalNonceLookup

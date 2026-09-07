@@ -52,13 +52,13 @@ theorem full256_verifier_calls_split_residual_final_work_and_q16
   unfold selectedWorkVerifierOracleCalls
   omega
 
-/-- Removing the routed final-work digest lowers the previous 999-call
+/-- Removing the routed final-work digest lowers the previous 1001-call
 non-q16 reserve by exactly one. -/
-theorem tag73_full256_residual_after_final_work_q16_calls_le_998
+theorem tag73_full256_residual_after_final_work_q16_calls_le_1000
     (messages : Messages)
     {frontierNodes : QuerySchedule → Nat}
     (search : FirstCap203Search frontierNodes) :
-    tag73Full256ResidualAfterFinalWorkQ16Calls messages search ≤ 998 := by
+    tag73Full256ResidualAfterFinalWorkQ16Calls messages search ≤ 1000 := by
   have challengeCap := challenge_blocks_used_le_192 messages
   have q16ResidualCap := q16_residual_oracle_calls_le_576 search
   unfold tag73Full256ResidualAfterFinalWorkQ16Calls
@@ -70,9 +70,9 @@ theorem tag73_full256_residual_after_final_work_q16_calls_le_998
 theorem exact_compiler_final_work_q16_residual_length_expanded
     (parameters : ExactCompilerResourceParameters) :
     (exactCompilerTargetCaps parameters).length - 513 =
-      parameters.q1ShaCallCap + 998 +
+      parameters.q1ShaCallCap + 1000 +
         parameters.forkRequestCap *
-          (parameters.q1ShaCallCap + 1511) +
+          (parameters.q1ShaCallCap + 1513) +
         2 * parameters.forkRequestCap := by
   rw [exact_compiler_target_caps_length]
   unfold unifiedFull256ExposureCap full256MachineFreshCap sameTapeStartCap
@@ -91,16 +91,16 @@ theorem exact_compiler_final_work_q16_residual_covers_execution
     parameters.q1ShaCallCap +
         tag73Full256ResidualAfterFinalWorkQ16Calls messages search +
         parameters.forkRequestCap *
-          (parameters.q1ShaCallCap + 1511) +
+          (parameters.q1ShaCallCap + 1513) +
         2 * parameters.forkRequestCap ≤
       (exactCompilerTargetCaps parameters).length - 513 := by
   rw [exact_compiler_final_work_q16_residual_length_expanded]
   have reserve :=
-    tag73_full256_residual_after_final_work_q16_calls_le_998 messages search
+    tag73_full256_residual_after_final_work_q16_calls_le_1000 messages search
   omega
 
 #print axioms full256_verifier_calls_split_residual_final_work_and_q16
-#print axioms tag73_full256_residual_after_final_work_q16_calls_le_998
+#print axioms tag73_full256_residual_after_final_work_q16_calls_le_1000
 #print axioms exact_compiler_final_work_q16_residual_length_expanded
 #print axioms exact_compiler_final_work_q16_residual_covers_execution
 

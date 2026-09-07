@@ -1,6 +1,10 @@
 import AspisFormal.K1.V7Tag73ExactMeasuredK16Assembly
 import AspisFormal.K1.V7Tag73ExactCleanK13MeasuredComposition
 import AspisFormal.K1.V7Tag73ExactPairAdversaryProfileClosure
+import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
+import AspisFormal.K1.V7Tag73K14BoundGammaClosure
+import AspisFormal.K1.V7Tag73K15BoundGammaClosure
+import AspisFormal.K1.V7Tag73K15RelationAlphaActualLawClosure
 
 /-!
 # Exact measured Tag-73 closure from the clean work-dependent q16 theorem
@@ -51,9 +55,14 @@ open AspisK1.V7Tag73ExactRestoredK15Events
 open AspisK1.V7Tag73ExactRestoredK15MeasuredAssembly
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13IdealErrorLedger
+open AspisK1.V7Tag73K13BoundChallengeClosure
+open AspisK1.V7Tag73K13PreQ16JointEventHandoff
 open AspisK1.V7Tag73K13K14EventComposition
 open AspisK1.V7Tag73K14K15IdealErrorLedger
+open AspisK1.V7Tag73K14BoundGammaClosure
 open AspisK1.V7Tag73K15ExactMeasureLedger
+open AspisK1.V7Tag73K15BoundGammaClosure
+open AspisK1.V7Tag73K15RelationAlphaActualLawClosure
 open AspisK1.V7Tag73ProofRelevantUpstreamInterface
 open AspisK1.V7Tag73Q16FirstCompactUniformity
 open AspisK1.V7Tag73Q16SemanticFrontierBridge
@@ -68,14 +77,15 @@ open AspisPool.V7C1SubfieldRecovery
 open AspisPool.V7DeterministicSpendWitness
 open AspisV5AcceptedSpendRelation
 open AspisV5ComponentCQM31TowerExact
+open AspisV6PublishedTheoremInterfaces
 
 noncomputable section
 
-/-- Release-facing K1.2--K1.6 theorem with q16 discharged by the clean
-one-forest factorization.  The old adversary-profile premise is replaced by
-the canonical decoded-source certificate and the explicitly typed pre-final
-semantic-binding boundary.  The latter still requires collision-event or
-external-assumption discharge before release. -/
+/-- Release-facing K1.2--K1.6 theorem with q16 discharged by the corrected
+decoded-challenge binding and clean one-forest factorization.  The former
+alpha/gamma semantic invariants are no longer premises.  The sole remaining
+q16 bridge is a deterministic source inclusion from the production query
+event into the corrected pre-q16 chronological trial union. -/
 theorem exact_tag73_measured_clean_k16_aok_raw
     {HiddenTape TapeIdentity Observation Payload : Type}
     [Fintype HiddenTape]
@@ -104,10 +114,24 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     (k12Source : ExactTag73K12SourceObligations transitionFuel configuration
       projection fixedInstance)
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (publishedInitialWidth29 :
+      PublishedInitialWidth29CurveDecodability exactInitialEncoder)
     (k13Source : ExactTag73K13SourceObligations transitionFuel configuration
       projection fixedInstance decoder)
     (decodedSource : ExactFixedK13DecodedParsedSourceProvider transitionFuel
       configuration projection fixedInstance)
+    (q16TrialCover :
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+          projection fixedInstance ∩
+        exactTag73K13QueryEvent transitionFuel configuration projection
+          fixedInstance decoder) ⊆
+        (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+            projection fixedInstance ∩
+          ⋃ finalTrial : ExactCompilerExposureTrial parameters,
+            exactPreQ16K13JointTrialEvent transitionFuel configuration projection
+              fixedInstance decoder finalTrial))
+    (k14Source : ExactTag73K14BoundGammaSource transitionFuel configuration
+      projection fixedInstance decoder)
     (transitionRoom : 3 ≤ transitionFuel)
     (driverCoversProtocol :
       tag73CanonicalDriverFuelCap ≤ configuration.machine.driverFuel)
@@ -122,12 +146,6 @@ theorem exact_tag73_measured_clean_k16_aok_raw
       (schedule : QuerySchedule),
       (exactOperationalTape input).frontierNodes schedule =
         semanticFrontierNodes schedule.positions)
-    (k12WordsInvariant :
-      ExactFixedCleanK13PairWordsInvariantOnAdversaryAnchors transitionFuel
-        configuration projection fixedInstance decoder)
-    (k13TranscriptInvariant :
-      ExactFixedCleanK13PairTranscriptInvariantOnAdversaryAnchors
-        transitionFuel configuration projection fixedInstance decoder)
     (reference : AdmittedResult SemanticCap203Admitted)
     (traceExists : Nonempty
       (FirstAdmittedTrace q16CandidateOutput SemanticCap203Admitted 64
@@ -148,17 +166,15 @@ theorem exact_tag73_measured_clean_k16_aok_raw
           (exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
             projection fixedInstance decoder k13Source) ≤
         exactLaterRelationAlphaIdealRawError)
-    (width29Bound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K14Width29Event transitionFuel configuration projection
-            fixedInstance decoder) ≤ exactK14IdealRawError)
-    (fixedK15Bounds : FixedK15EventBounds
+    (remainingFixedK15Bounds : FixedK15EventBoundsExceptRelationAlpha
       (exactCompilerJointLaw hiddenLaw parameters)
       (exactTag73RestoredFixedK15Events environment))
-    (restoredK15Bound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73RestoredK15ResidualEvent environment) ≤
-        exactK14IdealRawError) :
+    (k15RelationAlphaSource : ExactTag73K15RelationAlphaSource transitionFuel
+      configuration projection fixedInstance decoder decoderBinding basis rc
+      poseidon environment)
+    (k15ResidualSource : ExactTag73K15BoundGammaSource transitionFuel
+      configuration projection fixedInstance decoder decoderBinding basis rc
+      poseidon environment) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (exactFixedSourceRefinementEvent transitionFuel configuration projection
           fixedInstance) ≤
@@ -182,24 +198,33 @@ theorem exact_tag73_measured_clean_k16_aok_raw
   have q16TransitionRoom : 2 ≤ transitionFuel :=
     le_trans (by decide : 2 ≤ 3) transitionRoom
   have q16SemanticBound :=
-    exact_fixed_clean_pair_k13_query_probability_le_one_forest_of_components
-      (decoder := decoder) hiddenLaw q16TransitionRoom programmedCover
-      decodedSource k12WordsInvariant k13TranscriptInvariant frontierExact reference
-      traceExists foldExposureCap finalExposureCap
+    exact_clean_preQ16_trial_union_probability_le_one_forest_of_bindings
+      (decoder := decoder) hiddenLaw decodedSource q16TransitionRoom
+      programmedCover frontierExact reference traceExists foldExposureCap
+      finalExposureCap
   have q16CleanBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
               projection fixedInstance ∩
             exactTag73K13QueryEvent transitionFuel configuration projection
             fixedInstance decoder) ≤ q16SemanticOneForestRawError :=
-    q16SemanticBound
+    (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
+      q16TrialCover |>.trans q16SemanticBound
   have k13Clean := exact_assembled_k13_clean_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance relation decoder
     decoderBinding k15 initialEncoderExact k13Source q16CleanBound oneFoldBound
     jointBatchBound laterAlphaBound
+  have width29Bound :=
+    exact_tag73_k14_width29_probability_le_of_bound_gamma_source hiddenLaw
+      initialEncoderExact publishedInitialWidth29 k14Source
   have k14Measure := exact_assembled_k14_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance relation decoder
     decoderBinding k15 width29Bound
+  have restoredK15Bound :=
+    exact_tag73_restored_k15_residual_probability_le_of_bound_gamma_source
+      hiddenLaw publishedInitialWidth29 k15ResidualSource
+  have fixedK15Bounds := fixed_k15_event_bounds_of_relation_alpha_source
+    hiddenLaw remainingFixedK15Bounds k15RelationAlphaSource
   have k15Measure := exact_restored_k15_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance decoder
     decoderBinding basis rc poseidon environment fixedK15Bounds

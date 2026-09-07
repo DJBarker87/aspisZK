@@ -15,7 +15,7 @@ The deterministic result is intentionally two-sided:
   a verifier history record tagged `fresh`, and its input was absent from the
   frozen adversary table.
 
-The `1511` corollary is a concrete machine-fuel bound for the full-256 Tag-73
+The `1513` corollary is a concrete machine-fuel bound for the full-256 Tag-73
 verifier runner.  The separately typed 208-bit Merkle work is not part of this
 runner or bound.  Nothing here says acceptance implies stability, classifies a
 protocol failure as this event, or supplies a probabilistic/compiler premise.
@@ -540,19 +540,19 @@ theorem concrete_shared_verifier_new_entry_is_fresh_and_adversary_absent
 
 /-- With verifier fuel fixed to the independently audited full-256 ceiling,
 both successful verifier records and genuinely new verifier table entries are
-bounded by `1511`.  This theorem does not assert that a run with this fuel
+bounded by `1513`.  This theorem does not assert that a run with this fuel
 returns or accepts. -/
-theorem concrete_full256_verifier_history_and_new_entries_le_1511
+theorem concrete_full256_verifier_history_and_new_entries_le_1513
     {AdversaryResult : Type*} {freshAnswerCount : Nat}
     (freshTape : FreshAnswerTape Digest256 freshAnswerCount)
     (limits : OracleLimits) (adversaryFuel : Nat)
     (adversaryProgram : OracleMachine AdversaryResult)
     (transcriptTape : DeployedFixedTape) :
-    let run := runAdversaryThenTag73Verifier freshTape limits adversaryFuel 1511
+    let run := runAdversaryThenTag73Verifier freshTape limits adversaryFuel 1513
       adversaryProgram transcriptTape
-    (historySince run.adversary.oracle run.verifier.oracle).length ≤ 1511 ∧
+    (historySince run.adversary.oracle run.verifier.oracle).length ≤ 1513 ∧
       (run.verifier.oracle.table.drop run.adversary.oracle.table.length).length ≤
-        1511 := by
+        1513 := by
   dsimp only [runAdversaryThenTag73Verifier, runFullVerifierPlan,
     runVerifierPlan]
   let state :=
@@ -562,27 +562,27 @@ theorem concrete_full256_verifier_history_and_new_entries_le_1511
     (FixedBindings.ofContext transcriptTape.messages.context) initialCore
       (fullPlan transcriptTape)
   have exactRun := run_machine_exact_fresh_extension
-    (controllerFromFreshAnswerTape freshTape) limits .verifier 1511 state program
+    (controllerFromFreshAnswerTape freshTape) limits .verifier 1513 state program
   have stepBound := run_machine_steps_le_fuel
-    (controllerFromFreshAnswerTape freshTape) limits .verifier 1511 state program
+    (controllerFromFreshAnswerTape freshTape) limits .verifier 1513 state program
   have entryBound := run_machine_new_entry_count_le_steps
-    (controllerFromFreshAnswerTape freshTape) limits .verifier 1511 state program
+    (controllerFromFreshAnswerTape freshTape) limits .verifier 1513 state program
   change
     (historySince state
       (runMachine (controllerFromFreshAnswerTape freshTape) limits .verifier
-        1511 state program).oracle).length ≤ 1511 ∧
+        1513 state program).oracle).length ≤ 1513 ∧
     ((runMachine (controllerFromFreshAnswerTape freshTape) limits .verifier
-      1511 state program).oracle.table.drop state.table.length).length ≤ 1511
+      1513 state program).oracle.table.drop state.table.length).length ≤ 1513
   exact ⟨le_trans exactRun.2.2 stepBound, le_trans entryBound stepBound⟩
 
-/-- The independently audited schedule expression is also bounded by `1511`.
+/-- The independently audited schedule expression is also bounded by `1513`.
 It is kept separate from the fuel theorem above: connecting termination of a
 particular adversarial run to the complete plan is not smuggled into this
 stability interface. -/
 theorem concrete_transcript_schedule_full256_cap
     (transcriptTape : DeployedFixedTape) :
     tag73Full256VerifierOracleCalls transcriptTape.messages
-      transcriptTape.search ≤ 1511 :=
+      transcriptTape.search ≤ 1513 :=
   shared_runner_full256_verifier_call_cap transcriptTape.messages
     transcriptTape.search
 
@@ -598,7 +598,7 @@ theorem concrete_transcript_schedule_full256_cap
 #print axioms concrete_shared_verifier_stable_iff_no_fresh_records
 #print axioms concrete_shared_verifier_freshness_failure_iff_not_stable
 #print axioms concrete_shared_verifier_new_entry_is_fresh_and_adversary_absent
-#print axioms concrete_full256_verifier_history_and_new_entries_le_1511
+#print axioms concrete_full256_verifier_history_and_new_entries_le_1513
 #print axioms concrete_transcript_schedule_full256_cap
 
 end

@@ -186,11 +186,11 @@ theorem repeat_root_transition_sweep_replay_base_safe
         _ ih
 
 /-- The production-shaped sweep client: inspect the complete deployed
-1511-transition cap for each requested extraction round, then return the fixed
+1513-transition cap for each requested extraction round, then return the fixed
 accumulator extractor supplied independently of the hidden tape. -/
 def deployedRootSweepClient {Result : Type u} (rounds : Nat)
     (result : Result) : ConcreteRestorationClient Result :=
-  repeatRootTransitionSweep 1511 rounds (.pure result)
+  repeatRootTransitionSweep 1513 rounds (.pure result)
 
 /-! ## Exact all-reply request coverage -/
 
@@ -297,7 +297,7 @@ theorem root_transition_request_mem_repeated
         (Nat.zero_le index) (by simpa using indexWithin))
 
 /-- Production coverage certificate: on every possible adaptive reply path,
-each deployed root transition below 1511 is requested at least once whenever
+each deployed root transition below 1513 is requested at least once whenever
 the extractor asks for a positive number of rounds. -/
 theorem deployed_root_sweep_every_path_covers_transition
     {Result : Type u} (rounds : Nat) (result : Result)
@@ -305,17 +305,17 @@ theorem deployed_root_sweep_every_path_covers_transition
     (path : ConcreteRequestPath (deployedRootSweepClient rounds result)
       requests)
     (roundsPositive : 0 < rounds) (transitionIndex : Nat)
-    (transitionWithin : transitionIndex < 1511) :
+    (transitionWithin : transitionIndex < 1513) :
     { nodeId := 0, verifierTransitionIndex := transitionIndex } ∈ requests := by
-  rw [repeat_root_transition_sweep_request_path_exact 1511 rounds result path]
-  exact root_transition_request_mem_repeated 1511 rounds transitionIndex
+  rw [repeat_root_transition_sweep_request_path_exact 1513 rounds result path]
+  exact root_transition_request_mem_repeated 1513 rounds transitionIndex
     roundsPositive transitionWithin
 
 theorem deployed_root_sweep_client_exact_request_count
     {Result : Type u} (rounds : Nat) (result : Result) :
-    ExactRequestCount result (rounds * 1511)
+    ExactRequestCount result (rounds * 1513)
       (deployedRootSweepClient rounds result) := by
-  exact repeat_root_transition_sweep_exact_request_count result 1511 rounds
+  exact repeat_root_transition_sweep_exact_request_count result 1513 rounds
 
 theorem deployed_root_sweep_client_replay_base_safe
     {Result : Type u} (rounds : Nat) (result : Result) :
@@ -528,7 +528,7 @@ theorem exact_request_count_prevents_fuel_exhaustion
             exact continuations reply nextAccumulator _ (tails reply) (by omega))
   exact induction count exactCount fuelEnough
 
-/-- Production specialization: `rounds * 1511` restoration fuel is sufficient
+/-- Production specialization: `rounds * 1513` restoration fuel is sufficient
 for the complete deployed root-transition sweep to return its fixed result on
 every scheduler branch. -/
 theorem deployed_root_sweep_client_returns
@@ -545,11 +545,11 @@ theorem deployed_root_sweep_client_returns
         run.halt = .returned result)
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalOracleCalls) startProgram environment root
-        configuration (rounds * 1511)
+        configuration (rounds * 1513)
         (deployedRootSweepClient rounds result)) := by
   apply exact_request_count_prevents_fuel_exhaustion
-    startProgram environment root configuration (rounds * 1511)
-    (rounds * 1511) (deployedRootSweepClient rounds result) result
+    startProgram environment root configuration (rounds * 1513)
+    (rounds * 1513) (deployedRootSweepClient rounds result) result
   · exact deployed_root_sweep_client_exact_request_count rounds result
   · exact Nat.le_refl _
 
@@ -566,12 +566,12 @@ def exactRootSweepWitnessConfiguration
       Observation Statement Proof Payload Witness parameters)
     (rounds : Nat)
     (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
-    (withinForkCap : rounds * 1511 ≤ parameters.forkRequestCap) :
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap) :
     ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity Observation
       Statement Proof Payload Witness parameters where
   machine := base.machine
   restorationConfiguration := base.restorationConfiguration
-  restorationFuel := rounds * 1511
+  restorationFuel := rounds * 1513
   client := deployedRootSweepClient rounds extractor
   bounds :=
     { rootAdversaryTotalCalls := base.bounds.rootAdversaryTotalCalls
@@ -590,7 +590,7 @@ def exactRootSweepWitnessConfiguration
       Observation Statement Proof Payload Witness parameters)
     (rounds : Nat)
     (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
-    (withinForkCap : rounds * 1511 ≤ parameters.forkRequestCap) :
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap) :
     (exactRootSweepWitnessConfiguration base rounds extractor withinForkCap).machine =
       base.machine := by
   rfl
@@ -602,7 +602,7 @@ def exactRootSweepWitnessConfiguration
       Observation Statement Proof Payload Witness parameters)
     (rounds : Nat)
     (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
-    (withinForkCap : rounds * 1511 ≤ parameters.forkRequestCap) :
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap) :
     (exactRootSweepWitnessConfiguration base rounds extractor
         withinForkCap).client = deployedRootSweepClient rounds extractor := by
   rfl
@@ -619,7 +619,7 @@ theorem completed_exact_root_sweep_returns_extractor
       Observation Statement Proof Payload Witness parameters)
     (rounds : Nat)
     (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
-    (withinForkCap : rounds * 1511 ≤ parameters.forkRequestCap)
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap)
     (sample : ExactCompilerSample HiddenTape parameters)
     (runtime : SchedulerNativePlainRomRootRuntime TapeIdentity Statement Proof
       Payload)
@@ -656,7 +656,7 @@ theorem completed_exact_root_sweep_returns_extractor
         (globalOracleCalls := globalFull256OracleCallCap parameters)
         (base.machine.blackBox.start sample.1 base.machine.observation)
         base.machine.environment runtime.node base.restorationConfiguration
-        (rounds * 1511) (deployedRootSweepClient rounds extractor))
+        (rounds * 1513) (deployedRootSweepClient rounds extractor))
     exact deployed_root_sweep_client_returns
       (globalOracleCalls := globalFull256OracleCallCap parameters)
       (base.machine.blackBox.start sample.1 base.machine.observation)

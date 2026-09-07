@@ -397,6 +397,18 @@ theorem submitted_work_nonce_has_only_one_selected_check
 
 /-! ## Deterministic challenge and q16 updates -/
 
+/-- The two Tag-73 revision-2 challenges whose decoded values are absorbed
+immediately after sampling. The sampler's post-state already binds the exact
+raw block chain, so this payload need only bind the canonical decoded value. -/
+def challengeBindingPayload? (id : ChallengeId)
+    (value : Qm31Bytes) : Option Payload :=
+  match id with
+  | .gamma => some (.challengeBind .gamma value)
+  | .alpha round =>
+      if round = (0 : Fin 4) then some (.challengeBind .alphaZero value)
+      else none
+  | _ => none
+
 def completeFutureFreeChallenge (environment : FutureFreeEnvironment)
     (snapshot : FutureFreeSnapshot) (id : ChallengeId)
     (value : Qm31Bytes) (remaining : List FutureFreeSlot)
@@ -431,8 +443,11 @@ def processFutureFreeChallengeBlock
   let accumulated := outputs ++ [output]
   match environment.decoders.qm31Parameter id accumulated with
   | some value =>
-      completeFutureFreeChallenge environment snapshot id value remaining
-        nextCore
+      let completed := completeFutureFreeChallenge environment snapshot id value
+        remaining nextCore
+      match challengeBindingPayload? id value with
+      | none => completed
+      | some payload => { completed with control := .absorbPayload payload remaining }
   | none =>
       if accumulated.length < samplerBlockCap (samplerMode id) then
         { snapshot with

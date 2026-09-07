@@ -12,7 +12,7 @@ restoration client; there is no caller-supplied outcome, world, restoration
 function, acceptance cover, or extractor result map.
 
 The bounds below are deliberately stage-local.  `Q` bounds every literal
-same-tape adversary start, `1511` bounds each future-free verifier execution,
+same-tape adversary start, `1513` bounds each future-free verifier execution,
 and `R` bounds restoration requests.  The resulting scheduler is indexed by
 the exact global call cap `G`, while its sampled tape has the exact unified
 exposure length `F`.
@@ -358,10 +358,10 @@ theorem exact_plain_rom_operational_budget_fields
     (configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
       Observation Statement Proof Payload Result parameters) :
     configuration.machine.adversaryFuel ≤ parameters.q1ShaCallCap ∧
-      configuration.machine.verifierFuel ≤ 1511 ∧
+      configuration.machine.verifierFuel ≤ 1513 ∧
       configuration.restorationConfiguration.proverReplayFuel ≤
         parameters.q1ShaCallCap ∧
-      configuration.restorationConfiguration.verifierFuel ≤ 1511 ∧
+      configuration.restorationConfiguration.verifierFuel ≤ 1513 ∧
       configuration.restorationFuel ≤ parameters.forkRequestCap := by
   exact ⟨configuration.bounds.rootAdversaryFuel,
     configuration.bounds.rootVerifierFuel,
