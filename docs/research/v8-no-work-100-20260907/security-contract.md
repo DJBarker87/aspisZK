@@ -3,6 +3,13 @@
 Status: no candidate has a complete 100-bit certificate. This directory is
 research only; selected acceptance, deployment and payment semantics are unchanged.
 
+The [query-last audit](adaptive-tail-review.md) separates the prefix-defined
+width29 event from query-dependent classifier rejection and from the V8 chord
+image/source bridge. In the algebraic chord/query model, absence of an original
+component cover can coexist with perfect query agreement; its image residual must be
+charged separately. This does not assign H(T)=1 to the actual scheduler or the
+narrow width29 event. No new adaptive upper bound or FS certificate is claimed.
+
 New proved subexperiment: [fixed-target query-support theorem](lean-repair-review.md)
 uses independent direct q-subsets, nonzero gamma and whole-field alpha. Its
 119.0458-bit wrong-support bound is not the adaptive K1.4/extraction error.
