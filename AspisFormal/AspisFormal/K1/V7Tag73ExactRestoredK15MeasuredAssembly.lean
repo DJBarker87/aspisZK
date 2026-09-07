@@ -1,5 +1,6 @@
 import AspisFormal.K1.V7Tag73ExactRestoredK15Events
 import AspisFormal.K1.V7Tag73RestoredK15EventComposition
+import AspisFormal.K1.V7Tag73RestrictedK15EventComposition
 
 /-!
 # Measured assembly of the exact restoration-aware Tag-73 K1.5 stage
@@ -32,6 +33,8 @@ open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73K14K15IdealErrorLedger
 open AspisK1.V7Tag73RestoredCausalErrorLedger
 open AspisK1.V7Tag73RestoredK15EventComposition
+open AspisK1.V7Tag73K15RestrictedMeasureLedger
+open AspisK1.V7Tag73RestrictedK15EventComposition
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7C1SubfieldRecovery
 open AspisPool.V7DeterministicSpendWitness
@@ -101,9 +104,76 @@ theorem exact_restored_k15_error_measure_bound
     (exact_restored_k15_error_event_subset_fixed_union_residual environment)
     fixedBounds restoredBound
 
+/-- Exact measured K1.5 bound on the literal compiler-clean event consumed by
+K1.6.  This is the production-facing form: the compiler's causal target event
+is charged by K1.6, so none of the nine K1.5 source bounds is required outside
+the clean slice. -/
+theorem exact_restricted_restored_k15_error_measure_bound
+    {HiddenTape TapeIdentity Observation Payload : Type}
+    [Fintype HiddenTape]
+    (hiddenLaw : PMF HiddenTape)
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation V5PublicStatement Tag73K12ParsedProof Payload
+      DecodedSpendWitness parameters)
+    (projection : AcceptedTapeProjection V5PublicStatement Tag73K12ParsedProof
+      Payload)
+    (fixedInstance : PublicInstance V5PublicStatement)
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (decoderBinding : InitialProjectionBinding decoder)
+    (basis : Basis (Fin 4) F QM31Exact)
+    (rc : RoundConstants)
+    {deployedOwner : Digest → Digest}
+    {deployedNote : Digest → F → F → Digest → Digest}
+    {deployedNullifier : Digest → Digest → Digest}
+    {deployedNode : Digest → Digest → Digest}
+    (poseidon : Poseidon2Faithful rc deployedOwner deployedNote
+      deployedNullifier deployedNode)
+    (environment : ExactTag73RestoredCausalK15Environment transitionFuel
+      configuration projection fixedInstance decoder decoderBinding basis rc
+      poseidon)
+    (clean : Set (ExactCompilerSample HiddenTape parameters))
+    (fixedBounds : FixedK15EventBounds
+      (exactCompilerJointLaw hiddenLaw parameters)
+      (restrictFixedK15Events clean
+        (exactTag73RestoredFixedK15Events environment)))
+    (restoredBound :
+      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
+          (clean ∩ exactTag73RestoredK15ResidualEvent environment) ≤
+        exactK14IdealRawError) :
+    (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
+        (clean ∩
+          k15SpendWitnessErrorEvent
+            (exactTag73ProofRelevantStages transitionFuel configuration
+              projection fixedInstance
+              (exactTag73SpendRelation (deployedOwner := deployedOwner)
+                (deployedNote := deployedNote)
+                (deployedNullifier := deployedNullifier)
+                (deployedNode := deployedNode)) decoder decoderBinding
+              (exactTag73RestoredCausalK15Classifier transitionFuel
+                configuration projection fixedInstance decoder decoderBinding
+                basis rc poseidon environment))) ≤
+      exactK15RestoredCausalRawError := by
+  exact restricted_restored_k15_error_measure_bound_of_cover hiddenLaw
+    (exactTag73ProofRelevantStages transitionFuel configuration projection
+      fixedInstance
+      (exactTag73SpendRelation (deployedOwner := deployedOwner)
+        (deployedNote := deployedNote)
+        (deployedNullifier := deployedNullifier)
+        (deployedNode := deployedNode)) decoder decoderBinding
+      (exactTag73RestoredCausalK15Classifier transitionFuel configuration
+        projection fixedInstance decoder decoderBinding basis rc poseidon
+        environment))
+    clean (exactTag73RestoredFixedK15Events environment)
+    (exactTag73RestoredK15ResidualEvent environment)
+    (exact_restored_k15_error_event_subset_fixed_union_residual environment)
+    fixedBounds restoredBound
+
 end
 
 
 #print axioms exact_restored_k15_error_measure_bound
+#print axioms exact_restricted_restored_k15_error_measure_bound
 
 end AspisK1.V7Tag73ExactRestoredK15MeasuredAssembly
