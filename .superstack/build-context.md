@@ -14,8 +14,10 @@ instruction.
 Current result: q22 with a 26-byte digest and two OOD points has a 39,934-byte
 maximum body and a machine-checked 104.26666237024358-bit conditional ledger.
 Production feasibility remains unestablished because the universal hiding
-theorem, exact circle-fold bridge, restoration-wide source replay, and actual
-V8 SBF/Pool CU measurements are open.
+theorem, restoration-wide source replay, source translation/integration, and
+actual V8 SBF/Pool CU measurements are open. The exact affine-chord
+coordinate-ring degree drop and natural-basis quotient-message bridge are now
+proved for both source interpolation branches.
 
 review.security_score: C
 review.quality_score: B
@@ -29,13 +31,13 @@ review.findings:
     fix: Prove universal surjectivity of the complete M31 leakage map, including
       equality cases, or retain an explicit counterexample and enlarge the mask
       to the proved minimum before making the profile reachable.
-  - severity: Critical
+  - severity: Closed
     category: Correctness
-    description: The corrected affine-chord quotient lacks the exact circle
-      coordinate-ring degree and fold/final compatibility theorem.
-    fix: Prove chord divisibility and the required degree drop in the deployed
-      circle-code representation, then connect the theorem to the Rust quotient
-      routine through the existing translation boundary.
+    description: The corrected affine-chord quotient has exact distinct-x and
+      equal-x coordinate-ring degree theorems and an actual 1024-entry
+      natural-basis message representative after width-29 batching.
+    fix: Consume this theorem in the remaining V8 parser/transcript source
+      translation and feature-gated verifier integration.
   - severity: Critical
     category: Security
     description: The degree-28 gamma result is conditional on a restoration-wide

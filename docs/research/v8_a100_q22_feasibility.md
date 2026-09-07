@@ -7,12 +7,13 @@ Classification: **C — promising but not yet established**
 
 The best profile found is still the proposed **q22, 26-byte digest, two component-wise OOD points** profile. It has an exact maximum proof body of **39,934 bytes** and a complete pair-verifier account size of **40,662 bytes**. Under the explicitly named `Q = 2^36`, `R = 259`, and 1,511-verifier-call research resource envelope, the exact rational raw-error ledger is **104.26666237024358 bits** without crediting proof of work. Lean proves that conditional ledger is at most `2^-104` and not at most `2^-105`.
 
-That is not yet a production theorem. Four independent release gates remain open:
+That is not yet a production theorem. Three independent release gates remain open:
 
 1. the exact compiler/source pipeline does not yet construct a restoration-wide K1.4 provider that replays the two OOD vectors for cached and advance continuations;
-2. the affine-chord quotient has not yet been connected to the exact circle-code degree/fold representation;
-3. the unchanged masking system has concrete q22/two-OOD nonzero-minor witnesses, but no theorem covering every legal schedule and OOD pair;
-4. the V8 prototype is deliberately unreachable from a deployed instruction, and this Darwin/arm64 host cannot reproduce the repository's Linux/x86_64 final-SBF transaction harness, so there is no honest V8 transaction-CU number.
+2. the unchanged masking system has concrete q22/two-OOD nonzero-minor witnesses, but no theorem covering every legal schedule and OOD pair;
+3. the V8 prototype is deliberately unreachable from a deployed instruction, and this Darwin/arm64 host cannot reproduce the repository's Linux/x86_64 final-SBF transaction harness, so there is no honest V8 transaction-CU number.
+
+A continuation on this branch has now closed the former circle-code gate. Lean constructs the affine-chord quotient in both the distinct-x and equal-x branches, proves the exact component degree drops, and proves that the adaptive width-29 quotient is represented by an actual 1,024-entry natural-basis message consumed by the deployed initial encoder. This makes the existing source-connected circle-to-line fold commutation theorem applicable; it is no longer an ordinary-polynomial-only claim.
 
 These are precise proof and integration obligations, not evidence of impossibility. The byte result and optimized host prototype are favorable, but neither substitutes for the missing universal proof or SBF run. Consequently this work does not claim A or B, and it does not classify the candidate as D.
 
@@ -34,7 +35,7 @@ Relevant recent branches at selection/review included:
 
 | Branch | Tip | Relevance |
 |---|---:|---|
-| `main` | later advanced to `4c91f97a` | Production/formal integration continued after the research base was selected; this branch was intentionally not rebased mid-investigation. |
+| `main` | later advanced to `4c91f97a` | Production/formal integration continued after the research base was selected. The research branch was not rebased; the single relevant accepted-fold source-chain commit was explicitly cherry-picked as local `e39f8b37`. |
 | `integration/v7-cutoff20-main-20260902` | `4420d842` | Cutoff-20 integration. |
 | `research/v7-first-cap203-scan-cu-fix-20260902` | `d42334b8` | Exact current-binary frontier/CU work and one parent of the selected merge. |
 | `research/v7-deposit-invariant-promotion-20260902` | `44602d36` | Pool transaction evidence. |
@@ -62,6 +63,9 @@ Local milestone commits before this report:
 | `87d19e02` | `research: add v8 q22 two-ood hiding rank witnesses` |
 | `1c111825` | `evidence: retain focused v8 proof and v7 baseline logs` |
 | `00ad1d3d` | `research: compute exact v8 gamma security thresholds` |
+| `e39f8b37` | `proof: retain accepted fold source chain` (explicit cherry-pick of `4c91f97a`) |
+| `598a8e98` | `formal: connect v8 chord quotient to circle encoder` |
+| `2910cfc3` | `research: cover v8 equal-x deep branch` |
 
 The final documentation commit is intentionally identified by subject rather than embedding its own hash in itself.
 
@@ -285,7 +289,17 @@ Established abstract facts include:
 - ordinary univariate polynomial division by the two-root zerofier drops degree by two;
 - the no-new-tree quotient is computable entirely from existing authenticated C1/C2 openings and the public vectors.
 
-Not established: the exact degree theorem in the deployed circle coordinate ring and compatibility of this chord quotient with the concrete fold/final representation. The ordinary polynomial degree-drop theorem cannot fill that gap.
+The continuation establishes the previously missing deployed circle-code facts:
+
+- in the distinct-x branch, multiplying the residual pair by the conjugate chord produces two polynomials divisible by `(X-x0)(X-x1)`;
+- the chord norm is exactly `(u^2+v^2)(X-x0)(X-x1)`, with the rational-map scalar proved nonzero for distinct secure parameters;
+- division constructs a quotient pair of degrees at most `(511,510)`;
+- in the equal-x branch, distinctness forces distinct y-coordinates and both residual components carry the linear factor `X-x0`, giving degrees at most `(510,510)`;
+- pair multiplication evaluates to multiplication by the affine chord on `x^2+y^2=1`;
+- every resulting pair has an exact 1,024-entry natural-basis message representative; and
+- the complete width-29 gamma-batched adaptive quotient therefore lies in the deployed initial encoder without a new commitment tree.
+
+The existing `v5_circle_fold_encoder0_commutes` theorem applies to that quotient message. What remains is source translation/integration of the V8 arithmetic and the restoration-wide transcript theorem, not the circle algebra itself.
 
 ## 10. Candidate separation and fixed pre-gamma tuple
 
@@ -336,6 +350,8 @@ All successful files were compiled individually before dependent work. No `sorry
 |---|---|---:|---|
 | `V8A100DirectSchedule.lean` | q22 range/distinctness; ideal conditioned uniformity; exhaustion rejects; frontier ≤296; maximum fixture =296; body/account arithmetic | PASS 14.27 s; max RSS 5,732,073,472; zero swap | standard only |
 | `V8A100TwoPointDeep.lean` | circle chart, interpolation, chord identity/nonvanishing, width-29 batching, ordinary degree drop | PASS 3.93 s; max RSS 5,721,030,656; zero swap | standard only |
+| `V8A100CircleChordQuotient.lean` | chord-norm factorisation; distinct-x quadratic divisibility; equal-x linear divisibility; constructive circle-pair degree drops; pointwise chord multiplication | PASS 26.54 s; max RSS 4,851,236,864; zero swap | standard only |
+| `V8A100CircleDeepCompatibility.lean` | exact rational-map instantiation; adaptive source branch; actual natural-basis quotient message; width-29 no-new-tree codeword theorem | PASS 6.47 s; max RSS 5,508,284,416; zero swap | standard only |
 | `V8A100FixedTupleFingerprint.lean` | per-message/pair/family collision bounds, two-vector uniqueness, bad-gamma cardinality ≤28 | PASS 53.37 s; max RSS 4,538,695,680; zero swap | standard only |
 | `K1/V8A100PreGammaTupleBinding.lean` | conditional restoration-wide fixed-tuple theorem; exact missing source structure | PASS 18.06 s; max RSS 5,624,053,760; zero swap | standard only |
 | `V8A100RawSecurityLedger.lean` | exact resource arithmetic; q21≤2^-100; q22≤2^-104 and not≤2^-105; q23≤2^-105 | PASS 10.69 s; max RSS 5,585,387,520; zero swap | standard only |
@@ -513,6 +529,9 @@ The two critical-path optimizations already implemented and compared are batch i
 | Raw coordinate occurrence as source binding | Type/semantics mismatch | Does not cover semantic replay or cached/advance paths | Compared scheduler/compiler interfaces; added explicit K1.3 refinement and K1.4 prefix replay structure; did not smuggle it into the final claim. |
 | Third OOD point as easy repair | Dominated alternative | Two points already give abstract uniqueness; source gap is replay, not collision | Quantified +449 bytes; retained same conservative ledger; rejected as default. |
 | Stereographic `(t-t0)(t-t1)` quotient | Mathematical/source-model mismatch | Not the degree-one affine circle factor | Derived chord identity; replaced Rust and Lean model with affine chord; retained ordinary parameter result only as a non-release lemma. |
+| First coordinate-ring factor proof | Incorrect proof certificate | Direct polynomial linear combination did not match the required ideal identity | Tried direct combination and normalization; succeeded by proving the linear and constant coefficient identities separately, then normalizing symbolically. |
+| Concrete residual bridge timed out at `whnf` | Proof-shape/resource pathology | Elaboration unfolded the 512-entry natural-basis constructor in direct message-specific statements | Tried the existing max-recursion precedent and explicit rewrites; then replaced them with typed generic residual lemmas and a late concrete instantiation. No heartbeat increase was used. |
+| Equal-x Rust fixture initially found no point | Incorrect geometric assumption in test | `(t,-1/t)` has opposite x in this chart; equal x is `(t,-t)` | Reduced to the rational formulas, corrected only the adversarial fixture, and passed the y-interpolation/chord-root test plus the full V8 release suite. |
 | First Lean chord proof | Missing local algebraic lemma | Tactic could not discharge `4 != 0` cleanly | Factored `4 = 2*2` and used symbolic nonzero multiplication; final file compiles without `sorryAx`. |
 | First exact ledger build expanded huge `Nat.choose` | Resource pathology | Broad normalization unfolded a huge recurrence | Stopped near policy limit; used `Nat.choose_two_right`; introduced named sparse literal and exact bridge theorem; focused rebuild passed in 10.69 s. |
 | Exact V7 capstone local replay | Environment/cache limitation | Required `.olean` objects absent; cold replay violates local memory policy | Checked research and main caches; used retained exact build evidence; did not launch uncapped rebuild. |
@@ -534,7 +553,7 @@ The two critical-path optimizations already implemented and compared are batch i
 | One transaction <1.4M CU | Not measured for V8. |
 | Preferred ≤1.35M CU | Not measured for V8. |
 | Exact q22 hiding | Open; concrete witnesses only. |
-| Lean connected to actual Rust verifier | Partial source-model reuse; exact production V8 verifier does not yet exist and restoration-wide bridge is open. |
+| Lean connected to actual Rust verifier | Circle quotient, adaptive branch, width-29 message membership, and existing fold representation are connected; exact production V8 parser/transcript translation and restoration-wide bridge remain open. |
 
 ## 18. Best profile and go/no-go decision
 
@@ -557,20 +576,17 @@ Why not q21: it reaches only 100.318 conditional bits, below the preferred targe
 
 ## 19. Remaining exact gaps
 
-1. Prove the circle-coordinate-ring divisibility/degree statement for the affine chord and connect it to the actual fold/final representation.
-2. Implement a feature-gated V8 verifier instruction and prover KAT without changing V7.
-3. Translate/refine the V8 parser, direct sampler, prefix replay, gamma dots, chord quotient, authentication, and terminal result into the source pipeline.
-4. Construct `ExactCompilerPreGammaTupleObligation` from the actual paused compiler for fresh, cached, and advance continuations.
-5. Reassemble K1.2–K1.6 at the shifted challenge coordinates and instantiate Q/R from actual compiler resources.
-6. Prove universal hiding for every valid q22 schedule and distinct secure OOD pair, or produce a counterexample and compute the minimum mask enlargement.
-7. On a capped Linux/x86_64 build host, run actual SBF verifier-only, same-page, rollover, typical/max frontier, and strict-work transactions, recording CU/stack/heap/CPI/SHA/inversion counters.
-8. Produce complete cross-language byte-level KATs and a final capstone/axioms replay.
+1. Implement a feature-gated V8 verifier instruction and prover KAT without changing V7.
+2. Translate/refine the V8 parser, direct sampler, prefix replay, gamma dots, chord quotient, authentication, and terminal result into the source pipeline.
+3. Construct `ExactCompilerPreGammaTupleObligation` from the actual paused compiler for fresh, cached, and advance continuations.
+4. Reassemble K1.2–K1.6 at the shifted challenge coordinates and instantiate Q/R from actual compiler resources.
+5. Prove universal hiding for every valid q22 schedule and distinct secure OOD pair, or produce a counterexample and compute the minimum mask enlargement.
+6. On a capped Linux/x86_64 build host, run actual SBF verifier-only, same-page, rollover, typical/max frontier, and strict-work transactions, recording CU/stack/heap/CPI/SHA/inversion counters.
+7. Produce complete cross-language byte-level KATs and a final capstone/axioms replay.
 
 ## 20. Most valuable next task
 
-The highest-value next task is **the exact affine-chord circle-code bridge**, immediately followed by a feature-gated Linux SBF probe. The theorem should state that for two distinct secure off-domain circle points and a component polynomial in the actual initial circle-code representation, subtracting the coordinate-adaptive affine interpolant is divisible by their chord in the circle coordinate ring, with the precise degree drop needed by the existing fold/final verifier. This decides whether the mathematically corrected no-new-tree quotient is actually compatible with production folding before investing in broad Pool integration.
-
-If that focused bridge succeeds, wire the already-tested V8 core into a research-only instruction and measure maximum-frontier rollover. If it fails with a counterexample, the current V8 construction can be ruled out or revised without paying the cost of a full compiler and Pool proof.
+The highest-value theorem task is now **constructing the exact restoration-wide pre-gamma provider** from the paused source compiler, including cached and advance continuations. The circle-code bridge it depended on has succeeded. In parallel on a suitable capped Linux host, the highest-value engineering measurement is a feature-gated, unreachable-from-production V8 instruction probe followed by the maximum-frontier rollover transaction.
 
 ## Reproduction commands
 
@@ -583,6 +599,7 @@ cargo run --locked -p aspis-xtask --bin v8_a100_parameter_audit -- \
   --write results/v8-a100-q22/parameter-sweep.json
 
 cargo test --locked -p aspis-core v8_ -- --nocapture
+cargo test --locked --release -p aspis-core v8_ -- --nocapture
 cargo test --locked -p aspis-core v7 -- --nocapture
 
 /usr/bin/time -l cargo test --locked --release -p aspis-prover v7 -- --nocapture
@@ -618,8 +635,14 @@ export LEAN_BIN=/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/
 
 /usr/bin/time -l "$LEAN_BIN" -o /tmp/V8A100DirectSchedule.olean \
   AspisFormal/AspisFormal/V8A100DirectSchedule.lean
-/usr/bin/time -l "$LEAN_BIN" -o /tmp/V8A100TwoPointDeep.olean \
+/usr/bin/time -l "$LEAN_BIN" \
+  -o /Users/dominic/ZK/AspisFormal/.lake/build/lib/lean/AspisFormal/V8A100TwoPointDeep.olean \
   AspisFormal/AspisFormal/V8A100TwoPointDeep.lean
+/usr/bin/time -l "$LEAN_BIN" \
+  -o /Users/dominic/ZK/AspisFormal/.lake/build/lib/lean/AspisFormal/V8A100CircleChordQuotient.olean \
+  AspisFormal/AspisFormal/V8A100CircleChordQuotient.lean
+/usr/bin/time -l "$LEAN_BIN" \
+  AspisFormal/AspisFormal/V8A100CircleDeepCompatibility.lean
 /usr/bin/time -l "$LEAN_BIN" -o /tmp/V8A100FixedTupleFingerprint.olean \
   AspisFormal/AspisFormal/V8A100FixedTupleFingerprint.lean
 /usr/bin/time -l "$LEAN_BIN" -o /tmp/V8A100PreGammaTupleBinding.olean \
@@ -671,12 +694,15 @@ The regenerated JSON matched byte-for-byte at SHA-256
 - `crates/aspis-core/src/v8_deep.rs` — reference and optimized corrected chord quotient.
 - `AspisFormal/AspisFormal/V8A100DirectSchedule.lean` — q22 sampler/frontier/body results.
 - `AspisFormal/AspisFormal/V8A100TwoPointDeep.lean` — interpolation/chord/batching results.
+- `AspisFormal/AspisFormal/V8A100CircleChordQuotient.lean` — coordinate-ring chord factorisation, both secant cases, and exact degree drops.
+- `AspisFormal/AspisFormal/V8A100CircleDeepCompatibility.lean` — adaptive rational-map instantiation and exact width-29 natural-basis quotient message.
 - `AspisFormal/AspisFormal/V8A100FixedTupleFingerprint.lean` — collision and gamma-cardinality results.
 - `AspisFormal/AspisFormal/K1/V8A100PreGammaTupleBinding.lean` — exact source obligation and conditional restored theorem.
 - `AspisFormal/AspisFormal/V8A100RawSecurityLedger.lean` — exact conditional ledger inequalities.
 - `results/v8-a100-q22/hiding-rank-witnesses.json` — concrete pair/pair-forest ranks.
 - `results/v8-a100-q22/host-deep-profile.json` — diagnostic non-CU timings.
 - `results/v8-a100-q22/sbf-environment-gate.txt` — exact final-SBF host gate.
+- `results/v8-a100-q22/circle-deep-compatibility-20260907.txt` — focused Lean/Rust evidence and resolved failure record for the circle-code gate.
 - `results/v8-a100-q22/*.log` — focused Rust/Lean baselines and axioms output.
 - `docs/reviews/v8_a100_q22_production_readiness.html` — structured production-readiness review.
 - `.superstack/build-context.md` — review handoff and exact fixes.

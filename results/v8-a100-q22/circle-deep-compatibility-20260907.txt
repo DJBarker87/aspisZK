@@ -1,0 +1,97 @@
+V8-A100 focused circle-DEEP compatibility evidence
+Date: 2026-09-07 Europe/London
+Pre-milestone source revision: e39f8b37
+Lean: 4.32.0 arm64-apple-darwin24.6.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35
+
+Decisive focused Lean command:
+  export LEAN_PATH="$(cd /Users/dominic/ZK/AspisFormal && lake env printenv LEAN_PATH)"
+  /usr/bin/time -l /Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean \
+    AspisFormal/AspisFormal/V8A100CircleDeepCompatibility.lean
+
+Final result:
+  exit 0
+  6.47 real, 3.02 user, 2.04 sys (final width-29 build before this log)
+  maximum resident set size 5,508,284,416 bytes
+  0 swaps
+
+Important #print axioms results:
+  chordNorm_factor:
+    [propext, Classical.choice, Quot.sound]
+  xZerofier_dvd_conjugateProducts:
+    [propext, Classical.choice, Quot.sound]
+  distinctX_circleChord_quotient_exists:
+    [propext, Classical.choice, Quot.sound]
+  circleLineMul_eval:
+    [propext, Classical.choice, Quot.sound]
+  equalX_circleChord_quotient_exists:
+    [propext, Classical.choice, Quot.sound]
+  initialCircle_distinctX_deep_compatible:
+    [propext, Classical.choice, Quot.sound]
+  initialCircle_equalX_deep_compatible:
+    [propext, Classical.choice, Quot.sound]
+  initialCircle_adaptive_deep_compatible:
+    [propext, Classical.choice, Quot.sound]
+  circlePair_has_initialMessage:
+    [propext, Classical.choice, Quot.sound]
+  initialCircle_adaptive_deep_has_message:
+    [propext, Classical.choice, Quot.sound]
+  width29_adaptive_deep_has_message:
+    [propext, Classical.choice, Quot.sound]
+
+No sorry, admit, new axiom, opaque proof constant, or unsafe declaration occurs
+in either new module.
+
+Lean failure and resolution record:
+
+1. The first chordNorm_factor proof used an incorrect linear-combination
+   certificate. Lean rejected it with:
+     error: ring failed, ring expressions not equal
+   Classification: incorrect proof certificate, not a false theorem.
+   Resolutions attempted:
+     a. direct polynomial linear_combination;
+     b. normalization with ring/map simplification;
+     c. successful decomposition into separately proved linear and constant
+        coefficient identities followed by polynomial ring normalization.
+
+2. Concrete residual lemmas reached:
+     error: (deterministic) timeout at `whnf`, maximum number of heartbeats
+     (200000) has been reached
+   at direct occurrences of `(initialP1 message).eval ...`.
+   Classification: proof-shape/elaboration problem caused by unfolding the
+   512-entry natural-basis constructor, not a missing mathematical lemma.
+   Resolutions attempted:
+     a. raised maxRecDepth only to the existing module precedent (did not
+        address the heartbeat bottleneck);
+     b. replaced broad simp with explicit symbolic rewrites (still timed out);
+     c. successful typed generic residual lemmas, instantiated only after the
+        concrete `p0` and `p1` terms were bound with explicit polynomial types.
+   Heartbeats were not increased.
+
+Decisive Rust commands:
+  cargo test --locked --release -p aspis-core \
+    equal_x_ood_pair_uses_y_interpolation_and_exact_chord_roots -- --nocapture
+  cargo test --locked --release -p aspis-core v8_ -- --nocapture
+
+Initial adversarial-fixture failure:
+  thread 'v8_deep::tests::equal_x_ood_pair_uses_y_interpolation_and_exact_chord_roots'
+  panicked at crates/aspis-core/src/v8_deep.rs:538:9:
+  failed to construct a secure equal-x OOD pair
+  test result: FAILED. 0 passed; 1 failed
+
+Classification: incorrect geometric assumption in the test fixture. The
+parameter pair `(t,-1/t)` has opposite x-coordinates in the deployed rational
+chart. The exact equal-x conjugate is `(t,-t)`. The test generator was
+corrected without changing production arithmetic.
+
+Final Rust result:
+  release profile
+  15 passed; 0 failed; 1 ignored (explicit host profiler)
+  equal-x branch test passed
+  total filtered V8 test invocation: 0.08 real after compilation
+
+Established conclusion:
+  For either source interpolation branch, the affine-chord quotient of an
+  actual width-29 batched initial message is exactly another 1024-entry
+  natural-basis initial message. Therefore the no-new-tree quotient lies in
+  the deployed circle encoder representation and is eligible for the existing
+  source-connected first-fold commutation theorem.
