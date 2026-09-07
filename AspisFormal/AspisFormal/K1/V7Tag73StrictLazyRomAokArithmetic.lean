@@ -293,10 +293,10 @@ theorem strict_budget_excludes_observed_proof_simulation
     Nat.eq_zero_of_le_zero within.2.2.2.2.2.2.1⟩
 
 /-- The deployed verifier's complete SHA schedule fits any strict envelope
-whose verifier component reserves the proved 1979-call ceiling. -/
+whose verifier component reserves the proved 1981-call ceiling. -/
 theorem deployed_verifier_calls_fit_strict_envelope
     (envelope : StrictTag73ResourceEnvelope)
-    (reservesDeployedVerifier : 1979 ≤ envelope.verifierOracleCalls)
+    (reservesDeployedVerifier : 1981 ≤ envelope.verifierOracleCalls)
     (messages : AspisK1.V7Tag73TranscriptSchedule.Messages)
     {frontierNodes : AspisK1.V7Tag73TranscriptSchedule.QuerySchedule → Nat}
     (search : AspisK1.V7Tag73TranscriptSchedule.FirstCap203Search
@@ -306,18 +306,18 @@ theorem deployed_verifier_calls_fit_strict_envelope
   (tag73_verifier_oracle_calls_le messages search).trans
     reservesDeployedVerifier
 
-/-- The full-256 portion alone has the separately proved 1511-call ceiling;
+/-- The full-256 portion alone has the separately proved 1513-call ceiling;
 the remaining 468 calls are the two typed Merkle authentication trees. -/
 theorem deployed_full256_verifier_calls_fit_strict_envelope
     (envelope : StrictTag73ResourceEnvelope)
-    (reservesFull256Verifier : 1511 ≤ envelope.full256FreshExposures)
+    (reservesFull256Verifier : 1513 ≤ envelope.full256FreshExposures)
     (messages : AspisK1.V7Tag73TranscriptSchedule.Messages)
     {frontierNodes : AspisK1.V7Tag73TranscriptSchedule.QuerySchedule → Nat}
     (search : AspisK1.V7Tag73TranscriptSchedule.FirstCap203Search
       frontierNodes) :
     tag73Full256VerifierOracleCalls messages search ≤
       envelope.full256FreshExposures :=
-  (tag73_full256_verifier_oracle_calls_le_1511 messages search).trans
+  (tag73_full256_verifier_oracle_calls_le_1513 messages search).trans
     reservesFull256Verifier
 
 /-! ## One joint observed-proof experiment with the strict law and budget -/

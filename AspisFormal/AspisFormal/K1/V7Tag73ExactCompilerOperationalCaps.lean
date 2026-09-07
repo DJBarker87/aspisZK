@@ -723,7 +723,7 @@ structure OneRestorationAccumulatorDelta
     (before after : ConcreteRestorationAccumulator Statement Proof Payload) :
     Prop where
   oracleQueries : after.oracleQueryTotal ≤
-    before.oracleQueryTotal + (2 * Q + 1511)
+    before.oracleQueryTotal + (2 * Q + 1513)
   forkCoordinates : after.uniformForkCoordinateTotal ≤
     before.uniformForkCoordinateTotal + 2
   programmedPoints : after.programmedPointTotal ≤
@@ -741,7 +741,7 @@ theorem one_restoration_accumulator_delta_trans
       ConcreteRestorationAccumulator Statement Proof Payload)
     (firstDelta : OneRestorationAccumulatorDelta Q driverFuel first middle)
     (secondDelta : OneRestorationAccumulatorDelta Q driverFuel middle final) :
-    final.oracleQueryTotal ≤ first.oracleQueryTotal + 2 * (2 * Q + 1511) ∧
+    final.oracleQueryTotal ≤ first.oracleQueryTotal + 2 * (2 * Q + 1513) ∧
       final.uniformForkCoordinateTotal ≤
         first.uniformForkCoordinateTotal + 2 * 2 ∧
       final.programmedPointTotal ≤ first.programmedPointTotal + 2 * 2 ∧
@@ -773,7 +773,7 @@ structure AccumulatorWithinRestorationAttempts
     (initial current :
       ConcreteRestorationAccumulator Statement Proof Payload) : Prop where
   oracleQueries : current.oracleQueryTotal ≤
-    initial.oracleQueryTotal + attempts * (2 * Q + 1511)
+    initial.oracleQueryTotal + attempts * (2 * Q + 1513)
   forkCoordinates : current.uniformForkCoordinateTotal ≤
     initial.uniformForkCoordinateTotal + attempts * 2
   programmedPoints : current.programmedPointTotal ≤
@@ -818,7 +818,7 @@ theorem zero_initial_accumulator_attempt_caps
     (current : ConcreteRestorationAccumulator Statement Proof Payload)
     (within : AccumulatorWithinRestorationAttempts Q driverFuel attempts
       (initialRestorationAccumulatorFromRoot root) current) :
-    current.oracleQueryTotal ≤ attempts * (2 * Q + 1511) ∧
+    current.oracleQueryTotal ≤ attempts * (2 * Q + 1513) ∧
       current.uniformForkCoordinateTotal ≤ 2 * attempts ∧
       current.programmedPointTotal ≤ 2 * attempts ∧
       current.restartTotal ≤ 2 * attempts ∧
@@ -838,10 +838,10 @@ theorem zero_initial_accumulator_attempt_caps
 
 /-- Per restoration, at most one recorded-prefix start and one complete
 from-start replay each use `Q` calls, while the residual verifier uses at most
-1511. -/
-def perRestorationFull256CallCap (Q : Nat) : Nat := 2 * Q + 1511
+1513. -/
+def perRestorationFull256CallCap (Q : Nat) : Nat := 2 * Q + 1513
 
-def clientMachineFreshCap (Q R : Nat) : Nat := R * (Q + 1511)
+def clientMachineFreshCap (Q R : Nat) : Nat := R * (Q + 1513)
 
 def clientForkCoordinateCap (R : Nat) : Nat := 2 * R
 
@@ -923,11 +923,11 @@ theorem adequate_replay_total_limit_eq_G
 
 theorem exact_operational_cap_expansions
     (parameters : ExactCompilerResourceParameters) :
-    parameters.q1ShaCallCap + 1511 +
+    parameters.q1ShaCallCap + 1513 +
         parameters.forkRequestCap *
           perRestorationFull256CallCap parameters.q1ShaCallCap =
       globalFull256OracleCallCap parameters ∧
-    parameters.q1ShaCallCap + 1511 +
+    parameters.q1ShaCallCap + 1513 +
         clientMachineFreshCap parameters.q1ShaCallCap
           parameters.forkRequestCap =
       full256MachineFreshCap parameters ∧

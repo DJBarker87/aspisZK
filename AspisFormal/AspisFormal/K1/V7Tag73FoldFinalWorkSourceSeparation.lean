@@ -75,6 +75,7 @@ def prefixAfterC2BeforeFoldDigest (messages : Messages) : List MachineEvent :=
    .check .batchWork,
    .absorb (.batchNonce messages.batchGrinding.selected),
    challengeEvent messages .gamma,
+   challengeBindEvent messages .gamma,
    .absorb (.inactiveClaim messages.inactiveClaim),
    challengeEvent messages .kappa] ++
   oodEvents messages
@@ -124,7 +125,7 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
     ∃ (beforeRelation : EvalState)
         (foldDigest workAnswer boundaryAnswer : Digest256)
         (outputs advances : List Digest256) (exactValue : QM31Exact)
-        (afterFinal256Digest q16Base : Digest256),
+        (alphaBindDigest afterFinal256Digest q16Base : Digest256),
       tableLookup (exactOperationalTable input)
           (bytes beforeRelation.digest ++
             [domAbsorb,
@@ -158,6 +159,16 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
         exactValue ∧
       tableLookup (exactOperationalTable input)
           (bytes (gammaTerminalDigest boundaryAnswer advances) ++
+            [domAbsorb,
+              AspisK1.V7Tag73TranscriptSchedule.Payload.label
+                (.challengeBind .alphaZero
+                  ((exactOperationalTape input).messages.challengeValue (.alpha 0)))] ++
+            AspisK1.V7Tag73TranscriptSchedule.Payload.data
+              (.challengeBind .alphaZero
+                ((exactOperationalTape input).messages.challengeValue (.alpha 0)))) =
+        some alphaBindDigest ∧
+      tableLookup (exactOperationalTable input)
+          (bytes alphaBindDigest ++
             [domAbsorb,
               AspisK1.V7Tag73TranscriptSchedule.Payload.label
                 (.final256
@@ -271,7 +282,8 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
     simp
   have suffixErased := machine_events_success_survives_work_erasure
     (exactOperationalTable input)
-      [.absorb (.final256 (exactOperationalTape input).messages.finalValues),
+      [challengeBindEvent (exactOperationalTape input).messages .alphaZero,
+       .absorb (.final256 (exactOperationalTape input).messages.finalValues),
        .grind .final (exactOperationalTape input).messages.finalGrinding,
        .check .finalWork,
        .absorb (.finalNonce
@@ -279,7 +291,8 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
       afterAlpha prefixState suffixRun
   have suffixIncluded : SamplesIncluded afterAlpha prefixState :=
     machine_events_work_erased_samples_included (exactOperationalTable input)
-      [.absorb (.final256 (exactOperationalTape input).messages.finalValues),
+      [challengeBindEvent (exactOperationalTape input).messages .alphaZero,
+       .absorb (.final256 (exactOperationalTape input).messages.finalValues),
        .grind .final (exactOperationalTape input).messages.finalGrinding,
        .check .finalWork,
        .absorb (.finalNonce
@@ -334,6 +347,8 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
           (exactOperationalTape input).messages.challengeValue (.alpha 0) =
         exactValue := by
     simp [exactChallengeValue, exactDecode]
+  obtain ⟨afterAlphaBind, alphaBindRun, suffixRun⟩ :=
+    Option.bind_eq_some_iff.mp suffixRun
   obtain ⟨afterFinal256, final256Run, suffixRun⟩ :=
     Option.bind_eq_some_iff.mp suffixRun
   obtain ⟨afterFinalGrind, finalGrindRun, suffixRun⟩ :=
@@ -352,8 +367,14 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
       gammaTerminalDigest afterFoldNonce.digest advances := by
     rw [afterAlphaExact]
     exact terminalExact
+  have alphaBindLookup := absorb_step_exposes_literal_lookup
+    (exactOperationalTable input) afterAlpha afterAlphaBind
+      (.challengeBind .alphaZero
+        ((exactOperationalTape input).messages.challengeValue (.alpha 0)))
+      (by simpa [challengeBindEvent, BoundChallengeId.challengeId,
+        runMachineEvent] using alphaBindRun)
   have final256Lookup := absorb_step_exposes_literal_lookup
-    (exactOperationalTable input) afterAlpha afterFinal256
+    (exactOperationalTable input) afterAlphaBind afterFinal256
       (.final256 (exactOperationalTape input).messages.finalValues)
       (by simpa [runMachineEvent] using final256Run)
   have finalGrindDigest : afterFinalGrind.digest = afterFinal256.digest :=
@@ -373,12 +394,17 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
     simpa using exact
   exact ⟨beforeRelation, beforeFoldWork.digest, workAnswer,
     afterFoldNonce.digest, outputs, advances, exactValue,
-    afterFinal256.digest, prefixState.digest, relationLookup, workLookup,
+    afterAlphaBind.digest, afterFinal256.digest, prefixState.digest,
+    relationLookup, workLookup,
     workAccepted, by
       simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
         AspisK1.V7Tag73TranscriptSchedule.Payload.data] using boundaryLookup,
     outputsLength, coordinates, acceptedParameter, exactDecode,
     operationalValue, by
+      simpa [afterAlphaDigest,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.data] using alphaBindLookup,
+    by
       simpa [afterAlphaDigest,
         AspisK1.V7Tag73TranscriptSchedule.Payload.label,
         AspisK1.V7Tag73TranscriptSchedule.Payload.data] using final256Lookup,
@@ -433,7 +459,8 @@ theorem exact_fold_digest_ne_final_digest
       FinalWork34Accepted finalAnswer ∧
       foldDigest ≠ finalDigest := by
   obtain ⟨beforeRelation, foldDigest, foldAnswer, _boundaryAnswer,
-      _outputs, _advances, _exactValue, _afterFinal256Digest, _q16Base,
+      _outputs, _advances, _exactValue, _alphaBindDigest,
+      _afterFinal256Digest, _q16Base,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
@@ -555,7 +582,8 @@ theorem exact_fold_and_final_have_distinct_exposure_trials
         (runExactPlainRom transitionFuel configuration sample).trace
         finalTrial.val := by
   obtain ⟨beforeRelation, foldDigest, foldAnswer, _boundaryAnswer,
-      _outputs, _advances, _exactValue, _afterFinal256Digest, _q16Base,
+      _outputs, _advances, _exactValue, _alphaBindDigest,
+      _afterFinal256Digest, _q16Base,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
@@ -790,7 +818,8 @@ theorem exact_actual_k13_trial_has_distinct_fold_trial
     afterBase.2.1
   let pairLabeled := afterBase.2.2.2.1
   obtain ⟨beforeRelation, foldDigest, foldAnswer, _boundaryAnswer,
-      _outputs, _advances, _exactValue, _afterFinal256Digest, _q16Base,
+      _outputs, _advances, _exactValue, _alphaBindDigest,
+      _afterFinal256Digest, _q16Base,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input

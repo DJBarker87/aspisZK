@@ -14,7 +14,7 @@ enough fresh answers for every possible adaptive path.
 
 The second half composes those facts through the literal concrete restoration
 dispatcher.  A request consumes at most two fork coordinates, `Q` complete
-same-tape replay coordinates, and 1511 verifier coordinates.  Synchronous
+same-tape replay coordinates, and 1513 verifier coordinates.  Synchronous
 prefix replay is not sampled from the master tape and is retained separately
 in the concrete accumulator's runtime charges.
 

@@ -107,12 +107,14 @@ theorem before_alpha_zero_producer_run_fixes_fold_digest
     (prefixRun : runMachineEventsWorkErased table
         (beforeGammaTailEvents messages ++
           [challengeEvent messages .gamma,
+           challengeBindEvent messages .gamma,
            .absorb (.inactiveClaim messages.inactiveClaim),
            challengeEvent messages .kappa] ++
           oodEvents messages) start = some beforeRelation) :
     beforeAlphaProducer.digest = foldDigest := by
   let prefixEvents := beforeGammaTailEvents messages ++
     [challengeEvent messages .gamma,
+     challengeBindEvent messages .gamma,
      .absorb (.inactiveClaim messages.inactiveClaim),
      challengeEvent messages .kappa] ++ oodEvents messages
   have eventsExact : beforeAlphaZeroProducerTailEvents messages =

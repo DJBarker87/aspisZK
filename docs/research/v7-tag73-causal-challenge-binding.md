@@ -17,13 +17,14 @@ SHA256(
   0x00 ||
   62 ||
   challenge_id ||
-  blocks_used ||
-  raw_blocks_padded_to_12
+  canonical_decoded_qm31_le
 )
 ```
 
-`challenge_id` is zero for gamma and one for alpha-zero. `blocks_used` is in
-`1..12`. Every unused byte in the fixed 384-byte raw-block region is zero.
+`challenge_id` is zero for gamma and one for alpha-zero. The decoded value is
+the canonical 16-byte little-endian QM31 encoding already consumed by the
+algebraic verifier. The preceding transcript digest already binds the exact
+sampler-block chain and stopping point.
 The profile binding revision byte changes from one to two, so old proofs fail
 closed rather than crossing the transcript change.
 
@@ -34,12 +35,12 @@ closed rather than crossing the transcript change.
 - q16, Merkle digest width, work difficulties, algebraic relations and all
   proof-system security parameters are unchanged.
 - Exactly two additional transcript SHA-256 calls are introduced.
-- The fixed binding payload is 386 bytes and its complete absorb input is 420
+- The fixed binding payload is 17 bytes and its complete absorb input is 51
   bytes.
 
 ## Checked foundation
 
-`V7Tag73RawChallengeBinding.lean` proves the fixed binding codec and complete
+`V7Tag73RawChallengeBinding.lean` proves the binding codec and complete
 absorb input are injective. Its printed axiom union is exactly `propext`,
 `Classical.choice`, and `Quot.sound`; it contains no `sorry`, `admit`, project
 axiom, or `native_decide`.
@@ -49,11 +50,31 @@ field value and reaches the exact manually reconstructed binding state. A
 focused complete V7 prover-to-verifier fixture also accepted with the new
 profile and retained the existing sub-30-KiB proof body.
 
-## Remaining formal integration
+## Formal integration status
 
-The accepted Tag-73 execution schedule must now represent the two binding
-absorbs, connect their padded block inventories to the literal sampler traces,
-and use input equality to close gamma/alpha-zero equality in the corrected
-K1.3 pair invariant. K1.6's exact oracle-call arithmetic must increase by two.
-Production source/Aeneas and CU evidence must be regenerated after that formal
-closure; no release or deployment should reuse revision-1 artifacts.
+The corrected schedule is now integrated through the exact operational ROM
+model.  The accepted execution exposes the literal gamma and alpha-zero
+sampler traces, their immediate decoded-value binding records, the intervening
+event lists, final256, final work and the shared q16 base.  K1.6's exact
+resource arithmetic has been increased by exactly two full SHA-256 calls.
+
+`V7Tag73K13BoundChallengeClosure.lean` proves that equality of the immediate
+binding inputs forces equality of the decoded gamma and alpha-zero values,
+then discharges the corrected pair-coordinate invariant.  Its release-facing
+theorem is:
+
+```text
+exact_clean_preQ16_trial_union_probability_le_one_forest_of_bindings
+```
+
+That theorem reaches the existing one-forest K1.3 probability bound without a
+residual alpha/gamma alignment premise.  Every theorem printed by the module
+has axiom set exactly `propext`, `Classical.choice`, and `Quot.sound`; there is
+no `sorry`, `admit`, project-specific axiom, or `native_decide`.
+
+## Remaining release integration
+
+Production source/Aeneas and CU evidence must be regenerated for profile
+revision 2, and the corrected K1.3 bound must be composed with the K1.4 and
+K1.5 operational bounds before the conditional K1.6 capstone becomes the full
+end-to-end theorem.  No release or deployment may reuse revision-1 artifacts.

@@ -613,14 +613,25 @@ theorem accepted_challenge_block_completes_linear_slot
       some value)
     (secure : ChallengeSecureMapAccepted environment id value) :
     (processFutureFreeChallengeBlock environment snapshot id outputs remaining
-      output nextCore).control = linearOrDone remaining := by
-  cases id <;>
-    simp_all [processFutureFreeChallengeBlock, completeFutureFreeChallenge,
-      ChallengeSecureMapAccepted]
-  case circlePoint sample =>
-    obtain ⟨point, pointEq⟩ := secure
-    simp [processFutureFreeChallengeBlock, completeFutureFreeChallenge,
-      decoded, pointEq]
+      output nextCore).control =
+      match challengeBindingPayload? id value with
+      | none => linearOrDone remaining
+      | some payload => .absorbPayload payload remaining := by
+  change exactDeterministicDecoders.qm31Parameter id
+      (outputs ++ [output]) = some value at decoded
+  unfold processFutureFreeChallengeBlock
+  simp only [FutureFreeEnvironment.decoders]
+  rw [decoded]
+  dsimp only
+  cases binding : challengeBindingPayload? id value with
+  | some payload => simp only [binding]
+  | none =>
+      simp only [binding]
+      cases id <;>
+        simp_all [completeFutureFreeChallenge, ChallengeSecureMapAccepted]
+      case circlePoint sample =>
+        obtain ⟨point, pointEq⟩ := secure
+        simp [completeFutureFreeChallenge, pointEq]
 
 theorem process_future_free_challenge_block_preserves_core
     (environment : FutureFreeEnvironment) (snapshot : FutureFreeSnapshot)
@@ -636,8 +647,12 @@ theorem process_future_free_challenge_block_preserves_core
       simp only [decoded]
       split <;> rfl
   | some value =>
-      cases id <;> simp only [decoded, completeFutureFreeChallenge]
-      split <;> rfl
+      simp only [decoded]
+      cases binding : challengeBindingPayload? id value <;>
+        simp only [binding]
+      all_goals
+        cases id <;> simp only [completeFutureFreeChallenge] <;>
+          split <;> rfl
 
 theorem undecoded_challenge_block_continues_incrementally
     (environment : FutureFreeEnvironment) (snapshot : FutureFreeSnapshot)
@@ -743,7 +758,10 @@ theorem linear_challenge_squeeze_run_gives_future_free_step
     dsimp only
     split
     · rename_i value decoded
-      cases id <;> simp [completeFutureFreeChallenge] <;> split <;> rfl
+      cases binding : challengeBindingPayload? id value <;>
+        simp only [binding]
+      all_goals
+        cases id <;> simp [completeFutureFreeChallenge] <;> split <;> rfl
     · split <;> rfl
 
 /-- A complete exact evaluator squeeze chain is replayed incrementally.  Exact
@@ -771,7 +789,10 @@ theorem evaluator_challenge_chain_gives_future_free_trace
     ∃ pairs final,
       NonterminalRawDriverTrace environment raw state fresh.length pairs final ∧
       PathUsesFixedTable table pairs ∧
-      final.current.control = .linear remaining ∧
+      final.current.control = (
+        match challengeBindingPayload? id value with
+        | none => .linear remaining
+        | some payload => .absorbPayload payload remaining) ∧
       SameDigest final.current.core after ∧
       final.current.q16Candidates = state.current.q16Candidates ∧
       final.current.decodedChallenges = state.current.decodedChallenges ++
@@ -798,9 +819,12 @@ theorem evaluator_challenge_chain_gives_future_free_trace
               { state.current.core with digest := middle.digest }).control =
               false := by
           rw [completes]
-          cases remaining with
-          | nil => exact False.elim (remainingNonempty rfl)
-          | cons slot rest => rfl
+          cases binding : challengeBindingPayload? id value with
+          | some payload => rfl
+          | none =>
+              cases remaining with
+              | nil => exact False.elim (remainingNonempty rfl)
+              | cons slot rest => rfl
         obtain ⟨pairs, final, trace, supported, finalControl, _finalCore,
             finalSame, finalCandidates, finalChallenges⟩ :=
           linear_challenge_squeeze_run_gives_future_free_step table environment
@@ -809,14 +833,19 @@ theorem evaluator_challenge_chain_gives_future_free_trace
         refine ⟨pairs, final, ?_, supported, ?_, ?_, finalCandidates, ?_⟩
         · simpa using trace
         · rw [finalControl, completes]
-          cases remaining with
-          | nil => exact False.elim (remainingNonempty rfl)
-          | cons slot rest => rfl
+          cases binding : challengeBindingPayload? id value with
+          | none =>
+              simp only [binding]
+              cases remaining with
+              | nil => exact False.elim (remainingNonempty rfl)
+              | cons slot rest => rfl
+          | some payload => simp only [binding]
         · exact finalSame
         · rw [finalChallenges]
           cases id <;>
             simp [processFutureFreeChallengeBlock, decodedLast,
-              completeFutureFreeChallenge] <;> split <;> rfl
+              completeFutureFreeChallenge, challengeBindingPayload?] <;>
+              split <;> rfl
       · obtain ⟨nextOutput, restOutputs, outputsEq⟩ :=
           List.exists_cons_of_ne_nil tailEmpty
         subst outputs
@@ -1208,7 +1237,10 @@ theorem linear_challenge_event_run_gives_future_free_trace
       blocks.length = (messages.challengeUse id).blocksUsed ∧
       NonterminalRawDriverTrace environment raw state blocks.length pairs final ∧
       PathUsesFixedTable table pairs ∧
-      final.current.control = .linear remaining ∧
+      final.current.control = (
+        match challengeBindingPayload? id (messages.challengeValue id) with
+        | none => .linear remaining
+        | some payload => .absorbPayload payload remaining) ∧
       SameDigest final.current.core eventAfter ∧
       final.current.q16Candidates = state.current.q16Candidates ∧
       final.current.decodedChallenges = state.current.decodedChallenges ++
@@ -1253,6 +1285,79 @@ theorem linear_challenge_event_run_gives_future_free_trace
   have digestEq : afterBlocks.digest = eventAfter.digest := by
     rw [eventAfterEq]
   exact finalSame.trans digestEq
+
+/-- The decoded-value binding inserted after gamma or alpha0 is one ordinary
+fixed-table absorb.  It is replayed as a verifier action, not treated as free
+metadata or as a trusted hint. -/
+theorem challenge_binding_absorb_run_gives_future_free_step
+    (table : FixedOracleTable) (environment : FutureFreeEnvironment)
+    (raw : RawTag73ProverMessages) (state : FutureFreeVerifierState)
+    (before after : EvalState) (payload : Payload)
+    (remaining : List FutureFreeSlot)
+    (atControl : state.current.control = .absorbPayload payload remaining)
+    (same : SameDigest state.current.core before)
+    (run : absorbStep table before payload = some after)
+    (remainingNonempty : remaining ≠ []) :
+    ∃ pairs next,
+      NonterminalRawDriverTrace environment raw state 1 pairs next ∧
+      PathUsesFixedTable table pairs ∧
+      next.current.control = .linear remaining ∧
+      SameDigest next.current.core after ∧
+      next.current.q16Candidates = state.current.q16Candidates ∧
+      next.current.decodedChallenges = state.current.decodedChallenges := by
+  rw [absorbStep] at run
+  obtain ⟨queryPair, queryRun, result⟩ := Option.bind_eq_some_iff.mp run
+  rcases queryPair with ⟨output, stepped⟩
+  have steppedEq : stepped = after := by
+    simpa only [pure, Option.some.injEq] using result
+  subst stepped
+  obtain ⟨lookup, _calls, digest⟩ := query_step_appends_one table before
+    after (.absorb payload) output queryRun
+  have outputEq : output = after.digest := by
+    simpa only [RawQueryRole.nextDigest] using digest.symm
+  subst output
+  have normalized : tableLookup table
+      (bytes before.digest ++ [domAbsorb, payload.label] ++ payload.data) =
+        some after.digest := by
+    simpa only [RawQueryRole.input] using lookup
+  have noSubmission : submitNextRawMessage raw state = none := by
+    simp [submitNextRawMessage, atControl]
+  have forced : state.current.control.nextVerifierAction? =
+      some (.absorb payload) := by
+    rw [atControl]
+    rfl
+  have derived : deriveReply table state.current.bindings state.current.core
+      (.absorb payload) = some (.single after.digest) := by
+    simp only [deriveReply, actionInputs, lookupSingleInput]
+    change state.current.core.digest = before.digest at same
+    rw [same, normalized]
+    rfl
+  let nextCore : RuntimeCore :=
+    { state.current.core with digest := after.digest }
+  have applied : applyActionWorkErased state.current.core (.absorb payload)
+      (.single after.digest) = some nextCore := by
+    rfl
+  let nextSnapshot : FutureFreeSnapshot :=
+    { state.current with control := .linear remaining, core := nextCore }
+  let next := appendFutureFreeSnapshot state
+    (.verifier (.absorb payload) (.single after.digest)) nextSnapshot
+  have advanced : advanceFutureFreeVerifier environment state
+      (.single after.digest) = some next := by
+    have updated : afterFutureFreeVerifierReply environment state.current
+        (.single after.digest) nextCore = some nextSnapshot := by
+      simp [afterFutureFreeVerifierReply, rawAfterFutureFreeVerifierReply,
+        atControl, linearOrDone, remainingNonempty, nextSnapshot]
+    simpa [next] using
+      advance_future_free_verifier_of_components environment state
+        (.absorb payload) (.single after.digest) nextCore nextSnapshot forced
+        applied updated
+  have nonterminal : isDriverHalt next.current.control = false := by rfl
+  obtain ⟨pairs, trace, supported⟩ :=
+    fixed_table_action_gives_one_nonterminal_trace table environment raw state
+      next (.absorb payload) (.single after.digest) noSubmission forced derived
+      advanced nonterminal
+  refine ⟨pairs, next, trace, supported, rfl, ?_, rfl, rfl⟩
+  rfl
 
 /-! ## The live adaptive C2 round -/
 
@@ -2089,34 +2194,10 @@ def linearSlotSupported : FutureFreeSlot → Bool
   | .challenge _ | .payload _ | .work _ => true
   | .beginQ16 => false
 
-def fixedTapeLinearSlotEvents (tape : DeployedFixedTape) :
-    FutureFreeSlot → List MachineEvent
-  | .fixed action => (fixedLinearActionEvent? action).toList
-  | .challenge id => [challengeEvent tape.messages id]
-  | .payload site =>
-      [.absorb (rawPayloadAt (fixedTapeRawMessages tape) site)]
-  | .work stage =>
-      let choice := fixedTapeGrindingChoice tape.messages stage
-      [.grind stage choice,
-       .check (checkpointOfWorkStage stage),
-       .absorb (workNoncePayload stage choice.selected)]
-  | .beginQ16 => []
-
-def fixedTapeLinearEvents (tape : DeployedFixedTape)
-    (slots : List FutureFreeSlot) : List MachineEvent :=
-  slots.flatMap (fixedTapeLinearSlotEvents tape)
-
-def fixedTapeLinearFuel (tape : DeployedFixedTape) :
-    FutureFreeSlot → Nat
-  | .fixed _ => 1
-  | .challenge id => (tape.messages.challengeUse id).blocksUsed
-  | .payload _ => 2
-  | .work _ => 4
-  | .beginQ16 => 0
-
-def fixedTapeLinearFuels (tape : DeployedFixedTape)
-    (slots : List FutureFreeSlot) : Nat :=
-  (slots.map (fixedTapeLinearFuel tape)).sum
+def fixedTapeChallengeBindingEvents (tape : DeployedFixedTape)
+    (id : ChallengeId) : List MachineEvent :=
+  (challengeBindingPayload? id (tape.messages.challengeValue id)).map
+    MachineEvent.absorb |>.toList
 
 theorem run_machine_events_work_erased_append_iff
     (table : FixedOracleTable) (first second : List MachineEvent)
@@ -2142,6 +2223,132 @@ theorem run_machine_events_work_erased_append_iff
         exact Option.bind_eq_some_iff.mpr
           ⟨next, eventRun, (ih (state := next)).mpr
             ⟨middle, restRun, secondRun⟩⟩
+
+/-- Replay one complete fixed-tape challenge slot, including the additional
+decoded-value absorb for gamma and alpha0. -/
+theorem fixed_tape_challenge_slot_run_gives_future_free_trace
+    (table : FixedOracleTable) (tape : DeployedFixedTape)
+    (raw : RawTag73ProverMessages) (state : FutureFreeVerifierState)
+    (before after : EvalState) (id : ChallengeId)
+    (remaining : List FutureFreeSlot)
+    (atControl : state.current.control =
+      .linear (.challenge id :: remaining))
+    (same : SameDigest state.current.core before)
+    (run : runMachineEventsWorkErased table
+      ([challengeEvent tape.messages id] ++
+        fixedTapeChallengeBindingEvents tape id) before = some after)
+    (allDecoded : StateSamplesDecodeAs tape.messages after)
+    (secure : ChallengeSecureMapAccepted (fixedTapeFutureFreeEnvironment tape)
+      id (tape.messages.challengeValue id))
+    (remainingNonempty : remaining ≠ []) :
+    ∃ (blocks : List Digest256)
+      (pairs : List (ShaInput × ShaOutput))
+      (final : FutureFreeVerifierState),
+      blocks.length = (tape.messages.challengeUse id).blocksUsed ∧
+      NonterminalRawDriverTrace (fixedTapeFutureFreeEnvironment tape) raw state
+        (blocks.length + (fixedTapeChallengeBindingEvents tape id).length)
+        pairs final ∧
+      PathUsesFixedTable table pairs ∧
+      final.current.control = .linear remaining ∧
+      SameDigest final.current.core after ∧
+      final.current.q16Candidates = state.current.q16Candidates ∧
+      final.current.decodedChallenges = state.current.decodedChallenges ++
+        [{ id := id, value := tape.messages.challengeValue id }] := by
+  obtain ⟨afterChallenge, challengeRun, bindingRun⟩ :=
+    (run_machine_events_work_erased_append_iff table
+      [challengeEvent tape.messages id]
+      (fixedTapeChallengeBindingEvents tape id) before after).mp run
+  have eventRun : runMachineEventWorkErased table before
+      (challengeEvent tape.messages id) = some afterChallenge := by
+    simpa [runMachineEventsWorkErased] using challengeRun
+  have challengeIncluded : SamplesIncluded afterChallenge after :=
+    machine_events_work_erased_samples_included table
+      (fixedTapeChallengeBindingEvents tape id) afterChallenge after bindingRun
+  have challengeDecoded : StateSamplesDecodeAs tape.messages afterChallenge :=
+    state_samples_decode_of_included tape.messages afterChallenge after
+      challengeIncluded allDecoded
+  obtain ⟨blocks, challengePairs, challenged, blocksLength, challengeTrace,
+      challengeTable, challengeControl, challengeSame, challengeCandidates,
+      challengeRecords⟩ :=
+    linear_challenge_event_run_gives_future_free_trace table
+      (fixedTapeFutureFreeEnvironment tape) tape.messages raw state before
+      afterChallenge id remaining atControl same (by rfl) eventRun
+      challengeDecoded secure remainingNonempty
+  cases binding : challengeBindingPayload? id
+      (tape.messages.challengeValue id) with
+  | none =>
+      have noBindingEvents : fixedTapeChallengeBindingEvents tape id = [] := by
+        simp [fixedTapeChallengeBindingEvents, binding]
+      have afterEq : afterChallenge = after := by
+        have someEq : some afterChallenge = some after := by
+          simpa [noBindingEvents, runMachineEventsWorkErased] using bindingRun
+        exact Option.some.inj someEq
+      subst after
+      have linearControl : challenged.current.control = .linear remaining := by
+        simpa [binding] using challengeControl
+      refine ⟨blocks, challengePairs, challenged, blocksLength, ?_,
+        challengeTable, linearControl, challengeSame, challengeCandidates,
+        challengeRecords⟩
+      simpa [noBindingEvents] using challengeTrace
+  | some payload =>
+      have bindingEvents : fixedTapeChallengeBindingEvents tape id =
+          [.absorb payload] := by
+        simp [fixedTapeChallengeBindingEvents, binding]
+      have absorbRun : absorbStep table afterChallenge payload = some after := by
+        simpa [bindingEvents, runMachineEventsWorkErased,
+          runMachineEventWorkErased] using bindingRun
+      have absorbControl : challenged.current.control =
+          .absorbPayload payload remaining := by
+        simpa [binding] using challengeControl
+      obtain ⟨absorbPairs, final, absorbTrace, absorbTable, finalControl,
+          finalSame, finalCandidates, finalRecords⟩ :=
+        challenge_binding_absorb_run_gives_future_free_step table
+          (fixedTapeFutureFreeEnvironment tape) raw challenged afterChallenge
+          after payload remaining absorbControl challengeSame absorbRun
+          remainingNonempty
+      have combined := nonterminal_raw_driver_trace_append
+        (fixedTapeFutureFreeEnvironment tape) raw state challenged final
+        blocks.length 1 challengePairs absorbPairs challengeTrace absorbTrace
+      refine ⟨blocks, challengePairs ++ absorbPairs, final, blocksLength, ?_,
+        path_uses_fixed_table_append table challengePairs absorbPairs
+          challengeTable absorbTable, finalControl, finalSame, ?_, ?_⟩
+      · simpa [bindingEvents] using combined
+      · exact finalCandidates.trans challengeCandidates
+      · rw [finalRecords]
+        exact challengeRecords
+
+def fixedTapeLinearSlotEvents (tape : DeployedFixedTape) :
+    FutureFreeSlot → List MachineEvent
+  | .fixed action => (fixedLinearActionEvent? action).toList
+  | .challenge id =>
+      [challengeEvent tape.messages id] ++
+        fixedTapeChallengeBindingEvents tape id
+  | .payload site =>
+      [.absorb (rawPayloadAt (fixedTapeRawMessages tape) site)]
+  | .work stage =>
+      let choice := fixedTapeGrindingChoice tape.messages stage
+      [.grind stage choice,
+       .check (checkpointOfWorkStage stage),
+       .absorb (workNoncePayload stage choice.selected)]
+  | .beginQ16 => []
+
+def fixedTapeLinearEvents (tape : DeployedFixedTape)
+    (slots : List FutureFreeSlot) : List MachineEvent :=
+  slots.flatMap (fixedTapeLinearSlotEvents tape)
+
+def fixedTapeLinearFuel (tape : DeployedFixedTape) :
+    FutureFreeSlot → Nat
+  | .fixed _ => 1
+  | .challenge id =>
+      (tape.messages.challengeUse id).blocksUsed +
+        (fixedTapeChallengeBindingEvents tape id).length
+  | .payload _ => 2
+  | .work _ => 4
+  | .beginQ16 => 0
+
+def fixedTapeLinearFuels (tape : DeployedFixedTape)
+    (slots : List FutureFreeSlot) : Nat :=
+  (slots.map (fixedTapeLinearFuel tape)).sum
 
 theorem fixed_tape_linear_events_cons
     (tape : DeployedFixedTape) (slot : FutureFreeSlot)
@@ -2348,25 +2555,23 @@ theorem fixed_tape_linear_region_gives_future_free_trace
                 exact tailRecords id (by simpa using member)
               · simp [fixedTapeLinearFuels, fixedTapeLinearFuel, tailFuel]
       | challenge id =>
-          have eventRun : runMachineEventWorkErased table before
-              (challengeEvent tape.messages id) = some middle := by
-            simpa [fixedTapeLinearSlotEvents, runMachineEventsWorkErased] using
-              headRun
           obtain ⟨blocks, headPairs, next, blocksLength, headTrace,
               headTable, nextControl, nextSame, nextCandidates⟩ :=
-            linear_challenge_event_run_gives_future_free_trace table
-              (fixedTapeFutureFreeEnvironment tape) tape.messages
+            fixed_tape_challenge_slot_run_gives_future_free_trace table tape
               (fixedTapeRawMessages tape) state before middle id
-              (rest ++ tail) headControl same (by rfl) eventRun middleDecoded
-              (secureAll id) remainingNonempty
+              (rest ++ tail) headControl same
+              (by simpa [fixedTapeLinearSlotEvents] using headRun)
+              middleDecoded (secureAll id) remainingNonempty
           obtain ⟨tailSteps, tailPairs, final, tailTrace, tailTable,
               finalControl, finalSame, finalCandidates, tailRecords,
               tailFuel⟩ :=
             ih next middle nextControl nextSame restRun restSupported
-          refine ⟨blocks.length + tailSteps, headPairs ++ tailPairs, final,
+          refine ⟨(blocks.length + (fixedTapeChallengeBindingEvents tape id).length) +
+              tailSteps, headPairs ++ tailPairs, final,
             nonterminal_raw_driver_trace_append
               (fixedTapeFutureFreeEnvironment tape)
-              (fixedTapeRawMessages tape) state next final blocks.length
+              (fixedTapeRawMessages tape) state next final
+              (blocks.length + (fixedTapeChallengeBindingEvents tape id).length)
               tailSteps headPairs tailPairs headTrace tailTrace,
             path_uses_fixed_table_append table headPairs tailPairs headTable
               tailTable, finalControl, finalSame, ?_, ?_, ?_⟩
@@ -2484,19 +2689,21 @@ theorem fixed_tape_before_q16_events_are_exact_prefix_after_c2
     fixedTapeLinearEvents tape beforeQ16Slots =
       prefixAfterC2 tape.messages := by
   simp [fixedTapeLinearEvents, fixedTapeLinearSlotEvents,
+    fixedTapeChallengeBindingEvents, challengeBindingPayload?,
     fixedLinearActionEvent?, beforeQ16Slots, zeroCheckSlots, semanticSlots,
     oodSlots, fixedTapeGrindingChoice, fixedTapeRawMessages, rawPayloadAt,
     rawOfMessages, checkpointOfWorkStage, workNoncePayload, prefixAfterC2,
-    semanticEvents, oodEvents]
+    semanticEvents, oodEvents, challengeBindEvent, BoundChallengeId.challengeId]
 
 theorem fixed_tape_after_q16_events_are_exact_accepted_suffix
     (tape : DeployedFixedTape) :
     fixedTapeLinearEvents tape afterQ16PreterminalSlots =
       afterAcceptedQueryScan tape.messages := by
   simp [fixedTapeLinearEvents, fixedTapeLinearSlotEvents,
+    fixedTapeChallengeBindingEvents, challengeBindingPayload?,
     fixedLinearActionEvent?, afterQ16PreterminalSlots, relationTailSlots,
     fixedTapeRawMessages, rawPayloadAt, rawOfMessages, afterAcceptedQueryScan,
-    relationTailEvents]
+    relationTailEvents, challengeBindEvent, BoundChallengeId.challengeId]
 
 /-! ## Exact q16 cloned-branch execution -/
 

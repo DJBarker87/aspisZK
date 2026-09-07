@@ -30,7 +30,7 @@ the prover; it is not a guessed decoded challenge.
 alternative *query-only* fork theorem that insists every output half be
 represented by a pre-answer decoded-value prediction.  It uses a separate
 36-coordinate tape, whereas the concrete compiler has one `F`-coordinate
-master tape with `F >= 1511`; it is deliberately not added to the plain
+master tape with `F >= 1513`; it is deliberately not added to the plain
 concrete compiler error below.
 
 This leaf kernel-checks the alternative query-only arithmetic reserve, the
@@ -266,9 +266,9 @@ theorem exact_compiler_collision_prefix_and_fiber_raw_error_is_sum
 
 /-! ## Why the query-only theorem cannot be silently composed anyway -/
 
-theorem exact_compiler_master_tape_length_at_least_1511
+theorem exact_compiler_master_tape_length_at_least_1513
     (parameters : ExactCompilerResourceParameters) :
-    1511 <= (exactCompilerTargetCaps parameters).length := by
+    1513 <= (exactCompilerTargetCaps parameters).length := by
   rw [exact_compiler_target_caps_length]
   unfold unifiedFull256ExposureCap full256MachineFreshCap sameTapeStartCap
     deployedFull256VerifierCallCap
@@ -281,7 +281,7 @@ theorem exact_compiler_tape_length_ne_challenge_completion_tape_length
     (exactCompilerTargetCaps parameters).length ≠
       (deployedChallengeIds.map challengeCompletionFiberCap).length := by
   rw [deployed_challenge_prediction_coefficient_has_36_terms]
-  have lower := exact_compiler_master_tape_length_at_least_1511 parameters
+  have lower := exact_compiler_master_tape_length_at_least_1513 parameters
   omega
 
 /-! ## Deterministic zero-loss classes -/
@@ -3508,7 +3508,7 @@ show that newly sampled fork coins cannot probabilistically repair it.
 #print axioms exact_compiler_collision_prefix_and_fiber_coefficient_expanded
 #print axioms root_and_replay_challenge_fiber_coefficient_le_fallback
 #print axioms exact_compiler_collision_prefix_and_fiber_raw_error_is_sum
-#print axioms exact_compiler_master_tape_length_at_least_1511
+#print axioms exact_compiler_master_tape_length_at_least_1513
 #print axioms exact_compiler_tape_length_ne_challenge_completion_tape_length
 #print axioms successful_strict_checked_refinement_has_exact_q16_forest
 #print axioms exact_source_refinement_event_preserves_public_bindings

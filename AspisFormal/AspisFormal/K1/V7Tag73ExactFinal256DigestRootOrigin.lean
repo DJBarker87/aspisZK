@@ -52,6 +52,7 @@ def prefixAfterC2BeforeFinal256 (messages : Messages) : List MachineEvent :=
    .check .batchWork,
    .absorb (.batchNonce messages.batchGrinding.selected),
    challengeEvent messages .gamma,
+   challengeBindEvent messages .gamma,
    .absorb (.inactiveClaim messages.inactiveClaim),
    challengeEvent messages .kappa] ++
   oodEvents messages ++
@@ -59,7 +60,8 @@ def prefixAfterC2BeforeFinal256 (messages : Messages) : List MachineEvent :=
    .grind .fold messages.foldGrinding,
    .check .foldWork,
    .absorb (.foldNonce messages.foldGrinding.selected),
-   challengeEvent messages (.alpha 0)]
+   challengeEvent messages (.alpha 0),
+   challengeBindEvent messages .alphaZero]
 
 theorem prefix_before_final_work_final256_split (messages : Messages) :
     prefixAfterC2BeforeFinalWork messages =

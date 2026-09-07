@@ -72,9 +72,9 @@ theorem exact_fixed_clean_k13_adversary_anchor_alpha_terminal_eq
       (exactFixedK13TrialCoordinates transitionFuel configuration trial
         (hidden, right)).1) :
     ∃ (leftProducer rightProducer : ShaInput)
-        (leftBeforeAlpha rightBeforeAlpha leftAfterAlpha rightAfterAlpha
-          leftAfterBlocks rightAfterBlocks leftAfterFinal256 rightAfterFinal256 :
-          EvalState)
+        (leftBeforeAlpha rightBeforeAlpha leftAfterAlphaSample
+          rightAfterAlphaSample leftAfterAlpha rightAfterAlpha leftAfterBlocks
+          rightAfterBlocks leftAfterFinal256 rightAfterFinal256 : EvalState)
         (leftOutputs leftAdvances rightOutputs rightAdvances : List Digest256)
         (leftValue rightValue : QM31Exact),
       ExactRootOrderedQ16Chain leftWitness.input leftProducer
@@ -89,8 +89,8 @@ theorem exact_fixed_clean_k13_adversary_anchor_alpha_terminal_eq
         gammaTerminalDigest leftBeforeAlpha.digest leftAdvances ∧
       rightAfterBlocks.digest =
         gammaTerminalDigest rightBeforeAlpha.digest rightAdvances ∧
-      leftAfterAlpha.digest = leftAfterBlocks.digest ∧
-      rightAfterAlpha.digest = rightAfterBlocks.digest ∧
+      leftAfterAlphaSample.digest = leftAfterBlocks.digest ∧
+      rightAfterAlphaSample.digest = rightAfterBlocks.digest ∧
       leftAfterAlpha.digest = rightAfterAlpha.digest ∧
       leftAfterFinal256.digest = rightAfterFinal256.digest ∧
       decodeTagQM31ExactLE
@@ -108,23 +108,27 @@ theorem exact_fixed_clean_k13_adversary_anchor_alpha_terminal_eq
     exact_fixed_clean_k13_adversary_anchor_final256_input_eq transitionRoom trial
       hidden left right leftWitness rightWitness anchor programmedCover
       coordinateExact
-  obtain ⟨leftProducer, leftFinal256Input, leftBeforeAlpha, leftAfterAlpha,
-      leftAfterBlocks, leftAfterFinal256, leftOutputs, leftAdvances, leftValue,
+  obtain ⟨leftProducer, leftFinal256Input, leftBeforeAlpha,
+      leftAfterAlphaSample, leftAfterAlpha, leftAfterBlocks, leftAfterFinal256,
+      leftOutputs, leftAdvances, leftValue,
       _leftWorkAnswer, leftQ16Base, _leftProducerLookup, _leftProducerBoundary,
       leftOrdered,
       _leftOutputsLength, leftOutputsPositive, leftAdvancesLength,
-      leftTerminalExact, leftAfterAlphaExact, leftFinal256InputExact,
+      leftTerminalExact, leftAfterAlphaSampleExact, _leftAlphaBindLookup,
+      leftFinal256InputExact,
       leftFinal256Lookup, _leftWorkLookup, _leftWorkAccepted,
       leftFinalNonceLookup, leftQ16BaseExact, _leftAcceptedParameter,
       leftDecode, leftOperational⟩ :=
     exact_compiler_alpha_zero_chain_has_root_order transitionRoom
       leftWitness.input
-  obtain ⟨rightProducer, rightFinal256Input, rightBeforeAlpha, rightAfterAlpha,
-      rightAfterBlocks, rightAfterFinal256, rightOutputs, rightAdvances,
+  obtain ⟨rightProducer, rightFinal256Input, rightBeforeAlpha,
+      rightAfterAlphaSample, rightAfterAlpha, rightAfterBlocks, rightAfterFinal256,
+      rightOutputs, rightAdvances,
       rightValue, _rightWorkAnswer, rightQ16Base, _rightProducerLookup,
       _rightProducerBoundary, rightOrdered, _rightOutputsLength,
       rightOutputsPositive,
-      rightAdvancesLength, rightTerminalExact, rightAfterAlphaExact,
+      rightAdvancesLength, rightTerminalExact, rightAfterAlphaSampleExact,
+      _rightAlphaBindLookup,
       rightFinal256InputExact, rightFinal256Lookup, _rightWorkLookup,
       _rightWorkAccepted, rightFinalNonceLookup, rightQ16BaseExact,
       _rightAcceptedParameter, rightDecode, rightOperational⟩ :=
@@ -198,12 +202,13 @@ theorem exact_fixed_clean_k13_adversary_anchor_alpha_terminal_eq
     have prefixExact := congrArg (List.take 32) alphaFinal256InputExact
     simpa using prefixExact
   exact ⟨leftProducer, rightProducer, leftBeforeAlpha, rightBeforeAlpha,
-    leftAfterAlpha, rightAfterAlpha, leftAfterBlocks, rightAfterBlocks,
+    leftAfterAlphaSample, rightAfterAlphaSample, leftAfterAlpha, rightAfterAlpha,
+    leftAfterBlocks, rightAfterBlocks,
     leftAfterFinal256, rightAfterFinal256, leftOutputs, leftAdvances,
     rightOutputs, rightAdvances, leftValue, rightValue, leftOrdered,
     rightOrdered, leftOutputsPositive, rightOutputsPositive,
     leftAdvancesLength, rightAdvancesLength, leftTerminalExact,
-    rightTerminalExact, leftAfterAlphaExact, rightAfterAlphaExact,
+    rightTerminalExact, leftAfterAlphaSampleExact, rightAfterAlphaSampleExact,
     alphaTerminalExact, terminalSuccessorExact, leftDecode, rightDecode, leftOperational,
     rightOperational⟩
 

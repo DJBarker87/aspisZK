@@ -16,7 +16,7 @@ repeat them.  A `.workProbe ... .adversaryHistory` action therefore reads
 required evidence from the frozen post-adversary table without issuing an
 oracle call.  Only `.verifierSelected` issues the one deployed work check.
 Thus the three work stages remain separate and contribute exactly three calls
-to the existing `1511` full-256 verifier ceiling.
+to the existing `1513` full-256 verifier ceiling.
 
 No acceptance, schedule matching, restoration, or extraction statement is an
 input or conclusion here.
@@ -91,8 +91,8 @@ theorem shared_runner_full256_verifier_call_cap
     (messages : Messages)
     {frontierNodes : QuerySchedule → Nat}
     (search : FirstCap203Search frontierNodes) :
-    tag73Full256VerifierOracleCalls messages search ≤ 1511 :=
-  tag73_full256_verifier_oracle_calls_le_1511 messages search
+    tag73Full256VerifierOracleCalls messages search ≤ 1513 :=
+  tag73_full256_verifier_oracle_calls_le_1513 messages search
 
 /-! ## Query-list program and reply construction -/
 

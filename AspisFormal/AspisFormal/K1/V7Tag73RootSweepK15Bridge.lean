@@ -53,7 +53,7 @@ def exactRootSweepOperationalK15Material
     (rounds : Nat)
     (extractor : ExactPlainRomWitnessExtractor V5PublicStatement
       Tag73K12ParsedProof Payload DecodedSpendWitness)
-    (withinForkCap : rounds * 1511 ≤ parameters.forkRequestCap)
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap)
     {projection : AcceptedTapeProjection V5PublicStatement Tag73K12ParsedProof
       Payload}
     {fixedInstance : PublicInstance V5PublicStatement}

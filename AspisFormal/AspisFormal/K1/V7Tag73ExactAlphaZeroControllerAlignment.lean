@@ -496,12 +496,13 @@ theorem exact_compiler_alpha_zero_boundary_installs_block_zero
             UnifiedExposureRecord)])
         (exactAlphaZeroInitialState input)).memory.producers =
           [{ digest := beforeAlphaDigest, block := 0, sourceInput := producerInput }] := by
-  obtain ⟨producerInput, _final256Input, beforeAlpha, _afterAlpha,
-      _afterBlocks, _afterFinal256, _outputs, _advances, _exactValue,
+  obtain ⟨producerInput, _final256Input, beforeAlpha, _afterAlphaSample,
+      _afterAlpha, _afterBlocks, _afterFinal256, _outputs, _advances, _exactValue,
       _workAnswer, _q16Base, producerLookup,
       ⟨producerDigest, producerInputExact⟩, _ordered, _outputsLength,
-      _outputsPositive, _advancesLength, _terminalExact, _afterAlphaExact,
-      _final256InputExact, _final256Lookup, _workLookup, _workAccepted,
+      _outputsPositive, _advancesLength, _terminalExact, _afterSampleExact,
+      _alphaBindLookup, _final256InputExact, _final256Lookup, _workLookup,
+      _workAccepted,
       _finalNonceLookup, _q16BaseExact, _acceptedParameter, _exactDecode,
       _operationalExact⟩ :=
     exact_compiler_alpha_zero_chain_has_root_order transitionRoom input

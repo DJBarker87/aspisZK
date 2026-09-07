@@ -50,7 +50,8 @@ def beforeGammaVerifierEvents (oracle : HashOracle) (messages : Messages) :
 
 /-- The remainder of the deployed pre-query-scan schedule after gamma. -/
 def afterGammaVerifierEvents (messages : Messages) : List MachineEvent :=
-  [.absorb (.inactiveClaim messages.inactiveClaim),
+  [challengeBindEvent messages .gamma,
+   .absorb (.inactiveClaim messages.inactiveClaim),
    challengeEvent messages .kappa] ++
   oodEvents messages ++
   [.absorb (.relationRound 0 (messages.relationSent 0)),
@@ -58,6 +59,7 @@ def afterGammaVerifierEvents (messages : Messages) : List MachineEvent :=
    .check .foldWork,
    .absorb (.foldNonce messages.foldGrinding.selected),
    challengeEvent messages (.alpha 0),
+   challengeBindEvent messages .alphaZero,
    .absorb (.final256 messages.finalValues),
    .grind .final messages.finalGrinding,
    .check .finalWork,

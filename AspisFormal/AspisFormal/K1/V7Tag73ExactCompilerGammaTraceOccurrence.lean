@@ -235,7 +235,8 @@ theorem after_semantic_tail_events_gamma_split (messages : Messages) :
     afterSemanticTailEvents messages =
       beforeGammaTailEvents messages ++
         challengeEvent messages .gamma ::
-          ([.absorb (.inactiveClaim messages.inactiveClaim),
+          ([challengeBindEvent messages .gamma,
+            .absorb (.inactiveClaim messages.inactiveClaim),
             challengeEvent messages .kappa] ++
             oodEvents messages ++
             [.absorb (.relationRound 0 (messages.relationSent 0)),
@@ -243,6 +244,7 @@ theorem after_semantic_tail_events_gamma_split (messages : Messages) :
              .check .foldWork,
              .absorb (.foldNonce messages.foldGrinding.selected),
              challengeEvent messages (.alpha 0),
+             challengeBindEvent messages .alphaZero,
              .absorb (.final256 messages.finalValues),
              .grind .final messages.finalGrinding,
             .check .finalWork,
@@ -295,7 +297,8 @@ theorem exact_operational_gamma_output_lookup
       (exactOperationalTable input)
       (beforeGammaTailEvents (exactOperationalTape input).messages)
       (challengeEvent (exactOperationalTape input).messages .gamma ::
-        ([.absorb (.inactiveClaim
+        ([challengeBindEvent (exactOperationalTape input).messages .gamma,
+          .absorb (.inactiveClaim
             (exactOperationalTape input).messages.inactiveClaim),
           challengeEvent (exactOperationalTape input).messages .kappa] ++
           oodEvents (exactOperationalTape input).messages ++
@@ -306,6 +309,7 @@ theorem exact_operational_gamma_output_lookup
            .absorb (.foldNonce
             (exactOperationalTape input).messages.foldGrinding.selected),
            challengeEvent (exactOperationalTape input).messages (.alpha 0),
+           challengeBindEvent (exactOperationalTape input).messages .alphaZero,
            .absorb (.final256
             (exactOperationalTape input).messages.finalValues),
            .grind .final (exactOperationalTape input).messages.finalGrinding,

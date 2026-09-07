@@ -1381,9 +1381,9 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_alpha_terminal_eq
         (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
           right).2.1) :
     ∃ (leftProducer rightProducer leftFinal256Input rightFinal256Input : ShaInput)
-        (leftBeforeAlpha rightBeforeAlpha leftAfterAlpha rightAfterAlpha
-          leftAfterBlocks rightAfterBlocks leftAfterFinal256 rightAfterFinal256 :
-          EvalState)
+        (leftBeforeAlpha rightBeforeAlpha leftAfterAlphaSample
+          rightAfterAlphaSample leftAfterAlpha rightAfterAlpha leftAfterBlocks
+          rightAfterBlocks leftAfterFinal256 rightAfterFinal256 : EvalState)
         (leftOutputs leftAdvances rightOutputs rightAdvances : List Digest256)
         (leftValue rightValue : QM31Exact) (prefinalDigest : Digest256)
         (leftPrior rightPrior leftLater rightLater : List UnifiedExposureRecord)
@@ -1414,8 +1414,8 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_alpha_terminal_eq
         gammaTerminalDigest leftBeforeAlpha.digest leftAdvances ∧
       rightAfterBlocks.digest =
         gammaTerminalDigest rightBeforeAlpha.digest rightAdvances ∧
-      leftAfterAlpha.digest = leftAfterBlocks.digest ∧
-      rightAfterAlpha.digest = rightAfterBlocks.digest ∧
+      leftAfterAlphaSample.digest = leftAfterBlocks.digest ∧
+      rightAfterAlphaSample.digest = rightAfterBlocks.digest ∧
       leftAfterAlpha.digest = rightAfterAlpha.digest ∧
       leftAfterFinal256.digest = prefinalDigest ∧
       rightAfterFinal256.digest = prefinalDigest ∧
@@ -1454,22 +1454,26 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_alpha_terminal_eq
     exact_fixed_clean_pair_k13_adversary_anchor_final256_input_eq
       transitionRoom foldTrial finalTrial hidden left right leftWitness
       rightWitness anchor programmedCover contextExact foldExact
-  obtain ⟨leftProducer, leftFinal256Input, leftBeforeAlpha, leftAfterAlpha,
-      leftAfterBlocks, leftAfterFinal256, leftOutputs, leftAdvances, leftValue,
+  obtain ⟨leftProducer, leftFinal256Input, leftBeforeAlpha,
+      leftAfterAlphaSample, leftAfterAlpha, leftAfterBlocks, leftAfterFinal256,
+      leftOutputs, leftAdvances, leftValue,
       _leftWorkAnswer, leftQ16Base, _leftProducerLookup, leftProducerBoundary,
       leftOrdered, _leftOutputsLength, leftOutputsPositive,
-      leftAdvancesLength, leftTerminalExact, leftAfterAlphaExact,
+      leftAdvancesLength, leftTerminalExact, leftAfterAlphaSampleExact,
+      _leftAlphaBindLookup,
       leftFinal256InputExact, leftFinal256Lookup, _leftWorkLookup,
       _leftWorkAccepted, leftFinalNonceLookup, leftQ16BaseExact,
       leftAcceptedParameter, leftDecode, leftOperational⟩ :=
     exact_compiler_alpha_zero_chain_has_root_order transitionRoom
       leftWitness.joint.input
-  obtain ⟨rightProducer, rightFinal256Input, rightBeforeAlpha, rightAfterAlpha,
-      rightAfterBlocks, rightAfterFinal256, rightOutputs, rightAdvances,
+  obtain ⟨rightProducer, rightFinal256Input, rightBeforeAlpha,
+      rightAfterAlphaSample, rightAfterAlpha, rightAfterBlocks, rightAfterFinal256,
+      rightOutputs, rightAdvances,
       rightValue, _rightWorkAnswer, rightQ16Base, _rightProducerLookup,
       rightProducerBoundary, rightOrdered, _rightOutputsLength,
       rightOutputsPositive, rightAdvancesLength, rightTerminalExact,
-      rightAfterAlphaExact, rightFinal256InputExact, rightFinal256Lookup,
+      rightAfterAlphaSampleExact, _rightAlphaBindLookup, rightFinal256InputExact,
+      rightFinal256Lookup,
       _rightWorkLookup, _rightWorkAccepted, rightFinalNonceLookup,
       rightQ16BaseExact, rightAcceptedParameter, rightDecode,
       rightOperational⟩ :=
@@ -1576,14 +1580,15 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_alpha_terminal_eq
     simpa [rightCanonicalInput] using rightProducerMember
   exact ⟨leftProducer, rightProducer, leftFinal256Input, rightFinal256Input,
     leftBeforeAlpha, rightBeforeAlpha,
-    leftAfterAlpha, rightAfterAlpha, leftAfterBlocks, rightAfterBlocks,
+    leftAfterAlphaSample, rightAfterAlphaSample, leftAfterAlpha, rightAfterAlpha,
+    leftAfterBlocks, rightAfterBlocks,
     leftAfterFinal256, rightAfterFinal256, leftOutputs, leftAdvances,
     rightOutputs, rightAdvances, leftValue, rightValue, digest, leftPrior,
     rightPrior, leftLater, rightLater, leftAnchorRecord, rightAnchorRecord,
     leftOrdered, rightOrdered, leftProducerBoundary, rightProducerBoundary,
     leftOutputsPositive, rightOutputsPositive,
     leftAdvancesLength, rightAdvancesLength, leftTerminalExact,
-    rightTerminalExact, leftAfterAlphaExact, rightAfterAlphaExact,
+    rightTerminalExact, leftAfterAlphaSampleExact, rightAfterAlphaSampleExact,
     alphaTerminalExact, leftPrefinalExact, rightPrefinalExact,
     terminalSuccessorExact, leftFinal256Prefix, rightFinal256Prefix,
     leftFinal256Lookup', rightFinal256Lookup', priorExact, leftRootExact,
@@ -2060,121 +2065,11 @@ theorem exact_fixed_clean_pair_k13_final256_record_mem_shared_priors
     by simpa [producerInput] using leftMember,
     by simpa [producerInput, inputExact] using rightMember⟩
 
-/-- The last consumed alpha duplex block is identical across the two clean
-complete-coordinate fibres.  Equality comes from the shared root record for
-the common terminal answer, not from hash injectivity. -/
-theorem exact_fixed_clean_pair_k13_alpha_terminal_block_eq
-    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
-    {parameters : ExactCompilerResourceParameters}
-    {transitionFuel : Nat}
-    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
-      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
-    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
-    {fixedInstance : PublicInstance Statement}
-    {decoder : ExactDecoderInstantiation QM31Exact}
-    (transitionRoom : 2 ≤ transitionFuel)
-    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
-    (hidden : HiddenTape)
-    (left right : FreshAnswerTape Digest256
-      (exactCompilerTargetCaps parameters).length)
-    (leftWitness : ExactFixedCleanK13PairTrialWitness transitionFuel
-      configuration projection fixedInstance decoder (hidden, left) foldTrial
-        finalTrial)
-    (rightWitness : ExactFixedCleanK13PairTrialWitness transitionFuel
-      configuration projection fixedInstance decoder (hidden, right) foldTrial
-        finalTrial)
-    (anchor : ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial)
-    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
-    (contextExact :
-      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
-        transitionFuel foldTrial.val finalTrial.val
-        (exactPlainRomCursor configuration hidden).erase
-      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
-          left).1 =
-        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
-          right).1)
-    (foldExact :
-      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
-        transitionFuel foldTrial.val finalTrial.val
-        (exactPlainRomCursor configuration hidden).erase
-      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
-          left).2.1 =
-        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
-          right).2.1) :
-    ∃ leftBlock rightBlock : Digest256, leftBlock = rightBlock := by
-  obtain ⟨leftProducer, rightProducer, leftFinal256Input, rightFinal256Input,
-      leftBeforeAlpha, rightBeforeAlpha, leftAfterAlpha, rightAfterAlpha,
-      leftAfterBlocks, rightAfterBlocks, _leftAfterFinal256,
-      _rightAfterFinal256, leftOutputs, leftAdvances, rightOutputs,
-      rightAdvances, _leftValue, _rightValue, prefinalDigest, leftPrior,
-      rightPrior, leftLater, rightLater, leftAnchorRecord, rightAnchorRecord,
-      leftChain, rightChain, _leftBoundary, _rightBoundary, leftPositive,
-      rightPositive, _leftLengths, _rightLengths,
-      leftTerminal, rightTerminal, leftAfterExact, rightAfterExact,
-      alphaTerminalExact, _leftPrefinal, _rightPrefinal, _prefinalExact,
-      leftFinal256Prefix, rightFinal256Prefix, leftFinal256Lookup,
-      rightFinal256Lookup, priorExact, leftRootExact, rightRootExact,
-      leftFinalMember, rightFinalMember, _leftDecode, _rightDecode,
-      _leftOperational, _rightOperational⟩ :=
-    exact_fixed_clean_pair_k13_adversary_anchor_alpha_terminal_eq
-      transitionRoom foldTrial finalTrial hidden left right leftWitness
-      rightWitness anchor programmedCover contextExact foldExact
-  have leftGammaTerminal :
-      gammaTerminalDigest leftBeforeAlpha.digest leftAdvances =
-        leftAfterAlpha.digest :=
-    leftTerminal.symm.trans leftAfterExact.symm
-  have rightGammaTerminal :
-      gammaTerminalDigest rightBeforeAlpha.digest rightAdvances =
-        rightAfterAlpha.digest :=
-    rightTerminal.symm.trans rightAfterExact.symm
-  have leftPrefix :
-      HasLiteralStatePrefix
-          (gammaTerminalDigest leftBeforeAlpha.digest leftAdvances)
-        leftFinal256Input := by
-    simpa only [leftGammaTerminal] using leftFinal256Prefix
-  have rightPrefix :
-      HasLiteralStatePrefix
-          (gammaTerminalDigest rightBeforeAlpha.digest rightAdvances)
-        rightFinal256Input := by
-    simpa only [rightGammaTerminal] using rightFinal256Prefix
-  obtain ⟨leftBlock, _leftOutput, leftAdvanceActor, _leftOutputLookup,
-      _leftAdvanceLookup, leftAdvanceMember⟩ :=
-    exact_alpha_terminal_advance_mem_anchor_prior transitionRoom
-      leftWitness.joint.input leftPrior leftLater leftAnchorRecord leftRootExact
-      leftProducer leftBeforeAlpha.digest leftOutputs leftAdvances leftChain
-      leftPositive leftFinal256Input prefinalDigest leftPrefix
-      leftFinal256Lookup .adversary leftFinalMember
-  obtain ⟨rightBlock, _rightOutput, rightAdvanceActor, _rightOutputLookup,
-      _rightAdvanceLookup, rightAdvanceMember⟩ :=
-    exact_alpha_terminal_advance_mem_anchor_prior transitionRoom
-      rightWitness.joint.input rightPrior rightLater rightAnchorRecord
-      rightRootExact rightProducer rightBeforeAlpha.digest rightOutputs
-      rightAdvances rightChain rightPositive rightFinal256Input prefinalDigest
-      rightPrefix rightFinal256Lookup .adversary rightFinalMember
-  have leftAdvanceMember' :
-      (.machineFresh leftAdvanceActor (gammaAdvanceInput leftBlock)
-          leftAfterAlpha.digest : UnifiedExposureRecord) ∈ leftPrior := by
-    simpa only [leftGammaTerminal] using leftAdvanceMember
-  have rightAdvanceMember' :
-      (.machineFresh rightAdvanceActor (gammaAdvanceInput rightBlock)
-          leftAfterAlpha.digest : UnifiedExposureRecord) ∈ rightPrior := by
-    simpa only [rightGammaTerminal, ← alphaTerminalExact] using
-      rightAdvanceMember
-  have advanceInputExact :
-      gammaAdvanceInput leftBlock = gammaAdvanceInput rightBlock :=
-    exact_equal_root_priors_same_answer_input_eq leftWitness.joint.input
-      leftPrior rightPrior leftAdvanceActor rightAdvanceActor
-      (gammaAdvanceInput leftBlock) (gammaAdvanceInput rightBlock)
-      leftAfterAlpha.digest priorExact leftAdvanceMember' rightAdvanceMember'
-      (by
-        intro record member
-        rw [leftRootExact]
-        exact List.mem_append_left _ member)
-  have blockExact : leftBlock = rightBlock := by
-    apply digest_bytes_injective
-    have prefixExact := congrArg (List.take 32) advanceInputExact
-    simpa [gammaAdvanceInput] using prefixExact
-  exact ⟨leftBlock, rightBlock, blockExact⟩
+/- The former terminal-block lemma was removed when the decoded alpha value
+was given its own transcript binding.  Its old proof incorrectly treated the
+sampler terminal as the `final256` prestate, and its existential conclusion did
+not connect the chosen blocks to either accepted chain.  The causal binding
+closure now reasons through the intervening `challengeBind` record directly. -/
 
 /-- Equality of the canonical `final256` inputs fixes every serialized field
 block before q16; this is fixed-width decoding, not hash inversion. -/
@@ -2389,8 +2284,6 @@ theorem exact_fixed_clean_pair_k13_adversary_anchor_disclosed_final_eq
   exact_empty_ordered_chain_terminal_input_eq_producer
 #print axioms
   exact_fixed_clean_pair_k13_final256_record_mem_shared_priors
-#print axioms
-  exact_fixed_clean_pair_k13_alpha_terminal_block_eq
 #print axioms
   exact_fixed_clean_pair_k13_adversary_anchor_final_values_eq
 #print axioms

@@ -88,6 +88,7 @@ theorem raw_after_reply_preserves_decoded_challenge_membership
   all_goals split <;> try simp_all [List.mem_append]
   all_goals split <;> try simp_all [List.mem_append]
   all_goals split <;> try simp_all [List.mem_append]
+  all_goals split <;> try simp_all [List.mem_append]
 
 /-- Reinstalling the fixed binding cannot affect the decoded ledger. -/
 theorem after_reply_preserves_decoded_challenge_membership

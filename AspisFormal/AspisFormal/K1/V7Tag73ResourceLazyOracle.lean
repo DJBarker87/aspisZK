@@ -284,14 +284,15 @@ def eventAbsorbOracleCalls : MachineEvent → Nat
 def eventListAbsorbOracleCalls (events : List MachineEvent) : Nat :=
   (events.map eventAbsorbOracleCalls).sum
 
-/- Literal count from `beforeQueryScan`: 29 transcript absorbs before the
+/- Literal count from `beforeQueryScan`: 31 transcript absorbs before the
 cloned q16 forest. -/
 set_option maxHeartbeats 800000 in
 theorem before_query_scan_absorb_calls_exact
     (oracle : HashOracle) (messages : Messages) :
-    eventListAbsorbOracleCalls (beforeQueryScan oracle messages) = 29 := by
+    eventListAbsorbOracleCalls (beforeQueryScan oracle messages) = 31 := by
   simp [eventListAbsorbOracleCalls, eventAbsorbOracleCalls,
-    beforeQueryScan, semanticEvents, oodEvents, challengeEvent]
+    beforeQueryScan, semanticEvents, oodEvents, challengeEvent,
+    challengeBindEvent]
 
 /- Literal count from `afterAcceptedQueryScan`: query-batch domain and claim
 plus the three remaining relation-round messages give five absorbs. -/
@@ -301,10 +302,10 @@ theorem after_query_scan_absorb_calls_exact (messages : Messages) :
   simp [eventListAbsorbOracleCalls, eventAbsorbOracleCalls,
     afterAcceptedQueryScan, relationTailEvents, challengeEvent]
 
-def acceptedLinearAbsorbOracleCalls : Nat := 29 + 5
+def acceptedLinearAbsorbOracleCalls : Nat := 31 + 5
 
 theorem accepted_linear_absorb_calls_exact :
-    acceptedLinearAbsorbOracleCalls = 34 := by
+    acceptedLinearAbsorbOracleCalls = 36 := by
   rfl
 
 /-- Exact expression for the deployed verifier's SHA calls, conditional on
@@ -362,15 +363,15 @@ theorem full256_verifier_calls_split_non_q16_and_named_q16
     q16_branch_calls_split_named_and_residual]
   omega
 
-/-- The exact deployed reserve is `423 + 576 = 999`: at most 423 full-width
+/-- The exact deployed reserve is `425 + 576 = 1001`: at most 425 full-width
 calls outside q16, plus at most 576 candidate-absorb/advance calls inside the
 q16 forest.  In particular the separate 512-coordinate allowance in the
-1511-call verifier cap is not double-counted. -/
-theorem tag73_full256_non_q16_oracle_calls_le_999
+1513-call verifier cap is not double-counted. -/
+theorem tag73_full256_non_q16_oracle_calls_le_1001
     (messages : Messages)
     {frontierNodes : QuerySchedule → Nat}
     (search : FirstCap203Search frontierNodes) :
-    tag73Full256NonQ16OracleCalls messages search ≤ 999 := by
+    tag73Full256NonQ16OracleCalls messages search ≤ 1001 := by
   have challengeCap := challenge_blocks_used_le_192 messages
   have q16ResidualCap := q16_residual_oracle_calls_le_576 search
   unfold tag73Full256NonQ16OracleCalls publicRootSaltOracleCalls
@@ -390,11 +391,11 @@ theorem verifier_calls_split_full256_and_typed_merkle
         (frontierNodes search.selectedSchedule) := by
   rfl
 
-theorem tag73_full256_verifier_oracle_calls_le_1511
+theorem tag73_full256_verifier_oracle_calls_le_1513
     (messages : Messages)
     {frontierNodes : QuerySchedule → Nat}
     (search : FirstCap203Search frontierNodes) :
-    tag73Full256VerifierOracleCalls messages search ≤ 1511 := by
+    tag73Full256VerifierOracleCalls messages search ≤ 1513 := by
   have challengeCap := challenge_blocks_used_le_192 messages
   have q16Cap := q16_branch_oracle_calls_le_1088 search
   unfold tag73Full256VerifierOracleCalls publicRootSaltOracleCalls
@@ -402,7 +403,7 @@ theorem tag73_full256_verifier_oracle_calls_le_1511
   omega
 
 /-- The complete verifier ceiling is
-`2 + 34 + 2*192 + 3 + 1088 + 468 = 1979`.  The potentially much larger three
+`2 + 36 + 2*192 + 3 + 1088 + 468 = 1981`.  The potentially much larger three
 stage-local adversary search counts remain separate fields of the strict
 resource ledger and are already included in `Q1`. -/
 theorem tag73_verifier_oracle_calls_le
@@ -410,7 +411,7 @@ theorem tag73_verifier_oracle_calls_le
     {frontierNodes : QuerySchedule → Nat}
     (search : FirstCap203Search frontierNodes) :
     tag73VerifierOracleCalls messages search ≤
-      1979 := by
+      1981 := by
   have challengeCap := challenge_blocks_used_le_192 messages
   have q16Cap := q16_branch_oracle_calls_le_1088 search
   have treeCap := two_tree_authentication_calls_le_468
@@ -420,7 +421,7 @@ theorem tag73_verifier_oracle_calls_le
   omega
 
 theorem fixed_verifier_call_cap_breakdown :
-    1979 = 2 + 34 + 2 * 192 + 3 + 1088 + 468 := by
+    1981 = 2 + 36 + 2 * 192 + 3 + 1088 + 468 := by
   norm_num
 
 /-! ## Exact Q1/restart/runtime ledger -/
@@ -883,7 +884,7 @@ theorem strict_timeout_probability_le_expected_div
 #print axioms q16_branch_oracle_calls_le_1088
 #print axioms two_tree_authentication_calls_le_468
 #print axioms full256_verifier_calls_split_non_q16_and_named_q16
-#print axioms tag73_full256_non_q16_oracle_calls_le_999
+#print axioms tag73_full256_non_q16_oracle_calls_le_1001
 #print axioms tag73_verifier_oracle_calls_le
 #print axioms strict_resource_ledger_within_envelope
 #print axioms programming_conflict_has_previously_defined_input
