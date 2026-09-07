@@ -390,6 +390,126 @@ theorem exact_fixed_k13_adversary_anchor_has_prefinal_digest_prefix
       prefinalOrigin, Or.inr rfl, baseExact, absorbMember⟩
     simp [HasLiteralStatePrefix, RawFinalWorkKey.absorbInput, literalFinalWorkKey]
 
+/-- Source-only form of the preceding chronology fact.  The intrinsic K1.3
+bad set and q16 membership are irrelevant here; the literal operational input,
+actual selected pair, and first-exposure anchor contain all required data. -/
+theorem exact_k13_adversary_anchor_has_prefinal_digest_prefix_of_actual
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (trial : ExactCompilerExposureTrial parameters)
+    (actualTrial : ExactFixedK13ActualJointTrial input trial)
+    (anchor : ExactFixedK13AdversaryAnchor input trial) :
+    ∃ prior later target answer digest base absorbActor,
+      exactFixedRootRecords input.package.root =
+          prior ++
+            (.machineFresh .adversary target answer : UnifiedExposureRecord) ::
+              later ∧
+      trial.val = prior.length ∧
+      HasLiteralStatePrefix digest target ∧
+      ExactOperationalPrefinalDigest input digest ∧
+      (target =
+          (literalFinalWorkKey digest
+            (exactOperationalTape input).messages.finalGrinding.selected).workInput ∨
+        target =
+          (literalFinalWorkKey digest
+            (exactOperationalTape input).messages.finalGrinding.selected).absorbInput) ∧
+      base = (exactOperationalRawTrace input).q16BaseDigest ∧
+      (.machineFresh absorbActor
+        (literalFinalWorkKey digest
+          (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+        base : UnifiedExposureRecord) ∈
+        exactFixedRootRecords input.package.root := by
+  obtain ⟨anchorPrior, anchorLater, target, answer, anchorExact,
+      anchorIndex⟩ := anchor
+  obtain ⟨digest, workAnswer, base, _workAccepted, prefinalOrigin,
+      baseExact, pairLabeled, _workLabeled, _workCoordinate, _realized⟩ :=
+    actualTrial
+  rcases pairLabeled with
+      ⟨pairPrior, middle, pairLater, workActor, absorbActor, pairExact,
+        pairIndex⟩ |
+      ⟨pairPrior, middle, pairLater, workActor, absorbActor, pairExact,
+        pairIndex⟩
+  · have absorbMember :
+        (.machineFresh absorbActor
+          (literalFinalWorkKey digest
+            (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+          base : UnifiedExposureRecord) ∈
+        exactFixedRootRecords input.package.root := by
+      rw [pairExact]
+      simp
+    have pairHeadExact : exactFixedRootRecords input.package.root =
+        pairPrior ++
+          (.machineFresh workActor
+            (literalFinalWorkKey digest
+              (exactOperationalTape input).messages.finalGrinding.selected).workInput
+            workAnswer : UnifiedExposureRecord) ::
+            (middle ++
+              (.machineFresh absorbActor
+                (literalFinalWorkKey digest
+                  (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+                base : UnifiedExposureRecord) :: pairLater) := by
+      simpa only [List.cons_append, List.append_assoc] using pairExact
+    have selectedExact :
+        (.machineFresh .adversary target answer : UnifiedExposureRecord) =
+          .machineFresh workActor
+            (literalFinalWorkKey digest
+              (exactOperationalTape input).messages.finalGrinding.selected).workInput
+            workAnswer :=
+      selected_record_eq_of_same_index anchorExact anchorIndex pairHeadExact
+        pairIndex
+    injection selectedExact with _actorExact targetExact _answerExact
+    subst target
+    refine ⟨anchorPrior, anchorLater,
+      (literalFinalWorkKey digest
+        (exactOperationalTape input).messages.finalGrinding.selected).workInput,
+      answer, digest, base, absorbActor, anchorExact, anchorIndex, ?_,
+      prefinalOrigin, Or.inl rfl, baseExact, absorbMember⟩
+    simp [HasLiteralStatePrefix, RawFinalWorkKey.workInput, literalFinalWorkKey]
+  · have absorbMember :
+        (.machineFresh absorbActor
+          (literalFinalWorkKey digest
+            (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+          base : UnifiedExposureRecord) ∈
+        exactFixedRootRecords input.package.root := by
+      rw [pairExact]
+      simp
+    have pairHeadExact : exactFixedRootRecords input.package.root =
+        pairPrior ++
+          (.machineFresh absorbActor
+            (literalFinalWorkKey digest
+              (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+            base : UnifiedExposureRecord) ::
+            (middle ++
+              (.machineFresh workActor
+                (literalFinalWorkKey digest
+                  (exactOperationalTape input).messages.finalGrinding.selected).workInput
+                workAnswer : UnifiedExposureRecord) :: pairLater) := by
+      simpa only [List.cons_append, List.append_assoc] using pairExact
+    have selectedExact :
+        (.machineFresh .adversary target answer : UnifiedExposureRecord) =
+          .machineFresh absorbActor
+            (literalFinalWorkKey digest
+              (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+            base :=
+      selected_record_eq_of_same_index anchorExact anchorIndex pairHeadExact
+        pairIndex
+    injection selectedExact with _actorExact targetExact _answerExact
+    subst target
+    refine ⟨anchorPrior, anchorLater,
+      (literalFinalWorkKey digest
+        (exactOperationalTape input).messages.finalGrinding.selected).absorbInput,
+      answer, digest, base, absorbActor, anchorExact, anchorIndex, ?_,
+      prefinalOrigin, Or.inr rfl, baseExact, absorbMember⟩
+    simp [HasLiteralStatePrefix, RawFinalWorkKey.absorbInput, literalFinalWorkKey]
+
 /-- Equality of the four q16 semantic inputs is required only between two
 accepted, target-clean members of the same residual fibre. -/
 def ExactFixedCleanK13DerivedPreQ16ProfileInvariant
@@ -580,6 +700,8 @@ theorem exact_fixed_clean_k13_residual_invariant_of_adversary_anchor_profile
   exact_fixed_k13_adversary_anchor_has_literal_adversary_prefix
 #print axioms
   exact_fixed_k13_adversary_anchor_has_prefinal_digest_prefix
+#print axioms
+  exact_k13_adversary_anchor_has_prefinal_digest_prefix_of_actual
 #print axioms
   exact_fixed_clean_k13_adversary_anchor_replays_raw_pre_anchor_tape
 #print axioms

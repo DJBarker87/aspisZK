@@ -49,6 +49,7 @@ open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FoldArmedAlphaZeroController
 open AspisK1.V7Tag73FoldAlphaPreFinalPrefix
 open AspisK1.V7Tag73FoldArmedPreFinalPrefix
+open AspisK1.V7Tag73FixedFieldMessageBridge
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73OperationalOracleExposure
 open AspisK1.V7Tag73NoPairOccurrenceTrichotomy
@@ -639,6 +640,193 @@ theorem exact_restored_clean_pair_selected_input_and_digest_eq
     leftOrigin, rightOrigin⟩
   simpa [selectedInputExact] using rightPrefix
 
+/-- The adversary-first chronology fixes the complete serialized final-vector
+payload before q16.  This is a fixed-layout decoding result; it does not use
+SHA-256 injectivity and it is independent of the obsolete fixed bad set. -/
+theorem exact_restored_clean_pair_adversary_anchor_final_values_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (anchor : ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    (exactOperationalTape leftWitness.joint.input).messages.finalValues =
+      (exactOperationalTape rightWitness.joint.input).messages.finalValues := by
+  obtain ⟨leftBefore, rightBefore, _digest, _leftBase, _rightBase,
+      _leftAbsorbActor, _rightAbsorbActor, _leftPrior, _rightPrior, _leftLater,
+      _rightLater, _leftAnchorRecord, _rightAnchorRecord, inputExact,
+      _leftLookup, _rightLookup, _priorExact, _leftRootExact, _rightRootExact,
+      _leftProducerMember, _rightProducerMember, _leftBaseExact,
+      _rightBaseExact, _leftAbsorbMember, _rightAbsorbMember⟩ :=
+    exact_pair_k13_adversary_anchor_final256_input_eq_of_actual
+      transitionRoom foldTrial finalTrial hidden left right
+      leftWitness.joint.input rightWitness.joint.input
+      leftWitness.joint.actualTrial rightWitness.joint.actualTrial anchor
+      programmedCover contextExact foldExact
+  have leftDrop :
+      List.drop 34
+          (bytes leftBefore.digest ++ [domAbsorb, final256Label] ++
+            encodeBlocks
+              (exactOperationalTape leftWitness.joint.input).messages.finalValues) =
+        encodeBlocks
+          (exactOperationalTape leftWitness.joint.input).messages.finalValues := by
+    convert (List.drop_append_length
+      (l₁ := bytes leftBefore.digest ++ [domAbsorb, final256Label])
+      (l₂ := encodeBlocks
+        (exactOperationalTape leftWitness.joint.input).messages.finalValues)) using 1 <;>
+      simp
+  have rightDrop :
+      List.drop 34
+          (bytes rightBefore.digest ++ [domAbsorb, final256Label] ++
+            encodeBlocks
+              (exactOperationalTape rightWitness.joint.input).messages.finalValues) =
+        encodeBlocks
+          (exactOperationalTape rightWitness.joint.input).messages.finalValues := by
+    convert (List.drop_append_length
+      (l₁ := bytes rightBefore.digest ++ [domAbsorb, final256Label])
+      (l₂ := encodeBlocks
+        (exactOperationalTape rightWitness.joint.input).messages.finalValues)) using 1 <;>
+      simp
+  have canonicalExact :
+      bytes leftBefore.digest ++ [domAbsorb, final256Label] ++
+          encodeBlocks
+            (exactOperationalTape leftWitness.joint.input).messages.finalValues =
+        bytes rightBefore.digest ++ [domAbsorb, final256Label] ++
+          encodeBlocks
+            (exactOperationalTape rightWitness.joint.input).messages.finalValues := by
+    simpa only [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using inputExact
+  apply encode_blocks_injective 16 256
+  calc
+    encodeBlocks
+        (exactOperationalTape leftWitness.joint.input).messages.finalValues =
+      List.drop 34
+        (bytes leftBefore.digest ++ [domAbsorb, final256Label] ++
+          encodeBlocks
+            (exactOperationalTape leftWitness.joint.input).messages.finalValues) :=
+      leftDrop.symm
+    _ = List.drop 34
+        (bytes rightBefore.digest ++ [domAbsorb, final256Label] ++
+          encodeBlocks
+            (exactOperationalTape rightWitness.joint.input).messages.finalValues) := by
+      rw [canonicalExact]
+    _ = encodeBlocks
+        (exactOperationalTape rightWitness.joint.input).messages.finalValues :=
+      rightDrop
+
+/-- Canonical fixed-field decoding transports the byte-level final-vector
+equality into the verifier-derived restored K1.3 view. -/
+theorem exact_restored_clean_pair_adversary_anchor_disclosed_final_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (anchor : ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    (exactRestoredRootK13View leftWitness.joint.input).disclosedFinal =
+      (exactRestoredRootK13View rightWitness.joint.input).disclosedFinal := by
+  have operationalFinalExact :=
+    exact_restored_clean_pair_adversary_anchor_final_values_eq transitionRoom
+      foldTrial finalTrial hidden left right leftWitness rightWitness anchor
+      programmedCover contextExact foldExact
+  let leftNode := leftWitness.joint.input.package.root.fixedRoot.base.runtime.node
+  let rightNode := rightWitness.joint.input.package.root.fixedRoot.base.runtime.node
+  let leftData :=
+    (exact_restored_operational_k13_provider leftWitness.joint.input).data
+      leftNode (exact_restoration_accumulator_contains_root leftWitness.joint.input)
+        (exact_restoration_accumulator_root_is_done leftWitness.joint.input)
+  let rightData :=
+    (exact_restored_operational_k13_provider rightWitness.joint.input).data
+      rightNode (exact_restoration_accumulator_contains_root rightWitness.joint.input)
+        (exact_restoration_accumulator_root_is_done rightWitness.joint.input)
+  have leftRawExact : leftNode.adversaryValue.rawMessages.finalValues =
+      (exactOperationalTape leftWitness.joint.input).messages.finalValues := by
+    change
+      leftWitness.joint.input.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.finalValues =
+        leftWitness.joint.input.package.root.fixedRoot.base.tape.messages.finalValues
+    rw [← leftWitness.joint.input.package.root.fixedRoot.base.rawMessagesExact]
+    rfl
+  have rightRawExact : rightNode.adversaryValue.rawMessages.finalValues =
+      (exactOperationalTape rightWitness.joint.input).messages.finalValues := by
+    change
+      rightWitness.joint.input.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.finalValues =
+        rightWitness.joint.input.package.root.fixedRoot.base.tape.messages.finalValues
+    rw [← rightWitness.joint.input.package.root.fixedRoot.base.rawMessagesExact]
+    rfl
+  have rawFinalExact : leftNode.adversaryValue.rawMessages.finalValues =
+      rightNode.adversaryValue.rawMessages.finalValues :=
+    leftRawExact.trans (operationalFinalExact.trans rightRawExact.symm)
+  change decodedFinalMessage leftData.decoded = decodedFinalMessage rightData.decoded
+  funext coefficient
+  have leftDecode := decode_final_of_fixedFieldDecodeExact
+    leftData.fixedDecode coefficient
+  have rightDecode := decode_final_of_fixedFieldDecodeExact
+    rightData.fixedDecode coefficient
+  rw [rawFinalExact] at leftDecode
+  exact Option.some.inj (leftDecode.symm.trans rightDecode)
+
 /-- The only chronology branch still requiring a source proof: the selected
 final-work input was first exposed by the adversary and later read by the
 verifier as an immutable cache hit. -/
@@ -870,6 +1058,8 @@ theorem exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
 #print axioms exact_restored_clean_pair_adversary_anchor_root_priors_eq
 #print axioms exact_restored_clean_pair_selected_root_priors_eq
 #print axioms exact_restored_clean_pair_selected_input_and_digest_eq
+#print axioms exact_restored_clean_pair_adversary_anchor_final_values_eq
+#print axioms exact_restored_clean_pair_adversary_anchor_disclosed_final_eq
 #print axioms exact_restored_clean_k13_pair_coordinate_invariant_of_semantic
 #print axioms
   exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
