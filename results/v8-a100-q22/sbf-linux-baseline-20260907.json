@@ -1,0 +1,102 @@
+{
+  "schema": "aspis.v8-a100.sbf-linux-baseline.v1",
+  "source_revision": "e8627859856b792b2258d7e262b74d4199d5fc9d",
+  "date": "2026-09-07",
+  "execution_boundary": {
+    "host": "dombarker@nuc.local",
+    "os": "Linux",
+    "architecture": "x86_64",
+    "logical_cpus": 22,
+    "network": "none",
+    "deployment": false,
+    "live_program_mutation": false
+  },
+  "toolchain": {
+    "cargo_build_sbf": "2.3.0",
+    "platform_tools": "v1.48",
+    "platform_rustc": "1.84.1",
+    "runtime": "LiteSVM 0.16.0",
+    "systemd": "255"
+  },
+  "resource_policy": {
+    "sbf_memory_high_bytes": 4294967296,
+    "sbf_memory_max_bytes": 6442450944,
+    "harness_memory_high_bytes": 6442450944,
+    "harness_memory_max_bytes": 8589934592,
+    "memory_swap_max_bytes": 0
+  },
+  "sbf_builds": {
+    "verifier": {
+      "exit_status": 0,
+      "wall_seconds": 28.76,
+      "maximum_rss_kib": 560840,
+      "swaps": 0,
+      "bytes": 1819432,
+      "sha256": "3247628ca57225e5ca297b549c3aba0db6971c2480710751d1b25d600dfba204"
+    },
+    "pool": {
+      "exit_status": 0,
+      "wall_seconds": 26.36,
+      "maximum_rss_kib": 551912,
+      "swaps": 0,
+      "bytes": 536752,
+      "sha256": "9cd1401327493134ca42ed13a7e72d7e6c375c488f7aa2ede42b39f402b6c89d"
+    }
+  },
+  "v8_stack_gate": {
+    "sbf_limit_bytes": 4096,
+    "reference_frame_bytes": 11904,
+    "reference_max_offset_bytes": 11800,
+    "optimized_frame_bytes": 18880,
+    "optimized_max_offset_bytes": 18048,
+    "optimized_excess_bytes": 13952,
+    "symbols_in_final_v7_elf": 0,
+    "v7_safety_reason": "unreachable V8 functions were dead-stripped",
+    "v8_status": "not safely reachable from an SBF entrypoint"
+  },
+  "transactions": [
+    {
+      "shape": "withdrawal-same-page",
+      "populated_pairs": 13,
+      "strict_work": true,
+      "proof_payload_bytes": 31512,
+      "proof_body_bytes": 30824,
+      "txv1_bytes": 1010,
+      "compute_units": 1153267,
+      "verifier_cpi_compute_units": 1085276,
+      "pool_reported_compute_units": 1153211,
+      "maximum_rss_kib": 539436,
+      "swaps": 0,
+      "outcome": "accepted",
+      "remote_evidence_sha256": "dbbec1c5304ebd33f2b22f8d917d87b96b8181d5a80403a73e53fd600e4b8799"
+    },
+    {
+      "shape": "withdrawal-rollover",
+      "populated_pairs": 255,
+      "strict_work": true,
+      "proof_payload_bytes": 31460,
+      "proof_body_bytes": 30772,
+      "txv1_bytes": 1043,
+      "compute_units": 1218981,
+      "verifier_cpi_compute_units": 1084747,
+      "pool_reported_compute_units": 1218925,
+      "maximum_rss_kib": 541352,
+      "swaps": 0,
+      "outcome": "accepted",
+      "remote_evidence_sha256": "7a24cab29def602d17d392f711443aed5436b31d81302af6139f25a4c405f4e4"
+    }
+  ],
+  "rollover_headroom": {
+    "to_1400000_compute_units": 181019,
+    "to_1350000_compute_units": 131019
+  },
+  "v8_transaction_measurement": null,
+  "v8_transaction_blockers": [
+    "optimized DEEP function exceeds the SBF stack limit",
+    "no complete V8 transcript and relation verifier",
+    "no q22 Merkle and fold composition",
+    "no V8 pair-forest dispatch profile",
+    "no honest V8 prover fixture",
+    "existing harness hard-codes V7 profile, release, and length arithmetic"
+  ]
+}
