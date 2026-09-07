@@ -298,8 +298,14 @@ theorem process_challenge_block_preserves_q16_ledger_invariant
   simp only [processFutureFreeChallengeBlock]
   split
   next value decoded =>
-    exact complete_challenge_preserves_q16_ledger_invariant environment
-      snapshot id value remaining nextCore phase
+    split
+    · exact complete_challenge_preserves_q16_ledger_invariant environment
+        snapshot id value remaining nextCore phase
+    · apply normal_q16_ledger_phase_transport
+          (before := snapshot) (after := _)
+      · cases id <;> simp [completeFutureFreeChallenge]
+        split <;> rfl
+      · exact phase
   next noValue =>
     split
     · exact normal_q16_ledger_phase_transport

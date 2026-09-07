@@ -6,13 +6,14 @@ import AspisFormal.K1.V7Tag73CheckedPathActualRunAlignment
 `CompleteCheckedFutureFreePath` intentionally admits harmless post-halt fuel
 padding, so it has no representation-wide upper bound.  This module instead
 constructs the particular path obtained from the strict checked refinement and
-proves that its unpadded driver fuel is at most 1442 microsteps.
+proves that its unpadded driver fuel is at most 1444 microsteps.
 
 The accounting is protocol-local and keeps unlike resources separate:
 
 * 6 fixed-prefix verifier actions;
 * at most 14 C1/lambda/chi/C2 microsteps;
-* at most 12 microsteps per supported linear slot;
+* at most 12 sampler microsteps per supported linear slot, plus the two exact
+  decoded-value binding absorbs (gamma and alpha0);
 * at most 641 q16 microsteps, preserving 64 separate cloned candidates and
   each candidate's eight-block cap; and
 * one terminal marker step.
@@ -48,34 +49,51 @@ noncomputable section
 
 /-! ## Protocol-local component caps -/
 
-def tag73CanonicalDriverFuelCap : Nat := 1442
+def tag73CanonicalDriverFuelCap : Nat := 1444
 
 theorem sampler_block_cap_le_twelve (id : ChallengeId) :
     samplerBlockCap (samplerMode id) ≤ 12 := by
   cases id <;> simp [samplerMode, samplerBlockCap]
 
-theorem fixed_tape_linear_fuel_le_twelve
-    (tape : DeployedFixedTape) (slot : FutureFreeSlot) :
-    fixedTapeLinearFuel tape slot ≤ 12 := by
-  cases slot with
-  | fixed action => simp [fixedTapeLinearFuel]
-  | challenge id =>
-      exact (tape.messages.challengeUse id).withinDeployedCap.trans
-        (sampler_block_cap_le_twelve id)
-  | payload site => simp [fixedTapeLinearFuel]
-  | work stage => simp [fixedTapeLinearFuel]
-  | beginQ16 => simp [fixedTapeLinearFuel]
+def linearSlotBindingFuel (tape : DeployedFixedTape) :
+    FutureFreeSlot → Nat
+  | .challenge id => (fixedTapeChallengeBindingEvents tape id).length
+  | _ => 0
 
-theorem fixed_tape_linear_fuels_le_twelve_mul_length
+def linearSlotsBindingFuel (tape : DeployedFixedTape)
+    (slots : List FutureFreeSlot) : Nat :=
+  (slots.map (linearSlotBindingFuel tape)).sum
+
+theorem fixed_tape_linear_fuel_le_twelve_add_binding
+    (tape : DeployedFixedTape) (slot : FutureFreeSlot) :
+    fixedTapeLinearFuel tape slot ≤ 12 + linearSlotBindingFuel tape slot := by
+  cases slot with
+  | fixed action => simp [fixedTapeLinearFuel, linearSlotBindingFuel]
+  | challenge id =>
+      have blockCap := (tape.messages.challengeUse id).withinDeployedCap.trans
+        (sampler_block_cap_le_twelve id)
+      simp only [fixedTapeLinearFuel, linearSlotBindingFuel]
+      omega
+  | payload site => simp [fixedTapeLinearFuel, linearSlotBindingFuel]
+  | work stage => simp [fixedTapeLinearFuel, linearSlotBindingFuel]
+  | beginQ16 => simp [fixedTapeLinearFuel, linearSlotBindingFuel]
+
+theorem fixed_tape_linear_fuels_le_twelve_mul_length_add_binding
     (tape : DeployedFixedTape) : ∀ slots,
-    fixedTapeLinearFuels tape slots ≤ 12 * slots.length := by
+    fixedTapeLinearFuels tape slots ≤
+      12 * slots.length + linearSlotsBindingFuel tape slots := by
   intro slots
   induction slots with
-  | nil => simp [fixedTapeLinearFuels]
+  | nil => simp [fixedTapeLinearFuels, linearSlotsBindingFuel]
   | cons slot rest ih =>
       rw [fixed_tape_linear_fuels_cons]
-      have head := fixed_tape_linear_fuel_le_twelve tape slot
-      simp only [List.length_cons]
+      have head := fixed_tape_linear_fuel_le_twelve_add_binding tape slot
+      have tail : fixedTapeLinearFuels tape rest ≤
+          12 * rest.length +
+            (rest.map (linearSlotBindingFuel tape)).sum := by
+        simpa only [linearSlotsBindingFuel] using ih
+      simp only [List.length_cons, linearSlotsBindingFuel, List.map_cons,
+        List.sum_cons]
       omega
 
 theorem candidate_outcome_blocks_used_le_eight (outcome : CandidateOutcome) :
@@ -117,6 +135,18 @@ theorem after_q16_preterminal_slot_count :
     afterQ16PreterminalSlots.length = 12 := by
   decide
 
+theorem before_q16_binding_fuel_exact (tape : DeployedFixedTape) :
+    linearSlotsBindingFuel tape beforeQ16Slots = 2 := by
+  simp [linearSlotsBindingFuel, linearSlotBindingFuel, beforeQ16Slots,
+    zeroCheckSlots, semanticSlots, oodSlots, fixedTapeChallengeBindingEvents,
+    challengeBindingPayload?]
+
+theorem after_q16_binding_fuel_exact (tape : DeployedFixedTape) :
+    linearSlotsBindingFuel tape afterQ16PreterminalSlots = 0 := by
+  simp [linearSlotsBindingFuel, linearSlotBindingFuel,
+    afterQ16PreterminalSlots, relationTailSlots,
+    fixedTapeChallengeBindingEvents, challengeBindingPayload?]
+
 /-- Exact arithmetic aggregation used by the canonical constructor. -/
 theorem complete_component_fuel_le_canonical_cap
     (tape : DeployedFixedTape)
@@ -136,14 +166,18 @@ theorem complete_component_fuel_le_canonical_cap
     (tape.messages.challengeUse ChallengeId.lambda).withinDeployedCap
   have chiCap :=
     (tape.messages.challengeUse ChallengeId.chi).withinDeployedCap
-  have beforeCap := fixed_tape_linear_fuels_le_twelve_mul_length tape
+  have beforeCap := fixed_tape_linear_fuels_le_twelve_mul_length_add_binding tape
     beforeQ16Slots
-  have afterCap := fixed_tape_linear_fuels_le_twelve_mul_length tape
+  have afterCap := fixed_tape_linear_fuels_le_twelve_mul_length_add_binding tape
     afterQ16PreterminalSlots
   have q16Cap := accepting_q16_driver_fuel_le_641 tape
+  have beforeBinding := before_q16_binding_fuel_exact tape
+  have afterBinding := after_q16_binding_fuel_exact tape
   simp only [samplerMode, samplerBlockCap] at lambdaCap chiCap
   rw [before_q16_slot_count] at beforeCap
   rw [after_q16_preterminal_slot_count] at afterCap
+  rw [beforeBinding] at beforeCap
+  rw [afterBinding] at afterCap
   unfold tag73CanonicalDriverFuelCap
   omega
 
@@ -230,7 +264,7 @@ theorem strict_checked_refinement_aligns_with_cap_covered_actual_run
     align_complete_checked_path_with_actual_run execution tape path
       environmentExact rawExact covered⟩
 
-#print axioms fixed_tape_linear_fuels_le_twelve_mul_length
+#print axioms fixed_tape_linear_fuels_le_twelve_mul_length_add_binding
 #print axioms accepting_q16_driver_fuel_le_641
 #print axioms complete_component_fuel_le_canonical_cap
 #print axioms checked_work_erased_refinement_constructs_canonical_capped_path
