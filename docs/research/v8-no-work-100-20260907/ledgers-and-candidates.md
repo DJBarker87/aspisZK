@@ -60,6 +60,12 @@ operational stage measures must be instantiated before quoting a number.
 
 ## Primary: component-wise OOD tuple binding, retained QM31
 
+Latest applicability correction: `recovery-counterexample.md` refutes the
+unconditional 28-gamma initial-recovery replacement, with an explicit 99.246-bit
+isolated-stage boundary. The historical 104.266662-bit total below remains only
+a conditional arithmetic model. Repair requires joint event accounting or a
+changed recovery theorem, not filling a source-interface structure alone.
+
 Continuation status: user accepts the canonical q22 40,282-byte model.
 `chord-verdict.md` derives honest quotient/code-space closure and records exact
 basis tests, while exposing reverse-image and transformed-relation obligations.

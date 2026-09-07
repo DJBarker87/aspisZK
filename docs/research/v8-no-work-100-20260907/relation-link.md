@@ -132,3 +132,40 @@ coherent-extraction existence theorem and full-view hiding analysis before SBF.
 The principal security decision remains unchanged: the 28-root uniqueness
 argument does not construct coherent extractions from accepted arbitrary
 oracles. No 100-bit or unchanged-CU claim follows from these new identities.
+
+## Further structured calculation (subsequent changed-source run)
+
+`chord_link.rs` now evaluates `<w,Mv>` directly when w and v are rank-one
+bit tensors. For line tensor factors define d_k=w[k,0]v[k,0]+w[k,1]v[k,1].
+The carry identity gives `<w,Xv>` as a sum of nine prefix/suffix products,
+without materializing a vector. Also X²=(1+T2)/2, so its contraction is half
+the identity contraction plus half a carry starting at the second line bit.
+Combining these contractions with the y-bit factors implements `<w,Mv>` in
+O(log dimension) field operations. It uses no inverses and permits zero factors.
+
+All 32 synthetic tensor cases (including zero factors) matched the independent
+full forward map. Updated optimized run: exit 0, 0.90 s wall, 0.51 s user,
+2,064,384 bytes maximum RSS, zero swaps. Two hundred warm scalar calls:
+mean 1751 ns, p50 1750 ns, p95 1792 ns, max 1917 ns. The same run's full-vector
+transpose mean was 69721 ns; the outputs differ, so this is not a full-verifier
+speedup comparison. Prior 2048 basis/overflow checks also passed unchanged as
+part of this changed-source executable.
+
+**Source limitation caught during inspection:** the selected relation covector
+fold uses `[1,alpha³,alpha²,alpha]/4`, which is generally not a rank-one two-bit
+tensor (its unscaled 2x2 determinant is alpha-alpha^5). Thus the new scalar
+kernel must not be substituted once per terminal component as if every actual
+fold covector were rank one. A correct implementation needs two-bit block
+contractions or an explicitly charged sum of product tensors. Grouped inactive
+masks also are not generally single product tensors. These missing adaptations
+and source bridges prevent converting the microbenchmark into CU parity.
+
+The security shortcut is now explicitly refuted in
+[recovery-counterexample.md](recovery-counterexample.md). The structured
+calculation does not resolve that independent cryptographic problem.
+
+Subsequent ZIP review resolves the actual two-bit-block limitation for Product
+components: [zip-review.md](zip-review.md). `block_terminal` now implements all
+four real dual folds, and 40 cross-language cases agree on all terminal values.
+Its count is 91 generic products including the outer scale. Grouped-mask handling,
+source factor-order adaptation and full CU measurements remain outstanding.

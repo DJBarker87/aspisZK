@@ -172,6 +172,27 @@ CU relaxation is known without full measurements. Missing mathematical and priva
 steps are not a reason to invent one. Failure of these investigated families is
 not a general impossibility result.
 
+## Decisive continuation: recovery shortcut refuted
+
+[recovery-counterexample.md](recovery-counterexample.md) constructs 760 bad
+gammas with complete-fibre agreement, and 28,289,716 bad gammas for the isolated
+strict-threshold initial recovery event. The latter is 99.2462 raw bits, with
+an exact axiom-free Lean arithmetic check. It does not automatically satisfy
+the fold gate and is not a complete forgery. The proposed unconditional
+28-root stage replacement is rejected; the conditional fixed-tuple theorem is
+not contradicted. The q22 design needs a new joint recovery or support-loss
+argument before its old conditional numerical ledger can be used.
+
+The latest [relation-link.md](relation-link.md) also records a 1.75-microsecond
+host rank-one scalar calculation and why the actual four-way covector folds
+and grouped masks do not yet satisfy that shortcut's input assumptions.
+
+The later [ZIP review](zip-review.md) closes the two-bit block issue for Product
+components: its 163-product result reproduced exactly, and the independent Rust
+implementation shares more intermediates for 91 generic products including outer
+scale. It agrees with both ZIP paths on 160 terminal values. This does not cover
+grouped masks or turn a new-transform saving into measured parity with V7.
+
 ## Continuation: accepted 40,282-byte allowance
 
 See [chord-verdict.md](chord-verdict.md) for the subsequent exact experiment and
