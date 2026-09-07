@@ -45,6 +45,29 @@ open AspisV6QueryBatchSoundness
 
 noncomputable section
 
+/-- The degree-sixteen collision target is relevant only when the two query
+vectors differ. Off that event the guarded target is empty, which makes the
+source record total without asserting an impossible global inequality. -/
+noncomputable def guardedJointQueryBatchTarget
+    (preQueryDiscrepancy : QM31Exact)
+    (expected authenticated : QueryVector QM31Exact) : Finset QM31Exact :=
+  if expected ≠ authenticated then
+    jointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected
+      authenticated
+  else ∅
+
+theorem guardedJointQueryBatchTarget_card_le_sixteen
+    (preQueryDiscrepancy : QM31Exact)
+    (expected authenticated : QueryVector QM31Exact) :
+    (guardedJointQueryBatchTarget preQueryDiscrepancy expected authenticated).card
+        ≤ 16 := by
+  classical
+  by_cases different : expected ≠ authenticated
+  · simpa [guardedJointQueryBatchTarget, different] using
+      jointQueryBatch_nonzero_collision_card_le_sixteen_of_vectors_ne
+        preQueryDiscrepancy expected authenticated different
+  · simp [guardedJointQueryBatchTarget, different]
+
 /-- Exact pre-query-batch source data on one compiler-clean slice. The
 coordinate equivalence is explicit: constructing it from the literal
 query-batch scheduler is a source-alignment obligation, not a hidden
@@ -71,8 +94,6 @@ structure ExactTag73RestrictedK13JointBatchSource
     VariableGammaCompleteSkeleton → QueryVector QM31Exact
   authenticated : HiddenTape → ExactCompilerGammaPrefixResidual parameters →
     VariableGammaCompleteSkeleton → QueryVector QM31Exact
-  different : ∀ hidden residual skeleton,
-    expected hidden residual skeleton ≠ authenticated hidden residual skeleton
   covered : ∀ hidden,
     jointEventSlice
         (clean ∩ exactTag73K13JointQueryBatchCollisionEvent transitionFuel
@@ -80,7 +101,7 @@ structure ExactTag73RestrictedK13JointBatchSource
       (coordinates hidden) ⁻¹'
         dependentSuccessfulSubtypeEvent GammaPrefixSucceeds (fun residual ↦
           successfulGammaPrefixSkeletonDependentEvent (fun skeleton ↦
-            jointQueryBatchNonzeroCollisionSet
+            guardedJointQueryBatchTarget
               (preQueryDiscrepancy hidden residual skeleton)
               (expected hidden residual skeleton)
               (authenticated hidden residual skeleton)))
@@ -114,19 +135,19 @@ theorem exact_tag73_restricted_k13_joint_batch_probability_le
   apply exact_compiler_joint_law_dependent_variable_prefix_event_probability_le
     hiddenLaw parameters source.coordinates
     (fun hidden residual skeleton ↦
-      jointQueryBatchNonzeroCollisionSet
+      guardedJointQueryBatchTarget
         (source.preQueryDiscrepancy hidden residual skeleton)
         (source.expected hidden residual skeleton)
         (source.authenticated hidden residual skeleton)) 16
   · intro hidden residual skeleton
-    exact jointQueryBatch_nonzero_collision_card_le_sixteen_of_vectors_ne
+    exact guardedJointQueryBatchTarget_card_le_sixteen
       (source.preQueryDiscrepancy hidden residual skeleton)
       (source.expected hidden residual skeleton)
       (source.authenticated hidden residual skeleton)
-      (source.different hidden residual skeleton)
   · exact source.covered
 
 #print axioms ExactTag73RestrictedK13JointBatchSource
+#print axioms guardedJointQueryBatchTarget_card_le_sixteen
 #print axioms exact_tag73_restricted_k13_joint_batch_probability_le
 
 end
