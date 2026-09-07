@@ -4,6 +4,7 @@ import AspisFormal.K1.V7Tag73ExactPairAdversaryProfileClosure
 import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
 import AspisFormal.K1.V7Tag73K14BoundGammaClosure
 import AspisFormal.K1.V7Tag73K15BoundGammaClosure
+import AspisFormal.K1.V7Tag73K15RelationAlphaActualLawClosure
 
 /-!
 # Exact measured Tag-73 closure from the clean work-dependent q16 theorem
@@ -61,6 +62,7 @@ open AspisK1.V7Tag73K14K15IdealErrorLedger
 open AspisK1.V7Tag73K14BoundGammaClosure
 open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73K15BoundGammaClosure
+open AspisK1.V7Tag73K15RelationAlphaActualLawClosure
 open AspisK1.V7Tag73ProofRelevantUpstreamInterface
 open AspisK1.V7Tag73Q16FirstCompactUniformity
 open AspisK1.V7Tag73Q16SemanticFrontierBridge
@@ -164,9 +166,12 @@ theorem exact_tag73_measured_clean_k16_aok_raw
           (exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
             projection fixedInstance decoder k13Source) ≤
         exactLaterRelationAlphaIdealRawError)
-    (fixedK15Bounds : FixedK15EventBounds
+    (remainingFixedK15Bounds : FixedK15EventBoundsExceptRelationAlpha
       (exactCompilerJointLaw hiddenLaw parameters)
       (exactTag73RestoredFixedK15Events environment))
+    (k15RelationAlphaSource : ExactTag73K15RelationAlphaSource transitionFuel
+      configuration projection fixedInstance decoder decoderBinding basis rc
+      poseidon environment)
     (k15ResidualSource : ExactTag73K15BoundGammaSource transitionFuel
       configuration projection fixedInstance decoder decoderBinding basis rc
       poseidon environment) :
@@ -218,6 +223,8 @@ theorem exact_tag73_measured_clean_k16_aok_raw
   have restoredK15Bound :=
     exact_tag73_restored_k15_residual_probability_le_of_bound_gamma_source
       hiddenLaw publishedInitialWidth29 k15ResidualSource
+  have fixedK15Bounds := fixed_k15_event_bounds_of_relation_alpha_source
+    hiddenLaw remainingFixedK15Bounds k15RelationAlphaSource
   have k15Measure := exact_restored_k15_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance decoder
     decoderBinding basis rc poseidon environment fixedK15Bounds
