@@ -11,6 +11,10 @@ The supplied prototype ZIP has now been independently reviewed and reproduced:
 in the checked scope. A production-field Rust implementation agrees on 160
 terminal values and counts 91 generic products including the outer scale.
 
+Latest engineering result: [grouped-mask.md](grouped-mask.md) extends the fast
+path to actual grouped binary masks (142 generic + 170 mixed products), with
+2080 mask cases and 20 aggregate relation tests. Full security/CU remain open.
+
 Start with [report.md](report.md). See [security-contract.md](security-contract.md),
 [baseline.md](baseline.md), [ledgers-and-candidates.md](ledgers-and-candidates.md)
 and [sources.md](sources.md) for the contract, pins, applicability and primary sources.
