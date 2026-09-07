@@ -1,5 +1,6 @@
 import AspisFormal.K1.V7Tag73K15SemanticActualLawClosure
 import AspisFormal.K1.V7Tag73K15RestrictedMeasureLedger
+import AspisFormal.K1.V7Tag73K15RestrictedRelationAlphaActualLawClosure
 
 /-!
 # Compiler-clean actual-law closure for Tag-73 K1.5 semantic failures
@@ -32,6 +33,7 @@ open AspisK1.V7Tag73HiddenTapeAveraging
 open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73K15RestrictedMeasureLedger
 open AspisK1.V7Tag73K15RelationAlphaActualLawClosure
+open AspisK1.V7Tag73K15RestrictedRelationAlphaActualLawClosure
 open AspisK1.V7Tag73K15SemanticActualLawAdapter
 open AspisK1.V7Tag73K15SemanticActualLawClosure
 open AspisK1.V7Tag73K15SemanticFamilyProbability
@@ -134,8 +136,8 @@ theorem exact_tag73_restricted_semantic_probability_le_of_source
       (exactTag73RestoredFixedK15Events environment).event .semantic)
     (by exact covered)
 
-/-- Install the clean semantic source and the already proved full
-relation-alpha source into the clean-restricted fixed-family ledger. -/
+/-- Install the clean semantic and relation-alpha sources into the
+clean-restricted fixed-family ledger. -/
 theorem restricted_fixed_k15_event_bounds_of_semantic_relation_sources
     {HiddenTape TapeIdentity Observation Payload : Type}
     [Fintype HiddenTape]
@@ -173,9 +175,9 @@ theorem restricted_fixed_k15_event_bounds_of_semantic_relation_sources
       semanticLanes)
     (semanticCovered : ExactTag73RestrictedSemanticCover environment clean
       semanticLanes semanticTerminal semanticSumcheck)
-    (relationSource : ExactTag73K15RelationAlphaSource transitionFuel
+    (relationSource : ExactTag73RestrictedK15RelationAlphaSource transitionFuel
       configuration projection fixedInstance decoder decoderBinding basis rc
-      poseidon environment) :
+      poseidon environment clean) :
     FixedK15EventBounds (exactCompilerJointLaw hiddenLaw parameters)
       (restrictFixedK15Events clean
         (exactTag73RestoredFixedK15Events environment)) := by
@@ -187,17 +189,9 @@ theorem restricted_fixed_k15_event_bounds_of_semantic_relation_sources
         (ordinary_bound_le_common_nonzero_bound 30500)
   · by_cases relation : kind = .relationAlpha
     · subst kind
-      have fullBound := exact_tag73_relation_alpha_probability_le_of_source
-        hiddenLaw relationSource
-      have restrictedBound :
-          (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-              (clean ∩
-                (exactTag73RestoredFixedK15Events environment).event
-                  .relationAlpha) ≤
-            (24 : ENNReal) / ((P ^ 4 : Nat) : ENNReal) :=
-        ((exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
-          Set.inter_subset_right).trans fullBound
-      exact restrictedBound.trans (ordinary_bound_le_common_nonzero_bound 24)
+      exact (exact_tag73_restricted_relation_alpha_probability_le_of_source
+        hiddenLaw clean relationSource).trans
+          (ordinary_bound_le_common_nonzero_bound 24)
     · exact remaining.category kind semantic relation
 
 #print axioms exact_tag73_restricted_semantic_probability_le_of_source
