@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aspis V8-A100 q22 production-readiness review</title>
+  <style>
+    :root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+    body { max-width: 980px; margin: 0 auto; padding: 2rem; line-height: 1.5; }
+    h1, h2 { line-height: 1.15; }
+    .verdict { border-left: .4rem solid #d97706; padding: .7rem 1rem; background: color-mix(in srgb, #d97706 12%, transparent); }
+    .score { display: inline-block; margin-right: 1rem; padding: .25rem .55rem; border: 1px solid currentColor; border-radius: .35rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; vertical-align: top; padding: .55rem; border-bottom: 1px solid #8886; }
+    code { font-size: .92em; }
+    .critical { color: #dc2626; font-weight: 700; }
+    .high { color: #d97706; font-weight: 700; }
+    .medium { color: #2563eb; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>Aspis V8-A100 q22 production-readiness review</h1>
+  <p class="verdict"><strong>Classification C — promising but not established.</strong>
+    The 39,934-byte q22/208-bit/two-OOD profile is the best candidate, but it is
+    not ready for a production instruction or mainnet release.</p>
+  <p><span class="score">Security: C</span><span class="score">Quality: B</span>
+    <span class="score">Ready for mainnet: no</span></p>
+
+  <h2>Decisive evidence</h2>
+  <table>
+    <tr><th>Area</th><th>Result</th></tr>
+    <tr><td>Wire</td><td>Exact maximum body 39,934 bytes; complete pair-verifier account 40,662 bytes.</td></tr>
+    <tr><td>Frontier</td><td>Exact q22 maximum 296, attained by a committed fixture.</td></tr>
+    <tr><td>Security arithmetic</td><td>Lean proves the named-envelope ledger is at most 2<sup>-104</sup> and not at most 2<sup>-105</sup>; 104.26666237024358 displayed bits.</td></tr>
+    <tr><td>Prototype</td><td>Direct schedule and corrected affine-chord no-new-tree quotient pass reference/optimized tests.</td></tr>
+    <tr><td>Hiding</td><td>Concrete pair and pair-forest nonzero-minor witnesses pass; universal theorem open.</td></tr>
+    <tr><td>SBF</td><td>No V8 transaction measurement. The exact replay requires Linux x86_64 and V8 is not yet wired to an instruction.</td></tr>
+  </table>
+
+  <h2>Findings and exact fixes</h2>
+  <table>
+    <tr><th>Severity</th><th>Finding</th><th>Required fix</th></tr>
+    <tr><td class="critical">Critical</td><td>Exact q22/two-OOD hiding is not universal.</td><td>Prove surjectivity for every legal schedule/OOD pair and equality case, or exhibit a counterexample and enlarge the mask to the proved minimum.</td></tr>
+    <tr><td class="critical">Critical</td><td>The affine chord is not connected to the actual circle fold/final degree model.</td><td>Prove coordinate-ring divisibility and the exact degree drop, then refine the Rust implementation to that theorem.</td></tr>
+    <tr><td class="critical">Critical</td><td>The fixed-tuple result is conditional on a missing restoration-wide K1.4 replay provider.</td><td>Construct <code>ExactCompilerPreGammaTupleObligation</code> from the actual paused compiler for fresh, cached, and advance continuations.</td></tr>
+    <tr><td class="high">High</td><td>No actual V8 SBF or Pool transaction measurement exists.</td><td>Add a research-only dispatch, then run capped Linux x86_64 verifier-only, same-page, rollover, typical, and maximum-frontier measurements.</td></tr>
+    <tr><td class="medium">Medium</td><td>No complete Rust/Lean byte-level proof KAT exists.</td><td>Freeze one deterministic proof and compare transcript states, OOD values, gamma, q22 positions, frontiers, quotient values, body, and final result.</td></tr>
+  </table>
+
+  <h2>Best next task</h2>
+  <p>Close the affine-chord circle-code bridge first. If it succeeds, wire a
+    feature-gated V8 verifier and run the maximum-frontier rollover transaction
+    on the capped Linux build host. The full investigation and reproduction
+    commands are in <code>docs/research/v8_a100_q22_feasibility.md</code>.</p>
+</body>
+</html>
