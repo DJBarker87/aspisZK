@@ -46,9 +46,8 @@ def exactK13SemanticRawError : ENNReal :=
   q16SemanticOneForestRawError + exactOneFoldIdealRawError +
     exactJointQueryBatchIdealRawError + exactLaterRelationAlphaIdealRawError
 
-/-- Restricted K1.3 composition.  Only q16 needs its new clean-event bound;
-the remaining unconditional event bounds are safely restricted by monotonicity.
--/
+/-- Restricted K1.3 composition.  All four source events are required only on
+the compiler-clean slice consumed by K1.6. -/
 theorem exact_assembled_k13_clean_error_measure_bound
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
     [Fintype HiddenTape]
@@ -75,17 +74,23 @@ theorem exact_assembled_k13_clean_error_measure_bound
               fixedInstance decoder) ≤ q16SemanticOneForestRawError)
     (oneFoldBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K13OneFoldEvent transitionFuel configuration projection
-            fixedInstance decoder) ≤ exactOneFoldIdealRawError)
+          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+              projection fixedInstance ∩
+            exactTag73K13OneFoldEvent transitionFuel configuration projection
+              fixedInstance decoder) ≤ exactOneFoldIdealRawError)
     (jointBatchBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K13JointQueryBatchCollisionEvent transitionFuel
-            configuration projection fixedInstance decoder source) ≤
+          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+              projection fixedInstance ∩
+            exactTag73K13JointQueryBatchCollisionEvent transitionFuel
+              configuration projection fixedInstance decoder source) ≤
         exactJointQueryBatchIdealRawError)
     (laterAlphaBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
-            projection fixedInstance decoder source) ≤
+          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+              projection fixedInstance ∩
+            exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
+              projection fixedInstance decoder source) ≤
         exactLaterRelationAlphaIdealRawError) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -121,15 +126,6 @@ theorem exact_assembled_k13_clean_error_measure_bound
     · exact Or.inl (Or.inl (Or.inr ⟨cleanMember, fold⟩))
     · exact Or.inl (Or.inr ⟨cleanMember, batch⟩)
     · exact Or.inr ⟨cleanMember, alpha⟩
-  have oneFoldClean : law.toOuterMeasure (clean ∩ oneFold) ≤
-      exactOneFoldIdealRawError :=
-    (law.toOuterMeasure.mono Set.inter_subset_right).trans oneFoldBound
-  have jointClean : law.toOuterMeasure (clean ∩ joint) ≤
-      exactJointQueryBatchIdealRawError :=
-    (law.toOuterMeasure.mono Set.inter_subset_right).trans jointBatchBound
-  have laterClean : law.toOuterMeasure (clean ∩ later) ≤
-      exactLaterRelationAlphaIdealRawError :=
-    (law.toOuterMeasure.mono Set.inter_subset_right).trans laterAlphaBound
   calc
     law.toOuterMeasure
         (clean ∩ k13CircleListDecodeErrorEvent
@@ -154,8 +150,8 @@ theorem exact_assembled_k13_clean_error_measure_bound
           exactJointQueryBatchIdealRawError) +
         exactLaterRelationAlphaIdealRawError :=
       add_le_add
-        (add_le_add (add_le_add q16CleanBound oneFoldClean) jointClean)
-        laterClean
+        (add_le_add (add_le_add q16CleanBound oneFoldBound) jointBatchBound)
+        laterAlphaBound
     _ = exactK13SemanticRawError := rfl
 
 end

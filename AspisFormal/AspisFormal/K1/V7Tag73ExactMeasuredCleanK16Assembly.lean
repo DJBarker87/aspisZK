@@ -3,6 +3,7 @@ import AspisFormal.K1.V7Tag73ExactCleanK13MeasuredComposition
 import AspisFormal.K1.V7Tag73ExactPairAdversaryProfileClosure
 import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
 import AspisFormal.K1.V7Tag73K14BoundGammaClosure
+import AspisFormal.K1.V7Tag73K14RestrictedBoundGammaClosure
 import AspisFormal.K1.V7Tag73K15BoundGammaClosure
 import AspisFormal.K1.V7Tag73K15SemanticActualLawClosure
 import AspisFormal.K1.V7Tag73K15RestrictedSemanticActualLawClosure
@@ -62,6 +63,7 @@ open AspisK1.V7Tag73K13PreQ16JointEventHandoff
 open AspisK1.V7Tag73K13K14EventComposition
 open AspisK1.V7Tag73K14K15IdealErrorLedger
 open AspisK1.V7Tag73K14BoundGammaClosure
+open AspisK1.V7Tag73K14RestrictedBoundGammaClosure
 open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73K15RestrictedMeasureLedger
 open AspisK1.V7Tag73K15BoundGammaClosure
@@ -137,8 +139,10 @@ theorem exact_tag73_measured_clean_k16_aok_raw
           ⋃ finalTrial : ExactCompilerExposureTrial parameters,
             exactPreQ16K13JointTrialEvent transitionFuel configuration projection
               fixedInstance decoder finalTrial))
-    (k14Source : ExactTag73K14BoundGammaSource transitionFuel configuration
-      projection fixedInstance decoder)
+    (k14Source : ExactTag73RestrictedK14BoundGammaSource transitionFuel
+      configuration projection fixedInstance decoder
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance))
     (transitionRoom : 3 ≤ transitionFuel)
     (driverCoversProtocol :
       tag73CanonicalDriverFuelCap ≤ configuration.machine.driverFuel)
@@ -161,17 +165,23 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
     (oneFoldBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K13OneFoldEvent transitionFuel configuration projection
-            fixedInstance decoder) ≤ exactOneFoldIdealRawError)
+          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+              projection fixedInstance ∩
+            exactTag73K13OneFoldEvent transitionFuel configuration projection
+              fixedInstance decoder) ≤ exactOneFoldIdealRawError)
     (jointBatchBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K13JointQueryBatchCollisionEvent transitionFuel
-            configuration projection fixedInstance decoder k13Source) ≤
+          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+              projection fixedInstance ∩
+            exactTag73K13JointQueryBatchCollisionEvent transitionFuel
+              configuration projection fixedInstance decoder k13Source) ≤
         exactJointQueryBatchIdealRawError)
     (laterAlphaBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
-            projection fixedInstance decoder k13Source) ≤
+          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+              projection fixedInstance ∩
+            exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
+              projection fixedInstance decoder k13Source) ≤
         exactLaterRelationAlphaIdealRawError)
     (remainingFixedK15Bounds : FixedK15EventBoundsExceptSemanticRelationAlpha
       (exactCompilerJointLaw hiddenLaw parameters)
@@ -239,11 +249,16 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     decoderBinding k15 initialEncoderExact k13Source q16CleanBound oneFoldBound
     jointBatchBound laterAlphaBound
   have width29Bound :=
-    exact_tag73_k14_width29_probability_le_of_bound_gamma_source hiddenLaw
+    exact_tag73_restricted_k14_width29_probability_le hiddenLaw
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance)
       initialEncoderExact publishedInitialWidth29 k14Source
-  have k14Measure := exact_assembled_k14_error_measure_bound hiddenLaw
+  have k14Measure := exact_restricted_assembled_k14_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance relation decoder
-    decoderBinding k15 width29Bound
+    decoderBinding k15
+    (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
+      fixedInstance)
+    width29Bound
   have restoredK15Bound :=
     exact_tag73_restricted_restored_k15_residual_probability_le hiddenLaw
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -274,8 +289,7 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     (((exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
       Set.inter_subset_right).trans k12Measure)
     k13Clean
-    (((exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
-      Set.inter_subset_right).trans k14Measure)
+    k14Measure
     k15Measure
 
 end
