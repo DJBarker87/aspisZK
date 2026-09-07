@@ -195,7 +195,12 @@ Replay commands, exact signed RPC requests, landed responses, program dumps,
 account images, proof encodings, logs and checksums are in
 `results/v7-txv1-public-devnet-identity-fix-20260907/`. The committed transfer
 and withdrawal configs contain public identities only. `wallet-state.bin` and
-all task keypairs are deliberately excluded.
+all task keypairs are deliberately excluded. After the evidence commit was
+pushed, 12 enumerated task-owned payer/program/buffer/Registry/token key files
+were individually unlinked from the NUC; proof-account keys had already been
+destroyed by the lifecycle cleanup traps. The keys are not recoverable from
+the task host or repository. No shared cache or ledger was removed. The
+machine-readable cleanup receipt is `key-cleanup.json`.
 
 The harness and builder changes are safe to cherry-pick as default-off test
 plumbing. The public-devnet config/evidence and immutable deployments are
