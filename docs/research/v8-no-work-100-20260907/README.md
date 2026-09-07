@@ -1,5 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest continuation: [recovery ZIP review and adaptive-cover investigation](coverage-review.md).
+All 46,875 supplied cases and new q23/quintic controls reproduce. A focused Lean
+result now constructs a <=100 joint-tuple family at the relaxed 38,228-symbol
+floor, plus C1 descent from the tuple's own support. This admits the known
+counterexample's zero tuple but **does not prove adaptive branch coverage**.
+q23 remains an unapproved 41,527-byte control; full quintic q22 is the
+42,984-byte better-margin field-port control. See [exact rows](cover-results.json)
+and [execution/source evidence](coverage-evidence.json).
+
 **Current decision:** [decision.md](decision.md). No investigated implementation
 meets every requirement. A new full-fibre counterexample rejects extending the
 2,800-root fixed-family bound to unconditional recovery even after both agreement

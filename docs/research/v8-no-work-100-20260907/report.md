@@ -1,5 +1,14 @@
 # Decision: no investigated candidate is green on all requirements
 
+Latest: [coverage-review.md](coverage-review.md) reproduces the recovery-review
+ZIP and adds QM31 q23 / quintic q22 controls. The relaxed joint-family cap and
+existence theorem is now proved at 38,228 symbols, with no old-decoder filter;
+adaptive batch/fold representation is still unresolved. q23's conditional
+100-target subtotal is 102.979071 bits at 41,527 bytes. Quintic q22's known-stage
+subtotal is 104.402641 bits at 42,984 bytes. Both exceed the accepted allowance.
+Neither number is a complete security claim. The older q21 fallback remains
+the smaller thin-margin control, not the price of a completed protocol.
+
 The authoritative continuation is [decision.md](decision.md), with
 [joint-results.json](joint-results.json). The 40,282-byte q22 size is now accepted,
 but its proposed recovery certificate is not established. A full-fibre boundary

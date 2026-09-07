@@ -70,3 +70,13 @@ on accepted-proof security. The new 105.142-bit fixed-target folded-query lemma
 also is not a full certificate: its pre-challenge target and independent uniform
 query hypotheses must be proved for the actual adaptive transcript, then lifted
 to the stated FS resource experiment.
+
+The coverage continuation makes the missing term explicit:
+`Pr[accept and no valid extraction and not covered]`. A provider returning
+`none` does not make this term zero. The <=100 relaxed joint family now covers
+all tuples close on >=38,228 symbols, but does not establish that arbitrary
+accepted adaptive branches have a batch/fold representation by one of them.
+Johnson's lower closeness floor and the query lemma's upper match cap cannot
+be substituted for one another. Under the review's conditional inventory,
+q23/100 targets leaves ~2^-100.195660 for all omitted soundness/FS terms; it
+also exceeds the approved size by 1,245 bytes. Neither is a new security claim.
