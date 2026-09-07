@@ -1,0 +1,83 @@
+{
+  "date": "2026-09-07",
+  "research_parent": "67ba3ff1377bbb788d33e2e4a30b5b8b9bf1f5e9",
+  "v8_source_read_only": "07b66afc22288a6ff460180242b73de4f341e02d",
+  "main_observed_during_run": "e0f02bc3c6dd1ee76407e55cba7bfebc23279223",
+  "archive_sha256": "644df6b343daaed48f1819b1f98a968bcffd69d642507b7b2353858fc42eff39",
+  "archive_uncompressed_bytes": 30774,
+  "archive_files": 5,
+  "archive_supplied_hash_checks": "all four pass",
+  "host": "Apple M3 Mac15,13; Darwin 25.5.0 arm64; 25769803776 RAM bytes",
+  "lean": {
+    "target": "experiments/JointImageGame.lean",
+    "command": "/usr/bin/time -l lake env lean /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/JointImageGame.lean",
+    "cwd": "/Users/dominic/ZK/AspisFormal",
+    "version": "4.32.0",
+    "source_sha256": "746b466d3b5c258be8e8670e4cac47771e4dcd9223bc5828f5d803ab72fb8c1d",
+    "import": "AspisFormal.V5FriConcreteEncoderApplicability",
+    "import_source_sha256": "91d8d7a2d8e1ea832459a439482aa858e970cba1608ab7652bdfce3eede632d3",
+    "import_olean_sha256": "2ed1ef913f2baaeffd2e0ad289e750ba2b1e2c7282d783de8fedb8904464d8d6",
+    "exit_status": 0,
+    "wall_seconds": 30.30,
+    "peak_rss_bytes": 5042438144,
+    "swaps": 0,
+    "audited_declarations": 10,
+    "axioms": ["propext", "Classical.choice", "Quot.sound"],
+    "new_axioms": false,
+    "sorry": false,
+    "claim": "formal proof complete for the causal discrepancy game, not its complete V8 source instance",
+    "log": "experiments/joint-image-lean.log",
+    "package_replay": false
+  },
+  "runs": {
+    "supplied_python": {
+      "command": "/usr/bin/time -l python3 docs/research/v8-no-work-100-20260907/experiments/joint-image-package/check_joint_image.py",
+      "exit_status": 0, "wall_seconds": 2.51, "peak_rss_bytes": 23379968, "swaps": 0,
+      "output": "experiments/joint-image-package/results.json",
+      "status": "all supplied checks reproduced"
+    },
+    "image_gate_rust": {
+      "build": "rustc --edition=2021 -O docs/research/v8-no-work-100-20260907/experiments/image_gate.rs -o /tmp/aspis-v8-image-gate",
+      "command": "/usr/bin/time -l /tmp/aspis-v8-image-gate",
+      "source_sha256": "f85a1931ee6635b655b2b09cbd315c2d7d7dd651a0835148ad88f116a943ed85",
+      "exit_status": 0, "wall_seconds": 0.50, "peak_rss_bytes": 1769472, "swaps": 0,
+      "terminal_value_checks": 320, "adaptive_round_checks": 320,
+      "query_injection_checks": 80, "kernel_counterexamples": 4, "image_valid_controls": 12,
+      "terminal_accepts_explained_by_repair": 3,
+      "challenge_mode": "explicit ideal inputs, not transcript sampling",
+      "transcript_helper": "type-checked only; exact proposed framing, caller prefix binding not enforced by helper",
+      "log": "experiments/joint-image-rust.log"
+    },
+    "full_degree_rust": {
+      "build": "rustc --edition=2021 -O docs/research/v8-no-work-100-20260907/experiments/adaptive_outside.rs -o /tmp/aspis-v8-adaptive-outside-image",
+      "command": "/usr/bin/time -l /tmp/aspis-v8-adaptive-outside-image",
+      "source_sha256": "dbced1e3919783da5f4c921348a11db5f12351b63c9e53fdc5e42bb49791a178",
+      "exit_status": 0, "wall_seconds": 0.86, "peak_rss_bytes": 2473984, "swaps": 0,
+      "new_image_residual_checks": 32, "retained_fold_checks": 1280,
+      "log": "experiments/joint-image-outside.log"
+    },
+    "ledger": {
+      "command": "/usr/bin/time -l python3 docs/research/v8-no-work-100-20260907/experiments/joint_image.py",
+      "source_sha256": "7e47a3e3f25221254be5746bab6865da9969e48ccf892e1f8c9676f6c9fbe6ed",
+      "exit_status": 0, "wall_seconds": 0.08, "peak_rss_bytes": 18563072, "swaps": 0,
+      "small_exact_checks": 818, "log": "experiments/joint-image-arithmetic.log"
+    }
+  },
+  "rust_source_dependencies_sha256": {
+    "field.rs": "5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8",
+    "circle.rs": "8f6f0f32c8dd93e3ee459df0c1d0ef710b01996d3bc929dbeffb3f7d14a0227c",
+    "transcript.rs": "be036d144b9fe0c8119d9f6fdd8ca2167d1379f7d1d785fa2f197200b9f7d119"
+  },
+  "failed_preflights": [
+    "Lean initial finite-set simplification/universe errors corrected locally; see Lean log",
+    "Lean composition needed tiny rational 3*6 normalization, not a large generated reduction",
+    "Rust transcript helper import initially lacked diagnostic-only SUMCHECK_BYTES; supplied the exact 7*16 constant for unused KATs; no arithmetic stub"
+  ],
+  "full_transaction_cu": null,
+  "honest_prover_peak_rss": null,
+  "full_view_hiding": "unresolved",
+  "arbitrary_oracle_recovery": "unresolved",
+  "fiat_shamir_source_lift": "unresolved",
+  "production_changed": false,
+  "remote_builds_or_deployments": false
+}

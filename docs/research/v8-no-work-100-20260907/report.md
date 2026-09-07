@@ -1,5 +1,12 @@
 # Decision: no investigated candidate is green on all requirements
 
+Latest: [joint-image-review.md](joint-image-review.md) proves a restricted
+causal ideal-game bound for exact polynomial quotients with invalid image:
+118.4150 bits at q22 with a fresh image-aware relation gate. The pinned V8
+source lacks that gate; an isolated research model/prototype is now supplied.
+The 40,282-byte model is unchanged. Global non-polynomial adaptive coverage,
+full-view ZK, FS/source lifting and full-transaction CU parity remain open.
+
 Latest: [adaptive-tail-review.md](adaptive-tail-review.md) identifies a causal
 pre-OOD full-degree oracle whose chord quotient passes every pointwise query
 while original-code recovery is impossible. Its image residual is nonzero;
