@@ -37,6 +37,12 @@ const FULL256_VERIFIER_CALL_CAP: usize = 1_511;
 const VISIBLE_HONEST_WORK: usize = (1usize << 35) + (1usize << 31) + (1usize << 34);
 const FIXED_K15_NUMERATOR: usize = 396_430;
 const GAMMA_DEGREE: usize = COMPONENTS - 1;
+// The verifier checks only the two gamma-dot OOD scalars.  Outside the
+// two-point fingerprint-collision event, at most one of the <=100 fixed
+// tuples matches both complete vectors; every other tuple contributes at
+// most 28 roots.  We conservatively retain 100 * 28, covering the case where
+// no tuple matches both vectors.
+const SCALAR_DEEP_GAMMA_CARDINALITY: usize = TUPLE_LIST_CAP * GAMMA_DEGREE;
 const ONE_FOLD_NUMERATOR: usize = 3;
 const LATER_ALPHA_NUMERATOR: usize = 18;
 const TUPLE_LIST_CAP: usize = 100;
@@ -209,8 +215,11 @@ fn full_raw_ledger(q: usize, digest_bytes: usize) -> Value {
     let nonzero_field = &field - BigUint::one();
     let secure_circle_parameters = &field - BigUint::from(P).pow(2);
     let query = query_probability(q);
-    let algebraic_numerator =
-        ONE_FOLD_NUMERATOR + q + LATER_ALPHA_NUMERATOR + FIXED_K15_NUMERATOR + GAMMA_DEGREE;
+    let algebraic_numerator = ONE_FOLD_NUMERATOR
+        + q
+        + LATER_ALPHA_NUMERATOR
+        + FIXED_K15_NUMERATOR
+        + SCALAR_DEEP_GAMMA_CARDINALITY;
     let algebraic = Rational::from_usize_ratio(algebraic_numerator, nonzero_field);
     let deep_numerator =
         TUPLE_LIST_CAP * TUPLE_LIST_CAP * CLEARED_COMPONENT_DEGREE * CLEARED_COMPONENT_DEGREE;
@@ -248,7 +257,7 @@ fn full_raw_ledger(q: usize, digest_bytes: usize) -> Value {
                     "query_batch": q,
                     "later_alpha": LATER_ALPHA_NUMERATOR,
                     "fixed_k15": FIXED_K15_NUMERATOR,
-                    "gamma": GAMMA_DEGREE,
+                    "scalar_deep_gamma": SCALAR_DEEP_GAMMA_CARDINALITY,
                 },
                 "total": algebraic.json(),
             },
@@ -279,11 +288,13 @@ fn profile_size(q: usize, digest_bytes: usize, ood_points: usize) -> Value {
     let query_error = query_probability(q);
 
     // This intentionally excludes K1.2 resource-dependent hash terms and the
-    // not-yet-established two-point tuple-separation term.  It is the exact
-    // optimistic algebraic subtotal under bad-gamma cardinality 28.
+    // separately accounted two-point tuple-collision term.  It uses the
+    // conservative scalar-DEEP bad-gamma cardinality 100 * 28.
     let p = BigUint::from(P);
     let field_nonzero = p.pow(4) - BigUint::one();
-    let algebraic_numerator = BigUint::from(3usize + q + 18usize + 396_430usize + 28usize);
+    let algebraic_numerator = BigUint::from(
+        3usize + q + 18usize + 396_430usize + SCALAR_DEEP_GAMMA_CARDINALITY,
+    );
     let optimistic = query_error.add(&Rational::new(algebraic_numerator, field_nonzero));
 
     json!({

@@ -58,9 +58,13 @@ def queryDenominator : Nat → Nat
 def queryError (q : Nat) : ℚ :=
   (queryNumerator q : ℚ) / queryDenominator q
 
-/-- `3 + q + 18 + 396430 + 28`, over nonzero QM31. -/
+/-- `3 + q + 18 + 396430 + 100*28`, over nonzero QM31.  The last
+term is the conservative scalar-DEEP family bound: the verifier checks two
+gamma dots, so each of at most 100 nonmatching tuples contributes at most 28
+roots. -/
 def algebraicError (q : Nat) : ℚ :=
-  ((3 + q + 18 + 396430 + 28 : Nat) : ℚ) / nonzeroFieldCardinality
+  ((3 + q + 18 + 396430 + 100 * 28 : Nat) : ℚ) /
+    nonzeroFieldCardinality
 
 /-- `100^2 * 1024^2` ordered-pair collision bound. -/
 def twoPointTupleCollisionError : ℚ :=
