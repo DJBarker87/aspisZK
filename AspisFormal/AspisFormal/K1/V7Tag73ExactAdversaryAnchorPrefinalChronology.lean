@@ -256,6 +256,73 @@ theorem exact_fixed_k13_adversary_anchor_prefinal_is_not_later_root_answer
         simp) verifierPrior verifierLater producerInput digest laterExact
           statePrefix
 
+/-- Source-only form of the pre-final chronology theorem.  It deliberately
+omits the fixed residual bad-set witness: chronology depends only on the
+literal operational run, its selected actual pair, and the adversary anchor. -/
+theorem exact_k13_adversary_anchor_prefinal_is_not_later_root_answer_of_actual
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (trial : ExactCompilerExposureTrial parameters)
+    (actualTrial : ExactFixedK13ActualJointTrial input trial)
+    (anchor : ExactFixedK13AdversaryAnchor input trial) :
+    ∃ queryPrior queryLater anchorInput anchorAnswer digest base absorbActor,
+      input.package.root.full.projection.rootPrefixes.adversary.freshQueries =
+          queryPrior ++ (anchorInput, anchorAnswer) :: queryLater ∧
+      trial.val = queryPrior.length ∧
+      HasLiteralStatePrefix digest anchorInput ∧
+      ExactOperationalPrefinalDigest input digest ∧
+      (anchorInput =
+          (literalFinalWorkKey digest
+            (exactOperationalTape input).messages.finalGrinding.selected).workInput ∨
+        anchorInput =
+          (literalFinalWorkKey digest
+            (exactOperationalTape input).messages.finalGrinding.selected).absorbInput) ∧
+      base = (exactOperationalRawTrace input).q16BaseDigest ∧
+      (.machineFresh absorbActor
+        (literalFinalWorkKey digest
+          (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+        base : UnifiedExposureRecord) ∈
+        exactFixedRootRecords input.package.root ∧
+      (∀ between producerInput producerLater,
+        input.package.root.full.projection.rootPrefixes.adversary.freshQueries ≠
+          queryPrior ++ (anchorInput, anchorAnswer) ::
+            between ++ (producerInput, digest) :: producerLater) ∧
+      (∀ verifierPrior producerInput verifierLater,
+        input.package.root.full.projection.rootPrefixes.verifier.freshQueries ≠
+          verifierPrior ++ (producerInput, digest) :: verifierLater) := by
+  obtain ⟨rootPrior, rootLater, anchorInput, anchorAnswer, digest, base,
+      absorbActor, rootExact, trialExact, statePrefix, prefinalOrigin,
+      anchorKind, baseExact, absorbMember⟩ :=
+    exact_k13_adversary_anchor_has_prefinal_digest_prefix_of_actual input trial
+      actualTrial anchor
+  obtain ⟨queryPrior, queryLater, adversaryExact, rootPriorExact⟩ :=
+    exact_fixed_k13_adversary_anchor_has_literal_adversary_prefix input
+      rootPrior rootLater anchorInput anchorAnswer rootExact
+  refine ⟨queryPrior, queryLater, anchorInput, anchorAnswer, digest, base,
+    absorbActor, adversaryExact, ?_, statePrefix, prefinalOrigin, anchorKind,
+    baseExact, absorbMember, ?_, ?_⟩
+  · rw [rootPriorExact] at trialExact
+    simpa only [projected_machine_fresh_records_length] using trialExact
+  · intro between producerInput producerLater laterExact
+    exact exact_root_adversary_prefix_cannot_reference_later_adversary_answer
+      transitionRoom input queryPrior between producerLater anchorInput
+        producerInput anchorAnswer digest laterExact statePrefix
+  · intro verifierPrior producerInput verifierLater laterExact
+    exact exact_root_adversary_prefix_cannot_reference_verifier_answer
+      transitionRoom input anchorInput anchorAnswer (by
+        rw [adversaryExact]
+        simp) verifierPrior verifierLater producerInput digest laterExact
+          statePrefix
+
 /-- The `final256` query producing the selected pre-final digest occurs
 strictly before an adversary-owned final-work anchor in the literal adversary
 query list.  This is the commitment point needed by the remaining semantic
@@ -367,6 +434,112 @@ theorem exact_fixed_k13_adversary_anchor_has_earlier_final256_producer
   · exfalso
     exact notVerifier verifierPrior producerInput verifierLater producerVerifier
 
+/-- Source-only producer chronology, suitable for the restored K1.2 witness
+whose bad-set packaging intentionally differs from the older fixed model. -/
+theorem exact_k13_adversary_anchor_has_earlier_final256_producer_of_actual
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (trial : ExactCompilerExposureTrial parameters)
+    (actualTrial : ExactFixedK13ActualJointTrial input trial)
+    (anchor : ExactFixedK13AdversaryAnchor input trial) :
+    ∃ producerPrior middle anchorLater producerInput anchorInput
+        anchorAnswer digest base absorbActor,
+      input.package.root.full.projection.rootPrefixes.adversary.freshQueries =
+        producerPrior ++ (producerInput, digest) ::
+          middle ++ (anchorInput, anchorAnswer) :: anchorLater ∧
+      trial.val =
+        (producerPrior ++ (producerInput, digest) :: middle).length ∧
+      tableLookup (exactOperationalTable input) producerInput = some digest ∧
+      HasLiteralStatePrefix digest anchorInput ∧
+      ExactOperationalPrefinalDigest input digest ∧
+      base = (exactOperationalRawTrace input).q16BaseDigest ∧
+      (.machineFresh absorbActor
+        (literalFinalWorkKey digest
+          (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+        base : UnifiedExposureRecord) ∈
+        exactFixedRootRecords input.package.root := by
+  obtain ⟨queryPrior, queryLater, anchorInput, anchorAnswer, digest, base,
+      absorbActor, adversaryExact, trialExact, statePrefix, prefinalOrigin,
+      _anchorKind, baseExact, absorbMember, notLaterAdversary, notVerifier⟩ :=
+    exact_k13_adversary_anchor_prefinal_is_not_later_root_answer_of_actual
+      transitionRoom input trial actualTrial anchor
+  obtain ⟨beforeFinal256, producerLookup⟩ := prefinalOrigin
+  let producerInput : ShaInput :=
+    bytes beforeFinal256.digest ++
+      [domAbsorb,
+        (AspisK1.V7Tag73TranscriptSchedule.Payload.final256
+          (exactOperationalTape input).messages.finalValues).label] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.final256
+        (exactOperationalTape input).messages.finalValues).data
+  have producerPosition :=
+    exact_compiler_final_lookup_has_root_position input producerInput digest
+      (by simpa [producerInput] using producerLookup)
+  rcases producerPosition with
+      ⟨producerPrior, producerLater, producerAdversary⟩ |
+      ⟨verifierPrior, verifierLater, producerVerifier⟩
+  · have producerMember : (producerInput, digest) ∈
+        input.package.root.full.projection.rootPrefixes.adversary.freshQueries :=
+      by rw [producerAdversary]; simp
+    have anchorMember : (anchorInput, anchorAnswer) ∈
+        input.package.root.full.projection.rootPrefixes.adversary.freshQueries := by
+      rw [adversaryExact]
+      simp
+    have distinct : (producerInput, digest) ≠ (anchorInput, anchorAnswer) := by
+      intro equal
+      have inputExact : producerInput = anchorInput := congrArg Prod.fst equal
+      have avoids := exact_compiler_final_lookup_answer_avoids_own_input
+        input producerInput digest (by
+          simpa [producerInput] using producerLookup)
+      apply avoids
+      simpa [inputExact] using statePrefix
+    rcases distinct_members_have_strict_list_order
+        input.package.root.full.projection.rootPrefixes.adversary.freshQueries
+        (producerInput, digest) (anchorInput, anchorAnswer) distinct
+        producerMember anchorMember with producerFirst | anchorFirst
+    · obtain ⟨producerPrior, middle, anchorLater, exact⟩ := producerFirst
+      have rootRecordsNodup :
+          (exactFixedRootRecords input.package.root).Nodup :=
+        List.Nodup.of_map UnifiedExposureRecord.answer
+          (exact_root_record_answers_nodup input)
+      have adversaryRecordsNodup :
+          (projectedMachineFreshRecords .adversary
+            input.package.root.full.projection.rootPrefixes.adversary.freshQueries).Nodup := by
+        unfold exactFixedRootRecords fullProjectedRootRecords at rootRecordsNodup
+        exact (List.nodup_append.mp rootRecordsNodup).1
+      have adversaryNodup :
+          input.package.root.full.projection.rootPrefixes.adversary.freshQueries.Nodup :=
+        (projected_machine_fresh_records_nodup_iff .adversary _).mp
+          adversaryRecordsNodup
+      have queryPriorExact :
+          queryPrior = producerPrior ++ (producerInput, digest) :: middle :=
+        nodup_equal_pivot_prefixes (anchorInput, anchorAnswer)
+          queryPrior queryLater
+          (producerPrior ++ (producerInput, digest) :: middle) anchorLater
+          (by simpa [adversaryExact] using adversaryNodup)
+          (adversaryExact.symm.trans (by
+            simpa only [List.cons_append, List.append_assoc] using exact))
+      exact ⟨producerPrior, middle, anchorLater, producerInput, anchorInput,
+        anchorAnswer, digest, base, absorbActor, exact,
+        by simpa [queryPriorExact] using trialExact,
+        by simpa [producerInput] using producerLookup, statePrefix,
+        ⟨beforeFinal256, producerLookup⟩, baseExact, absorbMember⟩
+    · obtain ⟨beforeAnchor, middle, producerLater, exact⟩ := anchorFirst
+      exfalso
+      exact exact_root_adversary_prefix_cannot_reference_later_adversary_answer
+        transitionRoom input beforeAnchor middle producerLater anchorInput
+          producerInput anchorAnswer digest exact statePrefix
+  · exfalso
+    exact notVerifier verifierPrior producerInput verifierLater producerVerifier
+
 /-- Root-record form of the preceding chronology theorem.  It keeps the
 literal producer and anchor in one exact combined-root decomposition, which
 lets cross-fibre replay transport the already-created `final256` coordinate. -/
@@ -426,6 +599,62 @@ theorem exact_fixed_k13_adversary_anchor_has_earlier_final256_root_record
   · simpa only [List.length_append, List.length_cons,
       projected_machine_fresh_records_length] using trialExact
 
+/-- Source-only combined-root record form of the producer chronology. -/
+theorem exact_k13_adversary_anchor_has_earlier_final256_root_record_of_actual
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (trial : ExactCompilerExposureTrial parameters)
+    (actualTrial : ExactFixedK13ActualJointTrial input trial)
+    (anchor : ExactFixedK13AdversaryAnchor input trial) :
+    ∃ rootPrior rootMiddle rootLater producerInput anchorInput anchorAnswer
+        digest base absorbActor,
+      exactFixedRootRecords input.package.root =
+        rootPrior ++
+          (.machineFresh .adversary producerInput digest :
+            UnifiedExposureRecord) :: rootMiddle ++
+          (.machineFresh .adversary anchorInput anchorAnswer :
+            UnifiedExposureRecord) :: rootLater ∧
+      trial.val =
+        (rootPrior ++
+          (.machineFresh .adversary producerInput digest :
+            UnifiedExposureRecord) :: rootMiddle).length ∧
+      tableLookup (exactOperationalTable input) producerInput = some digest ∧
+      HasLiteralStatePrefix digest anchorInput ∧
+      ExactOperationalPrefinalDigest input digest ∧
+      base = (exactOperationalRawTrace input).q16BaseDigest ∧
+      (.machineFresh absorbActor
+        (literalFinalWorkKey digest
+          (exactOperationalTape input).messages.finalGrinding.selected).absorbInput
+        base : UnifiedExposureRecord) ∈
+        exactFixedRootRecords input.package.root := by
+  obtain ⟨producerPrior, middle, anchorLater, producerInput, anchorInput,
+      anchorAnswer, digest, base, absorbActor, adversaryExact, trialExact,
+      producerLookup, statePrefix, prefinalOrigin, baseExact, absorbMember⟩ :=
+    exact_k13_adversary_anchor_has_earlier_final256_producer_of_actual
+      transitionRoom input trial actualTrial anchor
+  refine ⟨projectedMachineFreshRecords .adversary producerPrior,
+    projectedMachineFreshRecords .adversary middle,
+    projectedMachineFreshRecords .adversary anchorLater ++
+    projectedMachineFreshRecords .verifier
+        input.package.root.full.projection.rootPrefixes.verifier.freshQueries,
+    producerInput, anchorInput, anchorAnswer, digest, base, absorbActor, ?_, ?_,
+    producerLookup, statePrefix, prefinalOrigin, baseExact, absorbMember⟩
+  · unfold exactFixedRootRecords fullProjectedRootRecords
+    rw [adversaryExact]
+    simp only [projected_machine_fresh_records_append,
+      projectedMachineFreshRecords, List.cons_append, List.append_assoc]
+  · simpa only [List.length_append, List.length_cons,
+      projected_machine_fresh_records_length] using trialExact
+
 #print axioms
   exact_root_adversary_prefix_cannot_reference_later_adversary_answer
 #print axioms projected_machine_fresh_records_nodup_iff
@@ -437,6 +666,12 @@ theorem exact_fixed_k13_adversary_anchor_has_earlier_final256_root_record
   exact_fixed_k13_adversary_anchor_has_earlier_final256_producer
 #print axioms
   exact_fixed_k13_adversary_anchor_has_earlier_final256_root_record
+#print axioms
+  exact_k13_adversary_anchor_prefinal_is_not_later_root_answer_of_actual
+#print axioms
+  exact_k13_adversary_anchor_has_earlier_final256_producer_of_actual
+#print axioms
+  exact_k13_adversary_anchor_has_earlier_final256_root_record_of_actual
 
 end
 
