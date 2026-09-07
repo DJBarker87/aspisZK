@@ -10,6 +10,8 @@ use aspis_statement::{
     },
 };
 use serde_json::json;
+use solana_program::pubkey::Pubkey;
+use std::str::FromStr;
 
 fn random_digest_bytes() -> Result<[u8; 32]> {
     let mut random = [0_u8; 32];
@@ -34,14 +36,34 @@ fn note(owner_key: [u8; 32], value: u32, salt: [u8; 32]) -> serde_json::Value {
 fn main() -> Result<()> {
     let mut args = env::args().skip(1);
     let operation = args.next().context(
-        "usage: create-live-operation-secrets <transfer|withdrawal> <new-secret-file> [required-lane]",
+        "usage: create-live-operation-secrets <transfer|withdrawal> <new-secret-file> [--required-lane 0..7] [--withdrawal-destination PUBKEY]",
     )?;
     let output = PathBuf::from(args.next().context("missing secret output")?);
-    let required_lane = args
-        .next()
-        .map(|value| value.parse::<u8>().context("invalid required lane"))
-        .transpose()?;
-    ensure!(args.next().is_none(), "unexpected extra argument");
+    let mut required_lane = None;
+    let mut withdrawal_destination = None;
+    while let Some(flag) = args.next() {
+        match flag.as_str() {
+            "--required-lane" => {
+                ensure!(required_lane.is_none(), "duplicate required lane");
+                required_lane = Some(
+                    args.next()
+                        .context("missing required lane")?
+                        .parse::<u8>()
+                        .context("invalid required lane")?,
+                );
+            }
+            "--withdrawal-destination" => {
+                ensure!(
+                    withdrawal_destination.is_none(),
+                    "duplicate withdrawal destination"
+                );
+                let destination = args.next().context("missing withdrawal destination")?;
+                Pubkey::from_str(&destination).context("invalid withdrawal destination")?;
+                withdrawal_destination = Some(destination);
+            }
+            _ => anyhow::bail!("unexpected argument: {flag}"),
+        }
+    }
     ensure!(
         required_lane.is_none_or(|lane| lane < 8),
         "required lane must be 0..7"
@@ -49,6 +71,10 @@ fn main() -> Result<()> {
     ensure!(
         operation == "transfer" || operation == "withdrawal",
         "invalid operation"
+    );
+    ensure!(
+        (operation == "withdrawal") == withdrawal_destination.is_some(),
+        "withdrawal requires one live destination; transfer forbids it"
     );
     let (nullifier_key, owner_key, input_salt, input_commitment, lane, attempts) = (1_u32..=1_024)
         .find_map(|attempts| {
@@ -90,8 +116,6 @@ fn main() -> Result<()> {
         (750, Some(250))
     };
     let change = note(random_digest_bytes()?, change_value, random_digest_bytes()?);
-    let withdrawal_destination =
-        (operation == "withdrawal").then_some("5jKh25biPsnrmLWXXuqKNH2Q67j69T4Q7Zew5c8wJKaV");
     let secret = json!({
         "schema":"aspis.v7.live-pool-proof-secrets.v1","operation":operation,
         "nullifierKeyHex":hex(&nullifier_key),"inputNote":input,
