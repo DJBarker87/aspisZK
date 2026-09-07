@@ -11,7 +11,8 @@ use aspis_pool_wallet_v1::{
     finalized_indexer::SolanaRpcCommitmentV1,
     lane_forest_client_v2::{
         select_pair_forest_spend_profile_v2, FinalizedPairForestProfileAccountsV2,
-        PairForestSpendProfileRequestV2,
+        PairForestSpendProfileRequestV2, PairForestSpendProfileSelectionV2,
+        PairForestVerifierRegistryFamilyV2,
     },
     lane_forest_durable_v2::{
         authenticate_forest_lane_account_v2, authenticate_forest_master_account_v2,
@@ -29,7 +30,8 @@ use aspis_statement::{
     encode_digest_canonical,
     pool_v1::{
         decode_pool_v1_pair_forest_terminal_request_v1, pool_v1_pair_forest_output_lane_v1,
-        PoolV1PairForestTerminalPaymentV1, POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+        root_history_location, PoolV1PairForestLaneStateV1, PoolV1PairForestTerminalPaymentV1,
+        PoolV1PairForestTerminalRequestV1, POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
         V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING, V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
     },
 };
@@ -41,6 +43,7 @@ use sha2::{Digest as _, Sha256};
 use solana_keypair::read_keypair_file;
 use solana_message_v1::VersionedMessage as V1VersionedMessage;
 use solana_program::pubkey::Pubkey;
+use solana_sdk_ids::bpf_loader_upgradeable;
 use solana_signature_v1::Signature as V1Signature;
 use solana_signer::Signer;
 use solana_transaction_v1::versioned::VersionedTransaction as V1VersionedTransaction;
@@ -161,6 +164,247 @@ fn resolve(base: &Path, value: &str) -> PathBuf {
         path.to_owned()
     } else {
         base.join(path)
+    }
+}
+
+const CREATE_PROGRAM_ADDRESS_CU: u64 = 1_500;
+
+fn pda_attempts_from_bump(bump: u8) -> Result<u16> {
+    ensure!(
+        bump > 0,
+        "successful on-chain find_program_address cannot return bump zero"
+    );
+    Ok(256u16 - u16::from(bump))
+}
+
+fn expected_terminal_pda_invocations(withdrawal: bool, rollover: bool) -> u64 {
+    match (withdrawal, rollover) {
+        (false, false) => 18,
+        (false, true) => 19,
+        (true, false) => 20,
+        (true, true) => 21,
+    }
+}
+
+/// Inventory the exact data-dependent PDA search component of the terminal
+/// Pool/verifier call graph before signing. Repeated runtime authentication is
+/// represented by `runtimeInvocations`; deriving a unique address once here
+/// does not pretend that the on-chain programs derive it only once.
+fn terminal_pda_search_audit(
+    pool_program: Pubkey,
+    asset_mint: Pubkey,
+    master_address: Pubkey,
+    lane: &PoolV1PairForestLaneStateV1,
+    profile: PairForestSpendProfileSelectionV2,
+    request: &PoolV1PairForestTerminalRequestV1,
+    terminal_accounts: &[Pubkey],
+) -> Result<serde_json::Value> {
+    ensure!(
+        profile.registry_family == PairForestVerifierRegistryFamilyV2::ImmutableDeploymentV2,
+        "exact PDA CU inventory requires the authenticated Registry V2 family"
+    );
+    let registry_program = Pubkey::new_from_array(profile.registry_program);
+    let verifier_program = Pubkey::new_from_array(profile.verifier_program);
+    let checkpoint_sequence = match request.public {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => public.anchor_sequence,
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => public.anchor_sequence,
+    };
+    let withdrawal = matches!(
+        request.public,
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(_)
+    );
+    let current_location = root_history_location(lane.tree.next_leaf_index);
+    let next_location = root_history_location(lane.tree.next_leaf_index + 1);
+    let rollover = current_location.page_number != next_location.page_number;
+
+    let (derived_master, master_bump) =
+        aspis_pool::pool_v1_pair_forest_master_address(&pool_program, &asset_mint);
+    ensure!(
+        derived_master == master_address && terminal_accounts.first() == Some(&master_address),
+        "terminal master account mismatch"
+    );
+
+    let (_, lane_bump) =
+        aspis_pool::pool_v1_pair_forest_lane_address(&pool_program, &master_address, lane.lane_id)
+            .map_err(|error| anyhow::anyhow!("derive lane PDA: {error:?}"))?;
+    let lane_address =
+        aspis_pool::pool_v1_pair_forest_lane_address(&pool_program, &master_address, lane.lane_id)
+            .map_err(|error| anyhow::anyhow!("derive lane PDA: {error:?}"))?
+            .0;
+    let (checkpoint_address, checkpoint_bump) = aspis_pool::pool_v1_pair_forest_checkpoint_address(
+        &pool_program,
+        &master_address,
+        checkpoint_sequence,
+    );
+    let (current_page, current_page_bump) = aspis_pool::pool_v1_root_page_address(
+        &pool_program,
+        &lane_address,
+        current_location.page_number,
+    );
+    let next_page = rollover.then(|| {
+        aspis_pool::pool_v1_root_page_address(
+            &pool_program,
+            &lane_address,
+            next_location.page_number,
+        )
+    });
+    let canonical_nullifier = encode_digest_canonical(request.public.nullifier());
+    let (marker, marker_bump) = aspis_pool::pool_v1_nullifier_marker_address(
+        &pool_program,
+        &master_address,
+        &canonical_nullifier,
+    )
+    .map_err(|error| anyhow::anyhow!("derive nullifier PDA: {error:?}"))?;
+    let (registry, registry_bump) =
+        aspis_registry::pool_v1_verifier_registry_v2_address(&registry_program, &master_address);
+    let (entry, entry_bump) = aspis_registry::pool_v1_verifier_entry_v2_address(
+        &registry_program,
+        &master_address,
+        &request.verifier_profile,
+        &request.verifier_release,
+    );
+    let loader = bpf_loader_upgradeable::id();
+    let (registry_programdata, registry_programdata_bump) =
+        Pubkey::find_program_address(&[registry_program.as_ref()], &loader);
+    let (verifier_programdata, verifier_programdata_bump) =
+        Pubkey::find_program_address(&[verifier_program.as_ref()], &loader);
+
+    ensure!(
+        terminal_accounts.contains(&lane_address),
+        "terminal lane account mismatch"
+    );
+    ensure!(
+        terminal_accounts.contains(&checkpoint_address),
+        "terminal checkpoint account mismatch"
+    );
+    ensure!(
+        terminal_accounts.contains(&current_page),
+        "terminal current history page mismatch"
+    );
+    if let Some((address, _)) = next_page {
+        ensure!(
+            terminal_accounts.contains(&address),
+            "terminal rollover history page mismatch"
+        );
+    }
+    ensure!(
+        terminal_accounts.contains(&marker),
+        "terminal marker account mismatch"
+    );
+    ensure!(
+        terminal_accounts.contains(&registry),
+        "terminal Registry V2 mismatch"
+    );
+    ensure!(
+        terminal_accounts.contains(&entry),
+        "terminal Registry V2 entry mismatch"
+    );
+    ensure!(
+        terminal_accounts.contains(&verifier_program),
+        "terminal verifier program mismatch"
+    );
+
+    let mut records = Vec::new();
+    let mut total_runtime_invocations = 0u64;
+    let mut total_weighted_attempts = 0u64;
+    let mut push =
+        |label: &str, address: Pubkey, bump: u8, runtime_invocations: u64| -> Result<()> {
+            let attempts = u64::from(pda_attempts_from_bump(bump)?);
+            let weighted_attempts = attempts * runtime_invocations;
+            total_runtime_invocations += runtime_invocations;
+            total_weighted_attempts += weighted_attempts;
+            records.push(json!({
+                "label": label,
+                "address": address.to_string(),
+                "bump": bump,
+                "attemptsPerInvocation": attempts,
+                "runtimeInvocations": runtime_invocations,
+                "weightedAttempts": weighted_attempts,
+                "pdaSearchSyscallCu": weighted_attempts * CREATE_PROGRAM_ADDRESS_CU,
+            }));
+            Ok(())
+        };
+
+    push("Pool master", master_address, master_bump, 2)?;
+    push("selected lane", lane_address, lane_bump, 3)?;
+    push(
+        "retained checkpoint",
+        checkpoint_address,
+        checkpoint_bump,
+        2,
+    )?;
+    push(
+        "current lane history page",
+        current_page,
+        current_page_bump,
+        1,
+    )?;
+    if let Some((address, bump)) = next_page {
+        push("rollover lane history page", address, bump, 1)?;
+    }
+    push("nullifier marker", marker, marker_bump, 2)?;
+    push("Registry V2", registry, registry_bump, 2)?;
+    push("Registry V2 entry", entry, entry_bump, 2)?;
+    push(
+        "Registry programdata",
+        registry_programdata,
+        registry_programdata_bump,
+        2,
+    )?;
+    push(
+        "verifier programdata",
+        verifier_programdata,
+        verifier_programdata_bump,
+        2,
+    )?;
+    if withdrawal {
+        let (vault, vault_bump) =
+            aspis_pool::pool_v1_vault_token_account_address(&pool_program, &master_address);
+        let (authority, authority_bump) =
+            aspis_pool::pool_v1_vault_authority_address(&pool_program, &master_address);
+        ensure!(
+            terminal_accounts.contains(&vault),
+            "terminal vault mismatch"
+        );
+        ensure!(
+            terminal_accounts.contains(&authority),
+            "terminal vault authority mismatch"
+        );
+        push("vault token account", vault, vault_bump, 1)?;
+        push("vault authority", authority, authority_bump, 1)?;
+    }
+
+    let expected_runtime_invocations = expected_terminal_pda_invocations(withdrawal, rollover);
+    ensure!(
+        total_runtime_invocations == expected_runtime_invocations,
+        "PDA runtime inventory drift"
+    );
+    Ok(json!({
+        "schema":"aspis.v7.terminal-pda-search-audit.v1",
+        "registryFamily":"immutable-v2",
+        "rollover":rollover,
+        "withdrawal":withdrawal,
+        "createProgramAddressCuPerAttempt":CREATE_PROGRAM_ADDRESS_CU,
+        "records":records,
+        "runtimeInvocations":total_runtime_invocations,
+        "weightedAttempts":total_weighted_attempts,
+        "pdaSearchSyscallCu":total_weighted_attempts * CREATE_PROGRAM_ADDRESS_CU,
+    }))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn pda_attempts_and_terminal_call_shapes_are_exact() {
+        assert_eq!(pda_attempts_from_bump(255).unwrap(), 1);
+        assert_eq!(pda_attempts_from_bump(1).unwrap(), 255);
+        assert!(pda_attempts_from_bump(0).is_err());
+        assert_eq!(expected_terminal_pda_invocations(false, false), 18);
+        assert_eq!(expected_terminal_pda_invocations(false, true), 19);
+        assert_eq!(expected_terminal_pda_invocations(true, false), 20);
+        assert_eq!(expected_terminal_pda_invocations(true, true), 21);
     }
 }
 
@@ -301,12 +545,33 @@ fn main() -> Result<()> {
         &request,
     )
     .map_err(|e| anyhow::anyhow!("terminal instruction: {e:?}"))?;
-    let terminal_accounts = terminal
+    let terminal_account_pubkeys = terminal
         .accounts
         .iter()
-        .map(|account| account.pubkey.to_string())
+        .map(|account| account.pubkey)
         .collect::<Vec<_>>();
-    let marker_account = terminal.accounts[4].pubkey.to_string();
+    let terminal_accounts = terminal_account_pubkeys
+        .iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>();
+    let master_pubkey = Pubkey::new_from_array(master.address);
+    let pda_search_audit = terminal_pda_search_audit(
+        program,
+        Pubkey::new_from_array(master.value.identity.asset_mint),
+        master_pubkey,
+        &lane.value,
+        profile,
+        &request,
+        &terminal_account_pubkeys,
+    )?;
+    let marker_account = aspis_pool::pool_v1_nullifier_marker_address(
+        &program,
+        &master_pubkey,
+        &encode_digest_canonical(request.public.nullifier()),
+    )
+    .map_err(|error| anyhow::anyhow!("derive marker: {error:?}"))?
+    .0
+    .to_string();
     let secrets: Secret = serde_json::from_slice(&fs::read(resolve(base, &bundle.secrets_file))?)?;
     let change = note(secrets.change_note)?;
     let pair_index = lane.value.tree.next_leaf_index;
@@ -479,6 +744,7 @@ fn main() -> Result<()> {
         "carrierTestMode":input.carrier_test_mode,
         "withdrawalCpiTestMode":input.withdrawal_cpi_test_mode,
         "computeUnitLimit":compute_unit_limit,
+        "pdaSearchAudit":pda_search_audit,
         "terminalAccounts":terminal_accounts,"markerAccount":marker_account,
         "simulationRequest":{"jsonrpc":"2.0","id":input.request_id,"method":"simulateTransaction","params":[wire64,{"encoding":"base64","commitment":"finalized","sigVerify":true,"replaceRecentBlockhash":false,"minContextSlot":input.min_context_slot,"innerInstructions":true}]},
         "sendRequest":{"jsonrpc":"2.0","id":input.request_id+100000,"method":"sendTransaction","params":[wire64,{"encoding":"base64","skipPreflight":true,"preflightCommitment":"finalized","maxRetries":0,"minContextSlot":input.min_context_slot}]}})
