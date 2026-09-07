@@ -1,5 +1,12 @@
 # Decision at the investigated revisions: no-go for a certified V8
 
+Latest review: [lean-repair-review.md](lean-repair-review.md) kernel-checks the
+generic fixed-target joint-query bound and root-product instance. The actual
+adaptive accepted-provider-none obligation remains open. Current primary is
+QM31 q22; the better-margin field-port fallback control is quintic q22 at
+42,984 bytes, with quintic q21 retained as a thinner 41,692-byte control.
+No complete security, ZK or CU-parity claim has been upgraded.
+
 Subsequent review: [coverage-review.md](coverage-review.md) adds the q23
 bounded-family control, quintic q22 margin comparison, a proved relaxed
 joint-family theorem and newer isolated SBF evidence. The no-go on a complete

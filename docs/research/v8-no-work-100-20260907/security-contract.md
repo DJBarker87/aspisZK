@@ -3,6 +3,13 @@
 Status: no candidate has a complete 100-bit certificate. This directory is
 research only; selected acceptance, deployment and payment semantics are unchanged.
 
+New proved subexperiment: [fixed-target query-support theorem](lean-repair-review.md)
+uses independent direct q-subsets, nonzero gamma and whole-field alpha. Its
+119.0458-bit wrong-support bound is not the adaptive K1.4/extraction error.
+General Tag-73 query batching separately costs at most q/(|K|-1) roots with a
+fixed prior discrepancy, plus later relation-repair accounting. No FS resource
+envelope, provider-none coverage or privacy claim is certified by this lemma.
+
 The requested classical claim has two gates, neither of which earns work credit:
 
 1. In the actual interactive experiment, sum every applicable round-by-round
