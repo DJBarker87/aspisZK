@@ -246,8 +246,15 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
   [[ -x "$SECRET_BUILDER" && -x "$DEPOSIT_BUILDER" && -x "$CHECKPOINT_BUILDER" ]] \
     || fail "secret, deposit and checkpoint builders are all required"
   mkdir "$EVIDENCE_DIR/deposit"
+  operation_secret_args=()
+  if [[ "$OPERATION" == withdrawal ]]; then
+    withdrawal_destination=$(jq -er \
+      '.liveFixture.withdrawalDestinationTokenAccount // .disposableLiveGenesis.withdrawalDestinationTokenAccount' \
+      "$CONFIG")
+    operation_secret_args+=(--withdrawal-destination "$withdrawal_destination")
+  fi
   "$SECRET_BUILDER" "$OPERATION" "$WORK_DIR/operation-secrets.json" \
-    >"$EVIDENCE_DIR/deposit/public-operation.json"
+    "${operation_secret_args[@]}" >"$EVIDENCE_DIR/deposit/public-operation.json"
   [[ "$(file_mode "$WORK_DIR/operation-secrets.json")" == 600 ]] \
     || fail "operation secret file mode is not 0600"
   selected_lane=$(jq -er '.depositLane' "$EVIDENCE_DIR/deposit/public-operation.json")
@@ -585,7 +592,8 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         if [[ "$SELECTED_LANE_CASE" == stale-after-deposit ]]; then
           readonly STALING_EVIDENCE="$TERMINAL_EVIDENCE/staling-deposit"
           mkdir "$STALING_EVIDENCE"
-          "$SECRET_BUILDER" transfer "$WORK_DIR/staling-deposit-secrets.json" "$selected_lane" \
+          "$SECRET_BUILDER" transfer "$WORK_DIR/staling-deposit-secrets.json" \
+            --required-lane "$selected_lane" \
             >"$STALING_EVIDENCE/public-operation.json"
           [[ "$(file_mode "$WORK_DIR/staling-deposit-secrets.json")" == 600 ]] \
             || fail "staling deposit secret file mode is not 0600"
