@@ -17,7 +17,6 @@ use solana_signer::Signer;
 use solana_transaction::versioned::VersionedTransaction;
 
 const SCHEMA: &str = "aspis.v7.txv1-proof-upload-input.v1";
-const VERIFIER_PROGRAM: &str = "7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue";
 const HEADER_BYTES: u64 = 40;
 const CHUNK_BYTES: usize = 960;
 
@@ -32,6 +31,7 @@ struct Input {
     payer_keypair: String,
     proof_keypair: String,
     proof_payload: String,
+    verifier_program: String,
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {
@@ -104,7 +104,7 @@ fn main() -> Result<()> {
     let payload = fs::read(&input.proof_payload).context("read proof payload")?;
     ensure!(!payload.is_empty(), "empty proof payload");
     let payload_len = u32::try_from(payload.len()).context("proof payload too large")?;
-    let verifier = Pubkey::from_str(VERIFIER_PROGRAM)?;
+    let verifier = Pubkey::from_str(&input.verifier_program).context("invalid verifier program")?;
 
     let create = system_instruction::create_account(
         &payer.pubkey(),
