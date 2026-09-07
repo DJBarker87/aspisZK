@@ -308,6 +308,49 @@ fn prepare_deep(challenges: &V8A100TwoPointChallenges) -> Result<PreparedDeep, V
     })
 }
 
+#[inline(never)]
+fn validate_wire_component_vectors(
+    wire: &V8A100Wire<'_>,
+    challenges: &V8A100TwoPointChallenges,
+) -> Result<(), V8DeepError> {
+    if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
+        return Err(V8DeepError::ComponentVectorMismatch);
+    }
+    Ok(())
+}
+
+/// Decode one complete authenticated fibre and form all four gamma dots
+/// without materializing the 4-by-29 QM31 component matrix.
+///
+/// C1 values use the exact late M31 lift, while the three C2 components retain
+/// their native QM31 multiplication. Both loops preserve component order.
+#[inline(never)]
+fn decode_v8_query_gamma_dots_streaming(
+    query: V8A100QueryRecord<'_>,
+    powers: &[QM31; V8_A100_COMPONENTS],
+) -> Result<[QM31; V8_A100_FIBRE_SLOTS], V8DeepError> {
+    let c1 = decode_packed_m31_eight_aligned::<V6_C1_LIMBS_PER_QUERY>(query.c1_packed)?;
+    let c2 = decode_packed_m31_eight_aligned::<V6_C2_LIMBS_PER_QUERY>(query.c2_packed)?;
+    let mut combined = [QM31::ZERO; V8_A100_FIBRE_SLOTS];
+    for column in 0..V6_C1_COLUMNS {
+        for slot in 0..V8_A100_FIBRE_SLOTS {
+            combined[slot] = combined[slot]
+                .add(powers[column].mul_m31(M31(c1[slot * V6_C1_COLUMNS + column])));
+        }
+    }
+    for helper in 0..V6_C2_COLUMNS {
+        for slot in 0..V8_A100_FIBRE_SLOTS {
+            let limb = 4 * (helper * V8_A100_FIBRE_SLOTS + slot);
+            let value = QM31 {
+                c0: CM31::new(M31(c2[limb]), M31(c2[limb + 1])),
+                c1: CM31::new(M31(c2[limb + 2]), M31(c2[limb + 3])),
+            };
+            combined[slot] = combined[slot].add(powers[V6_C1_COLUMNS + helper].mul(value));
+        }
+    }
+    Ok(combined)
+}
+
 fn batch_inverse<const N: usize>(values: &[QM31; N]) -> Result<[QM31; N], V8DeepError> {
     let mut prefixes = [QM31::ONE; N];
     let mut product = QM31::ONE;
@@ -423,9 +466,7 @@ pub fn v8_deep_quotients_reference_wire(
     queries: [u32; V8_A100_QUERY_COUNT],
     challenges: &V8A100TwoPointChallenges,
 ) -> Result<[[QM31; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT], V8DeepError> {
-    if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
-        return Err(V8DeepError::ComponentVectorMismatch);
-    }
+    validate_wire_component_vectors(wire, challenges)?;
     let points = query_circle_points(queries)?;
     let mut output = [[QM31::ZERO; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
     for query in 0..V8_A100_QUERY_COUNT {
@@ -453,9 +494,7 @@ pub fn v8_deep_quotients_optimized_wire(
     queries: [u32; V8_A100_QUERY_COUNT],
     challenges: &V8A100TwoPointChallenges,
 ) -> Result<[[QM31; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT], V8DeepError> {
-    if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
-        return Err(V8DeepError::ComponentVectorMismatch);
-    }
+    validate_wire_component_vectors(wire, challenges)?;
     let mut prepared = prepare_deep(challenges)?;
     let points = query_circle_points(queries)?;
     let mut numerators = [[QM31::ZERO; V8_A100_FIBRE_SLOTS]; V8_A100_QUERY_COUNT];
@@ -523,10 +562,8 @@ pub fn v8_deep_quotients_heap_batched_in_place(
     if output.len() != V8_A100_QUERY_COUNT {
         return Err(V8DeepError::Wire(V6WireError::WrongLength));
     }
-    if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
-        return Err(V8DeepError::ComponentVectorMismatch);
-    }
-    let mut prepared = prepare_deep(challenges)?;
+    validate_wire_component_vectors(wire, challenges)?;
+    let prepared = prepare_deep(challenges)?;
     let slot_zero = selected_circle_fiber_points_shared(V8_A100_CIRCLE_DOMAIN_LOG_SIZE, &queries)
         .map_err(|_| V8DeepError::CircleGeometry)?;
     if slot_zero.len() != V8_A100_QUERY_COUNT {
@@ -539,25 +576,11 @@ pub fn v8_deep_quotients_heap_batched_in_place(
         let record = wire
             .query(query)
             .ok_or(V8DeepError::Wire(V6WireError::WrongLength))?;
-        let components = decode_v8_query_components_optimized(record)?;
+        let combined = decode_v8_query_gamma_dots_streaming(record, &prepared.powers)?;
         let points = circle_fibre_slots(base_point);
         for slot in 0..V8_A100_FIBRE_SLOTS {
-            let combined = if query == 0 && slot == 0 {
-                let shared = qm31_dot3(
-                    &prepared.powers,
-                    [
-                        &components[slot],
-                        &challenges.component_evaluations[0],
-                        &challenges.component_evaluations[1],
-                    ],
-                );
-                prepared.evaluations = [shared[1], shared[2]];
-                shared[0]
-            } else {
-                qm31_dot(&prepared.powers, &components[slot])
-            };
             let flat = query * V8_A100_FIBRE_SLOTS + slot;
-            numerators[flat] = combined.sub(two_point_interpolant(
+            numerators[flat] = combined[slot].sub(two_point_interpolant(
                 points[slot],
                 prepared.points,
                 prepared.evaluations,
@@ -595,10 +618,8 @@ pub fn v8_deep_quotients_pointwise_in_place(
     if output.len() != V8_A100_QUERY_COUNT {
         return Err(V8DeepError::Wire(V6WireError::WrongLength));
     }
-    if wire.component_ood_vectors() != Some(challenges.component_evaluations) {
-        return Err(V8DeepError::ComponentVectorMismatch);
-    }
-    let mut prepared = prepare_deep(challenges)?;
+    validate_wire_component_vectors(wire, challenges)?;
+    let prepared = prepare_deep(challenges)?;
     let slot_zero = selected_circle_fiber_points_shared(V8_A100_CIRCLE_DOMAIN_LOG_SIZE, &queries)
         .map_err(|_| V8DeepError::CircleGeometry)?;
     if slot_zero.len() != V8_A100_QUERY_COUNT {
@@ -609,24 +630,10 @@ pub fn v8_deep_quotients_pointwise_in_place(
         let record = wire
             .query(query)
             .ok_or(V8DeepError::Wire(V6WireError::WrongLength))?;
-        let components = decode_v8_query_components_optimized(record)?;
+        let combined = decode_v8_query_gamma_dots_streaming(record, &prepared.powers)?;
         let points = circle_fibre_slots(base_point);
         for slot in 0..V8_A100_FIBRE_SLOTS {
-            let combined = if query == 0 && slot == 0 {
-                let shared = qm31_dot3(
-                    &prepared.powers,
-                    [
-                        &components[slot],
-                        &challenges.component_evaluations[0],
-                        &challenges.component_evaluations[1],
-                    ],
-                );
-                prepared.evaluations = [shared[1], shared[2]];
-                shared[0]
-            } else {
-                qm31_dot(&prepared.powers, &components[slot])
-            };
-            let numerator = combined.sub(two_point_interpolant(
+            let numerator = combined[slot].sub(two_point_interpolant(
                 points[slot],
                 prepared.points,
                 prepared.evaluations,
