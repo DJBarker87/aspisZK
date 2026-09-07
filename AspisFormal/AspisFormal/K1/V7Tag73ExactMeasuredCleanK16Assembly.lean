@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactMeasuredK16Assembly
 import AspisFormal.K1.V7Tag73ExactCleanK13MeasuredComposition
 import AspisFormal.K1.V7Tag73ExactPairAdversaryProfileClosure
+import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
 
 /-!
 # Exact measured Tag-73 closure from the clean work-dependent q16 theorem
@@ -51,6 +52,8 @@ open AspisK1.V7Tag73ExactRestoredK15Events
 open AspisK1.V7Tag73ExactRestoredK15MeasuredAssembly
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13IdealErrorLedger
+open AspisK1.V7Tag73K13BoundChallengeClosure
+open AspisK1.V7Tag73K13PreQ16JointEventHandoff
 open AspisK1.V7Tag73K13K14EventComposition
 open AspisK1.V7Tag73K14K15IdealErrorLedger
 open AspisK1.V7Tag73K15ExactMeasureLedger
@@ -71,11 +74,11 @@ open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
 
-/-- Release-facing K1.2--K1.6 theorem with q16 discharged by the clean
-one-forest factorization.  The old adversary-profile premise is replaced by
-the canonical decoded-source certificate and the explicitly typed pre-final
-semantic-binding boundary.  The latter still requires collision-event or
-external-assumption discharge before release. -/
+/-- Release-facing K1.2--K1.6 theorem with q16 discharged by the corrected
+decoded-challenge binding and clean one-forest factorization.  The former
+alpha/gamma semantic invariants are no longer premises.  The sole remaining
+q16 bridge is a deterministic source inclusion from the production query
+event into the corrected pre-q16 chronological trial union. -/
 theorem exact_tag73_measured_clean_k16_aok_raw
     {HiddenTape TapeIdentity Observation Payload : Type}
     [Fintype HiddenTape]
@@ -108,6 +111,16 @@ theorem exact_tag73_measured_clean_k16_aok_raw
       projection fixedInstance decoder)
     (decodedSource : ExactFixedK13DecodedParsedSourceProvider transitionFuel
       configuration projection fixedInstance)
+    (q16TrialCover :
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+          projection fixedInstance ∩
+        exactTag73K13QueryEvent transitionFuel configuration projection
+          fixedInstance decoder) ⊆
+        (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+            projection fixedInstance ∩
+          ⋃ finalTrial : ExactCompilerExposureTrial parameters,
+            exactPreQ16K13JointTrialEvent transitionFuel configuration projection
+              fixedInstance decoder finalTrial))
     (transitionRoom : 3 ≤ transitionFuel)
     (driverCoversProtocol :
       tag73CanonicalDriverFuelCap ≤ configuration.machine.driverFuel)
@@ -122,12 +135,6 @@ theorem exact_tag73_measured_clean_k16_aok_raw
       (schedule : QuerySchedule),
       (exactOperationalTape input).frontierNodes schedule =
         semanticFrontierNodes schedule.positions)
-    (k12WordsInvariant :
-      ExactFixedCleanK13PairWordsInvariantOnAdversaryAnchors transitionFuel
-        configuration projection fixedInstance decoder)
-    (k13TranscriptInvariant :
-      ExactFixedCleanK13PairTranscriptInvariantOnAdversaryAnchors
-        transitionFuel configuration projection fixedInstance decoder)
     (reference : AdmittedResult SemanticCap203Admitted)
     (traceExists : Nonempty
       (FirstAdmittedTrace q16CandidateOutput SemanticCap203Admitted 64
@@ -182,17 +189,18 @@ theorem exact_tag73_measured_clean_k16_aok_raw
   have q16TransitionRoom : 2 ≤ transitionFuel :=
     le_trans (by decide : 2 ≤ 3) transitionRoom
   have q16SemanticBound :=
-    exact_fixed_clean_pair_k13_query_probability_le_one_forest_of_components
-      (decoder := decoder) hiddenLaw q16TransitionRoom programmedCover
-      decodedSource k12WordsInvariant k13TranscriptInvariant frontierExact reference
-      traceExists foldExposureCap finalExposureCap
+    exact_clean_preQ16_trial_union_probability_le_one_forest_of_bindings
+      (decoder := decoder) hiddenLaw decodedSource q16TransitionRoom
+      programmedCover frontierExact reference traceExists foldExposureCap
+      finalExposureCap
   have q16CleanBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
               projection fixedInstance ∩
             exactTag73K13QueryEvent transitionFuel configuration projection
             fixedInstance decoder) ≤ q16SemanticOneForestRawError :=
-    q16SemanticBound
+    (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
+      q16TrialCover |>.trans q16SemanticBound
   have k13Clean := exact_assembled_k13_clean_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance relation decoder
     decoderBinding k15 initialEncoderExact k13Source q16CleanBound oneFoldBound

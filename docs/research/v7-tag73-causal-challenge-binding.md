@@ -75,6 +75,10 @@ no `sorry`, `admit`, project-specific axiom, or `native_decide`.
 ## Remaining release integration
 
 Production source/Aeneas and CU evidence must be regenerated for profile
-revision 2, and the corrected K1.3 bound must be composed with the K1.4 and
-K1.5 operational bounds before the conditional K1.6 capstone becomes the full
-end-to-end theorem.  No release or deployment may reuse revision-1 artifacts.
+revision 2.  `V7Tag73ExactMeasuredCleanK16Assembly.lean` now consumes the
+corrected bound directly and no longer accepts the former alpha/gamma
+invariants.  Its remaining K1.3 source seam is one deterministic inclusion:
+the production q16 query event must be represented by the corrected pre-q16
+chronological trial union.  The K1.4 and K1.5 operational bounds must then be
+installed before the conditional K1.6 capstone becomes the full end-to-end
+theorem.  No release or deployment may reuse revision-1 artifacts.
