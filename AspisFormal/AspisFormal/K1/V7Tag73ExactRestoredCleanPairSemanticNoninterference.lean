@@ -26,6 +26,7 @@ open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73CausalFoldAlphaFinalWorkQ16Coordinates
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactAdversaryAnchorSelectedInputInvariant
+open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedInstanceEvent
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
@@ -38,6 +39,7 @@ open AspisK1.V7Tag73ExactFoldAlphaFinalWorkQ16RootRouting
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactPairCoordinateProfileInvariant
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
+open AspisK1.V7Tag73ExactFinal256DigestRootOrigin
 open AspisK1.V7Tag73ExactRestoredCleanPairFactorization
 open AspisK1.V7Tag73ExactRestoredQ16ResidualFactorization
 open AspisK1.V7Tag73ExactRestoredQ16SemanticNoninterference
@@ -49,14 +51,18 @@ open AspisK1.V7Tag73FoldAlphaPreFinalPrefix
 open AspisK1.V7Tag73FoldArmedPreFinalPrefix
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73OperationalOracleExposure
+open AspisK1.V7Tag73NoPairOccurrenceTrichotomy
 open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73ProjectedMachineNativeRequestPrefix
 open AspisK1.V7Tag73K12BudgetedSchedulerTree
+open AspisK1.V7Tag73IndexedControllerTraceAlignment
+open AspisK1.V7Tag73IndexedAlignedRecordReplay
 open AspisK1.V7Tag73Q16DigestDrawReindex
 open AspisK1.V7Tag73Q16FirstCompactUniformity
 open AspisK1.V7Tag73Q16RawENNRealProbability
 open AspisK1.V7Tag73Q16SemanticFrontierBridge
 open AspisK1.V7Tag73SchedulerNativePlainRomExperiment
+open AspisK1.V7Tag73SqueezeInputStateInjectivity
 open AspisK1.V7Tag73CanonicalOneFoldSchedule
 open AspisK1.V7Tag73RestoredK12CanonicalWordCongruence
 open AspisK1.V7Tag73RestoredDerivedK13View
@@ -444,6 +450,195 @@ theorem exact_restored_clean_pair_adversary_anchor_root_priors_eq
     leftAnswer, rightAnswer, rightActor, leftRootExact, rightRootExact,
     leftTrialExact, rightTrialExact, priorExact⟩
 
+/-- The actor-independent form used by later transcript-chain transport.  Both
+selected records come from the actual accepted source chronology retained by
+the restored witnesses. -/
+theorem exact_restored_clean_pair_selected_root_priors_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    ∃ leftPrior leftLater rightPrior rightLater leftActor rightActor
+        leftInput rightInput leftAnswer rightAnswer,
+      exactFixedRootRecords leftWitness.joint.input.package.root =
+        leftPrior ++
+          (.machineFresh leftActor leftInput leftAnswer :
+            UnifiedExposureRecord) :: leftLater ∧
+      exactFixedRootRecords rightWitness.joint.input.package.root =
+        rightPrior ++
+          (.machineFresh rightActor rightInput rightAnswer :
+            UnifiedExposureRecord) :: rightLater ∧
+      finalTrial.val = leftPrior.length ∧
+      finalTrial.val = rightPrior.length ∧
+      leftPrior = rightPrior := by
+  obtain ⟨leftPrior, leftLater, leftActor, leftInput, leftAnswer, _leftDigest,
+      _leftBase, _leftAbsorbActor, leftRootExact, leftTrialExact, _leftPrefix,
+      _leftPrefinal, _leftBaseExact, _leftAbsorbMember⟩ :=
+    exact_fixed_k13_actual_trial_has_selected_prefinal_prefix
+      leftWitness.joint.input finalTrial leftWitness.joint.actualTrial
+  obtain ⟨rightPrior, rightLater, rightActor, rightInput, rightAnswer,
+      _rightDigest, _rightBase, _rightAbsorbActor, rightRootExact,
+      rightTrialExact, _rightPrefix, _rightPrefinal, _rightBaseExact,
+      _rightAbsorbMember⟩ :=
+    exact_fixed_k13_actual_trial_has_selected_prefinal_prefix
+      rightWitness.joint.input finalTrial rightWitness.joint.actualTrial
+  obtain ⟨rightRemaining, rightTapeFromLeft⟩ :=
+    exact_fold_armed_coordinates_force_pre_final_tape_prefix
+      leftWitness.joint.input foldTrial finalTrial leftPrior
+      ((.machineFresh leftActor leftInput leftAnswer :
+        UnifiedExposureRecord) :: leftLater)
+      (by simpa only [List.cons_append] using leftRootExact) leftTrialExact
+      programmedCover right contextExact foldExact
+  rw [fold_alpha_final_work_q16_named_slot_tape_preserves_master_list]
+    at rightTapeFromLeft
+  have priorExact : leftPrior = rightPrior :=
+    exact_fixed_k13_selected_root_priors_eq_of_right_tape_prefix finalTrial
+      hidden left right leftWitness.joint.input rightWitness.joint.input
+      leftPrior leftLater rightPrior rightLater leftActor rightActor leftInput
+      rightInput leftAnswer rightAnswer leftRootExact rightRootExact
+      leftTrialExact rightTrialExact ⟨rightRemaining, rightTapeFromLeft⟩
+  exact ⟨leftPrior, leftLater, rightPrior, rightLater, leftActor, rightActor,
+    leftInput, rightInput, leftAnswer, rightAnswer, leftRootExact,
+    rightRootExact, leftTrialExact, rightTrialExact, priorExact⟩
+
+/-- Equal selected-root prefixes identify the same literal final-work SHA
+input and therefore the same pre-final transcript digest.  Input equality is
+obtained from aligned scheduler state, not from SHA injectivity. -/
+theorem exact_restored_clean_pair_selected_input_and_digest_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    ∃ selectedInput leftDigest rightDigest,
+      HasLiteralStatePrefix leftDigest selectedInput ∧
+      HasLiteralStatePrefix rightDigest selectedInput ∧
+      leftDigest = rightDigest ∧
+      ExactOperationalPrefinalDigest leftWitness.joint.input leftDigest ∧
+      ExactOperationalPrefinalDigest rightWitness.joint.input rightDigest := by
+  obtain ⟨leftPrior, leftLater, leftActor, leftInput, leftAnswer, leftDigest,
+      _leftBase, _leftAbsorbActor, leftRootExact, leftTrialExact, leftPrefix,
+      leftOrigin, _leftBaseExact, _leftAbsorbMember⟩ :=
+    exact_fixed_k13_actual_trial_has_selected_prefinal_prefix
+      leftWitness.joint.input finalTrial leftWitness.joint.actualTrial
+  obtain ⟨rightPrior, rightLater, rightActor, rightInput, rightAnswer,
+      rightDigest, _rightBase, _rightAbsorbActor, rightRootExact,
+      rightTrialExact, rightPrefix, rightOrigin, _rightBaseExact,
+      _rightAbsorbMember⟩ :=
+    exact_fixed_k13_actual_trial_has_selected_prefinal_prefix
+      rightWitness.joint.input finalTrial rightWitness.joint.actualTrial
+  obtain ⟨rightRemaining, rightTapeFromLeft⟩ :=
+    exact_fold_armed_coordinates_force_pre_final_tape_prefix
+      leftWitness.joint.input foldTrial finalTrial leftPrior
+      ((.machineFresh leftActor leftInput leftAnswer :
+        UnifiedExposureRecord) :: leftLater)
+      (by simpa only [List.cons_append] using leftRootExact) leftTrialExact
+      programmedCover right contextExact foldExact
+  rw [fold_alpha_final_work_q16_named_slot_tape_preserves_master_list]
+    at rightTapeFromLeft
+  have priorExact : leftPrior = rightPrior :=
+    exact_fixed_k13_selected_root_priors_eq_of_right_tape_prefix finalTrial
+      hidden left right leftWitness.joint.input rightWitness.joint.input
+      leftPrior leftLater rightPrior rightLater leftActor rightActor leftInput
+      rightInput leftAnswer rightAnswer leftRootExact rightRootExact
+      leftTrialExact rightTrialExact ⟨rightRemaining, rightTapeFromLeft⟩
+  let controller := exactDagTrialController transitionFuel finalTrial
+  let initial := exactDagCandidateInitialState leftWitness.joint.input
+  have leftAlignedRaw := exact_root_records_aligned_for_dag_controller
+    leftWitness.joint.input finalTrial.val
+  have rightAlignedRaw := exact_root_records_aligned_for_dag_controller
+    rightWitness.joint.input finalTrial.val
+  have leftAligned : IndexedRecordsAligned transitionFuel controller initial
+      (exactFixedRootRecords leftWitness.joint.input.package.root) := by
+    simpa [controller, initial, exactDagTrialController] using leftAlignedRaw
+  have rightAligned : IndexedRecordsAligned transitionFuel controller initial
+      (exactFixedRootRecords rightWitness.joint.input.package.root) := by
+    simpa [controller, initial, exactDagTrialController,
+      exactDagCandidateInitialState] using rightAlignedRaw
+  have leftSelectedAligned := leftAligned leftPrior
+    (.machineFresh leftActor leftInput leftAnswer) leftLater leftRootExact
+  have rightSelectedAligned := rightAligned rightPrior
+    (.machineFresh rightActor rightInput rightAnswer) rightLater rightRootExact
+  have leftInputExact := aligned_machine_record_has_exact_input transitionFuel
+    (indexedStateAfterRecords transitionFuel controller leftPrior initial).cursor
+    leftActor leftInput leftAnswer leftSelectedAligned
+  have rightInputExact := aligned_machine_record_has_exact_input transitionFuel
+    (indexedStateAfterRecords transitionFuel controller rightPrior initial).cursor
+    rightActor rightInput rightAnswer rightSelectedAligned
+  have selectedInputExact : leftInput = rightInput := by
+    rw [priorExact] at leftInputExact
+    exact Option.some.inj (leftInputExact.symm.trans rightInputExact)
+  have digestExact : leftDigest = rightDigest := by
+    apply digest_bytes_injective
+    calc
+      bytes leftDigest = leftInput.take 32 := leftPrefix
+      _ = rightInput.take 32 := by rw [selectedInputExact]
+      _ = bytes rightDigest := rightPrefix.symm
+  refine ⟨leftInput, leftDigest, rightDigest, leftPrefix, ?_, digestExact,
+    leftOrigin, rightOrigin⟩
+  simpa [selectedInputExact] using rightPrefix
+
 /-- The only chronology branch still requiring a source proof: the selected
 final-work input was first exposed by the adversary and later read by the
 verifier as an immutable cache hit. -/
@@ -673,6 +868,8 @@ theorem exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
   exact_restored_clean_pair_verifier_anchor_preserves_prover_runtime
 #print axioms exact_restored_clean_pair_verifier_anchor_semantics_eq
 #print axioms exact_restored_clean_pair_adversary_anchor_root_priors_eq
+#print axioms exact_restored_clean_pair_selected_root_priors_eq
+#print axioms exact_restored_clean_pair_selected_input_and_digest_eq
 #print axioms exact_restored_clean_k13_pair_coordinate_invariant_of_semantic
 #print axioms
   exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
