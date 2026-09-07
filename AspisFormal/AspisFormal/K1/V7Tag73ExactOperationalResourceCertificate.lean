@@ -257,7 +257,7 @@ theorem completed_root_query_counts_le_stage_fuels
       ConcreteRestorationNode.verifierHistory, operationalRootRuntime] using
         verifierBound
 
-/-- The root query counts satisfy the exact `Q` and deployed-1511 caps from
+/-- The root query counts satisfy the exact `Q` and deployed-1513 caps from
 `ExactPlainRomOperationalBounds`. -/
 theorem completed_root_query_counts_le_parameters
     {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
@@ -336,7 +336,7 @@ theorem completed_full_client_accumulator_caps
     (transitionPositive : 0 < transitionFuel) :
     completed.clientRun.accumulator.oracleQueryTotal ≤
         configuration.restorationFuel *
-          (2 * parameters.q1ShaCallCap + 1511) ∧
+          (2 * parameters.q1ShaCallCap + 1513) ∧
       completed.clientRun.accumulator.uniformForkCoordinateTotal ≤
         2 * configuration.restorationFuel ∧
       completed.clientRun.accumulator.programmedPointTotal ≤
@@ -379,7 +379,7 @@ theorem completed_full_client_accumulator_caps_at_R
     (transitionPositive : 0 < transitionFuel) :
     completed.clientRun.accumulator.oracleQueryTotal ≤
         parameters.forkRequestCap *
-          (2 * parameters.q1ShaCallCap + 1511) ∧
+          (2 * parameters.q1ShaCallCap + 1513) ∧
       completed.clientRun.accumulator.uniformForkCoordinateTotal ≤
         2 * parameters.forkRequestCap ∧
       completed.clientRun.accumulator.programmedPointTotal ≤
@@ -436,7 +436,7 @@ theorem completed_operational_runtime_steps_le_cap
   have client := (completed_full_client_accumulator_caps_at_R transitionFuel
     configuration sample rootRuntime completed transitionPositive).1
   have perRestoration :
-      2 * parameters.q1ShaCallCap + 1511 ≤
+      2 * parameters.q1ShaCallCap + 1513 ≤
         2 * parameters.sameTapeStartRuntimeCap +
           parameters.replayVerifierRuntimeCap := by
     simpa [deployedFull256VerifierCallCap] using
@@ -562,11 +562,11 @@ theorem completed_full_run_has_exact_operational_resource_certificate
   have traceCaps := run_exact_plain_rom_trace_has_M_and_2R_caps transitionFuel
     configuration sample transitionRoom
   have rootVerifierCap :
-      completedRootVerifierQueryCount completed ≤ 1511 := by
+      completedRootVerifierQueryCount completed ≤ 1513 := by
     simpa [deployedFull256VerifierCallCap] using rootCaps.2
   have clientQueryCap : completedClientOracleQueryCount completed ≤
       parameters.forkRequestCap *
-        (2 * parameters.q1ShaCallCap + 1511) := by
+        (2 * parameters.q1ShaCallCap + 1513) := by
     simpa [completedClientOracleQueryCount] using clientCaps.1
   have globalQueries : completedRootQ1QueryCount completed +
         completedRootVerifierQueryCount completed +

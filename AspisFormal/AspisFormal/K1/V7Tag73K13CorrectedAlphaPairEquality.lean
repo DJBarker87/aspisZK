@@ -1,6 +1,6 @@
 import AspisFormal.K1.V7Tag73ExactFoldArmedAlphaChainDisposition
 import AspisFormal.K1.V7Tag73ExactPairAlphaHybridEquality
-import AspisFormal.K1.V7Tag73K13CorrectedAlphaGammaClosure
+import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
 
 /-!
 # Corrected K1.3 alpha pair equality
@@ -33,7 +33,7 @@ open AspisK1.V7Tag73ExactFoldAlphaFinalWorkQ16RootRouting
 open AspisK1.V7Tag73ExactFoldArmedAlphaChainDisposition
 open AspisK1.V7Tag73ExactPairAlphaHybridEquality
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
-open AspisK1.V7Tag73K13CorrectedAlphaGammaClosure
+open AspisK1.V7Tag73K13BoundChallengeClosure
 open AspisK1.V7Tag73K13CorrectedPairTrialProbability
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
@@ -229,49 +229,9 @@ theorem exact_preQ16_clean_pair_alpha_zero_eq_of_fold_priors_eq
           right).1) :
     exactOperationalChallenge leftWitness.joint.input (.alpha 0) =
       exactOperationalChallenge rightWitness.joint.input (.alpha 0) := by
-  let leftFold := exactAcceptedFoldTrial leftWitness.joint.input
-  let rightFold := exactAcceptedFoldTrial rightWitness.joint.input
-  obtain ⟨initialExact, advancesExact, lengthsExact, _pointwise⟩ :=
-    exact_preQ16_clean_pair_accepted_fold_alpha_advance_states_eq
-      transitionRoom foldTrial finalTrial hidden left right leftWitness
-        rightWitness jointPriorExact
-  have leftTrace := exact_accepted_fold_alpha_output_dispositions
-    transitionRoom programmedCover leftWitness.joint.input leftFold finalTrial
-  have rightTrace := exact_accepted_fold_alpha_output_dispositions
-    transitionRoom programmedCover rightWitness.joint.input rightFold finalTrial
-  have outputsExact : leftFold.alphaOutputs = rightFold.alphaOutputs :=
-    exact_pair_fold_alpha_output_dispositions_eq hidden left right
-      leftWitness.joint.input rightWitness.joint.input foldTrial finalTrial
-      leftFold rightFold leftWitness.foldExact rightWitness.foldExact
-      leftFold.prior rightFold.prior foldPriorExact
-      (fun _ member => member) (fun _ member => member)
-      (by
-        intro record member
-        rw [leftFold.rootDecomposition]
-        exact List.mem_append_left _ member)
-      (by
-        intro record member
-        rw [rightFold.rootDecomposition]
-        exact List.mem_append_left _ member)
-      contextExact leftTrace rightTrace initialExact advancesExact
-  have pointwise : ∀ index (leftBound : index < leftFold.alphaOutputs.length),
-      let rightBound : index < rightFold.alphaOutputs.length := by
-        simpa only [outputsExact] using leftBound
-      leftFold.alphaOutputs[index] = rightFold.alphaOutputs[index] := by
-    intro index leftBound
-    simpa [outputsExact]
-  exact exact_operational_alpha_zero_eq_of_pointwise_outputs
-    leftWitness.joint.input rightWitness.joint.input leftFold.alphaOutputs
-      rightFold.alphaOutputs
-      ((exactOperationalTape leftWitness.joint.input).messages.challengeValue
-        (.alpha 0))
-      ((exactOperationalTape rightWitness.joint.input).messages.challengeValue
-        (.alpha 0))
-      leftFold.alphaExactValue rightFold.alphaExactValue lengthsExact pointwise
-      leftFold.alphaAccepted rightFold.alphaAccepted leftFold.alphaExactDecode
-      rightFold.alphaExactDecode (by
-        simpa [exactOperationalChallenge] using leftFold.alphaOperational)
-      (by simpa [exactOperationalChallenge] using rightFold.alphaOperational)
+  exact exact_preQ16_clean_pair_alpha_zero_eq_of_binding transitionRoom
+    foldTrial finalTrial hidden left right leftWitness rightWitness
+      jointPriorExact
 
 #print axioms exact_pair_fold_alpha_output_dispositions_eq
 #print axioms exact_preQ16_clean_pair_alpha_zero_eq_of_fold_priors_eq

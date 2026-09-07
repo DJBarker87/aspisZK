@@ -212,7 +212,7 @@ theorem exact_fixed_k13_actual_trial_has_alpha_zero_terminal_profile
     (trial : ExactCompilerExposureTrial parameters)
     (actual : ExactFixedK13ActualJointTrial input trial) :
     ∃ (producerInput : ShaInput)
-        (beforeAlpha afterAlpha afterBlocks afterFinal256 : EvalState)
+        (beforeAlpha afterAlphaSample afterAlpha afterBlocks afterFinal256 : EvalState)
         (outputs advances : List Digest256) (exactValue : QM31Exact)
         (prefinalDigest : Digest256),
       ExactRootOrderedQ16Chain input producerInput beforeAlpha.digest
@@ -220,28 +220,37 @@ theorem exact_fixed_k13_actual_trial_has_alpha_zero_terminal_profile
       0 < outputs.length ∧
       advances.length = outputs.length ∧
       afterBlocks.digest = gammaTerminalDigest beforeAlpha.digest advances ∧
-      afterAlpha.digest = afterBlocks.digest ∧
+      afterAlphaSample.digest = afterBlocks.digest ∧
+      tableLookup (exactOperationalTable input)
+          (bytes afterAlphaSample.digest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+              ((exactOperationalTape input).messages.challengeValue
+                (.alpha 0))).data) =
+        some afterAlpha.digest ∧
       afterFinal256.digest = prefinalDigest ∧
       ExactOperationalPrefinalDigest input prefinalDigest ∧
       decodeTagQM31ExactLE
           ((exactOperationalTape input).messages.challengeValue (.alpha 0)) =
         some exactValue ∧
       exactOperationalChallenge input (.alpha 0) = exactValue := by
-  obtain ⟨producerInput, _final256Input, beforeAlpha, afterAlpha, afterBlocks,
-      afterFinal256, outputs, advances, exactValue, _workAnswer, q16Base,
+  obtain ⟨producerInput, _final256Input, beforeAlpha, afterAlphaSample,
+      afterAlpha, afterBlocks, afterFinal256, outputs, advances, exactValue,
+      _workAnswer, q16Base,
       _producerLookup, _producerBoundary, ordered, _outputsLength,
       outputsPositive,
-      advancesLength, terminalExact, afterAlphaExact, _final256InputExact,
-      _final256Lookup, _workLookup, _workAccepted, finalNonceLookup,
+      advancesLength, terminalExact, afterAlphaSampleExact, alphaBindLookup,
+      _final256InputExact, _final256Lookup, _workLookup, _workAccepted,
+      finalNonceLookup,
       q16BaseExact, _acceptedParameter, exactDecode, operationalExact⟩ :=
     exact_compiler_alpha_zero_chain_has_root_order transitionRoom input
   obtain ⟨prefinalDigest, prefinalOrigin, prefinalExact⟩ :=
     exact_fixed_k13_actual_trial_prefinal_eq_of_q16_base_lookup input trial
       actual afterFinal256.digest q16Base finalNonceLookup q16BaseExact
-  exact ⟨producerInput, beforeAlpha, afterAlpha, afterBlocks, afterFinal256,
-    outputs, advances, exactValue, prefinalDigest, ordered, outputsPositive,
-    advancesLength, terminalExact, afterAlphaExact, prefinalExact,
-    prefinalOrigin, exactDecode, operationalExact⟩
+  exact ⟨producerInput, beforeAlpha, afterAlphaSample, afterAlpha, afterBlocks,
+    afterFinal256, outputs, advances, exactValue, prefinalDigest, ordered,
+    outputsPositive, advancesLength, terminalExact, afterAlphaSampleExact,
+    alphaBindLookup, prefinalExact, prefinalOrigin, exactDecode,
+    operationalExact⟩
 
 #print axioms exact_fixed_k13_actual_trial_prefinal_eq_of_q16_base_lookup
 #print axioms exact_fixed_k13_actual_trial_has_alpha_zero_terminal_profile

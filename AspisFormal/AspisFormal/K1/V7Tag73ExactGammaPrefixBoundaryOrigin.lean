@@ -81,7 +81,8 @@ theorem exact_operational_batch_nonce_produces_gamma_digest
       (exactOperationalTable input)
       (beforeGammaTailEvents (exactOperationalTape input).messages)
       (challengeEvent (exactOperationalTape input).messages .gamma ::
-        ([.absorb (.inactiveClaim
+        ([challengeBindEvent (exactOperationalTape input).messages .gamma,
+          .absorb (.inactiveClaim
             (exactOperationalTape input).messages.inactiveClaim),
           challengeEvent (exactOperationalTape input).messages .kappa] ++
           oodEvents (exactOperationalTape input).messages ++
@@ -92,6 +93,7 @@ theorem exact_operational_batch_nonce_produces_gamma_digest
            .absorb (.foldNonce
             (exactOperationalTape input).messages.foldGrinding.selected),
            challengeEvent (exactOperationalTape input).messages (.alpha 0),
+           challengeBindEvent (exactOperationalTape input).messages .alphaZero,
            .absorb (.final256
             (exactOperationalTape input).messages.finalValues),
            .grind .final (exactOperationalTape input).messages.finalGrinding,
@@ -165,7 +167,8 @@ theorem exact_operational_batch_nonce_and_gamma_chain
       (exactOperationalTable input)
       (beforeGammaTailEvents (exactOperationalTape input).messages)
       (challengeEvent (exactOperationalTape input).messages .gamma ::
-        ([.absorb (.inactiveClaim
+        ([challengeBindEvent (exactOperationalTape input).messages .gamma,
+          .absorb (.inactiveClaim
             (exactOperationalTape input).messages.inactiveClaim),
           challengeEvent (exactOperationalTape input).messages .kappa] ++
           oodEvents (exactOperationalTape input).messages ++
@@ -176,6 +179,7 @@ theorem exact_operational_batch_nonce_and_gamma_chain
            .absorb (.foldNonce
             (exactOperationalTape input).messages.foldGrinding.selected),
            challengeEvent (exactOperationalTape input).messages (.alpha 0),
+           challengeBindEvent (exactOperationalTape input).messages .alphaZero,
            .absorb (.final256
             (exactOperationalTape input).messages.finalValues),
            .grind .final (exactOperationalTape input).messages.finalGrinding,
