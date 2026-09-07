@@ -1,5 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [non-polynomial recovery continuation](robust-recovery-review.md).
+A new Lean bounded-corruption game covers bad anchor boundaries and adaptive
+off-anchor finals without assuming the received word is polynomial. At B=9301
+the local error is 105.1452784160 bits; no-close-anchor and good-anchor/same-final
+unextracted mass remain unbounded. An isolated complete relation suffix now
+checks real canonical/Merkle openings and carried image weights, but is not a
+payment verifier or CU/ZK certificate. See [exact ledger](robust-results.json),
+[evidence and commands](robust-evidence.json). Body maximum remains 40,282 bytes.
+
 Latest: [joint image/relation review](joint-image-review.md). A new Lean causal
 game proves the restricted exact-polynomial/invalid-image bound, 118.4150 bits
 at q22 under ideal sampling, including adaptive finals and sequential responses.

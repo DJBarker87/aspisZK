@@ -1,5 +1,13 @@
 # Decision: no investigated candidate is green on all requirements
 
+Latest: [robust-recovery-review.md](robust-recovery-review.md) gives new
+quantitative treatment of bounded-corruption non-polynomial words and adaptive
+off-anchor finals, plus an executable image-aware research relation suffix.
+The 105.1453-bit local bound is not global recovery: no-close-anchor and
+good-anchor/same-final extraction failures remain unbounded. Canonical body
+maximum stays 40,282 bytes; source refinement, full-view ZK, FS and CU parity
+are not established. [Exact ledger](robust-results.json), [evidence](robust-evidence.json).
+
 Latest: [joint-image-review.md](joint-image-review.md) proves a restricted
 causal ideal-game bound for exact polynomial quotients with invalid image:
 118.4150 bits at q22 with a fresh image-aware relation gate. The pinned V8
