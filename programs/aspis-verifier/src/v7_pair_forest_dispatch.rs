@@ -78,10 +78,31 @@ const VERIFIER_ENTRY_V2_SEED: &[u8] = b"aspis-verifier-entry-v2";
 // generated mainnet Pool/registry/policy constants replace them in release
 // evidence; accepting values named by the request/master would be forgeable
 // under direct verifier invocation.
-#[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
+#[cfg(all(
+    feature = "v7-pair-forest-lane-invariant-audit",
+    not(feature = "v7-pair-forest-public-devnet-identity-audit")
+))]
 const PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1: [u8; 32] = [0x41; 32];
-#[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
+#[cfg(all(
+    feature = "v7-pair-forest-lane-invariant-audit",
+    not(feature = "v7-pair-forest-public-devnet-identity-audit")
+))]
 const PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1: [u8; 32] = [0x44; 32];
+
+// Immutable research deployments on public devnet. This capability changes
+// only the authenticated Pool/Registry identities; policy bytes, account
+// validation, statement reconstruction, transcript, proof relation and
+// verifier execution are identical to the ordinary invariant-audit build.
+#[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
+const PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1: [u8; 32] = [
+    0xef, 0xca, 0x7e, 0xf3, 0x31, 0x09, 0xdd, 0xf8, 0x3a, 0x61, 0x0f, 0x18, 0xbb, 0x0f, 0x2f, 0xe7,
+    0x98, 0xc5, 0x7c, 0x7c, 0x4e, 0xb9, 0x4f, 0xeb, 0xb7, 0x02, 0xab, 0xd1, 0xa0, 0x23, 0xcc, 0xdf,
+];
+#[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
+const PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1: [u8; 32] = [
+    0xa9, 0x96, 0xed, 0xcc, 0xd1, 0x27, 0x24, 0x7d, 0xe2, 0x1d, 0x3d, 0xce, 0xfe, 0xfe, 0x2d, 0xed,
+    0x64, 0xcf, 0x62, 0x66, 0x3b, 0xfe, 0x6c, 0xed, 0x3d, 0x0a, 0x16, 0xba, 0x66, 0x8b, 0xbe, 0xba,
+];
 #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
 const PAIR_FOREST_INVARIANT_POLICY_BINDING_AUDIT_V1: [u8; 32] = [7; 32];
 
@@ -1115,6 +1136,30 @@ mod tests {
     const STRICT_WORK_TRANSFER_NONCES: [u64; 3] = [41_330_364_500, 516_418_238, 29_526_748_214];
     const STRICT_WORK_TRANSFER_FRONTIER_NODES: usize = 201;
 
+    #[test]
+    fn configured_invariant_identity_capability_is_exact() {
+        let pool = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1);
+        let registry = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1);
+
+        #[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
+        {
+            assert_eq!(
+                pool.to_string(),
+                "H93Xdk81pavjXwmNBSFeDbfndBxpyD3X43Bp7P2XpJYW"
+            );
+            assert_eq!(
+                registry.to_string(),
+                "CR1PE8CVHdqkfPwSDGQUph22AK23n5S9wciZvdYxpn8h"
+            );
+        }
+
+        #[cfg(not(feature = "v7-pair-forest-public-devnet-identity-audit"))]
+        {
+            assert_eq!(pool, fixed_pubkey(0x41));
+            assert_eq!(registry, fixed_pubkey(0x44));
+        }
+    }
+
     fn digest(seed: u32) -> aspis_statement::Digest {
         core::array::from_fn(|index| M31(seed + 17 * index as u32))
     }
@@ -1168,10 +1213,11 @@ mod tests {
 
     fn strict_transfer_context() -> StrictTransferContext {
         let verifier = crate::id();
-        let pool_program = fixed_pubkey(0x41);
+        let pool_program = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1);
         let mint = fixed_pubkey(0x42);
         let token_program = fixed_pubkey(0x43);
-        let registry_program = fixed_pubkey(0x44);
+        let registry_program =
+            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1);
         let proof_key = fixed_pubkey(0x45);
         let master_key =
             Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
@@ -1885,8 +1931,9 @@ mod tests {
     #[test]
     fn immutable_registry_v2_release_certificate_authenticates_fail_closed() {
         let verifier_program = crate::id();
-        let pool_program = fixed_pubkey(0x41);
-        let registry_program = fixed_pubkey(0x44);
+        let pool_program = Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1);
+        let registry_program =
+            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1);
         let loader = bpf_loader_upgradeable::id();
         let master_key = fixed_pubkey(0x71);
         let registry_key = Pubkey::find_program_address(
