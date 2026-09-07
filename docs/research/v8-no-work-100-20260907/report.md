@@ -1,5 +1,11 @@
 # Decision: no investigated candidate is green on all requirements
 
+Latest: [Lean repair review](lean-repair-review.md) proves the symbolic
+fixed-target wrong-query-support bound and instantiates the root-product/zero
+reference family. It does not prove adaptive extraction, full-view ZK or CU
+parity. The small accepted-discarded-branch countermodel remains a coverage
+regression. The primary q22 and out-of-budget q23/quintic controls are unchanged.
+
 Latest: [coverage-review.md](coverage-review.md) reproduces the recovery-review
 ZIP and adds QM31 q23 / quintic q22 controls. The relaxed joint-family cap and
 existence theorem is now proved at 38,228 symbols, with no old-decoder filter;
@@ -16,8 +22,9 @@ refutes the unconditional 2,800-root replacement even when both agreement gates
 are passed. This does not establish a sub-100-bit forgery.
 
 Primary research: **QM31 two-point OOD with query-aware adaptive recovery**.
-Fallback control is now **full quintic q21**, accepting that its canonical model
-misses the user's allowance by 1,410 bytes. This supersedes the initial octic
+Better-margin fallback control is **full quintic q22**, whose canonical model
+misses the user's allowance by 2,702 bytes; q21 is the thinner +1,410-byte control.
+This supersedes the initial octic
 fallback ranking: quintic retains the older recovery architecture without a
 selective subfield-descent theorem or multi-gigabyte dense arrays. It still needs
 the theorem/source port and measured CU. The initial screen below is retained

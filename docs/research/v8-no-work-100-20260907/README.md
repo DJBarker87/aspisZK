@@ -1,5 +1,12 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest continuation: [Lean repair ZIP review](lean-repair-review.md). The generic
+fixed-target query-support theorem and root-product instance are kernel-checked;
+the actual adaptive discarded-branch coverage remains unresolved. All supplied
+finite checks reproduce. Tag-73's general prior-plus-query batch costs q roots,
+not automatically q-1. See [exact results](lean-repair-results.json) and
+[formal/execution evidence](lean-repair-evidence.json).
+
 Latest continuation: [recovery ZIP review and adaptive-cover investigation](coverage-review.md).
 All 46,875 supplied cases and new q23/quintic controls reproduce. A focused Lean
 result now constructs a <=100 joint-tuple family at the relaxed 38,228-symbol
@@ -19,8 +26,8 @@ sub-100-bit forgery or a proof that a repaired protocol is impossible.
 14,739 tiny exhaustive query cases, 255 fold cases and eight axiom-free finite
 Lean arithmetic facts. The fixed-target query-aware bound is promising but does
 not establish adaptive target existence. Primary research remains QM31 q22;
-the fallback control is now full quintic q21 with its explicit 1,410-byte miss
-against the accepted allowance.
+the better-margin fallback control is quintic q22 (+2,702 bytes), while quintic
+q21 remains the thin-margin control (+1,410 bytes).
 
 Latest decisive finding: [recovery-counterexample.md](recovery-counterexample.md)
 refutes the unconditional 28-gamma recovery shortcut. The 99.246-bit isolated
