@@ -190,7 +190,11 @@ theorem submit_next_raw_message_preserves_q16_slot_invariant
   cases decoded : environment.decoders.qm31Parameter id
       (outputs ++ [output]) with
   | some value =>
-      simp [processFutureFreeChallengeBlock, decoded]
+      simp only [processFutureFreeChallengeBlock, decoded]
+      split
+      · exact complete_future_free_challenge_q16_slot_bound
+          environment snapshot id value remaining nextCore
+      · simp [Q16SnapshotSlotBound, Q16ControlSlotBound]
   | none =>
       by_cases belowCap :
           (outputs ++ [output]).length < samplerBlockCap (samplerMode id)

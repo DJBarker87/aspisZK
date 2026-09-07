@@ -224,20 +224,30 @@ theorem process_challenge_block_preserves_k13_challenge_invariant
       required_k13_challenge_records_transport rfl afterAppend
     have ordinary := linear_or_done_has_required_challenge_records
       completedBase remaining completedRequired
-    cases id <;> simp only [completeFutureFreeChallenge]
-    all_goals try simpa [completedBase] using ordinary
-    case circlePoint sample =>
-      split
-      · trivial
-      · exact snapshot_k13_challenge_invariant_transport
-          (before := { completedBase with control := linearOrDone remaining })
-          (after := { snapshot with
-            control := linearOrDone remaining
-            core := nextCore
-            decodedChallenges := snapshot.decodedChallenges ++
-              [{ id := .circlePoint sample, value := encoded }]
-            circlePoints := snapshot.circlePoints ++ [_] })
-          rfl rfl ordinary
+    cases binding : challengeBindingPayload? id encoded with
+    | none =>
+        simp only [binding]
+        cases id <;> simp only [completeFutureFreeChallenge]
+        all_goals try simpa [completedBase] using ordinary
+        case circlePoint sample =>
+          split
+          · trivial
+          · exact snapshot_k13_challenge_invariant_transport
+              (before := { completedBase with control := linearOrDone remaining })
+              (after := { snapshot with
+                control := linearOrDone remaining
+                core := nextCore
+                decodedChallenges := snapshot.decodedChallenges ++
+                  [{ id := .circlePoint sample, value := encoded }]
+                circlePoints := snapshot.circlePoints ++ [_] })
+              rfl rfl ordinary
+    | some payload =>
+        simp only [binding]
+        apply required_k13_challenge_records_transport
+          (before := completedBase) (after := _)
+        · cases id <;> simp [completeFutureFreeChallenge, completedBase]
+          split <;> rfl
+        · exact completedRequired
   next noValue =>
     split
     · exact required

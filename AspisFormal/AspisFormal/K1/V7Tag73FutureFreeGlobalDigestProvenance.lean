@@ -351,7 +351,7 @@ theorem apply_action_work_erased_preserves_path_origins
       output nextCore).core = nextCore := by
   simp only [processFutureFreeChallengeBlock]
   split
-  · simp
+  · split <;> simp only [complete_future_free_challenge_core]
   · split <;> rfl
 
 @[simp] theorem process_future_free_candidate_block_core
