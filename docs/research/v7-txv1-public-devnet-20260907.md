@@ -1,5 +1,10 @@
 # V7 TxV1 public-devnet lifecycle attempt — 2026-09-07
 
+> Historical first attempt. The identity blocker below was subsequently closed
+> by a new immutable public-devnet-test-only verifier and fresh proofs. See
+> `v7-txv1-public-devnet-identity-fix-20260907.md`. This file and its raw failed
+> simulation evidence remain unchanged in substance and are not relabelled.
+
 Classification: **PUBLIC DEVNET FEATURE ACTIVE; BLOCKED BY IDENTITY/ARTIFACT**
 
 This is not a finalized combined lifecycle measurement. Public devnet accepted the real setup transactions and proof-account upload, but the exact terminal TxV1 simulation failed the deployed verifier's compile-time Pool/Registry identity gate. The terminal wire was not submitted. `PUBLIC FINALIZED DEVNET LIFECYCLE COMPLETE` and `MAINNET READY` are both false.
