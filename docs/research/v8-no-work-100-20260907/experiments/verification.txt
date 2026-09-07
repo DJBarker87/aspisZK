@@ -1,0 +1,30 @@
+Source baseline: 4c91f97ac6576201f90d41c2a575e54c026e3796
+Date: 2026-09-07
+
+python3 experiments/feasibility.py --test: exit 0
+Exhaustive small-tree distributions, binomial/product checks and wire identity passed.
+python3 experiments/independent_fields.py: exit 0
+Independent prime-field polynomial certificates passed.
+
+set -o pipefail; /usr/bin/time -l python3 experiments/feasibility.py | diff - candidates.json
+Final exit: 0; no diff.
+Wall: 1.40 seconds; peak RSS: 22,560,768 bytes; swaps: 0.
+An earlier byte comparison failed only because JS reserialization changed
+0.0/1.0 and exponent spelling. The retained artifact now preserves the
+generator's exact original bytes; no arithmetic parameter changed for this fix.
+
+Production field wrapper: 32 passed, 0 failed; exit 0.
+Exact invocation and resource log: production-field-tests.log and ../README.md.
+Optimized extension/hint checks: exit 0; fields.log.
+Optimized SHA-256 schedule search: exit 0; schedules.log.
+rustfmt --edition 2021 --config skip_children=true --check: exit 0.
+git diff --check: exit 0.
+
+Formal proof/#print axioms: not run; no Lean files changed; not a formal release.
+SBF/full-transaction V8 CU: not run; no surviving complete Gate-1 design or
+authorized matched Linux build environment. No extrapolated transaction CU.
+Actual full V8 proving time/peak RSS: unmeasured.
+
+Public PDF downloads totaled 3,536,639 bytes for the four locally inspected PDFs.
+These are research network reads, not proof/witness upload or prover traffic.
+No private data was transmitted to external research services.
