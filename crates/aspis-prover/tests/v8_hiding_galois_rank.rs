@@ -9,6 +9,7 @@ use aspis_core::{
     v8_a100::V8_A100_MAX_FRONTIER_FIXTURE,
 };
 use aspis_prover::state_only_hiding_rank::{
+    probe_v8_a100_pool_v1_pair_forest_root_message_hiding_rank,
     probe_v8_a100_pool_v1_pair_root_message_hiding_rank, StateOnlyHidingRankGateError,
 };
 
@@ -75,6 +76,22 @@ fn conjugate_pair_schedule() -> StateOnlyTranscriptScheduleResult {
 fn v8_pair_ambient_rank_rejects_legal_frobenius_pair() {
     assert_eq!(
         probe_v8_a100_pool_v1_pair_root_message_hiding_rank(&conjugate_pair_schedule()),
+        Err(StateOnlyHidingRankGateError::RawC1Rank {
+            column: 0,
+            got: 104,
+            want: 108,
+        })
+    );
+}
+
+/// The pair-forest registry hits the same exact obstruction.  The failure is
+/// independent of the statement layout because it occurs in the common C1
+/// two-OOD raw block before the later mask/source containment calculation.
+#[test]
+#[ignore = "optimized exact host rank replay; run explicitly"]
+fn v8_pair_forest_ambient_rank_rejects_legal_frobenius_pair() {
+    assert_eq!(
+        probe_v8_a100_pool_v1_pair_forest_root_message_hiding_rank(&conjugate_pair_schedule()),
         Err(StateOnlyHidingRankGateError::RawC1Rank {
             column: 0,
             got: 104,
