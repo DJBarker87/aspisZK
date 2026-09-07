@@ -64,6 +64,7 @@ mod state_only_native_full_x_affine_rank;
 mod state_only_reduced_high_switch_rank;
 mod state_only_two_variable_slice_rank;
 mod state_only_variable_permutation_rank;
+mod v8_per_c1_image_containment;
 pub use spend_polynomial_kernel_rank::{
     probe_spend_common_tail_polynomial_kernel_rank, probe_spend_mixed_polynomial_kernel_rank,
     probe_spend_root_neutral_polynomial_kernel_rank, SpendMixedPolynomialKernelRankReport,
@@ -111,6 +112,10 @@ pub use state_only_two_variable_slice_rank::{
 };
 pub use state_only_variable_permutation_rank::{
     AtomicProfile21VariablePermutationP0Probe, AtomicProfile21VariablePermutationP0RankReport,
+};
+pub use v8_per_c1_image_containment::{
+    probe_v8_a100_pool_pair_forest_per_c1_image_containment,
+    probe_v8_a100_pool_pair_per_c1_image_containment, V8PerC1ImageContainmentReport,
 };
 
 const TRACE_ROWS: usize = 1 << STATE_ONLY_HIDING_SUMCHECK_ROUNDS;

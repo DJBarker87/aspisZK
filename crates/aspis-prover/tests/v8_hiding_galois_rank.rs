@@ -9,6 +9,8 @@ use aspis_core::{
     v8_a100::V8_A100_MAX_FRONTIER_FIXTURE,
 };
 use aspis_prover::state_only_hiding_rank::{
+    probe_v8_a100_pool_pair_forest_per_c1_image_containment,
+    probe_v8_a100_pool_pair_per_c1_image_containment,
     probe_v8_a100_pool_v1_pair_forest_root_message_hiding_rank,
     probe_v8_a100_pool_v1_pair_root_message_hiding_rank, StateOnlyHidingRankGateError,
 };
@@ -98,4 +100,20 @@ fn v8_pair_forest_ambient_rank_rejects_legal_frobenius_pair() {
             want: 108,
         })
     );
+}
+
+#[test]
+fn v8_conjugate_pair_per_c1_physical_image_is_contained() {
+    for report in [
+        probe_v8_a100_pool_pair_per_c1_image_containment(&conjugate_pair_schedule()).unwrap(),
+        probe_v8_a100_pool_pair_forest_per_c1_image_containment(&conjugate_pair_schedule())
+            .unwrap(),
+    ] {
+        println!("{report:?}");
+        assert_eq!(report.query_count, 22);
+        assert_eq!(report.ambient_raw_m31, 108);
+        assert_eq!(report.mask_rank_m31, [104; 16]);
+        assert_eq!(report.physical_superset_generators, [1022; 16]);
+        assert!(report.physical_superset_contained);
+    }
 }
