@@ -508,6 +508,33 @@ mod tests {
         }
     }
 
+    fn equal_x_challenges() -> V8A100TwoPointChallenges {
+        for seed in 400u32..20_000 {
+            let parameter0 = q(seed);
+            // For the rational circle chart, t and -t have the same x
+            // coordinate and opposite y coordinates.
+            let parameter1 = parameter0.neg();
+            let Ok(point0) = secure_ood_circle_point_from_parameter(parameter0) else {
+                continue;
+            };
+            let Ok(point1) = secure_ood_circle_point_from_parameter(parameter1) else {
+                continue;
+            };
+            if point0 != point1 && point0.x == point1.x {
+                return V8A100TwoPointChallenges {
+                    points: [point0, point1],
+                    component_evaluations: core::array::from_fn(|sample| {
+                        core::array::from_fn(|component| {
+                            q(3_000 + 131 * sample as u32 + component as u32)
+                        })
+                    }),
+                    gamma: q(909),
+                };
+            }
+        }
+        panic!("failed to construct a secure equal-x OOD pair")
+    }
+
     fn pack_m31(values: &[u32]) -> alloc::vec::Vec<u8> {
         let mut out = vec![0u8; (31 * values.len() + 7) / 8];
         for (index, value) in values.iter().copied().enumerate() {
@@ -623,6 +650,72 @@ mod tests {
             ),
             Err(V8DeepError::ZeroDenominator)
         );
+    }
+
+    #[test]
+    fn equal_x_ood_pair_uses_y_interpolation_and_exact_chord_roots() {
+        let challenges = equal_x_challenges();
+        let (use_x, inverse_difference) = validate_challenges(&challenges).unwrap();
+        assert!(!use_x);
+        assert_eq!(challenges.points[0].x, challenges.points[1].x);
+        assert_ne!(challenges.points[0].y, challenges.points[1].y);
+
+        let evaluations = [q(70_001), q(70_002)];
+        assert_eq!(
+            two_point_interpolant(
+                challenges.points[0],
+                challenges.points,
+                evaluations,
+                inverse_difference,
+                use_x,
+            ),
+            evaluations[0]
+        );
+        assert_eq!(
+            two_point_interpolant(
+                challenges.points[1],
+                challenges.points,
+                evaluations,
+                inverse_difference,
+                use_x,
+            ),
+            evaluations[1]
+        );
+        assert_eq!(
+            two_point_chord_zerofier(challenges.points[0], challenges.points),
+            QM31::ZERO
+        );
+        assert_eq!(
+            two_point_chord_zerofier(challenges.points[1], challenges.points),
+            QM31::ZERO
+        );
+
+        let components: [QM31; V8_A100_COMPONENTS] =
+            core::array::from_fn(|component| q(80_000 + 211 * component as u32));
+        let prepared = prepare_deep(&challenges).unwrap();
+        for seed in 90_000u32..90_128 {
+            let Ok(query_point) = secure_ood_circle_point_from_parameter(q(seed)) else {
+                continue;
+            };
+            let denominator = two_point_chord_zerofier(query_point, challenges.points);
+            if denominator == QM31::ZERO {
+                continue;
+            }
+            let reference =
+                v8_two_point_circle_quotient_reference(&components, query_point, &challenges)
+                    .unwrap();
+            let combined = qm31_dot(&prepared.powers, &components);
+            let numerator = combined.sub(two_point_interpolant(
+                query_point,
+                prepared.points,
+                prepared.evaluations,
+                prepared.inverse_difference,
+                prepared.use_x,
+            ));
+            assert_eq!(reference, numerator.mul(denominator.try_inv().unwrap()));
+            return;
+        }
+        panic!("failed to construct a non-root query point")
     }
 
     #[test]
