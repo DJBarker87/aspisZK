@@ -8,6 +8,74 @@ NO_DNA=1 CARGO_BUILD_JOBS=2 cargo test -p aspis-verifier --lib --no-default-feat
 # pinned local equivalents; do not omit the cgroup or default-off feature.
 systemd-run --user --scope -p MemoryHigh=8G -p MemoryMax=12G -p MemorySwapMax=0 env NO_DNA=1 CARGO_BUILD_JOBS=2 cargo-build-sbf --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features v7-pair-forest-one-tx-candidate,v7-pair-forest-public-devnet-identity-audit --arch v0 --offline --skip-tools-install --tools-version v1.48 --sbf-sdk /PINNED/platform-tools-sdk/sbf --sbf-out-dir /TASK/build -- --locked
 
-# Public devnet funding/deployment remains intentionally unexecuted until the
-# isolated task payer has sufficient valueless devnet SOL.
-solana balance 4JQqjfysvMYtUS32H1w3ugv5bohN6oV8CRY4mN5DbkkN --url https://api.devnet.solana.com
+# Public-devnet deployment executed after the task payer received valueless
+# devnet SOL. The task-owned program keypair was not committed.
+solana program deploy \
+  --url https://api.devnet.solana.com \
+  --keypair /TASK/payer.json \
+  --program-id /TASK/aspis_verifier-keypair.json \
+  --final \
+  --output json \
+  /TASK/build/aspis_verifier.so
+solana program show CDeD7hL7MyvEv63VCw4T5Uv76Kn9ksYHYQXA3TzydVaq \
+  --url https://api.devnet.solana.com --output json
+solana program dump CDeD7hL7MyvEv63VCw4T5Uv76Kn9ksYHYQXA3TzydVaq \
+  /TASK/verifier-onchain.so --url https://api.devnet.solana.com
+sha256sum /TASK/build/aspis_verifier.so /TASK/verifier-onchain.so
+
+# Focused host tools. The prover alone opts into the default-off cutoff audit.
+NO_DNA=1 CARGO_BUILD_JOBS=2 cargo build --release --locked \
+  --manifest-path tools/v7-live-pool-proof/Cargo.toml --bins
+NO_DNA=1 CARGO_BUILD_JOBS=2 cargo build --release --locked \
+  --manifest-path tools/v7-live-pool-proof/Cargo.toml \
+  --features v7-final-nonce-cutoff-audit --bin prove-from-live-bundle
+NO_DNA=1 CARGO_BUILD_JOBS=2 cargo build --release --locked \
+  --manifest-path tools/v7-txv1-honest-proof/Cargo.toml \
+  --bin build_proof_upload_requests
+
+# Each fixture command requires new task-owned 0600 keypairs and a new absolute
+# evidence directory. The exact public identities are frozen in transfer-config.json
+# and withdrawal-config.json; input.json files record the task path bindings.
+export ASPIS_TXV1_DISPOSABLE_RPC_URL=https://api.devnet.solana.com
+export ASPIS_TXV1_PUBLIC_DEVNET_MODE=I_ACKNOWLEDGE_PUBLIC_DEVNET_TEST_ONLY
+export ASPIS_TXV1_DISPOSABLE_AGAVE_BIN_DIR=/PINNED/solana/bin
+export ASPIS_TXV1_DISPOSABLE_PAYER_KEYPAIR=/TASK/payer.json
+export ASPIS_TXV1_DISPOSABLE_PAYER_PUBKEY=4JQqjfysvMYtUS32H1w3ugv5bohN6oV8CRY4mN5DbkkN
+export ASPIS_TXV1_DISPOSABLE_SOURCE_AUTHORITY_KEYPAIR=/TASK/source-authority.json
+export ASPIS_V7_PUBLIC_DEVNET_TOKEN_FIXTURE_BUILDER=$PWD/tools/v7-live-pool-proof/target/release/build-public-devnet-token-fixture
+export ASPIS_V7_PUBLIC_DEVNET_MINT_KEYPAIR=/TASK/mint.json
+export ASPIS_V7_PUBLIC_DEVNET_SOURCE_TOKEN_KEYPAIR=/TASK/source-token.json
+export ASPIS_V7_PUBLIC_DEVNET_DESTINATION_TOKEN_KEYPAIR=/TASK/destination-token.json
+bash scripts/v7_public_devnet_token_fixture_child.sh /TASK/evidence/token-fixture
+
+export ASPIS_V7_LIVE_POOL_INITIALIZE_BUILDER=$PWD/tools/v7-live-pool-proof/target/release/build-live-pool-initialize
+export ASPIS_V7_LIVE_OPERATION_SECRET_BUILDER=$PWD/tools/v7-live-pool-proof/target/release/create-live-operation-secrets
+export ASPIS_V7_LIVE_POOL_DEPOSIT_BUILDER=$PWD/tools/v7-live-pool-proof/target/release/build-live-pool-deposit
+export ASPIS_V7_LIVE_POOL_CHECKPOINT_BUILDER=$PWD/tools/v7-live-pool-proof/target/release/build-live-pool-checkpoint
+export ASPIS_V7_LIVE_PROOF_MATERIALIZER=$PWD/tools/v7-live-pool-proof/target/release/materialize-live-proof-bundle
+export ASPIS_V7_LIVE_POOL_PROVER=$PWD/tools/v7-live-pool-proof/target/release/prove-from-live-bundle
+export ASPIS_V7_PROOF_UPLOAD_CHILD=$PWD/scripts/v7_txv1_upload_honest_proof_child.sh
+export ASPIS_V7_LIVE_TERMINAL_BUILDER=$PWD/tools/v7-live-pool-proof/target/release/build-live-transfer-terminal
+export ASPIS_V7_LIVE_PROOF_CLOSE_BUILDER=$PWD/tools/v7-live-pool-proof/target/release/build-live-proof-close
+export ASPIS_V7_VERIFIER_PROGRAM=CDeD7hL7MyvEv63VCw4T5Uv76Kn9ksYHYQXA3TzydVaq
+export ASPIS_V7_EXPERIMENTAL_MAX_COMPACT_COUNTER=20
+export ASPIS_V7_EXPERIMENTAL_FINAL_NONCE_CUTOFF_ACK=I_ACKNOWLEDGE_MEASUREMENT_ONLY_FINAL_NONCE_SELECTION
+
+# Run after creating/finalizing the exact Registry entry referenced by CONFIG.
+# Transfer and withdrawal use separately created token, Registry and Pool fixtures.
+ASPIS_TXV1_HARNESS_CONFIG=/TASK/transfer-config.json \
+ASPIS_V7_LIVE_OPERATION=transfer \
+bash scripts/v7_live_pool_initialize_child.sh /TASK/evidence/live-transfer
+
+ASPIS_TXV1_HARNESS_CONFIG=/TASK/withdrawal-config.json \
+ASPIS_V7_LIVE_OPERATION=withdrawal \
+bash scripts/v7_live_pool_initialize_child.sh /TASK/evidence/live-withdrawal
+
+# Evidence validation.
+jq -e '.classifications.publicDevnetLiveTransferFinalized and
+  .classifications.publicDevnetLiveWithdrawalFinalized and
+  .classifications.publicDevnetFreshSignatureReplayRejectionFinalized and
+  (.classifications.publicFinalizedDevnetFullLifecycleMatrixComplete | not) and
+  (.classifications.allReachableCuBoundEstablished | not) and
+  (.mainnetReady | not)' public-devnet-summary.json
+shasum -a 256 -c checksums.sha256
