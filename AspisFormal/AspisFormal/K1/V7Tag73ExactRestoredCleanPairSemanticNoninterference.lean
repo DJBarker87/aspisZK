@@ -58,6 +58,7 @@ open AspisK1.V7Tag73NoPairOccurrenceTrichotomy
 open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73ProjectedMachineNativeRequestPrefix
 open AspisK1.V7Tag73K12BudgetedSchedulerTree
+open AspisK1.V7Tag73K13PreQ16MerkleWordSource
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedAlignedRecordReplay
 open AspisK1.V7Tag73Q16DigestDrawReindex
@@ -900,6 +901,67 @@ theorem exact_restored_clean_pair_adversary_anchor_roots_eq
   simp only [exactK12Roots]
   rw [c1Exact, c2Exact]
 
+/-- The corrected K1.3 word is cut at the selected final-work exposure, not
+at the q16-dependent completed prover history.  The common chronological
+prior and the roots fixed above therefore determine one exact word across
+the adversary-anchor fibre. -/
+theorem exact_restored_clean_pair_adversary_anchor_pre_q16_words_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) foldTrial
+        finalTrial)
+    (rightWitness : ExactRestoredRootCleanK13PairTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) foldTrial
+        finalTrial)
+    (anchor : ExactFixedK13AdversaryAnchor leftWitness.joint.input finalTrial)
+    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (contextExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).1)
+    (foldExact :
+      let router := exactCompilerFoldArmedAlphaFinalWorkQ16Router parameters
+        transitionFuel foldTrial.val finalTrial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          left).2.1 =
+        (exactCompilerCausalFoldAlphaFinalWorkQ16Coordinates parameters router
+          right).2.1) :
+    exactTrialPreQ16Words leftWitness.joint.input finalTrial =
+      exactTrialPreQ16Words rightWitness.joint.input finalTrial := by
+  obtain ⟨leftPrior, leftLater, rightPrior, rightLater, leftInput, rightInput,
+      leftAnswer, rightAnswer, rightActor, leftRootExact, rightRootExact,
+      leftTrialExact, rightTrialExact, priorExact⟩ :=
+    exact_restored_clean_pair_adversary_anchor_root_priors_eq foldTrial
+      finalTrial hidden left right leftWitness rightWitness anchor
+        programmedCover contextExact foldExact
+  have rootsExact :=
+    exact_restored_clean_pair_adversary_anchor_roots_eq transitionRoom
+      foldTrial finalTrial hidden left right leftWitness rightWitness anchor
+        programmedCover contextExact foldExact
+  exact exactTrialPreQ16Words_eq_of_common_anchor_prior
+    leftWitness.joint.input rightWitness.joint.input finalTrial leftPrior
+      leftLater rightPrior rightLater
+      (.machineFresh .adversary leftInput leftAnswer)
+      (.machineFresh rightActor rightInput rightAnswer) leftRootExact
+      rightRootExact leftTrialExact rightTrialExact priorExact rootsExact
+
 /-- The only chronology branch still requiring a source proof: the selected
 final-work input was first exposed by the adversary and later read by the
 verifier as an immutable cache hit. -/
@@ -1132,6 +1194,8 @@ theorem exact_restored_clean_trial_union_probability_le_one_forest_of_semantic
 #print axioms exact_restored_clean_pair_selected_root_priors_eq
 #print axioms exact_restored_clean_pair_selected_input_and_digest_eq
 #print axioms exact_restored_clean_pair_adversary_anchor_roots_eq
+#print axioms
+  exact_restored_clean_pair_adversary_anchor_pre_q16_words_eq
 #print axioms exact_restored_clean_pair_adversary_anchor_final_values_eq
 #print axioms exact_restored_clean_pair_adversary_anchor_disclosed_final_eq
 #print axioms exact_restored_clean_k13_pair_coordinate_invariant_of_semantic
