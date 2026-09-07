@@ -193,6 +193,12 @@ implementation shares more intermediates for 91 generic products including outer
 scale. It agrees with both ZIP paths on 160 terminal values. This does not cover
 grouped masks or turn a new-transform saving into measured parity with V7.
 
+Subsequent [grouped-mask work](grouped-mask.md) resolves the binary-mask
+arithmetic gap: 142 generic plus 170 mixed products, all actual source profiles
+checked. Twenty aggregate cases now cover the three MLE weights, two circle-OOD
+weights, forest mask and sparse image claims together. This is not a complete
+transcript implementation or CU-parity result.
+
 ## Continuation: accepted 40,282-byte allowance
 
 See [chord-verdict.md](chord-verdict.md) for the subsequent exact experiment and

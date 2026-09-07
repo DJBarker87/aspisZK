@@ -8,6 +8,7 @@ mod field;
 use circle::{secure_ood_circle_point_from_parameter as ood, SecureCirclePoint as Point};
 use field::{CM31, M31, QM31 as K};
 use std::{hint::black_box, time::Instant};
+mod grouped_mask;
 const D: usize = 512;
 const EXT: usize = 514;
 fn scalar(n: u32) -> K {
@@ -247,6 +248,10 @@ fn block_terminal(w: &[[K; 2]; 10], alpha: [K; 4], [a, b, c]: [K; 3]) -> ([K; 4]
     (out, count)
 }
 fn main() {
+    if std::env::args().any(|a| a == "--grouped-test") {
+        grouped_mask::run();
+        return;
+    }
     if std::env::args().any(|a| a == "--cross-fixture") {
         for seed in 0..40u32 {
             let mut tw: [[K; 2]; 10] = core::array::from_fn(|j| {
