@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactConcreteK13K14Events
 import AspisFormal.K1.V7Tag73K15RestrictedRelationAlphaActualLawClosure
 import AspisFormal.K1.V7Tag73K13IdealErrorLedger
+import AspisFormal.K1.V7Tag73RelationTailSourceComposition
 
 /-!
 # Compiler-clean actual-law closure for later Tag-73 relation alphas
@@ -38,6 +39,7 @@ open AspisK1.V7Tag73K15FixedSamplerProbabilityAdapters
 open AspisK1.V7Tag73K15OrdinaryDuplexCoordinates
 open AspisK1.V7Tag73K15RelationAlphaActualLawClosure
 open AspisK1.V7Tag73K15RelationAlphaPreAnswerRouters
+open AspisK1.V7Tag73RelationTailSourceComposition
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
@@ -112,8 +114,8 @@ structure ExactTag73RestrictedK13LaterAlphaSource
     (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
     (fixedInstance : PublicInstance Statement)
     (decoder : ExactDecoderInstantiation QM31Exact)
-    (k13Source : ExactTag73K13SourceObligations transitionFuel configuration
-      projection fixedInstance decoder)
+    (relationSource : ExactTag73RelationSourceEnvironment transitionFuel
+      configuration projection fixedInstance decoder)
     (clean : Set (ExactCompilerSample HiddenTape parameters)) where
   execution : Fin 3 → HiddenTape →
     FreshAnswerTape Digest256 (relationAlphaRouterResidual parameters) →
@@ -121,7 +123,9 @@ structure ExactTag73RestrictedK13LaterAlphaSource
   covered : ∀ tail hidden,
     jointEventSlice
         (clean ∩ exactTag73K13LaterRelationAlphaRoundEvent transitionFuel
-          configuration projection fixedInstance decoder k13Source tail)
+          configuration projection fixedInstance decoder
+            (relationSource.toK13SourceObligations transitionFuel configuration
+              projection fixedInstance decoder) tail)
         hidden ⊆
       (exactPlainRomRelationAlphaSamplerCoordinates (laterRelationRound tail)
           transitionFuel configuration hidden) ⁻¹'
@@ -144,15 +148,19 @@ theorem exact_tag73_restricted_k13_later_alpha_probability_le
     {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
     {fixedInstance : PublicInstance Statement}
     {decoder : ExactDecoderInstantiation QM31Exact}
-    (k13Source : ExactTag73K13SourceObligations transitionFuel configuration
-      projection fixedInstance decoder)
+    (relationSource : ExactTag73RelationSourceEnvironment transitionFuel
+      configuration projection fixedInstance decoder)
     (clean : Set (ExactCompilerSample HiddenTape parameters))
     (source : ExactTag73RestrictedK13LaterAlphaSource transitionFuel
-      configuration projection fixedInstance decoder k13Source clean) :
+      configuration projection fixedInstance decoder relationSource clean) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (clean ∩ exactTag73K13LaterRelationAlphaEvent transitionFuel
-          configuration projection fixedInstance decoder k13Source) ≤
+          configuration projection fixedInstance decoder
+            (relationSource.toK13SourceObligations transitionFuel configuration
+              projection fixedInstance decoder)) ≤
       exactLaterRelationAlphaIdealRawError := by
+  let k13Source := relationSource.toK13SourceObligations transitionFuel
+    configuration projection fixedInstance decoder
   have roundBound : ∀ tail : Fin 3,
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (clean ∩ exactTag73K13LaterRelationAlphaRoundEvent transitionFuel
