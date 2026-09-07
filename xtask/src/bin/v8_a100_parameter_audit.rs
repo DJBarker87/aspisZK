@@ -292,9 +292,8 @@ fn profile_size(q: usize, digest_bytes: usize, ood_points: usize) -> Value {
     // conservative scalar-DEEP bad-gamma cardinality 100 * 28.
     let p = BigUint::from(P);
     let field_nonzero = p.pow(4) - BigUint::one();
-    let algebraic_numerator = BigUint::from(
-        3usize + q + 18usize + 396_430usize + SCALAR_DEEP_GAMMA_CARDINALITY,
-    );
+    let algebraic_numerator =
+        BigUint::from(3usize + q + 18usize + 396_430usize + SCALAR_DEEP_GAMMA_CARDINALITY);
     let optimistic = query_error.add(&Rational::new(algebraic_numerator, field_nonzero));
 
     json!({
