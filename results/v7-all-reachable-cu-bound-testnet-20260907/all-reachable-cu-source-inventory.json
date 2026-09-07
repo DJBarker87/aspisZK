@@ -1,0 +1,192 @@
+{
+  "agaveCostScheduleProvenance": {
+    "crateVersionInspected": "4.2.1",
+    "executionBudgetSourceSha256": "139ecd8dd861bd8b82345d2d015702d6b25d5cb95e7d4fa9af06d678729d6e93",
+    "successfulBumpRange": "255 down through 1",
+    "syscallsSourceSha256": "e34a5bae92d7dde433a17ad61803894b7f501a8255484c9eee054710e6e61a9a"
+  },
+  "calibratedCutoff20Envelope": {
+    "additionalPdaAttemptsToCrossRuntimeLimit": 68,
+    "counter": 20,
+    "frontierNodes": 203,
+    "qualification": "two-comparison calibrated model with <=1 CU fit error; not an all-reachable upper bound",
+    "runtimeHeadroomCu": 100916,
+    "transactionCu": 1299084
+  },
+  "classification": "ALL-REACHABLE COMPLETION BOUND FAILS CLOSED",
+  "combinedReferenceEnvelope": {
+    "additionalPdaAttemptsToCrossRuntimeLimit": 47,
+    "cutoff20MaxFrontierPlusMaximumSuccessfulQm31RetrySyscallCu": 1330596,
+    "qualification": "additive source-cost comparison only; no claim that a joint SHA-256 preimage realizing every maximum has been constructed",
+    "remainingRuntimeHeadroomCu": 69404
+  },
+  "decision": {
+    "byteIdenticalSimulationStillRequired": true,
+    "cutoff20GuaranteesBelow1300000": false,
+    "cutoff20GuaranteesBelow1400000": false,
+    "reason": "relative to an otherwise identical one-attempt derivation, one permitted 255-attempt successful PDA search adds 381000 syscall CU, exceeding the measured rollover anchor's 181028-CU runtime headroom; the fixture's exact bump inventory is not encoded in the measurement, so the 1599972-CU value is a reference envelope rather than a witnessed transaction",
+    "safeToPromoteAsUniversalCuPolicy": false,
+    "verifierAcceptedLanguageGuaranteesBelow1400000": false
+  },
+  "limits": {
+    "cutoff20InclusiveCounter": 20,
+    "frontierNodes": 203,
+    "transactionCu": 1400000
+  },
+  "measuredAnchor": {
+    "counter": 0,
+    "frontierNodes": 202,
+    "qualification": "genuine strict-work LiteSVM rollover withdrawal; sample, not upper bound",
+    "transactionCu": 1218972
+  },
+  "pdaBoundedControlFlow": {
+    "createProgramAddressCuPerAttempt": 1500,
+    "cutoff20ConstrainsPdaAttempts": false,
+    "exhaustedFailureChargesPerInvocation": 256,
+    "inventory": [
+      {
+        "anchor": "pool_v1_pair_forest_master_address",
+        "invocations": 1,
+        "label": "pool.master decode",
+        "source": "programs/aspis-pool/src/pair_forest.rs"
+      },
+      {
+        "anchor": "pool_v1_pair_forest_checkpoint_address",
+        "invocations": 1,
+        "label": "pool.checkpoint decode",
+        "source": "programs/aspis-pool/src/pair_forest.rs"
+      },
+      {
+        "anchor": "pool_v1_pair_forest_lane_address",
+        "invocations": 1,
+        "label": "pool.lane decode",
+        "source": "programs/aspis-pool/src/pair_forest.rs"
+      },
+      {
+        "anchor": "pool_v1_pair_forest_lane_address",
+        "invocations": 1,
+        "label": "pool.request selected lane",
+        "source": "programs/aspis-pool/src/pair_forest.rs"
+      },
+      {
+        "anchor": "require_root_page_address",
+        "invocations": 2,
+        "label": "pool.current and rollover history pages",
+        "source": "programs/aspis-pool/src/pair_forest.rs"
+      },
+      {
+        "anchor": "pool_v1_nullifier_marker_address",
+        "invocations": 1,
+        "label": "pool.nullifier marker initial plan",
+        "source": "programs/aspis-pool/src/nullifier.rs"
+      },
+      {
+        "anchor": "pool_v1_vault_",
+        "invocations": 2,
+        "label": "pool.withdrawal vault authority and token PDA",
+        "source": "programs/aspis-pool/src/vault.rs"
+      },
+      {
+        "anchor": "plan_nullifier_marker_consumption_v1",
+        "invocations": 1,
+        "label": "pool.nullifier marker post-create replan",
+        "source": "programs/aspis-pool/src/processor.rs"
+      },
+      {
+        "anchor": "find_program_address",
+        "invocations": 4,
+        "label": "pool.Registry V2/programdata selection",
+        "source": "programs/aspis-pool/src/registry.rs"
+      },
+      {
+        "anchor": "Pubkey::find_program_address",
+        "invocations": 3,
+        "label": "verifier.master/checkpoint/lane",
+        "source": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs"
+      },
+      {
+        "anchor": "Pubkey::find_program_address",
+        "invocations": 4,
+        "label": "verifier.Registry V2/programdata reauthentication",
+        "source": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs"
+      }
+    ],
+    "maximumSyscallCuAllInvocations": 8032500,
+    "maximumSyscallCuPerSuccessfulInvocation": 382500,
+    "oneAttemptReferenceEnvelopeWithAllMaximalInvocations": 9219972,
+    "oneAttemptReferenceEnvelopeWithOneMaximalInvocation": 1599972,
+    "oneMaximalInvocationExtraCuOverOneAttempt": 381000,
+    "referenceEnvelopeQualification": "these values compare an otherwise identical one-attempt derivation with permitted maximal bump searches; they are not witnessed transactions and do not assert the measured fixture used one attempt",
+    "rolloverWithdrawalFindProgramAddressInvocations": 21,
+    "successfulAttemptsPerInvocation": {
+      "maximum": 255,
+      "minimum": 1
+    }
+  },
+  "quantifiers": {
+    "cutoff20PublishedSubset": "counters 0..20 and exactly 16 distinct initial q16 draws per evaluated candidate",
+    "runtime": "Agave 4.2/4.3 default execution-cost schedule",
+    "terminalShape": "fresh-marker withdrawal at a lane history-page rollover",
+    "verifierAcceptedLanguage": "counters 0..63; q16 draws up to 64 per candidate"
+  },
+  "queryOrderingBoundedControlFlow": {
+    "acceptedOpeningSortElements": 16,
+    "binaryFrontierInsertionSortComparisons": {
+      "maximum": 120,
+      "minimum": 15
+    },
+    "cutoff20ConstrainsQueryOrdering": false,
+    "cutoff20MaximumCandidateComparisons": {
+      "maximum": 2520,
+      "minimum": 315
+    },
+    "qualification": "comparison count is source-bounded; no standalone SBF CU coefficient was inferred from the two-point calibrated envelope",
+    "queriesPerCandidate": 16
+  },
+  "repositoryRevision": "4c91f97ac6576201f90d41c2a575e54c026e3796",
+  "schema": "aspis.v7.all-reachable-cu-source-inventory.v1",
+  "scope": {
+    "doesNotClaimJointSha256PreimageWitnessForEveryMaximalBranch": true,
+    "doesProveCurrentAdmissionPolicyLeavesFiniteCostBranchesUngated": true,
+    "productionSourceChanged": false,
+    "proofFormatChanged": false,
+    "relationChanged": false,
+    "verifierChanged": false
+  },
+  "sourceSha256": {
+    "crates/aspis-core/src/state_only_hiding.rs": "18058112db3108a18f9d11f8d9ffb6f9c1b310b90b333010fd0f98cac480237f",
+    "crates/aspis-core/src/state_only_sumcheck.rs": "5458d3134a3123b8b02bef0374ccbf96a05461974d7e274966c6a3f0d2d496f9",
+    "crates/aspis-core/src/transcript.rs": "be036d144b9fe0c8119d9f6fdd8ca2167d1379f7d1d785fa2f197200b9f7d119",
+    "crates/aspis-core/src/v6_onefold.rs": "fa7977f2be11f4676146b802e687844086f0f33c56857c83514e8b6346f14fea",
+    "crates/aspis-core/src/v6_transcript.rs": "48275a37053ce5d33c7ec61caf6301863666f45a1e388c2c64bdb856708764cf",
+    "crates/aspis-core/src/v7_onefold.rs": "6abb0376100611c5553258062480777187785579f402c9c1d3ce72379518258f",
+    "crates/aspis-prover/src/v6_onefold_prover.rs": "1715970722d3e183771ff41711a760578deac0522038a3a7d2dd519f90c9a433",
+    "programs/aspis-pool/src/nullifier.rs": "274398d59536f19fa25dd11269945893fe02a03e5668655244b7be2f32e26c6f",
+    "programs/aspis-pool/src/pair_forest.rs": "d96b352bae081a72d6e887759a356674598e0bf3a177c8d103885f02bc344c30",
+    "programs/aspis-pool/src/processor.rs": "3c989ba201b622c01e67edec7cba8b17ba30663b386a4f316e757ff06dad7354",
+    "programs/aspis-pool/src/registry.rs": "99c166a1f6641631937450fe7e59e08cb6422e588d8c49b90f66f9a4cb85ed8a",
+    "programs/aspis-pool/src/vault.rs": "d7889cbdec8c3987cfa5aaad3984475e18e390c84712826847de611680d90463",
+    "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs": "4577c435a5c41a147331ca7d42b65053e181d58dca1b4322ef96b48c85babf77"
+  },
+  "transcriptBoundedControlFlow": {
+    "cutoff20ConstrainsQm31Retries": false,
+    "cutoff20QueryCandidatesMaximum": 21,
+    "cutoff20QuerySqueezeBlocksMaximum": 42,
+    "directQm31Calls": 30,
+    "maximumAdditionalQm31SqueezeBlocks": 156,
+    "maximumAdditionalQm31SqueezeSyscallCu": 31512,
+    "maximumQm31SqueezeBlocks": 192,
+    "maximumSuccessfulQm31Calls": 48,
+    "minimumQm31Calls": 36,
+    "minimumQm31SqueezeBlocks": 36,
+    "nonzeroQm31Wrappers": 4,
+    "secureCircleWrappers": 2,
+    "sha256CuPer33ByteCall": 101,
+    "sha256SyscallCuPerSqueezeBlock": 202,
+    "squeezeBlocksPerSuccessfulQm31": {
+      "maximum": 4,
+      "minimum": 1
+    },
+    "verifierLanguageQuerySqueezeBlocksMaximum": 512
+  }
+}
