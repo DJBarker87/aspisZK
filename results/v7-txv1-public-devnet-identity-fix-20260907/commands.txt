@@ -1,0 +1,13 @@
+# Focused host tests (run once for each identity capability)
+NO_DNA=1 CARGO_BUILD_JOBS=2 cargo test -p aspis-verifier --lib --no-default-features --features v7-pair-forest-one-tx-candidate v7_pair_forest_dispatch::tests::configured_invariant_identity_capability_is_exact -- --exact
+NO_DNA=1 CARGO_BUILD_JOBS=2 cargo test -p aspis-verifier --lib --no-default-features --features v7-pair-forest-one-tx-candidate,v7-pair-forest-public-devnet-identity-audit v7_pair_forest_dispatch::tests::configured_invariant_identity_capability_is_exact -- --exact
+NO_DNA=1 CARGO_BUILD_JOBS=2 cargo test -p aspis-verifier --lib --no-default-features --features v7-pair-forest-one-tx-candidate v7_pair_forest_dispatch::tests::immutable_registry_v2_release_certificate_authenticates_fail_closed -- --exact
+NO_DNA=1 CARGO_BUILD_JOBS=2 cargo test -p aspis-verifier --lib --no-default-features --features v7-pair-forest-one-tx-candidate,v7-pair-forest-public-devnet-identity-audit v7_pair_forest_dispatch::tests::immutable_registry_v2_release_certificate_authenticates_fail_closed -- --exact
+
+# Bounded Linux SBF build. Replace the three absolute tool/task paths with the
+# pinned local equivalents; do not omit the cgroup or default-off feature.
+systemd-run --user --scope -p MemoryHigh=8G -p MemoryMax=12G -p MemorySwapMax=0 env NO_DNA=1 CARGO_BUILD_JOBS=2 cargo-build-sbf --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features v7-pair-forest-one-tx-candidate,v7-pair-forest-public-devnet-identity-audit --arch v0 --offline --skip-tools-install --tools-version v1.48 --sbf-sdk /PINNED/platform-tools-sdk/sbf --sbf-out-dir /TASK/build -- --locked
+
+# Public devnet funding/deployment remains intentionally unexecuted until the
+# isolated task payer has sufficient valueless devnet SOL.
+solana balance 4JQqjfysvMYtUS32H1w3ugv5bohN6oV8CRY4mN5DbkkN --url https://api.devnet.solana.com
