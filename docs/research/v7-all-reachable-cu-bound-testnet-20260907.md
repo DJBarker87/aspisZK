@@ -2,8 +2,9 @@
 
 ## Result
 
-**ALL-REACHABLE COMPLETION BOUND FAILS CLOSED. PUBLIC TESTNET AND DEVNET TXV1
-FEATURES ARE ACTIVE; MAINNET IS NOT ACTIVE.**
+**CURRENT TAG-73 PROFILE CU BASELINE IS MISSING; THE ALL-REACHABLE COMPLETION
+BOUND FAILS CLOSED. PUBLIC TESTNET AND DEVNET TXV1 FEATURES ARE ACTIVE;
+MAINNET IS NOT ACTIVE.**
 
 Counter 20 remains a useful measured publication policy, but it is not a
 universal proof that every published terminal transaction completes below
@@ -18,10 +19,54 @@ a proof, deploy a program, sign a public transaction, or spend funds.
 
 Branch: `research/v7-all-reachable-cu-bound-testnet-20260902`.
 
-Base revision: `4c91f97ac6576201f90d41c2a575e54c026e3796`.
+Original CU-audit base revision:
+`4c91f97ac6576201f90d41c2a575e54c026e3796`.
+
+Current merged production-source revision:
+`b053663d6c4fc7e991ef08ca568f68b81d25311c`.
 
 The final evidence commit is reported in the handoff because a commit cannot
 contain its own hash.
+
+## Profile-revision-2 supersession
+
+Main subsequently merged `b053663d`, which causally binds the complete raw
+sampler output for Tag-73 gamma and alpha-zero. The compact transcript profile
+revision byte changed from 1 to 2. Proof bytes did not grow, but the accepted
+transcript language and production verifier source changed. Consequently,
+every CU/byte figure below remains authentic **historical profile-revision-1
+evidence** and is not a current-binary measurement.
+
+Revision 2 adds exactly two SHA-256 calls. Each hashes four slices of lengths
+32, 2, 2 and 384 bytes. Under the inspected Agave schedule, each syscall costs
+313 CU and the exact fixed syscall component is 626 CU. This is deliberately
+not added to an old transaction measurement: the new recorded-block copying
+and control flow also change SBF instruction cost. A fresh production SBF
+build and genuine revision-2 proof are required.
+
+The optimized host verifier rejects the saved genuine revision-1 proof with
+`Transcript(TerminalRejected)` (exit 1). This establishes fail-closed profile
+separation; it is not an SBF CU measurement.
+
+The designated memory-intensive build host, `nuc.tail0cfe7a.ts.net`, was
+offline when checked. Repository policy therefore prevents the required SBF
+rebuild and fresh honest proof run from being substituted with an uncapped
+local build. Current-profile simulated CU, landed CU and transaction bytes are
+recorded as `null`, not inferred.
+
+The live terminal builder now inventories PDA-search cost before signing for
+the authenticated immutable Registry V2 path. It records every unique PDA,
+bump, attempts per invocation, runtime multiplicity and the exact 1,500-CU per
+attempt syscall component. The call counts are 18 for same-page transfer, 19
+for rollover transfer, 20 for same-page withdrawal and 21 for rollover
+withdrawal. It also derives the nullifier marker by identity, fixing a
+harness-only reporting error where a hard-coded account index named the next
+history page as the marker during rollover.
+
+The host proof inspector now counts actual 33-byte transcript squeeze hashes,
+reports squeeze blocks, and requires exactly two `[32, 2, 2, 384]` causal-bind
+hash calls before accepting a revision-2 proof. No current proof exists yet to
+populate those diagnostics.
 
 ## Public feature activation
 
@@ -53,7 +98,7 @@ This is activation evidence only. No Aspis program is deployed or exercised
 on either public cluster, and it is not finalized public lifecycle evidence.
 `mainnetReady` remains `false`.
 
-## Existing measurements retained
+## Historical profile-revision-1 measurements retained
 
 No frozen CU path was rerun. The evidence distinguishes three previously
 captured contexts:
@@ -61,14 +106,15 @@ captured contexts:
 | Context | Counter/frontier | Bytes | Total CU | Qualification |
 | --- | ---: | ---: | ---: | --- |
 | Frozen combined terminal baseline | 0 / historical | 997 | 1,201,757 | one terminal transaction, eight lanes |
-| Current-binary rollover withdrawal | 0 / 202 | 1,043 | 1,218,972 | genuine strict-work LiteSVM sample |
+| Then-current rollover withdrawal | 0 / 202 | 1,043 | 1,218,972 | genuine strict-work LiteSVM sample; profile revision 1 |
 | Live disposable cutoff-20 withdrawal | 9 / 202 | 1,543 | 1,196,956 | genuine finalized Agave 4.2.0 local sample |
 
-The current-binary sample used Pool SHA-256
+The then-current sample used Pool SHA-256
 `9cd1401327493134ca42ed13a7e72d7e6c375c488f7aa2ede42b39f402b6c89d`
 and verifier SHA-256
 `97df12937d46e25a2eeefeac16ce31925fd473c672d6b656548be9220adbcc6d`.
-The 1,218,972-CU measurement is the source anchor below, not an upper bound.
+The 1,218,972-CU measurement is the historical source anchor below, not an
+upper bound and not applicable to profile revision 2.
 
 The prior two-point calibration remains:
 
@@ -161,7 +207,7 @@ preimage is not an all-reachable upper-bound proof. A release claim quantified
 over every accepted/published terminal transaction must cover these branches;
 the two sampled CU coefficients cannot do so.
 
-The exact conclusions are therefore:
+For profile revision 1, the exact conclusions were therefore:
 
 - counter 20 does **not establish** completion below 1,300,000 CU;
 - counter 20 does **not establish** completion below 1,400,000 CU;
@@ -170,6 +216,11 @@ The exact conclusions are therefore:
 - exact byte-identical simulation must remain mandatory; and
 - the default-off cutoff feature is not safe to promote as a universal CU
   policy on this evidence.
+
+For current profile revision 2, the conclusion is even narrower: no current
+production-SBF measurement exists, so neither the 1.30M project gate nor the
+1.40M runtime completion claim is established. The source-level uncontrolled
+QM31, ordering and PDA branches remain relevant after remeasurement.
 
 The smallest protocol-preserving engineering closure would remove variable
 bump search from the terminal path: persist/authenticate canonical bumps and
@@ -217,3 +268,11 @@ zero swaps. The three-cluster RPC snapshot ran in 8.65 seconds with
 31,309,824-byte maximum RSS and zero swaps. No job approached the repository's
 8-GiB local review threshold. Exact assertions, evidence, and checksums are in
 `results/v7-all-reachable-cu-bound-testnet-20260907/`.
+
+The revision-2 addendum used only focused host checks. The source audit peaked
+at 23,019,520 bytes RSS; the two exact unit tests peaked at 102,514,688 and
+172,032,000 bytes; and the optimized proof-inspector build peaked at
+755,302,400 bytes. All recorded zero swaps. No SBF build, proof generation,
+validator transaction, public signature or deployment was performed. The
+revision-2 machine-readable addendum is under
+`results/v7-all-reachable-cu-bound-testnet-20260907/profile-revision-2/`.

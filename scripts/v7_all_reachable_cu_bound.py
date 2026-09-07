@@ -20,12 +20,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_LIMIT = 1_400_000
-MEASURED_ROLLOVER_C0_CU = 1_218_972
-MEASURED_ROLLOVER_C0_FRONTIER = 202
-CALIBRATED_CUTOFF20_MAX_FRONTIER_CU = 1_299_084
+HISTORICAL_PROFILE_REVISION = 1
+CURRENT_PROFILE_REVISION = 2
+HISTORICAL_MEASURED_ROLLOVER_C0_CU = 1_218_972
+HISTORICAL_MEASURED_ROLLOVER_C0_FRONTIER = 202
+HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU = 1_299_084
 CUTOFF20_MAX_COUNTER = 20
 MAX_FRONTIER_NODES = 203
-AUDITED_PRODUCTION_SOURCE_REVISION = "4c91f97ac6576201f90d41c2a575e54c026e3796"
+AUDITED_PRODUCTION_SOURCE_REVISION = "b053663d6c4fc7e991ef08ca568f68b81d25311c"
 
 
 def fail(message: str) -> None:
@@ -82,11 +84,40 @@ def main() -> None:
     require(r"CHALLENGE_RETRY_LIMIT:\s*u32\s*=\s*8", transcript, "QM31 retry limit")
     require(r"NONZERO_QM31_RETRY_LIMIT:\s*u32\s*=\s*3", transcript, "nonzero retry limit")
     require(r"CIRCLE_POINT_RETRY_LIMIT:\s*u32\s*=\s*3", transcript, "circle retry limit")
+    require(r"V7_BOUND_CHALLENGE_MAX_BLOCKS:\s*usize\s*=\s*12", transcript, "Tag-73 recorded challenge block cap")
+    require(r"V7_GAMMA_BIND_ID:\s*u8\s*=\s*0", transcript, "Tag-73 gamma bind id")
+    require(r"V7_ALPHA_ZERO_BIND_ID:\s*u8\s*=\s*1", transcript, "Tag-73 alpha-zero bind id")
+    require(r"V7_CHALLENGE_BIND:\s*u8\s*=\s*62", transcript, "Tag-73 causal-bind transcript label")
     require(r"challenge_queries_without_replacement\(V6_QUERY_COUNT,\s*1\s*<<\s*18,\s*64\)", onefold, "q16 draw limit")
     require(r"V7_COMPACT_QUERY_CANDIDATES:\s*usize\s*=\s*64", onefold, "candidate count")
     require(r"V7_COMPACT_FRONTIER_CAP_PER_TREE:\s*usize\s*=\s*203", onefold, "frontier cap")
     require(r"V7_FINAL_NONCE_COUNTER_CUTOFF:\s*u8\s*=\s*20", prover, "publication cutoff")
     require(r"challenge_queries\(V6_QUERY_COUNT,\s*1\s*<<\s*18\)", prover, "minimum-query-draw check")
+    require(
+        r"OneFoldBuildProfile::V7Compact\s*=>\s*transcript\.challenge_nonzero_qm31_bound\(V7_GAMMA_BIND_ID\)",
+        prover,
+        "prover gamma causal binding",
+    )
+    require(
+        r"OneFoldBuildProfile::V7Compact\s*=>\s*transcript\.challenge_qm31_bound\(V7_ALPHA_ZERO_BIND_ID\)",
+        prover,
+        "prover alpha-zero causal binding",
+    )
+    require(
+        r"shift_query_batch_for_tag73\s*\{\s*transcript\.challenge_nonzero_qm31_bound\(V7_GAMMA_BIND_ID\)",
+        v6_transcript,
+        "verifier gamma causal binding",
+    )
+    require(
+        r"shift_query_batch_for_tag73\s*\{\s*transcript\.challenge_qm31_bound\(V7_ALPHA_ZERO_BIND_ID\)",
+        v6_transcript,
+        "verifier alpha-zero causal binding",
+    )
+    require(
+        r"0x81,\s*0x02,\s*8,\s*20,\s*18,\s*1,\s*64,\s*2",
+        onefold,
+        "causal-binding profile revision 2",
+    )
     require(
         r"for index in 1\.\.Q\s*\{.*while cursor > 0 && value < queries\[cursor - 1\]",
         read("crates/aspis-core/src/v6_onefold.rs"),
@@ -130,6 +161,23 @@ def main() -> None:
     maximum_additional_qm31_squeeze_syscall_cu = (
         maximum_qm31_squeeze_blocks - minimum_qm31_squeeze_blocks
     ) * squeeze_block_syscall_cu
+
+    # Revision 2 immediately absorbs two fixed-width causal records. Each
+    # call hashes four slices: transcript state (32), absorb frame (2),
+    # challenge header (2), and the zero-padded raw block inventory (384).
+    # Agave charges the base once and max(mem_op_base, floor(bytes/2)) per
+    # slice, so each bind syscall is 313 CU and the two-call fixed floor is
+    # 626 CU. This is not a current-binary measurement: the SBF copy/loop
+    # overhead also changed and must be measured from a rebuilt revision-2
+    # binary.
+    causal_bind_calls = 2
+    causal_bind_slice_bytes = [32, 2, 2, 32 * 12]
+    causal_bind_input_bytes = sum(causal_bind_slice_bytes)
+    causal_bind_sha256_cu_per_call = sha256_base_cu + sum(
+        max(mem_op_base_cu, sha256_byte_cu * (length // 2))
+        for length in causal_bind_slice_bytes
+    )
+    causal_bind_sha256_cu_total = causal_bind_calls * causal_bind_sha256_cu_per_call
 
     # Successful production-shaped rollover withdrawal call graph. Repeated
     # derivations are intentional: Pool and verifier independently authenticate
@@ -184,11 +232,11 @@ def main() -> None:
     q16_insertion_comparisons_min = 15
     q16_insertion_comparisons_max = 16 * 15 // 2
 
-    single_maximal_pda_one_attempt_reference_envelope = (
-        MEASURED_ROLLOVER_C0_CU + one_maximal_pda_extra_cu_over_one_attempt
+    historical_single_maximal_pda_one_attempt_reference_envelope = (
+        HISTORICAL_MEASURED_ROLLOVER_C0_CU + one_maximal_pda_extra_cu_over_one_attempt
     )
-    all_maximal_pda_one_attempt_reference_envelope = (
-        MEASURED_ROLLOVER_C0_CU
+    historical_all_maximal_pda_one_attempt_reference_envelope = (
+        HISTORICAL_MEASURED_ROLLOVER_C0_CU
         + pda_invocations
         * (pda_successful_attempts_per_invocation_max - 1)
         * create_program_address_cu
@@ -211,13 +259,13 @@ def main() -> None:
     })
 
     result = {
-        "schema": "aspis.v7.all-reachable-cu-source-inventory.v1",
+        "schema": "aspis.v7.all-reachable-cu-source-inventory.v2",
         "auditedProductionSourceRevision": AUDITED_PRODUCTION_SOURCE_REVISION,
         "revisionQualification": (
             "the audited production sources are unchanged from this base; the containing "
             "evidence commit is reported separately because a commit cannot contain its own hash"
         ),
-        "classification": "ALL-REACHABLE COMPLETION BOUND FAILS CLOSED",
+        "classification": "CURRENT PROFILE CU BASELINE MISSING; ALL-REACHABLE COMPLETION BOUND FAILS CLOSED",
         "quantifiers": {
             "verifierAcceptedLanguage": "counters 0..63; q16 draws up to 64 per candidate",
             "cutoff20PublishedSubset": "counters 0..20 and exactly 16 distinct initial q16 draws per evaluated candidate",
@@ -229,25 +277,42 @@ def main() -> None:
             "cutoff20InclusiveCounter": CUTOFF20_MAX_COUNTER,
             "frontierNodes": MAX_FRONTIER_NODES,
         },
-        "measuredAnchor": {
-            "transactionCu": MEASURED_ROLLOVER_C0_CU,
-            "counter": 0,
-            "frontierNodes": MEASURED_ROLLOVER_C0_FRONTIER,
-            "qualification": "genuine strict-work LiteSVM rollover withdrawal; sample, not upper bound",
+        "currentProfile": {
+            "revision": CURRENT_PROFILE_REVISION,
+            "productionSbfMeasurement": None,
+            "cutoff20Frontier203Measurement": None,
+            "measurementAvailable": False,
+            "reason": (
+                "profile revision 2 adds causal gamma/alpha transcript binds; the "
+                "production SBF binaries and honest proof evidence have not been rebuilt"
+            ),
         },
-        "calibratedCutoff20Envelope": {
-            "transactionCu": CALIBRATED_CUTOFF20_MAX_FRONTIER_CU,
+        "historicalMeasuredAnchor": {
+            "profileRevision": HISTORICAL_PROFILE_REVISION,
+            "currentProfileApplicable": False,
+            "transactionCu": HISTORICAL_MEASURED_ROLLOVER_C0_CU,
+            "counter": 0,
+            "frontierNodes": HISTORICAL_MEASURED_ROLLOVER_C0_FRONTIER,
+            "qualification": (
+                "genuine strict-work LiteSVM rollover withdrawal for profile revision 1; "
+                "sample, not an upper bound and not a revision-2 measurement"
+            ),
+        },
+        "historicalCalibratedCutoff20Envelope": {
+            "profileRevision": HISTORICAL_PROFILE_REVISION,
+            "currentProfileApplicable": False,
+            "transactionCu": HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU,
             "counter": CUTOFF20_MAX_COUNTER,
             "frontierNodes": MAX_FRONTIER_NODES,
-            "runtimeHeadroomCu": RUNTIME_LIMIT - CALIBRATED_CUTOFF20_MAX_FRONTIER_CU,
+            "runtimeHeadroomCu": RUNTIME_LIMIT - HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU,
             "additionalPdaAttemptsToCrossRuntimeLimit": (
-                (RUNTIME_LIMIT - CALIBRATED_CUTOFF20_MAX_FRONTIER_CU)
+                (RUNTIME_LIMIT - HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU)
                 // create_program_address_cu
                 + 1
             ),
             "qualification": (
-                "two-comparison calibrated model with <=1 CU fit error; not an "
-                "all-reachable upper bound"
+                "revision-1 two-comparison calibrated model with <=1 CU fit error; "
+                "not an all-reachable bound and not applicable to revision 2"
             ),
         },
         "transcriptBoundedControlFlow": {
@@ -268,6 +333,20 @@ def main() -> None:
             "verifierLanguageQuerySqueezeBlocksMaximum": verifier_language_query_squeeze_blocks_max,
             "cutoff20ConstrainsQm31Retries": False,
         },
+        "causalChallengeBindingRevision2": {
+            "profileRevision": CURRENT_PROFILE_REVISION,
+            "bindCalls": causal_bind_calls,
+            "sha256SlicesPerCall": causal_bind_slice_bytes,
+            "inputBytesPerCall": causal_bind_input_bytes,
+            "sha256SyscallCuPerCall": causal_bind_sha256_cu_per_call,
+            "fixedSha256SyscallCu": causal_bind_sha256_cu_total,
+            "maximumRecordedBlocksPerBind": 12,
+            "sbfCopyAndLoopOverheadMeasured": False,
+            "qualification": (
+                "626 CU is the exact Agave SHA-256 syscall charge only; it must not "
+                "be added to a revision-1 transaction as a revision-2 CU measurement"
+            ),
+        },
         "queryOrderingBoundedControlFlow": {
             "queriesPerCandidate": 16,
             "binaryFrontierInsertionSortComparisons": {
@@ -285,20 +364,22 @@ def main() -> None:
                 "inferred from the two-point calibrated envelope"
             ),
         },
-        "combinedReferenceEnvelope": {
+        "historicalCombinedReferenceEnvelope": {
+            "profileRevision": HISTORICAL_PROFILE_REVISION,
+            "currentProfileApplicable": False,
             "cutoff20MaxFrontierPlusMaximumSuccessfulQm31RetrySyscallCu": (
-                CALIBRATED_CUTOFF20_MAX_FRONTIER_CU
+                HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU
                 + maximum_additional_qm31_squeeze_syscall_cu
             ),
             "remainingRuntimeHeadroomCu": (
                 RUNTIME_LIMIT
-                - CALIBRATED_CUTOFF20_MAX_FRONTIER_CU
+                - HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU
                 - maximum_additional_qm31_squeeze_syscall_cu
             ),
             "additionalPdaAttemptsToCrossRuntimeLimit": (
                 (
                     RUNTIME_LIMIT
-                    - CALIBRATED_CUTOFF20_MAX_FRONTIER_CU
+                    - HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU
                     - maximum_additional_qm31_squeeze_syscall_cu
                 )
                 // create_program_address_cu
@@ -324,8 +405,10 @@ def main() -> None:
             "maximumSyscallCuPerSuccessfulInvocation": pda_syscall_cu_per_successful_invocation_max,
             "maximumSyscallCuAllInvocations": all_pda_syscall_cu_max,
             "oneMaximalInvocationExtraCuOverOneAttempt": one_maximal_pda_extra_cu_over_one_attempt,
-            "oneAttemptReferenceEnvelopeWithOneMaximalInvocation": single_maximal_pda_one_attempt_reference_envelope,
-            "oneAttemptReferenceEnvelopeWithAllMaximalInvocations": all_maximal_pda_one_attempt_reference_envelope,
+            "historicalProfileRevision": HISTORICAL_PROFILE_REVISION,
+            "currentProfileApplicable": False,
+            "oneAttemptReferenceEnvelopeWithOneMaximalInvocation": historical_single_maximal_pda_one_attempt_reference_envelope,
+            "oneAttemptReferenceEnvelopeWithAllMaximalInvocations": historical_all_maximal_pda_one_attempt_reference_envelope,
             "referenceEnvelopeQualification": (
                 "these values compare an otherwise identical one-attempt derivation with "
                 "permitted maximal bump searches; they are not witnessed transactions and "
@@ -338,11 +421,9 @@ def main() -> None:
             "cutoff20GuaranteesBelow1400000": False,
             "verifierAcceptedLanguageGuaranteesBelow1400000": False,
             "reason": (
-                "relative to an otherwise identical one-attempt derivation, one permitted "
-                "255-attempt successful PDA search adds 381000 syscall CU, exceeding the measured "
-                "rollover anchor's 181028-CU runtime headroom; the fixture's exact bump "
-                "inventory is not encoded in the measurement, so the 1599972-CU value is "
-                "a reference envelope rather than a witnessed transaction"
+                "no current profile-revision-2 production SBF measurement exists; additionally, "
+                "counter 20 leaves successful QM31 retries, query ordering, and data-dependent "
+                "PDA bump searches outside its admission predicate"
             ),
             "safeToPromoteAsUniversalCuPolicy": False,
             "byteIdenticalSimulationStillRequired": True,
@@ -352,6 +433,7 @@ def main() -> None:
             "verifierChanged": False,
             "proofFormatChanged": False,
             "relationChanged": False,
+            "acceptedTranscriptProfileChangedSinceHistoricalMeasurements": True,
             "doesNotClaimJointSha256PreimageWitnessForEveryMaximalBranch": True,
             "doesProveCurrentAdmissionPolicyLeavesFiniteCostBranchesUngated": True,
         },
