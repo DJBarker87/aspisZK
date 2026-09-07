@@ -19,7 +19,7 @@ use aspis_core::state_only_sumcheck::{
 use aspis_core::sumcheck::{
     boundary_sum, evaluate, polynomial_for_extension, SumcheckPolynomial, WeightAccumulator,
 };
-use aspis_core::transcript::{label, Transcript};
+use aspis_core::transcript::{label, Transcript, V7_ALPHA_ZERO_BIND_ID, V7_GAMMA_BIND_ID};
 use aspis_core::v6_onefold::{
     binary_frontier_nodes, fold_v6_onefold_queries, prepare_v6_onefold_coordinates,
     verify_and_gamma_combine_v6_binary_openings_prepared, V6OneFoldWire, V6WireError,
@@ -1490,9 +1490,11 @@ fn build_onefold_proof_with_pow_mode(
     let batch_nonce = work_nonce(&transcript, work_bits[0], pow_mode)?;
     let mut pow_valid = transcript.grinding_ok(batch_nonce, work_bits[0]);
     absorb_work(&mut transcript, 0, batch_nonce);
-    let gamma = transcript
-        .challenge_nonzero_qm31()
-        .map_err(|_| V6ProverError::Stage("V6 gamma"))?;
+    let gamma = match profile {
+        OneFoldBuildProfile::V6 => transcript.challenge_nonzero_qm31(),
+        OneFoldBuildProfile::V7Compact => transcript.challenge_nonzero_qm31_bound(V7_GAMMA_BIND_ID),
+    }
+    .map_err(|_| V6ProverError::Stage("one-fold gamma"))?;
 
     let combined_message =
         gamma_combine_state_only_spend_messages(&selected_c1, &c2_messages, gamma)
@@ -1571,9 +1573,11 @@ fn build_onefold_proof_with_pow_mode(
     let fold_nonce = work_nonce(&transcript, work_bits[1], pow_mode)?;
     pow_valid &= transcript.grinding_ok(fold_nonce, work_bits[1]);
     absorb_work(&mut transcript, 1, fold_nonce);
-    let alpha0 = transcript
-        .challenge_qm31()
-        .map_err(|_| V6ProverError::Stage("V6 alpha0"))?;
+    let alpha0 = match profile {
+        OneFoldBuildProfile::V6 => transcript.challenge_qm31(),
+        OneFoldBuildProfile::V7Compact => transcript.challenge_qm31_bound(V7_ALPHA_ZERO_BIND_ID),
+    }
+    .map_err(|_| V6ProverError::Stage("one-fold alpha0"))?;
     running_claim = evaluate(&first, alpha0);
     weights.fold_deferred_relation_arity4(alpha0);
     relation_values = fold_adjacent_natural_arity4(&relation_values, alpha0);
