@@ -14,11 +14,11 @@ pair.
 The three full-256 compiler quantities are kept distinct:
 
 * machine-fresh coordinates
-  `M = Q + 1511 + R * (Q + 1511)`;
+  `M = Q + 1513 + R * (Q + 1513)`;
 * unified uniform coordinates, including two programmed fork coins,
   `F = M + 2 * R`; and
 * full-256 compiler-oracle calls
-  `G = Q + 1511 + R * (2 * Q + 1511)`.
+  `G = Q + 1513 + R * (2 * Q + 1513)`.
 
 `Q` includes every adversary SHA call, including its three separately
 accounted grinding searches and any adversary Merkle calls.  The deployed
@@ -64,7 +64,7 @@ noncomputable section
 
 /-! ## Exact parameters and derived caps -/
 
-def deployedFull256VerifierCallCap : Nat := 1511
+def deployedFull256VerifierCallCap : Nat := 1513
 
 def deployedTypedMerkleVerifierCallCap : Nat := 468
 
@@ -131,16 +131,16 @@ def q16CandidateBranchCap
 theorem exact_compiler_M_F_G_expansion
     (parameters : ExactCompilerResourceParameters) :
     full256MachineFreshCap parameters =
-        parameters.q1ShaCallCap + 1511 +
-          parameters.forkRequestCap * (parameters.q1ShaCallCap + 1511) ∧
+        parameters.q1ShaCallCap + 1513 +
+          parameters.forkRequestCap * (parameters.q1ShaCallCap + 1513) ∧
       unifiedFull256ExposureCap parameters =
-        (parameters.q1ShaCallCap + 1511 +
-          parameters.forkRequestCap * (parameters.q1ShaCallCap + 1511)) +
+        (parameters.q1ShaCallCap + 1513 +
+          parameters.forkRequestCap * (parameters.q1ShaCallCap + 1513)) +
             2 * parameters.forkRequestCap ∧
       globalFull256OracleCallCap parameters =
-        parameters.q1ShaCallCap + 1511 +
+        parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (2 * parameters.q1ShaCallCap + 1511) := by
+            (2 * parameters.q1ShaCallCap + 1513) := by
   exact ⟨rfl, rfl, rfl⟩
 
 theorem exact_compiler_fork_and_start_caps
@@ -150,7 +150,7 @@ theorem exact_compiler_fork_and_start_caps
   exact ⟨rfl, rfl⟩
 
 /-- The positive-exposure simplification never encounters a zero denominator:
-the deployed verifier alone contributes 1511 full-256 calls. -/
+the deployed verifier alone contributes 1513 full-256 calls. -/
 theorem exact_compiler_unified_exposure_cap_positive
     (parameters : ExactCompilerResourceParameters) :
     0 < unifiedFull256ExposureCap parameters := by
@@ -168,7 +168,7 @@ theorem exact_compiler_total_runtime_cap_expanded
   rfl
 
 theorem deployed_verifier_full256_typed_merkle_split :
-    1979 = deployedFull256VerifierCallCap +
+    1981 = deployedFull256VerifierCallCap +
       deployedTypedMerkleVerifierCallCap := by
   norm_num [deployedFull256VerifierCallCap,
     deployedTypedMerkleVerifierCallCap]
@@ -199,10 +199,10 @@ theorem exact_compiler_resource_budget_core_fields
     (parameters : ExactCompilerResourceParameters) :
     (exactCompilerResourceBudget parameters).adversaryOracleCalls =
         parameters.q1ShaCallCap ∧
-      (exactCompilerResourceBudget parameters).verifierOracleCalls = 1511 ∧
+      (exactCompilerResourceBudget parameters).verifierOracleCalls = 1513 ∧
       (exactCompilerResourceBudget parameters).extractorOracleCalls =
         parameters.forkRequestCap *
-          (2 * parameters.q1ShaCallCap + 1511) ∧
+          (2 * parameters.q1ShaCallCap + 1513) ∧
       (exactCompilerResourceBudget parameters).freshOracleAnswers =
         full256MachineFreshCap parameters ∧
       (exactCompilerResourceBudget parameters).programmedPoints =
@@ -298,15 +298,15 @@ theorem exact_compiler_target_caps_length
   exact operational_caps_from_one_length _ _
 
 /-- Removing the 512 named q16 digest coordinates from the exact master tape
-leaves precisely the first-run adversary allowance, the 999 non-q16 verifier
+leaves precisely the first-run adversary allowance, the 1001 non-q16 verifier
 allowance, every replay machine block, and both programmed coordinates per
 fork. -/
 theorem exact_compiler_q16_residual_length_expanded
     (parameters : ExactCompilerResourceParameters) :
     (exactCompilerTargetCaps parameters).length - 512 =
-      parameters.q1ShaCallCap + 999 +
+      parameters.q1ShaCallCap + 1001 +
         parameters.forkRequestCap *
-          (parameters.q1ShaCallCap + 1511) +
+          (parameters.q1ShaCallCap + 1513) +
         2 * parameters.forkRequestCap := by
   rw [exact_compiler_target_caps_length]
   unfold unifiedFull256ExposureCap full256MachineFreshCap sameTapeStartCap
@@ -325,11 +325,11 @@ theorem exact_compiler_q16_residual_covers_non_q16_execution
     parameters.q1ShaCallCap +
         tag73Full256NonQ16OracleCalls messages search +
         parameters.forkRequestCap *
-          (parameters.q1ShaCallCap + 1511) +
+          (parameters.q1ShaCallCap + 1513) +
         2 * parameters.forkRequestCap ≤
       (exactCompilerTargetCaps parameters).length - 512 := by
   rw [exact_compiler_q16_residual_length_expanded]
-  have reserve := tag73_full256_non_q16_oracle_calls_le_999 messages search
+  have reserve := tag73_full256_non_q16_oracle_calls_le_1001 messages search
   omega
 
 theorem exact_compiler_target_caps_sum
@@ -341,21 +341,21 @@ theorem exact_compiler_target_caps_sum
 theorem exact_compiler_target_coefficient_expanded
     (parameters : ExactCompilerResourceParameters) :
     exactCompilerTargetCoefficient parameters =
-      (parameters.q1ShaCallCap + 1511 +
+      (parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (parameters.q1ShaCallCap + 1511) +
+            (parameters.q1ShaCallCap + 1513) +
           2 * parameters.forkRequestCap) +
-      (parameters.q1ShaCallCap + 1511 +
+      (parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (parameters.q1ShaCallCap + 1511) +
+            (parameters.q1ShaCallCap + 1513) +
           2 * parameters.forkRequestCap).choose 2 +
-      (parameters.q1ShaCallCap + 1511 +
+      (parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (parameters.q1ShaCallCap + 1511) +
+            (parameters.q1ShaCallCap + 1513) +
           2 * parameters.forkRequestCap) *
-        (parameters.q1ShaCallCap + 1511 +
+        (parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (2 * parameters.q1ShaCallCap + 1511)) := by
+            (2 * parameters.q1ShaCallCap + 1513)) := by
   rfl
 
 abbrev ExactCompilerSample (HiddenTape : Type)
@@ -507,21 +507,21 @@ theorem exact_compiler_target_probability_zero_when_F_zero
 theorem exact_compiler_positive_error_expanded
     (parameters : ExactCompilerResourceParameters) :
     exactCompilerPositiveExposureError parameters =
-      ((((parameters.q1ShaCallCap + 1511 +
+      ((((parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (parameters.q1ShaCallCap + 1511) +
+            (parameters.q1ShaCallCap + 1513) +
           2 * parameters.forkRequestCap) +
-        (parameters.q1ShaCallCap + 1511 +
+        (parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (parameters.q1ShaCallCap + 1511) +
+            (parameters.q1ShaCallCap + 1513) +
           2 * parameters.forkRequestCap).choose 2 +
-        (parameters.q1ShaCallCap + 1511 +
+        (parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (parameters.q1ShaCallCap + 1511) +
+            (parameters.q1ShaCallCap + 1513) +
           2 * parameters.forkRequestCap) *
-        (parameters.q1ShaCallCap + 1511 +
+        (parameters.q1ShaCallCap + 1513 +
           parameters.forkRequestCap *
-            (2 * parameters.q1ShaCallCap + 1511)) : Nat) : ENNReal) /
+            (2 * parameters.q1ShaCallCap + 1513)) : Nat) : ENNReal) /
         ((2 : ENNReal) ^ 256)) := by
   rfl
 

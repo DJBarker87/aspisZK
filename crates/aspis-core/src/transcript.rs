@@ -238,11 +238,10 @@ pub mod label {
     /// absorbed before the C1 root and before lambda/chi.
     pub const V7_PAIR_LIVE_APPEND_SNAPSHOT: u8 = 61;
     /// Tag-73 causal challenge binding. The record is
-    /// `challenge_id || blocks_used || raw_squeeze_blocks || zero_padding`.
-    /// The raw/padding region is always twelve 32-byte blocks. It is absorbed
+    /// `challenge_id || canonical_qm31_le`. It is absorbed
     /// immediately after the bounded sampler succeeds, so no later
-    /// transcript state can be computed without fixing the full raw sampler
-    /// output. Older profiles never use this label.
+    /// transcript state can be computed without fixing the decoded challenge.
+    /// Older profiles never use this label.
     pub const V7_CHALLENGE_BIND: u8 = 62;
 }
 
@@ -271,9 +270,6 @@ pub const OOD_RETRY_LIMIT: u32 = 3;
 /// later line layers continue to use [`Transcript::challenge_ood_qm31`].
 pub const CIRCLE_POINT_RETRY_LIMIT: u32 = 3;
 
-/// The largest raw block inventory consumed by any bounded Tag-73 field
-/// sampler: four blocks per QM31 draw and three nonzero outer attempts.
-pub const V7_BOUND_CHALLENGE_MAX_BLOCKS: usize = 12;
 pub const V7_GAMMA_BIND_ID: u8 = 0;
 pub const V7_ALPHA_ZERO_BIND_ID: u8 = 1;
 
@@ -428,77 +424,14 @@ impl Transcript {
         })
     }
 
-    fn recorded_squeeze_block(
-        &mut self,
-        raw: &mut [u8; 32 * V7_BOUND_CHALLENGE_MAX_BLOCKS],
-        blocks_used: &mut usize,
-    ) -> Result<[u8; 32], ChallengeSampleExhausted> {
-        if *blocks_used == V7_BOUND_CHALLENGE_MAX_BLOCKS {
-            return Err(ChallengeSampleExhausted);
-        }
-        let block = self.squeeze_block();
-        let start = *blocks_used * 32;
-        raw[start..start + 32].copy_from_slice(&block);
-        *blocks_used += 1;
-        Ok(block)
+    fn bind_decoded_challenge(&mut self, challenge_id: u8, value: QM31) {
+        let mut record = [0u8; 17];
+        record[0] = challenge_id;
+        value.write_le_bytes(&mut record[1..]);
+        self.absorb(label::V7_CHALLENGE_BIND, &record);
     }
 
-    fn challenge_qm31_recorded(
-        &mut self,
-        raw: &mut [u8; 32 * V7_BOUND_CHALLENGE_MAX_BLOCKS],
-        blocks_used: &mut usize,
-    ) -> Result<QM31, ChallengeSampleExhausted> {
-        let mut limbs = [M31::ZERO; 4];
-        let mut block = self.recorded_squeeze_block(raw, blocks_used)?;
-        let mut word_index = 0usize;
-        for limb in limbs.iter_mut() {
-            let mut accepted = false;
-            for _ in 0..CHALLENGE_RETRY_LIMIT {
-                if word_index == 8 {
-                    block = self.recorded_squeeze_block(raw, blocks_used)?;
-                    word_index = 0;
-                }
-                let word = u32::from_le_bytes(
-                    block[word_index * 4..word_index * 4 + 4]
-                        .try_into()
-                        .unwrap(),
-                );
-                word_index += 1;
-                let masked = word & crate::field::P;
-                if masked != crate::field::P {
-                    *limb = M31(masked);
-                    accepted = true;
-                    break;
-                }
-            }
-            if !accepted {
-                return Err(ChallengeSampleExhausted);
-            }
-        }
-        Ok(QM31 {
-            c0: crate::field::CM31 {
-                a: limbs[0],
-                b: limbs[1],
-            },
-            c1: crate::field::CM31 {
-                a: limbs[2],
-                b: limbs[3],
-            },
-        })
-    }
-
-    fn bind_recorded_challenge(
-        &mut self,
-        challenge_id: u8,
-        raw: &[u8; 32 * V7_BOUND_CHALLENGE_MAX_BLOCKS],
-        blocks_used: usize,
-    ) {
-        debug_assert!(blocks_used > 0 && blocks_used <= V7_BOUND_CHALLENGE_MAX_BLOCKS);
-        let header = [challenge_id, blocks_used as u8];
-        self.absorb_two(label::V7_CHALLENGE_BIND, &header, raw);
-    }
-
-    /// Tag-73 ordinary-QM31 sampler with an immediate full-raw-output bind.
+    /// Tag-73 ordinary-QM31 sampler with an immediate decoded-value bind.
     /// This preserves exact rejection sampling while preventing the duplex's
     /// independent advance leg from exposing a later state before this
     /// challenge has been fixed.
@@ -506,10 +439,8 @@ impl Transcript {
         &mut self,
         challenge_id: u8,
     ) -> Result<QM31, ChallengeSampleExhausted> {
-        let mut raw = [0u8; 32 * V7_BOUND_CHALLENGE_MAX_BLOCKS];
-        let mut blocks_used = 0usize;
-        let value = self.challenge_qm31_recorded(&mut raw, &mut blocks_used)?;
-        self.bind_recorded_challenge(challenge_id, &raw, blocks_used);
+        let value = self.challenge_qm31()?;
+        self.bind_decoded_challenge(challenge_id, value);
         Ok(value)
     }
 
@@ -526,22 +457,15 @@ impl Transcript {
         Err(ChallengeSampleExhausted)
     }
 
-    /// Tag-73 nonzero-QM31 sampler with one immediate bind covering every raw
-    /// block consumed by all rejected and accepted outer attempts.
+    /// Tag-73 nonzero-QM31 sampler with one immediate bind covering the
+    /// accepted decoded value.
     pub fn challenge_nonzero_qm31_bound(
         &mut self,
         challenge_id: u8,
     ) -> Result<QM31, ChallengeSampleExhausted> {
-        let mut raw = [0u8; 32 * V7_BOUND_CHALLENGE_MAX_BLOCKS];
-        let mut blocks_used = 0usize;
-        for _ in 0..NONZERO_QM31_RETRY_LIMIT {
-            let value = self.challenge_qm31_recorded(&mut raw, &mut blocks_used)?;
-            if value != QM31::ZERO {
-                self.bind_recorded_challenge(challenge_id, &raw, blocks_used);
-                return Ok(value);
-            }
-        }
-        Err(ChallengeSampleExhausted)
+        let value = self.challenge_nonzero_qm31()?;
+        self.bind_decoded_challenge(challenge_id, value);
+        Ok(value)
     }
 
     /// Sample exactly uniformly from QM31 \ CM31. Since every evaluation
@@ -1104,25 +1028,22 @@ mod tests {
     }
 
     #[test]
-    fn v7_bound_qm31_binds_exact_raw_block_without_changing_sample() {
+    fn v7_bound_qm31_binds_exact_decoded_value_without_changing_sample() {
         let mut ordinary = Transcript::new(test_hash);
         ordinary.absorb(label::PROFILE, b"v7-bound-qm31-test");
         let mut bound = ordinary.clone();
-        let mut raw = ordinary.clone();
+        let mut manual = ordinary.clone();
 
         let expected = ordinary.challenge_qm31().unwrap();
-        let block = raw.squeeze_block();
-        let mut padded = [0u8; 32 * V7_BOUND_CHALLENGE_MAX_BLOCKS];
-        padded[..32].copy_from_slice(&block);
-        raw.absorb_two(
-            label::V7_CHALLENGE_BIND,
-            &[V7_ALPHA_ZERO_BIND_ID, 1],
-            &padded,
-        );
+        let manual_value = manual.challenge_qm31().unwrap();
+        let mut record = [0u8; 17];
+        record[0] = V7_ALPHA_ZERO_BIND_ID;
+        manual_value.write_le_bytes(&mut record[1..]);
+        manual.absorb(label::V7_CHALLENGE_BIND, &record);
         let actual = bound.challenge_qm31_bound(V7_ALPHA_ZERO_BIND_ID).unwrap();
 
         assert_eq!(actual, expected);
-        assert_eq!(bound.diagnostic_state(), raw.diagnostic_state());
+        assert_eq!(bound.diagnostic_state(), manual.diagnostic_state());
         assert_ne!(bound.diagnostic_state(), ordinary.diagnostic_state());
     }
 

@@ -138,9 +138,9 @@ def globalSharedShaCallCap
 theorem global_shared_sha_call_cap_expanded
     (parameters : ExactCompilerResourceParameters) :
     globalSharedShaCallCap parameters =
-      parameters.q1ShaCallCap + 1511 +
+      parameters.q1ShaCallCap + 1513 +
         parameters.forkRequestCap *
-          (2 * parameters.q1ShaCallCap + 1511) +
+          (2 * parameters.q1ShaCallCap + 1513) +
         (parameters.forkRequestCap + 1) * 468 := by
   rfl
 
@@ -153,9 +153,9 @@ def k12CollisionUniverseExposureCap
 theorem k12_collision_universe_exposure_cap_expanded
     (parameters : ExactCompilerResourceParameters) :
     k12CollisionUniverseExposureCap parameters =
-      parameters.q1ShaCallCap + 1511 +
+      parameters.q1ShaCallCap + 1513 +
         parameters.forkRequestCap *
-          (2 * parameters.q1ShaCallCap + 1511) +
+          (2 * parameters.q1ShaCallCap + 1513) +
         (parameters.forkRequestCap + 1) * 468 + 38 := by
   rfl
 
@@ -204,9 +204,9 @@ def k12PartialRawCollisionExposureCap
 theorem k12_partial_raw_collision_exposure_cap_expanded
     (parameters : ExactCompilerResourceParameters) :
     k12PartialRawCollisionExposureCap parameters =
-      parameters.q1ShaCallCap + 1511 +
+      parameters.q1ShaCallCap + 1513 +
         parameters.forkRequestCap *
-          (2 * parameters.q1ShaCallCap + 1511) +
+          (2 * parameters.q1ShaCallCap + 1513) +
         (parameters.forkRequestCap + 1) * 468 := by
   rfl
 

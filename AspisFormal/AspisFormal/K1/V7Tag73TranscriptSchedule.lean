@@ -209,6 +209,19 @@ structure SamplerUse (id : ChallengeId) where
   consumesBlock : 0 < blocksUsed
   withinDeployedCap : blocksUsed ≤ samplerBlockCap (samplerMode id)
 
+inductive BoundChallengeId where
+  | gamma
+  | alphaZero
+  deriving DecidableEq, Repr
+
+def BoundChallengeId.code : BoundChallengeId → UInt8
+  | .gamma => 0
+  | .alphaZero => 1
+
+def BoundChallengeId.challengeId : BoundChallengeId → ChallengeId
+  | .gamma => .gamma
+  | .alphaZero => .alpha 0
+
 /-- `C2Commitment` can only be constructed at the type indexed by the decoded
 `lambda` and `chi` recorded after C1.  This records the deployed adaptive C2
 boundary without asserting any algebraic property of C2 or the missing raw
@@ -273,6 +286,7 @@ inductive Payload where
   | relationRound (round : Fin 4) (sent : Fin 6 → Qm31Bytes)
   | foldNonce (nonce : NonceBytes)
   | final256 (values : Fin 256 → Qm31Bytes)
+  | challengeBind (id : BoundChallengeId) (value : Qm31Bytes)
   | finalNonce (nonce : NonceBytes)
   | queryCandidate (counter : Fin 64)
   | queryBatchDomain
@@ -297,6 +311,7 @@ def Payload.label : Payload → UInt8
   | .relationRound _ _ => relationRoundLabel
   | .foldNonce _ => foldWorkNonceLabel
   | .final256 _ => final256Label
+  | .challengeBind _ _ => challengeBindLabel
   | .finalNonce _ => finalWorkNonceLabel
   | .queryCandidate _ => queryCandidateLabel
   | .queryBatchDomain => queryBatchChallengeLabel
@@ -321,6 +336,7 @@ def Payload.data : Payload → ByteString
   | .relationRound round sent => [UInt8.ofNat round.val] ++ encodeBlocks sent
   | .foldNonce nonce => [0] ++ bytes nonce
   | .final256 values => encodeBlocks values
+  | .challengeBind id value => [id.code] ++ bytes value
   | .finalNonce nonce => bytes nonce
   | .queryCandidate counter => [UInt8.ofNat counter.val]
   | .queryBatchDomain => []
@@ -496,6 +512,10 @@ structure Messages where
 def challengeEvent (messages : Messages) (id : ChallengeId) : MachineEvent :=
   .challenge id (messages.challengeUse id)
 
+def challengeBindEvent (messages : Messages)
+    (id : BoundChallengeId) : MachineEvent :=
+  .absorb (.challengeBind id (messages.challengeValue id.challengeId))
+
 def semanticEvents (messages : Messages) : List MachineEvent :=
   (List.ofFn fun round : Fin 10 =>
     [.absorb (.semanticRound round (messages.semanticSent round)),
@@ -542,6 +562,7 @@ def beforeQueryScan (oracle : HashOracle) (messages : Messages) : List MachineEv
    .check .batchWork,
    .absorb (.batchNonce messages.batchGrinding.selected),
    challengeEvent messages .gamma,
+   challengeBindEvent messages .gamma,
    .absorb (.inactiveClaim messages.inactiveClaim),
    challengeEvent messages .kappa] ++
   oodEvents messages ++
@@ -550,6 +571,7 @@ def beforeQueryScan (oracle : HashOracle) (messages : Messages) : List MachineEv
    .check .foldWork,
    .absorb (.foldNonce messages.foldGrinding.selected),
    challengeEvent messages (.alpha 0),
+   challengeBindEvent messages .alphaZero,
    .absorb (.final256 messages.finalValues),
    .grind .final messages.finalGrinding,
    .check .finalWork,

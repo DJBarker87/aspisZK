@@ -43,6 +43,7 @@ noncomputable section
 def beforeAlphaZeroTailEvents (messages : Messages) : List MachineEvent :=
   beforeGammaTailEvents messages ++
   [challengeEvent messages .gamma,
+   challengeBindEvent messages .gamma,
    .absorb (.inactiveClaim messages.inactiveClaim),
    challengeEvent messages .kappa] ++
   oodEvents messages ++
@@ -57,6 +58,7 @@ def beforeAlphaZeroProducerTailEvents (messages : Messages) :
     List MachineEvent :=
   beforeGammaTailEvents messages ++
   [challengeEvent messages .gamma,
+   challengeBindEvent messages .gamma,
    .absorb (.inactiveClaim messages.inactiveClaim),
    challengeEvent messages .kappa] ++
   oodEvents messages ++
@@ -77,7 +79,8 @@ theorem before_alpha_zero_tail_producer_split (messages : Messages) :
 
 /-- Exact suffix beginning with the value that alpha-zero immediately binds. -/
 def afterAlphaZeroTailEvents (messages : Messages) : List MachineEvent :=
-  [.absorb (.final256 messages.finalValues),
+  [challengeBindEvent messages .alphaZero,
+   .absorb (.final256 messages.finalValues),
    .grind .final messages.finalGrinding,
    .check .finalWork,
    .absorb (.finalNonce messages.finalGrinding.selected)]
@@ -109,8 +112,8 @@ theorem exact_compiler_constructs_alpha_zero_prefix_coordinates
       (segments : SemanticExecutionSegments (exactOperationalTable input)
         (exactOperationalTape input).messages evaluator.afterC2
         evaluator.prefixState)
-      (beforeAlphaProducer beforeAlpha afterAlpha afterBlocks afterFinal256 :
-        EvalState)
+      (beforeAlphaProducer beforeAlpha afterAlphaSample afterAlpha afterBlocks
+        afterFinal256 : EvalState)
       (outputs advances : List Digest256) (exactValue : QM31Exact),
       runMachineEventsWorkErased (exactOperationalTable input)
           (beforeAlphaZeroProducerTailEvents
@@ -134,9 +137,20 @@ theorem exact_compiler_constructs_alpha_zero_prefix_coordinates
           ((exactOperationalTape input).messages.challengeUse
             (.alpha 0)).blocksUsed beforeAlpha =
         some (outputs, afterBlocks) ∧
-      afterAlpha = { afterBlocks with
+      afterAlphaSample = { afterBlocks with
         samples := afterBlocks.samples ++
           [{ id := .alpha 0, blocks := outputs }] } ∧
+      runMachineEventWorkErased (exactOperationalTable input) afterAlphaSample
+          (challengeBindEvent (exactOperationalTape input).messages
+            .alphaZero) =
+        some afterAlpha ∧
+      tableLookup (exactOperationalTable input)
+          (bytes afterAlphaSample.digest ++
+            [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+              ((exactOperationalTape input).messages.challengeValue
+                (.alpha 0))).data) =
+        some afterAlpha.digest ∧
       runMachineEventWorkErased (exactOperationalTable input) afterAlpha
           (.absorb (.final256
             (exactOperationalTape input).messages.finalValues)) =
@@ -217,16 +231,16 @@ theorem exact_compiler_constructs_alpha_zero_prefix_coordinates
       (alphaZeroBoundaryPayload (exactOperationalTape input).messages)
       boundaryAbsorb
   simp only [runMachineEventsWorkErased] at restRun
-  obtain ⟨afterAlpha, alphaRun, suffixRun⟩ :=
+  obtain ⟨afterAlphaSample, alphaRun, suffixRun⟩ :=
     Option.bind_eq_some_iff.mp restRun
   have alphaRun' : runMachineEventWorkErased (exactOperationalTable input)
       beforeAlpha (.challenge (.alpha 0)
         ((exactOperationalTape input).messages.challengeUse (.alpha 0))) =
-        some afterAlpha := by
+        some afterAlphaSample := by
     simpa [challengeEvent] using alphaRun
   obtain ⟨outputs, afterBlocks, squeezeRun, afterAlphaExact, outputsLength,
       recordMember⟩ := challenge_event_work_erased_exposes_record
-    (exactOperationalTable input) beforeAlpha afterAlpha (.alpha 0)
+    (exactOperationalTable input) beforeAlpha afterAlphaSample (.alpha 0)
       ((exactOperationalTape input).messages.challengeUse (.alpha 0)) alphaRun'
   obtain ⟨advances, advancesLength, coordinates, terminalExact,
       callsExact⟩ :=
@@ -234,10 +248,10 @@ theorem exact_compiler_constructs_alpha_zero_prefix_coordinates
       (.challenge (.alpha 0))
       ((exactOperationalTape input).messages.challengeUse (.alpha 0)).blocksUsed
       beforeAlpha afterBlocks outputs squeezeRun
-  have suffixIncluded : SamplesIncluded afterAlpha evaluator.prefixState :=
+  have suffixIncluded : SamplesIncluded afterAlphaSample evaluator.prefixState :=
     machine_events_work_erased_samples_included (exactOperationalTable input)
       (afterAlphaZeroTailEvents (exactOperationalTape input).messages)
-      afterAlpha evaluator.prefixState (by
+      afterAlphaSample evaluator.prefixState (by
         simpa [afterAlphaZeroTailEvents] using suffixRun)
   have throughQ16 : SamplesIncluded evaluator.prefixState evaluator.afterQ16 :=
     run_q16_preserves_prior_samples (exactOperationalTable input)
@@ -266,13 +280,28 @@ theorem exact_compiler_constructs_alpha_zero_prefix_coordinates
       exactValue := by
     simp [exactOperationalChallenge, exactChallengeValue, exactDecode]
   change runMachineEventsWorkErased (exactOperationalTable input)
-      [.absorb (.final256 (exactOperationalTape input).messages.finalValues),
+      [challengeBindEvent (exactOperationalTape input).messages .alphaZero,
+       .absorb (.final256 (exactOperationalTape input).messages.finalValues),
        .grind .final (exactOperationalTape input).messages.finalGrinding,
        .check .finalWork,
        .absorb (.finalNonce
         (exactOperationalTape input).messages.finalGrinding.selected)]
-      afterAlpha = some evaluator.prefixState at suffixRun
+      afterAlphaSample = some evaluator.prefixState at suffixRun
   simp only [runMachineEventsWorkErased] at suffixRun
+  obtain ⟨afterAlpha, alphaBindRun, suffixRun⟩ :=
+    Option.bind_eq_some_iff.mp suffixRun
+  have alphaBindAbsorb : absorbStep (exactOperationalTable input)
+      afterAlphaSample
+      (.challengeBind .alphaZero
+        ((exactOperationalTape input).messages.challengeValue (.alpha 0))) =
+        some afterAlpha := by
+    simpa [runMachineEventWorkErased, challengeBindEvent,
+      BoundChallengeId.challengeId] using alphaBindRun
+  have alphaBindLookup := absorb_step_exposes_literal_lookup
+    (exactOperationalTable input) afterAlphaSample afterAlpha
+      (.challengeBind .alphaZero
+        ((exactOperationalTape input).messages.challengeValue (.alpha 0)))
+      alphaBindAbsorb
   obtain ⟨afterFinal256, final256Run, remainingRun⟩ :=
     Option.bind_eq_some_iff.mp suffixRun
   have final256Absorb : absorbStep (exactOperationalTable input) afterAlpha
@@ -336,13 +365,17 @@ theorem exact_compiler_constructs_alpha_zero_prefix_coordinates
   have q16BaseExact : evaluator.prefixState.digest =
       (exactOperationalRawTrace input).q16BaseDigest := by
     simpa using congrArg InteractiveRawTrace.q16BaseDigest evaluator.rawTraceEq
-  refine ⟨evaluator, segments, beforeAlphaProducer, beforeAlpha, afterAlpha,
-    afterBlocks, afterFinal256, outputs, advances, exactValue,
+  refine ⟨evaluator, segments, beforeAlphaProducer, beforeAlpha,
+    afterAlphaSample, afterAlpha, afterBlocks, afterFinal256, outputs, advances,
+    exactValue,
     producerPrefixRun, boundaryRun, boundaryLookup, squeezeRun,
     afterAlphaExact,
-    final256Run, outputsLength, advancesLength, coordinates, terminalExact,
+    alphaBindRun, ?_, final256Run, outputsLength, advancesLength, coordinates,
+    terminalExact,
     callsExact, acceptedParameter, exactDecode, operationalValue,
     final256Lookup, ?_, q16BaseExact⟩
+  · simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using alphaBindLookup
   simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
     AspisK1.V7Tag73TranscriptSchedule.Payload.data] using finalNonceLookup
 

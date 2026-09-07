@@ -198,7 +198,7 @@ theorem one_restoration_delta_of_charge_log_extension
     (chargesExact : after.charges = before.charges ++ extension)
     (queryBound :
       (extension.map ConcreteRestorationCharge.oracleQueries).sum ≤
-        2 * Q + 1511)
+        2 * Q + 1513)
     (forkBound :
       (extension.map
         ConcreteRestorationCharge.uniformForkCoordinates).sum ≤ 2)
@@ -457,7 +457,7 @@ theorem dispatch_one_concrete_restoration_preserves_projected_resources
         SchedulerNativeCursor globalOracleCalls
           (ConcreteRestorationClientRun Statement Proof Payload Result))
     (proverFuelBound : configuration.proverReplayFuel ≤ Q)
-    (verifierFuelBound : configuration.verifierFuel ≤ 1511)
+    (verifierFuelBound : configuration.verifierFuel ≤ 1513)
     (stored : AllStoredProverHistoriesWithin Q accumulator)
     (continuations : ∀ reply nextAccumulator,
       OneRestorationAccumulatorDelta Q configuration.driverFuel accumulator
@@ -474,7 +474,7 @@ theorem dispatch_one_concrete_restoration_preserves_projected_resources
       (extension : List ConcreteRestorationCharge),
       nextAccumulator.charges = accumulator.charges ++ extension →
       (extension.map ConcreteRestorationCharge.oracleQueries).sum ≤
-        2 * Q + 1511 →
+        2 * Q + 1513 →
       (extension.map
         ConcreteRestorationCharge.uniformForkCoordinates).sum ≤ 2 →
       (extension.map
@@ -1076,7 +1076,7 @@ theorem concrete_restoration_client_projected_resource_induction
     (client : ConcreteRestorationClient Result)
     (rootBound : root.proverHistory.length ≤ Q)
     (proverFuelBound : configuration.proverReplayFuel ≤ Q)
-    (verifierFuelBound : configuration.verifierFuel ≤ 1511) :
+    (verifierFuelBound : configuration.verifierFuel ≤ 1513) :
     SchedulerNativeCursorAllProjectedReturned
       (fun run =>
         AccumulatorWithinRestorationAttempts Q configuration.driverFuel
@@ -1165,7 +1165,7 @@ theorem completed_concrete_client_has_exact_accumulator_caps
     (client : ConcreteRestorationClient Result)
     (rootBound : root.proverHistory.length ≤ Q)
     (proverFuelBound : configuration.proverReplayFuel ≤ Q)
-    (verifierFuelBound : configuration.verifierFuel ≤ 1511)
+    (verifierFuelBound : configuration.verifierFuel ≤ 1513)
     (answers : List Digest256)
     (run : ConcreteRestorationClientRun Statement Proof Payload Result)
     (completed : runSchedulerNativeListTerminalFrom transitionFuel
@@ -1173,7 +1173,7 @@ theorem completed_concrete_client_has_exact_accumulator_caps
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalOracleCalls) startProgram environment root
         configuration R client) answers = .returned run) :
-    run.accumulator.oracleQueryTotal ≤ R * (2 * Q + 1511) ∧
+    run.accumulator.oracleQueryTotal ≤ R * (2 * Q + 1513) ∧
       run.accumulator.uniformForkCoordinateTotal ≤ 2 * R ∧
       run.accumulator.programmedPointTotal ≤ 2 * R ∧
       run.accumulator.restartTotal ≤ 2 * R ∧

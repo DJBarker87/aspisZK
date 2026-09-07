@@ -73,6 +73,20 @@ inductive ExactRetainedDigestChain
         prior) :
       ExactRetainedDigestChain prior boundaryInput allowedInput initial next
 
+/-- The boundary producer of a retained chain is itself retained. -/
+theorem exact_retained_digest_chain_boundary_member
+    {prior : List UnifiedExposureRecord} {boundaryInput : ShaInput}
+    {allowedInput : ShaInput → Prop} {initial terminal : Digest256}
+    (chain : ExactRetainedDigestChain prior boundaryInput allowedInput initial
+      terminal) :
+    ∃ actor,
+      (.machineFresh actor boundaryInput initial : UnifiedExposureRecord) ∈
+        prior := by
+  induction chain with
+  | boundary actor member => exact ⟨actor, member⟩
+  | step current next input actor previous causalPrefix allowed member ih =>
+      exact ih
+
 /-- The lookup-only form of a causal digest chain.  It is extracted directly
 from a successful evaluator run before chronology is used to retain every
 record inside a selected pre-anchor prefix. -/
@@ -300,6 +314,137 @@ theorem exact_lookup_digest_chain_through_machine_event
         simpa [runMachineEvent] using (Option.some.inj run).symm
       subst next
       exact chain
+
+/-- Work-erased counterpart used by the accepted semantic evaluator.  Erasing
+the three leading-zero predicates changes acceptance only; grinding still
+leaves the transcript digest unchanged. -/
+theorem exact_lookup_digest_chain_through_machine_event_work_erased
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    {forbiddenLabel : UInt8} {boundaryInput : ShaInput}
+    {initial : Digest256}
+    (state next : EvalState) (event : MachineEvent)
+    (chain : ExactLookupDigestChain (exactOperationalTable input)
+      boundaryInput (IsPostRootStateInput forbiddenLabel) initial state.digest)
+    (allowedEvent : IsPostRootMachineEvent forbiddenLabel event)
+    (run : runMachineEventWorkErased (exactOperationalTable input) state event =
+      some next) :
+    ExactLookupDigestChain (exactOperationalTable input) boundaryInput
+      (IsPostRootStateInput forbiddenLabel) initial next.digest := by
+  cases event with
+  | absorb payload =>
+      let absorbInput :=
+        bytes state.digest ++ [domAbsorb, payload.label] ++ payload.data
+      have lookup : tableLookup (exactOperationalTable input) absorbInput =
+          some next.digest := by
+        simpa [runMachineEventWorkErased, absorbInput] using
+          absorb_step_exposes_literal_lookup
+            (exactOperationalTable input) state next payload run
+      have causalPrefix : HasLiteralStatePrefix state.digest absorbInput := by
+        simp [HasLiteralStatePrefix, absorbInput]
+      have allowed : IsPostRootStateInput forbiddenLabel absorbInput := by
+        unfold IsPostRootMachineEvent at allowedEvent
+        exact Or.inr ⟨state.digest, payload, allowedEvent, rfl⟩
+      exact .step initial state.digest next.digest absorbInput chain causalPrefix
+        allowed lookup
+  | challenge id use =>
+      rw [runMachineEventWorkErased] at run
+      obtain ⟨samplePair, squeezeRun, result⟩ :=
+        Option.bind_eq_some_iff.mp run
+      rcases samplePair with ⟨outputs, sampled⟩
+      have nextExact :
+          { sampled with
+              samples := sampled.samples ++ [{ id := id, blocks := outputs }] } =
+            next := by
+        simpa only [pure, Option.some.injEq] using result
+      subst next
+      obtain ⟨advances, _advancesLength, coordinates, terminalExact,
+          _callsExact⟩ :=
+        squeeze_many_coordinates_with_terminal (exactOperationalTable input)
+          (.challenge id) use.blocksUsed state sampled outputs squeezeRun
+      obtain ⟨producerInput, producerLookup⟩ :=
+        exact_lookup_digest_chain_terminal_lookup chain
+      have ordered := gamma_table_coordinate_chain_has_exact_root_order
+        transitionRoom input producerInput state.digest producerLookup
+          coordinates
+      have appended := exact_lookup_digest_chain_append_ordered_q16 chain
+        ordered
+      simpa [terminalExact] using appended
+  | grind stage choice =>
+      rw [runMachineEventWorkErased, runGrindingChoiceWorkErased] at run
+      obtain ⟨queried, probesRun, run⟩ := Option.bind_eq_some_iff.mp run
+      obtain ⟨selectedPair, selectedRun, result⟩ :=
+        Option.bind_eq_some_iff.mp run
+      rcases selectedPair with ⟨output, afterSelected⟩
+      have nextExact : afterSelected = next := by
+        simpa only [pure, Option.some.injEq] using result
+      subst next
+      have probesDigest := grinding_probes_do_not_advance
+        (exactOperationalTable input) stage choice.probesBeforeSelected state
+          queried probesRun
+      have selectedDigest := grind_probe_does_not_advance
+        (exactOperationalTable input) queried afterSelected stage choice.selected
+          output selectedRun
+      have digestExact : afterSelected.digest = state.digest :=
+        selectedDigest.trans probesDigest
+      simpa [digestExact] using chain
+  | check checkpoint =>
+      have nextExact : next = state := by
+        simpa [runMachineEventWorkErased] using (Option.some.inj run).symm
+      subst next
+      exact chain
+
+/-- Iterate the work-erased event-local extraction. -/
+theorem exact_lookup_digest_chain_through_machine_events_work_erased
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    {forbiddenLabel : UInt8} {boundaryInput : ShaInput}
+    {initial : Digest256}
+    (events : List MachineEvent) (state final : EvalState)
+    (chain : ExactLookupDigestChain (exactOperationalTable input)
+      boundaryInput (IsPostRootStateInput forbiddenLabel) initial state.digest)
+    (allowedEvents : ∀ event, event ∈ events →
+      IsPostRootMachineEvent forbiddenLabel event)
+    (run : runMachineEventsWorkErased (exactOperationalTable input) events state =
+      some final) :
+    ExactLookupDigestChain (exactOperationalTable input) boundaryInput
+      (IsPostRootStateInput forbiddenLabel) initial final.digest := by
+  induction events generalizing state with
+  | nil =>
+      have finalExact : final = state := by
+        simpa [runMachineEventsWorkErased] using (Option.some.inj run).symm
+      subst final
+      exact chain
+  | cons event rest ih =>
+      rw [runMachineEventsWorkErased] at run
+      obtain ⟨next, eventRun, restRun⟩ := Option.bind_eq_some_iff.mp run
+      have eventAllowed : IsPostRootMachineEvent forbiddenLabel event :=
+        allowedEvents event (by simp)
+      have nextChain :=
+        exact_lookup_digest_chain_through_machine_event_work_erased
+          transitionRoom input state next event chain eventAllowed eventRun
+      apply ih next nextChain
+      · intro later laterMember
+        exact allowedEvents later (by simp [laterMember])
+      · exact restRun
 
 /-- Iterate the event-local extraction over a successful post-C2 event list. -/
 theorem exact_lookup_digest_chain_through_machine_events

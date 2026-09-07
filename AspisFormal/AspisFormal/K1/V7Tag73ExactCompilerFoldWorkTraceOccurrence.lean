@@ -80,6 +80,7 @@ def prefixAfterC2BeforeFoldWork (messages : Messages) : List MachineEvent :=
    .check .batchWork,
    .absorb (.batchNonce messages.batchGrinding.selected),
    challengeEvent messages .gamma,
+   challengeBindEvent messages .gamma,
    .absorb (.inactiveClaim messages.inactiveClaim),
    challengeEvent messages .kappa] ++
   oodEvents messages ++
@@ -91,6 +92,7 @@ def prefixAfterC2FromFoldWork (messages : Messages) : List MachineEvent :=
    .check .foldWork,
    .absorb (.foldNonce messages.foldGrinding.selected),
    challengeEvent messages (.alpha 0),
+   challengeBindEvent messages .alphaZero,
    .absorb (.final256 messages.finalValues),
    .grind .final messages.finalGrinding,
    .check .finalWork,

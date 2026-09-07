@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactCompilerGammaTraceOccurrence
+import AspisFormal.K1.V7Tag73ExactCompilerFinalWorkTraceOccurrence
 import AspisFormal.K1.V7Tag73SchedulerNativePreGammaFamily
 import AspisFormal.K1.V7Tag73VariablePrefixGammaCoordinates
 
@@ -39,6 +40,7 @@ open AspisK1.V7Tag73AcceptedSemanticExecution
 open AspisK1.V7Tag73SemanticRoundReplay
 open AspisK1.V7Tag73CheckedRefinementFullFutureFreePath
 open AspisK1.V7Tag73ExactCompilerGammaTraceOccurrence
+open AspisK1.V7Tag73ExactCompilerFinalWorkTraceOccurrence
 open AspisK1.V7Tag73SchedulerNativeGammaReplay
 open AspisK1.V7Tag73SchedulerNativeTargetPause
 open AspisK1.V7Tag73SchedulerNativePreGammaFamily
@@ -54,6 +56,405 @@ open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
+
+/-! ## Exact accepted gamma-binding suffix -/
+
+/-- State-changing events strictly after the decoded gamma binding and through
+the alpha-zero sampler.  The list stops before the alpha-zero decoded-value
+binding, so the gamma binding is the only `challengeBindLabel` boundary in the
+surrounding split. -/
+def afterGammaBindBeforeAlphaZeroTailEvents (messages : Messages) :
+    List MachineEvent :=
+  [.absorb (.inactiveClaim messages.inactiveClaim),
+   challengeEvent messages .kappa] ++
+  oodEvents messages ++
+  [.absorb (.relationRound 0 (messages.relationSent 0)),
+   .grind .fold messages.foldGrinding,
+   .check .foldWork,
+   .absorb (.foldNonce messages.foldGrinding.selected),
+   challengeEvent messages (.alpha 0)]
+
+/-- The remainder after alpha-zero sampling, beginning with the distinct
+alpha-zero decoded-value binding. -/
+def afterAlphaZeroSampleTailEvents (messages : Messages) : List MachineEvent :=
+  [challengeBindEvent messages .alphaZero,
+   .absorb (.final256 messages.finalValues),
+   .grind .final messages.finalGrinding,
+   .check .finalWork,
+   .absorb (.finalNonce messages.finalGrinding.selected)]
+
+theorem after_semantic_tail_events_gamma_binding_split (messages : Messages) :
+    afterSemanticTailEvents messages =
+      beforeGammaTailEvents messages ++
+        [challengeEvent messages .gamma,
+         challengeBindEvent messages .gamma] ++
+        afterGammaBindBeforeAlphaZeroTailEvents messages ++
+        afterAlphaZeroSampleTailEvents messages := by
+  simp [afterSemanticTailEvents, beforeGammaTailEvents,
+    afterGammaBindBeforeAlphaZeroTailEvents, afterAlphaZeroSampleTailEvents]
+
+/-- The exact accepted evaluator exposes the gamma sample, its decoded tower
+value, the immediately following decoded-value absorption, and the complete
+successful state-changing run from that absorption through alpha-zero
+sampling.  In particular, the binding lookup contains the canonical deployed
+gamma bytes and returns the digest from which the middle suffix starts. -/
+theorem exact_compiler_constructs_accepted_gamma_binding_coordinates
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) :
+    ∃ (evaluator : CompleteWorkErasedEvaluatorRun (exactOperationalTable input)
+        (exactOperationalTape input) (exactOperationalRawTrace input))
+      (segments : SemanticExecutionSegments (exactOperationalTable input)
+        (exactOperationalTape input).messages evaluator.afterC2
+        evaluator.prefixState)
+      (beforeGamma afterGammaSample afterGammaBind afterAlphaSample
+        afterAlphaBind afterFinal256 afterBlocks : EvalState)
+      (outputs : List Digest256) (exactValue : QM31Exact),
+      runMachineEventsWorkErased (exactOperationalTable input)
+          (beforeGammaTailEvents (exactOperationalTape input).messages)
+          segments.afterSemantic = some beforeGamma ∧
+      runMachineEventWorkErased (exactOperationalTable input) beforeGamma
+          (challengeEvent (exactOperationalTape input).messages .gamma) =
+        some afterGammaSample ∧
+      squeezeMany (exactOperationalTable input) (.challenge .gamma)
+          ((exactOperationalTape input).messages.challengeUse .gamma).blocksUsed
+          beforeGamma = some (outputs, afterBlocks) ∧
+      afterGammaSample = { afterBlocks with
+        samples := afterBlocks.samples ++ [{ id := .gamma, blocks := outputs }] } ∧
+      decodeChallengeParameter exactSecureCircleParameterMap .gamma outputs =
+        some ((exactOperationalTape input).messages.challengeValue .gamma) ∧
+      decodeTagQM31ExactLE
+          ((exactOperationalTape input).messages.challengeValue .gamma) =
+        some exactValue ∧
+      exactOperationalChallenge input .gamma = exactValue ∧
+      runMachineEventWorkErased (exactOperationalTable input) afterGammaSample
+          (challengeBindEvent (exactOperationalTape input).messages .gamma) =
+        some afterGammaBind ∧
+      tableLookup (exactOperationalTable input)
+          (bytes afterGammaSample.digest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+              ((exactOperationalTape input).messages.challengeValue .gamma)).data) =
+        some afterGammaBind.digest ∧
+      runMachineEventsWorkErased (exactOperationalTable input)
+          (afterGammaBindBeforeAlphaZeroTailEvents
+            (exactOperationalTape input).messages)
+          afterGammaBind = some afterAlphaSample ∧
+      runMachineEventWorkErased (exactOperationalTable input) afterAlphaSample
+          (challengeBindEvent (exactOperationalTape input).messages
+            .alphaZero) =
+        some afterAlphaBind ∧
+      tableLookup (exactOperationalTable input)
+          (bytes afterAlphaSample.digest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+              ((exactOperationalTape input).messages.challengeValue
+                (.alpha 0))).data) =
+        some afterAlphaBind.digest ∧
+      runMachineEventsWorkErased (exactOperationalTable input)
+          (afterGammaBindBeforeAlphaZeroTailEvents
+              (exactOperationalTape input).messages ++
+            [challengeBindEvent (exactOperationalTape input).messages
+              .alphaZero])
+          afterGammaBind = some afterAlphaBind ∧
+      runMachineEventWorkErased (exactOperationalTable input) afterAlphaBind
+          (.absorb (.final256
+            (exactOperationalTape input).messages.finalValues)) =
+        some afterFinal256 ∧
+      tableLookup (exactOperationalTable input)
+          (bytes afterAlphaBind.digest ++
+            [domAbsorb,
+              AspisK1.V7Tag73TranscriptSchedule.Payload.label
+                (.final256
+                  (exactOperationalTape input).messages.finalValues)] ++
+            AspisK1.V7Tag73TranscriptSchedule.Payload.data
+              (.final256
+                (exactOperationalTape input).messages.finalValues)) =
+        some afterFinal256.digest ∧
+      tableLookup (exactOperationalTable input)
+          (bytes afterFinal256.digest ++ [domAbsorb, finalWorkNonceLabel] ++
+            bytes
+              (exactOperationalTape input).messages.finalGrinding.selected) =
+        some evaluator.prefixState.digest ∧
+      evaluator.prefixState.digest =
+        (exactOperationalRawTrace input).q16BaseDigest := by
+  obtain ⟨evaluator⟩ :=
+    exact_operational_input_constructs_complete_evaluator input
+  obtain ⟨segments⟩ := complete_evaluator_exposes_semantic_segments
+    (exactOperationalTable input) (exactOperationalTape input)
+      (exactOperationalRawTrace input) evaluator
+  have finalDecoded := exact_operational_input_final_samples_decode input
+    evaluator
+  have splitRun := segments.afterSemanticRun
+  rw [after_semantic_tail_events_gamma_binding_split] at splitRun
+  obtain ⟨beforeGamma, prefixRun, restRun⟩ :=
+    (run_machine_events_work_erased_append_iff
+      (exactOperationalTable input)
+      (beforeGammaTailEvents (exactOperationalTape input).messages)
+      ([challengeEvent (exactOperationalTape input).messages .gamma,
+        challengeBindEvent (exactOperationalTape input).messages .gamma] ++
+        afterGammaBindBeforeAlphaZeroTailEvents
+          (exactOperationalTape input).messages ++
+        afterAlphaZeroSampleTailEvents
+          (exactOperationalTape input).messages)
+      segments.afterSemantic evaluator.prefixState).mp splitRun
+  change runMachineEventsWorkErased (exactOperationalTable input)
+      (challengeEvent (exactOperationalTape input).messages .gamma ::
+        challengeBindEvent (exactOperationalTape input).messages .gamma ::
+        (afterGammaBindBeforeAlphaZeroTailEvents
+          (exactOperationalTape input).messages ++
+         afterAlphaZeroSampleTailEvents
+          (exactOperationalTape input).messages))
+      beforeGamma = some evaluator.prefixState at restRun
+  simp only [runMachineEventsWorkErased] at restRun
+  obtain ⟨afterGammaSample, gammaRun, restRun⟩ :=
+    Option.bind_eq_some_iff.mp restRun
+  have gammaRun' : runMachineEventWorkErased (exactOperationalTable input)
+      beforeGamma (.challenge .gamma
+        ((exactOperationalTape input).messages.challengeUse .gamma)) =
+      some afterGammaSample := by
+    simpa [challengeEvent] using gammaRun
+  obtain ⟨outputs, afterBlocks, squeezeRun, afterGammaExact, _outputsLength,
+      recordMember⟩ := challenge_event_work_erased_exposes_record
+    (exactOperationalTable input) beforeGamma afterGammaSample .gamma
+      ((exactOperationalTape input).messages.challengeUse .gamma) gammaRun'
+  obtain ⟨afterGammaBind, gammaBindRun, restRun⟩ :=
+    Option.bind_eq_some_iff.mp restRun
+  have gammaBindAbsorb : absorbStep (exactOperationalTable input)
+      afterGammaSample
+      (.challengeBind .gamma
+        ((exactOperationalTape input).messages.challengeValue .gamma)) =
+      some afterGammaBind := by
+    simpa [runMachineEventWorkErased, challengeBindEvent,
+      BoundChallengeId.challengeId] using gammaBindRun
+  have gammaBindLookup : tableLookup (exactOperationalTable input)
+      (bytes afterGammaSample.digest ++ [domAbsorb, challengeBindLabel] ++
+        (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+          ((exactOperationalTape input).messages.challengeValue .gamma)).data) =
+      some afterGammaBind.digest := by
+    rw [absorbStep] at gammaBindAbsorb
+    obtain ⟨queryPair, queryRun, finalRun⟩ :=
+      Option.bind_eq_some_iff.mp gammaBindAbsorb
+    rcases queryPair with ⟨output, stepped⟩
+    have steppedExact : stepped = afterGammaBind := by
+      simpa only [pure, Option.some.injEq] using finalRun
+    subst stepped
+    obtain ⟨lookup, _calls, digestExact⟩ := query_step_appends_one
+      (exactOperationalTable input) afterGammaSample afterGammaBind
+      (.absorb (.challengeBind .gamma
+        ((exactOperationalTape input).messages.challengeValue .gamma)))
+      output queryRun
+    have outputExact : output = afterGammaBind.digest := by
+      simpa only [RawQueryRole.nextDigest] using digestExact.symm
+    subst output
+    simpa [RawQueryRole.input,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.label] using lookup
+  obtain ⟨afterAlphaSample, middleRun, suffixRun⟩ :=
+    (run_machine_events_work_erased_append_iff
+      (exactOperationalTable input)
+      (afterGammaBindBeforeAlphaZeroTailEvents
+        (exactOperationalTape input).messages)
+      (afterAlphaZeroSampleTailEvents (exactOperationalTape input).messages)
+      afterGammaBind evaluator.prefixState).mp restRun
+  have alphaSuffixRun := suffixRun
+  change runMachineEventsWorkErased (exactOperationalTable input)
+      (challengeBindEvent (exactOperationalTape input).messages .alphaZero ::
+        [.absorb (.final256 (exactOperationalTape input).messages.finalValues),
+         .grind .final (exactOperationalTape input).messages.finalGrinding,
+         .check .finalWork,
+         .absorb (.finalNonce
+          (exactOperationalTape input).messages.finalGrinding.selected)])
+      afterAlphaSample = some evaluator.prefixState at alphaSuffixRun
+  simp only [runMachineEventsWorkErased] at alphaSuffixRun
+  obtain ⟨afterAlphaBind, alphaBindRun, afterAlphaBindRun⟩ :=
+    Option.bind_eq_some_iff.mp alphaSuffixRun
+  have alphaBindAbsorb : absorbStep (exactOperationalTable input)
+      afterAlphaSample
+      (.challengeBind .alphaZero
+        ((exactOperationalTape input).messages.challengeValue (.alpha 0))) =
+      some afterAlphaBind := by
+    simpa [runMachineEventWorkErased, challengeBindEvent,
+      BoundChallengeId.challengeId] using alphaBindRun
+  have alphaBindLookup : tableLookup (exactOperationalTable input)
+      (bytes afterAlphaSample.digest ++ [domAbsorb, challengeBindLabel] ++
+        (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+          ((exactOperationalTape input).messages.challengeValue
+            (.alpha 0))).data) =
+      some afterAlphaBind.digest := by
+    rw [absorbStep] at alphaBindAbsorb
+    obtain ⟨queryPair, queryRun, finalRun⟩ :=
+      Option.bind_eq_some_iff.mp alphaBindAbsorb
+    rcases queryPair with ⟨output, stepped⟩
+    have steppedExact : stepped = afterAlphaBind := by
+      simpa only [pure, Option.some.injEq] using finalRun
+    subst stepped
+    obtain ⟨lookup, _calls, digestExact⟩ := query_step_appends_one
+      (exactOperationalTable input) afterAlphaSample afterAlphaBind
+      (.absorb (.challengeBind .alphaZero
+        ((exactOperationalTape input).messages.challengeValue (.alpha 0))))
+      output queryRun
+    have outputExact : output = afterAlphaBind.digest := by
+      simpa only [RawQueryRole.nextDigest] using digestExact.symm
+    subst output
+    simpa [RawQueryRole.input,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.label] using lookup
+  have alphaBindSingleton : runMachineEventsWorkErased
+      (exactOperationalTable input)
+      [challengeBindEvent (exactOperationalTape input).messages .alphaZero]
+      afterAlphaSample = some afterAlphaBind := by
+    simp [runMachineEventsWorkErased, alphaBindRun]
+  have middleWithAlphaBind : runMachineEventsWorkErased
+      (exactOperationalTable input)
+      (afterGammaBindBeforeAlphaZeroTailEvents
+          (exactOperationalTape input).messages ++
+        [challengeBindEvent (exactOperationalTape input).messages .alphaZero])
+      afterGammaBind = some afterAlphaBind :=
+    (run_machine_events_work_erased_append_iff
+      (exactOperationalTable input)
+      (afterGammaBindBeforeAlphaZeroTailEvents
+        (exactOperationalTape input).messages)
+      [challengeBindEvent (exactOperationalTape input).messages .alphaZero]
+      afterGammaBind afterAlphaBind).mpr
+        ⟨afterAlphaSample, middleRun, alphaBindSingleton⟩
+  obtain ⟨afterFinal256, final256Run, afterFinal256Run⟩ :=
+    Option.bind_eq_some_iff.mp afterAlphaBindRun
+  have final256Absorb : absorbStep (exactOperationalTable input)
+      afterAlphaBind
+      (.final256 (exactOperationalTape input).messages.finalValues) =
+      some afterFinal256 := by
+    simpa [runMachineEventWorkErased] using final256Run
+  have final256Lookup : tableLookup (exactOperationalTable input)
+      (bytes afterAlphaBind.digest ++
+        [domAbsorb,
+          AspisK1.V7Tag73TranscriptSchedule.Payload.label
+            (.final256 (exactOperationalTape input).messages.finalValues)] ++
+        AspisK1.V7Tag73TranscriptSchedule.Payload.data
+          (.final256 (exactOperationalTape input).messages.finalValues)) =
+      some afterFinal256.digest := by
+    rw [absorbStep] at final256Absorb
+    obtain ⟨queryPair, queryRun, finalRun⟩ :=
+      Option.bind_eq_some_iff.mp final256Absorb
+    rcases queryPair with ⟨output, stepped⟩
+    have steppedExact : stepped = afterFinal256 := by
+      simpa only [pure, Option.some.injEq] using finalRun
+    subst stepped
+    obtain ⟨lookup, _calls, digestExact⟩ := query_step_appends_one
+      (exactOperationalTable input) afterAlphaBind afterFinal256
+      (.absorb (.final256 (exactOperationalTape input).messages.finalValues))
+      output queryRun
+    have outputExact : output = afterFinal256.digest := by
+      simpa only [RawQueryRole.nextDigest] using digestExact.symm
+    subst output
+    simpa only [RawQueryRole.input] using lookup
+  obtain ⟨afterGrind, grindRun, afterFinal256Run⟩ :=
+    Option.bind_eq_some_iff.mp afterFinal256Run
+  obtain ⟨afterCheck, checkRun, afterFinal256Run⟩ :=
+    Option.bind_eq_some_iff.mp afterFinal256Run
+  have afterCheckExact : afterCheck = afterGrind := by
+    simpa [runMachineEventWorkErased] using (Option.some.inj checkRun).symm
+  subst afterCheck
+  obtain ⟨afterAbsorb, finalNonceRun, finalDone⟩ :=
+    Option.bind_eq_some_iff.mp afterFinal256Run
+  have afterAbsorbExact : afterAbsorb = evaluator.prefixState := by
+    simpa [runMachineEventsWorkErased] using Option.some.inj finalDone
+  subst afterAbsorb
+  have finalNonceAbsorb : absorbStep (exactOperationalTable input) afterGrind
+      (.finalNonce
+        (exactOperationalTape input).messages.finalGrinding.selected) =
+      some evaluator.prefixState := by
+    simpa [runMachineEventWorkErased] using finalNonceRun
+  have stableDigest : afterGrind.digest = afterFinal256.digest := by
+    change runGrindingChoiceWorkErased (exactOperationalTable input)
+      afterFinal256 .final
+        (exactOperationalTape input).messages.finalGrinding =
+      some afterGrind at grindRun
+    rw [runGrindingChoiceWorkErased] at grindRun
+    obtain ⟨queried, probesRun, grindRun⟩ := Option.bind_eq_some_iff.mp grindRun
+    obtain ⟨selectedPair, selectedRun, result⟩ :=
+      Option.bind_eq_some_iff.mp grindRun
+    rcases selectedPair with ⟨selectedOutput, afterSelected⟩
+    have afterSelectedExact : afterSelected = afterGrind := by
+      simpa only [pure, Option.some.injEq] using result
+    subst afterSelected
+    have probesDigest := grinding_probes_do_not_advance
+      (exactOperationalTable input) .final
+      (exactOperationalTape input).messages.finalGrinding.probesBeforeSelected
+      afterFinal256 queried probesRun
+    obtain ⟨_lookup, _calls, selectedDigest⟩ := query_step_appends_one
+      (exactOperationalTable input) queried afterGrind
+      (.grind .final
+        (exactOperationalTape input).messages.finalGrinding.selected)
+      selectedOutput selectedRun
+    have selectedUnchanged : afterGrind.digest = queried.digest := by
+      simpa only [RawQueryRole.nextDigest] using selectedDigest
+    exact selectedUnchanged.trans probesDigest
+  have finalNonceLookup := absorb_step_exposes_literal_lookup
+    (exactOperationalTable input) afterGrind evaluator.prefixState
+      (.finalNonce
+        (exactOperationalTape input).messages.finalGrinding.selected)
+      finalNonceAbsorb
+  rw [stableDigest] at finalNonceLookup
+  have q16BaseExact : evaluator.prefixState.digest =
+      (exactOperationalRawTrace input).q16BaseDigest := by
+    simpa using congrArg InteractiveRawTrace.q16BaseDigest evaluator.rawTraceEq
+  have bindIncluded : SamplesIncluded afterGammaSample afterGammaBind :=
+    machine_event_work_erased_samples_included (exactOperationalTable input)
+      afterGammaSample afterGammaBind
+      (challengeBindEvent (exactOperationalTape input).messages .gamma)
+      gammaBindRun
+  have middleFromBind : SamplesIncluded afterGammaBind afterAlphaSample :=
+    machine_events_work_erased_samples_included (exactOperationalTable input)
+      (afterGammaBindBeforeAlphaZeroTailEvents
+        (exactOperationalTape input).messages)
+      afterGammaBind afterAlphaSample middleRun
+  have middleIncluded : SamplesIncluded afterGammaSample afterAlphaSample :=
+    samples_included_trans bindIncluded middleFromBind
+  have suffixIncluded : SamplesIncluded afterAlphaSample evaluator.prefixState :=
+    machine_events_work_erased_samples_included (exactOperationalTable input)
+      (afterAlphaZeroSampleTailEvents (exactOperationalTape input).messages)
+      afterAlphaSample evaluator.prefixState suffixRun
+  have throughQ16 : SamplesIncluded evaluator.prefixState evaluator.afterQ16 :=
+    run_q16_preserves_prior_samples (exactOperationalTable input)
+      evaluator.prefixState evaluator.afterQ16
+      (q16TapeOfSearch (exactOperationalTape input).search) evaluator.q16Run
+  have afterQ16 : SamplesIncluded evaluator.afterQ16 evaluator.finalState :=
+    machine_events_work_erased_samples_included (exactOperationalTable input)
+      (afterAcceptedQueryScan (exactOperationalTape input).messages)
+      evaluator.afterQ16 evaluator.finalState evaluator.afterQ16Run
+  have recordFinal : ({ id := .gamma, blocks := outputs } : SampleRecord) ∈
+      evaluator.finalState.samples :=
+    afterQ16 _ (throughQ16 _ (suffixIncluded _
+      (middleIncluded _ recordMember)))
+  have acceptedParameter :
+      decodeChallengeParameter exactSecureCircleParameterMap .gamma outputs =
+        some ((exactOperationalTape input).messages.challengeValue .gamma) :=
+    finalDecoded ({ id := .gamma, blocks := outputs } : SampleRecord)
+      recordFinal
+  obtain ⟨exactValue, exactDecode⟩ :=
+    decodeChallengeParameter_has_exact_tower_value
+      exactSecureCircleParameterMap .gamma outputs
+      ((exactOperationalTape input).messages.challengeValue .gamma)
+      acceptedParameter
+  have operationalValue : exactOperationalChallenge input .gamma =
+      exactValue := by
+    simp [exactOperationalChallenge, exactChallengeValue, exactDecode]
+  refine ⟨evaluator, segments, beforeGamma, afterGammaSample,
+    afterGammaBind, afterAlphaSample, afterAlphaBind, afterFinal256,
+    afterBlocks, outputs, exactValue,
+    prefixRun, gammaRun', squeezeRun, afterGammaExact, acceptedParameter,
+    exactDecode, operationalValue, gammaBindRun, ?_, middleRun, alphaBindRun,
+    ?_, middleWithAlphaBind, final256Run, final256Lookup, ?_, q16BaseExact⟩
+  · simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using gammaBindLookup
+  · simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using alphaBindLookup
+  · simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using finalNonceLookup
 
 /-! ## Recursive literal table coordinates -/
 
@@ -377,7 +778,8 @@ theorem exact_compiler_constructs_successful_gamma_prefix_coordinates
       (exactOperationalTable input)
       (beforeGammaTailEvents (exactOperationalTape input).messages)
       (challengeEvent (exactOperationalTape input).messages .gamma ::
-        ([.absorb (.inactiveClaim
+        ([challengeBindEvent (exactOperationalTape input).messages .gamma,
+          .absorb (.inactiveClaim
             (exactOperationalTape input).messages.inactiveClaim),
           challengeEvent (exactOperationalTape input).messages .kappa] ++
           oodEvents (exactOperationalTape input).messages ++
@@ -388,6 +790,7 @@ theorem exact_compiler_constructs_successful_gamma_prefix_coordinates
            .absorb (.foldNonce
             (exactOperationalTape input).messages.foldGrinding.selected),
            challengeEvent (exactOperationalTape input).messages (.alpha 0),
+           challengeBindEvent (exactOperationalTape input).messages .alphaZero,
            .absorb (.final256
             (exactOperationalTape input).messages.finalValues),
            .grind .final (exactOperationalTape input).messages.finalGrinding,
@@ -412,7 +815,8 @@ theorem exact_compiler_constructs_successful_gamma_prefix_coordinates
       ((exactOperationalTape input).messages.challengeUse .gamma).blocksUsed
       beforeGamma afterBlocks outputs squeezeRun
   let remainingEvents : List MachineEvent :=
-    [.absorb (.inactiveClaim
+    [challengeBindEvent (exactOperationalTape input).messages .gamma,
+     .absorb (.inactiveClaim
         (exactOperationalTape input).messages.inactiveClaim),
       challengeEvent (exactOperationalTape input).messages .kappa] ++
       oodEvents (exactOperationalTape input).messages ++
@@ -423,6 +827,7 @@ theorem exact_compiler_constructs_successful_gamma_prefix_coordinates
        .absorb (.foldNonce
         (exactOperationalTape input).messages.foldGrinding.selected),
        challengeEvent (exactOperationalTape input).messages (.alpha 0),
+       challengeBindEvent (exactOperationalTape input).messages .alphaZero,
        .absorb (.final256
         (exactOperationalTape input).messages.finalValues),
        .grind .final (exactOperationalTape input).messages.finalGrinding,
