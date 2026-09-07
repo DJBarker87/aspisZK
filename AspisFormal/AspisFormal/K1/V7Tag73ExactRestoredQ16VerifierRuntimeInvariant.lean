@@ -16,6 +16,7 @@ deliberately not claimed here.
 
 set_option autoImplicit false
 set_option maxRecDepth 10000000
+set_option linter.defProp false
 
 namespace AspisK1.V7Tag73ExactRestoredQ16VerifierRuntimeInvariant
 
@@ -24,6 +25,7 @@ open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AdaptiveQ16TrialAccounting
 open AspisK1.V7Tag73CausalQ16FinalWorkProbability
 open AspisK1.V7Tag73CausalFinalWorkQ16UsedForest
+open AspisK1.V7Tag73CanonicalOneFoldSchedule
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
@@ -91,6 +93,46 @@ noncomputable def exact_restored_root_verifier_anchor_preserves_prover_runtime
       (finalWorkQ16NamedSlotInputTape
         (exactCompilerFinalWorkQ16InputTape parameters right))).2 at coordinateExact
   exact coordinateExact
+
+/-- The accepted-tape projection is functional.  Once the completed prover
+return is fixed, the entire checked deployed tape (including all verifier-owned
+challenge bytes) is fixed as well. -/
+noncomputable def exact_restored_root_verifier_anchor_preserves_operational_tape
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (programmedCover : 513 ≤ 2 * parameters.forkRequestCap)
+    (trial : ExactCompilerExposureTrial parameters) (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootK13JointTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) trial)
+    (rightWitness : ExactRestoredRootK13JointTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) trial)
+    (anchor : ExactFixedK13VerifierAnchor leftWitness.input trial)
+    (coordinateExact :
+      (exactRestoredRootK13TrialCoordinates transitionFuel configuration trial
+        (hidden, left)).1 =
+      (exactRestoredRootK13TrialCoordinates transitionFuel configuration trial
+        (hidden, right)).1) :
+    exactOperationalTape leftWitness.input =
+      exactOperationalTape rightWitness.input := by
+  have runtimeExact :=
+    (exact_restored_root_verifier_anchor_preserves_prover_runtime programmedCover
+      trial hidden left right leftWitness rightWitness anchor coordinateExact).1
+  have leftProjected :=
+    leftWitness.input.package.root.fixedRoot.base.projectedTape
+  have rightProjected :=
+    rightWitness.input.package.root.fixedRoot.base.projectedTape
+  change rightWitness.input.package.root.fixedRoot.base.runtime.adversaryValue =
+    leftWitness.input.package.root.fixedRoot.base.runtime.adversaryValue at runtimeExact
+  rw [runtimeExact] at rightProjected
+  exact Option.some.inj (leftProjected.symm.trans rightProjected)
 
 /-- The two transcript roots are prover-controlled fields, so the preceding
 runtime equality fixes them without a hash-injectivity premise. -/
@@ -186,10 +228,71 @@ noncomputable def exact_restored_root_verifier_anchor_preserves_disclosed_final
     (restoredOperationalK13View rightData).disclosedFinal
   exact congrArg decodedFinalMessage decodedExact
 
+/-- Gamma and alpha zero are verifier-ledger values, but the root source
+theorem identifies them with the corresponding checked-tape bytes.  Functional
+tape reconstruction therefore fixes gamma and the complete one-fold schedule
+on the verifier-owned residual fibre. -/
+noncomputable def exact_restored_root_verifier_anchor_preserves_gamma_schedule
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (programmedCover : 513 ≤ 2 * parameters.forkRequestCap)
+    (trial : ExactCompilerExposureTrial parameters) (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactRestoredRootK13JointTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) trial)
+    (rightWitness : ExactRestoredRootK13JointTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) trial)
+    (anchor : ExactFixedK13VerifierAnchor leftWitness.input trial)
+    (coordinateExact :
+      (exactRestoredRootK13TrialCoordinates transitionFuel configuration trial
+        (hidden, left)).1 =
+      (exactRestoredRootK13TrialCoordinates transitionFuel configuration trial
+        (hidden, right)).1) :
+    (exactRestoredRootK13View leftWitness.input).gamma =
+        (exactRestoredRootK13View rightWitness.input).gamma ∧
+      (exactRestoredRootK13View leftWitness.input).schedule =
+        (exactRestoredRootK13View rightWitness.input).schedule := by
+  let leftNode := leftWitness.input.package.root.fixedRoot.base.runtime.node
+  let rightNode := rightWitness.input.package.root.fixedRoot.base.runtime.node
+  let leftData := (exact_restored_operational_k13_provider leftWitness.input).data
+    leftNode (exact_restoration_accumulator_contains_root leftWitness.input)
+      (exact_restoration_accumulator_root_is_done leftWitness.input)
+  let rightData := (exact_restored_operational_k13_provider rightWitness.input).data
+    rightNode (exact_restoration_accumulator_contains_root rightWitness.input)
+      (exact_restoration_accumulator_root_is_done rightWitness.input)
+  have tapeExact :=
+    exact_restored_root_verifier_anchor_preserves_operational_tape programmedCover
+      trial hidden left right leftWitness rightWitness anchor coordinateExact
+  have leftExact :=
+    exact_restored_root_operational_data_challenges_are_source_exact
+      leftWitness.input leftData
+  have rightExact :=
+    exact_restored_root_operational_data_challenges_are_source_exact
+      rightWitness.input rightData
+  have gammaExact : leftData.gamma = rightData.gamma := by
+    rw [leftExact.2.1, rightExact.2.1, tapeExact]
+  have alphaExact : leftData.alphaZero = rightData.alphaZero := by
+    rw [leftExact.2.2.2, rightExact.2.2.2, tapeExact]
+  change (restoredOperationalK13View leftData).gamma =
+      (restoredOperationalK13View rightData).gamma ∧
+    (restoredOperationalK13View leftData).schedule =
+      (restoredOperationalK13View rightData).schedule
+  exact ⟨gammaExact, congrArg canonicalOneFoldSchedule alphaExact⟩
+
 #print axioms exact_restored_root_verifier_anchor_preserves_prover_runtime
+#print axioms exact_restored_root_verifier_anchor_preserves_operational_tape
 #print axioms exact_restored_root_verifier_anchor_preserves_roots
 #print axioms
   exact_restored_root_verifier_anchor_preserves_disclosed_final
+#print axioms
+  exact_restored_root_verifier_anchor_preserves_gamma_schedule
 
 end
 end AspisK1.V7Tag73ExactRestoredQ16VerifierRuntimeInvariant
