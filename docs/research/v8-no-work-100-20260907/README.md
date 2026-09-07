@@ -1,5 +1,16 @@
 # V8 no-work 100-bit research — bounded screen and prototypes
 
+Latest decisive finding: [recovery-counterexample.md](recovery-counterexample.md)
+refutes the unconditional 28-gamma recovery shortcut. The 99.246-bit isolated
+boundary is not a full-protocol attack. See the exact Rust/Python construction
+and small Lean arithmetic certificate; old conditional model figures are not
+upgraded to security claims.
+
+The supplied prototype ZIP has now been independently reviewed and reproduced:
+[zip-review.md](zip-review.md). Its actual four-fold block contraction is correct
+in the checked scope. A production-field Rust implementation agrees on 160
+terminal values and counts 91 generic products including the outer scale.
+
 Start with [report.md](report.md). See [security-contract.md](security-contract.md),
 [baseline.md](baseline.md), [ledgers-and-candidates.md](ledgers-and-candidates.md)
 and [sources.md](sources.md) for the contract, pins, applicability and primary sources.
