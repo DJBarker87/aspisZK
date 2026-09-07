@@ -587,6 +587,186 @@ theorem exact_preQ16_clean_pair_alpha_zero_eq_of_binding
 /-- One accepted run retains its gamma binding before the canonical final256
 record.  The intervening fold/alpha execution is replayed literally in the
 work-erased evaluator. -/
+theorem exact_actual_gamma_binding_record_mem_prior
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (actualTrial : ExactFixedK13ActualJointTrial input finalTrial)
+    (prior later : List UnifiedExposureRecord)
+    (pivotActor : QueryActor) (pivotInput : ShaInput) (pivotAnswer : Digest256)
+    (rootExact : exactFixedRootRecords input.package.root =
+      prior ++ (.machineFresh pivotActor pivotInput pivotAnswer :
+        UnifiedExposureRecord) :: later)
+    (trialExact : finalTrial.val = prior.length)
+    (canonicalBefore : EvalState) (canonicalDigest : Digest256)
+    (canonicalActor : QueryActor)
+    (canonicalLookup : tableLookup (exactOperationalTable input)
+      (bytes canonicalBefore.digest ++ [domAbsorb, final256Label] ++
+        encodeBlocks (exactOperationalTape input).messages.finalValues) =
+      some canonicalDigest)
+    (canonicalMember :
+      (.machineFresh canonicalActor
+        (bytes canonicalBefore.digest ++ [domAbsorb, final256Label] ++
+          encodeBlocks (exactOperationalTape input).messages.finalValues)
+        canonicalDigest : UnifiedExposureRecord) ∈ prior)
+    (canonicalPrefix : HasLiteralStatePrefix canonicalDigest pivotInput) :
+    ∃ (afterSample afterAlphaSample : EvalState)
+        (afterBindDigest : Digest256) (raw : Qm31Bytes) (value : QM31Exact)
+        (alphaActor : QueryActor),
+      tableLookup (exactOperationalTable input)
+          (bytes afterSample.digest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+              raw).data) = some afterBindDigest ∧
+      ExactRetainedDigestChain prior
+          (bytes afterSample.digest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+              raw).data)
+          (IsPostRootStateInput challengeBindLabel) afterBindDigest
+            afterAlphaSample.digest ∧
+      (.machineFresh alphaActor
+          (bytes afterAlphaSample.digest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+              ((exactOperationalTape input).messages.challengeValue
+                (.alpha 0))).data) canonicalBefore.digest :
+            UnifiedExposureRecord) ∈ prior ∧
+      raw = (exactOperationalTape input).messages.challengeValue .gamma ∧
+      decodeTagQM31ExactLE raw = some value ∧
+      exactOperationalChallenge input .gamma = value := by
+  classical
+  obtain ⟨evaluator, _segments, _beforeGamma, afterGammaSample,
+      afterGammaBind, _afterAlphaSample, afterAlphaBind, afterFinal256,
+      _afterBlocks, _outputs, value, _prefixRun, _gammaRun, _squeezeRun,
+      _afterSampleExact, _accepted, exactDecode, operationalExact, _bindRun,
+      gammaBindLookup, middleRun, _alphaBindRun, alphaBindLookup,
+      _middleWithAlphaBind, _final256Run, final256Lookup, finalNonceLookup,
+      q16BaseExact⟩ :=
+    exact_compiler_constructs_accepted_gamma_binding_coordinates input
+  obtain ⟨actualPrior, actualLater, selectedActor, selectedInput,
+      selectedAnswer, selectedDigest, selectedBase, absorbActor, actualRootExact,
+      actualTrialExact, selectedPrefix, _prefinalOrigin, selectedBaseExact,
+      absorbMember⟩ :=
+    exact_fixed_k13_actual_trial_has_selected_prefinal_prefix input finalTrial
+      actualTrial
+  have pivotRecordExact :
+      (.machineFresh pivotActor pivotInput pivotAnswer : UnifiedExposureRecord) =
+        .machineFresh selectedActor selectedInput selectedAnswer := by
+    have suppliedAt :
+        (exactFixedRootRecords input.package.root)[finalTrial.val]? =
+          some (.machineFresh pivotActor pivotInput pivotAnswer :
+            UnifiedExposureRecord) := by
+      rw [rootExact, trialExact]
+      simp
+    have actualAt :
+        (exactFixedRootRecords input.package.root)[finalTrial.val]? =
+          some (.machineFresh selectedActor selectedInput selectedAnswer :
+            UnifiedExposureRecord) := by
+      rw [actualRootExact, actualTrialExact]
+      simp
+    rw [suppliedAt] at actualAt
+    exact Option.some.inj actualAt
+  have selectedInputExact : pivotInput = selectedInput := by
+    injection pivotRecordExact
+  have _priorExact : prior = actualPrior :=
+    equal_prefixes_of_equal_decomposition_lengths
+      (exactFixedRootRecords input.package.root) prior later actualPrior
+      actualLater (.machineFresh pivotActor pivotInput pivotAnswer)
+      (.machineFresh selectedActor selectedInput selectedAnswer) rootExact
+      actualRootExact (by rw [← trialExact, ← actualTrialExact])
+  have afterFinalExact : afterFinal256.digest = selectedDigest :=
+    final_nonce_lookup_and_root_record_fix_digest input
+      afterFinal256.digest selectedDigest
+      (exactOperationalRawTrace input).q16BaseDigest selectedBase absorbActor
+      (by simpa [q16BaseExact] using finalNonceLookup)
+      selectedBaseExact.symm absorbMember
+  have selectedDigestExact : canonicalDigest = selectedDigest :=
+    literal_prefix_input_eq_fixes_digest canonicalPrefix selectedPrefix
+      selectedInputExact
+  have finalAnswerExact : afterFinal256.digest = canonicalDigest :=
+    afterFinalExact.trans selectedDigestExact.symm
+  let finalInput : ShaInput := bytes afterAlphaBind.digest ++ [domAbsorb,
+    final256Label] ++ encodeBlocks (exactOperationalTape input).messages.finalValues
+  obtain ⟨finalActor, finalMemberRaw⟩ :=
+    exact_final_table_lookup_has_root_record input finalInput
+      afterFinal256.digest (by simpa [finalInput,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+        AspisK1.V7Tag73TranscriptSchedule.Payload.data] using final256Lookup)
+  have finalMember :
+      (.machineFresh finalActor finalInput canonicalDigest :
+        UnifiedExposureRecord) ∈ exactFixedRootRecords input.package.root := by
+    simpa [finalAnswerExact] using finalMemberRaw
+  let canonicalInput : ShaInput := bytes canonicalBefore.digest ++
+    [domAbsorb, final256Label] ++
+      encodeBlocks (exactOperationalTape input).messages.finalValues
+  have canonicalRootMember :
+      (.machineFresh canonicalActor canonicalInput canonicalDigest :
+        UnifiedExposureRecord) ∈ exactFixedRootRecords input.package.root := by
+    rw [rootExact]
+    exact List.mem_append_left _ (by simpa [canonicalInput] using canonicalMember)
+  have finalInputExact : finalInput = canonicalInput := by
+    have recordExact := List.inj_on_of_nodup_map
+      (exact_root_record_answers_nodup input) finalMember canonicalRootMember rfl
+    injection recordExact
+  have afterAlphaBindExact : afterAlphaBind.digest = canonicalBefore.digest := by
+    apply digest_bytes_injective
+    have prefixExact := congrArg (List.take 32) finalInputExact
+    simpa [finalInput, canonicalInput] using prefixExact
+  let raw := (exactOperationalTape input).messages.challengeValue .gamma
+  let bindInput : ShaInput := bytes afterGammaSample.digest ++
+    [domAbsorb, challengeBindLabel] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma raw).data
+  let boundaryChain : ExactLookupDigestChain (exactOperationalTable input)
+      bindInput (IsPostRootStateInput challengeBindLabel) afterGammaBind.digest
+        afterGammaBind.digest :=
+    .boundary afterGammaBind.digest (by simpa [bindInput, raw] using
+      gammaBindLookup)
+  have middleChain :=
+    exact_lookup_digest_chain_through_machine_events_work_erased
+      transitionRoom input
+      (afterGammaBindBeforeAlphaZeroTailEvents
+        (exactOperationalTape input).messages)
+      afterGammaBind _afterAlphaSample boundaryChain
+      (gamma_middle_events_are_post_challenge_bind
+        (exactOperationalTape input).messages) middleRun
+  let alphaInput : ShaInput := bytes _afterAlphaSample.digest ++
+    [domAbsorb, challengeBindLabel] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .alphaZero
+        ((exactOperationalTape input).messages.challengeValue (.alpha 0))).data
+  have alphaLookupCommon : tableLookup (exactOperationalTable input)
+      alphaInput = some canonicalBefore.digest := by
+    simpa [alphaInput, afterAlphaBindExact] using alphaBindLookup
+  let alphaBoundary : ExactLookupDigestChain (exactOperationalTable input)
+      alphaInput (fun _ => False) canonicalBefore.digest
+        canonicalBefore.digest :=
+    .boundary canonicalBefore.digest alphaLookupCommon
+  have alphaRetained := exact_lookup_digest_chain_retained_before_consumer
+    transitionRoom input prior later
+      (.machineFresh pivotActor pivotInput pivotAnswer) rootExact alphaBoundary
+      canonicalInput canonicalDigest canonicalActor
+      (by simpa [canonicalInput] using canonicalLookup)
+      (by simpa [canonicalInput] using canonicalMember)
+      (by simp [canonicalInput, HasLiteralStatePrefix])
+  obtain ⟨alphaActor, alphaMember⟩ :=
+    exact_retained_digest_chain_boundary_member alphaRetained
+  have gammaRetained := exact_lookup_digest_chain_retained_before_consumer
+    transitionRoom input prior later
+      (.machineFresh pivotActor pivotInput pivotAnswer) rootExact middleChain
+      alphaInput canonicalBefore.digest alphaActor alphaLookupCommon alphaMember
+      (by simp [alphaInput, HasLiteralStatePrefix])
+  exact ⟨afterGammaSample, _afterAlphaSample, afterGammaBind.digest, raw,
+    value, alphaActor, by simpa [bindInput, raw] using gammaBindLookup,
+    by simpa [bindInput] using gammaRetained,
+    by simpa [alphaInput] using alphaMember, rfl,
+    by simpa [raw] using exactDecode, operationalExact⟩
+
 theorem exact_preQ16_gamma_binding_record_mem_prior
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
     {parameters : ExactCompilerResourceParameters}
@@ -1030,6 +1210,7 @@ theorem exact_clean_preQ16_trial_union_probability_le_one_forest_of_bindings
 
 #print axioms exact_preQ16_clean_pair_common_final256_record_v2
 #print axioms exact_actual_alpha_binding_record_mem_prior
+#print axioms exact_actual_gamma_binding_record_mem_prior
 #print axioms exact_preQ16_alpha_binding_record_mem_prior
 #print axioms exact_preQ16_clean_pair_alpha_zero_eq_of_binding
 #print axioms exact_preQ16_gamma_binding_record_mem_prior
