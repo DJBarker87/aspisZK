@@ -12,11 +12,12 @@ use crate::circle_fri::{selected_circle_fiber_points_shared, BaseCirclePoint};
 use crate::field::{qm31_dot, qm31_dot3, qm31_power_table, CM31, M31, QM31};
 use crate::transcript::{label, Transcript};
 use crate::v6_onefold::{
-    decode_packed_m31_eight_aligned, packed_m31_at, packed_qm31_at, V6WireError, V6_C1_COLUMNS,
-    V6_C1_LIMBS_PER_QUERY, V6_C2_COLUMNS, V6_C2_LIMBS_PER_QUERY,
+    decode_packed_m31_eight_aligned, packed_m31_at, packed_qm31_at, validate_packed_m31,
+    V6WireError, V6_C1_COLUMNS, V6_C1_LIMBS_PER_QUERY, V6_C2_COLUMNS, V6_C2_LIMBS_PER_QUERY,
 };
 use crate::v8_a100::{
-    V8A100QueryRecord, V8A100Wire, V8_A100_COMPONENTS, V8_A100_OOD_POINTS, V8_A100_QUERY_COUNT,
+    V8A100QueryRecord, V8A100Wire, V8_A100_COMPONENTS, V8_A100_FIXED_M31_LIMBS, V8_A100_OOD_POINTS,
+    V8_A100_QUERY_COUNT,
 };
 
 pub const V8_A100_CIRCLE_DOMAIN_LOG_SIZE: u32 = 20;
@@ -43,8 +44,9 @@ impl From<V6WireError> for V8DeepError {
 
 #[derive(Clone)]
 pub struct V8A100OodPrefix {
-    pub points: [SecureCirclePoint; V8_A100_OOD_POINTS],
-    pub parameters: [QM31; V8_A100_OOD_POINTS],
+    points: [SecureCirclePoint; V8_A100_OOD_POINTS],
+    parameters: [QM31; V8_A100_OOD_POINTS],
+    component_evaluations: [[QM31; V8_A100_COMPONENTS]; V8_A100_OOD_POINTS],
     /// State after both vectors, but deliberately before batch work and
     /// gamma. The production caller must check and absorb batch work first.
     pub continuation: Transcript,
@@ -52,9 +54,35 @@ pub struct V8A100OodPrefix {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct V8A100TwoPointChallenges {
-    pub points: [SecureCirclePoint; V8_A100_OOD_POINTS],
-    pub component_evaluations: [[QM31; V8_A100_COMPONENTS]; V8_A100_OOD_POINTS],
-    pub gamma: QM31,
+    points: [SecureCirclePoint; V8_A100_OOD_POINTS],
+    component_evaluations: [[QM31; V8_A100_COMPONENTS]; V8_A100_OOD_POINTS],
+    gamma: QM31,
+}
+
+impl V8A100OodPrefix {
+    pub fn points(&self) -> [SecureCirclePoint; V8_A100_OOD_POINTS] {
+        self.points
+    }
+
+    pub fn parameters(&self) -> [QM31; V8_A100_OOD_POINTS] {
+        self.parameters
+    }
+
+    pub fn component_evaluations(&self) -> [[QM31; V8_A100_COMPONENTS]; V8_A100_OOD_POINTS] {
+        self.component_evaluations
+    }
+
+    /// Bind the post-batch-work gamma to the exact points and vectors already
+    /// retained by this transcript prefix.  The challenge object has no public
+    /// fields or independent public constructor, so a caller cannot substitute
+    /// a second vector array after deriving the Fiat--Shamir state.
+    pub fn challenges(&self, gamma: QM31) -> V8A100TwoPointChallenges {
+        V8A100TwoPointChallenges {
+            points: self.points,
+            component_evaluations: self.component_evaluations,
+            gamma,
+        }
+    }
 }
 
 fn absorb_component_vector(
@@ -104,8 +132,26 @@ pub fn derive_v8_a100_ood_prefix(
     Ok(V8A100OodPrefix {
         points: [point0, point1],
         parameters: [parameter0, parameter1],
+        component_evaluations: *component_evaluations,
         continuation,
     })
+}
+
+/// Decode the canonical component vectors from the same V8 wire that will be
+/// authenticated, then derive and retain their exact transcript prefix.
+///
+/// This is the production-facing constructor.  It rechecks all packed limbs
+/// because a `V8A100Wire` may also have come from the deliberately deferred
+/// parser used before the direct query schedule is known.
+pub fn derive_v8_a100_ood_prefix_from_wire(
+    transcript: &Transcript,
+    wire: &V8A100Wire<'_>,
+) -> Result<V8A100OodPrefix, V8DeepError> {
+    validate_packed_m31(wire.fixed_fields_packed, V8_A100_FIXED_M31_LIMBS)?;
+    let component_evaluations = wire
+        .component_ood_vectors()
+        .ok_or(V8DeepError::Wire(V6WireError::WrongLength))?;
+    derive_v8_a100_ood_prefix(transcript, &component_evaluations)
 }
 
 /// Sample gamma only after the caller has checked and absorbed V8 batch work.
@@ -598,6 +644,7 @@ mod tests {
         let vectors = challenges().component_evaluations;
         let prefix = derive_v8_a100_ood_prefix(&transcript, &vectors).unwrap();
         assert_ne!(prefix.points[0], prefix.points[1]);
+        assert_eq!(prefix.component_evaluations(), vectors);
 
         let mut altered = vectors;
         altered[0][7] = altered[0][7].add(QM31::ONE);
@@ -618,6 +665,50 @@ mod tests {
         before_work.absorb(label::GRIND_NONCE, &[0x33; 8]);
         let gamma = sample_v8_a100_gamma(&mut before_work).unwrap();
         assert_ne!(gamma, QM31::ZERO);
+        assert_eq!(prefix.challenges(gamma).component_evaluations, vectors);
+    }
+
+    #[test]
+    fn wire_derived_prefix_is_the_only_public_challenge_constructor() {
+        let (body, expected_challenges) = populated_wire();
+        let wire = V8A100Wire::parse_for_schedule(
+            &body,
+            V8_A100_MAX_FRONTIER_FIXTURE,
+            crate::v8_a100::V8_A100_FRONTIER_MAX_PER_TREE,
+        )
+        .unwrap();
+        let mut transcript = Transcript::new(test_hash);
+        transcript.absorb(label::PROFILE, &V8_A100_PROFILE_BINDING);
+        transcript.absorb(label::STATEMENT, &[0x5a; 32]);
+
+        let prefix = derive_v8_a100_ood_prefix_from_wire(&transcript, &wire).unwrap();
+        assert_eq!(
+            prefix.component_evaluations(),
+            wire.component_ood_vectors().unwrap()
+        );
+        let rebound = prefix.challenges(expected_challenges.gamma);
+        assert_eq!(
+            rebound.component_evaluations,
+            expected_challenges.component_evaluations
+        );
+        assert_eq!(rebound.points, prefix.points());
+
+        // The production-facing constructor must not trust a wire obtained
+        // from the deferred parser: it independently rejects a noncanonical
+        // packed limb before any value is absorbed into Fiat--Shamir.
+        let mut noncanonical = body;
+        for bit in 0..31 {
+            noncanonical[bit / 8] |= 1 << (bit % 8);
+        }
+        let deferred = V8A100Wire::parse_deferred_canonicality(
+            &noncanonical,
+            crate::v8_a100::V8_A100_FRONTIER_MAX_PER_TREE,
+        )
+        .unwrap();
+        assert_eq!(
+            derive_v8_a100_ood_prefix_from_wire(&transcript, &deferred).map(|_| ()),
+            Err(V8DeepError::Wire(V6WireError::NonCanonicalM31))
+        );
     }
 
     #[test]
