@@ -92,8 +92,9 @@ rpc "$(jq -nc --arg signature "$signature" \
 jq -e '.result != null and .result.meta.err == null' "$EVIDENCE_DIR/finalized-transaction.json" >/dev/null \
   || fail "token fixture landed failure"
 mapfile -t accounts < <(jq -r '.mint,.sourceTokenAccount,.destinationTokenAccount' "$EVIDENCE_DIR/signed-request.json")
-rpc "$(jq -nc --args "${accounts[@]}" \
-  '{jsonrpc:"2.0",id:10,method:"getMultipleAccounts",params:[$ARGS.positional,{encoding:"base64",commitment:"finalized"}]}')" \
+rpc "$(jq -nc \
+  '{jsonrpc:"2.0",id:10,method:"getMultipleAccounts",params:[$ARGS.positional,{encoding:"base64",commitment:"finalized"}]}' \
+  --args "${accounts[@]}")" \
   | jq . >"$EVIDENCE_DIR/accounts.json"
 jq -e --arg owner "$TOKEN_PROGRAM" '
   (.result.value | length) == 3 and all(.result.value[]; . != null and .owner == $owner)' \
