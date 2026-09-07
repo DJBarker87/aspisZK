@@ -2,6 +2,7 @@ import AspisFormal.K1.V7Tag73ExactConcreteK13K14Events
 import AspisFormal.K1.V7Tag73K13IdealErrorLedger
 import AspisFormal.K1.V7Tag73K15FixedActualLawAdapters
 import AspisFormal.K1.V7Tag73QueryBatchPrefixCausalController
+import AspisFormal.K1.V7Tag73RelationTailSourceComposition
 
 /-!
 # Compiler-clean actual-law closure for the Tag-73 joint query batch
@@ -35,6 +36,7 @@ open AspisK1.V7Tag73JointQueryBatchSoundness
 open AspisK1.V7Tag73K13IdealErrorLedger
 open AspisK1.V7Tag73K15FixedActualLawAdapters
 open AspisK1.V7Tag73QueryBatchPrefixCausalController
+open AspisK1.V7Tag73RelationTailSourceComposition
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisK1.V7Tag73VariablePrefixGammaFactorization
@@ -82,8 +84,8 @@ structure ExactTag73RestrictedK13JointBatchSource
     (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
     (fixedInstance : PublicInstance Statement)
     (decoder : ExactDecoderInstantiation QM31Exact)
-    (k13Source : ExactTag73K13SourceObligations transitionFuel configuration
-      projection fixedInstance decoder)
+    (relationSource : ExactTag73RelationSourceEnvironment transitionFuel
+      configuration projection fixedInstance decoder)
     (clean : Set (ExactCompilerSample HiddenTape parameters)) where
   preQueryDiscrepancy : HiddenTape →
     ExactCompilerGammaPrefixResidual parameters →
@@ -95,7 +97,9 @@ structure ExactTag73RestrictedK13JointBatchSource
   covered : ∀ hidden,
     jointEventSlice
         (clean ∩ exactTag73K13JointQueryBatchCollisionEvent transitionFuel
-          configuration projection fixedInstance decoder k13Source) hidden ⊆
+          configuration projection fixedInstance decoder
+            (relationSource.toK13SourceObligations transitionFuel configuration
+              projection fixedInstance decoder)) hidden ⊆
       (exactCompilerQueryBatchPrefixCoordinates parameters transitionFuel
           (exactPlainRomCursor configuration hidden).erase) ⁻¹'
         dependentSuccessfulSubtypeEvent GammaPrefixSucceeds (fun residual ↦
@@ -117,19 +121,23 @@ theorem exact_tag73_restricted_k13_joint_batch_probability_le
     {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
     {fixedInstance : PublicInstance Statement}
     {decoder : ExactDecoderInstantiation QM31Exact}
-    (k13Source : ExactTag73K13SourceObligations transitionFuel configuration
-      projection fixedInstance decoder)
+    (relationSource : ExactTag73RelationSourceEnvironment transitionFuel
+      configuration projection fixedInstance decoder)
     (clean : Set (ExactCompilerSample HiddenTape parameters))
     (source : ExactTag73RestrictedK13JointBatchSource transitionFuel
-      configuration projection fixedInstance decoder k13Source clean) :
+      configuration projection fixedInstance decoder relationSource clean) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (clean ∩ exactTag73K13JointQueryBatchCollisionEvent transitionFuel
-          configuration projection fixedInstance decoder k13Source) ≤
+          configuration projection fixedInstance decoder
+            (relationSource.toK13SourceObligations transitionFuel configuration
+              projection fixedInstance decoder)) ≤
       exactJointQueryBatchIdealRawError := by
   change
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (clean ∩ exactTag73K13JointQueryBatchCollisionEvent transitionFuel
-          configuration projection fixedInstance decoder k13Source) ≤
+          configuration projection fixedInstance decoder
+            (relationSource.toK13SourceObligations transitionFuel configuration
+              projection fixedInstance decoder)) ≤
       (16 : ENNReal) / ((P ^ 4 - 1 : Nat) : ENNReal)
   apply exact_compiler_joint_law_dependent_variable_prefix_event_probability_le
     hiddenLaw parameters
