@@ -70,7 +70,7 @@ def profileBinding : ByteString :=
   [65, 86, 55, 79, 70, 48, 48, 49,
    26, 3, 10, 16, 203, 0, 26, 32,
    27, 4, 6, 35, 31, 34, 113, 241,
-   129, 2, 8, 20, 18, 1, 64, 1]
+   129, 2, 8, 20, 18, 1, 64, 2]
 
 def circleBasisBinding : ByteString :=
   [97, 115, 112, 105, 115, 58, 99, 49, 58, 109, 51,
@@ -121,6 +121,7 @@ def queryCandidateLabel : UInt8 := 57
 def queryBatchChallengeLabel : UInt8 := 58
 def queryBatchClaimLabel : UInt8 := 59
 def deploymentLabel : UInt8 := 60
+def challengeBindLabel : UInt8 := 62
 
 def domAbsorb : UInt8 := 0
 def domSqueeze : UInt8 := 1

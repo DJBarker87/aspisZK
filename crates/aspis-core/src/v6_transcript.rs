@@ -27,7 +27,7 @@ use crate::state_only_sumcheck::{
 };
 use crate::statement_sumcheck::PaymentConstraintChallenges;
 use crate::sumcheck::{boundary_sum, evaluate, SumcheckPolynomial, WeightAccumulator};
-use crate::transcript::{label, Transcript};
+use crate::transcript::{label, Transcript, V7_ALPHA_ZERO_BIND_ID, V7_GAMMA_BIND_ID};
 use crate::v6_onefold::{
     binary_frontier_nodes, V6FixedFieldReader, V6FixedFieldStream, V6OneFoldWire, V6WireError,
     V6_C1_TREE_TAG, V6_C2_TREE_TAG, V6_FINAL_QM31_VALUES, V6_FRONTIER_CAP_PER_TREE,
@@ -704,9 +704,12 @@ where
         V6WorkStage::Batch,
         check_pow,
     )?;
-    let gamma = transcript
-        .challenge_nonzero_qm31()
-        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+    let gamma = if shift_query_batch_for_tag73 {
+        transcript.challenge_nonzero_qm31_bound(V7_GAMMA_BIND_ID)
+    } else {
+        transcript.challenge_nonzero_qm31()
+    }
+    .map_err(|_| V6TranscriptError::ChallengeSampling)?;
     let inactive_claim = fields.next_qm31()?;
     let mut inactive_bytes = [0u8; 16];
     inactive_claim.write_le_bytes(&mut inactive_bytes);
@@ -768,9 +771,12 @@ where
         V6WorkStage::Fold,
         check_pow,
     )?;
-    alpha[0] = transcript
-        .challenge_qm31()
-        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+    alpha[0] = if shift_query_batch_for_tag73 {
+        transcript.challenge_qm31_bound(V7_ALPHA_ZERO_BIND_ID)
+    } else {
+        transcript.challenge_qm31()
+    }
+    .map_err(|_| V6TranscriptError::ChallengeSampling)?;
     running_claim = evaluate(&first, alpha[0]);
     weights.fold_deferred_relation_arity4(alpha[0]);
     trace(V6RelationDiagnosticPhase::RoundZero);
