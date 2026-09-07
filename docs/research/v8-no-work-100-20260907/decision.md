@@ -1,5 +1,13 @@
 # Decision at the investigated revisions: no-go for a certified V8
 
+Latest: [robust-recovery-review.md](robust-recovery-review.md) proves a new
+near-word causal reduction (105.1453 local bits at 9301 corrupt fibres), including
+image-valid/wrong-claim and different-final classes. Good-anchor/same-final
+unextracted mass and no-close-anchor mass remain. A real-opening research
+relation suffix now executes the image gate; outer semantics, translated
+refinement, full-view ZK, FS and complete-transaction CU remain unestablished.
+The 40,282-byte allowance is unchanged; this is not a global security upgrade.
+
 Latest: [joint-image-review.md](joint-image-review.md) proves the restricted
 causal image/relation bound (118.4150 ideal bits) and confirms that installing
 the gate requires a research-only verifier change. It adds no scalar values
