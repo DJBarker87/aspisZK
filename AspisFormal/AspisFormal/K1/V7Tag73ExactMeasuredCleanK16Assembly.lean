@@ -2,6 +2,7 @@ import AspisFormal.K1.V7Tag73ExactMeasuredK16Assembly
 import AspisFormal.K1.V7Tag73ExactCleanK13MeasuredComposition
 import AspisFormal.K1.V7Tag73ExactPairAdversaryProfileClosure
 import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
+import AspisFormal.K1.V7Tag73K14BoundGammaClosure
 
 /-!
 # Exact measured Tag-73 closure from the clean work-dependent q16 theorem
@@ -56,6 +57,7 @@ open AspisK1.V7Tag73K13BoundChallengeClosure
 open AspisK1.V7Tag73K13PreQ16JointEventHandoff
 open AspisK1.V7Tag73K13K14EventComposition
 open AspisK1.V7Tag73K14K15IdealErrorLedger
+open AspisK1.V7Tag73K14BoundGammaClosure
 open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73ProofRelevantUpstreamInterface
 open AspisK1.V7Tag73Q16FirstCompactUniformity
@@ -71,6 +73,7 @@ open AspisPool.V7C1SubfieldRecovery
 open AspisPool.V7DeterministicSpendWitness
 open AspisV5AcceptedSpendRelation
 open AspisV5ComponentCQM31TowerExact
+open AspisV6PublishedTheoremInterfaces
 
 noncomputable section
 
@@ -107,6 +110,8 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     (k12Source : ExactTag73K12SourceObligations transitionFuel configuration
       projection fixedInstance)
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (publishedInitialWidth29 :
+      PublishedInitialWidth29CurveDecodability exactInitialEncoder)
     (k13Source : ExactTag73K13SourceObligations transitionFuel configuration
       projection fixedInstance decoder)
     (decodedSource : ExactFixedK13DecodedParsedSourceProvider transitionFuel
@@ -121,6 +126,8 @@ theorem exact_tag73_measured_clean_k16_aok_raw
           ⋃ finalTrial : ExactCompilerExposureTrial parameters,
             exactPreQ16K13JointTrialEvent transitionFuel configuration projection
               fixedInstance decoder finalTrial))
+    (k14Source : ExactTag73K14BoundGammaSource transitionFuel configuration
+      projection fixedInstance decoder)
     (transitionRoom : 3 ≤ transitionFuel)
     (driverCoversProtocol :
       tag73CanonicalDriverFuelCap ≤ configuration.machine.driverFuel)
@@ -155,10 +162,6 @@ theorem exact_tag73_measured_clean_k16_aok_raw
           (exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
             projection fixedInstance decoder k13Source) ≤
         exactLaterRelationAlphaIdealRawError)
-    (width29Bound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactTag73K14Width29Event transitionFuel configuration projection
-            fixedInstance decoder) ≤ exactK14IdealRawError)
     (fixedK15Bounds : FixedK15EventBounds
       (exactCompilerJointLaw hiddenLaw parameters)
       (exactTag73RestoredFixedK15Events environment))
@@ -205,6 +208,9 @@ theorem exact_tag73_measured_clean_k16_aok_raw
     transitionFuel configuration projection fixedInstance relation decoder
     decoderBinding k15 initialEncoderExact k13Source q16CleanBound oneFoldBound
     jointBatchBound laterAlphaBound
+  have width29Bound :=
+    exact_tag73_k14_width29_probability_le_of_bound_gamma_source hiddenLaw
+      initialEncoderExact publishedInitialWidth29 k14Source
   have k14Measure := exact_assembled_k14_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance relation decoder
     decoderBinding k15 width29Bound

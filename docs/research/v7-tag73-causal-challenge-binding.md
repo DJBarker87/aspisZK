@@ -82,3 +82,12 @@ the production q16 query event must be represented by the corrected pre-q16
 chronological trial union.  The K1.4 and K1.5 operational bounds must then be
 installed before the conditional K1.6 capstone becomes the full end-to-end
 theorem.  No release or deployment may reuse revision-1 artifacts.
+
+The same assembly now obtains the K1.4 width-29 bound through
+`V7Tag73K14BoundGammaClosure.lean`.  That module fixes the abstract
+variable-prefix factorization to the deployed pre-answer gamma controller;
+the capstone no longer accepts a bare K1.4 probability inequality.  Its
+remaining K1.4 seam is deterministic source data: the pre-gamma extracted
+word, the scheduler-native response family, and inclusion of the literal
+failure in the corresponding width-29 target.  The only external mathematical
+input at this step is the explicitly typed published circle-code theorem.
