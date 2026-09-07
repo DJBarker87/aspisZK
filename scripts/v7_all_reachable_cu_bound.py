@@ -14,7 +14,6 @@ import argparse
 import hashlib
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
@@ -26,6 +25,7 @@ MEASURED_ROLLOVER_C0_FRONTIER = 202
 CALIBRATED_CUTOFF20_MAX_FRONTIER_CU = 1_299_084
 CUTOFF20_MAX_COUNTER = 20
 MAX_FRONTIER_NODES = 203
+AUDITED_PRODUCTION_SOURCE_REVISION = "4c91f97ac6576201f90d41c2a575e54c026e3796"
 
 
 def fail(message: str) -> None:
@@ -46,16 +46,6 @@ def require(pattern: str, text: str, description: str) -> None:
 
 def sha256(relative: str) -> str:
     return hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
-
-
-def repository_revision() -> str:
-    return subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
 
 
 def main() -> None:
@@ -222,7 +212,11 @@ def main() -> None:
 
     result = {
         "schema": "aspis.v7.all-reachable-cu-source-inventory.v1",
-        "repositoryRevision": repository_revision(),
+        "auditedProductionSourceRevision": AUDITED_PRODUCTION_SOURCE_REVISION,
+        "revisionQualification": (
+            "the audited production sources are unchanged from this base; the containing "
+            "evidence commit is reported separately because a commit cannot contain its own hash"
+        ),
         "classification": "ALL-REACHABLE COMPLETION BOUND FAILS CLOSED",
         "quantifiers": {
             "verifierAcceptedLanguage": "counters 0..63; q16 draws up to 64 per candidate",
