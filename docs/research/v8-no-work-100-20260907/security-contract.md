@@ -56,7 +56,17 @@ probability is bounded by choose(H,2)/2^n, with additional target-query terms wh
 the extraction theorem needs them. A 208-bit digest's 104-bit attack-work scale
 is not probability 2^-104. No quantum 100-bit claim is made.
 
-The byte gates are distinct: preferred 30,824; relaxed 40,000; near-miss 40,960.
+The byte gates are distinct: preferred 30,824; original relaxed 40,000;
+user-accepted continuation allowance 40,282; near-miss 40,960.
 CU must be <= matched V7 for all four complete transaction shapes on identical
 runtime/build conventions, including costly accepted schedules. Host nanoseconds,
 base multiplications and the 1.3M limit cannot certify this condition.
+
+The current applicability decision is in decision.md. The 2,800-root scalar
+fingerprint theorem bounds only a fixed existing family. A partial provider's
+discarded branches require a separate bound. The full-fibre boundary gives a
+101.246-bit lower bound on a particular joint same-support recovery event, not
+on accepted-proof security. The new 105.142-bit fixed-target folded-query lemma
+also is not a full certificate: its pre-challenge target and independent uniform
+query hypotheses must be proved for the actual adaptive transcript, then lifted
+to the stated FS resource experiment.

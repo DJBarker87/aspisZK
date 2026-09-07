@@ -110,3 +110,12 @@ Existing SHA-256 hashing is usable in the matched baseline. SIMD-0449 direct
 account pointers and TxV1 are potential data-access/transaction improvements,
 but this run did not establish activation or an Aspis CU delta for them.
 Host/JIT speed, larger transaction limits and rent do not reduce proof-body bytes.
+# Continuation primary-source check (2026-09-07)
+
+- [DEEP-FRI, ITCS 2020 published version](https://drops.dagstuhl.de/storage/00lipics/lipics-vol151-itcs2020/LIPIcs.ITCS.2020.5/LIPIcs.ITCS.2020.5.pdf),
+  Theorem 3 equation (7), Theorem 25 equation (15), and general-linear-code
+  Lemma 28 equation (16), pp. 5:9, 5:26 and 5:28. Exact statements inspected,
+  not only the abstract. The published threshold retains an epsilon-dependent
+  term; decision.md derives a finite ceiling for that formula. It is not a
+  drop-in degree-28-curve/circle proof or a lower bound on protocol security.
+  This older theorem's weakness does not rule out stronger later results.
