@@ -3,6 +3,7 @@ import AspisFormal.K1.V7Tag73ExactFixedK16Closure
 import AspisFormal.K1.V7Tag73PreQ16OperationalMeasuredComposition
 import AspisFormal.K1.V7Tag73PreQ16OperationalActualLawBounds
 import AspisFormal.K1.V7Tag73PreQ16K15RestrictedBoundGammaClosure
+import AspisFormal.K1.V7Tag73PreQ16K15RemainingFixedActualLawClosure
 import AspisFormal.K1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 import AspisFormal.K1.V7Tag73PreQ16RestoredK15MeasuredAssembly
 
@@ -39,6 +40,7 @@ open AspisK1.V7Tag73PreQ16OperationalMeasuredComposition
 open AspisK1.V7Tag73PreQ16OperationalActualLawBounds
 open AspisK1.V7Tag73PreQ16OperationalStageAssembly
 open AspisK1.V7Tag73PreQ16K15RestrictedBoundGammaClosure
+open AspisK1.V7Tag73PreQ16K15RemainingFixedActualLawClosure
 open AspisK1.V7Tag73PreQ16K15RestrictedRelationAlphaActualLawClosure
 open AspisK1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 open AspisK1.V7Tag73RelationTailSourceComposition
@@ -231,12 +233,12 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
       projection fixedInstance decoder
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance))
-    (remainingFixedK15Bounds : FixedK15EventBoundsExceptSemanticRelationAlpha
-      (exactCompilerJointLaw hiddenLaw parameters)
-      (restrictFixedK15Events
+    (remainingFixedK15Sources :
+      ExactTag73RestrictedPreQ16RemainingFixedSources transitionFuel
+        configuration projection fixedInstance decoder decoderBinding basis rc
+        poseidon environment.restoredK15
         (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-          projection fixedInstance)
-        (exactPreQ16RestoredFixedK15Events environment.restoredK15)))
+          projection fixedInstance))
     (semanticLanes : ExactTag73SemanticLanes HiddenTape parameters)
     (semanticTerminal : ExactTag73SemanticTerminal HiddenTape parameters decoder
       semanticLanes)
@@ -344,6 +346,10 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
     exact_tag73_restricted_preQ16_restored_k15_residual_probability_le hiddenLaw
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
         fixedInstance) publishedInitialWidth29 restoredK15Source
+  have remainingFixedK15Bounds :=
+    remaining_preQ16_fixed_k15_event_bounds_of_sources hiddenLaw
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
+        fixedInstance) remainingFixedK15Sources
   have fixedK15Bounds :=
     restricted_preQ16_fixed_k15_event_bounds_of_semantic_relation_sources
       hiddenLaw
