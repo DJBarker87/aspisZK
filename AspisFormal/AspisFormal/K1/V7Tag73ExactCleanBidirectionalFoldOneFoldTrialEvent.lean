@@ -32,6 +32,7 @@ open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13PreQ16JointEventHandoff
+open AspisK1.V7Tag73K13PreQ16TargetProbability
 open AspisK1.V7Tag73PreQ16OperationalStageEvents
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisV5ComponentCQM31TowerExact
@@ -61,6 +62,8 @@ structure ExactCleanBidirectionalK13OneFoldTrialWitness
   trialExact : exactAcceptedFoldPairTrial input fold = trial
   legal : sample ∈ exactFixedPlainRomLegalSameTapeEvent transitionFuel
     configuration projection fixedInstance
+  noLate : sample ∉ exactK13PreQ16LateTargetEvent transitionFuel
+    configuration projection fixedInstance
 
 def exactCleanBidirectionalK13OneFoldTrialEvent
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
@@ -88,8 +91,10 @@ theorem exactCleanBidirectionalK13OneFoldTrialEvent_iUnion
     (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
     (fixedInstance : PublicInstance Statement)
     (decoder : ExactDecoderInstantiation QM31Exact) :
-    exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
-          fixedInstance ∩
+    (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
+          fixedInstance \
+        exactK13PreQ16LateTargetEvent transitionFuel configuration projection
+          fixedInstance) ∩
         exactPreQ16K13OneFoldEvent transitionFuel configuration projection
           fixedInstance decoder =
       ⋃ trial : ExactCompilerExposureTrial parameters,
@@ -97,17 +102,17 @@ theorem exactCleanBidirectionalK13OneFoldTrialEvent_iUnion
           projection fixedInstance decoder trial := by
   ext sample
   constructor
-  · rintro ⟨legal, event⟩
+  · rintro ⟨⟨legal, noLate⟩, event⟩
     obtain ⟨input, k12, failure⟩ := event
     let fold := exactAcceptedFoldTrial input
     let trial := exactAcceptedFoldPairTrial input fold
     apply Set.mem_iUnion.2
     exact ⟨trial, ⟨⟨input, k12, Classical.choice failure, fold, rfl,
-      legal⟩⟩⟩
+      legal, noLate⟩⟩⟩
   · intro member
     obtain ⟨trial, trialMember⟩ := Set.mem_iUnion.1 member
     let witness := Classical.choice trialMember
-    refine ⟨witness.legal, ?_⟩
+    refine ⟨⟨witness.legal, witness.noLate⟩, ?_⟩
     exact ⟨witness.input, witness.k12, ⟨witness.failure⟩⟩
 
 end
