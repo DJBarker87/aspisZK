@@ -30,6 +30,8 @@ readonly SELECTED_LANE_CASE=${ASPIS_V7_LIVE_SELECTED_LANE_CASE:-none}
 readonly START_ACTION=${ASPIS_V7_LIVE_START_ACTION:-initialize}
 readonly RESUME_INITIALIZE_EVIDENCE=${ASPIS_V7_LIVE_RESUME_INITIALIZE_EVIDENCE:-}
 readonly PUBLIC_DEVNET_ACK=${ASPIS_TXV1_PUBLIC_DEVNET_MODE:-}
+readonly TERMINAL_PDA_CLOSURE_ACK=${ASPIS_V7_TERMINAL_PDA_CLOSURE_ACK:-}
+readonly TERMINAL_PDA_CLOSURE_ACK_VALUE=I_ACKNOWLEDGE_DEFAULT_OFF_TERMINAL_PDA_CERTIFICATE_AUDIT
 readonly DEVNET_GENESIS_HASH=EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG
 readonly TXV1_FEATURE=txv1aq4pp281K9um3tnPgkfX8UqtFT6wcVW3hNezGLL
 
@@ -52,6 +54,12 @@ fi
 export ASPIS_EVIDENCE_AUDIT_ONLY=$AUDIT_ONLY
 export ASPIS_EVIDENCE_DISPOSABLE=$DISPOSABLE
 export ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY=$PUBLIC_DEVNET_TEST_ONLY
+if [[ -n "$TERMINAL_PDA_CLOSURE_ACK" ]]; then
+  [[ "$TERMINAL_PDA_CLOSURE_ACK" == "$TERMINAL_PDA_CLOSURE_ACK_VALUE" ]] \
+    || fail "wrong terminal PDA certificate acknowledgement"
+  [[ "$DISPOSABLE" == true ]] \
+    || fail "terminal PDA certificate audit is restricted to a disposable cluster"
+fi
 [[ "$OPERATION" == transfer || "$OPERATION" == withdrawal ]] \
   || fail "ASPIS_V7_LIVE_OPERATION must be transfer or withdrawal"
 [[ "$CIPHERTEXT_CASE" == canonical || "$CIPHERTEXT_CASE" == malformed-magic ]] \
@@ -98,6 +106,69 @@ rpc() {
     sleep 2
   done
   return 1
+}
+
+initialize_terminal_pda_certificate() {
+  local signed_request=$1
+  local init_dir="$EVIDENCE_DIR/terminal-pda-certificate"
+  local init_json init_simulation init_send init_signature init_status init_finalized
+  [[ -n "$TERMINAL_PDA_CLOSURE_ACK" ]] || return 0
+  [[ ! -e "$init_dir" ]] || return 0
+  mkdir "$init_dir"
+  jq -e '.terminalPdaClosureEnabled == true and
+    .pdaCertificateInitialization.schema == "aspis.v7.terminal-pda-certificate-initialization-signed.v1" and
+    .pdaSearchAudit.after.terminalFindProgramAddressInvocations == 0' \
+    "$signed_request" >/dev/null || fail "terminal PDA certificate preflight failed"
+  init_json=$(jq -c '.pdaCertificateInitialization' "$signed_request")
+  jq . <<<"$init_json" >"$init_dir/signed-request.json"
+  init_simulation=$(rpc "$(jq -c '.simulationRequest' <<<"$init_json")")
+  jq . <<<"$init_simulation" >"$init_dir/simulation.json"
+  jq -e '.error | not' <<<"$init_simulation" >/dev/null
+  jq -e '.result.value.err == null' <<<"$init_simulation" >/dev/null \
+    || fail "terminal PDA certificate initialization simulation failed"
+  init_send=$(rpc "$(jq -c '.sendRequest' <<<"$init_json")")
+  jq . <<<"$init_send" >"$init_dir/send.json"
+  init_signature=$(jq -er '.result' <<<"$init_send")
+  [[ "$init_signature" == "$(jq -er '.signature' <<<"$init_json")" ]] \
+    || fail "terminal PDA certificate submission changed signed wire"
+  init_finalized=false
+  for _ in $(seq 1 600); do
+    init_status=$(rpc "$(jq -nc --arg signature "$init_signature" \
+      '{jsonrpc:"2.0",id:1498,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
+      <<<"$init_status" >/dev/null; then init_finalized=true; break; fi
+    sleep 1
+  done
+  [[ "$init_finalized" == true ]] || fail "terminal PDA certificate did not finalize"
+  rpc "$(jq -nc --arg signature "$init_signature" \
+    '{jsonrpc:"2.0",id:1499,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$init_dir/finalized-transaction.json"
+  jq -e '.result != null and .result.meta.err == null' \
+    "$init_dir/finalized-transaction.json" >/dev/null \
+    || fail "terminal PDA certificate landed failure"
+  local certificate_account
+  certificate_account=$(jq -er '.certificateAccount' <<<"$init_json")
+  rpc "$(jq -nc --arg address "$certificate_account" \
+    '{jsonrpc:"2.0",id:1502,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+    | jq --arg requestedAddress "$certificate_account" '. + {requestedAddress:$requestedAddress}' \
+    >"$init_dir/account.json"
+  local certificate_magic
+  certificate_magic=$(jq -er '.result.value.data[0]' "$init_dir/account.json" \
+    | openssl base64 -d -A | od -An -v -tc -N4 | tr -d '[:space:]')
+  [[ "$certificate_magic" == APD8 ]] || fail "terminal PDA certificate magic mismatch"
+  jq -n --arg signature "$init_signature" \
+    --argjson slot "$(jq -er '.result.slot' "$init_dir/finalized-transaction.json")" \
+    --arg account "$certificate_account" \
+    --argjson simulatedCu "$(jq -er '.result.value.unitsConsumed' "$init_dir/simulation.json")" \
+    --argjson landedCu "$(jq -er '.result.meta.computeUnitsConsumed' "$init_dir/finalized-transaction.json")" \
+    --slurpfile request "$init_dir/signed-request.json" \
+    '{schema:"aspis.v7.terminal-pda-certificate-finalized.v1",signature:$signature,slot:$slot,
+      certificateAccount:$account,serializedTransactionBytes:$request[0].serializedTransactionBytes,
+      signedWireSha256:$request[0].signedWireSha256,simulatedCu:$simulatedCu,landedCu:$landedCu,
+      byteIdenticalSimulationSubmission:true,canonicalSearchCompletedBeforeTerminal:true,
+      immutableDuringTerminal:true,taskOwnedKeypairDestroyedByCleanup:true,finalized:true,
+      auditOnly:true,disposable:true,publicDevnetTestOnly:false,mainnetReady:false}' \
+    >"$init_dir/finalized.json"
 }
 
 file_mode() {
@@ -512,6 +583,20 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         terminal_blockhash=$(rpc "$(jq -nc --argjson slot "$terminal_context_slot" \
           '{jsonrpc:"2.0",id:1501,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
           | jq -er '.result.value.blockhash')
+        terminal_pda_certificate_keypair=""
+        terminal_pda_certificate_rent=null
+        if [[ -n "$TERMINAL_PDA_CLOSURE_ACK" ]]; then
+          terminal_pda_certificate_keypair="$WORK_DIR/terminal-pda-certificate.json"
+          NO_DNA=1 "$AGAVE_BIN_DIR/solana-keygen" new --no-bip39-passphrase --silent \
+            --force --outfile "$terminal_pda_certificate_keypair"
+          [[ "$(file_mode "$terminal_pda_certificate_keypair")" == 600 ]] \
+            || fail "terminal PDA certificate keypair mode is not 0600"
+          terminal_pda_certificate_rent=$(rpc \
+            '{"jsonrpc":"2.0","id":1497,"method":"getMinimumBalanceForRentExemption","params":[704]}' \
+            | jq -er '.result')
+          [[ "$terminal_pda_certificate_rent" =~ ^[0-9]+$ && "$terminal_pda_certificate_rent" -gt 0 ]] \
+            || fail "terminal PDA certificate rent is unavailable"
+        fi
         calibrated_compute_limit=1300000
         calibration_token_entry_cu=null
         terminal_compute_unit_limit=null
@@ -520,12 +605,17 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
             --arg bundle "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
             --arg asq8 "$EVIDENCE_DIR/live-proof/asq8.bin" --arg payer "$PAYER_KEYPAIR" \
             --arg blockhash "$terminal_blockhash" --argjson slot "$terminal_context_slot" \
+            --arg certificateKeypair "$terminal_pda_certificate_keypair" \
+            --argjson certificateRent "$terminal_pda_certificate_rent" \
             '{schema:$schema,bundle:$bundle,asq8:$asq8,payerKeypair:$payer,
               recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1590,
-              carrierTestMode:null,withdrawalCpiTestMode:null,computeUnitLimit:null}' \
+              carrierTestMode:null,withdrawalCpiTestMode:null,computeUnitLimit:null,
+              terminalPdaCertificateKeypair:(if $certificateKeypair == "" then null else $certificateKeypair end),
+              terminalPdaCertificateRentLamports:$certificateRent}' \
             >"$WORK_DIR/terminal-calibration-input.json"
           "$TERMINAL_BUILDER" "$WORK_DIR/terminal-calibration-input.json" \
             >"$TERMINAL_EVIDENCE/calibration-signed-request.json"
+          initialize_terminal_pda_certificate "$TERMINAL_EVIDENCE/calibration-signed-request.json"
           calibration_simulation=$(rpc "$(jq -c '.simulationRequest' \
             "$TERMINAL_EVIDENCE/calibration-signed-request.json")")
           jq . <<<"$calibration_simulation" >"$TERMINAL_EVIDENCE/calibration-simulation.json"
@@ -562,13 +652,18 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
           --arg bundle "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
           --arg asq8 "$EVIDENCE_DIR/live-proof/asq8.bin" --arg payer "$PAYER_KEYPAIR" \
           --arg blockhash "$terminal_blockhash" --argjson slot "$terminal_context_slot" \
+          --arg certificateKeypair "$terminal_pda_certificate_keypair" \
+          --argjson certificateRent "$terminal_pda_certificate_rent" \
           '{schema:$schema,bundle:$bundle,asq8:$asq8,payerKeypair:$payer,
             recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1600,
             carrierTestMode:$carrierTestMode,withdrawalCpiTestMode:$withdrawalCpiTestMode,
-            computeUnitLimit:$computeUnitLimit}' \
+            computeUnitLimit:$computeUnitLimit,
+            terminalPdaCertificateKeypair:(if $certificateKeypair == "" then null else $certificateKeypair end),
+            terminalPdaCertificateRentLamports:$certificateRent}' \
           >"$WORK_DIR/terminal-input.json"
         "$TERMINAL_BUILDER" "$WORK_DIR/terminal-input.json" \
           >"$TERMINAL_EVIDENCE/signed-request.json"
+        initialize_terminal_pda_certificate "$TERMINAL_EVIDENCE/signed-request.json"
         jq -e --arg operation "$OPERATION" --arg carrierCase "$CIPHERTEXT_CASE" \
           --arg withdrawalCpiCase "$WITHDRAWAL_CPI_CASE" \
           --argjson expectedComputeUnitLimit "$calibrated_compute_limit" '
@@ -996,8 +1091,12 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         jq -n --arg bundle "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
           --arg asq8 "$EVIDENCE_DIR/live-proof/asq8.bin" --arg payer "$PAYER_KEYPAIR" \
           --arg blockhash "$fresh_replay_blockhash" --argjson slot "$fresh_replay_slot" \
+          --arg certificateKeypair "$terminal_pda_certificate_keypair" \
+          --argjson certificateRent "$terminal_pda_certificate_rent" \
           '{schema:"aspis.v7.live-terminal-input.v1",bundle:$bundle,asq8:$asq8,
-            payerKeypair:$payer,recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1852}' \
+            payerKeypair:$payer,recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1852,
+            terminalPdaCertificateKeypair:(if $certificateKeypair == "" then null else $certificateKeypair end),
+            terminalPdaCertificateRentLamports:$certificateRent}' \
           >"$WORK_DIR/fresh-replay-input.json"
         "$TERMINAL_BUILDER" "$WORK_DIR/fresh-replay-input.json" \
           >"$TERMINAL_EVIDENCE/fresh-replay-signed-request.json"

@@ -500,11 +500,11 @@ fn main() -> Result<()> {
         !(malformed_carrier_test && withdrawal_cpi_compute_exhaustion_test),
         "terminal negative-test modes are mutually exclusive"
     );
-    let pda_closure = input.schema == "aspis.v7.live-terminal-pda-closure-input.v1";
+    let pda_closure = input.terminal_pda_certificate_keypair.is_some();
     ensure!(
         pda_closure == input.terminal_pda_certificate_keypair.is_some()
             && pda_closure == input.terminal_pda_certificate_rent_lamports.is_some(),
-        "PDA closure schema requires exactly one certificate keypair and rent value"
+        "PDA closure requires exactly one certificate keypair and rent value"
     );
     ensure!(
         !pda_closure || cfg!(feature = "v7-terminal-pda-certificate-audit"),
