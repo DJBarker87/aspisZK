@@ -52,6 +52,8 @@ structure ExactPlainRomOperationalBounds
   rootAdversaryTotalCalls :
     machine.adversaryLimits.totalCalls ≤
       globalFull256OracleCallCap parameters
+  rootAdversaryFreshCalls :
+    machine.adversaryLimits.freshCalls ≤ parameters.q1ShaCallCap
   rootVerifierTotalCalls :
     machine.verifierLimits.totalCalls ≤
       globalFull256OracleCallCap parameters
