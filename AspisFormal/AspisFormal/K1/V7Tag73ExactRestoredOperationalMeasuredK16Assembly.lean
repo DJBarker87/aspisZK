@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalK13MeasuredComposition
+import AspisFormal.K1.V7Tag73ExactRestoredOperationalK14Probability
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalK16Assembly
 
 /-!
@@ -30,10 +31,12 @@ open AspisK1.V7Tag73ExactRestoredCleanPairSemanticNoninterference
 open AspisK1.V7Tag73ExactRestoredOperationalK13Events
 open AspisK1.V7Tag73ExactRestoredOperationalK13MeasuredComposition
 open AspisK1.V7Tag73ExactRestoredOperationalK13OneFoldProbability
+open AspisK1.V7Tag73ExactRestoredOperationalK14Probability
 open AspisK1.V7Tag73ExactRestoredOperationalK16Assembly
 open AspisK1.V7Tag73ExactRestoredOperationalStages
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13IdealErrorLedger
+open AspisK1.V7Tag73K14K15IdealErrorLedger
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73ProofRelevantUpstreamInterface
 open AspisK1.V7Tag73Q16FirstCompactUniformity
@@ -66,7 +69,7 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
     (binding : InitialProjectionBinding decoder)
     (k15 : ExactRestoredOperationalK15Classifier transitionFuel configuration
       projection fixedInstance relation decoder binding)
-    (k14Error k15Error : ENNReal)
+    (k15Error : ENNReal)
     (transitionRoom : 3 ≤ transitionFuel)
     (driverCoversProtocol :
       tag73CanonicalDriverFuelCap ≤ configuration.machine.driverFuel)
@@ -111,12 +114,10 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
       configuration projection fixedInstance decoder
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance))
-    (k14Bound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-              projection fixedInstance ∩
-            exactTag73RestoredOperationalK14Width29Event transitionFuel
-              configuration projection fixedInstance decoder) ≤ k14Error)
+    (k14Source : ExactTag73RestoredOperationalK14Source transitionFuel
+      configuration projection fixedInstance decoder
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance))
     (k15Bound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -129,7 +130,8 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
           transitionFuel configuration fixedInstance relation +
         exactFixedClosedK16RawError
           (exactRestoredOperationalUpstreamTerms
-            (exactRestoredOperationalK13RawError configuration) k14Error
+            (exactRestoredOperationalK13RawError configuration)
+              exactK14IdealRawError
               k15Error)
           parameters := by
   let stages := exactTag73RestoredOperationalStages transitionFuel configuration
@@ -152,8 +154,12 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
       finalExposureCap initialEncoderExact merkleBound idealBound oneFoldSource
   have k14Clean :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (clean ∩ k14CoherentChainErrorEvent stages) ≤ k14Error := by
-    apply le_trans (measure_mono ?_) k14Bound
+          (clean ∩ k14CoherentChainErrorEvent stages) ≤
+        exactK14IdealRawError := by
+    have width29Bound :=
+      exact_restored_operational_k14_width29_probability_le hiddenLaw clean
+        initialEncoderExact k14Source
+    apply le_trans (measure_mono ?_) width29Bound
     rintro sample ⟨cleanMember, failure⟩
     exact ⟨cleanMember,
       exact_restored_stages_k14_error_subset_width29 k15 failure⟩
@@ -166,7 +172,8 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
     hiddenLaw transitionFuel configuration projection fixedInstance relation
       transitionRoom driverCoversProtocol runtimeReserves cutoffBeyondCap stages
       (exactRestoredOperationalUpstreamTerms
-        (exactRestoredOperationalK13RawError configuration) k14Error k15Error)
+        (exactRestoredOperationalK13RawError configuration)
+          exactK14IdealRawError k15Error)
       k12Clean k13Clean k14Clean k15Clean
 
 end
