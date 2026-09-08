@@ -105,4 +105,9 @@ fn verify_relation(body:&[u8],statement:[u8;32],ordinary:Vec<K>,claim:K,hashfn:c
 }
 
 #[path="relation_callback_fixtures.rs"] mod fixtures;
+#[cfg(not(v8_inactive_binding))]
 fn main(){fixtures::run();}
+#[cfg(v8_inactive_binding)]
+#[path="inactive_row_binding.rs"] mod inactive_binding;
+#[cfg(v8_inactive_binding)]
+fn main(){inactive_binding::run();}

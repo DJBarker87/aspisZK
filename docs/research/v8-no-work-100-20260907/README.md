@@ -1,5 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [ordinary point/inactive binding continuation](row-binding-review.md).
+An executable false-point-claim construction passes the unshifted semantic and
+image-aware research relation suffix, including non-polynomial received words.
+A byte-neutral row-weight shift has a checked joint noisy-word bound without
+`inactiveExact`; component recovery, full-view ZK, FS and matched CU remain
+open. See [exact ledger](row-binding-results.json) and
+[commands/axioms/measurements](row-binding-evidence.json). Production unchanged.
+
 Latest: [non-polynomial recovery continuation](robust-recovery-review.md).
 A new Lean bounded-corruption game covers bad anchor boundaries and adaptive
 off-anchor finals without assuming the received word is polynomial. At B=9301
