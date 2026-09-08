@@ -14,6 +14,7 @@ readonly PAYER_KEYPAIR=${ASPIS_TXV1_DISPOSABLE_PAYER_KEYPAIR:-}
 readonly AGAVE_BIN_DIR=${ASPIS_TXV1_DISPOSABLE_AGAVE_BIN_DIR:-}
 readonly PROBE_BINARY=${ASPIS_V7_CU_TAIL_PROBE_BINARY:-}
 readonly PROBE_BUILDER=${ASPIS_V7_CU_TAIL_PROBE_BUILDER:-}
+readonly GENESIS_PROGRAM_ID=${ASPIS_TXV1_DISPOSABLE_CU_TAIL_PROBE_ID:-}
 
 [[ "${ASPIS_V7_CU_TAIL_PROBE_ACK:-}" == "$ACK" ]] \
   || fail "missing exact local-only CU-tail-probe acknowledgement"
@@ -32,7 +33,6 @@ done
 
 mkdir -p "$EVIDENCE_DIR/cases"
 readonly WORK_DIR=$(mktemp -d "${TMPDIR:-/tmp}/aspis-v7-cu-tail-probe.XXXXXX")
-readonly PROGRAM_KEYPAIR="$WORK_DIR/probe-program.json"
 cleanup() {
   case "$WORK_DIR" in
     */aspis-v7-cu-tail-probe.*) rm -rf -- "$WORK_DIR" ;;
@@ -66,14 +66,17 @@ finalized_transaction() {
     | jq . >"$output"
 }
 
-# This is an ephemeral local-validator deployment under a fresh task-owned ID.
-# Neither a production program ID nor any public cluster is touched.
-NO_DNA=1 "$AGAVE_BIN_DIR/solana-keygen" new --no-bip39-passphrase --silent \
-  --force --outfile "$PROGRAM_KEYPAIR"
-chmod 600 "$PROGRAM_KEYPAIR"
-readonly PROGRAM_ID=$(NO_DNA=1 "$AGAVE_BIN_DIR/solana-keygen" pubkey "$PROGRAM_KEYPAIR")
-NO_DNA=1 "$AGAVE_BIN_DIR/solana" program deploy --url "$RPC_URL" \
-  --keypair "$PAYER_KEYPAIR" --program-id "$PROGRAM_KEYPAIR" "$PROBE_BINARY" \
+# New sBPF-v0 deployment is deliberately disabled by the Agave 4.2 feature
+# set, while existing v0 programs remain executable.  The preferred probe
+# path therefore installs the fresh task-owned identity at disposable genesis.
+# Runtime deployment can emit a temporary buffer recovery phrase on failure.
+# This evidence path therefore requires genesis installation and never creates
+# a runtime deployment buffer.
+[[ -n "$GENESIS_PROGRAM_ID" ]] \
+  || fail "CU-tail probe must be installed at disposable genesis"
+readonly PROGRAM_ID="$GENESIS_PROGRAM_ID"
+readonly DEPLOYMENT_MODE="disposable-genesis"
+printf 'programId=%s\nmode=%s\n' "$PROGRAM_ID" "$DEPLOYMENT_MODE" \
   >"$EVIDENCE_DIR/deploy.log"
 
 rpc "$(jq -nc --arg id "$PROGRAM_ID" \
@@ -133,12 +136,14 @@ for index in 0 1 2 3; do
 done
 
 jq -n --arg programId "$PROGRAM_ID" --arg binarySha256 "$SOURCE_SHA" \
+  --arg deploymentMode "$DEPLOYMENT_MODE" \
   --slurpfile min "$EVIDENCE_DIR/cases/qm31-minimum/summary.json" \
   --slurpfile max "$EVIDENCE_DIR/cases/qm31-maximum-successful/summary.json" \
   --slurpfile best "$EVIDENCE_DIR/cases/query-order-best/summary.json" \
   --slurpfile worst "$EVIDENCE_DIR/cases/query-order-worst/summary.json" \
   '{schema:"aspis.v7.cu-tail-probe-evidence.v1",cluster:"disposable-local-validator",
     localOnly:true,probeProgramId:$programId,probeBinarySha256:$binarySha256,
+    deploymentMode:$deploymentMode,
     cases:[$min[0],$max[0],$best[0],$worst[0]],
     landedDeltasCu:{qm31MaximumMinusMinimum:($max[0].landedCu-$min[0].landedCu),
       queryWorstMinusBest:($worst[0].landedCu-$best[0].landedCu)},
