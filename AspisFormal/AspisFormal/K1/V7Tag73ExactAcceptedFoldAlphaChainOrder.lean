@@ -1,6 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactAcceptedFoldTrialPackage
 import AspisFormal.K1.V7Tag73ExactQ16CausalCoordinateOrder
-import AspisFormal.K1.V7Tag73ExactLinearTranscriptRootOrder
 
 /-!
 # Exact root order of the deployed post-fold alpha chain
@@ -18,11 +17,13 @@ namespace AspisK1.V7Tag73ExactAcceptedFoldAlphaChainOrder
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AlphaZeroCausalController
 open AspisK1.V7Tag73ExactAcceptedFoldTrialPackage
+open AspisK1.V7Tag73ExactAlphaZeroControllerAlignment
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
-open AspisK1.V7Tag73ExactLinearTranscriptRootOrder
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactQ16CausalCoordinateOrder
+open AspisK1.V7Tag73ExactRootFreshInputUniqueness
+open AspisK1.V7Tag73ExactRootLookupCausalOrder
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73SchedulerNativeGammaReplay
@@ -50,8 +51,11 @@ theorem exact_ordered_chain_initial_before_output_at
       advances) :
     ∀ index (inOutputs : index < outputs.length),
       ∃ outputInput,
-        ExactRootPairBefore input (producerInput, digest)
-          (outputInput, outputs[index]) := by
+        outputInput.length = 33 ∧
+        ∃ before middle after,
+          exactRootFreshQueries input =
+            before ++ (producerInput, digest) :: middle ++
+              (outputInput, outputs[index]) :: after := by
   induction chain with
   | done producerInput digest producerFound =>
       intro index inOutputs
@@ -62,13 +66,40 @@ theorem exact_ordered_chain_initial_before_output_at
       intro index inOutputs
       cases index with
       | zero =>
-          exact ⟨gammaOutputInput digest, producerBeforeOutput⟩
+          exact ⟨gammaOutputInput digest, by simp [gammaOutputInput],
+            producerBeforeOutput⟩
       | succ index =>
           have inTail : index < outputs.length := by simpa using inOutputs
-          obtain ⟨outputInput, advanceBeforeOutput⟩ := ih index inTail
-          exact ⟨outputInput,
-            exact_root_pair_before_trans producerBeforeAdvance
-              advanceBeforeOutput⟩
+          obtain ⟨outputInput, outputLength, advancePrior, advanceMiddle,
+              outputLater, advanceBeforeOutput⟩ := ih index inTail
+          obtain ⟨producerPrior, producerMiddle, advanceLater,
+              producerBeforeAdvance⟩ := producerBeforeAdvance
+          have prefixExact :
+              producerPrior ++ (producerInput, digest) :: producerMiddle =
+                advancePrior := by
+            apply alpha_mapped_nodup_selected_prefix_eq Prod.fst
+              (exactRootFreshQueries input)
+              (producerPrior ++ (producerInput, digest) :: producerMiddle)
+              advanceLater advancePrior
+              (advanceMiddle ++
+                (outputInput, outputs[index]) :: outputLater)
+              (gammaAdvanceInput digest, advanced)
+              (gammaAdvanceInput digest, advanced)
+              (exact_root_fresh_query_inputs_nodup input)
+            · simpa only [List.cons_append, List.append_assoc] using
+                producerBeforeAdvance
+            · simpa only [List.cons_append, List.append_assoc] using
+                advanceBeforeOutput
+            · rfl
+          refine ⟨outputInput, outputLength, producerPrior,
+            producerMiddle ++
+              (gammaAdvanceInput digest, advanced) :: advanceMiddle,
+            outputLater, ?_⟩
+          rw [← prefixExact] at advanceBeforeOutput
+          have outputExact :
+              (output :: outputs)[index + 1] = outputs[index] := rfl
+          simpa only [List.cons_append, List.append_assoc, outputExact] using
+            advanceBeforeOutput
 
 /-- The alpha blocks consumed immediately after the selected fold nonce have
 their exact producer lookup and strict root chronology.  No independently

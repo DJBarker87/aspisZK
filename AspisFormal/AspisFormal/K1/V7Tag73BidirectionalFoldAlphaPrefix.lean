@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73BidirectionalFoldAlphaController
+import AspisFormal.K1.V7Tag73IndexedAlignedRecordReplay
 
 /-!
 # Prefix invariants for the bidirectional fold/alpha controller
@@ -17,11 +18,20 @@ open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73BidirectionalFoldAlphaController
+open AspisK1.V7Tag73FinalWorkQ16CandidateController
+open AspisK1.V7Tag73FoldArmedAlphaZeroController
+open AspisK1.V7Tag73IndexedAlignedRecordReplay
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedExposureCausalRouter
+open AspisK1.V7Tag73SchedulerCausalQ16Router
 open AspisK1.V7Tag73TranscriptSchedule
 
 noncomputable section
+
+def bidirectionalMachineFreshPair? : UnifiedExposureRecord →
+    Option (ShaInput × Digest256)
+  | .machineFresh _ input answer => some (input, answer)
+  | .padding _ | .forkOutput _ _ _ _ _ | .forkAdvance _ => none
 
 def BidirectionalPreAnchorInvariant
     (memory : BidirectionalFoldAlphaMemory) : Prop :=
@@ -149,11 +159,125 @@ theorem bidirectional_waiting_for_work_step
   simp only [notAnchor, ↓reduceDIte]
   simp [waiting.1, waiting.2, noMatch']
 
+/-- Before the selected pair anchor, one aligned machine-fresh record is
+appended exactly to the nested causal machine cache. -/
+theorem bidirectional_pre_anchor_seen_machine_step_exact
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex : Nat)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (actor : QueryActor) (input : ShaInput) (answer : Digest256)
+    (beforeAnchor : state.exposureIndex ≠ anchorIndex)
+    (aligned : unifiedRecordAtAnswer transitionFuel state.cursor answer =
+      .machineFresh actor input answer) :
+    (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex state
+      answer).alpha.seenMachine =
+        state.memory.alpha.seenMachine ++ [(input, answer)] := by
+  have machineInput : unifiedMachineFreshInputBefore? transitionFuel
+      state.cursor = some input := by
+    unfold unifiedRecordAtAnswer at aligned
+    unfold unifiedMachineFreshInputBefore?
+    generalize requestExact : seekUnifiedExposure transitionFuel state.cursor =
+      request at aligned ⊢
+    cases request <;> simp_all
+  have causalInput : currentBidirectionalInput? transitionFuel state =
+      some input := by
+    exact unified_machine_fresh_input_is_unified_input transitionFuel
+      state.cursor input machineInput
+  have unifiedInput : unifiedInputBeforeAnswer? transitionFuel state.cursor =
+      some input := by
+    simpa [currentBidirectionalInput?] using causalInput
+  have projectedInput : unifiedInputBeforeAnswer? transitionFuel
+      (bidirectionalAlphaState state).cursor = some input := by
+    simpa [bidirectionalAlphaState] using unifiedInput
+  unfold bidirectionalFoldAlphaAfterMemory
+  simp only [beforeAnchor, ↓reduceDIte]
+  by_cases consumes : state.memory.foldUsed = false ∧
+      matchesExpectedFoldWork
+        (currentBidirectionalInput? transitionFuel state)
+        state.memory.expectedWork
+  · rw [if_pos consumes]
+    change (foldArmedAlphaAfterMemory transitionFuel
+      (bidirectionalAlphaState state) answer).seenMachine = _
+    unfold foldArmedAlphaAfterMemory
+    rw [projectedInput]
+    simp [bidirectionalAlphaState, rememberCurrentMachine, machineInput]
+  · rw [if_neg consumes]
+    change (foldArmedAlphaAfterMemory transitionFuel
+      (bidirectionalAlphaState state) answer).seenMachine = _
+    unfold foldArmedAlphaAfterMemory
+    rw [projectedInput]
+    simp [bidirectionalAlphaState, rememberCurrentMachine, machineInput]
+
+/-- Exact machine-cache contents at every aligned machine-only prefix ending
+at the selected pair anchor. -/
+theorem bidirectional_pre_anchor_seen_machine_replay_exact
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex : Nat) :
+    ∀ (records : List UnifiedExposureRecord)
+      (state : IndexedUnifiedExposureState globalOracleCalls
+        BidirectionalFoldAlphaMemory),
+      IndexedRecordsAligned transitionFuel
+        (bidirectionalFoldAlphaController transitionFuel anchorIndex)
+        state records →
+      OnlyMachineFreshRecords records →
+      state.exposureIndex + records.length = anchorIndex →
+      (indexedStateAfterRecords transitionFuel
+        (bidirectionalFoldAlphaController transitionFuel anchorIndex)
+        records state).memory.alpha.seenMachine =
+          state.memory.alpha.seenMachine ++
+            records.filterMap bidirectionalMachineFreshPair? := by
+  intro records
+  induction records with
+  | nil =>
+      intro state _aligned _only _endExact
+      simp
+  | cons record records ih =>
+      intro state aligned onlyMachine endExact
+      obtain ⟨actor, input, answer, recordExact⟩ :=
+        onlyMachine record List.mem_cons_self
+      subst record
+      have headAligned := aligned []
+        (.machineFresh actor input answer) records rfl
+      have beforeAnchor : state.exposureIndex ≠ anchorIndex := by
+        simp only [List.length_cons] at endExact
+        omega
+      let controller := bidirectionalFoldAlphaController
+        (globalOracleCalls := globalOracleCalls) transitionFuel anchorIndex
+      let next := controller.afterAnswer transitionFuel state answer
+      have stepExact : next.memory.alpha.seenMachine =
+          state.memory.alpha.seenMachine ++ [(input, answer)] := by
+        simpa [next, controller, bidirectionalFoldAlphaController,
+          IndexedUnifiedExposureController.afterAnswer] using
+          bidirectional_pre_anchor_seen_machine_step_exact transitionFuel
+            anchorIndex state actor input answer beforeAnchor headAligned
+      have tailAligned : IndexedRecordsAligned transitionFuel controller next
+          records := by
+        apply indexed_records_aligned_segment transitionFuel controller state
+          ((.machineFresh actor input answer) :: records)
+          [(.machineFresh actor input answer)] records []
+        · simpa [controller] using aligned
+        · simp [next, UnifiedExposureRecord.answer]
+      have tailOnly : OnlyMachineFreshRecords records := by
+        intro tailRecord member
+        exact onlyMachine tailRecord (List.mem_cons_of_mem _ member)
+      have nextEnd : next.exposureIndex + records.length = anchorIndex := by
+        simp only [next, controller, indexed_after_answer_exposure_index,
+          List.length_cons] at endExact ⊢
+        omega
+      rw [indexed_state_after_records_cons]
+      change (indexedStateAfterRecords transitionFuel controller records
+        next).memory.alpha.seenMachine = _
+      rw [ih next tailAligned tailOnly nextEnd, stepExact]
+      simp [List.append_assoc, bidirectionalMachineFreshPair?]
+
 end
 
 #print axioms inactive_bidirectional_pre_anchor
 #print axioms bidirectional_pre_anchor_invariant_step
 #print axioms bidirectional_pre_anchor_invariant_replay
 #print axioms bidirectional_waiting_for_work_step
+#print axioms bidirectional_pre_anchor_seen_machine_step_exact
+#print axioms bidirectional_pre_anchor_seen_machine_replay_exact
 
 end AspisK1.V7Tag73BidirectionalFoldAlphaPrefix
