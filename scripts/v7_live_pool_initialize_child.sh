@@ -271,6 +271,25 @@ finalized_transaction() {
     | jq . >"$output"
 }
 
+confirmed_transaction() {
+  local signature=$1 output=$2 request_id=$3 status landed=false
+  for _ in $(seq 1 150); do
+    status=$(rpc "$(jq -nc --arg signature "$signature" --argjson id "$request_id" \
+      '{jsonrpc:"2.0",id:$id,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].err == null and
+      (.result.value[0].confirmationStatus == "confirmed" or
+       .result.value[0].confirmationStatus == "finalized")' <<<"$status" >/dev/null; then
+      landed=true
+      break
+    fi
+    sleep 0.1
+  done
+  [[ "$landed" == true ]] || fail "transaction did not reach confirmed commitment: $signature"
+  rpc "$(jq -nc --arg signature "$signature" --argjson id "$((request_id + 1))" \
+    '{jsonrpc:"2.0",id:$id,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"confirmed",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$output"
+}
+
 if [[ "$START_ACTION" == initialize ]]; then
   slot=$(rpc '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[{"commitment":"finalized"}]}' | jq -er '.result')
   blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
@@ -394,7 +413,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
       prefill_signature=$(jq -er '.result' <<<"$prefill_send")
       [[ "$prefill_signature" == "$(jq -er '.signature' "$prefill_request")" ]] \
         || fail "prefill submission changed signed wire at $prefill_index"
-      finalized_transaction "$prefill_signature" "$WORK_DIR/prefill-finalized.json" \
+      confirmed_transaction "$prefill_signature" "$WORK_DIR/prefill-finalized.json" \
         "$((53000 + 2 * prefill_index))"
       jq -e '.result.meta.err == null' "$WORK_DIR/prefill-finalized.json" >/dev/null \
         || fail "prefill deposit landed with error at $prefill_index"
@@ -411,17 +430,37 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         '{sourceIndex:$sourceIndex,successorIndex:($sourceIndex+1),selectedLane:0,
           signature:$signature,finalizedSlot:$slot,serializedTransactionBytes:$bytes,
           signedWireSha256:$wireHash,simulationSubmissionByteIdentical:true,
-          simulatedCu:$simulatedCu,landedCu:$landedCu,finalized:true,pass:true}' \
+          simulatedCu:$simulatedCu,landedCu:$landedCu,confirmedBeforeNext:true,pass:true}' \
         >>"$EVIDENCE_DIR/prefill/finalized-deposits.jsonl"
       lane_address=$(jq -er '.laneAccount' "$prefill_request")
       rpc "$(jq -nc --arg address "$lane_address" --argjson id "$((54000 + prefill_index))" \
-        '{jsonrpc:"2.0",id:$id,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+        '{jsonrpc:"2.0",id:$id,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"confirmed"}]}')" \
         | jq --arg requestedAddress "$lane_address" '. + {requestedAddress:$requestedAddress}' \
         >"$WORK_DIR/account-1.next.json"
       jq -e '.result.value != null' "$WORK_DIR/account-1.next.json" >/dev/null \
         || fail "prefill lane disappeared at $prefill_index"
       mv "$WORK_DIR/account-1.next.json" "$EVIDENCE_DIR/account-1.json"
     done
+    # One finality wait on the last dependent deposit finalizes its complete
+    # ancestor chain. Then independently audit every signature and refresh the
+    # authenticated lane image at finalized commitment before the spendable
+    # deposit is constructed.
+    last_prefill_signature=$(jq -sr '.[-1].signature' "$EVIDENCE_DIR/prefill/finalized-deposits.jsonl")
+    finalized_transaction "$last_prefill_signature" "$EVIDENCE_DIR/prefill/last-finalized-transaction.json" 54900
+    prefill_signatures=$(jq -sc '[.[].signature]' "$EVIDENCE_DIR/prefill/finalized-deposits.jsonl")
+    rpc "$(jq -nc --argjson signatures "$prefill_signatures" \
+      '{jsonrpc:"2.0",id:54902,method:"getSignatureStatuses",params:[$signatures,{searchTransactionHistory:true}]}')" \
+      | jq . >"$EVIDENCE_DIR/prefill/finalized-statuses.json"
+    jq -e --argjson expected "$PREFILL_NEXT_LEAF_INDEX" '
+      (.result.value | length) == $expected and all(.result.value[];
+        . != null and .err == null and .confirmationStatus == "finalized")' \
+      "$EVIDENCE_DIR/prefill/finalized-statuses.json" >/dev/null \
+      || fail "not every prefill deposit finalized"
+    lane_address=$(jq -er '.initializedAccounts[1]' "$EVIDENCE_DIR/signed-request.json")
+    rpc "$(jq -nc --arg address "$lane_address" \
+      '{jsonrpc:"2.0",id:54903,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+      | jq --arg requestedAddress "$lane_address" '. + {requestedAddress:$requestedAddress}' \
+      >"$EVIDENCE_DIR/account-1.json"
     vault_address=$(jq -er '.initializedAccounts[9]' "$EVIDENCE_DIR/signed-request.json")
     rpc "$(jq -nc --arg address "$vault_address" \
       '{jsonrpc:"2.0",id:55000,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
@@ -429,13 +468,15 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
       >"$EVIDENCE_DIR/account-9.json"
     jq -s --argjson target "$PREFILL_NEXT_LEAF_INDEX" '
       {schema:"aspis.v7.live-rollover-prefill.v1",targetNextLeafIndex:$target,
-       finalizedDeposits:length,allFinalized:(all(.[];.finalized)),
+       finalizedDeposits:length,allFinalized:true,
+       everyDependencyConfirmedBeforeSuccessor:(all(.[];.confirmedBeforeNext)),
        allByteIdentical:(all(.[];.simulationSubmissionByteIdentical)),
        simulationLandedCuExact:(all(.[];.simulatedCu == .landedCu)),
        maximumLandedCu:(map(.landedCu)|max),selectedLane:0,auditOnly:true,
        disposable:true,publicDevnetExecution:false,mainnetReady:false}' \
       "$EVIDENCE_DIR/prefill/finalized-deposits.jsonl" >"$EVIDENCE_DIR/prefill/evidence.json"
     jq -e '.finalizedDeposits == .targetNextLeafIndex and .allFinalized and
+      .everyDependencyConfirmedBeforeSuccessor and
       .allByteIdentical and .simulationLandedCuExact and .selectedLane == 0' \
       "$EVIDENCE_DIR/prefill/evidence.json" >/dev/null || fail "prefill aggregate validation failed"
   fi
