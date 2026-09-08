@@ -1,5 +1,6 @@
 import AspisFormal.K1.V7Tag73ExactBidirectionalFoldOneFoldTrialEvent
 import AspisFormal.K1.V7Tag73ExactFixedInstanceEvent
+import AspisFormal.K1.V7Tag73PreQ16OperationalStageEvents
 
 /-!
 # Clean exposure-indexed Tag-73 one-fold event
@@ -20,14 +21,18 @@ namespace AspisK1.V7Tag73ExactCleanBidirectionalFoldOneFoldTrialEvent
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AdaptiveQ16TrialAccounting
+open AspisK1.V7Tag73ExactAcceptedFoldTrialPackage
+open AspisK1.V7Tag73ExactBidirectionalFoldAnchor
 open AspisK1.V7Tag73ExactBidirectionalFoldOneFoldTrialEvent
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
-open AspisK1.V7Tag73ExactConcreteK13K14Events
 open AspisK1.V7Tag73ExactFixedInstanceEvent
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73K13PreQ16JointEventHandoff
+open AspisK1.V7Tag73PreQ16OperationalStageEvents
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisV5ComponentCQM31TowerExact
 
@@ -48,8 +53,12 @@ structure ExactCleanBidirectionalK13OneFoldTrialWitness
     (decoder : ExactDecoderInstantiation QM31Exact)
     (sample : ExactCompilerSample HiddenTape parameters)
     (trial : ExactCompilerExposureTrial parameters) where
-  base : ExactBidirectionalK13OneFoldTrialWitness transitionFuel configuration
-    projection fixedInstance decoder sample trial
+  input : ExactK12OperationalInput transitionFuel configuration projection
+    fixedInstance sample
+  k12 : ExactPrefixK12Certificate input
+  failure : ExactPreQ16K13StageOneFoldFailure decoder input
+  fold : ExactAcceptedFoldTrial input
+  trialExact : exactAcceptedFoldPairTrial input fold = trial
   legal : sample ∈ exactFixedPlainRomLegalSameTapeEvent transitionFuel
     configuration projection fixedInstance
 
@@ -81,7 +90,7 @@ theorem exactCleanBidirectionalK13OneFoldTrialEvent_iUnion
     (decoder : ExactDecoderInstantiation QM31Exact) :
     exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
           fixedInstance ∩
-        exactTag73K13OneFoldEvent transitionFuel configuration projection
+        exactPreQ16K13OneFoldEvent transitionFuel configuration projection
           fixedInstance decoder =
       ⋃ trial : ExactCompilerExposureTrial parameters,
         exactCleanBidirectionalK13OneFoldTrialEvent transitionFuel configuration
@@ -89,19 +98,17 @@ theorem exactCleanBidirectionalK13OneFoldTrialEvent_iUnion
   ext sample
   constructor
   · rintro ⟨legal, event⟩
-    rw [exactBidirectionalK13OneFoldTrialEvent_iUnion transitionFuel
-      configuration projection fixedInstance decoder] at event
-    obtain ⟨trial, trialMember⟩ := Set.mem_iUnion.1 event
+    obtain ⟨input, k12, failure⟩ := event
+    let fold := exactAcceptedFoldTrial input
+    let trial := exactAcceptedFoldPairTrial input fold
     apply Set.mem_iUnion.2
-    exact ⟨trial, ⟨⟨Classical.choice trialMember, legal⟩⟩⟩
+    exact ⟨trial, ⟨⟨input, k12, Classical.choice failure, fold, rfl,
+      legal⟩⟩⟩
   · intro member
     obtain ⟨trial, trialMember⟩ := Set.mem_iUnion.1 member
     let witness := Classical.choice trialMember
     refine ⟨witness.legal, ?_⟩
-    rw [exactBidirectionalK13OneFoldTrialEvent_iUnion transitionFuel
-      configuration projection fixedInstance decoder]
-    apply Set.mem_iUnion.2
-    exact ⟨trial, ⟨witness.base⟩⟩
+    exact ⟨witness.input, witness.k12, ⟨witness.failure⟩⟩
 
 end
 
