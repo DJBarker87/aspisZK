@@ -2,6 +2,7 @@ import AspisFormal.K1.V7Tag73FoldOuterSourceSeparation
 import AspisFormal.K1.V7Tag73ExactFinal256DigestRootOrigin
 import AspisFormal.K1.V7Tag73ExactFinalWorkEarliestExposure
 import AspisFormal.K1.V7Tag73ExactFixedQ16JointEventHandoff
+import AspisFormal.K1.V7Tag73PureLookupDigestChain
 
 /-!
 # Exact separation of the fold-work and final-work source coordinates
@@ -52,6 +53,7 @@ open AspisK1.V7Tag73FinalWorkDigestProbability
 open AspisK1.V7Tag73FinalWorkEarliestExposure
 open AspisK1.V7Tag73FinalWorkQ16CandidateController
 open AspisK1.V7Tag73OperationalSemanticReplay
+open AspisK1.V7Tag73PureLookupDigestChain
 open AspisK1.V7Tag73SecureCircleMap
 open AspisK1.V7Tag73TranscriptSchedule
 
@@ -85,6 +87,32 @@ theorem prefix_before_fold_work_relation_split (messages : Messages) :
       prefixAfterC2BeforeFoldDigest messages ++
         [.absorb (.relationRound 0 (messages.relationSent 0))] := by
   simp [prefixAfterC2BeforeFoldWork, prefixAfterC2BeforeFoldDigest]
+
+theorem prefix_after_c2_before_fold_work_is_pure_post_c2
+    (messages : Messages) :
+    ∀ event, event ∈ prefixAfterC2BeforeFoldWork messages →
+      IsPurePostRootMachineEvent c2RootLabel event := by
+  simp [prefixAfterC2BeforeFoldWork, prefixAfterC2BeforeFoldDigest,
+    semanticEvents, oodEvents, IsPurePostRootMachineEvent,
+    challengeEvent, challengeBindEvent, BoundChallengeId.challengeId,
+    AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+    c2RootLabel, challengeBindLabel, constraintRegistryLabel, helperSumLabel,
+    initialMaskClaimLabel, semanticRoundLabel, pointClaimsLabel,
+    batchWorkNonceLabel, inactiveClaimLabel, circleOodValueLabel,
+    relationRoundLabel, foldWorkNonceLabel]
+
+theorem prefix_after_c2_before_fold_work_is_pure_post_c1
+    (messages : Messages) :
+    ∀ event, event ∈ prefixAfterC2BeforeFoldWork messages →
+      IsPurePostRootMachineEvent c1RootLabel event := by
+  simp [prefixAfterC2BeforeFoldWork, prefixAfterC2BeforeFoldDigest,
+    semanticEvents, oodEvents, IsPurePostRootMachineEvent,
+    challengeEvent, challengeBindEvent, BoundChallengeId.challengeId,
+    AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+    c1RootLabel, challengeBindLabel, constraintRegistryLabel, helperSumLabel,
+    initialMaskClaimLabel, semanticRoundLabel, pointClaimsLabel,
+    batchWorkNonceLabel, inactiveClaimLabel, circleOodValueLabel,
+    relationRoundLabel, foldWorkNonceLabel]
 
 private theorem run_machine_events_append_iff
     (table : FixedOracleTable) (first second : List MachineEvent)
@@ -125,7 +153,9 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
     ∃ (beforeRelation : EvalState)
         (foldDigest workAnswer boundaryAnswer : Digest256)
         (outputs advances : List Digest256) (exactValue : QM31Exact)
-        (alphaBindDigest afterFinal256Digest q16Base : Digest256),
+        (alphaBindDigest afterFinal256Digest q16Base : Digest256)
+        (c1BeforeDigest c2BeforeDigest c1Salt c2Salt c1Answer c2Answer :
+          Digest256),
       tableLookup (exactOperationalTable input)
           (bytes beforeRelation.digest ++
             [domAbsorb,
@@ -182,7 +212,27 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
             bytes
               (exactOperationalTape input).messages.finalGrinding.selected) =
         some q16Base ∧
-      q16Base = (exactOperationalRawTrace input).q16BaseDigest := by
+      q16Base = (exactOperationalRawTrace input).q16BaseDigest ∧
+      tableLookup (exactOperationalTable input)
+          (bytes c1BeforeDigest ++ [domAbsorb, c1RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+              (exactOperationalTape input).messages.c1Root c1Salt).data) =
+        some c1Answer ∧
+      tableLookup (exactOperationalTable input)
+          (bytes c2BeforeDigest ++ [domAbsorb, c2RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+              (exactOperationalTape input).messages.c2.root c2Salt).data) =
+        some c2Answer ∧
+      PureLookupDigestChain (exactOperationalTable input)
+          (bytes c1BeforeDigest ++ [domAbsorb, c1RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+              (exactOperationalTape input).messages.c1Root c1Salt).data)
+          (IsPurePostRootStateInput c1RootLabel) c1Answer foldDigest ∧
+      PureLookupDigestChain (exactOperationalTable input)
+          (bytes c2BeforeDigest ++ [domAbsorb, c2RootLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+              (exactOperationalTape input).messages.c2.root c2Salt).data)
+          (IsPurePostRootStateInput c2RootLabel) c2Answer foldDigest := by
   have strict := input.package.root.fixedRoot.base.strictRefinement
   have checked := checked_refinement_is_well_formed
     (exactOperationalTable input) exactDeterministicDecoders
@@ -195,17 +245,17 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
   rw [runPrefix] at prefixRun
   obtain ⟨beforeC1, _beforeC1Run, prefixRun⟩ :=
     Option.bind_eq_some_iff.mp prefixRun
-  obtain ⟨c1Pair, _c1SaltRun, prefixRun⟩ :=
+  obtain ⟨c1Pair, c1SaltRun, prefixRun⟩ :=
     Option.bind_eq_some_iff.mp prefixRun
-  rcases c1Pair with ⟨_c1Salt, _withC1SaltQuery⟩
-  obtain ⟨afterC1, _c1AbsorbRun, prefixRun⟩ :=
+  rcases c1Pair with ⟨c1Salt, withC1SaltQuery⟩
+  obtain ⟨afterC1, c1AbsorbRun, prefixRun⟩ :=
     Option.bind_eq_some_iff.mp prefixRun
-  obtain ⟨afterPhaseChallenges, _phaseRun, prefixRun⟩ :=
+  obtain ⟨afterPhaseChallenges, phaseRun, prefixRun⟩ :=
     Option.bind_eq_some_iff.mp prefixRun
-  obtain ⟨c2Pair, _c2SaltRun, prefixRun⟩ :=
+  obtain ⟨c2Pair, c2SaltRun, prefixRun⟩ :=
     Option.bind_eq_some_iff.mp prefixRun
-  rcases c2Pair with ⟨_c2Salt, _withC2SaltQuery⟩
-  obtain ⟨afterC2, _c2AbsorbRun, remainingRun⟩ :=
+  rcases c2Pair with ⟨c2Salt, withC2SaltQuery⟩
+  obtain ⟨afterC2, c2AbsorbRun, remainingRun⟩ :=
     Option.bind_eq_some_iff.mp prefixRun
   rw [prefix_after_c2_fold_work_split] at remainingRun
   obtain ⟨beforeFoldWork, beforeFoldRun, suffixRun⟩ :=
@@ -392,9 +442,80 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
       (exactOperationalRawTrace input).q16BaseDigest := by
     have exact := congrArg InteractiveRawTrace.q16BaseDigest rawExact
     simpa using exact
+  let c1Input := bytes withC1SaltQuery.digest ++ [domAbsorb, c1RootLabel] ++
+    (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+      (exactOperationalTape input).messages.c1Root c1Salt).data
+  let c2Input := bytes withC2SaltQuery.digest ++ [domAbsorb, c2RootLabel] ++
+    (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+      (exactOperationalTape input).messages.c2.root c2Salt).data
+  have c1Lookup : tableLookup (exactOperationalTable input) c1Input =
+      some afterC1.digest := by
+    simpa [c1Input, AspisK1.V7Tag73TranscriptSchedule.Payload.label] using
+      absorb_step_exposes_literal_lookup (exactOperationalTable input)
+        withC1SaltQuery afterC1
+        (.c1Root (exactOperationalTape input).messages.c1Root c1Salt)
+        c1AbsorbRun
+  have c2Lookup : tableLookup (exactOperationalTable input) c2Input =
+      some afterC2.digest := by
+    simpa [c2Input, AspisK1.V7Tag73TranscriptSchedule.Payload.label] using
+      absorb_step_exposes_literal_lookup (exactOperationalTable input)
+        withC2SaltQuery afterC2
+        (.c2Root (exactOperationalTape input).messages.c2.root c2Salt)
+        c2AbsorbRun
+  have c2SaltStep := query_step_appends_one (exactOperationalTable input)
+    afterPhaseChallenges withC2SaltQuery
+    (.publicRootSalt (exactOperationalTape input).messages.context c2TreeTag)
+    c2Salt (by simpa [rootSaltStep] using c2SaltRun)
+  have c2BeforeExact : withC2SaltQuery.digest =
+      afterPhaseChallenges.digest := by
+    simpa [RawQueryRole.nextDigest] using c2SaltStep.2.2
+  have initialC2Chain : PureLookupDigestChain (exactOperationalTable input)
+      c2Input (IsPurePostRootStateInput c2RootLabel) afterC2.digest
+        afterC2.digest := .boundary afterC2.digest c2Lookup
+  have c2FoldChain := pure_lookup_digest_chain_through_machine_events
+    (exactOperationalTable input)
+    (prefixAfterC2BeforeFoldWork (exactOperationalTape input).messages)
+    afterC2 beforeFoldWork initialC2Chain
+    (prefix_after_c2_before_fold_work_is_pure_post_c2
+      (exactOperationalTape input).messages) beforeFoldRun
+  have initialC1Chain : PureLookupDigestChain (exactOperationalTable input)
+      c1Input (IsPurePostRootStateInput c1RootLabel) afterC1.digest
+        afterC1.digest := .boundary afterC1.digest c1Lookup
+  have phaseC1Chain := pure_lookup_digest_chain_through_machine_events
+    (exactOperationalTable input)
+    [challengeEvent (exactOperationalTape input).messages .lambda,
+     challengeEvent (exactOperationalTape input).messages .chi]
+    afterC1 afterPhaseChallenges initialC1Chain (by
+      intro event member
+      simp [IsPurePostRootMachineEvent] at member ⊢
+      rcases member with rfl | rfl <;> trivial) phaseRun
+  have c2CausalPrefix : bytes afterPhaseChallenges.digest =
+      c2Input.take 32 := by
+    unfold c2Input
+    rw [c2BeforeExact]
+    simp [bytes_length]
+  have c2AllowedForC1 : IsPurePostRootStateInput c1RootLabel c2Input := by
+    exact Or.inr ⟨withC2SaltQuery.digest,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+        (exactOperationalTape input).messages.c2.root c2Salt,
+      by simp [AspisK1.V7Tag73TranscriptSchedule.Payload.label, c1RootLabel,
+        c2RootLabel], rfl⟩
+  have afterC2C1Chain : PureLookupDigestChain (exactOperationalTable input)
+      c1Input (IsPurePostRootStateInput c1RootLabel) afterC1.digest
+        afterC2.digest :=
+    .step afterC1.digest afterPhaseChallenges.digest afterC2.digest c2Input
+      phaseC1Chain c2CausalPrefix c2AllowedForC1 c2Lookup
+  have c1FoldChain := pure_lookup_digest_chain_through_machine_events
+    (exactOperationalTable input)
+    (prefixAfterC2BeforeFoldWork (exactOperationalTape input).messages)
+    afterC2 beforeFoldWork afterC2C1Chain
+    (prefix_after_c2_before_fold_work_is_pure_post_c1
+      (exactOperationalTape input).messages) beforeFoldRun
   exact ⟨beforeRelation, beforeFoldWork.digest, workAnswer,
     afterFoldNonce.digest, outputs, advances, exactValue,
     afterAlphaBind.digest, afterFinal256.digest, prefixState.digest,
+    withC1SaltQuery.digest, withC2SaltQuery.digest, c1Salt, c2Salt,
+    afterC1.digest, afterC2.digest,
     relationLookup, workLookup,
     workAccepted, by
       simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
@@ -410,7 +531,10 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
         AspisK1.V7Tag73TranscriptSchedule.Payload.data] using final256Lookup,
     by simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
       AspisK1.V7Tag73TranscriptSchedule.Payload.data] using finalNonceLookup,
-    q16BaseExact⟩
+    q16BaseExact, by simpa [c1Input] using c1Lookup,
+    by simpa [c2Input] using c2Lookup,
+    by simpa [c1Input] using c1FoldChain,
+    by simpa [c2Input] using c2FoldChain⟩
 
 @[simp] theorem relation_zero_absorb_input_length
     (digest : Digest256) (relation : Fin 6 → Qm31Bytes) :
@@ -461,6 +585,8 @@ theorem exact_fold_digest_ne_final_digest
   obtain ⟨beforeRelation, foldDigest, foldAnswer, _boundaryAnswer,
       _outputs, _advances, _exactValue, _alphaBindDigest,
       _afterFinal256Digest, _q16Base,
+      _c1BeforeDigest, _c2BeforeDigest, _c1Salt, _c2Salt,
+      _c1Answer, _c2Answer,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
@@ -584,6 +710,8 @@ theorem exact_fold_and_final_have_distinct_exposure_trials
   obtain ⟨beforeRelation, foldDigest, foldAnswer, _boundaryAnswer,
       _outputs, _advances, _exactValue, _alphaBindDigest,
       _afterFinal256Digest, _q16Base,
+      _c1BeforeDigest, _c2BeforeDigest, _c1Salt, _c2Salt,
+      _c1Answer, _c2Answer,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
@@ -820,6 +948,8 @@ theorem exact_actual_k13_trial_has_distinct_fold_trial
   obtain ⟨beforeRelation, foldDigest, foldAnswer, _boundaryAnswer,
       _outputs, _advances, _exactValue, _alphaBindDigest,
       _afterFinal256Digest, _q16Base,
+      _c1BeforeDigest, _c2BeforeDigest, _c1Salt, _c2Salt,
+      _c1Answer, _c2Answer,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
