@@ -106,6 +106,33 @@ def exactK13PreQ16MerkleTargetHitEvent
   {sample | sample.2 ∈
     canonicalPreQ16MerkleTargetHitEvent configuration transitionFuel sample.1}
 
+/-- Outside the already-counted global target event, no later root-record
+answer can hit the Merkle candidate inventory exposed by its strict prefix. -/
+theorem exact_no_merkle_target_excludes_root_later_target
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (before after : List UnifiedExposureRecord)
+    (hit : UnifiedExposureRecord)
+    (rootExact : exactFixedRootRecords input.package.root =
+      before ++ hit :: after)
+    (noTarget : sample ∉
+      exactK13PreQ16MerkleTargetHitEvent configuration transitionFuel) :
+    hit.answer ∉ preQ16FullMerkleTargets before := by
+  intro targetHit
+  apply noTarget
+  change sample.2 ∈
+    canonicalPreQ16MerkleTargetHitEvent configuration transitionFuel sample.1
+  exact exact_root_later_merkle_target_implies_master_scheduler_hit input
+    before after hit rootExact targetHit
+
 theorem exact_k13_preQ16_merkle_target_hit_probability_le
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
     [Fintype HiddenTape]
@@ -201,6 +228,7 @@ theorem exact_k13_preQ16_late_target_probability_le
       transitionFuel)
 
 #print axioms canonical_preQ16_merkle_target_hit_probability_le_exact_count
+#print axioms exact_no_merkle_target_excludes_root_later_target
 #print axioms exact_k13_preQ16_merkle_target_hit_probability_le
 #print axioms exact_k13_preQ16_late_target_subset_hit_event
 #print axioms exact_k13_preQ16_late_target_probability_le
