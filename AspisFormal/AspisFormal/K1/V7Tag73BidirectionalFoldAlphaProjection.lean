@@ -1,4 +1,4 @@
-import AspisFormal.K1.V7Tag73BidirectionalFoldAlphaController
+import AspisFormal.K1.V7Tag73BidirectionalFoldAlphaPrefix
 import AspisFormal.K1.V7Tag73AlphaZeroProducerInvariant
 
 /-!
@@ -20,6 +20,7 @@ open AspisK1.V7Tag73AlphaZeroCausalController
 open AspisK1.V7Tag73AlphaZeroProducerInvariant
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73BidirectionalFoldAlphaController
+open AspisK1.V7Tag73BidirectionalFoldAlphaPrefix
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73FinalWorkQ16CandidateController
 open AspisK1.V7Tag73FoldArmedAlphaZeroController
@@ -326,6 +327,282 @@ def BidirectionalAlphaProjection
     bidirectional.memory.expectedWork = expectedWork ∧
     anchorIndex < bidirectional.exposureIndex
 
+/-- If the boundary is the pair anchor, both controllers install the same
+block-zero producer on the same answer.  The bidirectional side additionally
+retains the exact 41-byte work sibling. -/
+theorem boundary_first_anchor_establishes_alpha_projection
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex : Nat)
+    (bidirectional : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (standalone : IndexedUnifiedExposureState globalOracleCalls
+      AlphaZeroControllerMemory)
+    (digest : Digest256) (nonce : NonceBytes) (answer : Digest256)
+    (atAnchor : bidirectional.exposureIndex = anchorIndex)
+    (exposureExact : bidirectional.exposureIndex = standalone.exposureIndex)
+    (cursorExact : bidirectional.cursor = standalone.cursor)
+    (preAnchor : BidirectionalPreAnchorInvariant bidirectional.memory)
+    (standaloneInactive : standalone.memory = inactiveAlphaZeroMemory)
+    (inputExact : currentBidirectionalInput? transitionFuel bidirectional =
+      some (bytes digest ++
+        (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce))) :
+    BidirectionalAlphaProjection anchorIndex anchorIndex
+      (bytes digest ++ (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce))
+      (some (bytes digest ++ domGrind :: bytes nonce))
+      ((bidirectionalFoldAlphaController transitionFuel anchorIndex).afterAnswer
+        transitionFuel bidirectional answer)
+      ((alphaZeroCausalController transitionFuel anchorIndex).afterAnswer
+        transitionFuel standalone answer) := by
+  rcases preAnchor with
+    ⟨foldUnused, noWork, noBoundary, noProducers, noUsed⟩
+  have standaloneInput :
+      unifiedInputBeforeAnswer? transitionFuel standalone.cursor =
+        some (bytes digest ++
+          (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce)) := by
+    simpa [currentBidirectionalInput?, cursorExact] using inputExact
+  have standaloneAt : standalone.exposureIndex = anchorIndex :=
+    exposureExact.symm.trans atAnchor
+  have boundaryTrue : isAlphaZeroBoundaryInput
+      (bytes digest ++
+        (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce)) = true := by
+    exact literal_fold_nonce_is_alpha_zero_boundary digest nonce
+  unfold BidirectionalAlphaProjection
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simp [exposureExact]
+  · simp [cursorExact]
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).alpha.alpha =
+      alphaZeroAfterMemory transitionFuel anchorIndex standalone answer
+    simp [bidirectionalFoldAlphaAfterMemory, atAnchor, inputExact,
+      installBoundaryAnchor, alphaZeroAfterMemory, currentBidirectionalInput?,
+      cursorExact, standaloneInput, standaloneInactive, inactiveAlphaZeroMemory,
+      exposureExact, standaloneAt, boundaryTrue, foldUnused, noUsed,
+      alphaZeroPreferredSlot,
+      alphaZeroOutputSlot?]
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).alpha.expectedBoundary = _
+    simp [bidirectionalFoldAlphaAfterMemory, atAnchor, inputExact,
+      installBoundaryAnchor]
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).expectedWork = _
+    simp [bidirectionalFoldAlphaAfterMemory, atAnchor, inputExact,
+      installBoundaryAnchor]
+  · simp only [indexed_after_answer_exposure_index]
+    omega
+
+/-- If work is the pair anchor, its answer arms the exact later boundary while
+both alpha memories remain inactive. -/
+theorem work_first_anchor_establishes_alpha_projection
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex boundaryIndex : Nat)
+    (bidirectional : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (standalone : IndexedUnifiedExposureState globalOracleCalls
+      AlphaZeroControllerMemory)
+    (digest : Digest256) (nonce : NonceBytes) (answer : Digest256)
+    (atAnchor : bidirectional.exposureIndex = anchorIndex)
+    (anchorBeforeBoundary : anchorIndex < boundaryIndex)
+    (exposureExact : bidirectional.exposureIndex = standalone.exposureIndex)
+    (cursorExact : bidirectional.cursor = standalone.cursor)
+    (preAnchor : BidirectionalPreAnchorInvariant bidirectional.memory)
+    (standaloneInactive : standalone.memory = inactiveAlphaZeroMemory)
+    (boundaryNotCached : seenMachineAnswer?
+      (bidirectionalAlphaState bidirectional).memory
+        (bytes digest ++
+          (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce)) = none)
+    (inputExact : currentBidirectionalInput? transitionFuel bidirectional =
+      some (bytes digest ++ domGrind :: bytes nonce)) :
+    BidirectionalAlphaProjection anchorIndex boundaryIndex
+      (bytes digest ++ (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce))
+      none
+      ((bidirectionalFoldAlphaController transitionFuel anchorIndex).afterAnswer
+        transitionFuel bidirectional answer)
+      ((alphaZeroCausalController transitionFuel boundaryIndex).afterAnswer
+        transitionFuel standalone answer) := by
+  rcases preAnchor with
+    ⟨foldUnused, noWork, noBoundary, noProducers, noUsed⟩
+  have standaloneInput :
+      unifiedInputBeforeAnswer? transitionFuel standalone.cursor =
+        some (bytes digest ++ domGrind :: bytes nonce) := by
+    simpa [currentBidirectionalInput?, cursorExact] using inputExact
+  have bidirectionalInput : unifiedInputBeforeAnswer? transitionFuel
+      (bidirectionalAlphaState bidirectional).cursor =
+        some (bytes digest ++ domGrind :: bytes nonce) := by
+    simpa [currentBidirectionalInput?, bidirectionalAlphaState] using inputExact
+  have armedExact : armFoldAlphaBoundary transitionFuel
+      (bidirectionalAlphaState bidirectional) =
+        some (bytes digest ++
+          (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce)) := by
+    simp only [armFoldAlphaBoundary, bidirectionalInput, Option.bind_some]
+    exact literal_fold_work_arms_exact_alpha_boundary digest nonce
+  have standaloneIndexNe : standalone.exposureIndex ≠ boundaryIndex := by
+    rw [← exposureExact, atAnchor]
+    omega
+  have nestedInactive :
+      (bidirectionalAlphaState bidirectional).memory.alpha =
+        inactiveAlphaZeroMemory := by
+    change bidirectional.memory.alpha.alpha = inactiveAlphaZeroMemory
+    cases alphaMemory : bidirectional.memory.alpha.alpha with
+    | mk producers usedSlots =>
+        rw [alphaMemory] at noProducers noUsed
+        simp only at noProducers noUsed
+        change ({ producers := producers, usedSlots := usedSlots } :
+          AlphaZeroControllerMemory) = inactiveAlphaZeroMemory
+        subst producers
+        subst usedSlots
+        rfl
+  unfold BidirectionalAlphaProjection
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simp [exposureExact]
+  · simp [cursorExact]
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).alpha.alpha =
+      alphaZeroAfterMemory transitionFuel boundaryIndex standalone answer
+    simp [bidirectionalFoldAlphaAfterMemory, atAnchor, inputExact,
+      armFoldAlphaMemory, currentBidirectionalInput?, cursorExact,
+      standaloneInput, standaloneInactive, inactiveAlphaZeroMemory,
+      standaloneIndexNe, foldUnused, noBoundary, noProducers, noUsed,
+      alphaZeroAfterMemory, alphaZeroPreferredSlot, alphaZeroOutputSlot?,
+      updateAlphaZeroProducers, alphaZeroAdvancedSlot?, armedExact,
+      boundaryNotCached, nestedInactive]
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).alpha.expectedBoundary = _
+    simp [bidirectionalFoldAlphaAfterMemory, atAnchor, inputExact,
+      armFoldAlphaMemory, armedExact, boundaryNotCached]
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).expectedWork = none
+    simp [bidirectionalFoldAlphaAfterMemory, atAnchor, inputExact, noWork]
+  · simp only [indexed_after_answer_exposure_index]
+    omega
+
+/-- At the later work-first boundary, both projected controllers reset the
+producer inventory to the same returned block-zero digest. -/
+theorem work_first_boundary_establishes_postboundary_projection
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex boundaryIndex : Nat)
+    (bidirectional : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (standalone : IndexedUnifiedExposureState globalOracleCalls
+      AlphaZeroControllerMemory)
+    (digest : Digest256) (nonce : NonceBytes) (answer : Digest256)
+    (projection : BidirectionalAlphaProjection anchorIndex boundaryIndex
+      (bytes digest ++ (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce))
+      none bidirectional standalone)
+    (atBoundary : bidirectional.exposureIndex = boundaryIndex)
+    (inputExact : currentBidirectionalInput? transitionFuel bidirectional =
+      some (bytes digest ++
+        (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce))) :
+    BidirectionalAlphaProjection anchorIndex boundaryIndex
+      (bytes digest ++ (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce))
+      none
+      ((bidirectionalFoldAlphaController transitionFuel anchorIndex).afterAnswer
+        transitionFuel bidirectional answer)
+      ((alphaZeroCausalController transitionFuel boundaryIndex).afterAnswer
+        transitionFuel standalone answer) := by
+  rcases projection with
+    ⟨exposureExact, cursorExact, alphaExact, boundaryExact, workExact,
+      afterAnchor⟩
+  have notAnchor : bidirectional.exposureIndex ≠ anchorIndex :=
+    (Nat.ne_of_lt afterAnchor).symm
+  have standaloneInput : unifiedInputBeforeAnswer? transitionFuel
+      standalone.cursor =
+        some (bytes digest ++
+          (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce)) := by
+    simpa [currentBidirectionalInput?, cursorExact] using inputExact
+  have standaloneAt : standalone.exposureIndex = boundaryIndex :=
+    exposureExact.symm.trans atBoundary
+  have boundaryTrue : isAlphaZeroBoundaryInput
+      (bytes digest ++
+        (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce)) = true :=
+    literal_fold_nonce_is_alpha_zero_boundary digest nonce
+  have pairPreserved := bidirectional_after_nonanchor_preserves_pair_coordinates
+    transitionFuel anchorIndex bidirectional answer notAnchor
+  unfold BidirectionalAlphaProjection
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simp [exposureExact]
+  · simp [cursorExact]
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).alpha.alpha =
+      alphaZeroAfterMemory transitionFuel boundaryIndex standalone answer
+    unfold bidirectionalFoldAlphaAfterMemory
+    simp only [notAnchor, ↓reduceDIte]
+    have noConsumes : ¬ (bidirectional.memory.foldUsed = false ∧
+        matchesExpectedFoldWork
+          (currentBidirectionalInput? transitionFuel bidirectional)
+          bidirectional.memory.expectedWork) := by
+      intro consumes
+      rw [workExact] at consumes
+      exact no_expected_fold_work_does_not_match _ consumes.2
+    rw [if_neg noConsumes]
+    simp [foldArmedAlphaAfterMemory, bidirectionalAlphaState, inputExact,
+      boundaryExact, alphaZeroAfterMemory, standaloneInput, standaloneAt,
+      boundaryTrue, alphaExact, foldArmedAlphaIndexedState, exposureExact,
+      cursorExact]
+    rw [← standaloneAt]
+    cases standalone
+    rfl
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).alpha.expectedBoundary = _
+    exact pairPreserved.2.trans boundaryExact
+  · change
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+        bidirectional answer).expectedWork = none
+    exact pairPreserved.1.trans workExact
+  · simp only [indexed_after_answer_exposure_index]
+    omega
+
+/-- Once the nested alpha state is projected exactly, every standalone
+preferred alpha block is also the wrapper's preferred `some block`, provided
+the current exposure is neither the pair anchor nor the outstanding work
+sibling. -/
+theorem bidirectional_preferred_alpha_of_projection
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex boundaryIndex : Nat)
+    (boundaryInput : ShaInput) (expectedWork : Option ShaInput)
+    (bidirectional : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (standalone : IndexedUnifiedExposureState globalOracleCalls
+      AlphaZeroControllerMemory)
+    (block : Fin 4)
+    (projection : BidirectionalAlphaProjection anchorIndex boundaryIndex
+      boundaryInput expectedWork bidirectional standalone)
+    (notAnchor : bidirectional.exposureIndex ≠ anchorIndex)
+    (noWorkMatch : ¬ (bidirectional.memory.foldUsed = false ∧
+      matchesExpectedFoldWork
+        (currentBidirectionalInput? transitionFuel bidirectional)
+        bidirectional.memory.expectedWork))
+    (standalonePreferred :
+      alphaZeroPreferredSlot transitionFuel standalone = some block) :
+    bidirectionalFoldAlphaPreferred transitionFuel anchorIndex bidirectional =
+      some (some block) := by
+  rcases projection with
+    ⟨exposureExact, cursorExact, alphaExact, _boundaryExact, _workExact,
+      _afterAnchor⟩
+  have stateExact :
+      foldArmedAlphaIndexedState (bidirectionalAlphaState bidirectional) =
+        standalone := by
+    cases bidirectional with
+    | mk bidirectionalIndex bidirectionalCursor bidirectionalMemory =>
+        cases standalone with
+        | mk standaloneIndex standaloneCursor standaloneMemory =>
+            simp only at exposureExact cursorExact alphaExact
+            subst standaloneIndex
+            subst standaloneCursor
+            subst standaloneMemory
+            rfl
+  unfold bidirectionalFoldAlphaPreferred
+  simp only [notAnchor, ↓reduceDIte, noWorkMatch]
+  rw [stateExact, standalonePreferred]
+  rfl
+
 /-- One post-boundary exposure preserves the exact projection.  The current
 input need only differ from the already-consumed boundary input; it may be the
 selected work input, whose 41-byte length makes that exceptional branch
@@ -594,6 +871,10 @@ end
 #print axioms alpha_zero_inactive_step_before_boundary
 #print axioms alpha_zero_inactive_replay_before_boundary
 #print axioms BidirectionalAlphaProjection
+#print axioms boundary_first_anchor_establishes_alpha_projection
+#print axioms work_first_anchor_establishes_alpha_projection
+#print axioms work_first_boundary_establishes_postboundary_projection
+#print axioms bidirectional_preferred_alpha_of_projection
 #print axioms bidirectional_alpha_projection_step
 #print axioms bidirectional_alpha_projection_replay
 #print axioms bidirectional_alpha_projection_replay_before_boundary
