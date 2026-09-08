@@ -86,13 +86,16 @@ theorem exact_clean_bidirectional_pair_anchor_priors_eq
               UnifiedExposureRecord) :: rightLater ∧
         trial.val = leftPrior.length ∧
         trial.val = rightPrior.length ∧
-        (leftTarget = selectedFoldWorkInput leftWitness.input leftWitness.fold ∨
-          leftTarget = selectedFoldBoundaryInput leftWitness.input
-            leftWitness.fold) ∧
-        (rightTarget = selectedFoldWorkInput rightWitness.input
-            rightWitness.fold ∨
-          rightTarget = selectedFoldBoundaryInput rightWitness.input
-            rightWitness.fold) ∧
+        ((leftTarget = selectedFoldWorkInput leftWitness.input
+              leftWitness.fold ∧ leftAnswer = leftWitness.fold.answer) ∨
+          (leftTarget = selectedFoldBoundaryInput leftWitness.input
+              leftWitness.fold ∧
+            leftAnswer = leftWitness.fold.boundaryAnswer)) ∧
+        ((rightTarget = selectedFoldWorkInput rightWitness.input
+              rightWitness.fold ∧ rightAnswer = rightWitness.fold.answer) ∨
+          (rightTarget = selectedFoldBoundaryInput rightWitness.input
+              rightWitness.fold ∧
+            rightAnswer = rightWitness.fold.boundaryAnswer)) ∧
         leftPrior = rightPrior := by
   have leftLabeled : ExactAcceptedFoldPairLabeled leftWitness.input
       leftWitness.fold trial := by
@@ -222,9 +225,20 @@ theorem exact_clean_bidirectional_pair_anchor_selected_inputs_eq
     rightActor rightTarget rightAnswer rightSelectedAligned
   have selectedInputExact : leftTarget = rightTarget :=
     Option.some.inj (leftInputAtCursor.symm.trans rightInputAtCursor)
+  have leftSimple :
+      leftTarget = selectedFoldWorkInput leftWitness.input leftWitness.fold ∨
+        leftTarget = selectedFoldBoundaryInput leftWitness.input
+          leftWitness.fold := leftRole.elim (fun work => Or.inl work.1)
+            (fun boundary => Or.inr boundary.1)
+  have rightSimple :
+      rightTarget = selectedFoldWorkInput rightWitness.input
+          rightWitness.fold ∨
+        rightTarget = selectedFoldBoundaryInput rightWitness.input
+          rightWitness.fold := rightRole.elim (fun work => Or.inl work.1)
+            (fun boundary => Or.inr boundary.1)
   exact ⟨leftPrior, leftLater, leftPrior, rightLater, leftActor, rightActor,
     leftTarget, rightTarget, leftAnswer, rightAnswer, leftRootExact,
-    rightRootExact, leftTrialExact, rightTrialExact, leftRole, rightRole, rfl,
+    rightRootExact, leftTrialExact, rightTrialExact, leftSimple, rightSimple, rfl,
     selectedInputExact⟩
 
 /-- Equal residual coordinates fix the relation-round digest carried by both

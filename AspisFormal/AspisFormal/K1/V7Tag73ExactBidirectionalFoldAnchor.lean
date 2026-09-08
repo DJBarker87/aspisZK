@@ -126,8 +126,10 @@ theorem exact_accepted_fold_pair_labeled_anchor_decomposition
         prior ++ (.machineFresh actor queryInput answer :
           UnifiedExposureRecord) :: later ∧
       trial.val = prior.length ∧
-      (queryInput = selectedFoldWorkInput input fold ∨
-        queryInput = selectedFoldBoundaryInput input fold) := by
+      ((queryInput = selectedFoldWorkInput input fold ∧
+          answer = fold.answer) ∨
+        (queryInput = selectedFoldBoundaryInput input fold ∧
+          answer = fold.boundaryAnswer)) := by
   rcases labeled with workFirst | boundaryFirst
   · obtain ⟨prior, middle, later, boundaryActor, rootExact, trialExact⟩ :=
       workFirst
@@ -136,7 +138,8 @@ theorem exact_accepted_fold_pair_labeled_anchor_decomposition
         (.machineFresh boundaryActor (selectedFoldBoundaryInput input fold)
           fold.boundaryAnswer : UnifiedExposureRecord) :: later,
       fold.actor, selectedFoldWorkInput input fold, fold.answer,
-      by simpa [List.append_assoc] using rootExact, trialExact, Or.inl rfl⟩
+      by simpa [List.append_assoc] using rootExact, trialExact,
+      Or.inl ⟨rfl, rfl⟩⟩
   · obtain ⟨prior, middle, later, boundaryActor, rootExact, trialExact⟩ :=
       boundaryFirst
     exact ⟨prior,
@@ -145,7 +148,7 @@ theorem exact_accepted_fold_pair_labeled_anchor_decomposition
           fold.answer : UnifiedExposureRecord) :: later,
       boundaryActor, selectedFoldBoundaryInput input fold,
       fold.boundaryAnswer, by simpa [List.append_assoc] using rootExact,
-      trialExact, Or.inr rfl⟩
+      trialExact, Or.inr ⟨rfl, rfl⟩⟩
 
 theorem exact_accepted_fold_pair_labeled_exists
     {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
