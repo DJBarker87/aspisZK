@@ -13,6 +13,7 @@ set_option maxRecDepth 100000
 
 namespace AspisK1.V7Tag73BidirectionalFoldAlphaPrefix
 
+open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73BidirectionalFoldAlphaController
@@ -29,6 +30,10 @@ def BidirectionalPreAnchorInvariant
     memory.alpha.expectedBoundary = none ∧
     memory.alpha.alpha.producers = [] ∧
     memory.alpha.alpha.usedSlots = ∅
+
+def BidirectionalWaitingForWork
+    (memory : BidirectionalFoldAlphaMemory) (workInput : ShaInput) : Prop :=
+  memory.foldUsed = false ∧ memory.expectedWork = some workInput
 
 @[simp] theorem inactive_bidirectional_pre_anchor :
     BidirectionalPreAnchorInvariant inactiveBidirectionalFoldAlphaMemory := by
@@ -111,10 +116,44 @@ theorem bidirectional_pre_anchor_invariant_replay
       rw [indexed_state_after_records_cons]
       exact ih next nextInvariant nextBounded
 
+/-- Once a boundary-first anchor has installed its missing work sibling,
+any non-anchor exposure at a different literal input preserves that waiting
+state.  Alpha producers and output-slot consumption remain unrestricted. -/
+theorem bidirectional_waiting_for_work_step
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex : Nat)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (answer : Digest256) (workInput : ShaInput)
+    (notAnchor : state.exposureIndex ≠ anchorIndex)
+    (inputAvoids : currentBidirectionalInput? transitionFuel state ≠
+      some workInput)
+    (waiting : BidirectionalWaitingForWork state.memory workInput) :
+    BidirectionalWaitingForWork
+      (bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex state
+        answer) workInput := by
+  have noMatch : ¬ matchesExpectedFoldWork
+      (currentBidirectionalInput? transitionFuel state)
+      state.memory.expectedWork := by
+    intro matched
+    rcases matched with ⟨input, currentExact, expectedExact⟩
+    rw [waiting.2] at expectedExact
+    have inputExact : workInput = input := Option.some.inj expectedExact
+    subst input
+    exact inputAvoids currentExact
+  have noMatch' : ¬ matchesExpectedFoldWork
+      (currentBidirectionalInput? transitionFuel state) (some workInput) := by
+    simpa [waiting.2] using noMatch
+  unfold BidirectionalWaitingForWork
+  unfold bidirectionalFoldAlphaAfterMemory
+  simp only [notAnchor, ↓reduceDIte]
+  simp [waiting.1, waiting.2, noMatch']
+
 end
 
 #print axioms inactive_bidirectional_pre_anchor
 #print axioms bidirectional_pre_anchor_invariant_step
 #print axioms bidirectional_pre_anchor_invariant_replay
+#print axioms bidirectional_waiting_for_work_step
 
 end AspisK1.V7Tag73BidirectionalFoldAlphaPrefix
