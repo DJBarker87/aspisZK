@@ -59,6 +59,18 @@ noncomputable def guardedJointQueryBatchTarget
       authenticated
   else ∅
 
+/-- Exactly the algebraic data fixed before the query-batch challenge is
+exposed.  The sampled `rho` is deliberately absent. -/
+structure JointQueryBatchPreChallengeView where
+  preQueryDiscrepancy : QM31Exact
+  expected : QueryVector QM31Exact
+  authenticated : QueryVector QM31Exact
+
+noncomputable def JointQueryBatchPreChallengeView.target
+    (view : JointQueryBatchPreChallengeView) : Finset QM31Exact :=
+  guardedJointQueryBatchTarget view.preQueryDiscrepancy view.expected
+    view.authenticated
+
 theorem guardedJointQueryBatchTarget_card_le_sixteen
     (preQueryDiscrepancy : QM31Exact)
     (expected authenticated : QueryVector QM31Exact) :
@@ -70,6 +82,11 @@ theorem guardedJointQueryBatchTarget_card_le_sixteen
       jointQueryBatch_nonzero_collision_card_le_sixteen_of_vectors_ne
         preQueryDiscrepancy expected authenticated different
   · simp [guardedJointQueryBatchTarget, different]
+
+theorem JointQueryBatchPreChallengeView.target_card_le_sixteen
+    (view : JointQueryBatchPreChallengeView) : view.target.card ≤ 16 :=
+  guardedJointQueryBatchTarget_card_le_sixteen view.preQueryDiscrepancy
+    view.expected view.authenticated
 
 /-- Exact pre-query-batch source data on one compiler-clean slice. Coordinates
 are fixed by the literal pre-answer query-batch scheduler controller; this
@@ -87,13 +104,9 @@ structure ExactTag73RestrictedK13JointBatchSource
     (relationSource : ExactTag73RelationSourceEnvironment transitionFuel
       configuration projection fixedInstance decoder)
     (clean : Set (ExactCompilerSample HiddenTape parameters)) where
-  preQueryDiscrepancy : HiddenTape →
+  view : HiddenTape →
     ExactCompilerGammaPrefixResidual parameters →
-      VariableGammaCompleteSkeleton → QM31Exact
-  expected : HiddenTape → ExactCompilerGammaPrefixResidual parameters →
-    VariableGammaCompleteSkeleton → QueryVector QM31Exact
-  authenticated : HiddenTape → ExactCompilerGammaPrefixResidual parameters →
-    VariableGammaCompleteSkeleton → QueryVector QM31Exact
+      VariableGammaCompleteSkeleton → JointQueryBatchPreChallengeView
   covered : ∀ hidden,
     jointEventSlice
         (clean ∩ exactTag73K13JointQueryBatchCollisionEvent transitionFuel
@@ -104,10 +117,7 @@ structure ExactTag73RestrictedK13JointBatchSource
           (exactPlainRomCursor configuration hidden).erase) ⁻¹'
         dependentSuccessfulSubtypeEvent GammaPrefixSucceeds (fun residual ↦
           successfulGammaPrefixSkeletonDependentEvent (fun skeleton ↦
-            guardedJointQueryBatchTarget
-              (preQueryDiscrepancy hidden residual skeleton)
-              (expected hidden residual skeleton)
-              (authenticated hidden residual skeleton)))
+            (view hidden residual skeleton).target))
 
 /-- Exact compiler-law joint-query-batch bound on the clean slice. -/
 theorem exact_tag73_restricted_k13_joint_batch_probability_le
@@ -144,19 +154,14 @@ theorem exact_tag73_restricted_k13_joint_batch_probability_le
     (fun hidden ↦ exactCompilerQueryBatchPrefixCoordinates parameters
       transitionFuel (exactPlainRomCursor configuration hidden).erase)
     (fun hidden residual skeleton ↦
-      guardedJointQueryBatchTarget
-        (source.preQueryDiscrepancy hidden residual skeleton)
-        (source.expected hidden residual skeleton)
-        (source.authenticated hidden residual skeleton)) 16
+      (source.view hidden residual skeleton).target) 16
   · intro hidden residual skeleton
-    exact guardedJointQueryBatchTarget_card_le_sixteen
-      (source.preQueryDiscrepancy hidden residual skeleton)
-      (source.expected hidden residual skeleton)
-      (source.authenticated hidden residual skeleton)
+    exact (source.view hidden residual skeleton).target_card_le_sixteen
   · exact source.covered
 
 #print axioms ExactTag73RestrictedK13JointBatchSource
 #print axioms guardedJointQueryBatchTarget_card_le_sixteen
+#print axioms JointQueryBatchPreChallengeView.target_card_le_sixteen
 #print axioms exact_tag73_restricted_k13_joint_batch_probability_le
 
 end
