@@ -60,6 +60,7 @@ def main() -> None:
     onefold_path = "crates/aspis-core/src/v7_onefold.rs"
     v6_onefold_path = "crates/aspis-core/src/v6_onefold.rs"
     compact_onefold_path = "crates/aspis-core/src/v7_compact_onefold.rs"
+    fixed_canonical_path = "crates/aspis-core/src/v7_fixed_canonical_audit.rs"
     v6_transcript_path = "crates/aspis-core/src/v6_transcript.rs"
     state_only_sumcheck_path = "crates/aspis-core/src/state_only_sumcheck.rs"
     state_only_hiding_path = "crates/aspis-core/src/state_only_hiding.rs"
@@ -86,6 +87,7 @@ def main() -> None:
     pool_vault = read(pool_vault_path)
     verifier_dispatch = read(verifier_dispatch_path)
     compact_onefold = read(compact_onefold_path)
+    fixed_canonical = read(fixed_canonical_path)
     verifier_certificate = read(verifier_certificate_path)
     cu_tail_probe = read(cu_tail_probe_path)
 
@@ -140,9 +142,22 @@ def main() -> None:
     require(
         r"fn sort_v7_query_order_source_bounded\(.*for index in 1\.\.V6_QUERY_COUNT.*"
         r"while cursor > 0 && value\.0 < order\[cursor - 1\]\.0",
-        compact_onefold,
+        read(v6_onefold_path),
         "source-bounded accepted-opening query sort",
     )
+    for selected_path, selected_source in (
+        (onefold_path, onefold),
+        (fixed_canonical_path, fixed_canonical),
+        (compact_onefold_path, compact_onefold),
+    ):
+        require(
+            r'cfg\(feature = "v7-query-order-source-bound-audit"\).*'
+            r"sort_v7_query_order_source_bounded\(&mut order\).*"
+            r'cfg\(not\(feature = "v7-query-order-source-bound-audit"\)\).*'
+            r"sort_unstable_by_key",
+            selected_source,
+            f"selected/default-off opening sorter routing: {selected_path}",
+        )
     require(
         r"if parameter\.c1 == crate::field::CM31::ZERO\s*\{\s*continue;\s*\}.*"
         r"secure_ood_circle_point_from_parameter\(parameter\)",
@@ -321,6 +336,7 @@ def main() -> None:
         onefold_path,
         v6_onefold_path,
         compact_onefold_path,
+        fixed_canonical_path,
         v6_transcript_path,
         state_only_sumcheck_path,
         state_only_hiding_path,

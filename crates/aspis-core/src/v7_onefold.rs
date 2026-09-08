@@ -212,6 +212,9 @@ pub fn verify_and_gamma_combine_v7_openings(
 ) -> Result<[[QM31; 4]; V6_QUERY_COUNT], V6WireError> {
     let mut order: [(u32, usize); V6_QUERY_COUNT] =
         core::array::from_fn(|ordinal| (queries[ordinal], ordinal));
+    #[cfg(feature = "v7-query-order-source-bound-audit")]
+    crate::v6_onefold::sort_v7_query_order_source_bounded(&mut order);
+    #[cfg(not(feature = "v7-query-order-source-bound-audit"))]
     order.sort_unstable_by_key(|entry| entry.0);
     if order[V6_QUERY_COUNT - 1].0 >= 1 << 18 || order.windows(2).any(|pair| pair[0].0 == pair[1].0)
     {
@@ -277,6 +280,9 @@ where
 {
     let mut order: [(u32, usize); V6_QUERY_COUNT] =
         core::array::from_fn(|ordinal| (queries[ordinal], ordinal));
+    #[cfg(feature = "v7-query-order-source-bound-audit")]
+    crate::v6_onefold::sort_v7_query_order_source_bounded(&mut order);
+    #[cfg(not(feature = "v7-query-order-source-bound-audit"))]
     order.sort_unstable_by_key(|entry| entry.0);
     if order[V6_QUERY_COUNT - 1].0 >= 1 << 18 || order.windows(2).any(|pair| pair[0].0 == pair[1].0)
     {
@@ -379,10 +385,7 @@ mod tests {
                 .unwrap()
                 .try_into()
                 .unwrap();
-            assert!(
-                binary_frontier_nodes(queries, 18).unwrap()
-                    > V7_COMPACT_FRONTIER_CAP_PER_TREE
-            );
+            assert!(binary_frontier_nodes(queries, 18).unwrap() > V7_COMPACT_FRONTIER_CAP_PER_TREE);
         }
     }
 }

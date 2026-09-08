@@ -2,8 +2,9 @@ use std::{env, fs, path::PathBuf, str::FromStr};
 
 use anyhow::{ensure, Context, Result};
 use aspis_verifier::v7_cu_tail_probe::{
-    V7_CU_TAIL_QM31_MAX_TAG, V7_CU_TAIL_QM31_MIN_TAG, V7_CU_TAIL_QUERY_ASCENDING_TAG,
-    V7_CU_TAIL_QUERY_DESCENDING_TAG,
+    V7_CU_TAIL_COUNTER_TWENTY_TAG, V7_CU_TAIL_COUNTER_ZERO_TAG, V7_CU_TAIL_FRONTIER_199_TAG,
+    V7_CU_TAIL_FRONTIER_203_TAG, V7_CU_TAIL_QM31_MAX_TAG, V7_CU_TAIL_QM31_MIN_TAG,
+    V7_CU_TAIL_QUERY_ASCENDING_TAG, V7_CU_TAIL_QUERY_DESCENDING_TAG,
 };
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use serde::Deserialize;
@@ -115,6 +116,10 @@ fn main() -> Result<()> {
             "query-order-worst",
             query_wire(V7_CU_TAIL_QUERY_DESCENDING_TAG),
         ),
+        ("counter-zero", vec![V7_CU_TAIL_COUNTER_ZERO_TAG]),
+        ("counter-twenty", vec![V7_CU_TAIL_COUNTER_TWENTY_TAG]),
+        ("frontier-199", vec![V7_CU_TAIL_FRONTIER_199_TAG]),
+        ("frontier-203", vec![V7_CU_TAIL_FRONTIER_203_TAG]),
     ];
     let requests = cases
         .into_iter()
