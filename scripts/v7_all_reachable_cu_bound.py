@@ -27,7 +27,8 @@ HISTORICAL_MEASURED_ROLLOVER_C0_FRONTIER = 202
 HISTORICAL_CALIBRATED_CUTOFF20_MAX_FRONTIER_CU = 1_299_084
 CUTOFF20_MAX_COUNTER = 20
 MAX_FRONTIER_NODES = 203
-AUDITED_PRODUCTION_SOURCE_REVISION = "b053663d6c4fc7e991ef08ca568f68b81d25311c"
+INVENTORY_START_REVISION = "e5640f79133f8afbeb7eb08a940abc6462274295"
+DECODED_CHALLENGE_BINDING_REVISION = "8f36d51a173fcd513224c1ce6cd2cc2cc4e2901f"
 
 
 def fail(message: str) -> None:
@@ -84,10 +85,16 @@ def main() -> None:
     require(r"CHALLENGE_RETRY_LIMIT:\s*u32\s*=\s*8", transcript, "QM31 retry limit")
     require(r"NONZERO_QM31_RETRY_LIMIT:\s*u32\s*=\s*3", transcript, "nonzero retry limit")
     require(r"CIRCLE_POINT_RETRY_LIMIT:\s*u32\s*=\s*3", transcript, "circle retry limit")
-    require(r"V7_BOUND_CHALLENGE_MAX_BLOCKS:\s*usize\s*=\s*12", transcript, "Tag-73 recorded challenge block cap")
     require(r"V7_GAMMA_BIND_ID:\s*u8\s*=\s*0", transcript, "Tag-73 gamma bind id")
     require(r"V7_ALPHA_ZERO_BIND_ID:\s*u8\s*=\s*1", transcript, "Tag-73 alpha-zero bind id")
     require(r"V7_CHALLENGE_BIND:\s*u8\s*=\s*62", transcript, "Tag-73 causal-bind transcript label")
+    require(
+        r"fn bind_decoded_challenge\(.*let mut record = \[0u8; 17\];.*"
+        r"record\[0\] = challenge_id;.*value\.write_le_bytes\(&mut record\[1\.\.\]\);.*"
+        r"self\.absorb\(label::V7_CHALLENGE_BIND, &record\)",
+        transcript,
+        "Tag-73 decoded-value causal binding",
+    )
     require(r"challenge_queries_without_replacement\(V6_QUERY_COUNT,\s*1\s*<<\s*18,\s*64\)", onefold, "q16 draw limit")
     require(r"V7_COMPACT_QUERY_CANDIDATES:\s*usize\s*=\s*64", onefold, "candidate count")
     require(r"V7_COMPACT_FRONTIER_CAP_PER_TREE:\s*usize\s*=\s*203", onefold, "frontier cap")
@@ -162,16 +169,15 @@ def main() -> None:
         maximum_qm31_squeeze_blocks - minimum_qm31_squeeze_blocks
     ) * squeeze_block_syscall_cu
 
-    # Revision 2 immediately absorbs two fixed-width causal records. Each
-    # call hashes four slices: transcript state (32), absorb frame (2),
-    # challenge header (2), and the zero-padded raw block inventory (384).
-    # Agave charges the base once and max(mem_op_base, floor(bytes/2)) per
-    # slice, so each bind syscall is 313 CU and the two-call fixed floor is
-    # 626 CU. This is not a current-binary measurement: the SBF copy/loop
-    # overhead also changed and must be measured from a rebuilt revision-2
-    # binary.
+    # Revision 2 immediately absorbs two canonical decoded-value records.
+    # `absorb` packs state (32), domain+label (2), and the 17-byte record into
+    # one 51-byte slice. Agave charges the base once plus
+    # max(mem_op_base, floor(total_bytes/2)), so each bind syscall is 110 CU
+    # and the two-call fixed floor is 220 CU. This is not a complete SBF
+    # measurement: the packing/copy/instruction overhead must be measured in
+    # the current binary.
     causal_bind_calls = 2
-    causal_bind_slice_bytes = [32, 2, 2, 32 * 12]
+    causal_bind_slice_bytes = [32 + 2 + 17]
     causal_bind_input_bytes = sum(causal_bind_slice_bytes)
     causal_bind_sha256_cu_per_call = sha256_base_cu + sum(
         max(mem_op_base_cu, sha256_byte_cu * (length // 2))
@@ -259,13 +265,14 @@ def main() -> None:
     })
 
     result = {
-        "schema": "aspis.v7.all-reachable-cu-source-inventory.v2",
-        "auditedProductionSourceRevision": AUDITED_PRODUCTION_SOURCE_REVISION,
+        "schema": "aspis.v7.all-reachable-cu-source-inventory.v3",
+        "inventoryStartRevision": INVENTORY_START_REVISION,
+        "decodedChallengeBindingRevision": DECODED_CHALLENGE_BINDING_REVISION,
         "revisionQualification": (
-            "the audited production sources are unchanged from this base; the containing "
-            "evidence commit is reported separately because a commit cannot contain its own hash"
+            "source hashes below pin the exact audited files; the start revision records the "
+            "containing tree before this inventory repair"
         ),
-        "classification": "CURRENT PROFILE CU BASELINE MISSING; ALL-REACHABLE COMPLETION BOUND FAILS CLOSED",
+        "classification": "CURRENT PROFILE ROLLOVER/CUTOFF BASELINE MISSING; ALL-REACHABLE COMPLETION BOUND FAILS CLOSED",
         "quantifiers": {
             "verifierAcceptedLanguage": "counters 0..63; q16 draws up to 64 per candidate",
             "cutoff20PublishedSubset": "counters 0..20 and exactly 16 distinct initial q16 draws per evaluated candidate",
@@ -279,12 +286,19 @@ def main() -> None:
         },
         "currentProfile": {
             "revision": CURRENT_PROFILE_REVISION,
-            "productionSbfMeasurement": None,
+            "productionSbfMeasurements": {
+                "publicDevnetSamePageTransferCu": 1_154_057,
+                "publicDevnetSamePageWithdrawalCu": 1_177_631,
+                "verifierBinarySha256": "5476d70d03fc3e55cee7bd3d7747023195713d0639afd9be66908e7ce09430c3",
+                "poolBinarySha256": "9cd1401327493134ca42ed13a7e72d7e6c375c488f7aa2ede42b39f402b6c89d",
+                "evidence": "results/v7-txv1-public-devnet-identity-fix-20260907/public-devnet-summary.json",
+            },
             "cutoff20Frontier203Measurement": None,
-            "measurementAvailable": False,
+            "samePageMeasurementAvailable": True,
+            "requiredRolloverBoundFixtureAvailable": False,
             "reason": (
-                "profile revision 2 adds causal gamma/alpha transcript binds; the "
-                "production SBF binaries and honest proof evidence have not been rebuilt"
+                "current profile production binaries and honest same-page proofs were measured "
+                "on public Devnet, but no current-binary counter-20/frontier-203 rollover fixture exists"
             ),
         },
         "historicalMeasuredAnchor": {
@@ -340,11 +354,12 @@ def main() -> None:
             "inputBytesPerCall": causal_bind_input_bytes,
             "sha256SyscallCuPerCall": causal_bind_sha256_cu_per_call,
             "fixedSha256SyscallCu": causal_bind_sha256_cu_total,
-            "maximumRecordedBlocksPerBind": 12,
+            "canonicalDecodedRecordBytes": 17,
+            "packedAbsorbBytes": 51,
             "sbfCopyAndLoopOverheadMeasured": False,
             "qualification": (
-                "626 CU is the exact Agave SHA-256 syscall charge only; it must not "
-                "be added to a revision-1 transaction as a revision-2 CU measurement"
+                "220 CU is the exact Agave SHA-256 syscall charge only; it must not "
+                "be treated as the complete revision-2 binary delta"
             ),
         },
         "queryOrderingBoundedControlFlow": {
@@ -421,9 +436,10 @@ def main() -> None:
             "cutoff20GuaranteesBelow1400000": False,
             "verifierAcceptedLanguageGuaranteesBelow1400000": False,
             "reason": (
-                "no current profile-revision-2 production SBF measurement exists; additionally, "
-                "counter 20 leaves successful QM31 retries, query ordering, and data-dependent "
-                "PDA bump searches outside its admission predicate"
+                "the current profile has same-page public-Devnet samples but no current-binary "
+                "counter-20/frontier-203 rollover measurement; additionally, counter 20 leaves "
+                "successful QM31 retries, query ordering, and data-dependent PDA bump searches "
+                "outside its admission predicate"
             ),
             "safeToPromoteAsUniversalCuPolicy": False,
             "byteIdenticalSimulationStillRequired": True,
