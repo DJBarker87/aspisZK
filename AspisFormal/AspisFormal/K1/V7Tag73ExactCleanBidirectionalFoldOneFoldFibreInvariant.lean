@@ -323,6 +323,40 @@ theorem exact_clean_bidirectional_pair_words_eq
           (exactK12Roots rightWitness.input) := rightFinalStable
     _ = rightWitness.failure.words := rightWitness.failure.wordsExact.symm
 
+/-- The chronological word theorem and the retained literal gamma binding
+give the complete causal invariant required by the one-fold reduction.  The
+production source provider is used only to identify the parsed gamma with the
+operationally decoded gamma on each accepting run. -/
+theorem exact_clean_onefold_words_gamma_invariant_of_source
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (programmedCover : 5 ≤ 2 * parameters.forkRequestCap)
+    (source : ExactFixedK13DecodedParsedSourceProvider transitionFuel
+      configuration projection fixedInstance) :
+    ExactCleanBidirectionalK13OneFoldWordsGammaInvariant transitionFuel
+      configuration projection fixedInstance decoder := by
+  intro trial hidden left right leftWitness rightWitness residualExact _foldExact
+  have wordsExact := exact_clean_bidirectional_pair_words_eq transitionRoom
+    programmedCover trial hidden left right leftWitness rightWitness
+      residualExact
+  obtain ⟨leftDecoded, _leftDecode, leftBinding⟩ :=
+    source (hidden, left) leftWitness.input
+  obtain ⟨rightDecoded, _rightDecode, rightBinding⟩ :=
+    source (hidden, right) rightWitness.input
+  have operationalGammaExact :=
+    exact_clean_bidirectional_pair_operational_gamma_eq transitionRoom trial
+      hidden left right leftWitness rightWitness programmedCover residualExact
+  exact ⟨wordsExact,
+    leftBinding.gammaExact.trans
+      (operationalGammaExact.trans rightBinding.gammaExact.symm)⟩
+
 /-- The already-required production source provider discharges schedule
 functionality, so the word/gamma causal invariant implies the full fibre
 invariant consumed by target transport. -/
@@ -386,6 +420,7 @@ noncomputable def exactCleanBidirectionalOneFoldContextOfSource
 #print axioms exact_scheduleAtAlpha_eq_of_source_bindings
 #print axioms ExactCleanBidirectionalK13OneFoldWordsGammaInvariant
 #print axioms exact_clean_bidirectional_pair_words_eq
+#print axioms exact_clean_onefold_words_gamma_invariant_of_source
 #print axioms exact_clean_onefold_fibre_invariant_of_words_gamma
 #print axioms exactCleanBidirectionalOneFoldContextOfSource
 

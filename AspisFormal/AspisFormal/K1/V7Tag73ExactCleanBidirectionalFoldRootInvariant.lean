@@ -2,6 +2,7 @@ import AspisFormal.K1.V7Tag73ExactCleanBidirectionalFoldPairPriorInvariant
 import AspisFormal.K1.V7Tag73ExactRootCausalChain
 import AspisFormal.K1.V7Tag73RootAbsorbInputInjectivity
 import AspisFormal.K1.V7Tag73K13PreQ16TargetInventory
+import AspisFormal.K1.V7Tag73RawChallengeBinding
 
 /-!
 # Clean bidirectional fold-root invariant
@@ -34,6 +35,7 @@ open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactPlainRomRun
+open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactRootCausalChain
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FutureFreeCheckedRefinementBisimulation
@@ -41,6 +43,7 @@ open AspisK1.V7Tag73NoPairOccurrenceTrichotomy
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73PureLookupDigestChain
 open AspisK1.V7Tag73RawProverMessages
+open AspisK1.V7Tag73RawChallengeBinding
 open AspisK1.V7Tag73K13PreQ16MerkleWordSource
 open AspisK1.V7Tag73K13PreQ16TargetInventory
 open AspisK1.V7Tag73RootAbsorbInputInjectivity
@@ -379,12 +382,138 @@ theorem exact_clean_bidirectional_pair_k12_roots_eq
   exact exact_clean_bidirectional_pair_roots_eq transitionRoom trial hidden left
     right leftWitness rightWitness programmedCover residualExact
 
+/-- The decoded gamma binding is causally before the selected fold pair.  The
+two retained gamma-to-fold chains end at the same fold digest inside the same
+clean prefix, so their literal binding inputs -- and hence gamma bytes -- are
+equal. -/
+theorem exact_clean_bidirectional_pair_operational_gamma_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (trial : ExactCompilerExposureTrial parameters) (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactCleanBidirectionalK13OneFoldTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) trial)
+    (rightWitness : ExactCleanBidirectionalK13OneFoldTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) trial)
+    (programmedCover : 5 ≤ 2 * parameters.forkRequestCap)
+    (residualExact :
+      let router := exactCompilerBidirectionalFoldOneFoldRouter parameters
+        transitionFuel trial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+          left).1 =
+        (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+          right).1) :
+    exactOperationalChallenge leftWitness.input .gamma =
+      exactOperationalChallenge rightWitness.input .gamma := by
+  obtain ⟨leftPrior, leftLater, rightPrior, rightLater, leftActor,
+      rightActor, leftTarget, rightTarget, leftAnswer, rightAnswer,
+      leftRootExact, rightRootExact, _leftTrialExact, _rightTrialExact,
+      leftRole, rightRole, priorExact⟩ :=
+    exact_clean_bidirectional_pair_anchor_priors_eq trial hidden left right
+      leftWitness rightWitness programmedCover residualExact
+  subst rightPrior
+  have foldDigestExact : leftWitness.fold.digest = rightWitness.fold.digest :=
+    exact_clean_bidirectional_pair_anchor_fold_digest_eq trial hidden left right
+      leftWitness rightWitness programmedCover residualExact
+  obtain ⟨leftAnchorLookup, leftTerminalPrefix⟩ :=
+    selected_fold_anchor_lookup_and_prefix leftWitness.input leftWitness.fold
+      leftTarget leftAnswer leftRole
+  obtain ⟨rightAnchorLookup, rightTerminalPrefix⟩ :=
+    selected_fold_anchor_lookup_and_prefix rightWitness.input rightWitness.fold
+      rightTarget rightAnswer rightRole
+  have leftRetained := exact_lookup_digest_chain_retained_before_anchor
+    transitionRoom leftWitness.input leftPrior leftLater leftActor leftRootExact
+      (pure_post_root_chain_to_exact leftWitness.fold.gammaFoldChain)
+      leftAnchorLookup leftTerminalPrefix
+  have rightRetained := exact_lookup_digest_chain_retained_before_anchor
+    transitionRoom rightWitness.input leftPrior rightLater rightActor
+      rightRootExact
+      (pure_post_root_chain_to_exact rightWitness.fold.gammaFoldChain)
+      rightAnchorLookup rightTerminalPrefix
+  rw [← foldDigestExact] at rightRetained
+  have priorAnswersNodup :
+      (leftPrior.map UnifiedExposureRecord.answer).Nodup := by
+    have fullNodup := exact_root_record_answers_nodup leftWitness.input
+    rw [leftRootExact, List.map_append, List.map_cons] at fullNodup
+    exact (List.nodup_append.mp fullNodup).1
+  let leftInput : ShaInput := bytes leftWitness.fold.gammaAfterSampleDigest ++
+    [domAbsorb, challengeBindLabel] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+        ((exactOperationalTape leftWitness.input).messages.challengeValue
+          .gamma)).data
+  let rightInput : ShaInput := bytes rightWitness.fold.gammaAfterSampleDigest ++
+    [domAbsorb, challengeBindLabel] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+        ((exactOperationalTape rightWitness.input).messages.challengeValue
+          .gamma)).data
+  have leftAvoids : ∀ input,
+      IsPostRootStateInput challengeBindLabel input → leftInput ≠ input := by
+    apply absorb_input_avoids_post_root_state_input challengeBindLabel
+      leftWitness.fold.gammaAfterSampleDigest
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+        ((exactOperationalTape leftWitness.input).messages.challengeValue
+          .gamma)).data
+    intro empty
+    have lengths := congrArg List.length empty
+    simp [AspisK1.V7Tag73TranscriptSchedule.Payload.data] at lengths
+  have rightAvoids : ∀ input,
+      IsPostRootStateInput challengeBindLabel input → rightInput ≠ input := by
+    apply absorb_input_avoids_post_root_state_input challengeBindLabel
+      rightWitness.fold.gammaAfterSampleDigest
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+        ((exactOperationalTape rightWitness.input).messages.challengeValue
+          .gamma)).data
+    intro empty
+    have lengths := congrArg List.length empty
+    simp [AspisK1.V7Tag73TranscriptSchedule.Payload.data] at lengths
+  have inputExact : leftInput = rightInput :=
+    exact_retained_digest_chains_boundary_input_eq priorAnswersNodup
+      (by simpa [leftInput] using leftRetained)
+      (by simpa [rightInput] using rightRetained)
+      (by simpa [leftInput] using leftAvoids)
+      (by simpa [rightInput] using rightAvoids)
+  let leftState : MachineState :=
+    { digest := leftWitness.fold.gammaAfterSampleDigest, oracleHistory := [] }
+  let rightState : MachineState :=
+    { digest := rightWitness.fold.gammaAfterSampleDigest, oracleHistory := [] }
+  let leftBinding := actualBinding .gamma
+    ((exactOperationalTape leftWitness.input).messages.challengeValue .gamma)
+  let rightBinding := actualBinding .gamma
+    ((exactOperationalTape rightWitness.input).messages.challengeValue .gamma)
+  have bindingInputExact : rawChallengeBindInput leftState leftBinding =
+      rawChallengeBindInput rightState rightBinding := by
+    simpa [leftInput, rightInput, leftState, rightState, leftBinding,
+      rightBinding, rawChallengeBindInput, RawChallengeBinding.data,
+      actualBinding,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using inputExact
+  have bindingExact := raw_challenge_bind_input_eq_implies_binding_eq
+    leftState rightState leftBinding rightBinding bindingInputExact
+  have rawExact :
+      (exactOperationalTape leftWitness.input).messages.challengeValue .gamma =
+        (exactOperationalTape rightWitness.input).messages.challengeValue
+          .gamma := by
+    simpa [leftBinding, rightBinding, actualBinding] using
+      congrArg RawChallengeBinding.value bindingExact
+  unfold exactOperationalChallenge
+  unfold AspisK1.V7Tag73SemanticRoundReplay.exactChallengeValue
+  rw [rawExact]
+
 #print axioms pure_post_root_chain_to_exact
 #print axioms selected_fold_anchor_lookup_and_prefix
 #print axioms exact_accepted_fold_anchor_k12_roots_mem
 #print axioms exact_clean_bidirectional_pair_roots_eq
 #print axioms exact_k12_roots_eq_of_operational_roots_eq
 #print axioms exact_clean_bidirectional_pair_k12_roots_eq
+#print axioms exact_clean_bidirectional_pair_operational_gamma_eq
 
 end
 
