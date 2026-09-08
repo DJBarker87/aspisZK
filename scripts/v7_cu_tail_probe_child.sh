@@ -106,26 +106,48 @@ jq -e '.schema == "aspis.v7.cu-tail-probe-signed-requests.v1" and .localOnly == 
   "$EVIDENCE_DIR/signed-requests.json" >/dev/null || fail "probe signed requests are malformed"
 
 for index in 0 1 2 3 4 5 6 7; do
-  name=$(jq -er ".requests[$index].name" "$EVIDENCE_DIR/signed-requests.json")
+  request_file="$EVIDENCE_DIR/signed-requests.json"
+  if [[ "$index" -eq 4 ]]; then
+    slot=$(rpc '{"jsonrpc":"2.0","id":4,"method":"getSlot","params":[{"commitment":"finalized"}]}' \
+      | jq -er '.result')
+    blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
+      '{jsonrpc:"2.0",id:5,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
+      | jq -er '.result.value.blockhash')
+    jq -n --arg ack "$ACK" --arg payer "$PAYER_KEYPAIR" --arg blockhash "$blockhash" \
+      --arg programId "$PROGRAM_ID" --argjson slot "$slot" \
+      '{schema:"aspis.v7.cu-tail-probe-input.v1",disposableAcknowledgement:$ack,
+        payerKeypair:$payer,recentBlockhash:$blockhash,minContextSlot:$slot,
+        requestId:2000,probeProgramId:$programId}' >"$WORK_DIR/tail-input.json"
+    "$PROBE_BUILDER" "$WORK_DIR/tail-input.json" >"$EVIDENCE_DIR/signed-requests-tail.json"
+    jq -e '.schema == "aspis.v7.cu-tail-probe-signed-requests.v1" and .localOnly == true and
+      (.requests | length) == 8 and all(.requests[];
+        .serializedTransactionBytes < 1232 and (.signedWireSha256 | test("^[0-9a-f]{64}$")))' \
+      "$EVIDENCE_DIR/signed-requests-tail.json" >/dev/null \
+      || fail "refreshed probe signed requests are malformed"
+  fi
+  if [[ "$index" -ge 4 ]]; then
+    request_file="$EVIDENCE_DIR/signed-requests-tail.json"
+  fi
+  name=$(jq -er ".requests[$index].name" "$request_file")
   case_dir="$EVIDENCE_DIR/cases/$name"
   mkdir "$case_dir"
-  simulation=$(rpc "$(jq -c ".requests[$index].simulationRequest" "$EVIDENCE_DIR/signed-requests.json")")
+  simulation=$(rpc "$(jq -c ".requests[$index].simulationRequest" "$request_file")")
   jq . <<<"$simulation" >"$case_dir/simulation.json"
   jq -e '.error | not' <<<"$simulation" >/dev/null || fail "$name simulation RPC error"
   jq -e '.result.value.err == null and (.result.value.unitsConsumed | type == "number")' \
     <<<"$simulation" >/dev/null || fail "$name simulation failed"
-  send=$(rpc "$(jq -c ".requests[$index].sendRequest" "$EVIDENCE_DIR/signed-requests.json")")
+  send=$(rpc "$(jq -c ".requests[$index].sendRequest" "$request_file")")
   jq . <<<"$send" >"$case_dir/send.json"
   signature=$(jq -er '.result' <<<"$send")
-  [[ "$signature" == "$(jq -er ".requests[$index].signature" "$EVIDENCE_DIR/signed-requests.json")" ]] \
+  [[ "$signature" == "$(jq -er ".requests[$index].signature" "$request_file")" ]] \
     || fail "$name submission was not byte-identical"
   finalized_transaction "$signature" "$case_dir/finalized-transaction.json" "$((2000 + index * 10))"
   jq -e '.result.meta.err == null and (.result.meta.computeUnitsConsumed | type == "number")' \
     "$case_dir/finalized-transaction.json" >/dev/null || fail "$name finalized execution failed"
   jq -n --arg name "$name" \
     --arg signature "$signature" \
-    --arg hash "$(jq -er ".requests[$index].signedWireSha256" "$EVIDENCE_DIR/signed-requests.json")" \
-    --argjson bytes "$(jq -er ".requests[$index].serializedTransactionBytes" "$EVIDENCE_DIR/signed-requests.json")" \
+    --arg hash "$(jq -er ".requests[$index].signedWireSha256" "$request_file")" \
+    --argjson bytes "$(jq -er ".requests[$index].serializedTransactionBytes" "$request_file")" \
     --argjson simulationCu "$(jq -er '.result.value.unitsConsumed' "$case_dir/simulation.json")" \
     --argjson landedCu "$(jq -er '.result.meta.computeUnitsConsumed' "$case_dir/finalized-transaction.json")" \
     --argjson finalizedSlot "$(jq -er '.result.slot' "$case_dir/finalized-transaction.json")" \
