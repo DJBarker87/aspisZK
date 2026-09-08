@@ -29,6 +29,7 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredCleanPairSemanticNoninterference
 open AspisK1.V7Tag73ExactRestoredOperationalK13Events
 open AspisK1.V7Tag73ExactRestoredOperationalK13MeasuredComposition
+open AspisK1.V7Tag73ExactRestoredOperationalK13OneFoldProbability
 open AspisK1.V7Tag73ExactRestoredOperationalK16Assembly
 open AspisK1.V7Tag73ExactRestoredOperationalStages
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
@@ -106,13 +107,10 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
               transitionFuel configuration projection fixedInstance decoder) ≤
         exactJointQueryBatchIdealRawError +
           exactLaterRelationAlphaIdealRawError)
-    (oneFoldBound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-              projection fixedInstance ∩
-            exactTag73RestoredOperationalCanonicalRootK13OneFoldEvent
-              transitionFuel configuration projection fixedInstance decoder) ≤
-        exactOneFoldIdealRawError)
+    (oneFoldSource : ExactTag73RestoredCanonicalOneFoldSource transitionFuel
+      configuration projection fixedInstance decoder
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance))
     (k14Bound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -151,7 +149,7 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
     exact exact_restored_operational_k13_clean_error_measure_bound hiddenLaw
       (le_trans (by omega : 2 ≤ 3) transitionRoom) programmedCover
       frontierExact semantic reference traceExists foldExposureCap
-      finalExposureCap initialEncoderExact merkleBound idealBound oneFoldBound
+      finalExposureCap initialEncoderExact merkleBound idealBound oneFoldSource
   have k14Clean :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (clean ∩ k14CoherentChainErrorEvent stages) ≤ k14Error := by

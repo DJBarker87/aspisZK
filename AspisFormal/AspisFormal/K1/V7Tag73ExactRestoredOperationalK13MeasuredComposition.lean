@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactConcreteK12Bound
+import AspisFormal.K1.V7Tag73ExactRestoredOperationalK13OneFoldProbability
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalK13QueryProbability
 import AspisFormal.K1.V7Tag73K13IdealErrorLedger
 
@@ -29,6 +30,7 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredCleanPairSemanticNoninterference
 open AspisK1.V7Tag73ExactRestoredOperationalK13Classifier
 open AspisK1.V7Tag73ExactRestoredOperationalK13Events
+open AspisK1.V7Tag73ExactRestoredOperationalK13OneFoldProbability
 open AspisK1.V7Tag73ExactRestoredOperationalK13QueryProbability
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13IdealErrorLedger
@@ -82,8 +84,9 @@ theorem exact_restored_operational_canonical_root_k13_list_cap_event_eq_empty
   · simp
 
 /-- Compiler-clean measured bound for the actual restoration-wide K1.3
-classifier.  q16 is proved internally.  The three remaining premises are the
-literal source-event bounds that subsequent source/coupling leaves discharge.
+classifier.  q16 and the degree-three one-fold probability theorem are proved
+internally.  The remaining premises are the literal Merkle/relation bounds and
+the pre-answer one-fold source family that subsequent source leaves discharge.
 -/
 theorem exact_restored_operational_k13_clean_error_measure_bound
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
@@ -131,13 +134,10 @@ theorem exact_restored_operational_k13_clean_error_measure_bound
               transitionFuel configuration projection fixedInstance decoder) ≤
         exactJointQueryBatchIdealRawError +
           exactLaterRelationAlphaIdealRawError)
-    (oneFoldBound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-              projection fixedInstance ∩
-            exactTag73RestoredOperationalCanonicalRootK13OneFoldEvent
-              transitionFuel configuration projection fixedInstance decoder) ≤
-        exactOneFoldIdealRawError) :
+    (oneFoldSource : ExactTag73RestoredCanonicalOneFoldSource transitionFuel
+      configuration projection fixedInstance decoder
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance)) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
             projection fixedInstance ∩
@@ -185,6 +185,9 @@ theorem exact_restored_operational_k13_clean_error_measure_bound
     exact_restored_operational_canonical_root_k13_query_probability_le
       hiddenLaw transitionRoom programmedCover frontierExact semantic reference
         traceExists foldExposureCap finalExposureCap
+  have oneFoldBound :=
+    exact_restored_operational_canonical_root_k13_onefold_probability_le
+      hiddenLaw clean oneFoldSource
   have listCapEmpty : listCap = ∅ := by
     exact exact_restored_operational_canonical_root_k13_list_cap_event_eq_empty
       initialEncoderExact
