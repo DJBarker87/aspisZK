@@ -34,7 +34,23 @@ theorem mem_factorized_dependentProductEvent_of_value
   rw [successfulOrdinaryExactFactorization_value]
   exact member
 
+/-- Transport exact slice membership across explicit raw-stream and target-
+family equalities without unfolding either concrete endpoint. -/
+theorem transport_successfulOrdinaryExactTargetMember
+    (leftRaw rightRaw : SuccessfulTag73RawStream)
+    (leftTarget rightTarget : Tag73OrdinarySamplerSkeleton → Set QM31Exact)
+    (rawExact : leftRaw = rightRaw)
+    (targetExact : leftTarget = rightTarget)
+    (member : successfulOrdinaryExactValue leftRaw ∈
+      leftTarget (successfulOrdinaryExactFactorization leftRaw).1) :
+    successfulOrdinaryExactValue rightRaw ∈
+      rightTarget (successfulOrdinaryExactFactorization rightRaw).1 := by
+  subst rightRaw
+  subst rightTarget
+  exact member
+
 #print axioms mem_factorized_dependentProductEvent_of_value
+#print axioms transport_successfulOrdinaryExactTargetMember
 
 end
 
