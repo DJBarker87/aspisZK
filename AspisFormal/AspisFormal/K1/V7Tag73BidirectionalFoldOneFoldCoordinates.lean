@@ -76,6 +76,31 @@ def bidirectionalFoldOneFoldCoordinateRegroup
   left_inv _ := rfl
   right_inv _ := rfl
 
+/-- The single length cast from the compiler master tape to the five named
+fold/alpha slots plus residual tape.  Keeping this cast shared by the source
+router and probability equivalence makes their named coordinates
+definitionally identical. -/
+def bidirectionalFoldNamedSlotTapeEquiv
+    (parameters : ExactCompilerResourceParameters) :
+    FreshAnswerTape Digest256 (exactCompilerTargetCaps parameters).length ≃
+      FreshAnswerTape Digest256
+        ((Finset.univ : Finset FoldOneFoldDigestSlot).card +
+          ((exactCompilerTargetCaps parameters).length - 5)) :=
+  castFreshAnswerTape (by
+    rw [Finset.card_univ, fold_onefold_digest_slot_card]
+    exact (Nat.add_sub_of_le
+      (exact_compiler_tape_has_bidirectional_fold_onefold_capacity
+        parameters)).symm)
+
+def bidirectionalFoldNamedSlotInputTape
+    (parameters : ExactCompilerResourceParameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length) :
+    FreshAnswerTape Digest256
+      ((Finset.univ : Finset FoldOneFoldDigestSlot).card +
+        ((exactCompilerTargetCaps parameters).length - 5)) :=
+  bidirectionalFoldNamedSlotTapeEquiv parameters tape
+
 /-- Exact compiler tape as residual × (fold-work × four alpha blocks). -/
 def exactCompilerCausalBidirectionalFoldOneFoldCoordinates
     (parameters : ExactCompilerResourceParameters)
@@ -83,22 +108,73 @@ def exactCompilerCausalBidirectionalFoldOneFoldCoordinates
     FreshAnswerTape Digest256 (exactCompilerTargetCaps parameters).length ≃
       ExactCompilerBidirectionalFoldOneFoldResidual parameters ×
         (Digest256 × FourGammaBlocks) := by
-  let total := (exactCompilerTargetCaps parameters).length
-  have enough : 5 ≤ total :=
-    exact_compiler_tape_has_bidirectional_fold_onefold_capacity parameters
-  have totalEq : total = 5 + (total - 5) := by omega
-  have slotCard : Fintype.card FoldOneFoldDigestSlot = 5 :=
-    fold_onefold_digest_slot_card
   exact
-    (Equiv.cast (congrArg (FreshAnswerTape Digest256) totalEq)).trans
-      ((castFreshAnswerTape
-          (congrArg (fun count => count + (total - 5)) slotCard).symm
-        ).trans
-        (router.fullCoordinateEquiv.trans
-          ((Equiv.prodCongr foldOneFoldDigestSlotFunctionEquiv
-            (Equiv.refl (FreshAnswerTape Digest256 (total - 5)))).trans
-              (bidirectionalFoldOneFoldCoordinateRegroup
-                (FreshAnswerTape Digest256 (total - 5))))))
+    (bidirectionalFoldNamedSlotTapeEquiv parameters).trans
+      (router.fullCoordinateEquiv.trans
+        ((Equiv.prodCongr foldOneFoldDigestSlotFunctionEquiv
+          (Equiv.refl (FreshAnswerTape Digest256
+            ((exactCompilerTargetCaps parameters).length - 5)))).trans
+            (bidirectionalFoldOneFoldCoordinateRegroup
+              (FreshAnswerTape Digest256
+                ((exactCompilerTargetCaps parameters).length - 5)))))
+
+/-- The probability equivalence's named component is literally the named
+component read by the source router; no second cast or extensional transport
+remains between them. -/
+@[simp] theorem exactCompilerCausalBidirectionalFoldOneFoldCoordinates_apply
+    (parameters : ExactCompilerResourceParameters)
+    (router : ExactCompilerCausalBidirectionalFoldOneFoldRouter parameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length) :
+    exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+        tape =
+      ((router.fullCoordinateEquiv
+          (bidirectionalFoldNamedSlotInputTape parameters tape)).2,
+        foldOneFoldDigestSlotFunctionEquiv
+          ((router.fullCoordinateEquiv
+            (bidirectionalFoldNamedSlotInputTape parameters tape)).1)) := by
+  rfl
+
+/-- The fold component of the public product is the underlying router's
+`none` named slot. -/
+theorem bidirectional_fold_coordinate_eq_named_slot
+    (parameters : ExactCompilerResourceParameters)
+    (router : ExactCompilerCausalBidirectionalFoldOneFoldRouter parameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length) :
+    (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+      tape).2.1 =
+        (router.coordinateEquiv
+          (bidirectionalFoldNamedSlotInputTape parameters tape)).1
+            ⟨none, Finset.mem_univ none⟩ := by
+  simp only [exactCompilerCausalBidirectionalFoldOneFoldCoordinates,
+    bidirectionalFoldNamedSlotTapeEquiv,
+    bidirectionalFoldNamedSlotInputTape,
+    CausalSlotRouter.fullCoordinateEquiv, Equiv.trans_apply,
+    Equiv.prodCongr_apply, foldOneFoldDigestSlotFunctionEquiv,
+    bidirectionalFoldOneFoldCoordinateRegroup, univSubtypeEquiv]
+  rfl
+
+/-- Each alpha component of the public product is the underlying router's
+corresponding `some block` named slot. -/
+theorem bidirectional_alpha_coordinate_eq_named_slot
+    (parameters : ExactCompilerResourceParameters)
+    (router : ExactCompilerCausalBidirectionalFoldOneFoldRouter parameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (block : Fin 4) :
+    (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+      tape).2.2 block =
+        (router.coordinateEquiv
+          (bidirectionalFoldNamedSlotInputTape parameters tape)).1
+            ⟨some block, Finset.mem_univ (some block)⟩ := by
+  simp only [exactCompilerCausalBidirectionalFoldOneFoldCoordinates,
+    bidirectionalFoldNamedSlotTapeEquiv,
+    bidirectionalFoldNamedSlotInputTape,
+    CausalSlotRouter.fullCoordinateEquiv, Equiv.trans_apply,
+    Equiv.prodCongr_apply, foldOneFoldDigestSlotFunctionEquiv,
+    bidirectionalFoldOneFoldCoordinateRegroup, univSubtypeEquiv]
+  rfl
 
 def bidirectionalFoldAlphaInitialState
     {globalOracleCalls : Nat}
@@ -123,7 +199,11 @@ def exactCompilerBidirectionalFoldOneFoldRouter
 end
 
 #print axioms foldOneFoldDigestSlotFunctionEquiv
+#print axioms bidirectionalFoldNamedSlotTapeEquiv
 #print axioms exactCompilerCausalBidirectionalFoldOneFoldCoordinates
+#print axioms exactCompilerCausalBidirectionalFoldOneFoldCoordinates_apply
+#print axioms bidirectional_fold_coordinate_eq_named_slot
+#print axioms bidirectional_alpha_coordinate_eq_named_slot
 #print axioms exactCompilerBidirectionalFoldOneFoldRouter
 
 end AspisK1.V7Tag73BidirectionalFoldOneFoldCoordinates

@@ -95,21 +95,6 @@ def exactBidirectionalFoldRootLabels
     (exactBidirectionalFoldInitialState input)
     (exactFixedRootRecords input.package.root)
 
-/-- The master tape cast to the controller's five named destinations plus
-residual.  This is a length proof only and preserves chronological values. -/
-def bidirectionalFoldNamedSlotInputTape
-    (parameters : ExactCompilerResourceParameters)
-    (tape : FreshAnswerTape Digest256
-      (exactCompilerTargetCaps parameters).length) :
-    FreshAnswerTape Digest256
-      ((Finset.univ : Finset FoldOneFoldDigestSlot).card +
-        ((exactCompilerTargetCaps parameters).length - 5)) :=
-  castFreshAnswerTape (by
-    rw [Finset.card_univ, fold_onefold_digest_slot_card]
-    exact (Nat.add_sub_of_le
-      (exact_compiler_tape_has_bidirectional_fold_onefold_capacity
-        parameters)).symm) tape
-
 theorem bidirectional_fold_named_slot_input_tape_preserves_list
     (parameters : ExactCompilerResourceParameters)
     (tape : FreshAnswerTape Digest256
@@ -117,7 +102,7 @@ theorem bidirectional_fold_named_slot_input_tape_preserves_list
     freshAnswerTapeToList
         (bidirectionalFoldNamedSlotInputTape parameters tape) =
       freshAnswerTapeToList tape := by
-  unfold bidirectionalFoldNamedSlotInputTape
+  unfold bidirectionalFoldNamedSlotInputTape bidirectionalFoldNamedSlotTapeEquiv
   rw [fresh_answer_tape_to_list_cast]
 
 theorem exact_bidirectional_fold_root_labels_form_trace
