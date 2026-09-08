@@ -86,6 +86,7 @@ readonly WORK_DIR=$(mktemp -d "${TMPDIR:-/tmp}/aspis-v7-txv1-feature-cluster.XXX
 readonly LEDGER="$WORK_DIR/ledger"
 readonly PAYER="$WORK_DIR/disposable-payer.json"
 readonly SOURCE_AUTHORITY="$WORK_DIR/disposable-source-authority.json"
+readonly CU_TAIL_PROBE_KEYPAIR="$WORK_DIR/disposable-cu-tail-probe.json"
 VALIDATOR_PID=""
 
 cleanup() {
@@ -125,6 +126,19 @@ declare -a VALIDATOR_ARGS=(
   --reset --quiet --ledger "$LEDGER" --bind-address 127.0.0.1
   --rpc-port "$RPC_PORT" --warp-slot 150 --mint "$PAYER_PUBKEY"
 )
+if [[ -n "${ASPIS_V7_CU_TAIL_PROBE_GENESIS_BINARY:-}" ]]; then
+  [[ "${ASPIS_V7_CU_TAIL_PROBE_ACK:-}" == "I_ACKNOWLEDGE_LOCAL_ONLY_V7_CU_TAIL_PROBE" ]] \
+    || fail "missing exact local-only CU-tail-probe acknowledgement"
+  [[ "$ASPIS_V7_CU_TAIL_PROBE_GENESIS_BINARY" == /* \
+      && -f "$ASPIS_V7_CU_TAIL_PROBE_GENESIS_BINARY" ]] \
+    || fail "CU-tail probe genesis binary must be an absolute regular file"
+  NO_DNA=1 "$AGAVE_BIN_DIR/solana-keygen" new --no-bip39-passphrase --silent \
+    --force --outfile "$CU_TAIL_PROBE_KEYPAIR"
+  readonly CU_TAIL_PROBE_ID=$(NO_DNA=1 "$AGAVE_BIN_DIR/solana-keygen" pubkey \
+    "$CU_TAIL_PROBE_KEYPAIR")
+  VALIDATOR_ARGS+=(--bpf-program "$CU_TAIL_PROBE_ID" \
+    "$ASPIS_V7_CU_TAIL_PROBE_GENESIS_BINARY")
+fi
 if [[ -n "${ASPIS_TXV1_LIVE_GENESIS_PREPARER:-}" ]]; then
   while IFS=$'\t' read -r address account_file; do
     [[ "$account_file" == "$LIVE_GENESIS_DIR"/* && -f "$account_file" ]] \
@@ -273,6 +287,9 @@ if [[ $# -gt 0 ]]; then
   export ASPIS_TXV1_DISPOSABLE_PAYER_PUBKEY="$PAYER_PUBKEY"
   export ASPIS_TXV1_DISPOSABLE_SOURCE_AUTHORITY_KEYPAIR="$SOURCE_AUTHORITY"
   export ASPIS_TXV1_DISPOSABLE_AGAVE_BIN_DIR="$AGAVE_BIN_DIR"
+  if [[ -n "${CU_TAIL_PROBE_ID:-}" ]]; then
+    export ASPIS_TXV1_DISPOSABLE_CU_TAIL_PROBE_ID="$CU_TAIL_PROBE_ID"
+  fi
   "$@" >"$EVIDENCE_DIR/child.stdout" 2>"$EVIDENCE_DIR/child.stderr"
 fi
 
