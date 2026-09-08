@@ -6,6 +6,7 @@ import AspisFormal.K1.V7Tag73NoPairOccurrenceTrichotomy
 import AspisFormal.K1.V7Tag73CumulativeReplayHistory
 import AspisFormal.K1.V7Tag73NoPairReplay
 import AspisFormal.K1.V7Tag73ExactCompilerTargetClean
+import AspisFormal.K1.V7Tag73SchedulerNativeForkPairReplay
 
 /-!
 # Root squeeze preparation reaches the real fork cursor
@@ -44,6 +45,8 @@ open AspisK1.V7Tag73RawSameTapeSource
 open AspisK1.V7Tag73RawStrictReplacementSuffix
 open AspisK1.V7Tag73RootSqueezePreparationClosure
 open AspisK1.V7Tag73SchedulerNativePlainRomExperiment
+open AspisK1.V7Tag73SchedulerNativeForkPairReplay
+open AspisK1.V7Tag73SchedulerNativePrefixTraversal
 open AspisK1.V7Tag73SchedulerNativeResult
 open AspisK1.V7Tag73SequentialOracleRuns
 open AspisK1.V7Tag73TotalizedMachineReflection
@@ -188,6 +191,88 @@ theorem program_concrete_pair_succeeds_from_empty_ledger
       simp only [Bool.false_eq_true, if_false]
       simp only [advanceExact]
       rw [outputExact]
+
+/-- Successful programming changes neither query history nor query counters,
+so it preserves the scheduler coherence invariant exactly. -/
+theorem program_concrete_pair_ready_preserves_history_total_coherent
+    (limits : OracleLimits) (order : PairProgrammingOrder)
+    (state afterBoth : OracleState) (outputInput advanceInput : ShaInput)
+    (forkOutput forkAdvance : Digest256)
+    (coherent : HistoryTotalCoherent state)
+    (ready : programConcretePair limits order state outputInput advanceInput
+      forkOutput forkAdvance = .ready afterBoth) :
+    HistoryTotalCoherent afterBoth := by
+  have installed := program_concrete_pair_ready_installs_exact_coordinates
+    limits order state afterBoth outputInput advanceInput forkOutput forkAdvance
+      ready
+  unfold HistoryTotalCoherent at coherent ⊢
+  rw [installed.historyUnchanged, installed.totalCallsUnchanged]
+  exact coherent
+
+/-- Observable entry condition for the real post-pair prover-replay cursor. -/
+inductive ExtractorReplayMachineAt
+    {globalOracleCalls : Nat} {Result : Type u}
+    (expected : OracleState) :
+    SchedulerNativeCursor globalOracleCalls Result → Prop where
+  | here
+      {MachineResult : Type u}
+      (limits : OracleLimits)
+      (limitBound : limits.totalCalls ≤ globalOracleCalls)
+      (program : OracleMachine MachineResult)
+      (fuel : Nat)
+      (coherent : HistoryTotalCoherent expected)
+      (onReturned : (result : MachineResult) → (state : OracleState) →
+        HistoryTotalCoherent state →
+          SchedulerNativeCursor globalOracleCalls Result) :
+      ExtractorReplayMachineAt expected
+        (.machine limits limitBound .extractorReplay expected program fuel
+          coherent onReturned)
+
+/-- Feeding a successfully programmed pair to the actual prepared dispatcher
+enters its literal from-start prover replay at the exact programmed oracle.
+No abstract callback or replacement dispatcher is used. -/
+theorem dispatch_prepared_pair_prefix_enters_exact_prover_replay
+    {Statement Proof Payload Result : Type u}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (prepared : PreparedConcreteRestoration Statement Proof Payload)
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result))
+    (forkOutput forkAdvance : Digest256)
+    (afterBoth : OracleState)
+    (prefixCoherent : HistoryTotalCoherent prepared.programmingBase)
+    (globalLimit : configuration.oracleLimits.totalCalls ≤ globalOracleCalls)
+    (pairRoom : prepared.programmingBase.history.length + 2 ≤
+      globalOracleCalls)
+    (programmed : programConcretePair configuration.oracleLimits
+      configuration.pairProgrammingOrder prepared.programmingBase
+      prepared.outputInput prepared.advanceInput forkOutput forkAdvance =
+        .ready afterBoth)
+    (proverRoom : StageHasOracleRoom configuration.oracleLimits afterBoth
+      configuration.proverReplayFuel) :
+    ExtractorReplayMachineAt afterBoth
+      (schedulerNativePrefixCursor 1
+        (dispatchPreparedRestoration startProgram environment configuration
+          prepared accumulator resume) [forkOutput, forkAdvance]) := by
+  have afterCoherent :=
+    program_concrete_pair_ready_preserves_history_total_coherent
+      configuration.oracleLimits configuration.pairProgrammingOrder
+      prepared.programmingBase afterBoth prepared.outputInput
+      prepared.advanceInput forkOutput forkAdvance prefixCoherent programmed
+  unfold dispatchPreparedRestoration
+  rw [dif_pos prefixCoherent, dif_pos globalLimit, dif_pos pairRoom]
+  rw [scheduler_native_prefix_cursor_fork_pair_exact 0]
+  simp only [canonical_scheduled_fork_uses_exact_coordinates]
+  rw [programmed]
+  simp only
+  rw [dif_pos afterCoherent, dif_pos proverRoom]
+  exact .here _ _ _ _ _ _
 
 theorem successful_query_preserves_history_total_coherent
     (controller : AdaptiveController) (limits : OracleLimits)
@@ -702,6 +787,9 @@ theorem literal_root_squeeze_dispatch_emits_typed_fork
 #print axioms run_machine_preserves_history_total_coherent
 #print axioms pair_lookups_none_of_query_absent_and_programming_empty
 #print axioms program_concrete_pair_succeeds_from_empty_ledger
+#print axioms program_concrete_pair_ready_preserves_history_total_coherent
+#print axioms ExtractorReplayMachineAt
+#print axioms dispatch_prepared_pair_prefix_enters_exact_prover_replay
 #print axioms schedulerNativePairForkHeader?
 #print axioms dispatch_prepared_restoration_emits_pair_fork_header
 #print axioms literal_root_squeeze_request_prepares_ready_coherent
