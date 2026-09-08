@@ -20,7 +20,10 @@ use aspis_pool_wallet_v1::{
     lane_forest_rpc_v2::FinalizedForestAccountV2,
     lane_forest_transaction_v1::{
         build_exact_pair_forest_v1_carrier_transaction_v2,
+        build_initialize_terminal_pda_certificate_instruction_v1_4k_v2,
         build_pair_forest_terminal_instruction_v1_4k_v2,
+        build_pair_forest_terminal_instruction_with_pda_certificate_v1_4k_v3,
+        build_pair_forest_terminal_pda_certificate_v1_4k_v2,
         validate_signed_pair_forest_v1_carrier_transaction_v2, PairForestV1TransactionConfigV2,
     },
     tx_v1_ciphertext_carrier_v2::TxV1CiphertextCarrierV2,
@@ -32,7 +35,8 @@ use aspis_statement::{
         decode_pool_v1_pair_forest_terminal_request_v1, pool_v1_pair_forest_output_lane_v1,
         root_history_location, PoolV1PairForestLaneStateV1, PoolV1PairForestTerminalPaymentV1,
         PoolV1PairForestTerminalRequestV1, POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
-        V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING, V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
+        POOL_V1_TERMINAL_PDA_CERTIFICATE_ACCOUNT_BYTES, V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+        V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
     },
 };
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
@@ -41,11 +45,13 @@ use serde::Deserialize;
 use serde_json::json;
 use sha2::{Digest as _, Sha256};
 use solana_keypair::read_keypair_file;
+use solana_message::{legacy, VersionedMessage};
 use solana_message_v1::VersionedMessage as V1VersionedMessage;
-use solana_program::pubkey::Pubkey;
+use solana_program::{hash::Hash, pubkey::Pubkey, system_instruction};
 use solana_sdk_ids::bpf_loader_upgradeable;
 use solana_signature_v1::Signature as V1Signature;
 use solana_signer::Signer;
+use solana_transaction::versioned::VersionedTransaction;
 use solana_transaction_v1::versioned::VersionedTransaction as V1VersionedTransaction;
 
 struct OsEntropy;
@@ -81,6 +87,8 @@ struct Input {
     carrier_test_mode: Option<String>,
     withdrawal_cpi_test_mode: Option<String>,
     compute_unit_limit: Option<u32>,
+    terminal_pda_certificate_keypair: Option<String>,
+    terminal_pda_certificate_rent_lamports: Option<u64>,
 }
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -169,12 +177,10 @@ fn resolve(base: &Path, value: &str) -> PathBuf {
 
 const CREATE_PROGRAM_ADDRESS_CU: u64 = 1_500;
 
-fn pda_attempts_from_bump(bump: u8) -> Result<u16> {
-    ensure!(
-        bump > 0,
-        "successful on-chain find_program_address cannot return bump zero"
-    );
-    Ok(256u16 - u16::from(bump))
+fn pda_attempts_from_bump(bump: u8) -> u16 {
+    // The canonical descending search includes bump zero. A successful zero
+    // is the complete 256-attempt path, not an invalid state.
+    256u16 - u16::from(bump)
 }
 
 fn expected_terminal_pda_invocations(withdrawal: bool, rollover: bool) -> u64 {
@@ -183,6 +189,18 @@ fn expected_terminal_pda_invocations(withdrawal: bool, rollover: bool) -> u64 {
         (false, true) => 19,
         (true, false) => 20,
         (true, true) => 21,
+    }
+}
+
+fn expected_terminal_single_attempts(withdrawal: bool, rollover: bool) -> u64 {
+    // Pool: marker twice, plus vault authority/token for withdrawals.
+    // Verifier certificate: nine required identities, plus next page for
+    // rollover and vault authority/token for withdrawal.
+    match (withdrawal, rollover) {
+        (false, false) => 11,
+        (false, true) => 12,
+        (true, false) => 15,
+        (true, true) => 16,
     }
 }
 
@@ -198,6 +216,7 @@ fn terminal_pda_search_audit(
     profile: PairForestSpendProfileSelectionV2,
     request: &PoolV1PairForestTerminalRequestV1,
     terminal_accounts: &[Pubkey],
+    pda_closure: bool,
 ) -> Result<serde_json::Value> {
     ensure!(
         profile.registry_family == PairForestVerifierRegistryFamilyV2::ImmutableDeploymentV2,
@@ -309,7 +328,7 @@ fn terminal_pda_search_audit(
     let mut total_weighted_attempts = 0u64;
     let mut push =
         |label: &str, address: Pubkey, bump: u8, runtime_invocations: u64| -> Result<()> {
-            let attempts = u64::from(pda_attempts_from_bump(bump)?);
+            let attempts = u64::from(pda_attempts_from_bump(bump));
             let weighted_attempts = attempts * runtime_invocations;
             total_runtime_invocations += runtime_invocations;
             total_weighted_attempts += weighted_attempts;
@@ -379,16 +398,32 @@ fn terminal_pda_search_audit(
         total_runtime_invocations == expected_runtime_invocations,
         "PDA runtime inventory drift"
     );
+    let fixed_attempts = expected_terminal_single_attempts(withdrawal, rollover);
     Ok(json!({
-        "schema":"aspis.v7.terminal-pda-search-audit.v1",
+        "schema":"aspis.v7.terminal-pda-search-audit.v2",
         "registryFamily":"immutable-v2",
         "rollover":rollover,
         "withdrawal":withdrawal,
+        "terminalMode":if pda_closure {"authenticated-fixed-bump-certificate"} else {"legacy-runtime-search"},
         "createProgramAddressCuPerAttempt":CREATE_PROGRAM_ADDRESS_CU,
         "records":records,
-        "runtimeInvocations":total_runtime_invocations,
-        "weightedAttempts":total_weighted_attempts,
-        "pdaSearchSyscallCu":total_weighted_attempts * CREATE_PROGRAM_ADDRESS_CU,
+        "identitySpecificLegacySearchReference":{
+            "runtimeInvocations":total_runtime_invocations,
+            "weightedAttempts":total_weighted_attempts,
+            "pdaSearchSyscallCu":total_weighted_attempts * CREATE_PROGRAM_ADDRESS_CU,
+        },
+        "terminalVariableFindProgramAddressInvocations":if pda_closure {0} else {total_runtime_invocations},
+        "terminalSingleAttemptValidations":if pda_closure {fixed_attempts} else {0},
+        "terminalPdaSyscallCu":if pda_closure {
+            fixed_attempts * CREATE_PROGRAM_ADDRESS_CU
+        } else {
+            total_weighted_attempts * CREATE_PROGRAM_ADDRESS_CU
+        },
+        "terminalPdaSyscallTheoreticalMaximumCu":if pda_closure {
+            fixed_attempts * CREATE_PROGRAM_ADDRESS_CU
+        } else {
+            total_runtime_invocations * 256 * CREATE_PROGRAM_ADDRESS_CU
+        },
     }))
 }
 
@@ -398,13 +433,17 @@ mod tests {
 
     #[test]
     fn pda_attempts_and_terminal_call_shapes_are_exact() {
-        assert_eq!(pda_attempts_from_bump(255).unwrap(), 1);
-        assert_eq!(pda_attempts_from_bump(1).unwrap(), 255);
-        assert!(pda_attempts_from_bump(0).is_err());
+        assert_eq!(pda_attempts_from_bump(255), 1);
+        assert_eq!(pda_attempts_from_bump(1), 255);
+        assert_eq!(pda_attempts_from_bump(0), 256);
         assert_eq!(expected_terminal_pda_invocations(false, false), 18);
         assert_eq!(expected_terminal_pda_invocations(false, true), 19);
         assert_eq!(expected_terminal_pda_invocations(true, false), 20);
         assert_eq!(expected_terminal_pda_invocations(true, true), 21);
+        assert_eq!(expected_terminal_single_attempts(false, false), 11);
+        assert_eq!(expected_terminal_single_attempts(false, true), 12);
+        assert_eq!(expected_terminal_single_attempts(true, false), 15);
+        assert_eq!(expected_terminal_single_attempts(true, true), 16);
     }
 }
 
@@ -441,6 +480,7 @@ fn main() -> Result<()> {
     ensure!(
         (input.schema == "aspis.v7.live-transfer-terminal-input.v1"
             || input.schema == "aspis.v7.live-terminal-input.v1"
+            || input.schema == "aspis.v7.live-terminal-pda-closure-input.v1"
             || input.schema == "aspis.v7.live-terminal-malformed-carrier-test-input.v1"
             || input.schema == "aspis.v7.live-terminal-withdrawal-cpi-failure-test-input.v1")
             && input.min_context_slot > 0,
@@ -459,6 +499,16 @@ fn main() -> Result<()> {
     ensure!(
         !(malformed_carrier_test && withdrawal_cpi_compute_exhaustion_test),
         "terminal negative-test modes are mutually exclusive"
+    );
+    let pda_closure = input.schema == "aspis.v7.live-terminal-pda-closure-input.v1";
+    ensure!(
+        pda_closure == input.terminal_pda_certificate_keypair.is_some()
+            && pda_closure == input.terminal_pda_certificate_rent_lamports.is_some(),
+        "PDA closure schema requires exactly one certificate keypair and rent value"
+    );
+    ensure!(
+        !pda_closure || cfg!(feature = "v7-terminal-pda-certificate-audit"),
+        "PDA closure input requires the default-off v7-terminal-pda-certificate-audit feature"
     );
     let compute_unit_limit = if withdrawal_cpi_compute_exhaustion_test {
         let limit = input
@@ -535,16 +585,101 @@ fn main() -> Result<()> {
     let payer =
         read_keypair_file(&input.payer_keypair).map_err(|e| anyhow::anyhow!("payer: {e}"))?;
     let proof = Pubkey::from_str(&bundle.proof_account)?;
-    let terminal = build_pair_forest_terminal_instruction_v1_4k_v2(
-        program,
-        &master.value,
-        &lane.value,
-        profile,
-        payer.pubkey(),
-        proof,
-        &request,
-    )
-    .map_err(|e| anyhow::anyhow!("terminal instruction: {e:?}"))?;
+    let (terminal, pda_closure_initialization) = if pda_closure {
+        let certificate_path = resolve(
+            input_path.parent().unwrap_or(Path::new(".")),
+            input
+                .terminal_pda_certificate_keypair
+                .as_deref()
+                .context("missing certificate keypair")?,
+        );
+        let certificate_keypair = read_keypair_file(&certificate_path)
+            .map_err(|e| anyhow::anyhow!("certificate keypair: {e}"))?;
+        ensure!(
+            certificate_keypair.pubkey() != payer.pubkey() && certificate_keypair.pubkey() != proof,
+            "certificate key aliases payer or proof"
+        );
+        let certificate = build_pair_forest_terminal_pda_certificate_v1_4k_v2(
+            program,
+            &master.value,
+            &lane.value,
+            profile,
+            proof,
+            &request,
+        )
+        .map_err(|e| anyhow::anyhow!("build PDA certificate: {e:?}"))?;
+        let initialize = build_initialize_terminal_pda_certificate_instruction_v1_4k_v2(
+            certificate_keypair.pubkey(),
+            &certificate,
+        )
+        .map_err(|e| anyhow::anyhow!("build PDA certificate initialization: {e:?}"))?;
+        let rent = input
+            .terminal_pda_certificate_rent_lamports
+            .context("missing certificate rent")?;
+        ensure!(rent > 0, "certificate rent must be positive");
+        let create = system_instruction::create_account(
+            &payer.pubkey(),
+            &certificate_keypair.pubkey(),
+            rent,
+            POOL_V1_TERMINAL_PDA_CERTIFICATE_ACCOUNT_BYTES as u64,
+            &Pubkey::new_from_array(certificate.verifier_program),
+        );
+        let blockhash = Hash::from_str(&input.recent_blockhash).context("invalid blockhash")?;
+        let message = VersionedMessage::Legacy(legacy::Message::new_with_blockhash(
+            &[create, initialize],
+            Some(&payer.pubkey()),
+            &blockhash,
+        ));
+        let transaction = VersionedTransaction::try_new(message, &[&payer, &certificate_keypair])
+            .map_err(|e| anyhow::anyhow!("sign certificate initialization: {e}"))?;
+        let wire = bincode::serialize(&transaction)?;
+        ensure!(
+            wire.len() < 1_232,
+            "certificate initialization exceeds legacy envelope"
+        );
+        let wire_base64 = BASE64.encode(&wire);
+        let initialization = json!({
+            "schema":"aspis.v7.terminal-pda-certificate-initialization-signed.v1",
+            "certificateAccount":certificate_keypair.pubkey().to_string(),
+            "proofAccount":proof.to_string(),
+            "serializedTransactionBytes":wire.len(),
+            "signedWireSha256":format!("{:x}",Sha256::digest(&wire)),
+            "signature":transaction.signatures[0].to_string(),
+            "simulationRequest":{"jsonrpc":"2.0","id":input.request_id+200_000,
+                "method":"simulateTransaction","params":[wire_base64,{"encoding":"base64",
+                "commitment":"finalized","sigVerify":true,"replaceRecentBlockhash":false,
+                "minContextSlot":input.min_context_slot}]},
+            "sendRequest":{"jsonrpc":"2.0","id":input.request_id+300_000,
+                "method":"sendTransaction","params":[wire_base64,{"encoding":"base64",
+                "skipPreflight":true,"preflightCommitment":"finalized","maxRetries":0,
+                "minContextSlot":input.min_context_slot}]}
+        });
+        let terminal = build_pair_forest_terminal_instruction_with_pda_certificate_v1_4k_v3(
+            program,
+            &master.value,
+            &lane.value,
+            profile,
+            payer.pubkey(),
+            proof,
+            certificate_keypair.pubkey(),
+            &certificate,
+            &request,
+        )
+        .map_err(|e| anyhow::anyhow!("terminal instruction with PDA certificate: {e:?}"))?;
+        (terminal, Some(initialization))
+    } else {
+        let terminal = build_pair_forest_terminal_instruction_v1_4k_v2(
+            program,
+            &master.value,
+            &lane.value,
+            profile,
+            payer.pubkey(),
+            proof,
+            &request,
+        )
+        .map_err(|e| anyhow::anyhow!("terminal instruction: {e:?}"))?;
+        (terminal, None)
+    };
     let terminal_account_pubkeys = terminal
         .accounts
         .iter()
@@ -563,6 +698,7 @@ fn main() -> Result<()> {
         profile,
         &request,
         &terminal_account_pubkeys,
+        pda_closure,
     )?;
     let marker_account = aspis_pool::pool_v1_nullifier_marker_address(
         &program,
@@ -744,6 +880,8 @@ fn main() -> Result<()> {
         "carrierTestMode":input.carrier_test_mode,
         "withdrawalCpiTestMode":input.withdrawal_cpi_test_mode,
         "computeUnitLimit":compute_unit_limit,
+        "terminalPdaClosureEnabled":pda_closure,
+        "pdaCertificateInitialization":pda_closure_initialization,
         "pdaSearchAudit":pda_search_audit,
         "terminalAccounts":terminal_accounts,"markerAccount":marker_account,
         "simulationRequest":{"jsonrpc":"2.0","id":input.request_id,"method":"simulateTransaction","params":[wire64,{"encoding":"base64","commitment":"finalized","sigVerify":true,"replaceRecentBlockhash":false,"minContextSlot":input.min_context_slot,"innerInstructions":true}]},

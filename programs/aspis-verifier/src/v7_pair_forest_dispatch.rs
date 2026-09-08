@@ -29,10 +29,10 @@ use aspis_statement::pool_v1::{
     PoolV1PairForestLaneStateV1, PoolV1PairForestMasterV1, PoolV1PairForestTerminalCommonV1,
     PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalResultV1,
     PoolV1PairForestTerminalStatementV1, PoolV1PairLatePublicStatementV1, PoolV1PairLiveSnapshotV1,
-    POOL_V1_PAIR_FOREST_ALL_LANES_MASK, POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES,
-    POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
-    V7_POOL_NATIVE_TAG73_MIN_FRONTIER_NODES, V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
-    V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
+    PoolV1TerminalPdaCertificateV1, POOL_V1_PAIR_FOREST_ALL_LANES_MASK,
+    POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES, POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES,
+    POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES, V7_POOL_NATIVE_TAG73_MIN_FRONTIER_NODES,
+    V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING, V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
 };
 #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
 use aspis_statement::pool_v1::{
@@ -173,6 +173,7 @@ fn authenticate_invariant_release_registry_v1(
     master: &PoolV1PairForestMasterV1,
     registry_account: &AccountInfo<'_>,
     entry_account: &AccountInfo<'_>,
+    certificate: Option<&PoolV1TerminalPdaCertificateV1>,
 ) -> ProgramResult {
     authenticate_invariant_release_registry_at_slot_v1(
         verifier_program,
@@ -181,6 +182,7 @@ fn authenticate_invariant_release_registry_v1(
         master,
         registry_account,
         entry_account,
+        certificate,
         Clock::get()?.slot,
     )
 }
@@ -194,6 +196,7 @@ fn authenticate_invariant_release_registry_at_slot_v1(
     master: &PoolV1PairForestMasterV1,
     registry_account: &AccountInfo<'_>,
     entry_account: &AccountInfo<'_>,
+    certificate: Option<&PoolV1TerminalPdaCertificateV1>,
     current_slot: u64,
 ) -> ProgramResult {
     if pool_program.to_bytes() != PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1
@@ -211,8 +214,15 @@ fn authenticate_invariant_release_registry_at_slot_v1(
     require_readonly_account(registry_account, &registry_program)?;
     let immutable_deployment =
         master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    if !immutable_deployment || certificate.is_none() {
+        return Err(ProgramError::InvalidAccountData);
+    }
     if immutable_deployment {
         let loader = bpf_loader_upgradeable::id();
+        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+        let expected_registry = Pubkey::new_from_array(certificate.unwrap().registry);
+        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let expected_registry = Pubkey::find_program_address(
             &[VERIFIER_REGISTRY_V2_SEED, master_account.key.as_ref()],
             &registry_program,
@@ -223,6 +233,10 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         }
         let registry = decode_verifier_registry_v2(&registry_account.try_borrow_data()?)
             .map_err(|_| ProgramError::InvalidAccountData)?;
+        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+        let registry_programdata =
+            Pubkey::new_from_array(certificate.unwrap().registry_programdata);
+        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let registry_programdata =
             Pubkey::find_program_address(&[registry_program.as_ref()], &loader).0;
         if registry.pool != master_account.key.to_bytes()
@@ -238,6 +252,9 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         }
 
         require_readonly_account(entry_account, &registry_program)?;
+        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+        let expected_entry = Pubkey::new_from_array(certificate.unwrap().registry_entry);
+        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let expected_entry = Pubkey::find_program_address(
             &[
                 VERIFIER_ENTRY_V2_SEED,
@@ -253,6 +270,10 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         }
         let entry = decode_verifier_registry_entry_v2(&entry_account.try_borrow_data()?)
             .map_err(|_| ProgramError::InvalidAccountData)?;
+        #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+        let verifier_programdata =
+            Pubkey::new_from_array(certificate.unwrap().verifier_programdata);
+        #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
         let verifier_programdata =
             Pubkey::find_program_address(&[verifier_program.as_ref()], &loader).0;
         if entry.pool != master_account.key.to_bytes()
@@ -271,16 +292,23 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         return Ok(());
     }
 
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    return Err(ProgramError::InvalidAccountData);
+
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let expected_registry = Pubkey::find_program_address(
         &[VERIFIER_REGISTRY_SEED, master_account.key.as_ref()],
         &registry_program,
     )
     .0;
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if registry_account.key != &expected_registry {
         return Err(ProgramError::InvalidAccountData);
     }
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let registry = decode_verifier_registry_v1(&registry_account.try_borrow_data()?)
         .map_err(|_| ProgramError::InvalidAccountData)?;
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if registry.pool != master_account.key.to_bytes()
         || registry.authority != master.verifier_policy.registry_authority
         || registry.policy_binding != master.verifier_policy.policy_binding
@@ -290,7 +318,9 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         return Err(ProgramError::InvalidAccountData);
     }
 
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     require_readonly_account(entry_account, &registry_program)?;
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let expected_entry = Pubkey::find_program_address(
         &[
             VERIFIER_ENTRY_SEED,
@@ -301,11 +331,14 @@ fn authenticate_invariant_release_registry_at_slot_v1(
         &registry_program,
     )
     .0;
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if entry_account.key != &expected_entry {
         return Err(ProgramError::InvalidAccountData);
     }
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     let entry = decode_verifier_registry_entry_v1(&entry_account.try_borrow_data()?)
         .map_err(|_| ProgramError::InvalidAccountData)?;
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     if entry.pool != master_account.key.to_bytes()
         || entry.policy_binding != PAIR_FOREST_INVARIANT_POLICY_BINDING_AUDIT_V1
         || entry.verifier_program != verifier_program.to_bytes()
@@ -316,6 +349,7 @@ fn authenticate_invariant_release_registry_at_slot_v1(
     {
         return Err(ProgramError::InvalidAccountData);
     }
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
     Ok(())
 }
 
@@ -449,7 +483,23 @@ fn authenticate_asq8_accounts_v1(
     pool_program: &Pubkey,
     output_lane: u8,
 ) -> Result<AuthenticatedV7PairForestAsq8AccountsV1, ProgramError> {
-    #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
+    #[cfg(all(
+        feature = "v7-pair-forest-lane-invariant-audit",
+        feature = "v7-terminal-pda-certificate-audit"
+    ))]
+    let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, certificate_account] =
+        accounts
+    else {
+        return Err(if accounts.len() < 7 {
+            ProgramError::NotEnoughAccountKeys
+        } else {
+            ProgramError::InvalidArgument
+        });
+    };
+    #[cfg(all(
+        feature = "v7-pair-forest-lane-invariant-audit",
+        not(feature = "v7-terminal-pda-certificate-audit")
+    ))]
     let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account] =
         accounts
     else {
@@ -472,7 +522,22 @@ fn authenticate_asq8_accounts_v1(
     require_readonly_account(master_account, pool_program)?;
     require_readonly_account(checkpoint_account, pool_program)?;
     require_readonly_account(lane_account, pool_program)?;
-    #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    require_readonly_account(certificate_account, verifier_program)?;
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    require_distinct_accounts(&[
+        proof_account,
+        master_account,
+        checkpoint_account,
+        lane_account,
+        registry_account,
+        entry_account,
+        certificate_account,
+    ])?;
+    #[cfg(all(
+        feature = "v7-pair-forest-lane-invariant-audit",
+        not(feature = "v7-terminal-pda-certificate-audit")
+    ))]
     require_distinct_accounts(&[
         proof_account,
         master_account,
@@ -489,17 +554,49 @@ fn authenticate_asq8_accounts_v1(
         lane_account,
     ])?;
 
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    let certificate = aspis_statement::pool_v1::decode_pool_v1_terminal_pda_certificate_v1(
+        &certificate_account.try_borrow_data()?,
+    )
+    .map_err(|_| ProgramError::InvalidAccountData)?;
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    {
+        crate::v7_terminal_pda_certificate::validate_terminal_pda_certificate_single_attempt_v1(
+            &certificate,
+        )?;
+        if certificate.proof_account != proof_account.key.to_bytes()
+            || certificate.pool_program != pool_program.to_bytes()
+            || certificate.master != master_account.key.to_bytes()
+            || certificate.checkpoint != checkpoint_account.key.to_bytes()
+            || certificate.selected_lane != lane_account.key.to_bytes()
+            || certificate.lane_id != output_lane
+            || certificate.registry_program != PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1
+            || certificate.registry != registry_account.key.to_bytes()
+            || certificate.registry_entry != entry_account.key.to_bytes()
+            || certificate.verifier_program != verifier_program.to_bytes()
+            || certificate.profile_binding != V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING
+            || certificate.release_binding != V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING
+        {
+            return Err(ProgramError::InvalidAccountData);
+        }
+    }
+
     let master = decode_master_box(&master_account.try_borrow_data()?)?;
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    let master_address_matches = certificate.asset_mint == master.identity.asset_mint
+        && certificate.master == master_account.key.to_bytes();
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
+    let master_address_matches = Pubkey::find_program_address(
+        &[
+            PAIR_FOREST_MASTER_SEED,
+            Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
+        ],
+        pool_program,
+    )
+    .0 == *master_account.key;
     if master.identity.pool != master_account.key.to_bytes()
         || master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK
-        || Pubkey::find_program_address(
-            &[
-                PAIR_FOREST_MASTER_SEED,
-                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
-            ],
-            pool_program,
-        )
-        .0 != *master_account.key
+        || !master_address_matches
     {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -511,36 +608,56 @@ fn authenticate_asq8_accounts_v1(
         &master,
         registry_account,
         entry_account,
+        {
+            #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+            {
+                Some(&certificate)
+            }
+            #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
+            {
+                None
+            }
+        },
     )?;
 
     let checkpoint = decode_checkpoint_box(&checkpoint_account.try_borrow_data()?)?;
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    let checkpoint_address_matches = certificate.checkpoint_sequence
+        == checkpoint.checkpoint_sequence
+        && certificate.checkpoint == checkpoint_account.key.to_bytes();
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
+    let checkpoint_address_matches = Pubkey::find_program_address(
+        &[
+            PAIR_FOREST_CHECKPOINT_SEED,
+            master_account.key.as_ref(),
+            &checkpoint.checkpoint_sequence.to_le_bytes(),
+        ],
+        pool_program,
+    )
+    .0 == *checkpoint_account.key;
     if checkpoint.master != master_account.key.to_bytes()
         || checkpoint.deployment_domain != master.identity.deployment_domain
-        || Pubkey::find_program_address(
-            &[
-                PAIR_FOREST_CHECKPOINT_SEED,
-                master_account.key.as_ref(),
-                &checkpoint.checkpoint_sequence.to_le_bytes(),
-            ],
-            pool_program,
-        )
-        .0 != *checkpoint_account.key
+        || !checkpoint_address_matches
     {
         return Err(ProgramError::InvalidAccountData);
     }
 
     let selected_lane = decode_lane_box(&lane_account.try_borrow_data()?)?;
+    #[cfg(feature = "v7-terminal-pda-certificate-audit")]
+    let lane_address_matches = certificate.selected_lane == lane_account.key.to_bytes();
+    #[cfg(not(feature = "v7-terminal-pda-certificate-audit"))]
+    let lane_address_matches = Pubkey::find_program_address(
+        &[
+            PAIR_FOREST_LANE_SEED,
+            master_account.key.as_ref(),
+            &[output_lane],
+        ],
+        pool_program,
+    )
+    .0 == *lane_account.key;
     if selected_lane.master != master_account.key.to_bytes()
         || selected_lane.lane_id != output_lane
-        || Pubkey::find_program_address(
-            &[
-                PAIR_FOREST_LANE_SEED,
-                master_account.key.as_ref(),
-                &[output_lane],
-            ],
-            pool_program,
-        )
-        .0 != *lane_account.key
+        || !lane_address_matches
     {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -2057,6 +2174,7 @@ mod tests {
                 &master,
                 &registry_account,
                 &entry_account,
+                None,
                 current_slot,
             )
         };

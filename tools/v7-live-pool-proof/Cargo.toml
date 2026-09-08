@@ -11,6 +11,13 @@ publish = false
 # honest-prover nonce selection feature; verifier, Pool, statement, and wire
 # dependencies are unchanged.
 v7-final-nonce-cutoff-audit = ["aspis-prover/v7-final-nonce-cutoff-audit"]
+# Default-off terminal PDA closure. Canonical search is moved into a one-time
+# verifier-owned certificate initialization; the terminal path uses only fixed
+# single-attempt derivations.
+v7-terminal-pda-certificate-audit = [
+    "aspis-pool/pair-forest-terminal-pda-certificate-audit",
+    "aspis-verifier/v7-terminal-pda-certificate-audit",
+]
 
 [dependencies]
 anyhow = "1.0.100"

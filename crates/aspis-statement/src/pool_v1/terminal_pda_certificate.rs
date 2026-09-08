@@ -69,7 +69,6 @@ pub enum PoolV1TerminalPdaCertificateErrorV1 {
     InvalidLane,
     NonCanonicalNullifier,
     InvalidOptionalIdentity,
-    InvalidBump,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -152,8 +151,13 @@ impl PoolV1TerminalPdaCertificateV1 {
                 || ((index == POOL_V1_TERMINAL_PDA_BUMP_VAULT_AUTHORITY
                     || index == POOL_V1_TERMINAL_PDA_BUMP_VAULT_TOKEN)
                     && !self.withdrawal());
-            if (optional_absent && bump != 0) || (!optional_absent && bump == 0) {
-                return Err(PoolV1TerminalPdaCertificateErrorV1::InvalidBump);
+            // A canonical Solana PDA bump can be any u8, including zero.  A
+            // required bump is therefore canonical only after the owning
+            // verifier has recomputed the exact `(address, bump)` pair.  The
+            // codec constrains only absent optional slots to their unique
+            // zero representation.
+            if optional_absent && bump != 0 {
+                return Err(PoolV1TerminalPdaCertificateErrorV1::InvalidOptionalIdentity);
             }
         }
         Ok(())
@@ -323,12 +327,9 @@ mod tests {
             decode_pool_v1_terminal_pda_certificate_v1(&changed),
             Err(PoolV1TerminalPdaCertificateErrorV1::NonZeroReserved)
         );
-        let mut changed = encoded;
-        changed[BUMPS_OFFSET] = 0;
-        assert_eq!(
-            decode_pool_v1_terminal_pda_certificate_v1(&changed),
-            Err(PoolV1TerminalPdaCertificateErrorV1::InvalidBump)
-        );
+        let mut zero_bump = value;
+        zero_bump.bumps[POOL_V1_TERMINAL_PDA_BUMP_MASTER] = 0;
+        assert!(encode_pool_v1_terminal_pda_certificate_v1(&zero_bump).is_ok());
     }
 
     #[test]

@@ -93,6 +93,61 @@ pub fn plan_nullifier_marker_consumption_v1(
     let canonical_nullifier = marker.canonical_nullifier_encoding();
     let (expected_address, address_bump) =
         pool_v1_nullifier_marker_address(program_id, &pool, &canonical_nullifier)?;
+    plan_nullifier_marker_for_authenticated_address_v1(
+        program_id,
+        marker_account,
+        marker,
+        encoded_marker,
+        expected_address,
+        address_bump,
+    )
+}
+
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+pub(crate) fn plan_nullifier_marker_consumption_with_bump_v1(
+    program_id: &Pubkey,
+    marker_account: &AccountInfo,
+    marker: PoolV1NullifierMarkerV1,
+    expected_address: &Pubkey,
+    address_bump: u8,
+) -> Result<PlannedNullifierMarkerV1, ProgramError> {
+    let encoded_marker = encode_pool_v1_nullifier_marker(&marker)
+        .map_err(|_| PoolV1ProgramError::InvalidNullifierMarkerAccount)?;
+    let pool = Pubkey::new_from_array(marker.pool);
+    let canonical_nullifier = marker.canonical_nullifier_encoding();
+    let bump = [address_bump];
+    let created = Pubkey::create_program_address(
+        &[
+            POOL_V1_NULLIFIER_MARKER_SEED,
+            pool.as_ref(),
+            &canonical_nullifier,
+            &bump,
+        ],
+        program_id,
+    )
+    .map_err(|_| PoolV1ProgramError::InvalidNullifierMarkerAddress)?;
+    if &created != expected_address {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into());
+    }
+    plan_nullifier_marker_for_authenticated_address_v1(
+        program_id,
+        marker_account,
+        marker,
+        encoded_marker,
+        *expected_address,
+        address_bump,
+    )
+}
+
+fn plan_nullifier_marker_for_authenticated_address_v1(
+    program_id: &Pubkey,
+    marker_account: &AccountInfo,
+    marker: PoolV1NullifierMarkerV1,
+    encoded_marker: [u8; POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES],
+    expected_address: Pubkey,
+    address_bump: u8,
+) -> Result<PlannedNullifierMarkerV1, ProgramError> {
+    let pool = Pubkey::new_from_array(marker.pool);
     if marker_account.key != &expected_address || marker_account.key == &pool {
         return Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into());
     }
@@ -253,6 +308,53 @@ mod tests {
         );
         assert_eq!(system_plan.encoded_marker, program_plan.encoded_marker);
         assert!(zeroed.iter().all(|byte| *byte == 0));
+    }
+
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    #[test]
+    fn authenticated_bump_replays_once_and_wrong_bump_fails_closed() {
+        let program_id = Pubkey::new_unique();
+        let pool = Pubkey::new_unique();
+        let marker = marker(pool);
+        let (marker_key, bump) = pool_v1_nullifier_marker_address(
+            &program_id,
+            &pool,
+            &marker.canonical_nullifier_encoding(),
+        )
+        .unwrap();
+        let mut lamports = 1;
+        let mut zeroed = [0u8; POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES];
+        let marker_account = account(
+            &marker_key,
+            &program_id,
+            &mut lamports,
+            &mut zeroed,
+            false,
+            true,
+            false,
+        );
+        let plan = plan_nullifier_marker_consumption_with_bump_v1(
+            &program_id,
+            &marker_account,
+            marker,
+            &marker_key,
+            bump,
+        )
+        .unwrap();
+        assert_eq!(plan.address_bump(), bump);
+
+        let wrong_bump = bump.wrapping_sub(1);
+        assert_ne!(wrong_bump, bump);
+        assert_eq!(
+            plan_nullifier_marker_consumption_with_bump_v1(
+                &program_id,
+                &marker_account,
+                marker,
+                &marker_key,
+                wrong_bump,
+            ),
+            Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into())
+        );
     }
 
     #[test]
