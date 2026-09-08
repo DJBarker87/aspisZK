@@ -81,6 +81,11 @@ fi
 
 readonly RPC_PORT=${ASPIS_TXV1_LOCAL_RPC_PORT:-18901}
 [[ "$RPC_PORT" =~ ^[0-9]+$ ]] || fail "RPC port must be numeric"
+readonly LEDGER_SHRED_RETENTION=${ASPIS_TXV1_LEDGER_SHRED_RETENTION:-1000000}
+[[ "$LEDGER_SHRED_RETENTION" =~ ^[0-9]+$ ]] \
+  || fail "ledger shred retention must be numeric"
+(( LEDGER_SHRED_RETENTION >= 1000000 )) \
+  || fail "ledger shred retention must preserve at least 1,000,000 shreds"
 readonly RPC_URL="http://127.0.0.1:$RPC_PORT"
 readonly WORK_DIR=$(mktemp -d "${TMPDIR:-/tmp}/aspis-v7-txv1-feature-cluster.XXXXXX")
 readonly LEDGER="$WORK_DIR/ledger"
@@ -125,6 +130,7 @@ fi
 declare -a VALIDATOR_ARGS=(
   --reset --quiet --ledger "$LEDGER" --bind-address 127.0.0.1
   --rpc-port "$RPC_PORT" --warp-slot 150 --mint "$PAYER_PUBKEY"
+  --limit-ledger-size "$LEDGER_SHRED_RETENTION"
 )
 if [[ -n "${ASPIS_V7_CU_TAIL_PROBE_GENESIS_BINARY:-}" ]]; then
   [[ "${ASPIS_V7_CU_TAIL_PROBE_ACK:-}" == "I_ACKNOWLEDGE_LOCAL_ONLY_V7_CU_TAIL_PROBE" ]] \
@@ -173,10 +179,12 @@ done < <(jq -r '.identitySet.programs[] | [.name,.id,.loader,.binary,.sha256] | 
 
 jq -n --arg ledgerTemplate '${TMPDIR:-/tmp}/aspis-v7-txv1-feature-cluster.XXXXXX/ledger' \
   --arg rpcUrl "$RPC_URL" --argjson warpSlot 150 \
+  --argjson ledgerShredRetention "$LEDGER_SHRED_RETENTION" \
   --arg featureId "$FEATURE_ID" --arg activationMechanism \
   'Agave test-validator default genesis feature set; feature is not passed to --deactivate-feature' \
   '{ledgerTemplate:$ledgerTemplate,rpcUrl:$rpcUrl,bindAddress:"127.0.0.1",
-    reset:true,warpSlot:$warpSlot,featureId:$featureId,
+    reset:true,warpSlot:$warpSlot,ledgerShredRetention:$ledgerShredRetention,
+    featureId:$featureId,
     activationMechanism:$activationMechanism,existingLedgerAllowed:false,
     cleanup:"EXIT/INT/TERM trap removes only the validated mktemp task directory"}' \
   >"$EVIDENCE_DIR/ledger-configuration.json"
