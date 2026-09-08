@@ -4,17 +4,22 @@
 //! Public ordinary weights/claim come from the outer semantic verifier, whose
 //! Aspis-specific construction is NOT supplied by this research callback.
 extern crate aspis_core as corelib;
+#[cfg(not(v8_performance_sbf))]
 extern crate sha2;
 use corelib::{field::{QM31 as K,CM31,M31},transcript::{Transcript,label},sumcheck::{WeightAccumulator,evaluate,polynomial_for_extension},
     circle::{SecureCirclePoint as Point},v6_onefold::gamma_combine_v6_packed_layer0,
     state_only_spend_query::StateOnlySpendQueryPowers,v7_merkle208::*};
+#[cfg(not(v8_performance_sbf))]
 use sha2::{Sha256,Digest};
 const FIXED:usize=697; const Q:usize=22; const REC:usize=621; const HEAD:usize=FIXED*16+52+24;
 const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
 #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
+#[cfg(not(v8_performance_sbf))]
 fn hash(parts:&[&[u8]])->[u8;32] {let mut h=Sha256::new();for p in parts {h.update(p);}let digest=h.finalize().into();
     #[cfg(v8_query_graph)] query_graph::record(parts);
     digest}
+#[cfg(v8_performance_sbf)]
+fn hash(parts:&[&[u8]])->[u8;32] {solana_program::hash::hashv(parts).to_bytes()}
 fn sc(x:u32)->K {K::from_cm31(CM31::from_m31(M31(x)))}
 fn bytes(v:&[K])->Vec<u8> {let mut b=vec![0;v.len()*16];for(i,v)in v.iter().enumerate(){v.write_le_bytes(&mut b[i*16..i*16+16]);}b}
 fn dot(a:&[K],b:&[K])->K {a.iter().zip(b).fold(K::ZERO,|s,(a,b)|s.add(a.mul(*b)))}
@@ -106,10 +111,11 @@ fn verify_relation(body:&[u8],statement:[u8;32],ordinary:Vec<K>,claim:K,hashfn:c
     if terminal!=c{return Err(Error::Terminal);}Ok(())
 }
 
+#[cfg(not(v8_performance_sbf))]
 #[path="relation_callback_fixtures.rs"] mod fixtures;
-#[cfg(not(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction)))]
+#[cfg(not(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction,v8_performance_sbf)))]
 fn main(){fixtures::run();}
-#[cfg(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction))]
+#[cfg(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction,v8_performance_sbf))]
 #[path="inactive_row_binding.rs"] mod inactive_binding;
 #[cfg(v8_inactive_binding)]
 fn main(){inactive_binding::run();}
@@ -137,7 +143,7 @@ use payment_sources::{circle_candidate,circle_candidate_openings,state_only_hidi
 #[path="c1_query_graph.rs"] mod query_graph;
 #[cfg(v8_c1_gao)]
 #[path="c1_gao.rs"] mod c1_gao;
-#[cfg(all(v8_payment_extraction,not(v8_graph_orders),not(v8_circle_coordinates)))]
+#[cfg(all(v8_payment_extraction,not(v8_graph_orders),not(v8_circle_coordinates),not(v8_gao_completeness),not(v8_performance)))]
 fn main(){payment_extraction::run();}
 #[cfg(v8_graph_orders)]
 fn main(){query_graph::exhaustive_depth_two_query_orders();}
@@ -145,3 +151,10 @@ fn main(){query_graph::exhaustive_depth_two_query_orders();}
 #[path="source_coordinate_gate.rs"] mod source_coordinate_gate;
 #[cfg(v8_circle_coordinates)]
 fn main(){source_coordinate_gate::run();}
+#[cfg(v8_gao_completeness)]
+fn main(){c1_gao::completeness_controls();}
+#[cfg(v8_performance)]
+fn main(){payment_extraction::performance::run();}
+#[cfg(any(v8_performance,v8_performance_sbf))]
+#[path="performance_verifier.rs"]
+pub mod performance_verifier;

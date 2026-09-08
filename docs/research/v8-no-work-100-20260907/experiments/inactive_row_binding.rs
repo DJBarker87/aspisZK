@@ -62,7 +62,53 @@ fn to_gamma(mut t:Transcript,w:&Wire<'_>)->Result<(Transcript,[Point;2],K),Error
 }
 fn edges(j:usize)->Vec<(usize,M31)>{let mut row=j;let mut bit=0;let mut s=M31::ONE;let mut out=vec![];
     while row&(1<<bit)!=0{row^=1<<bit;s=s.mul(corelib::field::M31_HALF);out.push((row,s));bit+=1;}out.push((row|(1<<bit),s));out}
+#[cfg(not(v8_performance_fast))]
 fn xt(v:&[K],n:usize)->Vec<K>{(0..n).map(|j|edges(j).into_iter().fold(K::ZERO,|a,(r,s)|a.add(v[r].mul_m31(s)))).collect()}
+#[cfg(v8_performance_fast)]
+fn xt(v:&[K],n:usize)->Vec<K>{
+    (0..n).map(|j|{
+        let(mut row,mut bit,mut scale,mut sum)=(j,0, M31::ONE,K::ZERO);
+        while row&(1<<bit)!=0 {
+            row^=1<<bit;scale=scale.mul(corelib::field::M31_HALF);
+            sum=sum.add(v[row].mul_m31(scale));bit+=1;
+        }
+        sum.add(v[row|(1<<bit)].mul_m31(scale))
+    }).collect()
+}
+// Same complete public weight vector. Share prefix products instead of
+// recomputing ten factors for each coefficient. Zero coordinates are legal.
+#[cfg(v8_performance_fast)]
+fn materialize_original(z:&[K;10],scales:[K;3])->Vec<K>{
+    let groups=pool_v1_pair_forest_copy_inactive_row_groups_compiled_v1();
+    let masks=pool_v1_pair_forest_copy_inactive_group_masks_compiled_v1();
+    let mut out:Vec<K>=(0..1024).map(|i|if masks[groups[i/16] as usize]&(1<<(i%16))!=0{K::ONE}else{K::ZERO}).collect();
+    let mut scratch=vec![K::ZERO;1024];
+    for(r,point)in corelib::v6_transcript::v6_statement_points(z).into_iter().enumerate(){
+        scratch[0]=scales[r];let mut len=1;
+        for coordinate in point {
+            for j in (0..len).rev(){let old=scratch[j];let right=old.mul(coordinate);scratch[2*j]=old.sub(right);scratch[2*j+1]=right;}
+            len*=2;
+        }
+        for i in 0..1024{out[i]=out[i].add(scratch[i]);}
+    }
+    out
+}
+#[cfg(all(v8_performance_fast,not(v8_performance_sbf)))]
+pub(super) fn performance_controls(){
+    for seed in 0..8u32 {
+        let z=std::array::from_fn(|i|if seed<2{sc(seed)}else{sc(seed*17+i as u32)});
+        let scales=[sc(seed),sc(seed+1),sc(seed+2)];
+        let mut reference=WeightAccumulator::empty(10);
+        for(r,p)in corelib::v6_transcript::v6_statement_points(&z).into_iter().enumerate(){reference.add_multilinear(scales[r],p.to_vec()).unwrap();}
+        reference.add_grouped_64x16_binary_masks_deferred_prepared(pool_v1_pair_forest_copy_inactive_row_groups_compiled_v1(),pool_v1_pair_forest_copy_inactive_group_masks_compiled_v1()).unwrap();
+        let got=materialize_original(&z,scales);
+        for i in 0..1024{assert_eq!(got[i],reference.weight_at(i as u32));}
+        let v:Vec<K>=(0..514).map(|i|sc(i*i+seed)).collect();
+        let got=xt(&v,513);
+        for j in 0..513{assert_eq!(got[j],edges(j).into_iter().fold(K::ZERO,|sum,(index,s)|sum.add(v[index].mul_m31(s))));}
+    }
+    println!("PERF_CONTROLS exact_public_weights=8192 allocation_free_carry=4104 zero_one_coordinates=true");
+}
 // Literal previously tested chord transpose, now over the linked core type.
 fn transpose(w:&[K],[a,b,c]:[K;3])->Vec<K>{let mut w=w.to_vec();w.resize(1028,K::ZERO);
     let wa:Vec<K>=w.chunks_exact(2).map(|v|v[0]).collect();let wb:Vec<K>=w.chunks_exact(2).map(|v|v[1]).collect();
@@ -70,6 +116,7 @@ fn transpose(w:&[K],[a,b,c]:[K;3])->Vec<K>{let mut w=w.to_vec();w.resize(1028,K:
     for j in 0..512{out[2*j]=a.mul(wa[j]).add(b.mul(xwa[j])).add(c.mul(wb[j]));out[2*j+1]=c.mul(wa[j].sub(xxwa[j])).add(a.mul(wb[j])).add(b.mul(xwb[j]));}out}
 pub(super) fn prepare(s:Semantic,w:&Wire<'_>,shift:bool)->Result<(Prefix,Vec<K>,K,K),Error>{
     let(t,points,gamma)=to_gamma(s.t,w)?;let mut t=t;
+    #[cfg(v8_performance_sbf)] super::performance_verifier::checkpoint("v8:ood-gamma");
     t.absorb(label::V6_INACTIVE_CLAIM,&bytes(&w.v[358..359]));let kappa=sample(&mut t,true)?;
     let k2=kappa.square();let scales=if shift{[kappa,k2,k2.mul(kappa)]}else{[K::ONE,kappa,k2]};
     let mut orig=WeightAccumulator::empty(10);
@@ -80,9 +127,16 @@ pub(super) fn prepare(s:Semantic,w:&Wire<'_>,shift:bool)->Result<(Prefix,Vec<K>,
     let [z0,z1]=points;let use_x=z0.x!=z1.x;let h0=if use_x{z0.x}else{z0.y};let h1=if use_x{z1.x}else{z1.y};
     let slope=batch(&w.v[359..388]).sub(batch(&w.v[388..417])).mul(h0.sub(h1).try_inv().ok_or(Error::Domain)?);
     let iv=[batch(&w.v[359..388]).sub(slope.mul(h0)),slope];let abc=[z0.x.mul(z1.y).sub(z0.y.mul(z1.x)),z0.y.sub(z1.y),z1.x.sub(z0.x)];
+    #[cfg(not(v8_performance_fast))]
     let original:Vec<K>=(0..1024).map(|i|orig.weight_at(i)).collect();
+    #[cfg(v8_performance_fast)]
+    let original=materialize_original(&s.z,scales);
+    #[cfg(all(v8_performance_fast,not(v8_performance_sbf)))]
+    for i in 0..1024 {assert_eq!(original[i],orig.weight_at(i as u32),"public weight differential");}
+    #[cfg(v8_performance_sbf)] super::performance_verifier::checkpoint("v8:original-weights");
     claim=claim.sub(iv[0].mul(original[0])).sub(iv[1].mul(original[if use_x{2}else{1}]));
     let ordinary=transpose(&original,abc);
+    #[cfg(v8_performance_sbf)] super::performance_verifier::checkpoint("v8:transpose");
     t.absorb(label::PROFILE,&bytes(&ordinary));t.absorb(label::CLAIM,&bytes(&[claim]));t.absorb(label::PROFILE,b"aspis-v8-image-gate-v1");let tau=sample(&mut t,true)?;
     Ok((Prefix{t,points,gamma,abc,iv,use_x,tau},ordinary,claim,kappa))
 }

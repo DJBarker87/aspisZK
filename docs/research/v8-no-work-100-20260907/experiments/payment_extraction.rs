@@ -8,6 +8,9 @@ use corelib::state_only_sumcheck::{begin_state_only_zerocheck,state_only_boundar
 use corelib::state_only_hiding::{StateOnlyHidingContext,begin_state_only_masked_sumcheck};
 use circle_candidate::CircleEncoder;
 const N:usize=1<<20;
+#[cfg(v8_performance)]
+#[path="performance.rs"]
+pub(super) mod performance;
 fn tree(leaves:Vec<[u8;26]>)->f::Tree{let mut t=vec![leaves];for _ in 0..18{t.push(t.last().unwrap().chunks_exact(2).map(|v|node_hash_v7(hash,&v[0],&v[1])).collect());}t}
 fn c1leaf(columns:&[Vec<M31>],id:usize)->Vec<u8>{let mut b=vec![0;403];
     for s in 0..4{for col in 0..26{ac::put31(&mut b,31*(s*26+col),columns[col][4*id+s]);}}

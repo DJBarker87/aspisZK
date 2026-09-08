@@ -1,0 +1,38 @@
+[package]
+name = "aspis-v8-performance-host"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[workspace]
+
+[[bin]]
+name = "aspis-v8-performance-host"
+path = "../relation_callback.rs"
+
+[features]
+selected-v7-kernels = [
+ "aspis-core/v7-gamma-four-slot-block-audit",
+ "aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+ "aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit",
+ "aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit",
+ "aspis-statement/pool-v1-pair-forest-semantic-factor-audit",
+ "aspis-statement/pool-v1-pair-forest-pattern-window-audit",
+ "aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit",
+ "aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit",
+ "aspis-statement/pool-v1-pair-forest-packed-range-audit",
+ "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit",
+]
+insecure-spend-fixture = []
+
+[dependencies]
+aspis-core = { path = "../../../../../crates/aspis-core" }
+aspis-statement = { path = "../../../../../crates/aspis-statement", features = ["spend-dynamic-rate512", "pool-v1-kernel"] }
+sha2 = "=0.10.9"
+zeroize = "=1.8.1"
+getrandom = "=0.3.4"
+
+[profile.release]
+opt-level = 3
+debug = false
+codegen-units = 1

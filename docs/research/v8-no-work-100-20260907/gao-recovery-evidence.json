@@ -1,0 +1,56 @@
+{
+  "base_revision": "163fe7c731102f5f964be4427113863a19284c7d",
+  "status": "Kernel-checked mathematical decoder completeness and circle coefficient composition; not Rust refinement or acceptance-to-recovery",
+  "environment": "Apple M3 / Lean 4.32.0 / cached Mathlib 81a5d257c8e410db227a6665ed08f64fea08e997",
+  "leafs": [
+    {
+      "target": "GaoRecovery.lean",
+      "command": "/usr/bin/time -l lake env lean -M 7000 -R /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments -o /tmp/aspis-v8-gao-lean.9dslpv/GaoRecovery.olean /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/GaoRecovery.lean",
+      "exit": 0,
+      "wall_seconds": 13.09,
+      "peak_rss_bytes": 2909192192,
+      "swaps": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "target": "GaoC1Recovery.lean",
+      "command": "/usr/bin/time -l lake env env LEAN_PATH='/tmp/aspis-v8-gao-lean.9dslpv:/Users/dominic/ZK/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/build/lib/lean:/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean' lean -M 7000 /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/GaoC1Recovery.lean",
+      "exit": 0,
+      "wall_seconds": 6.27,
+      "peak_rss_bytes": 2823258112,
+      "swaps": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "cache_directory": "/tmp/aspis-v8-gao-lean.9dslpv",
+  "source_and_cache_sha256": {
+    "GaoRecovery.lean": "4b508fc84e68b920f83512a5652002cc051bbad5ee13955c8099d0f5dfbfa1b0",
+    "GaoC1Recovery.lean": "1a7d4a33838f0cc2d865eced79ae10c92ef7256ea9873d79498261dd6095119e",
+    "GaoRecovery.olean": "5621ac83140c560cea5753ab46cdf5118d44a32736de4fa6ad87033d2d617810",
+    "CircleLaurentRecovery.olean": "959be50e0b3602c36c4bb38fe459d5a067fa7a034cbbe276f6605e919f2c93fe",
+    "lake-manifest.json": "65c23cce5c1bab2ba00affdff53fe52b67388cf2491c7f8ec68c1c2977dd7c10",
+    "lean-toolchain": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e"
+  },
+  "dependency_note": "CircleLaurentRecovery from the unchanged research HEAD was exported into a new private cache solely to supply the missing imported olean. No concurrent main Aspis modules imported; no cold Mathlib or package replay.",
+  "rust": {
+    "controls_build": "rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg v8_c1_both_windows --cfg v8_c1_gao --cfg v8_gao_completeness --cfg v8_gao_audit --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-gao-completeness",
+    "controls_run": "/usr/bin/time -l /tmp/aspis-v8-gao-completeness",
+    "controls": 85482,
+    "controls_wall_seconds": 0.85,
+    "controls_peak_rss_bytes": 2031616,
+    "payment_build": "rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg v8_c1_both_windows --cfg v8_c1_gao --cfg v8_gao_audit --cfg v8_c1_noncanonical --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-gao-payment-audit",
+    "payment_run": "/usr/bin/time -l /tmp/aspis-v8-gao-payment-audit",
+    "payment_wall_seconds": 45.56,
+    "payment_peak_rss_bytes": 629211136,
+    "swaps": 0,
+    "scope": "Synthetic old noncanonical genuine-payment extraction fixture with Euclidean invariants instrumented; NOT the new performance timer."
+  }
+}

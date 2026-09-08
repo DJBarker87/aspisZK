@@ -1,5 +1,11 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [NUC proving-time and SBF prototype](performance-review.md).
+Three genuine research proofs take about four seconds each on the NUC.
+The isolated SBF verifier completes at 7.31–7.32M CU under a diagnostic cap,
+and fails the ordinary transaction budget. This is a measured implementation
+bottleneck, not CU parity or a production-ready security claim.
+
 Latest: [raw C1 recovery and the circle polynomial bridge](raw-c1-review.md).
 A genuine accepted transfer with two noncanonical unopened C1 fibres defeats
 the strict graph extractor but yields a checked witness through byte-preserving

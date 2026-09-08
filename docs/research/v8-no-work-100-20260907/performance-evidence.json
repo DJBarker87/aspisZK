@@ -1,0 +1,81 @@
+{
+  "schema": "aspis.v8.performance.evidence.v1",
+  "source_base_revision": "163fe7c731102f5f964be4427113863a19284c7d",
+  "source_sha256": {
+    "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs": "12293798a2d1c957cc572d5497136dc4a015619b0c82510e7f720d8bd8c7045e",
+    "docs/research/v8-no-work-100-20260907/experiments/inactive_row_binding.rs": "baecd41c7bf17087c10aa26a59dd54fe7dab5e8a5c9abcb3f502b94067d07332",
+    "docs/research/v8-no-work-100-20260907/experiments/payment_extraction.rs": "c9cc32bdfaf4f8508d590c816a4d3f603fb4bbb42b6a73d09ce067765aee3eb7",
+    "docs/research/v8-no-work-100-20260907/experiments/performance.rs": "21e5168f314598468757eb96a6f4bd8553d718a677a794b13a60e765da17bdc5",
+    "docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs": "fba12bfa78630c00559c9ee3399bbbb98814ce13036d832a4b19c6192c1c5e89",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml": "a0269c4e3dc0fe585ed17b575ff393ec8f026d4bb0628a0c29228bbebb04c500",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.lock": "a2e3d525c3a0f01428b56df55001ba304981a6b8c26cca08badf7b09b7029814",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-sbf/lib.rs": "a9881591329db8bd444b74c882c59eb95a531ff0c45b70fda5612b4337af1d5d",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-sbf/Cargo.toml": "7a2350f1a07ba7bd95da44ec7c119f2fc527993dca798ff75d5062b1ef846218",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-sbf/Cargo.lock": "7e2109e75309e0dd77ce5d29242bffac7e61919bf42d32810ba9e1cee73d1b81",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-svm/src/main.rs": "bf7c4410f9385f102bd0d0cf0c695b171e96c802b5a918fefb90e6bfefd2c7e4",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-svm/Cargo.toml": "92d685f6cf6d9497218be4d9aa00429a98b0902f8ffe841274b5ab347f87ee56",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-svm/Cargo.lock": "1d0b83f5ec55c57a027f5290ad55cc5ede90ed6cba657d08afe4c5cdc51f84ec"
+  },
+  "nuc_matches_local_sources": true,
+  "nuc_workspace": "/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz",
+  "commands": {
+    "host_selected_build": "ssh -o BatchMode=yes dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-perf-host-build-r6 -p MemoryHigh=4G -p MemoryMax=6G -p MemorySwapMax=0 /usr/bin/time -v env PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin RUSTFLAGS=\"--cfg v8_payment_extraction --cfg v8_performance --cfg v8_performance_fast -A dead_code -A unexpected_cfgs\" cargo build --offline --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml'",
+    "host_selected_run": "ssh -o BatchMode=yes dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-perf-host-run-r3 -p MemoryHigh=4G -p MemoryMax=6G -p MemorySwapMax=0 /usr/bin/time -v /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/aspis-v8-performance-host /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/fixture-r3'",
+    "sbf_selected_build": "ssh -o BatchMode=yes dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-perf-sbf-build-r6 -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 /usr/bin/time -v env PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/active_release/bin:/usr/bin:/bin RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS=\"--cfg v8_performance_sbf --cfg v8_performance_fast -A dead_code -A unexpected_cfgs\" cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --features selected-v7-kernels --manifest-path /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-sbf/Cargo.toml --sbf-out-dir /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/sbf-selected'",
+    "svm_selected_run": "ssh -o BatchMode=yes dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-perf-svm-run-r4 -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 /usr/bin/time -v /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-svm/target/release/aspis-v8-performance-svm /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/sbf-selected/aspis_v8_performance_sbf.so /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/fixture-r3'"
+  },
+  "measurement_scope": "Synthetic genuine transfer; proof generation and isolated SBF verification. NOT full pool transaction, production preamble, FS/security certificate, ZK audit or worst-case CU bound.",
+  "caps": {
+    "host_build_and_run": {
+      "memory_max_gib": 6,
+      "memory_high_gib": 4,
+      "swap_max": 0
+    },
+    "sbf_and_svm_build": {
+      "memory_max_gib": 7,
+      "memory_high_gib": 5,
+      "swap_max": 0,
+      "jobs": 2
+    },
+    "svm_run": {
+      "memory_max_gib": 4,
+      "memory_high_gib": 3,
+      "swap_max": 0
+    }
+  },
+  "logs": {
+    "host": "evidence/performance-host-final.log",
+    "svm": "evidence/performance-svm-selected.log",
+    "sbf_build": "evidence/performance-sbf-selected-build.log"
+  },
+  "build_log_scope": "Retained final build output chunks include source compile and time/RSS/swap footers; some unrelated compiler warnings are tool-truncated. No formal proof replay was part of this performance experiment.",
+  "sbf_compile": {
+    "exit": 0,
+    "wall_seconds": 34.17,
+    "peak_child_rss_kib": 609840,
+    "swap": 0,
+    "compiler": "platform-tools v1.54 rustc 1.89.0-dev",
+    "stack_refactor": {
+      "initial_frame_bytes": 4544,
+      "maximum": 4096,
+      "action": "split public decoding and semantic evaluation into separate no-inline helper",
+      "retained_build": "no observed overflow diagnostic"
+    }
+  },
+  "host_build": {
+    "exit": 0,
+    "wall_seconds": 31.27,
+    "peak_child_rss_kib": 533348,
+    "swap": 0
+  },
+  "proof_sha256": [
+    "69aaec4992ff3dd3e7c4c8c3e8ab19f52767bd4fea06466589448b63563c2f48",
+    "1f8cf7cc82a84e57ffdf1eff23e67871be4566ef157c1f0588cccdec944d9a1d",
+    "5a0f44c46d2eb48e3f1436d859bbaac768a317dc154336aff69b78f5e571b693"
+  ],
+  "selected_elf_sha256": "1bb17cd5b0af46476f73bd29f26f19e2adf9278b3d7b8cd6ee588c7af59d6908",
+  "deployments": false,
+  "production_changes": false,
+  "network_rpc": false,
+  "math_assumed_not_certified": true
+}
