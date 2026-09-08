@@ -32,6 +32,9 @@ readonly RESUME_INITIALIZE_EVIDENCE=${ASPIS_V7_LIVE_RESUME_INITIALIZE_EVIDENCE:-
 readonly PUBLIC_DEVNET_ACK=${ASPIS_TXV1_PUBLIC_DEVNET_MODE:-}
 readonly TERMINAL_PDA_CLOSURE_ACK=${ASPIS_V7_TERMINAL_PDA_CLOSURE_ACK:-}
 readonly TERMINAL_PDA_CLOSURE_ACK_VALUE=I_ACKNOWLEDGE_DEFAULT_OFF_TERMINAL_PDA_CERTIFICATE_AUDIT
+readonly PREFILL_NEXT_LEAF_INDEX=${ASPIS_V7_LIVE_PREFILL_NEXT_LEAF_INDEX:-}
+readonly PREFILL_ACK=${ASPIS_V7_LIVE_ROLLOVER_PREFILL_ACK:-}
+readonly PREFILL_ACK_VALUE=I_ACKNOWLEDGE_254_DISPOSABLE_PREFILL_DEPOSITS
 readonly DEVNET_GENESIS_HASH=EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG
 readonly TXV1_FEATURE=txv1aq4pp281K9um3tnPgkfX8UqtFT6wcVW3hNezGLL
 
@@ -59,6 +62,16 @@ if [[ -n "$TERMINAL_PDA_CLOSURE_ACK" ]]; then
     || fail "wrong terminal PDA certificate acknowledgement"
   [[ "$DISPOSABLE" == true ]] \
     || fail "terminal PDA certificate audit is restricted to a disposable cluster"
+fi
+if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+  [[ "$PREFILL_NEXT_LEAF_INDEX" == 254 ]] \
+    || fail "live rollover prefill currently supports only next-leaf index 254"
+  [[ "$PREFILL_ACK" == "$PREFILL_ACK_VALUE" ]] \
+    || fail "missing exact live rollover prefill acknowledgement"
+  [[ "$DISPOSABLE" == true && "$START_ACTION" == initialize ]] \
+    || fail "live rollover prefill requires a fresh disposable Pool"
+  [[ "$SELECTED_LANE_CASE" == none ]] \
+    || fail "live rollover prefill cannot be combined with selected-lane mutation testing"
 fi
 [[ "$OPERATION" == transfer || "$OPERATION" == withdrawal ]] \
   || fail "ASPIS_V7_LIVE_OPERATION must be transfer or withdrawal"
@@ -240,6 +253,24 @@ token_state() {
     | od -An -j108 -N1 -tu1 | tr -d '[:space:]'
 }
 
+finalized_transaction() {
+  local signature=$1 output=$2 request_id=$3 status finalized=false
+  for _ in $(seq 1 600); do
+    status=$(rpc "$(jq -nc --arg signature "$signature" --argjson id "$request_id" \
+      '{jsonrpc:"2.0",id:$id,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
+      <<<"$status" >/dev/null; then
+      finalized=true
+      break
+    fi
+    sleep 0.1
+  done
+  [[ "$finalized" == true ]] || fail "transaction did not finalize: $signature"
+  rpc "$(jq -nc --arg signature "$signature" --argjson id "$((request_id + 1))" \
+    '{jsonrpc:"2.0",id:$id,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$output"
+}
+
 if [[ "$START_ACTION" == initialize ]]; then
   slot=$(rpc '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[{"commitment":"finalized"}]}' | jq -er '.result')
   blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
@@ -317,8 +348,103 @@ fi
 if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
   [[ -x "$SECRET_BUILDER" && -x "$DEPOSIT_BUILDER" && -x "$CHECKPOINT_BUILDER" ]] \
     || fail "secret, deposit and checkpoint builders are all required"
+  if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+    mkdir "$EVIDENCE_DIR/prefill"
+    : >"$EVIDENCE_DIR/prefill/finalized-deposits.jsonl"
+    for prefill_index in $(seq 0 $((PREFILL_NEXT_LEAF_INDEX - 1))); do
+      prefill_secret="$WORK_DIR/prefill-secret.json"
+      prefill_public="$WORK_DIR/prefill-public.json"
+      prefill_request="$WORK_DIR/prefill-request.json"
+      prefill_input="$WORK_DIR/prefill-input.json"
+      "$SECRET_BUILDER" transfer "$prefill_secret" --required-lane 0 >"$prefill_public"
+      [[ "$(file_mode "$prefill_secret")" == 600 ]] \
+        || fail "prefill secret file mode is not 0600"
+      jq -e '.depositLane == 0 and .outputLane == 0 and .requiredLane == 0 and
+        .secretValuesPrinted == false' "$prefill_public" >/dev/null \
+        || fail "prefill note did not route to lane zero"
+      prefill_slot=$(rpc "$(jq -nc --argjson id "$((50000 + prefill_index))" \
+        '{jsonrpc:"2.0",id:$id,method:"getSlot",params:[{commitment:"finalized"}]}')" | jq -er '.result')
+      prefill_blockhash=$(rpc "$(jq -nc --argjson id "$((51000 + prefill_index))" \
+        --argjson slot "$prefill_slot" \
+        '{jsonrpc:"2.0",id:$id,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
+        | jq -er '.result.value.blockhash')
+      prefill_lanes=$(for lane_index in $(seq 1 8); do
+        printf '%s\n' "$EVIDENCE_DIR/account-$lane_index.json"
+      done | jq -Rsc 'split("\n")[:-1]')
+      jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" \
+        --arg sourceAuthority "$SOURCE_AUTHORITY_KEYPAIR" --arg hash "$prefill_blockhash" \
+        --argjson slot "$prefill_slot" --arg master "$EVIDENCE_DIR/account-0.json" \
+        --argjson lanes "$prefill_lanes" --arg secrets "$prefill_secret" \
+        --argjson sourceIndex "$prefill_index" \
+        '{schema:"aspis.v7.live-pool-sequential-deposit-input.v1",config:$config,
+          payerKeypair:$payer,sourceAuthorityKeypair:$sourceAuthority,recentBlockhash:$hash,
+          minContextSlot:$slot,requestId:(52000+$sourceIndex),masterAccount:$master,
+          laneAccounts:$lanes,secretsFile:$secrets,expectedNextLeafIndex:$sourceIndex}' \
+        >"$prefill_input"
+      "$DEPOSIT_BUILDER" "$prefill_input" >"$prefill_request"
+      rm -f -- "$prefill_secret"
+      jq -e --argjson index "$prefill_index" '
+        .operation == "deposit" and .selectedLane == 0 and .sourceNextLeafIndex == $index and
+        .successorNextLeafIndex == ($index + 1) and .serializedTransactionBytes < 1232' \
+        "$prefill_request" >/dev/null || fail "invalid prefill deposit request at $prefill_index"
+      prefill_simulation=$(rpc "$(jq -c '.simulationRequest' "$prefill_request")")
+      jq -e '.result.value.err == null and .result.value.unitsConsumed < 1400000' \
+        <<<"$prefill_simulation" >/dev/null || fail "prefill simulation failed at $prefill_index"
+      prefill_send=$(rpc "$(jq -c '.sendRequest' "$prefill_request")")
+      prefill_signature=$(jq -er '.result' <<<"$prefill_send")
+      [[ "$prefill_signature" == "$(jq -er '.signature' "$prefill_request")" ]] \
+        || fail "prefill submission changed signed wire at $prefill_index"
+      finalized_transaction "$prefill_signature" "$WORK_DIR/prefill-finalized.json" \
+        "$((53000 + 2 * prefill_index))"
+      jq -e '.result.meta.err == null' "$WORK_DIR/prefill-finalized.json" >/dev/null \
+        || fail "prefill deposit landed with error at $prefill_index"
+      prefill_simulated_cu=$(jq -er '.result.value.unitsConsumed' <<<"$prefill_simulation")
+      prefill_landed_cu=$(jq -er '.result.meta.computeUnitsConsumed' "$WORK_DIR/prefill-finalized.json")
+      [[ "$prefill_simulated_cu" -eq "$prefill_landed_cu" ]] \
+        || fail "prefill simulation/landed CU mismatch at $prefill_index"
+      jq -nc --argjson sourceIndex "$prefill_index" \
+        --arg signature "$prefill_signature" \
+        --argjson slot "$(jq -er '.result.slot' "$WORK_DIR/prefill-finalized.json")" \
+        --argjson bytes "$(jq -er '.serializedTransactionBytes' "$prefill_request")" \
+        --arg wireHash "$(jq -er '.signedWireSha256' "$prefill_request")" \
+        --argjson simulatedCu "$prefill_simulated_cu" --argjson landedCu "$prefill_landed_cu" \
+        '{sourceIndex:$sourceIndex,successorIndex:($sourceIndex+1),selectedLane:0,
+          signature:$signature,finalizedSlot:$slot,serializedTransactionBytes:$bytes,
+          signedWireSha256:$wireHash,simulationSubmissionByteIdentical:true,
+          simulatedCu:$simulatedCu,landedCu:$landedCu,finalized:true,pass:true}' \
+        >>"$EVIDENCE_DIR/prefill/finalized-deposits.jsonl"
+      lane_address=$(jq -er '.laneAccount' "$prefill_request")
+      rpc "$(jq -nc --arg address "$lane_address" --argjson id "$((54000 + prefill_index))" \
+        '{jsonrpc:"2.0",id:$id,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+        | jq --arg requestedAddress "$lane_address" '. + {requestedAddress:$requestedAddress}' \
+        >"$WORK_DIR/account-1.next.json"
+      jq -e '.result.value != null' "$WORK_DIR/account-1.next.json" >/dev/null \
+        || fail "prefill lane disappeared at $prefill_index"
+      mv "$WORK_DIR/account-1.next.json" "$EVIDENCE_DIR/account-1.json"
+    done
+    vault_address=$(jq -er '.initializedAccounts[9]' "$EVIDENCE_DIR/signed-request.json")
+    rpc "$(jq -nc --arg address "$vault_address" \
+      '{jsonrpc:"2.0",id:55000,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+      | jq --arg requestedAddress "$vault_address" '. + {requestedAddress:$requestedAddress}' \
+      >"$EVIDENCE_DIR/account-9.json"
+    jq -s --argjson target "$PREFILL_NEXT_LEAF_INDEX" '
+      {schema:"aspis.v7.live-rollover-prefill.v1",targetNextLeafIndex:$target,
+       finalizedDeposits:length,allFinalized:(all(.[];.finalized)),
+       allByteIdentical:(all(.[];.simulationSubmissionByteIdentical)),
+       simulationLandedCuExact:(all(.[];.simulatedCu == .landedCu)),
+       maximumLandedCu:(map(.landedCu)|max),selectedLane:0,auditOnly:true,
+       disposable:true,publicDevnetExecution:false,mainnetReady:false}' \
+      "$EVIDENCE_DIR/prefill/finalized-deposits.jsonl" >"$EVIDENCE_DIR/prefill/evidence.json"
+    jq -e '.finalizedDeposits == .targetNextLeafIndex and .allFinalized and
+      .allByteIdentical and .simulationLandedCuExact and .selectedLane == 0' \
+      "$EVIDENCE_DIR/prefill/evidence.json" >/dev/null || fail "prefill aggregate validation failed"
+  fi
+
   mkdir "$EVIDENCE_DIR/deposit"
   operation_secret_args=()
+  if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+    operation_secret_args+=(--required-lane 0)
+  fi
   if [[ "$OPERATION" == withdrawal ]]; then
     withdrawal_destination=$(jq -er \
       '.liveFixture.withdrawalDestinationTokenAccount // .disposableLiveGenesis.withdrawalDestinationTokenAccount' \
@@ -342,14 +468,21 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
     | jq -er '.result.value.blockhash')
   lane_files=$(for lane_index in $(seq 1 8); do printf '%s\n' "$EVIDENCE_DIR/account-$lane_index.json"; done | jq -Rsc 'split("\n")[:-1]')
   [[ -f "$SOURCE_AUTHORITY_KEYPAIR" ]] || fail "ephemeral source authority unavailable"
-  jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" \
+  deposit_schema=aspis.v7.live-pool-deposit-input.v1
+  deposit_expected_index=null
+  if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+    deposit_schema=aspis.v7.live-pool-sequential-deposit-input.v1
+    deposit_expected_index=$PREFILL_NEXT_LEAF_INDEX
+  fi
+  jq -n --arg schema "$deposit_schema" --argjson expectedIndex "$deposit_expected_index" \
+    --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" \
     --arg sourceAuthority "$SOURCE_AUTHORITY_KEYPAIR" --arg hash "$blockhash_deposit" \
     --argjson slot "$slot_deposit" --arg master "$EVIDENCE_DIR/account-0.json" \
     --argjson lanes "$lane_files" --arg secrets "$WORK_DIR/operation-secrets.json" \
-    '{schema:"aspis.v7.live-pool-deposit-input.v1",config:$config,payerKeypair:$payer,
+    '{schema:$schema,config:$config,payerKeypair:$payer,
       sourceAuthorityKeypair:$sourceAuthority,
       recentBlockhash:$hash,minContextSlot:$slot,requestId:700,masterAccount:$master,
-      laneAccounts:$lanes,secretsFile:$secrets}' >"$WORK_DIR/deposit-input.json"
+      laneAccounts:$lanes,secretsFile:$secrets,expectedNextLeafIndex:$expectedIndex}' >"$WORK_DIR/deposit-input.json"
   "$DEPOSIT_BUILDER" "$WORK_DIR/deposit-input.json" >"$EVIDENCE_DIR/deposit/signed-request.json"
   jq -e --argjson lane "$selected_lane" '.operation == "deposit" and .selectedLane == $lane and
     .serializedTransactionBytes < 1232 and (.signedWireSha256 | test("^[0-9a-f]{64}$"))' \
@@ -556,6 +689,12 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         checkpointBlockhash:$checkpointBlockhash}' >"$WORK_DIR/materialize-input.json"
     "$MATERIALIZER" "$WORK_DIR/materialize-input.json" "$EVIDENCE_DIR/live-proof-bundle" \
       >"$EVIDENCE_DIR/live-proof-materialized.json"
+    if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+      jq -e --argjson expected "$PREFILL_NEXT_LEAF_INDEX" '
+        .depositLane == 0 and .depositPairLeafIndex == $expected and
+        .depositRootSequence == ($expected + 1)' "$EVIDENCE_DIR/live-proof-materialized.json" \
+        >/dev/null || fail "materializer did not bind the authenticated prefilled deposit cursor"
+    fi
     "$PROVER" "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
       "$EVIDENCE_DIR/live-proof" "$WORK_DIR/live-proof-nonce-ledger" \
       >"$EVIDENCE_DIR/live-proof.stdout.json"
