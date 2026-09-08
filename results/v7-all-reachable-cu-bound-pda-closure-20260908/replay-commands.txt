@@ -1,0 +1,29 @@
+# Run from the isolated worktree root.
+
+python3 -m py_compile scripts/v7_all_reachable_cu_bound.py scripts/v7_terminal_pda_inventory.py
+python3 scripts/v7_terminal_pda_inventory.py --pretty > /tmp/v7-terminal-pda-inventory.json
+cmp /tmp/v7-terminal-pda-inventory.json results/v7-all-reachable-cu-bound-pda-closure-20260908/source-inventory/terminal-pda-inventory.json
+python3 scripts/v7_all_reachable_cu_bound.py --pretty > /tmp/v7-all-reachable-cu-bound.json
+cmp /tmp/v7-all-reachable-cu-bound.json results/v7-all-reachable-cu-bound-pda-closure-20260908/summary.json
+jq -e '.classification == "A — ALL-REACHABLE GREEN" and .allReachableArithmetic.universalCeilingCu == 1395521 and .allReachableArithmetic.marginTo1400000Cu == 4479 and .decision.cutoff20GuaranteesBelow1400000 and (.residualRuntimeTails.uncontrolledAcceptedBranches | length == 0) and .scope.mainnetReady == false' results/v7-all-reachable-cu-bound-pda-closure-20260908/summary.json
+
+cargo test --release --locked --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features 'v7-cu-probe,v7-pair-forest-lane-invariant-audit' --lib v7_cu_tail_probe::tests
+cargo test --release --locked --manifest-path crates/aspis-core/Cargo.toml --features v7-query-order-source-bound-audit source_bounded_q16_sort_matches_standard_sort
+
+cd AspisFormal
+lake env lean AspisFormal/Pool/V7TerminalPdaCertificateInvariant.lean
+cd ..
+
+# NUC SBF commands (task-owned checkout and caches; cgrouped in the captured .time files).
+/home/dombarker/project-offloads/aspis-v7-agave-v4.2.0-runtime-20260830-r1/extracted/solana-release/bin/cargo-build-sbf --manifest-path programs/aspis-pool/Cargo.toml --no-default-features --features v7-pair-forest-one-tx-candidate,pair-forest-terminal-pda-certificate-audit --arch v0 --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --sbf-out-dir "$TASK/evidence/sbf/pool" -- --locked
+/home/dombarker/project-offloads/aspis-v7-agave-v4.2.0-runtime-20260830-r1/extracted/solana-release/bin/cargo-build-sbf --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features v7-pair-forest-one-tx-candidate,v7-terminal-pda-certificate-audit,v7-query-order-source-bound-audit --arch v0 --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --sbf-out-dir "$TASK/evidence/sbf/verifier-selected-sort" -- --locked
+/home/dombarker/project-offloads/aspis-v7-agave-v4.2.0-runtime-20260830-r1/extracted/solana-release/bin/cargo-build-sbf --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features v7-cu-probe --arch v0 --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --sbf-out-dir "$TASK/evidence/sbf/cu-tail-probe-v3" -- --locked
+
+# The disposable lifecycle requires the exact acknowledgement and task-owned paths.
+ASPIS_V7_CU_TAIL_PROBE_ACK=I_ACKNOWLEDGE_LOCAL_ONLY_V7_CU_TAIL_PROBE \
+ASPIS_V7_CU_TAIL_PROBE_GENESIS_BINARY="$TASK/evidence/sbf/cu-tail-probe-v3/aspis_verifier.so" \
+ASPIS_V7_CU_TAIL_PROBE_BINARY="$TASK/evidence/sbf/cu-tail-probe-v3/aspis_verifier.so" \
+ASPIS_V7_CU_TAIL_PROBE_BUILDER="$TASK/repo/tools/v7-live-pool-proof/target/release/build-v7-cu-tail-probe" \
+./scripts/v7_txv1_disposable_feature_cluster.sh "$TASK/agave-v4.2.2/solana-release/bin" "$NEW_EVIDENCE" I_ACKNOWLEDGE_AUDIT_ONLY_IDENTITIES_AND_DISPOSABLE_FUNDS -- ./scripts/v7_cu_tail_probe_child.sh "$NEW_EVIDENCE/probe"
+
+(cd results/v7-all-reachable-cu-bound-pda-closure-20260908 && shasum -a 256 -c SHA256SUMS)

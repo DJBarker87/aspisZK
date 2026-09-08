@@ -19,6 +19,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EVIDENCE_ROOT = ROOT / "results/v7-all-reachable-cu-bound-pda-closure-20260908"
 RUNTIME_LIMIT = 1_400_000
 HISTORICAL_PROFILE_REVISION = 1
 CURRENT_PROFILE_REVISION = 2
@@ -29,6 +30,12 @@ CUTOFF20_MAX_COUNTER = 20
 MAX_FRONTIER_NODES = 203
 INVENTORY_START_REVISION = "e5640f79133f8afbeb7eb08a940abc6462274295"
 DECODED_CHALLENGE_BINDING_REVISION = "8f36d51a173fcd513224c1ce6cd2cc2cc4e2901f"
+CURRENT_SBF_SOURCE_REVISION = "acc4055b6c55ff6a568cf0d3d916365eccb4ebf1"
+CURRENT_POOL_SBF_SHA256 = "cb5f90452ddd0772c5401f42ed0e28b7a38b7bb93ea0ac465cfab37fe7afd1a2"
+CURRENT_VERIFIER_SBF_SHA256 = "8894c98c21583bdbd08f891367ece6fcb7570cbc53058250f4f87b5372260c66"
+ROLLOVER_FULL_POOL_REFERENCE_CU = 119_206
+ROLLOVER_ADDITIONAL_FIXED_PDA_CU = 1_500
+ROLLOVER_ENVELOPE_CU = ROLLOVER_FULL_POOL_REFERENCE_CU + ROLLOVER_ADDITIONAL_FIXED_PDA_CU
 
 
 def fail(message: str) -> None:
@@ -49,6 +56,28 @@ def require(pattern: str, text: str, description: str) -> None:
 
 def sha256(relative: str) -> str:
     return hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
+
+
+def load_json(path: Path) -> dict:
+    if not path.is_file():
+        fail(f"missing evidence file: {path.relative_to(ROOT)}")
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        fail(f"invalid evidence JSON {path.relative_to(ROOT)}: {error}")
+    if not isinstance(value, dict):
+        fail(f"evidence root is not an object: {path.relative_to(ROOT)}")
+    return value
+
+
+def require_equal(actual: object, expected: object, description: str) -> None:
+    if actual != expected:
+        fail(f"evidence mismatch: {description}: expected {expected!r}, got {actual!r}")
+
+
+def require_true(value: object, description: str) -> None:
+    if value is not True:
+        fail(f"evidence mismatch: {description} is not true")
 
 
 def main() -> None:
@@ -168,7 +197,8 @@ def main() -> None:
         r"V7_CU_TAIL_QM31_MIN_TAG:\s*u8\s*=\s*78.*"
         r"V7_CU_TAIL_QM31_MAX_TAG:\s*u8\s*=\s*79.*"
         r"V7_CU_TAIL_QUERY_ASCENDING_TAG:\s*u8\s*=\s*80.*"
-        r"V7_CU_TAIL_QUERY_DESCENDING_TAG:\s*u8\s*=\s*81",
+        r"V7_CU_TAIL_QUERY_DESCENDING_TAG:\s*u8\s*=\s*81.*"
+        r"V7_CU_TAIL_FRONTIER_14_TAG:\s*u8\s*=\s*86",
         cu_tail_probe,
         "isolated CU-tail probe wire tags",
     )
@@ -350,6 +380,178 @@ def main() -> None:
         verifier_certificate_path,
         cu_tail_probe_path,
     })
+
+    # Freeze current-binary evidence and recompute every delta used below.
+    tail_path = EVIDENCE_ROOT / "cu-tail-probe/summary.json"
+    tail = load_json(tail_path)
+    require_equal(tail.get("schema"), "aspis.v7.cu-tail-probe-evidence.v1", "tail schema")
+    require_true(tail.get("localOnly"), "tail probe local-only classification")
+    require_equal(tail.get("probeBinarySha256"),
+                  "f71713a8c50bdb62111012856332a364f7800a68e604e6d6de0ed343f812ec04",
+                  "tail probe binary hash")
+    require_equal(tail.get("publicClusterTransaction"), False, "tail probe public-cluster flag")
+    require_equal(tail.get("mainnetReady"), False, "tail probe mainnet flag")
+    tail_cases = {case.get("name"): case for case in tail.get("cases", [])}
+    expected_tail_names = {
+        "qm31-minimum", "qm31-maximum-successful", "query-order-best", "query-order-worst",
+        "counter-zero", "counter-twenty", "frontier-14", "frontier-199", "frontier-203",
+    }
+    require_equal(set(tail_cases), expected_tail_names, "tail case names")
+    for name, case in tail_cases.items():
+        require_true(case.get("simulationSubmissionWireIdentical"), f"{name} byte identity")
+        require_equal(case.get("simulationCu"), case.get("landedCu"), f"{name} simulation/landed CU")
+        if not isinstance(case.get("finalizedSlot"), int) or case["finalizedSlot"] <= 0:
+            fail(f"evidence mismatch: {name} did not finalize")
+        if not isinstance(case.get("signedWireSha256"), str) or len(case["signedWireSha256"]) != 64:
+            fail(f"evidence mismatch: {name} signed wire hash")
+    tail_deltas = {
+        "qm31MaximumMinusMinimum": (
+            tail_cases["qm31-maximum-successful"]["landedCu"]
+            - tail_cases["qm31-minimum"]["landedCu"]
+        ),
+        "queryWorstMinusBest": (
+            tail_cases["query-order-worst"]["landedCu"]
+            - tail_cases["query-order-best"]["landedCu"]
+        ),
+        "counterTwentyMinusZero": (
+            tail_cases["counter-twenty"]["landedCu"]
+            - tail_cases["counter-zero"]["landedCu"]
+        ),
+        "frontier203Minus199": (
+            tail_cases["frontier-203"]["landedCu"]
+            - tail_cases["frontier-199"]["landedCu"]
+        ),
+        "frontier203Minus14": (
+            tail_cases["frontier-203"]["landedCu"]
+            - tail_cases["frontier-14"]["landedCu"]
+        ),
+    }
+    require_equal(tail.get("landedDeltasCu"), tail_deltas, "recomputed tail deltas")
+
+    def validate_terminal(kind: str, fixed_pda_attempts: int) -> tuple[dict, dict, dict]:
+        base = EVIDENCE_ROOT / f"current-{kind}-selected-sort"
+        terminal = load_json(base / "terminal/terminal-finalized.json")
+        signed = load_json(base / "terminal/signed-request.json")
+        proof_wrapper = load_json(base / "proof/genuine-live-proof.json")
+        closure = load_json(base / "closure/proof-close-finalized.json")
+        cluster = load_json(base / "cluster/cluster.json")
+        operation = "withdrawal" if kind == "withdrawal" else "transfer"
+        require_equal(terminal.get("schema"), "aspis.v7.live-terminal-finalized.v1",
+                      f"{kind} terminal schema")
+        require_equal(terminal.get("operation"), operation, f"{kind} operation")
+        require_true(terminal.get("finalized"), f"{kind} finalized")
+        require_true(terminal.get("byteIdenticalSimulationSubmission"), f"{kind} byte identity")
+        require_equal(terminal.get("simulatedCu"), terminal.get("landedCu"),
+                      f"{kind} simulation/landed CU")
+        require_equal(terminal.get("terminalInstructionCount"), 1, f"{kind} terminal count")
+        require_true(terminal.get("ciphertextCarrierRealHpke"), f"{kind} real HPKE carrier")
+        require_true(terminal.get("ciphertextCarrierCanonical"), f"{kind} canonical carrier")
+        require_equal(terminal.get("carrierTestMode"), None, f"{kind} carrier test mode")
+        require_true(terminal.get("auditOnly"), f"{kind} audit-only identity")
+        require_true(terminal.get("disposable"), f"{kind} disposable classification")
+        require_equal(terminal.get("publicDevnetTestOnly"), False, f"{kind} public Devnet flag")
+        require_equal(terminal.get("mainnetReady"), False, f"{kind} mainnet flag")
+        if terminal.get("serializedTransactionBytes", 4096) >= 4096:
+            fail(f"evidence mismatch: {kind} transaction is not below 4096 bytes")
+        require_true(signed.get("terminalPdaClosureEnabled"), f"{kind} PDA closure")
+        pda = signed.get("pdaSearchAudit", {})
+        require_equal(pda.get("terminalVariableFindProgramAddressInvocations"), 0,
+                      f"{kind} terminal variable PDA calls")
+        require_equal(pda.get("terminalSingleAttemptValidations"), fixed_pda_attempts,
+                      f"{kind} fixed PDA attempts")
+        require_equal(pda.get("terminalPdaSyscallTheoreticalMaximumCu"),
+                      fixed_pda_attempts * create_program_address_cu,
+                      f"{kind} fixed PDA CU")
+        require_equal(signed.get("signedWireSha256"), terminal.get("signedWireSha256"),
+                      f"{kind} signed wire hash")
+        require_equal(hashlib.sha256((base / "terminal/accounts-before.json").read_bytes()).hexdigest(),
+                      terminal.get("protectedAccountsBeforeJsonSha256"),
+                      f"{kind} protected before-account hash")
+        require_equal(hashlib.sha256((base / "terminal/accounts-after.json").read_bytes()).hexdigest(),
+                      terminal.get("protectedAccountsAfterJsonSha256"),
+                      f"{kind} protected after-account hash")
+        proof = proof_wrapper.get("proof", {})
+        require_equal(proof.get("operation"), operation, f"{kind} proof operation")
+        require_equal(proof.get("deterministicFixtureEntropy"), False, f"{kind} fixture entropy")
+        require_equal(proof.get("trustedResultAccount"), False, f"{kind} trusted result")
+        require_equal(proof.get("verifierBypass"), False, f"{kind} verifier bypass")
+        selection = proof.get("finalNonceSelection", {})
+        require_true(selection.get("enabled"), f"{kind} cutoff selection")
+        require_equal(selection.get("maxCompactCounter"), CUTOFF20_MAX_COUNTER,
+                      f"{kind} cutoff")
+        require_true(selection.get("minimumQueryDrawsPerEvaluatedCandidateRequired"),
+                     f"{kind} minimum q16 draws")
+        counter = selection.get("selectedCounter")
+        if not isinstance(counter, int) or not 0 <= counter <= CUTOFF20_MAX_COUNTER:
+            fail(f"evidence mismatch: {kind} counter outside cutoff-20")
+        require_true(proof.get("proof", {}).get("powValid"), f"{kind} proof work")
+        require_true(closure.get("finalized"), f"{kind} proof close finalized")
+        require_true(closure.get("byteIdenticalSimulationSubmission"), f"{kind} close byte identity")
+        require_true(closure.get("proofAccountDrained"), f"{kind} proof account drained")
+        require_equal(cluster.get("agave", {}).get("coreVersion"), "4.2.2", f"{kind} Agave")
+        require_true(cluster.get("cluster", {}).get("feature", {}).get("active"),
+                     f"{kind} TxV1 feature")
+        require_equal(cluster.get("cluster", {}).get("feature", {}).get("activationSlot"), 0,
+                      f"{kind} TxV1 genesis activation")
+        programs = {item.get("name"): item for item in cluster.get("identities", {}).get("configuredPrograms", [])}
+        require_equal(programs.get("pool", {}).get("sha256"), CURRENT_POOL_SBF_SHA256,
+                      f"{kind} Pool SBF")
+        require_equal(programs.get("verifier", {}).get("sha256"), CURRENT_VERIFIER_SBF_SHA256,
+                      f"{kind} verifier SBF")
+        require_equal(cluster.get("repository", {}).get("revision"), CURRENT_SBF_SOURCE_REVISION,
+                      f"{kind} SBF source revision")
+        if operation == "withdrawal":
+            custody = terminal.get("custody", {})
+            require_true(custody.get("conservation"), "withdrawal custody conservation")
+            require_true(custody.get("destinationBinding"), "withdrawal destination binding")
+        return terminal, proof, signed
+
+    transfer_terminal, transfer_proof, transfer_signed = validate_terminal("transfer", 11)
+    withdrawal_terminal, withdrawal_proof, withdrawal_signed = validate_terminal("withdrawal", 15)
+
+    # The terminal rollover branch has one extra pre-created zeroed history
+    # page and one additional fixed-bump validation.  Conservatively add the
+    # entire measured production-shaped rollover Pool transaction (not merely
+    # its same/rollover delta) plus that fixed 1,500-CU PDA attempt.  The old
+    # measurement used a transport-only verifier; it is therefore never used
+    # as a combined verifier measurement.  Adding its complete Pool cost to a
+    # genuine current combined same-page transaction deliberately double-counts
+    # the common Pool prefix, verifier transport, marker and state writes.
+    rollover_reference_path = ROOT / "results/pool-v1-pair-afterstate-litesvm-20260827/evidence-rollover.json"
+    rollover_reference = load_json(rollover_reference_path)
+    require_equal(rollover_reference.get("schema"),
+                  "aspis.pool-v1.pair-afterstate-runtime-evidence.v1", "rollover reference schema")
+    require_equal(rollover_reference.get("mode"), "rollover", "rollover reference mode")
+    require_equal(rollover_reference.get("execution", {}).get("compute_units"),
+                  ROLLOVER_FULL_POOL_REFERENCE_CU, "rollover full Pool CU")
+    require_true(rollover_reference.get("execution", {}).get("simulation_equals_execution"),
+                 "rollover reference simulation/execution equality")
+    require_true(rollover_reference.get("state_transition", {}).get("full_prior_page_byte_exact_on_rollover"),
+                 "rollover prior-page preservation")
+
+    full_tail_envelope_cu = (
+        tail_deltas["counterTwentyMinusZero"]
+        + tail_deltas["frontier203Minus14"]
+        + tail_deltas["qm31MaximumMinusMinimum"]
+        + tail_deltas["queryWorstMinusBest"]
+    )
+    transfer_same_ceiling = transfer_terminal["landedCu"] + full_tail_envelope_cu
+    transfer_rollover_ceiling = transfer_same_ceiling + ROLLOVER_ENVELOPE_CU
+    withdrawal_same_ceiling = withdrawal_terminal["landedCu"] + full_tail_envelope_cu
+    withdrawal_rollover_ceiling = withdrawal_same_ceiling + ROLLOVER_ENVELOPE_CU
+    shape_ceilings = {
+        "samePageTransfer": transfer_same_ceiling,
+        "rolloverTransfer": transfer_rollover_ceiling,
+        "samePageWithdrawal": withdrawal_same_ceiling,
+        "rolloverWithdrawal": withdrawal_rollover_ceiling,
+    }
+    universal_ceiling = max(shape_ceilings.values())
+    if universal_ceiling >= RUNTIME_LIMIT:
+        fail(f"computed all-reachable ceiling {universal_ceiling} is not below {RUNTIME_LIMIT}")
+    release_classification = (
+        "B — RELEASE-MARGIN GREEN" if universal_ceiling <= 1_350_000
+        else "A — ALL-REACHABLE GREEN"
+    )
 
     result = {
         "schema": "aspis.v7.all-reachable-cu-source-inventory.v4",
@@ -585,6 +787,133 @@ def main() -> None:
         },
         "sourceSha256": {path: sha256(path) for path in source_files},
     }
+
+    # Replace the pre-measurement classification with the fail-closed current
+    # evidence result.  Historical fields remain above for provenance only.
+    result.update({
+        "schema": "aspis.v7.all-reachable-cu-bound.v5",
+        "classification": release_classification,
+        "currentSbfSourceRevision": CURRENT_SBF_SOURCE_REVISION,
+        "currentSbf": {
+            "agaveVersion": "4.2.2",
+            "poolSha256": CURRENT_POOL_SBF_SHA256,
+            "verifierSha256": CURRENT_VERIFIER_SBF_SHA256,
+            "proofFormatChanged": False,
+            "relationChanged": False,
+        },
+        "currentProfile": {
+            "revision": CURRENT_PROFILE_REVISION,
+            "genuineFinalizedSamePage": {
+                "transfer": {
+                    "cu": transfer_terminal["landedCu"],
+                    "verifierCpiCu": 1_000_153,
+                    "bytes": transfer_terminal["serializedTransactionBytes"],
+                    "counter": transfer_proof["proof"]["compactCounter"],
+                    "frontierNodes": transfer_proof["proof"]["frontierNodes"],
+                    "signature": transfer_terminal["signature"],
+                    "slot": transfer_terminal["slot"],
+                    "wireSha256": transfer_terminal["signedWireSha256"],
+                    "beforeAccountsSha256": transfer_terminal["protectedAccountsBeforeJsonSha256"],
+                    "afterAccountsSha256": transfer_terminal["protectedAccountsAfterJsonSha256"],
+                    "proofSha256": transfer_proof["proof"]["sha256"],
+                },
+                "withdrawal": {
+                    "cu": withdrawal_terminal["landedCu"],
+                    "verifierCpiCu": 976_371,
+                    "bytes": withdrawal_terminal["serializedTransactionBytes"],
+                    "counter": withdrawal_proof["proof"]["compactCounter"],
+                    "frontierNodes": withdrawal_proof["proof"]["frontierNodes"],
+                    "signature": withdrawal_terminal["signature"],
+                    "slot": withdrawal_terminal["slot"],
+                    "wireSha256": withdrawal_terminal["signedWireSha256"],
+                    "beforeAccountsSha256": withdrawal_terminal["protectedAccountsBeforeJsonSha256"],
+                    "afterAccountsSha256": withdrawal_terminal["protectedAccountsAfterJsonSha256"],
+                    "proofSha256": withdrawal_proof["proof"]["sha256"],
+                },
+            },
+            "directCurrentRolloverMeasurementAvailable": False,
+            "rolloverQualification": (
+                "bounded from the exact current fixed-shape branch by conservatively adding an "
+                "entire production-shaped rollover Pool transaction plus its one additional "
+                "fixed PDA attempt to each genuine current same-page combined anchor"
+            ),
+        },
+        "measuredTailDeltasCu": tail_deltas,
+        "allReachableArithmetic": {
+            "method": (
+                "for each genuine current combined anchor, add every full independently measured "
+                "successful-path tail range, even though the anchor already lies inside each range; "
+                "for rollover also add the complete prior production-shaped rollover Pool cost and "
+                "the current extra fixed PDA attempt"
+            ),
+            "commonTailEnvelopeCu": {
+                "cutoff20CounterFullRange": tail_deltas["counterTwentyMinusZero"],
+                "frontier14To203FullGrammarRange": tail_deltas["frontier203Minus14"],
+                "frontier199To203DiagnosticRange": tail_deltas["frontier203Minus199"],
+                "qm31MinimumToMaximumSuccessfulFullTopology": tail_deltas["qm31MaximumMinusMinimum"],
+                "queryOrderingBestToWorstAllCandidatesAndOpening": tail_deltas["queryWorstMinusBest"],
+                "total": full_tail_envelope_cu,
+            },
+            "rolloverEnvelopeCu": {
+                "completeProductionShapedPoolRolloverReference": ROLLOVER_FULL_POOL_REFERENCE_CU,
+                "additionalCurrentFixedPdaAttempt": ROLLOVER_ADDITIONAL_FIXED_PDA_CU,
+                "total": ROLLOVER_ENVELOPE_CU,
+                "deliberatelyDoubleCountsCommonPoolWork": True,
+                "systemAccountCreationInTerminal": False,
+                "nextHistoryPageMustBePrecreatedZeroedPoolOwned": True,
+            },
+            "shapeCeilingsCu": shape_ceilings,
+            "maximumShape": max(shape_ceilings, key=shape_ceilings.get),
+            "universalCeilingCu": universal_ceiling,
+            "marginTo1400000Cu": RUNTIME_LIMIT - universal_ceiling,
+            "marginTo1350000Cu": 1_350_000 - universal_ceiling,
+            "marginTo1300000Cu": 1_300_000 - universal_ceiling,
+        },
+        "residualRuntimeTails": {
+            "pdaSearch": "closed: zero terminal find_program_address calls",
+            "qm31SuccessfulRetries": "bounded by source loop limits and full accepted-topology SBF delta",
+            "queryOrdering": "bounded by source-visible insertion loops and full cutoff-20 plus opening SBF delta",
+            "q16Counter": "bounded by cutoff-20 publication bridge and full counter-0-to-20 SBF delta",
+            "frontier": "bounded by the 203-node grammar cap and full 199-to-203 SBF delta",
+            "uncontrolledAcceptedBranches": [],
+        },
+        "evidence": {
+            "tailProbe": str(tail_path.relative_to(ROOT)),
+            "transfer": str((EVIDENCE_ROOT / "current-transfer-selected-sort").relative_to(ROOT)),
+            "withdrawal": str((EVIDENCE_ROOT / "current-withdrawal-selected-sort").relative_to(ROOT)),
+            "rolloverReference": str(rollover_reference_path.relative_to(ROOT)),
+            "formal": str((EVIDENCE_ROOT / "formal").relative_to(ROOT)),
+            "terminalPdaInventory": str((EVIDENCE_ROOT / "source-inventory/terminal-pda-inventory.json").relative_to(ROOT)),
+        },
+        "decision": {
+            "cutoff20GuaranteesBelow1300000": universal_ceiling <= 1_300_000,
+            "cutoff20GuaranteesBelow1350000": universal_ceiling <= 1_350_000,
+            "cutoff20GuaranteesBelow1400000": universal_ceiling < RUNTIME_LIMIT,
+            "verifierAcceptedLanguageGuaranteesBelow1400000": False,
+            "safeToPromoteAsUniversalCuPolicy": False,
+            "reasonNotProductionPromoted": (
+                "the closure is implemented behind default-off audit features and uses audit-only "
+                "identities on disposable local clusters; release migration and production identity "
+                "selection are explicitly outside this task"
+            ),
+            "byteIdenticalSimulationStillRequired": True,
+            "classification": release_classification,
+        },
+        "scope": {
+            "productionSourceChanged": True,
+            "verifierChanged": True,
+            "proofFormatChanged": False,
+            "relationChanged": False,
+            "cpiOrderingChanged": False,
+            "poolExistingAccountLayoutChanged": False,
+            "newVerifierOwnedCertificateAccountBytes": 704,
+            "terminalWireByteDelta": 33,
+            "auditFeaturesDefaultOff": True,
+            "publicDevnetEvidenceModified": False,
+            "publicDeploymentPerformed": False,
+            "mainnetReady": False,
+        },
+    })
 
     json.dump(result, sys.stdout, indent=2 if args.pretty else None, sort_keys=True)
     sys.stdout.write("\n")

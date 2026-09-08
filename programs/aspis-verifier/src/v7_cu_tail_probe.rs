@@ -28,6 +28,7 @@ pub const V7_CU_TAIL_COUNTER_ZERO_TAG: u8 = 82;
 pub const V7_CU_TAIL_COUNTER_TWENTY_TAG: u8 = 83;
 pub const V7_CU_TAIL_FRONTIER_199_TAG: u8 = 84;
 pub const V7_CU_TAIL_FRONTIER_203_TAG: u8 = 85;
+pub const V7_CU_TAIL_FRONTIER_14_TAG: u8 = 86;
 pub const V7_CU_TAIL_QUERY_WIRE_BYTES: usize = 1 + V6_QUERY_COUNT * 4;
 
 const DOM_SQUEEZE: u8 = 0x01;
@@ -307,6 +308,9 @@ pub fn process_v7_cu_tail_probe_instruction(
         V7_CU_TAIL_FRONTIER_203_TAG if instruction_data.len() == 1 => {
             run_frontier_topology(FRONTIER_203_QUERIES, 203)
         }
+        V7_CU_TAIL_FRONTIER_14_TAG if instruction_data.len() == 1 => {
+            run_frontier_topology(core::array::from_fn(|index| index as u32), 14)
+        }
         _ => return Err(ProgramError::InvalidInstructionData),
     };
     sol_log_data(&[b"aspis-v7-cu-tail-probe-v1", &sink]);
@@ -345,6 +349,8 @@ mod tests {
 
     #[test]
     fn frontier_probe_queries_have_pinned_counts() {
+        let minimum: [u32; V6_QUERY_COUNT] = core::array::from_fn(|index| index as u32);
+        assert_eq!(binary_frontier_nodes(minimum, 18), Ok(14));
         assert_eq!(binary_frontier_nodes(FRONTIER_199_QUERIES, 18), Ok(199));
         assert_eq!(binary_frontier_nodes(FRONTIER_203_QUERIES, 18), Ok(203));
     }
