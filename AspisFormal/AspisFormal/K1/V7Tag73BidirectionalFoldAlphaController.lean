@@ -288,6 +288,43 @@ def bidirectionalFoldAlphaController
   simp [bidirectionalFoldAlphaController, bidirectionalFoldAlphaPreferred,
     atAnchor, inputExact]
 
+@[simp] theorem bidirectional_preferred_at_expected_work
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex : Nat)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (workInput : ShaInput)
+    (notAnchor : state.exposureIndex ≠ anchorIndex)
+    (foldUnused : state.memory.foldUsed = false)
+    (expected : state.memory.expectedWork = some workInput)
+    (inputExact : currentBidirectionalInput? transitionFuel state =
+      some workInput) :
+    (bidirectionalFoldAlphaController transitionFuel anchorIndex).preferredSlot
+        state = some none := by
+  simp [bidirectionalFoldAlphaController, bidirectionalFoldAlphaPreferred,
+    notAnchor, foldUnused, expected, inputExact, matchesExpectedFoldWork]
+
+/-- A boundary-first anchor installs exactly the missing work sibling without
+consuming the fold slot. -/
+theorem bidirectional_boundary_anchor_waits_for_work
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex : Nat)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      BidirectionalFoldAlphaMemory)
+    (digest : Digest256) (nonce : NonceBytes) (answer : Digest256)
+    (atAnchor : state.exposureIndex = anchorIndex)
+    (foldUnused : state.memory.foldUsed = false)
+    (inputExact : currentBidirectionalInput? transitionFuel state =
+      some (bytes digest ++
+        (domAbsorb :: foldWorkNonceLabel :: 0 :: bytes nonce))) :
+    let next := bidirectionalFoldAlphaAfterMemory transitionFuel anchorIndex
+      state answer
+    next.foldUsed = false ∧
+      next.expectedWork =
+        some (bytes digest ++ (domGrind :: bytes nonce)) := by
+  simp [bidirectionalFoldAlphaAfterMemory, atAnchor, inputExact, foldUnused,
+    installBoundaryAnchor]
+
 @[simp] theorem no_expected_fold_work_does_not_match
     (current : Option ShaInput) :
     ¬ matchesExpectedFoldWork current none := by
@@ -302,6 +339,8 @@ end
 #print axioms literal_alpha_boundary_anchor_kind
 #print axioms bidirectional_preferred_at_literal_work_anchor
 #print axioms bidirectional_preferred_at_literal_boundary_anchor
+#print axioms bidirectional_preferred_at_expected_work
+#print axioms bidirectional_boundary_anchor_waits_for_work
 #print axioms no_expected_fold_work_does_not_match
 
 end AspisK1.V7Tag73BidirectionalFoldAlphaController
