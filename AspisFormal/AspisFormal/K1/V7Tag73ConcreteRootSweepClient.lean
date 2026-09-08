@@ -575,6 +575,7 @@ def exactRootSweepWitnessConfiguration
   client := deployedRootSweepClient rounds extractor
   bounds :=
     { rootAdversaryTotalCalls := base.bounds.rootAdversaryTotalCalls
+      rootAdversaryFreshCalls := base.bounds.rootAdversaryFreshCalls
       rootVerifierTotalCalls := base.bounds.rootVerifierTotalCalls
       replayTotalCalls := base.bounds.replayTotalCalls
       rootAdversaryFuel := base.bounds.rootAdversaryFuel

@@ -921,6 +921,32 @@ theorem adequate_replay_total_limit_eq_G
   exact Nat.le_antisymm configuration.bounds.replayTotalCalls
     adequate.replayTotalReserve
 
+/-- The production restoration oracle has at least the limits used by the
+root adversary.  The total-call comparison follows through `G`; the fresh-call
+comparison uses the exact root `Q` cap and the independently reserved unified
+exposure length `F`.  This discharges the monotonic replay premises without
+equating the deliberately different root and restoration configurations. -/
+theorem adequate_replay_limits_extend_root_adversary
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {canonicalDriverFuel transitionFuel : Nat}
+    (configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters)
+    (adequate : ExactPlainRomOperationalAdequacy canonicalDriverFuel
+      transitionFuel configuration) :
+    configuration.machine.adversaryLimits.totalCalls ≤
+        configuration.restorationConfiguration.oracleLimits.totalCalls ∧
+      configuration.machine.adversaryLimits.freshCalls ≤
+        configuration.restorationConfiguration.oracleLimits.freshCalls := by
+  constructor
+  · exact configuration.bounds.rootAdversaryTotalCalls.trans
+      adequate.replayTotalReserve
+  · apply configuration.bounds.rootAdversaryFreshCalls.trans
+    apply Nat.le_trans _ adequate.replayFreshReserve
+    simp only [unifiedFull256ExposureCap, full256MachineFreshCap,
+      sameTapeStartCap, deployedFull256VerifierCallCap]
+    omega
+
 theorem exact_operational_cap_expansions
     (parameters : ExactCompilerResourceParameters) :
     parameters.q1ShaCallCap + 1513 +
@@ -962,6 +988,7 @@ theorem exact_operational_cap_expansions
 #print axioms zero_initial_accumulator_attempt_caps
 #print axioms exact_operational_cap_expansions
 #print axioms adequate_replay_total_limit_eq_G
+#print axioms adequate_replay_limits_extend_root_adversary
 
 end
 

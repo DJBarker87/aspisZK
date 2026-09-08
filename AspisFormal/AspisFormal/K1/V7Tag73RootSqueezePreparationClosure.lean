@@ -193,6 +193,81 @@ theorem recorded_prefix_query_actor_change
                 exact congrArg (fun value => value + 1) agreement.freshCalls
               · simp [agreement.historyLength]
 
+/-! ## Monotonic oracle-limit replay -/
+
+/-- A query which succeeds under one pair of call limits returns the exact
+same answer and state under componentwise larger limits.  This is the resource
+fact needed by production restoration: the replay oracle is deliberately
+given the global compiler allowance, not the smaller first-run `Q` limit. -/
+theorem query_oracle_success_mono_limits
+    (controller : AdaptiveController) (sourceLimits replayLimits : OracleLimits)
+    (actor : QueryActor) (state nextState : OracleState)
+    (input : ShaInput) (output : ShaOutput)
+    (totalMono : sourceLimits.totalCalls ≤ replayLimits.totalCalls)
+    (freshMono : sourceLimits.freshCalls ≤ replayLimits.freshCalls)
+    (success : queryOracle controller sourceLimits actor state input =
+      .ok (output, nextState)) :
+    queryOracle controller replayLimits actor state input =
+      .ok (output, nextState) := by
+  unfold queryOracle at success ⊢
+  by_cases sourceTotalBlocked : state.totalCalls ≥ sourceLimits.totalCalls
+  · simp [sourceTotalBlocked] at success
+  · have replayTotalOpen : ¬ state.totalCalls ≥ replayLimits.totalCalls := by
+      omega
+    simp only [sourceTotalBlocked, replayTotalOpen, if_false] at success ⊢
+    cases found : lookupEntry state input with
+    | some entry => simpa only [found] using success
+    | none =>
+        simp only [found] at success ⊢
+        by_cases sourceFreshBlocked :
+            state.freshCalls ≥ sourceLimits.freshCalls
+        · simp [sourceFreshBlocked] at success
+        · have replayFreshOpen :
+              ¬ state.freshCalls ≥ replayLimits.freshCalls := by
+            omega
+          simp only [sourceFreshBlocked, replayFreshOpen, if_false]
+            at success ⊢
+          exact success
+
+/-- A normally returned oracle-machine execution is unchanged when both call
+limits are enlarged.  The controller, actor, hidden program, fuel, and every
+lazy-oracle state transition remain literal; only unreachable abort guards
+are relaxed. -/
+theorem run_machine_returned_mono_limits
+    {Result : Type*}
+    (controller : AdaptiveController) (sourceLimits replayLimits : OracleLimits)
+    (actor : QueryActor) (fuel : Nat) (state : OracleState)
+    (program : OracleMachine Result) (result : Result)
+    (totalMono : sourceLimits.totalCalls ≤ replayLimits.totalCalls)
+    (freshMono : sourceLimits.freshCalls ≤ replayLimits.freshCalls)
+    (returned :
+      (runMachine controller sourceLimits actor fuel state program).halt =
+        .returned result) :
+    runMachine controller replayLimits actor fuel state program =
+      runMachine controller sourceLimits actor fuel state program := by
+  induction fuel generalizing state program with
+  | zero =>
+      cases program <;> simp [runMachine] at returned ⊢
+  | succ fuel ih =>
+      cases program with
+      | pure value => rfl
+      | abort reason => simp [runMachine] at returned
+      | query input next =>
+          cases sourceQuery : queryOracle controller sourceLimits actor state
+              input with
+          | error reason => simp [runMachine, sourceQuery] at returned
+          | ok pair =>
+              rcases pair with ⟨output, nextState⟩
+              have replayQuery := query_oracle_success_mono_limits controller
+                sourceLimits replayLimits actor state nextState input output
+                totalMono freshMono sourceQuery
+              have tailReturned :
+                  (runMachine controller sourceLimits actor fuel nextState
+                    (next output)).halt = .returned result := by
+                simpa [runMachine, sourceQuery] using returned
+              simp only [runMachine, sourceQuery, replayQuery]
+              rw [ih nextState (next output) tailReturned]
+
 /-- Strengthened inversion induction. The normally returned source run uses
 `sourceActor`; the executable prefix replay may use any `replayActor`. -/
 private theorem returned_run_replays_prefix_under_actor_change_aux
@@ -439,7 +514,10 @@ theorem literal_root_squeeze_request_prepares_ready
       Payload)
     (runs : RootProjectedTotalizedRuns machine hidden runtime)
     (configuration : ConcreteRestorationConfiguration)
-    (limitsExact : configuration.oracleLimits = machine.adversaryLimits)
+    (totalLimitMono : machine.adversaryLimits.totalCalls ≤
+      configuration.oracleLimits.totalCalls)
+    (freshLimitMono : machine.adversaryLimits.freshCalls ≤
+      configuration.oracleLimits.freshCalls)
     (transitionIndex : Nat)
     (transition : FutureFreeTransition)
     (transitionExact : verifierTransitionAt? runtime.node transitionIndex =
@@ -466,6 +544,18 @@ theorem literal_root_squeeze_request_prepares_ready
         (machine.blackBox.start hidden machine.observation)).halt =
           .returned runtime.adversaryValue := by
     rw [returnedRun]
+  have replayRunExact := run_machine_returned_mono_limits
+    (rootAdversaryProjectedController runtime) machine.adversaryLimits
+    configuration.oracleLimits .adversary machine.adversaryFuel emptyOracle
+    (machine.blackBox.start hidden machine.observation) runtime.adversaryValue
+    totalLimitMono freshLimitMono returnedHalt
+  have replayReturnedHalt :
+      (runMachine (rootAdversaryProjectedController runtime)
+        configuration.oracleLimits .adversary machine.adversaryFuel emptyOracle
+        (machine.blackBox.start hidden machine.observation)).halt =
+          .returned runtime.adversaryValue := by
+    rw [replayRunExact]
+    exact returnedHalt
   cases occurrenceExact : firstEitherInputOccurrence outputInput advanceInput
       runtime.node.proverHistory with
   | none =>
@@ -499,15 +589,25 @@ theorem literal_root_squeeze_request_prepares_ready
         rw [returnedRun]
         simpa [SchedulerNativePlainRomRootRuntime.node,
           ConcreteRestorationNode.proverHistory] using occurrenceSpec.1
+      have replayOccurrenceDecomposition :
+          historySince emptyOracle
+              (runMachine (rootAdversaryProjectedController runtime)
+                configuration.oracleLimits .adversary machine.adversaryFuel
+                emptyOracle
+                (machine.blackBox.start hidden machine.observation)).oracle =
+            occurrence.before ++ occurrence.chosen :: occurrence.after := by
+        rw [replayRunExact]
+        exact occurrenceDecomposition
       have replay := returned_run_first_occurrence_replays_as_extractor
-        (rootAdversaryProjectedController runtime) machine.adversaryLimits
+        (rootAdversaryProjectedController runtime) configuration.oracleLimits
         .adversary machine.adversaryFuel emptyOracle
         (machine.blackBox.start hidden machine.observation)
-        runtime.adversaryValue occurrence returnedHalt occurrenceDecomposition
+        runtime.adversaryValue occurrence replayReturnedHalt
+        replayOccurrenceDecomposition
       rcases replay with ⟨pendingContinuation, prefixPaused, prefixTrace⟩
       let prefixRun := runPrefix
         (recordedPrefixController emptyOracle.history.length occurrence.before)
-        machine.adversaryLimits .extractorReplay occurrence.before.length
+        configuration.oracleLimits .extractorReplay occurrence.before.length
         emptyOracle (machine.blackBox.start hidden machine.observation)
       let prepared : PreparedConcreteRestoration Statement Proof Payload :=
         { request :=
@@ -527,10 +627,11 @@ theorem literal_root_squeeze_request_prepares_ready
         ConcreteRestorationAccumulator.node?,
         initialRestorationAccumulatorFromRoot, List.getElem?_cons_zero,
         transitionExact, pairExact, occurrenceExact]
-      rw [limitsExact]
       simp [rootEntry, prefixRun, prefixPaused, prefixTrace, prepared]
 
 #print axioms recorded_prefix_query_actor_change
+#print axioms query_oracle_success_mono_limits
+#print axioms run_machine_returned_mono_limits
 #print axioms returned_run_first_occurrence_replays_as_extractor
 #print axioms literal_root_squeeze_request_prepares_ready
 
