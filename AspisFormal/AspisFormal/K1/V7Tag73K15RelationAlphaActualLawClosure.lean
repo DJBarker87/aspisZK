@@ -140,6 +140,57 @@ noncomputable def guardedRelationAlphaTarget
   else
     ∅
 
+/-- The exact degree-six target written only in terms of data fixed before
+the current relation-alpha answer.  In particular, the sampled alpha is not
+an input to this definition. -/
+noncomputable def guardedRelationAlphaPreChallengeTarget
+    (view : RelationAlphaPreChallengeView QM31Exact) : Finset QM31Exact :=
+  if _wrong : relationBoundary view.claimed ≠ relationBoundary view.honest then
+    view.collisionSet
+  else
+    ∅
+
+/-- The incoming scalar carried by a candidate execution is exactly the
+boundary of the claimed polynomial at every relation round. -/
+theorem candidate_incoming_eq_claimed_boundary
+    (execution : CandidateExecution QM31Exact) (round : Fin 4) :
+    execution.incomingAt round =
+      relationBoundary (execution.claimedAt round) := by
+  fin_cases round
+  · simpa [CandidateExecution.claimedAt, CandidateExecution.incomingAt,
+      CandidateExecution.round0Claimed] using
+      (execution.relationBoundary_claimedCoefficients
+        execution.claimAfterOod 0).symm
+  · simpa [CandidateExecution.claimedAt, CandidateExecution.incomingAt] using
+      (execution.relationBoundary_claimedCoefficients execution.claim1 1).symm
+  · simpa [CandidateExecution.claimedAt, CandidateExecution.incomingAt] using
+      (execution.relationBoundary_claimedCoefficients execution.claim2 2).symm
+  · simpa [CandidateExecution.claimedAt, CandidateExecution.incomingAt] using
+      (execution.relationBoundary_claimedCoefficients execution.claim3 3).symm
+
+/-- The execution-shaped target is definitionally the pre-challenge target
+after projecting away every field that can depend on the current answer. -/
+theorem guarded_relation_alpha_target_eq_prechallenge
+    (execution : CandidateExecution QM31Exact) (round : Fin 4) :
+    guardedRelationAlphaTarget execution round =
+      guardedRelationAlphaPreChallengeTarget
+        (relationAlphaPreChallengeView execution round) := by
+  rw [guardedRelationAlphaTarget,
+    guardedRelationAlphaPreChallengeTarget,
+    candidate_incoming_eq_claimed_boundary]
+  rfl
+
+theorem guardedRelationAlphaPreChallengeTarget_card_le_six
+    (view : RelationAlphaPreChallengeView QM31Exact) :
+    (guardedRelationAlphaPreChallengeTarget view).card ≤ 6 := by
+  classical
+  by_cases wrong :
+      relationBoundary view.claimed ≠ relationBoundary view.honest
+  · simp only [guardedRelationAlphaPreChallengeTarget, dif_pos wrong]
+    exact roundCollisionSet_card_le_six view.claimed view.honest
+      (relationBoundary view.claimed) rfl wrong
+  · simp [guardedRelationAlphaPreChallengeTarget, wrong]
+
 theorem guardedRelationAlphaTarget_card_le_six
     (execution : CandidateExecution QM31Exact) (round : Fin 4) :
     (guardedRelationAlphaTarget execution round).card ≤ 6 := by
@@ -298,6 +349,8 @@ theorem fixed_k15_event_bounds_of_relation_alpha_source
 
 #print axioms exactTag73Restored_relationAlpha_event_eq_iUnion
 #print axioms guardedRelationAlphaTarget_card_le_six
+#print axioms guarded_relation_alpha_target_eq_prechallenge
+#print axioms guardedRelationAlphaPreChallengeTarget_card_le_six
 #print axioms ExactTag73K15RelationAlphaSource
 #print axioms exact_tag73_relation_alpha_probability_le_of_source
 #print axioms FixedK15EventBoundsExceptRelationAlpha
