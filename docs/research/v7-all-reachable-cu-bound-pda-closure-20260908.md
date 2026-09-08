@@ -19,6 +19,9 @@ Rollover harness commits: `4499ec7dad9a296d1d63783fb2a6849df1652f29`,
 Genuine rollover-withdrawal evidence commit:
 `b22c2b709d618f45e0d9b3a7cd733693fde390b5`.
 
+Genuine rollover-transfer and release-margin closure commit:
+`93682e98f8378cb2457ca8ef465a69a0c78c9c6b`.
+
 Ending HEAD: the immediate report-hygiene successor to the evidence commit;
 recorded exactly by `git rev-parse HEAD` in the handoff.
 
