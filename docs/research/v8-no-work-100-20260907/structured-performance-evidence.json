@@ -1,0 +1,185 @@
+{
+  "schema": "aspis.v8.structured-performance.evidence.v2",
+  "source_base_revision": "9e57493dbba8fb01c50bd62f737f187006a33cb1",
+  "research_branch": "research/v8-no-work-100-20260907",
+  "source_revision_note": "Scoped source and this evidence committed together. Exact pre-commit source hashes below; no self-referential commit SHA.",
+  "source_sha256": {
+    "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs": "3558278e5180c7cfb32c725f562203b3b788f5bf019a8f81bf701efb5dd1b5fb",
+    "docs/research/v8-no-work-100-20260907/experiments/inactive_row_binding.rs": "4642f1e4361aeb9f991ef917f8efdea292187fe3de9e3a9d351230859f9ad98b",
+    "docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs": "71146f5606d1b6c94afce1a5177316d82b933f021aeedc6df49735a5829d1222",
+    "docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs": "dc184e5ecd04086e231c13ba52e095cbae7556c72eb986b65573420052298849",
+    "docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs": "dd862d563355fc0f95e352b923750cbe7f62fba0970d51a8f61d952894ddb807",
+    "docs/research/v8-no-work-100-20260907/experiments/performance.rs": "76c1b5cf19ac0f5d36699279b06c0ad11d6e7f8f894dcf43dccc49e9834941d6",
+    "docs/research/v8-no-work-100-20260907/experiments/FusedRows.lean": "a827b5f0b32e1b893d67615a96672d203bf34a9c0c027345bd698175e2999a38",
+    "docs/research/v8-no-work-100-20260907/experiments/BlockHorner.lean": "d4c3242835b7ab9436f8916b071e2a63eec23c972057d73f47bca1bcdb99efd6",
+    "docs/research/v8-no-work-100-20260907/experiments/ArithmeticRewrites.lean": "49daceb697e11a1ed6cdcb53d7a8c1c88f63fbd4d7d067cdfa422719406d0b22",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-svm/src/main.rs": "47ddea6a0beb0285ebb99effca54ffc6277b6aae01b4c4ee12979352c9d48f9f",
+    "docs/research/v8-no-work-100-20260907/experiments/run_structured_nuc.sh": "678096521ac4c98ef87e3fcd39cf9a62c3cb4dc02d0113125bfeb4c3067d9c61",
+    "docs/research/v8-no-work-100-20260907/experiments/summarize_structured.py": "b729b16998a1d41c50179fc45909eb11205092cf1b6ef0d2005ac372d751dc67",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml": "a0269c4e3dc0fe585ed17b575ff393ec8f026d4bb0628a0c29228bbebb04c500",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.lock": "a2e3d525c3a0f01428b56df55001ba304981a6b8c26cca08badf7b09b7029814",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-sbf/Cargo.toml": "7a2350f1a07ba7bd95da44ec7c119f2fc527993dca798ff75d5062b1ef846218",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-sbf/Cargo.lock": "7e2109e75309e0dd77ce5d29242bffac7e61919bf42d32810ba9e1cee73d1b81",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-svm/Cargo.toml": "92d685f6cf6d9497218be4d9aa00429a98b0902f8ffe841274b5ab347f87ee56",
+    "docs/research/v8-no-work-100-20260907/experiments/performance-svm/Cargo.lock": "1d0b83f5ec55c57a027f5290ad55cc5ede90ed6cba657d08afe4c5cdc51f84ec",
+    "crates/aspis-core/src/field.rs": "5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8",
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs": "efbc5be87e271419d7b09e1bb6e3a83984d42795bc20067ea039814fb89ffa58"
+  },
+  "nuc_workspace": "/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz",
+  "nuc_matches_measured_rust_sources": true,
+  "checked_elf_sha256": "f27a07b85f18e4cd376ab28c2311a9122b682ff6aed8c0e982dede09bb42b0fa",
+  "proof_sha256": [
+    "b2ad1b63fca437acd86a2574404a1263c0fc293520cf526c313a5d82987d5ce1",
+    "1e04484d98f6b06147a64c44f7af3ed1941b3f0e1b607b5b4b6bf2980e801a46",
+    "11809f69a635f2c062a3eb3be76f92b29312bf2b1c1c404674b2806c45574fa5"
+  ],
+  "final_prover_regeneration_identical": true,
+  "environment": {
+    "hardware": "Intel Core Ultra 7 155H, 22 logical CPUs, NUC",
+    "memory_mib": 63608,
+    "host_rust": "1.94.1",
+    "cargo_build_sbf": "2.3.0",
+    "sbf_tools": "v1.54 rustc 1.89.0-dev",
+    "svm": "LiteSVM 0.16.0 / Agave 4.2.1 cached locks",
+    "network": "authorised SSH/SCP NUC; no RPC, deployment, third-party witness upload",
+    "scope": "isolated verifier; no pool settlement or independently authenticated context"
+  },
+  "commands": {
+    "host_build": "ssh dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-structured-host-query-shared -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 /usr/bin/time -v env NO_DNA=1 PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin RUSTFLAGS=\"--cfg v8_payment_extraction --cfg v8_performance --cfg v8_performance_fast --cfg v8_structured --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared -A dead_code -A unexpected_cfgs\" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml'",
+    "host_controls": "ssh dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-structured-gate-query-shared -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 /usr/bin/time -v /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/aspis-v8-performance-host --verify-existing /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/fixture-structured-v2'",
+    "host_final_prover": "ssh dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-structured-final-prover -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 /usr/bin/time -v /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/aspis-v8-performance-host /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/fixture-structured-final'",
+    "sbf_checked_profile": "ssh dombarker@nuc.local 'systemd-run --user --scope --unit=aspis-v8-structured-sbf-query-shared -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 /usr/bin/time -v env NO_DNA=1 PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/active_release/bin:/usr/bin:/bin RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS=\"--cfg v8_performance_sbf --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared -A dead_code -A unexpected_cfgs\" cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --features selected-v7-kernels --manifest-path /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-sbf/Cargo.toml --sbf-out-dir /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/sbf-structured-query-shared -- --locked'",
+    "sbf_checked_quiet_and_extended_svm": "ssh dombarker@nuc.local 'bash /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/run_structured_nuc.sh best-quiet /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/rescue-best-quiet /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/fixture-structured-v2'",
+    "sbf_global_overflow_off_unselected": "ssh dombarker@nuc.local 'bash /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/run_structured_nuc.sh best-overflow-control /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/rescue-overflow-control /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/fixture-structured-v2'",
+    "sbf_core_overflow_off_unselected": "ssh dombarker@nuc.local 'bash /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/run_structured_nuc.sh best-core-overflow-control /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/rescue-core-overflow-control /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/fixture-structured-v2'",
+    "reconcile": "python3 docs/research/v8-no-work-100-20260907/experiments/summarize_structured.py"
+  },
+  "caps": {
+    "sbf": {
+      "MemoryHigh": "5G",
+      "MemoryMax": "7G",
+      "MemorySwapMax": 0,
+      "jobs": 2
+    },
+    "host": {
+      "MemoryHigh": "3G",
+      "MemoryMax": "4G",
+      "MemorySwapMax": 0,
+      "jobs": 2
+    },
+    "final_svm_script": {
+      "MemoryHigh": "5G",
+      "MemoryMax": "7G",
+      "MemorySwapMax": 0
+    },
+    "local_lean": {
+      "memory_limit_mb": 7000,
+      "peak_process_below_gib": 8,
+      "scope": "focused cached leaves, no cold dependency build"
+    }
+  },
+  "checked_sbf_build": {
+    "exit": 0,
+    "wall_seconds": 48.58,
+    "peak_child_rss_kib": 612224,
+    "swap": 0,
+    "stack": "no observed overflow diagnostic; 33-row runtime cohort passed",
+    "log": "evidence/structured-best-quiet-build.log"
+  },
+  "host_build": {
+    "exit": 0,
+    "wall_seconds": 32.39,
+    "peak_child_rss_kib": 534500,
+    "swap": 0,
+    "log": "evidence/structured-query-shared-host-build.log"
+  },
+  "host_run": {
+    "exit": 0,
+    "wall_seconds": 13.49,
+    "peak_rss_kib": 202940,
+    "swap": 0,
+    "log": "evidence/structured-prover-final.log"
+  },
+  "lean": {
+    "cwd": "/Users/dominic/ZK/AspisFormal",
+    "version": "4.32.0",
+    "compiler_commit": "8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+    "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+    "cache_provenance": "No Aspis olean imports; pinned mathlib source/cache. Final hashes match initial inspection.",
+    "cache_sha256": {
+      "Pi": "a27291e9c6639ddf12f2288c9c075043ccf487cdfd83d4311bbc154a646643ca",
+      "Tactic": "55ee2345729e8a4d379de3bce14ea18b14fbfdc259cf2653fadf4bf3a46876d8"
+    },
+    "targets": [
+      {
+        "file": "FusedRows.lean",
+        "command": "/usr/bin/time -l lake env lean -M 7000 /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/FusedRows.lean",
+        "exit": 0,
+        "wall_seconds": 2.3,
+        "peak_rss_bytes": 2821505024,
+        "swaps": 0,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "log": "evidence/structured-fused-lean.log"
+      },
+      {
+        "file": "BlockHorner.lean",
+        "command": "/usr/bin/time -l lake env lean -M 7000 /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/BlockHorner.lean",
+        "exit": 0,
+        "wall_seconds": 8.32,
+        "peak_rss_bytes": 1321172992,
+        "swaps": 0,
+        "axioms": [
+          "propext"
+        ],
+        "log": "evidence/structured-block-horner-lean.log",
+        "rerun_reason": "missing durable initial evidence artifact"
+      },
+      {
+        "file": "ArithmeticRewrites.lean",
+        "command": "/usr/bin/time -l lake env lean -M 7000 /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/ArithmeticRewrites.lean",
+        "exit": 0,
+        "wall_seconds": 11.79,
+        "peak_rss_bytes": 1449558016,
+        "swaps": 0,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "log": "evidence/structured-arithmetic-lean.log"
+      }
+    ],
+    "no_new_axioms_or_sorry": true,
+    "source_translation": false,
+    "preflight_corrections": [
+      "FusedRows update lemma spelling / closed goal tactic corrected locally",
+      "ArithmeticRewrites removed nonexistent Omega import, added finite-sum order import; failing preflights not claimed as proofs"
+    ]
+  },
+  "rejected_controls": {
+    "full_QM31_batch": "Measured regression; not selected",
+    "inline_point_cache": "4224-byte frame, runtime violation; replaced with boxed cache",
+    "overflow_controls": "Diagnostic only: range/source equivalence for all reachable core operations not established"
+  },
+  "archive_review": {
+    "basis_zip_sha256": "8ba1a57cd704ee57d4a64ca7d80b7176e3e680cd379061a950eac2fc7e7767c2",
+    "cu_zip_sha256": "8ca3e986505529edb9e9eed51a4bc27dff6af8b32a4870f8688d8fc44b9726e3",
+    "cu_prompt_sha256": "c75b9968ed3c4915c9163d5f45116be509ce97220023d1110f89dd55a3b7d4fe",
+    "basis_tests": {
+      "full_dimension_cases": 32,
+      "wall_seconds": 2.52,
+      "peak_rss_bytes": 23101440,
+      "swaps": 0,
+      "status": "supplied result reproduced; not Rust CU or universal proof"
+    }
+  },
+  "production_source_changes": false,
+  "deployments": false,
+  "matched_full_transaction_CU": false,
+  "global_security_certificate": false,
+  "log_scope": "Final selected/control script logs complete; some intermediate manual build warning output was truncated. All numerical rows reference durable SVM logs. Final source hashes pin the selected endpoint, not every intermediate compiler source snapshot."
+}

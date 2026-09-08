@@ -7,6 +7,8 @@ use statement::pool_v1::*;
 use corelib::state_only_sumcheck::{begin_state_only_zerocheck,evaluate_state_only_polynomial};
 use corelib::state_only_hiding::{begin_state_only_masked_sumcheck,state_only_explicit_g_mask_factor};
 use std::collections::BTreeSet;
+#[cfg(v8_structured)]
+#[path="structured_weights.rs"] pub(super) mod structured;
 
 struct Public {transfer:PoolV1PrivateTransferPublicV1, withdrawal:PoolV1WithdrawalPublicV1, transition:PoolV1PairLatePublicStatementV1}
 fn public()->Public {
@@ -114,6 +116,16 @@ fn transpose(w:&[K],[a,b,c]:[K;3])->Vec<K>{let mut w=w.to_vec();w.resize(1028,K:
     let wa:Vec<K>=w.chunks_exact(2).map(|v|v[0]).collect();let wb:Vec<K>=w.chunks_exact(2).map(|v|v[1]).collect();
     let xwa=xt(&wa,513);let xxwa=xt(&xwa,512);let xwb=xt(&wb,512);let mut out=vec![K::ZERO;1024];
     for j in 0..512{out[2*j]=a.mul(wa[j]).add(b.mul(xwa[j])).add(c.mul(wb[j]));out[2*j+1]=c.mul(wa[j].sub(xxwa[j])).add(a.mul(wb[j])).add(b.mul(xwb[j]));}out}
+#[cfg(v8_structured)]
+pub(super) fn prepare(s:Semantic,w:&Wire<'_>,shift:bool)->Result<(Prefix,Vec<K>,K,K),Error>{
+    if !shift{return Err(Error::Shape);}
+    let(p,d,c,k)=structured::prepare(s,w)?;
+    let original=materialize_original(&d.z,d.scales);
+    assert_eq!(d.entry(0),original[0]);
+    assert_eq!(d.entry(if p.use_x{2}else{1}),original[if p.use_x{2}else{1}]);
+    Ok((p,transpose(&original,d.abc),c,k))
+}
+#[cfg(not(v8_structured))]
 pub(super) fn prepare(s:Semantic,w:&Wire<'_>,shift:bool)->Result<(Prefix,Vec<K>,K,K),Error>{
     let(t,points,gamma)=to_gamma(s.t,w)?;let mut t=t;
     #[cfg(v8_performance_sbf)] super::performance_verifier::checkpoint("v8:ood-gamma");
