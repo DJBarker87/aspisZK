@@ -28,15 +28,16 @@ use aspis_statement::{
         PoolV1PairForestCheckpointV1, PoolV1PairForestLaneStateV1, PoolV1PairForestMasterV1,
         PoolV1PairForestTerminalCommonV1, PoolV1PairForestTerminalPaymentV1,
         PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalStatementV1,
-        PoolV1PairLeafWitnessV1, POOL_V1_DIGEST_ENCODING_VERSION, POOL_V1_PAIR_CAPACITY,
-        POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING, POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
-        POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_LANE_COUNT,
-        POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES, POOL_V1_PAIR_FOREST_LANE_MAGIC,
-        POOL_V1_PAIR_FOREST_LANE_VERSION, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES,
-        POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES, POOL_V1_PAIR_TREE_DEPTH,
-        POOL_V1_ROOT_HISTORY_CAPACITY, POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES,
-        POOL_V1_ROOT_HISTORY_PAGE_SEED, POOL_V1_TREE_HASH_VERSION, POOL_V1_TREE_STATE_MAGIC,
-        POOL_V1_TREE_STATE_VERSION,
+        PoolV1PairLeafWitnessV1, PoolV1TerminalPdaCertificateV1, POOL_V1_DIGEST_ENCODING_VERSION,
+        POOL_V1_PAIR_CAPACITY, POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING,
+        POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES,
+        POOL_V1_PAIR_FOREST_LANE_COUNT, POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES,
+        POOL_V1_PAIR_FOREST_LANE_MAGIC, POOL_V1_PAIR_FOREST_LANE_VERSION,
+        POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES,
+        POOL_V1_PAIR_TREE_DEPTH, POOL_V1_ROOT_HISTORY_CAPACITY,
+        POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES, POOL_V1_ROOT_HISTORY_PAGE_SEED,
+        POOL_V1_TERMINAL_PDA_CERTIFICATE_ACCOUNT_BYTES, POOL_V1_TREE_HASH_VERSION,
+        POOL_V1_TREE_STATE_MAGIC, POOL_V1_TREE_STATE_VERSION,
     },
     poseidon2::Digest,
 };
@@ -379,11 +380,21 @@ fn decode_lane_account_from_program_invariant_v1(
     expected_lane: u8,
     account: &AccountInfo<'_>,
     writable: bool,
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")] expected_address: Option<
+        &Pubkey,
+    >,
 ) -> Result<PoolV1PairForestLaneStateV1, ProgramError> {
     require_program_account(account, program_id, writable)?;
-    if account.is_signer
-        || account.key != &pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?.0
-    {
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let address_matches = if let Some(expected_address) = expected_address {
+        account.key == expected_address
+    } else {
+        account.key == &pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?.0
+    };
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
+    let address_matches =
+        account.key == &pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?.0;
+    if account.is_signer || !address_matches {
         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
     }
     let data = account.try_borrow_data()?;
@@ -638,12 +649,29 @@ fn validate_lane_current_page(
     page: &AccountInfo<'_>,
     lane: &PoolV1PairForestLaneStateV1,
     writable: bool,
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")] expected_address: Option<
+        &Pubkey,
+    >,
 ) -> Result<RootPageHeaderV1, ProgramError> {
     let location = root_history_location(lane.tree.next_leaf_index);
     require_program_account(page, program_id, writable)?;
     if page.is_signer {
         return Err(ProgramError::InvalidAccountData);
     }
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    if let Some(expected_address) = expected_address {
+        if page.key != expected_address {
+            return Err(PoolV1ProgramError::InvalidRootPageAddress.into());
+        }
+    } else {
+        crate::history::require_root_page_address(
+            program_id,
+            lane_account.key,
+            location.page_number,
+            page,
+        )?;
+    }
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
     crate::history::require_root_page_address(
         program_id,
         lane_account.key,
@@ -771,6 +799,8 @@ fn decode_deposit_lane_box_v1(
         lane_id,
         lane_account,
         true,
+        #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+        None,
     )?));
 
     #[cfg(not(feature = "pair-forest-deposit-invariant-audit"))]
@@ -810,7 +840,7 @@ pub(crate) fn process_pair_forest_deposit_with_runtime_v1<'info, R: PoolCpiRunti
     let current_page = accounts
         .get(FOREST_DEPOSIT_CURRENT_PAGE_ACCOUNT_INDEX)
         .ok_or(ProgramError::NotEnoughAccountKeys)?;
-    let master = decode_terminal_master_box_v1(program_id, master_account)?;
+    let master = decode_terminal_master_box_v1(program_id, master_account, None)?;
     let commitment = pool_v1_note_commitment(
         &request.owner_key,
         request.amount,
@@ -851,16 +881,30 @@ pub(crate) fn process_pair_forest_deposit_with_runtime_v1<'info, R: PoolCpiRunti
             FOREST_DEPOSIT_GENESIS_PAGE_ACCOUNT_COUNT,
         )
     } else if next_location.page_number == current_location.page_number {
-        let header =
-            validate_lane_current_page(program_id, lane_account, current_page, &lane, true)?;
+        let header = validate_lane_current_page(
+            program_id,
+            lane_account,
+            current_page,
+            &lane,
+            true,
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            None,
+        )?;
         (
             PairForestDepositPageModeV1::ExistingSamePage { header },
             3,
             FOREST_DEPOSIT_SAME_PAGE_ACCOUNT_COUNT,
         )
     } else {
-        let current_header =
-            validate_lane_current_page(program_id, lane_account, current_page, &lane, false)?;
+        let current_header = validate_lane_current_page(
+            program_id,
+            lane_account,
+            current_page,
+            &lane,
+            false,
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            None,
+        )?;
         if usize::from(current_header.filled) != POOL_V1_ROOT_HISTORY_CAPACITY {
             return Err(PoolV1ProgramError::StateHistoryMismatch.into());
         }
@@ -1018,6 +1062,8 @@ struct PairForestSpendLayoutV1 {
     registry_start: usize,
     verifier_index: usize,
     proof_index: usize,
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    certificate_index: usize,
     token_start: usize,
 }
 
@@ -1026,6 +1072,8 @@ fn plan_pair_forest_spend_layout_v1(
     accounts: &[AccountInfo<'_>],
     lane: &PoolV1PairForestLaneStateV1,
     withdrawal: bool,
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    certificate: &PoolV1TerminalPdaCertificateV1,
 ) -> Result<PairForestSpendLayoutV1, ProgramError> {
     if lane.tree.next_leaf_index >= POOL_V1_PAIR_CAPACITY {
         return Err(PoolV1ProgramError::TreeFull.into());
@@ -1034,47 +1082,81 @@ fn plan_pair_forest_spend_layout_v1(
     let current = accounts.get(3).ok_or(ProgramError::NotEnoughAccountKeys)?;
     let current_location = root_history_location(lane.tree.next_leaf_index);
     let next_location = root_history_location(lane.tree.next_leaf_index + 1);
-    let (page, cursor) = if lane.tree.next_leaf_index == 0
-        && account_is_zeroed_program_page(current, program_id)?
-    {
-        crate::history::require_root_page_address(program_id, lane_account.key, 0, current)?;
-        require_program_account(current, program_id, true)?;
-        (PairForestSpendPageV1::Genesis, 4)
-    } else if current_location.page_number == next_location.page_number {
-        let header = validate_lane_current_page(program_id, lane_account, current, lane, true)?;
-        (PairForestSpendPageV1::SamePage(header), 4)
-    } else {
-        let header = validate_lane_current_page(program_id, lane_account, current, lane, false)?;
-        if usize::from(header.filled) != POOL_V1_ROOT_HISTORY_CAPACITY {
-            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
-        }
-        let next_index = 4;
-        let next = accounts
-            .get(next_index)
-            .ok_or(ProgramError::NotEnoughAccountKeys)?;
-        crate::history::require_root_page_address(
-            program_id,
-            lane_account.key,
-            next_location.page_number,
-            next,
-        )?;
-        if !account_is_zeroed_program_page(next, program_id)? || !next.is_writable {
-            return Err(PoolV1ProgramError::InvalidFreshAccount.into());
-        }
-        (
-            PairForestSpendPageV1::Rollover {
-                next_index,
-                page_number: next_location.page_number,
-            },
-            5,
-        )
-    };
+    let (page, cursor) =
+        if lane.tree.next_leaf_index == 0 && account_is_zeroed_program_page(current, program_id)? {
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            if current.key.to_bytes() != certificate.current_history_page
+                || certificate.current_page_number != 0
+            {
+                return Err(PoolV1ProgramError::InvalidRootPageAddress.into());
+            }
+            #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
+            crate::history::require_root_page_address(program_id, lane_account.key, 0, current)?;
+            require_program_account(current, program_id, true)?;
+            (PairForestSpendPageV1::Genesis, 4)
+        } else if current_location.page_number == next_location.page_number {
+            let header = validate_lane_current_page(
+                program_id,
+                lane_account,
+                current,
+                lane,
+                true,
+                #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+                Some(&Pubkey::new_from_array(certificate.current_history_page)),
+            )?;
+            (PairForestSpendPageV1::SamePage(header), 4)
+        } else {
+            let header = validate_lane_current_page(
+                program_id,
+                lane_account,
+                current,
+                lane,
+                false,
+                #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+                Some(&Pubkey::new_from_array(certificate.current_history_page)),
+            )?;
+            if usize::from(header.filled) != POOL_V1_ROOT_HISTORY_CAPACITY {
+                return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+            }
+            let next_index = 4;
+            let next = accounts
+                .get(next_index)
+                .ok_or(ProgramError::NotEnoughAccountKeys)?;
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            if next.key.to_bytes() != certificate.next_history_page
+                || certificate.next_page_number != next_location.page_number
+            {
+                return Err(PoolV1ProgramError::InvalidRootPageAddress.into());
+            }
+            #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
+            crate::history::require_root_page_address(
+                program_id,
+                lane_account.key,
+                next_location.page_number,
+                next,
+            )?;
+            if !account_is_zeroed_program_page(next, program_id)? || !next.is_writable {
+                return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+            }
+            (
+                PairForestSpendPageV1::Rollover {
+                    next_index,
+                    page_number: next_location.page_number,
+                },
+                5,
+            )
+        };
     let marker_index = cursor;
     let payer_index = cursor + 1;
     let system_program_index = cursor + 2;
     let registry_start = cursor + 3;
     let verifier_index = cursor + 5;
     let proof_index = cursor + 6;
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let certificate_index = cursor + 7;
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let token_start: usize = cursor + 8;
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
     let token_start: usize = cursor + 7;
     let expected = token_start
         .checked_add(if withdrawal { 5 } else { 0 })
@@ -1089,6 +1171,8 @@ fn plan_pair_forest_spend_layout_v1(
         registry_start,
         verifier_index,
         proof_index,
+        #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+        certificate_index,
         token_start,
     })
 }
@@ -1102,6 +1186,8 @@ fn validate_pair_forest_request_accounts_v1(
     checkpoint: &PoolV1PairForestCheckpointV1,
     lane: &PoolV1PairForestLaneStateV1,
     request: &PoolV1PairForestTerminalRequestV1,
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    certificate: &PoolV1TerminalPdaCertificateV1,
 ) -> ProgramResult {
     if request.pool_program != program_id.to_bytes() {
         return Err(PoolV1ProgramError::VerifierDispatchIdentityMismatch.into());
@@ -1137,8 +1223,22 @@ fn validate_pair_forest_request_accounts_v1(
         || checkpoint.deployment_domain != deployment
         || checkpoint.checkpoint_sequence != anchor_sequence
         || checkpoint.global_root != anchor_root
-        || lane_account.key
-            != &pool_v1_pair_forest_lane_address(program_id, master_account.key, output_lane)?.0
+        || {
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            {
+                lane_account.key.to_bytes() != certificate.selected_lane
+            }
+            #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
+            {
+                lane_account.key
+                    != &pool_v1_pair_forest_lane_address(
+                        program_id,
+                        master_account.key,
+                        output_lane,
+                    )?
+                    .0
+            }
+        }
         || lane.master != pool
         || lane.lane_id != output_lane
         || master.initialized_lane_mask & (1u8 << output_lane) == 0
@@ -1187,11 +1287,77 @@ fn decode_terminal_request_box_v1(
     ))
 }
 
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+#[inline(never)]
+fn decode_terminal_pda_certificate_box_v1(
+    program_id: &Pubkey,
+    accounts: &[AccountInfo<'_>],
+    request: &PoolV1PairForestTerminalRequestV1,
+    withdrawal: bool,
+) -> Result<Box<PoolV1TerminalPdaCertificateV1>, ProgramError> {
+    let suffix = if withdrawal { 5 } else { 0 };
+    let certificate_index = accounts
+        .len()
+        .checked_sub(suffix + 1)
+        .ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let proof_index = certificate_index
+        .checked_sub(1)
+        .ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let verifier_index = certificate_index
+        .checked_sub(2)
+        .ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let certificate_account = &accounts[certificate_index];
+    let proof_account = &accounts[proof_index];
+    let verifier_account = &accounts[verifier_index];
+    if certificate_account.owner != verifier_account.key
+        || certificate_account.executable
+        || certificate_account.is_signer
+        || certificate_account.is_writable
+        || certificate_account.data_len() != POOL_V1_TERMINAL_PDA_CERTIFICATE_ACCOUNT_BYTES
+    {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    let certificate = Box::new(
+        aspis_statement::pool_v1::decode_pool_v1_terminal_pda_certificate_v1(
+            &certificate_account.try_borrow_data()?,
+        )
+        .map_err(|_| ProgramError::InvalidAccountData)?,
+    );
+    if certificate.proof_account != proof_account.key.to_bytes()
+        || certificate.pool_program != program_id.to_bytes()
+        || certificate.verifier_program != verifier_account.key.to_bytes()
+        || certificate.profile_binding != request.verifier_profile
+        || certificate.release_binding != request.verifier_release
+        || certificate.canonical_nullifier != encode_digest_canonical(request.public.nullifier())
+        || certificate.withdrawal() != withdrawal
+    {
+        return Err(PoolV1ProgramError::VerifierDispatchIdentityMismatch.into());
+    }
+    Ok(certificate)
+}
+
 #[inline(never)]
 fn decode_terminal_master_box_v1(
     program_id: &Pubkey,
     master_account: &AccountInfo<'_>,
+    certificate: Option<&PoolV1TerminalPdaCertificateV1>,
 ) -> Result<Box<PoolV1PairForestMasterV1>, ProgramError> {
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    if let Some(certificate) = certificate {
+        require_program_account(master_account, program_id, false)?;
+        if master_account.is_signer {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        let master = decode_pool_v1_pair_forest_master_v1(&master_account.try_borrow_data()?)
+            .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
+        if certificate.master != master_account.key.to_bytes()
+            || certificate.asset_mint != master.identity.asset_mint
+            || master.identity.pool != master_account.key.to_bytes()
+        {
+            return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
+        }
+        return Ok(Box::new(master));
+    }
     Ok(Box::new(decode_master_account(
         program_id,
         master_account,
@@ -1204,7 +1370,25 @@ fn decode_terminal_checkpoint_box_v1(
     program_id: &Pubkey,
     master: &Pubkey,
     checkpoint_account: &AccountInfo<'_>,
+    certificate: Option<&PoolV1TerminalPdaCertificateV1>,
 ) -> Result<Box<PoolV1PairForestCheckpointV1>, ProgramError> {
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    if let Some(certificate) = certificate {
+        require_program_account(checkpoint_account, program_id, false)?;
+        if checkpoint_account.is_signer {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        let checkpoint =
+            decode_pool_v1_pair_forest_checkpoint_v1(&checkpoint_account.try_borrow_data()?)
+                .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
+        if checkpoint.master != master.to_bytes()
+            || certificate.checkpoint != checkpoint_account.key.to_bytes()
+            || certificate.checkpoint_sequence != checkpoint.checkpoint_sequence
+        {
+            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
+        }
+        return Ok(Box::new(checkpoint));
+    }
     Ok(Box::new(decode_retained_pair_forest_checkpoint_account_v1(
         program_id,
         master,
@@ -1218,6 +1402,7 @@ fn decode_terminal_lane_box_v1(
     master: &Pubkey,
     lane_id: u8,
     lane_account: &AccountInfo<'_>,
+    certificate: Option<&PoolV1TerminalPdaCertificateV1>,
 ) -> Result<Box<PoolV1PairForestLaneStateV1>, ProgramError> {
     #[cfg(feature = "pair-forest-source-invariant-audit")]
     return Ok(Box::new(decode_lane_account_from_program_invariant_v1(
@@ -1226,6 +1411,10 @@ fn decode_terminal_lane_box_v1(
         lane_id,
         lane_account,
         true,
+        #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+        certificate
+            .map(|value| Pubkey::new_from_array(value.selected_lane))
+            .as_ref(),
     )?));
 
     #[cfg(not(feature = "pair-forest-source-invariant-audit"))]
@@ -1402,23 +1591,44 @@ where
         &[AccountInfo<'info>],
         &AccountInfo<'info>,
         &AccountInfo<'info>,
+        Option<&AccountInfo<'info>>,
         &PoolV1PairForestTerminalRequestV1,
         u64,
     ) -> Result<AuthenticatedPairForestResultV1, ProgramError>,
     S: FnOnce(&[u8]),
 {
     let request = decode_terminal_request_box_v1(instruction_data)?;
+    let withdrawal = matches!(
+        request.public,
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(_)
+    );
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let certificate =
+        decode_terminal_pda_certificate_box_v1(program_id, accounts, &request, withdrawal)?;
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let certificate_for_pda = Some(certificate.as_ref());
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
+    let certificate_for_pda = None;
     let master_account = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
     let checkpoint_account = accounts.get(1).ok_or(ProgramError::NotEnoughAccountKeys)?;
     let lane_account = accounts.get(2).ok_or(ProgramError::NotEnoughAccountKeys)?;
-    let master = decode_terminal_master_box_v1(program_id, master_account)?;
-    let checkpoint =
-        decode_terminal_checkpoint_box_v1(program_id, master_account.key, checkpoint_account)?;
+    let master = decode_terminal_master_box_v1(program_id, master_account, certificate_for_pda)?;
+    let checkpoint = decode_terminal_checkpoint_box_v1(
+        program_id,
+        master_account.key,
+        checkpoint_account,
+        certificate_for_pda,
+    )?;
     let output_lane =
         aspis_statement::pool_v1::pool_v1_pair_forest_output_lane_v1(request.public.nullifier())
             .map_err(|_| PoolV1ProgramError::NonCanonicalLeaf)?;
-    let lane =
-        decode_terminal_lane_box_v1(program_id, master_account.key, output_lane, lane_account)?;
+    let lane = decode_terminal_lane_box_v1(
+        program_id,
+        master_account.key,
+        output_lane,
+        lane_account,
+        certificate_for_pda,
+    )?;
     validate_pair_forest_request_accounts_v1(
         program_id,
         master_account,
@@ -1428,12 +1638,31 @@ where
         &checkpoint,
         &lane,
         &request,
+        #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+        &certificate,
     )?;
-    let withdrawal = matches!(
-        request.public,
-        PoolV1PairForestTerminalPaymentV1::Withdrawal(_)
-    );
-    let layout = plan_pair_forest_spend_layout_v1(program_id, accounts, &lane, withdrawal)?;
+    let layout = plan_pair_forest_spend_layout_v1(
+        program_id,
+        accounts,
+        &lane,
+        withdrawal,
+        #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+        &certificate,
+    )?;
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    if layout.certificate_index >= accounts.len()
+        || accounts[layout.certificate_index].key
+            != accounts[accounts.len() - if withdrawal { 6 } else { 1 }].key
+        || certificate.master != master_account.key.to_bytes()
+        || certificate.checkpoint != checkpoint_account.key.to_bytes()
+        || certificate.selected_lane != lane_account.key.to_bytes()
+        || certificate.lane_id != output_lane
+        || certificate.current_page_number
+            != root_history_location(lane.tree.next_leaf_index).page_number
+        || certificate.rollover() != matches!(layout.page, PairForestSpendPageV1::Rollover { .. })
+    {
+        return Err(PoolV1ProgramError::VerifierDispatchIdentityMismatch.into());
+    }
     let payer = &accounts[layout.payer_index];
     let system_program_account = &accounts[layout.system_program_index];
     require_payer_and_system_program(payer, system_program_account)?;
@@ -1449,28 +1678,67 @@ where
         verifier_profile: request.verifier_profile,
         verifier_release: request.verifier_release,
     };
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let planned_marker = crate::nullifier::plan_nullifier_marker_consumption_with_bump_v1(
+        program_id,
+        marker,
+        marker_payload,
+        &Pubkey::new_from_array(certificate.nullifier_marker),
+        certificate.bumps[aspis_statement::pool_v1::POOL_V1_TERMINAL_PDA_BUMP_MARKER],
+    )?;
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
     let planned_marker = plan_nullifier_marker_consumption_v1(program_id, marker, marker_payload)?;
 
-    let withdrawal_plan =
-        if let PoolV1PairForestTerminalPaymentV1::Withdrawal(public) = request.public {
-            let token_accounts = &accounts[layout.token_start..layout.token_start + 5];
-            require_token_program_account(&token_accounts[4])?;
-            Some(plan_legacy_withdrawal_transfer_from_identity_v1(
-                program_id,
-                master_account.key,
-                &master.identity,
-                token_accounts,
-                &Pubkey::new_from_array(public.destination_token_account),
-                public.amount,
-            )?)
-        } else {
-            None
-        };
+    let withdrawal_plan = if let PoolV1PairForestTerminalPaymentV1::Withdrawal(public) =
+        request.public
+    {
+        let token_accounts = &accounts[layout.token_start..layout.token_start + 5];
+        require_token_program_account(&token_accounts[4])?;
+        #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+        let plan = crate::vault::plan_legacy_withdrawal_transfer_from_identity_with_bumps_v1(
+            program_id,
+            master_account.key,
+            &master.identity,
+            token_accounts,
+            &Pubkey::new_from_array(public.destination_token_account),
+            public.amount,
+            Pubkey::new_from_array(certificate.vault_authority),
+            certificate.bumps[aspis_statement::pool_v1::POOL_V1_TERMINAL_PDA_BUMP_VAULT_AUTHORITY],
+            Pubkey::new_from_array(certificate.vault_token),
+            certificate.bumps[aspis_statement::pool_v1::POOL_V1_TERMINAL_PDA_BUMP_VAULT_TOKEN],
+        )?;
+        #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
+        let plan = plan_legacy_withdrawal_transfer_from_identity_v1(
+            program_id,
+            master_account.key,
+            &master.identity,
+            token_accounts,
+            &Pubkey::new_from_array(public.destination_token_account),
+            public.amount,
+        )?;
+        Some(plan)
+    } else {
+        None
+    };
 
     // Reserve the exact nullifier PDA immediately before verifier CPI. Solana
     // rolls this System CPI back with every later write if verification or
     // settlement fails. Replanning authenticates the resulting owner, size,
     // zero image, rent reserve, canonical seeds and intended marker payload.
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let ready_marker = crate::processor::create_nullifier_marker_if_needed_with_bump_v1(
+        runtime,
+        program_id,
+        master_account.key,
+        marker,
+        payer,
+        system_program_account,
+        planned_marker,
+        &Pubkey::new_from_array(certificate.nullifier_marker),
+        certificate.bumps[aspis_statement::pool_v1::POOL_V1_TERMINAL_PDA_BUMP_MARKER],
+        rent,
+    )?;
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
     let ready_marker = create_nullifier_marker_if_needed_v1(
         runtime,
         program_id,
@@ -1482,6 +1750,10 @@ where
         rent,
     )?;
 
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let terminal_certificate_account = Some(&accounts[layout.certificate_index]);
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
+    let terminal_certificate_account = None;
     let authenticated = verify(
         program_id,
         master_account,
@@ -1491,6 +1763,7 @@ where
         &accounts[layout.registry_start..layout.registry_start + 2],
         &accounts[layout.verifier_index],
         &accounts[layout.proof_index],
+        terminal_certificate_account,
         &request,
         current_slot,
     )?;
@@ -1577,6 +1850,42 @@ pub(crate) fn process_pair_forest_terminal_v1<'info, R: PoolCpiRuntimeV1>(
     rent: &Rent,
     runtime: &mut R,
 ) -> ProgramResult {
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    return process_pair_forest_terminal_with_verifier_v1(
+        program_id,
+        accounts,
+        instruction_data,
+        current_slot,
+        rent,
+        runtime,
+        |pool_program,
+         master,
+         checkpoint,
+         lane,
+         policy,
+         registry_accounts,
+         verifier_program,
+         proof,
+         certificate,
+         request,
+         slot| {
+            crate::pair_forest_dispatch::dispatch_pair_forest_terminal_with_certificate_readonly_v1(
+                pool_program,
+                master,
+                checkpoint,
+                lane,
+                policy,
+                registry_accounts,
+                verifier_program,
+                proof,
+                certificate.ok_or(ProgramError::NotEnoughAccountKeys)?,
+                request,
+                slot,
+            )
+        },
+        solana_program::program::set_return_data,
+    );
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
     process_pair_forest_terminal_with_verifier_v1(
         program_id,
         accounts,
@@ -1584,7 +1893,30 @@ pub(crate) fn process_pair_forest_terminal_v1<'info, R: PoolCpiRuntimeV1>(
         current_slot,
         rent,
         runtime,
-        dispatch_pair_forest_terminal_readonly_v1,
+        |pool_program,
+         master,
+         checkpoint,
+         lane,
+         policy,
+         registry_accounts,
+         verifier_program,
+         proof,
+         _certificate,
+         request,
+         slot| {
+            dispatch_pair_forest_terminal_readonly_v1(
+                pool_program,
+                master,
+                checkpoint,
+                lane,
+                policy,
+                registry_accounts,
+                verifier_program,
+                proof,
+                request,
+                slot,
+            )
+        },
         solana_program::program::set_return_data,
     )
 }
@@ -1661,6 +1993,7 @@ pub(crate) fn process_pair_forest_terminal_full_asf8_v1<'info, R: PoolCpiRuntime
          registry_accounts,
          verifier_program,
          proof,
+         _certificate,
          request,
          slot| {
             crate::pair_forest_dispatch::dispatch_pair_forest_terminal_full_asf8_readonly_v1(
@@ -2306,6 +2639,8 @@ mod tests {
                 lane_id,
                 &account.info(),
                 true,
+                #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+                None,
             )
             .unwrap(),
             lane,
@@ -2323,6 +2658,8 @@ mod tests {
             lane_id,
             &account.info(),
             true,
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            None,
         )
         .is_err());
         account.data[root_start..root_start + 32].copy_from_slice(&canonical_root);
@@ -2337,6 +2674,8 @@ mod tests {
             lane_id,
             &account.info(),
             true,
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            None,
         )
         .is_err());
         account.data[index_start..index_start + 8].copy_from_slice(&canonical_index);
@@ -2357,6 +2696,8 @@ mod tests {
             lane_id,
             &account.info(),
             true,
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            None,
         )
         .is_ok());
 
@@ -2371,6 +2712,8 @@ mod tests {
             lane_id,
             &account.info(),
             true,
+            #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+            None,
         )
         .is_err());
     }
@@ -3670,7 +4013,7 @@ mod tests {
                     1,
                     &rent,
                     &mut NoCpi,
-                    |_, _, _, _, _, _, _, _, _, _| panic!("unsigned payer reached verifier"),
+                    |_, _, _, _, _, _, _, _, _, _, _| panic!("unsigned payer reached verifier"),
                     |_| {},
                 ),
                 Err(PoolV1ProgramError::InvalidPayer.into()),
@@ -3700,7 +4043,7 @@ mod tests {
                     1,
                     &rent,
                     &mut NoCpi,
-                    |_, _, _, _, _, _, _, _, _, _| panic!(
+                    |_, _, _, _, _, _, _, _, _, _, _| panic!(
                         "spoofed System Program reached verifier"
                     ),
                     |_| {},
@@ -3725,7 +4068,7 @@ mod tests {
                     1,
                     &rent,
                     &mut NoCpi,
-                    |_, _, _, _, _, _, _, _, _, _| panic!("wrong marker reached verifier"),
+                    |_, _, _, _, _, _, _, _, _, _, _| panic!("wrong marker reached verifier"),
                     |_| {},
                 ),
                 Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into()),
@@ -3751,7 +4094,7 @@ mod tests {
                     1,
                     &rent,
                     &mut NoCpi,
-                    |_, _, _, _, _, _, _, _, _, _| panic!("malformed marker reached verifier"),
+                    |_, _, _, _, _, _, _, _, _, _, _| panic!("malformed marker reached verifier"),
                     |_| {},
                 ),
                 Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into()),
@@ -3783,7 +4126,7 @@ mod tests {
                     1,
                     &rent,
                     &mut runtime,
-                    |_, _, _, _, _, _, _, _, _, _| panic!("unfunded marker reached verifier"),
+                    |_, _, _, _, _, _, _, _, _, _, _| panic!("unfunded marker reached verifier"),
                     |_| {},
                 ),
                 Err(ProgramError::InsufficientFunds),
@@ -3825,7 +4168,7 @@ mod tests {
                     1,
                     &rent,
                     &mut runtime,
-                    |_, _, _, _, _, _, _, _, _, _| Err(verifier_error.clone()),
+                    |_, _, _, _, _, _, _, _, _, _, _| Err(verifier_error.clone()),
                     |_| {},
                 ),
                 Err(verifier_error),
@@ -3879,7 +4222,7 @@ mod tests {
                 1,
                 &rent,
                 &mut runtime,
-                |_, _, _, _, _, _, _, _, _, _| {
+                |_, _, _, _, _, _, _, _, _, _, _| {
                     Ok(AuthenticatedPairForestResultV1::for_test(result))
                 },
                 |_| {},
@@ -3908,7 +4251,7 @@ mod tests {
                     2,
                     &rent,
                     &mut runtime,
-                    |_, _, _, _, _, _, _, _, _, _| panic!("replay reached verifier"),
+                    |_, _, _, _, _, _, _, _, _, _, _| panic!("replay reached verifier"),
                     |_| {},
                 ),
                 Err(PoolV1ProgramError::NullifierAlreadyConsumed.into()),
@@ -4133,7 +4476,7 @@ mod tests {
                 1,
                 &Rent::default(),
                 &mut NoCpi,
-                |_, _, _, _, _, _, _, _, _, _| panic!("bad request reached verifier"),
+                |_, _, _, _, _, _, _, _, _, _, _| panic!("bad request reached verifier"),
                 |_| {},
             )
             .is_err());
@@ -4147,7 +4490,7 @@ mod tests {
             1,
             &Rent::default(),
             &mut no_cpi,
-            |_, _, _, _, _, _, _, _, got, _| {
+            |_, _, _, _, _, _, _, _, _, got, _| {
                 assert_eq!(got, &request);
                 Ok(AuthenticatedPairForestResultV1::for_test(result))
             },
@@ -4177,7 +4520,7 @@ mod tests {
             2,
             &Rent::default(),
             &mut no_cpi,
-            |_, _, _, _, _, _, _, _, _, _| panic!("stale replay reached verifier"),
+            |_, _, _, _, _, _, _, _, _, _, _| panic!("stale replay reached verifier"),
             |_| {},
         )
         .is_err());
@@ -4337,7 +4680,7 @@ mod tests {
                 1,
                 &Rent::default(),
                 &mut invalid_loader_cpi,
-                |_, _, _, _, _, _, _, _, _, _| panic!("invalid loader reached verifier"),
+                |_, _, _, _, _, _, _, _, _, _, _| panic!("invalid loader reached verifier"),
                 |_| {},
             ),
             Err(PoolV1ProgramError::InvalidTokenProgram.into()),
@@ -4369,7 +4712,7 @@ mod tests {
             1,
             &Rent::default(),
             &mut failing,
-            |_, _, _, _, _, _, _, _, _, _| Ok(AuthenticatedPairForestResultV1::for_test(result)),
+            |_, _, _, _, _, _, _, _, _, _, _| Ok(AuthenticatedPairForestResultV1::for_test(result)),
             |_| {},
         )
         .is_err());
@@ -4392,7 +4735,7 @@ mod tests {
             1,
             &Rent::default(),
             &mut success,
-            |_, _, _, _, _, _, _, _, _, _| Ok(AuthenticatedPairForestResultV1::for_test(result)),
+            |_, _, _, _, _, _, _, _, _, _, _| Ok(AuthenticatedPairForestResultV1::for_test(result)),
             |_| {},
         )
         .unwrap();

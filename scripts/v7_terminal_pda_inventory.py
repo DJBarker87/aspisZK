@@ -79,6 +79,12 @@ def main() -> None:
         ("programs/aspis-pool/src/registry.rs", r"fn authenticate_verifier_selection_v2\(.*find_program_address"),
         ("programs/aspis-verifier/src/v7_pair_forest_dispatch.rs", r"fn authenticate_invariant_release_registry_at_slot_v1\(.*find_program_address"),
         ("programs/aspis-verifier/src/v7_pair_forest_dispatch.rs", r"fn authenticate_asq8_accounts_v1\(.*find_program_address"),
+        ("programs/aspis-verifier/src/v7_terminal_pda_certificate.rs", r"fn require_canonical_bumps\(.*find_program_address"),
+        ("programs/aspis-verifier/src/v7_terminal_pda_certificate.rs", r"fn require_created_address\(.*create_program_address"),
+        ("programs/aspis-verifier/src/v7_terminal_pda_certificate.rs", r"fn process_initialize_terminal_pda_certificate_v1\(.*require_canonical_bumps.*validate_terminal_pda_certificate_single_attempt_v1.*destination\.copy_from_slice"),
+        ("programs/aspis-pool/src/nullifier.rs", r"fn plan_nullifier_marker_consumption_with_bump_v1\(.*create_program_address"),
+        ("programs/aspis-pool/src/vault.rs", r"fn plan_legacy_withdrawal_transfer_from_identity_with_bumps_v1\(.*create_program_address"),
+        ("programs/aspis-pool/src/pair_forest_dispatch.rs", r"fn dispatch_pair_forest_terminal_with_certificate_readonly_v1"),
     ]
     for path, pattern in anchors:
         source_has(path, pattern)
@@ -119,12 +125,51 @@ def main() -> None:
     expected = {"samePageTransfer": 18, "rolloverTransfer": 19, "samePageWithdrawal": 20, "rolloverWithdrawal": 21}
     if counts != expected:
         raise SystemExit(f"FAIL: terminal PDA totals changed: {counts} != {expected}")
+    closure_identities = [
+        {"identity": "Pool master", "certificateSlot": 0, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "retained checkpoint", "certificateSlot": 1, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "selected lane", "certificateSlot": 2, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "current history page", "certificateSlot": 3, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "next history page", "certificateSlot": 4, "terminalSingleAttempts": 1, "applies": "rollover"},
+        {"identity": "nullifier marker", "certificateSlot": 5, "terminalSingleAttempts": 3, "applies": "all", "reason": "certificate replay plus Pool pre-create and post-create checks"},
+        {"identity": "Registry V2", "certificateSlot": 6, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "Registry ProgramData", "certificateSlot": 7, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "Registry V2 entry", "certificateSlot": 8, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "verifier ProgramData", "certificateSlot": 9, "terminalSingleAttempts": 1, "applies": "all"},
+        {"identity": "vault authority", "certificateSlot": 10, "terminalSingleAttempts": 2, "applies": "withdrawal", "reason": "certificate replay plus Pool SPL-CPI plan check"},
+        {"identity": "vault token account", "certificateSlot": 11, "terminalSingleAttempts": 2, "applies": "withdrawal", "reason": "certificate replay plus Pool custody plan check"},
+    ]
+    fixed_counts = {
+        "samePageTransfer": 11,
+        "rolloverTransfer": 12,
+        "samePageWithdrawal": 15,
+        "rolloverWithdrawal": 16,
+    }
     result = {
-        "schema": "aspis.v7.terminal-pda-inventory.v1",
+        "schema": "aspis.v7.terminal-pda-inventory.v2",
         "repositoryStartingRevision": "e5640f79133f8afbeb7eb08a940abc6462274295",
         "registryFamily": "immutable-v2",
         "counts": counts,
         "rows": rows,
+        "authenticatedFixedBumpClosure": {
+            "feature": "v7-terminal-pda-certificate-audit / pair-forest-terminal-pda-certificate-audit",
+            "defaultOff": True,
+            "certificateMagic": "APD8",
+            "certificateOwner": "selected verifier program",
+            "certificateWritableDuringTerminal": False,
+            "canonicalSearchLocation": "process_initialize_terminal_pda_certificate_v1 before the terminal transaction",
+            "terminalFindProgramAddressInvocations": {shape: 0 for shape in fixed_counts},
+            "terminalSingleAttemptValidations": fixed_counts,
+            "maximumTerminalSingleAttempts": max(fixed_counts.values()),
+            "createProgramAddressCuPerAttempt": 1500,
+            "maximumTerminalPdaSyscallCu": max(fixed_counts.values()) * 1500,
+            "identities": closure_identities,
+            "proofFormatChanged": False,
+            "statementFormatChanged": False,
+            "poolAccountLayoutChanged": False,
+            "additionalTerminalReadonlyAccounts": 1,
+            "terminalWireByteDelta": 33,
+        },
         "conclusion": {
             "allCallsEquivalent": False,
             "dominantFreshIdentity": "pool.nullifier.pre",
