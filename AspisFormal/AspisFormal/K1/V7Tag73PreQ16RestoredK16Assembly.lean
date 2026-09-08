@@ -3,6 +3,7 @@ import AspisFormal.K1.V7Tag73ExactFixedK16Closure
 import AspisFormal.K1.V7Tag73PreQ16OperationalMeasuredComposition
 import AspisFormal.K1.V7Tag73PreQ16OperationalActualLawBounds
 import AspisFormal.K1.V7Tag73PreQ16K15RestrictedBoundGammaClosure
+import AspisFormal.K1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 import AspisFormal.K1.V7Tag73PreQ16RestoredK15MeasuredAssembly
 
 /-! # Exact corrected pre-q16 K1.1--K1.6 assembly -/
@@ -33,10 +34,13 @@ open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K14K15IdealErrorLedger
 open AspisK1.V7Tag73K15ExactMeasureLedger
 open AspisK1.V7Tag73K15RestrictedMeasureLedger
+open AspisK1.V7Tag73K15SemanticActualLawClosure
 open AspisK1.V7Tag73PreQ16OperationalMeasuredComposition
 open AspisK1.V7Tag73PreQ16OperationalActualLawBounds
 open AspisK1.V7Tag73PreQ16OperationalStageAssembly
 open AspisK1.V7Tag73PreQ16K15RestrictedBoundGammaClosure
+open AspisK1.V7Tag73PreQ16K15RestrictedRelationAlphaActualLawClosure
+open AspisK1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 open AspisK1.V7Tag73RelationTailSourceComposition
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73K13RestrictedLaterAlphaActualLawClosure
@@ -227,12 +231,27 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
       projection fixedInstance decoder
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance))
-    (fixedK15Bounds : FixedK15EventBounds
+    (remainingFixedK15Bounds : FixedK15EventBoundsExceptSemanticRelationAlpha
       (exactCompilerJointLaw hiddenLaw parameters)
       (restrictFixedK15Events
         (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
           projection fixedInstance)
         (exactPreQ16RestoredFixedK15Events environment.restoredK15)))
+    (semanticLanes : ExactTag73SemanticLanes HiddenTape parameters)
+    (semanticTerminal : ExactTag73SemanticTerminal HiddenTape parameters decoder
+      semanticLanes)
+    (semanticSumcheck : ExactTag73SemanticSumcheck HiddenTape parameters decoder
+      semanticLanes)
+    (semanticCovered : ExactTag73RestrictedPreQ16SemanticCover
+      environment.restoredK15
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance)
+      semanticLanes semanticTerminal semanticSumcheck)
+    (relationAlphaSource : ExactTag73RestrictedPreQ16K15RelationAlphaSource
+      transitionFuel configuration projection fixedInstance decoder
+      decoderBinding basis rc poseidon environment.restoredK15
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+        projection fixedInstance))
     (publishedInitialWidth29 :
       PublishedInitialWidth29CurveDecodability exactInitialEncoder)
     (restoredK15Source :
@@ -325,6 +344,13 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
     exact_tag73_restricted_preQ16_restored_k15_residual_probability_le hiddenLaw
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
         fixedInstance) publishedInitialWidth29 restoredK15Source
+  have fixedK15Bounds :=
+    restricted_preQ16_fixed_k15_event_bounds_of_semantic_relation_sources
+      hiddenLaw
+      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
+        fixedInstance)
+      remainingFixedK15Bounds semanticLanes semanticTerminal semanticSumcheck
+      semanticCovered relationAlphaSource
   exact exact_tag73_preQ16_restored_k16_aok_raw_of_bounds hiddenLaw transitionFuel
     configuration projection fixedInstance decoder decoderBinding basis rc
     poseidon transitionRoom driverCoversProtocol runtimeReserves cutoffBeyondCap
