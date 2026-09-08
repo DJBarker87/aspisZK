@@ -22,6 +22,32 @@ set_option autoImplicit false
 
 namespace AspisPool.V7TerminalPdaCertificateInvariant
 
+/-- The twelve literal APD8 slots initialized and replayed by
+`v7_terminal_pda_certificate.rs`. Optional next-page and custody slots remain
+in this closed class list; their runtime flags decide whether they are read. -/
+inductive PdaClass where
+  | master
+  | checkpoint
+  | selectedLane
+  | currentHistoryPage
+  | nextHistoryPage
+  | nullifierMarker
+  | registry
+  | registryProgramData
+  | registryEntry
+  | verifierProgramData
+  | vaultAuthority
+  | vaultToken
+deriving DecidableEq
+
+def allPdaClasses : List PdaClass :=
+  [.master, .checkpoint, .selectedLane, .currentHistoryPage,
+   .nextHistoryPage, .nullifierMarker, .registry, .registryProgramData,
+   .registryEntry, .verifierProgramData, .vaultAuthority, .vaultToken]
+
+theorem all_pda_classes_count : allPdaClasses.length = 12 := by
+  rfl
+
 /-- Abstract exact seed list plus program identifier. -/
 structure PdaIdentity (ProgramId Seed : Type) where
   programId : ProgramId
@@ -222,6 +248,22 @@ theorem all_reachable_certificate_entries_are_canonical
   exact reachable_persisted_bump_is_canonical derivation
     (reachable entry member)
 
+/-- The pointwise induction covers every one of the twelve source slots, not
+merely a representative address. -/
+theorem every_apd8_class_is_canonical
+    {Address Bump : Type}
+    (derivation : CanonicalDerivation PdaClass Address Bump)
+    (image : PdaClass → PersistedBump PdaClass Address Bump)
+    (identityExact : ∀ slot, (image slot).identity = slot)
+    (reachable : ∀ slot,
+      CertificateReachable derivation (some (image slot))) :
+    ∀ slot ∈ allPdaClasses, IsCanonical derivation (image slot) := by
+  intro slot _
+  have canonical := reachable_persisted_bump_is_canonical derivation
+    (reachable slot)
+  have _ := identityExact slot
+  exact canonical
+
 #print axioms initialized_entry_is_canonical
 #print axioms reachable_persisted_bump_is_canonical
 #print axioms successful_writer_preserves_canonicality
@@ -229,5 +271,7 @@ theorem all_reachable_certificate_entries_are_canonical
 #print axioms reachable_search_iff_certified_single_attempt
 #print axioms corrupted_bump_that_does_not_recreate_address_rejects
 #print axioms all_reachable_certificate_entries_are_canonical
+#print axioms all_pda_classes_count
+#print axioms every_apd8_class_is_canonical
 
 end AspisPool.V7TerminalPdaCertificateInvariant
