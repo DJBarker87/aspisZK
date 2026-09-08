@@ -937,20 +937,24 @@ fn terminal_proof_account_v2(
     let request =
         aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(&instruction.data)
             .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?;
-    let proof_index = match request.public {
-        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_) => {
-            if !matches!(instruction.accounts.len(), 11 | 12) {
-                return Err(PairForestTransactionV1ErrorV2::WrongRequest);
-            }
-            instruction.accounts.len() - 1
-        }
-        PoolV1PairForestTerminalPaymentV1::Withdrawal(_) => {
-            if !matches!(instruction.accounts.len(), 16 | 17) {
-                return Err(PairForestTransactionV1ErrorV2::WrongRequest);
-            }
-            instruction.accounts.len() - 6
-        }
-    };
+    // The retained current page is writable for a same-page append and
+    // readonly for rollover.  This authenticated terminal shape fixes the
+    // proof position independently of the optional APD8 certificate appended
+    // immediately after the proof (and before withdrawal custody accounts).
+    let rollover = !instruction
+        .accounts
+        .get(3)
+        .ok_or(PairForestTransactionV1ErrorV2::WrongRequest)?
+        .is_writable;
+    let legacy_accounts = match request.public {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_) => 11,
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(_) => 16,
+    } + usize::from(rollover);
+    let account_count = instruction.accounts.len();
+    if account_count != legacy_accounts && account_count != legacy_accounts + 1 {
+        return Err(PairForestTransactionV1ErrorV2::WrongRequest);
+    }
+    let proof_index = 10 + usize::from(rollover);
     let proof = &instruction.accounts[proof_index];
     if proof.pubkey == Pubkey::default() || proof.is_signer || proof.is_writable {
         return Err(PairForestTransactionV1ErrorV2::WrongRequest);
@@ -1516,6 +1520,18 @@ mod tests {
                 old_wire.serialized_wire_bytes_v2() + 33
             );
             assert!(wire.serialized_wire_bytes_v2() < SOLANA_V1_TRANSACTION_MAX_BYTES_V2);
+            let carrier_wire = build_exact_pair_forest_v1_carrier_transaction_v2(
+                &carrier(&request, proof, withdrawal),
+                key(25),
+                &terminal,
+                payer,
+                [23; 32],
+                config(),
+                &[],
+            )
+            .unwrap();
+            assert_eq!(carrier_wire.instruction_count_v2(), 2);
+            assert!(carrier_wire.serialized_wire_bytes_v2() < 3_500);
 
             let mut wrong = certificate;
             wrong.bumps[POOL_V1_TERMINAL_PDA_BUMP_MASTER] ^= 1;
