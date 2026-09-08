@@ -58,7 +58,7 @@ noncomputable def guardedJointQueryBatchTarget
     (preQueryDiscrepancy : QM31Exact)
     (expected authenticated : QueryVector QM31Exact) : Finset QM31Exact :=
   if expected ≠ authenticated then
-    jointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected
+    exactTag73JointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected
       authenticated
   else ∅
 
@@ -71,14 +71,29 @@ structure JointQueryBatchPreChallengeView where
   active : Bool
   activeSound : active = true → expected ≠ authenticated
   collisionTarget : Finset QM31Exact
-  collisionTargetExact : collisionTarget =
-    jointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected authenticated
+  collisionTargetExact : active = true → collisionTarget =
+    exactTag73JointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected authenticated
 
 noncomputable def JointQueryBatchPreChallengeView.target
     (view : JointQueryBatchPreChallengeView) : Finset QM31Exact :=
   if view.active then
     view.collisionTarget
   else ∅
+
+/-- A canonical inactive nuisance view.  It is used on coordinate fibres that
+do not contain a joint-collision execution, avoiding any need to decide
+equality of the two function-valued query vectors. -/
+def inactiveJointQueryBatchPreChallengeView
+    (preQueryDiscrepancy : QM31Exact)
+    (expected authenticated : QueryVector QM31Exact) :
+    JointQueryBatchPreChallengeView where
+  preQueryDiscrepancy := preQueryDiscrepancy
+  expected := expected
+  authenticated := authenticated
+  active := false
+  activeSound := by simp
+  collisionTarget := ∅
+  collisionTargetExact := by simp
 
 theorem guardedJointQueryBatchTarget_card_le_sixteen
     (preQueryDiscrepancy : QM31Exact)
@@ -87,7 +102,8 @@ theorem guardedJointQueryBatchTarget_card_le_sixteen
         ≤ 16 := by
   classical
   by_cases different : expected ≠ authenticated
-  · simpa [guardedJointQueryBatchTarget, different] using
+  · simpa [guardedJointQueryBatchTarget, different,
+      exactTag73JointQueryBatchNonzeroCollisionSet] using
       jointQueryBatch_nonzero_collision_card_le_sixteen_of_vectors_ne
         preQueryDiscrepancy expected authenticated different
   · simp [guardedJointQueryBatchTarget, different]
@@ -97,7 +113,7 @@ theorem JointQueryBatchPreChallengeView.target_card_le_sixteen
   by_cases activeTrue : view.active = true
   · simp only [JointQueryBatchPreChallengeView.target, activeTrue,
       ↓reduceIte]
-    rw [view.collisionTargetExact]
+    rw [view.collisionTargetExact activeTrue]
     exact jointQueryBatch_nonzero_collision_card_le_sixteen_of_vectors_ne
       view.preQueryDiscrepancy view.expected view.authenticated
         (view.activeSound activeTrue)
@@ -132,11 +148,11 @@ def exactJointQueryBatchPreChallengeView
   authenticated := exactTag73K13AuthenticatedQueryVector decoder input k12
   active := true
   activeSound := fun _ => different
-  collisionTarget := jointQueryBatchNonzeroCollisionSet
+  collisionTarget := exactTag73JointQueryBatchNonzeroCollisionSet
     (source.preQueryDiscrepancy sample input)
     (exactTag73K13ExpectedQueryVector decoder input k12)
     (exactTag73K13AuthenticatedQueryVector decoder input k12)
-  collisionTargetExact := rfl
+  collisionTargetExact := fun _ => rfl
 
 /-- Target membership for an already-active pre-challenge view is a direct
 collision-set membership; no function equality is decided here. -/
