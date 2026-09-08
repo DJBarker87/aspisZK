@@ -1,6 +1,17 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [NUC proving-time and SBF prototype](performance-review.md).
+Latest: [structured CU rescue and basis alignment](structured-performance-review.md).
+Both structured families, fused z/XOR12 rows, shared arithmetic and exact
+query kernels reduce the checked isolated verifier to **1.888–1.890M CU**.
+Proving remains about **4.02 seconds /198 MiB** on the NUC.
+Separate unselected core-only/global overflow-codegen controls reach
+**1.325–1.327M /1.296–1.298M CU**; adopting those requires the indicated
+range/source audit. No complete-transaction CU parity is established.
+The body cap stays **40,282 bytes**. See
+[results](structured-performance-results.json) and
+[commands/evidence](structured-performance-evidence.json).
+
+Previous: [NUC proving-time and dense SBF prototype](performance-review.md).
 Three genuine research proofs take about four seconds each on the NUC.
 The isolated SBF verifier completes at 7.31–7.32M CU under a diagnostic cap,
 and fails the ordinary transaction budget. This is a measured implementation

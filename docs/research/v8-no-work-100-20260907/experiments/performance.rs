@@ -4,6 +4,29 @@ use super::*;
 use std::time::Instant;
 fn phase(seed:u8,name:&str,t:Instant){println!("PERF {{\"seed\":{seed},\"phase\":\"{name}\",\"seconds\":{}}}",t.elapsed().as_secs_f64());}
 pub fn run(){
+    #[cfg(v8_gamma_wrap)] super::super::query_arithmetic::controls();
+    #[cfg(v8_structured)] {
+        row::structured::controls();
+        if std::env::args().nth(1).as_deref()==Some("--structured-controls"){return;}
+        if std::env::args().nth(1).as_deref()==Some("--verify-existing"){
+            let dir=std::env::args().nth(2).expect("fixture directory");
+            let public=std::fs::read(format!("{dir}/public.bin")).unwrap();
+            let transition=std::fs::read(format!("{dir}/transition.bin")).unwrap();
+            let binding:[u8;32]=std::fs::read(format!("{dir}/binding.bin")).unwrap().try_into().unwrap();
+            for seed in [1,2,3]{
+                let body=std::fs::read(format!("{dir}/proof-{seed}.bin")).unwrap();
+                assert_eq!(super::super::performance_verifier::verify(&body,&binding,&public,&transition),Ok(()));
+                for index in [0,HEAD,body.len()-1,417*16,441*16]{
+                    let mut bad=body.clone();bad[index]^=1;
+                    assert!(super::super::performance_verifier::verify(&bad,&binding,&public,&transition).is_err());
+                }
+                let mut bad=body.clone();bad[..4].copy_from_slice(&corelib::field::P.to_le_bytes());
+                assert!(super::super::performance_verifier::verify(&bad,&binding,&public,&transition).is_err());
+                assert!(super::super::performance_verifier::verify(&body[..body.len()-1],&binding,&public,&transition).is_err());
+            }
+            println!("STRUCTURED_EXISTING three_honest=true seven_negative_cases_per_seed=true dense_v2_outcomes=true");return;
+        }
+    }
     #[cfg(v8_performance_fast)] row::performance_controls();
     let out=std::env::args().nth(1).expect("new output directory required");
     std::fs::create_dir(&out).expect("output directory must not exist");

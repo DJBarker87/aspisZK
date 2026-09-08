@@ -17,10 +17,18 @@ fn main(){
     for limit in [1_400_000u64,100_000_000] {
         for seed in [1,2,3] {
             let original=std::fs::read(format!("{}/proof-{seed}.bin",args[2])).unwrap();
-            for case in ["honest","bad-fixed","bad-leaf","bad-frontier","truncated"] {
+            let extended=std::env::var_os("ASPIS_V8_EXTENDED_REJECTIONS").is_some();
+            let cases=if extended{vec!["honest","bad-fixed","bad-leaf","bad-frontier","truncated",
+                "bad-inactive","bad-first-round","bad-final","noncanonical","appended"]}
+                else{vec!["honest","bad-fixed","bad-leaf","bad-frontier","truncated"]};
+            for case in cases {
                 if limit==1_400_000&&case!="honest"{continue;}
                 let mut proof=original.clone();
-                match case {"bad-fixed"=>proof[0]^=1,"bad-leaf"=>proof[11228]^=1,"bad-frontier"=>{let n=proof.len();proof[n-1]^=1;},"truncated"=>{proof.pop();},_=>{}}
+                match case {"bad-fixed"=>proof[0]^=1,"bad-leaf"=>proof[11228]^=1,
+                    "bad-frontier"=>{let n=proof.len();proof[n-1]^=1;},"truncated"=>{proof.pop();},
+                    "bad-inactive"=>proof[358*16]^=1,"bad-first-round"=>proof[417*16]^=1,
+                    "bad-final"=>proof[441*16]^=1,"noncanonical"=>proof[..4].copy_from_slice(&2147483647u32.to_le_bytes()),
+                    "appended"=>proof.push(0),_=>{}}
                 let public=std::fs::read(format!("{}/public.bin",args[2])).unwrap();
                 let transition=std::fs::read(format!("{}/transition.bin",args[2])).unwrap();
                 let binding=std::fs::read(format!("{}/binding.bin",args[2])).unwrap();
