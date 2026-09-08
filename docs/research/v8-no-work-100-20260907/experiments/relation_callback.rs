@@ -105,9 +105,13 @@ fn verify_relation(body:&[u8],statement:[u8;32],ordinary:Vec<K>,claim:K,hashfn:c
 }
 
 #[path="relation_callback_fixtures.rs"] mod fixtures;
-#[cfg(not(v8_inactive_binding))]
+#[cfg(not(any(v8_inactive_binding,v8_radius_boundary)))]
 fn main(){fixtures::run();}
-#[cfg(v8_inactive_binding)]
+#[cfg(any(v8_inactive_binding,v8_radius_boundary))]
 #[path="inactive_row_binding.rs"] mod inactive_binding;
 #[cfg(v8_inactive_binding)]
 fn main(){inactive_binding::run();}
+#[cfg(v8_radius_boundary)]
+#[path="radius_boundary.rs"] mod radius_boundary;
+#[cfg(v8_radius_boundary)]
+fn main(){radius_boundary::run();}

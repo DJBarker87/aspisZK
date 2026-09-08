@@ -10,21 +10,21 @@ fn metered_hash(parts:&[&[u8]])->[u8;32]{
     hash(parts)
 }
 fn tpower(mut x:K,n:usize)->K{for _ in 0..n.trailing_zeros(){x=x.square().add(x.square()).sub(K::ONE);}x}
-fn record(x:M31,n:usize)->Vec<u8>{
+pub(super) fn record(x:M31,n:usize)->Vec<u8>{
     let value=tpower(sc(x.0),n).c0.a.0;let mut r=vec![0u8;REC];
     for slot in 0..4{let bit=31*26*slot;for j in 0..31{r[(bit+j)/8]|=(((value>>j)&1)as u8)<<((bit+j)%8);}}
     r
 }
-type Tree=Vec<Vec<[u8;26]>>;
-fn trees(n:usize)->(Tree,Tree){
+pub(super) type Tree=Vec<Vec<[u8;26]>>;
+pub(super) fn trees(n:usize)->(Tree,Tree){
     let ids:Vec<u32>=(0..1<<18).collect();let points=corelib::circle_fri::selected_circle_fiber_points_shared(20,&ids).unwrap();
     let leaves:Vec<[u8;26]>=points.iter().map(|p|private_leaf_hash_v7(hash,V7_C1_TREE_TAG,&record(p.x,n)[..403],&[0;32])).collect();
     let mut a=vec![leaves];for _ in 0..18{let next=a.last().unwrap().chunks_exact(2).map(|v|node_hash_v7(hash,&v[0],&v[1])).collect();a.push(next);}
     let mut b=vec![vec![private_leaf_hash_v7(hash,V7_C2_TREE_TAG,&[0;186],&[0;32])]];for _ in 0..18{let v=b.last().unwrap()[0];b.push(vec![node_hash_v7(hash,&v,&v)]);}(a,b)
 }
-fn frontier(tree:&Tree,queries:&[u32])->Vec<u8>{let mut out=vec![];let mut nodes:BTreeSet<u32>=queries.iter().copied().collect();
+pub(super) fn frontier(tree:&Tree,queries:&[u32])->Vec<u8>{let mut out=vec![];let mut nodes:BTreeSet<u32>=queries.iter().copied().collect();
     for row in tree.iter().take(18){for &j in &nodes{if !nodes.contains(&(j^1)){out.extend_from_slice(&row[if row.len()==1{0}else{(j^1)as usize}]);}}nodes=nodes.into_iter().map(|j|j>>1).collect();}out}
-fn body(v:&[K],a:&Tree,b:&Tree,records:&[u8],front:(&[u8],&[u8]))->Vec<u8>{let mut out=bytes(v);out.extend_from_slice(&a[18][0]);out.extend_from_slice(&b[18][0]);out.extend_from_slice(&[0;24]);out.extend_from_slice(records);out.extend_from_slice(front.0);out.extend_from_slice(front.1);out}
+pub(super) fn body(v:&[K],a:&Tree,b:&Tree,records:&[u8],front:(&[u8],&[u8]))->Vec<u8>{let mut out=bytes(v);out.extend_from_slice(&a[18][0]);out.extend_from_slice(&b[18][0]);out.extend_from_slice(&[0;24]);out.extend_from_slice(records);out.extend_from_slice(front.0);out.extend_from_slice(front.1);out}
 fn next_cheb(t:&[K],prev:&[K])->Vec<K>{let mut n=vec![K::ZERO;t.len()+1];for(j,v)in t.iter().enumerate(){n[j+1]=v.add(*v);}for(j,v)in prev.iter().enumerate(){n[j]=n[j].sub(*v);}n}
 fn monomial_product(a:&[M31],b:&[M31])->Vec<M31>{let mut r=vec![M31::ZERO;a.len()+b.len()-1];for(i,x)in a.iter().enumerate(){for(j,y)in b.iter().enumerate(){r[i+j]=r[i+j].add(x.mul(*y));}}r}
 fn tensor_basis()->Vec<Vec<M31>>{
@@ -37,7 +37,7 @@ fn natural(mut a:Vec<K>,mut b:Vec<K>)->Vec<K>{a.resize(512,K::ZERO);b.resize(512
         for k in 0..=j{a[k]=a[k].sub(q[2*j].mul_m31(basis[j][k]));b[k]=b[k].sub(q[2*j+1].mul_m31(basis[j][k]));}}
     assert!(a.iter().chain(&b).all(|x|*x==K::ZERO));q
 }
-fn quotient(n:usize,p:&Prefix)->Vec<K>{
+pub(super) fn quotient(n:usize,p:&Prefix)->Vec<K>{
     let i=K::from_cm31(CM31::new(M31::ZERO,M31::ONE));let[a,b,c]=p.abc;
     let lo=b.add(i.mul(c)).half();let hi=b.sub(i.mul(c)).half();
     let mut num=vec![K::ZERO;2*n+1];num[0]=K::ONE.half();num[2*n]=K::ONE.half();num[n]=p.iv[0].neg();
@@ -52,7 +52,7 @@ fn quotient(n:usize,p:&Prefix)->Vec<K>{
     let q=natural(aa,bb);assert_eq!(q[1023],K::ZERO);
     assert_eq!(b.mul(q[1022]).sub(c.mul(q[1021])),if n==512{sc(512)}else{K::ZERO});q
 }
-fn save_round(v:&mut[K],r:usize,p:[K;7]){v[417+r*6..423+r*6].copy_from_slice(&[p[0],p[1],p[2],p[3],p[5],p[6]]);}
+pub(super) fn save_round(v:&mut[K],r:usize,p:[K;7]){v[417+r*6..423+r*6].copy_from_slice(&[p[0],p[1],p[2],p[3],p[5],p[6]]);}
 fn ordinary_weights()->Vec<K>{(0..1024).map(|i|sc((i%7+1)as u32)).collect()}
 fn proof(n:usize,a:&Tree,b:&Tree,alter:bool)->(Vec<u8>,K){
     let mut v=vec![K::ZERO;697];let ordinary=ordinary_weights();let stub=body(&v,a,b,&vec![0;Q*REC],(&[],&[]));let w=parse(&stub).unwrap();

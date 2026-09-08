@@ -1,5 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [beyond-radius recovery continuation](radius-residual-review.md).
+The 9,302-corruption boundary can lose the 9,301 classifier while retaining a
+unique nearest anchor; the repaired relation suffix accepts missed-corruption
+schedules. New Lean claim-transport identities and an executable recovered-C1
+to checked-transfer-witness endpoint narrow the source obligations. Full
+payment embedding and accepted residual recovery remain open. See
+[exact ledger](radius-results.json) and [commands/evidence](radius-evidence.json).
+
 Latest: [near-anchor gamma-cover continuation](near-gamma-review.md).
 The new Lean construction supplies a pre-gamma component tuple covering every
 9,301-close original-code candidate and at least 245,609 fibres of own support.
