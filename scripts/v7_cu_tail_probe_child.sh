@@ -101,32 +101,36 @@ jq -n --arg ack "$ACK" --arg payer "$PAYER_KEYPAIR" --arg blockhash "$blockhash"
     requestId:1000,probeProgramId:$programId}' >"$WORK_DIR/input.json"
 "$PROBE_BUILDER" "$WORK_DIR/input.json" >"$EVIDENCE_DIR/signed-requests.json"
 jq -e '.schema == "aspis.v7.cu-tail-probe-signed-requests.v1" and .localOnly == true and
-  (.requests | length) == 8 and all(.requests[];
+  (.requests | length) == 9 and all(.requests[];
     .serializedTransactionBytes < 1232 and (.signedWireSha256 | test("^[0-9a-f]{64}$")))' \
   "$EVIDENCE_DIR/signed-requests.json" >/dev/null || fail "probe signed requests are malformed"
 
-for index in 0 1 2 3 4 5 6 7; do
+for index in 0 1 2 3 4 5 6 7 8; do
   request_file="$EVIDENCE_DIR/signed-requests.json"
-  if [[ "$index" -eq 4 ]]; then
+  if [[ "$index" -eq 4 || "$index" -eq 8 ]]; then
     slot=$(rpc '{"jsonrpc":"2.0","id":4,"method":"getSlot","params":[{"commitment":"finalized"}]}' \
       | jq -er '.result')
     blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
       '{jsonrpc:"2.0",id:5,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
       | jq -er '.result.value.blockhash')
     jq -n --arg ack "$ACK" --arg payer "$PAYER_KEYPAIR" --arg blockhash "$blockhash" \
-      --arg programId "$PROGRAM_ID" --argjson slot "$slot" \
+      --arg programId "$PROGRAM_ID" --argjson slot "$slot" --argjson index "$index" \
       '{schema:"aspis.v7.cu-tail-probe-input.v1",disposableAcknowledgement:$ack,
         payerKeypair:$payer,recentBlockhash:$blockhash,minContextSlot:$slot,
-        requestId:2000,probeProgramId:$programId}' >"$WORK_DIR/tail-input.json"
-    "$PROBE_BUILDER" "$WORK_DIR/tail-input.json" >"$EVIDENCE_DIR/signed-requests-tail.json"
+        requestId:(2000+$index*100),probeProgramId:$programId}' \
+      >"$WORK_DIR/tail-input-$index.json"
+    "$PROBE_BUILDER" "$WORK_DIR/tail-input-$index.json" \
+      >"$EVIDENCE_DIR/signed-requests-tail-$index.json"
     jq -e '.schema == "aspis.v7.cu-tail-probe-signed-requests.v1" and .localOnly == true and
-      (.requests | length) == 8 and all(.requests[];
+    (.requests | length) == 9 and all(.requests[];
         .serializedTransactionBytes < 1232 and (.signedWireSha256 | test("^[0-9a-f]{64}$")))' \
-      "$EVIDENCE_DIR/signed-requests-tail.json" >/dev/null \
+      "$EVIDENCE_DIR/signed-requests-tail-$index.json" >/dev/null \
       || fail "refreshed probe signed requests are malformed"
   fi
-  if [[ "$index" -ge 4 ]]; then
-    request_file="$EVIDENCE_DIR/signed-requests-tail.json"
+  if [[ "$index" -ge 8 ]]; then
+    request_file="$EVIDENCE_DIR/signed-requests-tail-8.json"
+  elif [[ "$index" -ge 4 ]]; then
+    request_file="$EVIDENCE_DIR/signed-requests-tail-4.json"
   fi
   name=$(jq -er ".requests[$index].name" "$request_file")
   case_dir="$EVIDENCE_DIR/cases/$name"
@@ -167,13 +171,15 @@ jq -n --arg programId "$PROGRAM_ID" --arg binarySha256 "$SOURCE_SHA" \
   --slurpfile c20 "$EVIDENCE_DIR/cases/counter-twenty/summary.json" \
   --slurpfile f199 "$EVIDENCE_DIR/cases/frontier-199/summary.json" \
   --slurpfile f203 "$EVIDENCE_DIR/cases/frontier-203/summary.json" \
+  --slurpfile f14 "$EVIDENCE_DIR/cases/frontier-14/summary.json" \
   '{schema:"aspis.v7.cu-tail-probe-evidence.v1",cluster:"disposable-local-validator",
     localOnly:true,probeProgramId:$programId,probeBinarySha256:$binarySha256,
     deploymentMode:$deploymentMode,
-    cases:[$min[0],$max[0],$best[0],$worst[0],$c0[0],$c20[0],$f199[0],$f203[0]],
+    cases:[$min[0],$max[0],$best[0],$worst[0],$c0[0],$c20[0],$f14[0],$f199[0],$f203[0]],
     landedDeltasCu:{qm31MaximumMinusMinimum:($max[0].landedCu-$min[0].landedCu),
       queryWorstMinusBest:($worst[0].landedCu-$best[0].landedCu),
       counterTwentyMinusZero:($c20[0].landedCu-$c0[0].landedCu),
+      frontier203Minus14:($f203[0].landedCu-$f14[0].landedCu),
       frontier203Minus199:($f203[0].landedCu-$f199[0].landedCu)},
     privateKeysCommitted:false,publicClusterTransaction:false,mainnetReady:false}' \
   >"$EVIDENCE_DIR/summary.json"
