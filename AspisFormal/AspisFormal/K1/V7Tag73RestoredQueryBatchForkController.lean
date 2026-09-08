@@ -29,6 +29,7 @@ open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73CausalGammaPrefixCoordinates
 open AspisK1.V7Tag73CausalSlotMachineRouter
+open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73FinalWorkQ16CandidateController
 open AspisK1.V7Tag73IndexedExposureCausalRouter
 open AspisK1.V7Tag73QueryBatchPrefixCausalController
@@ -123,6 +124,114 @@ def restoredQueryBatchForkController
   preferredSlot := RestoredQueryBatchForkMemory.preferredSlot transitionFuel
   afterMemory := RestoredQueryBatchForkMemory.afterAnswer transitionFuel
 
+/-! ## Waiting for the typed fork in the complete compiler tape -/
+
+/-- A causal start marker may inspect the complete current cursor but not the
+answer about to be sampled.  This is the stopping-time interface used by the
+root-sweep source proof. -/
+inductive WaitingRestoredQueryBatchMemory where
+  | waiting
+  | active (forkMemory : RestoredQueryBatchForkMemory)
+  deriving DecidableEq
+
+def activeRestoredQueryBatchState
+    {globalOracleCalls : Nat}
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      WaitingRestoredQueryBatchMemory)
+    (forkMemory : RestoredQueryBatchForkMemory) :
+    IndexedUnifiedExposureState globalOracleCalls
+      RestoredQueryBatchForkMemory :=
+  { exposureIndex := state.exposureIndex
+    cursor := state.cursor
+    memory := forkMemory }
+
+/-- Stay inert until the pre-answer marker identifies the selected typed
+block-zero fork.  The marked answer itself is routed as block-zero output;
+the marker therefore cannot depend on that answer. -/
+def waitingRestoredQueryBatchForkController
+    {globalOracleCalls : Nat} (transitionFuel : Nat)
+    (startsHere : UnifiedExposureCursor globalOracleCalls → Bool) :
+    IndexedUnifiedExposureController globalOracleCalls Digest256
+      GammaPrefixDigestSlot WaitingRestoredQueryBatchMemory where
+  preferredSlot := fun state ↦
+    match state.memory with
+    | .waiting =>
+        if startsHere state.cursor then some (⟨0, by decide⟩, false)
+        else none
+    | .active forkMemory =>
+        (restoredQueryBatchForkController transitionFuel).preferredSlot
+          (activeRestoredQueryBatchState state forkMemory)
+  afterMemory := fun state answer ↦
+    match state.memory with
+    | .waiting =>
+        if startsHere state.cursor then
+          .active
+            ((restoredQueryBatchForkController transitionFuel).afterMemory
+              { exposureIndex := state.exposureIndex
+                cursor := state.cursor
+                memory := initialRestoredQueryBatchForkMemory }
+              answer)
+        else .waiting
+    | .active forkMemory =>
+        .active
+          ((restoredQueryBatchForkController transitionFuel).afterMemory
+            (activeRestoredQueryBatchState state forkMemory) answer)
+
+@[simp] theorem waiting_controller_marks_block_zero_output
+    {globalOracleCalls : Nat} (transitionFuel exposureIndex : Nat)
+    (startsHere : UnifiedExposureCursor globalOracleCalls → Bool)
+    (cursor : UnifiedExposureCursor globalOracleCalls)
+    (marked : startsHere cursor = true) :
+    (waitingRestoredQueryBatchForkController transitionFuel startsHere).preferredSlot
+        { exposureIndex := exposureIndex
+          cursor := cursor
+          memory := WaitingRestoredQueryBatchMemory.waiting } =
+      some (⟨0, by decide⟩, false) := by
+  simp [waitingRestoredQueryBatchForkController, marked]
+
+@[simp] theorem waiting_controller_marked_output_arms_adjacent_advance
+    {globalOracleCalls : Nat} (transitionFuel exposureIndex : Nat)
+    (startsHere : UnifiedExposureCursor globalOracleCalls → Bool)
+    (cursor : UnifiedExposureCursor globalOracleCalls)
+    (marked : startsHere cursor = true) (forkOutput : Digest256) :
+    let controller := waitingRestoredQueryBatchForkController transitionFuel
+      startsHere
+    let initial : IndexedUnifiedExposureState globalOracleCalls
+        WaitingRestoredQueryBatchMemory :=
+      { exposureIndex := exposureIndex
+        cursor := cursor
+        memory := .waiting }
+    let afterOutput := controller.afterAnswer transitionFuel initial forkOutput
+    afterOutput.memory =
+        .active
+          { phase := .firstAdvance forkOutput
+            chain := inactiveQueryBatchPrefixMemory } ∧
+      controller.preferredSlot afterOutput =
+        some (⟨0, by decide⟩, true) := by
+  simp [waitingRestoredQueryBatchForkController, marked,
+    IndexedUnifiedExposureController.afterAnswer,
+    restoredQueryBatchForkController,
+    RestoredQueryBatchForkMemory.afterAnswer,
+    activeRestoredQueryBatchState, initialRestoredQueryBatchForkMemory,
+    RestoredQueryBatchForkMemory.preferredSlot]
+
+/-- Full compiler-tape coordinate equivalence at an arbitrary causal
+root-sweep stopping point.  No exposure index is selected from the completed
+tape: `startsHere` is evaluated by the pre-answer controller during the same
+chronological run. -/
+def exactCompilerWaitingRestoredQueryBatchCoordinates
+    (parameters : ExactCompilerResourceParameters)
+    (transitionFuel : Nat)
+    (startsHere : UnifiedExposureCursor
+      (globalFull256OracleCallCap parameters) → Bool)
+    (cursor : UnifiedExposureCursor
+      (globalFull256OracleCallCap parameters)) :
+    FreshAnswerTape Digest256 (exactCompilerTargetCaps parameters).length ≃
+      ExactCompilerGammaPrefixResidual parameters × TotalGammaDuplexTape :=
+  exactCompilerIndexedGammaPrefixCoordinates parameters transitionFuel
+    (waitingRestoredQueryBatchForkController transitionFuel startsHere)
+    .waiting cursor
+
 @[simp] theorem initial_restored_query_batch_labels_first_output
     {globalOracleCalls : Nat} (transitionFuel exposureIndex : Nat)
     (cursor : UnifiedExposureCursor globalOracleCalls) :
@@ -194,6 +303,9 @@ def restoredQueryBatchForkSuffixCoordinates
 #print axioms restored_query_batch_labels_adjacent_advance
 #print axioms restored_query_batch_after_first_pair_starts_block_one
 #print axioms restoredQueryBatchForkSuffixCoordinates
+#print axioms waiting_controller_marks_block_zero_output
+#print axioms waiting_controller_marked_output_arms_adjacent_advance
+#print axioms exactCompilerWaitingRestoredQueryBatchCoordinates
 
 end
 end AspisK1.V7Tag73RestoredQueryBatchForkController
