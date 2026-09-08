@@ -68,7 +68,50 @@ theorem mem_dependent_fold_factorized_oneFoldEvent
   rw [if_pos foldAccepted, rawExact]
   exact mem_factorized_dependentProductEvent_of_value target raw member
 
+/-- Predicate-valued form of the generic component packaging theorem.  This
+keeps concrete finite target implementations out of set-coercion unification. -/
+theorem mem_dependent_fold_predicate_oneFoldEvent
+    {Residual : Type}
+    (coordinates : Residual × (Digest256 × FourGammaBlocks))
+    (target : Tag73OrdinarySamplerSkeleton → QM31Exact → Prop)
+    (succeeds : foldAlphaTotalSucceeds coordinates.2)
+    (foldAccepted : FoldWork31Accepted coordinates.2.1)
+    (raw : SuccessfulTag73RawStream)
+    (rawExact :
+      (⟨fourGammaBlocksRawEquiv coordinates.2.2, succeeds⟩ :
+        SuccessfulTag73RawStream) = raw)
+    (member : target (successfulOrdinaryExactFactorization raw).1
+      (successfulOrdinaryExactValue raw)) :
+    dependentFoldFactorizedOneFoldEventMember coordinates
+      (fun skeleton => {value | target skeleton value}) := by
+  exact mem_dependent_fold_factorized_oneFoldEvent coordinates
+    (fun skeleton => {value | target skeleton value}) succeeds foldAccepted raw
+      rawExact member
+
+/-- Component form with the successful raw subtype packaged internally. -/
+theorem mem_dependent_fold_predicate_of_components
+    {Residual : Type}
+    (coordinates : Residual × (Digest256 × FourGammaBlocks))
+    (target : Tag73OrdinarySamplerSkeleton → QM31Exact → Prop)
+    (succeeds : foldAlphaTotalSucceeds coordinates.2)
+    (foldAccepted : FoldWork31Accepted coordinates.2.1)
+    (member : target
+      (successfulOrdinaryExactFactorization
+        (⟨fourGammaBlocksRawEquiv coordinates.2.2, succeeds⟩ :
+          SuccessfulTag73RawStream)).1
+      (successfulOrdinaryExactValue
+        (⟨fourGammaBlocksRawEquiv coordinates.2.2, succeeds⟩ :
+          SuccessfulTag73RawStream))) :
+    dependentFoldFactorizedOneFoldEventMember coordinates
+      (fun skeleton => {value | target skeleton value}) := by
+  exact mem_dependent_fold_predicate_oneFoldEvent coordinates target succeeds
+    foldAccepted
+    (⟨fourGammaBlocksRawEquiv coordinates.2.2, succeeds⟩ :
+      SuccessfulTag73RawStream) rfl member
+
 #print axioms mem_dependent_fold_factorized_oneFoldEvent
+#print axioms mem_dependent_fold_predicate_oneFoldEvent
+#print axioms mem_dependent_fold_predicate_of_components
 
 end
 
