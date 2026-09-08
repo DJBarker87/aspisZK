@@ -368,15 +368,24 @@ theorem process_challenge_block_preserves_record_uniqueness
       remaining invariant
     have decodedPrefix := append_decoded_challenge_prefix_nodup snapshot id encoded
       remaining invariant
-    cases id <;>
-      simp only [completeFutureFreeChallenge]
-    all_goals try
-      simpa [SnapshotChallengeRecordUniqueness] using moved
-    case circlePoint sample =>
-      split
-      · simpa [SnapshotChallengeRecordUniqueness, pendingChallengeIds] using
-          decodedPrefix
-      · simpa [SnapshotChallengeRecordUniqueness] using moved
+    cases binding : challengeBindingPayload? id encoded with
+    | none =>
+        simp only [binding]
+        cases id <;> simp only [completeFutureFreeChallenge]
+        all_goals try
+          simpa [SnapshotChallengeRecordUniqueness] using moved
+        case circlePoint sample =>
+          split
+          · simpa [SnapshotChallengeRecordUniqueness, pendingChallengeIds]
+              using decodedPrefix
+          · simpa [SnapshotChallengeRecordUniqueness] using moved
+    | some payload =>
+        simp only [binding]
+        cases id <;>
+          simp [challengeBindingPayload?, completeFutureFreeChallenge,
+            SnapshotChallengeRecordUniqueness, pendingChallengeIds] at binding ⊢
+        all_goals
+          simpa [List.map_append, List.append_assoc] using moved
   next rejected =>
     have decodedPrefix :
         (snapshot.decodedChallenges.map DecodedChallenge.id).Nodup :=
