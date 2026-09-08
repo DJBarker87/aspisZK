@@ -30,6 +30,7 @@ open AspisK1.V7Tag73CompleteCausalOrdinaryProbability
 open AspisK1.V7Tag73CounterfactualOneFoldProvider
 open AspisK1.V7Tag73CounterfactualOneFoldReplayFilter
 open AspisK1.V7Tag73ExactAcceptedFoldTrialPackage
+open AspisK1.V7Tag73ExactBidirectionalFoldAnchor
 open AspisK1.V7Tag73ExactBidirectionalFoldOneFoldBadTarget
 open AspisK1.V7Tag73ExactBidirectionalFoldOneFoldFibreReplay
 open AspisK1.V7Tag73ExactBidirectionalFoldOneFoldProjection
@@ -99,6 +100,86 @@ def ExactBidirectionalK13OneFoldFibreInvariant
         scheduleAtAlpha (exactK13ParsedProof leftWitness.input).schedule
           (exactOperationalChallenge rightWitness.input (.alpha 0))
 
+/-- Witness-independent cross-fibre filter core.  It accepts the chronological
+word explicitly and depends only on operational inputs, selected folds, trial
+identity, and the semantic fields which precede or contain alpha. -/
+theorem exactBidirectionalFoldOneFoldReplayOracle_crossProof_inputs
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {trial : ExactCompilerExposureTrial parameters}
+    {hidden : HiddenTape}
+    {left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (programmedCover : 5 ≤ 2 * parameters.forkRequestCap)
+    (leftWords : ExtractedWords)
+    (leftInput : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance (hidden, left))
+    (rightInput : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance (hidden, right))
+    (leftFold : ExactAcceptedFoldTrial leftInput)
+    (rightFold : ExactAcceptedFoldTrial rightInput)
+    (leftTrialExact : exactAcceptedFoldPairTrial leftInput leftFold = trial)
+    (rightTrialExact : exactAcceptedFoldPairTrial rightInput rightFold = trial)
+    (residualExact :
+      let router := exactCompilerBidirectionalFoldOneFoldRouter parameters
+        transitionFuel trial.val (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+        left).1 =
+      (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+        right).1)
+    (foldExact :
+      let router := exactCompilerBidirectionalFoldOneFoldRouter parameters
+        transitionFuel trial.val (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+        left).2.1 =
+      (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+        right).2.1)
+    (gammaExact : (exactK13ParsedProof leftInput).gamma =
+      (exactK13ParsedProof rightInput).gamma)
+    (scheduleExact : (exactK13ParsedProof rightInput).schedule =
+      scheduleAtAlpha (exactK13ParsedProof leftInput).schedule
+        (exactOperationalChallenge rightInput (.alpha 0))) :
+    (exactAcceptedFoldReplayOracle leftWords leftInput leftFold).proof?
+      (exactAcceptedFoldCoordinateAttempt transitionRoom programmedCover
+        rightInput rightFold) =
+      some (exactK13ParsedProof rightInput) := by
+  let actual := exactAcceptedFoldCoordinateAttempt transitionRoom
+    programmedCover rightInput rightFold
+  let replay := fun attempt : SuccessfulTag73DuplexOrdinaryAttempt =>
+    exactBidirectionalFoldOneFoldRawReplay transitionFuel configuration hidden
+      (exactAcceptedFoldBidirectionalRouter leftInput leftFold)
+      (exactAcceptedFoldBidirectionalCoordinates leftInput leftFold).1
+      (exactAcceptedFoldBidirectionalCoordinates leftInput leftFold).2.1 attempt.1
+  have returned : (replay actual).terminal =
+      .returned (.completed (exactK12Runtime rightInput)
+        rightInput.package.root.full.clientRun) := by
+    have runExact := exactBidirectionalFoldOneFoldRawReplay_cross_inputs
+      transitionRoom programmedCover leftInput rightInput leftFold rightFold
+        leftTrialExact rightTrialExact residualExact foldExact
+    rw [show replay actual = runExactPlainRom transitionFuel configuration
+        (hidden, right) by exact runExact]
+    exact exactOperationalPlainRom_terminal rightInput
+  have alphaExact : successfulDuplexOrdinaryValue actual =
+      exactOperationalChallenge rightInput (.alpha 0) :=
+    exactAcceptedFoldCoordinateRaw_value transitionRoom programmedCover
+      rightInput rightFold
+  apply plainRomReplayOracle_actualProof
+    (words := leftWords)
+    (exactK13ParsedProof leftInput).gamma
+    (exactK13ParsedProof leftInput).schedule
+    (exactK13ParsedProof leftInput).disclosedFinal replay actual
+    (exactK12Runtime rightInput)
+    rightInput.package.root.full.clientRun returned
+  · exact gammaExact.symm
+  · rw [alphaExact]
+    exact scheduleExact
+
 /-- The representative's executable filter exposes the right member's
 literal parsed proof at the right member's successful alpha coordinate. -/
 theorem exactBidirectionalFoldOneFoldReplayOracle_crossProof
@@ -144,38 +225,11 @@ theorem exactBidirectionalFoldOneFoldReplayOracle_crossProof
       (exactAcceptedFoldCoordinateAttempt transitionRoom programmedCover
         rightWitness.input rightWitness.fold) =
       some (exactK13ParsedProof rightWitness.input) := by
-  let actual := exactAcceptedFoldCoordinateAttempt transitionRoom
-    programmedCover rightWitness.input rightWitness.fold
-  let replay := fun attempt : SuccessfulTag73DuplexOrdinaryAttempt =>
-    exactBidirectionalFoldOneFoldRawReplay transitionFuel configuration hidden
-      (exactAcceptedFoldBidirectionalRouter leftWitness.input leftWitness.fold)
-      (exactAcceptedFoldBidirectionalCoordinates leftWitness.input
-        leftWitness.fold).1
-      (exactAcceptedFoldBidirectionalCoordinates leftWitness.input
-        leftWitness.fold).2.1 attempt.1
-  have returned : (replay actual).terminal =
-      .returned (.completed (exactK12Runtime rightWitness.input)
-        rightWitness.input.package.root.full.clientRun) := by
-    have runExact := exactBidirectionalFoldOneFoldRawReplay_cross
-      transitionRoom programmedCover leftWitness rightWitness residualExact
-        foldExact
-    rw [show replay actual = runExactPlainRom transitionFuel configuration
-        (hidden, right) by exact runExact]
-    exact exactOperationalPlainRom_terminal rightWitness.input
-  have alphaExact : successfulDuplexOrdinaryValue actual =
-      exactOperationalChallenge rightWitness.input (.alpha 0) :=
-    exactAcceptedFoldCoordinateRaw_value transitionRoom programmedCover
-      rightWitness.input rightWitness.fold
-  apply plainRomReplayOracle_actualProof
-    (words := leftWitness.k12.words)
-    (exactK13ParsedProof leftWitness.input).gamma
-    (exactK13ParsedProof leftWitness.input).schedule
-    (exactK13ParsedProof leftWitness.input).disclosedFinal replay actual
-    (exactK12Runtime rightWitness.input)
-    rightWitness.input.package.root.full.clientRun returned
-  · exact gammaExact.symm
-  · rw [alphaExact]
-    exact scheduleExact
+  exact exactBidirectionalFoldOneFoldReplayOracle_crossProof_inputs
+    transitionRoom programmedCover leftWitness.k12.words leftWitness.input
+      rightWitness.input leftWitness.fold rightWitness.fold
+        leftWitness.trialExact rightWitness.trialExact residualExact foldExact
+          gammaExact scheduleExact
 
 /-- Every accepted right member lies in the fixed degree-three target chosen
 from a left representative of the same residual/fold fibre. -/
@@ -259,6 +313,7 @@ theorem exactBidirectionalFoldOneFoldFailure_mem_leftRawTarget
 end
 
 #print axioms ExactBidirectionalK13OneFoldFibreInvariant
+#print axioms exactBidirectionalFoldOneFoldReplayOracle_crossProof_inputs
 #print axioms exactBidirectionalFoldOneFoldReplayOracle_crossProof
 #print axioms exactBidirectionalFoldOneFoldFailure_mem_leftRawTarget
 

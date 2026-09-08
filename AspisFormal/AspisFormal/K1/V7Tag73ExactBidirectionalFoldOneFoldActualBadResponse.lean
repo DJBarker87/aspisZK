@@ -43,6 +43,59 @@ open AspisV6OneFoldCandidateExtraction
 
 noncomputable section
 
+/-- Word-parametric source form of the accepted one-fold bad-response bridge.
+The corrected classifier supplies the chronological pre-q16 word directly,
+so this theorem does not identify it with the legacy completed K1.2 word. -/
+theorem exactAcceptedFoldWordsActualOneFoldBadResponse
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoded : Fin 641 → QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (programmedCover : 5 ≤ 2 * parameters.forkRequestCap)
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (finalEncoderExact : decoder.finalEncoder = exactFinalEncoder)
+    (words : ExtractedWords)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (fold : ExactAcceptedFoldTrial input)
+    (source : ExactParsedProofSourceBinding input decoded)
+    (failure : OneFoldReductionFailure (exactK13ParsedProof input).schedule
+      (exactK13Encoders decoder)
+      (parsedK13Transcript words (exactK13ParsedProof input))) :
+    CausalOneFoldBadResponse (exactK13ParsedProof input).schedule
+      (exactK13Encoders decoder)
+      (exactOneFoldAlgebraBinding (exactK13ParsedProof input).schedule
+        (exactK13Encoders decoder) initialEncoderExact finalEncoderExact
+        source.inverseTablesExact)
+      (counterfactualOneFoldBase
+        (exactAcceptedFoldReplayOracle words input fold))
+      (counterfactualOneFoldStrategy decoder
+        (exactAcceptedFoldReplayOracle words input fold)
+        (successfulDuplexOrdinaryFactorization
+          (exactAcceptedFoldCoordinateAttempt transitionRoom programmedCover
+            input fold)).1)
+      (successfulDuplexOrdinaryValue
+        (exactAcceptedFoldCoordinateAttempt transitionRoom programmedCover
+          input fold)) := by
+  let actual := exactAcceptedFoldCoordinateAttempt transitionRoom
+    programmedCover input fold
+  let oracle := exactAcceptedFoldReplayOracle words input fold
+  have proofExact : oracle.proof? actual = some (exactK13ParsedProof input) :=
+    exactAcceptedFoldReplayOracle_actualProof transitionRoom programmedCover
+      words input fold source
+  exact actual_oneFold_failure_is_counterfactual_bad_response decoder
+    (exactOneFoldAlgebraBinding (exactK13ParsedProof input).schedule
+      (exactK13Encoders decoder) initialEncoderExact finalEncoderExact
+      source.inverseTablesExact)
+    oracle actual (exactK13ParsedProof input) proofExact failure
+
 /-- Literal production failure at the accepted alpha is a bad response for the
 future-free replay family fixed before that alpha value is returned. -/
 theorem exactAcceptedFoldActualOneFoldBadResponse
@@ -82,22 +135,15 @@ theorem exactAcceptedFoldActualOneFoldBadResponse
       (successfulDuplexOrdinaryValue
         (exactAcceptedFoldCoordinateAttempt transitionRoom programmedCover
           input fold)) := by
-  let actual := exactAcceptedFoldCoordinateAttempt transitionRoom
-    programmedCover input fold
-  let oracle := exactAcceptedFoldReplayOracle k12.words input fold
-  have proofExact : oracle.proof? actual = some (exactK13ParsedProof input) :=
-    exactAcceptedFoldReplayOracle_actualProof transitionRoom programmedCover
-      k12.words input fold source
   have failure' := failure
   change OneFoldReductionFailure (exactK13ParsedProof input).schedule
     (decoderCodeEncoders decoder)
     (parsedK13Transcript k12.words (exactK13ParsedProof input)) at failure'
-  exact actual_oneFold_failure_is_counterfactual_bad_response decoder
-    (exactOneFoldAlgebraBinding (exactK13ParsedProof input).schedule
-      (exactK13Encoders decoder) initialEncoderExact finalEncoderExact
-      source.inverseTablesExact)
-    oracle actual (exactK13ParsedProof input) proofExact failure'
+  exact exactAcceptedFoldWordsActualOneFoldBadResponse transitionRoom
+    programmedCover decoder initialEncoderExact finalEncoderExact k12.words
+    input fold source failure'
 
+#print axioms exactAcceptedFoldWordsActualOneFoldBadResponse
 #print axioms exactAcceptedFoldActualOneFoldBadResponse
 
 end

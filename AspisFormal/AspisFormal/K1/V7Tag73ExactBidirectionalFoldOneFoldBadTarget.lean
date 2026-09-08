@@ -38,6 +38,7 @@ open AspisK1.V7Tag73ExactOneFoldEncoderBinding
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
 open AspisK1.V7Tag73RawNonzeroSamplerFactorization
 open AspisK1.V7Tag73VariablePrefixGammaFactorization
@@ -49,6 +50,65 @@ open AspisV5ComponentCQM31TowerExact
 open AspisV6OneFoldCandidateExtraction
 
 noncomputable section
+
+/-- The literal accepted alpha lies in the exact fixed causal degree-three
+target built from any already-authenticated chronological word.  This is the
+word-parametric form needed by the corrected pre-q16 classifier: the word is
+fixed at its chronological anchor rather than reconstructed from the later
+completed transcript. -/
+theorem exactAcceptedFoldWordsOneFoldFailure_mem_exactRawTarget
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoded : Fin 641 → QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (programmedCover : 5 ≤ 2 * parameters.forkRequestCap)
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (finalEncoderExact : decoder.finalEncoder = exactFinalEncoder)
+    (words : ExtractedWords)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (fold : ExactAcceptedFoldTrial input)
+    (source : ExactParsedProofSourceBinding input decoded)
+    (failure : OneFoldReductionFailure (exactK13ParsedProof input).schedule
+      (exactK13Encoders decoder)
+      (parsedK13Transcript words (exactK13ParsedProof input))) :
+    successfulOrdinaryExactValue
+        (exactAcceptedFoldCoordinateRaw transitionRoom programmedCover input
+          fold) ∈
+      exactRawOneFoldTarget
+        (exactAcceptedFoldOneFoldContext decoder initialEncoderExact
+          finalEncoderExact words input fold source)
+        (successfulOrdinaryExactFactorization
+          (exactAcceptedFoldCoordinateRaw transitionRoom programmedCover input
+            fold)).1 := by
+  let raw := exactAcceptedFoldCoordinateRaw transitionRoom programmedCover input
+    fold
+  let actual := exactAcceptedFoldCoordinateAttempt transitionRoom
+    programmedCover input fold
+  let oracle := exactAcceptedFoldReplayOracle words input fold
+  let skeleton := (successfulOrdinaryExactFactorization raw).1
+  have actualValue : successfulDuplexOrdinaryValue actual =
+      successfulOrdinaryExactValue raw := by rfl
+  have actualSkeleton :
+      (successfulDuplexOrdinaryFactorization actual).1 =
+        (skeleton, fun _ => fold.answer) := by
+    apply Prod.ext
+    · rfl
+    · rfl
+  have bad0 := exactAcceptedFoldWordsActualOneFoldBadResponse transitionRoom
+    programmedCover decoder initialEncoderExact finalEncoderExact words input
+    fold source failure
+  rw [exactRawOneFoldTarget_exactAcceptedFoldOneFoldContext]
+  rw [← actualValue, ← actualSkeleton]
+  rw [mem_causalOneFoldFailureTarget_iff]
+  exact bad0
 
 /-- The literal accepted alpha lies in its exact fixed causal degree-three
 target whenever the production classifier supplies a genuine one-fold
@@ -107,6 +167,7 @@ theorem exactAcceptedFoldOneFoldFailure_mem_exactRawTarget
   rw [mem_causalOneFoldFailureTarget_iff]
   exact bad0
 
+#print axioms exactAcceptedFoldWordsOneFoldFailure_mem_exactRawTarget
 #print axioms exactAcceptedFoldOneFoldFailure_mem_exactRawTarget
 
 end
