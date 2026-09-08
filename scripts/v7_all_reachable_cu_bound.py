@@ -71,6 +71,7 @@ def main() -> None:
     pool_vault_path = "programs/aspis-pool/src/vault.rs"
     verifier_dispatch_path = "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs"
     verifier_certificate_path = "programs/aspis-verifier/src/v7_terminal_pda_certificate.rs"
+    cu_tail_probe_path = "programs/aspis-verifier/src/v7_cu_tail_probe.rs"
 
     transcript = read(transcript_path)
     onefold = read(onefold_path)
@@ -86,6 +87,7 @@ def main() -> None:
     verifier_dispatch = read(verifier_dispatch_path)
     compact_onefold = read(compact_onefold_path)
     verifier_certificate = read(verifier_certificate_path)
+    cu_tail_probe = read(cu_tail_probe_path)
 
     require(r"CHALLENGE_RETRY_LIMIT:\s*u32\s*=\s*8", transcript, "QM31 retry limit")
     require(r"NONZERO_QM31_RETRY_LIMIT:\s*u32\s*=\s*3", transcript, "nonzero retry limit")
@@ -146,6 +148,35 @@ def main() -> None:
         r"secure_ood_circle_point_from_parameter\(parameter\)",
         transcript,
         "secure-circle subfield rejection before rational-map inversion",
+    )
+    require(
+        r"V7_CU_TAIL_QM31_MIN_TAG:\s*u8\s*=\s*78.*"
+        r"V7_CU_TAIL_QM31_MAX_TAG:\s*u8\s*=\s*79.*"
+        r"V7_CU_TAIL_QUERY_ASCENDING_TAG:\s*u8\s*=\s*80.*"
+        r"V7_CU_TAIL_QUERY_DESCENDING_TAG:\s*u8\s*=\s*81",
+        cu_tail_probe,
+        "isolated CU-tail probe wire tags",
+    )
+    require(
+        r"fn real_hash_then_minimum_block\(.*crate::verify::sbf_hashv\(inputs\).*"
+        r"fn controlled_maximum_block\(.*crate::verify::sbf_hashv\(inputs\).*"
+        r"for word in block\.chunks_exact_mut\(4\)\.take\(7\).*"
+        r"P\.to_le_bytes\(\)",
+        cu_tail_probe,
+        "CU-tail probe executes real SHA before controlled successful outputs",
+    )
+    require(
+        r"for _ in 0\.\.30\s*\{.*challenge_qm31\(\).*"
+        r"for _ in 0\.\.4\s*\{.*challenge_nonzero_qm31\(\).*"
+        r"for _ in 0\.\.2\s*\{.*challenge_secure_circle_point\(\)",
+        cu_tail_probe,
+        "CU-tail probe exact accepted challenge topology",
+    )
+    require(
+        r"for candidate in 0\.\.21u32\s*\{.*binary_frontier_nodes\(queries, 18\).*"
+        r"sort_v7_query_order_source_bounded\(&mut order\)",
+        cu_tail_probe,
+        "CU-tail probe cutoff-20 candidate and opening ordering topology",
     )
 
     # The accepted transcript has 30 direct QM31 calls, four nonzero samplers,
@@ -301,6 +332,7 @@ def main() -> None:
         pool_vault_path,
         verifier_dispatch_path,
         verifier_certificate_path,
+        cu_tail_probe_path,
     })
 
     result = {
@@ -433,6 +465,17 @@ def main() -> None:
                 "candidate and opening comparison counts are source-bounded; no standalone "
                 "current-SBF CU coefficient is inferred without the required capped build"
             ),
+        },
+        "disposableCuTailProbe": {
+            "feature": "v7-cu-probe",
+            "entrypointProductionReachable": False,
+            "qm31Cases": ["minimum", "maximum-successful"],
+            "queryOrderCases": ["best", "worst"],
+            "realShaSyscallExecutedBeforeControlledBlock": True,
+            "signedWireBuilder": "tools/v7-live-pool-proof/src/bin/build_v7_cu_tail_probe.rs",
+            "byteIdenticalFinalizedRunner": "scripts/v7_cu_tail_probe_child.sh",
+            "currentSbfMeasurementAvailable": False,
+            "blockedBy": "dedicated Linux build host offline; Tailscale node key expired",
         },
         "historicalCombinedReferenceEnvelope": {
             "profileRevision": HISTORICAL_PROFILE_REVISION,
