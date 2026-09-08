@@ -11,12 +11,12 @@ use statement::pool_v1::pair_trace::PoolV1PairInputNoteWitnessV1;
 use statement::pool_v1::pair_forest_hiding::{pool_v1_pair_forest_path_base_row_v1 as path,
     POOL_V1_PAIR_FOREST_INPUT_OCCUPANCY_AUX_ROW_V1 as OCC};
 fn dig(s:u32)->Digest{std::array::from_fn(|j|M31(s+17*j as u32+1))}
-fn context(p:&PoolV1PrivateTransferPublicV1)->PoolV1PaymentRelationContextV1<'_>{
+pub(super) fn context(p:&PoolV1PrivateTransferPublicV1)->PoolV1PaymentRelationContextV1<'_>{
     PoolV1PaymentRelationContextV1{runtime_binding:PoolV1PaymentRuntimeBindingV1{
         pool:p.pool,deployment_domain:p.deployment_domain,anchor_sequence:p.anchor_sequence,
         anchor_root:p.anchor_root,asset_id:p.asset_id},spent_nullifiers:&[]}
 }
-fn fixture()->(PoolV1PrivateTransferPublicV1,PoolV1PairForestPrivateTransferWitnessV1,PoolV1PairLiveSnapshotV1){
+pub(super) fn fixture()->(PoolV1PrivateTransferPublicV1,PoolV1PairForestPrivateTransferWitnessV1,PoolV1PairLiveSnapshotV1){
     let key=dig(10);let salt=dig(100);let asset=M31(77);
     let leaf=pool_v1_note_commitment(&derive_owner_key(&key),1000,asset,&salt);
     let pair=PoolV1PairLeafWitnessV1::two_outputs(leaf,dig(900)).unwrap();
@@ -41,7 +41,7 @@ fn fixture()->(PoolV1PrivateTransferPublicV1,PoolV1PairForestPrivateTransferWitn
         sequence:0,next_pair_index:0,current_root:empty[20],frontier:std::array::from_fn(|i|empty[i])};
     (public,PoolV1PairForestPrivateTransferWitnessV1{input,recipient,change},snapshot)
 }
-fn decode(c:&StateOnlyTraceFoundation)->Result<PoolV1PairForestPrivateTransferWitnessV1,&'static str>{
+pub(super) fn decode(c:&StateOnlyTraceFoundation)->Result<PoolV1PairForestPrivateTransferWitnessV1,&'static str>{
     if c.c1.iter().any(|x|x.len()!=1024||x.iter().any(|v|v.0>=corelib::field::P)){return Err("shape/canonical");}
     let get=|row:usize,col:usize|c.c1[col][row];
     let digest=|row:usize,start:usize|std::array::from_fn(|i|get(row,start+i));
@@ -68,7 +68,7 @@ fn decode(c:&StateOnlyTraceFoundation)->Result<PoolV1PairForestPrivateTransferWi
             membership:PoolV1MembershipWitnessV1{siblings,index}},
         super_root_siblings,super_root_directions},recipient:note(27),change:note(30)})
 }
-fn extract_checked(c:&StateOnlyTraceFoundation,p:&PoolV1PrivateTransferPublicV1,
+pub(super) fn extract_checked(c:&StateOnlyTraceFoundation,p:&PoolV1PrivateTransferPublicV1,
     transition:&PoolV1PairLatePublicStatementV1,ctx:PoolV1PaymentRelationContextV1<'_>)->Result<PoolV1PairForestPrivateTransferWitnessV1,&'static str>{
     // Bind the OUTER forest root before the compiler substitutes its temporary
     // lane-root context. The authenticated context is supplied by the caller.

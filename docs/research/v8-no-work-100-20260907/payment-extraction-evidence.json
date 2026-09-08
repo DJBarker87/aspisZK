@@ -1,0 +1,149 @@
+{
+  "date": "2026-09-08",
+  "base_revision": "1c1e55a7213732068a6064168628c244e40a7f32",
+  "revision_scope": "Base plus exact scoped source hashes below; final commit contains this manifest.",
+  "branch": "research/v8-no-work-100-20260907",
+  "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+  "host": {
+    "model": "Apple M3 Mac15,13",
+    "os": "Darwin 25.5 arm64",
+    "ram_bytes": 25769803776,
+    "rust": "1.93.0",
+    "lean": "4.32.0"
+  },
+  "resource_scope": "Sequential focused local jobs below 8 GiB; Lean -M 7000, Rust -O. No package/cold dependency replay, SBF, remote or deployment job.",
+  "cache": {
+    "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+    "mathlib_status": "clean",
+    "lean_cwd": "/Users/dominic/ZK/AspisFormal",
+    "lean_imports": [
+      "Mathlib.Data.Fin.Basic",
+      "Mathlib.Tactic"
+    ],
+    "research_or_concurrent_Aspis_olean_imports": [],
+    "lake_manifest_sha256": "65c23cce5c1bab2ba00affdff53fe52b67388cf2491c7f8ec68c1c2977dd7c10",
+    "lean_toolchain_sha256": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e",
+    "rlibs": {
+      "/tmp/libaspis_core_v8_callback.rlib": "5a08f9e7e179e043c959cbf3f226449cdc2a993be75a40b67d070f55c064b4c8",
+      "/tmp/libaspis_statement_v8_semantic.rlib": "92086588a5463f780b88411d063a0f1b728c8c5785df09a3b4f290d28ec83071",
+      "/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib": "ca49553160bf98106838786e7ae3686a7b07aa5d82b4000533821d7bad83cc0f",
+      "/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib": "33d4a1825606a1be480e152cd1274a04f98dbcf8d0c5fa4c43881cc4c02e45ad",
+      "/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib": "1ca8ab2c08f435a133999805244588f93cca023b7afe59074e894b3a2c01e9b5"
+    },
+    "rlib_provenance": "Hashes reverified against radius-evidence.json and row-binding/robust evidence. git diff f8c2f7a949fdbb31431a104c8d29d34195594d98 HEAD -- crates/aspis-core crates/aspis-statement empty. Rebuild recipes: robust-evidence.json/core_build and row-binding-evidence.json/statement_build.",
+    "host_hash_backend": "sha2 is a cached debug dependency. Core, statement and new arithmetic are optimized. No host hash-rate, production prover or CU inference."
+  },
+  "jobs": {
+    "rust_compile": {
+      "command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-payment-extraction",
+      "exit": 0,
+      "wall_seconds": 1.5,
+      "peak_rss_bytes": 278740992,
+      "swaps": 0,
+      "log": "evidence/payment-extraction-build.log"
+    },
+    "rust_run": {
+      "command": "/usr/bin/time -l /tmp/aspis-v8-payment-extraction",
+      "exit": 0,
+      "wall_seconds": 91.46,
+      "peak_rss_bytes": 254656512,
+      "swaps": 0,
+      "log": "evidence/payment-extraction-host.log",
+      "public_matrix_seconds": 1.033884375,
+      "scope": "Four fixed seeds, honest and D-corrupt arms each. Entire synthetic harness including full trees, actual semantic producer port, matrix setup, authenticated extraction and 8,388,608 full-domain chord checks. Not actual replay or full pool execution.",
+      "outcome": {
+        "honest_accepted": 4,
+        "corrupt_accepted": 0,
+        "checked_witnesses": 8,
+        "corrupt_arm_pointwise_nonzero_residuals": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "maximum_observed_body_bytes": 39814
+      },
+      "rerun_reason": "Final identical-seed cohort adds independent authoritative account provisioning and all-domain quotient reconstruction checks; no seed search or unchanged regression rerun."
+    },
+    "lean": {
+      "command": "/usr/bin/time -l lake env lean -M 7000 /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/PaymentMaskRead.lean",
+      "exit": 0,
+      "wall_seconds": 5.25,
+      "peak_rss_bytes": 2827255808,
+      "swaps": 0,
+      "log": "evidence/payment-mask-read-axioms.log",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "new_axioms": 0,
+      "sorry": 0,
+      "audited_declarations": [
+        "read_not_mask",
+        "all_decoder_reads_unchanged",
+        "owner_key_mask_invariant",
+        "ordered_children_mask_invariant",
+        "selected_child_of_residuals"
+      ],
+      "scope": "Universal source-shaped mask/read exclusion and Boolean/path residual algebra. Exhaustive Rust source-layout comparison, NOT translated-source validator completeness."
+    },
+    "ledger": {
+      "command": "python3 -B docs/research/v8-no-work-100-20260907/experiments/payment_extraction_ledger.py --check",
+      "exit": 0,
+      "scope": "Exact retained records and access/wire census; no new global probability theorem."
+    }
+  },
+  "retained_failures": [
+    {
+      "log": "evidence/payment-extraction-packing-failure.log",
+      "exit": 101,
+      "wall_seconds": 17.68,
+      "peak_rss_bytes": 219693056,
+      "swaps": 0,
+      "cause": "New fixture used C1 slot-major packing for C2 helper-major leaves. Genuine semantic prefix passed, honest relation rejected.",
+      "repair": "Correct fixture C2 limb offsets to col*16+slot*4+limb. No acceptance check weakened."
+    },
+    {
+      "log": "evidence/payment-mask-read-initial-errors.log",
+      "exit": 1,
+      "wall_seconds": 15.96,
+      "peak_rss_bytes": 2821832704,
+      "swaps": 0,
+      "cause": "Local Lean logical/arithmetic simplification and classical decidability errors.",
+      "repair": "Symbolic case proofs and explicit sub_eq_zero; no larger memory cap or giant normalization."
+    }
+  ],
+  "access_contract": "One extra root-authenticated opening bundle for 256 fixed fibres. 111620 bytes without predetermined IDs / 112644 with explicit u32 IDs. Not transmitted in proof and not an implemented FS/replay interface.",
+  "limits": {
+    "full_payment_program": false,
+    "actual_replay_extractor": false,
+    "arbitrary_C1_error_correction": false,
+    "universal_residual_to_validator": false,
+    "global_100_bit_certificate": false,
+    "full_view_ZK": false,
+    "complete_transaction_CU_measured": false,
+    "new_SBF_stack_measurement": false,
+    "proof_body_max": 40282,
+    "new_proof_body_bytes": 0,
+    "grinding_security_credit_bits": 0
+  },
+  "source_and_evidence_sha256": {
+    "docs/research/v8-no-work-100-20260907/experiments/PaymentMaskRead.lean": "ca88ef28b6fa99fd9c52ebc92cbfdd951ff17a280adce0d6d8054fc7a4689c15",
+    "docs/research/v8-no-work-100-20260907/experiments/authenticated_c1.rs": "0d0f2834a3501e2958c1b78c738076060de62a944bfc8700aafb6d657da245c1",
+    "docs/research/v8-no-work-100-20260907/experiments/payment_extraction.rs": "2da0c5c2be159ad26e21c605c74e073b83678022af2ae4aee4a17a268d5bca55",
+    "docs/research/v8-no-work-100-20260907/experiments/payment_source_modules.rs": "b919008bfcdcb850d0b24d3d2dbc02595eb578b23c84672f668b2fc620cfd24e",
+    "docs/research/v8-no-work-100-20260907/experiments/payment_extraction_ledger.py": "f7d9d45bf5b816d3891b73e94fdc7fd414d0b04f0ac376686ac6e33693ca4d19",
+    "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs": "8ceb2de7753643d4dd7b8e379a603ae0d9bc8578f4f9731607c6978ff505ceb9",
+    "docs/research/v8-no-work-100-20260907/experiments/recovered_witness.rs": "56760c46ed56ace2756949efabc09f1a2b8880087c1b4dbb7da394a1cc54132f",
+    "docs/research/v8-no-work-100-20260907/experiments/inactive_row_binding.rs": "c29b71899b0f874f9322a8c814ac04bd73b9d2392d28aaaf497dba0ac04ab8cc",
+    "docs/research/v8-no-work-100-20260907/payment-extraction-results.json": "2371ca03936a501e70412b0ff8292ace6a9f6fef04fe687375fb9b7d1103af02",
+    "docs/research/v8-no-work-100-20260907/evidence/payment-extraction-host.log": "d4e5bd851747a8202214d815142f940889b9e4bbef30fe0760c1dd2273c3bdff",
+    "docs/research/v8-no-work-100-20260907/evidence/payment-mask-read-axioms.log": "df8b302a7e414034598ec6ae67f49e216b8103ea3be9c8982c5efe2894953872",
+    "crates/aspis-prover/src/circle_candidate.rs": "336d10034cb4a37140e5a3645eae7a76cf86a8b6cb2f0c4b8a213e97ac43bd54",
+    "crates/aspis-prover/src/circle_candidate_openings.rs": "317caee5cabf249c14ba435cacce71b10d167ec7a7c10081280ed2168f9a39af",
+    "crates/aspis-prover/src/state_only_hiding.rs": "0e8b83d50aaebc65dad86bc63c838d099428a166221990156b9f61164148fe0a",
+    "crates/aspis-prover/src/state_only_zerocheck.rs": "d78eacc5dc05cb5d8991358626a43214b849ca8bbda61f25615f7851984aab84",
+    "crates/aspis-prover/src/state_only_entropy.rs": "78ebbb3176daf23935243452992548ff9d877aaaf853d73e5ee46b60d8cb3ec0"
+  }
+}

@@ -21,7 +21,7 @@ fn public()->Public {
         candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:1,next_root:[M31(9);8],next_frontier:core::array::from_fn(|i|if i==0{[M31(10);8]}else{empty[i]})}};
     Public{transfer,withdrawal,transition}
 }
-pub(super) struct Semantic {pub(super) t:Transcript,pub(super) z:[K;10],lambda:K,chi:K,theta:K,zc:[K;10],mu:K,eta:K,claim:K}
+pub(super) struct Semantic {pub(super) t:Transcript,pub(super) z:[K;10],pub(super) lambda:K,pub(super) chi:K,pub(super) theta:K,pub(super) zc:[K;10],pub(super) mu:K,pub(super) eta:K,pub(super) claim:K}
 pub(super) fn semantic(w:&Wire<'_>,seed:u32,shift:bool)->Result<Semantic,Error>{
     let mut t=Transcript::new(hash);
     t.absorb(label::PROFILE,if shift{b"AV8/semantic-row-shift/v1"}else{b"AV8/semantic-row-collision/v1"});
