@@ -76,13 +76,69 @@ def ObservedQ16Duplex.afterInput (observed : ObservedQ16Duplex)
     ObservedQ16Duplex :=
   let outputs :=
     match q16DagOutputSlot? dag.producers input with
-    | some slot => Function.update observed.outputs slot (some answer)
+    | some slot =>
+        if observed.outputs slot = none then
+          Function.update observed.outputs slot (some answer)
+        else observed.outputs
     | none => observed.outputs
   let advances :=
     match q16AdvanceSlot? dag.producers input with
-    | some slot => Function.update observed.advances slot (some answer)
+    | some slot =>
+        if observed.advances slot = none then
+          Function.update observed.advances slot (some answer)
+        else observed.advances
     | none => observed.advances
   { outputs := outputs, advances := advances }
+
+theorem observed_q16_output_is_monotone
+    (observed : ObservedQ16Duplex) (dag : FinalWorkQ16DagMemory)
+    (input : ShaInput) (answer existing : Digest256) (slot : Q16DigestSlot)
+    (present : observed.outputs slot = some existing) :
+    (observed.afterInput dag input answer).outputs slot = some existing := by
+  simp only [ObservedQ16Duplex.afterInput]
+  cases outputSlot : q16DagOutputSlot? dag.producers input with
+  | none => simpa [outputSlot] using present
+  | some selected =>
+      by_cases selectedExact : selected = slot
+      · subst selected
+        simp [outputSlot, present]
+      · by_cases vacant : observed.outputs selected = none
+        · have slotNe : slot ≠ selected := Ne.symm selectedExact
+          simp [outputSlot, vacant, Function.update, slotNe, present]
+        · simp [outputSlot, vacant, present]
+
+theorem observed_q16_advance_is_monotone
+    (observed : ObservedQ16Duplex) (dag : FinalWorkQ16DagMemory)
+    (input : ShaInput) (answer existing : Digest256) (slot : Q16DigestSlot)
+    (present : observed.advances slot = some existing) :
+    (observed.afterInput dag input answer).advances slot = some existing := by
+  simp only [ObservedQ16Duplex.afterInput]
+  cases advanceSlot : q16AdvanceSlot? dag.producers input with
+  | none => simpa [advanceSlot] using present
+  | some selected =>
+      by_cases selectedExact : selected = slot
+      · subst selected
+        simp [advanceSlot, present]
+      · by_cases vacant : observed.advances selected = none
+        · have slotNe : slot ≠ selected := Ne.symm selectedExact
+          simp [advanceSlot, vacant, Function.update, slotNe, present]
+        · simp [advanceSlot, vacant, present]
+
+theorem observed_q16_output_installed
+    (observed : ObservedQ16Duplex) (dag : FinalWorkQ16DagMemory)
+    (input : ShaInput) (answer : Digest256) (slot : Q16DigestSlot)
+    (empty : observed.outputs slot = none)
+    (selected : q16DagOutputSlot? dag.producers input = some slot) :
+    (observed.afterInput dag input answer).outputs slot = some answer := by
+  simp [ObservedQ16Duplex.afterInput, selected, empty]
+
+theorem observed_q16_advance_installed
+    (observed : ObservedQ16Duplex) (dag : FinalWorkQ16DagMemory)
+    (input : ShaInput) (answer : Digest256) (slot : Q16DigestSlot)
+    (empty : observed.advances slot = none)
+    (selected : q16AdvanceSlot? dag.producers input = some slot) :
+    (observed.afterInput dag input answer).advances slot = some answer := by
+  simp [ObservedQ16Duplex.afterInput, selected, empty]
 
 /-- The continuing digest after one decoded candidate is its last paired
 advance answer. -/
@@ -116,6 +172,43 @@ def firstCompactContinuationFrom
 def firstCompactQ16Continuation?
     (observed : ObservedQ16Duplex) : Option Digest256 :=
   firstCompactContinuationFrom observed (List.ofFn id)
+
+/-- A deterministic prefix certificate identifies the exact first compact
+continuation without any probability or oracle-role assumption. -/
+theorem first_compact_continuation_from_exact_prefix
+    (observed : ObservedQ16Duplex)
+    (prior rest : List (Fin 64)) (selected : Fin 64)
+    (selectedSchedule : QuerySchedule) (continuation : Digest256)
+    (priorNoncompact : ∀ counter ∈ prior,
+      ∃ schedule priorContinuation,
+        decodeCandidateOutcome counter
+            (observedQ16OutputPrefix observed counter) =
+          some (.schedule schedule) ∧
+        decodedCandidateContinuation? observed counter schedule =
+          some priorContinuation ∧
+        203 < semanticFrontierNodes schedule.positions)
+    (selectedDecoded : decodeCandidateOutcome selected
+        (observedQ16OutputPrefix observed selected) =
+      some (.schedule selectedSchedule))
+    (selectedContinuation : decodedCandidateContinuation? observed selected
+      selectedSchedule = some continuation)
+    (selectedCompact : semanticFrontierNodes selectedSchedule.positions ≤ 203) :
+    firstCompactContinuationFrom observed
+        (prior ++ selected :: rest) = some continuation := by
+  induction prior with
+  | nil =>
+      simp [firstCompactContinuationFrom, selectedDecoded,
+        selectedContinuation, selectedCompact]
+  | cons counter prior ih =>
+      obtain ⟨schedule, priorContinuation, decoded, advanced, noncompact⟩ :=
+        priorNoncompact counter (by simp)
+      have notCompact : ¬semanticFrontierNodes schedule.positions ≤ 203 := by
+        omega
+      simp only [List.cons_append, firstCompactContinuationFrom, decoded,
+        advanced, notCompact, if_false]
+      apply ih
+      intro later member
+      exact priorNoncompact later (by simp [member])
 
 /-- Additional memory needed after the existing 518-slot controller. -/
 structure QueryBatchDagExtensionMemory where
@@ -341,6 +434,11 @@ def exactCompilerFoldAlphaQ16QueryBatchCoordinates
       foldExposureIndex finalExposureIndex boundaryIndex cursor)
 
 #print axioms firstCompactQ16Continuation?
+#print axioms first_compact_continuation_from_exact_prefix
+#print axioms observed_q16_output_is_monotone
+#print axioms observed_q16_advance_is_monotone
+#print axioms observed_q16_output_installed
+#print axioms observed_q16_advance_installed
 #print axioms queryBatchDagExtensionAfterInput
 #print axioms extendControllerThroughQueryBatch
 #print axioms extended_controller_base_after_memory
