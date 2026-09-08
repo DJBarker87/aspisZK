@@ -117,7 +117,8 @@ initialize_terminal_pda_certificate() {
   mkdir "$init_dir"
   jq -e '.terminalPdaClosureEnabled == true and
     .pdaCertificateInitialization.schema == "aspis.v7.terminal-pda-certificate-initialization-signed.v1" and
-    .pdaSearchAudit.after.terminalFindProgramAddressInvocations == 0' \
+    .pdaSearchAudit.terminalVariableFindProgramAddressInvocations == 0 and
+    .pdaSearchAudit.terminalSingleAttemptValidations > 0' \
     "$signed_request" >/dev/null || fail "terminal PDA certificate preflight failed"
   init_json=$(jq -c '.pdaCertificateInitialization' "$signed_request")
   jq . <<<"$init_json" >"$init_dir/signed-request.json"
