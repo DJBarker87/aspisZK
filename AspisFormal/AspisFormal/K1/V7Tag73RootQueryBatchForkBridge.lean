@@ -22,6 +22,9 @@ set_option maxRecDepth 1000000
 
 namespace AspisK1.V7Tag73RootQueryBatchForkBridge
 
+open AspisK1.V7Tag73AdaptiveLazyOracle
+open AspisK1.V7Tag73AtomicForkUniformScheduler
+open AspisK1.V7Tag73AtomicPairReplay
 open AspisK1.V7Tag73ConcreteRestorationClient
 open AspisK1.V7Tag73ConcreteRestorationTraceInduction
 open AspisK1.V7Tag73ConcreteRootSweepClient
@@ -218,8 +221,54 @@ theorem deployed_root_sweep_covers_query_batch_typed_fork
       transition transitionExact block reply eventExact environment accumulator
       rootStored resume
 
+/-! ## Exact master-tape coordinates at the typed fork -/
+
+/-- A cursor whose first-phase fork header is known consumes the next two
+master-tape coordinates as the output and advance answers of that exact
+header.  In particular, the fork output cannot inspect the advance answer:
+the latter is still the head of the remaining tape when the first record is
+emitted. -/
+theorem pair_fork_header_exposes_exact_adjacent_coordinates
+    {globalOracleCalls remaining : Nat} {Result : Type u}
+    (transitionFuel : Nat)
+    (cursor : SchedulerNativeCursor globalOracleCalls Result)
+    (header : PreparedForkHeader)
+    (headerExact : schedulerNativePairForkHeader? cursor = some header)
+    (forkOutput forkAdvance : Digest256)
+    (tail : FreshAnswerTape Digest256 remaining) :
+    ∃ (pairRoom : header.frozenHistory.length + 2 ≤ globalOracleCalls)
+        (next : AtomicPairReplayConfiguration →
+          SchedulerNativeCursor globalOracleCalls Result),
+      cursor =
+        .forkPair header.frozenHistory pairRoom header.outputInput
+          header.advanceInput header.template next ∧
+      (runSchedulerNative (transitionFuel + 1) (remaining + 2) cursor
+          (forkOutput, (forkAdvance, tail))).trace =
+        .forkOutput header.frozenHistory header.outputInput
+            header.advanceInput header.template forkOutput ::
+          .forkAdvance
+            { frozenHistory := header.frozenHistory
+              outputInput := header.outputInput
+              advanceInput := header.advanceInput
+              template := header.template
+              forkOutput := forkOutput
+              forkAdvance := forkAdvance } ::
+          (runSchedulerNative (transitionFuel + 1) remaining
+            (next (scheduledForkConfiguration header.template forkOutput
+              forkAdvance)) tail).trace := by
+  cases cursor with
+  | machine => simp [schedulerNativePairForkHeader?] at headerExact
+  | forkPair frozenHistory pairRoom outputInput advanceInput template next =>
+      simp only [schedulerNativePairForkHeader?] at headerExact
+      cases headerExact
+      exact ⟨pairRoom, next, rfl, rfl⟩
+  | forkAdvance => simp [schedulerNativePairForkHeader?] at headerExact
+  | returned => simp [schedulerNativePairForkHeader?] at headerExact
+  | failed => simp [schedulerNativePairForkHeader?] at headerExact
+
 #print axioms literal_root_query_batch_dispatch_emits_typed_fork
 #print axioms deployed_root_sweep_covers_query_batch_typed_fork
+#print axioms pair_fork_header_exposes_exact_adjacent_coordinates
 
 end
 end AspisK1.V7Tag73RootQueryBatchForkBridge
