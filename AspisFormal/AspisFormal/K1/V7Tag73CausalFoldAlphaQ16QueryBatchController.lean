@@ -171,7 +171,8 @@ def firstCompactContinuationFrom
 
 def firstCompactQ16Continuation?
     (observed : ObservedQ16Duplex) : Option Digest256 :=
-  firstCompactContinuationFrom observed (List.ofFn id)
+  firstCompactContinuationFrom observed
+    (List.ofFn (fun counter : Fin 64 ↦ counter))
 
 /-- A deterministic prefix certificate identifies the exact first compact
 continuation without any probability or oracle-role assumption. -/
@@ -209,6 +210,93 @@ theorem first_compact_continuation_from_exact_prefix
       apply ih
       intro later member
       exact priorNoncompact later (by simp [member])
+
+theorem all_q16_counters_split_at (selected : Fin 64) :
+    ∃ rest,
+      List.ofFn (fun counter : Fin 64 ↦ counter) =
+        (List.ofFn (fun counter : Fin 64 ↦ counter)).take selected.val ++
+          selected :: rest := by
+  let counters := List.ofFn (fun counter : Fin 64 ↦ counter)
+  have inBounds : selected.val < counters.length := by
+    simp [counters]
+  have decomp :
+    counters = counters.take (selected.val + 1) ++
+        counters.drop (selected.val + 1) :=
+      (List.take_append_drop (selected.val + 1) counters).symm
+  rw [List.take_succ_eq_append_getElem inBounds] at decomp
+  have selectedAt : counters[selected.val] = selected := by
+    simp only [counters, List.getElem_ofFn]
+  rw [selectedAt] at decomp
+  exact ⟨counters.drop (selected.val + 1), by simpa [counters] using decomp⟩
+
+theorem member_of_q16_counter_prefix_is_earlier
+    (selected counter : Fin 64)
+    (member : counter ∈
+      (List.ofFn (fun current : Fin 64 ↦ current)).take selected.val) :
+    counter.val < selected.val := by
+  rw [List.mem_take_iff_getElem] at member
+  obtain ⟨index, bounded, exact⟩ := member
+  have indexBefore : index < selected.val := by
+    omega
+  have valueExact : (⟨index, by omega⟩ : Fin 64) = counter := by
+    simpa only [List.getElem_ofFn] using exact
+  simpa [← valueExact] using indexBefore
+
+/-- Exact deterministic facts needed from the q16 trace observer.  They are
+byte/value equalities only; the first-compact property remains supplied by
+the already-checked `FirstCap203Search`. -/
+structure ObservedFirstCap203Facts
+    (frontierNodes : QuerySchedule → Nat)
+    (search : FirstCap203Search frontierNodes)
+    (observed : ObservedQ16Duplex) where
+  continuation : Fin 64 → Digest256
+  decodedExact : ∀ counter,
+    counter.val ≤ search.selectedCounter.val →
+    decodeCandidateOutcome counter (observedQ16OutputPrefix observed counter) =
+      some (search.outcome counter)
+  continuationExact : ∀ counter schedule,
+    counter.val ≤ search.selectedCounter.val →
+    search.outcome counter = .schedule schedule →
+    decodedCandidateContinuation? observed counter schedule =
+      some (continuation counter)
+  frontierExact : ∀ schedule,
+    frontierNodes schedule = semanticFrontierNodes schedule.positions
+
+/-- The observer's first compact continuation is exactly the operationally
+selected branch's final transcript advance. -/
+theorem observed_first_compact_continuation_exact
+    {frontierNodes : QuerySchedule → Nat}
+    {search : FirstCap203Search frontierNodes}
+    {observed : ObservedQ16Duplex}
+    (facts : ObservedFirstCap203Facts frontierNodes search observed) :
+    firstCompactQ16Continuation? observed =
+      some (facts.continuation search.selectedCounter) := by
+  obtain ⟨rest, countersExact⟩ :=
+    all_q16_counters_split_at search.selectedCounter
+  unfold firstCompactQ16Continuation?
+  rw [countersExact]
+  apply first_compact_continuation_from_exact_prefix
+    observed
+    ((List.ofFn (fun counter : Fin 64 ↦ counter)).take
+      search.selectedCounter.val)
+    rest search.selectedCounter search.selectedSchedule
+      (facts.continuation search.selectedCounter)
+  · intro counter member
+    have earlier := member_of_q16_counter_prefix_is_earlier
+      search.selectedCounter counter member
+    obtain ⟨schedule, outcomeExact, noncompact⟩ :=
+      search.everyEarlierSampledAndNoncompact counter earlier
+    refine ⟨schedule, facts.continuation counter, ?_, ?_, ?_⟩
+    · rw [facts.decodedExact counter (Nat.le_of_lt earlier), outcomeExact]
+    · exact facts.continuationExact counter schedule
+        (Nat.le_of_lt earlier) outcomeExact
+    · simpa [← facts.frontierExact schedule] using noncompact
+  · rw [facts.decodedExact search.selectedCounter (Nat.le_refl _),
+      search.selectedOutcome]
+  · exact facts.continuationExact search.selectedCounter
+      search.selectedSchedule (Nat.le_refl _) search.selectedOutcome
+  · simpa [← facts.frontierExact search.selectedSchedule] using
+      search.selectedCompact
 
 /-- Additional memory needed after the existing 518-slot controller. -/
 structure QueryBatchDagExtensionMemory where
@@ -435,6 +523,9 @@ def exactCompilerFoldAlphaQ16QueryBatchCoordinates
 
 #print axioms firstCompactQ16Continuation?
 #print axioms first_compact_continuation_from_exact_prefix
+#print axioms all_q16_counters_split_at
+#print axioms member_of_q16_counter_prefix_is_earlier
+#print axioms observed_first_compact_continuation_exact
 #print axioms observed_q16_output_is_monotone
 #print axioms observed_q16_advance_is_monotone
 #print axioms observed_q16_output_installed
