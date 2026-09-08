@@ -156,8 +156,10 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
               projection fixedInstance decoder) ≤ q16SemanticOneForestRawError)
     (oneFoldBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-              projection fixedInstance ∩
+          ((exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
+                projection fixedInstance \
+              exactK13PreQ16LateTargetEvent transitionFuel configuration
+                projection fixedInstance) ∩
             exactPreQ16K13OneFoldEvent transitionFuel configuration projection
               fixedInstance decoder) ≤ exactOneFoldIdealRawError)
     (jointBound :
@@ -205,7 +207,7 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
         (exactTag73PreQ16OperationalStages transitionFuel configuration
           projection fixedInstance decoder decoderBinding basis rc poseidon
           transitionRoom programmedCover initialEncoderExact environment) ⊆
-      ((((clean ∩ q16) ∪ (clean ∩ oneFold)) ∪ (clean ∩ joint)) ∪
+      ((((clean ∩ q16) ∪ ((clean \ late) ∩ oneFold)) ∪ (clean ∩ joint)) ∪
         (clean ∩ later)) ∪ (clean ∩ late) := by
     rintro sample ⟨cleanMember, errorMember⟩
     have named := preQ16_operational_k13_error_subset_named_events
@@ -215,7 +217,10 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
     rcases named with (((q16Member | oneFoldMember) | jointMember) |
         laterMember) | lateMember
     · exact Or.inl (Or.inl (Or.inl (Or.inl ⟨cleanMember, q16Member⟩)))
-    · exact Or.inl (Or.inl (Or.inl (Or.inr ⟨cleanMember, oneFoldMember⟩)))
+    · by_cases lateMember : sample ∈ late
+      · exact Or.inr ⟨cleanMember, lateMember⟩
+      · exact Or.inl (Or.inl (Or.inl (Or.inr
+          ⟨⟨cleanMember, lateMember⟩, oneFoldMember⟩)))
     · exact Or.inl (Or.inl (Or.inr ⟨cleanMember, jointMember⟩))
     · exact Or.inl (Or.inr ⟨cleanMember, laterMember⟩)
     · exact Or.inr ⟨cleanMember, lateMember⟩
@@ -224,23 +229,23 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
         (exactTag73PreQ16OperationalStages transitionFuel configuration
           projection fixedInstance decoder decoderBinding basis rc poseidon
           transitionRoom programmedCover initialEncoderExact environment)) ≤
-      law.toOuterMeasure (((((clean ∩ q16) ∪ (clean ∩ oneFold)) ∪
+      law.toOuterMeasure (((((clean ∩ q16) ∪ ((clean \ late) ∩ oneFold)) ∪
         (clean ∩ joint)) ∪ (clean ∩ later)) ∪ (clean ∩ late)) :=
       law.toOuterMeasure.mono covered
-    _ ≤ law.toOuterMeasure ((((clean ∩ q16) ∪ (clean ∩ oneFold)) ∪
+    _ ≤ law.toOuterMeasure ((((clean ∩ q16) ∪ ((clean \ late) ∩ oneFold)) ∪
           (clean ∩ joint)) ∪ (clean ∩ later)) +
         law.toOuterMeasure (clean ∩ late) := measure_union_le _ _
-    _ ≤ (law.toOuterMeasure (((clean ∩ q16) ∪ (clean ∩ oneFold)) ∪
+    _ ≤ (law.toOuterMeasure (((clean ∩ q16) ∪ ((clean \ late) ∩ oneFold)) ∪
           (clean ∩ joint)) + law.toOuterMeasure (clean ∩ later)) +
         law.toOuterMeasure (clean ∩ late) :=
       add_le_add (measure_union_le _ _) le_rfl
-    _ ≤ ((law.toOuterMeasure ((clean ∩ q16) ∪ (clean ∩ oneFold)) +
+    _ ≤ ((law.toOuterMeasure ((clean ∩ q16) ∪ ((clean \ late) ∩ oneFold)) +
           law.toOuterMeasure (clean ∩ joint)) +
           law.toOuterMeasure (clean ∩ later)) +
         law.toOuterMeasure (clean ∩ late) :=
       add_le_add (add_le_add (measure_union_le _ _) le_rfl) le_rfl
     _ ≤ (((law.toOuterMeasure (clean ∩ q16) +
-          law.toOuterMeasure (clean ∩ oneFold)) +
+          law.toOuterMeasure ((clean \ late) ∩ oneFold)) +
           law.toOuterMeasure (clean ∩ joint)) +
           law.toOuterMeasure (clean ∩ later)) +
         law.toOuterMeasure (clean ∩ late) :=

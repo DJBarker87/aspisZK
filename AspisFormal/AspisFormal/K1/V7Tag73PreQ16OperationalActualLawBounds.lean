@@ -237,7 +237,9 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
     (oneFoldSource : ExactTag73RestrictedPreQ16OneFoldSource transitionFuel
       configuration projection fixedInstance decoder
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-        projection fixedInstance))
+          projection fixedInstance \
+        exactK13PreQ16LateTargetEvent transitionFuel configuration projection
+          fixedInstance))
     (jointBatchSource : ExactTag73RestrictedK13JointBatchSource transitionFuel
       configuration projection fixedInstance decoder relationSource
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -266,7 +268,9 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
         (environment.k13Source sample input).frontierExact schedule)
       reference traceExists foldExposureCap finalExposureCap
   have oneFoldBound := exact_tag73_restricted_preQ16_onefold_probability_le
-    hiddenLaw clean oneFoldSource
+    hiddenLaw (clean \
+      exactK13PreQ16LateTargetEvent transitionFuel configuration projection
+        fixedInstance) oneFoldSource
   have jointBound := exact_tag73_restricted_k13_joint_batch_probability_le
     hiddenLaw relationSource clean jointBatchSource
   have laterBound := exact_tag73_restricted_k13_later_alpha_probability_le
