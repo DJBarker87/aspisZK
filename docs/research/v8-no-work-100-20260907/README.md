@@ -1,5 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [raw C1 recovery and the circle polynomial bridge](raw-c1-review.md).
+A genuine accepted transfer with two noncanonical unopened C1 fibres defeats
+the strict graph extractor but yields a checked witness through byte-preserving
+extraction and totalized error correction. Lean now proves the universal natural
+tensor/degree bridge and the finite-check-to-global-image implication. All-domain
+source factors pass; universal source/Gao and global security gates remain open.
+See [results](raw-c1-results.json) and [commands/evidence](raw-c1-evidence.json).
+
 Latest: [C1 query-graph extraction and error correction](query-graph-review.md).
 Frozen hash-query access replaces the extra-opening oracle. An accepted genuine
 payment defeats two fixed coefficient windows; Gao-style correction extracts a
