@@ -62,8 +62,8 @@ structure ExactCleanBidirectionalK13OneFoldTrialWitness
   trialExact : exactAcceptedFoldPairTrial input fold = trial
   legal : sample ∈ exactFixedPlainRomLegalSameTapeEvent transitionFuel
     configuration projection fixedInstance
-  noLate : sample ∉ exactK13PreQ16LateTargetEvent transitionFuel
-    configuration projection fixedInstance
+  noMerkleTarget : sample ∉ exactK13PreQ16MerkleTargetHitEvent configuration
+    transitionFuel
 
 def exactCleanBidirectionalK13OneFoldTrialEvent
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
@@ -93,8 +93,7 @@ theorem exactCleanBidirectionalK13OneFoldTrialEvent_iUnion
     (decoder : ExactDecoderInstantiation QM31Exact) :
     (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
           fixedInstance \
-        exactK13PreQ16LateTargetEvent transitionFuel configuration projection
-          fixedInstance) ∩
+        exactK13PreQ16MerkleTargetHitEvent configuration transitionFuel) ∩
         exactPreQ16K13OneFoldEvent transitionFuel configuration projection
           fixedInstance decoder =
       ⋃ trial : ExactCompilerExposureTrial parameters,
@@ -102,17 +101,17 @@ theorem exactCleanBidirectionalK13OneFoldTrialEvent_iUnion
           projection fixedInstance decoder trial := by
   ext sample
   constructor
-  · rintro ⟨⟨legal, noLate⟩, event⟩
+  · rintro ⟨⟨legal, noMerkleTarget⟩, event⟩
     obtain ⟨input, k12, failure⟩ := event
     let fold := exactAcceptedFoldTrial input
     let trial := exactAcceptedFoldPairTrial input fold
     apply Set.mem_iUnion.2
     exact ⟨trial, ⟨⟨input, k12, Classical.choice failure, fold, rfl,
-      legal, noLate⟩⟩⟩
+      legal, noMerkleTarget⟩⟩⟩
   · intro member
     obtain ⟨trial, trialMember⟩ := Set.mem_iUnion.1 member
     let witness := Classical.choice trialMember
-    refine ⟨⟨witness.legal, witness.noLate⟩, ?_⟩
+    refine ⟨⟨witness.legal, witness.noMerkleTarget⟩, ?_⟩
     exact ⟨witness.input, witness.k12, ⟨witness.failure⟩⟩
 
 end

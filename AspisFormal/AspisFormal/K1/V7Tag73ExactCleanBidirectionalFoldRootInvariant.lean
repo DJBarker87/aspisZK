@@ -40,6 +40,7 @@ open AspisK1.V7Tag73PureLookupDigestChain
 open AspisK1.V7Tag73RootAbsorbInputInjectivity
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
+open AspisPool.V7MerkleQueryExtractor
 open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
@@ -202,9 +203,110 @@ theorem exact_clean_bidirectional_pair_roots_eq
       (exactOperationalTape rightWitness.input).messages.c2.root
       leftWitness.fold.c2Salt rightWitness.fold.c2Salt c2InputExact⟩
 
+/-- The transcript-level root equality above is exactly the pair consumed by
+the K1.2 Merkle extractor.  This bridge is purely a source-layout projection;
+it neither hashes nor assumes injectivity of SHA-256. -/
+theorem exact_k12_roots_eq_of_operational_roots_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {leftSample rightSample : ExactCompilerSample HiddenTape parameters}
+    (left : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance leftSample)
+    (right : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance rightSample)
+    (rootsExact :
+      (exactOperationalTape left).messages.c1Root =
+          (exactOperationalTape right).messages.c1Root ∧
+        (exactOperationalTape left).messages.c2.root =
+          (exactOperationalTape right).messages.c2.root) :
+    exactK12Roots left = exactK12Roots right := by
+  change Roots.mk
+      (runtimeDigest208ToMerkleDigest
+        (exactK12Runtime left).adversaryValue.rawMessages.c1Root)
+      (runtimeDigest208ToMerkleDigest
+        (exactK12Runtime left).adversaryValue.rawMessages.c2Root) =
+    Roots.mk
+      (runtimeDigest208ToMerkleDigest
+        (exactK12Runtime right).adversaryValue.rawMessages.c1Root)
+      (runtimeDigest208ToMerkleDigest
+        (exactK12Runtime right).adversaryValue.rawMessages.c2Root)
+  have leftRaw := left.package.root.fixedRoot.base.rawMessagesExact
+  have rightRaw := right.package.root.fixedRoot.base.rawMessagesExact
+  have leftC1 :
+      (exactK12Runtime left).adversaryValue.rawMessages.c1Root =
+        (exactOperationalTape left).messages.c1Root := by
+    change left.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c1Root =
+      left.package.root.fixedRoot.base.tape.messages.c1Root
+    rw [← leftRaw]
+    rfl
+  have rightC1 :
+      (exactK12Runtime right).adversaryValue.rawMessages.c1Root =
+        (exactOperationalTape right).messages.c1Root := by
+    change right.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c1Root =
+      right.package.root.fixedRoot.base.tape.messages.c1Root
+    rw [← rightRaw]
+    rfl
+  have leftC2 :
+      (exactK12Runtime left).adversaryValue.rawMessages.c2Root =
+        (exactOperationalTape left).messages.c2.root := by
+    change left.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c2Root =
+      left.package.root.fixedRoot.base.tape.messages.c2.root
+    rw [← leftRaw]
+    rfl
+  have rightC2 :
+      (exactK12Runtime right).adversaryValue.rawMessages.c2Root =
+        (exactOperationalTape right).messages.c2.root := by
+    change right.package.root.fixedRoot.base.runtime.adversaryValue.rawMessages.c2Root =
+      right.package.root.fixedRoot.base.tape.messages.c2.root
+    rw [← rightRaw]
+    rfl
+  rw [leftC1, rightC1, leftC2, rightC2, rootsExact.1, rootsExact.2]
+
+/-- Equal residual coordinates therefore fix the exact K1.2 root pair, ready
+for the chronological-word argument. -/
+theorem exact_clean_bidirectional_pair_k12_roots_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (trial : ExactCompilerExposureTrial parameters)
+    (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactCleanBidirectionalK13OneFoldTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) trial)
+    (rightWitness : ExactCleanBidirectionalK13OneFoldTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) trial)
+    (programmedCover : 5 ≤ 2 * parameters.forkRequestCap)
+    (residualExact :
+      let router := exactCompilerBidirectionalFoldOneFoldRouter parameters
+        transitionFuel trial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+          left).1 =
+        (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+          right).1) :
+    exactK12Roots leftWitness.input = exactK12Roots rightWitness.input := by
+  apply exact_k12_roots_eq_of_operational_roots_eq leftWitness.input
+    rightWitness.input
+  exact exact_clean_bidirectional_pair_roots_eq transitionRoom trial hidden left
+    right leftWitness rightWitness programmedCover residualExact
+
 #print axioms pure_post_root_chain_to_exact
 #print axioms selected_fold_anchor_lookup_and_prefix
 #print axioms exact_clean_bidirectional_pair_roots_eq
+#print axioms exact_k12_roots_eq_of_operational_roots_eq
+#print axioms exact_clean_bidirectional_pair_k12_roots_eq
 
 end
 
