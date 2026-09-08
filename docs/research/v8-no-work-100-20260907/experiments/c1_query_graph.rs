@@ -36,7 +36,7 @@ impl<'a> Index<'a>{
             }}
         Ok(Self{log,first,defaults,stats})
     }
-    fn walk(&mut self,height:usize,expected:D,before:usize,root:bool,fuel:&mut usize,out:&mut Vec<Leaf>)->Result<(),Failure>{
+    fn walk(&mut self,height:usize,expected:D,before:usize,root:bool,strict:bool,fuel:&mut usize,out:&mut Vec<Leaf>)->Result<(),Failure>{
         if *fuel==0{return Err(Failure::Fuel)}*fuel-=1;self.stats.walk_nodes+=1;
         if !root&&expected==self.defaults[height]{let n=1<<height;self.stats.default_leaves+=n;out.extend(std::iter::repeat_n(default_leaf(),n));return Ok(())}
         let &i=self.first.get(&expected).ok_or(if root{Failure::MissingRoot}else{Failure::MissingPreimage})?;
@@ -46,19 +46,26 @@ impl<'a> Index<'a>{
             if b.len()!=437||b[..2]!=[0x10,0x71]{return Err(Failure::Malformed)}
             // This adapter strengthens the raw K1.2 extraction with canonical
             // M31 values for every column, not only the subsequently read ones.
-            for j in 0..104{super::authenticated_c1::read31(&b[2..405],31*j).map_err(|_|Failure::Canonical)?;}
+            if strict{for j in 0..104{super::authenticated_c1::read31(&b[2..405],31*j).map_err(|_|Failure::Canonical)?;}}
             out.push(Leaf{value:b[2..405].try_into().unwrap(),salt:b[405..437].try_into().unwrap()});Ok(())
         }else{
             if b.len()!=53||b[0]!=0x11{return Err(Failure::Malformed)}
             let left=b[1..27].try_into().unwrap();let right=b[27..53].try_into().unwrap();
-            self.walk(height-1,left,i,false,fuel,out)?;self.walk(height-1,right,i,false,fuel,out)
+            self.walk(height-1,left,i,false,strict,fuel,out)?;self.walk(height-1,right,i,false,strict,fuel,out)
         }
     }
 }
 pub struct Extracted{pub leaves:Vec<Leaf>,pub tree:Vec<Vec<D>>,pub stats:Stats}
-pub fn extract(log:&[Vec<u8>],root:D,depth:usize,mut fuel:usize)->Result<Extracted,Failure>{
+pub fn extract(log:&[Vec<u8>],root:D,depth:usize,fuel:usize)->Result<Extracted,Failure>{
+    extract_mode(log,root,depth,fuel,true)
+}
+/// Preserve authenticated bytes. Totalization is a separate arithmetic map.
+pub fn extract_raw(log:&[Vec<u8>],root:D,depth:usize,fuel:usize)->Result<Extracted,Failure>{
+    extract_mode(log,root,depth,fuel,false)
+}
+fn extract_mode(log:&[Vec<u8>],root:D,depth:usize,mut fuel:usize,strict:bool)->Result<Extracted,Failure>{
     let mut ix=Index::new(log,depth,digest)?;let mut leaves=Vec::with_capacity(1<<depth);
-    ix.walk(depth,root,log.len(),true,&mut fuel,&mut leaves)?;
+    ix.walk(depth,root,log.len(),true,strict,&mut fuel,&mut leaves)?;
     if leaves.len()!=1<<depth{return Err(Failure::RootMismatch)}
     let mut tree=vec![leaves.iter().map(|l|digest(&leaf_input(l))).collect::<Vec<_>>()];
     for _ in 0..depth{tree.push(tree.last().unwrap().chunks_exact(2).map(|v|digest(&node(v[0],v[1]))).collect());}
@@ -67,6 +74,11 @@ pub fn extract(log:&[Vec<u8>],root:D,depth:usize,mut fuel:usize)->Result<Extract
     Ok(Extracted{leaves,tree,stats:ix.stats})
 }
 impl Extracted{
+    pub fn totalized_value(&self,fibre:usize,slot:usize,col:usize)->Result<M31,Failure>{
+        if fibre>=self.leaves.len()||slot>=4||col>=26{return Err(Failure::Depth)}
+        // Literal Option.getD(0) convention in V7ExtractedLaneWords.c1Received.
+        Ok(super::authenticated_c1::read31(&self.leaves[fibre].value,31*(slot*26+col)).unwrap_or(M31::ZERO))
+    }
     pub fn candidate_at(&self,d:&super::authenticated_c1::Decoder)
         ->Result<aspis_statement::state_only_trace::StateOnlyTraceFoundation,Failure>{
         if d.first_position%4!=0||d.first_position+1024>4*self.leaves.len(){return Err(Failure::Depth)}
@@ -105,6 +117,13 @@ pub fn controls(){
     let def=extract(&[la.clone(),ndef.clone()],digest(&ndef),1,3).unwrap();assert_eq!(def.stats.default_leaves,1);
     let wrong=vec![0x10,0xf1];assert!(matches!(extract(&[wrong.clone()],digest(&wrong),0,1),Err(Failure::Malformed)));
     let mut nc=la.clone();nc[2..5].fill(255);nc[5]|=127;assert!(matches!(extract(&[nc.clone()],digest(&nc),0,1),Err(Failure::Canonical)));
+    let raw=extract_raw(&[nc.clone()],digest(&nc),0,1).unwrap();
+    assert!(raw.leaves[0].value[..4]==nc[2..6]);
+    assert_eq!(raw.totalized_value(0,0,0),Ok(M31::ZERO));
+    assert!(super::authenticated_c1::read31(&raw.leaves[0].value,0).is_err());
+    assert!(gamma_combine_v6_packed_layer0(&raw.leaves[0].value,&[0;186],&StateOnlySpendQueryPowers::new(K::ONE)).is_err());
+    assert!(matches!(raw.totalized_value(0,4,0),Err(Failure::Depth)));
+    println!("raw_totalization_controls=5 authenticated_bytes_preserved=true selected_gamma_parser_still_rejects=true");
     assert!(matches!(Index::new(&[vec![1],vec![2]],1,|_|[0;26]),Err(Failure::Collision)));
     // Missing at the frozen prefix is not repaired by post-prefix queries.
     let prefix=vec![lb,n.clone()];assert!(extract(&prefix,root,1,3).is_err());

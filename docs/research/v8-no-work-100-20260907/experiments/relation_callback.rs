@@ -137,7 +137,11 @@ use payment_sources::{circle_candidate,circle_candidate_openings,state_only_hidi
 #[path="c1_query_graph.rs"] mod query_graph;
 #[cfg(v8_c1_gao)]
 #[path="c1_gao.rs"] mod c1_gao;
-#[cfg(all(v8_payment_extraction,not(v8_graph_orders)))]
+#[cfg(all(v8_payment_extraction,not(v8_graph_orders),not(v8_circle_coordinates)))]
 fn main(){payment_extraction::run();}
 #[cfg(v8_graph_orders)]
 fn main(){query_graph::exhaustive_depth_two_query_orders();}
+#[cfg(v8_circle_coordinates)]
+#[path="source_coordinate_gate.rs"] mod source_coordinate_gate;
+#[cfg(v8_circle_coordinates)]
+fn main(){source_coordinate_gate::run();}

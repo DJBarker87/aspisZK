@@ -1,0 +1,156 @@
+{
+  "date": "2026-09-08",
+  "base_revision": "7b9d3f457ea929b7d1efa9e6dbafa540f0fd4143",
+  "branch": "research/v8-no-work-100-20260907",
+  "revision_scope": "Base plus scoped final source hashes. Noncanonical harness ran before the added selected-parser assertion and standalone coordinate entrypoint; its decoder, fixture and protocol path are unchanged afterwards. Do not infer byte-identical final-source builds from earlier binary hashes.",
+  "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+  "host": {
+    "model": "Apple M3 Mac15,13",
+    "os": "Darwin 25.5 arm64",
+    "ram_bytes": 25769803776,
+    "rust": "1.93.0",
+    "lean": "4.32.0"
+  },
+  "resource_policy": "Sequential focused optimized local jobs below 8 GiB; Lean -M 7000 and cached Mathlib only. No cold build, package replay, remote, SBF or deployment.",
+  "cache": {
+    "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+    "mathlib_status": "clean",
+    "lean_cwd": "/Users/dominic/ZK/AspisFormal",
+    "lean_imports": [
+      "Mathlib.Algebra.Polynomial.BigOperators",
+      "Mathlib.Algebra.Polynomial.Roots",
+      "Mathlib.Tactic"
+    ],
+    "research_or_concurrent_Aspis_olean_imports": [],
+    "lake_manifest_sha256": "65c23cce5c1bab2ba00affdff53fe52b67388cf2491c7f8ec68c1c2977dd7c10",
+    "lean_toolchain_sha256": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e",
+    "rlibs": {
+      "/tmp/libaspis_core_v8_callback.rlib": "5a08f9e7e179e043c959cbf3f226449cdc2a993be75a40b67d070f55c064b4c8",
+      "/tmp/libaspis_statement_v8_semantic.rlib": "92086588a5463f780b88411d063a0f1b728c8c5785df09a3b4f290d28ec83071",
+      "/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib": "ca49553160bf98106838786e7ae3686a7b07aa5d82b4000533821d7bad83cc0f",
+      "/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib": "33d4a1825606a1be480e152cd1274a04f98dbcf8d0c5fa4c43881cc4c02e45ad",
+      "/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib": "1ca8ab2c08f435a133999805244588f93cca023b7afe59074e894b3a2c01e9b5"
+    },
+    "rlib_provenance": "Hashes reverified against radius-evidence.json and row-binding/robust evidence. git diff f8c2f7a949fdbb31431a104c8d29d34195594d98 HEAD -- crates/aspis-core crates/aspis-statement empty. Rebuild recipes: robust-evidence.json/core_build and row-binding-evidence.json/statement_build.",
+    "host_hash_backend": "sha2 is a cached debug dependency. Core, statement and new arithmetic are optimized. No host hash-rate, production prover or CU inference."
+  },
+  "source_and_binary_sha256": {
+    "docs/research/v8-no-work-100-20260907/experiments/CircleLaurentRecovery.lean": "f35183b9c7461f2b6e8cc4e561233eb6817225914a93c7e4ff9b71b696b7ef94",
+    "docs/research/v8-no-work-100-20260907/experiments/source_coordinate_gate.rs": "a2abe13026b0b23358998a7dcc6ac34165139fb2fb37b2851f593b2fb4523c59",
+    "docs/research/v8-no-work-100-20260907/experiments/c1_gao.rs": "982c3dcbf664fa360dd10d712f62facaf18e59c77d3750422df4bc9d89ae23df",
+    "docs/research/v8-no-work-100-20260907/experiments/c1_query_graph.rs": "e19563108f484c2832993a0b81b110c30e3be1692ad68e805113e47fba0d14da",
+    "docs/research/v8-no-work-100-20260907/experiments/payment_extraction.rs": "1ae5a5b50849949a984c7ae266b6b4951641a77dce2f3a95842cf7d4981b28b9",
+    "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs": "40860ccfc212aef97f3856012638b8161a2b0670ef01fbfc2d328fa1c62cfefa",
+    "docs/research/v8-no-work-100-20260907/experiments/raw_c1_ledger.py": "8ab13afcd213d873bf875c44a33c22e121be0d1d7973f4c88dacb14fa326fd55",
+    "/tmp/aspis-v8-c1-noncanonical": "2c5cf87e81ea524ec6e4964d7c2e3f7ffed8d43f342cb59dfb0d1a715bd0281c",
+    "/tmp/aspis-v8-circle-coordinates": "839659a9985142a5bae4ac008b27f9799bf3e4eda500d6ff88dbc0243883e126",
+    "/tmp/aspis-v8-query-graph-orders": "6c9216ab4aa4deea2e28797b63367022fb5a4dba38c5c89632a309eb5c3b5b46"
+  },
+  "jobs": {
+    "noncanonical": {
+      "compile_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg v8_c1_both_windows --cfg v8_c1_gao --cfg v8_c1_noncanonical --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-c1-noncanonical",
+      "compile_exit": 0,
+      "compile_wall_seconds": 3.02,
+      "compile_peak_rss_bytes": 322928640,
+      "compile_swaps": 0,
+      "compile_log": "evidence/noncanonical-c1-build.log",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-c1-noncanonical",
+      "exit": 0,
+      "wall_seconds": 47.21,
+      "peak_rss_bytes": 592330752,
+      "swaps": 0,
+      "log": "evidence/noncanonical-c1-host.log",
+      "scope": "Same genuine synthetic transfer; strict/raw graph comparison, totalized Gao, actual semantic producer and repaired relation replay. Not SBF/full pool."
+    },
+    "controls": {
+      "compile_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_graph_orders --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-query-graph-orders",
+      "compile_exit": 0,
+      "compile_wall_seconds": 1.7,
+      "compile_peak_rss_bytes": 229261312,
+      "compile_swaps": 0,
+      "compile_log": "evidence/raw-c1-controls-build.log",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-query-graph-orders",
+      "exit": 0,
+      "wall_seconds": 1.15,
+      "peak_rss_bytes": 2015232,
+      "swaps": 0,
+      "log": "evidence/raw-c1-controls.log",
+      "reason": "Changed traversal interface, raw/strict split, totalization and direct selected gamma parser check"
+    },
+    "coordinates": {
+      "compile_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_circle_coordinates --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-circle-coordinates",
+      "compile_exit": 0,
+      "compile_wall_seconds": 0.97,
+      "compile_peak_rss_bytes": 216104960,
+      "compile_swaps": 0,
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-circle-coordinates",
+      "exit": 0,
+      "wall_seconds": 0.54,
+      "peak_rss_bytes": 28966912,
+      "swaps": 0,
+      "log": "evidence/source-coordinates-host.log",
+      "scope": "All 1048576 source points and 10485760 single-bit factors; finite optimized execution, no kernel certificate"
+    },
+    "lean": {
+      "command": "/usr/bin/time -l lake env lean -M 7000 /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/CircleLaurentRecovery.lean",
+      "working_directory": "/Users/dominic/ZK/AspisFormal",
+      "exit": 0,
+      "wall_seconds": 12.42,
+      "peak_rss_bytes": 2852962304,
+      "swaps": 0,
+      "log": "evidence/circle-laurent-axioms.log",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "new_axioms": [],
+      "sorry": false,
+      "scope": "Universal tensor polynomial, finite-image global consequence and totalization support. Not translated Rust."
+    }
+  },
+  "preflight_failures": [
+    {
+      "language": "Lean",
+      "exit": 1,
+      "causes": [
+        "noncomputable polynomial constructors",
+        "field identity proof and polynomial-degree API elaboration",
+        "missing decidable equality in fibre-cardinality theorem"
+      ],
+      "response": "Focused symbolic repairs only; final exact leaf and axiom audit green. No unchanged full replay."
+    },
+    {
+      "language": "Rust",
+      "exit": 1,
+      "wall_seconds": 0.89,
+      "peak_rss_bytes": 200523776,
+      "swaps": 0,
+      "cause": "M31 exposes mul rather than square in source-coordinate helper",
+      "response": "Use source mul kernel, then focused optimized compile and run"
+    }
+  ],
+  "artifact_checks": {
+    "results_command": "python3 docs/research/v8-no-work-100-20260907/experiments/raw_c1_ledger.py --check",
+    "exit": 0,
+    "diff_check": 0,
+    "forbidden_Lean_declarations": "No matches for sorry or explicit axiom declarations; final axiom log excludes sorryAx"
+  },
+  "measurement_limits": [
+    "no general adversary success probability measured",
+    "no Gao algorithm kernel completeness proof",
+    "no end-to-end source/refinement theorem",
+    "no full-transaction CU",
+    "no full-view adaptive ZK",
+    "no concrete FS extraction theorem"
+  ],
+  "production_delta": "none; only docs/research scoped files",
+  "body_maximum_bytes": 40282,
+  "new_proof_bytes": 0,
+  "new_verifier_operations": 0,
+  "grinding_credit_bits": 0,
+  "main_preservation": {
+    "revision": "161921048d3a5c50db97015647fe99b39eec580f",
+    "state": "Concurrent dirty K1 formal and v7 CU artifacts, untouched"
+  }
+}

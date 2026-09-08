@@ -10,7 +10,12 @@ use circle_candidate::CircleEncoder;
 const N:usize=1<<20;
 fn tree(leaves:Vec<[u8;26]>)->f::Tree{let mut t=vec![leaves];for _ in 0..18{t.push(t.last().unwrap().chunks_exact(2).map(|v|node_hash_v7(hash,&v[0],&v[1])).collect());}t}
 fn c1leaf(columns:&[Vec<M31>],id:usize)->Vec<u8>{let mut b=vec![0;403];
-    for s in 0..4{for col in 0..26{ac::put31(&mut b,31*(s*26+col),columns[col][4*id+s]);}}b}
+    for s in 0..4{for col in 0..26{ac::put31(&mut b,31*(s*26+col),columns[col][4*id+s]);}}
+    // Predetermined BEFORE commitment: encode p (the sole invalid 31-bit
+    // limb), never reduce it modulo p or change the committed raw bytes.
+    #[cfg(v8_c1_noncanonical)]
+    if id==0||id==256{for slot in 0..4{for j in 0..31{let bit=31*(slot*26)+j;b[bit/8]|=1<<(bit%8);}}}
+    b}
 fn c2leaf(columns:&[Vec<K>],id:usize,corrupt:bool)->Vec<u8>{let mut b=vec![0;186];
     for s in 0..4{for col in 0..3{let mut v=columns[col][4*id+s];if corrupt&&id<9302&&col==2{v=v.add(K::ONE);}
         let bytes=bytes(&[v]);for limb in 0..4{let x=M31(u32::from_le_bytes(bytes[4*limb..4*limb+4].try_into().unwrap()));
@@ -162,9 +167,9 @@ pub fn run(){
     let anchor_prefix:Vec<Vec<M31>>=encoded.iter().map(|c|c[..1024].to_vec()).collect();
     #[cfg(all(v8_c1_boundary,not(v8_c1_first_window)))] let corrupt_c1_fibre=256;
     #[cfg(all(v8_c1_boundary,v8_c1_first_window))] let corrupt_c1_fibre=0;
-    #[cfg(all(v8_c1_boundary,not(v8_c1_near)))]
+    #[cfg(all(v8_c1_boundary,not(v8_c1_near),not(v8_c1_noncanonical)))]
     for slot in 0..4{encoded[0][4*corrupt_c1_fibre+slot]=encoded[0][4*corrupt_c1_fibre+slot].add(M31::ONE);}
-    #[cfg(all(v8_c1_both_windows,not(v8_c1_near)))]
+    #[cfg(all(v8_c1_both_windows,not(v8_c1_near),not(v8_c1_noncanonical)))]
     for slot in 0..4{encoded[0][4*256+slot]=encoded[0][4*256+slot].add(M31::ONE);}
     #[cfg(v8_c1_near)]
     for fibre in 0..16535{for slot in 0..4{encoded[0][4*fibre+slot]=encoded[0][4*fibre+slot].add(M31::ONE);}}
@@ -177,15 +182,22 @@ pub fn run(){
         salts:salts[..256].to_vec(),frontier:f::frontier(&a,&(0..256).collect::<Vec<_>>())};
     #[cfg(v8_query_graph)]
     let (openings,extracted)={let log=super::query_graph::freeze();let begin=std::time::Instant::now();
+        #[cfg(not(v8_c1_noncanonical))]
         let ex=super::query_graph::extract(&log,a[18][0],18,(1<<19)-1).unwrap();
+        #[cfg(v8_c1_noncanonical)]
+        let ex={assert!(matches!(super::query_graph::extract(&log,a[18][0],18,(1<<19)-1),Err(super::query_graph::Failure::Canonical)));
+            let ex=super::query_graph::extract_raw(&log,a[18][0],18,(1<<19)-1).unwrap();
+            for fibre in [0,256]{for slot in 0..4{assert!(ac::read31(&ex.leaves[fibre].value,31*(slot*26)).is_err());assert_eq!(ex.totalized_value(fibre,slot,0).unwrap(),M31::ZERO);}}
+            println!("RAW_C1 strict_rejects=true raw_root_verified=true invalid_limbs=8 totalized_zero=true");ex};
         let exact=ex.recover_exact(&decoder,&enc);
         #[cfg(not(v8_c1_boundary))] assert!(exact.is_ok());
-        #[cfg(v8_c1_boundary)] assert!(matches!(&exact,Err(super::query_graph::Failure::NotCodeword)));
+        #[cfg(all(v8_c1_boundary,not(v8_c1_noncanonical)))] assert!(matches!(&exact,Err(super::query_graph::Failure::NotCodeword)));
+        #[cfg(v8_c1_noncanonical)] assert!(matches!(&exact,Err(super::query_graph::Failure::Canonical)));
         // The checked-witness extractor must not require exact received-word
         // membership: a corrupt word can still disclose a valid witness.
         let mut recovered=None;
         for (window,d) in [&decoder,&second_decoder].into_iter().enumerate(){
-            let candidate=ex.candidate_at(d).unwrap();
+            let candidate=match ex.candidate_at(d){Ok(c)=>c,Err(e)=>{println!("CANDIDATE window={window} decode_error={e:?} checked_witness=false");continue}};
             let valid=we::extract_checked(&candidate,&public,&transition,authoritative).is_ok();
             println!("CANDIDATE window={window} checked_witness={valid}");
             if valid{recovered=Some(candidate);break;}
@@ -221,12 +233,15 @@ pub fn run(){
     let mut broken=openings.clone();broken.leaves[0][..3].fill(255);broken.leaves[0][3]|=127;assert!(matches!(ac::authenticate(a[18][0],&broken),Err(Error::Canonical)));
     // Authenticated corruption under a NEW root is not repaired by ordinary
     // interpolation. This is a decoder capability control, not acceptance.
+    #[cfg(not(v8_c1_noncanonical))] {
     let mut changed=openings.clone();changed.leaves[0][0]^=1;
     let mut changed_hash=private_leaf_hash_v7(hash,V7_C1_TREE_TAG,&changed.leaves[0],&changed.salts[0]);
     for row in 0..18{changed_hash=node_hash_v7(hash,&changed_hash,&a[row][1]);}
     let bad_coeff=ac::recover_c1(changed_hash,&changed,&decoder).unwrap();
     assert!(we::extract_checked(&bad_coeff,&public,&transition,authoritative).is_err());
     println!("authentication_negative_controls=5 authenticated_changed_C1_decoder_rejected=true");
+    }
+    #[cfg(v8_c1_noncanonical)] println!("authentication_negative_controls=5 original_sample_noncanonical=true changed_root_interpolation_control=not_applicable");
     println!("authenticated_c1_recovered={} checked_witness={} root={:02x?} opening_bytes={}",extracted.is_some(),extracted.is_some(),a[18][0],256*(403+32)+openings.frontier.len());
     let(t,lambda,chi)=start(&binding,&a);
     let mut h=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(
@@ -290,7 +305,10 @@ pub fn run(){
         let mut finals=primal(&q,alpha);v[441..697].copy_from_slice(&finals);let(queries,rho)=query_schedule(&mut p,&finals,&[0;24]).unwrap();
         let records:Vec<u8>=queries.iter().flat_map(|&id|{let i=id as usize;let mut r=c1leaf(&encoded,i);r.extend(c2leaf(&c2encoded,i,corrupt));r.extend(salts[i]);r}).collect();
         let fa=f::frontier(&a,&queries);let fb=f::frontier(&b,&queries);let stub=f::body(&v,&a,&b,&records,(&fa,&fb));let w=parse(&stub).unwrap();
-        let(values,xs)=opened_values(&w,&p,&queries,alpha,hash).unwrap();
+        let(values,xs)=match opened_values(&w,&p,&queries,alpha,hash){Ok(v)=>v,Err(e)=>{
+            #[cfg(v8_c1_noncanonical)] {println!("NONCANONICAL_OPENING rejected_at_query_parse={e:?} accepted=false checked_witness={} queried_invalid_fibre={}",extracted.is_some(),queries.contains(&0)||queries.contains(&256));continue;}
+            #[cfg(not(v8_c1_noncanonical))] panic!("unexpected synthetic opening error: {e:?}");
+        }};
         let mismatches=(0..Q).filter(|&i|corelib::v6_onefold::evaluate_final256_coefficients(&finals,xs[i]).unwrap()!=values[i]).count();
         println!("arm_corrupt={corrupt} pointwise_mismatches={mismatches} prior_exact={}",claim==dot(&finals,&(0..256).map(|i|weights.weight_at(i)).collect::<Vec<_>>()));
         let inc=inject(&mut weights,&mut claim,&values,&xs,rho).unwrap();p.t.absorb(label::PROFILE,&bytes(&[inc]));
@@ -308,6 +326,7 @@ pub fn run(){
         println!("C1_BOUNDARY seed=1 corrupted_complete_fibres=1 fibre={corrupt_c1_fibre} c1_hit={} accepted={accepted} checked_witness={checked_witness} exact_codeword=false",queries.contains(&(corrupt_c1_fibre as u32)));
         #[cfg(all(v8_c1_both_windows,not(v8_c1_near)))]
         println!("C1_BOTH_WINDOWS seed=1 corrupted_complete_fibres=2 c1_hit={} accepted={accepted} checked_witness={checked_witness} candidate_exhaustion={}",queries.contains(&0)||queries.contains(&256),extracted.is_none());
+        #[cfg(v8_c1_noncanonical)] println!("NONCANONICAL_C1 same_execution=true accepted={accepted} checked_witness={checked_witness} queried_invalid_fibre={}",queries.contains(&0)||queries.contains(&256));
         #[cfg(v8_c1_near)]
         println!("C1_NEAR_CONTROL seed=1 corrupted_complete_fibres=16535 c1_hits={} accepted={accepted} checked_witness={checked_witness}",queries.iter().filter(|&&i|i<16535).count());
     }

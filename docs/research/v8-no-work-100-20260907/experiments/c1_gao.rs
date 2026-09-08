@@ -78,7 +78,7 @@ pub fn recover_near(ex:&super::query_graph::Extracted,source:&super::circle_cand
 fn recover_from_fibres(ex:&super::query_graph::Extracted,source:&super::circle_candidate::CircleEncoder,base:&super::authenticated_c1::Decoder,
     ids:&[u32],n:usize,global_cap:usize)->Result<aspis_statement::state_only_trace::StateOnlyTraceFoundation,Failure>{
     let k=1025;let start=std::time::Instant::now();
-    if n>4*ids.len()||n<k{return Err(Failure::Shape)}
+    if n>4*ids.len()||n<k||base.first_position!=0{return Err(Failure::Shape)}
     let indices:Vec<usize>=ids.iter().flat_map(|&i|(0..4).map(move|s|4*i as usize+s)).take(n).collect();
     let fibres=corelib::circle_fri::selected_circle_fiber_points_shared(20,ids).map_err(|_|Failure::Shape)?;
     let points:Vec<F>=fibres.iter().flat_map(|p|[F::new(p.x,p.y),F::new(p.x,p.y.neg()),F::new(p.x.neg(),p.y.neg()),F::new(p.x.neg(),p.y)]).take(n).collect();
@@ -94,7 +94,7 @@ fn recover_from_fibres(ex:&super::query_graph::Extracted,source:&super::circle_c
     let mut table=aspis_statement::state_only_trace::StateOnlyTraceFoundation{c1:std::array::from_fn(|_|vec![])};
     let mut all_bad=std::collections::BTreeSet::new();let mut sample_errors=Vec::new();
     for col in 0..16{
-        let mut y=vec![];for i in 0..n{let pos=indices[i];let v=super::authenticated_c1::read31(&ex.leaves[pos/4].value,31*((pos%4)*26+col)).map_err(|_|Failure::Canonical)?;
+        let mut y=vec![];for i in 0..n{let pos=indices[i];let v=ex.totalized_value(pos/4,pos%4,col).map_err(|_|Failure::Shape)?;
             y.push(shifts[i].mul_m31(v));}
         let(p,errors)=d.decode(&y)?;sample_errors.push(errors);
         let mut fixed=vec![];for &point in &fixed_points{let v=eval(&p,point).mul(point.conjugate().pow(512));
@@ -104,7 +104,7 @@ fn recover_from_fibres(ex:&super::query_graph::Extracted,source:&super::circle_c
         // Full source re-encoding prevents an ambient RS word outside the
         // actual circle image from being returned under a sample-only check.
         for i in 0..n{if eval(&p,d.points[i])!=shifts[i].mul_m31(encoded[indices[i]]){return Err(Failure::Subfield)}}
-        for(i,l)in ex.leaves.iter().enumerate(){for slot in 0..4{let v=super::authenticated_c1::read31(&l.value,31*(slot*26+col)).map_err(|_|Failure::Canonical)?;
+        for(i,_)in ex.leaves.iter().enumerate(){for slot in 0..4{let v=ex.totalized_value(i,slot,col).map_err(|_|Failure::Shape)?;
             if v!=encoded[4*i+slot]{all_bad.insert(i);}}}
     }
     if all_bad.len()>global_cap{return Err(Failure::GlobalRadius)}
