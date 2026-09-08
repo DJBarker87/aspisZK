@@ -158,8 +158,8 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           ((exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
                 projection fixedInstance \
-              exactK13PreQ16LateTargetEvent transitionFuel configuration
-                projection fixedInstance) ∩
+              exactK13PreQ16MerkleTargetHitEvent configuration
+                transitionFuel) ∩
             exactPreQ16K13OneFoldEvent transitionFuel configuration projection
               fixedInstance decoder) ≤ exactOneFoldIdealRawError)
     (jointBound :
@@ -180,8 +180,8 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
               projection fixedInstance ∩
-            exactK13PreQ16LateTargetEvent transitionFuel configuration projection
-              fixedInstance) ≤ exactPreQ16LateTargetRawError parameters) :
+            exactK13PreQ16MerkleTargetHitEvent configuration transitionFuel) ≤
+        exactPreQ16LateTargetRawError parameters) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
             projection fixedInstance ∩
@@ -201,8 +201,7 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
     configuration projection fixedInstance decoder source
   let later := exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
     projection fixedInstance decoder source
-  let late := exactK13PreQ16LateTargetEvent transitionFuel configuration
-    projection fixedInstance
+  let late := exactK13PreQ16MerkleTargetHitEvent configuration transitionFuel
   have covered : clean ∩ k13CircleListDecodeErrorEvent
         (exactTag73PreQ16OperationalStages transitionFuel configuration
           projection fixedInstance decoder decoderBinding basis rc poseidon
@@ -223,7 +222,9 @@ theorem exact_preQ16_operational_k13_clean_error_measure_bound
           ⟨⟨cleanMember, lateMember⟩, oneFoldMember⟩)))
     · exact Or.inl (Or.inl (Or.inr ⟨cleanMember, jointMember⟩))
     · exact Or.inl (Or.inr ⟨cleanMember, laterMember⟩)
-    · exact Or.inr ⟨cleanMember, lateMember⟩
+    · exact Or.inr ⟨cleanMember,
+        exact_k13_preQ16_late_target_subset_hit_event transitionFuel
+          configuration projection fixedInstance transitionRoom lateMember⟩
   calc
     law.toOuterMeasure (clean ∩ k13CircleListDecodeErrorEvent
         (exactTag73PreQ16OperationalStages transitionFuel configuration
