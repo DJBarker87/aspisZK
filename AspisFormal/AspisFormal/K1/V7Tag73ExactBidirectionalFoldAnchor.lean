@@ -104,6 +104,47 @@ def ExactAcceptedFoldPairLabeled
             fold.answer : UnifiedExposureRecord) :: later ∧
       trial.val = prior.length)
 
+/-- Either source order exposes one ordinary actor/input/answer decomposition
+at the selected pair anchor.  Downstream prefix arguments need not split on
+which member of the pair was chronologically first. -/
+theorem exact_accepted_fold_pair_labeled_anchor_decomposition
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (fold : ExactAcceptedFoldTrial input)
+    (trial : ExactCompilerExposureTrial parameters)
+    (labeled : ExactAcceptedFoldPairLabeled input fold trial) :
+    ∃ prior later actor queryInput answer,
+      exactFixedRootRecords input.package.root =
+        prior ++ (.machineFresh actor queryInput answer :
+          UnifiedExposureRecord) :: later ∧
+      trial.val = prior.length := by
+  rcases labeled with workFirst | boundaryFirst
+  · obtain ⟨prior, middle, later, boundaryActor, rootExact, trialExact⟩ :=
+      workFirst
+    exact ⟨prior,
+      middle ++
+        (.machineFresh boundaryActor (selectedFoldBoundaryInput input fold)
+          fold.boundaryAnswer : UnifiedExposureRecord) :: later,
+      fold.actor, selectedFoldWorkInput input fold, fold.answer,
+      by simpa [List.append_assoc] using rootExact, trialExact⟩
+  · obtain ⟨prior, middle, later, boundaryActor, rootExact, trialExact⟩ :=
+      boundaryFirst
+    exact ⟨prior,
+      middle ++
+        (.machineFresh fold.actor (selectedFoldWorkInput input fold)
+          fold.answer : UnifiedExposureRecord) :: later,
+      boundaryActor, selectedFoldBoundaryInput input fold,
+      fold.boundaryAnswer, by simpa [List.append_assoc] using rootExact,
+      trialExact⟩
+
 theorem exact_accepted_fold_pair_labeled_exists
     {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
     {parameters : ExactCompilerResourceParameters}
@@ -235,6 +276,7 @@ end
 
 
 #print axioms ExactAcceptedFoldPairLabeled
+#print axioms exact_accepted_fold_pair_labeled_anchor_decomposition
 #print axioms exact_accepted_fold_pair_labeled_exists
 #print axioms exactAcceptedFoldPairTrial_labeled
 #print axioms exact_root_records_aligned_for_bidirectional_fold_controller

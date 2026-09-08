@@ -16,13 +16,16 @@ namespace AspisK1.V7Tag73BidirectionalFoldAlphaPrefix
 
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
+open AspisK1.V7Tag73AlphaZeroCausalController
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73BidirectionalFoldAlphaController
 open AspisK1.V7Tag73FinalWorkQ16CandidateController
 open AspisK1.V7Tag73FoldArmedAlphaZeroController
 open AspisK1.V7Tag73IndexedAlignedRecordReplay
+open AspisK1.V7Tag73IndexedControllerLabeledRecords
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedExposureCausalRouter
+open AspisK1.V7Tag73CausalMachineLabeledTraceRouting
 open AspisK1.V7Tag73SchedulerCausalQ16Router
 open AspisK1.V7Tag73TranscriptSchedule
 
@@ -125,6 +128,80 @@ theorem bidirectional_pre_anchor_invariant_replay
         omega
       rw [indexed_state_after_records_cons]
       exact ih next nextInvariant nextBounded
+
+/-- Every record strictly before the selected bidirectional pair anchor is
+residual.  The controller cannot allocate the fold slot or any alpha slot
+until the anchor itself has been consumed. -/
+theorem bidirectional_labeled_records_before_anchor_all_residual
+    {globalOracleCalls : Nat}
+    (transitionFuel anchorIndex : Nat) :
+    ∀ (records : List UnifiedExposureRecord)
+      (state : IndexedUnifiedExposureState globalOracleCalls
+        BidirectionalFoldAlphaMemory),
+      state.exposureIndex + records.length = anchorIndex →
+      BidirectionalPreAnchorInvariant state.memory →
+      namedTraceSlots
+        (indexedControllerLabeledRecords transitionFuel
+          (bidirectionalFoldAlphaController transitionFuel anchorIndex)
+          state records) = [] := by
+  intro records
+  induction records with
+  | nil =>
+      intro state _anchorExact _invariant
+      rfl
+  | cons record records ih =>
+      intro state anchorExact invariant
+      rcases invariant with
+        ⟨foldUnused, noWork, noBoundary, noProducers, noUsed⟩
+      have beforeAnchor : state.exposureIndex ≠ anchorIndex := by
+        intro equal
+        rw [equal] at anchorExact
+        simp only [List.length_cons] at anchorExact
+        omega
+      let controller := bidirectionalFoldAlphaController
+        (globalOracleCalls := globalOracleCalls) transitionFuel anchorIndex
+      let next := controller.afterAnswer transitionFuel state record.answer
+      have preferredNone : controller.preferredSlot state = none := by
+        change bidirectionalFoldAlphaPreferred transitionFuel anchorIndex state =
+          none
+        unfold bidirectionalFoldAlphaPreferred
+        rw [dif_neg beforeAnchor]
+        have noMatch : ¬ (state.memory.foldUsed = false ∧
+            matchesExpectedFoldWork
+              (currentBidirectionalInput? transitionFuel state)
+              state.memory.expectedWork) := by
+          simp [noWork, matchesExpectedFoldWork]
+        rw [if_neg noMatch]
+        have alphaNone : alphaZeroPreferredSlot transitionFuel
+            (foldArmedAlphaIndexedState (bidirectionalAlphaState state)) =
+              none := by
+          unfold alphaZeroPreferredSlot
+          rw [show
+            (foldArmedAlphaIndexedState
+              (bidirectionalAlphaState state)).memory.producers = [] by
+                exact noProducers]
+          cases unifiedInputBeforeAnswer? transitionFuel
+              (foldArmedAlphaIndexedState
+                (bidirectionalAlphaState state)).cursor <;>
+            simp [alphaZeroOutputSlot?]
+        simp [alphaNone]
+      have nextInvariant : BidirectionalPreAnchorInvariant next.memory := by
+        simpa [next, controller, bidirectionalFoldAlphaController,
+          IndexedUnifiedExposureController.afterAnswer] using
+          bidirectional_pre_anchor_invariant_step transitionFuel anchorIndex
+            state record.answer beforeAnchor
+              ⟨foldUnused, noWork, noBoundary, noProducers, noUsed⟩
+      have nextAnchor : next.exposureIndex + records.length = anchorIndex := by
+        simp only [next, indexed_after_answer_exposure_index,
+          List.length_cons] at anchorExact ⊢
+        omega
+      have tailResidual := ih next nextAnchor nextInvariant
+      change namedTraceSlots
+        ((controller.preferredSlot state, record.answer) ::
+          indexedControllerLabeledRecords transitionFuel controller next
+            records) = []
+      rw [preferredNone]
+      exact tailResidual
 
 /-- Once a boundary-first anchor has installed its missing work sibling,
 any non-anchor exposure at a different literal input preserves that waiting
@@ -276,6 +353,7 @@ end
 #print axioms inactive_bidirectional_pre_anchor
 #print axioms bidirectional_pre_anchor_invariant_step
 #print axioms bidirectional_pre_anchor_invariant_replay
+#print axioms bidirectional_labeled_records_before_anchor_all_residual
 #print axioms bidirectional_waiting_for_work_step
 #print axioms bidirectional_pre_anchor_seen_machine_step_exact
 #print axioms bidirectional_pre_anchor_seen_machine_replay_exact
