@@ -10,37 +10,48 @@ Measured-binary source HEAD: `acc4055b6c55ff6a568cf0d3d916365eccb4ebf1`
 
 Evidence implementation commit: `e5e4edf133044fd8c70c1924c75333c9e6492bfd`
 
+Rollover harness commits: `4499ec7dad9a296d1d63783fb2a6849df1652f29`,
+`b7e2e0f52384c00183349677d40552adf23cd71f`,
+`3568b7e2479bd824db42af799c299d7deaf5245a`,
+`c21c0b8058f54b2eeab3bbf737c3a65224f6c12c`, and
+`d3a0829508e2beba792ab48623636f595f9b8606`.
+
+Genuine rollover-withdrawal evidence commit:
+`b22c2b709d618f45e0d9b3a7cd733693fde390b5`.
+
 Ending HEAD: the immediate report-hygiene successor to the evidence commit;
 recorded exactly by `git rev-parse HEAD` in the handoff.
 
-Classification: **A — ALL-REACHABLE GREEN**
+Classification: **B — RELEASE-MARGIN GREEN**
 
 ## Result
 
 For the default-off cutoff-20 publication policy and default-off authenticated
 terminal-PDA certificate, the conservative all-reachable successful terminal
-ceiling is **1,395,521 CU**. This leaves **4,479 CU** below Solana's 1,400,000-CU
-hard transaction limit.
-
-It does **not** meet the preferred 1,350,000-CU release gate and misses the
-aspirational 1,300,000-CU gate. No production promotion, public deployment, or
+ceiling is **1,311,862 CU**. This leaves **88,138 CU** below Solana's
+1,400,000-CU hard transaction limit and **38,138 CU** below the preferred
+1,350,000-CU release gate. It remains 11,862 CU above the aspirational
+1,300,000-CU project gate. No production promotion, public deployment, or
 identity selection was performed. `mainnetReady` remains false.
 
 This is a source-bounded current-profile result, not a claim that one sampled
-transaction exercised every maximum simultaneously. Two genuine current-binary
-same-page transactions provide combined anchors. Independently finalized probe
+transaction exercised every maximum simultaneously. Four genuine current-binary
+transactions for all four terminal shapes provide combined anchors.
+Independently finalized probe
 transactions cover the complete successful QM31 retry topology, counter 0 to
 20, all q16/order work, and the complete accepted frontier grammar from 14 to
-203. The rollover envelope deliberately adds an entire production-shaped Pool
-rollover execution, rather than an optimistic same-page/rollover delta.
+203. The former 120,706-CU rollover envelope is retained for provenance but is
+no longer used in the current ceilings.
 
 ## Source state and `main`
 
-`origin/main` was fetched at `ff19fd20465bd1c1aa7b17815815331b43feece2`.
+`origin/main` was fetched at `9dae54750b5e1e70e8b1a0d933ebc3ebe33e918e`.
 The merge base is `bff78d6eab006dfc75c704abde824fa7c57637b1`.
-No runtime, Pool, verifier, or harness path in this CU-closure scope changed on
-main after that merge base. The newer main-only work is the independent K1/fold
-formal series.
+No runtime, Pool-program, verifier-program, harness, or CU-bound path in this
+CU-closure scope changed on main after that merge base. The newer main-only
+work is the independent K1/fold formal series, including
+`V7MerkleTypedTruncateCongruence`; it is not a dependency of the persisted-PDA
+or terminal-CU argument.
 
 Two relevant changes were already ancestors of this branch:
 
@@ -89,7 +100,7 @@ The maximum terminal PDA cost is therefore exactly 16 fixed attempts × 1,500 =
 **24,000 CU**. There is no successful variable bump-search tail. This adds one
 readonly account and 33 transaction bytes. Existing Pool account layouts,
 proof bytes, statement bytes, relation, TxV1 encoding and CPI order are unchanged.
-Both features remain default-off.
+The terminal-PDA certificate and cutoff publication policy remain default-off.
 
 ## Formal invariant
 
@@ -137,14 +148,16 @@ task-owned funds were used.
 | CU-tail probe | `f71713a8c50bdb62111012856332a364f7800a68e604e6d6de0ed343f812ec04` |
 | cutoff-20 host prover | `5f51fb6b28c852b68f3d9d9b0710b92b4252db2253c3744504672282c847d3a7` |
 
-Both genuine terminal transactions had one Pool terminal instruction plus the
-canonical real-HPKE ciphertext carrier, were simulated with signature checking,
-submitted byte-identically, and finalized:
+All four genuine terminal transactions had one Pool terminal instruction plus
+the canonical real-HPKE ciphertext carrier, were simulated with signature
+checking, submitted byte-identically, and finalized:
 
 | Case | Counter/frontier | Bytes | verifier CPI CU | landed CU | Slot |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | transfer, same page | 8 / 196 | 1,411 | 1,000,153 | **1,029,881** | 710 |
 | withdrawal, same page | 1 / 201 | 1,576 | 976,371 | **1,014,941** | 803 |
+| transfer, rollover | 0 / 200 | 1,444 | 970,996 | **1,066,928** | 897 |
+| withdrawal, rollover | 9 / 203 | 1,609 | 1,010,821 | **1,115,624** | 1,035 |
 
 Transfer signature:
 `56VSaHfPycbg4neR4SiQCyUs6yb6EDLzrLB62guzQb4ipJHSL38KPdrXkEaTKXYyc9VjvD8UWGanH4riCCyLEoTq`.
@@ -161,17 +174,50 @@ Its genuine 30,720-byte proof hash is
 `6f896f82b2e8cffc7f45ae28325ac550df989b8fc6904709ac0bbc5402a8ee76`.
 Custody changed vault 1,000→750 and bound destination 0→250 for amount 250.
 
-Simulation CU equalled landed CU in both cases. Both proof accounts were
-finalized closed and fully refunded. Exact before/after JSON hashes, replay and
-fresh-nullifier replay rejection, finalized RPC records and closure receipts
-are under `current-transfer-selected-sort/` and
-`current-withdrawal-selected-sort/`. No private key or wallet-state binary is
-included.
+Rollover transfer signature:
+`5aUJ4Q4PCPScBQpZyGCFd7vBs7Hwp1KcAxRiLdphxXotUdoHLBxSf9b6zVP59bwFR8b7FUHWapKBoXdGMJvm9rpW`.
+Wire SHA-256:
+`8a8fed16cc16d1854c626944dc4e06f113ff295133e50dd03300f884c896f46e`.
+Its genuine proof hash is
+`fa309f9e6d5dc0ec5ada3331dc93b228fd028da95b418f494a5380374ce894fe`.
 
-Proof wall time was 287.745 s for transfer and 465.668 s for withdrawal. That
-variance is the existing proof-of-work search; the accepted final-nonce retry
-counts were only two and one respectively. Cutoff selection was enabled,
-required the minimum q16 draw path, and selected counters ≤20.
+Rollover withdrawal signature:
+`238yAUJGP3BecrVW56FNZv5Qq2WeUSZ9oBZi5X4h6BEX3GDKo8WRohjsuFbAML8pecW38HQh3b6rEfbXk9KHQGok`.
+Wire SHA-256:
+`f685e733fbc146ee5249e2e361db764161f415e3b8a9261d229b69e3b07acbb7`.
+Its genuine proof hash is
+`37edc3b5bb6a006486f2ff6bba2b945423e6f5dc5764b5f6d4f051c79c526b32`.
+Custody changed vault 255,000→254,750 and the bound destination 0→250.
+
+Simulation CU equalled landed CU in all four cases. All proof accounts were
+finalized closed and drained/refunded. Exact before/after JSON hashes, replay
+and fresh-nullifier replay rejection, finalized RPC records and closure
+receipts are under the two `current-*-selected-sort/` and two
+`current-*-rollover-direct/` evidence directories. No private key or
+wallet-state binary is included.
+
+Each rollover fixture independently finalized 254 sequential deposits, then
+derived its live witness from lane 0 at pair index 254/root sequence 255. The
+terminal append crossed the page boundary using the canonical precreated,
+zeroed, 8,256-byte, Pool-owned next history page. The prefill transactions were
+dependency ordered; every simulated/landed CU pair and signed wire matched.
+The highest precursor-deposit CU was 553,034. This is a genuine live rollover,
+not a synthetic Pool envelope.
+
+Two earlier genuine proofs could not reach the terminal step because the first
+finalized proof-upload transaction record was unavailable before the 35-write
+upload set was audited. This was consistent with pruning: Agave test-validator
+defaults to retaining 10,000 shreds. The harness now requires at least
+1,000,000 retained shreds, passes that value to `--limit-ledger-size`, and
+records it in `ledger-configuration.json`. The successful transfer replay used
+that setting. The failed attempts and the diagnosis are retained in
+`negative-evidence/direct-rollover-attempts.json`; neither is presented as
+terminal execution.
+
+Proof wall time was 287.745 s and 465.668 s for the same-page transfer and
+withdrawal. The rollover proofs took 191.002 s and 287.690 s. That variance is
+the existing proof-of-work search. Cutoff selection was enabled, required the
+minimum q16 draw path, and selected counters ≤20.
 
 ## Residual tails
 
@@ -228,12 +274,12 @@ The common tail envelope is:
 = common tail envelope                            244,934 CU
 ```
 
-The rollover envelope is:
+The historical rollover envelope was:
 
 ```text
   complete production-shaped Pool rollover path  119,206
 + one extra current fixed PDA validation            1,500
-= rollover envelope                               120,706 CU
+= superseded rollover envelope                    120,706 CU
 ```
 
 The 119,206-CU reference includes the Pool prefix, authenticated verifier
@@ -246,19 +292,28 @@ it performs no terminal System account creation. As corroboration, the
 independent 256-deposit run measured only a 49,078-CU same-page→rollover delta
 (594,776→643,854), far below the 120,706-CU envelope.
 
+It is retained as a conservative cross-check only. Direct current-binary
+rollover anchors now replace it in the release arithmetic.
+
+For each shape, the generator adds the complete independently measured range
+for every residual dimension unless the genuine anchor already exercises that
+dimension's exact maximum. The rollover withdrawal proof has exactly 203
+frontier nodes, so its remaining frontier term is zero. All other nonmaximum
+anchors conservatively receive the complete 14→203 range; the arithmetic does
+not infer a per-node coefficient.
+
 Final shape ceilings:
 
 | Shape | Arithmetic ceiling |
 | --- | ---: |
 | transfer, same page | 1,029,881 + 244,934 = **1,274,815** |
-| transfer, rollover | 1,029,881 + 244,934 + 120,706 = **1,395,521** |
+| transfer, rollover | 1,066,928 + 244,934 = **1,311,862** |
 | withdrawal, same page | 1,014,941 + 244,934 = **1,259,875** |
-| withdrawal, rollover | 1,014,941 + 244,934 + 120,706 = **1,380,581** |
+| withdrawal, rollover | 1,115,624 + 162,299 = **1,277,923** |
 
-The arithmetic intentionally adds each full range even though each anchor is
-already inside the counter/frontier/order/retry ranges. The maximum serialized
-wire envelope is 1,576 + 33 rollover-account bytes = 1,609 bytes, below both
-3,500 and 4,096 bytes.
+The arithmetic intentionally adds each full residual range even though each
+anchor is already inside the counter/order/retry ranges. The maximum measured
+serialized wire is 1,609 bytes, below both 3,500 and 4,096 bytes.
 
 No accepted data-dependent runtime branch remains outside this arithmetic for
 the cutoff-20 profile. The unchanged verifier language still accepts counters
@@ -279,7 +334,13 @@ Commands are reproduced exactly in `replay-commands.txt`.
 - revised host probe builder: 18.75 s; 898,508 KiB peak RSS; zero swap;
 - successful nine-case runtime: 2:01.58; 703,220 KiB peak RSS; zero swap;
 - genuine withdrawal lifecycle: 10:18 wall; 2.3 GiB systemd peak; zero swap;
-- genuine transfer lifecycle: 7:17.80 wall; 1.5 GiB systemd peak; zero swap.
+- genuine transfer lifecycle: 7:17.80 wall; 1.5 GiB systemd peak; zero swap;
+- genuine rollover withdrawal lifecycle: 9:15.50 wall; 2.3 GiB systemd
+  peak; zero swap;
+- genuine rollover transfer lifecycle: 7:41.21 wall; 2.2 GiB systemd peak;
+  zero swap;
+- focused rollover materializer/genesis-preparer release check: 0.46 s;
+  102,055,936-byte peak RSS; zero swap; focused `rustfmt --check` passed.
 
 All NUC builds/runs used explicit systemd `MemoryHigh`/`MemoryMax` limits no
 larger than 8/10 GiB and `MemorySwapMax=0`. Nothing approached the 12-GiB stop
@@ -302,24 +363,24 @@ preterminal account/init transaction. Existing Pool state requires no migration.
 Production identities and release artifacts were deliberately not selected.
 
 The earlier public-Devnet evidence is unchanged. No new public-Devnet verifier
-was deployed because this result has only 4,479 CU of hard-limit margin and the
-task expressly required local/source closure first. This report is neither
+was deployed because the task expressly required local/source closure first.
+This report is neither
 public-Devnet lifecycle evidence nor mainnet readiness evidence.
 
 ## Remaining work
 
-The universal cutoff-20 hard-limit claim is closed, but release engineering is
-not:
+The all-reachable cutoff-20 bound and preferred release margin are closed, but
+production release engineering is not:
 
-1. Obtain a direct current-binary rollover transfer/withdrawal measurement to
-   replace the deliberately oversized 120,706-CU rollover envelope.
-2. Recover preferred ≤1.35M margin before promotion. The most promising
-   protocol-preserving target is reducing the full 82,635-CU frontier span or
-   moving/certifying more static proof parsing at seal time—not weakening the
-   sampler or authentication.
-3. Perform migration/release review of the extra verifier-owned certificate;
-   only then consider a new disposable public-cluster lifecycle.
+1. Review migration and operational handling of the additional verifier-owned
+   APD8 certificate account and its preparation instruction.
+2. Decide whether to promote the two default-off audit features. That requires
+   production identities and release governance outside this task.
+3. Only after that decision, build the exact release binaries and execute a new
+   disposable public-cluster lifecycle. The current evidence must not be
+   relabelled as public-cluster or mainnet evidence.
 
 The branch is safe to cherry-pick as research/default-off audit infrastructure.
-It is **not** safe to enable in production solely from this report: the margin
-is narrow, identities are audit-only, and no production release was signed.
+It is **not** safe to enable in production solely from this report: identities
+are audit-only, the APD8 migration/release decision is outstanding, and no
+production release was signed.

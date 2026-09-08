@@ -2,10 +2,11 @@
 """Fail-closed source inventory for the V7 terminal CU quantifier.
 
 This tool does not pretend that sampled transactions prove a worst-case bound.
-It checks the bounded-loop constants and the production-shaped rollover
-withdrawal PDA call inventory against the source tree, then emits the exact
-runtime-syscall floors that decide whether the current admission policy can
-guarantee completion below Solana's transaction CU ceiling.
+It checks the bounded-loop constants and the production-shaped terminal PDA
+call inventory against the source tree, authenticates genuine current-binary
+evidence for all four terminal shapes, then emits the conservative arithmetic
+that decides whether the current admission policy stays below Solana's
+transaction CU ceiling.
 """
 
 from __future__ import annotations
@@ -31,6 +32,8 @@ MAX_FRONTIER_NODES = 203
 INVENTORY_START_REVISION = "e5640f79133f8afbeb7eb08a940abc6462274295"
 DECODED_CHALLENGE_BINDING_REVISION = "8f36d51a173fcd513224c1ce6cd2cc2cc4e2901f"
 CURRENT_SBF_SOURCE_REVISION = "acc4055b6c55ff6a568cf0d3d916365eccb4ebf1"
+CURRENT_WITHDRAWAL_ROLLOVER_HARNESS_REVISION = "c21c0b8058f54b2eeab3bbf737c3a65224f6c12c"
+CURRENT_TRANSFER_ROLLOVER_HARNESS_REVISION = "d3a0829508e2beba792ab48623636f595f9b8606"
 CURRENT_POOL_SBF_SHA256 = "cb5f90452ddd0772c5401f42ed0e28b7a38b7bb93ea0ac465cfab37fe7afd1a2"
 CURRENT_VERIFIER_SBF_SHA256 = "8894c98c21583bdbd08f891367ece6fcb7570cbc53058250f4f87b5372260c66"
 ROLLOVER_FULL_POOL_REFERENCE_CU = 119_206
@@ -428,8 +431,17 @@ def main() -> None:
     }
     require_equal(tail.get("landedDeltasCu"), tail_deltas, "recomputed tail deltas")
 
-    def validate_terminal(kind: str, fixed_pda_attempts: int) -> tuple[dict, dict, dict]:
-        base = EVIDENCE_ROOT / f"current-{kind}-selected-sort"
+    def validate_terminal(
+        kind: str,
+        fixed_pda_attempts: int,
+        evidence_directory: str | None = None,
+        *,
+        rollover: bool = False,
+        evidence_source_revision: str = CURRENT_SBF_SOURCE_REVISION,
+    ) -> tuple[dict, dict, dict]:
+        base = EVIDENCE_ROOT / (
+            evidence_directory or f"current-{kind}-selected-sort"
+        )
         terminal = load_json(base / "terminal/terminal-finalized.json")
         signed = load_json(base / "terminal/signed-request.json")
         proof_wrapper = load_json(base / "proof/genuine-live-proof.json")
@@ -459,6 +471,9 @@ def main() -> None:
                       f"{kind} terminal variable PDA calls")
         require_equal(pda.get("terminalSingleAttemptValidations"), fixed_pda_attempts,
                       f"{kind} fixed PDA attempts")
+        require_equal(pda.get("rollover"), rollover, f"{kind} rollover classification")
+        require_equal(pda.get("withdrawal"), operation == "withdrawal",
+                      f"{kind} withdrawal classification")
         require_equal(pda.get("terminalPdaSyscallTheoreticalMaximumCu"),
                       fixed_pda_attempts * create_program_address_cu,
                       f"{kind} fixed PDA CU")
@@ -470,6 +485,17 @@ def main() -> None:
         require_equal(hashlib.sha256((base / "terminal/accounts-after.json").read_bytes()).hexdigest(),
                       terminal.get("protectedAccountsAfterJsonSha256"),
                       f"{kind} protected after-account hash")
+        landed_transaction = load_json(base / "terminal/finalized-transaction.json")
+        verifier_cpi_pattern = re.compile(
+            r"^Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue consumed (\d+) of \d+ compute units$"
+        )
+        verifier_cpi_cu = [
+            int(match.group(1))
+            for log in landed_transaction.get("result", {}).get("meta", {}).get("logMessages", [])
+            if (match := verifier_cpi_pattern.match(log)) is not None
+        ]
+        require_equal(len(verifier_cpi_cu), 1, f"{kind} verifier CPI CU log count")
+        terminal["verifiedVerifierCpiCu"] = verifier_cpi_cu[0]
         proof = proof_wrapper.get("proof", {})
         require_equal(proof.get("operation"), operation, f"{kind} proof operation")
         require_equal(proof.get("deterministicFixtureEntropy"), False, f"{kind} fixture entropy")
@@ -488,6 +514,19 @@ def main() -> None:
         require_true(closure.get("finalized"), f"{kind} proof close finalized")
         require_true(closure.get("byteIdenticalSimulationSubmission"), f"{kind} close byte identity")
         require_true(closure.get("proofAccountDrained"), f"{kind} proof account drained")
+        if not isinstance(closure.get("rentRefundLamports"), int) or closure["rentRefundLamports"] <= 0:
+            fail(f"evidence mismatch: {kind} proof account rent refund")
+        fresh_replay = load_json(base / "terminal/fresh-nullifier-replay-rejection.json")
+        require_equal(fresh_replay.get("actual"), "finalized-rejected",
+                      f"{kind} fresh-wire replay result")
+        require_true(fresh_replay.get("byteIdenticalSimulationSubmission"),
+                     f"{kind} fresh-wire replay byte identity")
+        require_equal(fresh_replay.get("simulatedError"), fresh_replay.get("landedError"),
+                      f"{kind} fresh-wire replay error")
+        require_equal(fresh_replay.get("simulatedCu"), fresh_replay.get("landedCu"),
+                      f"{kind} fresh-wire replay CU")
+        require_true(fresh_replay.get("stateUnchangedExceptPayerFee"),
+                     f"{kind} fresh-wire replay rollback")
         require_equal(cluster.get("agave", {}).get("coreVersion"), "4.2.2", f"{kind} Agave")
         require_true(cluster.get("cluster", {}).get("feature", {}).get("active"),
                      f"{kind} TxV1 feature")
@@ -498,8 +537,50 @@ def main() -> None:
                       f"{kind} Pool SBF")
         require_equal(programs.get("verifier", {}).get("sha256"), CURRENT_VERIFIER_SBF_SHA256,
                       f"{kind} verifier SBF")
-        require_equal(cluster.get("repository", {}).get("revision"), CURRENT_SBF_SOURCE_REVISION,
+        require_equal(cluster.get("repository", {}).get("revision"), evidence_source_revision,
                       f"{kind} SBF source revision")
+        if rollover:
+            prefill = load_json(base / "prefill/evidence.json")
+            materialized = load_json(base / "proof/live-proof-materialized.json")
+            genesis = load_json(base / "cluster/live-genesis.json")
+            require_equal(prefill.get("schema"), "aspis.v7.live-rollover-prefill.v1",
+                          f"{kind} rollover prefill schema")
+            require_equal(prefill.get("targetNextLeafIndex"), 254,
+                          f"{kind} rollover prefill target")
+            require_equal(prefill.get("finalizedDeposits"), 254,
+                          f"{kind} rollover prefill count")
+            require_true(prefill.get("allFinalized"), f"{kind} rollover prefill finalized")
+            require_true(prefill.get("everyDependencyConfirmedBeforeSuccessor"),
+                         f"{kind} rollover prefill dependency order")
+            require_true(prefill.get("allByteIdentical"),
+                         f"{kind} rollover prefill byte identity")
+            require_true(prefill.get("simulationLandedCuExact"),
+                         f"{kind} rollover prefill CU equality")
+            require_equal(materialized.get("depositLane"), 0,
+                          f"{kind} rollover deposit lane")
+            require_equal(materialized.get("depositPairLeafIndex"), 254,
+                          f"{kind} rollover deposit index")
+            require_equal(materialized.get("depositRootSequence"), 255,
+                          f"{kind} rollover deposit root sequence")
+            require_true(materialized.get("secretValuesPrinted") is False,
+                         f"{kind} rollover materializer secret hygiene")
+            require_equal(genesis.get("precreatedRolloverHistoryPage"),
+                          "u8gbtV2a3QoYCUfTWR1X9fEQZVG2XD2CSZYykqoheiu",
+                          f"{kind} rollover page PDA")
+            rollover_pages = [
+                account for account in genesis.get("accounts", [])
+                if account.get("kind") == "disposable-precreated-zeroed-pool-rollover-page"
+            ]
+            require_equal(len(rollover_pages), 1, f"{kind} rollover genesis page count")
+            require_equal(rollover_pages[0].get("space"), 8_256,
+                          f"{kind} rollover genesis page size")
+            require_equal(rollover_pages[0].get("owner"),
+                          "5PjDJaGfSPJj4tFzMRCiuuAasKg5n8dJKXKenhuwZexx",
+                          f"{kind} rollover genesis page owner")
+            if evidence_source_revision == CURRENT_TRANSFER_ROLLOVER_HARNESS_REVISION:
+                ledger = load_json(base / "cluster/ledger-configuration.json")
+                if ledger.get("ledgerShredRetention", 0) < 1_000_000:
+                    fail(f"evidence mismatch: {kind} disposable ledger retention")
         if operation == "withdrawal":
             custody = terminal.get("custody", {})
             require_true(custody.get("conservation"), "withdrawal custody conservation")
@@ -508,6 +589,14 @@ def main() -> None:
 
     transfer_terminal, transfer_proof, transfer_signed = validate_terminal("transfer", 11)
     withdrawal_terminal, withdrawal_proof, withdrawal_signed = validate_terminal("withdrawal", 15)
+    rollover_transfer_terminal, rollover_transfer_proof, rollover_transfer_signed = validate_terminal(
+        "transfer", 12, "current-transfer-rollover-direct", rollover=True,
+        evidence_source_revision=CURRENT_TRANSFER_ROLLOVER_HARNESS_REVISION,
+    )
+    rollover_withdrawal_terminal, rollover_withdrawal_proof, rollover_withdrawal_signed = validate_terminal(
+        "withdrawal", 16, "current-withdrawal-rollover-direct", rollover=True,
+        evidence_source_revision=CURRENT_WITHDRAWAL_ROLLOVER_HARNESS_REVISION,
+    )
 
     # The terminal rollover branch has one extra pre-created zeroed history
     # page and one additional fixed-bump validation.  Conservatively add the
@@ -529,16 +618,60 @@ def main() -> None:
     require_true(rollover_reference.get("state_transition", {}).get("full_prior_page_byte_exact_on_rollover"),
                  "rollover prior-page preservation")
 
+    def remaining_tail_envelope(proof: dict) -> dict:
+        # A genuine anchor whose accepted proof already contains the grammar
+        # maximum of 203 frontier nodes has no remaining frontier branch. For
+        # every lower observed count, retain the complete 14..203 range rather
+        # than assuming an unmeasured per-node coefficient. Counter, sampler,
+        # and query-order dimensions retain their complete ranges unless the
+        # anchor itself is exactly at the corresponding maximum.
+        frontier_nodes = proof["proof"]["frontierNodes"]
+        counter = proof["proof"]["compactCounter"]
+        frontier_remaining = (
+            0 if frontier_nodes == MAX_FRONTIER_NODES
+            else tail_deltas["frontier203Minus14"]
+        )
+        counter_remaining = (
+            0 if counter == CUTOFF20_MAX_COUNTER
+            else tail_deltas["counterTwentyMinusZero"]
+        )
+        terms = {
+            "cutoff20CounterRemainingRange": counter_remaining,
+            "frontierRemainingRange": frontier_remaining,
+            "qm31MinimumToMaximumSuccessfulFullTopology": tail_deltas["qm31MaximumMinusMinimum"],
+            "queryOrderingBestToWorstAllCandidatesAndOpening": tail_deltas["queryWorstMinusBest"],
+        }
+        terms["total"] = sum(terms.values())
+        terms["anchorCounter"] = counter
+        terms["anchorFrontierNodes"] = frontier_nodes
+        return terms
+
     full_tail_envelope_cu = (
         tail_deltas["counterTwentyMinusZero"]
         + tail_deltas["frontier203Minus14"]
         + tail_deltas["qm31MaximumMinusMinimum"]
         + tail_deltas["queryWorstMinusBest"]
     )
-    transfer_same_ceiling = transfer_terminal["landedCu"] + full_tail_envelope_cu
-    transfer_rollover_ceiling = transfer_same_ceiling + ROLLOVER_ENVELOPE_CU
-    withdrawal_same_ceiling = withdrawal_terminal["landedCu"] + full_tail_envelope_cu
-    withdrawal_rollover_ceiling = withdrawal_same_ceiling + ROLLOVER_ENVELOPE_CU
+    shape_tail_envelopes = {
+        "samePageTransfer": remaining_tail_envelope(transfer_proof),
+        "rolloverTransfer": remaining_tail_envelope(rollover_transfer_proof),
+        "samePageWithdrawal": remaining_tail_envelope(withdrawal_proof),
+        "rolloverWithdrawal": remaining_tail_envelope(rollover_withdrawal_proof),
+    }
+    transfer_same_ceiling = (
+        transfer_terminal["landedCu"] + shape_tail_envelopes["samePageTransfer"]["total"]
+    )
+    transfer_rollover_ceiling = (
+        rollover_transfer_terminal["landedCu"]
+        + shape_tail_envelopes["rolloverTransfer"]["total"]
+    )
+    withdrawal_same_ceiling = (
+        withdrawal_terminal["landedCu"] + shape_tail_envelopes["samePageWithdrawal"]["total"]
+    )
+    withdrawal_rollover_ceiling = (
+        rollover_withdrawal_terminal["landedCu"]
+        + shape_tail_envelopes["rolloverWithdrawal"]["total"]
+    )
     shape_ceilings = {
         "samePageTransfer": transfer_same_ceiling,
         "rolloverTransfer": transfer_rollover_ceiling,
@@ -679,9 +812,10 @@ def main() -> None:
             },
             "sourceBoundedOpeningFeature": "v7-query-order-source-bound-audit",
             "cutoff20ConstrainsQueryOrdering": False,
+            "currentSbfFullDeltaCu": tail_deltas["queryWorstMinusBest"],
             "qualification": (
-                "candidate and opening comparison counts are source-bounded; no standalone "
-                "current-SBF CU coefficient is inferred without the required capped build"
+                "candidate and opening comparison counts are source-bounded; the full best-to-worst "
+                "cutoff-20 plus accepted-opening topology was measured in the current SBF probe"
             ),
         },
         "disposableCuTailProbe": {
@@ -689,11 +823,15 @@ def main() -> None:
             "entrypointProductionReachable": False,
             "qm31Cases": ["minimum", "maximum-successful"],
             "queryOrderCases": ["best", "worst"],
+            "frontierCases": [14, 199, 203],
+            "counterCases": [0, 20],
             "realShaSyscallExecutedBeforeControlledBlock": True,
             "signedWireBuilder": "tools/v7-live-pool-proof/src/bin/build_v7_cu_tail_probe.rs",
             "byteIdenticalFinalizedRunner": "scripts/v7_cu_tail_probe_child.sh",
-            "currentSbfMeasurementAvailable": False,
-            "blockedBy": "dedicated Linux build host offline; Tailscale node key expired",
+            "currentSbfMeasurementAvailable": True,
+            "allCasesFinalized": True,
+            "localOnly": True,
+            "blockedBy": None,
         },
         "historicalCombinedReferenceEnvelope": {
             "profileRevision": HISTORICAL_PROFILE_REVISION,
@@ -791,7 +929,7 @@ def main() -> None:
     # Replace the pre-measurement classification with the fail-closed current
     # evidence result.  Historical fields remain above for provenance only.
     result.update({
-        "schema": "aspis.v7.all-reachable-cu-bound.v5",
+        "schema": "aspis.v7.all-reachable-cu-bound.v6",
         "classification": release_classification,
         "currentSbfSourceRevision": CURRENT_SBF_SOURCE_REVISION,
         "currentSbf": {
@@ -806,7 +944,7 @@ def main() -> None:
             "genuineFinalizedSamePage": {
                 "transfer": {
                     "cu": transfer_terminal["landedCu"],
-                    "verifierCpiCu": 1_000_153,
+                    "verifierCpiCu": transfer_terminal["verifiedVerifierCpiCu"],
                     "bytes": transfer_terminal["serializedTransactionBytes"],
                     "counter": transfer_proof["proof"]["compactCounter"],
                     "frontierNodes": transfer_proof["proof"]["frontierNodes"],
@@ -819,7 +957,7 @@ def main() -> None:
                 },
                 "withdrawal": {
                     "cu": withdrawal_terminal["landedCu"],
-                    "verifierCpiCu": 976_371,
+                    "verifierCpiCu": withdrawal_terminal["verifiedVerifierCpiCu"],
                     "bytes": withdrawal_terminal["serializedTransactionBytes"],
                     "counter": withdrawal_proof["proof"]["compactCounter"],
                     "frontierNodes": withdrawal_proof["proof"]["frontierNodes"],
@@ -831,20 +969,47 @@ def main() -> None:
                     "proofSha256": withdrawal_proof["proof"]["sha256"],
                 },
             },
-            "directCurrentRolloverMeasurementAvailable": False,
+            "genuineFinalizedRollover": {
+                "transfer": {
+                    "cu": rollover_transfer_terminal["landedCu"],
+                    "verifierCpiCu": rollover_transfer_terminal["verifiedVerifierCpiCu"],
+                    "bytes": rollover_transfer_terminal["serializedTransactionBytes"],
+                    "counter": rollover_transfer_proof["proof"]["compactCounter"],
+                    "frontierNodes": rollover_transfer_proof["proof"]["frontierNodes"],
+                    "signature": rollover_transfer_terminal["signature"],
+                    "slot": rollover_transfer_terminal["slot"],
+                    "wireSha256": rollover_transfer_terminal["signedWireSha256"],
+                    "beforeAccountsSha256": rollover_transfer_terminal["protectedAccountsBeforeJsonSha256"],
+                    "afterAccountsSha256": rollover_transfer_terminal["protectedAccountsAfterJsonSha256"],
+                    "proofSha256": rollover_transfer_proof["proof"]["sha256"],
+                },
+                "withdrawal": {
+                    "cu": rollover_withdrawal_terminal["landedCu"],
+                    "verifierCpiCu": rollover_withdrawal_terminal["verifiedVerifierCpiCu"],
+                    "bytes": rollover_withdrawal_terminal["serializedTransactionBytes"],
+                    "counter": rollover_withdrawal_proof["proof"]["compactCounter"],
+                    "frontierNodes": rollover_withdrawal_proof["proof"]["frontierNodes"],
+                    "signature": rollover_withdrawal_terminal["signature"],
+                    "slot": rollover_withdrawal_terminal["slot"],
+                    "wireSha256": rollover_withdrawal_terminal["signedWireSha256"],
+                    "beforeAccountsSha256": rollover_withdrawal_terminal["protectedAccountsBeforeJsonSha256"],
+                    "afterAccountsSha256": rollover_withdrawal_terminal["protectedAccountsAfterJsonSha256"],
+                    "proofSha256": rollover_withdrawal_proof["proof"]["sha256"],
+                },
+            },
+            "directCurrentRolloverMeasurementAvailable": True,
             "rolloverQualification": (
-                "bounded from the exact current fixed-shape branch by conservatively adding an "
-                "entire production-shaped rollover Pool transaction plus its one additional "
-                "fixed PDA attempt to each genuine current same-page combined anchor"
+                "both terminal rollover shapes use genuine current-profile proofs, current SBF "
+                "binaries, 254 finalized precursor deposits, and a precreated canonical zeroed "
+                "Pool-owned next history page"
             ),
         },
         "measuredTailDeltasCu": tail_deltas,
         "allReachableArithmetic": {
             "method": (
-                "for each genuine current combined anchor, add every full independently measured "
-                "successful-path tail range, even though the anchor already lies inside each range; "
-                "for rollover also add the complete prior production-shaped rollover Pool cost and "
-                "the current extra fixed PDA attempt"
+                "use one genuine finalized current-binary combined anchor for each terminal shape; "
+                "add each full independently measured successful-path tail range unless the anchor "
+                "already exercises that dimension's exact grammar/policy maximum"
             ),
             "commonTailEnvelopeCu": {
                 "cutoff20CounterFullRange": tail_deltas["counterTwentyMinusZero"],
@@ -854,14 +1019,16 @@ def main() -> None:
                 "queryOrderingBestToWorstAllCandidatesAndOpening": tail_deltas["queryWorstMinusBest"],
                 "total": full_tail_envelope_cu,
             },
-            "rolloverEnvelopeCu": {
+            "historicalSupersededRolloverEnvelopeCu": {
                 "completeProductionShapedPoolRolloverReference": ROLLOVER_FULL_POOL_REFERENCE_CU,
                 "additionalCurrentFixedPdaAttempt": ROLLOVER_ADDITIONAL_FIXED_PDA_CU,
                 "total": ROLLOVER_ENVELOPE_CU,
                 "deliberatelyDoubleCountsCommonPoolWork": True,
+                "usedInCurrentShapeCeilings": False,
                 "systemAccountCreationInTerminal": False,
                 "nextHistoryPageMustBePrecreatedZeroedPoolOwned": True,
             },
+            "remainingTailEnvelopeByShapeCu": shape_tail_envelopes,
             "shapeCeilingsCu": shape_ceilings,
             "maximumShape": max(shape_ceilings, key=shape_ceilings.get),
             "universalCeilingCu": universal_ceiling,
@@ -874,13 +1041,15 @@ def main() -> None:
             "qm31SuccessfulRetries": "bounded by source loop limits and full accepted-topology SBF delta",
             "queryOrdering": "bounded by source-visible insertion loops and full cutoff-20 plus opening SBF delta",
             "q16Counter": "bounded by cutoff-20 publication bridge and full counter-0-to-20 SBF delta",
-            "frontier": "bounded by the 203-node grammar cap and full 199-to-203 SBF delta",
+            "frontier": "bounded by the 203-node grammar cap and full 14-to-203 SBF delta",
             "uncontrolledAcceptedBranches": [],
         },
         "evidence": {
             "tailProbe": str(tail_path.relative_to(ROOT)),
             "transfer": str((EVIDENCE_ROOT / "current-transfer-selected-sort").relative_to(ROOT)),
             "withdrawal": str((EVIDENCE_ROOT / "current-withdrawal-selected-sort").relative_to(ROOT)),
+            "rolloverTransfer": str((EVIDENCE_ROOT / "current-transfer-rollover-direct").relative_to(ROOT)),
+            "rolloverWithdrawal": str((EVIDENCE_ROOT / "current-withdrawal-rollover-direct").relative_to(ROOT)),
             "rolloverReference": str(rollover_reference_path.relative_to(ROOT)),
             "formal": str((EVIDENCE_ROOT / "formal").relative_to(ROOT)),
             "terminalPdaInventory": str((EVIDENCE_ROOT / "source-inventory/terminal-pda-inventory.json").relative_to(ROOT)),
