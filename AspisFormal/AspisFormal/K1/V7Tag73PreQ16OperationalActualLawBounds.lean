@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactInternalCurveProbability
+import AspisFormal.K1.V7Tag73ExactCleanBidirectionalFoldOneFoldProbability
 import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
 import AspisFormal.K1.V7Tag73K13RestrictedJointBatchActualLawClosure
 import AspisFormal.K1.V7Tag73K13RestrictedLaterAlphaActualLawClosure
@@ -31,11 +32,13 @@ open AspisK1.V7Tag73CausalOneFoldProbability
 open AspisK1.V7Tag73CompleteCausalOrdinaryProbability
 open AspisK1.V7Tag73ExactAdversaryAnchorFinalProfile
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
+open AspisK1.V7Tag73ExactCleanBidirectionalFoldOneFoldProbability
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactConcreteK13K14Events
 open AspisK1.V7Tag73ExactFixedInstanceEvent
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactInternalCurveProbability
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73HiddenTapeAveraging
@@ -228,18 +231,13 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
     (transitionRoom : 2 ≤ transitionFuel)
     (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (finalEncoderExact : decoder.finalEncoder = exactFinalEncoder)
     (reference : AdmittedResult SemanticCap203Admitted)
     (traceExists : Nonempty
       (FirstAdmittedTrace q16CandidateOutput SemanticCap203Admitted 64
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (oneFoldSource : ExactTag73RestrictedPreQ16OneFoldSource transitionFuel
-      configuration projection fixedInstance decoder
-      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-          projection fixedInstance \
-        exactK13PreQ16LateTargetEvent transitionFuel configuration projection
-          fixedInstance))
     (jointBatchSource : ExactTag73RestrictedK13JointBatchSource transitionFuel
       configuration projection fixedInstance decoder relationSource
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -267,22 +265,22 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
       (fun sample input schedule ↦
         (environment.k13Source sample input).frontierExact schedule)
       reference traceExists foldExposureCap finalExposureCap
-  have oneFoldBound := exact_tag73_restricted_preQ16_onefold_probability_le
-    hiddenLaw (clean \
-      exactK13PreQ16LateTargetEvent transitionFuel configuration projection
-        fixedInstance) oneFoldSource
+  have oneFoldBound :=
+    exact_clean_bidirectional_preQ16_onefold_probability_le hiddenLaw
+      transitionRoom (by omega) initialEncoderExact finalEncoderExact
+      environment.toDecodedParsedSourceProvider foldExposureCap
   have jointBound := exact_tag73_restricted_k13_joint_batch_probability_le
     hiddenLaw relationSource clean jointBatchSource
   have laterBound := exact_tag73_restricted_k13_later_alpha_probability_le
     hiddenLaw relationSource clean laterAlphaSource
   have lateBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (clean ∩ exactK13PreQ16LateTargetEvent transitionFuel configuration
-            projection fixedInstance) ≤ exactPreQ16LateTargetRawError parameters :=
+          (clean ∩ exactK13PreQ16MerkleTargetHitEvent configuration
+            transitionFuel) ≤ exactPreQ16LateTargetRawError parameters :=
     ((exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
       Set.inter_subset_right).trans
-        (exact_k13_preQ16_late_target_probability_le hiddenLaw transitionFuel
-          configuration projection fixedInstance transitionRoom)
+        (exact_k13_preQ16_merkle_target_hit_probability_le hiddenLaw
+          configuration transitionFuel)
   exact exact_preQ16_operational_k13_clean_error_measure_bound hiddenLaw
     transitionFuel configuration projection fixedInstance decoder decoderBinding
     basis rc poseidon transitionRoom (by omega) initialEncoderExact environment

@@ -28,6 +28,7 @@ open AspisK1.V7Tag73ExactFixedInstanceEvent
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK16Closure
 open AspisK1.V7Tag73ExactFixedOperationalStateMap
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
 open AspisK1.V7Tag73ExactOperationalK15Stage
 open AspisK1.V7Tag73ExactOperationalResourceCertificate
 open AspisK1.V7Tag73ExactPlainRomRun
@@ -205,6 +206,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
       totalCompilerRuntimeCap parameters < parameters.timeoutCutoff)
     (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (finalEncoderExact : decoder.finalEncoder = exactFinalEncoder)
     (environment : ExactPreQ16RestoredStageEnvironment transitionFuel
       configuration projection fixedInstance decoder decoderBinding basis rc
       poseidon)
@@ -218,12 +220,6 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (oneFoldSource : ExactTag73RestrictedPreQ16OneFoldSource transitionFuel
-      configuration projection fixedInstance decoder
-      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-          projection fixedInstance \
-        exactK13PreQ16LateTargetEvent transitionFuel configuration projection
-          fixedInstance))
     (jointBatchSource : ExactTag73RestrictedK13JointBatchSource transitionFuel
       configuration projection fixedInstance decoder relationSource
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -299,8 +295,8 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
     exact_tag73_preQ16_operational_k13_clean_probability_le hiddenLaw
       transitionFuel configuration projection fixedInstance decoder decoderBinding
       basis rc poseidon environment.operationalStages relationSource room2
-      programmedCover initialEncoderExact reference traceExists foldExposureCap
-      finalExposureCap oneFoldSource jointBatchSource laterAlphaSource
+      programmedCover initialEncoderExact finalEncoderExact reference traceExists
+      foldExposureCap finalExposureCap jointBatchSource laterAlphaSource
   have k13Bound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
