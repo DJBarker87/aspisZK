@@ -1,0 +1,215 @@
+{
+  "date": "2026-09-08",
+  "branch": "research/v8-no-work-100-20260907",
+  "base_revision": "954b88948ba7a4aab809ec6d21e3524af033f148",
+  "source_revision_rule": "base revision plus scoped files whose hashes follow; containing commit resolves the final revision",
+  "status": "generic geometry and claim-transport Lean proofs; host-measured relation suffix and checked witness endpoint; full recovery/source/FS/ZK/CU unresolved",
+  "environment": {
+    "hardware": "Apple M3 Mac15,13",
+    "os": "Darwin 25.5.0 arm64",
+    "physical_ram_bytes": 25769803776,
+    "rust": "1.93.0",
+    "lean": "4.32.0",
+    "remote_jobs": false,
+    "deployments": false,
+    "subagents": false
+  },
+  "source_sha256": {
+    "experiments/RadiusBoundary.lean": "dd9de8810ddfa095afa22124aa8a35bb0f958228210074a3ff805ed5885b5b8e",
+    "experiments/ClaimTransport.lean": "bc938d4a2765e0a697edc701ac8c2e3aba84a07ebf95bfe3d1fd47e97d693e08",
+    "experiments/radius_strategy.rs": "fa7ce0fb54e64e8338600c1eef05cec23c08c68c7105a4170f4b4ad20bcb8b27",
+    "experiments/radius_boundary.rs": "9c6ff606680ab236772070f97eb1d340f4e68df849639ae68fadf7e1ca7549cc",
+    "experiments/recovered_witness.rs": "5a7bc7ee041dd25810044ef621ce39bf2e99c11914fa1c0d6794c175cca5e10d",
+    "experiments/radius_ledger.py": "fd6b8379e9950ed3b0996ee3c2d455d3362c28e9263a6cc202acf404bcbd9aec",
+    "experiments/relation_callback.rs": "0c7f4e8542d96f017fb6d3d716d094daae2b80b1417878502ea169db92bd82e0",
+    "experiments/relation_callback_fixtures.rs": "9617cc1e3da82b1a5b1ede7cca172f596e9dd71888b8a5a62260a62952a18e7e",
+    "experiments/inactive_row_binding.rs": "edb458e5b28136cfcf6e0f222d4428ed364930c489185a51f6801653743e538b"
+  },
+  "lean_cache": {
+    "cwd": "/Users/dominic/ZK/AspisFormal",
+    "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+    "mathlib_worktree_clean": true,
+    "lean_toolchain_sha256": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e",
+    "lake_manifest_sha256": "65c23cce5c1bab2ba00affdff53fe52b67388cf2491c7f8ec68c1c2977dd7c10",
+    "main_and_research_manifest_match": true,
+    "Pi_source_sha256": "106ec6ccc535451d9f567694160df14e1e84ebc8dceac7ad5d991608e79c1796",
+    "Pi_olean_sha256": "a27291e9c6639ddf12f2288c9c075043ccf487cdfd83d4311bbc154a646643ca",
+    "imports": "Only pinned Mathlib/Lean dependencies. No changed Aspis or research oleans imported by these two leaves.",
+    "prior_near_replays": 0,
+    "scope": "Focused local jobs below 8 GiB; Lean -M 7000. macOS has no systemd cgroup; no heavy build or cold dependency build launched."
+  },
+  "lean": [
+    {
+      "file": "experiments/RadiusBoundary.lean",
+      "command": "/usr/bin/time -l lake env lean -M 7000 '/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/RadiusBoundary.lean'",
+      "exit": 0,
+      "wall_seconds": 3.31,
+      "peak_RSS_bytes": 2826108928,
+      "swaps": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "log": "evidence/radius-boundary-axioms.log"
+    },
+    {
+      "file": "experiments/ClaimTransport.lean",
+      "command": "/usr/bin/time -l lake env lean -M 7000 '/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/ClaimTransport.lean'",
+      "exit": 0,
+      "wall_seconds": 3.01,
+      "peak_RSS_bytes": 2834694144,
+      "swaps": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "log": "evidence/claim-transport-axioms.log"
+    }
+  ],
+  "reused_rlibs": {
+    "core": {
+      "path": "/tmp/libaspis_core_v8_callback.rlib",
+      "sha256": "5a08f9e7e179e043c959cbf3f226449cdc2a993be75a40b67d070f55c064b4c8",
+      "provenance": "robust-evidence.json / row-binding-evidence.json; optimized cached core"
+    },
+    "statement": {
+      "path": "/tmp/libaspis_statement_v8_semantic.rlib",
+      "sha256": "92086588a5463f780b88411d063a0f1b728c8c5785df09a3b4f290d28ec83071",
+      "provenance": "row-binding-evidence.json statement_build; optimized cached statement"
+    },
+    "sha2": {
+      "path": "/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib",
+      "sha256": "ca49553160bf98106838786e7ae3686a7b07aa5d82b4000533821d7bad83cc0f",
+      "scope": "reused host hash dependency; not an optimized full-prover or CU benchmark"
+    },
+    "source_provenance": "git diff base vs f8c2f7a949fdbb31431a104c8d29d34195594d98 -- crates/aspis-core crates/aspis-statement empty; rlib hashes match recorded predecessor evidence"
+  },
+  "rust": [
+    {
+      "target": "radius_strategy",
+      "compile": "/usr/bin/time -l rustc --edition=2021 -O /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/radius_strategy.rs -o /tmp/aspis-v8-radius-strategy",
+      "compile_exit": 0,
+      "compile_wall_seconds": 0.82,
+      "compile_peak_RSS_bytes": 113016832,
+      "compile_log": "evidence/radius-strategy-build.log",
+      "command": "/usr/bin/time -l /tmp/aspis-v8-radius-strategy",
+      "exit": 0,
+      "wall_seconds": 0.53,
+      "peak_RSS_bytes": 1572864,
+      "swaps": 0,
+      "log": "evidence/radius-strategy-host.log",
+      "strategy_scope": "all compact replies and adaptive affine finals in specified reduced game; four fixed gamma-row families; not all payment/oracle strategies"
+    },
+    {
+      "target": "radius_boundary",
+      "compile": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_radius_boundary -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-radius-boundary",
+      "compile_exit": 0,
+      "compile_wall_seconds": 1.57,
+      "compile_peak_RSS_bytes": 210239488,
+      "compile_swaps": 0,
+      "compile_evidence": "final compile tool output; numeric metrics transcribed, no separate raw compile log",
+      "command": "/usr/bin/time -l /tmp/aspis-v8-radius-boundary",
+      "exit": 0,
+      "wall_seconds": 6.06,
+      "peak_RSS_bytes": 33931264,
+      "swaps": 0,
+      "log": "evidence/radius-boundary-host.log",
+      "fixed_seeds": 32,
+      "accepted": 14,
+      "query_miss": 14,
+      "hit_accepted": 0,
+      "false_D_controls": 4,
+      "false_D_controls_rejected": 4,
+      "maximum_observed_body_bytes": 40022,
+      "scope": "repaired relation suffix, opaque semantic prefix; T2 diagnostic is not a valid payment C1 trace"
+    },
+    {
+      "target": "recovered_witness",
+      "compile": "/usr/bin/time -l rustc --edition=2021 -O docs/research/v8-no-work-100-20260907/experiments/recovered_witness.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib -L dependency=/tmp -o /tmp/aspis-v8-recovered-witness",
+      "compile_exit": 0,
+      "compile_wall_seconds": 0.34,
+      "compile_peak_RSS_bytes": 130023424,
+      "compile_log": "evidence/recovered-witness-build.log",
+      "command": "/usr/bin/time -l /tmp/aspis-v8-recovered-witness",
+      "exit": 0,
+      "wall_seconds": 0.34,
+      "peak_RSS_bytes": 3178496,
+      "swaps": 0,
+      "log": "evidence/recovered-witness-host.log",
+      "checked_extractions": 100,
+      "extraction_100_seconds": 0.050673917,
+      "mutations_rejected": 14,
+      "populated_mask_cells": 3803,
+      "unmasked_zero_residuals": 18089,
+      "masked_residual_scope": "zero-padding class deliberately nonzero, every other class zero in tested assignment",
+      "scope": "actual selected transfer compiler and settlement validator given recovered C1; not universal extraction from acceptance"
+    }
+  ],
+  "failures_and_repairs": [
+    {
+      "target": "RadiusBoundary.lean",
+      "exit": 1,
+      "wall_seconds": 15.39,
+      "peak_RSS_bytes": 2815279104,
+      "swaps": 0,
+      "reason": "omega saw not-equality and inequality finset cards as distinct terms",
+      "repair": "simp only [ne_eq] before symbolic arithmetic; no cap increase"
+    },
+    {
+      "target": "ClaimTransport.lean first coefficient attempt",
+      "exit": 1,
+      "wall_seconds": 14.56,
+      "peak_RSS_bytes": 2825191424,
+      "swaps": 0,
+      "reason": "Fin.ext_iff did not normalize coefficient selector",
+      "repair": "Fin.val_inj; focused file green"
+    },
+    {
+      "target": "ClaimTransport.lean degree extension",
+      "exit": 1,
+      "wall_seconds": 15.18,
+      "peak_RSS_bytes": 2824257536,
+      "swaps": 0,
+      "reason": "natDegree_monomial_le takes one explicit argument, not two",
+      "repair": "corrected API use; retained leaf axiom audit has no sorryAx",
+      "log": "evidence/claim-transport-degree-initial-failure.log"
+    },
+    {
+      "target": "recovered witness populated masks",
+      "exit": 101,
+      "wall_seconds": 0.43,
+      "peak_RSS_bytes": 2965504,
+      "swaps": 0,
+      "reason": "raw residual all_zero includes explicit zero-padding checks",
+      "repair": "test nonzero padding class separately and all other classes zero; extraction still matches witness",
+      "log": "evidence/recovered-witness-mask-initial-failure.log"
+    },
+    {
+      "target": "initial Rust preflights",
+      "exit": 1,
+      "reason": "QM31 has no double method; membership index expected u32",
+      "repair": "mul_m31(M31(2)); u32 index; no heavy gate before successful compile"
+    }
+  ],
+  "ledger_command": "python3 -B docs/research/v8-no-work-100-20260907/experiments/radius_ledger.py --check",
+  "measurement_limits": {
+    "full_transaction_CU": null,
+    "SBF_frame_bytes": null,
+    "full_prover_RSS": null,
+    "full_prover_seconds": null,
+    "search_tail_seconds": null,
+    "disk_network_traffic": null,
+    "extractor_from_oracles_runtime": null,
+    "FS_query_fork_budget": null
+  },
+  "publication": {
+    "target_branch": "research/v8-no-work-100-20260907",
+    "force_push": false,
+    "main_modified": false,
+    "observed_concurrent_main_revision": "70118b3edf6fe5aa78615e03048b23c9fbc00728",
+    "concurrent_changes": "K1 fold-alpha Lean work and results/v7-all-reachable-cu-bound-testnet-20260907 preserved",
+    "final_commit": "containing commit; final SHA and remote verification reported after publishing"
+  }
+}

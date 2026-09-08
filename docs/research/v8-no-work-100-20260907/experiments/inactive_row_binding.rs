@@ -21,8 +21,8 @@ fn public()->Public {
         candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:1,next_root:[M31(9);8],next_frontier:core::array::from_fn(|i|if i==0{[M31(10);8]}else{empty[i]})}};
     Public{transfer,withdrawal,transition}
 }
-struct Semantic {t:Transcript,z:[K;10],lambda:K,chi:K,theta:K,zc:[K;10],mu:K,eta:K,claim:K}
-fn semantic(w:&Wire<'_>,seed:u32,shift:bool)->Result<Semantic,Error>{
+pub(super) struct Semantic {pub(super) t:Transcript,pub(super) z:[K;10],lambda:K,chi:K,theta:K,zc:[K;10],mu:K,eta:K,claim:K}
+pub(super) fn semantic(w:&Wire<'_>,seed:u32,shift:bool)->Result<Semantic,Error>{
     let mut t=Transcript::new(hash);
     t.absorb(label::PROFILE,if shift{b"AV8/semantic-row-shift/v1"}else{b"AV8/semantic-row-collision/v1"});
     // A synthetic public context, not the full deployment/account preamble.
@@ -50,7 +50,7 @@ fn terminal(public:&Public,w:&Wire<'_>,s:&Semantic,withdraw:bool)->K{
         &public.transfer,&public.transition,&claims,&s.z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta).unwrap()}
 }
 // Existing source uses one label for all three 29-column point rows.
-fn points_absorb(t:&mut Transcript,w:&Wire<'_>){t.absorb(label::V6_POINT_CLAIMS,&bytes(&w.v[271..358]));}
+pub(super) fn points_absorb(t:&mut Transcript,w:&Wire<'_>){t.absorb(label::V6_POINT_CLAIMS,&bytes(&w.v[271..358]));}
 fn to_gamma(mut t:Transcript,w:&Wire<'_>)->Result<(Transcript,[Point;2],K),Error>{
     points_absorb(&mut t,w);
     let s=t.challenge_secure_circle_point().map_err(|_|Error::Sampler)?;
@@ -68,7 +68,7 @@ fn transpose(w:&[K],[a,b,c]:[K;3])->Vec<K>{let mut w=w.to_vec();w.resize(1028,K:
     let wa:Vec<K>=w.chunks_exact(2).map(|v|v[0]).collect();let wb:Vec<K>=w.chunks_exact(2).map(|v|v[1]).collect();
     let xwa=xt(&wa,513);let xxwa=xt(&xwa,512);let xwb=xt(&wb,512);let mut out=vec![K::ZERO;1024];
     for j in 0..512{out[2*j]=a.mul(wa[j]).add(b.mul(xwa[j])).add(c.mul(wb[j]));out[2*j+1]=c.mul(wa[j].sub(xxwa[j])).add(a.mul(wb[j])).add(b.mul(xwb[j]));}out}
-fn prepare(s:Semantic,w:&Wire<'_>,shift:bool)->Result<(Prefix,Vec<K>,K,K),Error>{
+pub(super) fn prepare(s:Semantic,w:&Wire<'_>,shift:bool)->Result<(Prefix,Vec<K>,K,K),Error>{
     let(t,points,gamma)=to_gamma(s.t,w)?;let mut t=t;
     t.absorb(label::V6_INACTIVE_CLAIM,&bytes(&w.v[358..359]));let kappa=sample(&mut t,true)?;
     let k2=kappa.square();let scales=if shift{[kappa,k2,k2.mul(kappa)]}else{[K::ONE,kappa,k2]};
@@ -86,7 +86,7 @@ fn prepare(s:Semantic,w:&Wire<'_>,shift:bool)->Result<(Prefix,Vec<K>,K,K),Error>
     t.absorb(label::PROFILE,&bytes(&ordinary));t.absorb(label::CLAIM,&bytes(&[claim]));t.absorb(label::PROFILE,b"aspis-v8-image-gate-v1");let tau=sample(&mut t,true)?;
     Ok((Prefix{t,points,gamma,abc,iv,use_x,tau},ordinary,claim,kappa))
 }
-fn relation(w:&Wire<'_>,mut p:Prefix,ordinary:Vec<K>,mut c:K)->Result<(),Error>{
+pub(super) fn relation(w:&Wire<'_>,mut p:Prefix,ordinary:Vec<K>,mut c:K)->Result<(),Error>{
     let mut weights=WeightAccumulator::empty(10);weights.add_dense(ordinary).unwrap();let mut a=[K::ZERO;4];
     let first=compact(&w.v[417..423],c);absorb_round(&mut p.t,0,&first);let mut work=vec![0];work.extend(&w.nonces[8..16]);p.t.absorb(label::M31_CIRCLE_FOLD_POW_NONCE,&work);
     a[0]=sample(&mut p.t,false)?;c=evaluate(&first,a[0]);weights.fold_deferred_relation_arity4(a[0]);
