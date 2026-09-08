@@ -186,6 +186,20 @@ structure ExactAcceptedFoldTrial
         (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
           (exactOperationalTape input).messages.c2.root c2Salt).data)
       (IsPurePostRootStateInput c2RootLabel) c2Answer digest
+  gammaAfterSampleDigest : Digest256
+  gammaBindDigest : Digest256
+  gammaBindLookup :
+    tableLookup (exactOperationalTable input)
+        (bytes gammaAfterSampleDigest ++ [domAbsorb, challengeBindLabel] ++
+          (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+            ((exactOperationalTape input).messages.challengeValue .gamma)).data) =
+      some gammaBindDigest
+  gammaFoldChain :
+    PureLookupDigestChain (exactOperationalTable input)
+      (bytes gammaAfterSampleDigest ++ [domAbsorb, challengeBindLabel] ++
+        (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+          ((exactOperationalTape input).messages.challengeValue .gamma)).data)
+      (IsPurePostRootStateInput challengeBindLabel) gammaBindDigest digest
   rootDecomposition :
     exactFixedRootRecords input.package.root =
       prior ++
@@ -210,12 +224,13 @@ theorem exact_accepted_fold_trial_exists
   obtain ⟨beforeRelation, digest, answer, boundaryAnswer, outputs,
       advances, exactValue, alphaBindDigest, afterFinal256Digest, q16Base,
       c1BeforeDigest, c2BeforeDigest, c1Salt, c2Salt, c1Answer, c2Answer,
-      facts⟩ :=
+      gammaAfterSampleDigest, gammaBindDigest, facts⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
   rcases facts with ⟨relationLookup, workLookup, accepted, boundaryLookup,
     outputsLength, coordinates, alphaAccepted, alphaExactDecode,
     alphaOperational, alphaBindLookup, final256Lookup, finalNonceLookup,
-    q16BaseExact, c1Lookup, c2Lookup, c1FoldChain, c2FoldChain⟩
+    q16BaseExact, c1Lookup, c2Lookup, c1FoldChain, c2FoldChain,
+    gammaBindLookup, gammaFoldChain⟩
   obtain ⟨actor, member⟩ :=
     exact_final_table_lookup_has_root_record input _ answer workLookup
   obtain ⟨prior, later, decomposition⟩ := (List.mem_iff_append).mp member
@@ -269,6 +284,10 @@ theorem exact_accepted_fold_trial_exists
       c2Lookup := c2Lookup
       c1FoldChain := c1FoldChain
       c2FoldChain := c2FoldChain
+      gammaAfterSampleDigest := gammaAfterSampleDigest
+      gammaBindDigest := gammaBindDigest
+      gammaBindLookup := gammaBindLookup
+      gammaFoldChain := gammaFoldChain
       rootDecomposition := decomposition
       trialExact := rfl }⟩
 

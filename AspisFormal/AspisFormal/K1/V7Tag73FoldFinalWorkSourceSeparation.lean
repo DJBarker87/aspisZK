@@ -114,6 +114,50 @@ theorem prefix_after_c2_before_fold_work_is_pure_post_c1
     batchWorkNonceLabel, inactiveClaimLabel, circleOodValueLabel,
     relationRoundLabel, foldWorkNonceLabel]
 
+/-! The same source prefix split at the decoded gamma binding. -/
+
+def prefixAfterC2BeforeGammaBind (messages : Messages) : List MachineEvent :=
+  [.absorb .constraintRegistry,
+   .absorb .helperSum,
+   challengeEvent messages .theta] ++
+  (List.ofFn fun coordinate : Fin 10 =>
+    challengeEvent messages (.zerocheckPoint coordinate)) ++
+  [challengeEvent messages .mu,
+   .absorb (.initialMaskClaim messages.initialClaim),
+   challengeEvent messages .eta] ++
+  semanticEvents messages ++
+  [.absorb (.pointClaims messages.pointClaims),
+   .check .semanticTerminal,
+   .grind .batch messages.batchGrinding,
+   .check .batchWork,
+   .absorb (.batchNonce messages.batchGrinding.selected),
+   challengeEvent messages .gamma]
+
+def afterGammaBindBeforeFoldDigestEvents (messages : Messages) :
+    List MachineEvent :=
+  [.absorb (.inactiveClaim messages.inactiveClaim),
+   challengeEvent messages .kappa] ++
+  oodEvents messages ++
+  [.absorb (.relationRound 0 (messages.relationSent 0))]
+
+theorem prefix_after_c2_before_fold_work_gamma_bind_split
+    (messages : Messages) :
+    prefixAfterC2BeforeFoldWork messages =
+      prefixAfterC2BeforeGammaBind messages ++
+        [challengeBindEvent messages .gamma] ++
+        afterGammaBindBeforeFoldDigestEvents messages := by
+  simp [prefixAfterC2BeforeFoldWork, prefixAfterC2BeforeGammaBind,
+    afterGammaBindBeforeFoldDigestEvents, List.append_assoc]
+
+theorem after_gamma_bind_before_fold_digest_is_pure
+    (messages : Messages) :
+    ∀ event, event ∈ afterGammaBindBeforeFoldDigestEvents messages →
+      IsPurePostRootMachineEvent challengeBindLabel event := by
+  simp [afterGammaBindBeforeFoldDigestEvents, oodEvents,
+    IsPurePostRootMachineEvent, challengeEvent,
+    AspisK1.V7Tag73TranscriptSchedule.Payload.label, challengeBindLabel,
+    inactiveClaimLabel, circleOodValueLabel, relationRoundLabel]
+
 private theorem run_machine_events_append_iff
     (table : FixedOracleTable) (first second : List MachineEvent)
     (state final : EvalState) :
@@ -155,7 +199,8 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
         (outputs advances : List Digest256) (exactValue : QM31Exact)
         (alphaBindDigest afterFinal256Digest q16Base : Digest256)
         (c1BeforeDigest c2BeforeDigest c1Salt c2Salt c1Answer c2Answer :
-          Digest256),
+          Digest256)
+        (gammaAfterSampleDigest gammaBindDigest : Digest256),
       tableLookup (exactOperationalTable input)
           (bytes beforeRelation.digest ++
             [domAbsorb,
@@ -232,7 +277,18 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
           (bytes c2BeforeDigest ++ [domAbsorb, c2RootLabel] ++
             (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
               (exactOperationalTape input).messages.c2.root c2Salt).data)
-          (IsPurePostRootStateInput c2RootLabel) c2Answer foldDigest := by
+          (IsPurePostRootStateInput c2RootLabel) c2Answer foldDigest ∧
+      tableLookup (exactOperationalTable input)
+          (bytes gammaAfterSampleDigest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+              ((exactOperationalTape input).messages.challengeValue .gamma)).data) =
+        some gammaBindDigest ∧
+      PureLookupDigestChain (exactOperationalTable input)
+          (bytes gammaAfterSampleDigest ++ [domAbsorb, challengeBindLabel] ++
+            (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+              ((exactOperationalTape input).messages.challengeValue .gamma)).data)
+          (IsPurePostRootStateInput challengeBindLabel) gammaBindDigest
+            foldDigest := by
   have strict := input.package.root.fixedRoot.base.strictRefinement
   have checked := checked_refinement_is_well_formed
     (exactOperationalTable input) exactDeterministicDecoders
@@ -264,6 +320,53 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
       (prefixAfterC2BeforeFoldWork (exactOperationalTape input).messages)
       (prefixAfterC2FromFoldWork (exactOperationalTape input).messages)
       afterC2 prefixState).mp remainingRun
+  have gammaSplitRun := beforeFoldRun
+  rw [prefix_after_c2_before_fold_work_gamma_bind_split] at gammaSplitRun
+  obtain ⟨afterGammaSample, _beforeGammaBindRun, gammaBindAndTailRun⟩ :=
+    (run_machine_events_append_iff
+      (exactOperationalTable input)
+      (prefixAfterC2BeforeGammaBind (exactOperationalTape input).messages)
+      ([challengeBindEvent (exactOperationalTape input).messages .gamma] ++
+        afterGammaBindBeforeFoldDigestEvents
+          (exactOperationalTape input).messages)
+      afterC2 beforeFoldWork).mp gammaSplitRun
+  obtain ⟨afterGammaBind, gammaBindRun, gammaTailRun⟩ :=
+    (run_machine_events_append_iff
+      (exactOperationalTable input)
+      [challengeBindEvent (exactOperationalTape input).messages .gamma]
+      (afterGammaBindBeforeFoldDigestEvents
+        (exactOperationalTape input).messages)
+      afterGammaSample beforeFoldWork).mp gammaBindAndTailRun
+  simp only [runMachineEvents] at gammaBindRun
+  obtain ⟨afterGammaBind', gammaBindEventRun, gammaBindDone⟩ :=
+    Option.bind_eq_some_iff.mp gammaBindRun
+  have afterGammaBindExact : afterGammaBind' = afterGammaBind := by
+    simpa [runMachineEvents] using Option.some.inj gammaBindDone
+  subst afterGammaBind'
+  have gammaBindLookup := absorb_step_exposes_literal_lookup
+    (exactOperationalTable input) afterGammaSample afterGammaBind
+      (.challengeBind .gamma
+        ((exactOperationalTape input).messages.challengeValue .gamma))
+      (by simpa [challengeBindEvent, BoundChallengeId.challengeId,
+        runMachineEvent] using gammaBindEventRun)
+  let gammaBindInput : ShaInput := bytes afterGammaSample.digest ++
+    [domAbsorb, challengeBindLabel] ++
+      (AspisK1.V7Tag73TranscriptSchedule.Payload.challengeBind .gamma
+        ((exactOperationalTape input).messages.challengeValue .gamma)).data
+  have initialGammaFoldChain : PureLookupDigestChain
+      (exactOperationalTable input) gammaBindInput
+      (IsPurePostRootStateInput challengeBindLabel) afterGammaBind.digest
+        afterGammaBind.digest :=
+    .boundary afterGammaBind.digest (by simpa [gammaBindInput,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using gammaBindLookup)
+  have gammaFoldChain := pure_lookup_digest_chain_through_machine_events
+    (exactOperationalTable input)
+    (afterGammaBindBeforeFoldDigestEvents
+      (exactOperationalTape input).messages)
+    afterGammaBind beforeFoldWork initialGammaFoldChain
+    (after_gamma_bind_before_fold_digest_is_pure
+      (exactOperationalTape input).messages) gammaTailRun
   rw [prefix_before_fold_work_relation_split] at beforeFoldRun
   obtain ⟨beforeRelation, beforeRelationRun, relationRun⟩ :=
     (run_machine_events_append_iff
@@ -515,7 +618,8 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
     afterFoldNonce.digest, outputs, advances, exactValue,
     afterAlphaBind.digest, afterFinal256.digest, prefixState.digest,
     withC1SaltQuery.digest, withC2SaltQuery.digest, c1Salt, c2Salt,
-    afterC1.digest, afterC2.digest,
+    afterC1.digest, afterC2.digest, afterGammaSample.digest,
+    afterGammaBind.digest,
     relationLookup, workLookup,
     workAccepted, by
       simpa [AspisK1.V7Tag73TranscriptSchedule.Payload.label,
@@ -534,7 +638,11 @@ theorem exact_operational_relation_zero_and_fold_work_lookups
     q16BaseExact, by simpa [c1Input] using c1Lookup,
     by simpa [c2Input] using c2Lookup,
     by simpa [c1Input] using c1FoldChain,
-    by simpa [c2Input] using c2FoldChain⟩
+    by simpa [c2Input] using c2FoldChain,
+    by simpa [gammaBindInput,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.label,
+      AspisK1.V7Tag73TranscriptSchedule.Payload.data] using gammaBindLookup,
+    by simpa [gammaBindInput] using gammaFoldChain⟩
 
 @[simp] theorem relation_zero_absorb_input_length
     (digest : Digest256) (relation : Fin 6 → Qm31Bytes) :
@@ -586,7 +694,7 @@ theorem exact_fold_digest_ne_final_digest
       _outputs, _advances, _exactValue, _alphaBindDigest,
       _afterFinal256Digest, _q16Base,
       _c1BeforeDigest, _c2BeforeDigest, _c1Salt, _c2Salt,
-      _c1Answer, _c2Answer,
+      _c1Answer, _c2Answer, _gammaAfterSampleDigest, _gammaBindDigest,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
@@ -711,7 +819,7 @@ theorem exact_fold_and_final_have_distinct_exposure_trials
       _outputs, _advances, _exactValue, _alphaBindDigest,
       _afterFinal256Digest, _q16Base,
       _c1BeforeDigest, _c2BeforeDigest, _c1Salt, _c2Salt,
-      _c1Answer, _c2Answer,
+      _c1Answer, _c2Answer, _gammaAfterSampleDigest, _gammaBindDigest,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
@@ -949,7 +1057,7 @@ theorem exact_actual_k13_trial_has_distinct_fold_trial
       _outputs, _advances, _exactValue, _alphaBindDigest,
       _afterFinal256Digest, _q16Base,
       _c1BeforeDigest, _c2BeforeDigest, _c1Salt, _c2Salt,
-      _c1Answer, _c2Answer,
+      _c1Answer, _c2Answer, _gammaAfterSampleDigest, _gammaBindDigest,
       relationLookup, foldLookup, foldAccepted,
       _boundaryLookup, _outputsLength, _coordinates⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
