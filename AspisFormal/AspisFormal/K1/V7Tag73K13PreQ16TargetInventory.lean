@@ -358,10 +358,9 @@ theorem prefixResolutionTargetSet_subset_prefixMerkleCandidateSet
       truncateSha256 log treeDepth roots.c2 (proof ordinal).position.val target
       c2RootMem (by simpa [firstUnresolvedC2Target] using targetExact)
 
-/-- For an actual accepted K1.3 trial, both transcript roots and therefore all
-first-unresolved opening targets are already determined by the chronological
-record prefix before the selected final-work/q16 coordinate. -/
-theorem exact_actual_trial_prefixResolutionTargetSet_subset
+/-- Both authenticated roots have appeared in canonical transcript absorb
+inputs before the actual final-work/q16 anchor. -/
+theorem exact_actual_trial_k12_roots_mem
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
     {parameters : ExactCompilerResourceParameters}
     {transitionFuel : Nat}
@@ -382,15 +381,15 @@ theorem exact_actual_trial_prefixResolutionTargetSet_subset
       prior ++ (.machineFresh pivotActor pivotInput pivotAnswer :
         UnifiedExposureRecord) :: later)
     (trialExact : trial.val = prior.length) :
-    prefixResolutionTargetSet (exactK12Truncate input)
-        (exposurePrefixRawQueries prior) (exactK12Roots input)
-        (exactK12Openings input) ⊆
-      prefixMerkleCandidateSet (exposurePrefixRawQueries prior) := by
+    (exactK12Roots input).c1 ∈
+        prefixMerkleCandidateSet (exposurePrefixRawQueries prior) ∧
+      (exactK12Roots input).c2 ∈
+        prefixMerkleCandidateSet (exposurePrefixRawQueries prior) := by
   obtain ⟨c1Before, c2Before, c1Salt, c2Salt, c1Answer, c2Answer,
       terminal, c1Chain, c2Chain, terminalPrefix⟩ :=
     exact_actual_trial_retains_root_chains transitionRoom input trial actual
       prior later pivotActor pivotInput pivotAnswer rootExact trialExact
-  apply prefixResolutionTargetSet_subset_prefixMerkleCandidateSet
+  constructor
   · change runtimeDigest208ToMerkleDigest
       (exactK12Runtime input).adversaryValue.rawMessages.c1Root ∈
         prefixMerkleCandidateSet (exposurePrefixRawQueries prior)
@@ -424,6 +423,41 @@ theorem exact_actual_trial_prefixResolutionTargetSet_subset
       (exactOperationalTape input).messages.c2.root c2Salt c2Answer terminal
       IsPostC2StateInput c2Chain
 
+/-- For an actual accepted K1.3 trial, both transcript roots and therefore all
+first-unresolved opening targets are already determined by the chronological
+record prefix before the selected final-work/q16 coordinate. -/
+theorem exact_actual_trial_prefixResolutionTargetSet_subset
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (trial : ExactCompilerExposureTrial parameters)
+    (actual : ExactFixedK13ActualJointTrial input trial)
+    (prior later : List UnifiedExposureRecord)
+    (pivotActor : QueryActor) (pivotInput : ShaInput)
+    (pivotAnswer : Digest256)
+    (rootExact : exactFixedRootRecords input.package.root =
+      prior ++ (.machineFresh pivotActor pivotInput pivotAnswer :
+        UnifiedExposureRecord) :: later)
+    (trialExact : trial.val = prior.length) :
+    prefixResolutionTargetSet (exactK12Truncate input)
+        (exposurePrefixRawQueries prior) (exactK12Roots input)
+        (exactK12Openings input) ⊆
+      prefixMerkleCandidateSet (exposurePrefixRawQueries prior) := by
+  obtain ⟨c1RootMem, c2RootMem⟩ := exact_actual_trial_k12_roots_mem
+    transitionRoom input trial actual prior later pivotActor pivotInput
+      pivotAnswer rootExact trialExact
+  exact prefixResolutionTargetSet_subset_prefixMerkleCandidateSet
+    (exactK12Truncate input) (exposurePrefixRawQueries prior)
+      (exactK12Roots input) (exactK12Openings input) c1RootMem c2RootMem
+
 #print axioms rawInputMerkleCandidates_card_le_four
 #print axioms node_left_mem_rawInputMerkleCandidates
 #print axioms node_right_mem_rawInputMerkleCandidates
@@ -434,6 +468,7 @@ theorem exact_actual_trial_prefixResolutionTargetSet_subset
 #print axioms machineFresh_input_mem_exposurePrefixRawQueries
 #print axioms c1_root_mem_prefixMerkleCandidateSet_of_retained
 #print axioms c2_root_mem_prefixMerkleCandidateSet_of_retained
+#print axioms exact_actual_trial_k12_roots_mem
 #print axioms prefixMerkleCandidateSet_card_le
 #print axioms prefixMerkleCandidatePreimage_card_le
 #print axioms firstUnresolvedTarget_mem_prefixMerkleCandidateSet

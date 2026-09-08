@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactCleanBidirectionalFoldPairPriorInvariant
 import AspisFormal.K1.V7Tag73ExactRootCausalChain
 import AspisFormal.K1.V7Tag73RootAbsorbInputInjectivity
+import AspisFormal.K1.V7Tag73K13PreQ16TargetInventory
 
 /-!
 # Clean bidirectional fold-root invariant
@@ -30,13 +31,18 @@ open AspisK1.V7Tag73ExactCleanBidirectionalFoldPairPriorInvariant
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
+open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRootCausalChain
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73FutureFreeCheckedRefinementBisimulation
 open AspisK1.V7Tag73NoPairOccurrenceTrichotomy
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73PureLookupDigestChain
+open AspisK1.V7Tag73RawProverMessages
+open AspisK1.V7Tag73K13PreQ16MerkleWordSource
+open AspisK1.V7Tag73K13PreQ16TargetInventory
 open AspisK1.V7Tag73RootAbsorbInputInjectivity
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
@@ -88,6 +94,77 @@ theorem selected_fold_anchor_lookup_and_prefix
       by simp [HasLiteralStatePrefix, selectedFoldWorkInput, bytes_length]⟩
   · exact ⟨by simpa [selectedFoldBoundaryInput] using fold.boundaryLookup,
       by simp [HasLiteralStatePrefix, selectedFoldBoundaryInput, bytes_length]⟩
+
+/-- Both public K1.2 roots have appeared in canonical absorb inputs before
+either member of the selected fold-work/boundary pair.  This is the exact
+root-membership premise needed by prefix-word suffix stability. -/
+theorem exact_accepted_fold_anchor_k12_roots_mem
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (fold : ExactAcceptedFoldTrial input)
+    (prior later : List UnifiedExposureRecord)
+    (actor : QueryActor) (target : ShaInput) (answer : Digest256)
+    (rootExact : exactFixedRootRecords input.package.root =
+      prior ++ (.machineFresh actor target answer : UnifiedExposureRecord) ::
+        later)
+    (role :
+      (target = selectedFoldWorkInput input fold ∧ answer = fold.answer) ∨
+        (target = selectedFoldBoundaryInput input fold ∧
+          answer = fold.boundaryAnswer)) :
+    (exactK12Roots input).c1 ∈
+        prefixMerkleCandidateSet (exposurePrefixRawQueries prior) ∧
+      (exactK12Roots input).c2 ∈
+        prefixMerkleCandidateSet (exposurePrefixRawQueries prior) := by
+  obtain ⟨anchorLookup, terminalPrefix⟩ :=
+    selected_fold_anchor_lookup_and_prefix input fold target answer role
+  have c1Chain := exact_lookup_digest_chain_retained_before_anchor
+    transitionRoom input prior later actor rootExact
+      (pure_post_root_chain_to_exact fold.c1FoldChain) anchorLookup
+      terminalPrefix
+  have c2Chain := exact_lookup_digest_chain_retained_before_anchor
+    transitionRoom input prior later actor rootExact
+      (pure_post_root_chain_to_exact fold.c2FoldChain) anchorLookup
+      terminalPrefix
+  have messagesExact :
+      fixedTapeRawMessages (exactOperationalTape input) =
+        (exactK12Runtime input).adversaryValue.rawMessages :=
+    input.package.root.fixedRoot.base.rawMessagesExact
+  have c1Exact :
+      (exactOperationalTape input).messages.c1Root =
+        (exactK12Runtime input).adversaryValue.rawMessages.c1Root := by
+    simpa [fixedTapeRawMessages, rawOfMessages] using
+      congrArg (fun raw => raw.c1Root) messagesExact
+  have c2Exact :
+      (exactOperationalTape input).messages.c2.root =
+        (exactK12Runtime input).adversaryValue.rawMessages.c2Root := by
+    simpa [fixedTapeRawMessages, rawOfMessages] using
+      congrArg (fun raw => raw.c2Root) messagesExact
+  constructor
+  · change runtimeDigest208ToMerkleDigest
+      (exactK12Runtime input).adversaryValue.rawMessages.c1Root ∈
+        prefixMerkleCandidateSet (exposurePrefixRawQueries prior)
+    rw [← c1Exact]
+    exact c1_root_mem_prefixMerkleCandidateSet_of_retained prior
+      fold.c1BeforeDigest (exactOperationalTape input).messages.c1Root
+      fold.c1Salt fold.c1Answer fold.digest
+      (IsPostRootStateInput c1RootLabel) c1Chain
+  · change runtimeDigest208ToMerkleDigest
+      (exactK12Runtime input).adversaryValue.rawMessages.c2Root ∈
+        prefixMerkleCandidateSet (exposurePrefixRawQueries prior)
+    rw [← c2Exact]
+    exact c2_root_mem_prefixMerkleCandidateSet_of_retained prior
+      fold.c2BeforeDigest (exactOperationalTape input).messages.c2.root
+      fold.c2Salt fold.c2Answer fold.digest
+      (IsPostRootStateInput c2RootLabel) c2Chain
 
 /-- Equal residual coordinates fix both authenticated Merkle roots before the
 one-fold variation. -/
@@ -304,6 +381,7 @@ theorem exact_clean_bidirectional_pair_k12_roots_eq
 
 #print axioms pure_post_root_chain_to_exact
 #print axioms selected_fold_anchor_lookup_and_prefix
+#print axioms exact_accepted_fold_anchor_k12_roots_mem
 #print axioms exact_clean_bidirectional_pair_roots_eq
 #print axioms exact_k12_roots_eq_of_operational_roots_eq
 #print axioms exact_clean_bidirectional_pair_k12_roots_eq
