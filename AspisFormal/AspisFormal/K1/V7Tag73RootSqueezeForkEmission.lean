@@ -7,6 +7,7 @@ import AspisFormal.K1.V7Tag73CumulativeReplayHistory
 import AspisFormal.K1.V7Tag73NoPairReplay
 import AspisFormal.K1.V7Tag73ExactCompilerTargetClean
 import AspisFormal.K1.V7Tag73SchedulerNativeForkPairReplay
+import AspisFormal.K1.V7Tag73TotalizedStageCompletion
 
 /-!
 # Root squeeze preparation reaches the real fork cursor
@@ -36,6 +37,7 @@ open AspisK1.V7Tag73OperationalCausalInjection
 open AspisK1.V7Tag73OperationalNodeCertificate
 open AspisK1.V7Tag73OracleTableProvenance
 open AspisK1.V7Tag73PrefixTableProvenance
+open AspisK1.V7Tag73ProjectedMachinePrefix
 open AspisK1.V7Tag73NoPairOccurrenceTrichotomy
 open AspisK1.V7Tag73NoPairReplay
 open AspisK1.V7Tag73CumulativeReplayHistory
@@ -51,6 +53,7 @@ open AspisK1.V7Tag73SchedulerNativeResult
 open AspisK1.V7Tag73SequentialOracleRuns
 open AspisK1.V7Tag73TotalizedMachineReflection
 open AspisK1.V7Tag73TranscriptSchedule
+open AspisK1.V7Tag73TotalizedStageCompletion
 open AspisK1.V7Tag73UniformRawVerifierExecution
 
 noncomputable section
@@ -228,6 +231,43 @@ inductive ExtractorReplayMachineAt
         (.machine limits limitBound .extractorReplay expected program fuel
           coherent onReturned)
 
+/-- Strong production-specific form of `ExtractorReplayMachineAt`.  Unlike
+the generic observation above, this retains the literal checked adversary
+program and the exact configured replay fuel.  Downstream counterfactual
+proof filters can therefore inspect the returned Tag-73 proof without an
+abstract-program equality premise. -/
+inductive ExactExtractorProverReplayAt
+    {Statement Proof Payload Result : Type u}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (configuration : ConcreteRestorationConfiguration)
+    (expected : OracleState) :
+    SchedulerNativeCursor globalOracleCalls
+      (ConcreteRestorationClientRun Statement Proof Payload Result) → Prop where
+  | here
+      (globalLimit : configuration.oracleLimits.totalCalls ≤ globalOracleCalls)
+      (coherent : HistoryTotalCoherent expected)
+      (room : StageHasOracleRoom configuration.oracleLimits expected
+        configuration.proverReplayFuel)
+      (onReturned :
+        (proverStage : SchedulerStageResult
+          (ConcreteRestorationClientRun Statement Proof Payload Result)
+          (Except TotalizedMachineFailure
+            (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))) →
+        (proverFinalOracle : OracleState) →
+        HistoryTotalCoherent proverFinalOracle →
+          SchedulerNativeCursor globalOracleCalls
+            (ConcreteRestorationClientRun Statement Proof Payload Result)) :
+      ExactExtractorProverReplayAt startProgram configuration expected
+        (.machine configuration.oracleLimits globalLimit .extractorReplay
+          expected
+          (schedulerStageProgram
+            (ConcreteRestorationClientRun Statement Proof Payload Result)
+            (totalizeOracleMachine configuration.proverReplayFuel
+              startProgram))
+          configuration.proverReplayFuel coherent onReturned)
+
 /-- Feeding a successfully programmed pair to the actual prepared dispatcher
 enters its literal from-start prover replay at the exact programmed oracle.
 No abstract callback or replacement dispatcher is used. -/
@@ -273,6 +313,92 @@ theorem dispatch_prepared_pair_prefix_enters_exact_prover_replay
   simp only
   rw [dif_pos afterCoherent, dif_pos proverRoom]
   exact .here _ _ _ _ _ _
+
+/-- Production-specific strengthening of the preceding entry theorem.  The
+reached cursor runs the exact closed `startProgram` through the configured
+totalized prover stage, rather than merely some existential machine. -/
+theorem dispatch_prepared_pair_prefix_enters_literal_prover_replay
+    {Statement Proof Payload Result : Type u}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (prepared : PreparedConcreteRestoration Statement Proof Payload)
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result))
+    (forkOutput forkAdvance : Digest256)
+    (afterBoth : OracleState)
+    (prefixCoherent : HistoryTotalCoherent prepared.programmingBase)
+    (globalLimit : configuration.oracleLimits.totalCalls ≤ globalOracleCalls)
+    (pairRoom : prepared.programmingBase.history.length + 2 ≤
+      globalOracleCalls)
+    (programmed : programConcretePair configuration.oracleLimits
+      configuration.pairProgrammingOrder prepared.programmingBase
+      prepared.outputInput prepared.advanceInput forkOutput forkAdvance =
+        .ready afterBoth)
+    (proverRoom : StageHasOracleRoom configuration.oracleLimits afterBoth
+      configuration.proverReplayFuel) :
+    ExactExtractorProverReplayAt startProgram configuration afterBoth
+      (schedulerNativePrefixCursor 1
+        (dispatchPreparedRestoration startProgram environment configuration
+          prepared accumulator resume) [forkOutput, forkAdvance]) := by
+  have afterCoherent :=
+    program_concrete_pair_ready_preserves_history_total_coherent
+      configuration.oracleLimits configuration.pairProgrammingOrder
+      prepared.programmingBase afterBoth prepared.outputInput
+      prepared.advanceInput forkOutput forkAdvance prefixCoherent programmed
+  unfold dispatchPreparedRestoration
+  rw [dif_pos prefixCoherent, dif_pos globalLimit, dif_pos pairRoom]
+  rw [scheduler_native_prefix_cursor_fork_pair_exact 0]
+  simp only [canonical_scheduled_fork_uses_exact_coordinates]
+  rw [programmed]
+  simp only
+  rw [dif_pos afterCoherent, dif_pos proverRoom]
+  exact .here _ _ proverRoom _
+
+/-- Once the literal prover-replay cursor has been reached, any answer suffix
+at least as long as the configured prover fuel deterministically reaches a
+normal totalized stage return.  Cached oracle entries can only reduce the
+number of consumed coordinates. -/
+theorem exact_extractor_prover_replay_has_returned_prefix
+    {Statement Proof Payload Result : Type u}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (configuration : ConcreteRestorationConfiguration)
+    (expected : OracleState)
+    (cursor : SchedulerNativeCursor globalOracleCalls
+      (ConcreteRestorationClientRun Statement Proof Payload Result))
+    (atReplay : ExactExtractorProverReplayAt startProgram configuration
+      expected cursor)
+    (answers : List Digest256)
+    (enough : configuration.proverReplayFuel ≤ answers.length) :
+    ∃ (coherent : HistoryTotalCoherent expected)
+        (returned : ProjectedMachinePrefixReturned configuration.oracleLimits
+        .extractorReplay configuration.proverReplayFuel expected
+        (schedulerStageProgram
+          (ConcreteRestorationClientRun Statement Proof Payload Result)
+          (totalizeOracleMachine configuration.proverReplayFuel startProgram))
+        answers),
+      consumeProjectedMachinePrefix configuration.oracleLimits
+          .extractorReplay answers configuration.proverReplayFuel expected
+          (schedulerStageProgram
+            (ConcreteRestorationClientRun Statement Proof Payload Result)
+            (totalizeOracleMachine configuration.proverReplayFuel startProgram))
+          coherent = .ok returned := by
+  cases atReplay with
+  | here globalLimit coherent room onReturned =>
+      refine ⟨coherent, ?_⟩
+      exact consume_mapped_totalized_stage_returns
+          configuration.oracleLimits .extractorReplay
+          (SchedulerStageResult.completed
+            (Final := ConcreteRestorationClientRun Statement Proof Payload Result))
+          configuration.proverReplayFuel answers expected startProgram coherent
+          room enough
 
 theorem successful_query_preserves_history_total_coherent
     (controller : AdaptiveController) (limits : OracleLimits)
@@ -659,6 +785,76 @@ theorem literal_root_squeeze_request_programs_every_fork_pair
       programmingRoom
   exact ⟨prepared, afterBoth, ready, coherent, programmed⟩
 
+/-- End-to-end deterministic root-fork entry.  Every scheduler-selected pair
+is installed by the real restoration preparation and, once the two explicit
+global room guards are discharged, the actual dispatcher reaches the exact
+closed prover replay at that programmed oracle.  This theorem is uniform in
+the fork answers; it does not classify their logical transcript role from
+query-origin metadata. -/
+theorem literal_root_squeeze_every_fork_pair_enters_literal_prover_replay
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type u}
+    {globalOracleCalls : Nat}
+    (machine : UniformRawVerifierMachine HiddenTape TapeIdentity Observation
+      Statement Proof Payload)
+    (hidden : HiddenTape)
+    (runtime : SchedulerNativePlainRomRootRuntime TapeIdentity Statement Proof
+      Payload)
+    (runs : RootProjectedTotalizedRuns machine hidden runtime)
+    (configuration : ConcreteRestorationConfiguration)
+    (limitsExact : configuration.oracleLimits = machine.adversaryLimits)
+    (transitionIndex : Nat)
+    (transition : FutureFreeTransition)
+    (transitionExact : verifierTransitionAt? runtime.node transitionIndex =
+      some transition)
+    (outputInput advanceInput : ShaInput)
+    (pairExact : squeezePairInputsOfTransition transition =
+      some (outputInput, advanceInput))
+    (environment : FutureFreeEnvironment)
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+    (rootStored : accumulator.node? 0 = some runtime.node)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result))
+    (forkOutput forkAdvance : Digest256)
+    (programmingRoom : 2 ≤
+      configuration.oracleLimits.programmedPoints)
+    (globalLimit : configuration.oracleLimits.totalCalls ≤ globalOracleCalls) :
+    ∃ (prepared : PreparedConcreteRestoration Statement Proof Payload)
+        (afterBoth : OracleState),
+      prepareConcreteRestorationFromStartProgram
+          (machine.blackBox.start hidden machine.observation) configuration
+          accumulator
+          { nodeId := 0, verifierTransitionIndex := transitionIndex } =
+        .ready prepared ∧
+      HistoryTotalCoherent prepared.programmingBase ∧
+      programConcretePair configuration.oracleLimits
+          configuration.pairProgrammingOrder prepared.programmingBase
+          prepared.outputInput prepared.advanceInput forkOutput forkAdvance =
+        .ready afterBoth ∧
+      (prepared.programmingBase.history.length + 2 ≤ globalOracleCalls →
+        StageHasOracleRoom configuration.oracleLimits afterBoth
+            configuration.proverReplayFuel →
+          ExactExtractorProverReplayAt
+            (machine.blackBox.start hidden machine.observation) configuration
+            afterBoth
+            (schedulerNativePrefixCursor 1
+              (dispatchPreparedRestoration
+                (machine.blackBox.start hidden machine.observation) environment
+                configuration prepared accumulator resume)
+              [forkOutput, forkAdvance])) := by
+  obtain ⟨prepared, afterBoth, ready, coherent, programmed⟩ :=
+    literal_root_squeeze_request_programs_every_fork_pair machine hidden runtime
+      runs configuration limitsExact transitionIndex transition transitionExact
+      outputInput advanceInput pairExact accumulator rootStored forkOutput
+      forkAdvance programmingRoom
+  refine ⟨prepared, afterBoth, ready, coherent, programmed, ?_⟩
+  intro pairRoom proverRoom
+  exact dispatch_prepared_pair_prefix_enters_literal_prover_replay
+    (machine.blackBox.start hidden machine.observation) environment
+    configuration prepared accumulator resume forkOutput forkAdvance afterBoth
+    coherent globalLimit pairRoom programmed proverRoom
+
 /-- Complete deterministic root-squeeze dispatcher cut.  Preparation and
 coherence are proved internally.  The only remaining hypotheses are the two
 literal global resource guards; under them the actual dispatcher exposes the
@@ -789,12 +985,17 @@ theorem literal_root_squeeze_dispatch_emits_typed_fork
 #print axioms program_concrete_pair_succeeds_from_empty_ledger
 #print axioms program_concrete_pair_ready_preserves_history_total_coherent
 #print axioms ExtractorReplayMachineAt
+#print axioms ExactExtractorProverReplayAt
 #print axioms dispatch_prepared_pair_prefix_enters_exact_prover_replay
+#print axioms dispatch_prepared_pair_prefix_enters_literal_prover_replay
+#print axioms exact_extractor_prover_replay_has_returned_prefix
 #print axioms schedulerNativePairForkHeader?
 #print axioms dispatch_prepared_restoration_emits_pair_fork_header
 #print axioms literal_root_squeeze_request_prepares_ready_coherent
 #print axioms literal_root_squeeze_request_prepares_pair_lookups_none
 #print axioms literal_root_squeeze_request_programs_every_fork_pair
+#print axioms
+  literal_root_squeeze_every_fork_pair_enters_literal_prover_replay
 #print axioms literal_root_squeeze_dispatch_emits_fork
 #print axioms literal_root_squeeze_dispatch_emits_typed_fork
 
