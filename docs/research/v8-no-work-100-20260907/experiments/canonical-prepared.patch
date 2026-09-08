@@ -1,0 +1,11 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -388,4 +388,8 @@
+     pub fn mul(self, rhs: QM31) -> QM31 {
+         let multiply = |left: [M31; 3], right: CM31| {
++            // The cached third component equals left[0]+left[1]. For the
++            // two-reduction layout only the original two limbs are needed.
++            #[cfg(v8_prepared_schoolbook)]
++            { return CM31::new(left[0],left[1]).mul(right); }
+             let m0 = left[0].mul(right.a);
+             let m1 = left[1].mul(right.b);

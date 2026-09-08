@@ -1,0 +1,16 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -59,4 +59,6 @@
+         #[cfg(not(v8_range_m31))] let s = self.0 + rhs.0;
+         #[cfg(v8_range_m31)] let s = self.0.wrapping_add(rhs.0);
++        #[cfg(v8_branchless_m31)]
++        { return M31(s.wrapping_add(s.wrapping_add(1) >> 31) & P); }
+         #[cfg(not(v8_range_m31))] { M31(if s >= P { s - P } else { s }) }
+         #[cfg(v8_range_m31)] { M31(if s >= P { s.wrapping_sub(P) } else { s }) }
+@@ -67,4 +69,6 @@
+         #[cfg(not(v8_range_m31))] let s = self.0 + P - rhs.0;
+         #[cfg(v8_range_m31)] let s = self.0.wrapping_add(P).wrapping_sub(rhs.0);
++        #[cfg(v8_branchless_m31)]
++        { return M31(s.wrapping_add(s.wrapping_add(1) >> 31) & P); }
+         #[cfg(not(v8_range_m31))] { M31(if s >= P { s - P } else { s }) }
+         #[cfg(v8_range_m31)] { M31(if s >= P { s.wrapping_sub(P) } else { s }) }
