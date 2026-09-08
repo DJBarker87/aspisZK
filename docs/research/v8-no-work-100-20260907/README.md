@@ -1,5 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [near-anchor gamma-cover continuation](near-gamma-review.md).
+The new Lean construction supplies a pre-gamma component tuple covering every
+9,301-close original-code candidate and at least 245,609 fibres of own support.
+A supported-event gamma/row theorem permits gamma-dependent corrupt supports.
+The ideal local ceiling is 105.145190 bits at the unchanged 40,282-byte body;
+no-near-anchor and tuple-to-payment extraction remain open. See the
+[exact ledger](near-gamma-results.json) and [replay evidence](near-gamma-evidence.json).
+
 Latest: [ordinary point/inactive binding continuation](row-binding-review.md).
 An executable false-point-claim construction passes the unshifted semantic and
 image-aware research relation suffix, including non-polynomial received words.

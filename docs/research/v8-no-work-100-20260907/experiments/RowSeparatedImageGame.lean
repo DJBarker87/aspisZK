@@ -92,6 +92,118 @@ theorem row_separated_joint_bound {D B : Finset K} {q d : ℕ}
     (fun k _ hn => valid_image_wrong_ordinary (strategy k) A G ha hg hs hq hn)
   convert h using 1 <;> dsimp [eps] <;> ring
 
+/-- A component-row error fixed before gamma is hidden at at most 28 gamma
+values. At every other gamma the inactive error may be chosen adaptively, but
+must still precede kappa; the repaired joint row game then applies. -/
+theorem gamma_then_row_joint_bound {D B : Finset K} {q d : ℕ}
+    (componentError : K[X]) (hp : componentError ≠ 0)
+    (hdegree : componentError.natDegree ≤ 28)
+    (inactive : K → K) (point : K → Fin 3 → K) (row : Fin 3)
+    (row_eq : ∀ gamma, point gamma row = componentError.eval gamma)
+    (strategy : (gamma kappa : K) →
+      NoisyGame D B q d
+        ((rowPolynomial (inactive gamma) (point gamma)).eval kappa) 0 0)
+    (A Gamma Kappa : Finset K) (ha : A.Nonempty)
+    (hgamma : Gamma.Nonempty) (hkappa : Kappa.Nonempty)
+    (hs : (D.powersetCard q).Nonempty) (hq : 0 < q) :
+    avg Gamma (fun gamma =>
+      avg Kappa (fun kappa => (strategy gamma kappa).prob A Kappa)) ≤
+      28/Gamma.card + ((q:ℚ)+3)/Kappa.card + 24/A.card +
+        ((B.card+d).choose q:ℚ)/(D.card.choose q) := by
+  let eps : ℚ := ((q:ℚ)+3)/Kappa.card + 24/A.card +
+    ((B.card+d).choose q:ℚ)/(D.card.choose q)
+  have hunit (gamma : K) :
+      avg Kappa (fun kappa => (strategy gamma kappa).prob A Kappa) ≤ 1 := by
+    exact avg_le Kappa hkappa _ _ (fun kappa _ =>
+      avg_le Kappa hkappa _ _ (fun tau _ =>
+        avg_le A ha _ _ (fun alpha _ =>
+          noisy_unit ((strategy gamma kappa).after tau alpha)
+            A Kappa ha hkappa hs)))
+  have hgood (gamma : K) (hn : componentError.eval gamma ≠ 0) :
+      avg Kappa (fun kappa => (strategy gamma kappa).prob A Kappa) ≤ eps := by
+    apply row_separated_joint_bound (inactive gamma) (point gamma)
+      (Or.inr ?_) (strategy gamma) A Kappa ha hkappa hs hq
+    intro hz
+    apply hn
+    rw [← row_eq gamma, hz]
+    rfl
+  have h := avg_polynomial Gamma hgamma componentError hp 28 hdegree
+    (fun gamma => avg Kappa (fun kappa => (strategy gamma kappa).prob A Kappa))
+    eps (by dsimp [eps]; positivity) (fun gamma _ => hunit gamma)
+    (fun gamma _ hn => hgood gamma hn)
+  convert h using 1 <;> dsimp [eps] <;> ring
+
+/-- Event-level variant: no anchor or game is required outside `Good`.
+The corrupted support may vary with gamma. `Good` and the component error
+polynomial are fixed before gamma; subsequent responses remain adaptive. -/
+theorem gamma_then_row_near_event_bound {D : Finset K} {q d b : ℕ}
+    (Good : Finset K) (corrupt : K → Finset K)
+    (cap : ∀ gamma ∈ Good, (corrupt gamma).card ≤ b)
+    (componentError : K[X]) (hp : componentError ≠ 0)
+    (hdegree : componentError.natDegree ≤ 28)
+    (inactive : K → K) (point : K → Fin 3 → K) (row : Fin 3)
+    (row_eq : ∀ gamma ∈ Good, point gamma row = componentError.eval gamma)
+    (strategy : (gamma : K) → gamma ∈ Good → (kappa : K) →
+      NoisyGame D (corrupt gamma) q d
+        ((rowPolynomial (inactive gamma) (point gamma)).eval kappa) 0 0)
+    (A Gamma Kappa : Finset K) (ha : A.Nonempty)
+    (hgamma : Gamma.Nonempty) (hkappa : Kappa.Nonempty)
+    (hs : (D.powersetCard q).Nonempty) (hq : 0 < q) :
+    avg Gamma (fun gamma => if hg : gamma ∈ Good then
+      avg Kappa (fun kappa => (strategy gamma hg kappa).prob A Kappa) else 0) ≤
+      28/Gamma.card + ((q:ℚ)+3)/Kappa.card + 24/A.card +
+        ((b+d).choose q:ℚ)/(D.card.choose q) := by
+  let eps : ℚ := ((q:ℚ)+3)/Kappa.card + 24/A.card +
+    ((b+d).choose q:ℚ)/(D.card.choose q)
+  have heps : 0 ≤ eps := by dsimp [eps]; positivity
+  have h := avg_polynomial Gamma hgamma componentError hp 28 hdegree
+    (fun gamma => if hg : gamma ∈ Good then
+      avg Kappa (fun kappa => (strategy gamma hg kappa).prob A Kappa) else 0)
+    eps heps
+    (by
+      intro gamma _
+      split_ifs with hg
+      · exact avg_le Kappa hkappa _ _ (fun kappa _ =>
+          avg_le Kappa hkappa _ _ (fun tau _ =>
+            avg_le A ha _ _ (fun alpha _ =>
+              noisy_unit ((strategy gamma hg kappa).after tau alpha)
+                A Kappa ha hkappa hs)))
+      · norm_num)
+    (by
+      intro gamma _ hn
+      split_ifs with hg
+      · have bad : point gamma ≠ 0 := by
+          intro hz
+          apply hn
+          rw [← row_eq gamma hg, hz]
+          rfl
+        have hb := row_separated_joint_bound (inactive gamma) (point gamma)
+          (Or.inr bad) (strategy gamma hg) A Kappa ha hkappa hs hq
+        have hc : (((corrupt gamma).card+d).choose q : ℚ) ≤
+            ((b+d).choose q : ℚ) := by
+          exact_mod_cast Nat.choose_le_choose q (Nat.add_le_add_right (cap gamma hg) d)
+        have hd := div_le_div_of_nonneg_right hc
+          (show (0:ℚ) ≤ D.card.choose q by positivity)
+        dsimp [eps]
+        linarith
+      · exact heps)
+  convert h using 1 <;> dsimp [eps] <;> ring
+
+/-- If an event is supported on fewer than 64 gammas, charge it before
+conditioning on the actual gamma. -/
+theorem small_good_set_bound (Gamma Good : Finset K) (f : K → ℚ)
+    (hgamma : Gamma.Nonempty) (hsub : Good ⊆ Gamma) (hcard : Good.card < 64)
+    (hunit : ∀ gamma ∈ Gamma, f gamma ≤ 1)
+    (hout : ∀ gamma ∈ Gamma, gamma ∉ Good → f gamma = 0) :
+    avg Gamma f ≤ 63/Gamma.card := by
+  have h := avg_exception Gamma Good hgamma hsub f 0 (by norm_num) hunit
+    (fun gamma hg hn => by rw [hout gamma hg hn])
+  have hc : (Good.card : ℚ) ≤ 63 := by exact_mod_cast (Nat.le_pred_of_lt hcard)
+  have hd : (0:ℚ) ≤ Gamma.card := by positivity
+  have hdiv := div_le_div_of_nonneg_right hc hd
+  change avg Gamma f ≤ _
+  linarith
+
 #print axioms unshifted_cancel
 #print axioms shifted_cancel_iff
 #print axioms rowPolynomial_eval
@@ -99,4 +211,7 @@ theorem row_separated_joint_bound {D B : Finset K} {q d : ℕ}
 #print axioms row_root_cap
 #print axioms valid_image_wrong_ordinary
 #print axioms row_separated_joint_bound
+#print axioms gamma_then_row_joint_bound
+#print axioms gamma_then_row_near_event_bound
+#print axioms small_good_set_bound
 end AspisV8.RowSeparatedImageGame
