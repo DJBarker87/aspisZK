@@ -117,9 +117,10 @@ structure ExactTag73RestrictedK13LaterAlphaSource
     (relationSource : ExactTag73RelationSourceEnvironment transitionFuel
       configuration projection fixedInstance decoder)
     (clean : Set (ExactCompilerSample HiddenTape parameters)) where
-  execution : Fin 3 → HiddenTape →
+  view : Fin 3 → HiddenTape →
     FreshAnswerTape Digest256 (relationAlphaRouterResidual parameters) →
-      Tag73CompleteOrdinarySamplerSkeleton → CandidateExecution QM31Exact
+      Tag73CompleteOrdinarySamplerSkeleton →
+        RelationAlphaPreChallengeView QM31Exact
   covered : ∀ tail hidden,
     jointEventSlice
         (clean ∩ exactTag73K13LaterRelationAlphaRoundEvent transitionFuel
@@ -132,9 +133,8 @@ structure ExactTag73RestrictedK13LaterAlphaSource
         dependentSuccessfulSubtypeEvent Tag73DuplexOrdinarySucceeds
           (fun residual ↦ successfulTag73DuplexOrdinaryCoordinates ⁻¹'
             fixedOrdinarySamplerTargetEvent (fun skeleton ↦
-              guardedRelationAlphaTarget
-                (execution tail hidden residual skeleton)
-                (laterRelationRound tail)))
+              guardedRelationAlphaPreChallengeTarget
+                (view tail hidden residual skeleton)))
 
 /-- Exact compiler-law later-alpha bound on the clean slice. -/
 theorem exact_tag73_restricted_k13_later_alpha_probability_le
@@ -172,13 +172,11 @@ theorem exact_tag73_restricted_k13_later_alpha_probability_le
       (exactPlainRomRelationAlphaSamplerCoordinates (laterRelationRound tail)
         transitionFuel configuration)
       successfulTag73DuplexOrdinaryCoordinates
-      (fun hidden residual skeleton ↦ guardedRelationAlphaTarget
-        (source.execution tail hidden residual skeleton)
-        (laterRelationRound tail)) 6
+      (fun hidden residual skeleton ↦ guardedRelationAlphaPreChallengeTarget
+        (source.view tail hidden residual skeleton)) 6
     · intro hidden residual skeleton
-      exact guardedRelationAlphaTarget_card_le_six
-        (source.execution tail hidden residual skeleton)
-        (laterRelationRound tail)
+      exact guardedRelationAlphaPreChallengeTarget_card_le_six
+        (source.view tail hidden residual skeleton)
     · exact source.covered tail
   have covered : clean ∩
       exactTag73K13LaterRelationAlphaEvent transitionFuel configuration
