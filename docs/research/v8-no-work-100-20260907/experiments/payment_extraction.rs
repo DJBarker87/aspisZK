@@ -109,6 +109,8 @@ fn provision_accounts(w:&PoolV1PairForestPrivateTransferWitnessV1)->PoolV1Paymen
 }
 pub fn run(){
     let total=std::time::Instant::now();
+    #[cfg(v8_query_graph)] super::query_graph::controls();
+    #[cfg(v8_c1_gao)] super::c1_gao::controls();
     let mask_set:std::collections::BTreeSet<(usize,usize)>=pool_v1_pair_forest_relation_free_mask_cells_v1().unwrap()
         .iter().map(|c|(c.row as usize,c.column as usize)).collect();
     let path=|l:usize|913+16*(l/4)+4*(l%4);
@@ -132,33 +134,86 @@ pub fn run(){
     assert_eq!(we::context(&public).runtime_binding,account_binding);
     let compiled=compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&public,&witness,authoritative,snapshot).unwrap();
     let transition=compiled.public_statement;
-    let binding=hash(&[b"AV8 synthetic account fixture", &encode_pool_v1_private_transfer_public_v1(&public).unwrap(),
-        format!("{transition:?}").as_bytes()]);
     let enc=CircleEncoder::new_for_domain_log(20);
     println!("stage=public_generator_rank");
     let matrix_start=std::time::Instant::now();let decoder=ac::Decoder::new(&enc);assert_eq!(decoder.pivots,1024);
     println!("public_matrix_seconds={}",matrix_start.elapsed().as_secs_f64());
+    #[cfg(v8_query_graph)]
+    let second_decoder={let t=std::time::Instant::now();let d=ac::Decoder::new_at(&enc,1024);assert_eq!(d.pivots,1024);
+        println!("second_matrix_start=1024 rank={} seconds={}",d.pivots,t.elapsed().as_secs_f64());d};
     let domain_points=corelib::circle_fri::selected_circle_fiber_points_shared(20,&(0..(N/4)as u32).collect::<Vec<_>>()).unwrap();
     println!("rank=1024 stage=producer");
     // Final fixed cohort, every arm retained. Seed1 was the packing preflight;
     // seeds2..4 are declared before this cohort executes. No stop on success.
-    for seed in [1u8,2,3,4]{
+    #[cfg(not(v8_c1_boundary))] let seeds=vec![1u8,2,3,4];
+    #[cfg(v8_c1_boundary)] let seeds=vec![1u8]; // predeclared, no search
+    for seed in seeds{
     println!("seed={seed}");
+    #[cfg(v8_query_graph)] super::query_graph::begin();
+    let binding=hash(&[b"AV8 synthetic account fixture", &encode_pool_v1_private_transfer_public_v1(&public).unwrap(),
+        format!("{transition:?}").as_bytes()]);
     let hc=StateOnlyHidingContext::pool_v1_pair_forest_v1(binding,[seed;32]);
     let attempt=state_only_entropy::StateOnlyAttemptSecrets::deterministic_spend_fixture([seed;32],[seed+1;32],[seed+2;32]);
     let(reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,hc,&mut InMemoryStateOnlyMaskNonceStore::default()).unwrap();
     let d=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,hc).unwrap();
     let mut trace=compiled.semantic_c1.clone();let masks=apply_pool_v1_pair_forest_mask_material_v1(&mut trace,material).unwrap();
     let selected:Vec<Vec<M31>>=trace.c1.iter().chain(masks.mask_only_c1.iter()).cloned().collect();
-    let encoded:Vec<Vec<M31>>=selected.iter().map(|m|enc.encode_c1_message(m).unwrap()).collect();
+    let mut encoded:Vec<Vec<M31>>=selected.iter().map(|m|enc.encode_c1_message(m).unwrap()).collect();
+    let anchor_prefix:Vec<Vec<M31>>=encoded.iter().map(|c|c[..1024].to_vec()).collect();
+    #[cfg(all(v8_c1_boundary,not(v8_c1_first_window)))] let corrupt_c1_fibre=256;
+    #[cfg(all(v8_c1_boundary,v8_c1_first_window))] let corrupt_c1_fibre=0;
+    #[cfg(all(v8_c1_boundary,not(v8_c1_near)))]
+    for slot in 0..4{encoded[0][4*corrupt_c1_fibre+slot]=encoded[0][4*corrupt_c1_fibre+slot].add(M31::ONE);}
+    #[cfg(all(v8_c1_both_windows,not(v8_c1_near)))]
+    for slot in 0..4{encoded[0][4*256+slot]=encoded[0][4*256+slot].add(M31::ONE);}
+    #[cfg(v8_c1_near)]
+    for fibre in 0..16535{for slot in 0..4{encoded[0][4*fibre+slot]=encoded[0][4*fibre+slot].add(M31::ONE);}}
     let salts:Vec<[u8;32]>=(0..N/4).map(|i|reserved.derive_pool_v1_leaf_salt(hash,hc,0x77,i as u32).unwrap()).collect();
     let a=tree((0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C1_TREE_TAG,&c1leaf(&encoded,i),&salts[i])).collect());
-    // Extra-opening oracle, explicitly not obtained from one q22 transcript.
+    // The graph variant supplies this bundle ONLY from the frozen SHA query
+    // log, without receiving the producer's encoded columns/tree/salts.
+    #[cfg(not(v8_query_graph))]
     let openings=ac::C1Openings{ids:(0..256).collect(),leaves:(0..256).map(|i|c1leaf(&encoded,i)).collect(),
         salts:salts[..256].to_vec(),frontier:f::frontier(&a,&(0..256).collect::<Vec<_>>())};
-    let extracted=ac::recover_c1(a[18][0],&openings,&decoder).unwrap();
-    let got=we::extract_checked(&extracted,&public,&transition,authoritative).unwrap();
-    assert_eq!(got,witness);assert_eq!(extracted,trace);
+    #[cfg(v8_query_graph)]
+    let (openings,extracted)={let log=super::query_graph::freeze();let begin=std::time::Instant::now();
+        let ex=super::query_graph::extract(&log,a[18][0],18,(1<<19)-1).unwrap();
+        let exact=ex.recover_exact(&decoder,&enc);
+        #[cfg(not(v8_c1_boundary))] assert!(exact.is_ok());
+        #[cfg(v8_c1_boundary)] assert!(matches!(&exact,Err(super::query_graph::Failure::NotCodeword)));
+        // The checked-witness extractor must not require exact received-word
+        // membership: a corrupt word can still disclose a valid witness.
+        let mut recovered=None;
+        for (window,d) in [&decoder,&second_decoder].into_iter().enumerate(){
+            let candidate=ex.candidate_at(d).unwrap();
+            let valid=we::extract_checked(&candidate,&public,&transition,authoritative).is_ok();
+            println!("CANDIDATE window={window} checked_witness={valid}");
+            if valid{recovered=Some(candidate);break;}
+        }
+        #[cfg(v8_c1_gao)]
+        if recovered.is_none() || cfg!(v8_c1_near){
+            #[cfg(not(v8_c1_near))] let candidate=super::c1_gao::recover(&ex,&enc,&decoder);
+            #[cfg(v8_c1_near)] let candidate=super::c1_gao::recover_near(&ex,&enc,&decoder);
+            println!("GAO_CANDIDATE returned={}",candidate.is_ok());
+            if let Ok(candidate)=candidate{if we::extract_checked(&candidate,&public,&transition,authoritative).is_ok(){recovered=Some(candidate)}}
+        }
+        // Failure stays visible while the independent prover continues.
+        // Never substitute the producer's trace for a missing candidate.
+        #[cfg(not(v8_c1_both_windows))] assert!(recovered.is_some());
+        if let Some(candidate)=&recovered{let got=we::extract_checked(candidate,&public,&transition,authoritative).unwrap();assert!(got==witness,"synthetic witness comparison failed");}
+        println!("GRAPH_PREFIX seed={seed} checked_witness={} full_semantic_C1_codeword={} pre_lambda_chi=true stats={:?} seconds={}",recovered.is_some(),exact.is_ok(),ex.stats,begin.elapsed().as_secs_f64());
+        #[cfg(not(v8_c1_boundary))]
+        if seed==1{super::query_graph::outside_sample_control(&log,&ex,&decoder,&enc);}
+        (ex.openings(),recovered)
+    };
+    #[cfg(not(v8_query_graph))]
+    let extracted=Some(ac::recover_c1(a[18][0],&openings,&decoder).unwrap());
+    if let Some(candidate)=&extracted{
+        let got=we::extract_checked(candidate,&public,&transition,authoritative).unwrap();
+        assert!(got==witness,"synthetic witness comparison failed");
+        println!("recovered_table_equals_producer={}",*candidate==trace);
+        #[cfg(not(v8_c1_boundary))] assert!(*candidate==trace,"honest table comparison failed");
+    }
     let mut broken=openings.clone();broken.ids[1]=0;assert!(ac::authenticate(a[18][0],&broken).is_err());
     let mut broken=openings.clone();broken.leaves[0][0]^=1;assert!(ac::authenticate(a[18][0],&broken).is_err());
     let mut wrong_root=a[18][0];wrong_root[0]^=1;assert!(ac::authenticate(wrong_root,&openings).is_err());
@@ -172,7 +227,7 @@ pub fn run(){
     let bad_coeff=ac::recover_c1(changed_hash,&changed,&decoder).unwrap();
     assert!(we::extract_checked(&bad_coeff,&public,&transition,authoritative).is_err());
     println!("authentication_negative_controls=5 authenticated_changed_C1_decoder_rejected=true");
-    println!("authenticated_c1_recovered=true checked_witness=true root={:02x?} opening_bytes={}",a[18][0],256*(403+32)+openings.frontier.len());
+    println!("authenticated_c1_recovered={} checked_witness={} root={:02x?} opening_bytes={}",extracted.is_some(),extracted.is_some(),a[18][0],256*(403+32)+openings.frontier.len());
     let(t,lambda,chi)=start(&binding,&a);
     let mut h=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(
         &compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
@@ -187,7 +242,9 @@ pub fn run(){
         assert_eq!(evaluate_pool_v1_pair_forest_private_transfer_selected_constraint_composition_compiled_v1(
             &public,&transition,&claims,&z,lambda,chi,sc(17)).unwrap(),K::ZERO);}
     println!("masked_selected_boolean_composition_checks=1024");
-    for corrupt in [false,true]{
+    #[cfg(not(v8_c1_boundary))] let arms=vec![false,true];
+    #[cfg(v8_c1_boundary)] let arms=vec![false];
+    for corrupt in arms{
         println!("arm_corrupt={corrupt} stage=commit_C2");
         let b=tree((0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C2_TREE_TAG,&c2leaf(&c2encoded,i,corrupt),&salts[i])).collect());
         let mut v=vec![K::ZERO;697];v[0]=initial;
@@ -210,7 +267,7 @@ pub fn run(){
         let pts=corelib::circle_fri::selected_circle_fiber_points_shared(20,&(0..256).collect::<Vec<_>>()).unwrap();
         let mut qeval=Vec::new();
         for (i,pt) in pts.iter().enumerate(){for(slot,(x,y))in[(pt.x,pt.y),(pt.x,pt.y.neg()),(pt.x.neg(),pt.y.neg()),(pt.x.neg(),pt.y)].into_iter().enumerate(){
-            let value=(0..29).rev().fold(K::ZERO,|acc,col|acc.mul(gamma).add(if col<26{K::from_cm31(CM31::from_m31(encoded[col][4*i+slot]))}else{c2encoded[col-26][4*i+slot]}));
+            let value=(0..29).rev().fold(K::ZERO,|acc,col|acc.mul(gamma).add(if col<26{K::from_cm31(CM31::from_m31(anchor_prefix[col][4*i+slot]))}else{c2encoded[col-26][4*i+slot]}));
             let l=p.abc[0].add(p.abc[1].mul_m31(x)).add(p.abc[2].mul_m31(y));
             let h=if p.use_x{x}else{y};qeval.push(value.sub(p.iv[0].add(p.iv[1].mul_m31(h))).mul(l.try_inv().unwrap()));}}
         let q=decoder.solve_wide(&qeval);
@@ -242,10 +299,21 @@ pub fn run(){
         let body=f::body(&v,&a,&b,&records,(&fa,&fb));let w=parse(&body).unwrap();
         let sem=semantic_replay(&w,&public,&transition,semantic_start(t.clone(),&b,initial,lambda,chi));
         let(p,weights,claim,_)=row::prepare(sem,&w,true).unwrap();let result=row::relation(&w,p,weights,claim);println!("relation_result={result:?}");let accepted=result.is_ok();
+        #[cfg(not(v8_c1_boundary))]
         if !corrupt{assert!(accepted,"honest baseline");}
-        let recovered=ac::recover_c1(w.roots.0,&openings,&decoder).unwrap();let got=we::extract_checked(&recovered,&public,&transition,authoritative).unwrap();assert_eq!(got,witness);
-        println!("RESULT corrupt={corrupt} accepted={accepted} checked_witness=true touched={} body={} proof_id={:02x?} c1_root={:02x?}",queries.iter().filter(|&&i|i<9302).count(),body.len(),hash(&[&body]),w.roots.0);
+        assert_eq!(w.roots.0,a[18][0]);
+        let checked_witness=extracted.as_ref().is_some_and(|candidate|we::extract_checked(candidate,&public,&transition,authoritative).is_ok());
+        println!("RESULT corrupt={corrupt} accepted={accepted} checked_witness={checked_witness} touched={} body={} proof_id={:02x?} c1_root={:02x?}",queries.iter().filter(|&&i|i<9302).count(),body.len(),hash(&[&body]),w.roots.0);
+        #[cfg(all(v8_c1_boundary,not(v8_c1_both_windows)))]
+        println!("C1_BOUNDARY seed=1 corrupted_complete_fibres=1 fibre={corrupt_c1_fibre} c1_hit={} accepted={accepted} checked_witness={checked_witness} exact_codeword=false",queries.contains(&(corrupt_c1_fibre as u32)));
+        #[cfg(all(v8_c1_both_windows,not(v8_c1_near)))]
+        println!("C1_BOTH_WINDOWS seed=1 corrupted_complete_fibres=2 c1_hit={} accepted={accepted} checked_witness={checked_witness} candidate_exhaustion={}",queries.contains(&0)||queries.contains(&256),extracted.is_none());
+        #[cfg(v8_c1_near)]
+        println!("C1_NEAR_CONTROL seed=1 corrupted_complete_fibres=16535 c1_hits={} accepted={accepted} checked_witness={checked_witness}",queries.iter().filter(|&&i|i<16535).count());
     }
     }
+    #[cfg(not(v8_query_graph))]
     println!("COMPLETE same_execution_access=extra_authenticated_opening_oracle seconds={}",total.elapsed().as_secs_f64());
+    #[cfg(v8_query_graph)]
+    println!("COMPLETE same_execution_access=frozen_C1_SHA_query_graph seconds={}",total.elapsed().as_secs_f64());
 }
