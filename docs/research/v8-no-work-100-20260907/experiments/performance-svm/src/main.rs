@@ -14,7 +14,7 @@ fn main(){
     let elf=std::fs::read(&args[1]).unwrap();
     let program=Address::new_from_array([71;32]);
     let keys=[Address::new_from_array([72;32]),Address::new_from_array([73;32]),Address::new_from_array([74;32])];
-    for limit in [1_400_000u64,100_000_000] {
+    for limit in [1_200_000u64,1_400_000,100_000_000] {
         for seed in [1,2,3] {
             let original=std::fs::read(format!("{}/proof-{seed}.bin",args[2])).unwrap();
             let extended=std::env::var_os("ASPIS_V8_EXTENDED_REJECTIONS").is_some();
@@ -22,7 +22,7 @@ fn main(){
                 "bad-inactive","bad-first-round","bad-final","noncanonical","appended"]}
                 else{vec!["honest","bad-fixed","bad-leaf","bad-frontier","truncated"]};
             for case in cases {
-                if limit==1_400_000&&case!="honest"{continue;}
+                if limit<=1_400_000&&case!="honest"{continue;}
                 let mut proof=original.clone();
                 match case {"bad-fixed"=>proof[0]^=1,"bad-leaf"=>proof[11228]^=1,
                     "bad-frontier"=>{let n=proof.len();proof[n-1]^=1;},"truncated"=>{proof.pop();},

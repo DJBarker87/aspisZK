@@ -3,6 +3,33 @@
 use super::*;
 use std::time::Instant;
 fn phase(seed:u8,name:&str,t:Instant){println!("PERF {{\"seed\":{seed},\"phase\":\"{name}\",\"seconds\":{}}}",t.elapsed().as_secs_f64());}
+// Stress-fixture generation only: use the existing last nonce to seek the
+// MAXIMUM authentication frontier. No security credit; no verifier change.
+// The cap is explicit, failure is reported, and all earlier commitments/final
+// coefficients remain fixed. This is NOT the ordinary prover timing mode.
+fn stress_queries(p:&mut Prefix,finals:&[K])->(Vec<u32>,K,[u8;24],u64){
+    let mut nonce=[0u8;24];
+    let Some(cap)=std::env::var("ASPIS_V8_MAX_FRONTIER_SCAN").ok() else{
+        let(q,rho)=query_schedule(p,finals,&nonce).unwrap();return(q,rho,nonce,0);
+    };
+    let cap:u64=cap.parse().unwrap();assert!(cap>0&&cap<=1_000_000);
+    let clock=Instant::now();let prefix=p.t.clone();
+    for attempt in 0..cap {
+        nonce[16..24].copy_from_slice(&attempt.to_le_bytes());p.t=prefix.clone();
+        let Ok((q,rho))=query_schedule(p,finals,&nonce) else{continue;};
+        let mut nodes=q.clone();nodes.sort_unstable();
+        let mut frontier=0;
+        for _ in 0..18 {
+            for &j in &nodes {if nodes.binary_search(&(j^1)).is_err(){frontier+=1;}}
+            for j in &mut nodes{*j>>=1;}nodes.dedup();
+        }
+        if frontier==296 {
+            println!("STRESS {{\"attempts\":{},\"seconds\":{},\"frontier_each\":296,\"security_credit_bits\":0}}",attempt+1,clock.elapsed().as_secs_f64());
+            return(q,rho,nonce,attempt+1);
+        }
+    }
+    panic!("maximum-frontier stress scan exhausted its declared cap");
+}
 pub fn run(){
     #[cfg(v8_gamma_wrap)] super::super::query_arithmetic::controls();
     #[cfg(v8_structured)] {
@@ -111,15 +138,17 @@ pub fn run(){
         p.t.absorb(label::M31_CIRCLE_FOLD_POW_NONCE,&[0;9]);
         let alpha=sample(&mut p.t,false).unwrap();claim=evaluate(&first,alpha);weights.fold_deferred_relation_arity4(alpha);
         let mut finals=primal(&q,alpha);v[441..697].copy_from_slice(&finals);
-        let(queries,rho)=query_schedule(&mut p,&finals,&[0;24]).unwrap();
+        let(queries,rho,nonces,stress_attempts)=stress_queries(&mut p,&finals);
         let records:Vec<u8>=queries.iter().flat_map(|&id|{let i=id as usize;let mut r=c1leaf(&encoded,i);r.extend(c2leaf(&c2encoded,i,false));r.extend(salts[i]);r}).collect();
         let fa=f::frontier(&a,&queries);let fb=f::frontier(&b,&queries);
-        let stub=f::body(&v,&a,&b,&records,(&fa,&fb));let w=parse(&stub).unwrap();
+        let mut stub=f::body(&v,&a,&b,&records,(&fa,&fb));
+        stub[FIXED*16+52..HEAD].copy_from_slice(&nonces);let w=parse(&stub).unwrap();
         let(values,xs)=opened_values(&w,&p,&queries,alpha,hash).unwrap();
         let inc=inject(&mut weights,&mut claim,&values,&xs,rho).unwrap();p.t.absorb(label::PROFILE,&bytes(&[inc]));
         for r in 1..4{f::save_round(&mut v,r,polynomial_for_extension(&finals,&weights));let poly=compact(&v[417+6*r..423+6*r],claim);
             absorb_round(&mut p.t,r,&poly);let a=sample(&mut p.t,false).unwrap();claim=evaluate(&poly,a);weights.fold_deferred_relation_arity4(a);finals=primal(&finals,a);}
-        let body=f::body(&v,&a,&b,&records,(&fa,&fb));
+        let mut body=f::body(&v,&a,&b,&records,(&fa,&fb));
+        body[FIXED*16+52..HEAD].copy_from_slice(&nonces);
         phase(seed,"relation_openings_serialize",clock);
         phase(seed,"prover_total_excludes_setup",total);
         // Verifier starts from bytes and public inputs; no witness/anchor.
@@ -132,6 +161,6 @@ pub fn run(){
         }
         assert!(super::super::performance_verifier::verify(&body[..body.len()-1],&binding,&public_bytes,&transition_bytes).is_err());
         std::fs::write(format!("{out}/proof-{seed}.bin"),&body).unwrap();
-        println!("PERF {{\"seed\":{seed},\"accepted\":true,\"body_bytes\":{},\"max_body_bytes\":40282,\"grinding_attempts\":0,\"full_transaction_cu\":null}}",body.len());
+        println!("PERF {{\"seed\":{seed},\"accepted\":true,\"body_bytes\":{},\"max_body_bytes\":40282,\"stress_nonce_attempts\":{stress_attempts},\"security_credit_bits\":0,\"full_transaction_cu\":null}}",body.len());
     }
 }

@@ -1,0 +1,109 @@
+diff --git a/crates/aspis-core/src/field.rs b/crates/aspis-core/src/field.rs
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -30,50 +30,59 @@
+     // P+3, then one conditional subtract canonicalizes. Supporting the full
+     // u64 range lets four maximal M31 products be accumulated before one
+     // reduction: 4*(P-1)^2 < 2^64.
+-    let x = (x & P as u64) + (x >> 31u32);
+-    let x = (x & P as u64) + (x >> 31u32);
+-    let x = x as u32;
+-    if x >= P {
+-        x - P
+-    } else {
+-        x
+-    }
+-}
+-
+-#[inline(always)]
+-fn square_n(mut value: M31, count: usize) -> M31 {
+-    for _ in 0..count {
+-        value = value.mul(value);
+-    }
+-    value
+-}
+-
+-impl M31 {
+-    pub const ZERO: M31 = M31(0);
+-    pub const ONE: M31 = M31(1);
+-
+-    #[inline(always)]
+-    pub fn add(self, rhs: M31) -> M31 {
+-        let s = self.0 + rhs.0;
+-        M31(if s >= P { s - P } else { s })
+-    }
+-
+-    #[inline(always)]
+-    pub fn sub(self, rhs: M31) -> M31 {
+-        let s = self.0 + P - rhs.0;
+-        M31(if s >= P { s - P } else { s })
+-    }
+-
+-    #[inline(always)]
+-    pub fn neg(self) -> M31 {
+-        if self.0 == 0 {
+-            M31(0)
+-        } else {
+-            M31(P - self.0)
+-        }
+-    }
+-
+-    #[inline(always)]
+-    pub fn mul(self, rhs: M31) -> M31 {
+-        M31(reduce_u64(self.0 as u64 * rhs.0 as u64))
++    #[cfg(not(v8_range_m31))] let x = (x & P as u64) + (x >> 31u32);
++    #[cfg(v8_range_m31)] let x = (x & P as u64).wrapping_add(x >> 31u32);
++    #[cfg(not(v8_range_m31))] let x = (x & P as u64) + (x >> 31u32);
++    #[cfg(v8_range_m31)] let x = (x & P as u64).wrapping_add(x >> 31u32);
++    let x = x as u32;
++    if x >= P {
++        #[cfg(not(v8_range_m31))] { x - P }
++        #[cfg(v8_range_m31)] { x.wrapping_sub(P) }
++    } else {
++        x
++    }
++}
++
++#[inline(always)]
++fn square_n(mut value: M31, count: usize) -> M31 {
++    for _ in 0..count {
++        value = value.mul(value);
++    }
++    value
++}
++
++impl M31 {
++    pub const ZERO: M31 = M31(0);
++    pub const ONE: M31 = M31(1);
++
++    #[inline(always)]
++    pub fn add(self, rhs: M31) -> M31 {
++        #[cfg(not(v8_range_m31))] let s = self.0 + rhs.0;
++        #[cfg(v8_range_m31)] let s = self.0.wrapping_add(rhs.0);
++        #[cfg(not(v8_range_m31))] { M31(if s >= P { s - P } else { s }) }
++        #[cfg(v8_range_m31)] { M31(if s >= P { s.wrapping_sub(P) } else { s }) }
++    }
++
++    #[inline(always)]
++    pub fn sub(self, rhs: M31) -> M31 {
++        #[cfg(not(v8_range_m31))] let s = self.0 + P - rhs.0;
++        #[cfg(v8_range_m31)] let s = self.0.wrapping_add(P).wrapping_sub(rhs.0);
++        #[cfg(not(v8_range_m31))] { M31(if s >= P { s - P } else { s }) }
++        #[cfg(v8_range_m31)] { M31(if s >= P { s.wrapping_sub(P) } else { s }) }
++    }
++
++    #[inline(always)]
++    pub fn neg(self) -> M31 {
++        if self.0 == 0 {
++            M31(0)
++        } else {
++            #[cfg(not(v8_range_m31))] { M31(P - self.0) }
++            #[cfg(v8_range_m31)] { M31(P.wrapping_sub(self.0)) }
++        }
++    }
++
++    #[inline(always)]
++    pub fn mul(self, rhs: M31) -> M31 {
++        #[cfg(not(v8_range_m31))] { M31(reduce_u64(self.0 as u64 * rhs.0 as u64)) }
++        #[cfg(v8_range_m31)] { M31(reduce_u64((self.0 as u64).wrapping_mul(rhs.0 as u64))) }
+     }

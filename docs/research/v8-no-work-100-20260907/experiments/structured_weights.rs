@@ -1,6 +1,8 @@
 //! Structured chord transport: port of the previously tested product/grouped kernels.
 //! No dense ordinary vector is constructed by this verifier path.
 use super::*;
+#[cfg(v8_sparse_groups)]
+#[path="sparse_grouped.rs"] mod sparse;
 
 #[cfg(not(v8_performance_sbf))]
 pub(in super::super) fn controls(){
@@ -399,6 +401,21 @@ fn grouped_terminal(masks: &[u16; 64], [a, b, c]: [K; 3], alpha: [K; 4]) -> ([K;
     #[cfg(v8_grouped_linear)]
     { products+=3*distinct.len(); } // logical products; prepared kernel costs measured separately
     let mut out = [K::ZERO; 4];
+    #[cfg(v8_sparse_groups)]
+    if groups == sparse::GROUPS && distinct.as_slice()==sparse::MASKS {
+        out=sparse::sparse_right(&sums,&carry,&high);
+        #[cfg(not(v8_performance_sbf))] {
+            let mut reference=[K::ZERO;4];
+            for j in 0..64 {
+                let mut v=sums[groups[j]].0;
+                for(r,s) in edges(j) {if r<64{v=v.add(sums[groups[r]].1.mul_m31(s));}}
+                reference[j>>4]=reference[j>>4].add(v.mul(high[j&15]));
+            }
+            assert_eq!(out,reference,"sparse right contraction");
+        }
+        for value in &mut out {for _ in 0..8{*value=value.half();}}
+        return (out,products+16,distinct.len());
+    }
     for j in 0..64 {
         let mut value = sums[groups[j]].0;
         for (r, s) in edges(j) {

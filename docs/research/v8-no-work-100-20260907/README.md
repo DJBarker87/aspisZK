@@ -1,6 +1,16 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [structured CU rescue and basis alignment](structured-performance-review.md).
+Latest: [range-proved arithmetic and sparse fusion](range-performance-review.md).
+The quiet isolated verifier accepts three **maximum-frontier, 40,282-byte**
+proofs at **1,194,675 /1,194,522 /1,194,670 CU**, with a 1.2M limit.
+Ordinary no-search proving is **3.59 seconds mean /197.91 MiB peak RSS**.
+Overflow checks remain enabled; explicit bounded kernels and new Lean
+identities replace blanket overflow-off controls. No complete-transaction
+CU parity, global security completion or production activation is claimed.
+See [results](range-performance-results.json) and
+[commands/evidence](range-performance-evidence.json).
+
+Previous: [structured CU rescue and basis alignment](structured-performance-review.md).
 Both structured families, fused z/XOR12 rows, shared arithmetic and exact
 query kernels reduce the checked isolated verifier to **1.888–1.890M CU**.
 Proving remains about **4.02 seconds /198 MiB** on the NUC.

@@ -1,0 +1,61 @@
+diff --git a/crates/aspis-core/src/field.rs b/crates/aspis-core/src/field.rs
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -246,26 +246,38 @@
+         // in u64. Reducing after the product is identical to first reducing
+         // each sum modulo P, and removes two canonical-add branches from
+         // every CM31 multiplication.
+-        let m2 = M31::reduce_u64(
+-            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),
+-        );
+-        CM31 {
+-            a: m0.sub(m1),
+-            b: m2.sub(m0).sub(m1),
+-        }
+-    }
+-
+-    /// Complex squaring with two M31 multiplications instead of the three
+-    /// used by generic Karatsuba multiplication.
+-    #[inline(always)]
+-    pub fn square(self) -> CM31 {
+-        CM31 {
+-            // `(a+b)*(a-b)` with raw representatives. Both factors are
+-            // below 2P and their product is strictly below 2^64.
+-            a: M31::reduce_u64(
+-                (u64::from(self.a.0) + u64::from(self.b.0))
+-                    * (u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),
++        #[cfg(not(v8_range_cm31))]
++        let m2 = M31::reduce_u64(
++            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),
++        );
++        #[cfg(v8_range_cm31)]
++        let m2 = M31::reduce_u64(
++            u64::from(self.a.0).wrapping_add(u64::from(self.b.0))
++                .wrapping_mul(u64::from(rhs.a.0).wrapping_add(u64::from(rhs.b.0))),
++        );
++        CM31 {
++            a: m0.sub(m1),
++            b: m2.sub(m0).sub(m1),
++        }
++    }
++
++    /// Complex squaring with two M31 multiplications instead of the three
++    /// used by generic Karatsuba multiplication.
++    #[inline(always)]
++    pub fn square(self) -> CM31 {
++        CM31 {
++            // `(a+b)*(a-b)` with raw representatives. Both factors are
++            // below 2P and their product is strictly below 2^64.
++            #[cfg(not(v8_range_cm31))]
++            a: M31::reduce_u64(
++                (u64::from(self.a.0) + u64::from(self.b.0))
++                    * (u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),
++            ),
++            #[cfg(v8_range_cm31)]
++            a: M31::reduce_u64(
++                u64::from(self.a.0).wrapping_add(u64::from(self.b.0))
++                    .wrapping_mul(u64::from(self.a.0).wrapping_add(u64::from(P)).wrapping_sub(u64::from(self.b.0))),
+             ),
+             b: self.a.mul(self.b).double(),
+         }
+     }

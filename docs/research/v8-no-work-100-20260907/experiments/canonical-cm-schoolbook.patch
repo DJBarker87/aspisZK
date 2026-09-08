@@ -1,0 +1,23 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -240,6 +240,18 @@
+     /// Karatsuba complex multiplication: 3 M31 muls.
+     #[inline(always)]
+-    pub fn mul(self, rhs: CM31) -> CM31 {
+-        let m0 = self.a.mul(rhs.a);
++    pub fn mul(self, rhs: CM31) -> CM31 {
++        #[cfg(v8_cm_schoolbook)]
++        {
++            // Canonical limbs: both fresh channels are <2*P^2<2^63.
++            // P^2 is a zero residue and dominates the negative product.
++            let (a,b,c,d)=(u64::from(self.a.0),u64::from(self.b.0),
++                u64::from(rhs.a.0),u64::from(rhs.b.0));
++            return CM31 {
++                a: M31::reduce_u64(a.wrapping_mul(c)
++                    .wrapping_add(4611686014132420609).wrapping_sub(b.wrapping_mul(d))),
++                b: M31::reduce_u64(a.wrapping_mul(d).wrapping_add(b.wrapping_mul(c))),
++            };
++        }
++        let m0 = self.a.mul(rhs.a);
+         let m1 = self.b.mul(rhs.b);
+         // Both unreduced sums are below `2P < 2^32`, so their product fits

@@ -1,0 +1,102 @@
+Running as unit: aspis-v8-range-prepared-tests.scope; invocation ID: d943fc2d1df648e1a637b8a46fa328df
+warning: unreachable statement
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/../../../../crates/aspis-core/src/field.rs:268:9
+    |
+262 | /             return CM31 {
+263 | |                 a: M31::reduce_u64(a.wrapping_mul(c)
+264 | |                     .wrapping_add(4611686014132420609).wrapping_sub(b.wrapping_mul(d))),
+265 | |                 b: M31::reduce_u64(a.wrapping_mul(d).wrapping_add(b.wrapping_mul(c))),
+266 | |             };
+    | |_____________- any code following this expression is unreachable
+267 |           }
+268 |           let m0 = self.a.mul(rhs.a);
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+    |
+    = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/../../../../crates/aspis-core/src/field.rs:431:13
+    |
+430 |             { return CM31::new(left[0],left[1]).mul(right); }
+    |               -------------------------------------------- any code following this expression is unreachable
+431 |             let m0 = left[0].mul(right.a);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: constant `M31_QUARTER` is never used
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/../../../../crates/aspis-core/src/field.rs:25:11
+   |
+25 | pub const M31_QUARTER: M31 = M31(0x2000_0000);
+   |           ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated function `from_le_bytes` is never used
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/../../../../crates/aspis-core/src/field.rs:188:12
+    |
+ 54 | impl M31 {
+    | -------- associated function in this implementation
+...
+188 |     pub fn from_le_bytes(bytes: [u8; 4]) -> Option<M31> {
+    |            ^^^^^^^^^^^^^
+
+warning: associated items `conjugate`, `pow`, and `from_le_bytes` are never used
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/../../../../crates/aspis-core/src/field.rs:333:12
+    |
+209 | impl CM31 {
+    | --------- associated items in this implementation
+...
+333 |     pub fn conjugate(self) -> CM31 {
+    |            ^^^^^^^^^
+...
+349 |     pub fn pow(self, mut exp: u64) -> CM31 {
+    |            ^^^
+...
+383 |     pub fn from_le_bytes(bytes: &[u8]) -> Option<CM31> {
+    |            ^^^^^^^^^^^^^
+
+warning: function `qm31_m31_sum_products3` is never used
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/../../../../crates/aspis-core/src/field.rs:597:8
+    |
+597 | pub fn qm31_m31_sum_products3(left: [QM31; 3], right: [M31; 3]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `neg`, `from_le_bytes`, and `write_le_bytes` are never used
+    --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/../../../../crates/aspis-core/src/field.rs:907:12
+     |
+ 863 | impl QM31 {
+     | --------- associated items in this implementation
+...
+ 907 |     pub fn neg(self) -> QM31 {
+     |            ^^^
+...
+1001 |     pub fn from_le_bytes(bytes: &[u8]) -> Option<QM31> {
+     |            ^^^^^^^^^^^^^
+...
+1007 |     pub fn write_le_bytes(self, out: &mut [u8]) {
+     |            ^^^^^^^^^^^^^^
+
+warning: 7 warnings emitted
+
+	Command being timed: "/home/dombarker/.cargo/bin/rustc --edition 2021 -O -C overflow-checks=yes --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --test /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/range_kernel_controls.rs -o /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/range-prepared-tests"
+	User time (seconds): 3.22
+	System time (seconds): 0.12
+	Percent of CPU this job got: 180%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.85
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 193912
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 21
+	Minor (reclaiming a frame) page faults: 49229
+	Voluntary context switches: 738
+	Involuntary context switches: 40
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 13872
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

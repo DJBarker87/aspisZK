@@ -1,0 +1,119 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -432,6 +432,24 @@
+ /// reconstructing CM31/QM31 is exact because reconstruction is M31-linear.
+ /// The fixed public arities below keep that overflow bound local and auditable.
+-#[inline(always)]
+-fn qm31_accumulate_product_channels(
++// Each call below is in a fresh group of at most four canonical products.
++// Affine constants have the separate 3*(P-1)^2+4*(P-1) bound.
++#[inline(always)]
++fn qm31_bounded_mac(sum: u64, a: u64, b: u64) -> u64 {
++    #[cfg(v8_range_dots)]
++    { sum.wrapping_add(a.wrapping_mul(b)) }
++    #[cfg(not(v8_range_dots))]
++    { sum + a * b }
++}
++
++#[inline(always)]
++fn qm31_bounded_add(sum: u64, value: u64) -> u64 {
++    #[cfg(v8_range_dots)]
++    { sum.wrapping_add(value) }
++    #[cfg(not(v8_range_dots))]
++    { sum + value }
++}
++
++#[inline(always)]
++fn qm31_accumulate_product_channels(
+     mut sums: [[u64; 3]; 3],
+     left: QM31,
+@@ -452,6 +470,7 @@
+     for component in 0..3 {
+         for channel in 0..3 {
+-            sums[component][channel] += left_components[component][channel].0 as u64
+-                * right_components[component][channel].0 as u64;
++            sums[component][channel] = qm31_bounded_mac(sums[component][channel],
++                left_components[component][channel].0 as u64,
++                right_components[component][channel].0 as u64);
+         }
+     }
+@@ -538,7 +557,8 @@
+     let dot = |a: M31, b: M31, c: M31| {
+         M31::reduce_u64(
+-            u64::from(a.0) * u64::from(right[0].0)
+-                + u64::from(b.0) * u64::from(right[1].0)
+-                + u64::from(c.0) * u64::from(right[2].0),
++            qm31_bounded_mac(
++                qm31_bounded_mac(qm31_bounded_mac(0, u64::from(a.0), u64::from(right[0].0)),
++                    u64::from(b.0), u64::from(right[1].0)),
++                u64::from(c.0), u64::from(right[2].0)),
+         )
+     };
+@@ -588,6 +608,7 @@
+         for component in 0..3 {
+             for channel in 0..3 {
+-                sums[component][channel] += left[index].components[component][channel].0 as u64
+-                    * right_components[component][channel].0 as u64;
++                sums[component][channel] = qm31_bounded_mac(sums[component][channel],
++                    left[index].components[component][channel].0 as u64,
++                    right_components[component][channel].0 as u64);
+             }
+         }
+@@ -623,6 +644,7 @@
+         for component in 0..3 {
+             for channel in 0..3 {
+-                sums[component][channel] += left[index].components[component][channel].0 as u64
+-                    * right_components[component][channel].0 as u64;
++                sums[component][channel] = qm31_bounded_mac(sums[component][channel],
++                    left[index].components[component][channel].0 as u64,
++                    right_components[component][channel].0 as u64);
+             }
+         }
+@@ -662,6 +684,7 @@
+         for component in 0..3 {
+             for channel in 0..3 {
+-                sums[component][channel] += left[index].components[component][channel].0 as u64
+-                    * right_components[component][channel].0 as u64;
++                sums[component][channel] = qm31_bounded_mac(sums[component][channel],
++                    left[index].components[component][channel].0 as u64,
++                    right_components[component][channel].0 as u64);
+             }
+         }
+@@ -674,8 +697,9 @@
+     // Add c0 to the Karatsuba m0 channel. Add c0+c1 to m2 so the
+     // reconstruction c1=m2-m0-m1 receives exactly c1.
+-    sums[0][0] += a0;
+-    sums[0][2] += a0 + b0;
+-    sums[2][0] += a0 + a1;
+-    sums[2][2] += a0 + a1 + b0 + b1;
++    sums[0][0] = qm31_bounded_add(sums[0][0], a0);
++    sums[0][2] = qm31_bounded_add(sums[0][2], qm31_bounded_add(a0, b0));
++    sums[2][0] = qm31_bounded_add(sums[2][0], qm31_bounded_add(a0, a1));
++    sums[2][2] = qm31_bounded_add(sums[2][2],
++        qm31_bounded_add(qm31_bounded_add(a0, a1), qm31_bounded_add(b0, b1)));
+     qm31_from_karatsuba_channel_sums(sums)
+ }
+@@ -707,7 +731,8 @@
+         for component in 0..3 {
+             for channel in 0..3 {
+-                sums[component][channel][group] += weights[index].components[component][channel].0
+-                    as u64
+-                    * rhs_components[component][channel].0 as u64;
++                sums[component][channel][group] = qm31_bounded_mac(
++                    sums[component][channel][group],
++                    weights[index].components[component][channel].0 as u64,
++                    rhs_components[component][channel].0 as u64);
+             }
+         }
+@@ -757,7 +782,8 @@
+         for component in 0..3 {
+             for channel in 0..3 {
+-                sums[component][channel][group] += weights[index].components[component][channel].0
+-                    as u64
+-                    * rhs_components[component][channel].0 as u64;
++                sums[component][channel][group] = qm31_bounded_mac(
++                    sums[component][channel][group],
++                    weights[index].components[component][channel].0 as u64,
++                    rhs_components[component][channel].0 as u64);
+             }
+         }
