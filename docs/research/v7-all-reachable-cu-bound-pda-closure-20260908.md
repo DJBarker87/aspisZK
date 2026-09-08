@@ -1,10 +1,18 @@
 # V7 all-reachable CU bound: PDA and residual-tail closure
 
-Date: 2026-09-08  
-Branch: `research/v7-all-reachable-cu-bound-testnet-20260902`  
-Starting HEAD: `e5640f79133f8afbeb7eb08a940abc6462274295`  
-Measured-binary source HEAD: `acc4055b6c55ff6a568cf0d3d916365eccb4ebf1`  
-Ending HEAD: the commit containing this report; record with `git rev-parse HEAD` at handoff.  
+Date: 2026-09-08
+
+Branch: `research/v7-all-reachable-cu-bound-testnet-20260902`
+
+Starting HEAD: `e5640f79133f8afbeb7eb08a940abc6462274295`
+
+Measured-binary source HEAD: `acc4055b6c55ff6a568cf0d3d916365eccb4ebf1`
+
+Evidence implementation commit: `e5e4edf133044fd8c70c1924c75333c9e6492bfd`
+
+Ending HEAD: the immediate report-hygiene successor to the evidence commit;
+recorded exactly by `git rev-parse HEAD` in the handoff.
+
 Classification: **A — ALL-REACHABLE GREEN**
 
 ## Result
