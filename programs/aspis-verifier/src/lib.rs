@@ -140,6 +140,8 @@ pub mod v5_full_transaction;
 pub mod v5_relation_stress;
 #[cfg(feature = "v6-cu-probe")]
 pub mod v6_cu_probe;
+#[cfg(feature = "v7-cu-probe")]
+pub mod v7_cu_tail_probe;
 #[cfg(any(feature = "v6-production-tag72", test))]
 pub mod v6_transaction;
 #[cfg(any(
