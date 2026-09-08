@@ -529,19 +529,6 @@ fn reconstruct_compact_c2_query_prepared(
     Ok((encode_full_c2_leaf(&helpers)?, combined))
 }
 
-#[cfg(feature = "v7-query-order-source-bound-audit")]
-pub fn sort_v7_query_order_source_bounded(order: &mut [(u32, usize); V6_QUERY_COUNT]) {
-    for index in 1..V6_QUERY_COUNT {
-        let value = order[index];
-        let mut cursor = index;
-        while cursor > 0 && value.0 < order[cursor - 1].0 {
-            order[cursor] = order[cursor - 1];
-            cursor -= 1;
-        }
-        order[cursor] = value;
-    }
-}
-
 /// Reconstruct, authenticate and gamma-combine every compact V7 query. The
 /// complete C2 leaf is restored before its typed leaf hash is computed.
 #[allow(clippy::too_many_arguments)]
@@ -558,7 +545,7 @@ pub fn verify_reconstruct_and_gamma_combine_v7_openings(
     let mut order: [(u32, usize); V6_QUERY_COUNT] =
         core::array::from_fn(|ordinal| (queries[ordinal], ordinal));
     #[cfg(feature = "v7-query-order-source-bound-audit")]
-    sort_v7_query_order_source_bounded(&mut order);
+    crate::v6_onefold::sort_v7_query_order_source_bounded(&mut order);
     #[cfg(not(feature = "v7-query-order-source-bound-audit"))]
     order.sort_unstable_by_key(|entry| entry.0);
     if order[V6_QUERY_COUNT - 1].0 >= 1 << 18 || order.windows(2).any(|pair| pair[0].0 == pair[1].0)
@@ -642,13 +629,13 @@ mod tests {
             });
             let mut expected = actual;
             expected.sort_unstable_by_key(|entry| entry.0);
-            sort_v7_query_order_source_bounded(&mut actual);
+            crate::v6_onefold::sort_v7_query_order_source_bounded(&mut actual);
             assert_eq!(actual, expected);
         }
 
         let mut descending: [(u32, usize); V6_QUERY_COUNT] =
             core::array::from_fn(|ordinal| ((V6_QUERY_COUNT - ordinal) as u32, ordinal));
-        sort_v7_query_order_source_bounded(&mut descending);
+        crate::v6_onefold::sort_v7_query_order_source_bounded(&mut descending);
         assert!(descending.windows(2).all(|pair| pair[0].0 <= pair[1].0));
     }
 

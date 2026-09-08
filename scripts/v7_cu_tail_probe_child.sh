@@ -101,11 +101,11 @@ jq -n --arg ack "$ACK" --arg payer "$PAYER_KEYPAIR" --arg blockhash "$blockhash"
     requestId:1000,probeProgramId:$programId}' >"$WORK_DIR/input.json"
 "$PROBE_BUILDER" "$WORK_DIR/input.json" >"$EVIDENCE_DIR/signed-requests.json"
 jq -e '.schema == "aspis.v7.cu-tail-probe-signed-requests.v1" and .localOnly == true and
-  (.requests | length) == 4 and all(.requests[];
+  (.requests | length) == 8 and all(.requests[];
     .serializedTransactionBytes < 1232 and (.signedWireSha256 | test("^[0-9a-f]{64}$")))' \
   "$EVIDENCE_DIR/signed-requests.json" >/dev/null || fail "probe signed requests are malformed"
 
-for index in 0 1 2 3; do
+for index in 0 1 2 3 4 5 6 7; do
   name=$(jq -er ".requests[$index].name" "$EVIDENCE_DIR/signed-requests.json")
   case_dir="$EVIDENCE_DIR/cases/$name"
   mkdir "$case_dir"
@@ -141,12 +141,18 @@ jq -n --arg programId "$PROGRAM_ID" --arg binarySha256 "$SOURCE_SHA" \
   --slurpfile max "$EVIDENCE_DIR/cases/qm31-maximum-successful/summary.json" \
   --slurpfile best "$EVIDENCE_DIR/cases/query-order-best/summary.json" \
   --slurpfile worst "$EVIDENCE_DIR/cases/query-order-worst/summary.json" \
+  --slurpfile c0 "$EVIDENCE_DIR/cases/counter-zero/summary.json" \
+  --slurpfile c20 "$EVIDENCE_DIR/cases/counter-twenty/summary.json" \
+  --slurpfile f199 "$EVIDENCE_DIR/cases/frontier-199/summary.json" \
+  --slurpfile f203 "$EVIDENCE_DIR/cases/frontier-203/summary.json" \
   '{schema:"aspis.v7.cu-tail-probe-evidence.v1",cluster:"disposable-local-validator",
     localOnly:true,probeProgramId:$programId,probeBinarySha256:$binarySha256,
     deploymentMode:$deploymentMode,
-    cases:[$min[0],$max[0],$best[0],$worst[0]],
+    cases:[$min[0],$max[0],$best[0],$worst[0],$c0[0],$c20[0],$f199[0],$f203[0]],
     landedDeltasCu:{qm31MaximumMinusMinimum:($max[0].landedCu-$min[0].landedCu),
-      queryWorstMinusBest:($worst[0].landedCu-$best[0].landedCu)},
+      queryWorstMinusBest:($worst[0].landedCu-$best[0].landedCu),
+      counterTwentyMinusZero:($c20[0].landedCu-$c0[0].landedCu),
+      frontier203Minus199:($f203[0].landedCu-$f199[0].landedCu)},
     privateKeysCommitted:false,publicClusterTransaction:false,mainnetReady:false}' \
   >"$EVIDENCE_DIR/summary.json"
 
