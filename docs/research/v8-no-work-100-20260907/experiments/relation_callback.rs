@@ -12,7 +12,9 @@ use sha2::{Sha256,Digest};
 const FIXED:usize=697; const Q:usize=22; const REC:usize=621; const HEAD:usize=FIXED*16+52+24;
 const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
 #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
-fn hash(parts:&[&[u8]])->[u8;32] {let mut h=Sha256::new();for p in parts {h.update(p);}h.finalize().into()}
+fn hash(parts:&[&[u8]])->[u8;32] {let mut h=Sha256::new();for p in parts {h.update(p);}let digest=h.finalize().into();
+    #[cfg(v8_query_graph)] query_graph::record(parts);
+    digest}
 fn sc(x:u32)->K {K::from_cm31(CM31::from_m31(M31(x)))}
 fn bytes(v:&[K])->Vec<u8> {let mut b=vec![0;v.len()*16];for(i,v)in v.iter().enumerate(){v.write_le_bytes(&mut b[i*16..i*16+16]);}b}
 fn dot(a:&[K],b:&[K])->K {a.iter().zip(b).fold(K::ZERO,|s,(a,b)|s.add(a.mul(*b)))}
@@ -131,5 +133,11 @@ use payment_sources::{circle_candidate,circle_candidate_openings,state_only_hidi
 #[path="authenticated_c1.rs"] mod authenticated_c1;
 #[cfg(v8_payment_extraction)]
 #[path="payment_extraction.rs"] mod payment_extraction;
-#[cfg(v8_payment_extraction)]
+#[cfg(v8_query_graph)]
+#[path="c1_query_graph.rs"] mod query_graph;
+#[cfg(v8_c1_gao)]
+#[path="c1_gao.rs"] mod c1_gao;
+#[cfg(all(v8_payment_extraction,not(v8_graph_orders)))]
 fn main(){payment_extraction::run();}
+#[cfg(v8_graph_orders)]
+fn main(){query_graph::exhaustive_depth_two_query_orders();}

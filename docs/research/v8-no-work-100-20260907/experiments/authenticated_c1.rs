@@ -32,12 +32,15 @@ pub fn authenticate(root:[u8;26],o:&C1Openings)->Result<Vec<Vec<M31>>,Error>{
         (&o.frontier,&o.frontier),&mut vec![],&mut vec![]){return Err(Error::Authentication)}
     Ok(values)
 }
-pub struct Decoder {inv:Vec<Vec<M31>>,pub pivots:usize}
+pub struct Decoder {inv:Vec<Vec<M31>>,pub pivots:usize,pub first_position:usize}
 impl Decoder {
     pub fn new(enc:&CircleEncoder)->Self{
+        Self::new_at(enc,0)
+    }
+    pub fn new_at(enc:&CircleEncoder,first_position:usize)->Self{
         // Public fixed generator matrix for the source's EXACT message basis.
         let n=1024;let mut a=vec![vec![M31::ZERO;2*n];n];
-        for i in 0..n{for j in 0..n{a[i][j]=enc.encode_c1_basis_value(j,i).unwrap();}a[i][n+i]=M31::ONE;}
+        for i in 0..n{for j in 0..n{a[i][j]=enc.encode_c1_basis_value(j,first_position+i).unwrap();}a[i][n+i]=M31::ONE;}
         let mut pivots=0;
         for j in 0..n{
             let pivot=(j..n).find(|&i|a[i][j]!=M31::ZERO).expect("generator rank deficiency");
@@ -49,7 +52,7 @@ impl Decoder {
             pivots+=1;
         }
         for i in 0..n{for j in 0..n{assert_eq!(a[i][j],if i==j{M31::ONE}else{M31::ZERO});}}
-        Self{inv:a.into_iter().map(|r|r[n..].to_vec()).collect(),pivots}
+        Self{inv:a.into_iter().map(|r|r[n..].to_vec()).collect(),pivots,first_position}
     }
     pub fn solve_base(&self,values:&[M31])->Vec<M31>{assert_eq!(values.len(),1024);
         self.inv.iter().map(|r|r.iter().zip(values).fold(M31::ZERO,|s,(a,b)|s.add(a.mul(*b)))).collect()}
@@ -57,6 +60,7 @@ impl Decoder {
         self.inv.iter().map(|r|r.iter().zip(values).fold(K::ZERO,|s,(a,b)|s.add(b.mul_m31(*a)))).collect()}
 }
 pub fn recover_c1(root:[u8;26],o:&C1Openings,d:&Decoder)->Result<StateOnlyTraceFoundation,Error>{
+    if d.first_position!=0{return Err(Error::Shape)}
     let values=authenticate(root,o)?;
     Ok(StateOnlyTraceFoundation{c1:std::array::from_fn(|col|d.solve_base(&values[col]))})
 }

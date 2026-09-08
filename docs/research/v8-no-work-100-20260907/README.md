@@ -1,5 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [C1 query-graph extraction and error correction](query-graph-review.md).
+Frozen hash-query access replaces the extra-opening oracle. An accepted genuine
+payment defeats two fixed coefficient windows; Gao-style correction extracts a
+checked witness from that SAME proof. A 16,535-corrupt-fibre control also recovers
+coefficients. New Lean one-fibre recovery and an exact conditional sampling ledger
+advance extraction, without establishing global security, FS, ZK or CU parity.
+See [results](query-graph-results.json), [sampling conditions](c1-sampling-results.json)
+and [commands/evidence](query-graph-evidence.json).
+
 Latest: [same-execution authenticated C1 / payment extraction](payment-extraction-review.md).
 Four genuine honest payment proofs pass the repaired research grammar and yield
 checked witnesses from an explicit extra-opening oracle. All four D-corrupted

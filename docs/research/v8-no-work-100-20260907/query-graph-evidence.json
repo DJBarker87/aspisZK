@@ -1,0 +1,217 @@
+{
+  "date": "2026-09-08",
+  "base_revision": "d96f56533bba7763fd907d931df40331f2497de7",
+  "branch": "research/v8-no-work-100-20260907",
+  "revision_scope": "Base plus final scoped source hashes below. Earlier phase source snapshots were not separately retained; their binaries/logs are phase-labelled, not asserted to be final-source replays.",
+  "host": {
+    "model": "Apple M3 Mac15,13",
+    "os": "Darwin 25.5 arm64",
+    "ram_bytes": 25769803776,
+    "rust": "1.93.0",
+    "lean": "4.32.0"
+  },
+  "resource_scope": "Sequential focused local jobs below 8 GiB; Lean -M 7000, Rust -O. No package/cold dependency replay, SBF, remote or deployment job.",
+  "cache": {
+    "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+    "mathlib_status": "clean",
+    "lean_cwd": "/Users/dominic/ZK/AspisFormal",
+    "lean_imports": [
+      "Mathlib.Data.Matrix.Mul",
+      "Mathlib.Tactic"
+    ],
+    "research_or_concurrent_Aspis_olean_imports": [],
+    "lake_manifest_sha256": "65c23cce5c1bab2ba00affdff53fe52b67388cf2491c7f8ec68c1c2977dd7c10",
+    "lean_toolchain_sha256": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e",
+    "rlibs": {
+      "/tmp/libaspis_core_v8_callback.rlib": "5a08f9e7e179e043c959cbf3f226449cdc2a993be75a40b67d070f55c064b4c8",
+      "/tmp/libaspis_statement_v8_semantic.rlib": "92086588a5463f780b88411d063a0f1b728c8c5785df09a3b4f290d28ec83071",
+      "/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib": "ca49553160bf98106838786e7ae3686a7b07aa5d82b4000533821d7bad83cc0f",
+      "/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib": "33d4a1825606a1be480e152cd1274a04f98dbcf8d0c5fa4c43881cc4c02e45ad",
+      "/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib": "1ca8ab2c08f435a133999805244588f93cca023b7afe59074e894b3a2c01e9b5"
+    },
+    "rlib_provenance": "Hashes reverified against radius-evidence.json and row-binding/robust evidence. git diff f8c2f7a949fdbb31431a104c8d29d34195594d98 HEAD -- crates/aspis-core crates/aspis-statement empty. Rebuild recipes: robust-evidence.json/core_build and row-binding-evidence.json/statement_build.",
+    "host_hash_backend": "sha2 is a cached debug dependency. Core, statement and new arithmetic are optimized. No host hash-rate, production prover or CU inference."
+  },
+  "source_sha256": {
+    "docs/research/v8-no-work-100-20260907/experiments/ExactC1Recovery.lean": "c5d1616c409ac4c073a84cb11fb1107eb3e1cf16f66eaf29e4fe26b43099f599",
+    "docs/research/v8-no-work-100-20260907/experiments/authenticated_c1.rs": "c38a0ea014f0c9dbda7663360d11eac44da5e2983af52250f2edd4862e7bdedb",
+    "docs/research/v8-no-work-100-20260907/experiments/c1_query_graph.rs": "2b317684c83aa4f47adbbbc854fe560cdd81463850de90a6bf86d143ea8edb75",
+    "docs/research/v8-no-work-100-20260907/experiments/c1_gao.rs": "e1ac011a6603b5a6398806d9b16b029b38e6c2d206e14fa084df108f0f4f3e9d",
+    "docs/research/v8-no-work-100-20260907/experiments/payment_extraction.rs": "f8ace00f4c13882667c60e4c4661b1ac12c590e3b06b833362e4fe477ebde948",
+    "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs": "3e76488a25fce72d5a993367aaabe09a9adf20939b47bda73e70c28fc7908dcf",
+    "docs/research/v8-no-work-100-20260907/experiments/query_graph_ledger.py": "67c352ce4378cf88b7c784ae7065bd12e05773e7b53050b082f6f301a686c75e",
+    "docs/research/v8-no-work-100-20260907/experiments/c1_sampling_ledger.py": "0b337b4f2bf2d4c75950c0b3029f437e878c626271c2facb7e2d93856ca51013"
+  },
+  "jobs": {
+    "four_seed": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-query-graph",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-query-graph",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 170.94,
+      "peak_rss_bytes": 1046216704,
+      "swaps": 0,
+      "log": "evidence/query-graph-final-host.log",
+      "phase": "Before failure-retention/Gao extension; same eight prior proof IDs, not a replay of final source"
+    },
+    "graph_orders": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_graph_orders --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-query-graph-orders",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-query-graph-orders",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 0.93,
+      "peak_rss_bytes": 1998848,
+      "swaps": 0,
+      "log": "evidence/query-graph-orders.log",
+      "phase": "Fixed seven-vertex graph order enumeration; graph module unchanged since check"
+    },
+    "fibre256": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-c1-boundary",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-c1-boundary",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 32.46,
+      "peak_rss_bytes": 644513792,
+      "swaps": 0,
+      "log": "evidence/c1-boundary-host.log",
+      "phase": "Single-window predecessor"
+    },
+    "fibre0": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-c1-first-window",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-c1-first-window",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 36.08,
+      "peak_rss_bytes": 625180672,
+      "swaps": 0,
+      "log": "evidence/c1-first-window-host.log",
+      "phase": "Two-window predecessor"
+    },
+    "both_failure": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg v8_c1_both_windows --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-c1-both-windows",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-c1-both-windows",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 34.24,
+      "peak_rss_bytes": 627490816,
+      "swaps": 0,
+      "log": "evidence/c1-both-windows-host.log",
+      "phase": "Failure-retaining two-window predecessor, no Gao"
+    },
+    "gao_first": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg v8_c1_both_windows --cfg v8_c1_gao --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-c1-gao",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-c1-gao",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 35.75,
+      "peak_rss_bytes": 624295936,
+      "swaps": 0,
+      "log": "evidence/c1-gao-host.log",
+      "phase": "First fixed-sample Gao, before generic scattered-sample extension"
+    },
+    "gao_final": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg v8_c1_both_windows --cfg v8_c1_gao --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-c1-gao",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-c1-gao",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 36.65,
+      "peak_rss_bytes": 626655232,
+      "swaps": 0,
+      "log": "evidence/c1-gao-final-host.log",
+      "phase": "Final retained source; rerun justified by generic sample mapping and assertion changes"
+    },
+    "gao_near_final": {
+      "build_command": "/usr/bin/time -l rustc --edition=2021 -O --cfg v8_payment_extraction --cfg v8_query_graph --cfg v8_c1_boundary --cfg v8_c1_first_window --cfg v8_c1_both_windows --cfg v8_c1_gao --cfg v8_c1_near --cfg 'feature=\"insecure-spend-fixture\"' -A dead_code docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs --extern aspis_core=/tmp/libaspis_core_v8_callback.rlib --extern aspis_statement=/tmp/libaspis_statement_v8_semantic.rlib --extern sha2=/Users/dominic/ZK/target/debug/deps/libsha2-9283d442df0ffddb.rlib --extern zeroize=/Users/dominic/ZK/target/debug/deps/libzeroize-5c6dcd518b5da5ce.rlib --extern getrandom=/Users/dominic/ZK/target/debug/deps/libgetrandom-48a7cea969fbe812.rlib -L dependency=/tmp -L dependency=/Users/dominic/ZK/target/debug/deps -o /tmp/aspis-v8-c1-near",
+      "run_command": "/usr/bin/time -l /tmp/aspis-v8-c1-near",
+      "working_directory": "/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907",
+      "exit": 0,
+      "wall_seconds": 37.21,
+      "peak_rss_bytes": 655818752,
+      "swaps": 0,
+      "log": "evidence/c1-near-gao-host.log",
+      "phase": "Final retained source; corrected fixture equality assertion and forced diagnostic Gao run"
+    },
+    "lean": {
+      "command": "/usr/bin/time -l lake env lean -M 7000 /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/ExactC1Recovery.lean",
+      "working_directory": "/Users/dominic/ZK/AspisFormal",
+      "exit": 0,
+      "wall_seconds": 15.9,
+      "peak_rss_bytes": 2814033920,
+      "swaps": 0,
+      "log": "evidence/exact-c1-joint-window-axioms.log",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "new_axioms": [],
+      "sorry": false,
+      "scope": "Six audited deterministic matrix/one-fibre declarations. No universal encoder, Gao or payment coverage theorem."
+    }
+  },
+  "builds": {
+    "gao_final": {
+      "exit": 0,
+      "wall_seconds": 2.79,
+      "peak_rss_bytes": 318177280,
+      "swaps": 0,
+      "log": "evidence/c1-gao-final-build.log"
+    },
+    "near_final": {
+      "exit": 0,
+      "wall_seconds": 2.97,
+      "peak_rss_bytes": 321880064,
+      "swaps": 0,
+      "warning": "unused corrupt_c1_fibre under large-control cfg"
+    }
+  },
+  "failures_retained": [
+    {
+      "scope": "rustc --test on inclusion harness",
+      "result": "compile failed on imported HOST_HASH test symbols; replaced with focused cfg entrypoint, not a heavy rebuild"
+    },
+    {
+      "scope": "first Gao compile",
+      "result": "ambiguous integer type for n; annotated usize before execution"
+    },
+    {
+      "scope": "first large-corruption harness",
+      "exit": 101,
+      "wall_seconds": 29.37,
+      "peak_rss_bytes": 600424448,
+      "swaps": 0,
+      "result": "Valid checked witness followed by overstrong original-table equality assertion. Replaced with diagnostic equality, did not weaken validator. Synthetic table output omitted from persistent evidence."
+    }
+  ],
+  "measurements_not_obtained": [
+    "full transaction CU",
+    "SBF",
+    "full adaptive extraction success probability",
+    "end-to-end production prover latency",
+    "full-view ZK"
+  ],
+  "privacy": "Synthetic fixtures only. No raw hash log, masks, witness tables or owner secrets retained in artifacts.",
+  "mathematical_status": {
+    "exact_matrix_one_fibre": "Lean kernel checked with explicit inverse/code-proximity hypotheses",
+    "source_matrix_ranks": "optimized Rust checked",
+    "Gao_Laurent_bridge": "finite exact source-basis checks and paper-level argument; Lean/source refinement unresolved",
+    "private_sampling_tail": "exact rational arithmetic; ideal law specified; fixed prototype coins not that law",
+    "global_100_bits": null
+  },
+  "primary_sources": [
+    {
+      "url": "https://www.math.clemson.edu/~sgao/papers/RS.pdf",
+      "section": "Algorithm 1a; Theorem 3.3",
+      "access": "2026-09-08 indexed primary sections; direct PDF open timed out",
+      "version": "2003 publication per author bibliography"
+    },
+    {
+      "url": "https://www.math.clemson.edu/~sgao/WEB/publications.html",
+      "access": "2026-09-08"
+    }
+  ],
+  "main_preservation": {
+    "observed_revision": "161921048d3a5c50db97015647fe99b39eec580f",
+    "state": "Concurrent dirty K1 Lean files and v7 CU result directory; untouched"
+  }
+}
