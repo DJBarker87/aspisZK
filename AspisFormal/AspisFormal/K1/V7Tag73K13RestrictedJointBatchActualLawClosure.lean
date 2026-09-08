@@ -29,6 +29,9 @@ open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactConcreteK13K14Events
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
+open AspisK1.V7Tag73ExactFixedK13K14Classifier
+open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73HiddenTapeAveraging
@@ -87,6 +90,30 @@ theorem JointQueryBatchPreChallengeView.target_card_le_sixteen
     (view : JointQueryBatchPreChallengeView) : view.target.card ≤ 16 :=
   guardedJointQueryBatchTarget_card_le_sixteen view.preQueryDiscrepancy
     view.expected view.authenticated
+
+/-- The exact source-side data used by the joint query-batch polynomial,
+projected before the batching challenge itself.  Keeping this constructor
+separate means the remaining compiler bridge has to prove only that this
+view is constant on one pre-answer coordinate fibre. -/
+def exactJointQueryBatchPreChallengeView
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k12 : ExactPrefixK12Certificate input) :
+    JointQueryBatchPreChallengeView where
+  preQueryDiscrepancy := source.preQueryDiscrepancy sample input
+  expected := exactTag73K13ExpectedQueryVector decoder input k12
+  authenticated := exactTag73K13AuthenticatedQueryVector decoder input k12
 
 /-- Exact pre-query-batch source data on one compiler-clean slice. Coordinates
 are fixed by the literal pre-answer query-batch scheduler controller; this

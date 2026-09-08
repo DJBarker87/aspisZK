@@ -103,6 +103,27 @@ theorem exact_tag73_k13_later_alpha_event_eq_iUnion
     exact ⟨input, k12, laterRelationRound tail, by
       simp [laterRelationRound], failure⟩
 
+/-- The literal relation execution projected to exactly the claimed and
+honest coefficient vectors fixed before one later alpha answer.  The current
+alpha is absent from this source view. -/
+def exactLaterAlphaPreChallengeView
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (relationSource : ExactTag73RelationSourceEnvironment transitionFuel
+      configuration projection fixedInstance decoder)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (tail : Fin 3) : RelationAlphaPreChallengeView QM31Exact :=
+  relationAlphaPreChallengeView
+    (relationSource.run sample input).execution (laterRelationRound tail)
+
 /-- Deterministic pre-alpha data for the three later rounds on one clean
 slice. -/
 structure ExactTag73RestrictedK13LaterAlphaSource
