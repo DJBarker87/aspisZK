@@ -54,6 +54,7 @@ open AspisK1.V7Tag73IndexedControllerLabeledRecords
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedExposureCausalRouter
 open AspisK1.V7Tag73OperationalSemanticReplay
+open AspisK1.V7Tag73PureLookupDigestChain
 open AspisK1.V7Tag73FinalWorkQ16CandidateController
 open AspisK1.V7Tag73SamplerDecoder
 open AspisK1.V7Tag73SecureCircleMap
@@ -85,6 +86,12 @@ structure ExactAcceptedFoldTrial
   alphaBindDigest : Digest256
   afterFinal256Digest : Digest256
   q16Base : Digest256
+  c1BeforeDigest : Digest256
+  c2BeforeDigest : Digest256
+  c1Salt : Digest256
+  c2Salt : Digest256
+  c1Answer : Digest256
+  c2Answer : Digest256
   trial : ExactCompilerExposureTrial parameters
   prior : List UnifiedExposureRecord
   later : List UnifiedExposureRecord
@@ -155,6 +162,30 @@ structure ExactAcceptedFoldTrial
             (exactOperationalTape input).messages.finalGrinding.selected) =
       some q16Base
   q16BaseExact : q16Base = (exactOperationalRawTrace input).q16BaseDigest
+  c1Lookup :
+    tableLookup (exactOperationalTable input)
+        (bytes c1BeforeDigest ++ [domAbsorb, c1RootLabel] ++
+          (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+            (exactOperationalTape input).messages.c1Root c1Salt).data) =
+      some c1Answer
+  c2Lookup :
+    tableLookup (exactOperationalTable input)
+        (bytes c2BeforeDigest ++ [domAbsorb, c2RootLabel] ++
+          (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+            (exactOperationalTape input).messages.c2.root c2Salt).data) =
+      some c2Answer
+  c1FoldChain :
+    PureLookupDigestChain (exactOperationalTable input)
+      (bytes c1BeforeDigest ++ [domAbsorb, c1RootLabel] ++
+        (AspisK1.V7Tag73TranscriptSchedule.Payload.c1Root
+          (exactOperationalTape input).messages.c1Root c1Salt).data)
+      (IsPurePostRootStateInput c1RootLabel) c1Answer digest
+  c2FoldChain :
+    PureLookupDigestChain (exactOperationalTable input)
+      (bytes c2BeforeDigest ++ [domAbsorb, c2RootLabel] ++
+        (AspisK1.V7Tag73TranscriptSchedule.Payload.c2Root
+          (exactOperationalTape input).messages.c2.root c2Salt).data)
+      (IsPurePostRootStateInput c2RootLabel) c2Answer digest
   rootDecomposition :
     exactFixedRootRecords input.package.root =
       prior ++
@@ -178,12 +209,13 @@ theorem exact_accepted_fold_trial_exists
     Nonempty (ExactAcceptedFoldTrial input) := by
   obtain ⟨beforeRelation, digest, answer, boundaryAnswer, outputs,
       advances, exactValue, alphaBindDigest, afterFinal256Digest, q16Base,
+      c1BeforeDigest, c2BeforeDigest, c1Salt, c2Salt, c1Answer, c2Answer,
       facts⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
   rcases facts with ⟨relationLookup, workLookup, accepted, boundaryLookup,
     outputsLength, coordinates, alphaAccepted, alphaExactDecode,
     alphaOperational, alphaBindLookup, final256Lookup, finalNonceLookup,
-    q16BaseExact⟩
+    q16BaseExact, c1Lookup, c2Lookup, c1FoldChain, c2FoldChain⟩
   obtain ⟨actor, member⟩ :=
     exact_final_table_lookup_has_root_record input _ answer workLookup
   obtain ⟨prior, later, decomposition⟩ := (List.mem_iff_append).mp member
@@ -210,6 +242,12 @@ theorem exact_accepted_fold_trial_exists
       alphaBindDigest := alphaBindDigest
       afterFinal256Digest := afterFinal256Digest
       q16Base := q16Base
+      c1BeforeDigest := c1BeforeDigest
+      c2BeforeDigest := c2BeforeDigest
+      c1Salt := c1Salt
+      c2Salt := c2Salt
+      c1Answer := c1Answer
+      c2Answer := c2Answer
       trial := trial
       prior := prior
       later := later
@@ -227,6 +265,10 @@ theorem exact_accepted_fold_trial_exists
       final256Lookup := final256Lookup
       finalNonceLookup := finalNonceLookup
       q16BaseExact := q16BaseExact
+      c1Lookup := c1Lookup
+      c2Lookup := c2Lookup
+      c1FoldChain := c1FoldChain
+      c2FoldChain := c2FoldChain
       rootDecomposition := decomposition
       trialExact := rfl }⟩
 
