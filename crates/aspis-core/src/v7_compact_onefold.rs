@@ -530,7 +530,7 @@ fn reconstruct_compact_c2_query_prepared(
 }
 
 #[cfg(feature = "v7-query-order-source-bound-audit")]
-fn sort_v7_query_order_source_bounded(order: &mut [(u32, usize); V6_QUERY_COUNT]) {
+pub fn sort_v7_query_order_source_bounded(order: &mut [(u32, usize); V6_QUERY_COUNT]) {
     for index in 1..V6_QUERY_COUNT {
         let value = order[index];
         let mut cursor = index;

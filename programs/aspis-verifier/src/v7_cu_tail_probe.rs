@@ -1,0 +1,249 @@
+//! Local-validator-only measurement of the two bounded V7 CU tails.
+//!
+//! This entrypoint is mutually exclusive with every production dispatcher.
+//! It calls the real transcript sampler and the source-visible query sorting
+//! routines with adversarial successful inputs. The custom transcript hashes
+//! still execute the real SHA syscall before returning controlled bytes, so
+//! their extra framing work makes the measured retry delta conservative.
+
+use aspis_core::{
+    field::{P, QM31},
+    transcript::Transcript,
+    v6_onefold::{binary_frontier_nodes, V6_QUERY_COUNT},
+    v7_compact_onefold::sort_v7_query_order_source_bounded,
+};
+use solana_program::{
+    account_info::AccountInfo,
+    entrypoint::ProgramResult,
+    log::{sol_log_compute_units, sol_log_data},
+    program_error::ProgramError,
+    pubkey::Pubkey,
+};
+
+pub const V7_CU_TAIL_QM31_MIN_TAG: u8 = 78;
+pub const V7_CU_TAIL_QM31_MAX_TAG: u8 = 79;
+pub const V7_CU_TAIL_QUERY_ASCENDING_TAG: u8 = 80;
+pub const V7_CU_TAIL_QUERY_DESCENDING_TAG: u8 = 81;
+pub const V7_CU_TAIL_QUERY_WIRE_BYTES: usize = 1 + V6_QUERY_COUNT * 4;
+
+const DOM_SQUEEZE: u8 = 0x01;
+const DOM_ADVANCE: u8 = 0x02;
+
+#[cfg(not(feature = "no-entrypoint"))]
+solana_program::entrypoint!(process_v7_cu_tail_probe_instruction);
+
+fn framed_state<'a>(inputs: &'a [&'a [u8]], domain: u8) -> Option<&'a [u8]> {
+    match inputs {
+        [state, frame] if state.len() == 32 && *frame == [domain] => Some(*state),
+        [packed] if packed.len() == 33 && packed[32] == domain => Some(&packed[..32]),
+        _ => None,
+    }
+}
+
+fn real_hash_then_minimum_block(inputs: &[&[u8]]) -> [u8; 32] {
+    let real = crate::verify::sbf_hashv(inputs);
+    if framed_state(inputs, DOM_SQUEEZE).is_none() {
+        return real;
+    }
+    let mut block = [0u8; 32];
+    for (index, word) in block.chunks_exact_mut(4).enumerate() {
+        word.copy_from_slice(&((index + 1) as u32).to_le_bytes());
+    }
+    block
+}
+
+fn controlled_maximum_block(inputs: &[&[u8]], accepted_word: u32) -> [u8; 32] {
+    let real = crate::verify::sbf_hashv(inputs);
+    if let Some(state) = framed_state(inputs, DOM_ADVANCE) {
+        let mut next = [0u8; 32];
+        next[0] = state[0].saturating_add(1);
+        return next;
+    }
+    if framed_state(inputs, DOM_SQUEEZE).is_none() {
+        return real;
+    }
+    let mut block = [0u8; 32];
+    for word in block.chunks_exact_mut(4).take(7) {
+        word.copy_from_slice(&P.to_le_bytes());
+    }
+    block[28..32].copy_from_slice(&accepted_word.to_le_bytes());
+    block
+}
+
+fn real_hash_then_maximum_nonzero_block(inputs: &[&[u8]]) -> [u8; 32] {
+    let accepted = framed_state(inputs, DOM_SQUEEZE)
+        .map(|state| u32::from(state[0] >= 8))
+        .unwrap_or(1);
+    controlled_maximum_block(inputs, accepted)
+}
+
+fn real_hash_then_maximum_secure_block(inputs: &[&[u8]]) -> [u8; 32] {
+    let accepted = framed_state(inputs, DOM_SQUEEZE)
+        .map(|state| u32::from(state[0] >= 8))
+        .unwrap_or(1);
+    controlled_maximum_block(inputs, accepted)
+}
+
+fn real_hash_then_maximum_ordinary_block(inputs: &[&[u8]]) -> [u8; 32] {
+    controlled_maximum_block(inputs, 1)
+}
+
+fn mix_qm31(sink: &mut [u8; 16], value: QM31) {
+    let mut bytes = [0u8; 16];
+    value.write_le_bytes(&mut bytes);
+    for (left, right) in sink.iter_mut().zip(bytes) {
+        *left ^= right;
+    }
+}
+
+fn run_qm31_minimum_topology() -> Result<[u8; 16], ProgramError> {
+    let mut sink = [0u8; 16];
+    let mut direct = Transcript::new(real_hash_then_minimum_block);
+    for _ in 0..30 {
+        mix_qm31(
+            &mut sink,
+            direct
+                .challenge_qm31()
+                .map_err(|_| ProgramError::InvalidArgument)?,
+        );
+    }
+    for _ in 0..4 {
+        let mut transcript = Transcript::new(real_hash_then_minimum_block);
+        mix_qm31(
+            &mut sink,
+            transcript
+                .challenge_nonzero_qm31()
+                .map_err(|_| ProgramError::InvalidArgument)?,
+        );
+    }
+    for _ in 0..2 {
+        let mut transcript = Transcript::new(real_hash_then_minimum_block);
+        let point = transcript
+            .challenge_secure_circle_point()
+            .map_err(|_| ProgramError::InvalidArgument)?;
+        mix_qm31(&mut sink, point.x);
+        mix_qm31(&mut sink, point.y);
+    }
+    Ok(sink)
+}
+
+fn run_qm31_maximum_successful_topology() -> Result<[u8; 16], ProgramError> {
+    let mut sink = [0u8; 16];
+    let mut direct = Transcript::new(real_hash_then_maximum_ordinary_block);
+    for _ in 0..30 {
+        mix_qm31(
+            &mut sink,
+            direct
+                .challenge_qm31()
+                .map_err(|_| ProgramError::InvalidArgument)?,
+        );
+    }
+    for _ in 0..4 {
+        let mut transcript = Transcript::new(real_hash_then_maximum_nonzero_block);
+        mix_qm31(
+            &mut sink,
+            transcript
+                .challenge_nonzero_qm31()
+                .map_err(|_| ProgramError::InvalidArgument)?,
+        );
+    }
+    for _ in 0..2 {
+        let mut transcript = Transcript::new(real_hash_then_maximum_secure_block);
+        let point = transcript
+            .challenge_secure_circle_point()
+            .map_err(|_| ProgramError::InvalidArgument)?;
+        mix_qm31(&mut sink, point.x);
+        mix_qm31(&mut sink, point.y);
+    }
+    Ok(sink)
+}
+
+fn parse_queries(instruction_data: &[u8], descending: bool) -> Result<[u32; 16], ProgramError> {
+    if instruction_data.len() != V7_CU_TAIL_QUERY_WIRE_BYTES {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    let mut queries = [0u32; V6_QUERY_COUNT];
+    for (index, output) in queries.iter_mut().enumerate() {
+        let offset = 1 + index * 4;
+        *output = u32::from_le_bytes(
+            instruction_data[offset..offset + 4]
+                .try_into()
+                .map_err(|_| ProgramError::InvalidInstructionData)?,
+        );
+    }
+    if descending {
+        queries.reverse();
+    }
+    Ok(queries)
+}
+
+fn run_query_topology(queries: [u32; 16]) -> Result<[u8; 16], ProgramError> {
+    let mut sink = [0u8; 16];
+    for candidate in 0..21u32 {
+        let frontier =
+            binary_frontier_nodes(queries, 18).map_err(|_| ProgramError::InvalidInstructionData)?;
+        sink[(candidate as usize) & 15] ^= frontier as u8;
+    }
+    let mut order: [(u32, usize); V6_QUERY_COUNT] =
+        core::array::from_fn(|ordinal| (queries[ordinal], ordinal));
+    sort_v7_query_order_source_bounded(&mut order);
+    for (index, (query, ordinal)) in order.into_iter().enumerate() {
+        sink[index] ^= (query as u8).wrapping_add(ordinal as u8);
+    }
+    Ok(sink)
+}
+
+pub fn process_v7_cu_tail_probe_instruction(
+    _program_id: &Pubkey,
+    accounts: &[AccountInfo<'_>],
+    instruction_data: &[u8],
+) -> ProgramResult {
+    if !accounts.is_empty() {
+        return Err(ProgramError::InvalidArgument);
+    }
+    let tag = instruction_data
+        .first()
+        .copied()
+        .ok_or(ProgramError::InvalidInstructionData)?;
+    sol_log_compute_units();
+    let sink = match tag {
+        V7_CU_TAIL_QM31_MIN_TAG if instruction_data.len() == 1 => run_qm31_minimum_topology()?,
+        V7_CU_TAIL_QM31_MAX_TAG if instruction_data.len() == 1 => {
+            run_qm31_maximum_successful_topology()?
+        }
+        V7_CU_TAIL_QUERY_ASCENDING_TAG => {
+            run_query_topology(parse_queries(instruction_data, false)?)?
+        }
+        V7_CU_TAIL_QUERY_DESCENDING_TAG => {
+            run_query_topology(parse_queries(instruction_data, true)?)?
+        }
+        _ => return Err(ProgramError::InvalidInstructionData),
+    };
+    sol_log_data(&[b"aspis-v7-cu-tail-probe-v1", &sink]);
+    sol_log_compute_units();
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn adversarial_qm31_topologies_are_successful() {
+        assert!(run_qm31_minimum_topology().is_ok());
+        assert!(run_qm31_maximum_successful_topology().is_ok());
+    }
+
+    #[test]
+    fn query_orders_have_identical_semantics() {
+        let queries: [u32; 16] = core::array::from_fn(|index| index as u32);
+        let mut reversed = queries;
+        reversed.reverse();
+        assert_eq!(
+            binary_frontier_nodes(queries, 18),
+            binary_frontier_nodes(reversed, 18)
+        );
+        assert!(run_query_topology(queries).is_ok());
+        assert!(run_query_topology(reversed).is_ok());
+    }
+}
