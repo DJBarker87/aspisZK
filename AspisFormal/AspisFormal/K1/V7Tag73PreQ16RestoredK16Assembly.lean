@@ -46,6 +46,7 @@ open AspisK1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 open AspisK1.V7Tag73RelationTailSourceComposition
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73K13RestrictedLaterAlphaActualLawClosure
+open AspisK1.V7Tag73K13PreQ16TargetProbability
 open AspisK1.V7Tag73Q16FirstCompactUniformity
 open AspisK1.V7Tag73Q16SemanticFrontierBridge
 open AspisK1.V7Tag73PreQ16RestoredK15Events
@@ -220,7 +221,9 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
     (oneFoldSource : ExactTag73RestrictedPreQ16OneFoldSource transitionFuel
       configuration projection fixedInstance decoder
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-        projection fixedInstance))
+          projection fixedInstance \
+        exactK13PreQ16LateTargetEvent transitionFuel configuration projection
+          fixedInstance))
     (jointBatchSource : ExactTag73RestrictedK13JointBatchSource transitionFuel
       configuration projection fixedInstance decoder relationSource
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
