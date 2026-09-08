@@ -82,6 +82,7 @@ structure ExactAcceptedFoldTrial
   alphaOutputs : List Digest256
   alphaAdvances : List Digest256
   alphaExactValue : QM31Exact
+  alphaBindDigest : Digest256
   afterFinal256Digest : Digest256
   q16Base : Digest256
   trial : ExactCompilerExposureTrial parameters
@@ -125,9 +126,22 @@ structure ExactAcceptedFoldTrial
     exactChallengeValue
         (exactOperationalTape input).messages.challengeValue (.alpha 0) =
       alphaExactValue
-  final256Lookup :
+  alphaBindLookup :
     tableLookup (exactOperationalTable input)
         (bytes (gammaTerminalDigest boundaryAnswer alphaAdvances) ++
+          [domAbsorb,
+            AspisK1.V7Tag73TranscriptSchedule.Payload.label
+              (.challengeBind .alphaZero
+                ((exactOperationalTape input).messages.challengeValue
+                  (.alpha 0)))] ++
+          AspisK1.V7Tag73TranscriptSchedule.Payload.data
+            (.challengeBind .alphaZero
+              ((exactOperationalTape input).messages.challengeValue
+                (.alpha 0)))) =
+      some alphaBindDigest
+  final256Lookup :
+    tableLookup (exactOperationalTable input)
+        (bytes alphaBindDigest ++
           [domAbsorb,
             (AspisK1.V7Tag73TranscriptSchedule.Payload.final256
               (exactOperationalTape input).messages.finalValues).label] ++
@@ -163,11 +177,13 @@ theorem exact_accepted_fold_trial_exists
       fixedInstance sample) :
     Nonempty (ExactAcceptedFoldTrial input) := by
   obtain ⟨beforeRelation, digest, answer, boundaryAnswer, outputs,
-      advances, exactValue, afterFinal256Digest, q16Base, facts⟩ :=
+      advances, exactValue, alphaBindDigest, afterFinal256Digest, q16Base,
+      facts⟩ :=
     exact_operational_relation_zero_and_fold_work_lookups input
   rcases facts with ⟨relationLookup, workLookup, accepted, boundaryLookup,
     outputsLength, coordinates, alphaAccepted, alphaExactDecode,
-    alphaOperational, final256Lookup, finalNonceLookup, q16BaseExact⟩
+    alphaOperational, alphaBindLookup, final256Lookup, finalNonceLookup,
+    q16BaseExact⟩
   obtain ⟨actor, member⟩ :=
     exact_final_table_lookup_has_root_record input _ answer workLookup
   obtain ⟨prior, later, decomposition⟩ := (List.mem_iff_append).mp member
@@ -191,6 +207,7 @@ theorem exact_accepted_fold_trial_exists
       alphaOutputs := outputs
       alphaAdvances := advances
       alphaExactValue := exactValue
+      alphaBindDigest := alphaBindDigest
       afterFinal256Digest := afterFinal256Digest
       q16Base := q16Base
       trial := trial
@@ -206,6 +223,7 @@ theorem exact_accepted_fold_trial_exists
       alphaAccepted := alphaAccepted
       alphaExactDecode := alphaExactDecode
       alphaOperational := alphaOperational
+      alphaBindLookup := alphaBindLookup
       final256Lookup := final256Lookup
       finalNonceLookup := finalNonceLookup
       q16BaseExact := q16BaseExact
