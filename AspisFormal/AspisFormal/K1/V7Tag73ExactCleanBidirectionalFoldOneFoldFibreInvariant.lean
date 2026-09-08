@@ -1,5 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactCleanBidirectionalFoldOneFoldFibreTarget
 import AspisFormal.K1.V7Tag73ExactAdversaryAnchorFinalProfile
+import AspisFormal.K1.V7Tag73ExactCleanBidirectionalFoldRootInvariant
+import AspisFormal.K1.V7Tag73PreQ16PrefixWordStability
 
 /-!
 # Corrected clean one-fold fibre invariant
@@ -19,6 +21,7 @@ namespace AspisK1.V7Tag73ExactCleanBidirectionalFoldOneFoldFibreInvariant
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AdaptiveQ16TrialAccounting
+open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73BidirectionalFoldOneFoldCoordinates
 open AspisK1.V7Tag73CausalRawOneFoldTarget
 open AspisK1.V7Tag73ExactAcceptedFoldTrialPackage
@@ -30,8 +33,11 @@ open AspisK1.V7Tag73ExactBidirectionalFoldOneFoldReplay
 open AspisK1.V7Tag73ExactCleanBidirectionalFoldOneFoldComponents
 open AspisK1.V7Tag73ExactCleanBidirectionalFoldOneFoldFibreTarget
 open AspisK1.V7Tag73ExactCleanBidirectionalFoldOneFoldTrialEvent
+open AspisK1.V7Tag73ExactCleanBidirectionalFoldPairPriorInvariant
+open AspisK1.V7Tag73ExactCleanBidirectionalFoldRootInvariant
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK13K14Classifier
 open AspisK1.V7Tag73ExactInternalCurveProbability
@@ -42,6 +48,9 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FoldOneFoldComponentMembership
 open AspisK1.V7Tag73K13PreQ16JointEventHandoff
+open AspisK1.V7Tag73K13PreQ16MerkleWordSource
+open AspisK1.V7Tag73K13PreQ16TargetInventory
+open AspisK1.V7Tag73PreQ16PrefixWordStability
 open AspisK1.V7Tag73RawNonzeroSamplerFactorization
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
 open AspisK1.V7Tag73TranscriptSchedule
@@ -195,6 +204,125 @@ def ExactCleanBidirectionalK13OneFoldWordsGammaInvariant
       (exactK13ParsedProof leftWitness.input).gamma =
         (exactK13ParsedProof rightWitness.input).gamma
 
+/-- The broad causal Merkle-target complement fixes the entire completed word
+between either proof-relevant anchor and the full root trace.  Both traces can
+therefore be compared through their common fold-pair prefix, where residual
+equality also fixes the authenticated roots. -/
+theorem exact_clean_bidirectional_pair_words_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (programmedCover : 5 ≤ 2 * parameters.forkRequestCap)
+    (trial : ExactCompilerExposureTrial parameters) (hidden : HiddenTape)
+    (left right : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (leftWitness : ExactCleanBidirectionalK13OneFoldTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, left) trial)
+    (rightWitness : ExactCleanBidirectionalK13OneFoldTrialWitness transitionFuel
+      configuration projection fixedInstance decoder (hidden, right) trial)
+    (residualExact :
+      let router := exactCompilerBidirectionalFoldOneFoldRouter parameters
+        transitionFuel trial.val
+        (exactPlainRomCursor configuration hidden).erase
+      (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+          left).1 =
+        (exactCompilerCausalBidirectionalFoldOneFoldCoordinates parameters router
+          right).1) :
+    leftWitness.failure.words = rightWitness.failure.words := by
+  obtain ⟨leftPrior, leftLater, rightPrior, rightLater, leftActor,
+      rightActor, leftTarget, rightTarget, leftAnswer, rightAnswer,
+      leftRootExact, rightRootExact, _leftTrialExact, _rightTrialExact,
+      leftRole, rightRole, priorExact⟩ :=
+    exact_clean_bidirectional_pair_anchor_priors_eq trial hidden left right
+      leftWitness rightWitness programmedCover residualExact
+  subst rightPrior
+  have rootsExact := exact_clean_bidirectional_pair_k12_roots_eq transitionRoom
+    trial hidden left right leftWitness rightWitness programmedCover
+      residualExact
+  have leftPairRoots := exact_accepted_fold_anchor_k12_roots_mem
+    transitionRoom leftWitness.input leftWitness.fold leftPrior leftLater
+      leftActor leftTarget leftAnswer leftRootExact leftRole
+  have rightPairRoots := exact_accepted_fold_anchor_k12_roots_mem
+    transitionRoom rightWitness.input rightWitness.fold leftPrior rightLater
+      rightActor rightTarget rightAnswer rightRootExact rightRole
+  have leftFinalRoots := exact_actual_trial_k12_roots_mem transitionRoom
+    leftWitness.input leftWitness.failure.anchor.trial
+      leftWitness.failure.anchor.actual leftWitness.failure.anchor.prior
+      leftWitness.failure.anchor.later leftWitness.failure.anchor.pivotActor
+      leftWitness.failure.anchor.pivotInput
+      leftWitness.failure.anchor.pivotAnswer
+      leftWitness.failure.anchor.rootExact
+      leftWitness.failure.anchor.trialExact
+  have rightFinalRoots := exact_actual_trial_k12_roots_mem transitionRoom
+    rightWitness.input rightWitness.failure.anchor.trial
+      rightWitness.failure.anchor.actual rightWitness.failure.anchor.prior
+      rightWitness.failure.anchor.later rightWitness.failure.anchor.pivotActor
+      rightWitness.failure.anchor.pivotInput
+      rightWitness.failure.anchor.pivotAnswer
+      rightWitness.failure.anchor.rootExact
+      rightWitness.failure.anchor.trialExact
+  have leftPairStable := exact_preQ16PrefixWords_append_eq_of_no_target
+    leftWitness.input leftPrior
+      ((.machineFresh leftActor leftTarget leftAnswer :
+        UnifiedExposureRecord) :: leftLater)
+      (by simpa only [List.cons_append] using leftRootExact)
+      (exactK12Roots leftWitness.input) leftPairRoots.1 leftPairRoots.2
+      leftWitness.noMerkleTarget
+  have rightPairStable := exact_preQ16PrefixWords_append_eq_of_no_target
+    rightWitness.input leftPrior
+      ((.machineFresh rightActor rightTarget rightAnswer :
+        UnifiedExposureRecord) :: rightLater)
+      (by simpa only [List.cons_append] using rightRootExact)
+      (exactK12Roots rightWitness.input) rightPairRoots.1 rightPairRoots.2
+      rightWitness.noMerkleTarget
+  have leftFinalStable := exact_preQ16PrefixWords_append_eq_of_no_target
+    leftWitness.input leftWitness.failure.anchor.prior
+      ((.machineFresh leftWitness.failure.anchor.pivotActor
+          leftWitness.failure.anchor.pivotInput
+          leftWitness.failure.anchor.pivotAnswer : UnifiedExposureRecord) ::
+        leftWitness.failure.anchor.later)
+      (by simpa only [List.cons_append] using
+        leftWitness.failure.anchor.rootExact)
+      (exactK12Roots leftWitness.input) leftFinalRoots.1 leftFinalRoots.2
+      leftWitness.noMerkleTarget
+  have rightFinalStable := exact_preQ16PrefixWords_append_eq_of_no_target
+    rightWitness.input rightWitness.failure.anchor.prior
+      ((.machineFresh rightWitness.failure.anchor.pivotActor
+          rightWitness.failure.anchor.pivotInput
+          rightWitness.failure.anchor.pivotAnswer : UnifiedExposureRecord) ::
+        rightWitness.failure.anchor.later)
+      (by simpa only [List.cons_append] using
+        rightWitness.failure.anchor.rootExact)
+      (exactK12Roots rightWitness.input) rightFinalRoots.1 rightFinalRoots.2
+      rightWitness.noMerkleTarget
+  rw [← leftRootExact] at leftPairStable
+  rw [← rightRootExact] at rightPairStable
+  rw [← leftWitness.failure.anchor.rootExact] at leftFinalStable
+  rw [← rightWitness.failure.anchor.rootExact] at rightFinalStable
+  calc
+    leftWitness.failure.words =
+        preQ16PrefixWords leftWitness.failure.anchor.prior
+          (exactK12Roots leftWitness.input) := leftWitness.failure.wordsExact
+    _ = preQ16PrefixWords
+          (exactFixedRootRecords leftWitness.input.package.root)
+          (exactK12Roots leftWitness.input) := leftFinalStable.symm
+    _ = preQ16PrefixWords leftPrior
+          (exactK12Roots leftWitness.input) := leftPairStable
+    _ = preQ16PrefixWords leftPrior
+          (exactK12Roots rightWitness.input) := by rw [rootsExact]
+    _ = preQ16PrefixWords
+          (exactFixedRootRecords rightWitness.input.package.root)
+          (exactK12Roots rightWitness.input) := rightPairStable.symm
+    _ = preQ16PrefixWords rightWitness.failure.anchor.prior
+          (exactK12Roots rightWitness.input) := rightFinalStable
+    _ = rightWitness.failure.words := rightWitness.failure.wordsExact.symm
+
 /-- The already-required production source provider discharges schedule
 functionality, so the word/gamma causal invariant implies the full fibre
 invariant consumed by target transport. -/
@@ -257,6 +385,7 @@ noncomputable def exactCleanBidirectionalOneFoldContextOfSource
 #print axioms ExactCleanBidirectionalK13OneFoldFibreInvariant
 #print axioms exact_scheduleAtAlpha_eq_of_source_bindings
 #print axioms ExactCleanBidirectionalK13OneFoldWordsGammaInvariant
+#print axioms exact_clean_bidirectional_pair_words_eq
 #print axioms exact_clean_onefold_fibre_invariant_of_words_gamma
 #print axioms exactCleanBidirectionalOneFoldContextOfSource
 
