@@ -106,6 +106,55 @@ theorem preQ16FullMerkleTargets_append_left
   simpa [exposurePrefixRawQueries, List.filterMap_append,
     List.map_append] using Or.inl rawInputMem
 
+/-- Any root-record answer that hits the Merkle inventory exposed by its
+strict chronological prefix is already a hit in the canonical compiler
+target tree.  Unlike the accepted-opening bridge below, this statement is
+proof-independent and can be used to keep the entire committed word fixed
+before the fold/alpha fibre. -/
+theorem exact_root_later_merkle_target_implies_master_scheduler_hit
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (before after : List UnifiedExposureRecord)
+    (hit : UnifiedExposureRecord)
+    (rootExact : exactFixedRootRecords input.package.root =
+      before ++ hit :: after)
+    (targetHit : hit.answer ∈ preQ16FullMerkleTargets before) :
+    (preQ16MerkleTargetTree
+      (globalFull256OracleCallCap parameters)
+      (unifiedFull256ExposureCap parameters) transitionFuel
+      (exactPlainRomCursor configuration sample.1).erase).everHits
+        (castFreshAnswerTape (preQ16MasterLengthEq parameters) sample.2) := by
+  let clientTail :=
+    (exactFixedComputedClientTailRun transitionFuel configuration sample
+      input.package.root).trace
+  have traceExact :
+      exactCompilerUnifiedExposureTrace parameters transitionFuel
+          (exactPlainRomCursor configuration sample.1) sample.2 =
+        before ++ hit :: (after ++ clientTail) := by
+    rw [exact_compiler_unified_exposure_trace_is_actual_plain_rom_trace,
+      exact_fixed_operational_state_map_trace_is_full_trace transitionFuel
+        configuration projection fixedInstance sample input.package]
+    unfold exactFixedOperationalStateMapTrace
+    rw [rootExact]
+    simp only [clientTail, List.cons_append, List.append_assoc]
+  have hitTree := later_record_target_implies_tree_hit transitionFuel
+    (exactPlainRomCursor configuration sample.1).erase
+    (operationalTapeCoordinates (globalFull256OracleCallCap parameters) 1
+      (unifiedFull256ExposureCap parameters)
+      (exactCompilerOperationalIndexedTape parameters sample.2))
+    before hit (after ++ clientTail) traceExact targetHit
+  rw [exactCompilerPreQ16MerkleTargetTape_eq_castMaster parameters sample.2]
+    at hitTree
+  exact hitTree
+
 /-- A late target in the accepted trial is carried by a fresh root record
 strictly after the trial prefix. Cached repetitions are routed to their first
 fresh table entry; the `input ∉ prefixLog` clause excludes an earlier entry. -/
@@ -303,6 +352,7 @@ theorem exact_actual_late_target_implies_master_scheduler_hit
 #print axioms freshAnswerTape_eq_of_toList_eq
 #print axioms exactCompilerPreQ16MerkleTargetTape_eq_castMaster
 #print axioms preQ16FullMerkleTargets_append_left
+#print axioms exact_root_later_merkle_target_implies_master_scheduler_hit
 #print axioms exact_actual_late_target_has_post_prefix_root_record
 #print axioms exact_actual_late_target_implies_preQ16_scheduler_hit
 #print axioms exact_actual_late_target_implies_master_scheduler_hit
