@@ -497,6 +497,15 @@ impl Transcript {
             let parameter = self
                 .challenge_qm31()
                 .map_err(|_| CirclePointSampleError::ChallengeSampleExhausted)?;
+            // Every CM31 parameter is rejected by the OOD policy.  Check that
+            // public condition before the rational map so a rejected outer
+            // candidate cannot execute the otherwise redundant QM31 inverse.
+            // The helper below retains its precise standalone error ordering;
+            // this transcript wrapper exposes only candidate exhaustion, so
+            // the accepted value and number of transcript draws are unchanged.
+            if parameter.c1 == crate::field::CM31::ZERO {
+                continue;
+            }
             if let Ok(point) = secure_ood_circle_point_from_parameter(parameter) {
                 return Ok(point);
             }
@@ -1194,6 +1203,49 @@ mod tests {
         } else {
             test_hash(inputs)
         }
+    }
+
+    fn first_two_cm31_then_secure_hash(inputs: &[&[u8]]) -> [u8; 32] {
+        if let Some(state) = framed_state(inputs, DOM_SQUEEZE) {
+            let mut block = [0u8; 32];
+            block[0..4].copy_from_slice(&1u32.to_le_bytes());
+            block[4..8].copy_from_slice(&2u32.to_le_bytes());
+            if state[0] >= 2 {
+                block[8..12].copy_from_slice(&3u32.to_le_bytes());
+                block[12..16].copy_from_slice(&4u32.to_le_bytes());
+            }
+            block
+        } else if let Some(state) = framed_state(inputs, DOM_ADVANCE) {
+            let mut next = [0u8; 32];
+            next[0] = state[0].saturating_add(1);
+            next
+        } else {
+            test_hash(inputs)
+        }
+    }
+
+    fn legacy_secure_circle_sampler(
+        transcript: &mut Transcript,
+    ) -> Result<SecureCirclePoint, CirclePointSampleError> {
+        for _ in 0..CIRCLE_POINT_RETRY_LIMIT {
+            let parameter = transcript
+                .challenge_qm31()
+                .map_err(|_| CirclePointSampleError::ChallengeSampleExhausted)?;
+            if let Ok(point) = secure_ood_circle_point_from_parameter(parameter) {
+                return Ok(point);
+            }
+        }
+        Err(CirclePointSampleError::ParameterSampleExhausted)
+    }
+
+    #[test]
+    fn circle_sampler_precheck_preserves_accepted_point_and_transcript_state() {
+        let mut optimized = Transcript::new(first_two_cm31_then_secure_hash);
+        let mut legacy = Transcript::new(first_two_cm31_then_secure_hash);
+        let optimized_point = optimized.challenge_secure_circle_point().unwrap();
+        let legacy_point = legacy_secure_circle_sampler(&mut legacy).unwrap();
+        assert_eq!(optimized_point, legacy_point);
+        assert_eq!(optimized.state, legacy.state);
     }
 
     #[test]

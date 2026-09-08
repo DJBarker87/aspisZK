@@ -58,6 +58,8 @@ def main() -> None:
 
     transcript_path = "crates/aspis-core/src/transcript.rs"
     onefold_path = "crates/aspis-core/src/v7_onefold.rs"
+    v6_onefold_path = "crates/aspis-core/src/v6_onefold.rs"
+    compact_onefold_path = "crates/aspis-core/src/v7_compact_onefold.rs"
     v6_transcript_path = "crates/aspis-core/src/v6_transcript.rs"
     state_only_sumcheck_path = "crates/aspis-core/src/state_only_sumcheck.rs"
     state_only_hiding_path = "crates/aspis-core/src/state_only_hiding.rs"
@@ -68,6 +70,7 @@ def main() -> None:
     pool_processor_path = "programs/aspis-pool/src/processor.rs"
     pool_vault_path = "programs/aspis-pool/src/vault.rs"
     verifier_dispatch_path = "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs"
+    verifier_certificate_path = "programs/aspis-verifier/src/v7_terminal_pda_certificate.rs"
 
     transcript = read(transcript_path)
     onefold = read(onefold_path)
@@ -81,6 +84,8 @@ def main() -> None:
     pool_processor = read(pool_processor_path)
     pool_vault = read(pool_vault_path)
     verifier_dispatch = read(verifier_dispatch_path)
+    compact_onefold = read(compact_onefold_path)
+    verifier_certificate = read(verifier_certificate_path)
 
     require(r"CHALLENGE_RETRY_LIMIT:\s*u32\s*=\s*8", transcript, "QM31 retry limit")
     require(r"NONZERO_QM31_RETRY_LIMIT:\s*u32\s*=\s*3", transcript, "nonzero retry limit")
@@ -127,13 +132,20 @@ def main() -> None:
     )
     require(
         r"for index in 1\.\.Q\s*\{.*while cursor > 0 && value < queries\[cursor - 1\]",
-        read("crates/aspis-core/src/v6_onefold.rs"),
+        read(v6_onefold_path),
         "candidate insertion-sort topology",
     )
     require(
-        r"order\.sort_unstable_by_key\(\|entry\| entry\.0\)",
-        onefold,
-        "accepted-opening query sort",
+        r"fn sort_v7_query_order_source_bounded\(.*for index in 1\.\.V6_QUERY_COUNT.*"
+        r"while cursor > 0 && value\.0 < order\[cursor - 1\]\.0",
+        compact_onefold,
+        "source-bounded accepted-opening query sort",
+    )
+    require(
+        r"if parameter\.c1 == crate::field::CM31::ZERO\s*\{\s*continue;\s*\}.*"
+        r"secure_ood_circle_point_from_parameter\(parameter\)",
+        transcript,
+        "secure-circle subfield rejection before rational-map inversion",
     )
 
     # The accepted transcript has 30 direct QM31 calls, four nonzero samplers,
@@ -146,6 +158,10 @@ def main() -> None:
     maximum_qm31_calls = direct_qm31 + 3 * nonzero_qm31 + 3 * secure_circle
     minimum_qm31_squeeze_blocks = minimum_qm31_calls
     maximum_qm31_squeeze_blocks = maximum_qm31_calls * 4
+    minimum_qm31_word_attempts = minimum_qm31_calls * 4
+    maximum_qm31_word_attempts = maximum_qm31_calls * 4 * 8
+    maximum_outer_nonzero_rejections = nonzero_qm31 * 2
+    maximum_outer_circle_rejections = secure_circle * 2
     if (v6_transcript.count(".challenge_nonzero_qm31()")
             + state_only_hiding.count(".challenge_nonzero_qm31()")) < nonzero_qm31:
         fail("source inventory mismatch: nonzero challenge call inventory")
@@ -210,11 +226,9 @@ def main() -> None:
     if pda_invocations != 21:
         fail(f"expected 21 rollover-withdrawal PDA invocations, got {pda_invocations}")
 
-    # Agave's on-chain syscall tries bumps 255 down through 1. A successful
-    # derivation therefore uses 1..255 charged attempts. Exhausting all bumps
-    # returns failure after a final (256th) charge and cannot reach a persisted
-    # transition.
-    pda_successful_attempts_per_invocation_max = 255
+    # Agave's canonical search tries every bump from 255 down through zero.
+    # A bump-zero success therefore uses all 256 charged attempts.
+    pda_successful_attempts_per_invocation_max = 256
     pda_exhausted_failure_charges = 256
     pda_syscall_cu_per_successful_invocation_max = (
         pda_successful_attempts_per_invocation_max * create_program_address_cu
@@ -226,6 +240,25 @@ def main() -> None:
         (pda_successful_attempts_per_invocation_max - 1) * create_program_address_cu
     )
 
+    # The APD8 proof-preparation certificate runs those canonical searches
+    # before the terminal transaction. Its verifier-owned immutable bytes are
+    # replayed with fixed create_program_address attempts in the terminal.
+    require(r"fn require_canonical_bumps\(.*find_program_address", verifier_certificate,
+            "certificate-time canonical bump search")
+    require(r"fn require_created_address\(.*create_program_address", verifier_certificate,
+            "certificate terminal single-attempt replay")
+    require(r"destination\.copy_from_slice", verifier_certificate,
+            "immutable certificate initialization write")
+    terminal_find_program_address_after = 0
+    terminal_single_attempts = {
+        "samePageTransfer": 11,
+        "rolloverTransfer": 12,
+        "samePageWithdrawal": 15,
+        "rolloverWithdrawal": 16,
+    }
+    maximum_terminal_single_attempts = max(terminal_single_attempts.values())
+    maximum_terminal_pda_syscall_cu = maximum_terminal_single_attempts * create_program_address_cu
+
     # The cutoff policy fixes q16 to exactly two blocks per evaluated candidate,
     # but it does not constrain the QM31 wrappers or any PDA bump search.
     cutoff20_query_candidates_max = CUTOFF20_MAX_COUNTER + 1
@@ -233,10 +266,14 @@ def main() -> None:
     verifier_language_query_squeeze_blocks_max = 64 * 8
 
     # binary_frontier_nodes insertion-sorts every 16-query candidate. Distinct
-    # input order makes 15..120 comparisons reachable at the Rust level; the
-    # cutoff policy constrains neither ordering nor the accepted-opening sort.
+    # input order makes 15..120 comparisons reachable at the Rust level. The
+    # audit opening consumer uses the same explicit source-visible topology.
     q16_insertion_comparisons_min = 15
     q16_insertion_comparisons_max = 16 * 15 // 2
+    cutoff20_query_comparisons_min = cutoff20_query_candidates_max * q16_insertion_comparisons_min
+    cutoff20_query_comparisons_max = cutoff20_query_candidates_max * q16_insertion_comparisons_max
+    opening_query_comparisons_min = q16_insertion_comparisons_min
+    opening_query_comparisons_max = q16_insertion_comparisons_max
 
     historical_single_maximal_pda_one_attempt_reference_envelope = (
         HISTORICAL_MEASURED_ROLLOVER_C0_CU + one_maximal_pda_extra_cu_over_one_attempt
@@ -251,7 +288,8 @@ def main() -> None:
     source_files = sorted({
         transcript_path,
         onefold_path,
-        "crates/aspis-core/src/v6_onefold.rs",
+        v6_onefold_path,
+        compact_onefold_path,
         v6_transcript_path,
         state_only_sumcheck_path,
         state_only_hiding_path,
@@ -262,17 +300,18 @@ def main() -> None:
         pool_processor_path,
         pool_vault_path,
         verifier_dispatch_path,
+        verifier_certificate_path,
     })
 
     result = {
-        "schema": "aspis.v7.all-reachable-cu-source-inventory.v3",
+        "schema": "aspis.v7.all-reachable-cu-source-inventory.v4",
         "inventoryStartRevision": INVENTORY_START_REVISION,
         "decodedChallengeBindingRevision": DECODED_CHALLENGE_BINDING_REVISION,
         "revisionQualification": (
             "source hashes below pin the exact audited files; the start revision records the "
             "containing tree before this inventory repair"
         ),
-        "classification": "CURRENT PROFILE ROLLOVER/CUTOFF BASELINE MISSING; ALL-REACHABLE COMPLETION BOUND FAILS CLOSED",
+        "classification": "PDA TAIL CLOSED; CURRENT-BINARY MEASUREMENT AND RESIDUAL SBF COEFFICIENTS MISSING",
         "quantifiers": {
             "verifierAcceptedLanguage": "counters 0..63; q16 draws up to 64 per candidate",
             "cutoff20PublishedSubset": "counters 0..20 and exactly 16 distinct initial q16 draws per evaluated candidate",
@@ -339,6 +378,13 @@ def main() -> None:
             "minimumQm31SqueezeBlocks": minimum_qm31_squeeze_blocks,
             "maximumQm31SqueezeBlocks": maximum_qm31_squeeze_blocks,
             "maximumAdditionalQm31SqueezeBlocks": maximum_qm31_squeeze_blocks - minimum_qm31_squeeze_blocks,
+            "minimumQm31WordAttempts": minimum_qm31_word_attempts,
+            "maximumQm31WordAttempts": maximum_qm31_word_attempts,
+            "maximumAdditionalQm31WordAttempts": maximum_qm31_word_attempts - minimum_qm31_word_attempts,
+            "maximumOuterNonzeroRejections": maximum_outer_nonzero_rejections,
+            "maximumOuterCircleRejections": maximum_outer_circle_rejections,
+            "variableRejectedCircleInversionsAfterPrecheck": 0,
+            "successfulCircleRationalMaps": secure_circle,
             "sha256CuPer33ByteCall": sha256_33_byte_cu,
             "sha256SyscallCuPerSqueezeBlock": squeeze_block_syscall_cu,
             "maximumAdditionalQm31SqueezeSyscallCu": maximum_additional_qm31_squeeze_syscall_cu,
@@ -369,14 +415,23 @@ def main() -> None:
                 "maximum": q16_insertion_comparisons_max,
             },
             "cutoff20MaximumCandidateComparisons": {
-                "minimum": cutoff20_query_candidates_max * q16_insertion_comparisons_min,
-                "maximum": cutoff20_query_candidates_max * q16_insertion_comparisons_max,
+                "minimum": cutoff20_query_comparisons_min,
+                "maximum": cutoff20_query_comparisons_max,
             },
             "acceptedOpeningSortElements": 16,
+            "acceptedOpeningInsertionSortComparisons": {
+                "minimum": opening_query_comparisons_min,
+                "maximum": opening_query_comparisons_max,
+            },
+            "totalCutoff20AndOpeningComparisons": {
+                "minimum": cutoff20_query_comparisons_min + opening_query_comparisons_min,
+                "maximum": cutoff20_query_comparisons_max + opening_query_comparisons_max,
+            },
+            "sourceBoundedOpeningFeature": "v7-query-order-source-bound-audit",
             "cutoff20ConstrainsQueryOrdering": False,
             "qualification": (
-                "comparison count is source-bounded; no standalone SBF CU coefficient was "
-                "inferred from the two-point calibrated envelope"
+                "candidate and opening comparison counts are source-bounded; no standalone "
+                "current-SBF CU coefficient is inferred without the required capped build"
             ),
         },
         "historicalCombinedReferenceEnvelope": {
@@ -430,23 +485,33 @@ def main() -> None:
                 "do not assert the measured fixture used one attempt"
             ),
             "cutoff20ConstrainsPdaAttempts": False,
+            "authenticatedTerminalClosure": {
+                "feature": "v7-terminal-pda-certificate-audit",
+                "canonicalSearchLocation": "sealed-proof preparation transaction",
+                "certificateOwner": "selected verifier program",
+                "terminalFindProgramAddressInvocations": terminal_find_program_address_after,
+                "terminalSingleAttemptValidations": terminal_single_attempts,
+                "maximumTerminalSingleAttempts": maximum_terminal_single_attempts,
+                "maximumTerminalPdaSyscallCu": maximum_terminal_pda_syscall_cu,
+                "variablePdaTailClosed": True,
+                "terminalWireByteDelta": 33,
+            },
         },
         "decision": {
             "cutoff20GuaranteesBelow1300000": False,
             "cutoff20GuaranteesBelow1400000": False,
             "verifierAcceptedLanguageGuaranteesBelow1400000": False,
             "reason": (
-                "the current profile has same-page public-Devnet samples but no current-binary "
-                "counter-20/frontier-203 rollover measurement; additionally, counter 20 leaves "
-                "successful QM31 retries, query ordering, and data-dependent PDA bump searches "
-                "outside its admission predicate"
+                "the PDA search tail is closed behind the default-off certificate, but no "
+                "certificate-enabled current-binary counter-20/frontier-203 rollover measurement "
+                "or exact SBF coefficient for bounded QM31 CPU/query-order work exists yet"
             ),
             "safeToPromoteAsUniversalCuPolicy": False,
             "byteIdenticalSimulationStillRequired": True,
         },
         "scope": {
-            "productionSourceChanged": False,
-            "verifierChanged": False,
+            "productionSourceChanged": True,
+            "verifierChanged": True,
             "proofFormatChanged": False,
             "relationChanged": False,
             "acceptedTranscriptProfileChangedSinceHistoricalMeasurements": True,
@@ -457,7 +522,7 @@ def main() -> None:
             "crateVersionInspected": "4.2.1",
             "executionBudgetSourceSha256": "139ecd8dd861bd8b82345d2d015702d6b25d5cb95e7d4fa9af06d678729d6e93",
             "syscallsSourceSha256": "e34a5bae92d7dde433a17ad61803894b7f501a8255484c9eee054710e6e61a9a",
-            "successfulBumpRange": "255 down through 1",
+            "successfulBumpRange": "255 down through 0",
         },
         "sourceSha256": {path: sha256(path) for path in source_files},
     }
