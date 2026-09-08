@@ -27,6 +27,23 @@ open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
 
+/-- The exact three deterministic facts needed for one fixed fold/alpha
+coordinate to belong to the public one-fold failure event. -/
+def FoldOneFoldComponentFacts
+    {Residual : Type}
+    (coordinate : Residual × (Digest256 × FourGammaBlocks))
+    (context : Tag73OrdinarySamplerSkeleton →
+      ExactCausalOneFoldSamplerContext) : Prop :=
+  ∃ succeeds : foldAlphaTotalSucceeds coordinate.2,
+    FoldWork31Accepted coordinate.2.1 ∧
+      successfulOrdinaryExactValue
+          (⟨fourGammaBlocksRawEquiv coordinate.2.2, succeeds⟩ :
+            SuccessfulTag73RawStream) ∈
+        exactRawOneFoldTarget context
+          (successfulOrdinaryExactFactorization
+            (⟨fourGammaBlocksRawEquiv coordinate.2.2, succeeds⟩ :
+              SuccessfulTag73RawStream)).1
+
 /-- The three component facts package into exactly the public nested event. -/
 theorem mem_dependent_fold_successfulRawOneFoldEvent_of_components
     {Residual : Type}
@@ -51,7 +68,23 @@ theorem mem_dependent_fold_successfulRawOneFoldEvent_of_components
     succeeds foldAccepted
   assumption
 
+/-- Named component facts imply membership without exposing the nested event
+representation to callers. -/
+theorem foldOneFoldComponentFacts_mem
+    {Residual : Type}
+    (coordinate : Residual × (Digest256 × FourGammaBlocks))
+    (context : Tag73OrdinarySamplerSkeleton →
+      ExactCausalOneFoldSamplerContext)
+    (facts : FoldOneFoldComponentFacts coordinate context) :
+    dependentFoldRawEventMember coordinate
+      (successfulRawOneFoldEvent context) := by
+  obtain ⟨succeeds, foldAccepted, targetMember⟩ := facts
+  apply mem_dependent_fold_successfulRawOneFoldEvent_of_components coordinate
+    context succeeds foldAccepted
+  assumption
+
 #print axioms mem_dependent_fold_successfulRawOneFoldEvent_of_components
+#print axioms foldOneFoldComponentFacts_mem
 
 end
 
