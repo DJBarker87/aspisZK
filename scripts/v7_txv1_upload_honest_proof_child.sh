@@ -171,10 +171,20 @@ done
 for request_index in $(seq 0 $((request_count - 1))); do
   name=$(jq -er ".requests[$request_index].name" "$EVIDENCE_DIR/signed-requests.json")
   signature=$(jq -er ".requests[$request_index].signature" "$EVIDENCE_DIR/signed-requests.json")
-  landed=$(rpc "$(jq -nc --arg signature "$signature" \
-    '{jsonrpc:"2.0",id:5000,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')")
+  transaction_available=false
+  for _ in $(seq 1 30); do
+    landed=$(rpc "$(jq -nc --arg signature "$signature" \
+      '{jsonrpc:"2.0",id:5000,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')")
+    if jq -e '.result != null' <<<"$landed" >/dev/null; then
+      transaction_available=true
+      break
+    fi
+    sleep 2
+  done
   jq . <<<"$landed" >"$EVIDENCE_DIR/transactions/$name.finalized.json"
-  jq -e '.result != null and .result.meta.err == null' <<<"$landed" >/dev/null \
+  [[ "$transaction_available" == true ]] \
+    || fail "finalized transaction record remained unavailable: $name"
+  jq -e '.result.meta.err == null' <<<"$landed" >/dev/null \
     || fail "landed transaction failed: $name"
 done
 
