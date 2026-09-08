@@ -160,6 +160,17 @@ def currentBidirectionalInput?
       BidirectionalFoldAlphaMemory) : Option ShaInput :=
   unifiedInputBeforeAnswer? transitionFuel state.cursor
 
+/-- A work sibling is consumed only when both sides contain the same literal
+input.  In particular, `none = none` at padding or fork exposure is never a
+work match. -/
+def matchesExpectedFoldWork (current expected : Option ShaInput) : Prop :=
+  ∃ input, current = some input ∧ expected = some input
+
+instance matchesExpectedFoldWorkDecidable (current expected : Option ShaInput) :
+    Decidable (matchesExpectedFoldWork current expected) := by
+  unfold matchesExpectedFoldWork
+  infer_instance
+
 /-- A later exact work sibling is named once.  Otherwise the established
 alpha producer inventory chooses an output-block slot. -/
 def bidirectionalFoldAlphaPreferred
@@ -170,10 +181,11 @@ def bidirectionalFoldAlphaPreferred
   let current := currentBidirectionalInput? transitionFuel state
   if atAnchor : state.exposureIndex = anchorIndex then
     match current.bind foldCandidateAnchorKind? with
-    | some (.work _) => some none
+    | some (.work _) =>
+        if state.memory.foldUsed = false then some none else none
     | some (.boundary _) | none => none
   else if state.memory.foldUsed = false ∧
-      current = state.memory.expectedWork then
+      matchesExpectedFoldWork current state.memory.expectedWork then
     some none
   else
     (alphaZeroPreferredSlot transitionFuel
@@ -220,10 +232,18 @@ def bidirectionalFoldAlphaAfterMemory
             installBoundaryAnchor transitionFuel state input workInput answer
         | none => state.memory
   else
-    let nextAlpha := foldArmedAlphaAfterMemory transitionFuel
+    let rawNextAlpha := foldArmedAlphaAfterMemory transitionFuel
       (bidirectionalAlphaState state) answer
     let consumesWork := state.memory.foldUsed = false ∧
-      current = state.memory.expectedWork
+      matchesExpectedFoldWork current state.memory.expectedWork
+    let nextAlpha :=
+      if consumesWork then
+        { rawNextAlpha with
+          alpha :=
+            { rawNextAlpha.alpha with
+              usedSlots := state.memory.alpha.alpha.usedSlots } }
+      else
+        rawNextAlpha
     { foldUsed := state.memory.foldUsed || decide consumesWork
       expectedWork := state.memory.expectedWork
       alpha := nextAlpha }
@@ -245,12 +265,13 @@ def bidirectionalFoldAlphaController
       BidirectionalFoldAlphaMemory)
     (digest : Digest256) (nonce : NonceBytes)
     (atAnchor : state.exposureIndex = anchorIndex)
+    (foldUnused : state.memory.foldUsed = false)
     (inputExact : currentBidirectionalInput? transitionFuel state =
       some (bytes digest ++ domGrind :: bytes nonce)) :
     (bidirectionalFoldAlphaController transitionFuel anchorIndex).preferredSlot
         state = some none := by
   simp [bidirectionalFoldAlphaController, bidirectionalFoldAlphaPreferred,
-    atAnchor, inputExact]
+    atAnchor, foldUnused, inputExact]
 
 @[simp] theorem bidirectional_preferred_at_literal_boundary_anchor
     {globalOracleCalls : Nat}
@@ -267,6 +288,13 @@ def bidirectionalFoldAlphaController
   simp [bidirectionalFoldAlphaController, bidirectionalFoldAlphaPreferred,
     atAnchor, inputExact]
 
+@[simp] theorem no_expected_fold_work_does_not_match
+    (current : Option ShaInput) :
+    ¬ matchesExpectedFoldWork current none := by
+  intro matched
+  rcases matched with ⟨input, _current, impossible⟩
+  simp at impossible
+
 end
 
 #print axioms literal_alpha_boundary_recovers_fold_work
@@ -274,5 +302,6 @@ end
 #print axioms literal_alpha_boundary_anchor_kind
 #print axioms bidirectional_preferred_at_literal_work_anchor
 #print axioms bidirectional_preferred_at_literal_boundary_anchor
+#print axioms no_expected_fold_work_does_not_match
 
 end AspisK1.V7Tag73BidirectionalFoldAlphaController
