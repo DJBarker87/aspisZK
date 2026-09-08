@@ -105,9 +105,9 @@ fn verify_relation(body:&[u8],statement:[u8;32],ordinary:Vec<K>,claim:K,hashfn:c
 }
 
 #[path="relation_callback_fixtures.rs"] mod fixtures;
-#[cfg(not(any(v8_inactive_binding,v8_radius_boundary)))]
+#[cfg(not(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction)))]
 fn main(){fixtures::run();}
-#[cfg(any(v8_inactive_binding,v8_radius_boundary))]
+#[cfg(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction))]
 #[path="inactive_row_binding.rs"] mod inactive_binding;
 #[cfg(v8_inactive_binding)]
 fn main(){inactive_binding::run();}
@@ -115,3 +115,21 @@ fn main(){inactive_binding::run();}
 #[path="radius_boundary.rs"] mod radius_boundary;
 #[cfg(v8_radius_boundary)]
 fn main(){radius_boundary::run();}
+#[cfg(v8_payment_extraction)]
+extern crate aspis_core;
+#[cfg(v8_payment_extraction)]
+extern crate aspis_statement;
+#[cfg(v8_payment_extraction)]
+extern crate zeroize;
+#[cfg(v8_payment_extraction)]
+#[path="payment_source_modules.rs"] mod payment_sources;
+#[cfg(v8_payment_extraction)]
+use payment_sources::{circle_candidate,circle_candidate_openings,state_only_hiding,state_only_zerocheck,state_only_entropy};
+#[cfg(v8_payment_extraction)]
+#[path="recovered_witness.rs"] mod witness_endpoint;
+#[cfg(v8_payment_extraction)]
+#[path="authenticated_c1.rs"] mod authenticated_c1;
+#[cfg(v8_payment_extraction)]
+#[path="payment_extraction.rs"] mod payment_extraction;
+#[cfg(v8_payment_extraction)]
+fn main(){payment_extraction::run();}

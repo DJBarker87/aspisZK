@@ -1,5 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest: [same-execution authenticated C1 / payment extraction](payment-extraction-review.md).
+Four genuine honest payment proofs pass the repaired research grammar and yield
+checked witnesses from an explicit extra-opening oracle. All four D-corrupted
+arms hit one changed fibre and reject; no accepting seed was searched for.
+New Lean mask/read and path-residual prerequisites pass. Actual replay access,
+corrupt-C1 recovery and universal validator coverage remain open. See
+[results/access census](payment-extraction-results.json) and
+[reproduction/evidence](payment-extraction-evidence.json).
+
 Latest: [beyond-radius recovery continuation](radius-residual-review.md).
 The 9,302-corruption boundary can lose the 9,301 classifier while retaining a
 unique nearest anchor; the repaired relation suffix accepts missed-corruption
