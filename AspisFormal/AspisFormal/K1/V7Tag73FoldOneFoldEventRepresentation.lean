@@ -35,6 +35,34 @@ def dependentFoldRawEventMember
       (fun _residual => successfulFoldAlphaTotalEquiv ⁻¹'
         foldSuccessfulRawOneFoldEvent (fun _fold => rawEvent))
 
+/-- Expose the named predicate as the literal nested-event membership without
+forcing concrete callers to unfold the representation. -/
+theorem dependentFoldRawEventMember_to_public
+    {Residual : Type}
+    (coordinate : Residual × (Digest256 × FourGammaBlocks))
+    (rawEvent : Set SuccessfulTag73RawStream)
+    (member : dependentFoldRawEventMember coordinate rawEvent) :
+    coordinate ∈
+      dependentSuccessfulSubtypeEvent foldAlphaTotalSucceeds
+        (fun _residual => successfulFoldAlphaTotalEquiv ⁻¹'
+          foldSuccessfulRawOneFoldEvent (fun _fold => rawEvent)) :=
+  member
+
+/-- Pointwise named membership transports to a residual/fold-indexed public
+event family.  Membership observes only the family at this coordinate. -/
+theorem dependentFoldRawEventMember_to_family
+    {Residual : Type}
+    (coordinate : Residual × (Digest256 × FourGammaBlocks))
+    (rawEvent : Residual → Digest256 → Set SuccessfulTag73RawStream)
+    (member : dependentFoldRawEventMember coordinate
+      (rawEvent coordinate.1 coordinate.2.1)) :
+    coordinate ∈
+      dependentSuccessfulSubtypeEvent foldAlphaTotalSucceeds
+        (fun residual => successfulFoldAlphaTotalEquiv ⁻¹'
+          foldSuccessfulRawOneFoldEvent
+            (fun fold => rawEvent residual fold)) :=
+  member
+
 /-- The public successful-raw event is exactly the factorized family of exact
 one-fold target slices. -/
 theorem successfulRawOneFoldEvent_eq_factorizedTarget
@@ -87,6 +115,8 @@ theorem dependentFoldFactorized_to_successfulRaw
 #print axioms successfulRawOneFoldEvent_eq_factorizedTarget
 #print axioms dependentFoldFactorizedOneFoldEventMember_eq
 #print axioms dependentFoldFactorized_to_successfulRaw
+#print axioms dependentFoldRawEventMember_to_public
+#print axioms dependentFoldRawEventMember_to_family
 
 end
 
