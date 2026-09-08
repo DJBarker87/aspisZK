@@ -48,6 +48,41 @@ open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
 
+/-- Reusable pointwise statement produced by the cache-aware ordinary replay
+bridge. -/
+def ExactCompilerOrdinaryReplayAt
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (id : ChallengeId) : Prop :=
+  ∃ (initialDigest output : Digest256) (outputs : List Digest256)
+    (advanced : Digest256) (advances : List Digest256)
+    (firstPause : SchedulerNativeFreshPause
+      (globalFull256OracleCallCap parameters)
+      (SchedulerNativePlainRomResult TapeIdentity Statement Tag73K12ParsedProof
+        Payload Result) (gammaOutputInput initialDigest))
+    (decoded : DecodedSchedulerNativeOrdinaryResponse
+      (SchedulerNativePlainRomResult TapeIdentity Statement Tag73K12ParsedProof
+        Payload Result)),
+    GammaTableCoordinateChain (exactOperationalTable input) initialDigest
+        (output :: outputs) (advanced :: advances) ∧
+    exactCompilerFullTargetScan input (gammaOutputInput initialDigest) =
+      .paused firstPause ∧
+    runSchedulerNativeOrdinaryFromFirstPause transitionFuel firstPause
+        ((output, advanced) :: outputs.zip advances) = .ok decoded ∧
+    decoded.response.run =
+      runSchedulerNativeListRun transitionFuel
+        (exactPlainRomCursor configuration sample.1)
+        (freshAnswerTapeToList sample.2) ∧
+    decoded.value = exactOperationalChallenge input id
+
 /-- Locate one literal challenge occurrence in a successful work-erased event
 list and retain its complete consumed output/advance chain. -/
 theorem challenge_coordinate_chain_in_work_erased_run
@@ -174,8 +209,36 @@ theorem exact_compiler_actual_ordinary_event_replay
             replayRun, reconstructed, ?_⟩
           exact replayValue.trans operationalValue.symm
 
+/-- Pack the event-local theorem into its reusable pointwise predicate. -/
+theorem exact_compiler_actual_ordinary_event_replay_at
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (events : List MachineEvent) (state final : EvalState)
+    (id : ChallengeId) (use : SamplerUse id)
+    (ordinary : samplerMode id = .ordinaryQm31)
+    (member : (.challenge id use : MachineEvent) ∈ events)
+    (run : runMachineEventsWorkErased (exactOperationalTable input) events
+      state = some final)
+    (decodedAtFinal : StateSamplesDecodeAs
+      (exactOperationalTape input).messages final) :
+    ExactCompilerOrdinaryReplayAt input id := by
+  unfold ExactCompilerOrdinaryReplayAt
+  exact exact_compiler_actual_ordinary_event_replay transitionRoom input events
+    state final id use ordinary member run decodedAtFinal
+
+#print axioms ExactCompilerOrdinaryReplayAt
 #print axioms challenge_coordinate_chain_in_work_erased_run
 #print axioms exact_compiler_actual_ordinary_event_replay
+#print axioms exact_compiler_actual_ordinary_event_replay_at
 
 end
 end AspisK1.V7Tag73ExactCompilerOrdinaryEventReplay
