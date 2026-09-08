@@ -63,6 +63,15 @@ open AspisV6QueryBatchSoundness
 
 noncomputable section
 
+/-- The concrete Tag-73 joint-collision set.  Naming the QM31 specialization
+once keeps all downstream event and source certificates on the same finite-set
+representation, rather than repeatedly elaborating the large tower's inferred
+decidable-equality instance. -/
+noncomputable def exactTag73JointQueryBatchNonzeroCollisionSet
+    (preQueryDiscrepancy : QM31Exact)
+    (expected authenticated : QueryVector QM31Exact) : Finset QM31Exact :=
+  jointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected authenticated
+
 /-- The sixteen disclosed-final evaluations installed by the exact Tag-73
 query-batch covector. -/
 def exactTag73K13ExpectedQueryVector
@@ -277,7 +286,7 @@ def exactTag73K13JointQueryBatchCollisionEvent
     exactTag73K13ExpectedQueryVector decoder input k12 ≠
         exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
       exactOperationalChallenge input .queryBatch ∈
-        jointQueryBatchNonzeroCollisionSet
+        exactTag73JointQueryBatchNonzeroCollisionSet
           (source.preQueryDiscrepancy sample input)
           (exactTag73K13ExpectedQueryVector decoder input k12)
           (exactTag73K13AuthenticatedQueryVector decoder input k12)}
@@ -516,7 +525,7 @@ theorem ideal_rejected_exposes_joint_or_later_relation_collision
     (exactTag73K13ExpectedQueryVector decoder input k12 ≠
           exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
         exactOperationalChallenge input .queryBatch ∈
-          jointQueryBatchNonzeroCollisionSet
+          exactTag73JointQueryBatchNonzeroCollisionSet
             (source.preQueryDiscrepancy sample input)
             (exactTag73K13ExpectedQueryVector decoder input k12)
             (exactTag73K13AuthenticatedQueryVector decoder input k12)) ∨

@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactInternalCurveProbability
 import AspisFormal.K1.V7Tag73ExactCleanBidirectionalFoldOneFoldProbability
 import AspisFormal.K1.V7Tag73K13BoundChallengeClosure
+import AspisFormal.K1.V7Tag73K13JointBatchCausalSource
 import AspisFormal.K1.V7Tag73K13RestrictedJointBatchActualLawClosure
 import AspisFormal.K1.V7Tag73K13RestrictedLaterAlphaActualLawClosure
 import AspisFormal.K1.V7Tag73PreQ16OperationalMeasuredComposition
@@ -43,6 +44,7 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73HiddenTapeAveraging
 open AspisK1.V7Tag73K13BoundChallengeClosure
+open AspisK1.V7Tag73K13JointBatchCausalSource
 open AspisK1.V7Tag73K13IdealErrorLedger
 open AspisK1.V7Tag73K13PreQ16JointEventHandoff
 open AspisK1.V7Tag73K13PreQ16TargetProbability
@@ -238,7 +240,7 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (jointBatchSource : ExactTag73RestrictedK13JointBatchSource transitionFuel
+    (jointBatchSource : ExactTag73K13JointBatchCausalSource transitionFuel
       configuration projection fixedInstance decoder relationSource
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance))
@@ -270,7 +272,7 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
       transitionRoom (by omega) initialEncoderExact finalEncoderExact
       environment.toDecodedParsedSourceProvider foldExposureCap
   have jointBound := exact_tag73_restricted_k13_joint_batch_probability_le
-    hiddenLaw relationSource clean jointBatchSource
+    hiddenLaw relationSource clean jointBatchSource.toRestrictedSource
   have laterBound := exact_tag73_restricted_k13_later_alpha_probability_le
     hiddenLaw relationSource clean laterAlphaSource
   have lateBound :

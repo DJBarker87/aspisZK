@@ -45,6 +45,7 @@ open AspisK1.V7Tag73PreQ16K15RemainingFixedActualLawClosure
 open AspisK1.V7Tag73PreQ16K15RestrictedRelationAlphaActualLawClosure
 open AspisK1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 open AspisK1.V7Tag73RelationTailSourceComposition
+open AspisK1.V7Tag73K13JointBatchCausalSource
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73K13RestrictedLaterAlphaActualLawClosure
 open AspisK1.V7Tag73K13PreQ16TargetProbability
@@ -220,7 +221,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (jointBatchSource : ExactTag73RestrictedK13JointBatchSource transitionFuel
+    (jointBatchSource : ExactTag73K13JointBatchCausalSource transitionFuel
       configuration projection fixedInstance decoder relationSource
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance))
