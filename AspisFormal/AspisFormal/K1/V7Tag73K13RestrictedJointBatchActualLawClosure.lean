@@ -68,11 +68,17 @@ structure JointQueryBatchPreChallengeView where
   preQueryDiscrepancy : QM31Exact
   expected : QueryVector QM31Exact
   authenticated : QueryVector QM31Exact
+  active : Bool
+  activeSound : active = true → expected ≠ authenticated
+  collisionTarget : Finset QM31Exact
+  collisionTargetExact : collisionTarget =
+    jointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected authenticated
 
 noncomputable def JointQueryBatchPreChallengeView.target
     (view : JointQueryBatchPreChallengeView) : Finset QM31Exact :=
-  guardedJointQueryBatchTarget view.preQueryDiscrepancy view.expected
-    view.authenticated
+  if view.active then
+    view.collisionTarget
+  else ∅
 
 theorem guardedJointQueryBatchTarget_card_le_sixteen
     (preQueryDiscrepancy : QM31Exact)
@@ -87,9 +93,17 @@ theorem guardedJointQueryBatchTarget_card_le_sixteen
   · simp [guardedJointQueryBatchTarget, different]
 
 theorem JointQueryBatchPreChallengeView.target_card_le_sixteen
-    (view : JointQueryBatchPreChallengeView) : view.target.card ≤ 16 :=
-  guardedJointQueryBatchTarget_card_le_sixteen view.preQueryDiscrepancy
-    view.expected view.authenticated
+    (view : JointQueryBatchPreChallengeView) : view.target.card ≤ 16 := by
+  by_cases activeTrue : view.active = true
+  · simp only [JointQueryBatchPreChallengeView.target, activeTrue,
+      ↓reduceIte]
+    rw [view.collisionTargetExact]
+    exact jointQueryBatch_nonzero_collision_card_le_sixteen_of_vectors_ne
+      view.preQueryDiscrepancy view.expected view.authenticated
+        (view.activeSound activeTrue)
+  · have inactive : view.active = false :=
+      Bool.eq_false_of_not_eq_true activeTrue
+    simp [JointQueryBatchPreChallengeView.target, inactive]
 
 /-- The exact source-side data used by the joint query-batch polynomial,
 projected before the batching challenge itself.  Keeping this constructor
@@ -109,11 +123,30 @@ def exactJointQueryBatchPreChallengeView
       projection fixedInstance decoder)
     (input : ExactK12OperationalInput transitionFuel configuration projection
       fixedInstance sample)
-    (k12 : ExactPrefixK12Certificate input) :
+    (k12 : ExactPrefixK12Certificate input)
+    (different : exactTag73K13ExpectedQueryVector decoder input k12 ≠
+      exactTag73K13AuthenticatedQueryVector decoder input k12) :
     JointQueryBatchPreChallengeView where
   preQueryDiscrepancy := source.preQueryDiscrepancy sample input
   expected := exactTag73K13ExpectedQueryVector decoder input k12
   authenticated := exactTag73K13AuthenticatedQueryVector decoder input k12
+  active := true
+  activeSound := fun _ => different
+  collisionTarget := jointQueryBatchNonzeroCollisionSet
+    (source.preQueryDiscrepancy sample input)
+    (exactTag73K13ExpectedQueryVector decoder input k12)
+    (exactTag73K13AuthenticatedQueryVector decoder input k12)
+  collisionTargetExact := rfl
+
+/-- Target membership for an already-active pre-challenge view is a direct
+collision-set membership; no function equality is decided here. -/
+theorem JointQueryBatchPreChallengeView.mem_target_of_active
+    (view : JointQueryBatchPreChallengeView)
+    (active : view.active = true) {rho : QM31Exact}
+    (collision : rho ∈ view.collisionTarget) :
+    rho ∈ view.target := by
+  simp only [JointQueryBatchPreChallengeView.target, active, ↓reduceIte]
+  exact collision
 
 /-- Exact pre-query-batch source data on one compiler-clean slice. Coordinates
 are fixed by the literal pre-answer query-batch scheduler controller; this
