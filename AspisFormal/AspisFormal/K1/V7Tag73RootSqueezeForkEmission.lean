@@ -272,8 +272,8 @@ inductive ExactExtractorProverReplayAt
 
 /-- Exact post-prover verifier entry.  The verifier program is the literal
 future-free Tag-73 driver, started from the restored transition snapshot and
-fed the returned prover messages.  Its completion callback remains abstract
-here; the next closure layer will characterize completed-node insertion. -/
+fed the returned prover messages.  Its completion callback proves that every
+successful verifier result appends and returns the exact completed node. -/
 inductive ExactRestoredVerifierReplayAt
     {Statement Proof Payload Result : Type u}
     {globalOracleCalls : Nat}
@@ -282,7 +282,12 @@ inductive ExactRestoredVerifierReplayAt
     (prepared : PreparedConcreteRestoration Statement Proof Payload)
     (adversaryValue : CheckedRawTag73AdversaryReturnedValue Statement Proof
       Payload)
-    (entry : OracleState) :
+    (proverEntry : OracleState)
+    (entry : OracleState)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result)) :
     SchedulerNativeCursor globalOracleCalls
       (ConcreteRestorationClientRun Statement Proof Payload Result) → Prop where
   | here
@@ -297,9 +302,25 @@ inductive ExactRestoredVerifierReplayAt
         (verifierFinalOracle : OracleState) →
         HistoryTotalCoherent verifierFinalOracle →
           SchedulerNativeCursor globalOracleCalls
-            (ConcreteRestorationClientRun Statement Proof Payload Result)) :
+            (ConcreteRestorationClientRun Statement Proof Payload Result))
+      (storesSuccessfulReturn : ∀ verifierFinalState verifierFinalOracle
+          (verifierCoherent : HistoryTotalCoherent verifierFinalOracle),
+        let node : ConcreteRestorationNode Statement Proof Payload :=
+          { parentRequest := some prepared.request
+            adversaryValue := adversaryValue
+            proverEntryOracle := proverEntry
+            proverFinalOracle := entry
+            verifierEntryOracle := entry
+            verifierFinalOracle := verifierFinalOracle
+            verifierEntryState := prepared.restoredState
+            verifierFinalState := verifierFinalState }
+        ∃ nodeId nextAccumulator,
+          nextAccumulator.node? nodeId = some node ∧
+          onReturned (.completed (.ok verifierFinalState))
+              verifierFinalOracle verifierCoherent =
+            resume (.added nodeId) nextAccumulator) :
       ExactRestoredVerifierReplayAt environment configuration prepared
-        adversaryValue entry
+        adversaryValue proverEntry entry resume
         (.machine configuration.oracleLimits globalLimit .verifier entry
           (schedulerStageProgram
             (ConcreteRestorationClientRun Statement Proof Payload Result)
@@ -321,7 +342,11 @@ inductive ExactBindingCheckedProverReplayAt
     (environment : FutureFreeEnvironment)
     (configuration : ConcreteRestorationConfiguration)
     (prepared : PreparedConcreteRestoration Statement Proof Payload)
-    (expected : OracleState) :
+    (expected : OracleState)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result)) :
     SchedulerNativeCursor globalOracleCalls
       (ConcreteRestorationClientRun Statement Proof Payload Result) → Prop where
   | here
@@ -345,11 +370,11 @@ inductive ExactBindingCheckedProverReplayAt
         StageHasOracleRoom configuration.oracleLimits proverFinalOracle
             configuration.verifierFuel →
         ExactRestoredVerifierReplayAt environment configuration prepared
-          adversaryValue proverFinalOracle
+          adversaryValue expected proverFinalOracle resume
           (onReturned (.completed (.ok adversaryValue)) proverFinalOracle
             proverCoherent)) :
       ExactBindingCheckedProverReplayAt startProgram environment configuration
-        prepared expected
+        prepared expected resume
         (.machine configuration.oracleLimits globalLimit .extractorReplay
           expected
           (schedulerStageProgram
@@ -369,10 +394,14 @@ theorem ExactBindingCheckedProverReplayAt.toExactExtractorProverReplayAt
     {configuration : ConcreteRestorationConfiguration}
     {prepared : PreparedConcreteRestoration Statement Proof Payload}
     {expected : OracleState}
+    {resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result)}
     {cursor : SchedulerNativeCursor globalOracleCalls
       (ConcreteRestorationClientRun Statement Proof Payload Result)}
     (exact : ExactBindingCheckedProverReplayAt startProgram environment
-      configuration prepared expected cursor) :
+      configuration prepared expected resume cursor) :
     ExactExtractorProverReplayAt startProgram configuration expected cursor := by
   cases exact with
   | here globalLimit coherent room onReturned successfulBindingReturn =>
@@ -500,7 +529,7 @@ theorem dispatch_prepared_pair_prefix_enters_binding_checked_prover_replay
     (proverRoom : StageHasOracleRoom configuration.oracleLimits afterBoth
       configuration.proverReplayFuel) :
     ExactBindingCheckedProverReplayAt startProgram environment configuration
-      prepared afterBoth
+      prepared afterBoth resume
       (schedulerNativePrefixCursor 1
         (dispatchPreparedRestoration startProgram environment configuration
           prepared accumulator resume) [forkOutput, forkAdvance]) := by
@@ -521,8 +550,36 @@ theorem dispatch_prepared_pair_prefix_enters_binding_checked_prover_replay
   intro adversaryValue proverFinalOracle proverCoherent bindingExact verifierRoom
   simp only
   rw [dif_neg (fun mismatch => mismatch bindingExact), dif_pos verifierRoom]
-  exact ExactRestoredVerifierReplayAt.here globalLimit proverCoherent
-    verifierRoom _
+  apply ExactRestoredVerifierReplayAt.here globalLimit proverCoherent
+    verifierRoom
+  intro verifierFinalState verifierFinalOracle verifierCoherent
+  simp only
+  let verifierQueries :=
+    (historySince proverFinalOracle verifierFinalOracle).length
+  let afterVerifier :=
+    (((((accumulator.addCharges
+        [.prefixReplayQueries prepared.prefixSteps,
+          .restart (if prepared.prefixRun.isSome then 1 else 0)]).addCharges
+        [.forkUniformCoordinates 2]).addCharges
+        [.programmedPoints 2]).addCharges [.restart 1]).addCharges
+        [.completeFromStartQueries
+          (historySince afterBoth proverFinalOracle).length]).addCharges
+      [.verifierSuffixQueries verifierQueries]
+  let node : ConcreteRestorationNode Statement Proof Payload :=
+    { parentRequest := some prepared.request
+      adversaryValue := adversaryValue
+      proverEntryOracle := afterBoth
+      proverFinalOracle := proverFinalOracle
+      verifierEntryOracle := proverFinalOracle
+      verifierFinalOracle := verifierFinalOracle
+      verifierEntryState := prepared.restoredState
+      verifierFinalState := verifierFinalState }
+  let charged := afterVerifier.addCharges
+    [.verifierTransitions verifierFinalState.transitions.length]
+  let added := charged.addNode node
+  refine ⟨added.1, added.2, ?_, ?_⟩
+  · simpa [added, node] using added_node_lookup_exact charged node
+  · rfl
 
 /-- Once the literal prover-replay cursor has been reached, any answer suffix
 at least as long as the configured prover fuel deterministically reaches a
@@ -1110,7 +1167,7 @@ theorem
             configuration.proverReplayFuel →
           ExactBindingCheckedProverReplayAt
             (machine.blackBox.start hidden machine.observation) environment
-            configuration prepared afterBoth
+            configuration prepared afterBoth resume
             (schedulerNativePrefixCursor 1
               (dispatchPreparedRestoration
                 (machine.blackBox.start hidden machine.observation) environment

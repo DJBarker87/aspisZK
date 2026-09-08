@@ -694,6 +694,16 @@ theorem node_lookup_preserved_by_add_node
     List.getElem?_append_left within, List.getElem?_eq_some_iff]
   exact ⟨within, valueExact⟩
 
+/-- The index returned by `addNode` resolves to the exact appended node. -/
+theorem added_node_lookup_exact
+    {Statement Proof Payload : Type u}
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+    (child : ConcreteRestorationNode Statement Proof Payload) :
+    (accumulator.addNode child).2.node?
+        (accumulator.addNode child).1 = some child := by
+  simp [ConcreteRestorationAccumulator.addNode,
+    ConcreteRestorationAccumulator.node?]
+
 /-- Any proof-free accumulator update that leaves the node list literally
 unchanged transports all node certificates.  This is the common lemma behind
 charge and failure bookkeeping. -/
@@ -822,6 +832,7 @@ theorem initial_every_node_operational
 #print axioms prepare_from_start_add_charges_and_failure
 #print axioms transport_projected_restoration_node_execution
 #print axioms transport_causally_provenanced_restoration_node_execution
+#print axioms added_node_lookup_exact
 #print axioms initial_every_node_operational
 #print axioms projected_node_execution_pair_is_adjacent_in_full_trace
 #print axioms projected_node_execution_programming_uses_scheduled_coordinates
