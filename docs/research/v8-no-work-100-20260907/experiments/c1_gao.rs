@@ -37,15 +37,61 @@ impl Decoder{
         trim(&mut interpolation);
         let(mut r0,mut r1)=(self.vanishing.clone(),interpolation);let(mut t0,mut t1)=(vec![],vec![F::ONE]);
         let mut steps=0;
+        #[cfg(v8_gao_audit)]
+        let mut determinant=self.vanishing.clone();
+        #[cfg(v8_gao_audit)]
+        self.audit_state(&r0,&r1,&t0,&t1,received,&determinant);
         while !r1.is_empty()&&2*(r1.len()-1)>=n+self.k{
+            #[cfg(v8_gao_audit)] let previous_degree=r1.len()-1;
             let(q,r)=divrem(r0,&r1)?;let t=sub(&t0,&mul(&q,&t1));r0=r1;r1=r;t0=t1;t1=t;
             steps+=1;if steps>n{return Err(Failure::Degree)}
+            #[cfg(v8_gao_audit)] {
+                assert!(r1.len().saturating_sub(1)<previous_degree);
+                for v in &mut determinant{*v=v.neg();}
+                self.audit_state(&r0,&r1,&t0,&t1,received,&determinant);
+            }
         }
         if t1.is_empty()||t1.len()-1>(n-self.k)/2{return Err(Failure::Degree)}
         let(p,rem)=divrem(r1,&t1)?;if !rem.is_empty(){return Err(Failure::Division)}if p.len()>self.k{return Err(Failure::Degree)}
         let errors=self.points.iter().zip(received).filter(|(x,y)|eval(&p,**x)!=**y).count();
         if errors>(n-self.k)/2{return Err(Failure::Radius)}Ok((p,errors))
     }
+    #[cfg(v8_gao_audit)]
+    fn audit_state(&self,r0:&[F],r1:&[F],t0:&[F],t1:&[F],y:&[F],det:&[F]){
+        let d=|p:&[F]|p.len().saturating_sub(1);let n=self.points.len();
+        assert!(d(r1)<n&&d(r1)<=d(r0));
+        assert!(d(r0)+d(t1)<=n&&d(r1)+d(t0)<=n);
+        assert!(n+self.k<=2*d(r0));
+        assert!(!det.is_empty()&&sub(&mul(r0,t1),&mul(r1,t0))==det);
+        for(j,&x)in self.points.iter().enumerate(){
+            assert_eq!(eval(r0,x),eval(t0,x).mul(y[j]));
+            assert_eq!(eval(r1,x),eval(t1,x).mul(y[j]));}
+    }
+}
+
+/// Exhaustive in the DECLARED finite coefficient/error alphabet, not in K.
+/// Every support up to radius and every assigned nonzero error are retained.
+pub fn completeness_controls(){
+    let clock=std::time::Instant::now();let i=F::new(M31::ZERO,M31::ONE);
+    let alphabet=[F::ZERO,F::ONE,i];let amplitudes=[F::ONE,i,F::ONE.add(i)];
+    let mut total=0;
+    for(n,k)in[(1usize,1usize),(2,1),(3,1),(5,2),(6,2),(7,3),(8,3),(9,3)]{
+        let points=(0..n).map(|j|F::new(M31(j as u32),M31((j*j%5)as u32))).collect::<Vec<_>>();
+        let decoder=Decoder::new(points.clone(),k).unwrap();let t=(n-k)/2;let mut cases=0;
+        fn visit(d:&Decoder,p:&Poly,base:&[F],y:&mut Vec<F>,a:&[F;3],start:usize,left:usize,count:&mut usize){
+            if left==0{let(g,e)=d.decode(y).expect("within-radius decoder failure");
+                assert!(g==*p,"decoded polynomial differs from declared synthetic source");
+                assert_eq!(e,y.iter().zip(base).filter(|(a,b)|a!=b).count());*count+=1;return}
+            for pos in start..=y.len()-left{for &delta in a{y[pos]=base[pos].add(delta);
+                visit(d,p,base,y,a,pos+1,left-1,count);y[pos]=base[pos];}}
+        }
+        for encoded in 0..3usize.pow(k as u32){let mut value=encoded;let mut p=Vec::new();
+            for _ in 0..k{p.push(alphabet[value%3]);value/=3;}trim(&mut p);
+            let base=points.iter().map(|&x|eval(&p,x)).collect::<Vec<_>>();
+            for e in 0..=t{visit(&decoder,&p,&base,&mut base.clone(),&amplitudes,0,e,&mut cases);}}
+        println!("GAO_COMPLETENESS n={n} k={k} t={t} cases={cases} extension_coefficients=true every_support_and_amplitude=true");total+=cases;
+    }
+    println!("GAO_COMPLETENESS_TOTAL cases={total} state_invariant_audit={} seconds={}",cfg!(v8_gao_audit),clock.elapsed().as_secs_f64());
 }
 pub fn controls(){
     let xs=(1..=9).map(|i|F::from_m31(M31(i))).collect::<Vec<_>>();let d=Decoder::new(xs.clone(),3).unwrap();let mut cases=0;
