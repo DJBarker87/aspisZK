@@ -516,6 +516,28 @@ private theorem mem_prefix_of_strict_record_order
   rw [priorExact, prefixExact]
   simp
 
+private theorem mem_prefix_of_strict_record_order_at_anchor
+    {Record : Type} [DecidableEq Record]
+    (records prior anchorLater before middle after : List Record)
+    (first anchorRecord : Record)
+    (recordsNodup : records.Nodup)
+    (anchorExact : records = prior ++ anchorRecord :: anchorLater)
+    (orderedExact : records =
+      before ++ first :: middle ++ anchorRecord :: after) :
+    first ∈ prior := by
+  have anchorExact' : records = prior ++ anchorRecord :: anchorLater :=
+    anchorExact
+  have orderedExact' : records =
+      (before ++ first :: middle) ++ anchorRecord :: after := by
+    simpa only [List.cons_append, List.append_assoc] using orderedExact
+  have prefixExact : prior = before ++ first :: middle :=
+    nodup_equal_pivot_prefixes anchorRecord prior anchorLater
+      (before ++ first :: middle) after
+      (by simpa only [← anchorExact'] using recordsNodup)
+      (anchorExact'.symm.trans orderedExact')
+  rw [prefixExact]
+  simp
+
 private theorem equal_answer_root_records
     {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
     {parameters : ExactCompilerResourceParameters}
@@ -649,6 +671,108 @@ theorem exact_lookup_digest_chain_retained_before_consumer
       exact .step initial current next stepInput stepActor retainedPrevious
         causalPrefix allowed stepMember
 
+/-- Specialization for a consumer that is the selected anchor itself.  Every
+lookup in the chain is strictly earlier and therefore belongs to the anchor's
+canonical prefix. -/
+theorem exact_lookup_digest_chain_retained_before_anchor
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (prior anchorLater : List UnifiedExposureRecord)
+    {consumerInput : ShaInput} {consumerAnswer : Digest256}
+    (consumerActor : QueryActor)
+    (anchorExact : exactFixedRootRecords input.package.root =
+      prior ++ (.machineFresh consumerActor consumerInput consumerAnswer :
+        UnifiedExposureRecord) :: anchorLater)
+    {boundaryInput : ShaInput} {allowedInput : ShaInput → Prop}
+    {initial terminal : Digest256}
+    (chain : ExactLookupDigestChain (exactOperationalTable input)
+      boundaryInput allowedInput initial terminal)
+    (consumerLookup : tableLookup (exactOperationalTable input) consumerInput =
+      some consumerAnswer)
+    (terminalPrefix : HasLiteralStatePrefix terminal consumerInput) :
+    ExactRetainedDigestChain prior boundaryInput allowedInput initial
+      terminal := by
+  classical
+  induction chain generalizing consumerInput consumerAnswer consumerActor with
+  | boundary boundaryLookup =>
+      obtain ⟨before, middle, after, pairOrder⟩ :=
+        exact_compiler_literal_dependency_has_strict_root_order transitionRoom
+          input boundaryInput consumerInput initial consumerAnswer
+          boundaryLookup consumerLookup terminalPrefix
+      obtain ⟨beforeRecords, middleRecords, afterRecords, boundaryActor,
+          orderedConsumerActor, recordOrder⟩ :=
+        exact_root_pair_order_lifts_to_records input boundaryInput
+          consumerInput initial consumerAnswer before middle after pairOrder
+      have orderedConsumerMember :
+          (.machineFresh orderedConsumerActor consumerInput consumerAnswer :
+            UnifiedExposureRecord) ∈ exactFixedRootRecords input.package.root := by
+        rw [recordOrder]
+        simp
+      have consumerMember :
+          (.machineFresh consumerActor consumerInput consumerAnswer :
+            UnifiedExposureRecord) ∈ exactFixedRootRecords input.package.root := by
+        rw [anchorExact]
+        simp
+      have consumerRecordExact := equal_answer_root_records input
+        orderedConsumerMember consumerMember
+      have rootNodup : (exactFixedRootRecords input.package.root).Nodup :=
+        List.Nodup.of_map UnifiedExposureRecord.answer
+          (exact_root_record_answers_nodup input)
+      have boundaryMember := mem_prefix_of_strict_record_order_at_anchor
+        (exactFixedRootRecords input.package.root) prior anchorLater
+        beforeRecords middleRecords afterRecords
+        (.machineFresh boundaryActor boundaryInput initial)
+        (.machineFresh consumerActor consumerInput consumerAnswer)
+        rootNodup anchorExact (by simpa [consumerRecordExact] using recordOrder)
+      exact .boundary initial boundaryActor boundaryMember
+  | step current next stepInput previous causalPrefix allowed stepLookup ih =>
+      obtain ⟨before, middle, after, pairOrder⟩ :=
+        exact_compiler_literal_dependency_has_strict_root_order transitionRoom
+          input stepInput consumerInput next consumerAnswer stepLookup
+          consumerLookup terminalPrefix
+      obtain ⟨beforeRecords, middleRecords, afterRecords, stepActor,
+          orderedConsumerActor, recordOrder⟩ :=
+        exact_root_pair_order_lifts_to_records input stepInput consumerInput
+          next consumerAnswer before middle after pairOrder
+      have orderedConsumerMember :
+          (.machineFresh orderedConsumerActor consumerInput consumerAnswer :
+            UnifiedExposureRecord) ∈ exactFixedRootRecords input.package.root := by
+        rw [recordOrder]
+        simp
+      have consumerMember :
+          (.machineFresh consumerActor consumerInput consumerAnswer :
+            UnifiedExposureRecord) ∈ exactFixedRootRecords input.package.root := by
+        rw [anchorExact]
+        simp
+      have consumerRecordExact := equal_answer_root_records input
+        orderedConsumerMember consumerMember
+      have rootNodup : (exactFixedRootRecords input.package.root).Nodup :=
+        List.Nodup.of_map UnifiedExposureRecord.answer
+          (exact_root_record_answers_nodup input)
+      have stepMember := mem_prefix_of_strict_record_order_at_anchor
+        (exactFixedRootRecords input.package.root) prior anchorLater
+        beforeRecords middleRecords afterRecords
+        (.machineFresh stepActor stepInput next)
+        (.machineFresh consumerActor consumerInput consumerAnswer)
+        rootNodup anchorExact (by simpa [consumerRecordExact] using recordOrder)
+      have retainedPrevious :=
+        exact_lookup_digest_chain_retained_before_consumer transitionRoom input
+          prior anchorLater
+          (.machineFresh consumerActor consumerInput consumerAnswer)
+          anchorExact previous stepInput next stepActor stepLookup stepMember
+          causalPrefix
+      exact .step initial current next stepInput stepActor retainedPrevious
+        causalPrefix allowed stepMember
+
 private theorem equal_answer_records_fix_input
     {prior : List UnifiedExposureRecord}
     (answersNodup : (prior.map UnifiedExposureRecord.answer).Nodup)
@@ -744,6 +868,7 @@ theorem exact_retained_digest_chains_boundary_input_eq
             rightBoundaryAvoidsLeft
 
 #print axioms exact_lookup_digest_chain_retained_before_consumer
+#print axioms exact_lookup_digest_chain_retained_before_anchor
 #print axioms exact_lookup_digest_chain_append_ordered_q16
 #print axioms exact_lookup_digest_chain_through_machine_event
 #print axioms exact_lookup_digest_chain_through_machine_events
