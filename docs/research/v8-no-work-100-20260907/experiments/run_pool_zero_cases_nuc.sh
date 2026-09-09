@@ -8,6 +8,7 @@ readonly svm="$ex/performance-svm/target/release/aspis-v7-pair-forest-combined-r
 verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_CHANNEL:-0}" != 1 ]] || verifier="$rt/sbf-complete-channel/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_GROUP:-0}" != 1 ]] || verifier="$rt/sbf-complete-group/aspis_v8_complete_sbf.so"
+[[ "${ASPIS_V8_TAG7:-0}" != 1 ]] || verifier="$rt/sbf-complete-tag7/aspis_v8_complete_sbf.so"
 readonly verifier registry="$rt/sbf-selected-registry/aspis_registry.so"
 readonly double="$rt/sbf-complete/aspis_pair_forest_result_double.so"
 case "$mode" in

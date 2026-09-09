@@ -1,0 +1,40 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -1246,6 +1246,10 @@
+         )
+     });
+     let selectors = Selectors::boxed_at_point(point);
++    #[cfg(v8_terminal_profile)]
++    unsafe extern "C" { fn aspis_v8_terminal_checkpoint(tag: u64); }
++    #[cfg(v8_terminal_profile)]
++    unsafe { aspis_v8_terminal_checkpoint(1); }
+     let poseidon =
+         evaluate_state_only_poseidon_oracle_projected(&openings, &poseidon_selectors(&selectors));
++    #[cfg(v8_terminal_profile)]
++    unsafe { aspis_v8_terminal_checkpoint(2); }
+     let semantic = semantic_packed(public, &openings, &selectors);
+@@ -1253,6 +1259,8 @@
++    #[cfg(v8_terminal_profile)]
++    unsafe { aspis_v8_terminal_checkpoint(3); }
+     let h1_z = selected_claim(claims, 0, SELECTED_H1_COLUMN);
+     let copy = evaluate_with_selectors(
+         &openings.z,
+@@ -1263,6 +1271,8 @@
+         public.transition.live_snapshot.next_pair_index,
+         copy_variant(public.variant),
+     );
++    #[cfg(v8_terminal_profile)]
++    unsafe { aspis_v8_terminal_checkpoint(4); }
+     let prepared_theta = PreparedQm31Multiplier::new(theta);
+     let mut composition = copy.residual;
+     for lane in semantic.into_iter().rev() {
+@@ -1271,6 +1281,8 @@
+     for lane in poseidon.into_iter().rev() {
+         composition = prepared_theta.mul(composition).add(lane);
+     }
++    #[cfg(v8_terminal_profile)]
++    unsafe { aspis_v8_terminal_checkpoint(5); }
+     Ok((
+         composition,
+         openings.z,

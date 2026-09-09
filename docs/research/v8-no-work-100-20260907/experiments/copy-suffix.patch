@@ -1,0 +1,73 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -321,10 +321,49 @@
++// Research-only common-suffix evaluation. No division, including at lambda=0.
++#[cfg(any(test, v8_copy_suffix))]
++#[inline(never)]
++fn pattern_values_suffix(openings: &[QM31; 16], lambda: QM31) -> [QM31; 14] {
++    let prepared = PreparedQm31Multiplier::new(lambda);
++    let l2 = lambda.square();
++    let l4 = l2.square();
++    let l6 = PreparedQm31Multiplier::new(l4.mul(l2));
++    let l8_value = l4.square();
++    let l8 = PreparedQm31Multiplier::new(l8_value);
++    let mut suffix = [QM31::ZERO; 17];
++    for j in (0..16).rev() {
++        suffix[j] = prepared.mul(openings[j].add(suffix[j+1]));
++    }
++    let s0 = prepared.mul(openings[0]);
++    let s1 = prepared.mul(openings[1]);
++    [
++        suffix[0],
++        suffix[0].sub(l8.mul(suffix[8])),
++        suffix[2].sub(l6.mul(suffix[8])),
++        suffix[0].sub(l6.mul(suffix[6])),
++        s0.add(prepared.mul(s1)),
++        prepared.mul(openings[6].add(prepared.mul(openings[7]))),
++        s0,
++        prepared.mul(openings[10]),
++        s1,
++        prepared.mul(openings[2]),
++        suffix[8].add(l8_value.mul_m31(M31(1_051_521_018))),
++        suffix[2].sub(l8.mul(suffix[10])),
++        suffix[1].sub(l8.mul(suffix[9])),
++        suffix[8],
++    ]
++}
++
+ fn pattern_values(
+     openings: &[QM31; POSEIDON2_WIDTH],
+     lambda: QM31,
+ ) -> [QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1] {
++    #[cfg(v8_copy_suffix)]
++    return pattern_values_suffix(openings, lambda);
+     #[cfg(not(feature = "pool-v1-pair-forest-pattern-window-audit"))]
+     return pattern_values_literal(openings, lambda);
+     #[cfg(feature = "pool-v1-pair-forest-pattern-window-audit")]
+     return pattern_values_windowed(openings, lambda);
+ }
+@@ -1379,6 +1418,28 @@
++    #[test]
++    fn suffix_copy_patterns_equal_literal_including_degenerate_inputs() {
++        let mut rng = Rng(0x7375_6666_6978_3136);
++        let max = QM31 { c0: CM31::new(M31(2147483646),M31(2147483646)),
++            c1: CM31::new(M31(2147483646),M31(2147483646)) };
++        for sample in 0..512 {
++            let openings = match sample {
++                0 => [QM31::ZERO;16], 1 => [QM31::ONE;16], 2 => [max;16],
++                _ => core::array::from_fn(|_| rng.qm31()),
++            };
++            for lambda in [QM31::ZERO,QM31::ONE,QM31::ONE.neg(),max,rng.qm31()] {
++                let expected = pattern_values_literal(&openings,lambda);
++                assert_eq!(pattern_values_suffix(&openings,lambda),expected);
++                assert_eq!(pattern_values_windowed(&openings,lambda),expected);
++                #[cfg(v8_copy_suffix)]
++                assert_eq!(pattern_values(&openings,lambda),expected);
++            }
++        }
++    }
++
+     #[test]
+     fn windowed_copy_patterns_equal_literal_off_domain() {
+         let mut rng = Rng(0x7061_7474_6572_6e31);

@@ -1,0 +1,61 @@
+{
+  "schema": "aspis.research.v8.copy-evidence.v1",
+  "base_revision": "32026b0a1dc139f2684dd9dad247901d8d5ecdd2",
+  "date": "2026-09-09",
+  "research_only": true,
+  "production_source_or_defaults_changed": false,
+  "task_copy": "/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz",
+  "host": "dombarker@nuc.local",
+  "runtime": {"litesvm":"0.16.0","solana_runtime":"4.2.1","sbf_tools":"v1.54","host_rust":"1.94.1","transaction_cap":1200000,"diagnostic_override":false,"token_control":"classic SPL Token 3.5 SBF"},
+  "limits": {"build_high_gib":5,"build_max_gib":7,"svm_high_gib":3,"svm_max_gib":4,"swap_max":0,"jobs":2},
+  "ambient_host_swap_mib":{"start":149,"end":154,"scope":"Global host, with concurrent unrelated V7 Lean work; every recorded task command reports zero swaps. No concurrent job was interrupted."},
+  "hashes": {
+    "field_overlay_unchanged":"bb4b177e4b06da631cef8cc3eaa44b3b08c1bbf3b123b975b116264f447d8fe0",
+    "copy_original":"50062fff8b6afbffad3ddbb8eda09992353a9171c4955151cece26a654c6a6d5",
+    "copy_suffix":"59884f82f3fd365b6d2fb0a7cdc5b73743377a9dc46ddb9660609c7f3aed7ad9",
+    "copy_tag7_final":"31d683dc6799fd315e46696bb75247fbf7a838208e2a35795742d1c359081d02",
+    "semantic_original":"efbc5be87e271419d7b09e1bb6e3a83984d42795bc20067ea039814fb89ffa58",
+    "semantic_profile_overlay":"2ec52bc3d42432dc59121c4caa854eb36e4b962bc54404de2233ed8002b52366",
+    "profile_verifier":"e65544cc9cad9e48b0197b802995034ee99ce6cdbc98e5b068f922d8ccdc5fac",
+    "suffix_verifier":"5a96a0208596b6ffc3539e7d734f7a35ee09192c6093f3157afe7088d83aa3a7",
+    "tag7_verifier":"53e1f8b17670927ebecf8f6b953e230442add1514fed6919a51c1b19ce33bae8",
+    "pool":"26a444033153177adc5a3b1c0c32477c12f655d1e27636563fbfc6c0604cc1e6",
+    "registry":"76f4c382de8c638084cd3c15d50398224e5ad377eeebfbc15d6f35a61f0f045d",
+    "driver":"7e4160da049f9dd60ffbc47522a2e005dfde23920acf9d5e05d5d2c8ca343e39"
+  },
+  "lean": {
+    "workspace":"/Users/dominic/ZK/AspisFormal",
+    "toolchain":"leanprover/lean4:v4.32.0",
+    "mathlib_revision":"81a5d257c8e410db227a6665ed08f64fea08e997",
+    "mathlib_worktree_clean":true,
+    "mathlib_tactic_olean_sha256":"55ee2345729e8a4d379de3bce14ea18b14fbfdc259cf2653fadf4bf3a46876d8",
+    "command":"/usr/bin/time -l lake env lean -M7000 <absolute leaf>",
+    "allowed_axioms":["propext","Classical.choice","Quot.sound"],
+    "new_axioms_or_sorry":false,
+    "source_translation":"algebraic/list/range model, not Rust/Aeneas/whole-verifier refinement",
+    "targets":[
+      {"file":"experiments/CopySuffix.lean","sha256":"a3540de204781350c0b868dbade1c73f12eb4343d57f2335016945b3b66206ce","exit":0,"wall_seconds":2.77,"peak_rss_bytes":2904391680,"swap":0,"log":"experiments/copy-suffix-lean.log"},
+      {"file":"experiments/CopyTagRange.lean","sha256":"040dca7b05791eb6a0318ca5065f89773c11c39f0c3e1869f52fb349e5a038fc","exit":0,"wall_seconds":3.38,"peak_rss_bytes":2818588672,"swap":0,"log":"experiments/copy-tag7-lean.log"}
+    ]
+  },
+  "optimized_actual_source_tests":[
+    {"mode":"suffix","exit":0,"tests":8,"test_seconds":0.04,"command_wall_seconds":32.02,"command_peak_rss_kib":640720,"swap":0,"log":"evidence/copy/copy-suffix-test.log"},
+    {"mode":"suffix+tag7","exit":0,"tests":9,"test_seconds":0.03,"command_wall_seconds":22.09,"command_peak_rss_kib":640172,"swap":0,"log":"evidence/copy/copy-tag7-test-fixed.log"}
+  ],
+  "sbf_builds":[
+    {"mode":"channel-profile","exit":0,"wall_seconds":32.96,"peak_rss_kib":588064,"swap":0,"log":"experiments/terminal-channel-profile-build.log"},
+    {"mode":"suffix","exit":0,"wall_seconds":32.97,"peak_rss_kib":588888,"swap":0,"log":"evidence/copy/copy-suffix-sbf-build.log"},
+    {"mode":"tag7","exit":0,"wall_seconds":44.14,"peak_rss_kib":588052,"swap":0,"log":"evidence/copy/copy-tag7-sbf-build.log"}
+  ],
+  "stack":{"max_direct_r10_offset":4096,"new_stack_warning":false,"log":"evidence/copy/tag7-stack.json","scope":"Direct offsets in stripped ELF; not a complete machine-stack proof"},
+  "profile_execution":{"exit":0,"wall_seconds":0.04,"peak_rss_kib":29052,"swap":0,"transaction_cap":1400000,"compute_units":1193326,"logging_overhead_included":true,"evidence":"experiments/terminal-channel-profile.json"},
+  "failed_preflights":[
+    {"target":"CopyTagRange.lean","exit":1,"wall_seconds":2.35,"peak_rss_bytes":2821308416,"swap":0,"reason":"Nat.add_mod rewrite oriented at the wrong expression; replaced with its explicit symmetric equality","log":"experiments/copy-tag7-lean-failed.log"},
+    {"target":"tag7 Rust test","exit":101,"wall_seconds":16.58,"peak_rss_kib":489808,"swap":0,"reason":"Use std::println! inside the no-std crate test","log":"evidence/copy/copy-tag7-test.log"}
+  ],
+  "proof_body_bytes":40282,
+  "proof_or_transcript_change":false,
+  "prover_timing_rerun":false,
+  "global_security_certificate":null,
+  "full_transaction_no_regression":false
+}
