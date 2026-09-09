@@ -214,6 +214,101 @@ theorem exact_restored_query_batch_full_labels_tape_exact
     exact_plain_rom_trace_answers_are_master_tape]
   simp
 
+/-- The complete trace has exactly the residual capacity reserved by the
+router once the deployed restored sampler has supplied all twenty-four named
+duplex coordinates.  The completeness premise is intentionally explicit:
+an early restoration failure may leave some named slots unused, in which case
+the corresponding full-trace statement is false. -/
+theorem exact_restored_query_batch_full_residual_exact_of_named_complete
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (namedComplete :
+      (namedTraceSlots
+        (exactRestoredQueryBatchFullLabels transitionFuel configuration
+          sample)).length = 24) :
+    residualTraceSteps
+        (exactRestoredQueryBatchFullLabels transitionFuel configuration sample) =
+      (exactCompilerTargetCaps parameters).length - 24 := by
+  let labels := exactRestoredQueryBatchFullLabels transitionFuel configuration
+    sample
+  have enough : 24 ≤ (exactCompilerTargetCaps parameters).length :=
+    exact_compiler_tape_has_gamma_prefix_capacity parameters
+  have labelsLength : labels.length =
+      (exactCompilerTargetCaps parameters).length := by
+    have tapeExact := exact_restored_query_batch_full_labels_tape_exact
+      transitionFuel configuration sample
+    have lengths := congrArg List.length tapeExact
+    have raw : 24 + ((exactCompilerTargetCaps parameters).length - 24) =
+        labels.length := by
+      simpa [labels] using lengths
+    omega
+  have split := labeled_trace_length_split labels
+  change residualTraceSteps labels =
+    (exactCompilerTargetCaps parameters).length - 24
+  change (namedTraceSlots labels).length = 24 at namedComplete
+  omega
+
+/-- Every chronological prefix through a selected record fits the residual
+component whenever the complete deployed run supplies all twenty-four named
+query-batch coordinates.  This replaces a brittle manual prefix count by the
+exact full-tape partition theorem. -/
+theorem exact_restored_query_batch_prefix_residual_enough_of_named_complete
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (prior later : List UnifiedExposureRecord)
+    (record : UnifiedExposureRecord)
+    (decomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        prior ++ record :: later)
+    (namedComplete :
+      (namedTraceSlots
+        (exactRestoredQueryBatchFullLabels transitionFuel configuration
+          sample)).length = 24) :
+    residualTraceSteps
+        (indexedControllerLabeledRecords transitionFuel
+          (exactRestoredQueryBatchController transitionFuel configuration
+            sample.1)
+          (exactRestoredQueryBatchInitialState transitionFuel configuration
+            sample.1)
+          (prior ++ [record])) ≤
+      (exactCompilerTargetCaps parameters).length - 24 := by
+  let controller := exactRestoredQueryBatchController transitionFuel
+    configuration sample.1
+  let initial := exactRestoredQueryBatchInitialState transitionFuel
+    configuration sample.1
+  let prefixLabels := indexedControllerLabeledRecords transitionFuel controller
+    initial (prior ++ [record])
+  let suffixLabels := indexedControllerLabeledRecords transitionFuel controller
+    (indexedStateAfterRecords transitionFuel controller (prior ++ [record])
+      initial) later
+  have labelsExact :
+      exactRestoredQueryBatchFullLabels transitionFuel configuration sample =
+        prefixLabels ++ suffixLabels := by
+    have traceSplit :
+        (runExactPlainRom transitionFuel configuration sample).trace =
+          (prior ++ [record]) ++ later := by
+      simpa [List.append_assoc] using decomposition
+    unfold exactRestoredQueryBatchFullLabels
+    rw [traceSplit]
+    rw [indexed_controller_labeled_records_append]
+  have fullExact :=
+    exact_restored_query_batch_full_residual_exact_of_named_complete
+      transitionFuel configuration sample namedComplete
+  rw [labelsExact, residual_trace_steps_append] at fullExact
+  have prefixLe : residualTraceSteps prefixLabels ≤
+      residualTraceSteps prefixLabels + residualTraceSteps suffixLabels := by
+    omega
+  simpa only [controller, initial, prefixLabels, suffixLabels] using
+    prefixLe.trans_eq fullExact
+
 /-! ## Routing a selected literal full-run record -/
 
 theorem exact_restored_query_batch_router_routes_selected_full_answer
@@ -328,6 +423,46 @@ theorem exact_restored_query_batch_router_routes_selected_full_answer
     (later.map UnifiedExposureRecord.answer) tapeExact
     priorLabels [] target record.answer labelsDecomposition
 
+/-- Source-facing routing form: a selected pre-answer label and completion of
+all twenty-four deployed duplex slots are sufficient.  The residual-capacity
+side condition is derived, not exposed to the source adapter. -/
+theorem exact_restored_query_batch_router_routes_selected_full_answer_of_named_complete
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (prior later : List UnifiedExposureRecord)
+    (record : UnifiedExposureRecord)
+    (target : GammaPrefixDigestSlot)
+    (decomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        prior ++ record :: later)
+    (preferred :
+      (exactRestoredQueryBatchController transitionFuel configuration
+        sample.1).preferredSlot
+        (indexedStateAfterRecords transitionFuel
+          (exactRestoredQueryBatchController transitionFuel configuration
+            sample.1)
+          prior
+          (exactRestoredQueryBatchInitialState transitionFuel configuration
+            sample.1)) = some target)
+    (namedComplete :
+      (namedTraceSlots
+        (exactRestoredQueryBatchFullLabels transitionFuel configuration
+          sample)).length = 24) :
+    causalRoutedAnswer? target
+        (exactRestoredQueryBatchRouter transitionFuel configuration sample.1)
+        (exactGammaPrefixRouterInputTape parameters sample.2) =
+      some record.answer := by
+  apply exact_restored_query_batch_router_routes_selected_full_answer
+    transitionFuel configuration sample prior later record target decomposition
+      preferred
+  exact exact_restored_query_batch_prefix_residual_enough_of_named_complete
+    transitionFuel configuration sample prior later record decomposition
+      namedComplete
+
 /-! ## Named lookup to the public restoration-native coordinates -/
 
 theorem exact_restored_query_batch_output_coordinate_eq_of_routed_lookup
@@ -385,7 +520,10 @@ theorem exact_restored_query_batch_advance_coordinate_eq_of_routed_lookup
 #print axioms exact_restored_query_batch_full_labels_form_trace
 #print axioms exact_restored_query_batch_full_named_slots_nodup
 #print axioms exact_restored_query_batch_full_labels_tape_exact
+#print axioms exact_restored_query_batch_full_residual_exact_of_named_complete
+#print axioms exact_restored_query_batch_prefix_residual_enough_of_named_complete
 #print axioms exact_restored_query_batch_router_routes_selected_full_answer
+#print axioms exact_restored_query_batch_router_routes_selected_full_answer_of_named_complete
 #print axioms exact_restored_query_batch_output_coordinate_eq_of_routed_lookup
 #print axioms exact_restored_query_batch_advance_coordinate_eq_of_routed_lookup
 
