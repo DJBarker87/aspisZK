@@ -20,6 +20,7 @@ verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_AUTH_ORDER:-0}" != 1 ]] || verifier="$rt/sbf-complete-auth-order/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_CHORD_NORM:-0}" != 1 ]] || verifier="$rt/sbf-complete-chord-norm/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_CIRCLE_NORM:-0}" != 1 ]] || verifier="$rt/sbf-complete-circle-norm/aspis_v8_complete_sbf.so"
+[[ "${ASPIS_V8_SPLIT_INVERSE:-0}" != 1 ]] || verifier="$rt/sbf-complete-split-inverse/aspis_v8_complete_sbf.so"
 readonly verifier registry="$rt/sbf-selected-registry/aspis_registry.so"
 readonly double="$rt/sbf-complete/aspis_pair_forest_result_double.so"
 case "$mode" in

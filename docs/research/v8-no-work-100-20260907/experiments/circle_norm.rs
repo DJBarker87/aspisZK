@@ -2,6 +2,8 @@
 //! No prover-provided point can construct Selected; its fields are private.
 use super::*;
 use corelib::circle_fri::BaseCirclePoint;
+#[cfg(any(v8_joined_inverse,test))]
+#[path="joined_inverse.rs"] mod joined_inverse;
 fn times_r(z:CM31)->CM31{CM31::new(z.a.double().sub(z.b),z.a.add(z.b.double()))}
 fn norm(v:K)->CM31{v.c0.square().sub(times_r(v.c1.square()))}
 fn polar(v:K,w:K)->CM31{v.c0.mul(w.c0).sub(times_r(v.c1.mul(w.c1))).double()}
@@ -23,6 +25,12 @@ impl Coeff{
 }
 pub(super) struct Selected(Vec<BaseCirclePoint>);
 impl Selected{
+    #[cfg(any(v8_joined_inverse,test))]
+    pub(super) fn inverse_joined(&self,values:&[K],abc:[K;3],base:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{
+        #[cfg(v8_split_inverse)] return joined_inverse::inverse_split(self,values,abc,base);
+        #[cfg(not(v8_split_inverse))]
+        joined_inverse::inverse(self,values,abc,base)
+    }
     pub(super) fn new(queries:&[u32])->Result<Self,Error>{
         Ok(Self(corelib::circle_fri::selected_circle_fiber_points_shared(20,queries).map_err(|_|Error::Domain)?))
     }
