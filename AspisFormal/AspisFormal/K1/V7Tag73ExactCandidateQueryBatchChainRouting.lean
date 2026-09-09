@@ -16,12 +16,15 @@ namespace AspisK1.V7Tag73ExactCandidateQueryBatchChainRouting
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73AdaptiveQ16TrialAccounting
+open AspisK1.V7Tag73CandidateDirectedQueryBatchController
 open AspisK1.V7Tag73CandidateQueryBatchArmedController
 open AspisK1.V7Tag73CandidateQueryBatchProducerInvariant
 open AspisK1.V7Tag73CandidateQueryBatchSlotFreshness
 open AspisK1.V7Tag73CausalGammaPrefixCoordinates
 open AspisK1.V7Tag73CausalQ16CoordinateRouter
+open AspisK1.V7Tag73CausalFoldAlphaQ16QueryBatchController
 open AspisK1.V7Tag73ExactCandidateQueryBatchArmedContext
+open AspisK1.V7Tag73ExactCandidateQueryBatchControllerProjection
 open AspisK1.V7Tag73ExactCandidateQueryBatchProducerAvailability
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
@@ -426,6 +429,18 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
         ((exactOperationalTape input).messages.challengeUse
           .queryBatch).blocksUsed ∧
       advances.length = outputs.length ∧
+      initial = queryBatchIndexedState
+        ((extendControllerThroughCandidateQueryBatch transitionFuel target
+          (candidateCompleteBaseController transitionFuel foldTrial.val
+            finalTrial.val boundaryIndex) completeFoldAlphaQ16DagMemory
+          ).afterAnswer transitionFuel
+            (indexedStateAfterRecords transitionFuel
+              (extendControllerThroughCandidateQueryBatch transitionFuel target
+                (candidateCompleteBaseController transitionFuel foldTrial.val
+                  finalTrial.val boundaryIndex) completeFoldAlphaQ16DagMemory)
+              boundaryPrior
+                (exactCandidateDirectedQueryBatchInitialState input))
+            queryBatchDigest) ∧
       initial.memory =
         { boundarySeen := true
           producers :=
@@ -461,7 +476,7 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
           slot.val = index) := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, initial, rootExact,
-      chain, outputsLength, advancesLength, initialMemory, aligned,
+      chain, outputsLength, advancesLength, initialExact, initialMemory, aligned,
       onlyMachine, inputNodup, answerNodup, sourceDisjoint, digestDisjoint,
       invariant, initialReady⟩ :=
     exact_selected_candidate_has_armed_query_batch_context transitionRoom input
@@ -521,7 +536,8 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
       simpa [slot] using preferred, rfl⟩
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs, advances,
     boundaryPrior, suffix, boundaryActor, initial, rootExact, chain,
-    outputsLength, advancesLength, initialMemory, outputResult, advanceResult⟩
+    outputsLength, advancesLength, initialExact, initialMemory, outputResult,
+    advanceResult⟩
 
 #print axioms armed_query_batch_ready_child_has_preferred
 #print axioms exact_ordered_armed_query_batch_chain_has_preferred_slots

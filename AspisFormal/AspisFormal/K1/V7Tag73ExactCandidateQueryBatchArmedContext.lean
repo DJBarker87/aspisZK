@@ -78,6 +78,17 @@ def ExactCandidateQueryBatchArmedContext
     outputs.length =
       ((exactOperationalTape input).messages.challengeUse .queryBatch).blocksUsed ∧
     advances.length = outputs.length ∧
+    initial = queryBatchIndexedState
+      ((extendControllerThroughCandidateQueryBatch transitionFuel target
+        (candidateCompleteBaseController transitionFuel foldTrial.val
+          finalTrial.val boundaryIndex) completeFoldAlphaQ16DagMemory
+        ).afterAnswer transitionFuel
+          (indexedStateAfterRecords transitionFuel
+            (extendControllerThroughCandidateQueryBatch transitionFuel target
+              (candidateCompleteBaseController transitionFuel foldTrial.val
+                finalTrial.val boundaryIndex) completeFoldAlphaQ16DagMemory)
+            boundaryPrior (exactCandidateDirectedQueryBatchInitialState input))
+          queryBatchDigest) ∧
     initial.memory =
       { boundarySeen := true
         producers :=
@@ -222,7 +233,7 @@ theorem exact_selected_candidate_has_armed_query_batch_context
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
     advances, boundaryPrior, suffix, boundaryActor, initial, by
       simpa [boundaryRecord, boundaryInput] using rootExact, chain,
-    outputsLength, advancesLength, by
+    outputsLength, advancesLength, rfl, by
       simpa [producer, boundaryInput] using initialMemory, aligned, onlyMachine,
     inputNodup, answerNodup, sourceDisjoint, digestDisjoint, invariant, by
       simpa [producer, boundaryInput] using initialReady⟩
