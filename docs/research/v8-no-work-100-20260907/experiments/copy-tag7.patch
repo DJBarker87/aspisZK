@@ -1,0 +1,59 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -700,6 +700,19 @@
+ static COPY_TAG_TERMS: ([u8; 272], [u32; 272]) = build_copy_tag_terms();
+-
++
++// The frozen tag range, not any honest-proof value, permits seven products.
++// Every M31 selector limb is canonical. All seven partial sums fit in u64.
++#[cfg(v8_copy_tag7)]
++const _: () = {
++    let mut i = 0;
++    while i < constants::COPY_LINKS.len() {
++        assert!(constants::COPY_LINKS[i].tag <= 1_124_073_607);
++        i += 1;
++    }
++    assert!(7u128 * 2_147_483_646u128 * 1_124_073_607u128 < (1u128<<64));
++};
++
+ /// Evaluate one frozen Copy-tag coordinate with four-product lazy M31
+@@ -710,6 +723,8 @@
+     let end = usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate + 1]);
+     while index < end {
+-        let chunk_end = core::cmp::min(index + 4, end);
++        // The quiet control retains four; seven is a research-only range port.
++        let width = if cfg!(v8_copy_tag7) { 7 } else { 4 };
++        let chunk_end = core::cmp::min(index + width, end);
+         let mut raw = [0u64; 4];
+         while index < chunk_end {
+@@ -1420,6 +1435,32 @@
++    #[test]
++    fn copy_tag_dot_matches_literal_canonical_extremes() {
++        let mut rng = Rng(0x7461_675f_7365_766e);
++        let max = QM31 { c0: CM31::new(M31(2147483646),M31(2147483646)),
++            c1: CM31::new(M31(2147483646),M31(2147483646)) };
++        let mut four_chunks = 0; let mut seven_chunks = 0;
++        for c in 0..30 {
++            let count = usize::from(COPY_TAG_COORDINATE_OFFSETS[c+1]-COPY_TAG_COORDINATE_OFFSETS[c]);
++            four_chunks += count.div_ceil(4); seven_chunks += count.div_ceil(7);
++        }
++        std::println!("copy_tag_chunks four={four_chunks} seven={seven_chunks}");
++        for sample in 0..512 {
++            let high = match sample {
++                0 => [QM31::ZERO;64], 1 => [QM31::ONE;64], 2 => [max;64],
++                _ => core::array::from_fn(|_| rng.qm31()),
++            };
++            let selectors = Selectors { high,low:[QM31::ZERO;16] };
++            for c in 0..30 {
++                let mut expected = QM31::ZERO;
++                for j in usize::from(COPY_TAG_COORDINATE_OFFSETS[c])..usize::from(COPY_TAG_COORDINATE_OFFSETS[c+1]) {
++                    expected = expected.add(high[usize::from(COPY_TAG_TERMS.0[j])].mul_m31(M31(COPY_TAG_TERMS.1[j])));
++                }
++                assert_eq!(copy_tag_coordinate_dot(c,&selectors),expected);
++            }
++        }
++    }
++
+     #[test]
+     fn suffix_copy_patterns_equal_literal_including_degenerate_inputs() {

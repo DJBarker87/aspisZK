@@ -1,0 +1,170 @@
+Running as unit: aspis-copy-suffix-test-tag7-1788915882-3704643.scope; invocation ID: 86263a1ec3b54ce3886966239e040b3d
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling autocfg v1.5.1
+   Compiling num-traits v0.2.19
+   Compiling syn v2.0.118
+   Compiling serde_core v1.0.228
+   Compiling num-integer v0.1.46
+   Compiling serde v1.0.228
+   Compiling paste v1.0.15
+   Compiling strength_reduce v0.2.4
+   Compiling serde_derive v1.0.228
+   Compiling tracing-attributes v0.1.31
+   Compiling transpose v0.2.3
+   Compiling pin-project-lite v0.2.17
+   Compiling tracing-core v0.1.36
+   Compiling either v1.16.0
+   Compiling rand_core v0.10.1
+   Compiling rand v0.10.2
+   Compiling itertools v0.14.0
+   Compiling p3-util v0.6.1
+   Compiling tracing v0.1.44
+   Compiling num-bigint v0.4.7
+   Compiling p3-maybe-rayon v0.6.1
+   Compiling scopeguard v1.2.0
+   Compiling lock_api v0.4.14
+   Compiling spin v0.12.1
+   Compiling version_check v0.9.5
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling p3-field v0.6.1
+   Compiling p3-matrix v0.6.1
+   Compiling p3-dft v0.6.1
+   Compiling p3-symmetric v0.6.1
+   Compiling p3-mds v0.6.1
+   Compiling p3-poseidon1 v0.6.1
+   Compiling p3-poseidon2 v0.6.1
+   Compiling crypto-common v0.1.7
+   Compiling p3-monty-31 v0.6.1
+   Compiling block-buffer v0.10.4
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core)
+   Compiling p3-challenger v0.6.1
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling cfg-if v1.0.4
+   Compiling sha2 v0.10.9
+   Compiling p3-mersenne-31 v0.6.1
+warning: unreachable statement
+   --> crates/aspis-core/src/field.rs:268:9
+    |
+262 | /             return CM31 {
+263 | |                 a: M31::reduce_u64(a.wrapping_mul(c)
+264 | |                     .wrapping_add(4611686014132420609).wrapping_sub(b.wrapping_mul(d))),
+265 | |                 b: M31::reduce_u64(a.wrapping_mul(d).wrapping_add(b.wrapping_mul(c))),
+266 | |             };
+    | |_____________- any code following this expression is unreachable
+267 |           }
+268 |           let m0 = self.a.mul(rhs.a);
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+    |
+    = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+   --> crates/aspis-core/src/field.rs:428:9
+    |
+427 |           { return qm31_hybrid_mul(QM31{c0:CM31::new(self.components[0][0],self.components[0][1]),c1:CM31::new(self.components[1][0],self.components[1][1])},rhs); }
+    |             ----------------------------------------------------------------------------------------------------------------------------------------------------- any code following this expression is unreachable
+428 | /         let multiply = |left: [M31; 3], right: CM31| {
+429 | |             // The cached third component equals left[0]+left[1]. For the
+430 | |             // two-reduction layout only the original two limbs are needed.
+431 | |             #[cfg(v8_prepared_schoolbook)]
+...   |
+440 | |         };
+    | |__________^ unreachable statement
+
+warning: unreachable statement
+   --> crates/aspis-core/src/field.rs:433:13
+    |
+432 |             { return CM31::new(left[0],left[1]).mul(right); }
+    |               -------------------------------------------- any code following this expression is unreachable
+433 |             let m0 = left[0].mul(right.a);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+   --> crates/aspis-core/src/field.rs:998:9
+    |
+997 |         { return qm31_hybrid_mul(self,rhs); }
+    |           -------------------------------- any code following this expression is unreachable
+998 |         let m0 = self.c0.mul(rhs.c0);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: function `verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes` is never used
+   --> crates/aspis-core/src/circle_merkle.rs:419:15
+    |
+419 | pub(crate) fn verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes<
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_circle_openings_deferred_canonical` is never used
+   --> crates/aspis-core/src/circle_openings.rs:993:15
+    |
+993 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `aspis-core` (lib) generated 7 warnings
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement)
+error: cannot find macro `println` in this scope
+    --> crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:1443:9
+     |
+1443 |         println!("copy_tag_chunks four={four_chunks} seven={seven_chunks}");
+     |         ^^^^^^^
+     |
+help: consider importing this macro
+     |
+1193 +     use std::println;
+     |
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+   --> crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:364:5
+    |
+360 |     return pattern_values_suffix(openings, lambda);
+    |     ---------------------------------------------- any code following this expression is unreachable
+...
+364 |     return pattern_values_windowed(openings, lambda);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+    |
+    = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `aspis-statement` (lib test) generated 2 warnings
+error: could not compile `aspis-statement` (lib test) due to 1 previous error; 2 warnings emitted
+Command exited with non-zero status 101
+	Command being timed: "env CARGO_TARGET_DIR=/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/target RUSTFLAGS=--cfg v8_copy_suffix --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_qm_channel_partial -C overflow-checks=yes -A unexpected_cfgs --cfg v8_copy_tag7 cargo test --offline --locked --release --jobs 2 -p aspis-statement --features pool-v1-kernel,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-active-mask-basis-audit --lib pool_v1::pair_forest_copy_terminal::tests:: -- --test-threads=1 --nocapture"
+	User time (seconds): 26.41
+	System time (seconds): 2.77
+	Percent of CPU this job got: 175%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:16.58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 489808
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 167
+	Minor (reclaiming a frame) page faults: 1315430
+	Voluntary context switches: 9292
+	Involuntary context switches: 837
+	Swaps: 0
+	File system inputs: 6184
+	File system outputs: 363936
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 101

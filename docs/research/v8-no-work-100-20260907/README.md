@@ -1,6 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [complete transactions below 1.2M: page scan and channel fusion](zero-channel-review.md).
+Latest: [shared copy windows and range-certified tag accumulators](copy-performance-review.md).
+Two further Lean-backed rewrites save **7,072–7,118 CU** on identical complete
+maximum-body proofs. All four shapes pass the actual 1.2M cap; worst observed
+is **1,180,814 CU**, including the pinned classic SPL Token 3.5 SBF settlement.
+The body remains **40,282 bytes**. These are measured fixture maxima, not a
+universal CU bound or production-readiness claim. See
+[results](copy-performance-results.json) and [evidence](copy-performance-evidence.json).
+
+Previous: [complete transactions below 1.2M: page scan and channel fusion](zero-channel-review.md).
 All four shapes pass the actual **1.2M TxV1 limit** with 40,282-byte proofs.
 The worst observed complete transaction is **1,181,866 CU**, or **1,187,906 CU**
 with the separately pinned SPL Token 3.5 SBF control. New Lean equivalence/range
