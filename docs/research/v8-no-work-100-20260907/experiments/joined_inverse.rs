@@ -1,6 +1,12 @@
 //! Same prefix/backward kernel, one base inverse across both denominator lists.
 //! Child module of circle_norm: uses the very same coefficient/point invariant.
 use super::*;
+#[cfg(any(v8_line_norm,test))]
+#[path="line_norm.rs"] mod line_norm;
+#[cfg(any(v8_line_norm,test))]
+pub(super) fn inverse_lines(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{
+    line_norm::inverse(selected,values,abc,base,lines)
+}
 fn batch_two(xs:&[M31],ys:&[M31])->Result<(Vec<M31>,Vec<M31>),Error>{
     if xs.is_empty() || ys.is_empty() || xs.iter().chain(ys).any(|x|*x==M31::ZERO){return Err(Error::Domain);}
     let mut px=Vec::with_capacity(xs.len());px.push(xs[0]);

@@ -25,6 +25,10 @@ impl Coeff{
 }
 pub(super) struct Selected(Vec<BaseCirclePoint>);
 impl Selected{
+    #[cfg(any(v8_line_norm,test))]
+    pub(super) fn inverse_lines(&self,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{
+        joined_inverse::inverse_lines(self,values,abc,base,lines)
+    }
     #[cfg(any(v8_joined_inverse,test))]
     pub(super) fn inverse_joined(&self,values:&[K],abc:[K;3],base:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{
         #[cfg(v8_split_inverse)] return joined_inverse::inverse_split(self,values,abc,base);

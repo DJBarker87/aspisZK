@@ -54,7 +54,7 @@ for mode,source in [('joined-inverse','joined_inverse_concat.rs'),('split-invers
     assert all((d<0 if selected else d>0) for ds in delta.values() for d in ds)
     src={'relation_callback.rs':patched('relation_callback.rs',mode+'-callback.patch'),
          'circle_norm.rs':patched('circle_norm.rs',mode+'-kernel.patch'),
-         'joined_inverse.rs':sha((EX/source).read_bytes())}
+         'joined_inverse.rs':sha(subprocess.check_output(['git','show', '992288fd577f647c810a506fc83b4811fb90f0e6:docs/research/v8-no-work-100-20260907/experiments/joined_inverse.rs'],cwd=ROOT)) if selected else sha((EX/source).read_bytes())}
     ev=ROOT/'evidence'/mode;test=(ev/(mode+'-test-v1.log')).read_text()
     assert all(h in test for h in src.values()) and '1 passed; 0 failed' in test
     assert 'chord_profiles=1024 general_batches=512 zero_positions=132' in test

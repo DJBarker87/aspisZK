@@ -1,6 +1,18 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [direct decoder blocks and rejected gamma fusion](decode-controls-review.md).
+Latest: [reuse the checked line coordinates](line-norm-review.md).
+Worst observed complete transaction is **1,092,232 CU**, with **107,768 CU**
+headroom below the real 1.2M cap and the unchanged **40,282-byte** body.
+The source-shaped Lean proof includes the literal half-word range/field bridge;
+all 50 maximum/ordinary/rollback cases pass. See [results](line-norm-results.json).
+Same-pool V7 remains 20,089–43,348 CU cheaper; universal CU remains open.
+
+Preceding retained changes: [split-prefix inversion fusion](inversion-fusion-review.md),
+[circle norm](circle-norm-review.md), [chord norm](chord-norm-review.md),
+and [authentication order](auth-order-review.md). Each reports its separate
+measured delta; rejected controls are not included in the selected build.
+
+Previous: [direct decoder blocks and rejected gamma fusion](decode-controls-review.md).
 The Lean-backed decoder saves **1,320 CU** per complete maximum-body proof.
 Worst observed is **1,100,125 CU**, with **99,875 CU** headroom below the real
 1.2M cap and the unchanged **40,282-byte** body. Malformed/ordinary/rollback
