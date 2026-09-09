@@ -11,7 +11,7 @@ case "$mode" in
  partial) verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"; matched=0;;
  channel) verifier="$rt/sbf-complete-channel/aspis_v8_complete_sbf.so"; matched=0;;
  group) verifier="$rt/sbf-complete-group/aspis_v8_complete_sbf.so"; matched=0;;
- suffix|tag7|scatter) verifier="$rt/sbf-complete-$mode/aspis_v8_complete_sbf.so"; matched=0;;
+ suffix|tag7|scatter|tag-split|tag-bounded) verifier="$rt/sbf-complete-$mode/aspis_v8_complete_sbf.so"; matched=0;;
  v7) verifier="$rt/sbf-matched-v7/aspis_v8_complete_sbf.so"; matched=1;;
  selected-v7) verifier="$rt/sbf-selected-v7/aspis_verifier.so"; matched=1;;
  *) exit 2;;
