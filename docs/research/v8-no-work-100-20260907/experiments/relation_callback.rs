@@ -17,6 +17,8 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
 #[path="leaf_record.rs"] mod leaf_record;
 #[cfg(any(v8_auth_order,test))]
 #[path="auth_order.rs"] mod auth_order;
+#[cfg(any(v8_chord_norm,test))]
+#[path="chord_norm.rs"] mod chord_norm;
 #[cfg(v8_gamma_wrap)]
 #[path="query_arithmetic.rs"] mod query_arithmetic;
 #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
@@ -211,9 +213,10 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
         }
     }
     query_checkpoint("v8:denominators");
-    #[cfg(v8_tower_batch)] let inverses=tower_inverse_k(&denoms)?;
-    #[cfg(all(v8_batch_k,not(v8_tower_batch)))] let inverses=batch_inverse_k(&denoms)?;
-    #[cfg(not(any(v8_batch_k,v8_tower_batch)))] let inverses=denoms.iter().map(|d|d.try_inv().ok_or(Error::Domain)).collect::<Result<Vec<_>,_>>()?;
+    #[cfg(all(v8_tower_batch,not(v8_chord_norm)))] let inverses=tower_inverse_k(&denoms)?;
+    #[cfg(v8_chord_norm)] let inverses=chord_norm::inverse(&denoms,p.abc,&pts)?;
+    #[cfg(all(v8_batch_k,not(any(v8_tower_batch,v8_chord_norm))))] let inverses=batch_inverse_k(&denoms)?;
+    #[cfg(not(any(v8_batch_k,v8_tower_batch,v8_chord_norm)))] let inverses=denoms.iter().map(|d|d.try_inv().ok_or(Error::Domain)).collect::<Result<Vec<_>,_>>()?;
     query_checkpoint("v8:qm-inverses");
     #[cfg(v8_batch_m)] let base_inverse=batch_inverse_m(&base_denoms)?;
     #[cfg(not(v8_batch_m))] let base_inverse:Vec<M31>=base_denoms.iter().map(|d|d.inv()).collect();
