@@ -1,5 +1,8 @@
 import AspisFormal.K1.V7Tag73K13CommittedExecutionInvariant
 import AspisFormal.K1.V7Tag73K13CandidateDirectedViewAlignment
+import AspisFormal.K1.V7Tag73K13CleanCausalSourceFromFunctional
+import AspisFormal.K1.V7Tag73K13CleanCommittedInputInvariant
+import AspisFormal.K1.V7Tag73K13CleanProbabilityClosure
 import AspisFormal.K1.V7Tag73PreQ16OperationalActualLawBounds
 
 /-!
@@ -45,6 +48,9 @@ open AspisK1.V7Tag73K13CandidateDirectedSourceBridge
 open AspisK1.V7Tag73K13CandidateDirectedSourceFactorization
 open AspisK1.V7Tag73K13CandidateDirectedViewAlignment
 open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
+open AspisK1.V7Tag73K13CleanCausalSourceFromFunctional
+open AspisK1.V7Tag73K13CleanCommittedInputInvariant
+open AspisK1.V7Tag73K13CleanProbabilityClosure
 open AspisK1.V7Tag73K13IdealErrorLedger
 open AspisK1.V7Tag73K13PreQ16JointEventHandoff
 open AspisK1.V7Tag73K13PreQ16TargetProbability
@@ -260,7 +266,7 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (sourceInvariant : ExactCandidateDirectedK13CommittedInputInvariant
+    (sourceInvariant : ExactCleanCandidateDirectedK13CommittedInputInvariant
       transitionFuel
       configuration projection fixedInstance decoder
         (relationSource.toK13SourceObligations transitionFuel configuration
@@ -281,13 +287,9 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
     projection fixedInstance
   let source := relationSource.toK13SourceObligations transitionFuel
     configuration projection fixedInstance decoder
-  let executionInvariant :=
-    AspisK1.V7Tag73K13CommittedExecutionInvariant.ExactCandidateDirectedK13CommittedInputInvariant.toExecutionInvariant
+  let viewFunctional :=
+    AspisK1.V7Tag73K13CleanCommittedInputInvariant.ExactCleanCandidateDirectedK13CommittedInputInvariant.toViewFunctional
       sourceInvariant
-  let viewFunctional := executionInvariant.toViewFunctional
-  let viewAlignment :=
-    AspisK1.V7Tag73K13CandidateDirectedViewAlignment.ExactCandidateDirectedK13ViewFunctional.toViewAlignment
-      viewFunctional
   have q16Bound :=
     exact_clean_preQ16_trial_union_probability_le_one_forest_of_bindings
       (decoder := decoder) hiddenLaw environment.toDecodedParsedSourceProvider
@@ -299,18 +301,13 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
     exact_clean_bidirectional_preQ16_onefold_probability_le hiddenLaw
       transitionRoom (by omega) initialEncoderExact finalEncoderExact
       environment.toDecodedParsedSourceProvider foldExposureCap
-  have globalJointBound :=
-    exact_candidate_directed_joint_batch_probability_le_of_alignment hiddenLaw
-      source (viewAlignment.toSourceAlignment transitionRoom programmedCover)
+  have jointBound :=
+    exact_clean_candidate_directed_joint_batch_collision_probability_le
+      hiddenLaw source
+      (AspisK1.V7Tag73K13CleanCausalSourceFromFunctional.ExactCleanCandidateDirectedK13ViewFunctional.toCausalSource
+        viewFunctional transitionRoom programmedCover)
       (by simpa [exact_compiler_exposure_trial_card] using foldExposureCap)
       (by simpa [exact_compiler_exposure_trial_card] using finalExposureCap)
-  have jointBound :
-      (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
-          (clean ∩ exactTag73K13JointQueryBatchCollisionEvent transitionFuel
-            configuration projection fixedInstance decoder source) ≤
-        candidateDirectedJointBatchRawError :=
-    ((exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure.mono
-      Set.inter_subset_right).trans globalJointBound
   have laterBound := exact_tag73_restricted_k13_later_alpha_probability_le
     hiddenLaw relationSource clean laterAlphaSource
   have lateBound :
