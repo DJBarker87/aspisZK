@@ -107,14 +107,7 @@ structure ExactCandidateDirectedK13SourceAlignment
       (input : ExactK12OperationalInput transitionFuel configuration projection
         fixedInstance sample)
       (k12 : ExactPrefixK12Certificate input)
-      (_collisionFacts :
-        exactTag73K13ExpectedQueryVector decoder input k12 ≠
-            exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
-          exactOperationalChallenge input .queryBatch ∈
-            exactTag73JointQueryBatchNonzeroCollisionSet
-              (source.preQueryDiscrepancy sample input)
-              (exactTag73K13ExpectedQueryVector decoder input k12)
-              (exactTag73K13AuthenticatedQueryVector decoder input k12)),
+      (_collisionFacts : ExactTag73K13CollisionCertificate source input k12),
     ∃ candidate foldTrial finalTrial,
       let coordinates := exactCandidateDirectedRegroupedCoordinates
         transitionFuel configuration candidate foldTrial finalTrial sample.1
@@ -164,14 +157,7 @@ structure ExactCandidateDirectedK13ViewAlignment
       (input : ExactK12OperationalInput transitionFuel configuration projection
         fixedInstance sample)
       (k12 : ExactPrefixK12Certificate input)
-      (_collisionFacts :
-        exactTag73K13ExpectedQueryVector decoder input k12 ≠
-            exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
-          exactOperationalChallenge input .queryBatch ∈
-            exactTag73JointQueryBatchNonzeroCollisionSet
-              (source.preQueryDiscrepancy sample input)
-              (exactTag73K13ExpectedQueryVector decoder input k12)
-              (exactTag73K13AuthenticatedQueryVector decoder input k12))
+      (_collisionFacts : ExactTag73K13CollisionCertificate source input k12)
       (candidate : Q16DigestSlot)
       (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
       (_selected : ExactTag73CandidateDirectedCoordinateSelected input candidate

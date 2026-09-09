@@ -102,13 +102,7 @@ structure ExactCandidateDirectedK13CausalSource
       (input : ExactK12OperationalInput transitionFuel configuration projection
         fixedInstance sample)
       (k12 : ExactPrefixK12Certificate input),
-    exactTag73K13ExpectedQueryVector decoder input k12 ≠
-        exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
-      exactOperationalChallenge input .queryBatch ∈
-        exactTag73JointQueryBatchNonzeroCollisionSet
-          (source.preQueryDiscrepancy sample input)
-          (exactTag73K13ExpectedQueryVector decoder input k12)
-          (exactTag73K13AuthenticatedQueryVector decoder input k12) →
+    ExactTag73K13CollisionCertificate source input k12 →
     ∃ candidate foldTrial finalTrial,
       let coordinates := exactCandidateDirectedRegroupedCoordinates
         transitionFuel configuration candidate foldTrial finalTrial sample.1
@@ -169,7 +163,7 @@ theorem exact_joint_batch_collision_subset_candidate_directed_failure_union
       (exactCandidateDirectedQueryBatchTrials transitionFuel configuration
         projection fixedInstance decoder source causal).failureUnion := by
   intro sample member
-  rcases member with ⟨input, k12, collisionFacts⟩
+  rcases member with ⟨input, k12, ⟨collisionFacts⟩⟩
   obtain ⟨candidate, foldTrial, finalTrial, mapped⟩ :=
     causal.collisionMapped sample input k12 collisionFacts
   apply Set.mem_iUnion.mpr

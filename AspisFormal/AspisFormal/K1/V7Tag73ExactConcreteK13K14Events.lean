@@ -25,6 +25,8 @@ circle-code theorem can be instantiated without double counting.
 
 set_option autoImplicit false
 set_option maxRecDepth 1000000
+set_option maxHeartbeats 2000000
+set_option linter.constructorNameAsVariable false
 
 namespace AspisK1.V7Tag73ExactConcreteK13K14Events
 
@@ -203,6 +205,102 @@ structure ExactTag73K13SourceObligations
       (execution sample input).alpha round =
         exactOperationalChallenge input (.alpha round)
 
+/-- The exact degree-sixteen collision target attached to one accepted K1.3
+source execution. Naming this dependent target once prevents downstream Lean
+elaboration from repeatedly normalizing the full source/input/vector term. -/
+noncomputable def exactTag73K13SourceCollisionTarget
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder)
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k12 : ExactPrefixK12Certificate input) : Finset QM31Exact :=
+  exactTag73JointQueryBatchNonzeroCollisionSet
+    (source.preQueryDiscrepancy sample input)
+    (exactTag73K13ExpectedQueryVector decoder input k12)
+    (exactTag73K13AuthenticatedQueryVector decoder input k12)
+
+theorem exactTag73K13SourceCollisionTarget_eq
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder)
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k12 : ExactPrefixK12Certificate input) :
+    exactTag73K13SourceCollisionTarget source input k12 =
+      exactTag73JointQueryBatchNonzeroCollisionSet
+        (source.preQueryDiscrepancy sample input)
+        (exactTag73K13ExpectedQueryVector decoder input k12)
+        (exactTag73K13AuthenticatedQueryVector decoder input k12) := rfl
+
+/-- Short, exact certificate for the repaired joint-batch collision event.
+The stored target is constrained to the original algebraic root set, while
+membership is carried against the short field rather than its expanded term. -/
+structure ExactTag73K13CollisionCertificate
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder)
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k12 : ExactPrefixK12Certificate input) where
+  different : exactTag73K13ExpectedQueryVector decoder input k12 ≠
+    exactTag73K13AuthenticatedQueryVector decoder input k12
+  target : Finset QM31Exact
+  targetExact : target = exactTag73K13SourceCollisionTarget source input k12
+  collision : exactOperationalChallenge input .queryBatch ∈ target
+
+/-- Build the collision certificate from a separately typed finite-set
+membership, avoiding dependent-record elaboration at event-reduction sites. -/
+def exactTag73K13CollisionCertificateOfTarget
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder)
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k12 : ExactPrefixK12Certificate input)
+    (different : exactTag73K13ExpectedQueryVector decoder input k12 ≠
+      exactTag73K13AuthenticatedQueryVector decoder input k12)
+    {target : Finset QM31Exact}
+    (collision : exactOperationalChallenge input .queryBatch ∈ target)
+    (targetExact : target = exactTag73K13SourceCollisionTarget source input k12) :
+    ExactTag73K13CollisionCertificate source input k12 where
+  different := different
+  target := target
+  targetExact := targetExact
+  collision := collision
+
 /-- Exact K1.3 residual event after deterministic source failures and the
 impossible list-cap branch are removed. -/
 def exactTag73K13QueryOrOneFoldEvent
@@ -283,13 +381,7 @@ def exactTag73K13JointQueryBatchCollisionEvent
       (input : ExactK12OperationalInput transitionFuel configuration projection
         fixedInstance sample)
       (k12 : ExactPrefixK12Certificate input),
-    exactTag73K13ExpectedQueryVector decoder input k12 ≠
-        exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
-      exactOperationalChallenge input .queryBatch ∈
-        exactTag73JointQueryBatchNonzeroCollisionSet
-          (source.preQueryDiscrepancy sample input)
-          (exactTag73K13ExpectedQueryVector decoder input k12)
-          (exactTag73K13AuthenticatedQueryVector decoder input k12)}
+    Nonempty (ExactTag73K13CollisionCertificate source input k12)}
 
 /-- If the repaired joint discrepancy survives query injection but the final
 relation comparison accepts, one of the three later alpha challenges repaired
@@ -522,13 +614,7 @@ theorem ideal_rejected_exposes_joint_or_later_relation_collision
     (rejected : ¬ IdealAccepts (exactK13ParsedProof input).schedule
       (exactK13Encoders decoder) (exactK13Transcript input k12)
       (exactK13ParsedProof input).queries) :
-    (exactTag73K13ExpectedQueryVector decoder input k12 ≠
-          exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
-        exactOperationalChallenge input .queryBatch ∈
-          exactTag73JointQueryBatchNonzeroCollisionSet
-            (source.preQueryDiscrepancy sample input)
-            (exactTag73K13ExpectedQueryVector decoder input k12)
-            (exactTag73K13AuthenticatedQueryVector decoder input k12)) ∨
+    Nonempty (ExactTag73K13CollisionCertificate source input k12) ∨
       ∃ round : Fin 4, 0 < round.val ∧
         (source.execution sample input).discrepancyTrace.AlphaRepair
           round := by
@@ -540,14 +626,18 @@ theorem ideal_rejected_exposes_joint_or_later_relation_collision
         equal)
   have rhoNonzero : exactOperationalChallenge input .queryBatch ≠ 0 :=
     (exact_operational_input_constructs_post_eta_nonzero_challenges input).2.2
-  exact joint_collision_or_later_alphaRepair
+  rcases joint_collision_certificate_or_later_alphaRepair
       (source.execution sample input)
       (source.preQueryDiscrepancy sample input)
       (exactTag73K13ExpectedQueryVector decoder input k12)
       (exactTag73K13AuthenticatedQueryVector decoder input k12)
       (exactOperationalChallenge input .queryBatch) rhoNonzero different
       (source.beforeOneExact sample input k12)
-      (source.relationTerminal sample input)
+      (source.relationTerminal sample input) with collision | repaired
+  · rcases collision with ⟨collision⟩
+    exact Or.inl ⟨exactTag73K13CollisionCertificateOfTarget source input k12
+      different collision.collision (collision.targetExact.trans rfl)⟩
+  · exact Or.inr repaired
 
 /-- Every executable K1.3 error is covered by q16, published one-fold, joint
 rho, or later relation-alpha collision events. -/

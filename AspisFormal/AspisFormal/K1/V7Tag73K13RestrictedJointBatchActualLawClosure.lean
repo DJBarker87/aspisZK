@@ -148,10 +148,7 @@ def exactJointQueryBatchPreChallengeView
   authenticated := exactTag73K13AuthenticatedQueryVector decoder input k12
   active := true
   activeSound := fun _ => different
-  collisionTarget := exactTag73JointQueryBatchNonzeroCollisionSet
-    (source.preQueryDiscrepancy sample input)
-    (exactTag73K13ExpectedQueryVector decoder input k12)
-    (exactTag73K13AuthenticatedQueryVector decoder input k12)
+  collisionTarget := exactTag73K13SourceCollisionTarget source input k12
   collisionTargetExact := fun _ => rfl
 
 /-- Target membership for an already-active pre-challenge view is a direct
