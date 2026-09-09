@@ -1,6 +1,16 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [partial-fold recovery and positive-residual degree](partial-degree-continuation.md).
+Latest formal continuation: [geometric anchors in the same causal relation execution](pre-anchor-joint-continuation.md).
+The selected geometric anchor now precedes the image/row challenges, and
+the same indexed received word feeds actual compact query acceptance.
+Kernel-checked reference independence and the combined sparse/dense theorem
+bound the displayed bad-image/row near-final classes without assuming provider
+success. Correct-row component/witness recovery and farther-final failures
+remain open. The positivity pack's Boolean/row1014 binding is also proved.
+See [current-source evidence and exact event ledger](pre-anchor-joint-evidence.json).
+No verifier/profile/body/CU changes; this is not a global 100-bit certificate.
+
+Previous formal continuation: [partial-fold recovery and positive-residual degree](partial-degree-continuation.md).
 Four partially agreeing adaptive finals now reconstruct a selected full-code
 quotient within4B fibres, with a proved far-word challenge cap. An exact
 circle-code control shows the generic factor4 is sharp: this geometry-only
