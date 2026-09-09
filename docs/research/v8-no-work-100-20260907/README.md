@@ -1,6 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [exact-fold recovery, concrete OOD rows and opt-in positive transfer](positive-recovery-continuation.md).
+Latest formal continuation: [partial-fold recovery and positive-residual degree](partial-degree-continuation.md).
+Four partially agreeing adaptive finals now reconstruct a selected full-code
+quotient within4B fibres, with a proved far-word challenge cap. An exact
+circle-code control shows the generic factor4 is sharp: this geometry-only
+route cannot supply100 bits by query suppression alone. The added transfer
+residual's per-coordinate degree is proved at most14, within degree27.
+See [current-source evidence](partial-degree-evidence.json). No further
+Rust/profile/body/CU changes; image/row-constrained recovery remains central.
+
+Previous formal continuation: [exact-fold recovery, concrete OOD rows and opt-in positive transfer](positive-recovery-continuation.md).
 The actual mathematical log20/log18 encoders now support a proved bound of
 at most three globally matching folding challenges for an arbitrary
 non-polynomial received quotient. Partial agreement and accepted extraction
