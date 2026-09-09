@@ -1,6 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [selected quotient-to-component and early C1 recovery](selected-component-continuation.md).
+Latest formal continuation: [private C1 recovery independent of final distance](private-c1-recovery-review.md).
+The fixed early-C1 object now feeds the mathematical common-sample Gao decoder,
+with a kernel-checked private-sample joint failure bound (134.453-bit arithmetic
+display) and no final-distance premise. Same-table sparse payment reads and
+checked query-inverse/pole/residual interfaces are also proved. See
+[current-source evidence](private-c1-recovery-evidence.json). Actual opening/replay
+access, canonical/source instantiation, far wrong-claim/payment validity, FS and
+full-view ZK remain open. No verifier/profile/body/CU changes or global certificate.
+
+Previous formal continuation: [selected quotient-to-component and early C1 recovery](selected-component-continuation.md).
 One constructed pre-gamma tuple now binds the three ordinary component rows
 and both OOD answer vectors in the same supported near-final relation game.
 Actual encoder coefficient equality, up to two chord-pole fibres, sparse/absent
