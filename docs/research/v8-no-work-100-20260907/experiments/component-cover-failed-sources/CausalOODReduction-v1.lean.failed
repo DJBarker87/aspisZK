@@ -1,0 +1,121 @@
+import SelectedOODGate
+import CausalCoveredRecovery
+
+/-! SAME-execution composition. The new OOD root count is charged only to
+the previously retained good-quotient mass. The actual rho and four relation
+repairs remain in the old missing-good ceiling and are not added again.
+The symbolic identity branch is explicit; it is not an extraction success. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+namespace AspisV8.CausalOODReduction
+open Finset Polynomial
+open AspisV8.SelectedOODGate AspisV8.CausalCoveredRecovery
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedCoveredRelation
+open AspisV8.ComponentOODBinding AspisV8.GammaComponentGame
+open AspisV8.JointImageGame AspisV8.CausalOrderedRelation
+noncomputable section
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+def identities {q : Nat} (e : Execution q) : Prop :=
+  ∀ r, gate e.c1 e.c2 e.data r=0
+
+theorem good_implies_gate_zero {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r≠-1) (gamma kappa tau alpha : K)
+    (good : goodPrefix e gamma kappa tau alpha) (r : Fin 2) :
+    (gate e.c1 e.c2 e.data r).eval gamma=0 := by
+  obtain ⟨Q,member,notBad,_⟩ := good
+  have image : Q 1023=0 ∧ e.data.b*Q 1022-e.data.c*Q 1021=0 := by
+    constructor
+    · by_contra h
+      exact notBad (Or.inl h)
+    · by_contra h
+      exact notBad (Or.inr (Or.inl h))
+  exact covered_gate_zero e.c1 e.c2 e.data checked circles west gamma Q image member r
+
+theorem good_slice_unit {q : Nat} (e : Execution q) (gamma : K) (A G : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (count : q≤262144) :
+    goodSlice e gamma A G≤1 := by
+  have count' : q≤domain.card := by rw [domain_card]; exact count
+  unfold goodSlice
+  apply avg_le G hg
+  intro kappa _
+  apply avg_le G hg
+  intro tau _
+  apply avg_le A ha
+  intro alpha _
+  split_ifs
+  · exact CausalOrderedRelation.after_unit ((e.rows gamma).before kappa)
+      e.quarterChecked (oracle 0 (e.raw gamma)) (e.strategy gamma kappa)
+      tau alpha A G ha hg count'
+  · norm_num
+
+theorem good_slice_zero {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r≠-1) (gamma : K) (A G : Finset K)
+    (r : Fin 2) (nonzero : (gate e.c1 e.c2 e.data r).eval gamma≠0) :
+    goodSlice e gamma A G=0 := by
+  have outside : ∀ kappa tau alpha, ¬goodPrefix e gamma kappa tau alpha := by
+    intro kappa tau alpha good
+    exact nonzero (good_implies_gate_zero e checked circles west gamma kappa tau alpha good r)
+  unfold goodSlice
+  simp only [outside,if_false,avg,Finset.sum_const_zero,zero_div]
+
+/-- Conditional only on a prefix-fixed algebraic case; gamma remains fresh
+in this ideal game. An arbitrary further acceptance/extraction-failure
+filter cannot increase this good-quotient contribution. -/
+theorem nonidentity_good_bound {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r≠-1) (A G Gamma : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (hgamma : Gamma.Nonempty)
+    (count : q≤262144) (nonidentity : ¬identities e) :
+    goodProbability e A G Gamma≤117077/(Gamma.card:ℚ) := by
+  have someRow : ∃ r, gate e.c1 e.c2 e.data r≠0 := by
+    by_contra none
+    apply nonidentity
+    intro r
+    by_contra wrong
+    exact none ⟨r,wrong⟩
+  obtain ⟨r,nonzero⟩ := someRow
+  have bound := avg_polynomial Gamma hgamma (gate e.c1 e.c2 e.data r) nonzero
+    117077 (gate_degree e.c1 e.c2 e.data r) (fun gamma => goodSlice e gamma A G)
+    0 (by norm_num) (fun gamma _ => good_slice_unit e gamma A G ha hg count) (by
+      intro gamma _ notRoot
+      exact le_of_eq (good_slice_zero e checked circles west gamma A G r notRoot))
+  simpa only [add_zero] using bound
+
+/-- Total accepted compact-suffix mass with the identity branch visibly
+retained, rather than conditioning away that branch or calling it a witness.
+The old bound includes relation repairs exactly once. No 99/100 multiplier
+applies to the new117077-gamma exceptional set. -/
+theorem total_reduction {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r≠-1) (A G Gamma : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (hgamma : Gamma.Nonempty)
+    (positive : 0<q) (count : q≤262144) :
+    totalProbability e A G Gamma≤ceiling q A G+117077/(Gamma.card:ℚ)+
+      (if identities e then goodProbability e A G Gamma else 0) := by
+  have old := total_bound e A G Gamma ha hg hgamma positive count
+  by_cases identity : identities e
+  · rw [if_pos identity]
+    have nonneg : (0:ℚ)≤117077/(Gamma.card:ℚ) := by positivity
+    linarith only [old,nonneg]
+  · rw [if_neg identity,add_zero]
+    have bound := nonidentity_good_bound e checked circles west A G Gamma
+      ha hg hgamma count identity
+    linarith only [old,bound]
+
+#print axioms good_implies_gate_zero
+#print axioms good_slice_unit
+#print axioms good_slice_zero
+#print axioms nonidentity_good_bound
+#print axioms total_reduction
+end
+end AspisV8.CausalOODReduction
