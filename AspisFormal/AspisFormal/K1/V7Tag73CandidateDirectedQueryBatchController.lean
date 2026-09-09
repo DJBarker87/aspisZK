@@ -22,12 +22,14 @@ set_option maxRecDepth 100000
 namespace AspisK1.V7Tag73CandidateDirectedQueryBatchController
 
 open AspisK1.V7FsAokExperiment
+open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73CausalDagFinalWorkQ16Controller
 open AspisK1.V7Tag73CausalFoldAlphaQ16QueryBatchController
 open AspisK1.V7Tag73CausalGammaPrefixCoordinates
 open AspisK1.V7Tag73CausalQ16CoordinateRouter
 open AspisK1.V7Tag73FinalWorkQ16CandidateController
 open AspisK1.V7Tag73IndexedExposureCausalRouter
+open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73QueryBatchPrefixCausalController
 open AspisK1.V7Tag73TranscriptSchedule
 
@@ -158,6 +160,50 @@ def extendControllerThroughCandidateQueryBatch
         base.afterMemory (baseIndexedState state) answer := by
   rfl
 
+@[simp] theorem candidate_extended_base_after_answer
+    {globalOracleCalls : Nat} {Memory Slot : Type}
+    (transitionFuel : Nat)
+    (target : Q16DigestSlot)
+    (base : IndexedUnifiedExposureController globalOracleCalls
+      Digest256 Slot Memory)
+    (dagOf : Memory → FinalWorkQ16DagMemory)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      (ExtendedControllerMemory Memory))
+    (answer : Digest256) :
+    baseIndexedState
+        ((extendControllerThroughCandidateQueryBatch transitionFuel target base
+          dagOf).afterAnswer transitionFuel state answer) =
+      base.afterAnswer transitionFuel (baseIndexedState state) answer := by
+  rfl
+
+/-- Replaying any record prefix through the candidate-directed extension
+projects exactly to replaying it through the unchanged base controller. -/
+theorem base_indexed_state_after_candidate_extended_records
+    {globalOracleCalls : Nat} {Memory Slot : Type}
+    (transitionFuel : Nat)
+    (target : Q16DigestSlot)
+    (base : IndexedUnifiedExposureController globalOracleCalls
+      Digest256 Slot Memory)
+    (dagOf : Memory → FinalWorkQ16DagMemory) :
+    ∀ (records : List UnifiedExposureRecord)
+      (state : IndexedUnifiedExposureState globalOracleCalls
+        (ExtendedControllerMemory Memory)),
+      baseIndexedState
+          (indexedStateAfterRecords transitionFuel
+            (extendControllerThroughCandidateQueryBatch transitionFuel target
+              base dagOf) records state) =
+        indexedStateAfterRecords transitionFuel base records
+          (baseIndexedState state) := by
+  intro records
+  induction records with
+  | nil => intro state; rfl
+  | cons record records ih =>
+      intro state
+      rw [indexed_state_after_records_cons, indexed_state_after_records_cons]
+      simpa using ih
+        ((extendControllerThroughCandidateQueryBatch transitionFuel target base
+          dagOf).afterAnswer transitionFuel state record.answer)
+
 @[simp] theorem candidate_extended_preserves_base_label
     {globalOracleCalls : Nat} {Memory Slot : Type}
     (transitionFuel : Nat)
@@ -199,6 +245,8 @@ def extendControllerThroughCandidateQueryBatch
 #print axioms missing_candidate_continuation_cannot_arm
 #print axioms extendControllerThroughCandidateQueryBatch
 #print axioms candidate_extended_base_after_memory
+#print axioms candidate_extended_base_after_answer
+#print axioms base_indexed_state_after_candidate_extended_records
 #print axioms candidate_extended_preserves_base_label
 #print axioms candidate_extended_uses_query_batch_label
 
