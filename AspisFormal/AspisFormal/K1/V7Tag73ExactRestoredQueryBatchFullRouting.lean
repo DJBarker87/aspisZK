@@ -56,7 +56,7 @@ def exactRestoredQueryBatchController
       Observation Statement Proof Payload Result parameters)
     (hidden : HiddenTape) :=
   waitingRestoredQueryBatchForkController transitionFuel
-    (typedRestoredQueryBatchForkStartsHere
+    (typedRestoredQueryBatchExposureStartsHere transitionFuel
       (globalOracleCalls := globalFull256OracleCallCap parameters)
       (Result := Result)
       (configuration.machine.blackBox.start hidden
@@ -169,7 +169,7 @@ theorem exact_restored_query_batch_full_named_slots_nodup
     (namedTraceSlots
       (indexedControllerLabeledRecords transitionFuel
         (waitingRestoredQueryBatchForkController transitionFuel
-          (typedRestoredQueryBatchForkStartsHere
+          (typedRestoredQueryBatchExposureStartsHere transitionFuel
             (globalOracleCalls := globalFull256OracleCallCap parameters)
             (Result := Result)
             (configuration.machine.blackBox.start sample.1
@@ -182,7 +182,7 @@ theorem exact_restored_query_batch_full_named_slots_nodup
         (runExactPlainRom transitionFuel configuration sample).trace)).Nodup
   exact waiting_restored_query_batch_labeled_records_named_slots_nodup
     transitionFuel
-    (typedRestoredQueryBatchForkStartsHere
+    (typedRestoredQueryBatchExposureStartsHere transitionFuel
       (globalOracleCalls := globalFull256OracleCallCap parameters)
       (Result := Result)
       (configuration.machine.blackBox.start sample.1
@@ -367,7 +367,7 @@ theorem exact_restored_query_batch_router_routes_selected_full_answer
       (namedTraceSlots
         (indexedControllerLabeledRecords transitionFuel
           (waitingRestoredQueryBatchForkController transitionFuel
-            (typedRestoredQueryBatchForkStartsHere
+            (typedRestoredQueryBatchExposureStartsHere transitionFuel
               (globalOracleCalls := globalFull256OracleCallCap parameters)
               (Result := Result)
               (configuration.machine.blackBox.start sample.1
@@ -380,7 +380,7 @@ theorem exact_restored_query_batch_router_routes_selected_full_answer
           prefixRecords)).Nodup
     exact waiting_restored_query_batch_labeled_records_named_slots_nodup
       transitionFuel
-      (typedRestoredQueryBatchForkStartsHere
+      (typedRestoredQueryBatchExposureStartsHere transitionFuel
         (globalOracleCalls := globalFull256OracleCallCap parameters)
         (Result := Result)
         (configuration.machine.blackBox.start sample.1
@@ -410,7 +410,7 @@ theorem exact_restored_query_batch_router_routes_selected_full_answer
         rw [indexed_controller_labeled_records_answers]
   have labelsDecomposition :
       prefixLabels = priorLabels ++ (some target, record.answer) :: [] := by
-    simp only [prefixLabels, prefixRecords, List.append_assoc,
+    simp only [prefixLabels, prefixRecords,
       indexed_controller_labeled_records_append]
     simpa only [indexedControllerLabeledRecords, controller, initial, reached,
       priorLabels, preferred]
