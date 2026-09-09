@@ -4298,6 +4298,11 @@ structure CanonicalCheckedFutureFreeConstruction
   gammaRecordExact :
     ({ id := .gamma, value := tape.messages.challengeValue .gamma } :
       DecodedChallenge) ∈ complete.final.current.decodedChallenges
+  gammaTransitionExact :
+    ∃ transition reply,
+      transition ∈ complete.final.transitions ∧
+        transition.event =
+          .verifier (.squeezePair (.challenge .gamma) 0) reply
   alphaZeroRecordExact :
     DecodedChallenge.mk (ChallengeId.alpha 0)
       (tape.messages.challengeValue (ChallengeId.alpha 0)) ∈
@@ -4448,7 +4453,7 @@ theorem checked_work_erased_refinement_constructs_canonical_future_free_path
     exact evaluator.beforeQ16Run
   obtain ⟨beforeSteps, beforePairs, q16State, beforeTrace, beforeTable,
       q16Control, q16Same, beforeCandidates, beforeRecords,
-      _beforeTransitions, beforeFuel⟩ :=
+      beforeTransitions, beforeFuel⟩ :=
     fixed_tape_linear_region_gives_future_free_trace table tape rawTrace
       wellFormed afterC2State evaluator.afterC2 evaluator.prefixState
       beforeQ16Slots (.beginQ16 :: afterQ16Slots) beforeControl adaptiveSame
@@ -4515,6 +4520,23 @@ theorem checked_work_erased_refinement_constructs_canonical_future_free_path
       ({ id := .gamma, value := tape.messages.challengeValue .gamma } :
         DecodedChallenge) ∈ final.current.decodedChallenges :=
     terminalLedger _ (afterLedger _ (q16Ledger _ gammaAtQ16))
+  obtain ⟨gammaTransition, gammaReply, gammaAtQ16Transition,
+      gammaTransitionEventExact⟩ :=
+    beforeTransitions .gamma (by simp [beforeQ16Slots])
+  have gammaTransitionFinal :
+      ∃ transition reply,
+        transition ∈ final.transitions ∧
+          transition.event =
+            .verifier (.squeezePair (.challenge .gamma) 0) reply := by
+    refine ⟨gammaTransition, gammaReply, ?_, gammaTransitionEventExact⟩
+    exact raw_future_free_microstep_preserves_transition_membership
+      environment raw beforeTerminal final [] terminalPath gammaTransition
+        (nonterminal_raw_driver_trace_preserves_transition_membership
+          environment raw afterQ16State beforeTerminal afterSteps afterPairs
+          afterTrace gammaTransition
+            (nonterminal_raw_driver_trace_preserves_transition_membership
+              environment raw q16State afterQ16State q16Steps q16Pairs q16Trace
+              gammaTransition gammaAtQ16Transition))
   have alphaZeroFinal :
       DecodedChallenge.mk (ChallengeId.alpha 0)
         (tape.messages.challengeValue (ChallengeId.alpha 0)) ∈
@@ -4612,6 +4634,8 @@ theorem checked_work_erased_refinement_constructs_canonical_future_free_path
   exact ⟨
     { complete := complete
       gammaRecordExact := by simpa [complete] using gammaFinal
+      gammaTransitionExact := by
+        simpa [complete] using gammaTransitionFinal
       alphaZeroRecordExact := by simpa [complete] using alphaZeroFinal
       queryBatchTransitionExact := by
         simpa [complete] using queryBatchFinal
