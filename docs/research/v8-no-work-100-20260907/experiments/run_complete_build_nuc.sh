@@ -7,6 +7,12 @@ readonly complete_root="$(cd "$complete_exp/../../../.." && pwd)"
 [[ "$complete_root" == /home/dombarker/project-offloads/aspis-v8-* && ! -e "$complete_root/.git" ]] || exit 2
 [[ $# == 2 && ! -e "$2" ]] || { echo 'usage: script host|partial-host|sbf|hybrid|lazy|partial|profile|driver|pool|registry|v7|selected-v7|selected-pool|selected-registry NEW_LOG' >&2; exit 2; }
 readonly mode="$1" log="$2"
+case "$mode" in
+ gamma-one|gamma-one-split)
+  expected_query=333ea1f92ec542d3e7cf3d2ab40ab53e16c2313e8ff118cfb02d1c781a76bac9
+  [[ "$mode" != gamma-one-split ]] || expected_query=e76be758a94a4350050122f2cb822d58cd5d9f2746deebb5b881d8327570bd41
+  [[ "$(sha256sum "$complete_exp/query_arithmetic.rs" | cut -d' ' -f1)" == "$expected_query" && "$(sha256sum "$complete_exp/relation_callback.rs" | cut -d' ' -f1)" == b34acafe1b7735915d2e250725f157ee9424b9208cc179470a3c67cd8d13f3db ]] || { echo 'Apply the archived gamma-one query/callback patches to e6373fdc in the task COPY first; rejected controls are not selected source.' >&2; exit 2; };;
+esac
 export NO_DNA=1 PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/active_release/bin:/usr/bin:/bin
 readonly common='--cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile -A dead_code -A unexpected_cfgs'
 scope(){ systemd-run --user --scope --unit="aspis-v8-complete-$mode-$(date +%s)-$$" -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 /usr/bin/time -v "$@"; }
@@ -16,9 +22,9 @@ host|partial-host|gamma-fixed-host)
  [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
  [[ "$mode" != gamma-fixed-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets --cfg v8_gamma_fixed -C overflow-checks=yes'
  scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
-sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm)
+sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm|gamma-one|gamma-one-split)
  lineage="$mode"
- case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm) lineage=leaf-record;; esac
+ case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm|gamma-one|gamma-one-split) lineage=leaf-record;; esac
  case "$mode" in scatter|tag-split|tag-bounded) python3 "$complete_exp/generate_copy_scatter.py" --check;; esac
  [[ "$mode" != tag-shared ]] || python3 "$complete_exp/generate_tag_shared.py" --check
  case "$lineage" in tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile) python3 "$complete_exp/generate_tag_offsets.py" --check;; esac
@@ -41,9 +47,11 @@ sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatte
  [[ "$mode" != merkle-both ]] || extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow"
  case "$lineage" in leaf-record|decode-profile) extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record";; esac
  [[ "$mode" != gamma-fused ]] || extra="$extra --cfg v8_gamma_fused"
- case "$mode" in decode-blocks|auth-order|chord-norm) extra="$extra --cfg v8_decode_blocks";; esac
- case "$mode" in auth-order|chord-norm) extra="$extra --cfg v8_auth_order";; esac
- [[ "$mode" != chord-norm ]] || extra="$extra --cfg v8_chord_norm"
+ case "$mode" in decode-blocks|auth-order|chord-norm|gamma-one|gamma-one-split) extra="$extra --cfg v8_decode_blocks";; esac
+ case "$mode" in auth-order|chord-norm|gamma-one|gamma-one-split) extra="$extra --cfg v8_auth_order";; esac
+ case "$mode" in chord-norm|gamma-one|gamma-one-split) extra="$extra --cfg v8_chord_norm";; esac
+ case "$mode" in gamma-one|gamma-one-split) extra="$extra --cfg v8_gamma_one";; esac
+ [[ "$mode" != gamma-one-split ]] || extra="$extra --cfg v8_gamma_one_split"
  selected="$common"
  if [[ "$mode" == decode-profile ]];then extra="$extra --cfg v8_terminal_profile --cfg v8_decode_profile";selected="${common/--cfg v8_quiet_profile/}";fi
  if [[ "$mode" == tag-offset-profile ]];then extra="$extra --cfg v8_terminal_profile";selected="${common/--cfg v8_quiet_profile/}";fi
