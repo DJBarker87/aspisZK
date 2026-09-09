@@ -1,0 +1,37 @@
+--- a/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
++++ b/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
+@@ -1190,3 +1190,29 @@
+     let token_program = LegacyPubkey::from_str(LEGACY_SPL_TOKEN_PROGRAM_ID)?;
++    let token_control = env::var("ASPIS_TOKEN_CONTROL").ok();
++    let token_control_artifact = if let Some(kind) = &token_control {
++        let (name, expected, loader) = match kind.as_str() {
++            "legacy35" => ("spl_token-3.5.0.so",
++                "7b44674b9704fa7640fbebfac68389f338b500b8c2bc29175c27ed66838b5a3c",
++                "BPFLoader2111111111111111111111111111111111"),
++            "ptoken" => ("pinocchio_token_program.so",
++                "53e587eee80c786bcfba1450397d92179a0f01def776d19fb4ddf690d64431cc",
++                BPF_LOADER_UPGRADEABLE_ID),
++            _ => bail!("unknown pinned Token control"),
++        };
++        ensure!(args.scenario != Scenario::WithdrawalCpiFailure,
++            "Token control and failing-CPI double are separate experiments");
++        let path = PathBuf::from(env::var("ASPIS_TOKEN_ELF_DIR")?).join(name);
++        let bytes = fs::read(&path)?;
++        ensure!(sha256_hex(&bytes) == expected, "Token control ELF hash mismatch");
++        svm.add_program_with_loader(address(&token_program), &bytes,
++            address(&LegacyPubkey::from_str(loader)?))?;
++        Some(serde_json::json!({"variant":kind,"path":path,"sha256":expected,
++            "bytes":bytes.len(),"loader":loader}))
++    } else { None };
+     if args.scenario == Scenario::WithdrawalCpiFailure {
+@@ -1635,4 +1661,6 @@
+             "token_program": {
+                 "program_id": token_program.to_string(),
++                "explicit_pinned_sbf_control": token_control_artifact,
+                 "kind": if args.scenario == Scenario::WithdrawalCpiFailure {
+                     "test-only failing CPI double installed at Tokenkeg"
+@@ -1640,3 +1668,3 @@
+                 } else {
+-                    "LiteSVM legacy SPL Token builtin"
++                    "LiteSVM bundled Token SBF (or explicit pinned SBF control); not a native builtin"
+                 }

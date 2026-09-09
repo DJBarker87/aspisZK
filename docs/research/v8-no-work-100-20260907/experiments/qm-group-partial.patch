@@ -1,0 +1,18 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -807,0 +807,7 @@
++    if cfg!(v8_qm_group_partial) {
++        let fold=|x:u64|(x&2147483647).wrapping_add(x>>31);
++        // Two arbitrary-u64 partial folds total <=10p+6<2^64.
++        let merged=sums.map(|row|row.map(|pair|fold(pair[0]).wrapping_add(fold(pair[1]))));
++        return qm31_from_karatsuba_channel_sums(merged);
++    }
++
+@@ -858,0 +865,7 @@
++    if cfg!(v8_qm_group_partial) {
++        let fold=|x:u64|(x&2147483647).wrapping_add(x>>31);
++        // Preserve all seven inputs and both groups; only reductions move.
++        let merged=sums.map(|row|row.map(|pair|fold(pair[0]).wrapping_add(fold(pair[1]))));
++        return qm31_from_karatsuba_channel_sums(merged);
++    }
++

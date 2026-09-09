@@ -1,0 +1,18 @@
+diff --git a/programs/aspis-pool/src/pair_forest.rs b/programs/aspis-pool/src/pair_forest.rs
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -634,1 +634,13 @@
+-    Ok(account.try_borrow_data()?.iter().all(|byte| *byte == 0))
++    #[cfg(v8_pool_profile)]
++    { solana_program::msg!("v8-pool:zero-scan:start"); solana_program::log::sol_log_compute_units(); }
++    #[cfg(v8_pool_zero)]
++    let zero = {
++        #[path = "../../../docs/research/v8-no-work-100-20260907/experiments/zero_page.rs"]
++        mod zero_page;
++        zero_page::all_zero(&account.try_borrow_data()?)
++    };
++    #[cfg(not(v8_pool_zero))]
++    let zero = account.try_borrow_data()?.iter().all(|byte| *byte == 0);
++    #[cfg(v8_pool_profile)]
++    { solana_program::msg!("v8-pool:zero-scan:end"); solana_program::log::sol_log_compute_units(); }
++    Ok(zero)

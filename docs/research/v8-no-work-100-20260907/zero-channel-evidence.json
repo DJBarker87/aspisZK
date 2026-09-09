@@ -1,0 +1,74 @@
+{
+  "schema": "aspis.research.v8.zero-channel-evidence.v1",
+  "base_revision": "b9630a7099cb533ff559770db81a7a8a55ee18ba",
+  "date": "2026-09-09",
+  "measurement_host": "dombarker@nuc.local",
+  "task_copy": "/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz",
+  "research_only": true,
+  "repository_production_source_or_defaults_changed": false,
+  "execution_model": "Local complete ASQ8/ASF8/ASR8 TxV1, Registry V2 and atomic Pool settlement, real SBF verifier and Token CPI",
+  "runtime": {"litesvm": "0.16.0", "solana_runtime": "4.2.1", "sbf_tools": "v1.54", "sbf_rust": "1.89.0-dev", "cargo_build_sbf": "2.3.0", "host_rust": "1.94.1", "transaction_limit": 1200000, "runtime_diagnostic_override": false},
+  "limits": {"sbf_build_memory_high_gib": 5, "sbf_build_memory_max_gib": 7, "svm_memory_high_gib": 3, "svm_memory_max_gib": 4, "memory_swap_max": 0, "cargo_jobs": 2},
+  "hashes": {
+    "winning_verifier_elf": "55fc1ac4e7fd8efedb6e2fa4be89d7833eb68fcf17a1e9302da1b30ae06ab552",
+    "winning_pool_elf": "26a444033153177adc5a3b1c0c32477c12f655d1e27636563fbfc6c0604cc1e6",
+    "registry_elf": "76f4c382de8c638084cd3c15d50398224e5ad377eeebfbc15d6f35a61f0f045d",
+    "selected_v7_elf": "e64bd844255ec7fb108d165b87348cc84ccff0374d08755facdd2611bf31f97b",
+    "group_control_elf": "dc900f5a9d90ce9ac518c9dfb03083cb42c8ad84cfe23656f3ba309aa0fc1462",
+    "token_control_driver": "7e4160da049f9dd60ffbc47522a2e005dfde23920acf9d5e05d5d2c8ca343e39",
+    "complete_sbf_cargo_lock": "e261bb76c6d81f8c9cabe133965ee325d7d92811ca10cce0c6a8bed2c1c489d3",
+    "performance_svm_cargo_lock": "1d0b83f5ec55c57a027f5290ad55cc5ede90ed6cba657d08afe4c5cdc51f84ec",
+    "pool_source_original": "d96b352bae081a72d6e887759a356674598e0bf3a177c8d103885f02bc344c30",
+    "pool_source_zero_overlay": "d1aeb0805b0260e9a28b0c14b3bb9809e576e7c227fb776802d8ae699b40fade",
+    "field_source_channel_overlay": "0d64ce75f067ab8d3207ea088612b46d43bf4898cae58d2424d9389f095a5397",
+    "field_source_group_overlay": "bb4b177e4b06da631cef8cc3eaa44b3b08c1bbf3b123b975b116264f447d8fe0",
+    "driver_source_final": "264cab184d72b27e8945235041c9f74993bdc6462165f729ab95276850a85957"
+  },
+  "lean": {
+    "toolchain": "leanprover/lean4:v4.32.0",
+    "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+    "cache_workspace": "/Users/dominic/ZK/AspisFormal",
+    "allowed_axioms": ["propext", "Classical.choice", "Quot.sound"],
+    "new_axioms_or_sorry": false,
+    "translation_status": "Kernel-checked algebraic/list-model equivalence; not a Rust/std/compiler/whole-verifier translation",
+    "targets": [
+      {"file": "experiments/ZeroPage.lean", "sha256": "669e52eadc66516f7915ae2916c652b8e8dc9ae871cc9658daf7897ca7263597", "command": "lake env lean -M7000 <absolute ZeroPage.lean>", "exit": 0, "wall_seconds": 15.14, "peak_rss_bytes": 2823749632, "swap": 0, "log": "experiments/zero-page-lean.log"},
+      {"file": "experiments/QmCrossRange.lean", "sha256": "cb06024066b66778a8e3de356871d4766ce2d6b17a7b698890195f8a9329f409", "command": "lake env lean -M7000 <absolute QmCrossRange.lean>", "exit": 0, "wall_seconds": 2.54, "peak_rss_bytes": 2862809088, "swap": 0, "log": "experiments/qm-group-lean.log"}
+    ],
+    "retained_failed_preflights": [
+      {"log": "experiments/qm-channel-lean-coarse-failed.log", "cause": "The weaker bound a_i<6p does not justify 32p padding for a channel with six negative terms; replaced by the proved exact partial-fold cap 5p+3. No cap increase or machine-code weakening."},
+      {"log": "experiments/qm-channel-congruence-failed.log", "cause": "Recursive simp modulo rewrite; replaced with explicit Int.ModEq.add/sub/mul_left composition."}
+    ]
+  },
+  "host_tests": [
+    {"log": "evidence/zero-page/zero-page-rust.log", "execution_wall_seconds": 0.19, "execution_peak_rss_kib": 2464, "swap": 0, "exit": 0, "scope": "Every one-byte corruption value/position in 8256 bytes; offsets, empty slices, remainders, deterministic multibyte comparisons"},
+    {"log": "evidence/channel/channel-rust.log", "execution_wall_seconds": 0.01, "execution_peak_rss_kib": 2992, "swap": 0, "exit": 0, "scope": "Actual patched field tests, 512 extreme raw-channel arrays, 8192 independent i128 modular comparisons, canonical product/parse controls"},
+    {"log": "evidence/channel/group-rust.log", "execution_wall_seconds": 0.01, "execution_peak_rss_kib": 2816, "swap": 0, "exit": 0, "scope": "Changed six/seven-product source under optimized checked arithmetic; no full-transaction saving"}
+  ],
+  "builds": [
+    {"mode": "profile-old Pool", "wall_seconds": 33.88, "peak_rss_kib": 548884, "swap": 0, "exit": 0},
+    {"mode": "profile-fast Pool", "wall_seconds": 33.72, "peak_rss_kib": 545380, "swap": 0, "exit": 0},
+    {"mode": "fast Pool", "wall_seconds": 33.87, "peak_rss_kib": 548808, "swap": 0, "exit": 0},
+    {"mode": "channel V8", "wall_seconds": 33.17, "peak_rss_kib": 588392, "swap": 0, "exit": 0},
+    {"mode": "group control V8", "wall_seconds": 32.92, "peak_rss_kib": 588688, "swap": 0, "exit": 0}
+  ],
+  "stack": {
+    "scope": "All emitted direct r10 negative offsets, not a machine-pointer or call-stack proof. Stripped binaries do not retain all function names.",
+    "command": "llvm-objdump --disassemble --demangle <exact ELF> | python3 experiments/audit_range_stack.py",
+    "winning_verifier_max_direct_frame_offset": 4096,
+    "winning_pool_max_direct_frame_offset": 4096,
+    "exit": 0,
+    "new_build_stack_warning": false
+  },
+  "token_provenance": {
+    "source": "Pinned litesvm-0.16.0 src/programs/mod.rs::load_default_programs and src/lib.rs::into_basic",
+    "correction": "The older harness label 'legacy SPL Token builtin' was imprecise. This runtime loads bundled SBF, not a native token processor.",
+    "ptoken_sha256": "53e587eee80c786bcfba1450397d92179a0f01def776d19fb4ddf690d64431cc",
+    "legacy35_sha256": "7b44674b9704fa7640fbebfac68389f338b500b8c2bc29175c27ed66838b5a3c",
+    "explicit_controls": "Both ELFs hash-checked then loaded with their actual loader families before the complete transaction. No remote deployment/feature activation inferred.",
+    "legacy35_extra_withdrawal_cu": 6040
+  },
+  "not_measured_in_this_continuation": ["New honest prover latency/RSS distribution", "all accepted statements/PDA bumps/schedules", "deployed cluster feature compatibility", "resource-bounded extraction", "full-view privacy"],
+  "wire_body_bytes": 40282,
+  "new_proof_values_or_transcript_messages": 0
+}

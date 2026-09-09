@@ -1,0 +1,29 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -450,4 +450,27 @@
++#[cfg(test)]
++pub fn research_channel_reconstruction(sums: [[u64;3];3])->QM31 {
++    qm31_from_karatsuba_channel_sums(sums)
++}
++
+ #[inline(always)]
+ fn qm31_from_karatsuba_channel_sums(sums: [[u64; 3]; 3]) -> QM31 {
++    if cfg!(v8_qm_channel_partial) {
++        // Each partially folded u64 is <=5p+3, even for arbitrary raw u64.
++        // 32p covers every negative prefix; positives total <=57p+15<2^64.
++        // QmCrossRange.lean proves the range, congruence and reconstruction.
++        let f=|x:u64|(x&2147483647).wrapping_add(x>>31);
++        let [[a,b,c],[d,e,fv],[g,h,i]]=sums.map(|row|row.map(f));
++        let pad=68719476704u64;
++        let r0=a.wrapping_add(d.wrapping_mul(3)).wrapping_add(pad)
++            .wrapping_sub(b).wrapping_sub(e).wrapping_sub(fv);
++        let r1=c.wrapping_add(fv.wrapping_mul(2)).wrapping_add(pad)
++            .wrapping_sub(a).wrapping_sub(b).wrapping_sub(d).wrapping_sub(e.wrapping_mul(3));
++        let r2=g.wrapping_add(b).wrapping_add(e).wrapping_add(pad)
++            .wrapping_sub(h).wrapping_sub(a).wrapping_sub(d);
++        let r3=i.wrapping_add(a).wrapping_add(b).wrapping_add(d).wrapping_add(e).wrapping_add(pad)
++            .wrapping_sub(g).wrapping_sub(h).wrapping_sub(c).wrapping_sub(fv);
++        return QM31{c0:CM31::new(M31::reduce_u64(r0),M31::reduce_u64(r1)),
++            c1:CM31::new(M31::reduce_u64(r2),M31::reduce_u64(r3))};
++    }
+     let reconstruct = |channels: [u64; 3]| {

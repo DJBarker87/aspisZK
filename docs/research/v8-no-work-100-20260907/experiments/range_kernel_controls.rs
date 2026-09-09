@@ -55,3 +55,21 @@ fn independent_qm31_eight_limb_products(){
         check(core::array::from_fn(|_|next()),core::array::from_fn(|_|next()));
     }
 }
+
+#[cfg(v8_qm_channel_partial)]
+#[test]
+fn independent_raw_channel_reconstruction(){
+    let check=|s:[[u64;3];3]|{
+        let [[a,b,c],[d,e,f],[g,h,i]]=s.map(|row|row.map(i128::from));
+        let raw=[a+3*d-b-e-f,c+2*f-a-b-d-3*e,g+b+e-h-a-d,i+a+b+d+e-g-h-c-f];
+        let limbs=raw.map(|n|M31(n.rem_euclid(i128::from(P)) as u32));
+        let expected=QM31{c0:CM31::new(limbs[0],limbs[1]),c1:CM31::new(limbs[2],limbs[3])};
+        assert_eq!(field::research_channel_reconstruction(s),expected);
+    };
+    for mask in 0..512{check(core::array::from_fn(|row|core::array::from_fn(|col|
+        if mask&(1<<(row*3+col))==0{0}else{u64::MAX})));}
+    let mut seed=0x6368616e6e656c31u64;
+    for _ in 0..8192{check(core::array::from_fn(|_|core::array::from_fn(|_|{
+        seed^=seed<<13;seed^=seed>>7;seed^=seed<<17;seed
+    })));}
+}

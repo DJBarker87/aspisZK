@@ -15,11 +15,13 @@ host|partial-host)
  extra=''
  [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
  scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
-sbf|hybrid|lazy|profile|partial)
+sbf|hybrid|lazy|profile|partial|channel|group)
  extra=''
  [[ "$mode" != hybrid ]] || extra='--cfg v8_qm_hybrid'
  [[ "$mode" != lazy ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0'
  [[ "$mode" != partial ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
+ [[ "$mode" != channel ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial'
+ [[ "$mode" != group ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_qm_group_partial'
  selected="$common"
  if [[ "$mode" == profile ]];then extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0';selected="${common/--cfg v8_quiet_profile/}";fi
  scope env CARGO_TARGET_DIR="$complete_exp/performance-sbf/target" RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS="$selected --cfg v8_performance_sbf $extra" cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --manifest-path "$complete_exp/complete-sbf/Cargo.toml" --sbf-out-dir "$complete_root/sbf-complete-$mode" 2>&1 | tee "$log";;
