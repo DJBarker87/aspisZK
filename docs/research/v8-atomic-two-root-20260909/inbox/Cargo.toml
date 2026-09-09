@@ -1,0 +1,21 @@
+[package]
+name = "aspis-v8-atomic-inbox"
+version = "0.0.0"
+edition = "2021"
+publish = false
+[workspace]
+[lib]
+crate-type = ["cdylib", "lib"]
+path = "lib.rs"
+[features]
+default = ["custom-heap"]
+custom-heap = []
+custom-panic = []
+[dependencies]
+solana-program = "=2.3.0"
+aspis-statement = { path = "../../../../crates/aspis-statement", default-features = false, features = ["pool-v1-kernel"] }
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+overflow-checks = true
