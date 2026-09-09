@@ -1,6 +1,17 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [geometric anchors in the same causal relation execution](pre-anchor-joint-continuation.md).
+Latest formal continuation: [selected quotient-to-component and early C1 recovery](selected-component-continuation.md).
+One constructed pre-gamma tuple now binds the three ordinary component rows
+and both OOD answer vectors in the same supported near-final relation game.
+Actual encoder coefficient equality, up to two chord-pole fibres, sparse/absent
+early-C1 accounting and the selector-loop payment prerequisite are proved.
+See [current-source evidence and exact event ledger](selected-component-evidence.json).
+The event uses folded-final distance at most 2,324; it is not all acceptance or
+the entire older 9,301-near regime. Far-final accepted extraction failure,
+semantic/payment enforcement, source/FS and full-view ZK remain open.
+No verifier/profile/body/CU changes or global 100-bit certificate.
+
+Previous formal continuation: [geometric anchors in the same causal relation execution](pre-anchor-joint-continuation.md).
 The selected geometric anchor now precedes the image/row challenges, and
 the same indexed received word feeds actual compact query acceptance.
 Kernel-checked reference independence and the combined sparse/dense theorem
