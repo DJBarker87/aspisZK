@@ -2,6 +2,7 @@ import AspisFormal.K1.V7Tag73ExactConcreteK16Assembly
 import AspisFormal.K1.V7Tag73ExactFixedK16Closure
 import AspisFormal.K1.V7Tag73PreQ16OperationalMeasuredComposition
 import AspisFormal.K1.V7Tag73PreQ16OperationalActualLawBounds
+import AspisFormal.K1.V7Tag73K13CandidateDirectedOperationalClosure
 import AspisFormal.K1.V7Tag73PreQ16K15RestrictedBoundGammaClosure
 import AspisFormal.K1.V7Tag73PreQ16K15RemainingFixedActualLawClosure
 import AspisFormal.K1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
@@ -46,6 +47,8 @@ open AspisK1.V7Tag73PreQ16K15RestrictedRelationAlphaActualLawClosure
 open AspisK1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 open AspisK1.V7Tag73RelationTailSourceComposition
 open AspisK1.V7Tag73K13JointBatchCausalSource
+open AspisK1.V7Tag73K13CandidateDirectedOperationalClosure
+open AspisK1.V7Tag73K13CleanCommittedInputInvariant
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73K13RestrictedLaterAlphaActualLawClosure
 open AspisK1.V7Tag73K13PreQ16TargetProbability
@@ -101,6 +104,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_of_bounds
     (environment : ExactPreQ16RestoredStageEnvironment transitionFuel
       configuration projection fixedInstance decoder decoderBinding basis rc
       poseidon)
+    (k13Error : ENNReal)
     (k12Bound : K12TwoTreeMerkle208ErrorMeasureBound hiddenLaw
       (exactTag73PreQ16RestoredStages transitionFuel configuration projection
         fixedInstance decoder decoderBinding basis rc poseidon
@@ -116,7 +120,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_of_bounds
                 projection fixedInstance decoder decoderBinding basis rc poseidon
                 (le_trans (by decide : 2 ≤ 3) transitionRoom) programmedCover
                 initialEncoderExact environment)) ≤
-        exactPreQ16OperationalK13RawError parameters)
+        k13Error)
     (k14Bound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -149,7 +153,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_of_bounds
             (deployedNode := deployedNode)) +
         exactFixedClosedK16RawError
           (exactTag73ConcreteUpstreamTerms configuration
-            (exactPreQ16OperationalK13RawError parameters) exactK14IdealRawError
+            k13Error exactK14IdealRawError
             exactK15RestoredCausalRawError) parameters := by
   let room2 : 2 ≤ transitionFuel := le_trans (by decide : 2 ≤ 3) transitionRoom
   let stages := exactTag73PreQ16RestoredStages transitionFuel configuration
@@ -159,7 +163,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_of_bounds
     (deployedNote := deployedNote) (deployedNullifier := deployedNullifier)
     (deployedNode := deployedNode)
   let terms := exactTag73ConcreteUpstreamTerms configuration
-    (exactPreQ16OperationalK13RawError parameters) exactK14IdealRawError
+    k13Error exactK14IdealRawError
     exactK15RestoredCausalRawError
   have k15Bound := exact_restricted_preQ16_restored_k15_error_measure_bound
     hiddenLaw transitionFuel configuration projection fixedInstance decoder
@@ -205,7 +209,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
     (runtimeReserves : ExactOperationalRuntimeReserves parameters)
     (cutoffBeyondCap :
       totalCompilerRuntimeCap parameters < parameters.timeoutCutoff)
-    (programmedCover : 518 ≤ 2 * parameters.forkRequestCap)
+    (programmedCover : 542 ≤ 2 * parameters.forkRequestCap)
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
     (finalEncoderExact : decoder.finalEncoder = exactFinalEncoder)
     (environment : ExactPreQ16RestoredStageEnvironment transitionFuel
@@ -221,10 +225,10 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (jointBatchSource : ExactTag73K13JointBatchCausalSource transitionFuel
-      configuration projection fixedInstance decoder relationSource
-      (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
-        projection fixedInstance))
+    (sourceInvariant : ExactCleanCandidateDirectedK13CommittedInputInvariant
+      transitionFuel configuration projection fixedInstance decoder
+      (relationSource.toK13SourceObligations transitionFuel configuration
+        projection fixedInstance decoder))
     (laterAlphaSource : ExactTag73RestrictedK13LaterAlphaSource transitionFuel
       configuration projection fixedInstance decoder relationSource
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -273,7 +277,8 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
             (deployedNode := deployedNode)) +
         exactFixedClosedK16RawError
           (exactTag73ConcreteUpstreamTerms configuration
-            (exactPreQ16OperationalK13RawError parameters) exactK14IdealRawError
+            (candidateDirectedPreQ16OperationalK13RawError parameters)
+            exactK14IdealRawError
             exactK15RestoredCausalRawError) parameters := by
   let room2 : 2 ≤ transitionFuel := le_trans (by decide : 2 ≤ 3) transitionRoom
   have cover513 : 513 ≤ 2 * parameters.forkRequestCap := by omega
@@ -293,11 +298,11 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
       (exactTag73K12ErrorBound configuration)
     exact operationalK12
   have operationalK13 :=
-    exact_tag73_preQ16_operational_k13_clean_probability_le hiddenLaw
+    exact_tag73_preQ16_operational_k13_candidate_directed_probability_le hiddenLaw
       transitionFuel configuration projection fixedInstance decoder decoderBinding
       basis rc poseidon environment.operationalStages relationSource room2
       programmedCover initialEncoderExact finalEncoderExact reference traceExists
-      foldExposureCap finalExposureCap jointBatchSource laterAlphaSource
+      foldExposureCap finalExposureCap sourceInvariant laterAlphaSource
   have k13Bound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
@@ -306,7 +311,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
               (exactTag73PreQ16RestoredStages transitionFuel configuration
                 projection fixedInstance decoder decoderBinding basis rc poseidon
                 room2 cover513 initialEncoderExact environment)) ≤
-        exactPreQ16OperationalK13RawError parameters := by
+        candidateDirectedPreQ16OperationalK13RawError parameters := by
     change (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
         (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
             projection fixedInstance ∩
@@ -315,7 +320,7 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
               projection fixedInstance decoder decoderBinding basis rc poseidon
               room2 cover513 initialEncoderExact
               environment.operationalStages)) ≤
-      exactPreQ16OperationalK13RawError parameters
+      candidateDirectedPreQ16OperationalK13RawError parameters
     exact operationalK13
   have width29Bound := exact_tag73_restricted_preQ16_k14_probability_le hiddenLaw
     (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration projection
@@ -360,7 +365,9 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
   exact exact_tag73_preQ16_restored_k16_aok_raw_of_bounds hiddenLaw transitionFuel
     configuration projection fixedInstance decoder decoderBinding basis rc
     poseidon transitionRoom driverCoversProtocol runtimeReserves cutoffBeyondCap
-    cover513 initialEncoderExact environment k12Bound k13Bound k14Bound
+    cover513 initialEncoderExact environment
+    (candidateDirectedPreQ16OperationalK13RawError parameters) k12Bound k13Bound
+    k14Bound
     fixedK15Bounds restoredK15Bound
 
 #print axioms exact_tag73_preQ16_restored_k16_aok_raw_of_bounds
