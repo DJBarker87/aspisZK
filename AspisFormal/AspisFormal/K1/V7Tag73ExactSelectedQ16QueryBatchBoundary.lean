@@ -237,6 +237,7 @@ theorem exact_selected_q16_terminal_has_candidate_slot
       target.1 = (exactOperationalTape input).search.selectedCounter ∧
       target.2.val + 1 =
         (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
+      prefixOutputs.length = target.2.val ∧
       tableLookup (exactOperationalTable input) producerInput =
         some initialDigest ∧
       producerInput =
@@ -245,6 +246,7 @@ theorem exact_selected_q16_terminal_has_candidate_slot
             UInt8.ofNat target.1.val] ∧
       ExactRootOrderedQ16Chain input producerInput initialDigest prefixOutputs
         prefixAdvances ∧
+      gammaTerminalDigest initialDigest prefixAdvances = blockDigest ∧
       tableLookup (exactOperationalTable input) blockProducerInput =
         some blockDigest ∧
       tableLookup (exactOperationalTable input)
@@ -270,7 +272,7 @@ theorem exact_selected_q16_terminal_has_candidate_slot
   obtain ⟨prefixOutputs, prefixAdvances, blockProducerInput, blockDigest,
       _blockOutput, blockAdvance, _outputsExact, advancesExact, prefixChain,
       blockProducerLookup, _blockOutputLookup, blockAdvanceLookup, blockOrder,
-      _predecessorExact, lastExact⟩ :=
+      predecessorExact, lastExact⟩ :=
     exact_root_ordered_q16_chain_unsnoc_with_order chain nonempty
   have prefixLength : prefixAdvances.length + 1 =
       (exactOperationalTape input).search.selectedSchedule.blocksUsed := by
@@ -286,11 +288,16 @@ theorem exact_selected_q16_terminal_has_candidate_slot
   let target : Q16DigestSlot :=
     ((exactOperationalTape input).search.selectedCounter,
       ⟨prefixAdvances.length, targetBound⟩)
+  have prefixPairLength : prefixOutputs.length = prefixAdvances.length := by
+    have lengths := exact_root_ordered_q16_chain_lengths prefixChain
+    exact lengths.symm
   refine ⟨target, producerInput, blockProducerInput, initialDigest, blockDigest,
     blockAdvance, prefixOutputs, prefixAdvances, beforeDomain,
-    beforeQueryBatch, rfl, ?_, producerLookup, ?_, prefixChain,
-    blockProducerLookup, blockAdvanceLookup, blockOrder, ?_, boundaryLookup⟩
+    beforeQueryBatch, rfl, ?_, ?_, producerLookup, ?_, prefixChain,
+    predecessorExact, blockProducerLookup, blockAdvanceLookup, blockOrder, ?_,
+    boundaryLookup⟩
   · simpa [target] using prefixLength
+  · simpa [target] using prefixPairLength
   · simpa [target] using producerExact
   · exact lastExact.symm.trans terminalExact
 
