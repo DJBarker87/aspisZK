@@ -1,6 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [byte-equivalent Merkle inputs and borrowed digests](merkle-input-review.md).
+Latest: [contiguous C2 leaf records](leaf-record-review.md).
+The Lean-proved literal record-slice rewrite saves another **88 CU per complete
+proof**. Worst observed is **1,101,445 CU**, with **98,555 CU** headroom below
+the real 1.2M cap. Body remains **40,282 bytes**; same-proof, malformed and
+rollback controls pass. See [results](leaf-record-results.json).
+V7 parity and universal CU coverage remain open.
+
+Previous: [byte-equivalent Merkle inputs and borrowed digests](merkle-input-review.md).
 The combined implementation saves **12,472–12,502 CU** on identical complete
 maximum-body proofs. Worst observed is **1,101,533 CU**, with **98,467 CU**
 headroom below the real 1.2M cap. Lean proves the byte-input identity; raw-byte,

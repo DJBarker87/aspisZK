@@ -13,6 +13,8 @@ use corelib::{field::{QM31 as K,CM31,M31},transcript::{Transcript,label},sumchec
 use sha2::{Sha256,Digest};
 const FIXED:usize=697; const Q:usize=22; const REC:usize=621; const HEAD:usize=FIXED*16+52+24;
 const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
+#[cfg(any(v8_leaf_record,test))]
+#[path="leaf_record.rs"] mod leaf_record;
 #[cfg(v8_gamma_wrap)]
 #[path="query_arithmetic.rs"] mod query_arithmetic;
 #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
@@ -161,7 +163,10 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
     let mut entries=Vec::with_capacity(queries.len());
     for (i,&id) in queries.iter().enumerate(){
         let r=&w.records[i*REC..(i+1)*REC];let salt:&[u8;32]=r[589..621].try_into().unwrap();
+        #[cfg(not(v8_leaf_record))]
         entries.push((id,private_leaf_hash_v7(hashfn,V7_C1_TREE_TAG,&r[..403],salt),private_leaf_hash_v7(hashfn,V7_C2_TREE_TAG,&r[403..589],salt)));
+        #[cfg(v8_leaf_record)]
+        entries.push((id,private_leaf_hash_v7(hashfn,V7_C1_TREE_TAG,&r[..403],salt),leaf_record::c2(hashfn,r)));
     }
     query_checkpoint("v8:leaf-hashes");
     entries.sort_by_key(|x|x.0);
