@@ -19,7 +19,8 @@ for n,pre in [('PROFILE',profile),('RELEASE',release)]:
  s=re.sub(r'(pub const V7_POOL_PAIR_FOREST_TAG73_'+n+r'_BINDING_PREIMAGE: &\[u8\] = )b"[^"]*";',lambda m:m[1]+'b"'+pre.decode()+'";',s)
  s=re.sub(r'(pub const V7_POOL_PAIR_FOREST_TAG73_'+n+r'_BINDING: \[u8;32\] = )\[[^;]+\];',lambda m:m[1]+str(list(hashlib.sha256(pre).digest()))+';',s)
 write(E/'complete_binding.rs',s)
-# Parent descriptor stays exactly the reviewed opt-in profile; outer Registry bindings are new.
+# Bind the prior COMPLETE profile as parent (the standalone opt-in host used the V7 default).
+# Mask inventories/cell/descriptor layout are retained; outer Registry bindings are new.
 p=E/'positive_transfer.rs';s=p.read_text().replace('d.extend(V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING);','d.extend('+str(list(parent))+');')
 desc=b'AV8/positive-transfer/active-cell-overwrite/lane94/v1'+parent+(1014).to_bytes(2,'little')+bytes([3,94])+bytes.fromhex('f9daf3d54f4285d1')[::-1]+bytes.fromhex('6b661245a56c7189')[::-1]+(3802).to_bytes(2,'little')
 assert len(desc)==107
