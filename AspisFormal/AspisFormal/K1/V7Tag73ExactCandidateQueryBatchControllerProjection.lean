@@ -32,6 +32,7 @@ open AspisK1.V7Tag73CausalFoldAlphaQ16QueryBatchController
 open AspisK1.V7Tag73CausalQ16CoordinateRouter
 open AspisK1.V7Tag73ExactCandidateQueryBatchAnchorInstalled
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
 open AspisK1.V7Tag73ExactDagQ16ChainRouting
 open AspisK1.V7Tag73DeterministicRefinement
@@ -39,6 +40,7 @@ open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFoldAlphaFinalWorkQ16RootRouting
 open AspisK1.V7Tag73ExactPlainRomRun
+open AspisK1.V7Tag73ExactSelectedQ16QueryBatchBoundary
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FoldAlphaFinalWorkQ16ControllerComposition
 open AspisK1.V7Tag73FoldAlphaFinalWorkQ16ControllerProjection
@@ -197,13 +199,15 @@ theorem exact_selected_candidate_parent_available_in_complete_base
       tableLookup (exactOperationalTable input)
           (gammaAdvanceInput blockDigest) = some blockAdvance ∧
       blockAdvance = beforeDomain.digest ∧
+      beforeDomain.digest =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       tableLookup (exactOperationalTable input)
           (bytes beforeDomain.digest ++
             [domAbsorb, queryBatchChallengeLabel]) =
         some beforeQueryBatch.digest := by
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, targetCounter, targetBlock, installed,
-      _producerLookup, advanceLookup, ordered, terminalExact,
+      _producerLookup, advanceLookup, ordered, terminalExact, boundaryStart,
       boundaryLookup⟩ :=
     exact_selected_candidate_query_batch_anchor_is_installed transitionRoom input
   obtain ⟨prior, middle, later, producerActor, advanceActor, recordsExact,
@@ -214,7 +218,7 @@ theorem exact_selected_candidate_parent_available_in_complete_base
   refine ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
     beforeDomain, beforeQueryBatch, prior, middle, later, producerActor,
     advanceActor, recordsExact, ?_, targetCounter, targetBlock, advanceLookup,
-    terminalExact, boundaryLookup⟩
+    terminalExact, boundaryStart, boundaryLookup⟩
   rw [complete_base_dag_after_records_eq_standalone input foldTrial finalTrial
     boundaryIndex]
   exact available

@@ -33,6 +33,7 @@ open AspisK1.V7Tag73DeterministicRefinement
 open AspisK1.V7Tag73ExactCandidateAdvanceFreshness
 open AspisK1.V7Tag73ExactCandidateQueryBatchControllerProjection
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
 open AspisK1.V7Tag73ExactDagQ16ChainRouting
 open AspisK1.V7Tag73ExactFinalWorkPairControllerCompletion
@@ -72,6 +73,7 @@ theorem exact_selected_candidate_query_batch_boundary_arms
     (boundaryIndex : Nat) :
     ∃ (finalTrial : ExactCompilerExposureTrial parameters)
         (target : Q16DigestSlot) (blockAdvance queryBatchDigest : Digest256)
+        (beforeDomain : EvalState)
         (boundaryPrior boundaryLater : List UnifiedExposureRecord)
         (boundaryActor : QueryActor),
       exactFixedRootRecords input.package.root =
@@ -79,6 +81,9 @@ theorem exact_selected_candidate_query_batch_boundary_arms
           (.machineFresh boundaryActor
             (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
             queryBatchDigest : UnifiedExposureRecord) :: boundaryLater ∧
+      blockAdvance = beforeDomain.digest ∧
+      beforeDomain.digest =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       let base := candidateCompleteBaseController transitionFuel foldTrial.val
         finalTrial.val boundaryIndex
       let controller := extendControllerThroughCandidateQueryBatch
@@ -101,7 +106,7 @@ theorem exact_selected_candidate_query_batch_boundary_arms
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, preAdvance, advanceLater, advanceActor,
       advanceRootExact, selectedMember, targetAbsent, advanceLookup,
-      terminalExact, boundaryLookup⟩ :=
+      terminalExact, boundaryStart, boundaryLookup⟩ :=
     exact_selected_candidate_advance_is_fresh transitionRoom input foldTrial
       boundaryIndex
   let boundaryInput : ShaInput :=
@@ -311,7 +316,8 @@ theorem exact_selected_candidate_query_batch_boundary_arms
       boundaryInput beforeQueryBatch.digest blockAdvance beforeBoundaryUnseen
       beforeBoundaryEmpty beforeBoundaryTarget rfl
   refine ⟨finalTrial, target, blockAdvance, beforeQueryBatch.digest,
-    boundaryPrior, boundaryLater, boundaryActor, ?_, ?_⟩
+    beforeDomain, boundaryPrior, boundaryLater, boundaryActor, ?_,
+    terminalExact, boundaryStart, ?_⟩
   · simpa [boundaryPrior, boundaryRecord, boundaryInput, orderedAdvance,
       List.append_assoc] using orderedRootExact
   · exact ⟨beforeBoundaryTarget, beforeBoundaryUnseen, beforeBoundaryEmpty,

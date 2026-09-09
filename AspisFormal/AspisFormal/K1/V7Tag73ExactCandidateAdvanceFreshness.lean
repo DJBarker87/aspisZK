@@ -34,6 +34,7 @@ open AspisK1.V7Tag73CausalQ16CoordinateRouter
 open AspisK1.V7Tag73DeterministicRefinement
 open AspisK1.V7Tag73ExactCandidateQueryBatchControllerProjection
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
 open AspisK1.V7Tag73ExactFinalWorkPairControllerCompletion
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
@@ -159,6 +160,8 @@ theorem exact_selected_candidate_advance_is_fresh
       tableLookup (exactOperationalTable input)
           (gammaAdvanceInput blockDigest) = some blockAdvance ∧
       blockAdvance = beforeDomain.digest ∧
+      beforeDomain.digest =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       tableLookup (exactOperationalTable input)
           (bytes beforeDomain.digest ++
             [domAbsorb, queryBatchChallengeLabel]) =
@@ -166,7 +169,7 @@ theorem exact_selected_candidate_advance_is_fresh
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, prior, middle, later, producerActor,
       advanceActor, recordsExact, selectedMember, _targetCounter, _targetBlock,
-      advanceLookup, terminalExact, boundaryLookup⟩ :=
+      advanceLookup, terminalExact, boundaryStart, boundaryLookup⟩ :=
     exact_selected_candidate_parent_available_in_complete_base transitionRoom
       input foldTrial boundaryIndex
   let producerRecord : UnifiedExposureRecord :=
@@ -274,7 +277,8 @@ theorem exact_selected_candidate_advance_is_fresh
         exact (separated _ priorInputMember _ suffixInputMember rfl).elim
   refine ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
     beforeDomain, beforeQueryBatch, preAdvance, later, advanceActor, rootExact,
-    ?_, targetAbsent, advanceLookup, terminalExact, boundaryLookup⟩
+    ?_, targetAbsent, advanceLookup, terminalExact, boundaryStart,
+    boundaryLookup⟩
   rw [candidate_extended_dag_after_records_eq_standalone input foldTrial
     finalTrial boundaryIndex target preAdvance]
   rw [← complete_base_dag_after_records_eq_standalone input foldTrial

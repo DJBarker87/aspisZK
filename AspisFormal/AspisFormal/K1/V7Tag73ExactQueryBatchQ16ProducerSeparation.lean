@@ -91,7 +91,7 @@ theorem exact_operational_query_batch_chain_avoids_full_dag_producers
           (exactDagCandidateInitialState input)).memory.producers
         initialDigest advances := by
   obtain ⟨producerInput, initialDigest, outputs, advances, producerLookup,
-      ⟨beforeDomain, producerInputExact⟩, chain, outputsLength,
+      ⟨beforeDomain, producerInputExact, _boundaryStart⟩, chain, outputsLength,
       advancesLength⟩ :=
     exact_operational_query_batch_domain_and_chain transitionRoom input
   let reached := indexedStateAfterRecords transitionFuel

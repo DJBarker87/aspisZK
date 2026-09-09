@@ -71,13 +71,15 @@ theorem exact_selected_candidate_query_batch_anchor_is_installed
           before ++ (blockProducerInput, blockDigest) :: middle ++
             (gammaAdvanceInput blockDigest, blockAdvance) :: after) ∧
       blockAdvance = beforeDomain.digest ∧
+      beforeDomain.digest =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       tableLookup (exactOperationalTable input)
           (bytes beforeDomain.digest ++
             [domAbsorb, queryBatchChallengeLabel]) =
         some beforeQueryBatch.digest := by
   obtain ⟨producerInput, initialDigest, outputs, advances, beforeDomain,
       beforeQueryBatch, producerLookup, producerExact, chain, outputsLength,
-      advancesLength, terminalBoundary, boundaryLookup⟩ :=
+      advancesLength, boundaryStart, terminalBoundary, boundaryLookup⟩ :=
     exact_selected_q16_terminal_is_query_batch_boundary transitionRoom input
   obtain ⟨_prefinalDigest, _workAnswer, base, trial, _workAccepted,
       _prefinalOrigin, baseExact, _pairLabeled, _workLabeled,
@@ -136,7 +138,8 @@ theorem exact_selected_candidate_query_batch_anchor_is_installed
     simpa [target] using lastInstalled
   refine ⟨trial, target, blockProducerInput, blockDigest, blockAdvance,
     beforeDomain, beforeQueryBatch, rfl, targetBlock, installedAtTarget,
-    blockProducerLookup, blockAdvanceLookup, blockOrder, ?_, boundaryLookup⟩
+    blockProducerLookup, blockAdvanceLookup, blockOrder, ?_, boundaryStart,
+    boundaryLookup⟩
   exact lastExact.symm.trans terminalBoundary
 
 #print axioms exact_selected_candidate_query_batch_anchor_is_installed

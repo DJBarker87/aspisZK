@@ -1,5 +1,6 @@
 import AspisFormal.K1.V7Tag73ExactCompilerGammaPrefixCoordinates
 import AspisFormal.K1.V7Tag73ExactCompilerFinalWorkTraceOccurrence
+import AspisFormal.K1.V7Tag73ExactCompilerQ16InitialDigestMap
 import AspisFormal.K1.V7Tag73ExactQ16CausalCoordinateOrder
 import AspisFormal.K1.V7Tag73QueryBatchPrefixCausalController
 
@@ -25,6 +26,7 @@ open AspisK1.V7Tag73DeterministicRefinement
 open AspisK1.V7Tag73ExactCompilerGammaPrefixCoordinates
 open AspisK1.V7Tag73ExactCompilerGammaTraceOccurrence
 open AspisK1.V7Tag73ExactCompilerFinalWorkTraceOccurrence
+open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactPlainRomRun
@@ -124,15 +126,16 @@ theorem exact_operational_query_batch_domain_and_chain
           some initialDigest ∧
       (∃ beforeDomain : EvalState,
         producerInput = bytes beforeDomain.digest ++
-          [domAbsorb, queryBatchChallengeLabel]) ∧
+          [domAbsorb, queryBatchChallengeLabel] ∧
+        beforeDomain.digest =
+          (exactOperationalQ16Evaluator input).afterQ16.digest) ∧
       ExactRootOrderedQ16Chain input producerInput initialDigest outputs
         advances ∧
       outputs.length =
         ((exactOperationalTape input).messages.challengeUse
           .queryBatch).blocksUsed ∧
       advances.length = outputs.length := by
-  obtain ⟨evaluator⟩ :=
-    exact_operational_input_constructs_complete_evaluator input
+  let evaluator := exactOperationalQ16Evaluator input
   have splitRun := evaluator.afterQ16Run
   rw [after_accepted_query_scan_query_batch_split] at splitRun
   obtain ⟨beforeQueryBatch, prefixRun, restRun⟩ :=
@@ -142,7 +145,7 @@ theorem exact_operational_query_batch_domain_and_chain
         afterQueryBatchChallengeEvents
           (exactOperationalTape input).messages)
       evaluator.afterQ16 evaluator.finalState).mp splitRun
-  obtain ⟨beforeDomain, _frontierRun, domainRun⟩ :=
+  obtain ⟨beforeDomain, frontierRun, domainRun⟩ :=
     (run_machine_events_work_erased_append_iff
       (exactOperationalTable input) [.check .frontierCount]
       [.absorb .queryBatchDomain] evaluator.afterQ16 beforeQueryBatch).mp
@@ -153,6 +156,12 @@ theorem exact_operational_query_batch_domain_and_chain
   have afterDomainExact : afterDomain = beforeQueryBatch := by
     simpa [runMachineEventsWorkErased] using Option.some.inj domainDone
   subst afterDomain
+  have beforeDomainStart : beforeDomain.digest =
+      (exactOperationalQ16Evaluator input).afterQ16.digest := by
+    have exact : evaluator.afterQ16 = beforeDomain := by
+      simpa [runMachineEventsWorkErased, runMachineEventWorkErased] using
+        frontierRun
+    simpa [evaluator] using congrArg EvalState.digest exact.symm
   let producerInput : ShaInput :=
     bytes beforeDomain.digest ++ [domAbsorb, queryBatchChallengeLabel]
   have producerLookup : tableLookup (exactOperationalTable input)
@@ -187,7 +196,7 @@ theorem exact_operational_query_batch_domain_and_chain
     gamma_table_coordinate_chain_has_exact_root_order transitionRoom input
       producerInput beforeQueryBatch.digest producerLookup coordinates
   exact ⟨producerInput, beforeQueryBatch.digest, outputs, advances,
-    producerLookup, ⟨beforeDomain, rfl⟩, ordered, outputsLength,
+    producerLookup, ⟨beforeDomain, rfl, beforeDomainStart⟩, ordered, outputsLength,
     advancesLength⟩
 
 #print axioms after_accepted_query_scan_query_batch_split

@@ -200,6 +200,8 @@ theorem exact_selected_q16_terminal_is_query_batch_boundary
       outputs.length =
         (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       advances.length = outputs.length ∧
+      beforeDomain.digest =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       gammaTerminalDigest initialDigest advances = beforeDomain.digest ∧
       tableLookup (exactOperationalTable input)
           (bytes beforeDomain.digest ++
@@ -212,7 +214,8 @@ theorem exact_selected_q16_terminal_is_query_batch_boundary
     exact_query_batch_domain_starts_at_after_q16 input
   exact ⟨producerInput, initialDigest, outputs, advances, beforeDomain,
     beforeQueryBatch, producerLookup, producerExact, ordered, outputsLength,
-    advancesLength, terminalExact.symm.trans boundaryStart.symm,
+    advancesLength, boundaryStart,
+    terminalExact.symm.trans boundaryStart.symm,
     boundaryLookup⟩
 
 /-- The terminal source fact names one concrete member of the 512-slot cover.
@@ -256,13 +259,15 @@ theorem exact_selected_q16_terminal_has_candidate_slot
           before ++ (blockProducerInput, blockDigest) :: middle ++
             (gammaAdvanceInput blockDigest, blockAdvance) :: after) ∧
       blockAdvance = beforeDomain.digest ∧
+      beforeDomain.digest =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       tableLookup (exactOperationalTable input)
           (bytes beforeDomain.digest ++
             [domAbsorb, queryBatchChallengeLabel]) =
         some beforeQueryBatch.digest := by
   obtain ⟨producerInput, initialDigest, outputs, advances, beforeDomain,
       beforeQueryBatch, producerLookup, producerExact, chain, outputsLength,
-      advancesLength, terminalExact, boundaryLookup⟩ :=
+      advancesLength, boundaryStart, terminalExact, boundaryLookup⟩ :=
     exact_selected_q16_terminal_is_query_batch_boundary transitionRoom input
   have nonempty : 0 < outputs.length := by
     rw [outputsLength]
@@ -295,7 +300,7 @@ theorem exact_selected_q16_terminal_has_candidate_slot
     blockAdvance, prefixOutputs, prefixAdvances, beforeDomain,
     beforeQueryBatch, rfl, ?_, ?_, producerLookup, ?_, prefixChain,
     predecessorExact, blockProducerLookup, blockAdvanceLookup, blockOrder, ?_,
-    boundaryLookup⟩
+    boundaryStart, boundaryLookup⟩
   · simpa [target] using prefixLength
   · simpa [target] using prefixPairLength
   · simpa [target] using producerExact
