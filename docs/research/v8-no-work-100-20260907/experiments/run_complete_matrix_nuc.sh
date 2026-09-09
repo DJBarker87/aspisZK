@@ -11,7 +11,7 @@ case "$mode" in
  partial) verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"; matched=0;;
  channel) verifier="$rt/sbf-complete-channel/aspis_v8_complete_sbf.so"; matched=0;;
  group) verifier="$rt/sbf-complete-group/aspis_v8_complete_sbf.so"; matched=0;;
- suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|gamma-one|gamma-one-split) verifier="$rt/sbf-complete-$mode/aspis_v8_complete_sbf.so"; matched=0;;
+ suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|gamma-one|gamma-one-split) verifier="$rt/sbf-complete-$mode/aspis_v8_complete_sbf.so"; matched=0;;
  v7) verifier="$rt/sbf-matched-v7/aspis_v8_complete_sbf.so"; matched=1;;
  selected-v7) verifier="$rt/sbf-selected-v7/aspis_verifier.so"; matched=1;;
  *) exit 2;;

@@ -1,6 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [expanded quotient fold with shared reductions](quotient-fold-review.md).
+Latest: [constant injection in final-coefficient folds](affine-primal-review.md).
+Worst observed complete transaction is **1,091,626 CU**, with **108,374 CU**
+headroom below the actual 1.2M cap and the unchanged **40,282-byte** body.
+The literal channel/cast/range proof supports another 491–534 CU saving;
+all 50 maximum/ordinary/rollback cases pass. See [results](affine-primal-results.json).
+Same-pool V7 remains 19,511–42,742 CU cheaper; universal CU remains open.
+
+Previous: [expanded quotient fold with shared reductions](quotient-fold-review.md).
 Worst observed complete transaction is **1,092,138 CU**, with **107,862 CU**
 headroom under the actual1.2M cap and the same **40,282-byte** body. The
 Lean-proved rewrite saves another55–102 CU on the twelve maximum proofs;

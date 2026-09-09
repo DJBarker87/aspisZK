@@ -23,6 +23,7 @@ verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_SPLIT_INVERSE:-0}" != 1 ]] || verifier="$rt/sbf-complete-split-inverse/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_LINE_NORM:-0}" != 1 ]] || verifier="$rt/sbf-complete-line-norm/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_QUOTIENT_FUSED:-0}" != 1 ]] || verifier="$rt/sbf-complete-quotient-fused/aspis_v8_complete_sbf.so"
+[[ "${ASPIS_V8_AFFINE_PRIMAL:-0}" != 1 ]] || verifier="$rt/sbf-complete-affine-primal/aspis_v8_complete_sbf.so"
 readonly verifier registry="$rt/sbf-selected-registry/aspis_registry.so"
 readonly double="$rt/sbf-complete/aspis_pair_forest_result_double.so"
 case "$mode" in

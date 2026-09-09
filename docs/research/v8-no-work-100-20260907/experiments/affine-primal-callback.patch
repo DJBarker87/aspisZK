@@ -1,0 +1,31 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+index 4a421151..2859cedc 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+@@ -23,6 +23,8 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
+ #[path="circle_norm.rs"] mod circle_norm;
+ #[cfg(v8_quotient_fused)]
+ #[path="quotient_fold.rs"] mod quotient_fold;
++#[cfg(v8_affine_primal)]
++#[path="affine_primal.rs"] mod affine_primal;
+ #[cfg(v8_gamma_wrap)]
+ #[path="query_arithmetic.rs"] mod query_arithmetic;
+ #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
+@@ -53,7 +55,7 @@ fn tower_inverse_k(values:&[K])->Result<Vec<K>,Error>{
+         K{c0:v.c0.mul(ni),c1:v.c1.neg().mul(ni)}
+     }).collect())
+ }
+-#[cfg(v8_query_kernels)]
++#[cfg(all(v8_query_kernels,not(v8_affine_primal)))]
+ fn primal(v:&[K],a:K)->Vec<K>{
+     use corelib::field::{PreparedQm31Multiplier as P,qm31_sum_products3_prepared};
+     let a2=a.square();let ps=[P::new(a),P::new(a2),P::new(a2.mul(a))];
+@@ -62,6 +64,8 @@ fn primal(v:&[K],a:K)->Vec<K>{
+     assert_eq!(out,primal_reference(v,a));
+     out
+ }
++#[cfg(v8_affine_primal)]
++fn primal(v:&[K],a:K)->Vec<K>{affine_primal::fold(v,a)}
+ 
+ fn image_terminal(t:K,b:K,c:K,a:[K;4])->K {
+     a[1].mul(a[2]).mul(a[3]).mul(t.mul(a[0]).add(t.square().mul(b.mul(a[0].square()).sub(c.mul(a[0].square().mul(a[0])))))).mul_m31(M31(8388608))
