@@ -12,9 +12,11 @@ early SHA answer is exposed.
 -/
 
 set_option autoImplicit false
+set_option maxRecDepth 100000
 
 namespace AspisK1.V7Tag73CandidateDirectedQueryBatchAccounting
 
+open MeasureTheory
 open scoped ENNReal
 open AspisK1.V7Tag73CausalQ16CoordinateRouter
 open AspisK1.V7Tag73K13IdealErrorLedger
@@ -34,6 +36,34 @@ def candidateDirectedJointBatchRawError : ENNReal :=
 
 theorem candidate_directed_joint_batch_numerator :
     (8192 : Nat) = 512 * 16 := by norm_num
+
+/-- A finite union over all pre-fixed q16 terminal-slot hypotheses costs
+exactly the advertised factor of 512.  This theorem contains only measure
+accounting: the protocol-specific actual-law theorem must still prove the
+degree-sixteen bound separately for each candidate event. -/
+theorem candidate_directed_joint_batch_union_probability_le
+    {Sample : Type}
+    (law : OuterMeasure Sample)
+    (event : Q16DigestSlot → Set Sample)
+    (perCandidate : ∀ target,
+      law (event target) ≤
+        (16 : ENNReal) / ((P ^ 4 - 1 : Nat) : ENNReal)) :
+    law (⋃ target, event target) ≤ candidateDirectedJointBatchRawError := by
+  calc
+    law (⋃ target, event target) ≤
+        ∑ target : Q16DigestSlot, law (event target) :=
+      measure_iUnion_fintype_le law event
+    _ ≤ ∑ _target : Q16DigestSlot,
+        (16 : ENNReal) / ((P ^ 4 - 1 : Nat) : ENNReal) := by
+      exact Finset.sum_le_sum fun target _member ↦ perCandidate target
+    _ = (Fintype.card Q16DigestSlot : ENNReal) *
+        ((16 : ENNReal) / ((P ^ 4 - 1 : Nat) : ENNReal)) := by
+      simp
+    _ = candidateDirectedJointBatchRawError := by
+      rw [q16_candidate_terminal_slot_card]
+      unfold candidateDirectedJointBatchRawError
+      simp only [div_eq_mul_inv]
+      ring
 
 /-- Even the conservative 512-hypothesis union remains below `2^-110`; it is
 far below the q16 term that controls the existing `2^-73` K1.3 envelope. -/
@@ -98,6 +128,7 @@ theorem candidate_directed_k13_raw_error_le_two_pow_neg73 :
 #print axioms q16_candidate_terminal_slot_card
 #print axioms candidateDirectedJointBatchRawError
 #print axioms candidate_directed_joint_batch_numerator
+#print axioms candidate_directed_joint_batch_union_probability_le
 #print axioms candidate_directed_joint_batch_raw_error_le_two_pow_neg110
 #print axioms candidateDirectedK13RawError
 #print axioms candidate_directed_k13_raw_error_le_two_pow_neg73
