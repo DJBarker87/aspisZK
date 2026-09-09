@@ -74,6 +74,22 @@ structure JointQueryBatchPreChallengeView where
   collisionTargetExact : active = true → collisionTarget =
     exactTag73JointQueryBatchNonzeroCollisionSet preQueryDiscrepancy expected authenticated
 
+/-- Canonical active view built from the three values fixed before the sampled
+query-batch challenge. -/
+def activeJointQueryBatchPreChallengeView
+    (preQueryDiscrepancy : QM31Exact)
+    (expected authenticated : QueryVector QM31Exact)
+    (different : expected ≠ authenticated) :
+    JointQueryBatchPreChallengeView where
+  preQueryDiscrepancy := preQueryDiscrepancy
+  expected := expected
+  authenticated := authenticated
+  active := true
+  activeSound := fun _ => different
+  collisionTarget := exactTag73JointQueryBatchNonzeroCollisionSet
+    preQueryDiscrepancy expected authenticated
+  collisionTargetExact := fun _ => rfl
+
 noncomputable def JointQueryBatchPreChallengeView.target
     (view : JointQueryBatchPreChallengeView) : Finset QM31Exact :=
   if view.active then
@@ -142,14 +158,11 @@ def exactJointQueryBatchPreChallengeView
     (k12 : ExactPrefixK12Certificate input)
     (different : exactTag73K13ExpectedQueryVector decoder input k12 ≠
       exactTag73K13AuthenticatedQueryVector decoder input k12) :
-    JointQueryBatchPreChallengeView where
-  preQueryDiscrepancy := source.preQueryDiscrepancy sample input
-  expected := exactTag73K13ExpectedQueryVector decoder input k12
-  authenticated := exactTag73K13AuthenticatedQueryVector decoder input k12
-  active := true
-  activeSound := fun _ => different
-  collisionTarget := exactTag73K13SourceCollisionTarget source input k12
-  collisionTargetExact := fun _ => rfl
+    JointQueryBatchPreChallengeView :=
+  activeJointQueryBatchPreChallengeView
+    (source.preQueryDiscrepancy sample input)
+    (exactTag73K13ExpectedQueryVector decoder input k12)
+    (exactTag73K13AuthenticatedQueryVector decoder input k12) different
 
 /-- Target membership for an already-active pre-challenge view is a direct
 collision-set membership; no function equality is decided here. -/

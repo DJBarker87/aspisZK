@@ -1,3 +1,4 @@
+import AspisFormal.K1.V7Tag73K13CandidateDirectedSourceFactorization
 import AspisFormal.K1.V7Tag73K13CandidateDirectedViewAlignment
 import AspisFormal.K1.V7Tag73PreQ16OperationalActualLawBounds
 
@@ -39,6 +40,7 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13BoundChallengeClosure
 open AspisK1.V7Tag73K13CandidateDirectedSourceBridge
+open AspisK1.V7Tag73K13CandidateDirectedSourceFactorization
 open AspisK1.V7Tag73K13CandidateDirectedViewAlignment
 open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
 open AspisK1.V7Tag73K13IdealErrorLedger
@@ -217,8 +219,9 @@ theorem exact_preQ16_operational_k13_clean_candidate_directed_error_measure_boun
       ac_rfl
 
 /-- Release-facing candidate-directed K1.3 bound.  The only remaining
-protocol/source input is the component-wise pre-challenge view alignment;
-the exact scheduler coordinate and probability accounting are internal. -/
+protocol/source input is the pre-challenge source factorization through the
+fixed candidate-directed coordinate key; the exact scheduler coordinate and
+probability accounting are internal. -/
 theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
     {HiddenTape TapeIdentity Observation Payload : Type}
     [Fintype HiddenTape]
@@ -255,7 +258,8 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (viewFunctional : ExactCandidateDirectedK13ViewFunctional transitionFuel
+    (sourceFactorization : ExactCandidateDirectedK13SourceFactorization
+      transitionFuel
       configuration projection fixedInstance decoder
         (relationSource.toK13SourceObligations transitionFuel configuration
           projection fixedInstance decoder))
@@ -275,6 +279,7 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
     projection fixedInstance
   let source := relationSource.toK13SourceObligations transitionFuel
     configuration projection fixedInstance decoder
+  let viewFunctional := sourceFactorization.toViewFunctional
   let viewAlignment :=
     AspisK1.V7Tag73K13CandidateDirectedViewAlignment.ExactCandidateDirectedK13ViewFunctional.toViewAlignment
       viewFunctional
