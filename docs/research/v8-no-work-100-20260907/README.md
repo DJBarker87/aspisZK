@@ -1,6 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [shared tag sums across kernels](tag-shared-review.md).
+Latest: [fixed tag-offset plans](tag-offset-review.md).
+The Lean-backed straight-line rewrite saves **6,007 CU** on each identical
+complete maximum-body proof. Worst observed is **1,127,798 CU**, including
+pinned classic Token settlement, with **72,202 CU** headroom under the real
+1.2M cap. Body remains **40,282 bytes**; ordinary, malformed and rollback
+controls pass. See [results](tag-offset-results.json). A fresh profile identifies
+canonical/gamma reconstruction and internal authentication as larger remaining
+targets. No new heap, proof or transcript data; V7 parity and universal CU remain open.
+
+Previous: [shared tag sums across kernels](tag-shared-review.md).
 Reusing the generated selector plan saves a further **4,030–4,044 CU** on
 identical complete transactions. Worst observed is now **1,133,805 CU** at
 the real 1.2M cap, with the unchanged **40,282-byte** maximum body. Lean proves
