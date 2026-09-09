@@ -3,6 +3,14 @@
 Status: no candidate has a complete 100-bit certificate. This directory is
 research only; selected acceptance, deployment and payment semantics are unchanged.
 
+Current continuation: [soundness resumed using V7](soundness-resume-review.md).
+The optimized research callback now includes the repaired row/image grammar
+and compact functional transcript. The historical implementation statements
+below refer to their named checkpoints, not to this newer research callback.
+New deterministic decoder/payment/compact-round bridges do not fill the
+remaining global accepted-extraction or FS bound; the current symbolic ledger
+is [here](soundness-resume-ledger.json).
+
 The [joint image/relation game](joint-image-review.md) now has a proved restricted
 ideal bound `(q+2)/(k-1)+24/k+choose(255,q)/choose(262144,q)`, 118.4150 bits at
 q22. This covers exact polynomial quotients with invalid image under a proposed

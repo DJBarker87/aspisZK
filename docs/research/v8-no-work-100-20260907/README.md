@@ -1,5 +1,12 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest formal continuation: [soundness resumed using V7](soundness-resume-review.md).
+New checked bridges cover common-sample Gao recovery, selected payment-value
+constraints and causal compact relation responses. The generic early-C1
+optional construction is proved; its concrete identification remains open.
+The verifier and measured CU checkpoint below are unchanged. See the
+[explicit residual ledger](soundness-resume-ledger.json).
+
 Latest retained result: [shared terminal query weights](terminal-query-review.md).
 Worst observed complete transaction is **1,047,041 CU**, with **152,959 CU**
 headroom under the actual 1.2M cap and the same **40,282-byte** body. All four
