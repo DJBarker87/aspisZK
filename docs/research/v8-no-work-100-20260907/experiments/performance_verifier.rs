@@ -5,7 +5,7 @@ use super::inactive_binding as row;
 use aspis_statement::pool_v1::*;
 use corelib::state_only_sumcheck::{begin_state_only_zerocheck,evaluate_state_only_polynomial};
 use corelib::state_only_hiding::begin_state_only_masked_sumcheck;
-#[cfg(v8_block_horner)]
+#[cfg(all(v8_block_horner,not(v8_semantic_carry)))]
 #[inline(never)]
 fn semantic_eval(poly:&[K;28],alpha:K)->K {
     use corelib::field::{PreparedQm31Multiplier as P,qm31_sum_products3_prepared};
@@ -19,6 +19,9 @@ fn semantic_eval(poly:&[K;28],alpha:K)->K {
     assert_eq!(out,evaluate_state_only_polynomial(poly,alpha));
     out
 }
+#[cfg(v8_semantic_carry)]
+#[inline(never)]
+fn semantic_eval(poly:&[K;28],alpha:K)->K {super::semantic_carry::evaluate(poly,alpha)}
 pub(super) fn checkpoint(name:&str){
     #[cfg(all(v8_performance_sbf,not(v8_quiet_profile)))] {
         solana_program::msg!(name);

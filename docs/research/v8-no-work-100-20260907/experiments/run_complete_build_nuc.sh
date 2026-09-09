@@ -40,9 +40,9 @@ host|partial-host|gamma-fixed-host)
  [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
  [[ "$mode" != gamma-fixed-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets --cfg v8_gamma_fixed -C overflow-checks=yes'
  scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
-sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|gamma-one|gamma-one-split)
+sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|gamma-one|gamma-one-split)
  lineage="$mode"
- case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|gamma-one|gamma-one-split) lineage=leaf-record;; esac
+ case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|gamma-one|gamma-one-split) lineage=leaf-record;; esac
  case "$mode" in scatter|tag-split|tag-bounded) python3 "$complete_exp/generate_copy_scatter.py" --check;; esac
  [[ "$mode" != tag-shared ]] || python3 "$complete_exp/generate_tag_shared.py" --check
  case "$lineage" in tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile) python3 "$complete_exp/generate_tag_offsets.py" --check;; esac
@@ -65,16 +65,17 @@ sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatte
  [[ "$mode" != merkle-both ]] || extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow"
  case "$lineage" in leaf-record|decode-profile) extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record";; esac
  [[ "$mode" != gamma-fused ]] || extra="$extra --cfg v8_gamma_fused"
- case "$mode" in decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|gamma-one|gamma-one-split) extra="$extra --cfg v8_decode_blocks";; esac
- case "$mode" in auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|gamma-one|gamma-one-split) extra="$extra --cfg v8_auth_order";; esac
- case "$mode" in chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|gamma-one|gamma-one-split) extra="$extra --cfg v8_chord_norm";; esac
+ case "$mode" in decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|gamma-one|gamma-one-split) extra="$extra --cfg v8_decode_blocks";; esac
+ case "$mode" in auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|gamma-one|gamma-one-split) extra="$extra --cfg v8_auth_order";; esac
+ case "$mode" in chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|gamma-one|gamma-one-split) extra="$extra --cfg v8_chord_norm";; esac
  case "$mode" in gamma-one|gamma-one-split) extra="$extra --cfg v8_gamma_one";; esac
- case "$mode" in circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal) extra="$extra --cfg v8_circle_norm";; esac
- case "$mode" in joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal) extra="$extra --cfg v8_joined_inverse";; esac
- case "$mode" in split-inverse|line-norm|quotient-fused|affine-primal) extra="$extra --cfg v8_split_inverse";; esac
- case "$mode" in line-norm|quotient-fused|affine-primal) extra="$extra --cfg v8_line_norm";; esac
- case "$mode" in quotient-fused|affine-primal) extra="$extra --cfg v8_quotient_fused";; esac
- [[ "$mode" != affine-primal ]] || extra="$extra --cfg v8_affine_primal"
+ case "$mode" in circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry) extra="$extra --cfg v8_circle_norm";; esac
+ case "$mode" in joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry) extra="$extra --cfg v8_joined_inverse";; esac
+ case "$mode" in split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry) extra="$extra --cfg v8_split_inverse";; esac
+ case "$mode" in line-norm|quotient-fused|affine-primal|semantic-carry) extra="$extra --cfg v8_line_norm";; esac
+ case "$mode" in quotient-fused|affine-primal|semantic-carry) extra="$extra --cfg v8_quotient_fused";; esac
+ case "$mode" in affine-primal|semantic-carry) extra="$extra --cfg v8_affine_primal";; esac
+ [[ "$mode" != semantic-carry ]] || extra="$extra --cfg v8_semantic_carry"
  [[ "$mode" != gamma-one-split ]] || extra="$extra --cfg v8_gamma_one_split"
  selected="$common"
  output_mode="$mode"
