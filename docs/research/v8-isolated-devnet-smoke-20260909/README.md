@@ -1,8 +1,10 @@
 # Isolated V8 COMPLETE devnet demonstration
 
-**Status: eight-lane checkpoint setup repaired and locally verified; live redeployment awaits faucet funding. No positive proof or atomic devnet transfer has yet been generated or submitted.**
+**Status: genuine positive COMPLETE transfer finalized on devnet at 1,083,081 CU / 1,200,000 declared. Exact settlement checks passed; malformed and replay controls rejected unchanged.**
 
-See [checkpoint-fix-review.md](checkpoint-fix-review.md) for the cause, explicit setup extension, measured controls and remaining live gate.
+See [live-demo-report.md](live-demo-report.md) for signatures, final metrics, account transitions and funding.
+
+See [checkpoint-fix-review.md](checkpoint-fix-review.md) for the cause, explicit setup extension and measured controls.
 
 Experimental engineering test in progress. No production activation or claim
 that soundness is complete. Global recovery, payment/source refinement,
@@ -81,12 +83,24 @@ The public endpoint and Helius devnet endpoint both returned devnet genesis
 10,000 lamports priority fee, 8 MiB loaded data and 256 KiB heap.
 RPC evidence is retained under `evidence/`. Later Helius response contexts also
 reported `4.3.0-alpha.2`; load-balanced response versions are preserved per call.
-The next live run must repeat the genesis/feature/signed-TxV1 gate.
+The successful resumed live run repeated the genesis/feature/signed-TxV1 gate.
 
 The user authorized up to 25 faucet-funded devnet SOL and funded the fresh
 payer with 10 SOL. The first deployed programs retain 8,435,741,320 lamports of rent.
-The new Pool/verifier require another 7,518,775,920 lamports; they are prepared
-but not deployed. See the funding receipt in `evidence/live-checkpoint-fix/`.
+The new Pool/verifier require another 7,518,775,920 lamports. Under the user’s
+explicit recovery authorization, two dedicated Colosseum devnet test wallets
+provided 8 SOL, bringing total external funding to 18 SOL within the 25-SOL
+budget. They retained 0.998280480 and 1 SOL respectively. The funding transaction
+is `4hnKG3nVMZdttprgSEZqAmEhGajvaNPpPRL9BuaCmWtn6FDPwrLudBDNActQb7L8JYEV9snUoE8jKno9Tb12Ukn5`.
+See public receipts in `evidence/live-checkpoint-fix/`. No accounts or programs
+from the other repositories were closed.
+
+The new Pool retains the experiment payer as upgrade/close authority. The
+verifier is initially deployed with that authority too. Only after live setup
+and init/upload/seal/close lifecycle gates pass does `certify_verifier.py`
+remove the verifier authority: the existing Registry V2 requires an immutable
+verifier. That step makes verifier rent irrecoverable; it does not remove Pool
+authority. This differs from the frozen benchmark’s immutable fixture Pool.
 All task keypairs, including loader buffers, are retained outside the repo
 under `~/.local/share/aspis/v8-devnet-smoke-20260909/keys`, with private file
 permissions. No keys or secret-bearing logs may be committed. No cleanup
@@ -116,11 +130,14 @@ python3 docs/research/v8-isolated-devnet-smoke-20260909/deploy.py verifier
 # Registry is already deployed in this isolated experiment: authenticate it; do not redeploy.
 python3 docs/research/v8-isolated-devnet-smoke-20260909/authenticate_programs.py
 python3 docs/research/v8-isolated-devnet-smoke-20260909/devnet.py setup
+# Run tools validate-setup on initialized-state.json and save validated-live-setup.json.
+python3 docs/research/v8-isolated-devnet-smoke-20260909/lifecycle_preflight.py
+python3 docs/research/v8-isolated-devnet-smoke-20260909/certify_verifier.py
 # Generate registry-plan.json using tools registry and a current finalized slot.
 python3 docs/research/v8-isolated-devnet-smoke-20260909/devnet.py registry
 # Export context with tools context from authoritative-before-proof.json.
 # Generate the proof on the NUC only after that context exists (commands below
-# will be completed with the actual run receipt).
+# are recorded in run_live_prover_nuc.sh and evidence/live-prover.log).
 python3 docs/research/v8-isolated-devnet-smoke-20260909/run_transfer.py
 ```
 
@@ -148,7 +165,7 @@ Do not rerun key generation, overwrite existing keys or upgrade an existing
 program. `deploy.py` refuses an existing on-chain program and resolves the
 explicit retained key mappings. All local key files remain private.
 
-After sufficient faucet funding, run the commands above for the fresh
+With funding restored, run the commands above for the fresh
 verifier and Pool, authenticate all three program images, then run setup.
 Setup uses thirteen deposits, eight strict lane validations, and one atomic
 checkpoint. Upload/setup fees are separate from atomic transfer fees.
@@ -197,7 +214,7 @@ This is an optimized proof-generation job, not a compilation job. Inspect
 host reservations first; keep aggregate caps within the safe host limit.
 Copy the proof to the retained private `proof` directory, preserve prover
 resource/timing logs after checking they contain no secrets, then execute
-`run_transfer.py`. Its exact positive and negative transitions remain pending.
+`run_transfer.py`. Its exact positive and negative transitions passed; see live-demo-report.md.
 
 For the executed checkpoint regression, `run_checkpoint_nuc.sh` records
 bounded cached build and replay commands. `prepare_checkpoint_receipts.py`

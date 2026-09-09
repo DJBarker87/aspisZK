@@ -17,7 +17,7 @@ configuration.write_text('---\njson_rpc_url: '+json.dumps(d.RPC)+'\nwebsocket_ur
 configuration.chmod(0o600)
 args=['solana','program','deploy','--config',str(configuration),'--keypair',str(d.key_path('payer')),
       '--program-id',str(d.key_path(name)),'--buffer',str(d.key_path(name+'_buffer')),
-      '--max-len',str(elf.stat().st_size),'--final','--use-rpc','--max-sign-attempts','2','--with-compute-unit-price','1000','--output','json',str(elf)]
+      '--max-len',str(elf.stat().st_size),'--upgrade-authority',str(d.key_path('payer')),'--use-rpc','--max-sign-attempts','2','--with-compute-unit-price','1000','--output','json',str(elf)]
 stamp=str(time.time_ns());log=d.EVIDENCE/(name+'-deploy-'+stamp+'.log')
 d.save(log.with_suffix('.command.json'),{'argv':args,'rpc_provider':'Helius devnet','explicit_buffer_key_retained':True})
 t=time.monotonic()

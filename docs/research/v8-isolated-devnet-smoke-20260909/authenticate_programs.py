@@ -13,13 +13,16 @@ for name in sys.argv[1:] or ['verifier','pool','registry']:
     a,b,buffer=response['value'];assert a and b
     assert a['owner']==b['owner']==str(loader) and a['executable'] and not b['executable']
     assert base64.b64decode(a['data'][0])==bytes([2,0,0,0])+bytes(programdata)
-    data=base64.b64decode(b['data'][0]);assert data[:4]==bytes([3,0,0,0]) and data[12]==0
+    data=base64.b64decode(b['data'][0]);assert data[:4]==bytes([3,0,0,0])
+    authority=None if data[12]==0 else str(Pubkey.from_bytes(data[13:45]))
+    assert authority is None or (name in ['pool','verifier'] and authority==d.IDS['payer']), 'Unexpected deployment authority'
+    if name=='registry':assert authority is None
     expected=(d.artifact(name)).read_bytes()
     assert data[45:]==expected
     assert buffer is None or buffer['lamports']==0
     signatures=d.rpc('getSignaturesForAddress',[str(program),{'commitment':'finalized','limit':20}])
     results[name]={'program':str(program),'programdata':str(programdata),'context_slot':response['context']['slot'],
-        'deployment_slot':int.from_bytes(data[4:12],'little'),'immutable':True,'elf_bytes':len(expected),'sha256':hashlib.sha256(expected).hexdigest(),
+        'deployment_slot':int.from_bytes(data[4:12],'little'),'immutable':authority is None,'upgrade_authority':authority,'elf_bytes':len(expected),'sha256':hashlib.sha256(expected).hexdigest(),
         'program_lamports':a['lamports'],'programdata_lamports':b['lamports'],'buffer_refunded':True,'signatures':signatures,
         'explorer':'https://explorer.solana.com/address/'+str(program)+'?cluster=devnet'}
     for item in signatures:

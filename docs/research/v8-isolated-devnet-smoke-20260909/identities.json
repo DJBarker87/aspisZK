@@ -29,11 +29,16 @@
     "pool_buffer": "pool_buffer-checkpoint-fix.json",
     "verifier_buffer": "verifier_buffer-checkpoint-fix.json"
   },
-  "setup_fixture": "fixed deposit indices 0 and 12 only; same normal proof seed 1",
+  "setup_fixture": "fixed deposit indices 0 through 12 inclusive, all eight lanes; normal proof seed 1",
   "checkpoint_receipts": true,
   "artifact_files": {
     "pool": "pool-checkpoint-fix.so",
     "verifier": "verifier-checkpoint-fix.so",
     "registry": "registry.so"
+  },
+  "deployment_authority_policy": {
+    "pool": "retain payer authority; refundable experimental Pool",
+    "verifier": "retain through setup/lifecycle preflight, then revoke only for immutable Registry certificate",
+    "registry": "existing isolated immutable Registry reused"
   }
 }

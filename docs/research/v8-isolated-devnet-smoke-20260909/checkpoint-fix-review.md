@@ -1,7 +1,8 @@
 # Eight-lane checkpoint setup repair
 
-Status: implemented and locally measured; rebuilt artifacts are **not yet deployed**.
-The genuine devnet atomic COMPLETE transfer remains unmeasured.
+Status: live eight-lane checkpoint finalized at **225,796 CU**. The genuine
+atomic COMPLETE transfer finalized at **1,083,081 CU**. Both declared 1.2M.
+See [live-demo-report.md](live-demo-report.md) for exact signatures and assertions.
 
 ## Cause and scope
 
@@ -95,14 +96,13 @@ to the original selected verifier ELF.
 ## Remaining live gate
 
 The immutable first-run programs remain retained. No upgrade is attempted.
-The new Pool/verifier require 7,518,775,920 lamports of program rent. Finalized
-payer balance at the recorded funding check was 1,042,884,477 lamports. The
-public faucet returned JSON-RPC -32603; the website request yielded no observed
-credit. Another 8 faucet-funded devnet SOL covers rent and remaining setup,
-proof upload and settlement within the existing 25-SOL authorization.
+Funding is restored by an authorized 8-SOL transfer from dedicated Colosseum
+devnet test wallets, within the original 25-SOL budget. All keys are retained.
+The new Pool retains its upgrade/close authority. The verifier is deployed
+with authority retained until successful live setup and lifecycle checks;
+Registry V2 certification then requires making only the verifier immutable.
 
-No new deployment was attempted without sufficient funding. All keypairs,
-including old program/buffer keys and the funded payer key, remain local.
-No positive proof or atomic transfer has yet been generated/submitted.
-The new setup and transfer must be measured live before this fix is reported
-as a devnet success. Formalisation and production-activation claims are unchanged.
+The new setup and genuine transfer are now measured live, with exact settlement
+assertions and malformed/replay controls passing. Formalisation and
+production-activation claims are unchanged. Public funding and deployment receipts are under
+`evidence/live-checkpoint-fix/`.

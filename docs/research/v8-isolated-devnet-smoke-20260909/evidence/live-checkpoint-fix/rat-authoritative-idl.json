@@ -1,0 +1,6955 @@
+{
+  "address": "DpZd8a9nqTHrMafqELDR3QwM8ZF5nUdEjUrYYs137KqU",
+  "metadata": {
+    "name": "rat",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Rat \u2014 multiplayer bluffing card game on Solana with Pedersen commitments"
+  },
+  "instructions": [
+    {
+      "name": "abandon_game",
+      "docs": [
+        "Abandon a stale game. Permissionless \u2014 anyone can call after 1 hour of",
+        "inactivity. Refunds entry fees to players, returns all rent to dealer.",
+        "Works in any game state."
+      ],
+      "discriminator": [
+        158,
+        233,
+        152,
+        62,
+        73,
+        63,
+        28,
+        12
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "Permissionless caller \u2014 anyone can trigger abandonment after the timeout."
+          ],
+          "signer": true
+        },
+        {
+          "name": "dealer",
+          "docs": [
+            "Validated against game_account.dealer."
+          ],
+          "writable": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "cache_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  97,
+                  99,
+                  104,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "accept_claim",
+      "docs": [
+        "Accept an unchallenged claim (claimant only, after full circuit)"
+      ],
+      "discriminator": [
+        139,
+        66,
+        180,
+        182,
+        209,
+        194,
+        173,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "accuse",
+      "docs": [
+        "Accuse another player of ratting"
+      ],
+      "discriminator": [
+        225,
+        66,
+        157,
+        205,
+        81,
+        13,
+        44,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "accuser_player_account",
+          "writable": true
+        },
+        {
+          "name": "accused_player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "accused_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "advance_round_player",
+      "docs": [
+        "Per-player round-end processing (deferred elimination, field reset)"
+      ],
+      "discriminator": [
+        22,
+        134,
+        213,
+        140,
+        1,
+        83,
+        2,
+        100
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless \u2014 anyone can call after all flags resolved"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "cancel_game",
+      "docs": [
+        "Cancel a game in Lobby state (closes GameAccount + CacheState)"
+      ],
+      "discriminator": [
+        121,
+        194,
+        154,
+        118,
+        103,
+        235,
+        149,
+        52
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "The caller \u2014 must be either the dealer or creator (validated in handler)."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dealer",
+          "docs": [
+            "Validated against game_account.dealer."
+          ],
+          "writable": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "cache_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  97,
+                  99,
+                  104,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_account",
+          "docs": [
+            "Vault PDA \u2014 closed during cancel. Rent goes to dealer."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "challenge",
+      "docs": [
+        "Challenge the standing claim (triggers BF resolution)"
+      ],
+      "discriminator": [
+        16,
+        107,
+        14,
+        39,
+        244,
+        150,
+        81,
+        187
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "clear_stale_staging",
+      "docs": [
+        "Permissionless: clear stale staging data after 30s timeout"
+      ],
+      "discriminator": [
+        140,
+        23,
+        242,
+        201,
+        167,
+        42,
+        135,
+        207
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "target_player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "target_player",
+          "docs": [
+            "Validated via PDA seeds above."
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "close_deal_audit",
+      "docs": [
+        "Close a deal audit account and return rent to the dealer."
+      ],
+      "discriminator": [
+        115,
+        84,
+        186,
+        107,
+        95,
+        167,
+        226,
+        28
+      ],
+      "accounts": [
+        {
+          "name": "dealer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "deal_audit_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  97,
+                  108,
+                  95,
+                  97,
+                  117,
+                  100,
+                  105,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "close_game",
+      "docs": [
+        "Close a finished game and sweep all remaining rent-bearing PDAs."
+      ],
+      "discriminator": [
+        237,
+        236,
+        157,
+        201,
+        253,
+        20,
+        248,
+        67
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "Permissionless cleanup caller."
+          ],
+          "signer": true
+        },
+        {
+          "name": "dealer",
+          "docs": [
+            "Validated against game_account.dealer."
+          ],
+          "writable": true
+        },
+        {
+          "name": "global_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "cache_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  97,
+                  99,
+                  104,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_account",
+          "docs": [
+            "Vault PDA \u2014 closed during game close. Rent goes to dealer."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "close_player_account",
+      "docs": [
+        "Close a player account and reclaim rent"
+      ],
+      "discriminator": [
+        244,
+        181,
+        162,
+        146,
+        184,
+        133,
+        216,
+        95
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "game_account",
+          "docs": [
+            "closed to the system program with empty data before player cleanup."
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "close_stale_session_key",
+      "docs": [
+        "Close an expired session key and return rent to the wallet."
+      ],
+      "discriminator": [
+        94,
+        192,
+        181,
+        136,
+        168,
+        14,
+        70,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "wallet",
+          "writable": true
+        },
+        {
+          "name": "session_key_account",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "contribute_prove",
+      "docs": [
+        "Contribution tx2: verify compound OR proof + promote staged data.",
+        "NOTE: game_id is NOT passed as instruction data \u2014 saves 32 bytes on tx2.",
+        "PDA validation uses game_id from the deserialized GameAccount instead."
+      ],
+      "discriminator": [
+        204,
+        72,
+        145,
+        88,
+        185,
+        43,
+        8,
+        194
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "proof_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "contribute_stage",
+      "docs": [
+        "Contribution tx1: stage commitments + verify flag proof"
+      ],
+      "discriminator": [
+        133,
+        43,
+        134,
+        109,
+        173,
+        199,
+        224,
+        119
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "data",
+          "type": {
+            "defined": {
+              "name": "ContributeStageData"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_game",
+      "docs": [
+        "Create a new game (GameAccount + CacheState)"
+      ],
+      "discriminator": [
+        124,
+        69,
+        75,
+        66,
+        184,
+        220,
+        72,
+        206
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "The game creator \u2014 signs for identity (becomes players[0])."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dealer_payer",
+          "docs": [
+            "The dealer's hot wallet \u2014 pays all account rent for the game.",
+            "Rent is returned to the dealer on close_game / cancel_game."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "global_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "cache_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  97,
+                  99,
+                  104,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_account",
+          "docs": [
+            "Vault PDA \u2014 always created (tiny rent). Holds stakes in staked mode."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "dealer",
+          "type": "pubkey"
+        },
+        {
+          "name": "max_players",
+          "type": "u8"
+        },
+        {
+          "name": "staked_mode",
+          "type": "bool"
+        },
+        {
+          "name": "entry_fee_lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "create_session_key",
+      "docs": [
+        "Create a delegated session key scoped to one game.",
+        "M12: session_pubkey removed \u2014 derived from session_signer co-signer (proof of possession)."
+      ],
+      "discriminator": [
+        137,
+        204,
+        246,
+        242,
+        200,
+        143,
+        215,
+        56
+      ],
+      "accounts": [
+        {
+          "name": "wallet",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "session_signer",
+          "docs": [
+            "M12: The session key must co-sign to prove possession of the private key."
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "session_key_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "duration_seconds",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "deal_init",
+      "docs": [
+        "Deal init: set seed values, deal hash, seed cache (Lobby \u2192 Dealing)"
+      ],
+      "discriminator": [
+        69,
+        23,
+        6,
+        62,
+        145,
+        91,
+        213,
+        231
+      ],
+      "accounts": [
+        {
+          "name": "dealer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "game_account"
+          ]
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "seed_values",
+          "type": {
+            "array": [
+              "u16",
+              4
+            ]
+          }
+        },
+        {
+          "name": "deal_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "deal_player",
+      "docs": [
+        "Deal one player's hand commitments (Dealing; last player \u2192 Loading)"
+      ],
+      "discriminator": [
+        63,
+        92,
+        84,
+        29,
+        113,
+        36,
+        221,
+        148
+      ],
+      "accounts": [
+        {
+          "name": "dealer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "game_account"
+          ]
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_wallet",
+          "docs": [
+            "The player wallet whose hand is being dealt."
+          ]
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "player_wallet"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "hand_commitments",
+          "type": {
+            "array": [
+              {
+                "array": [
+                  "u8",
+                  32
+                ]
+              },
+              8
+            ]
+          }
+        },
+        {
+          "name": "zero_commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "occupied_slots_mask",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "discard_card",
+      "docs": [
+        "Discard a card (penalised player selects slot + proves it's a real card)"
+      ],
+      "discriminator": [
+        38,
+        132,
+        222,
+        187,
+        133,
+        227,
+        8,
+        31
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "slot_index",
+          "type": "u8"
+        },
+        {
+          "name": "discard_value",
+          "type": "u16"
+        },
+        {
+          "name": "discard_blinding",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "discard_suit",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "finalize_round",
+      "docs": [
+        "Permissionless: finalize round after all players processed"
+      ],
+      "discriminator": [
+        239,
+        160,
+        254,
+        11,
+        254,
+        144,
+        53,
+        148
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless \u2014 anyone can call after all players prepared"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "force_accusation_timeout",
+      "docs": [
+        "Permissionless: force accusation timeout after 30s flag reveal deadline"
+      ],
+      "discriminator": [
+        234,
+        239,
+        164,
+        155,
+        94,
+        54,
+        46,
+        64
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless \u2014 anyone can call to force timeout"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "accused_player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "force_bf_timeout",
+      "docs": [
+        "Permissionless: force BF timeout for a specific player"
+      ],
+      "discriminator": [
+        74,
+        91,
+        132,
+        137,
+        89,
+        131,
+        65,
+        130
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless -- anyone can call to force BF timeout"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "player_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "force_contribution_timeout",
+      "docs": [
+        "Permissionless: force contribution timeout after 120s deadline"
+      ],
+      "discriminator": [
+        114,
+        97,
+        125,
+        69,
+        36,
+        222,
+        211,
+        37
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "Permissionless \u2014 anyone can call to force timeout"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "target_player"
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "target_player"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "player_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "force_discard_timeout",
+      "docs": [
+        "Permissionless: force discard timeout after 30s deadline"
+      ],
+      "discriminator": [
+        195,
+        184,
+        148,
+        166,
+        127,
+        123,
+        177,
+        215
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "force_flag_timeout_round_end",
+      "docs": [
+        "Permissionless: force flag timeout at round end after 30s deadline"
+      ],
+      "discriminator": [
+        62,
+        181,
+        233,
+        156,
+        147,
+        116,
+        14,
+        42
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless \u2014 anyone can call to force timeout"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "player_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "force_self_issue_timeout",
+      "docs": [
+        "Permissionless: force self-issue timeout after deadline"
+      ],
+      "discriminator": [
+        166,
+        236,
+        247,
+        160,
+        132,
+        41,
+        215,
+        152
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless \u2014 anyone can call after deadline"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "docs": [
+            "The self-issue player's account (derived from game.self_issue_player_idx)"
+          ],
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "force_turn_timeout",
+      "docs": [
+        "Permissionless: force turn timeout after 30s deadline"
+      ],
+      "discriminator": [
+        157,
+        88,
+        215,
+        130,
+        112,
+        184,
+        180,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless \u2014 anyone can call to force timeout"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_account.players [game_account.turn_index as usize]",
+                "account": "GameAccount"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize_config",
+      "docs": [
+        "One-time GlobalConfig initialization"
+      ],
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "global_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "join_game",
+      "docs": [
+        "Join an existing game"
+      ],
+      "discriminator": [
+        107,
+        112,
+        18,
+        38,
+        56,
+        173,
+        60,
+        128
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "docs": [
+            "The joining player \u2014 signs for identity."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dealer_payer",
+          "docs": [
+            "The dealer's hot wallet \u2014 pays PlayerAccount rent in free games.",
+            "In staked mode (M-22), the player pays their own rent instead.",
+            "Must match game_account.dealer."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "docs": [
+            "joins can return `AlreadyJoined` instead of failing at account init time."
+          ],
+          "writable": true
+        },
+        {
+          "name": "vault_account",
+          "docs": [
+            "Vault PDA for staked games."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "open_flag_round_end",
+      "docs": [
+        "Open flag commitment at round end (mandatory for all contributors)"
+      ],
+      "discriminator": [
+        24,
+        86,
+        190,
+        151,
+        50,
+        40,
+        79,
+        122
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "flag_value",
+          "type": "u8"
+        },
+        {
+          "name": "blinding_factor",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "raise_claim",
+      "docs": [
+        "Raise a claim (new or higher) during the claim phase"
+      ],
+      "discriminator": [
+        82,
+        27,
+        166,
+        20,
+        46,
+        132,
+        162,
+        69
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "suit",
+          "type": "u8"
+        },
+        {
+          "name": "value",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "register_alt",
+      "docs": [
+        "Register the client-created ALT address on the game"
+      ],
+      "discriminator": [
+        37,
+        116,
+        112,
+        231,
+        53,
+        55,
+        92,
+        166
+      ],
+      "accounts": [
+        {
+          "name": "dealer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "game_account"
+          ]
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "alt_account"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "resolve_challenge",
+      "docs": [
+        "Permissionless: resolve a challenge after all BFs received"
+      ],
+      "discriminator": [
+        81,
+        191,
+        124,
+        119,
+        131,
+        248,
+        157,
+        109
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "docs": [
+            "Permissionless -- anyone can call to resolve after all BFs received"
+          ],
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "claimant_account",
+          "docs": [
+            "The claimant's player account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_account.players [game_account.current_claimant_idx as usize]",
+                "account": "GameAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "challenger_account",
+          "docs": [
+            "The challenger's player account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_account.players [game_account.challenger_idx as usize]",
+                "account": "GameAccount"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "claimed_total_value",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "resolve_unchallenged_claim",
+      "docs": [
+        "Permissionless: resolve an unchallenged claim after all BFs received"
+      ],
+      "discriminator": [
+        237,
+        160,
+        58,
+        172,
+        213,
+        116,
+        190,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "claimant_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_account.players [game_account.current_claimant_idx as usize]",
+                "account": "GameAccount"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "claimed_total_value",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "reveal_flag",
+      "docs": [
+        "Reveal flag commitment (accused player responds to accusation)"
+      ],
+      "discriminator": [
+        12,
+        146,
+        232,
+        23,
+        108,
+        109,
+        94,
+        188
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "accused_player_account",
+          "writable": true
+        },
+        {
+          "name": "accuser_player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_account.players [game_account.accuser_idx as usize]",
+                "account": "GameAccount"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "flag_value",
+          "type": "u8"
+        },
+        {
+          "name": "blinding_factor",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "revoke_session_key",
+      "docs": [
+        "Revoke a delegated session key and reclaim rent."
+      ],
+      "discriminator": [
+        81,
+        192,
+        32,
+        110,
+        104,
+        116,
+        144,
+        151
+      ],
+      "accounts": [
+        {
+          "name": "wallet",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "session_key_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "self_issue_prove",
+      "docs": [
+        "Verify one membership proof and place card into hand slot"
+      ],
+      "discriminator": [
+        203,
+        82,
+        75,
+        132,
+        177,
+        195,
+        159,
+        157
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "membership_proof",
+          "type": "bytes"
+        },
+        {
+          "name": "target_slot",
+          "type": "u8"
+        },
+        {
+          "name": "proof_bitmask",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "self_issue_stage",
+      "docs": [
+        "Stage commitments + nullifiers + distinctness proofs for self-issuance"
+      ],
+      "discriminator": [
+        63,
+        178,
+        176,
+        239,
+        128,
+        142,
+        117,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "data",
+          "type": {
+            "defined": {
+              "name": "SelfIssueStageData"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "skip_self_issue",
+      "docs": [
+        "Voluntarily skip self-issuance"
+      ],
+      "discriminator": [
+        108,
+        39,
+        55,
+        156,
+        161,
+        174,
+        64,
+        58
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "submit_blinding_factor",
+      "docs": [
+        "Submit blinding factor sum during challenge/claim resolution"
+      ],
+      "discriminator": [
+        165,
+        71,
+        81,
+        187,
+        196,
+        202,
+        175,
+        97
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "blinding_factor_sum",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "proof_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "submit_deal_proof",
+      "docs": [
+        "Submit deal preimage for post-game audit verification"
+      ],
+      "discriminator": [
+        153,
+        84,
+        156,
+        117,
+        154,
+        63,
+        193,
+        107
+      ],
+      "accounts": [
+        {
+          "name": "dealer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "game_account"
+          ]
+        },
+        {
+          "name": "game_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "deal_audit_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  97,
+                  108,
+                  95,
+                  97,
+                  117,
+                  100,
+                  105,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "deal_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "update_config",
+      "docs": [
+        "M11: Update GlobalConfig (treasury, fee_bps, authority). Gated by authority."
+      ],
+      "discriminator": [
+        29,
+        158,
+        252,
+        191,
+        10,
+        83,
+        219,
+        99
+      ],
+      "accounts": [
+        {
+          "name": "global_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_treasury",
+          "type": {
+            "option": "pubkey"
+          }
+        },
+        {
+          "name": "new_fee_bps",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "new_authority",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "CacheState",
+      "discriminator": [
+        50,
+        155,
+        248,
+        164,
+        94,
+        213,
+        5,
+        207
+      ]
+    },
+    {
+      "name": "DealAuditAccount",
+      "discriminator": [
+        80,
+        242,
+        170,
+        136,
+        158,
+        187,
+        214,
+        244
+      ]
+    },
+    {
+      "name": "GameAccount",
+      "discriminator": [
+        168,
+        26,
+        58,
+        96,
+        13,
+        208,
+        230,
+        188
+      ]
+    },
+    {
+      "name": "GlobalConfig",
+      "discriminator": [
+        149,
+        8,
+        156,
+        202,
+        160,
+        252,
+        176,
+        217
+      ]
+    },
+    {
+      "name": "PlayerAccount",
+      "discriminator": [
+        224,
+        184,
+        224,
+        50,
+        98,
+        72,
+        48,
+        236
+      ]
+    },
+    {
+      "name": "SessionKeyAccount",
+      "discriminator": [
+        105,
+        86,
+        94,
+        211,
+        154,
+        53,
+        225,
+        208
+      ]
+    },
+    {
+      "name": "VaultAccount",
+      "discriminator": [
+        230,
+        251,
+        241,
+        83,
+        139,
+        202,
+        93,
+        28
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "AccusationMade",
+      "discriminator": [
+        170,
+        233,
+        174,
+        154,
+        230,
+        139,
+        190,
+        89
+      ]
+    },
+    {
+      "name": "AccusationTimedOut",
+      "discriminator": [
+        180,
+        4,
+        130,
+        50,
+        53,
+        191,
+        66,
+        22
+      ]
+    },
+    {
+      "name": "AltRegistered",
+      "discriminator": [
+        4,
+        201,
+        164,
+        109,
+        183,
+        123,
+        13,
+        124
+      ]
+    },
+    {
+      "name": "BfSubmitted",
+      "discriminator": [
+        10,
+        87,
+        160,
+        151,
+        88,
+        84,
+        118,
+        162
+      ]
+    },
+    {
+      "name": "BfTimedOut",
+      "discriminator": [
+        223,
+        58,
+        190,
+        239,
+        140,
+        4,
+        186,
+        107
+      ]
+    },
+    {
+      "name": "CardDiscarded",
+      "discriminator": [
+        214,
+        50,
+        164,
+        150,
+        17,
+        244,
+        206,
+        217
+      ]
+    },
+    {
+      "name": "ChallengeInitiated",
+      "discriminator": [
+        199,
+        5,
+        57,
+        193,
+        183,
+        216,
+        6,
+        43
+      ]
+    },
+    {
+      "name": "ChallengeResolved",
+      "discriminator": [
+        100,
+        153,
+        38,
+        123,
+        172,
+        250,
+        166,
+        105
+      ]
+    },
+    {
+      "name": "ClaimAccepted",
+      "discriminator": [
+        170,
+        62,
+        105,
+        181,
+        48,
+        158,
+        129,
+        65
+      ]
+    },
+    {
+      "name": "ClaimRaised",
+      "discriminator": [
+        52,
+        31,
+        221,
+        148,
+        147,
+        197,
+        161,
+        43
+      ]
+    },
+    {
+      "name": "ConfigInitialized",
+      "discriminator": [
+        181,
+        49,
+        200,
+        156,
+        19,
+        167,
+        178,
+        91
+      ]
+    },
+    {
+      "name": "ConfigUpdated",
+      "discriminator": [
+        40,
+        241,
+        230,
+        122,
+        11,
+        19,
+        198,
+        194
+      ]
+    },
+    {
+      "name": "ContributionStaged",
+      "discriminator": [
+        201,
+        160,
+        53,
+        127,
+        198,
+        196,
+        19,
+        103
+      ]
+    },
+    {
+      "name": "ContributionTimeout",
+      "discriminator": [
+        250,
+        146,
+        11,
+        192,
+        59,
+        219,
+        177,
+        174
+      ]
+    },
+    {
+      "name": "ContributionVerified",
+      "discriminator": [
+        3,
+        140,
+        106,
+        6,
+        191,
+        49,
+        251,
+        222
+      ]
+    },
+    {
+      "name": "DealFraudDetected",
+      "discriminator": [
+        230,
+        203,
+        243,
+        97,
+        187,
+        234,
+        45,
+        22
+      ]
+    },
+    {
+      "name": "DealInitiated",
+      "discriminator": [
+        160,
+        250,
+        73,
+        4,
+        187,
+        215,
+        126,
+        91
+      ]
+    },
+    {
+      "name": "DealVerified",
+      "discriminator": [
+        95,
+        184,
+        243,
+        143,
+        100,
+        176,
+        251,
+        88
+      ]
+    },
+    {
+      "name": "DiscardTimedOut",
+      "discriminator": [
+        44,
+        76,
+        30,
+        119,
+        148,
+        48,
+        4,
+        75
+      ]
+    },
+    {
+      "name": "FlagOpenedRoundEnd",
+      "discriminator": [
+        114,
+        232,
+        253,
+        161,
+        138,
+        25,
+        71,
+        179
+      ]
+    },
+    {
+      "name": "FlagRevealed",
+      "discriminator": [
+        117,
+        157,
+        221,
+        4,
+        6,
+        255,
+        74,
+        147
+      ]
+    },
+    {
+      "name": "FlagTimeoutRoundEnd",
+      "discriminator": [
+        25,
+        219,
+        4,
+        23,
+        32,
+        209,
+        31,
+        193
+      ]
+    },
+    {
+      "name": "GameAbandoned",
+      "discriminator": [
+        121,
+        228,
+        7,
+        28,
+        83,
+        252,
+        191,
+        237
+      ]
+    },
+    {
+      "name": "GameCancelled",
+      "discriminator": [
+        113,
+        20,
+        200,
+        104,
+        76,
+        35,
+        9,
+        241
+      ]
+    },
+    {
+      "name": "GameClosed",
+      "discriminator": [
+        178,
+        203,
+        179,
+        224,
+        43,
+        18,
+        209,
+        4
+      ]
+    },
+    {
+      "name": "GameCreated",
+      "discriminator": [
+        218,
+        25,
+        150,
+        94,
+        177,
+        112,
+        96,
+        2
+      ]
+    },
+    {
+      "name": "GameDealt",
+      "discriminator": [
+        82,
+        98,
+        245,
+        60,
+        34,
+        129,
+        55,
+        167
+      ]
+    },
+    {
+      "name": "GameEnded",
+      "discriminator": [
+        35,
+        93,
+        113,
+        153,
+        29,
+        144,
+        200,
+        109
+      ]
+    },
+    {
+      "name": "PlayerEliminated",
+      "discriminator": [
+        113,
+        7,
+        112,
+        31,
+        140,
+        23,
+        12,
+        120
+      ]
+    },
+    {
+      "name": "PlayerJoined",
+      "discriminator": [
+        39,
+        144,
+        49,
+        106,
+        108,
+        210,
+        183,
+        38
+      ]
+    },
+    {
+      "name": "RoundAdvanced",
+      "discriminator": [
+        215,
+        177,
+        143,
+        241,
+        202,
+        145,
+        181,
+        213
+      ]
+    },
+    {
+      "name": "SelfIssueComplete",
+      "discriminator": [
+        152,
+        205,
+        99,
+        59,
+        178,
+        131,
+        63,
+        136
+      ]
+    },
+    {
+      "name": "SelfIssueProved",
+      "discriminator": [
+        103,
+        57,
+        246,
+        73,
+        9,
+        141,
+        154,
+        70
+      ]
+    },
+    {
+      "name": "SelfIssueSkipped",
+      "discriminator": [
+        174,
+        41,
+        36,
+        29,
+        192,
+        128,
+        146,
+        241
+      ]
+    },
+    {
+      "name": "SelfIssueStaged",
+      "discriminator": [
+        113,
+        214,
+        53,
+        203,
+        150,
+        42,
+        30,
+        211
+      ]
+    },
+    {
+      "name": "SelfIssueTimedOut",
+      "discriminator": [
+        215,
+        46,
+        33,
+        91,
+        245,
+        74,
+        251,
+        221
+      ]
+    },
+    {
+      "name": "SessionKeyCreated",
+      "discriminator": [
+        242,
+        227,
+        114,
+        120,
+        164,
+        30,
+        58,
+        114
+      ]
+    },
+    {
+      "name": "SessionKeyRevoked",
+      "discriminator": [
+        18,
+        208,
+        143,
+        205,
+        85,
+        72,
+        180,
+        176
+      ]
+    },
+    {
+      "name": "StagingCleared",
+      "discriminator": [
+        236,
+        155,
+        93,
+        43,
+        72,
+        107,
+        61,
+        137
+      ]
+    },
+    {
+      "name": "StakeDeposited",
+      "discriminator": [
+        69,
+        152,
+        144,
+        109,
+        232,
+        34,
+        225,
+        19
+      ]
+    },
+    {
+      "name": "StakesRefunded",
+      "discriminator": [
+        128,
+        179,
+        95,
+        126,
+        52,
+        3,
+        188,
+        205
+      ]
+    },
+    {
+      "name": "SuitCleared",
+      "discriminator": [
+        145,
+        168,
+        3,
+        25,
+        100,
+        154,
+        68,
+        99
+      ]
+    },
+    {
+      "name": "TurnTimedOut",
+      "discriminator": [
+        205,
+        113,
+        84,
+        61,
+        54,
+        85,
+        56,
+        77
+      ]
+    },
+    {
+      "name": "UnclaimedClaimResolved",
+      "discriminator": [
+        37,
+        226,
+        190,
+        82,
+        108,
+        140,
+        4,
+        149
+      ]
+    },
+    {
+      "name": "WinnerPaid",
+      "discriminator": [
+        249,
+        7,
+        9,
+        105,
+        29,
+        200,
+        82,
+        110
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "WrongGameState",
+      "msg": "Invalid game state for this operation"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidPlayerCount",
+      "msg": "Player count must be between 3 and 6"
+    },
+    {
+      "code": 6002,
+      "name": "GameFull",
+      "msg": "Game is full"
+    },
+    {
+      "code": 6003,
+      "name": "AlreadyJoined",
+      "msg": "Player has already joined this game"
+    },
+    {
+      "code": 6004,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
+    },
+    {
+      "code": 6005,
+      "name": "NotDealer",
+      "msg": "Only the dealer can perform this action"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidEntryFee",
+      "msg": "Entry fee must be zero for free-to-play games"
+    },
+    {
+      "code": 6007,
+      "name": "MinimumEntryFeeNotMet",
+      "msg": "Entry fee must be at least 10,000 lamports"
+    },
+    {
+      "code": 6008,
+      "name": "DealDataTooLarge",
+      "msg": "Deal data exceeds maximum size (2048 bytes)"
+    },
+    {
+      "code": 6009,
+      "name": "VaultNotProvided",
+      "msg": "Staked game requires vault account"
+    },
+    {
+      "code": 6010,
+      "name": "TreasuryMismatch",
+      "msg": "Treasury account does not match global config"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidAltAddress",
+      "msg": "Invalid ALT address"
+    },
+    {
+      "code": 6012,
+      "name": "NotAllPlayersJoined",
+      "msg": "Not all players have joined yet"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidStateTransition",
+      "msg": "Invalid state transition"
+    },
+    {
+      "code": 6014,
+      "name": "GameNotCancellable",
+      "msg": "Game can only be cancelled in Lobby state"
+    },
+    {
+      "code": 6015,
+      "name": "GameNotClosable",
+      "msg": "Game can only be closed after GameOver"
+    },
+    {
+      "code": 6016,
+      "name": "PlayerAccountNotClosable",
+      "msg": "Player account cannot be closed in the current game state"
+    },
+    {
+      "code": 6017,
+      "name": "ProofVerificationFailed",
+      "msg": "Proof verification failed"
+    },
+    {
+      "code": 6018,
+      "name": "NullifierAlreadyUsed",
+      "msg": "Nullifier has already been used"
+    },
+    {
+      "code": 6019,
+      "name": "NullifierArrayFull",
+      "msg": "Nullifier array is full (32 slots exhausted)"
+    },
+    {
+      "code": 6020,
+      "name": "CurveOpFailed",
+      "msg": "Curve operation failed"
+    },
+    {
+      "code": 6021,
+      "name": "AlreadyContributed",
+      "msg": "Player has already contributed this round"
+    },
+    {
+      "code": 6022,
+      "name": "NoStagingActive",
+      "msg": "No staging data active (tx1 required before tx2)"
+    },
+    {
+      "code": 6023,
+      "name": "StagingExpired",
+      "msg": "Staging window has expired (30s timeout)"
+    },
+    {
+      "code": 6024,
+      "name": "InvalidSlotIndex",
+      "msg": "Invalid slot index (must be 0-7)"
+    },
+    {
+      "code": 6025,
+      "name": "InvalidProofLength",
+      "msg": "Invalid proof length"
+    },
+    {
+      "code": 6026,
+      "name": "InvalidBranchCount",
+      "msg": "Invalid branch count (must be 9)"
+    },
+    {
+      "code": 6027,
+      "name": "PlayerEliminated",
+      "msg": "Eliminated player cannot perform this action"
+    },
+    {
+      "code": 6028,
+      "name": "DeadlineNotPassed",
+      "msg": "Deadline has not passed yet"
+    },
+    {
+      "code": 6029,
+      "name": "ActionDeadlinePassed",
+      "msg": "Action deadline has passed"
+    },
+    {
+      "code": 6030,
+      "name": "PlayerDealMismatch",
+      "msg": "Player deal data does not match game players"
+    },
+    {
+      "code": 6031,
+      "name": "AltNotRegistered",
+      "msg": "ALT not registered"
+    },
+    {
+      "code": 6032,
+      "name": "InvalidPlayerAccountForDeal",
+      "msg": "Invalid player account for deal"
+    },
+    {
+      "code": 6033,
+      "name": "ArithmeticOverflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6034,
+      "name": "PlayerAlreadyDealt",
+      "msg": "Player has already been dealt this round"
+    },
+    {
+      "code": 6035,
+      "name": "NotYourTurn",
+      "msg": "It is not your turn"
+    },
+    {
+      "code": 6036,
+      "name": "InvalidClaimValue",
+      "msg": "Claim value must be at least MIN_CLAIM_VALUE"
+    },
+    {
+      "code": 6037,
+      "name": "InvalidSuit",
+      "msg": "Invalid suit index for this game"
+    },
+    {
+      "code": 6038,
+      "name": "NoStandingClaim",
+      "msg": "No standing claim to challenge"
+    },
+    {
+      "code": 6039,
+      "name": "ClaimValueNotHigher",
+      "msg": "Claim value must be strictly higher than the standing claim"
+    },
+    {
+      "code": 6040,
+      "name": "AlreadyAccusedThisRound",
+      "msg": "You have already accused someone this round"
+    },
+    {
+      "code": 6041,
+      "name": "AlreadyBeenAccusedThisRound",
+      "msg": "This player has already been accused this round"
+    },
+    {
+      "code": 6042,
+      "name": "CannotAccuseSelf",
+      "msg": "Cannot accuse yourself"
+    },
+    {
+      "code": 6043,
+      "name": "CannotAccuseEliminated",
+      "msg": "Cannot accuse an eliminated player"
+    },
+    {
+      "code": 6044,
+      "name": "BfAlreadySubmitted",
+      "msg": "Blinding factor already submitted for this resolution"
+    },
+    {
+      "code": 6045,
+      "name": "NoPendingDiscard",
+      "msg": "No pending discard to complete"
+    },
+    {
+      "code": 6046,
+      "name": "AllBfsNotReceived",
+      "msg": "Not all blinding factors have been received"
+    },
+    {
+      "code": 6047,
+      "name": "AggregateVerificationFailed",
+      "msg": "Aggregate commitment verification failed"
+    },
+    {
+      "code": 6048,
+      "name": "FlagVerificationFailed",
+      "msg": "Flag commitment verification failed"
+    },
+    {
+      "code": 6049,
+      "name": "ClaimCircuitNotComplete",
+      "msg": "Claim circuit has not completed"
+    },
+    {
+      "code": 6050,
+      "name": "PlayerNotInGracePeriod",
+      "msg": "Player is not in grace period"
+    },
+    {
+      "code": 6051,
+      "name": "ScalarNotCanonical",
+      "msg": "Scalar is not canonical (top 4 bits must be 0)"
+    },
+    {
+      "code": 6052,
+      "name": "GracePeriodPending",
+      "msg": "Cannot resolve while a player is in BF grace period"
+    },
+    {
+      "code": 6053,
+      "name": "SubmissionDeadlinePassed",
+      "msg": "BF submission deadline has passed"
+    },
+    {
+      "code": 6054,
+      "name": "BfAlreadyRevoked",
+      "msg": "Blinding factor already revoked for this player"
+    },
+    {
+      "code": 6055,
+      "name": "CommitmentOpeningFailed",
+      "msg": "Commitment opening does not match hand slot"
+    },
+    {
+      "code": 6056,
+      "name": "ClaimValueNotMet",
+      "msg": "Claim total does not satisfy the standing claim value"
+    },
+    {
+      "code": 6057,
+      "name": "InvalidOccupiedSlotMask",
+      "msg": "Occupied-slot mask is invalid for this hand state"
+    },
+    {
+      "code": 6058,
+      "name": "SlotNotOccupied",
+      "msg": "Selected slot is not occupied by a real card"
+    },
+    {
+      "code": 6059,
+      "name": "SelfIssueNotAuthorized",
+      "msg": "Caller is not authorized to self-issue"
+    },
+    {
+      "code": 6060,
+      "name": "SelfIssueCountExceedsCap",
+      "msg": "Self-issue count exceeds remaining cap"
+    },
+    {
+      "code": 6061,
+      "name": "SelfIssueStagingActive",
+      "msg": "Self-issuance staging already active"
+    },
+    {
+      "code": 6062,
+      "name": "SelfIssueSlotAlreadyUsed",
+      "msg": "Target slot already used in this self-issue sequence"
+    },
+    {
+      "code": 6063,
+      "name": "SelfIssueTargetSlotOccupied",
+      "msg": "Target slot must be padding for self-issuance"
+    },
+    {
+      "code": 6064,
+      "name": "SelfIssueStagingExpired",
+      "msg": "Self-issuance staging has expired (30s timeout)"
+    },
+    {
+      "code": 6065,
+      "name": "InvalidDistinctnessCount",
+      "msg": "Wrong number of distinctness proofs for selected count"
+    },
+    {
+      "code": 6066,
+      "name": "FlagAlreadyOpened",
+      "msg": "Flag has already been opened this round"
+    },
+    {
+      "code": 6067,
+      "name": "PlayerDidNotContribute",
+      "msg": "Player did not contribute this round (no flag to open)"
+    },
+    {
+      "code": 6068,
+      "name": "AllFlagsAlreadyOpened",
+      "msg": "All flags have already been opened"
+    },
+    {
+      "code": 6069,
+      "name": "FlagsStillPending",
+      "msg": "Flags are still pending (cannot advance round yet)"
+    },
+    {
+      "code": 6070,
+      "name": "WrongPlayerAccountCount",
+      "msg": "Wrong number of player accounts in remaining_accounts"
+    },
+    {
+      "code": 6071,
+      "name": "SessionKeyExpired",
+      "msg": "Session key has expired"
+    },
+    {
+      "code": 6072,
+      "name": "SessionKeyWrongGame",
+      "msg": "Session key is scoped to a different game"
+    },
+    {
+      "code": 6073,
+      "name": "SessionKeyWrongWallet",
+      "msg": "Session key is delegated to a different wallet"
+    },
+    {
+      "code": 6074,
+      "name": "InvalidSessionKeyDuration",
+      "msg": "Invalid session key duration"
+    },
+    {
+      "code": 6075,
+      "name": "GameAccountPdaMismatch",
+      "msg": "Game account address does not match expected PDA"
+    },
+    {
+      "code": 6076,
+      "name": "PlayerAccountPdaMismatch",
+      "msg": "Player account address does not match expected PDA"
+    },
+    {
+      "code": 6077,
+      "name": "InsufficientVaultBalance",
+      "msg": "Insufficient vault balance for transfer"
+    },
+    {
+      "code": 6078,
+      "name": "InvalidFeeRate",
+      "msg": "Fee rate exceeds maximum (10,000 bps = 100%)"
+    },
+    {
+      "code": 6079,
+      "name": "SessionKeyNotExpired",
+      "msg": "Session key has not expired yet"
+    },
+    {
+      "code": 6080,
+      "name": "InvalidPlayerIndex",
+      "msg": "Player index out of bounds"
+    },
+    {
+      "code": 6081,
+      "name": "InvalidProofData",
+      "msg": "Invalid proof data format"
+    },
+    {
+      "code": 6082,
+      "name": "AccumulatorAlreadyCleaned",
+      "msg": "Accumulator already cleaned for this suit"
+    },
+    {
+      "code": 6083,
+      "name": "PlayerAlreadyEliminated",
+      "msg": "Player is already eliminated"
+    },
+    {
+      "code": 6084,
+      "name": "InvalidSeedValue",
+      "msg": "Seed value exceeds maximum card bitmask (8191)"
+    },
+    {
+      "code": 6085,
+      "name": "NoWinnerDetermined",
+      "msg": "No winner has been determined yet"
+    },
+    {
+      "code": 6086,
+      "name": "AbandonTooEarly",
+      "msg": "Game has not been stale long enough to abandon"
+    },
+    {
+      "code": 6087,
+      "name": "NotEnoughPlayers",
+      "msg": "Not enough players have joined (minimum 3 required)"
+    },
+    {
+      "code": 6088,
+      "name": "NonCanonicalScalar",
+      "msg": "Non-canonical scalar passed to scalar arithmetic"
+    },
+    {
+      "code": 6089,
+      "name": "PlayerAlreadyPrepared",
+      "msg": "Player has already been prepared for this round end"
+    },
+    {
+      "code": 6090,
+      "name": "AllPlayersNotPrepared",
+      "msg": "Not all players have been prepared for round advancement"
+    },
+    {
+      "code": 6091,
+      "name": "UseCloseGameInstead",
+      "msg": "Game is over \u2014 use close_game instead of abandon_game"
+    },
+    {
+      "code": 6092,
+      "name": "HandCapExceeded",
+      "msg": "Hand cap exceeded (max 8 cards)"
+    },
+    {
+      "code": 6093,
+      "name": "FeeTooHigh",
+      "msg": "Fee exceeds maximum (5,000 bps = 50%)"
+    }
+  ],
+  "types": [
+    {
+      "name": "AccusationMade",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "accuser_idx",
+            "type": "u8"
+          },
+          {
+            "name": "accused_idx",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccusationTimedOut",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "accused_idx",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AltRegistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "alt_address",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BfSubmitted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BfTimedOut",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "was_eliminated",
+            "type": "bool"
+          },
+          {
+            "name": "strike_count",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CacheState",
+      "docs": [
+        "Cache state PDA: [\"cache\", &game_id]",
+        "ALT anchor only \u2014 holds no game data.",
+        "Allocated: 64 bytes."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "docs": [
+              "Game identifier (matches parent GameAccount)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CardDiscarded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "slot_index",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ChallengeInitiated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "challenger_idx",
+            "type": "u8"
+          },
+          {
+            "name": "claimant_idx",
+            "type": "u8"
+          },
+          {
+            "name": "suit",
+            "type": "u8"
+          },
+          {
+            "name": "value",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ChallengeResolved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "winner_idx",
+            "type": "u8"
+          },
+          {
+            "name": "loser_idx",
+            "type": "u8"
+          },
+          {
+            "name": "claim_valid",
+            "type": "bool"
+          },
+          {
+            "name": "face_value_sum",
+            "type": "u16"
+          },
+          {
+            "name": "revealed_bitmask",
+            "type": "u16"
+          },
+          {
+            "name": "adjusted",
+            "docs": [
+              "Whether the cache was adjusted via subtract-and-continue"
+            ],
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ClaimAccepted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "claimant_idx",
+            "type": "u8"
+          },
+          {
+            "name": "claim_wins_total",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ClaimRaised",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "suit",
+            "type": "u8"
+          },
+          {
+            "name": "value",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConfigInitialized",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConfigUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_fee_bps",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ContributeStageData",
+      "docs": [
+        "Instruction data for contribute_stage (tx1 of contribution)."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "value_commitments",
+            "docs": [
+              "4 suit value commitments [hearts, diamonds, clubs, spades]"
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "flag_commitment",
+            "docs": [
+              "Flag commitment (flag * G_f + r * H)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "flag_proof",
+            "docs": [
+              "Serialized flag binary proof (232 bytes)"
+            ],
+            "type": "bytes"
+          },
+          {
+            "name": "nullifier",
+            "docs": [
+              "Card nullifier point"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "consumed_slot_index",
+            "docs": [
+              "Index of hand slot being consumed (0-7)"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ContributionStaged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "player_index",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ContributionTimeout",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "player_index",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u8"
+          },
+          {
+            "name": "strikes",
+            "type": "u8"
+          },
+          {
+            "name": "eliminated",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ContributionVerified",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "player_index",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u8"
+          },
+          {
+            "name": "suit_commitments",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "nullifier",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DealAuditAccount",
+      "docs": [
+        "Deal audit PDA: [\"deal_audit\", &game_id]",
+        "Stores the deal preimage submitted by the dealer for post-game verification.",
+        "Persists independently of game cleanup."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "docs": [
+              "Game identifier"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "docs": [
+              "Dealer who submitted the proof"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "stored_deal_hash",
+            "docs": [
+              "Deal hash from GameAccount at submission time"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "actual_hash",
+            "docs": [
+              "SHA-256 of the submitted deal_data"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "verified",
+            "docs": [
+              "Whether stored_deal_hash == actual_hash"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "submitted_at",
+            "docs": [
+              "Clock timestamp of submission"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "data_len",
+            "docs": [
+              "Actual length of deal_data"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "deal_data",
+            "docs": [
+              "Raw deal preimage (max 2048 bytes)"
+            ],
+            "type": "bytes"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DealFraudDetected",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          },
+          {
+            "name": "expected_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "actual_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DealInitiated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DealVerified",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DiscardTimedOut",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "forced_slot",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FlagOpenedRoundEnd",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "flag_value",
+            "type": "u8"
+          },
+          {
+            "name": "new_hs",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FlagRevealed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "accused_idx",
+            "type": "u8"
+          },
+          {
+            "name": "flag_value",
+            "type": "u8"
+          },
+          {
+            "name": "penalty_target_idx",
+            "type": "u8"
+          },
+          {
+            "name": "penalty_amount",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FlagTimeoutRoundEnd",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "new_hs",
+            "type": "u8"
+          },
+          {
+            "name": "strikes",
+            "type": "u8"
+          },
+          {
+            "name": "eliminated",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameAbandoned",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          },
+          {
+            "name": "abandoned_state",
+            "type": "u8"
+          },
+          {
+            "name": "joined_players",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameAccount",
+      "docs": [
+        "Main game account PDA: [\"game\", &game_id]",
+        "Allocated: 1,024 bytes (1 KB). Serialized: 614 bytes."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "docs": [
+              "Unique game identifier / PDA seed"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "docs": [
+              "Dealing server's wallet (authorized to call `deal`)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "alt_address",
+            "docs": [
+              "Address Lookup Table for tx2"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "player_count",
+            "docs": [
+              "Number of players (frozen at deal time from joined_count)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "max_players",
+            "docs": [
+              "Maximum players allowed in the lobby (3-6, set at create_game)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "active_suit_count",
+            "docs": [
+              "Number of active suits (3 for 3p, 4 for 4-6p; set at deal_init)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "current_round",
+            "docs": [
+              "Current round (1-indexed)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "round_limit",
+            "docs": [
+              "Maximum rounds before tiebreak (default 15)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "game_state",
+            "docs": [
+              "Current state (GameState enum as u8)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "starting_player_idx",
+            "docs": [
+              "Index of player who starts this round's claim phase"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "turn_index",
+            "docs": [
+              "Current turn index in claim cycle"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "current_claim_suit",
+            "docs": [
+              "Suit of standing claim (0-3)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "current_claim_value",
+            "docs": [
+              "Value of standing claim"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "current_claimant_idx",
+            "docs": [
+              "Index of player who made the standing claim"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "deal_hash",
+            "docs": [
+              "SHA-256 of full deal for post-game audit"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "cache_aggregates",
+            "docs": [
+              "Running Pedersen aggregate per suit (4 x 32-byte Ristretto points)"
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "seed_values",
+            "docs": [
+              "Bitmask-encoded seed card per suit (public, set at deal)"
+            ],
+            "type": {
+              "array": [
+                "u16",
+                4
+              ]
+            }
+          },
+          {
+            "name": "players",
+            "docs": [
+              "Player wallets (unused slots = Pubkey::default)"
+            ],
+            "type": {
+              "array": [
+                "pubkey",
+                6
+              ]
+            }
+          },
+          {
+            "name": "player_alive",
+            "docs": [
+              "Whether each player is alive"
+            ],
+            "type": {
+              "array": [
+                "bool",
+                6
+              ]
+            }
+          },
+          {
+            "name": "player_joined",
+            "docs": [
+              "Whether each player has joined (lobby tracking)"
+            ],
+            "type": {
+              "array": [
+                "bool",
+                6
+              ]
+            }
+          },
+          {
+            "name": "claim_wins",
+            "docs": [
+              "Per-player unchallenged claim win count (tiebreak metric)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "staked_mode",
+            "docs": [
+              "Whether staked mode is active (guarded \u2014 not yet supported)"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "entry_fee_lamports",
+            "docs": [
+              "Entry fee in lamports (0 for free-to-play)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "fee_bps_at_creation",
+            "docs": [
+              "Fee basis points snapshotted at game creation (prevents mid-game fee changes)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "When the game was created"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "turn_deadline",
+            "docs": [
+              "When current player's 30s turn expires"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "resolution_deadline",
+            "docs": [
+              "When BF submission window closes (60s)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "_reserved_grace_deadline",
+            "docs": [
+              "DEPRECATED \u2014 grace deadline moved per-player. Kept for layout compatibility."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "contribution_deadline",
+            "docs": [
+              "When current round's load phase closes (120s)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "flag_reveal_deadline",
+            "docs": [
+              "When accused/round-end player must reveal flag (30s)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "discard_deadline",
+            "docs": [
+              "When penalised player must select a discard (30s)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "challenger_idx",
+            "docs": [
+              "Index of player who challenged (u8::MAX = not resolving)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "accuser_idx",
+            "docs": [
+              "Index of player who accused (u8::MAX = not resolving)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "accused_idx",
+            "docs": [
+              "Index of player being accused (u8::MAX = not resolving)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "pending_discard_player_idx",
+            "docs": [
+              "Index of player who must select a discard (u8::MAX = none)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "pending_discard_count",
+            "docs": [
+              "Number of penalty discards still owed by the pending player"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "resolution_suit",
+            "docs": [
+              "Which suit is being resolved"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "revealed_bitmask",
+            "docs": [
+              "Bitmask from opened suit aggregate (for self-issuance selection)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "bf_submitted",
+            "docs": [
+              "Per-player: has submitted BF during current resolution"
+            ],
+            "type": {
+              "array": [
+                "bool",
+                6
+              ]
+            }
+          },
+          {
+            "name": "bf_submissions_received",
+            "docs": [
+              "Count of players who submitted/handled during current resolution"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "bf_partial_sum",
+            "docs": [
+              "Running Ristretto point sum of submitted BFs for current resolution"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "self_issue_cards_remaining",
+            "docs": [
+              "Cards the claimant may still select from current claim win"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "self_issue_player_idx",
+            "docs": [
+              "Index of player authorized to self-issue (NO_PLAYER when not active)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "grace_count",
+            "docs": [
+              "Count of players currently in BF grace period"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "contributions_received",
+            "docs": [
+              "Number of players who have completed contribution this round (Loading state).",
+              "Dual-use: during Dealing state, reused as deals-completed counter",
+              "(reset to 0 on transition to Loading). See deal_init.rs."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "flags_opened_count",
+            "docs": [
+              "Flags already opened before RoundEnd (for example by accusation resolution)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "round_end_flags_remaining",
+            "docs": [
+              "Remaining flag openings needed at RoundEnd before advance_round can fire"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "winner_idx",
+            "docs": [
+              "Winner index (NO_PLAYER until GameOver)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "round_end_prepared",
+            "docs": [
+              "Bitmask tracking which players have been processed by advance_round_player.",
+              "Bit i is set after player i has been prepared for the next round."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "round_end_hs",
+            "docs": [
+              "Cached hand sizes for tiebreak during round-end processing.",
+              "Populated by advance_round_player, consumed by finalize_round."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "resolution_adjusted",
+            "docs": [
+              "Whether Path A subtract-and-continue fired during current BF resolution.",
+              "Frontend-only signaling: emitted in ChallengeResolved / UnclaimedClaimResolved events."
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameCancelled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameClosed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          },
+          {
+            "name": "player_count",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          },
+          {
+            "name": "max_players",
+            "type": "u8"
+          },
+          {
+            "name": "active_suit_count",
+            "type": "u8"
+          },
+          {
+            "name": "round_limit",
+            "type": "u8"
+          },
+          {
+            "name": "staked_mode",
+            "type": "bool"
+          },
+          {
+            "name": "entry_fee_lamports",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameDealt",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "dealer",
+            "type": "pubkey"
+          },
+          {
+            "name": "player_count",
+            "type": "u8"
+          },
+          {
+            "name": "active_suit_count",
+            "type": "u8"
+          },
+          {
+            "name": "current_round",
+            "type": "u8"
+          },
+          {
+            "name": "seed_values",
+            "type": {
+              "array": [
+                "u16",
+                4
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameEnded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "winner_idx",
+            "type": "u8"
+          },
+          {
+            "name": "reason",
+            "docs": [
+              "0 = last player standing, 1 = tiebreak at round limit"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GlobalConfig",
+      "docs": [
+        "Singleton PDA: [\"global_config\"]",
+        "Tracks platform-wide state (game counter, treasury, fees)."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_counter",
+            "docs": [
+              "Total games created (analytics + sequential numbering)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "authority",
+            "docs": [
+              "Platform authority (can update config)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "docs": [
+              "Treasury wallet for fee collection"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_bps",
+            "docs": [
+              "Fee in basis points (e.g. 500 = 5%). Deferred to staked mode."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PlayerAccount",
+      "docs": [
+        "Player account PDA: [\"player\", &game_id, player.key().as_ref()]",
+        "Allocated: 2,048 bytes (2 KB). Per-player nullifier array enforces card",
+        "double-spend prevention (cross-player collision is cryptographically impossible).",
+        "",
+        "NOTE: We do NOT use `#[account]` here because the derived BorshDeserialize",
+        "puts the full 2,041-byte struct on the stack (5,704-byte frame), exceeding",
+        "SBF's 4,096-byte per-frame limit. Instead we implement BorshDeserialize",
+        "manually using heap allocation, and provide the Anchor traits explicitly."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game",
+            "docs": [
+              "Parent game account pubkey"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "wallet",
+            "docs": [
+              "Player's wallet pubkey"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "hand_commitments",
+            "docs": [
+              "Fixed-size 8-slot commitment array (Ristretto points, compressed)"
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                8
+              ]
+            }
+          },
+          {
+            "name": "zero_commitment",
+            "docs": [
+              "Permanent zero commitment (0 * G_suit + r_zero * H)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "flag_commitment",
+            "docs": [
+              "Current round's flag commitment (ephemeral)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "hs_upper",
+            "docs": [
+              "Upper bound on hand size"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "hs_lower",
+            "docs": [
+              "Lower bound on hand size"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "strikes",
+            "docs": [
+              "Liveness strikes (0, 1, or 2 = eliminated)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "is_eliminated",
+            "docs": [
+              "Whether the player is eliminated"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "occupied_slots_mask",
+            "docs": [
+              "Bitmask of hand slots currently known to hold real cards"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "accused_this_round",
+            "docs": [
+              "Has accused someone this round (limit: once per round)"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "been_accused_this_round",
+            "docs": [
+              "Has been accused this round (limit: once per round per target)"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "staging_commitments",
+            "docs": [
+              "Tx1 pending promote: 4 suit value commitments"
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "staging_flag",
+            "docs": [
+              "Tx1 pending promote: flag commitment"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "staging_nullifier",
+            "docs": [
+              "Tx1 pending promote: nullifier"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "staging_replacement",
+            "docs": [
+              "Tx1 pending promote: derived witnessless padding replacement point"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "staging_slot_index",
+            "docs": [
+              "Which hand slot is being consumed by this contribution"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "staging_active",
+            "docs": [
+              "Whether staged data awaits tx2"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "staging_timestamp",
+            "docs": [
+              "Timestamp for tx2 timeout (30s)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "unresolved_suit_accum",
+            "docs": [
+              "Running per-suit commitment point sum since last clear.",
+              "Updated on promote (tx2). Subtracted+zeroed on timeout/elimination (Path A).",
+              "Zeroed-only on suit clear (Path B)."
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "accum_cleaned",
+            "docs": [
+              "Per-suit bitmask (4 bits): guards against double-subtract.",
+              "Set after subtract; cleared per-suit on suit clear."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "si_staging_commitments",
+            "docs": [
+              "Staged commitments for self-issuance (up to 3)"
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                3
+              ]
+            }
+          },
+          {
+            "name": "si_staging_nullifiers",
+            "docs": [
+              "Staged nullifiers for self-issuance (up to 3)"
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                3
+              ]
+            }
+          },
+          {
+            "name": "si_staging_count",
+            "docs": [
+              "How many cards selected for self-issuance"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "si_staging_verified",
+            "docs": [
+              "How many membership proofs verified so far"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "si_staging_active",
+            "docs": [
+              "Whether SI staging is active"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "si_staging_timestamp",
+            "docs": [
+              "Timestamp for 30s staging timeout"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "si_slots_used",
+            "docs": [
+              "Bitmask of target hand slots used in this self-issue sequence"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "si_staging_target_slots",
+            "docs": [
+              "Target slot selected for each staged proof index (u8::MAX = unset)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                3
+              ]
+            }
+          },
+          {
+            "name": "has_contributed_this_round",
+            "docs": [
+              "Has contributed this round (both tx1+tx2 completed)"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "has_submitted_or_proof",
+            "docs": [
+              "Has submitted OR proof (tx2) this round"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "flag_opened_this_round",
+            "docs": [
+              "Flag already opened this round (skip at round end if true)"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "blinding_factor_submitted",
+            "docs": [
+              "Has submitted BF for current resolution"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "in_grace_period",
+            "docs": [
+              "Currently in BF grace period (surviving-player two-strike path)"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "grace_deadline",
+            "docs": [
+              "Per-player grace period deadline (0 when not in grace)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "submitted_bf",
+            "docs": [
+              "The submitted blinding factor scalar, stored for potential revocation.",
+              "If a player submits an incorrect BF, this allows force_bf_timeout to",
+              "reverse the accumulation and subtract the player's contribution."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "bf_revoked",
+            "docs": [
+              "Whether this player's BF has been revoked via force_bf_timeout Branch D"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "nullifier_count",
+            "docs": [
+              "Number of permanently consumed nullifiers (contribution path)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "nullifiers",
+            "docs": [
+              "Per-player nullifier array: prevents double-spending the same card.",
+              "Cross-player collision is cryptographically impossible (each player's",
+              "blinding factors come from the dealer's random deal)."
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                32
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PlayerEliminated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "reason",
+            "docs": [
+              "0 = hands empty, 1 = two strikes, 2 = accusation timeout"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PlayerJoined",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "slot_index",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RoundAdvanced",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "new_round",
+            "type": "u8"
+          },
+          {
+            "name": "starting_player_idx",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SelfIssueComplete",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "cards_issued",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SelfIssueProved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "proof_index",
+            "type": "u8"
+          },
+          {
+            "name": "target_slot",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SelfIssueSkipped",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SelfIssueStageData",
+      "docs": [
+        "Instruction data for self_issue_stage."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "count",
+            "docs": [
+              "Number of cards to self-issue (1-3)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "commitments",
+            "docs": [
+              "Commitments for the selected cards (count entries)"
+            ],
+            "type": {
+              "vec": {
+                "array": [
+                  "u8",
+                  32
+                ]
+              }
+            }
+          },
+          {
+            "name": "nullifiers",
+            "docs": [
+              "Nullifiers for the selected cards (count entries)"
+            ],
+            "type": {
+              "vec": {
+                "array": [
+                  "u8",
+                  32
+                ]
+              }
+            }
+          },
+          {
+            "name": "distinctness_witnesses",
+            "docs": [
+              "Witness scalars for distinctness proofs: C(count,2) entries"
+            ],
+            "type": {
+              "vec": {
+                "array": [
+                  "u8",
+                  32
+                ]
+              }
+            }
+          },
+          {
+            "name": "distinctness_proofs",
+            "docs": [
+              "Distinctness proofs (R+s = 64 bytes each): C(count,2) entries"
+            ],
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SelfIssueStaged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "count",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SelfIssueTimedOut",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SessionKeyAccount",
+      "docs": [
+        "Session key PDA: [\"session\", wallet.key().as_ref(), &game_id]",
+        "Stub for Phase 5 \u2014 session key delegation to avoid wallet popups during gameplay.",
+        "Allocated: 128 bytes."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "docs": [
+              "Player's main wallet"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "session_pubkey",
+            "docs": [
+              "Delegated session public key"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "game_id",
+            "docs": [
+              "Game identifier"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "expires_at",
+            "docs": [
+              "When the session key expires (Unix timestamp)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SessionKeyCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "session_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SessionKeyRevoked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "session_pubkey",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StagingCleared",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "round",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeDeposited",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakesRefunded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "refunded_count",
+            "type": "u8"
+          },
+          {
+            "name": "amount_per_player",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SuitCleared",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "suit",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TurnTimedOut",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "player_idx",
+            "type": "u8"
+          },
+          {
+            "name": "forced_action",
+            "docs": [
+              "0 = forced_challenge, 1 = forced_minimum_claim, 2 = forced_accept_claim"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UnclaimedClaimResolved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "claimant_idx",
+            "type": "u8"
+          },
+          {
+            "name": "revealed_bitmask",
+            "type": "u16"
+          },
+          {
+            "name": "adjusted",
+            "docs": [
+              "Whether the cache was adjusted via subtract-and-continue"
+            ],
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VaultAccount",
+      "docs": [
+        "Vault PDA: [\"vault\", &game_id]",
+        "Holds staked SOL for the duration of a game.",
+        "Allocated: 64 bytes."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "docs": [
+              "Game identifier (matches parent GameAccount)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WinnerPaid",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "game_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "winner",
+            "type": "pubkey"
+          },
+          {
+            "name": "payout",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          }
+        ]
+      }
+    }
+  ]
+}

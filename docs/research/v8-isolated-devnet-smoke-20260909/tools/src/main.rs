@@ -77,12 +77,17 @@ fn main(){
                 "activate":ix(registry,vec![rw(reg),rw(entry),signer(authority,false)],encode_simple_mutation_v2(RegistryMutationOpcodeV1::Activate,1).unwrap().to_vec()),
                 "freeze":ix(registry,vec![rw(reg),signer(authority,false)],encode_simple_mutation_v2(RegistryMutationOpcodeV1::Freeze,2).unwrap().to_vec())}));
         }
-        "context"=>{
+        "context"|"validate-setup"=>{
             let snap:Value=serde_json::from_slice(&fs::read(&args[3]).unwrap()).unwrap();let a=&snap["accounts"];
             let m=decode_pool_v1_pair_forest_master_v1(&account(a,master,pool)).unwrap();
             assert_eq!(m.identity.asset_mint,mint.to_bytes());assert_eq!(m.identity.pool,master.to_bytes());assert_eq!(m.verifier_policy,init.verifier_policy);assert_eq!(m.identity.deployment_domain,init.deployment_domain);assert_eq!(m.identity.asset_id,M31(77));
             let live:Vec<_>=lanes.iter().enumerate().map(|(i,k)|{let l=decode_pool_v1_pair_forest_lane_state_v1(&account(a,*k,pool),&POOL_V1_PAIR_EMPTY_ROOTS).unwrap();assert_eq!(l.master,master.to_bytes());assert_eq!(l.lane_id,i as u8);assert_eq!(l.tree,trees[i]);l}).collect();
             let cp=decode_pool_v1_pair_forest_checkpoint_v1(&account(a,checkpoint,pool)).unwrap();assert_eq!(cp.master,master.to_bytes());assert_eq!(cp.checkpoint_sequence,0);assert_eq!(cp.lane_sequences,std::array::from_fn(|i|live[i].tree.next_leaf_index));
+            assert_eq!(cp.global_root,pool_v1_pair_forest_global_root_v1(&std::array::from_fn(|i|live[i].tree.root)));
+            if args[1]=="validate-setup" {
+                println!("{}",json!({"authoritative_slot":snap["slot"],"all_eight_lanes_match_thirteen_deposits":true,"canonical_checkpoint_matches_live_roots":true,"master_identity_and_policy_match":true}));
+                return;
+            }
             let rv=decode_verifier_registry_v2(&account(a,reg,registry)).unwrap();let ev=decode_verifier_registry_entry_v2(&account(a,entry,registry)).unwrap();assert!(rv.is_immutable()&&!rv.is_paused());assert_eq!(ev.status,VerifierEntryStatusV1::Active);assert_eq!(ev.verifier_program,verifier.to_bytes());assert_eq!(ev.profile_binding,V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING);assert_eq!(ev.release_binding,V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING);
             let hashes:Value=serde_json::from_slice(&fs::read(Path::new(&args[2]).parent().unwrap().join("elf-hashes.json")).unwrap()).unwrap();
             assert_eq!(rv.pool,master.to_bytes());assert_eq!(rv.registry_program,registry.to_bytes());assert_eq!(rv.authority,[0;32]);assert_eq!(rv.policy_binding,[7;32]);assert_eq!(rv.generation,3);

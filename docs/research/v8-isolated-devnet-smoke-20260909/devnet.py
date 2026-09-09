@@ -5,6 +5,7 @@ TxV1 encoding follows solana-message 4.2.4 and solana-transaction 4.1.5.
 Every submitted application transaction is first simulated with its exact signed bytes.
 """
 import base64, datetime, hashlib, json, os, pathlib, struct, sys, time, urllib.request
+import fcntl
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 
@@ -37,7 +38,25 @@ def recent_blockhash(force=False):
     return _RECENT_BLOCKHASH
 def save(path, value):
     path.write_text(json.dumps(value, indent=2)+'\n')
-def rpc(method, params, label=None):
+class RpcRateLimited(RuntimeError): pass
+def _pace_rpc():
+    # One shared clock across upload processes/threads; no credential in the file.
+    fd=os.open(PRIVATE/'rpc-rate-lock',os.O_RDWR|os.O_CREAT,0o600)
+    with os.fdopen(fd,'r+') as f:
+        fcntl.flock(f,fcntl.LOCK_EX)
+        previous=float(f.read() or '0')
+        delay=0.35-(time.monotonic()-previous)
+        if delay>0:time.sleep(delay)
+        f.seek(0);f.truncate();f.write(str(time.monotonic()));f.flush()
+        fcntl.flock(f,fcntl.LOCK_UN)
+def rpc(method,params,label=None):
+    for retry in range(4):
+        try:return _rpc_once(method,params,label)
+        except RpcRateLimited:
+            if retry==3:raise
+            time.sleep(2**retry)
+def _rpc_once(method, params, label=None):
+    _pace_rpc()
     q = {'jsonrpc':'2.0','id':1,'method':method,'params':params}
     stamp = str(time.time_ns())
     try:
@@ -47,6 +66,7 @@ def rpc(method, params, label=None):
         message = str(e).replace(RPC, '[devnet RPC]')
         if RPC_SECRET: message = message.replace(RPC_SECRET, '[REDACTED]')
         save(EVIDENCE/(stamp+'-rpc-failure.json'), {'request':q,'error':message})
+        if getattr(e,'code',None)==429:raise RpcRateLimited(message) from None
         raise RuntimeError(message) from None
     if label or 'error' in v:
         save(EVIDENCE/(stamp+'-'+(label or method)+'.json'), {'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'request':q,'response':v})
@@ -93,10 +113,10 @@ def build(instructions, blockhash, compute_limit=CU):
     wire=message+b''.join(bytes(s) for s in signatures)
     assert len(wire)<4096
     return wire,str(signatures[0]),message
-def confirm(signature, path):
+def confirm(signature, path, status_hint=None):
     expiry=json.loads((path/'input.json').read_text())['blockhash']['lastValidBlockHeight']
     for attempt in range(90):
-        status=rpc('getSignatureStatuses',[[signature],{'searchTransactionHistory':True}])['value'][0]
+        status=status_hint if attempt==0 and status_hint is not None else rpc('getSignatureStatuses',[[signature],{'searchTransactionHistory':True}])['value'][0]
         if status is None and attempt%5==0:
             height=rpc('getBlockHeight',[{'commitment':'finalized'}])
             if height>expiry:
@@ -190,8 +210,15 @@ def setup():
         create('source',TOKEN,165),ix(TOKEN,[meta(IDS['source'],False,True),meta(IDS['mint'])],bytes([18])+pb(IDS['source_authority'])),
         ix(TOKEN,[meta(IDS['mint'],False,True),meta(IDS['source'],False,True),meta(IDS['source_authority'],True)],bytes([7])+struct.pack('<Q',PLAN['deposit_count']*1000))])
     transaction('pool-initialize',[PLAN['initialize']])
-    for d in PLAN['deposits']:transaction(d['name'],[d['instruction']])
-    for i,ins in enumerate(PLAN.get('checkpoint_preparations',[])):transaction('checkpoint-validate-lane-'+str(i),[ins])
+    # Preserve fixed deposit order while fitting two supported instructions in 1.2M CU.
+    for start in range(0,len(PLAN['deposits']),2):
+        batch=PLAN['deposits'][start:start+2]
+        transaction('deposit-batch-'+str(start),[item['instruction'] for item in batch])
+    pending=[]
+    for i,ins in enumerate(PLAN.get('checkpoint_preparations',[])):
+        pending.append(transaction('checkpoint-validate-lane-'+str(i),[ins],wait=False))
+    for item in pending:
+        if 'signature' in item:confirm(item['signature'],pathlib.Path(item['path']))
     transaction('pool-checkpoint',[PLAN['checkpoint_instruction']])
     snapshot('initialized-state')
 def registry():
