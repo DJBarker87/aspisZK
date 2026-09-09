@@ -1,6 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [fixed early C1 and adaptive far finals](far-final-continuation.md).
+Latest formal continuation: [fork recovery, row separation and evidence collection](fork-collector-continuation.md).
+The common-support construction now derives all four repaired ordinary row
+claims, including inactive, on the same recovered quotient. A bounded causal
+collector control distinguishes many useful alpha branches from a coherent
+seven-branch group, and a censorship-safe support-growth argument isolates
+one collection failure. Authenticated useful-fork production and global
+accepted witness recovery remain open. Laptop-only focused work; no verifier,
+profile, 40,282-byte body or CU changes.
+
+Previous formal continuation: [fixed early C1 and adaptive far finals](far-final-continuation.md).
 The actual causal suffix now reduces to an explicit relation-compatible
 agreement moment, retaining the quadratic helper curve and degree-28 claim
 error. A checked adaptive-final correction rules out treating the actual prior

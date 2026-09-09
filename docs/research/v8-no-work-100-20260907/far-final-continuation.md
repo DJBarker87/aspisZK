@@ -1,5 +1,9 @@
 # Fixed early C1, adaptive far finals and extraction
 
+Next continuation: [four-kappa recovery and bounded collector
+evidence](fork-collector-continuation.md). It completes the deterministic row
+separation item below, without supplying a global far-moment bound.
+
 Research branch: `research/v8-no-work-100-20260907`.
 Parent revision: `edb199c12fcc41f00330298b95b4736f60ac6f3a`.
 Borrowed immutable V7 formal source: `26a9cd4718aae9f9de7ef1c3394fb74a229085d5`.

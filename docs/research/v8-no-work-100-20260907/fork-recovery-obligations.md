@@ -1,5 +1,12 @@
 # Fork-recovery certificate: obligations and resource contract
 
+Continuation at parent `532ade20`: [fork collector and four-kappa
+recovery](fork-collector-continuation.md) completes the four-row deterministic
+composition and executes the first bounded collector controls. The historical
+status below describes the seven-alpha/three-tau checkpoint; its open
+four-kappa item is superseded by that continuation. Access/coherence and
+global extraction obligations are not superseded.
+
 Research base: `edb199c12fcc41f00330298b95b4736f60ac6f3a`. This is a
 source/theorem map and a proposed bounded-extractor contract, not an implemented
 replay extractor, payment-witness theorem, or new numerical security bound.
