@@ -41,7 +41,8 @@ for line in (EX/'circle-norm-control.patch').read_text().splitlines(keepends=Tru
         if line[0] in ' +': new.append(line[1:])
 assert active
 callback_sha=sha(replace(text,old,new).encode())
-kernel_sha=sha((EX/'circle_norm.rs').read_bytes()); points_sha=sha((EX/'circle-window-points.json').read_bytes())
+kernel_sha=sha(subprocess.check_output(['git','show','09a6dd7aa188b31dd96c898e9b3f5ae296514a70:docs/research/v8-no-work-100-20260907/experiments/circle_norm.rs'],cwd=ROOT))
+points_sha=sha((EX/'circle-window-points.json').read_bytes())
 resources={}
 for job in ('test','sbf-build'):
     path=EV/f'circle-norm-{job}-v1.log'; log=path.read_text()
