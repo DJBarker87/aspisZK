@@ -130,8 +130,10 @@ theorem exact_restored_operational_k13_clean_error_measure_bound
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
               projection fixedInstance ∩
-            exactTag73RestoredOperationalCanonicalRootK13IdealRejectedEvent
-              transitionFuel configuration projection fixedInstance decoder) ≤
+            (exactTag73RestoredOperationalK13FailureEvent transitionFuel
+                configuration projection fixedInstance decoder ∩
+              exactTag73RestoredOperationalCanonicalRootK13IdealRejectedEvent
+                transitionFuel configuration projection fixedInstance decoder)) ≤
         exactJointQueryBatchIdealRawError +
           exactLaterRelationAlphaIdealRawError)
     (oneFoldSource : ExactTag73RestoredCanonicalOneFoldSource transitionFuel
@@ -154,6 +156,8 @@ theorem exact_restored_operational_k13_clean_error_measure_bound
     transitionFuel configuration projection fixedInstance
   let ideal := exactTag73RestoredOperationalCanonicalRootK13IdealRejectedEvent
     transitionFuel configuration projection fixedInstance decoder
+  let failure := exactTag73RestoredOperationalK13FailureEvent transitionFuel
+    configuration projection fixedInstance decoder
   let query := exactTag73RestoredOperationalCanonicalRootK13QueryEvent
     transitionFuel configuration projection fixedInstance decoder
   let oneFold := exactTag73RestoredOperationalCanonicalRootK13OneFoldEvent
@@ -163,7 +167,8 @@ theorem exact_restored_operational_k13_clean_error_measure_bound
   have covered :
       clean ∩ exactTag73RestoredOperationalK13FailureEvent transitionFuel
           configuration projection fixedInstance decoder ⊆
-        (((clean ∩ (authentication ∪ extraction)) ∪ (clean ∩ ideal)) ∪
+        (((clean ∩ (authentication ∪ extraction)) ∪
+            (clean ∩ (failure ∩ ideal))) ∪
           (clean ∩ query)) ∪ ((clean ∩ oneFold) ∪ (clean ∩ listCap)) := by
     rintro sample ⟨cleanMember, failure⟩
     have classified :=
@@ -177,7 +182,8 @@ theorem exact_restored_operational_k13_clean_error_measure_bound
         ⟨cleanMember, Or.inl authenticationMember⟩))
     · exact Or.inl (Or.inl (Or.inl
         ⟨cleanMember, Or.inr extractionMember⟩))
-    · exact Or.inl (Or.inl (Or.inr ⟨cleanMember, idealMember⟩))
+    · exact Or.inl (Or.inl (Or.inr
+        ⟨cleanMember, failure, idealMember⟩))
     · exact Or.inl (Or.inr ⟨cleanMember, queryMember⟩)
     · exact Or.inr (Or.inl ⟨cleanMember, oneFoldMember⟩)
     · exact Or.inr (Or.inr ⟨cleanMember, listCapMember⟩)
@@ -196,23 +202,24 @@ theorem exact_restored_operational_k13_clean_error_measure_bound
         (clean ∩ exactTag73RestoredOperationalK13FailureEvent transitionFuel
           configuration projection fixedInstance decoder) ≤
       law.toOuterMeasure
-        ((((clean ∩ (authentication ∪ extraction)) ∪ (clean ∩ ideal)) ∪
+        ((((clean ∩ (authentication ∪ extraction)) ∪
+            (clean ∩ (failure ∩ ideal))) ∪
           (clean ∩ query)) ∪ ((clean ∩ oneFold) ∪ (clean ∩ listCap))) :=
         measure_mono covered
     _ ≤ ((law.toOuterMeasure (clean ∩ (authentication ∪ extraction)) +
-            law.toOuterMeasure (clean ∩ ideal)) +
+            law.toOuterMeasure (clean ∩ (failure ∩ ideal))) +
           law.toOuterMeasure (clean ∩ query)) +
         (law.toOuterMeasure (clean ∩ oneFold) +
           law.toOuterMeasure (clean ∩ listCap)) := by
       calc
         _ ≤ law.toOuterMeasure
               (((clean ∩ (authentication ∪ extraction)) ∪
-                (clean ∩ ideal)) ∪ (clean ∩ query)) +
+                (clean ∩ (failure ∩ ideal))) ∪ (clean ∩ query)) +
             law.toOuterMeasure ((clean ∩ oneFold) ∪
               (clean ∩ listCap)) := measure_union_le _ _
         _ ≤ (law.toOuterMeasure
                 ((clean ∩ (authentication ∪ extraction)) ∪
-                  (clean ∩ ideal)) +
+                  (clean ∩ (failure ∩ ideal))) +
               law.toOuterMeasure (clean ∩ query)) +
             (law.toOuterMeasure (clean ∩ oneFold) +
               law.toOuterMeasure (clean ∩ listCap)) :=
