@@ -32,6 +32,7 @@ fn stress_queries(p:&mut Prefix,finals:&[K])->(Vec<u32>,K,[u8;24],u64){
     panic!("maximum-frontier stress scan exhausted its declared cap");
 }
 pub fn run(){
+    #[cfg(v8_early_prefix)] super::super::early_c1_trace::begin();
     #[cfg(v8_gamma_wrap)] super::super::query_arithmetic::controls();
     #[cfg(v8_gamma_wrap)]
     if std::env::args().nth(1).as_deref()==Some("--gamma-controls"){return;}
@@ -112,7 +113,10 @@ pub fn run(){
     std::fs::write(format!("{out}/transition.bin"),&transition_bytes).unwrap();
     let binding=complete_context.as_ref().map(|(_,b)|*b).unwrap_or_else(||hash(&[b"AV8 synthetic account fixture",&public_bytes,format!("{transition:?}").as_bytes()]));
     std::fs::write(format!("{out}/binding.bin"),binding).unwrap();
-    for seed in [1u8,2,3] {
+    #[cfg(v8_early_prefix)] let seeds=[1u8]; // one predeclared honest trace; no nonce search
+    #[cfg(not(v8_early_prefix))] let seeds=[1u8,2,3];
+    #[cfg(v8_early_prefix)] assert!(std::env::var_os("ASPIS_V8_MAX_FRONTIER_SCAN").is_none());
+    for seed in seeds {
         let total=Instant::now();let clock=Instant::now();
         let hc=StateOnlyHidingContext::pool_v1_pair_forest_v1(binding,[seed;32]);
         let attempt=state_only_entropy::StateOnlyAttemptSecrets::deterministic_spend_fixture([seed;32],[seed+1;32],[seed+2;32]);
@@ -126,6 +130,10 @@ pub fn run(){
         phase(seed,"c1_encode",clock);let clock=Instant::now();
         let salts:Vec<[u8;32]>=(0..N/4).map(|i|reserved.derive_pool_v1_leaf_salt(hash,hc,0x77,i as u32).unwrap()).collect();
         let a=tree((0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C1_TREE_TAG,&c1leaf(&encoded,i),&salts[i])).collect());
+        // Actual answers frozen before `start` samples lambda and chi. The
+        // resolver receives neither the encoded columns nor their preimages
+        // through any other channel, and never queries the hash oracle.
+        #[cfg(v8_early_prefix)] let early_c1=super::super::early_c1_trace::Prefix::new(super::super::early_c1_trace::freeze()).unwrap();
         phase(seed,"c1_salts_pack_tree",clock);let clock=Instant::now();
         let(t,lambda,chi)=start(&binding,&a);
         let mut h=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(
@@ -192,7 +200,9 @@ pub fn run(){
         // Verifier starts from bytes and public inputs; no witness/anchor.
         let clock=Instant::now();
         let verify=|body:&[u8]|super::super::performance_verifier::verify_payment(body,&binding,&payment,&transition);
+        #[cfg(v8_early_prefix)] super::super::early_c1_trace::begin();
         assert_eq!(verify(&body),Ok(()));
+        #[cfg(v8_early_prefix)] super::super::early_c1_trace::check_execution(early_c1,super::super::early_c1_trace::freeze(),a[18][0],&queries,&records);
         if matches!(payment,PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_)){
             assert_eq!(verify(&body),super::super::performance_verifier::verify(&body,&binding,&public_bytes,&transition_bytes));
         }

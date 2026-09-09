@@ -1,0 +1,156 @@
+bc945367d6b0d9a5b4cb2dc5a9ecad8ddcfb33ee
+rustc 1.93.0 (254b59607 2026-01-19)
+binary: rustc
+commit-hash: 254b59607d4417e9dffbc307138ae5c86280fe4c
+commit-date: 2026-01-19
+host: aarch64-apple-darwin
+release: 1.93.0
+LLVM version: 21.1.8
+MODE=payment
+WORK=/tmp/aspis-v8-early-trace.rH5G29
+4d7460a24ef55735ccd3dc12002be54fc785bbe8b6781ca2d38b34c0dc1a764f  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/early_c1_trace.rs
+5842ca71d8c0e59ac0999d510feb9738b0e4555285d04cf67afbcd035f2f40aa  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/run_early_c1_trace.sh
+631d9d2cbe48e860447ad3b2f7546880aec2bed9afe3b29c625a8d99616a5086  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance.rs
+661db08132ff1b0bf77e0a8dbf23dd2cdd58557884bfad16ce21ed4f48693dfd  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+COMMAND: env RUSTFLAGS=--cfg\ v8_payment_extraction\ --cfg\ v8_performance\ --cfg\ v8_performance_fast\ --cfg\ v8_structured\ --cfg\ v8_early_prefix\ -A\ dead_code\ -A\ unexpected_cfgs\ -C\ overflow-checks=yes cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture\,selected-v7-kernels --manifest-path /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml
+   Compiling version_check v0.9.5
+   Compiling libc v0.2.189
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling aspis-core v0.1.0 (/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-core)
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling cfg-if v1.0.4
+   Compiling getrandom v0.3.4
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+   Compiling zeroize v1.8.1
+   Compiling aspis-statement v0.1.0 (/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement)
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-statement` to apply 4 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+warning: variable does not need to be mutable
+   --> ../structured_weights.rs:152:9
+    |
+152 |     let mut d=Description::new(s.z,scales,abc);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> ../payment_extraction.rs:176:9
+    |
+176 |     let mut encoded:Vec<Vec<M31>>=selected.iter().map(|m|enc.encode_c1_message(m).unwrap()).collect();
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: `aspis-v8-performance-host` (bin "aspis-v8-performance-host") generated 2 warnings (run `cargo fix --bin "aspis-v8-performance-host" -p aspis-v8-performance-host` to apply 2 suggestions)
+    Finished `release` profile [optimized] target(s) in 45.35s
+       45.39 real        55.15 user         1.05 sys
+           805617664  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              323522  page reclaims
+                4225  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                  20  signals received
+                 959  voluntary context switches
+               46390  involuntary context switches
+           650354145  instructions retired
+           323956448  cycles elapsed
+            12550672  peak memory footprint
+EXIT=0
+4a67efda9d568dffec0767aa504b4720445f167a3feeb0dfa6515aea0d210471  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/aspis-v8-performance-host
+a2e3d525c3a0f01428b56df55001ba304981a6b8c26cca08badf7b09b7029814  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.lock
+COMMAND: env -u ASPIS_V8_MAX_FRONTIER_SCAN -u ASPIS_V8_COMPLETE_CONTEXT /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/aspis-v8-performance-host /tmp/aspis-v8-early-trace.rH5G29/public-fixture
+STRUCTURED_CONTROLS entries=16384 terminals=64 affine_x_y=true inversion_zero_every_position=true
+PERF_CONTROLS exact_public_weights=8192 allocation_free_carry=4104 zero_one_coordinates=true
+PERF {"seed":0,"phase":"setup_compiler_encoder_matrix","seconds":1.293213833}
+PERF {"seed":1,"phase":"masking","seconds":0.001208166}
+PERF {"seed":1,"phase":"c1_encode","seconds":0.341258917}
+PERF {"seed":1,"phase":"c1_salts_pack_tree","seconds":2.542696542}
+PERF {"seed":1,"phase":"c2_helpers_encode","seconds":0.129181625}
+PERF {"seed":1,"phase":"c2_pack_tree","seconds":0.821198041}
+semantic_round=0 checked=true
+semantic_round=1 checked=true
+semantic_round=2 checked=true
+semantic_round=3 checked=true
+semantic_round=4 checked=true
+semantic_round=5 checked=true
+semantic_round=6 checked=true
+semantic_round=7 checked=true
+semantic_round=8 checked=true
+semantic_round=9 checked=true
+PERF {"seed":1,"phase":"semantic_producer_literal","seconds":2.388716375}
+PERF {"seed":1,"phase":"ood_transpose_quotient","seconds":0.007879458}
+PERF {"seed":1,"phase":"relation_openings_serialize","seconds":0.001121583}
+PERF {"seed":1,"phase":"prover_total_excludes_setup","seconds":6.23329275}
+EARLY_C1_TRACE raw=1051764 unique=789620 input_bytes=238287374 verifier_calls=2812 accepted_openings=22 path_memberships=418 pre_lambda_chi=true actual_answers=true resolver_hash_calls=0 raw_trace_persisted=false
+PERF {"seed":1,"phase":"host_verify_from_public_bytes","seconds":0.0354855}
+PERF {"seed":1,"accepted":true,"body_bytes":39502,"max_body_bytes":40282,"stress_nonce_attempts":0,"security_credit_bits":0,"full_transaction_cu":null}
+        7.96 real         7.42 user         0.08 sys
+           664453120  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               44448  page reclaims
+                   1  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 557  involuntary context switches
+        128914736393  instructions retired
+         28835590427  cycles elapsed
+           655950664  peak memory footprint
+EXIT=0

@@ -37,6 +37,7 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
 #[cfg(not(v8_performance_sbf))]
 fn hash(parts:&[&[u8]])->[u8;32] {let mut h=Sha256::new();for p in parts {h.update(p);}let digest=h.finalize().into();
     #[cfg(v8_query_graph)] query_graph::record(parts);
+    #[cfg(v8_early_prefix)] early_c1_trace::record(parts,digest);
     digest}
 #[cfg(v8_performance_sbf)]
 fn hash(parts:&[&[u8]])->[u8;32] {solana_program::hash::hashv(parts).to_bytes()}
@@ -319,6 +320,8 @@ use payment_sources::{circle_candidate,circle_candidate_openings,state_only_hidi
 #[path="payment_extraction.rs"] mod payment_extraction;
 #[cfg(v8_query_graph)]
 #[path="c1_query_graph.rs"] mod query_graph;
+#[cfg(v8_early_prefix)]
+#[path="early_c1_trace.rs"] mod early_c1_trace;
 #[cfg(v8_c1_gao)]
 #[path="c1_gao.rs"] mod c1_gao;
 #[cfg(all(v8_payment_extraction,not(v8_graph_orders),not(v8_circle_coordinates),not(v8_gao_completeness),not(v8_performance)))]
