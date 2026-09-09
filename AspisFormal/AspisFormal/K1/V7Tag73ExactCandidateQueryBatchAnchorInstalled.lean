@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactDagQ16TerminalProducer
+import AspisFormal.K1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 import AspisFormal.K1.V7Tag73ExactSelectedQ16QueryBatchBoundary
 
 /-!
@@ -27,6 +28,7 @@ open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactDagQ16ChainRouting
 open AspisK1.V7Tag73ExactDagQ16TerminalProducer
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactQ16CausalCoordinateOrder
 open AspisK1.V7Tag73ExactRootLookupCausalOrder
@@ -60,6 +62,7 @@ theorem exact_selected_candidate_query_batch_anchor_is_installed
       target.1 = (exactOperationalTape input).search.selectedCounter ∧
       target.2.val + 1 =
         (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
+      trial = (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       ExactDagProducerInstalled input trial
         (Q16DagProducer.mk blockDigest target blockProducerInput) ∧
       tableLookup (exactOperationalTable input) blockProducerInput =
@@ -81,11 +84,12 @@ theorem exact_selected_candidate_query_batch_anchor_is_installed
       beforeQueryBatch, producerLookup, producerExact, chain, outputsLength,
       advancesLength, boundaryStart, terminalBoundary, boundaryLookup⟩ :=
     exact_selected_q16_terminal_is_query_batch_boundary transitionRoom input
-  obtain ⟨_prefinalDigest, _workAnswer, base, trial, _workAccepted,
-      _prefinalOrigin, baseExact, _pairLabeled, _workLabeled,
-      initialInstalled⟩ :=
-    exact_compiler_accepted_dag_trial_installs_all_candidates transitionRoom
-      input
+  let source := exactAcceptedDagInstallation transitionRoom input
+  let base := source.base
+  let trial := source.finalTrial
+  have baseExact : base = (exactOperationalRawTrace input).q16BaseDigest :=
+    source.baseExact
+  have initialInstalled := source.installed
   have canonicalLookup := exact_operational_q16_candidate_absorb_lookup input
     (exactOperationalTape input).search.selectedCounter (Nat.le_refl _)
   have initialExact : initialDigest =
@@ -103,7 +107,8 @@ theorem exact_selected_candidate_query_batch_anchor_is_installed
   have firstInstalled : ExactDagProducerInstalled input trial firstProducer := by
     have raw := initialInstalled
       (exactOperationalTape input).search.selectedCounter (Nat.le_refl _)
-    simpa [firstProducer, firstSlot, producerExact, initialExact, baseExact]
+    simpa [firstProducer, firstSlot, producerExact, initialExact, baseExact,
+      trial, base]
       using raw
   have nonempty : 0 < outputs.length := by
     rw [outputsLength]
@@ -137,7 +142,7 @@ theorem exact_selected_candidate_query_batch_anchor_is_installed
       (Q16DagProducer.mk blockDigest target blockProducerInput) := by
     simpa [target] using lastInstalled
   refine ⟨trial, target, blockProducerInput, blockDigest, blockAdvance,
-    beforeDomain, beforeQueryBatch, rfl, targetBlock, installedAtTarget,
+    beforeDomain, beforeQueryBatch, rfl, targetBlock, rfl, installedAtTarget,
     blockProducerLookup, blockAdvanceLookup, blockOrder, ?_, boundaryStart,
     boundaryLookup⟩
   exact lastExact.symm.trans terminalBoundary

@@ -39,6 +39,7 @@ open AspisK1.V7Tag73ExactDagQ16ChainRouting
 open AspisK1.V7Tag73ExactFinalWorkPairControllerCompletion
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRootLookupCausalOrder
 open AspisK1.V7Tag73ExactRootRecordOrderLift
@@ -82,6 +83,8 @@ theorem exact_selected_candidate_query_batch_boundary_arms
           (.machineFresh boundaryActor
             (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
             queryBatchDigest : UnifiedExposureRecord) :: boundaryLater ∧
+      finalTrial =
+        (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       blockAdvance = beforeDomain.digest ∧
       beforeDomain.digest =
         (exactOperationalQ16Evaluator input).afterQ16.digest ∧
@@ -106,7 +109,7 @@ theorem exact_selected_candidate_query_batch_boundary_arms
           usedSlots := ∅ } := by
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, preAdvance, advanceLater, advanceActor,
-      advanceRootExact, selectedMember, targetAbsent, advanceLookup,
+      advanceRootExact, selectedMember, finalTrialExact, targetAbsent, advanceLookup,
       terminalExact, boundaryStart, boundaryLookup⟩ :=
     exact_selected_candidate_advance_is_fresh transitionRoom input foldTrial
       boundaryIndex
@@ -349,7 +352,7 @@ theorem exact_selected_candidate_query_batch_boundary_arms
     rw [armed, beforeBoundaryUsedEmpty]
   refine ⟨finalTrial, target, blockAdvance, beforeQueryBatch.digest,
     beforeDomain, boundaryPrior, boundaryLater, boundaryActor, ?_,
-    terminalExact, boundaryStart, ?_⟩
+    finalTrialExact, terminalExact, boundaryStart, ?_⟩
   · simpa [boundaryPrior, boundaryRecord, boundaryInput, orderedAdvance,
       List.append_assoc] using orderedRootExact
   · exact ⟨beforeBoundaryTarget, beforeBoundaryUnseen, beforeBoundaryEmpty,

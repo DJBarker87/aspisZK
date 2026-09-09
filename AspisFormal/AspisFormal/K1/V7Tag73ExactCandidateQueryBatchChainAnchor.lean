@@ -31,6 +31,7 @@ open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactQ16CausalCoordinateOrder
 open AspisK1.V7Tag73ExactQueryBatchPrefixBoundaryOrigin
@@ -69,6 +70,8 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
           (.machineFresh boundaryActor
             (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
             queryBatchDigest : UnifiedExposureRecord) :: boundaryLater ∧
+      finalTrial =
+        (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       ExactRootOrderedQ16Chain input
         (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
         queryBatchDigest outputs advances ∧
@@ -99,7 +102,8 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
           usedSlots := ∅ } := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, beforeDomain,
       boundaryPrior, boundaryLater, boundaryActor, boundaryRoot,
-      terminalExact, boundaryStart, targetExact, unseen, empty, armed⟩ :=
+      finalTrialExact, terminalExact, boundaryStart, targetExact, unseen, empty,
+      armed⟩ :=
     exact_selected_candidate_query_batch_boundary_arms transitionRoom input
       foldTrial boundaryIndex
   obtain ⟨producerInput, initialDigest, outputs, advances, producerLookup,
@@ -130,8 +134,9 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
       queryBatchDigest outputs advances := by
     simpa [producerInputCanonical, initialDigestExact] using chain
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs, advances,
-    boundaryPrior, boundaryLater, boundaryActor, boundaryRoot, canonicalChain,
-    outputsLength, advancesLength, chainDigestExact.symm.trans chainStart,
+    boundaryPrior, boundaryLater, boundaryActor, boundaryRoot, finalTrialExact,
+    canonicalChain, outputsLength, advancesLength,
+    chainDigestExact.symm.trans chainStart,
     targetExact, unseen, empty, armed⟩
 
 #print axioms exact_selected_candidate_arms_complete_query_batch_chain

@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactFoldArmedCandidateQueryBatchFullRouting
+import AspisFormal.K1.V7Tag73ExactFoldArmedCandidateWorkRouting
 
 /-!
 # Probability-ready deployed query-batch coordinate
@@ -18,16 +19,22 @@ namespace AspisK1.V7Tag73ExactFoldArmedQueryBatchProbabilityReady
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveQ16TrialAccounting
 open AspisK1.V7Tag73CausalFoldAlphaFinalWorkQ16QueryBatchCoordinates
+open AspisK1.V7Tag73CausalFoldAlphaFinalWorkQ16Probability
+open AspisK1.V7Tag73CausalQ16FinalWorkProbability
 open AspisK1.V7Tag73CausalQ16CoordinateRouter
 open AspisK1.V7Tag73CausalSlotRouterLookup
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactAcceptedFoldTrialPackage
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFoldAlphaQ16QueryBatchRootRouting
 open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchFullRouting
 open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchRootRouting
+open AspisK1.V7Tag73ExactFoldArmedCandidateWorkRouting
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73FinalWorkDigestProbability
 open AspisK1.V7Tag73IncrementalSamplerControl
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73SamplerDecoder
@@ -65,14 +72,18 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
       let coordinates :=
         exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
           router sample.2
+      FoldWork31Accepted coordinates.1.2.1 ∧
+      FinalWork34Accepted coordinates.1.2.2.2.1 ∧
       ∃ success : GammaPrefixSucceeds coordinates.2,
-        exactOperationalChallenge input .queryBatch =
-          (routedSuccessfulGammaValue
-            (successfulGammaPrefixFlatRoutingEquiv
-              ⟨coordinates.2, success⟩)).1 := by
+          exactOperationalChallenge input .queryBatch =
+            (routedSuccessfulGammaValue
+              (successfulGammaPrefixFlatRoutingEquiv
+                ⟨coordinates.2, success⟩)).1 := by
   obtain ⟨foldTrial, finalTrial, target, outputs, advances, _flat,
-      consumedDecoded, consumedValue, outputsLength, _advancesLength,
-      _flatOutputPrefix, _flatAdvancePrefix, prefixRun, exactDecode,
+      consumedDecoded, consumedValue, outputsLength, foldTrialExact,
+      finalTrialExact, _advancesLength, _flatOutputPrefix,
+      _flatAdvancePrefix, prefixRun,
+      exactDecode,
       operationalValue, _flatChallenge, outputRouted, _advanceRouted⟩ :=
     exact_selected_fold_armed_candidate_query_batch_is_fully_routed
       transitionRoom programmedCover input
@@ -82,6 +93,52 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
   let coordinates :=
     exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
       router sample.2
+  let fold := exactAcceptedFoldTrial input
+  let source := exactAcceptedDagInstallation transitionRoom input
+  have foldRouterExact : foldTrial.val = fold.trial.val := by
+    simpa [fold] using congrArg Fin.val foldTrialExact
+  have finalRouterExact : finalTrial.val = source.finalTrial.val := by
+    simpa [source] using congrArg Fin.val finalTrialExact
+  have foldRouted : causalRoutedAnswer? (Sum.inl none) router
+      (foldAlphaQ16QueryBatchNamedSlotInputTape
+        (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters sample.2)) =
+      some fold.answer := by
+    simpa [router, foldRouterExact, finalRouterExact, fold, source] using
+      exact_fold_armed_candidate_accepted_fold_is_routed programmedCover input
+        fold source target
+  have finalWorkRouted :
+      causalRoutedAnswer? (Sum.inl (some (Sum.inr none))) router
+        (foldAlphaQ16QueryBatchNamedSlotInputTape
+          (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters sample.2)) =
+        some source.workAnswer := by
+    simpa [router, foldRouterExact, finalRouterExact, fold, source] using
+      exact_fold_armed_candidate_final_work_is_routed programmedCover input
+        fold source target
+  have foldNamed :=
+    fold_alpha_q16_query_batch_fold_coordinate_eq_named_slot parameters router
+      sample.2
+  have foldNamedValue := coordinate_eq_of_causalRoutedAnswer?_eq_some router
+    (foldAlphaQ16QueryBatchNamedSlotInputTape
+      (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters sample.2))
+    (Sum.inl none) (Finset.mem_univ _) fold.answer foldRouted
+  have foldCoordinate : coordinates.1.2.1 = fold.answer := by
+    exact foldNamed.trans foldNamedValue
+  have foldAccepted : FoldWork31Accepted coordinates.1.2.1 := by
+    rw [foldCoordinate]
+    exact fold.accepted
+  have finalWorkNamed :=
+    fold_alpha_q16_query_batch_final_work_coordinate_eq_named_slot parameters
+      router sample.2
+  have finalWorkNamedValue := coordinate_eq_of_causalRoutedAnswer?_eq_some router
+    (foldAlphaQ16QueryBatchNamedSlotInputTape
+      (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters sample.2))
+    (Sum.inl (some (Sum.inr none))) (Finset.mem_univ _) source.workAnswer
+      finalWorkRouted
+  have finalWorkCoordinate : coordinates.1.2.2.2.1 = source.workAnswer := by
+    exact finalWorkNamed.trans finalWorkNamedValue
+  have finalWorkAccepted : FinalWork34Accepted coordinates.1.2.2.2.1 := by
+    rw [finalWorkCoordinate]
+    exact source.workAccepted
   have outputsWithin : outputs.length ≤ 12 := by
     rw [outputsLength]
     simpa [samplerMode, samplerBlockCap] using
@@ -141,8 +198,8 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
     apply Option.some.inj
     rw [← routedDecode]
     simpa [appendOrdinaryRemaining] using exactDecode
-  exact ⟨foldTrial, finalTrial, target, success,
-    operationalValue.trans routedValue.symm⟩
+  exact ⟨foldTrial, finalTrial, target, foldAccepted, finalWorkAccepted,
+    success, operationalValue.trans routedValue.symm⟩
 
 #print axioms exact_selected_fold_armed_query_batch_coordinate_is_successful
 

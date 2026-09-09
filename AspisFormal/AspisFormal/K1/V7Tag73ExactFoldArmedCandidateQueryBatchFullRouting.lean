@@ -37,6 +37,7 @@ open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchProjection
 open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchRootRouting
 open AspisK1.V7Tag73ExactFoldAlphaQ16QueryBatchRootRouting
@@ -182,6 +183,9 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
       outputs.length =
         ((exactOperationalTape input).messages.challengeUse
           .queryBatch).blocksUsed ∧
+      foldTrial = (exactAcceptedFoldTrial input).trial ∧
+      finalTrial =
+        (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       advances.length = outputs.length ∧
       (gammaOutputBlocks flat.1).take outputs.length = outputs ∧
       (List.ofFn flat.1.2).take advances.length = advances ∧
@@ -216,7 +220,8 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
     exact_compiler_alpha_zero_boundary_installs_block_zero transitionRoom input
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, smallInitial, rootExact,
-      chain, outputsLength, advancesLength, q16TerminalExact, smallInitialExact,
+      finalTrialExact, chain, outputsLength, advancesLength, q16TerminalExact,
+      smallInitialExact,
       smallInitialMemory, outputPreferred, advancePreferred⟩ :=
     exact_selected_candidate_armed_query_batch_has_preferred_slots
       transitionRoom input fold.trial boundaryIndex
@@ -230,8 +235,10 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
       ⟨(exactOperationalQ16Evaluator input).afterQ16, by
         rw [q16TerminalExact], rfl⟩ chain outputsLength
   refine ⟨fold.trial, finalTrial, target, outputs, advances, flat,
-    consumedDecoded, consumedValue, outputsLength, advancesLength, outputPrefix,
-    advancePrefix, prefixRun, exactDecode, operationalValue, challengeExact,
+    consumedDecoded, consumedValue, outputsLength, rfl, finalTrialExact,
+    advancesLength, outputPrefix, advancePrefix, prefixRun, exactDecode,
+    operationalValue,
+    challengeExact,
     ?_, ?_⟩
   · intro index inOutputs
     obtain ⟨outputPrefix, later, outputActor, slot, suffixExact,
