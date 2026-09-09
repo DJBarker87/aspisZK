@@ -1,0 +1,223 @@
+Running as unit: aspis-v8-complete-terminal-stack-1788975385-67605.scope; invocation ID: 01f35d51129a43a69fb9e08bbe22b637
+warning: unused imports: `begin_payment_zerocheck` and `verify_payment_sumcheck_messages`
+  --> src/circle_prefix.rs:17:5
+   |
+17 |     begin_payment_zerocheck, decode_wire, verify_payment_sumcheck_messages,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unreachable statement
+   --> src/field.rs:268:9
+    |
+262 | /             return CM31 {
+263 | |                 a: M31::reduce_u64(a.wrapping_mul(c)
+264 | |                     .wrapping_add(4611686014132420609).wrapping_sub(b.wrapping_mul(d))),
+265 | |                 b: M31::reduce_u64(a.wrapping_mul(d).wrapping_add(b.wrapping_mul(c))),
+266 | |             };
+    | |_____________- any code following this expression is unreachable
+267 |           }
+268 |           let m0 = self.a.mul(rhs.a);
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+    |
+    = note: `#[warn(unreachable_code)]` on by default
+
+warning: unreachable statement
+   --> src/field.rs:428:9
+    |
+427 |           { return qm31_hybrid_mul(QM31{c0:CM31::new(self.components[0][0],self.components[0][1]),c1:CM31::new(self.components[1][0],self.components[1][1])},rhs); }
+    |             ----------------------------------------------------------------------------------------------------------------------------------------------------- any code following this expression is unreachable
+428 | /         let multiply = |left: [M31; 3], right: CM31| {
+429 | |             // The cached third component equals left[0]+left[1]. For the
+430 | |             // two-reduction layout only the original two limbs are needed.
+431 | |             #[cfg(v8_prepared_schoolbook)]
+...   |
+440 | |         };
+    | |__________^ unreachable statement
+
+warning: unreachable statement
+   --> src/field.rs:433:13
+    |
+432 |             { return CM31::new(left[0],left[1]).mul(right); }
+    |               -------------------------------------------- any code following this expression is unreachable
+433 |             let m0 = left[0].mul(right.a);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+   --> src/field.rs:998:9
+    |
+997 |         { return qm31_hybrid_mul(self,rhs); }
+    |           -------------------------------- any code following this expression is unreachable
+998 |         let m0 = self.c0.mul(rhs.c0);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: `aspis-core` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+warning: unused imports: `copy_logup_residual` and `range_logup_residual`
+  --> src/constraints_v4.rs:21:56
+   |
+21 |     build_copy_logup_helper, build_range_logup_helper, copy_logup_residual, range_logup_residual,
+   |                                                        ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `evaluate_trace_round`
+  --> src/constraints_v4.rs:26:5
+   |
+26 |     evaluate_trace_round, trace_round_constant, DIGEST_ELEMS, POSEIDON2_WIDTH, RATE,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `is_poseidon_active_row`, `is_poseidon_padding_row`, `merkle_boundary_layout`, `visit_copy_exceptional_terminal_links`, and `visit_copy_terminal_links`
+  --> src/constraints_v4.rs:30:47
+   |
+30 |     copy_terminal_pattern, has_carry_payload, is_poseidon_active_row, is_poseidon_padding_row,
+   |                                               ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+31 |     merkle_boundary_layout, permutation_block_schedule, source_relation_layout,
+   |     ^^^^^^^^^^^^^^^^^^^^^^
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `POOL_V1_PAIR_FOREST_ALL_LANES_MASK` and `decode_pool_v1_pair_late_public_statement_v1`
+  --> src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+24 |     PoolV1WithdrawalPublicV1, POOL_V1_DIGEST_ENCODING_VERSION, POOL_V1_PAIR_FOREST_ALL_LANES_MASK,
+   |                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> src/state_only_terminal.rs:88:1
+    |
+88  | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 6 warnings (run `cargo fix --lib -p aspis-statement` to apply 5 suggestions)
+   Compiling aspis-verifier v0.1.0 (/home/dombarker/project-offloads/aspis-v8-positive-complete-20260909/programs/aspis-verifier)
+warning: unused imports: `V7_COMPACT_BODY_WITHOUT_FRONTIERS`, `V7_COMPACT_DIGEST_BYTES`, and `V7_COMPACT_FRONTIER_CAP_PER_TREE`
+  --> src/v7_pair_forest_dispatch.rs:16:5
+   |
+16 |     V7_COMPACT_BODY_WITHOUT_FRONTIERS, V7_COMPACT_DIGEST_BYTES, V7_COMPACT_FRONTIER_CAP_PER_TREE,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unused imports: `POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES`, `V7_POOL_NATIVE_TAG73_MIN_FRONTIER_NODES`, `decode_pool_v1_pair_forest_lane_state_v1`, and `decode_pool_v1_pair_forest_terminal_statement_v1`
+  --> src/v7_pair_forest_dispatch.rs:21:47
+   |
+21 |     decode_pool_v1_pair_forest_checkpoint_v1, decode_pool_v1_pair_forest_lane_state_v1,
+   |                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |     decode_pool_v1_pair_forest_master_v1, decode_pool_v1_pair_forest_terminal_request_v1,
+23 |     decode_pool_v1_pair_forest_terminal_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+33 |     POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+34 |     V7_POOL_NATIVE_TAG73_MIN_FRONTIER_NODES, V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `polynomial_for_extension`
+ --> src/../../../docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs:9:112
+  |
+9 | use corelib::{field::{QM31 as K,CM31,M31},transcript::{Transcript,label},sumcheck::{WeightAccumulator,evaluate,polynomial_for_extension},
+  |                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `aspis_statement::pool_v1::*`
+ --> src/../../../docs/research/v8-no-work-100-20260907/experiments/positive_transfer.rs:6:5
+  |
+6 | use aspis_statement::pool_v1::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `evaluate_state_only_polynomial`
+ --> src/../../../docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs:6:63
+  |
+6 | use corelib::state_only_sumcheck::{begin_state_only_zerocheck,evaluate_state_only_polynomial};
+  |                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated module `solana_program::system_instruction`: Use `solana_system_interface` crate instead
+  --> src/atomic_payment.rs:15:5
+   |
+15 |     system_instruction, system_program,
+   |     ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+  --> src/atomic_payment.rs:15:25
+   |
+15 |     system_instruction, system_program,
+   |                         ^^^^^^^^^^^^^^
+
+warning: unused variable: `x`
+   --> src/../../../docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs:214:17
+    |
+214 |         for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumerate(){
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_x`
+    |
+    = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `y`
+   --> src/../../../docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs:214:19
+    |
+214 |         for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumerate(){
+    |                   ^ help: if this is intentional, prefix it with an underscore: `_y`
+
+warning: unused variable: `batch`
+   --> src/../../../docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs:132:9
+    |
+132 |     let batch=|v:&[K]|corelib::field::qm31_dot(&gp,v);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_batch`
+
+warning: `aspis-verifier` (lib) generated 10 warnings (run `cargo fix --lib -p aspis-verifier` to apply 5 suggestions)
+   Compiling aspis-v8-complete-sbf v0.0.0 (/home/dombarker/project-offloads/aspis-v8-positive-complete-20260909/docs/research/v8-no-work-100-20260907/experiments/complete-sbf)
+warning: use of deprecated field `solana_program::solana_program_entrypoint::BumpAllocator::start`: This field should not be accessed directly. It will become private in future versions
+ --> lib.rs:8:5
+  |
+8 |     start: solana_program::entrypoint::HEAP_START_ADDRESS as usize, len: 256 * 1024,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated field `solana_program::solana_program_entrypoint::BumpAllocator::len`: This field should not be accessed directly. It will become private in future versions
+ --> lib.rs:8:69
+  |
+8 |     start: solana_program::entrypoint::HEAP_START_ADDRESS as usize, len: 256 * 1024,
+  |                                                                     ^^^^^^^^^^^^^^^
+
+warning: `aspis-v8-complete-sbf` (lib) generated 2 warnings
+    Finished `release` profile [optimized] target(s) in 4.93s
+	Command being timed: "env CARGO_TARGET_DIR=/home/dombarker/project-offloads/aspis-v8-positive-complete-20260909/docs/research/v8-no-work-100-20260907/experiments/performance-sbf/target RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS=--cfg v8_positive_transfer --cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile -A dead_code -A unexpected_cfgs --cfg v8_performance_sbf --cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets --cfg v8_gamma_fixed --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record --cfg v8_decode_blocks --cfg v8_auth_order --cfg v8_chord_norm --cfg v8_circle_norm --cfg v8_joined_inverse --cfg v8_split_inverse --cfg v8_line_norm --cfg v8_quotient_fused --cfg v8_affine_primal --cfg v8_semantic_carry --cfg v8_semantic_boundary --cfg v8_shared_gamma --cfg v8_terminal_prefix --cfg v8_terminal_fixed --cfg v8_terminal_fused --cfg v8_semantic_stack cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --manifest-path /home/dombarker/project-offloads/aspis-v8-positive-complete-20260909/docs/research/v8-no-work-100-20260907/experiments/complete-sbf/Cargo.toml --sbf-out-dir /home/dombarker/project-offloads/aspis-v8-positive-complete-20260909/sbf-complete-terminal-stack"
+	User time (seconds): 4.79
+	System time (seconds): 0.29
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.12
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 288204
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 319
+	Minor (reclaiming a frame) page faults: 109102
+	Voluntary context switches: 1431
+	Involuntary context switches: 56
+	Swaps: 0
+	File system inputs: 47112
+	File system outputs: 17760
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
