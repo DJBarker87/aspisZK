@@ -198,6 +198,53 @@ the checked extraction endpoint needs an explicitly specified and justified
 pair/forest validator with that range convention. The generic one-tree
 validator cannot substitute for it. Neither option is implemented here.
 
+## Checked prerequisite for the uninstalled inverse-cell control
+
+[SelectedTransferPositive.lean](experiments/SelectedTransferPositive.lean) now
+proves the proposed repair's precise deterministic effect. It does **not**
+infer that the installed selected verifier checks this new residual.
+
+| Theorem / interface | Conclusion and dependency |
+|---|---|
+| `product_inverse_iff` | Over any field, an inverse witness satisfying `r*c*u-1=0` exists exactly when both factors are nonzero |
+| `ProductInverseResidual` | Names the proposed literal source-shaped equation at `(1014,1)`, `(1015,1)`, `(1014,3)` |
+| `selected_source_products_nonzero` | Existing selected source-value and conservation copy edges transport nonzeroness from those local factors to the recipient/change decoder source cells |
+| `representative_positive` | A nonzero M31 field element has a strictly positive canonical natural representative |
+| `selected_strict_amounts` | Existing selected `ValueResiduals`, `ConservationResiduals` and the **new, explicitly assumed residual** imply all three decoded amounts lie in `(0,2^30)`, exact natural-number conservation, and a `u32`-safe output sum |
+
+Input positivity is **derived** from the positive outputs and the reused
+natural-number conservation theorem. There is no additional inverse, assumed
+positive input, decoder success, honest trace equality, compiler acceptance,
+or abstract `validWitness` premise. The range/no-wrap mathematics is consumed
+from `SelectedPaymentRecovery`, which already ports V7's
+`ArithmetizationCore.range_value_sound` and `nat_of_field_eq` to the selected
+direct 30-bit cell convention. Those older leaves were not replayed.
+
+The kernel check ran after publication at HEAD
+`4aaa61e679189b2cf76bfc25c2e3ff8d5c76341e`, with dependencies matched to source
+pin `bc945367d6b0d9a5b4cb2dc5a9ecad8ddcfb33ee`. Main/cache source and olean
+provenance checks are in the [runner](experiments/run_selected_transfer_positive.sh)
+and [focused log](experiments/selected-transfer-positive-v1.log). Result:
+**exit 0, 11.57 s wall, 5,625,069,568 bytes peak RSS, zero swaps**. All six
+audited declarations use only `propext`, `Classical.choice`, `Quot.sound`;
+no `sorry`, new axioms or package replay. The standard finite-field model and
+canonical-representative connection are reused; this is not a newly translated
+Rust implementation of the gate.
+
+Source SHA-256:
+`00f427ff1d17f2b01a7fbb7f18a4bc68b9814d804a05242f0ac34a5d6a9ff48f`.
+Compiled olean SHA-256:
+`775b0b9796a0b206c279209742bb6a9fdfceb73428f3fe7f5087702bea19b560`.
+
+```sh
+bash docs/research/v8-no-work-100-20260907/experiments/run_selected_transfer_positive.sh \
+  /tmp/aspis-selected-transfer-positive-replay.log
+```
+
+This closes a real prerequisite for the costed control. It does not install
+the cell, update masking, supply accepted-residual enforcement, or establish
+the complete hash/path/context/settlement witness endpoint.
+
 ## Implication for the extraction ledger
 
 The obligation must name the exact endpoint. A claim of the form
