@@ -1,6 +1,13 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [contiguous C2 leaf records](leaf-record-review.md).
+Latest: [direct decoder blocks and rejected gamma fusion](decode-controls-review.md).
+The Lean-backed decoder saves **1,320 CU** per complete maximum-body proof.
+Worst observed is **1,100,125 CU**, with **99,875 CU** headroom below the real
+1.2M cap and the unchanged **40,282-byte** body. Malformed/ordinary/rollback
+controls pass. Four-channel fusion regressed by **24,882 CU** and is not selected.
+See [results](decode-controls-results.json); V7 parity and universal CU remain open.
+
+Previous: [contiguous C2 leaf records](leaf-record-review.md).
 The Lean-proved literal record-slice rewrite saves another **88 CU per complete
 proof**. Worst observed is **1,101,445 CU**, with **98,555 CU** headroom below
 the real 1.2M cap. Body remains **40,282 bytes**; same-proof, malformed and

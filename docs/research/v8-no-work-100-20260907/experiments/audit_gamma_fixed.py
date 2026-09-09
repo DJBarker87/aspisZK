@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Compare fixed-width gamma code against the pinned complete tag-offset build."""
-import contextlib, hashlib, io, json, re, runpy
+import contextlib, hashlib, io, json, re, runpy, subprocess
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 EX = ROOT / 'experiments'
@@ -9,6 +9,13 @@ with contextlib.redirect_stdout(io.StringIO()):
     prior = runpy.run_path(str(EX / 'audit_tag_offsets.py'))
 check, summary = prior['check'], prior['summary']
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+# Later research edits must not silently relabel this historical binary's
+# source. Resolve the actual gamma-fixed checkpoint blob, not today's file.
+query_source = subprocess.run(['git','show',
+    '54303c98ef06ba8ea72d3456c738fcb51a362796:docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs'],
+    cwd=ROOT,check=True,capture_output=True).stdout
+query_source_sha256 = hashlib.sha256(query_source).hexdigest()
+assert query_source_sha256 == 'bb497d35e1e5538480d48efc6d376984378d9dc756bb8288f0d5731103c228c0'
 def load(name, count):
     rows = {p.stem: check(json.loads(p.read_text())) for p in sorted((EV / name).glob('*.json'))}
     assert len(rows) == count, (name, len(rows))
@@ -86,7 +93,7 @@ out = {'schema': 'aspis.research.gamma-fixed.v1',
         'swaps': int(re.search(r'(\d+)  swaps', lean)[1]), 'axioms': dict(axioms),
         'log': 'experiments/gamma-fixed-final-lean.log'},
     'failed_lean_preflights': failed, 'resources': resources,
-    'query_source_sha256': sha(EX/'query_arithmetic.rs'),
+    'query_source_sha256': query_source_sha256,
     'artifacts': {role: raw['artifacts'][role] for role in ('selected_verifier','pool','registry','token_program')},
     'elf_delta_bytes': raw['artifacts']['selected_verifier']['bytes'] - prior['maximum']['withdrawal-255-2-success']['artifacts']['selected_verifier']['bytes'],
     'body_maximum': 697*16+52+24+22*621+2*296*26,

@@ -1,0 +1,17 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs b/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
+--- a/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
+@@ -27,4 +27,9 @@
+ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result<[K;4],Error>{
+-    let c1=decode::<104>(c1)?;let c2=decode::<48>(c2)?;
++    #[cfg(v8_decode_profile)] query_checkpoint("v8:gamma-enter");
++    let c1=decode::<104>(c1)?;
++    #[cfg(v8_decode_profile)] query_checkpoint("v8:decode-c1");
++    let c2=decode::<48>(c2)?;
++    #[cfg(v8_decode_profile)] query_checkpoint("v8:decode-c2");
+     let mut out=[K::ZERO;4];
+@@ -66,3 +71,4 @@
+         out[slot]=value.add(corelib::field::qm31_sum_products3_prepared(&[powers.base.helpers[0],powers.base.helpers[1],powers.d],&helpers));
+     }
++    #[cfg(v8_decode_profile)] query_checkpoint("v8:gamma-dots");
+     Ok(out)
