@@ -1,6 +1,16 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [shared copy-selector assembly](scatter-performance-review.md).
+Latest: [range-proved tag-prefix splitting](tag-split-review.md).
+One further exact rewrite saves **3,754–3,773 CU** against the shared-copy build.
+Worst observed complete transaction is now **1,137,838 CU**, including pinned
+classic Token settlement, with the unchanged **40,282-byte** maximum body.
+The ordinary checked version regressed and is retained as a rejected control;
+the selected version removes only proved redundant accumulator overflow checks.
+Malformed-proof and atomic rollback tests pass. See [results](tag-split-results.json)
+and [artifacts](tag-split-artifacts.json); universal CU, V7 parity and global
+security remain open.
+
+Previous: [shared copy-selector assembly](scatter-performance-review.md).
 A generated, Lean-proved public addition plan saves another **39,090–39,208 CU**
 on identical complete maximum-body proofs. Worst observed is **1,141,606 CU**
 including pinned classic SPL Token settlement, at the actual 1.2M cap.

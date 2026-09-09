@@ -1,0 +1,45 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -735,6 +735,21 @@
+ // CopyTagSplit proves prefix bounds and exact congruence for every canonical
+ // limb assignment, including all-max selectors; no honest-zero assumption.
++#[cfg(any(test,v8_copy_tag_split))]
++#[inline(always)]
++fn research_tag_add(a:u64,b:u64)->u64 {
++    if cfg!(v8_copy_tag_bounded) {a.wrapping_add(b)} else {a+b}
++}
++#[cfg(any(test,v8_copy_tag_split))]
++#[inline(always)]
++fn research_tag_mul(a:u64,b:u64)->u64 {
++    if cfg!(v8_copy_tag_bounded) {a.wrapping_mul(b)} else {a*b}
++}
+ #[cfg(any(test,v8_copy_tag_split))]
+ #[inline(never)]
+ fn research_copy_tag_split(coordinate:usize,selectors:&Selectors)->QM31 {
+@@ -745,13 +760,16 @@
+         let value=selectors.high[usize::from(COPY_TAG_TERMS.0[index])];
+-        let offset=u64::from(COPY_TAG_TERMS.1[index]-1_124_073_472);
++        let offset=if cfg!(v8_copy_tag_bounded) {
++            u64::from(COPY_TAG_TERMS.1[index].wrapping_sub(1_124_073_472))
++        } else {u64::from(COPY_TAG_TERMS.1[index]-1_124_073_472)};
+         let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];
+         let mut j=0;
+         while j<4 {
+-            s[j]+=u64::from(limbs[j]);
+-            d[j]+=u64::from(limbs[j])*offset;
++            s[j]=research_tag_add(s[j],u64::from(limbs[j]));
++            d[j]=research_tag_add(d[j],research_tag_mul(u64::from(limbs[j]),offset));
+             j+=1;
+         }
+         index+=1;
+@@ -758,8 +776,8 @@
+     let mut j=0;
+     while j<4 {
+-        let rotated=((s[j]&127)<<24)+(s[j]>>7);
+-        out[j]=M31::reduce_u64(67*rotated+d[j]);
++        let rotated=research_tag_add((s[j]&127)<<24,s[j]>>7);
++        out[j]=M31::reduce_u64(research_tag_add(research_tag_mul(67,rotated),d[j]));
+         j+=1;
+     }
+     QM31{c0:CM31::new(out[0],out[1]),c1:CM31::new(out[2],out[3])}

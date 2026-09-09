@@ -1,0 +1,65 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -718,6 +718,65 @@
+     assert!(7u128 * 2_147_483_646u128 * 1_124_073_607u128 < (1u128<<64));
+ };
++
++#[cfg(v8_copy_tag_split)]
++const _: () = {
++    let mut i=0;
++    while i<constants::COPY_LINKS.len() {
++        assert!(constants::COPY_LINKS[i].tag == (67u32<<24)+i as u32);
++        i+=1;
++    }
++    assert!(constants::COPY_LINKS.len()==136);
++    assert!(79_304_104_796_113u128<(1u128<<64));
++};
++
++// CopyTagSplit proves prefix bounds and exact congruence for every canonical
++// limb assignment, including all-max selectors; no honest-zero assumption.
++#[cfg(any(test,v8_copy_tag_split))]
++#[inline(never)]
++fn research_copy_tag_split(coordinate:usize,selectors:&Selectors)->QM31 {
++    let mut s=[0u64;4];
++    let mut d=[0u64;4];
++    let mut index=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate]);
++    let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate+1]);
++    while index<end {
++        let value=selectors.high[usize::from(COPY_TAG_TERMS.0[index])];
++        let offset=u64::from(COPY_TAG_TERMS.1[index]-1_124_073_472);
++        let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];
++        let mut j=0;
++        while j<4 {
++            s[j]+=u64::from(limbs[j]);
++            d[j]+=u64::from(limbs[j])*offset;
++            j+=1;
++        }
++        index+=1;
++    }
++    let mut out=[M31::ZERO;4];
++    let mut j=0;
++    while j<4 {
++        let rotated=((s[j]&127)<<24)+(s[j]>>7);
++        out[j]=M31::reduce_u64(67*rotated+d[j]);
++        j+=1;
++    }
++    QM31{c0:CM31::new(out[0],out[1]),c1:CM31::new(out[2],out[3])}
++}
+-
++
+ /// Evaluate one frozen Copy-tag coordinate with four-product lazy M31
+ /// reduction. Each raw channel is strictly below
+@@ -726,6 +785,8 @@
+ fn copy_tag_coordinate_dot(coordinate: usize, selectors: &Selectors) -> QM31 {
++    #[cfg(v8_copy_tag_split)]
++    return research_copy_tag_split(coordinate,selectors);
+     let mut output = [M31::ZERO; 4];
+     let mut index = usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate]);
+     let end = usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate + 1]);
+@@ -1505,6 +1566,7 @@
+                 assert_eq!(copy_tag_coordinate_dot(c,&selectors),expected);
++                assert_eq!(research_copy_tag_split(c,&selectors),expected);
+             }
+         }
+     }
