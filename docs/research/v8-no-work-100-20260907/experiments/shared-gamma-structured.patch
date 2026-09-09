@@ -1,0 +1,29 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs b/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs
+index 83372952..02dcf46f 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs
+@@ -128,10 +128,22 @@ pub(in super::super) fn prepare(s:Semantic,w:&Wire<'_>)->Result<(Prefix,Descript
+     let gp={let mut p=vec![K::ONE;29];for j in 1..29{p[j]=p[j-1].mul(gamma);}p};
+     #[cfg(v8_shared_weights)]
+     let batch=|v:&[K]|corelib::field::qm31_dot(&gp,v);
+-    let mut claim=w.v[358];for r in 0..3{claim=claim.add(scales[r].mul(batch(&w.v[271+29*r..300+29*r])));}
++    #[cfg(v8_shared_gamma)]
++    let dots=super::super::shared_gamma::five(gp[1..].try_into().unwrap(),[
++        w.v[271..300].try_into().unwrap(),w.v[300..329].try_into().unwrap(),
++        w.v[329..358].try_into().unwrap(),w.v[359..388].try_into().unwrap(),
++        w.v[388..417].try_into().unwrap()]);
++    #[cfg(not(v8_shared_gamma))]
++    let mut claim=w.v[358];
++    #[cfg(not(v8_shared_gamma))]
++    for r in 0..3{claim=claim.add(scales[r].mul(batch(&w.v[271+29*r..300+29*r])));}
++    #[cfg(v8_shared_gamma)]
++    let mut claim=(0..3).fold(w.v[358],|c,r|c.add(scales[r].mul(dots[r])));
+     let [s0,s1]=points;let use_x=s0.x!=s1.x;
+     let h0=if use_x{s0.x}else{s0.y};let h1=if use_x{s1.x}else{s1.y};
+-    let y0=batch(&w.v[359..388]);let y1=batch(&w.v[388..417]);
++    #[cfg(not(v8_shared_gamma))]
++    let [y0,y1]=[batch(&w.v[359..388]),batch(&w.v[388..417])];
++    #[cfg(v8_shared_gamma)] let [y0,y1]=[dots[3],dots[4]];
+     let slope=y0.sub(y1).mul(h0.sub(h1).try_inv().ok_or(Error::Domain)?);
+     let iv=[y0.sub(slope.mul(h0)),slope];
+     let abc=[s0.x.mul(s1.y).sub(s0.y.mul(s1.x)),s0.y.sub(s1.y),s1.x.sub(s0.x)];

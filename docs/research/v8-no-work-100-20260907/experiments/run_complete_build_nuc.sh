@@ -15,6 +15,7 @@ case "$mode" in
  affine-primal) bash "$complete_exp/check_affine_primal_sources.sh";;
  semantic-carry) bash "$complete_exp/check_semantic_carry_sources.sh";;
  semantic-boundary) bash "$complete_exp/check_semantic_boundary_sources.sh";;
+ shared-gamma) bash "$complete_exp/check_shared_gamma_sources.sh";;
  joined-inverse|split-inverse)
   expected_joined=4913337c4f5467db15ce58e680b7252e099fb597c2ef303edfe94165b2a9ba05
   expected_circle=46fa71b10b99950d5ab4b718964007d3b290b26ac51491e0e35a51d225178f2d
@@ -42,9 +43,9 @@ host|partial-host|gamma-fixed-host)
  [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
  [[ "$mode" != gamma-fixed-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets --cfg v8_gamma_fixed -C overflow-checks=yes'
  scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
-sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|gamma-one|gamma-one-split)
+sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma|gamma-one|gamma-one-split)
  lineage="$mode"
- case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|gamma-one|gamma-one-split) lineage=leaf-record;; esac
+ case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma|gamma-one|gamma-one-split) lineage=leaf-record;; esac
  case "$mode" in scatter|tag-split|tag-bounded) python3 "$complete_exp/generate_copy_scatter.py" --check;; esac
  [[ "$mode" != tag-shared ]] || python3 "$complete_exp/generate_tag_shared.py" --check
  case "$lineage" in tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile) python3 "$complete_exp/generate_tag_offsets.py" --check;; esac
@@ -67,18 +68,19 @@ sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatte
  [[ "$mode" != merkle-both ]] || extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow"
  case "$lineage" in leaf-record|decode-profile) extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record";; esac
  [[ "$mode" != gamma-fused ]] || extra="$extra --cfg v8_gamma_fused"
- case "$mode" in decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|gamma-one|gamma-one-split) extra="$extra --cfg v8_decode_blocks";; esac
- case "$mode" in auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|gamma-one|gamma-one-split) extra="$extra --cfg v8_auth_order";; esac
- case "$mode" in chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|gamma-one|gamma-one-split) extra="$extra --cfg v8_chord_norm";; esac
+ case "$mode" in decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma|gamma-one|gamma-one-split) extra="$extra --cfg v8_decode_blocks";; esac
+ case "$mode" in auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma|gamma-one|gamma-one-split) extra="$extra --cfg v8_auth_order";; esac
+ case "$mode" in chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma|gamma-one|gamma-one-split) extra="$extra --cfg v8_chord_norm";; esac
  case "$mode" in gamma-one|gamma-one-split) extra="$extra --cfg v8_gamma_one";; esac
- case "$mode" in circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary) extra="$extra --cfg v8_circle_norm";; esac
- case "$mode" in joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary) extra="$extra --cfg v8_joined_inverse";; esac
- case "$mode" in split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary) extra="$extra --cfg v8_split_inverse";; esac
- case "$mode" in line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary) extra="$extra --cfg v8_line_norm";; esac
- case "$mode" in quotient-fused|affine-primal|semantic-carry|semantic-boundary) extra="$extra --cfg v8_quotient_fused";; esac
- case "$mode" in affine-primal|semantic-carry|semantic-boundary) extra="$extra --cfg v8_affine_primal";; esac
- case "$mode" in semantic-carry|semantic-boundary) extra="$extra --cfg v8_semantic_carry";; esac
- [[ "$mode" != semantic-boundary ]] || extra="$extra --cfg v8_semantic_boundary"
+ case "$mode" in circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma) extra="$extra --cfg v8_circle_norm";; esac
+ case "$mode" in joined-inverse|split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma) extra="$extra --cfg v8_joined_inverse";; esac
+ case "$mode" in split-inverse|line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma) extra="$extra --cfg v8_split_inverse";; esac
+ case "$mode" in line-norm|quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma) extra="$extra --cfg v8_line_norm";; esac
+ case "$mode" in quotient-fused|affine-primal|semantic-carry|semantic-boundary|shared-gamma) extra="$extra --cfg v8_quotient_fused";; esac
+ case "$mode" in affine-primal|semantic-carry|semantic-boundary|shared-gamma) extra="$extra --cfg v8_affine_primal";; esac
+ case "$mode" in semantic-carry|semantic-boundary|shared-gamma) extra="$extra --cfg v8_semantic_carry";; esac
+ case "$mode" in semantic-boundary|shared-gamma) extra="$extra --cfg v8_semantic_boundary";; esac
+ [[ "$mode" != shared-gamma ]] || extra="$extra --cfg v8_shared_gamma"
  [[ "$mode" != gamma-one-split ]] || extra="$extra --cfg v8_gamma_one_split"
  selected="$common"
  output_mode="$mode"

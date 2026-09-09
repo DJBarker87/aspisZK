@@ -1,0 +1,67 @@
+928b7c8b4a27e32dac409f8f8c21e807526345b33e9e265df92f716bbf389b91  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SharedGammaDots.lean
+717b4bfcef6e1517780f1052d6961c7c0c02809c247606c92262b30916177d54  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SemanticCarry.lean
+f90b84321f2ca2620a6963fa362af7521485bf0ced54109e084f58c05ce13ea2  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SemanticCarry.olean
+cb06024066b66778a8e3de356871d4766ce2d6b17a7b698890195f8a9329f409  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/QmCrossRange.lean
+55ee2345729e8a4d379de3bce14ea18b14fbfdc259cf2653fadf4bf3a46876d8  /Users/dominic/ZK/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean
+b305936b5137a85f5015d363bcb0d416a2de9e4da2ba3d4d4453ec589718f064  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/QmCrossRange.olean
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SharedGammaDots.lean:87:18: error: unsolved goals
+case cons.e_init
+xy : Q ℕ × Q ℕ
+xs : List (Q ℕ × Q ℕ)
+ih :
+  ∀ (s : C ℕ),
+    castC (List.foldl (fun t xy => t + productsN xy.1 xy.2) s xs) =
+      List.foldl (fun t xy => t + productChannels (castQ xy.1) (castQ xy.2)) (castC s) xs
+s : C ℕ
+i j : Fin 3
+⊢ castC s i j + productChannels (castQ xy.1) (castQ xy.2) i j = ↑(s i j) + productChannels (castQ xy.1) (castQ xy.2) i j
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SharedGammaDots.lean:98:20: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SharedGammaDots.lean:112:4: error: Type mismatch: After simplification, term
+  accumulate_reconstructs (List.map (fun xy => (castQ xy.1, castQ xy.2)) (xy :: xs)) (castC s)
+ has type
+  @Eq (Fin 4 → ZMod p)
+    (reconstruct (List.foldl (fun x y => x + productChannels (castQ y.1) (castQ y.2)) (castC s) (xy :: xs)))
+    (List.foldl (fun x y => x + towerMul (castQ y.1) (castQ y.2)) (reconstruct (castC s)) (xy :: xs))
+but is expected to have type
+  @Eq (Fin 4 → ZMod p)
+    (reconstruct
+      (List.foldl (fun a x => a + productChannels (castQ x.1) (castQ x.2))
+        (castC s + productChannels (castQ xy.1) (castQ xy.2)) xs))
+    (List.foldl (fun t xy => t + towerMul (castQ xy.1) (castQ xy.2))
+      (reconstruct (castC s) + towerMul (castQ xy.1) (castQ xy.2)) xs)
+'AspisV8.SharedGammaDots.four_product_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.outer_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.partial_cast' depends on axioms: [propext, Quot.sound]
+'AspisV8.SharedGammaDots.cast_partial_add' depends on axioms: [propext, Quot.sound]
+'AspisV8.SharedGammaDots.outer_cast' depends on axioms: [propext, Quot.sound]
+'AspisV8.SharedGammaDots.groups_reconstruct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.structural_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.grouping' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.source_indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.canonical_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.raw_product_cast' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SharedGammaDots.cast_raw_fold' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.SharedGammaDots.fold_seed' depends on axioms: [propext, sorryAx]
+'AspisV8.SharedGammaDots.one_group' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.SharedGammaDots.kernel_result' depends on axioms: [propext, sorryAx, Quot.sound]
+        1.99 real         1.86 user         0.80 sys
+          2856943616  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              226652  page reclaims
+                2891  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 385  voluntary context switches
+               12929  involuntary context switches
+         25021254806  instructions retired
+          9814083370  cycles elapsed
+           483217448  peak memory footprint
