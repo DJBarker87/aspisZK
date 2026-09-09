@@ -25,6 +25,8 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
 #[path="quotient_fold.rs"] mod quotient_fold;
 #[cfg(v8_affine_primal)]
 #[path="affine_primal.rs"] mod affine_primal;
+#[cfg(v8_semantic_carry)]
+#[path="semantic_carry.rs"] mod semantic_carry;
 #[cfg(v8_gamma_wrap)]
 #[path="query_arithmetic.rs"] mod query_arithmetic;
 #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
