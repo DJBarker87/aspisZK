@@ -640,6 +640,39 @@ theorem successful_query_preserves_history_total_coherent
   simp only [List.length_append, List.length_singleton]
   omega
 
+/-- A prefix replay can append at most one oracle call per unit of query fuel.
+This is the prefix-interpreter counterpart of the existing complete-machine
+bound and is needed to size a later scheduler fork before exposing its coins. -/
+theorem run_prefix_total_calls_le_initial_add_fuel
+    {Result : Type*}
+    (controller : AdaptiveController) (limits : OracleLimits)
+    (actor : QueryActor) (fuel : Nat) (state : OracleState)
+    (program : OracleMachine Result) :
+    (runPrefix controller limits actor fuel state program).oracle.totalCalls ≤
+      state.totalCalls + fuel := by
+  induction fuel generalizing state program with
+  | zero => cases program <;> simp [runPrefix]
+  | succ fuel ih =>
+      cases program with
+      | pure result => simp [runPrefix]
+      | abort reason => simp [runPrefix]
+      | query input next =>
+          simp only [runPrefix]
+          cases queried : queryOracle controller limits actor state input with
+          | error reason => simp
+          | ok pair =>
+              rcases pair with ⟨output, nextState⟩
+              have queryStep :=
+                (query_oracle_success_counter_step controller limits actor
+                  state nextState input output queried).1
+              have tail := ih nextState (next output)
+              calc
+                (runPrefix controller limits actor fuel nextState
+                    (next output)).oracle.totalCalls ≤
+                    nextState.totalCalls + fuel := tail
+                _ = state.totalCalls + 1 + fuel := by rw [queryStep]
+                _ = state.totalCalls + (fuel + 1) := by omega
+
 theorem run_prefix_preserves_history_total_coherent
     {Result : Type*}
     (controller : AdaptiveController) (limits : OracleLimits)
@@ -763,6 +796,7 @@ theorem literal_root_squeeze_request_prepares_ready_coherent
           { nodeId := 0, verifierTransitionIndex := transitionIndex } =
         .ready prepared ∧
       HistoryTotalCoherent prepared.programmingBase ∧
+      prepared.programmingBase.history.length ≤ machine.adversaryFuel ∧
       firstEitherInputOccurrence prepared.outputInput prepared.advanceInput
           prepared.programmingBase.history = none ∧
       prepared.programmingBase.programmingHistory = [] ∧
@@ -787,6 +821,21 @@ theorem literal_root_squeeze_request_prepares_ready_coherent
       .adversary machine.adversaryFuel emptyOracle
       (machine.blackBox.start hidden machine.observation)
       empty_oracle_history_total_coherent
+  have rootFinalHistoryBound :
+      runtime.proverFinalOracle.history.length ≤ machine.adversaryFuel := by
+    have totalBound := run_machine_total_calls_le_initial_add_fuel
+      (rootAdversaryProjectedController runtime) machine.adversaryLimits
+      .adversary machine.adversaryFuel emptyOracle
+      (machine.blackBox.start hidden machine.observation)
+    rw [returnedRun] at totalBound
+    unfold HistoryTotalCoherent at rootFinalCoherent
+    rw [rootFinalCoherent]
+    simpa [emptyOracle] using totalBound
+  have rootNodeHistoryBound :
+      runtime.node.proverHistory.length ≤ machine.adversaryFuel := by
+    simpa [SchedulerNativePlainRomRootRuntime.node,
+      ConcreteRestorationNode.proverHistory, historySince, emptyOracle] using
+        rootFinalHistoryBound
   have rootFinalProgrammingEmpty :
       runtime.proverFinalOracle.programmingHistory = [] := by
     have preserved := run_machine_preserves_cumulative_programming_history
@@ -837,10 +886,12 @@ theorem literal_root_squeeze_request_prepares_ready_coherent
           prefixRun := none
           programmingBase := runtime.node.proverFinalOracle
           prefixSteps := 0 }
-      refine ⟨prepared, ?_, ?_, ?_, ?_, ?_⟩
+      refine ⟨prepared, ?_, ?_, ?_, ?_, ?_, ?_⟩
       · simp [prepareConcreteRestorationFromStartProgram, rootStored,
           transitionExact, pairExact, occurrenceExact, prepared]
       · exact rootFinalCoherent
+      · simpa [prepared, SchedulerNativePlainRomRootRuntime.node] using
+          rootFinalHistoryBound
       · simpa [prepared, SchedulerNativePlainRomRootRuntime.node,
           ConcreteRestorationNode.proverHistory, historySince, emptyOracle]
           using occurrenceExact
@@ -919,16 +970,39 @@ theorem literal_root_squeeze_request_prepares_ready_coherent
           configuration.oracleLimits .extractorReplay occurrence.before.length
           emptyOracle (machine.blackBox.start hidden machine.observation)
           empty_oracle_table_covered_by_query_or_programming
-      refine ⟨prepared, ?_, ?_, ?_, ?_, ?_⟩
-      · simp only [prepareConcreteRestorationFromStartProgram, rootStored,
-          transitionExact, pairExact, occurrenceExact]
-        simp [rootEntry, prefixRun, prefixPaused, prefixTrace, prepared]
-      · exact run_prefix_preserves_history_total_coherent
+      have prefixCoherent : HistoryTotalCoherent prefixRun.oracle :=
+        run_prefix_preserves_history_total_coherent
           (recordedPrefixController emptyOracle.history.length
             occurrence.before)
           configuration.oracleLimits .extractorReplay occurrence.before.length
           emptyOracle (machine.blackBox.start hidden machine.observation)
           empty_oracle_history_total_coherent
+      have prefixTotalBound := run_prefix_total_calls_le_initial_add_fuel
+        (recordedPrefixController emptyOracle.history.length occurrence.before)
+        configuration.oracleLimits .extractorReplay occurrence.before.length
+        emptyOracle (machine.blackBox.start hidden machine.observation)
+      have prefixHistoryBound :
+          prefixRun.oracle.history.length ≤ occurrence.before.length := by
+        unfold HistoryTotalCoherent at prefixCoherent
+        rw [prefixCoherent]
+        simpa [prefixRun, emptyOracle] using prefixTotalBound
+      have occurrenceDecomposition :=
+        (first_either_input_occurrence_spec outputInput advanceInput
+          runtime.node.proverHistory occurrence occurrenceExact).1
+      have occurrenceLengths := congrArg List.length occurrenceDecomposition
+      simp only [List.length_append, List.length_cons] at occurrenceLengths
+      have beforeLt : occurrence.before.length <
+          runtime.node.proverHistory.length := by
+        omega
+      have preparedHistoryBound :
+          prefixRun.oracle.history.length ≤ machine.adversaryFuel := by
+        omega
+      refine ⟨prepared, ?_, ?_, ?_, ?_, ?_, ?_⟩
+      · simp only [prepareConcreteRestorationFromStartProgram, rootStored,
+          transitionExact, pairExact, occurrenceExact]
+        simp [rootEntry, prefixRun, prefixPaused, prefixTrace, prepared]
+      · exact prefixCoherent
+      · simpa [prepared] using preparedHistoryBound
       · simpa [prepared] using prefixNone
       · simpa [prepared] using prefixProgrammingEmpty
       · simpa [prepared] using prefixCovered
@@ -967,7 +1041,8 @@ theorem literal_root_squeeze_request_prepares_pair_lookups_none
       HistoryTotalCoherent prepared.programmingBase ∧
       lookupEntry prepared.programmingBase prepared.outputInput = none ∧
       lookupEntry prepared.programmingBase prepared.advanceInput = none := by
-  obtain ⟨prepared, ready, coherent, queryAbsent, programmingEmpty, covered⟩ :=
+  obtain ⟨prepared, ready, coherent, _historyBound, queryAbsent,
+      programmingEmpty, covered⟩ :=
     literal_root_squeeze_request_prepares_ready_coherent machine hidden runtime
       runs configuration totalLimitMono freshLimitMono transitionIndex
       transition transitionExact
@@ -1017,7 +1092,8 @@ theorem literal_root_squeeze_request_programs_every_fork_pair
           configuration.pairProgrammingOrder prepared.programmingBase
           prepared.outputInput prepared.advanceInput forkOutput forkAdvance =
         .ready afterBoth := by
-  obtain ⟨prepared, ready, coherent, queryAbsent, programmingEmpty, covered⟩ :=
+  obtain ⟨prepared, ready, coherent, _historyBound, queryAbsent,
+      programmingEmpty, covered⟩ :=
     literal_root_squeeze_request_prepares_ready_coherent machine hidden runtime
       runs configuration totalLimitMono freshLimitMono transitionIndex
       transition transitionExact
@@ -1224,6 +1300,7 @@ theorem literal_root_squeeze_dispatch_emits_fork
           { nodeId := 0, verifierTransitionIndex := transitionIndex } =
         .ready prepared ∧
       HistoryTotalCoherent prepared.programmingBase ∧
+      prepared.programmingBase.history.length ≤ machine.adversaryFuel ∧
       (configuration.oracleLimits.totalCalls ≤ globalOracleCalls →
         prepared.programmingBase.history.length + 2 ≤ globalOracleCalls →
         schedulerNativePairForkHeader?
@@ -1233,13 +1310,13 @@ theorem literal_root_squeeze_dispatch_emits_fork
               { nodeId := 0, verifierTransitionIndex := transitionIndex }
               resume) =
           some (preparedForkHeader configuration prepared)) := by
-  obtain ⟨prepared, ready, coherent, _queryFresh, _programmingEmpty,
-      _covered⟩ :=
+  obtain ⟨prepared, ready, coherent, historyBound, _queryFresh,
+      _programmingEmpty, _covered⟩ :=
     literal_root_squeeze_request_prepares_ready_coherent
     machine hidden runtime runs configuration totalLimitMono freshLimitMono
     transitionIndex transition transitionExact outputInput advanceInput
     pairExact accumulator rootStored
-  refine ⟨prepared, ready, coherent, ?_⟩
+  refine ⟨prepared, ready, coherent, historyBound, ?_⟩
   intro globalLimit pairRoom
   unfold dispatchOneConcreteRestoration dispatchConcreteRestoration
   rw [ready]
@@ -1286,6 +1363,7 @@ theorem literal_root_squeeze_dispatch_emits_typed_fork
           { nodeId := 0, verifierTransitionIndex := transitionIndex } =
         .ready prepared ∧
       HistoryTotalCoherent prepared.programmingBase ∧
+      prepared.programmingBase.history.length ≤ machine.adversaryFuel ∧
       preparedRestorationPairRole? prepared = some role ∧
       role.inputs = (prepared.outputInput, prepared.advanceInput) ∧
       role.outputInput =
@@ -1301,7 +1379,7 @@ theorem literal_root_squeeze_dispatch_emits_typed_fork
               { nodeId := 0, verifierTransitionIndex := transitionIndex }
               resume) =
           some (preparedForkHeader configuration prepared)) := by
-  obtain ⟨prepared, ready, coherent, emits⟩ :=
+  obtain ⟨prepared, ready, coherent, historyBound, emits⟩ :=
     literal_root_squeeze_dispatch_emits_fork machine hidden runtime runs
       configuration totalLimitMono freshLimitMono transitionIndex transition
       transitionExact
@@ -1312,10 +1390,11 @@ theorem literal_root_squeeze_dispatch_emits_typed_fork
       (machine.blackBox.start hidden machine.observation) configuration
       accumulator { nodeId := 0, verifierTransitionIndex := transitionIndex }
       prepared ready
-  exact ⟨prepared, role, ready, coherent, projected, inputs, outputExact,
-    advanceExact, emits⟩
+  exact ⟨prepared, role, ready, coherent, historyBound, projected, inputs,
+    outputExact, advanceExact, emits⟩
 
 #print axioms successful_query_preserves_history_total_coherent
+#print axioms run_prefix_total_calls_le_initial_add_fuel
 #print axioms run_prefix_preserves_history_total_coherent
 #print axioms run_machine_preserves_history_total_coherent
 #print axioms pair_lookups_none_of_query_absent_and_programming_empty
