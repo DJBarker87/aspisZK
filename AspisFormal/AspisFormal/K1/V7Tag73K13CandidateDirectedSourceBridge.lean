@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73K13CandidateDirectedProbabilityClosure
+import AspisFormal.K1.V7Tag73K13CandidateDirectedCoordinateSelected
 import AspisFormal.K1.V7Tag73K13RestrictedJointBatchActualLawClosure
 
 /-!
@@ -37,6 +38,7 @@ open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FinalWorkDigestProbability
 open AspisK1.V7Tag73JointQueryBatchSoundness
 open AspisK1.V7Tag73K13CandidateDirectedProbabilityClosure
+open AspisK1.V7Tag73K13CandidateDirectedCoordinateSelected
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73Q16DigestDrawReindex
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
@@ -49,6 +51,35 @@ open AspisPool.AlgorithmicCircleDecoderV7
 open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
+
+theorem exact_candidate_directed_selected_coordinate_components
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {candidate : Q16DigestSlot}
+    {foldTrial finalTrial : ExactCompilerExposureTrial parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (selected : ExactTag73CandidateDirectedCoordinateSelected input candidate
+      foldTrial finalTrial) :
+    let coordinates := exactCandidateDirectedRegroupedCoordinates
+      transitionFuel configuration candidate foldTrial finalTrial sample.1
+        sample.2
+    FoldWork31Accepted coordinates.2.1 ∧
+      FinalWork34Accepted coordinates.2.2.1 ∧
+      ∃ success : GammaPrefixSucceeds coordinates.2.2.2,
+        exactOperationalChallenge input .queryBatch =
+          (successfulGammaPrefixFactorization
+            ⟨coordinates.2.2.2, success⟩).2.1 := by
+  simpa [ExactTag73CandidateDirectedCoordinateSelected,
+    exactCandidateDirectedRegroupedCoordinates,
+    foldFinalWorkQueryBatchCoordinateRegroup,
+    successfulGammaPrefixFactorization_value] using selected
 
 /-- Literal production facts at the selected 542-coordinate query-batch
 boundary. No event inclusion or measure bound is a field. -/
@@ -105,6 +136,99 @@ structure ExactCandidateDirectedK13SourceAlignment
               exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
             exactOperationalChallenge input .queryBatch ∈
               currentView.collisionTarget
+
+/-- The remaining production-specific target-data endpoint after scheduler
+routing is discharged. It contains no work-acceptance or challenge-generation
+premise: those come from the checked 542-coordinate scheduler theorem. -/
+structure ExactCandidateDirectedK13ViewAlignment
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    [Fintype HiddenTape]
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters)
+    (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
+    (fixedInstance : PublicInstance Statement)
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder) where
+  view : Q16DigestSlot →
+    ExactCompilerExposureTrial parameters →
+    ExactCompilerExposureTrial parameters → HiddenTape →
+    (ExactCompilerFoldAlphaFinalWorkQ16QueryBatchResidual parameters ×
+      (AlphaZeroDigestBlocks × Q16CandidateDigestForest)) →
+    Digest256 → Digest256 → VariableGammaCompleteSkeleton →
+      JointQueryBatchPreChallengeView
+  alignedAt : ∀
+      (sample : ExactCompilerSample HiddenTape parameters)
+      (input : ExactK12OperationalInput transitionFuel configuration projection
+        fixedInstance sample)
+      (k12 : ExactPrefixK12Certificate input)
+      (_collisionFacts :
+        exactTag73K13ExpectedQueryVector decoder input k12 ≠
+            exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
+          exactOperationalChallenge input .queryBatch ∈
+            exactTag73JointQueryBatchNonzeroCollisionSet
+              (source.preQueryDiscrepancy sample input)
+              (exactTag73K13ExpectedQueryVector decoder input k12)
+              (exactTag73K13AuthenticatedQueryVector decoder input k12))
+      (candidate : Q16DigestSlot)
+      (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
+      (_selected : ExactTag73CandidateDirectedCoordinateSelected input candidate
+        foldTrial finalTrial),
+    let coordinates := exactCandidateDirectedRegroupedCoordinates
+      transitionFuel configuration candidate foldTrial finalTrial sample.1
+        sample.2
+    ∀ success : GammaPrefixSucceeds coordinates.2.2.2,
+      let factored := successfulGammaPrefixFactorization
+        ⟨coordinates.2.2.2, success⟩
+      let currentView := view candidate foldTrial finalTrial sample.1
+        coordinates.1 coordinates.2.1 coordinates.2.2.1 factored.1
+      currentView.active = true ∧
+        currentView.preQueryDiscrepancy =
+          source.preQueryDiscrepancy sample input ∧
+        currentView.expected =
+          exactTag73K13ExpectedQueryVector decoder input k12 ∧
+        currentView.authenticated =
+          exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
+        exactOperationalChallenge input .queryBatch ∈
+          currentView.collisionTarget
+
+/-- The checked scheduler and a target-only view alignment construct the full
+component-wise source record. -/
+noncomputable def ExactCandidateDirectedK13ViewAlignment.toSourceAlignment
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    [Fintype HiddenTape]
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder}
+    (alignment : ExactCandidateDirectedK13ViewAlignment transitionFuel
+      configuration projection fixedInstance decoder source)
+    (transitionRoom : 2 ≤ transitionFuel)
+    (programmedCover : 542 ≤ 2 * parameters.forkRequestCap) :
+    ExactCandidateDirectedK13SourceAlignment transitionFuel configuration
+      projection fixedInstance decoder source where
+  view := alignment.view
+  exactAt := by
+    intro sample input k12 collisionFacts
+    obtain ⟨foldTrial, finalTrial, candidate, selected⟩ :=
+      exact_operational_input_has_candidate_directed_coordinate transitionRoom
+        programmedCover input
+    obtain ⟨foldAccepted, finalAccepted, success, challengeExact⟩ :=
+      exact_candidate_directed_selected_coordinate_components input selected
+    obtain ⟨activeExact, preExact, expectedExact, authenticatedExact,
+        actualMember⟩ :=
+      alignment.alignedAt sample input k12 collisionFacts candidate foldTrial
+        finalTrial selected success
+    exact ⟨candidate, foldTrial, finalTrial, foldAccepted, finalAccepted,
+      success, challengeExact, activeExact, preExact, expectedExact,
+      authenticatedExact, actualMember⟩
 
 /-- Component-wise causal source facts instantiate the finite-family source
 consumed by the exact probability theorem. -/
