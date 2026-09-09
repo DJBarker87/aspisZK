@@ -1,6 +1,19 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [private C1 recovery independent of final distance](private-c1-recovery-review.md).
+Latest formal continuation: [fixed early C1 and adaptive far finals](far-final-continuation.md).
+The actual causal suffix now reduces to an explicit relation-compatible
+agreement moment, retaining the quadratic helper curve and degree-28 claim
+error. A checked adaptive-final correction rules out treating the actual prior
+as a fixed-target degree-six error. Polynomial-raw-word quotient/OOD lemmas,
+canonical query-record parsing and the same-table append endpoint also advance.
+The exact restricted F19 search and its limitations are recorded alongside
+the proof evidence. Seven-alpha/three-tau common-support recovery now constructs
+one quotient and derives its ordinary and image constraints in Lean.
+Global far recovery, source/FS and full-view ZK remain open;
+the maximum body stays 40,282 bytes. See the continuation for current fork-proof
+status and the bounded next target.
+
+Previous formal continuation: [private C1 recovery independent of final distance](private-c1-recovery-review.md).
 The fixed early-C1 object now feeds the mathematical common-sample Gao decoder,
 with a kernel-checked private-sample joint failure bound (134.453-bit arithmetic
 display) and no final-distance premise. Same-table sparse payment reads and

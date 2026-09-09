@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "title": "Canonical 621-byte query records to typed gamma values; dependent residual draft",
+  "research_revision": "edb199c12fcc41f00330298b95b4736f60ac6f3a",
+  "branch": "research/v8-no-work-100-20260907",
+  "borrowed_formal_source_revision": "26a9cd4718aae9f9de7ef1c3394fb74a229085d5",
+  "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+  "environment": {
+    "lean_version": "4.32.0",
+    "lean_commit": "8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+    "host": "arm64 macOS",
+    "lean_memory_flag": "-M7000",
+    "aggregate_guard_bytes": 7516192768,
+    "max_rec_depth": 200,
+    "leaf_heartbeat_limits": {
+      "PackedLimbCollect": 10000,
+      "PackedQueryRecord": 30000,
+      "PackedQueryResidual": 30000
+    },
+    "cgroup": false,
+    "swap_disabled": false,
+    "observed_swaps_all_runs": 0,
+    "timing_scope": "Focused Lean process, excluding runner provenance work; not proving or verification runtime",
+    "source_olean_provenance": "Each borrowed source checked against explicit revision. Recursive imported source/olean hashes recorded before each run and checked unchanged after each successful run. Newly checked dependencies explicitly pinned.",
+    "cache_head_is_not_source_pin": true
+  },
+  "runner": {
+    "path": "experiments/run_packed_query_record.sh",
+    "sha256": "6ee470cf03b800a132c47d78ffb527d93a6e22212a01546198d81b7b981cb97f"
+  },
+  "source_inspection": [
+    {
+      "path": "experiments/relation_callback.rs",
+      "sha256": "285c90695cc7558a88ffc7cb50de4235b68c7ceed9d0600d5cc9ba7f682607ed",
+      "symbols": [
+        "Wire",
+        "opened_values_prepared"
+      ],
+      "scope": "621-byte query records, ordinal ordering, canonical gamma before separate Merkle authentication"
+    },
+    {
+      "path": "experiments/query_arithmetic.rs",
+      "sha256": "57590907abf1c6a278cca0babc49b4c916a87a0a44e1f265b9bea28cc9fd52b1",
+      "symbols": [
+        "decode",
+        "decode_blocks",
+        "gamma"
+      ],
+      "scope": "Actual four-u64 packed decoder and optimized gamma kernel inspected, not translated"
+    },
+    {
+      "path": "../../../crates/aspis-core/src/v6_onefold.rs",
+      "sha256": "fa7977f2be11f4676146b802e687844086f0f33c56857c83514e8b6346f14fea",
+      "symbols": [
+        "decode_packed_m31_eight_aligned",
+        "gamma_combine_v6_packed_layer0"
+      ]
+    },
+    {
+      "path": "../../../crates/aspis-core/src/state_only_spend_query.rs",
+      "sha256": "03d959ba62591dfdd55173a45e55647f38d9a0f1aded7dae1f654913aca2f0ac",
+      "symbols": [
+        "StateOnlySpendQueryPowers"
+      ]
+    }
+  ],
+  "wire": {
+    "maximum_body_bytes": 40282,
+    "body_formula": "697*16 + 52 + 24 + 22*621 + 2*296*26",
+    "query_count": 22,
+    "first_record_offset": 11228,
+    "record_bytes": 621,
+    "c1": {
+      "offset": 0,
+      "bytes": 403,
+      "limbs": 104,
+      "index": "26*slot+column"
+    },
+    "c2": {
+      "offset": 403,
+      "bytes": 186,
+      "limbs": 48,
+      "index": "4*(4*helper+slot)+basis",
+      "helper_order": [
+        "H",
+        "G",
+        "D"
+      ],
+      "tower_order": [
+        "c0.a",
+        "c0.b",
+        "c1.a",
+        "c1.b"
+      ]
+    },
+    "salt": {
+      "offset": 589,
+      "bytes": 32,
+      "canonical_field_interpretation": false
+    },
+    "transmitted_values_added": 0,
+    "protocol_source_changed": false
+  },
+  "completed": [
+    {
+      "module": "PackedLimbCollect",
+      "status": "formal proof complete",
+      "scope": "Successful canonical decode determines raw integer; total collection determines each limb; out-of-range rejection",
+      "green_log": "experiments/packed-limb-collect-v1.log"
+    },
+    {
+      "module": "PackedQueryRecord",
+      "status": "formal proof complete",
+      "scope": "621-byte mathematical byte-list parser, all 152 canonical limb values, exact field/tower/index assembly, 29-lane gamma identity, guarded complete-body record bounds",
+      "green_log": "experiments/packed-query-record-v3.log"
+    }
+  ],
+  "incomplete": [
+    {
+      "module": "PackedQueryResidual",
+      "status": "draft; focused compilation failed",
+      "source_sha256": "28c4a98fd4af9202a36ffea7079b8f5b1f1eea07520655dceecd169cd859a1e9",
+      "certified_olean_sha256": null,
+      "last_failure": {
+        "log": "experiments/packed-query-residual-v9.log",
+        "line": 126,
+        "command": "cases invx",
+        "kind": "Dependent equality elimination unfolds concrete exact-field inverse into nested QuadraticAlgebra norms, ZMod.gcdA and M31 modular arithmetic"
+      },
+      "proposed_next_step": "Explicit-argument abstract bridge or an opacity boundary below the exact-field inverse instance; do not increase limits or unfold more concrete terms"
+    }
+  ],
+  "obligations": [
+    "The four-u64 optimized decoder implements the literal little-endian bit decoder, including all crossing offsets, lengths and rejection",
+    "Prepared gamma powers and optimized delayed-reduction arithmetic implement the mathematical scalar-power sum",
+    "Observed parsed records correspond to the same root-authenticated fixed committed word at the actual causal prefix",
+    "The dependent parser/inverse/fold/ordered-rho constructor still requires a successful kernel check",
+    "Global recovery, payment knowledge, source refinement, full-view ZK and resource-bounded Fiat-Shamir composition remain distinct"
+  ],
+  "security": {
+    "new_probability_terms": [],
+    "global_security_bits": null,
+    "grinding_credit": 0,
+    "old_v7_query_or_work_law_applied": false
+  },
+  "measurements": {
+    "new_sbf_cu": null,
+    "matched_full_transaction_cu": null,
+    "host_prover_time": null,
+    "extractor_runtime": null
+  },
+  "runs": [
+    {
+      "target": "PackedLimbCollect",
+      "log": "experiments/packed-limb-collect-v1.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedLimbCollect experiments/packed-limb-collect-v1.log",
+      "exit_code": 0,
+      "wall_seconds": 3.87,
+      "peak_rss_bytes": 1259814912,
+      "swaps": 0,
+      "source_sha256": "353b0bd869f1bf2dcf217c8f2331a7808357a439bdf7853466cee741d22230a6",
+      "certified_olean_sha256": "415dc14a5507425026377f2c7b4c0c0e4ffea72589d8556e8a3523dd41454a5c",
+      "axiom_audits": 4,
+      "axiom_status": "standard-only; no sorry or new axioms",
+      "imported_provenance_unchanged": true
+    },
+    {
+      "target": "PackedQueryRecord",
+      "log": "experiments/packed-query-record-v1.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryRecord experiments/packed-query-record-v1.log",
+      "exit_code": 1,
+      "wall_seconds": 38.98,
+      "peak_rss_bytes": 5802688512,
+      "swaps": 0,
+      "source_sha256": "4037f0f9efedf7ac489248ba46f47b14b055b487452250dfbe529704b040cb41",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryRecord",
+      "log": "experiments/packed-query-record-v2.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryRecord experiments/packed-query-record-v2.log",
+      "exit_code": 1,
+      "wall_seconds": 7.22,
+      "peak_rss_bytes": 5468667904,
+      "swaps": 0,
+      "source_sha256": "bf3326032fa84f563ea24a696f36257d774672be4c6ac460597193d1bc5b49f7",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryRecord",
+      "log": "experiments/packed-query-record-v3.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryRecord experiments/packed-query-record-v3.log",
+      "exit_code": 0,
+      "wall_seconds": 14.55,
+      "peak_rss_bytes": 5614305280,
+      "swaps": 0,
+      "source_sha256": "224c4532918b8fe53c043ec7d16aaf2bca13e1d85b0bff8b39523a14988d0660",
+      "certified_olean_sha256": "24336b2bfa3f1f4a35a2c4f4c3e876fb860c989cfeb8d6c3423e50216a17786e",
+      "axiom_audits": 13,
+      "axiom_status": "standard-only; no sorry or new axioms",
+      "imported_provenance_unchanged": true
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v1.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v1.log",
+      "exit_code": 1,
+      "wall_seconds": 9.25,
+      "peak_rss_bytes": 5607178240,
+      "swaps": 0,
+      "source_sha256": "6dc0852f12b6af103f104a267dc26d27989a495cc0da6b969aa166c2088e8578",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v2.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v2.log",
+      "exit_code": 1,
+      "wall_seconds": 19.49,
+      "peak_rss_bytes": 5559255040,
+      "swaps": 0,
+      "source_sha256": "5ca61a5034f249b4d263d716998fe4976c4d165f6b389081468bb5525dac03f0",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v3.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v3.log",
+      "exit_code": 1,
+      "wall_seconds": 9.39,
+      "peak_rss_bytes": 5571624960,
+      "swaps": 0,
+      "source_sha256": "69019eae2e6d99c17b08795e3d50be2a51bf1245430c0d5fbfd9d5b7ddddbd46",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v4.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v4.log",
+      "exit_code": 1,
+      "wall_seconds": 27.8,
+      "peak_rss_bytes": 5579210752,
+      "swaps": 0,
+      "source_sha256": "a8d5f7d91191d7f293f0378a7d39a996d02c7cd09567c8b82d0c80b68606939e",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v5.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v5.log",
+      "exit_code": 1,
+      "wall_seconds": 8.38,
+      "peak_rss_bytes": 5587976192,
+      "swaps": 0,
+      "source_sha256": "d61859273861f7eba211c2a8932ff3f505e113bcd1c77e1f62225308791eef3b",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v6.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v6.log",
+      "exit_code": 1,
+      "wall_seconds": 19.94,
+      "peak_rss_bytes": 5571346432,
+      "swaps": 0,
+      "source_sha256": "a0ee9ee71900f23bd408cc7eb1f3d15694af43340bba12cdec51274d757c3d59",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-diagnostic-v7.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-diagnostic-v7.log",
+      "exit_code": 1,
+      "wall_seconds": 18.56,
+      "peak_rss_bytes": 5578506240,
+      "swaps": 0,
+      "source_sha256": "5d95d7b93ebb7685cd450520720a96a3d251ab7d096574cdcddd4a07b5132e59",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v8.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v8.log",
+      "exit_code": 1,
+      "wall_seconds": 10.58,
+      "peak_rss_bytes": 5615960064,
+      "swaps": 0,
+      "source_sha256": "b688a0089c9dcb4544aff813799e6483568a67f0fa63b1099cefd6e8811cb2f3",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    },
+    {
+      "target": "PackedQueryResidual",
+      "log": "experiments/packed-query-residual-v9.log",
+      "command": "bash experiments/run_packed_query_record.sh PackedQueryResidual experiments/packed-query-residual-v9.log",
+      "exit_code": 1,
+      "wall_seconds": 9.72,
+      "peak_rss_bytes": 5577392128,
+      "swaps": 0,
+      "source_sha256": "28c4a98fd4af9202a36ffea7079b8f5b1f1eea07520655dceecd169cd859a1e9",
+      "certified_olean_sha256": null,
+      "axiom_audits": null,
+      "axiom_status": "not certified; failed declarations may contain compiler-inserted sorryAx",
+      "imported_provenance_unchanged": null
+    }
+  ]
+}
