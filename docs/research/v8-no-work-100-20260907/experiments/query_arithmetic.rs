@@ -3,6 +3,13 @@
 //! zero. Canonical factors satisfy 4*(p-1)^2 < 2^64; wrapping_add is therefore
 //! exact integer addition, NOT field arithmetic modulo 2^64.
 use super::*;
+#[inline(always)]
+fn reduce_chunk(raw:u64)->u64{
+    #[cfg(v8_gamma_partial)]
+    { (raw & u64::from(corelib::field::P)).wrapping_add(raw>>31) }
+    #[cfg(not(v8_gamma_partial))]
+    { u64::from(M31::reduce_u64(raw).0) }
+}
 fn decode<const N:usize>(bytes:&[u8])->Result<[u32;N],Error>{
     if N==0 || N%8!=0 || bytes.len()!=N/8*31{return Err(Error::Length);}
     let mut out=[0u32;N];let mut invalid=0u32;
@@ -30,13 +37,15 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
                     .wrapping_add(u64::from(p[start+1][limb])*v[1])
                     .wrapping_add(u64::from(p[start+2][limb])*v[2])
                     .wrapping_add(u64::from(p[start+3][limb])*v[3]);
-                sum[limb]+=u64::from(M31::reduce_u64(raw).0);
+                // Seven chunks, each partial reduction <5p. Every prefix
+                // is <35p<2^37, including maximal canonical inputs.
+                sum[limb]=sum[limb].wrapping_add(reduce_chunk(raw));
             }
         }
         for limb in 0..4{
             let raw=u64::from(powers.base.c1_limbs[24][limb])*u64::from(c1[26*slot+24])
                 +u64::from(powers.base.c1_limbs[25][limb])*u64::from(c1[26*slot+25]);
-            sum[limb]+=u64::from(M31::reduce_u64(raw).0);
+            sum[limb]=sum[limb].wrapping_add(reduce_chunk(raw));
         }
         let fields=sum.map(M31::reduce_u64);
         let value=K{c0:CM31::new(fields[0],fields[1]),c1:CM31::new(fields[2],fields[3])};

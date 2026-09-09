@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Task-owned source COPY with complete-integration.patch already applied.
+# No production activation, remote deployment or unbounded build.
+set -euo pipefail
+readonly complete_exp="$(cd "$(dirname "$0")" && pwd)"
+readonly complete_root="$(cd "$complete_exp/../../../.." && pwd)"
+[[ "$complete_root" == /home/dombarker/project-offloads/aspis-v8-* && ! -e "$complete_root/.git" ]] || exit 2
+[[ $# == 2 && ! -e "$2" ]] || { echo 'usage: script host|partial-host|sbf|hybrid|lazy|partial|profile|driver|pool|registry|v7|selected-v7|selected-pool|selected-registry NEW_LOG' >&2; exit 2; }
+readonly mode="$1" log="$2"
+export NO_DNA=1 PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/active_release/bin:/usr/bin:/bin
+readonly common='--cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile -A dead_code -A unexpected_cfgs'
+scope(){ systemd-run --user --scope --unit="aspis-v8-complete-$mode-$(date +%s)-$$" -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 /usr/bin/time -v "$@"; }
+case "$mode" in
+host|partial-host)
+ extra=''
+ [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
+ scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
+sbf|hybrid|lazy|profile|partial)
+ extra=''
+ [[ "$mode" != hybrid ]] || extra='--cfg v8_qm_hybrid'
+ [[ "$mode" != lazy ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0'
+ [[ "$mode" != partial ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
+ selected="$common"
+ if [[ "$mode" == profile ]];then extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0';selected="${common/--cfg v8_quiet_profile/}";fi
+ scope env CARGO_TARGET_DIR="$complete_exp/performance-sbf/target" RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS="$selected --cfg v8_performance_sbf $extra" cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --manifest-path "$complete_exp/complete-sbf/Cargo.toml" --sbf-out-dir "$complete_root/sbf-complete-$mode" 2>&1 | tee "$log";;
+driver)
+ scope env CARGO_TARGET_DIR="$complete_exp/performance-svm/target" RUSTFLAGS='--cfg v8_complete -A unexpected_cfgs' cargo build --offline --locked --release --jobs 2 --bin aspis-v7-pair-forest-combined-rejection --manifest-path "$complete_root/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/Cargo.toml" 2>&1 | tee "$log";;
+selected-v7|selected-pool|selected-registry)
+ program="${mode#selected-}"; feature_args=()
+ case "$program" in
+  v7) program=verifier;feature_args=(--features v7-pair-forest-one-tx-candidate);;
+  pool) feature_args=(--features v7-pair-forest-one-tx-candidate);;
+ esac
+ scope env CARGO_TARGET_DIR="$complete_exp/performance-sbf/target" RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS='-A dead_code -A unexpected_cfgs' cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --no-default-features "${feature_args[@]}" --manifest-path "$complete_root/programs/aspis-$program/Cargo.toml" --sbf-out-dir "$complete_root/sbf-$mode" -- --locked 2>&1 | tee "$log";;
+pool|registry|v7)
+ manifest="$complete_exp/complete-$mode-sbf/Cargo.toml"
+ [[ "$mode" != v7 ]] || manifest="$complete_exp/complete-sbf/Cargo.toml"
+ scope env CARGO_TARGET_DIR="$complete_exp/performance-sbf/target" RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS='-A dead_code -A unexpected_cfgs' cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --manifest-path "$manifest" --sbf-out-dir "$complete_root/sbf-matched-$mode" 2>&1 | tee "$log";;
+*) exit 2;;
+esac

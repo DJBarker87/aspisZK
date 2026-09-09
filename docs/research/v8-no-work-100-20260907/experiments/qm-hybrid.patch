@@ -1,0 +1,33 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -387,3 +387,5 @@
+     #[inline(always)]
+     pub fn mul(self, rhs: QM31) -> QM31 {
++        #[cfg(v8_qm_hybrid)]
++        { return qm31_hybrid_mul(QM31{c0:CM31::new(self.components[0][0],self.components[0][1]),c1:CM31::new(self.components[1][0],self.components[1][1])},rhs); }
+         let multiply = |left: [M31; 3], right: CM31| {
+@@ -796,1 +798,18 @@
++#[cfg(v8_qm_hybrid)]
++#[inline(always)]
++fn qm31_hybrid_mul(a:QM31,b:QM31)->QM31 {
++    let ac=a.c0.mul(b.c0);
++    let bd=a.c1.mul(b.c1);
++    let (a0,a1,a2,a3)=(u64::from(a.c0.a.0),u64::from(a.c0.b.0),u64::from(a.c1.a.0),u64::from(a.c1.b.0));
++    let (b0,b1,b2,b3)=(u64::from(b.c0.a.0),u64::from(b.c0.b.0),u64::from(b.c1.a.0),u64::from(b.c1.b.0));
++    // Four canonical products fit. The signed channel has 2*P^2 padding:
++    // every prefix is below 4*P^2 < 2^64 and subtraction cannot underflow.
++    let real=a0.wrapping_mul(b2).wrapping_add(a2.wrapping_mul(b0))
++        .wrapping_add(9223372028264841218)
++        .wrapping_sub(a1.wrapping_mul(b3)).wrapping_sub(a3.wrapping_mul(b1));
++    let imag=a0.wrapping_mul(b3).wrapping_add(a1.wrapping_mul(b2))
++        .wrapping_add(a2.wrapping_mul(b1)).wrapping_add(a3.wrapping_mul(b0));
++    QM31 {c0:ac.add(mul_by_r(bd)),c1:CM31::new(M31::reduce_u64(real),M31::reduce_u64(imag))}
++}
++
+ impl QM31 {
+@@ -856,3 +875,5 @@
+     #[inline(always)]
+     pub fn mul(self, rhs: QM31) -> QM31 {
++        #[cfg(v8_qm_hybrid)]
++        { return qm31_hybrid_mul(self,rhs); }
+         let m0 = self.c0.mul(rhs.c0);

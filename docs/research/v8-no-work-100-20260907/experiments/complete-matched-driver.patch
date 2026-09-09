@@ -1,0 +1,81 @@
+--- a/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
++++ b/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
+@@ -89,0 +89,15 @@
++
++fn matched_v7()->bool{env::var("ASPIS_MATCHED_V7").as_deref()==Ok("1")}
++fn selected_profile()->[u8;32]{
++    if matched_v7(){Sha256::digest(b"aspis:pool-v1:verifier-profile:tag73-pair-forest8-v1:asq8-asf8-asr8-v1").into()}
++    else{V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING}
++}
++fn selected_release()->[u8;32]{
++    if matched_v7(){Sha256::digest(b"aspis:v7:pool-v1-pair-forest8:tag73:26c1-3c2:b10:q16:digest208:cap203:work35-31-34:asq8-asf8-asr8:active-df394a5a8554d09c:schedule-480809b836778dc6:mask-f9daf3d54f4285d1:release-v1").into()}
++    else{V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING}
++}
++fn transaction_limit()->u32{
++    let n=env::var("ASPIS_COMPLETE_TX_LIMIT").ok().map(|s|s.parse().expect("CU limit")).unwrap_or(COMPUTE_UNIT_LIMIT);
++    assert!(n>0&&n<=COMPUTE_UNIT_LIMIT);n
++}
++
+@@ -346,1 +361,1 @@
+-        .with_compute_unit_limit(COMPUTE_UNIT_LIMIT)
++        .with_compute_unit_limit(transaction_limit())
+@@ -538,2 +553,2 @@
+-        &V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+-        &V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
++        &selected_profile(),
++        &selected_release(),
+@@ -629,2 +644,2 @@
+-            V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+-            V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
++            selected_profile(),
++            selected_release(),
+@@ -654,2 +669,2 @@
+-            V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+-            V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
++            selected_profile(),
++            selected_release(),
+@@ -726,2 +741,2 @@
+-            && entry.profile_binding == V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING
+-            && entry.release_binding == V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING
++            && entry.profile_binding == selected_profile()
++            && entry.release_binding == selected_release()
+@@ -869,1 +884,1 @@
+-        verifier_profile: V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
++        verifier_profile: selected_profile(),
+@@ -873,1 +888,1 @@
+-            V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING
++            selected_release()
+@@ -1290,1 +1305,1 @@
+-        verifier_profile: V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
++        verifier_profile: selected_profile(),
+@@ -1447,3 +1462,5 @@
+-        "schema": "aspis.v7-pair-forest.registry-v2-combined-litesvm.v3",
+-        "classification": if first_success {
+-            "REAL COMBINED STRICT-WORK ACCEPTANCE CU"
++        "schema": "aspis.research.v8-v7.complete-comparison.v1",
++        "profile": if matched_v7() {"selected V7 control"} else {"repaired research V8"},
++        "grinding_security_credit_bits": 0,
++        "classification": if first_success {
++            "REAL COMBINED SELECTED-PROFILE ACCEPTANCE CU"
+@@ -1462,1 +1479,1 @@
+-            "strict_work_expected": !args.scenario.uses_result_double(),
++            "strict_work_expected": matched_v7() && !args.scenario.uses_result_double(),
+@@ -1509,1 +1526,1 @@
+-            "txv1_declared_compute_unit_limit": COMPUTE_UNIT_LIMIT,
++            "txv1_declared_compute_unit_limit": transaction_limit(),
+@@ -1583,1 +1600,1 @@
+-            "production_verifier": {
++            "cryptographic_verifier": {
+@@ -1599,1 +1616,1 @@
+-                "kind": if args.scenario.uses_result_double() { "test-only result double" } else { "production Tag-73 verifier" },
++                "kind": if args.scenario.uses_result_double() { "test-only result double" } else { if matched_v7() {"selected V7 control"} else {"repaired research V8 verifier"} },
+@@ -1614,1 +1631,1 @@
+-            "payload_layout": "688-byte encoded candidate afterstate followed by compact Tag-73 proof",
++            "payload_layout": "688-byte encoded candidate afterstate followed by selected canonical proof",
+@@ -1622,3 +1639,3 @@
+-            "The transaction is a real TxV1 message with its 1.4M compute limit in TransactionConfig.",
+-            "A runtime limit above 1.4M is an explicit local diagnostic override and is not deployable evidence.",
+-            "Production success/rejection cases execute the strict frozen proof and all 35/31/34-bit work checks; result-double cases are explicitly isolated outer-Pool return-data adversarial tests.",
++            "The transaction is a real TxV1 message; its exact declared compute limit is recorded in execution.",
++            "A runtime limit above 1.4M is an explicit local diagnostic override and is not deployable evidence.",
++            "V7 controls execute their unchanged strict work checks. V8 executes the repaired research grammar with zero work credit. Result-double cases are isolated outer-Pool tests.",

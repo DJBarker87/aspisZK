@@ -1,0 +1,113 @@
+diff --git a/programs/aspis-verifier/src/v7_pair_forest_dispatch.rs b/programs/aspis-verifier/src/v7_pair_forest_dispatch.rs
+--- a/programs/aspis-verifier/src/v7_pair_forest_dispatch.rs
++++ b/programs/aspis-verifier/src/v7_pair_forest_dispatch.rs
+@@ -111,1 +111,7 @@
+-fn frontier_nodes_from_proof_length(length: usize) -> Option<usize> {
++#[cfg(v8_complete)]
++fn frontier_nodes_from_proof_length(length: usize) -> Option<usize> {
++    let extra=length.checked_sub(697*16+52+24+22*621)?;
++    (extra%52==0 && extra/52<=296).then_some(extra/52)
++}
++#[cfg(not(v8_complete))]
++fn frontier_nodes_from_proof_length(length: usize) -> Option<usize> {
+@@ -806,1 +812,10 @@
+-fn verify_statement_v1(
++#[cfg(v8_complete)]
++fn verify_statement_v1(
++    verifier_program: &Pubkey, proof_account_key: &Pubkey, proof: &[u8],
++    _frontier_nodes: usize, statement: &PoolV1PairForestTerminalStatementV1,
++    statement_digest: [u8;32],
++) -> ProgramResult {
++    crate::v8_complete::verify(verifier_program,proof_account_key,proof,statement,statement_digest)
++}
++#[cfg(not(v8_complete))]
++fn verify_statement_v1(
+diff --git a/programs/aspis-verifier/src/lib.rs b/programs/aspis-verifier/src/lib.rs
+--- a/programs/aspis-verifier/src/lib.rs
++++ b/programs/aspis-verifier/src/lib.rs
+@@ -167,1 +167,4 @@
+-pub mod v7_pair_forest_dispatch;
++pub mod v7_pair_forest_dispatch;
++#[cfg(v8_complete)]
++#[path="../../../docs/research/v8-no-work-100-20260907/experiments/complete_callback.rs"]
++mod v8_complete;
+diff --git a/crates/aspis-statement/src/pool_v1/tag73_pair_forest_profile.rs b/crates/aspis-statement/src/pool_v1/tag73_pair_forest_profile.rs
+--- a/crates/aspis-statement/src/pool_v1/tag73_pair_forest_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/tag73_pair_forest_profile.rs
+@@ -11,17 +11,28 @@
+-pub const V7_POOL_PAIR_FOREST_TAG73_STATEMENT_DIGEST_DOMAIN: &[u8] =
+-    b"aspis/pool-v1/pair-forest8/asf8-statement-digest/v1";
+-
+-pub const V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING_PREIMAGE: &[u8] =
+-    b"aspis:pool-v1:verifier-profile:tag73-pair-forest8-v1:asq8-asf8-asr8-v1";
+-pub const V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING: [u8; 32] = [
+-    0xa1, 0x79, 0xf8, 0xd7, 0xe3, 0x70, 0x24, 0xeb, 0x54, 0xe3, 0xdb, 0x17, 0xf3, 0x96, 0xb3, 0x98,
+-    0xa1, 0xbe, 0xb2, 0xda, 0x0c, 0x8b, 0xfa, 0xf6, 0x2b, 0x33, 0x5f, 0x2b, 0xa4, 0xea, 0x5c, 0x26,
+-];
+-
+-pub const V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING_PREIMAGE: &[u8] =
+-    b"aspis:v7:pool-v1-pair-forest8:tag73:26c1-3c2:b10:q16:digest208:cap203:work35-31-34:asq8-asf8-asr8:active-df394a5a8554d09c:schedule-480809b836778dc6:mask-f9daf3d54f4285d1:release-v1";
+-pub const V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING: [u8; 32] = [
+-    0xad, 0xd0, 0x96, 0x63, 0xc6, 0xa5, 0x48, 0x38, 0x0e, 0x1a, 0x7e, 0x53, 0x94, 0xc8, 0x42, 0x6e,
+-    0x6e, 0x48, 0xba, 0xc2, 0x4a, 0x8c, 0x53, 0x6a, 0x04, 0x5f, 0xbf, 0x9d, 0xbe, 0x9f, 0xba, 0x1c,
+-];
+-
++#[cfg(not(v8_complete))]
++mod selected {
++pub const V7_POOL_PAIR_FOREST_TAG73_STATEMENT_DIGEST_DOMAIN: &[u8] =
++    b"aspis/pool-v1/pair-forest8/asf8-statement-digest/v1";
++
++pub const V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING_PREIMAGE: &[u8] =
++    b"aspis:pool-v1:verifier-profile:tag73-pair-forest8-v1:asq8-asf8-asr8-v1";
++pub const V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING: [u8; 32] = [
++    0xa1, 0x79, 0xf8, 0xd7, 0xe3, 0x70, 0x24, 0xeb, 0x54, 0xe3, 0xdb, 0x17, 0xf3, 0x96, 0xb3, 0x98,
++    0xa1, 0xbe, 0xb2, 0xda, 0x0c, 0x8b, 0xfa, 0xf6, 0x2b, 0x33, 0x5f, 0x2b, 0xa4, 0xea, 0x5c, 0x26,
++];
++
++pub const V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING_PREIMAGE: &[u8] =
++    b"aspis:v7:pool-v1-pair-forest8:tag73:26c1-3c2:b10:q16:digest208:cap203:work35-31-34:asq8-asf8-asr8:active-df394a5a8554d09c:schedule-480809b836778dc6:mask-f9daf3d54f4285d1:release-v1";
++pub const V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING: [u8; 32] = [
++    0xad, 0xd0, 0x96, 0x63, 0xc6, 0xa5, 0x48, 0x38, 0x0e, 0x1a, 0x7e, 0x53, 0x94, 0xc8, 0x42, 0x6e,
++    0x6e, 0x48, 0xba, 0xc2, 0x4a, 0x8c, 0x53, 0x6a, 0x04, 0x5f, 0xbf, 0x9d, 0xbe, 0x9f, 0xba, 0x1c,
++];
++
++}
++#[cfg(not(v8_complete))]
++pub use selected::*;
++#[cfg(v8_complete)]
++#[path="../../../../docs/research/v8-no-work-100-20260907/experiments/complete_binding.rs"]
++mod research;
++#[cfg(v8_complete)]
++pub use research::*;
++
+diff --git a/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs b/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
+--- a/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
++++ b/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
+@@ -899,1 +899,26 @@
+-    let instruction_data = match args.transport {
++    // Research fixture export before proof loading or any transaction.
++    // These values derive from the independently constructed account model.
++    if let Ok(directory)=env::var("ASPIS_V8_EXPORT_CONTEXT") {
++        let common=PoolV1PairForestTerminalCommonV1 {
++            master_account:master_key.to_bytes(), checkpoint_account:checkpoint_key.to_bytes(),
++            selected_lane_account:lane_key.to_bytes(),output_lane,checkpoint_sequence,
++            historical_global_anchor,
++            lane_transition:PoolV1PairLatePublicStatementV1{
++                live_snapshot:PoolV1PairLiveSnapshotV1{
++                    pool:master_key.to_bytes(),deployment_domain:DEPLOYMENT_DOMAIN_BYTES,
++                    sequence:lane.tree.next_leaf_index,next_pair_index:lane.tree.next_leaf_index,
++                    current_root:lane.tree.root,frontier:lane.tree.frontier},
++                candidate_afterstate}
++        };
++        let statement=match args.operation {
++            Operation::Transfer=>PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public:transfer_public},
++            Operation::Withdrawal=>PoolV1PairForestTerminalStatementV1::Withdrawal{common,public:withdrawal_public},
++        };
++        fs::create_dir(&directory)?;
++        fs::write(format!("{directory}/statement.bin"),encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(|e|anyhow!("{e:?}"))?)?;
++        fs::write(format!("{directory}/verifier.bin"),verifier_program.to_bytes())?;
++        fs::write(format!("{directory}/proof-account.bin"),PROOF_ACCOUNT_BYTES)?;
++        println!("Exported authoritative synthetic account context; no proof verified.");
++        return Ok(());
++    }
++    let instruction_data = match args.transport {
