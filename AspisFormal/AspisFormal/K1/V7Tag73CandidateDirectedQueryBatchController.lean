@@ -115,6 +115,26 @@ theorem missing_candidate_continuation_cannot_arm
     queryBatchDagPreferredSlotForInput, queryBatchPrefixOutputSlot?,
     queryBatchPrefixAdvanceSlot?]
 
+/-- Once the target continuation is known, every other literal input leaves an
+unarmed query-batch extension unarmed. -/
+theorem different_candidate_boundary_cannot_arm
+    (target : Q16DigestSlot)
+    (dag : FinalWorkQ16DagMemory)
+    (memory : QueryBatchDagExtensionMemory)
+    (input : ShaInput) (answer continuation : Digest256)
+    (unseen : memory.queryBatch.boundarySeen = false)
+    (empty : memory.queryBatch.producers = [])
+    (targetExact : memory.q16.advances target = some continuation)
+    (different : input ≠ bytes continuation ++
+      [domAbsorb, queryBatchChallengeLabel]) :
+    (candidateDirectedQueryBatchAfterInput target dag memory input answer
+      ).queryBatch = memory.queryBatch := by
+  rcases memory with ⟨q16, queryBatch⟩
+  rcases queryBatch with ⟨boundarySeen, producers, usedSlots⟩
+  simp_all [candidateDirectedQueryBatchAfterInput, candidateContinuation?,
+    queryBatchDagPreferredSlotForInput, queryBatchPrefixOutputSlot?,
+    queryBatchPrefixAdvanceSlot?]
+
 /-- Extend any established controller with one pre-fixed q16 terminal-slot
 hypothesis. Existing labels retain priority. -/
 def extendControllerThroughCandidateQueryBatch
@@ -243,6 +263,7 @@ theorem base_indexed_state_after_candidate_extended_records
 #print axioms candidateDirectedQueryBatchAfterInput
 #print axioms exact_candidate_boundary_arms_query_batch
 #print axioms missing_candidate_continuation_cannot_arm
+#print axioms different_candidate_boundary_cannot_arm
 #print axioms extendControllerThroughCandidateQueryBatch
 #print axioms candidate_extended_base_after_memory
 #print axioms candidate_extended_base_after_answer
