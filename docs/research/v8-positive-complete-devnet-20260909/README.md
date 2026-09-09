@@ -1,6 +1,8 @@
 # Positive-transfer COMPLETE integration
 
-Local gate passed; repaired verifier upload and fresh devnet state setup are in progress.
+Local gate and repaired devnet transfer passed. The finalized atomic transfer used
+1,105,880 CU of the declared 1,200,000. See [the live report](live-demo-report.md)
+for signatures, settlement assertions, controls, costs and artifact provenance.
 This is experimental engineering evidence. Full-view ZK, Fiat–Shamir and global
 accepted-proof recovery remain open. No production activation is claimed.
 
@@ -11,8 +13,10 @@ Own branch/worktree: `research/v8-positive-complete-devnet-20260909` /
 Main and the actively edited research worktrees are untouched.
 
 The opted-in repair adds the reviewed lane94 inverse-product residual requiring
-both transfer output amounts to be nonzero. The 107-byte descriptor retains the
-reviewed parent-profile bytes, mask inventory and active-cell overwrite rule.
+both transfer output amounts to be nonzero. The 107-byte descriptor retains the reviewed mask inventories, layout and
+active-cell overwrite rule, and explicitly binds the prior COMPLETE profile as
+parent. That parent differs from the standalone opt-in host run’s V7 default
+profile; it is a recorded transcript-input change, not byte-identical framing.
 The SBF path uses exact frozen descriptor bytes; the host checks equality with
 the original enumeration and 32 arbitrary-QM31 packing controls. No existing
 semantic, canonical, carried-image, shifted-row or shifted-query check is removed.
