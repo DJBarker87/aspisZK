@@ -1,6 +1,12 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest experiment: [three query-affine fusions](query-affine-review.md).
+Latest experiment: [helper hoisting and query injection](query-injection-review.md).
+One control ties; three algebraically equivalent lowerings regress by377–2,917CU.
+All96new complete cases preserve outcomes/account effects. The shifted query
+schedule and grouped-dot range/equivalence interfaces are Lean-proved; none of
+the controls replaces the retained verifier. See [results](query-injection-results.json).
+
+Preceding experiment: [three query-affine fusions](query-affine-review.md).
 Their field/range equivalence is Lean-proved, but all three regress complete CU
 (+737–8,409 per identical maximum-body proof). All 72 new complete cases preserve
 outcomes and account effects. They are rejected controls, not selected changes.

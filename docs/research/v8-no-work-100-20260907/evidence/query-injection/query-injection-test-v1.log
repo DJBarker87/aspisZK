@@ -1,0 +1,158 @@
+Running as unit: aspis-query-injection-test-1788939588-3956703.scope; invocation ID: 02cf91235b3347b19cee0edf84e0e9e1
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling libc v0.2.189
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core)
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling getrandom v0.3.4
+   Compiling cfg-if v1.0.4
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+warning: unreachable statement
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core/src/field.rs:268:9
+    |
+262 | /             return CM31 {
+263 | |                 a: M31::reduce_u64(a.wrapping_mul(c)
+264 | |                     .wrapping_add(4611686014132420609).wrapping_sub(b.wrapping_mul(d))),
+265 | |                 b: M31::reduce_u64(a.wrapping_mul(d).wrapping_add(b.wrapping_mul(c))),
+266 | |             };
+    | |_____________- any code following this expression is unreachable
+267 |           }
+268 |           let m0 = self.a.mul(rhs.a);
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+    |
+    = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core/src/field.rs:428:9
+    |
+427 |           { return qm31_hybrid_mul(QM31{c0:CM31::new(self.components[0][0],self.components[0][1]),c1:CM31::new(self.components[1][0],self.components[1][1])},rhs); }
+    |             ----------------------------------------------------------------------------------------------------------------------------------------------------- any code following this expression is unreachable
+428 | /         let multiply = |left: [M31; 3], right: CM31| {
+429 | |             // The cached third component equals left[0]+left[1]. For the
+430 | |             // two-reduction layout only the original two limbs are needed.
+431 | |             #[cfg(v8_prepared_schoolbook)]
+...   |
+440 | |         };
+    | |__________^ unreachable statement
+
+warning: unreachable statement
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core/src/field.rs:433:13
+    |
+432 |             { return CM31::new(left[0],left[1]).mul(right); }
+    |               -------------------------------------------- any code following this expression is unreachable
+433 |             let m0 = left[0].mul(right.a);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core/src/field.rs:998:9
+    |
+997 |         { return qm31_hybrid_mul(self,rhs); }
+    |           -------------------------------- any code following this expression is unreachable
+998 |         let m0 = self.c0.mul(rhs.c0);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+   Compiling zeroize v1.8.1
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement)
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `vec`
+ --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:8:25
+  |
+8 | use alloc::{boxed::Box, vec};
+  |                         ^^^
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-core` (lib) generated 4 warnings
+warning: `aspis-statement` (lib) generated 6 warnings (run `cargo fix --lib -p aspis-statement` to apply 5 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+warning: unused variable: `x`
+   --> ../relation_callback.rs:213:17
+    |
+213 | ...   for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumer...
+    |               ^ help: if this is intentional, prefix it with an underscore: `_x`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `y`
+   --> ../relation_callback.rs:213:19
+    |
+213 | ...   for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumer...
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_y`
+
+warning: `aspis-v8-performance-host` (bin "aspis-v8-performance-host" test) generated 2 warnings (run `cargo fix --bin "aspis-v8-performance-host" -p aspis-v8-performance-host --tests` to apply 2 suggestions)
+    Finished `release` profile [optimized] target(s) in 23.16s
+     Running unittests ../relation_callback.rs (docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps/aspis_v8_performance_host-04e835b3406062d2)
+
+running 1 test
+test query_injection::tests::shifted_claims_and_carried_weights_match ... QUERY_INJECTION arbitrary_profiles=512 complete_weight_tails=32 shape_cases=75 rho_zero_one_max=true shifted_degree_q=true
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.03s
+
+	Command being timed: "env RUSTFLAGS=--cfg v8_query_injection --cfg v8_gamma_wrap --cfg v8_gamma_fixed --cfg v8_gamma_partial --cfg v8_decode_blocks --cfg v8_structured --cfg v8_shared_weights --cfg v8_reuse_gamma --cfg v8_shared_gamma --cfg v8_semantic_boundary --cfg v8_semantic_carry --cfg v8_affine_primal --cfg v8_query_kernels --cfg v8_quotient_fused --cfg v8_query_shared --cfg v8_line_norm --cfg v8_split_inverse --cfg v8_joined_inverse --cfg v8_circle_norm --cfg v8_chord_norm --cfg v8_batch_m --cfg v8_leaf_record --cfg v8_merkle_slices --cfg v8_merkle_borrow -C overflow-checks=yes -A dead_code -A unexpected_cfgs --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_qm_channel_partial cargo test --offline --locked --release --jobs 2 --manifest-path /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml query_injection::tests -- --test-threads=1 --nocapture"
+	User time (seconds): 30.27
+	System time (seconds): 1.06
+	Percent of CPU this job got: 135%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:23.20
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 517856
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 74
+	Minor (reclaiming a frame) page faults: 575748
+	Voluntary context switches: 3023
+	Involuntary context switches: 343
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 192576
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+d4f7979118374f9e12d62e2ccba3b9e2f636bb0c02e93d2b32a5c538ee328781  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/query_injection.rs
+57590907abf1c6a278cca0babc49b4c916a87a0a44e1f265b9bea28cc9fd52b1  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
+ff29f8d7a074dc04b5877505eafb4b55b38d2218a20357d1e744434eabe7b6f9  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+bb4b177e4b06da631cef8cc3eaa44b3b08c1bbf3b123b975b116264f447d8fe0  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core/src/field.rs
