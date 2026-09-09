@@ -1,0 +1,163 @@
+UNVERIFIED CONCRETE ENDPOINT DRAFT — NOT A RETAINED LEAN RESULT.
+The scoped continuation's bounded elaboration did not close this endpoint.
+
+import EarlyC1ProjectionPrefix
+
+/-!
+An early mathematical C1 object from the fixed, totalized received C1 word.
+This is deliberately an Option: no candidate is not silently replaced by zero.
+The later width29 tuple is used to prove that the Option is populated, never
+to define it. No semantic challenge, C2 word, gamma or provider is an input.
+
+The object is noncomputable. It establishes causal mathematical uniqueness,
+not adversary access, decoder runtime, proof acceptance or payment validity.
+-/
+set_option autoImplicit false
+
+namespace AspisV8.EarlyC1Projection
+open Finset
+noncomputable section
+-- In particular, do not synthesize executable equality on a finite QM31
+-- function space while elaborating the symbolic support sets below.
+local instance endpointDecision (p : Prop) : Decidable p := Classical.propDecidable p
+
+
+open AspisV8.NearGammaFibreBridge
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisPool.V7C1SubfieldRecovery
+open AspisPool.AlgorithmicCircleDecoderV7
+open AspisPool.V7ExtractedLaneWords
+open AspisV5ComponentCQM31TowerExact
+
+
+theorem earlyC1_none_iff (received : C1Received) :
+    earlyC1 received = none ↔
+      ¬ ∃ p, 245609 ≤ (support fibreEncode (receivedFibres received) p).card :=
+  early_none_iff fibreEncode (receivedFibres received) 245609
+
+/-- Concrete V7 base projection preserves every correctly supported C1 fibre.
+This works on the tuple's own support and needs no decoder/provider success. -/
+theorem projected_support (received : C1Received) (p : C1Messages)
+    (base : ∀ lane index, projectBase (received lane index) = received lane index) :
+    support fibreEncode (receivedFibres received) p ⊆
+      support fibreEncode (receivedFibres received) (fun lane => projectMessage (p lane)) := by
+  exact projection_preserves_support fibreEncode (receivedFibres received) p projectMessage
+    (fun value slot => projectBase (value slot))
+    (fun message f => funext fun slot => congrFun (exactInitialEncoder_commutes message) _)
+    (fun lane f => funext fun slot => base lane _)
+
+theorem supported_C1_is_base (received : C1Received) (p : C1Messages)
+    (base : ∀ lane index, projectBase (received lane index) = received lane index)
+    (own : 245609 ≤ (support fibreEncode (receivedFibres received) p).card) :
+    ∀ lane, projectMessage (p lane) = p lane := by
+  have projected := own.trans (card_le_card (projected_support received p base))
+  have left := earlyC1_identifies_own_support received p own
+  have right := earlyC1_identifies_own_support received
+    (fun lane => projectMessage (p lane)) projected
+  have same := Option.some.inj (right.symm.trans left)
+  exact congrFun same
+
+theorem earlyC1_value_is_embedded (received : C1Received) (p : C1Messages)
+    (base : ∀ lane index, projectBase (received lane index) = received lane index)
+    (found : earlyC1 received = some p) (row : Fin 1024) (lane : Fin 16) :
+    embedM31Exact ((p (semanticColumnIndex lane) row).re.re) =
+      p (semanticColumnIndex lane) row := by
+  have own := some_early_has_support fibreEncode (receivedFibres received) 245609 p found
+  have fixed := congrFun (supported_C1_is_base received p base own
+    (semanticColumnIndex lane)) row
+  exact fixed
+
+abbrev Width29Messages := Fin 29 → Message
+abbrev Width29Received := Fin 29 → Fin 1048576 → QM31Exact
+
+noncomputable def jointOwnSupport (received : Width29Received) (p : Width29Messages) :
+    Finset (Fin 262144) :=
+  support fibreEncode (fun lane f slot => received lane (fibreEmbed (f,slot))) p
+
+/-- Consumes the dense near-gamma branch's joint own-support conclusion.
+The full tuple can depend on C2/earlier challenges; its C1 projection cannot
+vary once the fixed received C1 is fixed. The small-Good/no-tuple branch is
+not asserted to satisfy this premise. -/
+theorem late_width29_projection_is_early
+    (receivedC1 : C1Received) (received : Width29Received) (p : Width29Messages)
+    (c1fixed : ∀ column index,
+      received (c1LaneIndex column) index = receivedC1 column index)
+    (own : 245609 ≤ (jointOwnSupport received p).card) :
+    earlyC1 receivedC1 = some (fun column => p (c1LaneIndex column)) := by
+  have projected := support_restrict fibreEncode
+    (fun lane f slot => received lane (fibreEmbed (f,slot))) p c1LaneIndex
+    (receivedFibres receivedC1) (fun column f => funext fun slot => c1fixed column _)
+  exact earlyC1_identifies_own_support receivedC1 (fun column => p (c1LaneIndex column))
+    (own.trans (card_le_card projected))
+
+theorem no_early_excludes_late_own_support
+    (receivedC1 : C1Received) (received : Width29Received) (p : Width29Messages)
+    (c1fixed : ∀ column index,
+      received (c1LaneIndex column) index = receivedC1 column index)
+    (none : earlyC1 receivedC1 = Option.none) :
+    ¬ 245609 ≤ (jointOwnSupport received p).card := by
+  intro own
+  have found := late_width29_projection_is_early receivedC1 received p c1fixed own
+  rw [none] at found
+  contradiction
+
+theorem adaptive_C2_cannot_change_C1
+    (receivedC1 : C1Received) (leftWord rightWord : Width29Received)
+    (left right : Width29Messages)
+    (leftFixed : ∀ column index,
+      leftWord (c1LaneIndex column) index = receivedC1 column index)
+    (rightFixed : ∀ column index,
+      rightWord (c1LaneIndex column) index = receivedC1 column index)
+    (leftOwn : 245609 ≤ (jointOwnSupport leftWord left).card)
+    (rightOwn : 245609 ≤ (jointOwnSupport rightWord right).card) :
+    (fun column => left (c1LaneIndex column)) =
+      (fun column => right (c1LaneIndex column)) := by
+  have hl := late_width29_projection_is_early receivedC1 leftWord left leftFixed leftOwn
+  have hr := late_width29_projection_is_early receivedC1 rightWord right rightFixed rightOwn
+  exact Option.some.inj (hl.symm.trans hr)
+
+noncomputable def earlySemanticTrace (received : C1Received) :
+    Option (Fin 1024 → Fin 16 → M31Exact) :=
+  (earlyC1 received).map fun p row lane => (p (semanticColumnIndex lane) row).re.re
+
+/-- The selected sixteen-column M31 trace projection is the old V7 projection,
+now attached to an early object rather than to a post-C2 tuple by assertion. -/
+theorem late_semantic_trace_is_early
+    (receivedC1 : C1Received) (received : Width29Received) (p : Width29Messages)
+    (c1fixed : ∀ column index,
+      received (c1LaneIndex column) index = receivedC1 column index)
+    (own : 245609 ≤ (jointOwnSupport received p).card) :
+    earlySemanticTrace receivedC1 = some (semanticTrace p) := by
+  unfold earlySemanticTrace
+  rw [late_width29_projection_is_early receivedC1 received p c1fixed own]
+  rfl
+
+/-- Concrete totalization used by the existing V7 authenticated-word interface.
+It establishes only base-valuedness, not availability or Merkle extraction. -/
+theorem extracted_totalized_C1_base
+    (words : AspisPool.V7MerkleQueryExtractor.ExtractedWords) :
+    ∀ column index, projectBase (c1Received words column index) =
+      c1Received words column index :=
+  projectBase_c1Received words
+
+#print axioms large_support_unique
+#print axioms early_none_iff
+#print axioms early_eq_of_large_support
+#print axioms some_early_has_support
+#print axioms projection_preserves_support
+#print axioms support_restrict
+#print axioms function_agreement
+#print axioms exact_fibre_overlap
+#print axioms earlyC1_identifies_own_support
+#print axioms earlyC1_none_iff
+#print axioms projected_support
+#print axioms supported_C1_is_base
+#print axioms earlyC1_value_is_embedded
+#print axioms late_width29_projection_is_early
+#print axioms no_early_excludes_late_own_support
+#print axioms adaptive_C2_cannot_change_C1
+#print axioms late_semantic_trace_is_early
+#print axioms extracted_totalized_C1_base
+
+end
+end AspisV8.EarlyC1Projection
