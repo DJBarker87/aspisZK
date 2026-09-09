@@ -1,0 +1,22 @@
+diff --git a/crates/aspis-core/src/sumcheck.rs b/crates/aspis-core/src/sumcheck.rs
+index 5d5115ce..92319baa 100644
+--- a/crates/aspis-core/src/sumcheck.rs
++++ b/crates/aspis-core/src/sumcheck.rs
+@@ -941,0 +942,17 @@ impl WeightAccumulator {
++        #[cfg(v8_terminal_fixed)]
++        if N == 4 && self.log_len == 2 && self.components.len() == 1 {
++            if let WeightComponent::LineM31Batch { scales, xs, deferred_halvings } = &self.components[0] {
++                let mut out = [QM31::ZERO; N];
++                for (&scale, &x) in scales.iter().zip(xs) {
++                    let high = Self::double_x_m31(x);
++                    let low_value = scale.mul_m31(x);
++                    let high_value = scale.mul_m31(high);
++                    let cross_value = low_value.mul_m31(high);
++                    out[0] = out[0].add(scale);
++                    out[1] = out[1].add(low_value);
++                    out[2] = out[2].add(high_value);
++                    out[3] = out[3].add(cross_value);
++                }
++                return out.map(|v| Self::halve_qm31(v, *deferred_halvings));
++            }
++        }

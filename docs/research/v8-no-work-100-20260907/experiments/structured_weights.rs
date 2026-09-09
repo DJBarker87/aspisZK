@@ -1,6 +1,8 @@
 //! Structured chord transport: port of the previously tested product/grouped kernels.
 //! No dense ordinary vector is constructed by this verifier path.
 use super::*;
+#[cfg(v8_terminal_prefix)]
+#[path="terminal_query.rs"] mod terminal_query;
 #[cfg(v8_sparse_groups)]
 #[path="sparse_grouped.rs"] mod sparse;
 
@@ -209,6 +211,14 @@ pub(in super::super) fn relation(w:&Wire<'_>,mut p:Prefix,d:Description,mut c:K)
         for alpha in a{reference.fold_deferred_relation_arity4(alpha);}
         for i in 0..4{assert_eq!(terminal[i],reference.weight_at(i as u32),"structured terminal differential");}
     }
+    #[cfg(v8_terminal_prefix)]
+    let query_terminal=terminal_query::terminal(&query_weights);
+    #[cfg(all(v8_terminal_prefix,v8_terminal_fused))]
+    let expected=terminal_query::scalar(terminal,query_terminal,&f,image_terminal(p.tau,p.abc[1],p.abc[2],a));
+    #[cfg(all(v8_terminal_prefix,not(v8_terminal_fused)))]
+    let expected=(0..4).fold(K::ZERO,|v,i|v.add(terminal[i].add(query_terminal[i]).mul(f[i])))
+        .add(image_terminal(p.tau,p.abc[1],p.abc[2],a).mul(f[3]));
+    #[cfg(not(v8_terminal_prefix))]
     let expected=(0..4).fold(K::ZERO,|v,i|v.add(terminal[i].add(query_weights.weight_at(i as u32)).mul(f[i])))
         .add(image_terminal(p.tau,p.abc[1],p.abc[2],a).mul(f[3]));
     if expected==c{Ok(())}else{Err(Error::Terminal)}

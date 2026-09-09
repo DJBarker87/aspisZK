@@ -79,6 +79,7 @@ fn semantic_bytes(w:&Wire<'_>,binding:&[u8;32],public:&[u8],transition:&[u8])->R
     let transition=decode_pool_v1_pair_late_public_statement_v1(transition).map_err(|_|2u32)?;
     semantic(w,binding,&PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public),&transition).map_err(|_|4u32)
 }
+#[cfg_attr(v8_semantic_stack,inline(never))]
 pub(super) fn payment_terminal(public:&PoolV1PairForestTerminalPaymentV1,transition:&PoolV1PairLatePublicStatementV1,claims:&[K;84],z:&[K;10],s:&row::Semantic)->Result<K,Error>{
     match public {
         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>
