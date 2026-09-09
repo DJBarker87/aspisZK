@@ -23,9 +23,13 @@ open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73ActualNodeCausalProvenance
 open AspisK1.V7Tag73ConcreteRestorationClient
 open AspisK1.V7Tag73ConcreteRootSweepClient
+open AspisK1.V7Tag73CompletedRootProjection
+open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerOperationalCaps
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactLegalSameTapeEvent
 open AspisK1.V7Tag73ExactPlainRomRun
+open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73OperationalCausalInjection
@@ -442,6 +446,8 @@ theorem deployed_root_sweep_must_reach_query_batch
       configuration.oracleLimits.freshCalls)
     (transitionIndex : Nat)
     (transitionWithin : transitionIndex < 1513)
+    (rounds : Nat)
+    (roundsPositive : 0 < rounds)
     (transition : FutureFreeTransition)
     (transitionExact : verifierTransitionAt? runtime.node transitionIndex =
       some transition)
@@ -460,17 +466,18 @@ theorem deployed_root_sweep_must_reach_query_batch
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalOracleCalls)
         (machine.blackBox.start hidden machine.observation) environment
-        runtime.node configuration 1513
-          (deployedRootSweepClient 1 result)) := by
+        runtime.node configuration (rounds * 1513)
+          (deployedRootSweepClient rounds result)) := by
   apply finite_client_path_target_must_reach_query_batch machine hidden runtime
     runs configuration totalLimitMono freshLimitMono transitionIndex transition
     transitionExact reply eventExact environment globalRoom forkRoom
-    1513 1513 (deployedRootSweepClient 1 result) result
-  · exact deployed_root_sweep_client_exact_request_count 1 result
-  · omega
+    (rounds * 1513) (rounds * 1513)
+      (deployedRootSweepClient rounds result) result
+  · exact deployed_root_sweep_client_exact_request_count rounds result
+  · exact Nat.le_refl _
   · intro requests path
-    exact deployed_root_sweep_every_path_covers_transition 1 result path
-      (by omega) transitionIndex transitionWithin
+    exact deployed_root_sweep_every_path_covers_transition rounds result path
+      roundsPositive transitionIndex transitionWithin
 
 /-- Under the exact compiler's executable adequacy certificate, the abstract
 resource premises of the temporal root-sweep theorem are consequences of the
@@ -491,6 +498,8 @@ theorem exact_deployed_root_sweep_must_reach_query_batch
     (runs : RootProjectedTotalizedRuns configuration.machine hidden runtime)
     (transitionIndex : Nat)
     (transitionWithin : transitionIndex < 1513)
+    (rounds : Nat)
+    (roundsPositive : 0 < rounds)
     (transition : FutureFreeTransition)
     (transitionExact : verifierTransitionAt? runtime.node transitionIndex =
       some transition)
@@ -510,8 +519,8 @@ theorem exact_deployed_root_sweep_must_reach_query_batch
         (globalOracleCalls := globalFull256OracleCallCap parameters)
         (configuration.machine.blackBox.start hidden
           configuration.machine.observation)
-        environment runtime.node configuration.restorationConfiguration 1513
-          (deployedRootSweepClient 1 result)) := by
+        environment runtime.node configuration.restorationConfiguration
+          (rounds * 1513) (deployedRootSweepClient rounds result)) := by
   have replayExtendsRoot :=
     adequate_replay_limits_extend_root_adversary configuration adequate
   have forkRoom : configuration.machine.adversaryFuel + 2 ≤
@@ -521,15 +530,174 @@ theorem exact_deployed_root_sweep_must_reach_query_batch
     omega
   exact deployed_root_sweep_must_reach_query_batch configuration.machine hidden
     runtime runs configuration.restorationConfiguration replayExtendsRoot.1
-    replayExtendsRoot.2 transitionIndex transitionWithin transition
-    transitionExact reply eventExact environment
+    replayExtendsRoot.2 transitionIndex transitionWithin rounds roundsPositive
+    transition transitionExact reply eventExact environment
     configuration.bounds.replayTotalCalls forkRoom result
+
+/-- Production-facing form: the cursor, fuel and client are exactly those of
+`exactRootSweepWitnessConfiguration`.  This is the form consumed by the
+completed operational package, so no later rewrite may silently replace the
+deployed exhaustive client with a one-off synthetic sweep. -/
+theorem production_root_sweep_configuration_must_reach_query_batch
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {canonicalDriverFuel transitionFuel : Nat}
+    (base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Witness parameters)
+    (rounds : Nat)
+    (roundsPositive : 0 < rounds)
+    (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap)
+    (adequate : ExactPlainRomOperationalAdequacy canonicalDriverFuel
+      transitionFuel
+        (exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap))
+    (hidden : HiddenTape)
+    (runtime : SchedulerNativePlainRomRootRuntime TapeIdentity Statement Proof
+      Payload)
+    (runs : RootProjectedTotalizedRuns
+      (exactRootSweepWitnessConfiguration base rounds extractor
+        withinForkCap).machine hidden runtime)
+    (transitionIndex : Nat)
+    (transitionWithin : transitionIndex < 1513)
+    (transition : FutureFreeTransition)
+    (transitionExact : verifierTransitionAt? runtime.node transitionIndex =
+      some transition)
+    (reply : VerifierReply)
+    (eventExact : transition.event =
+      .verifier (.squeezePair (.challenge .queryBatch) 0) reply) :
+    SchedulerNativeCursorMustReach
+      (fun cursor =>
+        typedRestoredQueryBatchForkStartsHere
+          (Result := ExactPlainRomWitnessExtractor Statement Proof Payload
+            Witness)
+          ((exactRootSweepWitnessConfiguration base rounds extractor
+            withinForkCap).machine.blackBox.start hidden
+              (exactRootSweepWitnessConfiguration base rounds extractor
+                withinForkCap).machine.observation)
+          (exactRootSweepWitnessConfiguration base rounds extractor
+            withinForkCap).machine.environment
+          (exactRootSweepWitnessConfiguration base rounds extractor
+            withinForkCap).restorationConfiguration cursor.erase = true)
+      (startConcreteRestorationClientFromRoot
+        (globalOracleCalls := globalFull256OracleCallCap parameters)
+        ((exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap).machine.blackBox.start hidden
+            (exactRootSweepWitnessConfiguration base rounds extractor
+              withinForkCap).machine.observation)
+        (exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap).machine.environment
+        runtime.node
+        (exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap).restorationConfiguration
+        (exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap).restorationFuel
+        (exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap).client) := by
+  change SchedulerNativeCursorMustReach
+    (fun cursor =>
+      typedRestoredQueryBatchForkStartsHere
+        (Result := ExactPlainRomWitnessExtractor Statement Proof Payload
+          Witness)
+        (base.machine.blackBox.start hidden base.machine.observation)
+        base.machine.environment base.restorationConfiguration cursor.erase =
+          true)
+    (startConcreteRestorationClientFromRoot
+      (globalOracleCalls := globalFull256OracleCallCap parameters)
+      (base.machine.blackBox.start hidden base.machine.observation)
+      base.machine.environment runtime.node base.restorationConfiguration
+      (rounds * 1513) (deployedRootSweepClient rounds extractor))
+  exact exact_deployed_root_sweep_must_reach_query_batch
+    (configuration := exactRootSweepWitnessConfiguration base rounds extractor
+      withinForkCap)
+    adequate hidden runtime runs transitionIndex transitionWithin rounds
+    roundsPositive transition transitionExact reply eventExact
+    base.machine.environment extractor
+
+/-- A constructed clean source root supplies both missing pieces required by
+the production reachability theorem: the literal typed query-batch transition
+and the two exact projected root runs.  Thus reachability is now a consequence
+of the same proof-relevant root object already carried by K1.2--K1.5. -/
+theorem production_clean_root_must_reach_query_batch
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {canonicalDriverFuel transitionFuel : Nat}
+    (base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Witness parameters)
+    (rounds : Nat)
+    (roundsPositive : 0 < rounds)
+    (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap)
+    (adequate : ExactPlainRomOperationalAdequacy canonicalDriverFuel
+      transitionFuel
+        (exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap))
+    (projection : AcceptedTapeProjection Statement Proof Payload)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (root : ExactCleanSourceRootProjection transitionFuel
+      (exactRootSweepWitnessConfiguration base rounds extractor withinForkCap)
+      projection sample) :
+    ∃ transitionIndex transition reply,
+      verifierTransitionAt? root.runtime.node transitionIndex =
+          some transition ∧
+        transitionIndex < 1513 ∧
+        transition.event =
+          .verifier (.squeezePair (.challenge .queryBatch) 0) reply ∧
+        SchedulerNativeCursorMustReach
+          (fun cursor =>
+            typedRestoredQueryBatchForkStartsHere
+              (Result := ExactPlainRomWitnessExtractor Statement Proof Payload
+                Witness)
+              ((exactRootSweepWitnessConfiguration base rounds extractor
+                withinForkCap).machine.blackBox.start sample.1
+                  (exactRootSweepWitnessConfiguration base rounds extractor
+                    withinForkCap).machine.observation)
+              (exactRootSweepWitnessConfiguration base rounds extractor
+                withinForkCap).machine.environment
+              (exactRootSweepWitnessConfiguration base rounds extractor
+                withinForkCap).restorationConfiguration cursor.erase = true)
+          (startConcreteRestorationClientFromRoot
+            (globalOracleCalls := globalFull256OracleCallCap parameters)
+            ((exactRootSweepWitnessConfiguration base rounds extractor
+              withinForkCap).machine.blackBox.start sample.1
+                (exactRootSweepWitnessConfiguration base rounds extractor
+                  withinForkCap).machine.observation)
+            (exactRootSweepWitnessConfiguration base rounds extractor
+              withinForkCap).machine.environment
+            root.runtime.node
+            (exactRootSweepWitnessConfiguration base rounds extractor
+              withinForkCap).restorationConfiguration
+            (exactRootSweepWitnessConfiguration base rounds extractor
+              withinForkCap).restorationFuel
+            (exactRootSweepWitnessConfiguration base rounds extractor
+              withinForkCap).client) := by
+  obtain ⟨transitionIndex, transition, reply, transitionExact,
+      transitionWithin, eventExact⟩ :=
+    exact_clean_root_has_indexed_query_batch_transition root
+  have transitionPositive : 0 < transitionFuel := by
+    have reserve := adequate.schedulerTransitionFuel
+    unfold exactCompilerSufficientTransitionFuel at reserve
+    omega
+  have runs : RootProjectedTotalizedRuns
+      (exactRootSweepWitnessConfiguration base rounds extractor
+        withinForkCap).machine sample.1 root.runtime :=
+    completed_exact_plain_rom_root_gives_projected_totalized_runs
+      transitionFuel transitionPositive
+      (exactRootSweepWitnessConfiguration base rounds extractor withinForkCap)
+      sample root.runtime root.clientRun root.rootCompleted
+  refine ⟨transitionIndex, transition, reply, transitionExact,
+    transitionWithin, eventExact, ?_⟩
+  exact production_root_sweep_configuration_must_reach_query_batch base rounds
+    roundsPositive extractor withinForkCap adequate sample.1 root.runtime runs
+    transitionIndex transitionWithin transition transitionExact reply eventExact
 
 #print axioms root_stored_after_charges_and_failure
 #print axioms dispatch_one_preserves_rooted_must_reach
 #print axioms finite_client_path_target_must_reach_query_batch
 #print axioms deployed_root_sweep_must_reach_query_batch
 #print axioms exact_deployed_root_sweep_must_reach_query_batch
+#print axioms production_root_sweep_configuration_must_reach_query_batch
+#print axioms production_clean_root_must_reach_query_batch
 
 end
 end AspisK1.V7Tag73ConcreteRootSweepMustReach
