@@ -1,0 +1,16 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs b/docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs
+index 63b6996b..073b74fc 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs
+@@ -42,7 +42,10 @@ fn semantic(w:&Wire<'_>,binding:&[u8;32],public:&PoolV1PairForestTerminalPayment
+     for r in 0..10 {
+         let sent=&w.v[1+27*r..1+27*(r+1)];
+         let mut poly=[K::ZERO;28];poly[0]=sent[0];poly[2..].copy_from_slice(&sent[1..]);
+-        poly[1]=s.claim.sub(poly[0].add(poly[0]).add(poly[2..].iter().copied().fold(K::ZERO,|a,b|a.add(b))));
++        #[cfg(not(v8_semantic_boundary))]
++        {poly[1]=s.claim.sub(poly[0].add(poly[0]).add(poly[2..].iter().copied().fold(K::ZERO,|a,b|a.add(b))));}
++        #[cfg(v8_semantic_boundary)]
++        {poly[1]=super::semantic_boundary::missing(s.claim,poly[0],poly[2..].try_into().unwrap());}
+         let mut record=vec![r as u8];record.extend(bytes(sent));
+         s.t.absorb(label::V6_COMPACT_SEMANTIC_ROUND,&record);
+         s.z[r]=sample(&mut s.t,false)?;
