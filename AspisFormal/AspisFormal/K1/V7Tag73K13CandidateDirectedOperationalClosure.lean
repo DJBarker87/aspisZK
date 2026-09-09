@@ -258,7 +258,7 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (sourceFactorization : ExactCandidateDirectedK13SourceFactorization
+    (sourceInvariant : ExactCandidateDirectedK13CommittedSourceInvariant
       transitionFuel
       configuration projection fixedInstance decoder
         (relationSource.toK13SourceObligations transitionFuel configuration
@@ -279,7 +279,7 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
     projection fixedInstance
   let source := relationSource.toK13SourceObligations transitionFuel
     configuration projection fixedInstance decoder
-  let viewFunctional := sourceFactorization.toViewFunctional
+  let viewFunctional := sourceInvariant.toViewFunctional
   let viewAlignment :=
     AspisK1.V7Tag73K13CandidateDirectedViewAlignment.ExactCandidateDirectedK13ViewFunctional.toViewAlignment
       viewFunctional
