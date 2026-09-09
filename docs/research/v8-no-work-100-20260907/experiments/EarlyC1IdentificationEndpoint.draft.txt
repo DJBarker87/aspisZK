@@ -1,0 +1,20 @@
+import EarlyC1Identification
+
+/-! UNVERIFIED DRAFT: the focused run hit the aggregate memory guard.
+Concrete optional-object specialization, isolated from its cap proof.
+No definition of the received C1 object or its encoder changes here. -/
+set_option autoImplicit false
+namespace AspisV8.EarlyC1IdentificationEndpoint
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1Identification
+open AspisV5ComponentCQM31TowerExact
+
+theorem identify (received : C1Received) (p : C1Messages)
+    (own : 245609 ≤ (support fibreEncode (receivedFibres received) p).card) :
+    earlyC1 received = some p :=
+  early_eq_of_large_support (I := Fin 262144) (V := Fin 4 → QM31Exact)
+    (M := Message) (L := Fin 26)
+    fibreEncode (receivedFibres received) p 245609 256
+    exact_agreement_cap c1_margin own
+
+#print axioms identify
+end AspisV8.EarlyC1IdentificationEndpoint
