@@ -28,6 +28,15 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
     let c1=decode::<104>(c1)?;let c2=decode::<48>(c2)?;
     let mut out=[K::ZERO;4];
     for slot in 0..4{
+        #[cfg(v8_gamma_fixed)]
+        let fields={
+            let values:&[u32;26]=c1[26*slot..26*(slot+1)].try_into().unwrap();
+            let p=&powers.base.c1_limbs;
+            [fixed_dot::<0>(values,p),fixed_dot::<1>(values,p),
+             fixed_dot::<2>(values,p),fixed_dot::<3>(values,p)]
+        };
+        #[cfg(not(v8_gamma_fixed))]
+        let fields={
         let mut sum=[0u64;4];
         for start in (0..24).step_by(4){
             let v=core::array::from_fn::<_,4,_>(|i|u64::from(c1[26*slot+start+i]));
@@ -47,12 +56,31 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
                 +u64::from(powers.base.c1_limbs[25][limb])*u64::from(c1[26*slot+25]);
             sum[limb]=sum[limb].wrapping_add(reduce_chunk(raw));
         }
-        let fields=sum.map(M31::reduce_u64);
+        sum.map(M31::reduce_u64)
+        };
         let value=K{c0:CM31::new(fields[0],fields[1]),c1:CM31::new(fields[2],fields[3])};
         let helpers=core::array::from_fn(|h|{let offset=4*(4*h+slot);K{c0:CM31::new(M31(c2[offset]),M31(c2[offset+1])),c1:CM31::new(M31(c2[offset+2]),M31(c2[offset+3]))}});
         out[slot]=value.add(corelib::field::qm31_sum_products3_prepared(&[powers.base.helpers[0],powers.base.helpers[1],powers.d],&helpers));
     }
     Ok(out)
+}
+
+// Same six four-product chunks and final pair; only indices and limb choice
+// become constants. No assumption about gamma^0, helper values or honest zeros.
+#[cfg(v8_gamma_fixed)]
+#[inline(always)]
+fn fixed_dot<const L:usize>(v:&[u32;26],p:&[[u32;4];26])->M31{
+    macro_rules! chunk {($i:expr)=>{reduce_chunk(
+        (u64::from(p[$i][L])*u64::from(v[$i]))
+        .wrapping_add(u64::from(p[$i+1][L])*u64::from(v[$i+1]))
+        .wrapping_add(u64::from(p[$i+2][L])*u64::from(v[$i+2]))
+        .wrapping_add(u64::from(p[$i+3][L])*u64::from(v[$i+3])))}}
+    let tail=reduce_chunk(u64::from(p[24][L])*u64::from(v[24])
+        +u64::from(p[25][L])*u64::from(v[25]));
+    let a=chunk!(0).wrapping_add(chunk!(4));
+    let b=chunk!(8).wrapping_add(chunk!(12));
+    let c=chunk!(16).wrapping_add(chunk!(20));
+    M31::reduce_u64(a.wrapping_add(b).wrapping_add(c.wrapping_add(tail)))
 }
 #[cfg(not(v8_performance_sbf))]
 pub(super) fn controls(){
@@ -61,8 +89,10 @@ pub(super) fn controls(){
         for(i,x)in values.iter().enumerate(){for bit in 0..31{if x&(1<<bit)!=0{let at=i*31+bit;out[at/8]|=1<<(at%8);}}}out
     }
     let p=corelib::field::P;
-    for seed in 0..16u32{
-        let values:Vec<u32>=(0..152).map(|j|if seed==0{0}else if seed==1{p-1}else{(j*101+seed*19)%p}).collect();
+    for seed in 0..512u32{
+        let values:Vec<u32>=(0..152).map(|j|if seed==0{0}else if seed==1{p-1}
+            else if seed<154{if j==seed-2{p-1}else{0}}
+            else{(j*1_000_003+seed*19)%p}).collect();
         let a=pack(&values[..104]);let b=pack(&values[104..]);
         let gamma=K{c0:CM31::new(M31(seed),M31(p-1-seed)),c1:CM31::new(M31(seed+2),M31(seed+3))};
         let powers=StateOnlySpendQueryPowers::new(gamma);
@@ -86,5 +116,5 @@ pub(super) fn controls(){
     }
     assert!(gamma(&[0;402],&[0;186],&powers).is_err());
     assert!(gamma(&[0;403],&[0;185],&powers).is_err());
-    println!("GAMMA_CONTROLS canonical_profiles=16 maximal_limb_dot=true noncanonical_positions=152 short_inputs=2");
+    println!("GAMMA_CONTROLS canonical_profiles=512 maximal_limb_dot=true noncanonical_positions=152 short_inputs=2");
 }

@@ -33,6 +33,8 @@ fn stress_queries(p:&mut Prefix,finals:&[K])->(Vec<u32>,K,[u8;24],u64){
 }
 pub fn run(){
     #[cfg(v8_gamma_wrap)] super::super::query_arithmetic::controls();
+    #[cfg(v8_gamma_wrap)]
+    if std::env::args().nth(1).as_deref()==Some("--gamma-controls"){return;}
     #[cfg(v8_structured)] {
         row::structured::controls();
         if std::env::args().nth(1).as_deref()==Some("--structured-controls"){return;}

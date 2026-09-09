@@ -13,6 +13,7 @@ verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_TAG_BOUNDED:-0}" != 1 ]] || verifier="$rt/sbf-complete-tag-bounded/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_TAG_SHARED:-0}" != 1 ]] || verifier="$rt/sbf-complete-tag-shared/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_TAG_OFFSET:-0}" != 1 ]] || verifier="$rt/sbf-complete-tag-offset/aspis_v8_complete_sbf.so"
+[[ "${ASPIS_V8_GAMMA_FIXED:-0}" != 1 ]] || verifier="$rt/sbf-complete-gamma-fixed/aspis_v8_complete_sbf.so"
 readonly verifier registry="$rt/sbf-selected-registry/aspis_registry.so"
 readonly double="$rt/sbf-complete/aspis_pair_forest_result_double.so"
 case "$mode" in

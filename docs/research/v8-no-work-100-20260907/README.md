@@ -1,6 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [fixed tag-offset plans](tag-offset-review.md).
+Latest: [fixed-width gamma dots](gamma-fixed-review.md).
+Another exact rewrite saves **13,761–13,779 CU** on identical complete
+maximum-body proofs. Worst observed is **1,114,035 CU**, with **85,965 CU**
+headroom under the real 1.2M cap, including pinned classic Token settlement.
+The seven-chunk sum/range interface is Lean-proved; canonicality, ordinary,
+malformed and rollback controls pass. Body remains **40,282 bytes**.
+See [results](gamma-fixed-results.json); V7 parity and universal CU remain open.
+
+Previous: [fixed tag-offset plans](tag-offset-review.md).
 The Lean-backed straight-line rewrite saves **6,007 CU** on each identical
 complete maximum-body proof. Worst observed is **1,127,798 CU**, including
 pinned classic Token settlement, with **72,202 CU** headroom under the real

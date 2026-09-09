@@ -11,14 +11,15 @@ export NO_DNA=1 PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/share/sol
 readonly common='--cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile -A dead_code -A unexpected_cfgs'
 scope(){ systemd-run --user --scope --unit="aspis-v8-complete-$mode-$(date +%s)-$$" -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 /usr/bin/time -v "$@"; }
 case "$mode" in
-host|partial-host)
+host|partial-host|gamma-fixed-host)
  extra=''
  [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
+ [[ "$mode" != gamma-fixed-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets --cfg v8_gamma_fixed -C overflow-checks=yes'
  scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
-sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile)
+sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed)
  case "$mode" in scatter|tag-split|tag-bounded) python3 "$complete_exp/generate_copy_scatter.py" --check;; esac
  [[ "$mode" != tag-shared ]] || python3 "$complete_exp/generate_tag_shared.py" --check
- case "$mode" in tag-offset|tag-offset-profile) python3 "$complete_exp/generate_tag_offsets.py" --check;; esac
+ case "$mode" in tag-offset|tag-offset-profile|gamma-fixed) python3 "$complete_exp/generate_tag_offsets.py" --check;; esac
  extra=''
  [[ "$mode" != hybrid ]] || extra='--cfg v8_qm_hybrid'
  [[ "$mode" != lazy ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0'
@@ -31,7 +32,8 @@ sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatte
  [[ "$mode" != tag-split ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split'
  [[ "$mode" != tag-bounded ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded'
  [[ "$mode" != tag-shared ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared'
- case "$mode" in tag-offset|tag-offset-profile) extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets';; esac
+ case "$mode" in tag-offset|tag-offset-profile|gamma-fixed) extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets';; esac
+ [[ "$mode" != gamma-fixed ]] || extra="$extra --cfg v8_gamma_fixed"
  selected="$common"
  if [[ "$mode" == tag-offset-profile ]];then extra="$extra --cfg v8_terminal_profile";selected="${common/--cfg v8_quiet_profile/}";fi
  if [[ "$mode" == channel-profile ]];then extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_terminal_profile';selected="${common/--cfg v8_quiet_profile/}";fi
