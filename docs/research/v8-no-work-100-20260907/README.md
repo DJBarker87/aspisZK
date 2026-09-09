@@ -1,6 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [causal shifted-row/image execution and early C1](causal-row-continuation.md).
+Latest formal continuation: [authenticated early C1 and concrete natural image](authenticated-source-continuation.md).
+Accepted C1 openings now yield prefix-word agreement or explicit shared
+late-target/collision events; the exact sparse image conditions and natural
+projection are proved, and decoded owner/note/nullifier hashes compose with
+the selected24-level path. See the [current-source evidence](authenticated-source-evidence.json).
+No verifier, byte or performance changes. Actual source/replay coupling,
+global accepted recovery, complete payment/FS and full-view ZK remain open.
+
+Previous formal continuation: [causal shifted-row/image execution and early C1](causal-row-continuation.md).
 The affine-corrected shifted rows now feed a constructed causal image/relation
 and ordered-query game. Exact early-C1 identification and independence from
 qualifying late-C2 tuples are proved; a modeled selected24-level Merkle path
