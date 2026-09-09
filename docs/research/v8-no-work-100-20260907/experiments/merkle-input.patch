@@ -1,0 +1,57 @@
+diff --git a/crates/aspis-core/src/v7_merkle208.rs b/crates/aspis-core/src/v7_merkle208.rs
+--- a/crates/aspis-core/src/v7_merkle208.rs
++++ b/crates/aspis-core/src/v7_merkle208.rs
+@@ -35,6 +35,11 @@
+ pub fn node_hash_v7(hash: HashFn, left: &V7Digest, right: &V7Digest) -> V7Digest {
++    #[cfg(v8_merkle_slices)]
++    { return truncate_sha256_v7(hash(&[&[DOM_NODE],left,right])); }
++    // The research control requires a concatenation-based hash backend.
++    // HashFn's Rust type alone does not imply segmentation independence.
++    #[cfg(not(v8_merkle_slices))] {
+     let mut input = [0u8; V7_MERKLE_PARENT_PREIMAGE_BYTES];
+     input[0] = DOM_NODE;
+     input[1..1 + V7_MERKLE_DIGEST_BYTES].copy_from_slice(left);
+@@ -42,3 +47,4 @@
+     truncate_sha256_v7(hash(&[&input]))
++    }
+ }
+@@ -79,7 +85,13 @@
+         while index < level.len() {
++            #[cfg(not(v8_merkle_borrow))]
+             let (position, c1, c2) = level[index];
++            #[cfg(v8_merkle_borrow)]
++            let (position, ref c1, ref c2) = level[index];
+             let parent = if position & 1 == 0
+                 && index + 1 < level.len()
+                 && level[index + 1].0 == position + 1
+             {
++                #[cfg(not(v8_merkle_borrow))]
+                 let (_, c1_right, c2_right) = level[index + 1];
++                #[cfg(v8_merkle_borrow)]
++                let (_, ref c1_right, ref c2_right) = level[index + 1];
+                 index += 2;
+@@ -96,6 +108,18 @@
+                 }
++                #[cfg(v8_merkle_borrow)]
++                let c1_sibling: &V7Digest = node_bytes.0
++                    [node_pos..node_pos + V7_MERKLE_DIGEST_BYTES]
++                    .try_into()
++                    .unwrap();
++                #[cfg(v8_merkle_borrow)]
++                let c2_sibling: &V7Digest = node_bytes.1
++                    [node_pos..node_pos + V7_MERKLE_DIGEST_BYTES]
++                    .try_into()
++                    .unwrap();
++                #[cfg(not(v8_merkle_borrow))]
+                 let c1_sibling: V7Digest = node_bytes.0
+                     [node_pos..node_pos + V7_MERKLE_DIGEST_BYTES]
+                     .try_into()
+                     .unwrap();
++                #[cfg(not(v8_merkle_borrow))]
+                 let c2_sibling: V7Digest = node_bytes.1
+@@ -129,6 +153,8 @@
+ }
++#[cfg(test)]
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../docs/research/v8-no-work-100-20260907/experiments/merkle_input_tests.rs"));
+ 
+ #[cfg(test)]
