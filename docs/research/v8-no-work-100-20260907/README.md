@@ -1,6 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [fork recovery, row separation and evidence collection](fork-collector-continuation.md).
+Latest formal continuation: [adaptive off-family tails and the actual query/relation suffix](adaptive-tail-continuation.md).
+Two proved agreement tails now bound an arbitrary received quotient's actual
+post-alpha final outside a fixed quotient family. Their selected-code and
+compact-suffix composition is Lean-checked, with an approximately 104.592-bit
+ideal off-family ceiling and no family multiplier on the low-agreement query
+term. Represented quotient-to-component/payment recovery, bounded replay,
+source/FS and full-view ZK remain open. Checks resumed on the NUC at the user's
+request; no verifier, profile, 40,282-byte body or measured CU change.
+
+Previous formal continuation: [fork recovery, row separation and evidence collection](fork-collector-continuation.md).
 The common-support construction now derives all four repaired ordinary row
 claims, including inactive, on the same recovered quotient. A bounded causal
 collector control distinguishes many useful alpha branches from a coherent
