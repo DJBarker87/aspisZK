@@ -30,16 +30,22 @@ trait PaymentInput {fn payment(&self)->PoolV1PairForestTerminalPaymentV1;}
 impl PaymentInput for PoolV1PrivateTransferPublicV1 {fn payment(&self)->PoolV1PairForestTerminalPaymentV1{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(*self)}}
 impl PaymentInput for PoolV1PairForestTerminalPaymentV1 {fn payment(&self)->PoolV1PairForestTerminalPaymentV1{*self}}
 fn payment_terminal(p:&impl PaymentInput,tr:&PoolV1PairLatePublicStatementV1,claims:&[K;84],z:&[K;10],s:&row::Semantic)->K{
-    match p.payment(){
+    let value=match p.payment(){
         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1(&p,tr,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
         PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>evaluate_pool_v1_pair_forest_withdrawal_selected_masked_terminal_compiled_tag73_v1(&p,tr,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
-    }.unwrap()
+    }.unwrap();
+    #[cfg(v8_positive_transfer)] {
+        assert!(matches!(p.payment(),PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_)),"positive profile is transfer-only");
+        return value.add(super::positive_transfer::terminal_delta(claims,z,s.theta,&s.zc,s.eta));
+    }
+    #[cfg(not(v8_positive_transfer))] value
 }
 fn terminal(p:&impl PaymentInput,tr:&PoolV1PairLatePublicStatementV1,m:&[Vec<K>],z:&[K;10],s:&row::Semantic)->K{
     let rows=point_rows(m,z);let claims:[K;84]=std::array::from_fn(|i|rows[(i/28)*29+i%28]);
     payment_terminal(p,tr,&claims,z,s)
 }
 fn start(binding:&[u8;32],a:&f::Tree)->(Transcript,K,K){let mut t=Transcript::new(hash);
+    #[cfg(v8_positive_transfer)] super::positive_transfer::absorb(&mut t);
     t.absorb(label::PROFILE,b"AV8/payment-extraction/v1");t.absorb(label::STATEMENT,binding);t.absorb(label::ROOT,&a[18][0]);
     let lambda=sample(&mut t,false).unwrap();let chi=sample(&mut t,false).unwrap();(t,lambda,chi)}
 fn semantic_start(mut t:Transcript,b:&f::Tree,initial:K,lambda:K,chi:K)->row::Semantic{
@@ -107,6 +113,28 @@ fn semantic_replay(w:&Wire,p:&impl PaymentInput,tr:&PoolV1PairLatePublicStatemen
         s.z[r]=sample(&mut s.t,false).unwrap();s.claim=evaluate_state_only_polynomial(&poly,s.z[r]);}
     let claims:[K;84]=std::array::from_fn(|i|w.v[271+(i/28)*29+i%28]);
     let value=payment_terminal(p,tr,&claims,&s.z,&s);assert_eq!(value,s.claim);s
+}
+#[cfg(v8_positive_transfer)]
+fn semantic_negative_fixture(v:&mut[K],mut s:row::Semantic,p:&impl PaymentInput,
+    tr:&PoolV1PairLatePublicStatementV1,m:&[Vec<K>])->row::Semantic{
+    // Adversarial diagnostic ONLY: send the literal true-sum polynomials for
+    // a false zero-check, even though the initial claimed sum is wrong. The
+    // actual verifier still reconstructs every omitted coefficient from its
+    // own carried claim. No future challenge is forced or consulted.
+    let mut first_boundary_wrong=false;
+    for r in 0..10{let left=9-r;let mut samples=[K::ZERO;28];
+        for x in 0..28{let mut z=s.z;z[r]=sc(x as u32);
+            for assignment in 0..1<<left{for j in 0..left{z[r+1+j]=sc(((assignment>>(left-1-j))&1)as u32);}
+                samples[x]=samples[x].add(terminal(p,tr,m,&z,&s));}}
+        let poly=interpolate_degree27(&samples);
+        if r==0{first_boundary_wrong=state_only_boundary_sum(&poly)!=s.claim;}
+        let sent=&mut v[1+27*r..1+27*(r+1)];sent[0]=poly[0];sent[1..].copy_from_slice(&poly[2..]);
+        let mut record=vec![r as u8];record.extend(bytes(sent));s.t.absorb(label::V6_COMPACT_SEMANTIC_ROUND,&record);
+        s.z[r]=sample(&mut s.t,false).unwrap();s.claim=evaluate_state_only_polynomial(&poly,s.z[r]);
+    }
+    assert!(first_boundary_wrong,"fixed negative fixture encountered legitimate cancellation; record rather than retry");
+    assert_eq!(terminal(p,tr,m,&s.z,&s),s.claim);
+    println!("POSITIVE_NEGATIVE genuine_terminal_polynomials=true first_boundary_wrong=true future_challenges_forced=false");s
 }
 fn ood(m:&[K],p:Point)->K{let mut factors=[K::ZERO;10];factors[0]=p.y;factors[1]=p.x;
     for i in 2..10{factors[i]=factors[i-1].square().mul_m31(M31(2)).sub(K::ONE);}

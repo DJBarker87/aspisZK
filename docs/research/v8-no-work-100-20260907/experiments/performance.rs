@@ -32,6 +32,7 @@ fn stress_queries(p:&mut Prefix,finals:&[K])->(Vec<u32>,K,[u8;24],u64){
     panic!("maximum-frontier stress scan exhausted its declared cap");
 }
 pub fn run(){
+    #[cfg(v8_positive_transfer)] super::super::positive_transfer::layout_control();
     #[cfg(v8_early_prefix)] super::super::early_c1_trace::begin();
     #[cfg(v8_gamma_wrap)] super::super::query_arithmetic::controls();
     #[cfg(v8_gamma_wrap)]
@@ -96,6 +97,13 @@ pub fn run(){
             compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(public,&w,authoritative,snapshot)
         }
     }.unwrap();
+    #[cfg(v8_positive_transfer)] let positive_case=std::env::var("ASPIS_V8_POSITIVE_CASE").unwrap_or_else(|_|"honest".into());
+    #[cfg(v8_positive_transfer)] let compiled={
+        assert!(complete_context.is_none(),"new positivity profile is not integrated with complete transaction wrapper");
+        let p=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("transfer-only")};
+        let(p,c)=super::super::positive_transfer::case_compilation(&positive_case,&compiled,p,witness);
+        payment=PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p);c
+    };
     let transition=compiled.public_statement;
     if let Some((statement,_))=&complete_context{assert_eq!(transition,statement.common().lane_transition);}
     let enc=CircleEncoder::new_for_domain_log(20);
@@ -113,17 +121,33 @@ pub fn run(){
     std::fs::write(format!("{out}/transition.bin"),&transition_bytes).unwrap();
     let binding=complete_context.as_ref().map(|(_,b)|*b).unwrap_or_else(||hash(&[b"AV8 synthetic account fixture",&public_bytes,format!("{transition:?}").as_bytes()]));
     std::fs::write(format!("{out}/binding.bin"),binding).unwrap();
-    #[cfg(v8_early_prefix)] let seeds=[1u8]; // one predeclared honest trace; no nonce search
-    #[cfg(not(v8_early_prefix))] let seeds=[1u8,2,3];
+    #[cfg(any(v8_early_prefix,v8_positive_transfer))] let seeds=[1u8]; // one predeclared trace; no nonce search
+    #[cfg(not(any(v8_early_prefix,v8_positive_transfer)))] let seeds=[1u8,2,3];
     #[cfg(v8_early_prefix)] assert!(std::env::var_os("ASPIS_V8_MAX_FRONTIER_SCAN").is_none());
     for seed in seeds {
         let total=Instant::now();let clock=Instant::now();
         let hc=StateOnlyHidingContext::pool_v1_pair_forest_v1(binding,[seed;32]);
         let attempt=state_only_entropy::StateOnlyAttemptSecrets::deterministic_spend_fixture([seed;32],[seed+1;32],[seed+2;32]);
-        let(reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,hc,&mut InMemoryStateOnlyMaskNonceStore::default()).unwrap();
+        #[cfg(v8_positive_transfer)] let mask_binding=super::super::positive_transfer::entropy_binding(&binding);
+        #[cfg(not(v8_positive_transfer))] let mask_binding=binding;
+        let(reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,mask_binding,hc,&mut InMemoryStateOnlyMaskNonceStore::default()).unwrap();
         let d=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,hc).unwrap();
         let mut trace=compiled.semantic_c1.clone();
         let masks=apply_pool_v1_pair_forest_mask_material_v1(&mut trace,material).unwrap();
+        #[cfg(v8_positive_transfer)] {
+            let before=trace.clone();
+            if positive_case=="honest"{super::super::positive_transfer::install(&mut trace).unwrap();}
+            else {
+                assert_eq!(super::super::positive_transfer::install(&mut trace),Err(Error::Domain));
+                trace.c1[3][1014]=M31::ZERO; // fixed malicious inverse, not a bypass in the verifier
+            }
+            for col in 0..16{for r in 0..1024{if col!=3 || r!=1014{assert_eq!(trace.c1[col][r],before.c1[col][r]);}}}
+            assert!(trace.c1.iter().flatten().all(|v|v.0<corelib::field::P));
+            assert_eq!(we::decode(&trace),we::decode(&before));
+            assert_eq!(we::extract_checked(&trace,match &payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("transfer-only")},&transition,authoritative).is_ok(),positive_case=="honest");
+            let active=pool_v1_pair_forest_copy_active_rows_v1().unwrap();
+            for col in 0..16{assert_eq!((0..1024).filter(|r|!active.contains(&(*r as u16))).fold(M31::ZERO,|a,r|a.add(trace.c1[col][r])),M31::ZERO);}
+        }
         let selected:Vec<Vec<M31>>=trace.c1.iter().chain(masks.mask_only_c1.iter()).cloned().collect();
         phase(seed,"masking",clock);let clock=Instant::now();
         let encoded:Vec<Vec<M31>>=selected.iter().map(|m|enc.encode_c1_message(m).unwrap()).collect();
@@ -147,6 +171,18 @@ pub fn run(){
         let b=tree((0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C2_TREE_TAG,&c2leaf(&c2encoded,i,false),&salts[i])).collect());
         phase(seed,"c2_pack_tree",clock);let clock=Instant::now();
         let mut v=vec![K::ZERO;697];v[0]=initial;
+        #[cfg(v8_positive_transfer)] if positive_case!="honest"{
+            let s=semantic_negative_fixture(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);
+            v[271..358].copy_from_slice(&point_rows(&messages,&s.z));
+            // Well-shaped body with actual fixed roots/semantic responses and
+            // point claims. Later PCS suffix is unconstructed, since the
+            // actual verifier must reject at semantic error4, before PCS.
+            let body=f::body(&v,&a,&b,&vec![0;Q*REC],(&[],&[]));
+            assert!(parse(&body).is_ok());
+            assert_eq!(super::super::performance_verifier::verify_payment(&body,&binding,&payment,&transition),Err(4));
+            println!("POSITIVE_CASE case={} seed=1 actual_C1_C2_committed=true masked=true compact_rounds=10 verifier_error=4 verifier_reached_PCS=false nonce_search=false complete_bad_proof=false",positive_case);
+            continue;
+        }
         let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);
         v[271..358].copy_from_slice(&point_rows(&messages,&s.z));
         phase(seed,"semantic_producer_literal",clock);let clock=Instant::now();
