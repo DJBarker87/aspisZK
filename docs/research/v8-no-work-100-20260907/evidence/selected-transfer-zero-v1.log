@@ -1,0 +1,102 @@
+PIN=bc945367d6b0d9a5b4cb2dc5a9ecad8ddcfb33ee
+bc945367d6b0d9a5b4cb2dc5a9ecad8ddcfb33ee
+CORE_SOURCE_TREE=8828bd0c92bec8c3e879c3b333e39015bd69abad
+STATEMENT_SOURCE_TREE=9e4be1b88a2af4cf3f25fa8a0b5a195e6d2639e8
+BUILD=/tmp/aspis-v8-transfer-zero.1G4DKd
+rustc 1.93.0 (254b59607 2026-01-19)
+binary: rustc
+commit-hash: 254b59607d4417e9dffbc307138ae5c86280fe4c
+commit-date: 2026-01-19
+host: aarch64-apple-darwin
+release: 1.93.0
+LLVM version: 21.1.8
+b3d1ffa815bb5228939119e0d5b8cc8e3e38f1ffc681a78a7ea2f9b47e6a0af1  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/selected_transfer_zero.rs
+56760c46ed56ace2756949efabc09f1a2b8880087c1b4dbb7da394a1cc54132f  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/recovered_witness.rs
+COMMAND: /Users/dominic/.cargo/bin/rustc --edition=2021 -O --crate-name aspis_core --crate-type rlib --cfg feature=\"v7-gamma-four-slot-block-audit\" crates/aspis-core/src/lib.rs -o /tmp/aspis-v8-transfer-zero.1G4DKd/libaspis_core.rlib
+error: environment variable `OUT_DIR` not defined at compile time
+  --> crates/aspis-core/src/circle_fri.rs:30:18
+   |
+30 | include!(concat!(env!("OUT_DIR"), "/circle_tables.rs"));
+   |                  ^^^^^^^^^^^^^^^
+   |
+   = help: Cargo sets build script variables at run time. Use `std::env::var("OUT_DIR")` instead
+
+error[E0432]: unresolved imports `crate::circle_fri::FIXED_CIRCLE_INV_2X`, `crate::circle_fri::FIXED_CIRCLE_INV_2Y`, `crate::circle_fri::FIXED_FINAL_X`, `crate::circle_fri::FIXED_LINE1_INV`, `crate::circle_fri::FIXED_LINE2_INV`, `crate::circle_fri::FIXED_LINE3_INV`, `crate::circle_fri::RATE16_CIRCLE_INV_2X`, `crate::circle_fri::RATE16_CIRCLE_INV_2Y`, `crate::circle_fri::RATE16_FINAL_X`, `crate::circle_fri::RATE16_LINE1_INV`, `crate::circle_fri::RATE16_LINE2_INV`, `crate::circle_fri::RATE16_LINE3_INV`, `crate::circle_fri::RATE32_CIRCLE_INV_2X`, `crate::circle_fri::RATE32_CIRCLE_INV_2Y`, `crate::circle_fri::RATE32_FINAL_X`, `crate::circle_fri::RATE32_LINE1_INV`, `crate::circle_fri::RATE32_LINE2_INV`, `crate::circle_fri::RATE32_LINE3_INV`, `crate::circle_fri::RATE512_CIRCLE_INV_2X`, `crate::circle_fri::RATE512_CIRCLE_INV_2Y`, `crate::circle_fri::RATE512_FINAL_X`, `crate::circle_fri::RATE512_LINE1_INV`, `crate::circle_fri::RATE512_LINE2_INV`, `crate::circle_fri::RATE512_LINE3_INV`
+  --> crates/aspis-core/src/circle_openings.rs:10:5
+   |
+10 |     FIXED_CIRCLE_INV_2X, FIXED_CIRCLE_INV_2Y, FIXED_FINAL_X, FIXED_LINE1_INV, FIXED_LINE2_INV,
+   |     ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^ no `FIXED_LINE2_INV` in `circle_fri`
+   |     |                    |                    |              |
+   |     |                    |                    |              no `FIXED_LINE1_INV` in `circle_fri`
+   |     |                    |                    no `FIXED_FINAL_X` in `circle_fri`
+   |     |                    no `FIXED_CIRCLE_INV_2Y` in `circle_fri`
+   |     no `FIXED_CIRCLE_INV_2X` in `circle_fri`
+11 |     FIXED_LINE3_INV, RATE16_CIRCLE_INV_2X, RATE16_CIRCLE_INV_2Y, RATE16_FINAL_X, RATE16_LINE1_INV,
+   |     ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^ no `RATE16_LINE1_INV` in `circle_fri`
+   |     |                |                     |                     |
+   |     |                |                     |                     no `RATE16_FINAL_X` in `circle_fri`
+   |     |                |                     no `RATE16_CIRCLE_INV_2Y` in `circle_fri`
+   |     |                no `RATE16_CIRCLE_INV_2X` in `circle_fri`
+   |     no `FIXED_LINE3_INV` in `circle_fri`
+12 |     RATE16_LINE2_INV, RATE16_LINE3_INV, RATE32_CIRCLE_INV_2X, RATE32_CIRCLE_INV_2Y, RATE32_FINAL_X,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+13 |     RATE32_LINE1_INV, RATE32_LINE2_INV, RATE32_LINE3_INV, RATE512_CIRCLE_INV_2X,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
+14 |     RATE512_CIRCLE_INV_2Y, RATE512_FINAL_X, RATE512_LINE1_INV, RATE512_LINE2_INV,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+15 |     RATE512_LINE3_INV,
+   |     ^^^^^^^^^^^^^^^^^
+
+error[E0425]: cannot find value `RATE512_CIRCLE_LOW8_WINDOW` in this scope
+   --> crates/aspis-core/src/circle_fri.rs:264:34
+    |
+264 |             let [low_x, low_y] = RATE512_CIRCLE_LOW8_WINDOW[natural & 0xff];
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `RATE512_CIRCLE_HIGH9_WINDOW` in this scope
+   --> crates/aspis-core/src/circle_fri.rs:271:40
+    |
+271 |                 let [high_x, high_y] = RATE512_CIRCLE_HIGH9_WINDOW[high_index];
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `V6_CIRCLE_LOW6_WINDOW` in this scope
+   --> crates/aspis-core/src/circle_fri.rs:291:34
+    |
+291 |             let [low_x, low_y] = V6_CIRCLE_LOW6_WINDOW[natural & 0x3f];
+    |                                  ^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `V6_CIRCLE_MIDDLE6_WINDOW` in this scope
+   --> crates/aspis-core/src/circle_fri.rs:298:44
+    |
+298 |                 let [middle_x, middle_y] = V6_CIRCLE_MIDDLE6_WINDOW[middle_index];
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `V6_CIRCLE_HIGH6_WINDOW` in this scope
+   --> crates/aspis-core/src/circle_fri.rs:306:40
+    |
+306 |                 let [high_x, high_y] = V6_CIRCLE_HIGH6_WINDOW[high_index];
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error: aborting due to 7 previous errors
+
+Some errors have detailed explanations: E0425, E0432.
+For more information about an error, try `rustc --explain E0425`.
+        1.53 real         1.07 user         0.07 sys
+           245366784  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               13007  page reclaims
+                3399  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  50  voluntary context switches
+                3370  involuntary context switches
+         13842082783  instructions retired
+          4305091167  cycles elapsed
+           166757072  peak memory footprint
+EXIT=1

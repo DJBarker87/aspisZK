@@ -1,5 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+New executed source controls: [actual-answer early C1 trace](early-c1-trace-review.md)
+and [selected transfer residual/validator mismatch](selected-transfer-zero-review.md).
+One genuine payment's 22 openings match the pre-lambda/chi prefix and actual
+verifier paths without resolver hash calls. Separately, two zero-output tables
+pass every literal selected residual but fail the stricter selected compiler
+endpoint. This refutes that proposed residual-to-endpoint implication; it is
+not a PCS acceptance/forgery result. The costed positivity repair is uninstalled.
+No production or SBF acceptance change; proof-body maximum remains40,282 bytes.
+
 Latest formal continuation: [authenticated early C1 and concrete natural image](authenticated-source-continuation.md).
 Accepted C1 openings now yield prefix-word agreement or explicit shared
 late-target/collision events; the exact sparse image conditions and natural
