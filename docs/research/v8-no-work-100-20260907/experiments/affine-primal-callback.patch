@@ -20,12 +20,9 @@ index 4a421151..2859cedc 100644
  fn primal(v:&[K],a:K)->Vec<K>{
      use corelib::field::{PreparedQm31Multiplier as P,qm31_sum_products3_prepared};
      let a2=a.square();let ps=[P::new(a),P::new(a2),P::new(a2.mul(a))];
-@@ -62,6 +64,8 @@ fn primal(v:&[K],a:K)->Vec<K>{
+@@ -62,3 +64,5 @@ fn primal(v:&[K],a:K)->Vec<K>{
      assert_eq!(out,primal_reference(v,a));
      out
  }
 +#[cfg(v8_affine_primal)]
 +fn primal(v:&[K],a:K)->Vec<K>{affine_primal::fold(v,a)}
- 
- fn image_terminal(t:K,b:K,c:K,a:[K;4])->K {
-     a[1].mul(a[2]).mul(a[3]).mul(t.mul(a[0]).add(t.square().mul(b.mul(a[0].square()).sub(c.mul(a[0].square().mul(a[0])))))).mul_m31(M31(8388608))
