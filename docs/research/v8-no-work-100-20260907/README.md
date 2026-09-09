@@ -1,14 +1,17 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [constructed ordered post-query game](ordered-post-query-review.md).
-The natural-line functional now derives the game's discrepancy interfaces and
-connects actual compact tail responses to an ordered-query bound. Selected
-input-pair decoding and all 24 direction-bit parses follow from concrete
-residuals. The exact C1 agreement-cap specialization passes; optional-object
-identification remains open after isolated guarded failures. See the
-[current-source proof evidence and conditional ledger](ordered-post-query-evidence.json).
-No verifier, body or measured CU change; global soundness, extraction and ZK
-are not established.
+Latest formal continuation: [causal shifted-row/image execution and early C1](causal-row-continuation.md).
+The affine-corrected shifted rows now feed a constructed causal image/relation
+and ordered-query game. Exact early-C1 identification and independence from
+qualifying late-C2 tuples are proved; a modeled selected24-level Merkle path
+is constructed from residuals. See the
+[current-source evidence and exact conditional ledger](causal-row-evidence.json).
+No verifier, body or measured CU change. Accepted uncovered recovery, complete
+source/payment/FS correspondence and full-view ZK remain open.
+
+Previous formal checkpoint: [constructed ordered post-query game](ordered-post-query-review.md),
+with selected input-pair/direction decoding and the concrete C1 agreement cap.
+Its optional-identification blocker is resolved by the continuation above.
 
 Previous formal checkpoint: [soundness resumed using V7](soundness-resume-review.md),
 covering common-sample Gao recovery, payment-value constraints, compact
