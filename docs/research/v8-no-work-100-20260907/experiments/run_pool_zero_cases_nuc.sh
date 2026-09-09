@@ -27,6 +27,7 @@ verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_SEMANTIC_CARRY:-0}" != 1 ]] || verifier="$rt/sbf-complete-semantic-carry/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_SEMANTIC_BOUNDARY:-0}" != 1 ]] || verifier="$rt/sbf-complete-semantic-boundary/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_SHARED_GAMMA:-0}" != 1 ]] || verifier="$rt/sbf-complete-shared-gamma/aspis_v8_complete_sbf.so"
+[[ "${ASPIS_V8_TERMINAL_STACK:-0}" != 1 ]] || verifier="$rt/sbf-complete-terminal-stack/aspis_v8_complete_sbf.so"
 readonly verifier registry="$rt/sbf-selected-registry/aspis_registry.so"
 readonly double="$rt/sbf-complete/aspis_pair_forest_result_double.so"
 case "$mode" in

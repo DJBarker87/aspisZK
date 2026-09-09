@@ -1,6 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest experiment: [helper hoisting and query injection](query-injection-review.md).
+Latest retained result: [shared terminal query weights](terminal-query-review.md).
+Worst observed complete transaction is **1,047,041 CU**, with **152,959 CU**
+headroom under the actual 1.2M cap and the same **40,282-byte** body. All four
+maximum-body shape maxima are now below the matched V7 controls by 1,843–25,030 CU.
+The new Lean identities, corrected optimized unit gate and 50 selected complete
+maximum/ordinary/rollback cases pass. The separated semantic call also clears
+an inherited compiler frame diagnostic. See [results](terminal-query-results.json).
+These measurements are not a universal CU/parity or global protocol theorem.
+
+Preceding experiment: [helper hoisting and query injection](query-injection-review.md).
 One control ties; three algebraically equivalent lowerings regress by377–2,917CU.
 All96new complete cases preserve outcomes/account effects. The shifted query
 schedule and grouped-dot range/equivalence interfaces are Lean-proved; none of
@@ -12,7 +21,7 @@ Their field/range equivalence is Lean-proved, but all three regress complete CU
 outcomes and account effects. They are rejected controls, not selected changes.
 See [results](query-affine-results.json); the preceding winner is unchanged.
 
-Retained: [shared preparation for five public gamma dots](shared-gamma-review.md).
+Previous retained: [shared preparation for five public gamma dots](shared-gamma-review.md).
 Worst observed complete transaction is **1,057,043 CU**, with **142,957 CU**
 headroom below the actual 1.2M cap and the unchanged **40,282-byte** body.
 The source-shaped Lean bridge and all 50 maximum/ordinary/rollback cases pass;

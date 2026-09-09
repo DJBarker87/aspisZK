@@ -1,0 +1,16 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs b/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs
+index 02dcf46f..1f881e0e 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs
+@@ -3,0 +4,2 @@ use super::*;
++#[cfg(v8_terminal_prefix)]
++#[path="terminal_query.rs"] mod terminal_query;
+@@ -211,0 +214,8 @@ pub(in super::super) fn relation(w:&Wire<'_>,mut p:Prefix,d:Description,mut c:K)
++    #[cfg(v8_terminal_prefix)]
++    let query_terminal=terminal_query::terminal(&query_weights);
++    #[cfg(all(v8_terminal_prefix,v8_terminal_fused))]
++    let expected=terminal_query::scalar(terminal,query_terminal,&f,image_terminal(p.tau,p.abc[1],p.abc[2],a));
++    #[cfg(all(v8_terminal_prefix,not(v8_terminal_fused)))]
++    let expected=(0..4).fold(K::ZERO,|v,i|v.add(terminal[i].add(query_terminal[i]).mul(f[i])))
++        .add(image_terminal(p.tau,p.abc[1],p.abc[2],a).mul(f[3]));
++    #[cfg(not(v8_terminal_prefix))]
