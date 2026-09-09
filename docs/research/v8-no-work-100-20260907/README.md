@@ -1,6 +1,12 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [shared preparation for five public gamma dots](shared-gamma-review.md).
+Latest experiment: [three query-affine fusions](query-affine-review.md).
+Their field/range equivalence is Lean-proved, but all three regress complete CU
+(+737–8,409 per identical maximum-body proof). All 72 new complete cases preserve
+outcomes and account effects. They are rejected controls, not selected changes.
+See [results](query-affine-results.json); the preceding winner is unchanged.
+
+Retained: [shared preparation for five public gamma dots](shared-gamma-review.md).
 Worst observed complete transaction is **1,057,043 CU**, with **142,957 CU**
 headroom below the actual 1.2M cap and the unchanged **40,282-byte** body.
 The source-shaped Lean bridge and all 50 maximum/ordinary/rollback cases pass;

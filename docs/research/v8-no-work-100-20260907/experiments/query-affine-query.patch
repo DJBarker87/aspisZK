@@ -1,0 +1,77 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs b/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
+index 21e0ac1d..42d73c57 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
+@@ -62 +62 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
+-        #[cfg(all(v8_gamma_fixed,not(v8_gamma_fused)))]
++        #[cfg(all(v8_gamma_fixed,not(v8_gamma_fused),not(v8_query_affine)))]
+@@ -91,0 +92 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
++        #[cfg(not(v8_query_affine))]
+@@ -92,0 +94,3 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
++        #[cfg(v8_query_affine)]
++        let raw={let v=c1[26*slot..26*(slot+1)].try_into().unwrap();let p=&powers.base.c1_limbs;
++            [fixed_raw::<0>(v,p),fixed_raw::<1>(v,p),fixed_raw::<2>(v,p),fixed_raw::<3>(v,p)]};
+@@ -94 +98,6 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
+-        out[slot]=value.add(corelib::field::qm31_sum_products3_prepared(&[powers.base.helpers[0],powers.base.helpers[1],powers.d],&helpers));
++        #[cfg(not(any(v8_query_affine,v8_query_affine_canonical)))]
++        {out[slot]=value.add(corelib::field::qm31_sum_products3_prepared(&[powers.base.helpers[0],powers.base.helpers[1],powers.d],&helpers));}
++        #[cfg(v8_query_affine_canonical)]
++        {out[slot]=corelib::field::qm31_add_sum_products3_prepared(value,&[powers.base.helpers[0],powers.base.helpers[1],powers.d],&helpers);}
++        #[cfg(v8_query_affine)]
++        {out[slot]=corelib::field::research_qm31_add_raw_sum_products3_prepared(raw,&[powers.base.helpers[0],powers.base.helpers[1],powers.d],&helpers);}
+@@ -104,0 +114,5 @@ fn fixed_dot<const L:usize>(v:&[u32;26],p:&[[u32;4];26])->M31{
++    M31::reduce_u64(fixed_raw::<L>(v,p))
++}
++#[cfg(v8_gamma_fixed)]
++#[inline(always)]
++fn fixed_raw<const L:usize>(v:&[u32;26],p:&[[u32;4];26])->u64{
+@@ -115 +129 @@ fn fixed_dot<const L:usize>(v:&[u32;26],p:&[[u32;4];26])->M31{
+-    M31::reduce_u64(a.wrapping_add(b).wrapping_add(c.wrapping_add(tail)))
++    a.wrapping_add(b).wrapping_add(c.wrapping_add(tail))
+@@ -220,0 +235,46 @@ pub(super) fn controls(){
++
++#[cfg(all(test,v8_query_affine_canonical))]
++mod query_affine_canonical_tests {
++    use super::*;
++    #[test]
++    fn canonical_affine_packed_controls(){
++        controls();
++        println!("QUERY_AFFINE_CANONICAL selected_existing_helper=true unchanged_packed_rejections=true");
++    }
++}
++#[cfg(all(test,v8_query_affine))]
++mod query_affine_tests {
++    use super::*;
++    #[test]
++    fn wide_constant_and_packed_queries_match(){
++        use corelib::field::{PreparedQm31Multiplier as P,research_qm31_add_raw_sum_products3_prepared as affine};
++        let mut rng=0x7261_772d_4331_4332u64;
++        fn m(r:&mut u64)->M31{*r^=*r<<13;*r^=*r>>7;*r^=*r<<17;M31((*r%u64::from(corelib::field::P)) as u32)}
++        fn k(r:&mut u64)->K{K{c0:CM31::new(m(r),m(r)),c1:CM31::new(m(r),m(r))}}
++        let max=K{c0:CM31::new(M31(corelib::field::P-1),M31(corelib::field::P-1)),c1:CM31::new(M31(corelib::field::P-1),M31(corelib::field::P-1))};
++        let cap=7*(5*u64::from(corelib::field::P)+3);
++        for case in 0..4096 {
++            let mut raw=core::array::from_fn(|_|{let _=m(&mut rng);rng%(cap+1)});
++            let mut l=core::array::from_fn(|_|k(&mut rng));let mut r=core::array::from_fn(|_|k(&mut rng));
++            if case==0{raw=[cap;4];l=[max;3];r=[max;3];}
++            if case==1{raw=[0;4];l=[K::ZERO;3];r=[K::ZERO;3];}
++            let c=raw.map(M31::reduce_u64);let c=K{c0:CM31::new(c[0],c[1]),c1:CM31::new(c[2],c[3])};
++            assert_eq!(affine(raw,&l.map(P::new),&r),c.add(corelib::field::qm31_sum_products3_prepared(&l.map(P::new),&r)));
++            assert_eq!(affine(raw,&l.map(P::new),&r),(0..3).fold(c,|s,i|s.add(l[i].mul(r[i]))));
++        }
++        for case in 0..1024 {
++            let mut v=core::array::from_fn(|_|m(&mut rng).0);
++            let mut p=core::array::from_fn(|_|core::array::from_fn(|_|m(&mut rng).0));
++            if case==0{v=[corelib::field::P-1;26];p=[[corelib::field::P-1;4];26];}
++            if case==1{v=[0;26];p=[[0;4];26];}
++            let raw=[fixed_raw::<0>(&v,&p),fixed_raw::<1>(&v,&p),fixed_raw::<2>(&v,&p),fixed_raw::<3>(&v,&p)];
++            for i in 0..4 {
++                assert!(raw[i]<=cap);
++                let expected=(0..26).map(|j|u128::from(v[j])*u128::from(p[j][i])).sum::<u128>()%u128::from(corelib::field::P);
++                assert_eq!(u128::from(M31::reduce_u64(raw[i]).0),expected);
++            }
++        }
++        controls();
++        println!("QUERY_AFFINE wide_constants=4096 fixed_raw_profiles=1024 maximum_seed=true unchanged_packed_rejections=true");
++    }
++}
