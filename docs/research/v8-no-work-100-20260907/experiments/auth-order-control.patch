@@ -1,0 +1,33 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+index 1b4d1bd3..45a69b1f 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+@@ -15,6 +15,8 @@ const FIXED:usize=697; const Q:usize=22; const REC:usize=621; const HEAD:usize=F
+ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
+ #[cfg(any(v8_leaf_record,test))]
+ #[path="leaf_record.rs"] mod leaf_record;
++#[cfg(any(v8_auth_order,test))]
++#[path="auth_order.rs"] mod auth_order;
+ #[cfg(v8_gamma_wrap)]
+ #[path="query_arithmetic.rs"] mod query_arithmetic;
+ #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
+@@ -160,6 +162,8 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
+         combined.push(query_arithmetic::gamma(&r[..403],&r[403..589],&powers)?);
+     }
+     query_checkpoint("v8:canonical-gamma");
++    #[cfg(not(v8_auth_order))]
++    let entries={
+     let mut entries=Vec::with_capacity(queries.len());
+     for (i,&id) in queries.iter().enumerate(){
+         let r=&w.records[i*REC..(i+1)*REC];let salt:&[u8;32]=r[589..621].try_into().unwrap();
+@@ -170,6 +174,10 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
+     }
+     query_checkpoint("v8:leaf-hashes");
+     entries.sort_by_key(|x|x.0);
++    entries};
++    #[cfg(v8_auth_order)]
++    let entries=auth_order::entries(w.records,queries,hashfn)?;
++    #[cfg(v8_auth_order)] query_checkpoint("v8:ordered-leaf-hashes");
+     if !verify_two_minimal_subtrees_v7_bytes(hashfn,(&w.roots.0,&w.roots.1),18,&entries,w.frontiers,&mut vec![],&mut vec![]){return Err(Error::Authentication);}
+     query_checkpoint("v8:internal-auth");
+     let mut denoms=Vec::with_capacity(4*queries.len());let mut numerators=Vec::with_capacity(4*queries.len());

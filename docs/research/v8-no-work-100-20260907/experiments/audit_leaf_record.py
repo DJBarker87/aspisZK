@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Check measured leaf-record control against the committed Merkle winner."""
-import contextlib,hashlib,io,json,re,runpy
+import contextlib,hashlib,io,json,re,runpy,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 EX=ROOT/'experiments'; EV=ROOT/'evidence/leaf-record'
@@ -8,6 +8,10 @@ with contextlib.redirect_stdout(io.StringIO()):
     prior=runpy.run_path(str(EX/'audit_merkle_input.py'))
 check,summary=prior['check'],prior['summary']
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def pinned_sha(name):
+    path='docs/research/v8-no-work-100-20260907/experiments/'+name
+    return hashlib.sha256(subprocess.check_output(['git','show',
+        '7ccf84a3b8c66c30a9db96fb9cb305849b65106b:'+path],cwd=EX)).hexdigest()
 def load(folder,count):
     rows={p.stem:check(json.loads(p.read_text())) for p in sorted((EV/folder).glob('*.json'))}
     assert len(rows)==count,(folder,len(rows))
@@ -46,7 +50,7 @@ for job in ('test','sbf-build'):
     assert '\tExit status: 0' in log and not re.search(r'Stack offset .* exceeded|error:',log)
     if job=='test':
         assert '2 passed; 0 failed' in log
-        assert sha(EX/'relation_callback.rs') in log and sha(EX/'leaf_record.rs') in log
+        assert pinned_sha('relation_callback.rs') in log and pinned_sha('leaf_record.rs') in log
     parts=list(map(float,re.search(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([\d:.]+)',log)[1].split(':')))
     resources[job]={'exit':0,'wall_seconds':sum(x*60**i for i,x in enumerate(reversed(parts))),
         'rss_kib':int(re.search(r'Maximum resident set size \(kbytes\): (\d+)',log)[1]),
@@ -63,7 +67,7 @@ out={'schema':'aspis.research.leaf-record.v1','base_revision':'74f9b7661bad35374
         'axioms':dict(axs),'exit':0,'wall_seconds':float(re.search(r'([\d.]+) real',lean)[1]),
         'rss_bytes':int(re.search(r'(\d+)  maximum resident set size',lean)[1]),
         'swaps':int(re.search(r'(\d+)  swaps',lean)[1])},
-    'source_sha256':{p:sha(EX/p) for p in ('relation_callback.rs','leaf_record.rs')},
+    'source_sha256':{p:pinned_sha(p) for p in ('relation_callback.rs','leaf_record.rs')},
     'hash_input':{'bytes':220,'old_lengths':[2,186,32],'new_lengths':[2,218],
         'syscall_cu_each':204,'hash_calls_changed':False,'new_proof_or_transcript_bytes':0,
         'backend_requirement':'SHA backend hashes concatenation; same source audit as MerkleInput.'},
