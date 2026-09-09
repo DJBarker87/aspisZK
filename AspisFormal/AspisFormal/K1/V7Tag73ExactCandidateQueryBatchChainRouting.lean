@@ -30,6 +30,7 @@ open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactQ16CausalCoordinateOrder
 open AspisK1.V7Tag73ExactRootLookupCausalOrder
@@ -423,6 +424,8 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
         (.machineFresh boundaryActor
           (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
           queryBatchDigest : UnifiedExposureRecord) :: suffix ∧
+      finalTrial =
+        (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       ExactRootOrderedQ16Chain input
         (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
         queryBatchDigest outputs advances ∧
@@ -479,7 +482,8 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
           slot.val = index) := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, initial, rootExact,
-      chain, outputsLength, advancesLength, q16TerminalExact, initialExact,
+      finalTrialExact, chain, outputsLength, advancesLength, q16TerminalExact,
+      initialExact,
       initialMemory, aligned, onlyMachine, inputNodup, answerNodup,
       sourceDisjoint, digestDisjoint, invariant, initialReady⟩ :=
     exact_selected_candidate_has_armed_query_batch_context transitionRoom input
@@ -538,7 +542,8 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
     exact ⟨advancePrefix, later, advanceActor, slot, advanceExact, by
       simpa [slot] using preferred, rfl⟩
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs, advances,
-    boundaryPrior, suffix, boundaryActor, initial, rootExact, chain,
+    boundaryPrior, suffix, boundaryActor, initial, rootExact, finalTrialExact,
+    chain,
     outputsLength, advancesLength, q16TerminalExact, initialExact,
     initialMemory, outputResult, advanceResult⟩
 

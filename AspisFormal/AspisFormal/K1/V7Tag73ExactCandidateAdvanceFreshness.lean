@@ -40,6 +40,7 @@ open AspisK1.V7Tag73ExactFinalWorkPairControllerCompletion
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedOperationalStateMap
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactProbabilityCoverageAudit
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
@@ -151,6 +152,8 @@ theorem exact_selected_candidate_advance_is_fresh
               preAdvance
               (exactCandidateDirectedQueryBatchInitialState input))).memory
           ).producers ∧
+      finalTrial =
+        (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       (indexedStateAfterRecords transitionFuel
         (extendControllerThroughCandidateQueryBatch transitionFuel target
           (candidateCompleteBaseController transitionFuel foldTrial.val
@@ -169,7 +172,8 @@ theorem exact_selected_candidate_advance_is_fresh
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, prior, middle, later, producerActor,
       advanceActor, recordsExact, selectedMember, _targetCounter, _targetBlock,
-      advanceLookup, terminalExact, boundaryStart, boundaryLookup⟩ :=
+      finalTrialExact, advanceLookup, terminalExact, boundaryStart,
+      boundaryLookup⟩ :=
     exact_selected_candidate_parent_available_in_complete_base transitionRoom
       input foldTrial boundaryIndex
   let producerRecord : UnifiedExposureRecord :=
@@ -277,7 +281,7 @@ theorem exact_selected_candidate_advance_is_fresh
         exact (separated _ priorInputMember _ suffixInputMember rfl).elim
   refine ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
     beforeDomain, beforeQueryBatch, preAdvance, later, advanceActor, rootExact,
-    ?_, targetAbsent, advanceLookup, terminalExact, boundaryStart,
+    ?_, finalTrialExact, targetAbsent, advanceLookup, terminalExact, boundaryStart,
     boundaryLookup⟩
   rw [candidate_extended_dag_after_records_eq_standalone input foldTrial
     finalTrial boundaryIndex target preAdvance]

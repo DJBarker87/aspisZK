@@ -29,6 +29,7 @@ open AspisK1.V7Tag73CausalGammaPrefixCoordinates
 open AspisK1.V7Tag73CausalFinalWorkQ16UsedForest
 open AspisK1.V7Tag73CausalMachineLabeledTraceRouting
 open AspisK1.V7Tag73CausalQ16CoordinateRouter
+open AspisK1.V7Tag73CausalQ16FinalWorkProbability
 open AspisK1.V7Tag73CausalSlotRouterLookup
 open AspisK1.V7Tag73ExactCandidateLabeledRootRouting
 open AspisK1.V7Tag73ExactCausalRouterTapeAlignment
@@ -73,6 +74,58 @@ def foldAlphaQ16QueryBatchNamedSlotInputTape
   castFreshAnswerTape (by
     rw [Finset.card_univ,
       fold_alpha_final_work_q16_query_batch_digest_slot_card]) tape
+
+/-- The fold-work component of the public 542-coordinate factor is exactly
+the left-hand fold slot of the underlying causal router. -/
+theorem fold_alpha_q16_query_batch_fold_coordinate_eq_named_slot
+    (parameters : ExactCompilerResourceParameters)
+    (router : ExactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchRouter
+      parameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length) :
+    (exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
+      router tape).1.2.1 =
+      (router.coordinateEquiv
+        (foldAlphaQ16QueryBatchNamedSlotInputTape
+          (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters tape))).1
+        ⟨Sum.inl none, Finset.mem_univ _⟩ := by
+  simp only [exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates,
+    exactCompilerFoldAlphaQ16QueryBatchInputTape,
+    foldAlphaQ16QueryBatchNamedSlotInputTape,
+    CausalSlotRouter.fullCoordinateEquiv, Equiv.trans_apply,
+    Equiv.prodCongr_apply,
+    foldAlphaFinalWorkQ16QueryBatchDigestSlotFunctionEquiv,
+    foldAlphaFinalWorkQ16QueryBatchCoordinateRegroup,
+    foldAlphaFinalWorkQ16DigestSlotFunctionEquiv,
+    alphaFinalWorkQ16DigestSlotFunctionEquiv,
+    finalWorkQ16DigestSlotFunctionEquiv, univSubtypeEquiv]
+  rfl
+
+/-- The final-work component of the public 542-coordinate factor is exactly
+the corresponding left-hand work slot of the causal router. -/
+theorem fold_alpha_q16_query_batch_final_work_coordinate_eq_named_slot
+    (parameters : ExactCompilerResourceParameters)
+    (router : ExactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchRouter
+      parameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length) :
+    (exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
+      router tape).1.2.2.2.1 =
+      (router.coordinateEquiv
+        (foldAlphaQ16QueryBatchNamedSlotInputTape
+          (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters tape))).1
+        ⟨Sum.inl (some (Sum.inr none)), Finset.mem_univ _⟩ := by
+  simp only [exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates,
+    exactCompilerFoldAlphaQ16QueryBatchInputTape,
+    foldAlphaQ16QueryBatchNamedSlotInputTape,
+    CausalSlotRouter.fullCoordinateEquiv, Equiv.trans_apply,
+    Equiv.prodCongr_apply,
+    foldAlphaFinalWorkQ16QueryBatchDigestSlotFunctionEquiv,
+    foldAlphaFinalWorkQ16QueryBatchCoordinateRegroup,
+    foldAlphaFinalWorkQ16DigestSlotFunctionEquiv,
+    alphaFinalWorkQ16DigestSlotFunctionEquiv,
+    finalWorkQ16DigestSlotFunctionEquiv, univSubtypeEquiv]
+  rfl
 
 /-- One public query-batch output coordinate is exactly the corresponding
 right-hand named slot of the underlying 542-slot router. -/
