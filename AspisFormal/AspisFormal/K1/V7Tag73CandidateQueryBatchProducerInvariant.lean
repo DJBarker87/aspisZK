@@ -32,6 +32,54 @@ open AspisK1.V7Tag73TranscriptSchedule
 
 noncomputable section
 
+/-- A successful query-batch output scan returns the literal matching
+producer. -/
+theorem query_batch_output_slot_cases
+    (producers : List QueryBatchPrefixProducer) (input : ShaInput)
+    (slot : GammaPrefixDigestSlot)
+    (output : queryBatchPrefixOutputSlot? producers input = some slot) :
+    ∃ producer ∈ producers,
+      input = bytes producer.digest ++ [domSqueeze] ∧
+      slot = (producer.block, false) := by
+  unfold queryBatchPrefixOutputSlot? at output
+  generalize foundExact : producers.find? (fun producer =>
+      decide (input = bytes producer.digest ++ [domSqueeze])) = found at output
+  cases found with
+  | none => simp at output
+  | some producer =>
+      have producerMember : producer ∈ producers :=
+        List.mem_of_find?_eq_some foundExact
+      have predicate := List.find?_some foundExact
+      have inputExact : input = bytes producer.digest ++ [domSqueeze] :=
+        of_decide_eq_true predicate
+      have slotExact : slot = (producer.block, false) := by
+        simpa using (Option.some.inj output).symm
+      exact ⟨producer, producerMember, inputExact, slotExact⟩
+
+/-- A successful query-batch advance scan returns the literal matching
+producer. -/
+theorem query_batch_advance_slot_cases
+    (producers : List QueryBatchPrefixProducer) (input : ShaInput)
+    (slot : GammaPrefixDigestSlot)
+    (advance : queryBatchPrefixAdvanceSlot? producers input = some slot) :
+    ∃ producer ∈ producers,
+      input = bytes producer.digest ++ [domAdvance] ∧
+      slot = (producer.block, true) := by
+  unfold queryBatchPrefixAdvanceSlot? at advance
+  generalize foundExact : producers.find? (fun producer =>
+      decide (input = bytes producer.digest ++ [domAdvance])) = found at advance
+  cases found with
+  | none => simp at advance
+  | some producer =>
+      have producerMember : producer ∈ producers :=
+        List.mem_of_find?_eq_some foundExact
+      have predicate := List.find?_some foundExact
+      have inputExact : input = bytes producer.digest ++ [domAdvance] :=
+        of_decide_eq_true predicate
+      have slotExact : slot = (producer.block, true) := by
+        simpa using (Option.some.inj advance).symm
+      exact ⟨producer, producerMember, inputExact, slotExact⟩
+
 def QueryBatchProducerSourceValid
     (producers : List QueryBatchPrefixProducer)
     (producer : QueryBatchPrefixProducer) : Prop :=
@@ -370,6 +418,67 @@ theorem extend_query_batch_producer_member_origin
         exact Or.inr ⟨rfl, rfl⟩
     · exact Or.inl (by simpa [bounded] using member)
 
+/-- Query-batch producer extension only appends; it never removes a live
+producer. -/
+theorem extend_query_batch_producers_prefix
+    (producers : List QueryBatchPrefixProducer)
+    (input : ShaInput) (answer : Digest256) :
+    producers <+: extendQueryBatchPrefixProducers producers input answer := by
+  unfold extendQueryBatchPrefixProducers
+  generalize producers.find? (fun producer =>
+    decide (input = bytes producer.digest ++ [domAdvance])) = found
+  cases found with
+  | none => exact List.prefix_refl _
+  | some producer =>
+      by_cases bounded : producer.block.val + 1 < 12
+      · simp only [bounded, dite_true]
+        exact List.prefix_append _ _
+      · simpa [bounded] using List.prefix_refl producers
+
+theorem armed_query_batch_after_input_producers_prefix
+    (memory : QueryBatchPrefixControllerMemory)
+    (input : ShaInput) (answer : Digest256) :
+    memory.producers <+:
+      (armedQueryBatchAfterInput memory input answer).producers := by
+  simpa [armedQueryBatchAfterInput] using
+    extend_query_batch_producers_prefix memory.producers input answer
+
+/-- Producer availability is monotone through every replay suffix after the
+query-batch boundary has armed. -/
+theorem armed_query_batch_indexed_state_producers_prefix
+    {globalOracleCalls : Nat} (transitionFuel : Nat) :
+    ∀ (records : List UnifiedExposureRecord)
+      (state : IndexedUnifiedExposureState globalOracleCalls
+        QueryBatchPrefixControllerMemory),
+      state.memory.producers <+:
+        (indexedStateAfterRecords transitionFuel
+          (armedQueryBatchController transitionFuel) records state).memory.producers := by
+  intro records
+  induction records with
+  | nil =>
+      intro state
+      exact List.prefix_refl _
+  | cons record records ih =>
+      intro state
+      let controller := armedQueryBatchController
+        (globalOracleCalls := globalOracleCalls) transitionFuel
+      let next := controller.afterAnswer transitionFuel state record.answer
+      have oneStep : state.memory.producers <+: next.memory.producers := by
+        cases inputExact : unifiedInputBeforeAnswer? transitionFuel state.cursor with
+        | none =>
+            simpa [next, controller, armedQueryBatchController,
+              IndexedUnifiedExposureController.afterAnswer,
+              armedQueryBatchAfterMemory, inputExact] using
+                List.prefix_refl state.memory.producers
+        | some input =>
+            simpa [next, controller, armedQueryBatchController,
+              IndexedUnifiedExposureController.afterAnswer,
+              armedQueryBatchAfterMemory, inputExact] using
+                armed_query_batch_after_input_producers_prefix state.memory
+                  input record.answer
+      rw [indexed_state_after_records_cons]
+      exact oneStep.trans (ih next)
+
 structure ArmedQueryBatchProducerInvariant
     (memory : QueryBatchPrefixControllerMemory) : Prop where
   boundarySeen : memory.boundarySeen = true
@@ -458,6 +567,60 @@ theorem armed_query_batch_advance_preferred_of_producer
     state.memory.producers invariant.digestsNodup member
   simp [armedQueryBatchPreferredSlot, inputExact,
     queryBatchDagPreferredSlotForInput, outputNone, advanceExact, unused]
+
+/-- Every armed query-batch label is backed by a literal current producer and
+one of its two exact duplex child inputs. -/
+theorem armed_query_batch_preferred_slot_has_producer
+    {globalOracleCalls : Nat} (transitionFuel : Nat)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      QueryBatchPrefixControllerMemory) (slot : GammaPrefixDigestSlot)
+    (preferred : armedQueryBatchPreferredSlot transitionFuel state =
+      some slot) :
+    ∃ input producer,
+      unifiedInputBeforeAnswer? transitionFuel state.cursor = some input ∧
+      producer ∈ state.memory.producers ∧
+      ((input = bytes producer.digest ++ [domSqueeze] ∧
+          slot = (producer.block, false)) ∨
+        (input = bytes producer.digest ++ [domAdvance] ∧
+          slot = (producer.block, true))) := by
+  unfold armedQueryBatchPreferredSlot at preferred
+  cases inputExact : unifiedInputBeforeAnswer? transitionFuel state.cursor with
+  | none => simp [inputExact] at preferred
+  | some input =>
+      simp only [inputExact] at preferred
+      unfold queryBatchDagPreferredSlotForInput at preferred
+      cases output : queryBatchPrefixOutputSlot?
+          state.memory.producers input with
+      | some outputSlot =>
+          by_cases used : outputSlot ∈ state.memory.usedSlots
+          · simp [output, used] at preferred
+          · have slotExact : outputSlot = slot := by
+              have preferredSome : some outputSlot = some slot := by
+                simpa [output, used] using preferred
+              exact Option.some.inj preferredSome
+            obtain ⟨producer, member, sourceExact, producerSlot⟩ :=
+              query_batch_output_slot_cases state.memory.producers input
+                outputSlot output
+            subst outputSlot
+            exact ⟨input, producer, by simp, member,
+              Or.inl ⟨sourceExact, producerSlot⟩⟩
+      | none =>
+          cases advance : queryBatchPrefixAdvanceSlot?
+              state.memory.producers input with
+          | none => simp [output, advance] at preferred
+          | some advanceSlot =>
+              by_cases used : advanceSlot ∈ state.memory.usedSlots
+              · simp [output, advance, used] at preferred
+              · have slotExact : advanceSlot = slot := by
+                  have preferredSome : some advanceSlot = some slot := by
+                    simpa [output, advance, used] using preferred
+                  exact Option.some.inj preferredSome
+                obtain ⟨producer, member, sourceExact, producerSlot⟩ :=
+                  query_batch_advance_slot_cases state.memory.producers input
+                    advanceSlot advance
+                subst advanceSlot
+                exact ⟨input, producer, by simp, member,
+                  Or.inr ⟨sourceExact, producerSlot⟩⟩
 
 theorem armed_query_batch_advance_installs_successor
     (memory : QueryBatchPrefixControllerMemory)
@@ -603,9 +766,15 @@ theorem aligned_records_preserve_armed_query_batch_invariant
 #print axioms extend_query_batch_producer_member_origin
 #print axioms ArmedQueryBatchProducerInvariant
 #print axioms singleton_armed_query_batch_invariant
+#print axioms query_batch_output_slot_cases
+#print axioms query_batch_advance_slot_cases
+#print axioms extend_query_batch_producers_prefix
+#print axioms armed_query_batch_after_input_producers_prefix
+#print axioms armed_query_batch_indexed_state_producers_prefix
 #print axioms armed_query_batch_after_input_preserves_invariant
 #print axioms armed_query_batch_output_preferred_of_producer
 #print axioms armed_query_batch_advance_preferred_of_producer
+#print axioms armed_query_batch_preferred_slot_has_producer
 #print axioms armed_query_batch_advance_installs_successor
 #print axioms aligned_records_preserve_armed_query_batch_invariant
 
