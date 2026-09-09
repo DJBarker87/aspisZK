@@ -1,0 +1,19 @@
+[package]
+name = "aspis-v8-devnet-tools"
+version = "0.0.0"
+edition = "2021"
+publish = false
+[workspace]
+[dependencies]
+aspis-core = { path = "../../../../crates/aspis-core" }
+aspis-pool = { path = "../../../../programs/aspis-pool", default-features = false, features = ["no-entrypoint", "pair-forest-account-evidence"] }
+aspis-registry = { path = "../../../../programs/aspis-registry", default-features = false, features = ["no-entrypoint"] }
+aspis-statement = { path = "../../../../crates/aspis-statement", features = ["pool-v1-kernel"] }
+solana-program = "=2.3.0"
+serde_json = "=1.0.151"
+base64 = "=0.22.1"
+sha2 = "=0.10.9"
+[profile.release]
+opt-level = 3
+overflow-checks = true
+codegen-units = 1
