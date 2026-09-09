@@ -1,0 +1,106 @@
+RESEARCH_PIN=33e13de4e4b8bfdef7f3f2fb2e472b34db44865e
+MODE=leaf
+33e13de4e4b8bfdef7f3f2fb2e472b34db44865e
+Lean (version 4.32.0, arm64-apple-darwin24.6.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+87238dadc0a8925ccbbbd337e4eee71f1f56acad6c65626b1b70d9bd58095efd  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/AspisFormal/AspisFormal/ArithmetizationCore.lean
+6ab5f3738e8018b86409fd1ec394527d1e6eded5816817f11385529e0c579300  /Users/dominic/ZK/AspisFormal/.lake/build/lib/lean/AspisFormal/ArithmetizationCore.olean
+2b3ebca0fe5ec333c0471336fac8df41c869cc8b04f1eced02f5a1822c8b8d3e  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/AspisFormal/AspisFormal/ValueConservation.lean
+332f6aca6ab9b69eccb050d31895abf1f51ccfc9c97fa9015ab196bee634eaa1  /Users/dominic/ZK/AspisFormal/.lake/build/lib/lean/AspisFormal/ValueConservation.olean
+39e4ffe5a4eeb487aad97e6b787e5b8102cbe319072b89b67ad2307f7cbdfb40  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SelectedTransferMaskAdapter.lean
+ca88ef28b6fa99fd9c52ebc92cbfdd951ff17a280adce0d6d8054fc7a4689c15  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/PaymentMaskRead.lean
+00f427ff1d17f2b01a7fbb7f18a4bc68b9814d804a05242f0ac34a5d6a9ff48f  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SelectedTransferPositive.lean
+775b0b9796a0b206c279209742bb6a9fdfceb73428f3fe7f5087702bea19b560  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SelectedTransferPositive.olean
+f44d45e32240e9d4579813ceb427ce2cb938cb90dcfa00c47f9e1fad2c139803  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/PaymentMaskRead.olean
+COMMAND=lean -M7000 -R /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments -o /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SelectedTransferMaskAdapter.olean /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SelectedTransferMaskAdapter.lean
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SelectedTransferMaskAdapter.lean:20:4: error: unsolved goals
+case inl.«0»
+v : ℕ
+right✝ : 3 ≤ 10
+hv : 0 < 3
+hr : 1014 = 1008 ^^^ 12
+⊢ False
+
+case inl.«1»
+v : ℕ
+right✝ : 3 ≤ 10
+hv : 1 < 3
+hr : 1014 = 1010 ^^^ 12
+⊢ False
+
+case inl.«2»
+v : ℕ
+right✝ : 3 ≤ 10
+hv : 2 < 3
+hr : 1014 = 1012 ^^^ 12
+⊢ False
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/SelectedTransferMaskAdapter.lean:106:6: error: Tactic `rfl` failed: The left-hand side
+  ∑ r ∈ I.erase (dep c), t r c + -∑ r ∈ I.erase (dep c), t r c
+is not definitionally equal to the right-hand side
+  ∑ r ∈ I.erase (dep c), t r c - ∑ r ∈ I.erase (dep c), t r c
+
+K : Type u_1
+inst✝ : AddCommGroup K
+rows : Finset ℕ
+active : ℕ → Prop
+dep : ℕ → ℕ
+t : ℕ → ℕ → K
+c : ℕ
+hc : c < 16
+hmem : dep c ∈ rows
+hinactive : ¬active (dep c)
+I : Finset ℕ := inactiveRows rows active
+hd : dep c ∈ I
+rest : ∑ r ∈ I.erase (dep c), balance rows active dep t r c = ∑ r ∈ I.erase (dep c), t r c
+finish : balance rows active dep t (dep c) c = -∑ r ∈ I.erase (dep c), t r c
+⊢ ∑ r ∈ I.erase (dep c), t r c + -∑ r ∈ I.erase (dep c), t r c =
+    ∑ r ∈ I.erase (dep c), t r c - ∑ r ∈ I.erase (dep c), t r c
+'AspisV8.SelectedTransferMaskAdapter.reserved_was_mask' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.remaining_mask_preserves_decoder' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.balanced_inactive_sum_zero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.overwrite_preserves_inactive_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.adapter_protected' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.adapter_decoder_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.adapter_inactive_sum_zero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.adapter_product_residual' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.SelectedTransferMaskAdapter.original_mask_writes_reserved' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       15.91 real         1.94 user         2.57 sys
+          5488017408  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              290199  page reclaims
+              125608  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               26516  voluntary context switches
+              113929  involuntary context switches
+         41579634154  instructions retired
+         16695236062  cycles elapsed
+           859500424  peak memory footprint
+LEAN_EXIT=1

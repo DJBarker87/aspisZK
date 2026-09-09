@@ -32,6 +32,7 @@ pub(super) fn checkpoint(name:&str){
 #[inline(never)]
 fn semantic(w:&Wire<'_>,binding:&[u8;32],public:&PoolV1PairForestTerminalPaymentV1,transition:&PoolV1PairLatePublicStatementV1)->Result<row::Semantic,Error>{
     let mut t=Transcript::new(hash);
+    #[cfg(v8_positive_transfer)] super::positive_transfer::absorb(&mut t);
     t.absorb(label::PROFILE,b"AV8/payment-extraction/v1");
     t.absorb(label::STATEMENT,binding);t.absorb(label::ROOT,&w.roots.0);
     let lambda=sample(&mut t,false)?;let chi=sample(&mut t,false)?;
@@ -81,12 +82,17 @@ fn semantic_bytes(w:&Wire<'_>,binding:&[u8;32],public:&[u8],transition:&[u8])->R
 }
 #[cfg_attr(v8_semantic_stack,inline(never))]
 pub(super) fn payment_terminal(public:&PoolV1PairForestTerminalPaymentV1,transition:&PoolV1PairLatePublicStatementV1,claims:&[K;84],z:&[K;10],s:&row::Semantic)->Result<K,Error>{
-    match public {
+    #[cfg(v8_positive_transfer)]
+    if !matches!(public,PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_)){return Err(Error::Shape);}
+    let value=match public {
         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>
             evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1(p,transition,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
         PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>
             evaluate_pool_v1_pair_forest_withdrawal_selected_masked_terminal_compiled_tag73_v1(p,transition,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
-    }.map_err(|_|Error::Terminal)
+    }.map_err(|_|Error::Terminal)?;
+    #[cfg(v8_positive_transfer)]
+    return Ok(value.add(super::positive_transfer::terminal_delta(claims,z,s.theta,&s.zc,s.eta)));
+    #[cfg(not(v8_positive_transfer))] Ok(value)
 }
 #[inline(never)]
 pub fn verify(body:&[u8],binding:&[u8;32],public:&[u8],transition:&[u8])->Result<(),u32>{

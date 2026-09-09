@@ -1,12 +1,24 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [causal authentication and the selected payment endpoint](oracle-endpoint-continuation.md).
+Latest formal continuation: [exact-fold recovery, concrete OOD rows and opt-in positive transfer](positive-recovery-continuation.md).
+The actual mathematical log20/log18 encoders now support a proved bound of
+at most three globally matching folding challenges for an arbitrary
+non-polynomial received quotient. Partial agreement and accepted extraction
+remain open. The concrete OOD bridge and positive-transfer mask/terminal
+identities are kernel-checked, reusing V7 work. An **opt-in, transfer-only**
+research repair produced one accepted masked proof and rejected both
+predeclared zero-output semantic controls. The default and pool wrapper are
+unchanged; the repair has no new CU or full-view privacy certificate.
+See the [current-source evidence and symbolic global ledger](positive-recovery-evidence.json).
+Maximum body remains **40,282 bytes**, with zero grinding security credit.
+
+Previous formal continuation: [causal authentication and the selected payment endpoint](oracle-endpoint-continuation.md).
 A constructed full-output oracle game now bounds the whole-domain late-target
 event by `Q/2^190` under its stated ideal law. The concrete natural reconstruction,
 transpose and shifted-row constructor are kernel-checked, reusing V7 results.
 A proved product-inverse repair prerequisite addresses the selected zero-output
-endpoint mismatch; that proposed check is not installed. See the
-[current-source evidence and unresolved ledger](oracle-endpoint-evidence.json).
+endpoint mismatch; at that checkpoint the proposed check was not installed.
+See the [checkpoint evidence and unresolved ledger](oracle-endpoint-evidence.json).
 Actual source/replay coupling, global accepted recovery, the complete payment/FS
 theorem and full-view ZK remain open. No production, body or measured CU change.
 
@@ -16,7 +28,8 @@ One genuine payment's 22 openings match the pre-lambda/chi prefix and actual
 verifier paths without resolver hash calls. Separately, two zero-output tables
 pass every literal selected residual but fail the stricter selected compiler
 endpoint. This refutes that proposed residual-to-endpoint implication; it is
-not a PCS acceptance/forgery result. The costed positivity repair is uninstalled.
+not a PCS acceptance/forgery result. The positivity repair was uninstalled at
+that checkpoint; the latest continuation installs it only in an opt-in control.
 No production or SBF acceptance change; proof-body maximum remains 40,282 bytes.
 
 Previous formal continuation: [authenticated early C1 and concrete natural image](authenticated-source-continuation.md).

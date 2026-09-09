@@ -33,6 +33,8 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
 #[path="shared_gamma.rs"] mod shared_gamma;
 #[cfg(v8_gamma_wrap)]
 #[path="query_arithmetic.rs"] mod query_arithmetic;
+#[cfg(v8_positive_transfer)]
+#[path="positive_transfer.rs"] mod positive_transfer;
 #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
 #[cfg(not(v8_performance_sbf))]
 fn hash(parts:&[&[u8]])->[u8;32] {let mut h=Sha256::new();for p in parts {h.update(p);}let digest=h.finalize().into();

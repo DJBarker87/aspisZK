@@ -92,7 +92,7 @@ fn value_rows(c: &mut [Vec<M31>; 16], values: [u32; 3]) {
     c[0][1015]=partial; c[1][1015]=M31(values[2]);
 }
 
-fn rewrite_outputs(baseline: &PoolV1PairForestMergedC1CompilationV1,
+pub(crate) fn rewrite_outputs(baseline: &PoolV1PairForestMergedC1CompilationV1,
     mut public: PoolV1PrivateTransferPublicV1,
     w: PoolV1PairForestPrivateTransferWitnessV1)
     -> (PoolV1PrivateTransferPublicV1, PoolV1PairForestMergedC1CompilationV1)

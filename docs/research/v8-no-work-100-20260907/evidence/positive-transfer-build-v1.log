@@ -1,0 +1,172 @@
+PIN=33e13de4e4b8bfdef7f3f2fb2e472b34db44865e
+MODE=build
+WORK=/tmp/aspis-v8-positive.oGSmyj
+33e13de4e4b8bfdef7f3f2fb2e472b34db44865e
+rustc 1.93.0 (254b59607 2026-01-19)
+binary: rustc
+commit-hash: 254b59607d4417e9dffbc307138ae5c86280fe4c
+commit-date: 2026-01-19
+host: aarch64-apple-darwin
+release: 1.93.0
+LLVM version: 21.1.8
+COMMAND: env RUSTFLAGS=--cfg\ v8_payment_extraction\ --cfg\ v8_performance\ --cfg\ v8_performance_fast\ --cfg\ v8_structured\ --cfg\ v8_positive_transfer\ -A\ dead_code\ -A\ unexpected_cfgs\ -C\ overflow-checks=yes cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture\,selected-v7-kernels --manifest-path /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling libc v0.2.189
+   Compiling generic-array v0.14.7
+   Compiling aspis-core v0.1.0 (/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-core)
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling cfg-if v1.0.4
+   Compiling getrandom v0.3.4
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+   Compiling zeroize v1.8.1
+   Compiling aspis-statement v0.1.0 (/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement)
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-statement` to apply 4 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+warning: variable does not need to be mutable
+   --> ../structured_weights.rs:152:9
+    |
+152 |     let mut d=Description::new(s.z,scales,abc);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> ../payment_extraction.rs:204:9
+    |
+204 |     let mut encoded:Vec<Vec<M31>>=selected.iter().map(|m|enc.encode_c1_message(m).unwrap()).collect();
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: `aspis-v8-performance-host` (bin "aspis-v8-performance-host") generated 2 warnings (run `cargo fix --bin "aspis-v8-performance-host" -p aspis-v8-performance-host` to apply 2 suggestions)
+    Finished `release` profile [optimized] target(s) in 44.95s
+       44.99 real        54.01 user         1.00 sys
+           808206336  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              311392  page reclaims
+               10900  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                  20  signals received
+                1375  voluntary context switches
+               15522  involuntary context switches
+           635108221  instructions retired
+           284395434  cycles elapsed
+            12255736  peak memory footprint
+EXIT=0
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/adaptive_outside.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/affine_primal.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/auth_order.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/authenticated_c1.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/c1_gao.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/c1_query_graph.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/chord.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/chord_link.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/chord_norm.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/circle_norm.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/complete_binding.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/complete_callback.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/copy_scatter_plan_generated.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/copy_tag_offsets_generated.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/copy_tag_shared_generated.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/domain_geometry.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/early_c1_trace.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/fields.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/gamma_counterexample.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/grouped_mask.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/image_gate.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/inactive_row_binding.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/joined_inverse.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/joined_inverse_concat.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/joint_recovery.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/leaf_record.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/line_norm.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/merkle_input_tests.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/payment_extraction.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/payment_source_modules.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/positive_transfer.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/production_field_tests.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/query_affine_arithmetic_v1.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/query_affine_field.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/query_affine_field_v1.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/query_injection.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/query_injection_fixed_array.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/query_injection_generic.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/quotient_fold.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/radius_boundary.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/radius_strategy.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/range_kernel_controls.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/recovered_witness.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/relation_callback_fixtures.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/robust_geometry.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/row_binding_small.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/schedules.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/selected_transfer_zero.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/semantic_boundary.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/semantic_carry.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/shared_gamma.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/source_coordinate_gate.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/sparse_grouped.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/terminal_query.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/terminal_query_fixed.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/terminal_query_prefix.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/terminal_query_structured_v1.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/zero_page.rs: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml: OK
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.lock: OK
+f771bbb4b04a041c72d6d09e6c5c4c887bb5f6e31de37e8677dcd75cf3ef018f  /tmp/aspis-v8-positive.oGSmyj/positive-transfer
