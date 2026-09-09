@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# One optimized, fixed-strategy control in a dedicated NUC directory/scope.
+set -euo pipefail
+[[ $# == 2 ]] || exit 2
+readonly task="$1" tag="$2"
+case "$task" in /home/dombarker/project-offloads/aspis-mixed-c1.*) ;; *) exit 2 ;; esac
+[[ "$tag" =~ ^[a-z0-9-]+$ ]] || exit 2
+readonly source="$task/MixedC1Control.rs"
+readonly executable="$task/mixed-c1-$tag"
+readonly log="$task/$tag.log"
+readonly sourcehash=3f3f8a77355efcd402634b63ed3f606e95f5a271e7c50039a093a93c7c7c4c64
+[[ -f "$source" && ! -e "$executable" && ! -e "$log" ]] || exit 2
+[[ "$(sha256sum "$source" | awk '{print $1}')" == "$sourcehash" ]] || exit 2
+{
+  printf 'RESEARCH_PIN=bc23dfeb647320c4fbf09012cd92da1a6a5fa95a\nEXPECTED_WORK=optimized_compile_then_tiny_fixed_strategy_control\n'
+  sha256sum "$source" "$task/run_mixed_c1_control.sh"
+  systemd-run --user --scope --quiet --unit="aspis-mixed-c1-$tag" \
+    -p MemoryHigh=1G -p MemoryMax=2G -p MemorySwapMax=0 -p CPUQuota=200% \
+    bash -c '
+      set -euo pipefail
+      source="$1"; executable="$2"
+      ulimit -t 60
+      cg="$(awk -F: '\''$1=="0" {print $3}'\'' /proc/self/cgroup)"
+      printf "CGROUP=%s\n" "$cg"
+      for setting in memory.high memory.max memory.swap.max cpu.max; do
+        printf "%s=" "$setting"; head -n 1 "/sys/fs/cgroup$cg/$setting"
+      done
+      /home/dombarker/.cargo/bin/rustc --version
+      printf "COMPILE_COMMAND=/home/dombarker/.cargo/bin/rustc --edition=2021 -O -C overflow-checks=yes %q -o %q\n" "$source" "$executable"
+      /usr/bin/time -v /home/dombarker/.cargo/bin/rustc --edition=2021 -O -C overflow-checks=yes "$source" -o "$executable"
+      echo COMPILE_EXIT=0
+      sha256sum "$executable"
+      printf "CONTROL_COMMAND=%q\n" "$executable"
+      /usr/bin/time -v "$executable"
+      echo CONTROL_EXIT=0
+    ' _ "$source" "$executable"
+  [[ "$(sha256sum "$source" | awk '{print $1}')" == "$sourcehash" ]]
+  echo SOURCE_UNCHANGED=true
+} 2>&1 | tee "$log"

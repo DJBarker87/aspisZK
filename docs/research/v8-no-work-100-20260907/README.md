@@ -1,6 +1,16 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [adaptive off-family tails and the actual query/relation suffix](adaptive-tail-continuation.md).
+Latest formal continuation: [covered recovery and alternative early C1 candidates](covered-recovery-continuation.md).
+The literal quotient family is now proved to have at most 99 members. An
+unfiltered C1 family fixed before lambda/chi has at most 100 members, with
+the actual late 26+3 projection and own-support base-field descent proved.
+A mixed-C1 control rules out requiring every accepted suffix to describe
+one dominant decoder output; it does not establish a payment forgery.
+Alternative-candidate extraction, covered component/payment recovery,
+source/FS and full-view ZK remain open. Focused checks ran on the NUC;
+no verifier, 40,282-byte body, profile or measured CU change.
+
+Previous formal continuation: [adaptive off-family tails and the actual query/relation suffix](adaptive-tail-continuation.md).
 Two proved agreement tails now bound an arbitrary received quotient's actual
 post-alpha final outside a fixed quotient family. Their selected-code and
 compact-suffix composition is Lean-checked, with an approximately 104.592-bit
