@@ -112,6 +112,46 @@ theorem query_batch_advance_slot_of_digest_nodup
         rw [reduce]
         exact ih split.2 tailMember
 
+theorem query_batch_advance_find_of_digest_nodup
+    (producer : QueryBatchPrefixProducer) :
+    ∀ producers : List QueryBatchPrefixProducer,
+      (producers.map QueryBatchPrefixProducer.digest).Nodup →
+      producer ∈ producers →
+      producers.find? (fun candidate =>
+        decide (bytes producer.digest = bytes candidate.digest)) =
+          some producer := by
+  intro producers
+  induction producers with
+  | nil => simp
+  | cons head tail ih =>
+      intro nodup member
+      have split : head.digest ∉ tail.map QueryBatchPrefixProducer.digest ∧
+          (tail.map QueryBatchPrefixProducer.digest).Nodup := by
+        simpa only [List.map_cons] using List.nodup_cons.mp nodup
+      rcases List.mem_cons.mp member with equal | tailMember
+      · subst head
+        simp
+      · have digestNe : producer.digest ≠ head.digest := by
+          intro equal
+          apply split.1
+          exact List.mem_map.mpr ⟨producer, tailMember, equal⟩
+        have bytesNe : bytes producer.digest ≠ bytes head.digest := by
+          intro equal
+          exact digestNe (digest_bytes_injective equal)
+        simp only [List.find?_cons]
+        simp [bytesNe]
+        exact ih split.2 tailMember
+
+theorem query_batch_advance_input_is_not_output
+    (producers : List QueryBatchPrefixProducer) (digest : Digest256) :
+    queryBatchPrefixOutputSlot? producers
+        (bytes digest ++ [domAdvance]) = none := by
+  induction producers with
+  | nil => simp [queryBatchPrefixOutputSlot?]
+  | cons producer producers ih =>
+      have tagNe : domAdvance ≠ domSqueeze := by decide
+      simp [queryBatchPrefixOutputSlot?, tagNe, ih]
+
 theorem query_batch_advance_find_cases
     (producers : List QueryBatchPrefixProducer)
     (input : ShaInput) (parent : QueryBatchPrefixProducer)
@@ -383,6 +423,58 @@ theorem armed_query_batch_after_input_preserves_invariant
   · exact extend_query_batch_producers_digests_nodup memory.producers input
       answer invariant.digestsNodup digestFresh
 
+theorem armed_query_batch_output_preferred_of_producer
+    {globalOracleCalls : Nat} (transitionFuel : Nat)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      QueryBatchPrefixControllerMemory)
+    (producer : QueryBatchPrefixProducer)
+    (invariant : ArmedQueryBatchProducerInvariant state.memory)
+    (member : producer ∈ state.memory.producers)
+    (unused : (producer.block, false) ∉ state.memory.usedSlots)
+    (inputExact : unifiedInputBeforeAnswer? transitionFuel state.cursor =
+      some (bytes producer.digest ++ [domSqueeze])) :
+    armedQueryBatchPreferredSlot transitionFuel state =
+      some (producer.block, false) := by
+  have outputExact := query_batch_output_slot_of_digest_nodup producer
+    state.memory.producers invariant.digestsNodup member
+  simp [armedQueryBatchPreferredSlot, inputExact,
+    queryBatchDagPreferredSlotForInput, outputExact, unused]
+
+theorem armed_query_batch_advance_preferred_of_producer
+    {globalOracleCalls : Nat} (transitionFuel : Nat)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      QueryBatchPrefixControllerMemory)
+    (producer : QueryBatchPrefixProducer)
+    (invariant : ArmedQueryBatchProducerInvariant state.memory)
+    (member : producer ∈ state.memory.producers)
+    (unused : (producer.block, true) ∉ state.memory.usedSlots)
+    (inputExact : unifiedInputBeforeAnswer? transitionFuel state.cursor =
+      some (bytes producer.digest ++ [domAdvance])) :
+    armedQueryBatchPreferredSlot transitionFuel state =
+      some (producer.block, true) := by
+  have outputNone := query_batch_advance_input_is_not_output
+    state.memory.producers producer.digest
+  have advanceExact := query_batch_advance_slot_of_digest_nodup producer
+    state.memory.producers invariant.digestsNodup member
+  simp [armedQueryBatchPreferredSlot, inputExact,
+    queryBatchDagPreferredSlotForInput, outputNone, advanceExact, unused]
+
+theorem armed_query_batch_advance_installs_successor
+    (memory : QueryBatchPrefixControllerMemory)
+    (producer : QueryBatchPrefixProducer) (answer : Digest256)
+    (bounded : producer.block.val + 1 < 12)
+    (invariant : ArmedQueryBatchProducerInvariant memory)
+    (member : producer ∈ memory.producers) :
+    QueryBatchPrefixProducer.mk answer
+        ⟨producer.block.val + 1, bounded⟩
+        (bytes producer.digest ++ [domAdvance]) ∈
+      (armedQueryBatchAfterInput memory
+        (bytes producer.digest ++ [domAdvance]) answer).producers := by
+  have found := query_batch_advance_find_of_digest_nodup producer
+    memory.producers invariant.digestsNodup member
+  simp [armedQueryBatchAfterInput, extendQueryBatchPrefixProducers, found,
+    bounded]
+
 /-- An aligned machine-fresh record segment preserves the armed producer
 invariant.  The two disjointness hypotheses say that every producer already
 present was created before this segment; exact-root input and answer `Nodup`
@@ -503,6 +595,8 @@ theorem aligned_records_preserve_armed_query_batch_invariant
 
 #print axioms query_batch_output_slot_of_digest_nodup
 #print axioms query_batch_advance_slot_of_digest_nodup
+#print axioms query_batch_advance_find_of_digest_nodup
+#print axioms query_batch_advance_input_is_not_output
 #print axioms extend_query_batch_producers_preserves_inventory
 #print axioms query_batch_producer_eq_of_block_eq
 #print axioms extend_query_batch_producers_blocks_nodup
@@ -510,6 +604,9 @@ theorem aligned_records_preserve_armed_query_batch_invariant
 #print axioms ArmedQueryBatchProducerInvariant
 #print axioms singleton_armed_query_batch_invariant
 #print axioms armed_query_batch_after_input_preserves_invariant
+#print axioms armed_query_batch_output_preferred_of_producer
+#print axioms armed_query_batch_advance_preferred_of_producer
+#print axioms armed_query_batch_advance_installs_successor
 #print axioms aligned_records_preserve_armed_query_batch_invariant
 
 end
