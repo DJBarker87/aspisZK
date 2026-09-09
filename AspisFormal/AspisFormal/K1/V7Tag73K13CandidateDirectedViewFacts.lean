@@ -16,6 +16,26 @@ open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisV5ComponentCQM31TowerExact
 open AspisV6QueryBatchSoundness
 
+/-- Congruence of canonical active views depends only on their three
+pre-challenge data fields; the inequality witnesses are proof-irrelevant. -/
+theorem activeJointQueryBatchPreChallengeView_congr
+    {leftPre rightPre : QM31Exact}
+    {leftExpected rightExpected : QueryVector QM31Exact}
+    {leftAuthenticated rightAuthenticated : QueryVector QM31Exact}
+    {leftDifferent : leftExpected ≠ leftAuthenticated}
+    {rightDifferent : rightExpected ≠ rightAuthenticated}
+    (preExact : leftPre = rightPre)
+    (expectedExact : leftExpected = rightExpected)
+    (authenticatedExact : leftAuthenticated = rightAuthenticated) :
+    activeJointQueryBatchPreChallengeView leftPre leftExpected
+        leftAuthenticated leftDifferent =
+      activeJointQueryBatchPreChallengeView rightPre rightExpected
+        rightAuthenticated rightDifferent := by
+  subst rightPre
+  subst rightExpected
+  subst rightAuthenticated
+  rfl
+
 /-- Membership transports contravariantly across equality of finite sets. -/
 theorem memLeftOfFinsetEq
     {K : Type*} [DecidableEq K]
@@ -48,5 +68,6 @@ theorem alignedFactsOfViewEq
 
 #print axioms alignedFactsOfViewEq
 #print axioms memLeftOfFinsetEq
+#print axioms activeJointQueryBatchPreChallengeView_congr
 
 end AspisK1.V7Tag73K13CandidateDirectedViewFacts
