@@ -15,7 +15,8 @@ host|partial-host)
  extra=''
  [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
  scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
-sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7)
+sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter)
+ [[ "$mode" != scatter ]] || python3 "$complete_exp/generate_copy_scatter.py" --check
  extra=''
  [[ "$mode" != hybrid ]] || extra='--cfg v8_qm_hybrid'
  [[ "$mode" != lazy ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0'
@@ -24,6 +25,7 @@ sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7)
  [[ "$mode" != group ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_qm_group_partial'
  [[ "$mode" != suffix ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix'
  [[ "$mode" != tag7 ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7'
+ [[ "$mode" != scatter ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan'
  selected="$common"
  if [[ "$mode" == channel-profile ]];then extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_terminal_profile';selected="${common/--cfg v8_quiet_profile/}";fi
  if [[ "$mode" == profile ]];then extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0';selected="${common/--cfg v8_quiet_profile/}";fi
