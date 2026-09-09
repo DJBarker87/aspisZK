@@ -1,0 +1,99 @@
+Running as unit: aspis-circle-norm-test-1788930158-3857520.scope; invocation ID: f2c5058be577408f9ea615782f2dd18a
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling libc v0.2.189
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core)
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling getrandom v0.3.4
+   Compiling cfg-if v1.0.4
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+   Compiling zeroize v1.8.1
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement)
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `vec`
+ --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:8:25
+  |
+8 | use alloc::{boxed::Box, vec};
+  |                         ^^^
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 6 warnings (run `cargo fix --lib -p aspis-statement` to apply 5 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+    Finished `release` profile [optimized] target(s) in 34.40s
+     Running unittests ../relation_callback.rs (docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps/aspis_v8_performance_host-0c122035954f27d0)
+
+running 1 test
+test circle_norm::tests::all_selected_points_and_arbitrary_chords ... CIRCLE_NORM unit_domain_indices=262144 chord_profiles=1024 slots=4 legal_zero_coordinate_points=4 invalid_ids=3 zero_denominators_reject=true off_circle_counterexample=true
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.02s
+
+	Command being timed: "env RUSTFLAGS=--cfg v8_circle_norm --cfg v8_chord_norm --cfg v8_leaf_record --cfg v8_merkle_slices --cfg v8_merkle_borrow -C overflow-checks=yes -A dead_code -A unexpected_cfgs cargo test --offline --locked --release --jobs 2 --manifest-path /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml circle_norm::tests -- --test-threads=1 --nocapture"
+	User time (seconds): 43.93
+	System time (seconds): 1.10
+	Percent of CPU this job got: 130%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:34.44
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 559356
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 74
+	Minor (reclaiming a frame) page faults: 594650
+	Voluntary context switches: 2995
+	Involuntary context switches: 353
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 193784
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+163ef22abe4427aed3ea3c54ac10261c8e38e74fb8d22f21176413989fbfe522  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+edecd253c2e53996a9605ea61d7aa8dad2b08d22f8edb4a65be2864e3e9a84d4  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/circle_norm.rs
+1c3f97504465e4502aec8853d03500eabaf8ed01cabc87269455aa97c4eb39c0  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/circle-window-points.json
+7905b8c2a92c72a79a8a6c785a91ce162fb338569a02867f671d1910e21b6e0d  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core/build.rs
+77625499c80b30fe9de1e79daaf35dc964bf0cb675a65ced69592d3d421c856b  /home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/crates/aspis-core/src/circle_fri.rs

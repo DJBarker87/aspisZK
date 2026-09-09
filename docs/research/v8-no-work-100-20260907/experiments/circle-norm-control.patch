@@ -1,0 +1,33 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+index 19adc236..a2930a3e 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+@@ -19,6 +19,8 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
+ #[path="auth_order.rs"] mod auth_order;
+ #[cfg(any(v8_chord_norm,test))]
+ #[path="chord_norm.rs"] mod chord_norm;
++#[cfg(any(v8_circle_norm,test))]
++#[path="circle_norm.rs"] mod circle_norm;
+ #[cfg(v8_gamma_wrap)]
+ #[path="query_arithmetic.rs"] mod query_arithmetic;
+ #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
+@@ -151,6 +153,9 @@ fn opened_values(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:corelib::Ha
+ }
+ #[inline(never)]
+ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:corelib::HashFn,prepared:Option<&StateOnlySpendQueryPowers>)->Result<(Vec<K>,Vec<M31>),Error>{
++    #[cfg(v8_circle_norm)] let selected_points=circle_norm::Selected::new(queries)?;
++    #[cfg(v8_circle_norm)] let pts=selected_points.points();
++    #[cfg(not(v8_circle_norm))]
+     let pts=corelib::circle_fri::selected_circle_fiber_points_shared(20,queries).map_err(|_|Error::Domain)?;
+     query_checkpoint("v8:points");
+     let owned;
+@@ -214,7 +219,8 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
+     }
+     query_checkpoint("v8:denominators");
+     #[cfg(all(v8_tower_batch,not(v8_chord_norm)))] let inverses=tower_inverse_k(&denoms)?;
+-    #[cfg(v8_chord_norm)] let inverses=chord_norm::inverse(&denoms,p.abc,&pts)?;
++    #[cfg(all(v8_chord_norm,not(v8_circle_norm)))] let inverses=chord_norm::inverse(&denoms,p.abc,&pts)?;
++    #[cfg(v8_circle_norm)] let inverses=selected_points.inverse(&denoms,p.abc)?;
+     #[cfg(all(v8_batch_k,not(any(v8_tower_batch,v8_chord_norm))))] let inverses=batch_inverse_k(&denoms)?;
+     #[cfg(not(any(v8_batch_k,v8_tower_batch,v8_chord_norm)))] let inverses=denoms.iter().map(|d|d.try_inv().ok_or(Error::Domain)).collect::<Result<Vec<_>,_>>()?;
+     query_checkpoint("v8:qm-inverses");
