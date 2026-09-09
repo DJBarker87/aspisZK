@@ -76,6 +76,8 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
         ((exactOperationalTape input).messages.challengeUse
           .queryBatch).blocksUsed ∧
       advances.length = outputs.length ∧
+      blockAdvance =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       let base := candidateCompleteBaseController transitionFuel foldTrial.val
         finalTrial.val boundaryIndex
       let controller := extendControllerThroughCandidateQueryBatch
@@ -129,7 +131,8 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
     simpa [producerInputCanonical, initialDigestExact] using chain
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs, advances,
     boundaryPrior, boundaryLater, boundaryActor, boundaryRoot, canonicalChain,
-    outputsLength, advancesLength, targetExact, unseen, empty, armed⟩
+    outputsLength, advancesLength, chainDigestExact.symm.trans chainStart,
+    targetExact, unseen, empty, armed⟩
 
 #print axioms exact_selected_candidate_arms_complete_query_batch_chain
 

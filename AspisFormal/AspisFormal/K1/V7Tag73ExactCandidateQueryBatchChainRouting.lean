@@ -27,6 +27,7 @@ open AspisK1.V7Tag73ExactCandidateQueryBatchArmedContext
 open AspisK1.V7Tag73ExactCandidateQueryBatchControllerProjection
 open AspisK1.V7Tag73ExactCandidateQueryBatchProducerAvailability
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactPlainRomRun
@@ -429,6 +430,8 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
         ((exactOperationalTape input).messages.challengeUse
           .queryBatch).blocksUsed ∧
       advances.length = outputs.length ∧
+      blockAdvance =
+        (exactOperationalQ16Evaluator input).afterQ16.digest ∧
       initial = queryBatchIndexedState
         ((extendControllerThroughCandidateQueryBatch transitionFuel target
           (candidateCompleteBaseController transitionFuel foldTrial.val
@@ -476,9 +479,9 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
           slot.val = index) := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, initial, rootExact,
-      chain, outputsLength, advancesLength, initialExact, initialMemory, aligned,
-      onlyMachine, inputNodup, answerNodup, sourceDisjoint, digestDisjoint,
-      invariant, initialReady⟩ :=
+      chain, outputsLength, advancesLength, q16TerminalExact, initialExact,
+      initialMemory, aligned, onlyMachine, inputNodup, answerNodup,
+      sourceDisjoint, digestDisjoint, invariant, initialReady⟩ :=
     exact_selected_candidate_has_armed_query_batch_context transitionRoom input
       foldTrial boundaryIndex
   have lengthCap : (0 : Fin 12).val + outputs.length ≤ 12 := by
@@ -536,8 +539,8 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
       simpa [slot] using preferred, rfl⟩
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs, advances,
     boundaryPrior, suffix, boundaryActor, initial, rootExact, chain,
-    outputsLength, advancesLength, initialExact, initialMemory, outputResult,
-    advanceResult⟩
+    outputsLength, advancesLength, q16TerminalExact, initialExact,
+    initialMemory, outputResult, advanceResult⟩
 
 #print axioms armed_query_batch_ready_child_has_preferred
 #print axioms exact_ordered_armed_query_batch_chain_has_preferred_slots
