@@ -1,5 +1,6 @@
 import AspisFormal.K1.V7Tag73K13CandidateDirectedViewFacts
 import AspisFormal.K1.V7Tag73K13CandidateDirectedViewFunctional
+import AspisFormal.K1.V7Tag73K13PreQueryExecutionProjection
 import AspisFormal.K1.V7Tag73K13PreChallengeSemanticCongruence
 
 /-!
@@ -38,6 +39,7 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
 open AspisK1.V7Tag73K13CandidateDirectedViewFacts
+open AspisK1.V7Tag73K13PreQueryExecutionProjection
 open AspisK1.V7Tag73K13PreChallengeSemanticCongruence
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73Q16DigestDrawReindex
@@ -113,6 +115,34 @@ def ExactCandidateDirectedK13CommittedSourceInvariant
         source.preQueryDiscrepancy (hidden, right.answers) right.input ∧
       exactK13ParsedProof left.input = exactK13ParsedProof right.input ∧
       left.k12.words = right.k12.words
+
+/-- Production-facing committed-data invariant.  It retains the exact three
+verifier values present at the pre-query snapshot and the two Merkle/code
+vectors, rather than assuming equality of the already-combined discrepancy or
+of the complete parsed proof. -/
+def ExactCandidateDirectedK13CommittedExecutionInvariant
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    [Fintype HiddenTape]
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters)
+    (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
+    (fixedInstance : PublicInstance Statement)
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder) : Prop :=
+  ∀ candidate foldTrial finalTrial hidden context fold work skeleton
+      (left right : ExactCandidateDirectedK13ViewWitness source candidate
+        foldTrial finalTrial hidden context fold work skeleton),
+    exactK13PreQueryExecutionSnapshot
+        (source.execution (hidden, left.answers) left.input) =
+      exactK13PreQueryExecutionSnapshot
+        (source.execution (hidden, right.answers) right.input) ∧
+    exactTag73K13ExpectedQueryVector decoder left.input left.k12 =
+      exactTag73K13ExpectedQueryVector decoder right.input right.k12 ∧
+    exactTag73K13AuthenticatedQueryVector decoder left.input left.k12 =
+      exactTag73K13AuthenticatedQueryVector decoder right.input right.k12
 
 /-- Equality of the three pre-challenge components fixes the canonical active
 view.  Its proof-valued fields are irrelevant by proof irrelevance. -/
@@ -221,10 +251,47 @@ theorem ExactCandidateDirectedK13CommittedSourceInvariant.toViewFunctional
   exact exactJointQueryBatchPreChallengeView_eq_of_components preExact
     expectedExact authenticatedExact
 
+/-- The concrete pre-query snapshot invariant implies the complete functional
+view.  The discrepancy equality is derived from the pure relation evaluator. -/
+theorem ExactCandidateDirectedK13CommittedExecutionInvariant.toViewFunctional
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    [Fintype HiddenTape]
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder}
+    (invariant : ExactCandidateDirectedK13CommittedExecutionInvariant
+      transitionFuel configuration projection fixedInstance decoder source) :
+    ExactCandidateDirectedK13ViewFunctional transitionFuel configuration
+      projection fixedInstance decoder source := by
+  intro candidate foldTrial finalTrial hidden context fold work skeleton
+    left right
+  obtain ⟨snapshotExact, expectedExact, authenticatedExact⟩ :=
+    invariant candidate foldTrial finalTrial hidden context fold work skeleton
+      left right
+  have preExact :
+      source.preQueryDiscrepancy (hidden, left.answers) left.input =
+        source.preQueryDiscrepancy (hidden, right.answers) right.input := by
+    rw [source.preQueryDiscrepancyExact, source.preQueryDiscrepancyExact]
+    exact preQueryDiscrepancy_congr_of_projection_eq
+      (source.execution (hidden, left.answers) left.input)
+      (source.execution (hidden, right.answers) right.input) snapshotExact
+  change left.view = right.view
+  rw [left.viewExact, right.viewExact]
+  exact exactJointQueryBatchPreChallengeView_eq_of_components preExact
+    expectedExact authenticatedExact
+
 #print axioms exactJointQueryBatchPreChallengeView_eq_of_components
 #print axioms ExactCandidateDirectedK13SourceFactorization.toViewFunctional
 #print axioms
   ExactCandidateDirectedK13CommittedSourceInvariant.toViewFunctional
+#print axioms
+  ExactCandidateDirectedK13CommittedExecutionInvariant.toViewFunctional
 
 end
 end AspisK1.V7Tag73K13CandidateDirectedSourceFactorization

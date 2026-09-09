@@ -22,8 +22,10 @@ open AspisK1.V7Tag73CausalFoldAlphaFinalWorkQ16QueryBatchCoordinates
 open AspisK1.V7Tag73CausalFoldAlphaFinalWorkQ16Probability
 open AspisK1.V7Tag73CausalQ16CoordinateRouter
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactAcceptedFoldTrialPackage
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
+open AspisK1.V7Tag73ExactFoldAlphaQ16OperationalRealization
 open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchRootRouting
 open AspisK1.V7Tag73ExactFoldArmedQueryBatchProbabilityReady
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
@@ -36,8 +38,11 @@ open AspisK1.V7Tag73VariablePrefixGammaFlatRouting
 open AspisK1.V7Tag73VariablePrefixGammaSampler
 
 /-- The literal production coordinate selected by one candidate and the two
-accepted work trials.  The final conjunct binds the operational query-batch
-challenge to the nonzero value decoded from that exact coordinate. -/
+accepted work trials.  The two trial equalities retain the source provenance
+that the routing theorem used to choose those indices; without them the bare
+work predicates would also admit unrelated lucky coordinates.  The final
+conjunct binds the operational query-batch challenge to the nonzero value
+decoded from that exact coordinate. -/
 def ExactTag73CandidateDirectedCoordinateSelected
     {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
     {parameters : ExactCompilerResourceParameters}
@@ -57,7 +62,11 @@ def ExactTag73CandidateDirectedCoordinateSelected
   let coordinates :=
     exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
       router sample.2
-  FoldWork31Accepted coordinates.1.2.1 ∧
+  foldTrial = (exactAcceptedFoldTrial input).trial ∧
+    (∃ transitionRoom : 2 ≤ transitionFuel,
+      finalTrial =
+        (exactAcceptedDagInstallation transitionRoom input).finalTrial) ∧
+    FoldWork31Accepted coordinates.1.2.1 ∧
     FinalWork34Accepted coordinates.1.2.2.2.1 ∧
     ∃ success : GammaPrefixSucceeds coordinates.2,
       exactOperationalChallenge input .queryBatch =
@@ -84,9 +93,14 @@ theorem exact_operational_input_has_candidate_directed_coordinate
         (candidate : Q16DigestSlot),
       ExactTag73CandidateDirectedCoordinateSelected input candidate foldTrial
         finalTrial := by
-  simpa only [ExactTag73CandidateDirectedCoordinateSelected] using
+  obtain ⟨foldTrial, finalTrial, candidate, foldTrialExact, finalTrialExact,
+      foldAccepted, finalAccepted, success, challengeExact⟩ :=
     exact_selected_fold_armed_query_batch_coordinate_is_successful
       transitionRoom programmedCover input
+  refine ⟨foldTrial, finalTrial, candidate, ?_, ⟨transitionRoom, ?_⟩,
+    foldAccepted, finalAccepted, success, challengeExact⟩
+  · exact foldTrialExact
+  · exact finalTrialExact
 
 #print axioms ExactTag73CandidateDirectedCoordinateSelected
 #print axioms exact_operational_input_has_candidate_directed_coordinate
