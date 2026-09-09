@@ -17,6 +17,7 @@ verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_MERKLE_BOTH:-0}" != 1 ]] || verifier="$rt/sbf-complete-merkle-both/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_LEAF_RECORD:-0}" != 1 ]] || verifier="$rt/sbf-complete-leaf-record/aspis_v8_complete_sbf.so"
 [[ "${ASPIS_V8_DECODE_BLOCKS:-0}" != 1 ]] || verifier="$rt/sbf-complete-decode-blocks/aspis_v8_complete_sbf.so"
+[[ "${ASPIS_V8_AUTH_ORDER:-0}" != 1 ]] || verifier="$rt/sbf-complete-auth-order/aspis_v8_complete_sbf.so"
 readonly verifier registry="$rt/sbf-selected-registry/aspis_registry.so"
 readonly double="$rt/sbf-complete/aspis_pair_forest_result_double.so"
 case "$mode" in
