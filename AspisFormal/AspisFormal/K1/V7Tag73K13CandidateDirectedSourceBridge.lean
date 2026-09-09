@@ -76,10 +76,11 @@ theorem exact_candidate_directed_selected_coordinate_components
         exactOperationalChallenge input .queryBatch =
           (successfulGammaPrefixFactorization
             ⟨coordinates.2.2.2, success⟩).2.1 := by
-  simpa [ExactTag73CandidateDirectedCoordinateSelected,
-    exactCandidateDirectedRegroupedCoordinates,
+  dsimp [ExactTag73CandidateDirectedCoordinateSelected] at selected
+  refine ⟨selected.2.2.1, selected.2.2.2.1, ?_⟩
+  simpa [exactCandidateDirectedRegroupedCoordinates,
     foldFinalWorkQueryBatchCoordinateRegroup,
-    successfulGammaPrefixFactorization_value] using selected
+    successfulGammaPrefixFactorization_value] using selected.2.2.2.2
 
 /-- Literal production facts at the selected 542-coordinate query-batch
 boundary. No event inclusion or measure bound is a field. -/

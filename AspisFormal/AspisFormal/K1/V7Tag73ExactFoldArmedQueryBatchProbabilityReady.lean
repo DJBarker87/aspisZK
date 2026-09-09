@@ -72,6 +72,9 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
       let coordinates :=
         exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
           router sample.2
+      foldTrial = (exactAcceptedFoldTrial input).trial ∧
+      finalTrial =
+        (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       FoldWork31Accepted coordinates.1.2.1 ∧
       FinalWork34Accepted coordinates.1.2.2.2.1 ∧
       ∃ success : GammaPrefixSucceeds coordinates.2,
@@ -103,17 +106,19 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
       (foldAlphaQ16QueryBatchNamedSlotInputTape
         (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters sample.2)) =
       some fold.answer := by
-    simpa [router, foldRouterExact, finalRouterExact, fold, source] using
-      exact_fold_armed_candidate_accepted_fold_is_routed programmedCover input
-        fold source target
+    dsimp only [router]
+    rw [foldRouterExact, finalRouterExact]
+    exact exact_fold_armed_candidate_accepted_fold_is_routed programmedCover
+      input fold source target
   have finalWorkRouted :
       causalRoutedAnswer? (Sum.inl (some (Sum.inr none))) router
         (foldAlphaQ16QueryBatchNamedSlotInputTape
           (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters sample.2)) =
         some source.workAnswer := by
-    simpa [router, foldRouterExact, finalRouterExact, fold, source] using
-      exact_fold_armed_candidate_final_work_is_routed programmedCover input
-        fold source target
+    dsimp only [router]
+    rw [foldRouterExact, finalRouterExact]
+    exact exact_fold_armed_candidate_final_work_is_routed programmedCover input
+      fold source target
   have foldNamed :=
     fold_alpha_q16_query_batch_fold_coordinate_eq_named_slot parameters router
       sample.2
@@ -198,8 +203,9 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
     apply Option.some.inj
     rw [← routedDecode]
     simpa [appendOrdinaryRemaining] using exactDecode
-  exact ⟨foldTrial, finalTrial, target, foldAccepted, finalWorkAccepted,
-    success, operationalValue.trans routedValue.symm⟩
+  exact ⟨foldTrial, finalTrial, target, foldTrialExact, finalTrialExact,
+    foldAccepted, finalWorkAccepted, success,
+    operationalValue.trans routedValue.symm⟩
 
 #print axioms exact_selected_fold_armed_query_batch_coordinate_is_successful
 

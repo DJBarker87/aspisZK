@@ -258,7 +258,7 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (sourceInvariant : ExactCandidateDirectedK13CommittedSourceInvariant
+    (sourceInvariant : ExactCandidateDirectedK13CommittedExecutionInvariant
       transitionFuel
       configuration projection fixedInstance decoder
         (relationSource.toK13SourceObligations transitionFuel configuration
