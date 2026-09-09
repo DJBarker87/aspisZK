@@ -7,8 +7,11 @@ readonly complete_root="$(cd "$complete_exp/../../../.." && pwd)"
 [[ "$complete_root" == /home/dombarker/project-offloads/aspis-v8-* && ! -e "$complete_root/.git" ]] || exit 2
 [[ $# == 2 && ! -e "$2" ]] || { echo 'usage: script host|partial-host|sbf|hybrid|lazy|partial|profile|driver|pool|registry|v7|selected-v7|selected-pool|selected-registry NEW_LOG' >&2; exit 2; }
 readonly mode="$1" log="$2"
+readonly line_profile="${ASPIS_LINE_PROFILE:-0}"
+[[ "$line_profile" == 0 || ( "$line_profile" == 1 && "$mode" == line-norm ) ]] || exit 2
 case "$mode" in
  line-norm) bash "$complete_exp/check_line_norm_sources.sh";;
+ quotient-fused) bash "$complete_exp/check_quotient_fold_sources.sh";;
  joined-inverse|split-inverse)
   expected_joined=4913337c4f5467db15ce58e680b7252e099fb597c2ef303edfe94165b2a9ba05
   expected_circle=46fa71b10b99950d5ab4b718964007d3b290b26ac51491e0e35a51d225178f2d
@@ -36,9 +39,9 @@ host|partial-host|gamma-fixed-host)
  [[ "$mode" != partial-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial'
  [[ "$mode" != gamma-fixed-host ]] || extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_copy_suffix --cfg v8_copy_tag7 --cfg v8_copy_plan --cfg v8_copy_tag_split --cfg v8_copy_tag_bounded --cfg v8_copy_tag_shared --cfg v8_copy_tag_offsets --cfg v8_gamma_fixed -C overflow-checks=yes'
  scope env RUSTFLAGS="$common --cfg v8_payment_extraction --cfg v8_performance $extra" cargo build --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path "$complete_exp/performance-host/Cargo.toml" 2>&1 | tee "$log";;
-sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|gamma-one|gamma-one-split)
+sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatter|tag-split|tag-bounded|tag-shared|tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile|gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|gamma-one|gamma-one-split)
  lineage="$mode"
- case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|gamma-one|gamma-one-split) lineage=leaf-record;; esac
+ case "$mode" in gamma-fused|decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|gamma-one|gamma-one-split) lineage=leaf-record;; esac
  case "$mode" in scatter|tag-split|tag-bounded) python3 "$complete_exp/generate_copy_scatter.py" --check;; esac
  [[ "$mode" != tag-shared ]] || python3 "$complete_exp/generate_tag_shared.py" --check
  case "$lineage" in tag-offset|tag-offset-profile|gamma-fixed|merkle-slices|merkle-borrow|merkle-both|leaf-record|decode-profile) python3 "$complete_exp/generate_tag_offsets.py" --check;; esac
@@ -61,21 +64,28 @@ sbf|hybrid|lazy|profile|partial|channel|group|channel-profile|suffix|tag7|scatte
  [[ "$mode" != merkle-both ]] || extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow"
  case "$lineage" in leaf-record|decode-profile) extra="$extra --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record";; esac
  [[ "$mode" != gamma-fused ]] || extra="$extra --cfg v8_gamma_fused"
- case "$mode" in decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|gamma-one|gamma-one-split) extra="$extra --cfg v8_decode_blocks";; esac
- case "$mode" in auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|gamma-one|gamma-one-split) extra="$extra --cfg v8_auth_order";; esac
- case "$mode" in chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|gamma-one|gamma-one-split) extra="$extra --cfg v8_chord_norm";; esac
+ case "$mode" in decode-blocks|auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|gamma-one|gamma-one-split) extra="$extra --cfg v8_decode_blocks";; esac
+ case "$mode" in auth-order|chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|gamma-one|gamma-one-split) extra="$extra --cfg v8_auth_order";; esac
+ case "$mode" in chord-norm|circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused|gamma-one|gamma-one-split) extra="$extra --cfg v8_chord_norm";; esac
  case "$mode" in gamma-one|gamma-one-split) extra="$extra --cfg v8_gamma_one";; esac
- case "$mode" in circle-norm|joined-inverse|split-inverse|line-norm) extra="$extra --cfg v8_circle_norm";; esac
- case "$mode" in joined-inverse|split-inverse|line-norm) extra="$extra --cfg v8_joined_inverse";; esac
- case "$mode" in split-inverse|line-norm) extra="$extra --cfg v8_split_inverse";; esac
- [[ "$mode" != line-norm ]] || extra="$extra --cfg v8_line_norm"
+ case "$mode" in circle-norm|joined-inverse|split-inverse|line-norm|quotient-fused) extra="$extra --cfg v8_circle_norm";; esac
+ case "$mode" in joined-inverse|split-inverse|line-norm|quotient-fused) extra="$extra --cfg v8_joined_inverse";; esac
+ case "$mode" in split-inverse|line-norm|quotient-fused) extra="$extra --cfg v8_split_inverse";; esac
+ case "$mode" in line-norm|quotient-fused) extra="$extra --cfg v8_line_norm";; esac
+ [[ "$mode" != quotient-fused ]] || extra="$extra --cfg v8_quotient_fused"
  [[ "$mode" != gamma-one-split ]] || extra="$extra --cfg v8_gamma_one_split"
  selected="$common"
+ output_mode="$mode"
+ if [[ "$line_profile" == 1 ]];then
+  selected="${common/--cfg v8_quiet_profile/}"
+  extra="$extra --cfg v8_terminal_profile --cfg v8_decode_profile"
+  output_mode=line-norm-profile
+ fi
  if [[ "$mode" == decode-profile ]];then extra="$extra --cfg v8_terminal_profile --cfg v8_decode_profile";selected="${common/--cfg v8_quiet_profile/}";fi
  if [[ "$mode" == tag-offset-profile ]];then extra="$extra --cfg v8_terminal_profile";selected="${common/--cfg v8_quiet_profile/}";fi
  if [[ "$mode" == channel-profile ]];then extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial --cfg v8_qm_channel_partial --cfg v8_terminal_profile';selected="${common/--cfg v8_quiet_profile/}";fi
  if [[ "$mode" == profile ]];then extra='--cfg v8_qm_hybrid --cfg v8_qm_lazy_c0';selected="${common/--cfg v8_quiet_profile/}";fi
- scope env CARGO_TARGET_DIR="$complete_exp/performance-sbf/target" RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS="$selected --cfg v8_performance_sbf $extra" cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --manifest-path "$complete_exp/complete-sbf/Cargo.toml" --sbf-out-dir "$complete_root/sbf-complete-$mode" 2>&1 | tee "$log";;
+ scope env CARGO_TARGET_DIR="$complete_exp/performance-sbf/target" RUSTC=/home/dombarker/.cache/solana/v1.54/platform-tools/rust/bin/rustc RUSTFLAGS="$selected --cfg v8_performance_sbf $extra" cargo-build-sbf --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --jobs 2 --manifest-path "$complete_exp/complete-sbf/Cargo.toml" --sbf-out-dir "$complete_root/sbf-complete-$output_mode" 2>&1 | tee "$log";;
 driver)
  scope env CARGO_TARGET_DIR="$complete_exp/performance-svm/target" RUSTFLAGS='--cfg v8_complete -A unexpected_cfgs' cargo build --offline --locked --release --jobs 2 --bin aspis-v7-pair-forest-combined-rejection --manifest-path "$complete_root/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/Cargo.toml" 2>&1 | tee "$log";;
 selected-v7|selected-pool|selected-registry)

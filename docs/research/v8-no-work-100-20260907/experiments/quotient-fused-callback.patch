@@ -1,0 +1,38 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+index 060e8051..4a421151 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+@@ -21,6 +21,8 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
+ #[path="chord_norm.rs"] mod chord_norm;
+ #[cfg(any(v8_circle_norm,test))]
+ #[path="circle_norm.rs"] mod circle_norm;
++#[cfg(v8_quotient_fused)]
++#[path="quotient_fold.rs"] mod quotient_fold;
+ #[cfg(v8_gamma_wrap)]
+ #[path="query_arithmetic.rs"] mod query_arithmetic;
+ #[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}
+@@ -231,13 +233,14 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
+     #[cfg(v8_split_inverse)] let base_inverse=&joined_m_inverse[..];
+     #[cfg(not(v8_batch_m))] let base_inverse:Vec<M31>=base_denoms.iter().map(|d|d.inv()).collect();
+     query_checkpoint("v8:base-inverses");
+-    #[cfg(v8_query_shared)]
++    #[cfg(all(v8_query_shared,not(v8_quotient_fused)))]
+     let prepared_alpha=[alpha,alpha.square()].map(corelib::field::PreparedQm31Multiplier::new);
++    #[cfg(v8_quotient_fused)] let prepared_fold=quotient_fold::Prepared::new(alpha);
+     let values=(0..queries.len()).map(|i|{
+         let qv=core::array::from_fn(|j|numerators[4*i+j].mul(inverses[4*i+j]));
+         #[cfg(not(v8_query_shared))]
+         {corelib::field::qm31_circle_to_line_fold4(qv,alpha,base_inverse[2*i],base_inverse[2*i+1])}
+-        #[cfg(v8_query_shared)]
++        #[cfg(all(v8_query_shared,not(v8_quotient_fused)))]
+         {
+             let [v0,v1,v2,v3]=qv;
+             let positive=v0.add(v1).half().add(prepared_alpha[0].mul(v0.sub(v1).mul_m31(base_inverse[2*i+1])));
+@@ -247,6 +250,7 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
+             assert_eq!(folded,corelib::field::qm31_circle_to_line_fold4(qv,alpha,base_inverse[2*i],base_inverse[2*i+1]));
+             folded
+         }
++        #[cfg(v8_quotient_fused)] {prepared_fold.fold(qv,base_inverse[2*i],base_inverse[2*i+1])}
+     }).collect::<Vec<_>>();
+     query_checkpoint("v8:quotient-folds");
+     #[cfg(all(v8_structured,not(v8_performance_sbf)))]
