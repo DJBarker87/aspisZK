@@ -30,6 +30,7 @@ open AspisK1.V7Tag73ExactCandidateQueryBatchChainAnchor
 open AspisK1.V7Tag73ExactCandidateQueryBatchControllerProjection
 open AspisK1.V7Tag73ExactCandidateQueryBatchProducerAvailability
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactDagCandidateLabeledRootRouting
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
@@ -78,6 +79,8 @@ def ExactCandidateQueryBatchArmedContext
     outputs.length =
       ((exactOperationalTape input).messages.challengeUse .queryBatch).blocksUsed ∧
     advances.length = outputs.length ∧
+    blockAdvance =
+      (exactOperationalQ16Evaluator input).afterQ16.digest ∧
     initial = queryBatchIndexedState
       ((extendControllerThroughCandidateQueryBatch transitionFuel target
         (candidateCompleteBaseController transitionFuel foldTrial.val
@@ -132,7 +135,8 @@ theorem exact_selected_candidate_has_armed_query_batch_context
     ExactCandidateQueryBatchArmedContext input foldTrial boundaryIndex := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, rootExact, chain,
-      outputsLength, advancesLength, targetExact, unseen, empty, armed⟩ :=
+      outputsLength, advancesLength, q16TerminalExact, targetExact, unseen,
+      empty, armed⟩ :=
     exact_selected_candidate_arms_complete_query_batch_chain transitionRoom
       input foldTrial boundaryIndex
   let base : IndexedUnifiedExposureController
@@ -233,7 +237,7 @@ theorem exact_selected_candidate_has_armed_query_batch_context
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
     advances, boundaryPrior, suffix, boundaryActor, initial, by
       simpa [boundaryRecord, boundaryInput] using rootExact, chain,
-    outputsLength, advancesLength, rfl, by
+    outputsLength, advancesLength, q16TerminalExact, rfl, by
       simpa [producer, boundaryInput] using initialMemory, aligned, onlyMachine,
     inputNodup, answerNodup, sourceDisjoint, digestDisjoint, invariant, by
       simpa [producer, boundaryInput] using initialReady⟩

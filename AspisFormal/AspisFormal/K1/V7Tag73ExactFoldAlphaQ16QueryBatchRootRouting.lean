@@ -74,6 +74,58 @@ def foldAlphaQ16QueryBatchNamedSlotInputTape
     rw [Finset.card_univ,
       fold_alpha_final_work_q16_query_batch_digest_slot_card]) tape
 
+/-- One public query-batch output coordinate is exactly the corresponding
+right-hand named slot of the underlying 542-slot router. -/
+theorem fold_alpha_q16_query_batch_output_coordinate_eq_named_slot
+    (parameters : ExactCompilerResourceParameters)
+    (router : ExactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchRouter
+      parameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (block : Fin 12) :
+    (exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
+      router tape).2.1 block =
+      (router.coordinateEquiv
+        (foldAlphaQ16QueryBatchNamedSlotInputTape
+          (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters tape))).1
+        ⟨Sum.inr (block, false), Finset.mem_univ _⟩ := by
+  simp only [exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates,
+    exactCompilerFoldAlphaQ16QueryBatchInputTape,
+    foldAlphaQ16QueryBatchNamedSlotInputTape,
+    CausalSlotRouter.fullCoordinateEquiv, Equiv.trans_apply,
+    Equiv.prodCongr_apply,
+    foldAlphaFinalWorkQ16QueryBatchDigestSlotFunctionEquiv,
+    foldAlphaFinalWorkQ16QueryBatchCoordinateRegroup,
+    foldAlphaFinalWorkQ16DigestSlotFunctionEquiv,
+    gammaPrefixDigestSlotFunctionEquiv, univSubtypeEquiv]
+  rfl
+
+/-- One public query-batch advance coordinate is exactly the corresponding
+right-hand named slot of the underlying 542-slot router. -/
+theorem fold_alpha_q16_query_batch_advance_coordinate_eq_named_slot
+    (parameters : ExactCompilerResourceParameters)
+    (router : ExactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchRouter
+      parameters)
+    (tape : FreshAnswerTape Digest256
+      (exactCompilerTargetCaps parameters).length)
+    (block : Fin 12) :
+    (exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates parameters
+      router tape).2.2 block =
+      (router.coordinateEquiv
+        (foldAlphaQ16QueryBatchNamedSlotInputTape
+          (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters tape))).1
+        ⟨Sum.inr (block, true), Finset.mem_univ _⟩ := by
+  simp only [exactCompilerCausalFoldAlphaFinalWorkQ16QueryBatchCoordinates,
+    exactCompilerFoldAlphaQ16QueryBatchInputTape,
+    foldAlphaQ16QueryBatchNamedSlotInputTape,
+    CausalSlotRouter.fullCoordinateEquiv, Equiv.trans_apply,
+    Equiv.prodCongr_apply,
+    foldAlphaFinalWorkQ16QueryBatchDigestSlotFunctionEquiv,
+    foldAlphaFinalWorkQ16QueryBatchCoordinateRegroup,
+    foldAlphaFinalWorkQ16DigestSlotFunctionEquiv,
+    gammaPrefixDigestSlotFunctionEquiv, univSubtypeEquiv]
+  rfl
+
 def exactFoldAlphaQ16QueryBatchInitialState
     {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
     {parameters : ExactCompilerResourceParameters}
@@ -328,6 +380,8 @@ theorem exact_fold_alpha_q16_query_batch_root_answer_is_routed
 
 #print axioms exactCompilerFoldAlphaQ16QueryBatchInputTape
 #print axioms foldAlphaQ16QueryBatchNamedSlotInputTape
+#print axioms fold_alpha_q16_query_batch_output_coordinate_eq_named_slot
+#print axioms fold_alpha_q16_query_batch_advance_coordinate_eq_named_slot
 #print axioms exactFoldAlphaQ16QueryBatchInitialState
 #print axioms exactFoldAlphaQ16QueryBatchRootLabels
 #print axioms exact_fold_alpha_q16_query_batch_root_labels_form_trace

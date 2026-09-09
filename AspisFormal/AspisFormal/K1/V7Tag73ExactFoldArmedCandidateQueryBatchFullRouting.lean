@@ -2,6 +2,7 @@ import AspisFormal.K1.V7Tag73ExactCandidateQueryBatchFullRouting
 import AspisFormal.K1.V7Tag73ExactFoldArmedCandidateQueryBatchProjection
 import AspisFormal.K1.V7Tag73ExactFoldArmedCandidateQueryBatchRootRouting
 import AspisFormal.K1.V7Tag73ExactFoldArmedQueryBatchResidual
+import AspisFormal.K1.V7Tag73ExactQueryBatchSuccessfulCoordinates
 
 /-!
 # Full production query-batch routing without an alpha-boundary index
@@ -33,23 +34,33 @@ open AspisK1.V7Tag73ExactCandidateQueryBatchChainRouting
 open AspisK1.V7Tag73ExactCandidateQueryBatchControllerProjection
 open AspisK1.V7Tag73ExactCandidateQueryBatchFullRouting
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactCompilerQ16InitialDigestMap
 open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchProjection
 open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchRootRouting
 open AspisK1.V7Tag73ExactFoldAlphaQ16QueryBatchRootRouting
 open AspisK1.V7Tag73ExactFoldArmedQueryBatchResidual
+open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactQueryBatchAlphaProducerSeparation
+open AspisK1.V7Tag73ExactQueryBatchSuccessfulCoordinates
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FoldArmedCandidateQueryBatchLabelsNodup
 open AspisK1.V7Tag73FoldArmedAlphaZeroController
 open AspisK1.V7Tag73FinalWorkQ16CandidateController
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedExposureCausalRouter
+open AspisK1.V7Tag73IncrementalSamplerControl
 open AspisK1.V7Tag73OperationalSemanticReplay
+open AspisK1.V7Tag73SamplerDecoder
+open AspisK1.V7Tag73SecureCircleMap
 open AspisK1.V7Tag73SchedulerNativeGammaReplay
 open AspisK1.V7Tag73TranscriptSchedule
+open AspisK1.V7Tag73VariablePrefixGammaFlatRouting
+open AspisK1.V7Tag73VariablePrefixGammaFactorization
+open AspisK1.V7Tag73VariablePrefixGammaSampler
+open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
 
@@ -164,11 +175,22 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
     (input : ExactK12OperationalInput transitionFuel configuration projection
       fixedInstance sample) :
     ∃ (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
-        (target : Q16DigestSlot) (outputs advances : List Digest256),
+        (target : Q16DigestSlot) (outputs advances : List Digest256)
+        (flat : SuccessfulGammaPrefixTape)
+        (consumedDecoded : OrdinaryPrefixDecode)
+        (consumedValue : QM31Exact),
       outputs.length =
         ((exactOperationalTape input).messages.challengeUse
           .queryBatch).blocksUsed ∧
       advances.length = outputs.length ∧
+      (gammaOutputBlocks flat.1).take outputs.length = outputs ∧
+      (List.ofFn flat.1.2).take advances.length = advances ∧
+      decodeNonzeroPrefix 3 outputs = some consumedDecoded ∧
+      decodeTagQM31ExactLE consumedDecoded.value = some consumedValue ∧
+      exactOperationalChallenge input .queryBatch = consumedValue ∧
+      exactOperationalChallenge input .queryBatch =
+        (routedSuccessfulGammaValue
+          (successfulGammaPrefixFlatRoutingEquiv flat)).1 ∧
       (∀ index (inOutputs : index < outputs.length),
         ∃ slot : Fin 12, slot.val = index ∧
           causalRoutedAnswer? (Sum.inr (slot, false))
@@ -194,14 +216,23 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
     exact_compiler_alpha_zero_boundary_installs_block_zero transitionRoom input
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, smallInitial, rootExact,
-      chain, outputsLength, advancesLength, smallInitialExact,
+      chain, outputsLength, advancesLength, q16TerminalExact, smallInitialExact,
       smallInitialMemory, outputPreferred, advancePreferred⟩ :=
     exact_selected_candidate_armed_query_batch_has_preferred_slots
       transitionRoom input fold.trial boundaryIndex
   have smallInitialArmed : smallInitial.memory.boundarySeen = true := by
     rw [smallInitialMemory]
-  refine ⟨fold.trial, finalTrial, target, outputs, advances,
-    outputsLength, advancesLength, ?_, ?_⟩
+  obtain ⟨flat, _decoded, consumedDecoded, consumedValue, outputPrefix,
+      advancePrefix, prefixRun, exactDecode, _decodedValue, _flatRun,
+      _finalDecodedValue, operationalValue, challengeExact⟩ :=
+    exact_query_batch_ordered_chain_has_successful_coordinates transitionRoom
+      input
+      ⟨(exactOperationalQ16Evaluator input).afterQ16, by
+        rw [q16TerminalExact], rfl⟩ chain outputsLength
+  refine ⟨fold.trial, finalTrial, target, outputs, advances, flat,
+    consumedDecoded, consumedValue, outputsLength, advancesLength, outputPrefix,
+    advancePrefix, prefixRun, exactDecode, operationalValue, challengeExact,
+    ?_, ?_⟩
   · intro index inOutputs
     obtain ⟨outputPrefix, later, outputActor, slot, suffixExact,
         smallPreferred, slotExact⟩ := outputPreferred index inOutputs

@@ -463,7 +463,7 @@ theorem exact_selected_candidate_query_batch_is_fully_routed
     exact_compiler_accepted_fold_work_has_exposure_trial input
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, smallInitial, rootExact,
-      chain, outputsLength, advancesLength, smallInitialExact,
+      chain, outputsLength, advancesLength, _q16TerminalExact, smallInitialExact,
       smallInitialMemory, outputPreferred, advancePreferred⟩ :=
     exact_selected_candidate_armed_query_batch_has_preferred_slots
       transitionRoom input foldTrial boundaryIndex
