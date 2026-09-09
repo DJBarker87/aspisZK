@@ -1,6 +1,16 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [covered recovery and alternative early C1 candidates](covered-recovery-continuation.md).
+Latest formal continuation: [joint relation recovery beyond off-family finals](covered-relation-continuation.md).
+The actual compact relation's no-good-quotient event now has a kernel-checked
+joint bound: approximately 104.5902 bits, with only early collisions unioned
+over the 99-member family and one shared query/repair suffix. The literal
+26+3 wrapper needs no early decoder-success premise and retains an exact
+good-quotient acceptance remainder. A selected weighted-copy row balance
+prerequisite is also proved. Component/payment extraction from that remainder,
+source/FS and full-view ZK remain open. Five focused NUC leaves passed;
+no verifier, profile, 40,282-byte body or measured CU change.
+
+Previous formal continuation: [covered recovery and alternative early C1 candidates](covered-recovery-continuation.md).
 The literal quotient family is now proved to have at most 99 members. An
 unfiltered C1 family fixed before lambda/chi has at most 100 members, with
 the actual late 26+3 projection and own-support base-field descent proved.

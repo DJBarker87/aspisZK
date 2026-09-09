@@ -1,0 +1,145 @@
+import ShiftedRowPrefix
+import CausalOrderedRelation
+
+/-! First-discrepancy collisions for one fixed quotient/row prefix. The
+response depends on kappa and tau, but not on alpha. No received word,
+candidate membership, query schedule or suffix-acceptance bound is assumed.
+A later family union must keep each reference fixed before these challenges.
+The actual Strategy corollary places no restriction on its adaptive final;
+identifying that final with a candidate fold is a separate caller obligation. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 100000
+
+namespace AspisV8.CoveredFirstCollision
+open Finset Polynomial
+open AspisV8.JointImageGame AspisV8.FirstImageDiscrepancy
+open AspisV8.ShiftedRowPrefix AspisV8.PostQueryFunctional
+open AspisV8.OptimizedRelationRefinement
+variable {K : Type*} [Field K] [DecidableEq K]
+noncomputable section
+
+def badImage (r : Rows (K := K)) : Prop :=
+  r.referenceQ ⟨1023, by decide⟩≠0 ∨
+    r.b*r.referenceQ ⟨1022, by decide⟩-r.c*r.referenceQ ⟨1021, by decide⟩≠0
+
+def slice (r : Rows (K := K)) (response : K → K → Sent K)
+    (kappa tau : K) (A : Finset K) : ℚ :=
+  avg A (fun alpha => if ((r.before kappa).firstError tau
+    (response kappa tau)).eval alpha=0 then 1 else 0)
+
+def collisionProbability (r : Rows (K := K)) (response : K → K → Sent K)
+    (A G : Finset K) : ℚ :=
+  avg G (fun kappa => avg G (fun tau => slice r response kappa tau A))
+
+theorem slice_unit (r : Rows (K := K)) (response : K → K → Sent K)
+    (kappa tau : K) (A : Finset K) (ha : A.Nonempty) :
+    slice r response kappa tau A≤1 := by
+  apply avg_le A ha
+  intro alpha _
+  split_ifs <;> norm_num
+
+/-- The actual compact boundary, not a supplied discrepancy identity,
+forces the first degree-six polynomial to be nonzero. -/
+theorem slice_bound (r : Rows (K := K)) (quarter : r.quarter*4=1)
+    (response : K → K → Sent K) (kappa tau : K)
+    (A : Finset K) (ha : A.Nonempty)
+    (wrong : (r.before kappa).errorPolynomial.eval tau≠0) :
+    slice r response kappa tau A≤6/A.card := by
+  have bound := avg_polynomial A ha
+    ((r.before kappa).firstError tau (response kappa tau))
+    (firstError_nonzero (r.before kappa) quarter tau (response kappa tau) wrong)
+    6 (firstError_degree (r.before kappa) tau (response kappa tau))
+    (fun alpha => if ((r.before kappa).firstError tau
+      (response kappa tau)).eval alpha=0 then (1:ℚ) else 0)
+    0 (le_refl 0) (by intro alpha _; split_ifs <;> norm_num) (by
+      intro alpha _ nonzero
+      rw [if_neg nonzero])
+  simpa only [slice,add_zero,Nat.cast_ofNat] using bound
+
+/-- Image-invalid references pay only the quadratic tau collision and
+the first degree-six collision. Kappa and both response dependencies remain. -/
+theorem bad_image_bound (r : Rows (K := K)) (quarter : r.quarter*4=1)
+    (response : K → K → Sent K) (A G : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (bad : badImage r) :
+    collisionProbability r response A G≤2/G.card+6/A.card := by
+  apply avg_le G hg
+  intro kappa _
+  apply avg_polynomial G hg (r.before kappa).errorPolynomial
+    (FirstImageDiscrepancy.error_nonzero (r.before kappa) bad) 2
+    (FirstImageDiscrepancy.error_degree (r.before kappa))
+    (fun tau => slice r response kappa tau A) (6/A.card) (by positivity)
+  · intro tau _
+    exact slice_unit r response kappa tau A ha
+  · intro tau _ wrong
+    exact slice_bound r quarter response kappa tau A ha wrong
+
+/-- If image-valid, tau contributes no collision term: outside the cubic
+row roots, the actual image-boundary error is a nonzero constant in tau.
+Inactive is the constant coefficient and is not assumed exact. -/
+theorem wrong_rows_bound (r : Rows (K := K)) (quarter : r.quarter*4=1)
+    (response : K → K → Sent K) (A G : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty)
+    (image1 : r.referenceQ ⟨1023, by decide⟩=0)
+    (image2 : r.b*r.referenceQ ⟨1022, by decide⟩-
+      r.c*r.referenceQ ⟨1021, by decide⟩=0)
+    (wrong : r.errors≠0) :
+    collisionProbability r response A G≤3/G.card+6/A.card := by
+  apply avg_polynomial G hg r.errorPolynomial
+    (ShiftedRowPrefix.error_nonzero r wrong) 3 (ShiftedRowPrefix.error_degree r)
+    (fun kappa => avg G (fun tau => slice r response kappa tau A))
+    (6/A.card) (by positivity)
+  · intro kappa _
+    exact avg_le G hg _ _ (fun tau _ => slice_unit r response kappa tau A ha)
+  · intro kappa _ nonzero
+    apply avg_le G hg
+    intro tau _
+    apply slice_bound r quarter response kappa tau A ha
+    simpa only [Before.errorPolynomial,imagePolynomial_eval,before_E1,before_E2,
+      image1,image2,mul_zero,sub_zero,before_prior] using nonzero
+
+/-- A genuine partition: bad image uses2/G; only its complementary
+image-valid wrong-row branch uses3/G. They are not added together. -/
+theorem bad_reference_bound (r : Rows (K := K)) (quarter : r.quarter*4=1)
+    (response : K → K → Sent K) (A G : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (bad : badImage r ∨ r.errors≠0) :
+    collisionProbability r response A G≤3/G.card+6/A.card := by
+  by_cases image : badImage r
+  · have bound := bad_image_bound r quarter response A G ha hg image
+    have lower : (2:ℚ)/G.card≤3/G.card :=
+      div_le_div_of_nonneg_right (by norm_num) (Nat.cast_nonneg G.card)
+    linarith only [bound,lower]
+  · have both : r.referenceQ ⟨1023, by decide⟩=0 ∧
+        r.b*r.referenceQ ⟨1022, by decide⟩-r.c*r.referenceQ ⟨1021, by decide⟩=0 := by
+      simpa only [badImage,not_or,not_not] using image
+    exact wrong_rows_bound r quarter response A G ha hg both.1 both.2
+      (bad.resolve_left image)
+
+/-- The real strategy's final may depend on all revealed kappa/tau/alpha.
+Only its first response is used here; no final-before-alpha premise occurs. -/
+theorem strategy_bound [NeZero (2 : K)] {D : Finset K} {q : ℕ}
+    (r : Rows (K := K)) (quarter : r.quarter*4=1)
+    (strategy : K → CausalOrderedRelation.Strategy D q) (A G : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty)
+    (bad : r.referenceQ ⟨1023, by decide⟩≠0 ∨
+      r.b*r.referenceQ ⟨1022, by decide⟩-r.c*r.referenceQ ⟨1021, by decide⟩≠0 ∨
+      r.errors≠0) :
+    avg G (fun kappa => avg G (fun tau => avg A (fun alpha =>
+      if ((r.before kappa).firstError tau ((strategy kappa).firstResponse tau)).eval alpha=0
+      then (1:ℚ) else 0)))≤3/G.card+6/A.card := by
+  apply bad_reference_bound r quarter (fun kappa tau => (strategy kappa).firstResponse tau)
+    A G ha hg
+  rcases bad with image1 | image2 | wrong
+  · exact Or.inl (Or.inl image1)
+  · exact Or.inl (Or.inr image2)
+  · exact Or.inr wrong
+
+#print axioms slice_unit
+#print axioms slice_bound
+#print axioms bad_image_bound
+#print axioms wrong_rows_bound
+#print axioms bad_reference_bound
+#print axioms strategy_bound
+end
+end AspisV8.CoveredFirstCollision
