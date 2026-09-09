@@ -1,0 +1,46 @@
+RESEARCH_PIN=503332fbe747db381fc8ee67c4bbdd3631ec97cf
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+503332fbe747db381fc8ee67c4bbdd3631ec97cf
+c7347eefcf767c375040f8f73160995a7886e3ae
+Lean (version 4.32.0, arm64-apple-darwin24.6.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+477ecd031ff28f33eda190a8979999a143f8a4aeb014c5014f76d7b3546a7bb7  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/CanonicalCollect.lean
+abe204ff66e515907d5dc3fdc46d05084eef9882362e039ca67786776bd01ca9  /Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/run_canonical_relation_input.sh
+55ee2345729e8a4d379de3bce14ea18b14fbfdc259cf2653fadf4bf3a46876d8  /Users/dominic/ZK/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/CanonicalCollect.lean:54:6: error(lean.unknownIdentifier): Unknown constant `List.getD_eq_getElem`
+/Users/dominic/ZK/.worktrees/ZK-v8-no-work-100-20260907/docs/research/v8-no-work-100-20260907/experiments/CanonicalCollect.lean:44:89: error: unsolved goals
+A : Type u_1
+B : Type u_2
+decode : A → Option B
+n : ℕ
+fields : Fin n → A
+values : List B
+default : B
+success : collect decode (List.ofFn fields) = some values
+paired : List.Forall₂ (fun x y => decode x = some y) (List.ofFn fields) values
+length : values.length = n
+i : Fin n
+leftBound : ↑i < (List.ofFn fields).length
+rightBound : ↑i < values.length
+entry : decode ((List.ofFn fields).get ⟨↑i, leftBound⟩) = some (values.get ⟨↑i, rightBound⟩)
+⊢ decode (fields i) = some (values.getD (↑i) default)
+'AspisV8.CanonicalCollect.success_forall' depends on axioms: [propext, Quot.sound]
+'AspisV8.CanonicalCollect.success_ofFn' depends on axioms: [propext, sorryAx, Quot.sound]
+        3.90 real         0.51 user         0.56 sys
+          1254850560  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               75148  page reclaims
+               31252  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                5618  voluntary context switches
+               23371  involuntary context switches
+         10207485302  instructions retired
+          3878314219  cycles elapsed
+           211574696  peak memory footprint
+LEAN_EXIT=1
