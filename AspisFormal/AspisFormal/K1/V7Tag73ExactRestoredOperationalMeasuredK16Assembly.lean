@@ -28,6 +28,7 @@ open AspisK1.V7Tag73ExactFixedK16Closure
 open AspisK1.V7Tag73ExactOperationalResourceCertificate
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredCleanPairSemanticNoninterference
+open AspisK1.V7Tag73ExactRestoredOperationalK13Classifier
 open AspisK1.V7Tag73ExactRestoredOperationalK13Events
 open AspisK1.V7Tag73ExactRestoredOperationalK13MeasuredComposition
 open AspisK1.V7Tag73ExactRestoredOperationalK13OneFoldProbability
@@ -106,8 +107,10 @@ theorem exact_tag73_restored_operational_measured_k16_aok_raw
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
               projection fixedInstance ∩
-            exactTag73RestoredOperationalCanonicalRootK13IdealRejectedEvent
-              transitionFuel configuration projection fixedInstance decoder) ≤
+            (exactTag73RestoredOperationalK13FailureEvent transitionFuel
+                configuration projection fixedInstance decoder ∩
+              exactTag73RestoredOperationalCanonicalRootK13IdealRejectedEvent
+                transitionFuel configuration projection fixedInstance decoder)) ≤
         exactJointQueryBatchIdealRawError +
           exactLaterRelationAlphaIdealRawError)
     (oneFoldSource : ExactTag73RestoredCanonicalOneFoldSource transitionFuel
