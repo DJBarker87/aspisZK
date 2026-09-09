@@ -9,6 +9,8 @@ case "$mode" in
  hybrid) verifier="$rt/sbf-complete-hybrid/aspis_v8_complete_sbf.so"; matched=0;;
  lazy) verifier="$rt/sbf-complete-lazy/aspis_v8_complete_sbf.so"; matched=0;;
  partial) verifier="$rt/sbf-complete-partial/aspis_v8_complete_sbf.so"; matched=0;;
+ channel) verifier="$rt/sbf-complete-channel/aspis_v8_complete_sbf.so"; matched=0;;
+ group) verifier="$rt/sbf-complete-group/aspis_v8_complete_sbf.so"; matched=0;;
  v7) verifier="$rt/sbf-matched-v7/aspis_v8_complete_sbf.so"; matched=1;;
  selected-v7) verifier="$rt/sbf-selected-v7/aspis_verifier.so"; matched=1;;
  *) exit 2;;
@@ -16,6 +18,9 @@ esac
 pool="$rt/sbf-matched-pool/aspis_v8_comparison_pool_sbf.so"; registry="$rt/sbf-matched-registry/aspis_v8_comparison_registry_sbf.so"
 if [[ "${ASPIS_SELECTED_POOL:-0}" == 1 ]];then
  pool="$rt/sbf-selected-pool/aspis_pool.so";registry="$rt/sbf-selected-registry/aspis_registry.so"
+fi
+if [[ "${ASPIS_POOL_ZERO_FAST:-0}" == 1 ]];then
+ pool="$rt/sbf-pool-zero-fast/aspis_pool.so";registry="$rt/sbf-selected-registry/aspis_registry.so"
 fi
 readonly double="$rt/sbf-complete/aspis_pair_forest_result_double.so"
 readonly svm="$ex/performance-svm/target/release/aspis-v7-pair-forest-combined-rejection"

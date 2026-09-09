@@ -1,0 +1,47 @@
+--- a/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
++++ b/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/src/main.rs
+@@ -119,4 +119,5 @@
+ enum Scenario {
+     Success,
++    NonzeroFreshPage,
+     ProofRejection,
+@@ -136,4 +137,4 @@
+     fn verifier_cpi_expected(self) -> bool {
+-        !matches!(self, Self::WrongRelease)
++        !matches!(self, Self::WrongRelease | Self::NonzeroFreshPage)
+     }
+@@ -142,3 +143,4 @@
+             Self::Success => "success",
++            Self::NonzeroFreshPage => "nonzero-fresh-page",
+             Self::ProofRejection => "proof-rejection",
+@@ -164,3 +166,4 @@
+         "success" => Scenario::Success,
++        "nonzero-fresh-page" => Scenario::NonzeroFreshPage,
+         "proof-rejection" => Scenario::ProofRejection,
+@@ -1106,9 +1109,24 @@
+     if let Some(next_page_key) = next_page_key {
++        let mut fresh = vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
++        if args.scenario == Scenario::NonzeroFreshPage {
++            let index: usize = env::var("ASPIS_ZERO_PAGE_INDEX")?.parse()?;
++            let value: u8 = env::var("ASPIS_ZERO_PAGE_BYTE")?.parse()?;
++            ensure!(index < fresh.len() && value != 0, "invalid fresh-page mutation");
++            fresh[index] = value;
++        }
+         put_account(
+             &mut svm,
+             next_page_key,
+             pool_program,
+-            vec![0u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES],
++            fresh,
+         )?;
+     }
++    ensure!(args.scenario != Scenario::NonzeroFreshPage || rollover,
++        "fresh-page test requires rollover");
+     put_account(&mut svm, proof_key, verifier_program, proof_image)?;
+@@ -1428,3 +1446,8 @@
+         "scenario": args.scenario.label(),
++        "fresh_page_mutation": (args.scenario == Scenario::NonzeroFreshPage).then(|| serde_json::json!({
++            "index": env::var("ASPIS_ZERO_PAGE_INDEX").unwrap().parse::<usize>().unwrap(),
++            "value": env::var("ASPIS_ZERO_PAGE_BYTE").unwrap().parse::<u8>().unwrap()
++        })),
+         "fixture": {

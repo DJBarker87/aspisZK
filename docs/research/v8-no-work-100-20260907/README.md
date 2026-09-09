@@ -1,10 +1,19 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [complete transactions and QM31 arithmetic](complete-performance-review.md).
+Latest: [complete transactions below 1.2M: page scan and channel fusion](zero-channel-review.md).
+All four shapes pass the actual **1.2M TxV1 limit** with 40,282-byte proofs.
+The worst observed complete transaction is **1,181,866 CU**, or **1,187,906 CU**
+with the separately pinned SPL Token 3.5 SBF control. New Lean equivalence/range
+proofs justify the rewrites; all-byte rejection and atomic rollback controls pass.
+These are measured fixture maxima, not universal CU bounds. Selected-V7 parity
+and global security remain open; production is unchanged.
+See [results](zero-channel-results.json) and [commands/evidence](zero-channel-evidence.json).
+
+Previous: [complete transactions and QM31 arithmetic](complete-performance-review.md).
 Maximum-body current-page transfer / withdrawal now pass at **1,170,650 /
 1,182,365 CU** worst observed; rollover remains **1,244,066 /1,256,466 CU**.
 These execute actual account authentication and atomic Pool settlement.
-The all-shapes 1.2M target and selected-V7 parity remain unmet. New host proving
+At that checkpoint the all-shapes 1.2M target and selected-V7 parity remained unmet. Host proving
 is **3.17s mean +1.43s shared setup /197.71 MiB RSS**, with byte-identical proofs.
 See [exact results](complete-performance-results.json); production is unchanged.
 
