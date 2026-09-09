@@ -1,0 +1,134 @@
+import HighAgreementTail
+import SevenAlphaRecovery
+
+/-! A fixed-received-word candidate family and a selected high-agreement tail.
+The family is fixed before alpha; final coefficients remain alpha-adaptive.
+No candidate membership, global received polynomiality or family query union
+is a premise. The family is mathematical, not an efficient decoder. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 300000
+
+namespace AspisV8.OffFamilyIntersection
+open Finset
+open AspisV8.SevenAlphaRecovery AspisV8.PartialFoldSelected
+open AspisK1.V7Tag73CanonicalOneFoldSchedule
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisV5ComponentCConcreteFoldLinearity AspisV5ComponentCQM31TowerExact
+noncomputable section
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+def fullSupport (D : Finset (Fin 262144)) (received : Fin 1048576 → QM31Exact)
+    (Q : Fin 1024 → QM31Exact) : Finset (Fin 262144) := by
+  classical
+  exact D.filter fun i => ∀ slot : Fin 4,
+    exactInitialEncoder Q (childIndex i slot)=received (childIndex i slot)
+
+def matchingSupport (D : Finset (Fin 262144)) (received : Fin 1048576 → QM31Exact)
+    (alpha : QM31Exact) (final : Fin 256 → QM31Exact) : Finset (Fin 262144) := by
+  classical
+  exact D.filter fun i => exactFinalLinear final i=
+    circleFoldLayer 262144 alpha (canonicalOneFoldSchedule 0).circleInv2x
+      (canonicalOneFoldSchedule 0).circleInv2y received i
+
+/-- Fixed by received, domain and threshold alone, before alpha selection.
+No assertion of efficient enumeration or finite cardinality is made. -/
+def CandidateFamily (D : Finset (Fin 262144)) (received : Fin 1048576 → QM31Exact)
+    (a : Nat) : Set (Fin 1024 → QM31Exact) :=
+  {Q | a≤(fullSupport D received Q).card}
+
+def CoveredAt (D : Finset (Fin 262144)) (received : Fin 1048576 → QM31Exact)
+    (a : Nat) (alpha : QM31Exact) (final : Fin 256 → QM31Exact) : Prop :=
+  ∃ Q∈CandidateFamily D received a, final=coefficientFoldLayer 256 alpha Q
+
+def tailSet (D : Finset (Fin 262144)) (received : Fin 1048576 → QM31Exact)
+    (a t : Nat) (challenges : Finset QM31Exact)
+    (final : QM31Exact → Fin 256 → QM31Exact) : Finset QM31Exact := by
+  classical
+  exact challenges.filter fun alpha =>
+    t≤(matchingSupport D received alpha (final alpha)).card ∧
+      ¬CoveredAt D received a alpha (final alpha)
+
+/-- Four branch intersection constructs a candidate in the fixed family,
+then the exact selected overlap theorem identifies all four adaptive finals. -/
+theorem four_intersection_covered (D : Finset (Fin 262144))
+    (received : Fin 1048576 → QM31Exact) (a : Nat) (above : 255<a)
+    (nodes : Finset QM31Exact) (four : nodes.card=4)
+    (final : QM31Exact → Fin 256 → QM31Exact)
+    (large : a≤(D.filter fun i => ∀ alpha∈nodes,
+      i∈matchingSupport D received alpha (final alpha)).card) :
+    ∃ Q∈CandidateFamily D received a,
+      ∀ alpha∈nodes, final alpha=coefficientFoldLayer 256 alpha Q := by
+  classical
+  let S := D.filter fun i => ∀ alpha∈nodes,
+    i∈matchingSupport D received alpha (final alpha)
+  have actual (alpha : QM31Exact) (ha : alpha∈nodes) (i : Fin 262144) (hi : i∈S) :
+      exactFinalLinear (final alpha) i=circleFoldLayer 262144 alpha
+        (canonicalOneFoldSchedule 0).circleInv2x
+        (canonicalOneFoldSchedule 0).circleInv2y received i :=
+    (Finset.mem_filter.mp ((Finset.mem_filter.mp hi).2 alpha ha)).2
+  obtain ⟨Q,recovered⟩ := four_selected_support_folds_recover received nodes four final
+    {i | i∈S} actual
+  have inside : S⊆fullSupport D received Q := by
+    intro i hi
+    exact Finset.mem_filter.mpr ⟨(Finset.mem_filter.mp hi).1,recovered i hi⟩
+  have member : Q∈CandidateFamily D received a := large.trans (Finset.card_le_card inside)
+  refine ⟨Q,member,?_⟩
+  intro alpha ha
+  exact common_support_identifies received S (above.trans_le large) Q recovered
+    alpha (final alpha) (actual alpha ha)
+
+/-- An actual off-family branch cannot be one of four whose common matching
+support reaches the family's support threshold. -/
+theorem off_family_four_intersection_small (D : Finset (Fin 262144))
+    (received : Fin 1048576 → QM31Exact) (a : Nat) (above : 255<a)
+    (nodes : Finset QM31Exact) (four : nodes.card=4)
+    (final : QM31Exact → Fin 256 → QM31Exact)
+    (outside : ∀ alpha∈nodes, ¬CoveredAt D received a alpha (final alpha)) :
+    (D.filter fun i => ∀ alpha∈nodes,
+      i∈matchingSupport D received alpha (final alpha)).card<a := by
+  classical
+  by_contra notSmall
+  obtain ⟨Q,member,represented⟩ := four_intersection_covered D received a above nodes four final
+    (by omega)
+  obtain ⟨alpha,ha⟩ := Finset.card_pos.mp (show 0<nodes.card by omega)
+  exact outside alpha ha ⟨Q,member,represented alpha ha⟩
+
+/-- Actual selected high-agreement off-family tail. No cardinality or
+query-probability union over the candidate family occurs. D may be supplied
+as the selected full domain without normalizing its huge enumeration. -/
+theorem selected_high_tail_card (D : Finset (Fin 262144)) (hD : D.card=262144)
+    (received : Fin 1048576 → QM31Exact) (challenges : Finset QM31Exact)
+    (final : QM31Exact → Fin 256 → QM31Exact) :
+    (tailSet D received 9558 117965 challenges final).card≤127 := by
+  classical
+  apply HighAgreementTail.no_four_large_card_le
+    (tailSet D received 9558 117965 challenges final) D
+    (fun alpha => matchingSupport D received alpha (final alpha)) hD
+  · intro alpha _
+    exact Finset.filter_subset _ _
+  · intro alpha ha
+    exact (Finset.mem_filter.mp ha).2.1
+  · intro nodes member
+    have subset := (Finset.mem_powersetCard.mp member).1
+    have four := (Finset.mem_powersetCard.mp member).2
+    have small := off_family_four_intersection_small D received 9558 (by omega) nodes four final
+      (fun alpha ha => (Finset.mem_filter.mp (subset ha)).2.2)
+    -- Keep the arithmetic atom opaque, then transport the two filter
+    -- instances extensionally; do not normalize concrete cardinalities.
+    have bounded := (show ∀ n : Nat, n<9558 → n≤9557 from by
+      intro n hn
+      omega) _ small
+    refine le_trans ?_ bounded
+    apply le_of_eq
+    apply congrArg Finset.card
+    ext i
+    simp only [Finset.mem_filter]
+
+#print axioms four_intersection_covered
+#print axioms off_family_four_intersection_small
+#print axioms selected_high_tail_card
+end
+end AspisV8.OffFamilyIntersection

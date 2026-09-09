@@ -1,0 +1,128 @@
+import MaskedCurveRepresentation
+import OffFamilyIntersection
+import AspisFormal.K1.V7ExactCorrelatedAgreementTerminal
+
+/-! The masked old V7 curve theorem is instantiated on V8's literal received
+quotient slots and full actual folded matching set. This is an alpha-family
+coverage tail, not original image validity, component recovery, a payment
+witness or a source/Fiat--Shamir coupling. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+namespace AspisV8.SelectedMaskedCurveTail
+open Finset
+open AspisV8.MaskedCurveRepresentation AspisV8.ExactFoldRecovery
+open AspisV5FriDegreeThreeCorrelatedAgreement
+open AspisK1.V7Tag73CanonicalOneFoldSchedule
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
+open AspisK1.V7ExactCorrelatedAgreementTerminal
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisV5ComponentCConcreteFoldLinearity AspisV5ComponentCQM31TowerExact
+open AspisV5FriConcreteEncoderCommutation AspisV6PublishedTheoremInterfaces
+noncomputable section
+abbrev K := QM31Exact
+
+def lanes (received : Fin 1048576 → K) : Fin 4 → Fin 262144 → K :=
+  decodedLanes (canonicalOneFoldSchedule 0).circleInv2x
+    (canonicalOneFoldSchedule 0).circleInv2y received
+
+def strategy (received : Fin 1048576 → K) (final : K → Fin 256 → K) :
+    ProximateStrategy K (Fin 262144) (Fin 256 → K) :=
+  ⟨final,fun alpha => OffFamilyIntersection.matchingSupport Finset.univ received alpha (final alpha)⟩
+
+theorem actual_curve (received : Fin 1048576 → K) (alpha : K) (i : Fin 262144) :
+    curveValue (lanes received) alpha i=
+      circleFoldLayer 262144 alpha (canonicalOneFoldSchedule 0).circleInv2x
+        (canonicalOneFoldSchedule 0).circleInv2y received i := by
+  have inverses := canonical_one_fold_schedule_exact 0
+  exact decoded_curve_actual exactCircleX exactCircleY
+    (canonicalOneFoldSchedule 0).circleInv2x (canonicalOneFoldSchedule 0).circleInv2y
+    inverses.1 inverses.2 received alpha i
+
+theorem actual_support (received : Fin 1048576 → K) (Q : Fin 1024 → K) :
+    MaskedCurveRepresentation.fullSupport exactFinalLinear exactCircleX exactCircleY received Q=
+      OffFamilyIntersection.fullSupport Finset.univ received Q := by
+  classical
+  unfold MaskedCurveRepresentation.fullSupport OffFamilyIntersection.fullSupport
+  apply Finset.filter_congr
+  intro i _
+  rw [congrFun exactInitialEncoder_eq_circleLift Q]
+
+/-- Both candidate membership and final coefficient identity are derived from
+the actual interleaved basis and canonical inverse tables. -/
+theorem actual_covered_iff (received : Fin 1048576 → K)
+    (final : K → Fin 256 → K) (a : Nat) (alpha : K) :
+    MaskedCurveTail.CoveredAt exactFinalLinear (lanes received) a
+      (strategy received final) alpha ↔
+      OffFamilyIntersection.CoveredAt Finset.univ received a alpha (final alpha) := by
+  have inverses := canonical_one_fold_schedule_exact 0
+  have generic := MaskedCurveRepresentation.covered_iff exactFinalLinear
+    exactFinalEncoder_injective exactCircleX exactCircleY
+    (canonicalOneFoldSchedule 0).circleInv2x (canonicalOneFoldSchedule 0).circleInv2y
+    inverses.1 inverses.2 received a (strategy received final) alpha
+  constructor
+  · intro covered
+    obtain ⟨Q,own,represented⟩ := generic.mp covered
+    rw [actual_support] at own
+    exact ⟨Q,own,represented⟩
+  · rintro ⟨Q,own,represented⟩
+    apply generic.mpr
+    refine ⟨Q,?_,represented⟩
+    rwa [actual_support]
+
+theorem actual_valid_iff (received : Fin 1048576 → K)
+    (final : K → Fin 256 → K) (threshold : Nat) (alpha : K) :
+    ValidResponse exactFinalLinear threshold (lanes received)
+      (strategy received final) alpha ↔
+      threshold<(OffFamilyIntersection.matchingSupport Finset.univ received alpha (final alpha)).card := by
+  constructor
+  · exact fun valid => valid.1
+  · intro size
+    refine ⟨size,?_⟩
+    intro i member
+    have actual := (Finset.mem_filter.mp member).2
+    rw [actual_curve]
+    exact actual.symm
+
+theorem actual_tail_mem_iff (D : Finset (Fin 262144))
+    (received : Fin 1048576 → K) (a t : Nat) (challenges : Finset K)
+    (final : K → Fin 256 → K) (alpha : K) :
+    alpha∈OffFamilyIntersection.tailSet D received a t challenges final ↔
+      alpha∈challenges ∧ t≤(OffFamilyIntersection.matchingSupport D received alpha (final alpha)).card ∧
+        ¬OffFamilyIntersection.CoveredAt D received a alpha (final alpha) := by
+  classical
+  exact Finset.mem_filter
+
+/-- Full-field alpha tail for the actual selected candidate, with no assumed
+family membership or decoded-word/quotient correspondence. The borrowed
+curve theorem's old exception numerator is reused, not sold as a standalone
+soundness level; the parent game weights it by actual query agreement. -/
+theorem actual_tail_card_le (received : Fin 1048576 → K)
+    (final : K → Fin 256 → K) (a : Nat) (floor : a≤9558) :
+    (OffFamilyIntersection.tailSet Finset.univ received a 9558 Finset.univ final).card≤
+      foldChallengeCap := by
+  classical
+  have masked := MaskedCurveTail.tail_card_le exactFinalLinear (lanes received)
+    a 9558 foldChallengeCap (by omega) floor
+    exactV7FinalDegreeThreeCurveDecodable (strategy received final)
+  have inclusion : OffFamilyIntersection.tailSet Finset.univ received a 9558 Finset.univ final⊆
+      MaskedCurveTail.tailSet exactFinalLinear (lanes received) a 9558 (strategy received final) := by
+    intro alpha member
+    obtain ⟨_,size,outside⟩ :=
+      (actual_tail_mem_iff Finset.univ received a 9558 Finset.univ final alpha).mp member
+    apply Finset.mem_filter.mpr
+    refine ⟨?_,?_⟩
+    · apply (mem_goodChallenges_iff _ _ _ _ _).mpr
+      apply (actual_valid_iff received final (9558-1) alpha).mpr
+      omega
+    · intro covered
+      exact outside ((actual_covered_iff received final a alpha).mp covered)
+  exact (Finset.card_le_card inclusion).trans masked
+
+end
+end AspisV8.SelectedMaskedCurveTail
+#print axioms AspisV8.SelectedMaskedCurveTail.actual_curve
+#print axioms AspisV8.SelectedMaskedCurveTail.actual_covered_iff
+#print axioms AspisV8.SelectedMaskedCurveTail.actual_valid_iff
+#print axioms AspisV8.SelectedMaskedCurveTail.actual_tail_card_le

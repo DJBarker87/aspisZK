@@ -1,0 +1,142 @@
+import SelectedMaskedCurveTail
+import TwoTailQueryBound
+import SelectedReceivedOracle
+import RelationCompatibleMoment
+
+/-! The actual selected arbitrary received quotient, alpha-adaptive final,
+fresh ordered queries and compact scalar suffix. Both geometric tail inputs
+are proved for this literal family; no membership/correspondence premise is
+supplied. The event is off-family acceptance, NOT payment extraction failure.
+The preceding component/OOD quotient construction and authenticated source/FS
+coupling remain separate. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 300000
+namespace AspisV8.SelectedOutsideQuery
+open Finset
+open AspisV8.SelectedReceivedOracle AspisV8.OffFamilyIntersection
+open AspisV8.TwoTailQueryBound AspisV8.RelationCompatibleMoment
+open AspisV8.JointImageGame AspisV8.CausalOrderedRelation
+open AspisV8.FirstImageDiscrepancy AspisV8.PostQueryFunctional
+open AspisK1.V7ExactCorrelatedAgreementTerminal
+open AspisV6PublishedTheoremInterfaces
+open AspisV5ComponentCQM31TowerExact
+noncomputable section
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance indexFintype : Fintype (Fin 262144) :=
+  SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+    (SimplexCategory.mk 262143)
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+/-- Symbolic instance transport; never evaluate either concrete enumeration. -/
+theorem index_univ_card : (Finset.univ : Finset (Fin 262144)).card=262144 := by
+  rw [Finset.card_univ]
+  exact (@Fintype.card_congr (Fin 262144) (Fin 262144)
+    indexFintype (Fin.fintype 262144) (Equiv.refl _)).trans (Fintype.card_fin _)
+
+def outside (received : Fin 1048576 → K) (alpha : K) (final : Fin 256 → K) : Prop :=
+  ¬CoveredAt Finset.univ received 9558 alpha final
+
+def ceiling (q : Nat) (A : Finset K) : ℚ :=
+  beta 262144 q 9557+(foldChallengeCap:ℚ)/A.card*beta 262144 q 117964+127/A.card
+
+/-- The old curve tail and new four-intersection tail constrain the SAME
+actual final strategy, without multiplying its low-agreement query mass by
+the number of mathematical candidates. -/
+theorem pointwise_bound (received : Fin 1048576 → K)
+    (final : K → Fin 256 → K) (A : Finset K) (nonempty : A.Nonempty)
+    (q : Nat) (count : q≤262144) :
+    avg A (fun alpha => if outside received alpha (final alpha) then
+      beta 262144 q (matchingSupport Finset.univ received alpha (final alpha)).card else 0)≤
+      ceiling q A := by
+  have low := SelectedMaskedCurveTail.actual_tail_card_le_on received final 9558 (le_refl _) A
+  have high := selected_high_tail_card Finset.univ index_univ_card received A final
+  have lowSame : (A.filter fun alpha => outside received alpha (final alpha) ∧
+      9558≤(matchingSupport Finset.univ received alpha (final alpha)).card)=
+      tailSet Finset.univ received 9558 9558 A final := by
+    apply Finset.filter_congr
+    intro alpha _
+    exact and_comm
+  have highSame : (A.filter fun alpha => outside received alpha (final alpha) ∧
+      117965≤(matchingSupport Finset.univ received alpha (final alpha)).card)=
+      tailSet Finset.univ received 9558 117965 A final := by
+    apply Finset.filter_congr
+    intro alpha _
+    exact and_comm
+  have bounded (alpha : K) (_ : alpha∈A) :
+      (matchingSupport Finset.univ received alpha (final alpha)).card≤262144 := by
+    unfold matchingSupport
+    exact (Finset.card_le_card (Finset.filter_subset _ _)).trans_eq
+      index_univ_card
+  have result := two_tail_bound A nonempty
+    (fun alpha => (matchingSupport Finset.univ received alpha (final alpha)).card)
+    (fun alpha => outside received alpha (final alpha))
+    262144 q 9558 117965 foldChallengeCap 127 (by omega) (by omega) count bounded
+    (by rwa [lowSame]) (by rwa [highSame])
+  exact result
+
+/-- The field-domain equality set is exactly the image of the actual indexed
+matching set. No second independently supplied received word is involved. -/
+theorem matching_image (Q : Fin 1024 → K) (received : Fin 1048576 → K)
+    (alpha : K) (final : Fin 256 → K) :
+    domain.filter (fun t => lineEval final t=(oracle Q received).folded alpha t)=
+      (matchingSupport Finset.univ received alpha final).image (storedPoint (K := K)) := by
+  ext t
+  constructor
+  · intro member
+    obtain ⟨ht,equal⟩ := Finset.mem_filter.mp member
+    obtain ⟨i,_,rfl⟩ := Finset.mem_image.mp ht
+    refine Finset.mem_image.mpr ⟨i,Finset.mem_filter.mpr ⟨Finset.mem_univ _,?_⟩,rfl⟩
+    simpa only [final_evaluation,oracle_folded] using equal
+  · intro member
+    obtain ⟨i,hi,rfl⟩ := Finset.mem_image.mp member
+    refine Finset.mem_filter.mpr ⟨Finset.mem_image.mpr ⟨i,Finset.mem_univ _,rfl⟩,?_⟩
+    simpa only [final_evaluation,oracle_folded] using (Finset.mem_filter.mp hi).2
+
+theorem actual_matching_ratio (Q : Fin 1024 → K) (received : Fin 1048576 → K)
+    (alpha : K) (final : Fin 256 → K) (q : Nat) :
+    matchingRatio domain q final ((oracle Q received).folded alpha)=
+      beta 262144 q (matchingSupport Finset.univ received alpha final).card := by
+  unfold matchingRatio beta
+  rw [matching_image,Finset.card_image_of_injective _ storedPoint_injective,domain_card]
+
+/-- Full causal compact suffix bound, restricted to actual off-family finals.
+The first response precedes alpha, finals precede queries, rho follows queries,
+and each later response precedes its challenge. The four relation repairs are
+NOT added again: this reduction charges only rho and the three later repairs.
+No first-round root term is needed for this off-family class. -/
+theorem actual_off_family_suffix (pre : Before (K := K)) (quarter : pre.quarter*4=1)
+    (received : Fin 1048576 → K) (q : Nat) (s : Strategy domain q)
+    (A G : Finset K) (ha : A.Nonempty) (hg : G.Nonempty)
+    (positive : 0<q) (count : q≤262144) :
+    avg G (fun tau => avg A (fun alpha => if outside received alpha (s.final tau alpha) then
+      (after pre quarter (oracle pre.referenceQ received) s tau alpha).prob A G else 0))≤
+      ceiling q A+(q:ℚ)/G.card+18/A.card := by
+  have bound := causal_supported_bound pre quarter (oracle pre.referenceQ received) s
+    (fun tau alpha => outside received alpha (s.final tau alpha)) A G ha hg positive
+    (by rwa [domain_card])
+  have moment (tau : K) :
+      avg A (fun alpha => if outside received alpha (s.final tau alpha) then
+        compatibleMoment (atFold pre s tau alpha) (s.final tau alpha)
+          ((oracle pre.referenceQ received).folded alpha) domain q else 0)≤ceiling q A := by
+    apply LE.le.trans _ (pointwise_bound received (s.final tau) A ha q count)
+    apply avg_mono
+    intro alpha _
+    by_cases out : outside received alpha (s.final tau alpha)
+    · simp only [if_pos out,compatibleMoment]
+      rw [actual_matching_ratio]
+      split_ifs
+      · exact le_refl _
+      · exact beta_nonneg _ _ _
+    · simp only [if_neg out,le_refl]
+  have moments := avg_le G hg _ _ (fun tau _ => moment tau)
+  exact bound.trans (by linarith)
+
+#print axioms index_univ_card
+#print axioms pointwise_bound
+#print axioms matching_image
+#print axioms actual_matching_ratio
+#print axioms actual_off_family_suffix
+end
+end AspisV8.SelectedOutsideQuery

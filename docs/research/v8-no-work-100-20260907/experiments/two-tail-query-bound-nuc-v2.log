@@ -1,0 +1,78 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-masked-tail.SH0QtS
+TARGET=TwoTailQueryBound
+RESEARCH_PIN=b006d34ffc6d552cd5ecd9f292cf2bd095f7fdb9
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+7e5035687281bc1bc9bd92be038abb9c98ab6d5b0119ae71e1cdd9923e33a480  /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/two-tail-query-bound-nuc-v2-manifest.json
+80ab3c52c808f9b14677a341a416202e667985ffe6b4e0462082e18b05609494  /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay/TwoTailQueryBound.lean
+d79431f9fcb9a225ae0678b05d95c976980aa6f14718330bcaaae4c6be98b26d  /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/run_masked_nuc.sh
+OVERLAY_PROVENANCE_PASS=675
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-tail-two-tail-query-bound-nuc-v2.scope
+memory.high=5368709120
+memory.max=7516192768
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M6500 -R /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay -o /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay/TwoTailQueryBound.olean /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay/TwoTailQueryBound.lean
+/home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay/TwoTailQueryBound.lean:103:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean ?S fun j => if ?event j then ?c else 0
+in the target expression
+  (mean S fun j => if outside j then beta T q (M j) else 0) ≤
+    (beta T q (a - 1) + mean S fun j => if low j then beta T q (t - 1) else 0) + mean S fun j => if high j then 1 else 0
+
+J : Type u_1
+S : Finset J
+nonempty : S.Nonempty
+M : J → ℕ
+outside : J → Prop
+T q a t C H : ℕ
+positive : 0 < a
+ordered : a ≤ t
+queries : q ≤ T
+bounded : ∀ j ∈ S, M j ≤ T
+lowTail : #({j ∈ S | outside j ∧ a ≤ M j}) ≤ C
+highTail : #({j ∈ S | outside j ∧ t ≤ M j}) ≤ H
+low : J → Prop := fun j => outside j ∧ a ≤ M j
+high : J → Prop := fun j => outside j ∧ t ≤ M j
+point :
+  ∀ j ∈ S,
+    (if outside j then beta T q (M j) else 0) ≤
+      (beta T q (a - 1) + if low j then beta T q (t - 1) else 0) + if high j then 1 else 0
+summed :
+  (mean S fun j => if outside j then beta T q (M j) else 0) ≤
+    (beta T q (a - 1) + mean S fun j => if low j then beta T q (t - 1) else 0) + mean S fun j => if high j then 1 else 0
+⊢ (mean S fun j => if outside j then beta T q (M j) else 0) ≤
+    beta T q (a - 1) + ↑C / ↑(#S) * beta T q (t - 1) + ↑H / ↑(#S)
+'AspisV8.TwoTailQueryBound.mean_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.TwoTailQueryBound.mean_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.TwoTailQueryBound.mean_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.TwoTailQueryBound.beta_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.TwoTailQueryBound.beta_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.TwoTailQueryBound.beta_unit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.TwoTailQueryBound.average_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.TwoTailQueryBound.two_tail_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M6500 -R /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay -o /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay/TwoTailQueryBound.olean /home/dombarker/project-offloads/aspis-masked-tail.SH0QtS/overlay/TwoTailQueryBound.lean"
+	User time (seconds): 1.10
+	System time (seconds): 0.47
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.59
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3273068
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 10
+	Minor (reclaiming a frame) page faults: 73639
+	Voluntary context switches: 434
+	Involuntary context switches: 89
+	Swaps: 0
+	File system inputs: 1736
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1
