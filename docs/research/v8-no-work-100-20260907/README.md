@@ -1,6 +1,19 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [constant injection in final-coefficient folds](affine-primal-review.md).
+Latest: [shared preparation for five public gamma dots](shared-gamma-review.md).
+Worst observed complete transaction is **1,057,043 CU**, with **142,957 CU**
+headroom below the actual 1.2M cap and the unchanged **40,282-byte** body.
+The source-shaped Lean bridge and all 50 maximum/ordinary/rollback cases pass;
+same-proof savings are **24,813–24,911 CU**. See [results](shared-gamma-results.json).
+Current-page transfer is below the same-pool V7 control; the other three shapes
+remain **4,158–8,159 CU above it**. Universal CU and full protocol claims remain open.
+
+Preceding: [semantic carry fusion](semantic-carry-review.md) and
+[compact boundary reduction](semantic-boundary-review.md), both preserving
+the same proof/transcript and checked field equations. Together they reduced
+the worst measured total from 1,091,626 to 1,081,936 CU before this latest change.
+
+Previous: [constant injection in final-coefficient folds](affine-primal-review.md).
 Worst observed complete transaction is **1,091,626 CU**, with **108,374 CU**
 headroom below the actual 1.2M cap and the unchanged **40,282-byte** body.
 The literal channel/cast/range proof supports another 491–534 CU saving;
