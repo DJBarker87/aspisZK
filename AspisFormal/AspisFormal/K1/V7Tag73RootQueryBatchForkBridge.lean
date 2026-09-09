@@ -155,6 +155,7 @@ theorem literal_root_query_batch_dispatch_emits_typed_fork
           { nodeId := 0, verifierTransitionIndex := transitionIndex } =
         .ready prepared ∧
       HistoryTotalCoherent prepared.programmingBase ∧
+      prepared.programmingBase.history.length ≤ machine.adversaryFuel ∧
       prepared.transition = transition ∧
       preparedRestorationPairRole? prepared = some role ∧
       role.owner = .challenge .queryBatch ∧
@@ -177,7 +178,7 @@ theorem literal_root_query_batch_dispatch_emits_typed_fork
   have pairExact : squeezePairInputsOfTransition transition =
       some (outputInput, advanceInput) := by
     rw [squeezePairInputsOfTransition, eventExact]
-  obtain ⟨prepared, role, ready, coherent, projected, _inputs,
+  obtain ⟨prepared, role, ready, coherent, historyBound, projected, _inputs,
       outputExact, advanceExact, emits⟩ :=
     literal_root_squeeze_dispatch_emits_typed_fork machine hidden runtime runs
       configuration totalLimitMono freshLimitMono transitionIndex transition
@@ -216,8 +217,8 @@ theorem literal_root_query_batch_dispatch_emits_typed_fork
       block := block
       outputInput := prepared.outputInput
       advanceInput := prepared.advanceInput },
-    ready, coherent, preparedTransitionExact, projected, rfl, rfl, ?_, ?_,
-    emits⟩
+    ready, coherent, historyBound, preparedTransitionExact, projected, rfl,
+    rfl, ?_, ?_, emits⟩
   · simpa [preparedTransitionExact] using outputExact
   · simpa [preparedTransitionExact] using advanceExact
 
@@ -265,6 +266,7 @@ theorem deployed_root_sweep_covers_query_batch_typed_fork
             { nodeId := 0, verifierTransitionIndex := transitionIndex } =
           .ready prepared ∧
         HistoryTotalCoherent prepared.programmingBase ∧
+        prepared.programmingBase.history.length ≤ machine.adversaryFuel ∧
         prepared.transition = transition ∧
         preparedRestorationPairRole? prepared = some role ∧
         role.owner = .challenge .queryBatch ∧

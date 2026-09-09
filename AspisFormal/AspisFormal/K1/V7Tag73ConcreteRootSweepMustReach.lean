@@ -23,6 +23,9 @@ open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73ActualNodeCausalProvenance
 open AspisK1.V7Tag73ConcreteRestorationClient
 open AspisK1.V7Tag73ConcreteRootSweepClient
+open AspisK1.V7Tag73ExactCompilerOperationalCaps
+open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73OperationalCausalInjection
@@ -315,16 +318,7 @@ theorem finite_client_path_target_must_reach_query_batch
       .verifier (.squeezePair (.challenge .queryBatch) 0) reply)
     (environment : FutureFreeEnvironment)
     (globalRoom : configuration.oracleLimits.totalCalls ≤ globalOracleCalls)
-    (pairRoomAtTarget : ∀
-      (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
-      (prepared : PreparedConcreteRestoration Statement Proof Payload),
-      RootStoredAtZero runtime.node accumulator →
-      prepareConcreteRestorationFromStartProgram
-          (machine.blackBox.start hidden machine.observation) configuration
-          accumulator
-          { nodeId := 0, verifierTransitionIndex := transitionIndex } =
-        .ready prepared →
-      prepared.programmingBase.history.length + 2 ≤ globalOracleCalls)
+    (forkRoom : machine.adversaryFuel + 2 ≤ globalOracleCalls)
     (fuel count : Nat)
     (client : ConcreteRestorationClient Result)
     (result : Result)
@@ -384,9 +378,9 @@ theorem finite_client_path_target_must_reach_query_batch
         | restore certifiedRequest certifiedNext tails =>
           by_cases selected : request = targetRequest
           · subst request
-            obtain ⟨prepared, role, ready, coherent, transitionPrepared,
-                roleExact, ownerExact, blockExact, _outputExact,
-                _advanceExact, _header⟩ :=
+            obtain ⟨prepared, role, ready, coherent, historyBound,
+                transitionPrepared, roleExact, ownerExact, blockExact,
+                _outputExact, _advanceExact, _header⟩ :=
               literal_root_query_batch_dispatch_emits_typed_fork machine hidden
                 runtime runs configuration totalLimitMono freshLimitMono
                 transitionIndex transition transitionExact 0 reply eventExact
@@ -407,7 +401,7 @@ theorem finite_client_path_target_must_reach_query_batch
                 environment configuration accumulator prepared role resume
                   readyAtPrepared roleExact ownerExact blockExact coherent
                   globalRoom
-                  (pairRoomAtTarget accumulator prepared rootStored ready))
+                  (by omega))
           · apply dispatch_one_preserves_rooted_must_reach target runtime.node
               startProgram environment configuration accumulator request resume
               rootStored
@@ -456,16 +450,7 @@ theorem deployed_root_sweep_must_reach_query_batch
       .verifier (.squeezePair (.challenge .queryBatch) 0) reply)
     (environment : FutureFreeEnvironment)
     (globalRoom : configuration.oracleLimits.totalCalls ≤ globalOracleCalls)
-    (pairRoomAtTarget : ∀
-      (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
-      (prepared : PreparedConcreteRestoration Statement Proof Payload),
-      RootStoredAtZero runtime.node accumulator →
-      prepareConcreteRestorationFromStartProgram
-          (machine.blackBox.start hidden machine.observation) configuration
-          accumulator
-          { nodeId := 0, verifierTransitionIndex := transitionIndex } =
-        .ready prepared →
-      prepared.programmingBase.history.length + 2 ≤ globalOracleCalls)
+    (forkRoom : machine.adversaryFuel + 2 ≤ globalOracleCalls)
     (result : Result) :
     SchedulerNativeCursorMustReach
       (fun cursor =>
@@ -479,7 +464,7 @@ theorem deployed_root_sweep_must_reach_query_batch
           (deployedRootSweepClient 1 result)) := by
   apply finite_client_path_target_must_reach_query_batch machine hidden runtime
     runs configuration totalLimitMono freshLimitMono transitionIndex transition
-    transitionExact reply eventExact environment globalRoom pairRoomAtTarget
+    transitionExact reply eventExact environment globalRoom forkRoom
     1513 1513 (deployedRootSweepClient 1 result) result
   · exact deployed_root_sweep_client_exact_request_count 1 result
   · omega
@@ -487,10 +472,64 @@ theorem deployed_root_sweep_must_reach_query_batch
     exact deployed_root_sweep_every_path_covers_transition 1 result path
       (by omega) transitionIndex transitionWithin
 
+/-- Under the exact compiler's executable adequacy certificate, the abstract
+resource premises of the temporal root-sweep theorem are consequences of the
+frozen `Q,R,G` arithmetic.  In particular, the selected pair has room because
+its replay prefix is bounded by root adversary fuel, which is itself at most
+`Q`; no per-accumulator resource hypothesis remains. -/
+theorem exact_deployed_root_sweep_must_reach_query_batch
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {canonicalDriverFuel transitionFuel : Nat}
+    (configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters)
+    (adequate : ExactPlainRomOperationalAdequacy canonicalDriverFuel
+      transitionFuel configuration)
+    (hidden : HiddenTape)
+    (runtime : SchedulerNativePlainRomRootRuntime TapeIdentity Statement Proof
+      Payload)
+    (runs : RootProjectedTotalizedRuns configuration.machine hidden runtime)
+    (transitionIndex : Nat)
+    (transitionWithin : transitionIndex < 1513)
+    (transition : FutureFreeTransition)
+    (transitionExact : verifierTransitionAt? runtime.node transitionIndex =
+      some transition)
+    (reply : VerifierReply)
+    (eventExact : transition.event =
+      .verifier (.squeezePair (.challenge .queryBatch) 0) reply)
+    (environment : FutureFreeEnvironment)
+    (result : Result) :
+    SchedulerNativeCursorMustReach
+      (fun cursor =>
+        typedRestoredQueryBatchForkStartsHere (Result := Result)
+          (configuration.machine.blackBox.start hidden
+            configuration.machine.observation)
+          environment configuration.restorationConfiguration cursor.erase =
+            true)
+      (startConcreteRestorationClientFromRoot
+        (globalOracleCalls := globalFull256OracleCallCap parameters)
+        (configuration.machine.blackBox.start hidden
+          configuration.machine.observation)
+        environment runtime.node configuration.restorationConfiguration 1513
+          (deployedRootSweepClient 1 result)) := by
+  have replayExtendsRoot :=
+    adequate_replay_limits_extend_root_adversary configuration adequate
+  have forkRoom : configuration.machine.adversaryFuel + 2 ≤
+      globalFull256OracleCallCap parameters := by
+    have fuelBound := configuration.bounds.rootAdversaryFuel
+    unfold globalFull256OracleCallCap deployedFull256VerifierCallCap
+    omega
+  exact deployed_root_sweep_must_reach_query_batch configuration.machine hidden
+    runtime runs configuration.restorationConfiguration replayExtendsRoot.1
+    replayExtendsRoot.2 transitionIndex transitionWithin transition
+    transitionExact reply eventExact environment
+    configuration.bounds.replayTotalCalls forkRoom result
+
 #print axioms root_stored_after_charges_and_failure
 #print axioms dispatch_one_preserves_rooted_must_reach
 #print axioms finite_client_path_target_must_reach_query_batch
 #print axioms deployed_root_sweep_must_reach_query_batch
+#print axioms exact_deployed_root_sweep_must_reach_query_batch
 
 end
 end AspisK1.V7Tag73ConcreteRootSweepMustReach
