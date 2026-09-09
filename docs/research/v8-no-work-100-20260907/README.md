@@ -1,11 +1,18 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [soundness resumed using V7](soundness-resume-review.md).
-New checked bridges cover common-sample Gao recovery, selected payment-value
-constraints and causal compact relation responses. The generic early-C1
-optional construction is proved; its concrete identification remains open.
-The verifier and measured CU checkpoint below are unchanged. See the
-[explicit residual ledger](soundness-resume-ledger.json).
+Latest formal continuation: [constructed ordered post-query game](ordered-post-query-review.md).
+The natural-line functional now derives the game's discrepancy interfaces and
+connects actual compact tail responses to an ordered-query bound. Selected
+input-pair decoding and all 24 direction-bit parses follow from concrete
+residuals. The exact C1 agreement-cap specialization passes; optional-object
+identification remains open after isolated guarded failures. See the
+[current-source proof evidence and conditional ledger](ordered-post-query-evidence.json).
+No verifier, body or measured CU change; global soundness, extraction and ZK
+are not established.
+
+Previous formal checkpoint: [soundness resumed using V7](soundness-resume-review.md),
+covering common-sample Gao recovery, payment-value constraints, compact
+responses and generic early-C1 uniqueness. Those results are reused unchanged.
 
 Latest retained result: [shared terminal query weights](terminal-query-review.md).
 Worst observed complete transaction is **1,047,041 CU**, with **152,959 CU**
