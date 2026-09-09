@@ -50,6 +50,7 @@ open AspisK1.V7Tag73IndexedExposureCausalRouter
 open AspisK1.V7Tag73OperationalCausalInjection
 open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73NoPairOccurrenceTrichotomy
+open AspisK1.V7Tag73QueryBatchPrefixCausalController
 open AspisK1.V7Tag73SchedulerNativeGammaReplay
 open AspisK1.V7Tag73TranscriptSchedule
 
@@ -102,7 +103,7 @@ theorem exact_selected_candidate_query_batch_boundary_arms
             [{ digest := queryBatchDigest, block := 0,
                sourceInput := bytes blockAdvance ++
                  [domAbsorb, queryBatchChallengeLabel] }]
-          usedSlots := beforeBoundary.memory.2.queryBatch.usedSlots } := by
+          usedSlots := ∅ } := by
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, preAdvance, advanceLater, advanceActor,
       advanceRootExact, selectedMember, targetAbsent, advanceLookup,
@@ -193,6 +194,16 @@ theorem exact_selected_candidate_query_batch_boundary_arms
   have beforeAdvanceEmpty :
       beforeAdvance.memory.2.queryBatch.producers = [] :=
     preAdvanceInactive.2
+  have beforeAdvanceMemory : beforeAdvance.memory.2.queryBatch =
+      inactiveQueryBatchPrefixMemory := by
+    have preserved :=
+      candidate_query_batch_memory_preserved_until_target_seen transitionFuel
+        target base completeFoldAlphaQ16DagMemory preAdvance initial (by rfl)
+          (by rfl) (by
+            simpa [beforeAdvance, controller, base, initial] using targetAbsent)
+    simpa [beforeAdvance, controller, initial,
+      exactCandidateDirectedQueryBatchInitialState,
+      inactiveQueryBatchDagExtensionMemory] using preserved
   let afterAdvance := controller.afterAnswer transitionFuel beforeAdvance
     blockAdvance
   have afterAdvanceTarget : afterAdvance.memory.2.q16.advances target =
@@ -270,6 +281,12 @@ theorem exact_selected_candidate_query_batch_boundary_arms
       between afterAdvance betweenAligned betweenOnly (by
         simpa [boundaryInput] using betweenDistinct) afterAdvanceTarget
       afterAdvanceUnseen afterAdvanceEmpty
+  have betweenMemory :=
+    candidate_query_batch_memory_preserved_before_distinct_boundary
+      transitionFuel target base completeFoldAlphaQ16DagMemory blockAdvance
+      between afterAdvance betweenAligned betweenOnly (by
+        simpa [boundaryInput] using betweenDistinct) afterAdvanceTarget
+      afterAdvanceUnseen afterAdvanceEmpty
   let boundaryPrior := preAdvance ++ orderedAdvance :: between
   let beforeBoundary := indexedStateAfterRecords transitionFuel controller
     boundaryPrior initial
@@ -290,6 +307,14 @@ theorem exact_selected_candidate_query_batch_boundary_arms
       beforeBoundary.memory.2.queryBatch.producers = [] := by
     rw [beforeBoundaryExact]
     exact betweenState.2.2
+  have beforeBoundaryMemory : beforeBoundary.memory.2.queryBatch =
+      inactiveQueryBatchPrefixMemory := by
+    rw [beforeBoundaryExact, betweenMemory, afterAdvanceQueryBatch,
+      beforeAdvanceMemory]
+  have beforeBoundaryUsedEmpty :
+      beforeBoundary.memory.2.queryBatch.usedSlots = ∅ := by
+    rw [beforeBoundaryMemory]
+    rfl
   have boundaryInputExact : unifiedInputBeforeAnswer? transitionFuel
       beforeBoundary.cursor = some boundaryInput := by
     have aligned := fullAligned boundaryPrior boundaryRecord boundaryLater
@@ -315,6 +340,13 @@ theorem exact_selected_candidate_query_batch_boundary_arms
         (baseIndexedState beforeBoundary).memory) beforeBoundary.memory.2
       boundaryInput beforeQueryBatch.digest blockAdvance beforeBoundaryUnseen
       beforeBoundaryEmpty beforeBoundaryTarget rfl
+  have armedEmpty : afterBoundary.memory.2.queryBatch =
+      { boundarySeen := true
+        producers :=
+          [{ digest := beforeQueryBatch.digest, block := 0,
+             sourceInput := boundaryInput }]
+        usedSlots := ∅ } := by
+    rw [armed, beforeBoundaryUsedEmpty]
   refine ⟨finalTrial, target, blockAdvance, beforeQueryBatch.digest,
     beforeDomain, boundaryPrior, boundaryLater, boundaryActor, ?_,
     terminalExact, boundaryStart, ?_⟩
@@ -322,7 +354,7 @@ theorem exact_selected_candidate_query_batch_boundary_arms
       List.append_assoc] using orderedRootExact
   · exact ⟨beforeBoundaryTarget, beforeBoundaryUnseen, beforeBoundaryEmpty,
       by simpa [base, controller, initial, beforeBoundary, afterBoundary,
-        boundaryInput] using armed⟩
+        boundaryInput] using armedEmpty⟩
 
 #print axioms exact_selected_candidate_query_batch_boundary_arms
 

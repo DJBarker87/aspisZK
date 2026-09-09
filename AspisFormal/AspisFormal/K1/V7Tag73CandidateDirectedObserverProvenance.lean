@@ -133,6 +133,72 @@ theorem candidate_query_batch_stays_inactive_until_target_seen
         UnifiedExposureRecord.answer] using
           ih next nextUnseen nextEmpty tailAbsent
 
+/-- Before the target advance is observed, the complete query-batch memory is
+unchanged, not merely its boundary and producer fields.  In particular its
+used-slot set remains empty from the inactive initial state. -/
+theorem candidate_query_batch_memory_preserved_until_target_seen
+    {globalOracleCalls : Nat} {Memory Slot : Type}
+    (transitionFuel : Nat) (target : Q16DigestSlot)
+    (base : IndexedUnifiedExposureController globalOracleCalls
+      Digest256 Slot Memory)
+    (dagOf : Memory → FinalWorkQ16DagMemory) :
+    ∀ (records : List UnifiedExposureRecord)
+      (state : IndexedUnifiedExposureState globalOracleCalls
+        (ExtendedControllerMemory Memory)),
+      state.memory.2.queryBatch.boundarySeen = false →
+      state.memory.2.queryBatch.producers = [] →
+      (indexedStateAfterRecords transitionFuel
+        (extendControllerThroughCandidateQueryBatch transitionFuel target base
+          dagOf) records state).memory.2.q16.advances target = none →
+      (indexedStateAfterRecords transitionFuel
+        (extendControllerThroughCandidateQueryBatch transitionFuel target base
+          dagOf) records state).memory.2.queryBatch =
+        state.memory.2.queryBatch := by
+  intro records
+  induction records with
+  | nil =>
+      intro state _unseen _empty _absent
+      rfl
+  | cons record records ih =>
+      intro state unseen empty finalAbsent
+      let controller := extendControllerThroughCandidateQueryBatch
+        transitionFuel target base dagOf
+      let next := controller.afterAnswer transitionFuel state record.answer
+      have stateAbsent : state.memory.2.q16.advances target = none := by
+        cases current : state.memory.2.q16.advances target with
+        | none => rfl
+        | some existing =>
+            have persists := candidate_observed_advance_is_monotone_over_records
+              transitionFuel target base dagOf
+              (record :: records) state existing current
+            rw [finalAbsent] at persists
+            contradiction
+      have nextInactive : next.memory.2.queryBatch =
+          state.memory.2.queryBatch := by
+        simp only [next, controller,
+          IndexedUnifiedExposureController.afterAnswer,
+          extendControllerThroughCandidateQueryBatch]
+        cases inputExact : unifiedInputBeforeAnswer? transitionFuel state.cursor
+        · simp [inputExact]
+        · simp only [inputExact]
+          exact missing_candidate_continuation_cannot_arm target
+            (dagOf (baseIndexedState state).memory) state.memory.2 _
+            record.answer unseen empty stateAbsent
+      have nextUnseen : next.memory.2.queryBatch.boundarySeen = false := by
+        rw [nextInactive]
+        exact unseen
+      have nextEmpty : next.memory.2.queryBatch.producers = [] := by
+        rw [nextInactive]
+        exact empty
+      have tailAbsent :
+          (indexedStateAfterRecords transitionFuel controller records next
+            ).memory.2.q16.advances target = none := by
+        simpa [controller, next, indexed_state_after_records_cons,
+          UnifiedExposureRecord.answer] using finalAbsent
+      have tailExact := ih next nextUnseen nextEmpty tailAbsent
+      rw [indexed_state_after_records_cons]
+      exact tailExact.trans nextInactive
+
 /-- After the target continuation is known, a machine-fresh prefix containing
 no copy of its boundary input preserves both the continuation and an unarmed
 query-batch extension. -/
@@ -228,6 +294,100 @@ theorem candidate_query_batch_stays_inactive_before_distinct_boundary
         UnifiedExposureRecord.answer] using
           ih next tailAligned tailOnly tailDistinct nextPresent nextUnseen
             nextEmpty
+
+/-- After the target continuation is known and before its unique boundary
+input occurs, the complete query-batch memory is unchanged. -/
+theorem candidate_query_batch_memory_preserved_before_distinct_boundary
+    {globalOracleCalls : Nat} {Memory Slot : Type}
+    (transitionFuel : Nat) (target : Q16DigestSlot)
+    (base : IndexedUnifiedExposureController globalOracleCalls
+      Digest256 Slot Memory)
+    (dagOf : Memory → FinalWorkQ16DagMemory)
+    (continuation : Digest256) :
+    ∀ (records : List UnifiedExposureRecord)
+      (state : IndexedUnifiedExposureState globalOracleCalls
+        (ExtendedControllerMemory Memory)),
+      IndexedRecordsAligned transitionFuel
+        (extendControllerThroughCandidateQueryBatch transitionFuel target base
+          dagOf) state records →
+      OnlyMachineFreshRecords records →
+      (∀ record ∈ records,
+        causalInput? record ≠ some (bytes continuation ++
+          [domAbsorb, queryBatchChallengeLabel])) →
+      state.memory.2.q16.advances target = some continuation →
+      state.memory.2.queryBatch.boundarySeen = false →
+      state.memory.2.queryBatch.producers = [] →
+      (indexedStateAfterRecords transitionFuel
+        (extendControllerThroughCandidateQueryBatch transitionFuel target base
+          dagOf) records state).memory.2.queryBatch =
+        state.memory.2.queryBatch := by
+  intro records
+  induction records with
+  | nil =>
+      intro state _aligned _only _distinct _present _unseen _empty
+      rfl
+  | cons head tail ih =>
+      intro state aligned onlyMachine distinct present unseen empty
+      obtain ⟨actor, input, answer, headExact⟩ :=
+        onlyMachine head (by simp)
+      subst head
+      let controller := extendControllerThroughCandidateQueryBatch
+        transitionFuel target base dagOf
+      let next := controller.afterAnswer transitionFuel state answer
+      have headAligned := aligned []
+        (.machineFresh actor input answer : UnifiedExposureRecord) tail (by rfl)
+      have inputExact : unifiedInputBeforeAnswer? transitionFuel state.cursor =
+          some input := by
+        simpa only [indexed_state_after_records_nil] using
+          aligned_machine_record_has_exact_input transitionFuel state.cursor
+            actor input answer headAligned
+      have inputDifferent : input ≠ bytes continuation ++
+          [domAbsorb, queryBatchChallengeLabel] := by
+        intro equal
+        have rejected := distinct
+          (.machineFresh actor input answer : UnifiedExposureRecord) (by simp)
+        exact rejected (by simp [causalInput?, equal])
+      have nextPresent : next.memory.2.q16.advances target =
+          some continuation := by
+        simp only [next, controller,
+          IndexedUnifiedExposureController.afterAnswer,
+          extendControllerThroughCandidateQueryBatch, inputExact]
+        exact observed_q16_advance_is_monotone state.memory.2.q16
+          (dagOf (baseIndexedState state).memory) input answer continuation
+          target present
+      have nextInactive : next.memory.2.queryBatch =
+          state.memory.2.queryBatch := by
+        simp only [next, controller,
+          IndexedUnifiedExposureController.afterAnswer,
+          extendControllerThroughCandidateQueryBatch, inputExact]
+        exact different_candidate_boundary_cannot_arm target
+          (dagOf (baseIndexedState state).memory) state.memory.2 input answer
+          continuation unseen empty present inputDifferent
+      have tailAligned : IndexedRecordsAligned transitionFuel controller next
+          tail := by
+        apply indexed_records_aligned_segment transitionFuel controller state
+          ((.machineFresh actor input answer : UnifiedExposureRecord) :: tail)
+          [(.machineFresh actor input answer : UnifiedExposureRecord)] tail []
+          aligned
+        simp
+      have tailOnly : OnlyMachineFreshRecords tail := by
+        intro record member
+        exact onlyMachine record (by simp [member])
+      have tailDistinct : ∀ record ∈ tail,
+          causalInput? record ≠ some (bytes continuation ++
+            [domAbsorb, queryBatchChallengeLabel]) := by
+        intro record member
+        exact distinct record (by simp [member])
+      have nextUnseen : next.memory.2.queryBatch.boundarySeen = false := by
+        rw [nextInactive]
+        exact unseen
+      have nextEmpty : next.memory.2.queryBatch.producers = [] := by
+        rw [nextInactive]
+        exact empty
+      have tailExact := ih next tailAligned tailOnly tailDistinct nextPresent
+        nextUnseen nextEmpty
+      rw [indexed_state_after_records_cons]
+      exact tailExact.trans nextInactive
 
 /-- Every newly present target advance has a literal installing record and a
 producer which the base DAG already knew immediately before that record. -/
@@ -366,7 +526,9 @@ theorem candidate_observed_advance_has_installing_record
 #print axioms candidate_observed_advance_has_installing_record
 #print axioms candidate_observed_advance_is_monotone_over_records
 #print axioms candidate_query_batch_stays_inactive_until_target_seen
+#print axioms candidate_query_batch_memory_preserved_until_target_seen
 #print axioms candidate_query_batch_stays_inactive_before_distinct_boundary
+#print axioms candidate_query_batch_memory_preserved_before_distinct_boundary
 
 end
 end AspisK1.V7Tag73CandidateDirectedObserverProvenance

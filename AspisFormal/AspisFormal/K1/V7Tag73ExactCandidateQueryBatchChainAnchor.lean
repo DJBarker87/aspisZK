@@ -94,7 +94,7 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
             [{ digest := queryBatchDigest, block := 0,
                sourceInput := bytes blockAdvance ++
                  [domAbsorb, queryBatchChallengeLabel] }]
-          usedSlots := beforeBoundary.memory.2.queryBatch.usedSlots } := by
+          usedSlots := ∅ } := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, beforeDomain,
       boundaryPrior, boundaryLater, boundaryActor, boundaryRoot,
       terminalExact, boundaryStart, targetExact, unseen, empty, armed⟩ :=
