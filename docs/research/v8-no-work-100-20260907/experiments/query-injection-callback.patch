@@ -1,0 +1,10 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+index ec44e395..d0224dfa 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+@@ -33,0 +34,2 @@ const V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs
++#[cfg(v8_query_injection)]
++#[path="query_injection.rs"] mod query_injection;
+@@ -270,0 +273,2 @@ fn inject(weights:&mut WeightAccumulator,c:&mut K,values:&[K],xs:&[M31],rho:K)->
++    #[cfg(v8_query_injection)]
++    if let Ok(values)=<&[K;Q]>::try_from(values){return query_injection::inject(weights,c,values,xs,rho);}
