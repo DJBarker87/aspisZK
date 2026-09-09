@@ -1,0 +1,64 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -910,1 +910,9 @@
++#[cfg(all(v8_copy_plan,not(all(feature="pool-v1-pair-forest-copy-selector-tensor-basis-audit",feature="pool-v1-pair-forest-copy-tag-dot-basis-audit"))))]
++compile_error!("research copy plan requires the selected tensor/tag layout");
++#[cfg(any(test,v8_copy_plan))]
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../docs/research/v8-no-work-100-20260907/experiments/copy_scatter_plan_generated.rs"));
++
+ pub(crate) fn evaluate_with_selectors(
+@@ -943,4 +951,8 @@
+     #[cfg(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")]
+     let mut selector_tensor_scratch = vec![QM31::ZERO; COPY_SELECTOR_TENSOR_SCRATCH];
++    #[cfg(v8_copy_plan)]
++    research_fill_scatter(&mut selector_tensor_scratch,selectors,&research_scatter_flags(append_index,variant));
++    #[cfg(not(v8_copy_plan))]
+     let mut link_index = 0usize;
++    #[cfg(not(v8_copy_plan))]
+     while link_index < POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1 {
+@@ -1432,2 +1444,59 @@
++    #[test]
++    fn generated_scatter_matches_actual_source_for_independent_flags() {
++        let mut rng=Rng(0x7363_6174_7465_7231);
++        let max=QM31{c0:CM31::new(M31(P-1),M31(P-1)),c1:CM31::new(M31(P-1),M31(P-1))};
++        for sample in 0..83 {
++            let high=match sample {
++                0..=63 => core::array::from_fn(|j|if j==sample {QM31::ONE}else{QM31::ZERO}),
++                64 => [QM31::ZERO;64],65 => [QM31::ONE;64],66 => [max;64],
++                _ => core::array::from_fn(|_|rng.qm31()),
++            };
++            let selectors=Selectors{high,low:[QM31::ZERO;16]};
++            for control in 0..RESEARCH_SCATTER_FLAG_COUNT+2 {
++                let flags=core::array::from_fn(|j|control==j || control==RESEARCH_SCATTER_FLAG_COUNT+1);
++                let mut expected=vec![QM31::ZERO;COPY_SELECTOR_TENSOR_SCRATCH];
++                for link in constants::COPY_LINKS {
++                    let f=RESEARCH_SCATTER_FLAG_KEYS.iter().position(|&k|k==(link.weight_kind,link.weight_level)).unwrap();
++                    let weight=M31(u32::from(flags[f]));
++                    accumulate_endpoint_selector_tensor_basis(&mut expected,0,link.producer,link.tag,weight,&selectors);
++                    accumulate_endpoint_selector_tensor_basis(&mut expected,2,link.consumer,link.tag,weight,&selectors);
++                }
++                let mut actual=vec![QM31::ZERO;COPY_SELECTOR_TENSOR_SCRATCH];
++                research_fill_scatter(&mut actual,&selectors,&flags);
++                assert_eq!(actual,expected,"sample={sample}, flags={control}");
++            }
++        }
++    }
++
++    #[test]
++    fn generated_scatter_flags_match_actual_link_weight() {
++        for variant in [PoolV1PairForestCompiledVariantV1::PrivateTransfer,PoolV1PairForestCompiledVariantV1::Withdrawal] {
++            for bit in 0..64 {
++                for index in [0,u64::MAX,1u64<<bit,(1u64<<bit)-1] {
++                    let flags=research_scatter_flags(index,variant);
++                    for link in constants::COPY_LINKS {
++                        let f=RESEARCH_SCATTER_FLAG_KEYS.iter().position(|&k|k==(link.weight_kind,link.weight_level)).unwrap();
++                        assert_eq!(M31(u32::from(flags[f])),link_weight(link,index,variant));
++                    }
++                }
++            }
++        }
++    }
++
+     #[test]
+     fn copy_tag_dot_matches_literal_canonical_extremes() {

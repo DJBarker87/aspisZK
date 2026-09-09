@@ -1,6 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [shared copy windows and range-certified tag accumulators](copy-performance-review.md).
+Latest: [shared copy-selector assembly](scatter-performance-review.md).
+A generated, Lean-proved public addition plan saves another **39,090–39,208 CU**
+on identical complete maximum-body proofs. Worst observed is **1,141,606 CU**
+including pinned classic SPL Token settlement, at the actual 1.2M cap.
+The body stays **40,282 bytes**; malformed-proof and atomic rollback controls
+pass. These are fixture maxima, not a universal bound; selected-V7 parity and
+global security remain open. See [results](scatter-performance-results.json)
+and [evidence](scatter-performance-evidence.json).
+
+Previous: [shared copy windows and range-certified tag accumulators](copy-performance-review.md).
 Two further Lean-backed rewrites save **7,072–7,118 CU** on identical complete
 maximum-body proofs. All four shapes pass the actual 1.2M cap; worst observed
 is **1,180,814 CU**, including the pinned classic SPL Token 3.5 SBF settlement.
