@@ -1,0 +1,94 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -835,5 +835,42 @@
+ fn copy_tag_coordinate_value(_scratch: &[QM31], coordinate: usize, selectors: &Selectors) -> QM31 {
++    #[cfg(v8_copy_tag_shared)]
++    return research_copy_tag_shared(coordinate,_scratch[coordinate],selectors);
+     copy_tag_coordinate_dot(coordinate, selectors)
+ }
++
++#[cfg(any(test,v8_copy_tag_shared))]
++#[inline(never)]
++fn research_copy_tag_shared(coordinate:usize,sum:QM31,selectors:&Selectors)->QM31 {
++    let mut d=[0u64;4];
++    let mut index=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate]);
++    let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate+1]);
++    while index<end {
++        let value=selectors.high[usize::from(COPY_TAG_TERMS.0[index])];
++        let offset=u64::from(COPY_TAG_TERMS.1[index].wrapping_sub(1_124_073_472));
++        let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];
++        let mut j=0;
++        while j<4 {
++            d[j]=d[j].wrapping_add(u64::from(limbs[j]).wrapping_mul(offset));
++            j+=1;
++        }
++        index+=1;
++    }
++    let s=[sum.c0.a.0,sum.c0.b.0,sum.c1.a.0,sum.c1.b.0];
++    let mut out=[M31::ZERO;4];
++    let mut j=0;
++    while j<4 {
++        let limb=u64::from(s[j]);
++        let rotated=((limb&127)<<24).wrapping_add(limb>>7);
++        out[j]=M31::reduce_u64(67u64.wrapping_mul(rotated).wrapping_add(d[j]));
++        j+=1;
++    }
++    QM31{c0:CM31::new(out[0],out[1]),c1:CM31::new(out[2],out[3])}
++}
+-
++
+ /// Accumulate one compiled endpoint after changing from the endpoint basis to
+ /// the fixed tuple-pattern basis:
+@@ -1018,6 +1055,10 @@
+ #[cfg(any(test,v8_copy_plan))]
+ include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../docs/research/v8-no-work-100-20260907/experiments/copy_scatter_plan_generated.rs"));
++#[cfg(all(v8_copy_tag_shared,not(all(v8_copy_plan,v8_copy_tag_split,v8_copy_tag_bounded))))]
++compile_error!("shared tags require the selected scatter and bounded tag kernels");
++#[cfg(any(test,v8_copy_tag_shared))]
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../docs/research/v8-no-work-100-20260907/experiments/copy_tag_shared_generated.rs"));
+-
++
+ pub(crate) fn evaluate_with_selectors(
+@@ -1054,8 +1095,10 @@
+-    #[cfg(v8_copy_plan)]
++    #[cfg(all(v8_copy_plan,not(v8_copy_tag_shared)))]
+     research_fill_scatter(&mut selector_tensor_scratch,selectors,&research_scatter_flags(append_index,variant));
++    #[cfg(v8_copy_tag_shared)]
++    research_fill_scatter_tag_shared(&mut selector_tensor_scratch,selectors,&research_scatter_flags(append_index,variant));
+     #[cfg(not(v8_copy_plan))]
+     let mut link_index = 0usize;
+@@ -1525,6 +1567,45 @@
+     #[test]
++    fn shared_tag_sums_and_coordinates_match_literal_source() {
++        let mut rng=Rng(0x7461_675f_7368_6172);
++        let max=QM31{c0:CM31::new(M31(2147483646),M31(2147483646)),
++            c1:CM31::new(M31(2147483646),M31(2147483646))};
++        for sample in 0..512 {
++            let high=match sample {
++                0=>[QM31::ZERO;64],1=>[QM31::ONE;64],2=>[max;64],
++                3..=66=>core::array::from_fn(|j| if j==sample-3 {max} else {QM31::ZERO}),
++                _=>core::array::from_fn(|_|rng.qm31()),
++            };
++            let selectors=Selectors{high,low:[QM31::ZERO;16]};
++            let flags=core::array::from_fn(|j| (sample>>(j%9))&1!=0);
++            let mut old=vec![QM31::ZERO;103];let mut shared=vec![QM31::ZERO;103];
++            research_fill_scatter(&mut old,&selectors,&flags);
++            research_fill_scatter_tag_shared(&mut shared,&selectors,&flags);
++            assert_eq!(&old[30..],&shared[30..]);
++            for c in 0..30 {
++                let mut sum=QM31::ZERO;let mut expected=QM31::ZERO;
++                for j in usize::from(COPY_TAG_COORDINATE_OFFSETS[c])..usize::from(COPY_TAG_COORDINATE_OFFSETS[c+1]) {
++                    let v=high[usize::from(COPY_TAG_TERMS.0[j])];sum=sum.add(v);
++                    expected=expected.add(v.mul_m31(M31(COPY_TAG_TERMS.1[j])));
++                }
++                assert_eq!(shared[c],sum);
++                assert_eq!(research_copy_tag_shared(c,shared[c],&selectors),expected);
++                assert_eq!(research_copy_tag_shared(c,shared[c],&selectors),research_copy_tag_split(c,&selectors));
++            }
++        }
++    }
++
++    #[test]
+     fn generated_scatter_flags_match_actual_link_weight() {
+         for variant in [PoolV1PairForestCompiledVariantV1::PrivateTransfer,PoolV1PairForestCompiledVariantV1::Withdrawal] {
