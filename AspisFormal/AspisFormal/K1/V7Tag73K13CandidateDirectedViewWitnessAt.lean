@@ -1,10 +1,10 @@
-import AspisFormal.K1.V7Tag73K13CandidateDirectedViewFunctional
+import AspisFormal.K1.V7Tag73K13CandidateDirectedViewWitness
 
 /-!
-# Concrete witness for a candidate-directed K1.3 view fibre
+# Specialized candidate-directed K1.3 view witness
 
-This module isolates the dependent constructor from the representative-choice
-and alignment modules so focused Lean jobs remain below the memory ceiling.
+This module fixes the generic witness target to the exact algebraic collision
+set.  It carries no collision membership proof.
 -/
 
 set_option autoImplicit false
@@ -12,7 +12,7 @@ set_option maxRecDepth 1000000
 set_option maxHeartbeats 2000000
 set_option linter.constructorNameAsVariable false
 
-namespace AspisK1.V7Tag73K13CandidateDirectedViewWitness
+namespace AspisK1.V7Tag73K13CandidateDirectedViewWitnessAt
 
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
@@ -29,11 +29,11 @@ open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
-open AspisK1.V7Tag73FinalWorkDigestProbability
 open AspisK1.V7Tag73JointQueryBatchSoundness
 open AspisK1.V7Tag73K13CandidateDirectedCoordinateSelected
 open AspisK1.V7Tag73K13CandidateDirectedProbabilityClosure
 open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
+open AspisK1.V7Tag73K13CandidateDirectedViewWitness
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73Q16DigestDrawReindex
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
@@ -46,10 +46,8 @@ open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
 
-/-- The actual collision execution is a member of its own pre-challenge
-coordinate fibre.  Every equality here is definitional; no source or
-probability claim is inserted. -/
-def exactCandidateDirectedK13ViewWitnessOf
+/-- Exact-target specialization of the generic view witness constructor. -/
+def exactCandidateDirectedK13ViewWitnessAt
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
     [Fintype HiddenTape]
     {parameters : ExactCompilerResourceParameters}
@@ -80,33 +78,11 @@ def exactCandidateDirectedK13ViewWitnessOf
     let factored := successfulGammaPrefixFactorization
       ⟨coordinates.2.2.2, success⟩
     ExactCandidateDirectedK13ViewWitness source candidate foldTrial finalTrial
-      sample.1 coordinates.1 coordinates.2.1 coordinates.2.2.1 factored.1 := by
-  let coordinates := exactCandidateDirectedRegroupedCoordinates
-    transitionFuel configuration candidate foldTrial finalTrial sample.1
-      sample.2
-  let factored := successfulGammaPrefixFactorization
-    ⟨coordinates.2.2.2, success⟩
-  exact
-    { answers := sample.2
-      input := input
-      k12 := k12
-      different := different
-      selected := selected
-      success := success
-      contextExact := rfl
-      foldExact := rfl
-      workExact := rfl
-      skeletonExact := rfl
-      view := exactJointQueryBatchPreChallengeView decoder source input k12
-        different
-      viewExact := rfl
-      viewCollisionTarget := rfl
-      viewActive := rfl
-      viewPreQueryDiscrepancy := rfl
-      viewExpected := rfl
-      viewAuthenticated := rfl }
+      sample.1 coordinates.1 coordinates.2.1 coordinates.2.2.1 factored.1 :=
+  exactCandidateDirectedK13ViewWitnessOf source input k12 different candidate
+    foldTrial finalTrial selected success
 
-#print axioms exactCandidateDirectedK13ViewWitnessOf
+#print axioms exactCandidateDirectedK13ViewWitnessAt
 
 end
-end AspisK1.V7Tag73K13CandidateDirectedViewWitness
+end AspisK1.V7Tag73K13CandidateDirectedViewWitnessAt

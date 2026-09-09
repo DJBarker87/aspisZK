@@ -105,13 +105,8 @@ structure ExactCandidateDirectedK13ViewWitness
   view : JointQueryBatchPreChallengeView
   viewExact : view = exactJointQueryBatchPreChallengeView decoder source input
     k12 different
-  sourceCollisionTarget : Finset QM31Exact
-  sourceCollisionTargetExact : sourceCollisionTarget =
-    exactTag73JointQueryBatchNonzeroCollisionSet
-      (source.preQueryDiscrepancy (hidden, answers) input)
-      (exactTag73K13ExpectedQueryVector decoder input k12)
-      (exactTag73K13AuthenticatedQueryVector decoder input k12)
-  viewCollisionTarget : view.collisionTarget = sourceCollisionTarget
+  viewCollisionTarget : view.collisionTarget =
+    exactTag73K13SourceCollisionTarget source input k12
   viewActive : view.active = true
   viewPreQueryDiscrepancy : view.preQueryDiscrepancy =
     source.preQueryDiscrepancy (hidden, answers) input

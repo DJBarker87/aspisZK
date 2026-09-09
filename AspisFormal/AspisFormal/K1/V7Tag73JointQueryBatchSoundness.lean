@@ -122,6 +122,16 @@ def jointQueryBatchNonzeroCollisionSet
     jointQueryBatchDiscrepancy preQueryDiscrepancy expected authenticated rho =
       0
 
+/-- A collision root carried against a short finite-set field. The equality
+pins that field to the exact joint-batch root set. -/
+structure JointQueryBatchCollisionCertificate
+    (preQueryDiscrepancy : K)
+    (expected authenticated : QueryVector K) (rho : K) where
+  target : Finset K
+  targetExact : target = jointQueryBatchNonzeroCollisionSet
+    preQueryDiscrepancy expected authenticated
+  collision : rho ∈ target
+
 /-- Direct constructor for the repaired nonzero collision set.  Keeping this
 generic prevents concrete protocol types from re-elaborating the finite-field
 filter and erase machinery. -/
@@ -161,6 +171,33 @@ theorem joint_collision_or_later_alphaRepair
   · exact Or.inr
       (execution.later_alphaRepair_of_before_one_ne_terminal afterQueryZero
         terminal)
+
+/-- Target-indexed form of `joint_collision_or_later_alphaRepair`. Packaging
+the root before protocol specialization avoids expanding its dependent
+membership type in downstream source bridges. -/
+theorem joint_collision_certificate_or_later_alphaRepair
+    (execution : CandidateExecution K)
+    (preQueryDiscrepancy : K)
+    (expected authenticated : QueryVector K) (rho : K)
+    (rhoNonzero : rho ≠ 0)
+    (different : expected ≠ authenticated)
+    (beforeOneExact : execution.discrepancyTrace.before 1 =
+      jointQueryBatchDiscrepancy preQueryDiscrepancy expected authenticated rho)
+    (terminal : execution.RelationTerminalAccepts) :
+    Nonempty (JointQueryBatchCollisionCertificate preQueryDiscrepancy expected
+        authenticated rho) ∨
+      ∃ round : Fin 4, 0 < round.val ∧
+        execution.discrepancyTrace.AlphaRepair round := by
+  rcases joint_collision_or_later_alphaRepair execution preQueryDiscrepancy
+      expected authenticated rho rhoNonzero different beforeOneExact terminal
+      with collision | repaired
+  · rcases collision with ⟨_, member⟩
+    exact Or.inl ⟨
+      { target := jointQueryBatchNonzeroCollisionSet preQueryDiscrepancy
+          expected authenticated
+        targetExact := rfl
+        collision := member }⟩
+  · exact Or.inr repaired
 
 /-- If the query vectors differ, at most sixteen nonzero challenges can hide
 the combined prior/query discrepancy. -/
@@ -221,6 +258,7 @@ end FiniteField
 #print axioms jointQueryBatchPolynomial_natDegree_le_sixteen
 #print axioms mem_jointQueryBatchNonzeroCollisionSet_of_nonzero_of_zero
 #print axioms joint_collision_or_later_alphaRepair
+#print axioms joint_collision_certificate_or_later_alphaRepair
 #print axioms jointQueryBatch_nonzero_collision_card_le_sixteen_of_vectors_ne
 #print axioms legacy_start_at_one_allows_universal_constant_cancellation
 

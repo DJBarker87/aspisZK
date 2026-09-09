@@ -1,4 +1,4 @@
-import AspisFormal.K1.V7Tag73K13CandidateDirectedSourceBridge
+import AspisFormal.K1.V7Tag73K13CandidateDirectedViewAlignment
 import AspisFormal.K1.V7Tag73PreQ16OperationalActualLawBounds
 
 /-!
@@ -39,6 +39,8 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13BoundChallengeClosure
 open AspisK1.V7Tag73K13CandidateDirectedSourceBridge
+open AspisK1.V7Tag73K13CandidateDirectedViewAlignment
+open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
 open AspisK1.V7Tag73K13IdealErrorLedger
 open AspisK1.V7Tag73K13PreQ16JointEventHandoff
 open AspisK1.V7Tag73K13PreQ16TargetProbability
@@ -253,7 +255,7 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (viewAlignment : ExactCandidateDirectedK13ViewAlignment transitionFuel
+    (viewFunctional : ExactCandidateDirectedK13ViewFunctional transitionFuel
       configuration projection fixedInstance decoder
         (relationSource.toK13SourceObligations transitionFuel configuration
           projection fixedInstance decoder))
@@ -273,6 +275,9 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
     projection fixedInstance
   let source := relationSource.toK13SourceObligations transitionFuel
     configuration projection fixedInstance decoder
+  let viewAlignment :=
+    AspisK1.V7Tag73K13CandidateDirectedViewAlignment.ExactCandidateDirectedK13ViewFunctional.toViewAlignment
+      viewFunctional
   have q16Bound :=
     exact_clean_preQ16_trial_union_probability_le_one_forest_of_bindings
       (decoder := decoder) hiddenLaw environment.toDecodedParsedSourceProvider

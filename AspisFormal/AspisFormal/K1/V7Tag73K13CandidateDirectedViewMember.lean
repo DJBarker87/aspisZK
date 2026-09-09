@@ -1,10 +1,13 @@
-import AspisFormal.K1.V7Tag73K13CandidateDirectedViewFunctional
+import AspisFormal.K1.V7Tag73K13CandidateDirectedViewFacts
+import AspisFormal.K1.V7Tag73K13CandidateDirectedViewWitnessAt
 
 /-!
-# Concrete witness for a candidate-directed K1.3 view fibre
+# Candidate-directed K1.3 collision membership
 
-This module isolates the dependent constructor from the representative-choice
-and alignment modules so focused Lean jobs remain below the memory ceiling.
+This module transports only collision-target membership across the functional
+view equality.  Keeping this proof separate prevents Lean from normalizing the
+large scheduler indices while it is also constructing the other four aligned
+view fields.
 -/
 
 set_option autoImplicit false
@@ -12,7 +15,7 @@ set_option maxRecDepth 1000000
 set_option maxHeartbeats 2000000
 set_option linter.constructorNameAsVariable false
 
-namespace AspisK1.V7Tag73K13CandidateDirectedViewWitness
+namespace AspisK1.V7Tag73K13CandidateDirectedViewMember
 
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
@@ -29,11 +32,14 @@ open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
 open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
-open AspisK1.V7Tag73FinalWorkDigestProbability
 open AspisK1.V7Tag73JointQueryBatchSoundness
 open AspisK1.V7Tag73K13CandidateDirectedCoordinateSelected
 open AspisK1.V7Tag73K13CandidateDirectedProbabilityClosure
+open AspisK1.V7Tag73K13CandidateDirectedSourceBridge
+open AspisK1.V7Tag73K13CandidateDirectedViewFacts
 open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
+open AspisK1.V7Tag73K13CandidateDirectedViewWitness
+open AspisK1.V7Tag73K13CandidateDirectedViewWitnessAt
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73Q16DigestDrawReindex
 open AspisK1.V7Tag73SuccessfulSamplerConditioningBridge
@@ -46,10 +52,9 @@ open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
 
-/-- The actual collision execution is a member of its own pre-challenge
-coordinate fibre.  Every equality here is definitional; no source or
-probability claim is inserted. -/
-def exactCandidateDirectedK13ViewWitnessOf
+/-- The selected functional view contains the actual query-batch challenge
+whenever the source execution supplies the exact collision certificate. -/
+theorem exactCandidateDirectedFunctionalView_collisionMember
     {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
     [Fintype HiddenTape]
     {parameters : ExactCompilerResourceParameters}
@@ -59,14 +64,15 @@ def exactCandidateDirectedK13ViewWitnessOf
     {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
     {fixedInstance : PublicInstance Statement}
     {decoder : ExactDecoderInstantiation QM31Exact}
-    (source : ExactTag73K13SourceObligations transitionFuel configuration
-      projection fixedInstance decoder)
+    {source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder}
+    (functional : ExactCandidateDirectedK13ViewFunctional transitionFuel
+      configuration projection fixedInstance decoder source)
     {sample : ExactCompilerSample HiddenTape parameters}
     (input : ExactK12OperationalInput transitionFuel configuration projection
       fixedInstance sample)
     (k12 : ExactPrefixK12Certificate input)
-    (different : exactTag73K13ExpectedQueryVector decoder input k12 ≠
-      exactTag73K13AuthenticatedQueryVector decoder input k12)
+    (collisionFacts : ExactTag73K13CollisionCertificate source input k12)
     (candidate : Q16DigestSlot)
     (foldTrial finalTrial : ExactCompilerExposureTrial parameters)
     (selected : ExactTag73CandidateDirectedCoordinateSelected input candidate
@@ -79,34 +85,36 @@ def exactCandidateDirectedK13ViewWitnessOf
         sample.2
     let factored := successfulGammaPrefixFactorization
       ⟨coordinates.2.2.2, success⟩
-    ExactCandidateDirectedK13ViewWitness source candidate foldTrial finalTrial
-      sample.1 coordinates.1 coordinates.2.1 coordinates.2.2.1 factored.1 := by
+    exactOperationalChallenge input .queryBatch ∈
+      (exactCandidateDirectedFunctionalView source candidate foldTrial
+        finalTrial sample.1 coordinates.1 coordinates.2.1 coordinates.2.2.1
+          factored.1).collisionTarget := by
   let coordinates := exactCandidateDirectedRegroupedCoordinates
     transitionFuel configuration candidate foldTrial finalTrial sample.1
       sample.2
   let factored := successfulGammaPrefixFactorization
     ⟨coordinates.2.2.2, success⟩
-  exact
-    { answers := sample.2
-      input := input
-      k12 := k12
-      different := different
-      selected := selected
-      success := success
-      contextExact := rfl
-      foldExact := rfl
-      workExact := rfl
-      skeletonExact := rfl
-      view := exactJointQueryBatchPreChallengeView decoder source input k12
-        different
-      viewExact := rfl
-      viewCollisionTarget := rfl
-      viewActive := rfl
-      viewPreQueryDiscrepancy := rfl
-      viewExpected := rfl
-      viewAuthenticated := rfl }
+  let witness : ExactCandidateDirectedK13ViewWitness source candidate
+      foldTrial finalTrial sample.1 coordinates.1 coordinates.2.1
+        coordinates.2.2.1 factored.1 :=
+    exactCandidateDirectedK13ViewWitnessAt source input k12
+      collisionFacts.different candidate foldTrial finalTrial selected success
+  have viewExact := exactCandidateDirectedFunctionalView_eq functional witness
+  change exactCandidateDirectedFunctionalView source candidate foldTrial
+      finalTrial sample.1 coordinates.1 coordinates.2.1 coordinates.2.2.1
+        factored.1 = witness.preChallengeView at viewExact
+  have witnessTarget : witness.view.collisionTarget =
+      exactTag73K13SourceCollisionTarget source input k12 := by
+    exact witness.viewCollisionTarget
+  have currentTarget :
+      (exactCandidateDirectedFunctionalView source candidate foldTrial
+        finalTrial sample.1 coordinates.1 coordinates.2.1 coordinates.2.2.1
+          factored.1).collisionTarget = collisionFacts.target :=
+    (congrArg JointQueryBatchPreChallengeView.collisionTarget viewExact).trans
+      (witnessTarget.trans collisionFacts.targetExact.symm)
+  exact memLeftOfFinsetEq currentTarget collisionFacts.collision
 
-#print axioms exactCandidateDirectedK13ViewWitnessOf
+#print axioms exactCandidateDirectedFunctionalView_collisionMember
 
 end
-end AspisK1.V7Tag73K13CandidateDirectedViewWitness
+end AspisK1.V7Tag73K13CandidateDirectedViewMember
