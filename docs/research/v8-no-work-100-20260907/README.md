@@ -1,6 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [fixed-width gamma dots](gamma-fixed-review.md).
+Latest: [byte-equivalent Merkle inputs and borrowed digests](merkle-input-review.md).
+The combined implementation saves **12,472–12,502 CU** on identical complete
+maximum-body proofs. Worst observed is **1,101,533 CU**, with **98,467 CU**
+headroom below the real 1.2M cap. Lean proves the byte-input identity; raw-byte,
+small-tree, full-transaction and rollback controls pass. The ELF shrinks and
+the body stays **40,282 bytes**. See [results](merkle-input-results.json).
+V7 parity and universal CU coverage remain open.
+
+Previous: [fixed-width gamma dots](gamma-fixed-review.md).
 Another exact rewrite saves **13,761–13,779 CU** on identical complete
 maximum-body proofs. Worst observed is **1,114,035 CU**, with **85,965 CU**
 headroom under the real 1.2M cap, including pinned classic Token settlement.
