@@ -1,4 +1,4 @@
-import AspisFormal.K1.V7Tag73K13CandidateDirectedSourceFactorization
+import AspisFormal.K1.V7Tag73K13CommittedExecutionInvariant
 import AspisFormal.K1.V7Tag73K13CandidateDirectedViewAlignment
 import AspisFormal.K1.V7Tag73PreQ16OperationalActualLawBounds
 
@@ -33,6 +33,8 @@ open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCleanBidirectionalFoldOneFoldProbability
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactConcreteK13K14Events
+open AspisK1.V7Tag73K13CommittedInputInvariant
+open AspisK1.V7Tag73K13CommittedExecutionInvariant
 open AspisK1.V7Tag73ExactFixedInstanceEvent
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactOneFoldEncoderBinding
@@ -258,7 +260,7 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (sourceInvariant : ExactCandidateDirectedK13CommittedExecutionInvariant
+    (sourceInvariant : ExactCandidateDirectedK13CommittedInputInvariant
       transitionFuel
       configuration projection fixedInstance decoder
         (relationSource.toK13SourceObligations transitionFuel configuration
@@ -279,7 +281,10 @@ theorem exact_tag73_preQ16_operational_k13_candidate_directed_probability_le
     projection fixedInstance
   let source := relationSource.toK13SourceObligations transitionFuel
     configuration projection fixedInstance decoder
-  let viewFunctional := sourceInvariant.toViewFunctional
+  let executionInvariant :=
+    AspisK1.V7Tag73K13CommittedExecutionInvariant.ExactCandidateDirectedK13CommittedInputInvariant.toExecutionInvariant
+      sourceInvariant
+  let viewFunctional := executionInvariant.toViewFunctional
   let viewAlignment :=
     AspisK1.V7Tag73K13CandidateDirectedViewAlignment.ExactCandidateDirectedK13ViewFunctional.toViewAlignment
       viewFunctional
