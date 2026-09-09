@@ -1,0 +1,158 @@
+{
+  "schema": "aspis-v8-focused-lean-evidence/v1",
+  "status": "formal proof complete: field/list interfaces; actual Rust-machine refinement incomplete",
+  "research_branch": "research/v8-no-work-100-20260907",
+  "research_source_revision": "1b8f72d9de123b16eb831754e58518e66a33d3f3",
+  "borrowed_source_revision": "26a9cd4718aae9f9de7ef1c3394fb74a229085d5",
+  "observed_cache_head": "e674314c6d062377f29df84f3c4c94d4ebd7572d",
+  "mathlib_revision": "81a5d257c8e410db227a6665ed08f64fea08e997",
+  "environment": {
+    "platform": "arm64-apple-darwin24.6.0",
+    "lean_version": "4.32.0",
+    "lean_commit": "8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+    "lean_memory_flag": "-M7000",
+    "aggregate_process_tree_rss_guard_bytes": 7516192768,
+    "serialized_builds": true,
+    "cache": "/Users/dominic/ZK/AspisFormal",
+    "joint_cache": "/tmp/aspis-v8-joint-cache.n3hmg5"
+  },
+  "artifact_sha256": {
+    "experiments/SharedInverseReplay.lean": "c21931ba16fc4a862e2d62f7fb756e81573aaeefb4d94b72dd9e744c7aa2b6b2",
+    "experiments/SharedInverseReplay.olean": "429845cd8f6cc9247d84ec9e39eb76de1faf084c6b0f657aa9797eb9f0867932",
+    "experiments/LineNormBuffer.lean": "2e1ecd394aaca5ff14542eb640fba75a7d12d2110d060ce91fb3721e52c736a1",
+    "experiments/LineNormBuffer.olean": "4c217817b58b307bfc49226438b906584d8007f89c7df9f5a286cb7a930521a8",
+    "experiments/run_norm_buffer.sh": "808a9298d7992a0af9501569dfa142e3615ebf9bfcac6b6a01432938259a8a74",
+    "experiments/shared-inverse-pinned.sha256": "1587a98688753c1c0391bcf4f6ded5537c08c346e648aa2e72a81d7001aa9366",
+    "experiments/shared-inverse-replay-v1.log": "3fc6c3512b49409982a62c95eb6636e41a0fa3b1adb611eaa7ef2d33450ec219",
+    "experiments/line-norm-buffer-v1.log": "7352e74d933b5318841a5ab5729827db972e4c6038dc595951f2d3c91b06d947",
+    "experiments/line-norm-buffer-v2.log": "e12855b2e398037a6b6937665131d0db905b77500b6f79ba9df18ea42ba0f625",
+    "experiments/line-norm-buffer-v3.log": "2d323af5ffee5deb480ba47213c1e723bd4beff43cca93b3e265534dcb364043"
+  },
+  "unchanged_research_rust_source_sha256": {
+    "experiments/line_norm.rs": "8f84072acbddf35b7e811036a093a0de4a31d44fc62223938cc0f87dcb153f05",
+    "experiments/circle_norm.rs": "95985ca1a1d09f9e23805145f2dfd49c38016803844a768bd919bf4bbace7a1a",
+    "experiments/joined_inverse.rs": "5dc5bb8aa79c512867897e96eb09ab5a8879e65f73de2c2b10af872ccdcd5a32",
+    "experiments/relation_callback.rs": "285c90695cc7558a88ffc7cb50de4235b68c7ceed9d0600d5cc9ba7f682607ed"
+  },
+  "commands": [
+    "bash docs/research/v8-no-work-100-20260907/experiments/run_norm_buffer.sh SharedInverseReplay docs/research/v8-no-work-100-20260907/experiments/shared-inverse-replay-v1.log",
+    "bash docs/research/v8-no-work-100-20260907/experiments/run_norm_buffer.sh LineNormBuffer docs/research/v8-no-work-100-20260907/experiments/line-norm-buffer-v3.log"
+  ],
+  "successful_runs": [
+    {
+      "target": "SharedInverseReplay.lean",
+      "log": "experiments/shared-inverse-replay-v1.log",
+      "exit_code": 0,
+      "lean_wall_seconds": 11.92,
+      "peak_rss_bytes": 2859483136,
+      "swaps": 0,
+      "provenance_unchanged": true,
+      "axiom_audits": [
+        "backward_eq_sweep",
+        "finish_correct",
+        "batchTwo_eq_separate",
+        "batchTwo_eq_joined"
+      ]
+    },
+    {
+      "target": "LineNormBuffer.lean",
+      "log": "experiments/line-norm-buffer-v3.log",
+      "exit_code": 0,
+      "lean_wall_seconds": 16.08,
+      "peak_rss_bytes": 5606490112,
+      "swaps": 0,
+      "provenance_unchanged": true,
+      "axiom_audits": [
+        "halfC_double",
+        "halfC_eq",
+        "point_norms",
+        "norms_eq",
+        "scalar_norms_eq",
+        "buffer_lengths",
+        "inverseLines_eq_checked"
+      ]
+    }
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "retained_source_sorry_or_new_axiom": false,
+  "failed_runs": [
+    {
+      "target": "LineNormBuffer.lean",
+      "log": "experiments/line-norm-buffer-v1.log",
+      "exit_code": 1,
+      "lean_wall_seconds": 25.12,
+      "peak_rss_bytes": 5321506816,
+      "swaps": 0,
+      "reason": "Local base-literal/cast, finite-vector, list-expression and let-reduction proof errors; not a memory-pressure failure.",
+      "replacement": "Explicit M31 casts, finite-vector head/tail simp lemmas, lambda/list congruence and local let reduction.",
+      "claimed_proof_result": false
+    },
+    {
+      "target": "LineNormBuffer.lean",
+      "log": "experiments/line-norm-buffer-v2.log",
+      "exit_code": 1,
+      "lean_wall_seconds": 17.21,
+      "peak_rss_bytes": 5493981184,
+      "swaps": 0,
+      "reason": "Only the base literal 2 nonzero proof remained: Nat-cast rewrite did not match its OfNat representation.",
+      "replacement": "Small exact canonical check: by decide : (2 : M31Exact) != 0. No field enumeration or cap increase.",
+      "claimed_proof_result": false
+    }
+  ],
+  "interfaces": [
+    {
+      "theorem": "SharedInverseReplay.batchTwo_eq_separate",
+      "status": "formal proof complete",
+      "inputs": "Arbitrary field lists; checks empty/zero in both lists.",
+      "result": "Actual shared product inverse and reverse cursor recurrence equal checked separate inverses."
+    },
+    {
+      "theorem": "LineNormBuffer.halfC_double",
+      "status": "formal proof complete",
+      "inputs": "Canonical CM31 coordinate values.",
+      "result": "Literal low31 word-half on each coordinate satisfies 2*halfC n=n."
+    },
+    {
+      "theorem": "LineNormBuffer.point_norms",
+      "status": "formal proof complete",
+      "inputs": "QM31 chord coefficients; typed M31 unit-circle point.",
+      "result": "Actual five-coefficient constructor and 2*x^2-1 line produce the four denominator norms in source quadrant order."
+    },
+    {
+      "theorem": "LineNormBuffer.norms_eq",
+      "status": "formal proof complete",
+      "inputs": "Ordered list of those same points.",
+      "result": "Derived point/line zip and flatMap equal map normK of constructed denominator list."
+    },
+    {
+      "theorem": "LineNormBuffer.inverseLines_eq_checked",
+      "status": "formal proof complete",
+      "inputs": "Chord coefficients and ordered typed unit points only; no supplied norm or reciprocal equality.",
+      "result": "Reconstruction consumes generated norms and shared-inverse outputs and equals QueriedInverse.checked on the constructed values and base inputs."
+    }
+  ],
+  "remaining_interfaces": [
+    "Actual selected immutable point lookup into the typed unit-point list.",
+    "Complete flattened point/index coupling to QueriedResidual.denominatorList and baseList for the parsed q22 proof.",
+    "Mutable Rust Vec, range/length/error-enum and machine-arithmetic source translation.",
+    "Packed canonical gamma parsing, Merkle authentication and actual replay/rewinding.",
+    "Acceptance-to-recovery, valid-payment extraction, complete Fiat-Shamir and full-view privacy composition."
+  ],
+  "measurement_scope": "Focused Lean compilation only. No new prover, extractor, host-verifier or SBF execution.",
+  "budget": {
+    "proof_body_formula": "697*16 + 52 + 24 + 22*621 + 2*296*26",
+    "maximum_proof_body_bytes": 40282,
+    "new_proof_bytes": 0,
+    "new_transcript_messages": 0,
+    "new_probability_terms": [],
+    "full_transaction_cu": null,
+    "global_security_bits": null
+  },
+  "source_edits": [],
+  "production_activation": false,
+  "committed_by_subagent": false
+}
