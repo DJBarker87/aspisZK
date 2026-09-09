@@ -1,5 +1,7 @@
 import AspisFormal.K1.V7Tag73ConcreteRootSweepClient
 import AspisFormal.K1.V7Tag73ConcreteRestorationTraceInduction
+import AspisFormal.K1.V7Tag73ExactCompilerOperationalCaps
+import AspisFormal.K1.V7Tag73ExactLegalSameTapeEvent
 import AspisFormal.K1.V7Tag73RootSqueezeForkEmission
 
 /-!
@@ -29,12 +31,21 @@ open AspisK1.V7Tag73ConcreteRestorationClient
 open AspisK1.V7Tag73ConcreteRestorationTraceInduction
 open AspisK1.V7Tag73ConcreteRootSweepClient
 open AspisK1.V7Tag73CompletedFullRunProjection
+open AspisK1.V7Tag73CanonicalFutureFreeFuel
+open AspisK1.V7Tag73CheckedRefinementFullFutureFreePath
 open AspisK1.V7Tag73DeterministicRefinement
+open AspisK1.V7Tag73ExactCompilerOperationalCaps
+open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactLegalSameTapeEvent
+open AspisK1.V7Tag73ExactPlainRomRun
+open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FutureFreeFullControl
+open AspisK1.V7Tag73FutureFreeCheckedRefinementBisimulation
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73OperationalCausalInjection
 open AspisK1.V7Tag73OperationalNodeCertificate
 open AspisK1.V7Tag73PreparedRestorationRoles
+open AspisK1.V7Tag73RawFutureFreeDriver
 open AspisK1.V7Tag73RawSameTapeSource
 open AspisK1.V7Tag73RawStrictReplacementSuffix
 open AspisK1.V7Tag73RootSqueezeForkEmission
@@ -47,6 +58,64 @@ open AspisK1.V7Tag73UniformRawVerifierExecution
 noncomputable section
 
 universe u
+
+/-! ## The literal deployed root contains the typed query-batch transition -/
+
+/-- Exact source acceptance does not merely decode the query-batch challenge:
+the actual completed root runtime contains its block-zero verifier transition
+at a concrete index covered by the deployed 1513-position sweep. -/
+theorem exact_clean_root_has_indexed_query_batch_transition
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Proof Payload}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (root : ExactCleanSourceRootProjection transitionFuel configuration
+      projection sample) :
+    ∃ transitionIndex transition reply,
+      verifierTransitionAt? root.runtime.node transitionIndex =
+          some transition ∧
+        transitionIndex < 1513 ∧
+        transition.event =
+          .verifier (.squeezePair (.challenge .queryBatch) 0) reply := by
+  obtain ⟨transition, reply, transitionMember, eventExact⟩ :=
+    root.canonical.construction.queryBatchTransitionExact
+  have finalStateExact : root.canonical.construction.complete.final =
+      root.runtime.verifierFinalState :=
+    root.actualPathAlignment.finalStateExact.symm.trans
+      root.projected.finalStateExact
+  rw [finalStateExact] at transitionMember
+  rw [List.mem_iff_getElem] at transitionMember
+  obtain ⟨transitionIndex, within, valueExact⟩ := transitionMember
+  have transitionCount :
+      root.canonical.construction.complete.final.transitions.length ≤
+        root.canonical.construction.complete.fuel := by
+    have growth := drive_raw_future_free_transition_growth_le_fuel
+      (fixedTapeFutureFreeEnvironment root.tape)
+      (fixedTapeRawMessages root.tape)
+      root.canonical.construction.complete.fuel
+      (initialFutureFreeVerifierState
+        (FixedBindings.ofContext root.tape.messages.context))
+      root.canonical.construction.complete.pairs
+      root.canonical.construction.complete.final
+      (by simpa [initialRawFutureFreeProgram] using
+        root.canonical.construction.complete.path)
+    simpa [initialFutureFreeVerifierState] using growth
+  have runtimeTransitionCount :
+      root.runtime.verifierFinalState.transitions.length ≤
+        root.canonical.construction.complete.fuel := by
+    rw [← finalStateExact]
+    exact transitionCount
+  have indexWithin : transitionIndex < 1513 := by
+    have cap := root.canonical.fuelWithinProtocolCap
+    have protocolCap : tag73CanonicalDriverFuelCap < 1513 := by decide
+    omega
+  refine ⟨transitionIndex, transition, reply, ?_, indexWithin, eventExact⟩
+  unfold verifierTransitionAt?
+  rw [List.getElem?_eq_some_iff]
+  exact ⟨within, valueExact⟩
 
 /-- A selected root query-batch transition emits a fork whose typed owner and
 block are fixed before either fork answer is exposed. -/
@@ -266,6 +335,7 @@ theorem pair_fork_header_exposes_exact_adjacent_coordinates
   | returned => simp [schedulerNativePairForkHeader?] at headerExact
   | failed => simp [schedulerNativePairForkHeader?] at headerExact
 
+#print axioms exact_clean_root_has_indexed_query_batch_transition
 #print axioms literal_root_query_batch_dispatch_emits_typed_fork
 #print axioms deployed_root_sweep_covers_query_batch_typed_fork
 #print axioms pair_fork_header_exposes_exact_adjacent_coordinates

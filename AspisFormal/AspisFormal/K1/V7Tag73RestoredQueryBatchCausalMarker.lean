@@ -129,6 +129,41 @@ theorem typed_query_batch_prepared_dispatch_is_marked
   exact ⟨accumulator, prepared, role, resume, ready, roleExact, ownerExact,
     blockExact, coherent, globalRoom, pairRoom, rfl⟩
 
+/-- The public one-request dispatcher exposes the same pre-answer marker when
+its executable preparer returns the typed query-batch preparation.  This is
+the bridge used inside the literal root-sweep client interpreter. -/
+theorem typed_query_batch_dispatch_one_is_marked
+    {Statement Proof Payload Result : Type}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+    (prepared : PreparedConcreteRestoration Statement Proof Payload)
+    (role : PreparedRestorationPairRole)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result))
+    (ready : prepareConcreteRestorationFromStartProgram startProgram
+      configuration accumulator prepared.request = .ready prepared)
+    (roleExact : preparedRestorationPairRole? prepared = some role)
+    (ownerExact : role.owner = .challenge .queryBatch)
+    (blockExact : role.block = 0)
+    (coherent : HistoryTotalCoherent prepared.programmingBase)
+    (globalRoom : configuration.oracleLimits.totalCalls ≤ globalOracleCalls)
+    (pairRoom : prepared.programmingBase.history.length + 2 ≤
+      globalOracleCalls) :
+    typedRestoredQueryBatchForkStartsHere (Result := Result) startProgram
+        environment configuration
+        (dispatchOneConcreteRestoration startProgram environment configuration
+          accumulator prepared.request resume).erase = true := by
+  simp only [dispatchOneConcreteRestoration, dispatchConcreteRestoration, ready]
+  exact typed_query_batch_prepared_dispatch_is_marked startProgram environment
+    configuration accumulator prepared role resume ready roleExact ownerExact
+      blockExact coherent globalRoom pairRoom
+
 /-- Every marked cursor is operationally at a fork-output request.  This is
 the key fail-closed fact: a machine/cache-hit cursor cannot satisfy the typed
 marker merely because its raw SHA input resembles a query-batch squeeze. -/
@@ -182,6 +217,7 @@ def exactCompilerTypedRestoredQueryBatchCoordinates
 #print axioms IsTypedRestoredQueryBatchForkStart
 #print axioms typed_restored_query_batch_fork_starts_here_iff
 #print axioms typed_query_batch_prepared_dispatch_is_marked
+#print axioms typed_query_batch_dispatch_one_is_marked
 #print axioms marked_query_batch_cursor_seeks_fork_output
 #print axioms exactCompilerTypedRestoredQueryBatchCoordinates
 

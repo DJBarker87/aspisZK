@@ -2390,6 +2390,142 @@ def ExactChallengeRecordsForSlots (messages : Messages)
     ({ id := id, value := messages.challengeValue id } : DecodedChallenge) ∈
       state.current.decodedChallenges
 
+/-- Each completed linear challenge slot has a literal block-zero verifier
+transition in the retained future-free transition log.  The reply is
+existential because only the typed owner and block are needed by restoration;
+its two digest values remain fixed by the corresponding operational step. -/
+def ExactChallengeTransitionsForSlots (slots : List FutureFreeSlot)
+    (state : FutureFreeVerifierState) : Prop :=
+  ∀ id, .challenge id ∈ slots →
+    ∃ transition reply,
+      transition ∈ state.transitions ∧
+        transition.event =
+          .verifier (.squeezePair (.challenge id) 0) reply
+
+/-- A successful verifier advance appends the action already forced by the
+pre-reply control state. -/
+theorem successful_future_free_advance_is_forced_append
+    (environment : FutureFreeEnvironment)
+    (state next : FutureFreeVerifierState) (action : VerifierAction)
+    (reply : VerifierReply)
+    (forced : state.current.control.nextVerifierAction? = some action)
+    (advanced : advanceFutureFreeVerifier environment state reply = some next) :
+    ∃ snapshot,
+      next = appendFutureFreeSnapshot state (.verifier action reply) snapshot := by
+  rw [advanceFutureFreeVerifier] at advanced
+  obtain ⟨actualAction, actualForced, advanced⟩ :=
+    Option.bind_eq_some_iff.mp advanced
+  have actionExact : actualAction = action :=
+    Option.some.inj (actualForced.symm.trans forced)
+  subst actualAction
+  obtain ⟨nextCore, _coreExact, advanced⟩ :=
+    Option.bind_eq_some_iff.mp advanced
+  obtain ⟨snapshot, _snapshotExact, finalExact⟩ :=
+    Option.bind_eq_some_iff.mp advanced
+  exact ⟨snapshot, (Option.some.inj finalExact).symm⟩
+
+/-- An actual driver microstep cannot delete an earlier transition. -/
+theorem raw_future_free_microstep_preserves_transition_membership
+    (environment : FutureFreeEnvironment) (raw : RawTag73ProverMessages)
+    (state next : FutureFreeVerifierState)
+    (pairs : List (ShaInput × ShaOutput))
+    (path : MachineQueryPath
+      (rawFutureFreeMicrostep environment raw state) pairs next)
+    (transition : FutureFreeTransition)
+    (member : transition ∈ state.transitions) :
+    transition ∈ next.transitions := by
+  have step := raw_future_free_microstep_path_is_operational environment raw
+    state next pairs path
+  cases step with
+  | prover submitted event snapshot appendExact =>
+      rw [appendExact]
+      simp only [appendFutureFreeSnapshot, List.mem_append,
+        List.mem_singleton]
+      exact Or.inl member
+  | @verifier _ action reply _ forced replyPath advanced =>
+      obtain ⟨snapshot, appendExact⟩ :=
+        successful_future_free_advance_is_forced_append environment state next
+          action reply forced advanced
+      rw [appendExact]
+      simp only [appendFutureFreeSnapshot, List.mem_append,
+        List.mem_singleton]
+      exact Or.inl member
+  | stutter noSubmission noAction =>
+      exact member
+
+/-- A complete nonterminal driver trace retains every transition already
+present at its entry state. -/
+theorem nonterminal_raw_driver_trace_preserves_transition_membership
+    (environment : FutureFreeEnvironment) (raw : RawTag73ProverMessages)
+    (state final : FutureFreeVerifierState) (steps : Nat)
+    (pairs : List (ShaInput × ShaOutput))
+    (trace : NonterminalRawDriverTrace environment raw state steps pairs final)
+    (transition : FutureFreeTransition)
+    (member : transition ∈ state.transitions) :
+    transition ∈ final.transitions := by
+  induction trace with
+  | stop current => exact member
+  | @next current middle final head tail tailSteps headPath nonterminal rest ih =>
+      exact ih (raw_future_free_microstep_preserves_transition_membership
+        environment raw current middle head headPath transition member)
+
+/-- Any positive nonterminal trace beginning at a linear challenge consumes
+that challenge's block-zero squeeze first.  This is a control-state inversion,
+not a classifier on the raw SHA input. -/
+theorem nonterminal_trace_from_linear_challenge_has_block_zero_transition
+    (environment : FutureFreeEnvironment) (raw : RawTag73ProverMessages)
+    (state final : FutureFreeVerifierState) (steps : Nat)
+    (pairs : List (ShaInput × ShaOutput)) (id : ChallengeId)
+    (remaining : List FutureFreeSlot)
+    (atControl : state.current.control =
+      .linear (.challenge id :: remaining))
+    (trace : NonterminalRawDriverTrace environment raw state steps pairs final)
+    (positive : 0 < steps) :
+    ∃ transition reply,
+      transition ∈ final.transitions ∧
+        transition.event =
+          .verifier (.squeezePair (.challenge id) 0) reply := by
+  induction trace with
+  | stop current => omega
+  | @next current middle final head tail tailSteps headPath nonterminal rest =>
+      have step := raw_future_free_microstep_path_is_operational environment raw
+        current middle head headPath
+      cases step with
+      | prover submitted event snapshot appendExact =>
+          simp [submitNextRawMessage, atControl] at submitted
+      | @verifier _ action reply _ forced replyPath advanced =>
+          have expected : current.current.control.nextVerifierAction? =
+              some (.squeezePair (.challenge id) 0) := by
+            rw [atControl]
+            rfl
+          have actionExact : action =
+              .squeezePair (.challenge id) 0 :=
+            Option.some.inj (forced.symm.trans expected)
+          subst action
+          obtain ⟨snapshot, appendExact⟩ :=
+            successful_future_free_advance_is_forced_append environment
+              current middle (.squeezePair (.challenge id) 0) reply forced
+                advanced
+          let transition : FutureFreeTransition :=
+            { before := current.current
+              event := .verifier (.squeezePair (.challenge id) 0) reply
+              after := snapshot }
+          have middleMember : transition ∈ middle.transitions := by
+            rw [appendExact]
+            simp [transition, appendFutureFreeSnapshot]
+          exact ⟨transition, reply,
+            nonterminal_raw_driver_trace_preserves_transition_membership
+              environment raw middle final tailSteps tail rest transition
+                middleMember,
+            rfl⟩
+      | stutter noSubmission noAction =>
+          have expected : current.current.control.nextVerifierAction? =
+              some (.squeezePair (.challenge id) 0) := by
+            rw [atControl]
+            rfl
+          rw [expected] at noAction
+          contradiction
+
 theorem work_slot_event_run_exposes
     (table : FixedOracleTable) (tape : DeployedFixedTape)
     (stage : WorkStage) (before after : EvalState)
@@ -2442,6 +2578,7 @@ theorem fixed_tape_linear_region_gives_future_free_trace
       SameDigest final.current.core after ∧
       final.current.q16Candidates = state.current.q16Candidates ∧
       ExactChallengeRecordsForSlots tape.messages slots final ∧
+      ExactChallengeTransitionsForSlots slots final ∧
       steps = fixedTapeLinearFuels tape slots := by
   induction slots generalizing state before with
   | nil =>
@@ -2450,9 +2587,10 @@ theorem fixed_tape_linear_region_gives_future_free_trace
           Option.some.inj run
       subst after
       refine ⟨0, [], state, .stop state, path_uses_fixed_table_nil table,
-        ?_, same, rfl, ?_, rfl⟩
+        ?_, same, rfl, ?_, ?_, rfl⟩
       simpa using atControl
       simp [ExactChallengeRecordsForSlots]
+      simp [ExactChallengeTransitionsForSlots]
   | cons slot rest ih =>
       rw [fixed_tape_linear_events_cons] at run
       obtain ⟨middle, headRun, restRun⟩ :=
@@ -2503,6 +2641,7 @@ theorem fixed_tape_linear_region_gives_future_free_trace
                 exact nextSame
               obtain ⟨tailSteps, tailPairs, final, tailTrace, tailTable,
                   finalControl, finalSame, finalCandidates, tailRecords,
+                  tailTransitions,
                   tailFuel⟩ :=
                 ih next middle nextControl nextSame' restRun restSupported
               refine ⟨1 + tailSteps, headPairs ++ tailPairs, final,
@@ -2511,10 +2650,12 @@ theorem fixed_tape_linear_region_gives_future_free_trace
                   (fixedTapeRawMessages tape) state next final 1 tailSteps
                   headPairs tailPairs headTrace tailTrace,
                 path_uses_fixed_table_append table headPairs tailPairs headTable
-                  tailTable, finalControl, finalSame, ?_, ?_, ?_⟩
+                  tailTable, finalControl, finalSame, ?_, ?_, ?_, ?_⟩
               · exact finalCandidates.trans nextCandidates
               · intro id member
                 exact tailRecords id (by simpa using member)
+              · intro id member
+                exact tailTransitions id (by simpa using member)
               · simp [fixedTapeLinearFuels, fixedTapeLinearFuel, tailFuel]
           ·
               have eventRun : runMachineEventWorkErased table before
@@ -2541,6 +2682,7 @@ theorem fixed_tape_linear_region_gives_future_free_trace
                 exact nextSame
               obtain ⟨tailSteps, tailPairs, final, tailTrace, tailTable,
                   finalControl, finalSame, finalCandidates, tailRecords,
+                  tailTransitions,
                   tailFuel⟩ :=
                 ih next middle nextControl nextSame' restRun restSupported
               refine ⟨1 + tailSteps, headPairs ++ tailPairs, final,
@@ -2549,32 +2691,37 @@ theorem fixed_tape_linear_region_gives_future_free_trace
                   (fixedTapeRawMessages tape) state next final 1 tailSteps
                   headPairs tailPairs headTrace tailTrace,
                 path_uses_fixed_table_append table headPairs tailPairs headTable
-                  tailTable, finalControl, finalSame, ?_, ?_, ?_⟩
+                  tailTable, finalControl, finalSame, ?_, ?_, ?_, ?_⟩
               · exact finalCandidates.trans nextCandidates
               · intro id member
                 exact tailRecords id (by simpa using member)
+              · intro id member
+                exact tailTransitions id (by simpa using member)
               · simp [fixedTapeLinearFuels, fixedTapeLinearFuel, tailFuel]
-      | challenge id =>
+      | challenge challengeId =>
           obtain ⟨blocks, headPairs, next, blocksLength, headTrace,
               headTable, nextControl, nextSame, nextCandidates⟩ :=
             fixed_tape_challenge_slot_run_gives_future_free_trace table tape
-              (fixedTapeRawMessages tape) state before middle id
+              (fixedTapeRawMessages tape) state before middle challengeId
               (rest ++ tail) headControl same
               (by simpa [fixedTapeLinearSlotEvents] using headRun)
-              middleDecoded (secureAll id) remainingNonempty
+              middleDecoded (secureAll challengeId) remainingNonempty
           obtain ⟨tailSteps, tailPairs, final, tailTrace, tailTable,
               finalControl, finalSame, finalCandidates, tailRecords,
+              tailTransitions,
               tailFuel⟩ :=
             ih next middle nextControl nextSame restRun restSupported
-          refine ⟨(blocks.length + (fixedTapeChallengeBindingEvents tape id).length) +
+          refine ⟨(blocks.length +
+              (fixedTapeChallengeBindingEvents tape challengeId).length) +
               tailSteps, headPairs ++ tailPairs, final,
             nonterminal_raw_driver_trace_append
               (fixedTapeFutureFreeEnvironment tape)
               (fixedTapeRawMessages tape) state next final
-              (blocks.length + (fixedTapeChallengeBindingEvents tape id).length)
+              (blocks.length +
+                (fixedTapeChallengeBindingEvents tape challengeId).length)
               tailSteps headPairs tailPairs headTrace tailTrace,
             path_uses_fixed_table_append table headPairs tailPairs headTable
-              tailTable, finalControl, finalSame, ?_, ?_, ?_⟩
+              tailTable, finalControl, finalSame, ?_, ?_, ?_, ?_⟩
           · exact finalCandidates.trans nextCandidates.1
           · intro target member
             simp only [List.mem_cons, FutureFreeSlot.challenge.injEq] at member
@@ -2587,6 +2734,27 @@ theorem fixed_tape_linear_region_gives_future_free_trace
               rw [nextCandidates.2]
               simp
             · exact tailRecords target restMember
+          · intro target member
+            simp only [List.mem_cons, FutureFreeSlot.challenge.injEq] at member
+            rcases member with rfl | restMember
+            · have blocksPositive : 0 < blocks.length := by
+                rw [blocksLength]
+                exact (tape.messages.challengeUse target).consumesBlock
+              obtain ⟨transition, reply, transitionMember, eventExact⟩ :=
+                nonterminal_trace_from_linear_challenge_has_block_zero_transition
+                  (fixedTapeFutureFreeEnvironment tape)
+                  (fixedTapeRawMessages tape) state next
+                  (blocks.length +
+                    (fixedTapeChallengeBindingEvents tape target).length)
+                  headPairs target (rest ++ tail) headControl headTrace
+                    (by omega)
+              exact ⟨transition, reply,
+                nonterminal_raw_driver_trace_preserves_transition_membership
+                  (fixedTapeFutureFreeEnvironment tape)
+                  (fixedTapeRawMessages tape) next final tailSteps tailPairs
+                    tailTrace transition transitionMember,
+                eventExact⟩
+            · exact tailTransitions target restMember
           · simp [fixedTapeLinearFuels, fixedTapeLinearFuel, blocksLength,
               tailFuel]
       | payload site =>
@@ -2602,6 +2770,7 @@ theorem fixed_tape_linear_region_gives_future_free_trace
               (rest ++ tail) headControl same eventRun remainingNonempty
           obtain ⟨tailSteps, tailPairs, final, tailTrace, tailTable,
               finalControl, finalSame, finalCandidates, tailRecords,
+              tailTransitions,
               tailFuel⟩ :=
             ih next middle nextControl nextSame restRun restSupported
           refine ⟨2 + tailSteps, headPairs ++ tailPairs, final,
@@ -2610,10 +2779,12 @@ theorem fixed_tape_linear_region_gives_future_free_trace
               (fixedTapeRawMessages tape) state next final 2 tailSteps
               headPairs tailPairs headTrace tailTrace,
             path_uses_fixed_table_append table headPairs tailPairs headTable
-              tailTable, finalControl, finalSame, ?_, ?_, ?_⟩
+              tailTable, finalControl, finalSame, ?_, ?_, ?_, ?_⟩
           · exact finalCandidates.trans nextCandidates
           · intro id member
             exact tailRecords id (by simpa using member)
+          · intro id member
+            exact tailTransitions id (by simpa using member)
           · simp [fixedTapeLinearFuels, fixedTapeLinearFuel, tailFuel]
       | work stage =>
           obtain ⟨afterGrind, grindRun, absorbRun⟩ :=
@@ -2631,6 +2802,7 @@ theorem fixed_tape_linear_region_gives_future_free_trace
               absorbRun remainingNonempty
           obtain ⟨tailSteps, tailPairs, final, tailTrace, tailTable,
               finalControl, finalSame, finalCandidates, tailRecords,
+              tailTransitions,
               tailFuel⟩ :=
             ih next middle nextControl nextSame restRun restSupported
           refine ⟨4 + tailSteps, headPairs ++ tailPairs, final,
@@ -2639,10 +2811,12 @@ theorem fixed_tape_linear_region_gives_future_free_trace
               (fixedTapeRawMessages tape) state next final 4 tailSteps
               headPairs tailPairs headTrace tailTrace,
             path_uses_fixed_table_append table headPairs tailPairs headTable
-              tailTable, finalControl, finalSame, ?_, ?_, ?_⟩
+              tailTable, finalControl, finalSame, ?_, ?_, ?_, ?_⟩
           · exact finalCandidates.trans nextCandidates
           · intro id member
             exact tailRecords id (by simpa using member)
+          · intro id member
+            exact tailTransitions id (by simpa using member)
           · simp [fixedTapeLinearFuels, fixedTapeLinearFuel, tailFuel]
       | beginQ16 =>
           simp [linearSlotSupported] at headSupported
@@ -4128,6 +4302,11 @@ structure CanonicalCheckedFutureFreeConstruction
     DecodedChallenge.mk (ChallengeId.alpha 0)
       (tape.messages.challengeValue (ChallengeId.alpha 0)) ∈
       complete.final.current.decodedChallenges
+  queryBatchTransitionExact :
+    ∃ transition reply,
+      transition ∈ complete.final.transitions ∧
+        transition.event =
+          .verifier (.squeezePair (.challenge .queryBatch) 0) reply
   selectedQ16 : SelectedQ16LedgerCertificate
     (fixedTapeFutureFreeEnvironment tape) complete.final.current
   selectedQ16CounterExact :
@@ -4268,7 +4447,8 @@ theorem checked_work_erased_refinement_constructs_canonical_future_free_path
     rw [fixed_tape_before_q16_events_are_exact_prefix_after_c2]
     exact evaluator.beforeQ16Run
   obtain ⟨beforeSteps, beforePairs, q16State, beforeTrace, beforeTable,
-      q16Control, q16Same, beforeCandidates, beforeRecords, beforeFuel⟩ :=
+      q16Control, q16Same, beforeCandidates, beforeRecords,
+      _beforeTransitions, beforeFuel⟩ :=
     fixed_tape_linear_region_gives_future_free_trace table tape rawTrace
       wellFormed afterC2State evaluator.afterC2 evaluator.prefixState
       beforeQ16Slots (.beginQ16 :: afterQ16Slots) beforeControl adaptiveSame
@@ -4297,7 +4477,7 @@ theorem checked_work_erased_refinement_constructs_canonical_future_free_path
     exact evaluator.afterQ16Run
   obtain ⟨afterSteps, afterPairs, beforeTerminal, afterTrace, afterTable,
       terminalControl, terminalSame, afterCandidates, afterRecords,
-      afterFuel⟩ :=
+      afterTransitions, afterFuel⟩ :=
     fixed_tape_linear_region_gives_future_free_trace table tape rawTrace
       wellFormed afterQ16State evaluator.afterQ16 evaluator.finalState
       afterQ16PreterminalSlots [.fixed .terminal] afterControl q16SameFinal
@@ -4340,6 +4520,19 @@ theorem checked_work_erased_refinement_constructs_canonical_future_free_path
         (tape.messages.challengeValue (ChallengeId.alpha 0)) ∈
         final.current.decodedChallenges :=
     terminalLedger _ (afterLedger _ (q16Ledger _ alphaZeroAtQ16))
+  obtain ⟨queryBatchTransition, queryBatchReply,
+      queryBatchBeforeTerminal, queryBatchEventExact⟩ :=
+    afterTransitions .queryBatch (by simp [afterQ16PreterminalSlots])
+  have queryBatchFinal :
+      ∃ transition reply,
+        transition ∈ final.transitions ∧
+          transition.event =
+            .verifier (.squeezePair (.challenge .queryBatch) 0) reply :=
+    ⟨queryBatchTransition, queryBatchReply,
+      raw_future_free_microstep_preserves_transition_membership environment raw
+        beforeTerminal final [] terminalPath queryBatchTransition
+          queryBatchBeforeTerminal,
+      queryBatchEventExact⟩
 
   have prefixAdaptive := nonterminal_raw_driver_trace_append environment raw
     (initialFutureFreeVerifierState bindings) c1State afterC2State 6
@@ -4420,6 +4613,8 @@ theorem checked_work_erased_refinement_constructs_canonical_future_free_path
     { complete := complete
       gammaRecordExact := by simpa [complete] using gammaFinal
       alphaZeroRecordExact := by simpa [complete] using alphaZeroFinal
+      queryBatchTransitionExact := by
+        simpa [complete] using queryBatchFinal
       selectedQ16 := by
         simpa [environment] using finalQ16Certificate
       selectedQ16CounterExact := by
