@@ -1,6 +1,17 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [joint relation recovery beyond off-family finals](covered-relation-continuation.md).
+Latest formal continuation: [component recovery through the actual OOD constraints](component-ood-continuation.md).
+The same covered quotient now supplies 38,230 original-symbol agreements and
+the actual OOD-to-GRS values, enabling reuse of V7's interpolation theorem.
+Unless both fixed OOD substitutions are polynomial identities, compatible
+gamma values are bounded by 117,077, without a candidate-family union. The
+same-execution composition has a 104.3661-bit local ceiling plus an explicit
+identity-branch remainder. That remainder is not a payment witness. The actual
+136-link layout now discharges the weighted-copy inactive-weight premise.
+Seven focused NUC leaves passed; no verifier, 40,282-byte body or CU change.
+Global component/payment extraction, source/FS and full-view ZK remain open.
+
+Previous formal continuation: [joint relation recovery beyond off-family finals](covered-relation-continuation.md).
 The actual compact relation's no-good-quotient event now has a kernel-checked
 joint bound: approximately 104.5902 bits, with only early collisions unioned
 over the 99-member family and one shared query/repair suffix. The literal
