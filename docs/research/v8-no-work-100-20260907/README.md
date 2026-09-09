@@ -1,6 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [reuse the checked line coordinates](line-norm-review.md).
+Latest: [expanded quotient fold with shared reductions](quotient-fold-review.md).
+Worst observed complete transaction is **1,092,138 CU**, with **107,862 CU**
+headroom under the actual1.2M cap and the same **40,282-byte** body. The
+Lean-proved rewrite saves another55–102 CU on the twelve maximum proofs;
+ordinary/rollback controls and selected-arithmetic tests pass. See
+[results](quotient-fold-results.json) and the separately labelled
+[fresh stage profile](line-profile-review.md). Same-pool V7 is still cheaper.
+
+Previous: [reuse the checked line coordinates](line-norm-review.md).
 Worst observed complete transaction is **1,092,232 CU**, with **107,768 CU**
 headroom below the real 1.2M cap and the unchanged **40,282-byte** body.
 The source-shaped Lean proof includes the literal half-word range/field bridge;
