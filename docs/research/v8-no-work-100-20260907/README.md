@@ -1,6 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [range-proved tag-prefix splitting](tag-split-review.md).
+Latest: [shared tag sums across kernels](tag-shared-review.md).
+Reusing the generated selector plan saves a further **4,030–4,044 CU** on
+identical complete transactions. Worst observed is now **1,133,805 CU** at
+the real 1.2M cap, with the unchanged **40,282-byte** maximum body. Lean proves
+all thirty sums and the necessary reduced-sum interface; actual-source and
+malformed-proof/rollback controls pass. See [results](tag-shared-results.json).
+No extra heap, proof or transcript data; V7 parity and universal CU remain open.
+
+Previous: [range-proved tag-prefix splitting](tag-split-review.md).
 One further exact rewrite saves **3,754–3,773 CU** against the shared-copy build.
 Worst observed complete transaction is now **1,137,838 CU**, including pinned
 classic Token settlement, with the unchanged **40,282-byte** maximum body.
