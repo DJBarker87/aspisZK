@@ -43,6 +43,7 @@ open AspisK1.V7Tag73IndexedExposureCausalRouter
 open AspisK1.V7Tag73Q16SemanticFrontierBridge
 open AspisK1.V7Tag73QueryBatchPrefixCausalController
 open AspisK1.V7Tag73SamplerDecoder
+open AspisK1.V7Tag73SqueezeInputStateInjectivity
 open AspisK1.V7Tag73TranscriptSchedule
 
 noncomputable section
@@ -70,6 +71,45 @@ def q16AdvanceSlot? (producers : List Q16DagProducer)
   (producers.find? fun producer ↦
     decide (input = bytes producer.digest ++ [domAdvance])).map
       Q16DagProducer.slot
+
+/-- A known producer is recognized at its literal advance input.  Digest
+uniqueness is enough: the observer deliberately records the parent slot,
+whereas the causal DAG installs the successor slot. -/
+theorem q16_advance_slot_of_digest_nodup
+    (producer : Q16DagProducer) :
+    ∀ (producers : List Q16DagProducer),
+      (producers.map Q16DagProducer.digest).Nodup →
+      producer ∈ producers →
+      q16AdvanceSlot? producers
+          (bytes producer.digest ++ [domAdvance]) =
+        some producer.slot := by
+  intro producers
+  induction producers with
+  | nil => simp
+  | cons head tail ih =>
+      intro nodup member
+      have nodup' : head.digest ∉ tail.map Q16DagProducer.digest ∧
+          (tail.map Q16DagProducer.digest).Nodup := by
+        simpa only [List.map_cons] using List.nodup_cons.mp nodup
+      rw [List.mem_cons] at member
+      rcases member with equal | member
+      · subst head
+        simp [q16AdvanceSlot?]
+      · have digestNe : producer.digest ≠ head.digest := by
+          intro equal
+          apply nodup'.1
+          rw [List.mem_map]
+          exact ⟨producer, member, equal⟩
+        have bytesNe : bytes producer.digest ≠ bytes head.digest := by
+          intro equal
+          exact digestNe (digest_bytes_injective equal)
+        have reduce : q16AdvanceSlot? (head :: tail)
+              (bytes producer.digest ++ [domAdvance]) =
+            q16AdvanceSlot? tail
+              (bytes producer.digest ++ [domAdvance]) := by
+          simp [q16AdvanceSlot?, bytesNe]
+        rw [reduce]
+        exact ih nodup'.2 member
 
 def ObservedQ16Duplex.afterInput (observed : ObservedQ16Duplex)
     (dag : FinalWorkQ16DagMemory) (input : ShaInput) (answer : Digest256) :
@@ -528,6 +568,7 @@ def exactCompilerFoldAlphaQ16QueryBatchCoordinates
 #print axioms observed_first_compact_continuation_exact
 #print axioms observed_q16_output_is_monotone
 #print axioms observed_q16_advance_is_monotone
+#print axioms q16_advance_slot_of_digest_nodup
 #print axioms observed_q16_output_installed
 #print axioms observed_q16_advance_installed
 #print axioms queryBatchDagExtensionAfterInput
