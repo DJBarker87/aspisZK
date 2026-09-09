@@ -1,6 +1,14 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest: [range-proved arithmetic and sparse fusion](range-performance-review.md).
+Latest: [complete transactions and QM31 arithmetic](complete-performance-review.md).
+Maximum-body current-page transfer / withdrawal now pass at **1,170,650 /
+1,182,365 CU** worst observed; rollover remains **1,244,066 /1,256,466 CU**.
+These execute actual account authentication and atomic Pool settlement.
+The all-shapes 1.2M target and selected-V7 parity remain unmet. New host proving
+is **3.17s mean +1.43s shared setup /197.71 MiB RSS**, with byte-identical proofs.
+See [exact results](complete-performance-results.json); production is unchanged.
+
+Previous: [range-proved arithmetic and sparse fusion](range-performance-review.md).
 The quiet isolated verifier accepts three **maximum-frontier, 40,282-byte**
 proofs at **1,194,675 /1,194,522 /1,194,670 CU**, with a 1.2M limit.
 Ordinary no-search proving is **3.59 seconds mean /197.91 MiB peak RSS**.

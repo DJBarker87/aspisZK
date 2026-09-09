@@ -1,0 +1,25 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -865,2 +865,4 @@
+-    let ac=a.c0.mul(b.c0);
+-    let bd=a.c1.mul(b.c1);
++    #[cfg(not(v8_qm_lazy_c0))] let ac=a.c0.mul(b.c0);
++    #[cfg(not(v8_qm_lazy_c0))] let bd=a.c1.mul(b.c1);
++    // The other branch derives these two output limbs directly below.
++
+@@ -877,1 +879,14 @@
+-    QM31 {c0:ac.add(mul_by_r(bd)),c1:CM31::new(M31::reduce_u64(real),M31::reduce_u64(imag))}
++    #[cfg(not(v8_qm_lazy_c0))] let c0=ac.add(mul_by_r(bd));
++    #[cfg(v8_qm_lazy_c0)] let c0={
++        let fold=|x:u64|(x&2147483647).wrapping_add(x>>31);
++        let p22=a2.wrapping_mul(b2);let p33=a3.wrapping_mul(b3);
++        let cross=fold(a2.wrapping_mul(b3).wrapping_add(a3.wrapping_mul(b2)));
++        let pos=fold(a0.wrapping_mul(b0).wrapping_add(p22.wrapping_mul(2)));
++        let neg=fold(a1.wrapping_mul(b1).wrapping_add(p33.wrapping_mul(2)));
++        let real=pos.wrapping_add(17179869176).wrapping_sub(neg).wrapping_sub(cross);
++        let pos=fold(a0.wrapping_mul(b1).wrapping_add(a1.wrapping_mul(b0)).wrapping_add(p22));
++        let imag=pos.wrapping_add(cross.wrapping_mul(2)).wrapping_add(17179869176)
++            .wrapping_sub(fold(p33));
++        CM31::new(M31::reduce_u64(real),M31::reduce_u64(imag))
++    };
++    QM31 {c0,c1:CM31::new(M31::reduce_u64(real),M31::reduce_u64(imag))}

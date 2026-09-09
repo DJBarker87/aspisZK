@@ -26,10 +26,18 @@ fn c2leaf(columns:&[Vec<K>],id:usize,corrupt:bool)->Vec<u8>{let mut b=vec![0;186
 fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
     corelib::v6_transcript::v6_statement_points(z).iter().flat_map(|p|messages.iter().map(move|m|multilinear_evaluate_qm31(m,p).unwrap())).collect()
 }
-fn terminal(p:&PoolV1PrivateTransferPublicV1,tr:&PoolV1PairLatePublicStatementV1,m:&[Vec<K>],z:&[K;10],s:&row::Semantic)->K{
+trait PaymentInput {fn payment(&self)->PoolV1PairForestTerminalPaymentV1;}
+impl PaymentInput for PoolV1PrivateTransferPublicV1 {fn payment(&self)->PoolV1PairForestTerminalPaymentV1{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(*self)}}
+impl PaymentInput for PoolV1PairForestTerminalPaymentV1 {fn payment(&self)->PoolV1PairForestTerminalPaymentV1{*self}}
+fn payment_terminal(p:&impl PaymentInput,tr:&PoolV1PairLatePublicStatementV1,claims:&[K;84],z:&[K;10],s:&row::Semantic)->K{
+    match p.payment(){
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1(&p,tr,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>evaluate_pool_v1_pair_forest_withdrawal_selected_masked_terminal_compiled_tag73_v1(&p,tr,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
+    }.unwrap()
+}
+fn terminal(p:&impl PaymentInput,tr:&PoolV1PairLatePublicStatementV1,m:&[Vec<K>],z:&[K;10],s:&row::Semantic)->K{
     let rows=point_rows(m,z);let claims:[K;84]=std::array::from_fn(|i|rows[(i/28)*29+i%28]);
-    evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1(p,tr,&claims,z,
-        s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta).unwrap()
+    payment_terminal(p,tr,&claims,z,s)
 }
 fn start(binding:&[u8;32],a:&f::Tree)->(Transcript,K,K){let mut t=Transcript::new(hash);
     t.absorb(label::PROFILE,b"AV8/payment-extraction/v1");t.absorb(label::STATEMENT,binding);t.absorb(label::ROOT,&a[18][0]);
@@ -76,7 +84,7 @@ fn interpolate_degree27(values: &[K; 28]) -> [K;28] {
     output
 }
 
-fn semantic_produce(v:&mut[K],mut s:row::Semantic,p:&PoolV1PrivateTransferPublicV1,tr:&PoolV1PairLatePublicStatementV1,m:&[Vec<K>])->row::Semantic{
+fn semantic_produce(v:&mut[K],mut s:row::Semantic,p:&impl PaymentInput,tr:&PoolV1PairLatePublicStatementV1,m:&[Vec<K>])->row::Semantic{
     // Literal selected producer enumeration/interpolation; only framing is
     // the repaired research grammar, and the selected terminal is called.
     for r in 0..10{let left=9-r;let mut samples=[K::ZERO;28];
@@ -92,14 +100,13 @@ fn semantic_produce(v:&mut[K],mut s:row::Semantic,p:&PoolV1PrivateTransferPublic
     }
     assert_eq!(terminal(p,tr,m,&s.z,&s),s.claim);s
 }
-fn semantic_replay(w:&Wire,p:&PoolV1PrivateTransferPublicV1,tr:&PoolV1PairLatePublicStatementV1,mut s:row::Semantic)->row::Semantic{
+fn semantic_replay(w:&Wire,p:&impl PaymentInput,tr:&PoolV1PairLatePublicStatementV1,mut s:row::Semantic)->row::Semantic{
     for r in 0..10{let sent=&w.v[1+27*r..1+27*(r+1)];let mut poly=[K::ZERO;28];poly[0]=sent[0];poly[2..].copy_from_slice(&sent[1..]);
         poly[1]=s.claim.sub(poly[0].add(poly[0]).add(poly[2..].iter().copied().fold(K::ZERO,|a,b|a.add(b))));
         let mut record=vec![r as u8];record.extend(bytes(sent));s.t.absorb(label::V6_COMPACT_SEMANTIC_ROUND,&record);
         s.z[r]=sample(&mut s.t,false).unwrap();s.claim=evaluate_state_only_polynomial(&poly,s.z[r]);}
     let claims:[K;84]=std::array::from_fn(|i|w.v[271+(i/28)*29+i%28]);
-    let value=evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1(p,tr,&claims,&s.z,
-        s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta).unwrap();assert_eq!(value,s.claim);s
+    let value=payment_terminal(p,tr,&claims,&s.z,&s);assert_eq!(value,s.claim);s
 }
 fn ood(m:&[K],p:Point)->K{let mut factors=[K::ZERO;10];factors[0]=p.y;factors[1]=p.x;
     for i in 2..10{factors[i]=factors[i-1].square().mul_m31(M31(2)).sub(K::ONE);}

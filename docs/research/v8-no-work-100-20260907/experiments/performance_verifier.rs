@@ -27,7 +27,7 @@ pub(super) fn checkpoint(name:&str){
     #[cfg(any(not(v8_performance_sbf),v8_quiet_profile))] let _=name;
 }
 #[inline(never)]
-fn semantic(w:&Wire<'_>,binding:&[u8;32],public:&PoolV1PrivateTransferPublicV1,transition:&PoolV1PairLatePublicStatementV1)->Result<row::Semantic,Error>{
+fn semantic(w:&Wire<'_>,binding:&[u8;32],public:&PoolV1PairForestTerminalPaymentV1,transition:&PoolV1PairLatePublicStatementV1)->Result<row::Semantic,Error>{
     let mut t=Transcript::new(hash);
     t.absorb(label::PROFILE,b"AV8/payment-extraction/v1");
     t.absorb(label::STATEMENT,binding);t.absorb(label::ROOT,&w.roots.0);
@@ -48,14 +48,13 @@ fn semantic(w:&Wire<'_>,binding:&[u8;32],public:&PoolV1PrivateTransferPublicV1,t
     }
     checkpoint("v8:semantic-rounds");
     let claims:[K;84]=std::array::from_fn(|i|w.v[271+(i/28)*29+i%28]);
-    let actual=evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1(
-        public,transition,&claims,&s.z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta).map_err(|_|Error::Terminal)?;
+    let actual=payment_terminal(public,transition,&claims,&s.z,&s)?;
     if actual!=s.claim{return Err(Error::Terminal);}
     checkpoint("v8:semantic-terminal");
     #[cfg(v8_semantic_control)] {
         // Matched selected V7 terminal call: same literal 3x28 projection and
         // all public/challenge inputs. Diagnostic duplicate, NOT a saving.
-        let again=selected_terminal_control(public,transition,&claims,&s)?;
+        let again=payment_terminal(public,transition,&claims,&s.z,&s)?;
         if again!=actual{return Err(Error::Terminal);}
         checkpoint("v8:selected-semantic-control");
     }
@@ -72,14 +71,37 @@ fn selected_terminal_control(public:&PoolV1PrivateTransferPublicV1,transition:&P
 fn semantic_bytes(w:&Wire<'_>,binding:&[u8;32],public:&[u8],transition:&[u8])->Result<row::Semantic,u32>{
     let public=decode_pool_v1_private_transfer_public_v1(public).map_err(|_|1u32)?;
     let transition=decode_pool_v1_pair_late_public_statement_v1(transition).map_err(|_|2u32)?;
-    semantic(w,binding,&public,&transition).map_err(|_|4u32)
+    semantic(w,binding,&PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public),&transition).map_err(|_|4u32)
+}
+pub(super) fn payment_terminal(public:&PoolV1PairForestTerminalPaymentV1,transition:&PoolV1PairLatePublicStatementV1,claims:&[K;84],z:&[K;10],s:&row::Semantic)->Result<K,Error>{
+    match public {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>
+            evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1(p,transition,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>
+            evaluate_pool_v1_pair_forest_withdrawal_selected_masked_terminal_compiled_tag73_v1(p,transition,claims,z,s.lambda,s.chi,s.theta,&s.zc,s.mu,s.eta),
+    }.map_err(|_|Error::Terminal)
 }
 #[inline(never)]
 pub fn verify(body:&[u8],binding:&[u8;32],public:&[u8],transition:&[u8])->Result<(),u32>{
     checkpoint("v8:start");
     let w=parse(body).map_err(|_|3u32)?;
     checkpoint("v8:parse");
-    let s=semantic_bytes(&w,binding,public,transition)?;
+    let public=decode_pool_v1_private_transfer_public_v1(public).map_err(|_|1u32)?;
+    let transition=decode_pool_v1_pair_late_public_statement_v1(transition).map_err(|_|2u32)?;
+    verify_parsed(&w,binding,&PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public),&transition)
+}
+/// Typed objects ONLY after the complete wrapper's canonical/account checks.
+/// This removes encode/decode round-trips, not any untrusted-byte validation.
+#[inline(never)]
+pub fn verify_payment(body:&[u8],binding:&[u8;32],public:&PoolV1PairForestTerminalPaymentV1,transition:&PoolV1PairLatePublicStatementV1)->Result<(),u32>{
+    checkpoint("v8:start");
+    let w=parse(body).map_err(|_|3u32)?;
+    checkpoint("v8:parse");
+    verify_parsed(&w,binding,public,transition)
+}
+#[inline(never)]
+fn verify_parsed(w:&Wire<'_>,binding:&[u8;32],public:&PoolV1PairForestTerminalPaymentV1,transition:&PoolV1PairLatePublicStatementV1)->Result<(),u32>{
+    let s=semantic(w,binding,public,transition).map_err(|_|4u32)?;
     #[cfg(not(v8_structured))]
     let(p,weights,claim,_)=row::prepare(s,&w,true).map_err(|_|5u32)?;
     #[cfg(v8_structured)]
@@ -91,7 +113,7 @@ pub fn verify(body:&[u8],binding:&[u8;32],public:&[u8],transition:&[u8])->Result
     {
         let result=row::structured::relation(&w,p,weights,claim);
         #[cfg(not(v8_performance_sbf))] {
-            let s=semantic_bytes(&w,binding,public,transition)?;
+            let s=semantic(w,binding,public,transition).map_err(|_|4u32)?;
             let(p,ordinary,c,_)=row::prepare(s,&w,true).map_err(|_|5u32)?;
             assert_eq!(result,row::relation(&w,p,ordinary,c),"complete dense-v2/structured outcome");
         }

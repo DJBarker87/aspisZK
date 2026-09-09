@@ -2,6 +2,7 @@
 //! full-domain diagnostic, or claim of a complete pool transaction.
 use super::*;
 use std::time::Instant;
+#[path="complete_binding.rs"] mod complete_binding;
 fn phase(seed:u8,name:&str,t:Instant){println!("PERF {{\"seed\":{seed},\"phase\":\"{name}\",\"seconds\":{}}}",t.elapsed().as_secs_f64());}
 // Stress-fixture generation only: use the existing last nonce to seek the
 // MAXIMUM authentication frontier. No security credit; no verifier change.
@@ -58,21 +59,56 @@ pub fn run(){
     let out=std::env::args().nth(1).expect("new output directory required");
     std::fs::create_dir(&out).expect("output directory must not exist");
     let setup=Instant::now();
-    let(public,witness,snapshot)=we::fixture();
-    let authoritative=PoolV1PaymentRelationContextV1{runtime_binding:provision_accounts(&witness),spent_nullifiers:&[]};
-    let compiled=compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&public,&witness,authoritative,snapshot).unwrap();
+    let(public,witness,mut snapshot)=we::fixture();
+    let mut payment=PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public);
+    let mut runtime=provision_accounts(&witness);
+    let complete_context=std::env::var("ASPIS_V8_COMPLETE_CONTEXT").ok().map(|directory| {
+        let statement_bytes:[u8;POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES]=std::fs::read(format!("{directory}/statement.bin")).unwrap().try_into().unwrap();
+        let statement=decode_pool_v1_pair_forest_terminal_statement_v1(&statement_bytes).unwrap();
+        validate_pool_v1_pair_forest_terminal_statement_v1(&statement).unwrap();
+        let (root,asset,sequence)=match &statement {
+            PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>{payment=PoolV1PairForestTerminalPaymentV1::PrivateTransfer(*public);(public.anchor_root,public.asset_id,public.anchor_sequence)},
+            PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>{payment=PoolV1PairForestTerminalPaymentV1::Withdrawal(*public);(public.anchor_root,public.asset_id,public.anchor_sequence)},
+        };
+        // Account context was exported by the actual combined harness BEFORE
+        // proof creation; retain the independent input-tree/root assertions.
+        assert_eq!(root,runtime.anchor_root);
+        assert_eq!(asset,runtime.asset_id);
+        assert_eq!(sequence,runtime.anchor_sequence);
+        snapshot=statement.common().lane_transition.live_snapshot;
+        runtime.pool=statement.common().master_account;
+        runtime.deployment_domain=snapshot.deployment_domain;
+        let verifier:[u8;32]=std::fs::read(format!("{directory}/verifier.bin")).unwrap().try_into().unwrap();
+        let proof:[u8;32]=std::fs::read(format!("{directory}/proof-account.bin")).unwrap().try_into().unwrap();
+        assert_eq!(V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,complete_binding::V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,"research profile cfg required");
+        let digest=v7_pool_pair_forest_tag73_statement_digest_v1(&statement_bytes,hash);
+        (statement,complete_binding::bind_attempt(hash,&digest,&verifier,&proof))
+    });
+    let authoritative=PoolV1PaymentRelationContextV1{runtime_binding:runtime,spent_nullifiers:&[]};
+    let compiled=match &payment {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(public,&witness,authoritative,snapshot),
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>{
+            let dig=|seed:u32|std::array::from_fn(|i|M31(seed+17*i as u32+1));
+            let w=PoolV1PairForestWithdrawalWitnessV1{input:witness.input,change:PoolV1OutputNoteWitnessV1{owner_key:dig(700),salt:dig(800),value:750}};
+            compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(public,&w,authoritative,snapshot)
+        }
+    }.unwrap();
     let transition=compiled.public_statement;
+    if let Some((statement,_))=&complete_context{assert_eq!(transition,statement.common().lane_transition);}
     let enc=CircleEncoder::new_for_domain_log(20);
     // Public matrix is a prover quotient-interpolation aid, NOT an extractor.
     let decoder=ac::Decoder::new(&enc);
     let pts=corelib::circle_fri::selected_circle_fiber_points_shared(20,&(0..256).collect::<Vec<_>>()).unwrap();
     phase(0,"setup_compiler_encoder_matrix",setup);
-    let public_bytes=encode_pool_v1_private_transfer_public_v1(&public).unwrap();
+    let public_bytes=match &payment {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>encode_pool_v1_private_transfer_public_v1(p).unwrap().to_vec(),
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>encode_pool_v1_withdrawal_public_v1(p).unwrap().to_vec(),
+    };
     let mut transition_bytes=vec![0;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES];
     encode_pool_v1_pair_late_public_statement_v1(&transition,&mut transition_bytes).unwrap();
     std::fs::write(format!("{out}/public.bin"),&public_bytes).unwrap();
     std::fs::write(format!("{out}/transition.bin"),&transition_bytes).unwrap();
-    let binding=hash(&[b"AV8 synthetic account fixture",&public_bytes,format!("{transition:?}").as_bytes()]);
+    let binding=complete_context.as_ref().map(|(_,b)|*b).unwrap_or_else(||hash(&[b"AV8 synthetic account fixture",&public_bytes,format!("{transition:?}").as_bytes()]));
     std::fs::write(format!("{out}/binding.bin"),binding).unwrap();
     for seed in [1u8,2,3] {
         let total=Instant::now();let clock=Instant::now();
@@ -101,7 +137,7 @@ pub fn run(){
         let b=tree((0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C2_TREE_TAG,&c2leaf(&c2encoded,i,false),&salts[i])).collect());
         phase(seed,"c2_pack_tree",clock);let clock=Instant::now();
         let mut v=vec![K::ZERO;697];v[0]=initial;
-        let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&public,&transition,&messages);
+        let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);
         v[271..358].copy_from_slice(&point_rows(&messages,&s.z));
         phase(seed,"semantic_producer_literal",clock);let clock=Instant::now();
         let empty=vec![0;Q*REC];let stub=f::body(&v,&a,&b,&empty,(&[],&[]));let w=parse(&stub).unwrap();
@@ -119,7 +155,7 @@ pub fn run(){
         let combined:Vec<K>=(0..1024).map(|i|messages.iter().rev().fold(K::ZERO,|x,m|x.mul(gamma).add(m[i]))).collect();
         v[358]=(0..1024).fold(K::ZERO,|sum,i|sum.add(iw.weight_at(i).mul(combined[i as usize])));
         let stub=f::body(&v,&a,&b,&empty,(&[],&[]));let w=parse(&stub).unwrap();
-        let sem=semantic_replay(&w,&public,&transition,semantic_start(t.clone(),&b,initial,lambda,chi));
+        let sem=semantic_replay(&w,&payment,&transition,semantic_start(t.clone(),&b,initial,lambda,chi));
         let(mut p,ordinary,mut claim,_)=row::prepare(sem,&w,true).unwrap();
         let mut qeval=Vec::new();
         for(i,pt)in pts.iter().enumerate(){for(slot,(x,y))in[(pt.x,pt.y),(pt.x,pt.y.neg()),(pt.x.neg(),pt.y.neg()),(pt.x.neg(),pt.y)].into_iter().enumerate(){
@@ -153,13 +189,17 @@ pub fn run(){
         phase(seed,"prover_total_excludes_setup",total);
         // Verifier starts from bytes and public inputs; no witness/anchor.
         let clock=Instant::now();
-        assert_eq!(super::super::performance_verifier::verify(&body,&binding,&public_bytes,&transition_bytes),Ok(()));
+        let verify=|body:&[u8]|super::super::performance_verifier::verify_payment(body,&binding,&payment,&transition);
+        assert_eq!(verify(&body),Ok(()));
+        if matches!(payment,PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_)){
+            assert_eq!(verify(&body),super::super::performance_verifier::verify(&body,&binding,&public_bytes,&transition_bytes));
+        }
         phase(seed,"host_verify_from_public_bytes",clock);
         for index in [0,HEAD,body.len()-1] {
             let mut bad=body.clone();bad[index]^=1;
-            assert!(super::super::performance_verifier::verify(&bad,&binding,&public_bytes,&transition_bytes).is_err());
+            assert!(verify(&bad).is_err());
         }
-        assert!(super::super::performance_verifier::verify(&body[..body.len()-1],&binding,&public_bytes,&transition_bytes).is_err());
+        assert!(verify(&body[..body.len()-1]).is_err());
         std::fs::write(format!("{out}/proof-{seed}.bin"),&body).unwrap();
         println!("PERF {{\"seed\":{seed},\"accepted\":true,\"body_bytes\":{},\"max_body_bytes\":40282,\"stress_nonce_attempts\":{stress_attempts},\"security_credit_bits\":0,\"full_transaction_cu\":null}}",body.len());
     }
