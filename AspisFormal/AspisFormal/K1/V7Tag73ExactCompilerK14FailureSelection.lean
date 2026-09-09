@@ -1,4 +1,6 @@
 import AspisFormal.K1.V7Tag73ExactCompilerGammaSelectedProofClosure
+import AspisFormal.K1.V7Tag73ExactCompilerActualGammaReplayClosure
+import AspisFormal.K1.V7Tag73ExactAdversaryAnchorFinalProfile
 import AspisFormal.K1.V7Tag73K14FamilyFailureMembership
 import AspisFormal.K1.V7Tag73VariablePrefixK14Probability
 
@@ -22,8 +24,11 @@ open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73CausalRestoredFamily
 open AspisK1.V7Tag73CounterfactualReplayProofFilter
+open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerGammaPrefixReplayLift
 open AspisK1.V7Tag73ExactCompilerGammaSelectedProofClosure
+open AspisK1.V7Tag73ExactCompilerActualGammaReplayClosure
+open AspisK1.V7Tag73ExactAdversaryAnchorFinalProfile
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK12PrefixClassifier
@@ -171,7 +176,63 @@ theorem exact_compiler_actual_gamma_family_selects_width29_failure
   dsimp only [routed, provider, family]
   exact ⟨familyFacts.1, familyFacts.2.trans selectedExact⟩
 
+/-- Release-facing specialization: the existing decoded source provider and
+the scheduler transition reserve discharge the two low-level premises of the
+selection theorem. -/
+theorem exact_compiler_actual_gamma_family_selects_width29_failure_of_source
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (transitionRoom : 2 ≤ transitionFuel)
+    (decodedSource : ExactFixedK13DecodedParsedSourceProvider transitionFuel
+      configuration projection fixedInstance)
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (k12 : ExactPrefixK12Certificate input)
+    (k13 : ExactK13Certificate decoder input k12)
+    (failure : Width29DecompositionFailure decoder k12.words
+      (exactK13ParsedProof input).gamma
+      (exactK13ParsedProof input).disclosedFinal
+      (exactK13ParsedProof input).schedule)
+    (defaultResponse : InitialMessage QM31Exact)
+    (defaultDisclosedFinal : FinalMessage QM31Exact)
+    (defaultSchedule : ExactSchedule)
+    (defaultSelected : ExactCandidatePair) :
+    ∃ (initialDigest : Digest256) (flat : SuccessfulGammaPrefixTape)
+      (response : SchedulerNativeGammaResponse
+        (SchedulerNativePlainRomResult TapeIdentity Statement Tag73K12ParsedProof
+          Payload (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+            Payload Witness))),
+      exactOperationalChallenge input .gamma =
+          (routedSuccessfulGammaValue
+            (successfulGammaPrefixFlatRoutingEquiv flat)).1 ∧
+      exactCompilerRoutedGammaReplay input initialDigest
+          (successfulGammaPrefixFlatRoutingEquiv flat) = .ok response ∧
+      response.run = runExactPlainRom transitionFuel configuration sample ∧
+      let routed := successfulGammaPrefixFlatRoutingEquiv flat
+      let provider : RestoredSelectedBranchProvider decoder k12.words :=
+        exactCompilerK14Provider defaultResponse defaultDisclosedFinal
+          defaultSchedule defaultSelected input initialDigest
+            (routedSuccessfulGammaFactorization routed).1
+      let family := restoredSelectedChainFamilyOfK13Provider provider
+      family.available (routedSuccessfulGammaValue routed).1 ∧
+        family.selected (routedSuccessfulGammaValue routed).1 =
+          Classical.choose failure := by
+  obtain ⟨decoded, _decodeExact, source⟩ := decodedSource sample input
+  exact exact_compiler_actual_gamma_family_selects_width29_failure input k12
+    k13 failure source
+    (exact_compiler_actual_gamma_coordinate_step transitionRoom input)
+    defaultResponse defaultDisclosedFinal defaultSchedule defaultSelected
+
 #print axioms exact_compiler_actual_gamma_family_selects_width29_failure
+#print axioms
+  exact_compiler_actual_gamma_family_selects_width29_failure_of_source
 #print axioms exactCompilerK14Provider
 
 end
