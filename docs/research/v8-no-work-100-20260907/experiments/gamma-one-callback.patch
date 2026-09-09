@@ -1,0 +1,21 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+index 19adc236..4d7787bc 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+@@ -155,13 +155,15 @@ fn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:co
+     query_checkpoint("v8:points");
+     let owned;
+     let powers=match prepared{Some(p)=>p,None=>{owned=StateOnlySpendQueryPowers::new(p.gamma);&owned}};
++    #[cfg(v8_gamma_one)] let gamma_kernel=query_arithmetic::GammaKernel::new(powers);
+     let mut combined=Vec::with_capacity(queries.len());
+     for i in 0..queries.len(){
+         let r=&w.records[i*REC..(i+1)*REC];
+         #[cfg(not(v8_gamma_wrap))]
+         combined.push(gamma_combine_v6_packed_layer0(&r[..403],&r[403..589],&powers).map_err(|_|Error::Canonical)?);
+-        #[cfg(v8_gamma_wrap)]
++        #[cfg(all(v8_gamma_wrap,not(v8_gamma_one)))]
+         combined.push(query_arithmetic::gamma(&r[..403],&r[403..589],&powers)?);
++        #[cfg(v8_gamma_one)] combined.push(gamma_kernel.combine(&r[..403],&r[403..589])?);
+     }
+     query_checkpoint("v8:canonical-gamma");
+     #[cfg(not(v8_auth_order))]

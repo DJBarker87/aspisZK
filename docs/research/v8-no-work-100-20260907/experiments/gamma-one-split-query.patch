@@ -1,0 +1,133 @@
+diff --git a/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs b/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
+index 21e0ac1d..d832440b 100644
+--- a/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
++++ b/docs/research/v8-no-work-100-20260907/experiments/query_arithmetic.rs
+@@ -38,8 +38,34 @@ fn decode_blocks<const B:usize>(bytes:&[u8])->Result<[[u32;8];B],Error>{
+     });
+     if invalid!=0{Err(Error::Canonical)}else{Ok(out)}
+ }
+-#[inline(never)]
++// One check for the whole immutable prepared table, not one per query/dot.
++// Fields are private: the flag is derived here, never supplied by the prover.
++#[cfg(v8_gamma_one)]
++pub(super) struct GammaKernel<'a>{powers:&'a StateOnlySpendQueryPowers,first_one:bool}
++#[cfg(v8_gamma_one)]
++impl<'a> GammaKernel<'a>{
++    pub(super) fn new(powers:&'a StateOnlySpendQueryPowers)->Self{
++        Self{powers,first_one:powers.base.c1_limbs[0]==[1,0,0,0]}
++    }
++    #[inline]
++    pub(super) fn combine(&self,c1:&[u8],c2:&[u8])->Result<[K;4],Error>{
++        #[cfg(not(v8_gamma_one_split))] {gamma_prepared::<false>(c1,c2,self)}
++        #[cfg(v8_gamma_one_split)] {
++            if self.first_one{gamma_prepared::<true>(c1,c2,self)}
++            else{gamma_prepared::<false>(c1,c2,self)}
++        }
++    }
++}
++#[inline]
+ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result<[K;4],Error>{
++    #[cfg(v8_gamma_one)] {GammaKernel::new(powers).combine(c1,c2)}
++    #[cfg(not(v8_gamma_one))] {gamma_prepared::<false>(c1,c2,powers)}
++}
++#[inline(never)]
++fn gamma_prepared<const FIRST_ONE:bool>(c1:&[u8],c2:&[u8],
++    #[cfg(v8_gamma_one)] kernel:&GammaKernel<'_>,
++    #[cfg(not(v8_gamma_one))] powers:&StateOnlySpendQueryPowers)->Result<[K;4],Error>{
++    #[cfg(v8_gamma_one)] let powers=kernel.powers;
+     #[cfg(v8_decode_profile)] query_checkpoint("v8:gamma-enter");
+     #[cfg(not(v8_decode_blocks))]
+     let c1=decode::<104>(c1)?;
+@@ -59,13 +85,22 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
+     for slot in 0..4{
+         #[cfg(v8_gamma_fused)]
+         let fields=fused_dot(c1[26*slot..26*(slot+1)].try_into().unwrap(),&powers.base.c1_limbs);
+-        #[cfg(all(v8_gamma_fixed,not(v8_gamma_fused)))]
++        #[cfg(all(v8_gamma_fixed,not(any(v8_gamma_fused,v8_gamma_one))))]
+         let fields={
+             let values:&[u32;26]=c1[26*slot..26*(slot+1)].try_into().unwrap();
+             let p=&powers.base.c1_limbs;
+             [fixed_dot::<0>(values,p),fixed_dot::<1>(values,p),
+              fixed_dot::<2>(values,p),fixed_dot::<3>(values,p)]
+         };
++        #[cfg(v8_gamma_one)]
++        let fields={
++            let values:&[u32;26]=c1[26*slot..26*(slot+1)].try_into().unwrap();
++            let p=&powers.base.c1_limbs;
++            #[cfg(not(v8_gamma_one_split))] let one=kernel.first_one;
++            #[cfg(v8_gamma_one_split)] let one=FIRST_ONE;
++            [guarded_dot::<0>(values,p,one),guarded_dot::<1>(values,p,one),
++             guarded_dot::<2>(values,p,one),guarded_dot::<3>(values,p,one)]
++        };
+         #[cfg(not(any(v8_gamma_fixed,v8_gamma_fused)))]
+         let fields={
+         let mut sum=[0u64;4];
+@@ -102,6 +137,13 @@ pub(super) fn gamma(c1:&[u8],c2:&[u8],powers:&StateOnlySpendQueryPowers)->Result
+ #[cfg(v8_gamma_fixed)]
+ #[inline(always)]
+ fn fixed_dot<const L:usize>(v:&[u32;26],p:&[[u32;4];26])->M31{
++    guarded_dot::<L>(v,p,false)
++}
++// True is supplied only by GammaKernel's immutable head comparison. False
++// retains the old arbitrary-table path, including non-power test matrices.
++#[cfg(v8_gamma_fixed)]
++#[inline(always)]
++fn guarded_dot<const L:usize>(v:&[u32;26],p:&[[u32;4];26],first_one:bool)->M31{
+     macro_rules! chunk {($i:expr)=>{reduce_chunk(
+         (u64::from(p[$i][L])*u64::from(v[$i]))
+         .wrapping_add(u64::from(p[$i+1][L])*u64::from(v[$i+1]))
+@@ -109,12 +151,53 @@ fn fixed_dot<const L:usize>(v:&[u32;26],p:&[[u32;4];26])->M31{
+         .wrapping_add(u64::from(p[$i+3][L])*u64::from(v[$i+3])))}}
+     let tail=reduce_chunk(u64::from(p[24][L])*u64::from(v[24])
+         +u64::from(p[25][L])*u64::from(v[25]));
+-    let a=chunk!(0).wrapping_add(chunk!(4));
++    let first=if first_one{
++        let tail=(u64::from(p[1][L])*u64::from(v[1]))
++            .wrapping_add(u64::from(p[2][L])*u64::from(v[2]))
++            .wrapping_add(u64::from(p[3][L])*u64::from(v[3]));
++        reduce_chunk(if L==0{u64::from(v[0]).wrapping_add(tail)}else{tail})
++    }else{chunk!(0)};
++    let a=first.wrapping_add(chunk!(4));
+     let b=chunk!(8).wrapping_add(chunk!(12));
+     let c=chunk!(16).wrapping_add(chunk!(20));
+     M31::reduce_u64(a.wrapping_add(b).wrapping_add(c.wrapping_add(tail)))
+ }
+ 
++#[cfg(all(test,v8_gamma_one))]
++mod one_tests{
++    use super::*;
++    #[test]
++    fn guarded_identity_and_arbitrary_table_fallback(){
++        let mut rng=0x6761_6d6d_616f_6e65u64;
++        let mut next=||{rng^=rng<<13;rng^=rng>>7;rng^=rng<<17;(rng%u64::from(corelib::field::P)) as u32};
++        let mut baseline=StateOnlySpendQueryPowers::new(K::ONE);
++        for case in 0..2048{
++            let mut v=core::array::from_fn(|_|next());
++            let mut p=core::array::from_fn(|_|core::array::from_fn(|_|next()));
++            if case==0{v=[0;26];p=[[0;4];26];}
++            if case==1{v=[corelib::field::P-1;26];p=[[corelib::field::P-1;4];26];}
++            if case%2==0{p[0]=[1,0,0,0];}
++            baseline.base.c1_limbs=p;
++            let kernel=GammaKernel::new(&baseline);let one=kernel.first_one;
++            assert_eq!(one,p[0]==[1,0,0,0]);
++            let expected=core::array::from_fn(|l|M31(((0..26).map(|i|u128::from(v[i])*u128::from(p[i][l])).sum::<u128>()%u128::from(corelib::field::P)) as u32));
++            let actual=[guarded_dot::<0>(&v,&p,one),guarded_dot::<1>(&v,&p,one),guarded_dot::<2>(&v,&p,one),guarded_dot::<3>(&v,&p,one)];
++            let old=[fixed_dot::<0>(&v,&p),fixed_dot::<1>(&v,&p),fixed_dot::<2>(&v,&p),fixed_dot::<3>(&v,&p)];
++            assert_eq!(actual,expected);assert_eq!(actual,old);
++        }
++        // Near misses in EACH head limb must take the generic path.
++        for limb in 0..4{for value in [0,1,2,corelib::field::P-1]{
++            baseline.base.c1_limbs[0]=[1,0,0,0];baseline.base.c1_limbs[0][limb]=value;
++            let one=GammaKernel::new(&baseline).first_one;
++            assert_eq!(one,value==if limb==0{1}else{0});
++        }}
++        let mut v=[0u32;26];v[0]=1;let p=[[2u32;4];26];
++        assert_ne!(guarded_dot::<0>(&v,&p,true),fixed_dot::<0>(&v,&p));
++        controls();
++        println!("GAMMA_ONE arbitrary_profiles=2048 head_near_misses=16 generic_fallback=true guard_per_table=1");
++    }
++}
++
+ // Control: one loaded four-value block feeds all four channels. Same seven
+ // reductions and balanced final additions as fixed_dot; no special power or
+ // honest-input assumption. A larger live working set may regress SBF.
