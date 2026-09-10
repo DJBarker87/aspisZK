@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalStages
 import AspisFormal.K1.V7Tag73ExactFixedOperationalNodeExecution
 import AspisFormal.K1.V7Tag73ExactFixedOperationalNodeProgramming
+import AspisFormal.K1.V7Tag73ProjectedNodeForkCursor
 import AspisFormal.K1.V7Tag73RootGammaForkBridge
 
 /-!
@@ -30,14 +31,21 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredOperationalK13Classifier
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73ActualNodeCausalProvenance
+open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73PreparedRestorationRoles
+open AspisK1.V7Tag73ProjectedNodeForkCursor
+open AspisK1.V7Tag73OperationalOracleExposure
 open AspisK1.V7Tag73RestoredDerivedK13View
 open AspisK1.V7Tag73RestoredNodeK13Classifier
 open AspisK1.V7Tag73RootGammaForkBridge
 open AspisK1.V7Tag73TranscriptSchedule
+open AspisK1.V7Tag73SchedulerNativeResult
+open AspisK1.V7Tag73SchedulerNativePlainRomExperiment
+open AspisK1.V7Tag73SchedulerNativePrefixTraversal
+open AspisK1.V7Tag73SchedulerTraceFactorization
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7CoherentTraceExtraction
 open AspisK1.V7Tag73OperationalNodeCertificate
@@ -347,6 +355,86 @@ theorem gamma_restored_certificate_has_block_zero_gamma_pair
   exact ⟨execution, role, requestExact, transitionExact, roleExact, ownerExact,
     blockExact, outputExact, advanceExact⟩
 
+/-- The trace retained by the selected gamma-restored child is sufficient to
+recover the exact live native cursor at which its pair was sampled.  Thus the
+child cannot merely carry compatible pair metadata: its scheduled output is
+the literal next exposure of the production scheduler run. -/
+theorem gamma_restored_certificate_trace_prefix_reaches_scheduled_output
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample}
+    (positive : 0 < transitionFuel)
+    (k13 : ExactGammaRestoredOperationalK13Certificate decoder input) :
+    ∃ (execution : ProjectedRestorationNodeExecution
+          (Final := ConcreteRestorationClientRun Statement Tag73K12ParsedProof
+            Payload (ExactPlainRomWitnessExtractor Statement
+              Tag73K12ParsedProof Payload Witness))
+          (configuration.machine.blackBox.start sample.1
+            configuration.machine.observation)
+          configuration.machine.environment
+          configuration.restorationConfiguration
+          (runExactPlainRom transitionFuel configuration sample).trace
+          (exactRestorationAccumulator input) k13.certificate.node)
+        (role : PreparedRestorationPairRole)
+        (pairRoom : execution.scheduled.frozenHistory.length + 2 ≤
+          globalFull256OracleCallCap parameters)
+        (next : AspisK1.V7Tag73AtomicPairReplay.AtomicPairReplayConfiguration →
+          SchedulerNativeCursor (globalFull256OracleCallCap parameters)
+            (SchedulerNativePlainRomResult TapeIdentity Statement
+              Tag73K12ParsedProof Payload
+              (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+                Payload Witness))),
+      execution.prepared.request = k13.request ∧
+      execution.prepared.transition = k13.requestIsGamma.transition ∧
+      preparedRestorationPairRole? execution.prepared = some role ∧
+      role.owner = .challenge .gamma ∧
+      role.block = 0 ∧
+      seekSchedulerNativeExposure transitionFuel
+          (schedulerNativePrefixCursor transitionFuel
+            (exactPlainRomCursor configuration sample.1)
+            (execution.traceBeforePair.map UnifiedExposureRecord.answer)) =
+        .forkOutput execution.scheduled.frozenHistory pairRoom
+          execution.scheduled.outputInput execution.scheduled.advanceInput
+          execution.scheduled.template next := by
+  obtain ⟨execution, role, requestExact, transitionExact, roleExact,
+      ownerExact, blockExact, _outputExact, _advanceExact⟩ :=
+    gamma_restored_certificate_has_block_zero_gamma_pair positive k13
+  have runExact :
+      runSchedulerNativeListRun transitionFuel
+          (exactPlainRomCursor configuration sample.1)
+          (freshAnswerTapeToList sample.2) =
+        runExactPlainRom transitionFuel configuration sample := by
+    simpa [runExactPlainRom] using
+      (run_scheduler_native_eq_list_run transitionFuel
+        (exactCompilerTargetCaps parameters).length
+        (exactPlainRomCursor configuration sample.1) sample.2).symm
+  have traceExact :
+      (runSchedulerNativeListRun transitionFuel
+          (exactPlainRomCursor configuration sample.1)
+          (freshAnswerTapeToList sample.2)).trace =
+        execution.traceBeforePair ++
+          scheduledPairRecords execution.scheduled ++
+          (execution.proverRecords ++ execution.verifierRecords ++
+            execution.traceAfterVerifier) := by
+    rw [runExact]
+    simpa [List.append_assoc] using execution.fullTraceExact
+  obtain ⟨pairRoom, next, cursorExact⟩ :=
+    seek_after_trace_prefix_is_scheduled_fork_output transitionFuel
+      (exactPlainRomCursor configuration sample.1)
+      (freshAnswerTapeToList sample.2) execution.traceBeforePair
+      (execution.proverRecords ++ execution.verifierRecords ++
+        execution.traceAfterVerifier) execution.scheduled traceExact
+  exact ⟨execution, role, pairRoom, next, requestExact, transitionExact,
+    roleExact, ownerExact, blockExact, cursorExact⟩
+
 /-- Forgetting provenance embeds the corrected event into the older broad
 event.  The converse is deliberately absent. -/
 theorem gamma_restored_k14_width29_subset_unscoped
@@ -375,6 +463,7 @@ theorem gamma_restored_k14_width29_subset_unscoped
 #print axioms gamma_restored_certificate_has_exact_projected_execution
 #print axioms gamma_restored_certificate_execution_has_exact_transition
 #print axioms gamma_restored_certificate_has_block_zero_gamma_pair
+#print axioms gamma_restored_certificate_trace_prefix_reaches_scheduled_output
 #print axioms gamma_restored_k14_width29_subset_unscoped
 
 end
