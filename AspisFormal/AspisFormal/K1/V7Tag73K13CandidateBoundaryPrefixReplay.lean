@@ -55,6 +55,63 @@ open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
 
+/-- Aligned prefixes emitted from the same scheduler state are determined by
+their chronological answer lists.  This generic form is used below for the
+542-slot candidate controller. -/
+theorem indexed_records_aligned_eq_of_answer_maps_eq_generic
+    {globalOracleCalls : Nat} {Memory Slot : Type}
+    (transitionFuel : Nat)
+    (controller : IndexedUnifiedExposureController globalOracleCalls
+      Digest256 Slot Memory)
+    (state : IndexedUnifiedExposureState globalOracleCalls Memory) :
+    ∀ left right,
+      IndexedRecordsAligned transitionFuel controller state left →
+      IndexedRecordsAligned transitionFuel controller state right →
+      left.map UnifiedExposureRecord.answer =
+        right.map UnifiedExposureRecord.answer →
+      left = right := by
+  intro left
+  induction left generalizing state with
+  | nil =>
+      intro right _leftAligned _rightAligned answersExact
+      cases right with
+      | nil => rfl
+      | cons head tail => simp at answersExact
+  | cons leftHead leftTail ih =>
+      intro right leftAligned rightAligned answersExact
+      cases right with
+      | nil => simp at answersExact
+      | cons rightHead rightTail =>
+          simp only [List.map_cons, List.cons.injEq] at answersExact
+          have leftHeadExact := leftAligned [] leftHead leftTail (by simp)
+          have rightHeadExact := rightAligned [] rightHead rightTail (by simp)
+          simp only [indexed_state_after_records_nil] at leftHeadExact
+          simp only [indexed_state_after_records_nil] at rightHeadExact
+          have headExact : leftHead = rightHead := by
+            rw [answersExact.1] at leftHeadExact
+            exact leftHeadExact.symm.trans rightHeadExact
+          subst rightHead
+          have leftTailAligned : IndexedRecordsAligned transitionFuel controller
+              (controller.afterAnswer transitionFuel state leftHead.answer)
+              leftTail := by
+            simpa only [indexed_state_after_records_cons,
+              indexed_state_after_records_nil] using
+              indexed_records_aligned_segment transitionFuel controller state
+                (leftHead :: leftTail) [leftHead] leftTail [] leftAligned (by
+                  simp)
+          have rightTailAligned : IndexedRecordsAligned transitionFuel controller
+              (controller.afterAnswer transitionFuel state leftHead.answer)
+              rightTail := by
+            simpa only [indexed_state_after_records_cons,
+              indexed_state_after_records_nil] using
+              indexed_records_aligned_segment transitionFuel controller state
+                (leftHead :: rightTail) [leftHead] rightTail [] rightAligned (by
+                  simp)
+          have tailExact := ih
+            (controller.afterAnswer transitionFuel state leftHead.answer)
+            rightTail leftTailAligned rightTailAligned answersExact.2
+          rw [tailExact]
+
 /-- The right compiler tape replays the complete left accepted-root prefix up
 to (but not including) the selected query-batch answer. -/
 theorem candidate_witness_boundary_prefix_replays
@@ -92,11 +149,24 @@ theorem candidate_witness_boundary_prefix_replays
           (foldAlphaQ16QueryBatchNamedSlotInputTape
             (exactCompilerFoldAlphaQ16QueryBatchInputTape parameters
               right.answers)) =
-        prior.map UnifiedExposureRecord.answer ++ rightRemaining := by
+        prior.map UnifiedExposureRecord.answer ++ rightRemaining ∧
+      (let base : IndexedUnifiedExposureController
+          (globalFull256OracleCallCap parameters) Digest256
+          FoldAlphaFinalWorkQ16DigestSlot CompleteFoldAlphaQ16Memory :=
+        candidateCompleteBaseController transitionFuel foldTrial.val
+          finalTrial.val 0
+       let controller := extendControllerThroughCandidateQueryBatch
+          transitionFuel candidate base completeFoldAlphaQ16DagMemory
+       let initial := exactCandidateDirectedQueryBatchInitialState left.input
+       let beforeBoundary := indexedStateAfterRecords transitionFuel controller
+          prior initial
+       beforeBoundary.memory.2.q16.advances candidate = some blockAdvance ∧
+         beforeBoundary.memory.2.queryBatch.boundarySeen = false ∧
+         beforeBoundary.memory.2.queryBatch.producers = []) := by
   obtain ⟨selectedRoom, selectedFinal⟩ := left.selected.2.1
   obtain ⟨boundaryFinal, target, blockAdvance, queryBatchDigest, prior, later,
       actor, rootExact, boundaryFinalExact, targetCounter, targetBlock,
-      onlyBase⟩ :=
+      onlyBase, boundaryReady⟩ :=
     exact_selected_candidate_boundary_prior_has_only_base_labels
       transitionRoom left.input foldTrial 0
   have targetExact : target = candidate :=
@@ -115,7 +185,8 @@ theorem candidate_witness_boundary_prefix_replays
       (by simpa only [List.cons_append] using rootExact) programmedCover
       right.answers baseExact (by simpa only [finalExact] using onlyBase)
   exact ⟨blockAdvance, queryBatchDigest, prior, later, actor, rightRemaining,
-    rootExact, rightPrefix⟩
+    rootExact, rightPrefix, by
+      simpa [finalExact] using boundaryReady⟩
 
 /-- Two witnesses in the same candidate-directed fibre replay each other's
 complete literal accepted-root prefix before the selected query-batch answer.
@@ -172,11 +243,13 @@ theorem candidate_witness_boundary_prefixes_mutually_replay
               left.answers)) =
         rightPrior.map UnifiedExposureRecord.answer ++ leftRemaining := by
   obtain ⟨leftBlockAdvance, leftQueryBatchDigest, leftPrior, leftLater,
-      leftActor, rightRemaining, leftRoot, rightReplaysLeft⟩ :=
+      leftActor, rightRemaining, leftRoot, rightReplaysLeft,
+      _leftUnseen⟩ :=
     candidate_witness_boundary_prefix_replays transitionRoom programmedCover
       left right
   obtain ⟨rightBlockAdvance, rightQueryBatchDigest, rightPrior, rightLater,
-      rightActor, leftRemaining, rightRoot, leftReplaysRight⟩ :=
+      rightActor, leftRemaining, rightRoot, leftReplaysRight,
+      _rightUnseen⟩ :=
     candidate_witness_boundary_prefix_replays transitionRoom programmedCover
       right left
   exact ⟨leftBlockAdvance, leftQueryBatchDigest, rightBlockAdvance,
@@ -237,7 +310,7 @@ theorem candidate_witness_boundary_request_replays
             initial).cursor =
         some (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel]) := by
   obtain ⟨blockAdvance, queryBatchDigest, prior, later, actor,
-      rightRemaining, rootExact, rightPrefix⟩ :=
+      rightRemaining, rootExact, rightPrefix, _boundaryUnseen⟩ :=
     candidate_witness_boundary_prefix_replays transitionRoom programmedCover
       left right
   let base : IndexedUnifiedExposureController
