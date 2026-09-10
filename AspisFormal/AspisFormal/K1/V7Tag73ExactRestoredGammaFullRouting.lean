@@ -100,6 +100,57 @@ def exactRestoredGammaInitialState
     cursor := (exactPlainRomCursor configuration hidden).erase
     memory := .waiting }
 
+/-- A chronological record prefix contains no activation point for a waiting
+controller.  The predicate is intentionally recursive on the actual replay
+state: it cannot be discharged by inspecting completed answers or by a raw
+SHA-coordinate classifier. -/
+def WaitingControllerPrefixUnmarked
+    {globalOracleCalls : Nat}
+    (transitionFuel : Nat)
+    (startsHere : UnifiedExposureCursor globalOracleCalls → Bool) :
+    IndexedUnifiedExposureState globalOracleCalls
+        WaitingRestoredQueryBatchMemory →
+      List UnifiedExposureRecord → Prop
+  | _state, [] => True
+  | state, record :: records =>
+      startsHere state.cursor = false ∧
+        WaitingControllerPrefixUnmarked transitionFuel startsHere
+          ((waitingRestoredQueryBatchForkController transitionFuel startsHere)
+            .afterAnswer transitionFuel state record.answer)
+          records
+
+/-- Replaying an unmarked prefix from the waiting phase leaves the controller
+waiting.  This is the generic chronological half of the canonical-gamma
+bridge; the root-sweep source layer only has to prove that its earlier
+requests satisfy `WaitingControllerPrefixUnmarked`. -/
+theorem waiting_controller_prefix_unmarked_preserves_waiting
+    {globalOracleCalls : Nat}
+    (transitionFuel : Nat)
+    (startsHere : UnifiedExposureCursor globalOracleCalls → Bool) :
+    ∀ (state : IndexedUnifiedExposureState globalOracleCalls
+        WaitingRestoredQueryBatchMemory)
+      (records : List UnifiedExposureRecord),
+      state.memory = .waiting →
+      WaitingControllerPrefixUnmarked transitionFuel startsHere state records →
+      (indexedStateAfterRecords transitionFuel
+        (waitingRestoredQueryBatchForkController transitionFuel startsHere)
+        records state).memory = .waiting := by
+  intro state records
+  induction records generalizing state with
+  | nil =>
+      intro waiting _unmarked
+      simpa using waiting
+  | cons record records ih =>
+      intro waiting unmarked
+      obtain ⟨markedFalse, tailUnmarked⟩ := unmarked
+      rw [indexed_state_after_records_cons]
+      apply ih _ tailUnmarked
+      rcases state with ⟨exposureIndex, cursor, memory⟩
+      simp only at waiting
+      subst memory
+      simp [waitingRestoredQueryBatchForkController, markedFalse,
+        IndexedUnifiedExposureController.afterAnswer]
+
 def exactRestoredGammaFullLabels
     {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
     {parameters : ExactCompilerResourceParameters}
@@ -537,6 +588,8 @@ theorem exact_restored_gamma_advance_coordinate_eq_of_routed_lookup
     (exactRestoredGammaRouter transitionFuel configuration hidden)
     (exactGammaPrefixRouterInputTape parameters tape)
     (block, true) (Finset.mem_univ _) answer routed
+
+#print axioms waiting_controller_prefix_unmarked_preserves_waiting
 
 #print axioms exactRestoredGammaFullLabels
 #print axioms exact_gamma_prefix_router_input_tape_preserves_list

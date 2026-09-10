@@ -353,7 +353,9 @@ theorem gamma_restored_certificate_execution_has_exact_transition
         (runExactPlainRom transitionFuel configuration sample).trace
         (exactRestorationAccumulator input) k13.certificate.node //
       execution.prepared.request = k13.request ∧
-        execution.prepared.transition = k13.requestIsGamma.transition } := by
+        execution.prepared.transition = k13.requestIsGamma.transition ∧
+        execution.prepared.parentNode =
+          input.package.root.fixedRoot.base.runtime.node } := by
   obtain ⟨⟨execution, requestExact⟩⟩ :=
     gamma_restored_certificate_has_exact_projected_execution positive k13
   have selected := ready_preparation_parent_is_stored
@@ -382,7 +384,60 @@ theorem gamma_restored_certificate_execution_has_exact_transition
       k13.requestIsGamma.transition := by
     apply Option.some.inj
     exact selectedTransition.symm.trans k13.requestIsGamma.transitionExact
-  exact ⟨⟨execution, requestExact, transitionExact⟩⟩
+  exact ⟨⟨execution, requestExact, transitionExact, parentExact⟩⟩
+
+/-- No earlier transition of the selected execution's literal root parent is
+another block-zero gamma squeeze.  The fact follows from the canonical
+`Nat.find` request, rather than from a uniqueness assumption about transcript
+digests. -/
+theorem gamma_restored_certificate_preparation_has_no_earlier_root_gamma
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample}
+    (positive : 0 < transitionFuel)
+    (k13 : ExactGammaRestoredOperationalK13Certificate decoder input) :
+    Nonempty { execution : ProjectedRestorationNodeExecution
+        (Final := ConcreteRestorationClientRun Statement Tag73K12ParsedProof
+          Payload (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+            Payload Witness))
+        (configuration.machine.blackBox.start sample.1
+          configuration.machine.observation)
+        configuration.machine.environment configuration.restorationConfiguration
+        (runExactPlainRom transitionFuel configuration sample).trace
+        (exactRestorationAccumulator input) k13.certificate.node //
+      execution.prepared.request = k13.request ∧
+      execution.prepared.transition = k13.requestIsGamma.transition ∧
+      execution.prepared.parentNode =
+        input.package.root.fixedRoot.base.runtime.node ∧
+      ∀ index, index < execution.prepared.request.verifierTransitionIndex →
+        ¬ ∃ transition reply,
+          verifierTransitionAt? execution.prepared.parentNode index =
+              some transition ∧
+            transition.event =
+              .verifier (.squeezePair (.challenge .gamma) 0) reply } := by
+  obtain ⟨⟨execution, requestExact, transitionExact, parentExact⟩⟩ :=
+    gamma_restored_certificate_execution_has_exact_transition positive k13
+  refine ⟨⟨execution, requestExact, transitionExact, parentExact, ?_⟩⟩
+  intro index earlier candidate
+  obtain ⟨transition, reply, selected, eventExact⟩ := candidate
+  have earlierCanonical : index <
+      (exactOperationalRootGammaRestorationRequest input).verifierTransitionIndex := by
+    rw [← k13.requestCanonical, ← requestExact]
+    exact earlier
+  apply no_root_gamma_transition_before_canonical input index earlierCanonical
+  refine ⟨transition, reply, ?_, ?_, eventExact⟩
+  · simpa [parentExact] using selected
+  · have within :=
+      (exact_operational_root_gamma_restoration_request_is_typed input).transitionWithin
+    omega
 
 /-- The inserted node's adjacent scheduler pair is exactly a block-zero gamma
 pair.  Owner and block are recovered from the typed transition before either
@@ -418,7 +473,7 @@ theorem gamma_restored_certificate_has_block_zero_gamma_pair
       role.block = 0 ∧
       execution.scheduled.outputInput = role.outputInput ∧
       execution.scheduled.advanceInput = role.advanceInput := by
-  obtain ⟨⟨execution, requestExact, transitionExact⟩⟩ :=
+  obtain ⟨⟨execution, requestExact, transitionExact, _parentExact⟩⟩ :=
     gamma_restored_certificate_execution_has_exact_transition positive k13
   obtain ⟨role, roleExact, outputExact, advanceExact, _outputGrammar,
       _advanceGrammar⟩ := projected_restoration_node_has_exact_fork_role
@@ -592,6 +647,7 @@ theorem gamma_restored_k14_width29_subset_unscoped
 #print axioms gamma_restored_certificate_is_not_root
 #print axioms gamma_restored_certificate_has_exact_projected_execution
 #print axioms gamma_restored_certificate_execution_has_exact_transition
+#print axioms gamma_restored_certificate_preparation_has_no_earlier_root_gamma
 #print axioms gamma_restored_certificate_has_block_zero_gamma_pair
 #print axioms gamma_restored_certificate_trace_prefix_reaches_scheduled_output
 #print axioms one_round_gamma_restored_certificates_have_same_node
