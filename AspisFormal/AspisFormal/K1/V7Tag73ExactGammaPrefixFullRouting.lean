@@ -1,6 +1,11 @@
 import AspisFormal.K1.V7Tag73CausalSlotRouterLookup
 import AspisFormal.K1.V7Tag73ExactCausalRouterTapeAlignment
+import AspisFormal.K1.V7Tag73ExactFixedFullRunFactorization
+import AspisFormal.K1.V7Tag73ExactFixedK12MerkleClassifier
+import AspisFormal.K1.V7Tag73ExactFixedOperationalStateMap
 import AspisFormal.K1.V7Tag73ExactPlainRomRun
+import AspisFormal.K1.V7Tag73ExactPlainRomTraceResourceCaps
+import AspisFormal.K1.V7Tag73FullCursorClientLineageLift
 import AspisFormal.K1.V7Tag73GammaPrefixLabeledRecordsNodup
 
 /-! # Exact full-run routing for the gamma-prefix controller -/
@@ -10,6 +15,7 @@ set_option maxRecDepth 100000
 
 namespace AspisK1.V7Tag73ExactGammaPrefixFullRouting
 
+open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AtomicForkUniformScheduler
 open AspisK1.V7Tag73CausalGammaPrefixCoordinates
@@ -18,13 +24,20 @@ open AspisK1.V7Tag73CausalQ16CoordinateRouter
 open AspisK1.V7Tag73CausalSlotRouterLookup
 open AspisK1.V7Tag73ExactCausalRouterTapeAlignment
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisK1.V7Tag73ExactFixedFullRunFactorization
+open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
+open AspisK1.V7Tag73ExactFixedOperationalStateMap
 open AspisK1.V7Tag73ExactPlainRomRun
+open AspisK1.V7Tag73ExactPlainRomTraceResourceCaps
+open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73FullCursorClientLineageLift
 open AspisK1.V7Tag73GammaPrefixCausalController
 open AspisK1.V7Tag73GammaPrefixLabeledRecordsNodup
 open AspisK1.V7Tag73IndexedControllerLabeledRecords
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedExposureCausalRouter
 open AspisK1.V7Tag73OperationalOracleExposure
+open AspisK1.V7Tag73SchedulerTraceFactorization
 open AspisK1.V7Tag73TranscriptSchedule
 
 noncomputable section
@@ -132,6 +145,86 @@ theorem exact_gamma_prefix_full_labels_tape_exact
   rw [indexed_controller_labeled_records_answers,
     exact_plain_rom_trace_answers_are_master_tape]
   simp
+
+/-- Root-only labels for the literal first execution.  Keeping this separate
+from `exactGammaPrefixFullLabels` matters: the later restoration-client trace
+contains fork coordinates, whereas the root is entirely machine-fresh. -/
+def exactGammaPrefixRootLabels
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) :
+    List (Option GammaPrefixDigestSlot × Digest256) :=
+  indexedControllerLabeledRecords transitionFuel
+    (gammaPrefixCausalController transitionFuel)
+    (exactGammaPrefixInitialState configuration sample.1)
+    (exactFixedRootRecords input.package.root)
+
+/-- The literal root prefix fits below the residual portion reserved for the
+complete twelve-block gamma duplex tape.  This is pure `M + 2R` accounting:
+the root itself contains only machine-fresh coordinates, while the reserved
+twenty-four output/advance positions are paid from the programmed-pair
+allowance. -/
+theorem exact_gamma_prefix_root_residual_enough_of_programmed_cover
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (programmedCover : 24 ≤ 2 * parameters.forkRequestCap) :
+    residualTraceSteps (exactGammaPrefixRootLabels input) ≤
+      (exactCompilerTargetCaps parameters).length - 24 := by
+  let records := exactFixedRootRecords input.package.root
+  let labels := exactGammaPrefixRootLabels input
+  have labelsLength : labels.length = records.length := by
+    have answers := congrArg List.length
+      (indexed_controller_labeled_records_answers transitionFuel
+        (gammaPrefixCausalController transitionFuel)
+        (exactGammaPrefixInitialState configuration sample.1) records)
+    simpa [labels, exactGammaPrefixRootLabels] using answers
+  have residualLe : residualTraceSteps labels ≤ labels.length := by
+    have split := labeled_trace_length_split labels
+    omega
+  have projectedLength (actor : QueryActor) :
+      ∀ queries : List (ShaInput × Digest256),
+        (projectedMachineFreshRecords actor queries).length = queries.length := by
+    intro queries
+    induction queries with
+    | nil => rfl
+    | cons query queries ih =>
+        rcases query with ⟨queryInput, queryAnswer⟩
+        simp [projectedMachineFreshRecords, ih]
+  have recordsCount : records.length = machineFreshCoordinateCount records := by
+    unfold records exactFixedRootRecords fullProjectedRootRecords
+    simp [projectedLength]
+  have recordsMachineLe : records.length ≤
+      machineFreshCoordinateCount
+        (runExactPlainRom transitionFuel configuration sample).trace := by
+    rw [recordsCount,
+      exact_fixed_operational_state_map_trace_is_full_trace transitionFuel
+        configuration projection fixedInstance sample input.package]
+    unfold exactFixedOperationalStateMapTrace
+    simp [records]
+  have recordsLengthLe : records.length ≤ full256MachineFreshCap parameters :=
+    recordsMachineLe.trans input.package.root.traceCaps.1
+  have capLe : full256MachineFreshCap parameters ≤
+      (exactCompilerTargetCaps parameters).length - 24 := by
+    rw [exact_compiler_target_caps_length]
+    unfold unifiedFull256ExposureCap sameTapeStartCap
+    omega
+  exact residualLe.trans
+    (labelsLength.le.trans (recordsLengthLe.trans capLe))
 
 /-- A literal selected record is routed to its pre-answer gamma label whenever
 the prefix fits the router's reserved residual component. -/
@@ -272,6 +365,7 @@ theorem exact_gamma_prefix_advance_coordinate_eq_of_routed_lookup
 #print axioms exact_gamma_prefix_full_labels_form_trace
 #print axioms exact_gamma_prefix_full_named_slots_nodup
 #print axioms exact_gamma_prefix_full_labels_tape_exact
+#print axioms exact_gamma_prefix_root_residual_enough_of_programmed_cover
 #print axioms exact_gamma_prefix_router_routes_selected_full_answer
 #print axioms exact_gamma_prefix_output_coordinate_eq_of_routed_lookup
 #print axioms exact_gamma_prefix_advance_coordinate_eq_of_routed_lookup
