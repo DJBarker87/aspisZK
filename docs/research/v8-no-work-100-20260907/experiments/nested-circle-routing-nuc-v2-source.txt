@@ -1,0 +1,326 @@
+import DistinctCircleDecoder
+
+/-! Source-facing prerequisites for a finite-tape
+coupling of first-circle3 / distinct3(circle3). This file distinguishes a
+short prefix from an exhausted limb retry cap. Named block destinations are
+chosen from controller state BEFORE the next answer; unvisited slots may be
+filled only as ghost padding after the source result has been determined.
+
+The projection lemmas below concern actual V7 prefix decoders. The full
+accepted-trace/router refinement and finite coordinate equivalence are NOT
+claimed here. In particular, a 48-coordinate forest is not identified with
+12 successive fixed four-block source windows. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.NestedCircleRouting
+noncomputable section
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+open AspisK1.V7Tag73TranscriptSchedule
+open AspisK1.V7Tag73DeterministicRefinement
+open AspisK1.V7Tag73SamplerDecoder
+open AspisK1.V7Tag73IncrementalSamplerControl
+
+/-- `layoutFailure` isolates the explicit final layout guard, rather than
+silently equating it with either short input or limb-fuel exhaustion. -/
+inductive PrefixStatus (A : Type) where
+  | needMore
+  | hardFailure
+  | layoutFailure
+  | accepted (value : A)
+
+def PrefixStatus.forget {A : Type} : PrefixStatus A → Option A
+  | .accepted value => some value
+  | _ => none
+
+/-- Literal limb recursion, retaining the distinction erased by Option.
+Fuel zero is a hard failure; a nonzero-fuel empty prefix needs more input. -/
+def limbStatus : Nat → List Nat → PrefixStatus LimbDecode
+  | 0, _ => .hardFailure
+  | _+1, [] => .needMore
+  | fuel+1, word::rest =>
+      if maskedM31 word = m31Prime then
+        match limbStatus fuel rest with
+        | .accepted decoded => .accepted
+            { decoded with attemptsUsed := decoded.attemptsUsed+1 }
+        | .needMore => .needMore
+        | .hardFailure => .hardFailure
+        | .layoutFailure => .layoutFailure
+      else .accepted {value := maskedM31 word, restWords := rest, attemptsUsed := 1}
+
+theorem limbStatus_forget (fuel : Nat) (words : List Nat) :
+    (limbStatus fuel words).forget = decodeLimb fuel words := by
+  induction fuel generalizing words with
+  | zero => rfl
+  | succ fuel ih =>
+      cases words with
+      | nil => rfl
+      | cons word rest =>
+          by_cases rejected : maskedM31 word = m31Prime
+          · have recursive := ih rest
+            cases status : limbStatus fuel rest <;>
+              simp [limbStatus, decodeLimb, rejected, status, PrefixStatus.forget] at recursive ⊢
+            all_goals rw [← recursive]
+          · simp [limbStatus, decodeLimb, rejected, PrefixStatus.forget]
+
+theorem limb_hard_failure_append (fuel : Nat) (words suffix : List Nat)
+    (failed : limbStatus fuel words = .hardFailure) :
+    limbStatus fuel (words++suffix) = .hardFailure := by
+  induction fuel generalizing words with
+  | zero => rfl
+  | succ fuel ih =>
+      cases words with
+      | nil => simp [limbStatus] at failed
+      | cons word rest =>
+          by_cases rejected : maskedM31 word = m31Prime
+          · cases status : limbStatus fuel rest <;>
+              simp [limbStatus, rejected, status] at failed
+            simp [limbStatus, rejected, ih rest status]
+          · simp [limbStatus, rejected] at failed
+
+def limbsStatus : Nat → List Nat → PrefixStatus FourLimbDecode
+  | 0, words => .accepted {limbs := [], restWords := words, wordsUsed := 0}
+  | count+1, words =>
+      match limbStatus 8 words with
+      | .needMore => .needMore
+      | .hardFailure => .hardFailure
+      | .layoutFailure => .layoutFailure
+      | .accepted first =>
+          match limbsStatus count first.restWords with
+          | .needMore => .needMore
+          | .hardFailure => .hardFailure
+          | .layoutFailure => .layoutFailure
+          | .accepted rest => .accepted
+              {limbs := first.value::rest.limbs, restWords := rest.restWords,
+               wordsUsed := first.attemptsUsed+rest.wordsUsed}
+
+theorem limbsStatus_forget (count : Nat) (words : List Nat) :
+    (limbsStatus count words).forget = decodeLimbs count words := by
+  induction count generalizing words with
+  | zero => rfl
+  | succ count ih =>
+      have first := limbStatus_forget 8 words
+      cases status : limbStatus 8 words with
+      | needMore => simp [status, PrefixStatus.forget] at first
+                    simp [limbsStatus, status, decodeLimbs, ← first, PrefixStatus.forget]
+      | hardFailure => simp [status, PrefixStatus.forget] at first
+                       simp [limbsStatus, status, decodeLimbs, ← first, PrefixStatus.forget]
+      | layoutFailure => simp [status, PrefixStatus.forget] at first
+                         simp [limbsStatus, status, decodeLimbs, ← first, PrefixStatus.forget]
+      | accepted decoded =>
+          simp only [status, PrefixStatus.forget] at first
+          have rest := ih decoded.restWords
+          cases tailStatus : limbsStatus count decoded.restWords <;>
+            simp [limbsStatus, status, tailStatus, PrefixStatus.forget,
+              decodeLimbs, ← first] at rest ⊢
+          all_goals rw [← rest]
+          all_goals rfl
+
+def ordinaryStatus (blocks : List Digest256) : PrefixStatus OrdinaryPrefixDecode :=
+  match blocks with
+  | [] => .needMore
+  | _::_ =>
+      match limbsStatus 4 (flattenedWords blocks) with
+      | .needMore => .needMore
+      | .hardFailure => .hardFailure
+      | .layoutFailure => .layoutFailure
+      | .accepted decoded =>
+          let used := blocksNeededForWords decoded.wordsUsed
+          if 0<used ∧ used≤4 ∧ used≤blocks.length then
+            .accepted
+              { value := encodeQm31Limbs decoded.limbs
+                limbs := decoded.limbs
+                wordsUsed := decoded.wordsUsed
+                blocksUsed := used
+                remainingBlocks := blocks.drop used }
+          else .layoutFailure
+
+/-- The detailed classifier projects to the ACTUAL ordinary prefix decoder,
+not a replacement padded-four-block decoder. -/
+theorem ordinaryStatus_forget (blocks : List Digest256) :
+    (ordinaryStatus blocks).forget = decodeOrdinaryPrefix blocks := by
+  cases blocks with
+  | nil => rfl
+  | cons block rest =>
+      have limbs := limbsStatus_forget 4 (flattenedWords (block::rest))
+      cases status : limbsStatus 4 (flattenedWords (block::rest)) <;>
+        simp [ordinaryStatus, status, PrefixStatus.forget,
+          decodeOrdinaryPrefix] at limbs ⊢
+      all_goals rw [← limbs]
+      all_goals simp only [Option.bind_none, Option.bind_some]
+      all_goals split <;> rfl
+
+/-- The literal ordinary decoder supplies the cut and its bounds. No caller
+provides an expected suffix or a padded-block alignment equation. -/
+theorem ordinary_source_tail (blocks : List Digest256)
+    (decoded : OrdinaryPrefixDecode)
+    (run : decodeOrdinaryPrefix blocks = some decoded) :
+    0<decoded.blocksUsed ∧ decoded.blocksUsed≤4 ∧
+      decoded.blocksUsed≤blocks.length ∧
+      decoded.remainingBlocks=blocks.drop decoded.blocksUsed := by
+  cases blocks with
+  | nil => simp [decodeOrdinaryPrefix] at run
+  | cons block rest =>
+      cases limbsRun : decodeLimbs 4 (flattenedWords (block::rest)) with
+      | none => simp [decodeOrdinaryPrefix, limbsRun] at run
+      | some limbs =>
+          by_cases valid : 0<blocksNeededForWords limbs.wordsUsed ∧
+              blocksNeededForWords limbs.wordsUsed≤4 ∧
+              blocksNeededForWords limbs.wordsUsed≤(block::rest).length
+          · simp [decodeOrdinaryPrefix, limbsRun, valid] at run
+            have output := run.2
+            cases output
+            exact ⟨valid.1, valid.2.1, valid.2.2, rfl⟩
+          · simp [decodeOrdinaryPrefix, limbsRun] at run
+            exact False.elim (valid (by simpa using run.1))
+
+/-- The next ordinary call starts at the ACTUAL cumulative cursor. It does
+not start four blocks later unless this call actually consumed four blocks.
+The record returned by the nested circle/distinct decoders retains only the
+FINAL ordinary call's blocksUsed/wordsUsed; total nested consumption must be
+accumulated through these successive tail cuts, not read from that record. -/
+theorem ordinary_cursor_tail (tape : List Digest256) (cursor : Nat)
+    (decoded : OrdinaryPrefixDecode)
+    (run : decodeOrdinaryPrefix (tape.drop cursor) = some decoded) :
+    decoded.remainingBlocks=tape.drop (cursor+decoded.blocksUsed) ∧
+      cursor<cursor+decoded.blocksUsed ∧
+      cursor+decoded.blocksUsed≤tape.length ∧ decoded.blocksUsed≤4 := by
+  obtain ⟨positive, cap, available, tail⟩ := ordinary_source_tail _ decoded run
+  refine ⟨?_, by omega, ?_, cap⟩
+  · simpa only [List.drop_drop] using tail
+  · simp only [List.length_drop] at available
+    omega
+
+/-- First sampler has 3*4 named cells; the distinct-second wrapper has
+3*3*4. These are 48 squeeze-output slots, not a bound of 48 oracle answers:
+the paired duplex-advance coordinates are separate (up to another 48).
+Slots belong to calls, but chronological reads are NOT fixed windows. -/
+abbrev Slot := (Fin 3 × Fin 4) ⊕ (Fin 3 × Fin 3 × Fin 4)
+
+theorem slot_card : Fintype.card Slot = 48 := by
+  simp [Slot]
+
+inductive AbortReason where
+  | ordinaryHardFailure
+  | ordinaryLayoutFailure
+  | incompleteAtFourBlocks
+  | circleAttemptsExhausted
+  | distinctAttemptsExhausted
+
+inductive State where
+  | first (inner : Fin 3) (pending : List Digest256)
+  | second (firstPoint : SecureCirclePointBytes)
+      (outer inner : Fin 3) (pending : List Digest256)
+  | accepted (firstPoint secondPoint : SecureCirclePointBytes)
+  | aborted (reason : AbortReason)
+
+/-- No answer argument is available at destination selection. A halted
+state names no source destination: any remaining fill is ghost padding. -/
+def preferredSlot : State → Option Slot
+  | .first inner pending =>
+      if small : pending.length<4 then some (.inl (inner, ⟨pending.length, small⟩)) else none
+  | .second _ outer inner pending =>
+      if small : pending.length<4 then some (.inr (outer, inner, ⟨pending.length, small⟩)) else none
+  | _ => none
+
+def afterOrdinary (circleMap : SecureCircleParameterMap) (state : State)
+    (decoded : OrdinaryPrefixDecode) : State :=
+  match state with
+  | .first inner _ =>
+      match circleMap decoded.value with
+      | some point => .second point 0 0 []
+      | none => if next : inner.val+1<3 then .first ⟨inner.val+1,next⟩ []
+                else .aborted .circleAttemptsExhausted
+  | .second firstPoint outer inner _ =>
+      match circleMap decoded.value with
+      | none => if next : inner.val+1<3 then .second firstPoint outer ⟨inner.val+1,next⟩ []
+                else .aborted .circleAttemptsExhausted
+      | some point =>
+          if point=firstPoint then
+            if next : outer.val+1<3 then .second firstPoint ⟨outer.val+1,next⟩ 0 []
+            else .aborted .distinctAttemptsExhausted
+          else .accepted firstPoint point
+  | _ => state
+
+/-- This processes exactly one newly exposed block. A hard failure does not
+consume another inner or outer attempt. Incomplete prefixes instead retain
+their pending blocks. The layout/at-four branches remain visibly separate
+until the relevant successful/full-prefix invariants are established. -/
+def afterAnswer (circleMap : SecureCircleParameterMap) (state : State)
+    (answer : Digest256) : State :=
+  let consume (pending : List Digest256) (resume : List Digest256 → State) :=
+    let blocks := pending++[answer]
+    match ordinaryStatus blocks with
+    | .hardFailure => .aborted .ordinaryHardFailure
+    | .layoutFailure => .aborted .ordinaryLayoutFailure
+    | .needMore => if blocks.length<4 then resume blocks
+                  else .aborted .incompleteAtFourBlocks
+    | .accepted decoded => afterOrdinary circleMap state decoded
+  match state with
+  | .first inner pending => consume pending (.first inner)
+  | .second firstPoint outer inner pending => consume pending (.second firstPoint outer inner)
+  | _ => state
+
+theorem hard_failure_aborts_first (circleMap : SecureCircleParameterMap)
+    (inner : Fin 3) (pending : List Digest256) (answer : Digest256)
+    (failed : ordinaryStatus (pending++[answer]) = .hardFailure) :
+    afterAnswer circleMap (.first inner pending) answer = .aborted .ordinaryHardFailure := by
+  simp [afterAnswer, failed]
+
+theorem hard_failure_aborts_second (circleMap : SecureCircleParameterMap)
+    (firstPoint : SecureCirclePointBytes) (outer inner : Fin 3)
+    (pending : List Digest256) (answer : Digest256)
+    (failed : ordinaryStatus (pending++[answer]) = .hardFailure) :
+    afterAnswer circleMap (.second firstPoint outer inner pending) answer =
+      .aborted .ordinaryHardFailure := by
+  simp [afterAnswer, failed]
+
+/-- Ghost padding cannot change either a success or an abort. -/
+theorem halted_padding (circleMap : SecureCircleParameterMap) (answer : Digest256)
+    (firstPoint secondPoint : SecureCirclePointBytes) (reason : AbortReason) :
+    (preferredSlot (.accepted firstPoint secondPoint) = none ∧
+      afterAnswer circleMap (.accepted firstPoint secondPoint) answer =
+        .accepted firstPoint secondPoint) ∧
+    (preferredSlot (.aborted reason) = none ∧
+      afterAnswer circleMap (.aborted reason) answer = .aborted reason) := by
+  exact ⟨⟨rfl,rfl⟩,⟨rfl,rfl⟩⟩
+
+/- Remaining deterministic theorem (NOT an assumption exported above):
+starting at `.first 0 []`, the block-by-block controller must refine the
+literal first `decodeSecureCirclePrefix circleMap 3`, then
+`decodeDistinctPrefix circleMap firstPoint 3` on its ACTUAL remainingBlocks.
+The proof must derive each consumed-prefix cut, freshness/uniqueness of
+preferred slots, no-short-input at adequate capacity, and exact accepted
+output equality. It must not infer all none cases are hard failures.
+
+The underlying truncation/locality mathematics already exists at borrowed
+26a9cd4718aae9f9de7ef1c3394fb74a229085d5:
+V7Tag73VariablePrefixGammaSampler.decodeOrdinaryPrefix_take_blocksUsed
+(line 188; source 5395e710e188f1f7e2085fbf84304fd040215446be7349d75061a540e22dea1f),
+and V7Tag73VariablePrefixGammaFlatRouting.decodeOrdinaryPrefix_of_matching_consumed_prefix
+(line 658; source f99a9cd8160535f3bab41c6bb87bc775ff7d39cabe431b00aed1a0981f214041).
+Their full imports meet incompatible native/overlay cache variants, so a
+permitted narrow source port/import plus the NEW controller composition is
+needed. Do not describe those already-proved generic facts as open mathematics.
+
+After that refinement, instantiate the pinned V7 PreAnswerSlotMachine
+fullCoordinateEquiv with this preferredSlot/afterAnswer and 48 slots. That
+existing equivalence may complete unvisited slots after halt. Its source
+lookup theorem is still necessary to relate routed cells to the actual
+consumed blocks. No mass equality or uniform conditional FS law is currently
+claimed by this draft. -/
+
+#print axioms limbStatus_forget
+#print axioms limb_hard_failure_append
+#print axioms limbsStatus_forget
+#print axioms ordinaryStatus_forget
+#print axioms ordinary_source_tail
+#print axioms ordinary_cursor_tail
+#print axioms slot_card
+#print axioms hard_failure_aborts_first
+#print axioms hard_failure_aborts_second
+#print axioms halted_padding
+end
+end AspisV8.NestedCircleRouting
