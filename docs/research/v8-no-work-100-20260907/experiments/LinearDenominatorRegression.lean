@@ -1,0 +1,69 @@
+import LinearDenominatorOOD
+
+/-! Exact symbolic regression: F=(X*Z+1)Y+1 is prime and primitive.
+Its original Z-resultant is one, yet at X=0 the polynomial answer -1
+is an OOD identity. The leading-coefficient factor is indispensable. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+namespace AspisV8.LinearDenominatorRegression
+open Polynomial
+noncomputable section
+variable {K : Type*} [Field K]
+
+def denominator : Polynomial K[X] := C X * X + 1
+def factor : Polynomial (Polynomial K[X]) := C denominator * X + 1
+
+theorem denominator_nonzero : (denominator (K := K)) ≠ 0 := by
+  intro zero
+  have evaluated := congrArg (fun p : Polynomial K[X] => p.eval 0) zero
+  apply one_ne_zero (α := K[X])
+  simpa only [denominator, Polynomial.eval_add, Polynomial.eval_mul,
+    Polynomial.eval_C, Polynomial.eval_X, Polynomial.eval_one,
+    Polynomial.eval_zero, mul_zero, zero_add] using evaluated
+
+theorem denominator_degree : (denominator (K := K)).natDegree = 1 := by
+  unfold denominator
+  compute_degree!
+
+theorem factor_prime : Prime (factor (K := K)) := by
+  have irreducible : Irreducible (C (denominator (K := K)) * X + C 1) :=
+    Polynomial.irreducible_C_mul_X_add_C denominator_nonzero
+      (fun _ _ dividesOne => isUnit_of_dvd_one dividesOne)
+  simpa only [Polynomial.C_1, factor] using irreducible.prime
+
+theorem factor_primitive : (factor (K := K)).IsPrimitive := by
+  apply Polynomial.isPrimitive_iff_isUnit_of_C_dvd.mpr
+  intro divisor divides
+  rw [Polynomial.C_dvd_iff_dvd_coeff] at divides
+  have coefficient := divides 0
+  apply isUnit_of_dvd_one
+  simpa only [factor, Polynomial.coeff_add, Polynomial.coeff_mul_X_zero,
+    Polynomial.coeff_one_zero, zero_add] using coefficient
+
+theorem original_resultant :
+    Polynomial.resultant (denominator (K := K)) 1 = 1 := by
+  simp only [Polynomial.natDegree_one, Polynomial.resultant_one_right, pow_zero]
+
+theorem actual_identity :
+    LinearDenominatorOOD.atPoint (denominator (K := K)) 0 * (-1) +
+      LinearDenominatorOOD.atPoint 1 0 = 0 := by
+  simp only [LinearDenominatorOOD.atPoint, denominator, Polynomial.map_add,
+    Polynomial.map_mul, Polynomial.map_C, Polynomial.map_X, Polynomial.map_one,
+    Polynomial.coe_evalRingHom, Polynomial.eval_X, Polynomial.C_0,
+    zero_mul, zero_add, one_mul, neg_add_cancel]
+
+theorem corrected_certificate_vanishes :
+    (LinearDenominatorOOD.certificate (denominator (K := K)) 1).eval 0 = 0 :=
+  LinearDenominatorOOD.identity_certificate_zero _ _ (by rw [denominator_degree]; omega)
+    0 (-1) actual_identity
+
+#print axioms denominator_degree
+#print axioms factor_prime
+#print axioms factor_primitive
+#print axioms original_resultant
+#print axioms actual_identity
+#print axioms corrected_certificate_vanishes
+end
+end AspisV8.LinearDenominatorRegression

@@ -1,0 +1,178 @@
+import LinearDenominatorOOD
+import GammaConstantLinear
+import MonicFactorOOD
+
+/-! One pre-OOD obstruction for all excluded linear-Y prime factors.
+Both gamma-dependent denominators and gamma-constant denominators with
+excess numerator degree are covered. Additive X degrees prevent a factor-
+count multiplier. No distribution or source sampler theorem is asserted. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.LinearDenominatorFactors
+open Polynomial
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementSmooth
+open AspisK1.V7ExactCorrelatedAgreementRegularWeights
+open AspisK1.V7ExactCorrelatedAgreementFactorBudgets
+open AspisV8.FactorCoherence AspisV8.FactorIdentityCover
+noncomputable section
+variable {K : Type*} [Field K]
+
+def Small (degree : Nat) (F : TrivariatePolynomial K) : Prop :=
+  (F.coeff 1).natDegree = 0 ∧ (F.coeff 0).natDegree ≤ degree
+
+theorem coefficient_gamma_weight (degree : Nat) (F : TrivariatePolynomial K) (i : Nat) :
+    (F.coeff i).natDegree ≤ trivariateYZWeight degree F := by
+  by_cases zero : F.coeff i = 0
+  · simp only [zero, Polynomial.natDegree_zero, Nat.zero_le]
+  · have weight := coeff_weight_le_localBivariateWeight degree F i
+      (Polynomial.mem_support_iff.mpr zero)
+    exact (Nat.le_add_right _ _).trans weight
+
+theorem factor_weight_le (degree : Nat) (P F : TrivariatePolynomial K)
+    (nonzero : P ≠ 0) (member : F ∈ curvePrimeFactors P) :
+    trivariateYZWeight degree F ≤ trivariateYZWeight degree P :=
+  (Multiset.le_sum_of_mem (Multiset.mem_map.mpr ⟨F, member, rfl⟩)).trans
+    (all_factor_weights_le degree P nonzero)
+
+/-- The certificate is derived from the actual prime factor, including its
+nonzero leading coefficient and primitive Y content. -/
+theorem denominator_obstruction (degree : Nat) (P F : TrivariatePolynomial K)
+    (nonzero : P ≠ 0) (member : F ∈ curvePrimeFactors P)
+    (linear : F.natDegree = 1) (positive : 0 < (F.coeff 1).natDegree) :
+    let E := LinearDenominatorOOD.certificate (F.coeff 1) (F.coeff 0)
+    E ≠ 0 ∧ E.natDegree ≤
+      (2*trivariateYZWeight degree P+1)*(trivariateXOuterEquiv K F).natDegree ∧
+      ∀ x (answer : K[X]), pointSubstitution x answer F = 0 → E.eval x = 0 := by
+  dsimp only
+  have primitive : F.IsPrimitive :=
+    (curvePrimeFactors_prime P nonzero F member).irreducible.isPrimitive (by omega)
+  have linearPrimitive :
+      (C (F.coeff 1) * X + C (F.coeff 0) : TrivariatePolynomial K).IsPrimitive := by
+    rw [← Polynomial.eq_X_add_C_of_natDegree_le_one linear.le]
+    exact primitive
+  have z1 := (coefficient_gamma_weight degree F 1).trans
+    (factor_weight_le degree P F nonzero member)
+  have z0 := (coefficient_gamma_weight degree F 0).trans
+    (factor_weight_le degree P F nonzero member)
+  refine ⟨LinearDenominatorOOD.certificate_ne_zero _ _
+    (GammaConstantLinear.leading_coefficient_ne_zero F linear) linearPrimitive, ?_, ?_⟩
+  · exact (LinearDenominatorOOD.certificate_degree _ _ _
+      (GammaConstantLinear.coefficient_x_degree F 1)
+      (GammaConstantLinear.coefficient_x_degree F 0)).trans
+        (Nat.mul_le_mul_right _ (by omega))
+  · intro x answer identity
+    apply LinearDenominatorOOD.identity_certificate_zero _ _ positive x answer
+    exact GammaConstantLinear.linear_ood_equation F linear x answer identity
+
+theorem exists_factor_obstruction (degree : Nat) (P F : TrivariatePolynomial K)
+    (nonzero : P ≠ 0) (member : F ∈ curvePrimeFactors P)
+    (linear : F.natDegree = 1) :
+    ∃ beta : K[X], beta ≠ 0 ∧ beta.natDegree ≤
+      (2*trivariateYZWeight degree P+1)*(trivariateXOuterEquiv K F).natDegree ∧
+      ∀ x (answer : K[X]), answer.natDegree ≤ degree →
+        pointSubstitution x answer F = 0 → Small degree F ∨ beta.eval x = 0 := by
+  by_cases constant : (F.coeff 1).natDegree = 0
+  · by_cases small : (F.coeff 0).natDegree ≤ degree
+    · exact ⟨1, one_ne_zero, by simp, fun _ _ _ _ => Or.inl ⟨constant, small⟩⟩
+    · obtain ⟨H, nonzeroH, bound, vanishes⟩ :=
+        GammaConstantLinear.excess_numerator_obstruction degree F constant (by omega)
+      refine ⟨H, nonzeroH, ?_, fun x answer answerDegree identity =>
+        Or.inr (vanishes x answer linear answerDegree identity)⟩
+      calc
+        H.natDegree ≤ (trivariateXOuterEquiv K F).natDegree := bound
+        _ = 1*(trivariateXOuterEquiv K F).natDegree := (one_mul _).symm
+        _ ≤ _ := Nat.mul_le_mul_right _ (by omega)
+  · have properties := denominator_obstruction degree P F nonzero member linear (by omega)
+    exact ⟨_, properties.1, properties.2.1,
+      fun x answer _ identity => Or.inr (properties.2.2 x answer identity)⟩
+
+private theorem product_degree_le {I : Type*} (factors : Multiset I)
+    (beta : I → K[X]) (weight : I → Nat)
+    (bounds : ∀ F ∈ factors, (beta F).natDegree ≤ weight F) :
+    (factors.map beta).prod.natDegree ≤ (factors.map weight).sum := by
+  induction factors using Multiset.induction_on with
+  | empty => simp
+  | @cons F rest induction =>
+    simp only [Multiset.map_cons, Multiset.prod_cons, Multiset.sum_cons]
+    exact Polynomial.natDegree_mul_le.trans <| Nat.add_le_add
+      (bounds F (Multiset.mem_cons_self F rest))
+      (induction fun H member => bounds H (Multiset.mem_cons_of_mem member))
+
+/-- P fixes E before either OOD point. Answers may depend arbitrarily and
+sequentially on the points. The same actual retained factor is preserved. -/
+theorem exists_parent_obstruction (degree : Nat)
+    (P : TrivariatePolynomial K) (nonzero : P ≠ 0) :
+    ∃ E : K[X], E ≠ 0 ∧ E.natDegree ≤
+      (2*trivariateYZWeight degree P+1)*(trivariateXOuterEquiv K P).natDegree ∧
+      ∀ (points : Fin 2 → K) (answers : Fin 2 → K[X])
+        (F : TrivariatePolynomial K), F ∈ curvePrimeFactors P → F.natDegree = 1 →
+        Retained points answers F → (∀ r, (answers r).natDegree ≤ degree) →
+        Small degree F ∨ ∀ r, E.eval (points r) = 0 := by
+  classical
+  let factorBudget := 2*trivariateYZWeight degree P+1
+  let beta : TrivariatePolynomial K → K[X] := fun F =>
+    if eligible : F ∈ curvePrimeFactors P ∧ F.natDegree = 1 then
+      Classical.choose (exists_factor_obstruction degree P F nonzero eligible.1 eligible.2)
+    else 1
+  have betaNonzero : ∀ F, beta F ≠ 0 := by
+    intro F
+    by_cases eligible : F ∈ curvePrimeFactors P ∧ F.natDegree = 1
+    · simpa only [beta, dif_pos eligible] using
+        (Classical.choose_spec (exists_factor_obstruction degree P F nonzero
+          eligible.1 eligible.2)).1
+    · simp only [beta, dif_neg eligible, ne_eq, one_ne_zero, not_false_eq_true]
+  have betaBound : ∀ F ∈ curvePrimeFactors P,
+      (beta F).natDegree ≤ factorBudget*(trivariateXOuterEquiv K F).natDegree := by
+    intro F member
+    by_cases linear : F.natDegree = 1
+    · simpa only [beta, dif_pos ⟨member, linear⟩, factorBudget] using
+        (Classical.choose_spec (exists_factor_obstruction degree P F nonzero member linear)).2.1
+    · simp only [beta, dif_neg (show ¬(F ∈ curvePrimeFactors P ∧ F.natDegree=1)
+        from fun h => linear h.2), Polynomial.natDegree_one, Nat.zero_le]
+  let E := ((curvePrimeFactors P).map beta).prod
+  have eNonzero : E ≠ 0 := by
+    apply Multiset.prod_ne_zero
+    intro zeroMember
+    obtain ⟨F, _, zero⟩ := Multiset.mem_map.mp zeroMember
+    exact betaNonzero F zero
+  have budgetSum : ((curvePrimeFactors P).map
+      (fun F => factorBudget*(trivariateXOuterEquiv K F).natDegree)).sum =
+      factorBudget*((curvePrimeFactors P).map
+        (fun F => (trivariateXOuterEquiv K F).natDegree)).sum := by
+    induction curvePrimeFactors P using Multiset.induction_on with
+    | empty => simp
+    | cons F rest induction => simp only [Multiset.map_cons, Multiset.sum_cons, induction, mul_add]
+  refine ⟨E, eNonzero, ?_, ?_⟩
+  · calc
+      E.natDegree ≤ ((curvePrimeFactors P).map
+          (fun F => factorBudget*(trivariateXOuterEquiv K F).natDegree)).sum :=
+        product_degree_le _ beta _ betaBound
+      _ = _ := budgetSum
+      _ ≤ _ := Nat.mul_le_mul_left factorBudget (MonicFactorOOD.all_factor_x_degrees_le P nonzero)
+  · intro points answers F member linear retained answerDegrees
+    by_cases small : Small degree F
+    · exact Or.inl small
+    · right
+      intro r
+      have properties := Classical.choose_spec
+        (exists_factor_obstruction degree P F nonzero member linear)
+      have root : (beta F).eval (points r) = 0 := by
+        simp only [beta, dif_pos ⟨member, linear⟩]
+        exact (properties.2.2 (points r) (answers r) (answerDegrees r)
+          (retained.2 r)).resolve_left small
+      obtain ⟨rest, product⟩ := (Multiset.dvd_prod
+        (Multiset.mem_map.mpr ⟨F, member, rfl⟩) : beta F ∣ E)
+      change E.eval (points r) = 0
+      rw [product, Polynomial.eval_mul, root, zero_mul]
+
+#print axioms coefficient_gamma_weight
+#print axioms factor_weight_le
+#print axioms denominator_obstruction
+#print axioms exists_factor_obstruction
+#print axioms exists_parent_obstruction
+end
+end AspisV8.LinearDenominatorFactors
