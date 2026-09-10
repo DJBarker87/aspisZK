@@ -78,10 +78,30 @@ const VERIFIER_ENTRY_V2_SEED: &[u8] = b"aspis-verifier-entry-v2";
 // generated mainnet Pool/registry/policy constants replace them in release
 // evidence; accepting values named by the request/master would be forgeable
 // under direct verifier invocation.
-#[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
+#[cfg(all(
+    feature = "v7-pair-forest-lane-invariant-audit",
+    not(feature = "v7-pair-forest-public-devnet-identity-audit")
+))]
 const PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1: [u8; 32] = [0x41; 32];
-#[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
+#[cfg(all(
+    feature = "v7-pair-forest-lane-invariant-audit",
+    not(feature = "v7-pair-forest-public-devnet-identity-audit")
+))]
 const PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1: [u8; 32] = [0x44; 32];
+
+// Immutable public-devnet research deployments.  This changes only the two
+// authenticated program identities; the request/result bindings, transcript,
+// proof relation, registry validation, and Pool CPI order are unchanged.
+#[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
+const PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1: [u8; 32] = [
+    0xef, 0xca, 0x7e, 0xf3, 0x31, 0x09, 0xdd, 0xf8, 0x3a, 0x61, 0x0f, 0x18, 0xbb, 0x0f, 0x2f, 0xe7,
+    0x98, 0xc5, 0x7c, 0x7c, 0x4e, 0xb9, 0x4f, 0xeb, 0xb7, 0x02, 0xab, 0xd1, 0xa0, 0x23, 0xcc, 0xdf,
+];
+#[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
+const PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1: [u8; 32] = [
+    0xa9, 0x96, 0xed, 0xcc, 0xd1, 0x27, 0x24, 0x7d, 0xe2, 0x1d, 0x3d, 0xce, 0xfe, 0xfe, 0x2d, 0xed,
+    0x64, 0xcf, 0x62, 0x66, 0x3b, 0xfe, 0x6c, 0xed, 0x3d, 0x0a, 0x16, 0xba, 0x66, 0x8b, 0xbe, 0xba,
+];
 #[cfg(feature = "v7-pair-forest-lane-invariant-audit")]
 const PAIR_FOREST_INVARIANT_POLICY_BINDING_AUDIT_V1: [u8; 32] = [7; 32];
 
@@ -1164,6 +1184,19 @@ mod tests {
 
     fn fixed_pubkey(byte: u8) -> Pubkey {
         Pubkey::new_from_array([byte; 32])
+    }
+
+    #[cfg(feature = "v7-pair-forest-public-devnet-identity-audit")]
+    #[test]
+    fn public_devnet_identity_capability_is_exact() {
+        assert_eq!(
+            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_POOL_PROGRAM_AUDIT_V1).to_string(),
+            "H93Xdk81pavjXwmNBSFeDbfndBxpyD3X43Bp7P2XpJYW"
+        );
+        assert_eq!(
+            Pubkey::new_from_array(PAIR_FOREST_INVARIANT_REGISTRY_PROGRAM_AUDIT_V1).to_string(),
+            "CR1PE8CVHdqkfPwSDGQUph22AK23n5S9wciZvdYxpn8h"
+        );
     }
 
     fn strict_transfer_context() -> StrictTransferContext {
