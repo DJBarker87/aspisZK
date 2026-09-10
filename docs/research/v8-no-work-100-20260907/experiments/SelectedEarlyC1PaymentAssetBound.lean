@@ -1,0 +1,68 @@
+import SelectedEarlyC1PaymentFacts
+
+/-!
+The positive-pack public asset and the input/output-note public asset are one
+value.  This removes the deliberately generic `packedAsset` parameter from
+the coherent early-C1 transfer endpoint without changing the underlying
+decoder or copy-collision theorem.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.SelectedEarlyC1PaymentAssetBound
+open Polynomial Finset
+open AspisFormal.ArithmetizationCore AspisFormal.HashMerkleModel
+open AspisV5ComponentCQM31TowerExact
+open AspisPool.V7ExtractedLaneWords AspisPool.V7FixedWidth29TupleList
+open AspisPool.V7C1SubfieldRecovery
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1CopyCollision
+open AspisV8.SelectedPaymentRecovery AspisV8.SelectedAmountEndpoint
+open AspisV8.PositivePackBinding
+open AspisV8.SelectedNoteRecovery AspisV8.SelectedOutputNotes
+open AspisV8.SelectedEarlyC1Amounts AspisV8.SelectedEarlyC1Inputs
+open AspisV8.SelectedEarlyC1Outputs AspisV8.SelectedEarlyC1InputPair
+open AspisV8.SelectedEarlyC1PaymentFacts
+noncomputable section
+
+/-- All four decoded payment fragments use the same public asset supplied to
+the base-to-QM31 positive-pack check.  Public authentication itself remains
+an outer caller/context obligation. -/
+theorem early_transfer_facts_or_copy_collision_asset_bound
+    (rc : RoundConstants) (c1 : C1InitialWords) (candidate : C1InitialMessages)
+    (found : earlyC1 c1 = some candidate)
+    (baseWord : ∀ column index, projectBase (c1 column index) = c1 column index)
+    (appendIndex : Nat) (lambdas chis : Finset QM31Exact) (lambda chi : QM31Exact)
+    (lambdaMember : lambda ∈ lambdas) (chiMember : chi ∈ chis)
+    (helper : Fin 1024 → QM31Exact)
+    (copy : CopyConditions candidate .transfer appendIndex lambda chi helper)
+    (amountSemantic : AmountSemanticChecks (semanticTable candidate))
+    (inputSemantic : InputSemanticChecks rc candidate)
+    (pairSemantic : InputPairSemanticChecks candidate)
+    (outputSemantic : OutputSemanticChecks rc candidate)
+    (publicAsset : F) (publicNullifier : Digest)
+    (positive : tablePositivePack (semanticTable candidate) (liftBase publicAsset) = some 0)
+    (assetBinding : semanticTable candidate 44 1 - publicAsset = 0)
+    (nullifierBinding : ∀ i : Fin 8,
+      semanticTable candidate 427 i.val - publicNullifier i = 0)
+    (commitments : Fin 2 → Digest)
+    (outputAssets : ∀ which,
+      semanticTable candidate (amountRow (outputBlock which)) 1 - publicAsset = 0)
+    (outputBinding : ∀ which, ∀ i : Fin 8,
+      semanticTable candidate (16 * (outputBlock which + 2) + 11) i.val -
+        commitments which i = 0) :
+    (∀ row : Fin 1024, ∀ column : Fin 16,
+      liftBase (semanticTable candidate row.val column.val) =
+        memberTable candidate row column.val) ∧
+    (TransferFacts rc candidate publicAsset publicNullifier commitments ∨
+      (lambda, chi) ∈ collisionPairs c1 .transfer appendIndex lambdas chis) := by
+  exact early_transfer_facts_or_copy_collision rc c1 candidate found baseWord
+    appendIndex lambdas chis lambda chi lambdaMember chiMember helper copy
+    amountSemantic inputSemantic pairSemantic outputSemantic (liftBase publicAsset)
+    positive publicAsset publicNullifier assetBinding nullifierBinding commitments
+    outputAssets outputBinding
+
+#print axioms early_transfer_facts_or_copy_collision_asset_bound
+end
+end AspisV8.SelectedEarlyC1PaymentAssetBound
