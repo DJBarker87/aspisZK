@@ -1,0 +1,125 @@
+import Mathlib.LinearAlgebra.Lagrange
+
+/-! Polynomial-valued interpolation inside an extension field.
+This reuses the Lagrange construction behind V7's ReleasedLift, but proves
+coefficient descent from a low-degree polynomial over K(X) rather than from
+an already supplied ambient codeword curve. The coefficients are explicit
+K-linear combinations of the node polynomials. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.PolynomialValueInterpolation
+open Polynomial Finset
+noncomputable section
+variable {K L : Type*} [Field K] [Field L]
+
+def scalarMap (phi : K[X] →+* L) : K →+* L := phi.comp Polynomial.C
+
+theorem map_basis (f : K →+* L) (nodes : Finset K) (node : K) :
+    (Lagrange.basis nodes id node).map f = Lagrange.basis nodes f node := by
+  classical
+  simp only [Lagrange.basis, Lagrange.basisDivisor, id_eq,
+    Polynomial.map_prod, Polynomial.map_mul, Polynomial.map_C,
+    map_inv₀, map_sub, Polynomial.map_sub, Polynomial.map_X]
+
+def component (nodes : Finset K) (values : K → K[X]) (j : Nat) : K[X] :=
+  ∑ node ∈ nodes, (Lagrange.basis nodes id node).coeff j • values node
+
+def batch (c : Nat) (nodes : Finset K) (values : K → K[X]) (gamma : K) : K[X] :=
+  ∑ j : Fin (c+1), gamma^j.val • component nodes values j.val
+
+theorem component_degree (nodes : Finset K) (values : K → K[X]) (D j : Nat)
+    (degrees : ∀ node ∈ nodes, (values node).natDegree ≤ D) :
+    (component nodes values j).natDegree ≤ D := by
+  classical
+  unfold component
+  apply Polynomial.natDegree_sum_le_of_forall_le
+  intro node member
+  rw [Polynomial.smul_eq_C_mul]
+  exact (Polynomial.natDegree_C_mul_le _ _).trans (degrees node member)
+
+theorem component_mem (S : Submodule K K[X]) (nodes : Finset K)
+    (values : K → K[X]) (j : Nat) (members : ∀ node ∈ nodes, values node ∈ S) :
+    component nodes values j ∈ S := by
+  classical
+  apply Submodule.sum_mem
+  intro node member
+  exact S.smul_mem _ (members node member)
+
+/-- The value-embedding need only be a ring homomorphism here. Its restriction
+to K is injective because K and L are fields. -/
+theorem coefficient_descent (phi : K[X] →+* L) (R : L[X])
+    (c : Nat) (degree : R.natDegree ≤ c)
+    (nodes : Finset K) (cardinality : nodes.card = c+1)
+    (values : K → K[X])
+    (matched : ∀ node ∈ nodes, R.eval (scalarMap phi node) = phi (values node))
+    (j : Nat) :
+    R.coeff j = phi (component nodes values j) := by
+  classical
+  have nodeInjective : Set.InjOn (scalarMap phi) nodes :=
+    (scalarMap phi).injective.injOn
+  have degreeLt : R.degree < (nodes.card : WithBot Nat) := by
+    calc
+      R.degree ≤ (R.natDegree : WithBot Nat) := Polynomial.degree_le_natDegree
+      _ ≤ (c : WithBot Nat) := by exact_mod_cast degree
+      _ < (nodes.card : WithBot Nat) := by
+        rw [cardinality]
+        exact_mod_cast Nat.lt_succ_self c
+  have interpolation : R = Lagrange.interpolate nodes (scalarMap phi)
+      (fun node => phi (values node)) :=
+    Lagrange.eq_interpolate_of_eval_eq _ nodeInjective degreeLt matched
+  rw [interpolation, Lagrange.interpolate_apply, Polynomial.finsetSum_coeff]
+  unfold component
+  rw [map_sum]
+  apply Finset.sum_congr rfl
+  intro node member
+  rw [Polynomial.coeff_C_mul, ← map_basis (scalarMap phi) nodes node,
+    Polynomial.coeff_map, Polynomial.smul_eq_C_mul, map_mul]
+  change phi (values node) * scalarMap phi ((Lagrange.basis nodes id node).coeff j) =
+    scalarMap phi ((Lagrange.basis nodes id node).coeff j) * phi (values node)
+  exact mul_comm _ _
+
+theorem batch_image (phi : K[X] →+* L) (R : L[X])
+    (c : Nat) (degree : R.natDegree ≤ c)
+    (nodes : Finset K) (cardinality : nodes.card = c+1)
+    (values : K → K[X])
+    (matched : ∀ node ∈ nodes, R.eval (scalarMap phi node) = phi (values node))
+    (gamma : K) :
+    phi (batch c nodes values gamma) = R.eval (scalarMap phi gamma) := by
+  classical
+  have expansion := Polynomial.eval_eq_sum_range'
+    (show R.natDegree < c+1 by omega) (scalarMap phi gamma)
+  unfold batch
+  rw [map_sum]
+  simp only [Polynomial.smul_eq_C_mul, map_mul]
+  change (∑ j : Fin (c+1), scalarMap phi (gamma^j.val) *
+    phi (component nodes values j.val)) = _
+  simp_rw [map_pow, ← coefficient_descent phi R c degree nodes cardinality values matched]
+  rw [Fin.sum_univ_eq_sum_range]
+  rw [expansion]
+  apply Finset.sum_congr rfl
+  intro j member
+  exact mul_comm _ _
+
+/-- Once the fixed extension-field polynomial is interpolated, all later
+polynomial values are identified, not just the interpolation nodes. -/
+theorem candidate_eq_batch (phi : K[X] →+* L) (injective : Function.Injective phi)
+    (R : L[X]) (c : Nat) (degree : R.natDegree ≤ c)
+    (nodes : Finset K) (cardinality : nodes.card = c+1)
+    (values : K → K[X])
+    (matched : ∀ node ∈ nodes, R.eval (scalarMap phi node) = phi (values node))
+    (gamma : K) (U : K[X]) (root : R.eval (scalarMap phi gamma) = phi U) :
+    U = batch c nodes values gamma := by
+  apply injective
+  exact root.symm.trans (batch_image phi R c degree nodes cardinality values matched gamma).symm
+
+#print axioms map_basis
+#print axioms component_degree
+#print axioms component_mem
+#print axioms coefficient_descent
+#print axioms batch_image
+#print axioms candidate_eq_batch
+end
+end AspisV8.PolynomialValueInterpolation
