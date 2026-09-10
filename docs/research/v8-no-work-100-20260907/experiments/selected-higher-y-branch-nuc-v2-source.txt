@@ -1,0 +1,131 @@
+import SelectedQuadraticReduction
+import CausalFactorReduction
+
+/-! Source-shaped higher-Y branch inputs. The maximal fixed-factor challenge
+set contains every actual image-valid covered quotient, including arbitrary
+post-alpha selections. Its old V7 support validity and both actual OOD
+values are derived, not assumed. The prime-factor universe is fixed before
+OOD; Retained and the selected OOD row may depend on the completed OOD
+prefix but not gamma. Simplicity is explicitly split from derivative-zero;
+this leaf supplies no incidence/cardinality, sampler, or extraction claim.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.SelectedHigherYBranch
+open Polynomial Finset
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7Tag73ExactGRSConversion
+open AspisV6Width29CorrelatedAgreement
+open AspisV5ComponentCConcreteFoldLinearity
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedCoveredRelation
+open AspisV8.CausalCoveredRecovery AspisV8.SelectedQuadraticReduction
+open AspisV8.SelectedFactorCoherence AspisV8.SelectedOODGate
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.ComponentOODBinding AspisV8.GammaComponentGame AspisV8.OODInterpolant
+open AspisV8.FactorIdentityCover AspisV8.QuotientFamilySelected
+open AspisV8.CoveredOriginalSymbols
+noncomputable section
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+attribute [local irreducible] curvePrimeFactors
+
+/-- Same Q throughout: literal support, image equations and higher-factor
+root. No source correspondence or global decoder is supplied as a premise. -/
+def Qualified (c1 : C1Received) (c2 : C2Received) (d : Data (K := K))
+    (F : TrivariatePolynomial K) (gamma : K) (Q : Fin 1024 → K) : Prop :=
+  Q ∈ literalFamily (SelectedComponentGame.received c1 c2 d gamma) ∧
+    (Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0) ∧
+    challengeCandidateHom gamma
+      (exactCircleGRSPolynomial ((atGamma d gamma).original Q)) F=0
+
+/-- F and the received/OOD prefix are fixed, but Q is existential per gamma.
+Thus this set covers all adaptive later branches, not one chosen strategy. -/
+def qualifyingGammas (c1 : C1Received) (c2 : C2Received) (d : Data (K := K))
+    (F : TrivariatePolynomial K) (Gamma : Finset K) : Finset K :=
+  Gamma.filter fun gamma => ∃ Q, Qualified c1 c2 d F gamma Q
+
+def regularGammas (c1 : C1Received) (c2 : C2Received) (d : Data (K := K))
+    (F : TrivariatePolynomial K) (r : Fin 2) (Gamma : Finset K) : Finset K :=
+  (qualifyingGammas c1 c2 d F Gamma).filter fun gamma =>
+    (FactorCoherence.derivativeCurve F (point d r)
+      (CurveOODGate.answerCurve (answers d r))).eval gamma ≠ 0
+
+theorem qualified_valid (c1 : C1Received) (c2 : C2Received)
+    (d : Data (K := K)) (checked : d.Checked) (F : TrivariatePolynomial K)
+    (quotient : K → Fin 1024 → K) (gamma : K)
+    (qualified : Qualified c1 c2 d F gamma (quotient gamma)) :
+    Width29ValidResponse exactInitialEncoder 38229 (received29 c1 c2)
+      (originalStrategy c1 c2 d quotient) gamma :=
+  selected_width29_valid c1 c2 d checked quotient gamma qualified.2.1 qualified.1
+
+theorem qualified_points (c1 : C1Received) (c2 : C2Received)
+    (d : Data (K := K)) (checked : d.Checked)
+    (circles : d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1)
+    (west : ∀ r, pointX d r ≠ -1) (F : TrivariatePolynomial K)
+    (gamma : K) (Q : Fin 1024 → K) (qualified : Qualified c1 c2 d F gamma Q) :
+    ∀ r, (exactCircleGRSPolynomial ((atGamma d gamma).original Q)).eval (point d r)=
+      (CurveOODGate.answerCurve (answers d r)).eval gamma :=
+  (SelectedIdentityCover.literal_candidate c1 c2 d checked circles west gamma Q
+    qualified.1 qualified.2.1).2
+
+/-- Restricted SAME-execution higher-Y prefix. The root is required for the
+same Q representing the actual final, not merely another covered candidate. -/
+def higherPrefix {q : Nat} (e : Execution q) (gamma kappa tau alpha : K) : Prop :=
+  ∃ Q ∈ literalFamily (e.raw gamma), ¬badAnchor (e.rows gamma) Q ∧
+    (e.strategy gamma kappa).final tau alpha=coefficientFoldLayer 256 alpha Q ∧
+    HigherCubicRoot e.c1 e.c2 e.data gamma Q
+
+/-- Literal causal implication to the old V7 branch inputs. No dependence
+restriction is imposed on Q beyond the source's actual final selection. -/
+theorem higher_prefix_branch {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r ≠ -1) (Gamma : Finset K)
+    (gamma kappa tau alpha : K) (memberGamma : gamma ∈ Gamma)
+    (selectedPrefix : higherPrefix e gamma kappa tau alpha) :
+    ∃ F ∈ curvePrimeFactors (parent e.c1 e.c2),
+      Retained (point e.data) (fun r => CurveOODGate.answerCurve (answers e.data r)) F ∧
+      3 ≤ F.natDegree ∧ gamma ∈ qualifyingGammas e.c1 e.c2 e.data F Gamma ∧
+      ∃ Q, Qualified e.c1 e.c2 e.data F gamma Q ∧
+        (e.strategy gamma kappa).final tau alpha=coefficientFoldLayer 256 alpha Q ∧
+        Width29ValidResponse exactInitialEncoder 38229 (received29 e.c1 e.c2)
+          (originalStrategy e.c1 e.c2 e.data (fun _ => Q)) gamma ∧
+        ∀ r, (exactCircleGRSPolynomial ((atGamma e.data gamma).original Q)).eval
+            (point e.data r)=(CurveOODGate.answerCurve (answers e.data r)).eval gamma := by
+  obtain ⟨Q, member, notBad, final, F, factor, retained, root, higher⟩ := selectedPrefix
+  have image : Q 1023=0 ∧ e.data.b*Q 1022-e.data.c*Q 1021=0 := by
+    constructor
+    · by_contra wrong
+      exact notBad (Or.inl wrong)
+    · by_contra wrong
+      exact notBad (Or.inr (Or.inl wrong))
+  have qualified : Qualified e.c1 e.c2 e.data F gamma Q := ⟨member, image, root⟩
+  refine ⟨F, factor, retained, higher, ?_, Q, qualified, final, ?_, ?_⟩
+  · exact Finset.mem_filter.mpr ⟨memberGamma, Q, qualified⟩
+  · exact qualified_valid e.c1 e.c2 e.data checked F (fun _ => Q) gamma qualified
+  · exact qualified_points e.c1 e.c2 e.data checked circles west F gamma Q qualified
+
+/-- A fixed pre-gamma row gives an exact regular-or-singular split. The
+singular branch is not silently removed or assigned an unproved root bound. -/
+theorem qualifying_regular_or_singular (c1 : C1Received) (c2 : C2Received)
+    (d : Data (K := K)) (F : TrivariatePolynomial K) (r : Fin 2)
+    (Gamma : Finset K) (gamma : K)
+    (member : gamma ∈ qualifyingGammas c1 c2 d F Gamma) :
+    gamma ∈ regularGammas c1 c2 d F r Gamma ∨
+      (FactorCoherence.derivativeCurve F (point d r)
+        (CurveOODGate.answerCurve (answers d r))).eval gamma=0 := by
+  by_cases zero : (FactorCoherence.derivativeCurve F (point d r)
+      (CurveOODGate.answerCurve (answers d r))).eval gamma=0
+  · exact Or.inr zero
+  · exact Or.inl (Finset.mem_filter.mpr ⟨member, zero⟩)
+
+#print axioms qualified_valid
+#print axioms qualified_points
+#print axioms higher_prefix_branch
+#print axioms qualifying_regular_or_singular
+end
+end AspisV8.SelectedHigherYBranch
