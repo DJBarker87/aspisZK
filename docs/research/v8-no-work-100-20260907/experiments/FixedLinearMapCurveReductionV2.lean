@@ -147,3 +147,4 @@ theorem dense_feasible_particular_curve (L : V →ₗ[K] W)
 #print axioms dense_feasible_particular_curve
 end
 end AspisV8.FixedLinearMapCurveReduction
+
