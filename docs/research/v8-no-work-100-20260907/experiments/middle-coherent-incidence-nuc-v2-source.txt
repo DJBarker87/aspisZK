@@ -1,0 +1,151 @@
+import SelectedMiddleUniqueness
+import SelectedOwnSymbol
+import SupportQualifiedRootIncidence
+
+/-! A fixed tuple with insufficient own support can represent at most 36
+actual middle-support gammas. Middle witnesses and representation are both
+explicit: interpolation at 29 nodes does not represent later nodes. This
+is deterministic incidence, not a post-selection or sampler bound. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.MiddleCoherentIncidence
+open Polynomial Finset
+noncomputable section
+
+namespace Generic
+variable {K I : Type*} [Field K] [DecidableEq K] [DecidableEq I]
+open AspisV8.OwnSymbolCollision AspisV8.SupportQualifiedRootIncidence
+
+theorem identity_coordinates (D : Finset I) (received expected : Fin 29 → I → K) :
+    identityCoordinates D (residual received expected) = own D received expected := by
+  ext i
+  simp only [identityCoordinates, own, Finset.mem_filter, residual_zero_iff]
+
+theorem matching_incidence (D : Finset I) (G : Finset K)
+    (received expected : Fin 29 → I → K) (a : Nat)
+    (large : ∀ g ∈ G, a ≤ (matching D received expected g).card) :
+    G.card * (a - (own D received expected).card) ≤
+      28 * (D.card - (own D received expected).card) := by
+  classical
+  have bound := adaptive_polynomial_bound D G (residual received expected)
+    (matching D received expected) a 28
+    (fun i _ => residual_degree received expected i)
+    (fun _ _ => Finset.filter_subset _ _) large (by
+      intro g _ i member
+      exact (Finset.mem_filter.mp member).2)
+  rw [identity_coordinates] at bound
+  exact bound
+
+/-- Pure small arithmetic after the symbolic incidence theorem. -/
+theorem small_own_card_le_36 (D : Finset I) (G : Finset K)
+    (received expected : Fin 29 → I → K) (size : D.card = 1048576)
+    (small : (own D received expected).card < 38228)
+    (large : ∀ g ∈ G, 803230 ≤ (matching D received expected g).card) :
+    G.card ≤ 36 := by
+  have bound := matching_incidence D G received expected 803230 large
+  rw [size] at bound
+  by_contra many
+  have thirtySeven : 37 ≤ G.card := by omega
+  have lower := Nat.mul_le_mul_right
+    (803230 - (own D received expected).card) thirtySeven
+  have impossible := lower.trans bound
+  omega
+
+/-- Thirty-seven coherent nodes force at least 39932 own symbols. -/
+theorem thirty_seven_own (D : Finset I) (G : Finset K)
+    (received expected : Fin 29 → I → K) (size : D.card = 1048576)
+    (many : 37 ≤ G.card)
+    (large : ∀ g ∈ G, 803230 ≤ (matching D received expected g).card) :
+    39932 ≤ (own D received expected).card := by
+  have bound := matching_incidence D G received expected 803230 large
+  rw [size] at bound
+  have lower := Nat.mul_le_mul_right
+    (803230 - (own D received expected).card) many
+  have necessary := lower.trans bound
+  omega
+end Generic
+
+open AspisV8.CausalCoveredRecovery AspisV8.SelectedMiddleUniqueness
+open AspisV8.SelectedHigherYHighSupport AspisV8.SelectedRegularLowSupport
+open AspisV8.SelectedHigherYRegularTail AspisV8.GammaComponentGame
+open AspisV8.OODInterpolant AspisV8.TupleQueryTransport
+open AspisV8.EarlyC1LateProjection AspisV8.SelectedOwnSymbol
+abbrev K := AspisV5ComponentCQM31TowerExact.QM31Exact
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+/-- The source middle threshold transfers with exactly two symbol losses.
+The original candidate is the SAME Q from the actual later history. -/
+theorem middle_matching_803230 {q : Nat} (e : Execution q)
+    (checked : e.data.Checked) (p : Fin 29 → Fin 1024 → K)
+    (gamma kappa tau alpha : K) (Q : Fin 1024 → K)
+    (witness : MiddleWitness e gamma kappa tau alpha Q)
+    (represented : (atGamma e.data gamma).original Q = ClaimTransport.batch gamma p) :
+    803230 ≤ (OwnSymbolCollision.matching univ (received29 e.c1 e.c2)
+      (expected p) gamma).card := by
+  have image := witness_image e gamma kappa tau alpha Q witness.1
+  have transfer := fibre_to_original_support e.c1 e.c2 e.data checked gamma Q image
+  have high := witness.2.1
+  have enough : 803230 ≤ (originalSupport e.c1 e.c2 e.data gamma Q).card := by
+    change 200808 ≤ fibreCount
+      (SelectedComponentGame.received e.c1 e.c2 e.data gamma) Q at high
+    omega
+  rw [SelectedOwnSymbol.matching_eq_symbols]
+  unfold originalSupport at enough
+  rw [represented] at enough
+  exact enough
+
+/-- No history is frozen: each gamma may use different kappa/tau/alpha and
+factor witnesses. The tuple p is common to the displayed whole set. -/
+theorem coherent_middle_card_le_36 {q : Nat} (e : Execution q)
+    (checked : e.data.Checked) (p : Fin 29 → Fin 1024 → K) (G : Finset K)
+    (small : (SelectedOwnSymbol.own e.c1 e.c2 p).card < 38228)
+    (coherent : ∀ gamma ∈ G, ∃ kappa tau alpha Q,
+      MiddleWitness e gamma kappa tau alpha Q ∧
+      (atGamma e.data gamma).original Q = ClaimTransport.batch gamma p) :
+    G.card ≤ 36 := by
+  apply Generic.small_own_card_le_36 (univ : Finset (Fin 1048576)) G
+    (received29 e.c1 e.c2) (expected p) (by simp only [card_univ, Fintype.card_fin]) small
+  intro gamma member
+  obtain ⟨kappa, tau, alpha, Q, witness, represented⟩ := coherent gamma member
+  exact middle_matching_803230 e checked p gamma kappa tau alpha Q witness represented
+
+/-- Conditional 37-node endpoint. Nothing here derives coherence of eight
+holdouts from interpolation at the first 29 nodes. -/
+theorem coherent_37_own_support {q : Nat} (e : Execution q)
+    (checked : e.data.Checked) (p : Fin 29 → Fin 1024 → K) (G : Finset K)
+    (many : 37 ≤ G.card)
+    (coherent : ∀ gamma ∈ G, ∃ kappa tau alpha Q,
+      MiddleWitness e gamma kappa tau alpha Q ∧
+      (atGamma e.data gamma).original Q = ClaimTransport.batch gamma p) :
+    39932 ≤ (SelectedOwnSymbol.own e.c1 e.c2 p).card := by
+  apply Generic.thirty_seven_own (univ : Finset (Fin 1048576)) G
+    (received29 e.c1 e.c2) (expected p) (by simp only [card_univ, Fintype.card_fin]) many
+  intro gamma member
+  obtain ⟨kappa, tau, alpha, Q, witness, represented⟩ := coherent gamma member
+  exact middle_matching_803230 e checked p gamma kappa tau alpha Q witness represented
+
+theorem coherent_37_early_member {q : Nat} (e : Execution q)
+    (checked : e.data.Checked) (p : Fin 29 → Fin 1024 → K) (G : Finset K)
+    (many : 37 ≤ G.card)
+    (coherent : ∀ gamma ∈ G, ∃ kappa tau alpha Q,
+      MiddleWitness e gamma kappa tau alpha Q ∧
+      (atGamma e.data gamma).original Q = ClaimTransport.batch gamma p) :
+    c1Projection p ∈ EarlyC1Family.family e.c1 := by
+  apply own_supported_early_member e.c1 e.c2 p
+  have large := coherent_37_own_support e checked p G many coherent
+  omega
+
+#print axioms Generic.identity_coordinates
+#print axioms Generic.matching_incidence
+#print axioms Generic.small_own_card_le_36
+#print axioms Generic.thirty_seven_own
+#print axioms middle_matching_803230
+#print axioms coherent_middle_card_le_36
+#print axioms coherent_37_own_support
+#print axioms coherent_37_early_member
+end
+end AspisV8.MiddleCoherentIncidence
