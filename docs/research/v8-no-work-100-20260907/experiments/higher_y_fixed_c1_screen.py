@@ -28,6 +28,7 @@ SYMBOLS = 1_048_576
 Q = 22
 MIN_SUPPORT = 9_558
 LOW_SUPPORT_MAX = 200_807
+NO_EARLY_SUPPORT_MAX = 252_847
 REGULAR_BUDGET = 239_599_331
 HIGHER_PARENT_WEIGHT = 117_077
 SINGULAR_GAMMAS = 117_049
@@ -43,10 +44,10 @@ def tail_cap(support: int) -> int:
     return min(GAMMA, SYMBOLS * REGULAR_BUDGET // denominator)
 
 
-def low_weighted_numerator() -> int:
+def low_weighted_numerator(upper: int) -> int:
     return tail_cap(MIN_SUPPORT) * math.comb(MIN_SUPPORT, Q) + sum(
         tail_cap(m) * math.comb(m - 1, Q - 1)
-        for m in range(MIN_SUPPORT + 1, LOW_SUPPORT_MAX + 1)
+        for m in range(MIN_SUPPORT + 1, upper + 1)
     )
 
 
@@ -60,8 +61,10 @@ def exact(value: Fraction) -> dict[str, str]:
 
 def main() -> None:
     query_denominator = math.comb(FIBRES, Q)
-    weighted = low_weighted_numerator()
+    weighted = low_weighted_numerator(LOW_SUPPORT_MAX)
+    no_early_weighted = low_weighted_numerator(NO_EARLY_SUPPORT_MAX)
     low_query = Fraction(weighted, GAMMA * query_denominator)
+    no_early_low_query = Fraction(no_early_weighted, GAMMA * query_denominator)
     conservative_alpha = Fraction(3, K)
     high_curve = Fraction(HIGHER_PARENT_WEIGHT, GAMMA)
     suffix = Fraction(Q, GAMMA) + Fraction(18, K)
@@ -79,6 +82,13 @@ def main() -> None:
     # This conservatively charges the singular set again even though its
     # high-support intersection is already contained in high_curve.
     all_higher = outside_pair + PAIR_ROOT
+    no_early_naive = (
+        no_early_low_query
+        + conservative_alpha
+        + Fraction(63 + SINGULAR_GAMMAS, GAMMA)
+        + suffix
+        + PAIR_ROOT
+    )
     result = {
         "status": "exact_arithmetic_screen_not_global_probability_theorem",
         "field_cardinality": K,
@@ -89,6 +99,7 @@ def main() -> None:
         "regular_incidence_budget": REGULAR_BUDGET,
         "higher_parent_weight": HIGHER_PARENT_WEIGHT,
         "low_weighted_numerator": str(weighted),
+        "no_early_naive_weighted_numerator": str(no_early_weighted),
         "terms": {
             "low_query_plus_alpha": {
                 **exact(low_query + conservative_alpha),
@@ -128,6 +139,13 @@ def main() -> None:
                 "bits_approx": bits(sparse_total_control),
                 "passes_100": sparse_total_control * 2**100 < 1,
             },
+            "no_early_naive_extended_layer_cake": {
+                **exact(no_early_naive),
+                "bits_approx": bits(no_early_naive),
+                "passes_100": no_early_naive * 2**100 < 1,
+                "support_interval": [MIN_SUPPORT, NO_EARLY_SUPPORT_MAX],
+                "status": "rejected_as_q22_completion",
+            },
         },
         "conditional_composition": "fixed_early_higher_bound_plus_pair_root_sampler_screen",
         "proof_body_bytes": 40_282,
@@ -141,6 +159,8 @@ def main() -> None:
             "selected_layer_cake_instantiation": "kernel checked",
             "regular_low_outer_suffix_and_root_composition": "kernel checked",
             "fixed_early_higher_high_low_composition": "kernel checked",
+            "no_early_support_cap_252847_outside_63_gammas": "kernel checked",
+            "no_early_middle_band_probability": "unresolved",
             "complete_acceptance_partition": "unresolved",
             "fiat_shamir_coupling": "unresolved",
             "payment_extraction": "partial deterministic bridges only",
