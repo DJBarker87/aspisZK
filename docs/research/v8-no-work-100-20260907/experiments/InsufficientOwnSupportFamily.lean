@@ -1,0 +1,120 @@
+import InsufficientOwnSupport
+
+/-! An adaptive choice from a fixed finite family is covered by a union
+of the charged joint events, not by a union of bare common-query tails.
+There is no assumed membership of every accepted execution in this family.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+namespace AspisV8.InsufficientOwnSupportFamily
+open Polynomial Finset
+open AspisV8.InsufficientOwnSupport AspisV8.FixedTargetQuerySupport
+noncomputable section
+variable {K I M : Type*} [Field K] [DecidableEq K] [DecidableEq I]
+
+theorem adaptive_union_count (family : Finset M) (U : Finset I) (q : Nat) (G A : Finset K)
+    (actual : Finset I → K → K → Prop) (events : M → Finset I → K → K → Prop)
+    (capture : ∀ S ∈ U.powersetCard q, ∀ g ∈ G, ∀ a ∈ A, actual S g a →
+      ∃ m ∈ family, events m S g a) :
+    totalCount U q G A actual ≤ ∑ m ∈ family, totalCount U q G A (events m) := by
+  classical
+  unfold totalCount pairCount
+  calc
+    _ ≤ ∑ S ∈ U.powersetCard q, ∑ g ∈ G,
+        ∑ m ∈ family, (A.filter fun a => events m S g a).card := by
+      apply Finset.sum_le_sum
+      intro S schedule
+      apply Finset.sum_le_sum
+      intro g gamma
+      have subset : A.filter (fun a => actual S g a) ⊆
+          family.biUnion (fun m => A.filter fun a => events m S g a) := by
+        intro a hit
+        obtain ⟨m, member, event⟩ := capture S schedule g gamma a
+          (Finset.mem_filter.mp hit).1 (Finset.mem_filter.mp hit).2
+        exact Finset.mem_biUnion.mpr ⟨m, member,
+          Finset.mem_filter.mpr ⟨(Finset.mem_filter.mp hit).1, event⟩⟩
+      exact (Finset.card_le_card subset).trans Finset.card_biUnion_le
+    _ = ∑ S ∈ U.powersetCard q, ∑ m ∈ family,
+        ∑ g ∈ G, (A.filter fun a => events m S g a).card := by
+      apply Finset.sum_congr rfl
+      intro S _
+      exact Finset.sum_comm
+    _ = _ := Finset.sum_comm
+
+/-- The fine union retains each member's actual common support and exception
+size. Selection after alpha is unrestricted by the capture premise. -/
+theorem family_joint_count (family : Finset M) (U : Finset I) (q : Nat) (G A : Finset K)
+    (C : M → Finset I) (E : M → Finset K) (x y : I → K)
+    (den : I → Fin 4 → K) (R : M → I → Fin 4 → K[X])
+    (actual : Finset I → K → K → Prop) (events : M → Finset I → K → K → Prop)
+    (d : Nat) (hd : d ≤ G.card) (ha : 3 ≤ A.card) (four : (4 : K) ≠ 0)
+    (xy : ∀ i ∈ U, x i ≠ 0 ∧ y i ≠ 0)
+    (subsets : ∀ m ∈ family, C m ⊆ U)
+    (degree : ∀ m ∈ family, ∀ i ∈ U, ∀ j, (R m i j).natDegree ≤ d)
+    (common : ∀ m ∈ family, ∀ i ∈ U, i ∈ C m ↔ ∀ j, R m i j = 0)
+    (pointwise : ∀ m ∈ family, ∀ S ∈ U.powersetCard q,
+      ∀ g ∈ G, ∀ a ∈ A, events m S g a →
+        ∀ i ∈ S, (fibreFold x y den (R m) i g).eval a = 0)
+    (poles : ∀ m ∈ family, ∀ S ∈ U.powersetCard q,
+      ∀ g ∈ G, ∀ a ∈ A, events m S g a → ∀ i ∈ S, ∀ j, den i j ≠ 0)
+    (charged : ∀ m ∈ family, ∀ S ∈ U.powersetCard q, S ⊆ C m →
+      ∀ g ∈ G, ∀ a ∈ A, events m S g a → g ∈ E m)
+    (capture : ∀ S ∈ U.powersetCard q, ∀ g ∈ G, ∀ a ∈ A, actual S g a →
+      ∃ m ∈ family, events m S g a) :
+    totalCount U q G A actual ≤ ∑ m ∈ family,
+      ((C m).card.choose q * ((E m).card*A.card) +
+        (U.card.choose q-(C m).card.choose q) * (d*A.card + (G.card-d)*3)) := by
+  apply (adaptive_union_count family U q G A actual events capture).trans
+  apply Finset.sum_le_sum
+  intro m member
+  exact fixed_tuple_count U (C m) (subsets m member) q G A (E m) x y den (R m)
+    (events m) d hd ha four xy (degree m member) (common m member)
+    (pointwise m member) (poles m member) (charged m member)
+
+/-- Coarsening preserves the crucial |E| factor on the common-query term.
+The second term alone uses all schedules as an upper bound. -/
+theorem coarsen_family_count (family : Finset M) (U : Finset I) (q : Nat) (G A : Finset K)
+    (C : M → Finset I) (E : M → Finset K) (actual : Finset I → K → K → Prop)
+    (d J e size : Nat) (familySize : family.card ≤ size)
+    (commonSize : ∀ m ∈ family, (C m).card ≤ J)
+    (exceptionSize : ∀ m ∈ family, (E m).card ≤ e)
+    (fine : totalCount U q G A actual ≤ ∑ m ∈ family,
+      ((C m).card.choose q * ((E m).card*A.card) +
+        (U.card.choose q-(C m).card.choose q) * (d*A.card+(G.card-d)*3))) :
+    totalCount U q G A actual ≤ size *
+      (J.choose q * (e*A.card) + U.card.choose q * (d*A.card+(G.card-d)*3)) := by
+  apply fine.trans
+  calc
+    _ ≤ ∑ _m ∈ family,
+        (J.choose q * (e*A.card) + U.card.choose q * (d*A.card+(G.card-d)*3)) := by
+      apply Finset.sum_le_sum
+      intro m member
+      apply Nat.add_le_add
+      · exact Nat.mul_le_mul (Nat.choose_le_choose q (commonSize m member))
+          (Nat.mul_le_mul_right A.card (exceptionSize m member))
+      · exact Nat.mul_le_mul_right _ (Nat.sub_le _ _)
+    _ = family.card * _ := by simp
+    _ ≤ _ := Nat.mul_le_mul_right _ familySize
+
+/-- The denominator remains the original domain's q-subset count. No
+conditioning on a pole-free domain or favourable common-support event. -/
+theorem normalize_coarse_family (size schedules common g a e d : Nat)
+    (hd : d ≤ g) (hs : schedules ≠ 0) (hg : g ≠ 0) (ha : a ≠ 0) :
+    (((size*(common*(e*a)+schedules*(d*a+(g-d)*3)) : Nat) : Rat)/(schedules*g*a)) =
+      (size : Rat)*
+        (((common : Rat)/schedules)*((e : Rat)/g) +
+          ((d : Rat)/g+(1-(d : Rat)/g)*(3 : Rat)/a)) := by
+  have schedulesNonzero : (schedules : Rat) ≠ 0 := Nat.cast_ne_zero.mpr hs
+  have gammaNonzero : (g : Rat) ≠ 0 := Nat.cast_ne_zero.mpr hg
+  have alphaNonzero : (a : Rat) ≠ 0 := Nat.cast_ne_zero.mpr ha
+  push_cast [Nat.cast_sub hd]
+  field_simp
+
+#print axioms adaptive_union_count
+#print axioms family_joint_count
+#print axioms coarsen_family_count
+#print axioms normalize_coarse_family
+end
+end AspisV8.InsufficientOwnSupportFamily
