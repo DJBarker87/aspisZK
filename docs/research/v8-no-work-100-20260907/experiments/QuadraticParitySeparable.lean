@@ -1,0 +1,55 @@
+import Mathlib.FieldTheory.Separable
+import Mathlib.RingTheory.Polynomial.UniqueFactorization
+import Mathlib.RingTheory.Polynomial.Resultant.Basic
+
+/-! Squarefreeness is not casually identified with separability over an
+imperfect coefficient field. The derivative condition on irreducible
+divisors is explicit; the selected characteristic bound must supply it.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.QuadraticParitySeparable
+noncomputable section
+open Polynomial
+
+theorem separable_of_squarefree_of_factor_derivatives
+    {L : Type*} [Field L] (R : L[X]) (nonzero : R ≠ 0)
+    (squarefree : Squarefree R)
+    (derivatives : ∀ P : L[X], Irreducible P → P ∣ R → P.derivative ≠ 0) :
+    R.Separable := by
+  apply (Polynomial.separable_def R).mpr
+  apply isRelPrime_iff_isCoprime.mp
+  apply (UniqueFactorizationMonoid.isRelPrime_iff_no_prime_factors nonzero).mpr
+  intro P divides derivativeDivides prime
+  obtain ⟨S, product⟩ := divides
+  have factorDivides : P ∣ R := ⟨S, product⟩
+  have factorSeparable :=
+    (Polynomial.separable_iff_derivative_ne_zero prime.irreducible).mpr
+      (derivatives P prime.irreducible factorDivides)
+  have factorRelPrime : IsRelPrime P P.derivative :=
+    isRelPrime_iff_isCoprime.mpr ((Polynomial.separable_def P).mp factorSeparable)
+  have productSquarefree : Squarefree (P*S) := by rw [← product]; exact squarefree
+  have factorsRelPrime : IsRelPrime P S := IsRelPrime.of_squarefree_mul productSquarefree
+  rw [product, Polynomial.derivative_mul] at derivativeDivides
+  have productDivides : P ∣ P.derivative*S :=
+    (dvd_add_left (dvd_mul_right P S.derivative)).mp derivativeDivides
+  rcases prime.dvd_mul.mp productDivides with left | right
+  · exact prime.not_unit (factorRelPrime (dvd_refl P) left)
+  · exact prime.not_unit (factorsRelPrime (dvd_refl P) right)
+
+theorem resultant_nonzero_of_squarefree_of_factor_derivatives
+    {L : Type*} [Field L] (R : L[X]) (nonzero : R ≠ 0)
+    (squarefree : Squarefree R)
+    (derivatives : ∀ P : L[X], Irreducible P → P ∣ R → P.derivative ≠ 0) :
+    R.resultant R.derivative ≠ 0 := by
+  exact Polynomial.resultant_ne_zero R R.derivative
+    ((Polynomial.separable_def R).mp
+      (separable_of_squarefree_of_factor_derivatives R nonzero squarefree derivatives))
+
+#print axioms separable_of_squarefree_of_factor_derivatives
+#print axioms resultant_nonzero_of_squarefree_of_factor_derivatives
+end
+end AspisV8.QuadraticParitySeparable
