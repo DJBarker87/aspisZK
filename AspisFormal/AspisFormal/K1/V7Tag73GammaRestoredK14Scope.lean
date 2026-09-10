@@ -1,5 +1,6 @@
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalStages
 import AspisFormal.K1.V7Tag73ExactFixedOperationalNodeExecution
+import AspisFormal.K1.V7Tag73ExactFixedOperationalNodeProgramming
 import AspisFormal.K1.V7Tag73RootGammaForkBridge
 
 /-!
@@ -24,6 +25,7 @@ open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK13K14FailureReduction
 open AspisK1.V7Tag73ExactFixedOperationalNodeExecution
+open AspisK1.V7Tag73ExactFixedOperationalNodeProgramming
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredOperationalK13Classifier
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
@@ -31,6 +33,7 @@ open AspisK1.V7Tag73ActualNodeCausalProvenance
 open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73ParsedK13K14Classifier
+open AspisK1.V7Tag73PreparedRestorationRoles
 open AspisK1.V7Tag73RestoredDerivedK13View
 open AspisK1.V7Tag73RestoredNodeK13Classifier
 open AspisK1.V7Tag73RootGammaForkBridge
@@ -287,6 +290,63 @@ theorem gamma_restored_certificate_execution_has_exact_transition
     exact selectedTransition.symm.trans k13.requestIsGamma.transitionExact
   exact ⟨⟨execution, requestExact, transitionExact⟩⟩
 
+/-- The inserted node's adjacent scheduler pair is exactly a block-zero gamma
+pair.  Owner and block are recovered from the typed transition before either
+scheduled answer is inspected. -/
+theorem gamma_restored_certificate_has_block_zero_gamma_pair
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample}
+    (positive : 0 < transitionFuel)
+    (k13 : ExactGammaRestoredOperationalK13Certificate decoder input) :
+    ∃ (execution : ProjectedRestorationNodeExecution
+        (Final := ConcreteRestorationClientRun Statement Tag73K12ParsedProof
+          Payload (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+            Payload Witness))
+        (configuration.machine.blackBox.start sample.1
+          configuration.machine.observation)
+        configuration.machine.environment configuration.restorationConfiguration
+        (runExactPlainRom transitionFuel configuration sample).trace
+        (exactRestorationAccumulator input) k13.certificate.node)
+      (role : PreparedRestorationPairRole),
+      execution.prepared.request = k13.request ∧
+      execution.prepared.transition = k13.requestIsGamma.transition ∧
+      preparedRestorationPairRole? execution.prepared = some role ∧
+      role.owner = .challenge .gamma ∧
+      role.block = 0 ∧
+      execution.scheduled.outputInput = role.outputInput ∧
+      execution.scheduled.advanceInput = role.advanceInput := by
+  obtain ⟨⟨execution, requestExact, transitionExact⟩⟩ :=
+    gamma_restored_certificate_execution_has_exact_transition positive k13
+  obtain ⟨role, roleExact, outputExact, advanceExact, _outputGrammar,
+      _advanceGrammar⟩ := projected_restoration_node_has_exact_fork_role
+        execution
+  have eventExact : execution.prepared.transition.event =
+      .verifier (.squeezePair (.challenge .gamma) 0)
+        k13.requestIsGamma.reply := by
+    rw [transitionExact]
+    exact k13.requestIsGamma.eventExact
+  have ownerExact : role.owner = .challenge .gamma := by
+    unfold preparedRestorationPairRole? at roleExact
+    rw [eventExact] at roleExact
+    cases roleExact
+    rfl
+  have blockExact : role.block = 0 := by
+    unfold preparedRestorationPairRole? at roleExact
+    rw [eventExact] at roleExact
+    cases roleExact
+    rfl
+  exact ⟨execution, role, requestExact, transitionExact, roleExact, ownerExact,
+    blockExact, outputExact, advanceExact⟩
+
 /-- Forgetting provenance embeds the corrected event into the older broad
 event.  The converse is deliberately absent. -/
 theorem gamma_restored_k14_width29_subset_unscoped
@@ -314,6 +374,7 @@ theorem gamma_restored_k14_width29_subset_unscoped
 #print axioms gamma_restored_certificate_is_not_root
 #print axioms gamma_restored_certificate_has_exact_projected_execution
 #print axioms gamma_restored_certificate_execution_has_exact_transition
+#print axioms gamma_restored_certificate_has_block_zero_gamma_pair
 #print axioms gamma_restored_k14_width29_subset_unscoped
 
 end
