@@ -1,0 +1,75 @@
+import EarlyC1Projection
+import EarlyC1Family
+
+/-!
+The strong early C1 object already qualifies for the fixed, at-most-100
+early-C1 family.  This is a deterministic support bridge: four distinct
+stored symbols are supplied by every complete fibre in the early object's
+own support.  No late C2 word, gamma, provider result, acceptance event, or
+decoder-success premise is used.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.EarlyC1StrongFamilyBridge
+open Finset
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1Family
+open AspisV8.NearGammaFibreBridge
+open AspisPool.V7FixedWidth29TupleList
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisPool.V7C1SubfieldRecovery
+noncomputable section
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+/-- Every complete common C1 fibre supplies four distinct entries of the
+literal source-symbol agreement set. -/
+theorem complete_fibre_support_supplies_symbols
+    (received : C1Received) (p : C1Messages) :
+    4 * (support fibreEncode (receivedFibres received) p).card ≤
+      (c1JointAgreementSet received p).card := by
+  let good := support fibreEncode (receivedFibres received) p
+  let pairs := good.product (Finset.univ : Finset (Fin 4))
+  have subset : pairs.map fibreEmbed ⊆ c1JointAgreementSet received p := by
+    intro index member
+    obtain ⟨pair, pairMember, indexEq⟩ := Finset.mem_map.mp member
+    obtain ⟨fibreMember, slotMember⟩ := Finset.mem_product.mp pairMember
+    apply Finset.mem_filter.mpr
+    refine ⟨Finset.mem_univ _, ?_⟩
+    intro column
+    have fibreEq := (Finset.mem_filter.mp fibreMember).2 column
+    have slotEq := congrFun fibreEq pair.2
+    rw [← indexEq]
+    exact slotEq
+  calc
+    4 * good.card = pairs.card := by simp [pairs, Nat.mul_comm]
+    _ = (pairs.map fibreEmbed).card := by simp only [Finset.card_map]
+    _ ≤ (c1JointAgreementSet received p).card := Finset.card_le_card subset
+
+/-- Returning `some p` from the fixed early-C1 object puts exactly that `p`
+in the pre-lambda/chi family.  The much stronger 245609-complete-fibre
+threshold is used only through the object's own definitional support. -/
+theorem some_early_member (received : C1Received) (p : C1Messages)
+    (found : earlyC1 received = some p) : p ∈ family received := by
+  apply (mem_family received p).mpr
+  unfold qualifies
+  have fibres := some_early_has_support fibreEncode (receivedFibres received)
+    245609 p found
+  have symbols := complete_fibre_support_supplies_symbols received p
+  omega
+
+/-- The existing family descent theorem therefore applies directly to a
+strong early-C1 result fixed before the later transcript challenges. -/
+theorem some_early_is_base (received : C1Received) (p : C1Messages)
+    (found : earlyC1 received = some p)
+    (fixed : ∀ column index,
+      projectBase (received column index) = received column index) :
+    ∀ column, projectMessage (p column) = p column := by
+  exact member_is_base received p (some_early_member received p found) fixed
+
+#print axioms complete_fibre_support_supplies_symbols
+#print axioms some_early_member
+#print axioms some_early_is_base
+end
+end AspisV8.EarlyC1StrongFamilyBridge
