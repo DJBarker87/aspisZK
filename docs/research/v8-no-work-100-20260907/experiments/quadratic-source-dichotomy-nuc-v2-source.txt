@@ -1,0 +1,92 @@
+import QuadraticFactorSource
+import QuadraticConstantParity
+
+/-! Fixed source-factor alternative: two OOD roots of a constructed
+nonzero polynomial, or a bounded set of candidate-root challenges.
+This is a causal algebraic interface, not an acceptance theorem or a
+probability claim. Candidates may depend on any already revealed challenge.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.QuadraticSourceDichotomy
+noncomputable section
+open Polynomial
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementRegularWeights
+open AspisK1.V7ExactCorrelatedAgreementFactorBudgets
+
+variable {K : Type*} [Field K] [NeZero (2 : K)]
+
+theorem discriminant_order (F : TrivariatePolynomial K) :
+    QuadraticConstantParity.discriminant (QuadraticConstantParity.reordered F) =
+      QuadraticFactorSource.discriminant F := by
+  simp only [QuadraticConstantParity.discriminant, QuadraticConstantParity.reordered,
+    Polynomial.coeff_map, QuadraticFactorSource.discriminant, discrim]
+  rfl
+
+theorem discriminant_nonzero (F : TrivariatePolynomial K)
+    (irreducible : Irreducible F) (degree : F.natDegree = 2) :
+    QuadraticFactorSource.discriminant F ≠ 0 := by
+  letI : NeZero (2 : FractionRing (Polynomial K[X])) :=
+    ⟨QuadraticConstantParity.fraction_two_ne_zero⟩
+  have mappedIrreducible : Irreducible (QuadraticConstantParity.reordered F) :=
+    irreducible.map (Polynomial.mapEquiv Polynomial.Bivariate.swap.toRingEquiv)
+  have mappedDegree : (QuadraticConstantParity.reordered F).natDegree = 2 :=
+    (Polynomial.natDegree_map_eq_of_injective Polynomial.Bivariate.swap.injective F).trans degree
+  have ns := QuadraticDiscriminantNonsquare.fraction_discriminant_nonsquare
+    (L := FractionRing (Polynomial K[X]))
+    (QuadraticConstantParity.reordered F) mappedIrreducible mappedDegree
+  intro zero
+  apply ns
+  change IsSquare (algebraMap (Polynomial K[X]) (FractionRing (Polynomial K[X]))
+    (QuadraticConstantParity.discriminant (QuadraticConstantParity.reordered F)))
+  rw [discriminant_order, zero, map_zero]
+  exact ⟨0, (zero_mul 0).symm⟩
+
+/-- The branch is determined by the fixed factor, before points, answers,
+gamma sets or candidate selection. Neither candidate membership nor a
+given decomposition/nonzero resultant is a premise. -/
+theorem fixed_source_alternative (p curveDegree : Nat) [CharP K p]
+    (F : TrivariatePolynomial K) (irreducible : Irreducible F)
+    (degree : F.natDegree = 2)
+    (small : (QuadraticFactorSource.discriminant F).natDegree < p) :
+    (∃ E : K[X], E ≠ 0 ∧
+      E.natDegree ≤ (QuadraticFactorSource.discriminant F).natDegree ∧
+      ∀ (points : Fin 2 → K) (answers : Fin 2 → K[X]),
+        (∀ r, FactorCoherence.pointSubstitution (points r) (answers r) F = 0) →
+        ∀ r, E.eval (points r) = 0) ∨
+    (∀ G : Finset K,
+      (∀ gamma ∈ G, ∃ U : K[X], challengeCandidateHom gamma U F = 0) →
+      G.card ≤ 8 * trivariateYZWeight curveDegree F) := by
+  obtain ⟨H, R, hn, rn, identity, squarefree, alternatives⟩ :=
+    QuadraticConstructedParity.exists_fixed_parity_dichotomy p
+      (Polynomial.Bivariate.swap (F.coeff 2))
+      (Polynomial.Bivariate.swap (F.coeff 1))
+      (Polynomial.Bivariate.swap (F.coeff 0))
+      (discriminant_nonzero F irreducible degree) small
+  change QuadraticFactorSource.discriminant F = H^2*R at identity
+  rcases alternatives with constant | bounded
+  · left
+    obtain ⟨E, en, eb, _, forces⟩ := QuadraticConstantParity.source_fixed_obstruction
+      F irreducible degree H R ((discriminant_order F).trans identity) constant
+    refine ⟨E, en, ?_, forces⟩
+    have hd := congrArg Polynomial.natDegree identity
+    rw [Polynomial.natDegree_mul (pow_ne_zero 2 hn) rn, Polynomial.natDegree_pow] at hd
+    omega
+  · right
+    intro G roots
+    have counted := bounded G (fun gamma member => by
+      obtain ⟨U, root⟩ := roots gamma member
+      exact QuadraticFactorSource.candidate_root F degree gamma U root)
+    have weight := QuadraticFactorSource.discriminant_degree_le_weight F curveDegree
+    change G.card ≤ 4*(Polynomial.Bivariate.swap (QuadraticFactorSource.discriminant F)).natDegree at counted
+    omega
+
+#print axioms discriminant_order
+#print axioms discriminant_nonzero
+#print axioms fixed_source_alternative
+end
+end AspisV8.QuadraticSourceDichotomy
