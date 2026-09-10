@@ -70,6 +70,60 @@ def IsTypedRestoredChallengeForkStart
         (dispatchPreparedRestoration startProgram environment configuration
           prepared accumulator resume).erase
 
+/-- The same pre-answer marker with the concrete restoration request retained.
+This is needed when a later algebraic stage must use the child created by one
+particular verifier transition rather than an unrelated restored node. -/
+def IsTypedRestoredChallengeForkStartForRequest
+    {Statement Proof Payload Result : Type}
+    {globalOracleCalls : Nat}
+    (expectedOwner : SqueezeOwner)
+    (request : ConcreteRestorationRequest)
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (cursor : UnifiedExposureCursor globalOracleCalls) : Prop :=
+  ∃ (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+      (prepared : PreparedConcreteRestoration Statement Proof Payload)
+      (role : PreparedRestorationPairRole)
+      (resume : ConcreteRestorationReply →
+        ConcreteRestorationAccumulator Statement Proof Payload →
+          SchedulerNativeCursor globalOracleCalls
+            (ConcreteRestorationClientRun Statement Proof Payload Result)),
+    prepared.request = request ∧
+      prepareConcreteRestorationFromStartProgram startProgram configuration
+          accumulator prepared.request = .ready prepared ∧
+      preparedRestorationPairRole? prepared = some role ∧
+      role.owner = expectedOwner ∧
+      role.block = 0 ∧
+      HistoryTotalCoherent prepared.programmingBase ∧
+      configuration.oracleLimits.totalCalls ≤ globalOracleCalls ∧
+      prepared.programmingBase.history.length + 2 ≤ globalOracleCalls ∧
+      cursor =
+        (dispatchPreparedRestoration startProgram environment configuration
+          prepared accumulator resume).erase
+
+theorem typed_restored_challenge_for_request_implies_marker
+    {Statement Proof Payload Result : Type}
+    {globalOracleCalls : Nat}
+    (expectedOwner : SqueezeOwner)
+    (request : ConcreteRestorationRequest)
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (cursor : UnifiedExposureCursor globalOracleCalls)
+    (exactRequest : IsTypedRestoredChallengeForkStartForRequest
+      (Result := Result) expectedOwner request startProgram environment
+        configuration cursor) :
+    IsTypedRestoredChallengeForkStart (Result := Result) expectedOwner
+      startProgram environment configuration cursor := by
+  rcases exactRequest with ⟨accumulator, prepared, role, resume, _requestExact,
+    ready, roleExact, ownerExact, blockExact, coherent, globalRoom, pairRoom,
+    cursorExact⟩
+  exact ⟨accumulator, prepared, role, resume, ready, roleExact, ownerExact,
+    blockExact, coherent, globalRoom, pairRoom, cursorExact⟩
+
 def typedRestoredChallengeForkStartsHere
     {Statement Proof Payload Result : Type}
     {globalOracleCalls : Nat}
@@ -165,6 +219,41 @@ theorem typed_challenge_dispatch_one_is_marked
   exact typed_challenge_prepared_dispatch_is_marked expectedOwner startProgram
     environment configuration accumulator prepared role resume ready roleExact
       ownerExact blockExact coherent globalRoom pairRoom
+
+/-- A literal ready dispatch retains the exact request selected by its caller. -/
+theorem typed_challenge_dispatch_one_starts_exact_request
+    {Statement Proof Payload Result : Type}
+    {globalOracleCalls : Nat}
+    (expectedOwner : SqueezeOwner)
+    (request : ConcreteRestorationRequest)
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+    (prepared : PreparedConcreteRestoration Statement Proof Payload)
+    (role : PreparedRestorationPairRole)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result))
+    (requestExact : prepared.request = request)
+    (ready : prepareConcreteRestorationFromStartProgram startProgram
+      configuration accumulator prepared.request = .ready prepared)
+    (roleExact : preparedRestorationPairRole? prepared = some role)
+    (ownerExact : role.owner = expectedOwner)
+    (blockExact : role.block = 0)
+    (coherent : HistoryTotalCoherent prepared.programmingBase)
+    (globalRoom : configuration.oracleLimits.totalCalls ≤ globalOracleCalls)
+    (pairRoom : prepared.programmingBase.history.length + 2 ≤
+      globalOracleCalls) :
+    IsTypedRestoredChallengeForkStartForRequest (Result := Result)
+      expectedOwner request startProgram environment configuration
+        (dispatchOneConcreteRestoration startProgram environment configuration
+          accumulator prepared.request resume).erase := by
+  simp only [dispatchOneConcreteRestoration, dispatchConcreteRestoration, ready]
+  exact ⟨accumulator, prepared, role, resume, requestExact, ready, roleExact,
+    ownerExact, blockExact, coherent, globalRoom, pairRoom, rfl⟩
 
 theorem native_cursor_with_typed_challenge_marker_is_fork_pair
     {Statement Proof Payload ClientResult NativeResult : Type}
@@ -419,6 +508,8 @@ def exactCompilerTypedRestoredGammaCoordinates
     cursor
 
 #print axioms IsTypedRestoredChallengeForkStart
+#print axioms IsTypedRestoredChallengeForkStartForRequest
+#print axioms typed_restored_challenge_for_request_implies_marker
 #print axioms typed_restored_challenge_fork_starts_here_iff
 #print axioms typed_challenge_prepared_dispatch_is_marked
 #print axioms typed_challenge_dispatch_one_is_marked
@@ -428,6 +519,7 @@ def exactCompilerTypedRestoredGammaCoordinates
 #print axioms typed_restored_challenge_exposure_starts_here_iff
 #print axioms typed_challenge_exposure_marked_of_record_eq
 #print axioms exactCompilerTypedRestoredGammaCoordinates
+#print axioms typed_challenge_dispatch_one_starts_exact_request
 #print axioms typed_gamma_dispatch_one_is_marked
 #print axioms native_cursor_with_typed_gamma_marker_is_fork_pair
 

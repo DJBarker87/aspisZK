@@ -334,9 +334,11 @@ theorem finite_client_path_target_must_reach_gamma
           requests) :
     SchedulerNativeCursorMustReach
       (fun cursor =>
-        typedRestoredGammaForkStartsHere (Result := Result)
+        IsTypedRestoredChallengeForkStartForRequest (Result := Result)
+          (.challenge .gamma)
+          { nodeId := 0, verifierTransitionIndex := transitionIndex }
           (machine.blackBox.start hidden machine.observation) environment
-          configuration cursor.erase = true)
+          configuration cursor.erase)
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalOracleCalls)
         (machine.blackBox.start hidden machine.observation) environment
@@ -346,8 +348,9 @@ theorem finite_client_path_target_must_reach_gamma
     { nodeId := 0, verifierTransitionIndex := transitionIndex }
   let target := fun cursor : SchedulerNativeCursor globalOracleCalls
       (ConcreteRestorationClientRun Statement Proof Payload Result) =>
-    typedRestoredGammaForkStartsHere (Result := Result) startProgram
-      environment configuration cursor.erase = true
+    IsTypedRestoredChallengeForkStartForRequest (Result := Result)
+      (.challenge .gamma) targetRequest startProgram environment configuration
+        cursor.erase
   let motive := fun (remainingFuel : Nat)
       (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
       (residualClient : ConcreteRestorationClient Result)
@@ -400,12 +403,14 @@ theorem finite_client_path_target_must_reach_gamma
               rw [requestExact]
               simpa [startProgram, targetRequest] using ready
             apply SchedulerNativeCursorMustReach.here
-            simpa [target, requestExact] using
-              (typed_gamma_dispatch_one_is_marked startProgram
-                environment configuration accumulator prepared role resume
-                  readyAtPrepared roleExact ownerExact blockExact coherent
-                  globalRoom
-                  (by omega))
+            have exactStart :=
+              typed_challenge_dispatch_one_starts_exact_request
+                (.challenge .gamma) targetRequest startProgram environment
+                configuration accumulator prepared role resume requestExact
+                readyAtPrepared roleExact ownerExact blockExact coherent
+                globalRoom (by omega)
+            rw [requestExact] at exactStart
+            simpa only [target] using exactStart
           · apply dispatch_one_preserves_rooted_must_reach target runtime.node
               startProgram environment configuration accumulator request resume
               rootStored
@@ -460,9 +465,11 @@ theorem deployed_root_sweep_must_reach_gamma
     (result : Result) :
     SchedulerNativeCursorMustReach
       (fun cursor =>
-        typedRestoredGammaForkStartsHere (Result := Result)
+        IsTypedRestoredChallengeForkStartForRequest (Result := Result)
+          (.challenge .gamma)
+          { nodeId := 0, verifierTransitionIndex := transitionIndex }
           (machine.blackBox.start hidden machine.observation) environment
-          configuration cursor.erase = true)
+          configuration cursor.erase)
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalOracleCalls)
         (machine.blackBox.start hidden machine.observation) environment
@@ -510,11 +517,12 @@ theorem exact_deployed_root_sweep_must_reach_gamma
     (result : Result) :
     SchedulerNativeCursorMustReach
       (fun cursor =>
-        typedRestoredGammaForkStartsHere (Result := Result)
+        IsTypedRestoredChallengeForkStartForRequest (Result := Result)
+          (.challenge .gamma)
+          { nodeId := 0, verifierTransitionIndex := transitionIndex }
           (configuration.machine.blackBox.start hidden
             configuration.machine.observation)
-          environment configuration.restorationConfiguration cursor.erase =
-            true)
+          environment configuration.restorationConfiguration cursor.erase)
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalFull256OracleCallCap parameters)
         (configuration.machine.blackBox.start hidden
@@ -568,9 +576,10 @@ theorem production_root_sweep_configuration_must_reach_gamma
       .verifier (.squeezePair (.challenge .gamma) 0) reply) :
     SchedulerNativeCursorMustReach
       (fun cursor =>
-        typedRestoredGammaForkStartsHere
-          (Result := ExactPlainRomWitnessExtractor Statement Proof Payload
-            Witness)
+        IsTypedRestoredChallengeForkStartForRequest
+          (Result := ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
+          (.challenge .gamma)
+          { nodeId := 0, verifierTransitionIndex := transitionIndex }
           ((exactRootSweepWitnessConfiguration base rounds extractor
             withinForkCap).machine.blackBox.start hidden
               (exactRootSweepWitnessConfiguration base rounds extractor
@@ -578,7 +587,7 @@ theorem production_root_sweep_configuration_must_reach_gamma
           (exactRootSweepWitnessConfiguration base rounds extractor
             withinForkCap).machine.environment
           (exactRootSweepWitnessConfiguration base rounds extractor
-            withinForkCap).restorationConfiguration cursor.erase = true)
+            withinForkCap).restorationConfiguration cursor.erase)
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalFull256OracleCallCap parameters)
         ((exactRootSweepWitnessConfiguration base rounds extractor
@@ -596,12 +605,12 @@ theorem production_root_sweep_configuration_must_reach_gamma
           withinForkCap).client) := by
   change SchedulerNativeCursorMustReach
     (fun cursor =>
-      typedRestoredGammaForkStartsHere
-        (Result := ExactPlainRomWitnessExtractor Statement Proof Payload
-          Witness)
+      IsTypedRestoredChallengeForkStartForRequest
+        (Result := ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
+        (.challenge .gamma)
+        { nodeId := 0, verifierTransitionIndex := transitionIndex }
         (base.machine.blackBox.start hidden base.machine.observation)
-        base.machine.environment base.restorationConfiguration cursor.erase =
-          true)
+        base.machine.environment base.restorationConfiguration cursor.erase)
     (startConcreteRestorationClientFromRoot
       (globalOracleCalls := globalFull256OracleCallCap parameters)
       (base.machine.blackBox.start hidden base.machine.observation)
@@ -645,9 +654,11 @@ theorem production_clean_root_must_reach_gamma
           .verifier (.squeezePair (.challenge .gamma) 0) reply ∧
         SchedulerNativeCursorMustReach
           (fun cursor =>
-            typedRestoredGammaForkStartsHere
+            IsTypedRestoredChallengeForkStartForRequest
               (Result := ExactPlainRomWitnessExtractor Statement Proof Payload
                 Witness)
+              (.challenge .gamma)
+              { nodeId := 0, verifierTransitionIndex := transitionIndex }
               ((exactRootSweepWitnessConfiguration base rounds extractor
                 withinForkCap).machine.blackBox.start sample.1
                   (exactRootSweepWitnessConfiguration base rounds extractor
@@ -655,7 +666,7 @@ theorem production_clean_root_must_reach_gamma
               (exactRootSweepWitnessConfiguration base rounds extractor
                 withinForkCap).machine.environment
               (exactRootSweepWitnessConfiguration base rounds extractor
-                withinForkCap).restorationConfiguration cursor.erase = true)
+                withinForkCap).restorationConfiguration cursor.erase)
           (startConcreteRestorationClientFromRoot
             (globalOracleCalls := globalFull256OracleCallCap parameters)
             ((exactRootSweepWitnessConfiguration base rounds extractor
@@ -701,4 +712,3 @@ theorem production_clean_root_must_reach_gamma
 
 end
 end AspisK1.V7Tag73ConcreteRootSweepMustReachGamma
-

@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ConcreteRootSweepMustReachGamma
 import AspisFormal.K1.V7Tag73ExactFixedK12MerkleClassifier
 import AspisFormal.K1.V7Tag73ExactFixedFullRunFactorization
+import AspisFormal.K1.V7Tag73GammaRestoredK14Scope
 
 /-!
 # Actual completed-run occurrence of the restored gamma fork
@@ -30,6 +31,7 @@ open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactPlainRomOperationalCompletion
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73GammaRestoredK14Scope
 open AspisK1.V7Tag73RestoredChallengeCausalMarker
 open AspisK1.V7Tag73SchedulerNativeMustReach
 open AspisK1.V7Tag73SchedulerNativePlainRomExperiment
@@ -90,7 +92,8 @@ theorem exact_root_sweep_full_trace_contains_typed_gamma_fork
           (ConcreteRestorationClientRun Statement Tag73K12ParsedProof Payload
             (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
               Payload Witness)))
-        (answer : Digest256),
+        (answer : Digest256)
+        (request : ConcreteRestorationRequest),
       (runExactPlainRom transitionFuel
           (exactRootSweepWitnessConfiguration base rounds extractor
             withinForkCap) sample).trace =
@@ -101,6 +104,15 @@ theorem exact_root_sweep_full_trace_contains_typed_gamma_fork
           (base.machine.blackBox.start sample.1 base.machine.observation)
           base.machine.environment base.restorationConfiguration
           targetCursor.erase = true ∧
+      IsTypedRestoredChallengeForkStartForRequest
+          (Result := ExactPlainRomWitnessExtractor Statement
+            Tag73K12ParsedProof Payload Witness)
+          (.challenge .gamma)
+          request
+          (base.machine.blackBox.start sample.1 base.machine.observation)
+          base.machine.environment base.restorationConfiguration
+          targetCursor.erase ∧
+      Nonempty (ExactRootGammaRestorationRequest input request) ∧
       selected = schedulerNativeRequestRecord
         (seekSchedulerNativeExposure transitionFuel targetCursor) answer := by
   let configuration :=
@@ -142,20 +154,30 @@ theorem exact_root_sweep_full_trace_contains_typed_gamma_fork
       input.package.root.full.clientRun (by
         exact input.package.factorization.computedClientListTerminalExact)
   obtain ⟨tailPrior, tailLater, selected, targetCursor, answer, tailExact,
-      marked, selectedExact⟩ :=
+      exactRequest, selectedExact⟩ :=
     returned_run_of_must_reach_contains_target_fork
       (fun cursor =>
-        typedRestoredGammaForkStartsHere
+        IsTypedRestoredChallengeForkStartForRequest
           (Result := ExactPlainRomWitnessExtractor Statement
             Tag73K12ParsedProof Payload Witness)
+          (.challenge .gamma)
+          { nodeId := 0, verifierTransitionIndex := transitionIndex }
           (base.machine.blackBox.start sample.1 base.machine.observation)
           base.machine.environment base.restorationConfiguration
-          cursor.erase = true)
+          cursor.erase)
       transitionFuel transitionPositive
-      (fun cursor marked =>
+      (fun cursor exactRequest =>
         native_cursor_with_typed_gamma_marker_is_fork_pair
           (base.machine.blackBox.start sample.1 base.machine.observation)
-          base.machine.environment base.restorationConfiguration cursor marked)
+          base.machine.environment base.restorationConfiguration cursor (by
+            unfold typedRestoredGammaForkStartsHere
+            rw [typed_restored_challenge_fork_starts_here_iff]
+            exact typed_restored_challenge_for_request_implies_marker
+              (.challenge .gamma)
+              { nodeId := 0, verifierTransitionIndex := transitionIndex }
+              (base.machine.blackBox.start sample.1 base.machine.observation)
+              base.machine.environment base.restorationConfiguration
+              cursor.erase exactRequest))
       (startConcreteRestorationClientFromRoot
         (globalOracleCalls := globalFull256OracleCallCap parameters)
         (base.machine.blackBox.start sample.1 base.machine.observation)
@@ -167,6 +189,28 @@ theorem exact_root_sweep_full_trace_contains_typed_gamma_fork
       continuationPositive
       input.package.root.full.projection.rootPrefixes.verifier.remaining
       input.package.root.full.clientRun clientCompleted
+  have marked : typedRestoredGammaForkStartsHere
+      (Result := ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+        Payload Witness)
+      (base.machine.blackBox.start sample.1 base.machine.observation)
+      base.machine.environment base.restorationConfiguration
+      targetCursor.erase = true := by
+    unfold typedRestoredGammaForkStartsHere
+    rw [typed_restored_challenge_fork_starts_here_iff]
+    exact typed_restored_challenge_for_request_implies_marker
+      (.challenge .gamma)
+      { nodeId := 0, verifierTransitionIndex := transitionIndex }
+      (base.machine.blackBox.start sample.1 base.machine.observation)
+      base.machine.environment base.restorationConfiguration targetCursor.erase
+      exactRequest
+  let request : ConcreteRestorationRequest :=
+    { nodeId := 0, verifierTransitionIndex := transitionIndex }
+  let requestTyped : ExactRootGammaRestorationRequest input request :=
+    { rootNode := rfl
+      transition := transition
+      reply := reply
+      transitionExact := transitionExact
+      eventExact := eventExact }
   let rootRecords := exactFixedRootRecords input.package.root
   let clientTail := exactFixedComputedClientTailRun transitionFuel configuration
     sample input.package.root
@@ -180,24 +224,25 @@ theorem exact_root_sweep_full_trace_contains_typed_gamma_fork
     simpa only [SchedulerNativeRun.trace, runSchedulerNativeListRun,
       configuration, rootRecords, clientTail] using exact
   refine ⟨rootRecords ++ tailPrior, tailLater, selected, targetCursor, answer,
-    ?_, marked, selectedExact⟩
-  rw [fullTraceFactor]
-  change rootRecords ++
-      (runSchedulerNativeListRunFrom transitionFuel
-        (exactFixedClientContinuationFuel transitionFuel input.package.root)
-        (startConcreteRestorationClientFromRoot
-          (globalOracleCalls := globalFull256OracleCallCap parameters)
-          (base.machine.blackBox.start sample.1 base.machine.observation)
-          base.machine.environment input.package.root.fixedRoot.base.runtime.node
-          base.restorationConfiguration (rounds * 1513)
-          (deployedRootSweepClient rounds extractor))
-        input.package.root.full.projection.rootPrefixes.verifier.remaining).trace =
-      (rootRecords ++ tailPrior) ++ selected :: tailLater
-  rw [tailExact, List.append_assoc]
+    request, ?_, marked, ?_, ⟨requestTyped⟩, selectedExact⟩
+  · rw [fullTraceFactor]
+    change rootRecords ++
+        (runSchedulerNativeListRunFrom transitionFuel
+          (exactFixedClientContinuationFuel transitionFuel input.package.root)
+          (startConcreteRestorationClientFromRoot
+            (globalOracleCalls := globalFull256OracleCallCap parameters)
+            (base.machine.blackBox.start sample.1 base.machine.observation)
+            base.machine.environment
+            input.package.root.fixedRoot.base.runtime.node
+            base.restorationConfiguration (rounds * 1513)
+            (deployedRootSweepClient rounds extractor))
+          input.package.root.full.projection.rootPrefixes.verifier.remaining).trace =
+        (rootRecords ++ tailPrior) ++ selected :: tailLater
+    rw [tailExact, List.append_assoc]
+  · simpa only [request] using exactRequest
 
 #print axioms exact_root_sweep_full_trace_contains_typed_gamma_fork
 #print axioms scheduler_native_record_eq_unified_record_at_answer
 
 end
 end AspisK1.V7Tag73ExactRestoredGammaActualTrace
-
