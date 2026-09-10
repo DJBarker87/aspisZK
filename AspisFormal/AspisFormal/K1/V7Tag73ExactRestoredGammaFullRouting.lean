@@ -45,10 +45,31 @@ open AspisK1.V7Tag73RestoredJointBatchActualLawClosure
 open AspisK1.V7Tag73RestoredChallengeCausalMarker
 open AspisK1.V7Tag73RestoredQueryBatchForkController
 open AspisK1.V7Tag73RestoredQueryBatchLabelsNodup
+open AspisK1.V7Tag73SchedulerCausalQ16Router
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisK1.V7Tag73VariablePrefixGammaSampler
 
 noncomputable section
+
+/-- Equality of the emitted record at one answer fixes every pre-answer field,
+and therefore fixes the emitted record at every answer.  This lets a literal
+trace record transport a causal marker without inspecting the fresh digest. -/
+theorem unified_record_at_answer_extensional_of_eq
+    {globalOracleCalls : Nat}
+    (transitionFuel : Nat)
+    (source target : UnifiedExposureCursor globalOracleCalls)
+    (witness : Digest256)
+    (exact : unifiedRecordAtAnswer transitionFuel source witness =
+      unifiedRecordAtAnswer transitionFuel target witness) :
+    ∀ answer, unifiedRecordAtAnswer transitionFuel source answer =
+      unifiedRecordAtAnswer transitionFuel target answer := by
+  intro answer
+  unfold unifiedRecordAtAnswer at exact ⊢
+  generalize sourceExact : seekUnifiedExposure transitionFuel source =
+    sourceRequest at exact ⊢
+  generalize targetExact : seekUnifiedExposure transitionFuel target =
+    targetRequest at exact ⊢
+  cases sourceRequest <;> cases targetRequest <;> simp_all
 
 /-- Literal full-run coordinates at the first prepared block-zero gamma
 restoration fork. -/
@@ -115,8 +136,8 @@ def WaitingControllerPrefixUnmarked
   | state, record :: records =>
       startsHere state.cursor = false ∧
         WaitingControllerPrefixUnmarked transitionFuel startsHere
-          ((waitingRestoredQueryBatchForkController transitionFuel startsHere)
-            .afterAnswer transitionFuel state record.answer)
+          ((waitingRestoredQueryBatchForkController transitionFuel startsHere).afterAnswer
+            transitionFuel state record.answer)
           records
 
 /-- Replaying an unmarked prefix from the waiting phase leaves the controller
@@ -144,12 +165,111 @@ theorem waiting_controller_prefix_unmarked_preserves_waiting
       intro waiting unmarked
       obtain ⟨markedFalse, tailUnmarked⟩ := unmarked
       rw [indexed_state_after_records_cons]
-      apply ih _ tailUnmarked
+      apply ih _ ?_ tailUnmarked
       rcases state with ⟨exposureIndex, cursor, memory⟩
       simp only at waiting
       subst memory
       simp [waitingRestoredQueryBatchForkController, markedFalse,
         IndexedUnifiedExposureController.afterAnswer]
+
+/-- Once an unmarked chronological prefix has been replayed, the first marked
+cursor is routed to the block-zero output slot.  This packages the two facts
+needed by the source adapter without assuming that the marked exposure was
+verifier-origin: an adversary-first exposure of the same immutable oracle
+coordinate is handled by choosing that earlier exposure as the stopping
+point. -/
+theorem waiting_controller_prefix_unmarked_then_marked_routes_first_output
+    {globalOracleCalls : Nat}
+    (transitionFuel : Nat)
+    (startsHere : UnifiedExposureCursor globalOracleCalls → Bool)
+    (state : IndexedUnifiedExposureState globalOracleCalls
+      WaitingRestoredQueryBatchMemory)
+    (records : List UnifiedExposureRecord)
+    (waiting : state.memory = .waiting)
+    (unmarked : WaitingControllerPrefixUnmarked transitionFuel startsHere
+      state records)
+    (marked : startsHere
+      (indexedStateAfterRecords transitionFuel
+        (waitingRestoredQueryBatchForkController transitionFuel startsHere)
+        records state).cursor = true) :
+    (waitingRestoredQueryBatchForkController transitionFuel startsHere).preferredSlot
+        (indexedStateAfterRecords transitionFuel
+          (waitingRestoredQueryBatchForkController transitionFuel startsHere)
+          records state) =
+      some (⟨0, by decide⟩, false) := by
+  let reached := indexedStateAfterRecords transitionFuel
+    (waitingRestoredQueryBatchForkController transitionFuel startsHere)
+    records state
+  have stillWaiting : reached.memory = .waiting :=
+    waiting_controller_prefix_unmarked_preserves_waiting
+    transitionFuel startsHere state records waiting unmarked
+  change
+    (waitingRestoredQueryBatchForkController transitionFuel startsHere).preferredSlot
+        reached = some (⟨0, by decide⟩, false)
+  change startsHere reached.cursor = true at marked
+  rcases reached with ⟨exposureIndex, cursor, memory⟩
+  simp only at stillWaiting marked ⊢
+  subst memory
+  exact waiting_controller_marks_block_zero_output transitionFuel exposureIndex
+    startsHere cursor marked
+
+/-- Any known marked point in a chronological trace has an earliest marked
+record.  The returned prefix is certified unmarked by construction, so it is
+safe even when an adversary queried the eventual verifier coordinate before
+the verifier-origin restoration fork. -/
+theorem waiting_controller_eventually_marked_has_first_marked_record
+    {globalOracleCalls : Nat}
+    (transitionFuel : Nat)
+    (startsHere : UnifiedExposureCursor globalOracleCalls → Bool) :
+    ∀ (state : IndexedUnifiedExposureState globalOracleCalls
+        WaitingRestoredQueryBatchMemory)
+      (prior : List UnifiedExposureRecord)
+      (record : UnifiedExposureRecord)
+      (later : List UnifiedExposureRecord),
+      startsHere
+          (indexedStateAfterRecords transitionFuel
+            (waitingRestoredQueryBatchForkController transitionFuel startsHere)
+            prior state).cursor = true →
+      ∃ (firstPrior : List UnifiedExposureRecord)
+          (firstRecord : UnifiedExposureRecord)
+          (firstLater : List UnifiedExposureRecord),
+        prior ++ record :: later =
+          firstPrior ++ firstRecord :: firstLater ∧
+        WaitingControllerPrefixUnmarked transitionFuel startsHere state
+          firstPrior ∧
+        startsHere
+            (indexedStateAfterRecords transitionFuel
+              (waitingRestoredQueryBatchForkController transitionFuel startsHere)
+              firstPrior state).cursor = true := by
+  intro state prior
+  induction prior generalizing state with
+  | nil =>
+      intro record later marked
+      exact ⟨[], record, later, rfl, trivial, marked⟩
+  | cons head tail ih =>
+      intro record later marked
+      cases markedNow : startsHere state.cursor with
+      | true =>
+          exact ⟨[], head, tail ++ record :: later, by simp, trivial,
+            markedNow⟩
+      | false =>
+          let controller :=
+            waitingRestoredQueryBatchForkController transitionFuel startsHere
+          let next := controller.afterAnswer transitionFuel state head.answer
+          have markedAfterTail : startsHere
+              (indexedStateAfterRecords transitionFuel controller tail next).cursor =
+                true := by
+            simpa only [controller, next, indexed_state_after_records_cons] using
+              marked
+          obtain ⟨firstPrior, firstRecord, firstLater, splitExact,
+              prefixUnmarked, firstMarked⟩ :=
+            ih next record later markedAfterTail
+          refine ⟨head :: firstPrior, firstRecord, firstLater, ?_, ?_, ?_⟩
+          · simp only [List.cons_append]
+            rw [splitExact]
+          · exact ⟨markedNow, prefixUnmarked⟩
+          · simpa only [controller, next, indexed_state_after_records_cons]
+              using firstMarked
 
 def exactRestoredGammaFullLabels
     {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
@@ -537,6 +657,95 @@ theorem exact_restored_gamma_router_routes_selected_full_answer_of_named_complet
     transitionFuel configuration sample prior later record decomposition
       namedComplete
 
+/-- Route the earliest exposure equivalent to a known restored-gamma fork.
+This is the source-facing adversary-prequery-safe form: callers may exhibit a
+later marked verifier occurrence, while the theorem selects and routes the
+first marked record in the literal complete trace. -/
+theorem exact_restored_gamma_router_routes_first_marked_full_answer
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (prior later : List UnifiedExposureRecord)
+    (record : UnifiedExposureRecord)
+    (decomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        prior ++ record :: later)
+    (eventuallyMarked :
+      let reached := indexedStateAfterRecords transitionFuel
+        (exactRestoredGammaController transitionFuel configuration sample.1)
+        prior
+        (exactRestoredGammaInitialState transitionFuel configuration sample.1)
+      typedRestoredChallengeExposureStartsHere
+          (Result := ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+            Payload Witness)
+          transitionFuel (.challenge .gamma)
+          (configuration.machine.blackBox.start sample.1
+            configuration.machine.observation)
+          configuration.machine.environment
+          configuration.restorationConfiguration reached.cursor = true)
+    (namedComplete :
+      (namedTraceSlots
+        (exactRestoredGammaFullLabels transitionFuel configuration
+          sample)).length = 24) :
+    ∃ (firstPrior firstLater : List UnifiedExposureRecord)
+        (firstRecord : UnifiedExposureRecord),
+      (runExactPlainRom transitionFuel configuration sample).trace =
+          firstPrior ++ firstRecord :: firstLater ∧
+        WaitingControllerPrefixUnmarked transitionFuel
+          (typedRestoredChallengeExposureStartsHere
+            (Result := ExactPlainRomWitnessExtractor Statement
+              Tag73K12ParsedProof Payload Witness)
+            transitionFuel (.challenge .gamma)
+            (configuration.machine.blackBox.start sample.1
+              configuration.machine.observation)
+            configuration.machine.environment
+            configuration.restorationConfiguration)
+          (exactRestoredGammaInitialState transitionFuel configuration sample.1)
+          firstPrior ∧
+        causalRoutedAnswer? (⟨0, by decide⟩, false)
+          (exactRestoredGammaRouter transitionFuel configuration sample.1)
+          (exactGammaPrefixRouterInputTape parameters sample.2) =
+            some firstRecord.answer := by
+  let startsHere : UnifiedExposureCursor
+      (globalFull256OracleCallCap parameters) → Bool :=
+    typedRestoredChallengeExposureStartsHere
+    (Result := ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+      Payload Witness)
+    transitionFuel (.challenge .gamma)
+    (configuration.machine.blackBox.start sample.1
+      configuration.machine.observation)
+    configuration.machine.environment configuration.restorationConfiguration
+  let controller := exactRestoredGammaController transitionFuel configuration
+    sample.1
+  let initial := exactRestoredGammaInitialState transitionFuel configuration
+    sample.1
+  have eventuallyMarked' : startsHere
+      (indexedStateAfterRecords transitionFuel controller prior initial).cursor =
+        true := by
+    simpa only [startsHere, controller, initial] using eventuallyMarked
+  obtain ⟨firstPrior, firstRecord, firstLater, firstSplit, firstUnmarked,
+      firstMarked⟩ :=
+    waiting_controller_eventually_marked_has_first_marked_record transitionFuel
+      startsHere initial prior record later eventuallyMarked'
+  have firstDecomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        firstPrior ++ firstRecord :: firstLater :=
+    decomposition.trans firstSplit
+  have firstPreferred :=
+    waiting_controller_prefix_unmarked_then_marked_routes_first_output
+      transitionFuel startsHere initial firstPrior rfl firstUnmarked firstMarked
+  have routed :=
+    exact_restored_gamma_router_routes_selected_full_answer_of_named_complete
+      transitionFuel configuration sample firstPrior firstLater firstRecord
+      (⟨0, by decide⟩, false) firstDecomposition (by
+        simpa only [controller, initial, startsHere,
+          exactRestoredGammaController] using firstPreferred) namedComplete
+  refine ⟨firstPrior, firstLater, firstRecord, firstDecomposition, ?_, routed⟩
+  simpa only [startsHere, initial] using firstUnmarked
+
 /-! ## Named lookup to the public restoration-native coordinates -/
 
 theorem exact_restored_gamma_output_coordinate_eq_of_routed_lookup
@@ -590,6 +799,10 @@ theorem exact_restored_gamma_advance_coordinate_eq_of_routed_lookup
     (block, true) (Finset.mem_univ _) answer routed
 
 #print axioms waiting_controller_prefix_unmarked_preserves_waiting
+#print axioms unified_record_at_answer_extensional_of_eq
+#print axioms
+  waiting_controller_prefix_unmarked_then_marked_routes_first_output
+#print axioms waiting_controller_eventually_marked_has_first_marked_record
 
 #print axioms exactRestoredGammaFullLabels
 #print axioms exact_gamma_prefix_router_input_tape_preserves_list
@@ -600,6 +813,7 @@ theorem exact_restored_gamma_advance_coordinate_eq_of_routed_lookup
 #print axioms exact_restored_gamma_prefix_residual_enough_of_named_complete
 #print axioms exact_restored_gamma_router_routes_selected_full_answer
 #print axioms exact_restored_gamma_router_routes_selected_full_answer_of_named_complete
+#print axioms exact_restored_gamma_router_routes_first_marked_full_answer
 #print axioms exact_restored_gamma_output_coordinate_eq_of_routed_lookup
 #print axioms exact_restored_gamma_advance_coordinate_eq_of_routed_lookup
 
