@@ -1,5 +1,5 @@
 {
-  "schema": "aspis-v8-higher-y-joint-ledger-v1",
+  "schema": "aspis-v8-higher-y-joint-ledger-v2",
   "field": {
     "base_prime": 2147483647,
     "qm31_cardinality": "21267647892944572736998860269687930881",
@@ -55,6 +55,20 @@
       "theorem": "RegularQueryMoment.regular_suffix_bound",
       "status": "kernel-checked restricted suffix; repair terms must be charged once in global composition",
       "grinding_credit_bits": 0
+    },
+    {
+      "id": "fixed_early_c1_high_support_all_higher_factors",
+      "fixing_prefix": "the actual early C1 and adaptive C2 are fixed; the dense branch constructs one 29-message tuple before OOD and gamma",
+      "fresh_randomness": "uniform nonzero gamma in the ideal challenge set",
+      "support_condition": "image-valid quotient has at most 4*15334 bad quotient fibres, hence at least 200808 matching fibres",
+      "exact_rational": {
+        "numerator": "117077",
+        "denominator": "21267647892944572736998860269687930880"
+      },
+      "bits_approx": 107.1629018393943,
+      "theorem": "EarlyC1HigherYSupport.fixed_early_high_count",
+      "status": "kernel-checked all-factor cardinality; accepted-event inclusion, ideal normalization and Fiat-Shamir coupling unresolved",
+      "grinding_credit_bits": 0
     }
   ],
   "conditional_screens": {
@@ -65,11 +79,16 @@
     "singular_pair_plus_gamma_plus_one_suffix_charge": {
       "bits_approx": 107.16275397556687,
       "status": "arithmetic screen, not global theorem"
+    },
+    "fixed_early_c1_low_high_support_plus_one_suffix": {
+      "bits_approx": 103.99997702486534,
+      "status": "exact arithmetic screen with kernel-checked component bounds; complete accepted-event composition unresolved",
+      "details": "higher-y-fixed-c1-screen.json"
     }
   },
   "unsupported_global_terms": [
-    "regular gamma/support tail composed with the new alpha/query moment",
-    "own-supported early C1 recovery and authenticated extractor",
+    "literal accepted higher-Y execution included in the low/high support partition",
+    "authenticated acceptance-to-early-C1 recovery and extractor",
     "acceptance-to-payment semantic premises",
     "resource-bounded Fiat-Shamir coupling including prequeries, retries, forks and transcript selection",
     "full-view adaptive zero knowledge",

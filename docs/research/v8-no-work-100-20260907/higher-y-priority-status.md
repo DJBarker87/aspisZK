@@ -132,3 +132,33 @@ gamma/support layer-cake composed with `RegularQueryMoment`, with high-support
 branches discharged by authenticated early-C1/payment extraction rather than
 counted as failures. The actual Fiat--Shamir coupling and full-view ZK remain
 separate gates.
+
+## Fixed-early-C1 high-support continuation
+
+`EarlyC1HigherYSupport` now discharges the all-factor high-support count that
+the preceding paragraph left open.  When the actual early-C1 candidate is
+present, the existing degree-two helper cover gives either fewer than three
+helper-good gammas or one 29-message tuple fixed before OOD and gamma.  Every
+later image-valid quotient with at most `4*15334` bad quotient fibres—at least
+**200,808 matching complete fibres**—reconstructs to that tuple's scalar-power
+batch.  Across **all** retained factors of Y-degree at least three, including
+singular factors and gamma-dependent factor/quotient choices, the resulting
+high-support set has cardinality at most **117,077**.  The proof uses the
+parent's additive weight once; there is no factor-count multiplier or
+regularity premise.
+
+Combining that checked high-support count with the existing regular incidence
+layer cake through support 200,807, the conservative `3/|QM31|` alpha term and
+one `q/(|QM31|-1)+18/|QM31|` compact suffix gives the exact conditional screen
+recorded in `higher-y-fixed-c1-screen.json`:
+
+    103.99997702486534 bits.
+
+This is not yet a global probability theorem.  The actual accepted higher-Y
+branch must still be included in the low/high event partition, the populated
+early-C1 premise must be obtained from authenticated accepted execution, and
+the tuple must feed the complete payment extractor.  A small-field regular
+full-match example shows that one favourable gamma cannot itself imply a
+populated early C1, so that premise cannot be inferred by a retrospective
+target choice.  Authentication/source refinement, the resource-bounded
+Fiat--Shamir lift and full-view ZK remain separate.

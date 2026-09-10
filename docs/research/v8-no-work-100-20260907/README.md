@@ -1,15 +1,15 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest higher-degree continuation: [Y-degree at least three checkpoint](higher-y-priority-status.md).
-The retained singular branch now has a checked complete OOD-pair root-set mass
-and a checked all-factor singular-gamma union; their ideal arithmetic screen is
-about **107.16 bits**.  The regular branch now has the exact ordered
-alpha/query moment and one-time compact-suffix charge, while the same early C1
-table reaches strict conserving output amounts and both output-note openings.
-The unrestricted regular tail remains only about **96.10 bits** until its
-high-support executions are connected to authenticated early-C1/payment
-extraction.  The actual Fiat--Shamir coupling, acceptance-to-source refinement,
-complete payment witness and full-view ZK remain open.  No verifier operation,
+Latest higher-degree continuation: [fixed-early-C1 higher-Y support](early-c1-higher-y-support-review.md).
+The retained singular branch has a checked complete OOD-pair root-set mass and
+all-factor singular-gamma union.  For the regular support tail, one pre-OOD
+component curve now covers every image-valid quotient having at least 200,808
+matching fibres whenever the actual early C1 exists; all retained Y-degree-at-
+least-three factors then contribute at most 117,077 gammas in total.  Combined
+with the checked low-support alpha/query moment and one compact suffix, the
+exact conditional ideal screen is **103.999977 bits**.  Acceptance-to-event,
+authenticated early-C1 recovery, complete payment extraction, the actual
+Fiat--Shamir coupling and full-view ZK remain open.  No verifier operation,
 proof byte or grinding credit changed; the body remains **40,282 bytes**.
 
 Latest formal continuation: [nested sequential OOD sampler and root-set mass](nested-ood-sampler-review.md).
