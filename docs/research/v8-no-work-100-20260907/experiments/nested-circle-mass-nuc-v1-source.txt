@@ -1,0 +1,321 @@
+import OrdinaryPrefixMass
+import SecureCircleParameterDomain
+import SecureCircleParameterInverse
+
+/-! Exact nested circle3/distinct3 masses in a history-indexed finite-coin
+experiment. Ordinary failures have zero continuation. The ordinary value law
+must hold at EVERY history; no freshness follows from labels, successful
+decoding, or the earlier one-call decoder theorem alone. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.NestedCircleMass
+noncomputable section
+local instance decision (p : Prop) : Decidable p := Classical.propDecidable p
+open Finset AspisV8.JointImageGame AspisV8.RelationCompatibleMoment
+open AspisV8.BoundedRetryKernel
+
+namespace Generic
+variable {O H V : Type*} [DecidableEq V]
+
+def atom (draw : H → O → Option (V × H)) (h : H) (target : V) (coin : O) : ℚ :=
+  match draw h coin with
+  | none => 0
+  | some (value, _) => if value=target then 1 else 0
+
+def Uniform (coins : Finset O) (draw : H → O → Option (V × H)) (u : ℚ) : Prop :=
+  ∀ h target, avg coins (atom draw h target) = u
+
+/-- Continuation is invoked only on successful accepted values. In
+particular, an ordinary abort does not spend another circle retry. -/
+def pay (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] :
+    Nat → H → (V → H → ℚ) → ℚ
+  | 0, _, _ => 0
+  | n+1, h, reward => avg coins (fun coin =>
+      match draw h coin with
+      | none => 0
+      | some (value, next) =>
+          if accept value then reward value next
+          else pay coins draw accept n next reward)
+
+theorem pay_congr (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (n : Nat) (h : H)
+    (f g : V → H → ℚ) (same : ∀ v next, f v next=g v next) :
+    pay coins draw accept n h f=pay coins draw accept n h g := by
+  have equal : f=g := funext (fun v => funext (same v))
+  rw [equal]
+
+theorem pay_add (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (n : Nat) (h : H)
+    (f g : V → H → ℚ) :
+    pay coins draw accept n h (fun v next => f v next+g v next) =
+      pay coins draw accept n h f+pay coins draw accept n h g := by
+  induction n generalizing h with
+  | zero => simp only [pay, add_zero]
+  | succ n ih =>
+      simp only [pay]
+      rw [← avg_add]
+      congr 1
+      funext coin
+      cases result : draw h coin with
+      | none => simp only [zero_add]
+      | some pair =>
+          rcases pair with ⟨v,next⟩
+          by_cases accepted : accept v <;> simp only [accepted, reduceIte, ih]
+
+theorem pay_scale (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (n : Nat) (h : H)
+    (f : V → H → ℚ) (c : ℚ) :
+    pay coins draw accept n h (fun v next => f v next*c) =
+      pay coins draw accept n h f*c := by
+  induction n generalizing h with
+  | zero => simp only [pay, zero_mul]
+  | succ n ih =>
+      simp only [pay]
+      rw [← avg_mul_right]
+      congr 1
+      funext coin
+      cases result : draw h coin with
+      | none => simp only [zero_mul]
+      | some pair =>
+          rcases pair with ⟨v,next⟩
+          by_cases accepted : accept v <;> simp only [accepted, reduceIte, ih]
+
+theorem pay_target (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (n : Nat) (h : H) (target : V) :
+    pay coins draw accept n h (fun v _ => if v=target then 1 else 0) =
+      mass coins draw accept n h target := by
+  induction n generalizing h with
+  | zero => rfl
+  | succ n ih =>
+      simp only [pay, mass]
+      congr 1
+      funext coin
+      cases result : draw h coin with
+      | none => rfl
+      | some pair =>
+          rcases pair with ⟨v,next⟩
+          by_cases accepted : accept v <;> simp only [accepted, reduceIte, ih]
+
+theorem avg_sum (coins : Finset O) (S : Finset V) (f : V → O → ℚ) :
+    avg coins (fun coin => ∑ v ∈ S, f v coin) =
+      ∑ v ∈ S, avg coins (f v) := by
+  simp only [avg, Finset.sum_div]
+  rw [Finset.sum_comm]
+
+theorem event_mass (coins : Finset O) (draw : H → O → Option (V × H))
+    (u : ℚ) (law : Uniform coins draw u) (S : Finset V) (h : H) :
+    avg coins (fun coin => match draw h coin with
+      | none => 0
+      | some (v,_) => if v∈S then 1 else 0) = (S.card : ℚ)*u := by
+  have pointwise : (fun coin => match draw h coin with
+      | none => (0 : ℚ)
+      | some (v,_) => if v∈S then 1 else 0) =
+      (fun coin => ∑ v ∈ S, atom draw h v coin) := by
+    funext coin
+    cases result : draw h coin with
+    | none => simp only [atom, result, Finset.sum_const_zero]
+    | some pair =>
+        rcases pair with ⟨v,next⟩
+        simp [atom, result, eq_comm]
+  rw [pointwise, avg_sum]
+  simp only [law, Finset.sum_const, nsmul_eq_mul]
+
+theorem reject_mass [Fintype V] (coins : Finset O)
+    (draw : H → O → Option (V × H)) (accept : V → Prop)
+    [DecidablePred accept] (u : ℚ) (law : Uniform coins draw u) (h : H) :
+    avg coins (reject draw accept h) =
+      (Fintype.card {v : V // ¬accept v} : ℚ)*u := by
+  have bound := event_mass coins draw u law (univ.filter (fun v => ¬accept v)) h
+  have same : reject draw accept h = (fun coin => match draw h coin with
+      | none => (0 : ℚ)
+      | some (v,_) => if v∈univ.filter (fun v => ¬accept v) then 1 else 0) := by
+    funext coin
+    cases result : draw h coin with
+    | none => rfl
+    | some pair =>
+        rcases pair with ⟨v,next⟩
+        by_cases accepted : accept v <;> simp [reject, result, accepted]
+  rw [same]
+  simpa only [Fintype.card_subtype] using bound
+
+theorem hit_mass (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (target : V)
+    (accepted : accept target) (u : ℚ) (law : Uniform coins draw u) (h : H) :
+    avg coins (hit draw accept h target) = u := by
+  have same : hit draw accept h target = atom draw h target := by
+    funext coin
+    cases result : draw h coin with
+    | none => rfl
+    | some pair =>
+        rcases pair with ⟨v,next⟩
+        by_cases equal : v=target
+        · subst v; simp [hit, atom, result, accepted]
+        · simp [hit, atom, result, equal]
+  rw [same]
+  exact law h target
+
+/-- The outer retry consumes an entire circle call. An inner exhausted or
+aborted call has no continuation; only a successful duplicate retries. -/
+def distinct (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (first target : V) : Nat → H → ℚ
+  | 0, _ => 0
+  | n+1, h => pay coins draw accept 3 h (fun v next =>
+      if v=first then distinct coins draw accept first target n next
+      else if v=target then 1 else 0)
+
+theorem distinct_eq (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (first target : V)
+    (different : first≠target) (w : ℚ)
+    (firstLaw : ∀ h, mass coins draw accept 3 h first=w)
+    (targetLaw : ∀ h, mass coins draw accept 3 h target=w) (n : Nat) (h : H) :
+    distinct coins draw accept first target n h=w*geometric n w := by
+  induction n generalizing h with
+  | zero => simp only [distinct, geometric, mul_zero]
+  | succ n ih =>
+      rw [distinct]
+      have split := pay_congr coins draw accept 3 h
+        (fun v next => if v=first then distinct coins draw accept first target n next
+          else if v=target then 1 else 0)
+        (fun v _ => (if v=target then 1 else 0) +
+          (if v=first then 1 else 0)*(w*geometric n w)) (by
+          intro v next
+          by_cases same : v=first
+          · subst v; simp only [if_pos rfl, if_neg different, zero_add, one_mul, ih]
+          · simp only [if_neg same, zero_mul, add_zero])
+      rw [split, pay_add, pay_scale, pay_target, pay_target,
+        firstLaw, targetLaw, geometric]
+      ring
+
+/-- The arbitrary between-answer history update may depend on the first
+parameter and all returned history. The targets themselves are fixed. -/
+def orderedPair (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (between : V → H → H)
+    (first target : V) (h : H) : ℚ :=
+  pay coins draw accept 3 h (fun v next =>
+    if v=first then distinct coins draw accept first target 3 (between v next) else 0)
+
+theorem ordered_pair_eq (coins : Finset O) (draw : H → O → Option (V × H))
+    (accept : V → Prop) [DecidablePred accept] (between : V → H → H)
+    (first target : V) (different : first≠target) (w : ℚ)
+    (firstLaw : ∀ h, mass coins draw accept 3 h first=w)
+    (targetLaw : ∀ h, mass coins draw accept 3 h target=w) (h : H) :
+    orderedPair coins draw accept between first target h=w^2*(1+w+w^2) := by
+  unfold orderedPair
+  have split := pay_congr coins draw accept 3 h
+    (fun v next => if v=first then distinct coins draw accept first target 3
+      (between v next) else 0)
+    (fun v _ => (if v=first then 1 else 0)*(w*geometric 3 w)) (by
+      intro v next
+      rw [distinct_eq coins draw accept first target different w firstLaw targetLaw]
+      by_cases same : v=first <;> simp only [same, reduceIte, one_mul, zero_mul])
+  rw [split, pay_scale, pay_target, firstLaw, geometric_three]
+  ring
+end Generic
+
+open AspisV5ComponentCQM31TowerExact
+open AspisK1.V7Tag73SecureCircleMap
+open AspisV8.SecureCircleParameterDomain
+variable {O H : Type*}
+
+def ordinaryAtomMass (σ : ℚ) : ℚ := σ / ((P^4 : Nat) : ℚ)
+def circleRejectMass (σ : ℚ) : ℚ := ((P^2 : Nat) : ℚ)*ordinaryAtomMass σ
+def circleAtomMass (σ : ℚ) : ℚ := ordinaryAtomMass σ *
+  (1+circleRejectMass σ+(circleRejectMass σ)^2)
+
+theorem excluded_card : Fintype.card {t : QM31Exact // ¬Admissible t}=P^2 := by
+  calc
+    Fintype.card {t : QM31Exact // ¬Admissible t} =
+        Fintype.card {t : QM31Exact // t.im=0} :=
+      Fintype.card_congr (Equiv.subtypeEquivRight (fun t => by
+        simp only [admissible_iff, not_not]))
+    _ = P^2 := zero_imaginary_card
+
+theorem circle_mass (coins : Finset O) (draw : H → O → Option (QM31Exact × H))
+    (σ : ℚ) (law : Generic.Uniform coins draw (ordinaryAtomMass σ))
+    (target : QM31Exact) (accepted : Admissible target) (h : H) :
+    mass coins draw Admissible 3 h target=circleAtomMass σ := by
+  apply mass_three coins draw Admissible target (ordinaryAtomMass σ) (circleRejectMass σ)
+  · intro next
+    exact Generic.hit_mass coins draw Admissible target accepted _ law next
+  · intro next
+    rw [Generic.reject_mass coins draw Admissible _ law next, excluded_card]
+    rfl
+
+/-- Exact mass of every fixed admissible ordered distinct parameter pair.
+Aborts remain zero and are not conditioned away. This is a history-uniform
+kernel theorem, not a theorem supplying actual transcript freshness. -/
+theorem ordered_parameter_mass (coins : Finset O)
+    (draw : H → O → Option (QM31Exact × H)) (between : QM31Exact → H → H)
+    (σ : ℚ) (law : Generic.Uniform coins draw (ordinaryAtomMass σ))
+    (first target : QM31Exact) (firstGood : Admissible first)
+    (targetGood : Admissible target) (different : first≠target) (h : H) :
+    Generic.orderedPair coins draw Admissible between first target h =
+      (circleAtomMass σ)^2*(1+circleAtomMass σ+(circleAtomMass σ)^2) :=
+  Generic.ordered_pair_eq coins draw Admissible between first target different _
+    (circle_mass coins draw σ law first firstGood)
+    (circle_mass coins draw σ law target targetGood) h
+
+theorem ordered_pair_mass_constant (coins : Finset O)
+    (draw : H → O → Option (QM31Exact × H)) (between : QM31Exact → H → H)
+    (σ : ℚ) (law : Generic.Uniform coins draw (ordinaryAtomMass σ))
+    (a b c d : QM31Exact) (ha : Admissible a) (hb : Admissible b)
+    (hc : Admissible c) (hd : Admissible d) (hab : a≠b) (hcd : c≠d) (h h' : H) :
+    Generic.orderedPair coins draw Admissible between a b h =
+      Generic.orderedPair coins draw Admissible between c d h' := by
+  rw [ordered_parameter_mass coins draw between σ law a b ha hb hab h,
+    ordered_parameter_mass coins draw between σ law c d hc hd hcd h']
+
+/-- The literal decoded point map is injective on successful parameters;
+the outer source comparison therefore rejects exactly one parameter. -/
+theorem successful_point_eq_iff (first target : QM31Exact)
+    (p q : AspisK1.V7Tag73DeterministicRefinement.SecureCirclePointBytes)
+    (firstRun : exactSecureCirclePointFromDecoded first=some p)
+    (targetRun : exactSecureCirclePointFromDecoded target=some q) :
+    p=q ↔ first=target := by
+  constructor
+  · intro same
+    subst q
+    exact SecureCircleParameterInverse.successful_decoded_parameters_equal
+      first target p firstRun targetRun
+  · intro same
+    subst target
+    exact Option.some.inj (firstRun.symm.trans targetRun)
+
+/-- One-call specialization of the already checked literal four-block
+decoder law. Its arbitrary history update does NOT identify this padded
+coin experiment with successive variable-length transcript calls. -/
+def decodedOrdinary (update : H → OrdinaryPrefixMass.FourBlocks → QM31Exact → H)
+    (h : H) (coin : OrdinaryPrefixMass.FourBlocks) : Option (QM31Exact × H) :=
+  (OrdinaryPrefixMass.value coin).map (fun t => (t, update h coin t))
+
+theorem decoded_ordinary_uniform
+    (update : H → OrdinaryPrefixMass.FourBlocks → QM31Exact → H) :
+    Generic.Uniform univ (decodedOrdinary update)
+      (ordinaryAtomMass (FiniteOptionMass.successMass OrdinaryPrefixMass.value)) := by
+  intro h target
+  have same : Generic.atom (decodedOrdinary update) h target =
+      (fun coin => if OrdinaryPrefixMass.value coin=some target then 1 else 0) := by
+    funext coin
+    cases result : OrdinaryPrefixMass.value coin <;>
+      simp only [Generic.atom, decodedOrdinary, result, Option.map_none,
+        Option.map_some, Option.some.injEq, Option.none_ne_some, if_false]
+  rw [same]
+  exact OrdinaryPrefixMass.unconditional_mass target
+
+#print axioms Generic.pay_target
+#print axioms Generic.event_mass
+#print axioms Generic.reject_mass
+#print axioms Generic.distinct_eq
+#print axioms Generic.ordered_pair_eq
+#print axioms excluded_card
+#print axioms circle_mass
+#print axioms ordered_parameter_mass
+#print axioms ordered_pair_mass_constant
+#print axioms successful_point_eq_iff
+#print axioms decoded_ordinary_uniform
+end
+end AspisV8.NestedCircleMass

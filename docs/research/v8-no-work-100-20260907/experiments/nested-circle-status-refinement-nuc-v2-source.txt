@@ -1,0 +1,278 @@
+import NestedCircleSourceRefinement
+
+/-! Detailed source-status prerequisites for the chronological controller.
+This leaf does not claim the whole nested run, routing equivalence, sampler
+mass, or a Fiat--Shamir law. Every capacity/cut fact below comes from the
+literal bounded decoder recursion, not from padded source consumption. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.NestedCircleStatusRefinement
+noncomputable section
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+open AspisK1.V7Tag73TranscriptSchedule
+open AspisK1.V7Tag73DeterministicRefinement
+open AspisK1.V7Tag73SamplerDecoder
+open AspisK1.V7Tag73SamplerDecoderExact
+open AspisK1.V7Tag73IncrementalSamplerControl
+open AspisV8.NestedCircleRouting
+open AspisV8.NestedCircleSourceRefinement
+
+theorem accepted_of_forget {A : Type} (status : PrefixStatus A) (value : A)
+    (success : status.forget = some value) : status = .accepted value := by
+  cases status <;> simp [PrefixStatus.forget] at success ⊢
+  exact success
+
+theorem limb_no_layout (fuel : Nat) (words : List Nat) :
+    limbStatus fuel words ≠ .layoutFailure := by
+  induction fuel generalizing words with
+  | zero => simp [limbStatus]
+  | succ fuel ih =>
+      cases words with
+      | nil => simp [limbStatus]
+      | cons word rest =>
+          by_cases rejected : maskedM31 word = m31Prime
+          · have recursive := ih rest
+            cases status : limbStatus fuel rest <;>
+              simp [limbStatus, rejected, status] at recursive ⊢
+          · simp [limbStatus, rejected]
+
+/-- A non-exhausted empty suffix is the only source of needMore. -/
+theorem limb_needMore_short (fuel : Nat) (words : List Nat)
+    (waiting : limbStatus fuel words = .needMore) : words.length < fuel := by
+  induction fuel generalizing words with
+  | zero => simp [limbStatus] at waiting
+  | succ fuel ih =>
+      cases words with
+      | nil => simp
+      | cons word rest =>
+          by_cases rejected : maskedM31 word = m31Prime
+          · cases status : limbStatus fuel rest <;>
+              simp [limbStatus, rejected, status] at waiting
+            have short := ih rest status
+            simp only [List.length_cons]
+            omega
+          · simp [limbStatus, rejected] at waiting
+
+theorem limb_success_append (fuel : Nat) (words suffix : List Nat)
+    (decoded : LimbDecode) (success : limbStatus fuel words = .accepted decoded) :
+    limbStatus fuel (words ++ suffix) = .accepted (appendLimbRest decoded suffix) := by
+  have source : decodeLimb fuel words = some decoded := by
+    rw [← limbStatus_forget, success]
+    rfl
+  apply accepted_of_forget
+  rw [limbStatus_forget]
+  exact decodeLimb_append_of_some fuel words suffix decoded source
+
+theorem limbs_no_layout (count : Nat) (words : List Nat) :
+    limbsStatus count words ≠ .layoutFailure := by
+  induction count generalizing words with
+  | zero => simp [limbsStatus]
+  | succ count ih =>
+      have firstNoLayout := limb_no_layout 8 words
+      cases firstStatus : limbStatus 8 words with
+      | needMore => simp [limbsStatus, firstStatus]
+      | hardFailure => simp [limbsStatus, firstStatus]
+      | layoutFailure => exact False.elim (firstNoLayout firstStatus)
+      | accepted first =>
+          have tailNoLayout := ih first.restWords
+          cases tailStatus : limbsStatus count first.restWords <;>
+            simp [limbsStatus, firstStatus, tailStatus] at tailNoLayout ⊢
+
+theorem limbs_hard_failure_append (count : Nat) (words suffix : List Nat)
+    (failed : limbsStatus count words = .hardFailure) :
+    limbsStatus count (words ++ suffix) = .hardFailure := by
+  induction count generalizing words with
+  | zero => simp [limbsStatus] at failed
+  | succ count ih =>
+      cases firstStatus : limbStatus 8 words with
+      | needMore => simp [limbsStatus, firstStatus] at failed
+      | layoutFailure => simp [limbsStatus, firstStatus] at failed
+      | hardFailure =>
+          have extended := limb_hard_failure_append 8 words suffix firstStatus
+          simp [limbsStatus, extended]
+      | accepted first =>
+          cases tailStatus : limbsStatus count first.restWords <;>
+            simp [limbsStatus, firstStatus, tailStatus] at failed
+          have firstExtended := limb_success_append 8 words suffix first firstStatus
+          have tailExtended := ih first.restWords tailStatus
+          simp [limbsStatus, firstExtended, appendLimbRest, tailExtended]
+
+/-- Four limbs require at most 32 words, including every rejected word. -/
+theorem limbs_needMore_short (count : Nat) (words : List Nat)
+    (waiting : limbsStatus count words = .needMore) : words.length < 8 * count := by
+  induction count generalizing words with
+  | zero => simp [limbsStatus] at waiting
+  | succ count ih =>
+      cases firstStatus : limbStatus 8 words with
+      | hardFailure => simp [limbsStatus, firstStatus] at waiting
+      | layoutFailure => simp [limbsStatus, firstStatus] at waiting
+      | needMore =>
+          have short := limb_needMore_short 8 words firstStatus
+          omega
+      | accepted first =>
+          cases tailStatus : limbsStatus count first.restWords <;>
+            simp [limbsStatus, firstStatus, tailStatus] at waiting
+          have tailShort := ih first.restWords tailStatus
+          have source : decodeLimb 8 words = some first := by
+            rw [← limbStatus_forget, firstStatus]
+            rfl
+          have accounted := decodeLimb_length_accounting 8 words first source
+          have capped := decodeLimb_attempts_le_fuel 8 words first source
+          omega
+
+/-- The ordinary final layout guard follows from source word accounting;
+there is no additional valid-layout premise on the table or tape. -/
+theorem ordinary_guard_of_limbs (blocks : List Digest256)
+    (decoded : FourLimbDecode)
+    (source : decodeLimbs 4 (flattenedWords blocks) = some decoded) :
+    0 < blocksNeededForWords decoded.wordsUsed ∧
+      blocksNeededForWords decoded.wordsUsed ≤ 4 ∧
+      blocksNeededForWords decoded.wordsUsed ≤ blocks.length := by
+  obtain ⟨_, accounted, lower, upper, _⟩ :=
+    decodeLimbs_success_bounds 4 (flattenedWords blocks) decoded source
+  rw [flattenedWords_length] at accounted
+  have division := Nat.div_add_mod (decoded.wordsUsed + 7) 8
+  have remainder : (decoded.wordsUsed + 7) % 8 < 8 := Nat.mod_lt _ (by decide)
+  dsimp [blocksNeededForWords]
+  omega
+
+theorem ordinary_no_layout (blocks : List Digest256) :
+    ordinaryStatus blocks ≠ .layoutFailure := by
+  cases blocks with
+  | nil => simp [ordinaryStatus]
+  | cons block rest =>
+      cases status : limbsStatus 4 (flattenedWords (block :: rest)) with
+      | needMore => simp [ordinaryStatus, status]
+      | hardFailure => simp [ordinaryStatus, status]
+      | layoutFailure =>
+          exact False.elim (limbs_no_layout 4 (flattenedWords (block :: rest)) status)
+      | accepted decoded =>
+          have source : decodeLimbs 4 (flattenedWords (block :: rest)) = some decoded := by
+            rw [← limbsStatus_forget, status]
+            rfl
+          have valid := ordinary_guard_of_limbs (block :: rest) decoded source
+          simp only [List.length_cons] at valid
+          simp [ordinaryStatus, status, valid]
+
+/-- Exhaustion aborts on the existing prefix; later blocks cannot repair it. -/
+theorem ordinary_hard_failure_append (blocks suffix : List Digest256)
+    (failed : ordinaryStatus blocks = .hardFailure) :
+    ordinaryStatus (blocks ++ suffix) = .hardFailure := by
+  cases blocks with
+  | nil => simp [ordinaryStatus] at failed
+  | cons block rest =>
+      cases status : limbsStatus 4 (flattenedWords (block :: rest)) with
+      | needMore => simp [ordinaryStatus, status] at failed
+      | layoutFailure => simp [ordinaryStatus, status] at failed
+      | accepted decoded =>
+          simp only [ordinaryStatus, status] at failed
+          split at failed <;> contradiction
+      | hardFailure =>
+          have extended := limbs_hard_failure_append 4
+            (flattenedWords (block :: rest)) (flattenedWords suffix) status
+          rw [← flattenedWords_append] at extended
+          have consExtended : limbsStatus 4 (flattenedWords (block :: (rest ++ suffix))) =
+              .hardFailure := by
+            simpa only [List.cons_append] using extended
+          simp only [List.cons_append, ordinaryStatus, consExtended]
+
+theorem ordinary_needMore_short (blocks : List Digest256)
+    (waiting : ordinaryStatus blocks = .needMore) : blocks.length < 4 := by
+  cases blocks with
+  | nil => simp
+  | cons block rest =>
+      cases status : limbsStatus 4 (flattenedWords (block :: rest)) with
+      | hardFailure => simp [ordinaryStatus, status] at waiting
+      | layoutFailure => simp [ordinaryStatus, status] at waiting
+      | accepted decoded =>
+          simp only [ordinaryStatus, status] at waiting
+          split at waiting <;> contradiction
+      | needMore =>
+          have short := limbs_needMore_short 4 (flattenedWords (block :: rest)) status
+          rw [flattenedWords_length] at short
+          omega
+
+/-- On a successful source run, all genuinely earlier block cuts are short
+input, not hard/layout failures hidden by Option. -/
+theorem ordinary_strict_prefix_needMore (blocks : List Digest256)
+    (decoded : OrdinaryPrefixDecode)
+    (source : decodeOrdinaryPrefix blocks = some decoded)
+    (count : Nat) (short : count < decoded.blocksUsed) :
+    ordinaryStatus (blocks.take count) = .needMore := by
+  have notAccepted := ordinary_strict_prefix_none blocks decoded source count short
+  cases status : ordinaryStatus (blocks.take count) with
+  | needMore => rfl
+  | layoutFailure => exact False.elim (ordinary_no_layout _ status)
+  | accepted early =>
+      have projected := ordinaryStatus_forget (blocks.take count)
+      simp [status, PrefixStatus.forget, notAccepted] at projected
+  | hardFailure =>
+      have extended := ordinary_hard_failure_append
+        (blocks.take count) (blocks.drop count) status
+      rw [List.take_append_drop] at extended
+      have projected := ordinaryStatus_forget blocks
+      simp [extended, PrefixStatus.forget, source] at projected
+
+/-- This is the no-unread-whole-block seam required by afterOrdinary.
+A reachable waiting prefix that accepts just after one new block has
+consumed exactly that enlarged prefix. -/
+theorem ordinary_next_accept_empty (pending : List Digest256) (answer : Digest256)
+    (decoded : OrdinaryPrefixDecode)
+    (waiting : ordinaryStatus pending = .needMore)
+    (accepted : ordinaryStatus (pending ++ [answer]) = .accepted decoded) :
+    decoded.blocksUsed = pending.length + 1 ∧ decoded.remainingBlocks = [] := by
+  have source : decodeOrdinaryPrefix (pending ++ [answer]) = some decoded := by
+    rw [← ordinaryStatus_forget, accepted]
+    rfl
+  obtain ⟨positive, cap, available, tail⟩ := ordinary_source_tail _ decoded source
+  have pastPending : pending.length < decoded.blocksUsed := by
+    by_contra notPast
+    have within : decoded.blocksUsed ≤ pending.length := by omega
+    have prefixEq : pending.take decoded.blocksUsed =
+        (pending ++ [answer]).take decoded.blocksUsed := by
+      simp [List.take_append, Nat.sub_eq_zero_of_le within]
+    have earlier := decodeOrdinaryPrefix_of_matching_consumed_prefix
+      (pending ++ [answer]) pending decoded source prefixEq
+    have projected := ordinaryStatus_forget pending
+    simp [waiting, PrefixStatus.forget, earlier] at projected
+  have used : decoded.blocksUsed = pending.length + 1 := by
+    simp only [List.length_append, List.length_singleton] at available
+    omega
+  refine ⟨used, ?_⟩
+  have atEnd : decoded.blocksUsed = (pending ++ [answer]).length := by
+    simpa only [List.length_append, List.length_singleton] using used
+  simpa only [atEnd, List.drop_length] using tail
+
+/-- At four available whole blocks the source must either succeed or
+exhaust a limb cap. The controller's incomplete/layout aborts are absent. -/
+theorem ordinary_four_blocks_decisive (blocks : List Digest256)
+    (enough : 4 ≤ blocks.length) :
+    ordinaryStatus blocks = .hardFailure ∨
+      ∃ decoded, ordinaryStatus blocks = .accepted decoded := by
+  cases status : ordinaryStatus blocks with
+  | needMore =>
+      have short := ordinary_needMore_short blocks status
+      omega
+  | hardFailure => exact Or.inl rfl
+  | layoutFailure => exact False.elim (ordinary_no_layout blocks status)
+  | accepted decoded => exact Or.inr ⟨decoded, rfl⟩
+
+#print axioms accepted_of_forget
+#print axioms limb_no_layout
+#print axioms limb_needMore_short
+#print axioms limb_success_append
+#print axioms limbs_no_layout
+#print axioms limbs_hard_failure_append
+#print axioms limbs_needMore_short
+#print axioms ordinary_guard_of_limbs
+#print axioms ordinary_no_layout
+#print axioms ordinary_hard_failure_append
+#print axioms ordinary_needMore_short
+#print axioms ordinary_strict_prefix_needMore
+#print axioms ordinary_next_accept_empty
+#print axioms ordinary_four_blocks_decisive
+end
+end AspisV8.NestedCircleStatusRefinement

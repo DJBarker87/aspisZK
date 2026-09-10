@@ -1,0 +1,211 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=NestedCircleRunRefinement
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+8c8d00a0235a0636ea1fcf5b202a2c8f50ee2da0db0b9a91e0c97b08b3960487  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/nested-circle-run-refinement-nuc-v1-manifest.json
+705cdcde32440b84699b24009c7927fd2967698fc7286198ddd29b499146d017  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean
+705cdcde32440b84699b24009c7927fd2967698fc7286198ddd29b499146d017  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/nested-circle-run-refinement-nuc-v1-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=883
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-nested-circle-run-refinement-nuc-v1.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:218:17: error: unsolved goals
+case pos
+circleMap : SecureCircleParameterMap
+answer : Digest256
+inner : Fin 3
+pending : List Digest256
+status : ordinaryStatus (pending ++ [answer]) = PrefixStatus.needMore
+short : (pending ++ [answer]).length < 4
+⊢ match
+    if pending.length + 1 < 4 then State.first inner (pending ++ [answer])
+    else State.aborted AbortReason.incompleteAtFourBlocks with
+  | State.first inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | State.second firstPoint outer inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | x => True
+
+case neg
+circleMap : SecureCircleParameterMap
+answer : Digest256
+inner : Fin 3
+pending : List Digest256
+status : ordinaryStatus (pending ++ [answer]) = PrefixStatus.needMore
+short : ¬(pending ++ [answer]).length < 4
+⊢ match
+    if pending.length + 1 < 4 then State.first inner (pending ++ [answer])
+    else State.aborted AbortReason.incompleteAtFourBlocks with
+  | State.first inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | State.second firstPoint outer inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | x => True
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:228:17: error: unsolved goals
+case pos
+circleMap : SecureCircleParameterMap
+answer : Digest256
+point : SecureCirclePointBytes
+outer inner : Fin 3
+pending : List Digest256
+status : ordinaryStatus (pending ++ [answer]) = PrefixStatus.needMore
+short : (pending ++ [answer]).length < 4
+⊢ match
+    if pending.length + 1 < 4 then State.second point outer inner (pending ++ [answer])
+    else State.aborted AbortReason.incompleteAtFourBlocks with
+  | State.first inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | State.second firstPoint outer inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | x => True
+
+case neg
+circleMap : SecureCircleParameterMap
+answer : Digest256
+point : SecureCirclePointBytes
+outer inner : Fin 3
+pending : List Digest256
+status : ordinaryStatus (pending ++ [answer]) = PrefixStatus.needMore
+short : ¬(pending ++ [answer]).length < 4
+⊢ match
+    if pending.length + 1 < 4 then State.second point outer inner (pending ++ [answer])
+    else State.aborted AbortReason.incompleteAtFourBlocks with
+  | State.first inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | State.second firstPoint outer inner pending => ordinaryStatus pending = PrefixStatus.needMore
+  | x => True
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:220:39: warning: This simp argument is unused:
+  short
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer, status, s̵h̵o̵r̵t̵,̵ ̵Ready]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:230:39: warning: This simp argument is unused:
+  short
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer, status, s̵h̵o̵r̵t̵,̵ ̵Ready]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:279:17: error: unsolved goals
+case first.needMore
+circleMap : SecureCircleParameterMap
+answer : Digest256
+unread : List Digest256
+inner : Fin 3
+pending : List Digest256
+ready : ordinaryStatus pending = PrefixStatus.needMore
+status : ordinaryStatus (pending ++ [answer]) = PrefixStatus.needMore
+short : (pending ++ [answer]).length < 4
+⊢ firstSource circleMap (3 - ↑inner) (pending ++ answer :: unread) =
+    match
+      if pending.length + 1 < 4 then State.first inner (pending ++ [answer])
+      else State.aborted AbortReason.incompleteAtFourBlocks with
+    | State.first inner pending => firstSource circleMap (3 - ↑inner) (pending ++ unread)
+    | State.second point outer inner pending =>
+      innerSource circleMap point (2 - ↑outer) (3 - ↑inner) (pending ++ unread)
+    | State.accepted firstPoint secondPoint => some (firstPoint, secondPoint)
+    | State.aborted reason => none
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:297:17: error: unsolved goals
+case second.needMore
+circleMap : SecureCircleParameterMap
+answer : Digest256
+unread : List Digest256
+point : SecureCirclePointBytes
+outer inner : Fin 3
+pending : List Digest256
+ready : ordinaryStatus pending = PrefixStatus.needMore
+status : ordinaryStatus (pending ++ [answer]) = PrefixStatus.needMore
+short : (pending ++ [answer]).length < 4
+⊢ innerSource circleMap point (2 - ↑outer) (3 - ↑inner) (pending ++ answer :: unread) =
+    match
+      if pending.length + 1 < 4 then State.second point outer inner (pending ++ [answer])
+      else State.aborted AbortReason.incompleteAtFourBlocks with
+    | State.first inner pending => firstSource circleMap (3 - ↑inner) (pending ++ unread)
+    | State.second point outer inner pending =>
+      innerSource circleMap point (2 - ↑outer) (3 - ↑inner) (pending ++ unread)
+    | State.accepted firstPoint secondPoint => some (firstPoint, secondPoint)
+    | State.aborted reason => none
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:281:37: warning: This simp argument is unused:
+  short
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer, status, s̵h̵o̵r̵t̵,̵ ̵interpret, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:281:55: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer, status, short, interpret,̵ ̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:299:37: warning: This simp argument is unused:
+  short
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer, status, s̵h̵o̵r̵t̵,̵ ̵interpret, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean:299:55: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer, status, short, interpret,̵ ̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8.NestedCircleRunRefinement.secondSource_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.firstSource_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.innerSource_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.firstSource_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.innerSource_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.first_ordinary_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.second_ordinary_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.afterOrdinary_remaining' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.afterOrdinary_ready' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.afterAnswer_ready' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.NestedCircleRunRefinement.hard_on_unread' depends on axioms: [propext, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.accepted_on_unread' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.one_block_preserves' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.NestedCircleRunRefinement.empty_interpret' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.run_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.source_pair_refines' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.NestedCircleRunRefinement.accepted_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRunRefinement.abort_implies_source_none' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRunRefinement.lean"
+	User time (seconds): 4.23
+	System time (seconds): 2.64
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:06.89
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6658416
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 141351
+	Voluntary context switches: 1199
+	Involuntary context switches: 474
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1
