@@ -1,6 +1,6 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest higher-degree continuation: [regular low-support composition](regular-low-support-composition-review.md).
+Latest higher-degree continuation: [selected HIGH/LOW probability composition](selected-higher-y-probability-review.md).
 For all retained Y-degree-at-least-three factors, the fixed early C1 now feeds
 both a checked high-support incidence cap and a multiplicity-preserving regular
 support-tail sum.  The actual adaptive selected quotient is connected to the
@@ -14,8 +14,13 @@ a fixed representative per factor/gamma and bounds the actual union for every
 later kappa/tau.  The outer low-support probability theorem is now checked too:
 it averages over the original gamma space, charges the explicit degree-117,049
 product-root set, and applies the shared rho/later-relation suffix only once.
-The next seam is the total low/high/sparse/pair-root acceptance partition.  The
-exact conservative arithmetic screen,
+The exact HIGH/LOW partition of the same actual adaptive suffix is now checked
+under the fixed early-C1 hypothesis, giving `234126/|Gamma|` plus the integrated
+query budget and one repair term outside the pair-root branch.  The older
+`max(sparse,dense)` shortcut was removed: sparse helper-Good controls only HIGH,
+while LOW remains charged in both cases.  The next seams are the pair-root
+sampler lift, the `earlyC1 = none` residual and the whole-acceptance partition.
+The exact conservative arithmetic screen,
 including the singular and pair-root controls, is **103.847307 bits**, but is
 still labelled a screen rather than a global probability theorem.
 

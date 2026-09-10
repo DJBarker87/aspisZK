@@ -7,7 +7,8 @@ This consumes, but does not prove, the proposed disjoint classification:
   layer cake;
 * supports at least 200,808 fibres in the dense three-helper branch use one
   fixed degree-28 component curve and the parent's 117,077 weight budget;
-* the alternative helper branch has fewer than three good gammas.
+* the alternative helper branch has fewer than three good gammas, which
+  improves only the HIGH contribution; LOW remains charged in both branches.
 
 The alpha and compact-suffix terms are included once.  This remains an ideal
 uniform-challenge arithmetic screen until the event adapter and source/FS
@@ -65,10 +66,19 @@ def main() -> None:
     high_curve = Fraction(HIGHER_PARENT_WEIGHT, GAMMA)
     suffix = Fraction(Q, GAMMA) + Fraction(18, K)
     dense = low_query + conservative_alpha + high_curve + suffix
-    sparse = Fraction(2, GAMMA) + suffix
+    outside_pair = dense + Fraction(SINGULAR_GAMMAS, GAMMA)
+    sparse_high_only = Fraction(2, GAMMA)
+    sparse_total_control = (
+        low_query
+        + conservative_alpha
+        + sparse_high_only
+        + Fraction(SINGULAR_GAMMAS, GAMMA)
+        + suffix
+        + PAIR_ROOT
+    )
     # This conservatively charges the singular set again even though its
     # high-support intersection is already contained in high_curve.
-    all_higher = dense + Fraction(SINGULAR_GAMMAS, GAMMA) + PAIR_ROOT
+    all_higher = outside_pair + PAIR_ROOT
     result = {
         "status": "exact_arithmetic_screen_not_global_probability_theorem",
         "field_cardinality": K,
@@ -97,18 +107,29 @@ def main() -> None:
                 "bits_approx": bits(dense),
                 "passes_100": dense * 2**100 < 1,
             },
+            "fixed_early_higher_outside_pair_root": {
+                **exact(outside_pair),
+                "bits_approx": bits(outside_pair),
+                "passes_100": outside_pair * 2**100 < 1,
+            },
             "all_higher_conservative_total": {
                 **exact(all_higher),
                 "bits_approx": bits(all_higher),
                 "passes_100": all_higher * 2**100 < 1,
                 "double_counts_high_support_singular_intersection": True,
             },
-            "sparse_branch": {
-                **exact(sparse),
-                "bits_approx": bits(sparse),
+            "sparse_high_only": {
+                **exact(sparse_high_only),
+                "bits_approx": bits(sparse_high_only),
+                "not_a_total_higher_bound": True,
+            },
+            "sparse_total_control": {
+                **exact(sparse_total_control),
+                "bits_approx": bits(sparse_total_control),
+                "passes_100": sparse_total_control * 2**100 < 1,
             },
         },
-        "conditional_composition": "max(sparse_branch,dense_total)",
+        "conditional_composition": "fixed_early_higher_bound_plus_pair_root_sampler_screen",
         "proof_body_bytes": 40_282,
         "grinding_credit_bits": 0,
         "theorem_status": {
@@ -119,7 +140,7 @@ def main() -> None:
             "generic_finite_layer_cake": "kernel checked",
             "selected_layer_cake_instantiation": "kernel checked",
             "regular_low_outer_suffix_and_root_composition": "kernel checked",
-            "global_shared_suffix_composition": "unresolved",
+            "fixed_early_higher_high_low_composition": "kernel checked",
             "complete_acceptance_partition": "unresolved",
             "fiat_shamir_coupling": "unresolved",
             "payment_extraction": "partial deterministic bridges only",
