@@ -314,6 +314,76 @@ theorem exact_gamma_prefix_router_routes_selected_full_answer
     (later.map UnifiedExposureRecord.answer) tapeExact
     priorLabels [] target record.answer labelsDecomposition
 
+/-- A selected literal root answer is read from its gamma-prefix coordinate.
+Unlike the full-trace theorem above, the residual obligation is discharged
+from the root's exact machine-fresh cap, so no later restoration-client
+activity and no unused sampler retry is silently counted as observed. -/
+theorem exact_gamma_prefix_root_router_routes_selected_answer
+    {HiddenTape TapeIdentity Observation Statement Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (prior later : List UnifiedExposureRecord)
+    (record : UnifiedExposureRecord)
+    (target : GammaPrefixDigestSlot)
+    (rootExact : exactFixedRootRecords input.package.root =
+      prior ++ record :: later)
+    (preferred :
+      (gammaPrefixCausalController transitionFuel).preferredSlot
+        (indexedStateAfterRecords transitionFuel
+          (gammaPrefixCausalController transitionFuel) prior
+          (exactGammaPrefixInitialState configuration sample.1)) = some target)
+    (programmedCover : 24 ≤ 2 * parameters.forkRequestCap) :
+    causalRoutedAnswer? target
+        (exactCompilerGammaPrefixRouter parameters transitionFuel
+          (exactPlainRomCursor configuration sample.1).erase)
+        (exactGammaPrefixRouterInputTape parameters sample.2) =
+      some record.answer := by
+  let controller := gammaPrefixCausalController
+    (globalOracleCalls := globalFull256OracleCallCap parameters) transitionFuel
+  let initial := exactGammaPrefixInitialState configuration sample.1
+  let prefixLabels := indexedControllerLabeledRecords transitionFuel controller
+    initial (prior ++ [record])
+  let suffixLabels := indexedControllerLabeledRecords transitionFuel controller
+    (indexedStateAfterRecords transitionFuel controller (prior ++ [record])
+      initial) later
+  have rootLabelsExact : exactGammaPrefixRootLabels input =
+      prefixLabels ++ suffixLabels := by
+    unfold exactGammaPrefixRootLabels
+    rw [rootExact]
+    have grouped : prior ++ record :: later = (prior ++ [record]) ++ later := by
+      simp [List.append_assoc]
+    rw [grouped, indexed_controller_labeled_records_append]
+  have rootEnough :=
+    exact_gamma_prefix_root_residual_enough_of_programmed_cover input
+      programmedCover
+  rw [rootLabelsExact, residual_trace_steps_append] at rootEnough
+  have prefixLe : residualTraceSteps prefixLabels ≤
+      residualTraceSteps prefixLabels + residualTraceSteps suffixLabels := by
+    omega
+  have prefixEnough : residualTraceSteps prefixLabels ≤
+      (exactCompilerTargetCaps parameters).length - 24 :=
+    prefixLe.trans rootEnough
+  let tail := (exactFixedComputedClientTailRun transitionFuel configuration
+    sample input.package.root).trace
+  have fullDecomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        prior ++ record :: (later ++ tail) := by
+    rw [exact_fixed_operational_state_map_trace_is_full_trace transitionFuel
+      configuration projection fixedInstance sample input.package]
+    simp [exactFixedOperationalStateMapTrace, rootExact, tail,
+      List.append_assoc]
+  apply exact_gamma_prefix_router_routes_selected_full_answer transitionFuel
+    configuration sample prior (later ++ tail) record target fullDecomposition
+  · simpa only [controller, initial] using preferred
+  · simpa only [controller, initial, prefixLabels] using prefixEnough
+
 theorem exact_gamma_prefix_output_coordinate_eq_of_routed_lookup
     {parameters : ExactCompilerResourceParameters}
     (transitionFuel : Nat)
@@ -366,6 +436,7 @@ theorem exact_gamma_prefix_advance_coordinate_eq_of_routed_lookup
 #print axioms exact_gamma_prefix_full_named_slots_nodup
 #print axioms exact_gamma_prefix_full_labels_tape_exact
 #print axioms exact_gamma_prefix_root_residual_enough_of_programmed_cover
+#print axioms exact_gamma_prefix_root_router_routes_selected_answer
 #print axioms exact_gamma_prefix_router_routes_selected_full_answer
 #print axioms exact_gamma_prefix_output_coordinate_eq_of_routed_lookup
 #print axioms exact_gamma_prefix_advance_coordinate_eq_of_routed_lookup
