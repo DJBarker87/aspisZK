@@ -1,6 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalK13MeasuredComposition
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalK14Probability
-import AspisFormal.K1.V7Tag73ExactRestoredOperationalK16Assembly
 
 /-!
 # Measured clean-restricted restoration-wide K1.6 assembly

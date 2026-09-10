@@ -1,6 +1,7 @@
 import AspisFormal.K1.V7Tag73ExactRestoredQ16AnchorPartition
 import AspisFormal.K1.V7Tag73ExactDagVerifierAnchorPrefix
 import AspisFormal.K1.V7Tag73ExactK12UntypedVerifierSuffix
+import AspisFormal.K1.V7Tag73RestoredK12CanonicalWordCongruence
 
 /-!
 # Restored q16 verifier-anchor runtime invariants
