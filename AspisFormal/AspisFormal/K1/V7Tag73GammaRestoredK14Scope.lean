@@ -28,6 +28,7 @@ open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73RestoredDerivedK13View
+open AspisK1.V7Tag73RootGammaForkBridge
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7CoherentTraceExtraction
@@ -57,6 +58,67 @@ structure ExactRootGammaRestorationRequest
       request.verifierTransitionIndex = some transition
   eventExact : transition.event =
     .verifier (.squeezePair (.challenge .gamma) 0) reply
+
+/-- Every literal accepted operational root supplies such a request.  This is
+derived from the checked future-free transition list, not chosen from an
+untyped SHA input. -/
+theorem exact_operational_input_has_root_gamma_restoration_request
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) :
+    Nonempty (Σ request : ConcreteRestorationRequest,
+      ExactRootGammaRestorationRequest input request) := by
+  obtain ⟨transitionIndex, transition, reply, transitionExact, _within,
+      eventExact⟩ :=
+    exact_clean_root_has_indexed_gamma_transition
+      input.package.root.fixedRoot.base
+  exact ⟨⟨
+    { nodeId := 0, verifierTransitionIndex := transitionIndex },
+    { rootNode := rfl
+      transition := transition
+      reply := reply
+      transitionExact := transitionExact
+      eventExact := eventExact }
+  ⟩⟩
+
+/-- Canonical typed request used by downstream K1.4 source construction. -/
+noncomputable def exactOperationalRootGammaRestorationRequest
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) : ConcreteRestorationRequest :=
+  (Classical.choice
+    (exact_operational_input_has_root_gamma_restoration_request input)).1
+
+/-- The canonical request retains its typed root-gamma provenance. -/
+noncomputable def exact_operational_root_gamma_restoration_request_is_typed
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) :
+    ExactRootGammaRestorationRequest input
+      (exactOperationalRootGammaRestorationRequest input) :=
+  (Classical.choice
+    (exact_operational_input_has_root_gamma_restoration_request input)).2
 
 /-- A restoration-wide K1.3 certificate whose node was actually created by
 the selected root-gamma request.  `parentRequestExact` excludes the original
@@ -143,6 +205,9 @@ theorem gamma_restored_k14_width29_subset_unscoped
   exact ⟨input, k13.certificate, failure⟩
 
 #print axioms ExactRootGammaRestorationRequest
+#print axioms exact_operational_input_has_root_gamma_restoration_request
+#print axioms exactOperationalRootGammaRestorationRequest
+#print axioms exact_operational_root_gamma_restoration_request_is_typed
 #print axioms ExactGammaRestoredOperationalK13Certificate
 #print axioms exactTag73GammaRestoredOperationalK14Width29Event
 #print axioms gamma_restored_certificate_is_not_root
