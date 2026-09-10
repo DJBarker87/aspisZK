@@ -29,6 +29,11 @@ MIN_SUPPORT = 9_558
 LOW_SUPPORT_MAX = 200_807
 REGULAR_BUDGET = 239_599_331
 HIGHER_PARENT_WEIGHT = 117_077
+SINGULAR_GAMMAS = 117_049
+PAIR_ROOT = Fraction(
+    3_244_499_600_849,
+    2_284_408_317_668_028_910_234_756_318_256_429_327_990_468_779_241_285_843_698_658_142_054_252_544,
+)
 
 
 def tail_cap(support: int) -> int:
@@ -61,8 +66,11 @@ def main() -> None:
     suffix = Fraction(Q, GAMMA) + Fraction(18, K)
     dense = low_query + conservative_alpha + high_curve + suffix
     sparse = Fraction(2, GAMMA) + suffix
+    # This conservatively charges the singular set again even though its
+    # high-support intersection is already contained in high_curve.
+    all_higher = dense + Fraction(SINGULAR_GAMMAS, GAMMA) + PAIR_ROOT
     result = {
-        "status": "exact_arithmetic_screen_not_probability_theorem",
+        "status": "exact_arithmetic_screen_not_global_probability_theorem",
         "field_cardinality": K,
         "nonzero_gamma_cardinality": GAMMA,
         "queries": Q,
@@ -73,38 +81,46 @@ def main() -> None:
         "low_weighted_numerator": str(weighted),
         "terms": {
             "low_query_plus_alpha": {
-                "exact": exact(low_query + conservative_alpha),
+                **exact(low_query + conservative_alpha),
                 "bits_approx": bits(low_query + conservative_alpha),
             },
             "dense_high_curve": {
-                "exact": exact(high_curve),
+                **exact(high_curve),
                 "bits_approx": bits(high_curve),
             },
             "one_compact_suffix": {
-                "exact": exact(suffix),
+                **exact(suffix),
                 "bits_approx": bits(suffix),
             },
             "dense_total": {
-                "exact": exact(dense),
+                **exact(dense),
                 "bits_approx": bits(dense),
                 "passes_100": dense * 2**100 < 1,
             },
+            "all_higher_conservative_total": {
+                **exact(all_higher),
+                "bits_approx": bits(all_higher),
+                "passes_100": all_higher * 2**100 < 1,
+                "double_counts_high_support_singular_intersection": True,
+            },
             "sparse_branch": {
-                "exact": exact(sparse),
+                **exact(sparse),
                 "bits_approx": bits(sparse),
             },
         },
         "conditional_composition": "max(sparse_branch,dense_total)",
         "proof_body_bytes": 40_282,
         "grinding_credit_bits": 0,
-        "not_established": [
-            "fixed-early-C1 all-higher-factor event adapter",
-            "acceptance implies the selected event partition",
-            "ordinary/component claims and payment extraction on the dense tuple",
-            "actual query and Fiat-Shamir coupling",
-            "authentication and source refinement",
-            "full-view zero knowledge",
-        ],
+        "theorem_status": {
+            "high_support_all_factor_count": "kernel checked",
+            "regular_tail_sum": "kernel checked",
+            "actual_low_support_query_adapter": "kernel checked",
+            "common_row_and_layer_cake_composition": "unresolved",
+            "complete_acceptance_partition": "unresolved",
+            "fiat_shamir_coupling": "unresolved",
+            "payment_extraction": "partial deterministic bridges only",
+            "full_view_zero_knowledge": "unresolved",
+        },
     }
     print(json.dumps(result, indent=2, sort_keys=True))
 

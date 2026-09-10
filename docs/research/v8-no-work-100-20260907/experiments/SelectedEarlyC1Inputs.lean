@@ -1,0 +1,197 @@
+import SelectedEarlyC1Amounts
+import SelectedNoteRecovery
+
+/-! Source-review draft: derive the seventy-two input note/key/salt/carry
+aliases from the actual selected copy registry on one early C1 member.
+Only the non-copy gates, initial states and tail zeros remain assumptions.
+The public bindings and existing copy collision alternative are explicit.
+No verifier acceptance, valid witness, path or settlement theorem is assumed.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.SelectedEarlyC1Inputs
+open Polynomial Finset
+open AspisFormal.ArithmetizationCore AspisFormal.HashMerkleModel
+open AspisV5ComponentCQM31TowerExact
+open AspisPool.V7ExtractedLaneWords AspisPool.V7FixedWidth29TupleList
+open AspisPool.V7C1SubfieldRecovery
+open AspisV8.EarlyC1Family AspisV8.EarlyC1CopyCollision
+open AspisV8.SelectedWeightedCopyCore AspisV8.SelectedWeightedCopyRows
+open AspisV8.SelectedCopyLayout AspisV8.SelectedCopyLayoutRows
+open AspisV8.SelectedCopyAliases AspisV8.SelectedCopyAliasQM31
+open AspisV8.SelectedEarlyC1Amounts AspisV8.SelectedNoteRecovery
+open AspisV8.PositivePackBinding
+noncomputable section
+
+def inputLink : Fin 7 → Fin 136 := ![0, 1, 2, 7, 8, 9, 10]
+def inputSourceRow : Fin 7 → Nat := ![27, 43, 411, 11, 12, 44, 60]
+def inputTargetRow : Fin 7 → Nat := ![32, 48, 416, 28, 412, 428, 428]
+def inputWidth : Fin 7 → Nat := ![16, 16, 16, 8, 8, 6, 2]
+def inputSourceStart : Fin 7 → Nat := ![0, 0, 0, 0, 0, 2, 0]
+def inputTargetStart : Fin 7 → Nat := ![0, 0, 0, 0, 0, 0, 6]
+
+/-- Only seven literal registry entries and their fourteen small tuple
+patterns are reduced. The challenge field and table are absent. -/
+theorem input_link_shape (edge : Fin 7) :
+    selectedKind (inputLink edge) = .one ∧
+    (producer (inputLink edge)).row.val = inputSourceRow edge ∧
+    (consumer (inputLink edge)).row.val = inputTargetRow edge ∧
+    sourcePatterns (producer (inputLink edge)).pattern =
+      ⟨inputWidth edge, inputSourceStart edge, 0⟩ ∧
+    sourcePatterns (consumer (inputLink edge)).pattern =
+      ⟨inputWidth edge, inputTargetStart edge, 0⟩ := by
+  fin_cases edge <;> exact ⟨rfl, rfl, rfl, rfl, rfl⟩
+
+theorem input_alias_count : (∑ edge : Fin 7, inputWidth edge) = 72 := by
+  decide
+
+/-- The seven source links all have constant weight one. Only equality
+is projected to the base coordinate, never an arbitrary field product. -/
+theorem weighted_aliases_supply_input_limb (candidate : C1InitialMessages)
+    (appendIndex : Nat)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex)
+    (edge : Fin 7) (lane : Fin 16) (live : lane.val < inputWidth edge) :
+    semanticTable candidate (inputSourceRow edge) (inputSourceStart edge + lane.val) -
+      semanticTable candidate (inputTargetRow edge) (inputTargetStart edge + lane.val) = 0 := by
+  obtain ⟨kind, sourceRow, targetRow, sourcePattern, targetPattern⟩ := input_link_shape edge
+  have weight : selectedWeight (K := QM31Exact) .transfer appendIndex (inputLink edge) = 1 := by
+    simp only [selectedWeight, kind, publicWeight, weightBit, if_true]
+  have sourceEq : patternLimb (memberTable candidate) (producer (inputLink edge)) lane =
+      memberTable candidate (producer (inputLink edge)).row (inputSourceStart edge + lane.val) := by
+    simp only [patternLimb, sourcePattern, live, if_true, Nat.cast_zero, ite_self, add_zero]
+  have targetEq : patternLimb (memberTable candidate) (consumer (inputLink edge)) lane =
+      memberTable candidate (consumer (inputLink edge)).row (inputTargetStart edge + lane.val) := by
+    simp only [patternLimb, targetPattern, live, if_true, Nat.cast_zero, ite_self, add_zero]
+  have residual := aliases (inputLink edge) lane
+  rw [weight, one_mul, sourceEq, targetEq] at residual
+  have projected := congrArg (fun value : QM31Exact => value.re.re) (sub_eq_zero.mp residual)
+  rw [← semanticTable_read, ← semanticTable_read, sourceRow, targetRow] at projected
+  exact sub_eq_zero.mpr projected
+
+structure InputCopyAliases (t : SelectedNoteRecovery.Table) : Prop where
+  carryNote1 : ∀ i : Fin 16, t 27 i.val - t 32 i.val = 0
+  carryNote2 : ∀ i : Fin 16, t 43 i.val - t 48 i.val = 0
+  carryNullifier : ∀ i : Fin 16, t 411 i.val - t 416 i.val = 0
+  ownerCopy : ∀ i : Fin 8, t 11 i.val - t 28 i.val = 0
+  keyCopy : ∀ i : Fin 8, t 12 i.val - t 412 i.val = 0
+  saltHeadCopy : ∀ i : Fin 6, t 44 (i.val + 2) - t 428 i.val = 0
+  saltTailCopy : ∀ i : Fin 2, t 60 i.val - t 428 (i.val + 6) = 0
+
+theorem input_copy_aliases (candidate : C1InitialMessages) (appendIndex : Nat)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex) :
+    InputCopyAliases (semanticTable candidate) := by
+  have cell := weighted_aliases_supply_input_limb candidate appendIndex aliases
+  constructor
+  · intro i
+    have h := cell 0 i i.isLt
+    simpa [inputSourceRow, inputTargetRow, inputSourceStart, inputTargetStart] using h
+  · intro i
+    have h := cell 1 i i.isLt
+    simpa [inputSourceRow, inputTargetRow, inputSourceStart, inputTargetStart] using h
+  · intro i
+    have h := cell 2 i i.isLt
+    simpa [inputSourceRow, inputTargetRow, inputSourceStart, inputTargetStart] using h
+  · intro i
+    have h := cell 3 ⟨i.val, by omega⟩ i.isLt
+    simpa [inputSourceRow, inputTargetRow, inputSourceStart, inputTargetStart] using h
+  · intro i
+    have h := cell 4 ⟨i.val, by omega⟩ i.isLt
+    simpa [inputSourceRow, inputTargetRow, inputSourceStart, inputTargetStart] using h
+  · intro i
+    have h := cell 5 ⟨i.val, by omega⟩ i.isLt
+    simpa [inputSourceRow, inputTargetRow, inputSourceStart, inputTargetStart, Nat.add_comm] using h
+  · intro i
+    have h := cell 6 ⟨i.val, by omega⟩ i.isLt
+    simpa [inputSourceRow, inputTargetRow, inputSourceStart, inputTargetStart, Nat.add_comm] using h
+
+/-- Exactly the non-copy part of the existing NoteResiduals structure.
+The actual source gate model/constants and individual residuals stay visible. -/
+structure InputSemanticChecks (rc : RoundConstants) (candidate : C1InitialMessages) : Prop where
+  pairs : ∀ block, block ∈ activeBlocks → BlockResiduals rc (semanticTable candidate) block
+  initialOwner : ∀ i : Fin 16, semanticTable candidate 0 i.val - initState DOM_OWNER 8 i = 0
+  initialNote : ∀ i : Fin 16, semanticTable candidate 16 i.val - initState DOM_NOTE 18 i = 0
+  initialNullifier : ∀ i : Fin 16,
+    semanticTable candidate 400 i.val - initState DOM_NULLIFIER 16 i = 0
+  noteTailZero : ∀ i : Fin 6, semanticTable candidate 60 (i.val + 2) = 0
+
+theorem input_residuals_from_selected_copy (rc : RoundConstants)
+    (candidate : C1InitialMessages) (appendIndex : Nat)
+    (semantic : InputSemanticChecks rc candidate)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex) :
+    NoteResiduals rc (semanticTable candidate) := by
+  have copies := input_copy_aliases candidate appendIndex aliases
+  exact ⟨semantic.pairs, semantic.initialOwner, semantic.initialNote, semantic.initialNullifier,
+    copies.carryNote1, copies.carryNote2, copies.carryNullifier, copies.ownerCopy,
+    copies.keyCopy, copies.saltHeadCopy, copies.saltTailCopy, semantic.noteTailZero⟩
+
+theorem input_hashes_of_aliases (rc : RoundConstants)
+    (candidate : C1InitialMessages) (appendIndex : Nat)
+    (semantic : InputSemanticChecks rc candidate)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex) :
+    owner (semanticTable candidate) = ownerHash rc (key (semanticTable candidate)) ∧
+    inputNote (semanticTable candidate) = noteHash rc (ownerHash rc (key (semanticTable candidate)))
+      (amount (semanticTable candidate)) (asset (semanticTable candidate)) (salt (semanticTable candidate)) ∧
+    nullifier (semanticTable candidate) = nullifierHash rc (key (semanticTable candidate))
+      (salt (semanticTable candidate)) :=
+  decoded_hash_endpoint rc (semanticTable candidate)
+    (input_residuals_from_selected_copy rc candidate appendIndex semantic aliases)
+
+def InputFacts (rc : RoundConstants) (candidate : C1InitialMessages)
+    (publicAsset : F) (publicNullifier : Digest) : Prop :=
+  owner (semanticTable candidate) = ownerHash rc (key (semanticTable candidate)) ∧
+  inputNote (semanticTable candidate) = noteHash rc (ownerHash rc (key (semanticTable candidate)))
+    (amount (semanticTable candidate)) publicAsset (salt (semanticTable candidate)) ∧
+  publicNullifier = nullifierHash rc (key (semanticTable candidate)) (salt (semanticTable candidate))
+
+theorem public_input_facts_of_aliases (rc : RoundConstants)
+    (candidate : C1InitialMessages) (appendIndex : Nat)
+    (semantic : InputSemanticChecks rc candidate)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex)
+    (publicAsset : F) (publicNullifier : Digest)
+    (assetBinding : semanticTable candidate 44 1 - publicAsset = 0)
+    (nullifierBinding : ∀ i : Fin 8, semanticTable candidate 427 i.val - publicNullifier i = 0) :
+    InputFacts rc candidate publicAsset publicNullifier := by
+  have notes := input_residuals_from_selected_copy rc candidate appendIndex semantic aliases
+  exact ⟨(decoded_hash_endpoint rc (semanticTable candidate) notes).1,
+    exact_public_asset_nullifier rc (semanticTable candidate) notes publicAsset publicNullifier
+      assetBinding nullifierBinding⟩
+
+/-- The same early C1 member may be selected adaptively from its fixed
+family. Nothing freezes C2 before lambda or authenticates public inputs.
+The existing collision alternative is preserved with no additional charge. -/
+theorem member_inputs_or_copy_collision
+    (rc : RoundConstants) (c1 : C1InitialWords) (candidate : C1InitialMessages)
+    (member : candidate ∈ EarlyC1Family.family c1)
+    (baseWord : ∀ column index, projectBase (c1 column index) = c1 column index)
+    (appendIndex : Nat) (lambdas chis : Finset QM31Exact) (lambda chi : QM31Exact)
+    (lambdaMember : lambda ∈ lambdas) (chiMember : chi ∈ chis)
+    (helper : Fin 1024 → QM31Exact)
+    (copy : CopyConditions candidate .transfer appendIndex lambda chi helper)
+    (semantic : InputSemanticChecks rc candidate)
+    (publicAsset : F) (publicNullifier : Digest)
+    (assetBinding : semanticTable candidate 44 1 - publicAsset = 0)
+    (nullifierBinding : ∀ i : Fin 8, semanticTable candidate 427 i.val - publicNullifier i = 0) :
+    (∀ row : Fin 1024, ∀ column : Fin 16,
+      liftBase (semanticTable candidate row.val column.val) = memberTable candidate row column.val) ∧
+    (InputFacts rc candidate publicAsset publicNullifier ∨
+      (lambda, chi) ∈ collisionPairs c1 .transfer appendIndex lambdas chis) := by
+  refine ⟨semanticTable_embeds c1 candidate member baseWord, ?_⟩
+  rcases source_member_covered c1 .transfer appendIndex lambdas chis lambda chi
+      lambdaMember chiMember candidate member helper copy with aliases | collision
+  · exact Or.inl (public_input_facts_of_aliases rc candidate appendIndex semantic aliases
+      publicAsset publicNullifier assetBinding nullifierBinding)
+  · exact Or.inr collision
+
+#print axioms input_link_shape
+#print axioms input_alias_count
+#print axioms weighted_aliases_supply_input_limb
+#print axioms input_copy_aliases
+#print axioms input_residuals_from_selected_copy
+#print axioms input_hashes_of_aliases
+#print axioms public_input_facts_of_aliases
+#print axioms member_inputs_or_copy_collision
+end
+end AspisV8.SelectedEarlyC1Inputs
