@@ -1,0 +1,164 @@
+import TupleQueryTransportCore
+import OwnSymbolCollision
+import SelectedComponentGame
+import SelectedSupportIdentification
+
+/-! Actual selected tuple/query transport. The tuple and component received
+word are fixed before gamma. Q and final may be chosen after alpha: the
+image, representation and true-fold equalities below eliminate them from
+the pointwise residual. Poles are rejected on the queried fibres only.
+This is not an authentication, Fiat--Shamir or extraction theorem. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.TupleQueryTransport
+open Polynomial Finset
+open AspisV5ComponentCQM31TowerExact AspisV5ComponentCConcreteFoldLinearity
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisK1.V7Tag73CanonicalOneFoldSchedule
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.OODInterpolant AspisV8.GammaComponentGame
+open AspisV8.SelectedQuotientOriginal AspisV8.SelectedReceivedOracle
+open AspisV8.FixedTargetQuerySupport
+noncomputable section
+abbrev K := QM31Exact
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+
+def initialLinear : (Fin 1024 → K) →ₗ[K] (Fin 1048576 → K) where
+  toFun := exactInitialEncoder
+  map_add' := AspisK1.V7ExactCorrelatedAgreement.exactInitialEncoder_add
+  map_smul' := AspisK1.V7ExactCorrelatedAgreement.exactInitialEncoder_smul
+
+def expected (tuple : Fin 29 → Fin 1024 → K) : Fin 29 → Fin 1048576 → K :=
+  fun lane => exactInitialEncoder (tuple lane)
+
+def symbolError (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (i : Fin 1048576) : K[X] :=
+  OwnSymbolCollision.residual (received29 c1 c2) (expected tuple) i
+
+def errors (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (i : Fin 262144) (j : Fin 4) : K[X] :=
+  symbolError c1 c2 tuple (childIndex i j)
+
+def denominators (data : Data (K := K)) (i : Fin 262144) (j : Fin 4) : K :=
+  denominator data (childIndex i j)
+
+def Legal (data : Data (K := K)) (i : Fin 262144) : Prop :=
+  ∀ j, denominators data i j ≠ 0
+
+theorem denominator_atGamma (data : Data (K := K)) (gamma : K)
+    (i : Fin 1048576) : denominator (atGamma data gamma) i=denominator data i := rfl
+
+theorem errors_degree (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (i : Fin 262144) (j : Fin 4) :
+    (errors c1 c2 tuple i j).natDegree ≤ 28 :=
+  OwnSymbolCollision.residual_degree _ _ _
+
+theorem errors_zero_iff (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (i : Fin 262144) (j : Fin 4) :
+    errors c1 c2 tuple i j=0 ↔ ∀ lane,
+      received29 c1 c2 lane (childIndex i j)=exactInitialEncoder (tuple lane) (childIndex i j) :=
+  OwnSymbolCollision.residual_zero_iff _ _ _
+
+theorem symbolError_eval (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (gamma : K) (i : Fin 1048576) :
+    (symbolError c1 c2 tuple i).eval gamma =
+      NearGammaSelectedC1.rawBatch c1 c2 gamma i-
+        exactInitialEncoder (ClaimTransport.batch gamma tuple) i := by
+  have encoded := TupleQueryTransportCore.encode_batch initialLinear tuple gamma i
+  change exactInitialEncoder (ClaimTransport.batch gamma tuple) i =
+    ∑ lane : Fin 29, gamma^lane.val*exactInitialEncoder (tuple lane) i at encoded
+  rw [encoded]
+  exact OwnSymbolCollision.residual_eval (received29 c1 c2) (expected tuple) i gamma
+
+/-- The adaptive quotient disappears at each legal symbol by the exact
+image/reconstruction encoder identity; no received-word polynomiality. -/
+theorem symbol_transport (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (data : Data (K := K))
+    (checked : data.Checked) (gamma : K) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ (atGamma data gamma).b*Q 1022-(atGamma data gamma).c*Q 1021=0)
+    (represented : (atGamma data gamma).original Q=ClaimTransport.batch gamma tuple)
+    (i : Fin 1048576) (nonpole : denominator data i ≠ 0) :
+    SelectedComponentGame.received c1 c2 data gamma i-exactInitialEncoder Q i=
+      (symbolError c1 c2 tuple i).eval gamma/denominator data i := by
+  have reconstruction := encoded_original (atGamma data gamma)
+    (SelectedComponentGame.checked_atGamma data checked gamma) Q image i
+  rw [represented, denominator_atGamma] at reconstruction
+  have difference := TupleQueryTransportCore.quotient_difference
+    (NearGammaSelectedC1.rawBatch c1 c2 gamma i)
+    (exactInitialEncoder (atGamma data gamma).interpolant i)
+    (denominator data i) (exactInitialEncoder Q i)
+    (exactInitialEncoder (ClaimTransport.batch gamma tuple) i) nonpole reconstruction
+  rw [← symbolError_eval c1 c2 tuple gamma i] at difference
+  simpa only [SelectedComponentGame.received, virtual, denominator_atGamma] using difference
+
+theorem four_nonzero : (4 : K) ≠ 0 := by
+  have two : (2 : K) ≠ 0 := NeZero.ne _
+  have same : (4 : K)=2*2 := by ring
+  rw [same]
+  exact mul_ne_zero two two
+
+/-- Literal selected final-minus-received residual. The right side is
+fixed by the pre-gamma tuple, received word and chord, not by Q or final. -/
+theorem fold_residual (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (data : Data (K := K))
+    (checked : data.Checked) (gamma alpha : K) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ (atGamma data gamma).b*Q 1022-(atGamma data gamma).c*Q 1021=0)
+    (represented : (atGamma data gamma).original Q=ClaimTransport.batch gamma tuple)
+    (final : Fin 256 → K) (identified : final=coefficientFoldLayer 256 alpha Q)
+    (i : Fin 262144) (legal : Legal data i) :
+    exactFinalLinear final i-circleFoldLayer 262144 alpha
+      (canonicalOneFoldSchedule 0).circleInv2x (canonicalOneFoldSchedule 0).circleInv2y
+      (SelectedComponentGame.received c1 c2 data gamma) i =
+    -(fibreFold exactCircleX exactCircleY (denominators data) (errors c1 c2 tuple) i gamma).eval alpha := by
+  rw [identified, ← congrFun (SelectedSupportIdentification.selected_fold_commutes Q alpha) i]
+  rw [circleFoldLayer_apply, circleFoldLayer_apply, inverse_x, inverse_y]
+  apply TupleQueryTransportCore.residual_fold _ _ _ _ _ _ four_nonzero
+    (x_nonzero i) (y_nonzero i)
+  intro j
+  exact symbol_transport c1 c2 tuple data checked gamma Q image represented
+    (childIndex i j) (legal j)
+
+/-- Source ordered query slots, arbitrary reference Q, and the exact sign.
+The reference parameter is not tied to the adaptive represented quotient. -/
+theorem query_residual {q : Nat} (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (data : Data (K := K))
+    (checked : data.Checked) (gamma alpha : K) (Q reference : Fin 1024 → K)
+    (image : Q 1023=0 ∧ (atGamma data gamma).b*Q 1022-(atGamma data gamma).c*Q 1021=0)
+    (represented : (atGamma data gamma).original Q=ClaimTransport.batch gamma tuple)
+    (final : Fin 256 → K) (identified : final=coefficientFoldLayer 256 alpha Q)
+    (queries : Fin q → Fin 262144) (j : Fin q) (legal : Legal data (queries j)) :
+    PostQueryFunctional.residual final (fun t => PostQueryFunctional.storedPoint (K := K) (queries t))
+      ((oracle reference (SelectedComponentGame.received c1 c2 data gamma)).folded alpha) j =
+    -(fibreFold exactCircleX exactCircleY (denominators data) (errors c1 c2 tuple)
+      (queries j) gamma).eval alpha := by
+  rw [SelectedReceivedOracle.query_residual]
+  exact fold_residual c1 c2 tuple data checked gamma alpha Q image represented
+    final identified (queries j) legal
+
+/-- A nonzero component residual at gamma gives a nonzero actual cubic in
+alpha. This instantiates the existing fixed-target theorem's nonzero input. -/
+theorem nonzero_cubic (c1 : C1Received) (c2 : C2Received)
+    (tuple : Fin 29 → Fin 1024 → K) (data : Data (K := K))
+    (i : Fin 262144) (j : Fin 4) (gamma : K)
+    (wrong : (errors c1 c2 tuple i j).eval gamma ≠ 0)
+    (nonpole : denominators data i j ≠ 0) :
+    fibreFold exactCircleX exactCircleY (denominators data) (errors c1 c2 tuple) i gamma ≠ 0 := by
+  apply foldedPolynomial_ne_zero _ _ four_nonzero (x_nonzero i) (y_nonzero i)
+  exact divided_residual_ne_zero _ _ j wrong nonpole
+
+#print axioms initialLinear
+#print axioms denominator_atGamma
+#print axioms errors_degree
+#print axioms errors_zero_iff
+#print axioms symbolError_eval
+#print axioms symbol_transport
+#print axioms four_nonzero
+#print axioms fold_residual
+#print axioms query_residual
+#print axioms nonzero_cubic
+end
+end AspisV8.TupleQueryTransport
