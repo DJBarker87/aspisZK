@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalStages
+import AspisFormal.K1.V7Tag73ExactFixedOperationalNodeExecution
 import AspisFormal.K1.V7Tag73RootGammaForkBridge
 
 /-!
@@ -22,16 +23,21 @@ open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK13K14FailureReduction
+open AspisK1.V7Tag73ExactFixedOperationalNodeExecution
+open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredOperationalK13Classifier
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73ActualNodeCausalProvenance
 open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73ParsedK13K14Classifier
 open AspisK1.V7Tag73RestoredDerivedK13View
+open AspisK1.V7Tag73RestoredNodeK13Classifier
 open AspisK1.V7Tag73RootGammaForkBridge
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7CoherentTraceExtraction
+open AspisK1.V7Tag73OperationalNodeCertificate
 open AspisV5ComponentCQM31TowerExact
 
 noncomputable section
@@ -186,6 +192,101 @@ theorem gamma_restored_certificate_is_not_root
   rw [nodeExact, rootParent] at childParent
   cases childParent
 
+/-- The scoped certificate names a node inserted by the executable dispatcher
+for exactly its retained gamma request.  This exposes the scheduled fork coins
+and both replay segments without trusting a source-supplied node map. -/
+theorem gamma_restored_certificate_has_exact_projected_execution
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample}
+    (positive : 0 < transitionFuel)
+    (k13 : ExactGammaRestoredOperationalK13Certificate decoder input) :
+    Nonempty { execution : ProjectedRestorationNodeExecution
+        (Final := ConcreteRestorationClientRun Statement Tag73K12ParsedProof
+          Payload (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+            Payload Witness))
+        (configuration.machine.blackBox.start sample.1
+          configuration.machine.observation)
+        configuration.machine.environment configuration.restorationConfiguration
+        (runExactPlainRom transitionFuel configuration sample).trace
+        (exactRestorationAccumulator input) k13.certificate.node //
+      execution.prepared.request = k13.request } := by
+  have nonroot : k13.certificate.node.parentRequest ≠ none := by
+    rw [k13.parentRequestExact]
+    exact Option.some_ne_none k13.request
+  obtain ⟨execution⟩ := exact_operational_nonroot_node_has_projected_execution
+    positive input k13.certificate.node k13.certificate.member nonroot
+  have requestExact : execution.prepared.request = k13.request := by
+    apply Option.some.inj
+    exact execution.parentRequestExact.symm.trans k13.parentRequestExact
+  exact ⟨⟨execution, requestExact⟩⟩
+
+/-- The projected child execution selects the same literal root transition as
+the typed request; the equality follows from executable preparation and the
+immutable node-zero lookup. -/
+theorem gamma_restored_certificate_execution_has_exact_transition
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample}
+    (positive : 0 < transitionFuel)
+    (k13 : ExactGammaRestoredOperationalK13Certificate decoder input) :
+    Nonempty { execution : ProjectedRestorationNodeExecution
+        (Final := ConcreteRestorationClientRun Statement Tag73K12ParsedProof
+          Payload (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+            Payload Witness))
+        (configuration.machine.blackBox.start sample.1
+          configuration.machine.observation)
+        configuration.machine.environment configuration.restorationConfiguration
+        (runExactPlainRom transitionFuel configuration sample).trace
+        (exactRestorationAccumulator input) k13.certificate.node //
+      execution.prepared.request = k13.request ∧
+        execution.prepared.transition = k13.requestIsGamma.transition } := by
+  obtain ⟨⟨execution, requestExact⟩⟩ :=
+    gamma_restored_certificate_has_exact_projected_execution positive k13
+  have selected := ready_preparation_parent_is_stored
+    (configuration.machine.blackBox.start sample.1
+      configuration.machine.observation)
+    configuration.restorationConfiguration (exactRestorationAccumulator input)
+    execution.prepared.request execution.prepared execution.preparationExact
+  have rootLookup := input.package.root.full.projection.nodeStoreInvariant.1
+  change (exactRestorationAccumulator input).node? 0 =
+    some input.package.root.fixedRoot.base.runtime.node at rootLookup
+  have parentExact : execution.prepared.parentNode =
+      input.package.root.fixedRoot.base.runtime.node := by
+    apply Option.some.inj
+    calc
+      some execution.prepared.parentNode =
+          (exactRestorationAccumulator input).node?
+            execution.prepared.request.nodeId := selected.1.symm
+      _ = (exactRestorationAccumulator input).node? k13.request.nodeId := by
+        rw [requestExact]
+      _ = (exactRestorationAccumulator input).node? 0 := by
+        rw [k13.requestIsGamma.rootNode]
+      _ = some input.package.root.fixedRoot.base.runtime.node := rootLookup
+  have selectedTransition := selected.2.2.2
+  rw [requestExact, parentExact] at selectedTransition
+  have transitionExact : execution.prepared.transition =
+      k13.requestIsGamma.transition := by
+    apply Option.some.inj
+    exact selectedTransition.symm.trans k13.requestIsGamma.transitionExact
+  exact ⟨⟨execution, requestExact, transitionExact⟩⟩
+
 /-- Forgetting provenance embeds the corrected event into the older broad
 event.  The converse is deliberately absent. -/
 theorem gamma_restored_k14_width29_subset_unscoped
@@ -211,6 +312,8 @@ theorem gamma_restored_k14_width29_subset_unscoped
 #print axioms ExactGammaRestoredOperationalK13Certificate
 #print axioms exactTag73GammaRestoredOperationalK14Width29Event
 #print axioms gamma_restored_certificate_is_not_root
+#print axioms gamma_restored_certificate_has_exact_projected_execution
+#print axioms gamma_restored_certificate_execution_has_exact_transition
 #print axioms gamma_restored_k14_width29_subset_unscoped
 
 end
