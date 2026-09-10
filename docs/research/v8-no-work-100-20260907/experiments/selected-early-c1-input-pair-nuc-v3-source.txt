@@ -1,0 +1,204 @@
+import SelectedEarlyC1Outputs
+import SelectedPairDecoder
+
+/-! Same early-C1 table to the selected input-pair field decoder. The seventeen
+copy equalities are derived from literal links18,19,66, including pattern10's
+last-limb offset. Non-copy occupancy/direction/spend gates remain explicit.
+No acceptance, decoder success, shared support or payment validity is assumed.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.SelectedEarlyC1InputPair
+open Polynomial Finset
+open AspisFormal.ArithmetizationCore AspisFormal.HashMerkleModel
+open AspisV5ComponentCQM31TowerExact
+open AspisPool.V7ExtractedLaneWords AspisPool.V7FixedWidth29TupleList
+open AspisPool.V7C1SubfieldRecovery
+open AspisV8.EarlyC1Family AspisV8.EarlyC1CopyCollision
+open AspisV8.SelectedWeightedCopyCore AspisV8.SelectedWeightedCopyRows
+open AspisV8.SelectedCopyLayout AspisV8.SelectedCopyLayoutRows
+open AspisV8.SelectedCopyAliases AspisV8.SelectedCopyAliasQM31
+open AspisV8.SelectedEarlyC1Amounts AspisV8.SelectedPairDecoder
+open AspisV8.PositivePackBinding
+noncomputable section
+
+def pairLink : Fin 3 → Fin 136 := ![18, 19, 66]
+def pairSourceRow : Fin 3 → Nat := ![64, 913, 914]
+def pairTargetRow : Fin 3 → Nat := ![1017, 1017, 64]
+def pairWidth : Fin 3 → Nat := ![8, 1, 8]
+def pairSourceStart : Fin 3 → Nat := ![8, 0, 8]
+def pairTargetStart : Fin 3 → Nat := ![2, 10, 8]
+def pairSourceOffset : Fin 3 → Nat := ![1051521018, 0, 0]
+def pairTargetOffset : Fin 3 → Nat := ![0, 0, 1051521018]
+
+/-- Only three literal registry entries are reduced, with no field or table. -/
+theorem pair_link_shape (edge : Fin 3) :
+    selectedKind (pairLink edge) = .one ∧
+    (producer (pairLink edge)).row.val = pairSourceRow edge ∧
+    (consumer (pairLink edge)).row.val = pairTargetRow edge ∧
+    sourcePatterns (producer (pairLink edge)).pattern =
+      ⟨pairWidth edge, pairSourceStart edge, pairSourceOffset edge⟩ ∧
+    sourcePatterns (consumer (pairLink edge)).pattern =
+      ⟨pairWidth edge, pairTargetStart edge, pairTargetOffset edge⟩ := by
+  fin_cases edge <;> refine ⟨by rfl, ?_⟩ <;> decide
+
+theorem pair_alias_count : (∑ edge : Fin 3, pairWidth edge) = 17 := by decide
+
+/-- Narrow port of SelectedOutputPair.literal_right_offset_cancels, itself
+reusing V7's symbolic cast proof, without importing the output-pair closure. -/
+theorem literal_right_offset_cancels : (1051521018 : F) + NODE_TWEAK = 0 := by
+  rw [NODE_TWEAK]
+  change ((1051521018 : Nat) : F) + ((1095962629 : Nat) : F) = 0
+  rw [← Nat.cast_add]
+  change ((2147483647 : Nat) : ZMod 2147483647) = 0
+  exact ZMod.natCast_self 2147483647
+
+/-- Coordinate projection is used only for addition of a public integer,
+not for arbitrary QM31 products. The offset remains symbolic here. -/
+theorem project_add_offset (value : QM31Exact) (offset : Nat) :
+    (value + (offset : QM31Exact)).re.re = value.re.re + (offset : F) := by
+  rfl
+
+theorem project_pattern_limb (candidate : C1InitialMessages) (endpoint : Endpoint)
+    (lane : Fin 16) (live : lane.val < (sourcePatterns endpoint.pattern).width) :
+    (patternLimb (memberTable candidate) endpoint lane).re.re =
+      semanticTable candidate endpoint.row.val ((sourcePatterns endpoint.pattern).start + lane.val) +
+        if lane.val + 1 = (sourcePatterns endpoint.pattern).width then
+          ((sourcePatterns endpoint.pattern).lastOffset : F) else 0 := by
+  rw [patternLimb, if_pos live]
+  by_cases last : lane.val + 1 = (sourcePatterns endpoint.pattern).width
+  · rw [if_pos last, project_add_offset, ← semanticTable_read, if_pos last]
+  · rw [if_neg last, add_zero, ← semanticTable_read, if_neg last, add_zero]
+
+/-- All three weights are one. The genuine offset is projected along with
+the equality; zero-weight slots elsewhere are not discarded. -/
+theorem weighted_aliases_supply_pair_limb (candidate : C1InitialMessages)
+    (appendIndex : Nat)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex)
+    (edge : Fin 3) (lane : Fin 16) (live : lane.val < pairWidth edge) :
+    semanticTable candidate (pairSourceRow edge) (pairSourceStart edge + lane.val) +
+        (if lane.val + 1 = pairWidth edge then (pairSourceOffset edge : F) else 0) =
+      semanticTable candidate (pairTargetRow edge) (pairTargetStart edge + lane.val) +
+        (if lane.val + 1 = pairWidth edge then (pairTargetOffset edge : F) else 0) := by
+  obtain ⟨kind, sourceRow, targetRow, sourcePattern, targetPattern⟩ := pair_link_shape edge
+  have weight : selectedWeight (K := QM31Exact) .transfer appendIndex (pairLink edge) = 1 := by
+    simp only [selectedWeight, kind, publicWeight, weightBit, if_true]
+  have residual := aliases (pairLink edge) lane
+  rw [weight, one_mul] at residual
+  have projected := congrArg (fun value : QM31Exact => value.re.re) (sub_eq_zero.mp residual)
+  have sourceLive : lane.val < (sourcePatterns (producer (pairLink edge)).pattern).width := by
+    simpa only [sourcePattern] using live
+  have targetLive : lane.val < (sourcePatterns (consumer (pairLink edge)).pattern).width := by
+    simpa only [targetPattern] using live
+  rw [project_pattern_limb candidate _ lane sourceLive,
+    project_pattern_limb candidate _ lane targetLive, sourcePattern, targetPattern,
+    sourceRow, targetRow] at projected
+  exact projected
+
+structure InputPairCopies (t : SelectedPairDecoder.Table F) : Prop where
+  selectedCopy : t 913 0 - t 1017 10 = 0
+  pathRightCopy : ∀ i : Fin 8, t 914 (8 + i.val) - nodeRight t NODE_TWEAK i = 0
+  occupancyRightCopy : ∀ i : Fin 8, nodeRight t NODE_TWEAK i - t 1017 (2 + i.val) = 0
+
+theorem input_pair_copies (candidate : C1InitialMessages) (appendIndex : Nat)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex) :
+    InputPairCopies (semanticTable candidate) := by
+  have cell := weighted_aliases_supply_pair_limb candidate appendIndex aliases
+  have offset : (1051521018 : F) = -NODE_TWEAK :=
+    eq_neg_iff_add_eq_zero.mpr literal_right_offset_cancels
+  constructor
+  · have h := cell 1 0 (by decide)
+    apply sub_eq_zero.mpr
+    simpa [pairSourceRow, pairTargetRow, pairSourceStart, pairTargetStart,
+      pairSourceOffset, pairTargetOffset] using h
+  · intro i
+    have h := cell 2 ⟨i.val, by omega⟩ i.isLt
+    have last : i.val + 1 = 8 ↔ i.val = 7 := by omega
+    apply sub_eq_zero.mpr
+    simpa [pairSourceRow, pairTargetRow, pairSourceStart, pairTargetStart,
+      pairSourceOffset, pairTargetOffset, pairWidth, nodeRight, last, offset] using h
+  · intro i
+    have h := cell 0 ⟨i.val, by omega⟩ i.isLt
+    have last : i.val + 1 = 8 ↔ i.val = 7 := by omega
+    apply sub_eq_zero.mpr
+    simpa [pairSourceRow, pairTargetRow, pairSourceStart, pairTargetStart,
+      pairSourceOffset, pairTargetOffset, pairWidth, nodeRight, last, offset] using h
+
+/-- Precisely the non-copy part of InputPairResiduals: the 24 direction
+bits and literal input-occupancy row1017 gates, including selected spend. -/
+structure InputPairSemanticChecks (candidate : C1InitialMessages) : Prop where
+  directionBoolean : ∀ level,
+    semanticTable candidate (pathRow level) 0 *
+      (semanticTable candidate (pathRow level) 0 - 1) = 0
+  occupiedBoolean : semanticTable candidate 1017 0 * (semanticTable candidate 1017 0 - 1) = 0
+  sentinelInverse : semanticTable candidate 1017 9 * semanticTable candidate 1017 1 -
+    semanticTable candidate 1017 0 = 0
+  emptyInverse : (1 - semanticTable candidate 1017 0) * semanticTable candidate 1017 1 = 0
+  emptyDigest : ∀ i : Fin 8, (1 - semanticTable candidate 1017 0) *
+    semanticTable candidate 1017 (2 + i.val) = 0
+  selectedSpend : semanticTable candidate 1017 10 * (1 - semanticTable candidate 1017 0) = 0
+
+theorem input_pair_residuals_from_selected_copy (candidate : C1InitialMessages)
+    (appendIndex : Nat) (semantic : InputPairSemanticChecks candidate)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex) :
+    InputPairResiduals (semanticTable candidate) NODE_TWEAK := by
+  have copies := input_pair_copies candidate appendIndex aliases
+  exact ⟨semantic.directionBoolean, semantic.occupiedBoolean, semantic.sentinelInverse,
+    semantic.emptyInverse, semantic.emptyDigest, semantic.selectedSpend,
+    copies.selectedCopy, copies.pathRightCopy, copies.occupancyRightCopy⟩
+
+def InputPairFacts (candidate : C1InitialMessages) : Prop :=
+  decodeInputPairFields (semanticTable candidate) =
+      some (inputPair (semanticTable candidate), selectedSide (semanticTable candidate 913 0)) ∧
+    (inputPair (semanticTable candidate)).Valid ∧
+    (inputPair (semanticTable candidate)).SelectedSlotIsSpendable
+      (selectedSide (semanticTable candidate 913 0)) ∧
+    (∀ level, decodeSide (semanticTable candidate (pathRow level) 0) =
+      some (selectedSide (semanticTable candidate (pathRow level) 0)))
+
+/-- Reuses the selected fallible decoder and pinned V7 occupancy theorem;
+in particular, occupied nonzero sentinel is derived rather than assumed. -/
+theorem input_pair_facts_of_aliases (candidate : C1InitialMessages) (appendIndex : Nat)
+    (semantic : InputPairSemanticChecks candidate)
+    (aliases : WeightedAliases (memberTable candidate) .transfer appendIndex) :
+    InputPairFacts candidate :=
+  residuals_imply_checked_input_decode (semanticTable candidate) NODE_TWEAK
+    (input_pair_residuals_from_selected_copy candidate appendIndex semantic aliases)
+
+/-- The candidate is a member of the actual fixed early-C1 family. The
+collision alternative and all helper/pole/local conditions are inherited,
+without any late-C2 freezing or new acceptance-to-residual implication. -/
+theorem member_input_pair_or_copy_collision
+    (c1 : C1InitialWords) (candidate : C1InitialMessages)
+    (member : candidate ∈ EarlyC1Family.family c1)
+    (baseWord : ∀ column index, projectBase (c1 column index) = c1 column index)
+    (appendIndex : Nat) (lambdas chis : Finset QM31Exact) (lambda chi : QM31Exact)
+    (lambdaMember : lambda ∈ lambdas) (chiMember : chi ∈ chis)
+    (helper : Fin 1024 → QM31Exact)
+    (copy : CopyConditions candidate .transfer appendIndex lambda chi helper)
+    (semantic : InputPairSemanticChecks candidate) :
+    (∀ row : Fin 1024, ∀ column : Fin 16,
+      liftBase (semanticTable candidate row.val column.val) = memberTable candidate row column.val) ∧
+    (InputPairFacts candidate ∨
+      (lambda, chi) ∈ collisionPairs c1 .transfer appendIndex lambdas chis) := by
+  refine ⟨semanticTable_embeds c1 candidate member baseWord, ?_⟩
+  rcases source_member_covered c1 .transfer appendIndex lambdas chis lambda chi
+      lambdaMember chiMember candidate member helper copy with aliases | collision
+  · exact Or.inl (input_pair_facts_of_aliases candidate appendIndex semantic aliases)
+  · exact Or.inr collision
+
+#print axioms pair_link_shape
+#print axioms pair_alias_count
+#print axioms literal_right_offset_cancels
+#print axioms project_add_offset
+#print axioms project_pattern_limb
+#print axioms weighted_aliases_supply_pair_limb
+#print axioms input_pair_copies
+#print axioms input_pair_residuals_from_selected_copy
+#print axioms input_pair_facts_of_aliases
+#print axioms member_input_pair_or_copy_collision
+end
+end AspisV8.SelectedEarlyC1InputPair
