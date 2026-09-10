@@ -223,6 +223,48 @@ def repeatedRootTransitionRequests (transitionCount : Nat) :
       rootTransitionRequests 0 transitionCount ++
         repeatedRootTransitionRequests transitionCount rounds
 
+/-- Every request in one half-open root interval names node zero and an
+index in that interval.  This small list fact is the basis for selecting the
+unique production gamma request in a single deployed sweep. -/
+theorem root_transition_request_mem_bounds
+    (start count : Nat) (request : ConcreteRestorationRequest)
+    (member : request ∈ rootTransitionRequests start count) :
+    request.nodeId = 0 ∧ start ≤ request.verifierTransitionIndex ∧
+      request.verifierTransitionIndex < start + count := by
+  induction count generalizing start with
+  | zero => simp [rootTransitionRequests] at member
+  | succ count ih =>
+      simp only [rootTransitionRequests, List.mem_cons] at member
+      rcases member with rfl | later
+      · refine ⟨rfl, Nat.le_refl start, ?_⟩
+        change start < start + (count + 1)
+        omega
+      · obtain ⟨node, lower, upper⟩ := ih (start + 1) later
+        exact ⟨node, by omega, by omega⟩
+
+/-- A single interval never requests the same root transition twice. -/
+theorem root_transition_requests_nodup (start count : Nat) :
+    (rootTransitionRequests start count).Nodup := by
+  induction count generalizing start with
+  | zero => simp [rootTransitionRequests]
+  | succ count ih =>
+      rw [rootTransitionRequests]
+      apply List.nodup_cons.mpr
+      refine ⟨?_, ih (start + 1)⟩
+      intro member
+      obtain ⟨_node, lower, _upper⟩ :=
+        root_transition_request_mem_bounds (start + 1) count
+          { nodeId := 0, verifierTransitionIndex := start } member
+      change start + 1 ≤ start at lower
+      omega
+
+/-- The exact request list of one deployed 1513-transition sweep is
+duplicate-free.  Repeated sweeps intentionally do not have this property. -/
+theorem deployed_root_sweep_one_round_requests_nodup :
+    (repeatedRootTransitionRequests 1513 1).Nodup := by
+  simpa [repeatedRootTransitionRequests] using
+    root_transition_requests_nodup 0 1513
+
 /-- Every adaptive reply path through a prepended interval decomposes into
 the fixed literal interval and one genuine path through the supplied tail. -/
 theorem prepend_root_transition_sweep_request_path_decompose
@@ -267,6 +309,17 @@ theorem repeat_root_transition_sweep_request_path_exact
           0 transitionCount path
       rw [exact, ih tailPath]
       rfl
+
+/-- Every actual reply path through the production single-round sweep uses
+each root transition request exactly once.  This excludes the repeated-request
+ambiguity that exists in the generic multi-round extractor. -/
+theorem deployed_root_sweep_one_round_path_nodup
+    {Result : Type u} (result : Result)
+    {requests : List ConcreteRestorationRequest}
+    (path : ConcreteRequestPath (deployedRootSweepClient 1 result) requests) :
+    requests.Nodup := by
+  rw [repeat_root_transition_sweep_request_path_exact 1513 1 result path]
+  exact deployed_root_sweep_one_round_requests_nodup
 
 /-- One interval contains every root request whose index is in its half-open
 range. -/
@@ -678,8 +731,12 @@ theorem completed_exact_root_sweep_returns_extractor
 #print axioms repeat_root_transition_sweep_replay_base_safe
 #print axioms deployed_root_sweep_client_exact_request_count
 #print axioms deployed_root_sweep_client_replay_base_safe
+#print axioms root_transition_request_mem_bounds
+#print axioms root_transition_requests_nodup
+#print axioms deployed_root_sweep_one_round_requests_nodup
 #print axioms prepend_root_transition_sweep_request_path_decompose
 #print axioms repeat_root_transition_sweep_request_path_exact
+#print axioms deployed_root_sweep_one_round_path_nodup
 #print axioms root_transition_request_mem_repeated
 #print axioms deployed_root_sweep_every_path_covers_transition
 #print axioms dispatch_one_concrete_restoration_preserves_all_returned
