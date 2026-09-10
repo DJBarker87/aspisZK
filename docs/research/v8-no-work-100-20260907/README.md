@@ -1,6 +1,17 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [all retained linear factors and early-C1 copy coverage](denominator-continuation.md).
+Latest formal continuation: [nested sequential OOD sampler and root-set mass](nested-ood-sampler-review.md).
+The literal finite-tape controller is now proved equivalent to the source's
+first-circle3 followed by distinct3(circle3), including exact first-hit block
+cuts, unread-tail locality and abort routing. Separately, the history-indexed
+ideal kernel proves exact ordered-pair mass with all decoder/retry failures
+retained. A fixed root set of size `m` therefore has mass at most
+`m(m-1)/(N(N-1))`; the intended `m<=114687` screen is about 214.385 bits.
+The measure-preserving source/oracle coupling and FS freshness theorem are
+still missing, so the old OOD indicator is not yet replaced globally. Six
+focused NUC leaves passed; body, verifier and CU remain unchanged.
+
+Previous formal continuation: [all retained linear factors and early-C1 copy coverage](denominator-continuation.md).
 The selected-model theorem now classifies every retained linear-Y factor into
 a fixed family of at most 111 actual 29-message tuples, a sparse gamma hit
 (at most 3,108 challenges), or a proved double-OOD obstruction. It removes

@@ -1,0 +1,66 @@
+import BoundedRetryKernel
+
+/-! Symbolic arithmetic for the nested three-retry circle sampler. If every
+accepted parameter has one-call mass `w`, and there are `N` accepted
+parameters, the resulting ordered-distinct pair mass is bounded by uniform
+sampling without replacement. Aborts need not be conditioned away. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.RetryMassArithmetic
+noncomputable section
+
+/-- If a successful circle attempt gives each of N values mass w, its total
+success constraint N*w <= 1 suffices for the outer three-try duplicate
+rejection sampler. -/
+theorem ordered_pair_mass_le_one (N w : ℚ) (hN : 2 ≤ N)
+    (hw : 0 ≤ w) (success : N*w ≤ 1) :
+    N*(N-1)*w^2*(1+w+w^2) ≤ 1 := by
+  have hNpos : 0 < N := lt_of_lt_of_le (by norm_num) hN
+  have hNm1 : 0 ≤ N-1 := by linarith
+  have hwUpper : w ≤ 1/N := by
+    apply (le_div_iff₀ hNpos).2
+    nlinarith
+  have hsq : w^2 ≤ (1/N)^2 := by
+    exact pow_le_pow_left₀ hw hwUpper 2
+  have hfactor : 0 ≤ N*(N-1) := mul_nonneg (le_of_lt hNpos) hNm1
+  have hpoly : 1+w+w^2 ≤ 1+(1/N)+(1/N)^2 := by
+    linarith
+  have hpolyNonneg : 0 ≤ 1+w+w^2 := by positivity
+  have hupperNonneg : 0 ≤ N*(N-1)*(1/N)^2 := by positivity
+  calc
+    N*(N-1)*w^2*(1+w+w^2) ≤
+        N*(N-1)*(1/N)^2*(1+w+w^2) := by
+          gcongr
+    _ ≤ N*(N-1)*(1/N)^2*(1+(1/N)+(1/N)^2) := by
+          exact mul_le_mul_of_nonneg_left hpoly hupperNonneg
+    _ = 1-1/N^3 := by
+          field_simp [ne_of_gt hNpos]
+          ring
+    _ ≤ 1 := by
+      have inverseCube : 0 ≤ 1/N^3 := by positivity
+      linarith
+
+/-- Multiplying the constant ordered-pair fibre mass over an m-element
+target set gives the ordinary without-replacement target bound. -/
+theorem target_pair_mass_le (N m w : ℚ) (hN : 2 ≤ N)
+    (hm : 1 ≤ m) (hw : 0 ≤ w) (success : N*w ≤ 1) :
+    m*(m-1)*w^2*(1+w+w^2) ≤ m*(m-1)/(N*(N-1)) := by
+  have hPair := ordered_pair_mass_le_one N w hN hw success
+  have hNpos : 0 < N := lt_of_lt_of_le (by norm_num) hN
+  have hNm1 : 0 < N-1 := by linarith
+  have hmNonneg : 0 ≤ m*(m-1) := mul_nonneg (by linarith) (by linarith)
+  have denominator : 0 < N*(N-1) := mul_pos hNpos hNm1
+  apply (le_div_iff₀ denominator).2
+  calc
+    m*(m-1)*w^2*(1+w+w^2)*(N*(N-1)) =
+        m*(m-1)*(N*(N-1)*w^2*(1+w+w^2)) := by ring
+    _ ≤ m*(m-1)*1 := by gcongr
+    _ = m*(m-1) := by ring
+
+#print axioms ordered_pair_mass_le_one
+#print axioms target_pair_mass_le
+end
+end AspisV8.RetryMassArithmetic
