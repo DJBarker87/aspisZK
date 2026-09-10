@@ -1,0 +1,165 @@
+import FactorCoherence
+import AspisFormal.K1.V7ExactCorrelatedAgreementPowerSeriesLift
+import AspisFormal.K1.V7ExactCorrelatedAgreementRegularHensel
+
+/-! The literal OOD polynomial answer A selects the monic local branch
+Y-A(Z). Its own derivative, not the full resultant of all local branches,
+constructs the exact V7 Hensel root and nonzero regular denominator.
+
+F, x and A are fixed before gamma. This does not assert that the derivative
+is nonzero for every retained factor, nor supply agreement, a component
+curve, a gamma probability bound, or an accepted-to-covered implication.
+The reused V7 constructors and maps are pinned at 26a9cd4718aae9f9de7ef1c3394fb74a229085d5.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.MonicOODBranch
+open Polynomial
+open AspisV8.FactorCoherence
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementSmooth
+open AspisK1.V7ExactCorrelatedAgreementFunctionField
+open AspisK1.V7ExactCorrelatedAgreementRegularRing
+open AspisK1.V7ExactCorrelatedAgreementRegularHensel
+open AspisK1.V7ExactCorrelatedAgreementPowerSeriesLift
+open AspisK1.V7ExactCorrelatedAgreementHensel
+open AspisV5ComponentCQM31TowerExact
+noncomputable section
+variable {K : Type*} [Field K]
+
+def branch (answer : K[X]) : BivariatePolynomial K := X-C answer
+
+theorem branch_monic (answer : K[X]) : (branch answer).Monic :=
+  Polynomial.monic_X_sub_C answer
+
+theorem branch_degree (answer : K[X]) : (branch answer).natDegree=1 :=
+  Polynomial.natDegree_X_sub_C answer
+
+theorem branch_nonzero (answer : K[X]) : branch answer≠0 :=
+  (branch_monic answer).ne_zero
+
+theorem branch_leading (answer : K[X]) : (branch answer).leadingCoeff=1 :=
+  (branch_monic answer).leadingCoeff
+
+theorem branch_irreducible (answer : K[X]) :
+    Irreducible (localFactorOverRational (branch answer)) := by
+  simpa only [localFactorOverRational,branch,Polynomial.map_sub,
+    Polynomial.map_X,Polynomial.map_C] using
+    (Polynomial.irreducible_X_sub_C
+      (algebraMap K[X] (ChallengeRationalField K) answer))
+
+instance branchFact (answer : K[X]) :
+    Fact (Irreducible (localFactorOverRational (branch answer))) :=
+  ⟨branch_irreducible answer⟩
+
+/-- No normalized-factor membership is needed: the literal monic branch
+has exactly the expected generator in its existing V7 function field. -/
+theorem branch_root (answer : K[X]) :
+    AdjoinRoot.root (localFactorOverRational (branch answer)) =
+      regularCoefficientMap (branch answer) answer := by
+  have equation := localFactor_eval₂_branchRoot (branch answer)
+  change (X-C answer : BivariatePolynomial K).eval₂
+    (regularCoefficientMap (branch answer))
+    (AdjoinRoot.root (localFactorOverRational (branch answer)))=0 at equation
+  rw [Polynomial.eval₂_sub,Polynomial.eval₂_X,Polynomial.eval₂_C] at equation
+  exact sub_eq_zero.mp equation
+
+theorem branch_poles (answer : K[X]) : localPoleChallengeSet (branch answer)=∅ := by
+  classical
+  simp only [localPoleChallengeSet,branch_leading,Polynomial.roots_one,
+    Multiset.empty_eq_zero,Multiset.toFinset_zero]
+
+/-- Source scalar lookup supplies the actual local-root equation. -/
+theorem branch_local_root (answer U : K[X]) (x gamma : K)
+    (point : U.eval x=answer.eval gamma) :
+    (branch answer).eval₂ (Polynomial.evalRingHom gamma) (U.eval x)=0 := by
+  simpa only [branch,Polynomial.eval₂_sub,Polynomial.eval₂_X,
+    Polynomial.eval₂_C,Polynomial.coe_evalRingHom,sub_eq_zero] using point
+
+theorem eval_at_branch_root (answer : K[X]) (P : BivariatePolynomial K) :
+    P.eval₂ (regularCoefficientMap (branch answer))
+        (AdjoinRoot.root (localFactorOverRational (branch answer))) =
+      regularCoefficientMap (branch answer) (P.eval answer) := by
+  rw [branch_root]
+  exact Polynomial.eval₂_at_apply (regularCoefficientMap (branch answer)) answer
+
+/-- The exact two-map expression in the borrowed shifted-X constructor. -/
+theorem mapped_at_branch_root (answer : K[X]) (P : BivariatePolynomial K) :
+    ((P.map (algebraMap K[X] (ChallengeRationalField K))).map
+      (AdjoinRoot.of (localFactorOverRational (branch answer)))).eval
+        (AdjoinRoot.root (localFactorOverRational (branch answer))) =
+      regularCoefficientMap (branch answer) (P.eval answer) := by
+  rw [Polynomial.map_map,Polynomial.eval_map]
+  exact eval_at_branch_root answer P
+
+theorem specialized_derivative_value (F : TrivariatePolynomial K)
+    (x : K) (answer : K[X]) :
+    (specializeEvaluationPoint x F).derivative.eval answer =
+      derivativeCurve F x answer := by
+  change (F.map (evaluateInnerVariable x)).derivative.eval answer =
+    (F.derivative.map (evaluateInnerVariable x)).eval answer
+  rw [Polynomial.derivative_map]
+
+/-- The regular denominator is the embedded actual derivative because the
+local leading coefficient is one. No other local branch need be smooth. -/
+theorem derivative_image (F : TrivariatePolynomial K) (x : K) (answer : K[X]) :
+    integralBranchToFunctionField (branch answer)
+      (regularizedHenselDerivative F x (branch answer)) =
+        regularCoefficientMap (branch answer) (derivativeCurve F x answer) := by
+  rw [integralBranchToFunctionField_regularizedHenselDerivative,
+    branch_leading,map_one,one_pow,one_mul,eval_at_branch_root,
+    specialized_derivative_value]
+
+theorem derivative_nonzero (F : TrivariatePolynomial K) (x : K) (answer : K[X])
+    (regular : derivativeCurve F x answer≠0) :
+    regularizedHenselDerivative F x (branch answer)≠0 := by
+  intro zero
+  have mapped := congrArg (integralBranchToFunctionField (branch answer)) zero
+  rw [derivative_image,map_zero] at mapped
+  apply regular
+  exact regularCoefficientMap_injective (branch answer)
+    (mapped.trans (map_zero (regularCoefficientMap (branch answer))).symm)
+
+/-- Construct the literal borrowed Hensel object from the source identity
+and its own nonzero derivative. No supplied formal root or full-resultant
+certificate remains in the endpoint hypotheses. -/
+theorem exists_source_hensel_root (F : TrivariatePolynomial QM31Exact)
+    (x : QM31Exact) (answer : QM31Exact[X])
+    (identity : pointSubstitution x answer F=0)
+    (regular : derivativeCurve F x answer≠0) :
+    ∃ root : PowerSeries (LocalBranchField (branch answer)),
+      (liftedGlobalFactor F x (branch answer)).IsRoot root ∧
+        PowerSeries.constantCoeff root =
+          AdjoinRoot.root (localFactorOverRational (branch answer)) := by
+  apply exists_powerSeries_root_of_simple_constant_root
+    (liftedGlobalFactor F x (branch answer))
+    (AdjoinRoot.root (localFactorOverRational (branch answer)))
+  · rw [constantCoeff_liftedGlobalFactor_eval_C,mapped_at_branch_root]
+    change regularCoefficientMap (branch answer) (pointSubstitution x answer F)=0
+    rw [identity,map_zero]
+  · rw [constantCoeff_liftedGlobalFactor_derivative_eval_C,mapped_at_branch_root,
+      specialized_derivative_value]
+    intro zero
+    apply regular
+    exact regularCoefficientMap_injective (branch answer)
+      (zero.trans (map_zero (regularCoefficientMap (branch answer))).symm)
+
+#print axioms branch_monic
+#print axioms branch_degree
+#print axioms branch_nonzero
+#print axioms branch_leading
+#print axioms branch_irreducible
+#print axioms branch_root
+#print axioms branch_poles
+#print axioms branch_local_root
+#print axioms eval_at_branch_root
+#print axioms mapped_at_branch_root
+#print axioms specialized_derivative_value
+#print axioms derivative_image
+#print axioms derivative_nonzero
+#print axioms exists_source_hensel_root
+end
+end AspisV8.MonicOODBranch

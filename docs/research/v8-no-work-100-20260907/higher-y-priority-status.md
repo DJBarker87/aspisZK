@@ -1,0 +1,95 @@
+# Y-degree at least three: priority checkpoint
+
+Working parent at start: `e969d9fa5378dd1e548c8b64b79a9e76a2270d66`.
+This checkpoint concentrates on retained factors of Y-degree at least three.
+It is research evidence, not a complete V8 or production-security result.
+
+## What is now checked
+
+| Result | Security implication | Exact limit |
+| --- | --- | --- |
+| `HigherYCurveObstruction` | A fixed prime higher-Y factor cannot contain a global polynomial curve; a degree-28 curve can specialize to it at no more than the weighted degree | Does not construct the curve |
+| `MonicOODBranch` | An actual retained OOD identity and nonzero actual derivative construct the literal pole-free linear branch and V7 Hensel data | Regular rows only |
+| `SupportQualifiedRootIncidence` | Adaptive supports obey an exact incidence inequality against fixed coordinate polynomials | Needs a useful identity-coordinate bound |
+| `CubicSupportControl` | The restricted singular cubic/helper family has at most 2,303 qualifying gammas | Restricted algebraic family, not an actual selected parent |
+| `SelectedHigherYBranch` | The same actual post-alpha quotient/final is connected to a fixed retained higher factor, image validity, source support and OOD values | Restricted `HigherCubicRoot` branch |
+| `HigherYRegularBranch` | For one fixed regular factor and actual gamma-varying messages, `(M-1024)*|G| <= 1048576*B_F` | No accepted-event union or extraction conclusion |
+| `SelectedOriginalInjectivity` | On the image-valid domain, equality of reconstructed originals forces equality of quotients; regular Qualified choices are unique at fixed gamma | Quotient may still vary with gamma |
+| `FactorDerivativeWeight` | The actual derivative curve has degree at most `W_F-28` for a degree-28 OOD answer | Nonzeroness and OOD exceptional event separate |
+| `FamilyIdentityIncidence` | Per-factor support bounds aggregate by summed weight, without a factor-count multiplier | Requires every included factor to have at most 31,129 identity coordinates |
+| `FamilyIdentityArithmetic` | The selected common-identity threshold gives a certified integer 100-bit gamma budget | Still needs the actual factor-family event adapter |
+| `SingularOODResultant` | An actual OOD identity plus zero derivative yields the derived V7 resultant certificate at the actual point | Still needs a pre-OOD nonzero coefficient and two-point root accounting |
+| `SelectedHigherYRegularTail` | The literal selected regular-gamma event satisfies `37206*|G| <= 1048576*B_F` without a supplied support premise | One retained fixed factor/row; not acceptance or extraction |
+
+Every listed Lean result was compiled as a focused leaf on the capped NUC
+runner. Their reports retain failed attempts, exact commands, peak RSS,
+swap and axiom audits. No broad package replay was used.
+
+## Quantitative regular-factor frontier
+
+The direct fixed-factor budgets add to at most 239,599,331. At the minimum
+literal support this gives only 91.3472 ideal uniform-gamma bits. Using the
+entire proved support tail jointly with 22 fresh distinct queries improves
+the exact arithmetic screen, but it still reaches only
+**96.0953599519 bits** if all support sizes remain extraction failures.
+
+The layer-cake screen identifies a falsifiable extraction threshold:
+
+| Desired local ceiling | Residual support may extend through |
+| ---: | ---: |
+| 100 bits | 230,445 matching quotient fibres |
+| 105 bits | 195,385 matching quotient fibres |
+| 110 bits | 165,658 matching quotient fibres |
+
+Therefore another unstratified regular-incidence proof will not close q22.
+The useful next result is checked payment extraction above a support cutoff,
+or a stronger semantic classification that removes those high-support
+executions from `accept AND not extract`.
+
+## Singular branch and identity residual
+
+The statement “prime plus two OOD identities gives a small singular-gamma
+set” is false. The irreducible cubic `Y^3-[X(X-1)]^3 Z` has two identically
+singular OOD rows and polynomial roots for one third of nonzero challenges.
+This is a root-only control, not a support-qualified or payment attack.
+
+The viable singular-row path constructs a fixed pre-OOD coefficient from
+the derived resultant. Outside its explicit two-point root event, the newly
+checked derivative-degree theorem would bound the union of singular gammas
+by 117,049 using additive weights. The resultant/common-root adapter and
+the actual two-point OOD probability remain unproved.
+
+The support-incidence route reaches 100 raw bits whenever each factor has
+at most 31,129 identity coordinates. The boundary is sharp for that
+inequality: 31,130 fails. Fixed early C1 alone cannot remove the residual,
+because up to 66,140 symbols may lie outside its own support. The optimized
+F127 cubic regression explicitly realizes that separation while retaining
+two OOD identities and a compatible specialization. It is not a selected
+interpolant or accepted-payment fixture.
+
+## Protocol and release status
+
+No protocol messages, verifier checks or proof bytes changed in this
+checkpoint. The canonical proof-body census remains **40,282 bytes**.
+No grinding work contributes security. The results are raw ideal-game
+ingredients only.
+
+Still open are the complete acceptance-to-class partition, high-support
+payment extraction, the singular OOD pair-root event, authentication and
+source refinement, resource-bounded Fiat--Shamir extraction, full-view zero
+knowledge, and matched complete-transaction CU parity. V8 is not yet ready
+for a production security claim.
+
+## Decisive next experiment
+
+First finish the exact selected-event adapter from `higherPrefix` to the
+checked regular support tail, using fixed-gamma quotient uniqueness. Then
+prove or falsify:
+
+> Every accepted regular higher-Y execution whose selected image-valid
+> quotient matches on more than 195,385 fibres yields a checked payment
+> witness through the existing authenticated C1 extractor.
+
+Success leaves at least roughly five local bits for other justified terms;
+failure will identify the concrete high-support non-extractable class that
+needs an additional relation check or a stronger recovery theorem.

@@ -1,0 +1,147 @@
+import JointImageGame
+import Mathlib.Combinatorics.Enumerative.DoubleCounting
+
+/-! Adaptive support incidence for fixed coordinate polynomials.
+
+Research source parent e969d9fa5378dd1e548c8b64b79a9e76a2270d66.
+The supports may be chosen separately at every challenge. Only the coordinate
+polynomials, coordinate domain and challenge set are fixed. Identity
+coordinates are constructed, not supplied as a candidate-cover assumption.
+No sampler, accepted-query, component-recovery or payment assertion occurs.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxHeartbeats 200000
+set_option maxRecDepth 200
+
+namespace AspisV8.SupportQualifiedRootIncidence
+open Finset Polynomial
+
+section Counting
+variable {I J : Type*} [DecidableEq I] [DecidableEq J]
+
+/-- Count only incidences outside a fixed exceptional coordinate set.
+Natural subtraction makes the statement valid even when `a < C.card`;
+it is informative only when the support threshold exceeds that card. -/
+theorem adaptive_support_bound (D C : Finset I) (G : Finset J)
+    (S : J → Finset I) (a W : Nat) (subset : C ⊆ D)
+    (inside : ∀ g ∈ G, S g ⊆ D) (large : ∀ g ∈ G, a ≤ (S g).card)
+    (loads : ∀ i ∈ D \ C, (G.filter fun g => i ∈ S g).card ≤ W) :
+    G.card * (a - C.card) ≤ W * (D.card - C.card) := by
+  have double := Finset.sum_card_bipartiteAbove_eq_sum_card_bipartiteBelow
+    (fun g i => i ∈ S g) (s := G) (t := D \ C)
+  change (∑ g ∈ G, ((D \ C).filter fun i => i ∈ S g).card) =
+    ∑ i ∈ D \ C, (G.filter fun g => i ∈ S g).card at double
+  have lower : G.card * (a - C.card) ≤
+      ∑ g ∈ G, ((D \ C).filter fun i => i ∈ S g).card := by
+    calc
+      _ = ∑ _g ∈ G, a - C.card := by
+        simp only [Finset.sum_const, nsmul_eq_mul, Nat.cast_id]
+      _ ≤ _ := Finset.sum_le_sum (by
+        intro g hg
+        have equal : (D \ C).filter (fun i => i ∈ S g) = S g \ C := by
+          ext i
+          simp only [Finset.mem_filter, Finset.mem_sdiff]
+          exact ⟨fun h => ⟨h.2, h.1.2⟩,
+            fun h => ⟨⟨inside g hg h.1, h.2⟩, h.1⟩⟩
+        rw [equal]
+        have loss : (S g).card ≤ (S g \ C).card + C.card :=
+          Finset.card_le_card_sdiff_add_card
+        have enough := large g hg
+        omega)
+  rw [double] at lower
+  have upper := Finset.sum_le_sum loads
+  simp only [Finset.sum_const, nsmul_eq_mul, Nat.cast_id,
+    Finset.card_sdiff_of_subset subset] at upper
+  exact lower.trans (by simpa only [Nat.mul_comm] using upper)
+
+/-- Equivalent additive accounting with no truncated-subtraction premise. -/
+theorem adaptive_support_additive (D C : Finset I) (G : Finset J)
+    (S : J → Finset I) (a W : Nat) (subset : C ⊆ D)
+    (inside : ∀ g ∈ G, S g ⊆ D) (large : ∀ g ∈ G, a ≤ (S g).card)
+    (loads : ∀ i ∈ D \ C, (G.filter fun g => i ∈ S g).card ≤ W) :
+    G.card * a ≤ G.card * C.card + W * (D.card - C.card) := by
+  have bound := adaptive_support_bound D C G S a W subset inside large loads
+  rcases le_total C.card a with below | above
+  · have split : G.card * a = G.card * C.card + G.card * (a - C.card) := by
+      rw [← Nat.mul_add, Nat.add_sub_of_le below]
+    rw [split]
+    exact Nat.add_le_add_left bound _
+  · exact (Nat.mul_le_mul_left G.card above).trans (Nat.le_add_right _ _)
+end Counting
+
+section Polynomial
+variable {I K : Type*} [DecidableEq I] [Field K] [DecidableEq K]
+
+/-- Coordinates where the pullback is the zero polynomial, not merely zero
+as a function on a finite field. -/
+def identityCoordinates (D : Finset I) (E : I → K[X]) : Finset I :=
+  D.filter fun i => E i = 0
+
+theorem adaptive_polynomial_bound (D : Finset I) (G : Finset K)
+    (E : I → K[X]) (S : K → Finset I) (a W : Nat)
+    (degree : ∀ i ∈ D, (E i).natDegree ≤ W)
+    (inside : ∀ g ∈ G, S g ⊆ D) (large : ∀ g ∈ G, a ≤ (S g).card)
+    (roots : ∀ g ∈ G, ∀ i ∈ S g, (E i).eval g = 0) :
+    G.card * (a - (identityCoordinates D E).card) ≤
+      W * (D.card - (identityCoordinates D E).card) := by
+  apply adaptive_support_bound D (identityCoordinates D E) G S a W
+    (Finset.filter_subset _ _) inside large
+  intro i hi
+  have member := (Finset.mem_sdiff.mp hi).1
+  have nonzero : E i ≠ 0 := by
+    intro zero
+    exact (Finset.mem_sdiff.mp hi).2 (Finset.mem_filter.mpr ⟨member, zero⟩)
+  have rootSubset : (G.filter fun g => i ∈ S g) ⊆
+      G.filter fun g => (E i).eval g = 0 := by
+    intro g hg
+    have hit := Finset.mem_filter.mp hg
+    exact Finset.mem_filter.mpr ⟨hit.1, roots g hit.1 i hit.2⟩
+  exact (Finset.card_le_card rootSubset).trans
+    (JointImageGame.root_count G (E i) nonzero W (degree i member))
+
+/-- The maximal qualifying challenge set contains every adaptive candidate
+whose matching coordinates force these pullback roots. -/
+def qualifyingGammas (D : Finset I) (Gamma : Finset K) (E : I → K[X])
+    (a : Nat) : Finset K :=
+  Gamma.filter fun g => a ≤ (D.filter fun i => (E i).eval g = 0).card
+
+theorem qualifying_gammas_bound (D : Finset I) (Gamma : Finset K)
+    (E : I → K[X]) (a W : Nat)
+    (degree : ∀ i ∈ D, (E i).natDegree ≤ W) :
+    (qualifyingGammas D Gamma E a).card *
+        (a - (identityCoordinates D E).card) ≤
+      W * (D.card - (identityCoordinates D E).card) := by
+  apply adaptive_polynomial_bound D (qualifyingGammas D Gamma E a) E
+    (fun g => D.filter fun i => (E i).eval g = 0) a W degree
+  · intro g _
+    exact Finset.filter_subset _ _
+  · intro g hg
+    exact (Finset.mem_filter.mp hg).2
+  · intro g _ i hi
+    exact (Finset.mem_filter.mp hi).2
+
+/-- Selected symbol-count arithmetic for the degree-84 cubic control, with
+its essential zero-identity-coordinate premise still explicit. -/
+theorem degree84_card_le_2303 (D : Finset I) (G : Finset K)
+    (E : I → K[X]) (S : K → Finset I) (size : D.card = 1048576)
+    (nonzero : ∀ i ∈ D, E i ≠ 0)
+    (degree : ∀ i ∈ D, (E i).natDegree ≤ 84)
+    (inside : ∀ g ∈ G, S g ⊆ D) (large : ∀ g ∈ G, 38230 ≤ (S g).card)
+    (roots : ∀ g ∈ G, ∀ i ∈ S g, (E i).eval g = 0) : G.card ≤ 2303 := by
+  have empty : identityCoordinates D E = ∅ := by
+    apply Finset.eq_empty_iff_forall_notMem.mpr
+    intro i hi
+    have member := Finset.mem_filter.mp hi
+    exact nonzero i member.1 member.2
+  have bound := adaptive_polynomial_bound D G E S 38230 84 degree inside large roots
+  rw [empty, Finset.card_empty, Nat.sub_zero, Nat.sub_zero, size] at bound
+  omega
+end Polynomial
+
+#print axioms adaptive_support_bound
+#print axioms adaptive_support_additive
+#print axioms adaptive_polynomial_bound
+#print axioms qualifying_gammas_bound
+#print axioms degree84_card_le_2303
+end AspisV8.SupportQualifiedRootIncidence
