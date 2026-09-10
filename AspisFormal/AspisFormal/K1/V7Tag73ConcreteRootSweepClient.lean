@@ -2,6 +2,7 @@ import AspisFormal.K1.V7Tag73UniqueRestorationRequests
 import AspisFormal.K1.V7Tag73SchedulerNativeSafety
 import AspisFormal.K1.V7Tag73CompletedFullRunProjection
 import AspisFormal.K1.V7Tag73ExactClientKnowledgeComposition
+import AspisFormal.K1.V7Tag73ConcreteRestorationTraceInduction
 
 /-!
 # A finite root-transition sweep client for Tag-73 extraction
@@ -208,6 +209,19 @@ inductive ConcreteRequestPath {Result : Type u} :
       (tailPath : ConcreteRequestPath (next reply) tail) :
       ConcreteRequestPath (.restore request next) (request :: tail)
 
+/-- Every finite concrete client has at least one request path.  The witness
+chooses the fail-closed fuel-exhaustion reply at each branch; no scheduler or
+success assumption is involved. -/
+theorem concrete_request_path_exists
+    {Result : Type u} (client : ConcreteRestorationClient Result) :
+    ∃ requests, ConcreteRequestPath client requests := by
+  induction client with
+  | pure result => exact ⟨[], .pure result⟩
+  | restore request next ih =>
+      obtain ⟨tail, tailPath⟩ := ih (.failed .restorationFuelExhausted)
+      exact ⟨request :: tail, .restore (.failed .restorationFuelExhausted)
+        tailPath⟩
+
 /-- Literal request list emitted by one half-open root interval. -/
 def rootTransitionRequests : Nat → Nat → List ConcreteRestorationRequest
   | _start, 0 => []
@@ -378,11 +392,117 @@ theorem deployed_root_sweep_client_replay_base_safe
 
 /-! ## Exact fuel closure -/
 
+/-- A single restoration request either leaves the append-only node store
+unchanged or appends exactly one child carrying that request as its parent.
+Failure records and resource charges do not count as node-store changes. -/
+def OneRequestNodeEffect
+    {Statement Proof Payload : Type*}
+    (before : ConcreteRestorationAccumulator Statement Proof Payload)
+    (request : ConcreteRestorationRequest)
+    (after : ConcreteRestorationAccumulator Statement Proof Payload) : Prop :=
+  after.nodes = before.nodes ∨
+    ∃ node : ConcreteRestorationNode Statement Proof Payload,
+      node.parentRequest = some request ∧
+        after.nodes = before.nodes ++ [node]
+
+/-- Parent requests retained by the append-only node store.  The root's
+`none` marker is deliberately omitted. -/
+def storedParentRequests
+    {Statement Proof Payload : Type*}
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload) :
+    List ConcreteRestorationRequest :=
+  accumulator.nodes.filterMap (fun node => node.parentRequest)
+
+/-- The exact one-request node effect either preserves the retained request
+list or appends exactly the request currently being dispatched. -/
+theorem one_request_node_effect_stored_parent_requests
+    {Statement Proof Payload : Type*}
+    {before after : ConcreteRestorationAccumulator Statement Proof Payload}
+    {request : ConcreteRestorationRequest}
+    (effect : OneRequestNodeEffect before request after) :
+    storedParentRequests after = storedParentRequests before ∨
+      storedParentRequests after = storedParentRequests before ++ [request] := by
+  rcases effect with unchanged | ⟨node, parentExact, appended⟩
+  · exact Or.inl (by simp [storedParentRequests, unchanged])
+  · exact Or.inr (by
+      simp [storedParentRequests, appended, parentExact])
+
+/-- List-level injectivity behind the accumulator-facing theorem below. -/
+theorem node_eq_of_same_filter_mapped_parent_request
+    {Statement Proof Payload : Type*}
+    {nodes : List (ConcreteRestorationNode Statement Proof Payload)}
+    (nodup : (nodes.filterMap (fun node => node.parentRequest)).Nodup)
+    {left right : ConcreteRestorationNode Statement Proof Payload}
+    (leftMem : left ∈ nodes) (rightMem : right ∈ nodes)
+    {request : ConcreteRestorationRequest}
+    (leftParent : left.parentRequest = some request)
+    (rightParent : right.parentRequest = some request) :
+    left = right := by
+  induction nodes generalizing left right request with
+  | nil => simp at leftMem
+  | cons head tail ih =>
+      cases headParent : head.parentRequest with
+      | none =>
+          have tailNodup :
+              (tail.filterMap (fun node => node.parentRequest)).Nodup := by
+            simpa [headParent] using nodup
+          simp only [List.mem_cons] at leftMem rightMem
+          rcases leftMem with rfl | leftTail
+          · rw [headParent] at leftParent
+            cases leftParent
+          · rcases rightMem with rfl | rightTail
+            · rw [headParent] at rightParent
+              cases rightParent
+            · exact ih tailNodup leftTail rightTail leftParent rightParent
+      | some headRequest =>
+          have split :
+              headRequest ∉ tail.filterMap (fun node => node.parentRequest) ∧
+                (tail.filterMap (fun node => node.parentRequest)).Nodup := by
+            simpa [headParent] using nodup
+          simp only [List.mem_cons] at leftMem rightMem
+          rcases leftMem with rfl | leftTail
+          · rcases rightMem with rfl | rightTail
+            · rfl
+            · have requestExact : headRequest = request := by
+                rw [headParent] at leftParent
+                exact Option.some.inj leftParent
+              apply False.elim
+              apply split.1
+              rw [requestExact]
+              exact List.mem_filterMap.mpr
+                ⟨right, rightTail, rightParent⟩
+          · rcases rightMem with rfl | rightTail
+            · have requestExact : headRequest = request := by
+                rw [headParent] at rightParent
+                exact Option.some.inj rightParent
+              apply False.elim
+              apply split.1
+              rw [requestExact]
+              exact List.mem_filterMap.mpr
+                ⟨left, leftTail, leftParent⟩
+            · exact ih split.2 leftTail rightTail leftParent rightParent
+
+/-- Duplicate-freedom of the stored `some request` keys makes the parent
+request an injective identifier for non-root nodes. -/
+theorem node_eq_of_same_stored_parent_request
+    {Statement Proof Payload : Type*}
+    {accumulator : ConcreteRestorationAccumulator Statement Proof Payload}
+    (nodup : (storedParentRequests accumulator).Nodup)
+    {left right : ConcreteRestorationNode Statement Proof Payload}
+    (leftMem : left ∈ accumulator.nodes)
+    (rightMem : right ∈ accumulator.nodes)
+    {request : ConcreteRestorationRequest}
+    (leftParent : left.parentRequest = some request)
+    (rightParent : right.parentRequest = some request) :
+    left = right := by
+  exact node_eq_of_same_filter_mapped_parent_request nodup leftMem rightMem
+    leftParent rightParent
+
 /-- The real one-request dispatcher preserves any terminal property already
 proved for every adaptive reply continuation.  This theorem unfolds the
 actual preparation, fork, replay and verifier-suffix dispatcher; it does not
 replace it by an abstract handler. -/
-theorem dispatch_one_concrete_restoration_preserves_all_returned
+theorem dispatch_one_concrete_restoration_preserves_all_returned_with_node_effect
     {Statement Proof Payload Result : Type*}
     {globalOracleCalls : Nat}
     (startProgram : OracleMachine
@@ -397,7 +517,8 @@ theorem dispatch_one_concrete_restoration_preserves_all_returned
           (ConcreteRestorationClientRun Statement Proof Payload Result))
     (P : ConcreteRestorationClientRun Statement Proof Payload Result → Prop)
     (continuations : ∀ reply nextAccumulator,
-      SchedulerNativeCursorAllReturned P (resume reply nextAccumulator)) :
+      OneRequestNodeEffect accumulator request nextAccumulator →
+        SchedulerNativeCursorAllReturned P (resume reply nextAccumulator)) :
     SchedulerNativeCursorAllReturned P
       (dispatchOneConcreteRestoration startProgram environment configuration
         accumulator request resume) := by
@@ -406,12 +527,15 @@ theorem dispatch_one_concrete_restoration_preserves_all_returned
       (failureRequest : ConcreteRestorationRequest)
       (reason : ConcreteRestorationFailure)
       (nextAccumulator :
-        ConcreteRestorationAccumulator Statement Proof Payload),
+        ConcreteRestorationAccumulator Statement Proof Payload)
+      (nodesExact : nextAccumulator.nodes = accumulator.nodes),
       SchedulerNativeCursorAllReturned P
         (resume (.failed reason)
           (nextAccumulator.addFailure failureRequest reason)) := by
-    intro failureRequest reason nextAccumulator
-    exact continuations _ _
+    intro failureRequest reason nextAccumulator nodesExact
+    apply continuations _ _
+    exact Or.inl (by simpa [ConcreteRestorationAccumulator.addFailure] using
+      nodesExact)
   generalize preparationExact :
     prepareConcreteRestorationFromStartProgram startProgram configuration
       accumulator request = preparation
@@ -419,8 +543,12 @@ theorem dispatch_one_concrete_restoration_preserves_all_returned
   | failed reason prefixSteps prefixRestarts =>
       simp only [dispatchOneConcreteRestoration,
         dispatchConcreteRestoration, preparationExact]
-      exact failureSafe request reason _
+      exact failureSafe request reason _ rfl
   | ready prepared =>
+      have preparedRequestExact :=
+        AspisK1.V7Tag73ConcreteRestorationTraceInduction.ready_preparation_request_exact
+          startProgram configuration accumulator request prepared
+            preparationExact
       simp only [dispatchOneConcreteRestoration,
         dispatchConcreteRestoration, preparationExact]
       unfold dispatchPreparedRestoration
@@ -444,7 +572,7 @@ theorem dispatch_one_concrete_restoration_preserves_all_returned
                 forkConfiguration.forkOutput forkConfiguration.forkAdvance with
             | failed reason inserted =>
                 simp only [programmed]
-                exact failureSafe prepared.request reason _
+                exact failureSafe prepared.request reason _ rfl
             | ready afterBoth =>
                 simp only [programmed]
                 by_cases afterCoherent : HistoryTotalCoherent afterBoth
@@ -464,10 +592,10 @@ theorem dispatch_one_concrete_restoration_preserves_all_returned
                             cases failure with
                             | oracleAbort reason =>
                                 exact failureSafe prepared.request
-                                  (.proverReplayAbort reason) _
+                                  (.proverReplayAbort reason) _ rfl
                             | timeout =>
                                 exact failureSafe prepared.request
-                                  .proverReplayTimeout _
+                                  .proverReplayTimeout _ rfl
                         | ok adversaryValue =>
                             simp only
                             by_cases bindingMismatch :
@@ -477,7 +605,7 @@ theorem dispatch_one_concrete_restoration_preserves_all_returned
                             next =>
                               rw [dif_pos bindingMismatch]
                               exact failureSafe prepared.request
-                                .restoredBindingMismatch _
+                                .restoredBindingMismatch _ rfl
                             next =>
                               rw [dif_neg bindingMismatch]
                               by_cases verifierRoom : StageHasOracleRoom
@@ -495,32 +623,158 @@ theorem dispatch_one_concrete_restoration_preserves_all_returned
                                         cases failure with
                                         | oracleAbort reason =>
                                             exact failureSafe prepared.request
-                                              (.verifierSuffixAbort reason) _
+                                              (.verifierSuffixAbort reason) _ rfl
                                         | timeout =>
                                             exact failureSafe prepared.request
-                                              .verifierSuffixTimeout _
+                                              .verifierSuffixTimeout _ rfl
                                     | ok verifierFinalState =>
-                                        exact continuations (.added _) _
+                                        apply continuations (.added _) _
+                                        refine Or.inr ⟨_, ?_, rfl⟩
+                                        exact congrArg some preparedRequestExact
                               next =>
                                 simp only [verifierRoom, if_neg]
                                 exact failureSafe prepared.request
-                                  .verifierSuffixRoom _
+                                  .verifierSuffixRoom _ rfl
                   next =>
                     simp only [proverRoom, if_neg]
-                    exact failureSafe prepared.request .proverReplayRoom _
+                    exact failureSafe prepared.request .proverReplayRoom _ rfl
                 next =>
                   simp only [afterCoherent, if_neg]
                   exact failureSafe prepared.request
-                    .incoherentProgrammedOracle _
+                    .incoherentProgrammedOracle _ rfl
           next =>
             simp only [pairRoom, if_neg]
-            exact failureSafe prepared.request .pairExposureLimit _
+            exact failureSafe prepared.request .pairExposureLimit _ rfl
         next =>
           simp only [globalLimit, if_neg]
-          exact failureSafe prepared.request .globalLimitTooSmall _
+          exact failureSafe prepared.request .globalLimitTooSmall _ rfl
       next =>
         simp only [prefixCoherent, if_neg]
-        exact failureSafe prepared.request .incoherentPrefixOracle _
+        exact failureSafe prepared.request .incoherentPrefixOracle _ rfl
+
+/-- Forgetting the exact node-store effect recovers the original terminal
+closure theorem. -/
+theorem dispatch_one_concrete_restoration_preserves_all_returned
+    {Statement Proof Payload Result : Type*}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+    (request : ConcreteRestorationRequest)
+    (resume : ConcreteRestorationReply →
+      ConcreteRestorationAccumulator Statement Proof Payload →
+        SchedulerNativeCursor globalOracleCalls
+          (ConcreteRestorationClientRun Statement Proof Payload Result))
+    (P : ConcreteRestorationClientRun Statement Proof Payload Result → Prop)
+    (continuations : ∀ reply nextAccumulator,
+      SchedulerNativeCursorAllReturned P (resume reply nextAccumulator)) :
+    SchedulerNativeCursorAllReturned P
+      (dispatchOneConcreteRestoration startProgram environment configuration
+        accumulator request resume) := by
+  apply dispatch_one_concrete_restoration_preserves_all_returned_with_node_effect
+    startProgram environment configuration accumulator request resume P
+  intro reply nextAccumulator _effect
+  exact continuations reply nextAccumulator
+
+/-- If every possible remaining request path is duplicate-free relative to
+the parent requests already stored, then every ordinary client result retains
+a duplicate-free parent-request store.  This follows the literal fuel-bounded
+interpreter and the exact node effect of its dispatcher. -/
+theorem concrete_client_preserves_stored_parent_requests_nodup
+    {Statement Proof Payload Result : Type*}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (root : ConcreteRestorationNode Statement Proof Payload)
+    (configuration : ConcreteRestorationConfiguration)
+    (fuel : Nat)
+    (client : ConcreteRestorationClient Result)
+    (allPathsNodup : ∀ requests, ConcreteRequestPath client requests →
+      (storedParentRequests (initialRestorationAccumulatorFromRoot root) ++
+        requests).Nodup) :
+    SchedulerNativeCursorAllReturned
+      (fun run : ConcreteRestorationClientRun Statement Proof Payload Result =>
+        (storedParentRequests run.accumulator).Nodup)
+      (startConcreteRestorationClientFromRoot
+        (globalOracleCalls := globalOracleCalls) startProgram environment root
+        configuration fuel client) := by
+  let P := fun run : ConcreteRestorationClientRun Statement Proof Payload
+      Result => (storedParentRequests run.accumulator).Nodup
+  let motive := fun (_remainingFuel : Nat)
+      (accumulator : ConcreteRestorationAccumulator Statement Proof Payload)
+      (residualClient : ConcreteRestorationClient Result)
+      (cursor : SchedulerNativeCursor globalOracleCalls
+        (ConcreteRestorationClientRun Statement Proof Payload Result)) =>
+      (∀ requests, ConcreteRequestPath residualClient requests →
+        (storedParentRequests accumulator ++ requests).Nodup) →
+          SchedulerNativeCursorAllReturned P cursor
+  have induction :=
+    start_concrete_restoration_client_from_root_dependent_induction
+      (globalOracleCalls := globalOracleCalls) startProgram environment root
+      configuration fuel client motive
+      (by
+        intro remainingFuel accumulator result pathsNodup
+        have exact := pathsNodup [] (.pure result)
+        simpa [P] using exact)
+      (by
+        intro accumulator request next pathsNodup
+        obtain ⟨tail, tailPath⟩ :=
+          concrete_request_path_exists
+            (next (.failed .restorationFuelExhausted))
+        have combined := pathsNodup (request :: tail)
+          (.restore (.failed .restorationFuelExhausted) tailPath)
+        have current : (storedParentRequests accumulator).Nodup :=
+          (List.nodup_append.mp combined).1
+        simpa [P, storedParentRequests,
+          ConcreteRestorationAccumulator.addFailure] using current)
+      (by
+        intro remainingFuel accumulator request next resume continuations
+          pathsNodup
+        apply dispatch_one_concrete_restoration_preserves_all_returned_with_node_effect
+          startProgram environment configuration accumulator request resume P
+        intro reply nextAccumulator effect
+        apply continuations reply nextAccumulator
+        intro tail tailPath
+        have combined := pathsNodup (request :: tail) (.restore reply tailPath)
+        rcases one_request_node_effect_stored_parent_requests effect with
+          unchanged | appended
+        · rw [unchanged]
+          exact List.Nodup.sublist
+            (List.Sublist.append_left
+              (List.Sublist.cons request (List.Sublist.refl tail))
+              (storedParentRequests accumulator)) combined
+        · rw [appended]
+          simpa [List.append_assoc] using combined)
+  exact induction allPathsNodup
+
+/-- A single deployed sweep stores at most one child for every literal root
+transition request on every ordinary scheduler return. -/
+theorem deployed_root_sweep_one_round_stored_parent_requests_nodup
+    {Statement Proof Payload Result : Type*}
+    {globalOracleCalls : Nat}
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (root : ConcreteRestorationNode Statement Proof Payload)
+    (rootIsRoot : root.parentRequest = none)
+    (configuration : ConcreteRestorationConfiguration)
+    (fuel : Nat) (result : Result) :
+    SchedulerNativeCursorAllReturned
+      (fun run : ConcreteRestorationClientRun Statement Proof Payload Result =>
+        (storedParentRequests run.accumulator).Nodup)
+      (startConcreteRestorationClientFromRoot
+        (globalOracleCalls := globalOracleCalls) startProgram environment root
+        configuration fuel (deployedRootSweepClient 1 result)) := by
+  apply concrete_client_preserves_stored_parent_requests_nodup
+    startProgram environment root configuration fuel
+      (deployedRootSweepClient 1 result)
+  intro requests path
+  simpa [storedParentRequests,
+    initialRestorationAccumulatorFromRoot, rootIsRoot] using
+      deployed_root_sweep_one_round_path_nodup result path
 
 /-- A structurally certified client cannot reach the interpreter's
 `restorationFuelExhausted` terminal when its exact request count fits in the
@@ -724,6 +978,68 @@ theorem completed_exact_root_sweep_returns_extractor
     projection.rootPrefixes.verifier.remaining clientRun safe
     projection.clientTerminalExact
 
+/-- In a completed production-shaped one-round sweep, the actual final node
+store has an injective non-root parent-request key.  This is the completed-run
+form needed to identify a K1.4/K1.5 certificate node with the chronologically
+routed gamma child. -/
+theorem completed_exact_root_sweep_one_round_stored_parent_requests_nodup
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat) (positive : 0 < transitionFuel)
+    (base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Witness parameters)
+    (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
+    (withinForkCap : 1513 ≤ parameters.forkRequestCap)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (runtime : SchedulerNativePlainRomRootRuntime TapeIdentity Statement Proof
+      Payload)
+    (clientRun : ConcreteRestorationClientRun Statement Proof Payload
+      (ExactPlainRomWitnessExtractor Statement Proof Payload Witness))
+    (completed :
+      (runExactPlainRom transitionFuel
+          (exactRootSweepWitnessConfiguration base 1 extractor
+            (by simpa using withinForkCap)) sample).terminal =
+        .returned (.completed runtime clientRun)) :
+    (storedParentRequests clientRun.accumulator).Nodup := by
+  let configuration := exactRootSweepWitnessConfiguration base 1 extractor
+    (by simpa using withinForkCap)
+  let projection := Classical.choice
+    (completed_exact_plain_rom_gives_root_and_store_projection_nonempty
+      transitionFuel positive configuration sample runtime clientRun (by
+        simpa [configuration] using completed))
+  have safe : SchedulerNativeCursorAllReturned
+      (fun run : ConcreteRestorationClientRun Statement Proof Payload
+          (ExactPlainRomWitnessExtractor Statement Proof Payload Witness) =>
+        (storedParentRequests run.accumulator).Nodup)
+      (startConcreteRestorationClientFromRoot
+        (globalOracleCalls := globalFull256OracleCallCap parameters)
+        (configuration.machine.blackBox.start sample.1
+          configuration.machine.observation)
+        configuration.machine.environment runtime.node
+        configuration.restorationConfiguration configuration.restorationFuel
+        configuration.client) := by
+    change SchedulerNativeCursorAllReturned
+      (fun run : ConcreteRestorationClientRun Statement Proof Payload
+          (ExactPlainRomWitnessExtractor Statement Proof Payload Witness) =>
+        (storedParentRequests run.accumulator).Nodup)
+      (startConcreteRestorationClientFromRoot
+        (globalOracleCalls := globalFull256OracleCallCap parameters)
+        (base.machine.blackBox.start sample.1 base.machine.observation)
+        base.machine.environment runtime.node base.restorationConfiguration
+        1513 (deployedRootSweepClient 1 extractor))
+    exact deployed_root_sweep_one_round_stored_parent_requests_nodup
+      (globalOracleCalls := globalFull256OracleCallCap parameters)
+      (base.machine.blackBox.start sample.1 base.machine.observation)
+      base.machine.environment runtime.node rfl base.restorationConfiguration
+      1513 extractor
+  exact run_scheduler_native_list_terminal_respects_all_returned
+    (fun run : ConcreteRestorationClientRun Statement Proof Payload
+        (ExactPlainRomWitnessExtractor Statement Proof Payload Witness) =>
+      (storedParentRequests run.accumulator).Nodup)
+    transitionFuel projection.clientCurrentTransitionFuel _
+    projection.rootPrefixes.verifier.remaining clientRun safe
+    projection.clientTerminalExact
+
 #print axioms prepend_root_transition_sweep_exact_request_count
 #print axioms prepend_root_transition_sweep_adds_exact_request_count
 #print axioms repeat_root_transition_sweep_exact_request_count
@@ -739,10 +1055,14 @@ theorem completed_exact_root_sweep_returns_extractor
 #print axioms deployed_root_sweep_one_round_path_nodup
 #print axioms root_transition_request_mem_repeated
 #print axioms deployed_root_sweep_every_path_covers_transition
+#print axioms node_eq_of_same_stored_parent_request
 #print axioms dispatch_one_concrete_restoration_preserves_all_returned
+#print axioms concrete_client_preserves_stored_parent_requests_nodup
+#print axioms deployed_root_sweep_one_round_stored_parent_requests_nodup
 #print axioms exact_request_count_prevents_fuel_exhaustion
 #print axioms deployed_root_sweep_client_returns
 #print axioms exactRootSweepWitnessConfiguration
 #print axioms completed_exact_root_sweep_returns_extractor
+#print axioms completed_exact_root_sweep_one_round_stored_parent_requests_nodup
 
 end AspisK1.V7Tag73ConcreteRootSweepClient
