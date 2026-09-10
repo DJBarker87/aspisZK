@@ -1,6 +1,16 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [component recovery through the actual OOD constraints](component-ood-continuation.md).
+Latest formal continuation: [all retained linear factors and early-C1 copy coverage](denominator-continuation.md).
+The selected-model theorem now classifies every retained linear-Y factor into
+a fixed family of at most 111 actual 29-message tuples, a sparse gamma hit
+(at most 3,108 challenges), or a proved double-OOD obstruction. It removes
+the earlier supplied-rational-root premise and preserves the actual adaptive
+candidate. The early-C1 copy collision theorem separately covers adaptive
+selection from the pre-lambda 100-member family. Ten focused NUC leaves passed;
+body and verifier remain unchanged. Higher-Y factors, component own support
+and checked payment extraction are explicit remaining obligations.
+
+Previous formal continuation: [component recovery through the actual OOD constraints](component-ood-continuation.md).
 The same covered quotient now supplies 38,230 original-symbol agreements and
 the actual OOD-to-GRS values, enabling reuse of V7's interpolation theorem.
 Unless both fixed OOD substitutions are polynomial identities, compatible

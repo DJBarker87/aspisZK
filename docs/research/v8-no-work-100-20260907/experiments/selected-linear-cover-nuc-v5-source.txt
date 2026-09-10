@@ -1,0 +1,181 @@
+import LinearDenominatorFactors
+import LinearMessageFamily
+import SelectedMonicCover
+
+/-! Same-execution classification of ALL retained linear-Y factors. The
+message family and OOD obstruction are fixed from C1/C2 before OOD, not from
+the actual post-alpha final. Higher-Y factors and own-support/extraction
+obligations are explicitly retained. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.SelectedLinearCover
+namespace Generic
+open Polynomial
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisV8.FactorIdentityCover AspisV8.LinearDenominatorFactors
+noncomputable section
+variable {k : Type*} [Field k]
+
+theorem small_left (degree : Nat) (F : TrivariatePolynomial k)
+    (small : Small degree F) : (F.coeff 1).natDegree = 0 := small.1
+
+theorem small_right (degree : Nat) (F : TrivariatePolynomial k)
+    (small : Small degree F) : (F.coeff 0).natDegree ≤ degree := small.2
+
+theorem classify_root (degree : Nat) (P : TrivariatePolynomial k) (E : k[X])
+    (control : ∀ (points : Fin 2 → k) (answers : Fin 2 → k[X])
+      (F : TrivariatePolynomial k), F ∈ curvePrimeFactors P → F.natDegree = 1 →
+      Retained points answers F → (∀ r, (answers r).natDegree ≤ degree) →
+      Small degree F ∨ ∀ r, E.eval (points r) = 0)
+    (points : Fin 2 → k) (answers : Fin 2 → k[X])
+    (bounds : ∀ r, (answers r).natDegree ≤ degree) (gamma : k) (U : k[X])
+    (root : ∃ F ∈ curvePrimeFactors P, Retained points answers F ∧
+      challengeCandidateHom gamma U F = 0) :
+    (∀ r, E.eval (points r) = 0) ∨
+      (∃ F ∈ curvePrimeFactors P, Retained points answers F ∧
+        challengeCandidateHom gamma U F = 0 ∧ 2 ≤ F.natDegree) ∨
+      (∃ F ∈ curvePrimeFactors P, Retained points answers F ∧
+        challengeCandidateHom gamma U F = 0 ∧ F.natDegree = 1 ∧ Small degree F) := by
+  obtain ⟨F, member, retained, candidate⟩ := root
+  by_cases linear : F.natDegree = 1
+  · rcases control points answers F member linear retained bounds with small | bad
+    · exact Or.inr (Or.inr ⟨F, member, retained, candidate, linear, small⟩)
+    · exact Or.inl bad
+  · have positive := retained.1
+    exact Or.inr (Or.inl ⟨F, member, retained, candidate, by omega⟩)
+
+/-- Eliminate the factor existential while still over a generic field.
+The concrete caller supplies handlers instead of unfolding QM31's tower
+inside a nested existential pattern. -/
+theorem classify_root_into (degree : Nat) (P : TrivariatePolynomial k) (E : k[X])
+    (control : ∀ (points : Fin 2 → k) (answers : Fin 2 → k[X])
+      (F : TrivariatePolynomial k), F ∈ curvePrimeFactors P → F.natDegree = 1 →
+      Retained points answers F → (∀ r, (answers r).natDegree ≤ degree) →
+      Small degree F ∨ ∀ r, E.eval (points r) = 0)
+    (points : Fin 2 → k) (answers : Fin 2 → k[X])
+    (bounds : ∀ r, (answers r).natDegree ≤ degree) (gamma : k) (U : k[X])
+    (root : ∃ F ∈ curvePrimeFactors P, Retained points answers F ∧
+      challengeCandidateHom gamma U F = 0) (Tail : Prop)
+    (bad : (∀ r, E.eval (points r) = 0) → Tail)
+    (higher : (∃ F ∈ curvePrimeFactors P, Retained points answers F ∧
+      challengeCandidateHom gamma U F = 0 ∧ 2 ≤ F.natDegree) → Tail)
+    (small : ∀ F ∈ curvePrimeFactors P, Retained points answers F →
+      challengeCandidateHom gamma U F = 0 → F.natDegree = 1 → Small degree F → Tail) : Tail := by
+  rcases classify_root degree P E control points answers bounds gamma U root with
+    hit | high | ⟨F, member, retained, candidate, linear, low⟩
+  · exact bad hit
+  · exact higher high
+  · exact small F member retained candidate linear low
+end
+end Generic
+
+open Polynomial Finset
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementFactorBudgets
+open AspisK1.V7Tag73ExactGRSConversion
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedOODGate
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.SelectedFactorCoherence AspisV8.SelectedIdentityCover
+open AspisV8.FactorIdentityCover AspisV8.LinearDenominatorFactors
+open AspisV8.OODInterpolant AspisV8.GammaComponentGame
+noncomputable section
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+theorem small_root_message_cover (P F : TrivariatePolynomial SelectedGRSSubmodule.K)
+    (nonzero : P ≠ 0) (member : F ∈ curvePrimeFactors P)
+    (linear : F.natDegree = 1) (small : Small 28 F)
+    (Gamma : Finset K) (gamma : K) (gammaMember : gamma ∈ Gamma)
+    (message : SelectedGRSSubmodule.Message)
+    (candidate : challengeCandidateHom gamma (exactCircleGRSPolynomial message) F = 0) :
+    gamma ∈ LinearMessageFamily.sparseChallenges P Gamma ∨
+      ∃ messages ∈ LinearMessageFamily.family P,
+        message = ∑ j : Fin 29, gamma^j.val • messages j := by
+  rcases LinearMessageFamily.actual_root_sparse_or_covered P F nonzero member linear
+    (Generic.small_left 28 F small) (Generic.small_right 28 F small) Gamma gamma gammaMember
+    message candidate with sparse | covered
+  · exact Or.inl sparse
+  · obtain ⟨messages, familyMember, cover⟩ := covered
+    exact Or.inr ⟨messages, familyMember,
+      exactCircleGRSPolynomial_injective (cover gamma _ candidate)⟩
+
+theorem parent_y_degree (c1 : C1Received) (c2 : C2Received) :
+    (parent c1 c2).natDegree ≤ 111 :=
+  Nat.le_of_lt_succ (curveTrivariatePolynomial_natDegree_lt
+    (by norm_num : 0 < 112) (fixedInterpolant c1 c2))
+
+def HigherDegreeRoot (c1 : C1Received) (c2 : C2Received) (d : Data (K := K))
+    (gamma : K) (Q : Fin 1024 → K) : Prop :=
+  ∃ F ∈ curvePrimeFactors (parent c1 c2),
+    Retained (point d) (fun r => CurveOODGate.answerCurve (answers d r)) F ∧
+    challengeCandidateHom gamma
+      (exactCircleGRSPolynomial ((atGamma d gamma).original Q)) F = 0 ∧
+    2 ≤ F.natDegree
+
+/-- The returned family consists of actual 1024-coordinate source messages.
+Its existence is mathematical, not a claimed efficient extractor. The first
+26 components are not moved before lambda/chi by this theorem. -/
+theorem exists_selected_classification (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) :
+    ∃ E : K[X], E ≠ 0 ∧ E.natDegree ≤ 26854534485 ∧
+      (LinearMessageFamily.family (parent c1 c2)).card ≤ 111 ∧
+      (LinearMessageFamily.sparseChallenges (parent c1 c2) Gamma).card ≤ 3108 ∧
+      ∀ (d : Data (K := K)) gamma Q, gamma ∈ Gamma → Root c1 c2 d gamma Q →
+        (∀ r, E.eval (point d r) = 0) ∨
+        gamma ∈ LinearMessageFamily.sparseChallenges (parent c1 c2) Gamma ∨
+        HigherDegreeRoot c1 c2 d gamma Q ∨
+        ∃ messages ∈ LinearMessageFamily.family (parent c1 c2),
+          (atGamma d gamma).original Q =
+            ∑ j : Fin 29, gamma^j.val • messages j := by
+  have nonzero : parent c1 c2 ≠ 0 :=
+    curveTrivariatePolynomial_ne_zero _ (fixedInterpolant_nonzero c1 c2)
+  obtain ⟨E, eNonzero, degree, control⟩ :=
+    exists_parent_obstruction 28 (parent c1 c2) nonzero
+  have weight : trivariateYZWeight 28 (parent c1 c2) ≤ 117077 :=
+    Nat.le_of_lt_succ (trivariateYZWeight_curveTrivariatePolynomial_lt
+      (by norm_num : 0 < 117078) (fixedInterpolant c1 c2))
+  have degreeBound : E.natDegree ≤ 26854534485 := by
+    calc
+      E.natDegree ≤ _ := degree
+      _ ≤ (2*117077+1)*114687 := Nat.mul_le_mul
+        (Nat.add_le_add_right (Nat.mul_le_mul_left 2 weight) 1)
+        (SelectedMonicCover.parent_x_degree c1 c2)
+      _ = 26854534485 := by norm_num
+  refine ⟨E, eNonzero, degreeBound,
+    (LinearMessageFamily.family_card _ nonzero).trans (parent_y_degree c1 c2),
+    (LinearMessageFamily.sparseChallenges_card _ nonzero Gamma).trans
+      (Nat.mul_le_mul_right 28 (parent_y_degree c1 c2)), ?_⟩
+  intro d gamma Q gammaMember root
+  have consume : ∀ (F : TrivariatePolynomial K), F ∈ curvePrimeFactors (parent c1 c2) →
+      F.natDegree = 1 → Small 28 F →
+      challengeCandidateHom gamma (exactCircleGRSPolynomial ((atGamma d gamma).original Q)) F = 0 →
+      gamma ∈ LinearMessageFamily.sparseChallenges (parent c1 c2) Gamma ∨
+        ∃ messages ∈ LinearMessageFamily.family (parent c1 c2),
+          (atGamma d gamma).original Q = ∑ j : Fin 29, gamma^j.val • messages j := by
+    intro F member linear small candidate
+    exact small_root_message_cover (parent c1 c2) F nonzero member linear small
+      Gamma gamma gammaMember ((atGamma d gamma).original Q) candidate
+  apply Generic.classify_root_into 28 (parent c1 c2) E control (point d)
+    (fun r => CurveOODGate.answerCurve (answers d r)) (answers_degree d) gamma
+    (exactCircleGRSPolynomial ((atGamma d gamma).original Q)) root
+  · intro bad
+    exact Or.inl bad
+  · intro higher
+    exact Or.inr (Or.inr (Or.inl higher))
+  · intro F member retained candidate linear small
+    rcases consume F member linear small candidate with sparse | covered
+    · exact Or.inr (Or.inl sparse)
+    · exact Or.inr (Or.inr (Or.inr covered))
+
+#print axioms Generic.classify_root
+#print axioms Generic.classify_root_into
+#print axioms Generic.small_left
+#print axioms Generic.small_right
+#print axioms small_root_message_cover
+#print axioms parent_y_degree
+#print axioms exists_selected_classification
+end
+end AspisV8.SelectedLinearCover
