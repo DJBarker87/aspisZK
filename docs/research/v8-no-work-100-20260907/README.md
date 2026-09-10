@@ -9,8 +9,10 @@ suffix is charged once for the union.  One pre-gamma row is now checked to be
 regular for every retained factor outside a single degree-117,049 product root
 set.  The complete multiplicity-preserving finite layer-cake calculation is
 also checked.  This closes the fixed-factor/adaptive-factor, two-row and
-generic finite-integration seams; the remaining higher-Y step is its selected
-source instantiation.  The exact conservative arithmetic screen,
+generic finite-integration seams.  The selected source instantiation now
+constructs a fixed representative per factor/gamma and bounds the actual union
+for every later kappa/tau; the next seam is the outer averages, one shared
+suffix and the explicit product-root charge.  The exact conservative arithmetic screen,
 including the singular and pair-root controls, is **103.847307 bits**, but is
 still labelled a screen rather than a global probability theorem.
 
