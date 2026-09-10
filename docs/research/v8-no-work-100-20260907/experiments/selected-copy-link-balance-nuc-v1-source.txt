@@ -1,0 +1,174 @@
+import SelectedCopyLayoutRows
+
+/-! The literal selected 136-link layout has separate injective producer and
+consumer placements. This converts the already-constructed weighted row
+balance into the actual active-link rational balance. The slot values are
+never multiplied by, or deleted according to, public weights.
+
+The sum argument is a weighted port of NativePaymentCompiledCopyLogUpV1's
+slot-to-link proof; no old native registry or uncached closure is imported.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 1000
+set_option maxHeartbeats 150000
+
+namespace AspisV8.SelectedCopyLinkBalance
+open scoped BigOperators
+open AspisV8.SelectedWeightedCopyCore
+open AspisV8.SelectedWeightedCopyRows
+open AspisV8.SelectedCopyLayout
+open AspisV8.SelectedCopyLayoutRows
+
+def placement (endpoint : Endpoint) : Fin 1024 × Fin 2 :=
+  (endpoint.row, endpoint.slot)
+
+/-- Small public-layout certificates, not field enumeration. Separate sides
+may share a row/slot; within either side each slot has at most one link. -/
+theorem producer_placement_injective :
+    Function.Injective (fun index => placement (sourceLinks index).producer) := by
+  decide
+
+theorem consumer_placement_injective :
+    Function.Injective (fun index => placement (sourceLinks index).consumer) := by
+  decide
+
+variable {K : Type*} [Field K]
+
+theorem gather_at_placement (endpoint : Fin 136 → Endpoint)
+    (unique : Function.Injective (fun index => placement (endpoint index)))
+    (value : Fin 136 → K) (index : Fin 136) :
+    gather endpoint value (endpoint index).row (endpoint index).slot = value index := by
+  classical
+  unfold gather
+  rw [Finset.sum_eq_single index]
+  · simp [slotContribution]
+  · intro other _ different
+    apply if_neg
+    intro same
+    exact different (unique (Prod.ext same.1 same.2))
+  · simp
+
+theorem gather_unoccupied (endpoint : Fin 136 → Endpoint)
+    (value : Fin 136 → K) (row : Fin 1024) (slot : Fin 2)
+    (empty : ¬∃ index, (endpoint index).row = row ∧ (endpoint index).slot = slot) :
+    gather endpoint value row slot = 0 := by
+  unfold gather
+  apply Finset.sum_eq_zero
+  intro index _
+  apply if_neg
+  intro occupied
+  exact empty ⟨index, occupied⟩
+
+/-- This identity does not require any denominator premise: field inverse
+is total. Non-poles remain necessary in the separate residual-to-helper step. -/
+theorem weighted_slot_eq_gather (endpoint : Fin 136 → Endpoint)
+    (unique : Function.Injective (fun index => placement (endpoint index)))
+    (value weight : Fin 136 → K) (chi : K) (row : Fin 1024) (slot : Fin 2) :
+    gather endpoint weight row slot * (chi - gather endpoint value row slot)⁻¹ =
+      gather endpoint (fun index => weight index * (chi - value index)⁻¹) row slot := by
+  classical
+  by_cases occupied : ∃ index, (endpoint index).row = row ∧ (endpoint index).slot = slot
+  · obtain ⟨index, rowEqual, slotEqual⟩ := occupied
+    subst row
+    subst slot
+    rw [gather_at_placement endpoint unique weight,
+      gather_at_placement endpoint unique value,
+      gather_at_placement endpoint unique]
+  · rw [gather_unoccupied endpoint weight row slot occupied,
+      gather_unoccupied endpoint _ row slot occupied, zero_mul]
+
+theorem sum_gather (endpoint : Fin 136 → Endpoint) (value : Fin 136 → K) :
+    (∑ row : Fin 1024, ∑ slot : Fin 2, gather endpoint value row slot) =
+      ∑ index : Fin 136, value index := by
+  classical
+  unfold gather
+  calc
+    _ = ∑ row : Fin 1024, ∑ index : Fin 136, ∑ slot : Fin 2,
+        slotContribution (endpoint index) row slot (value index) := by
+      apply Finset.sum_congr rfl
+      intro row _
+      exact Finset.sum_comm
+    _ = ∑ index : Fin 136, ∑ row : Fin 1024, ∑ slot : Fin 2,
+        slotContribution (endpoint index) row slot (value index) := Finset.sum_comm
+    _ = _ := by
+      apply Finset.sum_congr rfl
+      intro index _
+      simp [slotContribution, ite_and, eq_comm]
+
+theorem sum_weighted_slots (endpoint : Fin 136 → Endpoint)
+    (unique : Function.Injective (fun index => placement (endpoint index)))
+    (value weight : Fin 136 → K) (chi : K) :
+    (∑ row : Fin 1024, ∑ slot : Fin 2,
+      gather endpoint weight row slot * (chi - gather endpoint value row slot)⁻¹) =
+      ∑ index : Fin 136, weight index * (chi - value index)⁻¹ := by
+  simp_rw [weighted_slot_eq_gather endpoint unique value weight chi]
+  exact sum_gather endpoint _
+
+def linkBalance (table : Table K) (lambda chi : K)
+    (variant : Variant) (appendIndex : Nat) : K :=
+  ∑ index : Fin 136, selectedWeight variant appendIndex index *
+    ((chi - compressed table lambda index (sourceLinks index).producer)⁻¹ -
+      (chi - compressed table lambda index (sourceLinks index).consumer)⁻¹)
+
+/-- Exact sum over the selected public active-link set, not over an old
+transfer-only/native registry. No inactive tuple equality is asserted. -/
+def activeLinkBalance (table : Table K) (lambda chi : K)
+    (variant : Variant) (appendIndex : Nat) : K :=
+  ∑ index : Fin 136,
+    if weightBit variant appendIndex (selectedKind index) then
+      (chi - compressed table lambda index (sourceLinks index).producer)⁻¹ -
+        (chi - compressed table lambda index (sourceLinks index).consumer)⁻¹
+    else 0
+
+theorem linkBalance_eq_active (table : Table K) (lambda chi : K)
+    (variant : Variant) (appendIndex : Nat) :
+    linkBalance table lambda chi variant appendIndex =
+      activeLinkBalance table lambda chi variant appendIndex := by
+  unfold linkBalance activeLinkBalance
+  apply Finset.sum_congr rfl
+  intro index _
+  unfold selectedWeight publicWeight
+  split <;> simp_all
+
+/-- The substantive new bridge: the whole constructed Boolean row sum is
+the weighted link sum with actual endpoints/patterns and their own tags. -/
+theorem source_rows_eq_link_balance (table : Table K) (lambda chi : K)
+    (variant : Variant) (appendIndex : Nat) :
+    (∑ row, rationalContribution (sourceRows table lambda variant appendIndex row) chi) =
+      linkBalance table lambda chi variant appendIndex := by
+  simp only [rationalContribution, sourceRows]
+  rw [Finset.sum_sub_distrib,
+    sum_weighted_slots _ producer_placement_injective,
+    sum_weighted_slots _ consumer_placement_injective,
+    ← Finset.sum_sub_distrib]
+  unfold linkBalance
+  apply Finset.sum_congr rfl
+  intro index _
+  exact (mul_sub _ _ _).symm
+
+theorem source_active_links_zero (table : Table K) (lambda chi : K)
+    (variant : Variant) (appendIndex : Nat) (helper : Fin 1024 → K)
+    (localZero : ∀ row,
+      selectedBooleanResidual (sourceRows table lambda variant appendIndex)
+        helper chi row = 0)
+    (totalZero : (∑ row, helper row) = 0)
+    (inactiveZero : (∑ row, inactiveHelper rowActive helper row) = 0)
+    (noPole : ∀ row, rowActive row →
+      NoSlotPole (sourceRows table lambda variant appendIndex row) chi) :
+    activeLinkBalance table lambda chi variant appendIndex = 0 := by
+  rw [← linkBalance_eq_active, ← source_rows_eq_link_balance]
+  exact source_layout_balance_zero table lambda variant appendIndex helper chi
+    localZero totalZero inactiveZero noPole
+
+#print axioms producer_placement_injective
+#print axioms consumer_placement_injective
+#print axioms gather_at_placement
+#print axioms gather_unoccupied
+#print axioms weighted_slot_eq_gather
+#print axioms sum_gather
+#print axioms sum_weighted_slots
+#print axioms linkBalance_eq_active
+#print axioms source_rows_eq_link_balance
+#print axioms source_active_links_zero
+end AspisV8.SelectedCopyLinkBalance

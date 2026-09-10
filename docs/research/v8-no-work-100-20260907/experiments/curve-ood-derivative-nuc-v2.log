@@ -1,0 +1,80 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg
+TARGET=CurveOODDerivative
+RESEARCH_PIN=f0f46ffede8812252ac7cee9edf5547f228533d5
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+b1bbe5cb174e0e3084f851546a3afa7b424215216f39547ab4f038d0f53dfbab  /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/curve-ood-derivative-nuc-v2-manifest.json
+8d875a5d6af08b35b2823a485c76ca4c075cca8a3c869c16fa290a2cf6f02e90  /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay/CurveOODDerivative.lean
+8d875a5d6af08b35b2823a485c76ca4c075cca8a3c869c16fa290a2cf6f02e90  /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/curve-ood-derivative-nuc-v2-source.txt
+7ed329de2a9fa09f7c0d41589c3a466156081bf0d392357262883667388c80ad  /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/run_symbolic_ood_nuc.sh
+OVERLAY_PROVENANCE_PASS=717
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-symbolic-curve-ood-derivative-nuc-v2.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay -o /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay/CurveOODDerivative.olean /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay/CurveOODDerivative.lean
+/home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay/CurveOODDerivative.lean:70:41: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => _a + ↑m.snd.2 < zBound
+Error: Application type mismatch: The argument
+  m.snd
+has type
+  Fin (xBound - maximumDegree * ↑m.fst) × Fin (zBound - curveDegree * ↑m.fst)
+but is expected to have type
+  Fin (xBound - maximumDegree * ↑m.fst) × Fin (zBound - _a)
+in the application
+  m.snd.2
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+K : Type u_1
+inst✝ : Field K
+maximumDegree curveDegree xBound yRows zBound : ℕ
+coefficients : CurveMonomialIndex maximumDegree curveDegree xBound yRows zBound → K
+x : K
+answers : Fin (curveDegree + 1) → K
+m : CurveMonomialIndex maximumDegree curveDegree xBound yRows zBound
+a✝ : m ∈ univ
+zero : ¬↑m.fst = 0
+positive : 1 ≤ ↑m.fst
+strict : curveDegree * ↑m.fst + ↑m.snd.2 < zBound
+shift : (↑m.fst - 1) * curveDegree + curveDegree = ↑m.fst * curveDegree
+degree : (answerCurve answers).natDegree ≤ curveDegree
+⊢ (↑m.fst - 1) * curveDegree + ↑m.snd.2 ≤ zBound - curveDegree - 1
+/home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay/CurveOODDerivative.lean:86:2: error: No goals to be solved
+'AspisV8.CurveOODDerivative.atPoint_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.CurveOODDerivative.atPoint_degree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.CurveOODDerivative.interpolationConstraint_two_derivative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.CurveOODDerivative.atPoint_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.CurveOODDerivative.root_card_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.CurveOODDerivative.selected_degree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay -o /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay/CurveOODDerivative.olean /home/dombarker/project-offloads/aspis-symbolic-ood.zZbNpg/overlay/CurveOODDerivative.lean"
+	User time (seconds): 2.03
+	System time (seconds): 1.05
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.08
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6798840
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 141694
+	Voluntary context switches: 564
+	Involuntary context switches: 170
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1
