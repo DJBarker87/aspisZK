@@ -152,6 +152,9 @@ theorem exact_selected_candidate_advance_is_fresh
               preAdvance
               (exactCandidateDirectedQueryBatchInitialState input))).memory
           ).producers ∧
+      target.1 = (exactOperationalTape input).search.selectedCounter ∧
+      target.2.val + 1 =
+        (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
       (indexedStateAfterRecords transitionFuel
@@ -171,7 +174,7 @@ theorem exact_selected_candidate_advance_is_fresh
         some beforeQueryBatch.digest := by
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, prior, middle, later, producerActor,
-      advanceActor, recordsExact, selectedMember, _targetCounter, _targetBlock,
+      advanceActor, recordsExact, selectedMember, targetCounter, targetBlock,
       finalTrialExact, advanceLookup, terminalExact, boundaryStart,
       boundaryLookup⟩ :=
     exact_selected_candidate_parent_available_in_complete_base transitionRoom
@@ -281,8 +284,8 @@ theorem exact_selected_candidate_advance_is_fresh
         exact (separated _ priorInputMember _ suffixInputMember rfl).elim
   refine ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
     beforeDomain, beforeQueryBatch, preAdvance, later, advanceActor, rootExact,
-    ?_, finalTrialExact, targetAbsent, advanceLookup, terminalExact, boundaryStart,
-    boundaryLookup⟩
+    ?_, targetCounter, targetBlock, finalTrialExact, targetAbsent, advanceLookup,
+    terminalExact, boundaryStart, boundaryLookup⟩
   rw [candidate_extended_dag_after_records_eq_standalone input foldTrial
     finalTrial boundaryIndex target preAdvance]
   rw [← complete_base_dag_after_records_eq_standalone input foldTrial

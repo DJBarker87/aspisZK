@@ -72,6 +72,9 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
             queryBatchDigest : UnifiedExposureRecord) :: boundaryLater ∧
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
+      target.1 = (exactOperationalTape input).search.selectedCounter ∧
+      target.2.val + 1 =
+        (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       ExactRootOrderedQ16Chain input
         (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
         queryBatchDigest outputs advances ∧
@@ -102,8 +105,8 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
           usedSlots := ∅ } := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, beforeDomain,
       boundaryPrior, boundaryLater, boundaryActor, boundaryRoot,
-      finalTrialExact, terminalExact, boundaryStart, targetExact, unseen, empty,
-      armed⟩ :=
+      finalTrialExact, targetCounter, targetBlock, terminalExact, boundaryStart,
+      targetExact, unseen, empty, armed⟩ :=
     exact_selected_candidate_query_batch_boundary_arms transitionRoom input
       foldTrial boundaryIndex
   obtain ⟨producerInput, initialDigest, outputs, advances, producerLookup,
@@ -135,7 +138,7 @@ theorem exact_selected_candidate_arms_complete_query_batch_chain
     simpa [producerInputCanonical, initialDigestExact] using chain
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs, advances,
     boundaryPrior, boundaryLater, boundaryActor, boundaryRoot, finalTrialExact,
-    canonicalChain, outputsLength, advancesLength,
+    targetCounter, targetBlock, canonicalChain, outputsLength, advancesLength,
     chainDigestExact.symm.trans chainStart,
     targetExact, unseen, empty, armed⟩
 

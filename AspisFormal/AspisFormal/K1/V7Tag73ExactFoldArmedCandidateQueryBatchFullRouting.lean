@@ -186,6 +186,9 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
       foldTrial = (exactAcceptedFoldTrial input).trial ∧
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
+      target.1 = (exactOperationalTape input).search.selectedCounter ∧
+      target.2.val + 1 =
+        (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       advances.length = outputs.length ∧
       (gammaOutputBlocks flat.1).take outputs.length = outputs ∧
       (List.ofFn flat.1.2).take advances.length = advances ∧
@@ -220,8 +223,8 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
     exact_compiler_alpha_zero_boundary_installs_block_zero transitionRoom input
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, smallInitial, rootExact,
-      finalTrialExact, chain, outputsLength, advancesLength, q16TerminalExact,
-      smallInitialExact,
+      finalTrialExact, targetCounter, targetBlock, chain, outputsLength,
+      advancesLength, q16TerminalExact, smallInitialExact,
       smallInitialMemory, outputPreferred, advancePreferred⟩ :=
     exact_selected_candidate_armed_query_batch_has_preferred_slots
       transitionRoom input fold.trial boundaryIndex
@@ -236,7 +239,8 @@ theorem exact_selected_fold_armed_candidate_query_batch_is_fully_routed
         rw [q16TerminalExact], rfl⟩ chain outputsLength
   refine ⟨fold.trial, finalTrial, target, outputs, advances, flat,
     consumedDecoded, consumedValue, outputsLength, rfl, finalTrialExact,
-    advancesLength, outputPrefix, advancePrefix, prefixRun, exactDecode,
+    targetCounter, targetBlock, advancesLength, outputPrefix, advancePrefix,
+    prefixRun, exactDecode,
     operationalValue,
     challengeExact,
     ?_, ?_⟩

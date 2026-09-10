@@ -85,6 +85,9 @@ theorem exact_selected_candidate_query_batch_boundary_arms
             queryBatchDigest : UnifiedExposureRecord) :: boundaryLater ∧
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
+      target.1 = (exactOperationalTape input).search.selectedCounter ∧
+      target.2.val + 1 =
+        (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       blockAdvance = beforeDomain.digest ∧
       beforeDomain.digest =
         (exactOperationalQ16Evaluator input).afterQ16.digest ∧
@@ -109,8 +112,9 @@ theorem exact_selected_candidate_query_batch_boundary_arms
           usedSlots := ∅ } := by
   obtain ⟨finalTrial, target, blockProducerInput, blockDigest, blockAdvance,
       beforeDomain, beforeQueryBatch, preAdvance, advanceLater, advanceActor,
-      advanceRootExact, selectedMember, finalTrialExact, targetAbsent, advanceLookup,
-      terminalExact, boundaryStart, boundaryLookup⟩ :=
+      advanceRootExact, selectedMember, targetCounter, targetBlock,
+      finalTrialExact, targetAbsent, advanceLookup, terminalExact, boundaryStart,
+      boundaryLookup⟩ :=
     exact_selected_candidate_advance_is_fresh transitionRoom input foldTrial
       boundaryIndex
   let boundaryInput : ShaInput :=
@@ -352,7 +356,8 @@ theorem exact_selected_candidate_query_batch_boundary_arms
     rw [armed, beforeBoundaryUsedEmpty]
   refine ⟨finalTrial, target, blockAdvance, beforeQueryBatch.digest,
     beforeDomain, boundaryPrior, boundaryLater, boundaryActor, ?_,
-    finalTrialExact, terminalExact, boundaryStart, ?_⟩
+    finalTrialExact, targetCounter, targetBlock, terminalExact, boundaryStart,
+    ?_⟩
   · simpa [boundaryPrior, boundaryRecord, boundaryInput, orderedAdvance,
       List.append_assoc] using orderedRootExact
   · exact ⟨beforeBoundaryTarget, beforeBoundaryUnseen, beforeBoundaryEmpty,

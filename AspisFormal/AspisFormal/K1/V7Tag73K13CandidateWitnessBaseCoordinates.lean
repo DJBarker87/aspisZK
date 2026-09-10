@@ -28,9 +28,11 @@ open AspisK1.V7Tag73ExactFoldArmedCandidateQueryBatchRootRouting
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73K13CandidateDirectedProbabilityClosure
+open AspisK1.V7Tag73K13CandidateDirectedCoordinateSelected
 open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
 open AspisK1.V7Tag73K13CandidateFibreBaseCoordinates
 open AspisK1.V7Tag73Q16DigestDrawReindex
+open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisK1.V7Tag73VariablePrefixGammaFactorization
 open AspisPool.AlgorithmicCircleDecoderV7
@@ -74,7 +76,75 @@ theorem candidate_witnesses_have_equal_base_coordinates
   · exact left.foldExact.trans right.foldExact.symm
   · exact left.workExact.trans right.workExact.symm
 
+/-- A candidate-directed witness is tied to the deployed selected counter and
+last consumed q16 block, rather than merely to an equal decoded challenge. -/
+theorem candidate_witness_has_selected_terminal_slot
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    [Fintype HiddenTape]
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder}
+    {candidate : Q16DigestSlot}
+    {foldTrial finalTrial : ExactCompilerExposureTrial parameters}
+    {hidden : HiddenTape}
+    {context : ExactCompilerFoldAlphaFinalWorkQ16QueryBatchResidual parameters ×
+      (AlphaZeroDigestBlocks × Q16CandidateDigestForest)}
+    {fold work : Digest256}
+    {skeleton : VariableGammaCompleteSkeleton}
+    (witness : ExactCandidateDirectedK13ViewWitness source candidate foldTrial
+      finalTrial hidden context fold work skeleton) :
+    candidate.1 =
+        (exactOperationalTape witness.input).search.selectedCounter ∧
+      candidate.2.val + 1 =
+        (exactOperationalTape witness.input).search.selectedSchedule.blocksUsed := by
+  have selected := witness.selected
+  dsimp [ExactTag73CandidateDirectedCoordinateSelected] at selected
+  exact ⟨selected.2.2.1, selected.2.2.2.1⟩
+
+/-- Any operationally selected terminal slot for the same execution equals
+the candidate carried by its witness. -/
+theorem selected_terminal_slot_eq_witness_candidate
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    [Fintype HiddenTape]
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {source : ExactTag73K13SourceObligations transitionFuel configuration
+      projection fixedInstance decoder}
+    {candidate target : Q16DigestSlot}
+    {foldTrial finalTrial : ExactCompilerExposureTrial parameters}
+    {hidden : HiddenTape}
+    {context : ExactCompilerFoldAlphaFinalWorkQ16QueryBatchResidual parameters ×
+      (AlphaZeroDigestBlocks × Q16CandidateDigestForest)}
+    {fold work : Digest256}
+    {skeleton : VariableGammaCompleteSkeleton}
+    (witness : ExactCandidateDirectedK13ViewWitness source candidate foldTrial
+      finalTrial hidden context fold work skeleton)
+    (targetCounter : target.1 =
+      (exactOperationalTape witness.input).search.selectedCounter)
+    (targetBlock : target.2.val + 1 =
+      (exactOperationalTape witness.input).search.selectedSchedule.blocksUsed) :
+    target = candidate := by
+  obtain ⟨candidateCounter, candidateBlock⟩ :=
+    candidate_witness_has_selected_terminal_slot witness
+  apply Prod.ext
+  · exact targetCounter.trans candidateCounter.symm
+  · apply Fin.ext
+    omega
+
 #print axioms candidate_witnesses_have_equal_base_coordinates
+#print axioms candidate_witness_has_selected_terminal_slot
+#print axioms selected_terminal_slot_eq_witness_candidate
 
 end
 end AspisK1.V7Tag73K13CandidateWitnessBaseCoordinates

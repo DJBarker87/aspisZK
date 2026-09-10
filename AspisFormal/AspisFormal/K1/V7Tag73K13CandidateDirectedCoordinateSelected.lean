@@ -32,6 +32,7 @@ open AspisK1.V7Tag73ExactParsedProofSourceBinding
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FinalWorkDigestProbability
+open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisK1.V7Tag73VariablePrefixGammaFactorization
 open AspisK1.V7Tag73VariablePrefixGammaFlatRouting
@@ -66,6 +67,9 @@ def ExactTag73CandidateDirectedCoordinateSelected
     (∃ transitionRoom : 2 ≤ transitionFuel,
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial) ∧
+    candidate.1 = (exactOperationalTape input).search.selectedCounter ∧
+    candidate.2.val + 1 =
+      (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
     FoldWork31Accepted coordinates.1.2.1 ∧
     FinalWork34Accepted coordinates.1.2.2.2.1 ∧
     ∃ success : GammaPrefixSucceeds coordinates.2,
@@ -94,11 +98,13 @@ theorem exact_operational_input_has_candidate_directed_coordinate
       ExactTag73CandidateDirectedCoordinateSelected input candidate foldTrial
         finalTrial := by
   obtain ⟨foldTrial, finalTrial, candidate, foldTrialExact, finalTrialExact,
-      foldAccepted, finalAccepted, success, challengeExact⟩ :=
+      targetCounter, targetBlock, foldAccepted, finalAccepted, success,
+      challengeExact⟩ :=
     exact_selected_fold_armed_query_batch_coordinate_is_successful
       transitionRoom programmedCover input
   refine ⟨foldTrial, finalTrial, candidate, ?_, ⟨transitionRoom, ?_⟩,
-    foldAccepted, finalAccepted, success, challengeExact⟩
+    targetCounter, targetBlock, foldAccepted, finalAccepted, success,
+    challengeExact⟩
   · exact foldTrialExact
   · exact finalTrialExact
 

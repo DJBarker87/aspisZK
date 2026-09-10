@@ -426,6 +426,9 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
           queryBatchDigest : UnifiedExposureRecord) :: suffix ∧
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
+      target.1 = (exactOperationalTape input).search.selectedCounter ∧
+      target.2.val + 1 =
+        (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       ExactRootOrderedQ16Chain input
         (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
         queryBatchDigest outputs advances ∧
@@ -482,8 +485,8 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
           slot.val = index) := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, initial, rootExact,
-      finalTrialExact, chain, outputsLength, advancesLength, q16TerminalExact,
-      initialExact,
+      finalTrialExact, targetCounter, targetBlock, chain, outputsLength,
+      advancesLength, q16TerminalExact, initialExact,
       initialMemory, aligned, onlyMachine, inputNodup, answerNodup,
       sourceDisjoint, digestDisjoint, invariant, initialReady⟩ :=
     exact_selected_candidate_has_armed_query_batch_context transitionRoom input
@@ -543,7 +546,7 @@ theorem exact_selected_candidate_armed_query_batch_has_preferred_slots
       simpa [slot] using preferred, rfl⟩
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs, advances,
     boundaryPrior, suffix, boundaryActor, initial, rootExact, finalTrialExact,
-    chain,
+    targetCounter, targetBlock, chain,
     outputsLength, advancesLength, q16TerminalExact, initialExact,
     initialMemory, outputResult, advanceResult⟩
 

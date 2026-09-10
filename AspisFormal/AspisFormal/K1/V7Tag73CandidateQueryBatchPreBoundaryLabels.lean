@@ -45,6 +45,7 @@ open AspisK1.V7Tag73IndexedControllerLabeledRecords
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedExposureCausalRouter
 open AspisK1.V7Tag73OperationalOracleExposure
+open AspisK1.V7Tag73OperationalSemanticReplay
 open AspisK1.V7Tag73QueryBatchPrefixCausalController
 open AspisK1.V7Tag73TranscriptSchedule
 
@@ -233,6 +234,9 @@ theorem exact_selected_candidate_boundary_prior_has_only_base_labels
             queryBatchDigest : UnifiedExposureRecord) :: boundaryLater ∧
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
+      target.1 = (exactOperationalTape input).search.selectedCounter ∧
+      target.2.val + 1 =
+        (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       (∀ slot ∈ namedTraceSlots
           (indexedControllerLabeledRecords transitionFuel
             (foldArmedCandidateQueryBatchController transitionFuel
@@ -243,7 +247,8 @@ theorem exact_selected_candidate_boundary_prior_has_only_base_labels
           slot = Sum.inl baseSlot) := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, _beforeDomain,
       boundaryPrior, boundaryLater, boundaryActor, rootExact,
-      finalTrialExact, _blockAdvanceExact, _boundaryStart,
+      finalTrialExact, targetCounter, targetBlock, _blockAdvanceExact,
+      _boundaryStart,
       _targetExact, oldUnseen, oldEmpty, _armed⟩ :=
     exact_selected_candidate_query_batch_boundary_arms transitionRoom
       input foldTrial boundaryIndex
@@ -283,6 +288,8 @@ theorem exact_selected_candidate_boundary_prior_has_only_base_labels
           foldArmedCandidateQueryBatchController] using newUnseen)
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, boundaryPrior,
     boundaryLater, boundaryActor, rootExact, finalTrialExact, by
+      exact targetCounter, by
+      exact targetBlock, by
       simpa [foldArmedCandidateQueryBatchController] using onlyBase⟩
 
 #print axioms candidate_boundary_seen_persists_over_records

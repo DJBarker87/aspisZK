@@ -77,6 +77,9 @@ def ExactCandidateQueryBatchArmedContext
         queryBatchDigest : UnifiedExposureRecord) :: suffix ∧
     finalTrial =
       (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
+    target.1 = (exactOperationalTape input).search.selectedCounter ∧
+    target.2.val + 1 =
+      (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
     ExactRootOrderedQ16Chain input
       (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
       queryBatchDigest outputs advances ∧
@@ -140,8 +143,8 @@ theorem exact_selected_candidate_has_armed_query_batch_context
       boundaryIndex := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
       advances, boundaryPrior, suffix, boundaryActor, rootExact,
-      finalTrialExact, chain, outputsLength, advancesLength, q16TerminalExact,
-      targetExact, unseen,
+      finalTrialExact, targetCounter, targetBlock, chain, outputsLength,
+      advancesLength, q16TerminalExact, targetExact, unseen,
       empty, armed⟩ :=
     exact_selected_candidate_arms_complete_query_batch_chain transitionRoom
       input foldTrial boundaryIndex
@@ -243,7 +246,7 @@ theorem exact_selected_candidate_has_armed_query_batch_context
   exact ⟨finalTrial, target, blockAdvance, queryBatchDigest, outputs,
     advances, boundaryPrior, suffix, boundaryActor, initial, by
       simpa [boundaryRecord, boundaryInput] using rootExact, finalTrialExact,
-    chain,
+    targetCounter, targetBlock, chain,
     outputsLength, advancesLength, q16TerminalExact, rfl, by
       simpa [producer, boundaryInput] using initialMemory, aligned, onlyMachine,
     inputNodup, answerNodup, sourceDisjoint, digestDisjoint, invariant, by

@@ -75,6 +75,9 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
       foldTrial = (exactAcceptedFoldTrial input).trial ∧
       finalTrial =
         (exactAcceptedDagInstallation transitionRoom input).finalTrial ∧
+      target.1 = (exactOperationalTape input).search.selectedCounter ∧
+      target.2.val + 1 =
+        (exactOperationalTape input).search.selectedSchedule.blocksUsed ∧
       FoldWork31Accepted coordinates.1.2.1 ∧
       FinalWork34Accepted coordinates.1.2.2.2.1 ∧
       ∃ success : GammaPrefixSucceeds coordinates.2,
@@ -84,7 +87,8 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
                 ⟨coordinates.2, success⟩)).1 := by
   obtain ⟨foldTrial, finalTrial, target, outputs, advances, _flat,
       consumedDecoded, consumedValue, outputsLength, foldTrialExact,
-      finalTrialExact, _advancesLength, _flatOutputPrefix,
+      finalTrialExact, targetCounter, targetBlock, _advancesLength,
+      _flatOutputPrefix,
       _flatAdvancePrefix, prefixRun,
       exactDecode,
       operationalValue, _flatChallenge, outputRouted, _advanceRouted⟩ :=
@@ -204,7 +208,7 @@ theorem exact_selected_fold_armed_query_batch_coordinate_is_successful
     rw [← routedDecode]
     simpa [appendOrdinaryRemaining] using exactDecode
   exact ⟨foldTrial, finalTrial, target, foldTrialExact, finalTrialExact,
-    foldAccepted, finalWorkAccepted, success,
+    targetCounter, targetBlock, foldAccepted, finalWorkAccepted, success,
     operationalValue.trans routedValue.symm⟩
 
 #print axioms exact_selected_fold_armed_query_batch_coordinate_is_successful
