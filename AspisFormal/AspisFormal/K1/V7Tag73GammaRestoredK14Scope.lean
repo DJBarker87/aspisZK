@@ -21,10 +21,12 @@ namespace AspisK1.V7Tag73GammaRestoredK14Scope
 
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73ConcreteRestorationClient
+open AspisK1.V7Tag73ConcreteRootSweepClient
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK13K14FailureReduction
+open AspisK1.V7Tag73ExactFixedFullRunFactorization
 open AspisK1.V7Tag73ExactFixedOperationalNodeExecution
 open AspisK1.V7Tag73ExactFixedOperationalNodeProgramming
 open AspisK1.V7Tag73ExactPlainRomRun
@@ -519,6 +521,47 @@ theorem gamma_restored_certificate_trace_prefix_reaches_scheduled_output
   exact ⟨execution, role, pairRoom, next, requestExact, transitionExact,
     roleExact, ownerExact, blockExact, cursorExact⟩
 
+/-- In the production one-round root sweep, two scoped gamma certificates
+cannot refer to different children.  Both carry the canonical request and the
+completed real dispatcher stores that request at most once. -/
+theorem one_round_gamma_restored_certificates_have_same_node
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {extractor : ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+      Payload Witness}
+    {withinForkCap : 1 * 1513 ≤ parameters.forkRequestCap}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel
+      (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+      projection fixedInstance sample}
+    (positive : 0 < transitionFuel)
+    (left right : ExactGammaRestoredOperationalK13Certificate decoder input) :
+    left.certificate.node = right.certificate.node := by
+  have nodup :
+      (storedParentRequests
+        (exactRestorationAccumulator input)).Nodup := by
+    apply returned_one_round_root_sweep_stored_parent_requests_nodup
+      transitionFuel
+      (exactFixedClientContinuationFuel transitionFuel input.package.root)
+      base sample.1
+      input.package.root.fixedRoot.base.runtime
+      extractor input.package.root.full.projection.rootPrefixes.verifier.remaining
+      input.package.root.full.clientRun
+    simpa only [exactRootSweepWitnessConfiguration,
+      Nat.one_mul] using
+        input.package.factorization.computedClientListTerminalExact
+  apply node_eq_of_same_stored_parent_request nodup
+  · exact left.certificate.member
+  · exact right.certificate.member
+  · rw [left.parentRequestExact, left.requestCanonical]
+  · rw [right.parentRequestExact, right.requestCanonical]
+
 /-- Forgetting provenance embeds the corrected event into the older broad
 event.  The converse is deliberately absent. -/
 theorem gamma_restored_k14_width29_subset_unscoped
@@ -551,6 +594,7 @@ theorem gamma_restored_k14_width29_subset_unscoped
 #print axioms gamma_restored_certificate_execution_has_exact_transition
 #print axioms gamma_restored_certificate_has_block_zero_gamma_pair
 #print axioms gamma_restored_certificate_trace_prefix_reaches_scheduled_output
+#print axioms one_round_gamma_restored_certificates_have_same_node
 #print axioms gamma_restored_k14_width29_subset_unscoped
 
 end

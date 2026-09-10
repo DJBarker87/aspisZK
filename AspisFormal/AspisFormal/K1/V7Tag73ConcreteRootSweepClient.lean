@@ -34,6 +34,7 @@ set_option maxRecDepth 1000000
 namespace AspisK1.V7Tag73ConcreteRootSweepClient
 
 open AspisK1.V7Tag73ConcreteRestorationClient
+open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73UniqueRestorationRequests
 open AspisK1.V7Tag73SchedulerNativeResult
 open AspisK1.V7Tag73SchedulerNativeSafety
@@ -48,6 +49,8 @@ open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73SchedulerNativePlainRomExperiment
+open AspisK1.V7Tag73SchedulerMachineFactorization
+open AspisK1.V7Tag73TranscriptSchedule
 
 universe u
 
@@ -978,6 +981,43 @@ theorem completed_exact_root_sweep_returns_extractor
     projection.rootPrefixes.verifier.remaining clientRun safe
     projection.clientTerminalExact
 
+/-- Direct terminal-equation form of the one-round uniqueness theorem.  This
+matches the fixed full-run factorization package used by K1.2--K1.5, whose
+returned client result is not the smaller root-only `PUnit` result. -/
+theorem returned_one_round_root_sweep_stored_parent_requests_nodup
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel currentTransitionFuel : Nat)
+    (base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Witness parameters)
+    (hidden : HiddenTape)
+    (runtime : SchedulerNativePlainRomRootRuntime TapeIdentity Statement Proof
+      Payload)
+    (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
+    (answers : List Digest256)
+    (clientRun : ConcreteRestorationClientRun Statement Proof Payload
+      (ExactPlainRomWitnessExtractor Statement Proof Payload Witness))
+    (terminalExact :
+      runSchedulerNativeListTerminalFrom transitionFuel currentTransitionFuel
+        (startConcreteRestorationClientFromRoot
+          (globalOracleCalls := globalFull256OracleCallCap parameters)
+          (base.machine.blackBox.start hidden base.machine.observation)
+          base.machine.environment runtime.node base.restorationConfiguration
+          1513 (deployedRootSweepClient 1 extractor)) answers =
+        .returned clientRun) :
+    (storedParentRequests clientRun.accumulator).Nodup := by
+  have safe :=
+    deployed_root_sweep_one_round_stored_parent_requests_nodup
+      (globalOracleCalls := globalFull256OracleCallCap parameters)
+      (base.machine.blackBox.start hidden base.machine.observation)
+      base.machine.environment runtime.node rfl base.restorationConfiguration
+      1513 extractor
+  exact run_scheduler_native_list_terminal_respects_all_returned
+    (fun run : ConcreteRestorationClientRun Statement Proof Payload
+        (ExactPlainRomWitnessExtractor Statement Proof Payload Witness) =>
+      (storedParentRequests run.accumulator).Nodup)
+    transitionFuel currentTransitionFuel _ answers clientRun safe terminalExact
+
 /-- In a completed production-shaped one-round sweep, the actual final node
 store has an injective non-root parent-request key.  This is the completed-run
 form needed to identify a K1.4/K1.5 certificate node with the chronologically
@@ -989,7 +1029,7 @@ theorem completed_exact_root_sweep_one_round_stored_parent_requests_nodup
     (base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
       Observation Statement Proof Payload Witness parameters)
     (extractor : ExactPlainRomWitnessExtractor Statement Proof Payload Witness)
-    (withinForkCap : 1513 ≤ parameters.forkRequestCap)
+    (withinForkCap : 1 * 1513 ≤ parameters.forkRequestCap)
     (sample : ExactCompilerSample HiddenTape parameters)
     (runtime : SchedulerNativePlainRomRootRuntime TapeIdentity Statement Proof
       Payload)
@@ -998,11 +1038,11 @@ theorem completed_exact_root_sweep_one_round_stored_parent_requests_nodup
     (completed :
       (runExactPlainRom transitionFuel
           (exactRootSweepWitnessConfiguration base 1 extractor
-            (by simpa using withinForkCap)) sample).terminal =
+            withinForkCap) sample).terminal =
         .returned (.completed runtime clientRun)) :
     (storedParentRequests clientRun.accumulator).Nodup := by
   let configuration := exactRootSweepWitnessConfiguration base 1 extractor
-    (by simpa using withinForkCap)
+    withinForkCap
   let projection := Classical.choice
     (completed_exact_plain_rom_gives_root_and_store_projection_nonempty
       transitionFuel positive configuration sample runtime clientRun (by
