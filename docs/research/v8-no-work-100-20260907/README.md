@@ -5,9 +5,12 @@ For all retained Y-degree-at-least-three factors, the fixed early C1 now feeds
 both a checked high-support incidence cap and a multiplicity-preserving regular
 support-tail sum.  The actual adaptive selected quotient is connected to the
 same indexed q22 matching mass and to that tail, while the rho/later-relation
-suffix is charged once for the union.  This closes the fixed-factor/adaptive-
-factor accounting seam; it does **not** yet prove the final common-row and
-finite layer-cake composition.  The exact conservative arithmetic screen,
+suffix is charged once for the union.  One pre-gamma row is now checked to be
+regular for every retained factor outside a single degree-117,049 product root
+set.  The complete multiplicity-preserving finite layer-cake calculation is
+also checked.  This closes the fixed-factor/adaptive-factor, two-row and
+generic finite-integration seams; the remaining higher-Y step is its selected
+source instantiation.  The exact conservative arithmetic screen,
 including the singular and pair-root controls, is **103.847307 bits**, but is
 still labelled a screen rather than a global probability theorem.
 

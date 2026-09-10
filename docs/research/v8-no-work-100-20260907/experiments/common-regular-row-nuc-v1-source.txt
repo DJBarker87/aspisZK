@@ -1,0 +1,170 @@
+import SelectedRegularTailSum
+
+/-! Expose the common row and the literal derivative product already used
+inside SingularOODFamily. Outside its fixed pre-OOD pair-root obstruction,
+one polynomial of degree at most W-c controls singularity at the selected
+row for EVERY retained higher factor, not merely simultaneous two-row
+singularity. All choices precede gamma and the adaptive final.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.CommonRegularRow
+open Polynomial Finset
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementFactorBudgets
+open AspisV8.FactorCoherence AspisV8.FactorIdentityCover
+open AspisV8.FactorDerivativeWeight AspisV8.SingularOODCoefficient
+open AspisV8.SingularOODFamily
+noncomputable section
+variable {K : Type*} [Field K]
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+private theorem product_eval_zero {I : Type*} (s : Multiset I)
+    (polynomial : I → K[X]) (i : I) (member : i ∈ s) (x : K)
+    (zero : (polynomial i).eval x=0) : ((s.map polynomial).prod).eval x=0 := by
+  obtain ⟨rest, product⟩ := (Multiset.dvd_prod
+    (Multiset.mem_map.mpr ⟨i, member, rfl⟩) : polynomial i ∣ (s.map polynomial).prod)
+  rw [product, Polynomial.eval_mul, zero, zero_mul]
+
+private theorem shaved_sum_le {I : Type*} (s : Multiset I) (weight : I → Nat)
+    (c : Nat) (lower : ∀ i ∈ s, c ≤ weight i) :
+    (s.map (fun i => weight i-c)).sum ≤ (s.map weight).sum-c := by
+  induction s using Multiset.induction_on with
+  | empty => simp
+  | @cons i s _ =>
+      have first := lower i (Multiset.mem_cons_self i s)
+      have rest : (s.map (fun j => weight j-c)).sum ≤ (s.map weight).sum :=
+        Multiset.sum_map_le_sum_map _ _ (fun _ _ => Nat.sub_le _ _)
+      simp only [Multiset.map_cons, Multiset.sum_cons]
+      omega
+
+def retainedFactors (P : TrivariatePolynomial K) (points : Fin 2 → K)
+    (answers : Fin 2 → K[X]) : Multiset (TrivariatePolynomial K) :=
+  (higherFactors P).filter (Retained points answers)
+
+def derivativeProduct (P : TrivariatePolynomial K) (points : Fin 2 → K)
+    (answers : Fin 2 → K[X]) (r : Fin 2) : K[X] :=
+  ((retainedFactors P points answers).map fun F =>
+    derivativeCurve F (points r) (answers r)).prod
+
+/-- The stronger ALL selected-row-zero implication. The product keeps
+every factor occurrence; no parent squarefreeness is assumed. -/
+theorem member_zero (P : TrivariatePolynomial K) (points : Fin 2 → K)
+    (answers : Fin 2 → K[X]) (r : Fin 2) (F : TrivariatePolynomial K)
+    (member : F ∈ higherFactors P) (retained : Retained points answers F)
+    (gamma : K) (zero : (derivativeCurve F (points r) (answers r)).eval gamma=0) :
+    (derivativeProduct P points answers r).eval gamma=0 :=
+  product_eval_zero (retainedFactors P points answers)
+    (fun J => derivativeCurve J (points r) (answers r)) F
+    (Multiset.mem_filter.mpr ⟨member, retained⟩) gamma zero
+
+theorem product_degree (c : Nat) (P : TrivariatePolynomial K) (nonzero : P ≠ 0)
+    (points : Fin 2 → K) (answers : Fin 2 → K[X]) (r : Fin 2)
+    (degree : (answers r).natDegree ≤ c) :
+    (derivativeProduct P points answers r).natDegree ≤ trivariateYZWeight c P-c := by
+  let s := retainedFactors P points answers
+  let delta := fun F => derivativeCurve F (points r) (answers r)
+  have first : (s.map delta).prod.natDegree ≤ (s.map (fun F => (delta F).natDegree)).sum := by
+    simpa only [Multiset.map_map, Function.comp_def] using
+      Polynomial.natDegree_multiset_prod_le (s.map delta)
+  have individual : (s.map (fun F => (delta F).natDegree)).sum ≤
+      (s.map (fun F => trivariateYZWeight c F-c)).sum :=
+    Multiset.sum_map_le_sum_map _ _ (fun F _ =>
+      derivative_curve_degree c F (points r) (answers r) degree)
+  have shaved := shaved_sum_le s (trivariateYZWeight c) c (by
+    intro F member
+    exact positive_weight c F (Multiset.mem_filter.mp member).2.1)
+  have retainedBound := SelectedRegularTailSum.Generic.filtered_sum_le (higherFactors P)
+    (Retained points answers) (trivariateYZWeight c)
+  have higherBound := SelectedRegularTailSum.Generic.filtered_sum_le (curvePrimeFactors P)
+    (fun F => 3 ≤ F.natDegree) (trivariateYZWeight c)
+  have total : (s.map (trivariateYZWeight c)).sum ≤ trivariateYZWeight c P :=
+    retainedBound.trans (higherBound.trans (all_factor_weights_le c P nonzero))
+  exact (first.trans (individual.trans shaved)).trans (Nat.sub_le_sub_right total c)
+
+/-- Select the row from completed OOD data, BEFORE gamma. Outside the
+pre-OOD obstruction every retained factor contributes a nonzero derivative
+polynomial at this SAME row, so their literal product is nonzero. -/
+theorem common_row (c : Nat) (P : TrivariatePolynomial K) (nonzero : P ≠ 0)
+    (points : Fin 2 → K) (answers : Fin 2 → K[X])
+    (degrees : ∀ r, (answers r).natDegree ≤ c)
+    (outside : ¬∀ r, (parentObstruction P).eval (points r)=0) :
+    ∃ r : Fin 2, (parentObstruction P).eval (points r) ≠ 0 ∧
+      derivativeProduct P points answers r ≠ 0 ∧
+      (derivativeProduct P points answers r).natDegree ≤ trivariateYZWeight c P-c ∧
+      ∀ gamma, (derivativeProduct P points answers r).eval gamma ≠ 0 →
+        ∀ F ∈ higherFactors P, Retained points answers F →
+          (derivativeCurve F (points r) (answers r)).eval gamma ≠ 0 := by
+  obtain ⟨r, row⟩ : ∃ r, (parentObstruction P).eval (points r) ≠ 0 := by
+    simpa only [not_forall] using outside
+  have regular : ∀ F ∈ retainedFactors P points answers,
+      derivativeCurve F (points r) (answers r) ≠ 0 := by
+    intro F member
+    obtain ⟨higher, identities⟩ := Multiset.mem_filter.mp member
+    apply derivative_nonzero_of_obstruction F identities.1 (points r) (answers r)
+      (identities.2 r)
+    intro root
+    exact row (product_eval_zero (higherFactors P) obstruction F higher (points r) root)
+  have productNonzero : derivativeProduct P points answers r ≠ 0 := by
+    apply Multiset.prod_ne_zero
+    intro member
+    obtain ⟨F, member, zero⟩ := Multiset.mem_map.mp member
+    exact regular F member zero
+  refine ⟨r, row, productNonzero, product_degree c P nonzero points answers r (degrees r), ?_⟩
+  intro gamma notZero F member retained zero
+  exact notZero (member_zero P points answers r F member retained gamma zero)
+
+theorem product_root_count (P : TrivariatePolynomial K) (points : Fin 2 → K)
+    (answers : Fin 2 → K[X]) (r : Fin 2)
+    (nonzero : derivativeProduct P points answers r ≠ 0) (Gamma : Finset K) :
+    (Gamma.filter fun gamma => (derivativeProduct P points answers r).eval gamma=0).card ≤
+      (derivativeProduct P points answers r).natDegree := by
+  apply Polynomial.card_le_degree_of_subset_roots
+  intro gamma member
+  exact (Polynomial.mem_roots nonzero).mpr (Finset.mem_filter.mp member).2
+
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedOODGate
+open AspisV8.SelectedFactorCoherence AspisV8.EarlyC1Projection
+open AspisV8.EarlyC1LateProjection AspisV8.OODInterpolant
+local instance : NeZero (2 : SelectedReceivedOracle.K) := SelectedReceivedOracle.twoNonzero
+
+/-- Literal selected prefix: the exception polynomial and row are chosen
+before all gamma/kappa/tau/alpha/query choices. Checked/image hypotheses
+are deliberately absent: they are needed by the downstream support tail,
+not by this larger algebraic regularity guard. -/
+theorem selected_common_row (c1 : C1Received) (c2 : C2Received)
+    (d : Data (K := SelectedReceivedOracle.K))
+    (Gamma : Finset SelectedReceivedOracle.K)
+    (outside : ¬∀ r, (SelectedSingularOODFamily.obstruction c1 c2).eval (point d r)=0) :
+    ∃ r : Fin 2, ∃ Z : Polynomial SelectedReceivedOracle.K,
+      Z ≠ 0 ∧ Z.natDegree ≤ 117049 ∧
+      (Gamma.filter fun gamma => Z.eval gamma=0).card ≤ 117049 ∧
+      ∀ gamma, Z.eval gamma ≠ 0 →
+        ∀ F ∈ higherFactors (parent c1 c2),
+          Retained (point d) (fun row => CurveOODGate.answerCurve (answers d row)) F →
+          (derivativeCurve F (point d r)
+            (CurveOODGate.answerCurve (answers d r))).eval gamma ≠ 0 := by
+  have nonzero : parent c1 c2 ≠ 0 :=
+    curveTrivariatePolynomial_ne_zero _ (fixedInterpolant_nonzero c1 c2)
+  obtain ⟨r, _, nz, degree, guard⟩ := common_row 28 (parent c1 c2) nonzero
+    (point d) (fun row => CurveOODGate.answerCurve (answers d row)) (answers_degree d) outside
+  let Z := derivativeProduct (parent c1 c2) (point d)
+    (fun row => CurveOODGate.answerCurve (answers d row)) r
+  have weight : trivariateYZWeight 28 (parent c1 c2) ≤ 117077 :=
+    Nat.le_of_lt_succ (trivariateYZWeight_curveTrivariatePolynomial_lt
+      (by norm_num : 0 < 117078) (fixedInterpolant c1 c2))
+  have small : Z.natDegree ≤ 117049 := degree.trans (by omega)
+  exact ⟨r, Z, nz, small,
+    (product_root_count (parent c1 c2) (point d)
+      (fun row => CurveOODGate.answerCurve (answers d row)) r nz Gamma).trans small, guard⟩
+
+#print axioms member_zero
+#print axioms product_degree
+#print axioms common_row
+#print axioms product_root_count
+#print axioms selected_common_row
+end
+end AspisV8.CommonRegularRow
