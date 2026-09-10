@@ -1,4 +1,5 @@
 import AspisFormal.K1.V7Tag73ExactInternalCurveProbability
+import AspisFormal.K1.V7Tag73ExactRestoredGammaFullRouting
 import AspisFormal.K1.V7Tag73ExactRestoredOperationalStages
 import AspisFormal.K1.V7Tag73K14RestrictedBoundGammaClosure
 
@@ -26,6 +27,7 @@ open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactInternalCurveProbability
 open AspisK1.V7Tag73ExactPlainRomRun
+open AspisK1.V7Tag73ExactRestoredGammaFullRouting
 open AspisK1.V7Tag73ExactRestoredOperationalStages
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73GammaPrefixCausalController
@@ -65,8 +67,8 @@ structure ExactTag73RestoredOperationalK14Source
     jointEventSlice
         (clean ∩ exactTag73RestoredOperationalK14Width29Event transitionFuel
           configuration projection fixedInstance decoder) hidden ⊆
-      (exactCompilerGammaPrefixCoordinates parameters transitionFuel
-          (exactPlainRomCursor configuration hidden).erase) ⁻¹'
+      (exactCompilerRestoredGammaCoordinates transitionFuel configuration
+          hidden) ⁻¹'
         dependentSuccessfulSubtypeEvent GammaPrefixSucceeds
           (fun residual ↦ successfulGammaPrefixSkeletonDependentEventK14
             (variablePrefixK14FailureGammaTarget (provider hidden residual)))
@@ -102,8 +104,8 @@ theorem exact_restored_operational_k14_width29_probability_le
         ((P ^ 4 - 1 : Nat) : ENNReal)
   apply hidden_tape_variable_prefix_k14_event_probability_le hiddenLaw
     (exactCompilerTargetCaps parameters).length
-    (fun hidden ↦ exactCompilerGammaPrefixCoordinates parameters
-      transitionFuel (exactPlainRomCursor configuration hidden).erase)
+    (fun hidden ↦ exactCompilerRestoredGammaCoordinates transitionFuel
+      configuration hidden)
     (fun hidden residual ↦
       variablePrefixK14FailureGammaTarget (source.provider hidden residual))
     initialBatchChallengeCap

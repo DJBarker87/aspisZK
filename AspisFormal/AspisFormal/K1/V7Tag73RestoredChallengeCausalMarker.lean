@@ -202,6 +202,34 @@ theorem native_cursor_with_typed_challenge_marker_is_fork_pair
       forkOutput next =>
       cases cursorExact
 
+theorem unified_cursor_with_typed_challenge_marker_is_fork_pair
+    {Statement Proof Payload Result : Type}
+    {globalOracleCalls : Nat}
+    (expectedOwner : SqueezeOwner)
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (cursor : UnifiedExposureCursor globalOracleCalls)
+    (marked : typedRestoredChallengeForkStartsHere (Result := Result)
+      expectedOwner startProgram environment configuration cursor = true) :
+    ∃ (frozenHistory : List QueryRecord)
+        (pairRoom : frozenHistory.length + 2 ≤ globalOracleCalls)
+        (outputInput advanceInput : ShaInput)
+        (template : AspisK1.V7Tag73AtomicPairReplay.AtomicPairReplayConfiguration)
+        (next : AspisK1.V7Tag73AtomicPairReplay.AtomicPairReplayConfiguration →
+          UnifiedExposureCursor globalOracleCalls),
+      cursor = .forkPair frozenHistory pairRoom outputInput advanceInput
+        template next := by
+  rw [typed_restored_challenge_fork_starts_here_iff] at marked
+  rcases marked with ⟨accumulator, prepared, role, resume, ready, roleExact,
+    ownerExact, blockExact, coherent, globalRoom, pairRoom, cursorExact⟩
+  subst cursor
+  unfold dispatchPreparedRestoration
+  rw [dif_pos coherent, dif_pos globalRoom, dif_pos pairRoom]
+  exact ⟨prepared.programmingBase.history, pairRoom, prepared.outputInput,
+    prepared.advanceInput, canonicalForkTemplate configuration, _, rfl⟩
+
 /-- Exposure-normalized marker.  Deterministic cached work may be traversed
 before the typed fork, but the record equality is required for every possible
 answer and hence remains pre-answer. -/
@@ -330,6 +358,46 @@ theorem native_cursor_with_typed_gamma_marker_is_fork_pair
   classical
   simp [typedRestoredChallengeExposureStartsHere]
 
+theorem typed_challenge_exposure_marked_of_record_eq
+    {Statement Proof Payload Result : Type}
+    {globalOracleCalls transitionFuel : Nat}
+    (positive : 0 < transitionFuel)
+    (expectedOwner : SqueezeOwner)
+    (startProgram : OracleMachine
+      (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
+    (environment : FutureFreeEnvironment)
+    (configuration : ConcreteRestorationConfiguration)
+    (cursor target : UnifiedExposureCursor globalOracleCalls)
+    (answer : Digest256)
+    (targetMarked : typedRestoredChallengeForkStartsHere (Result := Result)
+      expectedOwner startProgram environment configuration target = true)
+    (recordExact : unifiedRecordAtAnswer transitionFuel cursor answer =
+      unifiedRecordAtAnswer transitionFuel target answer) :
+    typedRestoredChallengeExposureStartsHere (Result := Result)
+        transitionFuel expectedOwner startProgram environment configuration
+        cursor = true := by
+  rw [typed_restored_challenge_exposure_starts_here_iff]
+  rw [typed_restored_challenge_fork_starts_here_iff] at targetMarked
+  refine ⟨target, targetMarked, ?_⟩
+  obtain ⟨frozenHistory, pairRoom, outputInput, advanceInput, template, next,
+      targetExact⟩ :=
+    unified_cursor_with_typed_challenge_marker_is_fork_pair expectedOwner
+      startProgram environment configuration target (by
+        rw [typed_restored_challenge_fork_starts_here_iff]
+        exact targetMarked)
+  subst target
+  cases transitionFuel with
+  | zero => omega
+  | succ fuel =>
+      generalize requestExact : seekUnifiedExposure (fuel + 1) cursor = request
+      cases request <;>
+        simp only [unifiedRecordAtAnswer, requestExact, seekUnifiedExposure]
+          at recordExact ⊢
+      all_goals try { cases recordExact }
+      intro other
+      cases recordExact
+      rfl
+
 /-- The complete compiler tape factored at the first restored gamma block-zero
 fork.  The 24 routed coordinates are the twelve output/advance pairs consumed
 by the deployed gamma sampler. -/
@@ -355,8 +423,10 @@ def exactCompilerTypedRestoredGammaCoordinates
 #print axioms typed_challenge_prepared_dispatch_is_marked
 #print axioms typed_challenge_dispatch_one_is_marked
 #print axioms native_cursor_with_typed_challenge_marker_is_fork_pair
+#print axioms unified_cursor_with_typed_challenge_marker_is_fork_pair
 #print axioms IsTypedRestoredChallengeExposureStart
 #print axioms typed_restored_challenge_exposure_starts_here_iff
+#print axioms typed_challenge_exposure_marked_of_record_eq
 #print axioms exactCompilerTypedRestoredGammaCoordinates
 #print axioms typed_gamma_dispatch_one_is_marked
 #print axioms native_cursor_with_typed_gamma_marker_is_fork_pair
