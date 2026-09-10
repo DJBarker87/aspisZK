@@ -244,12 +244,25 @@ theorem exact_selected_candidate_boundary_prior_has_only_base_labels
             (exactFoldArmedCandidateQueryBatchInitialState input)
             boundaryPrior),
         ∃ baseSlot : FoldAlphaFinalWorkQ16DigestSlot,
-          slot = Sum.inl baseSlot) := by
+          slot = Sum.inl baseSlot) ∧
+      (let controller := extendControllerThroughCandidateQueryBatch
+          (globalOracleCalls := globalFull256OracleCallCap parameters)
+          transitionFuel target
+          (candidateCompleteBaseController
+            (globalOracleCalls := globalFull256OracleCallCap parameters)
+            transitionFuel foldTrial.val finalTrial.val boundaryIndex)
+          completeFoldAlphaQ16DagMemory
+       let initial := exactCandidateDirectedQueryBatchInitialState input
+       let beforeBoundary := indexedStateAfterRecords transitionFuel controller
+          boundaryPrior initial
+       beforeBoundary.memory.2.q16.advances target = some blockAdvance ∧
+         beforeBoundary.memory.2.queryBatch.boundarySeen = false ∧
+         beforeBoundary.memory.2.queryBatch.producers = []) := by
   obtain ⟨finalTrial, target, blockAdvance, queryBatchDigest, _beforeDomain,
       boundaryPrior, boundaryLater, boundaryActor, rootExact,
       finalTrialExact, targetCounter, targetBlock, _blockAdvanceExact,
       _boundaryStart,
-      _targetExact, oldUnseen, oldEmpty, _armed⟩ :=
+      targetExact, oldUnseen, oldEmpty, _armed⟩ :=
     exact_selected_candidate_query_batch_boundary_arms transitionRoom
       input foldTrial boundaryIndex
   let oldController := extendControllerThroughCandidateQueryBatch
@@ -290,7 +303,9 @@ theorem exact_selected_candidate_boundary_prior_has_only_base_labels
     boundaryLater, boundaryActor, rootExact, finalTrialExact, by
       exact targetCounter, by
       exact targetBlock, by
-      simpa [foldArmedCandidateQueryBatchController] using onlyBase⟩
+      simpa [foldArmedCandidateQueryBatchController] using onlyBase, by
+      simpa [oldController, oldBefore] using And.intro targetExact
+        (And.intro oldUnseen oldEmpty)⟩
 
 #print axioms candidate_boundary_seen_persists_over_records
 #print axioms candidate_unseen_empty_after_answer_is_empty
