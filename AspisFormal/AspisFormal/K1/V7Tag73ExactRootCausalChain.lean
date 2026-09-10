@@ -141,11 +141,12 @@ theorem prefix_after_c2_before_final256_is_post_c2
       IsPostC2MachineEvent event := by
   simp [prefixAfterC2BeforeFinal256, semanticEvents, oodEvents,
     IsPostC2MachineEvent, IsPostRootMachineEvent, challengeEvent,
+    challengeBindEvent, BoundChallengeId.challengeId,
     AspisK1.V7Tag73TranscriptSchedule.Payload.label, c2RootLabel,
     constraintRegistryLabel, helperSumLabel, initialMaskClaimLabel,
     semanticRoundLabel, pointClaimsLabel, batchWorkNonceLabel,
     inactiveClaimLabel, circleOodValueLabel, relationRoundLabel,
-    foldWorkNonceLabel]
+    foldWorkNonceLabel, challengeBindLabel]
 
 theorem prefix_after_c2_before_final256_is_post_c1
     (messages : Messages) :
@@ -153,11 +154,12 @@ theorem prefix_after_c2_before_final256_is_post_c1
       IsPostC1MachineEvent event := by
   simp [prefixAfterC2BeforeFinal256, semanticEvents, oodEvents,
     IsPostC1MachineEvent, IsPostRootMachineEvent, challengeEvent,
+    challengeBindEvent, BoundChallengeId.challengeId,
     AspisK1.V7Tag73TranscriptSchedule.Payload.label, c1RootLabel,
     constraintRegistryLabel, helperSumLabel, initialMaskClaimLabel,
     semanticRoundLabel, pointClaimsLabel, batchWorkNonceLabel,
     inactiveClaimLabel, circleOodValueLabel, relationRoundLabel,
-    foldWorkNonceLabel]
+    foldWorkNonceLabel, challengeBindLabel]
 
 theorem absorb_input_avoids_post_root_state_input
     (forbiddenLabel : UInt8) (before : Digest256)
