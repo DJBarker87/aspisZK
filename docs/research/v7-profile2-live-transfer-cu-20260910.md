@@ -32,6 +32,38 @@ CU. A fresh-signed duplicate reached the nullifier gate and failed with the
 expected custom error after 31,822 CU. The lifecycle harness's account-image
 checks passed and its complete checksum manifest verified.
 
+## Withdrawal and q16-counter variance
+
+An unrestricted live withdrawal generated a valid proof with compact counter
+45 and a 202-node frontier, but correctly exhausted its 1,300,000-CU terminal
+budget inside the verifier before settlement. Its terminal was not submitted.
+This is an actual release gate, not a measurement anomaly: the first-cap-203
+verifier must reconstruct and reject every earlier q16 candidate.
+
+The existing default-off cutoff-20 honest-prover publication policy was then
+used with its explicit measurement acknowledgement. It does not change the
+proof wire, verifier, Pool, statement, transcript, work predicate, or query
+checks. It merely retries an otherwise work-valid final nonce off chain until
+the verifier's unchanged first-cap-203 selection has counter at most 20. The
+publication-security bridge is in
+`V7Tag73Cutoff20FinalNoncePublicationBridge.lean`; release promotion still
+requires the remaining all-reachable source/CU closure.
+
+| Item | Result |
+|---|---:|
+| Selected counter / frontier | 2 / 196 |
+| Honest proof body / payload | 30,460 / 31,148 bytes |
+| Withdrawal terminal wire | 1,543 bytes |
+| Simulation / finalized CU | 1,180,845 / 1,180,845 |
+| Margin to 1,300,000 CU | 119,155 CU |
+| Margin to 1,200,000 CU | 19,155 CU |
+| Finalized slot | 673 |
+
+The successful withdrawal wire SHA-256 was
+`92b78ae6044702cf2908c69d95792d4e001ea0e6aec0e19e0fbd73be6ceeb19e`.
+Its fresh signed replay was rejected at the nullifier gate after 39,169 CU,
+and the checksum manifest verified.
+
 ## Exact build inputs
 
 The Pool and verifier SBF artifacts were rebuilt from the source revision
@@ -65,10 +97,11 @@ live lifecycle peak remained below 2.4 GiB.
 ## Scope and remaining gates
 
 This replaces neither an all-reachable counter bound nor public devnet
-evidence. It establishes a current-profile, real combined transfer measurement
-only. The current formal K1.3 adversary-first parsed-profile causality endpoint,
-K1.4/K1.5 composition, full release/source composition, an all-reachable CU
-bound, and public TxV1 devnet activation/lifecycle are still open.
+evidence. It establishes current-profile, real combined transfer and
+cutoff-20 withdrawal measurements only. The current formal K1.3
+adversary-first parsed-profile causality endpoint, K1.4/K1.5 composition, full
+release/source composition, an all-reachable CU bound, and public TxV1 devnet
+activation/lifecycle are still open.
 
 The first run was deliberately stopped during setup because its explicit
 provenance environment value had a typo. It produced no terminal transaction;
