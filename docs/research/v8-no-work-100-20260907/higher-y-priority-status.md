@@ -93,3 +93,42 @@ prove or falsify:
 Success leaves at least roughly five local bits for other justified terms;
 failure will identify the concrete high-support non-extractable class that
 needs an additional relation check or a stronger recovery theorem.
+
+## Continuation after `96046bac`
+
+The first regular-event adapter requested above is now kernel checked, as is
+its exact normalized alpha/query consumer:
+
+- `SelectedRegularQueryBridge` fixes one actual qualified regular quotient at
+  fixed gamma before quantifying over later kappa/tau/alpha histories, while
+  retaining the post-alpha strategy final.
+- `RegularQueryMoment` proves the ordered-distinct joint bound
+  `b+(1-b)*min(1,3/|A|)` and the one-time suffix bound obtained by adding
+  `q/|G|+18/|A|`. It does not multiply a gamma marginal into this moment.
+
+The singular path is also sharper. `SingularOODFamily` and its selected
+adapter cover all retained Y-degree-at-least-three factors simultaneously:
+outside one fixed pair-root event their singular-gamma union has cardinality
+at most 117,049, with no factor-count multiplier. `SelectedSingularPairMass`
+now charges the complete admissible pair-root set in the abort-preserving
+history-uniform ideal sampler by
+
+    25,345,827 * 25,345,826 / (N * (N-1)),
+
+approximately `2^-198.8095102474`. The pair plus singular-gamma arithmetic
+screen remains approximately `2^-107.1632469139`; its random-oracle/source
+coupling is not yet proved.
+
+On the payment side, `SelectedEarlyC1Outputs` is kernel checked. Starting from
+the same early C1 family member and the earlier strict amount facts, it derives
+the four actual output carry links, canonical raw decoding, positive/conserving
+recipient and change amounts, and both public output-note openings, retaining
+the lambda/chi collision alternative. Acceptance enforcing its premises and
+the own-supported early C1 member remain open.
+
+These additions preserve the 40,282-byte body and add no verifier operation or
+grinding credit. The decisive missing theorem is now the global regular
+gamma/support layer-cake composed with `RegularQueryMoment`, with high-support
+branches discharged by authenticated early-C1/payment extraction rather than
+counted as failures. The actual Fiat--Shamir coupling and full-view ZK remain
+separate gates.

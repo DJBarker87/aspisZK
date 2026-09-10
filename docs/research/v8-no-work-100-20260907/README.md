@@ -1,5 +1,17 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest higher-degree continuation: [Y-degree at least three checkpoint](higher-y-priority-status.md).
+The retained singular branch now has a checked complete OOD-pair root-set mass
+and a checked all-factor singular-gamma union; their ideal arithmetic screen is
+about **107.16 bits**.  The regular branch now has the exact ordered
+alpha/query moment and one-time compact-suffix charge, while the same early C1
+table reaches strict conserving output amounts and both output-note openings.
+The unrestricted regular tail remains only about **96.10 bits** until its
+high-support executions are connected to authenticated early-C1/payment
+extraction.  The actual Fiat--Shamir coupling, acceptance-to-source refinement,
+complete payment witness and full-view ZK remain open.  No verifier operation,
+proof byte or grinding credit changed; the body remains **40,282 bytes**.
+
 Latest formal continuation: [nested sequential OOD sampler and root-set mass](nested-ood-sampler-review.md).
 The literal finite-tape controller is now proved equivalent to the source's
 first-circle3 followed by distinct3(circle3), including exact first-hit block
