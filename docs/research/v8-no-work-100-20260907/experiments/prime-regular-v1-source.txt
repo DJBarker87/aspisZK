@@ -1,0 +1,72 @@
+import FactorIdentityCover
+
+/-! Positive-Y prime factors cannot vanish identically after a gamma
+specialization. A constant-in-Y divisor Z-gamma would contradict their
+primitivity. Therefore any polynomial root of a linear-Y prime factor is
+automatically a regular denominator specialization. This removes an
+exceptional-access premise; it does not prove that its rational root is a
+degree-28 polynomial in gamma. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+namespace AspisV8.PrimeFactorRegularity
+open Polynomial
+open AspisK1.V7ExactCorrelatedAgreementFactors
+noncomputable section
+variable {K : Type*} [Field K]
+
+theorem primitive_specialization_ne_zero (F : TrivariatePolynomial K)
+    (primitive : F.IsPrimitive) (gamma : K) : specializeChallenge gamma F ≠ 0 := by
+  intro zero
+  have divisor : C (X-C (C gamma) : Polynomial K[X]) ∣ F := by
+    rw [Polynomial.C_dvd_iff_dvd_coeff]
+    intro j
+    apply Polynomial.dvd_iff_isRoot.mpr
+    have coefficient := congrArg (fun P : Polynomial K[X] => P.coeff j) zero
+    simpa only [specializeChallenge, Polynomial.coe_mapRingHom,
+      Polynomial.coeff_map, Polynomial.coe_evalRingHom, Polynomial.coeff_zero] using coefficient
+  have unit := (Polynomial.isPrimitive_iff_isUnit_of_C_dvd.mp primitive) _ divisor
+  have impossible := Polynomial.natDegree_eq_zero_of_isUnit unit
+  rw [Polynomial.natDegree_X_sub_C] at impossible
+  omega
+
+theorem prime_specialization_ne_zero (P F : TrivariatePolynomial K)
+    (nonzero : P ≠ 0) (member : F ∈ curvePrimeFactors P)
+    (positive : 0 < F.natDegree) (gamma : K) : specializeChallenge gamma F ≠ 0 :=
+  primitive_specialization_ne_zero F
+    ((curvePrimeFactors_prime P nonzero F member).irreducible.isPrimitive
+      (Nat.ne_of_gt positive)) gamma
+
+theorem linear_root_equation (F : TrivariatePolynomial K)
+    (linear : F.natDegree = 1) (gamma : K) (U : K[X])
+    (root : challengeCandidateHom gamma U F = 0) :
+    (F.coeff 1).eval (C gamma) * U + (F.coeff 0).eval (C gamma) = 0 := by
+  have shape := Polynomial.eq_X_add_C_of_natDegree_le_one linear.le
+  rw [shape] at root
+  simpa only [challengeCandidateHom, RingHom.coe_comp, Function.comp_apply,
+    specializeChallenge, Polynomial.coe_mapRingHom, Polynomial.map_add,
+    Polynomial.map_mul, Polynomial.map_X, Polynomial.map_C,
+    substituteCandidate, Polynomial.coe_evalRingHom, Polynomial.eval_add,
+    Polynomial.eval_mul, Polynomial.eval_X, Polynomial.eval_C] using root
+
+theorem prime_linear_root_regular (P F : TrivariatePolynomial K)
+    (nonzero : P ≠ 0) (member : F ∈ curvePrimeFactors P)
+    (linear : F.natDegree = 1) (gamma : K) (U : K[X])
+    (root : challengeCandidateHom gamma U F = 0) :
+    (F.coeff 1).eval (C gamma) ≠ 0 := by
+  intro azero
+  have equation := linear_root_equation F linear gamma U root
+  rw [azero, zero_mul, zero_add] at equation
+  apply prime_specialization_ne_zero P F nonzero member (by omega) gamma
+  rw [Polynomial.eq_X_add_C_of_natDegree_le_one linear.le]
+  simp only [specializeChallenge, Polynomial.coe_mapRingHom, Polynomial.map_add,
+    Polynomial.map_mul, Polynomial.map_X, Polynomial.map_C,
+    Polynomial.coe_evalRingHom, azero, equation, Polynomial.C_0, zero_mul, zero_add]
+
+#print axioms primitive_specialization_ne_zero
+#print axioms prime_specialization_ne_zero
+#print axioms linear_root_equation
+#print axioms prime_linear_root_regular
+end
+end AspisV8.PrimeFactorRegularity
