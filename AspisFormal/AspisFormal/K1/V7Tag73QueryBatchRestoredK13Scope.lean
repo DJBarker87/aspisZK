@@ -33,12 +33,16 @@ open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73OperationalNodeCertificate
+open AspisK1.V7Tag73OperationalOracleExposure
 open AspisK1.V7Tag73PreparedRestorationRoles
+open AspisK1.V7Tag73ProjectedNodeForkCursor
 open AspisK1.V7Tag73RestoredDerivedK13View
 open AspisK1.V7Tag73RestoredNodeK13Classifier
 open AspisK1.V7Tag73RootQueryBatchForkBridge
 open AspisK1.V7Tag73SchedulerNativePlainRomExperiment
+open AspisK1.V7Tag73SchedulerNativePrefixTraversal
 open AspisK1.V7Tag73SchedulerNativeResult
+open AspisK1.V7Tag73SchedulerTraceFactorization
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisV5ComponentCQM31TowerExact
@@ -350,6 +354,124 @@ theorem query_batch_restored_certificate_has_block_zero_query_batch_pair
   exact ⟨execution, role, requestExact, transitionExact, roleExact,
     ownerExact, blockExact, outputExact, advanceExact⟩
 
+/-- The child's retained trace reaches its own scheduled query-batch output
+in the literal production cursor.  This is the correct pre-answer coordinate;
+no equality with the accepted root's old query-batch value is asserted. -/
+theorem
+    query_batch_restored_certificate_trace_prefix_reaches_scheduled_output
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample}
+    (positive : 0 < transitionFuel)
+    (k13 : ExactQueryBatchRestoredOperationalK13Certificate decoder input) :
+    ∃ (execution : ProjectedRestorationNodeExecution
+          (Final := ConcreteRestorationClientRun Statement Tag73K12ParsedProof
+            Payload (ExactPlainRomWitnessExtractor Statement
+              Tag73K12ParsedProof Payload Witness))
+          (configuration.machine.blackBox.start sample.1
+            configuration.machine.observation)
+          configuration.machine.environment
+          configuration.restorationConfiguration
+          (runExactPlainRom transitionFuel configuration sample).trace
+          (exactRestorationAccumulator input) k13.certificate.node)
+        (role : PreparedRestorationPairRole)
+        (pairRoom : execution.scheduled.frozenHistory.length + 2 ≤
+          globalFull256OracleCallCap parameters)
+        (next : AspisK1.V7Tag73AtomicPairReplay.AtomicPairReplayConfiguration →
+          SchedulerNativeCursor (globalFull256OracleCallCap parameters)
+            (SchedulerNativePlainRomResult TapeIdentity Statement
+              Tag73K12ParsedProof Payload
+              (ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+                Payload Witness))),
+      execution.prepared.request = k13.request ∧
+      execution.prepared.transition = k13.requestIsQueryBatch.transition ∧
+      preparedRestorationPairRole? execution.prepared = some role ∧
+      role.owner = .challenge .queryBatch ∧
+      role.block = 0 ∧
+      seekSchedulerNativeExposure transitionFuel
+          (schedulerNativePrefixCursor transitionFuel
+            (exactPlainRomCursor configuration sample.1)
+            (execution.traceBeforePair.map UnifiedExposureRecord.answer)) =
+        .forkOutput execution.scheduled.frozenHistory pairRoom
+          execution.scheduled.outputInput execution.scheduled.advanceInput
+          execution.scheduled.template next := by
+  obtain ⟨execution, role, requestExact, transitionExact, roleExact,
+      ownerExact, blockExact, _outputExact, _advanceExact⟩ :=
+    query_batch_restored_certificate_has_block_zero_query_batch_pair positive k13
+  have runExact :
+      runSchedulerNativeListRun transitionFuel
+          (exactPlainRomCursor configuration sample.1)
+          (freshAnswerTapeToList sample.2) =
+        runExactPlainRom transitionFuel configuration sample := by
+    simpa [runExactPlainRom] using
+      (run_scheduler_native_eq_list_run transitionFuel
+        (exactCompilerTargetCaps parameters).length
+        (exactPlainRomCursor configuration sample.1) sample.2).symm
+  have traceExact :
+      (runSchedulerNativeListRun transitionFuel
+          (exactPlainRomCursor configuration sample.1)
+          (freshAnswerTapeToList sample.2)).trace =
+        execution.traceBeforePair ++
+          scheduledPairRecords execution.scheduled ++
+          (execution.proverRecords ++ execution.verifierRecords ++
+            execution.traceAfterVerifier) := by
+    rw [runExact]
+    simpa [List.append_assoc] using execution.fullTraceExact
+  obtain ⟨pairRoom, next, cursorExact⟩ :=
+    seek_after_trace_prefix_is_scheduled_fork_output transitionFuel
+      (exactPlainRomCursor configuration sample.1)
+      (freshAnswerTapeToList sample.2) execution.traceBeforePair
+      (execution.proverRecords ++ execution.verifierRecords ++
+        execution.traceAfterVerifier) execution.scheduled traceExact
+  exact ⟨execution, role, pairRoom, next, requestExact, transitionExact,
+    roleExact, ownerExact, blockExact, cursorExact⟩
+
+/-- In the production one-round root sweep, the canonical query-batch request
+can insert at most one child. -/
+theorem one_round_query_batch_restored_certificates_have_same_node
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {extractor : ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+      Payload Witness}
+    {withinForkCap : 1 * 1513 ≤ parameters.forkRequestCap}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    {input : ExactK12OperationalInput transitionFuel
+      (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+      projection fixedInstance sample}
+    (_positive : 0 < transitionFuel)
+    (left right : ExactQueryBatchRestoredOperationalK13Certificate decoder
+      input) :
+    left.certificate.node = right.certificate.node := by
+  have nodup :
+      (storedParentRequests (exactRestorationAccumulator input)).Nodup := by
+    apply returned_one_round_root_sweep_stored_parent_requests_nodup
+      transitionFuel
+      (exactFixedClientContinuationFuel transitionFuel input.package.root)
+      base sample.1 input.package.root.fixedRoot.base.runtime
+      extractor input.package.root.full.projection.rootPrefixes.verifier.remaining
+      input.package.root.full.clientRun
+    simpa only [exactRootSweepWitnessConfiguration, Nat.one_mul] using
+      input.package.factorization.computedClientListTerminalExact
+  apply node_eq_of_same_stored_parent_request nodup
+  · exact left.certificate.member
+  · exact right.certificate.member
+  · rw [left.parentRequestExact, left.requestCanonical]
+  · rw [right.parentRequestExact, right.requestCanonical]
+
 #print axioms ExactRootQueryBatchRestorationRequest
 #print axioms exact_operational_input_has_root_query_batch_transition_index
 #print axioms exactOperationalRootQueryBatchRestorationRequest
@@ -362,6 +484,10 @@ theorem query_batch_restored_certificate_has_block_zero_query_batch_pair
   query_batch_restored_certificate_execution_has_exact_transition
 #print axioms
   query_batch_restored_certificate_has_block_zero_query_batch_pair
+#print axioms
+  query_batch_restored_certificate_trace_prefix_reaches_scheduled_output
+#print axioms
+  one_round_query_batch_restored_certificates_have_same_node
 
 end
 end AspisK1.V7Tag73QueryBatchRestoredK13Scope
