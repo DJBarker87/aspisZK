@@ -1,0 +1,132 @@
+import AspisFormal.K1.V7Tag73EightRetrySamplerLaw
+import FiniteOptionMass
+
+/-! Unconditional value fibres of the actual V7 eight-retry shared-stream
+ordinary sampler. The stronger constructive fibre equivalence underlying
+its checked successful-uniform law is reused; uniformity is not assumed.
+This raw-word leaf does not assert fresh transcript coins or a block-routing
+law. A separate decoder adapter must preserve final-block word discard. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.OrdinaryRawMass
+open AspisK1.V7Tag73EightRetrySamplerLaw
+open AspisV5ComponentCRejectionSampler
+open AspisV5ComponentCQM31TowerExact
+noncomputable section
+local instance decision (p : Prop) : Decidable p := Classical.propDecidable p
+
+/-- The literal raw stopping machine, with its remaining words forgotten
+only in this value projection. Failure remains None. -/
+def value (raw : Tag73RawStream) : Option QM31Exact :=
+  (tag73RawRun raw).map (fun result => tag73FourLimbsToExact result.1)
+
+def exactValue (raw : SuccessfulTag73RawStream) : QM31Exact :=
+  tag73FourLimbsToExact (successfulTag73Values raw)
+
+theorem value_successful (raw : SuccessfulTag73RawStream) :
+    value raw.val = some (exactValue raw) := by
+  cases run : tag73RawRun raw.val with
+  | none =>
+      have success := raw.property
+      simp only [Tag73RawSucceeds, run, Option.isSome_none, Bool.false_eq_true] at success
+  | some result =>
+      simp only [value, exactValue, successfulTag73Values, tag73ValuesOrFirst, run,
+        Option.map_some]
+
+theorem value_none_iff (raw : Tag73RawStream) :
+    value raw = none ↔ tag73RawRun raw = none := by
+  simp only [value, Option.map_eq_none_iff]
+
+/-- The base fibre keeps the same stopping positions, rejected words,
+unused words and high bits used by V7's successful-uniform proof. -/
+def Skeleton := {raw : SuccessfulTag73RawStream //
+  successfulTag73Values raw = fun _ => firstM31Value}
+
+noncomputable instance : Fintype Skeleton := Fintype.ofFinite _
+
+/-- The ordinary-only part of the V7 factorization: reuse its checked
+value-fibre equivalences without importing the outer nonzero sampler. -/
+def exactFactorization : SuccessfulTag73RawStream ≃ QM31Exact × Skeleton :=
+  (domainProdFibreEquiv successfulTag73Values (fun _ => firstM31Value)
+    (fun values => successfulTag73ValuesFibreEquiv values (fun _ => firstM31Value))).trans
+    (Equiv.prodCongr tag73FourLimbsToExact (Equiv.refl Skeleton))
+
+theorem exactFactorization_value (raw : SuccessfulTag73RawStream) :
+    (exactFactorization raw).1 = exactValue raw := rfl
+
+def successEquiv : {raw : Tag73RawStream // (value raw).isSome} ≃
+    SuccessfulTag73RawStream :=
+  Equiv.subtypeEquivRight (by
+    intro raw
+    simp only [value, Tag73RawSucceeds, Option.isSome_map])
+
+def valueFibreEquiv (v : QM31Exact) :
+    {raw : Tag73RawStream // value raw = some v} ≃
+      {raw : SuccessfulTag73RawStream // exactValue raw = v} where
+  toFun raw := by
+    have success : Tag73RawSucceeds raw.val := by
+      have present := congrArg Option.isSome raw.property
+      simpa only [value, Option.isSome_map, Option.isSome_some, Tag73RawSucceeds]
+        using present
+    let successful : SuccessfulTag73RawStream := ⟨raw.val, success⟩
+    refine ⟨successful, ?_⟩
+    exact Option.some.inj ((value_successful successful).symm.trans raw.property)
+  invFun raw := ⟨raw.val.val, by rw [value_successful, raw.property]⟩
+  left_inv _ := by apply Subtype.ext; rfl
+  right_inv _ := by apply Subtype.ext; apply Subtype.ext; rfl
+
+def fibreSkeletonEquiv (v : QM31Exact) :
+    {raw : SuccessfulTag73RawStream // exactValue raw = v} ≃ Skeleton where
+  toFun raw := (exactFactorization raw.val).2
+  invFun skeleton := ⟨exactFactorization.symm (v, skeleton), by
+    rw [← exactFactorization_value]
+    exact congrArg Prod.fst (exactFactorization.apply_symm_apply (v, skeleton))⟩
+  left_inv raw := by
+    apply Subtype.ext
+    apply exactFactorization.injective
+    change exactFactorization (exactFactorization.symm
+      (v, (exactFactorization raw.val).2)) = exactFactorization raw.val
+    rw [exactFactorization.apply_symm_apply]
+    exact Prod.ext (raw.property.symm.trans (exactFactorization_value raw.val).symm) rfl
+  right_inv skeleton :=
+    congrArg Prod.snd (exactFactorization.apply_symm_apply (v, skeleton))
+
+/-- Exact finite counting input for unconditional mass conversion. No
+success condition has been imposed on the sampling space on either side. -/
+theorem value_fibre_card (v : QM31Exact) :
+    Fintype.card {raw : Tag73RawStream // value raw = some v} *
+        Fintype.card QM31Exact =
+      Fintype.card {raw : Tag73RawStream // (value raw).isSome} := by
+  have fibre : Fintype.card {raw : Tag73RawStream // value raw = some v} =
+      Fintype.card Skeleton :=
+    Fintype.card_congr ((valueFibreEquiv v).trans (fibreSkeletonEquiv v))
+  have total : Fintype.card {raw : Tag73RawStream // (value raw).isSome} =
+      Fintype.card QM31Exact * Fintype.card Skeleton := by
+    rw [Fintype.card_congr (successEquiv.trans exactFactorization), Fintype.card_prod]
+  rw [fibre, total, Nat.mul_comm]
+
+theorem value_fibre_card_P4 (v : QM31Exact) :
+    Fintype.card {raw : Tag73RawStream // value raw = some v} * P^4 =
+      Fintype.card {raw : Tag73RawStream // (value raw).isSome} := by
+  simpa only [qm31Exact_card] using value_fibre_card v
+
+/-- Unconditional mass on the full raw coin space. Abort remains in the
+denominator; no closed-form abort probability or fresh-history premise is
+required for this finite decoder theorem. -/
+theorem unconditional_mass (v : QM31Exact) :
+    JointImageGame.avg Finset.univ (fun raw => if value raw = some v then 1 else 0) =
+      FiniteOptionMass.successMass value / ((P^4 : Nat) : ℚ) := by
+  simpa only [qm31Exact_card] using
+    FiniteOptionMass.unconditional_mass value v (value_fibre_card v)
+
+#print axioms value_successful
+#print axioms value_none_iff
+#print axioms exactFactorization_value
+#print axioms value_fibre_card
+#print axioms value_fibre_card_P4
+#print axioms unconditional_mass
+end
+end AspisV8.OrdinaryRawMass

@@ -1,0 +1,220 @@
+import OrdinaryRawMass
+import AspisFormal.K1.V7Tag73EightRetryDecoderBridge
+import AspisFormal.K1.V7Tag73SamplerExactValue
+
+/-! Exact one-call block/word bridge and unconditional value mass.
+The block-coordinate and total-commute proofs are narrowly ported from
+V7Tag73VariablePrefixGammaFactorization (source 5ca77d543500dac6...) and
+V7Tag73VariablePrefixGammaFlatRouting (source f99a9cd8160535f3...). Only
+their one-ordinary-call slices are used; no full gamma routing, successful
+transcript conditioning or independent-label premise is imported. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.OrdinaryPrefixMass
+open AspisK1.V7Tag73TranscriptSchedule
+open AspisK1.V7Tag73SamplerDecoder
+open AspisK1.V7Tag73SamplerDecoderExact
+open AspisK1.V7Tag73SamplerExactValue
+open AspisK1.V7Tag73SecureCircleMap
+open AspisK1.V7Tag73DeployedDecoderFiberCap
+open AspisK1.V7Tag73EightRetryDecoderBridge
+open AspisK1.V7Tag73EightRetrySamplerLaw
+open AspisV5ComponentCRejectionSampler
+open AspisV5ComponentCQM31TowerExact
+noncomputable section
+local instance decision (p : Prop) : Decidable p := Classical.propDecidable p
+
+abbrev FourBlocks := Fin 4 → Digest256
+
+def wordIndexEquiv : Fin 4 × Fin 8 ≃ Fin tag73MaximumRawWordCount :=
+  finProdFinEquiv.trans (finCongr (by
+    norm_num [tag73MaximumRawWordCount, tag73LimbCount, tag73LimbRetryLimit]))
+
+/-- Exact chronological four-block / thirty-two-u32 coordinate map. -/
+def blocksRawEquiv : FourBlocks ≃ Tag73RawStream where
+  toFun blocks :=
+    (Equiv.vectorEquivFin RawWord tag73MaximumRawWordCount).symm fun draw =>
+      let coordinate := wordIndexEquiv.symm draw
+      digestWordsEquiv (blocks coordinate.1) coordinate.2
+  invFun raw block := digestWordsEquiv.symm fun word =>
+    (Equiv.vectorEquivFin RawWord tag73MaximumRawWordCount raw)
+      (wordIndexEquiv (block, word))
+  left_inv blocks := by
+    funext block
+    apply digestWordsEquiv.injective
+    funext word
+    simp [wordIndexEquiv]
+  right_inv raw := by
+    apply (Equiv.vectorEquivFin RawWord tag73MaximumRawWordCount).injective
+    funext draw
+    simp [wordIndexEquiv]
+
+theorem block_word (blocks : FourBlocks) (block : Fin 4) (word : Fin 8) :
+    (Equiv.vectorEquivFin RawWord tag73MaximumRawWordCount (blocksRawEquiv blocks))
+        (wordIndexEquiv (block, word)) = digestWordsEquiv (blocks block) word := by
+  simp [blocksRawEquiv, wordIndexEquiv]
+
+theorem flattened_words (blocks : FourBlocks) :
+    flattenedWords (List.ofFn blocks) = rawWordsToNat (blocksRawEquiv blocks).val := by
+  have coordinates : flattenedWords (List.ofFn blocks) =
+      List.ofFn (fun draw : Fin 32 => littleEndianWord
+        (blocks ⟨draw.val / 8, by omega⟩) ⟨draw.val % 8, Nat.mod_lt _ (by norm_num)⟩) := by
+    unfold flattenedWords
+    rw [List.flatMap_def, List.map_ofFn]
+    symm
+    rw [List.ofFn_mul (m := 4) (n := 8)]
+    apply congrArg List.flatten
+    apply congrArg List.ofFn
+    funext block
+    change List.ofFn _ = blockWords (blocks block)
+    unfold blockWords
+    apply congrArg List.ofFn
+    funext word
+    have quotient : (block.val * 8 + word.val) / 8 = block.val := by
+      rw [Nat.mul_comm block.val 8, Nat.mul_add_div (by decide),
+        Nat.div_eq_of_lt word.isLt, Nat.add_zero]
+    have remainder : (block.val * 8 + word.val) % 8 = word.val :=
+      Nat.mul_add_mod_of_lt word.isLt
+    exact congrArg₂ (fun b w => littleEndianWord (blocks b) w)
+      (Fin.ext quotient) (Fin.ext remainder)
+  rw [coordinates]
+  apply List.ext_getElem
+  · simp only [List.length_ofFn, rawWordsToNat, List.length_map]
+    exact (blocksRawEquiv blocks).property.symm
+  · intro index leftBound rightBound
+    have indexBound : index < 32 := by simpa only [List.length_ofFn] using leftBound
+    let block : Fin 4 := ⟨index / 8, by omega⟩
+    let word : Fin 8 := ⟨index % 8, Nat.mod_lt _ (by norm_num)⟩
+    have coordinate : wordIndexEquiv (block, word) =
+        (⟨index, by
+          norm_num [tag73MaximumRawWordCount, tag73LimbCount, tag73LimbRetryLimit]
+          exact indexBound⟩ : Fin tag73MaximumRawWordCount) := by
+      apply Fin.ext
+      change word.val + 8 * block.val = index
+      dsimp [block, word]
+      exact Nat.mod_add_div index 8
+    simp only [List.getElem_ofFn, rawWordsToNat, List.getElem_map]
+    rw [show (blocksRawEquiv blocks).val[index] =
+        (Equiv.vectorEquivFin RawWord tag73MaximumRawWordCount (blocksRawEquiv blocks))
+          (⟨index, by
+            norm_num [tag73MaximumRawWordCount, tag73LimbCount, tag73LimbRetryLimit]
+            exact indexBound⟩ : Fin tag73MaximumRawWordCount) by rfl]
+    rw [← coordinate, block_word]
+    exact (digestWordsEquiv_apply_val (blocks block) word).symm
+
+/-- The exact rounded block discard, not the raw machine's unused words. -/
+def prefixOfRaw (blocks : FourBlocks)
+    (result : (Fin tag73LimbCount → M31Value) × List RawWord) : OrdinaryPrefixDecode :=
+  let decoded := limbsDecodeOfRawSuccess (blocksRawEquiv blocks).val result
+  { value := encodeQm31Limbs decoded.limbs
+    limbs := decoded.limbs
+    wordsUsed := decoded.wordsUsed
+    blocksUsed := blocksNeededForWords decoded.wordsUsed
+    remainingBlocks := (List.ofFn blocks).drop (blocksNeededForWords decoded.wordsUsed) }
+
+/-- Total correspondence, including aborts, consumed words and block suffix. -/
+theorem decoder_total (blocks : FourBlocks) :
+    decodeOrdinaryPrefix (List.ofFn blocks) =
+      (tag73RawRun (blocksRawEquiv blocks)).map (prefixOfRaw blocks) := by
+  let raw := blocksRawEquiv blocks
+  have words : flattenedWords (List.ofFn blocks) = rawWordsToNat raw.val := flattened_words blocks
+  cases rawRun : tag73RawRun raw with
+  | none =>
+      have limbsNone : decodeLimbs 4 (flattenedWords (List.ofFn blocks)) = none := by
+        rw [words, decodeFourLimbs_rawWordsToNat]
+        simpa [tag73RawRun] using rawRun
+      simp only [Option.map_none]
+      have blocksEq : List.ofFn blocks = [blocks 0, blocks 1, blocks 2, blocks 3] := rfl
+      rw [blocksEq]
+      unfold decodeOrdinaryPrefix
+      have limbsNone' : decodeLimbs 4
+          (flattenedWords [blocks 0, blocks 1, blocks 2, blocks 3]) = none := by
+        simpa using limbsNone
+      rw [limbsNone']
+      rfl
+  | some result =>
+      have limbsSome : decodeLimbs 4 (flattenedWords (List.ofFn blocks)) =
+          some (limbsDecodeOfRawSuccess raw.val result) := by
+        rw [words, decodeFourLimbs_rawWordsToNat]
+        change (tag73RawRun raw).map (limbsDecodeOfRawSuccess raw.val) =
+          some (limbsDecodeOfRawSuccess raw.val result)
+        rw [rawRun]
+        rfl
+      have cap := decodeFourLimbs_word_cap (flattenedWords (List.ofFn blocks))
+        (limbsDecodeOfRawSuccess raw.val result) limbsSome
+      have valid : 0 < blocksNeededForWords (limbsDecodeOfRawSuccess raw.val result).wordsUsed ∧
+          blocksNeededForWords (limbsDecodeOfRawSuccess raw.val result).wordsUsed ≤ 4 := by
+        unfold blocksNeededForWords
+        omega
+      simp only [Option.map_some]
+      have blocksEq : List.ofFn blocks = [blocks 0, blocks 1, blocks 2, blocks 3] := rfl
+      rw [blocksEq]
+      unfold decodeOrdinaryPrefix
+      have limbsSome' : decodeLimbs 4 (flattenedWords [blocks 0, blocks 1, blocks 2, blocks 3]) =
+          some (limbsDecodeOfRawSuccess raw.val result) := by simpa using limbsSome
+      rw [limbsSome']
+      simp [valid, prefixOfRaw, raw]
+
+theorem prefix_value_encoding (blocks : FourBlocks)
+    (result : (Fin tag73LimbCount → M31Value) × List RawWord) :
+    (prefixOfRaw blocks result).value = encodeTagQM31ExactLE (tag73FourLimbsToExact result.1) := by
+  let limbs := (List.ofFn result.1).map Fin.val
+  have lengthExact : limbs.length = 4 := by simp [limbs, tag73LimbCount]
+  have canonical : ∀ limb ∈ limbs, limb < m31Prime := by
+    intro limb member
+    simp [limbs] at member
+    obtain ⟨index, same⟩ := member
+    subst limb
+    exact (result.1 index).isLt
+  rw [show (prefixOfRaw blocks result).value = encodeQm31Limbs limbs by rfl]
+  have limbEq : exactLimbsOfList limbs lengthExact canonical = result.1 := by
+    funext index
+    fin_cases index <;> apply Fin.ext <;>
+      simp [exactLimbsOfList, limbs, listValue, tag73LimbCount]
+  rw [encodeQm31Limbs_eq_exact_encoding limbs lengthExact canonical]
+  exact congrArg encodeTagQM31ExactLE (congrArg qm31ExactLimbEquiv limbEq)
+
+def value (blocks : FourBlocks) : Option QM31Exact :=
+  (decodeOrdinaryPrefix (List.ofFn blocks)).bind fun decoded =>
+    decodeTagQM31ExactLE decoded.value
+
+theorem value_eq_raw (blocks : FourBlocks) :
+    value blocks = OrdinaryRawMass.value (blocksRawEquiv blocks) := by
+  rw [value, decoder_total, OrdinaryRawMass.value]
+  cases run : tag73RawRun (blocksRawEquiv blocks) with
+  | none => rfl
+  | some result =>
+      simp only [Option.map_some, Option.bind_some, prefix_value_encoding,
+        decodeTagQM31ExactLE_encodeTagQM31ExactLE]
+
+theorem value_fibre_card (v : QM31Exact) :
+    Fintype.card {blocks : FourBlocks // value blocks = some v} * Fintype.card QM31Exact =
+      Fintype.card {blocks : FourBlocks // (value blocks).isSome} := by
+  have hit := Fintype.card_congr (blocksRawEquiv.subtypeEquiv
+    (p := fun blocks => value blocks = some v)
+    (q := fun raw => OrdinaryRawMass.value raw = some v) (fun blocks => by rw [value_eq_raw]))
+  have success := Fintype.card_congr (blocksRawEquiv.subtypeEquiv
+    (p := fun blocks => (value blocks).isSome)
+    (q := fun raw => (OrdinaryRawMass.value raw).isSome) (fun blocks => by rw [value_eq_raw]))
+  rw [hit, success]
+  exact OrdinaryRawMass.value_fibre_card v
+
+/-- Exact actual ordinary-prefix value mass on uniform four-block coins.
+Abort remains included; no transcript freshness or recursive routing claim. -/
+theorem unconditional_mass (v : QM31Exact) :
+    JointImageGame.avg Finset.univ (fun blocks => if value blocks = some v then 1 else 0) =
+      FiniteOptionMass.successMass value / ((P^4 : Nat) : ℚ) := by
+  simpa only [qm31Exact_card] using
+    FiniteOptionMass.unconditional_mass value v (value_fibre_card v)
+
+#print axioms flattened_words
+#print axioms decoder_total
+#print axioms prefix_value_encoding
+#print axioms value_eq_raw
+#print axioms value_fibre_card
+#print axioms unconditional_mass
+end
+end AspisV8.OrdinaryPrefixMass
