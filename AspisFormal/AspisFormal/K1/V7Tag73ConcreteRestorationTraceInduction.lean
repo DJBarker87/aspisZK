@@ -45,7 +45,7 @@ open AspisK1.V7Tag73CompletedFullRunProjection
 
 noncomputable section
 
-universe u
+universe u uStatement uProof uPayload
 
 /-- A ready preparation necessarily selected an existing parent node.  This
 small eliminator is sufficient to transport that immutable lookup through the
@@ -70,7 +70,8 @@ theorem ready_preparation_has_selected_parent
 passed to the deterministic preparation program.  This is an inversion fact
 about the executable preparer, not an extra well-formedness premise. -/
 theorem ready_preparation_request_exact
-    {Statement Proof Payload : Type u}
+    {Statement : Type uStatement} {Proof : Type uProof}
+    {Payload : Type uPayload}
     (startProgram : OracleMachine
       (CheckedRawTag73AdversaryReturnedValue Statement Proof Payload))
     (configuration : ConcreteRestorationConfiguration)
