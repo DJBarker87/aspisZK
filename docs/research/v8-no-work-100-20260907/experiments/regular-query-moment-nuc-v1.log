@@ -1,0 +1,122 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=RegularQueryMoment
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+77959b2e9c832e737b0cd09a1a2015d0168d8b2ec1d085939abd1e6f97b49ae4  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/regular-query-moment-nuc-v1-manifest.json
+29866225451b261b6fb52b263bc79a1b2f6e45815c6e701672c663efd88d6f1c  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean
+29866225451b261b6fb52b263bc79a1b2f6e45815c6e701672c663efd88d6f1c  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/regular-query-moment-nuc-v1-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=947
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-regular-query-moment-nuc-v1.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:60:63: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  avg ?S fun i => if ?predicate i then 1 else 0
+in the target expression
+  avg S f ≤ epsilon + (1 - epsilon) * avg S fun i => if i ∈ C then 1 else 0
+
+I : Type u_1
+inst✝ : DecidableEq I
+S C : Finset I
+nonempty : S.Nonempty
+subset : C ⊆ S
+f : I → ℚ
+epsilon : ℚ
+common : ∀ i ∈ C, f i ≤ 1
+other : ∀ i ∈ S, i ∉ C → f i ≤ epsilon
+bound : avg S f ≤ epsilon + (1 - epsilon) * avg S fun i => if i ∈ C then 1 else 0
+representation : (fun i => if i ∈ C then 1 else epsilon) = fun i => epsilon + (1 - epsilon) * if i ∈ C then 1 else 0
+scale : (avg S fun i => (1 - epsilon) * if i ∈ C then 1 else 0) = (1 - epsilon) * avg S fun i => if i ∈ C then 1 else 0
+filtered : {i ∈ S | i ∈ C} = C
+⊢ avg S f ≤ ↑(#C) / ↑(#S) + (1 - ↑(#C) / ↑(#S)) * epsilon
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:72:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  avg ?S fun i => if ?predicate i then 1 else 0
+in the target expression
+  (avg univ fun s => if ∀ (j : Fin q), predicate ↑(s j) then 1 else 0) =
+    ↑((#(filter predicate D)).choose q) / ↑((#D).choose q)
+
+K : Type u_1
+inst✝¹ : Field K
+inst✝ : DecidableEq K
+D : Finset K
+q : ℕ
+predicate : K → Prop
+⊢ (avg univ fun s => if ∀ (j : Fin q), predicate ↑(s j) then 1 else 0) =
+    ↑((#(filter predicate D)).choose q) / ↑((#D).choose q)
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:101:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  avg ?S fun i => if ?predicate i then 1 else 0
+in the target expression
+  (avg A fun alpha => if ∀ (j : Fin q), matched alpha ↑(s j) then 1 else 0) ≤ ↑d / ↑(#A)
+
+K : Type u_1
+inst✝¹ : Field K
+inst✝ : DecidableEq K
+D : Finset K
+q : ℕ
+A : Finset K
+nonempty : A.Nonempty
+count : q ≤ #D
+full : K → Prop
+matched : K → K → Prop
+d : ℕ
+bad : ∀ (s : Schedule D q), (¬∀ (j : Fin q), full ↑(s j)) → #({alpha ∈ A | ∀ (j : Fin q), matched alpha ↑(s j)}) ≤ d
+S : Finset (Schedule D q) := univ
+C : Finset (Schedule D q) := matching D q full
+fibre : Schedule D q → ℚ := fun s => avg A fun alpha => if ∀ (j : Fin q), matched alpha ↑(s j) then 1 else 0
+unit : ∀ (s : Schedule D q), fibre s ≤ 1
+s : Schedule D q
+a✝ : s ∈ S
+outside : s ∉ C
+notFull : ¬∀ (j : Fin q), full ↑(s j)
+cap : #({alpha ∈ A | ∀ (j : Fin q), matched alpha ↑(s j)}) ≤ d
+⊢ (avg A fun alpha => if ∀ (j : Fin q), matched alpha ↑(s j) then 1 else 0) ≤ ↑d / ↑(#A)
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:147:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:170:17: error(lean.unknownIdentifier): Unknown identifier `pointX`
+
+Note: It is not possible to treat `pointX` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:195:17: error(lean.unknownIdentifier): Unknown identifier `pointX`
+
+Note: It is not possible to treat `pointX` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisV8.RegularQueryMoment.Generic.avg_indicator' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.RegularQueryMoment.Generic.avg_commute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.RegularQueryMoment.Generic.weighted_split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.RegularQueryMoment.Generic.ordered_average' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.RegularQueryMoment.Generic.ordered_joint_bound' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8.RegularQueryMoment.fixed_fold_moment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:217:14: error(lean.unknownIdentifier): Unknown constant `adaptive_regular_moment`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean:218:14: error(lean.unknownIdentifier): Unknown constant `regular_suffix_bound`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RegularQueryMoment.lean"
+	User time (seconds): 2.08
+	System time (seconds): 1.15
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.23
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6848044
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 157411
+	Voluntary context switches: 524
+	Involuntary context switches: 168
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1
