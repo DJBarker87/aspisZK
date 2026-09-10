@@ -1,16 +1,23 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest higher-degree continuation: [fixed-early-C1 higher-Y support](early-c1-higher-y-support-review.md).
-The retained singular branch has a checked complete OOD-pair root-set mass and
-all-factor singular-gamma union.  For the regular support tail, one pre-OOD
-component curve now covers every image-valid quotient having at least 200,808
-matching fibres whenever the actual early C1 exists; all retained Y-degree-at-
-least-three factors then contribute at most 117,077 gammas in total.  Combined
-with the checked low-support alpha/query moment and one compact suffix, the
-exact conditional ideal screen is **103.999977 bits**.  Acceptance-to-event,
-authenticated early-C1 recovery, complete payment extraction, the actual
-Fiat--Shamir coupling and full-view ZK remain open.  No verifier operation,
-proof byte or grinding credit changed; the body remains **40,282 bytes**.
+Latest higher-degree continuation: [regular low-support composition](regular-low-support-composition-review.md).
+For all retained Y-degree-at-least-three factors, the fixed early C1 now feeds
+both a checked high-support incidence cap and a multiplicity-preserving regular
+support-tail sum.  The actual adaptive selected quotient is connected to the
+same indexed q22 matching mass and to that tail, while the rho/later-relation
+suffix is charged once for the union.  This closes the fixed-factor/adaptive-
+factor accounting seam; it does **not** yet prove the final common-row and
+finite layer-cake composition.  The exact conservative arithmetic screen,
+including the singular and pair-root controls, is **103.847307 bits**, but is
+still labelled a screen rather than a global probability theorem.
+
+The same early-C1 table now also supplies the selected input owner, input-note
+and nullifier equations without 72 caller-supplied copy equalities, and the
+typed q22 minimal-multiproof execution constructs all eighteen sibling levels
+for each original query ordinal.  Rust-loop/parser refinement, accepted-prefix
+coupling, complete payment extraction, Fiat--Shamir and full-view ZK remain
+open.  No verifier operation, proof byte or grinding credit changed; the body
+remains **40,282 bytes**.
 
 Latest formal continuation: [nested sequential OOD sampler and root-set mass](nested-ood-sampler-review.md).
 The literal finite-tape controller is now proved equivalent to the source's
