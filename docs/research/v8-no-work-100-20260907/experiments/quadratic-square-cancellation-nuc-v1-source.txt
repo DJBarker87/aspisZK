@@ -1,0 +1,59 @@
+import Mathlib.RingTheory.UniqueFactorizationDomain.Multiplicity
+import Mathlib.RingTheory.Polynomial.Basic
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
+
+/-! Literal cancellation of the polynomial square part at a good
+specialization. No rational quotient is silently treated as a polynomial:
+divisibility is obtained by unique factorization first.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.QuadraticSquareCancellation
+noncomputable section
+open Polynomial
+
+theorem exists_polynomial_square_after_cancellation
+    {K : Type*} [Field K] (a : K) (H R U : K[X])
+    (aNonzero : a ≠ 0) (hNonzero : H ≠ 0) (rNonzero : R ≠ 0)
+    (identity : U^2 = C a * H^2 * R) :
+    ∃ V : K[X], V ≠ 0 ∧ U = H*V ∧ R = C a⁻¹ * V^2 := by
+  have squareDivides : H^2 ∣ U^2 := by
+    rw [identity]
+    exact ⟨C a * R, by ring⟩
+  have divides : H ∣ U :=
+    (UniqueFactorizationMonoid.pow_dvd_pow_iff_dvd (by decide : (2:Nat) ≠ 0)).mp
+      squareDivides
+  obtain ⟨V, quotient⟩ := divides
+  have cancelled : V^2 = C a * R := by
+    apply mul_left_cancel₀ (pow_ne_zero 2 hNonzero)
+    calc
+      H^2 * V^2 = (H*V)^2 := by ring
+      _ = U^2 := by rw [quotient]
+      _ = C a * H^2 * R := identity
+      _ = H^2 * (C a * R) := by ring
+  have reconstructed : R = C a⁻¹ * V^2 := by
+    rw [cancelled, ← mul_assoc, ← Polynomial.C_mul, inv_mul_cancel₀ aNonzero,
+      Polynomial.C_1, one_mul]
+  have vNonzero : V ≠ 0 := by
+    intro zero
+    apply rNonzero
+    simpa only [zero, zero_pow (by decide : (2:Nat) ≠ 0), mul_zero] using reconstructed
+  exact ⟨V, vNonzero, quotient, reconstructed⟩
+
+theorem square_factor_degree_bound
+    {K : Type*} [Field K] (a : K) (R V : K[X]) (m : Nat)
+    (aNonzero : a ≠ 0)
+    (square : R = C a * V^2) (degree : R.natDegree ≤ 2*m) :
+    V.natDegree ≤ m := by
+  rw [square, Polynomial.natDegree_C_mul aNonzero,
+    Polynomial.natDegree_pow] at degree
+  nlinarith
+
+#print axioms exists_polynomial_square_after_cancellation
+#print axioms square_factor_degree_bound
+end
+end AspisV8.QuadraticSquareCancellation
