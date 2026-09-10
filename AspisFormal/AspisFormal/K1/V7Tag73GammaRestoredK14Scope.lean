@@ -73,8 +73,48 @@ structure ExactRootGammaRestorationRequest
   transitionExact : verifierTransitionAt?
       input.package.root.fixedRoot.base.runtime.node
       request.verifierTransitionIndex = some transition
+  transitionWithin : request.verifierTransitionIndex < 1513
   eventExact : transition.event =
     .verifier (.squeezePair (.challenge .gamma) 0) reply
+
+/-- A root transition index is a genuine block-zero gamma squeeze.  Keeping
+the bound in this predicate lets the canonical request be the least such
+index, rather than an arbitrary classical choice. -/
+def IsRootGammaTransitionIndex
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (index : Nat) : Prop :=
+  ∃ transition reply,
+    verifierTransitionAt? input.package.root.fixedRoot.base.runtime.node index =
+        some transition ∧
+      index < 1513 ∧
+      transition.event =
+        .verifier (.squeezePair (.challenge .gamma) 0) reply
+
+theorem exact_operational_input_has_root_gamma_transition_index
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) :
+    ∃ index, IsRootGammaTransitionIndex input index := by
+  obtain ⟨index, transition, reply, transitionExact, within, eventExact⟩ :=
+    exact_clean_root_has_indexed_gamma_transition
+      input.package.root.fixedRoot.base
+  exact ⟨index, transition, reply, transitionExact, within, eventExact⟩
 
 /-- Every literal accepted operational root supplies such a request.  This is
 derived from the checked future-free transition list, not chosen from an
@@ -92,7 +132,7 @@ theorem exact_operational_input_has_root_gamma_restoration_request
       fixedInstance sample) :
     Nonempty (Σ request : ConcreteRestorationRequest,
       ExactRootGammaRestorationRequest input request) := by
-  obtain ⟨transitionIndex, transition, reply, transitionExact, _within,
+  obtain ⟨transitionIndex, transition, reply, transitionExact, within,
       eventExact⟩ :=
     exact_clean_root_has_indexed_gamma_transition
       input.package.root.fixedRoot.base
@@ -102,6 +142,7 @@ theorem exact_operational_input_has_root_gamma_restoration_request
       transition := transition
       reply := reply
       transitionExact := transitionExact
+      transitionWithin := within
       eventExact := eventExact }
   ⟩⟩
 
@@ -117,8 +158,12 @@ noncomputable def exactOperationalRootGammaRestorationRequest
     {sample : ExactCompilerSample HiddenTape parameters}
     (input : ExactK12OperationalInput transitionFuel configuration projection
       fixedInstance sample) : ConcreteRestorationRequest :=
-  (Classical.choice
-    (exact_operational_input_has_root_gamma_restoration_request input)).1
+  by
+    classical
+    exact
+      { nodeId := 0
+        verifierTransitionIndex := Nat.find
+          (exact_operational_input_has_root_gamma_transition_index input) }
 
 /-- The canonical request retains its typed root-gamma provenance. -/
 noncomputable def exact_operational_root_gamma_restoration_request_is_typed
@@ -133,9 +178,47 @@ noncomputable def exact_operational_root_gamma_restoration_request_is_typed
     (input : ExactK12OperationalInput transitionFuel configuration projection
       fixedInstance sample) :
     ExactRootGammaRestorationRequest input
-      (exactOperationalRootGammaRestorationRequest input) :=
-  (Classical.choice
-    (exact_operational_input_has_root_gamma_restoration_request input)).2
+      (exactOperationalRootGammaRestorationRequest input) := by
+  classical
+  let found := Nat.find_spec
+    (exact_operational_input_has_root_gamma_transition_index input)
+  let transition := Classical.choose found
+  let transitionFacts := Classical.choose_spec found
+  let reply := Classical.choose transitionFacts
+  have facts := Classical.choose_spec transitionFacts
+  exact
+    { rootNode := rfl
+      transition := transition
+      reply := reply
+      transitionExact := facts.1
+      transitionWithin := facts.2.1
+      eventExact := facts.2.2 }
+
+/-- No earlier root transition can carry the same typed block-zero gamma
+role.  This is the chronological fact needed by the waiting coordinate
+router; it does not assume that later protocol states contain no such role. -/
+theorem no_root_gamma_transition_before_canonical
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample)
+    (index : Nat)
+    (earlier : index <
+      (exactOperationalRootGammaRestorationRequest input).verifierTransitionIndex) :
+    ¬ IsRootGammaTransitionIndex input index := by
+  classical
+  intro candidate
+  have minimal := Nat.find_min'
+    (exact_operational_input_has_root_gamma_transition_index input) candidate
+  change index < Nat.find
+    (exact_operational_input_has_root_gamma_transition_index input) at earlier
+  omega
 
 /-- A restoration-wide K1.3 certificate whose node was actually created by
 the selected root-gamma request.  `parentRequestExact` excludes the original
@@ -154,6 +237,7 @@ structure ExactGammaRestoredOperationalK13Certificate
       fixedInstance sample) : Type where
   request : ConcreteRestorationRequest
   requestIsGamma : ExactRootGammaRestorationRequest input request
+  requestCanonical : request = exactOperationalRootGammaRestorationRequest input
   certificate : ExactRestoredOperationalK13Certificate decoder input
   parentRequestExact : certificate.node.parentRequest = some request
 
@@ -454,9 +538,12 @@ theorem gamma_restored_k14_width29_subset_unscoped
   exact ⟨input, k13.certificate, failure⟩
 
 #print axioms ExactRootGammaRestorationRequest
+#print axioms IsRootGammaTransitionIndex
+#print axioms exact_operational_input_has_root_gamma_transition_index
 #print axioms exact_operational_input_has_root_gamma_restoration_request
 #print axioms exactOperationalRootGammaRestorationRequest
 #print axioms exact_operational_root_gamma_restoration_request_is_typed
+#print axioms no_root_gamma_transition_before_canonical
 #print axioms ExactGammaRestoredOperationalK13Certificate
 #print axioms exactTag73GammaRestoredOperationalK14Width29Event
 #print axioms gamma_restored_certificate_is_not_root
