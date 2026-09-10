@@ -24,6 +24,14 @@ The exact conservative arithmetic screen,
 including the singular and pair-root controls, is **103.847307 bits**, but is
 still labelled a screen rather than a global probability theorem.
 
+For `earlyC1 = none`, a checked support lemma now confines every image-valid
+quotient outside one fixed set of at most 63 gammas to at most 252,847 matching
+fibres.  This is useful but not sufficient: extending the existing layer-cake
+bound mechanically across the remaining 200,808--252,847 band yields only
+**97.187909 bits**.  That naive q22 completion is therefore rejected; this
+branch needs a stronger relation-constrained incidence argument or a proved
+acceptance-to-early-C1 implication.
+
 The same early-C1 table now also supplies the selected input owner, input-note
 and nullifier equations without 72 caller-supplied copy equalities, and the
 typed q22 minimal-multiproof execution constructs all eighteen sibling levels
