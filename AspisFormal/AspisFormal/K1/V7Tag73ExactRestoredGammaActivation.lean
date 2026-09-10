@@ -39,6 +39,22 @@ open AspisK1.V7Tag73TranscriptSchedule
 
 noncomputable section
 
+/-- A nonempty production root sweep reserves far more than the twenty-four
+programmed answers needed for the complete gamma duplex fibre.  This closes
+the arithmetic side condition of the gamma routers directly from the deployed
+1513-transition sweep and its checked fork cap. -/
+theorem production_root_sweep_has_gamma_programmed_cover
+    {parameters : ExactCompilerResourceParameters}
+    (rounds : Nat)
+    (roundsPositive : 0 < rounds)
+    (withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap) :
+    24 ≤ 2 * parameters.forkRequestCap := by
+  have oneRound : 1513 ≤ rounds * 1513 := by
+    omega
+  have forkRoom : 1513 ≤ parameters.forkRequestCap :=
+    oneRound.trans withinForkCap
+  omega
+
 /-- A completed production root sweep activates the restored-gamma router at
 the earliest exposure equivalent to its typed gamma fork.  The selected
 coordinate is therefore pre-answer and adversary-prequery safe. -/
@@ -227,6 +243,7 @@ theorem exact_root_sweep_first_restored_gamma_coordinate_exact
 
 #print axioms exact_root_sweep_routes_first_restored_gamma_output
 #print axioms exact_root_sweep_first_restored_gamma_coordinate_exact
+#print axioms production_root_sweep_has_gamma_programmed_cover
 
 end
 end AspisK1.V7Tag73ExactRestoredGammaActivation
