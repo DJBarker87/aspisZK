@@ -1,0 +1,156 @@
+import SelectedIdentityCover
+import CausalOODReduction
+
+/-! Same-execution accepted-mass reduction, including singular parents.
+The old symbolic-identity remainder is replaced by a literal covered
+quotient whose SAME reconstruction roots a pre-gamma both-identity factor.
+Only one117077/gamma-card exception is charged. This is not component or
+payment extraction; that remaining mass is left explicit.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+namespace AspisV8.CausalFactorReduction
+open Polynomial Finset
+open AspisV8.SelectedIdentityCover AspisV8.CausalCoveredRecovery
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedCoveredRelation
+open AspisV8.ComponentOODBinding AspisV8.GammaComponentGame
+open AspisV8.JointImageGame AspisV8.CausalOrderedRelation
+open AspisV8.RelationCompatibleMoment
+open AspisV8.QuotientFamilySelected AspisV5ComponentCConcreteFoldLinearity
+noncomputable section
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+def factorPrefix {q : Nat} (e : Execution q) (gamma kappa tau alpha : K) : Prop :=
+  ∃ Q∈literalFamily (e.raw gamma), ¬badAnchor (e.rows gamma) Q ∧
+    (e.strategy gamma kappa).final tau alpha=coefficientFoldLayer 256 alpha Q ∧
+    Root e.c1 e.c2 e.data gamma Q
+
+theorem factor_implies_good {q : Nat} (e : Execution q) (gamma kappa tau alpha : K)
+    (factor : factorPrefix e gamma kappa tau alpha) : goodPrefix e gamma kappa tau alpha := by
+  obtain ⟨Q,member,notBad,final,_⟩ := factor
+  exact ⟨Q,member,notBad,final⟩
+
+def outsideSlice {q : Nat} (e : Execution q) (gamma : K) (A G : Finset K) : ℚ :=
+  avg G (fun kappa => avg G (fun tau => avg A (fun alpha =>
+    if goodPrefix e gamma kappa tau alpha ∧ ¬factorPrefix e gamma kappa tau alpha
+      then suffix e gamma kappa tau alpha A G else 0)))
+
+def factorSlice {q : Nat} (e : Execution q) (gamma : K) (A G : Finset K) : ℚ :=
+  avg G (fun kappa => avg G (fun tau => avg A (fun alpha =>
+    if factorPrefix e gamma kappa tau alpha then suffix e gamma kappa tau alpha A G else 0)))
+
+def outsideProbability {q : Nat} (e : Execution q) (A G Gamma : Finset K) : ℚ :=
+  avg Gamma (fun gamma => outsideSlice e gamma A G)
+def factorProbability {q : Nat} (e : Execution q) (A G Gamma : Finset K) : ℚ :=
+  avg Gamma (fun gamma => factorSlice e gamma A G)
+
+theorem slice_partition {q : Nat} (e : Execution q) (gamma : K) (A G : Finset K) :
+    goodSlice e gamma A G=outsideSlice e gamma A G+factorSlice e gamma A G := by
+  unfold goodSlice outsideSlice factorSlice
+  simp_rw [←avg_add]
+  congr 1
+  funext kappa
+  congr 1
+  funext tau
+  congr 1
+  funext alpha
+  by_cases factor : factorPrefix e gamma kappa tau alpha
+  · have good := factor_implies_good e gamma kappa tau alpha factor
+    simp only [factor,good,not_true_eq_false,and_false,if_true,if_false,zero_add]
+  · by_cases good : goodPrefix e gamma kappa tau alpha
+    · simp only [factor,good,not_false_eq_true,and_self,if_true,if_false,add_zero]
+    · simp only [factor,good,false_and,if_false,add_zero]
+
+theorem probability_partition {q : Nat} (e : Execution q) (A G Gamma : Finset K) :
+    goodProbability e A G Gamma=outsideProbability e A G Gamma+factorProbability e A G Gamma := by
+  unfold goodProbability outsideProbability factorProbability
+  simp_rw [slice_partition]
+  exact avg_add Gamma _ _
+
+theorem outside_unit {q : Nat} (e : Execution q) (gamma : K) (A G : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (count : q≤262144) :
+    outsideSlice e gamma A G≤1 := by
+  have count' : q≤domain.card := by rw [domain_card]; exact count
+  unfold outsideSlice
+  apply avg_le G hg
+  intro kappa _
+  apply avg_le G hg
+  intro tau _
+  apply avg_le A ha
+  intro alpha _
+  split_ifs
+  · exact CausalOrderedRelation.after_unit ((e.rows gamma).before kappa)
+      e.quarterChecked (oracle 0 (e.raw gamma)) (e.strategy gamma kappa)
+      tau alpha A G ha hg count'
+  · norm_num
+
+/-- Once the actual cover has been constructed, a good quotient outside its
+exception roots necessarily inhabits the retained factor event. -/
+theorem outside_zero {q : Nat} (e : Execution q) (exception : K[X])
+    (covered : ∀ gamma (Q : Fin 1024 → K),
+      Q∈literalFamily (e.raw gamma) →
+      (Q 1023=0 ∧ e.data.b*Q 1022-e.data.c*Q 1021=0) →
+      exception.eval gamma=0 ∨ Root e.c1 e.c2 e.data gamma Q)
+    (gamma : K) (A G : Finset K) (notRoot : exception.eval gamma≠0) :
+    outsideSlice e gamma A G=0 := by
+  have none : ∀ kappa tau alpha,
+      ¬(goodPrefix e gamma kappa tau alpha ∧ ¬factorPrefix e gamma kappa tau alpha) := by
+    intro kappa tau alpha ⟨good,notFactor⟩
+    obtain ⟨Q,member,notBad,final⟩ := good
+    have image : Q 1023=0 ∧ e.data.b*Q 1022-e.data.c*Q 1021=0 := by
+      constructor
+      · by_contra wrong
+        exact notBad (Or.inl wrong)
+      · by_contra wrong
+        exact notBad (Or.inr (Or.inl wrong))
+    have root := (covered gamma Q member image).resolve_left notRoot
+    exact notFactor ⟨Q,member,notBad,final,root⟩
+  unfold outsideSlice
+  simp only [none,if_false,avg,Finset.sum_const_zero,zero_div]
+
+/-- No assumed factor membership or symbolic identity: the constructed
+cover supplies all premises to the polynomial charge for this execution. -/
+theorem outside_bound {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r≠-1) (A G Gamma : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (hgamma : Gamma.Nonempty)
+    (count : q≤262144) : outsideProbability e A G Gamma≤117077/(Gamma.card:ℚ) := by
+  obtain ⟨exception,nonzero,degree,cover⟩ := exists_selected_cover e.c1 e.c2 e.data
+  have bound := avg_polynomial Gamma hgamma exception nonzero 117077 degree
+    (fun gamma => outsideSlice e gamma A G) 0 (by norm_num)
+    (fun gamma _ => outside_unit e gamma A G ha hg count) (by
+      intro gamma _ notRoot
+      exact le_of_eq (outside_zero e exception (cover checked circles west)
+        gamma A G notRoot))
+  simpa only [add_zero,Nat.cast_ofNat,outsideProbability] using bound
+
+/-- The previous117077 OOD nonidentity term is REPLACED, not added to.
+The four relation repairs and rho cancellation stay counted exactly once in
+the existing missing-good ceiling. All remaining accepted factor mass is
+visible; it may include a non-polynomial component branch. -/
+theorem total_reduction {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r≠-1) (A G Gamma : Finset K)
+    (ha : A.Nonempty) (hg : G.Nonempty) (hgamma : Gamma.Nonempty)
+    (positive : 0<q) (count : q≤262144) :
+    totalProbability e A G Gamma≤ceiling q A G+117077/(Gamma.card:ℚ)+
+      factorProbability e A G Gamma := by
+  have old := total_bound e A G Gamma ha hg hgamma positive count
+  have partition := probability_partition e A G Gamma
+  have bound := outside_bound e checked circles west A G Gamma ha hg hgamma count
+  linarith only [old,partition,bound]
+
+#print axioms factor_implies_good
+#print axioms slice_partition
+#print axioms probability_partition
+#print axioms outside_unit
+#print axioms outside_zero
+#print axioms outside_bound
+#print axioms total_reduction
+end
+end AspisV8.CausalFactorReduction

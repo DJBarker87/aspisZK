@@ -1,0 +1,12 @@
+Read-only systemd user-journal timing excerpt.
+Command: ssh -o BatchMode=yes dombarker@nuc.local 'journalctl --user --since "2026-09-09 23:48:30 UTC" --until "2026-09-09 23:49:00 UTC" --no-pager -o short-iso | rg "aspis-symbolic-(selected-copy-link-balance-nuc-v2|curve-ood-derivative-nuc-v1)"'
+Only the long repeated Started-command suffix was omitted below.
+
+2026-09-09T23:48:39+00:00 nuc systemd[1563704]: Started aspis-symbolic-curve-ood-derivative-nuc-v1.scope [command omitted; full command is in each build log]
+2026-09-09T23:48:40+00:00 nuc systemd[1563704]: Started aspis-symbolic-selected-copy-link-balance-nuc-v2.scope [command omitted; full command is in each build log]
+2026-09-09T23:48:42+00:00 nuc systemd[1563704]: aspis-symbolic-curve-ood-derivative-nuc-v1.scope: Consumed 3.020s CPU time.
+2026-09-09T23:48:46+00:00 nuc systemd[1563704]: aspis-symbolic-selected-copy-link-balance-nuc-v2.scope: Consumed 6.038s CPU time.
+
+The timestamps have one-second precision. A parent/agent grant-and-hold message race
+allowed these two capped scopes to overlap briefly. This is not evidence of
+serialized performance, and no aggregate peak-RSS measurement was collected.
