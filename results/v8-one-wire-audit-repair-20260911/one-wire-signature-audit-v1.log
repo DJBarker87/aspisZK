@@ -1,0 +1,643 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=OneWireSignatureAudit
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+20a324a2cb1f19ba541e9421207af7771a8f8bf7169fb8925109407c52a59968  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/one-wire-signature-audit-v1-manifest.json
+b80c21939dfacb333d32fb6cfaeb0e045a2b7026f472b8920ff4570d1f469b80  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/OneWireSignatureAudit.lean
+b80c21939dfacb333d32fb6cfaeb0e045a2b7026f472b8920ff4570d1f469b80  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/one-wire-signature-audit-v1-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=1115
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-one-wire-signature-audit-v1.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/OneWireSignatureAudit.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/OneWireSignatureAudit.lean
+AspisV8.SuccessfulCompleteSelectedWire.successful_complete_selected_wire_constructs_ideal_execution_or_auth_failure : ∀
+  (p : AspisV8.SuccessfulSelectedVerifierRun.Program (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))))
+  (c2Prefix : AspisV8.AuthenticatedEarlyC1Prefix.AnswerPrefix)
+  (c2Root : AspisV8.SuccessfulCompleteSelectedWire.Digest208)
+  (view : AspisPool.V7MerkleQueryGrammar.RawHashInput → AspisV8.SuccessfulCompleteSelectedWire.Digest208)
+  (fullLog : AspisPool.V7MerkleQueryGrammar.OrderedRawQueryLog)
+  (body : List.{0} AspisV8.SuccessfulCompleteSelectedWire.Byte)
+  (gamma kappa tau alpha : AspisV8.SuccessfulCompleteSelectedWire.K)
+  (queries :
+    @AspisV8.OrderedQueryGame.Schedule.{0} AspisV8.SelectedReceivedOracle.K AspisV8.SelectedReceivedOracle.domain
+      (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))))
+  (rho a1 a2 a3 : AspisV8.SuccessfulCompleteSelectedWire.K)
+  (merkle :
+    AspisV8.SelectedWireMerkleRun.SuccessfulMerkleRun view
+      (@AspisV8.FixedWordQueryTerminal.indices (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) queries)
+      body),
+  @Eq.{1} AspisV8.MinimalMultiproofPaths.Digests
+      (AspisV8.SelectedWireMerkleRun.wireRoots
+        (@AspisV8.SelectedWireMerkleRun.SuccessfulMerkleRun.wire view
+          (@AspisV8.FixedWordQueryTerminal.indices (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+            queries)
+          body merkle))
+      (@AspisV8.SelectedAuthenticatedSuccessfulRun.roots (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+        p c2Root) →
+    ∀
+      (decoded :
+        Fin (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) → AspisV8.PackedQueryRecord.Decoded),
+      (∀ (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))),
+          @Eq.{1} (Option.{0} AspisV8.PackedQueryRecord.Decoded)
+            (AspisV8.PackedQueryRecord.parse
+              ((@AspisV8.SelectedWireMerkleRun.SuccessfulMerkleRun.wire view
+                    (@AspisV8.FixedWordQueryTerminal.indices
+                      (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) queries)
+                    body merkle).record
+                i))
+            (@some.{0} AspisV8.PackedQueryRecord.Decoded (decoded i))) →
+        (∀ (record : Prod.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208),
+            @Membership.mem.{0, 0}
+                (Prod.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208)
+                AspisV8.AuthenticatedEarlyC1Prefix.AnswerPrefix
+                (@List.instMembership.{0}
+                  (Prod.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208))
+                (@AspisV8.SuccessfulSelectedVerifierRun.Program.earlyRecords
+                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p)
+                record →
+              @Eq.{1} AspisV8.SuccessfulCompleteSelectedWire.Digest208
+                (view
+                  (@Prod.fst.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208
+                    record))
+                (@Prod.snd.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208
+                  record)) →
+          (∀
+              (record :
+                Prod.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208),
+              @Membership.mem.{0, 0}
+                  (Prod.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208)
+                  AspisV8.AuthenticatedEarlyC1Prefix.AnswerPrefix
+                  (@List.instMembership.{0}
+                    (Prod.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208))
+                  c2Prefix record →
+                @Eq.{1} AspisV8.SuccessfulCompleteSelectedWire.Digest208
+                  (view
+                    (@Prod.fst.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput
+                      AspisPool.V7MerkleQueryGrammar.Digest208 record))
+                  (@Prod.snd.{0, 0} AspisPool.V7MerkleQueryGrammar.RawHashInput AspisPool.V7MerkleQueryGrammar.Digest208
+                    record)) →
+            AspisPool.V7MerkleOpeningBinding.TraceIncludedInLog
+                (AspisV8.AuthenticatedEarlyC1Prefix.rawPrefix
+                  (@AspisV8.SuccessfulSelectedVerifierRun.Program.earlyRecords
+                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p))
+                fullLog →
+              AspisPool.V7MerkleOpeningBinding.TraceIncludedInLog
+                  (AspisV8.AuthenticatedEarlyC1Prefix.rawPrefix c2Prefix) fullLog →
+                AspisPool.V7MerkleOpeningBinding.TraceIncludedInLog
+                    (@HAppend.hAppend.{0, 0, 0} AspisPool.V7MerkleQueryGrammar.OrderedRawQueryLog
+                      AspisPool.V7MerkleQueryGrammar.OrderedRawQueryLog
+                      AspisPool.V7MerkleQueryGrammar.OrderedRawQueryLog
+                      (@instHAppendOfAppend.{0} AspisPool.V7MerkleQueryGrammar.OrderedRawQueryLog
+                        (@List.instAppend.{0} AspisPool.V7MerkleQueryGrammar.RawHashInput))
+                      (AspisV8.MinimalMultiproofPaths.leafLog
+                        (@AspisV8.FixedWordQueryTerminal.indices
+                          (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) queries)
+                        (AspisV8.SelectedWireMerkleRun.wireRecords
+                          (@AspisV8.SelectedWireMerkleRun.SuccessfulMerkleRun.wire view
+                            (@AspisV8.FixedWordQueryTerminal.indices
+                              (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) queries)
+                            body merkle)))
+                      (@AspisV8.SelectedWireMerkleRun.SuccessfulMerkleRun.trace view
+                        (@AspisV8.FixedWordQueryTerminal.indices
+                          (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) queries)
+                        body merkle))
+                    fullLog →
+                  @AspisV8.SelectedAuthenticatedSuccessfulRun.PathChecks
+                      (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                      (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                        (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                      gamma kappa tau alpha queries rho a1 a2 →
+                    ∀
+                      (out :
+                        Prod.{0, 0} (List.{0} AspisV8.SuccessfulCompleteSelectedWire.K)
+                          (List.{0} AspisV8.SuccessfulCompleteSelectedWire.M31)),
+                      @Eq.{1}
+                          (Option.{0}
+                            (Prod.{0, 0} (List.{0} AspisV8.QueriedInverse.K) (List.{0} AspisV8.QueriedInverse.M)))
+                          (AspisV8.LineNormBuffer.inverseLines
+                            (@AspisV8.OODInterpolant.Data.a.{0} AspisV8.FixedWordQueryTerminal.K
+                              (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                                (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact)
+                                  (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                    (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                          AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                      AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                    (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                      (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                  (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                    (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                  AspisV5ComponentCQM31TowerExact.cm31Rootless)
+                                AspisV5ComponentCQM31TowerExact.qm31R
+                                (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.CM31Exact (nat_lit 0)
+                                  (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                                    (@QuadraticAlgebra.instZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                  AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                      (@Field.toDivisionRing.{0}
+                                                        AspisV5ComponentCQM31TowerExact.M31Exact
+                                                        (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                          AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                        (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                          (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                      (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                        AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                      (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                        (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Semifield.toDivisionSemiring.{0}
+                                                  AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                      AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                      (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                AspisV5ComponentCQM31TowerExact.qm31Rootless)
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.fixedInput
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                  (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                  gamma kappa).chord)
+                            (@AspisV8.OODInterpolant.Data.b.{0} AspisV8.FixedWordQueryTerminal.K
+                              (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                                (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact)
+                                  (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                    (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                          AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                      AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                    (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                      (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                  (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                    (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                  AspisV5ComponentCQM31TowerExact.cm31Rootless)
+                                AspisV5ComponentCQM31TowerExact.qm31R
+                                (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.CM31Exact (nat_lit 0)
+                                  (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                                    (@QuadraticAlgebra.instZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                  AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                      (@Field.toDivisionRing.{0}
+                                                        AspisV5ComponentCQM31TowerExact.M31Exact
+                                                        (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                          AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                        (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                          (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                      (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                        AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                      (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                        (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Semifield.toDivisionSemiring.{0}
+                                                  AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                      AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                      (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                AspisV5ComponentCQM31TowerExact.qm31Rootless)
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.fixedInput
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                  (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                  gamma kappa).chord)
+                            (@AspisV8.OODInterpolant.Data.c.{0} AspisV8.FixedWordQueryTerminal.K
+                              (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                                (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact)
+                                  (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                    (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                          AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                      AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                    (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                      (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                  (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                    (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                  AspisV5ComponentCQM31TowerExact.cm31Rootless)
+                                AspisV5ComponentCQM31TowerExact.qm31R
+                                (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.CM31Exact (nat_lit 0)
+                                  (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                                    (@QuadraticAlgebra.instZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                  AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                      (@Field.toDivisionRing.{0}
+                                                        AspisV5ComponentCQM31TowerExact.M31Exact
+                                                        (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                          AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                        (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                          (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                      (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                        AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                      (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                        (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Semifield.toDivisionSemiring.{0}
+                                                  AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                      AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                      (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                AspisV5ComponentCQM31TowerExact.qm31Rootless)
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.fixedInput
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                  (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                  gamma kappa).chord)
+                            (@AspisV8.SelectedQueryBuffer.points
+                              (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                              (@AspisV8.FixedWordQueryTerminal.indices
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) queries)))
+                          (@some.{0}
+                            (Prod.{0, 0} (List.{0} AspisV8.SuccessfulCompleteSelectedWire.K)
+                              (List.{0} AspisV8.SuccessfulCompleteSelectedWire.M31))
+                            out) →
+                        @AspisV8.FixedWordQueryTerminal.acceptsValues.{0} AspisV8.FixedWordQueryTerminal.K
+                            (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                              (@QuadraticAlgebra.instField.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact)
+                                (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                  (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                    (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                        AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                          AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                  (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                    (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                          AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                  AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                  (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                    (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                AspisV5ComponentCQM31TowerExact.cm31Rootless)
+                              AspisV5ComponentCQM31TowerExact.qm31R
+                              (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.CM31Exact (nat_lit 0)
+                                (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.CM31Exact
+                                  (@QuadraticAlgebra.instZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                    (@Neg.neg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@NegZeroClass.toNeg.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                            AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Ring.toAddCommGroup.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                      (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                        AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                      (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 1)
+                                        (@One.toOfNat1.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@AddMonoidWithOne.toOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                              AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Ring.toAddGroupWithOne.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@DivisionRing.toRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@Field.toDivisionRing.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                    (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                      AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                                    (@OfNat.ofNat.{0} AspisV5ComponentCQM31TowerExact.M31Exact (nat_lit 0)
+                                      (@Zero.toOfNat0.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@Semifield.toDivisionSemiring.{0}
+                                                AspisV5ComponentCQM31TowerExact.M31Exact
+                                                (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                                  (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                    AspisV5ComponentCQM31TowerExact.m31PrimeFact))))))))
+                                    (@MulZeroClass.toZero.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                      (@instMulZeroClassOfSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                        (@DivisionSemiring.toSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                          (@Semifield.toDivisionSemiring.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                            (@Field.toSemifield.{0} AspisV5ComponentCQM31TowerExact.M31Exact
+                                              (@ZMod.instField AspisV5ComponentCQM31TowerExact.P
+                                                AspisV5ComponentCQM31TowerExact.m31PrimeFact)))))))))
+                              AspisV5ComponentCQM31TowerExact.qm31Rootless)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                            (@AspisV8.FirstImageDiscrepancy.Before.snapshot.{0} AspisV8.FixedWordQueryTerminal.K
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.fixedInput
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                  (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                  gamma kappa).before
+                              tau
+                              (@AspisV8.TypedRelationTerminal.Fields.firstResponse.{0} AspisV8.SelectedReceivedOracle.K
+                                AspisV8.SelectedReceivedOracle.domain
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                (@AspisV8.SelectedAuthenticatedSuccessfulRun.fields
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                  (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                  gamma kappa)
+                                tau)
+                              alpha)
+                            (@AspisV8.TypedRelationTerminal.Fields.final.{0} AspisV8.SelectedReceivedOracle.K
+                              AspisV8.SelectedReceivedOracle.domain
+                              (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.fields
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                gamma kappa)
+                              tau alpha)
+                            (fun j =>
+                              @Subtype.val.{1} AspisV8.SelectedReceivedOracle.K
+                                (fun x =>
+                                  @Membership.mem.{0, 0} AspisV8.SelectedReceivedOracle.K
+                                    (Finset.{0} AspisV8.SelectedReceivedOracle.K)
+                                    (@SetLike.instMembership.{0, 0} (Finset.{0} AspisV8.SelectedReceivedOracle.K)
+                                      AspisV8.SelectedReceivedOracle.K
+                                      (@Finset.instSetLike.{0} AspisV8.SelectedReceivedOracle.K))
+                                    AspisV8.SelectedReceivedOracle.domain x)
+                                (@DFunLike.coe.{1, 1, 1}
+                                  (@AspisV8.OrderedQueryGame.Schedule.{0} AspisV8.SelectedReceivedOracle.K
+                                    AspisV8.SelectedReceivedOracle.domain
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))))
+                                  (Fin (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))))
+                                  (fun x => ↥AspisV8.SelectedReceivedOracle.domain)
+                                  (@Function.instFunLikeEmbedding.{1, 1}
+                                    (Fin (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))))
+                                    ↥AspisV8.SelectedReceivedOracle.domain)
+                                  queries j))
+                            (@AspisV8.FixedWordQueryTerminal.openedValues
+                              (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.fixedInput
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                gamma kappa)
+                              decoded queries out alpha)
+                            rho
+                            (@AspisV8.TypedRelationTerminal.Fields.later.{0} AspisV8.SelectedReceivedOracle.K
+                              AspisV8.SelectedReceivedOracle.domain
+                              (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.fields
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                gamma kappa)
+                              tau alpha queries rho)
+                            a1 a2 a3 →
+                          Or
+                            (AspisV8.SelectedMultiproofOpeningEquality.AuthenticationFailure view
+                              (@AspisV8.SuccessfulSelectedVerifierRun.Program.earlyRecords
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p)
+                              c2Prefix
+                              (@AspisV8.SelectedAuthenticatedSuccessfulRun.roots
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Root)
+                              fullLog
+                              (@AspisV8.FixedWordQueryTerminal.indices
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) queries))
+                            (And
+                              (@AspisV8.SuccessfulSelectedVerifierRun.SuccessfulAt
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root)
+                                gamma kappa tau alpha queries rho a1 a2 a3)
+                              (@AspisV8.SelectedAcceptedPrefixPartition.idealAccepts
+                                (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                (@AspisV8.SuccessfulSelectedVerifierRun.Program.execution
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))
+                                  (@AspisV8.SelectedAuthenticatedSuccessfulRun.phaseProgram
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) p c2Prefix c2Root))
+                                gamma kappa tau alpha queries rho
+                                (@List.cons.{0} AspisV8.SelectedAcceptedPrefixPartition.K a1
+                                  (@List.cons.{0} AspisV8.SelectedAcceptedPrefixPartition.K a2
+                                    (@List.cons.{0} AspisV8.SelectedAcceptedPrefixPartition.K a3
+                                      (@List.nil.{0} AspisV8.SelectedAcceptedPrefixPartition.K))))))
+AspisV8.OneWireConsumedFields.fixedAt_decoded : ∀ (body : List.{0} AspisV8.OneWireConsumedFields.Byte)
+  (wire : AspisV8.SelectedWireBytes.Wire),
+  @Eq.{1} (Option.{0} AspisV8.SelectedWireBytes.Wire) (AspisV8.SelectedWireBytes.parse body)
+      (@some.{0} AspisV8.SelectedWireBytes.Wire wire) →
+    ∀ (field : Fin (@OfNat.ofNat.{0} Nat (nat_lit 697) (instOfNatNat (nat_lit 697)))),
+      @Eq.{1} (Option.{0} AspisV5ComponentCQM31TowerExact.QM31Exact)
+        (AspisV5ComponentCQM31TowerExact.decodeQM31ExactLE (AspisV8.CanonicalRelationInput.fieldBytes body field))
+        (@some.{0} AspisV8.OneWireConsumedFields.K (AspisV8.OneWireConsumedFields.fixedAt wire field))
+AspisV8.OneWireConsumedFields.relationFields_transparent : ∀ (wire : AspisV8.SelectedWireBytes.Wire),
+  And
+    (@Eq.{1}
+      (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) →
+        Fin (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))) → AspisV8.OneWireConsumedFields.K)
+      (AspisV8.OneWireConsumedFields.relationFields wire).responses
+      (AspisV8.OneWireConsumedFields.compactResponse wire))
+    (And
+      (@Eq.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256))) → AspisV8.OneWireConsumedFields.K)
+        (AspisV8.OneWireConsumedFields.relationFields wire).final256
+        (AspisV8.OneWireConsumedFields.finalCoefficient wire))
+      (And
+        (@Eq.{1}
+          (Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) →
+            Fin (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) → AspisV8.OneWireConsumedFields.K)
+          (AspisV8.OneWireConsumedFields.relationFields wire).claims (AspisV8.OneWireConsumedFields.ordinaryClaim wire))
+        (And
+          (@Eq.{1}
+            (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) →
+              Fin (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) → AspisV8.OneWireConsumedFields.K)
+            (AspisV8.OneWireConsumedFields.relationFields wire).ood (AspisV8.OneWireConsumedFields.componentOOD wire))
+          (@Eq.{1} AspisV8.OneWireConsumedFields.K (AspisV8.OneWireConsumedFields.relationFields wire).inactive
+            (AspisV8.OneWireConsumedFields.inactiveClaim wire)))))
+'AspisV8.SuccessfulCompleteSelectedWire.successful_complete_selected_wire_constructs_ideal_execution_or_auth_failure' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+'AspisV8.OneWireConsumedFields.fixedAt_decoded' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/OneWireSignatureAudit.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/OneWireSignatureAudit.lean"
+	User time (seconds): 1.80
+	System time (seconds): 2.48
+	Percent of CPU this job got: 33%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:12.99
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6564532
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 53561
+	Minor (reclaiming a frame) page faults: 153790
+	Voluntary context switches: 100090
+	Involuntary context switches: 28
+	Swaps: 0
+	File system inputs: 11904496
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+LEAN_EXIT=0
+3750163a621c23587dca52ae8686e66a3dcfffcaa93a3ef7bc99cae1470ae85a  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/OneWireSignatureAudit.olean
+OVERLAY_PROVENANCE_PASS=1115
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+PROVENANCE_UNCHANGED=true

@@ -1,0 +1,34 @@
+{
+  "schema": "aspis-v8-one-wire-field-map/v1",
+  "audit_target": "30a303a344dbb42e24ad8f42a8804819747942bc",
+  "source_model": "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs",
+  "body": {
+    "minimum_bytes": 24890,
+    "maximum_bytes": 40282,
+    "admission": "n >= 24890 && n <= 40282 && (n - 11228 - 22*621) % 52 == 0"
+  },
+  "fixed_fields": [
+    {"range": "0..270", "width_bytes": 16, "meaning": "outer semantic/public relation values", "producer": "body fixed section", "consumer": "semantic/outer callback", "status": "source-produced but semantic mapping not yet translated"},
+    {"range": "271..357", "width_bytes": 16, "meaning": "three 29-lane ordinary point-claim rows", "producer": "body fixed section", "consumer": "points_absorb / ordinary row construction", "status": "literal index map pending semantic constructor"},
+    {"range": "358", "width_bytes": 16, "meaning": "inactive claim", "producer": "body fixed section", "consumer": "prepare after gamma before kappa", "status": "literal index map constructed"},
+    {"range": "359..387", "width_bytes": 16, "meaning": "first 29 component OOD answers", "producer": "body fixed section", "consumer": "freeze OOD record 0", "status": "literal index map constructed"},
+    {"range": "388..416", "width_bytes": 16, "meaning": "second 29 component OOD answers", "producer": "body fixed section", "consumer": "freeze OOD record 1", "status": "literal index map constructed"},
+    {"range": "417..440", "width_bytes": 16, "meaning": "four compact relation responses, six sent values each", "producer": "body fixed section", "consumer": "response0 and three later compact rounds", "status": "literal index map constructed"},
+    {"range": "441..696", "width_bytes": 16, "meaning": "final256", "producer": "body fixed section", "consumer": "pre-query final polynomial", "status": "literal index map constructed"}
+  ],
+  "other_body_sections": [
+    {"range": "11152..11177", "meaning": "C1 root", "consumer": "before OOD"},
+    {"range": "11178..11203", "meaning": "C2 root", "consumer": "post-lambda/chi phase"},
+    {"range": "11204..11211", "meaning": "gamma nonce", "consumer": "before gamma"},
+    {"range": "11212..11219", "meaning": "fold nonce", "consumer": "before alpha0"},
+    {"range": "11220..11227", "meaning": "query nonce", "consumer": "before q22/rho"},
+    {"range": "11228..24889", "meaning": "22 packed 621-byte records in original query ordinal", "consumer": "opened-values and Merkle leaves"},
+    {"range": "24890..end", "meaning": "equal paired frontier halves, 26-byte nodes", "consumer": "two-tree minimal multiproof"}
+  ],
+  "open_boundaries": [
+    "ordinary 1024-weight functional and claim are outer semantic inputs in the audited research callback",
+    "public statement/runtime/payment settlement context are not encoded in this body",
+    "C1/C2 full-word authentication prefixes and their chronological hash logs are not constructed by the existing theorem",
+    "compiled Rust mutable Vec/slice/hash-call refinement is not translated"
+  ]
+}
