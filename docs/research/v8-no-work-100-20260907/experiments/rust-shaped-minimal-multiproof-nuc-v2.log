@@ -1,0 +1,190 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=RustShapedMinimalMultiproof
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+f56e9b31dce76430d4886d9a476e1fdfd2affb5f47a8eab780e55350e6418dbd  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/rust-shaped-minimal-multiproof-nuc-v2-manifest.json
+145d98d575eb2805df589892a17092fc66b44b29ed0809d66d777995f4b0f98b  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean
+145d98d575eb2805df589892a17092fc66b44b29ed0809d66d777995f4b0f98b  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/rust-shaped-minimal-multiproof-nuc-v2-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=1105
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-rust-shaped-minimal-multiproof-nuc-v2.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:103:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if CanPair head rest then ?m.127 else ?m.128
+in the target expression
+  (match fuel + 1, head :: rest, frontier with
+    | x, [], frontier => some { entries := [], remaining := frontier, trace := [] }
+    | 0, head :: tail, x => none
+    | fuel.succ, head :: rest, frontier =>
+      if CanPair head rest then
+        match rest with
+        | [] => none
+        | next :: tail =>
+          match runPass view fuel tail frontier with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest next.digest)
+                (nodeCalls head.position head.digest next.digest) result)
+      else
+        match frontier with
+        | [] => none
+        | sibling :: tail =>
+          match runPass view fuel rest tail with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest sibling) (nodeCalls head.position head.digest sibling)
+                result)) =
+    some result
+
+case pos
+view : RawHashInput → Digest208
+fuel : ℕ
+ih :
+  ∀ (entries : List Entry) (frontier : List Digests) (result : Result),
+    runPass view fuel entries frontier = some result →
+      Pass view entries frontier result.entries result.remaining result.trace
+frontier : List Digests
+result : Result
+head : Entry
+rest : List Entry
+success :
+  (match fuel + 1, head :: rest, frontier with
+    | x, [], frontier => some { entries := [], remaining := frontier, trace := [] }
+    | 0, head :: tail, x => none
+    | fuel.succ, head :: rest, frontier =>
+      if CanPair head rest then
+        match rest with
+        | [] => none
+        | next :: tail =>
+          match runPass view fuel tail frontier with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest next.digest)
+                (nodeCalls head.position head.digest next.digest) result)
+      else
+        match frontier with
+        | [] => none
+        | sibling :: tail =>
+          match runPass view fuel rest tail with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest sibling) (nodeCalls head.position head.digest sibling)
+                result)) =
+    some result
+paired : CanPair head rest
+⊢ Pass view (head :: rest) frontier result.entries result.remaining result.trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:114:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if CanPair head rest then ?m.132 else ?m.133
+in the target expression
+  (match fuel + 1, head :: rest, frontier with
+    | x, [], frontier => some { entries := [], remaining := frontier, trace := [] }
+    | 0, head :: tail, x => none
+    | fuel.succ, head :: rest, frontier =>
+      if CanPair head rest then
+        match rest with
+        | [] => none
+        | next :: tail =>
+          match runPass view fuel tail frontier with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest next.digest)
+                (nodeCalls head.position head.digest next.digest) result)
+      else
+        match frontier with
+        | [] => none
+        | sibling :: tail =>
+          match runPass view fuel rest tail with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest sibling) (nodeCalls head.position head.digest sibling)
+                result)) =
+    some result
+
+case neg
+view : RawHashInput → Digest208
+fuel : ℕ
+ih :
+  ∀ (entries : List Entry) (frontier : List Digests) (result : Result),
+    runPass view fuel entries frontier = some result →
+      Pass view entries frontier result.entries result.remaining result.trace
+frontier : List Digests
+result : Result
+head : Entry
+rest : List Entry
+success :
+  (match fuel + 1, head :: rest, frontier with
+    | x, [], frontier => some { entries := [], remaining := frontier, trace := [] }
+    | 0, head :: tail, x => none
+    | fuel.succ, head :: rest, frontier =>
+      if CanPair head rest then
+        match rest with
+        | [] => none
+        | next :: tail =>
+          match runPass view fuel tail frontier with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest next.digest)
+                (nodeCalls head.position head.digest next.digest) result)
+      else
+        match frontier with
+        | [] => none
+        | sibling :: tail =>
+          match runPass view fuel rest tail with
+          | none => none
+          | some result =>
+            some
+              (prepend (parent view head.position head.digest sibling) (nodeCalls head.position head.digest sibling)
+                result)) =
+    some result
+paired : ¬CanPair head rest
+⊢ Pass view (head :: rest) frontier result.entries result.remaining result.trace
+'AspisV8.RustShapedMinimalMultiproof.pass_sound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.pass_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.levels_sound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.adjacent_sound' depends on axioms: [propext, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.frontier_length' depends on axioms: [propext, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.frontier_in_bounds' depends on axioms: [propext, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.finish_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.verify_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.verify_selected_accepted' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean"
+	User time (seconds): 2.03
+	System time (seconds): 1.06
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.06
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6656348
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 139234
+	Voluntary context switches: 936
+	Involuntary context switches: 176
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1
