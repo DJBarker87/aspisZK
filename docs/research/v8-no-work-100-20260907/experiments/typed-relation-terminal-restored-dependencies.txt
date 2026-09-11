@@ -1,0 +1,30 @@
+Post-run read-only observation, not an execution-time manifest attestation.
+Observed UTC: 2026-09-11T11:42:05Z
+Endpoint: dombarker@100.108.41.90 (Tailscale)
+SSH options: BatchMode=yes ConnectTimeout=10 StrictHostKeyChecking=yes HostKeyAlias=nuc.local
+HostKeyAlias is key reuse only; no nuc.local network access was used.
+Command: date -u +%Y-%m-%dT%H:%M:%SZ; sha256sum the six explicit overlay paths below.
+
+5c7a931def5ff81f64c73adc99d1432ef1572f1e162f01880ca80802792fc5e5  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/CanonicalCollect.lean
+4bcb2d752bbe2b70460666f1e30c8ab500034894562f6746b2c988e38c6f0807  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/CanonicalCollect.olean
+63de36026f36facec3096bad747eafb258b2f2ac7bd73383ab0056eaa3c2ae30  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/CanonicalRelationInput.lean
+b3da7c20e2a97083108e338ec1ee51e0eb5066a277e262773c94fe1e582a4b09  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/CanonicalRelationInput.olean
+05a8ea8a361cbb09fa426287d37f446b3123329e9b7bf46d88dda726ff4be9a3  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/TypedRelationTerminalV3.lean
+ab7f519f9f4820b81b2479778b828d4bfb551db34a79268f370181779b1b51d8  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/TypedRelationTerminalV3.olean
+
+CanonicalCollect/Input source/output pairs match the original retained
+canonical-collect-v2.log and canonical-relation-input-v2.log and the current
+local retained files. The old builds used Lean 4.32.0 arm64-apple-darwin,
+commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, source parent
+503332fbe747db381fc8ee67c4bbdd3631ec97cf, borrowed26a9cd47 and Mathlib81a5d257.
+Their successful import by the present Lean 4.32.0 Linux target is observed;
+no new build of those two unchanged proofs is claimed.
+
+Important omission: neither CanonicalCollect nor CanonicalRelationInput is
+listed in any of the five TypedRelationTerminal attempt manifests. The first
+two attempts failed on these missing outputs; root restored the exact
+retained bytes before subsequent attempts. Historical manifests were not
+rewritten. Their PASS1051/PASS1053 covers registered entries only. This
+observation plus old proof receipts is separate evidence of the restored
+pairs, not a reconstruction of a missing per-copy receipt or a complete
+cross-platform transitive-closure equivalence certificate.
