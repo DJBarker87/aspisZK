@@ -1,0 +1,86 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=SelectedWireBytes
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+b87d0ad7e465b76c0a0d0fef881da3f2a9d46188be2355456fd055ce38791da8  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/selected-wire-bytes-nuc-v2-manifest.json
+32a739a36412612b45b5fd5626bba5811a0f60f2f7d73dad8ca8179918639ae2  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedWireBytes.lean
+32a739a36412612b45b5fd5626bba5811a0f60f2f7d73dad8ca8179918639ae2  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/selected-wire-bytes-nuc-v2-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=1103
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-selected-wire-bytes-nuc-v2.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedWireBytes.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedWireBytes.lean
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedWireBytes.lean:234:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ↑item < _a / 26
+Error: Application type mismatch: The argument
+  item
+has type
+  Fin ((wire.frontiers 0).length / 26)
+but is expected to have type
+  Fin (_a / 26)
+in the application
+  ↑item
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+body : List Byte
+wire : Wire
+success : parse body = some wire
+item : Fin ((wire.frontiers 0).length / 26)
+phase : Fin 2
+byte : Fin 26
+count : ℕ
+left✝ : count ≤ 296
+half : halfFrontier body = 26 * count
+lengths : ∀ (phase : Fin 2), (wire.frontiers phase).length = 26 * count
+hi : ↑item < (wire.frontiers 0).length / 26
+hb : ↑byte < 26
+⊢ wire.frontierPairs[↑item] phase byte = body.getD (24890 + ↑phase * halfFrontier body + 26 * ↑item + ↑byte) 0
+'AspisV8.SelectedWireBytes.slice_length' depends on axioms: [propext, Quot.sound]
+'AspisV8.SelectedWireBytes.slice_byte' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.parse_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.malformed_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.successful_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.fixed_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.roots_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.fixed_slice_lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.nonce_byte' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.record_eq_bodyRecord' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.record_bytes_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.frontier_lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.second_frontier_to_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.frontier_byte' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.frontier_pairs_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SelectedWireBytes.frontier_pair_byte' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedWireBytes.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedWireBytes.lean"
+	User time (seconds): 2.11
+	System time (seconds): 1.00
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.11
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6682348
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 139421
+	Voluntary context switches: 763
+	Involuntary context switches: 177
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1

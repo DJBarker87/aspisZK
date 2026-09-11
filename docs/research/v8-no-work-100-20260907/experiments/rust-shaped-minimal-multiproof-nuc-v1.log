@@ -1,0 +1,296 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=RustShapedMinimalMultiproof
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+7502048e3f93976484daced07b46ac057885dcb27da722d6f37ed86b17f868bb  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/rust-shaped-minimal-multiproof-nuc-v1-manifest.json
+c16e3f7742d4246da897b95aa4f7e0ab4507fd8f56f9aa3bf172303aeecbc3a4  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean
+c16e3f7742d4246da897b95aa4f7e0ab4507fd8f56f9aa3bf172303aeecbc3a4  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/rust-shaped-minimal-multiproof-nuc-v1-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=1105
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-rust-shaped-minimal-multiproof-nuc-v1.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:91:21: error: unsolved goals
+case zero.cons
+view : RawHashInput → Digest208
+frontier : List Digests
+result : Result
+head : Entry
+rest : List Entry
+success : none = some result
+⊢ Pass view (head :: rest) frontier result.entries result.remaining result.trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:99:10: error: Failed to rewrite using equation theorems for `runPass`
+
+Hint: Try rewriting with `AspisV8.RustShapedMinimalMultiproof.runPass.eq_def`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:138:72: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ -1
+  a - c ≥ 0
+where
+ a := ↑fuel
+ b := ↑({ position := 2 * k, digest := left } :: { position := 2 * k + 1, digest := right } :: rest).length
+ c := ↑rest.length
+ d := ↑{ position := 2 * k, digest := left }.position / 2
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:134:16: error: unsolved goals
+case pair.succ
+view : RawHashInput → Digest208
+entries output✝ : List Entry
+frontier✝ remaining✝ : List Digests
+trace✝ : OrderedRawQueryLog
+k : ℕ
+left right : Digests
+rest output : List Entry
+frontier remaining : List Digests
+trace : OrderedRawQueryLog
+tail : Pass view rest frontier output remaining trace
+ih :
+  ∀ (fuel : ℕ),
+    rest.length ≤ fuel →
+      runPass view fuel rest frontier = some { entries := output, remaining := remaining, trace := trace }
+fuel : ℕ
+enough : ({ position := 2 * k, digest := left } :: { position := 2 * k + 1, digest := right } :: rest).length ≤ fuel + 1
+smaller : rest.length ≤ fuel
+paired : CanPair { position := 2 * k, digest := left } ({ position := 2 * k + 1, digest := right } :: rest)
+⊢ (do
+      let result ← some { entries := output, remaining := remaining, trace := trace }
+      some
+          { entries := parent view (2 * k) left right :: result.entries, remaining := result.remaining,
+            trace := nodeCalls (2 * k) left right ++ result.trace }) =
+    some
+      { entries := parent view (2 * k) left right :: output, remaining := remaining,
+        trace := nodeCalls (2 * k) left right ++ trace }
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:143:16: error: unsolved goals
+case single.succ
+view : RawHashInput → Digest208
+entries output✝ : List Entry
+frontier✝ remaining✝ : List Digests
+trace✝ : OrderedRawQueryLog
+head : Entry
+sibling : Digests
+rest output : List Entry
+frontier remaining : List Digests
+trace : OrderedRawQueryLog
+unpaired : ¬CanPair head rest
+tail : Pass view rest frontier output remaining trace
+ih :
+  ∀ (fuel : ℕ),
+    rest.length ≤ fuel →
+      runPass view fuel rest frontier = some { entries := output, remaining := remaining, trace := trace }
+fuel : ℕ
+enough : (head :: rest).length ≤ fuel + 1
+smaller : rest.length ≤ fuel
+⊢ (do
+      let result ← some { entries := output, remaining := remaining, trace := trace }
+      some
+          { entries := parent view head.position head.digest sibling :: result.entries, remaining := result.remaining,
+            trace := nodeCalls head.position head.digest sibling ++ result.trace }) =
+    some
+      { entries := parent view head.position head.digest sibling :: output, remaining := remaining,
+        trace := nodeCalls head.position head.digest sibling ++ trace }
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:139:58: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [runPass, if_pos paired, ih fuel smaller, O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵ ̵Option.pure_def, prepend]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:147:60: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [runPass, if_neg unpaired, ih fuel smaller, O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵ ̵Option.pure_def, prepend]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:169:11: error: unsolved goals
+case succ.none
+view : RawHashInput → Digest208
+depth : ℕ
+ih :
+  ∀ (entries : List Entry) (frontier : List Digests) (result : Result),
+    runLevels view depth entries frontier = some result →
+      Levels view depth entries frontier result.entries result.remaining result.trace
+entries : List Entry
+frontier : List Digests
+result : Result
+first : runPass view entries.length entries frontier = none
+success :
+  (do
+      let first ← none
+      let later ← runLevels view depth first.entries first.remaining
+      pure { entries := later.entries, remaining := later.remaining, trace := first.trace ++ later.trace }) =
+    some result
+⊢ Levels view (depth + 1) entries frontier result.entries result.remaining result.trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:173:16: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:176:8: error: Tactic `subst` failed: did not find equation for eliminating 'result'
+
+case succ.some.some
+view : RawHashInput → Digest208
+depth : ℕ
+ih :
+  ∀ (entries : List Entry) (frontier : List Digests) (result : Result),
+    runLevels view depth entries frontier = some result →
+      Levels view depth entries frontier result.entries result.remaining result.trace
+entries : List Entry
+frontier : List Digests
+result output : Result
+first : runPass view entries.length entries frontier = some output
+success :
+  (do
+      let first ← some output
+      let later ← runLevels view depth first.entries first.remaining
+      some { entries := later.entries, remaining := later.remaining, trace := first.trace ++ later.trace }) =
+    some result
+final : Result
+later : runLevels view depth output.entries output.remaining = some final
+⊢ Levels view (depth + 1) entries frontier result.entries result.remaining result.trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:169:32: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [first,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:171:24: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [first,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:175:19: warning: This simp argument is unused:
+  later
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵a̵t̵e̵r̵,̵ ̵Option.bind_some, Option.pure_def, Option.some.injEq] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:175:26: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [later, O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵ ̵Option.pure_def, Option.some.injEq] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:175:61: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [later, Option.bind_some, Option.pure_def,̵ ̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:233:16: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:233:16: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:261:8: error: unsolved goals
+case nil
+roots : Digests
+trace : OrderedRawQueryLog
+remaining : List Digests
+calls : OrderedRawQueryLog
+success : none = some trace
+⊢ { entries := [], remaining := remaining, trace := calls }.entries = [{ position := 0, digest := roots }] ∧
+    { entries := [], remaining := remaining, trace := calls }.remaining = [] ∧
+      { entries := [], remaining := remaining, trace := calls }.trace = trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:264:21: error: unsolved goals
+case cons.cons
+roots : Digests
+trace : OrderedRawQueryLog
+remaining : List Digests
+calls : OrderedRawQueryLog
+entry next : Entry
+tail : List Entry
+success : none = some trace
+⊢ { entries := entry :: next :: tail, remaining := remaining, trace := calls }.entries =
+      [{ position := 0, digest := roots }] ∧
+    { entries := entry :: next :: tail, remaining := remaining, trace := calls }.remaining = [] ∧
+      { entries := entry :: next :: tail, remaining := remaining, trace := calls }.trace = trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:267:26: error: unsolved goals
+case cons.nil.cons
+roots : Digests
+trace calls : OrderedRawQueryLog
+entry : Entry
+sibling : Digests
+tail : List Digests
+success : none = some trace
+⊢ { entries := [entry], remaining := sibling :: tail, trace := calls }.entries = [{ position := 0, digest := roots }] ∧
+    { entries := [entry], remaining := sibling :: tail, trace := calls }.remaining = [] ∧
+      { entries := [entry], remaining := sibling :: tail, trace := calls }.trace = trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:274:20: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:294:11: error: unsolved goals
+case isTrue.none
+view : RawHashInput → Digest208
+roots : Digests
+depth : ℕ
+entries : List Entry
+left right : List Byte
+trace : OrderedRawQueryLog
+guards : Guards depth entries left right
+call : runLevels view depth entries (frontierPairs left right) = none
+success :
+  (do
+      let result ← none
+      finish roots result) =
+    some trace
+⊢ Guards depth entries left right ∧
+    Levels view depth entries (frontierPairs left right) [{ position := 0, digest := roots }] [] trace
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:294:31: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [call,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean:296:23: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [call,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8.RustShapedMinimalMultiproof.pass_sound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.pass_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.levels_sound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.adjacent_sound' depends on axioms: [propext, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.frontier_length' depends on axioms: [propext, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.frontier_in_bounds' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.finish_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.verify_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8.RustShapedMinimalMultiproof.verify_selected_accepted' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/RustShapedMinimalMultiproof.lean"
+	User time (seconds): 1.99
+	System time (seconds): 1.03
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.98
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6656804
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 139069
+	Voluntary context switches: 911
+	Involuntary context switches: 177
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1
