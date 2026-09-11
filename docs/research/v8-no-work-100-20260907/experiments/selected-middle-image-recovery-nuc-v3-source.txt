@@ -1,0 +1,213 @@
+import SelectedMiddleSimpleParent
+import MiddleLinearClassification
+import MiddleCoherentIncidence
+import SelectedMiddleGammaCover
+
+/-! Source-review draft: all image-valid high-support quotients, not only
+roots of the old higher-Y parent. One pre-OOD family has at most one tuple.
+Outside a fixed pair-root event, shared/sparse/insufficient-own exceptions
+cost at most 40+28+36 gammas. Every remaining SAME quotient reconstructs
+that family's own-supported tuple, whose C1 projection lies in the fixed
+early family. This is neither earlyC1=some nor payment extraction.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.SelectedMiddleImageRecovery
+open Polynomial Finset
+noncomputable section
+
+namespace Generic
+variable {K I J : Type*} [Field K] [DecidableEq K] [DecidableEq I]
+
+/-- The tuple family may be an infinite ambient type; only this already
+fixed finite family is unioned. Overlapping exceptional sets are allowed. -/
+theorem small_family_union (family : Finset J) (one : family.card ≤ 1)
+    (hits : J → Finset K) (each : ∀ p ∈ family, (hits p).card ≤ 36)
+    (shared sparse : Finset K) (sharedSmall : shared.card ≤ 40)
+    (sparseSmall : sparse.card ≤ 28) :
+    (shared ∪ (sparse ∪ family.biUnion hits)).card ≤ 104 := by
+  classical
+  have hitBound : (family.biUnion hits).card ≤ family.card * 36 :=
+    Finset.card_biUnion_le_card_mul family hits 36 each
+  have product := Nat.mul_le_mul_right 36 one
+  have outer := Finset.card_union_le shared (sparse ∪ family.biUnion hits)
+  have inner := Finset.card_union_le sparse (family.biUnion hits)
+  omega
+
+/-- Keep membership in a concrete polynomial-defined set opaque at the
+selected specialization boundary. This is ordinary finite-set inclusion. -/
+theorem filtered_members_card (left right : Finset K) :
+    (left.filter fun value => value ∈ right).card ≤ right.card := by
+  exact Finset.card_le_card (fun _ member => (Finset.mem_filter.mp member).2)
+
+/-- The bound uses fixed degree-28 component errors, not an assumed
+gamma-polynomial dependence of the candidate selected after alpha. -/
+theorem matching_set_card (D : Finset I) (Gamma : Finset K)
+    (received expected : Fin 29 → I → K) (size : D.card = 1048576)
+    (small : (OwnSymbolCollision.own D received expected).card < 38228) :
+    (Gamma.filter fun gamma =>
+      803230 ≤ (OwnSymbolCollision.matching D received expected gamma).card).card ≤ 36 := by
+  exact MiddleCoherentIncidence.Generic.small_own_card_le_36 D _ received expected size small
+    (fun _ member => (Finset.mem_filter.mp member).2)
+end Generic
+
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.OODInterpolant AspisV8.GammaComponentGame
+open AspisV8.SelectedRegularLowSupport AspisV8.SelectedHigherYRegularTail
+open AspisV8.TupleQueryTransport AspisV8.ComponentOODBinding
+open AspisV8.SelectedOODGate AspisV8.CurveOODGate
+open AspisK1.V7Tag73ExactGRSConversion
+abbrev K := AspisV5ComponentCQM31TowerExact.QM31Exact
+abbrev Tuple := Fin 29 → Fin 1024 → K
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+def insufficientHits (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K)
+    (p : Tuple) : Finset K :=
+  if (SelectedOwnSymbol.own c1 c2 p).card < 38228 then
+    Gamma.filter fun gamma =>
+      803230 ≤ (OwnSymbolCollision.matching univ (received29 c1 c2) (expected p) gamma).card
+  else ∅
+
+theorem insufficientHits_card (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (p : Tuple) : (insufficientHits c1 c2 Gamma p).card ≤ 36 := by
+  unfold insufficientHits
+  split_ifs with small
+  · exact Generic.matching_set_card univ Gamma (received29 c1 c2) (expected p)
+      (by simp only [Finset.card_univ, Fintype.card_fin]) small
+  · simp only [Finset.card_empty, Nat.zero_le]
+
+theorem insufficientHits_subset (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (p : Tuple) : insufficientHits c1 c2 Gamma p ⊆ Gamma := by
+  unfold insufficientHits
+  split_ifs
+  · exact Finset.filter_subset _ _
+  · exact Finset.empty_subset _
+
+/-- This source support transfer needs no Witness, factor membership,
+ordinary-row gate, or bound on the time at which Q was selected. -/
+theorem matching_of_image (c1 : C1Received) (c2 : C2Received)
+    (d : Data (K := K)) (checked : d.Checked) (gamma : K) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0)
+    (high : 200808 ≤ fibreCount (SelectedComponentGame.received c1 c2 d gamma) Q)
+    (p : Tuple) (represented : (atGamma d gamma).original Q = ClaimTransport.batch gamma p) :
+    803230 ≤ (OwnSymbolCollision.matching univ (received29 c1 c2) (expected p) gamma).card := by
+  have support := SelectedMiddleSimpleParent.middle_original_support c1 c2 d checked
+    gamma Q image high
+  rw [SelectedOwnSymbol.matching_eq_symbols]
+  unfold originalSupport at support
+  rw [represented] at support
+  exact support
+
+/-- Both OOD identities follow from the image reconstruction alone. The
+literal-family hypothesis in the older combined root/OOD theorem is not
+needed for this part and is not silently imposed on the new event. -/
+theorem image_points (d : Data (K := K)) (checked : d.Checked)
+    (circles : d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1)
+    (west : ∀ r, pointX d r ≠ -1) (gamma : K) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0) :
+    ∀ r, (exactCircleGRSPolynomial ((atGamma d gamma).original Q)).eval (point d r) =
+      (answerCurve (answers d r)).eval gamma := by
+  intro r
+  rw [answers_eval]
+  simpa only [point, SelectedOODGate.factor, pointX, pointY, atGamma] using
+    CoveredOODGRS.original_grs_at_ood (atGamma d gamma) checked Q image circles r (west r)
+
+/-- The alternatives have explicit precedence and are therefore disjoint:
+pair-root first, then the exceptional gamma set, then SAME-Q recovery.
+The three sets making up bad may overlap; their total card is at most 104.
+Family/E precede both OOD draws, bad precedes gamma, and Q is universal last.
+-/
+-- Declaration-local static elaboration allowance: the generic incidence,
+-- finite-union, and source transport lemmas above retain depth 200. Only
+-- packaging their nested dependent selected propositions needs depth 400.
+-- No field enumeration, polynomial expansion, or heartbeat increase occurs.
+set_option maxRecDepth 400 in
+theorem exists_recovery (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K) :
+    ∃ family : Finset Tuple, family.card ≤ 1 ∧
+      ∃ E : K[X], E ≠ 0 ∧ E.natDegree ≤ 65061549 ∧
+        ∀ d : Data (K := K), d.Checked →
+          (d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1) →
+          (∀ r, pointX d r ≠ -1) →
+          ∃ bad : Finset K, bad ⊆ Gamma ∧ bad.card ≤ 104 ∧
+            ∀ gamma ∈ Gamma, ∀ Q : Fin 1024 → K,
+              (Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0) →
+              200808 ≤ fibreCount (SelectedComponentGame.received c1 c2 d gamma) Q →
+              (∀ r, E.eval (point d r)=0) ∨
+                (¬(∀ r, E.eval (point d r)=0) ∧ gamma ∈ bad) ∨
+                (¬(∀ r, E.eval (point d r)=0) ∧ gamma ∉ bad ∧
+                  ∃ p ∈ family, 38228 ≤ (SelectedOwnSymbol.own c1 c2 p).card ∧
+                    (atGamma d gamma).original Q = ClaimTransport.batch gamma p ∧
+                    c1Projection p ∈ EarlyC1Family.family c1) := by
+  classical
+  let P := SelectedMiddleSimpleParent.parent c1 c2
+  have bounds := SelectedMiddleSimpleParent.parent_bounds c1 c2
+  obtain ⟨E, nonzero, degree, one, sparseSmall, classify⟩ :=
+    MiddleLinearClassification.exists_classification P
+      (SelectedMiddleSimpleParent.parent_nonzero c1 c2)
+      bounds.1 bounds.2.1 bounds.2.2 Gamma
+  let family := LinearMessageFamily.family P
+  refine ⟨family, one, E, nonzero, degree, ?_⟩
+  intro d checked circles west
+  obtain ⟨beta, betaNonzero, betaDegree, cover⟩ := classify (point d)
+    (fun r => answerCurve (answers d r)) (fun _ => answerCurve_degree _)
+  let shared := Gamma.filter fun gamma => beta.eval gamma=0
+  let sparse := Gamma.filter fun gamma => gamma ∈ LinearMessageFamily.sparseChallenges P Gamma
+  let hits := family.biUnion (insufficientHits c1 c2 Gamma)
+  let bad := shared ∪ (sparse ∪ hits)
+  have sharedSmall : shared.card ≤ 40 :=
+    SelectedMiddleGammaCover.shared_roots_card beta betaNonzero betaDegree Gamma
+  have sparseBound : sparse.card ≤ 28 :=
+    (Generic.filtered_members_card Gamma (LinearMessageFamily.sparseChallenges P Gamma)).trans
+      sparseSmall
+  have badSmall : bad.card ≤ 104 := Generic.small_family_union family one
+    (insufficientHits c1 c2 Gamma) (fun p _ => insufficientHits_card c1 c2 Gamma p)
+    shared sparse sharedSmall sparseBound
+  have badSubset : bad ⊆ Gamma := by
+    intro gamma member
+    rcases Finset.mem_union.mp member with sharedMember | other
+    · exact (Finset.mem_filter.mp sharedMember).1
+    · rcases Finset.mem_union.mp other with sparseMember | hit
+      · exact (Finset.mem_filter.mp sparseMember).1
+      · obtain ⟨p, _, member⟩ := Finset.mem_biUnion.mp hit
+        exact insufficientHits_subset c1 c2 Gamma p member
+  refine ⟨bad, badSubset, badSmall, ?_⟩
+  intro gamma inside Q image high
+  by_cases pairRoot : ∀ r, E.eval (point d r)=0
+  · exact Or.inl pairRoot
+  by_cases exceptional : gamma ∈ bad
+  · exact Or.inr (Or.inl ⟨pairRoot, exceptional⟩)
+  have root := SelectedMiddleSimpleParent.candidate_root c1 c2 d checked gamma Q image high
+  have points := image_points d checked circles west gamma Q image
+  rcases cover gamma ((atGamma d gamma).original Q) inside root points with
+    sharedHit | pairHit | sparseHit | represented
+  · exact False.elim (exceptional (Finset.mem_union_left _
+      (Finset.mem_filter.mpr ⟨inside, sharedHit⟩)))
+  · exact False.elim (pairRoot pairHit)
+  · exact False.elim (exceptional (Finset.mem_union_right _ (Finset.mem_union_left _
+      (Finset.mem_filter.mpr ⟨inside, sparseHit⟩))))
+  · obtain ⟨p, member, same⟩ := represented
+    have large : 38228 ≤ (SelectedOwnSymbol.own c1 c2 p).card := by
+      by_contra notLarge
+      have small : (SelectedOwnSymbol.own c1 c2 p).card < 38228 := Nat.lt_of_not_ge notLarge
+      have enough := matching_of_image c1 c2 d checked gamma Q image high p same
+      have hit : gamma ∈ insufficientHits c1 c2 Gamma p := by
+        simpa only [insufficientHits, if_pos small] using Finset.mem_filter.mpr ⟨inside, enough⟩
+      exact exceptional (Finset.mem_union_right _ (Finset.mem_union_right _
+        (Finset.mem_biUnion.mpr ⟨p, member, hit⟩)))
+    exact Or.inr (Or.inr ⟨pairRoot, exceptional, p, member, large, same,
+      SelectedOwnSymbol.own_supported_early_member c1 c2 p large⟩)
+
+#print axioms Generic.small_family_union
+#print axioms Generic.filtered_members_card
+#print axioms Generic.matching_set_card
+#print axioms insufficientHits_card
+#print axioms insufficientHits_subset
+#print axioms matching_of_image
+#print axioms image_points
+#print axioms exists_recovery
+end
+end AspisV8.SelectedMiddleImageRecovery

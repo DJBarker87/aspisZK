@@ -1,0 +1,413 @@
+import SelectedMiddleSimpleParent
+import MiddleLinearClassification
+import MiddleCoherentIncidence
+import SelectedMiddleGammaCover
+
+/-! Source-review draft: all image-valid high-support quotients, not only
+roots of the old higher-Y parent. One pre-OOD family has at most one tuple.
+Outside a fixed pair-root event, shared/sparse/insufficient-own exceptions
+cost at most 40+28+36 gammas. Every remaining SAME quotient reconstructs
+that family's own-supported tuple, whose C1 projection lies in the fixed
+early family. This is neither earlyC1=some nor payment extraction.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.SelectedMiddleImageRecovery
+open Polynomial Finset
+noncomputable section
+
+namespace Generic
+variable {K I J : Type*} [Field K] [DecidableEq K] [DecidableEq I]
+
+/-- Field-free precedence. Concrete source propositions are opaque
+parameters, not types normalized in selected inductive constructors. -/
+inductive Outcome (pair exceptional recovered : Prop) : Prop
+  | pairRoot (root : pair)
+  | exceptional (outsidePair : ¬pair) (hit : exceptional)
+  | recovered (outsidePair : ¬pair) (outsideBad : ¬exceptional) (result : recovered)
+
+/-- The tuple family may be an infinite ambient type; only this already
+fixed finite family is unioned. Overlapping exceptional sets are allowed. -/
+theorem small_family_union (family : Finset J) (one : family.card ≤ 1)
+    (hits : J → Finset K) (each : ∀ p ∈ family, (hits p).card ≤ 36)
+    (shared sparse : Finset K) (sharedSmall : shared.card ≤ 40)
+    (sparseSmall : sparse.card ≤ 28) :
+    (shared ∪ (sparse ∪ family.biUnion hits)).card ≤ 104 := by
+  classical
+  have hitBound : (family.biUnion hits).card ≤ family.card * 36 :=
+    Finset.card_biUnion_le_card_mul family hits 36 each
+  have product := Nat.mul_le_mul_right 36 one
+  have outer := Finset.card_union_le shared (sparse ∪ family.biUnion hits)
+  have inner := Finset.card_union_le sparse (family.biUnion hits)
+  omega
+
+/-- Keep membership in a concrete polynomial-defined set opaque at the
+selected specialization boundary. This is ordinary finite-set inclusion. -/
+theorem filtered_members_card (left right : Finset K) :
+    (left.filter fun value => value ∈ right).card ≤ right.card := by
+  exact Finset.card_le_card (fun _ member => (Finset.mem_filter.mp member).2)
+
+theorem filtered_member (domain : Finset K) (predicate : K → Prop)
+    [DecidablePred predicate] (value : K) (inside : value ∈ domain)
+    (hit : predicate value) : value ∈ domain.filter predicate :=
+  Finset.mem_filter.mpr ⟨inside, hit⟩
+
+theorem intersection_card (left right : Finset K) : (left ∩ right).card ≤ left.card :=
+  Finset.card_le_card Finset.inter_subset_left
+
+theorem intersection_subset (left right : Finset K) : left ∩ right ⊆ right :=
+  Finset.inter_subset_right
+
+theorem intersection_member (left right : Finset K) (value : K)
+    (inLeft : value ∈ left) (inRight : value ∈ right) : value ∈ left ∩ right :=
+  Finset.mem_inter.mpr ⟨inLeft, inRight⟩
+
+/-- A named finite construction keeps its callers from elaborating the
+concrete predicates under nested union and membership constructors. -/
+def exceptionSet (family : Finset J) (shared sparse : Finset K)
+    (hits : J → Finset K) : Finset K := by
+  classical
+  exact shared ∪ (sparse ∪ family.biUnion hits)
+
+theorem exceptionSet_card (family : Finset J)
+    (shared sparse : Finset K) (hits : J → Finset K)
+    (one : family.card ≤ 1) (sharedSmall : shared.card ≤ 40)
+    (sparseSmall : sparse.card ≤ 28) (each : ∀ p ∈ family, (hits p).card ≤ 36) :
+    (exceptionSet family shared sparse hits).card ≤ 104 := by
+  classical
+  exact small_family_union family one hits each shared sparse sharedSmall sparseSmall
+
+theorem exceptionSet_subset (Gamma : Finset K) (family : Finset J)
+    (shared sparse : Finset K) (hits : J → Finset K)
+    (sharedSubset : shared ⊆ Gamma) (sparseSubset : sparse ⊆ Gamma)
+    (each : ∀ p ∈ family, hits p ⊆ Gamma) :
+    exceptionSet family shared sparse hits ⊆ Gamma := by
+  classical
+  intro gamma member
+  rcases Finset.mem_union.mp member with left | right
+  · exact sharedSubset left
+  · rcases Finset.mem_union.mp right with middle | last
+    · exact sparseSubset middle
+    · obtain ⟨p, inFamily, hit⟩ := Finset.mem_biUnion.mp last
+      exact each p inFamily hit
+
+theorem exceptionSet_shared (family : Finset J)
+    (shared sparse : Finset K) (hits : J → Finset K)
+    (gamma : K) (hit : gamma ∈ shared) :
+    gamma ∈ exceptionSet family shared sparse hits := by
+  classical
+  exact Finset.mem_union_left _ hit
+
+theorem exceptionSet_sparse (family : Finset J)
+    (shared sparse : Finset K) (hits : J → Finset K)
+    (gamma : K) (hit : gamma ∈ sparse) :
+    gamma ∈ exceptionSet family shared sparse hits := by
+  classical
+  exact Finset.mem_union_right _ (Finset.mem_union_left _ hit)
+
+theorem exceptionSet_hit (family : Finset J)
+    (shared sparse : Finset K) (hits : J → Finset K)
+    (gamma : K) (p : J) (member : p ∈ family) (hit : gamma ∈ hits p) :
+    gamma ∈ exceptionSet family shared sparse hits := by
+  classical
+  exact Finset.mem_union_right _ (Finset.mem_union_right _
+    (Finset.mem_biUnion.mpr ⟨p, member, hit⟩))
+
+theorem exceptionSet_restricted_sparse (Gamma : Finset K) (family : Finset J)
+    (shared sparseSource : Finset K) (hits : J → Finset K)
+    (gamma : K) (hit : gamma ∈ sparseSource) (inside : gamma ∈ Gamma) :
+    gamma ∈ exceptionSet family shared (sparseSource ∩ Gamma) hits :=
+  exceptionSet_sparse family shared (sparseSource ∩ Gamma) hits gamma
+    (intersection_member sparseSource Gamma gamma hit inside)
+
+/-- The bound uses fixed degree-28 component errors, not an assumed
+gamma-polynomial dependence of the candidate selected after alpha. -/
+theorem matching_set_card (D : Finset I) (Gamma : Finset K)
+    (received expected : Fin 29 → I → K) (size : D.card = 1048576)
+    (small : (OwnSymbolCollision.own D received expected).card < 38228) :
+    (Gamma.filter fun gamma =>
+      803230 ≤ (OwnSymbolCollision.matching D received expected gamma).card).card ≤ 36 := by
+  exact MiddleCoherentIncidence.Generic.small_own_card_le_36 D _ received expected size small
+    (fun _ member => (Finset.mem_filter.mp member).2)
+end Generic
+
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.OODInterpolant AspisV8.GammaComponentGame
+open AspisV8.SelectedRegularLowSupport AspisV8.SelectedHigherYRegularTail
+open AspisV8.TupleQueryTransport AspisV8.ComponentOODBinding
+open AspisV8.SelectedOODGate AspisV8.CurveOODGate
+open AspisK1.V7Tag73ExactGRSConversion
+open AspisK1.V7ExactCorrelatedAgreementFactors
+abbrev K := AspisV5ComponentCQM31TowerExact.QM31Exact
+abbrev Tuple := Fin 29 → Fin 1024 → K
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+def insufficientHits (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K)
+    (p : Tuple) : Finset K :=
+  if (SelectedOwnSymbol.own c1 c2 p).card < 38228 then
+    Gamma.filter fun gamma =>
+      803230 ≤ (OwnSymbolCollision.matching univ (received29 c1 c2) (expected p) gamma).card
+  else ∅
+
+theorem insufficientHits_card (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (p : Tuple) : (insufficientHits c1 c2 Gamma p).card ≤ 36 := by
+  unfold insufficientHits
+  split_ifs with small
+  · exact Generic.matching_set_card univ Gamma (received29 c1 c2) (expected p)
+      (by simp only [Finset.card_univ, Fintype.card_fin]) small
+  · simp only [Finset.card_empty, Nat.zero_le]
+
+theorem insufficientHits_subset (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (p : Tuple) : insufficientHits c1 c2 Gamma p ⊆ Gamma := by
+  unfold insufficientHits
+  split_ifs
+  · exact Finset.filter_subset _ _
+  · exact Finset.empty_subset _
+
+theorem insufficientHits_mem (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (p : Tuple) (gamma : K) (inside : gamma ∈ Gamma)
+    (small : (SelectedOwnSymbol.own c1 c2 p).card < 38228)
+    (enough : 803230 ≤
+      (OwnSymbolCollision.matching univ (received29 c1 c2) (expected p) gamma).card) :
+    gamma ∈ insufficientHits c1 c2 Gamma p := by
+  unfold insufficientHits
+  rw [if_pos small]
+  exact Finset.mem_filter.mpr ⟨inside, enough⟩
+
+/-- This source support transfer needs no Witness, factor membership,
+ordinary-row gate, or bound on the time at which Q was selected. -/
+theorem matching_of_image (c1 : C1Received) (c2 : C2Received)
+    (d : Data (K := K)) (checked : d.Checked) (gamma : K) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0)
+    (high : 200808 ≤ fibreCount (SelectedComponentGame.received c1 c2 d gamma) Q)
+    (p : Tuple) (represented : (atGamma d gamma).original Q = ClaimTransport.batch gamma p) :
+    803230 ≤ (OwnSymbolCollision.matching univ (received29 c1 c2) (expected p) gamma).card := by
+  have support := SelectedMiddleSimpleParent.middle_original_support c1 c2 d checked
+    gamma Q image high
+  rw [SelectedOwnSymbol.matching_eq_symbols]
+  unfold originalSupport at support
+  rw [represented] at support
+  exact support
+
+/-- Both OOD identities follow from the image reconstruction alone. The
+literal-family hypothesis in the older combined root/OOD theorem is not
+needed for this part and is not silently imposed on the new event. -/
+theorem image_points (d : Data (K := K)) (checked : d.Checked)
+    (circles : d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1)
+    (west : ∀ r, pointX d r ≠ -1) (gamma : K) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0) :
+    ∀ r, (exactCircleGRSPolynomial ((atGamma d gamma).original Q)).eval (point d r) =
+      (answerCurve (answers d r)).eval gamma := by
+  intro r
+  rw [answers_eval]
+  simpa only [point, SelectedOODGate.factor, pointX, pointY, atGamma] using
+    CoveredOODGRS.original_grs_at_ood (atGamma d gamma) checked Q image circles r (west r)
+
+attribute [local irreducible] Generic.exceptionSet insufficientHits
+
+/-- The source-specific contrapositive consumes named memberships only;
+no nested concrete union or biUnion proposition is unfolded here. -/
+theorem own_large_of_nonexception (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (family : Finset Tuple) (shared sparse : Finset K)
+    (d : Data (K := K)) (checked : d.Checked) (gamma : K) (inside : gamma ∈ Gamma)
+    (Q : Fin 1024 → K) (image : Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0)
+    (high : 200808 ≤ fibreCount (SelectedComponentGame.received c1 c2 d gamma) Q)
+    (p : Tuple) (member : p ∈ family)
+    (represented : (atGamma d gamma).original Q = ClaimTransport.batch gamma p)
+    (outside : gamma ∉ Generic.exceptionSet family shared sparse
+      (insufficientHits c1 c2 Gamma)) :
+    38228 ≤ (SelectedOwnSymbol.own c1 c2 p).card := by
+  by_contra notLarge
+  have small : (SelectedOwnSymbol.own c1 c2 p).card < 38228 := Nat.lt_of_not_ge notLarge
+  have enough := matching_of_image c1 c2 d checked gamma Q image high p represented
+  have hit := insufficientHits_mem c1 c2 Gamma p gamma inside small enough
+  exact outside (Generic.exceptionSet_hit family shared sparse
+    (insufficientHits c1 c2 Gamma) gamma p member hit)
+
+def PairRoot (E : K[X]) (d : Data (K := K)) : Prop :=
+  ∀ r, E.eval (point d r)=0
+
+/-- SAME-p payload, separate from the field-free outcome constructors. -/
+def Recovered (c1 : C1Received) (c2 : C2Received) (family : Finset Tuple)
+    (d : Data (K := K)) (gamma : K) (Q : Fin 1024 → K) : Prop :=
+  ∃ p ∈ family, 38228 ≤ (SelectedOwnSymbol.own c1 c2 p).card ∧
+    (atGamma d gamma).original Q = ClaimTransport.batch gamma p ∧
+    c1Projection p ∈ EarlyC1Family.family c1
+
+/-- This object belongs to a completed OOD prefix. Its bad set is fixed
+before the universally quantified challenge and later quotient. -/
+def DataRecovery (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K)
+    (family : Finset Tuple) (E : K[X]) (d : Data (K := K)) (bad : Finset K) : Prop :=
+  bad ⊆ Gamma ∧ bad.card ≤ 104 ∧
+  ∀ gamma ∈ Gamma, ∀ Q : Fin 1024 → K,
+    (Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0) →
+    200808 ≤ fibreCount (SelectedComponentGame.received c1 c2 d gamma) Q →
+    Generic.Outcome (PairRoot E d) (gamma ∈ bad) (Recovered c1 c2 family d gamma Q)
+
+/-- One prefix-fixed family/obstruction, with a total source-data consumer.
+This is mathematical data, not a bounded executable decoder. -/
+def RecoveryCover (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K) : Prop :=
+  ∃ family : Finset Tuple, family.card ≤ 1 ∧
+    ∃ E : K[X], E ≠ 0 ∧ E.natDegree ≤ 65061549 ∧
+      ∀ d : Data (K := K), d.Checked →
+        (d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1) →
+        (∀ r, pointX d r ≠ -1) → ∃ bad, DataRecovery c1 c2 Gamma family E d bad
+
+theorem recovered_of_nonexception (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (family : Finset Tuple) (shared sparse : Finset K)
+    (d : Data (K := K)) (checked : d.Checked)
+    (gamma : K) (inside : gamma ∈ Gamma) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0)
+    (high : 200808 ≤ fibreCount (SelectedComponentGame.received c1 c2 d gamma) Q)
+    (outsideBad : gamma ∉ Generic.exceptionSet family shared sparse
+      (insufficientHits c1 c2 Gamma))
+    (p : Tuple) (member : p ∈ family)
+    (same : (atGamma d gamma).original Q = ClaimTransport.batch gamma p) :
+    Recovered c1 c2 family d gamma Q := by
+  have large := own_large_of_nonexception c1 c2 Gamma family shared sparse d checked
+    gamma inside Q image high p member same outsideBad
+  exact ⟨p, member, large, same, SelectedOwnSymbol.own_supported_early_member c1 c2 p large⟩
+
+def CandidateClassifies (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K)
+    (family : Finset Tuple) (E beta : K[X]) (sparseSource : Finset K)
+    (d : Data (K := K)) : Prop :=
+  ∀ (gamma : K) (message : Fin 1024 → K), gamma ∈ Gamma →
+    challengeCandidateHom gamma (exactCircleGRSPolynomial message)
+      (SelectedMiddleSimpleParent.parent c1 c2)=0 →
+    (∀ r, (exactCircleGRSPolynomial message).eval (point d r)=
+      (answerCurve (answers d r)).eval gamma) →
+    beta.eval gamma=0 ∨ PairRoot E d ∨ gamma ∈ sparseSource ∨
+      ∃ p ∈ family, message=ClaimTransport.batch gamma p
+
+-- This one-candidate boundary keeps the classification proof opaque when
+-- consumed by the finite-set/data and outer prefix-existence declarations.
+set_option maxRecDepth 1000 in
+lemma candidate_outcome (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K)
+    (family : Finset Tuple) (E beta : K[X]) (sparseSource : Finset K)
+    (d : Data (K := K)) (checked : d.Checked)
+    (circles : d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1)
+    (west : ∀ r, pointX d r ≠ -1)
+    (cover : CandidateClassifies c1 c2 Gamma family E beta sparseSource d)
+    (gamma : K) (inside : gamma ∈ Gamma) (Q : Fin 1024 → K)
+    (image : Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0)
+    (high : 200808 ≤ fibreCount (SelectedComponentGame.received c1 c2 d gamma) Q) :
+    Generic.Outcome (PairRoot E d)
+      (gamma ∈ Generic.exceptionSet family (Gamma.filter fun g => beta.eval g=0)
+        (sparseSource ∩ Gamma) (insufficientHits c1 c2 Gamma))
+      (Recovered c1 c2 family d gamma Q) := by
+  classical
+  let shared := Gamma.filter fun gamma => beta.eval gamma=0
+  let sparse := sparseSource ∩ Gamma
+  let hits := insufficientHits c1 c2 Gamma
+  let bad := Generic.exceptionSet family shared sparse hits
+  change Generic.Outcome (PairRoot E d) (gamma ∈ bad) (Recovered c1 c2 family d gamma Q)
+  by_cases pairRoot : ∀ r, E.eval (point d r)=0
+  · exact Generic.Outcome.pairRoot pairRoot
+  by_cases exceptional : gamma ∈ bad
+  · exact Generic.Outcome.exceptional pairRoot exceptional
+  have root := SelectedMiddleSimpleParent.candidate_root c1 c2 d checked gamma Q image high
+  have points := image_points d checked circles west gamma Q image
+  rcases cover gamma ((atGamma d gamma).original Q) inside root points with
+    sharedHit | pairHit | sparseHit | represented
+  · exact False.elim (exceptional
+      (Generic.exceptionSet_shared family shared sparse hits gamma
+        (Generic.filtered_member Gamma (fun value => beta.eval value=0) gamma inside sharedHit)))
+  · exact False.elim (pairRoot pairHit)
+  · exact False.elim (exceptional
+      (Generic.exceptionSet_restricted_sparse Gamma family shared sparseSource hits
+        gamma sparseHit inside))
+  · obtain ⟨p, member, same⟩ := represented
+    exact Generic.Outcome.recovered pairRoot exceptional
+      (recovered_of_nonexception c1 c2 Gamma family shared sparse d checked
+        gamma inside Q image high exceptional p member same)
+
+-- The cardinality/subset construction is checked independently of each
+-- source candidate and independently of the outer Classical.choose prefix.
+set_option maxRecDepth 1000 in
+lemma data_recovery_of_classification (c1 : C1Received) (c2 : C2Received)
+    (Gamma : Finset K) (family : Finset Tuple) (one : family.card ≤ 1)
+    (E beta : K[X]) (betaNonzero : beta ≠ 0) (betaDegree : beta.natDegree ≤ 40)
+    (sparseSource : Finset K) (sparseSmall : sparseSource.card ≤ 28)
+    (d : Data (K := K)) (checked : d.Checked)
+    (circles : d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1)
+    (west : ∀ r, pointX d r ≠ -1)
+    (cover : CandidateClassifies c1 c2 Gamma family E beta sparseSource d) :
+    ∃ bad, DataRecovery c1 c2 Gamma family E d bad := by
+  classical
+  let shared := Gamma.filter fun gamma => beta.eval gamma=0
+  let sparse := sparseSource ∩ Gamma
+  let hits := insufficientHits c1 c2 Gamma
+  let bad := Generic.exceptionSet family shared sparse hits
+  have sharedSmall : shared.card ≤ 40 :=
+    SelectedMiddleGammaCover.shared_roots_card beta betaNonzero betaDegree Gamma
+  have sparseBound : sparse.card ≤ 28 :=
+    (Generic.intersection_card sparseSource Gamma).trans sparseSmall
+  have badSmall : bad.card ≤ 104 := Generic.exceptionSet_card family shared sparse hits
+    one sharedSmall sparseBound (fun p _ => insufficientHits_card c1 c2 Gamma p)
+  have badSubset : bad ⊆ Gamma := Generic.exceptionSet_subset Gamma family shared sparse hits
+    (Finset.filter_subset _ _) (Generic.intersection_subset sparseSource Gamma)
+    (fun p _ => insufficientHits_subset c1 c2 Gamma p)
+  refine ⟨bad, ?_⟩
+  unfold DataRecovery
+  exact ⟨badSubset, badSmall, candidate_outcome c1 c2 Gamma family E beta sparseSource
+    d checked circles west cover⟩
+
+/- The alternatives have explicit precedence and are therefore disjoint.
+Family/E precede both OOD draws, bad precedes gamma, and Q is universal last.
+Only the three source-composition boundaries have declaration-local depth
+1000; all mathematics/set/source-transport helpers remain at 200. The former
+monolithic kernel proof is split, not rerun with a larger resource cap. -/
+set_option maxRecDepth 1000 in
+lemma exists_recovery (c1 : C1Received) (c2 : C2Received) (Gamma : Finset K) :
+    RecoveryCover c1 c2 Gamma := by
+  classical
+  unfold RecoveryCover
+  let P := SelectedMiddleSimpleParent.parent c1 c2
+  have bounds := SelectedMiddleSimpleParent.parent_bounds c1 c2
+  obtain ⟨E, nonzero, degree, one, sparseSmall, classify⟩ :=
+    MiddleLinearClassification.exists_classification P
+      (SelectedMiddleSimpleParent.parent_nonzero c1 c2)
+      bounds.1 bounds.2.1 bounds.2.2 Gamma
+  let family := LinearMessageFamily.family P
+  refine ⟨family, one, E, nonzero, degree, ?_⟩
+  intro d checked circles west
+  obtain ⟨beta, betaNonzero, betaDegree, cover⟩ := classify (point d)
+    (fun r => answerCurve (answers d r)) (fun _ => answerCurve_degree _)
+  exact data_recovery_of_classification c1 c2 Gamma family one E beta betaNonzero betaDegree
+    (LinearMessageFamily.sparseChallenges P Gamma) sparseSmall d checked circles west cover
+
+#print axioms Generic.small_family_union
+#print axioms Generic.filtered_members_card
+#print axioms Generic.filtered_member
+#print axioms Generic.intersection_card
+#print axioms Generic.intersection_subset
+#print axioms Generic.intersection_member
+#print axioms Generic.exceptionSet_card
+#print axioms Generic.exceptionSet_subset
+#print axioms Generic.exceptionSet_shared
+#print axioms Generic.exceptionSet_sparse
+#print axioms Generic.exceptionSet_hit
+#print axioms Generic.exceptionSet_restricted_sparse
+#print axioms Generic.matching_set_card
+#print axioms insufficientHits_card
+#print axioms insufficientHits_subset
+#print axioms insufficientHits_mem
+#print axioms matching_of_image
+#print axioms image_points
+#print axioms own_large_of_nonexception
+#print axioms Generic.Outcome
+#print axioms PairRoot
+#print axioms Recovered
+#print axioms DataRecovery
+#print axioms RecoveryCover
+#print axioms recovered_of_nonexception
+#print axioms CandidateClassifies
+#print axioms candidate_outcome
+#print axioms data_recovery_of_classification
+#print axioms exists_recovery
+end
+end AspisV8.SelectedMiddleImageRecovery
