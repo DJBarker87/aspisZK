@@ -1,5 +1,21 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest compact/source continuation:
+[selected packed query bridge](selected-packed-query-bridge-review.md),
+[selected semantic afterstate checks](selected-semantic-afterstate-checks-review.md),
+[compact semantic repair](selected-compact-semantic-repair-review.md), and
+[selected terminal alternative](selected-semantic-terminal-alternative-review.md).
+The exact canonical 621-byte query record now reaches the typed shifted-q22
+residual with the selected slot/order/sign conventions.  The same selected
+semantic table now derives the two dynamic afterstate bindings in addition to
+the four literal source comparisons.  The compact ten-round recurrence has a
+checked degree-27 repair split, and one prefix-fixed causal plan has the ideal
+adaptive finite-mean ceiling `270/|S|`.  These results do not yet prove Merkle
+root-to-fixed-word authentication, the Rust callback constructor, a global
+accepted-extraction bound, Fiat--Shamir lifting, full-view ZK or matched
+complete-transaction CU parity.  No wire field changed; the body remains
+**40,282 bytes**.
+
 Latest source/semantic continuation:
 [typed relation terminal](typed-relation-terminal-review.md),
 [selected semantic aggregation](selected-semantic-aggregation-review.md), and
