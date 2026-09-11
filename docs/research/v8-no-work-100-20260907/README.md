@@ -15,6 +15,15 @@ Rust/authentication constructor, the ten-round aggregate-to-row composition,
 caller/input membership, Fiat--Shamir lifting, full-view ZK and complete
 transaction CU parity open.  They do not change the **40,282-byte** body.
 
+The immediate follow-up also closes two narrower premises.  The selected
+29-lane and ten-coordinate aggregation has checked degree-28, degree-10 and
+degree-2 collision alternatives, for a fixed-table `40/|K|` algebraic
+subtotal before compact-round repair and authentication.  All six append
+residual groups are now derived from the same table and literal links 24--63;
+only authoritative direct afterstate checks remain supplied at that endpoint.
+See [selected semantic lane aggregation](selected-semantic-lane-aggregation-review.md)
+and [selected append residuals](selected-semantic-append-residuals-review.md).
+
 Latest higher-degree continuation: [selected HIGH/LOW probability composition](selected-higher-y-probability-review.md).
 For all retained Y-degree-at-least-three factors, the fixed early C1 now feeds
 both a checked high-support incidence cap and a multiplicity-preserving regular
