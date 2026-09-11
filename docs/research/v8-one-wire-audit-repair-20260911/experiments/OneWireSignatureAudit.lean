@@ -1,0 +1,13 @@
+import SuccessfulCompleteSelectedWire
+import OneWireConsumedFields
+
+/-! Signature-only audit leaf.  It introduces no theorem. -/
+set_option autoImplicit false
+set_option pp.universes true
+set_option pp.explicit true
+
+#check @AspisV8.SuccessfulCompleteSelectedWire.successful_complete_selected_wire_constructs_ideal_execution_or_auth_failure
+#check @AspisV8.OneWireConsumedFields.fixedAt_decoded
+#check @AspisV8.OneWireConsumedFields.relationFields_transparent
+#print axioms AspisV8.SuccessfulCompleteSelectedWire.successful_complete_selected_wire_constructs_ideal_execution_or_auth_failure
+#print axioms AspisV8.OneWireConsumedFields.fixedAt_decoded

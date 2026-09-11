@@ -31,8 +31,13 @@ abbrev M31 := AspisV5ComponentCQM31TowerExact.M31Exact
 abbrev Byte := AspisPool.V7MerkleQueryGrammar.Byte
 abbrev Digest208 := AspisPool.V7MerkleQueryGrammar.Digest208
 
-/-- No `Accepted`, independent records, roots, or frontiers are theorem
-inputs: they are constructed from the one successful parsed Wire run. -/
+/-- The Merkle acceptance, records, roots and frontiers are constructed from
+the successful parsed Wire run.  `p` remains an independent field-level
+program input: this theorem does **not** establish that its claims, OOD data,
+responses, final256, weights or semantic context are constructed from `body`.
+`OneWireConsumedFields` is the separate audit-repair leaf for literal
+fixed-field projections; a full same-body source refinement must compose that
+leaf with the public semantic/context and causal-prefix constructors. -/
 theorem successful_complete_selected_wire_constructs_ideal_execution_or_auth_failure
     (p : Program 22) (c2Prefix : AnswerPrefix) (c2Root : Digest208)
     (view : RawHashInput → Digest208) (fullLog : OrderedRawQueryLog)
