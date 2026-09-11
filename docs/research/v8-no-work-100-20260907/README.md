@@ -1,5 +1,20 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
+Latest source/semantic continuation:
+[typed relation terminal](typed-relation-terminal-review.md),
+[selected semantic aggregation](selected-semantic-aggregation-review.md), and
+[selected output transition](selected-semantic-output-transition-review.md).
+The compact relation tail is now proved equal to the ideal relation game for
+the same typed adaptive buffers, including sparse image transport and shifted
+query injection.  The selected helper aggregate now uses the actual quadratic
+`mu` term: a false aggregate has at most two ideal challenge roots, so the old
+V7 linear-helper `35/|K|` subtotal is not reused.  On the deterministic payment
+side, one same selected semantic table now yields the checked two-output
+constructor and exact append-afterstate slice.  These results still leave the
+Rust/authentication constructor, the ten-round aggregate-to-row composition,
+caller/input membership, Fiat--Shamir lifting, full-view ZK and complete
+transaction CU parity open.  They do not change the **40,282-byte** body.
+
 Latest higher-degree continuation: [selected HIGH/LOW probability composition](selected-higher-y-probability-review.md).
 For all retained Y-degree-at-least-three factors, the fixed early C1 now feeds
 both a checked high-support incidence cap and a multiplicity-preserving regular
