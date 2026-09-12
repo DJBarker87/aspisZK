@@ -166,3 +166,32 @@ The follow-on [recovered-high-fork-extraction-20260912.md](recovered-high-fork-e
 proves that a 29-by-4 table of recovered middle continuations constructs the
 fixed singleton-family member from disclosed final vectors.  Production of
 that table by a bounded ROM fork collector remains open.
+
+The next [recovered-same-c1-review.md](recovered-same-c1-review.md) connects
+that computed tuple to the same decoded C1 payment table and records the exact
+remaining semantic-enforcement premises.  The
+[ExtractionCollectorSpecification.md](ExtractionCollectorSpecification.md)
+gives the corresponding allowed-access replay interface and resource model;
+it deliberately does not assume that 116 attempts succeed.
+
+`lean/SelectedConcreteRowLanes.lean` now constructs the four Poseidon, 24
+selected semantic and one selected copy lane from that same C1 projection and
+lane-26 helper.  Its focused pinned-4.32 proof shows `AllRowsZero` implies the
+selected row, Poseidon and copy-row predicates.  Source acceptance to
+`AllRowsZero`, the global helper sums/poles and literal Rust constants/selectors
+remain open.
+
+`lean/SelectedConcreteTerminal.lean` consumes the existing compact semantic
+alternative for those same tuple lanes. It derives both global H sums on the
+good branch while retaining the exact theta, equality-point, mu, mask-binding,
+terminal-binding and later-repair alternatives. Producing its mask/reference
+trace and terminal equalities from the same source execution remains open.
+
+`lean/FSOODSampler.lean` and `lean/FSV7OODSampler.lean` give the first checked
+chronological OOD control-flow bridge: all cache/log/state and exhaustion
+outcomes are retained through the bounded first-point and distinct-second-point
+loops, using the existing exact V7 QM31 circle map.  The first answer-vector
+absorption is now included by `FSOODPair.lean`, and the canonical four-limb
+success seam is proved. The pair slice still has a restricted no-hash answer
+producer; second-answer absorption, actual-source prefix production and the
+ROM distribution theorem remain open.

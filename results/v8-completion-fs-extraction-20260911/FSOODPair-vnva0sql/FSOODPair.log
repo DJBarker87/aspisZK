@@ -1,0 +1,85 @@
+FSOODPair.lean:39:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run tape (absorbScript (circle decode tape 3 s).snd.digest ?label ?data) (circle decode tape 3 s).snd.oracle
+in the target expression
+  run tape
+      (FSTranscriptScript.bind (absorbScript (circle decode tape 3 s).snd.digest 62 (0 :: List.ofFn (answer point✝)))
+        fun bound =>
+        map (fun second => (Except.map (fun x => (point✝, x)) second.fst, second.snd))
+          (distinctScript decode point✝ 3 bound))
+      (circle decode tape 3 s).snd.oracle =
+    (some
+        ((Except.map (fun x => (point✝, x))
+                (distinct decode point✝ tape 3
+                    (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).fst,
+              (distinct decode point✝ tape 3
+                  (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).snd).fst,
+          (Except.map (fun x => (point✝, x))
+                  (distinct decode point✝ tape 3
+                      (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).fst,
+                (distinct decode point✝ tape 3
+                    (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).snd).snd.digest),
+      (Except.map (fun x => (point✝, x))
+              (distinct decode point✝ tape 3
+                  (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).fst,
+            (distinct decode point✝ tape 3
+                (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).snd).snd.oracle)
+
+case h_2
+Point : Type
+inst✝ : DecidableEq Point
+decode : List Nat → Option Point
+answer : Point → AnswerBytes
+tape : Tape
+s : Transcript
+x✝ : Except Error Point
+point✝ : Point
+heq✝ : (circle decode tape 3 s).fst = Except.ok point✝
+⊢ run tape
+      (FSTranscriptScript.bind (absorbScript (circle decode tape 3 s).snd.digest 62 (0 :: List.ofFn (answer point✝)))
+        fun bound =>
+        map (fun second => (Except.map (fun x => (point✝, x)) second.fst, second.snd))
+          (distinctScript decode point✝ 3 bound))
+      (circle decode tape 3 s).snd.oracle =
+    (some
+        ((Except.map (fun x => (point✝, x))
+                (distinct decode point✝ tape 3
+                    (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).fst,
+              (distinct decode point✝ tape 3
+                  (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).snd).fst,
+          (Except.map (fun x => (point✝, x))
+                  (distinct decode point✝ tape 3
+                      (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).fst,
+                (distinct decode point✝ tape 3
+                    (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).snd).snd.digest),
+      (Except.map (fun x => (point✝, x))
+              (distinct decode point✝ tape 3
+                  (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).fst,
+            (distinct decode point✝ tape 3
+                (absorb tape (circle decode tape 3 s).snd 62 (0 :: List.ofFn (answer point✝)))).snd).snd.oracle)
+FSOODPair.lean:54:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  ∃ suffix, (pair decode answer tape s).snd.oracle.log = s.oracle.log ++ suffix
+but is expected to have type
+  Prefix s.oracle (pair decode answer tape s).snd.oracle
+'AspisV8Completion.FSOODPair.run_pair' depends on axioms: [propext, sorryAx]
+'AspisV8Completion.FSOODPair.pair_valid' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8Completion.FSOODPair.pair_prefix' depends on axioms: [propext, sorryAx, Quot.sound]
+        0.36 real         0.21 user         0.14 sys
+           670105600  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               46766  page reclaims
+                  27  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   2  voluntary context switches
+                 506  involuntary context switches
+           315426591  instructions retired
+           109162019  cycles elapsed
+            11109096  peak memory footprint

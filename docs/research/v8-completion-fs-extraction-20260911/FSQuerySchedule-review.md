@@ -37,7 +37,7 @@ case splitting was needed to expose the capped branch. Statements unchanged.
 Checked source SHA256:
 `d700c16c0772c585b4b791762bc1fba07f03bf186d581d0b50390912a654dd62`.
 
-## New source join awaiting historical compilation
+## Checked source join
 
 `FSV7SampledBodyScript.lean` combines:
 
@@ -47,19 +47,30 @@ Checked source SHA256:
 - the derived typed schedule;
 - the already checked same-body Merkle suffix.
 
-Its drafted theorem removes the independently supplied query schedule from
+Its checked theorem removes the independently supplied query schedule from
 this boundary. It still takes an incoming **pre-query transcript**, whose
 production through the preceding semantic/OOD/image/row/alpha0 phases remains
 an explicit source obligation. It does not move the complete proof body into
 a pre-challenge adversarial callback or establish an ideal/ROM coupling.
 
-The first historical Lean 4.32 integration attempts exposed a proof-dependent
-match-elimination incompatibility around `from_success`.  The q22 schedule
-leaf itself remains checked; the combined `sampled_body_constructs` theorem
-is **not promoted**.  The latest failed source and bounded run are recorded in
-`results/v8-completion-fs-extraction-20260911/sampled-body-v7/report.json`.
-Fresh-kernel checking and actual Rust refinement are NOT RUN.
+The join is intentionally not a literal complete query-phase trace.  The
+selected research Rust absorbs `AV8/query-batch/v1` and samples nonzero `rho`
+after the schedule and before `opened_values` starts the leaf/node hashes
+(`relation_callback.rs:122--125,286--288`).  This leaf goes directly from the
+schedule to the pure Merkle script.  It therefore proves schedule-to-opening
+position coherence, not the intervening transcript/effect order or the final
+query-phase oracle state.
 
-Next: compile that join, then instantiate its incoming state with the actual
-compact response0/fold execution and prove canonical fixed-field serialization
-matches the byte ranges it absorbs. No global security or CU claim follows.
+The first historical Lean 4.32 integration attempts exposed a proof-dependent
+match-elimination incompatibility around `from_success`; the failed v7 run is
+retained.  A small generic branch eliminator and definitionally equivalent
+research-model refactoring resolved it without adding a premise.  The final
+`sampled_body_constructs` theorem passed pinned Lean 4.32 with standard
+axioms.  Evidence is in
+`results/v8-completion-fs-extraction-20260911/sampled-body-v13/report.json`.
+Fresh dependency/kernel checking and actual Rust refinement are NOT RUN.
+
+Next: instantiate its incoming state with the actual compact response0/fold
+execution, insert the rho boundary and prove canonical fixed-field
+serialization matches the byte ranges it absorbs. No global security or CU
+claim follows.
