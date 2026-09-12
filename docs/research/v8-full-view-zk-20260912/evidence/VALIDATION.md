@@ -77,6 +77,21 @@ Instrumented encoder SHA-256 (including the earlier child certificate test):
 Cargo lock SHA-256:
 `a1d2fc87435e98734f74a0fb1f070f1eaa5e5fe19266967092a7ea7849f8a91d`.
 
+## Bounded q22 schedule-shape probe
+
+The actual encoder and reconstructed repaired column-3 mask inventory were
+used to test containment of the row-1014 basis displacement. The retained
+test body is `rust/q22_row1014_schedule_probe.rs`, and the retained result is
+`q22-row1014-schedule-probe.json`. The optimized focused command
+exited 0 in 22.27 seconds with peak RSS 583,172,096 bytes and zero swaps.
+
+All five consecutive schedules tested (starts 0, 1, 17, 1024 and 65536) had
+rank 56 and left row 1014 outside the mask image. All 32 deterministic
+pseudorandom distinct schedules tested had rank 88 and therefore contained
+every 88-coordinate displacement, including row 1014. This refutes the idea
+that the demonstrated separator occurs for every q22 schedule, but sampling
+does not prove a bad-schedule probability bound or joint-view containment.
+
 ## Lean
 
 Toolchain: Lean 4.32.0
@@ -118,3 +133,38 @@ An initial `lake env lean` invocation inside the fresh worktree attempted a
 cold Mathlib clone and was interrupted immediately. The successful checks used
 `lake env` from the existing pinned/cache-built `/Users/dominic/ZK/AspisFormal`
 workspace with an explicit source root and temporary output directory.
+
+## Same-public separator obstruction leaf
+
+Base revision: `6cd3365bb9a69f07345ed81be5245b4eb0b215eb` plus the uncommitted
+`SeparatorObstruction.lean` source with SHA-256
+`e2b6dcdc2eedf6097161b4bac49f8edd769ba089b7ab9fad046f820b6d953ab3`.
+
+The new leaf and then the aggregate were compiled serially with the same
+pinned Lean 4.32.0 environment, existing imported cache, explicit privacy
+source root, `-j1 -M1800`, and output under
+`/private/tmp/aspis-v8-privacy-final-lean-20260912`. This was a focused cached
+replay, not a dependency rebuild.
+
+| Target | Exit | Wall | Peak RSS | Swap |
+|---|---:|---:|---:|---:|
+| `AspisV8Privacy/SeparatorObstruction.lean` | 0 | 8.76 s | 1,444,265,984 B | 0 |
+| `AspisV8Privacy.lean` aggregate | 0 | 2.18 s | 1,549,680,640 B | 0 |
+
+The leaf proves `pairwise_event_advantage_le_two_mul`, its contrapositive
+`no_statement_only_simulator_of_pairwise_separator`, and
+`deterministic_separator_advantage_one`. `#print axioms` for all three reports
+only `propext`, `Classical.choice`, and `Quot.sound`; there is no `sorryAx`.
+These theorems make the q22 falsification boundary exact. The source-derived
+same-public witness pair and event are recorded in `same-public-q22-attack.json`.
+
+## Same-public valid-witness attack
+
+The optimized Rust diagnostic
+`cargo test --offline -p aspis-prover --release diagnostic_same_public_duplicate_input_selection_pair -- --nocapture`
+exited 0 in 21.06 s, with peak RSS 609,189,888 bytes and zero swaps. It found
+identical public statements/snapshots, changed rows 913 and 1017, and
+functional values `1959911333` versus `303025598` in M31. The q4/q6 event has
+exact inclusion probability `11/1636171776` under uniform distinct q22
+sampling. This closes the prior “no same-public pair” gap; it is a protocol
+failure, not merely an obstruction to the proof route.
