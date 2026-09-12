@@ -39,6 +39,7 @@ open AspisK1.V7Tag73K13CandidateBoundaryPrefixReplay
 open AspisK1.V7Tag73K13CandidateDirectedViewFunctional
 open AspisK1.V7Tag73K13CleanViewFunctional
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
+open AspisK1.V7Tag73Q16DigestDrawReindex
 open AspisK1.V7Tag73TranscriptSchedule
 open AspisK1.V7Tag73VariablePrefixGammaFactorization
 open AspisPool.AlgorithmicCircleDecoderV7
@@ -62,7 +63,13 @@ structure ExactCandidateDirectedK13ViewPrefixFactorization
     (decoder : ExactDecoderInstantiation QM31Exact)
     (source : ExactTag73K13SourceObligations transitionFuel configuration
       projection fixedInstance decoder) where
-  viewFromPrefix : List UnifiedExposureRecord → JointQueryBatchPreChallengeView
+  viewFromPrefix : Q16DigestSlot →
+    ExactCompilerExposureTrial parameters →
+    ExactCompilerExposureTrial parameters → HiddenTape →
+    (ExactCompilerFoldAlphaFinalWorkQ16QueryBatchResidual parameters ×
+      (AlphaZeroDigestBlocks × Q16CandidateDigestForest)) →
+    Digest256 → Digest256 → VariableGammaCompleteSkeleton →
+    List UnifiedExposureRecord → JointQueryBatchPreChallengeView
   exactAtBoundary : ∀ candidate foldTrial finalTrial hidden context fold work
       skeleton
       (witness : ExactCandidateDirectedK13ViewWitness source candidate
@@ -74,7 +81,9 @@ structure ExactCandidateDirectedK13ViewPrefixFactorization
           (.machineFresh actor
             (bytes blockAdvance ++ [domAbsorb, queryBatchChallengeLabel])
             queryBatchDigest : UnifiedExposureRecord) :: later →
-      witness.preChallengeView = viewFromPrefix prior
+      witness.preChallengeView =
+        viewFromPrefix candidate foldTrial finalTrial hidden context fold work
+          skeleton prior
 
 /-- Literal prefix factorization proves functional fibres.  The only scheduler
 input is selected-boundary prefix equality; no hash injectivity or challenge
