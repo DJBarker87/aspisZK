@@ -518,6 +518,19 @@ remain open. Evidence is
 in `gamma-challenge-input-bridge-20260912.md` and
 `results/gamma-challenge-input-bridge-v1/report.json`.
 
+### 2026-09-12 gamma origin-history adapter
+
+`lean/FSV8GammaOriginHistoryAdapter.lean` lifts an aligned FS event to a
+concrete V7 `QueryRecord` through `StateAligned.history`. It then transfers
+that record into frozen `q1` only with explicit actor=`adversary` and
+origin-state-cut equalities. The actor is intentionally not inferred:
+`projectRecord` erases it, and no theorem currently identifies the post-nonce
+current cut with `origin.firstRun.stateAtAdversaryHalt`. These are the exact
+remaining adapters; programmed target/fork/resource, freshness, acceptance,
+ROM and probability remain open. Evidence is in
+`gamma-origin-history-adapter-20260912.md` and
+`results/gamma-origin-history-adapter-v1/report.json`.
+
 ### 2026-09-12 live authenticated relation observation
 
 `lean/SameBodyLiveRelationObservation.lean` constructs the post-query relation
