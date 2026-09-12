@@ -520,6 +520,28 @@ factorisation and literal machine refinement remain open.  Evidence is in
 `selected-absorption-outputs-source-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/selected-absorption-outputs-source-v1/report.json`.
 
+### 2026-09-12 source terminal weight
+
+`lean/SameBodySourceTerminalWeight.lean` derives the 256-entry relation
+terminal covector from the same selected inactive mask, repaired point rows,
+chord transpose, image gate and actual `alpha0`.  Thus the functional source
+producer no longer accepts an arbitrary ordinary scalar or terminal covector;
+only the legal causal strategy/same-word construction remains.  The dense
+reference is not yet a refinement theorem for the structured Rust kernel.
+Evidence is in `source-terminal-weight-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/source-terminal-weight-v1/report.json`.
+
+### 2026-09-12 initial and occupancy source polynomials
+
+`lean/SelectedInitialOutputsSourcePolynomial.lean` constructs all sixteen
+initial-output coordinates, including the schedule and the transfer occupancy
+terms in slots 0--11.  It preserves the source indices and signs and proves
+the complete Boolean table equals the selected residual, raising exact
+semantic-coordinate coverage from 69/95 to 85/95.  The optimized Rust
+high/low schedule-selector refinement remains open.  Evidence is in
+`selected-initial-outputs-source-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/selected-initial-outputs-source-v1/report.json`.
+
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
