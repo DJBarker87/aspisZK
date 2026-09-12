@@ -7,17 +7,18 @@ arbitrary three-row QM31 point tables and row scales.
 
 The proof isolates a one-row ten-coordinate factorisation and closes its two
 nontrivial identities with `mul_sub` and commutativity. It adds no semantic,
-soundness or honest-input premise. The direct specialisation to the large
-prepared source record and dense `originalWeight` exhausted the focused
-250,000-heartbeat budget during definitional equality checking; that bridge
-is not claimed here and the cap was not raised.
+soundness or honest-input premise. A direct monolithic specialisation first
+exhausted the focused heartbeat budget. The retained proof instead uses named
+arithmetic projections, constructed prepared-scale equality and the proved
+small-index inactive bits to establish `pair_eq_originalWeight` without
+raising the cap.
 
 Focused NUC compile used pinned Lean 4.32 and the existing V8/base cache:
-exit 0, wall 3.77 seconds, peak RSS 6,770,056 KiB, swap 0. Source SHA-256 was
-`70d91b00184622273362579fd2907b2ca793aaee48dd0ff8006339f620f85822` and
+exit 0, wall 4.49 seconds, peak RSS 6,774,656 KiB, swap 0. Source SHA-256 was
+`856f2decf1e4a74ac250eb4b53a120530a09947d1cf0c5c0c14644c23eb3471a` and
 OLean SHA-256 was
-`1b8f9ddd8d5e6fe241979d929b3849eb6191544b848612e805988597e55903ec`.
+`50a6d9836201a2806c6f6b6deb8e1a010f08b6d59a95d911de6b447034c0fdc9`.
 The theorem prints only `propext`, `Classical.choice` and `Quot.sound`.
 
-This is functional field algebra, not literal Rust/Aeneas refinement or an
-SBF/CU measurement. It changes no protocol or proof bytes.
+This is source-shaped functional field algebra, not literal Rust/Aeneas
+refinement or an SBF/CU measurement. It changes no protocol or proof bytes.
