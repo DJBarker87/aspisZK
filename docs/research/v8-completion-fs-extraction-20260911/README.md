@@ -463,6 +463,16 @@ chronological relation producer, remain open.  Evidence is in
 `source-gamma-coordinates-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/source-gamma-coordinates-v1/report.json`.
 
+`lean/SameBodyLiveRelationFromSampled.lean` removes the independent OOD `Data`
+argument from the next live relation-input constructor.  It executes
+`fromSampled` first, preserves its rejection separately from later relation
+construction errors, and proves that success returns both the exact same-body
+provenance equality and `Data.Checked`.  The wider chronological verifier
+must still call this constructor; this leaf does not turn an arbitrary older
+`Ready` value into source-produced data.  Evidence is in
+`live-relation-from-sampled-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/live-relation-from-sampled-v1/report.json`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected
