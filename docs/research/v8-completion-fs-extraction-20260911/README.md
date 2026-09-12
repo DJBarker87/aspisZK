@@ -462,6 +462,14 @@ source-shaped evidence, not literal Rust/Aeneas refinement. Evidence is in
 `selected-recomposition-rust-shaped-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/recomposition-rust-shaped-v1/report.json`.
 
+`lean/SelectedPathOutputsSourcePolynomial.lean` constructs the next seventeen
+selected semantic coordinates (direction and eight left/right path outputs)
+as chronological source polynomials and proves their Boolean tables and
+array-level index/sign execution match the literal residuals. Constructed
+semantic-coordinate coverage is now 53/95. The Rust high/low selector
+factorisation and machine refinement remain open. Evidence is in
+`selected-path-outputs-source-20260912.md`.
+
 ### 2026-09-12 chronological Prepared scalar
 
 `lean/SameBodyChronologicalPreparedScalar.lean` executes the same-body
@@ -474,6 +482,19 @@ premise is supplied by the caller. OOD-data construction, relation terminal,
 payment extraction, literal Rust refinement and FS probability coupling remain
 open. Evidence is in `chronological-prepared-scalar-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/chronological-prepared-scalar-v1/report.json`.
+
+### 2026-09-12 chronological relation terminal
+
+`lean/SameBodyChronologicalRelationTerminal.lean` carries the same-run
+authenticated scalar into the actual pure relation consumer and an executed
+terminal comparison. Consumer success is derived from one explicit remaining
+source invariant—the canonical parsed word equals the realised word of a
+pre-tau causal strategy—and terminal rejection is retained. The accepted
+certificate supplies exactly the final premise of the existing checked
+terminal-zero theorem. OOD-data and source strategy/functional production,
+payment extraction, Rust refinement and FS probability coupling remain open.
+Evidence is in `chronological-relation-terminal-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/chronological-relation-terminal-v1/report.json`.
 
 ### 2026-09-12 replayable collector source
 
