@@ -1,4 +1,4 @@
-import AspisFormal.K1.V7Tag73GammaRestoredK14CausalSource
+import AspisFormal.K1.V7Tag73GammaRestoredK14FibreAlignment
 
 /-! # Probability-source closure from exact restored-gamma alignment -/
 
