@@ -19,6 +19,11 @@ machine](v7-whole-script-alignment-20260912.md).  Every bounded current
 aligned unprogrammed state; actual adversary/source coupling to that state and
 law remains open.
 
+Latest FS history milestone: [V7 fresh-history projection alignment](v7-history-projection-alignment-20260912.md).
+The ideal uniform finite-tape run from `emptyOracle` now constructs the
+projected current state with no caller-supplied projected-prefix premise,
+while arbitrary adversarial-prehistory/source coupling remains open.
+
 The [selected semantic packing review](semantic-packed-literal-review-20260912.md)
 proves the exact 94-position Boolean writer and positive-slot insertion, while
 formally retaining the counterexample to an invalid off-domain MLE shortcut.
