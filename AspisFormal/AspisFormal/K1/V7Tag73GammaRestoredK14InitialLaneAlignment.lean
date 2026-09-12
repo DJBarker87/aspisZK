@@ -50,7 +50,6 @@ open AspisK1.V7Tag73VariablePrefixGammaFlatRouting
 open AspisK1.V7Tag73VariablePrefixGammaSampler
 open AspisK1.V7Tag73VariablePrefixK14MeasureTransport
 open AspisK1.V7Tag73VariablePrefixK14Probability
-open AspisK1.V7ExactCorrelatedAgreementTerminal
 open AspisPool.AlgorithmicCircleDecoderV7
 open AspisPool.V7C1ConcreteProjectionBinding
 open AspisPool.V7CoherentTraceExtraction
@@ -191,6 +190,7 @@ theorem exact_gamma_restored_k14_probability_le_of_initial_lane_alignment
     {decoder : ExactDecoderInstantiation QM31Exact}
     (clean : Set (ExactCompilerSample HiddenTape parameters))
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (published : PublishedInitialWidth29CurveDecodability exactInitialEncoder)
     (source : ExactTag73GammaRestoredK14InitialLaneAlignment transitionFuel
       configuration projection fixedInstance decoder clean) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
@@ -214,7 +214,7 @@ theorem exact_gamma_restored_k14_probability_le_of_initial_lane_alignment
     initialBatchChallengeCap
   · intro hidden residual skeleton
     exact restored_gamma_initial_lane_failure_target_card_le decoder
-      initialEncoderExact exactV7InitialPublishedWidth29CurveDecodability
+      initialEncoderExact published
       (source.lanes hidden residual)
       source.defaultResponse skeleton
   · exact initial_lane_alignment_covers_restored_k14_event source
