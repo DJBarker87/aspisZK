@@ -1,5 +1,13 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest live-schedule milestone:
+[`SameBodyLivePreparedIncrement`](live-schedule-prepared-increment-20260912.md)
+derives the exact length/range/distinctness certificate from the same live
+q22 sampler success, constructs the typed schedule from that returned list,
+and feeds it with the same alpha0/rho into the authenticated opening pipeline.
+No schedule-equality premise is assumed.  Prefix/log production, successful
+opening preparation, relation consume and literal Rust refinement remain open.
+
 Latest authenticated-increment milestone:
 [`SameBodyAuthenticatedIncrement`](authenticated-increment-20260912.md)
 constructs the shifted q22 scalar and canonical 16-byte transcript value from
@@ -454,3 +462,18 @@ capability/Rust-Aeneas adapter, programmed-fork K1.6 scheduling or deployed ROM
 coupling, and makes no acceptance or independence claim. Exact evidence is in
 `replayable-source-bind-law-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/replayable-source-bind-law-v1/report.json`.
+
+### 2026-09-12 replayable source collector adapter
+
+`lean/FSV8ReplayableSourceCollectorAdapter.lean` adds the source-facing
+dependent bind: an `OracleMachine Observation` runs first, and only its
+returned observation constructs the replayable source/OOD/gamma/middle/later
+continuation. The bind machine is closed into the existing V7
+`SameTapeExperimentOrigin` and consumed by `sourceAttempt`; aborts remain
+oracle aborts. This removes caller-supplied body/observation coupling at the
+continuation boundary while retaining V7 legal-replay, programming, fork and
+resource classifications. Actual Rust/Aeneas capability, programmed target
+and hash/transcript assumptions, fork scheduler/resources, ROM coupling,
+acceptance and independence remain open. Evidence is in
+`replayable-source-collector-adapter-20260912.md` and
+`results/replayable-source-collector-adapter-v1/report.json`.
