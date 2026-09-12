@@ -315,7 +315,13 @@ pub struct V7Tag73PrechallengeSnapshot {
 }
 
 #[cfg(feature = "aeneas-observer")]
-fn snapshot_prechallenge(view: &V6QueryBatchPrechallengeView<'_>) -> V7Tag73PrechallengeSnapshot {
+/// Small source-proof root for the exact scalar value consumed at the K1.3
+/// pre-query boundary.  It is feature-gated and called only by the observer
+/// root; the selected verifier continues to use no observation path.
+#[inline(never)]
+pub fn snapshot_prechallenge(
+    view: &V6QueryBatchPrechallengeView<'_>,
+) -> V7Tag73PrechallengeSnapshot {
     V7Tag73PrechallengeSnapshot {
         transcript_state: view.transcript_state,
         running_claim: view.running_claim,
