@@ -6,8 +6,6 @@
 //! and complete authenticated C2 fibres.
 
 use aspis_core::field::QM31;
-#[cfg(feature = "aeneas-observer")]
-use aspis_core::v6_onefold::V6_QUERY_COUNT;
 use aspis_core::v6_onefold::{
     fold_v6_onefold_queries, prepare_v6_onefold_coordinates, V6WireError,
 };
@@ -21,8 +19,9 @@ use aspis_core::v6_transcript::{
 };
 #[cfg(feature = "aeneas-observer")]
 use aspis_core::v6_transcript::{
+    snapshot_query_batch_prechallenge,
     verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe,
-    V6QueryBatchPrechallengeView,
+    V6QueryBatchPrechallengeSnapshot, V6QueryBatchPrechallengeView,
 };
 #[cfg(feature = "v7-pair-forest-fixed-canonical-audit")]
 use aspis_core::v7_fixed_canonical_audit::{
@@ -297,22 +296,7 @@ pub fn verify_v7_read_only_with_statement_digest(
 /// challenge.  This exists only in the default-off Aeneas bridge feature; the
 /// selected verifier continues to pass the same no-op observer.
 #[cfg(feature = "aeneas-observer")]
-#[derive(Clone, Debug)]
-pub struct V7Tag73PrechallengeSnapshot {
-    pub transcript_state: [u8; 32],
-    pub running_claim: QM31,
-    /// The exact pre-query terminal residual.  This is computed from the
-    /// borrowed accumulator and the first four folded final coefficients at
-    /// the observation boundary; neither large object is copied into the
-    /// source-proof interface.
-    pub terminal_discrepancy: QM31,
-    pub gamma: QM31,
-    pub alpha0: QM31,
-    pub queries: [u32; V6_QUERY_COUNT],
-    pub selector: u8,
-    pub compact_counter: u8,
-    pub frontier_nodes: usize,
-}
+pub type V7Tag73PrechallengeSnapshot = V6QueryBatchPrechallengeSnapshot;
 
 #[cfg(feature = "aeneas-observer")]
 /// Small source-proof root for the exact scalar value consumed at the K1.3
@@ -322,19 +306,7 @@ pub struct V7Tag73PrechallengeSnapshot {
 pub fn snapshot_prechallenge(
     view: &V6QueryBatchPrechallengeView<'_>,
 ) -> V7Tag73PrechallengeSnapshot {
-    V7Tag73PrechallengeSnapshot {
-        transcript_state: view.transcript_state,
-        running_claim: view.running_claim,
-        terminal_discrepancy: view
-            .running_claim
-            .sub(view.weights.dot(&view.final256_coefficients[..4])),
-        gamma: view.gamma,
-        alpha0: view.alpha0,
-        queries: view.queries,
-        selector: view.selector,
-        compact_counter: view.compact_counter,
-        frontier_nodes: view.frontier_nodes,
-    }
+    snapshot_query_batch_prechallenge(view)
 }
 
 /// Feature-gated, monomorphic observer root for the selected atomic Tag-73

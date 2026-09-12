@@ -217,6 +217,47 @@ pub struct V6QueryBatchPrechallengeView<'a> {
     pub frontier_nodes: usize,
 }
 
+/// Owned projection of the exact state immediately before the Tag-73
+/// query-batch challenge. This is feature-gated source-proof plumbing; the
+/// selected verifier continues to install a no-op observer.
+#[cfg(feature = "aeneas-observer")]
+#[derive(Clone, Debug)]
+pub struct V6QueryBatchPrechallengeSnapshot {
+    pub transcript_state: [u8; 32],
+    pub running_claim: QM31,
+    pub terminal_discrepancy: QM31,
+    pub gamma: QM31,
+    pub alpha0: QM31,
+    pub queries: [u32; V6_QUERY_COUNT],
+    pub selector: u8,
+    pub compact_counter: u8,
+    pub frontier_nodes: usize,
+}
+
+/// Materialize the small source-proof projection without copying either the
+/// accumulator or the disclosed final vector. Keeping this calculation in
+/// `aspis-core` lets Aeneas translate its complete local call graph through
+/// `WeightAccumulator::dot` and `weight_at`.
+#[cfg(feature = "aeneas-observer")]
+#[inline(never)]
+pub fn snapshot_query_batch_prechallenge(
+    view: &V6QueryBatchPrechallengeView<'_>,
+) -> V6QueryBatchPrechallengeSnapshot {
+    V6QueryBatchPrechallengeSnapshot {
+        transcript_state: view.transcript_state,
+        running_claim: view.running_claim,
+        terminal_discrepancy: view
+            .running_claim
+            .sub(view.weights.dot(&view.final256_coefficients[..4])),
+        gamma: view.gamma,
+        alpha0: view.alpha0,
+        queries: view.queries,
+        selector: view.selector,
+        compact_counter: view.compact_counter,
+        frontier_nodes: view.frontier_nodes,
+    }
+}
+
 fn profile_root_salt(
     hash: HashFn,
     domain: &[u8],
