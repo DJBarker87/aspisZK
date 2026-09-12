@@ -1103,6 +1103,72 @@ theorem three_quadratic_events_le_bcs_numerator
       simp only [div_eq_mul_inv]
       ring
 
+theorem map_success_exposes_driving_split_and_exact_prefix_run
+    {RandomTape Observation Statement Proof Result : Type*}
+    (capability : SameTapeStartCapability RandomTape Observation Result)
+    (record : FixedFirstRunRecord
+      RandomTape Observation Statement Proof Result)
+    (output : {run : CoupledReplay RandomTape Statement Proof Result //
+      IsOperationalCoupling capability record run})
+    (success : constructLegalReplay capability record = .ok output) :
+    ∃ split : DrivingSplit record.firstRun.q1 record.transcriptDrivingInput,
+      splitAtDrivingQuery record.transcriptDrivingInput record.firstRun.q1 =
+          some split ∧
+      output.1.replayPrefix = split.before ∧
+      output.1.driving = split.driving ∧
+      output.1.suffix = split.after ∧
+      output.1.prefixRun =
+        runPrefix
+          (recordedPrefixController record.initialOracle.history.length
+            split.before)
+          record.oracleLimits .extractorReplay split.before.length
+          record.initialOracle (capability.start record.observation) := by
+  classical
+  have candidateSuccess :
+      constructCandidate capability record = .ok output.1 := by
+    unfold constructLegalReplay at success
+    generalize hCandidate : constructCandidate capability record = candidateValue at success
+    cases candidateValue with
+    | error reason => contradiction
+    | ok candidate =>
+      by_cases operational : IsOperationalCoupling capability record candidate
+      · have hoper := operational
+        have hsub :
+            (⟨candidate, hoper⟩ : {run : CoupledReplay RandomTape Statement Proof Result //
+              IsOperationalCoupling capability record run}) = output :=
+          Except.ok.inj (show
+            (Except.ok ⟨candidate, hoper⟩ : Except CouplingFailure
+              {run : CoupledReplay RandomTape Statement Proof Result //
+                IsOperationalCoupling capability record run}) = .ok output by
+            simpa [operational] using success)
+        have hc : candidate = output.1 := congrArg Subtype.val hsub
+        simpa [hc] using hCandidate
+      · simp [hCandidate, operational] at success
+  unfold constructCandidate at candidateSuccess
+  cases splitResult :
+      splitAtDrivingQuery record.transcriptDrivingInput record.firstRun.q1 with
+  | none =>
+    simp [splitResult] at candidateSuccess
+  | some split =>
+    simp only [splitResult] at candidateSuccess
+    split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    all_goals split at candidateSuccess <;> try contradiction
+    have hval := Except.ok.inj candidateSuccess
+    exact ⟨split, rfl,
+      (congrArg CoupledReplay.replayPrefix hval).symm,
+      (congrArg CoupledReplay.driving hval).symm,
+      (congrArg CoupledReplay.suffix hval).symm,
+      (congrArg CoupledReplay.prefixRun hval).symm⟩
+
 /-!
 The former `AdaptiveHashChainProbabilityLemmaNeeded` placeholder has been
 removed.  It encoded a BCS-shaped coefficient without constructing the
@@ -1112,6 +1178,7 @@ isolated K1.6 modules; no generic compiler statement is retained here.
 -/
 
 #print axioms splitAtDrivingQuery_success
+#print axioms map_success_exposes_driving_split_and_exact_prefix_run
 #print axioms makeSameTapeExperimentOrigin_identity
 #print axioms makeSameTapeExperimentOrigin_first_execution
 #print axioms makeSameTapeExperimentOrigin_same_hidden_tape_start
