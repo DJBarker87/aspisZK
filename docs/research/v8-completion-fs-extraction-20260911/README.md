@@ -452,6 +452,17 @@ coordinates, and that the source answer-row and ordinary-relation OOD indices
 are exactly aligned. Extracting those trace witnesses from the whole live
 source run remains open. Evidence is in `ood-source-primitives-20260912.md`.
 
+`lean/FSLiveSourceThenGammaCoordinates.lean` now extracts those concrete first
+and second retry traces from one successful whole source/OOD/gamma execution,
+derives canonical coordinates for both returned points, and applies the
+fail-closed same-body OOD constructor.  The result deliberately retains the
+alternative that `fromSampled` rejects: it does not assume inverse success or
+silently duplicate either sampler.  Proving that a complete selected verifier
+success reaches the checked-data branch, and connecting that data to the
+chronological relation producer, remain open.  Evidence is in
+`source-gamma-coordinates-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/source-gamma-coordinates-v1/report.json`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected

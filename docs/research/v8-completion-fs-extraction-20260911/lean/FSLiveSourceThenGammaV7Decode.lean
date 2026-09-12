@@ -293,8 +293,124 @@ theorem sourceGammaTrace_every_reached_v7 {n m : Nat}
                 distinctTrace_all_v7, nonzeroTrace_all_v7]
   · simp [aborted]
 
+/-! Public elimination of a successful global trace.  This is kept beside the
+trace constructors so the private abort/return wrappers are reduced here,
+without duplicating the sampler semantics in a consumer leaf. -/
+theorem successful_trace_components {n m : Nat}
+    (firstWork : Point → Script Bytes Block Unit n)
+    (secondWork : Point → Point → Script Bytes Block Unit m)
+    (body : Bytes) (tape : Tape) (start : Transcript)
+    (out : OODResult) (gamma : Gamma)
+    (success :
+      (sourceGammaTrace firstWork secondWork body tape start).outcome =
+        some (.ok (out, gamma))) :
+    ∃ first second,
+      (sourceGammaTrace firstWork secondWork body tape start).first = some first ∧
+      (sourceGammaTrace firstWork secondWork body tape start).second = some second ∧
+      first.result = .ok out.first ∧
+      second.result = .ok out.second ∧
+      first = circleTrace tape 3 start ∧
+      ∃ firstPoint, first.result = .ok firstPoint ∧
+        second = distinctTrace firstPoint tape 3
+          (absorb tape
+            { digest := (circleTrace tape 3 start).final.digest,
+              oracle := (run tape (firstWork firstPoint)
+                (circleTrace tape 3 start).final.oracle).2 }
+            62 (0 :: answerBytes body 0)) := by
+  unfold sourceGammaTrace at success
+  split at success
+  · rename_i canonical
+    cases firstResult : (circleTrace tape 3 start).result with
+    | error e => simp [firstResult, returned] at success
+    | ok firstPoint =>
+      cases firstWorkResult :
+          (run tape (firstWork firstPoint)
+            (circleTrace tape 3 start).final.oracle).1 with
+      | none => simp [firstResult, firstWorkResult, aborted] at success
+      | some unit =>
+        let afterFirst := absorb tape
+          { digest := (circleTrace tape 3 start).final.digest,
+            oracle := (run tape (firstWork firstPoint)
+              (circleTrace tape 3 start).final.oracle).2 }
+          62 (0 :: answerBytes body 0)
+        cases secondResult : (distinctTrace firstPoint tape 3 afterFirst).result with
+        | error e => simp [firstResult, firstWorkResult, afterFirst,
+            secondResult, returned] at success
+        | ok secondPoint =>
+          cases secondWorkResult :
+              (run tape (secondWork firstPoint secondPoint)
+                (distinctTrace firstPoint tape 3 afterFirst).final.oracle).1 with
+          | none => simp [firstResult, firstWorkResult, afterFirst,
+              secondResult, secondWorkResult, aborted] at success
+          | some unit =>
+            let afterSecond := absorb tape
+              { digest := (distinctTrace firstPoint tape 3 afterFirst).final.digest,
+                oracle := (run tape (secondWork firstPoint secondPoint)
+                  (distinctTrace firstPoint tape 3 afterFirst).final.oracle).2 }
+              62 (1 :: answerBytes body 1)
+            let afterNonce := absorb tape afterSecond 28 (batchNonceBytes body)
+            cases gammaResult : (nonzeroTrace tape 3 afterNonce).result with
+            | error e => simp [firstResult, firstWorkResult, afterFirst,
+                secondResult, secondWorkResult, afterSecond, afterNonce,
+                gammaResult, returned] at success
+            | ok gamma' =>
+              simp [firstResult, firstWorkResult, afterFirst,
+                secondResult, secondWorkResult, afterSecond, afterNonce,
+                gammaResult, returned] at success
+              rcases success with ⟨hout, hgamma⟩
+              subst out
+              have hsecond :
+                  (distinctTrace firstPoint tape 3
+                    (absorb tape
+                      { digest := (circleTrace tape 3 start).final.digest,
+                        oracle := (run tape (firstWork firstPoint)
+                          (circleTrace tape 3 start).final.oracle).2 }
+                      62 (0 :: answerBytes body 0))).result =
+                    Except.ok secondPoint := by
+                simpa [afterFirst] using secondResult
+              have hsecondWork :
+                  (run tape (secondWork firstPoint secondPoint)
+                    (distinctTrace firstPoint tape 3
+                      (absorb tape
+                        { digest := (circleTrace tape 3 start).final.digest,
+                          oracle := (run tape (firstWork firstPoint)
+                            (circleTrace tape 3 start).final.oracle).2 }
+                        62 (0 :: answerBytes body 0))).final.oracle).1 =
+                    some unit := by
+                simpa [afterFirst] using secondWorkResult
+              have hgammaTrace :
+                  (nonzeroTrace tape 3
+                    (absorb tape
+                      (absorb tape
+                        { digest := (distinctTrace firstPoint tape 3
+                            (absorb tape
+                              { digest := (circleTrace tape 3 start).final.digest,
+                                oracle := (run tape (firstWork firstPoint)
+                                  (circleTrace tape 3 start).final.oracle).2 }
+                              62 (0 :: answerBytes body 0))).final.digest,
+                          oracle := (run tape (secondWork firstPoint secondPoint)
+                            (distinctTrace firstPoint tape 3
+                              (absorb tape
+                                { digest := (circleTrace tape 3 start).final.digest,
+                                  oracle := (run tape (firstWork firstPoint)
+                                    (circleTrace tape 3 start).final.oracle).2 }
+                                62 (0 :: answerBytes body 0))).final.oracle).2 }
+                        62 (1 :: answerBytes body 1))
+                      28 (batchNonceBytes body))).result = Except.ok gamma := by
+                simpa [afterFirst, afterSecond, afterNonce, hgamma] using gammaResult
+              refine ⟨circleTrace tape 3 start,
+                distinctTrace firstPoint tape 3 afterFirst, ?_, ?_,
+                firstResult, secondResult, rfl,
+                ⟨firstPoint, firstResult, rfl⟩⟩
+              · simp [canonical, sourceGammaTrace, afterFirst, firstResult,
+                  firstWorkResult, hsecond, hsecondWork, hgammaTrace, returned]
+              · simp [canonical, sourceGammaTrace, afterFirst, firstResult,
+                  firstWorkResult, hsecond, hsecondWork, hgammaTrace, returned]
+  · simp [aborted] at success
+
 #print axioms sourceGammaTrace_exact
 #print axioms sourceGammaTrace_every_reached_v7
+#print axioms successful_trace_components
 
 end
 end AspisV8Completion.FSLiveSourceThenGammaV7Decode
