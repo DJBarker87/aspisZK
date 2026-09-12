@@ -282,3 +282,37 @@ NUC scopes and print only `propext`, `Classical.choice` and `Quot.sound` where
 applicable.  No wire, protocol, production acceptance, byte census or CU claim
 changed.  Global soundness, the resource-bounded Fiat--Shamir lift, allowed-
 access checked payment extraction and adaptive full-view ZK remain unfinished.
+
+### 2026-09-12 chronological OOD/gamma and Copy callback continuation
+
+`lean/FSLiveOODV7Decode.lean`, `lean/FSLiveNonzeroV7Decode.lean` and
+`lean/FSLiveSourceThenGammaV7Decode.lean` now form one total deterministic
+trace from canonical-body absorption through both sequential OOD samplers and
+the nonzero-gamma sampler.  The trace retains parameter rejection, equal-point
+rejection, zero retries, exhaustion, source-callback aborts and the exact final
+digest/cache/cursor/log.  Every reached attempt that produces field limbs is
+decoded through the V7 ordinary-prefix decoder, including attempts preceding a
+later abort.  This closes the sampler-content and ordering bridge; it does not
+establish freshness or the adversarial random-oracle law.
+
+`lean/SelectedCopyPatternValuesLiteral.lean`,
+`lean/SelectedCopyLinkConstants.lean` and
+`lean/SelectedCopyResidualCallback.lean` connect the independent literal
+transcriptions of all 14 patterns and all 136 links to the selected functional
+Copy terminal.  The proof includes both endpoint slots, tags, public weights,
+the nonlinear denominator/numerator calculation, the producer-minus-consumer
+sign and the active-row multiplier.  Literal Rust/Aeneas machine refinement
+and composition with every other semantic lane remain open.
+
+`lean/FSV8V7OracleMachineBridge.lean` now proves the first operational state
+correspondence: a successful fresh V7 query from empty state and its cached
+repeat project to the current interpreter's answer/cache/cursor/log behavior.
+Total-call exhaustion, fresh-call exhaustion and controller refusal are not
+conditioned away.  The required next step is a constructed recursive state
+invariant and whole-`Script` induction, followed by transport of the existing
+V7 uniform-tape machine law.  Until that is proved, actual causal-distribution
+coupling remains partial.
+
+The supplied completion pack was also rerun independently: its 67 Python
+tests and five optimized Rust reference tests pass.  Those tests are diagnostic
+evidence only; its uncompiled Lean drafts were not promoted into this chain.
