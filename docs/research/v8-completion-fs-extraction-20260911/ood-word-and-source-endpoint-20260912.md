@@ -42,3 +42,13 @@ All three focused leaves were checked with pinned Lean 4.32.0 on the bounded
 NUC runner.  Machine evidence is stored under the corresponding results
 directories.  These are deterministic/source-interface results, not a
 complete random-oracle sampler theorem or global soundness result.
+
+## One tape across cached and fresh execution
+
+`FSFreshTapeTrace.lean` proves directly for the current interpreter that the
+answers in all events marked fresh, in chronological order, are exactly
+`tape[0..state.next)`.  Cached events remain in the log but do not consume a
+tape coordinate, and the invariant holds for successful and aborting scripts.
+This supplies the deterministic half of the V7-style uniform-tape coupling;
+sampling that tape uniformly and connecting the actual adversary/verifier
+execution to a causal target tree remain separate probability obligations.
