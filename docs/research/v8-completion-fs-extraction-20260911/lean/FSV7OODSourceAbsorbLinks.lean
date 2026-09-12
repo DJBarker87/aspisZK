@@ -20,8 +20,8 @@ noncomputable section
 local instance : DecidableEq Point := Classical.decEq _
 
 /- The two label-62 records are extracted from the successful concrete
-   execution itself.  The existential answers are the actual query replies,
-   not sampled or independently supplied values. -/
+   execution itself.  Their answers are the result fields, not existentially
+   supplied values. -/
 theorem successful_source_absorb_links {n m : Nat}
     (firstWork : Point → Script Bytes HashBlock Unit n)
     (secondWork : Point → Point → Script Bytes HashBlock Unit m)
@@ -30,15 +30,15 @@ theorem successful_source_absorb_links {n m : Nat}
     (success :
       (run tape (FSV7OODBodyScript.sourceScript firstWork secondWork body digest)
       FSFirstFresh.empty).1 = some (Except.ok out, finalDigest)) :
-    ∃ firstState firstAnswer secondState secondAnswer,
+    ∃ firstState secondState,
       LinkedAbsorb
         (run tape (FSV7OODBodyScript.sourceScript firstWork secondWork body digest)
           FSFirstFresh.empty).2.log
-        (absorbInput firstState 62 (0 :: FSV8OODBodyScript.answerBytes body 0)) firstAnswer ∧
+        (absorbInput firstState 62 (0 :: FSV8OODBodyScript.answerBytes body 0)) out.afterFirstAnswer ∧
       LinkedAbsorb
         (run tape (FSV7OODBodyScript.sourceScript firstWork secondWork body digest)
           FSFirstFresh.empty).2.log
-        (absorbInput secondState 62 (1 :: FSV8OODBodyScript.answerBytes body 1)) secondAnswer := by
+        (absorbInput secondState 62 (1 :: FSV8OODBodyScript.answerBytes body 1)) out.afterSecondAnswer := by
   have canonical := FSV8OODBodyScript.checked_success_canonical decodePoint
     firstWork secondWork body digest tape FSFirstFresh.empty (.ok out, finalDigest) success
   simp only [FSV7OODBodyScript.sourceScript, FSV8OODBodyScript.checkedBodyPairScript,
@@ -122,8 +122,7 @@ theorem successful_source_absorb_links {n m : Nat}
             rw [run_bind] at firstLinked
             rw [run_absorb tape ⟨secondState, secondOracle⟩ 62 secondData] at firstLinked
             simp only [run] at firstLinked
-            refine ⟨firstState, (absorb tape ⟨firstState, firstOracle⟩ 62 firstData).digest,
-              secondState, (absorb tape ⟨secondState, secondOracle⟩ 62 secondData).digest, ?_, ?_⟩
+            refine ⟨firstState, secondState, ?_, ?_⟩
             · exact firstLinked
             · exact secondLinked
 #print axioms successful_source_absorb_links
