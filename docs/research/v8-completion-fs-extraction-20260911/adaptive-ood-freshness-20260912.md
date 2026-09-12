@@ -26,6 +26,11 @@ The companion deterministic theorem proves that the two installed coins are
 the returned answers and that exactly two unread tape cells are consumed.
 Cached answers are not included as fresh coins.
 
+`sourceSqueeze_uniform_targets` instantiates the result for the literal
+`digest || 1` output request and `digest || 2` advancement request.  Their
+byte-level inequality is proved, and reachable history validity derives both
+cache misses from chronological-prefix absence.
+
 ## Why this matters
 
 The second Aspis OOD state depends on the first OOD answer.  A product law

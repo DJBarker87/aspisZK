@@ -98,9 +98,67 @@ theorem adaptivePair_uniform_targets [Fintype O] [Nonempty O] [DecidableEq O]
       _ = 1 := Fintype.sum_ite_eq' firstTarget (fun _ => (1 : ℚ))
   rw [numerator]
 
+/-- Prefix-facing form.  Reachable history validity converts absence from the
+chronological log into the two cache misses required above. -/
+theorem adaptivePair_uniform_unseen
+    [Fintype FSExposureOrder.Block] [Nonempty FSExposureOrder.Block]
+    [DecidableEq FSExposureOrder.Block]
+    (tape : Nat → FSExposureOrder.Block) (state : FSFirstFresh.Oracle)
+    (firstInput : List UInt8)
+    (secondInput : FSExposureOrder.Block → List UInt8)
+    (firstTarget secondTarget : FSExposureOrder.Block)
+    (valid : FSFirstFresh.ValidHistory state)
+    (firstUnseen : firstInput ∉ FSExposureOrder.inputs state.log)
+    (secondUnseen : ∀ answer, secondInput answer ∉ FSExposureOrder.inputs state.log)
+    (different : ∀ answer, secondInput answer ≠ firstInput) :
+    (∑ first : FSExposureOrder.Block, ∑ second : FSExposureOrder.Block,
+      if (adaptivePair tape state firstInput secondInput (first, second)).1 =
+          (firstTarget, secondTarget)
+      then (1 : ℚ) else 0) / (Fintype.card FSExposureOrder.Block : ℚ) ^ 2 =
+        1 / (Fintype.card FSExposureOrder.Block : ℚ) ^ 2 :=
+  adaptivePair_uniform_targets tape state firstInput secondInput
+    firstTarget secondTarget
+    (cache_miss_of_unseen state valid firstInput firstUnseen)
+    (fun answer => cache_miss_of_unseen state valid (secondInput answer)
+      (secondUnseen answer))
+    different
+
+abbrev outputInput (digest : FSExposureOrder.Block) : List UInt8 :=
+  FSExposureOrder.squeezeInput digest
+
+def advanceInput (digest : FSExposureOrder.Block) : List UInt8 :=
+  FSExposureOrder.blockBytes digest ++ [2]
+
+theorem advanceInput_ne_outputInput (digest : FSExposureOrder.Block) :
+    advanceInput digest ≠ outputInput digest := by
+  intro same
+  have last := congrArg List.getLast? same
+  simp [advanceInput, outputInput, FSExposureOrder.squeezeInput] at last
+
+/-- Exact joint law for the two literal source queries made by one squeeze.
+The two byte strings must both be unseen at the starting prefix; if either was
+queried earlier, that execution belongs to the separately charged target-hit
+case rather than this law. -/
+theorem sourceSqueeze_uniform_targets
+    (tape : Nat → FSExposureOrder.Block) (state : FSFirstFresh.Oracle)
+    (digest firstTarget secondTarget : FSExposureOrder.Block)
+    (valid : FSFirstFresh.ValidHistory state)
+    (outputUnseen : outputInput digest ∉ FSExposureOrder.inputs state.log)
+    (advanceUnseen : advanceInput digest ∉ FSExposureOrder.inputs state.log) :
+    (∑ first : FSExposureOrder.Block, ∑ second : FSExposureOrder.Block,
+      if (adaptivePair tape state (outputInput digest) (fun _ => advanceInput digest)
+          (first, second)).1 = (firstTarget, secondTarget)
+      then (1 : ℚ) else 0) / (Fintype.card FSExposureOrder.Block : ℚ) ^ 2 =
+        1 / (Fintype.card FSExposureOrder.Block : ℚ) ^ 2 :=
+  adaptivePair_uniform_unseen tape state (outputInput digest)
+    (fun _ => advanceInput digest) firstTarget secondTarget valid outputUnseen
+    (fun _ => advanceUnseen) (fun _ => advanceInput_ne_outputInput digest)
+
 #print axioms adaptivePair_outputs
 #print axioms adaptivePair_next
 #print axioms adaptivePair_uniform_targets
+#print axioms adaptivePair_uniform_unseen
+#print axioms sourceSqueeze_uniform_targets
 
 end
 end AspisV8Completion.FSAdaptiveFreshPairMass
