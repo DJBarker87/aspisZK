@@ -446,6 +446,12 @@ The chronological sampler/gamma connection and literal Rust refinement remain
 open. Evidence is in `same-body-ood-data-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/same-body-ood-data-v1/report.json`.
 
+`lean/SameBodyOODSourcePrimitives.lean` additionally proves that every output
+of the concrete V7 first/distinct circle retry traces has canonically decodable
+coordinates, and that the source answer-row and ordinary-relation OOD indices
+are exactly aligned. Extracting those trace witnesses from the whole live
+source run remains open. Evidence is in `ood-source-primitives-20260912.md`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected
