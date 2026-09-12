@@ -473,6 +473,15 @@ must still call this constructor; this leaf does not turn an arbitrary older
 `live-relation-from-sampled-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/live-relation-from-sampled-v1/report.json`.
 
+`lean/SameBodyLiveRelationFromSampledIntegration.lean` applies that executable
+constructor to the actual successful middle and later run records and gives a
+total split: a `Ready` value with exact same-body provenance and checked data,
+or a named sampled-data/relation-input rejection. The successful source/OOD
+prefix still has to be composed with these middle/later records in the whole
+verifier; no rejected branch is assigned a probability. Evidence is in
+`live-relation-from-sampled-integration-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/live-relation-from-sampled-integration-v1/report.json`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected
