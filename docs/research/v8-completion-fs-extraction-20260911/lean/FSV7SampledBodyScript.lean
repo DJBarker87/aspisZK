@@ -1,4 +1,5 @@
 import FSQuerySchedule
+import FSOptionBranch
 import FSV7SelectedBodyScript
 
 /-! No caller-supplied query schedule: absorb this body's final256 bytes and
@@ -36,12 +37,10 @@ def sampledBody (tape : Tape) (before : Transcript) (cuts : RootCuts)
     Option (Schedule × Option OrderedRawQueryLog) × Oracle :=
   let queryPrefix := beforeQueries tape before body
   let sampled := reference tape 8 queryPrefix [] 0
-  match success : sampled.1 with
-  | none => (none, sampled.2.oracle)
-  | some returned =>
+  FSOptionBranch.branch sampled.1 (none, sampled.2.oracle) (fun returned success =>
     let schedule := from_success tape queryPrefix returned success
     let checked := run tape (selectedScript cuts (positionsOf schedule) body) sampled.2.oracle
-    (some (schedule, checked.1), checked.2)
+    (some (schedule, checked.1), checked.2))
 
 theorem before_queries_valid (tape : Tape) (before : Transcript)
     (body : List AspisPool.V7MerkleQueryGrammar.Byte) (valid : FSFirstFresh.ValidHistory before.oracle) :
@@ -60,8 +59,15 @@ theorem sampled_body_some (tape : Tape) (before : Transcript) (cuts : RootCuts)
         (reference tape 8 (beforeQueries tape before body) [] 0).2.oracle
       (some (schedule, checked.1), checked.2) := by
   unfold sampledBody
-  cases sample
-  rfl
+  dsimp only
+  simpa only using FSOptionBranch.some_branch
+    (reference tape 8 (beforeQueries tape before body) [] 0).1
+    (none, (reference tape 8 (beforeQueries tape before body) [] 0).2.oracle)
+    (fun actual actualSample =>
+      let schedule := from_success tape (beforeQueries tape before body) actual actualSample
+      let checked := run tape (selectedScript cuts (positionsOf schedule) body)
+        (reference tape 8 (beforeQueries tape before body) [] 0).2.oracle
+      (some (schedule, checked.1), checked.2)) returned sample
 
 theorem sampled_body_none (tape : Tape) (before : Transcript) (cuts : RootCuts)
     (body : List AspisPool.V7MerkleQueryGrammar.Byte)
@@ -69,8 +75,15 @@ theorem sampled_body_none (tape : Tape) (before : Transcript) (cuts : RootCuts)
     sampledBody tape before cuts body =
       (none, (reference tape 8 (beforeQueries tape before body) [] 0).2.oracle) := by
   unfold sampledBody
-  cases sample
-  rfl
+  dsimp only
+  simpa only using FSOptionBranch.none_branch
+    (reference tape 8 (beforeQueries tape before body) [] 0).1
+    (none, (reference tape 8 (beforeQueries tape before body) [] 0).2.oracle)
+    (fun actual actualSample =>
+      let schedule := from_success tape (beforeQueries tape before body) actual actualSample
+      let checked := run tape (selectedScript cuts (positionsOf schedule) body)
+        (reference tape 8 (beforeQueries tape before body) [] 0).2.oracle
+      (some (schedule, checked.1), checked.2)) sample
 
 /-- Returned query positions come from the actual sampler execution; their
 distinctness/range and all Merkle interfaces are constructed. The only

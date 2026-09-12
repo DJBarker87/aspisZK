@@ -1,0 +1,35 @@
+{
+  "status": "PASS_FOCUSED_HISTORICAL_LEAVES",
+  "claim_scope": "The generic bounded scripts exactly implement three-candidate circle retries and three distinct-point retries, retaining cache/log/state and every exhaustion outcome. The concrete leaf reuses the existing exact V7 QM31 rational circle map and canonical limb order. A restricted no-hash producer composes first-point sampling, the 465-byte first-answer absorption and distinct second-point sampling. Uniformity and actual source-state coupling remain open.",
+  "source_revision": "b719ea2b587ba478ef0b46a3fa27d01b3fe4ef54 plus uncommitted scoped source",
+  "sources": {
+    "FSChallengeCanonical.lean": "c7509f81a9ec0f18de55efde1f4f884d001a1df39cbb65220fae19f6642eed29",
+    "FSOODSampler.lean": "85027d8dc94ef067fede105693c7e977eb41d25f02e348c9a9211ef495f9e71f",
+    "FSV7OODSampler.lean": "bdcecdc9ad08288f91a6640512e7bf53bd02da1d46cc55af2c7ad9dfee982080",
+    "FSOODPair.lean": "7ae45649a99e50500079bdb728ac7b4448f138a2c5b85de0d6ab4b25b7860947"
+  },
+  "artifacts": {
+    "FSChallengeCanonical.olean": "39e2623a29a60102fde0d0572c71771dd7c2d5a45e5c08f4f4d65d75028bc82b",
+    "FSOODSampler.olean": "8d593df7fde76616bca139900837cb890d662074437d412c340dd0ba39b8d1c6",
+    "FSV7OODSampler.olean": "3f12bdd104f60da5cfda0714fbce5a4e9749c23a396b2b64cd4acf90dd81ea17",
+    "FSOODPair.olean": "e556612378137303c0c0ad8c7e0b354c907fb2c834ba531585a6d79c365900a4"
+  },
+  "toolchain": "Lean 4.32.0 historical pinned binary",
+  "commands": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -o FSOODSampler.olean FSOODSampler.lean",
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -o FSChallengeCanonical.olean FSChallengeCanonical.lean",
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -o FSV7OODSampler.olean FSV7OODSampler.lean",
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -o FSOODPair.olean FSOODPair.lean"
+  ],
+  "cgroup": {"memory_high":"8G","memory_max":"10G","memory_swap_max":"0","runtime_max_seconds":600},
+  "runs": [
+    {"unit":"aspis-ood-sampler-v1.scope","target":"FSOODSampler.lean","exit_code":0,"wall_seconds":0.71,"maximum_resident_set_kib":753008,"swaps":0},
+    {"unit":"aspis-ood-sampler-v1.scope","target":"FSV7OODSampler.lean","exit_code":1,"wall_seconds":3.12,"maximum_resident_set_kib":6449216,"swaps":0,"failure":"extra named end after unnamed noncomputable section; no theorem error"},
+    {"unit":"aspis-v7-ood-sampler-v2.scope","target":"FSV7OODSampler.lean","exit_code":0,"wall_seconds":3.13,"maximum_resident_set_kib":6486868,"swaps":0,"scope":"superseded by canonical seam import"},
+    {"unit":"aspis-ood-canonical-v1.scope","target":"FSChallengeCanonical.lean","exit_code":0,"wall_seconds":0.35,"maximum_resident_set_kib":749616,"swaps":0},
+    {"unit":"aspis-ood-canonical-v1.scope","target":"FSV7OODSampler.lean","exit_code":0,"wall_seconds":3.20,"maximum_resident_set_kib":6514360,"swaps":0},
+    {"unit":"aspis-ood-pair-v1.scope","target":"FSOODPair.lean","exit_code":0,"wall_seconds":0.45,"maximum_resident_set_kib":753328,"swaps":0}
+  ],
+  "axioms": ["propext","Classical.choice","Quot.sound"],
+  "limitations": ["historical dependency artifacts reused", "first answer-vector absorption is composed only for a restricted no-hash response producer", "second answer-vector absorption and complete OOD source prefix not yet composed", "no sampler uniformity or FS probability theorem", "literal Rust refinement and fresh kernel replay not run"]
+}
