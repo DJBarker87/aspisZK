@@ -493,6 +493,15 @@ producer remain open.  Evidence is in
 `replayable-run-from-sampled-integration-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/replayable-run-from-sampled-integration-v1/report.json`.
 
+`lean/SameBodyReplayableOldViewIntegration.lean` specializes that constructed
+classification to the exact `oldView` of the final oracle returned by the same
+replayable execution.  It removes a freely chosen hash-view argument from the
+usable result without introducing a view equality.  This is a specialization
+of the preceding theorem, not a new authentication or probability bound; the
+current replayable grammar still schedules its Merkle suffix later than the
+literal Rust opening calls.  Evidence is in
+`../../../results/v8-completion-fs-extraction-20260911/replayable-old-view-v1/report.json`.
+
 `lean/SameBodyFunctionalProducerSource.lean` constructs the verifier-derived
 compact functional data from the same canonical body, sampled OOD result,
 gamma, kappa and explicit public statement point.  It fails closed on sampled
