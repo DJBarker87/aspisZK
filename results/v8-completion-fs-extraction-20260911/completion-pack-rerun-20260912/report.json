@@ -1,0 +1,37 @@
+{
+  "status": "PASS_REFERENCE_TESTS_ONLY",
+  "revision": "d718070e3fe0b2b08b4da8ea18cb9e0fae3236d2",
+  "input_archive": "/Users/dominic/Downloads/aspis_v8_completion_pack_20260911.zip",
+  "input_archive_sha256": "5df19a177ffe0ddf3e2365de1b5feb0b56fe94b5b6e8497f7e48113ff796f2ff",
+  "manifest_check": "PASS",
+  "python": {
+    "command": "python3 run.py --stage python",
+    "exit_code": 0,
+    "tests_passed": 67,
+    "tests_failed": 0
+  },
+  "static": {
+    "command": "python3 run.py --stage static",
+    "exit_code": 0,
+    "status": "LEXICAL_PASS_ONLY"
+  },
+  "preflight": {
+    "command": "python3 run.py --stage preflight --repo /Users/dominic/ZK/.worktrees/ZK-v8-completion-fs-extraction-20260911",
+    "exit_code": 0,
+    "status": "NEEDS_HUMAN_ENDPOINT_REVIEW",
+    "descends_from_audited_pin": true,
+    "note": "The reported dirty paths were active scoped agent work, not archive mutations."
+  },
+  "rust": {
+    "command": "cargo test --release --manifest-path <isolated-temporary-copy>/Cargo.toml",
+    "exit_code": 0,
+    "tests_passed": 5,
+    "tests_failed": 0,
+    "note": "An isolated temporary copy was required because extracting below the repository root made Cargo inherit the parent workspace."
+  },
+  "scope": [
+    "These are executable reference and diagnostic tests, not compiled Lean evidence.",
+    "The supplied Lean drafts are not promoted into the checked chain by this result.",
+    "No source coupling, global probability theorem, extraction theorem, ZK theorem, or CU certificate follows from these tests."
+  ]
+}
