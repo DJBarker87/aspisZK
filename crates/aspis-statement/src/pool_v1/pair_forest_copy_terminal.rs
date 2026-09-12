@@ -824,8 +824,7 @@ fn accumulate_endpoint_selector_tensor_basis(
     #[cfg(feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit")]
     let _ = tag;
     let weight_index = COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + group_local;
-    scratch[weight_index] =
-        scratch[weight_index].add(selected_binary_weight(high, weight));
+    scratch[weight_index] = scratch[weight_index].add(selected_binary_weight(high, weight));
     let pattern_local =
         usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
     scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + pattern_local] =
