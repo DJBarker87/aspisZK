@@ -581,6 +581,13 @@ resource room, acceptance, ROM coupling or probability. Evidence is in
 `gamma-target-disposition-20260912.md` and
 `results/gamma-target-disposition-v1/report.json`.
 
+`lean/FSV8GammaTargetRestorationAdapter.lean` then connects the prior-q1
+branch to the existing exact V7 K1.6 fixed-record replay constructor and
+checker, while retaining table-hit and absent-table outcomes. It is a
+deterministic boundary adapter, not the missing programming/fork/resource or
+ROM probability theorem. Evidence is in
+`gamma-target-restoration-adapter-20260912.md`.
+
 ### 2026-09-12 live authenticated relation observation
 
 `lean/SameBodyLiveRelationObservation.lean` constructs the post-query relation
