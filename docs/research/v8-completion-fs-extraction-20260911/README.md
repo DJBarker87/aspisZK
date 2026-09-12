@@ -553,6 +553,17 @@ reference is not yet a refinement theorem for the structured Rust kernel.
 Evidence is in `source-terminal-weight-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/source-terminal-weight-v1/report.json`.
 
+`lean/SameBodyConsumeConstructsWord.lean` proves that the early, four compact
+response and final256 projections reassemble the canonical 697-field word,
+then derives the complete causal-word equality from an actually successful
+`SameBodyRelation.consume` execution. `lean/SameBodySourceFromConsumption.lean`
+uses that result to construct the dense source relation producer without a
+caller-supplied whole-word equality. The remaining source obligation is now a
+legal staged strategy plus the consumer success that the chronological
+verifier must execute; terminal acceptance and probability are not assumed.
+Evidence is in `consume-constructs-word-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/consume-constructs-word-v1/report.json`.
+
 `lean/SameBodyAffinePairConsistency.lean` proves the source optimization that
 shares the nine unchanged tensor factors when constructing affine correction
 entries 0 and 2/1. For arbitrary three-row point tables and scales, its pair
