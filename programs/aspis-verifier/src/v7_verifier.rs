@@ -6,9 +6,13 @@
 //! and complete authenticated C2 fibres.
 
 use aspis_core::field::QM31;
+#[cfg(feature = "aeneas-observer")]
+use aspis_core::sumcheck::WeightAccumulator;
 use aspis_core::v6_onefold::{
     fold_v6_onefold_queries, prepare_v6_onefold_coordinates, V6WireError,
 };
+#[cfg(feature = "aeneas-observer")]
+use aspis_core::v6_onefold::{V6_FINAL_QM31_VALUES, V6_QUERY_COUNT};
 use aspis_core::v6_query_batch::V6AuthenticatedQueryBatch;
 #[cfg(feature = "v7-pair-forest-fixed-canonical-audit")]
 use aspis_core::v6_transcript::verify_v7_canonical_transcript_and_relation_prepared_with_hiding_context;
@@ -16,6 +20,11 @@ use aspis_core::v6_transcript::{
     verify_v7_compact_transcript_and_relation_prepared,
     verify_v7_compact_transcript_and_relation_prepared_with_hiding_context, V6QueryBatchView,
     V6SemanticView, V6TranscriptContext, V6TranscriptError, V6VerifiedTranscript,
+};
+#[cfg(feature = "aeneas-observer")]
+use aspis_core::v6_transcript::{
+    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe,
+    V6QueryBatchPrechallengeView,
 };
 #[cfg(feature = "v7-pair-forest-fixed-canonical-audit")]
 use aspis_core::v7_fixed_canonical_audit::{
@@ -52,6 +61,8 @@ pub enum V7VerifyError {
     StatementDigest,
     Transcript(V6TranscriptError),
     Query(V6WireError),
+    #[cfg(feature = "aeneas-observer")]
+    PrechallengeObservationMissing,
 }
 
 impl From<V6TranscriptError> for V7VerifyError {
@@ -282,6 +293,90 @@ pub fn verify_v7_read_only_with_statement_digest(
         transcript,
         folded_query_sum,
     })
+}
+
+/// Owned transcript state observed immediately before the Tag-73 query-batch
+/// challenge.  This exists only in the default-off Aeneas bridge feature; the
+/// selected verifier continues to pass the same no-op observer.
+#[cfg(feature = "aeneas-observer")]
+#[derive(Clone, Debug)]
+pub struct V7Tag73PrechallengeSnapshot {
+    pub transcript_state: [u8; 32],
+    pub running_claim: QM31,
+    pub weights: WeightAccumulator,
+    pub gamma: QM31,
+    pub alpha0: QM31,
+    pub final256_coefficients: [QM31; V6_FINAL_QM31_VALUES],
+    pub queries: [u32; V6_QUERY_COUNT],
+    pub selector: u8,
+    pub compact_counter: u8,
+    pub frontier_nodes: usize,
+}
+
+#[cfg(feature = "aeneas-observer")]
+fn snapshot_prechallenge(view: &V6QueryBatchPrechallengeView<'_>) -> V7Tag73PrechallengeSnapshot {
+    V7Tag73PrechallengeSnapshot {
+        transcript_state: view.transcript_state,
+        running_claim: view.running_claim,
+        weights: view.weights.clone(),
+        gamma: view.gamma,
+        alpha0: view.alpha0,
+        final256_coefficients: *view.final256_coefficients,
+        queries: view.queries,
+        selector: view.selector,
+        compact_counter: view.compact_counter,
+        frontier_nodes: view.frontier_nodes,
+    }
+}
+
+/// Feature-gated, monomorphic observer root for the selected atomic Tag-73
+/// read-only verifier.  Its parser, hiding context, terminal predicate, and
+/// authenticated query fold are the production ones.  Only the pre-existing
+/// no-op callback is replaced with an owned observation for source proofs.
+#[cfg(feature = "aeneas-observer")]
+#[allow(clippy::too_many_arguments)]
+#[inline(never)]
+pub fn observe_v7_read_only_with_statement_digest(
+    hash: HashFn,
+    proof: &[u8],
+    frontier_nodes: usize,
+    program_id: &Pubkey,
+    release_binding: [u8; 32],
+    attempt_id: &Pubkey,
+    statement: &AtomicPaymentStatementV4,
+    statement_digest: [u8; 32],
+    check_pow: bool,
+) -> Result<(VerifiedV7ReadOnly, V7Tag73PrechallengeSnapshot), V7VerifyError> {
+    let wire = V7CompactOneFoldWire::parse_deferred_canonicality(proof, frontier_nodes)?;
+    let context = V6TranscriptContext {
+        program_id: program_id.to_bytes(),
+        release_binding,
+        statement_digest,
+        attempt_id: attempt_id.to_bytes(),
+    };
+    let mut observed = None;
+    let transcript =
+        verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe(
+            hash,
+            &wire,
+            &context,
+            StateOnlyHidingContext::atomic_spend_v3(context.statement_digest, context.attempt_id),
+            atomic_state_only_copy_inactive_row_groups_v3(),
+            atomic_state_only_copy_inactive_group_masks_v3(),
+            check_pow,
+            |view| terminal_matches(statement, view),
+            |view| authenticate_and_fold_queries(hash, &wire, view),
+            |view| observed = Some(snapshot_prechallenge(view)),
+        )?;
+    let snapshot = observed.ok_or(V7VerifyError::PrechallengeObservationMissing)?;
+    let folded_query_sum = transcript.folded_query_sum;
+    Ok((
+        VerifiedV7ReadOnly {
+            transcript,
+            folded_query_sum,
+        },
+        snapshot,
+    ))
 }
 
 #[allow(clippy::too_many_arguments)]
