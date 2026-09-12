@@ -375,3 +375,16 @@ terminal relation or payment acceptance.  Response1–response3, their sequentia
 alphas, and the connection to `SameBodyRelation.consume` remain open.  Exact
 evidence and scope are in `replayable-collector-source-20260912.md` and
 `results/v8-completion-fs-extraction-20260911/replayable-collector-source-v1/`.
+
+### 2026-09-12 live later-relation suffix
+
+`lean/FSLiveLaterRelationSuffix.lean` extends the same chronological execution
+from rho through response1–response3 and the three sequential live alpha
+draws.  The responses use the pinned canonical fixed-field body ranges and a
+successful trace constructs the exact `Fin 3` coin vector, rather than taking
+later coins from the environment.  All alpha failure/exhaustion branches and
+the exact final transcript state remain visible.  The query-increment bytes
+are still supplied by an explicit source-arithmetic producer, and neither
+`SameBodyRelation.consume` nor terminal/payment acceptance is assumed.  Exact
+scope and evidence are in `live-later-relation-suffix-20260912.md` and
+`results/v8-completion-fs-extraction-20260911/live-later-relation-suffix-v1/`.
