@@ -1,0 +1,32 @@
+/-
+FIRST ATTEMPT — NOT COMPILED IN THE AUTHORING ENVIRONMENT.
+No declaration in this file is a certification of Aspis or a source-refinement
+claim unless its concrete producer and dependency chain are separately checked.
+See docs/OBLIGATIONS.md and the per-module status manifest.
+-/
+import AspisV8Completion.AdaptiveHazard
+import AspisV8Completion.AuthenticationBudget
+import AspisV8Completion.CausalPrograms
+import AspisV8Completion.CheckedCandidate
+import AspisV8Completion.ChronologicalPrefixes
+import AspisV8Completion.CommonSupport
+import AspisV8Completion.CostTrace
+import AspisV8Completion.DecoderUniqueness
+import AspisV8Completion.DigestProjection
+import AspisV8Completion.DistinctPair
+import AspisV8Completion.DistinctQueries
+import AspisV8Completion.FiatShamirTransport
+import AspisV8Completion.FiniteMass
+import AspisV8Completion.FirstExposure
+import AspisV8Completion.ForkReplay
+import AspisV8Completion.GaoInvariant
+import AspisV8Completion.GlobalLedger
+import AspisV8Completion.LazyROHazard
+import AspisV8Completion.MaskTranslation
+import AspisV8Completion.OracleCache
+import AspisV8Completion.PaymentTransition
+import AspisV8Completion.RejectionKernel
+import AspisV8Completion.SelectedArithmetic
+import AspisV8Completion.TransferAmounts
+import AspisV8Completion.UniformStep
+import AspisV8Completion.UnresolvedTargets
