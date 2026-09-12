@@ -629,6 +629,20 @@ private noncomputable def constructCandidate
                               else
                                 .error (.budget .finalResourceBudget)
 
+private theorem constructCandidate_programmed_output
+    {RandomTape Observation Statement Proof Result : Type*}
+    (capability : SameTapeStartCapability RandomTape Observation Result)
+    (record : FixedFirstRunRecord
+      RandomTape Observation Statement Proof Result)
+    (output : CoupledReplay RandomTape Statement Proof Result)
+    (success : constructCandidate capability record = .ok output) :
+    output.programmedOutput = record.forkOutput := by
+  simp only [constructCandidate] at success
+  repeat' split at success
+  all_goals try contradiction
+  all_goals injection success with outputEq
+  all_goals exact (congrArg CoupledReplay.programmedOutput outputEq).symm
+
 private theorem queryOracle_success_history_prefix
     (controller : AdaptiveController) (limits : OracleLimits)
     (actor : QueryActor) (state nextState : OracleState)
@@ -644,6 +658,31 @@ private theorem queryOracle_success_history_prefix
       simp only [Except.ok.injEq, Prod.mk.injEq] at success
       rcases success with ⟨_, rfl⟩
       exact List.prefix_append _ _
+    next missing =>
+      split at success <;> try contradiction
+      next _ =>
+        split at success
+        next _ => contradiction
+        next _ =>
+          simp only [Except.ok.injEq, Prod.mk.injEq] at success
+          rcases success with ⟨_, rfl⟩
+          exact List.prefix_append _ _
+
+private theorem queryOracle_success_table_prefix
+    (controller : AdaptiveController) (limits : OracleLimits)
+    (actor : QueryActor) (state nextState : OracleState)
+    (input : ShaInput) (output : ShaOutput)
+    (success : queryOracle controller limits actor state input =
+      .ok (output, nextState)) :
+    state.table <+: nextState.table := by
+  unfold queryOracle at success
+  split at success <;> try contradiction
+  next _ =>
+    split at success
+    next entry found =>
+      simp only [Except.ok.injEq, Prod.mk.injEq] at success
+      rcases success with ⟨_, rfl⟩
+      exact List.prefix_refl _
     next missing =>
       split at success <;> try contradiction
       next _ =>
@@ -697,6 +736,138 @@ private theorem runMachine_history_prefix
                 state nextState input output queryResult).trans
                   (inductionHypothesis nextState (next output))
 
+private theorem runMachine_table_prefix
+    {Result : Type*} (controller : AdaptiveController) (limits : OracleLimits)
+    (actor : QueryActor) (fuel : Nat) (state : OracleState)
+    (program : OracleMachine Result) :
+    state.table <+: (runMachine controller limits actor fuel state program).oracle.table := by
+  induction fuel generalizing state program with
+  | zero =>
+      cases program <;> simp [runMachine]
+  | succ fuel inductionHypothesis =>
+      cases program with
+      | pure result => simp [runMachine]
+      | abort reason => simp [runMachine]
+      | query input next =>
+          simp only [runMachine]
+          cases queryResult : queryOracle controller limits actor state input with
+          | error reason => simp
+          | ok pair =>
+              rcases pair with ⟨output, nextState⟩
+              exact (queryOracle_success_table_prefix controller limits actor
+                state nextState input output queryResult).trans
+                  (inductionHypothesis nextState (next output))
+
+private theorem programOracle_success_lookup
+    (limits : OracleLimits) (actor : QueryActor)
+    (state nextState : OracleState) (programming : Programming)
+    (success : programOracle limits actor state programming = .ok nextState) :
+    ∃ entry, lookupEntry nextState programming.input = some entry ∧
+      entry.output = programming.output := by
+  unfold programOracle at success
+  split at success <;> try contradiction
+  next _ =>
+    split at success <;> try contradiction
+    next missing =>
+      simp only [Except.ok.injEq] at success
+      subst nextState
+      let entry : TableEntry :=
+        { input := programming.input, output := programming.output,
+          source := .programmed }
+      refine ⟨entry, ?_, rfl⟩
+      unfold lookupEntry
+      rw [List.find?_append]
+      have absent : state.table.find?
+          (fun candidate => candidate.input = programming.input) = none := by
+        simpa [lookupEntry] using Option.not_isSome_iff_eq_none.mp missing
+      rw [absent]
+      simp [entry]
+
+private theorem find?_append_preserves_some
+    (table suffix : List TableEntry) (input : ShaInput) (entry : TableEntry)
+    (found : table.find? (fun candidate => candidate.input = input) = some entry) :
+    (table ++ suffix).find? (fun candidate => candidate.input = input) = some entry := by
+  induction table with
+  | nil => simp at found
+  | cons head tail ih =>
+      by_cases hit : head.input = input
+      · simpa [hit] using found
+      · have tailFound :
+            tail.find? (fun candidate => candidate.input = input) = some entry := by
+          simpa [hit] using found
+        simpa [hit] using ih tailFound
+
+private theorem lookupEntry_preserved_by_table_prefix
+    (before after : OracleState) (input : ShaInput) (entry : TableEntry)
+    (tablePrefix : before.table <+: after.table)
+    (found : lookupEntry before input = some entry) :
+    lookupEntry after input = some entry := by
+  obtain ⟨suffix, extension⟩ := tablePrefix
+  unfold lookupEntry at found ⊢
+  rw [← extension]
+  exact find?_append_preserves_some before.table suffix input entry found
+
+private theorem constructCandidate_programmed_lookup
+    {RandomTape Observation Statement Proof Result : Type*}
+    (capability : SameTapeStartCapability RandomTape Observation Result)
+    (record : FixedFirstRunRecord
+      RandomTape Observation Statement Proof Result)
+    (output : CoupledReplay RandomTape Statement Proof Result)
+    (success : constructCandidate capability record = .ok output) :
+    ∃ entry,
+      lookupEntry output.replayRun.oracle record.transcriptDrivingInput =
+        some entry ∧ entry.output = record.forkOutput := by
+  simp only [constructCandidate] at success
+  split at success <;> try contradiction
+  next splitResult split splitSuccess =>
+    split at success <;> try contradiction
+    next beforeNonempty =>
+      split at success <;> try contradiction
+      next prefixHalt residualMachine prefixPaused =>
+        split at success <;> try contradiction
+        next residualValue pendingInput continuation =>
+          split at success <;> try contradiction
+          next pendingMatches =>
+            split at success <;> try contradiction
+            next traceMatches =>
+              split at success <;> try contradiction
+              next programResult programmedOracle programSuccess =>
+                split at success <;> try contradiction
+                next fuelPositive =>
+                  split at success <;> try contradiction
+                  next replayHalt returnedValue replayReturned =>
+                    split at success <;> try contradiction
+                    next newQueriesNonempty =>
+                      split at success <;> try contradiction
+                      next callsMatch =>
+                        split at success <;> try contradiction
+                        next withinBudget =>
+                          injection success with outputEq
+                          rw [← outputEq]
+                          have pendingEq : pendingInput =
+                              record.transcriptDrivingInput :=
+                            (not_ne_iff.mp pendingMatches).trans
+                              split.drivingInput
+                          obtain ⟨entry, installedLookup, entryOutput⟩ :=
+                            programOracle_success_lookup record.oracleLimits
+                              .extractorReplay _ programmedOracle
+                              ({ input := pendingInput,
+                                 output := record.forkOutput } : Programming)
+                              programSuccess
+                          have finalLookup :=
+                            lookupEntry_preserved_by_table_prefix programmedOracle
+                              (runMachine record.postForkController
+                                record.oracleLimits .extractorReplay
+                                record.replayFuel programmedOracle
+                                (.query pendingInput continuation)).oracle
+                              pendingInput entry
+                              (runMachine_table_prefix record.postForkController
+                                record.oracleLimits .extractorReplay
+                                record.replayFuel programmedOracle
+                                (.query pendingInput continuation)) installedLookup
+                          refine ⟨entry, ?_, entryOutput⟩
+                          simpa [pendingEq] using finalLookup
+
 /-- Detailed deterministic map with explicit failure reasons.  The final
 operational check is decidable and contains no cryptographic conclusion. -/
 noncomputable def constructLegalReplay
@@ -715,6 +886,58 @@ noncomputable def constructLegalReplay
         exact .ok ⟨output, operational⟩
       else
         exact .error .operationalInvariantCheck
+
+/-- Successful construction exposes the exact output installed at the
+transcript-driving query.  This is a deterministic constructor invariant, not
+a field smuggled into `IsOperationalCoupling` and not a probability claim. -/
+theorem constructLegalReplay_programmed_output
+    {RandomTape Observation Statement Proof Result : Type*}
+    (capability : SameTapeStartCapability RandomTape Observation Result)
+    (record : FixedFirstRunRecord
+      RandomTape Observation Statement Proof Result)
+    (output : {run : CoupledReplay RandomTape Statement Proof Result //
+      IsOperationalCoupling capability record run})
+    (success : constructLegalReplay capability record = .ok output) :
+    output.val.programmedOutput = record.forkOutput := by
+  simp only [constructLegalReplay] at success
+  split at success
+  · contradiction
+  · rename_i candidate candidateSuccess
+    split at success
+    · injection success with outputEq
+      rw [← outputEq]
+      exact constructCandidate_programmed_output capability record candidate
+        candidateSuccess
+    · contradiction
+
+#print axioms constructLegalReplay_programmed_output
+
+/-- The programmed entry remains the first lookup result in the final replay
+oracle.  `lookupEntry` is first-match and the oracle table is append-only, so
+later adversarial calls cannot shadow this entry. -/
+theorem constructLegalReplay_programmed_lookup
+    {RandomTape Observation Statement Proof Result : Type*}
+    (capability : SameTapeStartCapability RandomTape Observation Result)
+    (record : FixedFirstRunRecord
+      RandomTape Observation Statement Proof Result)
+    (output : {run : CoupledReplay RandomTape Statement Proof Result //
+      IsOperationalCoupling capability record run})
+    (success : constructLegalReplay capability record = .ok output) :
+    ∃ entry,
+      lookupEntry output.val.replayRun.oracle record.transcriptDrivingInput =
+        some entry ∧ entry.output = record.forkOutput := by
+  simp only [constructLegalReplay] at success
+  split at success
+  · contradiction
+  · rename_i candidate candidateSuccess
+    split at success
+    · injection success with outputEq
+      rw [← outputEq]
+      exact constructCandidate_programmed_lookup capability record candidate
+        candidateSuccess
+    · contradiction
+
+#print axioms constructLegalReplay_programmed_lookup
 
 /-- Requested deterministic partial map. -/
 noncomputable def constructLegalReplay?
