@@ -66,16 +66,9 @@ structure ExactTag73K13JointBatchCausalSource
       (input : ExactK12OperationalInput transitionFuel configuration projection
         fixedInstance (hidden, answers))
       (k12 : ExactPrefixK12Certificate input)
-      (_collisionFacts :
-        exactTag73K13ExpectedQueryVector decoder input k12 ≠
-            exactTag73K13AuthenticatedQueryVector decoder input k12 ∧
-          exactOperationalChallenge input .queryBatch ∈
-            exactTag73JointQueryBatchNonzeroCollisionSet
-              ((relationSource.toK13SourceObligations transitionFuel
-                configuration projection fixedInstance decoder).preQueryDiscrepancy
-                  (hidden, answers) input)
-              (exactTag73K13ExpectedQueryVector decoder input k12)
-              (exactTag73K13AuthenticatedQueryVector decoder input k12)),
+      (_collisionFacts : ExactTag73K13CollisionCertificate
+        (relationSource.toK13SourceObligations transitionFuel configuration
+          projection fixedInstance decoder) input k12),
     let coordinates := exactCompilerQueryBatchPrefixCoordinates parameters
       transitionFuel (exactPlainRomCursor configuration hidden).erase answers
     ∃ success : GammaPrefixSucceeds coordinates.2,
@@ -125,9 +118,11 @@ noncomputable def ExactTag73K13JointBatchCausalSource.toRestrictedSource
   covered := by
     intro hidden answers member
     rcases member with ⟨cleanMember, input, k12, collisionFacts⟩
+    rcases collisionFacts with ⟨collisionCertificate⟩
     obtain ⟨success, challengeExact, activeExact, _preExact, _expectedExact,
         _authenticatedExact, actualMember, _targetExact⟩ :=
-      causal.exactAt hidden answers cleanMember input k12 collisionFacts
+      causal.exactAt hidden answers cleanMember input k12
+        collisionCertificate
     let coordinates := exactCompilerQueryBatchPrefixCoordinates parameters
       transitionFuel (exactPlainRomCursor configuration hidden).erase answers
     change ∃ h : GammaPrefixSucceeds coordinates.2,
