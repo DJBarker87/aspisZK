@@ -441,3 +441,16 @@ query-increment bytes remain an explicit, unverified Rust-arithmetic producer,
 and the leaf does not call `SameBodyRelation.consume` or claim terminal/payment
 acceptance.  Evidence is in `same-body-live-terminal-input-20260912.md` and
 `results/v8-completion-fs-extraction-20260911/same-body-live-terminal-input-v1/`.
+
+### 2026-09-12 replayable source dependent bind law
+
+`lean/FSV8ReplayableSourceBindLaw.lean` gives the causal finite-tape
+composition: a preprogram runs first, and only its `.returned observation`
+starts `replayableScript` with the returned body and initial digest. Abort and
+out-of-fuel prehalts remain terminal. The current interpreter and compiled V7
+machine agree pointwise under explicit resource bounds, with equality of their
+uniform finite-tape pushforward PMFs. This is not yet the actual adversary
+capability/Rust-Aeneas adapter, programmed-fork K1.6 scheduling or deployed ROM
+coupling, and makes no acceptance or independence claim. Exact evidence is in
+`replayable-source-bind-law-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/replayable-source-bind-law-v1/report.json`.
