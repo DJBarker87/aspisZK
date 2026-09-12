@@ -1,5 +1,12 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest range-source milestone: [the literal selected range-lane coordinate
+restriction](selected-range-lane-coordinate-slice-20260912.md) proves that the
+three-row selector times an arbitrary opened-column Booleanity residual has
+individual degree at most three and evaluates to the exact source expression.
+The chronological Boolean-suffix sum and adjacent-round partition remain the
+next source-polynomial constructor seam.
+
 Latest semantic-source milestone: [the first literal off-domain semantic
 source polynomial](booleanity-source-polynomial-20260912.md) constructs the
 causal ten-round degree-bounded trace for `z * (z - 1)`.  It reaches the actual
