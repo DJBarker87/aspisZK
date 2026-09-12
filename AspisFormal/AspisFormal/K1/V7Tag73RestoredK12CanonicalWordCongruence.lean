@@ -59,6 +59,66 @@ theorem extract_v7_words_success_words_eq_of_same_source
           truncateSha256 roots rightProof candidate rightWords rightFinished).1
         exact leftExact.trans rightExact.symm
 
+/-- Node-generic typed-source form.  Later transcript-only SHA traffic and
+q16-dependent supplied openings may differ; successful extraction returns the
+same word whenever the two node-local hash views agree on typed Merkle
+preimages, their committed roots agree, and their retained typed query logs
+agree. -/
+theorem restored_node_k12_certificate_words_eq_of_typed_hash_agreement
+    {Statement Payload : Type*}
+    (leftNode rightNode : RestoredK13Node Statement Payload)
+    (leftK12 : RestoredNodeK12Certificate leftNode)
+    (rightK12 : RestoredNodeK12Certificate rightNode)
+    (truncateAgree : ∀ input, parseTypedPreimage input ≠ none →
+      restoredNodeK12Truncate leftNode input =
+        restoredNodeK12Truncate rightNode input)
+    (rootsExact : restoredNodeK12Roots leftNode =
+      restoredNodeK12Roots rightNode)
+    (typedQueriesExact :
+      retainTypedMerkleQueries
+          (deduplicateFirst (restoredNodeK12OrderedQueries leftNode)) =
+        retainTypedMerkleQueries
+          (deduplicateFirst (restoredNodeK12OrderedQueries rightNode))) :
+    leftK12.words = rightK12.words := by
+  let typedLog := retainTypedMerkleQueries
+    (deduplicateFirst (restoredNodeK12OrderedQueries leftNode))
+  have typedLogAll : ∀ input ∈ typedLog,
+      parseTypedPreimage input ≠ none := by
+    intro input member
+    have filtered := List.mem_filter.mp member
+    exact of_decide_eq_true filtered.2
+  have leftTyped := extractV7Words_success_yields_typed_complete
+    (restoredNodeK12Truncate leftNode) (restoredNodeK12Roots leftNode)
+    (restoredNodeK12Openings leftNode)
+    (restoredNodeK12OrderedQueries leftNode) leftK12.words leftK12.extracted
+  have rightTyped := extractV7Words_success_yields_typed_complete
+    (restoredNodeK12Truncate rightNode) (restoredNodeK12Roots rightNode)
+    (restoredNodeK12Openings rightNode)
+    (restoredNodeK12OrderedQueries rightNode) rightK12.words rightK12.extracted
+  have rightTypedAtLeftSource :
+      extractCompleteWords (restoredNodeK12Truncate rightNode)
+          (restoredNodeK12Roots leftNode) typedLog = .words rightK12.words := by
+    simpa [typedLog, rootsExact, typedQueriesExact] using rightTyped
+  have hashCongruence :
+      extractCompleteWords (restoredNodeK12Truncate leftNode)
+          (restoredNodeK12Roots leftNode) typedLog =
+        extractCompleteWords (restoredNodeK12Truncate rightNode)
+          (restoredNodeK12Roots leftNode) typedLog := by
+    apply extractCompleteWords_eq_of_agree_on_typed
+    · exact typedLogAll
+    · intro input typed
+      exact truncateAgree input typed
+  have rightAtLeft :
+      extractCompleteWords (restoredNodeK12Truncate leftNode)
+          (restoredNodeK12Roots leftNode) typedLog = .words rightK12.words :=
+    hashCongruence.trans rightTypedAtLeftSource
+  have leftAtTyped :
+      extractCompleteWords (restoredNodeK12Truncate leftNode)
+          (restoredNodeK12Roots leftNode) typedLog = .words leftK12.words := by
+    simpa [typedLog] using leftTyped
+  rw [leftAtTyped] at rightAtLeft
+  injection rightAtLeft
+
 /-- More general form: the two executions may have different later query
 logs and supplied openings.  It suffices that their complete-tree resolution
 returns the same pre-q16 committed candidate. -/
@@ -591,6 +651,8 @@ theorem exact_restored_root_residual_invariant_of_committed_invariant
     (exact_restored_pre_q16_semantics_of_committed_invariant invariant)
 
 #print axioms extract_v7_words_success_words_eq_of_same_source
+#print axioms
+  restored_node_k12_certificate_words_eq_of_typed_hash_agreement
 #print axioms
   extract_v7_words_success_words_eq_of_same_complete_candidate
 #print axioms restored_root_k12_roots_eq_exact
