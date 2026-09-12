@@ -1,6 +1,7 @@
 # Completion-pack intake and first source-transcript slice
 
-Latest work: [same-body authenticated slots and FS prefixes](authentication-connection-20260912.md),
+Latest work: [authenticated folds/residuals and later oracle histories](authenticated-fold-continuation-20260912.md).
+Earlier: [same-body authenticated slots and FS prefixes](authentication-connection-20260912.md),
 with historical-toolchain and patched-toolchain evidence kept separate.
 Earlier work: [source connections and bounded FS scripts](source-connections-20260912.md).
 Five new leaves passed compilation and a fresh kernel replay; full source/FS
