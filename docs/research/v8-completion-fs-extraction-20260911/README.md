@@ -493,6 +493,19 @@ producer remain open.  Evidence is in
 `replayable-run-from-sampled-integration-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/replayable-run-from-sampled-integration-v1/report.json`.
 
+`lean/SameBodyFunctionalProducerSource.lean` constructs the verifier-derived
+compact functional data from the same canonical body, sampled OOD result,
+gamma, kappa and explicit public statement point.  It fails closed on sampled
+data, canonical parsing, inversion or ordinary-correction failure; success
+proves checked data, exact gamma provenance, the 545-byte description and the
+canonical 16-byte claim.  A reproducible source-constant check matches the
+pinned Rust prefix, metadata, 64 groups, seven masks, little-endian bytes and
+field ordering.  Literal Rust equivalence is not thereby proved.  The current
+`FunctionalProducer` script interface is total, so integrating this constructor
+requires an explicit rejecting script branch, not default bytes.  Evidence is
+in `functional-producer-source-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/functional-producer-source-v1/report.json`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected
