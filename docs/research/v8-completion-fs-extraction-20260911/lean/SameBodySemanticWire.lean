@@ -34,7 +34,7 @@ structure Wire where
 
 def ofSelected (wire : AspisV8.SelectedWireBytes.Wire) : Wire where
   values := wire.values
-  roots := fun phase byte => UInt8.ofNat (wire.roots phase byte).val
+  roots := fun phase byte => UInt8.ofFin (wire.roots phase byte)
 
 /-- Parse once: fixed fields and roots cannot come from different bodies. -/
 def parse (body : Bytes) : Option Wire :=
@@ -69,7 +69,7 @@ theorem roots_exact (body : Bytes) (wire : Wire)
     ∃ selected : AspisV8.SelectedWireBytes.Wire,
       AspisV8.SelectedWireBytes.parse (body.map UInt8.toFin) = some selected ∧
       ∀ phase byte,
-        wire.roots phase byte = UInt8.ofNat (selected.roots phase byte).val := by
+        wire.roots phase byte = UInt8.ofFin (selected.roots phase byte) := by
   obtain ⟨selected, selectedParse, rfl⟩ := parse_success body wire success
   exact ⟨selected, selectedParse, fun _ _ => rfl⟩
 
