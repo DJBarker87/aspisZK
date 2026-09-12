@@ -90,16 +90,6 @@ theorem uniform_finFreshEquiv (steps : Nat) :
       PMF.uniformOfFintype (FreshAnswerTape Block steps) := by
   exact AspisV5RankOneOpeningHiding.uniform_map_equiv (finFreshEquiv steps)
 
-theorem sourceThenGamma_uniform_source {n m : Nat}
-    (firstWork : Point → Script (List UInt8) Block Unit n)
-    (secondWork : Point → Point → Script (List UInt8) Block Unit m)
-    (body : List UInt8) (digest : Block) (tape : Tape) :
-    ∃ finiteTape : FreshAnswerTape Block (sourceThenGammaBudget n m),
-      freshAnswerTapeToList finiteTape =
-        (List.range (sourceThenGammaBudget n m)).map tape := by
-  exact ⟨v7FreshTape tape _, v7FreshTape_toList tape _⟩
-
 #print axioms finFreshEquiv_list
 #print axioms uniform_finFreshEquiv
-#print axioms sourceThenGamma_uniform_source
 end AspisV8Completion.FSV8V7FiniteUniformBridge
