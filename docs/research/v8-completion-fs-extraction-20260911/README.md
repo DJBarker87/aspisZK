@@ -496,6 +496,30 @@ payment extraction, Rust refinement and FS probability coupling remain open.
 Evidence is in `chronological-relation-terminal-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/chronological-relation-terminal-v1/report.json`.
 
+### 2026-09-12 source relation producer: ordinary scalar
+
+`lean/SameBodySourceRelationProducer.lean` executes the repaired row batching,
+same-body OOD interpolation and public affine correction with exact QM31
+arithmetic, replacing the terminal interface's arbitrary ordinary scalar.
+Inverse/domain rejection remains explicit. On success, the claim and literal
+first-417-field prefix construct those fields of `SourceRelationProducer`.
+The chronological OOD-data splice, causal strategy/canonical-word equality and
+final ordinary/image weight remain explicit. Evidence is in
+`source-relation-producer-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/source-relation-producer-v1/report.json`.
+
+### 2026-09-12 absorption-output source polynomials
+
+`lean/SelectedAbsorptionOutputsSourcePolynomial.lean` constructs chronological
+degree-at-most-two source polynomials for all sixteen absorption outputs.  It
+proves their Boolean tables equal the literal selected residuals and proves an
+independent same-index array multiply equals each source value.  Together with
+the preceding source-polynomial leaves this raises exact semantic-coordinate
+coverage from 53/95 to 69/95.  The pinned Rust three-bucket selector
+factorisation and literal machine refinement remain open.  Evidence is in
+`selected-absorption-outputs-source-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/selected-absorption-outputs-source-v1/report.json`.
+
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
