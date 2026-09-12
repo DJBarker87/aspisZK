@@ -112,9 +112,14 @@ theorem path_copies (candidate : C1InitialMessages) (index : Nat)
       using path_copy_limb candidate index aliases level 1 limb
   · intro level limb
     apply sub_eq_zero.mpr
-    simpa [sourceRow, targetRow, sourceStart, targetStart, targetOffset,
-      SelectedForestPath.right, SelectedForestPath.nodeRight, SelectedForestPath.digest, offset]
-      using path_copy_limb candidate index aliases level 2 limb
+    have copied := path_copy_limb candidate index aliases level 2 limb
+    by_cases last : limb.val = 7
+    · simpa [sourceRow, targetRow, sourceStart, targetStart, targetOffset,
+        SelectedForestPath.right, SelectedForestPath.nodeRight,
+        SelectedForestPath.digest, offset, last, sub_eq_add_neg] using copied
+    · simpa [sourceRow, targetRow, sourceStart, targetStart, targetOffset,
+        SelectedForestPath.right, SelectedForestPath.nodeRight,
+        SelectedForestPath.digest, offset, last, sub_eq_add_neg] using copied
 
 theorem path_mask_at (level : Fin 24) :
     pathMask (SelectedForestPath.auxRow level.val) ∧
@@ -268,4 +273,5 @@ theorem same_table_input_membership (rc : RoundConstants) (pub : Public)
 #print axioms digest_at_anchor
 #print axioms anchor_binding
 #print axioms same_table_input_membership
+end
 end AspisV8.SelectedSemanticInputPath

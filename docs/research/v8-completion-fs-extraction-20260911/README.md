@@ -151,3 +151,13 @@ No protocol, proof format, acceptance, deployed identity or production source
 changed. Body cap remains 40,282 bytes. Grinding security credit remains zero.
 No new global security claim is supported. This is self-review, not an independent
 cryptographic review. No push, merge, deployment or network transaction performed.
+
+## 2026-09-12 same-body/source continuation
+
+See [same-body-source-and-extraction-20260912.md](same-body-source-and-extraction-20260912.md)
+for the chronological C1/C2 Merkle construction, same-body opened terminal,
+literal block-accurate q22 sampler control flow, same-C1 transfer facts, and the
+corrected status of the rejected historical 97.1879-bit screen.  These are
+focused functional and algebraic milestones; the permitted-access recovered
+candidate, literal Rust refinement, global event composition, ROM Fiat--Shamir
+lift and adaptive ZK remain open.
