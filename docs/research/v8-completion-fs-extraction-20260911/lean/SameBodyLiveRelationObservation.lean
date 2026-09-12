@@ -171,9 +171,18 @@ theorem absorbed_increment_is_relation_increment
         ready.middleFinalDigest) ready.laterOracle).1 =
         some (.ok ready.later, ready.laterFinalDigest) /\
     ready.input.incrementBytes = ready.prepared.bytes /\
+    ready.increment.bytes ready.out ready.gamma ready.middle ready.body =
+      ready.prepared.bytes /\
     ready.prepared.relationIncrement ready.input.final256 ready.prepared.query
         ready.prepared.rho = ready.prepared.scalar := by
+  have inputFacts := SameBodyLiveTerminalInput.fromBody_constructs_canonical
+    ready.increment ready.out ready.gamma ready.middle ready.later ready.body
+    ready.input ready.inputRun
+  have callbackBytes : ready.input.incrementBytes =
+      ready.increment.bytes ready.out ready.gamma ready.middle ready.body :=
+    inputFacts.2.2.2.2.2.2
   exact ⟨ready.laterRun, ready.incrementBytes,
+    callbackBytes.symm.trans ready.incrementBytes,
     relation_increment_exact ready.prepared _⟩
 
 #print axioms build_success
