@@ -640,6 +640,17 @@ field-level semantic source object; it is not yet the packed mutable Rust
 callback, terminal execution, or an acceptance theorem. Focused evidence is
 in `../../../results/v8-completion-fs-extraction-20260911/complete-semantic-source-v1/report.json`.
 
+`lean/SelectedCompleteSemanticPackedSource.lean` constructs the 24 packed
+semantic lanes at arbitrary points from those 95 chronological source
+polynomials, preserving `packedLocation` and the structural zero at position
+95.  It proves equality with `packedRows` and the older `semanticMLE` on the
+Boolean cube only.  This records a consequential correction: Boolean-table
+equality does not justify replacing the generally nonlinear chronological
+source polynomial by its multilinear extension at off-domain points.  The
+source callback must consume `sourceSemanticField` there; literal Rust
+refinement remains open.  Evidence is in
+`../../../results/v8-completion-fs-extraction-20260911/complete-semantic-packed-source-v1/report.json`.
+
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
