@@ -201,6 +201,22 @@ pub struct V6QueryBatchView<'a> {
     pub frontier_nodes: usize,
 }
 
+/// State exposed immediately before the query-batch challenge is absorbed
+/// and squeezed.  This is intentionally a borrowed view so probes cannot
+/// alter the relation accumulator or disclosed final object.
+pub struct V6QueryBatchPrechallengeView<'a> {
+    pub transcript_state: [u8; 32],
+    pub running_claim: QM31,
+    pub weights: &'a WeightAccumulator,
+    pub gamma: QM31,
+    pub alpha0: QM31,
+    pub final256_coefficients: &'a [QM31; V6_FINAL_QM31_VALUES],
+    pub queries: [u32; V6_QUERY_COUNT],
+    pub selector: u8,
+    pub compact_counter: u8,
+    pub frontier_nodes: usize,
+}
+
 fn profile_root_salt(
     hash: HashFn,
     domain: &[u8],
@@ -664,7 +680,7 @@ fn derive_first_compact_queries(
 
 #[allow(clippy::too_many_arguments)]
 #[inline(never)]
-fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields>(
+fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields, Prechallenge>(
     mut transcript: Transcript,
     work_nonces: &[u8; 24],
     c1_frontier: &[u8],
@@ -683,6 +699,7 @@ fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields>(
     semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
+    mut prechallenge: Prechallenge,
     mut trace: Trace,
 ) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
@@ -695,6 +712,7 @@ where
     >,
     Trace: FnMut(V6RelationDiagnosticPhase),
     Fields: V6FixedFieldStream,
+    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     trace(V6RelationDiagnosticPhase::Start);
     check_and_absorb_work(
@@ -800,6 +818,18 @@ where
         accepted_query_transcript,
     ) = derive_queries(&transcript)?;
     transcript = accepted_query_transcript;
+    prechallenge(&V6QueryBatchPrechallengeView {
+        transcript_state: transcript.diagnostic_state(),
+        running_claim,
+        weights: &weights,
+        gamma,
+        alpha0: alpha[0],
+        final256_coefficients: folded_values.as_ref(),
+        queries,
+        selector,
+        compact_counter,
+        frontier_nodes,
+    });
     if frontier_node_bytes == 0
         || c1_frontier.len() % frontier_node_bytes != 0
         || c2_frontier.len() % frontier_node_bytes != 0
@@ -924,7 +954,7 @@ where
 
 #[allow(clippy::too_many_arguments)]
 #[inline(always)]
-fn finish_v6_relation<QueryFold, Trace>(
+fn finish_v6_relation<QueryFold, Trace, Prechallenge>(
     transcript: Transcript,
     wire: &V6OneFoldWire<'_>,
     fields: V6FixedFieldReader<'_>,
@@ -935,11 +965,13 @@ fn finish_v6_relation<QueryFold, Trace>(
     semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
+    prechallenge: Prechallenge,
     trace: Trace,
 ) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     Trace: FnMut(V6RelationDiagnosticPhase),
+    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     finish_onefold_relation(
         transcript,
@@ -960,13 +992,14 @@ where
         semantic_point,
         point_claims,
         query_fold,
+        prechallenge,
         trace,
     )
 }
 
 #[allow(clippy::too_many_arguments)]
 #[inline(always)]
-fn finish_v7_compact_relation<QueryFold, Trace>(
+fn finish_v7_compact_relation<QueryFold, Trace, Prechallenge>(
     transcript: Transcript,
     wire: &V7CompactOneFoldWire<'_>,
     fields: V6FixedFieldReader<'_>,
@@ -976,11 +1009,13 @@ fn finish_v7_compact_relation<QueryFold, Trace>(
     semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
+    prechallenge: Prechallenge,
     trace: Trace,
 ) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     Trace: FnMut(V6RelationDiagnosticPhase),
+    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     finish_onefold_relation(
         transcript,
@@ -1015,6 +1050,7 @@ where
         semantic_point,
         point_claims,
         query_fold,
+        prechallenge,
         trace,
     )
 }
@@ -1121,6 +1157,7 @@ where
         &point_claims,
         query_fold,
         |_| {},
+        |_| {},
     )
 }
 
@@ -1211,6 +1248,7 @@ where
         &point_claims,
         query_fold,
         |_| {},
+        |_| {},
     )
 }
 
@@ -1291,6 +1329,7 @@ where
         &point_claims,
         query_fold,
         |_| {},
+        |_| {},
     )
 }
 
@@ -1356,6 +1395,7 @@ where
         semantic_point,
         &point_claims,
         query_fold,
+        |_| {},
         |phase| trace(V7TranscriptDiagnosticPhase::Relation(phase)),
     )
 }
@@ -1415,6 +1455,7 @@ where
         semantic_point,
         &point_claims,
         query_fold,
+        |_| {},
         trace,
     )
 }
