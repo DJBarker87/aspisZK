@@ -23,6 +23,7 @@ source-instantiated privacy theorem or independent kernel replay.
 | `GatedRelease` | Gate-preserving transport including explicit abort | Actual rank-gate caller and coin transport unproved |
 | `PrivacyGames` | Statistical/ computational targets and simulator cost target | Definitions only; no simulator or advantage theorem |
 | `HybridBudget` | Event-distance triangle and exact same-game hop | No numerical V8 privacy bound |
+| `SeparatorObstruction` | A same-public efficient separator larger than `2ε` rules out any one statement-only `ε`-simulator | No V8 same-public witness pair or source event instance is asserted |
 | `V8Profile` | Literal inventory/wire arithmetic | Numeric identities, not source authentication |
 | `AspisV8Privacy.lean` | Aggregate imports | Not a capstone security theorem |
 | `integration-drafts/FSProgrammingDraft` | Conflict-detecting chosen requests using the **actual existing FS types** | No programmed-oracle law or prover refinement |
