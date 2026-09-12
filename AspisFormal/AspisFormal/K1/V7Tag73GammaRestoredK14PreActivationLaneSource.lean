@@ -1,5 +1,6 @@
 import AspisFormal.K1.V7Tag73ExactRestoredGammaPreActivationPrefix
 import AspisFormal.K1.V7Tag73GammaRestoredK14InitialLaneFunctional
+import AspisFormal.V6PublishedTheoremInterfaces
 
 /-!
 # Pointwise pre-activation source for restored-gamma K1.4
@@ -26,6 +27,7 @@ open AspisK1.V7Tag73ConcreteRootSweepClient
 open AspisK1.V7Tag73ExactClientKnowledgeComposition
 open AspisK1.V7Tag73ExactCompilerOperationalCaps
 open AspisK1.V7Tag73ExactCompilerResources
+open AspisV6PublishedTheoremInterfaces
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactFixedK13K14FailureReduction
 open AspisK1.V7Tag73ExactPlainRomRun
@@ -249,6 +251,7 @@ theorem exact_gamma_restored_k14_probability_le_of_pre_activation_lane_source
     {decoder : ExactDecoderInstantiation QM31Exact}
     (clean : Set (ExactCompilerSample HiddenTape parameters))
     (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (published : PublishedInitialWidth29CurveDecodability exactInitialEncoder)
     (source : ExactTag73GammaRestoredK14PreActivationLaneSource
       canonicalDriverFuel transitionFuel base rounds extractor withinForkCap
       adequate projection fixedInstance decoder clean) :
@@ -262,7 +265,7 @@ theorem exact_gamma_restored_k14_probability_le_of_pre_activation_lane_source
   let functional := source.toInitialLaneFunctional
   let alignment := functional.toInitialLaneAlignment
   exact exact_gamma_restored_k14_probability_le_of_initial_lane_alignment
-    hiddenLaw clean initialEncoderExact alignment
+    hiddenLaw clean initialEncoderExact published alignment
 
 #print axioms ExactTag73GammaRestoredK14PreActivationLaneSource
 #print axioms
