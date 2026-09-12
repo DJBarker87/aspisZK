@@ -156,8 +156,8 @@ theorem exact_root_sweep_routes_first_restored_query_batch_output
       (base.machine.blackBox.start sample.1 base.machine.observation)
       base.machine.environment base.restorationConfiguration reached.cursor
       targetCursor.erase answer targetMarked recordExact
-  obtain ⟨firstPrior, firstRecord, firstLater, firstSplit, firstUnmarked,
-      firstMarked⟩ :=
+  obtain ⟨firstPrior, firstRecord, firstLater, firstSplit, _firstWithin,
+      firstUnmarked, firstMarked⟩ :=
     waiting_controller_eventually_marked_has_first_marked_record transitionFuel
       startsHere initial prior selected later eventuallyMarked
   have firstDecomposition :
