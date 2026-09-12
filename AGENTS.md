@@ -83,3 +83,22 @@ The normal cadence is: focused proof, dependent bridge, one axioms audit, one
 final manifest replay.  Adversarial/runtime/reproducible-build suites are run
 when their covered source or artifact changes, not after every unrelated Lean
 edit.
+
+## Delegation policy
+
+The lead agent owns all architectural, cryptographic, probability,
+source-semantics, and formal-security decisions.  In particular, it decides
+whether a theorem's premises are justified and whether a result closes a
+release gate.
+
+Bounded mechanical work may be delegated to a Luna worker after the lead has
+specified the theorem statement, permitted premises, and intended proof route.
+Suitable tasks include repository exploration, import/refactor work, focused
+Lean plumbing, implementation of already-specified lemmas, targeted test and
+evidence collection, documentation, and mechanical Rust changes.
+
+Do not delegate the following to Luna: choosing or weakening theorem premises,
+designing cryptographic or Fiat--Shamir arguments, probability accounting,
+source-to-model semantic correspondence, or deciding that an obligation is
+closed.  The lead must inspect the resulting diff and run the relevant focused
+checks before relying on delegated work.
