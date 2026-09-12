@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "base_revision": "b92a387d8df580a5b327dba8efc6cfae7f177973",
+  "source": "docs/research/v8-completion-fs-extraction-20260911/lean/FSV8V7FiniteUniformBridge.lean",
+  "source_sha256": "3779bbf8b26a27baaa58eb1bf3e2ab8ea2bfc959e39f84ac5a701091983f718a",
+  "artifact_sha256": "3e93a66aba57ae5b7d57f305ea34fbb7d7c622c2c79b8e311ccd0a4f3cb2a9f0",
+  "lean": "4.32.0 commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+  "command": "systemd-run --user --scope -p MemoryHigh=8G -p MemoryMax=9G -p MemorySwapMax=0 -p RuntimeMaxSec=300 /usr/bin/time -v lean -j1 -M8192 -o FSV8V7FiniteUniformBridge.olean FSV8V7FiniteUniformBridge.lean",
+  "exit_code": 0,
+  "wall_seconds": 2.70,
+  "peak_rss_kib": 6528688,
+  "swap_kib": 0,
+  "axioms": ["propext", "Classical.choice", "Quot.sound"],
+  "proved": [
+    "Fin-indexed answer vectors are equivalent to V7 recursive FreshAnswerTape values at every fixed length",
+    "the equivalence preserves the chronological left-to-right List.ofFn order",
+    "uniformOfFintype is transported exactly across that equivalence",
+    "the composed source/OOD/gamma budget admits the existing deterministic finite-tape witness"
+  ],
+  "not_proved": [
+    "that the actual random-oracle execution is distributed as a uniform finite answer vector",
+    "the coupling of adversarial prequeries, cache hits, retries and aborts to the V7 operational experiment",
+    "global Fiat-Shamir soundness"
+  ],
+  "failed_predecessors": [
+    "the first run used a shadowing LEAN_PATH order and did not reach elaboration",
+    "the first elaborated draft had invalid dependent induction and a range-map statement with no index-bound witness",
+    "the repaired proof uses explicit recursive inverse lemmas and List.ofFn"
+  ]
+}
