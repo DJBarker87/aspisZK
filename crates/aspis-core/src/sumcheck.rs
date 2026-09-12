@@ -1791,17 +1791,21 @@ impl WeightAccumulator {
             // extension-field dot.  The former spelling performed one full
             // QM31 multiplication per query after independently evaluating
             // the same coefficient tuple.
-            let line_deferred_halvings = self
-                .components
-                .iter()
-                .filter_map(|component| match component {
-                    WeightComponent::LineM31Batch {
-                        deferred_halvings, ..
-                    } => Some(*deferred_halvings),
-                    _ => None,
-                })
-                .max()
-                .unwrap_or(0);
+            // Keep the terminal path in direct control flow.  This is the
+            // same maximum as the previous `filter_map(...).max()` spelling,
+            // but avoids pulling generic iterator adapters into the accepted
+            // source certificate.
+            let mut line_deferred_halvings = 0u8;
+            for component in &self.components {
+                if let WeightComponent::LineM31Batch {
+                    deferred_halvings, ..
+                } = component
+                {
+                    if *deferred_halvings > line_deferred_halvings {
+                        line_deferred_halvings = *deferred_halvings;
+                    }
+                }
+            }
             let mut line_count = 0usize;
             let mut line_constant_limbs = [M31::ZERO; 4];
             let mut line_raw = [[0u64; 4]; 3];
