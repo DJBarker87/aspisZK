@@ -12,6 +12,8 @@ def sha(p):
 def main():
     p=argparse.ArgumentParser()
     for name in ['source','output','overlay','package','manifest','supplement']:p.add_argument('--'+name,type=Path,required=True)
+    p.add_argument('--prior-leaf',type=Path,action='append',default=[],
+                   help='Prior focused output directory; verify receipt, source and sole artifact before importing')
     a=p.parse_args();assert sys.platform=='linux'
     a.output.mkdir(exist_ok=False)
     group=next(x[3:] for x in Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0::'))
@@ -39,19 +41,48 @@ def main():
         restored.append({'path':str(path),'sha256':m[1]})
     assert len(restored)>=28
     sourcehash=sha(a.source)
+    prior=[]
+    for directory in a.prior_leaf:
+        receipt=directory/'report.json'
+        r=json.loads(receipt.read_text())
+        assert r['status']=='PASS_LEAF_ONLY' and r['exit_code']==0
+        assert r['version']==version
+        assert r['manifest_sha256']==sha(a.manifest)
+        assert r['supplement_sha256']==sha(a.supplement)
+        original_source=Path(r['command'][-1])
+        artifact=directory/(original_source.stem+'.olean')
+        assert sha(original_source)==r['source_sha256'],str(original_source)
+        assert sha(artifact)==r['artifact_sha256'],str(artifact)
+        assert sha(directory/'compile.log')==r['log_sha256']
+        assert sorted(str(x.relative_to(directory)) for x in directory.rglob('*.olean*'))==[artifact.name]
+        # A chained consumer must explicitly revalidate every earlier leaf too.
+        for dependency in r.get('prior_leaves_checked',[]):
+            assert Path(dependency['directory']) in a.prior_leaf
+            assert sha(Path(dependency['directory'])/'report.json')==dependency['receipt_sha256']
+        prior.append({'directory':str(directory),'receipt_sha256':sha(receipt),
+                      'source':str(original_source),'source_sha256':sha(original_source),
+                      'artifact':str(artifact),'artifact_sha256':sha(artifact)})
     report={'status':'RUNNING','version':version,'limits':limits,'source_sha256':sourcehash,
       'manifest_sha256':sha(a.manifest),'recorded_imports_checked':checks,
+      'prior_leaves_checked':prior,
       'supplement_sha256':sha(a.supplement),'post_run_observation_imports_checked':restored,
       'scope':'Historical cached-import leaf only. Supplement is post-run observation, not an original compilation receipt. No clean dependency rebuild. Patched rebuild and fresh replay NOT RUN.'}
     output=a.output/(a.source.stem+'.olean')
     command=[lean,'-j1','-M9000','-R',str(a.source.parent),'-o',str(output),str(a.source)]
-    env=os.environ.copy();env['LEAN_PATH']=str(a.output)+':'+str(a.overlay)+':'+oldpath
+    env=os.environ.copy();env['LEAN_PATH']=':'.join([str(a.output),*(str(x) for x in a.prior_leaf),str(a.overlay),oldpath])
     report['command']=command;report['lean_path']=env['LEAN_PATH'];start=time.monotonic()
     with (a.output/'compile.log').open('w') as f:
         result=subprocess.run(['/usr/bin/time','-v',*command],cwd=a.package,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=540)
     report.update(exit_code=result.returncode,wall_seconds=time.monotonic()-start,
       log_sha256=sha(a.output/'compile.log'),status='PASS_LEAF_ONLY' if result.returncode==0 else 'FAIL')
     assert sha(a.source)==sourcehash
+    for entry in checks+restored:
+        assert sha(Path(entry['path']))==entry['sha256'],entry['path']
+    for entry in prior:
+        assert sha(Path(entry['source']))==entry['source_sha256']
+        assert sha(Path(entry['artifact']))==entry['artifact_sha256']
+        assert sha(Path(entry['directory'])/'report.json')==entry['receipt_sha256']
+    report['postflight_import_hashes_unchanged']=True
     if output.exists():report['artifact_sha256']=sha(output)
     (a.output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps({k:v for k,v in report.items() if k not in ['recorded_imports_checked','lean_path']}),flush=True)

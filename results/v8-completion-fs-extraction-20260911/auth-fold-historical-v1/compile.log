@@ -1,0 +1,70 @@
+theorem AspisV8.SameBodyAuthenticatedFold.same_body_authenticated_fold_or_failure : ∀ (view : RawHashInput → Digest208)
+  (body : List Byte) (query : Fin 22 → Position) (merkle : SuccessfulMerkleRun view query body)
+  (c1Prefix c2Prefix : AnswerPrefix) (fullLog : OrderedRawQueryLog),
+  (∀ record ∈ c1Prefix, view record.1 = record.2) →
+    (∀ record ∈ c2Prefix, view record.1 = record.2) →
+      TraceIncludedInLog (rawPrefix c1Prefix) fullLog →
+        TraceIncludedInLog (rawPrefix c2Prefix) fullLog →
+          TraceIncludedInLog (MinimalMultiproofPaths.leafLog query (wireRecords merkle.wire) ++ merkle.trace) fullLog →
+            (parseRecords merkle.wire).isSome = true →
+              ∀ (d : Data) (out : List K × List M31Exact),
+                LineNormBuffer.inverseLines d.a d.b d.c (SelectedQueryBuffer.points query) = some out →
+                  ∀ (alpha : K),
+                    AuthenticationFailure view c1Prefix c2Prefix (wireRoots merkle.wire) fullLog query ∨
+                      ∃ decoded,
+                        parseRecords merkle.wire = some decoded ∧
+                          (∀ (i : Fin 22), merkle.wire.record i = bodyRecord body i) ∧
+                            ∀ (i : Fin 22),
+                              SelectedPackedQueryBridge.recordFold d decoded query out alpha i =
+                                (SelectedReceivedOracle.oracle 0
+                                      (SelectedQuotientOriginal.virtual d
+                                        (prefixBatch c1Prefix c2Prefix merkle.wire d.gamma))).folded
+                                  alpha (storedPoint (query i)) :=
+fun view body query merkle c1Prefix c2Prefix fullLog c1Answers c2Answers c1Included c2Included callsIncluded canonical d
+    out inverse alpha =>
+  Or.casesOn
+    (same_body_authenticated_slots_or_failure view body query merkle c1Prefix c2Prefix fullLog c1Answers c2Answers
+      c1Included c2Included callsIncluded canonical d.gamma)
+    (fun bad => Or.inl bad) fun good =>
+    Exists.casesOn good fun decoded h =>
+      And.casesOn h fun parsedAll right =>
+        And.casesOn right fun bodyRecords slots =>
+          have parsed := parseRecords_success merkle.wire decoded parsedAll;
+          have checked := Eq.trans (Eq.symm (SelectedQueryBuffer.inverse_eq d query)) inverse;
+          Or.inr
+            (Exists.intro decoded
+              ⟨parsedAll,
+                ⟨bodyRecords, fun i =>
+                  have actualToSource :=
+                    SelectedPackedQueryBridge.matching_fold d (fun j => merkle.wire.record j) decoded parsed query out
+                      (prefixBatch c1Prefix c2Prefix merkle.wire d.gamma) (fun j slot => (slots j slot).right) alpha i;
+                  have sourceToQuotient :=
+                    QueriedResidual.success_fold d (prefixBatch c1Prefix c2Prefix merkle.wire d.gamma) query out checked
+                      alpha i;
+                  Eq.trans actualToSource sourceToQuotient⟩⟩)
+'AspisV8.SameBodyAuthenticatedFold.same_body_authenticated_fold_or_failure' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -R /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr -o /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/fold-v1/SameBodyAuthenticatedFold.olean /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/SameBodyAuthenticatedFold.lean"
+	User time (seconds): 1.99
+	System time (seconds): 0.90
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.89
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6671652
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 142473
+	Voluntary context switches: 212
+	Involuntary context switches: 178
+	Swaps: 0
+	File system inputs: 192
+	File system outputs: 144
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
