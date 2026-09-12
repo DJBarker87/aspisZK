@@ -37,6 +37,15 @@ noncomputable section
 
 /-! ## Active prefixes contain no terminal padding -/
 
+/-- The three scheduler requests that consume genuine full-256 coordinates.
+Terminal and transition-limit requests emit only padding. -/
+def SchedulerNativeRequestIsActive
+    {globalOracleCalls : Nat} {Result : Type}
+    (request : SchedulerNativeRequest globalOracleCalls Result) : Prop :=
+  match request with
+  | .machineFresh .. | .forkOutput .. | .forkAdvance .. => True
+  | .returned _ | .failed _ | .transitionLimit => False
+
 @[simp] theorem scheduler_native_prefix_cursor_returned
     {globalOracleCalls : Nat} {Result : Type}
     (transitionFuel : Nat) (positive : 0 < transitionFuel)
@@ -71,6 +80,191 @@ noncomputable section
     | cons answer rest ih =>
         simpa [schedulerNativePrefixCursor, seekSchedulerNativeExposure,
           schedulerNativeRequestNext] using ih
+
+/-- Any answer prefix ending at an active request contains no terminal
+padding.  This generic form covers a verifier fork as well as an earlier
+adversary exposure of the same immutable SHA coordinate. -/
+theorem scheduler_native_prefix_records_padding_free_of_reached_active
+    {globalOracleCalls : Nat} {Result : Type}
+    (transitionFuel : Nat) (positive : 0 < transitionFuel) :
+    ∀ (cursor : SchedulerNativeCursor globalOracleCalls Result)
+      (answers : List Digest256),
+      SchedulerNativeRequestIsActive
+        (seekSchedulerNativeExposure transitionFuel
+          (schedulerNativePrefixCursor transitionFuel cursor answers)) →
+      paddingCoordinateCount
+        (schedulerNativePrefixRecords transitionFuel cursor answers) = 0 := by
+  intro cursor answers
+  induction answers generalizing cursor with
+  | nil =>
+      intro _active
+      rfl
+  | cons answer rest ih =>
+      intro active
+      generalize requestExact :
+          seekSchedulerNativeExposure transitionFuel cursor = request
+      cases request with
+      | returned result =>
+          cases transitionFuel with
+          | zero => omega
+          | succ fuel =>
+              simp [schedulerNativePrefixCursor, requestExact,
+                schedulerNativeRequestNext,
+                SchedulerNativeRequestIsActive] at active
+      | failed reason =>
+          cases transitionFuel with
+          | zero => omega
+          | succ fuel =>
+              simp [schedulerNativePrefixCursor, requestExact,
+                schedulerNativeRequestNext, seekSchedulerNativeExposure,
+                SchedulerNativeRequestIsActive] at active
+      | transitionLimit =>
+          cases transitionFuel with
+          | zero => omega
+          | succ fuel =>
+              simp [schedulerNativePrefixCursor, requestExact,
+                schedulerNativeRequestNext, seekSchedulerNativeExposure,
+                SchedulerNativeRequestIsActive] at active
+      | machineFresh limits limitBound actor state input nextProgram
+          remainingFuel coherent totalRoom freshRoom missing onReturned =>
+          have tailActive : SchedulerNativeRequestIsActive
+              (seekSchedulerNativeExposure transitionFuel
+                (schedulerNativePrefixCursor transitionFuel
+                  (schedulerNativeRequestNext
+                    (.machineFresh limits limitBound actor state input
+                      nextProgram remainingFuel coherent totalRoom freshRoom
+                      missing onReturned) answer) rest)) := by
+            simpa [schedulerNativePrefixCursor, requestExact] using active
+          have tailFree := ih
+            (schedulerNativeRequestNext
+              (.machineFresh limits limitBound actor state input nextProgram
+                remainingFuel coherent totalRoom freshRoom missing onReturned)
+              answer) tailActive
+          rw [schedulerNativePrefixRecords, requestExact]
+          simpa [schedulerNativeRequestRecord, paddingCoordinateCount] using
+            tailFree
+
+      | forkOutput frozen pairRoom output advance template next =>
+          have tailActive : SchedulerNativeRequestIsActive
+              (seekSchedulerNativeExposure transitionFuel
+                (schedulerNativePrefixCursor transitionFuel
+                  (schedulerNativeRequestNext
+                    (.forkOutput frozen pairRoom output advance template next)
+                    answer) rest)) := by
+            simpa [schedulerNativePrefixCursor, requestExact] using active
+          have tailFree := ih
+            (schedulerNativeRequestNext
+              (.forkOutput frozen pairRoom output advance template next) answer)
+            tailActive
+          rw [schedulerNativePrefixRecords, requestExact]
+          simpa [schedulerNativeRequestRecord, paddingCoordinateCount] using
+            tailFree
+
+      | forkAdvance frozen pairRoom output advance template forkOutput next =>
+          have tailActive : SchedulerNativeRequestIsActive
+              (seekSchedulerNativeExposure transitionFuel
+                (schedulerNativePrefixCursor transitionFuel
+                  (schedulerNativeRequestNext
+                    (.forkAdvance frozen pairRoom output advance template
+                      forkOutput next) answer) rest)) := by
+            simpa [schedulerNativePrefixCursor, requestExact] using active
+          have tailFree := ih
+            (schedulerNativeRequestNext
+              (.forkAdvance frozen pairRoom output advance template forkOutput
+                next) answer) tailActive
+          rw [schedulerNativePrefixRecords, requestExact]
+          simpa [schedulerNativeRequestRecord, paddingCoordinateCount] using
+            tailFree
+
+/-- An observed chronological prefix whose next native request is still active
+contains no padding records. -/
+theorem run_trace_prefix_padding_free_of_reached_active
+    {globalOracleCalls : Nat} {Result : Type}
+    (transitionFuel : Nat) (positive : 0 < transitionFuel)
+    (cursor : SchedulerNativeCursor globalOracleCalls Result)
+    (answers : List Digest256)
+    (prior later : List UnifiedExposureRecord)
+    (traceExact :
+      (runSchedulerNativeListRun transitionFuel cursor answers).trace =
+        prior ++ later)
+    (active : SchedulerNativeRequestIsActive
+      (seekSchedulerNativeExposure transitionFuel
+        (schedulerNativePrefixCursor transitionFuel cursor
+          (prior.map UnifiedExposureRecord.answer)))) :
+    paddingCoordinateCount prior = 0 := by
+  have recordsExact := scheduler_native_prefix_records_eq_of_run_trace_prefix
+    transitionFuel cursor answers prior later traceExact
+  rw [← recordsExact]
+  exact scheduler_native_prefix_records_padding_free_of_reached_active
+    transitionFuel positive cursor (prior.map UnifiedExposureRecord.answer)
+      active
+
+/-- Before any still-active request, chronological length is exactly the sum
+of the two real full-256 resource classes. -/
+theorem run_trace_prefix_length_eq_machine_plus_fork_of_reached_active
+    {globalOracleCalls : Nat} {Result : Type}
+    (transitionFuel : Nat) (positive : 0 < transitionFuel)
+    (cursor : SchedulerNativeCursor globalOracleCalls Result)
+    (answers : List Digest256)
+    (prior later : List UnifiedExposureRecord)
+    (traceExact :
+      (runSchedulerNativeListRun transitionFuel cursor answers).trace =
+        prior ++ later)
+    (active : SchedulerNativeRequestIsActive
+      (seekSchedulerNativeExposure transitionFuel
+        (schedulerNativePrefixCursor transitionFuel cursor
+          (prior.map UnifiedExposureRecord.answer)))) :
+    prior.length = machineFreshCoordinateCount prior +
+      forkCoordinateCount prior := by
+  have paddingFree := run_trace_prefix_padding_free_of_reached_active
+    transitionFuel positive cursor answers prior later traceExact active
+  have partition := trace_coordinate_partition prior
+  omega
+
+/-- If the next literal record is a fork output, the deterministic native
+prefix must end at an active request.  This extracts the request shape from
+the trace rather than assuming cursor identity. -/
+theorem run_trace_prefix_reaches_active_of_selected_fork_output
+    {globalOracleCalls : Nat} {Result : Type}
+    (transitionFuel : Nat)
+    (cursor : SchedulerNativeCursor globalOracleCalls Result)
+    (answers : List Digest256)
+    (prior later : List UnifiedExposureRecord)
+    (frozenHistory : List QueryRecord)
+    (outputInput advanceInput : ShaInput)
+    (template : AspisK1.V7Tag73AtomicPairReplay.AtomicPairReplayConfiguration)
+    (answer : Digest256)
+    (traceExact :
+      (runSchedulerNativeListRun transitionFuel cursor answers).trace =
+        prior ++
+          (.forkOutput frozenHistory outputInput advanceInput template answer :
+            UnifiedExposureRecord) :: later) :
+    SchedulerNativeRequestIsActive
+      (seekSchedulerNativeExposure transitionFuel
+        (schedulerNativePrefixCursor transitionFuel cursor
+          (prior.map UnifiedExposureRecord.answer))) := by
+  let selected : UnifiedExposureRecord :=
+    .forkOutput frozenHistory outputInput advanceInput template answer
+  have priorExact := scheduler_native_prefix_records_eq_of_run_trace_prefix
+    transitionFuel cursor answers prior (selected :: later) (by
+      simpa only [selected] using traceExact)
+  have throughExact := scheduler_native_prefix_records_eq_of_run_trace_prefix
+    transitionFuel cursor answers (prior ++ [selected]) later (by
+      simpa [selected, List.append_assoc] using traceExact)
+  rw [List.map_append, scheduler_native_prefix_records_append, priorExact] at throughExact
+  have oneStep :
+      schedulerNativePrefixRecords transitionFuel
+          (schedulerNativePrefixCursor transitionFuel cursor
+            (prior.map UnifiedExposureRecord.answer)) [answer] = [selected] := by
+    have cancelled := (List.append_right_inj prior).mp throughExact
+    have selectedAnswer : selected.answer = answer := by rfl
+    rw [List.map_singleton, selectedAnswer] at cancelled
+    exact cancelled
+  generalize requestExact : seekSchedulerNativeExposure transitionFuel
+      (schedulerNativePrefixCursor transitionFuel cursor
+        (prior.map UnifiedExposureRecord.answer)) = request
+  cases request <;> simp [schedulerNativePrefixRecords, requestExact, selected,
+    schedulerNativeRequestRecord, SchedulerNativeRequestIsActive] at oneStep ⊢
 
 /-- Padding is emitted only after the scheduler has halted.  Therefore a
 literal answer prefix whose reached cursor still exposes a fork output
@@ -331,6 +525,10 @@ theorem exact_operational_root_gamma_prefix_numeric_capacity
 #print axioms exact_gamma_restored_prefix_numeric_capacity
 #print axioms full_machine_cap_plus_gamma_prefix_forks_has_capacity
 #print axioms exact_operational_root_gamma_prefix_numeric_capacity
+#print axioms scheduler_native_prefix_records_padding_free_of_reached_active
+#print axioms run_trace_prefix_padding_free_of_reached_active
+#print axioms run_trace_prefix_length_eq_machine_plus_fork_of_reached_active
+#print axioms run_trace_prefix_reaches_active_of_selected_fork_output
 #print axioms scheduler_native_prefix_records_padding_free_of_reached_fork
 #print axioms run_trace_prefix_padding_free_of_reached_fork
 #print axioms run_trace_prefix_length_eq_machine_plus_fork_of_reached_fork

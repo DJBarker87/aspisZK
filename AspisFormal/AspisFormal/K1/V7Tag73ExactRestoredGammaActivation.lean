@@ -1,4 +1,4 @@
-import AspisFormal.K1.V7Tag73ExactRestoredGammaActualTrace
+import AspisFormal.K1.V7Tag73ExactRestoredGammaActualTraceForkCap
 import AspisFormal.K1.V7Tag73ExactRestoredGammaFullRouting
 
 /-!
@@ -27,6 +27,7 @@ open AspisK1.V7Tag73ExactCompilerResources
 open AspisK1.V7Tag73ExactFixedK12MerkleClassifier
 open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredGammaActualTrace
+open AspisK1.V7Tag73ExactRestoredGammaActualTraceForkCap
 open AspisK1.V7Tag73ExactRestoredGammaFullRouting
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
@@ -54,6 +55,168 @@ theorem production_root_sweep_has_gamma_programmed_cover
   have forkRoom : 1513 ≤ parameters.forkRequestCap :=
     oneRound.trans withinForkCap
   omega
+
+/-- One production root-sweep round routes the earliest exposure equivalent
+to the typed block-zero gamma fork using the proved chronological prefix
+capacity.  No sampler-completion premise is required. -/
+theorem exact_one_round_root_sweep_routes_first_restored_gamma_output
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {canonicalDriverFuel transitionFuel : Nat}
+    (base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters)
+    (extractor : ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+      Payload Witness)
+    (withinForkCap : 1 * 1513 ≤ parameters.forkRequestCap)
+    (adequate : ExactPlainRomOperationalAdequacy canonicalDriverFuel
+      transitionFuel
+        (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap))
+    (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
+    (fixedInstance : PublicInstance Statement)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (input : ExactK12OperationalInput transitionFuel
+      (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+      projection fixedInstance sample) :
+    ∃ (firstPrior firstLater : List UnifiedExposureRecord)
+        (firstRecord : UnifiedExposureRecord),
+      (runExactPlainRom transitionFuel
+          (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+          sample).trace = firstPrior ++ firstRecord :: firstLater ∧
+      WaitingControllerPrefixUnmarked transitionFuel
+        (typedRestoredChallengeExposureStartsHere
+          (Result := ExactPlainRomWitnessExtractor Statement
+            Tag73K12ParsedProof Payload Witness)
+          transitionFuel (.challenge .gamma)
+          (base.machine.blackBox.start sample.1 base.machine.observation)
+          base.machine.environment base.restorationConfiguration)
+        (exactRestoredGammaInitialState transitionFuel
+          (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+          sample.1)
+        firstPrior ∧
+      causalRoutedAnswer? (⟨0, by decide⟩, false)
+        (exactRestoredGammaRouter transitionFuel
+          (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+          sample.1)
+        (exactGammaPrefixRouterInputTape parameters sample.2) =
+          some firstRecord.answer := by
+  let configuration :=
+    exactRootSweepWitnessConfiguration base 1 extractor withinForkCap
+  let startsHere : UnifiedExposureCursor
+      (globalFull256OracleCallCap parameters) → Bool :=
+    typedRestoredChallengeExposureStartsHere
+      (Result := ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+        Payload Witness)
+      transitionFuel (.challenge .gamma)
+      (base.machine.blackBox.start sample.1 base.machine.observation)
+      base.machine.environment base.restorationConfiguration
+  let controller := exactRestoredGammaController transitionFuel configuration
+    sample.1
+  let initial := exactRestoredGammaInitialState transitionFuel configuration
+    sample.1
+  obtain ⟨prior, later, selected, targetCursor, answer, traceExact,
+      targetMarked, selectedExact, prefixLength⟩ :=
+    exact_one_round_gamma_fork_prefix_has_router_capacity base extractor
+      withinForkCap adequate projection fixedInstance sample input
+  let reached := indexedStateAfterRecords transitionFuel controller prior initial
+  have erasedTrace :
+      runUnifiedExposureTrace transitionFuel
+          (exactCompilerTargetCaps parameters).length initial.cursor sample.2 =
+        prior ++ selected :: later := by
+    have exact := exact_plain_rom_trace_is_erased_exposure_trace transitionFuel
+      configuration sample
+    simpa only [configuration, initial, exactRestoredGammaInitialState,
+      exactPlainRomExposureCursor] using exact.symm.trans traceExact
+  have selectedAligned :
+      unifiedRecordAtAnswer transitionFuel reached.cursor selected.answer =
+        selected :=
+    trace_prefix_aligns_indexed_state transitionFuel controller prior later
+      selected (exactCompilerTargetCaps parameters).length initial sample.2
+      erasedTrace
+  have answerExact : selected.answer = answer := by
+    rw [selectedExact]
+    exact scheduler_native_request_record_answer
+      (seekSchedulerNativeExposure transitionFuel targetCursor) answer
+  have selectedAlignedAtAnswer :
+      unifiedRecordAtAnswer transitionFuel reached.cursor answer = selected := by
+    simpa only [answerExact] using selectedAligned
+  have targetRecord :
+      schedulerNativeRequestRecord
+          (seekSchedulerNativeExposure transitionFuel targetCursor) answer =
+        unifiedRecordAtAnswer transitionFuel targetCursor.erase answer :=
+    scheduler_native_record_eq_unified_record_at_answer transitionFuel
+      targetCursor answer
+  have recordExact :
+      unifiedRecordAtAnswer transitionFuel reached.cursor answer =
+        unifiedRecordAtAnswer transitionFuel targetCursor.erase answer :=
+    selectedAlignedAtAnswer.trans (selectedExact.trans targetRecord)
+  have positive : 0 < transitionFuel := by
+    have reserve := adequate.schedulerTransitionFuel
+    unfold exactCompilerSufficientTransitionFuel at reserve
+    omega
+  have eventuallyMarked : startsHere reached.cursor = true := by
+    exact typed_challenge_exposure_marked_of_record_eq positive
+      (.challenge .gamma)
+      (base.machine.blackBox.start sample.1 base.machine.observation)
+      base.machine.environment base.restorationConfiguration reached.cursor
+      targetCursor.erase answer (by
+        simpa only [typedRestoredGammaForkStartsHere] using targetMarked)
+      recordExact
+  have routed :=
+    exact_restored_gamma_router_routes_first_marked_full_answer_of_prefix_length
+      transitionFuel configuration sample prior later selected traceExact (by
+        simpa only [reached, controller, initial, startsHere, configuration,
+          exactRootSweepWitnessConfiguration] using eventuallyMarked)
+      prefixLength
+  simpa only [configuration, startsHere, initial,
+    exactRootSweepWitnessConfiguration] using routed
+
+/-- Coordinate-facing form of the premise-free one-round activation. -/
+theorem exact_one_round_first_restored_gamma_coordinate_exact
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {canonicalDriverFuel transitionFuel : Nat}
+    (base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters)
+    (extractor : ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+      Payload Witness)
+    (withinForkCap : 1 * 1513 ≤ parameters.forkRequestCap)
+    (adequate : ExactPlainRomOperationalAdequacy canonicalDriverFuel
+      transitionFuel
+        (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap))
+    (projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload)
+    (fixedInstance : PublicInstance Statement)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (input : ExactK12OperationalInput transitionFuel
+      (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+      projection fixedInstance sample) :
+    ∃ (firstPrior firstLater : List UnifiedExposureRecord)
+        (firstRecord : UnifiedExposureRecord),
+      (runExactPlainRom transitionFuel
+          (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+          sample).trace = firstPrior ++ firstRecord :: firstLater ∧
+      WaitingControllerPrefixUnmarked transitionFuel
+        (typedRestoredChallengeExposureStartsHere
+          (Result := ExactPlainRomWitnessExtractor Statement
+            Tag73K12ParsedProof Payload Witness)
+          transitionFuel (.challenge .gamma)
+          (base.machine.blackBox.start sample.1 base.machine.observation)
+          base.machine.environment base.restorationConfiguration)
+        (exactRestoredGammaInitialState transitionFuel
+          (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+          sample.1)
+        firstPrior ∧
+      (exactCompilerRestoredGammaCoordinates transitionFuel
+        (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+        sample.1 sample.2).2.1 ⟨0, by decide⟩ = firstRecord.answer := by
+  obtain ⟨firstPrior, firstLater, firstRecord, traceExact, prefixUnmarked,
+      routed⟩ :=
+    exact_one_round_root_sweep_routes_first_restored_gamma_output base extractor
+      withinForkCap adequate projection fixedInstance sample input
+  refine ⟨firstPrior, firstLater, firstRecord, traceExact, prefixUnmarked, ?_⟩
+  exact exact_restored_gamma_output_coordinate_eq_of_routed_lookup
+    transitionFuel
+    (exactRootSweepWitnessConfiguration base 1 extractor withinForkCap)
+    sample.1 sample.2 ⟨0, by decide⟩ firstRecord.answer routed
 
 /-- A completed production root sweep activates the restored-gamma router at
 the earliest exposure equivalent to its typed gamma fork.  The selected
@@ -243,6 +406,8 @@ theorem exact_root_sweep_first_restored_gamma_coordinate_exact
 
 #print axioms exact_root_sweep_routes_first_restored_gamma_output
 #print axioms exact_root_sweep_first_restored_gamma_coordinate_exact
+#print axioms exact_one_round_root_sweep_routes_first_restored_gamma_output
+#print axioms exact_one_round_first_restored_gamma_coordinate_exact
 #print axioms production_root_sweep_has_gamma_programmed_cover
 
 end
