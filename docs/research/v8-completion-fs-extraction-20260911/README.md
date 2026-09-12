@@ -251,3 +251,34 @@ gamma and alpha together. The source producer must make those values causal
 outputs and expose its hash calls through the replayable oracle program; the
 checker may not receive them as proposed records. Focused evidence is recorded
 in `results/v8-completion-fs-extraction-20260911/concrete-collector-checker-v1/`.
+
+### 2026-09-12 finite-tape and selected-callback continuation
+
+`lean/FSV8V7FiniteUniformBridge.lean`, `lean/FSV8FiniteInterpreterBridge.lean`
+and `lean/FSV8FiniteInterpreterPMFBridge.lean` now put the bounded current
+source/OOD/gamma interpreter on exactly the same uniform recursive finite-tape
+law used by the V7 operational model.  The equality preserves answer order,
+cache behavior, early aborts and the explicit script budget.  This is an exact
+distributional reparameterization of a stated uniform tape, not yet a theorem
+that the deployed adversarial random-oracle execution supplies that tape.
+
+`lean/FSLiveChallengeTrace.lean` and `lean/FSLiveChallengeV7Decode.lean` prove
+that every successful actual lazy QM31 challenge uses the exact recorded one to
+four blocks and decodes through the V7 ordinary decoder with identical limbs,
+word count and block count.  Freshness and the source/ROM coupling remain
+separate.
+
+On the semantic side, `lean/SelectedSemanticPackedBoundary.lean` prevents a
+false source bridge: the source's 94-position `semantic_packed` output becomes
+the selected 95-position model only after the positive slot is inserted.
+`lean/SelectedCopyActiveExecutable.lean` proves the literal selected active-mask
+scan, while `lean/SelectedCopyDescriptorAggregation.lean` carries all 136 Copy
+descriptors into the producer/consumer row-table functionals.  The fourteen
+pattern values, literal Rust constant tables, nonlinear Copy residual, Poseidon
+source evaluator and complete selected callback are still open.
+
+All promoted leaves above were checked with Lean 4.32.0 under bounded no-swap
+NUC scopes and print only `propext`, `Classical.choice` and `Quot.sound` where
+applicable.  No wire, protocol, production acceptance, byte census or CU claim
+changed.  Global soundness, the resource-bounded Fiat--Shamir lift, allowed-
+access checked payment extraction and adaptive full-view ZK remain unfinished.
