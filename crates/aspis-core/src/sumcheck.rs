@@ -1742,6 +1742,46 @@ impl WeightAccumulator {
         self.log_len -= 3;
     }
 
+    /// Accumulate one line-tensor contribution for the four-value terminal
+    /// dot product.  Keeping this as a regular helper rather than a closure
+    /// preserves the arithmetic while avoiding a captured mutable borrow in
+    /// the Aeneas source model.
+    #[inline]
+    fn accumulate_line_dot(
+        line_deferred_halvings: u8,
+        mut scale: QM31,
+        x: M31,
+        mut halvings: u8,
+        line_count: &mut usize,
+        line_constant_limbs: &mut [M31; 4],
+        line_raw: &mut [[u64; 4]; 3],
+        line_sums: &mut [[M31; 4]; 3],
+    ) {
+        while halvings < line_deferred_halvings {
+            scale = scale.add(scale);
+            halvings += 1;
+        }
+        let high = Self::double_x_m31(x);
+        let factors = [x, high, x.mul(high)];
+        let limbs = [scale.c0.a.0, scale.c0.b.0, scale.c1.a.0, scale.c1.b.0];
+        for limb in 0..4 {
+            line_constant_limbs[limb] = line_constant_limbs[limb].add(M31(limbs[limb]));
+            for slot in 0..3 {
+                line_raw[slot][limb] += u64::from(limbs[limb]) * u64::from(factors[slot].0);
+            }
+        }
+        *line_count += 1;
+        if *line_count % 4 == 0 {
+            for slot in 0..3 {
+                for limb in 0..4 {
+                    line_sums[slot][limb] =
+                        line_sums[slot][limb].add(M31::reduce_u64(line_raw[slot][limb]));
+                    line_raw[slot][limb] = 0;
+                }
+            }
+        }
+    }
+
     pub fn dot(&self, values: &[QM31]) -> QM31 {
         debug_assert_eq!(values.len(), 1usize << self.log_len);
         if self.log_len == 2 && values.len() == 4 {
@@ -1767,41 +1807,33 @@ impl WeightAccumulator {
             let mut line_raw = [[0u64; 4]; 3];
             let mut line_sums = [[M31::ZERO; 4]; 3];
             for component in &self.components {
-                let mut accumulate_line = |mut scale: QM31, x: M31, mut halvings: u8| {
-                    while halvings < line_deferred_halvings {
-                        scale = scale.add(scale);
-                        halvings += 1;
-                    }
-                    let high = Self::double_x_m31(x);
-                    let factors = [x, high, x.mul(high)];
-                    let limbs = [scale.c0.a.0, scale.c0.b.0, scale.c1.a.0, scale.c1.b.0];
-                    for limb in 0..4 {
-                        line_constant_limbs[limb] = line_constant_limbs[limb].add(M31(limbs[limb]));
-                        for slot in 0..3 {
-                            line_raw[slot][limb] +=
-                                u64::from(limbs[limb]) * u64::from(factors[slot].0);
-                        }
-                    }
-                    line_count += 1;
-                    if line_count % 4 == 0 {
-                        for slot in 0..3 {
-                            for limb in 0..4 {
-                                line_sums[slot][limb] = line_sums[slot][limb]
-                                    .add(M31::reduce_u64(line_raw[slot][limb]));
-                                line_raw[slot][limb] = 0;
-                            }
-                        }
-                    }
-                };
                 match component {
-                    WeightComponent::LineM31Tensor { scale, x } => accumulate_line(*scale, *x, 0),
+                    WeightComponent::LineM31Tensor { scale, x } => Self::accumulate_line_dot(
+                        line_deferred_halvings,
+                        *scale,
+                        *x,
+                        0,
+                        &mut line_count,
+                        &mut line_constant_limbs,
+                        &mut line_raw,
+                        &mut line_sums,
+                    ),
                     WeightComponent::LineM31Batch {
                         scales,
                         xs,
                         deferred_halvings,
                     } => {
                         for (&scale, &x) in scales.iter().zip(xs) {
-                            accumulate_line(scale, x, *deferred_halvings);
+                            Self::accumulate_line_dot(
+                                line_deferred_halvings,
+                                scale,
+                                x,
+                                *deferred_halvings,
+                                &mut line_count,
+                                &mut line_constant_limbs,
+                                &mut line_raw,
+                                &mut line_sums,
+                            );
                         }
                     }
                     _ => {}
