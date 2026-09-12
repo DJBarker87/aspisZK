@@ -1,6 +1,10 @@
 import FSV7OODAbsorbLink
 set_option autoImplicit false
 set_option Elab.async false
+/- The proof follows seven concrete source stages.  Its terms are symbolic;
+the extra elaboration budget is for unifying the nested dependent `Script`
+indices, not reducing a generated field expression. -/
+set_option maxHeartbeats 600000
 namespace AspisV8Completion.FSV7OODSourceAbsorbLinks
 open FSOracleExecution FSBoundedTranscript FSTranscriptScript FSOODSampler
 open FSV7OODSampler FSV8OODBodyScript FSV7OODBodyScript
@@ -50,13 +54,13 @@ theorem successful_source_absorb_links {n m : Nat}
         { digest := digest, oracle := FSFirstFresh.empty }).1 with
     | error e => simp only [hfirst, run] at success; cases success
     | ok firstPoint =>
-      simp only [hfirst] at success
+      simp only [hfirst] at success ⊢
       rw [run_bind, run_answerScript] at success ⊢
       cases hfirstWork : (run tape (firstWork firstPoint)
           (circle decodePoint tape 3 { digest := digest, oracle := FSFirstFresh.empty }).2.oracle).1 with
       | none => simp only [hfirstWork, Option.map_none] at success; cases success
       | some firstUnit =>
-        simp only [hfirstWork, Option.map_some] at success
+        simp only [hfirstWork, Option.map_some] at success ⊢
         rw [run_bind] at success ⊢
         let firstState : HashBlock :=
           (circle decodePoint tape 3 { digest := digest, oracle := FSFirstFresh.empty }).2.digest
@@ -70,21 +74,21 @@ theorem successful_source_absorb_links {n m : Nat}
               afterFirst secondWork body secondDraw)) firstOracle
           (absorb tape ⟨firstState, firstOracle⟩ 62 firstData).digest (by rfl)
         rw [run_absorb tape ⟨firstState, firstOracle⟩ 62 firstData] at success ⊢
-        simp only [] at success
+        simp only [] at success ⊢
         rw [run_bind, run_distinct] at success ⊢
         let afterFirst := absorb tape ⟨firstState, firstOracle⟩ 62 firstData
         cases hsecond : (distinct decodePoint firstPoint tape 3 afterFirst).1 with
         | error e => dsimp [afterFirst] at hsecond; simp only [hsecond, afterSecond, run] at success; cases success
         | ok secondPoint =>
           dsimp [afterFirst] at hsecond
-          simp only [hsecond, afterSecond] at success
+          simp only [hsecond, afterSecond] at success ⊢
           rw [run_bind, run_answerScript] at success ⊢
           cases hsecondWork : (run tape (secondWork firstPoint secondPoint)
               (distinct decodePoint firstPoint tape 3 afterFirst).2.oracle).1 with
           | none => dsimp [afterFirst] at hsecondWork; simp only [hsecondWork, Option.map_none] at success; cases success
           | some secondUnit =>
             dsimp [afterFirst] at hsecondWork
-            simp only [hsecondWork, Option.map_some] at success
+            simp only [hsecondWork, Option.map_some] at success ⊢
             rw [run_bind] at success ⊢
             let secondState : HashBlock :=
               (distinct decodePoint firstPoint tape 3 afterFirst).2.digest
@@ -106,8 +110,18 @@ theorem successful_source_absorb_links {n m : Nat}
                 Script Bytes HashBlock (Except Error Result × HashBlock) 0))
               secondOracle (absorb tape ⟨secondState, secondOracle⟩ 62 secondData).digest (by rfl)
             rw [run_absorb tape ⟨secondState, secondOracle⟩ 62 secondData] at success ⊢
-            simp only [run] at success
+            simp only [run] at success ⊢
             cases success
+            rw [run_bind] at firstLinked
+            rw [run_absorb tape ⟨firstState, firstOracle⟩ 62 firstData] at firstLinked
+            simp only [] at firstLinked
+            rw [run_bind, run_distinct] at firstLinked
+            simp only [hsecond, afterSecond] at firstLinked
+            rw [run_bind, run_answerScript] at firstLinked
+            simp only [hsecondWork, Option.map_some] at firstLinked
+            rw [run_bind] at firstLinked
+            rw [run_absorb tape ⟨secondState, secondOracle⟩ 62 secondData] at firstLinked
+            simp only [run] at firstLinked
             refine ⟨firstState, (absorb tape ⟨firstState, firstOracle⟩ 62 firstData).digest,
               secondState, (absorb tape ⟨secondState, secondOracle⟩ 62 secondData).digest, ?_, ?_⟩
             · exact firstLinked

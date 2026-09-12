@@ -210,12 +210,15 @@ and the first-exposure law remain open.  See
 
 `lean/FSV7OODAbsorbLink.lean` constructs the literal absorption event in the
 actual final oracle log for an `absorbScript` followed by any continuation.
+`lean/FSV7OODSourceAbsorbLinks.lean` instantiates that fact through every
+successful branch of the complete concrete OOD source script, producing both
+label-62 same-body answer records from one chronological execution.
 `lean/FSFreshQueryMass.lean` then proves the exact local law at the next
 interpreter transition: on a cache miss, changing only the unread tape cell
 gives uniform target mass `1 / |Block|`; on a cache hit the coin is irrelevant.
-These facts remove an abstract one-step source/law seam. They do not yet prove
-that every OOD squeeze is fresh, assemble the four-block decoder coin, or
-establish the complete adaptive pair distribution.
+These facts remove the absorption and abstract one-step source/law seams. They
+do not yet prove that every OOD squeeze is fresh, assemble the four-block
+decoder coin, or establish the complete adaptive pair distribution.
 
 `lean/SameBodySelectedSemanticSource.lean` executes the fallible semantic
 terminal callback on the same body's 84 point claims and constructs the mask
