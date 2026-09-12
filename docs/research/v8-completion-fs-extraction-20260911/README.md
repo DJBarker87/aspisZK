@@ -223,3 +223,15 @@ legal same-tape replays and the checker result actually returned by each run.
 It retains replay failure, rejection, resource failure and duplicates and
 proves deterministic `Progress -> Complete` for a distinct 29-by-4 schedule.
 It does not assume or prove progress probability or `RecoveredHigh`.
+
+`lean/ExtractionCollectorConcreteChecker.lean`
+instantiates its checker at the actual `Option (SameBodyRelation.Result K)`
+return: success identifies the exact returned record and final256 vector. The
+same-tape producer adapter also exposes the current blocking mismatch: it
+returns `OracleMachine.pure (consume ...)`, so the V7 restoration constructor
+has no source query at which to pause and program gamma or alpha. The separate
+selected-Merkle return is not integrated and neither return type carries body,
+gamma and alpha together. The source producer must make those values causal
+outputs and expose its hash calls through the replayable oracle program; the
+checker may not receive them as proposed records. Focused evidence is recorded
+in `results/v8-completion-fs-extraction-20260911/concrete-collector-checker-v1/`.
