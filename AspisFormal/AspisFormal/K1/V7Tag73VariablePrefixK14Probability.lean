@@ -90,6 +90,93 @@ abbrev VariablePrefixK14Provider
     (words : AspisPool.V7MerkleQueryExtractor.ExtractedWords) :=
   VariableGammaCompleteSkeleton → RestoredSelectedBranchProvider decoder words
 
+/-! ## Initial-lane-only probability interface
+
+The published width-29 theorem observes only the 29 initial lanes.  Keeping
+the full `ExtractedWords` index in the release-facing probability interface
+would incorrectly force the folded C2 word and every unused Merkle leaf to be
+constant across the gamma fibre.  The response may depend on gamma; the
+initial lanes may not. -/
+
+abbrev Width29InitialLanes := Fin 29 → InitialWord QM31Exact
+
+abbrev VariablePrefixK14Response :=
+  VariableGammaCompleteSkeleton → QM31Exact → InitialMessage QM31Exact
+
+/-- Width-29 bad-gamma target with exactly the data used by the published
+curve theorem: fixed initial lanes and a nuisance-dependent response family. -/
+noncomputable def variablePrefixK14InitialLanesFailureGammaTarget
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (lanes : Width29InitialLanes)
+    (response : VariablePrefixK14Response)
+    (skeleton : VariableGammaCompleteSkeleton) : Finset QM31Exact :=
+  width29GoodChallenges decoder.initialEncoder
+    AspisV6PublishedTheoremInterfaces.initialAgreementThreshold lanes
+    (width29BadStrategy decoder.initialEncoder
+      AspisV6PublishedTheoremInterfaces.initialAgreementThreshold lanes
+      (restoredWidth29Strategy decoder lanes (response skeleton)))
+
+/-- The degree-28 cap does not depend on a full extracted two-tree word. -/
+theorem variable_prefix_k14_initial_lanes_failure_target_card_le
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (published : PublishedInitialWidth29CurveDecodability exactInitialEncoder)
+    (lanes : Width29InitialLanes)
+    (response : VariablePrefixK14Response)
+    (skeleton : VariableGammaCompleteSkeleton) :
+    (variablePrefixK14InitialLanesFailureGammaTarget decoder lanes response
+      skeleton).card ≤ initialBatchChallengeCap := by
+  have decoderPublished : PublishedInitialWidth29CurveDecodability
+      decoder.initialEncoder := by
+    rw [initialEncoderExact]
+    exact published
+  exact initial_bad_response_challenges_card_le decoder.initialEncoder
+    decoderPublished lanes (restoredWidth29Strategy decoder lanes
+      (response skeleton))
+
+def variablePrefixK14InitialLanesFailureFlatEvent
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (lanes : Width29InitialLanes)
+    (response : VariablePrefixK14Response) : Set SuccessfulGammaPrefixTape :=
+  successfulGammaPrefixSkeletonDependentEventK14
+    (variablePrefixK14InitialLanesFailureGammaTarget decoder lanes response)
+
+/-- Exact successful-prefix probability bound at the minimal initial-lane
+interface. -/
+theorem variable_prefix_k14_initial_lanes_failure_flat_probability_le
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (published : PublishedInitialWidth29CurveDecodability exactInitialEncoder)
+    (lanes : Width29InitialLanes)
+    (response : VariablePrefixK14Response) :
+    (PMF.uniformOfFintype SuccessfulGammaPrefixTape).toOuterMeasure
+        (variablePrefixK14InitialLanesFailureFlatEvent decoder lanes response) ≤
+      (initialBatchChallengeCap : ENNReal) /
+        ((P ^ 4 - 1 : Nat) : ENNReal) := by
+  apply successful_gamma_prefix_skeleton_dependent_probability_le_k14
+  intro skeleton
+  exact variable_prefix_k14_initial_lanes_failure_target_card_le decoder
+    initialEncoderExact published lanes response skeleton
+
+/-- Failed bounded-sampler executions add no event mass, exactly as in the
+legacy full-word wrapper. -/
+theorem variable_prefix_k14_initial_lanes_failure_total_probability_le
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (published : PublishedInitialWidth29CurveDecodability exactInitialEncoder)
+    (lanes : Width29InitialLanes)
+    (response : VariablePrefixK14Response) :
+    (PMF.uniformOfFintype TotalGammaDuplexTape).toOuterMeasure
+        (successfulSubtypeEvent GammaPrefixSucceeds
+          (variablePrefixK14InitialLanesFailureFlatEvent decoder lanes
+            response)) ≤
+      (initialBatchChallengeCap : ENNReal) /
+        ((P ^ 4 - 1 : Nat) : ENNReal) := by
+  exact (uniform_successful_subtype_event_probability_le GammaPrefixSucceeds
+      (variablePrefixK14InitialLanesFailureFlatEvent decoder lanes response)).trans
+    (variable_prefix_k14_initial_lanes_failure_flat_probability_le decoder
+      initialEncoderExact published lanes response)
+
 /-- The exact width-29 bad-gamma set selected before the returned gamma. -/
 noncomputable def variablePrefixK14FailureGammaTarget
     {decoder : ExactDecoderInstantiation QM31Exact}
@@ -171,5 +258,9 @@ end
 #print axioms variable_prefix_k14_failure_target_card_le
 #print axioms variable_prefix_k14_failure_flat_probability_le
 #print axioms variable_prefix_k14_failure_total_probability_le
+#print axioms variablePrefixK14InitialLanesFailureGammaTarget
+#print axioms variable_prefix_k14_initial_lanes_failure_target_card_le
+#print axioms variable_prefix_k14_initial_lanes_failure_flat_probability_le
+#print axioms variable_prefix_k14_initial_lanes_failure_total_probability_le
 
 end AspisK1.V7Tag73VariablePrefixK14Probability
