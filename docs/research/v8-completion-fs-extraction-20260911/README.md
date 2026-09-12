@@ -1,5 +1,10 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest work: [2026-09-12 continuation](continuation-20260912.md), including
+same-body constructors, chronological commitment cuts, recorded C1 access and
+a successful fresh kernel replay of the new ten-module closure. The material
+below records the earlier intake slice, not the current total evidence.
+
 This is an intermediate continuation, not closure of the same-body audit,
 Fiat–Shamir security, or checked-payment extraction. Research branch:
 `research/v8-completion-fs-extraction-20260911`, based on

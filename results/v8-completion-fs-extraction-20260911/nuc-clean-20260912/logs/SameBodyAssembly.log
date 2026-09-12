@@ -1,0 +1,177 @@
+theorem AspisV8Completion.SameBodyAssembly.preserves_semantic.{u, v} : ∀ {K : Type u} {Schedule : Type v}
+  (ops : SemanticWireExecution.Arithmetic K) (w : Word K) (strategy : Strategy K Schedule) (z : Fin 10 → K)
+  (tau alpha : K) (queries : Schedule) (rho : K) (coins : Fin 3 → K),
+  SemanticWireExecution.terminalInput ops (produce (early w) strategy tau alpha queries rho coins) z =
+    SemanticWireExecution.terminalInput ops w z :=
+fun {K} {Schedule} ops w strategy z tau alpha queries rho coins =>
+  SemanticWireExecution.suffix_independent ops (produce (early w) strategy tau alpha queries rho coins) w z fun i hi =>
+    produced_early w strategy tau alpha queries rho coins i
+      (Decidable.byContradiction fun a => preserves_semantic._proof_1_1 i hi a)
+theorem AspisV8Completion.SameBodyAssembly.preserves_ordinary.{u, v} : ∀ {K : Type u} {Schedule : Type v}
+  [inst : DecidableEq K] (ops : SameBodyOrdinary.Arithmetic K) (w : Word K) (strategy : Strategy K Schedule)
+  (gamma kappa tau alpha : K) (p0 p1 : SameBodyOrdinary.Point K) (queries : Schedule) (rho : K) (coins : Fin 3 → K),
+  SameBodyOrdinary.prepare ops (produce (early w) strategy tau alpha queries rho coins) gamma kappa p0 p1 =
+    SameBodyOrdinary.prepare ops w gamma kappa p0 p1 :=
+fun {K} {Schedule} [DecidableEq K] ops w strategy gamma kappa tau alpha p0 p1 queries rho coins =>
+  And.casesOn
+    (SameBodyOrdinary.consumed_fields_fixed (produce (early w) strategy tau alpha queries rho coins) w fun i x h =>
+      produced_early w strategy tau alpha queries rho coins i h)
+    fun hc right =>
+    And.casesOn right fun ho hi =>
+      have hs :=
+        of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrFun'
+                  (congr
+                    (congrArg List.foldl
+                      (funext fun c =>
+                        funext fun r =>
+                          congrArg (ops.add c)
+                            (congrArg (ops.mul (SameBodyOrdinary.scales ops kappa r))
+                              (congrArg (SameBodyOrdinary.batch ops gamma) (congrFun hc r)))))
+                    hi)
+                  (List.finRange 3)))
+              (List.foldl
+                (fun c r =>
+                  ops.add c
+                    (ops.mul (SameBodyOrdinary.scales ops kappa r)
+                      (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.claims w r))))
+                (w 358) (List.finRange 3)))
+            (eq_self
+              (List.foldl
+                (fun c r =>
+                  ops.add c
+                    (ops.mul (SameBodyOrdinary.scales ops kappa r)
+                      (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.claims w r))))
+                (w 358) (List.finRange 3))));
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (congrArg
+                (SameBodyOrdinary.prepare.match_1 (fun x => Option (SameBodyOrdinary.Prepared K))
+                  (ops.tryInv
+                    (ops.sub (if decide (p0.x ≠ p1.x) = true then p0.x else p0.y)
+                      (if decide (p0.x ≠ p1.x) = true then p1.x else p1.y)))
+                  fun _ => none)
+                (funext fun inv =>
+                  congrArg some
+                    (congrFun'
+                      (congrFun'
+                        (congr
+                          (congr
+                            (congr
+                              (congrArg
+                                (SameBodyOrdinary.Prepared.mk (decide (p0.x ≠ p1.x))
+                                  (SameBodyOrdinary.scales ops kappa))
+                                hs)
+                              (funext fun r =>
+                                ite_congr (Eq.refl (↑r = 0))
+                                  (fun a => congrArg (SameBodyOrdinary.batch ops gamma) (congrFun ho 0)) fun a =>
+                                  congrArg (SameBodyOrdinary.batch ops gamma) (congrFun ho 1)))
+                            (congr (congrArg ops.sub (congrArg (SameBodyOrdinary.batch ops gamma) (congrFun ho 0)))
+                              (congrFun'
+                                (congrArg ops.mul
+                                  (congrFun'
+                                    (congrArg ops.mul
+                                      (congr
+                                        (congrArg ops.sub (congrArg (SameBodyOrdinary.batch ops gamma) (congrFun ho 0)))
+                                        (congrArg (SameBodyOrdinary.batch ops gamma) (congrFun ho 1))))
+                                    inv))
+                                (if decide (p0.x ≠ p1.x) = true then p0.x else p0.y))))
+                          (congrFun'
+                            (congrArg ops.mul
+                              (congr (congrArg ops.sub (congrArg (SameBodyOrdinary.batch ops gamma) (congrFun ho 0)))
+                                (congrArg (SameBodyOrdinary.batch ops gamma) (congrFun ho 1))))
+                            inv))
+                        fun r =>
+                        if ↑r = 0 then ops.sub (ops.mul p0.x p1.y) (ops.mul p0.y p1.x)
+                        else if ↑r = 1 then ops.sub p0.y p1.y else ops.sub p1.x p0.x)
+                      inv))))
+            (match
+              ops.tryInv
+                (ops.sub (if decide (p0.x ≠ p1.x) = true then p0.x else p0.y)
+                  (if decide (p0.x ≠ p1.x) = true then p1.x else p1.y)) with
+            | none => none
+            | some inv =>
+              some
+                { useX := decide (p0.x ≠ p1.x), scales := SameBodyOrdinary.scales ops kappa,
+                  uncorrectedClaim := SameBodyOrdinary.rowScalar ops w gamma kappa,
+                  oodBatches := fun r =>
+                    if ↑r = 0 then SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0)
+                    else SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 1),
+                  intercept :=
+                    ops.sub (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0))
+                      (ops.mul
+                        (ops.mul
+                          (ops.sub (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0))
+                            (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 1)))
+                          inv)
+                        (if decide (p0.x ≠ p1.x) = true then p0.x else p0.y)),
+                  slope :=
+                    ops.mul
+                      (ops.sub (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0))
+                        (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 1)))
+                      inv,
+                  abc := fun r =>
+                    if ↑r = 0 then ops.sub (ops.mul p0.x p1.y) (ops.mul p0.y p1.x)
+                    else if ↑r = 1 then ops.sub p0.y p1.y else ops.sub p1.x p0.x,
+                  denominatorInverse := inv }))
+          (eq_self
+            (match
+              ops.tryInv
+                (ops.sub (if decide (p0.x ≠ p1.x) = true then p0.x else p0.y)
+                  (if decide (p0.x ≠ p1.x) = true then p1.x else p1.y)) with
+            | none => none
+            | some inv =>
+              some
+                { useX := decide (p0.x ≠ p1.x), scales := SameBodyOrdinary.scales ops kappa,
+                  uncorrectedClaim := SameBodyOrdinary.rowScalar ops w gamma kappa,
+                  oodBatches := fun r =>
+                    if ↑r = 0 then SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0)
+                    else SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 1),
+                  intercept :=
+                    ops.sub (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0))
+                      (ops.mul
+                        (ops.mul
+                          (ops.sub (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0))
+                            (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 1)))
+                          inv)
+                        (if decide (p0.x ≠ p1.x) = true then p0.x else p0.y)),
+                  slope :=
+                    ops.mul
+                      (ops.sub (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 0))
+                        (SameBodyOrdinary.batch ops gamma (SameBodyOrdinary.ood w 1)))
+                      inv,
+                  abc := fun r =>
+                    if ↑r = 0 then ops.sub (ops.mul p0.x p1.y) (ops.mul p0.y p1.x)
+                    else if ↑r = 1 then ops.sub p0.y p1.y else ops.sub p1.x p0.x,
+                  denominatorInverse := inv })))
+'AspisV8Completion.SameBodyAssembly.produced_early' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.SameBodyAssembly.preserves_semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8Completion.SameBodyAssembly.preserves_ordinary' depends on axioms: [propext, Quot.sound]
+	Command being timed: "lake env lean -j1 -M2048 -o /home/dombarker/aspis-v8-clean-20260912.nFTrRf/certification/artifacts/SameBodyAssembly.olean /home/dombarker/aspis-v8-clean-20260912.nFTrRf/lean/SameBodyAssembly.lean"
+	User time (seconds): 0.25
+	System time (seconds): 0.09
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.34
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 785336
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 21303
+	Voluntary context switches: 480
+	Involuntary context switches: 28
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 240
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
