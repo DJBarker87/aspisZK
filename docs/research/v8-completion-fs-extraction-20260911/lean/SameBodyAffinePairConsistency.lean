@@ -120,14 +120,93 @@ theorem tensorPair_eq_entries (point : Fin 3 → Fin 10 → K)
   rw [finRange3_eq]
   cases useX <;> simp [rowPair_eq]
 
-#print axioms tensorPair_eq_entries
+/-- Small definitional bridge: specializing the source arithmetic record does
+not change the optimized loop.  Kept separate from the theorem application so
+Lean never unfolds both ten-coordinate loops in one conversion problem. -/
+theorem pair_eq_tensorPair (z : Fin 10 → K) (kappa : K) (useX : Bool) :
+    pair ordinaryOps z kappa useX =
+      tensorPair (points ordinaryOps z)
+        (SameBodyOrdinary.scales ordinaryOps kappa) useX := by
+  rfl
 
-/- The remaining specialization is definitionally the requested source
-statement, but unfolding `ordinaryOps`, `pair`, `entry`, and `originalWeight`
-currently exhausts the focused 250k-heartbeat budget at `whnf`.  No
-mathematical premise is missing: the surviving seam is an elaboration-sized
-bridge from these abstract `point`/`scale` parameters to the prepared source
-record and its `inactiveCoefficient_small = 1` fact. -/
+private theorem ordinaryOps_one : ordinaryOps.one = (1 : K) := rfl
+private theorem ordinaryOps_add (a b : K) : ordinaryOps.add a b = a + b := rfl
+private theorem ordinaryOps_sub (a b : K) : ordinaryOps.sub a b = a - b := rfl
+private theorem ordinaryOps_mul (a b : K) : ordinaryOps.mul a b = a * b := rfl
+
+/-- Corresponding one-entry definitional bridge. -/
+theorem entry_eq_tensorEntry (z : Fin 10 → K) (kappa : K) (index : Fin 3) :
+    entry ordinaryOps z kappa index =
+      tensorEntry (points ordinaryOps z)
+        (SameBodyOrdinary.scales ordinaryOps kappa) index := by
+  unfold entry tensorEntry
+  simp only [ordinaryOps_one, ordinaryOps_add, ordinaryOps_sub, ordinaryOps_mul]
+
+theorem pair_eq_entries (z : Fin 10 → K) (kappa : K) (useX : Bool) :
+    pair ordinaryOps z kappa useX =
+      (entry ordinaryOps z kappa 0,
+        entry ordinaryOps z kappa (if useX then 2 else 1)) := by
+  calc
+    pair ordinaryOps z kappa useX =
+        tensorPair (points ordinaryOps z)
+          (SameBodyOrdinary.scales ordinaryOps kappa) useX :=
+      pair_eq_tensorPair z kappa useX
+    _ = (tensorEntry (points ordinaryOps z)
+            (SameBodyOrdinary.scales ordinaryOps kappa) 0,
+          tensorEntry (points ordinaryOps z)
+            (SameBodyOrdinary.scales ordinaryOps kappa)
+              (if useX then 2 else 1)) := tensorPair_eq_entries _ _ useX
+    _ = (entry ordinaryOps z kappa 0,
+          entry ordinaryOps z kappa (if useX then 2 else 1)) :=
+      congrArg₂ Prod.mk (entry_eq_tensorEntry z kappa 0).symm
+        (entry_eq_tensorEntry z kappa _).symm
+
+/-- The prepared source record supplies exactly the scale vector in the
+literal dense loop; the inactive contribution at indices 0,1,2 is one. -/
+theorem originalWeight_small_eq_entry {view : RawHashInput → Digest208}
+    {ready : Ready view} (ordinary : OrdinaryReady ready) (index : Fin 3) :
+    originalWeight ordinary (smallIndex index) =
+      entry ordinaryOps ordinary.z ready.middle.kappa index := by
+  have preparedRun := (ordinary_claim_constructed ordinary).1
+  have preparedFacts := prepared_from_same_word ordinaryOps ready.input.word
+    ready.gamma ready.middle.kappa (firstPoint ready.data) (secondPoint ready.data)
+    ordinary.value.prepared preparedRun
+  have scalesEq : ordinary.value.prepared.scales =
+      SameBodyOrdinary.scales ordinaryOps ready.middle.kappa := preparedFacts.1
+  rw [entry_eq_tensorEntry]
+  unfold originalWeight tensorEntry
+  rw [inactiveCoefficient_small, scalesEq]
+  simp only [ordinaryOps_one, ordinaryOps_add, ordinaryOps_sub, ordinaryOps_mul,
+    smallIndex]
+
+/-- Required optimized affine correction agrees with entries 0 and 2/1 of
+the literal full source-loop covector. -/
+theorem pair_eq_originalWeight {view : RawHashInput → Digest208}
+    {ready : Ready view} (ordinary : OrdinaryReady ready) :
+    pair ordinaryOps ordinary.z ready.middle.kappa
+        ordinary.value.prepared.useX =
+      (originalWeight ordinary (smallIndex 0),
+        originalWeight ordinary
+          (smallIndex (if ordinary.value.prepared.useX then 2 else 1))) := by
+  calc
+    pair ordinaryOps ordinary.z ready.middle.kappa
+        ordinary.value.prepared.useX =
+      (entry ordinaryOps ordinary.z ready.middle.kappa 0,
+       entry ordinaryOps ordinary.z ready.middle.kappa
+         (if ordinary.value.prepared.useX then 2 else 1)) :=
+      pair_eq_entries _ _ _
+    _ = (originalWeight ordinary (smallIndex 0),
+          originalWeight ordinary
+            (smallIndex (if ordinary.value.prepared.useX then 2 else 1))) :=
+      congrArg₂ Prod.mk (originalWeight_small_eq_entry ordinary 0).symm
+        (originalWeight_small_eq_entry ordinary _).symm
+
+#print axioms tensorPair_eq_entries
+#print axioms pair_eq_tensorPair
+#print axioms entry_eq_tensorEntry
+#print axioms pair_eq_entries
+#print axioms originalWeight_small_eq_entry
+#print axioms pair_eq_originalWeight
 
 end
 end AspisV8Completion.SameBodyAffinePairConsistency

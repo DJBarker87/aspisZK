@@ -569,9 +569,10 @@ shares the nine unchanged tensor factors when constructing affine correction
 entries 0 and 2/1. For arbitrary three-row point tables and scales, its pair
 is exactly the corresponding two literal ten-coordinate tensor entries. The
 proof uses small one-row factorisations rather than normalising the expanded
-3x10 term. Specialising this algebraic identity to the prepared source record
-and `originalWeight` still exceeds the focused elaboration budget and remains
-open; no CU saving is claimed by the Lean result alone. Evidence is in
+3x10 term. Named arithmetic bridges now specialise that identity to the
+prepared source scales and prove the optimized pair equals entries 0 and 2/1
+of the literal dense `originalWeight`; no CU saving is claimed by the Lean
+result alone. Evidence is in
 `affine-pair-consistency-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/affine-pair-consistency-v1/report.json`.
 
