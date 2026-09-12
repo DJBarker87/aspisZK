@@ -1729,6 +1729,51 @@ mod tests {
         );
     }
 
+    #[cfg(feature = "aeneas-observer")]
+    #[test]
+    fn aeneas_observer_receives_the_prequery_view_from_the_accepted_v7_run() {
+        let context = context();
+        let hiding_context =
+            StateOnlyHidingContext::atomic_spend_v3(context.statement_digest, context.attempt_id);
+        let frontier = expected_v7_frontier_with_hiding_context(hiding_context).unwrap();
+        let body = v7_zero_body(frontier);
+        let wire = V7CompactOneFoldWire::parse(&body, frontier).unwrap();
+        let mut observed = None;
+        let accepted =
+            verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe(
+                test_hash,
+                &wire,
+                &context,
+                hiding_context,
+                &[0u8; 64],
+                &[u16::MAX],
+                false,
+                |_| true,
+                |_| Ok(zero_query_batch()),
+                |view| {
+                    observed = Some((
+                        view.gamma,
+                        view.alpha0,
+                        view.queries,
+                        view.selector,
+                        view.compact_counter,
+                        view.frontier_nodes,
+                        view.final256_coefficients[0],
+                    ));
+                },
+            )
+            .unwrap();
+        let (gamma, alpha0, queries, selector, counter, observed_frontier, first_final) =
+            observed.expect("a successful V7 run reaches the pre-query observer");
+        assert_eq!(gamma, accepted.gamma);
+        assert_eq!(alpha0, accepted.alpha[0]);
+        assert_eq!(queries, accepted.queries);
+        assert_eq!(selector, accepted.selector);
+        assert_eq!(counter, accepted.compact_counter);
+        assert_eq!(observed_frontier, accepted.frontier_nodes);
+        assert_eq!(first_final, QM31::ZERO);
+    }
+
     #[test]
     fn typed_v7_hiding_context_rejects_outer_statement_and_attempt_mismatches() {
         let context = context();
