@@ -31,6 +31,11 @@ The ideal uniform finite-tape run from `emptyOracle` now constructs the
 projected current state with no caller-supplied projected-prefix premise,
 while arbitrary adversarial-prehistory/source coupling remains open.
 
+Latest deterministic producer milestone: [well-formed fresh-oracle producer](well-formed-fresh-oracle-20260912.md).
+An arbitrary controller run from `emptyOracle`, under an explicit finite fresh
+bound, now constructs its padded chronological fresh tape and projected current
+state. Programming forks and distributional/source coupling remain separate.
+
 The [V7/V8 source-coupling premise map](v7-v8-source-coupling-premise-map-20260912.md)
 records the inspected fixed-run, resource-certificate, restoration-map, and
 K16-closure leaves. None provides the missing generic producer from an actual
@@ -395,3 +400,15 @@ are still supplied by an explicit source-arithmetic producer, and neither
 `SameBodyRelation.consume` nor terminal/payment acceptance is assumed.  Exact
 scope and evidence are in `live-later-relation-suffix-20260912.md` and
 `results/v8-completion-fs-extraction-20260911/live-later-relation-suffix-v1/`.
+
+### 2026-09-12 canonical live terminal input
+
+`lean/SameBodyLiveTerminalInput.lean` parses the one live `UInt8` body through
+the V7 byte bridge and sequential canonical 697-field decoder, then constructs
+all response/final projections and the three terminal coins from that same
+body and the live alpha1–alpha3 results.  Parse failure stays failure; no
+fallback word or externally supplied later coin is admitted.  The absorbed
+query-increment bytes remain an explicit, unverified Rust-arithmetic producer,
+and the leaf does not call `SameBodyRelation.consume` or claim terminal/payment
+acceptance.  Evidence is in `same-body-live-terminal-input-20260912.md` and
+`results/v8-completion-fs-extraction-20260911/same-body-live-terminal-input-v1/`.
