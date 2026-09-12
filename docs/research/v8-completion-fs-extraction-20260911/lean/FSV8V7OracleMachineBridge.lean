@@ -31,8 +31,11 @@ def projectRecord (record : QueryRecord) : Event Bytes Block :=
   { input := record.input, answer := record.output,
     fresh := projectOrigin record.origin }
 
+def projectedCache (state : OracleState) : Bytes → Option Block :=
+  fun input => (lookupEntry state input).map TableEntry.output
+
 def projectOracleState (state : OracleState) : State Bytes Block where
-  cache := fun input => (lookupEntry state input).map TableEntry.output
+  cache := projectedCache state
   next := state.freshCalls
   log := state.history.map projectRecord
 
@@ -52,6 +55,53 @@ theorem projectOracleState_empty :
       (FSFirstFresh.empty : State Bytes Block) := by
   rfl
 
+def singletonFreshState (actor : QueryActor) (input : Bytes)
+    (answer : Block) : OracleState where
+  table := [{ input := input, output := answer, source := .fresh }]
+  history := [{ input := input, output := answer, actor := actor, origin := .fresh }]
+  programmingHistory := []
+  totalCalls := 1
+  freshCalls := 1
+
+theorem projected_empty_query_fresh
+    (controller : AdaptiveController) (limits : OracleLimits)
+    (actor : QueryActor) (input : Bytes) (answer : Block)
+    (tape : Nat → Block)
+    (controller_answer : controller [] input = .answer answer)
+    (total_ok : 0 < limits.totalCalls) (fresh_ok : 0 < limits.freshCalls)
+    (tape_answer : tape 0 = answer) :
+    queryOracle controller limits actor emptyOracle input =
+      .ok (answer, singletonFreshState actor input answer) ∧
+    projectOracleState (singletonFreshState actor input answer) =
+      (FSOracleExecution.query tape (FSFirstFresh.empty : State Bytes Block) input).2 := by
+  constructor
+  · simp [queryOracle, emptyOracle, lookupEntry, controller_answer,
+      Nat.not_le.mpr total_ok, Nat.not_le.mpr fresh_ok, singletonFreshState]
+  · have cacheEq :
+        projectedCache (singletonFreshState actor input answer) =
+        (fun other => if other = input then some answer else none) := by
+      funext other
+      by_cases same : other = input
+      · subst other
+        simp [projectedCache, lookupEntry, singletonFreshState]
+      · simp [projectedCache, lookupEntry, singletonFreshState, same, Ne.symm same]
+    simp only [projectOracleState, FSOracleExecution.query, FSFirstFresh.empty]
+    rw [tape_answer, cacheEq]
+    simp [singletonFreshState, projectRecord, projectOrigin]
+
+theorem projected_empty_query_cached
+    (actor : QueryActor) (input : Bytes) (answer : Block)
+    (tape : Nat → Block) :
+    let state : OracleState := singletonFreshState actor input answer
+    queryOracle (fun _ _ => .refuse)
+      { totalCalls := 2, freshCalls := 1, programmedPoints := 0 }
+      actor state input =
+      .ok (answer, { state with
+        history := state.history ++
+          [{ input := input, output := answer, actor, origin := .cached }]
+        totalCalls := 2 }) := by
+  simp [queryOracle, lookupEntry, cachedOrigin, singletonFreshState]
+
 /-- The remaining semantic gap is explicit: `projectOracleState` preserves the
     table-derived cache, ordered history, and fresh counter, but a full query
     refinement additionally needs a V7 controller/limits object matching the
@@ -63,4 +113,6 @@ def projectedQueryInput (state : OracleState) (input : Bytes) :
 #print axioms compileScript_abort
 #print axioms compileScript_ask
 #print axioms projectOracleState_empty
+#print axioms projected_empty_query_fresh
+#print axioms projected_empty_query_cached
 end AspisV8Completion.FSV8V7OracleMachineBridge
