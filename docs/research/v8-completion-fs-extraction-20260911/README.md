@@ -1,5 +1,11 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest ideal-law milestone: [uniform finite-tape law for the whole transcript
+script](v7-whole-script-uniform-law-20260912.md).  The current and V7
+interpreters now have an exact pointwise and PMF pushforward equality under
+explicit bounds.  Coupling that ideal finite tape to the actual adaptive
+random-oracle/source execution remains open.
+
 Latest FS refinement milestone: [whole-script alignment with the V7 oracle
 machine](v7-whole-script-alignment-20260912.md).  Every bounded current
 `Script` now has a checked fresh/cache/abort execution correspondence from an
