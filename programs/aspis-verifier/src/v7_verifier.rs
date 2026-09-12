@@ -7,12 +7,10 @@
 
 use aspis_core::field::QM31;
 #[cfg(feature = "aeneas-observer")]
-use aspis_core::sumcheck::WeightAccumulator;
+use aspis_core::v6_onefold::V6_QUERY_COUNT;
 use aspis_core::v6_onefold::{
     fold_v6_onefold_queries, prepare_v6_onefold_coordinates, V6WireError,
 };
-#[cfg(feature = "aeneas-observer")]
-use aspis_core::v6_onefold::{V6_FINAL_QM31_VALUES, V6_QUERY_COUNT};
 use aspis_core::v6_query_batch::V6AuthenticatedQueryBatch;
 #[cfg(feature = "v7-pair-forest-fixed-canonical-audit")]
 use aspis_core::v6_transcript::verify_v7_canonical_transcript_and_relation_prepared_with_hiding_context;
@@ -303,10 +301,13 @@ pub fn verify_v7_read_only_with_statement_digest(
 pub struct V7Tag73PrechallengeSnapshot {
     pub transcript_state: [u8; 32],
     pub running_claim: QM31,
-    pub weights: WeightAccumulator,
+    /// The exact pre-query terminal residual.  This is computed from the
+    /// borrowed accumulator and the first four folded final coefficients at
+    /// the observation boundary; neither large object is copied into the
+    /// source-proof interface.
+    pub terminal_discrepancy: QM31,
     pub gamma: QM31,
     pub alpha0: QM31,
-    pub final256_coefficients: [QM31; V6_FINAL_QM31_VALUES],
     pub queries: [u32; V6_QUERY_COUNT],
     pub selector: u8,
     pub compact_counter: u8,
@@ -318,10 +319,11 @@ fn snapshot_prechallenge(view: &V6QueryBatchPrechallengeView<'_>) -> V7Tag73Prec
     V7Tag73PrechallengeSnapshot {
         transcript_state: view.transcript_state,
         running_claim: view.running_claim,
-        weights: view.weights.clone(),
+        terminal_discrepancy: view
+            .running_claim
+            .sub(view.weights.dot(&view.final256_coefficients[..4])),
         gamma: view.gamma,
         alpha0: view.alpha0,
-        final256_coefficients: *view.final256_coefficients,
         queries: view.queries,
         selector: view.selector,
         compact_counter: view.compact_counter,
