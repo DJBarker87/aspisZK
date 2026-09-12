@@ -36,6 +36,11 @@ An arbitrary controller run from `emptyOracle`, under an explicit finite fresh
 bound, now constructs its padded chronological fresh tape and projected current
 state. Programming forks and distributional/source coupling remain separate.
 
+Latest composition milestone: [combined finite-tape prehistory law](combined-prehistory-law-20260912.md).
+The preprogram halt is retained while the compiled current script is continued
+from its produced V7 state; the two explicit finite-tape pushforward laws agree
+pointwise and therefore as PMFs.
+
 The [V7/V8 source-coupling premise map](v7-v8-source-coupling-premise-map-20260912.md)
 records the inspected fixed-run, resource-certificate, restoration-map, and
 K16-closure leaves. None provides the missing generic producer from an actual
