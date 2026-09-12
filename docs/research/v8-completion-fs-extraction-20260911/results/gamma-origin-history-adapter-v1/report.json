@@ -1,0 +1,23 @@
+{
+  "target": "FSV8GammaOriginHistoryAdapter.lean",
+  "theorems": ["projected_event_lifts_to_v7_record", "origin_q1_membership_from_lifted_record"],
+  "scope": "Lifts an aligned FS event to a concrete V7 history record, then transfers it into fixedFirstRunRecord.firstRun.q1 when explicit actor=adversary and origin-state cut equalities are available.",
+  "obstruction": "projectRecord erases actor provenance and StateAligned does not identify the current post-nonce cut with origin.firstRun.stateAtAdversaryHalt; these are the exact remaining adapter premises.",
+  "open": "Actor/cut producer, programmed target/fork/resource instantiation, freshness, acceptance, ROM coupling, and probability remain open.",
+  "compile": {
+    "host": "NUC via Tailscale",
+    "toolchain": "Lean 4.32.0",
+    "command": "lean -j1 -M8192 -o FSV8GammaOriginHistoryAdapter.olean FSV8GammaOriginHistoryAdapter.lean",
+    "exit_status": 0,
+    "wall_seconds": 2.66,
+    "peak_rss_kib": 6603176,
+    "swap_kib": 0,
+    "source_sha256": "78db48bb86710f74b68f416270f60ad66e5ffbc69127177ae2cdf406393dc577",
+    "olean_sha256": "f1fcf184f06015db7db85f7ecd9ef788ac64194fcde9b8eda61298db4b86bdaf"
+  },
+  "axioms": {
+    "projected_event_lifts_to_v7_record": ["propext", "Quot.sound"],
+    "origin_q1_membership_from_lifted_record": ["propext", "Classical.choice", "Quot.sound"]
+  },
+  "commit": null
+}
