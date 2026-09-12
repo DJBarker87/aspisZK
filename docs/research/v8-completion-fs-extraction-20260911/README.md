@@ -378,15 +378,16 @@ evidence only; its uncompiled Lean drafts were not promoted into this chain.
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
-collector start with the compiled chronological source/OOD/gamma and repaired
-middle/query/rho script.  A returned record now carries the literal same body
-and the gamma/alpha0 actually sampled in that execution.  Abort and returned
-sampler failures remain visible.  Checker acceptance at this milestone means
-only that the source script returned a record through rho; it is **not**
-terminal relation or payment acceptance.  Response1–response3, their sequential
-alphas, and the connection to `SameBodyRelation.consume` remain open.  Exact
-evidence and scope are in `replayable-collector-source-20260912.md` and
-`results/v8-completion-fs-extraction-20260911/replayable-collector-source-v1/`.
+collector start with the compiled chronological source/OOD/gamma, repaired
+middle/query/rho and live response1–response3 script.  A returned record now
+carries the literal same body and all six relation challenges actually sampled
+in that execution.  Abort and prefix/middle/later sampler failures remain
+visible.  Checker acceptance still means only that the source script returned
+a record through alpha3; it is **not** terminal relation or payment acceptance.
+The authenticated increment arithmetic, causal relation strategy and
+`SameBodyRelation.consume` connection remain open.  Exact evidence and scope
+are in `replayable-collector-source-20260912.md` and
+`results/v8-completion-fs-extraction-20260911/replayable-collector-source-v2/`.
 
 ### 2026-09-12 live later-relation suffix
 

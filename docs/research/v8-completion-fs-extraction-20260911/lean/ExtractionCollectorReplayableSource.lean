@@ -1,20 +1,19 @@
 import ExtractionCollectorSource
-import FSLiveSelectedMiddleQueryRho
+import FSLiveLaterRelationSuffix
 import FSV8V7WholeScriptAlignment
 
 /-!
-# Replayable same-execution collector source through rho
+# Replayable same-execution collector source through later relation coins
 
 This replaces the collector's `.pure` source at the strongest currently
 source-shaped boundary.  The black box executes the actual bounded
-source/OOD/gamma and repaired middle/query/rho `Script`.  A successful return
-contains the same submitted body and the gamma/alpha0 values produced by that
-execution; neither label is supplied to the checker.
+source/OOD/gamma, repaired middle/query/rho and response1--response3 `Script`.
+A successful return contains the same submitted body and all sampled relation
+coins produced by that execution; none is supplied as a checker label.
 
-The live source model currently stops at rho.  Consequently this file does
-not attach a `SameBodyRelation.Result`: doing so would require externally
-supplied later alphas/responses.  That later-response source suffix and its
-terminal checker remain the precise next producer seam.
+This does not attach a `SameBodyRelation.Result`.  The authenticated query
+increment arithmetic, causal relation strategy/ordinary scalar and terminal
+checker remain explicit producer seams.
 -/
 
 set_option autoImplicit false
@@ -26,6 +25,7 @@ open FSOracleExecution FSBoundedTranscript FSTranscriptScript
 open AspisK1.V7FsAokExperiment AspisK1.V7FsStateRestorationCoupling
 open ExtractionCollectorSource
 open FSV8PostOODGammaScript FSLiveSelectedMiddleQueryRho
+open FSLiveLaterRelationSuffix
 open FSV8V7OracleMachineBridge
 
 abbrev Bytes := List UInt8
@@ -41,6 +41,7 @@ noncomputable section
 inductive Error where
   | prefix (error : PrefixError)
   | middle (error : FSLiveSelectedMiddleQueryRho.Error)
+  | later (error : FSLiveLaterRelationSuffix.Error)
   deriving DecidableEq
 
 /-- Every field is produced by one chronological execution.  `body` is the
@@ -50,8 +51,10 @@ structure Record where
   ood : OODResult
   gamma : K
   middle : FSLiveSelectedMiddleQueryRho.Success
+  later : FSLiveLaterRelationSuffix.Success
 
 def Record.alpha0 (record : Record) : K := record.middle.alpha0
+def Record.coins (record : Record) : Fin 3 -> K := record.later.coins
 
 abbrev Returned := Except Error Record × Block
 
@@ -61,17 +64,26 @@ still propagates through `bind` and is compiled as controller refusal. -/
 def replayableScript {n m : Nat}
     (firstWork : Point -> Script Bytes Block Unit n)
     (secondWork : Point -> Point -> Script Bytes Block Unit m)
-    (producer : FunctionalProducer) (body : Bytes) (digest : Block) :=
-  bind (sourceThenGammaScript firstWork secondWork body digest) fun prefixDraw =>
+    (producer : FunctionalProducer) (increment : IncrementProducer)
+    (body : Bytes) (digest : Block) :=
+  FSTranscriptScript.bind
+      (sourceThenGammaScript firstWork secondWork body digest) fun prefixDraw =>
     match prefixDraw.1 with
     | .error e => .done (Except.error (Error.prefix e), prefixDraw.2)
     | .ok (out, gamma) =>
-      bind (m := 0) (middleQueryRhoScript producer out gamma body prefixDraw.2)
+      FSTranscriptScript.bind
+        (middleQueryRhoScript producer out gamma body prefixDraw.2)
         fun middleDraw =>
-          .done (match middleDraw.1 with
-            | .error e => (Except.error (Error.middle e), middleDraw.2)
-            | .ok middle =>
-              (Except.ok (Record.mk body out gamma middle), middleDraw.2))
+          match middleDraw.1 with
+          | .error e => .done (Except.error (Error.middle e), middleDraw.2)
+          | .ok middle =>
+            FSTranscriptScript.bind (m := 0)
+                (laterScript increment out gamma middle body middleDraw.2)
+              fun laterDraw =>
+                .done (match laterDraw.1 with
+                  | .error e => (Except.error (Error.later e), laterDraw.2)
+                  | .ok later =>
+                    (Except.ok (Record.mk body out gamma middle later), laterDraw.2))
 
 structure Observation where
   body : Bytes
@@ -84,30 +96,32 @@ same-tape execution machinery. -/
 def replayableBlackBox {n m : Nat}
     (firstWork : Point -> Script Bytes Block Unit n)
     (secondWork : Point -> Point -> Script Bytes Block Unit m)
-    (producer : FunctionalProducer) :
+    (producer : FunctionalProducer) (increment : IncrementProducer) :
     SameTapeBlackBox Unit Observation Returned where
   start _ observation :=
-    compileScript (replayableScript firstWork secondWork producer
+    compileScript (replayableScript firstWork secondWork producer increment
       observation.body observation.initialDigest)
 
 theorem replayable_start_is_compiled_script {n m : Nat}
     (firstWork : Point -> Script Bytes Block Unit n)
     (secondWork : Point -> Point -> Script Bytes Block Unit m)
-    (producer : FunctionalProducer) (observation : Observation) :
-    (replayableBlackBox firstWork secondWork producer).start () observation =
-      compileScript (replayableScript firstWork secondWork producer
+    (producer : FunctionalProducer) (increment : IncrementProducer)
+    (observation : Observation) :
+    (replayableBlackBox firstWork secondWork producer increment).start () observation =
+      compileScript (replayableScript firstWork secondWork producer increment
         observation.body observation.initialDigest) := by
   rfl
 
 def makeReplayableOrigin {n m : Nat} {TapeIdentity Statement Proof : Type*}
     (firstWork : Point -> Script Bytes Block Unit n)
     (secondWork : Point -> Point -> Script Bytes Block Unit m)
-    (producer : FunctionalProducer) (identity : TapeIdentity)
+    (producer : FunctionalProducer) (increment : IncrementProducer)
+    (identity : TapeIdentity)
     (observation : Observation) (controller : AdaptiveController)
     (limits : OracleLimits) (fuel : Nat) (initialOracle : OracleState)
     (forgeryOf : Returned -> Option (PublicProof Statement Proof)) :
     SameTapeExperimentOrigin TapeIdentity Observation Statement Proof Returned :=
-  makeSourceOrigin (replayableBlackBox firstWork secondWork producer) ()
+  makeSourceOrigin (replayableBlackBox firstWork secondWork producer increment) ()
     identity observation controller limits fuel initialOracle forgeryOf
 
 /-- The origin handed to `sourceAttempt` starts the compiled chronological
@@ -116,13 +130,14 @@ theorem replayable_origin_start {n m : Nat}
     {TapeIdentity Statement Proof : Type*}
     (firstWork : Point -> Script Bytes Block Unit n)
     (secondWork : Point -> Point -> Script Bytes Block Unit m)
-    (producer : FunctionalProducer) (identity : TapeIdentity)
+    (producer : FunctionalProducer) (increment : IncrementProducer)
+    (identity : TapeIdentity)
     (observation : Observation) (controller : AdaptiveController)
     (limits : OracleLimits) (fuel : Nat) (initialOracle : OracleState)
     (forgeryOf : Returned -> Option (PublicProof Statement Proof)) :
-    (makeReplayableOrigin firstWork secondWork producer identity observation
+    (makeReplayableOrigin firstWork secondWork producer increment identity observation
       controller limits fuel initialOracle forgeryOf).capability.start observation =
-      compileScript (replayableScript firstWork secondWork producer
+      compileScript (replayableScript firstWork secondWork producer increment
         observation.body observation.initialDigest) := by
   rfl
 
@@ -158,19 +173,24 @@ body/gamma/alpha0 without a `Progress` or successful-fork premise. -/
 theorem successful_run_components {n m : Nat}
     (firstWork : Point -> Script Bytes Block Unit n)
     (secondWork : Point -> Point -> Script Bytes Block Unit m)
-    (producer : FunctionalProducer) (body : Bytes) (digest : Block)
+    (producer : FunctionalProducer) (increment : IncrementProducer)
+    (body : Bytes) (digest : Block)
     (tape : Tape) (oracle : FSBoundedTranscript.Oracle)
     (record : Record) (finalDigest : Block)
     (success :
-      (run tape (replayableScript firstWork secondWork producer body digest)
+      (run tape (replayableScript firstWork secondWork producer increment body digest)
         oracle).1 = some (.ok record, finalDigest)) :
-    exists out gamma prefixDigest middle,
+    exists out gamma prefixDigest middle middleDigest later,
       (run tape (sourceThenGammaScript firstWork secondWork body digest) oracle).1 =
         some (.ok (out, gamma), prefixDigest) /\
       (run tape (middleQueryRhoScript producer out gamma body prefixDigest)
         (run tape (sourceThenGammaScript firstWork secondWork body digest) oracle).2).1 =
-        some (.ok middle, finalDigest) /\
-      record = Record.mk body out gamma middle := by
+        some (.ok middle, middleDigest) /\
+      (run tape (laterScript increment out gamma middle body middleDigest)
+        (run tape (middleQueryRhoScript producer out gamma body prefixDigest)
+          (run tape (sourceThenGammaScript firstWork secondWork body digest)
+            oracle).2).2).1 = some (.ok later, finalDigest) /\
+      record = Record.mk body out gamma middle later := by
   unfold replayableScript at success
   rw [run_bind] at success
   cases prefixRun :
@@ -194,9 +214,23 @@ theorem successful_run_components {n m : Nat}
         cases middleResult with
         | error e => simp [middleRun, run] at success
         | ok middle =>
-          simp [middleRun, run] at success
-          rcases success with ⟨rfl, rfl⟩
-          exact ⟨out, gamma, prefixDigest, middle, rfl, middleRun, rfl⟩
+          simp only [middleRun] at success
+          rw [run_bind] at success
+          cases laterRun :
+              (run tape (laterScript increment out gamma middle body middleDigest)
+                (run tape (middleQueryRhoScript producer out gamma body prefixDigest)
+                  (run tape (sourceThenGammaScript firstWork secondWork body digest)
+                    oracle).2).2).1 with
+          | none => simp [laterRun] at success
+          | some laterValue =>
+            rcases laterValue with ⟨laterResult, laterDigest⟩
+            cases laterResult with
+            | error e => simp [laterRun, run] at success
+            | ok later =>
+              simp [laterRun, run] at success
+              rcases success with ⟨rfl, rfl⟩
+              exact ⟨out, gamma, prefixDigest, middle, middleDigest, later,
+                rfl, middleRun, laterRun, rfl⟩
 
 /-- The accepted collector labels are projections of the actual returned
 record; no caller-supplied gamma/alpha labelling functions are needed. -/
@@ -206,11 +240,23 @@ theorem accepted_labels_are_returned (returned : Returned) (record : Record)
       record.gamma = record.gamma /\ record.alpha0 = record.middle.alpha0 := by
   exact ⟨checkReturned_accepted returned record accepted, rfl, rfl⟩
 
+/-- The collector's later coins are the live suffix outputs carried by the
+same returned record, not labels selected after replay. -/
+theorem accepted_later_coins_are_returned (returned : Returned) (record : Record)
+    (accepted : checkReturned returned = .accepted record) :
+    returned.1 = .ok record /\
+      record.coins 0 = record.later.alpha1 /\
+      record.coins 1 = record.later.alpha2 /\
+      record.coins 2 = record.later.alpha3 := by
+  exact ⟨checkReturned_accepted returned record accepted,
+    record.later.coins_literal⟩
+
 #print axioms replayable_start_is_compiled_script
 #print axioms replayable_origin_start
 #print axioms checkReturned_accepted
 #print axioms successful_run_components
 #print axioms accepted_labels_are_returned
+#print axioms accepted_later_coins_are_returned
 
 end
 end AspisV8Completion.ExtractionCollectorReplayableSource
