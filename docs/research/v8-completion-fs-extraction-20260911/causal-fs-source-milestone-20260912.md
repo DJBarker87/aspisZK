@@ -22,6 +22,18 @@ payment extraction, or global 100-bit security.
   script consumes at most its finite static call budget of fresh tape answers
   from the empty lazy oracle.  This is the deterministic resource bridge to
   the older V7 finite-tape probability work, not the probability theorem.
+- `FSFirstExposureTapeIndex.lean` identifies every first fresh event with its
+  exact chronological tape coordinate: the number of earlier fresh events.
+  This avoids treating equal answer values as the same exposure.
+- `FSLiveChallengeTrace.lean` instruments the existing lazy challenge without
+  changing its result or state, and constructs its actual one-to-four squeeze
+  blocks and their chronological state path.
+- `SelectedSourceTerminalAssembly.lean` proves the literal 4+24+Copy Horner
+  order and helper/mask field assembly.  The individual Rust evaluator outputs
+  and off-domain source-polynomial restrictions remain to be connected.
+- `SelectedSelectorToSemanticWeight.lean` connects the source-shaped
+  descending selector expansion, including its 6/4 split and MSB ordering,
+  to the exact semantic `mleRowWeight` for every row and evaluation point.
 
 All three focused leaves passed pinned Lean 4.32.0 checks on the NUC under
 capped systemd scopes with zero swap and only the standard axioms recorded in
