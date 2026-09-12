@@ -1,0 +1,129 @@
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:20:78: error: unsolved goals
+bytes : List UInt8
+⊢ List.map (UInt8.ofFin ∘ UInt8.toFin) bytes = bytes
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:22:80: error: unsolved goals
+bytes : RawHashInput
+⊢ List.map (UInt8.toFin ∘ UInt8.ofFin) bytes = bytes
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:38:37: warning: This simp argument is unused:
+  List.map_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [fixedBytes, root208, encode,̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵o̵f̵F̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:45:52: error: unsolved goals
+left right : Digest208
+⊢ UInt8.ofFin 17 = 17
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:46:39: warning: This simp argument is unused:
+  List.map_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [decode, serialize, fixedBytes,̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵o̵f̵F̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:52:16: warning: Possibly looping simp theorem: `serialize.eq_1`
+
+Note: Possibly caused by: `Fin.isValue`, `fixedBytes`, `List.ofFn_succ`, `Fin.succ_zero_eq_one`, `Fin.succ_one_eq_two`, and `Fin.reduceSucc`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:52:16: warning: Possibly looping simp theorem: `serialize.eq_2`
+
+Note: Possibly caused by: `Fin.isValue`, `fixedBytes`, `List.ofFn_succ`, `Fin.succ_zero_eq_one`, `Fin.succ_one_eq_two`, and `Fin.reduceSucc`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:52:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:58:16: warning: Possibly looping simp theorem: `serialize.eq_1`
+
+Note: Possibly caused by: `Fin.isValue`, `fixedBytes`, `List.ofFn_succ`, `Fin.succ_zero_eq_one`, `Fin.succ_one_eq_two`, and `Fin.reduceSucc`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:58:16: warning: Possibly looping simp theorem: `serialize.eq_2`
+
+Note: Possibly caused by: `Fin.isValue`, `fixedBytes`, `List.ofFn_succ`, `Fin.succ_zero_eq_one`, `Fin.succ_one_eq_two`, and `Fin.reduceSucc`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:58:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean:77:61: error: unsolved goals
+oracle : Oracle
+new : List AnswerRecord
+cut : ℕ
+literal : new = List.take cut (records oracle.log)
+⊢ List.take cut
+      (List.map
+        (Prod.fst ∘
+          (fun record => (encode record.1, digestOfBytes record.2)) ∘ fun event =>
+            (event.input, truncate208 event.answer))
+        oracle.log) =
+    List.take cut (List.map (fun event => encode event.input) oracle.log)
+theorem AspisV8Completion.FSV7PrefixBridge.chronological_old_prefixes : ∀ {A : Type} {n m q : ℕ} (tape : Tape)
+  (digest : Block) (producerC1 : Transcript → Script (List UInt8) Block Root n)
+  (producerC2 : Oracle → List ℕ → List ℕ → Script (List UInt8) Block Root m)
+  (suffix : RootCuts → Script (List UInt8) Block A q) (out : RootCuts) (outcome : Option A),
+  (continueRun tape { digest := digest, oracle := FSFirstFresh.empty } producerC1 producerC2 suffix).1 =
+      some (out, outcome) →
+    have final := (continueRun tape { digest := digest, oracle := FSFirstFresh.empty } producerC1 producerC2 suffix).2;
+    (∀ record ∈ oldRecords (c1Records out), oldView final record.1 = record.2) ∧
+      (∀ record ∈ oldRecords (c2Records out), oldView final record.1 = record.2) ∧
+        TraceIncludedInLog (rawPrefix (oldRecords (c1Records out))) (oldLog final) ∧
+          TraceIncludedInLog (rawPrefix (oldRecords (c2Records out))) (oldLog final) ∧
+            rawPrefix (oldRecords (c1Records out)) = List.take out.c1Cut.log.length (oldLog final) ∧
+              rawPrefix (oldRecords (c2Records out)) = List.take out.c2Cut.log.length (oldLog final) :=
+fun {A} {n m q} tape digest producerC1 producerC2 suffix out outcome success =>
+  And.casesOn (continued_prefix_answers tape digest producerC1 producerC2 suffix out outcome success) fun left right =>
+    And.casesOn right fun c1Take right =>
+      And.casesOn right fun c2Take right =>
+        And.casesOn right fun c1Answers c2Answers =>
+          have p1 :=
+            raw_prefix_transport
+              (continueRun tape { digest := digest, oracle := FSFirstFresh.empty } producerC1 producerC2 suffix).2
+              (c1Records out) out.c1Cut.log.length c1Take;
+          have p2 :=
+            raw_prefix_transport
+              (continueRun tape { digest := digest, oracle := FSFirstFresh.empty } producerC1 producerC2 suffix).2
+              (c2Records out) out.c2Cut.log.length c2Take;
+          ⟨record_transport
+              (continueRun tape { digest := digest, oracle := FSFirstFresh.empty } producerC1 producerC2 suffix).2
+              (c1Records out) c1Answers,
+            ⟨record_transport
+                (continueRun tape { digest := digest, oracle := FSFirstFresh.empty } producerC1 producerC2 suffix).2
+                (c2Records out) c2Answers,
+              ⟨fun input member => List.mem_of_mem_take (Eq.mp (congrArg (fun _a => input ∈ _a) p1) member),
+                ⟨fun input member => List.mem_of_mem_take (Eq.mp (congrArg (fun _a => input ∈ _a) p2) member),
+                  ⟨p1, p2⟩⟩⟩⟩⟩
+'AspisV8Completion.FSV7PrefixBridge.chronological_old_prefixes' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8Completion.FSV7PrefixBridge.decode_encode' depends on axioms: [propext, sorryAx]
+'AspisV8Completion.FSV7PrefixBridge.encode_decode' depends on axioms: [propext, sorryAx]
+'AspisV8Completion.FSV7PrefixBridge.digest_bytes_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8Completion.FSV7PrefixBridge.node_input_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8Completion.FSV7PrefixBridge.c1_input_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8Completion.FSV7PrefixBridge.c2_input_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -R /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr -o /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/fs-old-7-v1/FSV7PrefixBridge.olean /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/FSV7PrefixBridge.lean"
+	User time (seconds): 2.96
+	System time (seconds): 1.01
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.97
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6512188
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 141289
+	Voluntary context switches: 403
+	Involuntary context switches: 261
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

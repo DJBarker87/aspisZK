@@ -13,22 +13,6 @@ def squeezeInput (b : Block) : Bytes := blockBytes b ++ [1]
 def inputs (log : Log) : List Bytes := log.map Event.input
 def firstExposure (log : Log) (input : Bytes) : Nat := (inputs log).idxOf input
 
-/-- Symbolic compatibility lemma for pinned Lean4.32, which lacks the later
-List.getElem_idxOf name. No concrete log enumeration or extra assumption. -/
-theorem getElem_first_index {α : Type} [BEq α] [LawfulBEq α]
-    {x : α} {xs : List α} (h : xs.idxOf x < xs.length) : xs[xs.idxOf x] = x := by
-  induction xs with
-  | nil => simp at h
-  | cons a tail ih =>
-      cases same : a == x with
-      | true =>
-          simp only [List.idxOf_cons, same, cond_true, List.getElem_cons_zero]
-          exact eq_of_beq same
-      | false =>
-          simp only [List.idxOf_cons, same, cond_false, List.getElem_cons_succ]
-          rw [List.idxOf_cons, same, cond_false, List.length_cons] at h
-          exact ih (by omega)
-
 /-- The answer recorded for an actual source absorption. No relationship to
 a separately supplied semantic program is presumed. -/
 def LinkedAbsorb (log : Log) (input : Bytes) (answer : Block) : Prop :=
@@ -118,7 +102,7 @@ theorem first_recorded_answer (s : State Bytes Block) (input : Bytes) (answer : 
   have within := List.idxOf_lt_length_of_mem seen
   have h : firstExposure s.log input < s.log.length := by
     simpa only [firstExposure, inputs, List.length_map] using within
-  have found := getElem_first_index within
+  have found := List.getElem_idxOf within
   change (inputs s.log)[firstExposure s.log input] = input at found
   simp only [inputs, List.getElem_map] at found
   refine ⟨h, found, ?_⟩
@@ -132,8 +116,8 @@ theorem exposure_indices_distinct (log : Log) (a c : Bytes)
     (ha : a ∈ inputs log) (hc : c ∈ inputs log) (different : a ≠ c) :
     firstExposure log a ≠ firstExposure log c := by
   intro eq
-  have ea := getElem_first_index (List.idxOf_lt_length_of_mem ha)
-  have ec := getElem_first_index (List.idxOf_lt_length_of_mem hc)
+  have ea := List.getElem_idxOf (List.idxOf_lt_length_of_mem ha)
+  have ec := List.getElem_idxOf (List.idxOf_lt_length_of_mem hc)
   change (inputs log).idxOf a = (inputs log).idxOf c at eq
   have locations := congrArg (fun i => (inputs log)[i]?) eq
   rw [List.getElem?_eq_getElem (List.idxOf_lt_length_of_mem ha),
@@ -149,7 +133,7 @@ theorem target_of_earlier_squeeze (log : Log) (answer : Block) (cut : Nat)
   have before : squeezeInput answer ∈ (inputs log).take cut := by
     apply List.mem_take_iff_getElem.mpr
     exact ⟨firstExposure log (squeezeInput answer), by simp only [firstExposure] at earlier ⊢; omega,
-      getElem_first_index within⟩
+      List.getElem_idxOf within⟩
   have before' : squeezeInput answer ∈ inputs (log.take cut) := by
     simpa [inputs, List.map_take] using before
   apply List.mem_filterMap.mpr
@@ -196,5 +180,4 @@ private def premature : Log := [⟨squeezeInput zero, zero, true⟩,
 #print axioms run_log_consistent
 #print axioms same_logged_input_same_answer
 #print axioms first_recorded_answer
-#print axioms getElem_first_index
 end AspisV8Completion.FSExposureOrder

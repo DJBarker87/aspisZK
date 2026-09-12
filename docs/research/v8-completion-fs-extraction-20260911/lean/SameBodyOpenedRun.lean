@@ -1,0 +1,122 @@
+import SameBodyAuthenticatedFold
+
+/-! A total, source-shaped opened-query pipeline on one submitted body.
+This is NOT the complete verifier or an effectful Rust translation: Data and
+the realised query/alpha still need their transcript producers. The four
+functional checks below produce their success equations internally.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxHeartbeats 250000
+namespace AspisV8.SameBodyOpenedRun
+open AspisPool.V7MerkleQueryGrammar AspisPool.V7MerkleQueryExtractor
+open AspisPool.V7MerkleOpeningBinding
+open AspisV5ComponentCQM31TowerExact AspisV5ComponentCConcreteFoldLinearity
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
+open AspisV8.AuthenticatedEarlyC1Prefix AspisV8.AuthenticatedPhaseWords
+open AspisV8.SelectedWireBytes AspisV8.SelectedWireMerkleRun
+open AspisV8.SelectedMultiproofOpeningEquality AspisV8.PackedQueryRecord
+open AspisV8.SameBodyAuthenticatedSlots AspisV8.SameBodyAuthenticatedFold
+open AspisV8.OODInterpolant AspisV8.PostQueryFunctional
+noncomputable section
+abbrev K := QM31Exact
+abbrev Byte := AspisPool.V7MerkleQueryGrammar.Byte
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+
+structure Output where
+  wire : Wire
+  decoded : Fin 22 → Decoded
+  inverses : List K × List M31Exact
+  trace : OrderedRawQueryLog
+
+/-- Parsing, canonical record decoding, checked inversion and both-tree
+authentication are run on the same derived objects. Their order here is a
+pure functional decomposition, not a claim about chronological hash calls. -/
+def run (view : RawHashInput → Digest208) (body : List Byte)
+    (query : Fin 22 → Position) (d : Data (K := K)) : Option Output := do
+  let wire ← SelectedWireBytes.parse body
+  let decoded ← parseRecords wire
+  let inverses ← LineNormBuffer.inverseLines d.a d.b d.c (SelectedQueryBuffer.points query)
+  let trace ← RustShapedMinimalMultiproof.verify view (wireRoots wire) 18
+    (MinimalMultiproofPaths.sortedEntries view query (wireRecords wire))
+    (wire.frontiers 0) (wire.frontiers 1)
+  pure ⟨wire, decoded, inverses, trace⟩
+
+def opened (result : Output) (d : Data (K := K))
+    (query : Fin 22 → Position) (alpha : K) : Fin 22 → K :=
+  SelectedPackedQueryBridge.recordFold d result.decoded query result.inverses alpha
+
+theorem bind_success {A B : Type*} (input : Option A) (next : A → Option B)
+    (result : B) (success : input.bind next = some result) :
+    ∃ value, input = some value ∧ next value = some result := by
+  cases input with
+  | none => cases success
+  | some value => exact ⟨value, rfl, success⟩
+
+theorem run_checks (view : RawHashInput → Digest208) (body : List Byte)
+    (query : Fin 22 → Position) (d : Data (K := K)) (result : Output)
+    (success : run view body query d = some result) :
+    SelectedWireBytes.parse body = some result.wire ∧
+    parseRecords result.wire = some result.decoded ∧
+    LineNormBuffer.inverseLines d.a d.b d.c (SelectedQueryBuffer.points query) = some result.inverses ∧
+    RustShapedMinimalMultiproof.verify view (wireRoots result.wire) 18
+      (MinimalMultiproofPaths.sortedEntries view query (wireRecords result.wire))
+      (result.wire.frontiers 0) (result.wire.frontiers 1) = some result.trace := by
+  unfold run at success
+  obtain ⟨wire, hw, h1⟩ := bind_success _ _ _ success
+  obtain ⟨decoded, hd, h2⟩ := bind_success _ _ _ h1
+  obtain ⟨inverses, hi, h3⟩ := bind_success _ _ _ h2
+  obtain ⟨trace, ht, h4⟩ := bind_success _ _ _ h3
+  have eq : (⟨wire, decoded, inverses, trace⟩ : Output) = result := Option.some.inj h4
+  subst result
+  exact ⟨hw, hd, hi, ht⟩
+
+/-- Success constructs the historical Merkle-run object; it is not an
+independently supplied semantic program or acceptance certificate. -/
+def merkleRun (view : RawHashInput → Digest208) (body : List Byte)
+    (query : Fin 22 → Position) (d : Data (K := K)) (result : Output)
+    (success : run view body query d = some result) : SuccessfulMerkleRun view query body where
+  wire := result.wire
+  parsed := (run_checks view body query d result success).1
+  trace := result.trace
+  verified := (run_checks view body query d result success).2.2.2
+
+attribute [local irreducible] parseRecords SelectedWireBytes.parse
+attribute [local irreducible] prefixBatch SelectedPackedQueryBridge.recordFold
+
+theorem run_authenticated_opened_or_failure
+    (view : RawHashInput → Digest208) (body : List Byte)
+    (query : Fin 22 → Position) (d : Data (K := K)) (result : Output)
+    (success : run view body query d = some result)
+    (c1Prefix c2Prefix : AnswerPrefix) (fullLog : OrderedRawQueryLog)
+    (c1Answers : ∀ record ∈ c1Prefix, view record.1 = record.2)
+    (c2Answers : ∀ record ∈ c2Prefix, view record.1 = record.2)
+    (c1Included : TraceIncludedInLog (rawPrefix c1Prefix) fullLog)
+    (c2Included : TraceIncludedInLog (rawPrefix c2Prefix) fullLog)
+    (callsIncluded : TraceIncludedInLog
+      (MinimalMultiproofPaths.leafLog query (wireRecords result.wire) ++ result.trace) fullLog)
+    (alpha : K) :
+    AuthenticationFailure view c1Prefix c2Prefix (wireRoots result.wire) fullLog query ∨
+      ∀ i : Fin 22, opened result d query alpha i =
+        (SelectedReceivedOracle.oracle (0 : Fin 1024 → K)
+          (SelectedQuotientOriginal.virtual d
+            (prefixBatch c1Prefix c2Prefix result.wire d.gamma))).folded alpha
+              (storedPoint (K := K) (query i)) := by
+  have checks := run_checks view body query d result success
+  have canonical : (parseRecords result.wire).isSome = true := by
+    rw [checks.2.1]; rfl
+  rcases same_body_authenticated_fold_or_failure view body query
+      (merkleRun view body query d result success) c1Prefix c2Prefix fullLog
+      c1Answers c2Answers c1Included c2Included callsIncluded canonical d
+      result.inverses checks.2.2.1 alpha with bad | good
+  · exact Or.inl bad
+  · obtain ⟨decoded, parsed, _, folds⟩ := good
+    have same : decoded = result.decoded := Option.some.inj (parsed.symm.trans checks.2.1)
+    subst decoded
+    exact Or.inr folds
+
+#print run_authenticated_opened_or_failure
+#print axioms run_checks
+#print axioms run_authenticated_opened_or_failure
+end
+end AspisV8.SameBodyOpenedRun
