@@ -1,0 +1,91 @@
+{
+  "schema": "aspis.v7.cu-closure-validation.v1",
+  "classification": "B — RELEASE-MARGIN GREEN",
+  "focused": [
+    {
+      "target": "v7_cu_tail_probe::tests",
+      "command": "cargo test --release --locked --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features 'v7-cu-probe,v7-pair-forest-lane-invariant-audit' --lib v7_cu_tail_probe::tests",
+      "passed": 4,
+      "failed": 0,
+      "wallSeconds": 3.64,
+      "peakRssBytes": 352944128,
+      "swapBytes": 0
+    },
+    {
+      "target": "source_bounded_q16_sort_matches_standard_sort",
+      "command": "cargo test --release --locked --manifest-path crates/aspis-core/Cargo.toml --features v7-query-order-source-bound-audit source_bounded_q16_sort_matches_standard_sort",
+      "passed": 1,
+      "failed": 0,
+      "wallSeconds": 11.90,
+      "peakRssBytes": 676528128,
+      "swapBytes": 0
+    },
+    {
+      "target": "AspisFormal/Pool/V7TerminalPdaCertificateInvariant.lean",
+      "command": "cd AspisFormal && lake env lean AspisFormal/Pool/V7TerminalPdaCertificateInvariant.lean",
+      "exitStatus": 0,
+      "wallSeconds": 1.23,
+      "peakRssBytes": 432308224,
+      "swapBytes": 0,
+      "printedTheorems": 9,
+      "axiomFree": true
+    },
+    {
+      "target": "rollover materializer and genesis preparation binaries",
+      "command": "rustfmt --edition 2021 --check tools/v7-live-pool-proof/src/bin/prepare_live_genesis.rs tools/v7-live-pool-proof/src/bin/materialize_live_proof_bundle.rs && cargo check --release --locked --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin materialize-live-proof-bundle --bin prepare-live-genesis",
+      "exitStatus": 0,
+      "wallSeconds": 0.46,
+      "peakRssBytes": 102055936,
+      "swapBytes": 0
+    }
+  ],
+  "nuc": {
+    "host": "dombarker@192.168.1.84",
+    "tailscaleVersion": "1.102.3",
+    "agaveVersion": "4.2.2",
+    "memoryPolicy": "systemd MemoryHigh/MemoryMax, MemorySwapMax=0",
+    "maximumObservedRss": "2.3 GiB (systemd rounded accounting)",
+    "twelveGiBStopThresholdExceeded": false,
+    "swapObservedBytes": 0
+  },
+  "genuineRolloverLifecycle": [
+    {
+      "operation": "transfer",
+      "sourceRevision": "d3a0829508e2beba792ab48623636f595f9b8606",
+      "finalizedPrefillDeposits": 254,
+      "proofElapsedMillis": 191002,
+      "terminalLandedCu": 1066928,
+      "terminalBytes": 1444,
+      "wallSeconds": 461.21,
+      "processPeakRssKiB": 1147296,
+      "systemdPeakMemory": "2.2 GiB",
+      "swapBytes": 0,
+      "passed": true
+    },
+    {
+      "operation": "withdrawal",
+      "sourceRevision": "c21c0b8058f54b2eeab3bbf737c3a65224f6c12c",
+      "finalizedPrefillDeposits": 254,
+      "proofElapsedMillis": 287690,
+      "terminalLandedCu": 1115624,
+      "terminalBytes": 1609,
+      "wallSeconds": 555.50,
+      "processPeakRssKiB": 1129204,
+      "systemdPeakMemory": "2.3 GiB",
+      "swapBytes": 0,
+      "passed": true
+    }
+  ],
+  "boundRegeneration": {
+    "command": "python3 scripts/v7_all_reachable_cu_bound.py --pretty",
+    "exitStatus": 0,
+    "wallSeconds": 0.03,
+    "peakRssBytes": 22970368,
+    "universalCeilingCu": 1311862,
+    "marginTo1400000Cu": 88138
+  },
+  "broadRegressionRun": false,
+  "frozenCuProfileRerun": false,
+  "publicDeployment": false,
+  "mainnetReady": false
+}

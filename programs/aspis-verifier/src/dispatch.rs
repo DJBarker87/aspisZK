@@ -76,6 +76,20 @@ pub fn process_spend_production_instruction(
     accounts: &[AccountInfo],
     instruction_data: &[u8],
 ) -> ProgramResult {
+    // APD8 is a default-off proof-preparation operation. It performs every
+    // canonical bump search once and seals the exact results into an
+    // immutable verifier-owned account; no terminal state is touched.
+    #[cfg(any(feature = "v7-terminal-pda-certificate-audit", test))]
+    if instruction_data
+        .starts_with(&aspis_statement::pool_v1::POOL_V1_TERMINAL_PDA_CERTIFICATE_MAGIC)
+    {
+        return crate::v7_terminal_pda_certificate::process_initialize_terminal_pda_certificate_v1(
+            program_id,
+            accounts,
+            instruction_data,
+        );
+    }
+
     // ASQ8 is a distinct, exact 320-byte compact request. Its default-off
     // handler authenticates the Pool accounts, reconstructs exact ASF8, and
     // emits ASR8 only after the eight-lane Tag-73 verifier accepts.

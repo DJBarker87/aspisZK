@@ -37,7 +37,10 @@ v6-cu-probe = []
 # Local-validator-only entrypoint for the compact V7 verifier. It retains the
 # complete atomic wrapper while allowing work-hash acceptance to be isolated
 # from the production Tag-73 binary during CU development.
-v7-cu-probe = []
+v7-cu-probe = [
+    "aspis-core/v7-query-order-source-bound-audit",
+    "aspis-statement/pool-v1-kernel",
+]
 # Local-only CU profiler for one honest native Pool Tag-73 proof.  It exposes
 # the production cryptographic path behind a distinct entrypoint and logs
 # coarse phase boundaries.  It is deliberately not a production feature.
@@ -126,10 +129,17 @@ v7-pair-forest-binary-copy-weights-audit = [
 # persisted active root/frontier Poseidon reconstruction, which is an
 # inductive invariant of Pool constructors and writers.
 v7-pair-forest-lane-invariant-audit = []
-# Public-devnet-only identity capability for the immutable V7 Pool and
-# Registry deployments recorded in the lifecycle evidence.  It is deliberately
-# not included by the one-transaction candidate alias: an invocation must name
-# this capability explicitly, and the ordinary audit identities stay unchanged.
+# Default-off proof-preparation certificate. Canonical PDA bump search runs
+# once while the sealed proof context is fixed; terminal consumers replay
+# only single-attempt derivations from this immutable verifier-owned image.
+v7-terminal-pda-certificate-audit = ["v7-pair-forest-lane-invariant-audit"]
+# Audit-only source-visible query-order schedule. It changes neither query
+# derivation nor sorted output; it replaces only an opaque std sort call.
+v7-query-order-source-bound-audit = ["aspis-core/v7-query-order-source-bound-audit"]
+# Research-only identity capability for the immutable public-devnet programs
+# recorded by the 2026-09-07 lifecycle attempt.  This feature is deliberately
+# not part of the one-transaction candidate alias: builds must name it
+# explicitly, and the ordinary audit constants remain unchanged otherwise.
 v7-pair-forest-public-devnet-identity-audit = [
     "v7-pair-forest-lane-invariant-audit",
 ]

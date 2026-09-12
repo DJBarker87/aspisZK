@@ -14,8 +14,9 @@ use aspis_registry::{
     RegistryMutationOpcodeV1,
 };
 use aspis_statement::pool_v1::{
-    POOL_V1_HISTORICAL_ANCHOR_VERSION, V7_POOL_NATIVE_TAG73_PROFILE_BINDING,
-    V7_POOL_NATIVE_TAG73_RELEASE_BINDING,
+    POOL_V1_HISTORICAL_ANCHOR_VERSION, POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+    V7_POOL_NATIVE_TAG73_PROFILE_BINDING, V7_POOL_NATIVE_TAG73_RELEASE_BINDING,
+    V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING, V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
 };
 use solana_program::{
     instruction::{AccountMeta, Instruction},
@@ -56,6 +57,13 @@ impl RegistryEntryKeyV1 {
         Self {
             profile_binding: V7_POOL_NATIVE_TAG73_PROFILE_BINDING,
             release_binding: V7_POOL_NATIVE_TAG73_RELEASE_BINDING,
+        }
+    }
+
+    pub const fn pair_forest_tag73_v1() -> Self {
+        Self {
+            profile_binding: V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+            release_binding: V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
         }
     }
 }
@@ -357,6 +365,30 @@ pub fn build_schedule_native_tag73_profile_instruction_v2(
         expected_verifier_executable_hash,
         RegistryEntryKeyV1::native_tag73_v1(),
         POOL_V1_HISTORICAL_ANCHOR_VERSION,
+        activation_slot,
+        route,
+    )
+}
+
+/// Schedule the frozen eight-lane pair-forest Tag-73 profile in Registry V2.
+/// Callers cannot substitute the profile, release, or statement version.
+pub fn build_schedule_pair_forest_tag73_profile_instruction_v2(
+    registry_program: Pubkey,
+    pool: Pubkey,
+    expected_generation: u64,
+    verifier_program: Pubkey,
+    expected_verifier_executable_hash: [u8; 32],
+    activation_slot: u64,
+    route: RegistryGovernanceRouteV1,
+) -> Result<Instruction, RegistryTransactionBuilderErrorV1> {
+    build_schedule_registry_profile_instruction_v2(
+        registry_program,
+        pool,
+        expected_generation,
+        verifier_program,
+        expected_verifier_executable_hash,
+        RegistryEntryKeyV1::pair_forest_tag73_v1(),
+        POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
         activation_slot,
         route,
     )
@@ -1065,6 +1097,47 @@ mod tests {
                 &native.release_binding,
             )
             .0
+        );
+    }
+
+    #[test]
+    fn pair_forest_registry_v2_builder_pins_exact_terminal_profile() {
+        let registry_program = key(61);
+        let pool = key(62);
+        let verifier_program = key(63);
+        let verifier_hash = [64u8; 32];
+        let pair_forest = RegistryEntryKeyV1::pair_forest_tag73_v1();
+        let entry = pool_v1_verifier_entry_v2_address(
+            &registry_program,
+            &pool,
+            &pair_forest.profile_binding,
+            &pair_forest.release_binding,
+        )
+        .0;
+
+        let schedule = build_schedule_pair_forest_tag73_profile_instruction_v2(
+            registry_program,
+            pool,
+            7,
+            verifier_program,
+            verifier_hash,
+            12_345,
+            route(),
+        )
+        .unwrap();
+
+        assert_eq!(schedule.accounts[1], AccountMeta::new(entry, false));
+        assert_eq!(
+            decode_registry_instruction_v2(&schedule.data).unwrap(),
+            RegistryInstructionV2::ScheduleProfile {
+                expected_generation: 7,
+                verifier_program: verifier_program.to_bytes(),
+                profile_binding: V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING,
+                release_binding: V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
+                statement_version: POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+                activation_slot: 12_345,
+                expected_executable_hash: verifier_hash,
+            }
         );
     }
 

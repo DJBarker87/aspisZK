@@ -13,6 +13,7 @@ use aspis_statement::{
         pool_v1_note_commitment, pool_v1_pair_forest_deposit_lane_v1, root_history_location,
     },
 };
+use aspis_v7_live_pool_proof::require_nonproduction_live_fixture;
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use serde::Deserialize;
 use serde_json::{json, Value};
@@ -102,10 +103,7 @@ fn main() -> Result<()> {
         "invalid live input"
     );
     let config: Value = serde_json::from_slice(&fs::read(&input.config)?)?;
-    ensure!(
-        config["mainnetReady"] == false && config["identitySet"]["auditOnly"] == true,
-        "deposit is not pinned to disposable audit identities"
-    );
+    let fixture = require_nonproduction_live_fixture(&config)?;
     let pool_id = config["identitySet"]["programs"]
         .as_array()
         .context("missing programs")?
@@ -113,7 +111,7 @@ fn main() -> Result<()> {
         .find(|program| program["name"] == "pool")
         .and_then(|program| program["id"].as_str())
         .context("missing Pool program")?;
-    let source = config["disposableLiveGenesis"]["sourceTokenAccount"]
+    let source = fixture["sourceTokenAccount"]
         .as_str()
         .context("missing source token account")?;
     let master = decode_pool_v1_pair_forest_master_v1(&rpc_account_data(&input.master_account)?)

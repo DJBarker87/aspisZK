@@ -1,0 +1,7 @@
+python3 -m py_compile scripts/v7_all_reachable_cu_bound.py scripts/v7_txv1_public_cluster_snapshot.py
+./scripts/v7_all_reachable_cu_bound.py --pretty
+./scripts/v7_all_reachable_cu_bound.py | jq -e '.classification == "ALL-REACHABLE COMPLETION BOUND FAILS CLOSED" and .decision.cutoff20GuaranteesBelow1400000 == false and .pdaBoundedControlFlow.rolloverWithdrawalFindProgramAddressInvocations == 21 and .pdaBoundedControlFlow.successfulAttemptsPerInvocation.maximum == 255 and .transcriptBoundedControlFlow.maximumQm31SqueezeBlocks == 192'
+./scripts/v7_txv1_public_cluster_snapshot.py --pretty
+./scripts/v7_txv1_public_cluster_snapshot.py | jq -e '[.clusters[] | {key:.cluster,value:.active}] | from_entries == {testnet:true,devnet:true,"mainnet-beta":false}'
+jq -e '.network.testnet.active and .network.devnet.active and (.network.mainnetBeta.active | not) and (.decision.universalSuccessfulCompletionBelow1400000Established | not) and (.network.mainnetReady | not)' results/v7-all-reachable-cu-bound-testnet-20260907/summary.json
+shasum -a 256 -c results/v7-all-reachable-cu-bound-testnet-20260907/SHA256SUMS

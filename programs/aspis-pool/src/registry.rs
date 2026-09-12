@@ -9,8 +9,8 @@
 use aspis_statement::pool_v1::{
     decode_verifier_registry_entry_v1, decode_verifier_registry_entry_v2,
     decode_verifier_registry_v1, decode_verifier_registry_v2, validate_verifier_policy_v1,
-    VerifierEntryStatusV1, VerifierPolicyV1, POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT,
-    POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT,
+    PoolV1TerminalPdaCertificateV1, VerifierEntryStatusV1, VerifierPolicyV1,
+    POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT, POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT,
     POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
 };
 use solana_program::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
@@ -351,6 +351,109 @@ fn authenticate_verifier_selection_v2(
         return Err(PoolV1ProgramError::VerifierEntryRetired.into());
     }
 
+    Ok(AuthenticatedVerifierSelectionV1 {
+        policy: *policy,
+        pool: entry.pool,
+        verifier_program: entry.verifier_program,
+        profile_binding: entry.profile_binding,
+        release_binding: entry.release_binding,
+        statement_version: entry.statement_version,
+        registry_generation: registry.generation,
+        expected_verifier_loader: Some(loader.to_bytes()),
+        authenticated_at_slot: current_slot,
+    })
+}
+
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+pub(crate) fn authenticate_verifier_selection_with_terminal_certificate_v1(
+    pool: &Pubkey,
+    policy: &VerifierPolicyV1,
+    accounts: &[AccountInfo],
+    selection: VerifierSelectionV1,
+    current_slot: u64,
+    certificate: &PoolV1TerminalPdaCertificateV1,
+) -> Result<AuthenticatedVerifierSelectionV1, ProgramError> {
+    validate_verifier_policy_v1(policy).map_err(|_| PoolV1ProgramError::InvalidVerifierRegistry)?;
+    if policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT == 0 {
+        return Err(PoolV1ProgramError::InvalidVerifierRegistry.into());
+    }
+    let [registry_account, entry_account] = accounts else {
+        return Err(if accounts.len() < 2 {
+            ProgramError::NotEnoughAccountKeys
+        } else {
+            ProgramError::InvalidArgument
+        });
+    };
+    let registry_program = Pubkey::new_from_array(policy.registry_program);
+    let loader = bpf_loader_upgradeable::id();
+    if certificate.master != pool.to_bytes()
+        || certificate.registry_program != registry_program.to_bytes()
+        || certificate.registry != registry_account.key.to_bytes()
+        || certificate.registry_entry != entry_account.key.to_bytes()
+        || certificate.verifier_program != selection.verifier_program
+        || certificate.profile_binding != selection.profile_binding
+        || certificate.release_binding != selection.release_binding
+    {
+        return Err(PoolV1ProgramError::VerifierSelectionMismatch.into());
+    }
+
+    require_readonly_registry_account(
+        registry_account,
+        &registry_program,
+        PoolV1ProgramError::InvalidVerifierRegistry,
+    )?;
+    let registry = {
+        let data = registry_account.try_borrow_data()?;
+        decode_verifier_registry_v2(&data)
+            .map_err(|_| PoolV1ProgramError::InvalidVerifierRegistry)?
+    };
+    if registry.pool != pool.to_bytes()
+        || registry.authority != policy.registry_authority
+        || registry.policy_binding != policy.policy_binding
+        || !registry.is_immutable()
+        || registry.registry_program != policy.registry_program
+        || registry.loader_program != loader.to_bytes()
+        || registry.programdata_address != certificate.registry_programdata
+    {
+        return Err(PoolV1ProgramError::InvalidVerifierRegistry.into());
+    }
+    if registry.is_paused() {
+        return Err(PoolV1ProgramError::VerifierRegistryPaused.into());
+    }
+
+    require_readonly_registry_account(
+        entry_account,
+        &registry_program,
+        PoolV1ProgramError::InvalidVerifierEntry,
+    )?;
+    let entry = {
+        let data = entry_account.try_borrow_data()?;
+        decode_verifier_registry_entry_v2(&data)
+            .map_err(|_| PoolV1ProgramError::InvalidVerifierEntry)?
+    };
+    if entry.pool != pool.to_bytes()
+        || entry.policy_binding != policy.policy_binding
+        || entry.verifier_program != selection.verifier_program
+        || entry.profile_binding != selection.profile_binding
+        || entry.release_binding != selection.release_binding
+        || entry.statement_version != selection.statement_version
+        || entry.loader_program != loader.to_bytes()
+        || entry.programdata_address != certificate.verifier_programdata
+        || entry.expected_upgrade_authority != [0u8; 32]
+    {
+        return Err(PoolV1ProgramError::VerifierSelectionMismatch.into());
+    }
+    if entry.status != VerifierEntryStatusV1::Active {
+        return Err(PoolV1ProgramError::VerifierEntryInactive.into());
+    }
+    if current_slot < entry.activation_slot {
+        return Err(PoolV1ProgramError::VerifierEntryNotActiveYet.into());
+    }
+    if entry.retirement_slot != POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT
+        && current_slot >= entry.retirement_slot
+    {
+        return Err(PoolV1ProgramError::VerifierEntryRetired.into());
+    }
     Ok(AuthenticatedVerifierSelectionV1 {
         policy: *policy,
         pool: entry.pool,

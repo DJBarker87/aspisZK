@@ -544,6 +544,9 @@ pub fn verify_reconstruct_and_gamma_combine_v7_openings(
 ) -> Result<[[QM31; 4]; V6_QUERY_COUNT], V6WireError> {
     let mut order: [(u32, usize); V6_QUERY_COUNT] =
         core::array::from_fn(|ordinal| (queries[ordinal], ordinal));
+    #[cfg(feature = "v7-query-order-source-bound-audit")]
+    crate::v6_onefold::sort_v7_query_order_source_bounded(&mut order);
+    #[cfg(not(feature = "v7-query-order-source-bound-audit"))]
     order.sort_unstable_by_key(|entry| entry.0);
     if order[V6_QUERY_COUNT - 1].0 >= 1 << 18 || order.windows(2).any(|pair| pair[0].0 == pair[1].0)
     {
@@ -611,6 +614,29 @@ mod tests {
             hasher.update(input);
         }
         hasher.finalize().into()
+    }
+
+    #[cfg(feature = "v7-query-order-source-bound-audit")]
+    #[test]
+    fn source_bounded_query_sort_matches_standard_sort() {
+        let mut state = 0x9e37_79b9_7f4a_7c15u64;
+        for _ in 0..1_024 {
+            let mut actual: [(u32, usize); V6_QUERY_COUNT] = core::array::from_fn(|ordinal| {
+                state ^= state << 13;
+                state ^= state >> 7;
+                state ^= state << 17;
+                ((state as u32) ^ ((ordinal as u32) << 24), ordinal)
+            });
+            let mut expected = actual;
+            expected.sort_unstable_by_key(|entry| entry.0);
+            crate::v6_onefold::sort_v7_query_order_source_bounded(&mut actual);
+            assert_eq!(actual, expected);
+        }
+
+        let mut descending: [(u32, usize); V6_QUERY_COUNT] =
+            core::array::from_fn(|ordinal| ((V6_QUERY_COUNT - ordinal) as u32, ordinal));
+        crate::v6_onefold::sort_v7_query_order_source_bounded(&mut descending);
+        assert!(descending.windows(2).all(|pair| pair[0].0 <= pair[1].0));
     }
 
     fn minimal_root216(entries: &[(u32, V7Digest)], depth: u32, frontier: &[V7Digest]) -> V7Digest {

@@ -1,0 +1,8 @@
+python3 -m py_compile scripts/v7_all_reachable_cu_bound.py
+./scripts/v7_all_reachable_cu_bound.py --pretty
+NO_DNA=1 CARGO_BUILD_JOBS=4 cargo check --locked --offline --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin build-live-transfer-terminal
+NO_DNA=1 CARGO_BUILD_JOBS=4 cargo test --locked --offline --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin build-live-transfer-terminal tests::pda_attempts_and_terminal_call_shapes_are_exact -- --exact
+NO_DNA=1 CARGO_BUILD_JOBS=4 cargo test --locked --offline --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin inspect-live-proof tests::transcript_and_causal_bind_hash_shapes_are_counted_exactly -- --exact
+NO_DNA=1 CARGO_BUILD_JOBS=4 cargo build --locked --offline --release --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin inspect-live-proof
+tools/v7-live-pool-proof/target/release/inspect-live-proof results/v7-first-cap203-scan-cu-fix-20260902/live-cutoff20-minimum-draw-withdrawal/live-setup/live-proof/asf8.bin results/v7-first-cap203-scan-cu-fix-20260902/live-cutoff20-minimum-draw-withdrawal/live-setup/live-proof/proof-body.bin 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue D8oRB6rTsZEAEwTLp93zS4JH8EPTnDyStkDxyY4Tt9cW
+NO_DNA=1 tailscale status --json

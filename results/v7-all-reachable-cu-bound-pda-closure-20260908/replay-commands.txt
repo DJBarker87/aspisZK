@@ -1,0 +1,71 @@
+# Run from the isolated worktree root.
+
+python3 -m py_compile scripts/v7_all_reachable_cu_bound.py scripts/v7_terminal_pda_inventory.py
+python3 scripts/v7_terminal_pda_inventory.py --pretty > /tmp/v7-terminal-pda-inventory.json
+cmp /tmp/v7-terminal-pda-inventory.json results/v7-all-reachable-cu-bound-pda-closure-20260908/source-inventory/terminal-pda-inventory.json
+python3 scripts/v7_all_reachable_cu_bound.py --pretty > /tmp/v7-all-reachable-cu-bound.json
+cmp /tmp/v7-all-reachable-cu-bound.json results/v7-all-reachable-cu-bound-pda-closure-20260908/summary.json
+jq -e '.classification == "A — ALL-REACHABLE GREEN" and .allReachableArithmetic.universalCeilingCu == 1395521 and .allReachableArithmetic.marginTo1400000Cu == 4479 and .decision.cutoff20GuaranteesBelow1400000 and (.residualRuntimeTails.uncontrolledAcceptedBranches | length == 0) and .scope.mainnetReady == false' results/v7-all-reachable-cu-bound-pda-closure-20260908/summary.json
+
+cargo test --release --locked --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features 'v7-cu-probe,v7-pair-forest-lane-invariant-audit' --lib v7_cu_tail_probe::tests
+cargo test --release --locked --manifest-path crates/aspis-core/Cargo.toml --features v7-query-order-source-bound-audit source_bounded_q16_sort_matches_standard_sort
+
+cd AspisFormal
+lake env lean AspisFormal/Pool/V7TerminalPdaCertificateInvariant.lean
+cd ..
+
+# NUC SBF commands (task-owned checkout and caches; cgrouped in the captured .time files).
+/home/dombarker/project-offloads/aspis-v7-agave-v4.2.0-runtime-20260830-r1/extracted/solana-release/bin/cargo-build-sbf --manifest-path programs/aspis-pool/Cargo.toml --no-default-features --features v7-pair-forest-one-tx-candidate,pair-forest-terminal-pda-certificate-audit --arch v0 --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --sbf-out-dir "$TASK/evidence/sbf/pool" -- --locked
+/home/dombarker/project-offloads/aspis-v7-agave-v4.2.0-runtime-20260830-r1/extracted/solana-release/bin/cargo-build-sbf --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features v7-pair-forest-one-tx-candidate,v7-terminal-pda-certificate-audit,v7-query-order-source-bound-audit --arch v0 --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --sbf-out-dir "$TASK/evidence/sbf/verifier-selected-sort" -- --locked
+/home/dombarker/project-offloads/aspis-v7-agave-v4.2.0-runtime-20260830-r1/extracted/solana-release/bin/cargo-build-sbf --manifest-path programs/aspis-verifier/Cargo.toml --no-default-features --features v7-cu-probe --arch v0 --offline --skip-tools-install --no-rustup-override --tools-version v1.54 --sbf-out-dir "$TASK/evidence/sbf/cu-tail-probe-v3" -- --locked
+
+# The disposable lifecycle requires the exact acknowledgement and task-owned paths.
+ASPIS_V7_CU_TAIL_PROBE_ACK=I_ACKNOWLEDGE_LOCAL_ONLY_V7_CU_TAIL_PROBE \
+ASPIS_V7_CU_TAIL_PROBE_GENESIS_BINARY="$TASK/evidence/sbf/cu-tail-probe-v3/aspis_verifier.so" \
+ASPIS_V7_CU_TAIL_PROBE_BINARY="$TASK/evidence/sbf/cu-tail-probe-v3/aspis_verifier.so" \
+ASPIS_V7_CU_TAIL_PROBE_BUILDER="$TASK/repo/tools/v7-live-pool-proof/target/release/build-v7-cu-tail-probe" \
+./scripts/v7_txv1_disposable_feature_cluster.sh "$TASK/agave-v4.2.2/solana-release/bin" "$NEW_EVIDENCE" I_ACKNOWLEDGE_AUDIT_ONLY_IDENTITIES_AND_DISPOSABLE_FUNDS -- ./scripts/v7_cu_tail_probe_child.sh "$NEW_EVIDENCE/probe"
+
+(cd results/v7-all-reachable-cu-bound-pda-closure-20260908 && shasum -a 256 -c SHA256SUMS)
+
+# Genuine rollover terminal replay on the task-owned NUC checkout. Set
+# OPERATION=transfer or withdrawal; use the matching terminal builder. The
+# source revision is the committed harness revision being replayed. The
+# systemd unit must be given a fresh name and EVIDENCE must not already exist.
+TASK=/home/dombarker/project-offloads/aspis-v7-all-reachable-cu-20260908.xeZ1gC
+OPERATION=transfer
+PORT=19055
+SOURCE_REVISION=d3a0829508e2beba792ab48623636f595f9b8606
+EVIDENCE="$TASK/evidence/current-transfer-rollover-direct-v3"
+TERMINAL_BUILDER="$TASK/target-host/release/build-live-transfer-terminal"
+systemd-run --user --unit=aspis-v7-current-transfer-rollover-direct-v3 \
+  --property=MemoryHigh=8G --property=MemoryMax=10G \
+  --property=MemorySwapMax=0 --property=OOMPolicy=stop --collect \
+  /usr/bin/time -v env \
+  PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin NO_DNA=1 \
+  ASPIS_TXV1_SOURCE_REVISION="$SOURCE_REVISION" \
+  ASPIS_TXV1_LOCAL_RPC_PORT="$PORT" \
+  ASPIS_TXV1_LEDGER_SHRED_RETENTION=1000000 \
+  ASPIS_TXV1_HARNESS_CONFIG="$TASK/config/current-selected-sort-r2.json" \
+  ASPIS_V7_LIVE_OPERATION="$OPERATION" \
+  ASPIS_V7_PAIR_FOREST_DEPOSIT_CU_AUDIT=I_ACKNOWLEDGE_256_DISPOSABLE_SEQUENTIAL_DEPOSITS \
+  ASPIS_V7_LIVE_PREFILL_NEXT_LEAF_INDEX=254 \
+  ASPIS_V7_LIVE_ROLLOVER_PREFILL_ACK=I_ACKNOWLEDGE_254_DISPOSABLE_PREFILL_DEPOSITS \
+  ASPIS_V7_EXPERIMENTAL_MAX_COMPACT_COUNTER=20 \
+  ASPIS_V7_EXPERIMENTAL_FINAL_NONCE_CUTOFF_ACK=I_ACKNOWLEDGE_MEASUREMENT_ONLY_FINAL_NONCE_SELECTION \
+  ASPIS_V7_TERMINAL_PDA_CLOSURE_ACK=I_ACKNOWLEDGE_DEFAULT_OFF_TERMINAL_PDA_CERTIFICATE_AUDIT \
+  ASPIS_TXV1_LIVE_GENESIS_PREPARER="$TASK/target-host/release/prepare-live-genesis" \
+  ASPIS_TXV1_SPL_NOOP_BINARY=/home/dombarker/project-offloads/aspis-v7-live-adapter.oTxZ60/spl-noop/spl_noop.so \
+  ASPIS_V7_LIVE_POOL_INITIALIZE_BUILDER="$TASK/target-host/release/build-live-pool-initialize" \
+  ASPIS_V7_LIVE_OPERATION_SECRET_BUILDER="$TASK/target-host/release/create-live-operation-secrets" \
+  ASPIS_V7_LIVE_POOL_DEPOSIT_BUILDER="$TASK/target-host/release/build-live-pool-deposit" \
+  ASPIS_V7_LIVE_POOL_CHECKPOINT_BUILDER="$TASK/target-host/release/build-live-pool-checkpoint" \
+  ASPIS_V7_LIVE_PROOF_MATERIALIZER="$TASK/target-host/release/materialize-live-proof-bundle" \
+  ASPIS_V7_LIVE_POOL_PROVER="$TASK/target-host/release/prove-from-live-bundle" \
+  ASPIS_V7_PROOF_UPLOAD_CHILD="$TASK/repo/scripts/v7_txv1_upload_honest_proof_child.sh" \
+  ASPIS_V7_LIVE_TERMINAL_BUILDER="$TERMINAL_BUILDER" \
+  ASPIS_V7_LIVE_PROOF_CLOSE_BUILDER="$TASK/target-host/release/build-live-proof-close" \
+  "$TASK/repo/scripts/v7_txv1_disposable_feature_cluster.sh" \
+  "$TASK/agave-v4.2.2/solana-release/bin" "$EVIDENCE" \
+  I_ACKNOWLEDGE_AUDIT_ONLY_IDENTITIES_AND_DISPOSABLE_FUNDS -- \
+  "$TASK/repo/scripts/v7_live_pool_initialize_child.sh" "$EVIDENCE/live-setup"
