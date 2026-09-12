@@ -23,6 +23,7 @@ open AspisK1.V7Tag73VariablePrefixGammaFactorization
 open AspisK1.V7Tag73VariablePrefixGammaSampler
 open AspisK1.V7Tag73VariablePrefixK14Probability
 open AspisPool.AlgorithmicCircleDecoderV7
+open AspisPool.V7C1ConcreteProjectionBinding
 open AspisPool.V7CandidateChainExtraction
 open AspisPool.V7CoherentTraceExtraction
 open AspisPool.V7ExtractedLaneWords
@@ -85,6 +86,32 @@ noncomputable def restoredGammaInitialLaneResponse
       Classical.choose available
     else defaultResponse
 
+/-- Opaque name for the finite bad-gamma target.  Keeping this expression
+folded prevents source-heavy consumers from repeatedly normalizing the full
+width-29 strategy. -/
+noncomputable def restoredGammaInitialLaneFailureTarget
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (lanes : Width29InitialLanes)
+    (defaultResponse : InitialMessage QM31Exact)
+    (skeleton : VariableGammaCompleteSkeleton) : Finset QM31Exact :=
+  variablePrefixK14InitialLanesFailureGammaTarget decoder lanes
+    (restoredGammaInitialLaneResponse decoder lanes defaultResponse) skeleton
+
+/-- The opaque target retains the exact degree-28 cap. -/
+theorem restored_gamma_initial_lane_failure_target_card_le
+    (decoder : ExactDecoderInstantiation QM31Exact)
+    (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (published : PublishedInitialWidth29CurveDecodability exactInitialEncoder)
+    (lanes : Width29InitialLanes)
+    (defaultResponse : InitialMessage QM31Exact)
+    (skeleton : VariableGammaCompleteSkeleton) :
+    (restoredGammaInitialLaneFailureTarget decoder lanes defaultResponse
+      skeleton).card ≤ initialBatchChallengeCap := by
+  unfold restoredGammaInitialLaneFailureTarget
+  exact variable_prefix_k14_initial_lanes_failure_target_card_le decoder
+    initialEncoderExact published lanes
+      (restoredGammaInitialLaneResponse decoder lanes defaultResponse) skeleton
+
 /-- Every realized bad response is counted by the single response family at
 that gamma, independently of which witness supplied existence. -/
 theorem realized_bad_response_mem_initial_lane_failure_target
@@ -95,9 +122,8 @@ theorem realized_bad_response_mem_initial_lane_failure_target
     (gamma : QM31Exact)
     (available : ∃ response,
       InitialLaneBadResponseRealized decoder lanes gamma response) :
-    gamma ∈ variablePrefixK14InitialLanesFailureGammaTarget decoder lanes
-      (restoredGammaInitialLaneResponse decoder lanes defaultResponse)
-        skeleton := by
+    gamma ∈ restoredGammaInitialLaneFailureTarget decoder lanes
+      defaultResponse skeleton := by
   classical
   let chosen := Classical.choose available
   have chosenRealized := Classical.choose_spec available
@@ -122,6 +148,7 @@ theorem realized_bad_response_mem_initial_lane_failure_target
           (selectedCandidateStrategy decoder lanes selected)) := by
     rw [mem_width29BadStrategy_good_iff]
     exact ⟨gammaNonzero, valid, noMatching⟩
+  unfold restoredGammaInitialLaneFailureTarget
   unfold variablePrefixK14InitialLanesFailureGammaTarget
   rw [mem_width29BadStrategy_good_iff] at fixedMember ⊢
   let response :=
@@ -156,9 +183,13 @@ theorem realized_bad_response_mem_initial_lane_failure_target
       exact onCurve
   exact ⟨fixedMember.1, restoredValid, restoredNoMatching⟩
 
+attribute [irreducible] restoredGammaInitialLaneFailureTarget
+
 #print axioms InitialLaneBadResponseRealized
 #print axioms initialLaneBadResponseRealizedOfFailure
 #print axioms restoredGammaInitialLaneResponse
+#print axioms restoredGammaInitialLaneFailureTarget
+#print axioms restored_gamma_initial_lane_failure_target_card_le
 #print axioms realized_bad_response_mem_initial_lane_failure_target
 
 end
