@@ -553,6 +553,17 @@ reference is not yet a refinement theorem for the structured Rust kernel.
 Evidence is in `source-terminal-weight-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/source-terminal-weight-v1/report.json`.
 
+`lean/SameBodyAffinePairConsistency.lean` proves the source optimization that
+shares the nine unchanged tensor factors when constructing affine correction
+entries 0 and 2/1. For arbitrary three-row point tables and scales, its pair
+is exactly the corresponding two literal ten-coordinate tensor entries. The
+proof uses small one-row factorisations rather than normalising the expanded
+3x10 term. Specialising this algebraic identity to the prepared source record
+and `originalWeight` still exceeds the focused elaboration budget and remains
+open; no CU saving is claimed by the Lean result alone. Evidence is in
+`affine-pair-consistency-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/affine-pair-consistency-v1/report.json`.
+
 ### 2026-09-12 initial and occupancy source polynomials
 
 `lean/SelectedInitialOutputsSourcePolynomial.lean` constructs all sixteen
