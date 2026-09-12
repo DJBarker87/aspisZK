@@ -1,5 +1,14 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest authenticated-increment milestone:
+[`SameBodyAuthenticatedIncrement`](authenticated-increment-20260912.md)
+constructs the shifted q22 scalar and canonical 16-byte transcript value from
+the existing same-body parsed, inverse-checked and Merkle-authenticated opening
+pipeline.  It proves the exact `SameBodyRelation` increment application and
+retains authentication failure as an explicit alternative.  Typed live
+schedule construction, chronological prefix/log production and literal Rust
+refinement remain open before it can replace the live callback.
+
 Latest source-polynomial composition milestone: the selected range lane now
 has a constructed chronological degree-three `SourcePolynomial`. It sums the
 literal three-row-selector/opening-Booleanity restriction over Boolean future
