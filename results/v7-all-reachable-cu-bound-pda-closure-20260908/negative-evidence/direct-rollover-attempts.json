@@ -1,0 +1,45 @@
+{
+  "schema": "aspis.v7.direct-rollover-attempts.v1",
+  "localDisposableOnly": true,
+  "publicDevnetEvidenceModified": false,
+  "mainnetReady": false,
+  "attempts": [
+    {
+      "case": "withdrawal-rollover-v3",
+      "sourceRevision": "c21c0b8058f54b2eeab3bbf737c3a65224f6c12c",
+      "prefillFinalizedDeposits": 254,
+      "genuineProof": {
+        "compactCounter": 4,
+        "frontierNodes": 194,
+        "sha256": "12334c1a658f856a2bb5d97d6a862cb91f88b7f054667e784aa607cc3bb822b5",
+        "payloadSha256": "4ffe40b6148291612790d9d88f52cbb6f9113812ad9d48f2d6e21e17e7de8b7c",
+        "elapsedMillis": 404962
+      },
+      "proofUploadSignatureStatusesFinalized": 35,
+      "terminalAttempted": false,
+      "result": "proof upload evidence collection failed because getTransaction returned null for the first finalized upload signature"
+    },
+    {
+      "case": "transfer-rollover-v1",
+      "sourceRevision": "c21c0b8058f54b2eeab3bbf737c3a65224f6c12c",
+      "prefillFinalizedDeposits": 254,
+      "genuineProof": {
+        "compactCounter": 5,
+        "frontierNodes": 199,
+        "bytes": 30616,
+        "sha256": "b29292fcb7ce9b50aab8c4687affbf8d602fa77d9a48cca4b4c9f757d3d1602b",
+        "payloadSha256": "877ea170d6adc242d5f57a6a8c825f1a73555d2a648cc31072206c4c0b1fc8d2",
+        "elapsedMillis": 421635
+      },
+      "proofUploadSignatureStatusesFinalized": 35,
+      "terminalAttempted": false,
+      "result": "proof upload evidence collection failed because getTransaction returned null for the first finalized upload signature"
+    }
+  ],
+  "diagnosis": {
+    "agaveTestValidatorDefaultLedgerShredRetention": 10000,
+    "observation": "the oldest proof-upload transaction record was unavailable after the complete dependent upload set finalized",
+    "inference": "the failure is consistent with transaction-status pruning during the long local run",
+    "repair": "the disposable validator now requires at least 1000000 retained shreds and records that value in ledger-configuration.json"
+  }
+}

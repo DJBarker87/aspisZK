@@ -7,6 +7,7 @@ use aspis_statement::pool_v1::{
     VerifierPolicyV1, POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT,
     POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
 };
+use aspis_v7_live_pool_proof::require_nonproduction_live_fixture;
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use serde::Deserialize;
 use serde_json::{json, Value};
@@ -50,18 +51,16 @@ fn main() -> Result<()> {
         input.schema == "aspis.v7.live-pool-initialize-input.v1",
         "wrong input schema"
     );
-    ensure!(input.min_context_slot > 0 && input.request_id > 0, "invalid RPC identity");
+    ensure!(
+        input.min_context_slot > 0 && input.request_id > 0,
+        "invalid RPC identity"
+    );
     let config_path = input_path
         .parent()
         .unwrap_or_else(|| std::path::Path::new("."))
         .join(&input.config);
     let config: Value = serde_json::from_slice(&fs::read(config_path)?)?;
-    ensure!(
-        config["mainnetReady"] == false
-            && config["identitySet"]["auditOnly"] == true
-            && config["disposableLiveGenesis"]["enabledOnlyWithDisposableAcknowledgement"] == true,
-        "initialization is not pinned to the disposable audit identity"
-    );
+    let fixture = require_nonproduction_live_fixture(&config)?;
     let pool_id = config["identitySet"]["programs"]
         .as_array()
         .context("missing programs")?
@@ -76,9 +75,7 @@ fn main() -> Result<()> {
         .find(|account| account["name"] == "registry")
         .and_then(|account| account["owner"].as_str())
         .context("missing Registry program")?;
-    let mint = config["disposableLiveGenesis"]["mint"]["id"]
-        .as_str()
-        .context("missing mint")?;
+    let mint = fixture["mint"]["id"].as_str().context("missing mint")?;
     let payer = read_keypair_file(&input.payer_keypair)
         .map_err(|error| anyhow::anyhow!("read disposable payer: {error}"))?;
     let initialization = PoolInitializationV1 {
@@ -121,7 +118,10 @@ fn main() -> Result<()> {
         .map_err(|error| anyhow::anyhow!("sign initialize transaction: {error}"))?;
     let signature = transaction.signatures[0].to_string();
     let wire = bincode::serialize(&transaction)?;
-    ensure!(wire.len() < 1_232, "initialize exceeds legacy transaction envelope");
+    ensure!(
+        wire.len() < 1_232,
+        "initialize exceeds legacy transaction envelope"
+    );
     let wire_hash = format!("{:x}", Sha256::digest(&wire));
     let wire_base64 = BASE64.encode(&wire);
     println!(

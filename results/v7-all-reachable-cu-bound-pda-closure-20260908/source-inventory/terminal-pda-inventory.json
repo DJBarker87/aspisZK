@@ -1,0 +1,853 @@
+{
+  "authenticatedFixedBumpClosure": {
+    "additionalTerminalReadonlyAccounts": 1,
+    "canonicalSearchLocation": "process_initialize_terminal_pda_certificate_v1 before the terminal transaction",
+    "certificateMagic": "APD8",
+    "certificateOwner": "selected verifier program",
+    "certificateWritableDuringTerminal": false,
+    "createProgramAddressCuPerAttempt": 1500,
+    "defaultOff": true,
+    "feature": "v7-terminal-pda-certificate-audit / pair-forest-terminal-pda-certificate-audit",
+    "identities": [
+      {
+        "applies": "all",
+        "certificateSlot": 0,
+        "identity": "Pool master",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 1,
+        "identity": "retained checkpoint",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 2,
+        "identity": "selected lane",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 3,
+        "identity": "current history page",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "rollover",
+        "certificateSlot": 4,
+        "identity": "next history page",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 5,
+        "identity": "nullifier marker",
+        "reason": "certificate replay plus Pool pre-create and post-create checks",
+        "terminalSingleAttempts": 3
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 6,
+        "identity": "Registry V2",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 7,
+        "identity": "Registry ProgramData",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 8,
+        "identity": "Registry V2 entry",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "all",
+        "certificateSlot": 9,
+        "identity": "verifier ProgramData",
+        "terminalSingleAttempts": 1
+      },
+      {
+        "applies": "withdrawal",
+        "certificateSlot": 10,
+        "identity": "vault authority",
+        "reason": "certificate replay plus Pool SPL-CPI plan check",
+        "terminalSingleAttempts": 2
+      },
+      {
+        "applies": "withdrawal",
+        "certificateSlot": 11,
+        "identity": "vault token account",
+        "reason": "certificate replay plus Pool custody plan check",
+        "terminalSingleAttempts": 2
+      }
+    ],
+    "maximumTerminalPdaSyscallCu": 24000,
+    "maximumTerminalSingleAttempts": 16,
+    "poolAccountLayoutChanged": false,
+    "proofFormatChanged": false,
+    "statementFormatChanged": false,
+    "terminalFindProgramAddressInvocations": {
+      "rolloverTransfer": 0,
+      "rolloverWithdrawal": 0,
+      "samePageTransfer": 0,
+      "samePageWithdrawal": 0
+    },
+    "terminalSingleAttemptValidations": {
+      "rolloverTransfer": 12,
+      "rolloverWithdrawal": 16,
+      "samePageTransfer": 11,
+      "samePageWithdrawal": 15
+    },
+    "terminalWireByteDelta": 33
+  },
+  "conclusion": {
+    "allCallsEquivalent": false,
+    "dominantFreshIdentity": "pool.nullifier.pre",
+    "sameInstructionDuplicate": "pool.nullifier.post",
+    "securityWarning": "A supplied nullifier bump is not sufficient: alternate valid bumps would create replay namespaces."
+  },
+  "counts": {
+    "rolloverTransfer": 19,
+    "rolloverWithdrawal": 21,
+    "samePageTransfer": 18,
+    "samePageWithdrawal": 20
+  },
+  "registryFamily": "immutable-v2",
+  "repositoryStartingRevision": "e5640f79133f8afbeb7eb08a940abc6462274295",
+  "rows": [
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.master",
+      "candidateReplacementClass": "program-owned placement invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "master",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "canonical Pool identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pair-forest-master-v1"
+        },
+        {
+          "class": "derived",
+          "value": "decoded master.identity.asset_mint"
+        }
+      ],
+      "source": {
+        "caller": "process_pair_forest_terminal_with_verifier_v1",
+        "file": "programs/aspis-pool/src/pair_forest.rs",
+        "function": "decode_master_account"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.checkpoint",
+      "candidateReplacementClass": "program-owned placement invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "checkpoint",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "immutable retained checkpoint identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pair-forest-checkpoint-v1"
+        },
+        {
+          "class": "derived",
+          "value": "supplied master key"
+        },
+        {
+          "class": "derived",
+          "value": "decoded checkpoint_sequence LE"
+        }
+      ],
+      "source": {
+        "caller": "decode_terminal_checkpoint_box_v1",
+        "file": "programs/aspis-pool/src/pair_forest.rs",
+        "function": "decode_retained_pair_forest_checkpoint_account_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.lane.decode",
+      "candidateReplacementClass": "authenticated parent/source placement invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "selected-lane",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "selected live lane identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pair-forest-lane-v1"
+        },
+        {
+          "class": "derived",
+          "value": "supplied master key"
+        },
+        {
+          "class": "derived",
+          "value": "output lane from canonical nullifier"
+        }
+      ],
+      "source": {
+        "caller": "decode_terminal_lane_box_v1",
+        "file": "programs/aspis-pool/src/pair_forest.rs",
+        "function": "decode_lane_account[_from_program_invariant_v1]"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.lane.request",
+      "candidateReplacementClass": "reuse prior authenticated equality",
+      "component": "Pool",
+      "duplicateIdentityGroup": "selected-lane",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "duplicate selected-lane binding",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pair-forest-lane-v1"
+        },
+        {
+          "class": "derived",
+          "value": "supplied master key"
+        },
+        {
+          "class": "derived",
+          "value": "output lane from canonical nullifier"
+        }
+      ],
+      "source": {
+        "caller": "process_pair_forest_terminal_with_verifier_v1",
+        "file": "programs/aspis-pool/src/pair_forest.rs",
+        "function": "validate_pair_forest_request_accounts_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.history.current",
+      "candidateReplacementClass": "program-owned placement invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "current-history",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "current retained-root page identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-root-page-v1"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated selected lane key"
+        },
+        {
+          "class": "derived",
+          "value": "current page number from lane next index"
+        }
+      ],
+      "source": {
+        "caller": "plan_pair_forest_spend_layout_v1 via validate_lane_current_page",
+        "file": "programs/aspis-pool/src/history.rs",
+        "function": "require_root_page_address"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": false,
+        "samePageWithdrawal": false
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.history.next",
+      "candidateReplacementClass": "bounded bump certificate at page preparation",
+      "component": "Pool",
+      "duplicateIdentityGroup": null,
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "fresh rollover page identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-root-page-v1"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated selected lane key"
+        },
+        {
+          "class": "derived",
+          "value": "next page number from next index"
+        }
+      ],
+      "source": {
+        "caller": "plan_pair_forest_spend_layout_v1 rollover branch",
+        "file": "programs/aspis-pool/src/history.rs",
+        "function": "require_root_page_address"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "held only in PlannedNullifierMarkerV1 during this instruction",
+      "callId": "pool.nullifier.pre",
+      "candidateReplacementClass": "preterminal verifier-owned canonical-bump certificate",
+      "component": "Pool",
+      "duplicateIdentityGroup": "nullifier-marker",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "canonical uniqueness; alternate bumps would permit replay",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-nullifier-v1"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        },
+        {
+          "class": "derived",
+          "value": "canonical public nullifier"
+        }
+      ],
+      "source": {
+        "caller": "process_pair_forest_terminal_with_verifier_v1",
+        "file": "programs/aspis-pool/src/nullifier.rs",
+        "function": "plan_nullifier_marker_consumption_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": false,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": false,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "returned in withdrawal plan but not persisted",
+      "callId": "pool.vault.authority",
+      "candidateReplacementClass": "persist canonical bump in master capability",
+      "component": "Pool",
+      "duplicateIdentityGroup": null,
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "SPL CPI signing authority",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pool-vault-authority-v1"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        }
+      ],
+      "source": {
+        "caller": "process_pair_forest_terminal_with_verifier_v1",
+        "file": "programs/aspis-pool/src/vault.rs",
+        "function": "plan_legacy_withdrawal_transfer_from_identity_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": false,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": false,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.vault.token",
+      "candidateReplacementClass": "persist canonical bump/address in master capability",
+      "component": "Pool",
+      "duplicateIdentityGroup": null,
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "custody token-account identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pool-vault-token-v1"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        }
+      ],
+      "source": {
+        "caller": "process_pair_forest_terminal_with_verifier_v1",
+        "file": "programs/aspis-pool/src/vault.rs",
+        "function": "plan_legacy_withdrawal_transfer_from_identity_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "same canonical bump already held in PlannedNullifierMarkerV1",
+      "callId": "pool.nullifier.post",
+      "candidateReplacementClass": "reuse prior canonical bump with create_program_address",
+      "component": "Pool",
+      "duplicateIdentityGroup": "nullifier-marker",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "post-create owner/size/zero/rent/payload recheck",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-nullifier-v1"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        },
+        {
+          "class": "derived",
+          "value": "canonical public nullifier"
+        }
+      ],
+      "source": {
+        "caller": "create_nullifier_marker_if_needed_v1",
+        "file": "programs/aspis-pool/src/nullifier.rs",
+        "function": "plan_nullifier_marker_consumption_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "address stored in decoded Registry V2; bump not stored",
+      "callId": "pool.registry.programdata",
+      "candidateReplacementClass": "registry-creation provenance invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "registry-programdata",
+      "expectedPdaAlreadySuppliedAsAccount": false,
+      "programId": "BPFLoaderUpgradeab1e11111111111111111111111",
+      "securityRole": "immutable registry deployment certificate",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "derived",
+          "value": "fixed registry program id"
+        }
+      ],
+      "source": {
+        "caller": "plan_pair_forest_terminal_dispatch_v1",
+        "file": "programs/aspis-pool/src/registry.rs",
+        "function": "authenticate_verifier_selection_v2"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.registry.account",
+      "candidateReplacementClass": "registry-owned placement invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "registry-account",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "master.verifier_policy.registry_program (fixed by audit release capability)",
+      "securityRole": "canonical per-Pool registry identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-verifier-registry-v2"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        }
+      ],
+      "source": {
+        "caller": "plan_pair_forest_terminal_dispatch_v1",
+        "file": "programs/aspis-pool/src/registry.rs",
+        "function": "authenticate_verifier_selection_v2"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "pool.registry.entry",
+      "candidateReplacementClass": "registry-owned placement invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "registry-entry",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "master.verifier_policy.registry_program (fixed by audit release capability)",
+      "securityRole": "exact profile/release certificate identity",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-verifier-entry-v2"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        },
+        {
+          "class": "static",
+          "value": "V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING"
+        },
+        {
+          "class": "static",
+          "value": "V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING"
+        }
+      ],
+      "source": {
+        "caller": "plan_pair_forest_terminal_dispatch_v1",
+        "file": "programs/aspis-pool/src/registry.rs",
+        "function": "authenticate_verifier_selection_v2"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "address stored in decoded Registry entry V2; bump not stored",
+      "callId": "pool.verifier.programdata",
+      "candidateReplacementClass": "entry-creation provenance invariant",
+      "component": "Pool",
+      "duplicateIdentityGroup": "verifier-programdata",
+      "expectedPdaAlreadySuppliedAsAccount": false,
+      "programId": "BPFLoaderUpgradeab1e11111111111111111111111",
+      "securityRole": "immutable verifier deployment certificate",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "derived",
+          "value": "selected verifier program id"
+        }
+      ],
+      "source": {
+        "caller": "plan_pair_forest_terminal_dispatch_v1",
+        "file": "programs/aspis-pool/src/registry.rs",
+        "function": "authenticate_verifier_selection_v2"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "verifier.registry.account",
+      "candidateReplacementClass": "same registry-owned placement invariant",
+      "component": "verifier",
+      "duplicateIdentityGroup": "registry-account",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "master.verifier_policy.registry_program (fixed by audit release capability)",
+      "securityRole": "direct-invocation registry authentication",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-verifier-registry-v2"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        }
+      ],
+      "source": {
+        "caller": "authenticate_asq8_accounts_v1",
+        "file": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
+        "function": "authenticate_invariant_release_registry_at_slot_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "address stored in decoded Registry V2; bump not stored",
+      "callId": "verifier.registry.programdata",
+      "candidateReplacementClass": "same registry-creation provenance invariant",
+      "component": "verifier",
+      "duplicateIdentityGroup": "registry-programdata",
+      "expectedPdaAlreadySuppliedAsAccount": false,
+      "programId": "BPFLoaderUpgradeab1e11111111111111111111111",
+      "securityRole": "direct-invocation immutable registry authentication",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "derived",
+          "value": "fixed registry program id"
+        }
+      ],
+      "source": {
+        "caller": "authenticate_asq8_accounts_v1",
+        "file": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
+        "function": "authenticate_invariant_release_registry_at_slot_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "verifier.registry.entry",
+      "candidateReplacementClass": "same registry-owned placement invariant",
+      "component": "verifier",
+      "duplicateIdentityGroup": "registry-entry",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "master.verifier_policy.registry_program (fixed by audit release capability)",
+      "securityRole": "direct-invocation exact release authentication",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-verifier-entry-v2"
+        },
+        {
+          "class": "derived",
+          "value": "authenticated master key"
+        },
+        {
+          "class": "static",
+          "value": "V7_POOL_PAIR_FOREST_TAG73_PROFILE_BINDING"
+        },
+        {
+          "class": "static",
+          "value": "V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING"
+        }
+      ],
+      "source": {
+        "caller": "authenticate_asq8_accounts_v1",
+        "file": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
+        "function": "authenticate_invariant_release_registry_at_slot_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "address stored in decoded Registry entry V2; bump not stored",
+      "callId": "verifier.verifier.programdata",
+      "candidateReplacementClass": "same entry-creation provenance invariant",
+      "component": "verifier",
+      "duplicateIdentityGroup": "verifier-programdata",
+      "expectedPdaAlreadySuppliedAsAccount": false,
+      "programId": "BPFLoaderUpgradeab1e11111111111111111111111",
+      "securityRole": "direct-invocation immutable self authentication",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "derived",
+          "value": "runtime verifier program id"
+        }
+      ],
+      "source": {
+        "caller": "authenticate_asq8_accounts_v1",
+        "file": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
+        "function": "authenticate_invariant_release_registry_at_slot_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "verifier.master",
+      "candidateReplacementClass": "same program-owned placement invariant",
+      "component": "verifier",
+      "duplicateIdentityGroup": "master",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "direct-invocation Pool master authentication",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pair-forest-master-v1"
+        },
+        {
+          "class": "derived",
+          "value": "decoded master.identity.asset_mint"
+        }
+      ],
+      "source": {
+        "caller": "process_v7_pair_forest_asq8_instruction",
+        "file": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
+        "function": "authenticate_asq8_accounts_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "verifier.checkpoint",
+      "candidateReplacementClass": "same program-owned placement invariant",
+      "component": "verifier",
+      "duplicateIdentityGroup": "checkpoint",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "direct-invocation retained checkpoint authentication",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pair-forest-checkpoint-v1"
+        },
+        {
+          "class": "derived",
+          "value": "supplied master key"
+        },
+        {
+          "class": "derived",
+          "value": "decoded checkpoint_sequence LE"
+        }
+      ],
+      "source": {
+        "caller": "process_v7_pair_forest_asq8_instruction",
+        "file": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
+        "function": "authenticate_asq8_accounts_v1"
+      }
+    },
+    {
+      "applies": {
+        "rolloverTransfer": true,
+        "rolloverWithdrawal": true,
+        "samePageTransfer": true,
+        "samePageWithdrawal": true
+      },
+      "bumpChangesDuringObjectLifetime": false,
+      "bumpStorageBeforeChange": "not stored",
+      "callId": "verifier.lane",
+      "candidateReplacementClass": "same authenticated parent/source placement invariant",
+      "component": "verifier",
+      "duplicateIdentityGroup": "selected-lane",
+      "expectedPdaAlreadySuppliedAsAccount": true,
+      "programId": "runtime Pool program id",
+      "securityRole": "direct-invocation selected live lane authentication",
+      "seedClass": "derived",
+      "seeds": [
+        {
+          "class": "static",
+          "value": "aspis-pair-forest-lane-v1"
+        },
+        {
+          "class": "derived",
+          "value": "supplied master key"
+        },
+        {
+          "class": "derived",
+          "value": "output lane from canonical nullifier"
+        }
+      ],
+      "source": {
+        "caller": "process_v7_pair_forest_asq8_instruction",
+        "file": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
+        "function": "authenticate_asq8_accounts_v1"
+      }
+    }
+  ],
+  "schema": "aspis.v7.terminal-pda-inventory.v2"
+}

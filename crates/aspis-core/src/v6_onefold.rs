@@ -472,6 +472,23 @@ pub fn binary_frontier_nodes<const Q: usize>(
         .ok_or(V6WireError::InvalidQuerySchedule)
 }
 
+/// Sort the protocol-fixed q16 `(query, ordinal)` records with a directly
+/// auditable comparison bound.  This is deliberately available only to the
+/// default-off CU-closure feature; ordinary builds retain the standard
+/// library implementation.
+#[cfg(feature = "v7-query-order-source-bound-audit")]
+pub fn sort_v7_query_order_source_bounded(order: &mut [(u32, usize); V6_QUERY_COUNT]) {
+    for index in 1..V6_QUERY_COUNT {
+        let value = order[index];
+        let mut cursor = index;
+        while cursor > 0 && value.0 < order[cursor - 1].0 {
+            order[cursor] = order[cursor - 1];
+            cursor -= 1;
+        }
+        order[cursor] = value;
+    }
+}
+
 /// Return the first compact candidate and reject malformed candidate streams.
 /// A future transcript driver must derive `candidates` itself; accepting a
 /// proof-carried counter without checking every earlier candidate is unsafe.
@@ -1040,6 +1057,24 @@ mod tests {
             hasher.update(input);
         }
         hasher.finalize().into()
+    }
+
+    #[cfg(feature = "v7-query-order-source-bound-audit")]
+    #[test]
+    fn source_bounded_q16_sort_matches_standard_sort() {
+        let mut state = 0x9e37_79b9_7f4a_7c15u64;
+        for _ in 0..1_024 {
+            let mut actual: [(u32, usize); V6_QUERY_COUNT] = core::array::from_fn(|ordinal| {
+                state ^= state << 13;
+                state ^= state >> 7;
+                state ^= state << 17;
+                ((state as u32) ^ ((ordinal as u32) << 24), ordinal)
+            });
+            let mut expected = actual;
+            expected.sort_unstable_by_key(|entry| entry.0);
+            sort_v7_query_order_source_bounded(&mut actual);
+            assert_eq!(actual, expected);
+        }
     }
 
     fn minimal_binary_root(

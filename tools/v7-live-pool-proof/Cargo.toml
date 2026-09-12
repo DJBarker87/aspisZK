@@ -11,12 +11,22 @@ publish = false
 # honest-prover nonce selection feature; verifier, Pool, statement, and wire
 # dependencies are unchanged.
 v7-final-nonce-cutoff-audit = ["aspis-prover/v7-final-nonce-cutoff-audit"]
+# Default-off terminal PDA closure. Canonical search is moved into a one-time
+# verifier-owned certificate initialization; the terminal path uses only fixed
+# single-attempt derivations.
+v7-terminal-pda-certificate-audit = [
+    "aspis-pool/pair-forest-terminal-pda-certificate-audit",
+    "aspis-verifier/v7-terminal-pda-certificate-audit",
+]
+# Disposable-validator-only client for the isolated verifier CU-tail probe.
+v7-cu-tail-probe = ["aspis-verifier/v7-cu-probe"]
 
 [dependencies]
 anyhow = "1.0.100"
 aspis-core = { path = "../../crates/aspis-core", features = ["v7-fixed-canonical-audit"] }
 aspis-pool = { path = "../../programs/aspis-pool", default-features = false, features = ["no-entrypoint", "pair-forest-account-evidence"] }
 aspis-prover = { path = "../../crates/aspis-prover" }
+aspis-registry = { path = "../../programs/aspis-registry", default-features = false, features = ["no-entrypoint"] }
 aspis-verifier = { path = "../../programs/aspis-verifier", default-features = false, features = ["no-entrypoint", "v7-pair-forest-one-tx-candidate"] }
 aspis-pool-wallet-v1 = { path = "../../crates/aspis-pool-wallet-v1", features = ["eight-lane-plumbing-v2"] }
 aspis-statement = { path = "../../crates/aspis-statement", features = ["pool-v1-kernel"] }
@@ -34,6 +44,7 @@ solana-compute-budget-interface = "=2.2.2"
 solana-message = { version = "=2.4.0", features = ["bincode"] }
 solana-message-v1 = { package = "solana-message", version = "=4.2.4", features = ["wincode"] }
 solana-program = "=2.3.0"
+solana-sdk-ids = "=2.2.1"
 solana-signer = "=2.2.1"
 solana-transaction = { version = "=2.2.3", features = ["bincode"] }
 solana-signature-v1 = { package = "solana-signature", version = "=3.4.1" }
@@ -77,5 +88,17 @@ name = "build-live-proof-close"
 path = "src/bin/build_live_proof_close.rs"
 
 [[bin]]
+name = "build-public-devnet-registry"
+path = "src/bin/build_public_devnet_registry.rs"
+
+[[bin]]
+name = "build-public-devnet-token-fixture"
+path = "src/bin/build_public_devnet_token_fixture.rs"
+
+[[bin]]
 name = "inspect-live-proof"
 path = "src/bin/inspect_live_proof.rs"
+
+[[bin]]
+name = "build-v7-cu-tail-probe"
+path = "src/bin/build_v7_cu_tail_probe.rs"

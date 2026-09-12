@@ -6,6 +6,9 @@
 
 use std::{io, path::Path};
 
+use anyhow::{ensure, Context, Result};
+use serde_json::Value;
+
 use aspis_core::v7_fixed_canonical_audit::transcode_tag73_to_canonical_fixed;
 use aspis_pool_wallet_v1::live_pool_witness_adapter_v2::{
     LivePairForestTransferPlanV2, LivePairForestWithdrawalPlanV2,
@@ -36,6 +39,41 @@ pub enum LivePoolProofErrorV1 {
 pub struct BuiltLivePoolProofV1 {
     pub proof: BuiltV7CompactOneFoldProof,
     pub proof_payload: Vec<u8>,
+}
+
+pub const SOLANA_DEVNET_GENESIS_HASH: &str = "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG";
+
+/// Accept only the two explicitly non-production live-fixture classes.
+///
+/// The historical disposable mode remains audit-only. Public devnet uses
+/// independently generated test identities and is deliberately neither an
+/// audit identity nor a production-approved identity. Both remain fail-closed
+/// for mainnet.
+pub fn require_nonproduction_live_fixture(config: &Value) -> Result<&Value> {
+    ensure!(
+        config["mainnetReady"] == false,
+        "mainnet-ready config is forbidden"
+    );
+    let identities = &config["identitySet"];
+    if identities["auditOnly"] == true {
+        ensure!(
+            config["disposableLiveGenesis"]["enabledOnlyWithDisposableAcknowledgement"] == true,
+            "audit identities require the disposable acknowledgement"
+        );
+        return config
+            .get("disposableLiveGenesis")
+            .context("missing disposable live fixture");
+    }
+    ensure!(
+        identities["auditOnly"] == false
+            && identities["productionApproved"] == false
+            && identities["publicDevnetTestOnly"] == true
+            && config["cluster"]["genesisHash"] == SOLANA_DEVNET_GENESIS_HASH,
+        "config is neither disposable audit-only nor exact public-devnet test-only"
+    );
+    config
+        .get("liveFixture")
+        .context("missing public-devnet live fixture")
 }
 
 fn payload(

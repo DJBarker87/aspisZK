@@ -1,0 +1,54 @@
+{
+  "schema": "aspis.focused-command-resource-usage.v1",
+  "host": "local macOS development machine",
+  "commands": [
+    {
+      "command": "./scripts/v7_all_reachable_cu_bound.py --pretty",
+      "exitStatus": 0,
+      "wallSeconds": 0.11,
+      "maximumResidentSetBytes": 23019520,
+      "swaps": 0
+    },
+    {
+      "command": "cargo check --locked --offline --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin build-live-transfer-terminal",
+      "exitStatus": 0,
+      "wallSeconds": 1.17,
+      "maximumResidentSetBytes": 169148416,
+      "swaps": 0
+    },
+    {
+      "command": "cargo test --locked --offline --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin build-live-transfer-terminal tests::pda_attempts_and_terminal_call_shapes_are_exact -- --exact",
+      "exitStatus": 0,
+      "wallSeconds": 0.38,
+      "maximumResidentSetBytes": 102514688,
+      "swaps": 0
+    },
+    {
+      "command": "cargo test --locked --offline --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin inspect-live-proof tests::transcript_and_causal_bind_hash_shapes_are_counted_exactly -- --exact",
+      "exitStatus": 0,
+      "wallSeconds": 1.86,
+      "maximumResidentSetBytes": 172032000,
+      "swaps": 0
+    },
+    {
+      "command": "cargo build --locked --offline --release --manifest-path tools/v7-live-pool-proof/Cargo.toml --bin inspect-live-proof",
+      "exitStatus": 0,
+      "wallSeconds": 88.26,
+      "maximumResidentSetBytes": 755302400,
+      "swaps": 0
+    },
+    {
+      "command": "target/release/inspect-live-proof <revision-1-asf8> <revision-1-proof> <verifier> <attempt>",
+      "exitStatus": 1,
+      "expectedFailure": true,
+      "wallSeconds": 0.47,
+      "maximumResidentSetBytes": 1949696,
+      "swaps": 0
+    }
+  ],
+  "maximumObservedResidentSetBytes": 755302400,
+  "localReviewThresholdBytes": 8589934592,
+  "heavyBuildRun": false,
+  "sbfBuildRun": false,
+  "proofGenerationRun": false
+}

@@ -5,6 +5,11 @@ use std::{
 };
 
 use anyhow::{ensure, Context, Result};
+use aspis_pool::{
+    pool_v1_pair_forest_lane_address, pool_v1_pair_forest_lane_root_page_address,
+    pool_v1_pair_forest_master_address,
+};
+use aspis_statement::pool_v1::POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES;
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -67,6 +72,19 @@ fn main() -> Result<()> {
     ensure!(
         deposit_cu_audit.is_none() || selected_lane_test_mode.is_none(),
         "sequential-deposit CU audit cannot be combined with selected-lane mode"
+    );
+    let rollover_prefill = env::var("ASPIS_V7_LIVE_PREFILL_NEXT_LEAF_INDEX")
+        .ok()
+        .filter(|value| !value.is_empty());
+    ensure!(
+        rollover_prefill
+            .as_deref()
+            .is_none_or(|value| value == "254"),
+        "rollover prefill currently supports only next-leaf index 254"
+    );
+    ensure!(
+        rollover_prefill.is_none() || deposit_cu_audit.is_some(),
+        "rollover prefill requires the explicit sequential-deposit acknowledgement"
     );
     let mut args = env::args_os().skip(1);
     let repo = PathBuf::from(args.next().context(
@@ -211,12 +229,55 @@ fn main() -> Result<()> {
             "dataSha256":expected["dataSha256"]
         }));
     }
+    let precreated_rollover_history_page = if rollover_prefill.is_some() {
+        let pool_program = Pubkey::from_str(
+            config["identitySet"]["programs"]
+                .as_array()
+                .context("missing programs")?
+                .iter()
+                .find(|program| program["name"] == "pool")
+                .and_then(|program| program["id"].as_str())
+                .context("missing Pool program id")?,
+        )?;
+        let mint = Pubkey::from_str(mint_id)?;
+        let master = pool_v1_pair_forest_master_address(&pool_program, &mint).0;
+        let lane = pool_v1_pair_forest_lane_address(&pool_program, &master, 0)
+            .map_err(|error| anyhow::anyhow!("derive rollover lane: {error:?}"))?
+            .0;
+        let page = pool_v1_pair_forest_lane_root_page_address(&pool_program, &master, 0, 1)
+            .map_err(|error| anyhow::anyhow!("derive rollover page: {error:?}"))?
+            .0;
+        let data = vec![0_u8; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
+        let account = GenesisAccount {
+            data: (BASE64.encode(&data), "base64".to_owned()),
+            executable: false,
+            // Deliberately overfunded task-local genesis account. No real
+            // funds or production identity are involved.
+            lamports: 100_000_000,
+            owner: pool_program.to_string(),
+            rent_epoch: 0,
+            space: data.len(),
+        };
+        let destination = output.join("lane-0-rollover-page-1.json");
+        write_keyed_account(&destination, &page.to_string(), &account)?;
+        accounts.push(serde_json::json!({
+            "kind":"disposable-precreated-zeroed-pool-rollover-page",
+            "address":page.to_string(),"file":destination,"owner":pool_program.to_string(),
+            "master":master.to_string(),"lane":lane.to_string(),"laneId":0,"pageNumber":1,
+            "space":data.len(),"lamports":account.lamports,
+            "dataSha256":format!("{:x}", Sha256::digest(&data))
+        }));
+        Some(page.to_string())
+    } else {
+        None
+    };
     println!(
         "{}",
         serde_json::to_string(&serde_json::json!({
             "schema":"aspis.v7.disposable-live-genesis.v1", "auditOnly":true,
             "selectedLaneTestMode":selected_lane_test_mode,
             "sequentialDepositCuAudit":deposit_cu_audit.is_some(),
+            "precreatedRolloverHistoryPage":precreated_rollover_history_page,
             "sourceTokenAmount":source_amount,
             "ephemeralMintAuthority":payer.to_string(),
             "ephemeralTokenAuthority":source_authority.to_string(), "accounts":accounts

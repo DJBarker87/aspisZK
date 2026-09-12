@@ -417,6 +417,77 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
     destination: &Pubkey,
     amount: u32,
 ) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
+    let (expected_authority, authority_bump) = pool_v1_vault_authority_address(program_id, pool);
+    let expected_vault = pool_v1_vault_token_account_address(program_id, pool).0;
+    plan_legacy_withdrawal_transfer_from_identity_for_addresses_v1(
+        identity,
+        accounts,
+        destination,
+        amount,
+        expected_authority,
+        authority_bump,
+        expected_vault,
+    )
+}
+
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_with_bumps_v1(
+    program_id: &Pubkey,
+    pool: &Pubkey,
+    identity: &PoolIdentityV1,
+    accounts: &[AccountInfo],
+    destination: &Pubkey,
+    amount: u32,
+    expected_authority: Pubkey,
+    authority_bump: u8,
+    expected_vault: Pubkey,
+    vault_bump: u8,
+) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
+    let authority_bump_seed = [authority_bump];
+    let authority = Pubkey::create_program_address(
+        &[
+            POOL_V1_VAULT_AUTHORITY_SEED,
+            pool.as_ref(),
+            &authority_bump_seed,
+        ],
+        program_id,
+    )
+    .map_err(|_| PoolV1ProgramError::InvalidVaultAuthority)?;
+    let vault_bump_seed = [vault_bump];
+    let vault = Pubkey::create_program_address(
+        &[
+            POOL_V1_VAULT_TOKEN_ACCOUNT_SEED,
+            pool.as_ref(),
+            &vault_bump_seed,
+        ],
+        program_id,
+    )
+    .map_err(|_| PoolV1ProgramError::InvalidVaultTokenAddress)?;
+    if authority != expected_authority || vault != expected_vault {
+        return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
+    }
+    plan_legacy_withdrawal_transfer_from_identity_for_addresses_v1(
+        identity,
+        accounts,
+        destination,
+        amount,
+        expected_authority,
+        authority_bump,
+        expected_vault,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn plan_legacy_withdrawal_transfer_from_identity_for_addresses_v1(
+    identity: &PoolIdentityV1,
+    accounts: &[AccountInfo],
+    destination: &Pubkey,
+    amount: u32,
+    expected_authority: Pubkey,
+    authority_bump: u8,
+    expected_vault: Pubkey,
+) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
     let [mint_account, vault_account, destination_account, vault_authority, token_program] =
         exact_five_withdrawal_accounts(accounts)?;
     if amount == 0 {
@@ -443,7 +514,6 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
 
     require_token_owned_account(vault_account, true)?;
     require_token_owned_account(destination_account, true)?;
-    let (expected_authority, authority_bump) = pool_v1_vault_authority_address(program_id, pool);
     if vault_authority.key != &expected_authority
         || vault_authority.owner != &system_program::id()
         || vault_authority.executable
@@ -465,7 +535,7 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
         let data = destination_account.try_borrow_data()?;
         parse_legacy_token_account_v1(&data)?
     };
-    if vault_account.key != &pool_v1_vault_token_account_address(program_id, pool).0 {
+    if vault_account.key != &expected_vault {
         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
     }
     if vault.mint != expected_mint

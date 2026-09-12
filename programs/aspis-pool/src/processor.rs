@@ -1545,6 +1545,62 @@ pub(crate) fn create_nullifier_marker_if_needed_v1<'info, R: PoolCpiRuntimeV1>(
     Ok(ready)
 }
 
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn create_nullifier_marker_if_needed_with_bump_v1<'info, R: PoolCpiRuntimeV1>(
+    runtime: &mut R,
+    program_id: &Pubkey,
+    pool: &Pubkey,
+    marker_account: &AccountInfo<'info>,
+    payer: &AccountInfo<'info>,
+    system_program_account: &AccountInfo<'info>,
+    planned: PlannedNullifierMarkerV1,
+    expected_address: &Pubkey,
+    address_bump: u8,
+    rent: &Rent,
+) -> Result<PlannedNullifierMarkerV1, ProgramError> {
+    if planned.address_bump() != address_bump || marker_account.key != expected_address {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into());
+    }
+    if planned.preparation() == NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned {
+        let nullifier_bytes = planned.marker().canonical_nullifier_encoding();
+        let bump_seed = [address_bump];
+        let seeds: &[&[u8]] = &[
+            POOL_V1_NULLIFIER_MARKER_SEED,
+            pool.as_ref(),
+            &nullifier_bytes,
+            &bump_seed,
+        ];
+        create_or_allocate_pda_with_rent(
+            runtime,
+            payer,
+            marker_account,
+            system_program_account,
+            POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES,
+            program_id,
+            seeds,
+            rent,
+        )?;
+    }
+    let ready = crate::nullifier::plan_nullifier_marker_consumption_with_bump_v1(
+        program_id,
+        marker_account,
+        planned.marker(),
+        expected_address,
+        address_bump,
+    )?;
+    if ready.preparation() != NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed
+        || ready.encoded_marker() != planned.encoded_marker()
+        || !rent.is_exempt(
+            marker_account.lamports(),
+            POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES,
+        )
+    {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+    }
+    Ok(ready)
+}
+
 /// Consume one exact ASPS/optional ASRS plan and perform the complete final
 /// Pool transition in the same locked instruction. The pure apply gate owns
 /// every statement/image comparison; this processor supplies live accounts,

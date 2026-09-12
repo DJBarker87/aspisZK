@@ -12,8 +12,8 @@ use alloc::{boxed::Box, vec, vec::Vec};
 use aspis_statement::pool_v1::{
     decode_pool_v1_pair_forest_terminal_result_v1, encode_pool_v1_pair_forest_terminal_request_v1,
     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
-    PoolV1PairForestTerminalResultV1, POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES,
-    POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+    PoolV1PairForestTerminalResultV1, PoolV1TerminalPdaCertificateV1,
+    POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES, POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
 };
 use solana_program::{
     account_info::AccountInfo,
@@ -25,6 +25,8 @@ use solana_program::{
 };
 use solana_sdk_ids::{bpf_loader, bpf_loader_upgradeable, loader_v4};
 
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+use crate::registry::authenticate_verifier_selection_with_terminal_certificate_v1;
 use crate::{
     error::PoolV1ProgramError,
     pair_dispatch::derive_pair_verifier_account_claim_v1,
@@ -112,6 +114,41 @@ pub(crate) fn plan_pair_forest_terminal_dispatch_v1(
         request,
         current_slot,
         request_bytes,
+        None,
+    )
+}
+
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn plan_pair_forest_terminal_dispatch_with_certificate_v1(
+    pool_program: &Pubkey,
+    master: &AccountInfo<'_>,
+    checkpoint: &AccountInfo<'_>,
+    lane: &AccountInfo<'_>,
+    policy: &aspis_statement::pool_v1::VerifierPolicyV1,
+    registry_accounts: &[AccountInfo<'_>],
+    verifier_program: &AccountInfo<'_>,
+    proof: &AccountInfo<'_>,
+    certificate: &AccountInfo<'_>,
+    request: &PoolV1PairForestTerminalRequestV1,
+    current_slot: u64,
+) -> Result<PlannedPairForestDispatchV1, ProgramError> {
+    let request_bytes = encode_pool_v1_pair_forest_terminal_request_v1(request)
+        .map_err(|_| ProgramError::InvalidInstructionData)?
+        .to_vec();
+    plan_pair_forest_terminal_dispatch_with_bytes_v1(
+        pool_program,
+        master,
+        checkpoint,
+        lane,
+        policy,
+        registry_accounts,
+        verifier_program,
+        proof,
+        request,
+        current_slot,
+        request_bytes,
+        Some(certificate),
     )
 }
 
@@ -128,6 +165,7 @@ fn plan_pair_forest_terminal_dispatch_with_bytes_v1(
     request: &PoolV1PairForestTerminalRequestV1,
     current_slot: u64,
     request_bytes: Vec<u8>,
+    certificate_account: Option<&AccountInfo<'_>>,
 ) -> Result<PlannedPairForestDispatchV1, ProgramError> {
     if request.pool_program != pool_program.to_bytes() {
         return Err(PoolV1ProgramError::VerifierDispatchIdentityMismatch.into());
@@ -135,16 +173,63 @@ fn plan_pair_forest_terminal_dispatch_with_bytes_v1(
     let claim = derive_pair_verifier_account_claim_v1(verifier_program, proof)?;
     let selected = Pubkey::new_from_array(claim.verifier_program);
     require_verifier_program(verifier_program, &selected)?;
+    let selection = VerifierSelectionV1 {
+        verifier_program: selected.to_bytes(),
+        profile_binding: request.verifier_profile,
+        release_binding: request.verifier_release,
+        statement_version: POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+    };
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let certificate = if let Some(certificate_account) = certificate_account {
+        if certificate_account.owner != &selected
+            || certificate_account.executable
+            || certificate_account.is_signer
+            || certificate_account.is_writable
+        {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        let certificate = aspis_statement::pool_v1::decode_pool_v1_terminal_pda_certificate_v1(
+            &certificate_account.try_borrow_data()?,
+        )
+        .map_err(|_| ProgramError::InvalidAccountData)?;
+        if certificate.proof_account != proof.key.to_bytes()
+            || certificate.pool_program != pool_program.to_bytes()
+            || certificate.master != master.key.to_bytes()
+            || certificate.checkpoint != checkpoint.key.to_bytes()
+            || certificate.selected_lane != lane.key.to_bytes()
+            || certificate.verifier_program != selected.to_bytes()
+        {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        Some(certificate)
+    } else {
+        None
+    };
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    let authenticated = if let Some(certificate) = certificate.as_ref() {
+        authenticate_verifier_selection_with_terminal_certificate_v1(
+            master.key,
+            policy,
+            registry_accounts,
+            selection,
+            current_slot,
+            certificate,
+        )?
+    } else {
+        authenticate_verifier_selection_v1(
+            master.key,
+            policy,
+            registry_accounts,
+            selection,
+            current_slot,
+        )?
+    };
+    #[cfg(not(feature = "pair-forest-terminal-pda-certificate-audit"))]
     let authenticated = authenticate_verifier_selection_v1(
         master.key,
         policy,
         registry_accounts,
-        VerifierSelectionV1 {
-            verifier_program: selected.to_bytes(),
-            profile_binding: request.verifier_profile,
-            release_binding: request.verifier_release,
-            statement_version: POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
-        },
+        selection,
         current_slot,
     )?;
     if !authenticated.matches_verifier_owner(verifier_program.owner) {
@@ -161,7 +246,9 @@ fn plan_pair_forest_terminal_dispatch_with_bytes_v1(
     }
     let account_keys = [proof.key, master.key, checkpoint.key, lane.key];
     for (index, key) in account_keys.iter().enumerate() {
-        if account_keys[..index].iter().any(|previous| previous == key) {
+        if account_keys[..index].iter().any(|previous| previous == key)
+            || certificate_account.is_some_and(|certificate| certificate.key == *key)
+        {
             return Err(ProgramError::InvalidArgument);
         }
     }
@@ -221,6 +308,7 @@ fn invoke_pair_forest_terminal_with_runtime_v1<'info, R: PairForestVerifierRunti
     lane: &AccountInfo<'info>,
     registry_accounts: &[AccountInfo<'info>],
     verifier_program: &AccountInfo<'info>,
+    certificate: Option<&AccountInfo<'info>>,
     runtime: &mut R,
 ) -> Result<AuthenticatedPairForestResultV1, ProgramError> {
     require_verifier_program(verifier_program, &plan.selected_verifier)?;
@@ -237,7 +325,7 @@ fn invoke_pair_forest_terminal_with_runtime_v1<'info, R: PairForestVerifierRunti
         });
     };
     #[cfg(feature = "pair-forest-verifier-lane-invariant-audit")]
-    let cpi_accounts = vec![
+    let mut cpi_accounts = vec![
         AccountMeta::new_readonly(*proof.key, false),
         AccountMeta::new_readonly(*master.key, false),
         AccountMeta::new_readonly(*checkpoint.key, false),
@@ -245,6 +333,10 @@ fn invoke_pair_forest_terminal_with_runtime_v1<'info, R: PairForestVerifierRunti
         AccountMeta::new_readonly(*registry.key, false),
         AccountMeta::new_readonly(*entry.key, false),
     ];
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    if let Some(certificate) = certificate {
+        cpi_accounts.push(AccountMeta::new_readonly(*certificate.key, false));
+    }
     #[cfg(not(feature = "pair-forest-verifier-lane-invariant-audit"))]
     let cpi_accounts = vec![
         AccountMeta::new_readonly(*proof.key, false),
@@ -258,15 +350,20 @@ fn invoke_pair_forest_terminal_with_runtime_v1<'info, R: PairForestVerifierRunti
         data: plan.request_bytes,
     };
     #[cfg(feature = "pair-forest-verifier-lane-invariant-audit")]
-    let infos = [
+    let mut infos = vec![
         proof.clone(),
         master.clone(),
         checkpoint.clone(),
         lane.clone(),
         registry.clone(),
         entry.clone(),
-        verifier_program.clone(),
     ];
+    #[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+    if let Some(certificate) = certificate {
+        infos.push(certificate.clone());
+    }
+    #[cfg(feature = "pair-forest-verifier-lane-invariant-audit")]
+    infos.push(verifier_program.clone());
     #[cfg(not(feature = "pair-forest-verifier-lane-invariant-audit"))]
     let infos = [
         proof.clone(),
@@ -328,6 +425,49 @@ pub(crate) fn dispatch_pair_forest_terminal_readonly_v1<'info>(
         lane,
         registry_accounts,
         verifier_program,
+        None,
+        &mut runtime,
+    )
+}
+
+#[cfg(feature = "pair-forest-terminal-pda-certificate-audit")]
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn dispatch_pair_forest_terminal_with_certificate_readonly_v1<'info>(
+    pool_program: &Pubkey,
+    master: &AccountInfo<'info>,
+    checkpoint: &AccountInfo<'info>,
+    lane: &AccountInfo<'info>,
+    policy: &aspis_statement::pool_v1::VerifierPolicyV1,
+    registry_accounts: &[AccountInfo<'info>],
+    verifier_program: &AccountInfo<'info>,
+    proof: &AccountInfo<'info>,
+    certificate: &AccountInfo<'info>,
+    request: &PoolV1PairForestTerminalRequestV1,
+    current_slot: u64,
+) -> Result<AuthenticatedPairForestResultV1, ProgramError> {
+    let plan = plan_pair_forest_terminal_dispatch_with_certificate_v1(
+        pool_program,
+        master,
+        checkpoint,
+        lane,
+        policy,
+        registry_accounts,
+        verifier_program,
+        proof,
+        certificate,
+        request,
+        current_slot,
+    )?;
+    let mut runtime = SolanaPairForestVerifierRuntimeV1;
+    invoke_pair_forest_terminal_with_runtime_v1(
+        plan,
+        proof,
+        master,
+        checkpoint,
+        lane,
+        registry_accounts,
+        verifier_program,
+        Some(certificate),
         &mut runtime,
     )
 }
@@ -369,6 +509,7 @@ pub(crate) fn dispatch_pair_forest_terminal_full_asf8_readonly_v1<'info>(
         request,
         current_slot,
         statement_bytes.to_vec(),
+        None,
     )?;
     let mut runtime = SolanaPairForestVerifierRuntimeV1;
     invoke_pair_forest_terminal_with_runtime_v1(
@@ -379,6 +520,7 @@ pub(crate) fn dispatch_pair_forest_terminal_full_asf8_readonly_v1<'info>(
         lane,
         registry_accounts,
         verifier_program,
+        None,
         &mut runtime,
     )
 }
@@ -690,6 +832,7 @@ mod tests {
                     &lane,
                     &[registry.clone(), entry.clone()],
                     &verifier,
+                    None,
                     &mut runtime,
                 ),
                 Err(expected)
@@ -867,6 +1010,7 @@ mod tests {
             &lane,
             &[registry.clone(), entry.clone()],
             &verifier,
+            None,
             &mut runtime,
         )
         .unwrap();

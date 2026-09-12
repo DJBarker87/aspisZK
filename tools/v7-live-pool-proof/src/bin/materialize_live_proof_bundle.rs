@@ -168,6 +168,16 @@ fn main() -> Result<()> {
     let commitment = pool_v1_note_commitment(&owner, 1_000, aspis_core::field::M31(77), &salt);
     let lane_id = pool_v1_pair_forest_deposit_lane_v1(&commitment)
         .map_err(|error| anyhow::anyhow!("route deposit: {error:?}"))?;
+    let lane_id_checked =
+        LaneIdV2::new(lane_id).map_err(|error| anyhow::anyhow!("invalid lane: {error:?}"))?;
+    // The authenticated pre-deposit lane is the source of truth for the
+    // finalized event cursor.  Live notes are not restricted to a genesis
+    // lane: a deposit at any reachable pair index must be reconstructible
+    // without fixture-only index constants.
+    let deposit_pair_leaf_index = durable.lane(lane_id_checked).0.value.tree.next_leaf_index;
+    let deposit_root_sequence = deposit_pair_leaf_index
+        .checked_add(1)
+        .context("deposit root sequence overflow")?;
     let deposit_point = point(input.deposit_slot, &input.deposit_blockhash)?;
     let event_id = DepositEventIdV1::new(
         deposit_point,
@@ -187,10 +197,9 @@ fn main() -> Result<()> {
         .ingest_finalized_append_preselected_v2(
             ForestFinalizedAppendEventV2 {
                 master: initial_master.address,
-                lane_id: LaneIdV2::new(lane_id)
-                    .map_err(|error| anyhow::anyhow!("invalid lane: {error:?}"))?,
-                pair_leaf_index: 0,
-                root_sequence: 1,
+                lane_id: lane_id_checked,
+                pair_leaf_index: deposit_pair_leaf_index,
+                root_sequence: deposit_root_sequence,
                 after_lane_address: after_lane.address,
                 after_lane_image,
                 kind: ForestFinalizedAppendKindV2::Deposit {
@@ -284,7 +293,9 @@ fn main() -> Result<()> {
     println!(
         "{}",
         json!({"schema":"aspis.v7.live-proof-materialized.v1",
-        "depositLane":lane_id,"checkpointSequence":0,"walletStateBytes":fs::metadata(wallet_file)?.len(),
+        "depositLane":lane_id,"depositPairLeafIndex":deposit_pair_leaf_index,
+        "depositRootSequence":deposit_root_sequence,"checkpointSequence":0,
+        "walletStateBytes":fs::metadata(wallet_file)?.len(),
         "secretValuesPrinted":false})
     );
     Ok(())

@@ -1,0 +1,21 @@
+# Read-only cluster and feature replay
+curl -sS -H 'content-type: application/json' --data-binary '{"jsonrpc":"2.0","id":1,"method":"getGenesisHash"}' https://api.devnet.solana.com
+curl -sS -H 'content-type: application/json' --data-binary '{"jsonrpc":"2.0","id":2,"method":"getAccountInfo","params":["txv1aq4pp281K9um3tnPgkfX8UqtFT6wcVW3hNezGLL",{"encoding":"base64","commitment":"finalized"}]}' https://api.devnet.solana.com
+
+# Focused host validation
+NO_DNA=1 cargo check --locked --offline --manifest-path tools/v7-txv1-honest-proof/Cargo.toml --bin build_proof_upload_requests
+NO_DNA=1 cargo test --release --locked --offline --manifest-path crates/aspis-pool-wallet-v1/Cargo.toml 'registry_transaction_builder::tests::pair_forest_registry_v2_builder_pins_exact_terminal_profile' -- --exact
+bash -n scripts/v7_live_pool_initialize_child.sh scripts/v7_public_devnet_registry_child.sh scripts/v7_txv1_upload_honest_proof_child.sh
+
+# Public-devnet fail-closed preflight. This must fail before creating an evidence directory
+# while the deployed verifier remains pinned to the absent audit Pool/Registry IDs.
+ASPIS_TXV1_HARNESS_CONFIG="$PWD/config/v7-txv1-public-devnet-20260907.json" \
+ASPIS_TXV1_DISPOSABLE_RPC_URL=https://api.devnet.solana.com \
+ASPIS_TXV1_PUBLIC_DEVNET_MODE=I_ACKNOWLEDGE_PUBLIC_DEVNET_TEST_ONLY \
+ASPIS_TXV1_DISPOSABLE_PAYER_KEYPAIR=/absolute/devnet-only-payer.json \
+ASPIS_TXV1_DISPOSABLE_SOURCE_AUTHORITY_KEYPAIR=/absolute/task-source-authority.json \
+ASPIS_V7_LIVE_POOL_INITIALIZE_BUILDER="$PWD/tools/v7-live-pool-proof/target/release/build-live-pool-initialize" \
+NO_DNA=1 scripts/v7_live_pool_initialize_child.sh /absolute/new-evidence-directory
+
+# Evidence integrity
+(cd results/v7-txv1-public-devnet-20260907 && shasum -a 256 -c checksums.sha256)

@@ -27,8 +27,52 @@ readonly OPERATION=${ASPIS_V7_LIVE_OPERATION:-transfer}
 readonly CIPHERTEXT_CASE=${ASPIS_V7_LIVE_CIPHERTEXT_CASE:-canonical}
 readonly WITHDRAWAL_CPI_CASE=${ASPIS_V7_LIVE_WITHDRAWAL_CPI_CASE:-none}
 readonly SELECTED_LANE_CASE=${ASPIS_V7_LIVE_SELECTED_LANE_CASE:-none}
+readonly START_ACTION=${ASPIS_V7_LIVE_START_ACTION:-initialize}
+readonly RESUME_INITIALIZE_EVIDENCE=${ASPIS_V7_LIVE_RESUME_INITIALIZE_EVIDENCE:-}
+readonly PUBLIC_DEVNET_ACK=${ASPIS_TXV1_PUBLIC_DEVNET_MODE:-}
+readonly TERMINAL_PDA_CLOSURE_ACK=${ASPIS_V7_TERMINAL_PDA_CLOSURE_ACK:-}
+readonly TERMINAL_PDA_CLOSURE_ACK_VALUE=I_ACKNOWLEDGE_DEFAULT_OFF_TERMINAL_PDA_CERTIFICATE_AUDIT
+readonly PREFILL_NEXT_LEAF_INDEX=${ASPIS_V7_LIVE_PREFILL_NEXT_LEAF_INDEX:-}
+readonly PREFILL_ACK=${ASPIS_V7_LIVE_ROLLOVER_PREFILL_ACK:-}
+readonly PREFILL_ACK_VALUE=I_ACKNOWLEDGE_254_DISPOSABLE_PREFILL_DEPOSITS
+readonly DEVNET_GENESIS_HASH=EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG
+readonly TXV1_FEATURE=txv1aq4pp281K9um3tnPgkfX8UqtFT6wcVW3hNezGLL
 
-[[ "$RPC_URL" =~ ^http://127\.0\.0\.1:[0-9]+$ ]] || fail "disposable RPC is required"
+if [[ -n "$PUBLIC_DEVNET_ACK" ]]; then
+  [[ "$PUBLIC_DEVNET_ACK" == I_ACKNOWLEDGE_PUBLIC_DEVNET_TEST_ONLY ]] \
+    || fail "wrong public-devnet acknowledgement"
+  [[ "$RPC_URL" == https://api.devnet.solana.com ]] \
+    || fail "public mode requires the canonical devnet RPC"
+  configured_pool=$(jq -er '.identitySet.programs[] | select(.name == "pool") | .id' "$CONFIG")
+  configured_registry=$(jq -er '.identitySet.programs[] | select(.name == "registry") | .id' "$CONFIG")
+  invariant_pool=$(jq -er '.identitySet.verifierInvariantBindings.poolProgramId' "$CONFIG")
+  invariant_registry=$(jq -er '.identitySet.verifierInvariantBindings.registryProgramId' "$CONFIG")
+  [[ "$configured_pool" == "$invariant_pool" && "$configured_registry" == "$invariant_registry" ]] \
+    || fail "deployed verifier invariant bindings do not authenticate the configured Pool/Registry IDs"
+  readonly AUDIT_ONLY=false DISPOSABLE=false PUBLIC_DEVNET_TEST_ONLY=true
+else
+  [[ "$RPC_URL" =~ ^http://127\.0\.0\.1:[0-9]+$ ]] || fail "disposable RPC is required"
+  readonly AUDIT_ONLY=true DISPOSABLE=true PUBLIC_DEVNET_TEST_ONLY=false
+fi
+export ASPIS_EVIDENCE_AUDIT_ONLY=$AUDIT_ONLY
+export ASPIS_EVIDENCE_DISPOSABLE=$DISPOSABLE
+export ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY=$PUBLIC_DEVNET_TEST_ONLY
+if [[ -n "$TERMINAL_PDA_CLOSURE_ACK" ]]; then
+  [[ "$TERMINAL_PDA_CLOSURE_ACK" == "$TERMINAL_PDA_CLOSURE_ACK_VALUE" ]] \
+    || fail "wrong terminal PDA certificate acknowledgement"
+  [[ "$DISPOSABLE" == true ]] \
+    || fail "terminal PDA certificate audit is restricted to a disposable cluster"
+fi
+if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+  [[ "$PREFILL_NEXT_LEAF_INDEX" == 254 ]] \
+    || fail "live rollover prefill currently supports only next-leaf index 254"
+  [[ "$PREFILL_ACK" == "$PREFILL_ACK_VALUE" ]] \
+    || fail "missing exact live rollover prefill acknowledgement"
+  [[ "$DISPOSABLE" == true && "$START_ACTION" == initialize ]] \
+    || fail "live rollover prefill requires a fresh disposable Pool"
+  [[ "$SELECTED_LANE_CASE" == none ]] \
+    || fail "live rollover prefill cannot be combined with selected-lane mutation testing"
+fi
 [[ "$OPERATION" == transfer || "$OPERATION" == withdrawal ]] \
   || fail "ASPIS_V7_LIVE_OPERATION must be transfer or withdrawal"
 [[ "$CIPHERTEXT_CASE" == canonical || "$CIPHERTEXT_CASE" == malformed-magic ]] \
@@ -45,6 +89,12 @@ if [[ "$SELECTED_LANE_CASE" != none ]]; then
   [[ "$OPERATION" == transfer && "$CIPHERTEXT_CASE" == canonical && "$WITHDRAWAL_CPI_CASE" == none ]] \
     || fail "selected-lane testing requires canonical transfer mode"
 fi
+[[ "$START_ACTION" == initialize || "$START_ACTION" == deposit ]] \
+  || fail "ASPIS_V7_LIVE_START_ACTION must be initialize or deposit"
+if [[ "$START_ACTION" == deposit ]]; then
+  [[ "$RESUME_INITIALIZE_EVIDENCE" == /* && -d "$RESUME_INITIALIZE_EVIDENCE" ]] \
+    || fail "deposit resume requires absolute initialize evidence"
+fi
 [[ -f "$PAYER_KEYPAIR" && -x "$BUILDER" ]] || fail "ephemeral payer or prebuilt builder unavailable"
 [[ "$EVIDENCE_DIR" == /* && "$EVIDENCE_DIR" != / && ! -e "$EVIDENCE_DIR" ]] \
   || fail "evidence directory must be new, absolute and non-root"
@@ -59,9 +109,100 @@ cleanup() {
 trap cleanup EXIT
 
 rpc() {
-  curl --fail-with-body --silent --show-error --max-time 60 \
-    -H 'content-type: application/json' --data-binary "$1" "$RPC_URL"
+  local response
+  for _ in $(seq 1 30); do
+    if response=$(curl --fail-with-body --silent --show-error --max-time 60 \
+      -H 'content-type: application/json' --data-binary "$1" "$RPC_URL"); then
+      printf '%s\n' "$response"
+      return 0
+    fi
+    sleep 2
+  done
+  return 1
 }
+
+initialize_terminal_pda_certificate() {
+  local signed_request=$1
+  local init_dir="$EVIDENCE_DIR/terminal-pda-certificate"
+  local init_json init_simulation init_send init_signature init_status init_finalized
+  [[ -n "$TERMINAL_PDA_CLOSURE_ACK" ]] || return 0
+  [[ ! -e "$init_dir" ]] || return 0
+  mkdir "$init_dir"
+  jq -e '.terminalPdaClosureEnabled == true and
+    .pdaCertificateInitialization.schema == "aspis.v7.terminal-pda-certificate-initialization-signed.v1" and
+    .pdaSearchAudit.terminalVariableFindProgramAddressInvocations == 0 and
+    .pdaSearchAudit.terminalSingleAttemptValidations > 0' \
+    "$signed_request" >/dev/null || fail "terminal PDA certificate preflight failed"
+  init_json=$(jq -c '.pdaCertificateInitialization' "$signed_request")
+  jq . <<<"$init_json" >"$init_dir/signed-request.json"
+  init_simulation=$(rpc "$(jq -c '.simulationRequest' <<<"$init_json")")
+  jq . <<<"$init_simulation" >"$init_dir/simulation.json"
+  jq -e '.error | not' <<<"$init_simulation" >/dev/null
+  jq -e '.result.value.err == null' <<<"$init_simulation" >/dev/null \
+    || fail "terminal PDA certificate initialization simulation failed"
+  init_send=$(rpc "$(jq -c '.sendRequest' <<<"$init_json")")
+  jq . <<<"$init_send" >"$init_dir/send.json"
+  init_signature=$(jq -er '.result' <<<"$init_send")
+  [[ "$init_signature" == "$(jq -er '.signature' <<<"$init_json")" ]] \
+    || fail "terminal PDA certificate submission changed signed wire"
+  init_finalized=false
+  for _ in $(seq 1 600); do
+    init_status=$(rpc "$(jq -nc --arg signature "$init_signature" \
+      '{jsonrpc:"2.0",id:1498,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
+      <<<"$init_status" >/dev/null; then init_finalized=true; break; fi
+    sleep 1
+  done
+  [[ "$init_finalized" == true ]] || fail "terminal PDA certificate did not finalize"
+  rpc "$(jq -nc --arg signature "$init_signature" \
+    '{jsonrpc:"2.0",id:1499,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$init_dir/finalized-transaction.json"
+  jq -e '.result != null and .result.meta.err == null' \
+    "$init_dir/finalized-transaction.json" >/dev/null \
+    || fail "terminal PDA certificate landed failure"
+  local certificate_account
+  certificate_account=$(jq -er '.certificateAccount' <<<"$init_json")
+  rpc "$(jq -nc --arg address "$certificate_account" \
+    '{jsonrpc:"2.0",id:1502,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+    | jq --arg requestedAddress "$certificate_account" '. + {requestedAddress:$requestedAddress}' \
+    >"$init_dir/account.json"
+  local certificate_magic
+  certificate_magic=$(jq -er '.result.value.data[0]' "$init_dir/account.json" \
+    | openssl base64 -d -A | od -An -v -tc -N4 | tr -d '[:space:]')
+  [[ "$certificate_magic" == APD8 ]] || fail "terminal PDA certificate magic mismatch"
+  jq -n --arg signature "$init_signature" \
+    --argjson slot "$(jq -er '.result.slot' "$init_dir/finalized-transaction.json")" \
+    --arg account "$certificate_account" \
+    --argjson simulatedCu "$(jq -er '.result.value.unitsConsumed' "$init_dir/simulation.json")" \
+    --argjson landedCu "$(jq -er '.result.meta.computeUnitsConsumed' "$init_dir/finalized-transaction.json")" \
+    --slurpfile request "$init_dir/signed-request.json" \
+    '{schema:"aspis.v7.terminal-pda-certificate-finalized.v1",signature:$signature,slot:$slot,
+      certificateAccount:$account,serializedTransactionBytes:$request[0].serializedTransactionBytes,
+      signedWireSha256:$request[0].signedWireSha256,simulatedCu:$simulatedCu,landedCu:$landedCu,
+      byteIdenticalSimulationSubmission:true,canonicalSearchCompletedBeforeTerminal:true,
+      immutableDuringTerminal:true,taskOwnedKeypairDestroyedByCleanup:true,finalized:true,
+      auditOnly:true,disposable:true,publicDevnetTestOnly:false,mainnetReady:false}' \
+    >"$init_dir/finalized.json"
+}
+
+file_mode() {
+  case "$(uname -s)" in
+    Darwin) stat -f %Lp "$1" ;;
+    *) stat -c %a "$1" ;;
+  esac
+}
+
+if [[ -n "$PUBLIC_DEVNET_ACK" ]]; then
+  observed_genesis=$(rpc '{"jsonrpc":"2.0","id":90,"method":"getGenesisHash"}' | jq -er '.result')
+  [[ "$observed_genesis" == "$DEVNET_GENESIS_HASH" ]] || fail "public RPC genesis mismatch"
+  feature_value=$(rpc "$(jq -nc --arg address "$TXV1_FEATURE" \
+    '{jsonrpc:"2.0",id:91,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')")
+  jq -e '.result.value != null and .result.value.owner == "Feature111111111111111111111111111111111111"' \
+    <<<"$feature_value" >/dev/null || fail "TxV1 feature account is unavailable"
+  feature_tag=$(jq -er '.result.value.data[0]' <<<"$feature_value" \
+    | openssl base64 -d -A | od -An -v -tu1 -N1 | tr -d '[:space:]')
+  [[ "$feature_tag" == 1 ]] || fail "TxV1 feature is not activated"
+fi
 
 account_data_hash() {
   jq -er '.result.value.data[0]' "$1" | openssl base64 -d -A | shasum -a 256 | awk '{print $1}'
@@ -97,7 +238,7 @@ token_amount() {
   local bytes
   bytes=$(jq -er '.result.value.data[0]' "$1" | openssl base64 -d -A \
     | od -An -v -tu1 | tr -s ' ' '\n' | sed '/^$/d')
-  mapfile -t token_bytes <<<"$bytes"
+  token_bytes=($bytes)
   [[ ${#token_bytes[@]} -ge 72 ]] || fail "short SPL token account: $1"
   local amount=0 multiplier=1 index
   for index in $(seq 64 71); do
@@ -112,46 +253,94 @@ token_state() {
     | od -An -j108 -N1 -tu1 | tr -d '[:space:]'
 }
 
-slot=$(rpc '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[{"commitment":"finalized"}]}' | jq -er '.result')
-blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
-  '{jsonrpc:"2.0",id:2,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
-  | jq -er '.result.value.blockhash')
-jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" --arg hash "$blockhash" \
-  --argjson slot "$slot" \
-  '{schema:"aspis.v7.live-pool-initialize-input.v1",config:$config,payerKeypair:$payer,
-    recentBlockhash:$hash,minContextSlot:$slot,requestId:100}' >"$WORK_DIR/input.json"
-"$BUILDER" "$WORK_DIR/input.json" >"$EVIDENCE_DIR/signed-request.json"
-jq -e '.schema == "aspis.v7.live-pool-signed-request.v1" and
-  .operation == "initialize" and .serializedTransactionBytes < 1232 and
-  (.signedWireSha256 | test("^[0-9a-f]{64}$")) and
-  (.initializedAccounts | length) == 10' "$EVIDENCE_DIR/signed-request.json" >/dev/null \
-  || fail "signed initialize request failed validation"
+finalized_transaction() {
+  local signature=$1 output=$2 request_id=$3 status finalized=false
+  for _ in $(seq 1 600); do
+    status=$(rpc "$(jq -nc --arg signature "$signature" --argjson id "$request_id" \
+      '{jsonrpc:"2.0",id:$id,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
+      <<<"$status" >/dev/null; then
+      finalized=true
+      break
+    fi
+    sleep 0.1
+  done
+  [[ "$finalized" == true ]] || fail "transaction did not finalize: $signature"
+  rpc "$(jq -nc --arg signature "$signature" --argjson id "$((request_id + 1))" \
+    '{jsonrpc:"2.0",id:$id,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$output"
+}
 
-simulation=$(rpc "$(jq -c '.simulationRequest' "$EVIDENCE_DIR/signed-request.json")")
-jq . <<<"$simulation" >"$EVIDENCE_DIR/simulation.json"
-jq -e '.error | not' <<<"$simulation" >/dev/null
-jq -e '.result.value.err == null' <<<"$simulation" >/dev/null || fail "initialize simulation failed"
-send=$(rpc "$(jq -c '.sendRequest' "$EVIDENCE_DIR/signed-request.json")")
-jq . <<<"$send" >"$EVIDENCE_DIR/send.json"
-signature=$(jq -er '.result' <<<"$send")
-[[ "$signature" == "$(jq -er '.signature' "$EVIDENCE_DIR/signed-request.json")" ]] \
-  || fail "submitted transaction was not byte-identical"
+confirmed_transaction() {
+  local signature=$1 output=$2 request_id=$3 status landed=false
+  for _ in $(seq 1 150); do
+    status=$(rpc "$(jq -nc --arg signature "$signature" --argjson id "$request_id" \
+      '{jsonrpc:"2.0",id:$id,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].err == null and
+      (.result.value[0].confirmationStatus == "confirmed" or
+       .result.value[0].confirmationStatus == "finalized")' <<<"$status" >/dev/null; then
+      landed=true
+      break
+    fi
+    sleep 0.1
+  done
+  [[ "$landed" == true ]] || fail "transaction did not reach confirmed commitment: $signature"
+  rpc "$(jq -nc --arg signature "$signature" --argjson id "$((request_id + 1))" \
+    '{jsonrpc:"2.0",id:$id,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"confirmed",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$output"
+}
 
-finalized=false
-for _ in $(seq 1 600); do
-  status=$(rpc "$(jq -nc --arg signature "$signature" \
-    '{jsonrpc:"2.0",id:300,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
-  if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
-    <<<"$status" >/dev/null; then
-    finalized=true
-    break
-  fi
-  sleep 0.1
-done
-[[ "$finalized" == true ]] || fail "initialize did not finalize"
-rpc "$(jq -nc --arg signature "$signature" \
-  '{jsonrpc:"2.0",id:400,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
-  | jq . >"$EVIDENCE_DIR/finalized-transaction.json"
+if [[ "$START_ACTION" == initialize ]]; then
+  slot=$(rpc '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[{"commitment":"finalized"}]}' | jq -er '.result')
+  blockhash=$(rpc "$(jq -nc --argjson slot "$slot" \
+    '{jsonrpc:"2.0",id:2,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
+    | jq -er '.result.value.blockhash')
+  jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" --arg hash "$blockhash" \
+    --argjson slot "$slot" \
+    '{schema:"aspis.v7.live-pool-initialize-input.v1",config:$config,payerKeypair:$payer,
+      recentBlockhash:$hash,minContextSlot:$slot,requestId:100}' >"$WORK_DIR/input.json"
+  "$BUILDER" "$WORK_DIR/input.json" >"$EVIDENCE_DIR/signed-request.json"
+  jq -e '.schema == "aspis.v7.live-pool-signed-request.v1" and
+    .operation == "initialize" and .serializedTransactionBytes < 1232 and
+    (.signedWireSha256 | test("^[0-9a-f]{64}$")) and
+    (.initializedAccounts | length) == 10' "$EVIDENCE_DIR/signed-request.json" >/dev/null \
+    || fail "signed initialize request failed validation"
+
+  simulation=$(rpc "$(jq -c '.simulationRequest' "$EVIDENCE_DIR/signed-request.json")")
+  jq . <<<"$simulation" >"$EVIDENCE_DIR/simulation.json"
+  jq -e '.error | not' <<<"$simulation" >/dev/null
+  jq -e '.result.value.err == null' <<<"$simulation" >/dev/null || fail "initialize simulation failed"
+  send=$(rpc "$(jq -c '.sendRequest' "$EVIDENCE_DIR/signed-request.json")")
+  jq . <<<"$send" >"$EVIDENCE_DIR/send.json"
+  signature=$(jq -er '.result' <<<"$send")
+  [[ "$signature" == "$(jq -er '.signature' "$EVIDENCE_DIR/signed-request.json")" ]] \
+    || fail "submitted transaction was not byte-identical"
+
+  finalized=false
+  for _ in $(seq 1 600); do
+    status=$(rpc "$(jq -nc --arg signature "$signature" \
+      '{jsonrpc:"2.0",id:300,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
+    if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
+      <<<"$status" >/dev/null; then
+      finalized=true
+      break
+    fi
+    sleep 1
+  done
+  [[ "$finalized" == true ]] || fail "initialize did not finalize"
+  rpc "$(jq -nc --arg signature "$signature" \
+    '{jsonrpc:"2.0",id:400,method:"getTransaction",params:[$signature,{encoding:"json",commitment:"finalized",maxSupportedTransactionVersion:1}]}')" \
+    | jq . >"$EVIDENCE_DIR/finalized-transaction.json"
+else
+  for file in signed-request.json simulation.json send.json finalized-transaction.json; do
+    [[ -f "$RESUME_INITIALIZE_EVIDENCE/$file" ]] || fail "resume initialize evidence missing $file"
+    cp "$RESUME_INITIALIZE_EVIDENCE/$file" "$EVIDENCE_DIR/$file"
+  done
+  jq -e '.schema == "aspis.v7.live-pool-signed-request.v1" and .operation == "initialize" and
+    (.initializedAccounts | length) == 10' "$EVIDENCE_DIR/signed-request.json" >/dev/null \
+    || fail "resume initialize request invalid"
+  signature=$(jq -er '.signature' "$EVIDENCE_DIR/signed-request.json")
+fi
 jq -e '.result != null and .result.meta.err == null' "$EVIDENCE_DIR/finalized-transaction.json" >/dev/null \
   || fail "finalized initialize failed"
 
@@ -165,17 +354,150 @@ while IFS= read -r address; do
     || fail "initialized account missing: $address"
   account_index=$((account_index + 1))
 done < <(jq -r '.initializedAccounts[]' "$EVIDENCE_DIR/signed-request.json")
+if [[ "$START_ACTION" == deposit ]]; then
+  for account_index in $(seq 0 9); do
+    [[ -f "$RESUME_INITIALIZE_EVIDENCE/account-$account_index.json" ]] \
+      || fail "resume initialize account snapshot missing"
+    [[ "$(account_data_hash "$EVIDENCE_DIR/account-$account_index.json")" == \
+      "$(account_data_hash "$RESUME_INITIALIZE_EVIDENCE/account-$account_index.json")" ]] \
+      || fail "initialized Pool state changed before deposit resume"
+  done
+fi
 
 if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
   [[ -x "$SECRET_BUILDER" && -x "$DEPOSIT_BUILDER" && -x "$CHECKPOINT_BUILDER" ]] \
     || fail "secret, deposit and checkpoint builders are all required"
+  if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+    mkdir "$EVIDENCE_DIR/prefill"
+    : >"$EVIDENCE_DIR/prefill/finalized-deposits.jsonl"
+    for prefill_index in $(seq 0 $((PREFILL_NEXT_LEAF_INDEX - 1))); do
+      prefill_secret="$WORK_DIR/prefill-secret.json"
+      prefill_public="$WORK_DIR/prefill-public.json"
+      prefill_request="$WORK_DIR/prefill-request.json"
+      prefill_input="$WORK_DIR/prefill-input.json"
+      "$SECRET_BUILDER" transfer "$prefill_secret" --required-lane 0 >"$prefill_public"
+      [[ "$(file_mode "$prefill_secret")" == 600 ]] \
+        || fail "prefill secret file mode is not 0600"
+      jq -e '.depositLane == 0 and .outputLane == 0 and .requiredLane == 0 and
+        .secretValuesPrinted == false' "$prefill_public" >/dev/null \
+        || fail "prefill note did not route to lane zero"
+      prefill_slot=$(rpc "$(jq -nc --argjson id "$((50000 + prefill_index))" \
+        '{jsonrpc:"2.0",id:$id,method:"getSlot",params:[{commitment:"finalized"}]}')" | jq -er '.result')
+      prefill_blockhash=$(rpc "$(jq -nc --argjson id "$((51000 + prefill_index))" \
+        --argjson slot "$prefill_slot" \
+        '{jsonrpc:"2.0",id:$id,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
+        | jq -er '.result.value.blockhash')
+      prefill_lanes=$(for lane_index in $(seq 1 8); do
+        printf '%s\n' "$EVIDENCE_DIR/account-$lane_index.json"
+      done | jq -Rsc 'split("\n")[:-1]')
+      jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" \
+        --arg sourceAuthority "$SOURCE_AUTHORITY_KEYPAIR" --arg hash "$prefill_blockhash" \
+        --argjson slot "$prefill_slot" --arg master "$EVIDENCE_DIR/account-0.json" \
+        --argjson lanes "$prefill_lanes" --arg secrets "$prefill_secret" \
+        --argjson sourceIndex "$prefill_index" \
+        '{schema:"aspis.v7.live-pool-sequential-deposit-input.v1",config:$config,
+          payerKeypair:$payer,sourceAuthorityKeypair:$sourceAuthority,recentBlockhash:$hash,
+          minContextSlot:$slot,requestId:(52000+$sourceIndex),masterAccount:$master,
+          laneAccounts:$lanes,secretsFile:$secrets,expectedNextLeafIndex:$sourceIndex}' \
+        >"$prefill_input"
+      "$DEPOSIT_BUILDER" "$prefill_input" >"$prefill_request"
+      rm -f -- "$prefill_secret"
+      jq -e --argjson index "$prefill_index" '
+        .operation == "deposit" and .selectedLane == 0 and .sourceNextLeafIndex == $index and
+        .successorNextLeafIndex == ($index + 1) and .serializedTransactionBytes < 1232' \
+        "$prefill_request" >/dev/null || fail "invalid prefill deposit request at $prefill_index"
+      prefill_simulation=$(rpc "$(jq -c '.simulationRequest' "$prefill_request")")
+      jq -e '.result.value.err == null and .result.value.unitsConsumed < 1400000' \
+        <<<"$prefill_simulation" >/dev/null || fail "prefill simulation failed at $prefill_index"
+      prefill_send=$(rpc "$(jq -c '.sendRequest' "$prefill_request")")
+      prefill_signature=$(jq -er '.result' <<<"$prefill_send")
+      [[ "$prefill_signature" == "$(jq -er '.signature' "$prefill_request")" ]] \
+        || fail "prefill submission changed signed wire at $prefill_index"
+      confirmed_transaction "$prefill_signature" "$WORK_DIR/prefill-finalized.json" \
+        "$((53000 + 2 * prefill_index))"
+      jq -e '.result.meta.err == null' "$WORK_DIR/prefill-finalized.json" >/dev/null \
+        || fail "prefill deposit landed with error at $prefill_index"
+      prefill_simulated_cu=$(jq -er '.result.value.unitsConsumed' <<<"$prefill_simulation")
+      prefill_landed_cu=$(jq -er '.result.meta.computeUnitsConsumed' "$WORK_DIR/prefill-finalized.json")
+      [[ "$prefill_simulated_cu" -eq "$prefill_landed_cu" ]] \
+        || fail "prefill simulation/landed CU mismatch at $prefill_index"
+      jq -nc --argjson sourceIndex "$prefill_index" \
+        --arg signature "$prefill_signature" \
+        --argjson slot "$(jq -er '.result.slot' "$WORK_DIR/prefill-finalized.json")" \
+        --argjson bytes "$(jq -er '.serializedTransactionBytes' "$prefill_request")" \
+        --arg wireHash "$(jq -er '.signedWireSha256' "$prefill_request")" \
+        --argjson simulatedCu "$prefill_simulated_cu" --argjson landedCu "$prefill_landed_cu" \
+        '{sourceIndex:$sourceIndex,successorIndex:($sourceIndex+1),selectedLane:0,
+          signature:$signature,finalizedSlot:$slot,serializedTransactionBytes:$bytes,
+          signedWireSha256:$wireHash,simulationSubmissionByteIdentical:true,
+          simulatedCu:$simulatedCu,landedCu:$landedCu,confirmedBeforeNext:true,pass:true}' \
+        >>"$EVIDENCE_DIR/prefill/finalized-deposits.jsonl"
+      lane_address=$(jq -er '.laneAccount' "$prefill_request")
+      rpc "$(jq -nc --arg address "$lane_address" --argjson id "$((54000 + prefill_index))" \
+        '{jsonrpc:"2.0",id:$id,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"confirmed"}]}')" \
+        | jq --arg requestedAddress "$lane_address" '. + {requestedAddress:$requestedAddress}' \
+        >"$WORK_DIR/account-1.next.json"
+      jq -e '.result.value != null' "$WORK_DIR/account-1.next.json" >/dev/null \
+        || fail "prefill lane disappeared at $prefill_index"
+      mv "$WORK_DIR/account-1.next.json" "$EVIDENCE_DIR/account-1.json"
+    done
+    # One finality wait on the last dependent deposit finalizes its complete
+    # ancestor chain. Then independently audit every signature and refresh the
+    # authenticated lane image at finalized commitment before the spendable
+    # deposit is constructed.
+    last_prefill_signature=$(jq -sr '.[-1].signature' "$EVIDENCE_DIR/prefill/finalized-deposits.jsonl")
+    finalized_transaction "$last_prefill_signature" "$EVIDENCE_DIR/prefill/last-finalized-transaction.json" 54900
+    prefill_signatures=$(jq -sc '[.[].signature]' "$EVIDENCE_DIR/prefill/finalized-deposits.jsonl")
+    rpc "$(jq -nc --argjson signatures "$prefill_signatures" \
+      '{jsonrpc:"2.0",id:54902,method:"getSignatureStatuses",params:[$signatures,{searchTransactionHistory:true}]}')" \
+      | jq . >"$EVIDENCE_DIR/prefill/finalized-statuses.json"
+    jq -e --argjson expected "$PREFILL_NEXT_LEAF_INDEX" '
+      (.result.value | length) == $expected and all(.result.value[];
+        . != null and .err == null and .confirmationStatus == "finalized")' \
+      "$EVIDENCE_DIR/prefill/finalized-statuses.json" >/dev/null \
+      || fail "not every prefill deposit finalized"
+    lane_address=$(jq -er '.initializedAccounts[1]' "$EVIDENCE_DIR/signed-request.json")
+    rpc "$(jq -nc --arg address "$lane_address" \
+      '{jsonrpc:"2.0",id:54903,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+      | jq --arg requestedAddress "$lane_address" '. + {requestedAddress:$requestedAddress}' \
+      >"$EVIDENCE_DIR/account-1.json"
+    vault_address=$(jq -er '.initializedAccounts[9]' "$EVIDENCE_DIR/signed-request.json")
+    rpc "$(jq -nc --arg address "$vault_address" \
+      '{jsonrpc:"2.0",id:55000,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
+      | jq --arg requestedAddress "$vault_address" '. + {requestedAddress:$requestedAddress}' \
+      >"$EVIDENCE_DIR/account-9.json"
+    jq -s --argjson target "$PREFILL_NEXT_LEAF_INDEX" '
+      {schema:"aspis.v7.live-rollover-prefill.v1",targetNextLeafIndex:$target,
+       finalizedDeposits:length,allFinalized:true,
+       everyDependencyConfirmedBeforeSuccessor:(all(.[];.confirmedBeforeNext)),
+       allByteIdentical:(all(.[];.simulationSubmissionByteIdentical)),
+       simulationLandedCuExact:(all(.[];.simulatedCu == .landedCu)),
+       maximumLandedCu:(map(.landedCu)|max),selectedLane:0,auditOnly:true,
+       disposable:true,publicDevnetExecution:false,mainnetReady:false}' \
+      "$EVIDENCE_DIR/prefill/finalized-deposits.jsonl" >"$EVIDENCE_DIR/prefill/evidence.json"
+    jq -e '.finalizedDeposits == .targetNextLeafIndex and .allFinalized and
+      .everyDependencyConfirmedBeforeSuccessor and
+      .allByteIdentical and .simulationLandedCuExact and .selectedLane == 0' \
+      "$EVIDENCE_DIR/prefill/evidence.json" >/dev/null || fail "prefill aggregate validation failed"
+  fi
+
   mkdir "$EVIDENCE_DIR/deposit"
+  operation_secret_args=()
+  if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+    operation_secret_args+=(--required-lane 0)
+  fi
+  if [[ "$OPERATION" == withdrawal ]]; then
+    withdrawal_destination=$(jq -er \
+      '.liveFixture.withdrawalDestinationTokenAccount // .disposableLiveGenesis.withdrawalDestinationTokenAccount' \
+      "$CONFIG")
+    operation_secret_args+=(--withdrawal-destination "$withdrawal_destination")
+  fi
   "$SECRET_BUILDER" "$OPERATION" "$WORK_DIR/operation-secrets.json" \
-    >"$EVIDENCE_DIR/deposit/public-operation.json"
-  [[ "$(stat -c %a "$WORK_DIR/operation-secrets.json")" == 600 ]] \
+    "${operation_secret_args[@]}" >"$EVIDENCE_DIR/deposit/public-operation.json"
+  [[ "$(file_mode "$WORK_DIR/operation-secrets.json")" == 600 ]] \
     || fail "operation secret file mode is not 0600"
   selected_lane=$(jq -er '.depositLane' "$EVIDENCE_DIR/deposit/public-operation.json")
-  source_token=$(jq -er '.disposableLiveGenesis.sourceTokenAccount' "$CONFIG")
+  source_token=$(jq -er '.liveFixture.sourceTokenAccount // .disposableLiveGenesis.sourceTokenAccount' "$CONFIG")
   rpc "$(jq -nc --arg address "$source_token" \
     '{jsonrpc:"2.0",id:600,method:"getAccountInfo",params:[$address,{encoding:"base64",commitment:"finalized"}]}')" \
     | jq . >"$EVIDENCE_DIR/deposit/source-before.json"
@@ -187,14 +509,21 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
     | jq -er '.result.value.blockhash')
   lane_files=$(for lane_index in $(seq 1 8); do printf '%s\n' "$EVIDENCE_DIR/account-$lane_index.json"; done | jq -Rsc 'split("\n")[:-1]')
   [[ -f "$SOURCE_AUTHORITY_KEYPAIR" ]] || fail "ephemeral source authority unavailable"
-  jq -n --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" \
+  deposit_schema=aspis.v7.live-pool-deposit-input.v1
+  deposit_expected_index=null
+  if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+    deposit_schema=aspis.v7.live-pool-sequential-deposit-input.v1
+    deposit_expected_index=$PREFILL_NEXT_LEAF_INDEX
+  fi
+  jq -n --arg schema "$deposit_schema" --argjson expectedIndex "$deposit_expected_index" \
+    --arg config "$CONFIG" --arg payer "$PAYER_KEYPAIR" \
     --arg sourceAuthority "$SOURCE_AUTHORITY_KEYPAIR" --arg hash "$blockhash_deposit" \
     --argjson slot "$slot_deposit" --arg master "$EVIDENCE_DIR/account-0.json" \
     --argjson lanes "$lane_files" --arg secrets "$WORK_DIR/operation-secrets.json" \
-    '{schema:"aspis.v7.live-pool-deposit-input.v1",config:$config,payerKeypair:$payer,
+    '{schema:$schema,config:$config,payerKeypair:$payer,
       sourceAuthorityKeypair:$sourceAuthority,
       recentBlockhash:$hash,minContextSlot:$slot,requestId:700,masterAccount:$master,
-      laneAccounts:$lanes,secretsFile:$secrets}' >"$WORK_DIR/deposit-input.json"
+      laneAccounts:$lanes,secretsFile:$secrets,expectedNextLeafIndex:$expectedIndex}' >"$WORK_DIR/deposit-input.json"
   "$DEPOSIT_BUILDER" "$WORK_DIR/deposit-input.json" >"$EVIDENCE_DIR/deposit/signed-request.json"
   jq -e --argjson lane "$selected_lane" '.operation == "deposit" and .selectedLane == $lane and
     .serializedTransactionBytes < 1232 and (.signedWireSha256 | test("^[0-9a-f]{64}$"))' \
@@ -214,7 +543,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
       '{jsonrpc:"2.0",id:800,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
     if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
       <<<"$deposit_status" >/dev/null; then deposit_finalized=true; break; fi
-    sleep 0.1
+    sleep 1
   done
   [[ "$deposit_finalized" == true ]] || fail "deposit did not finalize"
   rpc "$(jq -nc --arg signature "$deposit_signature" \
@@ -253,8 +582,10 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
       signedWireSha256:$request[0].signedWireSha256,byteIdenticalSimulationSubmission:true,
       accountDataSha256:{lane:{before:$laneBefore,after:$laneAfter},
         vault:{before:$vaultBefore,after:$vaultAfter},source:{before:$sourceBefore,after:$sourceAfter}},
-      secretValuesRecorded:false,secretDestroyedByCleanup:true,finalized:true,auditOnly:true,
-      disposable:true,mainnetReady:false}' >"$EVIDENCE_DIR/deposit/deposit-finalized.json"
+      secretValuesRecorded:false,secretDestroyedByCleanup:true,finalized:true,
+      auditOnly:(env.ASPIS_EVIDENCE_AUDIT_ONLY == "true"),
+      disposable:(env.ASPIS_EVIDENCE_DISPOSABLE == "true"),
+      publicDevnetTestOnly:(env.ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY == "true"),mainnetReady:false}' >"$EVIDENCE_DIR/deposit/deposit-finalized.json"
 
   mkdir "$EVIDENCE_DIR/checkpoint"
   master_address=$(jq -er '.initializedAccounts[0]' "$EVIDENCE_DIR/signed-request.json")
@@ -287,7 +618,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
       '{jsonrpc:"2.0",id:1200,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
     if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
       <<<"$checkpoint_status" >/dev/null; then checkpoint_finalized=true; break; fi
-    sleep 0.1
+    sleep 1
   done
   [[ "$checkpoint_finalized" == true ]] || fail "checkpoint did not finalize"
   rpc "$(jq -nc --arg signature "$checkpoint_signature" \
@@ -319,7 +650,9 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
       checkpointAccount:$checkpointAccount,simulatedCu:$simulatedCu,landedCu:$landedCu,
       serializedTransactionBytes:$request[0].serializedTransactionBytes,
       signedWireSha256:$request[0].signedWireSha256,byteIdenticalSimulationSubmission:true,
-      finalized:true,auditOnly:true,disposable:true,mainnetReady:false}' \
+      finalized:true,auditOnly:(env.ASPIS_EVIDENCE_AUDIT_ONLY == "true"),
+      disposable:(env.ASPIS_EVIDENCE_DISPOSABLE == "true"),
+      publicDevnetTestOnly:(env.ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY == "true"),mainnetReady:false}' \
     >"$EVIDENCE_DIR/checkpoint/checkpoint-finalized.json"
 
   if [[ -n "$MATERIALIZER" || -n "$PROVER" ]]; then
@@ -339,9 +672,9 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
     vault_account=""
     destination_account=""
     if [[ "$OPERATION" == withdrawal ]]; then
-      mint_address=$(jq -er '.disposableLiveGenesis.mint.id' "$CONFIG")
+      mint_address=$(jq -er '.liveFixture.mint.id // .disposableLiveGenesis.mint.id' "$CONFIG")
       vault_address=$(jq -er '.initializedAccounts[9]' "$EVIDENCE_DIR/signed-request.json")
-      destination_address=$(jq -er '.disposableLiveGenesis.withdrawalDestinationTokenAccount' "$CONFIG")
+      destination_address=$(jq -er '.liveFixture.withdrawalDestinationTokenAccount // .disposableLiveGenesis.withdrawalDestinationTokenAccount' "$CONFIG")
       for custody_binding in "mint:$mint_address" "vault:$vault_address" \
         "destination:$destination_address"; do
         custody_name=${custody_binding%%:*}; custody_address=${custody_binding##*:}
@@ -397,6 +730,12 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         checkpointBlockhash:$checkpointBlockhash}' >"$WORK_DIR/materialize-input.json"
     "$MATERIALIZER" "$WORK_DIR/materialize-input.json" "$EVIDENCE_DIR/live-proof-bundle" \
       >"$EVIDENCE_DIR/live-proof-materialized.json"
+    if [[ -n "$PREFILL_NEXT_LEAF_INDEX" ]]; then
+      jq -e --argjson expected "$PREFILL_NEXT_LEAF_INDEX" '
+        .depositLane == 0 and .depositPairLeafIndex == $expected and
+        .depositRootSequence == ($expected + 1)' "$EVIDENCE_DIR/live-proof-materialized.json" \
+        >/dev/null || fail "materializer did not bind the authenticated prefilled deposit cursor"
+    fi
     "$PROVER" "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
       "$EVIDENCE_DIR/live-proof" "$WORK_DIR/live-proof-nonce-ledger" \
       >"$EVIDENCE_DIR/live-proof.stdout.json"
@@ -425,6 +764,20 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         terminal_blockhash=$(rpc "$(jq -nc --argjson slot "$terminal_context_slot" \
           '{jsonrpc:"2.0",id:1501,method:"getLatestBlockhash",params:[{commitment:"finalized",minContextSlot:$slot}]}')" \
           | jq -er '.result.value.blockhash')
+        terminal_pda_certificate_keypair=""
+        terminal_pda_certificate_rent=null
+        if [[ -n "$TERMINAL_PDA_CLOSURE_ACK" ]]; then
+          terminal_pda_certificate_keypair="$WORK_DIR/terminal-pda-certificate.json"
+          NO_DNA=1 "$AGAVE_BIN_DIR/solana-keygen" new --no-bip39-passphrase --silent \
+            --force --outfile "$terminal_pda_certificate_keypair"
+          [[ "$(file_mode "$terminal_pda_certificate_keypair")" == 600 ]] \
+            || fail "terminal PDA certificate keypair mode is not 0600"
+          terminal_pda_certificate_rent=$(rpc \
+            '{"jsonrpc":"2.0","id":1497,"method":"getMinimumBalanceForRentExemption","params":[704]}' \
+            | jq -er '.result')
+          [[ "$terminal_pda_certificate_rent" =~ ^[0-9]+$ && "$terminal_pda_certificate_rent" -gt 0 ]] \
+            || fail "terminal PDA certificate rent is unavailable"
+        fi
         calibrated_compute_limit=1300000
         calibration_token_entry_cu=null
         terminal_compute_unit_limit=null
@@ -433,12 +786,17 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
             --arg bundle "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
             --arg asq8 "$EVIDENCE_DIR/live-proof/asq8.bin" --arg payer "$PAYER_KEYPAIR" \
             --arg blockhash "$terminal_blockhash" --argjson slot "$terminal_context_slot" \
+            --arg certificateKeypair "$terminal_pda_certificate_keypair" \
+            --argjson certificateRent "$terminal_pda_certificate_rent" \
             '{schema:$schema,bundle:$bundle,asq8:$asq8,payerKeypair:$payer,
               recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1590,
-              carrierTestMode:null,withdrawalCpiTestMode:null,computeUnitLimit:null}' \
+              carrierTestMode:null,withdrawalCpiTestMode:null,computeUnitLimit:null,
+              terminalPdaCertificateKeypair:(if $certificateKeypair == "" then null else $certificateKeypair end),
+              terminalPdaCertificateRentLamports:$certificateRent}' \
             >"$WORK_DIR/terminal-calibration-input.json"
           "$TERMINAL_BUILDER" "$WORK_DIR/terminal-calibration-input.json" \
             >"$TERMINAL_EVIDENCE/calibration-signed-request.json"
+          initialize_terminal_pda_certificate "$TERMINAL_EVIDENCE/calibration-signed-request.json"
           calibration_simulation=$(rpc "$(jq -c '.simulationRequest' \
             "$TERMINAL_EVIDENCE/calibration-signed-request.json")")
           jq . <<<"$calibration_simulation" >"$TERMINAL_EVIDENCE/calibration-simulation.json"
@@ -475,13 +833,18 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
           --arg bundle "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
           --arg asq8 "$EVIDENCE_DIR/live-proof/asq8.bin" --arg payer "$PAYER_KEYPAIR" \
           --arg blockhash "$terminal_blockhash" --argjson slot "$terminal_context_slot" \
+          --arg certificateKeypair "$terminal_pda_certificate_keypair" \
+          --argjson certificateRent "$terminal_pda_certificate_rent" \
           '{schema:$schema,bundle:$bundle,asq8:$asq8,payerKeypair:$payer,
             recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1600,
             carrierTestMode:$carrierTestMode,withdrawalCpiTestMode:$withdrawalCpiTestMode,
-            computeUnitLimit:$computeUnitLimit}' \
+            computeUnitLimit:$computeUnitLimit,
+            terminalPdaCertificateKeypair:(if $certificateKeypair == "" then null else $certificateKeypair end),
+            terminalPdaCertificateRentLamports:$certificateRent}' \
           >"$WORK_DIR/terminal-input.json"
         "$TERMINAL_BUILDER" "$WORK_DIR/terminal-input.json" \
           >"$TERMINAL_EVIDENCE/signed-request.json"
+        initialize_terminal_pda_certificate "$TERMINAL_EVIDENCE/signed-request.json"
         jq -e --arg operation "$OPERATION" --arg carrierCase "$CIPHERTEXT_CASE" \
           --arg withdrawalCpiCase "$WITHDRAWAL_CPI_CASE" \
           --argjson expectedComputeUnitLimit "$calibrated_compute_limit" '
@@ -505,9 +868,10 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         if [[ "$SELECTED_LANE_CASE" == stale-after-deposit ]]; then
           readonly STALING_EVIDENCE="$TERMINAL_EVIDENCE/staling-deposit"
           mkdir "$STALING_EVIDENCE"
-          "$SECRET_BUILDER" transfer "$WORK_DIR/staling-deposit-secrets.json" "$selected_lane" \
+          "$SECRET_BUILDER" transfer "$WORK_DIR/staling-deposit-secrets.json" \
+            --required-lane "$selected_lane" \
             >"$STALING_EVIDENCE/public-operation.json"
-          [[ "$(stat -c %a "$WORK_DIR/staling-deposit-secrets.json")" == 600 ]] \
+          [[ "$(file_mode "$WORK_DIR/staling-deposit-secrets.json")" == 600 ]] \
             || fail "staling deposit secret file mode is not 0600"
           jq -e --argjson lane "$selected_lane" '
             .operation == "transfer" and .depositLane == $lane and
@@ -574,7 +938,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
               '{jsonrpc:"2.0",id:1577,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
             if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
               <<<"$staling_status" >/dev/null; then staling_finalized=true; break; fi
-            sleep 0.1
+            sleep 1
           done
           [[ "$staling_finalized" == true ]] || fail "staling deposit did not finalize"
           rpc "$(jq -nc --arg signature "$staling_signature" \
@@ -618,7 +982,9 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
               laneDataSha256:{before:$laneBefore,after:$laneAfter},
               sourceAmount:{before:1000,after:0},vaultAmount:{before:1000,after:2000},
               byteIdenticalSimulationSubmission:true,finalized:true,
-              auditOnly:true,disposable:true,mainnetReady:false}' \
+              auditOnly:(env.ASPIS_EVIDENCE_AUDIT_ONLY == "true"),
+              disposable:(env.ASPIS_EVIDENCE_DISPOSABLE == "true"),
+              publicDevnetTestOnly:(env.ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY == "true"),mainnetReady:false}' \
             >"$STALING_EVIDENCE/staling-deposit-finalized.json"
         fi
         protected_addresses=$(jq -nc --slurpfile init "$EVIDENCE_DIR/signed-request.json" \
@@ -648,7 +1014,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
               '{jsonrpc:"2.0",id:1660,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
             if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
               <<<"$stale_status" >/dev/null; then stale_finalized=true; break; fi
-            sleep 0.1
+            sleep 1
           done
           [[ "$stale_finalized" == true ]] || fail "stale selected-lane rejection did not finalize"
           rpc "$(jq -nc --arg signature "$stale_signature" \
@@ -702,7 +1068,9 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
               feeNormalizedProtectedStateBeforeSha256:$before,
               feeNormalizedProtectedStateAfterSha256:$after,
               stateUnchangedExceptPayerFee:true,payer:$payer,payerFeeLamports:$payerFeeLamports,
-              finalized:true,auditOnly:true,disposable:true,mainnetReady:false}' \
+              finalized:true,auditOnly:(env.ASPIS_EVIDENCE_AUDIT_ONLY == "true"),
+              disposable:(env.ASPIS_EVIDENCE_DISPOSABLE == "true"),
+              publicDevnetTestOnly:(env.ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY == "true"),mainnetReady:false}' \
             >"$TERMINAL_EVIDENCE/stale-selected-lane-rejection.json"
           exit 0
         fi
@@ -727,7 +1095,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
               '{jsonrpc:"2.0",id:1650,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
             if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
               <<<"$failed_status" >/dev/null; then failed_finalized=true; break; fi
-            sleep 0.1
+            sleep 1
           done
           [[ "$failed_finalized" == true ]] || fail "failed withdrawal CPI did not finalize"
           rpc "$(jq -nc --arg signature "$failed_signature" \
@@ -801,7 +1169,9 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
               stateUnchangedExceptPayerFee:true,payer:$payer,payerFeeLamports:$payerFeeLamports,
               vaultAmountBeforeAndAfter:$vaultAmount,
               destinationAmountBeforeAndAfter:$destinationAmount,
-              finalized:true,auditOnly:true,disposable:true,mainnetReady:false}' \
+              finalized:true,auditOnly:(env.ASPIS_EVIDENCE_AUDIT_ONLY == "true"),
+              disposable:(env.ASPIS_EVIDENCE_DISPOSABLE == "true"),
+              publicDevnetTestOnly:(env.ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY == "true"),mainnetReady:false}' \
             >"$TERMINAL_EVIDENCE/failed-withdrawal-cpi-rollback.json"
           exit 0
         fi
@@ -818,7 +1188,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
             '{jsonrpc:"2.0",id:1700,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
           if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
             <<<"$terminal_status" >/dev/null; then terminal_finalized=true; break; fi
-          sleep 0.1
+          sleep 1
         done
         [[ "$terminal_finalized" == true ]] || fail "terminal $OPERATION did not finalize"
         rpc "$(jq -nc --arg signature "$terminal_signature" \
@@ -884,7 +1254,9 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
             carrierTestMode:$request[0].carrierTestMode,
             protectedAccountsBeforeJsonSha256:$beforeSha,
             protectedAccountsAfterJsonSha256:$afterSha,custody:$custody,
-            finalized:true,auditOnly:true,disposable:true,mainnetReady:false}' \
+            finalized:true,auditOnly:(env.ASPIS_EVIDENCE_AUDIT_ONLY == "true"),
+            disposable:(env.ASPIS_EVIDENCE_DISPOSABLE == "true"),
+            publicDevnetTestOnly:(env.ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY == "true"),mainnetReady:false}' \
           >"$TERMINAL_EVIDENCE/terminal-finalized.json"
         jq -n --argjson error "$(jq -c '.result.value.err' "$TERMINAL_EVIDENCE/replay-simulation.json")" \
           --arg before "$(account_values_hash "$TERMINAL_EVIDENCE/accounts-after.json")" \
@@ -900,8 +1272,12 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
         jq -n --arg bundle "$EVIDENCE_DIR/live-proof-bundle/live-bundle.json" \
           --arg asq8 "$EVIDENCE_DIR/live-proof/asq8.bin" --arg payer "$PAYER_KEYPAIR" \
           --arg blockhash "$fresh_replay_blockhash" --argjson slot "$fresh_replay_slot" \
+          --arg certificateKeypair "$terminal_pda_certificate_keypair" \
+          --argjson certificateRent "$terminal_pda_certificate_rent" \
           '{schema:"aspis.v7.live-terminal-input.v1",bundle:$bundle,asq8:$asq8,
-            payerKeypair:$payer,recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1852}' \
+            payerKeypair:$payer,recentBlockhash:$blockhash,minContextSlot:$slot,requestId:1852,
+            terminalPdaCertificateKeypair:(if $certificateKeypair == "" then null else $certificateKeypair end),
+            terminalPdaCertificateRentLamports:$certificateRent}' \
           >"$WORK_DIR/fresh-replay-input.json"
         "$TERMINAL_BUILDER" "$WORK_DIR/fresh-replay-input.json" \
           >"$TERMINAL_EVIDENCE/fresh-replay-signed-request.json"
@@ -925,7 +1301,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
             '{jsonrpc:"2.0",id:1853,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
           if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
             <<<"$fresh_replay_status" >/dev/null; then fresh_replay_finalized=true; break; fi
-          sleep 0.1
+          sleep 1
         done
         [[ "$fresh_replay_finalized" == true ]] || fail "fresh nullifier replay did not finalize"
         rpc "$(jq -nc --arg signature "$fresh_replay_signature" \
@@ -999,7 +1375,7 @@ if [[ -n "$SECRET_BUILDER" || -n "$DEPOSIT_BUILDER" ]]; then
               '{jsonrpc:"2.0",id:2100,method:"getSignatureStatuses",params:[[$signature],{searchTransactionHistory:true}]}')")
             if jq -e '.result.value[0] != null and .result.value[0].confirmationStatus == "finalized"' \
               <<<"$close_status" >/dev/null; then close_finalized=true; break; fi
-            sleep 0.1
+            sleep 1
           done
           [[ "$close_finalized" == true ]] || fail "proof close did not finalize"
           rpc "$(jq -nc --arg signature "$close_signature" \
@@ -1041,6 +1417,8 @@ jq -n --arg signature "$signature" --argjson slot "$slot_landed" \
     signature:$signature,slot:$slot,simulatedCu:$simulatedCu,landedCu:$landedCu,
     byteIdenticalSimulationSubmission:true,serializedTransactionBytes:$request[0].serializedTransactionBytes,
     signedWireSha256:$request[0].signedWireSha256,initializedAccounts:$request[0].initializedAccounts,
-    finalized:true,auditOnly:true,disposable:true,mainnetReady:false}' \
+    finalized:true,auditOnly:(env.ASPIS_EVIDENCE_AUDIT_ONLY == "true"),
+    disposable:(env.ASPIS_EVIDENCE_DISPOSABLE == "true"),
+    publicDevnetTestOnly:(env.ASPIS_EVIDENCE_PUBLIC_DEVNET_TEST_ONLY == "true"),mainnetReady:false}' \
   >"$EVIDENCE_DIR/initialize-finalized.json"
 echo "FINALIZED DISPOSABLE LIVE POOL INITIALIZE: $signature"
