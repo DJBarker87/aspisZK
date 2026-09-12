@@ -10,10 +10,13 @@ The current milestone is deliberately narrow:
 - the consecutive-q22 separator is reproduced by the actual Rust encoder,
   conditional on the separately reconstructed repaired inventory/balancing
   rule;
+- on seven genuine positive-transfer traces, the separator evaluates to the
+  exact mask-seed-invariant quantity recorded in
+  `evidence/valid-positive-transfer-values.json`;
 - source inspection shows that the generated positive-V8 path does not call
   the repository's q18 Spend rank gate;
 - generic Lean algebra and the pinned FS cache helper compile after
   API/import-only repairs.
 
-This is not a proof of V8 zero knowledge and not a demonstrated valid-payment
-privacy attack. See [CURRENT_STATUS.md](CURRENT_STATUS.md).
+This is not a proof of V8 zero knowledge and not a demonstrated same-public
+valid-payment privacy attack. See [CURRENT_STATUS.md](CURRENT_STATUS.md).

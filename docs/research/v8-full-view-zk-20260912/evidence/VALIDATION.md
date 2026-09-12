@@ -35,6 +35,48 @@ comments produced the passing run. Original encoder SHA-256:
 Supplied harness SHA-256:
 `7e68e0fdbac80a7c4bbf764287cc0ca76021d2ea621ade8c993cc463395124c8`.
 
+## Valid positive-transfer trace diagnostic
+
+Isolated copied source:
+`/private/tmp/aspis-v8-raw-repro-20260912.BQGqWh`.
+
+Command:
+
+```text
+/usr/bin/time -l cargo test --offline -p aspis-prover --release \
+  diagnostic_q22_certificate_on_valid_positive_transfers -- --nocapture
+```
+
+Result: exit 0; one passed; test runtime 0.52 seconds; wall 35.54 seconds;
+peak RSS 521,224,192 bytes; zero swaps. The focused test compiled the actual
+honest pair-forest transfer compiler, actual mask builder/application, and
+actual full circle encoder. The positive adapter's three-line overwrite was
+repeated literally in the test because the generated experiment module is not
+part of the prover crate.
+
+The certificate has six nonzero coefficients and induces a 384-row semantic
+functional. Its row-1014 coefficient is `170822063`. For each valid split
+`(1,999)`, `(100,900)`, `(400,600)`, `(500,500)`, `(600,400)`, `(900,100)`,
+and `(999,1)`, and deterministic mask seeds 1, 7, and 19, the test checked
+
+```text
+L(final column 3)
+  = L(semantic column 3)
+  + 170822063 * inverse(recipient_value * change_value)  (mod 2^31-1).
+```
+
+The pre-overwrite value varied across mask seeds; the final value was identical
+across seeds for each payment. Full output is summarized in
+`valid-positive-transfer-values.json`. The amount sweep recomputed the two
+public note commitments, so it is not a same-public witness-pair experiment.
+
+Instrumented honest-source SHA-256:
+`c6007b630a414871dd927b0857496ae144fc2ed00bb59cc5010f08f24a8b779f`.
+Instrumented encoder SHA-256 (including the earlier child certificate test):
+`480841c8d490415a20ee357170297623b314504ce000a7458f5432e256633d3d`.
+Cargo lock SHA-256:
+`a1d2fc87435e98734f74a0fb1f070f1eaa5e5fe19266967092a7ea7849f8a91d`.
+
 ## Lean
 
 Toolchain: Lean 4.32.0
