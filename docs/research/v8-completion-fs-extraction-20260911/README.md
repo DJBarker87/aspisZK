@@ -1,5 +1,13 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest semantic-source milestone:
+[`SelectedRangeOutputsSourcePolynomial`](selected-range-outputs-source-20260912.md)
+constructs chronological degree-three source polynomials for all 30 selected
+range outputs and any verifier-fixed linear projection of them. Their Boolean
+tables are proved equal to the literal selected range residuals; no off-domain
+identity is inferred from Boolean equality. Literal Rust opening/selector
+refinement and the other 65 semantic coordinates remain open.
+
 Latest live-schedule milestone:
 [`SameBodyLivePreparedIncrement`](live-schedule-prepared-increment-20260912.md)
 derives the exact length/range/distinctness certificate from the same live
