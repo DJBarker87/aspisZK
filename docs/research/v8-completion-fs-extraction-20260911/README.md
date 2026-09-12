@@ -506,6 +506,16 @@ requires an explicit rejecting script branch, not default bytes.  Evidence is
 in `functional-producer-source-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/functional-producer-source-v1/report.json`.
 
+`lean/FSLiveSourceFunctionalMiddle.lean` supplies that rejecting script.  At
+the actual post-kappa boundary it executes `fromInputs`; failure returns the
+named functional error without hashing arbitrary replacement bytes.  Success
+absorbs the constructed 545-byte description and 16-byte claim, then preserves
+the image-profile, tau, response0, alpha0, q22 and rho order.  Its success value
+carries exact constructor provenance, checked OOD data and gamma identity.
+Public `z`, the outer source-script splice and literal Rust refinement remain
+open.  Evidence is in
+`../../../results/v8-completion-fs-extraction-20260911/source-functional-middle-v1/report.json`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected
