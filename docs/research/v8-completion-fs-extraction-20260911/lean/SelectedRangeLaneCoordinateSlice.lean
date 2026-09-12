@@ -75,7 +75,12 @@ theorem rowSlice_eval_at (fixed : Fin 10 → K) (round : Fin 10)
   unfold rowSlice mleRowWeight
   rw [eval_mul, eval_C, eval_bitPolynomial]
   unfold pointFactor replaceCoordinate
-  rw [Finset.prod_erase_mul Finset.univ _ (Finset.mem_univ round)]
+  rw [← Finset.prod_erase_mul Finset.univ
+    (fun coordinate =>
+      if bigEndianBit row coordinate then
+        if coordinate = round then x else fixed coordinate
+      else 1 - if coordinate = round then x else fixed coordinate)
+    (Finset.mem_univ round)]
   congr 1
   · apply Finset.prod_congr rfl
     intro coordinate membership
