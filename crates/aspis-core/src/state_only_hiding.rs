@@ -686,6 +686,12 @@ pub fn state_only_hiding_layout_factor_fingerprint(mask_layout_fingerprint: u64)
     )
 }
 
+#[inline]
+fn absorb_layout_fingerprint_byte(hash: &mut u64, byte: u8) {
+    *hash ^= u64::from(byte);
+    *hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
+}
+
 /// Bind one concrete relation-free mask layout to its copy-active registry
 /// while retaining the frozen width-28 factor schedule.  Alternate statement
 /// profiles must pin the output before using it in a transcript context.
@@ -695,23 +701,19 @@ pub fn state_only_hiding_layout_factor_fingerprint_for_registry(
     has_copy_inactive_zero_claim: bool,
 ) -> u64 {
     let mut hash = 0xcbf2_9ce4_8422_2325u64;
-    let mut absorb = |byte: u8| {
-        hash ^= u64::from(byte);
-        hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
-    };
     for byte in b"aspis-state-only-hiding-v2-shared-powers" {
-        absorb(*byte);
+        absorb_layout_fingerprint_byte(&mut hash, *byte);
     }
     for byte in mask_layout_fingerprint.to_le_bytes() {
-        absorb(byte);
+        absorb_layout_fingerprint_byte(&mut hash, byte);
     }
     for byte in b"copy-inactive-dense-zero-claim-v1" {
-        absorb(*byte);
+        absorb_layout_fingerprint_byte(&mut hash, *byte);
     }
     for byte in copy_active_rows_fingerprint.to_le_bytes() {
-        absorb(byte);
+        absorb_layout_fingerprint_byte(&mut hash, byte);
     }
-    absorb(u8::from(has_copy_inactive_zero_claim));
+    absorb_layout_fingerprint_byte(&mut hash, u8::from(has_copy_inactive_zero_claim));
     for value in [
         STATE_ONLY_HIDING_C1_COLUMNS as u16,
         STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS as u16,
@@ -723,25 +725,25 @@ pub fn state_only_hiding_layout_factor_fingerprint_for_registry(
         STATE_ONLY_HIDING_TERMINAL_POINTS as u16,
     ] {
         for byte in value.to_le_bytes() {
-            absorb(byte);
+            absorb_layout_fingerprint_byte(&mut hash, byte);
         }
     }
     for column in 0..STATE_ONLY_HIDING_C1_COLUMNS {
-        absorb(column as u8);
-        absorb((column & 3) as u8);
-        absorb(FACTOR_FAMILIES[column]);
-        absorb(FACTOR_EXPONENTS[column]);
+        absorb_layout_fingerprint_byte(&mut hash, column as u8);
+        absorb_layout_fingerprint_byte(&mut hash, (column & 3) as u8);
+        absorb_layout_fingerprint_byte(&mut hash, FACTOR_FAMILIES[column]);
+        absorb_layout_fingerprint_byte(&mut hash, FACTOR_EXPONENTS[column]);
     }
     for column in 0..STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
-        absorb(0xfe); // Full-domain shared-power mask-only C1 namespace.
-        absorb(column as u8);
-        absorb(MASK_ONLY_FACTOR_EXPONENTS[column]);
-        absorb((column & 3) as u8);
+        absorb_layout_fingerprint_byte(&mut hash, 0xfe); // Full-domain shared-power mask-only C1 namespace.
+        absorb_layout_fingerprint_byte(&mut hash, column as u8);
+        absorb_layout_fingerprint_byte(&mut hash, MASK_ONLY_FACTOR_EXPONENTS[column]);
+        absorb_layout_fingerprint_byte(&mut hash, (column & 3) as u8);
     }
-    absorb(0xff); // Explicit G is not one of the sixteen C1 columns.
-    absorb(0x45); // Even-coefficient-interval schedule marker.
-    absorb(EXPLICIT_FACTOR_EXPONENT as u8);
-    absorb(EXPLICIT_FACTOR_FAMILY as u8);
+    absorb_layout_fingerprint_byte(&mut hash, 0xff); // Explicit G is not one of the sixteen C1 columns.
+    absorb_layout_fingerprint_byte(&mut hash, 0x45); // Even-coefficient-interval schedule marker.
+    absorb_layout_fingerprint_byte(&mut hash, EXPLICIT_FACTOR_EXPONENT as u8);
+    absorb_layout_fingerprint_byte(&mut hash, EXPLICIT_FACTOR_FAMILY as u8);
     hash
 }
 
