@@ -680,6 +680,16 @@ source callback must consume `sourceSemanticField` there; literal Rust
 refinement remains open.  Evidence is in
 `../../../results/v8-completion-fs-extraction-20260911/complete-semantic-packed-source-v1/report.json`.
 
+`lean/SelectedCorrectedSemanticCallbackComposition.lean` installs those 24
+nonlinear source-semantic lanes in the callback-shaped algebra, proves the
+per-coordinate source message degree bound and retains the exact Boolean
+recovery-table restriction through helper, active and hiding assembly.  Its
+scope is deliberately semantic-lane-only: the current `poseidonMLE` is also a
+Boolean-table MLE while the literal off-domain Poseidon residual is nonlinear,
+so a separate chronological Poseidon source bridge is still required before
+the whole callback can be called corrected.  Evidence is in
+`../../../results/v8-completion-fs-extraction-20260911/semantic-lane-corrected-callback-v1/report.json`.
+
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
