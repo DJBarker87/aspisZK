@@ -1,5 +1,14 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest authenticated-execution milestone:
+[`ExtractionCollectorAuthenticatedReplayable`](authenticated-replayable-source-20260912.md)
+continues a successful live source/OOD/relation transcript with the selected
+leaf/node verifier on the typed schedule produced by that same run and the
+earlier root cuts. It constructs the functional Merkle success object, both
+root equalities and opening-call inclusion; these are no longer caller
+premises at this boundary. Relation-terminal/payment acceptance and literal
+Rust refinement remain open.
+
 Latest semantic-source milestone:
 [`SelectedRangeOutputsSourcePolynomial`](selected-range-outputs-source-20260912.md)
 constructs chronological degree-three source polynomials for all 30 selected
