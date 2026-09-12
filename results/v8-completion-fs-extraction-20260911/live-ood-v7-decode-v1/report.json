@@ -1,0 +1,26 @@
+{
+  "status": "PASS_FOCUSED",
+  "base_revision": "c36af7f643f3aa6b2e7deafb0ceab51c9632ce80",
+  "source": "docs/research/v8-completion-fs-extraction-20260911/lean/FSLiveOODV7Decode.lean",
+  "source_sha256": "eb9432e6316bb97ffb143e9d19dec2582c8588afce8769be10e1516db7a68375",
+  "artifact_sha256": "d27c6dd39966b725295a988a4849b3fdae7059ca621a2b8180348fdc4fe530f5",
+  "toolchain": "Lean 4.32.0 commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+  "command": "systemd-run --user --scope -p MemoryHigh=8G -p MemoryMax=9G -p MemorySwapMax=0 -p RuntimeMaxSec=300 /usr/bin/time -v lean -j1 -M8192 -o FSLiveOODV7Decode.olean FSLiveOODV7Decode.lean",
+  "exit_code": 0,
+  "wall_seconds": 3.60,
+  "peak_rss_kib": 6593456,
+  "swap_kib": 0,
+  "axioms": ["propext", "Classical.choice", "Quot.sound"],
+  "proved": [
+    "the live first-OOD sampler is exactly represented by a chronological trace, retaining limb exhaustion, parameter rejection, parameter exhaustion, and final transcript state",
+    "every completed first-OOD inner attempt is decoded by the V7 ordinary decoder with identical limbs, words consumed, and one-to-four block count",
+    "the live distinct-second-OOD sampler is exactly represented by a chronological trace, retaining inner failures, equal-point retries, distinct exhaustion, and final transcript state",
+    "every completed second-OOD inner attempt is V7-decoded and a successful second point is unequal to the first"
+  ],
+  "not_proved": [
+    "uniformity or freshness of the blocks consumed by the live samplers",
+    "coupling to an adversarial random-oracle execution with prequeries and cache hits",
+    "the full source-then-OOD-then-gamma chronological run",
+    "global Fiat-Shamir soundness"
+  ]
+}
