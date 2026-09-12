@@ -1,5 +1,22 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest FS refinement milestone: [whole-script alignment with the V7 oracle
+machine](v7-whole-script-alignment-20260912.md).  Every bounded current
+`Script` now has a checked fresh/cache/abort execution correspondence from an
+aligned unprogrammed state; actual adversary/source coupling to that state and
+law remains open.
+
+The [selected semantic packing review](semantic-packed-literal-review-20260912.md)
+proves the exact 94-position Boolean writer and positive-slot insertion, while
+formally retaining the counterexample to an invalid off-domain MLE shortcut.
+
+Latest chronological milestone: [live selected middle-to-query transcript
+splice](live-selected-middle-query-rho-20260912.md).  It places the selected
+source/OOD/gamma, kappa, tau, alpha0, final256, q22 and rho operations in one
+total causal `Script`, retaining retry and abort paths.  The verifier-derived
+functional description/claim still has an explicit Rust-to-Lean producer
+boundary, and no probability law is inferred from the deterministic splice.
+
 Latest work: [same-body opened-query constructor and positive update](opened-query-constructor-20260912.md).
 Earlier: [authenticated folds/residuals and later oracle histories](authenticated-fold-continuation-20260912.md).
 Earlier: [same-body authenticated slots and FS prefixes](authentication-connection-20260912.md),
