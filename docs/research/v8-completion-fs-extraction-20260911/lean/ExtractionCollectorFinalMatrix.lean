@@ -88,8 +88,10 @@ theorem final256_fixed_body {body : Bytes} {z : Fin 10 → K}
   simp [final256, SameBodyRelation.finalValues, SameBodyRelation.finalIndex,
     SameBodyFunctionalProducerSource.wordOfValues]
 
-/-- The 29-by-4 final values selected from actual checker-accepted replay
-records.  The only final projection is the canonical `final256` above. -/
+/-- The 29-by-4 final values selected from supplied `.checked` replay records.
+The collector source must still prove that those records came from legal
+successful replays.  The only final projection is the canonical `final256`
+above. -/
 def finalValuesMatrix {z : Fin 10 → K}
     {RejectReason ResourceReason : Type*}
     (labels : MatrixLabels K K)
