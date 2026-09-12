@@ -586,6 +586,17 @@ high/low schedule-selector refinement remains open.  Evidence is in
 `selected-initial-outputs-source-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/selected-initial-outputs-source-v1/report.json`.
 
+`lean/SelectedPublicOutputsSourcePolynomial.lean` supplies the final eight
+public-digest and two scalar coordinates. It covers anchor, nullifier, both
+commitments, all twenty append branches including `NODE_TWEAK`, next root,
+carry frontier and asset rows; proves degree-at-most-two slices, exact Boolean
+residual equality and a same-index source-shaped array binding. Field-level
+semantic source-polynomial coverage is therefore 95/95. This does not yet
+refine the selected packed/factored mutable Rust callback or compose the 95
+coordinates into its literal execution. Evidence is in
+`selected-public-outputs-source-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/selected-public-outputs-source-v1/report.json`.
+
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
