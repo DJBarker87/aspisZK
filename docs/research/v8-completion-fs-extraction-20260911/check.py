@@ -41,14 +41,16 @@ def run(name, cmd, cwd, evidence, env=None, timeout=120):
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument('--stage',choices=['python','rust','lean','all','kernel'],required=True)
+    parser.add_argument('--stage',choices=['python','rust','lean','semantic','all','kernel'],required=True)
     args=parser.parse_args()
     OUT.mkdir(parents=True,exist_ok=True)
     evidence=Path(tempfile.mkdtemp(prefix=args.stage+'-',dir=OUT))
     revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
     sources=list(HERE.rglob('*.lean'))+[HERE/'source_transcript.rs',HERE/'check.py',
         REPO/'crates/aspis-core/src/transcript.rs',REPO/'crates/aspis-core/src/circle.rs',
-        REPO/'crates/aspis-core/src/field.rs',REPO/'crates/aspis-core/src/sumcheck.rs']
+        REPO/'crates/aspis-core/src/field.rs',REPO/'crates/aspis-core/src/sumcheck.rs',
+        REPO/'crates/aspis-core/src/statement_sumcheck.rs',REPO/'crates/aspis-core/src/state_only_sumcheck.rs',
+        REPO/'docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs']
     report=dict(revision=revision,stage=args.stage,checks=[],
                 sources={str(p.relative_to(REPO)):sha(p) for p in sources if '.lake' not in p.parts})
     with tempfile.TemporaryDirectory(prefix='aspis-completion-build-') as builddir:
@@ -82,6 +84,25 @@ def main():
         if args.stage=='kernel':
             report['checks'].append(dict(name='fresh-kernel',status='NOT RUN',exit_code=2,
                 reason='Use reviewed explicit-module command on capped Linux runner; never probe leanchecker --help'))
+        if args.stage=='semantic':
+            lean=HERE/'lean'
+            env=os.environ.copy();env['LEAN_PATH']=str(build)
+            version=subprocess.check_output(['lake','env','lean','--version'],cwd=lean,text=True).strip()
+            assert '4.33.1' in version and '819816b2e0a3bf405af45ae5c7af2491d8f5bee6' in version
+            report['lean_version']=version
+            compiled=check('SemanticWireExecution',['lake','env','lean','-j1','-M2048','-o',str(build/'SemanticWireExecution.olean'),'SemanticWireExecution.lean'],lean,env)
+            if compiled:
+                report['fresh_first_party_artifacts']={'SemanticWireExecution':sha(build/'SemanticWireExecution.olean')}
+                check('lean-semantic-fixtures',['lake','env','lean','-j1','-M2048','--run','SemanticFixtures.lean'],lean,env)
+            if check('actual-source-compile',['rustc','--edition','2021','-O',str(HERE/'source_transcript.rs'),'-o',str(build/'source-transcript')]):
+                check('actual-source-run',[str(build/'source-transcript')])
+            def lines(name):
+                path=evidence/name
+                return [x for x in path.read_text().splitlines() if x.startswith(('SEMANTIC ','SEMANTIC_Q '))] if path.exists() else []
+            a,b=lines('lean-semantic-fixtures.log'),lines('actual-source-run.log')
+            okay=len(a)==64 and a==b
+            report['checks'].append(dict(name='cross-language-semantic',exit_code=0 if okay else 1,
+                status='PASS' if okay else 'FAIL',cases=len(a),scope='32 M31 and 32 full QM31 synthetic executions, actual selected Rust scalar kernel versus executable Lean; not complete payment acceptance'))
     report['status']='PASS_SCOPED_ONLY' if all(c['exit_code']==0 for c in report['checks']) else 'FAIL_OR_NOT_RUN'
     (evidence/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(evidence)
