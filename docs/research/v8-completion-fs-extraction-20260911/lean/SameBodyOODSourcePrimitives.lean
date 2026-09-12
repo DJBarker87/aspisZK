@@ -115,12 +115,34 @@ theorem answerRows_eq_ordinaryOOD (values : List K)
       SameBodyOrdinary.ood (fun i => values.getD i.val 0) sample lane := by
   rfl
 
+/-- Successful parsing makes the totalized `getD` fallback unreachable at
+every OOD-answer coordinate. -/
+theorem answerRows_success_in_bounds (body : List UInt8) (values : List K)
+    (success : fields (body.map UInt8.toFin) = some values)
+    (sample : Fin 2) (lane : Fin 29) :
+    ∃ bound : answerIndex sample lane < values.length,
+      answerRows values sample lane = values[answerIndex sample lane]'bound := by
+  have parsed : AspisV8.CanonicalRelationInput.parseFixed
+      (body.map UInt8.toFin) = some values := by
+    rw [← fields_eq_parseFixed]
+    exact success
+  have lengthExact :=
+    (AspisV8.CanonicalRelationInput.parse_success
+      (body.map UInt8.toFin) values parsed).2.1
+  have bound : answerIndex sample lane < values.length := by
+    unfold answerIndex
+    omega
+  exact ⟨bound, by
+    unfold answerRows
+    exact List.getD_eq_getElem values 0 bound⟩
+
 #print axioms exact_point_coordinates
 #print axioms decodePoint_coordinates
 #print axioms successfulCircle_coordinates
 #print axioms successfulDistinct_coordinates
 #print axioms answerIndex_eq_oodIndex
 #print axioms answerRows_eq_ordinaryOOD
+#print axioms answerRows_success_in_bounds
 
 end
 end AspisV8Completion.SameBodyOODSourcePrimitives
