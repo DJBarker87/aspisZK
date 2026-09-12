@@ -1,5 +1,12 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest semantic-source milestone: [the first literal off-domain semantic
+source polynomial](booleanity-source-polynomial-20260912.md) constructs the
+causal ten-round degree-bounded trace for `z * (z - 1)`.  It reaches the actual
+off-domain expression without the rejected Boolean-table MLE inference.  The
+selector/opening product, remaining 93 semantic outputs and literal Rust
+callback refinement remain open.
+
 Latest ideal-law milestone: [uniform finite-tape law for the whole transcript
 script](v7-whole-script-uniform-law-20260912.md).  The current and V7
 interpreters now have an exact pointwise and PMF pushforward equality under
