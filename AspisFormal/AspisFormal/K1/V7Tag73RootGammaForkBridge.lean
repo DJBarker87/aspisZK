@@ -68,8 +68,11 @@ universe u
 
 /-- Exact source acceptance does not merely decode the gamma challenge:
 the actual completed root runtime contains its block-zero verifier transition
-at a concrete index covered by the deployed 1513-position sweep. -/
-theorem exact_clean_root_has_indexed_gamma_transition
+strictly below the independently derived canonical driver-fuel cap.  Retaining
+this stronger bound is important for the variable-prefix gamma argument: the
+deployed 1513-position sweep has genuine suffix room after the selected
+transition, rather than merely containing it. -/
+theorem exact_clean_root_has_indexed_gamma_transition_with_canonical_bound
     {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
     {parameters : ExactCompilerResourceParameters}
     {transitionFuel : Nat}
@@ -82,6 +85,7 @@ theorem exact_clean_root_has_indexed_gamma_transition
     ∃ transitionIndex transition reply,
       verifierTransitionAt? root.runtime.node transitionIndex =
           some transition ∧
+        transitionIndex < tag73CanonicalDriverFuelCap ∧
         transitionIndex < 1513 ∧
         transition.event =
           .verifier (.squeezePair (.challenge .gamma) 0) reply := by
@@ -113,14 +117,41 @@ theorem exact_clean_root_has_indexed_gamma_transition
         root.canonical.construction.complete.fuel := by
     rw [← finalStateExact]
     exact transitionCount
-  have indexWithin : transitionIndex < 1513 := by
+  have indexWithinCanonical :
+      transitionIndex < tag73CanonicalDriverFuelCap := by
     have cap := root.canonical.fuelWithinProtocolCap
+    omega
+  have indexWithin : transitionIndex < 1513 := by
     have protocolCap : tag73CanonicalDriverFuelCap < 1513 := by decide
     omega
-  refine ⟨transitionIndex, transition, reply, ?_, indexWithin, eventExact⟩
+  refine ⟨transitionIndex, transition, reply, ?_, indexWithinCanonical,
+    indexWithin, eventExact⟩
   unfold verifierTransitionAt?
   rw [List.getElem?_eq_some_iff]
   exact ⟨within, valueExact⟩
+
+/-- Compatibility form used by the deployed 1513-position sweep. -/
+theorem exact_clean_root_has_indexed_gamma_transition
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters}
+    {projection : AcceptedTapeProjection Statement Proof Payload}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (root : ExactCleanSourceRootProjection transitionFuel configuration
+      projection sample) :
+    ∃ transitionIndex transition reply,
+      verifierTransitionAt? root.runtime.node transitionIndex =
+          some transition ∧
+        transitionIndex < 1513 ∧
+        transition.event =
+          .verifier (.squeezePair (.challenge .gamma) 0) reply := by
+  obtain ⟨transitionIndex, transition, reply, transitionExact,
+      _indexWithinCanonical, indexWithin, eventExact⟩ :=
+    exact_clean_root_has_indexed_gamma_transition_with_canonical_bound root
+  exact ⟨transitionIndex, transition, reply, transitionExact, indexWithin,
+    eventExact⟩
 
 /-- A selected root gamma transition emits a fork whose typed owner and
 block are fixed before either fork answer is exposed. -/
@@ -550,6 +581,8 @@ theorem pair_fork_header_exposes_exact_adjacent_coordinates
   | returned => simp [schedulerNativePairForkHeader?] at headerExact
   | failed => simp [schedulerNativePairForkHeader?] at headerExact
 
+#print axioms
+  exact_clean_root_has_indexed_gamma_transition_with_canonical_bound
 #print axioms exact_clean_root_has_indexed_gamma_transition
 #print axioms literal_root_gamma_dispatch_emits_typed_fork
 #print axioms literal_root_gamma_dispatch_programs_every_fork_pair
@@ -559,5 +592,3 @@ theorem pair_fork_header_exposes_exact_adjacent_coordinates
 
 end
 end AspisK1.V7Tag73RootGammaForkBridge
-
-

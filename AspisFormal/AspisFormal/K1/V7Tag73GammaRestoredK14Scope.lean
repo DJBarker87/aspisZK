@@ -34,6 +34,7 @@ open AspisK1.V7Tag73ExactRestoredOperationalK13Classifier
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
 open AspisK1.V7Tag73ActualNodeCausalProvenance
 open AspisK1.V7Tag73AtomicForkUniformScheduler
+open AspisK1.V7Tag73CanonicalFutureFreeFuel
 open AspisK1.V7Tag73FutureFreeFullControl
 open AspisK1.V7Tag73InteractiveAncestor
 open AspisK1.V7Tag73ParsedK13K14Classifier
@@ -195,6 +196,39 @@ noncomputable def exact_operational_root_gamma_restoration_request_is_typed
       transitionExact := facts.1
       transitionWithin := facts.2.1
       eventExact := facts.2.2 }
+
+/-- The canonical request inherits the exact 1444-step verifier bound, not
+merely membership in the coarser 1513-position extraction sweep.  The request
+is the least block-zero gamma transition, so it is no later than the concrete
+bounded witness supplied by the accepted source root. -/
+theorem exact_operational_root_gamma_restoration_request_within_canonical_cap
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    {transitionFuel : Nat}
+    {configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {sample : ExactCompilerSample HiddenTape parameters}
+    (input : ExactK12OperationalInput transitionFuel configuration projection
+      fixedInstance sample) :
+    (exactOperationalRootGammaRestorationRequest input).verifierTransitionIndex <
+      tag73CanonicalDriverFuelCap := by
+  classical
+  obtain ⟨index, transition, reply, transitionExact, indexWithinCanonical,
+      indexWithin, eventExact⟩ :=
+    exact_clean_root_has_indexed_gamma_transition_with_canonical_bound
+      input.package.root.fixedRoot.base
+  have candidate : IsRootGammaTransitionIndex input index :=
+    ⟨transition, reply, transitionExact, indexWithin, eventExact⟩
+  have least : Nat.find
+      (exact_operational_input_has_root_gamma_transition_index input) ≤ index :=
+    Nat.find_min' (exact_operational_input_has_root_gamma_transition_index input)
+      candidate
+  change Nat.find
+      (exact_operational_input_has_root_gamma_transition_index input) <
+        tag73CanonicalDriverFuelCap
+  omega
 
 /-- No earlier root transition can carry the same typed block-zero gamma
 role.  This is the chronological fact needed by the waiting coordinate
@@ -641,6 +675,8 @@ theorem gamma_restored_k14_width29_subset_unscoped
 #print axioms exact_operational_input_has_root_gamma_restoration_request
 #print axioms exactOperationalRootGammaRestorationRequest
 #print axioms exact_operational_root_gamma_restoration_request_is_typed
+#print axioms
+  exact_operational_root_gamma_restoration_request_within_canonical_cap
 #print axioms no_root_gamma_transition_before_canonical
 #print axioms ExactGammaRestoredOperationalK13Certificate
 #print axioms exactTag73GammaRestoredOperationalK14Width29Event

@@ -235,6 +235,7 @@ theorem waiting_controller_eventually_marked_has_first_marked_record
           (firstLater : List UnifiedExposureRecord),
         prior ++ record :: later =
           firstPrior ++ firstRecord :: firstLater ∧
+        firstPrior.length ≤ prior.length ∧
         WaitingControllerPrefixUnmarked transitionFuel startsHere state
           firstPrior ∧
         startsHere
@@ -245,12 +246,12 @@ theorem waiting_controller_eventually_marked_has_first_marked_record
   induction prior generalizing state with
   | nil =>
       intro record later marked
-      exact ⟨[], record, later, rfl, trivial, marked⟩
+      exact ⟨[], record, later, rfl, by simp, trivial, marked⟩
   | cons head tail ih =>
       intro record later marked
       cases markedNow : startsHere state.cursor with
       | true =>
-          exact ⟨[], head, tail ++ record :: later, by simp, trivial,
+          exact ⟨[], head, tail ++ record :: later, by simp, by simp, trivial,
             markedNow⟩
       | false =>
           let controller :=
@@ -262,11 +263,12 @@ theorem waiting_controller_eventually_marked_has_first_marked_record
             simpa only [controller, next, indexed_state_after_records_cons] using
               marked
           obtain ⟨firstPrior, firstRecord, firstLater, splitExact,
-              prefixUnmarked, firstMarked⟩ :=
+              firstWithin, prefixUnmarked, firstMarked⟩ :=
             ih next record later markedAfterTail
-          refine ⟨head :: firstPrior, firstRecord, firstLater, ?_, ?_, ?_⟩
+          refine ⟨head :: firstPrior, firstRecord, firstLater, ?_, ?_, ?_, ?_⟩
           · simp only [List.cons_append]
             rw [splitExact]
+          · simpa using firstWithin
           · exact ⟨markedNow, prefixUnmarked⟩
           · simpa only [controller, next, indexed_state_after_records_cons]
               using firstMarked
@@ -617,6 +619,57 @@ theorem exact_restored_gamma_router_routes_selected_full_answer
     (later.map UnifiedExposureRecord.answer) tapeExact
     priorLabels [] target record.answer labelsDecomposition
 
+/-- Prefix-length form of the selected-record router.  Unlike the older
+`namedComplete` wrapper, this does not claim that an accepting variable-prefix
+sampler consumed all twelve blocks.  It asks only for the exact chronological
+prefix to fit beside the 24-coordinate gamma tape. -/
+theorem exact_restored_gamma_router_routes_selected_full_answer_of_prefix_length
+    {HiddenTape TapeIdentity Observation Statement Proof Payload Result : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomConfiguration HiddenTape TapeIdentity
+      Observation Statement Proof Payload Result parameters)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (prior later : List UnifiedExposureRecord)
+    (record : UnifiedExposureRecord)
+    (target : GammaPrefixDigestSlot)
+    (decomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        prior ++ record :: later)
+    (preferred :
+      (exactRestoredGammaController transitionFuel configuration
+        sample.1).preferredSlot
+        (indexedStateAfterRecords transitionFuel
+          (exactRestoredGammaController transitionFuel configuration
+            sample.1)
+          prior
+          (exactRestoredGammaInitialState transitionFuel configuration
+            sample.1)) = some target)
+    (prefixLength : (prior ++ [record]).length ≤
+      (exactCompilerTargetCaps parameters).length - 24) :
+    causalRoutedAnswer? target
+        (exactRestoredGammaRouter transitionFuel configuration sample.1)
+        (exactGammaPrefixRouterInputTape parameters sample.2) =
+      some record.answer := by
+  apply exact_restored_gamma_router_routes_selected_full_answer
+    transitionFuel configuration sample prior later record target decomposition
+      preferred
+  let labels := indexedControllerLabeledRecords transitionFuel
+    (exactRestoredGammaController transitionFuel configuration sample.1)
+    (exactRestoredGammaInitialState transitionFuel configuration sample.1)
+    (prior ++ [record])
+  have labelsLength : labels.length = (prior ++ [record]).length := by
+    have answers := congrArg List.length
+      (indexed_controller_labeled_records_answers transitionFuel
+        (exactRestoredGammaController transitionFuel configuration sample.1)
+        (exactRestoredGammaInitialState transitionFuel configuration sample.1)
+        (prior ++ [record]))
+    simpa only [List.length_map] using answers
+  have residualLe : residualTraceSteps labels ≤ labels.length := by
+    have split := labeled_trace_length_split labels
+    omega
+  exact residualLe.trans (labelsLength.le.trans prefixLength)
+
 /-- Source-facing routing form: a selected pre-answer label and completion of
 all twenty-four deployed duplex slots are sufficient.  The residual-capacity
 side condition is derived, not exposed to the source adapter. -/
@@ -726,8 +779,8 @@ theorem exact_restored_gamma_router_routes_first_marked_full_answer
       (indexedStateAfterRecords transitionFuel controller prior initial).cursor =
         true := by
     simpa only [startsHere, controller, initial] using eventuallyMarked
-  obtain ⟨firstPrior, firstRecord, firstLater, firstSplit, firstUnmarked,
-      firstMarked⟩ :=
+  obtain ⟨firstPrior, firstRecord, firstLater, firstSplit, _firstWithin,
+      firstUnmarked, firstMarked⟩ :=
     waiting_controller_eventually_marked_has_first_marked_record transitionFuel
       startsHere initial prior record later eventuallyMarked'
   have firstDecomposition :
@@ -743,6 +796,99 @@ theorem exact_restored_gamma_router_routes_first_marked_full_answer
       (⟨0, by decide⟩, false) firstDecomposition (by
         simpa only [controller, initial, startsHere,
           exactRestoredGammaController] using firstPreferred) namedComplete
+  refine ⟨firstPrior, firstLater, firstRecord, firstDecomposition, ?_, routed⟩
+  simpa only [startsHere, initial] using firstUnmarked
+
+/-- Earliest-exposure routing with an honest prefix-length premise.  The
+first marked coordinate can be an adversary prequery; its prefix is proved no
+longer than the exhibited verifier-origin fork prefix. -/
+theorem exact_restored_gamma_router_routes_first_marked_full_answer_of_prefix_length
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    {parameters : ExactCompilerResourceParameters}
+    (transitionFuel : Nat)
+    (configuration : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters)
+    (sample : ExactCompilerSample HiddenTape parameters)
+    (prior later : List UnifiedExposureRecord)
+    (record : UnifiedExposureRecord)
+    (decomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        prior ++ record :: later)
+    (eventuallyMarked :
+      let reached := indexedStateAfterRecords transitionFuel
+        (exactRestoredGammaController transitionFuel configuration sample.1)
+        prior
+        (exactRestoredGammaInitialState transitionFuel configuration sample.1)
+      typedRestoredChallengeExposureStartsHere
+          (Result := ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+            Payload Witness)
+          transitionFuel (.challenge .gamma)
+          (configuration.machine.blackBox.start sample.1
+            configuration.machine.observation)
+          configuration.machine.environment
+          configuration.restorationConfiguration reached.cursor = true)
+    (prefixLength : (prior ++ [record]).length ≤
+      (exactCompilerTargetCaps parameters).length - 24) :
+    ∃ (firstPrior firstLater : List UnifiedExposureRecord)
+        (firstRecord : UnifiedExposureRecord),
+      (runExactPlainRom transitionFuel configuration sample).trace =
+          firstPrior ++ firstRecord :: firstLater ∧
+        WaitingControllerPrefixUnmarked transitionFuel
+          (typedRestoredChallengeExposureStartsHere
+            (Result := ExactPlainRomWitnessExtractor Statement
+              Tag73K12ParsedProof Payload Witness)
+            transitionFuel (.challenge .gamma)
+            (configuration.machine.blackBox.start sample.1
+              configuration.machine.observation)
+            configuration.machine.environment
+            configuration.restorationConfiguration)
+          (exactRestoredGammaInitialState transitionFuel configuration sample.1)
+          firstPrior ∧
+        causalRoutedAnswer? (⟨0, by decide⟩, false)
+          (exactRestoredGammaRouter transitionFuel configuration sample.1)
+          (exactGammaPrefixRouterInputTape parameters sample.2) =
+            some firstRecord.answer := by
+  let startsHere : UnifiedExposureCursor
+      (globalFull256OracleCallCap parameters) → Bool :=
+    typedRestoredChallengeExposureStartsHere
+      (Result := ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+        Payload Witness)
+      transitionFuel (.challenge .gamma)
+      (configuration.machine.blackBox.start sample.1
+        configuration.machine.observation)
+      configuration.machine.environment configuration.restorationConfiguration
+  let controller := exactRestoredGammaController transitionFuel configuration
+    sample.1
+  let initial := exactRestoredGammaInitialState transitionFuel configuration
+    sample.1
+  have eventuallyMarked' : startsHere
+      (indexedStateAfterRecords transitionFuel controller prior initial).cursor =
+        true := by
+    simpa only [startsHere, controller, initial] using eventuallyMarked
+  obtain ⟨firstPrior, firstRecord, firstLater, firstSplit, firstWithin,
+      firstUnmarked, firstMarked⟩ :=
+    waiting_controller_eventually_marked_has_first_marked_record transitionFuel
+      startsHere initial prior record later eventuallyMarked'
+  have firstDecomposition :
+      (runExactPlainRom transitionFuel configuration sample).trace =
+        firstPrior ++ firstRecord :: firstLater :=
+    decomposition.trans firstSplit
+  have firstPreferred :=
+    waiting_controller_prefix_unmarked_then_marked_routes_first_output
+      transitionFuel startsHere initial firstPrior rfl firstUnmarked firstMarked
+  have firstPrefixLength : (firstPrior ++ [firstRecord]).length ≤
+      (exactCompilerTargetCaps parameters).length - 24 := by
+    have shorter : (firstPrior ++ [firstRecord]).length ≤
+        (prior ++ [record]).length := by
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega
+    exact shorter.trans prefixLength
+  have routed :=
+    exact_restored_gamma_router_routes_selected_full_answer_of_prefix_length
+      transitionFuel configuration sample firstPrior firstLater firstRecord
+      (⟨0, by decide⟩, false) firstDecomposition (by
+        simpa only [controller, initial, startsHere,
+          exactRestoredGammaController] using firstPreferred) firstPrefixLength
   refine ⟨firstPrior, firstLater, firstRecord, firstDecomposition, ?_, routed⟩
   simpa only [startsHere, initial] using firstUnmarked
 
@@ -812,8 +958,12 @@ theorem exact_restored_gamma_advance_coordinate_eq_of_routed_lookup
 #print axioms exact_restored_gamma_full_residual_exact_of_named_complete
 #print axioms exact_restored_gamma_prefix_residual_enough_of_named_complete
 #print axioms exact_restored_gamma_router_routes_selected_full_answer
+#print axioms
+  exact_restored_gamma_router_routes_selected_full_answer_of_prefix_length
 #print axioms exact_restored_gamma_router_routes_selected_full_answer_of_named_complete
 #print axioms exact_restored_gamma_router_routes_first_marked_full_answer
+#print axioms
+  exact_restored_gamma_router_routes_first_marked_full_answer_of_prefix_length
 #print axioms exact_restored_gamma_output_coordinate_eq_of_routed_lookup
 #print axioms exact_restored_gamma_advance_coordinate_eq_of_routed_lookup
 
