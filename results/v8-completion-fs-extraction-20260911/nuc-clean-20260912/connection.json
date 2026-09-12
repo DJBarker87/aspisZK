@@ -1,0 +1,163 @@
+{
+  "version": "Lean (version 4.33.1, x86_64-unknown-linux-gnu, commit 819816b2e0a3bf405af45ae5c7af2491d8f5bee6, Release)",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0"
+  },
+  "prior_build_sha256": "b031cb84be4b3dedf96eb3b3587c047d0556ce794d62b27b46f361d540211d8b",
+  "prior_freshness_sha256": "3dbc00ec8809a33e508102db1afb89ef62466580ab4933a33c16e60229637585",
+  "files": [
+    {
+      "module": "SameBodyPublicCorrection",
+      "source_sha256": "59a1b2c9723b7e5df68c5ce9af18dba429179f6eab40f9afce082a9473e6c0e1",
+      "imports": [
+        "SameBodyAssembly"
+      ],
+      "artifacts": {
+        "SameBodyPublicCorrection.olean": "824947284f25f4d5abd7895ad75be518174cdf8d04e42cc309e72ee92acebb85"
+      }
+    },
+    {
+      "module": "SameBodyQueryClaim",
+      "source_sha256": "b01b8d2fbeb79ed3669654584e488c1def1ee0a84994f4c0973020a6b5a0f530",
+      "imports": [
+        "SameBodyRelation"
+      ],
+      "artifacts": {
+        "SameBodyQueryClaim.olean": "81da84e492370c71af0ebeebd93901b64b48c690700c67cf077dd47348fc4354"
+      }
+    },
+    {
+      "module": "SameBodyQueryFixtures",
+      "source_sha256": "d79e84848a8b821583b7d67b75a222a8e7f8d4eaf3c4a937935f47217fc99b7c",
+      "imports": [
+        "SameBodyQueryClaim"
+      ],
+      "artifacts": {
+        "SameBodyQueryFixtures.olean": "1395a9900c0fb3e224c1d9e1ea921ae2091d91d8c91089df3cea5fe707527f95"
+      }
+    },
+    {
+      "module": "FSTranscriptScript",
+      "source_sha256": "6808909ce8f843fafb119d487fa78c77be2a36ba6442074b763ed3c1a950bd27",
+      "imports": [
+        "FSBoundedTranscript",
+        "FSFirstFresh"
+      ],
+      "artifacts": {
+        "FSTranscriptScript.olean": "695c060d5292bb5ca9f9955e32108883663a231075677b55bbba6589a1f0f43d"
+      }
+    },
+    {
+      "module": "SourceConnectionAudit",
+      "source_sha256": "73e5bc59a3ca974cfebfde1fea0e3e0d49ba7a781151453745acbfddea44ff0d",
+      "imports": [
+        "SameBodyPublicCorrection",
+        "SameBodyQueryFixtures",
+        "FSTranscriptScript"
+      ],
+      "artifacts": {
+        "SourceConnectionAudit.olean": "e351132cdde9c23e40cf60775b375942f3a83380b83472ac26b66be5d01fd92d"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "stage": "SameBodyPublicCorrection-connection",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M2048",
+        "-o",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/certification/artifacts/SameBodyPublicCorrection.olean",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/lean/SameBodyPublicCorrection.lean"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.4644700922071934,
+      "log_sha256": "66a6a2d90916c3ca16cd3adb76c9f342938151c61d96ddc37c51f53d36b4cbf6"
+    },
+    {
+      "stage": "SameBodyQueryClaim-connection",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M2048",
+        "-o",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/certification/artifacts/SameBodyQueryClaim.olean",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/lean/SameBodyQueryClaim.lean"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.4143704492598772,
+      "log_sha256": "57212da815fdeb165f983993ef3d5521c091745059aa250e768b407b0bbd0081"
+    },
+    {
+      "stage": "SameBodyQueryFixtures-connection",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M2048",
+        "-o",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/certification/artifacts/SameBodyQueryFixtures.olean",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/lean/SameBodyQueryFixtures.lean"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.3142322637140751,
+      "log_sha256": "1bc3ca0d010f78e5797dd3e3f77cbaa172564dbede51f6c7690935e9f5f42d03"
+    },
+    {
+      "stage": "FSTranscriptScript-connection",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M2048",
+        "-o",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/certification/artifacts/FSTranscriptScript.olean",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/lean/FSTranscriptScript.lean"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.9149683695286512,
+      "log_sha256": "9a29a9d952da79f43fe7aba93db27f13a26ae615b6bf7e75b3b4b0a3101076fb"
+    },
+    {
+      "stage": "SourceConnectionAudit-connection",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M2048",
+        "-o",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/certification/artifacts/SourceConnectionAudit.olean",
+        "/home/dombarker/aspis-v8-clean-20260912.nFTrRf/lean/SourceConnectionAudit.lean"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.41443750262260437,
+      "log_sha256": "f2caee05209c808c974d317f4a4a611c40099c3cc5ba5e09f1299d9727c42d95"
+    },
+    {
+      "stage": "SourceConnectionAudit-fresh",
+      "command": [
+        "lake",
+        "env",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.33.1/bin/leanchecker",
+        "--fresh",
+        "-v",
+        "SourceConnectionAudit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 63.39826880209148,
+      "log_sha256": "1b103768f57db7a1f6a024da4a6b4f760fd51fda3102e01849dd2959675e58d3"
+    }
+  ],
+  "scope": "Five new source modules; eleven previous source-built modules hash-validated, not recompiled. Std reused. Same-kernel fresh replay, not external validation.",
+  "status": "PASS"
+}

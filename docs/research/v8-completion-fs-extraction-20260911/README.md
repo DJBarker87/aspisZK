@@ -1,6 +1,8 @@
 # Completion-pack intake and first source-transcript slice
 
-Latest work: [2026-09-12 continuation](continuation-20260912.md), including
+Latest work: [source connections and bounded FS scripts](source-connections-20260912.md).
+Five new leaves passed compilation and a fresh kernel replay; full source/FS
+soundness remains open. Earlier [2026-09-12 continuation](continuation-20260912.md) includes
 same-body constructors, chronological commitment cuts, recorded C1 access and
 a successful fresh kernel replay of the new ten-module closure. The material
 below records the earlier intake slice, not the current total evidence.
