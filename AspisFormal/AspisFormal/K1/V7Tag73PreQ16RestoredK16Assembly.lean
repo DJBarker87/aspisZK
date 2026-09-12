@@ -48,7 +48,7 @@ open AspisK1.V7Tag73PreQ16K15RestrictedSemanticActualLawClosure
 open AspisK1.V7Tag73RelationTailSourceComposition
 open AspisK1.V7Tag73K13JointBatchCausalSource
 open AspisK1.V7Tag73K13CandidateDirectedOperationalClosure
-open AspisK1.V7Tag73K13CleanCommittedInputInvariant
+open AspisK1.V7Tag73K13ViewPrefixFactorization
 open AspisK1.V7Tag73K13RestrictedJointBatchActualLawClosure
 open AspisK1.V7Tag73K13RestrictedLaterAlphaActualLawClosure
 open AspisK1.V7Tag73K13PreQ16TargetProbability
@@ -225,12 +225,14 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
         reference.1))
     (foldExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 31)
     (finalExposureCap : unifiedFull256ExposureCap parameters ≤ 2 ^ 34)
-    (sourceInvariant : ExactCleanCandidateDirectedK13CommittedInputInvariant
+    (sourceFactorization : ExactCandidateDirectedK13ViewPrefixFactorization
       transitionFuel configuration projection fixedInstance decoder
       (relationSource.toK13SourceObligations transitionFuel configuration
         projection fixedInstance decoder))
     (laterAlphaSource : ExactTag73RestrictedK13LaterAlphaSource transitionFuel
-      configuration projection fixedInstance decoder relationSource
+      configuration projection fixedInstance decoder
+      (relationSource.toK13SourceObligations transitionFuel configuration
+        projection fixedInstance decoder)
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance))
     (k14Source : ExactTag73RestrictedPreQ16K14Source transitionFuel configuration
@@ -298,11 +300,11 @@ theorem exact_tag73_preQ16_restored_k16_aok_raw_after_k14
       (exactTag73K12ErrorBound configuration)
     exact operationalK12
   have operationalK13 :=
-    exact_tag73_preQ16_operational_k13_candidate_directed_probability_le hiddenLaw
+    exact_tag73_preQ16_operational_k13_candidate_directed_probability_le_of_prefix_factorization hiddenLaw
       transitionFuel configuration projection fixedInstance decoder decoderBinding
       basis rc poseidon environment.operationalStages relationSource room2
       programmedCover initialEncoderExact finalEncoderExact reference traceExists
-      foldExposureCap finalExposureCap sourceInvariant laterAlphaSource
+      foldExposureCap finalExposureCap sourceFactorization laterAlphaSource
   have k13Bound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration

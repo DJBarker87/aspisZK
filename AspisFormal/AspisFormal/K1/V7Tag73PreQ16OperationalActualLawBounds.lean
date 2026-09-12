@@ -245,7 +245,9 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance))
     (laterAlphaSource : ExactTag73RestrictedK13LaterAlphaSource transitionFuel
-      configuration projection fixedInstance decoder relationSource
+      configuration projection fixedInstance decoder
+      (relationSource.toK13SourceObligations transitionFuel configuration
+        projection fixedInstance decoder)
       (exactFixedPlainRomLegalSameTapeEvent transitionFuel configuration
         projection fixedInstance)) :
     (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
@@ -274,7 +276,7 @@ theorem exact_tag73_preQ16_operational_k13_clean_probability_le
   have jointBound := exact_tag73_restricted_k13_joint_batch_probability_le
     hiddenLaw relationSource clean jointBatchSource.toRestrictedSource
   have laterBound := exact_tag73_restricted_k13_later_alpha_probability_le
-    hiddenLaw relationSource clean laterAlphaSource
+    hiddenLaw source clean laterAlphaSource
   have lateBound :
       (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
           (clean ∩ exactK13PreQ16MerkleTargetHitEvent configuration
