@@ -1,4 +1,5 @@
 import FSV7OODAbsorbLink
+import FSOODSamplerExposure
 set_option autoImplicit false
 set_option Elab.async false
 /- The proof follows seven concrete source stages.  Its terms are symbolic;
@@ -38,7 +39,10 @@ theorem successful_source_absorb_links {n m : Nat}
       LinkedAbsorb
         (run tape (FSV7OODBodyScript.sourceScript firstWork secondWork body digest)
           FSFirstFresh.empty).2.log
-        (absorbInput secondState 62 (1 :: FSV8OODBodyScript.answerBytes body 1)) out.afterSecondAnswer := by
+        (absorbInput secondState 62 (1 :: FSV8OODBodyScript.answerBytes body 1)) out.afterSecondAnswer ∧
+      squeezeInput out.afterFirstAnswer ∈ inputs
+        (run tape (FSV7OODBodyScript.sourceScript firstWork secondWork body digest)
+          FSFirstFresh.empty).2.log := by
   have canonical := FSV8OODBodyScript.checked_success_canonical decodePoint
     firstWork secondWork body digest tape FSFirstFresh.empty (.ok out, finalDigest) success
   simp only [FSV7OODBodyScript.sourceScript, FSV8OODBodyScript.checkedBodyPairScript,
@@ -122,9 +126,21 @@ theorem successful_source_absorb_links {n m : Nat}
             rw [run_bind] at firstLinked
             rw [run_absorb tape ⟨secondState, secondOracle⟩ 62 secondData] at firstLinked
             simp only [run] at firstLinked
-            refine ⟨firstState, secondState, ?_, ?_⟩
+            have squeezedAtDistinct := FSOODSamplerExposure.distinct_logs_start
+              decodePoint firstPoint tape 2 afterFirst secondPoint hsecond
+            have throughSecondWork : Prefix
+                (distinct decodePoint firstPoint tape 3 afterFirst).2.oracle secondOracle := by
+              exact run_extends tape (secondWork firstPoint secondPoint)
+                (distinct decodePoint firstPoint tape 3 afterFirst).2.oracle
+            have throughSecondAbsorb : Prefix secondOracle
+                (absorb tape ⟨secondState, secondOracle⟩ 62 secondData).oracle :=
+              absorb_prefix tape ⟨secondState, secondOracle⟩ 62 secondData
+            have squeezedFinal := FSOODSamplerExposure.mem_inputs_of_prefix
+              (prefix_trans throughSecondWork throughSecondAbsorb) squeezedAtDistinct
+            refine ⟨firstState, secondState, ?_, ?_, ?_⟩
             · exact firstLinked
             · exact secondLinked
+            · exact squeezedFinal
 #print axioms successful_source_absorb_links
 end
 end AspisV8Completion.FSV7OODSourceAbsorbLinks
