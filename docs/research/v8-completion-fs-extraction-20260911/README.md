@@ -161,3 +161,8 @@ corrected status of the rejected historical 97.1879-bit screen.  These are
 focused functional and algebraic milestones; the permitted-access recovered
 candidate, literal Rust refinement, global event composition, ROM Fiat--Shamir
 lift and adaptive ZK remain open.
+
+The follow-on [recovered-high-fork-extraction-20260912.md](recovered-high-fork-extraction-20260912.md)
+proves that a 29-by-4 table of recovered middle continuations constructs the
+fixed singleton-family member from disclosed final vectors.  Production of
+that table by a bounded ROM fork collector remains open.

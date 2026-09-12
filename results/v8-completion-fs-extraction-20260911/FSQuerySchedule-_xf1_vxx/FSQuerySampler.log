@@ -1,0 +1,720 @@
+FSQuerySampler.lean:82:25: warning: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [stop, if_true, run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisV8Completion.FSQuerySampler.run_queries : ∀ (tape : Tape) (fuel : Nat) (digest : Block) (s : Oracle)
+  (accepted : List Nat) (draws : Nat),
+  run tape (queryScript fuel digest accepted draws) s =
+    (some
+        ((reference tape fuel { digest := digest, oracle := s } accepted draws).fst,
+          (reference tape fuel { digest := digest, oracle := s } accepted draws).snd.digest),
+      (reference tape fuel { digest := digest, oracle := s } accepted draws).snd.oracle) :=
+fun tape fuel digest s accepted draws =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (digest : Block) (s : Oracle) (accepted : List Nat) (draws : Nat),
+      run tape (queryScript fuel digest accepted draws) s =
+        (some
+            ((reference tape fuel { digest := digest, oracle := s } accepted draws).fst,
+              (reference tape fuel { digest := digest, oracle := s } accepted draws).snd.digest),
+          (reference tape fuel { digest := digest, oracle := s } accepted draws).snd.oracle))
+    (fun digest s accepted draws =>
+      if cap : draws < 64 then
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun'
+                    (congrArg (run tape)
+                      (Eq.trans
+                        (ite_congr (eq_true cap) (fun a => Eq.refl (Script.done (none, digest))) fun a =>
+                          Eq.refl (Script.done (finish accepted, digest)))
+                        (if_true (Script.done (none, digest)) (Script.done (finish accepted, digest)))))
+                    s)
+                  (run.eq_1 tape (2 * 0) s (none, digest))))
+              (congr
+                (congrArg Prod.mk
+                  (congrArg some
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg Prod.fst
+                          (Eq.trans
+                            (ite_congr (eq_true cap) (fun a => Eq.refl (none, { digest := digest, oracle := s }))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            (if_true (none, { digest := digest, oracle := s })
+                              (finish accepted, { digest := digest, oracle := s })))))
+                      (congrArg Transcript.digest
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (ite_congr (eq_true cap) (fun a => Eq.refl (none, { digest := digest, oracle := s }))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            (if_true (none, { digest := digest, oracle := s })
+                              (finish accepted, { digest := digest, oracle := s }))))))))
+                (congrArg Transcript.oracle
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (ite_congr (eq_true cap) (fun a => Eq.refl (none, { digest := digest, oracle := s })) fun a =>
+                        Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                      (if_true (none, { digest := digest, oracle := s })
+                        (finish accepted, { digest := digest, oracle := s })))))))
+            (eq_self (some (none, digest), s)))
+      else
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun'
+                    (congrArg (run tape)
+                      (Eq.trans
+                        (ite_congr (eq_false cap) (fun a => Eq.refl (Script.done (none, digest))) fun a =>
+                          Eq.refl (Script.done (finish accepted, digest)))
+                        (if_false (Script.done (none, digest)) (Script.done (finish accepted, digest)))))
+                    s)
+                  (run.eq_1 tape (2 * 0) s (finish accepted, digest))))
+              (congr
+                (congrArg Prod.mk
+                  (congrArg some
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg Prod.fst
+                          (Eq.trans
+                            (ite_congr (eq_false cap) (fun a => Eq.refl (none, { digest := digest, oracle := s }))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            (if_false (none, { digest := digest, oracle := s })
+                              (finish accepted, { digest := digest, oracle := s })))))
+                      (congrArg Transcript.digest
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (ite_congr (eq_false cap) (fun a => Eq.refl (none, { digest := digest, oracle := s }))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            (if_false (none, { digest := digest, oracle := s })
+                              (finish accepted, { digest := digest, oracle := s }))))))))
+                (congrArg Transcript.oracle
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (ite_congr (eq_false cap) (fun a => Eq.refl (none, { digest := digest, oracle := s })) fun a =>
+                        Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                      (if_false (none, { digest := digest, oracle := s })
+                        (finish accepted, { digest := digest, oracle := s })))))))
+            (eq_self (some (finish accepted, digest), s))))
+    (fun fuel ih digest s accepted draws =>
+      if cap : draws < 64 then
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg (run tape)
+                        (Eq.trans
+                          (ite_congr (Eq.refl (draws < 64))
+                            (fun a =>
+                              Eq.refl
+                                (FSTranscriptScript.bind (squeezeScript digest) fun block =>
+                                  if (scan (queryWords block.fst) accepted draws).stopped = true then
+                                    Script.done
+                                      (finish (scan (queryWords block.fst) accepted draws).accepted, block.snd)
+                                  else
+                                    queryScript fuel block.snd (scan (queryWords block.fst) accepted draws).accepted
+                                      (scan (queryWords block.fst) accepted draws).draws))
+                            fun a => Eq.refl (Script.done (finish accepted, digest)))
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                            (Script (List UInt8) Block (Option (List Nat) × Block) (2 * (fuel + 1)))
+                            (FSTranscriptScript.bind (squeezeScript digest) fun block =>
+                              if (scan (queryWords block.fst) accepted draws).stopped = true then
+                                Script.done (finish (scan (queryWords block.fst) accepted draws).accepted, block.snd)
+                              else
+                                queryScript fuel block.snd (scan (queryWords block.fst) accepted draws).accepted
+                                  (scan (queryWords block.fst) accepted draws).draws)
+                            (Script.done (finish accepted, digest)))))
+                      s)
+                    (run_bind tape (squeezeScript digest)
+                      (fun block =>
+                        if (scan (queryWords block.fst) accepted draws).stopped = true then
+                          Script.done (finish (scan (queryWords block.fst) accepted draws).accepted, block.snd)
+                        else
+                          queryScript fuel block.snd (scan (queryWords block.fst) accepted draws).accepted
+                            (scan (queryWords block.fst) accepted draws).draws)
+                      s))
+                  (congrFun'
+                    (congrArg (run tape)
+                      (ite_congr
+                        (Eq.refl
+                          ((scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).stopped =
+                            true))
+                        (fun a =>
+                          Eq.refl
+                            (Script.done
+                              (finish
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted,
+                                (squeeze tape { digest := digest, oracle := s }).snd.digest)))
+                        fun a =>
+                        Eq.refl
+                          (queryScript fuel (squeeze tape { digest := digest, oracle := s }).snd.digest
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).accepted
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).draws)))
+                    (squeeze tape { digest := digest, oracle := s }).snd.oracle)))
+              (congr
+                (congrArg Prod.mk
+                  (congrArg some
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg Prod.fst
+                          (Eq.trans
+                            (ite_congr (Eq.refl (draws < 64))
+                              (fun a =>
+                                Eq.refl
+                                  (if
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).stopped =
+                                        true then
+                                    (finish
+                                        (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).accepted,
+                                      (squeeze tape { digest := digest, oracle := s }).snd)
+                                  else
+                                    reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos cap) x_0 x_1 x_2 x_3)
+                              (draws.decLt 64) (Option (List Nat) × Transcript)
+                              (if
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).stopped =
+                                    true then
+                                (finish
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted,
+                                  (squeeze tape { digest := digest, oracle := s }).snd)
+                              else
+                                reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).draws)
+                              (finish accepted, { digest := digest, oracle := s })))))
+                      (congrArg Transcript.digest
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (ite_congr (Eq.refl (draws < 64))
+                              (fun a =>
+                                Eq.refl
+                                  (if
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).stopped =
+                                        true then
+                                    (finish
+                                        (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).accepted,
+                                      (squeeze tape { digest := digest, oracle := s }).snd)
+                                  else
+                                    reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos cap) x_0 x_1 x_2 x_3)
+                              (draws.decLt 64) (Option (List Nat) × Transcript)
+                              (if
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).stopped =
+                                    true then
+                                (finish
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted,
+                                  (squeeze tape { digest := digest, oracle := s }).snd)
+                              else
+                                reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).draws)
+                              (finish accepted, { digest := digest, oracle := s }))))))))
+                (congrArg Transcript.oracle
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (ite_congr (Eq.refl (draws < 64))
+                        (fun a =>
+                          Eq.refl
+                            (if
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).stopped =
+                                  true then
+                              (finish
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted,
+                                (squeeze tape { digest := digest, oracle := s }).snd)
+                            else
+                              reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).draws))
+                        fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                        (Option (List Nat) × Transcript)
+                        (if
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).stopped =
+                              true then
+                          (finish
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).accepted,
+                            (squeeze tape { digest := digest, oracle := s }).snd)
+                        else
+                          reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).accepted
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).draws)
+                        (finish accepted, { digest := digest, oracle := s }))))))))
+          (if stop :
+              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted draws).stopped =
+                true then
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg (run tape)
+                          (Eq.trans
+                            (ite_congr (Eq.trans (congrFun' (congrArg Eq stop) true) (eq_self true))
+                              (fun a =>
+                                Eq.refl
+                                  (Script.done
+                                    (finish
+                                        (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).accepted,
+                                      (squeeze tape { digest := digest, oracle := s }).snd.digest)))
+                              fun a =>
+                              Eq.refl
+                                (queryScript fuel (squeeze tape { digest := digest, oracle := s }).snd.digest
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).draws))
+                            (if_true
+                              (Script.done
+                                (finish
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted,
+                                  (squeeze tape { digest := digest, oracle := s }).snd.digest))
+                              (queryScript fuel (squeeze tape { digest := digest, oracle := s }).snd.digest
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).draws))))
+                        (squeeze tape { digest := digest, oracle := s }).snd.oracle)
+                      (run.eq_1 tape (Nat.mul 2 fuel) (squeeze tape { digest := digest, oracle := s }).snd.oracle
+                        (finish
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).accepted,
+                          (squeeze tape { digest := digest, oracle := s }).snd.digest))))
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg some
+                        (congr
+                          (congrArg Prod.mk
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (ite_congr (Eq.trans (congrFun' (congrArg Eq stop) true) (eq_self true))
+                                  (fun a =>
+                                    Eq.refl
+                                      (finish
+                                          (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst)
+                                              accepted draws).accepted,
+                                        (squeeze tape { digest := digest, oracle := s }).snd))
+                                  fun a =>
+                                  Eq.refl
+                                    (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                                (if_true
+                                  (finish
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted,
+                                    (squeeze tape { digest := digest, oracle := s }).snd)
+                                  (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).draws)))))
+                          (congrArg Transcript.digest
+                            (congrArg Prod.snd
+                              (Eq.trans
+                                (ite_congr (Eq.trans (congrFun' (congrArg Eq stop) true) (eq_self true))
+                                  (fun a =>
+                                    Eq.refl
+                                      (finish
+                                          (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst)
+                                              accepted draws).accepted,
+                                        (squeeze tape { digest := digest, oracle := s }).snd))
+                                  fun a =>
+                                  Eq.refl
+                                    (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                                (if_true
+                                  (finish
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted,
+                                    (squeeze tape { digest := digest, oracle := s }).snd)
+                                  (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).draws))))))))
+                    (congrArg Transcript.oracle
+                      (congrArg Prod.snd
+                        (Eq.trans
+                          (ite_congr (Eq.trans (congrFun' (congrArg Eq stop) true) (eq_self true))
+                            (fun a =>
+                              Eq.refl
+                                (finish
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted,
+                                  (squeeze tape { digest := digest, oracle := s }).snd))
+                            fun a =>
+                            Eq.refl
+                              (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).draws))
+                          (if_true
+                            (finish
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted,
+                              (squeeze tape { digest := digest, oracle := s }).snd)
+                            (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).accepted
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).draws)))))))
+                (eq_self
+                  (some
+                      (finish
+                          (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                              draws).accepted,
+                        (squeeze tape { digest := digest, oracle := s }).snd.digest),
+                    (squeeze tape { digest := digest, oracle := s }).snd.oracle)))
+          else
+            Eq.mpr
+              (id
+                (congr
+                  (congrArg Eq
+                    (congrFun'
+                      (congrArg (run tape)
+                        (Eq.trans
+                          (ite_congr
+                            (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true stop)) true) Bool.false_eq_true)
+                            (fun a =>
+                              Eq.refl
+                                (Script.done
+                                  (finish
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted,
+                                    (squeeze tape { digest := digest, oracle := s }).snd.digest)))
+                            fun a =>
+                            Eq.refl
+                              (queryScript fuel (squeeze tape { digest := digest, oracle := s }).snd.digest
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).draws))
+                          (if_false
+                            (Script.done
+                              (finish
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted,
+                                (squeeze tape { digest := digest, oracle := s }).snd.digest))
+                            (queryScript fuel (squeeze tape { digest := digest, oracle := s }).snd.digest
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).accepted
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).draws))))
+                      (squeeze tape { digest := digest, oracle := s }).snd.oracle))
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg some
+                        (congr
+                          (congrArg Prod.mk
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (ite_congr
+                                  (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true stop)) true)
+                                    Bool.false_eq_true)
+                                  (fun a =>
+                                    Eq.refl
+                                      (finish
+                                          (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst)
+                                              accepted draws).accepted,
+                                        (squeeze tape { digest := digest, oracle := s }).snd))
+                                  fun a =>
+                                  Eq.refl
+                                    (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                                (if_false
+                                  (finish
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted,
+                                    (squeeze tape { digest := digest, oracle := s }).snd)
+                                  (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).draws)))))
+                          (congrArg Transcript.digest
+                            (congrArg Prod.snd
+                              (Eq.trans
+                                (ite_congr
+                                  (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true stop)) true)
+                                    Bool.false_eq_true)
+                                  (fun a =>
+                                    Eq.refl
+                                      (finish
+                                          (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst)
+                                              accepted draws).accepted,
+                                        (squeeze tape { digest := digest, oracle := s }).snd))
+                                  fun a =>
+                                  Eq.refl
+                                    (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                                (if_false
+                                  (finish
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted,
+                                    (squeeze tape { digest := digest, oracle := s }).snd)
+                                  (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).draws))))))))
+                    (congrArg Transcript.oracle
+                      (congrArg Prod.snd
+                        (Eq.trans
+                          (ite_congr
+                            (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true stop)) true) Bool.false_eq_true)
+                            (fun a =>
+                              Eq.refl
+                                (finish
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted,
+                                  (squeeze tape { digest := digest, oracle := s }).snd))
+                            fun a =>
+                            Eq.refl
+                              (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).draws))
+                          (if_false
+                            (finish
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted,
+                              (squeeze tape { digest := digest, oracle := s }).snd)
+                            (reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).accepted
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).draws))))))))
+              (ih (squeeze tape { digest := digest, oracle := s }).snd.digest
+                (squeeze tape { digest := digest, oracle := s }).snd.oracle
+                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted draws).accepted
+                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted draws).draws))
+      else
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun'
+                    (congrArg (run tape)
+                      (Eq.trans
+                        (ite_congr (Eq.refl (draws < 64))
+                          (fun a =>
+                            Eq.refl
+                              (FSTranscriptScript.bind (squeezeScript digest) fun block =>
+                                if (scan (queryWords block.fst) accepted draws).stopped = true then
+                                  Script.done (finish (scan (queryWords block.fst) accepted draws).accepted, block.snd)
+                                else
+                                  queryScript fuel block.snd (scan (queryWords block.fst) accepted draws).accepted
+                                    (scan (queryWords block.fst) accepted draws).draws))
+                          fun a => Eq.refl (Script.done (finish accepted, digest)))
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                          (Script (List UInt8) Block (Option (List Nat) × Block) (2 * (fuel + 1)))
+                          (FSTranscriptScript.bind (squeezeScript digest) fun block =>
+                            if (scan (queryWords block.fst) accepted draws).stopped = true then
+                              Script.done (finish (scan (queryWords block.fst) accepted draws).accepted, block.snd)
+                            else
+                              queryScript fuel block.snd (scan (queryWords block.fst) accepted draws).accepted
+                                (scan (queryWords block.fst) accepted draws).draws)
+                          (Script.done (finish accepted, digest)))))
+                    s)
+                  (run.eq_1 tape (2 * (fuel + 1)) s (finish accepted, digest))))
+              (congr
+                (congrArg Prod.mk
+                  (congrArg some
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg Prod.fst
+                          (Eq.trans
+                            (ite_congr (Eq.refl (draws < 64))
+                              (fun a =>
+                                Eq.refl
+                                  (if
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).stopped =
+                                        true then
+                                    (finish
+                                        (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).accepted,
+                                      (squeeze tape { digest := digest, oracle := s }).snd)
+                                  else
+                                    reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg cap) x_0 x_1 x_2 x_3)
+                              (draws.decLt 64) (Option (List Nat) × Transcript)
+                              (if
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).stopped =
+                                    true then
+                                (finish
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted,
+                                  (squeeze tape { digest := digest, oracle := s }).snd)
+                              else
+                                reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).draws)
+                              (finish accepted, { digest := digest, oracle := s })))))
+                      (congrArg Transcript.digest
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (ite_congr (Eq.refl (draws < 64))
+                              (fun a =>
+                                Eq.refl
+                                  (if
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).stopped =
+                                        true then
+                                    (finish
+                                        (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                            draws).accepted,
+                                      (squeeze tape { digest := digest, oracle := s }).snd)
+                                  else
+                                    reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).accepted
+                                      (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                          draws).draws))
+                              fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg cap) x_0 x_1 x_2 x_3)
+                              (draws.decLt 64) (Option (List Nat) × Transcript)
+                              (if
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).stopped =
+                                    true then
+                                (finish
+                                    (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                        draws).accepted,
+                                  (squeeze tape { digest := digest, oracle := s }).snd)
+                              else
+                                reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).draws)
+                              (finish accepted, { digest := digest, oracle := s }))))))))
+                (congrArg Transcript.oracle
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (ite_congr (Eq.refl (draws < 64))
+                        (fun a =>
+                          Eq.refl
+                            (if
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).stopped =
+                                  true then
+                              (finish
+                                  (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                      draws).accepted,
+                                (squeeze tape { digest := digest, oracle := s }).snd)
+                            else
+                              reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).accepted
+                                (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                    draws).draws))
+                        fun a => Eq.refl (finish accepted, { digest := digest, oracle := s }))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                        (Option (List Nat) × Transcript)
+                        (if
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).stopped =
+                              true then
+                          (finish
+                              (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                  draws).accepted,
+                            (squeeze tape { digest := digest, oracle := s }).snd)
+                        else
+                          reference tape fuel (squeeze tape { digest := digest, oracle := s }).snd
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).accepted
+                            (scan (queryWords (squeeze tape { digest := digest, oracle := s }).fst) accepted
+                                draws).draws)
+                        (finish accepted, { digest := digest, oracle := s })))))))
+            (eq_self (some (finish accepted, digest), s))))
+    fuel digest s accepted draws
+'AspisV8Completion.FSQuerySampler.run_queries' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSQuerySampler.scan_unstopped_draws' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSQuerySampler.query_words_bounded' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSQuerySampler.queries_valid' depends on axioms: [propext, Quot.sound]
+        0.76 real         0.43 user         0.26 sys
+           693714944  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               48282  page reclaims
+                  30  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  18  voluntary context switches
+                4393  involuntary context switches
+           324236182  instructions retired
+           135847496  cycles elapsed
+            12256048  peak memory footprint
