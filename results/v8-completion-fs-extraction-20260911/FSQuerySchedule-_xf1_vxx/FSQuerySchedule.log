@@ -1,0 +1,204 @@
+FSQuerySchedule.lean:30:27: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [stop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FSQuerySchedule.lean:116:25: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [stop] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisV8Completion.FSQuerySchedule.reference_success : ∀ (tape : Tape) (fuel : Nat) (s : Transcript)
+  (accepted returned : List Nat) (draws : Nat),
+  ValidAccepted accepted →
+    (reference tape fuel s accepted draws).fst = some returned → ValidAccepted returned ∧ returned.length = 22 :=
+fun tape fuel s accepted returned draws valid success =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (s : Transcript) (accepted : List Nat) (draws : Nat),
+      ValidAccepted accepted →
+        (reference tape fuel s accepted draws).fst = some returned → ValidAccepted returned ∧ returned.length = 22)
+    (fun s accepted draws valid success =>
+      if cap : draws < 64 then
+        False.elim
+          (Eq.mp
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Prod.fst
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                      (Option (List Nat) × Transcript) (none, s) (finish accepted, s))))
+                (some returned))
+              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+            success)
+      else
+        finish_success accepted returned valid
+          (Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg Prod.fst
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                    (Option (List Nat) × Transcript) (none, s) (finish accepted, s))))
+              (some returned))
+            success))
+    (fun fuel ih s accepted draws valid success =>
+      if cap : draws < 64 then
+        have checked :=
+          scan_valid (queryWords (squeeze tape s).fst) accepted draws (query_words_bounded (squeeze tape s).fst) valid;
+        if stop : (scan (queryWords (squeeze tape s).fst) accepted draws).stopped = true then
+          finish_success (scan (queryWords (squeeze tape s).fst) accepted draws).accepted returned checked
+            (Eq.mp
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Prod.fst
+                    (Eq.trans
+                      (ite_congr (Eq.trans (congrFun' (congrArg Eq stop) true) (eq_self true))
+                        (fun a =>
+                          Eq.refl
+                            (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted,
+                              (squeeze tape s).snd))
+                        fun a =>
+                        Eq.refl
+                          (reference tape fuel (squeeze tape s).snd
+                            (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                            (scan (queryWords (squeeze tape s).fst) accepted draws).draws))
+                      (if_true
+                        (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted, (squeeze tape s).snd)
+                        (reference tape fuel (squeeze tape s).snd
+                          (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                          (scan (queryWords (squeeze tape s).fst) accepted draws).draws)))))
+                (some returned))
+              (Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (ite_congr (Eq.refl (draws < 64))
+                          (fun a =>
+                            Eq.refl
+                              (if (scan (queryWords (squeeze tape s).fst) accepted draws).stopped = true then
+                                (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted,
+                                  (squeeze tape s).snd)
+                              else
+                                reference tape fuel (squeeze tape s).snd
+                                  (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                                  (scan (queryWords (squeeze tape s).fst) accepted draws).draws))
+                          fun a => Eq.refl (finish accepted, s))
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                          (Option (List Nat) × Transcript)
+                          (if (scan (queryWords (squeeze tape s).fst) accepted draws).stopped = true then
+                            (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted,
+                              (squeeze tape s).snd)
+                          else
+                            reference tape fuel (squeeze tape s).snd
+                              (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                              (scan (queryWords (squeeze tape s).fst) accepted draws).draws)
+                          (finish accepted, s)))))
+                  (some returned))
+                success))
+        else
+          ih (squeeze tape s).snd (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+            (scan (queryWords (squeeze tape s).fst) accepted draws).draws checked
+            (Eq.mp
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Prod.fst
+                    (ite_congr (congrFun' (congrArg Eq (Bool.of_not_eq_true stop)) true)
+                      (fun a =>
+                        Eq.refl
+                          (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted,
+                            (squeeze tape s).snd))
+                      fun a =>
+                      Eq.refl
+                        (reference tape fuel (squeeze tape s).snd
+                          (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                          (scan (queryWords (squeeze tape s).fst) accepted draws).draws))))
+                (some returned))
+              (Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (ite_congr (Eq.refl (draws < 64))
+                          (fun a =>
+                            Eq.refl
+                              (if (scan (queryWords (squeeze tape s).fst) accepted draws).stopped = true then
+                                (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted,
+                                  (squeeze tape s).snd)
+                              else
+                                reference tape fuel (squeeze tape s).snd
+                                  (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                                  (scan (queryWords (squeeze tape s).fst) accepted draws).draws))
+                          fun a => Eq.refl (finish accepted, s))
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                          (Option (List Nat) × Transcript)
+                          (if (scan (queryWords (squeeze tape s).fst) accepted draws).stopped = true then
+                            (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted,
+                              (squeeze tape s).snd)
+                          else
+                            reference tape fuel (squeeze tape s).snd
+                              (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                              (scan (queryWords (squeeze tape s).fst) accepted draws).draws)
+                          (finish accepted, s)))))
+                  (some returned))
+                success))
+      else
+        finish_success accepted returned valid
+          (Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg Prod.fst
+                  (Eq.trans
+                    (ite_congr (Eq.refl (draws < 64))
+                      (fun a =>
+                        Eq.refl
+                          (if (scan (queryWords (squeeze tape s).fst) accepted draws).stopped = true then
+                            (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted,
+                              (squeeze tape s).snd)
+                          else
+                            reference tape fuel (squeeze tape s).snd
+                              (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                              (scan (queryWords (squeeze tape s).fst) accepted draws).draws))
+                      fun a => Eq.refl (finish accepted, s))
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg cap) x_0 x_1 x_2 x_3) (draws.decLt 64)
+                      (Option (List Nat) × Transcript)
+                      (if (scan (queryWords (squeeze tape s).fst) accepted draws).stopped = true then
+                        (finish (scan (queryWords (squeeze tape s).fst) accepted draws).accepted, (squeeze tape s).snd)
+                      else
+                        reference tape fuel (squeeze tape s).snd
+                          (scan (queryWords (squeeze tape s).fst) accepted draws).accepted
+                          (scan (queryWords (squeeze tape s).fst) accepted draws).draws)
+                      (finish accepted, s)))))
+              (some returned))
+            success))
+    fuel s accepted draws valid success
+def AspisV8Completion.FSQuerySchedule.from_success : (tape : Tape) →
+  (s : Transcript) → (returned : List Nat) → (reference tape 8 s [] 0).fst = some returned → Schedule :=
+fun tape s returned success =>
+  have facts := ⋯;
+  scheduleOf returned ⋯ ⋯
+'AspisV8Completion.FSQuerySchedule.fuel_stable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8Completion.FSQuerySchedule.eight_blocks_suffice' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8Completion.FSQuerySchedule.reference_success' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSQuerySchedule.from_success_values' depends on axioms: [propext, Quot.sound]
+        0.50 real         0.31 user         0.17 sys
+           687325184  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               47883  page reclaims
+                  22  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   8  voluntary context switches
+                 761  involuntary context switches
+           319678628  instructions retired
+           122353672  cycles elapsed
+            12010312  peak memory footprint

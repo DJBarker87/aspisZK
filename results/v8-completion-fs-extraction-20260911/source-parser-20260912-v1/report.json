@@ -1,0 +1,110 @@
+{
+  "schema": "aspis-v8-fixed-field-source-producer/v2",
+  "revision": "ab4f61feaca096ae3dae66e39d29f6e36bdca0ec",
+  "source_hashes": {
+    "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs": "285c90695cc7558a88ffc7cb50de4235b68c7ceed9d0600d5cc9ba7f682607ed",
+    "docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs": "bf8a24c42c0d5493d2259fa19a70b1a8bf4ba168f661b71cfed6d33c70eebfbc",
+    "docs/research/v8-no-work-100-20260907/experiments/inactive_row_binding.rs": "4642f1e4361aeb9f991ef917f8efdea292187fe3de9e3a9d351230859f9ad98b",
+    "docs/research/v8-no-work-100-20260907/experiments/structured_weights.rs": "06befd20c084234ce1afa2d7cf3612a12370fdb0e98e95db30d89cf245b51089",
+    "docs/research/v8-no-work-100-20260907/experiments/auth_order.rs": "d3e6ecaee54a76baaf32ca9e56e4f065b8b3e24e2addb762c8552cfe8247d8dd",
+    "crates/aspis-core/src/field.rs": "5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8",
+    "docs/research/v8-completion-fs-extraction-20260911/lean/FSV7SelectedBodyScript.lean": "99a7e7011077e289b79e28cf1fd0a43e5c06c3208ca4d236c4621021bb15e218",
+    "docs/research/v8-completion-fs-extraction-20260911/lean/SameBodyOpenedTerminal.lean": "a018780b89cdcbdf55a6f1ca7d5365316c7fad22507f88652829416365b4fbda"
+  },
+  "sources_scope": "current checkout; cfg/profile not inferred from source presence",
+  "other_sections": [
+    {
+      "name": "C1_root",
+      "offset": 11152,
+      "width": 26,
+      "boundary": "before_lambda_chi"
+    },
+    {
+      "name": "C2_root",
+      "offset": 11178,
+      "width": 26,
+      "boundary": "after_lambda_chi_before_semantic_batch"
+    },
+    {
+      "name": "gamma_nonce",
+      "offset": 11204,
+      "width": 8,
+      "boundary": "after_OOD1_before_gamma"
+    },
+    {
+      "name": "alpha0_nonce",
+      "offset": 11212,
+      "width": 8,
+      "boundary": "after_response0_before_alpha0",
+      "framing": "0 byte then nonce"
+    },
+    {
+      "name": "query_nonce",
+      "offset": 11220,
+      "width": 8,
+      "boundary": "after_final256_before_queries"
+    },
+    {
+      "name": "packed_records",
+      "offset": 11228,
+      "width": 13662,
+      "count": 22,
+      "record_width": 621,
+      "boundary": "after_queries; queried ordinal preserved"
+    },
+    {
+      "name": "frontiers",
+      "offset": 24890,
+      "width": "body.length-24890",
+      "halves": "(body.length-24890)/2",
+      "node_width": 26
+    }
+  ],
+  "extracted_parser_sha256": "76a092e9fd23cafd72bdc9b070ebbedafe2735cd53c559c41584fb77a4d81868",
+  "kernel_proof": "NOT RUN",
+  "literal_rust_refinement": "NOT PROVED",
+  "semantic_context": "public/payment/transition/binding are independently supplied external source inputs",
+  "chronological_mismatches": [
+    "SameBodyOpenedRun inverses precede Merkle; Rust opened_values_prepared authenticates before inversion. Pure conjunction does not prove call order.",
+    "FSV7SelectedBodyScript omits packed canonicality/geometry checks; it is a Merkle suffix, not complete opened run.",
+    "FSV7SelectedBodyScript hashes sorted query ordinals: matches v8_auth_order only. Without cfg, Rust hashes original ordinal then sorts entries.",
+    "Whole body is available to noninteractive verifier; deriving a uniform causal prover strategy still requires source/ROM coupling, not merely parsing."
+  ],
+  "generated_driver_sha256": "a588816f752f1b84e392c456b14d47eccebc7a7dbaaf55325c31c74ff9abb8be",
+  "checks": [
+    {
+      "name": "parser-rustc",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "rustc",
+        "--edition=2021",
+        "-O",
+        "/var/folders/hz/wqvm2j953q37v6b7j_lx65lh0000gn/T/aspis-source-parser-_39nvqdg/parser.rs",
+        "-o",
+        "/var/folders/hz/wqvm2j953q37v6b7j_lx65lh0000gn/T/aspis-source-parser-_39nvqdg/parser"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 1.0711504169739783,
+      "sampled_peak_tree_rss_kib": 137728,
+      "status": "PASS",
+      "log": "parser-rustc.log",
+      "log_sha256": "f8fe308983c06bc383c129e315d28a114dd50a74b0f929e52dde16736e93ae41"
+    },
+    {
+      "name": "parser-execute",
+      "command": [
+        "/usr/bin/time",
+        "-l",
+        "/var/folders/hz/wqvm2j953q37v6b7j_lx65lh0000gn/T/aspis-source-parser-_39nvqdg/parser"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.3610439579933882,
+      "sampled_peak_tree_rss_kib": 1168,
+      "status": "PASS",
+      "log": "parser-execute.log",
+      "log_sha256": "2a568726f09e3e4ecceef6df6bf9b7039ccfa07107659702bcd0d043bcd0f131"
+    }
+  ],
+  "test_scope": "actual verbatim extracted parse with actual field.rs; synthetic bytes; not Lean/source semantic refinement or full verifier"
+}
