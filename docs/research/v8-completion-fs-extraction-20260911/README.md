@@ -1,5 +1,14 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest source-polynomial composition milestone: the selected range lane now
+has a constructed chronological degree-three `SourcePolynomial`. It sums the
+literal three-row-selector/opening-Booleanity restriction over Boolean future
+suffixes and proves both the initial cube boundary and every adjacent-round
+partition. See [the coordinate restriction](selected-range-lane-coordinate-slice-20260912.md)
+and its `SelectedRangeLaneSourcePolynomial.lean` continuation. The initial
+table is connected to the selected big-endian Boolean row decoder. The other
+93 outputs and literal Rust machine refinement remain open.
+
 Latest range-source milestone: [the literal selected range-lane coordinate
 restriction](selected-range-lane-coordinate-slice-20260912.md) proves that the
 three-row selector times an arbitrary opened-column Booleanity residual has
@@ -40,6 +49,11 @@ Latest composition milestone: [combined finite-tape prehistory law](combined-pre
 The preprogram halt is retained while the compiled current script is continued
 from its produced V7 state; the two explicit finite-tape pushforward laws agree
 pointwise and therefore as PMFs.
+
+Latest replayable-source milestone: [replayable same-body source law](replayable-source-law-20260912.md).
+The actual replayable source script through alpha3 now has an exact finite-tape
+PMF composition with arbitrary prehistory; only the explicit source/preProgram
+resource adapter and literal programmed/fork refinement remain open.
 
 The [V7/V8 source-coupling premise map](v7-v8-source-coupling-premise-map-20260912.md)
 records the inspected fixed-run, resource-certificate, restoration-map, and
