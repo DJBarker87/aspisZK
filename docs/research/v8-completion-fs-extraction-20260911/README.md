@@ -482,6 +482,17 @@ verifier; no rejected branch is assigned a probability. Evidence is in
 `live-relation-from-sampled-integration-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/live-relation-from-sampled-integration-v1/report.json`.
 
+`lean/SameBodyReplayableRunFromSampledIntegration.lean` moves that split to
+the full replayable source script.  A successful run is decomposed at its
+actual source/OOD/gamma, middle and later boundaries, and those exact run
+records are passed to `buildFromSampled`.  The resulting branch is checked
+same-body sampled data or a named rejection; no `Ready`, `Checked`, coherence
+or acceptance premise is supplied.  The hash view is still an explicit
+parameter, and complete acceptance-to-success plus the structured functional
+producer remain open.  Evidence is in
+`replayable-run-from-sampled-integration-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/replayable-run-from-sampled-integration-v1/report.json`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected
