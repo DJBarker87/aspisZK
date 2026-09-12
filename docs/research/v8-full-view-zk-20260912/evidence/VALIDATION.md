@@ -41,12 +41,22 @@ Toolchain: Lean 4.32.0
 (`8c9756b28d64dab099da31a4c09229a9e6a2ef35`), repository-pinned Mathlib
 artifacts, serial `-j1 -M1800`.
 
+Validated retained-source revision:
+`88081c690be32073eefdaad53b1b2821442ad46e`. The privacy sources in that
+revision are the exact inputs to the final replay.
+
 All thirteen generic leaves and the aggregate compiled from the retained
 worktree sources. Maximum observed process RSS was 1,538,834,432 bytes for the
 final aggregate replay; swaps were zero. The
 exact `FSOracleExecution.lean` from `ab4f61fe...` (SHA-256
 `aa2928cc4407c0cbe45910d0527a1cffa18e3a941698ee77fbc7910ffefd9806`)
 compiled, followed by `FSProgrammingDraft.lean`.
+
+| Target | Exit | Wall | Peak RSS | Swap | Artifact SHA-256 |
+|---|---:|---:|---:|---:|---|
+| `AspisV8Privacy.lean` aggregate | 0 | 1.03 s | 1,538,834,432 B | 0 | `d0c6f859d023d80c75e6b24f666987be68f8326dccfb9246a4deb3226ae78a84` |
+| pinned `FSOracleExecution.lean` | 0 | 2.68 s | 667,353,088 B | 0 | `e7a9718f15626e27d9dfb9aacbe939e92984778b2c8b98c652edd75355582282` |
+| `FSProgrammingDraft.lean` | 0 | 0.72 s | 645,185,536 B | 0 | `77e69ce28707eb63276ca6e3e6db5d072191e69ad422ca21029f4a92cfb4219a` |
 
 Repairs preserved theorem statements:
 
