@@ -494,3 +494,15 @@ and hash/transcript assumptions, fork scheduler/resources, ROM coupling,
 acceptance and independence remain open. Evidence is in
 `replayable-source-collector-adapter-20260912.md` and
 `results/replayable-source-collector-adapter-v1/report.json`.
+
+### 2026-09-12 gamma challenge-input bridge
+
+`lean/FSV8GammaChallengeInputBridge.lean` constructs the first gamma
+candidate input from the actual post-label-28 transcript cut as
+`List.ofFn afterNonce.digest ++ [1]`, proves candidate-log membership and
+post-nonce prefix provenance, and fixes the V7 driving-input field with that
+computed value. Fork output, controller and resource fields remain explicit;
+the history-to-origin cut equality, programmed target/fork instantiation,
+freshness, acceptance, ROM coupling and probability remain open. Evidence is
+in `gamma-challenge-input-bridge-20260912.md` and
+`results/gamma-challenge-input-bridge-v1/report.json`.
