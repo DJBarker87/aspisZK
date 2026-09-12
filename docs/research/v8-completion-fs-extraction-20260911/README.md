@@ -525,6 +525,16 @@ Public `z`, the outer source-script splice and literal Rust refinement remain
 open.  Evidence is in
 `../../../results/v8-completion-fs-extraction-20260911/source-functional-middle-v1/report.json`.
 
+`lean/ExtractionCollectorFallibleFunctionalSource.lean` splices the new middle
+into one source/OOD/gamma → functional middle → later-response script.  Its
+total error type retains prefix, middle (including functional construction),
+and later failures.  A successful run decomposes into the exact three boundary
+runs and carries the same body, OOD result, gamma, public point, constructed
+functional data and later coins.  The increment producer is still explicit,
+and the current grammar has not yet interleaved Merkle opening calls at the
+literal post-rho/pre-increment position.  Evidence is in
+`../../../results/v8-completion-fs-extraction-20260911/fallible-functional-source-v1/report.json`.
+
 ### 2026-09-12 Rust-shaped recomposition source
 
 `lean/SelectedRecompositionRustShaped.lean` independently models the selected
