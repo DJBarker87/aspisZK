@@ -618,6 +618,15 @@ coordinates into its literal execution. Evidence is in
 `selected-public-outputs-source-20260912.md` and
 `../../../results/v8-completion-fs-extraction-20260911/selected-public-outputs-source-v1/report.json`.
 
+`lean/SelectedCompleteSemanticSourcePolynomial.lean` composes that inventory
+through an exact position-preserving `Coordinate ≃ Fin 95` map. Every indexed
+coordinate has one chronological source polynomial whose Boolean table is the
+corresponding literal selected residual, and the sum of all 95 initial
+boundaries is the row-major literal residual sum. This is the complete
+field-level semantic source object; it is not yet the packed mutable Rust
+callback, terminal execution, or an acceptance theorem. Focused evidence is
+in `../../../results/v8-completion-fs-extraction-20260911/complete-semantic-source-v1/report.json`.
+
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
