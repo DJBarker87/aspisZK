@@ -523,7 +523,8 @@ factorisation and literal machine refinement remain open.  Evidence is in
 ### 2026-09-12 source terminal weight
 
 `lean/SameBodySourceTerminalWeight.lean` derives the 256-entry relation
-terminal covector from the same selected inactive mask, repaired point rows,
+terminal covector from the same selected inactive mask, repaired point-row
+source loops,
 chord transpose, image gate and actual `alpha0`.  Thus the functional source
 producer no longer accepts an arbitrary ordinary scalar or terminal covector;
 only the legal causal strategy/same-word construction remains.  The dense

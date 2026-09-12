@@ -3,14 +3,15 @@
 `lean/SameBodySourceTerminalWeight.lean` removes the arbitrary 256-entry
 terminal covector from the functional relation producer.  The dense reference
 is constructed from the selected inactive-row table, the three repaired
-point-row MLE weights, the proved chord transpose, the sparse image gate and
+point-row tensor-product loops, the proved chord transpose, the sparse image gate and
 the actual first relation challenge.  `completeDense` therefore retains only
 the legal causal relation strategy and its realised same-word equality as a
 caller interface.
 
 This is a mathematical dense reference, not the optimized implementation.
 The selected structured Rust contraction still needs an exact refinement to
-this reference, including its frozen grouped-mask constants.  Likewise, the
+this reference, including its frozen grouped-mask constants and its optimized
+two-entry affine-correction calculation.  Likewise, the
 new definition does not construct the causal strategy from the Rust parser or
 Fiat--Shamir history.
 
@@ -27,10 +28,10 @@ it did not rebuild that imported closure.
 - Lean 4.32.0, commit `8c9756b28d64dab099da31a4c09229a9e6a2ef35`
 - `MemoryHigh=8G`, `MemoryMax=9G`, `MemorySwapMax=0`, `-j1 -M8192`
 - Exit: 0
-- Wall time: 3.05 seconds
-- Peak RSS: 6,770,252 KiB
+- Wall time: 3.11 seconds
+- Peak RSS: 6,774,500 KiB
 - Swap: 0
-- Source SHA-256: `3dc345d4d4d90ca49c4f4c80daf036617f4e4999e47b0c22d7ef956dc66e590d`
-- Olean SHA-256: `40752fad8e0da16a57780cb7683c71862d037a9ce5a07dc10c590229752d6d7b`
+- Source SHA-256: `769a9ebe9ef7ced03036894013d5c015949d5e0448d1e49e126a6d15497dc45c`
+- Olean SHA-256: `675eaaea5d9d26b4b1d1020578688a9d62d858d1b752435310d0a60676774ac6`
 - Axioms: `propext`, `Classical.choice`, `Quot.sound`
 - Dependency rebuild: not run; pinned artifacts were reused.
