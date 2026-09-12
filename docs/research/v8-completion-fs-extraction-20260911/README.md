@@ -436,6 +436,39 @@ The supplied completion pack was also rerun independently: its 67 Python
 tests and five optimized Rust reference tests pass.  Those tests are diagnostic
 evidence only; its uncompiled Lean drafts were not promoted into this chain.
 
+### 2026-09-12 same-body OOD data
+
+`lean/SameBodyOODData.lean` constructs checked interpolant data from the two
+sampled point encodings, the live gamma and the same canonically parsed body.
+It supplies the actual two sequential 29-lane OOD rows and computed chord
+inverse; malformed coordinates, fields and zero denominators fail closed.
+The chronological sampler/gamma connection and literal Rust refinement remain
+open. Evidence is in `same-body-ood-data-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/same-body-ood-data-v1/report.json`.
+
+### 2026-09-12 Rust-shaped recomposition source
+
+`lean/SelectedRecompositionRustShaped.lean` independently models the selected
+sixteen-opening Rust loop, including its actual indices, reverse-fold order,
+view order, selector rows, `mul_m31` constants and sign, and proves it equals
+the constructed recomposition source polynomial. This is field-level
+source-shaped evidence, not literal Rust/Aeneas refinement. Evidence is in
+`selected-recomposition-rust-shaped-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/recomposition-rust-shaped-v1/report.json`.
+
+### 2026-09-12 chronological Prepared scalar
+
+`lean/SameBodyChronologicalPreparedScalar.lean` executes the same-body
+authenticated opening preparation above the one chronological C1/C2/source/
+q22/Merkle run. Preparation failure remains explicit. On success, small named
+lemmas identify every `Prepared` field, wire, trace and opening-log call with
+that run; the constructed prefix/call facts then feed the existing exact
+authenticated shifted-scalar theorem. No authentication or opening-equality
+premise is supplied by the caller. OOD-data construction, relation terminal,
+payment extraction, literal Rust refinement and FS probability coupling remain
+open. Evidence is in `chronological-prepared-scalar-20260912.md` and
+`../../../results/v8-completion-fs-extraction-20260911/chronological-prepared-scalar-v1/report.json`.
+
 ### 2026-09-12 replayable collector source
 
 `lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
@@ -530,6 +563,17 @@ remaining adapters; programmed target/fork/resource, freshness, acceptance,
 ROM and probability remain open. Evidence is in
 `gamma-origin-history-adapter-20260912.md` and
 `results/gamma-origin-history-adapter-v1/report.json`.
+
+### 2026-09-12 gamma target disposition
+
+`lean/FSV8GammaTargetDisposition.lean` adds the restoration-side split for
+the computed gamma input: already in adversary `q1`, already present as a
+prior table target/hazard, or absent from the table and therefore eligible for
+the V7 programming precondition. This does not misclassify the verifier
+event as q1 and assumes no nonmembership, freshness, programming/fork success,
+resource room, acceptance, ROM coupling or probability. Evidence is in
+`gamma-target-disposition-20260912.md` and
+`results/gamma-target-disposition-v1/report.json`.
 
 ### 2026-09-12 live authenticated relation observation
 
