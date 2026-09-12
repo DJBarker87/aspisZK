@@ -1,5 +1,6 @@
 import FSV8PostOODGammaScript
 import AspisFormal.K1.V7FsStateRestorationCoupling
+import ExtractionCollectorReplayableSource
 
 set_option autoImplicit false
 set_option Elab.async false
@@ -9,10 +10,13 @@ open FSOracleExecution FSBoundedTranscript FSTranscriptScript
 open FSV8PostOODGammaScript FSNonzeroQM31
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7FsStateRestorationCoupling
+open ExtractionCollectorReplayableSource
 
 abbrev Bytes := List UInt8
 abbrev Block := FSBoundedTranscript.Block
 abbrev Tape := FSBoundedTranscript.Tape
+abbrev Observation := ExtractionCollectorReplayableSource.Observation
+abbrev Returned := ExtractionCollectorReplayableSource.Returned
 
 noncomputable section
 
@@ -133,6 +137,44 @@ theorem gammaBoundaryConfiguration_input
       List.ofFn afterNonce.digest ++ [1] := by
   rfl
 
+/-! The V7 side can consume the computed input once its actual origin history
+contains the corresponding adversary query.  This theorem exposes precisely
+that remaining history-to-origin obligation; it does not postulate it. -/
+theorem fixedRecord_q1_contains_gamma
+    {TapeIdentity Statement Proof : Type*}
+    (origin : SameTapeExperimentOrigin TapeIdentity Observation Statement Proof Returned)
+    (afterNonce : FSBoundedTranscript.Transcript)
+    (firstRunUse : ResourceUse) (forkOutput : ShaOutput)
+    (postForkController : AdaptiveController) (oracleLimits : OracleLimits)
+    (budget : ResourceBudget) (replayFuel : Nat)
+    (event : QueryRecord)
+    (eventMem : event ∈ origin.firstRun.stateAtAdversaryHalt.history)
+    (eventActor : event.actor = .adversary)
+    (eventInput : event.input = gammaCandidateInput afterNonce) :
+    event ∈ (fixedFirstRunRecordFromOrigin origin
+      (gammaBoundaryConfiguration afterNonce firstRunUse forkOutput
+        postForkController oracleLimits budget replayFuel)).firstRun.q1 ∧
+    (fixedFirstRunRecordFromOrigin origin
+      (gammaBoundaryConfiguration afterNonce firstRunUse forkOutput
+        postForkController oracleLimits budget replayFuel)).transcriptDrivingInput =
+      event.input := by
+  let fixed := fixedFirstRunRecordFromOrigin origin
+    (gammaBoundaryConfiguration afterNonce firstRunUse forkOutput
+      postForkController oracleLimits budget replayFuel)
+  have stateMem : event ∈ fixed.firstRun.stateAtAdversaryHalt.history := by
+    dsimp [fixed]
+    simpa using eventMem
+  constructor
+  · change event ∈ fixed.firstRun.q1
+    unfold FirstRun.q1 freezeAdversaryQ1
+    refine List.mem_filter.mpr ⟨stateMem, ?_⟩
+    simp [eventActor]
+  · change (gammaBoundaryConfiguration afterNonce firstRunUse forkOutput
+      postForkController oracleLimits budget replayFuel).transcriptDrivingInput =
+      event.input
+    rw [gammaBoundaryConfiguration_input]
+    exact eventInput.symm
+
 theorem gammaCandidateEvidence_input_is_actual_query
     (tape : Tape) (afterNonce : FSBoundedTranscript.Transcript) :
     (gammaCandidateEvidence tape afterNonce).event.input =
@@ -143,5 +185,6 @@ theorem gammaCandidateEvidence_input_is_actual_query
 #print axioms candidate_prefix
 #print axioms gammaCandidateEvidence_input_is_actual_query
 #print axioms gammaBoundaryConfiguration_input
+#print axioms fixedRecord_q1_contains_gamma
 end
 end AspisV8Completion.FSV8GammaChallengeInputBridge

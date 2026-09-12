@@ -1,24 +1,25 @@
 {
   "target": "FSV8GammaChallengeInputBridge.lean",
-  "theorems": ["candidate_query_mem", "candidate_prefix", "gammaCandidateEvidence_input_is_actual_query", "gammaBoundaryConfiguration_input"],
-  "scope": "Constructs the first nonzero-gamma candidate ShaInput from the actual post-label-28 transcript digest, proves candidate-log membership/prefix provenance, and fixes the V7 driving-input field without choosing fork output or success.",
-  "open": "History-to-origin cut equality for sourceAttempt, V7 programmed-target/fork/resource instantiation, freshness, acceptance, ROM coupling, and probability remain open.",
+  "theorems": ["candidate_query_mem", "candidate_prefix", "gammaCandidateEvidence_input_is_actual_query", "gammaBoundaryConfiguration_input", "fixedRecord_q1_contains_gamma"],
+  "scope": "Constructs the first nonzero-gamma candidate ShaInput from the actual post-label-28 transcript digest, proves candidate-log membership/prefix provenance, fixes the V7 driving-input field without choosing fork output or success, and transfers it into fixedFirstRunRecord.q1 under explicit V7 origin-history membership.",
+  "open": "The V8-to-V7 origin-history membership/cut premise, V7 programmed-target/fork/resource instantiation, freshness, acceptance, ROM coupling, and probability remain open.",
   "compile": {
     "host": "NUC via Tailscale",
     "toolchain": "Lean 4.32.0",
     "command": "lean -j1 -M8192 -o FSV8GammaChallengeInputBridge.olean FSV8GammaChallengeInputBridge.lean",
     "exit_status": 0,
-    "wall_seconds": 2.97,
-    "peak_rss_kib": 6560028,
+    "wall_seconds": 3.08,
+    "peak_rss_kib": 6619248,
     "swap_kib": 0,
-    "source_sha256": "9b5266040cd9fcfaec1f30f05443e976be99ca45b958719cb282a62c948c71a6",
-    "olean_sha256": "dbe4a840b599b8bb5b4a566055c16257428efb32521ab5718c327482ef82ebc2"
+    "source_sha256": "5315138660a8f9e94ef674664fd4a47d7c2b3a70789a811bf42a8e316e6d9241",
+    "olean_sha256": "332480e47444d8ade752030fe353460022a094dc013cc18e53c1887673b59a0d"
   },
   "axioms": {
     "candidate_query_mem": ["propext", "Classical.choice", "Quot.sound"],
     "candidate_prefix": ["propext", "Classical.choice", "Quot.sound"],
     "gammaCandidateEvidence_input_is_actual_query": ["propext", "Classical.choice", "Quot.sound"],
-    "gammaBoundaryConfiguration_input": []
+    "gammaBoundaryConfiguration_input": [],
+    "fixedRecord_q1_contains_gamma": ["propext", "Classical.choice", "Quot.sound"]
   },
   "commit": null
 }
