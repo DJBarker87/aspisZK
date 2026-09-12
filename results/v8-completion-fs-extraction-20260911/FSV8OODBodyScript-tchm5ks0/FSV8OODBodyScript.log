@@ -1,0 +1,266 @@
+FSV8OODBodyScript.lean:52:0: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.FSV8OODBodyScript.run_answerScript`:
+  [DecidableEq Point]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Point] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+FSV8OODBodyScript.lean:76:2: error: don't know how to synthesize implicit argument `m`
+  @FSTranscriptScript.bind (Except Error Point × Block) (Except Error PairResult × Block)
+    (?m.170 decode firstWork secondWork body digest + 1 + m + 198 * 3 + 1 + n) (66 * 3) (circleScript decode 3 digest)
+    fun firstDraw =>
+    match firstDraw.fst with
+    | Except.error e => Script.done (Except.error e, firstDraw.snd)
+    | Except.ok firstPoint =>
+      FSTranscriptScript.bind (answerScript firstWork firstPoint body 0) fun firstAnswer =>
+        FSTranscriptScript.bind (absorbScript firstDraw.snd 62 (0 :: firstAnswer)) fun afterFirst =>
+          FSTranscriptScript.bind (distinctScript decode firstPoint 3 afterFirst) fun secondDraw =>
+            match secondDraw.fst with
+            | Except.error e => Script.done (Except.error e, secondDraw.snd)
+            | Except.ok secondPoint =>
+              FSTranscriptScript.bind (answerScript (secondWork firstPoint) secondPoint body 1) fun secondAnswer =>
+                FSTranscriptScript.bind (absorbScript secondDraw.snd 62 (1 :: secondAnswer)) fun afterSecond =>
+                  Script.done
+                    (Except.ok
+                        { first := firstPoint, second := secondPoint, firstAnswer := firstAnswer,
+                          secondAnswer := secondAnswer, afterFirstAnswer := afterFirst,
+                          afterSecondAnswer := afterSecond },
+                      afterSecond)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+⊢ Nat
+FSV8OODBodyScript.lean:80:6: error: don't know how to synthesize implicit argument `m`
+  @FSTranscriptScript.bind Bytes (Except Error PairResult × Block)
+    (?m.170 decode firstWork secondWork body digest + 1 + m + 198 * 3 + 1) n (answerScript firstWork firstPoint body 0)
+    fun firstAnswer =>
+    FSTranscriptScript.bind (absorbScript firstDraw.snd 62 (0 :: firstAnswer)) fun afterFirst =>
+      FSTranscriptScript.bind (distinctScript decode firstPoint 3 afterFirst) fun secondDraw =>
+        match secondDraw.fst with
+        | Except.error e => Script.done (Except.error e, secondDraw.snd)
+        | Except.ok secondPoint =>
+          FSTranscriptScript.bind (answerScript (secondWork firstPoint) secondPoint body 1) fun secondAnswer =>
+            FSTranscriptScript.bind (absorbScript secondDraw.snd 62 (1 :: secondAnswer)) fun afterSecond =>
+              Script.done
+                (Except.ok
+                    { first := firstPoint, second := secondPoint, firstAnswer := firstAnswer,
+                      secondAnswer := secondAnswer, afterFirstAnswer := afterFirst, afterSecondAnswer := afterSecond },
+                  afterSecond)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+firstPoint : Point
+⊢ Nat
+FSV8OODBodyScript.lean:81:8: error: don't know how to synthesize implicit argument `m`
+  @FSTranscriptScript.bind Block (Except Error PairResult × Block)
+    (?m.170 decode firstWork secondWork body digest + 1 + m + 198 * 3) 1
+    (absorbScript firstDraw.snd 62 (0 :: firstAnswer)) fun afterFirst =>
+    FSTranscriptScript.bind (distinctScript decode firstPoint 3 afterFirst) fun secondDraw =>
+      match secondDraw.fst with
+      | Except.error e => Script.done (Except.error e, secondDraw.snd)
+      | Except.ok secondPoint =>
+        FSTranscriptScript.bind (answerScript (secondWork firstPoint) secondPoint body 1) fun secondAnswer =>
+          FSTranscriptScript.bind (absorbScript secondDraw.snd 62 (1 :: secondAnswer)) fun afterSecond =>
+            Script.done
+              (Except.ok
+                  { first := firstPoint, second := secondPoint, firstAnswer := firstAnswer,
+                    secondAnswer := secondAnswer, afterFirstAnswer := afterFirst, afterSecondAnswer := afterSecond },
+                afterSecond)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+firstPoint : Point
+firstAnswer : Bytes
+⊢ Nat
+FSV8OODBodyScript.lean:82:10: error: don't know how to synthesize implicit argument `m`
+  @FSTranscriptScript.bind (Except Error Point × Block) (Except Error PairResult × Block)
+    (?m.170 decode firstWork secondWork body digest + 1 + m) (198 * 3) (distinctScript decode firstPoint 3 afterFirst)
+    fun secondDraw =>
+    match secondDraw.fst with
+    | Except.error e => Script.done (Except.error e, secondDraw.snd)
+    | Except.ok secondPoint =>
+      FSTranscriptScript.bind (answerScript (secondWork firstPoint) secondPoint body 1) fun secondAnswer =>
+        FSTranscriptScript.bind (absorbScript secondDraw.snd 62 (1 :: secondAnswer)) fun afterSecond =>
+          Script.done
+            (Except.ok
+                { first := firstPoint, second := secondPoint, firstAnswer := firstAnswer, secondAnswer := secondAnswer,
+                  afterFirstAnswer := afterFirst, afterSecondAnswer := afterSecond },
+              afterSecond)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+firstPoint : Point
+firstAnswer : Bytes
+afterFirst : Block
+⊢ Nat
+FSV8OODBodyScript.lean:86:14: error: don't know how to synthesize implicit argument `m`
+  @FSTranscriptScript.bind Bytes (Except Error PairResult × Block) (?m.170 decode firstWork secondWork body digest + 1)
+    m (answerScript (secondWork firstPoint) secondPoint body 1) fun secondAnswer =>
+    FSTranscriptScript.bind (absorbScript secondDraw.snd 62 (1 :: secondAnswer)) fun afterSecond =>
+      Script.done
+        (Except.ok
+            { first := firstPoint, second := secondPoint, firstAnswer := firstAnswer, secondAnswer := secondAnswer,
+              afterFirstAnswer := afterFirst, afterSecondAnswer := afterSecond },
+          afterSecond)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+firstPoint : Point
+firstAnswer : Bytes
+afterFirst : Block
+secondDraw : Except Error Point × Block
+secondPoint : Point
+⊢ Nat
+FSV8OODBodyScript.lean:87:16: error: don't know how to synthesize implicit argument `m`
+  @FSTranscriptScript.bind Block (Except Error PairResult × Block) (?m.170 decode firstWork secondWork body digest) 1
+    (absorbScript secondDraw.snd 62 (1 :: secondAnswer)) fun afterSecond =>
+    Script.done
+      (Except.ok
+          { first := firstPoint, second := secondPoint, firstAnswer := firstAnswer, secondAnswer := secondAnswer,
+            afterFirstAnswer := afterFirst, afterSecondAnswer := afterSecond },
+        afterSecond)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+firstPoint : Point
+firstAnswer : Bytes
+afterFirst : Block
+secondDraw : Except Error Point × Block
+secondPoint : Point
+secondAnswer : Bytes
+⊢ Nat
+FSV8OODBodyScript.lean:88:18: error: don't know how to synthesize implicit argument `n`
+  @Script.done (List UInt8) Block (Except Error PairResult × Block) (?m.170 decode firstWork secondWork body digest)
+    (Except.ok
+        { first := firstPoint, second := secondPoint, firstAnswer := firstAnswer, secondAnswer := secondAnswer,
+          afterFirstAnswer := afterFirst, afterSecondAnswer := afterSecond },
+      afterSecond)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+firstPoint : Point
+firstAnswer : Bytes
+afterFirst : Block
+secondDraw : Except Error Point × Block
+secondPoint : Point
+secondAnswer : Bytes
+afterSecond : Block
+⊢ Nat
+FSV8OODBodyScript.lean:84:26: error: don't know how to synthesize implicit argument `n`
+  @Script.done (List UInt8) Block (Except Error PairResult × Block)
+    (?m.170 decode firstWork secondWork body digest + 1 + m) (Except.error e, secondDraw.snd)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+firstPoint : Point
+firstAnswer : Bytes
+afterFirst : Block
+secondDraw : Except Error Point × Block
+e : Error
+⊢ Nat
+FSV8OODBodyScript.lean:78:18: error: don't know how to synthesize implicit argument `n`
+  @Script.done (List UInt8) Block (Except Error PairResult × Block)
+    (?m.170 decode firstWork secondWork body digest + 1 + m + 198 * 3 + 1 + n) (Except.error e, firstDraw.snd)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+firstDraw : Except Error Point × Block
+e : Error
+⊢ Nat
+FSV8OODBodyScript.lean:71:4: error(lean.inferDefTypeFailed): Failed to infer type of definition `bodyPairScript`
+FSV8OODBodyScript.lean:100:26: error(lean.unknownIdentifier): Unknown identifier `bodyPairScript`
+
+Note: It is not possible to treat `bodyPairScript` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+FSV8OODBodyScript.lean:103:13: error(lean.unknownIdentifier): Unknown identifier `bodyPairScript`
+FSV8OODBodyScript.lean:103:2: error: `simp` made no progress
+FSV8OODBodyScript.lean:129:29: error(lean.unknownIdentifier): Unknown identifier `bodyPairScript`
+
+Note: It is not possible to treat `bodyPairScript` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+FSV8OODBodyScript.lean:131:5: error(lean.unknownIdentifier): Unknown identifier `bodyPairScript`
+FSV8OODBodyScript.lean:140:17: error(lean.unknownIdentifier): Unknown identifier `bodyPairScript`
+
+Note: It is not possible to treat `bodyPairScript` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisV8Completion.FSV8OODBodyScript.answer_bytes_size' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSV8OODBodyScript.answer_fields_canonical' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSV8OODBodyScript.run_answerScript' depends on axioms: [propext, Quot.sound]
+FSV8OODBodyScript.lean:146:14: error(lean.unknownIdentifier): Unknown constant `successful_answers_same_body`
+FSV8OODBodyScript.lean:147:14: error(lean.unknownIdentifier): Unknown constant `body_pair_prefix`
+FSV8OODBodyScript.lean:148:14: error(lean.unknownIdentifier): Unknown constant `body_pair_valid`
+        0.79 real         0.59 user         0.18 sys
+           674840576  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               47543  page reclaims
+                  51  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   3  voluntary context switches
+                1871  involuntary context switches
+           317488135  instructions retired
+           116949409  cycles elapsed
+            11633432  peak memory footprint

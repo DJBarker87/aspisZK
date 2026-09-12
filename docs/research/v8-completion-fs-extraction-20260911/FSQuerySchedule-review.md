@@ -53,13 +53,21 @@ production through the preceding semantic/OOD/image/row/alpha0 phases remains
 an explicit source obligation. It does not move the complete proof body into
 a pre-challenge adversarial callback or establish an ideal/ROM coupling.
 
-The join is intentionally not a literal complete query-phase trace.  The
+The first join is intentionally not a literal complete query-phase trace.  The
 selected research Rust absorbs `AV8/query-batch/v1` and samples nonzero `rho`
 after the schedule and before `opened_values` starts the leaf/node hashes
 (`relation_callback.rs:122--125,286--288`).  This leaf goes directly from the
 schedule to the pure Merkle script.  It therefore proves schedule-to-opening
 position coherence, not the intervening transcript/effect order or the final
 query-phase oracle state.
+
+`FSNonzeroQM31.lean` and `FSV7SampledRhoBodyScript.lean` now close that
+deterministic interlude. They execute the literal profile bytes under label1,
+the three-attempt nonzero sampler, and only then the authenticated opening
+hashes. Successful execution constructs the actual nonzero rho and preserves
+the exact q22 positions. The final leaf passed pinned Lean4.32 with standard
+axioms (5.34 s wall, 6,681,196 KiB peak RSS, zero swap). This is still not a
+uniformity theorem, an incoming-transcript producer or literal Rust refinement.
 
 The first historical Lean 4.32 integration attempts exposed a proof-dependent
 match-elimination incompatibility around `from_success`; the failed v7 run is
@@ -71,6 +79,6 @@ axioms.  Evidence is in
 Fresh dependency/kernel checking and actual Rust refinement are NOT RUN.
 
 Next: instantiate its incoming state with the actual compact response0/fold
-execution, insert the rho boundary and prove canonical fixed-field
+execution and prove canonical fixed-field
 serialization matches the byte ranges it absorbs. No global security or CU
 claim follows.

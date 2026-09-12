@@ -19,9 +19,12 @@ acceptance predicate.
 set_option autoImplicit false
 set_option Elab.async false
 set_option maxHeartbeats 200000
+set_option maxRecDepth 10000
 namespace AspisV8Completion.SameBodySelectedSemanticSource
 open scoped BigOperators
 open AspisV6AcceptedPathObligations
+open AspisV6TranscriptRelationGrammar
+open AspisFormal.HashMerkleModel
 open AspisV8.SelectedCompactSemanticRepair
 open AspisV8Completion.SameBodyRelation
 
@@ -55,7 +58,7 @@ def semanticFieldsFromWord (word : Word K) (rest : FixedFieldView K) : FixedFiel
     (early : Fin 417 → K) (strategy : Strategy K Schedule)
     (tau alpha : K) (queries : Schedule) (rho : K) (coins : Fin 3 → K) :
     sourceWord mask early strategy tau alpha queries rho coins 0 = ∑ row, mask row := by
-  simp [sourceWord, produce, assembled_early, earlyWithMask]
+  simp [sourceWord, produce, assemble, earlyWithMask]
 
 @[simp] theorem semanticFields_sourceWord_mask_bound (mask : Fin 1024 → K)
     (early : Fin 417 → K) (strategy : Strategy K Schedule)
@@ -86,16 +89,19 @@ theorem runSelectedTerminal_success
     (success : runSelectedTerminal callback fields point = some computed) :
     callback (terminalProjection fields.pointClaim) point = some computed ∧
       semanticTerminalClaim fields point = computed := by
-  simp only [runSelectedTerminal] at success
-  split at success
-  · contradiction
-  next value callbackRun =>
-    split at success
-    next equal =>
-      have result := Option.some.inj success
-      subst computed
-      exact ⟨callbackRun, equal⟩
-    next unequal => contradiction
+  unfold runSelectedTerminal at success
+  cases callbackRun : callback (terminalProjection fields.pointClaim) point with
+  | none => simp [callbackRun] at success
+  | some value =>
+      have success' :
+          (if semanticTerminalClaim fields point = value then some value else none) =
+            some computed := by
+        simpa [callbackRun] using success
+      by_cases equal : semanticTerminalClaim fields point = value
+      · have same : value = computed := Option.some.inj (by simpa [equal] using success')
+        subst computed
+        exact ⟨rfl, equal⟩
+      · simp [equal] at success'
 
 /-- The two exact bindings consumed by `SelectedConcreteTerminal`.  The
 callback equality is the remaining selected-terminal Rust/refinement fact:

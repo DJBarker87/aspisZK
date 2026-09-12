@@ -20,9 +20,10 @@ set_option maxHeartbeats 200000
 namespace AspisV8Completion.SelectedSemanticCallbackGap
 open scoped BigOperators
 open Polynomial
-open AspisV5AcceptedTerminalResidualExtraction
 open AspisV6AcceptedPathObligations
+open AspisV6TranscriptRelationGrammar
 open AspisV8.SelectedCompactSemanticRepair
+open AspisV8.SelectedSemanticLaneAggregation
 open AspisV8Completion.SameBodySelectedSemanticSource
 
 variable {K : Type*} [Field K] [DecidableEq K]
@@ -44,9 +45,11 @@ theorem arbitraryTerminalMessage_degree
   unfold arbitraryTerminalMessage
   split
   · apply (natDegree_add_le _ _).trans
-    exact max_le (by simp) ((natDegree_mul_le _ _).trans (by simp))
+    apply max_le (by simp)
+    exact (natDegree_C_mul_le (initial - 2 * target) X).trans (by simp)
   · apply (natDegree_sub_le _ _).trans
-    exact max_le (by simp) ((natDegree_mul_le _ _).trans (by simp))
+    apply max_le (by simp)
+    exact (natDegree_C_mul_le target X).trans (by simp)
 
 @[simp] theorem arbitraryTerminalMessage_zero
     (initial target : K) (round : Fin 10) :
@@ -71,14 +74,18 @@ noncomputable def arbitraryTerminalTrace
   degree := arbitraryTerminalMessage_degree _ target
   boundary := by
     intro round
-    fin_cases round <;>
-      simp [arbitraryTerminalMessage, referenceClaim, zeroPoint] <;> ring
+    refine Fin.cases ?_ (fun previous => ?_) round
+    · simpa [referenceClaim] using
+        arbitraryTerminalMessage_boundary (∑ row, table row) target (0 : Fin 10)
+    · rw [arbitraryTerminalMessage_boundary]
+      simp [referenceClaim, zeroPoint, arbitraryTerminalMessage_zero]
 
 @[simp] theorem arbitraryTerminalTrace_final
     (table : Fin 1024 → K) (target : K) :
     referenceClaim (∑ row, table row) (arbitraryTerminalTrace table target).messages
       zeroPoint (Fin.last 10) = target := by
-  simp [referenceClaim, arbitraryTerminalTrace, zeroPoint]
+  change (arbitraryTerminalMessage (∑ row, table row) target (Fin.last 9)).eval 0 = target
+  exact arbitraryTerminalMessage_zero _ _ _
 
 /-- The exact value the frozen Boolean-table model assigns to the selected
 masked callback.  Proving that the literal pair-forest Rust evaluator returns
