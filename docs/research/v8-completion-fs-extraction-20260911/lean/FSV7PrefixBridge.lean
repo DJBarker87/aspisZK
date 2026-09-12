@@ -1,0 +1,132 @@
+import FSAuthenticationSuffix
+import AuthenticatedEarlyC1Prefix
+
+/-! DRAFT for the parent's serial historical-source build. This imports the
+ACTUAL old Byte/RawHashInput/Digest208/AnswerPrefix types, not shadow aliases.
+It constructs the two advertised-answer and two inclusion premises required
+by SameBodyAuthenticatedSlots from the extended causal execution. It does NOT
+construct SuccessfulMerkleRun or prove its leaf/internal calls are the suffix.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+namespace AspisV8Completion.FSV7PrefixBridge
+open FSOracleExecution FSBoundedTranscript FSAuthenticationPrefixes FSAuthenticationSuffix
+open AspisPool.V7MerkleQueryGrammar AspisPool.V7MerkleOpeningBinding
+open AspisV8.AuthenticatedEarlyC1Prefix
+
+def encode (bytes : List UInt8) : RawHashInput := bytes.map UInt8.toFin
+def decode (bytes : RawHashInput) : List UInt8 := bytes.map UInt8.ofFin
+
+/-- The pinned4.32 library lacks the later simp names; these are constructor
+identities, independent of concrete values and checked without enumeration. -/
+theorem byte_roundtrip (byte : UInt8) : UInt8.ofFin byte.toFin = byte := by
+  cases byte
+  rfl
+theorem fin_roundtrip (byte : Fin 256) : (UInt8.ofFin byte).toFin = byte := rfl
+
+theorem decode_encode (bytes : List UInt8) : decode (encode bytes) = bytes := by
+  simp only [decode, encode, List.map_map, Function.comp_def, byte_roundtrip]
+  exact List.map_id bytes
+theorem encode_decode (bytes : RawHashInput) : encode (decode bytes) = bytes := by
+  simp only [decode, encode, List.map_map, Function.comp_def, fin_roundtrip]
+  exact List.map_id bytes
+
+/-- Source projections always have exactly26 bytes. getD is retained only to
+make the total view's unobserved-input default explicit, not to parse wire. -/
+def digestOfBytes (bytes : List UInt8) : Digest208 :=
+  AspisPool.V7MerkleQueryExtractor.fixedOfListD (encode bytes)
+def root208 (root : Root) : Digest208 := fun i => (root i).toFin
+
+theorem digest_bytes_exact (answer : Block) :
+    fixedBytes (digestOfBytes (truncate208 answer)) = encode (truncate208 answer) := by
+  apply AspisPool.V7MerkleQueryExtractor.fixedBytes_fixedOfListD_of_length
+  simp [encode, truncate_length]
+
+theorem root_bytes_exact (root : Root) :
+    fixedBytes (root208 root) = encode (List.ofFn root) := by
+  simp only [fixedBytes, root208, encode, List.map_ofFn] <;> rfl
+
+/-- Exact source hash-input grammar under the byte bijection. These identities
+do not turn the pure multiproof recursion into an effectful causal script. -/
+theorem node_input_bytes (left right : Digest208) :
+    decode (serialize (.node left right)) = [0x11] ++
+      List.ofFn (fun i => UInt8.ofFin (left i)) ++
+      List.ofFn (fun i => UInt8.ofFin (right i)) := by
+  simp only [decode, serialize, fixedBytes, List.map_append, List.map_cons,
+    List.map_nil, List.map_ofFn] <;> rfl
+
+theorem c1_input_bytes (value : C1Value) (salt : Salt32) :
+    decode (serialize (.c1Leaf value salt)) = [0x10, 0x71] ++
+      List.ofFn (fun i => UInt8.ofFin (value i)) ++
+      List.ofFn (fun i => UInt8.ofFin (salt i)) := by
+  simp only [decode, serialize, fixedBytes, List.map_append, List.map_cons,
+    List.map_nil, List.map_ofFn] <;> rfl
+
+theorem c2_input_bytes (value : C2Value) (salt : Salt32) :
+    decode (serialize (.c2Leaf value salt)) = [0x10, 0xf1] ++
+      List.ofFn (fun i => UInt8.ofFin (value i)) ++
+      List.ofFn (fun i => UInt8.ofFin (salt i)) := by
+  simp only [decode, serialize, fixedBytes, List.map_append, List.map_cons,
+    List.map_nil, List.map_ofFn] <;> rfl
+
+def oldRecords (new : List AnswerRecord) : AnswerPrefix :=
+  new.map (fun record => (encode record.1, digestOfBytes record.2))
+def oldLog (oracle : Oracle) : OrderedRawQueryLog :=
+  oracle.log.map (fun event => encode event.input)
+def oldView (oracle : Oracle) (input : RawHashInput) : Digest208 :=
+  digestOfBytes (totalView208 oracle (decode input))
+
+theorem record_transport (oracle : Oracle) (new : List AnswerRecord)
+    (answers : ∀ record ∈ new, totalView208 oracle record.1 = record.2) :
+    ∀ record ∈ oldRecords new, oldView oracle record.1 = record.2 := by
+  intro record member
+  obtain ⟨source, seen, eq⟩ := List.mem_map.mp member
+  subst record
+  simp only [oldView, decode_encode, answers source seen]
+
+theorem raw_prefix_transport (oracle : Oracle) (new : List AnswerRecord) (cut : Nat)
+    (literal : new = (records oracle.log).take cut) :
+    rawPrefix (oldRecords new) = (oldLog oracle).take cut := by
+  rw [literal]
+  simp only [rawPrefix, oldRecords, records, oldLog, List.map_map,
+    List.map_take, Function.comp_def]
+
+/-- No caller supplies answers, inclusion, expected old prefix, or a callback
+agreement. These four concrete old-type premises are produced from the same
+extended execution, even when its later script returns inner none (abort).
+This is NOT old Merkle acceptance or the source's callsIncluded premise. -/
+theorem chronological_old_prefixes {A : Type} {n m q : Nat}
+    (tape : Tape) (digest : Block)
+    (producerC1 : Transcript → Script (List UInt8) Block Root n)
+    (producerC2 : Oracle → List Nat → List Nat → Script (List UInt8) Block Root m)
+    (suffix : RootCuts → Script (List UInt8) Block A q) (out : RootCuts) (outcome : Option A)
+    (success : (continueRun tape ⟨digest, FSFirstFresh.empty⟩ producerC1 producerC2 suffix).1 =
+      some (out, outcome)) :
+    let final := (continueRun tape ⟨digest, FSFirstFresh.empty⟩ producerC1 producerC2 suffix).2
+    (∀ record ∈ oldRecords (c1Records out), oldView final record.1 = record.2) ∧
+    (∀ record ∈ oldRecords (c2Records out), oldView final record.1 = record.2) ∧
+    TraceIncludedInLog (rawPrefix (oldRecords (c1Records out))) (oldLog final) ∧
+    TraceIncludedInLog (rawPrefix (oldRecords (c2Records out))) (oldLog final) ∧
+    rawPrefix (oldRecords (c1Records out)) = (oldLog final).take out.c1Cut.log.length ∧
+    rawPrefix (oldRecords (c2Records out)) = (oldLog final).take out.c2Cut.log.length := by
+  obtain ⟨_, c1Take, c2Take, c1Answers, c2Answers⟩ :=
+    continued_prefix_answers tape digest producerC1 producerC2 suffix out outcome success
+  have p1 := raw_prefix_transport _ _ _ c1Take
+  have p2 := raw_prefix_transport _ _ _ c2Take
+  refine ⟨record_transport _ _ c1Answers, record_transport _ _ c2Answers, ?_, ?_, p1, p2⟩
+  · intro input member
+    rw [p1] at member
+    exact List.mem_of_mem_take member
+  · intro input member
+    rw [p2] at member
+    exact List.mem_of_mem_take member
+
+#print chronological_old_prefixes
+#print axioms chronological_old_prefixes
+#print axioms decode_encode
+#print axioms encode_decode
+#print axioms digest_bytes_exact
+#print axioms node_input_bytes
+#print axioms c1_input_bytes
+#print axioms c2_input_bytes
+end AspisV8Completion.FSV7PrefixBridge

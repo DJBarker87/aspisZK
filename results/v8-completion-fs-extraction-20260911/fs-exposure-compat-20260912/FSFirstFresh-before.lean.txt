@@ -94,7 +94,7 @@ theorem first_fresh (s : Oracle) (valid : ValidHistory s) (input : Bytes)
   have within := List.idxOf_lt_length_of_mem seen
   have h : firstExposure s.log input < s.log.length := by
     simpa only [firstExposure, inputs, List.length_map] using within
-  have found := getElem_first_index within
+  have found := List.getElem_idxOf within
   change (inputs s.log)[firstExposure s.log input] = input at found
   simp only [inputs, List.getElem_map] at found
   refine ⟨h, (valid.flags _ h).mpr ?_⟩
