@@ -379,10 +379,7 @@ mod tests {
                 .unwrap()
                 .try_into()
                 .unwrap();
-            assert!(
-                binary_frontier_nodes(queries, 18).unwrap()
-                    > V7_COMPACT_FRONTIER_CAP_PER_TREE
-            );
+            assert!(binary_frontier_nodes(queries, 18).unwrap() > V7_COMPACT_FRONTIER_CAP_PER_TREE);
         }
     }
 }

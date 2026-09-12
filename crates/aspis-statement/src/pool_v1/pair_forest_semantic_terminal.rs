@@ -223,12 +223,7 @@ fn initial_variant_selectors(
     high29: QM31,
 ) -> (QM31, QM31, QM31, QM31) {
     match variant {
-        CompiledVariant::PrivateTransfer => (
-            high27,
-            QM31::ZERO,
-            high27.add(high28),
-            high29,
-        ),
+        CompiledVariant::PrivateTransfer => (high27, QM31::ZERO, high27.add(high28), high29),
         CompiledVariant::Withdrawal => (
             QM31::ZERO,
             high27.add(high28).add(high29),
@@ -248,13 +243,12 @@ fn semantic_initial_and_absorption(
         .add(selectors.high[1])
         .add(selectors.high[25])
         .add(selectors.high[30]);
-    let (transfer_first, fixed, private_chunk_eight, private_chunk_two) =
-        initial_variant_selectors(
-            public.variant,
-            selectors.high[27],
-            selectors.high[28],
-            selectors.high[29],
-        );
+    let (transfer_first, fixed, private_chunk_eight, private_chunk_two) = initial_variant_selectors(
+        public.variant,
+        selectors.high[27],
+        selectors.high[28],
+        selectors.high[29],
+    );
     let full_initial_selector = selectors.low[0].mul(first_common.add(transfer_first).add(fixed));
     let rate_initial_selector = selectors.low[0].mul(nodes);
     let full = PreparedQm31Multiplier::new(full_initial_selector);
@@ -482,9 +476,7 @@ fn add_value_lanes(
     }
     index = 0;
     while index < 10 {
-        range[10 + index] = openings.succ_z[index]
-            .square()
-            .sub(openings.succ_z[index]);
+        range[10 + index] = openings.succ_z[index].square().sub(openings.succ_z[index]);
         index += 1;
     }
     index = 0;
@@ -890,10 +882,7 @@ fn append_level_packed_selector_tensor(
     frontier: Digest,
     opened: [QM31; POSEIDON2_WIDTH],
     high: QM31,
-) -> (
-    [QM31; DIGEST_ELEMS / 4],
-    [QM31; DIGEST_ELEMS / 4],
-) {
+) -> ([QM31; DIGEST_ELEMS / 4], [QM31; DIGEST_ELEMS / 4]) {
     let prepared_high = PreparedQm31Multiplier::new(high);
     if ((next_pair_index >> level) & 1) == 0 {
         let expected = empty_root(level);
@@ -907,8 +896,7 @@ fn append_level_packed_selector_tensor(
             opened[RATE + 4].sub(lift_m31(expected[4])),
             opened[RATE + 5].sub(lift_m31(expected[5])),
             opened[RATE + 6].sub(lift_m31(expected[6])),
-            opened[RATE + 7]
-                .sub(lift_m31(expected[7].add(MERKLE_NODE_COMPRESSION_V3_TWEAK))),
+            opened[RATE + 7].sub(lift_m31(expected[7].add(MERKLE_NODE_COMPRESSION_V3_TWEAK))),
         ];
         (
             [
@@ -950,10 +938,7 @@ fn append_levels_packed_selector_tensor(
     frontier: [Digest; 20],
     opened: [QM31; POSEIDON2_WIDTH],
     selector_high: [QM31; 64],
-) -> (
-    [QM31; DIGEST_ELEMS / 4],
-    [QM31; DIGEST_ELEMS / 4],
-) {
+) -> ([QM31; DIGEST_ELEMS / 4], [QM31; DIGEST_ELEMS / 4]) {
     let mut local0 = [QM31::ZERO; DIGEST_ELEMS / 4];
     let mut local12 = [QM31::ZERO; DIGEST_ELEMS / 4];
     let mut level = 0usize;
@@ -1029,32 +1014,18 @@ fn public_digest_packed_selector_tensor(
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
     let mut local_sums = [[QM31::ZERO; DIGEST_ELEMS / 4]; 3];
-    let anchor = left_digest_packed_selector_tensor(
-        selectors.high[56],
-        openings.z,
-        public.anchor,
-    );
+    let anchor = left_digest_packed_selector_tensor(selectors.high[56], openings.z, public.anchor);
     local_sums[1][0] = local_sums[1][0].add(anchor[0]);
     local_sums[1][1] = local_sums[1][1].add(anchor[1]);
-    let nullifier = left_digest_packed_selector_tensor(
-        selectors.high[26],
-        openings.z,
-        public.nullifier,
-    );
+    let nullifier =
+        left_digest_packed_selector_tensor(selectors.high[26], openings.z, public.nullifier);
     local_sums[1][0] = local_sums[1][0].add(nullifier[0]);
     local_sums[1][1] = local_sums[1][1].add(nullifier[1]);
-    let recipient = optional_recipient_packed_selector_tensor(
-        public.recipient,
-        openings.z,
-        selectors.high[29],
-    );
+    let recipient =
+        optional_recipient_packed_selector_tensor(public.recipient, openings.z, selectors.high[29]);
     local_sums[1][0] = local_sums[1][0].add(recipient[0]);
     local_sums[1][1] = local_sums[1][1].add(recipient[1]);
-    let change = left_digest_packed_selector_tensor(
-        selectors.high[32],
-        openings.z,
-        public.change,
-    );
+    let change = left_digest_packed_selector_tensor(selectors.high[32], openings.z, public.change);
     local_sums[1][0] = local_sums[1][0].add(change[0]);
     local_sums[1][1] = local_sums[1][1].add(change[1]);
 
@@ -1074,11 +1045,8 @@ fn public_digest_packed_selector_tensor(
     local_sums[0][1] = local_sums[0][1].add(append_local0[1]);
     local_sums[2][0] = local_sums[2][0].add(append_local12[0]);
     local_sums[2][1] = local_sums[2][1].add(append_local12[1]);
-    let next_root = left_digest_packed_selector_tensor(
-        selector_high[53],
-        opened_z,
-        after.next_root,
-    );
+    let next_root =
+        left_digest_packed_selector_tensor(selector_high[53], opened_z, after.next_root);
     local_sums[1][0] = local_sums[1][0].add(next_root[0]);
     local_sums[1][1] = local_sums[1][1].add(next_root[1]);
     let carry = core::cmp::min(next_pair_index.trailing_ones() as usize, 20);
@@ -1678,8 +1646,12 @@ mod tests {
         let rows = [row, (row + 1) & 1023, row ^ 12];
         StateOnlyPoseidonOpenings {
             z: core::array::from_fn(|column| lift_m31(compiled.semantic_c1.c1[column][rows[0]])),
-            succ_z: core::array::from_fn(|column| lift_m31(compiled.semantic_c1.c1[column][rows[1]])),
-            xor12_z: core::array::from_fn(|column| lift_m31(compiled.semantic_c1.c1[column][rows[2]])),
+            succ_z: core::array::from_fn(|column| {
+                lift_m31(compiled.semantic_c1.c1[column][rows[1]])
+            }),
+            xor12_z: core::array::from_fn(|column| {
+                lift_m31(compiled.semantic_c1.c1[column][rows[2]])
+            }),
         }
     }
 
@@ -1819,7 +1791,8 @@ mod tests {
         let mut claims = [QM31::ZERO; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1];
         for point in 0..3 {
             for column in 0..16 {
-                claims[point * 28 + column] = lift_m31(compiled.semantic_c1.c1[column][rows[point]]);
+                claims[point * 28 + column] =
+                    lift_m31(compiled.semantic_c1.c1[column][rows[point]]);
             }
         }
         claims[SELECTED_H1_COLUMN] = helper[row];
