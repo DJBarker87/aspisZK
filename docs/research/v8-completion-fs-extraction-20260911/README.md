@@ -1,5 +1,13 @@
 # Completion-pack intake and first source-transcript slice
 
+Latest chronological-authentication milestone:
+[`SameBodyChronologicalAuthentication`](chronological-authentication-20260912.md)
+constructs both commitment-prefix answer/inclusion facts and the selected
+same-body leaf/node inclusion from one empty-origin C1/C2 builder followed by
+the live source/Merkle continuation. The final `Prepared` scalar composition
+is reduced to a smaller elaboration seam; terminal/payment acceptance and
+literal Rust refinement remain open.
+
 Latest authenticated-execution milestone:
 [`ExtractionCollectorAuthenticatedReplayable`](authenticated-replayable-source-20260912.md)
 continues a successful live source/OOD/relation transcript with the selected
@@ -501,8 +509,22 @@ acceptance and independence remain open. Evidence is in
 candidate input from the actual post-label-28 transcript cut as
 `List.ofFn afterNonce.digest ++ [1]`, proves candidate-log membership and
 post-nonce prefix provenance, and fixes the V7 driving-input field with that
-computed value. Fork output, controller and resource fields remain explicit;
-the history-to-origin cut equality, programmed target/fork instantiation,
-freshness, acceptance, ROM coupling and probability remain open. Evidence is
+computed value. Under explicit membership of the corresponding adversary
+query in the V7 origin history, it also transfers the query into
+`fixedFirstRunRecordFromOrigin.firstRun.q1`. Fork output, controller and
+resource fields remain explicit; the V8-to-V7 history membership, programmed
+target/fork instantiation, freshness, acceptance, ROM coupling and probability
+remain open. Evidence is
 in `gamma-challenge-input-bridge-20260912.md` and
 `results/gamma-challenge-input-bridge-v1/report.json`.
+
+### 2026-09-12 live authenticated relation observation
+
+`lean/SameBodyLiveRelationObservation.lean` constructs the post-query relation
+input from one successful chronological middle/later run and one same-body
+authenticated-opening run.  Construction rejects unless the increment bytes
+actually consumed before response1 equal the canonical shifted scalar computed
+from those openings.  OOD-data construction, the chronological hash view,
+ordinary/image functional producer, causal relation terminal, Rust refinement,
+payment extraction and probability coupling remain open.  Evidence is in
+`live-relation-observation-20260912.md` and the root `results/` tree.
