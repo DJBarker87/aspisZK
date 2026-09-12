@@ -1194,15 +1194,16 @@ where
     )
 }
 
-/// Pool/native-profile entrypoint for the compact V7 transcript.  The caller
-/// supplies a typed hiding context whose statement digest and nonce are
-/// checked by the hiding precommit.  The legacy wrapper above remains pinned
-/// to the atomic-spend context and therefore keeps its exact transcript.
+/// Shared implementation for the compact V7 transcript.  The selected
+/// production wrapper supplies a no-op `prechallenge` callback.  Keeping the
+/// callback explicit here lets the default-off Aeneas observer invoke exactly
+/// the same parser, transcript, terminal, and query-verification path.
 #[allow(clippy::too_many_arguments)]
 #[inline(never)]
-pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context<
+fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner<
     TerminalCheck,
     QueryFold,
+    Prechallenge,
 >(
     hash: HashFn,
     wire: &V7CompactOneFoldWire<'_>,
@@ -1213,10 +1214,12 @@ pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context<
     check_pow: bool,
     terminal_check: TerminalCheck,
     query_fold: QueryFold,
+    prechallenge: Prechallenge,
 ) -> Result<V6VerifiedTranscript, V6TranscriptError>
 where
     TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
+    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
 {
     let mut fields = V6FixedFieldReader::new(wire.fixed_fields_packed)?;
     let (mut transcript, lambda, chi, batching) =
@@ -1247,8 +1250,90 @@ where
         semantic_point,
         &point_claims,
         query_fold,
+        prechallenge,
         |_| {},
+    )
+}
+
+/// Pool/native-profile entrypoint for the compact V7 transcript.  The caller
+/// supplies a typed hiding context whose statement digest and nonce are
+/// checked by the hiding precommit.  The legacy wrapper above remains pinned
+/// to the atomic-spend context and therefore keeps its exact transcript.
+#[allow(clippy::too_many_arguments)]
+#[inline(never)]
+pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context<
+    TerminalCheck,
+    QueryFold,
+>(
+    hash: HashFn,
+    wire: &V7CompactOneFoldWire<'_>,
+    context: &V6TranscriptContext,
+    hiding_context: StateOnlyHidingContext,
+    inactive_row_groups: &[u8; 64],
+    inactive_group_masks: &[u16],
+    check_pow: bool,
+    terminal_check: TerminalCheck,
+    query_fold: QueryFold,
+) -> Result<V6VerifiedTranscript, V6TranscriptError>
+where
+    TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
+    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
+{
+    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner(
+        hash,
+        wire,
+        context,
+        hiding_context,
+        inactive_row_groups,
+        inactive_group_masks,
+        check_pow,
+        terminal_check,
+        query_fold,
         |_| {},
+    )
+}
+
+/// Default-off source-observation sibling of the selected V7 wrapper.
+///
+/// It is compiled solely for the Rust-to-Lean bridge.  It differs from the
+/// selected wrapper only in receiving the pre-query view already constructed
+/// by the shared implementation; it neither changes nor bypasses any parser,
+/// transcript, work, Merkle, terminal, or query check.
+#[cfg(feature = "aeneas-observer")]
+#[allow(clippy::too_many_arguments)]
+#[inline(never)]
+pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe<
+    TerminalCheck,
+    QueryFold,
+    Prechallenge,
+>(
+    hash: HashFn,
+    wire: &V7CompactOneFoldWire<'_>,
+    context: &V6TranscriptContext,
+    hiding_context: StateOnlyHidingContext,
+    inactive_row_groups: &[u8; 64],
+    inactive_group_masks: &[u16],
+    check_pow: bool,
+    terminal_check: TerminalCheck,
+    query_fold: QueryFold,
+    prechallenge: Prechallenge,
+) -> Result<V6VerifiedTranscript, V6TranscriptError>
+where
+    TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
+    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
+    Prechallenge: FnMut(&V6QueryBatchPrechallengeView<'_>),
+{
+    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner(
+        hash,
+        wire,
+        context,
+        hiding_context,
+        inactive_row_groups,
+        inactive_group_masks,
+        check_pow,
+        terminal_check,
+        query_fold,
+        prechallenge,
     )
 }
 
