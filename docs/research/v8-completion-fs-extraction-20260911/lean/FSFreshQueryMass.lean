@@ -1,5 +1,5 @@
 import Mathlib
-import FSOracleExecution
+import FSFirstFresh
 
 /-!
 The local probability law for the *actual* lazy-oracle `query` transition.
@@ -48,6 +48,18 @@ theorem query_miss_next (tape : Nat → O) (state : State I O) (input : I)
     (query (installNext tape state.next coin) state input).2.next = state.next + 1 := by
   simp [query, miss]
 
+/-- Reachable cache completeness turns a genuinely unseen input into a cache
+miss.  This is the missing logical direction needed before using a fresh-coin
+law; log/cache coherence alone would not suffice. -/
+theorem cache_miss_of_unseen (state : FSFirstFresh.Oracle)
+    (valid : FSFirstFresh.ValidHistory state) (input : List UInt8)
+    (unseen : input ∉ FSExposureOrder.inputs state.log) :
+    state.cache input = none := by
+  cases found : state.cache input with
+  | none => rfl
+  | some answer =>
+      exact False.elim (unseen (valid.complete input answer found))
+
 /-- Exact uniform target mass at every cache-miss state.  The state and input
 may have been chosen adaptively from the complete prior history. -/
 theorem query_miss_uniform_target [Fintype O] [Nonempty O] [DecidableEq O]
@@ -60,6 +72,22 @@ theorem query_miss_uniform_target [Fintype O] [Nonempty O] [DecidableEq O]
   simp only [query_miss_answer tape state input _ miss]
   simp
 
+/-- Source-facing form: at any valid adaptive history, an input absent from
+the actual chronological log receives exact uniform target mass.  No caller
+supplies a cache-miss hypothesis. -/
+theorem unseen_query_uniform_target
+    (tape : Nat → FSExposureOrder.Block)
+    (state : FSFirstFresh.Oracle) (input : List UInt8)
+    (valid : FSFirstFresh.ValidHistory state)
+    (unseen : input ∉ FSExposureOrder.inputs state.log)
+    (target : FSExposureOrder.Block) :
+    (∑ coin : FSExposureOrder.Block,
+      if (query (installNext tape state.next coin) state input).1 = target
+      then (1 : ℚ) else 0) / Fintype.card FSExposureOrder.Block =
+        1 / Fintype.card FSExposureOrder.Block :=
+  query_miss_uniform_target tape state input
+    (cache_miss_of_unseen state valid input unseen) target
+
 /-- A cached query has no coin-dependent mass: changing the unread tape cell
 cannot create a new independent draw. -/
 theorem query_hit_coin_independent (tape : Nat → O) (state : State I O)
@@ -70,7 +98,9 @@ theorem query_hit_coin_independent (tape : Nat → O) (state : State I O)
   simp [query, hit]
 
 #print axioms query_miss_answer
+#print axioms cache_miss_of_unseen
 #print axioms query_miss_uniform_target
+#print axioms unseen_query_uniform_target
 #print axioms query_hit_coin_independent
 
 end

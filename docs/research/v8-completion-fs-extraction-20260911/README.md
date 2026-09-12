@@ -223,8 +223,12 @@ and terminal bindings consumed by the concrete residual alternative.  Hostile
 review in `lean/SelectedSemanticCallbackGap.lean` proves that degree and
 boundary checks alone permit a reference trace with any terminal scalar.  The
 remaining semantic seam is therefore split honestly into literal
-callback-to-table-MLE refinement and a table-derived reference endpoint.  Both
-new leaves are pinned-4.32 checked.  See
+callback-to-table-MLE refinement and a table-derived reference endpoint.
+`lean/CanonicalTableReferenceTrace.lean` now constructs the latter from the
+same 1,024-row table, proves prefix independence for every round, and proves
+its terminal is exactly `tableMLEValue`. Consequently the trace-end premise is
+gone; only literal callback-to-table equality remains. All three focused leaves
+are pinned-4.32 checked. See
 [selected-semantic-source-bridge-20260912.md](selected-semantic-source-bridge-20260912.md).
 
 `lean/ExtractionCollectorSource.lean` instantiates the bounded collector around
