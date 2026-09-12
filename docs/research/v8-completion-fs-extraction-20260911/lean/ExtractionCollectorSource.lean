@@ -188,6 +188,29 @@ def findChecked
         if gammaOf record = gamma ∧ alphaOf record = alpha then some record else none
     | _ => none
 
+theorem findChecked_mem
+    [DecidableEq Gamma] [DecidableEq Alpha]
+    (gammaOf : Record → Gamma) (alphaOf : Record → Alpha)
+    (outcomes : List (AttemptOutcome Record RejectReason ResourceReason))
+    (gamma : Gamma) (alpha : Alpha) (record : Record)
+    (found : findChecked gammaOf alphaOf outcomes gamma alpha = some record) :
+    .checked record ∈ outcomes := by
+  induction outcomes with
+  | nil => simp [findChecked] at found
+  | cons outcome rest ih =>
+      cases outcome with
+      | replayFailure reason => exact List.mem_cons_of_mem _ (ih found)
+      | rejected reason => exact List.mem_cons_of_mem _ (ih found)
+      | resource reason => exact List.mem_cons_of_mem _ (ih found)
+      | checked candidate =>
+          simp only [findChecked, List.findSome?_cons] at found
+          by_cases hit : gammaOf candidate = gamma ∧ alphaOf candidate = alpha
+          · simp [hit] at found
+            subst record
+            exact List.mem_cons_self
+          · simp [hit] at found
+            exact List.mem_cons_of_mem _ (ih found)
+
 /-- This is the exact deterministic progress condition: every scheduled cell
 has already produced a checker-accepted record.  No probability or
 `RecoveredHigh` predicate occurs in it. -/
@@ -257,6 +280,18 @@ def completeMatrix
       alpha_eq := fun row column =>
         (findChecked_labels gammaOf alphaOf outcomes _ _ _ (selected row column)).2 }
 
+theorem CompleteMatrix.selected_mem
+    [DecidableEq Gamma] [DecidableEq Alpha]
+    (gammaOf : Record → Gamma) (alphaOf : Record → Alpha)
+    (labels : MatrixLabels Gamma Alpha)
+    (outcomes : List (AttemptOutcome Record RejectReason ResourceReason))
+    (complete : CompleteMatrix gammaOf alphaOf labels outcomes)
+    (row : Fin 29) (column : Fin 4) :
+    .checked (complete.matrix row column) ∈ outcomes :=
+  findChecked_mem gammaOf alphaOf outcomes (labels.gamma row)
+    (labels.alpha row column) (complete.matrix row column)
+    (complete.selected row column)
+
 inductive CollectorResult
     [DecidableEq Gamma] [DecidableEq Alpha]
     (gammaOf : Record → Gamma) (alphaOf : Record → Alpha)
@@ -280,6 +315,9 @@ def collect29x4
         (retain gammaOf alphaOf outcomes)
     else
       .incomplete (retain gammaOf alphaOf outcomes)
+
+#print axioms findChecked_mem
+#print axioms CompleteMatrix.selected_mem
 
 theorem progress_implies_complete
     [DecidableEq Gamma] [DecidableEq Alpha]

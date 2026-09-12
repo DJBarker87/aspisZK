@@ -141,6 +141,30 @@ theorem verified_attempt_count
       min budget configurations.length := by
   simp [verifiedAttempts]
 
+theorem verified_attempt_checked_mem_configurations
+    (configurations : List OriginReplayConfiguration) (budget : Nat)
+    (cell : Cell origin firstWork secondWork z cuts initialDigest
+      controller limits fuel)
+    (member : .checked cell ∈
+      verifiedAttempts origin firstWork secondWork z cuts initialDigest
+        controller limits fuel configurations budget) :
+    cell.configuration ∈ configurations.take budget := by
+  have configuration_of_checked :
+      ∀ (configuration : OriginReplayConfiguration)
+        (candidate : Cell origin firstWork secondWork z cuts initialDigest
+          controller limits fuel),
+        verifiedAttempt origin firstWork secondWork z cuts initialDigest
+            controller limits fuel configuration = .checked candidate →
+          candidate.configuration = configuration := by
+    intro configuration candidate equality
+    simp only [verifiedAttempt] at equality
+    split at equality <;> try {cases equality}
+    injection equality with cell_eq
+    exact (congrArg (fun c : Cell origin firstWork secondWork z cuts initialDigest
+      controller limits fuel => c.configuration) cell_eq).symm
+  obtain ⟨configuration, member, equality⟩ := List.mem_map.1 member
+  exact (configuration_of_checked configuration cell equality) ▸ member
+
 abbrev Outcomes := List (AttemptOutcome
   (Cell origin firstWork secondWork z cuts initialDigest controller limits fuel)
   AttemptReject AttemptResource)
@@ -154,6 +178,25 @@ abbrev CurrentComplete
     (CheckedCell.alpha origin firstWork secondWork z cuts initialDigest controller
       limits fuel)
     labels outcomes
+
+theorem complete_matrix_cell_configuration_mem_configurations
+    (labels : MatrixLabels K K)
+    (configurations : List OriginReplayConfiguration) (budget : Nat)
+    (complete : CurrentComplete origin firstWork secondWork z cuts initialDigest
+      controller limits fuel labels
+      (verifiedAttempts origin firstWork secondWork z cuts initialDigest
+        controller limits fuel configurations budget))
+    (row : Fin 29) (column : Fin 4) :
+    (complete.matrix row column).configuration ∈ configurations.take budget := by
+  apply verified_attempt_checked_mem_configurations origin firstWork secondWork
+    z cuts initialDigest controller limits fuel configurations budget
+    (complete.matrix row column)
+  apply CompleteMatrix.selected_mem
+    (CheckedCell.gamma origin firstWork secondWork z cuts initialDigest
+      controller limits fuel)
+    (CheckedCell.alpha origin firstWork secondWork z cuts initialDigest
+      controller limits fuel)
+    labels _ complete row column
 
 /-- Matrix selection no longer erases replay provenance: the selected value is
 a `CheckedCell`, so its configuration and exact producer equality remain
@@ -199,6 +242,8 @@ theorem matrix_cell_labels
 #print axioms verified_attempt_count
 #print axioms matrix_cell_constructs_functional_run
 #print axioms matrix_cell_labels
+#print axioms verified_attempt_checked_mem_configurations
+#print axioms complete_matrix_cell_configuration_mem_configurations
 
 end
 end AspisV8Completion.ExtractionCollectorVerifiedMatrix
