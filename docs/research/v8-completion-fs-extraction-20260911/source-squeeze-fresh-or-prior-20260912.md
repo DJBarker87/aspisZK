@@ -8,11 +8,12 @@ in which case the already proved adaptive-pair law gives exact mass
 
 1. `digest ++ [1]` was seen earlier, placing the full 256-bit digest in the
    existing `priorTargets` set; or
-2. `digest ++ [2]` was seen earlier, retained as a separate advance-input
-   collision.
+2. `digest ++ [2]` was seen earlier, placing the same full digest in a
+   separately counted advance-target set.
 
-The second alternative matters: it is not a target request and therefore
-cannot be hidden in `priorTargets`.  The result does not infer independence
+The second alternative matters: it is not an output request and therefore
+cannot be hidden in `priorTargets`.  Both finite target lists are bounded by
+the number of distinct prior inputs.  The result does not infer independence
 from byte labels and does not condition cached executions away.
 
 This is not the complete OOD law.  The two reuse alternatives still need
