@@ -20,6 +20,7 @@ refinement; no performance claim follows from this construction.
 set_option autoImplicit false
 set_option Elab.async false
 set_option maxHeartbeats 300000
+set_option maxRecDepth 2000
 
 namespace AspisV8Completion.SameBodySourceTerminalWeight
 
@@ -28,10 +29,10 @@ open SameBodySourceRelationProducer SameBodyChronologicalRelationTerminal
 open SameBodyLiveRelationObservation SameBodyAuthenticatedIncrement
 open AspisV8Completion.SelectedCopyActiveFlat
 open AspisV8.SelectedWeightedCopyRows
-open AspisV8.SelectedSemanticLaneAggregation
 open AspisV8.InterleavedChordRows AspisV8.ImageCallbackInterfaces
 open AspisV5FriRelationCandidateBridge
 open AspisPool.V7MerkleQueryGrammar
+open AspisV8.AuthenticatedEarlyC1Prefix
 
 abbrev K := SameBodySourceRelationProducer.K
 abbrev Query := SameBodyChronologicalRelationTerminal.Query
@@ -45,13 +46,25 @@ local instance : NeZero (2 : K) := AspisV8.SelectedReceivedOracle.twoNonzero
 def inactiveCoefficient (index : Fin 1024) : K :=
   if rowActive index then 0 else 1
 
-/-- Dense specification of `Description::entry`: one inactive-mask bit plus
-the three repaired scalar-weighted multilinear point rows. -/
+/-- Dense source spelling of `Description::entry`: one inactive-mask bit plus
+the three repaired point-row tensor products.  Both loops preserve the pinned
+Rust traversal order. -/
 def originalWeight {view : RawHashInput → Digest208} {ready : Ready view}
     (ordinary : OrdinaryReady ready) : Fin 1024 → K := fun index =>
-  inactiveCoefficient index + ∑ row : Fin 3,
-    ordinary.value.prepared.scales row *
-      mleRowWeight (SameBodyPublicCorrection.points ordinaryOps ordinary.z row) index
+  (List.finRange 3).foldl (fun out row =>
+    let point := SameBodyPublicCorrection.points ordinaryOps ordinary.z row
+    let value := (List.finRange 10).foldl (fun product coordinate =>
+      ordinaryOps.mul product
+        (if index.val / 2^(9-coordinate.val) % 2 = 0
+          then ordinaryOps.sub ordinaryOps.one (point coordinate)
+          else point coordinate)) (ordinary.value.prepared.scales row)
+    ordinaryOps.add out value) (inactiveCoefficient index)
+
+def smallIndex (index : Fin 3) : Fin 1024 := ⟨index.val, by omega⟩
+
+theorem inactiveCoefficient_small (index : Fin 3) :
+    inactiveCoefficient (smallIndex index) = 1 := by
+  fin_cases index <;> decide
 
 /-- The exact mathematical chord transpose used by the quotient relation. -/
 def transformedWeight {view : RawHashInput → Digest208} {ready : Ready view}
