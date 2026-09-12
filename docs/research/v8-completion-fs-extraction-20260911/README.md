@@ -24,6 +24,17 @@ The ideal uniform finite-tape run from `emptyOracle` now constructs the
 projected current state with no caller-supplied projected-prefix premise,
 while arbitrary adversarial-prehistory/source coupling remains open.
 
+The [V7/V8 source-coupling premise map](v7-v8-source-coupling-premise-map-20260912.md)
+records the inspected fixed-run, resource-certificate, restoration-map, and
+K16-closure leaves. None provides the missing generic producer from an actual
+adaptive source/adversary history to the fresh-only finite-tape state.
+
+The [prehistory-continuation bridge](v7-prehistory-continuation-20260912.md)
+now runs an arbitrary current V8 script from the exact projected state produced
+by an ideal V7 finite-tape prehistory and proves final halt/state
+correspondence without an assumed alignment certificate.  Constructing the
+actual adversarial/source prehistory and ROM coupling remains the next layer.
+
 The [selected semantic packing review](semantic-packed-literal-review-20260912.md)
 proves the exact 94-position Boolean writer and positive-slot insertion, while
 formally retaining the counterexample to an invalid off-domain MLE shortcut.
@@ -351,3 +362,16 @@ coupling remains partial.
 The supplied completion pack was also rerun independently: its 67 Python
 tests and five optimized Rust reference tests pass.  Those tests are diagnostic
 evidence only; its uncompiled Lean drafts were not promoted into this chain.
+
+### 2026-09-12 replayable collector source
+
+`lean/ExtractionCollectorReplayableSource.lean` replaces the `.pure`
+collector start with the compiled chronological source/OOD/gamma and repaired
+middle/query/rho script.  A returned record now carries the literal same body
+and the gamma/alpha0 actually sampled in that execution.  Abort and returned
+sampler failures remain visible.  Checker acceptance at this milestone means
+only that the source script returned a record through rho; it is **not**
+terminal relation or payment acceptance.  Response1–response3, their sequential
+alphas, and the connection to `SameBodyRelation.consume` remain open.  Exact
+evidence and scope are in `replayable-collector-source-20260912.md` and
+`results/v8-completion-fs-extraction-20260911/replayable-collector-source-v1/`.
