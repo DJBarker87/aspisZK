@@ -1,0 +1,78 @@
+FSV8OODBodyScript.lean:52:0: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.FSV8OODBodyScript.run_answerScript`:
+  [DecidableEq Point]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Point] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+FSV8OODBodyScript.lean:72:37: error: don't know how to synthesize implicit argument `Point`
+  @PairResult (?m.8 firstPoint firstAnswer afterFirst secondWork body secondDraw)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+m : Nat
+firstPoint : Point
+firstAnswer : Bytes
+afterFirst : Block
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+secondDraw : Except Error Point × Block
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+FSV8OODBodyScript.lean:91:37: error: don't know how to synthesize implicit argument `Point`
+  @PairResult (?m.30 decode firstWork secondWork body digest)
+context:
+Point : Type
+inst✝ : DecidableEq Point
+n m : Nat
+decode : List Nat → Option Point
+firstWork : Point → Script Bytes Block Unit n
+secondWork : Point → Point → Script Bytes Block Unit m
+body : Bytes
+digest : Block
+⊢ Type
+
+Note: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be
+FSV8OODBodyScript.lean:119:14: error: `simp` made no progress
+FSV8OODBodyScript.lean:121:6: error: `simp` made no progress
+FSV8OODBodyScript.lean:120:11: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+FSV8OODBodyScript.lean:115:39: warning: This simp argument is unused:
+  run_circle
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bodyPairScript, run_bind, run_answerScript] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FSV8OODBodyScript.lean:115:51: warning: This simp argument is unused:
+  run_answerScript
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bodyPairScript, run_bind, run_circle] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8Completion.FSV8OODBodyScript.answer_bytes_size' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSV8OODBodyScript.answer_fields_canonical' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSV8OODBodyScript.run_answerScript' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSV8OODBodyScript.successful_answers_same_body' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8Completion.FSV8OODBodyScript.body_pair_prefix' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSV8OODBodyScript.body_pair_valid' depends on axioms: [propext, Quot.sound]
+        0.76 real         0.58 user         0.16 sys
+           682426368  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               47538  page reclaims
+                  43  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   1  voluntary context switches
+                 946  involuntary context switches
+           314722838  instructions retired
+           119553465  cycles elapsed
+            11518720  peak memory footprint

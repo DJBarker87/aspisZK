@@ -33,12 +33,14 @@ between its point evaluation and the independently fixed reference trace.  It
 cannot be discharged merely from a returned `some`, root agreement, or a
 renamed acceptance predicate.
 
-No local Lean result is claimed.  A direct leaf command was stopped after it
-attempted a cold Mathlib clone in the isolated worktree (34.71 seconds, about
-54 MiB maximum RSS, zero swap).  The new leaf should be compiled after its
-existing `SameBodyAssembly` and `SelectedConcreteTerminal` artifacts in the
-pinned NUC overlay; no full manifest replay is warranted before that leaf is
-green.
+The leaf and its three missing local dependencies were subsequently compiled
+in dependency order on the pinned Lean 4.32.0 NUC overlay.  The final target
+exited zero in 3.20 seconds, used 6,576,248 KiB peak RSS and zero swap, and
+printed only `propext`, `Classical.choice` and `Quot.sound`.  An import-only
+preflight showed that the combined historical closures exceed Lean's 6,144
+MiB allocator threshold, so the final leaf used `-M8192` inside a 10 GiB
+cgroup; no package replay was run.  Exact hashes and the log are in
+`results/v8-completion-fs-extraction-20260911/same-body-semantic-source-v6/`.
 
 ## Literal callback audit
 
@@ -70,3 +72,9 @@ defined.  Thus the smallest exact interface has two direct equalities:
 `callback_exact_of_table_terminal` composes precisely those facts into the
 earlier `callbackExact`; it proves neither premise and introduces no renamed
 acceptance condition.
+
+The counter-construction and factorisation were also checked on pinned Lean
+4.32.0.  `SelectedSemanticCallbackGap.lean` exited zero in 3.18 seconds with
+6,581,428 KiB peak RSS, zero swap and only the standard three axioms above.
+Evidence is in
+`results/v8-completion-fs-extraction-20260911/selected-semantic-callback-gap-v4/`.

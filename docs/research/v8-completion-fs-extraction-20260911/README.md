@@ -195,3 +195,31 @@ absorption is now included by `FSOODPair.lean`, and the canonical four-limb
 success seam is proved. The pair slice still has a restricted no-hash answer
 producer; second-answer absorption, actual-source prefix production and the
 ROM distribution theorem remain open.
+
+`lean/FSNonzeroQM31.lean` and `lean/FSV7SampledRhoBodyScript.lean` close the
+previously omitted query-batch ordering slice: the derived schedule is followed
+by the exact research profile absorption and a bounded nonzero rho before any
+opening hashes. The incoming transcript and ROM distribution remain open.
+
+`lean/FSV8OODBodyScript.lean` now places both canonical 29-value OOD rows from
+the same body around the first/distinct-second bounded sampler while retaining
+answer-builder calls, cache hits, aborts and one chronological history.  The
+generic body script is pinned-4.32 checked; concrete decoder/source refinement
+and the first-exposure law remain open.  See
+[ood-body-script-20260912.md](ood-body-script-20260912.md).
+
+`lean/SameBodySelectedSemanticSource.lean` executes the fallible semantic
+terminal callback on the same body's 84 point claims and constructs the mask
+and terminal bindings consumed by the concrete residual alternative.  Hostile
+review in `lean/SelectedSemanticCallbackGap.lean` proves that degree and
+boundary checks alone permit a reference trace with any terminal scalar.  The
+remaining semantic seam is therefore split honestly into literal
+callback-to-table-MLE refinement and a table-derived reference endpoint.  Both
+new leaves are pinned-4.32 checked.  See
+[selected-semantic-source-bridge-20260912.md](selected-semantic-source-bridge-20260912.md).
+
+`lean/ExtractionCollectorSource.lean` instantiates the bounded collector around
+legal same-tape replays and the checker result actually returned by each run.
+It retains replay failure, rejection, resource failure and duplicates and
+proves deterministic `Progress -> Complete` for a distinct 29-by-4 schedule.
+It does not assume or prove progress probability or `RecoveredHigh`.
