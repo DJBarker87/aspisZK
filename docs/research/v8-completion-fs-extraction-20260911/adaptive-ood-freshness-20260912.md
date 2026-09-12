@@ -52,6 +52,14 @@ This must be iterated through retry, canonical-decoding and abort branches and
 then connected to the exact four-limb QM31/circle decoder.  The present result
 does not condition away exhaustion or repeated inputs.
 
+The first inter-OOD boundary is now source-classified by
+`successful_first_answer_order_or_prior_target`: both first exposures are
+fresh, and either the authenticated answer absorption precedes the next
+squeeze or its digest is already in the explicit prior-target set at that
+cut.  The corresponding second-answer statement still requires the enclosing
+post-OOD verifier continuation, because the OOD-body slice ends immediately
+after the second answer absorption.
+
 ## Evidence
 
 Both leaves were checked with pinned Lean 4.32.0 on the NUC in separate
@@ -61,6 +69,8 @@ resource, hash and axiom records are in:
 
 - `results/v8-completion-fs-extraction-20260911/adaptive-fresh-pair-v1/report.json`
 - `results/v8-completion-fs-extraction-20260911/ood-source-absorb-links-v2/report.json`
+- `results/v8-completion-fs-extraction-20260911/ood-sampler-exposure-v1/report.json`
+- `results/v8-completion-fs-extraction-20260911/ood-first-answer-order-v1/report.json`
 
 Each promoted theorem uses only `propext`, `Classical.choice` and
 `Quot.sound`.  No proof bytes, verifier checks or protocol ordering changed.
