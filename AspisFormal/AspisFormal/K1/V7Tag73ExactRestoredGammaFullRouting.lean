@@ -2,7 +2,6 @@ import AspisFormal.K1.V7Tag73CausalSlotRouterLookup
 import AspisFormal.K1.V7Tag73ExactCausalRouterTapeAlignment
 import AspisFormal.K1.V7Tag73ExactPlainRomRun
 import AspisFormal.K1.V7Tag73RestoredChallengeCausalMarker
-import AspisFormal.K1.V7Tag73RestoredJointBatchActualLawClosure
 import AspisFormal.K1.V7Tag73RestoredQueryBatchLabelsNodup
 
 /-!
@@ -41,7 +40,6 @@ open AspisK1.V7Tag73IndexedControllerLabeledRecords
 open AspisK1.V7Tag73IndexedControllerTraceAlignment
 open AspisK1.V7Tag73IndexedExposureCausalRouter
 open AspisK1.V7Tag73OperationalOracleExposure
-open AspisK1.V7Tag73RestoredJointBatchActualLawClosure
 open AspisK1.V7Tag73RestoredChallengeCausalMarker
 open AspisK1.V7Tag73RestoredQueryBatchForkController
 open AspisK1.V7Tag73RestoredQueryBatchLabelsNodup
