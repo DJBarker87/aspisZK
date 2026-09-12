@@ -17,6 +17,7 @@ set_option maxRecDepth 1000000
 
 namespace AspisK1.V7Tag73GammaRestoredK14PreActivationLaneSource
 
+open MeasureTheory
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73AtomicForkUniformScheduler
@@ -31,8 +32,10 @@ open AspisK1.V7Tag73ExactPlainRomRun
 open AspisK1.V7Tag73ExactRestoredGammaFullRouting
 open AspisK1.V7Tag73ExactRestoredGammaPreActivationPrefix
 open AspisK1.V7Tag73ExactSourceAcceptanceModel
+open AspisK1.V7Tag73GammaRestoredK14InitialLaneAlignment
 open AspisK1.V7Tag73GammaRestoredK14InitialLaneFunctional
 open AspisK1.V7Tag73GammaRestoredK14Scope
+open AspisK1.V7Tag73K14K15IdealErrorLedger
 open AspisK1.V7Tag73RestoredDerivedK13View
 open AspisK1.V7Tag73RestoredChallengeCausalMarker
 open AspisK1.V7Tag73SamplerDecoder
@@ -40,6 +43,7 @@ open AspisK1.V7Tag73TranscriptSchedule
 open AspisK1.V7Tag73VariablePrefixGammaSampler
 open AspisK1.V7Tag73VariablePrefixK14Probability
 open AspisPool.AlgorithmicCircleDecoderV7
+open AspisPool.V7C1ConcreteProjectionBinding
 open AspisPool.V7CoherentTraceExtraction
 open AspisPool.V7ExtractedLaneWords
 open AspisV5ComponentCQM31TowerExact
@@ -221,9 +225,50 @@ noncomputable def
       rightPlainTrace unmarked activated
     exact leftLanes.trans rightLanes.symm
 
+/-- Release-facing K1.4 closure from the single pointwise production
+projection.  All pairwise fibre functionality and the fixed degree-28 bad
+challenge family are constructed inside Lean. -/
+theorem exact_gamma_restored_k14_probability_le_of_pre_activation_lane_source
+    {HiddenTape TapeIdentity Observation Statement Payload Witness : Type}
+    [Fintype HiddenTape]
+    (hiddenLaw : PMF HiddenTape)
+    {parameters : ExactCompilerResourceParameters}
+    {canonicalDriverFuel transitionFuel : Nat}
+    {base : ExactPlainRomWitnessConfiguration HiddenTape TapeIdentity
+      Observation Statement Tag73K12ParsedProof Payload Witness parameters}
+    {rounds : Nat}
+    {extractor : ExactPlainRomWitnessExtractor Statement Tag73K12ParsedProof
+      Payload Witness}
+    {withinForkCap : rounds * 1513 ≤ parameters.forkRequestCap}
+    {adequate : ExactPlainRomOperationalAdequacy canonicalDriverFuel
+      transitionFuel
+        (exactRootSweepWitnessConfiguration base rounds extractor
+          withinForkCap)}
+    {projection : AcceptedTapeProjection Statement Tag73K12ParsedProof Payload}
+    {fixedInstance : PublicInstance Statement}
+    {decoder : ExactDecoderInstantiation QM31Exact}
+    (clean : Set (ExactCompilerSample HiddenTape parameters))
+    (initialEncoderExact : decoder.initialEncoder = exactInitialEncoder)
+    (source : ExactTag73GammaRestoredK14PreActivationLaneSource
+      canonicalDriverFuel transitionFuel base rounds extractor withinForkCap
+      adequate projection fixedInstance decoder clean) :
+    (exactCompilerJointLaw hiddenLaw parameters).toOuterMeasure
+        (clean ∩ exactTag73GammaRestoredOperationalK14Width29Event
+          transitionFuel
+            (exactRootSweepWitnessConfiguration base rounds extractor
+              withinForkCap)
+            projection fixedInstance decoder) ≤
+      exactK14IdealRawError := by
+  let functional := source.toInitialLaneFunctional
+  let alignment := functional.toInitialLaneAlignment
+  exact exact_gamma_restored_k14_probability_le_of_initial_lane_alignment
+    hiddenLaw clean initialEncoderExact alignment
+
 #print axioms ExactTag73GammaRestoredK14PreActivationLaneSource
 #print axioms
   ExactTag73GammaRestoredK14PreActivationLaneSource.toInitialLaneFunctional
+#print axioms
+  exact_gamma_restored_k14_probability_le_of_pre_activation_lane_source
 
 end
 end AspisK1.V7Tag73GammaRestoredK14PreActivationLaneSource
