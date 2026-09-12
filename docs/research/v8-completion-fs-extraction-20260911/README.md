@@ -1,6 +1,8 @@
 # Completion-pack intake and first source-transcript slice
 
-Latest work: [source connections and bounded FS scripts](source-connections-20260912.md).
+Latest work: [same-body authenticated slots and FS prefixes](authentication-connection-20260912.md),
+with historical-toolchain and patched-toolchain evidence kept separate.
+Earlier work: [source connections and bounded FS scripts](source-connections-20260912.md).
 Five new leaves passed compilation and a fresh kernel replay; full source/FS
 soundness remains open. Earlier [2026-09-12 continuation](continuation-20260912.md) includes
 same-body constructors, chronological commitment cuts, recorded C1 access and
