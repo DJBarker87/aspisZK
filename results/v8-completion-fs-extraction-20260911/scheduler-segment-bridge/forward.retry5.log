@@ -1,0 +1,69 @@
+/home/dombarker/v8w/FSV8ForwardAlphaForkCursor.lean:68:2: error: overloaded, errors
+  Type mismatch
+    FSTranscriptScript.bind (sourceThenGammaScript firstWork secondWork body digest) fun prefixDraw =>
+      match prefixDraw.1 with
+      | Except.error error => Script.done (Except.error (BoundaryError.prefix error), prefixDraw.2)
+      | Except.ok (out, gamma) =>
+        FSTranscriptScript.bind (preAlphaScript out gamma body z prefixDraw.2) fun boundaryDraw =>
+          match boundaryDraw.1 with
+          | Except.error error => Script.done (Except.error (BoundaryError.middle error), boundaryDraw.2)
+          | Except.ok boundary =>
+            Script.done (Except.ok { out := out, gamma := gamma, boundary := boundary }, boundaryDraw.2)
+  has type
+    Script (List UInt8) FSBoundedTranscript.Block (Except BoundaryError (ExecutedPreAlpha body z) × HashBlock)
+      (preAlphaBudget + (1 + 3 * 66 + (1 + m + 594 + 1 + n + 198)))
+  but is expected to have type
+    Script Bytes Block (Except BoundaryError (ExecutedPreAlpha body z) × Block)
+      (1 + 3 * 66 + (1 + m + 594 + 1 + n + 198) + preAlphaBudget)
+
+  68:13 Application type mismatch: The argument
+    preAlphaBudget
+  has type
+    ℕ
+  of sort `Type` but is expected to have type
+    Type ?u.73 → Type ?u.72
+  of sort
+    Type (max (?u.72 + 1) (?u.73 + 1))
+  in the application
+    @Bind.bind preAlphaBudget
+/home/dombarker/v8w/FSV8ForwardAlphaForkCursor.lean:119:26: error: Type mismatch
+  verifierBoundaryOracle
+has type
+  OracleState
+but is expected to have type
+  Oracle
+'AspisV8Completion.FSV8ForwardAlphaForkCursor.verifierPreAlphaScript' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.FSV8ForwardAlphaForkCursor.rootToAlphaForkCursor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.FSV8ForwardAlphaForkCursor.emitted_alpha_fork_pair_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "env LEAN_PATH=/home/dombarker/v8w:/home/dombarker/v8w/.lean-union-432:/home/dombarker/v8w/AspisFormal:/home/dombarker/weighted-hensel-repair/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/plausible/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/batteries/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/importGraph/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/Qq/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/aesop/.lake/build/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M8192 -o /home/dombarker/v8w/FSV8ForwardAlphaForkCursor.olean /home/dombarker/v8w/FSV8ForwardAlphaForkCursor.lean"
+	User time (seconds): 12.63
+	System time (seconds): 0.92
+	Percent of CPU this job got: 97%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:13.83
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6737320
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 123
+	Minor (reclaiming a frame) page faults: 149984
+	Voluntary context switches: 3966
+	Involuntary context switches: 818
+	Swaps: 0
+	File system inputs: 90144
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
