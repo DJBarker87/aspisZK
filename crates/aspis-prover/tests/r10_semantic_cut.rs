@@ -292,3 +292,6 @@ fn r10_real_compiler_h1_cut_matches_complete_selected_terminal() {
         ), "c1 reconstruction from the real polynomial");
     }
 }
+
+#[path = "support/r12_terminal_cut_append.rs"]
+mod r12_terminal_cut_append;
