@@ -79,6 +79,7 @@ theorem programmed_cut_constructs_candidate_alignment
       candidateRun.halt = .returned (.ok alpha0, candidateDigest) ∧
       (run tape (FSNonzeroQM31.candidateScript boundary.digest)
         markerContinuationFS).1 = some (.ok alpha0, candidateDigest) ∧
+      StateAligned tape finiteTape preRun.oracle markerContinuationFS ∧
       StateAligned tape finiteTape candidateRun.oracle
         (run tape (FSNonzeroQM31.candidateScript boundary.digest)
           markerContinuationFS).2 := by
@@ -135,7 +136,7 @@ theorem programmed_cut_constructs_candidate_alignment
     candidateRun.steps initialAligned (by
       simpa [candidateRun, alphaCandidateMachineRun, sourceRun, preRun] using
         candidateExact)
-  refine ⟨alpha0, candidateDigest, candidateReturned, ?_, ?_⟩
+  refine ⟨alpha0, candidateDigest, candidateReturned, ?_, initialAligned, ?_⟩
   · simpa [candidateRun, alphaCandidateMachineRun, sourceRun, preRun] using
       alignedResult.1
   · simpa [candidateRun, alphaCandidateMachineRun, sourceRun, preRun] using
