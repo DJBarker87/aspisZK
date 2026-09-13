@@ -1,4 +1,5 @@
 import FSV8AlignedAlphaCandidateSuffixSync
+import FSV8AlignedAlphaAllFreshSuffixSync
 import FSV8ProgrammedAlphaCandidateWholeHistoryPrefix
 import FSV8ReturnedBindKnownPrefix
 
@@ -38,6 +39,7 @@ open FSV8ProgrammedAlphaCandidateWholeHistoryPrefix
 open FSV8ReturnedBindKnownPrefix
 open FSV8AlignedAlphaSqueezeStep FSV8AlignedAlphaChallengeRun
 open FSV8AlignedAlphaCandidateSuffixSync FSV8CandidateOriginTrace
+open FSV8AlignedAlphaAllFreshSuffixSync
 
 noncomputable section
 
@@ -147,7 +149,119 @@ theorem programmed_cut_final_pair_fresh_advance_mem_whole_enumeration
     freshMember originExact
   simpa [inputExact, outputExact, wholeRun] using inWhole
 
+private theorem freshQueryEnumeration_append (left right : List QueryRecord) :
+    freshQueryEnumeration (left ++ right) =
+      freshQueryEnumeration left ++ freshQueryEnumeration right := by
+  induction left with
+  | nil => rfl
+  | cons head tail ih =>
+      rcases head with ⟨input, output, actor, origin⟩
+      cases origin <;> simp [freshQueryEnumeration, ih]
+
+/-- Ordered strengthening: the complete fresh subsequence consumed by the
+aligned alpha challenge occurs, in order, inside the same factored whole
+verifier's fresh-query enumeration.  Cached pair halves remain in the full
+projected suffix equality and simply do not enter this fresh sublist. -/
+theorem programmed_cut_alpha_fresh_enumeration_sublist_whole
+    {steps : Nat} {tape : Tape}
+    (finiteTape : FreshAnswerTape Block steps)
+    (limits : OracleLimits)
+    {n m : Nat}
+    (firstWork : Point → Script Bytes Block Unit n)
+    (secondWork : Point → Point → Script Bytes Block Unit m)
+    (z : Fin 10 → K) (cuts : RootCuts) (body : Bytes) (digest : Block)
+    (v7 : OracleState) (fs : State Bytes Block) (fuel : Nat)
+    (record : Record body z) (finalDigest : Block)
+    (rootAligned : StateAligned tape finiteTape v7 fs)
+    (wholeSuccess :
+      (runMachine (controllerFromFreshAnswerTape finiteTape) limits .verifier
+        fuel v7 (compileScript (factoredWholeStagedScript firstWork secondWork
+          z cuts body digest))).halt = .returned (.ok record, finalDigest))
+    (out : OODResult) (gamma : K) (sourceDigest : Block)
+    (boundary : PreAlpha out gamma body z) (preDigest : Block)
+    (before : FSV8BeforeAlphaMarkerFactorization.BeforeAlphaMarker
+      out gamma body z)
+    (middle : Success out gamma body z) (middleResultDigest : Block)
+    (cutWitness : ProgrammedAlphaCutWitness (tape := tape) finiteTape limits
+      .verifier firstWork secondWork z body digest v7 fs fuel out gamma
+      sourceDigest boundary preDigest before middle middleResultDigest)
+    {start : Transcript} {blocks : List Block} {final : Transcript}
+    {value : Qm31Bytes}
+    (success : SuccessfulAlignedChallenge tape finiteTape limits
+      (preAlphaMachineRun finiteTape limits .verifier firstWork secondWork body
+        digest v7 fuel out gamma z sourceDigest).oracle start blocks final value)
+    (candidateAligned : StateAligned tape finiteTape
+      (alphaCandidateMachineRun finiteTape limits .verifier firstWork
+        secondWork body digest v7 fuel out gamma z sourceDigest boundary).oracle
+      final.oracle) :
+    ∃ alphaSuffix,
+      List.Sublist (freshQueryEnumeration alphaSuffix)
+        (freshQueryEnumeration (historySince v7
+          (runMachine (controllerFromFreshAnswerTape finiteTape) limits
+            .verifier fuel v7
+            (compileScript (factoredWholeStagedScript firstWork secondWork z
+              cuts body digest))).oracle)) := by
+  let sourceRun := sourceMachineRun finiteTape limits .verifier firstWork
+    secondWork body digest v7 fuel
+  let preRun := preAlphaMachineRun finiteTape limits .verifier firstWork
+    secondWork body digest v7 fuel out gamma z sourceDigest
+  let candidateRun := alphaCandidateMachineRun finiteTape limits .verifier
+    firstWork secondWork body digest v7 fuel out gamma z sourceDigest boundary
+  let wholeRun := runMachine (controllerFromFreshAnswerTape finiteTape) limits
+    .verifier fuel v7 (compileScript (factoredWholeStagedScript firstWork
+      secondWork z cuts body digest))
+  have rootToSource := runMachine_entry_history_prefix_final
+    (controllerFromFreshAnswerTape finiteTape) limits .verifier fuel v7
+    (compileScript (sourceThenGammaScript firstWork secondWork body digest))
+  have rootToPreRun := runMachine_entry_history_prefix_final
+    (controllerFromFreshAnswerTape finiteTape) limits .verifier
+    (fuel - sourceRun.steps) sourceRun.oracle
+    (compileScript (preAlphaScript out gamma body z sourceDigest))
+  have rootToSource' : v7.history <+: sourceRun.oracle.history := by
+    simpa [sourceRun, sourceMachineRun] using rootToSource
+  have rootToPre : v7.history <+: preRun.oracle.history :=
+    rootToSource'.trans (by
+      simpa [sourceRun, preRun, preAlphaMachineRun] using rootToPreRun)
+  obtain ⟨_alpha0, _candidateDigest, _candidateReturned, candidateToWhole⟩ :=
+    programmed_cut_constructs_candidate_history_prefix_factored_whole
+      finiteTape limits .verifier firstWork secondWork z cuts body digest v7 fs
+      fuel record finalDigest rootAligned wholeSuccess out gamma sourceDigest
+      boundary preDigest before middle middleResultDigest cutWitness
+  obtain ⟨alphaSuffix, candidateSuffix, _finalHistory, candidateHistory,
+      freshEqual, _candidateActors⟩ :=
+    successful_alpha_fresh_query_enumeration_eq_candidate_suffix
+      (controllerFromFreshAnswerTape finiteTape)
+      ((fuel - sourceRun.steps) - preRun.steps)
+      (compileScript (FSNonzeroQM31.candidateScript boundary.digest))
+      (by simpa [candidateRun, alphaCandidateMachineRun, sourceRun, preRun] using
+        candidateAligned) success
+  rcases rootToPre with ⟨beforeSuffix, preHistory⟩
+  rcases (show candidateRun.oracle.history <+: wholeRun.oracle.history by
+    simpa [candidateRun, wholeRun] using candidateToWhole) with
+      ⟨afterSuffix, wholeHistory⟩
+  have candidateHistory' : candidateRun.oracle.history =
+      preRun.oracle.history ++ candidateSuffix := by
+    simpa [candidateRun, alphaCandidateMachineRun, sourceRun, preRun] using
+      candidateHistory
+  have sinceExact : historySince v7 wholeRun.oracle =
+      beforeSuffix ++ candidateSuffix ++ afterSuffix := by
+    unfold historySince
+    rw [← wholeHistory, candidateHistory', ← preHistory]
+    simp only [List.append_assoc]
+    exact List.drop_append_length
+  refine ⟨alphaSuffix, ?_⟩
+  rw [freshEqual, sinceExact, freshQueryEnumeration_append,
+    freshQueryEnumeration_append]
+  exact
+    (List.sublist_append_right (freshQueryEnumeration beforeSuffix)
+      (freshQueryEnumeration candidateSuffix)).trans
+    (List.sublist_append_left
+      (freshQueryEnumeration beforeSuffix ++
+        freshQueryEnumeration candidateSuffix)
+      (freshQueryEnumeration afterSuffix))
+
 #print axioms programmed_cut_final_pair_fresh_advance_mem_whole_enumeration
+#print axioms programmed_cut_alpha_fresh_enumeration_sublist_whole
 
 end
 end AspisV8Completion.FSV8ProgrammedAlphaFinalPairFreshEnumeration
