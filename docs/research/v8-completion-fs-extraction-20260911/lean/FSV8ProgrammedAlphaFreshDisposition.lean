@@ -146,7 +146,76 @@ theorem strong_disposition_constructs_fresh_disposition
         (by simpa [sourceRun, preRun, preAlphaMachineRun] using member)
         actorEq fresh inputEq outputEq entryEq
 
+/-- The same source-shaped fresh disposition can be constructed directly at
+any fixed boundary returned by the prefix.  This avoids pairing the marker cut
+with a separately existentialized candidate-disposition witness. -/
+theorem source_runs_construct_fresh_disposition
+    {steps : Nat}
+    (finiteTape : FreshAnswerTape Block steps)
+    (limits : OracleLimits) (actor : QueryActor)
+    {n m : Nat}
+    (firstWork : Point → Script Bytes Block Unit n)
+    (secondWork : Point → Point → Script Bytes Block Unit m)
+    (z : Fin 10 → K) (body : Bytes) (digest : Block)
+    (v7 : OracleState) (fuel : Nat)
+    (out : FSV7OODBodyScript.Result) (gamma : K)
+    (sourceDigest : Block)
+    (boundary : PreAlpha out gamma body z) :
+    let sourceRun := sourceMachineRun finiteTape limits actor firstWork
+      secondWork body digest v7 fuel
+    let preRun := preAlphaMachineRun finiteTape limits actor firstWork
+      secondWork body digest v7 fuel out gamma z sourceDigest
+    FreshCausalAlphaDisposition v7 sourceRun.oracle preRun.oracle actor
+      (List.ofFn boundary.digest ++ [1]) := by
+  classical
+  let input := List.ofFn boundary.digest ++ [1]
+  let sourceRun := sourceMachineRun finiteTape limits actor firstWork secondWork
+    body digest v7 fuel
+  let preRun := preAlphaMachineRun finiteTape limits actor firstWork secondWork
+    body digest v7 fuel out gamma z sourceDigest
+  by_cases adversary : ∃ record,
+      record ∈ freezeAdversaryQ1 v7 ∧ record.input = input
+  · exact .priorAdversary (Classical.choose adversary)
+      (Classical.choose_spec adversary).1
+      (Classical.choose_spec adversary).2
+  · cases rootLookup : lookupEntry v7 input with
+    | some entry =>
+        exact .priorTarget adversary entry rootLookup
+    | none =>
+        cases sourceLookup : lookupEntry sourceRun.oracle input with
+        | some entry =>
+            obtain ⟨record, member, actorEq, fresh, inputEq, outputEq,
+                entryEq⟩ :=
+              run_machine_lookup_of_initially_absent_is_fresh
+                (controllerFromFreshAnswerTape finiteTape) limits actor fuel v7
+                (compileScript
+                  (sourceThenGammaScript firstWork secondWork body digest))
+                input entry rootLookup
+                (by simpa [sourceRun, sourceMachineRun] using sourceLookup)
+            exact .introducedDuringSource adversary rootLookup entry sourceLookup
+              record (by simpa [sourceRun, sourceMachineRun] using member)
+              actorEq fresh inputEq outputEq entryEq
+        | none =>
+            cases preLookup : lookupEntry preRun.oracle input with
+            | none =>
+                exact .freshAtCandidate adversary rootLookup preLookup
+            | some entry =>
+                obtain ⟨record, member, actorEq, fresh, inputEq, outputEq,
+                    entryEq⟩ :=
+                  run_machine_lookup_of_initially_absent_is_fresh
+                    (controllerFromFreshAnswerTape finiteTape) limits actor
+                    (fuel - sourceRun.steps) sourceRun.oracle
+                    (compileScript
+                      (preAlphaScript out gamma body z sourceDigest))
+                    input entry sourceLookup
+                    (by simpa [preRun, preAlphaMachineRun] using preLookup)
+                exact .introducedDuringPreAlpha adversary rootLookup sourceLookup
+                  entry preLookup record
+                  (by simpa [sourceRun, preRun, preAlphaMachineRun] using member)
+                  actorEq fresh inputEq outputEq entryEq
+
 #print axioms strong_disposition_constructs_fresh_disposition
+#print axioms source_runs_construct_fresh_disposition
 
 end
 end AspisV8Completion.FSV8ProgrammedAlphaFreshDisposition
