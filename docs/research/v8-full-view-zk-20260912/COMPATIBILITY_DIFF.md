@@ -43,6 +43,9 @@ generated-certificate aggregation was performed.
 - Lean results for finite transport, graph incidence, nonlinear-coefficient
   fresh padding, triangular reuse of one pad, point projection, and the
   conditional source-shaped fixed helper observation.
+- A research-only finite paired-commitment construction with both exact
+  marginals, a forward shadow-table execution proof, explicit ideal-salt
+  counting from coordinate fibers, and source-exact local byte-grammar lemmas.
 - A staged evidence ledger that keeps raw diagnostics, joint-view coverage,
   simulator construction, and retry/publication proof separate.
 

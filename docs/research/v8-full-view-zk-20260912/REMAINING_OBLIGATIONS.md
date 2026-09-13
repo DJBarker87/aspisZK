@@ -8,11 +8,10 @@ Date: 2026-09-13.
    conditioned on the exposed C1/oracle history, the 809 unused H1 pad
    coordinates have the fresh uniform law required by R7. Charge the hybrid
    loss; do not treat shared-seed outputs as independent by definition.
-2. Construct the source-instantiated causal paired C1/C2 salted-commitment
-   kernel in one coherent lazy random oracle. It must preserve the earlier C1
-   root/history, the same per-leaf C1/C2 salt, and later adaptive q22 openings,
-   accounting for prior queries, revealed salts, programming conflicts and
-   shared-cache retries.
+2. Instantiate the proved finite causal paired C1/C2 hop with the complete
+   selected source SHA-256 call trace. Prove the source-to-`ForwardTrace`
+   refinement and coordinate-fiber cap, including prior queries, 26-byte
+   digest projection, interleaved frontiers, retries and first salt disclosure.
 3. Extend the conditional fixed-linear transport through the first selected
    semantic message, point/OOD claims, `final256` and q22, reusing the same H1
    pad and stacking every genuinely linear observation and offset.
@@ -55,13 +54,11 @@ publication enforcement before making a release claim.
 
 ## Smallest next experiment
 
-Instantiate the existing paired-salt hiding interface to the selected C1/C2
-leaf records and list the first premise that fails under adaptive q22. Then
-formulate the minimal causal replacement on a single lazy-oracle state: input
-is an already exposed C1 history plus ideal unused-uniform H1 pad; output must
-preserve C1, transport C2, and later open equal paired C1/C2 records under the
-same salts. Treat the absent oracle-relative Merkle programming theorem as an
-open premise, not as collision resistance.
+Refine the actual selected SHA-256 call chronology into the new finite
+`ForwardTrace`. Start before C1 and retain one table through C2, transcript,
+retries and paired openings. Prove the concrete coordinate-fiber query cap
+only after charging the real salt/field seed-expansion hybrid; do not identify
+deterministic derived salts with the ideal IID tape.
 
 After that kernel is proved, add the first selected semantic message as one
 fixed-linear observation to the same H1-pad correction. Do not rerun the 768
