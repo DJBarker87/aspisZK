@@ -36,6 +36,13 @@ generated-certificate aggregation was performed.
   adapter and not a production repair.
 - Lean results for the affine public-coset construction, release-event
   transport, and a non-IID conditional retry-failure bound.
+- Research-only source regressions deriving the literal 136-edge H1 incidence
+  layout, the full 1024-row duplicate-selection helper delta, the actual-encoder
+  fixed-observation corrections, coordinatewise C2 lift, and exact 84/87 point
+  projection.
+- Lean results for finite transport, graph incidence, nonlinear-coefficient
+  fresh padding, triangular reuse of one pad, point projection, and the
+  conditional source-shaped fixed helper observation.
 - A staged evidence ledger that keeps raw diagnostics, joint-view coverage,
   simulator construction, and retry/publication proof separate.
 

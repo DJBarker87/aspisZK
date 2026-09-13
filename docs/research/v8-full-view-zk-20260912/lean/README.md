@@ -30,6 +30,16 @@ source-instantiated privacy theorem or independent kernel replay.
 
 The finite-distribution layer intentionally uses nonempty finite coin spaces. Computationally bounded tests and simulator efficiency are distinct targets. Do not use an unrestricted statistical target for a fixed short-seed PRG without an appropriate theorem.
 
+## R7 H1/C2 modules
+
+`AspisV8H1C2.lean` aggregates the supplied H1 incidence work. Its modules prove
+finite law transport, public graph incidence, hiding of nonlinear incidence
+coefficients by fresh padding, reuse of one pad across stacked linear
+observations, the 84/87 projection facts, and the conditional source-shaped
+helper-observation endpoint. The endpoint still assumes the fresh uniform
+conditional H1-pad law and fixed-linear coverage. It is not the missing
+paired C1/C2 commitment or random-oracle theorem.
+
 ## Compiling safely
 
 Use the repository's existing Lean 4.32.0/Mathlib environment. Compilation was
