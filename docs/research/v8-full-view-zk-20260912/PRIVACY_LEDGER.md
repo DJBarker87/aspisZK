@@ -2,6 +2,12 @@
 
 No numerical global privacy bound is assigned.
 
+As of R5, none of the symbolic terms below is assigned zero. The current
+fail-closed research boundary issues no full-view permits, so its source-level
+release probability is exactly zero and its exhaustion probability is one for
+every finite attempt cap. This is safe containment but fails liveness and is
+not a privacy repair.
+
 For one session, reserve the symbolic bound
 
 `epsilon_total <= epsilon_seed + epsilon_salt + epsilon_commit +
@@ -36,6 +42,13 @@ The terms are:
   externally visible proof-generation abort.
 - `epsilon_source`: mismatch between the exact generated honest prover,
   serializer/application projection and their mathematical games.
+
+Retry adds no fictitious IID term. A future source theorem must give, at every
+reachable failed public/oracle history, both a coupled one-step kernel bound
+`delta_i` and a conditional release lower bound `a>0`. Only then may the
+generic bounds `sum delta_i` and `(1-a)^K` be instantiated. Public setup files,
+account events, terminal failure and any visible attempt count remain in the
+unconditioned view.
 
 The mask-limb exhaustion calculation `25471 / 2^496` belongs only inside a
 proved ideal-word component of `epsilon_sampler_abort`. It is not a global
