@@ -89,6 +89,37 @@ prefix, the terminal cursor, and the remaining tape.  Only label uniqueness,
 residual capacity, and selection of the accepted alpha-ending root prefix
 remain.
 
+The next two finite side conditions have now been separated without making
+the false unrestricted claim that every alpha slot-machine trace is
+duplicate-free.  A second round-zero marker can reset the phase and reuse
+slot zero.  `FSV8AlignedAlphaNamedSlotsNodup` instead proves uniqueness for
+the actual one-marker `AlignedRejectedPath`, with cached calls contributing no
+fresh slot.  An exact equality between that path-indexed list and the labels
+generated over the selected exact-root prefix is still required.
+
+`FSV8ActualRootAlphaPrefixResidualCapacity` constructs the verifier fresh-list
+prefix selected by an intermediate chronological history and embeds that
+prefix into the same exact-root trace.  It proves the router residual bound
+from a concrete machine-fresh cap.  A whole-verifier cap is unnecessarily
+strong here: `FSV8ActualRootSourceFreshCap` instead proves that a literal alpha
+prefix of source length at most
+`sourceThenGammaBudget n m + beforeAlphaMarkerBudget + 9` fits the original
+`q1+1511` root allocation when `adversaryFuel <= q1ShaCallCap` and
+`n+m <= 108`.  The exact arithmetic is `1403+n+m <= 1511`.  The generic V8
+`Configuration` still lacks the selected producer of those two profile facts
+and of the prefix-length fact; they remain explicit rather than silently
+borrowing V7's verifier profile.
+
+`FSV8AlignedAlphaHistorySlotBridge` closes the local-history half of the label
+connection.  By induction over the actual one-marker path it constructs the
+literal query-record suffix, replays every label at its pre-answer history,
+omits cached calls from the fresh-coordinate list, includes the accepted final
+pair, and proves the replay duplicate-free.  What remains is specifically a
+scheduler refinement: each `seekUnifiedExposure` pre-answer state/input in the
+selected exact-root prefix must be identified with the corresponding V7
+history cut.  Existing projection theorems identify logs and fresh-answer
+lists, but not this state-by-state fact.
+
 ## Checked leaves
 
 All retained leaves compile with Lean 4.32.0.  Their promoted declarations use
@@ -125,6 +156,11 @@ declarations use a subset).
 | `FSV8AlphaInitialCachedCases` | Initial cached cases are classified without falsely charging a digest fixed point as a root target | PASS (restoration/first-block branch open) |
 | `Alpha0RootLabeledTrace.of_trace_prefix` | Exact master-tape prefix equality mechanically constructs the residual suffix required by the router | PASS (trace/prefix producer open) |
 | `FSV8AlphaRootLabeledTraceConstructor` | An actual exact-root trace prefix constructs its labels, causal trace, master-tape prefix, final cursor and remaining tape | PASS (`namedNodup`, residual bound and accepted-prefix selection open) |
+| `FSV8AlignedAlphaNamedSlotsNodup` | The actual one-marker aligned alpha path constructs duplicate-free fresh output/advance slots; the unrestricted resettable machine claim is false | PASS (exact-root generated-label equality open) |
+| `FSV8ActualRootAlphaPrefixResidualCapacity` | An intermediate source history selects the literal verifier-fresh prefix and embeds it in the same exact root; that prefix fits the router given the concrete machine-fresh cap | PASS (source cap producer separate) |
+| `FSV8ActualRootSourceFreshCap` | A source-bounded alpha prefix fits the existing root allocation from `adversaryFuel≤q1`, `n+m≤108`, and the literal `1403+n+m` prefix bound | PASS (selected-profile producers open) |
+| `FSV8AlignedAlphaHistorySlotBridge` | The one-marker path constructs its exact V7 record suffix and the duplicate-free pre-answer fresh-slot replay, including the accepted pair | PASS (scheduler-state/root-label refinement open) |
+| `v8_sampler_source_tests` | Literal sampler control flow, caching, masking, bounded retry/exhaustion and distinct duplex keys | PASS 8/8 release host tests (not a random-oracle law) |
 
 Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 `MemoryMax=8G`, and `MemorySwapMax=0`.  The final three runs were:
@@ -145,9 +181,24 @@ Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 | `FSV8MarkerQueryPrefixPath.lean` | 0 | 2.65 s | 6,787,540 KiB | 0 |
 | `FSV8AlphaRouterRealization.lean` | 0 | 2.98 s | 6,807,888 KiB | 0 |
 | `FSV8AlphaRootLabeledTraceConstructor.lean` | 0 | 2.62 s | 6,791,776 KiB | 0 |
+| `FSV8AlignedAlphaNamedSlotsNodup.lean` | 0 | 2.67 s | 6,778,004 KiB | 0 |
+| `FSV8ActualRootAlphaPrefixResidualCapacity.lean` | 0 | 2.69 s | 6,795,668 KiB | 0 |
+| `FSV8AlignedAlphaHistorySlotBridge.lean` | 0 | 2.92 s | 6,778,888 KiB | 0 |
+| `FSV8ActualRootSourceFreshCap.lean` | 0 | 2.55 s | 6,732,692 KiB | 0 |
+
+The focused optimized sampler test command was
+`cargo test --release -p aspis-core --test v8_sampler_source_tests`; it passed
+8/8 tests in 9.38 seconds including compilation, with 506,904,576 bytes peak
+RSS and zero swaps.  These scripted memoizing-hash tests establish literal
+control flow only.
 
 The first trace-prefix attempt failed on list association and was replaced by
 an explicit rewrite; it was not rerun with a larger memory cap.
+An intermediate source-cap draft also tried to prove a generic structural
+fresh-call theorem and a full aligned-terminal bound at once.  The focused
+Lean run failed immediately on incomplete interfaces.  That draft was removed
+rather than increasing resources; the surviving alpha-prefix allocation leaf
+then passed in the run recorded above.
 
 ## Exact probability scope
 
@@ -211,16 +262,24 @@ The status is:
 - **PASS:** an actual exact-root trace prefix constructs the chronological
   labels, causal trace, master-tape answer prefix, terminal cursor and
   remaining tape; no independent trace or suffix witness is required;
-- **OPEN:** complete-duplex actual sampler law and both cached cases;
+- **PASS:** one-marker source-path slot uniqueness and same-root residual
+  capacity; the alpha-prefix-specific allocation reduces its resource side to
+  explicit selected-profile facts `adversaryFuel≤q1` and `n+m≤108`;
+- **PASS:** exact local-history label replay for the full one-marker accepted
+  path;
+- **OPEN:** the state-by-state `seekUnifiedExposure`/V7-history refinement,
+  those selected-profile producers, complete-duplex actual sampler law, and
+  both cached cases;
 - **NOT USED:** first-block fallback;
 - **NO CLAIM:** global 100-bit soundness, allowed-access extraction, adaptive
   zero knowledge, literal Rust refinement, or complete-transaction CU parity.
 
-The next exact source obligation is now to select, from the same accepted
-root, the trace prefix ending at the accepted alpha candidate and prove the
-generated round-zero labels are duplicate-free and within residual capacity.
+The next exact source obligation is now the state-by-state scheduler theorem
+identifying each exact-root pre-answer state/input with the local V7 history
+replay, plus the selected-profile resource facts needed by the prefix cap.
 The constructor already supplies the chronological trace and exact master-tape
-prefix for any such literal root prefix.  The
+prefix, while the new leaves supply path-local uniqueness, exact local-history
+replay and cap-to-residual arithmetic separately.  The
 output-fresh/advance-cached and output-cached alternatives, including the
 explicit cached marker branches above, must still trace to their actual first
 exposure and remain separate until charged.  Assuming independence from
