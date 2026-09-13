@@ -2,9 +2,9 @@
 
 Date: 2026-09-13.
 
-Status: **R7 Tickets A/B complete conditionally; Ticket C stops at the paired
-C1/C2 commitment kernel; no full-view privacy repair or production release
-claim**.
+Status: **R8 universal witness-retaining paired-commitment hop and ideal salt
+counting proved; source refinement and public algebraic provider remain open;
+no full-view privacy repair or production release claim**.
 
 ## Milestone ledger
 
@@ -20,6 +20,9 @@ claim**.
 | R7 Ticket A | PASS: literal source gives `H1_unpadded = D a` under honest validation and pole freedom; 1024-row fixture delta matches | The source identity alone is not privacy |
 | R7 Ticket B | PASS: actual-encoder coverage and coordinatewise C2 lift; conditional Lean fixed-observation theorem | Fresh conditional pad law is a separate prefix/commitment premise |
 | R7 Ticket C | PRECISE BOUNDARY | Causal paired C1/C2 same-salt commitment kernel in one coherent lazy random oracle, before first semantic message |
+| R8 finite commitment hop | PASS, SAME-PROVIDER | Both exact marginals, forward execution invariant, atomic paired materialization, and event gap bounded by Bad; witness retained |
+| R8 ideal salt loss | PASS, CONDITIONAL ON FIBER CAP | Adaptive coordinate counting and duplicate-salt union bound; actual seed hybrid and source query cap open |
+| R8 selected grammar | PASS, LOCAL SOURCE EXACT | 403/186-byte packed payloads, 32-byte shared salt, 0x71/0xf1 leaf tags, 53-byte parents; complete SHA-call-trace refinement open |
 
 ## Decisive evidence
 
@@ -71,6 +74,7 @@ positive release bound; source-to-model refinement; independent final replay;
 or any global V8 privacy advantage bound.
 
 See `R7_H1_C2_INCIDENCE.md`, `R7_FIRST_SEMANTIC_BOUNDARY.md`,
+`R8_PAIRED_COMMITMENT_HOP.md`, `R8_EVIDENCE_LEDGER.json`,
 `COMPATIBILITY_DIFF.md`, and
 `REMAINING_OBLIGATIONS.md` for the exact handoff. No deployment, transaction,
 wallet/key operation, force push, merge, SBF build, Aeneas replay or full
