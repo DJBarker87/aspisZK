@@ -33,10 +33,12 @@ exact codec. They do not instantiate a real SHA codec or commitment hybrid.
 
 Compiler: `rustc 1.93.0`. Feature: `insecure-spend-fixture`; release/offline.
 
-- `r12_balanced_g_cut`: pass, 1.92 s wall, 131,923,968 bytes maximum RSS,
+- `r12_balanced_g_cut`: pass (2 tests), 2.94 s wall, 146,161,664 bytes maximum RSS,
   zero swaps. It checks actual G-factor rows, inactivity, exact prior-round
   cancellation, boundary zero and full 27-coordinate rank for Boolean and
-  non-base QM31 prefixes.
+  non-base QM31 prefixes. Its fixed boundary/moment inverses plus polynomial
+  translation lift every coordinate and an arbitrary 27-vector, checking the
+  entire compact image and all prior polynomials.
 - appended `r12_complete_selected_terminal_preserves_earlier_rounds`: pass,
   3.42 s wall, 161,660,928 bytes maximum RSS, zero swaps. It uses the genuine
   compiler fixture and complete selected terminal through rounds 0..2.
