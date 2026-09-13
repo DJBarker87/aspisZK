@@ -301,6 +301,10 @@ pub fn apply_pool_v1_pair_forest_h1_padding_mask_v1(
     apply_h1_padding_mask_for_active(h1, padding, &pool_v1_pair_forest_copy_active_rows()?)
 }
 
+#[cfg(test)]
+#[path = "r11_mask_material_kat.rs"]
+mod r11_mask_material_kat;
+
 struct SeedExpander {
     hash: HashFn,
     seed: [u8; 32],
