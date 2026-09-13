@@ -62,6 +62,13 @@ def successfulRelationAlphaTotalEquiv :
       exact fourGammaBlocksRawEquiv.apply_symm_apply sample.1.1
     · rfl
 
+noncomputable instance successfulRelationAlphaTotalNonempty :
+    Nonempty {sample : RelationAlphaTotalTape //
+      relationAlphaTotalSucceeds sample} :=
+  ⟨successfulRelationAlphaTotalEquiv.symm
+    (Classical.choice
+      (inferInstance : Nonempty SuccessfulTag73DuplexOrdinaryAttempt))⟩
+
 @[simp] theorem successfulRelationAlphaTotalEquiv_advance
     (sample : {sample : RelationAlphaTotalTape //
       relationAlphaTotalSucceeds sample}) :
@@ -77,6 +84,7 @@ def successfulRelationAlphaTotalEquiv :
 
 #print axioms relationAlphaTotalSucceeds
 #print axioms successfulRelationAlphaTotalEquiv
+#print axioms successfulRelationAlphaTotalNonempty
 #print axioms successfulRelationAlphaTotalEquiv_advance
 #print axioms successfulRelationAlphaTotalEquiv_raw
 

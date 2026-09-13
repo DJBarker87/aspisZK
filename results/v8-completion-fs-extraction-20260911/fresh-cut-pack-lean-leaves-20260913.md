@@ -45,3 +45,27 @@ The remaining source probability obligation is to connect this ideal IID
 word-tape law to actual routed fresh coordinates at a causal V8 cut while
 retaining output/advance cache cases.  No such premise is introduced by these
 files.
+
+## `FSV8AlignedAlphaTotalTape.lean`
+
+- exit status: 0
+- wall time: 2.70 s
+- maximum RSS (`/usr/bin/time -v`): 6,798,952 KiB
+- swaps: 0
+- axioms: `propext`, `Classical.choice`, `Quot.sound`
+- source SHA-256: `dbb69764c75775e41138124f198b06046b2b866b3304b89880216fca62372c27`
+
+Starting from an actual `SuccessfulAlignedChallenge`, this deterministic leaf
+constructs a four-output/four-advance `RelationAlphaTotalTape`.  Its output
+prefix is the literal rejected-block sequence plus the accepted final output;
+its advance prefix contains the matching actual advance answers in chronology;
+both sides are padded only after the used prefix.  The four-block word bridge
+is retained explicitly, and the padded output raw stream succeeds with the
+same returned alpha.
+
+This does not yet prove that the constructed tape is definitionally the named
+coordinate pair produced by `alpha0SamplerCoordinates` for an exact-root
+master tape.  That remaining source/router equality needs the exact root's
+starting cursor and the slot-router execution to be connected to this same
+`SuccessfulAlignedChallenge`; it cannot be inferred merely from the common
+four-pair type.

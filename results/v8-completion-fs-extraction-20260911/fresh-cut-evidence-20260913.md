@@ -35,6 +35,10 @@ resource figures from systemd timestamps:
 | `0f461499c6ca5f040199ba6ef8c743d6cb418a67005cc4bf4afd495c3d9641e8` | `FSV8AlphaTotalSuccessfulCoordinates` | 0 | 2.78 s | 6,821,508 KiB | 0 | standard only |
 | `e55e78b5c8ef5c7a9884d125d1713f52edf6b9fc2bee8a30bbade2a6baee1f0e` | `FSV8SourceBufferedDecode` | 0 | 0.31 s | 773,788 KiB | 0 | standard only |
 | `3b5f4019ff7440f5a087d3608c198f15d69ee8823ab302ca878e282659f4281c` | `FSV8ExactRejectionWeights` | 0 | 2.46 s | 6,515,692 KiB | 0 | standard only |
+| `4bba9fa9142653877fddc2d5f33aa7697215dd2632d5d014523d23c478cde69f` | `FSV8AlphaTotalSuccessfulCoordinates` (with successful-subtype inhabitant) | 0 | 2.74 s | 6,821,680 KiB | 0 | standard only |
+| `c3a536755f76c0074ace1361e45327b484b97cd23b249bca0aca62a01f15636d` | `FSV8AlphaOrdinaryRoutedEvent` | 0 | 2.91 s | 6,835,872 KiB | 0 | standard only |
+| `dbb69764c75775e41138124f198b06046b2b866b3304b89880216fca62372c27` | `FSV8AlignedAlphaTotalTape` | 0 | 2.70 s | 6,798,952 KiB | 0 | standard only |
+| `0a91980af14c6f5598411d0403b1b4ad53843dc6b43e395dec29e63eda754f24` | `FSV8AlignedAlphaPairDispositions` | 0 | 2.80 s | 6,828,996 KiB | 0 | standard only |
 
 The accepted marker theorem constructs a source-level classifier: prior
 adversary, fresh marker already charged to the exact-root target event,
