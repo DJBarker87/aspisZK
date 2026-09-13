@@ -1,5 +1,6 @@
 import FSV8AlignedAlphaChallengeRun
 import FSV8AlphaCompleteCoordinateRouter
+import FSV8AlphaTotalSuccessfulCoordinates
 import FSV7FourBlockWordBridge
 import AspisFormal.K1.V7Tag73VariablePrefixGammaFlatRouting
 import AspisFormal.K1.V7Tag73IncrementalSamplerControl
@@ -27,6 +28,7 @@ namespace AspisV8Completion.FSV8AlignedAlphaTotalTape
 open FSBoundedTranscript
 open FSV8AlignedAlphaChallengeRun FSV8AlignedAlphaSqueezeStep
 open FSV8CandidateOriginTrace
+open FSV8AlphaTotalSuccessfulCoordinates
 open AspisK1.V7FsAokExperiment
 open AspisK1.V7Tag73AdaptiveLazyOracle
 open AspisK1.V7Tag73DeployedDecoderFiberCap
@@ -117,6 +119,64 @@ theorem successful_blocks_cap
     simpa [decodeChallengeParameter, samplerMode] using accepted
   exact decodeOrdinaryExact_block_cap blocks value ordinaryExact
 
+/-- Any complete routed tape whose output side has the consumed source prefix
+of a successful aligned run succeeds and decodes to the same alpha.  The
+advance side is deliberately unconstrained: it affects the causal source
+history, but not the deterministic ordinary decoder.
+
+This is the consumer interface needed by a source router.  It requires only
+equality of the actually consumed output prefix; it does not require the
+router's unused suffix to equal `padFour`, and it has no freshness or
+probability premise. -/
+theorem successfulTotalTape_of_output_prefix
+    {steps : Nat} {tape : Tape} {finiteTape : FreshAnswerTape Block steps}
+    {limits : OracleLimits} {startV7 : OracleState} {start : Transcript}
+    {blocks : List Block} {final : Transcript} {value : Qm31Bytes}
+    (success : SuccessfulAlignedChallenge tape finiteTape limits startV7 start
+      blocks final value)
+    (total : RelationAlphaTotalTape)
+    (outputPrefix : (List.ofFn total.1).take blocks.length = blocks) :
+    ∃ decoded : OrdinaryPrefixDecode,
+      decodeOrdinaryPrefix (List.ofFn total.1) = some decoded ∧
+      decoded.value = value ∧ relationAlphaTotalSucceeds total := by
+  have blocksCap := successful_blocks_cap success
+  obtain ⟨_rejected, _finalStart, _beforeFinal, _rejectedPath, _finalPair,
+      blocksEq, _finalEq, accepted, _phase⟩ := success
+  have ordinaryExact : decodeOrdinaryExact blocks = some value := by
+    rw [blocksEq]
+    simpa [decodeChallengeParameter, samplerMode] using accepted
+  obtain ⟨decoded, decodedAtBlocks, noRemaining, valueEq⟩ :=
+    decodeOrdinaryExact_witness blocks value ordinaryExact
+  have usedEq : decoded.blocksUsed = blocks.length := by
+    have remaining := decodeOrdinaryPrefix_remaining_eq_drop
+      blocks decoded decodedAtBlocks
+    obtain ⟨_before, _acceptedWord, _after, _decomposition, _wordsUsed,
+        _limbCount, _finalLimb, _value, _blocksUsed, _remaining,
+        usedLe⟩ := decodeOrdinaryPrefix_fourth_limb_trace
+          blocks decoded decodedAtBlocks
+    have dropEmpty : blocks.drop decoded.blocksUsed = [] := by
+      rw [← remaining]
+      exact noRemaining
+    have lengthLe := List.drop_eq_nil_iff.mp dropEmpty
+    omega
+  let routedBlocks := List.ofFn total.1
+  have routedLong : decoded.blocksUsed ≤ routedBlocks.length := by
+    rw [usedEq]
+    simpa [routedBlocks] using blocksCap
+  have prefixEq : routedBlocks.take decoded.blocksUsed =
+      blocks.take decoded.blocksUsed := by
+    rw [usedEq, outputPrefix]
+    simp
+  have routedRun := decodeOrdinaryPrefix_of_matching_consumed_prefix
+    blocks routedBlocks decoded decodedAtBlocks routedLong prefixEq
+  refine ⟨{ decoded with
+      remainingBlocks := routedBlocks.drop decoded.blocksUsed },
+    routedRun, valueEq, ?_⟩
+  unfold relationAlphaTotalSucceeds
+  rw [← fourGammaBlocksRawEquiv_success_iff]
+  rw [routedRun]
+  rfl
+
 /-- Padding the output side of an actual successful aligned run preserves its
 returned alpha.  The result uses the same four-block/raw-stream bridge as the
 complete coordinate router. -/
@@ -203,6 +263,7 @@ theorem successfulTotalTape_decodes_same_alpha
 #print axioms AdvanceTrace.length_eq
 #print axioms AlignedRejectedPath.exists_advanceTrace
 #print axioms successful_blocks_cap
+#print axioms successfulTotalTape_of_output_prefix
 #print axioms successfulTotalTape_decodes_same_alpha
 
 end
