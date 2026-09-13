@@ -822,3 +822,14 @@ from those openings.  OOD-data construction, the chronological hash view,
 ordinary/image functional producer, causal relation terminal, Rust refinement,
 payment extraction and probability coupling remain open.  Evidence is in
 `live-relation-observation-20260912.md` and the root `results/` tree.
+
+### 2026-09-13 fresh-cut source target bridge
+
+The focused leaves recorded in `S1_FRESH_CUT_REPORT.md` connect a positional
+fresh verifier query from the returned V8 execution to its exact global native
+request and actual root-trace coordinate.  A literal operational target hit at
+that cut is included in the existing exact-root target event, with no
+per-request union or grinding credit.  The marker-specific prior-creator route
+is closed when the retained creator is a fresh verifier record.  Cached and
+programmed creator provenance, and the complete-duplex ordinary sampler law,
+remain explicit open obligations.  The proof body remains 40,282 bytes.
