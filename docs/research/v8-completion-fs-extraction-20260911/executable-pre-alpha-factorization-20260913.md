@@ -69,12 +69,20 @@ This is literal `OracleMachine` equality, not equality inferred from completed
 runs.  Rewriting it inside the exact root preserves scheduler normalization,
 cache handling, query history and exposure traces.
 
-`FSV8CompileScriptAlgebra.lean` supplies the structural compiler laws needed
-for the first route: compilation erases static `promote`/`pad`, preserves
-`bind`, and the target `OracleMachine` bind is associative.  These laws are
-proved by induction over the actual scripts/machines, not inferred from
-interpreter-run extensionality.  The V8-specific compiled whole-script
-equality is the next leaf.
+`FSV8CompileScriptAlgebra.lean` supplies the structural compiler laws used by
+that result: compilation erases static `promote`/`pad`, preserves `bind`, and
+the target `OracleMachine` bind is associative.  These laws are proved by
+induction over the actual scripts/machines, not inferred from interpreter-run
+extensionality.
+
+`FSV8FactoredExactRootCursor.lean` closes the intervening root-identity step.
+It substitutes the factored compiled program into the adversary-returned-body
+callback and proves literal equality with `FSV8ExactRootCursor.rootCursor`.
+The body, entry oracle, actors, limits, fuel, dependent runtime value and both
+final oracle states are unchanged.  Consequently its erasure is the existing
+probability-visible exposure cursor.  This remains one monolithic scheduler
+machine: it does not yet construct a cache-aware split callback or identify
+which of the one-to-four alpha pairs were fresh.
 
 After that bridge, the live execution must route each of the one-to-four
 answer-dependent pairs as cached or fresh, run the incremental ordinary
@@ -103,7 +111,7 @@ this was not a fresh transitive source rebuild.
 | `FSV8ForwardAlphaForkCursor.lean` | 0 | 2.99 s | 6,788,424 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
 | `FSV8CompileScriptAlgebra.lean` | 0 | 3.06 s | 6,542,156 KiB | 0 | `Quot.sound` |
 | `FSV8CompiledWholeFactorization.lean` | 0 | 3.16 s | 6,794,004 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
-| `FSV8CompileScriptAlgebra.lean` | 0 | 3.06 s | 6,542,156 KiB | 0 | `Quot.sound` |
+| `FSV8FactoredExactRootCursor.lean` | 0 | 2.66 s | 6,778,912 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
 
 The first failed focused runs are retained in the machine report as
 elaboration/proof-normalization diagnostics.  No heartbeat or memory-cap
