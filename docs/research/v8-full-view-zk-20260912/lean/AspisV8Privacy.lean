@@ -11,6 +11,7 @@ import AspisV8Privacy.GatedRelease
 import AspisV8Privacy.PrivacyGames
 import AspisV8Privacy.HybridBudget
 import AspisV8Privacy.SeparatorObstruction
+import AspisV8Privacy.PublicCosetRepair
 import AspisV8Privacy.V8Profile
 
 /-! Imported first-attempt leaves, compiled after API-only repairs in the
