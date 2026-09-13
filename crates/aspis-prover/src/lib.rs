@@ -32,6 +32,7 @@ pub mod state_only_zerocheck;
 
 pub mod v6_onefold_prover;
 pub mod v8_privacy_affine_gate;
+pub mod v8_privacy_publication;
 pub mod v8_six_mask_hiding_rank;
 
 /// Deterministic eight-lane fixture shared by host integration tests.  Its
