@@ -1,0 +1,135 @@
+# S1 fresh-cut source connection
+
+Date: 2026-09-13
+
+Branch: `research/v8-completion-fs-extraction-20260911`
+
+Base inspected: `9d644fa0087bcfcc626fa0e588b34abba9aea67f`
+
+## Result
+
+This continuation closes a real source-to-root boundary for **genuinely fresh
+requests**.  Given a returned V8 functional execution and a positional member
+of its verifier `freshQueries`, Lean now constructs:
+
+1. the request's exact position in the actual `runExactRoot` trace;
+2. the exact global scheduler-native request at the root cursor after the
+   adversary answers and preceding verifier answers;
+3. the request state and preceding-verifier-query history facts; and
+4. inclusion of a literal operational target hit at that request in the
+   existing exact-root target event.
+
+The resulting event is bounded by `exactCompilerExactCountError`.  This is the
+same root event already present in the compiler accounting, so there is no
+per-request union and no grinding/work term.
+
+The promoted endpoint is
+`returned_verifier_fresh_target_hit_mem_exact_root_event` in
+`FSV8ReturnedVerifierFreshTargetEvent.lean`.  Its only target-specific premise
+is that the answer belongs to `operationalRequestTargets` of the exact request
+state constructed at that positional source cut.  The request, trace and state
+are not caller-supplied coherence certificates.
+
+For the source route that retains a concrete earlier creator record, the
+marker-specific transport is also closed when that creator has
+`actor=.verifier` and `origin=.fresh`: the exact marker split places the
+creator among the preceding queries, the global request retains it, and its
+literal-prefix relation is charged to the same root target event.  No equality
+between the local marker state and global request state is assumed.
+
+Cached or programmed creator records are deliberately not promoted.  A cache
+hit emits no `machineFresh` record and requires first-producer provenance.
+
+## Checked leaves
+
+All retained leaves compile with Lean 4.32.0.  Their promoted declarations use
+only `propext`, `Classical.choice`, and `Quot.sound` (some individual helper
+declarations use a subset).
+
+| Leaf | Security/source meaning | Status |
+|---|---|---|
+| `FSV8ProgrammedAlphaMarkerHistoryPrefix` | Same source marker continuation reaches the same factored verifier history | PASS |
+| `FSV8OutsideTargetTraceClean` | Operational reindexing preserves the actual V8 root trace; outside target event it is chronologically clean | PASS |
+| `FSV8MarkerFreshVerifierQueryBridge` | A successful missing marker query appends its literal fresh record | PASS |
+| `FSV8MarkerFreshVerifierMembership` | That marker pair belongs to the same returned verifier `freshQueries` | PASS |
+| `FSV8FreshRequestTargetEvent` | Actual fresh request target hit is included in the exact-root target event and inherits its exact count bound | PASS |
+| `FSV8ReturnedRootFreshTracePrefix` | Returned projected adversary/verifier records form a prefix of the actual root trace; a verifier member has a trace coordinate | PASS |
+| `FSV8RootVerifierNativeRequest` | A verifier member constructs the exact global native request and retains prior-query history | PASS |
+| `FSV8ReturnedVerifierFreshTargetEvent` | Joins the trace, request, and target-event inclusion on one returned execution | PASS |
+| `FSV8MarkerFreshEnumerationSplit` | Exact preceding fresh-query list at the marker and fresh-creator retention at the global request | PASS |
+| `FSV8MarkerFreshCreatorTargetEvent` | Fresh verifier creator at the marker is charged to the exact-root target event | PASS |
+| `FSV8MarkerFreshTargetReduction` | Arbitrary marker target is charged or exposes a concrete missing prior record | PASS |
+| `FSV8OperationalTargetMonotone` | Operational targets persist under chronological history extension | PASS |
+
+Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
+`MemoryMax=8G`, and `MemorySwapMax=0`.  The final three runs were:
+
+| Target | Exit | Wall | Peak RSS | Swap |
+|---|---:|---:|---:|---:|
+| `FSV8ReturnedRootFreshTracePrefix.lean` | 0 | 2.69 s | 6,765,448 KiB | 0 |
+| `FSV8RootVerifierNativeRequest.lean` | 0 | 2.82 s | 6,828,692 KiB | 0 |
+| `FSV8ReturnedVerifierFreshTargetEvent.lean` | 0 | 2.84 s | 6,827,416 KiB | 0 |
+| `FSV8MarkerFreshEnumerationSplit.lean` | 0 | 2.79 s | 6,806,952 KiB | 0 |
+| `FSV8MarkerFreshCreatorTargetEvent.lean` | 0 | 2.85 s | 6,831,952 KiB | 0 |
+| `FSV8MarkerFreshTargetReduction.lean` | 0 | 2.88 s | 6,828,428 KiB | 0 |
+| `FSV8OperationalTargetMonotone.lean` | 0 | 2.64 s | 6,789,056 KiB | 0 |
+
+The first trace-prefix attempt failed on list association and was replaced by
+an explicit rewrite; it was not rerun with a larger memory cap.
+
+## Exact probability scope
+
+Let
+
+- `F = unifiedFull256ExposureCap parameters`,
+- `G = globalFull256OracleCallCap parameters`, and
+- `C = choose(F,2) + F*(G+1)`.
+
+The reused exact-root bound is
+
+`exactCompilerExactCountError = C * (2^256)^(F-1) / (2^256)^F`.
+
+The new theorem proves event inclusion into that exact event.  It does not
+assert an independent local random-oracle law and therefore does not
+double-charge `C / 2^256`.
+
+The complete-duplex ordinary sampler claims supplied in the standalone prompt
+remain **not source-connected here**:
+
+- fresh output and fresh advance;
+- fresh output with cached advance; and
+- cached output.
+
+The ideal formula `s / p^4`, with `s=(1-(2^31)^-8)^4` and
+`p=2^31-1`, has not been promoted as the distribution of the actual V8 cut.
+The referenced sampler certificate and Lean/Rust drafts were absent from the
+available download.
+
+The first-block fallback is **not used**.  Its charge would be
+`J * 56 / 2^155`, but there is no proved V8 invocation/site/fork cap `J` in
+this checkout.  Neither the V7-specific 1511 cap nor `29*4` was substituted.
+
+## Compatibility and remaining boundary
+
+No protocol, parser, transcript, field, query count, verifier acceptance rule,
+or proof format changed.  The body remains exactly
+
+`697*16 + 52 + 24 + 22*621 + 2*296*26 = 40,282 bytes`.
+
+The status is:
+
+- **PASS:** same-root fresh-request target-event probability bridge;
+- **PASS:** marker-specific transport for a retained fresh verifier creator;
+- **PARTIAL:** accepted-origin wrapper currently erases that creator witness;
+- **OPEN:** complete-duplex actual sampler law and both cached cases;
+- **NOT USED:** first-block fallback;
+- **NO CLAIM:** global 100-bit soundness, allowed-access extraction, adaptive
+  zero knowledge, literal Rust refinement, or complete-transaction CU parity.
+
+The next exact source obligation is to retain the concrete creator and its
+fresh/verifier provenance through the accepted marker-origin classifier,
+instead of reducing it to bare target-set membership.  The programmed/cached
+creator alternatives must trace to their actual first exposure.  After that,
+the genuinely fresh output/advance complement still needs the complete
+four-pair source sampler law.  Assuming state equality or treating cached
+calls as fresh would not close either obligation.
