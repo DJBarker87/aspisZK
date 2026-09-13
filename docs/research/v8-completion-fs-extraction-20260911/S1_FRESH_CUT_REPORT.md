@@ -82,7 +82,12 @@ For the causal coordinate router, the caller no longer supplies an arbitrary
 `remaining` tape decomposition.  `Alpha0RootLabeledTrace.of_trace_prefix`
 constructs it by `take`/`drop` from the exact master tape once the chronological
 labeled trace and its exact answer-prefix equality have been built.  The
-answer-prefix equality itself remains the decisive source-to-router boundary.
+new `actualRootPrefixAlpha0RootLabeledTrace` goes further: from an actual
+decomposition of the same `runExactRoot.trace`, it constructs the chronological
+pre-answer labels, the `MachineLabeledTrace`, the exact master-tape answer
+prefix, the terminal cursor, and the remaining tape.  Only label uniqueness,
+residual capacity, and selection of the accepted alpha-ending root prefix
+remain.
 
 ## Checked leaves
 
@@ -119,6 +124,7 @@ declarations use a subset).
 | `FSV8ProgrammedAlphaLiveAlignmentComposition` | A literal returned candidate plus source alignments constructs the live successful alpha run and aligned terminal | PASS (capacity/path producers separate) |
 | `FSV8AlphaInitialCachedCases` | Initial cached cases are classified without falsely charging a digest fixed point as a root target | PASS (restoration/first-block branch open) |
 | `Alpha0RootLabeledTrace.of_trace_prefix` | Exact master-tape prefix equality mechanically constructs the residual suffix required by the router | PASS (trace/prefix producer open) |
+| `FSV8AlphaRootLabeledTraceConstructor` | An actual exact-root trace prefix constructs its labels, causal trace, master-tape prefix, final cursor and remaining tape | PASS (`namedNodup`, residual bound and accepted-prefix selection open) |
 
 Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 `MemoryMax=8G`, and `MemorySwapMax=0`.  The final three runs were:
@@ -138,6 +144,7 @@ Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 | `FSV8ProjectedRootPreAlphaNoProgrammed.lean` | 0 | 2.53 s | 6,779,072 KiB | 0 |
 | `FSV8MarkerQueryPrefixPath.lean` | 0 | 2.65 s | 6,787,540 KiB | 0 |
 | `FSV8AlphaRouterRealization.lean` | 0 | 2.98 s | 6,807,888 KiB | 0 |
+| `FSV8AlphaRootLabeledTraceConstructor.lean` | 0 | 2.62 s | 6,791,776 KiB | 0 |
 
 The first trace-prefix attempt failed on list association and was replaced by
 an explicit rewrite; it was not rerun with a larger memory cap.
@@ -201,22 +208,19 @@ The status is:
 - **PASS:** the forward projected root constructs `NoProgrammed`, the literal
   marker query constructs the phase-prefix base case, and a returned candidate
   composes with the live alpha execution;
-- **PASS:** an exact chronological answer-prefix equality is sufficient to
-  construct the router's remaining-tape field; no independent suffix witness
-  is required;
+- **PASS:** an actual exact-root trace prefix constructs the chronological
+  labels, causal trace, master-tape answer prefix, terminal cursor and
+  remaining tape; no independent trace or suffix witness is required;
 - **OPEN:** complete-duplex actual sampler law and both cached cases;
 - **NOT USED:** first-block fallback;
 - **NO CLAIM:** global 100-bit soundness, allowed-access extraction, adaptive
   zero knowledge, literal Rust refinement, or complete-transaction CU parity.
 
-The next exact source obligation is now the chronological labeled-trace and
-master-tape prefix theorem
-
-`take steps.length exactRootTape = steps.map Prod.snd`
-
-for the same accepted root and alpha cut.  Once constructed, the checked
-router constructor supplies the suffix decomposition and the existing router
-lemmas identify the consumed output/advance coordinates.  The
+The next exact source obligation is now to select, from the same accepted
+root, the trace prefix ending at the accepted alpha candidate and prove the
+generated round-zero labels are duplicate-free and within residual capacity.
+The constructor already supplies the chronological trace and exact master-tape
+prefix for any such literal root prefix.  The
 output-fresh/advance-cached and output-cached alternatives, including the
 explicit cached marker branches above, must still trace to their actual first
 exposure and remain separate until charged.  Assuming independence from
