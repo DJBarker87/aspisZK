@@ -27,13 +27,25 @@ The checked chain is:
 5. `returned_factoredMiddle_constructs_preAlpha_cut` lifts the result to an
    accepted source-shaped factored middle and retains the post-alpha
    continuation.
+6. `returned_factoredPrefixMiddle_constructs_source_cut` and
+   `returned_factoredWhole_constructs_prefixMiddle_cut` descend through the
+   actual factored complete verifier, retaining the source/OOD/gamma and
+   authenticated-suffix continuations.
+7. `returned_factoredWhole_constructs_programmed_alpha_cut` composes those
+   cuts.  Its result now retains both the successful post-alpha middle
+   continuation and the programmed marker continuation, so the alpha boundary
+   is not detached from the successful verifier execution.
+8. `returned_accepted_exact_root_constructs_programmed_alpha_cut` starts from
+   the exact scheduler root and actual `accepted?` result.  It constructs the
+   programmed alpha cut on the literal adversary-returned body and retains the
+   exact equality between that body/record/digest and the accepted value.
 
 These are deterministic execution/refinement lemmas.  They assign no
-probability to the alpha request and do not yet claim that the internal middle
-cut has been derived from every accepted exact-root run.  The next bridge is
-the structural descent through `factoredWholeStagedScript` and
-`factoredPrefixMiddleScript`, after which the exact marker request can be fed
-to the programmed target/disposition law.
+probability to the alpha request.  The internal programmed alpha cut is now
+constructed from every normally completed, accepted exact-root run satisfying
+the root theorem's positive-fuel premise.  The next bridge feeds its exact
+marker state and continuation into the existing target/disposition and
+restoration law.
 
 ## Evidence
 
@@ -49,6 +61,10 @@ systemd user scopes with `MemoryHigh=8G`, `MemoryMax=9G`,
 | `FSV8SuccessfulProgrammedBindCut.lean` | 0 | 2.61 s | 6,551,076 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
 | `FSV8ProgrammedBeforeAlphaMarkerCut.lean` | 0 | 2.68 s | 6,758,652 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
 | `FSV8ProgrammedMiddlePreAlphaCut.lean` | 0 | 2.70 s | 6,753,608 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
+| `FSV8ProgrammedPrefixMiddleCut.lean` | 0 | 2.76 s | 6,754,828 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
+| `FSV8ProgrammedMiddleContinuationCut.lean` | 0 | 2.70 s | 6,755,780 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
+| `FSV8ProgrammedWholeAlphaCut.lean` (strengthened) | 0 | 2.65 s | 6,724,200 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
+| `FSV8AcceptedExactRootProgrammedAlphaCut.lean` (strengthened) | 0 | 2.80 s | 6,724,420 KiB | 0 | `propext`, `Classical.choice`, `Quot.sound` |
 
 `FSV8SuccessfulBindPrefix.lean` is the narrower exact-static-budget
 predecessor.  No complete manifest replay was performed because only focused
@@ -56,9 +72,16 @@ leaves changed.
 
 ## Security implication and boundary
 
-This closes the generic operational objection that a programmed/cached alpha
-path cannot be cut without assuming fresh-only state or worst-case unused
-fuel.  It does **not** yet close the alpha probability event: the whole-root
-to-middle structural descent and the actual target/disposition inclusion are
-still required.  Extraction, global probability composition, and literal
-Rust refinement remain unchanged obligations.
+This closes the deterministic whole-root-to-alpha-cut gap and the generic
+operational objection that a programmed/cached alpha path cannot be cut
+without assuming fresh-only state or worst-case unused fuel.  It does **not**
+close the alpha probability event: actual target/disposition inclusion,
+restoration, and resource-bounded probability transport are still required.
+Extraction, global probability composition, and literal Rust refinement
+remain unchanged obligations.
+
+A hostile theorem-interface review found no conclusion-shaped premise,
+alternate body, stale semantic program, premature alpha value, or acceptance/
+return conflation.  It did identify that the first aggregate predicate dropped
+the successful post-alpha continuation and accepted-value equality.  Both are
+retained by the strengthened statements recorded above.

@@ -25,6 +25,7 @@ open AspisK1.V7Tag73SharedOracleVerifierRunner
 open FSV8V7OracleMachineBridge
 open FSV8V7ProgrammedAlignment
 open FSV8SuccessfulProgrammedBindCut
+open FSV8SuccessfulProgrammedAlignmentFuel
 open FSV8ExecutablePreAlphaFactorization
 open FSV8BeforeAlphaMarkerFactorization
 open FSV8CompileScriptAlgebra
@@ -66,7 +67,13 @@ theorem returned_preAlpha_constructs_programmed_marker_cut
       (run tape (beforeAlphaMarkerScript out gamma body z digest) fs).1 =
         some (.ok before, before.digest) ∧
       StateAligned tape finiteTape prefixRun.oracle
-        (run tape (beforeAlphaMarkerScript out gamma body z digest) fs).2 := by
+        (run tape (beforeAlphaMarkerScript out gamma body z digest) fs).2 ∧
+      (run tape (alphaMarkerContinuation out gamma body z before)
+        (run tape (beforeAlphaMarkerScript out gamma body z digest) fs).2).1 =
+          some (.ok boundary, finalDigest) ∧
+      StateAligned tape finiteTape continuationRun.oracle
+        (run tape (alphaMarkerContinuation out gamma body z before)
+          (run tape (beforeAlphaMarkerScript out gamma body z digest) fs).2).2 := by
   have factoredSuccess :
       (runMachine (controllerFromFreshAnswerTape finiteTape) limits actor fuel v7
         (compileScript (factoredPreAlphaScript out gamma body z digest))).halt =
@@ -113,8 +120,34 @@ theorem returned_preAlpha_constructs_programmed_marker_cut
         successful_beforeAlphaMarker_digest out gamma body z digest tape fs
           before returnedDigest prefixFunctional
       subst returnedDigest
+      let prefixRun := runMachine (controllerFromFreshAnswerTape finiteTape)
+        limits actor fuel v7
+        (compileScript (beforeAlphaMarkerScript out gamma body z digest))
+      let continuationRun := runMachine
+        (controllerFromFreshAnswerTape finiteTape) limits actor
+        (fuel - prefixRun.steps) prefixRun.oracle
+        (compileScript (alphaMarkerContinuation out gamma body z before))
+      have continuationReturnedExact :
+          continuationRun.halt = .returned (.ok boundary, finalDigest) := by
+        simpa [continuationRun, prefixRun, markerNext] using
+          continuationReturned
+      have continuationExact :
+          continuationRun =
+            { halt := .returned (.ok boundary, finalDigest)
+              oracle := continuationRun.oracle
+              steps := continuationRun.steps } := by
+        generalize runEq : continuationRun = actualRun
+        rcases actualRun with ⟨halt, oracle, used⟩
+        simp only [runEq] at continuationReturnedExact ⊢
+        rw [continuationReturnedExact]
+      have continuationAligned := returned_compileScript_aligned_with_fuel
+        limits actor (alphaMarkerContinuation out gamma body z before)
+        (fuel - prefixRun.steps) prefixRun.oracle
+        (run tape (beforeAlphaMarkerScript out gamma body z digest) fs).2
+        (.ok boundary, finalDigest) continuationRun.oracle
+        continuationRun.steps prefixAligned continuationExact
       exact ⟨before, prefixReturned, continuationReturned, prefixFunctional,
-        prefixAligned⟩
+        prefixAligned, continuationAligned.1, continuationAligned.2⟩
 
 #print axioms returned_preAlpha_constructs_programmed_marker_cut
 
