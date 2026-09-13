@@ -531,4 +531,55 @@ mod tests {
             ))
         );
     }
+
+    #[test]
+    fn diagnostic_same_public_duplicate_input_selection_pair() {
+        use crate::circle_candidate::CircleEncoder;
+        use crate::state_only_entropy::StateOnlyAttemptSecrets;
+        use crate::state_only_hiding::{
+            apply_pool_v1_pair_forest_mask_material_v1, InMemoryStateOnlyMaskNonceStore,
+        };
+        use aspis_core::field::P;
+        use aspis_core::state_only_hiding::StateOnlyHidingContext;
+        use aspis_statement::StateOnlyTraceFoundation;
+
+        const LAMBDA: [u32; 8] = [1508290849, 1480589898, 639192798, 666893749, 2147483646, 0, 1, 0];
+        fn functional(encoder: &CircleEncoder, message: &[M31]) -> M31 {
+            let encoded = encoder.encode_c1_message(message).unwrap();
+            LAMBDA.iter().enumerate().fold(M31::ZERO, |acc, (i, &coefficient)| {
+                assert!(coefficient < P);
+            let offset = if i < 4 { 16 + i } else { 24 + (i - 4) };
+            acc.add(M31(coefficient).mul(encoded[offset]))
+            })
+        }
+
+        let mut first = transfer_fixture();
+        let commitment = first.witness.input.pair.pair_leaf.first_commitment;
+        first.witness.input.pair.pair_leaf = PoolV1PairLeafWitnessV1::two_outputs(commitment, commitment).unwrap();
+        first.public.anchor_root = global_anchor(&first.witness.input);
+        first.public.nullifier = pool_v1_nullifier(&first.witness.input.pair.nullifier_key, &first.witness.input.pair.salt);
+        let mut second = first;
+        second.witness.input.pair.selected_second = true;
+        assert_eq!(first.public, second.public);
+        assert_eq!(first.snapshot, second.snapshot);
+        let checked_first = run_transfer(&first).unwrap();
+        let checked_second = run_transfer(&second).unwrap();
+        let encoder = CircleEncoder::new_for_domain_log(20);
+        let first_l = functional(&encoder, &checked_first.compilation.semantic_c1.c1[0]);
+        let second_l = functional(&encoder, &checked_second.compilation.semantic_c1.c1[0]);
+        assert_ne!(first_l, second_l);
+
+        for (seed, checked) in [(1u8, checked_first), (33u8, checked_second)] {
+            let context = StateOnlyHidingContext::pool_v1_pair_forest_v1([42u8; 32], [seed; 32]);
+            let attempt = StateOnlyAttemptSecrets::deterministic_spend_fixture([seed; 32], [seed + 1; 32], [seed + 2; 32]);
+            let (_, material) = attempt
+                .reserve_and_build_pool_v1_pair_forest_mask_material_v1(
+                    crate::HOST_HASH, [7u8; 32], context, &mut InMemoryStateOnlyMaskNonceStore::default(),
+                )
+                .unwrap();
+            let mut masked = StateOnlyTraceFoundation { c1: checked.compilation.semantic_c1.c1.clone() };
+            apply_pool_v1_pair_forest_mask_material_v1(&mut masked, material).unwrap();
+            assert_eq!(functional(&encoder, &masked.c1[0]), if seed == 1 { first_l } else { second_l });
+        }
+    }
 }
