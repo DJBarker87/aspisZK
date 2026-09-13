@@ -125,8 +125,8 @@ pub enum V7TranscriptDiagnosticPhase {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[charon::variants_prefix("V6TranscriptErrorVariant_")]
 pub enum V6TranscriptError {
-    #[charon::rename("WireFailure")]
     Wire(V6WireError),
     HidingContext,
     ChallengeSampling,
