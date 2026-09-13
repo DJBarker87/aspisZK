@@ -242,12 +242,12 @@ theorem returned_accepted_exact_root_routes_alpha_marker_target_event
               markerNext markerInput cached boundary.digest found
               (by simpa [markerInput] using markerQuery)
             cases sourceEq : cached.source with
-            | fresh => exact .markerCachedFreshSource markerRun.oracle
-                markerInput boundary.digest target cached found sourceEq
-                outputExact
-            | programmed => exact .markerCachedProgrammedSource markerRun.oracle
-                markerInput boundary.digest target cached found sourceEq
-                outputExact
+            | fresh =>
+                exact .markerCachedFreshSource markerRun.oracle markerInput
+                  boundary.digest target cached found sourceEq outputExact
+            | programmed =>
+                exact .markerCachedProgrammedSource markerRun.oracle markerInput
+                  boundary.digest target cached found sourceEq outputExact
         | none =>
             have rootToSource := runMachine_entry_history_prefix_final
               (controllerFromFreshAnswerTape sample.2)
@@ -289,12 +289,12 @@ theorem returned_accepted_exact_root_routes_alpha_marker_target_event
               markerNext markerInput cached boundary.digest found
               (by simpa [markerInput] using markerQuery)
             cases sourceEq : cached.source with
-            | fresh => exact .markerCachedFreshSource markerRun.oracle
-                markerInput boundary.digest target cached found sourceEq
-                outputExact
-            | programmed => exact .markerCachedProgrammedSource markerRun.oracle
-                markerInput boundary.digest target cached found sourceEq
-                outputExact
+            | fresh =>
+                exact .markerCachedFreshSource markerRun.oracle markerInput
+                  boundary.digest target cached found sourceEq outputExact
+            | programmed =>
+                exact .markerCachedProgrammedSource markerRun.oracle markerInput
+                  boundary.digest target cached found sourceEq outputExact
         | none =>
             obtain ⟨creator, creatorMember, actorEq, freshOrigin, inputEq⟩ :=
               prealpha_inserted_candidate_has_before_marker_fresh_creator

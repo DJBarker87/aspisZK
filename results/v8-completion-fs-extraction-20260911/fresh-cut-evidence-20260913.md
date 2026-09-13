@@ -30,13 +30,16 @@ resource figures from systemd timestamps:
 |---|---|---:|---:|---:|---:|---|
 | `d5560254e62a606bf622ce39e7b3be6263674c87562ce450997c2d64bcc3044c` | `FSV8MarkerFreshVerifierCut` | 0 | 6.08 s | 6,829,892 KiB | 0 | standard only |
 | `4b4777917c8352d826cf981081378de03c82f6ce923c94670f6a1673edde1b66` | `FSV8PreAlphaMarkerCreator` | 0 | 3.31 s | 6,806,324 KiB | 0 | standard only |
-| `a3caf2b3c5a93cd50ee2f166b7f8e16b596fca2a9e1b8c1085c865f475fa8d6d` | `FSV8AcceptedExactRootAlphaMarkerTargetEvent` | 0 | 19.11 s | 6,868,896 KiB | 0 | standard only |
+| `b85a73018f135e36f3fa36e06d9333bfef027659e7d7bb48d2ab778ac2c0fa9e` | `FSV8AcceptedExactRootAlphaMarkerTargetEvent` | 0 | 25.02 s | 6,869,360 KiB | 0 | standard only |
 | `6daf578881e080a80fadc477462849b4268787ecd93dc96f3986c95c281bf3e4` | `FSV8AlignedAlphaInitialPairDisposition` | 0 | 2.63 s | 6,793,076 KiB | 0 | standard only |
 | `0f461499c6ca5f040199ba6ef8c743d6cb418a67005cc4bf4afd495c3d9641e8` | `FSV8AlphaTotalSuccessfulCoordinates` | 0 | 2.78 s | 6,821,508 KiB | 0 | standard only |
+| `e55e78b5c8ef5c7a9884d125d1713f52edf6b9fc2bee8a30bbade2a6baee1f0e` | `FSV8SourceBufferedDecode` | 0 | 0.31 s | 773,788 KiB | 0 | standard only |
+| `3b5f4019ff7440f5a087d3608c198f15d69ee8823ab302ca878e282659f4281c` | `FSV8ExactRejectionWeights` | 0 | 2.46 s | 6,515,692 KiB | 0 | standard only |
 
-The accepted marker theorem constructs a source-level four-way classifier:
-prior adversary, fresh marker already charged to the exact-root target event,
-cached marker retained explicitly, or candidate absent at the candidate cut.
+The accepted marker theorem constructs a source-level classifier: prior
+adversary, fresh marker already charged to the exact-root target event,
+cached marker from a fresh table entry, cached marker from a programmed table
+entry, or candidate absent at the candidate cut.
 The aligned-pair theorem constructs the common-initial-state split for one
 actual output/advance pair.  Neither proves the complete four-pair ordinary
 sampler law, a cached first-exposure charge, or the fixed-alpha distribution
