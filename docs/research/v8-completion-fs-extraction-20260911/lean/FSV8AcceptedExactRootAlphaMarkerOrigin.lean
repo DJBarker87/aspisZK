@@ -141,12 +141,19 @@ theorem returned_accepted_exact_root_constructs_alpha_marker_origin
               (compileScript (beforeAlphaMarkerScript out gamma
                 execution.prefixes.adversary.result configuration.z
                 sourceDigest))
+            let markerContinuation := runMachine
+              (controllerFromFreshAnswerTape sample.2)
+              configuration.verifierLimits .verifier
+              (middleFuel - markerRun.steps) markerRun.oracle
+              (compileScript (alphaMarkerContinuation out gamma
+                execution.prefixes.adversary.result configuration.z before))
             ∃ markerNext,
               queryOracle (controllerFromFreshAnswerTape sample.2)
                 configuration.verifierLimits .verifier markerRun.oracle
                 (List.ofFn before.digest ++ [0, 20] ++
                   (0 :: alpha0NonceBytes execution.prefixes.adversary.result)) =
                 .ok (boundary.digest, markerNext) ∧
+              markerContinuation.oracle = markerNext ∧
               AlphaMarkerOriginDisposition
                 execution.prefixes.adversary.finalState markerRun.oracle
                 preRun.oracle (List.ofFn boundary.digest ++ [1])
@@ -189,7 +196,7 @@ theorem returned_accepted_exact_root_constructs_alpha_marker_origin
       markerContinuation.halt = .returned (.ok boundary, preDigest) := by
     simpa only [markerContinuation, markerRun, middleFuel, sourceRun,
       sourceMachineRun] using markerContinuationReturned
-  obtain ⟨markerNext, markerQuery, _markerFinal⟩ :=
+  obtain ⟨markerNext, markerQuery, markerFinal⟩ :=
     returned_marker_continuation_exposes_query sample.2
       configuration.verifierLimits .verifier out gamma
       execution.prefixes.adversary.result configuration.z boundary preDigest
@@ -226,7 +233,7 @@ theorem returned_accepted_exact_root_constructs_alpha_marker_origin
     sourceDigest, boundary, preDigest, before, middle, middleResultDigest,
     cutWitness, ?_⟩
   dsimp only
-  exact ⟨markerNext, markerQuery, refined⟩
+  exact ⟨markerNext, markerQuery, markerFinal, refined⟩
 
 #print axioms returned_accepted_exact_root_constructs_alpha_marker_origin
 #print axioms successful_cached_query_output_eq
