@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "scope": "deterministic complete one-to-four-pair live alpha0 challenge realization in aligned V7 and finite-transcript states",
+  "source_revision_before_commit": "76e39ef4ec79d4e9646bd8bdf59f34a9c75c0955",
+  "host": "nuc",
+  "kernel": "Linux 6.8.0-110-generic x86_64",
+  "lean": {
+    "version": "4.32.0",
+    "commit": "8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+    "command_shape": "systemd-run --user --scope -p MemoryHigh=8G -p MemoryMax=9G -p MemorySwapMax=0 -p RuntimeMaxSec=600 bash -lc 'LEAN_PATH=<pinned> /usr/bin/time -v <lean-4.32.0>/bin/lean -j1 -M8192 -o <leaf>.olean <leaf>.lean'",
+    "swap_limit_bytes": 0
+  },
+  "leaves": [
+    {
+      "file": "FSV8AlphaHistoryPhasePrefix.lean",
+      "source_sha256": "da36f4b06013548fc2bda8f3c6002908b01918d335fc3074bb1af510769a481d",
+      "olean_sha256": "57b60be373ab57d1402b69b63842d7a4e47edd6a419ad0b06d2c302925747422",
+      "exit_status": 0,
+      "wall_seconds": 2.78,
+      "peak_rss_kib": 6819144,
+      "swaps": 0
+    },
+    {
+      "file": "FSV8CandidateOriginTrace.lean",
+      "source_sha256": "0e25fe3be084c4003c380ff45ec9a85f8fa692f023458771e4bb4d95fedde874",
+      "olean_sha256": "9eca0ee902fc3b64e9026c68479ad840efc80dea832042df9e84809d177b1198",
+      "exit_status": 0,
+      "wall_seconds": 0.27,
+      "peak_rss_kib": 763272,
+      "swaps": 0
+    },
+    {
+      "file": "FSV8AlignedAlphaSqueezeStep.lean",
+      "source_sha256": "39faf6f8766274e5d37232673dc23d25f036d4c51adf3692a7e12254d80b3ad8",
+      "olean_sha256": "f21b73c03749a3c8829641c81e8263cb5be058d0b39a32465fefb9bf786184ab",
+      "exit_status": 0,
+      "wall_seconds": 4.03,
+      "peak_rss_kib": 6831552,
+      "swaps": 0
+    },
+    {
+      "file": "FSV8AlphaChallengeDecoderBridge.lean",
+      "source_sha256": "7dede5232e03226a6c7d5818bd7c56fb75f85ba7d8ec8069e212ae323da173eb",
+      "olean_sha256": "b354c01bc164f26551743cea43070d6426e389c7f44dceddbdc2387be8981931",
+      "exit_status": 0,
+      "wall_seconds": 3.01,
+      "peak_rss_kib": 6586080,
+      "swaps": 0
+    },
+    {
+      "file": "FSV8AlignedAlphaChallengeRun.lean",
+      "source_sha256": "c0776b7abea0d030dc345af695bf1bd9244d18434db70d699727689caf6aa5ef",
+      "olean_sha256": "e3065971b7b846d7cf5b6d239ff609868d8ca1b7d40064a323d86d3e062bf36d",
+      "exit_status": 0,
+      "wall_seconds": 3.52,
+      "peak_rss_kib": 6825564,
+      "swaps": 0
+    }
+  ],
+  "promoted_theorem": "AspisV8Completion.FSV8AlignedAlphaChallengeRun.successful_live_challenge_constructs_aligned_run",
+  "axioms": ["propext", "Classical.choice", "Quot.sound"],
+  "sorry_or_custom_axioms": false,
+  "hostile_review": "PASS for stated deterministic scope; no blocking flaw or conclusion-shaped premise found",
+  "not_claimed": [
+    "exact whole-verifier marker/root-cut construction",
+    "programmed or restored-state alignment",
+    "preferred-coordinate target realization",
+    "random-oracle or Fiat-Shamir probability transport",
+    "literal Rust refinement",
+    "global soundness"
+  ]
+}

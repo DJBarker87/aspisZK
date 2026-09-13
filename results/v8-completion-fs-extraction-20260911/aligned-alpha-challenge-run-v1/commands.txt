@@ -1,0 +1,21 @@
+Host: nuc (Linux 6.8.0-110-generic x86_64)
+Lean: 4.32.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35
+
+Working directory on the recorded host:
+  /home/dombarker/v8w
+
+LEAN_PATH:
+  /home/dombarker/v8w:/home/dombarker/v8w/.lean-union-432:/home/dombarker/v8w/AspisFormal:/home/dombarker/weighted-hensel-repair/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/plausible/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/batteries/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/importGraph/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/Qq/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dombarker/weighted-hensel-repair/.lake/packages/aesop/.lake/build/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean
+
+For each leaf named in report.json, the recorded command was:
+
+  systemd-run --user --scope --quiet \
+    -p MemoryHigh=8G -p MemoryMax=9G -p MemorySwapMax=0 \
+    -p RuntimeMaxSec=600 \
+    bash -lc "LEAN_PATH=$LEAN_PATH /usr/bin/time -v \
+      /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean \
+      -j1 -M8192 -o LEAF.olean LEAF.lean"
+
+To reproduce in another pinned checkout, replace the host-specific prefixes in
+LEAN_PATH with the corresponding repository, AspisFormal, weighted-Hensel and
+Lean 4.32.0 paths; do not use the recorded `.olean` outputs as source evidence.
