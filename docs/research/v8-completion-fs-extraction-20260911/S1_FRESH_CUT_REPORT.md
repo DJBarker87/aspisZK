@@ -45,9 +45,11 @@ accepted execution:
 1. prior adversary candidate input;
 2. a genuinely fresh marker whose source/pre-alpha fresh verifier creator is
    charged to the existing exact-root target event;
-3. cached marker reuse, retaining its actual lookup entry, target membership
-   and output equality; or
-4. candidate input absent at the candidate cut.
+3. cached marker reuse from a fresh table entry, retaining target membership
+   and output equality;
+4. cached marker reuse from a programmed table entry, retaining the same
+   evidence; or
+5. candidate input absent at the candidate cut.
 
 Thus the earlier `accepted_origin_retains_creator_provenance` obligation is
 closed for the two verifier-insertion/fresh-marker branches.  The cached
@@ -93,6 +95,8 @@ declarations use a subset).
 | `FSV8AcceptedExactRootAlphaMarkerTargetEvent` | Accepted execution preserves fresh creator provenance and routes its fresh-marker branch to the existing root event while retaining cached/adversary/absent alternatives | PASS |
 | `FSV8AlignedAlphaInitialPairDisposition` | One actual aligned output/advance pair is classified at its common initial state | PASS |
 | `FSV8AlphaTotalSuccessfulCoordinates` | Successful eight-coordinate V8 alpha tape is equivalent to the existing successful Tag-73 raw stream with all four advance digests preserved | PASS |
+| `FSV8SourceBufferedDecode` | Pinned source decoder consumes literal sentinel/canonical first-block patterns and rejects the all-sentinel block | PASS (deterministic) |
+| `FSV8ExactRejectionWeights` | Exact bounded-geometric and fixed-tuple mass identities, including the V8 `n=2^31`, cap-eight instance | PASS (ideal arithmetic) |
 
 Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 `MemoryMax=8G`, and `MemorySwapMax=0`.  The final three runs were:
@@ -158,6 +162,8 @@ The status is:
 - **PASS:** source-exact initial-state disposition for one aligned squeeze pair;
 - **PASS:** deterministic successful-tape equivalence required by the existing
   complete causal ordinary-probability consumer;
+- **PASS:** literal first-block decoder behavior and exact complete ideal
+  decoder mass identities;
 - **OPEN:** complete-duplex actual sampler law and both cached cases;
 - **NOT USED:** first-block fallback;
 - **NO CLAIM:** global 100-bit soundness, allowed-access extraction, adaptive
