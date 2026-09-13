@@ -64,6 +64,53 @@ structure Alpha0RootLabeledTrace
         (relation_alpha_slots_add_residual parameters).symm tape) =
     steps.map Prod.snd ++ remaining
 
+/- The only global tape fact consumed by the router is a prefix equality.  Keep
+   that fact as an explicit source-facing premise, and derive the residual
+   field mechanically.  This is intentionally not an ``all local origins are
+   fresh'' shortcut: the prefix is over the exact master tape attached to the
+   root cursor. -/
+def Alpha0RootLabeledTrace.of_trace_prefix
+    {HiddenTape TapeIdentity Observation : Type}
+    (parameters : ExactCompilerResourceParameters)
+    {n m : Nat}
+    (configuration : Configuration HiddenTape TapeIdentity Observation
+      (globalFull256OracleCallCap parameters) n m)
+    (transitionFuel : Nat) (hidden : HiddenTape)
+    (tape : FreshAnswerTape Block
+      (exactCompilerTargetCaps parameters).length)
+    (steps : List (Option RelationAlphaDuplexSlot × Block))
+    (finalCursor : UnifiedExposureCursor
+      (globalFull256OracleCallCap parameters))
+    (trace : MachineLabeledTrace (relationAlphaSlotMachine 0 transitionFuel)
+      (exposureCursor configuration hidden) steps finalCursor)
+    (namedNodup : (namedTraceSlots steps).Nodup)
+    (residualEnough : residualTraceSteps steps ≤
+      relationAlphaRouterResidual parameters)
+    (tapePrefixTaken :
+      (freshAnswerTapeToList
+        (castFreshAnswerTape
+          (relation_alpha_slots_add_residual parameters).symm tape)).take
+          steps.length = steps.map Prod.snd) :
+    Alpha0RootLabeledTrace parameters configuration transitionFuel hidden tape := by
+  let allAnswers := freshAnswerTapeToList
+    (castFreshAnswerTape
+      (relation_alpha_slots_add_residual parameters).symm tape)
+  let remaining := allAnswers.drop steps.length
+  refine {
+    steps := steps
+    finalCursor := finalCursor
+    remaining := remaining
+    trace := trace
+    namedNodup := namedNodup
+    residualEnough := residualEnough
+    tapePrefix := ?_ }
+  change allAnswers = steps.map Prod.snd ++ remaining
+  calc
+    allAnswers = allAnswers.take steps.length ++ remaining :=
+      (List.take_append_drop steps.length allAnswers).symm
+    _ = steps.map Prod.snd ++ remaining := by rw [tapePrefixTaken]
+
+
 /-- Every named literal source answer in a constructed exact-root trace is
 the corresponding component of the exact V8 alpha coordinate equivalence. -/
 theorem alpha0_coordinate_eq_of_labeled_trace
@@ -179,6 +226,7 @@ theorem alpha0_sampler_advance_eq_of_labeled_trace
       decomposition
 
 #print axioms Alpha0RootLabeledTrace
+#print axioms Alpha0RootLabeledTrace.of_trace_prefix
 #print axioms alpha0_coordinate_eq_of_labeled_trace
 #print axioms alpha0SamplerCoordinates_output
 #print axioms alpha0SamplerCoordinates_advance

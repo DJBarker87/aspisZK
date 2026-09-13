@@ -70,6 +70,20 @@ not the complete four-pair ordinary sampler.
 Cached or programmed creator records are deliberately not promoted.  A cache
 hit emits no `machineFresh` record and requires first-producer provenance.
 
+The forward projected-root branch now also constructs two prerequisites that
+were previously caller-facing.  Starting from the literal `emptyOracle`, its
+returned adversary table has no programmed entries; ordinary source/gamma and
+pre-alpha runs preserve that property.  Separately, a successful literal
+alpha-marker query appends exactly the marker record that initializes the
+rejected-candidate phase path.  These results do not apply to a restored root
+whose initial table already contains programmed entries.
+
+For the causal coordinate router, the caller no longer supplies an arbitrary
+`remaining` tape decomposition.  `Alpha0RootLabeledTrace.of_trace_prefix`
+constructs it by `take`/`drop` from the exact master tape once the chronological
+labeled trace and its exact answer-prefix equality have been built.  The
+answer-prefix equality itself remains the decisive source-to-router boundary.
+
 ## Checked leaves
 
 All retained leaves compile with Lean 4.32.0.  Their promoted declarations use
@@ -100,6 +114,11 @@ declarations use a subset).
 | `FSV8AlignedAlphaPairDispositions` | Every reached pair in the actual successful alpha path receives the exact initial lookup disposition; first cached conflict remains explicit | PASS (deterministic) |
 | `FSV8AlignedAlphaTotalTape` | The actual successful path constructs a padded four-output/four-advance tape that decodes to the same alpha | PASS (deterministic; router equality open) |
 | `FSV8AlphaOrdinaryRoutedEvent` | The exact V8 coordinate-preimage event has the reused V7 `cap/P^4` probability bound | PASS (event itself; accepted-run inclusion open) |
+| `FSV8ProjectedRootPreAlphaNoProgrammed` | Literal empty-oracle projected root and query-only source/pre-alpha runs construct fresh-only table provenance | PASS (forward-root branch) |
+| `FSV8MarkerQueryPrefixPath` | One successful literal marker query constructs the base rejected-candidate phase path with cached/fresh origin retained | PASS |
+| `FSV8ProgrammedAlphaLiveAlignmentComposition` | A literal returned candidate plus source alignments constructs the live successful alpha run and aligned terminal | PASS (capacity/path producers separate) |
+| `FSV8AlphaInitialCachedCases` | Initial cached cases are classified without falsely charging a digest fixed point as a root target | PASS (restoration/first-block branch open) |
+| `Alpha0RootLabeledTrace.of_trace_prefix` | Exact master-tape prefix equality mechanically constructs the residual suffix required by the router | PASS (trace/prefix producer open) |
 
 Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 `MemoryMax=8G`, and `MemorySwapMax=0`.  The final three runs were:
@@ -113,6 +132,12 @@ Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 | `FSV8MarkerFreshCreatorTargetEvent.lean` | 0 | 2.85 s | 6,831,952 KiB | 0 |
 | `FSV8MarkerFreshTargetReduction.lean` | 0 | 2.88 s | 6,828,428 KiB | 0 |
 | `FSV8OperationalTargetMonotone.lean` | 0 | 2.64 s | 6,789,056 KiB | 0 |
+| `FSV8AlphaInitialCachedCases.lean` | 0 | 2.85 s | 6,801,116 KiB | 0 |
+| `FSV8ProgrammedAlphaCandidateAlignment.lean` | 0 | 2.73 s | 6,733,464 KiB | 0 |
+| `FSV8ProgrammedAlphaLiveAlignmentComposition.lean` | 0 | 2.65 s | 6,769,332 KiB | 0 |
+| `FSV8ProjectedRootPreAlphaNoProgrammed.lean` | 0 | 2.53 s | 6,779,072 KiB | 0 |
+| `FSV8MarkerQueryPrefixPath.lean` | 0 | 2.65 s | 6,787,540 KiB | 0 |
+| `FSV8AlphaRouterRealization.lean` | 0 | 2.98 s | 6,807,888 KiB | 0 |
 
 The first trace-prefix attempt failed on list association and was replaced by
 an explicit rewrite; it was not rerun with a larger memory cap.
@@ -173,16 +198,26 @@ The status is:
   path constructs a complete decoder tape with the same returned alpha;
 - **PASS:** the exact routed-coordinate event has the existing `cap/P^4`
   probability bound;
+- **PASS:** the forward projected root constructs `NoProgrammed`, the literal
+  marker query constructs the phase-prefix base case, and a returned candidate
+  composes with the live alpha execution;
+- **PASS:** an exact chronological answer-prefix equality is sufficient to
+  construct the router's remaining-tape field; no independent suffix witness
+  is required;
 - **OPEN:** complete-duplex actual sampler law and both cached cases;
 - **NOT USED:** first-block fallback;
 - **NO CLAIM:** global 100-bit soundness, allowed-access extraction, adaptive
   zero knowledge, literal Rust refinement, or complete-transaction CU parity.
 
-The next exact source obligation is equality between the tape constructed
-from `SuccessfulAlignedChallenge` and the particular named-coordinate tape
-produced by `alpha0SamplerCoordinates` from the exact-root master tape.  This
-requires a root slot-router realization at the same challenge start.  The
+The next exact source obligation is now the chronological labeled-trace and
+master-tape prefix theorem
+
+`take steps.length exactRootTape = steps.map Prod.snd`
+
+for the same accepted root and alpha cut.  Once constructed, the checked
+router constructor supplies the suffix decomposition and the existing router
+lemmas identify the consumed output/advance coordinates.  The
 output-fresh/advance-cached and output-cached alternatives, including the
-explicit cached marker branches above, must trace to their actual first
+explicit cached marker branches above, must still trace to their actual first
 exposure and remain separate until charged.  Assuming independence from
 labels or treating cached calls as fresh would not close this obligation.
