@@ -12,6 +12,11 @@
 //! Stage 1 work and no soundness figure may be quoted from this code alone.
 
 #![no_std]
+// Charon needs a distinct constructor name for the `Wire` error variant when
+// it translates this crate under the extraction-only observer feature.  These
+// tool attributes are inert in every ordinary host and SBF build.
+#![cfg_attr(feature = "aeneas-observer", feature(register_tool))]
+#![cfg_attr(feature = "aeneas-observer", register_tool(charon))]
 
 extern crate alloc;
 
