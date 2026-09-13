@@ -252,7 +252,7 @@ pub fn snapshot_query_batch_prechallenge(
         running_claim: view.running_claim,
         terminal_discrepancy: view
             .running_claim
-            .sub(view.weights.dot(&view.final256_coefficients[..])),
+            .sub(prequery_dot_256(view.weights, view.final256_coefficients)),
         gamma: view.gamma,
         alpha0: view.alpha0,
         queries: view.queries,
@@ -1954,4 +1954,31 @@ mod tests {
             assert_eq!(decode(&points[2]), row ^ 12);
         }
     }
+}
+
+/// Full-width pre-query observer calculation. This is not a production
+/// terminal-dot replacement. The caller reaches this observer after round
+/// zero, where the represented covector has 256 entries.
+///
+/// Keeping a standalone, fixed-size source function here lets Aeneas extract
+/// this loop and the real `weight_at` call graph without traversing the
+/// unreachable log-length-two fast path in `WeightAccumulator::dot`.
+/// The resulting Lean definition must still be proved: this is not a trusted
+/// replacement for either translated function.
+#[cfg(feature = "aeneas-observer")]
+#[inline(never)]
+pub fn prequery_dot_256(
+    weights: &WeightAccumulator,
+    coefficients: &[QM31; V6_FINAL_QM31_VALUES],
+) -> QM31 {
+    let mut sum = QM31::ZERO;
+    let mut index = 0usize;
+    while index < V6_FINAL_QM31_VALUES {
+        let coefficient = coefficients[index];
+        let weight = weights.weight_at(index as u32);
+        let product = coefficient.mul(weight);
+        sum = sum.add(product);
+        index += 1;
+    }
+    sum
 }
