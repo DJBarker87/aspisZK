@@ -21,11 +21,36 @@ Resource scope: `MemoryHigh=7500M`, `MemoryMax=8G`, `MemorySwapMax=0`
 | `01153916b82896d74d184c15d95c75e69dd30731ff8cae26336e25789ca6c352` | `FSV8MarkerFreshTargetReduction` | 0 | 2.88 s | 6,828,428 KiB | 0 | standard only |
 | `a72d4cd28175f01a9d654b9ec975673fafc405479d397411f9ede25b4688977c` | `FSV8OperationalTargetMonotone` | 0 | 2.64 s | 6,789,056 KiB | 0 | standard only |
 
+Subsequent focused checks also passed for the following exact sources.  Their
+source hashes and exit status are retained here; final release evidence must
+add the lead runner's captured wall/RSS receipts rather than reconstructing
+resource figures from systemd timestamps:
+
+| Source SHA-256 | Target | Exit | Wall | Maximum RSS | Swap | Axioms |
+|---|---|---:|---:|---:|---:|---|
+| `d5560254e62a606bf622ce39e7b3be6263674c87562ce450997c2d64bcc3044c` | `FSV8MarkerFreshVerifierCut` | 0 | 6.08 s | 6,829,892 KiB | 0 | standard only |
+| `4b4777917c8352d826cf981081378de03c82f6ce923c94670f6a1673edde1b66` | `FSV8PreAlphaMarkerCreator` | 0 | 3.31 s | 6,806,324 KiB | 0 | standard only |
+| `a3caf2b3c5a93cd50ee2f166b7f8e16b596fca2a9e1b8c1085c865f475fa8d6d` | `FSV8AcceptedExactRootAlphaMarkerTargetEvent` | 0 | 19.11 s | 6,868,896 KiB | 0 | standard only |
+| `6daf578881e080a80fadc477462849b4268787ecd93dc96f3986c95c281bf3e4` | `FSV8AlignedAlphaInitialPairDisposition` | 0 | 2.63 s | 6,793,076 KiB | 0 | standard only |
+| `0f461499c6ca5f040199ba6ef8c743d6cb418a67005cc4bf4afd495c3d9641e8` | `FSV8AlphaTotalSuccessfulCoordinates` | 0 | 2.78 s | 6,821,508 KiB | 0 | standard only |
+
+The accepted marker theorem constructs a source-level four-way classifier:
+prior adversary, fresh marker already charged to the exact-root target event,
+cached marker retained explicitly, or candidate absent at the candidate cut.
+The aligned-pair theorem constructs the common-initial-state split for one
+actual output/advance pair.  Neither proves the complete four-pair ordinary
+sampler law, a cached first-exposure charge, or the fixed-alpha distribution
+for the actual V8 source execution.
+
 `standard only` means a subset of `propext`, `Classical.choice`, and
 `Quot.sound`; no retained promoted declaration reports `sorryAx` or a custom
 axiom.
 
 The standalone input prompt SHA-256 was
 `ff322b7bb6060d2b34abc7ad9528c0bce637a93119db66fc4c542706570935d5`.
-The archive and its referenced executable sampler certificates were absent,
-so their tests are NOT RUN.
+The subsequently downloaded fresh-cut archive SHA-256 was
+`32b8694bc734d68df471499e8d50f3ef6dcacd90bba94e3e2d27a1b3b07379c5`;
+all entries passed its supplied `SHA256SUMS`.  Intake reran the supplied 61
+Python tests (exit 0, 0.29 s wrapper wall, 26,918,912-byte maximum RSS) and
+certificate generator (exit 0, 0.08 s wrapper wall, 23,101,440-byte maximum
+RSS).  These are reference-model checks, not Lean/Rust/source-law evidence.

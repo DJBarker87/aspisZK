@@ -37,6 +37,34 @@ creator among the preceding queries, the global request retains it, and its
 literal-prefix relation is charged to the same root target event.  No equality
 between the local marker state and global request state is assumed.
 
+The accepted-run wrapper now preserves and consumes that provenance before it
+can be erased.  `returned_accepted_exact_root_routes_alpha_marker_target_event`
+constructs one exhaustive source disposition from the same returned and
+accepted execution:
+
+1. prior adversary candidate input;
+2. a genuinely fresh marker whose source/pre-alpha fresh verifier creator is
+   charged to the existing exact-root target event;
+3. cached marker reuse, retaining its actual lookup entry, target membership
+   and output equality; or
+4. candidate input absent at the candidate cut.
+
+Thus the earlier `accepted_origin_retains_creator_provenance` obligation is
+closed for the two verifier-insertion/fresh-marker branches.  The cached
+marker branch remains explicit and uncharged; this classifier is not an
+ordinary-alpha sampler law.
+
+Separately, `AlignedSqueezePair.initialDisposition` gives the exact three-way
+split at the state before either call of one real aligned squeeze pair:
+
+- output and advance both fresh and initially absent;
+- output fresh/initially absent, advance cached at the initial state; or
+- output cached at the initial state.
+
+The proof transports the advance lookup back across the distinct fresh output
+insertion.  It assigns no probability and currently covers one aligned pair,
+not the complete four-pair ordinary sampler.
+
 Cached or programmed creator records are deliberately not promoted.  A cache
 hit emits no `machineFresh` record and requires first-producer provenance.
 
@@ -60,6 +88,11 @@ declarations use a subset).
 | `FSV8MarkerFreshCreatorTargetEvent` | Fresh verifier creator at the marker is charged to the exact-root target event | PASS |
 | `FSV8MarkerFreshTargetReduction` | Arbitrary marker target is charged or exposes a concrete missing prior record | PASS |
 | `FSV8OperationalTargetMonotone` | Operational targets persist under chronological history extension | PASS |
+| `FSV8MarkerFreshVerifierCut` | Same-run fresh marker constructs the exact entry/append/final history cut | PASS |
+| `FSV8PreAlphaMarkerCreator` | Pre-alpha insertion retains the actual before-marker fresh creator | PASS |
+| `FSV8AcceptedExactRootAlphaMarkerTargetEvent` | Accepted execution preserves fresh creator provenance and routes its fresh-marker branch to the existing root event while retaining cached/adversary/absent alternatives | PASS |
+| `FSV8AlignedAlphaInitialPairDisposition` | One actual aligned output/advance pair is classified at its common initial state | PASS |
+| `FSV8AlphaTotalSuccessfulCoordinates` | Successful eight-coordinate V8 alpha tape is equivalent to the existing successful Tag-73 raw stream with all four advance digests preserved | PASS |
 
 Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 `MemoryMax=8G`, and `MemorySwapMax=0`.  The final three runs were:
@@ -120,16 +153,22 @@ The status is:
 
 - **PASS:** same-root fresh-request target-event probability bridge;
 - **PASS:** marker-specific transport for a retained fresh verifier creator;
-- **PARTIAL:** accepted-origin wrapper currently erases that creator witness;
+- **PASS:** accepted-run classifier retains the source/pre-alpha fresh creator
+  until its fresh-marker branch is charged to the root target event;
+- **PASS:** source-exact initial-state disposition for one aligned squeeze pair;
+- **PASS:** deterministic successful-tape equivalence required by the existing
+  complete causal ordinary-probability consumer;
 - **OPEN:** complete-duplex actual sampler law and both cached cases;
 - **NOT USED:** first-block fallback;
 - **NO CLAIM:** global 100-bit soundness, allowed-access extraction, adaptive
   zero knowledge, literal Rust refinement, or complete-transaction CU parity.
 
-The next exact source obligation is to retain the concrete creator and its
-fresh/verifier provenance through the accepted marker-origin classifier,
-instead of reducing it to bare target-set membership.  The programmed/cached
-creator alternatives must trace to their actual first exposure.  After that,
-the genuinely fresh output/advance complement still needs the complete
-four-pair source sampler law.  Assuming state equality or treating cached
-calls as fresh would not close either obligation.
+The next exact source obligation is to lift the one-pair initial disposition
+through all four sequential alpha squeeze pairs and attach the complete
+source decoder law on the all-fresh coordinates.  The output-fresh/
+advance-cached and output-cached alternatives, including the explicit cached
+marker branch above, must trace to their actual first exposure and remain
+separate until charged.  No current theorem establishes the ideal fixed-alpha
+mass for the actual source execution.  Assuming independence from labels,
+treating cached calls as fresh, or composing four isolated marginal laws would
+not close this obligation.
