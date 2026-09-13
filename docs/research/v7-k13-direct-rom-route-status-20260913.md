@@ -60,14 +60,19 @@ Fiat--Shamir answer.
 
 ## Remaining formal work on the release route
 
-1. Instantiate `ProofRelevantK12ToK15Stages` for
-   `ExactFixedSchedulerK12ToK15Input`, beginning with the exact two-tree,
-   shared-topology 208-bit K1.2 certificate.
-2. Connect the K1.2 output to the existing interactive K1.3 circle/list
-   decoder, then the K1.4 coherent-chain selection and K1.5 spend-witness
-   recovery.
-3. Prove the four resulting interactive-stage error bounds and install them
-   in `exact_fixed_tag73_k16_classical_rom_aok_raw`.
-4. Compose the accepted-source/Aeneas bridge with the production Pool caller.
+The classifier wiring is already present: `exactTag73ProofRelevantStages` in
+`V7Tag73ExactConcreteStageAssembly.lean` installs the concrete K1.2 prefix
+certificate, K1.3 circle/list classifier, and K1.4 coherent-chain classifier.
+The restoration-wide package makes K1.2 administrative because it authenticates
+the two trees inside the K1.3 classifier.  Therefore the remaining work is:
+
+1. Prove the actual restoration-wide K1.3 error event is bounded by the
+   existing q16, one-fold, joint-batch, and later-alpha ledger terms, using
+   the interactive/restoration state rather than a direct-ROM fibre premise.
+2. Prove the corresponding restoration-wide K1.4 width-29 and K1.5
+   extraction/recovery event bounds.
+3. Install those three bounds in
+   `exact_tag73_restored_operational_k16_aok_raw`, then compose the
+   accepted-source/Aeneas bridge with the production Pool caller.
 
 No direct-ROM fibre-invariance premise is permitted in the release capstone.
