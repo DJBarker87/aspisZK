@@ -125,7 +125,10 @@ pub enum V7TranscriptDiagnosticPhase {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-#[charon::variants_prefix("V6TranscriptErrorVariant_")]
+#[cfg_attr(
+    feature = "aeneas-observer",
+    charon::variants_prefix("V6TranscriptErrorVariant_")
+)]
 pub enum V6TranscriptError {
     Wire(V6WireError),
     HidingContext,
