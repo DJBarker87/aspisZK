@@ -32,6 +32,16 @@ builder but is not invoked by the selected reconstructed repaired q22 host
 demonstration before serialization/publication. This does not authenticate
 every deployment path while P0 and the production entropy adapter remain open.
 
+The pinned generated performance harness writes `public.bin`,
+`transition.bin`, and `binding.bin` before candidate construction. These are
+public setup events. It constructs and verifies the final body privately, then
+publishes candidate-dependent bytes at the sole observed proof sink
+`std::fs::write("proof-{seed}.bin", &body)`. Diagnostic `PERF` and phase logs
+are additional visible host events. Negative cases construct private bodies
+but do not write them. The new `v8_privacy_publication` ownership boundary is
+not wired into this generated harness because full-view review is unsupported;
+its raw-PASS path fails closed and cannot construct an approval token.
+
 ## Entropy boundary
 
 - `state_only_entropy.rs:154-169` defines
