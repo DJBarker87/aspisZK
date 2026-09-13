@@ -87,6 +87,172 @@ pub enum CircleCandidateError {
     Fold(CircleFriError),
 }
 
+// Research-only source instantiation of the H1 incidence/padding certificate.
+// C2 uses the same M31 twiddle map coordinatewise; the lift has a separate
+// source regression below.
+#[cfg(test)]
+mod v8_h1_geometry {
+    use super::{qm31_coordinates, CircleEncoder, TRACE_LEN};
+    use crate::v8_privacy_affine_gate::{
+        certify_fixed_affine, verify_fixed_affine_certificate, AffineCertificate,
+    };
+    use aspis_core::field::{CM31, M31, QM31};
+    use aspis_statement::pool_v1::{
+        pair_forest_hiding::{
+            pool_v1_pair_forest_copy_active_rows_v1,
+            pool_v1_pair_forest_copy_row_schedule_fingerprint_v1,
+            PINNED_POOL_V1_PAIR_FOREST_COPY_ROW_SCHEDULE_FINGERPRINT_V1,
+        },
+        pair_forest_trace::build_pool_v1_pair_forest_copy_registry_v1,
+    };
+
+    fn check(queries: &[usize]) {
+        let encoder = CircleEncoder::new_for_domain_log(20);
+        let active = pool_v1_pair_forest_copy_active_rows_v1().unwrap();
+        let inactive: Vec<usize> = (0..1024)
+            .filter(|row| !active.contains(&(*row as u16)))
+            .collect();
+        assert_eq!(active.len(), 214);
+        assert_eq!(inactive.len(), 810);
+        assert_eq!(inactive[0], 0);
+        let edges = build_pool_v1_pair_forest_copy_registry_v1().unwrap();
+        assert_eq!(edges.len(), 136);
+
+        let mut mask = Vec::new();
+        let mut target = Vec::new();
+        for &query in queries {
+            assert!(query < 262_144);
+            for slot in 0..4 {
+                let index = 4 * query + slot;
+                let encode_basis = |row: usize| encoder.encode_c1_basis_value(row, index).unwrap();
+                let dependent = encode_basis(inactive[0]);
+                mask.push(
+                    inactive[1..]
+                        .iter()
+                        .map(|row| encode_basis(*row).sub(dependent))
+                        .collect::<Vec<M31>>(),
+                );
+                target.push(
+                    edges
+                        .iter()
+                        .map(|edge| {
+                            encode_basis(edge.producer.row as usize)
+                                .sub(encode_basis(edge.consumer.row as usize))
+                        })
+                        .collect::<Vec<M31>>(),
+                );
+            }
+        }
+        let certificate = certify_fixed_affine(&mask, &target).unwrap();
+        verify_fixed_affine_certificate(&mask, &target, &certificate).unwrap();
+        match certificate {
+            AffineCertificate::Correction { rank, .. } => {
+                assert_eq!(rank, 4 * queries.len())
+            }
+            AffineCertificate::Separator { .. } => {
+                panic!("actual encoder did not reproduce the H1 incidence certificate")
+            }
+        }
+    }
+
+    #[test]
+    fn v8_h1_public_graph_inventory() {
+        assert_eq!(
+            pool_v1_pair_forest_copy_row_schedule_fingerprint_v1().unwrap(),
+            0x4808_09b8_3677_8dc6
+        );
+        assert_eq!(
+            pool_v1_pair_forest_copy_row_schedule_fingerprint_v1().unwrap(),
+            PINNED_POOL_V1_PAIR_FOREST_COPY_ROW_SCHEDULE_FINGERPRINT_V1
+        );
+
+        let edges = build_pool_v1_pair_forest_copy_registry_v1().unwrap();
+        let active = pool_v1_pair_forest_copy_active_rows_v1().unwrap();
+        let mut adjacency = vec![Vec::<usize>::new(); 1024];
+        for edge in &edges {
+            let producer = edge.producer.row as usize;
+            let consumer = edge.consumer.row as usize;
+            adjacency[producer].push(consumer);
+            adjacency[consumer].push(producer);
+        }
+        let mut seen = [false; 1024];
+        let mut components = 0usize;
+        for &root in &active {
+            let root = root as usize;
+            if seen[root] {
+                continue;
+            }
+            components += 1;
+            seen[root] = true;
+            let mut pending = vec![root];
+            while let Some(row) = pending.pop() {
+                for &next in &adjacency[row] {
+                    if !seen[next] {
+                        seen[next] = true;
+                        pending.push(next);
+                    }
+                }
+            }
+        }
+        assert_eq!(components, 78);
+        assert_eq!(active.len() - components, edges.len());
+    }
+
+    #[test]
+    fn v8_h1_known_pair_and_full_schedules_cover_public_incidence() {
+        check(&[4, 6]);
+        check(&(0..22).collect::<Vec<_>>());
+        check(&(0..22).map(|index| index * 11_915).collect::<Vec<_>>());
+        let mut scattered = vec![4usize, 6usize];
+        scattered.extend((1..=20).map(|index| index * 11_003));
+        check(&scattered);
+    }
+
+    #[test]
+    fn v8_h1_c2_lift_is_coordinatewise() {
+        let encoder = CircleEncoder::new();
+        let message = (0..TRACE_LEN)
+            .map(|index| QM31 {
+                c0: CM31::new(M31(index as u32 + 1), M31(index as u32 + 3)),
+                c1: CM31::new(M31(index as u32 + 5), M31(index as u32 + 7)),
+            })
+            .collect::<Vec<_>>();
+        let encoded = encoder.encode_c2_message(&message).unwrap();
+        for coordinate in 0..4 {
+            let base = message
+                .iter()
+                .map(|value| qm31_coordinates(*value)[coordinate])
+                .collect::<Vec<_>>();
+            let expected = encoder.encode_c1_message(&base).unwrap();
+            for (actual, expected) in encoded.iter().zip(expected) {
+                assert_eq!(qm31_coordinates(*actual)[coordinate], expected);
+            }
+        }
+    }
+
+    #[test]
+    fn v8_h1_point_projection_is_84_of_87_and_keeps_h1_g() {
+        let selected = (0..84)
+            .map(|index| 271 + (index / 28) * 29 + index % 28)
+            .collect::<Vec<_>>();
+        assert_eq!(selected.len(), 84);
+        let mut unique = selected.clone();
+        unique.sort_unstable();
+        unique.dedup();
+        assert_eq!(unique.len(), 84);
+        assert!(selected.iter().all(|index| (271..358).contains(index)));
+        assert!([297usize, 298, 326, 327, 355, 356]
+            .iter()
+            .all(|index| selected.contains(index)));
+        assert_eq!(
+            (271..358)
+                .filter(|index| !selected.contains(index))
+                .collect::<Vec<_>>(),
+            vec![299, 328, 357]
+        );
+    }
+}
+
 #[cfg(test)]
 mod v8_q22_same_public_local_separator {
     use super::CircleEncoder;

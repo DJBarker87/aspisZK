@@ -603,4 +603,6 @@ mod tests {
             );
         }
     }
+
+    include!("pool_v1_pair_forest_h1_privacy_tests.rs");
 }

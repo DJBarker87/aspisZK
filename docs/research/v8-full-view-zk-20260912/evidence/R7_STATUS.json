@@ -1,0 +1,121 @@
+{
+  "date": "2026-09-13",
+  "milestone": "R7_H1_C2",
+  "status": "TICKETS_A_B_PASS_TICKET_C_PAIRED_COMMITMENT_BOUNDARY",
+  "validation_base_revision": "bfb5192e0fde8e15c4ec73e79cd88c74bd552ea0",
+  "branch": "research/v8-privacy-repair-20260913",
+  "pack": {
+    "path": "/Users/dominic/Downloads/aspis-v8-h1-c2-privacy-pack-20260913",
+    "manifest_entries": 54,
+    "python_tests_passed": 48,
+    "certificates_direct_multiplication_passed": 4,
+    "check_pack_exit_status": 0,
+    "check_pack_wall_seconds": 3.90,
+    "check_pack_peak_rss_bytes": 48087040,
+    "source_lock_blob_comparisons_passed": 15,
+    "source_lock_exit_status": 0
+  },
+  "ticket_a": {
+    "status": "PASS_CONDITIONAL_SOURCE_IDENTITY",
+    "registry_links": 136,
+    "schedule_fingerprint_hex": "480809b836778dc6",
+    "active_rows": 214,
+    "graph_components": 78,
+    "inactive_rows": 810,
+    "padding_pivot": 0,
+    "independent_padding_directions": 809,
+    "source_theorem": "For a successfully validated honest trace, actual public link weights, and pole-free chi, complete tuple equality on every nonzero-weight link implies H1_unpadded = D*a; zero-weight links are skipped and active poles remain explicit errors",
+    "fixture_edge": 19,
+    "fixture_tag_hex": "43000013",
+    "fixture_rows": [913, 1017],
+    "fixture_all_helper_rows_checked": 1024,
+    "point_fields_serialized": 87,
+    "point_fields_internal_projection": 84,
+    "omitted_d_field_indices": [299, 328, 357]
+  },
+  "ticket_b": {
+    "status": "PASS_CONDITIONAL_FIXED_OBSERVATION",
+    "actual_encoder_schedules_checked": [
+      "q4_q6",
+      "q22_consecutive",
+      "q22_stride_11915",
+      "q22_scattered_q4_q6_stride_11003"
+    ],
+    "correction_rank_rule": "4 * query_count",
+    "c2_encoding_coordinatewise_c1": true,
+    "fresh_uniform_conditional_pad_law_proved": false,
+    "full_view_privacy_proved": false
+  },
+  "optimized_rust": {
+    "command": "/usr/bin/time -l cargo test --offline -p aspis-prover --release --lib v8_h1 -- --nocapture",
+    "exit_status": 0,
+    "tests_passed": 5,
+    "tests_failed": 0,
+    "tests_filtered": 75,
+    "test_seconds": 0.30,
+    "wall_seconds": 8.22,
+    "peak_rss_bytes": 579043328,
+    "swap_bytes": 0
+  },
+  "lean": {
+    "command_shape": "env LEAN_PATH=/tmp/aspis-v8-h1-c2-lean:<research-lean> lake env lean -R <research-lean> -j1 -M1800 -o <olean> <target>",
+    "cached_workspace": "/Users/dominic/ZK/AspisFormal",
+    "targets": [
+      {"name": "FiniteTransport.lean", "exit_status": 0, "wall_seconds": 10.48, "peak_rss_bytes": 1294516224},
+      {"name": "Incidence.lean", "exit_status": 0, "wall_seconds": 2.13, "peak_rss_bytes": 1475641344},
+      {"name": "NonlinearFreshPad.lean", "exit_status": 0, "wall_seconds": 1.93, "peak_rss_bytes": 1360330752},
+      {"name": "TriangularTransport.lean", "exit_status": 0, "wall_seconds": 2.01, "peak_rss_bytes": 1377501184},
+      {"name": "PointProjection.lean", "exit_status": 0, "wall_seconds": 4.38, "peak_rss_bytes": 1214988288},
+      {"name": "HelperObservation.lean", "exit_status": 0, "wall_seconds": 2.01, "peak_rss_bytes": 1462517760},
+      {"name": "AspisV8H1C2.lean", "exit_status": 0, "wall_seconds": 2.50, "peak_rss_bytes": 1441841152}
+    ],
+    "swap_bytes": 0,
+    "axioms": ["propext", "Classical.choice", "Quot.sound"],
+    "sorryAx": false
+  },
+  "superseded_build_attempts": [
+    {
+      "attempt": "isolated-worktree cold dependency build",
+      "result": "interrupted after cold Mathlib clone began",
+      "wall_seconds": 35.19,
+      "peak_rss_bytes": 347176960
+    },
+    {
+      "attempt": "cached workspace with source outside Lean root",
+      "result": "rejected source path",
+      "exit_status": 1,
+      "wall_seconds": 3.31,
+      "peak_rss_bytes": 669974528
+    },
+    {
+      "attempt": "FiniteTransport with broad Mathlib import",
+      "result": "stopped and replaced by minimal imports after observed Lean child RSS reached 2562160 KiB",
+      "wall_seconds": 111.73,
+      "observed_child_peak_rss_bytes": 2623651840
+    }
+  ],
+  "ticket_c": {
+    "status": "PRECISE_SOURCE_GROUNDED_BOUNDARY",
+    "first_semantic_message_h1_dependence": "Affine in the remaining H1 pad after old C1, mask-only, G, public inputs, and prior challenges are fixed",
+    "earlier_blocker": "Causal paired C1/C2 same-per-leaf-salt commitment kernel preserving the exposed C1 root and coherent lazy-random-oracle history while supporting later adaptive q22 openings",
+    "nearest_existing_result": "AspisFormal.V6PairedSaltHiding.paired_binary_packaging_hiding for a fixed public query set under an explicit paired-salt-hiding hash premise",
+    "oracle_relative_merkle_simulator_proved": false,
+    "useful_publication_permit_constructed": false,
+    "current_full_view_permit_probability": 0,
+    "current_exhaustion_probability_for_any_finite_cap": 1
+  },
+  "validated_source_sha256": {
+    "crates/aspis-prover/src/circle_candidate.rs": "751d1cc50da87618b00231fdf9db12b845526bc21478f0ce058873794ecb4839",
+    "crates/aspis-prover/src/pool_v1_pair_forest_honest.rs": "ad24182eaf4b1aec84abf16817f854178ee01ea8e7ce61438e4c0d4e7ef7f91a",
+    "crates/aspis-prover/src/pool_v1_pair_forest_h1_privacy_tests.rs": "f375fa3a960234c01b0d5e3a679e04cee64e7360771880636eeebbc7d444e75a",
+    "docs/research/v8-full-view-zk-20260912/lean/AspisV8H1C2.lean": "d382fe8870e97ef7f5a87577c93cd9a1ddf179316762ac3fec66bea5f43d166f",
+    "docs/research/v8-full-view-zk-20260912/lean/AspisV8H1C2/FiniteTransport.lean": "bf3adbdb45827784070bdcf64a302019391687a8a9c2a54b9c10bcba897cf1cd",
+    "docs/research/v8-full-view-zk-20260912/lean/AspisV8H1C2/HelperObservation.lean": "80be141f671cd0d40bc5b62958a419e56bca3f98ce66b5698a02b40535ef9f63",
+    "docs/research/v8-full-view-zk-20260912/lean/AspisV8H1C2/Incidence.lean": "93bfc2672fdbc8f7305d0edfdcdf82808b8e67eeb9dc7b099c3e1c552abb8962",
+    "docs/research/v8-full-view-zk-20260912/lean/AspisV8H1C2/NonlinearFreshPad.lean": "462cef70fd284faa02693f4d612a3a59a9021b1c678458f0419b9be4db7789da",
+    "docs/research/v8-full-view-zk-20260912/lean/AspisV8H1C2/PointProjection.lean": "0a67d005fb1b1478c06a4be3a235259512fc1accc6b1cf53aed06a1b93c66f0d",
+    "docs/research/v8-full-view-zk-20260912/lean/AspisV8H1C2/TriangularTransport.lean": "eb60262fd1d0e1192c9423cd6038310d7409534dbfed44f848d3638d1be7c60e"
+  },
+  "production_path_changed": false,
+  "existing_c1_failure_preserved": true
+}
