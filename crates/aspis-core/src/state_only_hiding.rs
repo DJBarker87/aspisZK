@@ -290,15 +290,11 @@ pub fn begin_state_only_hiding_precommit(
 /// the exact candidate count, so q3 and the retired q4 draft cannot collide.
 pub fn state_only_spend_hiding_layout_factor_fingerprint_v3() -> u64 {
     let mut hash = 0xcbf2_9ce4_8422_2325u64;
-    let mut absorb = |byte: u8| {
-        hash ^= u64::from(byte);
-        hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
-    };
     // Frozen consensus bytes: this domain separator feeds the pinned layout
     // factor fingerprint checked fail-closed by the verifying schedule. The
     // aspis-spend release proofs are ground against exactly these bytes.
     for byte in b"aspis-state-only-spend-zero-factor-d-v1" {
-        absorb(*byte);
+        absorb_layout_fingerprint_byte(&mut hash, *byte);
     }
     for value in [
         PINNED_ATOMIC_STATE_ONLY_RELATION_FREE_MASK_FINGERPRINT_V3,
@@ -306,7 +302,7 @@ pub fn state_only_spend_hiding_layout_factor_fingerprint_v3() -> u64 {
         PINNED_ATOMIC_STATE_ONLY_HIDING_LAYOUT_FACTOR_FINGERPRINT_V3,
     ] {
         for byte in value.to_le_bytes() {
-            absorb(byte);
+            absorb_layout_fingerprint_byte(&mut hash, byte);
         }
     }
     for byte in [
@@ -318,7 +314,7 @@ pub fn state_only_spend_hiding_layout_factor_fingerprint_v3() -> u64 {
         STATE_ONLY_SPEND_D_FACTOR_IDENTIFIER,
         STATE_ONLY_SPEND_QUERY_CANDIDATES as u8,
     ] {
-        absorb(byte);
+        absorb_layout_fingerprint_byte(&mut hash, byte);
     }
     hash
 }
@@ -336,12 +332,8 @@ pub fn state_only_pool_v1_tag73_hiding_layout_factor_fingerprint(
         true,
     );
     let mut hash = 0xcbf2_9ce4_8422_2325u64;
-    let mut absorb = |byte: u8| {
-        hash ^= u64::from(byte);
-        hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
-    };
     for byte in b"aspis-state-only-pool-v1-tag73-zero-factor-d-v1" {
-        absorb(*byte);
+        absorb_layout_fingerprint_byte(&mut hash, *byte);
     }
     for value in [
         mask_layout_fingerprint,
@@ -349,11 +341,11 @@ pub fn state_only_pool_v1_tag73_hiding_layout_factor_fingerprint(
         ordinary,
     ] {
         for byte in value.to_le_bytes() {
-            absorb(byte);
+            absorb_layout_fingerprint_byte(&mut hash, byte);
         }
     }
     for byte in b"tag73-q16-first-cap203-v1" {
-        absorb(*byte);
+        absorb_layout_fingerprint_byte(&mut hash, *byte);
     }
     for byte in [
         POOL_V1_TAG73_TOTAL_GENERATOR_WIDTH as u8,
@@ -364,10 +356,10 @@ pub fn state_only_pool_v1_tag73_hiding_layout_factor_fingerprint(
         POOL_V1_TAG73_D_FACTOR_IDENTIFIER,
         POOL_V1_TAG73_QUERY_COUNT as u8,
     ] {
-        absorb(byte);
+        absorb_layout_fingerprint_byte(&mut hash, byte);
     }
     for byte in (POOL_V1_TAG73_FIRST_QUERY_CAP as u16).to_le_bytes() {
-        absorb(byte);
+        absorb_layout_fingerprint_byte(&mut hash, byte);
     }
     hash
 }
