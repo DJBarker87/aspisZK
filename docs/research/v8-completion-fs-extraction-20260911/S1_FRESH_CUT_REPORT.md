@@ -97,6 +97,9 @@ declarations use a subset).
 | `FSV8AlphaTotalSuccessfulCoordinates` | Successful eight-coordinate V8 alpha tape is equivalent to the existing successful Tag-73 raw stream with all four advance digests preserved | PASS |
 | `FSV8SourceBufferedDecode` | Pinned source decoder consumes literal sentinel/canonical first-block patterns and rejects the all-sentinel block | PASS (deterministic) |
 | `FSV8ExactRejectionWeights` | Exact bounded-geometric and fixed-tuple mass identities, including the V8 `n=2^31`, cap-eight instance | PASS (ideal arithmetic) |
+| `FSV8AlignedAlphaPairDispositions` | Every reached pair in the actual successful alpha path receives the exact initial lookup disposition; first cached conflict remains explicit | PASS (deterministic) |
+| `FSV8AlignedAlphaTotalTape` | The actual successful path constructs a padded four-output/four-advance tape that decodes to the same alpha | PASS (deterministic; router equality open) |
+| `FSV8AlphaOrdinaryRoutedEvent` | The exact V8 coordinate-preimage event has the reused V7 `cap/P^4` probability bound | PASS (event itself; accepted-run inclusion open) |
 
 Focused NUC compilation used systemd scopes with `MemoryHigh=7500M`,
 `MemoryMax=8G`, and `MemorySwapMax=0`.  The final three runs were:
@@ -139,8 +142,10 @@ remain **not source-connected here**:
 
 The ideal formula `s / p^4`, with `s=(1-(2^31)^-8)^4` and
 `p=2^31-1`, has not been promoted as the distribution of the actual V8 cut.
-The referenced sampler certificate and Lean/Rust drafts were absent from the
-available download.
+The fresh-cut archive was subsequently received and its manifest and 61
+reference tests passed.  Its relevant deterministic decoder and rational-mass
+drafts are now Lean-checked above.  The supplied Rust integration test remains
+unintegrated/unrun, and the source-to-routed-coordinate equality remains open.
 
 The first-block fallback is **not used**.  Its charge would be
 `J * 56 / 2^155`, but there is no proved V8 invocation/site/fork cap `J` in
@@ -164,17 +169,20 @@ The status is:
   complete causal ordinary-probability consumer;
 - **PASS:** literal first-block decoder behavior and exact complete ideal
   decoder mass identities;
+- **PASS:** all reached pairs are source-classified, and the actual successful
+  path constructs a complete decoder tape with the same returned alpha;
+- **PASS:** the exact routed-coordinate event has the existing `cap/P^4`
+  probability bound;
 - **OPEN:** complete-duplex actual sampler law and both cached cases;
 - **NOT USED:** first-block fallback;
 - **NO CLAIM:** global 100-bit soundness, allowed-access extraction, adaptive
   zero knowledge, literal Rust refinement, or complete-transaction CU parity.
 
-The next exact source obligation is to lift the one-pair initial disposition
-through all four sequential alpha squeeze pairs and attach the complete
-source decoder law on the all-fresh coordinates.  The output-fresh/
-advance-cached and output-cached alternatives, including the explicit cached
-marker branch above, must trace to their actual first exposure and remain
-separate until charged.  No current theorem establishes the ideal fixed-alpha
-mass for the actual source execution.  Assuming independence from labels,
-treating cached calls as fresh, or composing four isolated marginal laws would
-not close this obligation.
+The next exact source obligation is equality between the tape constructed
+from `SuccessfulAlignedChallenge` and the particular named-coordinate tape
+produced by `alpha0SamplerCoordinates` from the exact-root master tape.  This
+requires a root slot-router realization at the same challenge start.  The
+output-fresh/advance-cached and output-cached alternatives, including the
+explicit cached marker branches above, must trace to their actual first
+exposure and remain separate until charged.  Assuming independence from
+labels or treating cached calls as fresh would not close this obligation.
