@@ -305,6 +305,10 @@ pub fn apply_pool_v1_pair_forest_h1_padding_mask_v1(
 #[path = "r11_mask_material_kat.rs"]
 mod r11_mask_material_kat;
 
+#[cfg(test)]
+#[path = "r13_source_bridge.rs"]
+mod r13_source_bridge;
+
 struct SeedExpander {
     hash: HashFn,
     seed: [u8; 32],
