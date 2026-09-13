@@ -252,7 +252,7 @@ pub fn snapshot_query_batch_prechallenge(
         running_claim: view.running_claim,
         terminal_discrepancy: view
             .running_claim
-            .sub(view.weights.dot(&view.final256_coefficients[..4])),
+            .sub(view.weights.dot(&view.final256_coefficients[..])),
         gamma: view.gamma,
         alpha0: view.alpha0,
         queries: view.queries,
