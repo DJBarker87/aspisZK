@@ -49,11 +49,11 @@ files.
 ## `FSV8AlignedAlphaTotalTape.lean`
 
 - exit status: 0
-- wall time: 2.70 s
-- maximum RSS (`/usr/bin/time -v`): 6,798,952 KiB
+- wall time: 2.71 s
+- maximum RSS (`/usr/bin/time -v`): 6,778,476 KiB
 - swaps: 0
 - axioms: `propext`, `Classical.choice`, `Quot.sound`
-- source SHA-256: `dbb69764c75775e41138124f198b06046b2b866b3304b89880216fca62372c27`
+- source SHA-256: `04a1e66397cf170f2472a94f7b3c31b8db933e96e3f5d1ae5105bfab0f0eb3ae`
 
 Starting from an actual `SuccessfulAlignedChallenge`, this deterministic leaf
 constructs a four-output/four-advance `RelationAlphaTotalTape`.  Its output
@@ -63,9 +63,110 @@ both sides are padded only after the used prefix.  The four-block word bridge
 is retained explicitly, and the padded output raw stream succeeds with the
 same returned alpha.
 
+The general consumer theorem `successfulTotalTape_of_output_prefix` further
+shows that **any** `RelationAlphaTotalTape` whose output-side prefix through
+the successful run's actual block count is equal to those source blocks has
+`relationAlphaTotalSucceeds` and decodes to the same alpha.  Its four advance
+coordinates and unused output suffix are arbitrary.  This removes any need
+for the eventual router-realization proof to identify unused coordinates with
+the leaf's zero padding.
+
 This does not yet prove that the constructed tape is definitionally the named
 coordinate pair produced by `alpha0SamplerCoordinates` for an exact-root
 master tape.  That remaining source/router equality needs the exact root's
 starting cursor and the slot-router execution to be connected to this same
 `SuccessfulAlignedChallenge`; it cannot be inferred merely from the common
 four-pair type.
+
+## Public Rust sampler source tests
+
+Command:
+
+```text
+/usr/bin/time -lp cargo test -p aspis-core --test v8_sampler_source_tests
+```
+
+- host: local macOS development machine
+- profile: focused Cargo test profile (unoptimized; these are bounded
+  control-flow tests, not a substantive arithmetic benchmark)
+- exit status: 0
+- wall time: 6.54 s, including a cold partial dependency compile
+- maximum RSS (`/usr/bin/time -lp`): 633,257,984 bytes
+- swaps: 0
+- tests: 8 passed; 0 failed
+- source SHA-256:
+  `065519e4484ad33a637603faafbf068a099d980e1a39fa3ca9340f7e5709805c`
+
+The tests call the public `Transcript::challenge_qm31` implementation with a
+scripted memoizing hash oracle.  They check that ordinary alpha accepts zero,
+masks high bits before canonical rejection, rejects the M31 sentinel rather
+than folding it to zero, consumes the last buffered word without an extra
+squeeze, permits all four limbs to use their eight-word retry bounds, advances
+after first-limb exhaustion, uses distinct literal output/advance keys, and
+reuses cached oracle answers after prequeries or repeated states.
+
+No production source or protocol constant changed.  This is source-level
+control-flow evidence only: scripted answers do not prove that actual oracle
+coordinates are fresh or uniform, do not establish the random-oracle coupling,
+and do not execute the complete selected V8 verifier.
+
+## `FSV8AlphaRouterRealization.lean`
+
+- exit status: 0
+- wall time: 3.12 s
+- maximum RSS (`/usr/bin/time -v`): 6,824,256 KiB
+- swaps: 0
+- axioms: `propext`, `Classical.choice`, `Quot.sound`
+- source SHA-256:
+  `ceb8d386afc64cf1190114509f07a59493ecba76e1a5c91cb4e6373c246ce38c`
+
+This leaf proves that every named output or advance slot in a chronological
+labelled trace from the exact-root exposure cursor is the corresponding
+literal component of `alpha0SamplerCoordinates`.  It preserves the router's
+actual unused coordinates and does not replace them with zero padding.
+
+The theorem consumes an `Alpha0RootLabeledTrace` package.  Construction of
+that package from the same accepted exact-root execution remains open; the
+package is not counted as source closure.
+
+## `FSV8AlphaTableHistoryCoverage.lean`
+
+- exit status: 0
+- wall time: 3.17 s
+- maximum RSS (`/usr/bin/time -v`): 6,842,484 KiB
+- swaps: 0
+- axioms: `propext`, `Classical.choice`, `Quot.sound`
+- source SHA-256:
+  `420ee5cbcb0dccd56a4af9492f2ddb4c342dd157d6cef19413f1843a78370cdc`
+
+This leaf constructs actor-agnostic table/history coverage from the actual
+projected adversary run at `emptyOracle` and proves preservation through the
+selected source/gamma and pre-alpha programs and through each aligned squeeze
+pair.  A later cached call following a fresh advance is routed to a target
+already available at the fresh advance request, rather than treating the
+future cache lookup as an independent answer.
+
+It does not yet place that target into the same exact-root global target event.
+That native request/root-trace composition is the next source obligation.
+
+## `FSV8AlphaFreshCreatorCoverage.lean`
+
+- exit status: 0
+- wall time: 2.87 s
+- maximum RSS (`/usr/bin/time -v`): 6,842,112 KiB
+- swaps: 0
+- axioms: `propext`, `Classical.choice`, `Quot.sound`
+- source SHA-256:
+  `e58239537c73d950de33e2f5753259b828d0b4fe327accc279f687f98950d372`
+- compiled artifact SHA-256:
+  `39320a7e1da903ef2367c0dcababa8fb757e0722eda753889e0ddd1617dd8446`
+
+This strengthens table/history coverage to a literal `.fresh` creator record
+for every cached table entry.  The invariant is constructed from the
+empty-oracle projected adversary root and preserved through the exact
+source/gamma and pre-alpha programs and every aligned alpha pair/path.
+
+This is the source fact needed by `RootVerifierNativeRequest`, whose prior
+request branch retains fresh verifier records rather than arbitrary cached
+records.  The separate theorem placing the creator's request into the same
+exact-root target event is still pending.
