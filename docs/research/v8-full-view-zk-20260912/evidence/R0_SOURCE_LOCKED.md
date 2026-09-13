@@ -22,6 +22,11 @@ Actual source regressions added to the isolated branch:
   It compiles both duplicate-commitment witnesses, confirms equal public
   statement/snapshot, applies actual mask material with distinct seeds, and
   preserves the q4/q6 functional distinction.
+- `v8_privacy_affine_gate::tests::predeclared_768_pair_family_fails_raw_column_zero_gate`:
+  all six pairs in each of the 128 predeclared four-fibre groups were rerun
+  against the actual Rust encoder; all 768 returned independently verified
+  separators. This promotes that family from reconstruction-only to
+  actual-encoder raw evidence, not to full-view evidence.
 
 The existing q22 row-1014 `{1,2}` certificate remains separate from this
 column-zero `{4,6}` regression. These results are negative/raw and valid-trace
