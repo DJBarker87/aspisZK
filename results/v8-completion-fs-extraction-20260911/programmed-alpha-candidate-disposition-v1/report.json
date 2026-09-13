@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "date": "2026-09-13",
+  "base_revision": "47db72f27c279ac61165a164549ae96bb354f31b",
+  "host": "NUC via Tailscale",
+  "toolchain": "Lean 4.32.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+  "limits": {
+    "MemoryHigh": "8G",
+    "MemoryMax": "9G",
+    "MemorySwapMax": "0",
+    "RuntimeMaxSec": 600,
+    "lean_memory_mib": 8192,
+    "jobs": 1
+  },
+  "checks": [
+    {"leaf": "FSV8ProgrammedWholeAlphaCut.lean", "mode": "explicit importable artifact rebuild", "exit_code": 0, "wall_seconds": 2.77, "peak_rss_kib": 6758956, "swap": 0},
+    {"leaf": "FSV8AcceptedExactRootProgrammedAlphaCut.lean", "mode": "explicit importable artifact rebuild", "exit_code": 0, "wall_seconds": 2.88, "peak_rss_kib": 6758924, "swap": 0},
+    {"leaf": "FSV8ProgrammedAlphaCandidateDisposition.lean", "exit_code": 0, "wall_seconds": 3.84, "peak_rss_kib": 6774592, "swap": 0, "axioms": ["propext", "Classical.choice", "Quot.sound"]},
+    {"leaf": "FSV8AcceptedExactRootProgrammedAlphaCandidateDisposition.lean", "exit_code": 0, "wall_seconds": 2.62, "peak_rss_kib": 6755448, "swap": 0, "axioms": ["propext", "Classical.choice", "Quot.sound"]}
+  ],
+  "source_artifact_note": "An initial downstream attempt resolved an older importable ProgrammedAlphaCut artifact because prior check-only invocations did not emit -o. Both changed dependencies were rebuilt explicitly before the passing checks.",
+  "claim": "Accepted exact-root execution constructs the literal first alpha candidate query transition and exact history append, with a total prior-adversary/prior-root-target/verifier-prefix-insertion/fresh-at-candidate classification of its exact input.",
+  "hostile_review": "PASS for the stated causal split: the former unconditional Nonempty and unrelated-state defects are removed. Earlier verifier-prefix provenance and probability charges remain open.",
+  "not_claimed": [
+    "freshness or uniformity",
+    "restoration success",
+    "Fiat-Shamir probability charge",
+    "payment extraction",
+    "global soundness",
+    "literal Rust refinement"
+  ]
+}
