@@ -1,13 +1,13 @@
 # Completion-pack intake and first source-transcript slice
 
 Latest alpha-history milestone:
-[`FSV8AlignedAlphaChallengeRun`](aligned-alpha-challenge-run-20260913.md)
-constructs the complete chronological one-to-four-pair V7 execution of a
-successful live ordinary-alpha challenge.  Each real output/advance call has
-an exact history append, aligned successor state and fresh-or-cached origin;
-proper decoder prefixes are rejected and the final pair reaches the inactive
-history phase.  The aligned marker/root producer, programmed restoration,
-preferred-coordinate realization and ROM probability transport remain open.
+[`FSV8AcceptedExactRootAlphaMarkerDisposition`](alpha-marker-routing-20260913.md)
+constructs, from one accepted exact-root execution and body, the actual alpha
+marker cut and reduces the first candidate input to three causal alternatives:
+an adversary-Q1 query, a marker-time operational target created earlier by the
+verifier, or genuine absence at the candidate sampling cut.  Exact-root target
+event transport, fresh eight-coordinate sampling, replay/fork success and ROM
+probability composition remain open.
 
 Latest chronological-authentication milestone:
 [`SameBodyChronologicalAuthentication`](chronological-authentication-20260912.md)
