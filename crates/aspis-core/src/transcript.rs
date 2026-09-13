@@ -395,7 +395,10 @@ impl Transcript {
         let mut limb_index = 0usize;
         while limb_index < limbs.len() {
             let mut accepted = false;
-            for _ in 0..CHALLENGE_RETRY_LIMIT {
+            // This is deliberately a counter rather than `for _ in 0..` for
+            // the same Aeneas lowering reason as the outer fixed-limb loop.
+            let mut retry_index = 0u32;
+            while retry_index < CHALLENGE_RETRY_LIMIT {
                 if word_index == 8 {
                     block = self.squeeze_block();
                     word_index = 0;
@@ -412,6 +415,7 @@ impl Transcript {
                     accepted = true;
                     break;
                 }
+                retry_index += 1;
             }
             if !accepted {
                 return Err(ChallengeSampleExhausted);
