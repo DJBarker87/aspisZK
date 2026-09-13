@@ -1,13 +1,13 @@
 # Completion-pack intake and first source-transcript slice
 
 Latest alpha-history milestone:
-[`FSV8AcceptedExactRootAlphaMarkerDisposition`](alpha-marker-routing-20260913.md)
-constructs, from one accepted exact-root execution and body, the actual alpha
-marker cut and reduces the first candidate input to three causal alternatives:
-an adversary-Q1 query, a marker-time operational target created earlier by the
-verifier, or genuine absence at the candidate sampling cut.  Exact-root target
-event transport, fresh eight-coordinate sampling, replay/fork success and ROM
-probability composition remain open.
+[`FSV8AcceptedExactRootAlphaMarkerOrigin`](alpha-marker-origin-20260913.md)
+constructs, from one accepted exact-root execution and body, the literal
+successful marker query and separates a genuinely fresh marker target from a
+cached marker replay.  Cached replay is retained as a distinct causal
+obligation rather than promoted to a first-exposure target event.  The fresh
+marker scheduler-prefix lift, segment-sensitive cached-marker analysis, all
+eight alpha coordinates, replay/fork success and ROM composition remain open.
 
 Latest chronological-authentication milestone:
 [`SameBodyChronologicalAuthentication`](chronological-authentication-20260912.md)
