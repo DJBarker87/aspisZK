@@ -67,6 +67,30 @@ inductive ForwardStep [DecidableEq Input] [DecidableEq Answer]
         { state with
           eagerView := state.eagerView ++ [record]
           delayedView := state.delayedView ++ [record] }
+  /-- Source-facing reserve transition. Unlike `defer`, the public record may
+  include the logical slot and input as well as the reserved answer. -/
+  | deferRecord (state : ForwardState Input Answer Obs)
+      (input : Input) (fresh : Answer) (record : Obs)
+      (eagerMissing : state.eager input = none)
+      (delayedMissing : state.delayed input = none) :
+      ForwardStep observe state
+        { eager := put state.eager input fresh
+          delayed := state.delayed
+          hidden := fun query => query = input ∨ state.hidden query
+          eagerView := state.eagerView ++ [record]
+          delayedView := state.delayedView ++ [record] }
+  /-- Source-facing ordinary query transition with its complete public record.
+  The trace constructor is applicable only after the two query answers have
+  been proved equal from the shadow invariant. -/
+  | ordinaryRecord (state : ForwardState Input Answer Obs)
+      (input : Input) (fresh : Answer) (record : Obs)
+      (outside : ¬ state.hidden input) :
+      ForwardStep observe state
+        { eager := (queryStep state.eager input fresh).2
+          delayed := (queryStep state.delayed input fresh).2
+          hidden := state.hidden
+          eagerView := state.eagerView ++ [record]
+          delayedView := state.delayedView ++ [record] }
 
 theorem forward_step_preserves
     [DecidableEq Input] [DecidableEq Answer] (observe : Answer → Obs)
@@ -112,6 +136,21 @@ theorem forward_step_preserves
       · simp [views]
   | emit record =>
       exact ⟨agree, by simp [views]⟩
+  | deferRecord input fresh record eagerMissing delayedMissing =>
+      constructor
+      · intro query outside
+        have notInput : query ≠ input := by
+          intro same
+          exact outside (Or.inl same)
+        have notHidden : ¬ before.hidden query := by
+          intro hidden
+          exact outside (Or.inr hidden)
+        simpa [put, notInput] using agree query notHidden
+      · simp [views]
+  | ordinaryRecord input fresh record outside =>
+      have transition := ordinary_query_agrees before.hidden before.eager before.delayed
+        input fresh agree outside
+      exact ⟨transition.2, by rw [views]⟩
 
 inductive ForwardTrace [DecidableEq Input] [DecidableEq Answer]
     (observe : Answer → Obs) :
