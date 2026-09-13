@@ -15,6 +15,8 @@ pub enum AffineGateError {
     ObservationMismatch,
     WorkspaceCap,
     InvalidCertificate,
+    PublicCosetMismatch,
+    CoinMismatch,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -209,6 +211,77 @@ pub fn certify_joint_affine(
     certify_fixed_affine(&mask, &target)
 }
 
+fn matrix_rank(matrix: &[Vec<M31>]) -> Result<usize, AffineGateError> {
+    let (rows, _) = shape(matrix)?;
+    let empty_target = vec![Vec::new(); rows];
+    Ok(match certify_fixed_affine(matrix, &empty_target)? {
+        AffineCertificate::Correction { rank, .. } | AffineCertificate::Separator { rank, .. } => {
+            rank
+        }
+    })
+}
+
+/// Construct a witness-free representative of `L*y = public_rhs`, after
+/// checking `ker(L) = im(mask)` by annihilation and complementary ranks.
+/// The caller must prove that every valid real offset has this public image.
+pub fn public_coset_representative(
+    mask: &[Vec<M31>],
+    annihilator: &[Vec<M31>],
+    public_rhs: &[M31],
+) -> Result<Vec<M31>, AffineGateError> {
+    let (observations, mask_columns) = shape(mask)?;
+    let (quotient_rows, annihilator_columns) = shape(annihilator)?;
+    if annihilator_columns != observations || public_rhs.len() != quotient_rows {
+        return Err(AffineGateError::PublicCosetMismatch);
+    }
+    for quotient in annihilator {
+        for column in 0..mask_columns {
+            let value = (0..observations).fold(M31::ZERO, |sum, row| {
+                sum.add(quotient[row].mul(mask[row][column]))
+            });
+            if value != M31::ZERO {
+                return Err(AffineGateError::PublicCosetMismatch);
+            }
+        }
+    }
+    if matrix_rank(mask)? + matrix_rank(annihilator)? != observations {
+        return Err(AffineGateError::PublicCosetMismatch);
+    }
+    let rhs = public_rhs
+        .iter()
+        .copied()
+        .map(|value| vec![value])
+        .collect::<Vec<_>>();
+    match certify_fixed_affine(annihilator, &rhs)? {
+        AffineCertificate::Correction { matrix, .. } => {
+            Ok(matrix.into_iter().map(|row| row[0]).collect())
+        }
+        AffineCertificate::Separator { .. } => Err(AffineGateError::PublicCosetMismatch),
+    }
+}
+
+/// Sample one certified fixed affine block from public data and explicit
+/// ideal field coins. This function never receives a witness.
+pub fn simulate_public_coset(
+    mask: &[Vec<M31>],
+    annihilator: &[Vec<M31>],
+    public_rhs: &[M31],
+    coins: &[M31],
+) -> Result<Vec<M31>, AffineGateError> {
+    let (observations, mask_columns) = shape(mask)?;
+    if coins.len() != mask_columns {
+        return Err(AffineGateError::CoinMismatch);
+    }
+    let mut output = public_coset_representative(mask, annihilator, public_rhs)?;
+    debug_assert_eq!(output.len(), observations);
+    for row in 0..observations {
+        for column in 0..mask_columns {
+            output[row] = output[row].add(mask[row][column].mul(coins[column]));
+        }
+    }
+    Ok(output)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -321,6 +394,49 @@ mod tests {
         assert_eq!(
             verify_fixed_affine_certificate(&mask, &target, &corrupt),
             Err(AffineGateError::InvalidCertificate)
+        );
+    }
+
+    #[test]
+    fn public_coset_simulator_is_witness_free_and_transportable() {
+        let mask = vec![vec![M31::ONE], vec![M31::ONE]];
+        let annihilator = vec![vec![M31::ONE, M31::ONE.neg()]];
+        let rhs = [M31(2)];
+        let representative = public_coset_representative(&mask, &annihilator, &rhs).unwrap();
+        for offset in [
+            vec![M31(2), M31::ZERO],
+            vec![M31(3), M31::ONE],
+            vec![M31(4), M31(2)],
+        ] {
+            let difference = offset
+                .iter()
+                .zip(&representative)
+                .map(|(a, b)| vec![a.sub(*b)])
+                .collect::<Vec<_>>();
+            let correction = certify_fixed_affine(&mask, &difference).unwrap();
+            let d = match correction {
+                AffineCertificate::Correction { matrix, .. } => matrix[0][0],
+                _ => panic!("same public coset lacked correction"),
+            };
+            for r in [M31::ZERO, M31(7), M31(91)] {
+                let simulated =
+                    simulate_public_coset(&mask, &annihilator, &rhs, &[r.add(d)]).unwrap();
+                let real = vec![offset[0].add(r), offset[1].add(r)];
+                assert_eq!(simulated, real);
+            }
+        }
+    }
+
+    #[test]
+    fn incomplete_or_nonannihilating_public_quotient_fails_closed() {
+        let mask = vec![vec![M31::ONE], vec![M31::ONE]];
+        assert_eq!(
+            public_coset_representative(&mask, &[], &[]),
+            Err(AffineGateError::PublicCosetMismatch)
+        );
+        assert_eq!(
+            public_coset_representative(&mask, &[vec![M31::ONE, M31::ONE]], &[M31::ZERO]),
+            Err(AffineGateError::PublicCosetMismatch)
         );
     }
 
