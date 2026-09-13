@@ -170,3 +170,37 @@ This is the source fact needed by `RootVerifierNativeRequest`, whose prior
 request branch retains fresh verifier records rather than arbitrary cached
 records.  The separate theorem placing the creator's request into the same
 exact-root target event is still pending.
+
+## Post-marker history factorization leaves
+
+All five leaves below compile with the pinned Lean 4.32.0 toolchain and use
+only `propext`, `Classical.choice`, and `Quot.sound` (the fresh-enumeration
+leaf does not require `Classical.choice`).
+
+| Leaf | Exit | Wall | Peak RSS | Swap | Source SHA-256 |
+|---|---:|---:|---:|---:|---|
+| `FSV8AlignedAlphaPairHistoryNesting.lean` | 0 | 2.79 s | 6,773,464 KiB | 0 | `8f33b9e074f06adf032fb5db25394fcd3f3c8a480da57b35e8a620f0d3d5c330` |
+| `FSV8AlphaFreshPairVerifierMembership.lean` | 0 | 2.93 s | 6,798,600 KiB | 0 | `2e982b93d2f008f98253261d8eb7550611bf3c7dda0d7368c9c152433e6aa412` |
+| `FSV8ProgrammedPostAlphaHistoryPrefix.lean` | 0 | 2.97 s | 6,761,484 KiB | 0 | `e40b09023dd36442567d5d26c0de69b0f1924ef2fa92455e2c801b78448133b7` |
+| `FSV8ProgrammedAlphaCandidateHistoryPrefix.lean` | 0 | 5.65 s | 6,758,860 KiB | 0 | `759c93d28f17a011e68056ba6ccab29096d14b2fd71ded4a3f16fef202e3e3cb` |
+| `FSV8ProgrammedAlphaCandidateWholeHistoryPrefix.lean` | 0 | 2.78 s | 6,797,808 KiB | 0 | `2b90a8ed1c9effbdfb0f2f5731e5759fb91e77fb29f747b4f832a2a0d7ea58c6` |
+
+These prove, respectively: local chronological nesting of every reached
+alpha pair; membership of a locally fresh pair record in an enclosing exact
+verifier fresh-query enumeration when its chronological interval is known;
+the successful post-alpha terminal precedes the same factored whole-verifier
+terminal; and the exact candidate-machine terminal precedes that post-alpha
+terminal.  The fifth leaf composes the candidate-to-post-alpha and
+post-alpha-to-whole prefixes.  These latter intervals are constructed from the same
+`ProgrammedAlphaCutWitness`, not supplied by the caller.
+
+The remaining left-hand link is exact synchronization of the live aligned
+challenge's accepted `finalPair.afterAdvance` with the corresponding
+candidate-machine terminal.  Until that is constructed, the enclosing
+interval premise of the fresh-enumeration leaf is not source-closed.
+
+The attempted full-root labeling shortcut is invalid: the fixed-length root
+trace includes padding.  If alpha succeeds after fewer than four pairs, its
+residual-step count exceeds `cap - 8`.  A valid router construction must use
+the prefix ending at the accepted pair and retain the untouched master-tape
+suffix as the remaining tape.
