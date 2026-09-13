@@ -388,7 +388,12 @@ impl Transcript {
         let mut limbs = [M31::ZERO; 4];
         let mut block = self.squeeze_block();
         let mut word_index = 0usize;
-        for limb in limbs.iter_mut() {
+        // Keep this as an indexed loop rather than `iter_mut()`: the latter
+        // lowers through `Range`/iterator internals that the pinned Aeneas
+        // backend cannot translate.  The fixed four-limb traversal and all
+        // sampler state transitions are otherwise identical.
+        let mut limb_index = 0usize;
+        while limb_index < limbs.len() {
             let mut accepted = false;
             for _ in 0..CHALLENGE_RETRY_LIMIT {
                 if word_index == 8 {
@@ -403,7 +408,7 @@ impl Transcript {
                 word_index += 1;
                 let masked = word & crate::field::P;
                 if masked != crate::field::P {
-                    *limb = M31(masked);
+                    limbs[limb_index] = M31(masked);
                     accepted = true;
                     break;
                 }
@@ -411,6 +416,7 @@ impl Transcript {
             if !accepted {
                 return Err(ChallengeSampleExhausted);
             }
+            limb_index += 1;
         }
         Ok(QM31 {
             c0: crate::field::CM31 {
