@@ -68,20 +68,25 @@ def main() -> None:
     import_hits = [token for token in forbidden_imports if token in terminal_imports]
     if import_hits:
         raise AssertionError(f"shared SHA import in generated terminal module: {import_hits}")
-    # This is intentionally a *negative* closure test.  The current selected
-    # configuration uses read-only placeholders and therefore cannot be named
-    # as the literal selected OOD/source producer in an endpoint theorem.
-    if "def readOnlyFirst (_ : Point) : Script Bytes HB Unit 0 := .done ()" not in callbacks:
-        raise AssertionError("S5 callback model changed; re-audit source binding")
-    if "def readOnlySecond (_ _ : Point) : Script Bytes HB Unit 0 := .done ()" not in callbacks:
-        raise AssertionError("S5 callback model changed; re-audit source binding")
+    # The selected source does no hash-capable callback work when it reads an
+    # OOD row.  `answerScript` is the producer: it maps this no-op to the
+    # exact canonical row from the same parsed body before the absorb.
+    required_callback_fragments = (
+        "def sourceReadOnlyFirst (_ : Point) : Script Bytes HB Unit 0 := .done ()",
+        "def sourceReadOnlySecond (_ _ : Point) : Script Bytes HB Unit 0 := .done ()",
+        "answerScript sourceReadOnlyFirst point body sample",
+        "sourceThenGammaScript sourceReadOnlyFirst sourceReadOnlySecond body digest",
+    )
+    missing_callback_fragments = [f for f in required_callback_fragments if f not in callbacks]
+    if missing_callback_fragments:
+        raise AssertionError(f"S5 OOD source producer changed: {missing_callback_fragments}")
     print(json.dumps({
         "scope": "static selected-terminal shared-SHA audit; not refinement",
         "performance_verifier_sha256": source_hash(PERFORMANCE),
         "pair_forest_terminal_sha256": source_hash(TERMINAL),
         "payment_terminal_direct_shared_sha_tokens": hits,
         "generated_terminal_module_shared_sha_import_tokens": import_hits,
-        "selected_configuration_uses_literal_ood_source_producer": False,
+        "selected_configuration_uses_literal_same_body_ood_payload": True,
         "result": "PASS",
     }, sort_keys=True))
 

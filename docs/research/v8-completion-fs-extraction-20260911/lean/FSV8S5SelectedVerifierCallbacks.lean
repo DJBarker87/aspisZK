@@ -3,10 +3,11 @@ import FSV8BeforeAlphaMarkerFactorization
 import FSV8FreshTapeBudget
 
 /-!
-S5 FIRST ATTEMPT, UNCOMPILED. Construct the selected READ-ONLY OOD callbacks.
-Source scope: structured verifier suffix beginning after the point claims.
-`inactive_row_binding::to_gamma` reads proof-carried rows; it does not run a
-hash-capable answer prover. No theorem below replaces arbitrary callbacks.
+Selected read-only OOD callbacks for the structured verifier suffix beginning
+after the point claims.  `inactive_row_binding::to_gamma` reads proof-carried
+rows; it does not run a hash-capable answer prover.  The `answerScript`
+wrapper, rather than the zero-work callback itself, emits the exact canonical
+same-body OOD payload before its transcript absorb.
 -/
 set_option autoImplicit false
 set_option Elab.async false
@@ -27,28 +28,31 @@ abbrev OODResult := FSV7OODBodyScript.Result
 
 noncomputable section
 
-def readOnlyFirst (_ : Point) : Script Bytes HB Unit 0 := .done ()
-def readOnlySecond (_ _ : Point) : Script Bytes HB Unit 0 := .done ()
+def sourceReadOnlyFirst (_ : Point) : Script Bytes HB Unit 0 := .done ()
+def sourceReadOnlySecond (_ _ : Point) : Script Bytes HB Unit 0 := .done ()
 
-@[simp] theorem run_readOnlyFirst (point : Point)
+@[simp] theorem run_sourceReadOnlyFirst (point : Point)
     (tape : FSBoundedTranscript.Tape) (oracle : FSBoundedTranscript.Oracle) :
-    run tape (readOnlyFirst point) oracle = (some (), oracle) := rfl
+    run tape (sourceReadOnlyFirst point) oracle = (some (), oracle) := rfl
 
-@[simp] theorem run_readOnlySecond (first second : Point)
+@[simp] theorem run_sourceReadOnlySecond (first second : Point)
     (tape : FSBoundedTranscript.Tape) (oracle : FSBoundedTranscript.Oracle) :
-    run tape (readOnlySecond first second) oracle = (some (), oracle) := rfl
+    run tape (sourceReadOnlySecond first second) oracle = (some (), oracle) := rfl
 
-/-- No digest, history, fresh cursor or cache is changed by reading the row. -/
-theorem readOnly_answer_script_exact (point : Point) (body : Bytes)
+/-- The actual source has no callback work at this point, but `answerScript`
+still produces the canonical row from this same body.  Thus the no-op preserves
+the persistent oracle while the enclosing script absorbs the source payload. -/
+theorem source_readOnly_answer_script_exact (point : Point) (body : Bytes)
     (sample : Fin 2) (tape : FSBoundedTranscript.Tape)
     (oracle : FSBoundedTranscript.Oracle) :
-    run tape (answerScript readOnlyFirst point body sample) oracle =
+    run tape (answerScript sourceReadOnlyFirst point body sample) oracle =
       (some (answerBytes body sample), oracle) := by
-  simp [answerScript, readOnlyFirst, FSTranscriptScript.map, FSOracleExecution.run]
+  simp [answerScript, sourceReadOnlyFirst, FSTranscriptScript.map, FSOracleExecution.run]
 
 /-- An explicit experiment constructor, not a claim that all Configurations
-are equivalent. It preserves the common inputs and selects zero-query OOD
-reading plus the named adversary resource bound. -/
+are equivalent. It preserves the common inputs and selects the literal
+same-body read-only OOD payload path plus the named adversary resource bound.
+It still does not construct the outer selected configuration from Rust. -/
 def selectedConfiguration
     {HiddenTape TapeIdentity Observation : Type}
     (parameters : ExactCompilerResourceParameters) {n m : Nat}
@@ -62,8 +66,8 @@ def selectedConfiguration
   adversaryLimits := base.adversaryLimits
   verifierLimits := base.verifierLimits
   adversaryFuel := parameters.q1ShaCallCap
-  firstWork := readOnlyFirst
-  secondWork := readOnlySecond
+  firstWork := sourceReadOnlyFirst
+  secondWork := sourceReadOnlySecond
   z := base.z
   cuts := base.cuts
   initialDigest := base.initialDigest
@@ -93,7 +97,7 @@ def selectedBeforeMarkerScript (body : Bytes) (z : Fin 10 → K) (digest : HB) :
     Script Bytes HB
       (Except SelectedPrefixError (SelectedBeforeMarker body z) × HB) 1394 :=
   bind (m := 401)
-      (sourceThenGammaScript readOnlyFirst readOnlySecond body digest)
+      (sourceThenGammaScript sourceReadOnlyFirst sourceReadOnlySecond body digest)
     fun source =>
       match source.1 with
       | .error error => .done (.error (.inl error), source.2)
@@ -117,7 +121,7 @@ theorem selected_before_marker_call_bound (body : Bytes) (z : Fin 10 → K)
 
 @[simp] theorem selected_source_budget : sourceThenGammaBudget 0 0 = 993 := rfl
 
-#print axioms readOnly_answer_script_exact
+#print axioms source_readOnly_answer_script_exact
 #print axioms selected_adversary_fuel
 #print axioms selected_before_marker_call_bound
 end
