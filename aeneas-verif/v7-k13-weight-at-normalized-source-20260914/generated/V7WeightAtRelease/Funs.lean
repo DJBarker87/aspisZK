@@ -858,4 +858,81 @@ def sumcheck.WeightAccumulator.weight_at
   := do
   sumcheck.WeightAccumulator.weight_at_loop self index field.QM31.ZERO 0#usize
 
+/-- [aspis_core::v6_onefold::V6_FINAL_QM31_VALUES]
+    Source: 'crates/aspis-core/src/v6_onefold.rs', lines 46:0-46:44
+    Visibility: public -/
+@[global_simps, irreducible]
+def v6_onefold.V6_FINAL_QM31_VALUES : Std.Usize := 256#usize
+
+/-- [aspis_core::v6_transcript::prequery_dot_256]: loop body 0:
+    Source: 'crates/aspis-core/src/v6_transcript.rs', lines 1976:4-1982:5
+    Visibility: public -/
+@[rust_loop_body]
+def v6_transcript.prequery_dot_256_loop.body
+  (weights : sumcheck.WeightAccumulator)
+  (coefficients : Array field.QM31 256#usize) (sum : field.QM31)
+  (index : Std.Usize) :
+  Result (ControlFlow (field.QM31 × Std.Usize) field.QM31)
+  := do
+  if index < v6_onefold.V6_FINAL_QM31_VALUES
+  then
+    let coefficient ← Array.index_usize coefficients index
+    let i ← lift (UScalar.cast .U32 index)
+    let weight ← sumcheck.WeightAccumulator.weight_at weights i
+    let product ← field.QM31.mul coefficient weight
+    let sum1 ← field.QM31.add sum product
+    let index1 ← lift (Std.Usize.wrapping_add index 1#usize)
+    ok (cont (sum1, index1))
+  else ok (done sum)
+
+/-- [aspis_core::v6_transcript::prequery_dot_256]: loop 0:
+    Source: 'crates/aspis-core/src/v6_transcript.rs', lines 1976:4-1982:5
+    Visibility: public -/
+@[rust_loop]
+def v6_transcript.prequery_dot_256_loop
+  (weights : sumcheck.WeightAccumulator)
+  (coefficients : Array field.QM31 256#usize) (sum : field.QM31)
+  (index : Std.Usize) :
+  Result field.QM31
+  := do
+  loop
+    (fun (sum1, index1) => v6_transcript.prequery_dot_256_loop.body weights
+      coefficients sum1 index1)
+    (sum, index)
+
+/-- [aspis_core::v6_transcript::prequery_dot_256]:
+    Source: 'crates/aspis-core/src/v6_transcript.rs', lines 1970:0-1984:1
+    Visibility: public -/
+@[reducible]
+def v6_transcript.prequery_dot_256
+  (weights : sumcheck.WeightAccumulator)
+  (coefficients : Array field.QM31 256#usize) :
+  Result field.QM31
+  := do
+  v6_transcript.prequery_dot_256_loop weights coefficients field.QM31.ZERO
+    0#usize
+
+/-- [aspis_core::v6_transcript::snapshot_query_batch_prechallenge]:
+    Source: 'crates/aspis-core/src/v6_transcript.rs', lines 247:0-263:1
+    Visibility: public -/
+def v6_transcript.snapshot_query_batch_prechallenge
+  (view : v6_transcript.V6QueryBatchPrechallengeView) :
+  Result v6_transcript.V6QueryBatchPrechallengeSnapshot
+  := do
+  let q ←
+    v6_transcript.prequery_dot_256 view.weights view.final256_coefficients
+  let q1 ← field.QM31.sub view.running_claim q
+  ok
+    {
+      transcript_state := view.transcript_state,
+      running_claim := view.running_claim,
+      terminal_discrepancy := q1,
+      gamma := view.gamma,
+      alpha0 := view.alpha0,
+      queries := view.queries,
+      selector := view.selector,
+      compact_counter := view.compact_counter,
+      frontier_nodes := view.frontier_nodes
+    }
+
 end V7WeightAtRelease
