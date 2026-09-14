@@ -14,7 +14,9 @@ for module in \
   FSV8S7DynamicSelectedRoot \
   FSV8S7DynamicSuccessfulCut \
   FSV8S7SelectedSourcePrefixBudget \
-  FSV8S7CompactWordTargetInclusion
+  FSV8S7CompactWordTargetInclusion \
+  SelectedPositiveTerminalDeltaSource \
+  FSV8S7PreAlphaConcreteOrdinaryCut
 do
   env LEAN_PATH="$build_dir:$LEAN_PATH" "$LEAN_BIN" \
     -o "$build_dir/$module.olean" "$source_dir/$module.lean"
