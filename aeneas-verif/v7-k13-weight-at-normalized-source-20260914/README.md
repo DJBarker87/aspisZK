@@ -55,5 +55,20 @@ sets are exactly:
 The refreshed field/half/tensor/multilinear checks and the new grouped-binary
 check all exited zero.  The grouped-binary target used peak RSS 2,674,376 KiB
 and zero swap; the other refreshed targets remained below 2.70 GiB.  The outer
-component accumulator/caller refinement and the 256-entry observer consumer
-remain subsequent G1/G2 work.
+component work is now also checked:
+
+- `generated_live_multilinear_component_corresponds`,
+  `generated_live_tensor_component_corresponds`, and
+  `generated_live_grouped_component_corresponds` discharge the current
+  generated dispatcher branches;
+- `generated_accumulator_loop_corresponds` proves the complete generated
+  `weight_at` loop terminates successfully and returns the exact ordered sum;
+- `generated_live_six_component_accumulator_corresponds` instantiates that
+  loop for the literal post-round-zero Tag-73 shape: three multilinears, one
+  deferred grouped-binary component, and two tensors at log length eight.
+
+All of these report exactly `[propext, Classical.choice, Quot.sound]`.  The
+remaining G1 work is caller reachability: derive that six-component shape and
+all canonical/length premises from the translated `finish_onefold_relation`
+construction and first arity-four fold.  The 256-entry observer consumer then
+remains G2.
