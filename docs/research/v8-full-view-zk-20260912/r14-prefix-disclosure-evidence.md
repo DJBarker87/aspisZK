@@ -42,6 +42,9 @@ privacy.
 ## Actual-source tests
 
 All Rust commands used `--offline --release` and `CARGO_BUILD_JOBS=1`.
+The four R14 Rust sources are individually `rustfmt --check` clean.  A
+workspace-wide formatter check still reports pre-existing unrelated formatting
+drift, which was left untouched.
 
 - `r14_public_prefix`: exit 0; literal initial eta and three compact rounds
   match the pinned Python fixture.
