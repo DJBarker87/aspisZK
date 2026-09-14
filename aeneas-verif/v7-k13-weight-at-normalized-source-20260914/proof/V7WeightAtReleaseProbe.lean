@@ -1,0 +1,13 @@
+import V7WeightAtRelease.Funs
+
+set_option pp.explicit true
+set_option pp.universes true
+set_option pp.proofs false
+
+#check @V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at
+#print V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at
+#print axioms V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at
+#check @V7WeightAtRelease.sumcheck.WeightAccumulator.weight_component_at_indexed
+#print axioms V7WeightAtRelease.sumcheck.WeightAccumulator.weight_component_at_indexed
+#print V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8
+#print axioms V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8

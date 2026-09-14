@@ -1,0 +1,255 @@
+V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at : V7WeightAtRelease.sumcheck.WeightAccumulator →
+  Aeneas.Std.U32 → Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31
+@[reducible] def V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at : V7WeightAtRelease.sumcheck.WeightAccumulator →
+  Aeneas.Std.U32 → Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31 :=
+fun self index =>
+  self.weight_at_loop index V7WeightAtRelease.field.QM31.ZERO
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_multilinear_indexed._proof_1)
+'V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+V7WeightAtRelease.sumcheck.WeightAccumulator.weight_component_at_indexed : Aeneas.Std.U32 →
+  V7WeightAtRelease.sumcheck.WeightComponent → Aeneas.Std.U32 → Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31
+'V7WeightAtRelease.sumcheck.WeightAccumulator.weight_component_at_indexed' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+def V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8 : Aeneas.Std.Slice.{0}
+    Aeneas.Std.U8 →
+  Aeneas.Std.Slice.{0} Aeneas.Std.U16 →
+    Option.{0} V7WeightAtRelease.field.QM31 → Aeneas.Std.U32 → Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31 :=
+fun row_groups group_masks first_alpha index =>
+  @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} V7WeightAtRelease.field.QM31
+    V7WeightAtRelease.field.QM31 (@Aeneas.Std.core.option.Option.unwrap V7WeightAtRelease.field.QM31 first_alpha)
+    fun alpha =>
+    @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+      V7WeightAtRelease.field.QM31
+      (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+        (@Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 Aeneas.Std.UScalarTy.Usize index))
+      fun i =>
+      @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+        V7WeightAtRelease.field.QM31
+        (@HDiv.hDiv.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+          (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+          (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+          (@Aeneas.Std.instHDivUScalarResult Aeneas.Std.UScalarTy.Usize) i
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+            V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8._proof_1))
+        fun high =>
+        @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+          V7WeightAtRelease.field.QM31
+          (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+            (@Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 Aeneas.Std.UScalarTy.Usize index))
+          fun i1 =>
+          @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+            (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) V7WeightAtRelease.field.QM31
+            (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+              (@HAnd.hAnd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+                (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+                (@Aeneas.Std.instHAndUScalar Aeneas.Std.UScalarTy.Usize) i1
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                  V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8._proof_2)))
+            fun low_chunk =>
+            @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Aeneas.Std.U8 V7WeightAtRelease.field.QM31
+              (@Aeneas.Std.Slice.index_usize.{0} Aeneas.Std.U8 row_groups high) fun i2 =>
+              @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Aeneas.Std.Usize
+                V7WeightAtRelease.field.QM31
+                (@Aeneas.Std.lift.{0} Aeneas.Std.Usize (Aeneas.Std.core.convert.num.FromUsizeU8.from i2)) fun i3 =>
+                @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Aeneas.Std.U16
+                  V7WeightAtRelease.field.QM31 (@Aeneas.Std.Slice.index_usize.{0} Aeneas.Std.U16 group_masks i3)
+                  fun mask =>
+                  @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Aeneas.Std.Usize
+                    V7WeightAtRelease.field.QM31
+                    (@Aeneas.Std.lift.{0} Aeneas.Std.Usize
+                      (Aeneas.Std.Usize.wrapping_mul
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                          V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8._proof_1)
+                        low_chunk))
+                    fun i4 =>
+                    @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                      (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U32) V7WeightAtRelease.field.QM31
+                      (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U32)
+                        (@Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize Aeneas.Std.UScalarTy.U32 i4))
+                      fun shift =>
+                      @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} Aeneas.Std.U16
+                        V7WeightAtRelease.field.QM31 (@Aeneas.Std.lift.{0} Aeneas.Std.U16 (mask.wrapping_shr shift))
+                        fun i5 =>
+                        @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                          (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16) V7WeightAtRelease.field.QM31
+                          (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                            (@HAnd.hAnd.{0, 0, 0} Aeneas.Std.U16 (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                              (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                              (@Aeneas.Std.instHAndUScalar Aeneas.Std.UScalarTy.U16) i5
+                              (Aeneas.Std.U16.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 15) (instOfNatNat (nat_lit 15)))
+                                V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8._proof_3)))
+                          fun bits =>
+                          @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} V7WeightAtRelease.field.QM31
+                            V7WeightAtRelease.field.QM31 alpha.square fun alpha2 =>
+                            @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                              V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31 (alpha2.mul alpha) fun alpha3 =>
+                              @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16) V7WeightAtRelease.field.QM31
+                                (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                  (@HAnd.hAnd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                    (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                    (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                    (@Aeneas.Std.instHAndUScalar Aeneas.Std.UScalarTy.U16) bits
+                                    (Aeneas.Std.U16.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                      V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_3)))
+                                fun i6 =>
+                                have __do_jp := fun sum =>
+                                  @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                    (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16) V7WeightAtRelease.field.QM31
+                                    (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                      (@HAnd.hAnd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                        (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                        (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                        (@Aeneas.Std.instHAndUScalar Aeneas.Std.UScalarTy.U16) bits
+                                        (Aeneas.Std.U16.ofNat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                                          V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8._proof_4)))
+                                    fun i7 =>
+                                    have __do_jp := fun sum1 =>
+                                      @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                        (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16) V7WeightAtRelease.field.QM31
+                                        (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                          (@HAnd.hAnd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                            (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                            (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                            (@Aeneas.Std.instHAndUScalar Aeneas.Std.UScalarTy.U16) bits
+                                            (Aeneas.Std.U16.ofNat
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                                              V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8._proof_5)))
+                                        fun i8 =>
+                                        have __do_jp := fun sum2 =>
+                                          @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                            (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16) V7WeightAtRelease.field.QM31
+                                            (@Aeneas.Std.lift.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                              (@HAnd.hAnd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                                (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                                (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                                (@Aeneas.Std.instHAndUScalar Aeneas.Std.UScalarTy.U16) bits
+                                                (Aeneas.Std.U16.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                                                  V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8._proof_6)))
+                                            fun i9 =>
+                                            have __do_jp := fun sum3 =>
+                                              @bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                                V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31 sum3.half
+                                                fun q => q.half;
+                                            @ite.{1} (Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31)
+                                              (@Eq.{1} Bool
+                                                (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                                  (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i9
+                                                  (Aeneas.Std.U16.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                                    V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                                true)
+                                              (instDecidableEqBool
+                                                (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                                  (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i9
+                                                  (Aeneas.Std.U16.ofNat
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                                    V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                                true)
+                                              (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                                V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31
+                                                (sum2.add alpha) fun sum3 => __do_jp sum3)
+                                              (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                                V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31
+                                                (@Aeneas.Std.Result.ok.{0} V7WeightAtRelease.field.QM31 sum2)
+                                                fun sum3 => __do_jp sum3);
+                                        @ite.{1} (Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31)
+                                          (@Eq.{1} Bool
+                                            (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                              (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i8
+                                              (Aeneas.Std.U16.ofNat
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                                V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                            true)
+                                          (instDecidableEqBool
+                                            (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                              (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i8
+                                              (Aeneas.Std.U16.ofNat
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                                V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                            true)
+                                          (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                            V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31 (sum1.add alpha2)
+                                            fun sum2 => __do_jp sum2)
+                                          (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                            V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31
+                                            (@Aeneas.Std.Result.ok.{0} V7WeightAtRelease.field.QM31 sum1) fun sum2 =>
+                                            __do_jp sum2);
+                                    @ite.{1} (Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31)
+                                      (@Eq.{1} Bool
+                                        (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                          (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i7
+                                          (Aeneas.Std.U16.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                            V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                        true)
+                                      (instDecidableEqBool
+                                        (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                          (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i7
+                                          (Aeneas.Std.U16.ofNat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                            V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                        true)
+                                      (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                        V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31 (sum.add alpha3)
+                                        fun sum1 => __do_jp sum1)
+                                      (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                        V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31
+                                        (@Aeneas.Std.Result.ok.{0} V7WeightAtRelease.field.QM31 sum) fun sum1 =>
+                                        __do_jp sum1);
+                                @ite.{1} (Aeneas.Std.Result.{0} V7WeightAtRelease.field.QM31)
+                                  (@Eq.{1} Bool
+                                    (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                      (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i6
+                                      (Aeneas.Std.U16.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                        V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                    true)
+                                  (instDecidableEqBool
+                                    (@bne.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U16)
+                                      (@Aeneas.Std.instBEqUScalar_1 Aeneas.Std.UScalarTy.U16) i6
+                                      (Aeneas.Std.U16.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                        V7WeightAtRelease.sumcheck.grouped_64x16_binary_deferred_weight_at_log10._proof_4))
+                                    true)
+                                  (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                    V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31
+                                    (V7WeightAtRelease.field.QM31.ZERO.add V7WeightAtRelease.field.QM31.ONE) fun sum =>
+                                    __do_jp sum)
+                                  (@bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+                                    V7WeightAtRelease.field.QM31 V7WeightAtRelease.field.QM31
+                                    (@Aeneas.Std.Result.ok.{0} V7WeightAtRelease.field.QM31
+                                      V7WeightAtRelease.field.QM31.ZERO)
+                                    fun sum => __do_jp sum)
+'V7WeightAtRelease.sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+	Command being timed: "systemd-run --user --scope --quiet -p MemoryHigh=1G -p MemoryMax=2G -p MemorySwapMax=0 /home/dombarker/.elan/bin/lean V7WeightAtReleaseProbe.lean"
+	User time (seconds): 0.77
+	System time (seconds): 0.46
+	Percent of CPU this job got: 103%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.19
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2566904
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 61977
+	Voluntary context switches: 6125
+	Involuntary context switches: 81
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 40
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

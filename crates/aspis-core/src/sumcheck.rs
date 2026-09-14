@@ -797,7 +797,8 @@ impl WeightAccumulator {
         let mut value = scale;
         let mut coordinate = 0usize;
         while coordinate < point.len() {
-            let bit = (index >> (point.len() - 1 - coordinate)) & 1;
+            let shift = (point.len() - 1 - coordinate) as u32;
+            let bit = (index >> shift) & 1;
             let z = point[coordinate];
             value = if bit == 0 {
                 value.mul(QM31::ONE.sub(z))
@@ -814,7 +815,8 @@ impl WeightAccumulator {
         let mut value = scale;
         let mut coordinate = 0usize;
         while coordinate < factors.len() {
-            let bit = (index >> (factors.len() - 1 - coordinate)) & 1;
+            let shift = (factors.len() - 1 - coordinate) as u32;
+            let bit = (index >> shift) & 1;
             if bit != 0 {
                 value = value.mul(factors[coordinate]);
             }
@@ -828,9 +830,30 @@ impl WeightAccumulator {
         let mut value = scale;
         let mut coordinate = 0usize;
         while coordinate < pairs.len() {
-            let bit = ((index >> (pairs.len() - 1 - coordinate)) & 1) as usize;
+            let shift = (pairs.len() - 1 - coordinate) as u32;
+            let bit = ((index >> shift) & 1) as usize;
             value = value.mul(pairs[coordinate][bit]);
             coordinate += 1;
+        }
+        value
+    }
+
+    #[inline]
+    fn weight_at_line_tensor_indexed(
+        log_len: u32,
+        scale: QM31,
+        x: M31,
+        index: u32,
+    ) -> QM31 {
+        let mut value = scale;
+        let mut factor = x;
+        let mut bit = 0u32;
+        while bit < log_len {
+            if index & (1u32 << bit) != 0 {
+                value = value.mul_m31(factor);
+            }
+            factor = Self::double_x_m31(factor);
+            bit += 1;
         }
         value
     }
@@ -863,6 +886,142 @@ impl WeightAccumulator {
         }
         Self::halve_qm31(sum, deferred_halvings)
     }
+
+    #[inline]
+    fn weight_at_grouped_binary_deferred_indexed(
+        log_len: u32,
+        row_groups: &[u8],
+        group_masks: &[u16],
+        first_alpha: Option<QM31>,
+        group_values: &[QM31],
+        index: u32,
+    ) -> QM31 {
+        match log_len {
+            10 => {
+                debug_assert!(first_alpha.is_none());
+                grouped_64x16_binary_deferred_weight_at_log10(
+                    row_groups,
+                    group_masks,
+                    index,
+                )
+            }
+            8 => Self::weight_at_grouped_binary_deferred_log8(
+                row_groups,
+                group_masks,
+                first_alpha,
+                index,
+            ),
+            2 | 4 | 6 => {
+                debug_assert!(first_alpha.is_none());
+                Self::weight_at_grouped_binary_deferred_log246(row_groups, group_values, index)
+            }
+            _ => unreachable!("invalid deferred binary fold depth"),
+        }
+    }
+
+    #[inline]
+    fn weight_at_grouped_binary_deferred_log8(
+        row_groups: &[u8],
+        group_masks: &[u16],
+        first_alpha: Option<QM31>,
+        index: u32,
+    ) -> QM31 {
+        let alpha = first_alpha.unwrap();
+        let high = index as usize / 4;
+        let low_chunk = index as usize & 3;
+        let mask = group_masks[usize::from(row_groups[high])];
+        let shift = (4 * low_chunk) as u32;
+        let bits = (mask >> shift) & 0x0f;
+        let alpha2 = alpha.square();
+        let alpha3 = alpha2.mul(alpha);
+        let mut sum = QM31::ZERO;
+        if bits & 1 != 0 {
+            sum = sum.add(QM31::ONE);
+        }
+        if bits & 2 != 0 {
+            sum = sum.add(alpha3);
+        }
+        if bits & 4 != 0 {
+            sum = sum.add(alpha2);
+        }
+        if bits & 8 != 0 {
+            sum = sum.add(alpha);
+        }
+        sum.half().half()
+    }
+
+    #[inline]
+    fn weight_at_grouped_binary_deferred_log246(
+        row_groups: &[u8],
+        group_values: &[QM31],
+        index: u32,
+    ) -> QM31 {
+        group_values[usize::from(row_groups[index as usize])]
+    }
+
+    #[inline]
+    fn weight_component_at_indexed(
+        log_len: u32,
+        component: &WeightComponent,
+        index: u32,
+    ) -> QM31 {
+        match component {
+            WeightComponent::Geometric { scale, base } => scale.mul(base.pow(index as u64)),
+            WeightComponent::Multilinear { scale, point } => {
+                Self::weight_at_multilinear_indexed(*scale, point, index)
+            }
+            WeightComponent::Tensor { scale, factors } => {
+                Self::weight_at_tensor_indexed(*scale, factors, index)
+            }
+            WeightComponent::LineM31Tensor { scale, x } => {
+                Self::weight_at_line_tensor_indexed(log_len, *scale, *x, index)
+            }
+            WeightComponent::LineM31Batch {
+                scales,
+                xs,
+                deferred_halvings,
+            } => Self::weight_at_line_batch_indexed(
+                log_len,
+                scales,
+                xs,
+                *deferred_halvings,
+                index,
+            ),
+            WeightComponent::Product { scale, pairs } => {
+                Self::weight_at_product_indexed(*scale, pairs, index)
+            }
+            WeightComponent::Dense { values } => values[index as usize],
+            WeightComponent::Grouped64x16 {
+                row_groups,
+                group_values,
+                low_width,
+            }
+            | WeightComponent::Grouped128x16 {
+                row_groups,
+                group_values,
+                low_width,
+            } => {
+                let low_width = usize::from(*low_width);
+                let high = index as usize / low_width;
+                let low = index as usize & (low_width - 1);
+                let group = usize::from(row_groups[high]);
+                group_values[group * low_width + low]
+            }
+            WeightComponent::Grouped64x16BinaryDeferred {
+                row_groups,
+                group_masks,
+                first_alpha,
+                group_values,
+            } => Self::weight_at_grouped_binary_deferred_indexed(
+                log_len,
+                row_groups,
+                group_masks,
+                *first_alpha,
+                group_values,
+                index,
+            ),
+        }
+    }
     // END V7_WEIGHT_AT_INDEXED_HELPERS_20260913
 
     pub fn weight_at(&self, index: u32) -> QM31 {
@@ -871,102 +1030,7 @@ impl WeightAccumulator {
         let mut component_index = 0usize;
         while component_index < self.components.len() {
             let component = &self.components[component_index];
-            let value = match component {
-                WeightComponent::Geometric { scale, base } => scale.mul(base.pow(index as u64)),
-                WeightComponent::Multilinear { scale, point } => {
-                    Self::weight_at_multilinear_indexed(*scale, point, index)
-                }
-                WeightComponent::Tensor { scale, factors } => {
-                    Self::weight_at_tensor_indexed(*scale, factors, index)
-                }
-                WeightComponent::LineM31Tensor { scale, x } => {
-                    let mut value = *scale;
-                    let mut factor = *x;
-                    let mut bit = 0u32;
-                    while bit < self.log_len {
-                        if index & (1u32 << bit) != 0 {
-                            value = value.mul_m31(factor);
-                        }
-                        factor = Self::double_x_m31(factor);
-                        bit += 1;
-                    }
-                    value
-                }
-                WeightComponent::LineM31Batch {
-                    scales,
-                    xs,
-                    deferred_halvings,
-                } => Self::weight_at_line_batch_indexed(
-                    self.log_len, scales, xs, *deferred_halvings, index,
-                ),
-                WeightComponent::Product { scale, pairs } => {
-                    Self::weight_at_product_indexed(*scale, pairs, index)
-                }
-                WeightComponent::Dense { values } => values[index as usize],
-                WeightComponent::Grouped64x16 {
-                    row_groups,
-                    group_values,
-                    low_width,
-                } => {
-                    let low_width = usize::from(*low_width);
-                    let high = index as usize / low_width;
-                    let low = index as usize & (low_width - 1);
-                    let group = usize::from(row_groups[high]);
-                    group_values[group * low_width + low]
-                }
-                WeightComponent::Grouped64x16BinaryDeferred {
-                    row_groups,
-                    group_masks,
-                    first_alpha,
-                    group_values,
-                } => match self.log_len {
-                    10 => {
-                        debug_assert!(first_alpha.is_none());
-                        grouped_64x16_binary_deferred_weight_at_log10(
-                            row_groups,
-                            group_masks,
-                            index,
-                        )
-                    }
-                    8 => {
-                        let alpha = first_alpha
-                            .as_ref()
-                            .expect("the first deferred fold stores its challenge");
-                        let high = index as usize / 4;
-                        let low_chunk = index as usize & 3;
-                        let mask = group_masks[usize::from(row_groups[high])];
-                        let bits = (mask >> (4 * low_chunk)) & 0x0f;
-                        let alpha2 = alpha.square();
-                        let alpha3 = alpha2.mul(*alpha);
-                        let powers = [QM31::ONE, alpha3, alpha2, *alpha];
-                        let mut sum = QM31::ZERO;
-                        let mut slot = 0u32;
-                        while slot < 4 {
-                            if bits & (1u16 << slot) != 0 {
-                                sum = sum.add(powers[slot as usize]);
-                            }
-                            slot += 1;
-                        }
-                        sum.half().half()
-                    }
-                    2 | 4 | 6 => {
-                        debug_assert!(first_alpha.is_none());
-                        group_values[usize::from(row_groups[index as usize])]
-                    }
-                    _ => unreachable!("invalid deferred binary fold depth"),
-                },
-                WeightComponent::Grouped128x16 {
-                    row_groups,
-                    group_values,
-                    low_width,
-                } => {
-                    let low_width = usize::from(*low_width);
-                    let high = index as usize / low_width;
-                    let low = index as usize & (low_width - 1);
-                    let group = usize::from(row_groups[high]);
-                    group_values[group * low_width + low]
-                }
-            };
+            let value = Self::weight_component_at_indexed(self.log_len, component, index);
             total = total.add(value);
             component_index += 1;
         }

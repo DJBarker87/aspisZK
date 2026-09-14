@@ -130,7 +130,7 @@ impl M31 {
     /// multiply and an input-dependent branch.
     #[inline(always)]
     pub fn half(self) -> M31 {
-        M31((self.0 >> 1) | ((self.0 & 1) << 30))
+        M31((self.0 >> 1u32) | ((self.0 & 1) << 30u32))
     }
 
     pub fn pow(self, mut exp: u64) -> M31 {
@@ -141,7 +141,7 @@ impl M31 {
                 acc = acc.mul(base);
             }
             base = base.mul(base);
-            exp >>= 1;
+            exp >>= 1u32;
         }
         acc
     }
