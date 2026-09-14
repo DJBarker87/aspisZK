@@ -1,0 +1,42 @@
+{
+  "scope": "S6 local guard/killed-sampler machinery and selected-terminal source-static audit; no selected-root FS closure",
+  "base_commit": "d787fa42781d3d9e6fb5f569ca2b9db02cf98852",
+  "reference_tests": {
+    "command": "python3 /tmp/aspis-v8-s6.YbR1IJ/aspis-v8-soundness-s6-closure-pack-20260914/scripts/run_checks.py --stage reference",
+    "exit": 0,
+    "tests": 42,
+    "scope": "finite/reference models only"
+  },
+  "source_static_audit": {
+    "command": "python3 docs/research/v8-completion-fs-extraction-20260911/experiments/s6_terminal_effect_audit.py",
+    "exit": 0,
+    "performance_verifier_sha256": "bf8a24c42c0d5493d2259fa19a70b1a8bf4ba168f661b71cfed6d33c70eebfbc",
+    "pair_forest_terminal_sha256": "efbc5be87e271419d7b09e1bb6e3a83984d42795bc20067ea039814fb89ffa58",
+    "literal_ood_source_producer_in_selected_configuration": false,
+    "scope": "static source audit, not Rust refinement"
+  },
+  "lean": {
+    "host": "NUC via Tailscale",
+    "toolchain": "Lean 4.32.0 (8c9756b28d64dab099da31a4c09229a9e6a2ef35)",
+    "memory_policy": "focused direct leaves; peak RSS below 3.33 GiB; swap 0",
+    "modules": [
+      {"name": "S6GuardErasure", "exit": 0, "wall_seconds": 0.51, "peak_rss_kib": 756808},
+      {"name": "S6DynamicGuardCut", "exit": 0, "wall_seconds": 0.49, "peak_rss_kib": 750304},
+      {"name": "S6FirstCreatorList", "exit": 0, "wall_seconds": 0.43, "peak_rss_kib": 750620},
+      {"name": "S6FiniteEnvelope", "exit": 0, "wall_seconds": 1.68, "peak_rss_kib": 3232988},
+      {"name": "S6KilledKernelEnvelope", "exit": 0, "wall_seconds": 1.66, "peak_rss_kib": 3249900},
+      {"name": "S6Audit", "exit": 0, "wall_seconds": 1.66, "peak_rss_kib": 3325128}
+    ],
+    "axioms": ["propext", "Classical.choice", "Quot.sound"],
+    "sorryAx": false
+  },
+  "closed": [],
+  "open": [
+    "literal selected configuration/root producer",
+    "complete source fresh-output occurrence and capacity producer",
+    "actual ordinary bad-event inclusion",
+    "cached creator restoration",
+    "usable-node collection",
+    "global FS composition"
+  ]
+}
