@@ -38,8 +38,38 @@ sumcheck.rs      3f390d96a668206b9d49691cd337f58153ba70d688329697dcb73c2891dfe2d
 v6_transcript.rs 03c561a5048efc308ba4f479ebe19597a4a36dfa9b035571185372754b299fb5
 ```
 
-This closes the complete current-source translation blocker. It is not by
-itself the G1 caller-refinement theorem: the generated standard-library
-externals still need their checked implementations, and the callback's exact
-six-component prechallenge state must be consumed by the maintained K1.3
-model. The selected SBF/CU comparison is also a separate runtime gate.
+## Kernel import
+
+The generated graph was staged for Lean 4.32 with the same source-neutral
+compatibility rewrites already audited for the earlier current-caller bundle:
+fully qualified transcript namespace references, the executable mutable
+iterator write-back adapter, a curried QM31 fold, and the correct `(Unit,
+closure)` result for the no-op diagnostic `FnMut`.  `TypesExternal.lean` and
+`FunsExternal.lean` reuse that bundle's executable Rust standard-library
+models; they contain no Aspis primitive axiom.  No generated Rust function
+body was replaced by a hand-written implementation.
+
+The complete staged graph kernel-compiled on Lean 4.32.0:
+
+```text
+TypesExternal wall 1.21 s, peak RSS 2,517,768 KiB, swap 0
+Types         wall 2.00 s, peak RSS 2,579,164 KiB, swap 0
+FunsExternal  wall 1.73 s, peak RSS 2,565,208 KiB, swap 0
+Funs          wall 23.07 s, peak RSS 3,242,632 KiB, swap 0
+```
+
+Staged source hashes:
+
+```text
+TypesExternal 26444cedd12c23c357021c819a1878743d5b368aedaba8237c0c373414bb37a1
+Types         894dce5ab015727686aaf06686883eebb2c1e39aeebaa29275bb3eba87eb44dc
+FunsExternal  5796fc6e5f619f9fa8d46eaf091b29831bf3ac1201f26562a1f858279ccea77b
+Iterator      80cd40191de85197c50f7e7f4254ece11f6aa3571bd47aaccb9a51b73a773f67
+Funs          a4001cb3700e25aee5eb04e495f0eb560d18e9c9e86ae879ca34567c9a169505
+```
+
+This closes G0: the complete current-source translation and kernel-import
+blocker. It is not by itself G1. The callback's exact six-component
+prechallenge state must still be derived from this caller and consumed by the
+maintained K1.3 model. The selected SBF/CU comparison is also a separate
+runtime gate.
