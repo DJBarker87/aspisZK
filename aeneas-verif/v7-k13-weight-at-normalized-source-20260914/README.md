@@ -10,7 +10,7 @@ loops and field operations are present as transparent generated definitions.
 - Git base: `7432cdb7b856ac1995fcba8d6d0dac1cd4a1dbfe`, plus the tracked source
   normalization in `crates/aspis-core/src/{field,sumcheck}.rs`.
 - Source hashes: `field.rs` `49fb94aa465647a5addedaa803a40506968678d64277cdeb27635db1d9b56794`;
-  `sumcheck.rs` `a5c753676817fa01a27f2124c03e751619edac27aca93c29b6918be093df6fa2`.
+  `sumcheck.rs` `d8485471a77943b68e26096e545f01d2f90a4474169a04a9f5d5c2a580fdc24e`.
 - Charon: pinned `0.1.223` executable at the path recorded in
   `evidence/charon-release.log`.
 - Aeneas: pinned patched `d860` executable at the path recorded in
@@ -19,8 +19,11 @@ loops and field operations are present as transparent generated definitions.
 - Lean: `4.32.0`, using the pinned Aeneas library/cache recorded by the kernel
   logs.
 
-The LLBC SHA-256 is
-`be2043d87634da05c6933362d2c54d6fb71e3ee74fa3485ea0992d94136cbc51`.
+The refreshed LLBC SHA-256 is
+`63f09a6f446c5781e23b4f4024e1d6792fdd09b1ad7d4251a59d28defa3eeeb9`.
+It includes the source-level extraction-only factorization of the log-eight
+grouped-binary arithmetic tail; the operation order is unchanged and the
+13-case normalization target passes in both debug and release mode.
 
 ## Mechanical generated-code repair
 
@@ -40,11 +43,17 @@ No value, branch, source operation, or proof-facing definition is changed.
 `proof/V7WeightAtReleaseProbe.lean` imports and prints the real root.
 `proof/V7WeightAtReleaseFieldBridge.lean` proves exact and canonical semantics
 for the current generated QM31 add, optimized lazy-u64 multiply, and optimized
-square. Their axiom sets are exactly:
+square.  The half, tensor, multilinear, and live log-eight grouped-binary
+leaves then prove the corresponding current generated source paths.  In
+particular, `generated_grouped_log8_corresponds` covers the literal row-group
+and mask reads, exact `[1, alpha^3, alpha^2, alpha]` ordering, both halvings,
+successful return, canonical output, and exact decoded equation. Their axiom
+sets are exactly:
 
 `[propext, Classical.choice, Quot.sound]`.
 
-The final field-bridge check exited zero with peak RSS 2,738,952 KiB and zero
-swap under `MemoryHigh=5G`, `MemoryMax=6G`, `MemorySwapMax=0`. This closes the
-field-operation subgate only. The live accumulator loop/caller refinement and
-the 256-entry observer consumer remain subsequent G1/G2 work.
+The refreshed field/half/tensor/multilinear checks and the new grouped-binary
+check all exited zero.  The grouped-binary target used peak RSS 2,674,376 KiB
+and zero swap; the other refreshed targets remained below 2.70 GiB.  The outer
+component accumulator/caller refinement and the 256-entry observer consumer
+remain subsequent G1/G2 work.

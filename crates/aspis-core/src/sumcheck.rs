@@ -920,18 +920,7 @@ impl WeightAccumulator {
     }
 
     #[inline]
-    fn weight_at_grouped_binary_deferred_log8(
-        row_groups: &[u8],
-        group_masks: &[u16],
-        first_alpha: Option<QM31>,
-        index: u32,
-    ) -> QM31 {
-        let alpha = first_alpha.unwrap();
-        let high = index as usize / 4;
-        let low_chunk = index as usize & 3;
-        let mask = group_masks[usize::from(row_groups[high])];
-        let shift = (4 * low_chunk) as u32;
-        let bits = (mask >> shift) & 0x0f;
+    fn weight_at_grouped_binary_deferred_log8_arithmetic(alpha: QM31, bits: u16) -> QM31 {
         let alpha2 = alpha.square();
         let alpha3 = alpha2.mul(alpha);
         let mut sum = QM31::ZERO;
@@ -948,6 +937,22 @@ impl WeightAccumulator {
             sum = sum.add(alpha);
         }
         sum.half().half()
+    }
+
+    #[inline]
+    fn weight_at_grouped_binary_deferred_log8(
+        row_groups: &[u8],
+        group_masks: &[u16],
+        first_alpha: Option<QM31>,
+        index: u32,
+    ) -> QM31 {
+        let alpha = first_alpha.unwrap();
+        let high = index as usize / 4;
+        let low_chunk = index as usize & 3;
+        let mask = group_masks[usize::from(row_groups[high])];
+        let shift = (4 * low_chunk) as u32;
+        let bits = (mask >> shift) & 0x0f;
+        Self::weight_at_grouped_binary_deferred_log8_arithmetic(alpha, bits)
     }
 
     #[inline]

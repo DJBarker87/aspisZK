@@ -480,7 +480,7 @@ def sumcheck.WeightAccumulator.weight_at_product_indexed
     0#usize
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::double_x_m31]:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1317:4-1319:5 -/
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1322:4-1324:5 -/
 def sumcheck.WeightAccumulator.double_x_m31
   (x : field.M31) : Result field.M31 := do
   let m ← field.M31.mul x x
@@ -533,7 +533,7 @@ def sumcheck.WeightAccumulator.weight_at_line_tensor_indexed
     scale x 0#u32
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::halve_qm31]: loop body 0:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1324:8-1327:9 -/
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1329:8-1332:9 -/
 @[rust_loop_body]
 def sumcheck.WeightAccumulator.halve_qm31_loop.body
   (count : Std.U8) (value : field.QM31) (index : Std.U8) :
@@ -547,7 +547,7 @@ def sumcheck.WeightAccumulator.halve_qm31_loop.body
   else ok (done value)
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::halve_qm31]: loop 0:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1324:8-1327:9 -/
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1329:8-1332:9 -/
 @[rust_loop]
 def sumcheck.WeightAccumulator.halve_qm31_loop
   (value : field.QM31) (count : Std.U8) (index : Std.U8) :
@@ -559,7 +559,7 @@ def sumcheck.WeightAccumulator.halve_qm31_loop
     (value, index)
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::halve_qm31]:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1322:4-1329:5 -/
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1327:4-1334:5 -/
 @[reducible]
 def sumcheck.WeightAccumulator.halve_qm31
   (value : field.QM31) (count : Std.U8) : Result field.QM31 := do
@@ -652,7 +652,7 @@ def sumcheck.WeightAccumulator.weight_at_line_batch_indexed
   sumcheck.WeightAccumulator.halve_qm31 sum deferred_halvings
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_at_grouped_binary_deferred_log246]:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 954:4-960:5 -/
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 959:4-965:5 -/
 def sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log246
   (row_groups : Slice Std.U8) (group_values : Slice field.QM31)
   (index : Std.U32) :
@@ -663,8 +663,35 @@ def sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log246
   let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
   Slice.index_usize group_values i2
 
+/-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_at_grouped_binary_deferred_log8_arithmetic]:
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 923:4-940:5 -/
+def
+  sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8_arithmetic
+  (alpha : field.QM31) (bits : Std.U16) : Result field.QM31 := do
+  let alpha2 ← field.QM31.square alpha
+  let alpha3 ← field.QM31.mul alpha2 alpha
+  let i ← lift (bits &&& 1#u16)
+  let sum ←
+    if i != 0#u16
+    then field.QM31.add field.QM31.ZERO field.QM31.ONE
+    else ok field.QM31.ZERO
+  let i1 ← lift (bits &&& 2#u16)
+  let sum1 ← if i1 != 0#u16
+               then field.QM31.add sum alpha3
+               else ok sum
+  let i2 ← lift (bits &&& 4#u16)
+  let sum2 ← if i2 != 0#u16
+               then field.QM31.add sum1 alpha2
+               else ok sum1
+  let i3 ← lift (bits &&& 8#u16)
+  let sum3 ← if i3 != 0#u16
+               then field.QM31.add sum2 alpha
+               else ok sum2
+  let q ← field.QM31.half sum3
+  field.QM31.half q
+
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_at_grouped_binary_deferred_log8]:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 923:4-951:5 -/
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 943:4-956:5 -/
 def sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8
   (row_groups : Slice Std.U8) (group_masks : Slice Std.U16)
   (first_alpha : Option field.QM31) (index : Std.U32) :
@@ -682,27 +709,8 @@ def sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8
   let shift ← lift (UScalar.cast .U32 i4)
   let i5 ← lift (Std.U16.wrapping_shr mask shift)
   let bits ← lift (i5 &&& 15#u16)
-  let alpha2 ← field.QM31.square alpha
-  let alpha3 ← field.QM31.mul alpha2 alpha
-  let i6 ← lift (bits &&& 1#u16)
-  let sum ←
-    if i6 != 0#u16
-    then field.QM31.add field.QM31.ZERO field.QM31.ONE
-    else ok field.QM31.ZERO
-  let i7 ← lift (bits &&& 2#u16)
-  let sum1 ← if i7 != 0#u16
-               then field.QM31.add sum alpha3
-               else ok sum
-  let i8 ← lift (bits &&& 4#u16)
-  let sum2 ← if i8 != 0#u16
-               then field.QM31.add sum1 alpha2
-               else ok sum1
-  let i9 ← lift (bits &&& 8#u16)
-  let sum3 ← if i9 != 0#u16
-               then field.QM31.add sum2 alpha
-               else ok sum2
-  let q ← field.QM31.half sum3
-  field.QM31.half q
+  sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_log8_arithmetic
+    alpha bits
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_at_grouped_binary_deferred_indexed]:
     Source: 'crates/aspis-core/src/sumcheck.rs', lines 891:4-920:5 -/
@@ -731,7 +739,7 @@ def sumcheck.WeightAccumulator.weight_at_grouped_binary_deferred_indexed
   | _ => fail panic
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_component_at_indexed]:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 963:4-1024:5 -/
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 968:4-1029:5 -/
 def sumcheck.WeightAccumulator.weight_component_at_indexed
   (log_len : Std.U32) (component : sumcheck.WeightComponent) (index : Std.U32)
   :
@@ -802,7 +810,7 @@ def sumcheck.WeightAccumulator.weight_component_at_indexed
       group_values i5
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_at]: loop body 0:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1031:8-1036:9
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1036:8-1041:9
     Visibility: public -/
 @[rust_loop_body]
 def sumcheck.WeightAccumulator.weight_at_loop.body
@@ -826,7 +834,7 @@ def sumcheck.WeightAccumulator.weight_at_loop.body
   else ok (done total)
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_at]: loop 0:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1031:8-1036:9
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1036:8-1041:9
     Visibility: public -/
 @[rust_loop]
 def sumcheck.WeightAccumulator.weight_at_loop
@@ -841,7 +849,7 @@ def sumcheck.WeightAccumulator.weight_at_loop
     (total, component_index)
 
 /-- [aspis_core::sumcheck::{aspis_core::sumcheck::WeightAccumulator}::weight_at]:
-    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1027:4-1038:5
+    Source: 'crates/aspis-core/src/sumcheck.rs', lines 1032:4-1043:5
     Visibility: public -/
 @[reducible]
 def sumcheck.WeightAccumulator.weight_at
