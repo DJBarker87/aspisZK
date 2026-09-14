@@ -295,3 +295,6 @@ fn r10_real_compiler_h1_cut_matches_complete_selected_terminal() {
 
 #[path = "support/r12_terminal_cut_append.rs"]
 mod r12_terminal_cut_append;
+
+#[path = "support/r14_source_offset_append.rs"]
+mod r14_source_offset_append;
