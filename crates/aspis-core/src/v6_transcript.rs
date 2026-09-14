@@ -12,7 +12,7 @@
 use alloc::{boxed::Box, vec, vec::Vec};
 
 use crate::field::{
-    qm31_add_sum_products3_prepared, qm31_dot3, qm31_power_table, qm31_sum_products3,
+    qm31_add_sum_products3_prepared, qm31_dot3_separate, qm31_power_table, qm31_sum_products3,
     PreparedQm31Multiplier, CM31, M31, M31_QUARTER, QM31,
 };
 use crate::proof::M31_CIRCLE_BASIS_DISCRIMINATOR;
@@ -579,7 +579,7 @@ fn gamma_point_claims_and_query_powers(
     debug_assert_eq!(V6_TOTAL_COLUMNS, SPEND_TOTAL_COLUMNS);
     let powers = qm31_power_table::<SPEND_TOTAL_COLUMNS>(gamma);
     (
-        qm31_dot3(&powers, [&claims[0], &claims[1], &claims[2]]),
+        qm31_dot3_separate(&powers, &claims[0], &claims[1], &claims[2]),
         StateOnlySpendQueryPowers::from_full_table(&powers),
         powers[SPEND_D_GENERATOR_INDEX],
     )

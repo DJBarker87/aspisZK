@@ -1951,72 +1951,204 @@ pub fn qm31_dot(weights: &[QM31], values: &[QM31]) -> QM31 {
 /// element. The 256-element outer windows have the same overflow proof as
 /// [`qm31_dot`].
 pub fn qm31_dot3(weights: &[QM31], values: [&[QM31]; 3]) -> [QM31; 3] {
-    for row in values {
-        assert_eq!(weights.len(), row.len());
-    }
-    let mut sums = [[M31::ZERO; 9]; 3];
-    const OUTER_COLUMNS: usize = 256;
-    for outer_start in (0..weights.len()).step_by(OUTER_COLUMNS) {
-        let outer_end = core::cmp::min(outer_start + OUTER_COLUMNS, weights.len());
-        let mut outer = [[0u64; 9]; 3];
-        for start in (outer_start..outer_end).step_by(4) {
-            let end = core::cmp::min(start + 4, outer_end);
-            let mut raw = [[0u64; 9]; 3];
-            for index in start..end {
-                let weight = weights[index];
-                let weight_sum = weight.c0.add(weight.c1);
-                let left = [
-                    [weight.c0.a, weight.c0.b, weight.c0.a.add(weight.c0.b)],
-                    [weight.c1.a, weight.c1.b, weight.c1.a.add(weight.c1.b)],
-                    [weight_sum.a, weight_sum.b, weight_sum.a.add(weight_sum.b)],
-                ];
-                for row in 0..3 {
-                    let value = values[row][index];
-                    let value_sum = value.c0.add(value.c1);
-                    let right = [
-                        [value.c0.a, value.c0.b, value.c0.a.add(value.c0.b)],
-                        [value.c1.a, value.c1.b, value.c1.a.add(value.c1.b)],
-                        [value_sum.a, value_sum.b, value_sum.a.add(value_sum.b)],
-                    ];
-                    for component in 0..3 {
-                        let offset = 3 * component;
-                        raw[row][offset] +=
-                            u64::from(left[component][0].0) * u64::from(right[component][0].0);
-                        raw[row][offset + 1] +=
-                            u64::from(left[component][1].0) * u64::from(right[component][1].0);
-                        raw[row][offset + 2] +=
-                            u64::from(left[component][2].0) * u64::from(right[component][2].0);
-                    }
-                }
-            }
-            for row in 0..3 {
-                for channel in 0..9 {
-                    outer[row][channel] += u64::from(M31::reduce_u64(raw[row][channel]).0);
-                }
-            }
-        }
-        for row in 0..3 {
-            for channel in 0..9 {
-                sums[row][channel] = sums[row][channel].add(M31::reduce_u64(outer[row][channel]));
-            }
-        }
-    }
+    let [values0, values1, values2] = values;
+    qm31_dot3_separate(weights, values0, values1, values2)
+}
 
-    core::array::from_fn(|row| {
-        let component = |offset: usize| CM31 {
-            a: sums[row][offset].sub(sums[row][offset + 1]),
-            b: sums[row][offset + 2]
-                .sub(sums[row][offset])
-                .sub(sums[row][offset + 1]),
-        };
-        let m0 = component(0);
-        let m1 = component(3);
-        let m2 = component(6);
-        QM31 {
-            c0: m0.add(mul_by_r(m1)),
-            c1: m2.sub(m0).sub(m1),
+/// Borrow-separated spelling of [`qm31_dot3`] for source translation.
+/// Arithmetic, chunking and reduction order are shared exactly with the
+/// public array-of-slices wrapper.
+#[inline(always)]
+pub fn qm31_dot3_separate(
+    weights: &[QM31],
+    values0: &[QM31],
+    values1: &[QM31],
+    values2: &[QM31],
+) -> [QM31; 3] {
+    assert!(weights.len() == values0.len());
+    assert!(weights.len() == values1.len());
+    assert!(weights.len() == values2.len());
+    let sums = qm31_dot3_all(weights, values0, values1, values2);
+
+    qm31_dot3_rows(sums)
+}
+
+#[inline(always)]
+fn qm31_dot3_rows(sums: [[M31; 9]; 3]) -> [QM31; 3] {
+    let row0 = qm31_dot3_row(&sums, 0);
+    let row1 = qm31_dot3_row(&sums, 1);
+    let row2 = qm31_dot3_row(&sums, 2);
+    [row0, row1, row2]
+}
+
+#[inline(always)]
+fn qm31_dot3_all(
+    weights: &[QM31],
+    values0: &[QM31],
+    values1: &[QM31],
+    values2: &[QM31],
+) -> [[M31; 9]; 3] {
+    let mut sums = [[M31::ZERO; 9]; 3];
+    let mut outer_start = 0usize;
+    while outer_start < weights.len() {
+        let outer_end = core::cmp::min(outer_start + 256, weights.len());
+        let outer = qm31_dot3_outer(
+            weights,
+            values0,
+            values1,
+            values2,
+            outer_start,
+            outer_end,
+        );
+        sums = qm31_dot3_finish_outer(sums, outer);
+        outer_start += 256;
+    }
+    sums
+}
+
+#[inline(always)]
+fn qm31_dot3_outer(
+    weights: &[QM31],
+    values0: &[QM31],
+    values1: &[QM31],
+    values2: &[QM31],
+    outer_start: usize,
+    outer_end: usize,
+) -> [[u64; 9]; 3] {
+    let mut outer = [[0u64; 9]; 3];
+    let mut start = outer_start;
+    while start < outer_end {
+        let end = core::cmp::min(start + 4, outer_end);
+        let raw = qm31_dot3_chunk(weights, values0, values1, values2, start, end);
+        outer = qm31_dot3_add_chunk(outer, raw);
+        start += 4;
+    }
+    outer
+}
+
+#[inline(always)]
+fn qm31_dot3_add_chunk(
+    mut outer: [[u64; 9]; 3],
+    raw: [[u64; 9]; 3],
+) -> [[u64; 9]; 3] {
+    let mut row = 0usize;
+    while row < 3 {
+        let mut channel = 0usize;
+        while channel < 9 {
+            outer[row][channel] += u64::from(M31::reduce_u64(raw[row][channel]).0);
+            channel += 1;
         }
-    })
+        row += 1;
+    }
+    outer
+}
+
+#[inline(always)]
+fn qm31_dot3_finish_outer(
+    mut sums: [[M31; 9]; 3],
+    outer: [[u64; 9]; 3],
+) -> [[M31; 9]; 3] {
+    let mut row = 0usize;
+    while row < 3 {
+        let mut channel = 0usize;
+        while channel < 9 {
+            sums[row][channel] = sums[row][channel].add(M31::reduce_u64(outer[row][channel]));
+            channel += 1;
+        }
+        row += 1;
+    }
+    sums
+}
+
+#[inline(always)]
+fn qm31_dot3_chunk(
+    weights: &[QM31],
+    values0: &[QM31],
+    values1: &[QM31],
+    values2: &[QM31],
+    start: usize,
+    end: usize,
+) -> [[u64; 9]; 3] {
+    let mut raw = [[0u64; 9]; 3];
+    let mut index = start;
+    while index < end {
+        raw = qm31_dot3_accumulate_index(
+            raw,
+            weights[index],
+            values0[index],
+            values1[index],
+            values2[index],
+        );
+        index += 1;
+    }
+    raw
+}
+
+#[inline(always)]
+fn qm31_dot3_accumulate_index(
+    mut raw: [[u64; 9]; 3],
+    weight: QM31,
+    value0: QM31,
+    value1: QM31,
+    value2: QM31,
+) -> [[u64; 9]; 3] {
+    let weight_sum = weight.c0.add(weight.c1);
+    let left = [
+        [weight.c0.a, weight.c0.b, weight.c0.a.add(weight.c0.b)],
+        [weight.c1.a, weight.c1.b, weight.c1.a.add(weight.c1.b)],
+        [weight_sum.a, weight_sum.b, weight_sum.a.add(weight_sum.b)],
+    ];
+    raw = qm31_dot3_accumulate_row(raw, 0, left, value0);
+    raw = qm31_dot3_accumulate_row(raw, 1, left, value1);
+    qm31_dot3_accumulate_row(raw, 2, left, value2)
+}
+
+#[inline(always)]
+fn qm31_dot3_accumulate_row(
+    mut raw: [[u64; 9]; 3],
+    row: usize,
+    left: [[M31; 3]; 3],
+    value: QM31,
+) -> [[u64; 9]; 3] {
+    let value_sum = value.c0.add(value.c1);
+    let right = [
+        [value.c0.a, value.c0.b, value.c0.a.add(value.c0.b)],
+        [value.c1.a, value.c1.b, value.c1.a.add(value.c1.b)],
+        [value_sum.a, value_sum.b, value_sum.a.add(value_sum.b)],
+    ];
+    let mut component = 0usize;
+    while component < 3 {
+        let offset = 3 * component;
+        raw[row][offset] +=
+            u64::from(left[component][0].0) * u64::from(right[component][0].0);
+        raw[row][offset + 1] +=
+            u64::from(left[component][1].0) * u64::from(right[component][1].0);
+        raw[row][offset + 2] +=
+            u64::from(left[component][2].0) * u64::from(right[component][2].0);
+        component += 1;
+    }
+    raw
+}
+
+#[inline(always)]
+fn qm31_dot3_row(sums: &[[M31; 9]; 3], row: usize) -> QM31 {
+    let m0 = qm31_dot3_component(sums, row, 0);
+    let m1 = qm31_dot3_component(sums, row, 3);
+    let m2 = qm31_dot3_component(sums, row, 6);
+    QM31 {
+        c0: m0.add(mul_by_r(m1)),
+        c1: m2.sub(m0).sub(m1),
+    }
+}
+
+#[inline(always)]
+fn qm31_dot3_component(sums: &[[M31; 9]; 3], row: usize, offset: usize) -> CM31 {
+    CM31 {
+        a: sums[row][offset].sub(sums[row][offset + 1]),
+        b: sums[row][offset + 2]
+            .sub(sums[row][offset])
+            .sub(sums[row][offset + 1]),
+    }
 }
 
 /// Montgomery batch inversion over M31: one field inversion for the whole
