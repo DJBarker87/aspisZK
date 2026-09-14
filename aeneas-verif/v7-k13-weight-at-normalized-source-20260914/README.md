@@ -1,9 +1,10 @@
 # V7 current release `weight_at` source bundle
 
-This bundle extracts the body-bearing production root
-`aspis_core::sumcheck::_::weight_at` from the V7 gate-closure source revision.
-Unlike the earlier verifier-root extraction, this root is local and its helper
-loops and field operations are present as transparent generated definitions.
+This bundle extracts the body-bearing
+`aspis_core::v6_transcript::snapshot_query_batch_prechallenge` root from the V7
+gate-closure source revision.  Its reachable graph contains the genuine
+`prequery_dot_256`, production `WeightAccumulator::weight_at`, helper loops,
+and field operations as transparent generated definitions.
 
 ## Source and tools
 
@@ -19,8 +20,8 @@ loops and field operations are present as transparent generated definitions.
 - Lean: `4.32.0`, using the pinned Aeneas library/cache recorded by the kernel
   logs.
 
-The refreshed LLBC SHA-256 is
-`63f09a6f446c5781e23b4f4024e1d6792fdd09b1ad7d4251a59d28defa3eeeb9`.
+The current snapshot-root LLBC SHA-256 is
+`c6693102412133322ba88d19645e0c1d7982f247413337a6f00249a2cdcf87be`.
 It includes the source-level extraction-only factorization of the log-eight
 grouped-binary arithmetic tail; the operation order is unchanged and the
 13-case normalization target passes in both debug and release mode.
@@ -70,5 +71,16 @@ component work is now also checked:
 All of these report exactly `[propext, Classical.choice, Quot.sound]`.  The
 remaining G1 work is caller reachability: derive that six-component shape and
 all canonical/length premises from the translated `finish_onefold_relation`
-construction and first arity-four fold.  The 256-entry observer consumer then
-remains G2.
+construction and first arity-four fold.
+
+The G2 source loop and wrapper are now independently checked as well.
+`generated_prequery_dot_256_corresponds` proves the literal 256-iteration
+source loop by a symbolic prefix invariant, including array reads, usize/u32
+casts, current `weight_at`, current multiply/add operations, termination, and
+canonicality. `generated_snapshot_prechallenge_corresponds` consumes that
+theorem, proves the exact terminal subtraction, and proves byte-for-byte copying
+of transcript state, running claim, gamma, alpha zero, query schedule, selector,
+compact counter, and frontier count. Both report exactly the same foundational
+axiom set. The remaining source/model gate is to instantiate their coefficient
+and live-weight premises from the translated caller and maintained Tag-73 field
+representation; those premises have not been relabelled as closed.

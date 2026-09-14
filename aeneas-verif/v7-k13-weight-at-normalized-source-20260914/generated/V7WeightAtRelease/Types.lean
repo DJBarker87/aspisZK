@@ -81,4 +81,33 @@ structure sumcheck.WeightAccumulator where
   log_len : Std.U32
   components : alloc.vec.Vec sumcheck.WeightComponent
 
+/-- [aspis_core::v6_transcript::V6QueryBatchPrechallengeView]
+    Source: 'crates/aspis-core/src/v6_transcript.rs', lines 211:0-222:1
+    Visibility: public -/
+structure v6_transcript.V6QueryBatchPrechallengeView where
+  transcript_state : Array Std.U8 32#usize
+  running_claim : field.QM31
+  weights : sumcheck.WeightAccumulator
+  gamma : field.QM31
+  alpha0 : field.QM31
+  final256_coefficients : Array field.QM31 256#usize
+  queries : Array Std.U32 16#usize
+  selector : Std.U8
+  compact_counter : Std.U8
+  frontier_nodes : Std.Usize
+
+/-- [aspis_core::v6_transcript::V6QueryBatchPrechallengeSnapshot]
+    Source: 'crates/aspis-core/src/v6_transcript.rs', lines 229:0-239:1
+    Visibility: public -/
+structure v6_transcript.V6QueryBatchPrechallengeSnapshot where
+  transcript_state : Array Std.U8 32#usize
+  running_claim : field.QM31
+  terminal_discrepancy : field.QM31
+  gamma : field.QM31
+  alpha0 : field.QM31
+  queries : Array Std.U32 16#usize
+  selector : Std.U8
+  compact_counter : Std.U8
+  frontier_nodes : Std.Usize
+
 end V7WeightAtRelease
