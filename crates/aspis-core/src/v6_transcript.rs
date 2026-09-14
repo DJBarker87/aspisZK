@@ -1382,6 +1382,56 @@ where
     )
 }
 
+/// Source-proof wrapper that retains the exact pre-query snapshot produced by
+/// the shared accepted verifier execution.
+///
+/// The `Option` is intentional: it keeps the wrapper total even on an early
+/// verifier return.  The downstream source proof must show that a successful
+/// selected V7 execution returns `Some`; this helper introduces neither a
+/// panic nor an additional trusted callback result.
+#[cfg(feature = "aeneas-observer")]
+#[allow(clippy::too_many_arguments)]
+#[inline(never)]
+pub fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot<
+    TerminalCheck,
+    QueryFold,
+>(
+    hash: HashFn,
+    wire: &V7CompactOneFoldWire<'_>,
+    context: &V6TranscriptContext,
+    hiding_context: StateOnlyHidingContext,
+    inactive_row_groups: &[u8; 64],
+    inactive_group_masks: &[u16],
+    check_pow: bool,
+    terminal_check: TerminalCheck,
+    query_fold: QueryFold,
+) -> Result<
+    (
+        V6VerifiedTranscript,
+        Option<V6QueryBatchPrechallengeSnapshot>,
+    ),
+    V6TranscriptError,
+>
+where
+    TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
+    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
+{
+    let mut snapshot = None;
+    let accepted = verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe(
+        hash,
+        wire,
+        context,
+        hiding_context,
+        inactive_row_groups,
+        inactive_group_masks,
+        check_pow,
+        terminal_check,
+        query_fold,
+        |view| snapshot = Some(snapshot_query_batch_prechallenge(view)),
+    )?;
+    Ok((accepted, snapshot))
+}
+
 /// Measurement-only twin of the accepted V7 transcript using canonical
 /// 16-byte records for the complete 641-QM31 fixed section. It absorbs the
 /// same canonical field image and retains every work/Merkle/query check.
@@ -1817,6 +1867,38 @@ mod tests {
         assert_eq!(counter, accepted.compact_counter);
         assert_eq!(observed_frontier, accepted.frontier_nodes);
         assert_eq!(first_final, QM31::ZERO);
+    }
+
+    #[cfg(feature = "aeneas-observer")]
+    #[test]
+    fn aeneas_snapshot_wrapper_returns_the_accepted_v7_prequery_snapshot() {
+        let context = context();
+        let hiding_context =
+            StateOnlyHidingContext::atomic_spend_v3(context.statement_digest, context.attempt_id);
+        let frontier = expected_v7_frontier_with_hiding_context(hiding_context).unwrap();
+        let body = v7_zero_body(frontier);
+        let wire = V7CompactOneFoldWire::parse(&body, frontier).unwrap();
+        let (accepted, snapshot) =
+            verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot(
+                test_hash,
+                &wire,
+                &context,
+                hiding_context,
+                &[0u8; 64],
+                &[u16::MAX],
+                false,
+                |_| true,
+                |_| Ok(zero_query_batch()),
+            )
+            .unwrap();
+        let snapshot = snapshot.expect("an accepted V7 run reaches the pre-query snapshot");
+        assert_eq!(snapshot.gamma, accepted.gamma);
+        assert_eq!(snapshot.alpha0, accepted.alpha[0]);
+        assert_eq!(snapshot.queries, accepted.queries);
+        assert_eq!(snapshot.selector, accepted.selector);
+        assert_eq!(snapshot.compact_counter, accepted.compact_counter);
+        assert_eq!(snapshot.frontier_nodes, accepted.frontier_nodes);
+        assert_eq!(snapshot.terminal_discrepancy, QM31::ZERO);
     }
 
     #[test]
