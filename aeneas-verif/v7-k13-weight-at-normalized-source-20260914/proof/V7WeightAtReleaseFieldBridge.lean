@@ -357,6 +357,25 @@ theorem generated_qm31_add_corresponds
     · exact hexact0
     · exact hexact1
 
+theorem generated_qm31_sub_corresponds
+    (x y : QM31) (hx : GeneratedCanonicalQM31 x)
+    (hy : GeneratedCanonicalQM31 y) :
+    ∃ out : QM31,
+      V7WeightAtRelease.field.QM31.sub x y = ok out ∧
+      GeneratedCanonicalQM31 out ∧
+      generatedQm31ToExact out =
+        generatedQm31ToExact x - generatedQm31ToExact y := by
+  obtain ⟨o0, hcall0, hcan0, hexact0⟩ :=
+    generated_cm31_sub_corresponds x.c0 y.c0 hx.1 hy.1
+  obtain ⟨o1, hcall1, hcan1, hexact1⟩ :=
+    generated_cm31_sub_corresponds x.c1 y.c1 hx.2 hy.2
+  let out : QM31 := ⟨o0, o1⟩
+  refine ⟨out, ?_, ⟨hcan0, hcan1⟩, ?_⟩
+  · simp [V7WeightAtRelease.field.QM31.sub, hcall0, hcall1, out]
+  · apply QuadraticAlgebra.ext
+    · exact hexact0
+    · exact hexact1
+
 theorem generated_qm31_mul_corresponds
     (x y : QM31) (hx : GeneratedCanonicalQM31 x)
     (hy : GeneratedCanonicalQM31 y) :
@@ -569,6 +588,7 @@ theorem generated_qm31_square_corresponds
       ring
 
 #print axioms generated_qm31_add_corresponds
+#print axioms generated_qm31_sub_corresponds
 #print axioms generated_qm31_mul_corresponds
 #print axioms generated_qm31_square_corresponds
 
