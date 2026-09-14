@@ -789,6 +789,82 @@ impl WeightAccumulator {
         true
     }
 
+    // BEGIN V7_WEIGHT_AT_INDEXED_HELPERS_20260913
+    // Iterator-free spellings of the existing ordered scalar evaluations.
+    // No field operation or source-level multiplication order is changed.
+    #[inline]
+    fn weight_at_multilinear_indexed(scale: QM31, point: &[QM31], index: u32) -> QM31 {
+        let mut value = scale;
+        let mut coordinate = 0usize;
+        while coordinate < point.len() {
+            let bit = (index >> (point.len() - 1 - coordinate)) & 1;
+            let z = point[coordinate];
+            value = if bit == 0 {
+                value.mul(QM31::ONE.sub(z))
+            } else {
+                value.mul(z)
+            };
+            coordinate += 1;
+        }
+        value
+    }
+
+    #[inline]
+    fn weight_at_tensor_indexed(scale: QM31, factors: &[QM31], index: u32) -> QM31 {
+        let mut value = scale;
+        let mut coordinate = 0usize;
+        while coordinate < factors.len() {
+            let bit = (index >> (factors.len() - 1 - coordinate)) & 1;
+            if bit != 0 {
+                value = value.mul(factors[coordinate]);
+            }
+            coordinate += 1;
+        }
+        value
+    }
+
+    #[inline]
+    fn weight_at_product_indexed(scale: QM31, pairs: &[[QM31; 2]], index: u32) -> QM31 {
+        let mut value = scale;
+        let mut coordinate = 0usize;
+        while coordinate < pairs.len() {
+            let bit = ((index >> (pairs.len() - 1 - coordinate)) & 1) as usize;
+            value = value.mul(pairs[coordinate][bit]);
+            coordinate += 1;
+        }
+        value
+    }
+
+    #[inline]
+    fn weight_at_line_batch_indexed(
+        log_len: u32,
+        scales: &[QM31],
+        xs: &[M31],
+        deferred_halvings: u8,
+        index: u32,
+    ) -> QM31 {
+        let mut sum = QM31::ZERO;
+        let mut position = 0usize;
+        // The old zip stops at the SHORTER slice. Preserve this even for
+        // malformed private states; do not replace it with an equality check.
+        while position < scales.len() && position < xs.len() {
+            let mut value = scales[position];
+            let mut factor = xs[position];
+            let mut bit = 0u32;
+            while bit < log_len {
+                if index & (1u32 << bit) != 0 {
+                    value = value.mul_m31(factor);
+                }
+                factor = Self::double_x_m31(factor);
+                bit += 1;
+            }
+            sum = sum.add(value);
+            position += 1;
+        }
+        Self::halve_qm31(sum, deferred_halvings)
+    }
+    // END V7_WEIGHT_AT_INDEXED_HELPERS_20260913
+
     pub fn weight_at(&self, index: u32) -> QM31 {
         debug_assert!(index < (1u32 << self.log_len));
         let mut total = QM31::ZERO;
@@ -798,26 +874,10 @@ impl WeightAccumulator {
             let value = match component {
                 WeightComponent::Geometric { scale, base } => scale.mul(base.pow(index as u64)),
                 WeightComponent::Multilinear { scale, point } => {
-                    let mut value = *scale;
-                    for (coordinate, z) in point.iter().enumerate() {
-                        let bit = (index >> (point.len() - 1 - coordinate)) & 1;
-                        value = if bit == 0 {
-                            value.mul(QM31::ONE.sub(*z))
-                        } else {
-                            value.mul(*z)
-                        };
-                    }
-                    value
+                    Self::weight_at_multilinear_indexed(*scale, point, index)
                 }
                 WeightComponent::Tensor { scale, factors } => {
-                    let mut value = *scale;
-                    for (coordinate, factor) in factors.iter().enumerate() {
-                        let bit = (index >> (factors.len() - 1 - coordinate)) & 1;
-                        if bit != 0 {
-                            value = value.mul(*factor);
-                        }
-                    }
-                    value
+                    Self::weight_at_tensor_indexed(*scale, factors, index)
                 }
                 WeightComponent::LineM31Tensor { scale, x } => {
                     let mut value = *scale;
@@ -836,30 +896,11 @@ impl WeightAccumulator {
                     scales,
                     xs,
                     deferred_halvings,
-                } => {
-                    let mut sum = QM31::ZERO;
-                    for (&scale, &x) in scales.iter().zip(xs) {
-                        let mut value = scale;
-                        let mut factor = x;
-                        let mut bit = 0u32;
-                        while bit < self.log_len {
-                            if index & (1u32 << bit) != 0 {
-                                value = value.mul_m31(factor);
-                            }
-                            factor = Self::double_x_m31(factor);
-                            bit += 1;
-                        }
-                        sum = sum.add(value);
-                    }
-                    Self::halve_qm31(sum, *deferred_halvings)
-                }
+                } => Self::weight_at_line_batch_indexed(
+                    self.log_len, scales, xs, *deferred_halvings, index,
+                ),
                 WeightComponent::Product { scale, pairs } => {
-                    let mut value = *scale;
-                    for (coordinate, pair) in pairs.iter().enumerate() {
-                        let bit = ((index >> (pairs.len() - 1 - coordinate)) & 1) as usize;
-                        value = value.mul(pair[bit]);
-                    }
-                    value
+                    Self::weight_at_product_indexed(*scale, pairs, index)
                 }
                 WeightComponent::Dense { values } => values[index as usize],
                 WeightComponent::Grouped64x16 {
@@ -3500,3 +3541,9 @@ mod tests {
         );
     }
 }
+
+// BEGIN V7_WEIGHT_AT_NORMALIZATION_TESTS_20260913
+#[cfg(all(test, feature = "aeneas-observer"))]
+#[path = "sumcheck/weight_at_normalization_20260913.rs"]
+mod weight_at_normalization_20260913;
+// END V7_WEIGHT_AT_NORMALIZATION_TESTS_20260913
