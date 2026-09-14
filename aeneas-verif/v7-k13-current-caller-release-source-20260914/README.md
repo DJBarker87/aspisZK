@@ -65,3 +65,22 @@ The remaining immediate source obligation is to derive the literal six-component
 accumulator and its canonical/length premises from the translated successful
 `finish_onefold_relation` path, then identify the snapshot fields with the
 maintained restored K1.3 checkpoint.
+
+## R21 caller-return experiment
+
+A default-off Rust wrapper now retains the observer snapshot as an `Option` in
+the successful caller's return value.  Its focused Rust test passed.  The new
+release Charon root also exited zero in 13.68 seconds at 630,932 KiB RSS, and
+Aeneas exited zero in 242.81 seconds at 3,952,440 KiB RSS; both used the same
+6 GiB, zero-swap Tailscale NUC scope.  The new LLBC hash is
+`a1acd1a671e1f872a14d9280437f345756474325bfec69a9bcbafe601a1d72fa`.
+
+The generated R21 root is not yet a checked source theorem.  Its dependency
+files compiled, but the generated `Funs.lean` exposed an Aeneas mutable-closure
+write-back mismatch: the generated callback methods return closure state where
+the generated `FnOnce`/`FnMut` instances require `Unit`, while the generated
+observer wrapper drops that state before the outer wrapper destructures it.
+The focused target failed at generated lines 23332, 23356 and 23384.  No opaque
+callback or fabricated `Some` value was introduced to make this compile.  The
+next source step is a source-level observer-return shape that the pinned backend
+can translate faithfully, followed by the actual accepted-path `Some` theorem.
