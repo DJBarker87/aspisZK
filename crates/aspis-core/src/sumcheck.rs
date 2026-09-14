@@ -1892,6 +1892,159 @@ impl WeightAccumulator {
         }
     }
 
+    #[inline(always)]
+    fn line_batch_deferred_halvings(component: &WeightComponent) -> u8 {
+        match component {
+            WeightComponent::LineM31Batch {
+                deferred_halvings, ..
+            } => *deferred_halvings,
+            _ => 0,
+        }
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    #[inline(always)]
+    fn accumulate_line_batch_dot(
+        line_deferred_halvings: u8,
+        scales: &[QM31],
+        xs: &[M31],
+        deferred_halvings: u8,
+        line_count: &mut usize,
+        line_constant_limbs: &mut [M31; 4],
+        line_raw: &mut [[u64; 4]; 3],
+        line_sums: &mut [[M31; 4]; 3],
+    ) {
+        let mut batch_index = 0usize;
+        while batch_index < scales.len() && batch_index < xs.len() {
+            Self::accumulate_line_dot(
+                line_deferred_halvings,
+                scales[batch_index],
+                xs[batch_index],
+                deferred_halvings,
+                line_count,
+                line_constant_limbs,
+                line_raw,
+                line_sums,
+            );
+            batch_index += 1;
+        }
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    #[inline(always)]
+    fn accumulate_line_component_dot(
+        component: &WeightComponent,
+        line_deferred_halvings: u8,
+        line_count: &mut usize,
+        line_constant_limbs: &mut [M31; 4],
+        line_raw: &mut [[u64; 4]; 3],
+        line_sums: &mut [[M31; 4]; 3],
+    ) {
+        match component {
+            WeightComponent::LineM31Tensor { scale, x } => Self::accumulate_line_dot(
+                line_deferred_halvings,
+                *scale,
+                *x,
+                0,
+                line_count,
+                line_constant_limbs,
+                line_raw,
+                line_sums,
+            ),
+            WeightComponent::LineM31Batch {
+                scales,
+                xs,
+                deferred_halvings,
+            } => Self::accumulate_line_batch_dot(
+                line_deferred_halvings,
+                scales,
+                xs,
+                *deferred_halvings,
+                line_count,
+                line_constant_limbs,
+                line_raw,
+                line_sums,
+            ),
+            _ => {}
+        }
+    }
+
+    #[inline(always)]
+    fn dot_dense_terminal(values: &[QM31], weights: &[QM31]) -> QM31 {
+        let mut sum = QM31::ZERO;
+        let mut index = 0usize;
+        while index < values.len() {
+            sum = sum.add(values[index].mul(weights[index]));
+            index += 1;
+        }
+        sum
+    }
+
+    #[inline(always)]
+    fn dot_grouped_binary_terminal(
+        values: &[QM31],
+        row_groups: &[u8],
+        group_values: &[QM31],
+    ) -> QM31 {
+        let mut sum = QM31::ZERO;
+        let mut index = 0usize;
+        while index < values.len() {
+            sum = sum.add(values[index].mul(group_values[usize::from(row_groups[index])]));
+            index += 1;
+        }
+        sum
+    }
+
+    #[inline(always)]
+    fn dot_terminal_component(component: &WeightComponent, values: &[QM31]) -> QM31 {
+        match component {
+            WeightComponent::Geometric { scale, base } => {
+                let base2 = base.square();
+                let evaluation = values[0]
+                    .add(base.mul(values[1]))
+                    .add(base2.mul(values[2]))
+                    .add(base2.mul(*base).mul(values[3]));
+                scale.mul(evaluation)
+            }
+            WeightComponent::Multilinear { scale, point } => {
+                debug_assert_eq!(point.len(), 2);
+                let low = values[0].add(point[1].mul(values[1].sub(values[0])));
+                let high = values[2].add(point[1].mul(values[3].sub(values[2])));
+                scale.mul(low.add(point[0].mul(high.sub(low))))
+            }
+            WeightComponent::Tensor { scale, factors } => {
+                debug_assert_eq!(factors.len(), 2);
+                let low = values[0].add(factors[1].mul(values[1]));
+                let high = values[2].add(factors[1].mul(values[3]));
+                scale.mul(low.add(factors[0].mul(high)))
+            }
+            WeightComponent::LineM31Tensor { .. } => QM31::ZERO,
+            WeightComponent::LineM31Batch { .. } => QM31::ZERO,
+            WeightComponent::Product { scale, pairs } => {
+                debug_assert_eq!(pairs.len(), 2);
+                let evaluation = values[0]
+                    .mul(pairs[0][0].mul(pairs[1][0]))
+                    .add(values[1].mul(pairs[0][0].mul(pairs[1][1])))
+                    .add(values[2].mul(pairs[0][1].mul(pairs[1][0])))
+                    .add(values[3].mul(pairs[0][1].mul(pairs[1][1])));
+                scale.mul(evaluation)
+            }
+            WeightComponent::Dense { values: weights } =>
+                Self::dot_dense_terminal(values, weights),
+            WeightComponent::Grouped64x16 { .. } => {
+                unreachable!("grouped component becomes dense before log length two")
+            }
+            WeightComponent::Grouped64x16BinaryDeferred {
+                row_groups,
+                group_values,
+                ..
+            } => Self::dot_grouped_binary_terminal(values, row_groups, group_values),
+            WeightComponent::Grouped128x16 { .. } => {
+                unreachable!("grouped component becomes dense before log length two")
+            }
+        }
+    }
+
     pub fn dot(&self, values: &[QM31]) -> QM31 {
         debug_assert_eq!(values.len(), 1usize << self.log_len);
         if self.log_len == 2 && values.len() == 4 {
@@ -1906,52 +2059,30 @@ impl WeightAccumulator {
             // but avoids pulling generic iterator adapters into the accepted
             // source certificate.
             let mut line_deferred_halvings = 0u8;
-            for component in &self.components {
-                if let WeightComponent::LineM31Batch {
-                    deferred_halvings, ..
-                } = component
-                {
-                    if *deferred_halvings > line_deferred_halvings {
-                        line_deferred_halvings = *deferred_halvings;
-                    }
+            let mut component_index = 0usize;
+            while component_index < self.components.len() {
+                let deferred_halvings =
+                    Self::line_batch_deferred_halvings(&self.components[component_index]);
+                if deferred_halvings > line_deferred_halvings {
+                    line_deferred_halvings = deferred_halvings;
                 }
+                component_index += 1;
             }
             let mut line_count = 0usize;
             let mut line_constant_limbs = [M31::ZERO; 4];
             let mut line_raw = [[0u64; 4]; 3];
             let mut line_sums = [[M31::ZERO; 4]; 3];
-            for component in &self.components {
-                match component {
-                    WeightComponent::LineM31Tensor { scale, x } => Self::accumulate_line_dot(
-                        line_deferred_halvings,
-                        *scale,
-                        *x,
-                        0,
-                        &mut line_count,
-                        &mut line_constant_limbs,
-                        &mut line_raw,
-                        &mut line_sums,
-                    ),
-                    WeightComponent::LineM31Batch {
-                        scales,
-                        xs,
-                        deferred_halvings,
-                    } => {
-                        for (&scale, &x) in scales.iter().zip(xs) {
-                            Self::accumulate_line_dot(
-                                line_deferred_halvings,
-                                scale,
-                                x,
-                                *deferred_halvings,
-                                &mut line_count,
-                                &mut line_constant_limbs,
-                                &mut line_raw,
-                                &mut line_sums,
-                            );
-                        }
-                    }
-                    _ => {}
-                }
+            component_index = 0;
+            while component_index < self.components.len() {
+                Self::accumulate_line_component_dot(
+                    &self.components[component_index],
+                    line_deferred_halvings,
+                    &mut line_count,
+                    &mut line_constant_limbs,
+                    &mut line_raw,
+                    &mut line_sums,
+                );
+                component_index += 1;
             }
             if line_count % 4 != 0 {
                 for slot in 0..3 {
@@ -1981,71 +2112,12 @@ impl WeightAccumulator {
                     line_deferred_halvings,
                 )
             };
-            for component in &self.components {
-                let contribution = match component {
-                    WeightComponent::Geometric { scale, base } => {
-                        let base2 = base.square();
-                        let evaluation = values[0]
-                            .add(base.mul(values[1]))
-                            .add(base2.mul(values[2]))
-                            .add(base2.mul(*base).mul(values[3]));
-                        scale.mul(evaluation)
-                    }
-                    WeightComponent::Multilinear { scale, point } => {
-                        debug_assert_eq!(point.len(), 2);
-                        let low = values[0].add(point[1].mul(values[1].sub(values[0])));
-                        let high = values[2].add(point[1].mul(values[3].sub(values[2])));
-                        scale.mul(low.add(point[0].mul(high.sub(low))))
-                    }
-                    WeightComponent::Tensor { scale, factors } => {
-                        debug_assert_eq!(factors.len(), 2);
-                        let low = values[0].add(factors[1].mul(values[1]));
-                        let high = values[2].add(factors[1].mul(values[3]));
-                        scale.mul(low.add(factors[0].mul(high)))
-                    }
-                    WeightComponent::LineM31Tensor { .. } => QM31::ZERO,
-                    WeightComponent::LineM31Batch { .. } => QM31::ZERO,
-                    WeightComponent::Product { scale, pairs } => {
-                        debug_assert_eq!(pairs.len(), 2);
-                        let evaluation = values[0]
-                            .mul(pairs[0][0].mul(pairs[1][0]))
-                            .add(values[1].mul(pairs[0][0].mul(pairs[1][1])))
-                            .add(values[2].mul(pairs[0][1].mul(pairs[1][0])))
-                            .add(values[3].mul(pairs[0][1].mul(pairs[1][1])));
-                        scale.mul(evaluation)
-                    }
-                    WeightComponent::Dense { values: weights } => {
-                        let mut sum = QM31::ZERO;
-                        let mut index = 0usize;
-                        while index < values.len() {
-                            sum = sum.add(values[index].mul(weights[index]));
-                            index += 1;
-                        }
-                        sum
-                    }
-                    WeightComponent::Grouped64x16 { .. } => {
-                        unreachable!("grouped component becomes dense before log length two")
-                    }
-                    WeightComponent::Grouped64x16BinaryDeferred {
-                        row_groups,
-                        group_values,
-                        ..
-                    } => {
-                        let mut sum = QM31::ZERO;
-                        let mut index = 0usize;
-                        while index < values.len() {
-                            sum = sum.add(
-                                values[index].mul(group_values[usize::from(row_groups[index])]),
-                            );
-                            index += 1;
-                        }
-                        sum
-                    }
-                    WeightComponent::Grouped128x16 { .. } => {
-                        unreachable!("grouped component becomes dense before log length two")
-                    }
-                };
+            component_index = 0;
+            while component_index < self.components.len() {
+                let contribution =
+                    Self::dot_terminal_component(&self.components[component_index], values);
                 total = total.add(contribution);
+                component_index += 1;
             }
             return total;
         }
