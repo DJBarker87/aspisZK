@@ -573,6 +573,10 @@ pub struct CircleEncoder {
     first_circle_layer: Vec<M31>,
 }
 
+#[cfg(test)]
+#[path = "r14_raw_disclosure.rs"]
+mod r14_raw_disclosure;
+
 impl CircleEncoder {
     pub fn new() -> Self {
         Self::new_for_domain_log(DOMAIN_LOG_SIZE)
