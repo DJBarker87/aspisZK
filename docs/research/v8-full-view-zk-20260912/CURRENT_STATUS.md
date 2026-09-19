@@ -15,6 +15,10 @@ adapter, and three other generated preimages remain unavailable.
 
 New focused evidence:
 
+- `r15-universal-disclosure-evidence.md`: Lean zero-extension theorem for
+  every containing injective schedule, with the literal certificate scalars;
+  authenticated fixed-witness demo boundary and correction of the older
+  source-advantage overclaim.
 - `r15-q22-source-slice-audit.md`: exact initial/v4 image recovery, disabled
   stress mode, and separate positive/negative proof-file sinks.
 - `r15-q22-stopping-evidence.md`: three actual sampler tests, including the

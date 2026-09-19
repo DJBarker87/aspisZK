@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[4]
 ARCHIVE = ROOT / "docs/research/v8-positive-complete-devnet-20260909"
 RELATION = ARCHIVE / "upstream/relation_callback.rs"
 PERFORMANCE = ARCHIVE / "upstream/performance.rs"
+LIVE_CONTEXT = ARCHIVE / "live_context.rs"
 INTEGRATION = ARCHIVE / "evidence/integration-inputs-v4.json"
 
 
@@ -71,6 +72,14 @@ def main() -> None:
         'assert!(std::env::var_os("ASPIS_V8_MAX_FRONTIER_SCAN").is_none());',
         'for seed in seeds {')
     assert v4.count('std::fs::write(format!("{out}/proof-{seed}.bin"),&body).unwrap();') == 2
+    assert 'StateOnlyAttemptSecrets::deterministic_spend_fixture([seed;32],[seed+1;32],[seed+2;32])' in v4
+    assert 'InMemoryStateOnlyMaskNonceStore::default()' in v4
+    assert 'generate_for_mask_nonce' not in v4
+    live = LIVE_CONTEXT.read_text()
+    # Equal to the blob at the selected SOURCE_MANIFEST target 9e432896.
+    assert sha256(LIVE_CONTEXT) == '6c71cdf5e5677761b638e8532981ca7f75b1387475b31d821bf4775431780bd2'
+    assert 'let key = dig(10); let salt = dig(100);' in live
+    assert 'single_output(leaf).unwrap(), selected_second: false' in live
     assert contains_in_order(
         reconstructed,
         'assert!(std::env::var_os("ASPIS_V8_MAX_FRONTIER_SCAN").is_none());',
@@ -124,6 +133,13 @@ def main() -> None:
                     "delta_from_initial": "delete obsolete pre-rebind statement assertion",
                     "stress_environment_rejected": True,
                     "proof_file_sinks": 2,
+                },
+                "experiment_boundary": {
+                    "private_entropy": "fixed repeated-byte fixture seeds",
+                    "nonce_reservation": "in-memory demo store",
+                    "live_context_sha256": sha256(LIVE_CONTEXT),
+                    "live_witness": "fixed note secrets, single output, selected_second=false",
+                    "implements_intended_entropy_backed_two_witness_game": False,
                 },
                 "query_grammar": {
                     "query_count": 22,
