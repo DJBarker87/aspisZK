@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""Audit the archived V8 q22 slice without mistaking it for source closure.
+
+This is intentionally a source-text/provenance audit.  It establishes the
+literal grammar visible in the checked-in historical files and records the
+missing transformed performance image.  It does not execute the generated
+host, prove a random-oracle law, or assert that this archived harness was the
+sole publication path.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[4]
+ARCHIVE = ROOT / "docs/research/v8-positive-complete-devnet-20260909"
+RELATION = ARCHIVE / "upstream/relation_callback.rs"
+PERFORMANCE = ARCHIVE / "upstream/performance.rs"
+INTEGRATION = ARCHIVE / "evidence/integration-inputs-v4.json"
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def contains_in_order(text: str, *needles: str) -> bool:
+    cursor = 0
+    for needle in needles:
+        cursor = text.find(needle, cursor)
+        if cursor < 0:
+            return False
+        cursor += len(needle)
+    return True
+
+
+def main() -> None:
+    integration = json.loads(INTEGRATION.read_text())
+    performance_entry = integration[
+        "docs/research/v8-no-work-100-20260907/experiments/performance.rs"
+    ]
+    relation_entry = integration[
+        "docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs"
+    ]
+    relation = RELATION.read_text()
+    performance = PERFORMANCE.read_text()
+
+    actual_relation = sha256(RELATION)
+    actual_performance = sha256(PERFORMANCE)
+    assert actual_relation == relation_entry["after"]
+    assert actual_performance == performance_entry["before"]
+    assert actual_performance != performance_entry["after"]
+
+    assert contains_in_order(
+        relation,
+        "fn query_schedule(p:&mut Prefix,finals:&[K],nonces:&[u8])",
+        "p.t.absorb(label::V6_FINAL256,&bytes(finals));",
+        "p.t.absorb(label::GRIND_NONCE,&nonces[16..24]);",
+        "p.t.challenge_queries_without_replacement(22,1<<18,64)",
+        'p.t.absorb(label::PROFILE,b"AV8/query-batch/v1");',
+        "let rho=sample(&mut p.t,true)?",
+    )
+    assert contains_in_order(
+        performance,
+        'let Some(cap)=std::env::var("ASPIS_V8_MAX_FRONTIER_SCAN").ok() else{',
+        "let(q,rho)=query_schedule(p,finals,&nonce).unwrap();return(q,rho,nonce,0);",
+    )
+    assert contains_in_order(
+        performance,
+        "for attempt in 0..cap {",
+        "if frontier==296 {",
+        "return(q,rho,nonce,attempt+1);",
+    )
+    assert contains_in_order(
+        performance,
+        "let(queries,rho,nonces,stress_attempts)=stress_queries(&mut p,&finals);",
+        'std::fs::write(format!("{out}/proof-{seed}.bin"),&body).unwrap();',
+    )
+
+    print(
+        json.dumps(
+            {
+                "audit": "r15_archived_q22_source_slice",
+                "relation_callback_sha256": actual_relation,
+                "performance_sha256": actual_performance,
+                "query_grammar": {
+                    "query_count": 22,
+                    "domain": 262144,
+                    "draw_limit": 64,
+                    "final256_before_nonce_before_queries": True,
+                    "rho_after_queries": True,
+                },
+                "default_path": "one direct schedule; no frontier selection",
+                "environmental_stress_path": (
+                    "ASPIS_V8_MAX_FRONTIER_SCAN can search nonce suffixes "
+                    "until frontier == 296"
+                ),
+                "publication_slice": "writes proof-{seed}.bin after schedule use",
+                "closure": {
+                    "complete": False,
+                    "reason": (
+                        "the checked-in performance slice is the integration "
+                        "manifest's before image; its required after image is "
+                        "absent"
+                    ),
+                    "expected_performance_after_sha256": performance_entry["after"],
+                },
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
