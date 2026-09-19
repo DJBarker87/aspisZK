@@ -15,6 +15,11 @@ adapter, and three other generated preimages remain unavailable.
 
 New focused evidence:
 
+- `r15-complete-host-disclosure-evidence.md`: the recovered host builds and
+  produces an accepted complete proof in synthetic account mode. Two
+  source-derived controlled same-public executions under one fixed six-cell
+  function produce accepted proofs with raw statistic difference 490597912.
+  This is not the intended random-oracle event-probability theorem.
 - `r15-universal-disclosure-evidence.md`: Lean zero-extension theorem for
   every containing injective schedule, with the literal certificate scalars;
   authenticated fixed-witness demo boundary and correction of the older
