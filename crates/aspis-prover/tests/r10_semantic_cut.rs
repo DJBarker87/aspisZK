@@ -8,20 +8,18 @@ use aspis_core::field::{CM31, M31, QM31};
 use aspis_prover::v7_pair_forest_fixture::prepare_v7_pair_forest_transfer_fixture_v1;
 use aspis_statement::{
     constraints_v4::{multilinear_evaluate, multilinear_evaluate_qm31},
-    pool_v1::{
-        compile_pool_v1_pair_forest_private_transfer_merged_c1_v1,
-        pool_v1_empty_roots, pool_v1_tree_parent, PoolV1PairLiveSnapshotV1,
-        PoolV1PaymentRelationContextV1, PoolV1PaymentRuntimeBindingV1,
-        POOL_V1_PAIR_TREE_DEPTH,
-    },
     pool_v1::pair_forest_copy_terminal::{
         evaluate_pool_v1_pair_forest_copy_terminal_compiled_v1,
-        pool_v1_pair_forest_copy_active_row_masks_compiled_v1,
-        PoolV1PairForestCompiledVariantV1,
+        pool_v1_pair_forest_copy_active_row_masks_compiled_v1, PoolV1PairForestCompiledVariantV1,
     },
     pool_v1::pair_forest_semantic_terminal::{
         evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1,
         POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1,
+    },
+    pool_v1::{
+        compile_pool_v1_pair_forest_private_transfer_merged_c1_v1, pool_v1_empty_roots,
+        pool_v1_tree_parent, PoolV1PairLiveSnapshotV1, PoolV1PaymentRelationContextV1,
+        PoolV1PaymentRuntimeBindingV1, POOL_V1_PAIR_TREE_DEPTH,
     },
     poseidon2::Digest,
     state_only_poseidon::{successor_point, xor12_point},
@@ -64,10 +62,7 @@ fn openings(c1: &[Vec<M31>; 16], t: QM31, b: usize) -> [QM31; 16] {
 }
 
 fn h1_opening(pad: &[QM31; ROWS], t: QM31, b: usize) -> QM31 {
-    QM31::ONE
-        .sub(t)
-        .mul(pad[b])
-        .add(t.mul(pad[b + 512]))
+    QM31::ONE.sub(t).mul(pad[b]).add(t.mul(pad[b + 512]))
 }
 
 fn claims(
@@ -79,13 +74,16 @@ fn claims(
     // H1 comparison is fixed-context, but no synthetic three-opening trace is
     // substituted for the selected terminal.
     let mut claims = [QM31::ZERO; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1];
-    for (selected_point, opening_point) in [*point, successor_point(point), xor12_point(point)].iter().enumerate() {
+    for (selected_point, opening_point) in [*point, successor_point(point), xor12_point(point)]
+        .iter()
+        .enumerate()
+    {
         for column in 0..16 {
-            claims[selected_point * 28 + column] = multilinear_evaluate(&c1[column], opening_point)
-                .expect("compiler C1 shape");
+            claims[selected_point * 28 + column] =
+                multilinear_evaluate(&c1[column], opening_point).expect("compiler C1 shape");
         }
-        claims[selected_point * 28 + 26] = multilinear_evaluate_qm31(h1, opening_point)
-            .expect("H1 shape");
+        claims[selected_point * 28 + 26] =
+            multilinear_evaluate_qm31(h1, opening_point).expect("H1 shape");
     }
     claims
 }
@@ -127,7 +125,9 @@ fn evaluate(coefficients: &[QM31], x: QM31) -> QM31 {
     coefficients
         .iter()
         .rev()
-        .fold(QM31::ZERO, |value, coefficient| value.mul(x).add(*coefficient))
+        .fold(QM31::ZERO, |value, coefficient| {
+            value.mul(x).add(*coefficient)
+        })
 }
 
 fn source_snapshot(pool: [u8; 32], domain: [u8; 32]) -> PoolV1PairLiveSnapshotV1 {
@@ -136,7 +136,10 @@ fn source_snapshot(pool: [u8; 32], domain: [u8; 32]) -> PoolV1PairLiveSnapshotV1
         if level < POOL_V1_PAIR_TREE_DEPTH {
             ordinary[level + 1]
         } else {
-            pool_v1_tree_parent(&ordinary[POOL_V1_PAIR_TREE_DEPTH], &ordinary[POOL_V1_PAIR_TREE_DEPTH])
+            pool_v1_tree_parent(
+                &ordinary[POOL_V1_PAIR_TREE_DEPTH],
+                &ordinary[POOL_V1_PAIR_TREE_DEPTH],
+            )
         }
     });
     PoolV1PairLiveSnapshotV1 {
@@ -154,9 +157,7 @@ fn inactive_rows() -> Vec<usize> {
         .iter()
         .enumerate()
         .flat_map(|(block, mask)| {
-            (0..16).filter_map(move |bit| {
-                ((*mask >> bit) & 1 == 0).then_some(block * 16 + bit)
-            })
+            (0..16).filter_map(move |bit| ((*mask >> bit) & 1 == 0).then_some(block * 16 + bit))
         })
         .collect()
 }
@@ -192,7 +193,11 @@ fn r10_real_compiler_h1_cut_matches_complete_selected_terminal() {
     )
     .expect("compiler-valid C1 fixture");
     assert_eq!(compiled.semantic_c1.c1.len(), 16);
-    assert!(compiled.semantic_c1.c1.iter().all(|column| column.len() == ROWS));
+    assert!(compiled
+        .semantic_c1
+        .c1
+        .iter()
+        .all(|column| column.len() == ROWS));
 
     let lambda = lift(19);
     let chi = lift(23);
@@ -201,7 +206,10 @@ fn r10_real_compiler_h1_cut_matches_complete_selected_terminal() {
     let eta = lift(37);
     let zero_point = core::array::from_fn(|i| lift((41 + i) as u32));
     let inactive = inactive_rows();
-    assert!(inactive.len() > 3, "the frozen schedule must expose inactive rows");
+    assert!(
+        inactive.len() > 3,
+        "the frozen schedule must expose inactive rows"
+    );
 
     // Matrix samples K(t,b), extracted from the actual public Copy evaluator.
     let mut k_samples = vec![vec![QM31::ZERO; 512]; SAMPLES];
@@ -211,16 +219,27 @@ fn r10_real_compiler_h1_cut_matches_complete_selected_terminal() {
             let p = point(t, b);
             let opened = openings(&compiled.semantic_c1.c1, t, b);
             let zero = evaluate_pool_v1_pair_forest_copy_terminal_compiled_v1(
-                &opened, QM31::ZERO, &p, lambda, chi,
+                &opened,
+                QM31::ZERO,
+                &p,
+                lambda,
+                chi,
                 compiled.public_statement.live_snapshot.next_pair_index,
                 PoolV1PairForestCompiledVariantV1::PrivateTransfer,
             );
             let one = evaluate_pool_v1_pair_forest_copy_terminal_compiled_v1(
-                &opened, QM31::ONE, &p, lambda, chi,
+                &opened,
+                QM31::ONE,
+                &p,
+                lambda,
+                chi,
                 compiled.public_statement.live_snapshot.next_pair_index,
                 PoolV1PairForestCompiledVariantV1::PrivateTransfer,
             );
-            assert_eq!(zero.active, one.active, "active selector depends only on point");
+            assert_eq!(
+                zero.active, one.active,
+                "active selector depends only on point"
+            );
             *entry = eta.mul(
                 eq(&zero_point, &p)
                     .mul(theta.pow(28))
@@ -236,15 +255,26 @@ fn r10_real_compiler_h1_cut_matches_complete_selected_terminal() {
     for b in 0..512 {
         let reference: Vec<_> = (0..SAMPLES).map(|sample| k_samples[sample][b]).collect();
         let coefficients = interpolate(&reference);
-        assert!(coefficients[11..].iter().all(|coefficient| *coefficient == QM31::ZERO),
-            "source Copy multiplier has degree above ten at Boolean suffix {b}");
-        assert_eq!(interpolate(&reference[..11]), coefficients[..11],
-            "11-node interpolation disagrees with the 28-node source reference at suffix {b}");
+        assert!(
+            coefficients[11..]
+                .iter()
+                .all(|coefficient| *coefficient == QM31::ZERO),
+            "source Copy multiplier has degree above ten at Boolean suffix {b}"
+        );
+        assert_eq!(
+            interpolate(&reference[..11]),
+            coefficients[..11],
+            "11-node interpolation disagrees with the 28-node source reference at suffix {b}"
+        );
     }
 
     // Three explicit balanced pads in the real fixed inactive block.  Their
     // support remains source-visible here; no hiding claim is made by this test.
-    for &target in &[inactive[1], inactive[inactive.len() / 2], *inactive.last().unwrap()] {
+    for &target in &[
+        inactive[1],
+        inactive[inactive.len() / 2],
+        *inactive.last().unwrap(),
+    ] {
         let base = inactive[0];
         let mut pad = [QM31::ZERO; ROWS];
         pad[target] = QM31::ONE;
@@ -279,17 +309,38 @@ fn r10_real_compiler_h1_cut_matches_complete_selected_terminal() {
             })
             .collect();
         let actual = interpolate(&actual_samples);
-        assert_eq!(actual, expected, "complete terminal response disagrees with Copy matrix");
-        assert_eq!(actual[0], actual_samples[0], "initial boundary c0 is not recovered");
+        assert_eq!(
+            actual, expected,
+            "complete terminal response disagrees with Copy matrix"
+        );
+        assert_eq!(
+            actual[0], actual_samples[0],
+            "initial boundary c0 is not recovered"
+        );
         for (sample, value) in actual_samples.iter().enumerate() {
-            assert_eq!(evaluate(&actual, lift(sample as u32)), *value, "compact coefficient order");
+            assert_eq!(
+                evaluate(&actual, lift(sample as u32)),
+                *value,
+                "compact coefficient order"
+            );
         }
-        assert!(actual[12..].iter().all(|coefficient| *coefficient == QM31::ZERO),
-            "H1 response reaches c12..c27");
+        assert!(
+            actual[12..]
+                .iter()
+                .all(|coefficient| *coefficient == QM31::ZERO),
+            "H1 response reaches c12..c27"
+        );
         let c1 = actual[1];
-        assert_eq!(c1, actual_samples[1].sub(actual[0]).sub(
-            actual.iter().skip(2).fold(QM31::ZERO, |sum, coefficient| sum.add(*coefficient))
-        ), "c1 reconstruction from the real polynomial");
+        assert_eq!(
+            c1,
+            actual_samples[1].sub(actual[0]).sub(
+                actual
+                    .iter()
+                    .skip(2)
+                    .fold(QM31::ZERO, |sum, coefficient| sum.add(*coefficient))
+            ),
+            "c1 reconstruction from the real polynomial"
+        );
     }
 }
 
@@ -298,3 +349,6 @@ mod r12_terminal_cut_append;
 
 #[path = "support/r14_source_offset_append.rs"]
 mod r14_source_offset_append;
+
+#[path = "support/r15_actual_r12_inverse_append.rs"]
+mod r15_actual_r12_inverse_append;
