@@ -72,6 +72,15 @@ def main() -> None:
         'assert!(std::env::var_os("ASPIS_V8_MAX_FRONTIER_SCAN").is_none());',
         'for seed in seeds {')
     assert v4.count('std::fs::write(format!("{out}/proof-{seed}.bin"),&body).unwrap();') == 2
+    # The pre-query quotient interpolation is NOT a full query-domain scan.
+    # Keep this distinction explicit when accounting for post-query poles.
+    assert 'let pts=corelib::circle_fri::selected_circle_fiber_points_shared(20,&(0..256).collect::<Vec<_>>()).unwrap();' in v4
+    assert contains_in_order(v4,
+        'for(i,pt)in pts.iter().enumerate()',
+        'mul(l.try_inv().unwrap())',
+        'let q=decoder.solve_wide(&qeval);',
+        'let(queries,rho,nonces,stress_attempts)=stress_queries(&mut p,&finals);',
+        'let(values,xs)=opened_values(&w,&p,&queries,alpha,hash).unwrap();')
     assert 'StateOnlyAttemptSecrets::deterministic_spend_fixture([seed;32],[seed+1;32],[seed+2;32])' in v4
     assert 'InMemoryStateOnlyMaskNonceStore::default()' in v4
     assert 'generate_for_mask_nonce' not in v4
@@ -142,6 +151,8 @@ def main() -> None:
                     "implements_intended_entropy_backed_two_witness_game": False,
                 },
                 "query_grammar": {
+                    "pre_query_interpolation_fibres": 256,
+                    "pre_query_scan_covers_query_domain": False,
                     "query_count": 22,
                     "domain": 262144,
                     "draw_limit": 64,
