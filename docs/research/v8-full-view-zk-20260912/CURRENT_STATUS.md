@@ -15,6 +15,10 @@ adapter, and three other generated preimages remain unavailable.
 
 New focused evidence:
 
+- `r15-query-address-evidence.md`: the SHA fixture's first query addresses
+  are fresh in the observed callback history; read-only instrumentation
+  preserves its complete proof bytes. Universal freshness and publication
+  probability remain unproved.
 - `r15-complete-host-disclosure-evidence.md`: the recovered host builds and
   produces an accepted complete proof in synthetic account mode. Two
   source-derived controlled same-public executions under one fixed six-cell

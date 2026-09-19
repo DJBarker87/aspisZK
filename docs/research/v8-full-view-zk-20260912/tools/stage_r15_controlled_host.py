@@ -52,10 +52,13 @@ def main():
     edit(EXPERIMENTS / 'relation_callback.rs', oracle)
     module = Path(__file__).with_name('r15_controlled_oracle.rs').read_bytes()
     (out / EXPERIMENTS / 'r15_controlled_oracle.rs').write_bytes(module)
+    audit_module = Path(__file__).with_name('r15_query_audit.rs').read_bytes()
+    (out / EXPERIMENTS / 'r15_query_audit.rs').write_bytes(audit_module)
     metadata = json.loads((out / 'r15-stage.json').read_text())
     metadata['diagnostic_only'] = True
     metadata['instrumentation'] = edits
     metadata['oracle_module_sha256'] = hashlib.sha256(module).hexdigest()
+    metadata['query_audit_module_sha256'] = hashlib.sha256(audit_module).hexdigest()
     metadata['scope'] = 'test-only duplicate witness and fixed deterministic oracle hooks; no distribution claim'
     (out / 'r15-controlled-stage.json').write_text(json.dumps(metadata, indent=2) + '\n')
     print(json.dumps({'diagnostic_stage': str(out), 'edits': edits}, indent=2))

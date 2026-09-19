@@ -1,10 +1,13 @@
 //! Research-only deterministic function: SHA-256 with a fixed finite table.
 //! No adaptive programming, oracle-law claim, or production feature.
 use std::sync::OnceLock;
+#[path = "r15_query_audit.rs"]
+mod query_audit;
 
 type Cell = ([u8; 33], [u8; 32]);
 
 pub fn answer(parts: &[&[u8]], original: [u8; 32]) -> [u8; 32] {
+    query_audit::observe(parts);
     static CELLS: OnceLock<Vec<Cell>> = OnceLock::new();
     let cells = CELLS.get_or_init(|| {
         let Some(path) = std::env::var_os("ASPIS_R15_ORACLE_TABLE") else {
@@ -40,10 +43,12 @@ pub fn answer(parts: &[&[u8]], original: [u8; 32]) -> [u8; 32] {
 }
 
 pub fn query_entry(state: [u8; 32]) {
+    query_audit::begin(state);
     let hex: String = state.iter().map(|byte| format!("{byte:02x}")).collect();
     eprintln!("R15_Q22_ENTRY {hex}");
 }
 
 pub fn query_result(queries: &[u32]) {
+    query_audit::end();
     eprintln!("R15_Q22_RESULT {queries:?}");
 }

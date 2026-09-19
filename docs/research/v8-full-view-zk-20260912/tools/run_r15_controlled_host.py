@@ -56,6 +56,8 @@ def main():
         if item['path'] not in edited:
             assert sha((stage / item['path']).read_bytes()) == item['sha256']
     assert sha((stage / 'docs/research/v8-no-work-100-20260907/experiments/r15_controlled_oracle.rs').read_bytes()) == metadata['oracle_module_sha256']
+    if 'query_audit_module_sha256' in metadata:
+        assert sha((stage / 'docs/research/v8-no-work-100-20260907/experiments/r15_query_audit.rs').read_bytes()) == metadata['query_audit_module_sha256']
     runs = []
 
     def run(name, world, table=None):
@@ -123,6 +125,13 @@ def main():
     for world in range(2):
         assert final[world]['entry_state'] == base[world]['entry_state'], 'override affected earlier history'
         assert final[world]['queries'] == queries
+        before = (output / ('locate-' + str(world)) / 'proof-1.bin').read_bytes()
+        after = (output / ('fixed-' + str(world)) / 'proof-1.bin').read_bytes()
+        # All serialized values produced before the q22 call: the initial
+        # claim, ten semantic rounds, 87 point fields, OOD and inactive fields,
+        # first relation polynomial, Final256, both roots and zero nonces.
+        assert before[:423 * 16] == after[:423 * 16]
+        assert before[441 * 16:697 * 16 + 76] == after[441 * 16:697 * 16 + 76]
     public = {}
     for name in ['public.bin', 'transition.bin', 'binding.bin']:
         left = (output / 'fixed-0' / name).read_bytes()
