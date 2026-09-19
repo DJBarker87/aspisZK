@@ -16,8 +16,9 @@ adapter, and three other generated preimages remain unavailable.
 New focused evidence:
 
 - `r15-post-query-pole-boundary.md`: authenticated pre-query interpolation
-  checks cover only 256 fibres. New Lean chord-factorization/nonzero lemmas
-  compile; their actual-source, full-domain instantiation remains open.
+  checks cover only 256 fibres. Lean now proves chord nonvanishing at every
+  subfield circle point for distinct finite OOD parameters outside that
+  subfield; actual-source, full-domain instantiation remains open.
 - `r15-query-address-evidence.md`: the SHA fixture's first query addresses
   are fresh in the observed callback history; read-only instrumentation
   preserves its complete proof bytes. Universal freshness and publication

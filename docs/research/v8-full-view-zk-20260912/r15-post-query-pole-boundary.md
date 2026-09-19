@@ -62,16 +62,42 @@ and `Quot.sound`; no `sorry` or custom axiom. No full manifest replay was
 run: this is a new isolated generic leaf, not a release aggregation.
 The source-text audit also passed with exit 0.
 
+## Full subfield-circle theorem (follow-up)
+
+On source base `4f328da3`, the same focused leaf now additionally proves
+`recover_denom`, `recover_point`, and `subfield_circle_nonzero`.
+For **any field** with `2 ≠ 0` and any subfield S, two distinct finite rational
+parameters outside S define a chord nonzero at **every** S-valued circle
+point. This quantifies over all points, not a fixture or an enumerated sample.
+The proof recovers `r=y/(1+x)` inside S when `x ≠ -1`; the remaining circle
+point is `(-1,0)`. No probabilistic or hiding premise is used.
+
+Focused compilation in the same cached workspace and cap:
+
+| Target | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Parameter-recovery lemmas | 0 | 17.64 | 1551728640 | 0 |
+| First subfield proof attempt | 1 | 14.61 | 1555169280 | 0 |
+| Corrected subfield theorem and final leaf | 0 | 8.33 | 1555578880 | 0 |
+
+The failed attempt used a nonexistent `pow_eq_zero` identifier. It was
+replaced by `mul_eq_zero` after rewriting `y²` as `y*y`; no premise or resource
+cap changed. The failed output included `sorryAx` from Lean's error recovery
+and is not proof evidence. The successful final `#print axioms` for
+`subfield_circle_nonzero` and `recover_point`, and all four prior theorems,
+contains only `propext`, `Classical.choice`, and `Quot.sound`.
+
 Source `circle.rs::secure_ood_circle_point_from_parameter` rejects singular
 parameters and parameters in CM31; `inactive_row_binding.rs::to_gamma`
 requires two distinct returned points. These support the intended route,
 but the new Lean leaf does **not** yet instantiate the QM31/CM31 embeddings,
-rational parameter recovery for every base-field circle point, or correctness
+the selected Rust query-point circle invariant, or correctness
 of the selected optimized norm-inversion code. The generic algebra must not
 be reported as complete source pole-freedom.
 
-Next proposition: establish the source OOD chord's pole set on all `2^18`
-query fibres (or its event-specific effect on q4/q6), alongside the outstanding
+The generic circle-point recovery is now proved, not a remaining premise.
+Next proposition: instantiate the proved subfield theorem for the source OOD
+chord and all `2^18` query fibres, alongside the outstanding
 fresh-address query law. Then account for remaining sampler failures,
 authentication/terminal correctness, the host's corruption checks and final
 publication. Do not substitute the pre-query interpolation checks for these.
