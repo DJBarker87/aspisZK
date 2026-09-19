@@ -35,10 +35,14 @@ every deployment path while P0 and the production entropy adapter remain open.
 The pinned generated performance harness writes `public.bin`,
 `transition.bin`, and `binding.bin` before candidate construction. These are
 public setup events. It constructs and verifies the final body privately, then
-publishes candidate-dependent bytes at the sole observed proof sink
-`std::fs::write("proof-{seed}.bin", &body)`. Diagnostic `PERF` and phase logs
-are additional visible host events. Negative cases construct private bodies
-but do not write them. The new `v8_privacy_publication` ownership boundary is
+publishes the positive candidate at `std::fs::write("proof-{seed}.bin", &body)`.
+**R15 correction:** both authenticated generated images also write the
+negative-control body at a second sink before `continue`; it is incorrect to
+call the positive sink the sole proof sink. Diagnostic `PERF` and phase logs
+are additional visible host events. Both images reject an enabled
+`ASPIS_V8_MAX_FRONTIER_SCAN` before the seed loop. See
+`r15-q22-source-slice-audit.md` for hash-authenticated reconstruction of the
+selected v4 host. The `v8_privacy_publication` ownership boundary is
 not wired into this generated harness because full-view review is unsupported;
 its raw-PASS path fails closed and cannot construct an approval token.
 

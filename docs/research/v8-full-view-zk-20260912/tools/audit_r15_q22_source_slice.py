@@ -3,7 +3,7 @@
 
 This is intentionally a source-text/provenance audit.  It establishes the
 literal grammar visible in the checked-in historical files and records the
-missing transformed performance image.  It does not execute the generated
+reconstructed transformed performance images. It does not execute the generated
 host, prove a random-oracle law, or assert that this archived harness was the
 sole publication path.
 """
@@ -13,6 +13,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from reconstruct_generated_inputs import transform_performance, transform_performance_v4
 
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -52,6 +53,30 @@ def main() -> None:
     assert actual_relation == relation_entry["after"]
     assert actual_performance == performance_entry["before"]
     assert actual_performance != performance_entry["after"]
+    reconstructed = transform_performance(performance)
+    reconstructed_hash = hashlib.sha256(reconstructed.encode()).hexdigest()
+    initial_entry = json.loads((ARCHIVE / "integration-inputs.json").read_text())[
+        "docs/research/v8-no-work-100-20260907/experiments/performance.rs"
+    ]
+    assert reconstructed_hash == initial_entry["after"]
+    assert reconstructed_hash != performance_entry["after"]
+    v4 = transform_performance_v4(performance)
+    v4_hash = hashlib.sha256(v4.encode()).hexdigest()
+    for version in range(1, 5):
+        entry = json.loads((ARCHIVE / f"evidence/integration-inputs-v{version}.json").read_text())[
+            "docs/research/v8-no-work-100-20260907/experiments/performance.rs"
+        ]
+        assert v4_hash == entry["after"]
+    assert contains_in_order(v4,
+        'assert!(std::env::var_os("ASPIS_V8_MAX_FRONTIER_SCAN").is_none());',
+        'for seed in seeds {')
+    assert v4.count('std::fs::write(format!("{out}/proof-{seed}.bin"),&body).unwrap();') == 2
+    assert contains_in_order(
+        reconstructed,
+        'assert!(std::env::var_os("ASPIS_V8_MAX_FRONTIER_SCAN").is_none());',
+        'for seed in seeds {',
+    )
+    assert reconstructed.count('std::fs::write(format!("{out}/proof-{seed}.bin"),&body).unwrap();') == 2
 
     assert contains_in_order(
         relation,
@@ -85,6 +110,21 @@ def main() -> None:
                 "audit": "r15_archived_q22_source_slice",
                 "relation_callback_sha256": actual_relation,
                 "performance_sha256": actual_performance,
+                "initial_transformed_image": {
+                    "sha256": reconstructed_hash,
+                    "matches_initial_manifest": True,
+                    "matches_v4_manifest": False,
+                    "stress_environment_rejected": True,
+                    "proof_file_sinks": 2,
+                    "negative_controls_write_before_continue": True,
+                },
+                "v4_transformed_image": {
+                    "sha256": v4_hash,
+                    "matches_all_four_evidence_manifests": True,
+                    "delta_from_initial": "delete obsolete pre-rebind statement assertion",
+                    "stress_environment_rejected": True,
+                    "proof_file_sinks": 2,
+                },
                 "query_grammar": {
                     "query_count": 22,
                     "domain": 262144,
@@ -101,9 +141,9 @@ def main() -> None:
                 "closure": {
                     "complete": False,
                     "reason": (
-                        "the checked-in performance slice is the integration "
-                        "manifest's before image; its required after image is "
-                        "absent"
+                        "both host images are authenticated; the complete "
+                        "generated build, entropy-backed adapter, shared-oracle "
+                        "law and public-event refinement remain unproved"
                     ),
                     "expected_performance_after_sha256": performance_entry["after"],
                 },

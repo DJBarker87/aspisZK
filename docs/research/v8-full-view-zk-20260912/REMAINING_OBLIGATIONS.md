@@ -1,6 +1,30 @@
 # Remaining V8 privacy obligations
 
-Date: 2026-09-13.
+## Current ordering — 2026-09-19
+
+See `CURRENT_STATUS.md` and the R12–R15 evidence reports. The list below is
+the historical R8 ledger, not permission to repeat an H1-only search or to
+discard later ACTIVE-G results.
+
+1. The v4 host image is now hash-authenticated. Bind it to the intended fresh
+   entropy adapter and complete generated call graph, then prove its joint
+   oracle/query/stopping/publication law. Include the actual sampler's extra
+   block on boundary success and the separate negative-control file sink.
+2. Resolve the raw q4/q6 disclosure under that **unconditioned** law. Keep the
+   source-valid separator, exact IID probability and actual advantage distinct.
+3. Prove the universal actual-terminal identities behind the tested
+   three-cut map; join its inverse to the complete paired commitments and
+   one coherent oracle, with a source-specific seed/first-hit bound.
+4. Carry the full posterior through every remaining read and failure. A
+   successful local affine map is not global joint-view coverage.
+5. Only then derive an end-to-end simulator/advantage and release statement,
+   or a source-realizable obstruction and a separately reviewed repair.
+
+No production adapter/protocol change or new hiding assumption is authorized
+by this research continuation. The two transformed host images are recovered
+without repinning; other missing generated preimages remain separate.
+
+## Historical R8 ledger — 2026-09-13
 
 ## Mathematical and cryptographic
 

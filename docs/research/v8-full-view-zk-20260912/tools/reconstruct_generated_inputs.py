@@ -171,6 +171,21 @@ def transform_performance(text: str) -> str:
     return text
 
 
+def transform_performance_v4(text: str) -> str:
+    """Recover the later pinned host image without changing the initial one.
+
+    The obsolete equality checked the old statement before its rebinding.
+    All four evidence/integration-inputs-v*.json manifests authenticate this
+    one-line deletion by the identical resulting SHA-256.
+    """
+    return one_replace(
+        transform_performance(text),
+        "    if let Some((statement,_))=&complete_context{assert_eq!(compiled.public_statement,statement.common().lane_transition); }\n",
+        "",
+        "performance v4 remove pre-rebind assertion",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", required=True, type=Path)

@@ -79,9 +79,10 @@ arbitrary targets under the real callback chronology.  The local G-offset
 test is not that construction.
 
 The subsequent R15 source-slice audit narrows the syntax-level part of this
-boundary to a direct 22-query/64-draw archived callback, but finds that its
-performance companion is the integration manifest's pre-transformation image.
-See `r15-q22-source-slice-audit.md`; this does not close the q22
+boundary to a direct 22-query/64-draw callback and now recovers its exact
+pinned v4 performance companion from the retained generator and a
+hash-authenticated one-line delta. See `r15-q22-source-slice-audit.md` and
+`r15-q22-stopping-evidence.md`; this does not close the q22
 query/stopping/release proposition.
 
 No production protocol path, negative regression, hiding assumption, merge,

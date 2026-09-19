@@ -1,5 +1,39 @@
 # Current V8 privacy-repair status
 
+## Current verdict — 2026-09-19
+
+**Full-transcript privacy is not established.** A literal raw C1 separator
+remains; neither commitment hiding nor early-message surjectivity eliminates
+plaintext disclosure. No source-valid numerical distinguishing advantage has
+yet been derived from its ideal schedule probability.
+
+R15 recovered the exact selected v4 performance source (`5ded…08d456`) from
+the retained generator plus one hash-authenticated deletion of an obsolete
+pre-rebind assertion. The missing host image is **no longer** the first
+blocker. The deterministic demo is still not the intended entropy-backed
+adapter, and three other generated preimages remain unavailable.
+
+New focused evidence:
+
+- `r15-q22-source-slice-audit.md`: exact initial/v4 image recovery, disabled
+  stress mode, and separate positive/negative proof-file sinks.
+- `r15-q22-stopping-evidence.md`: three actual sampler tests, including the
+  extra block consumed at boundary success; exact 64-word IID event counts,
+  explicitly not an actual oracle/publication law.
+- `r15-r12-terminal-inverse-evidence.md`: 56 complete selected-terminal
+  target checks at cuts 1 and 2, preserving the earlier fixture observations.
+  This is not a universal source equivalence or public-only simulator.
+
+The first source proposition is the entropy-backed attempt's joint
+shared-oracle, query/stopping, and public-event refinement. Independent
+positive obligations remain: universal source coefficient identities and
+three-cut inverse; actual paired-commitment/seed first-hit instantiation;
+and continuation through all remaining semantic rounds, 87 point fields,
+OOD, Final256, openings and visible failures using the retained posterior.
+Do not restart the H1-only schedule search.
+
+## Historical R8 status — retained, not the current next-step prescription
+
 Date: 2026-09-13.
 
 Status: **R8 universal witness-retaining paired-commitment hop and ideal salt

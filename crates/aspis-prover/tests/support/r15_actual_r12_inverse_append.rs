@@ -307,6 +307,10 @@ fn r15_r12_inverse_hits_arbitrary_compact_targets_at_actual_selected_terminal() 
         c0: CM31::new(M31(2), M31(3)),
         c1: CM31::new(M31(5), M31(7)),
     };
+    // Cache the fixed offsets; only G changes during the inverse checks.
+    let zero_values: Vec<_> = (0..3)
+        .map(|cut| terminal_values(&zero, &prefix[..cut]))
+        .collect();
     for (cut, pairs, shifts) in [
         (
             1usize,
@@ -326,13 +330,28 @@ fn r15_r12_inverse_hits_arbitrary_compact_targets_at_actual_selected_terminal() 
         ),
     ] {
         let (boundary_inverse, moment_inverse) = r15_fixed_inverses(cut, shifts);
-        let basis = (0..27)
-            .map(|i| if i == 8 { extension } else { QM31::ZERO })
-            .collect::<Vec<_>>();
-        let arbitrary = (0..27)
-            .map(|i| extension.mul(lift((3 * i + 7) as u32)))
-            .collect::<Vec<_>>();
-        for target in [basis, arbitrary] {
+        let mut targets: Vec<Vec<QM31>> = (0..27)
+            .map(|coordinate| {
+                (0..27)
+                    .map(|i| {
+                        if i == coordinate {
+                            extension
+                        } else {
+                            QM31::ZERO
+                        }
+                    })
+                    .collect()
+            })
+            .collect();
+        targets.push(
+            (0..27u32)
+                .map(|i| QM31 {
+                    c0: CM31::new(M31(3 * i + 7), M31(i * i + 11)),
+                    c1: CM31::new(M31(5 * i + 13), M31(i * i * i + 17)),
+                })
+                .collect(),
+        );
+        for (target_index, target) in targets.into_iter().enumerate() {
             let delta = r15_lift_target(
                 cut,
                 &prefix[..cut],
@@ -348,23 +367,25 @@ fn r15_r12_inverse_hits_arbitrary_compact_targets_at_actual_selected_terminal() 
             );
             for earlier in 0..cut {
                 let delta_values = terminal_values(&delta, &prefix[..earlier]);
-                let zero_values = terminal_values(&zero, &prefix[..earlier]);
                 assert!(
                     delta_values
                         .iter()
-                        .zip(zero_values)
-                        .all(|(left, right)| *left == right),
+                        .zip(&zero_values[earlier])
+                        .all(|(left, right)| left == right),
                     "R12 correction changed an earlier actual selected-terminal round"
                 );
             }
             let delta_values = terminal_values(&delta, &prefix[..cut]);
-            let zero_values = terminal_values(&zero, &prefix[..cut]);
             let difference = delta_values
                 .iter()
-                .zip(zero_values)
-                .map(|(left, right)| left.sub(right))
+                .zip(&zero_values[cut])
+                .map(|(left, right)| left.sub(*right))
                 .collect::<Vec<_>>();
-            assert_eq!(r15_compact(&r15_interpolate(&difference)), target);
+            assert_eq!(
+                r15_compact(&r15_interpolate(&difference)),
+                target,
+                "cut {cut}, target {target_index}"
+            );
         }
     }
 }
