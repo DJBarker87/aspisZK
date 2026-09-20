@@ -1,6 +1,6 @@
 # R16 candidate: public basis transport for existing C1 masks
 
-This is a repair candidate, not an implemented protocol or privacy claim.
+This is a repair candidate, not a production repair or privacy claim.
 It addresses the raw C1 defect directly; the previous negative regression is
 retained. No new randomness distribution or hiding assumption is introduced.
 
@@ -27,7 +27,10 @@ rows, and `w'[1023]=w[p]`. Then `dot(w,m)=dot(w',Tm)`.
 This gives the required direction of verifier weight transport; applying T
 to both vectors is not correct in general.
 
-## Required protocol integration, not performed yet
+## Required protocol integration
+
+`R16_SOURCE_INTEGRATION.md` records the separately staged research-host
+implementation and its checked boundary. Production paths remain unchanged.
 
 The current encoder treats message rows directly as code coefficients,
 without an AIR interpolation. Candidate encoding is `E(Tm)` instead of

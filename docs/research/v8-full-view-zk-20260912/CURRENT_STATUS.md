@@ -5,13 +5,16 @@
 The new user goal prioritizes an implemented repair and full privacy proof,
 not further attack-frequency measurement. `R16_BASIS_REPAIR_DESIGN.md`
 specifies a reversible public encoding-basis transport using existing legal
-balanced C1 masks. Two focused candidate tests pass, including full raw rank
-88 on the retained bad q22 schedule. It is not integrated into protocol
-paths and is not yet proved for arbitrary schedules or the joint transcript.
+balanced C1 masks. Four focused candidate tests pass, including full raw rank
+88 on the retained bad q22 schedule and QM31 inverse-dual/batching checks.
+It is integrated only in a separately staged research host, not production,
+and is not yet proved for the joint transcript.
 `R16_UNIVERSAL_RAW_ARGUMENT.md` adds a compiled arbitrary-fibre polynomial
 interpolation theorem and exhaustive source-factor/root checks. The
-composed natural-basis/transport Lean endpoint and complete source/dual
-integration remain next; global joint-view privacy remains unproved.
+composed natural-basis/transport Lean endpoint remains open.
+`R16_SOURCE_INTEGRATION.md` records the common C1/C2 transport, inverse-dual
+verifier, profile binding, retained integration failures and runtime results;
+global joint-view privacy and soundness preservation remain unproved.
 The earlier R15 probability investigation is retained, not the current priority.
 
 ## Current verdict — 2026-09-19
