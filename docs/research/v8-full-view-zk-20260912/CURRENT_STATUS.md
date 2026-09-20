@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## Latest witness step — C1 affine correction, 2026-09-20
+
+`R17_C1_WITNESS_CHANGE.md` records an actual opposite-witness correction
+preserving C1 raw/point/OOD observations at both source prefixes. The
+corrected trace passes the witness/compiler validator. Rebuilding H1
+changes two rows; that offset is retained for the next correction.
+C2, semantic and final/relation observations are not yet coupled across
+witnesses. Full privacy and soundness preservation remain unproved.
+
 ## Latest construction — coupled invisible correction, 2026-09-20
 
 `R17_COUPLED_CORRECTION.md` records an explicit nontrivial H1/G correction

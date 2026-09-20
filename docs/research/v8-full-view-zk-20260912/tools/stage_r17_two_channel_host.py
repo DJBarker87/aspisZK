@@ -93,7 +93,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
             return '\n    let gc=crate::structured_g::mixed_coins(&m[27]);'+b
         s = function_body(s, 'fn semantic_produce(', producer)
         s = function_body(s, 'fn semantic_negative_fixture(', producer)
-        return s + '\ninclude!("r17_h1_semantic_audit.rs");\ninclude!("r17_coupled_audit.rs");\n'
+        return s + '\ninclude!("r17_h1_semantic_audit.rs");\ninclude!("r17_coupled_audit.rs");\ninclude!("r17_c1_witness_audit.rs");\n'
     edit('payment_extraction.rs', payment)
 
     def verifier(s):
@@ -113,6 +113,17 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
     edit('performance_verifier.rs', verifier)
 
     def performance(s):
+        s = one_replace(s, 'let transition=compiled.public_statement;', '''let alternate=if std::env::var_os("ASPIS_R17_C1_WITNESS_AUDIT").is_some(){
+            assert!(std::env::var_os("ASPIS_V8_LIVE_CONTEXT").is_none());
+            assert!(std::env::var_os("ASPIS_V8_COMPLETE_CONTEXT").is_none());
+            assert_eq!(positive_case,"honest");
+            let mut other=witness;other.input.pair.selected_second=!other.input.pair.selected_second;
+            let public=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("fixture transfer only")};
+            let other_compiled=compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&public,&other,authoritative,snapshot).unwrap();
+            assert_eq!(other_compiled.public_statement,compiled.public_statement);
+            Some((other,other_compiled))
+        }else{None};
+        let transition=compiled.public_statement;''','same-public alternate witness diagnostic')
         s = one_replace(s, 'let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);',
             '''let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);
         let h1_coordinates=if std::env::var_os("ASPIS_R17_H1_SEMANTIC_AUDIT").is_some() || std::env::var_os("ASPIS_R17_COUPLED_AUDIT").is_some(){Some(r17_h1_semantic_audit(&payment,&transition,&messages,&s))}else{None};''',
@@ -167,6 +178,18 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
         v[441..697].copy_from_slice(&finals[0]);v[697..953].copy_from_slice(&finals[1]);
         let nonces=[0u8;24];let stress_attempts=0u64;
         let(queries,rho)=query_schedule(&mut p,&v[441..953],&nonces).unwrap();
+        if let Some((other,other_compiled))=&alternate{
+            let base:Vec<Vec<M31>>=(0..16).map(|c|(0..1024).map(|r|other_compiled.semantic_c1.c1[c][r].sub(compiled.semantic_c1.c1[c][r])).collect()).collect();
+            assert_eq!(base[3][1014],M31::ZERO);
+            let delta=r17_c1_witness_audit(&base,&s.z,p.points,&queries,&enc);
+            let mut corrected=trace.clone();for c in 0..16{for r in 0..1024{corrected.c1[c][r]=corrected.c1[c][r].add(delta[c][r]);}}
+            let public=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("fixture transfer only")};
+            assert_eq!(we::extract_checked(&corrected,&public,&transition,authoritative).unwrap(),*other);
+            let before=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(&compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
+            let after=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(&other_compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
+            let changed=before.iter().zip(&after).filter(|(a,b)|a!=b).count();
+            println!("R17_C1_WITNESS_VALIDATED same_public=true opposite_selected_input=true actual_helper_rebuilt=true helper_changed_rows={changed} fixed_prefix_diagnostic_only=true");
+        }
         if std::env::var_os("ASPIS_R17_COUPLED_AUDIT").is_some(){r17_coupled_audit::run(h1_coordinates.as_ref().unwrap(),&s.z,&p,audit_kappa,alpha,&queries,|delta|{
             let codeword=enc.encode_c2_message(&crate::r16_basis_transport::transport().forward(delta)).unwrap();
             for &id in &queries{for slot in 0..4{assert_eq!(codeword[4*id as usize+slot],K::ZERO);}}
@@ -194,7 +217,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
     edit('performance.rs', performance)
 
     shared=[]
-    for name in ['r17_structured_g.rs','r17_opening_weights.rs','r17_host_relation.rs','r17_h1_semantic_audit.rs','r17_coupled_audit.rs']:
+    for name in ['r17_structured_g.rs','r17_opening_weights.rs','r17_host_relation.rs','r17_h1_semantic_audit.rs','r17_coupled_audit.rs','r17_c1_witness_audit.rs']:
         data=Path(__file__).with_name(name).read_bytes()
         (out/EXPERIMENTS/name).write_bytes(data)
         shared.append(dict(path=str(EXPERIMENTS/name),sha256=hashlib.sha256(data).hexdigest()))
