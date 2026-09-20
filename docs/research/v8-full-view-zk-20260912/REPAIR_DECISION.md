@@ -59,6 +59,25 @@ address a different H1 obligation; they do not fix this C1 certificate.
 
 ## What decides the present protocol's attack verdict
 
+### The existing research gate is not deployed protection
+
+Source inspection at `328c7a58` confirms that
+`crates/aspis-prover/src/v8_privacy_publication.rs::review_for_publication`
+returns an error for both raw-precheck outcomes. Its only call sites in the
+crates tree are its own unit tests; `lib.rs` merely exports the module.
+The recovered `performance-host/Cargo.toml` depends on `aspis-core` and
+`aspis-statement`, not `aspis-prover`, and the authenticated performance
+source writes proof bytes directly after verification/corruption controls.
+Those controls test proof validity, not full-view privacy.
+
+Thus the research gate neither proves a useful release probability nor
+protects the recovered host's output. Integrating its present fail-closed
+behavior would stop publication, not repair privacy while retaining service.
+No such production integration was performed. This is read-only source
+evidence; unchanged gate unit tests were not rerun.
+
+### Quantitative attack question
+
 The remaining quantitative question is the unconditioned probability of
 publishing the revealing observation in the intended source-bound experiment.
 The ideal uniform-query pair probability `11/1636171776` is **not** an actual
