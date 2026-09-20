@@ -29,6 +29,10 @@ for the first three G cuts jointly with later raw/point/OOD values at fixed
 challenges. It preserves the earlier 82 coordinates when correcting the
 later 93, but excludes Final256 and later semantic rounds; the R14 G-only
 final-round obstruction and source commitment/oracle premises remain open.
+`R16_FINAL256_CONSISTENCY.md` proves the normalized fold identity and checks
+the two actual source maps on all 1024 basis units at the retained schedule.
+Final256 must satisfy raw-opening consistency; the next coverage target is
+the compatible joint image, not arbitrary independent final coefficients.
 The earlier R15 probability investigation is retained, not the current priority.
 
 ## Current verdict — 2026-09-19

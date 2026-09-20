@@ -8,6 +8,47 @@ use aspis_core::field::M31;
 mod basis_transport;
 use basis_transport::{Transport, N, PADS, PIVOT};
 
+/// Mandatory quotient-opening/Final256 consistency, not independent privacy
+/// targets. Checks both selected source maps on every coefficient basis unit.
+#[test]
+fn r16_final256_source_fold_consistency_all_basis_units() {
+    use aspis_core::{
+        circle_fri::selected_circle_fiber_points_shared,
+        field::{qm31_circle_to_line_fold4, CM31, QM31 as K},
+        v6_onefold::evaluate_final256_coefficients,
+    };
+    let alpha = K {
+        c0: CM31::new(M31(2), M31(3)),
+        c1: CM31::new(M31(5), M31(7)),
+    };
+    let powers = [K::ONE, alpha, alpha.square(), alpha.square().mul(alpha)];
+    let mut queries = vec![4u32, 6];
+    queries.extend((0..20).map(|i| 1000 + 7919 * i));
+    let points = selected_circle_fiber_points_shared(20, &queries).unwrap();
+    let encoder = CircleEncoder::new_for_domain_log(20);
+    for coefficient in 0..N {
+        let mut finals = vec![K::ZERO; 256];
+        finals[coefficient / 4] = powers[coefficient % 4];
+        for (&q, pt) in queries.iter().zip(&points) {
+            let raw = core::array::from_fn(|slot| {
+                K::from_cm31(CM31::from_m31(
+                    encoder
+                        .encode_c1_basis_value(coefficient, 4 * q as usize + slot)
+                        .unwrap(),
+                ))
+            });
+            let folded =
+                qm31_circle_to_line_fold4(raw, alpha, pt.x.double().inv(), pt.y.double().inv());
+            let root = pt.x.mul(pt.x).double().sub(M31::ONE);
+            assert_eq!(
+                folded,
+                evaluate_final256_coefficients(&finals, root).unwrap(),
+                "coefficient={coefficient} fibre={q}"
+            );
+        }
+    }
+}
+
 /// Earlier semantic G responses and later G observations share all 1024
 /// original G variables. Fixed challenges only; not a causal oracle theorem.
 #[test]
