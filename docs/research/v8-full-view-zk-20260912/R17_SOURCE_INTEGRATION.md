@@ -98,6 +98,10 @@ SHA-256 identifiers:
 
 ## First remaining propositions
 
+Subsequent algebra progress is in `R17_SOURCE_ALGEBRA.md`: the reverse
+mask loop and arbitrary-input channel residual identities now compile.
+Those results do not discharge the concrete source refinement below.
+
 The first source refinement is universal, not another fixture: for every
 legal source message vector and challenge prefix, prove that the new
 initial/terminal/first-point computations are the compiled structured-cube

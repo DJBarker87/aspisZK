@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## Latest proof step — R17 source-shaped algebra, 2026-09-20
+
+`R17_SOURCE_ALGEBRA.md` records two compiled Lean leaves. The literal
+reverse mask accumulator equals the existing structured-cube recurrence,
+including its full sum and next suffix polynomial. The channel identities
+now retain arbitrary false-claim and quotient residuals without assuming
+honest inputs. Concrete Rust field/index/packed-column refinement remains
+open, as do the joint adaptive privacy and soundness arguments.
+
 ## Latest step — R17 staged source integration, 2026-09-20
 
 `R17_SOURCE_INTEGRATION.md` records a compiled, domain-separated research
