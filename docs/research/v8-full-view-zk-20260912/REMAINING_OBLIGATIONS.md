@@ -91,6 +91,12 @@ and those checks do not exercise the commitment boundary.
 
 ## Alternative if the separator survives
 
+**R15 clarification:** the following historical helper-mask proposal concerns
+the H1 obligation. It is not a repair of the retained raw column-zero C1
+separator unless it also changes that observation/mask image or establishes
+safe publication. See `REPAIR_DECISION.md`; no repair is currently preferred
+on the basis of a sufficiency proof.
+
 The preferred compatible repair remains a host publication filter, but it
 cannot be useful without the theorems above. If the paired commitment or
 stacked observation experiment returns a source-realizable separator, the

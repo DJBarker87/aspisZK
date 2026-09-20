@@ -7,6 +7,10 @@ remains; neither commitment hiding nor early-message surjectivity eliminates
 plaintext disclosure. No source-valid numerical distinguishing advantage has
 yet been derived from its ideal schedule probability.
 
+See `REPAIR_DECISION.md` for the plain-language verdict and necessary repair
+constraint: helper-only/early-message fixes do not remove the raw C1
+separator on a published revealing schedule. No sufficient repair is proved.
+
 R15 recovered the exact selected v4 performance source (`5ded…08d456`) from
 the retained generator plus one hash-authenticated deletion of an obsolete
 pre-rebind assertion. The missing host image is **no longer** the first
