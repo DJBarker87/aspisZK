@@ -1,5 +1,13 @@
 # Current V8 privacy-repair status
 
+## Latest construction — coupled invisible correction, 2026-09-20
+
+`R17_COUPLED_CORRECTION.md` records an explicit nontrivial H1/G correction
+at both source prefixes. All 271 semantic effects and seven gamma-scaled
+relation coefficients cancel; retained views and direct source encoder/OOD
+checks pass. This is within-context remasking, not a witness-change coupling
+or a claim that commitment roots stay fixed. Full privacy remains open.
+
 ## Latest source step — H1 semantic map, 2026-09-20
 
 `R17_SOURCE_H1_SEMANTIC_MAP.md` records the constructed 271-by-1024 H1

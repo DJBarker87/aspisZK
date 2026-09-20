@@ -5,7 +5,7 @@ fn r17_h1_semantic_audit(
     tr: &PoolV1PairLatePublicStatementV1,
     m: &[Vec<K>],
     s: &row::Semantic,
-) {
+) -> Vec<Vec<K>> {
     let gc = crate::structured_g::mixed_coins(&m[27]);
     let coefficient = |z: &[K; 10]| {
         let rows = point_rows_with_g(m, z, &gc);
@@ -128,4 +128,5 @@ fn r17_h1_semantic_audit(
     }
     assert_eq!(legal, 809);
     println!("R17_H1_SEMANTIC_MAP coordinates=271 columns=1024 rounds=10 terminal_basis_checks=1024 legal_initial_directions=809 internal_map_not_serialized=true");
+    coordinates
 }

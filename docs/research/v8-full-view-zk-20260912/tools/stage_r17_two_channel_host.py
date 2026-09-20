@@ -93,7 +93,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
             return '\n    let gc=crate::structured_g::mixed_coins(&m[27]);'+b
         s = function_body(s, 'fn semantic_produce(', producer)
         s = function_body(s, 'fn semantic_negative_fixture(', producer)
-        return s + '\ninclude!("r17_h1_semantic_audit.rs");\n'
+        return s + '\ninclude!("r17_h1_semantic_audit.rs");\ninclude!("r17_coupled_audit.rs");\n'
     edit('payment_extraction.rs', payment)
 
     def verifier(s):
@@ -115,7 +115,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
     def performance(s):
         s = one_replace(s, 'let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);',
             '''let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);
-        if std::env::var_os("ASPIS_R17_H1_SEMANTIC_AUDIT").is_some(){r17_h1_semantic_audit(&payment,&transition,&messages,&s);}''',
+        let h1_coordinates=if std::env::var_os("ASPIS_R17_H1_SEMANTIC_AUDIT").is_some() || std::env::var_os("ASPIS_R17_COUPLED_AUDIT").is_some(){Some(r17_h1_semantic_audit(&payment,&transition,&messages,&s))}else{None};''',
             'opt-in source H1 semantic map diagnostic')
         s = one_replace(s, 'let mut v=vec![K::ZERO;697];',
             'let mut v=vec![K::ZERO;FIXED];', 'allocate complete Final512 frame')
@@ -145,6 +145,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
         end = s.index('        let mut body=f::body(&v,&a,&b,&records,(&fa,&fb));', start)
         s = s[:start]+'''
         let prepared=crate::r17_relation::prepare(sem,&w).unwrap();
+        let audit_kappa=prepared.public_audit[10];
         let crate::r17_relation::Prepared{mut p,iv_g,mut weights,mut claim,..}=prepared;
         assert_eq!(p.gamma,gamma);
         let gp=gamma.pow(27);let mut qeval=[Vec::new(),Vec::new()];
@@ -166,6 +167,10 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
         v[441..697].copy_from_slice(&finals[0]);v[697..953].copy_from_slice(&finals[1]);
         let nonces=[0u8;24];let stress_attempts=0u64;
         let(queries,rho)=query_schedule(&mut p,&v[441..953],&nonces).unwrap();
+        if std::env::var_os("ASPIS_R17_COUPLED_AUDIT").is_some(){r17_coupled_audit::run(h1_coordinates.as_ref().unwrap(),&s.z,&p,audit_kappa,alpha,&queries,|delta|{
+            let codeword=enc.encode_c2_message(&crate::r16_basis_transport::transport().forward(delta)).unwrap();
+            for &id in &queries{for slot in 0..4{assert_eq!(codeword[4*id as usize+slot],K::ZERO);}}
+        });}
         let records:Vec<u8>=queries.iter().flat_map(|&id|{let i=id as usize;let mut r=c1leaf(&encoded,i);r.extend(c2leaf(&c2encoded,i,false));r.extend(salts[i]);r}).collect();
         let fa=f::frontier(&a,&queries);let fb=f::frontier(&b,&queries);
         let mut stub=f::body(&v,&a,&b,&records,(&fa,&fb));
@@ -189,7 +194,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
     edit('performance.rs', performance)
 
     shared=[]
-    for name in ['r17_structured_g.rs','r17_opening_weights.rs','r17_host_relation.rs','r17_h1_semantic_audit.rs']:
+    for name in ['r17_structured_g.rs','r17_opening_weights.rs','r17_host_relation.rs','r17_h1_semantic_audit.rs','r17_coupled_audit.rs']:
         data=Path(__file__).with_name(name).read_bytes()
         (out/EXPERIMENTS/name).write_bytes(data)
         shared.append(dict(path=str(EXPERIMENTS/name),sha256=hashlib.sha256(data).hexdigest()))
