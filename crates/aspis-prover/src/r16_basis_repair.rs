@@ -8,6 +8,174 @@ use aspis_core::field::M31;
 mod basis_transport;
 use basis_transport::{Transport, N, PADS, PIVOT};
 
+/// Earlier semantic G responses and later G observations share all 1024
+/// original G variables. Fixed challenges only; not a causal oracle theorem.
+#[test]
+fn r16_g_three_cut_and_later_view_same_coin_diagnostic() {
+    use aspis_core::{
+        circle::secure_ood_circle_point_from_parameter,
+        field::{CM31, QM31 as K},
+        state_only_hiding::state_only_explicit_g_mask_factor,
+        sumcheck::WeightAccumulator,
+        v6_transcript::v6_statement_points,
+    };
+    let sample = |i: u32| K {
+        c0: CM31::new(M31(i + 1), M31(3 * i + 7)),
+        c1: CM31::new(M31(5 * i + 11), M31(7 * i + 13)),
+    };
+    let sc = |i: usize| K::from_cm31(CM31::from_m31(M31(i as u32)));
+    let z: [K; 10] = core::array::from_fn(|i| sample(i as u32 + 1));
+    let mut matrix: Vec<Vec<K>> = Vec::new();
+    for round in 0..3 {
+        // Round 0's 28 evaluations encode (initial,27 compact coefficients).
+        // Later rounds omit x=1: the earlier carried claim fixes that value.
+        for x in (0..28).filter(|&x| round == 0 || x != 1) {
+            let suffix_bits = 9 - round;
+            let factors: Vec<_> = (0..1 << suffix_bits)
+                .map(|suffix| {
+                    let mut point = z;
+                    point[round] = sc(x);
+                    for bit in 0..suffix_bits {
+                        point[round + 1 + bit] = sc((suffix >> (suffix_bits - 1 - bit)) & 1);
+                    }
+                    state_only_explicit_g_mask_factor(&point)
+                })
+                .collect();
+            matrix.push(
+                (0..N)
+                    .map(|r| {
+                        let prefix = (0..round).fold(K::ONE, |v, bit| {
+                            v.mul(if r >> (9 - bit) & 1 == 1 {
+                                z[bit]
+                            } else {
+                                K::ONE.sub(z[bit])
+                            })
+                        });
+                        let current = if r >> suffix_bits & 1 == 1 {
+                            sc(x)
+                        } else {
+                            K::ONE.sub(sc(x))
+                        };
+                        prefix
+                            .mul(current)
+                            .mul(factors[r & ((1 << suffix_bits) - 1)])
+                    })
+                    .collect(),
+            );
+        }
+    }
+    assert_eq!(matrix.len(), 82);
+    let t = basis_transport::transport();
+    let mut index = vec![0; N];
+    for (j, &r) in t.order.iter().enumerate() {
+        index[r] = j;
+    }
+    let pull = |coeff: &[K]| {
+        (0..N)
+            .map(|r| {
+                if r != PIVOT && t.inactive[r] {
+                    coeff[index[r]].add(coeff[PIVOT])
+                } else {
+                    coeff[index[r]]
+                }
+            })
+            .collect::<Vec<_>>()
+    };
+    let encoder = CircleEncoder::new_for_domain_log(20);
+    let mut queries = vec![4usize, 6];
+    queries.extend((0..20).map(|i| 1000 + 7919 * i));
+    for q in queries {
+        for slot in 0..4 {
+            let coeff: Vec<_> = (0..N)
+                .map(|j| {
+                    K::from_cm31(CM31::from_m31(
+                        encoder.encode_c1_basis_value(j, 4 * q + slot).unwrap(),
+                    ))
+                })
+                .collect();
+            matrix.push(pull(&coeff));
+        }
+    }
+    for p in v6_statement_points(&z) {
+        let mut weights = WeightAccumulator::empty(10);
+        weights.add_multilinear(K::ONE, p.to_vec()).unwrap();
+        matrix.push((0..N).map(|r| weights.weight_at(r as u32)).collect());
+    }
+    for parameter in [sample(71), sample(113)] {
+        let p = secure_ood_circle_point_from_parameter(parameter).unwrap();
+        let mut factors = [K::ZERO; 10];
+        factors[0] = p.y;
+        factors[1] = p.x;
+        for bit in 2..10 {
+            factors[bit] = factors[bit - 1].square().mul_m31(M31(2)).sub(K::ONE);
+        }
+        let coeff: Vec<_> = (0..N)
+            .map(|j| {
+                (0..10)
+                    .filter(|&bit| j & (1 << bit) != 0)
+                    .fold(K::ONE, |v, bit| v.mul(factors[bit]))
+            })
+            .collect();
+        matrix.push(pull(&coeff));
+    }
+    let n = matrix.len();
+    assert_eq!(n, 175);
+    let mut a = matrix.clone();
+    let mut u = vec![vec![K::ZERO; n]; n];
+    for i in 0..n {
+        u[i][i] = K::ONE;
+    }
+    let mut pivots = Vec::new();
+    for col in 0..N {
+        let rank = pivots.len();
+        if rank == n {
+            break;
+        }
+        let Some(p) = (rank..n).find(|&r| a[r][col] != K::ZERO) else {
+            continue;
+        };
+        a.swap(rank, p);
+        u.swap(rank, p);
+        let inv = a[rank][col].inv();
+        for v in &mut a[rank] {
+            *v = v.mul(inv);
+        }
+        for v in &mut u[rank] {
+            *v = v.mul(inv);
+        }
+        let ar = a[rank].clone();
+        let ur = u[rank].clone();
+        for r in 0..n {
+            if r != rank {
+                let f = a[r][col];
+                for c in col..N {
+                    a[r][c] = a[r][c].sub(f.mul(ar[c]));
+                }
+                for c in 0..n {
+                    u[r][c] = u[r][c].sub(f.mul(ur[c]));
+                }
+            }
+        }
+        pivots.push(col);
+    }
+    println!(
+        "R16_G_JOINT earlier=82 later=93 variables=1024 rank={}",
+        pivots.len()
+    );
+    assert_eq!(
+        pivots.len(),
+        n,
+        "same-coin three-cut/later coverage obstruction"
+    );
+    // Independently verify the sparse right inverse, not just pivot count.
+    for i in 0..n {
+        for j in 0..n {
+            let value = (0..n).fold(K::ZERO, |s, k| s.add(matrix[i][pivots[k]].mul(u[k][j])));
+            assert_eq!(value, if i == j { K::ONE } else { K::ZERO });
+        }
+    }
+}
+
 /// Fixed affine diagnostic, NOT the adaptive full transcript. In particular
 /// the semantic messages, H1/C2 correlation, Final256 and oracle law are absent.
 #[test]

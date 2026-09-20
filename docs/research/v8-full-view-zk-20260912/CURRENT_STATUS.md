@@ -24,6 +24,11 @@ raw/point/OOD subview in all 16 witness columns, plus the 89-pad negative
 control. This excludes semantic/helper correlations and Final256 and is
 not a full-transcript theorem. `R16_SOUNDNESS_OBLIGATIONS.md` separately
 lists the source extraction, functional, quotient and Fiat–Shamir gates.
+`R16_G_POSTERIOR_DIAGNOSTIC.md` adds a verified rank-175 correction matrix
+for the first three G cuts jointly with later raw/point/OOD values at fixed
+challenges. It preserves the earlier 82 coordinates when correcting the
+later 93, but excludes Final256 and later semantic rounds; the R14 G-only
+final-round obstruction and source commitment/oracle premises remain open.
 The earlier R15 probability investigation is retained, not the current priority.
 
 ## Current verdict — 2026-09-19
