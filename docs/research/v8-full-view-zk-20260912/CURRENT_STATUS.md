@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest coverage step — raw/final compatible image, 2026-09-21
+
+`R17_RAW_FINAL_COVERAGE.md` records a compiled interpolation theorem for
+every distinct-fibre schedule and every alpha: all compatible raw/final
+targets have a quotient construction. Source tests pass at both accepted
+prefixes with three alpha cases each. A new negative control explicitly
+shows this construction does not enforce H1 active-row legality. Next is
+the raw-zero/final-zero kernel and coverage of the remaining H1/G
+constraints there. No full privacy or soundness result is claimed.
+
 ## Latest coverage step — explicit two-OOD correction, 2026-09-21
 
 `R17_OOD_PAIR_COVERAGE.md` replaces the H1 two-row rank test with an

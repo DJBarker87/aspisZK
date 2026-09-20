@@ -250,6 +250,70 @@ fn fold_coefficients(q: &[K], alpha: K) -> Vec<K> {
         .collect()
 }
 
+/// Constructive compatible raw/final interpolation. This deliberately does
+/// NOT claim that the recovered original message is a legal H1 pad.
+#[test]
+#[ignore = "requires accepted R17 host public-prefix audit log"]
+fn r17_actual_prefix_raw_final_interpolation() {
+    use aspis_core::field::CM31;
+    let (_, p) = super::final_posterior::read_public_prefix();
+    let pts = selected_circle_fiber_points_shared(20, &p.queries).unwrap();
+    let abc = [p.p0.x.mul(p.p1.y).sub(p.p0.y.mul(p.p1.x)),
+        p.p0.y.sub(p.p1.y), p.p1.x.sub(p.p0.x)];
+    let enc = CircleEncoder::new_for_domain_log(20);
+    let mut original: Vec<_> = (0..1024).map(|i| sample(3000+i)).collect();
+    original[1021] = abc[1].mul(sample(5000));
+    original[1022] = abc[2].mul(sample(5000));
+    original[1023] = K::ZERO;
+    let raw = enc.encode_c2_message(&original).unwrap();
+    let n = pts.len(); assert_eq!(n,22);
+    for alpha in [p.alpha, K::ZERO, K::from_cm31(CM31::from_m31(pts[0].y.neg()))] {
+        let finals = fold_coefficients(&original,alpha);
+        let mut matrix=vec![vec![K::ZERO;n+3];n];
+        for (i,pt) in pts.iter().enumerate() {
+            let root=pt.x.mul(pt.x).double().sub(M31::ONE);
+            for j in 0..n {
+                let mut unit=vec![K::ZERO;256];unit[j]=K::ONE;
+                matrix[i][j]=evaluate_final256_coefficients(&unit,root).unwrap();
+            }
+            let at=4*p.queries[i] as usize;
+            let v=&raw[at..at+4];
+            matrix[i][n]=v[0].sub(v[1]).sub(v[2]).add(v[3]).mul_m31(M31(4).mul(pt.y).inv());
+            matrix[i][n+1]=v[0].add(v[1]).sub(v[2]).sub(v[3]).mul_m31(M31(4).mul(pt.x).inv());
+            matrix[i][n+2]=v[0].sub(v[1]).add(v[2]).sub(v[3]).mul_m31(M31(4).mul(pt.x).mul(pt.y).inv());
+            assert_eq!(qm31_circle_to_line_fold4(v.try_into().unwrap(),alpha,pt.x.double().inv(),pt.y.double().inv()),
+                evaluate_final256_coefficients(&finals,root).unwrap());
+        }
+        let (rref,pivots)=reduce(&matrix);
+        assert_eq!(pivots,(0..n).collect::<Vec<_>>());
+        let mut q=vec![K::ZERO;1024];
+        for i in 0..256 {
+            let b=if i<n{rref[i][n]}else{K::ZERO};
+            let c=if i<n{rref[i][n+1]}else{K::ZERO};
+            let d=if i<n{rref[i][n+2]}else{K::ZERO};
+            q[4*i]=finals[i].sub(alpha.mul(b)).sub(alpha.square().mul(c)).sub(alpha.pow(3).mul(d));
+            q[4*i+1]=b;q[4*i+2]=c;q[4*i+3]=d;
+        }
+        assert_eq!(fold_coefficients(&q,alpha),finals);
+        assert_eq!(&q[1021..],&[K::ZERO;3]);
+        let repaired=enc.encode_c2_message(&q).unwrap();
+        let message=chord_product(&q,abc);
+        let original_message=transport().inverse(&message);
+        assert!((0..N).any(|r|!transport().inactive[r] && original_message[r]!=K::ZERO),
+            "negative control: raw/final interpolation alone must not be claimed as a legal H1 pad");
+        let encoded_message=enc.encode_c2_message(&message).unwrap();
+        for pt in [p.p0,p.p1]{assert_eq!(eval_ood(&sparse(&message),pt),K::ZERO);}
+        for (i,pt) in pts.iter().enumerate(){for (s,(x,y)) in
+            [(pt.x,pt.y),(pt.x,pt.y.neg()),(pt.x.neg(),pt.y.neg()),(pt.x.neg(),pt.y)].into_iter().enumerate(){
+            let at=4*p.queries[i] as usize+s;
+            assert_eq!(repaired[at],raw[at]);
+            let l=abc[0].add(abc[1].mul_m31(x)).add(abc[2].mul_m31(y));
+            assert_eq!(encoded_message[at],l.mul(raw[at]));
+        }}
+    }
+    println!("R17_RAW_FINAL_INTERPOLATION fibres=22 alpha_cases=3 raw_targets=88 final_targets=256 quotient_image_checked=true active_row_negative_control=true h1_legality_not_claimed=true");
+}
+
 #[test]
 fn r17_two_channel_opening_arithmetic_and_public_tail() {
     use aspis_core::sumcheck::{boundary_sum, evaluate, polynomial_for_extension};
