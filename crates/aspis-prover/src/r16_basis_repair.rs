@@ -10,6 +10,46 @@ use basis_transport::{Transport, N, PADS, PIVOT};
 #[path = "r16_final_posterior.rs"]
 mod final_posterior;
 
+/// Inventory-level source check: legal C1 remasking does not alter any
+/// copy-registry tuple input. Witness changes remain a different operation.
+#[test]
+fn r16_c1_remasking_is_disjoint_from_h1_tuple_inputs() {
+    use aspis_statement::pool_v1::{
+        pair_forest_trace::build_pool_v1_pair_forest_copy_registry_v1,
+        pair_trace::PoolV1PairTupleLimbV1, pool_v1_pair_forest_relation_free_mask_cells_v1,
+    };
+    use std::collections::BTreeSet;
+    let masks = pool_v1_pair_forest_relation_free_mask_cells_v1().unwrap();
+    let legal: BTreeSet<_> = masks.iter().map(|cell| (cell.row, cell.column)).collect();
+    let links = build_pool_v1_pair_forest_copy_registry_v1().unwrap();
+    let mut reads = BTreeSet::new();
+    let mut occurrences = 0;
+    for link in &links {
+        for tuple in [link.producer, link.consumer] {
+            for limb in tuple.limbs {
+                if let PoolV1PairTupleLimbV1::Cell { source, .. } = limb {
+                    let key = (source.cell.row, source.cell.column);
+                    assert!(
+                        !legal.contains(&key),
+                        "legal mask touches copy input: link={} row={} column={}",
+                        link.id,
+                        key.0,
+                        key.1
+                    );
+                    reads.insert(key);
+                    occurrences += 1;
+                }
+            }
+        }
+    }
+    for column in 0..16 {
+        assert!(legal.contains(&(1023, column)));
+    }
+    assert_eq!(links.len(), 136);
+    println!("R16_H1_READS links={} limb_reads={occurrences} unique_cells={} legal_masks={} intersection=0 pivot_legal=true",
+        links.len(),reads.len(),legal.len());
+}
+
 /// Mandatory quotient-opening/Final256 consistency, not independent privacy
 /// targets. Checks both selected source maps on every coefficient basis unit.
 #[test]

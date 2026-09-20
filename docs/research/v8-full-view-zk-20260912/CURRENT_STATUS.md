@@ -38,6 +38,11 @@ fixed prefix: 430 observations including Final256 and the inactive claim
 have rank 408, exactly accounting for 22 verified fold relations. Later
 semantic rounds, nonlinear C1/H1 coupling and the source probability law
 remain outside this diagnostic.
+`R16_H1_REMASKING_BOUNDARY.md` distinguishes legal C1 remasking from a
+witness change: the complete registry-input/mask-cell intersection is empty,
+so remasking alone leaves unpadded H1 fixed at fixed challenges. Witness
+changes still require the R7 nonlinear incidence offset; nonlinear semantic
+composition and actual oracle coupling remain open.
 The earlier R15 probability investigation is retained, not the current priority.
 
 ## Current verdict — 2026-09-19
