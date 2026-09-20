@@ -2,7 +2,7 @@
 fn r17_h1_witness_joint_audit(
     h0: &[K], c1: &[Vec<M31>], z: &[K; 10], p: &Prefix,
     alpha: K, queries: &[u32], enc: &CircleEncoder, decoder: &ac::Decoder,
-) -> Vec<K> {
+) -> (Vec<K>, Vec<K>) {
     use r17_coupled_audit::{chord, dot, eval_weights, qvector, reduce};
     let map = crate::r16_basis_transport::transport();
     let scale = p.gamma.pow(26);
@@ -65,7 +65,88 @@ fn r17_h1_witness_joint_audit(
     let total:Vec<_>=rq.iter().zip(&q).map(|(&a,&b)|a.add(scale.mul(b))).collect();
     assert!(primal(&total,alpha).iter().all(|&v|v==K::ZERO));
     println!("R17_H1_WITNESS_JOINT rank=540 equations=562 compatibility_residuals=22 raw_zero=88 point_zero=3 ood_zero=2 rest_final_zero=256 gamma26_retained=true fixed_prefix_only=true");
-    h
+    (h, total)
+}
+
+// Literal old/new terminal enumeration, including nonlinear C1 interactions.
+fn r17_witness_semantic_delta(p: &impl PaymentInput, tr: &PoolV1PairLatePublicStatementV1,
+    old: &[Vec<K>], new: &[Vec<K>], s: &row::Semantic) -> [K;271] {
+    let og=crate::structured_g::mixed_coins(&old[27]);
+    let ng=crate::structured_g::mixed_coins(&new[27]);
+    let mut coords=[K::ZERO;271];let mut carry=K::ZERO;
+    for r in 0..10 {
+        let left=9-r;let mut samples=[K::ZERO;28];
+        for x in 0..28 {let mut z=s.z;z[r]=sc(x as u32);
+            for assignment in 0..1usize<<left {
+                for j in 0..left {z[r+1+j]=sc(((assignment>>(left-1-j))&1)as u32);}
+                samples[x]=samples[x].add(terminal_with_g(p,tr,new,&z,s,&ng).sub(terminal_with_g(p,tr,old,&z,s,&og)));
+            }
+        }
+        let poly=interpolate_degree27(&samples);
+        if r==0 {carry=state_only_boundary_sum(&poly);coords[0]=carry;}
+        assert_eq!(state_only_boundary_sum(&poly),carry,"witness semantic boundary {r}");
+        coords[1+27*r]=poly[0].sub(carry.half());
+        for k in 2..28 {coords[1+27*r+k-1]=poly[k];}
+        carry=evaluate_state_only_polynomial(&poly,s.z[r]);
+    }
+    assert_eq!(carry,terminal_with_g(p,tr,new,&s.z,s,&ng).sub(terminal_with_g(p,tr,old,&s.z,s,&og)));
+    assert_eq!(crate::structured_g::mask_eval(&coords,&s.z),carry);
+    coords
+}
+
+fn r17_g_witness_audit(delta: &[K;271], rq: &[K], z: &[K;10], p: &Prefix,
+    kappa: K, alpha: K, queries: &[u32], enc: &CircleEncoder) -> Vec<K> {
+    use r17_coupled_audit::{chord,dot,eval_weights,qvector,reduce};
+    let map=crate::r16_basis_transport::transport();
+    let gw=crate::opening_weights::quotient_weights(z,kappa,p.abc,p.tau,true);
+    let rw=crate::opening_weights::quotient_weights(z,kappa,p.abc,p.tau,false);
+    let rp=corelib::sumcheck::polynomial_for_extension(rq,&rw);
+    assert_eq!(corelib::sumcheck::boundary_sum(&rp),K::ZERO);
+    assert_eq!(corelib::sumcheck::evaluate(&rp,alpha),K::ZERO);
+    // The C1 witness correction changes the initial mask claim. Coordinate
+    // zero is an affine target for G, not a precondition that it is zero.
+    assert_eq!(crate::structured_g::mask_eval(delta,z),K::ZERO,"retained terminal");
+    let pts=corelib::circle_fri::selected_circle_fiber_points_shared(20,queries).unwrap();
+    let raw:Vec<_>=pts.iter().flat_map(|p|[(p.x,p.y),(p.x,p.y.neg()),(p.x.neg(),p.y.neg()),(p.x.neg(),p.y)])
+        .map(|(x,y)|eval_weights(K::from_cm31(CM31::from_m31(x)),K::from_cm31(CM31::from_m31(y)))).collect();
+    let mut point:Vec<Vec<K>>=corelib::v6_transcript::v6_statement_points(z).iter().map(|z|{
+        let mut w=WeightAccumulator::empty(10);w.add_multilinear(K::ONE,z.to_vec()).unwrap();
+        (0..1024).map(|i|w.weight_at(i)).collect()
+    }).collect();point[0]=crate::structured_g::mask_weights(z);
+    let mixing:Vec<_>=(0..271).map(crate::structured_g::mixing_row).collect();
+    let mut matrix=vec![vec![K::ZERO;1022];625];
+    for j in 0..1022 {
+        let mut unit=vec![K::ZERO;1022];unit[j]=K::ONE;
+        let q=qvector(&unit,p.abc);let c=chord(&q,p.abc);let m=map.inverse(&c);
+        for i in 0..271{matrix[i][j]=dot(&mixing[i],&m);}
+        for i in 0..88{matrix[271+i][j]=dot(&raw[i],&c);}
+        for i in 0..3{matrix[359+i][j]=dot(&point[i],&m);}
+        let f=primal(&q,alpha);for i in 0..256{matrix[362+i][j]=f[i];}
+        matrix[618][j]=(0..1024).filter(|&r|map.inactive[r]).fold(K::ZERO,|s,r|s.add(m[r]));
+        let poly=corelib::sumcheck::polynomial_for_extension(&q,&gw);
+        for (i,k) in [0,1,2,3,5,6].into_iter().enumerate(){matrix[619+i][j]=poly[k];}
+    }
+    let mut target=vec![K::ZERO;625];for i in 0..271{target[i]=delta[i].neg();}
+    let scale=p.gamma.pow(27);assert_ne!(scale,K::ZERO);
+    for (i,k) in [0,1,2,3,5,6].into_iter().enumerate(){target[619+i]=rp[k].mul(scale.inv()).neg();}
+    let mut reduced=matrix.clone();for i in 0..625{reduced[i].push(target[i]);}
+    let pivots=reduce(&mut reduced,1022);assert_eq!(pivots.len(),601);
+    assert!(reduced[601..].iter().all(|r|r[1022]==K::ZERO),"affine G witness compatibility");
+    let mut x=vec![K::ZERO;1022];for (i,&j) in pivots.iter().enumerate(){x[j]=reduced[i][1022];}
+    for i in 0..625{assert_eq!(dot(&matrix[i],&x),target[i],"original G row {i}");}
+    let q=qvector(&x,p.abc);let g=map.inverse(&chord(&q,p.abc));
+    let gc=crate::structured_g::mixed_coins(&g);
+    for i in 0..271{assert_eq!(gc[i].add(delta[i]),K::ZERO);}
+    let gp=corelib::sumcheck::polynomial_for_extension(&q,&gw);
+    for i in 0..7{assert_eq!(rp[i].add(scale.mul(gp[i])),K::ZERO);}
+    let code=enc.encode_c2_message(&map.forward(&g)).unwrap();
+    for &id in queries{for s in 0..4{assert_eq!(code[4*id as usize+s],K::ZERO);}}
+    for pt in p.points{assert_eq!(ood(&g,pt),K::ZERO);}
+    for pt in corelib::v6_transcript::v6_statement_points(z).iter().skip(1){assert_eq!(multilinear_evaluate_qm31(&g,pt).unwrap(),K::ZERO);}
+    assert_eq!(crate::structured_g::mask_eval(&gc,z),K::ZERO);
+    assert!(primal(&q,alpha).iter().all(|&v|v==K::ZERO));
+    println!("R17_G_WITNESS_JOINT equations=625 rank=601 compatibility_residuals=24 semantic_cancel=271 relation_cancel=7 raw_zero=88 point_zero=3 ood_zero=2 final_zero=256 fixed_prefix_only=true");
+    g
 }
 
 // First affine helper step only: retain both OOD values with a legal pad.

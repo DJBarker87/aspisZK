@@ -1,5 +1,18 @@
 # Current V8 privacy-repair status
 
+## Latest witness step — semantic/G compensation, 2026-09-21
+
+`R17_G_WITNESS_JOINT.md` records both actual-prefix witness changes:
+625 G equations pass (rank 601), all 271 semantic coordinates and seven
+first-relation coefficients cancel, and the retained G view is unchanged.
+The full source terminal is re-evaluated across all ten rounds after
+correction. A caught false initial-zero assumption is retained in the
+ledger; the corrected diagnostic checks the initial affine target against
+the source builder and restores the actual original claim. Next is
+universal compatible-image coverage with bounded exceptional events and
+source-grounded distributional/oracle composition. No full privacy or
+soundness claim follows from these two fixtures.
+
 ## Latest witness step — joint H1 correction, 2026-09-21
 
 `R17_H1_WITNESS_JOINT.md` records successful affine corrections in both

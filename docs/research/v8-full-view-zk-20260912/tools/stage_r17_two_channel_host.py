@@ -189,9 +189,19 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
             let after=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(&other_compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
             let changed=before.iter().zip(&after).filter(|(a,b)|a!=b).count();
             let h1_ood_delta=r17_h1_witness_ood_audit(&before,&after,p.points);
-            let h1_joint_delta=r17_h1_witness_joint_audit(&h1_ood_delta,&delta,&s.z,&p,alpha,&queries,&enc,&decoder);
+            let (h1_joint_delta,rest_q_delta)=r17_h1_witness_joint_audit(&h1_ood_delta,&delta,&s.z,&p,alpha,&queries,&enc,&decoder);
             let total_pad:Vec<_>=(0..1024).map(|r|h1_joint_delta[r].sub(after[r].sub(before[r]))).collect();
             let mut applied_pad=vec![K::ZERO;1024];apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut applied_pad,&total_pad).unwrap();assert_eq!(applied_pad,total_pad);
+            let mut alternate_messages=messages.clone();
+            for c in 0..16{for r in 0..1024{alternate_messages[c][r]=alternate_messages[c][r].add(K::from_cm31(CM31::from_m31(delta[c][r])));}}
+            for r in 0..1024{alternate_messages[26][r]=alternate_messages[26][r].add(h1_joint_delta[r]);}
+            let semantic_delta=r17_witness_semantic_delta(&payment,&transition,&messages,&alternate_messages,&s);
+            let alternate_initial=crate::r17_relation::initial(state_only_initial_mask_claim(&corrected,&masks.mask_only_c1,&masks.g).unwrap(),&masks.g);
+            assert_eq!(semantic_delta[0],alternate_initial.sub(initial),"source initial affine target");
+            let g_delta=r17_g_witness_audit(&semantic_delta,&rest_q_delta,&s.z,&p,audit_kappa,alpha,&queries,&enc);
+            for r in 0..1024{alternate_messages[27][r]=alternate_messages[27][r].add(g_delta[r]);}
+            assert_eq!(crate::r17_relation::initial(state_only_initial_mask_claim(&corrected,&masks.mask_only_c1,&alternate_messages[27]).unwrap(),&alternate_messages[27]),initial,"corrected source initial claim");
+            assert!(r17_witness_semantic_delta(&payment,&transition,&messages,&alternate_messages,&s).iter().all(|&v|v==K::ZERO));
             println!("R17_C1_WITNESS_VALIDATED same_public=true opposite_selected_input=true actual_helper_rebuilt=true helper_changed_rows={changed} fixed_prefix_diagnostic_only=true");
         }
         if std::env::var_os("ASPIS_R17_COUPLED_AUDIT").is_some(){r17_coupled_audit::run(h1_coordinates.as_ref().unwrap(),&s.z,&p,audit_kappa,alpha,&queries,|delta|{

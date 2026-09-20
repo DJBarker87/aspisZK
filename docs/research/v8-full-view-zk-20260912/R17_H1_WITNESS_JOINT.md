@@ -35,6 +35,10 @@ proof. No production paths, transcript sampling or hiding assumptions change.
 
 ## Remaining proposition
 
+Update: `R17_G_WITNESS_JOINT.md` records the following affine G construction
+passing at both fixture prefixes, including actual initial-claim checks.
+The universal source/distributional boundary remains open.
+
 Compute the complete old/new non-G semantic-coordinate difference using
 the corrected C1 and H1 in their respective hidden contexts. Construct G's
 correction that cancels this difference and the combined first-relation
