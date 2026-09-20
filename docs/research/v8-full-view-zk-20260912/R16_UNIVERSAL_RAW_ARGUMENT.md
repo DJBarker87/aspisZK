@@ -63,17 +63,60 @@ Rust: `cargo test --offline --locked --release --jobs 1 -p aspis-prover
 test time 0.10 seconds, compilation 16.50 seconds. No full manifest or
 unchanged full regression ran. Existing negative regressions are unchanged.
 
+## Natural-basis bridge — 2026-09-20
+
+Base privacy revision `3c61406c`. `lean/AspisV8R16/NaturalCoverage.lean`
+now compiles `natural_eval_surjective` and `natural_four_slot_coverage`.
+The first constructs a right inverse as the retained monomial-to-natural
+conversion composed with the inverse Vandermonde matrix. Injective roots
+prove the Vandermonde determinant nonzero; surjectivity is a conclusion,
+not an added assumption. The second applies this map to the four signed
+channel targets and uses the compiled four-slot inverse. It holds for every
+n over a field with nonzero 2 and 4, injective roots and nonzero x/y.
+Thus n=22 uses four channels of 22 natural coefficients, not just monomials.
+
+The maintained `CircleNaturalBasis` imported all of Mathlib. The first
+attempt to import it hit the 2600 MB Lean allocation cap during interpreter
+loading (exit 134, wall 41.59 seconds, peak RSS 4241899520 bytes, swaps 0).
+It was not retried with a larger cap. `NaturalBasisCore.lean` contains
+exactly the retained source declarations and proofs, replacing only that
+broad import with Vandermonde, nonsingular inverse and Colex dependencies.
+`tools/check_r16_natural_basis.py` checks byte-exact equality against Git
+revision `406790e520fa48da4ed7ed0a8e0bb27b9d23625d` and pins the maintained
+evaluator source; it passed. No theorem statement or proof was weakened.
+
+| Target | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Predecessor output attempt without explicit package root | 1 | 4.25 | 667664384 | 0 |
+| `FibreInterpolation.lean`, produce missing import artifact | 0 | 9.57 | 2006810624 | 0 |
+| Broad-import `NaturalCoverage.lean` | 134 | 41.59 | 4241899520 | 0 |
+| Slim `NaturalBasisCore.lean`, before Colex import | 1 | 10.70 | 1958543360 | 0 |
+| Slim `NaturalBasisCore.lean`, final | 0 | 5.42 | 1979203584 | 0 |
+| `NaturalCoverage.lean`, final | 0 | 12.51 | 1990000640 | 0 |
+
+The missing Colex import provided the existing bit-index sum simplification;
+the source-exact proof body stayed unchanged. All Lean jobs used cached
+`/Users/dominic/ZK/AspisFormal`, `lake env lean -j1 -M2600`, and explicit
+`-R` pointing at this pack's `lean` directory. Local `.olean` outputs are in
+`target/r16-lean/AspisV8R16`; prepend `target/r16-lean` to the Lake-provided
+`LEAN_PATH` for the dependent leaf. The unchanged interpolation predecessor
+was compiled only to produce its missing import artifact. Both new theorem
+audits report only `propext`, `Classical.choice`, `Quot.sound`. No Rust or
+host replay was repeated for these proof-only changes.
+
 ## Remaining boundary
 
-The new Lean theorem stops at the four monomial-channel representation.
-The natural-basis theorem is retained and inspected, but a single composed
-Lean endpoint joining it to this theorem and the R16 transport is not yet
-compiled. The concrete factor correspondence is checked by executable
-enumeration, not a formal Rust extraction.
+The new Lean endpoint now reaches the four natural-coefficient channels.
+The next precise proposition is that the actual source mask lift, followed
+by the implemented T and circle encoder, equals that four-channel map with
+coefficient positions `4*k`, `4*k+1`, `4*k+2`, `4*k+3`. The transport and
+concrete factor correspondence are checked by basis tests and exhaustive
+domain enumeration, not yet one composed kernel-checked Rust refinement.
 
 Most importantly, raw surjectivity is not a full-transcript privacy proof.
-The candidate still needs complete prover/verifier basis transport, correct
-profile binding, soundness preservation, and a joint posterior argument
+The staged host now exercises common prover/verifier basis transport and
+profile binding (see `R16_SOURCE_INTEGRATION.md`). It still needs universal
+soundness preservation and a joint posterior argument
 including earlier messages and all remaining disclosures. The source seed,
 shared oracle and publication laws remain separate obligations. No full
 privacy claim or production integration follows from this milestone.

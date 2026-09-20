@@ -11,7 +11,8 @@ It is integrated only in a separately staged research host, not production,
 and is not yet proved for the joint transcript.
 `R16_UNIVERSAL_RAW_ARGUMENT.md` adds a compiled arbitrary-fibre polynomial
 interpolation theorem and exhaustive source-factor/root checks. The
-composed natural-basis/transport Lean endpoint remains open.
+natural-basis endpoint now compiles for every distinct-fibre schedule.
+Exact source mask/transport correspondence and joint posterior remain open.
 `R16_SOURCE_INTEGRATION.md` records the common C1/C2 transport, inverse-dual
 verifier, profile binding, retained integration failures and runtime results;
 global joint-view privacy and soundness preservation remain unproved.
