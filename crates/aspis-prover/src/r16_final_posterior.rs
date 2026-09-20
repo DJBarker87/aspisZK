@@ -11,7 +11,7 @@ use aspis_core::{
     v6_transcript::v6_statement_points,
 };
 
-fn sample(i: u32) -> K {
+pub(super) fn sample(i: u32) -> K {
     K {
         c0: CM31::new(M31(i + 1), M31(3 * i + 7)),
         c1: CM31::new(M31(5 * i + 11), M31(7 * i + 13)),
@@ -36,7 +36,7 @@ fn times_x(v: &[K]) -> Vec<K> {
     }
     out
 }
-fn chord_product(q: &[K], [a, b, c]: [K; 3]) -> Vec<K> {
+pub(super) fn chord_product(q: &[K], [a, b, c]: [K; 3]) -> Vec<K> {
     let even: Vec<_> = q.chunks_exact(2).map(|v| v[0]).collect();
     let odd: Vec<_> = q.chunks_exact(2).map(|v| v[1]).collect();
     let xe = times_x(&even);
@@ -61,7 +61,7 @@ fn chord_product(q: &[K], [a, b, c]: [K; 3]) -> Vec<K> {
     out.truncate(N);
     out
 }
-fn eval_ood(c: &[(usize, K)], p: SecureCirclePoint) -> K {
+pub(super) fn eval_ood(c: &[(usize, K)], p: SecureCirclePoint) -> K {
     let mut factors = [K::ZERO; 10];
     factors[0] = p.y;
     factors[1] = p.x;
@@ -76,7 +76,7 @@ fn eval_ood(c: &[(usize, K)], p: SecureCirclePoint) -> K {
         )
     })
 }
-fn sparse(v: &[K]) -> Vec<(usize, K)> {
+pub(super) fn sparse(v: &[K]) -> Vec<(usize, K)> {
     v.iter()
         .copied()
         .enumerate()
@@ -103,15 +103,22 @@ fn r17_structured_g_vandermonde_compatible_image() {
     assert_eq!(compatible_image(Placement::Vandermonde), 596);
 }
 
+#[test]
+fn r17_structured_g_first_relation_compatible_image() {
+    assert_eq!(compatible_image(Placement::VandermondeRelation), 601);
+}
+
 #[derive(Clone, Copy, Debug)]
 enum Placement {
     Original,
     First271,
     Vandermonde,
+    VandermondeRelation,
 }
 
 fn compatible_image(placement: Placement) -> usize {
     let structured = !matches!(placement, Placement::Original);
+    let has_relation = matches!(placement, Placement::VandermondeRelation);
     let z: [K; 10] = core::array::from_fn(|i| sample(i as u32 + 1));
     let alpha = sample(151);
     let p0 = secure_ood_circle_point_from_parameter(sample(71)).unwrap();
@@ -164,7 +171,10 @@ fn compatible_image(placement: Placement) -> usize {
         // semantic map is invertible, so use its underlying coin coordinates.
         earlier = (0..271)
             .map(|i| {
-                if matches!(placement, Placement::Vandermonde) {
+                if matches!(
+                    placement,
+                    Placement::Vandermonde | Placement::VandermondeRelation
+                ) {
                     return super::structured_g::mixing_row(i);
                 }
                 (0..N)
@@ -204,7 +214,22 @@ fn compatible_image(placement: Placement) -> usize {
     let point_start = raw_start + 88;
     let final_start = point_start + point_weights.len();
     let inactive_index = final_start + 256;
-    let mut matrix = vec![vec![K::ZERO; 1022]; inactive_index + 1];
+    let mut matrix =
+        vec![vec![K::ZERO; 1022]; inactive_index + 1 + if has_relation { 6 } else { 0 }];
+    let original =
+        has_relation.then(|| super::two_channel::original_weights(&z, sample(191), true));
+    let relation = has_relation
+        .then(|| super::two_channel::quotient_weights(&z, sample(191), abc, sample(211), true));
+    let folded_relation = relation.clone().map(|mut w| {
+        w.fold_deferred_relation_arity4(alpha);
+        w
+    });
+    if has_relation {
+        // In the compact polynomial c4=claim/4-c0. The extra constraint
+        // P(alpha)=dot(Final256,folded_weights) has nonzero coefficient alpha
+        // on the sent c1, independent of the 22 raw/fold constraints.
+        assert_ne!(alpha, K::ZERO);
+    }
     // Each fold equation has a nonzero coefficient in its own disjoint raw
     // block, so these 22 compatibility equations are independent.
     for pt in &pts {
@@ -281,6 +306,22 @@ fn compatible_image(placement: Placement) -> usize {
         for i in 0..256 {
             matrix[final_start + i][col] = finals[i];
         }
+        if let Some(weights) = &relation {
+            let polynomial = aspis_core::sumcheck::polynomial_for_extension(&q, weights);
+            let claim = ms.iter().fold(K::ZERO, |s, &(i, v)| {
+                s.add(v.mul(original.as_ref().unwrap()[i]))
+            });
+            assert_eq!(aspis_core::sumcheck::boundary_sum(&polynomial), claim);
+            let expected = finals.iter().enumerate().fold(K::ZERO, |s, (i, &v)| {
+                s.add(v.mul(folded_relation.as_ref().unwrap().weight_at(i as u32)))
+            });
+            assert_eq!(aspis_core::sumcheck::evaluate(&polynomial, alpha), expected);
+            // Literal compact relation wire order: c0,c1,c2,c3,c5,c6 (not
+            // the semantic polynomial's c0,c2,...,c27 convention).
+            for (i, j) in [0, 1, 2, 3, 5, 6].into_iter().enumerate() {
+                matrix[inactive_index + 1 + i][col] = polynomial[j];
+            }
+        }
         for (i, pt) in pts.iter().enumerate() {
             let qvalues = core::array::from_fn(|slot| {
                 let x = if slot < 2 { pt.x } else { pt.x.neg() };
@@ -342,10 +383,11 @@ fn compatible_image(placement: Placement) -> usize {
         pivots.push(col);
     }
     let rank = pivots.len();
+    let consistency = 22 + usize::from(has_relation);
     println!(
-        "FINAL_POSTERIOR placement={placement:?} rows={n} variables=1022 rank={rank} expected_consistency_relations=22"
+        "FINAL_POSTERIOR placement={placement:?} rows={n} variables=1022 rank={rank} expected_consistency_relations={consistency}"
     );
-    assert!(rank <= n - 22);
+    assert!(rank <= n - consistency);
     assert!(a[rank..].iter().flatten().all(|v| *v == K::ZERO));
     // Independent lower-rank certificate: U_top * original pivot columns = I.
     for i in 0..rank {

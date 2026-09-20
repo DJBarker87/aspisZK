@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## Latest step — R17 two-channel arithmetic, 2026-09-20
+
+`R17_TWO_CHANNEL_OPENING.md` records the implemented test-only opening
+arithmetic: two OOD interpolants/quotients, separate functionals and image
+gates, Final512, 44 raw/final checks with disjoint query-injection powers,
+and four relation rounds. Fixed-fixture checks give H1 rank 325 of 347
+after legal-pad/OOD constraints, and G rank 601 of 624 including the first
+relation polynomial. Prior negatives remain intact.
+
+Lean proves the two-channel pullback for the additive R16 transform and
+conditional root-count bounds that include ordinary/carried claim errors.
+No new source wire profile or full-transcript theorem exists yet. Next is
+matched prover/verifier integration in a separate research stage, followed
+by the joint causal/source/oracle and exceptional-event obligations.
+
 ## Latest candidate check — R17 mixed mask, 2026-09-20
 
 `R17_MIXED_MASK_BOUNDARY.md` records a prototype using invertible public

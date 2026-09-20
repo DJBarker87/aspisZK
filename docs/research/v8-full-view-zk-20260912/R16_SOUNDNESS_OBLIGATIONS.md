@@ -58,3 +58,13 @@ that mismatch. A distinct opening argument (such as the specified, still
 unimplemented two-channel route) must be soundness-checked; the old verifier
 must not be patched to accept unmatched claims. This is not a demonstrated
 soundness break in the unchanged protocol.
+
+The next R17 step is now an arithmetic prototype, documented in
+`R17_TWO_CHANNEL_OPENING.md`. Its two functionals remain distinct through
+both quotient channels, four image residuals and four relation rounds.
+The compiled root-count bounds must include the ordinary/carried error:
+degree 4 for the combined image check and degree 44 for the combined
+query check. The smaller image-only degree-3 bound is not the whole gate's
+soundness bound. Uniform challenge, source chronology, binding/extraction
+and adversarial query-budget premises remain open; no end-to-end loss or
+soundness-preservation claim follows from the prototype.

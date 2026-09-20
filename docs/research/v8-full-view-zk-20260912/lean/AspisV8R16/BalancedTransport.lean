@@ -1,5 +1,6 @@
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Logic.Equiv.Defs
+import Mathlib.Algebra.Group.Equiv.Defs
 
 /-! Algebra of the R16 balancing row and immutable permutation.
 This is a source-shaped model, not a Rust extraction or privacy theorem. -/
@@ -108,9 +109,25 @@ def transportEquiv (inactive : Finset ι) (pivot : ι)
   left_inv := inverse_transport inactive pivot hp order
   right_inv := transport_inverse inactive pivot hp order
 
+theorem transport_add (inactive : Finset ι) (pivot : ι) (order : ι ≃ ι)
+    (m n : ι → F) :
+    transport inactive pivot order (m+n) =
+      transport inactive pivot order m + transport inactive pivot order n := by
+  funext j
+  simp only [transport, Pi.add_apply]
+  split <;> simp [Finset.sum_add_distrib]
+
+/-- The repaired basis map is additive as well as bijective. This supplies
+the model premise for transporting distinct opening functionals. -/
+def transportAddEquiv (inactive : Finset ι) (pivot : ι)
+    (hp : pivot ∈ inactive) (order : ι ≃ ι) : (ι → F) ≃+ (ι → F) where
+  toEquiv := transportEquiv inactive pivot hp order
+  map_add' := transport_add inactive pivot order
+
 #print axioms balanced_target_lift
 #print axioms balance_sum_zero
 #print axioms inverse_transport
 #print axioms transport_injective
 #print axioms transportEquiv
+#print axioms transportAddEquiv
 end AspisV8R16

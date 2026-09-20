@@ -11,6 +11,8 @@ use basis_transport::{Transport, N, PADS, PIVOT};
 mod final_posterior;
 #[path = "../../../docs/research/v8-full-view-zk-20260912/tools/r17_structured_g.rs"]
 mod structured_g;
+#[path = "r17_two_channel.rs"]
+mod two_channel;
 
 /// Inventory-level source check: legal C1 remasking does not alter any
 /// copy-registry tuple input. Witness changes remain a different operation.
