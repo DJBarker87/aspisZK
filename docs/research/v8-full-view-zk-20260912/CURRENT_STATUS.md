@@ -15,6 +15,9 @@ adapter, and three other generated preimages remain unavailable.
 
 New focused evidence:
 
+- `r15-exact-tower-chord-evidence.md`: the chord theorem is instantiated in
+  the literal QM31 tower, with the source OOD policy's algebraic premises.
+  Rust operation/query-point refinement and probability obligations remain.
 - `r15-post-query-pole-boundary.md`: authenticated pre-query interpolation
   checks cover only 256 fibres. Lean now proves chord nonvanishing at every
   subfield circle point for distinct finite OOD parameters outside that
