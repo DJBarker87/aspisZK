@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## Latest source step — H1 semantic map, 2026-09-20
+
+`R17_SOURCE_H1_SEMANTIC_MAP.md` records the constructed 271-by-1024 H1
+coordinate map using the selected terminal and interpolation. Both real
+contexts pass every terminal-basis check and all 809 legal-pad initial
+checks; their proof bytes remain identical. The internal map is not
+published. Constructing the full context-dependent correction and proving
+adaptive/full-transcript privacy remain open.
+
 ## Latest step — posterior counting, 2026-09-20
 
 `R17_POSTERIOR_COUNTING.md` records compiled fiber-count/uniform-law

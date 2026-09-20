@@ -92,7 +92,8 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
             b = one_replace(b, 'terminal(p,tr,m,&s.z,&s)', 'terminal_with_g(p,tr,m,&s.z,&s,&gc)', 'final carry uses same G')
             return '\n    let gc=crate::structured_g::mixed_coins(&m[27]);'+b
         s = function_body(s, 'fn semantic_produce(', producer)
-        return function_body(s, 'fn semantic_negative_fixture(', producer)
+        s = function_body(s, 'fn semantic_negative_fixture(', producer)
+        return s + '\ninclude!("r17_h1_semantic_audit.rs");\n'
     edit('payment_extraction.rs', payment)
 
     def verifier(s):
@@ -112,6 +113,10 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
     edit('performance_verifier.rs', verifier)
 
     def performance(s):
+        s = one_replace(s, 'let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);',
+            '''let mut s=semantic_produce(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);
+        if std::env::var_os("ASPIS_R17_H1_SEMANTIC_AUDIT").is_some(){r17_h1_semantic_audit(&payment,&transition,&messages,&s);}''',
+            'opt-in source H1 semantic map diagnostic')
         s = one_replace(s, 'let mut v=vec![K::ZERO;697];',
             'let mut v=vec![K::ZERO;FIXED];', 'allocate complete Final512 frame')
         s = one_replace(s, 'pub fn run(){', '''pub fn run(){
@@ -184,7 +189,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
     edit('performance.rs', performance)
 
     shared=[]
-    for name in ['r17_structured_g.rs','r17_opening_weights.rs','r17_host_relation.rs']:
+    for name in ['r17_structured_g.rs','r17_opening_weights.rs','r17_host_relation.rs','r17_h1_semantic_audit.rs']:
         data=Path(__file__).with_name(name).read_bytes()
         (out/EXPERIMENTS/name).write_bytes(data)
         shared.append(dict(path=str(EXPERIMENTS/name),sha256=hashlib.sha256(data).hexdigest()))
