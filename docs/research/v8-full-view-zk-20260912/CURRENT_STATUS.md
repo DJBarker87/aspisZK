@@ -33,6 +33,11 @@ final-round obstruction and source commitment/oracle premises remain open.
 the two actual source maps on all 1024 basis units at the retained schedule.
 Final256 must satisfy raw-opening consistency; the next coverage target is
 the compatible joint image, not arbitrary independent final coefficients.
+`R16_FINAL_POSTERIOR_DIAGNOSTIC.md` now checks that compatible image at a
+fixed prefix: 430 observations including Final256 and the inactive claim
+have rank 408, exactly accounting for 22 verified fold relations. Later
+semantic rounds, nonlinear C1/H1 coupling and the source probability law
+remain outside this diagnostic.
 The earlier R15 probability investigation is retained, not the current priority.
 
 ## Current verdict — 2026-09-19

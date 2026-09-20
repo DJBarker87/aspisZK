@@ -7,6 +7,8 @@ use aspis_core::field::M31;
 #[path = "../../../docs/research/v8-full-view-zk-20260912/tools/r16_basis_transport.rs"]
 mod basis_transport;
 use basis_transport::{Transport, N, PADS, PIVOT};
+#[path = "r16_final_posterior.rs"]
+mod final_posterior;
 
 /// Mandatory quotient-opening/Final256 consistency, not independent privacy
 /// targets. Checks both selected source maps on every coefficient basis unit.
