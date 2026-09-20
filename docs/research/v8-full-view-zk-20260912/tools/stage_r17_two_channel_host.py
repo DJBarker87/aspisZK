@@ -188,6 +188,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
             let before=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(&compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
             let after=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(&other_compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
             let changed=before.iter().zip(&after).filter(|(a,b)|a!=b).count();
+            let _h1_ood_delta=r17_h1_witness_ood_audit(&before,&after,p.points);
             println!("R17_C1_WITNESS_VALIDATED same_public=true opposite_selected_input=true actual_helper_rebuilt=true helper_changed_rows={changed} fixed_prefix_diagnostic_only=true");
         }
         if std::env::var_os("ASPIS_R17_COUPLED_AUDIT").is_some(){r17_coupled_audit::run(h1_coordinates.as_ref().unwrap(),&s.z,&p,audit_kappa,alpha,&queries,|delta|{

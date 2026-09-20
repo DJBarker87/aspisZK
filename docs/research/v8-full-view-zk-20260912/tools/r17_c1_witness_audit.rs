@@ -1,4 +1,46 @@
 // Fixed-prefix C1 witness-offset correction, not a complete transcript coupling.
+// First affine helper step only: retain both OOD values with a legal pad.
+// Raw, point, final and semantic observations still require joint correction.
+fn r17_h1_witness_ood_audit(before: &[K], after: &[K], points: [Point; 2]) -> Vec<K> {
+    assert_eq!(before.len(), 1024);
+    assert_eq!(after.len(), 1024);
+    let map = crate::r16_basis_transport::transport();
+    let base: Vec<_> = after.iter().zip(before).map(|(&a, &b)| a.sub(b)).collect();
+    let rows: Vec<_> = (0..1023).filter(|&r| map.inactive[r]).collect();
+    assert_eq!(rows.len(), 809);
+    assert!(map.inactive[1023]);
+    let mut matrix = vec![vec![K::ZERO; rows.len()]; 2];
+    for (j, &r) in rows.iter().enumerate() {
+        let mut unit = vec![K::ZERO; 1024];
+        unit[r] = K::ONE;
+        unit[1023] = K::ONE.neg();
+        for i in 0..2 { matrix[i][j] = ood(&unit, points[i]); }
+    }
+    let target = [ood(&base, points[0]).neg(), ood(&base, points[1]).neg()];
+    let mut reduced = matrix.clone();
+    for i in 0..2 { reduced[i].push(target[i]); }
+    let pivots = r17_coupled_audit::reduce(&mut reduced, rows.len());
+    assert_eq!(pivots.len(), 2, "actual helper OOD correction rank");
+    let mut x = vec![K::ZERO; rows.len()];
+    for (i, &j) in pivots.iter().enumerate() { x[j] = reduced[i][rows.len()]; }
+    for i in 0..2 {
+        assert_eq!(matrix[i].iter().zip(&x).fold(K::ZERO, |s, (&a, &b)| s.add(a.mul(b))), target[i]);
+    }
+    let mut pad = vec![K::ZERO; 1024];
+    for (j, &r) in rows.iter().enumerate() {
+        pad[r] = x[j];
+        pad[1023] = pad[1023].sub(x[j]);
+    }
+    let mut applied = vec![K::ZERO; 1024];
+    apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut applied, &pad).unwrap();
+    assert_eq!(applied, pad);
+    let result: Vec<_> = base.iter().zip(&pad).map(|(&a, &b)| a.add(b)).collect();
+    for i in 0..2 { assert_eq!(ood(&result, points[i]), K::ZERO); }
+    for r in 0..1024 { if !map.inactive[r] { assert_eq!(result[r], base[r]); } }
+    println!("R17_H1_WITNESS_OOD rank=2 legal_directions=809 source_pad_checked=true retained_ood=2 active_helper_offset_retained=true fixed_prefix_only=true");
+    result
+}
+
 fn r17_c1_witness_audit(
     base: &[Vec<M31>],
     z: &[K; 10],

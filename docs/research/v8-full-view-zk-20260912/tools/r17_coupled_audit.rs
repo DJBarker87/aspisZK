@@ -61,7 +61,7 @@ mod r17_coupled_audit {
             })
             .collect()
     }
-    fn reduce(a: &mut [Vec<K>], columns: usize) -> Vec<usize> {
+    pub(super) fn reduce(a: &mut [Vec<K>], columns: usize) -> Vec<usize> {
         let mut pivots = vec![];
         for col in 0..columns {
             let r = pivots.len();

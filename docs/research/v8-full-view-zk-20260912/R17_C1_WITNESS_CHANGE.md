@@ -95,6 +95,41 @@ and `e81cd45d977e56ce4c5307dc792a468b182dc2d44b2722670aa0a140a38613a7`.
 
 ## Next concrete correction
 
+### Completed first substep: v12 source H1 OOD correction
+
+Source revision `402916543b43be8c0e487da21b8ef5ef7905ac6d` plus this
+changeset. The optional witness diagnostic now evaluates all 809 balanced
+inactive directions with the source OOD evaluator, solves the actual
+two-coordinate helper-offset target, and checks the original equations.
+The constructed pad passes the actual H1 padding routine unchanged; the
+corrected difference has both OOD values zero and retains every active
+helper difference. Both witness directions pass. No private correction
+vector is exported or installed in the emitted proof.
+
+Stage `/tmp/aspis-r15-host.drHYn9/r17-two-channel-source-v12`, manifest
+SHA-256 `21e8a351570376df0af21dacf0b74772756742d7b5e7383c755b1ae137ed4bca`.
+Exact flags/cache are retained in its `r16-stage.json`; source pins remain
+enforced. Build is offline/locked/release/jobs=1. Logs in the same root:
+`r17-build-v12.log`, `r17-v12-world0.log`, `r17-v12-world1.log`.
+
+| Target | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| v12 focused host build | 0 | 48.87 | 645660672 | 0 |
+| v12 world0 witness/OOD correction | 0 | 7.94 | 224952320 | 0 |
+| v12 world1 witness/OOD correction | 0 | 7.51 | 224985088 | 0 |
+
+No Lean files changed or compiled; no new axioms claim. Original proof
+hashes remain the two listed above. This checks diagnostic transparency,
+not equality of witness-dependent transcript distributions.
+
+The first remaining proposition is existence of a legal OOD-zero H1
+correction satisfying the simultaneous raw/point targets and cancelling
+the **combined C1/H1** rest-channel Final256 offset. Its target must retain
+the gamma^26 normalization and pass original-row compatibility checks.
+The earlier zero-target kernel result does not establish this affine claim.
+
+### Remaining joint construction
+
 Use the rebuilt H1 offset, not zero, as the affine target. First cancel its
 two OOD differences with legal H1 padding. Then use the retained OOD-zero
 H1 space to preserve H1 raw/point values while cancelling the combined

@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest affine helper step — OOD correction, 2026-09-20
+
+The v12 diagnostic constructs a legal H1 pad cancelling the rebuilt
+witness-helper difference at both OOD points, in both actual fixture
+prefixes. Rank is 2 over 809 legal directions; original equations and the
+actual padding/OOD routines pass. Active helper offsets are retained.
+This is only the first affine helper step: joint raw/point/rest-Final256
+correction, semantic compensation and adaptive full-transcript arguments
+remain open. See the v12 evidence in `R17_C1_WITNESS_CHANGE.md`.
+
 ## Latest witness step — C1 affine correction, 2026-09-20
 
 `R17_C1_WITNESS_CHANGE.md` records an actual opposite-witness correction
