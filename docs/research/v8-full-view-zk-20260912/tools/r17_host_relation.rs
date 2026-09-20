@@ -3,6 +3,7 @@ use super::inactive_binding as row;
 use super::*;
 
 pub(super) struct Prepared {
+    pub(super) public_audit: [K; 11],
     pub(super) p: Prefix,
     pub(super) iv_g: [K; 2],
     pub(super) weights: [WeightAccumulator; 2],
@@ -89,6 +90,7 @@ pub(super) fn prepare(s: row::Semantic, w: &Wire<'_>) -> Result<Prepared, Error>
         weights
     });
     Ok(Prepared {
+        public_audit: core::array::from_fn(|i| if i < 10 { s.z[i] } else { kappa }),
         p: Prefix {
             t,
             points,
@@ -245,6 +247,7 @@ fn fold_dense(v: &[K], a: K) -> Vec<K> {
 
 pub(super) fn verify(w: &Wire<'_>, prepared: Prepared, reference: bool) -> Result<(), Error> {
     let Prepared {
+        public_audit,
         mut p,
         iv_g,
         mut weights,
@@ -319,6 +322,25 @@ pub(super) fn verify(w: &Wire<'_>, prepared: Prepared, reference: bool) -> Resul
     });
     if terminal != claim {
         return Err(Error::Terminal);
+    }
+    // Read-only diagnostic of an accepted public proof. No witness, mask,
+    // seed or additional oracle query is involved. Never emitted normally.
+    if !reference && std::env::args().nth(1).as_deref() == Some("--audit-existing") {
+        let mut fields = public_audit.to_vec();
+        fields.extend([
+            p.tau,
+            a,
+            p.points[0].x,
+            p.points[0].y,
+            p.points[1].x,
+            p.points[1].y,
+            p.gamma,
+        ]);
+        eprintln!(
+            "R17_PUBLIC_PREFIX {{\"fields\":{:?},\"queries\":{:?}}}",
+            bytes(&fields),
+            queries
+        );
     }
     Ok(())
 }

@@ -117,18 +117,103 @@ enum Placement {
 }
 
 fn compatible_image(placement: Placement) -> usize {
+    compatible_image_at(placement, None)
+}
+
+struct PublicPrefix {
+    z: [K; 10],
+    kappa: K,
+    tau: K,
+    alpha: K,
+    p0: SecureCirclePoint,
+    p1: SecureCirclePoint,
+    queries: Vec<u32>,
+}
+
+#[test]
+#[ignore = "requires accepted R17 host public-prefix audit log"]
+fn r17_actual_source_prefix_compatible_image() {
+    let path = std::env::var("ASPIS_R17_PUBLIC_PREFIX_LOG").expect("explicit source audit log");
+    let log = std::fs::read_to_string(&path).unwrap();
+    assert!(log.lines().any(|l| l == "R17_PUBLIC_PREFIX_ACCEPTED"));
+    let records: Vec<_> = log
+        .lines()
+        .filter_map(|l| l.strip_prefix("R17_PUBLIC_PREFIX "))
+        .collect();
+    assert_eq!(records.len(), 1, "one accepted source execution per audit");
+    let record: serde_json::Value = serde_json::from_str(records[0]).unwrap();
+    let bytes: Vec<u8> = serde_json::from_value(record["fields"].clone()).unwrap();
+    assert_eq!(bytes.len(), 18 * 16);
+    let fields: Vec<_> = bytes
+        .chunks_exact(16)
+        .map(|b| K::from_le_bytes(b).unwrap())
+        .collect();
+    let queries: Vec<u32> = serde_json::from_value(record["queries"].clone()).unwrap();
+    assert_eq!(queries.len(), 22);
+    let mut unique = queries.clone();
+    unique.sort_unstable();
+    unique.dedup();
+    assert_eq!(unique.len(), 22);
+    assert!(queries.iter().all(|&q| q < 1 << 18));
+    assert_ne!(fields[17], K::ZERO, "source nonzero gamma");
+    let prefix = PublicPrefix {
+        z: fields[..10].try_into().unwrap(),
+        kappa: fields[10],
+        tau: fields[11],
+        alpha: fields[12],
+        p0: SecureCirclePoint {
+            x: fields[13],
+            y: fields[14],
+        },
+        p1: SecureCirclePoint {
+            x: fields[15],
+            y: fields[16],
+        },
+        queries,
+    };
+    for p in [prefix.p0, prefix.p1] {
+        assert_eq!(p.x.square().add(p.y.square()), K::ONE);
+    }
+    assert_ne!(prefix.p0, prefix.p1);
+    assert_ne!(prefix.kappa, K::ZERO);
+    assert_ne!(prefix.tau, K::ZERO);
+    assert_eq!(
+        compatible_image_at(Placement::VandermondeRelation, Some(prefix)),
+        601
+    );
+    println!("R17_ACTUAL_PREFIX compatible_rank=601 observations=624 source_log={path}");
+}
+
+fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> usize {
     let structured = !matches!(placement, Placement::Original);
     let has_relation = matches!(placement, Placement::VandermondeRelation);
-    let z: [K; 10] = core::array::from_fn(|i| sample(i as u32 + 1));
-    let alpha = sample(151);
-    let p0 = secure_ood_circle_point_from_parameter(sample(71)).unwrap();
-    let p1 = secure_ood_circle_point_from_parameter(sample(113)).unwrap();
+    let PublicPrefix {
+        z,
+        alpha,
+        p0,
+        p1,
+        kappa,
+        tau,
+        queries,
+    } = prefix.unwrap_or_else(|| {
+        let mut queries = vec![4u32, 6];
+        queries.extend((0..20).map(|i| 1000 + 7919 * i));
+        PublicPrefix {
+            z: core::array::from_fn(|i| sample(i as u32 + 1)),
+            alpha: sample(151),
+            p0: secure_ood_circle_point_from_parameter(sample(71)).unwrap(),
+            p1: secure_ood_circle_point_from_parameter(sample(113)).unwrap(),
+            kappa: sample(191),
+            tau: sample(211),
+            queries,
+        }
+    });
     let abc = [
         p0.x.mul(p1.y).sub(p0.y.mul(p1.x)),
         p0.y.sub(p1.y),
         p1.x.sub(p0.x),
     ];
-    assert_ne!(abc[1], K::ZERO);
+    assert!(abc[1] != K::ZERO || abc[2] != K::ZERO, "distinct OOD chord");
     let mut earlier = Vec::new();
     for round in 0..3 {
         for x in (0..28).filter(|&x| round == 0 || x != 1) {
@@ -194,8 +279,6 @@ fn compatible_image(placement: Placement) -> usize {
             (0..N).map(|r| w.weight_at(r as u32)).collect::<Vec<_>>()
         })
         .collect();
-    let mut queries = vec![4u32, 6];
-    queries.extend((0..20).map(|i| 1000 + 7919 * i));
     let pts = selected_circle_fiber_points_shared(20, &queries).unwrap();
     let enc = CircleEncoder::new_for_domain_log(20);
     let eval: Vec<Vec<_>> = queries
@@ -216,19 +299,19 @@ fn compatible_image(placement: Placement) -> usize {
     let inactive_index = final_start + 256;
     let mut matrix =
         vec![vec![K::ZERO; 1022]; inactive_index + 1 + if has_relation { 6 } else { 0 }];
-    let original =
-        has_relation.then(|| super::two_channel::original_weights(&z, sample(191), true));
-    let relation = has_relation
-        .then(|| super::two_channel::quotient_weights(&z, sample(191), abc, sample(211), true));
+    let original = has_relation.then(|| super::two_channel::original_weights(&z, kappa, true));
+    let relation =
+        has_relation.then(|| super::two_channel::quotient_weights(&z, kappa, abc, tau, true));
     let folded_relation = relation.clone().map(|mut w| {
         w.fold_deferred_relation_arity4(alpha);
         w
     });
     if has_relation {
         // In the compact polynomial c4=claim/4-c0. The extra constraint
-        // P(alpha)=dot(Final256,folded_weights) has nonzero coefficient alpha
-        // on the sent c1, independent of the 22 raw/fold constraints.
-        assert_ne!(alpha, K::ZERO);
+        // P(alpha)=dot(Final256,folded_weights) has coefficient alpha on
+        // sent c1; at alpha=0 its coefficient on sent c0 is one instead.
+        // Thus independence does not require rejecting zero fold challenges.
+        assert!(alpha != K::ZERO || K::ONE.sub(alpha.pow(4)) != K::ZERO);
     }
     // Each fold equation has a nonzero coefficient in its own disjoint raw
     // block, so these 22 compatibility equations are independent.

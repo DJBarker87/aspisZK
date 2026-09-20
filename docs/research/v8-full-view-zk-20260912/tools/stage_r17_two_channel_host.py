@@ -115,6 +115,15 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
         s = one_replace(s, 'let mut v=vec![K::ZERO;697];',
             'let mut v=vec![K::ZERO;FIXED];', 'allocate complete Final512 frame')
         s = one_replace(s, 'pub fn run(){', '''pub fn run(){
+    if std::env::args().nth(1).as_deref()==Some("--audit-existing"){
+        let dir=std::env::args().nth(2).unwrap();
+        let public=std::fs::read(format!("{dir}/public.bin")).unwrap();
+        let transition=std::fs::read(format!("{dir}/transition.bin")).unwrap();
+        let binding:[u8;32]=std::fs::read(format!("{dir}/binding.bin")).unwrap().try_into().unwrap();
+        let body=std::fs::read(format!("{dir}/proof-1.bin")).unwrap();
+        assert_eq!(super::super::performance_verifier::verify(&body,&binding,&public,&transition),Ok(()));
+        println!("R17_PUBLIC_PREFIX_ACCEPTED");return;
+    }
     if std::env::args().nth(1).as_deref()==Some("--reject-existing"){
         let dir=std::env::args().nth(2).unwrap();
         let public=std::fs::read(format!("{dir}/public.bin")).unwrap();
@@ -131,7 +140,7 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
         end = s.index('        let mut body=f::body(&v,&a,&b,&records,(&fa,&fb));', start)
         s = s[:start]+'''
         let prepared=crate::r17_relation::prepare(sem,&w).unwrap();
-        let crate::r17_relation::Prepared{mut p,iv_g,mut weights,mut claim}=prepared;
+        let crate::r17_relation::Prepared{mut p,iv_g,mut weights,mut claim,..}=prepared;
         assert_eq!(p.gamma,gamma);
         let gp=gamma.pow(27);let mut qeval=[Vec::new(),Vec::new()];
         for(i,pt)in pts.iter().enumerate(){for(slot,(x,y))in[(pt.x,pt.y),(pt.x,pt.y.neg()),(pt.x.neg(),pt.y.neg()),(pt.x.neg(),pt.y)].into_iter().enumerate(){

@@ -1,5 +1,12 @@
 # Current V8 privacy-repair status
 
+## Latest diagnostic — actual R17 verifier prefixes, 2026-09-20
+
+`R17_ACTUAL_PREFIX_COVERAGE.md` records rank 601/624 at both retained
+proofs' actual verifier-derived challenges and queries. Public-only audit
+records are checked in; synthetic negatives remain. This closes neither
+the joint H1/G composition nor adaptive exceptional-event accounting.
+
 ## Latest proof step — R17 source-shaped algebra, 2026-09-20
 
 `R17_SOURCE_ALGEBRA.md` records two compiled Lean leaves. The literal
