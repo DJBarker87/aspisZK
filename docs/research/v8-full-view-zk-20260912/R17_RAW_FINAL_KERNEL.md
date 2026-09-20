@@ -50,6 +50,9 @@ does not label its basis vectors legal H1 pads.
 
 ## Reduced maps, not a closed coverage gate
 
+Update: `R17_BALANCED_KERNEL.md` handles the balance scalar explicitly
+and reduces the remaining maps to the 699-direction balanced kernel.
+
 The same source basis is projected to the remaining observations:
 
 - H1: 214 active-row constraints, one inactive balance and three point

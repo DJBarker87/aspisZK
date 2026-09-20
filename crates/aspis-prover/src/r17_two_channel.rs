@@ -262,6 +262,8 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
     assert_eq!(distinct.len(),roots.len(),"distinct source fibre roots");
     let abc=[p.p0.x.mul(p.p1.y).sub(p.p0.y.mul(p.p1.x)),p.p0.y.sub(p.p1.y),p.p1.x.sub(p.p0.x)];
     assert!(abc[1]!=K::ZERO || abc[2]!=K::ZERO);
+    let normal=abc[1].square().add(abc[2].square());
+    assert_ne!(normal,K::ZERO,"distinct circle secant normal");
     let mut factor=vec![K::ONE];
     for &root in &roots {
         let mut next=super::final_posterior::times_x(&factor);
@@ -300,6 +302,11 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
             let message=chord_product(&q,abc);let m=transport().inverse(&message);
             for (i,&r) in active.iter().enumerate(){hm[i].push(m[r]);}
             let balance=(0..1024).filter(|&r|transport().inactive[r]).fold(K::ZERO,|s,r|s.add(m[r]));
+            assert_eq!(balance,message[1023],"transport balancing coordinate");
+            assert_eq!(balance,abc[1].mul(q[1021]).add(abc[2].mul(q[1022])),"source chord top coefficient");
+            if degree<255{assert_eq!(balance,K::ZERO);}else{
+                assert_eq!(balance,normal.mul(factor[255]));assert_ne!(balance,K::ZERO);
+            }
             hm[214].push(balance);gm[274].push(balance);
             for i in 0..3{hm[215+i].push(dot(&point[i],&m));gm[271+i].push(dot(if i==0{&gp}else{&point[i]},&m));}
             for i in 0..271{gm[i].push(dot(&mix[i],&m));}
@@ -313,6 +320,14 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
     assert_eq!(count,700);
     let (_,hp)=reduce(&hm);let (_,gg)=reduce(&gm);
     assert_eq!(hp.len(),218);assert_eq!(gg.len(),279);
+    // Drop only the one special nonbalanced direction and the balance row.
+    // The remaining basis has all three high quotient coordinates zero.
+    let h_balanced:Vec<Vec<K>>=hm.iter().enumerate().filter(|(i,_)|*i!=214)
+        .map(|(_,row)|row[..699].to_vec()).collect();
+    let g_balanced:Vec<Vec<K>>=gm.iter().enumerate().filter(|(i,_)|*i!=274)
+        .map(|(_,row)|row[..699].to_vec()).collect();
+    let (_,hb)=reduce(&h_balanced);let (_,gb)=reduce(&g_balanced);
+    assert_eq!(hb.len(),217);assert_eq!(gb.len(),278);
     let enc=CircleEncoder::new_for_domain_log(20);
     let qcode=enc.encode_c2_message(&combined).unwrap();
     let msg=chord_product(&combined,abc);let mcode=enc.encode_c2_message(&msg).unwrap();
@@ -320,6 +335,7 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
     for pt in [p.p0,p.p1]{assert_eq!(eval_ood(&sparse(&msg),pt),K::ZERO);}
     assert!(fold_coefficients(&combined,p.alpha).iter().all(|&v|v==K::ZERO));
     println!("R17_FACTOR_KERNEL independent_directions=700 polynomial_factors_checked=234 H_residual_rank=218 G_residual_rank=279 source_raw_zeros=176 source_ood_zeros=2 prefix_only=true");
+    println!("R17_BALANCED_KERNEL independent_directions=699 high_coordinates_zero=3 source_balance_identity_checked=700 H_residual_rank=217 G_residual_rank=278 prefix_only=true");
 }
 
 /// Constructive compatible raw/final interpolation. This deliberately does

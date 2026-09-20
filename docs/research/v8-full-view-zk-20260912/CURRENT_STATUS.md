@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## Latest coverage step — balanced kernel, 2026-09-21
+
+`R17_BALANCED_KERNEL.md` records the compiled nonzero secant-normal
+theorem and the image/balance equivalence. Source checks identify 699
+balanced kernel directions and one explicit balance direction. Both
+prefixes pass the remaining H1 rank 217 and G rank 278 checks. Universal
+coverage of those residual maps, adaptive loss accounting and full
+privacy/soundness remain open.
+
 ## Latest coverage step — factored kernel, 2026-09-21
 
 `R17_RAW_FINAL_KERNEL.md` records the compiled vanishing-polynomial
