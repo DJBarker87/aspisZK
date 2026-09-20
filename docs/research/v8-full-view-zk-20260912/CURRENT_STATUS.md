@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest source dependency — G-independent target, 2026-09-21
+
+`R17_G_INDEPENDENCE.md` records compiled source-shaped algebra and 57,288
+literal-versus-G-separated terminal comparisons per witness direction.
+Both actual-prefix runs pass, retaining the previous joint corrections.
+The non-G path receives an entirely zeroed G column. This supports the
+fixed-prefix triangular transport dependency, not independence through
+eta/commitment sampling. Universal rank/compatible-image bounds and the
+adaptive full-transcript source argument remain open.
+
 ## Latest proof step — three-block transport, 2026-09-21
 
 `R17_WITNESS_TRANSPORT.md` records two compiled leaves: the invertible

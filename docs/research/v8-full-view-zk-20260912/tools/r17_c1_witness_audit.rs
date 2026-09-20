@@ -73,13 +73,23 @@ fn r17_witness_semantic_delta(p: &impl PaymentInput, tr: &PoolV1PairLatePublicSt
     old: &[Vec<K>], new: &[Vec<K>], s: &row::Semantic) -> [K;271] {
     let og=crate::structured_g::mixed_coins(&old[27]);
     let ng=crate::structured_g::mixed_coins(&new[27]);
+    let zero=[K::ZERO;271];
+    let gd: [K;271]=core::array::from_fn(|i|ng[i].sub(og[i]));
+    // Remove G at all three point claims, not just its structured first
+    // point. The non-G path now receives no old/new G data at all.
+    let mut old_without_g=old.to_vec();old_without_g[27].fill(K::ZERO);
+    let mut new_without_g=new.to_vec();new_without_g[27].fill(K::ZERO);
     let mut coords=[K::ZERO;271];let mut carry=K::ZERO;
     for r in 0..10 {
         let left=9-r;let mut samples=[K::ZERO;28];
         for x in 0..28 {let mut z=s.z;z[r]=sc(x as u32);
             for assignment in 0..1usize<<left {
                 for j in 0..left {z[r+1+j]=sc(((assignment>>(left-1-j))&1)as u32);}
-                samples[x]=samples[x].add(terminal_with_g(p,tr,new,&z,s,&ng).sub(terminal_with_g(p,tr,old,&z,s,&og)));
+                let literal=terminal_with_g(p,tr,new,&z,s,&ng).sub(terminal_with_g(p,tr,old,&z,s,&og));
+                let without_g=terminal_with_g(p,tr,&new_without_g,&z,s,&zero).sub(terminal_with_g(p,tr,&old_without_g,&z,s,&zero));
+                let split=without_g.add(crate::structured_g::mask_eval(&gd,&z));
+                assert_eq!(literal,split,"source G independence r={r} x={x}");
+                samples[x]=samples[x].add(split);
             }
         }
         let poly=interpolate_degree27(&samples);
