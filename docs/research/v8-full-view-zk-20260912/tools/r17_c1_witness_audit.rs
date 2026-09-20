@@ -1,4 +1,73 @@
 // Fixed-prefix C1 witness-offset correction, not a complete transcript coupling.
+fn r17_h1_witness_joint_audit(
+    h0: &[K], c1: &[Vec<M31>], z: &[K; 10], p: &Prefix,
+    alpha: K, queries: &[u32], enc: &CircleEncoder, decoder: &ac::Decoder,
+) -> Vec<K> {
+    use r17_coupled_audit::{chord, dot, eval_weights, qvector, reduce};
+    let map = crate::r16_basis_transport::transport();
+    let scale = p.gamma.pow(26);
+    assert_ne!(scale, K::ZERO);
+    let mut rest: Vec<_> = h0.iter().map(|&h| h.mul(scale)).collect();
+    for c in 0..16 { for r in 0..1024 {
+        rest[r] = rest[r].add(p.gamma.pow(c as u64).mul_m31(c1[c][r]));
+    }}
+    for pt in p.points { assert_eq!(ood(&rest, pt), K::ZERO); }
+    let encoded = enc.encode_c2_message(&map.forward(&rest)).unwrap();
+    let fibers = corelib::circle_fri::selected_circle_fiber_points_shared(20, &(0..256).collect::<Vec<u32>>()).unwrap();
+    let mut values = Vec::new();
+    for (i, pt) in fibers.iter().enumerate() {
+        for (s, (x,y)) in [(pt.x,pt.y),(pt.x,pt.y.neg()),(pt.x.neg(),pt.y.neg()),(pt.x.neg(),pt.y)].into_iter().enumerate() {
+            let l = p.abc[0].add(p.abc[1].mul_m31(x)).add(p.abc[2].mul_m31(y));
+            values.push(encoded[4*i+s].mul(l.try_inv().unwrap()));
+        }
+    }
+    let rq = decoder.solve_wide(&values);
+    assert_eq!(rq[1023], K::ZERO);
+    assert_eq!(p.abc[1].mul(rq[1022]), p.abc[2].mul(rq[1021]));
+    assert_eq!(chord(&rq, p.abc), map.forward(&rest));
+    let finals = primal(&rq, alpha);
+    let rawpoints = corelib::circle_fri::selected_circle_fiber_points_shared(20, queries).unwrap();
+    let raw: Vec<_> = rawpoints.iter().flat_map(|pt| [(pt.x,pt.y),(pt.x,pt.y.neg()),(pt.x.neg(),pt.y.neg()),(pt.x.neg(),pt.y)])
+        .map(|(x,y)| eval_weights(K::from_cm31(CM31::from_m31(x)), K::from_cm31(CM31::from_m31(y)))).collect();
+    let point: Vec<Vec<K>> = corelib::v6_transcript::v6_statement_points(z).iter().map(|z| {
+        let mut w = WeightAccumulator::empty(10); w.add_multilinear(K::ONE,z.to_vec()).unwrap();
+        (0..1024).map(|i| w.weight_at(i)).collect()
+    }).collect();
+    let active: Vec<_> = (0..1024).filter(|&r| !map.inactive[r]).collect();
+    assert_eq!(active.len(),214);
+    let mut matrix = vec![vec![K::ZERO;1022];562];
+    for j in 0..1022 {
+        let mut unit=vec![K::ZERO;1022];unit[j]=K::ONE;
+        let q=qvector(&unit,p.abc);let c=chord(&q,p.abc);let m=map.inverse(&c);
+        for (i,&r) in active.iter().enumerate(){matrix[i][j]=m[r];}
+        matrix[214][j]=(0..1024).filter(|&r|map.inactive[r]).fold(K::ZERO,|s,r|s.add(m[r]));
+        for i in 0..88{matrix[215+i][j]=dot(&raw[i],&c);}
+        for i in 0..3{matrix[303+i][j]=dot(&point[i],&m);}
+        let f=primal(&q,alpha);for i in 0..256{matrix[306+i][j]=f[i];}
+    }
+    let hc=map.forward(h0);let mut target=vec![K::ZERO;562];
+    for i in 0..88{target[215+i]=dot(&raw[i],&hc).neg();}
+    for i in 0..3{target[303+i]=dot(&point[i],h0).neg();}
+    for i in 0..256{target[306+i]=finals[i].mul(scale.inv()).neg();}
+    let mut reduced=matrix.clone();for i in 0..562{reduced[i].push(target[i]);}
+    let pivots=reduce(&mut reduced,1022);assert_eq!(pivots.len(),540);
+    assert!(reduced[540..].iter().all(|r|r[1022]==K::ZERO),"affine H1 joint compatibility");
+    let mut x=vec![K::ZERO;1022];for (i,&j) in pivots.iter().enumerate(){x[j]=reduced[i][1022];}
+    for i in 0..562{assert_eq!(dot(&matrix[i],&x),target[i]);}
+    let q=qvector(&x,p.abc);let pad=map.inverse(&chord(&q,p.abc));
+    let mut applied=vec![K::ZERO;1024];apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut applied,&pad).unwrap();assert_eq!(applied,pad);
+    let h:Vec<_>=h0.iter().zip(&pad).map(|(&a,&b)|a.add(b)).collect();
+    let code=enc.encode_c2_message(&map.forward(&h)).unwrap();
+    for &id in queries{for s in 0..4{assert_eq!(code[4*id as usize+s],K::ZERO);}}
+    for w in &point{assert_eq!(dot(w,&h),K::ZERO);}
+    for pt in corelib::v6_transcript::v6_statement_points(z){assert_eq!(multilinear_evaluate_qm31(&h,&pt).unwrap(),K::ZERO);}
+    for pt in p.points{assert_eq!(ood(&h,pt),K::ZERO);}
+    let total:Vec<_>=rq.iter().zip(&q).map(|(&a,&b)|a.add(scale.mul(b))).collect();
+    assert!(primal(&total,alpha).iter().all(|&v|v==K::ZERO));
+    println!("R17_H1_WITNESS_JOINT rank=540 equations=562 compatibility_residuals=22 raw_zero=88 point_zero=3 ood_zero=2 rest_final_zero=256 gamma26_retained=true fixed_prefix_only=true");
+    h
+}
+
 // First affine helper step only: retain both OOD values with a legal pad.
 // Raw, point, final and semantic observations still require joint correction.
 fn r17_h1_witness_ood_audit(before: &[K], after: &[K], points: [Point; 2]) -> Vec<K> {

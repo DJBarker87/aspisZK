@@ -95,6 +95,10 @@ and `e81cd45d977e56ce4c5307dc792a468b182dc2d44b2722670aa0a140a38613a7`.
 
 ## Next concrete correction
 
+Update 2026-09-21: `R17_H1_WITNESS_JOINT.md` records the now-tested
+joint helper correction below. The next open step is the complete
+changed-context semantic and first-relation G compensation.
+
 ### Completed first substep: v12 source H1 OOD correction
 
 Source revision `402916543b43be8c0e487da21b8ef5ef7905ac6d` plus this

@@ -1,5 +1,16 @@
 # Current V8 privacy-repair status
 
+## Latest witness step — joint H1 correction, 2026-09-21
+
+`R17_H1_WITNESS_JOINT.md` records successful affine corrections in both
+actual fixture prefixes. All 562 original equations hold (rank 540),
+retaining H1 raw/point/OOD values and cancelling the combined C1/H1
+rest-channel Final256 offset. The actual encoder, OOD/MLE and padding
+routines independently check the result. Next is G compensation for the
+full changed-context semantic and first-relation differences. This is not
+yet a complete fixed-prefix witness coupling, much less full privacy or
+soundness preservation.
+
 ## Latest affine helper step — OOD correction, 2026-09-20
 
 The v12 diagnostic constructs a legal H1 pad cancelling the rebuilt

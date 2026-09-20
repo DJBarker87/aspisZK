@@ -188,7 +188,10 @@ fn point_rows(messages:&[Vec<K>],z:&[K;10])->Vec<K>{
             let before=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(&compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
             let after=aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1(&other_compiled.trace,snapshot.next_pair_index,lambda,chi).unwrap();
             let changed=before.iter().zip(&after).filter(|(a,b)|a!=b).count();
-            let _h1_ood_delta=r17_h1_witness_ood_audit(&before,&after,p.points);
+            let h1_ood_delta=r17_h1_witness_ood_audit(&before,&after,p.points);
+            let h1_joint_delta=r17_h1_witness_joint_audit(&h1_ood_delta,&delta,&s.z,&p,alpha,&queries,&enc,&decoder);
+            let total_pad:Vec<_>=(0..1024).map(|r|h1_joint_delta[r].sub(after[r].sub(before[r]))).collect();
+            let mut applied_pad=vec![K::ZERO;1024];apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut applied_pad,&total_pad).unwrap();assert_eq!(applied_pad,total_pad);
             println!("R17_C1_WITNESS_VALIDATED same_public=true opposite_selected_input=true actual_helper_rebuilt=true helper_changed_rows={changed} fixed_prefix_diagnostic_only=true");
         }
         if std::env::var_os("ASPIS_R17_COUPLED_AUDIT").is_some(){r17_coupled_audit::run(h1_coordinates.as_ref().unwrap(),&s.z,&p,audit_kappa,alpha,&queries,|delta|{

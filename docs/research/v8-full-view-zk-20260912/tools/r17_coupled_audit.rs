@@ -1,7 +1,7 @@
 // In-process, fixed-prefix correction witness. Nothing private is exported.
 mod r17_coupled_audit {
     use super::*;
-    fn dot(a: &[K], b: &[K]) -> K {
+    pub(super) fn dot(a: &[K], b: &[K]) -> K {
         assert_eq!(a.len(), b.len());
         a.iter().zip(b).fold(K::ZERO, |s, (&a, &b)| s.add(a.mul(b)))
     }
@@ -19,7 +19,7 @@ mod r17_coupled_audit {
         }
         out
     }
-    fn chord(q: &[K], [a, b, c]: [K; 3]) -> Vec<K> {
+    pub(super) fn chord(q: &[K], [a, b, c]: [K; 3]) -> Vec<K> {
         let e: Vec<_> = q.chunks_exact(2).map(|v| v[0]).collect();
         let o: Vec<_> = q.chunks_exact(2).map(|v| v[1]).collect();
         let xe = xt(&e);
@@ -41,12 +41,12 @@ mod r17_coupled_audit {
         out.truncate(1024);
         out
     }
-    fn qvector(x: &[K], abc: [K; 3]) -> Vec<K> {
+    pub(super) fn qvector(x: &[K], abc: [K; 3]) -> Vec<K> {
         let mut q = x[..1021].to_vec();
         q.extend([abc[1].mul(x[1021]), abc[2].mul(x[1021]), K::ZERO]);
         q
     }
-    fn eval_weights(x: K, y: K) -> Vec<K> {
+    pub(super) fn eval_weights(x: K, y: K) -> Vec<K> {
         let mut factors = [K::ZERO; 10];
         factors[0] = y;
         factors[1] = x;
