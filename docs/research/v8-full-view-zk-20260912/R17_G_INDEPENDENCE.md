@@ -51,6 +51,10 @@ independence of eta and G, or causal sampler property, is inferred here.
 
 ## What the rank problem now precisely requires
 
+Update: `R17_OOD_PAIR_COVERAGE.md` replaces the two-row H1 OOD rank test
+below with explicit distinct-point interpolation. The remaining larger
+rank conditions are unchanged.
+
 These matrices are functions of public prefix data and fixed layouts,
 not of old mask values. Their affine targets may depend on the witnesses
 and C1/H1 context. The G target no longer needs an assumption of old-G

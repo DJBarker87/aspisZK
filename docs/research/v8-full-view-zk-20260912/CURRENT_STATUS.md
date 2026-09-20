@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest coverage step — explicit two-OOD correction, 2026-09-21
+
+`R17_OOD_PAIR_COVERAGE.md` replaces the H1 two-row rank test with an
+explicit constant-plus-x/y pad. Lean proves interpolation for every
+distinct point pair. Both source coordinate branches, coincident-point
+rejection and both complete witness-change diagnostics pass. This removes
+the extra algebraic rank exception from that small step; the sampler's
+failure branch, C1/H1-joint/G coverage and global privacy/soundness remain
+separate open obligations.
+
 ## Latest source dependency — G-independent target, 2026-09-21
 
 `R17_G_INDEPENDENCE.md` records compiled source-shaped algebra and 57,288
