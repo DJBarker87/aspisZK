@@ -19,6 +19,11 @@ this is not yet a complete Rust refinement or distributional proof.
 `R16_SOURCE_INTEGRATION.md` records the common C1/C2 transport, inverse-dual
 verifier, profile binding, retained integration failures and runtime results;
 global joint-view privacy and soundness preservation remain unproved.
+`R16_JOINT_LINEAR_DIAGNOSTIC.md` records rank 108 for a fixed same-coin
+raw/point/OOD subview in all 16 witness columns, plus the 89-pad negative
+control. This excludes semantic/helper correlations and Final256 and is
+not a full-transcript theorem. `R16_SOUNDNESS_OBLIGATIONS.md` separately
+lists the source extraction, functional, quotient and Fiat–Shamir gates.
 The earlier R15 probability investigation is retained, not the current priority.
 
 ## Current verdict — 2026-09-19
