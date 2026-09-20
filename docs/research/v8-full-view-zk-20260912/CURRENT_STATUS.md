@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest candidate check — R17, 2026-09-20
+
+`R17_STRUCTURED_G_CANDIDATE.md` derives a proposed ten-round zero-boundary
+G mask, but rejects its naive first-271-entry placement: the joint fixed
+PCS map has rank 540 rather than 596, leaving 56 extra constraints.
+This is retained as a passing negative regression, alongside the unchanged
+R16 rank-408 requirement. No new source protocol is implemented. The next
+obligation is a justified round-coordinate extraction with sufficient joint
+posterior freedom; full privacy and soundness preservation remain unproved.
+
 ## Active repair direction — R16
 
 The new user goal prioritizes an implemented repair and full privacy proof,

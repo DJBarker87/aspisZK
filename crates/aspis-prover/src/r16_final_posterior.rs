@@ -86,6 +86,19 @@ fn sparse(v: &[K]) -> Vec<(usize, K)> {
 
 #[test]
 fn r16_g_posterior_including_final256_compatible_image() {
+    assert_eq!(compatible_image(false), 408);
+}
+
+#[test]
+fn r17_structured_g_first271_negative_compatible_image() {
+    // Preserve the failed candidate: 56 additional constraints beyond the
+    // 22 mandatory fold relations. This is not a repaired-source theorem.
+    let rank = compatible_image(true);
+    assert_eq!(rank, 540);
+    assert!(rank < 618 - 22);
+}
+
+fn compatible_image(structured: bool) -> usize {
     let z: [K; 10] = core::array::from_fn(|i| sample(i as u32 + 1));
     let alpha = sample(151);
     let p0 = secure_ood_circle_point_from_parameter(sample(71)).unwrap();
@@ -132,8 +145,23 @@ fn r16_g_posterior_including_final256_compatible_image() {
             );
         }
     }
+    if structured {
+        // Proposed (not source-instantiated) initial scalar plus 27 independent
+        // zero-boundary polynomial coordinates per round. The triangular
+        // semantic map is invertible, so use its underlying coin coordinates.
+        earlier = (0..271)
+            .map(|i| {
+                (0..N)
+                    .map(|j| if i == j { K::ONE } else { K::ZERO })
+                    .collect()
+            })
+            .collect();
+    }
     let point_weights: Vec<_> = v6_statement_points(&z)
         .into_iter()
+        // The proposed first G claim is the structured polynomial evaluation,
+        // already determined by the 271 coins. Retain the other two MLE claims.
+        .skip(usize::from(structured))
         .map(|p| {
             let mut w = WeightAccumulator::empty(10);
             w.add_multilinear(K::ONE, p.to_vec()).unwrap();
@@ -156,7 +184,11 @@ fn r16_g_posterior_including_final256_compatible_image() {
     // 82 earlier + 88 raw + 3 original-row points + 256 final coefficients
     // + the source's publicly serialized inactive-sum claim.
     // OOD is fixed at zero by parametrizing c=L*q with the source image gate.
-    let mut matrix = vec![vec![K::ZERO; 1022]; 430];
+    let raw_start = earlier.len();
+    let point_start = raw_start + 88;
+    let final_start = point_start + point_weights.len();
+    let inactive_index = final_start + 256;
+    let mut matrix = vec![vec![K::ZERO; 1022]; inactive_index + 1];
     // Each fold equation has a nonzero coefficient in its own disjoint raw
     // block, so these 22 compatibility equations are independent.
     for pt in &pts {
@@ -191,19 +223,19 @@ fn r16_g_posterior_including_final256_compatible_image() {
         let m = transport().inverse(&c);
         assert_eq!(transport().forward(&m), c);
         let ms = sparse(&m);
-        matrix[429][col] = m
+        matrix[inactive_index][col] = m
             .iter()
             .enumerate()
             .filter(|(r, _)| transport().inactive[*r])
             .fold(K::ZERO, |s, (_, v)| s.add(*v));
-        assert_eq!(matrix[429][col], c[1023]);
-        for i in 0..82 {
+        assert_eq!(matrix[inactive_index][col], c[1023]);
+        for i in 0..earlier.len() {
             matrix[i][col] = ms
                 .iter()
                 .fold(K::ZERO, |s, &(r, v)| s.add(earlier[i][r].mul(v)));
         }
         for i in 0..88 {
-            matrix[82 + i][col] = cs
+            matrix[raw_start + i][col] = cs
                 .iter()
                 .fold(K::ZERO, |s, &(j, v)| s.add(v.mul_m31(eval[i][j])));
             let qval = qs
@@ -217,12 +249,12 @@ fn r16_g_posterior_including_final256_compatible_image() {
                 pt.y.neg()
             };
             assert_eq!(
-                matrix[82 + i][col],
+                matrix[raw_start + i][col],
                 qval.mul(abc[0].add(abc[1].mul_m31(x)).add(abc[2].mul_m31(y)))
             );
         }
-        for i in 0..3 {
-            matrix[170 + i][col] = ms
+        for i in 0..point_weights.len() {
+            matrix[point_start + i][col] = ms
                 .iter()
                 .fold(K::ZERO, |s, &(r, v)| s.add(point_weights[i][r].mul(v)));
         }
@@ -231,7 +263,7 @@ fn r16_g_posterior_including_final256_compatible_image() {
             .map(|v| v[0].add(alpha.mul(v[1].add(alpha.mul(v[2].add(alpha.mul(v[3])))))))
             .collect();
         for i in 0..256 {
-            matrix[173 + i][col] = finals[i];
+            matrix[final_start + i][col] = finals[i];
         }
         for (i, pt) in pts.iter().enumerate() {
             let qvalues = core::array::from_fn(|slot| {
@@ -241,7 +273,7 @@ fn r16_g_posterior_including_final256_compatible_image() {
                 } else {
                     pt.y.neg()
                 };
-                matrix[82 + 4 * i + slot][col]
+                matrix[raw_start + 4 * i + slot][col]
                     .mul(abc[0].add(abc[1].mul_m31(x)).add(abc[2].mul_m31(y)).inv())
             });
             assert_eq!(
@@ -295,12 +327,10 @@ fn r16_g_posterior_including_final256_compatible_image() {
     }
     let rank = pivots.len();
     println!(
-        "R16_FINAL_POSTERIOR rows=430 variables=1022 rank={rank} expected_consistency_relations=22"
+        "FINAL_POSTERIOR structured={structured} rows={n} variables=1022 rank={rank} expected_consistency_relations=22"
     );
-    assert_eq!(
-        rank, 408,
-        "additional fixed-prefix obstruction beyond the 22 fold relations"
-    );
+    assert!(rank <= n - 22);
+    assert!(a[rank..].iter().flatten().all(|v| *v == K::ZERO));
     // Independent lower-rank certificate: U_top * original pivot columns = I.
     for i in 0..rank {
         for j in 0..rank {
@@ -308,4 +338,5 @@ fn r16_g_posterior_including_final256_compatible_image() {
             assert_eq!(value, if i == j { K::ONE } else { K::ZERO });
         }
     }
+    rank
 }
