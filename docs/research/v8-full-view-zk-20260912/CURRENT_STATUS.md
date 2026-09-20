@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest proof step — three-block transport, 2026-09-21
+
+`R17_WITNESS_TRANSPORT.md` records two compiled leaves: the invertible
+C1/H1/G triangular coin transport and the separate two-sided prefix
+invariant needed to select a transport adaptively. A Boolean counterexample
+formally prevents inferring adaptive bijectivity from fixed-prefix
+bijectivity alone. Final axioms audits contain no sorryAx. Universal
+source correction identities, exceptional-event bounds, seed law and
+commitment/oracle chronology remain open; no global privacy claim.
+
 ## Latest witness step — semantic/G compensation, 2026-09-21
 
 `R17_G_WITNESS_JOINT.md` records both actual-prefix witness changes:
