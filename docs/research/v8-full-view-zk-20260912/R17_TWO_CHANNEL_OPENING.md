@@ -4,6 +4,10 @@ Date: 2026-09-20. Base revision `79295dc4`, plus the files committed with this
 ledger. No production path or staged R16 host was changed. This does not
 establish full privacy or malicious-prover soundness.
 
+Subsequent milestone: `R17_SOURCE_INTEGRATION.md` records the separately
+staged source implementation and runtime controls. The implementation
+obligation below describes the boundary at this arithmetic-only milestone.
+
 ## What is now implemented and checked
 
 The test-only `crates/aspis-prover/src/r17_two_channel.rs` implements the

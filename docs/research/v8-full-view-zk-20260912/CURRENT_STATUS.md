@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## Latest step — R17 staged source integration, 2026-09-20
+
+`R17_SOURCE_INTEGRATION.md` records a compiled, domain-separated research
+host with structured G, two quotient channels and Final512. Two different
+witnesses with identical public inputs produce accepted proofs; dense and
+deferred verification agree, with retained/extended rejection controls.
+The earlier arithmetic-only boundary below is historical. Production paths
+remain unchanged; this is neither full privacy nor a soundness proof.
+Next: universal source refinement of the structured semantic computations
+and two-functional committed-column relation, then joint causal posterior
+composition and adaptive oracle/seed/failure/publication loss accounting.
+
 ## Latest step — R17 two-channel arithmetic, 2026-09-20
 
 `R17_TWO_CHANNEL_OPENING.md` records the implemented test-only opening

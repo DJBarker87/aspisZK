@@ -1,5 +1,5 @@
 //! Proposed structured mask. Research/test module only; not a source profile.
-use aspis_core::field::{CM31, M31, M31_HALF, QM31 as K};
+use super::corelib::field::{CM31, M31, M31_HALF, QM31 as K};
 
 pub(super) const N: usize = 1024;
 pub(super) const ROUNDS: usize = 10;

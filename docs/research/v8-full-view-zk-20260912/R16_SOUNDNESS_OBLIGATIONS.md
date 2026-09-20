@@ -68,3 +68,8 @@ query check. The smaller image-only degree-3 bound is not the whole gate's
 soundness bound. Uniform challenge, source chronology, binding/extraction
 and adversarial query-budget premises remain open; no end-to-end loss or
 soundness-preservation claim follows from the prototype.
+
+The subsequent `R17_SOURCE_INTEGRATION.md` records a matched staged host
+implementation and honest/negative runtime controls. This advances source
+implementation, not the universal extraction/refinement or Fiat--Shamir
+soundness gates above. Production protocol paths remain unchanged.
