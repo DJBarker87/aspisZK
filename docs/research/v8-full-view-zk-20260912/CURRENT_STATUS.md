@@ -8,7 +8,10 @@ specifies a reversible public encoding-basis transport using existing legal
 balanced C1 masks. Two focused candidate tests pass, including full raw rank
 88 on the retained bad q22 schedule. It is not integrated into protocol
 paths and is not yet proved for arbitrary schedules or the joint transcript.
-Next: universal raw-coverage argument and complete source/dual transport.
+`R16_UNIVERSAL_RAW_ARGUMENT.md` adds a compiled arbitrary-fibre polynomial
+interpolation theorem and exhaustive source-factor/root checks. The
+composed natural-basis/transport Lean endpoint and complete source/dual
+integration remain next; global joint-view privacy remains unproved.
 The earlier R15 probability investigation is retained, not the current priority.
 
 ## Current verdict — 2026-09-19

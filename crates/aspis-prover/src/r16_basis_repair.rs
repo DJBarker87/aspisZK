@@ -1,9 +1,9 @@
 //! Candidate only: reversible public basis transport, not a privacy theorem.
-use aspis_core::field::M31;
 use crate::{
     circle_candidate::CircleEncoder,
     v8_privacy_affine_gate::{certify_fixed_affine, AffineCertificate},
 };
+use aspis_core::field::M31;
 use aspis_statement::pool_v1::{
     pool_v1_pair_forest_copy_active_rows_v1, pool_v1_pair_forest_relation_free_mask_cells_v1,
 };
@@ -11,6 +11,49 @@ use aspis_statement::pool_v1::{
 const N: usize = 1024;
 const PIVOT: usize = 1023;
 const PADS: usize = 89;
+
+#[test]
+fn r16_source_low_factors_match_four_slot_polynomial_channels() {
+    use aspis_core::circle_fri::selected_circle_fiber_points_shared;
+    let encoder = CircleEncoder::new_for_domain_log(20);
+    let mut roots = Vec::with_capacity(1 << 18);
+    for start in (0u32..1 << 18).step_by(512) {
+        let ids: Vec<_> = (start..start + 512).collect();
+        let points = selected_circle_fiber_points_shared(20, &ids).unwrap();
+        for (&id, p) in ids.iter().zip(points) {
+            let root = p.x.mul(p.x).double().sub(M31::ONE);
+            roots.push(root.0);
+            for (slot, (x, y)) in [
+                (p.x, p.y),
+                (p.x, p.y.neg()),
+                (p.x.neg(), p.y.neg()),
+                (p.x.neg(), p.y),
+            ]
+            .into_iter()
+            .enumerate()
+            {
+                let index = 4 * id as usize + slot;
+                assert_eq!(encoder.encode_c1_basis_value(1, index).unwrap(), y);
+                assert_eq!(encoder.encode_c1_basis_value(2, index).unwrap(), x);
+                let mut factor = root;
+                for bit in 2..7 {
+                    assert_eq!(
+                        encoder.encode_c1_basis_value(1 << bit, index).unwrap(),
+                        factor
+                    );
+                    factor = factor.mul(factor).double().sub(M31::ONE);
+                }
+            }
+        }
+    }
+    roots.sort_unstable();
+    roots.dedup();
+    assert_eq!(
+        roots.len(),
+        1 << 18,
+        "all source fibre line roots must be distinct"
+    );
+}
 
 struct Transport {
     order: Vec<usize>,
