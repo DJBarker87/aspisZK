@@ -52,6 +52,10 @@ are not its proof and are not a new complete privacy test.
 
 ## Next reduced obligation
 
+Update: `R17_RAW_FINAL_KERNEL.md` proves the polynomial divisibility
+characterization below and tests an explicit source kernel basis. General
+coverage of the remaining H1/G maps remains open.
+
 Instead of treating raw and final values as independent targets, start
 with this compatible interpolant and correct the remaining observations
 inside its raw-zero/final-zero kernel.

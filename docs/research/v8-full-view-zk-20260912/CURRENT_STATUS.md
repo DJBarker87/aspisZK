@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest coverage step — factored kernel, 2026-09-21
+
+`R17_RAW_FINAL_KERNEL.md` records the compiled vanishing-polynomial
+characterization of raw-zero/final-zero corrections. A source-basis test
+constructs 700 independent quotient directions without dense nullspace
+elimination. At both actual prefixes, the remaining H1 map has rank 218
+and the G map rank 279 (281 rows with two compatibility equations).
+Universal coverage of these residual maps is the next source obligation;
+global privacy, exceptional-event accounting and soundness remain open.
+
 ## Latest coverage step — raw/final compatible image, 2026-09-21
 
 `R17_RAW_FINAL_COVERAGE.md` records a compiled interpolation theorem for

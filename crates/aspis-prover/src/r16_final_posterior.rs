@@ -22,7 +22,7 @@ fn sc(i: usize) -> K {
 }
 
 // Primal of the retained inactive_row_binding::edges/xt natural-basis map.
-fn times_x(v: &[K]) -> Vec<K> {
+pub(super) fn times_x(v: &[K]) -> Vec<K> {
     let mut out = vec![K::ZERO; v.len() + 1];
     for (j, &value) in v.iter().enumerate() {
         let (mut row, mut bit, mut scale) = (j, 0, M31::ONE);
@@ -123,8 +123,8 @@ fn compatible_image(placement: Placement) -> usize {
 
 pub(super) struct PublicPrefix {
     pub(super) z: [K; 10],
-    kappa: K,
-    tau: K,
+    pub(super) kappa: K,
+    pub(super) tau: K,
     pub(super) alpha: K,
     pub(super) p0: SecureCirclePoint,
     pub(super) p1: SecureCirclePoint,

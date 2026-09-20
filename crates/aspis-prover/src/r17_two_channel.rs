@@ -250,6 +250,78 @@ fn fold_coefficients(q: &[K], alpha: K) -> Vec<K> {
         .collect()
 }
 
+/// Explicit polynomial-factor kernel. No dense 1022-column nullspace solve.
+#[test]
+#[ignore = "requires accepted R17 host public-prefix audit log"]
+fn r17_actual_prefix_factor_kernel_reduced_maps() {
+    let (_,p)=super::final_posterior::read_public_prefix();
+    let pts=selected_circle_fiber_points_shared(20,&p.queries).unwrap();
+    let roots:Vec<_>=pts.iter().map(|pt|pt.x.mul(pt.x).double().sub(M31::ONE)).collect();
+    assert_eq!(roots.len(),22);
+    let mut distinct=roots.clone();distinct.sort_by_key(|v|v.0);distinct.dedup();
+    assert_eq!(distinct.len(),roots.len(),"distinct source fibre roots");
+    let abc=[p.p0.x.mul(p.p1.y).sub(p.p0.y.mul(p.p1.x)),p.p0.y.sub(p.p1.y),p.p1.x.sub(p.p0.x)];
+    assert!(abc[1]!=K::ZERO || abc[2]!=K::ZERO);
+    let mut factor=vec![K::ONE];
+    for &root in &roots {
+        let mut next=super::final_posterior::times_x(&factor);
+        for i in 0..factor.len(){next[i]=next[i].sub(factor[i].mul_m31(root));}
+        factor=next;
+    }
+    assert_eq!(factor.len(),23);assert_ne!(factor[22],K::ZERO);
+    let point:Vec<Vec<K>>=v6_statement_points(&p.z).iter().map(|z|{
+        let mut w=WeightAccumulator::empty(10);w.add_multilinear(K::ONE,z.to_vec()).unwrap();
+        (0..1024).map(|i|w.weight_at(i)).collect()
+    }).collect();
+    let gp=super::structured_g::mask_weights(&p.z);
+    let mix:Vec<_>=(0..271).map(super::structured_g::mixing_row).collect();
+    let gw=quotient_weights(&p.z,p.kappa,abc,p.tau,true);
+    let active:Vec<_>=(0..1024).filter(|&r|!transport().inactive[r]).collect();assert_eq!(active.len(),214);
+    let mut hm=vec![vec![];218];let mut gm=vec![vec![];281];
+    let mut combined=vec![K::ZERO;1024];let mut last_pivot=None;let mut count=0;
+    for degree in 22..=255 {
+        assert_eq!(factor.len(),degree+1);assert_ne!(factor[degree],K::ZERO);
+        let mut padded=factor.clone();padded.resize(256,K::ZERO);
+        for &root in &roots{assert_eq!(evaluate_final256_coefficients(&padded,root).unwrap(),K::ZERO);}
+        let scales=if degree<255{vec![[K::ONE,K::ZERO,K::ZERO],[K::ZERO,K::ONE,K::ZERO],[K::ZERO,K::ZERO,K::ONE]]}
+            else{vec![[abc[1],abc[2],K::ZERO]]};
+        for scale in scales {
+            let mut q=vec![K::ZERO;1024];
+            for i in 0..=degree {
+                let b=factor[i].mul(scale[0]);let c=factor[i].mul(scale[1]);let d=factor[i].mul(scale[2]);
+                q[4*i]=p.alpha.mul(b).add(p.alpha.square().mul(c)).add(p.alpha.pow(3).mul(d)).neg();
+                q[4*i+1]=b;q[4*i+2]=c;q[4*i+3]=d;
+            }
+            // Increasing last nonzero coordinates certify independence.
+            let pivot=q.iter().rposition(|&v|v!=K::ZERO).unwrap();
+            if let Some(prev)=last_pivot{assert!(pivot>prev);}last_pivot=Some(pivot);
+            assert_eq!(q[1023],K::ZERO);assert_eq!(abc[1].mul(q[1022]),abc[2].mul(q[1021]));
+            assert!(fold_coefficients(&q,p.alpha).iter().all(|&v|v==K::ZERO));
+            let message=chord_product(&q,abc);let m=transport().inverse(&message);
+            for (i,&r) in active.iter().enumerate(){hm[i].push(m[r]);}
+            let balance=(0..1024).filter(|&r|transport().inactive[r]).fold(K::ZERO,|s,r|s.add(m[r]));
+            hm[214].push(balance);gm[274].push(balance);
+            for i in 0..3{hm[215+i].push(dot(&point[i],&m));gm[271+i].push(dot(if i==0{&gp}else{&point[i]},&m));}
+            for i in 0..271{gm[i].push(dot(&mix[i],&m));}
+            let poly=aspis_core::sumcheck::polynomial_for_extension(&q,&gw);
+            for (i,k) in [0,1,2,3,5,6].into_iter().enumerate(){gm[275+i].push(poly[k]);}
+            for i in 0..1024{combined[i]=combined[i].add(q[i].mul(sample(6000+count)));}
+            count+=1;
+        }
+        if degree<255{factor=super::final_posterior::times_x(&factor);}
+    }
+    assert_eq!(count,700);
+    let (_,hp)=reduce(&hm);let (_,gg)=reduce(&gm);
+    assert_eq!(hp.len(),218);assert_eq!(gg.len(),279);
+    let enc=CircleEncoder::new_for_domain_log(20);
+    let qcode=enc.encode_c2_message(&combined).unwrap();
+    let msg=chord_product(&combined,abc);let mcode=enc.encode_c2_message(&msg).unwrap();
+    for &id in &p.queries{for s in 0..4{assert_eq!(qcode[4*id as usize+s],K::ZERO);assert_eq!(mcode[4*id as usize+s],K::ZERO);}}
+    for pt in [p.p0,p.p1]{assert_eq!(eval_ood(&sparse(&msg),pt),K::ZERO);}
+    assert!(fold_coefficients(&combined,p.alpha).iter().all(|&v|v==K::ZERO));
+    println!("R17_FACTOR_KERNEL independent_directions=700 polynomial_factors_checked=234 H_residual_rank=218 G_residual_rank=279 source_raw_zeros=176 source_ood_zeros=2 prefix_only=true");
+}
+
 /// Constructive compatible raw/final interpolation. This deliberately does
 /// NOT claim that the recovered original message is a legal H1 pad.
 #[test]
