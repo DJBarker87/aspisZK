@@ -1,5 +1,16 @@
 # Current V8 privacy-repair status
 
+## Active repair direction — R16
+
+The new user goal prioritizes an implemented repair and full privacy proof,
+not further attack-frequency measurement. `R16_BASIS_REPAIR_DESIGN.md`
+specifies a reversible public encoding-basis transport using existing legal
+balanced C1 masks. Two focused candidate tests pass, including full raw rank
+88 on the retained bad q22 schedule. It is not integrated into protocol
+paths and is not yet proved for arbitrary schedules or the joint transcript.
+Next: universal raw-coverage argument and complete source/dual transport.
+The earlier R15 probability investigation is retained, not the current priority.
+
 ## Current verdict — 2026-09-19
 
 **Full-transcript privacy is not established.** A literal raw C1 separator

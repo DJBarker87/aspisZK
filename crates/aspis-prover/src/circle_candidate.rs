@@ -577,6 +577,10 @@ pub struct CircleEncoder {
 #[path = "r14_raw_disclosure.rs"]
 mod r14_raw_disclosure;
 
+#[cfg(test)]
+#[path = "r16_basis_repair.rs"]
+mod r16_basis_repair;
+
 impl CircleEncoder {
     pub fn new() -> Self {
         Self::new_for_domain_log(DOMAIN_LOG_SIZE)
