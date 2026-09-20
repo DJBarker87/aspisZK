@@ -1,5 +1,13 @@
 # Current V8 privacy-repair status
 
+## Latest step — posterior counting, 2026-09-20
+
+`R17_POSTERIOR_COUNTING.md` records compiled fiber-count/uniform-law
+lemmas and a reversible context-dependent correction allowing different
+hidden H1 semantic maps. H1 coverage is now checked at both real prefixes
+(325/347). Source construction of those semantic maps/corrections and the
+adaptive commitment/oracle/seed argument remain open; no full privacy claim.
+
 ## Latest step — explicit joint compatibility, 2026-09-20
 
 `R17_JOINT_COMPOSITION_BOUNDARY.md` retains the serialized first G point

@@ -18,7 +18,7 @@ fn dot(a: &[K], b: &[K]) -> K {
     a.iter().zip(b).fold(K::ZERO, |v, (&a, &b)| v.add(a.mul(b)))
 }
 
-pub(super) use super::opening_weights::{chord_transpose,original_weights,quotient_weights};
+pub(super) use super::opening_weights::{chord_transpose, original_weights, quotient_weights};
 
 fn quotient_direction(col: usize, abc: [K; 3]) -> Vec<K> {
     let mut q = vec![K::ZERO; N];
@@ -93,12 +93,32 @@ fn r17_h1_second_channel_final256_compatible_image() {
     let alpha = sample(151);
     let p0 = secure_ood_circle_point_from_parameter(sample(71)).unwrap();
     let p1 = secure_ood_circle_point_from_parameter(sample(113)).unwrap();
+    let mut queries = vec![4, 6];
+    queries.extend((0..20).map(|i| 1000 + 7919 * i));
+    h1_compatible_image(z, alpha, p0, p1, queries);
+}
+
+#[test]
+#[ignore = "requires accepted R17 host public-prefix audit log"]
+fn r17_actual_source_prefix_h1_compatible_image() {
+    let (path, p) = super::final_posterior::read_public_prefix();
+    h1_compatible_image(p.z, p.alpha, p.p0, p.p1, p.queries);
+    println!("R17_ACTUAL_H1_PREFIX source_log={path}");
+}
+
+fn h1_compatible_image(
+    z: [K; 10],
+    alpha: K,
+    p0: aspis_core::circle::SecureCirclePoint,
+    p1: aspis_core::circle::SecureCirclePoint,
+    queries: Vec<u32>,
+) {
     let abc = [
         p0.x.mul(p1.y).sub(p0.y.mul(p1.x)),
         p0.y.sub(p1.y),
         p1.x.sub(p0.x),
     ];
-    assert_ne!(abc[1], K::ZERO);
+    assert!(abc[1] != K::ZERO || abc[2] != K::ZERO);
     let active: Vec<_> = (0..N).filter(|&i| !transport().inactive[i]).collect();
     assert_eq!(active.len(), 214);
     // 214 active-row zeros plus one inactive-balance equation on m=T^-1(Lq).
@@ -114,8 +134,6 @@ fn r17_h1_second_channel_final256_compatible_image() {
             (0..N).map(|i| w.weight_at(i as u32)).collect::<Vec<_>>()
         })
         .collect();
-    let mut queries = vec![4, 6];
-    queries.extend((0..20).map(|i| 1000 + 7919 * i));
     let pts = selected_circle_fiber_points_shared(20, &queries).unwrap();
     // Each fold equation has a nonzero coefficient in its own raw block.
     // The 22 constraints are therefore independent in observation space.

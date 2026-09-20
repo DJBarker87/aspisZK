@@ -121,14 +121,14 @@ fn compatible_image(placement: Placement) -> usize {
     compatible_image_at(placement, None)
 }
 
-struct PublicPrefix {
-    z: [K; 10],
+pub(super) struct PublicPrefix {
+    pub(super) z: [K; 10],
     kappa: K,
     tau: K,
-    alpha: K,
-    p0: SecureCirclePoint,
-    p1: SecureCirclePoint,
-    queries: Vec<u32>,
+    pub(super) alpha: K,
+    pub(super) p0: SecureCirclePoint,
+    pub(super) p1: SecureCirclePoint,
+    pub(super) queries: Vec<u32>,
 }
 
 #[test]
@@ -153,7 +153,7 @@ fn r17_actual_source_prefix_joint_ready_image() {
     println!("R17_JOINT_READY_PREFIX compatible_rank=601 observations=625 source_log={path}");
 }
 
-fn read_public_prefix() -> (String, PublicPrefix) {
+pub(super) fn read_public_prefix() -> (String, PublicPrefix) {
     let path = std::env::var("ASPIS_R17_PUBLIC_PREFIX_LOG").expect("explicit source audit log");
     let log = std::fs::read_to_string(&path).unwrap();
     assert!(log.lines().any(|l| l == "R17_PUBLIC_PREFIX_ACCEPTED"));
