@@ -46,3 +46,15 @@ old challenges or old proof bytes cannot be assumed identical.
 There is no current full soundness-preservation claim, no full privacy
 claim, and no release/deployment approval. Closing either ledger alone is
 insufficient for the user's full-repair goal.
+
+## R17 structured-G integration boundary (2026-09-20)
+
+The R17 prototype would require a G-specific opening functional. The R16
+source instead proves one functional of a single gamma-batched message.
+`R17_MIXED_MASK_BOUNDARY.md` records source hashes, a compiled impossibility
+lemma for unequal functionals on a single combined input, and an executable
+negative regression. Changing a common inverse-dual weight cannot repair
+that mismatch. A distinct opening argument (such as the specified, still
+unimplemented two-channel route) must be soundness-checked; the old verifier
+must not be patched to accept unmatched claims. This is not a demonstrated
+soundness break in the unchanged protocol.

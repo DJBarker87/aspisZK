@@ -86,19 +86,32 @@ fn sparse(v: &[K]) -> Vec<(usize, K)> {
 
 #[test]
 fn r16_g_posterior_including_final256_compatible_image() {
-    assert_eq!(compatible_image(false), 408);
+    assert_eq!(compatible_image(Placement::Original), 408);
 }
 
 #[test]
 fn r17_structured_g_first271_negative_compatible_image() {
     // Preserve the failed candidate: 56 additional constraints beyond the
     // 22 mandatory fold relations. This is not a repaired-source theorem.
-    let rank = compatible_image(true);
+    let rank = compatible_image(Placement::First271);
     assert_eq!(rank, 540);
     assert!(rank < 618 - 22);
 }
 
-fn compatible_image(structured: bool) -> usize {
+#[test]
+fn r17_structured_g_vandermonde_compatible_image() {
+    assert_eq!(compatible_image(Placement::Vandermonde), 596);
+}
+
+#[derive(Clone, Copy, Debug)]
+enum Placement {
+    Original,
+    First271,
+    Vandermonde,
+}
+
+fn compatible_image(placement: Placement) -> usize {
+    let structured = !matches!(placement, Placement::Original);
     let z: [K; 10] = core::array::from_fn(|i| sample(i as u32 + 1));
     let alpha = sample(151);
     let p0 = secure_ood_circle_point_from_parameter(sample(71)).unwrap();
@@ -151,6 +164,9 @@ fn compatible_image(structured: bool) -> usize {
         // semantic map is invertible, so use its underlying coin coordinates.
         earlier = (0..271)
             .map(|i| {
+                if matches!(placement, Placement::Vandermonde) {
+                    return super::structured_g::mixing_row(i);
+                }
                 (0..N)
                     .map(|j| if i == j { K::ONE } else { K::ZERO })
                     .collect()
@@ -327,7 +343,7 @@ fn compatible_image(structured: bool) -> usize {
     }
     let rank = pivots.len();
     println!(
-        "FINAL_POSTERIOR structured={structured} rows={n} variables=1022 rank={rank} expected_consistency_relations=22"
+        "FINAL_POSTERIOR placement={placement:?} rows={n} variables=1022 rank={rank} expected_consistency_relations=22"
     );
     assert!(rank <= n - 22);
     assert!(a[rank..].iter().flatten().all(|v| *v == K::ZERO));

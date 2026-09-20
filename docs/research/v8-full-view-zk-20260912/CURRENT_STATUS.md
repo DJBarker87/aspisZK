@@ -1,6 +1,21 @@
 # Current V8 privacy-repair status
 
-## Latest candidate check — R17, 2026-09-20
+## Latest candidate check — R17 mixed mask, 2026-09-20
+
+`R17_MIXED_MASK_BOUNDARY.md` records a prototype using invertible public
+mixing of existing G coins. Five focused Lean leaves compile: mixing,
+round coefficients/degree/boundary, causal cuts, Boolean-cube recurrence,
+and the shared-functional limitation. Its fixed joint map reaches rank 596
+of 618 and the ten-round algebra test passes. This is not a source profile.
+
+Source inspection identifies the next integration obligation: the existing
+single-quotient PCS uses one shared functional, whereas structured G needs
+a different one. A negative regression and abstract theorem prohibit the
+naive substitution. A two-channel opening route is specified for scrutiny,
+not implemented. Its extra disclosures and adaptive rank/loss proof must
+be established before any full privacy or soundness claim.
+
+## Retained first-placement negative — R17
 
 `R17_STRUCTURED_G_CANDIDATE.md` derives a proposed ten-round zero-boundary
 G mask, but rejects its naive first-271-entry placement: the joint fixed
