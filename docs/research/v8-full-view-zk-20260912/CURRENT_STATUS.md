@@ -15,6 +15,9 @@ adapter, and three other generated preimages remain unavailable.
 
 New focused evidence:
 
+- `r15-circle-domain-evidence.md`: all 262,144 actual log-20 query fibres
+  pass independent integer circle/composition checks. This is exhaustive
+  finite executable evidence, not a Rust semantics or privacy theorem.
 - `r15-exact-tower-chord-evidence.md`: the chord theorem is instantiated in
   the literal QM31 tower, with the source OOD policy's algebraic premises.
   Rust operation/query-point refinement and probability obligations remain.
