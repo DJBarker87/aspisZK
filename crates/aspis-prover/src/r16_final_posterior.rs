@@ -114,6 +114,7 @@ enum Placement {
     First271,
     Vandermonde,
     VandermondeRelation,
+    VandermondeJoint,
 }
 
 fn compatible_image(placement: Placement) -> usize {
@@ -133,6 +134,26 @@ struct PublicPrefix {
 #[test]
 #[ignore = "requires accepted R17 host public-prefix audit log"]
 fn r17_actual_source_prefix_compatible_image() {
+    let (path, prefix) = read_public_prefix();
+    assert_eq!(
+        compatible_image_at(Placement::VandermondeRelation, Some(prefix)),
+        601
+    );
+    println!("R17_ACTUAL_PREFIX compatible_rank=601 observations=624 source_log={path}");
+}
+
+#[test]
+#[ignore = "requires accepted R17 host public-prefix audit log"]
+fn r17_actual_source_prefix_joint_ready_image() {
+    let (path, prefix) = read_public_prefix();
+    assert_eq!(
+        compatible_image_at(Placement::VandermondeJoint, Some(prefix)),
+        601
+    );
+    println!("R17_JOINT_READY_PREFIX compatible_rank=601 observations=625 source_log={path}");
+}
+
+fn read_public_prefix() -> (String, PublicPrefix) {
     let path = std::env::var("ASPIS_R17_PUBLIC_PREFIX_LOG").expect("explicit source audit log");
     let log = std::fs::read_to_string(&path).unwrap();
     assert!(log.lines().any(|l| l == "R17_PUBLIC_PREFIX_ACCEPTED"));
@@ -177,16 +198,16 @@ fn r17_actual_source_prefix_compatible_image() {
     assert_ne!(prefix.p0, prefix.p1);
     assert_ne!(prefix.kappa, K::ZERO);
     assert_ne!(prefix.tau, K::ZERO);
-    assert_eq!(
-        compatible_image_at(Placement::VandermondeRelation, Some(prefix)),
-        601
-    );
-    println!("R17_ACTUAL_PREFIX compatible_rank=601 observations=624 source_log={path}");
+    (path, prefix)
 }
 
 fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> usize {
     let structured = !matches!(placement, Placement::Original);
-    let has_relation = matches!(placement, Placement::VandermondeRelation);
+    let has_terminal = matches!(placement, Placement::VandermondeJoint);
+    let has_relation = matches!(
+        placement,
+        Placement::VandermondeRelation | Placement::VandermondeJoint
+    );
     let PublicPrefix {
         z,
         alpha,
@@ -258,7 +279,9 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
             .map(|i| {
                 if matches!(
                     placement,
-                    Placement::Vandermonde | Placement::VandermondeRelation
+                    Placement::Vandermonde
+                        | Placement::VandermondeRelation
+                        | Placement::VandermondeJoint
                 ) {
                     return super::structured_g::mixing_row(i);
                 }
@@ -268,7 +291,7 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
             })
             .collect();
     }
-    let point_weights: Vec<_> = v6_statement_points(&z)
+    let mut point_weights: Vec<_> = v6_statement_points(&z)
         .into_iter()
         // The proposed first G claim is the structured polynomial evaluation,
         // already determined by the 271 coins. Retain the other two MLE claims.
@@ -279,6 +302,12 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
             (0..N).map(|r| w.weight_at(r as u32)).collect::<Vec<_>>()
         })
         .collect();
+    if has_terminal {
+        // This field is serialized, even though it is determined by the
+        // G coin coordinates. Keep its compatibility equation explicit
+        // before attempting joint H1/G composition.
+        point_weights.insert(0, super::structured_g::mask_weights(&z));
+    }
     let pts = selected_circle_fiber_points_shared(20, &queries).unwrap();
     let enc = CircleEncoder::new_for_domain_log(20);
     let eval: Vec<Vec<_>> = queries
@@ -382,6 +411,17 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
                 .iter()
                 .fold(K::ZERO, |s, &(r, v)| s.add(point_weights[i][r].mul(v)));
         }
+        if has_terminal {
+            let coins: [K; 271] = core::array::from_fn(|i| matrix[i][col]);
+            assert_eq!(
+                matrix[point_start][col],
+                super::structured_g::mask_eval(&coins, &z)
+            );
+            // Its coefficient on the first G point is one; the 22 fold
+            // equations have no point/coin coefficients. The relation
+            // equation has a nonzero sent-polynomial coefficient. Hence
+            // all 24 equations remain independent.
+        }
         let finals: Vec<_> = q
             .chunks_exact(4)
             .map(|v| v[0].add(alpha.mul(v[1].add(alpha.mul(v[2].add(alpha.mul(v[3])))))))
@@ -466,7 +506,7 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
         pivots.push(col);
     }
     let rank = pivots.len();
-    let consistency = 22 + usize::from(has_relation);
+    let consistency = 22 + usize::from(has_relation) + usize::from(has_terminal);
     println!(
         "FINAL_POSTERIOR placement={placement:?} rows={n} variables=1022 rank={rank} expected_consistency_relations={consistency}"
     );

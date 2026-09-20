@@ -1,5 +1,13 @@
 # Current V8 privacy-repair status
 
+## Latest step — explicit joint compatibility, 2026-09-20
+
+`R17_JOINT_COMPOSITION_BOUNDARY.md` retains the serialized first G point
+and checks rank 601/625 at both actual prefixes, accounting for 24 equations.
+A conditional compatible-image composition lemma and the exact source-shaped
+H1 affine terminal identity compile. The source H1 semantic-coordinate map,
+its compatibility laws and the adaptive posterior argument remain open.
+
 ## Latest diagnostic — actual R17 verifier prefixes, 2026-09-20
 
 `R17_ACTUAL_PREFIX_COVERAGE.md` records rank 601/624 at both retained
