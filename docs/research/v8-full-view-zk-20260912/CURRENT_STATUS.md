@@ -13,6 +13,9 @@ and is not yet proved for the joint transcript.
 interpolation theorem and exhaustive source-factor/root checks. The
 natural-basis endpoint now compiles for every distinct-fibre schedule.
 Exact source mask/transport correspondence and joint posterior remain open.
+`R16_BALANCED_TRANSPORT_PROOF.md` adds compiled balanced-lift and two-sided
+inverse theorems for the source-shaped transport, with standard axioms only;
+this is not yet a complete Rust refinement or distributional proof.
 `R16_SOURCE_INTEGRATION.md` records the common C1/C2 transport, inverse-dual
 verifier, profile binding, retained integration failures and runtime results;
 global joint-view privacy and soundness preservation remain unproved.
