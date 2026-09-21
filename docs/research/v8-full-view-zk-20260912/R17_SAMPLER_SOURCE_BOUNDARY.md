@@ -1,5 +1,45 @@
 # R17 determinant sampler/source boundary
 
+## Joint sequential ideal-tape symmetry — 2026-09-21
+
+Base `d0c22b8c212fd1eb0427a4f479e328b4f208ec8a` plus this changeset.
+`AspisV8R17/SequentialRelabel.lean` proves a joint distributional symmetry,
+not just four marginal symmetries. A list of acceptance-preserving alphabet
+permutations assigns one permutation to each requested limb. The full-tape
+transformation advances to the next permutation only on acceptance, never
+at a fixed word offset. It has a proved inverse using inverse permutations
+and preserves total tape length, including on tapes where a bounded scan fails.
+
+The single-scan commuting identity carries the transformed suffix into the
+next limb. The multi-scan identity maps the entire returned tuple componentwise
+and leaves the final unused suffix unchanged; failure stays none. A fixed-length
+List.Vector tape equivalence then invokes the retained FiniteGames coin
+reindexing theorem. `joint_uniform_symmetry` is equality of the full laws on
+Option (returned-values, unused-suffix) for uniform finite tapes. The theorem
+does not drop the suffix or condition silently on successful execution.
+
+Six #print axioms audits pass: the five deterministic lemmas use propext and
+Quot.sound; joint_uniform_symmetry also uses Classical.choice. The acceptance
+preservation premise is explicit, not a new cryptographic hiding assumption.
+No source oracle law is asserted: repeated/cached words need not have this
+uniform-tape law. Exact success/failure mass for the multi-limb model, Rust
+byte/block refinement, and adaptive shared-oracle selection remain separate.
+
+Focused cached command: earlier lake wrapper and -j1 -M1800, target
+`AspisV8R17/SequentialRelabel.lean`, matching cached object. No full replay,
+runtime rerun, or production changes.
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Initial recursion/Option simplification | 1 | 7.64 | 1457356800 | 0 |
+| Remaining Option bind identity | 1 | 3.06 | 1458683904 | 0 |
+| Four deterministic lemmas | 0 | 3.02 | 1472233472 | 0 |
+| Tape equivalence, missing local nonempty instance | 1 | 2.43 | 1462812672 | 0 |
+| Final six audited theorems and tape equivalence | 0 | 8.18 | 1476067328 | 0 |
+
+Failed-attempt sorryAx results are rejected. The final fixes add the derived
+nonempty-vector instance and simplify double inversion; no premise was weakened.
+
 ## Sequential word-cursor model — 2026-09-21
 
 Base `4f05c559ad2b549b1e4f9f01000380d3ea5f1bca` plus this changeset.
