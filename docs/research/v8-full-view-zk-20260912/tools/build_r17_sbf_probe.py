@@ -38,6 +38,10 @@ def check_after(name, expected):
         change = stage['fused_fft'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('scalar_fma', {}):
+        change = stage['scalar_fma'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'owned_weights' in stage:
     assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == stage['owned_weights_sha256']

@@ -41,7 +41,16 @@ theorem padding_is_prime_square :
     (4611686014132420609 : ℕ) = 2147483647 * 2147483647 := by
   norm_num
 
+/-- Range bound for each limb of the scalar FMA used in the original merge
+order. This is a bound, not a theorem about the source reducer's residue. -/
+theorem scalar_fma_bound (acc x y : ℕ)
+    (hacc : acc < 2147483647) (hx : x < 2147483647) (hy : y < 2147483647) :
+    acc + x * y < 4611686018427387904 := by
+  have h := canonical_product_bound x y hx hy
+  omega
+
 #print axioms canonical_product_bound
 #print axioms raw_bounds
 #print axioms padding_is_prime_square
+#print axioms scalar_fma_bound
 end AspisV8R17.FusedButterfly

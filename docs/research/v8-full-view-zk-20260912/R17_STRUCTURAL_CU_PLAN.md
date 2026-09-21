@@ -111,7 +111,10 @@ leaf compiles; all finite arithmetic/basis/actual-host-proof gates pass. The
 FFT marker interval falls from 13.37M to 8.53M CU. See R17_REPAIR_CU.md for
 exact evidence and proof limitations: the natural-number bounds do not yet
 establish source reducer correspondence or whole-transform correctness.
-The ordinary tensors and polynomial tree remain costly. Preserve the failed
-tree-batching evidence; the next arithmetic candidate is fused scalar
-multiply-add in the original scatter order, rather than reintroducing that
-output-diagonal batching loop. Full SBF verification still fails on heap.
+R20 implements scalar multiply-add in the original scatter order, retaining
+the failed diagonal-batching evidence. Its tree interval is 5.46M CU versus
+7.91M before. Reusing weight serialization storage saves another 16 KiB and
+lets the honest SBF execution complete openings and their reference check.
+It still exhausts heap afterwards. The next ownership targets are in-place
+dense dual folding and temporary injection scales; the ordinary tensors and
+both G transform sections remain well above the desired total CU budget.

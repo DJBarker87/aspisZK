@@ -648,3 +648,63 @@ the retained reducer refinement to these raw integer bounds and the four
 field residues. Whole-transform source equivalence and all full-transcript
 privacy, soundness, retry/publication and resource-failure obligations remain
 separate. The performance improvement closes none of those broader gates.
+
+## R20 scalar FMA and reused transcript serialization
+
+Base b23f7594 plus this changeset. stage_r17_scalar_fma.py keeps the original
+tree scatter order, replacing each QM31-by-M31 multiplication followed by
+addition with one reduction of acc + x*y per M31 limb. It does not restore
+the rejected four-product diagonal batching loop. The same stage reuses one
+16384-byte weight serialization buffer across both channels. Every byte is
+rewritten with the same source write_le_bytes method; labels, lengths, order
+and absorption calls remain. A host-only assertion compares both encodings
+with the original bytes(v) implementation. This avoids one 16 KiB SBF
+allocation without omitting the expanded weights from the transcript.
+
+125 boundary triples check the scalar FMA against source field operations,
+with distinct extension limbs and checked u64 intermediates. All previous
+butterfly, FFT, 271-basis-position, dirty-buffer and complete-weight controls
+pass. The actual host proof is accepted and G-final corruption rejected;
+both verifier paths and the independent combined-opening check remain.
+Host scope 4G/6G/zero swap: focused exit 0, 28.08 s, RSS 533900 KiB;
+positive exit 0, 9.44 s, 428012 KiB; negative exit 0, 0.00 s reported,
+3344 KiB. SBF source/table/frame gates pass: exit 0, 35.46 s, 619036 KiB,
+scope 5G/7G/zero swap. All task swap counts are zero.
+
+G tree interval falls from 7909059 to **5455352 CU**; FFT remains 8525873.
+Second original-weight interval falls from 19776420 to **17323740 CU**.
+The honest diagnostic SBF execution now reaches opened-points,
+opened-records, opened-authenticated and openings-end, including the retained
+combined-opening reference check. It then exhausts heap at 29712455 CU,
+after openings and before a completed verifier result. The corrupt execution
+reaches opened-records, then starts the second semantic pass without an
+opened-authenticated marker, and later exhausts heap at 29541974 CU. By source
+control flow this is consistent with the first path returning authentication
+error, but the overall SBF result is still resource failure, not a completed
+checked rejection. Do not count it as a negative verifier pass.
+
+Both 1.2M/1.4M pairs still exhaust CU. Heap stays 256 KiB; diagnostic 100M
+budget is unchanged. Observation driver exit 0, 0.13 s, RSS 26624 KiB,
+zero swaps, scope 3G/4G/zero swap. ELF SHA256:
+29b9dbc16649ef19dc8c9d0118ac8846bce7459264dd1fd9b77c49ec870e8c92.
+Evidence: r17-scalar-fma-host-r20.log, r17-scalar-fma-sbf-r20.log,
+r17-scalar-fma-svm-r20.{jsonl,log}.
+
+The changed FusedButterflyBounds.lean compiles with the same cached Lean
+4.32.0/mathlib pin and explicit isolated root. New scalar_fma_bound proves
+acc + x*y < 2^62 from canonical limb bounds. Its #print axioms result is
+[propext, Quot.sound]; the other three audits are unchanged. Scope 1G/2G,
+zero swap, TasksMax=64, lake env lean -j1 -M1600: exit 0, 1.56 s,
+peak RSS 1635076 KiB, task swaps 0. Source revision b23f7594 plus this changed
+leaf and staged kernel. Evidence: r17-scalar-fma-bounds-r20.log. No full
+manifest replay or unchanged generator/regression rerun was needed.
+
+The exact remaining source boundary is still reducer/canonical-operand
+correspondence and whole-map equivalence; these range lemmas alone do not
+close it. Full privacy, soundness and publication/retry obligations remain.
+Next allocation target found in source: WeightAccumulator::fold_dense_arity4
+allocates a new vector at every dual fold, although ascending writes to
+index i can safely consume the already-read block 4*i..4*i+4 in place.
+The post-opening injection also builds temporary scale vectors that the
+accumulator immediately copies. Inspect and test those ownership changes
+without dropping either verifier or the reference opening check.
