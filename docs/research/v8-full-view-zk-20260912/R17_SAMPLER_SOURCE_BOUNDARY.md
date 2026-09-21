@@ -1,5 +1,57 @@
 # R17 determinant sampler/source boundary
 
+## Adaptive unread-cell law — 2026-09-21
+
+Base `78b6d5f84ebc1b013611b81f412717af1faed88c` plus this changeset.
+`AspisV8R17/AdaptiveOracle.lean` supplies a generic deferred-decisions bridge
+missing from the earlier pathwise provenance result. It uses one complete
+finite oracle H, not independent oracles for different protocol components.
+A causal policy chooses its next address from the previous address/answer
+log. Repeated addresses consequently return the same H value.
+
+Proved: agreement on every cell read by an execution preserves its trace;
+updating an unread cell preserves that trace; permuting one cell is an oracle
+equivalence; fixing a trace and an unread cell gives a bijection between the
+fibers for any two cell values. Thus all joint masses (trace=tr, H(i)=a) are
+equal as a varies under a uniform full oracle. A corollary sets i=next(tr),
+allowing adaptive next-address selection. These are joint-mass equalities,
+valid even for impossible traces, without dividing by a possibly zero trace
+probability. For positive-mass traces they support conditional uniformity.
+
+The unread premise refers to the complete prior log from an empty start.
+Public prequeries must appear there; a sampler call to a prequeried address
+does not meet that premise. Apply the law at its earlier first assignment,
+then use retained cache provenance. Fixed private/random coins can parameterize
+the policy, but their independence from unread cells must be justified when
+averaging over them. The policy cannot inspect unread H through a closure.
+
+First remaining source-specific proposition: refine the combined source and
+adversary execution (including commitments, expansion, public prequeries,
+absorbs, squeezes and advances) into this causal policy with the same shared
+oracle and bounded query accounting. Then charge determinant/sampler events
+at justified first assignments, including selection of transcripts and visible
+aborts. An arbitrary future-dependent bad predicate is still not admissible.
+This generic result is not that source refinement, an adaptive loss bound,
+or an end-to-end privacy/soundness theorem.
+
+Six declarations are axioms-audited: run_congr_on_reads and
+unread_update_preserves_trace use propext; cellEquiv and traceCellFiberEquiv
+use propext/Quot.sound; fresh_cell_counts_equal and
+fresh_next_joint_probabilities additionally use Classical.choice.
+No new hiding axiom or sorryAx remains. The retained finite-game definition
+is reused; this does not assert SHA-256 is an information-theoretic oracle.
+
+Focused cached lake invocation targets `AspisV8R17/AdaptiveOracle.lean` and
+its matching object, -j1 -M1800. No production changes or unchanged tests.
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Initial product-equality subtype conversion | 1 | 9.03 | 1462960128 | 0 |
+| Corrected five audited declarations | 0 | 3.03 | 1477345280 | 0 |
+| Final six including adaptive next-cell joint mass | 0 | 2.89 | 1479507968 | 0 |
+
+The failed audit is rejected. Final compile has no warnings.
+
 ## Actual-core cursor differential gate — 2026-09-21
 
 Base `922852d39af704f9713f8d3e3e3017b8416ea9dd` plus this changeset.
