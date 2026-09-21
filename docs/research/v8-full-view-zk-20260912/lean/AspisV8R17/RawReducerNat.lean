@@ -1,11 +1,13 @@
-import Init.Data.Nat.Bitwise.Lemmas
-import Mathlib.Data.Nat.Notation
+module
+public import Init.Data.Nat.Bitwise.Lemmas
+public import Mathlib.Data.Nat.Notation
 import Lean.Elab.Tactic.Omega
 
 /-! Natural-number definitions and bounds split from RawReducer. The retained
 statements and reducer definitions are unchanged; closed numeral proofs use
 `decide` instead of importing the field-algebra tactic stack. -/
 set_option autoImplicit false
+@[expose] public section
 namespace AspisV8R17.RawReducer
 abbrev P : ℕ := 2147483647
 def CanonicalRawM31 (x : ℕ) : Prop := x<P

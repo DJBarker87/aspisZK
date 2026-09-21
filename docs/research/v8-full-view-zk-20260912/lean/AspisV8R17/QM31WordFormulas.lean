@@ -1,7 +1,9 @@
-import AspisV8R17.RawReducerNat
+module
+public import AspisV8R17.RawReducerNat
 
 /-! Pure modular-word interface shared by runtime execution and tower algebra.
 No generated-runtime declarations or cryptographic premises are imported. -/
+@[expose] public section
 namespace AspisV8R17.GeneratedQM31Products
 open RawReducer
 abbrev WordPair := Nat × Nat

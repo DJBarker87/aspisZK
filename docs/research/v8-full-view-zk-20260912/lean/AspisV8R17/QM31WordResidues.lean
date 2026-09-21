@@ -1,8 +1,11 @@
-import AspisV8R17.QM31WordFormulas
-import Mathlib.Data.ZMod.Basic
+module
+public import AspisV8R17.QM31WordFormulas
+public import Mathlib.Data.ZMod.Basic
+import Lean.Elab.Tactic.Omega
 
 /-! Coordinatewise residue interface for the retained explicit tower.
 This leaf does not instantiate its quadratic-algebra operations or fields. -/
+@[expose] public section
 namespace AspisV8R17.QM31WordResidues
 open RawReducer GeneratedQM31Products GeneratedQM31Linear
 abbrev M := ZMod P

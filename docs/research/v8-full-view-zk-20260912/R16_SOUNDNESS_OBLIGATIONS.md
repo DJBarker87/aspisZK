@@ -1,5 +1,52 @@
 # R16 soundness preservation obligations
 
+## Concrete shared-word decoder into the actual tower — 2026-09-21
+
+Base revision `c74f0439` plus this changeset. QM31WordTower.lean instantiates
+the actual quadratic tower over ZMod P and proves decode_mul, decode_square,
+decode_add and decode_sub for the SAME shared Nat word formulas used by the
+generated execution theorems. Product/square/add decoding is unconditional;
+subtraction retains the canonical-subtrahend premise. embed_product and
+embed_square are definitional identifications of residue-coordinate formulas
+with the retained tower algorithms, followed by the compiled ring identities.
+No cardinality-only equivalence or hidden field assumption is substituted.
+
+RawReducerNat, QM31WordFormulas and QM31WordResidues now use module-scoped
+public interfaces, with exposed definitions and private tactic imports.
+Their mathematical statements/bodies are unchanged. The initial bridge
+attempt correctly rejected importing a non-module dependency; converting
+this three-leaf pure dependency chain resolved it. Aeneas source projections
+remain non-module and were not modified by this migration.
+
+Cached Linux Lean 4.32.0 `-j1 -M1800`, each scope MemoryHigh=4G,
+MemoryMax=6G, MemorySwapMax=0, TasksMax=64. Targets below are under
+AspisV8R17; scope names have prefix aspis-r17-:
+
+| Target | Scope suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| QM31WordTower.lean, non-module import rejection | concrete-tower-r1 | 1 | 0.23 | 645700 | 0 |
+| RawReducerNat.lean | module-RawReducerNat-r1 | 0 | 0.51 | 536580 | 0 |
+| QM31WordFormulas.lean | module-QM31WordFormulas-r1 | 0 | 0.28 | 522224 | 0 |
+| QM31WordResidues.lean | module-QM31WordResidues-r1 | 0 | 0.79 | 1008808 | 0 |
+| QM31WordTower.lean | module-QM31WordTower-r1 | 0 | 0.79 | 1206840 | 0 |
+| UnsignedReducerExecution.lean | module-consumer-UnsignedReducerExecution-r1 | 0 | 0.75 | 1629900 | 0 |
+| GeneratedQM31Products.lean | module-consumer-GeneratedQM31Products-r1 | 0 | 0.71 | 1634648 | 0 |
+| GeneratedQM31Linear.lean | module-consumer-GeneratedQM31Linear-r1 | 0 | 0.75 | 1627764 | 0 |
+
+All six bridge #print axioms results are `[propext, Quot.sound]`. Rechecked
+reducer and product consumers retain the standard three axioms; linear and
+residue leaves use `[propext, Quot.sound]`, with mul_canonical axiom-free.
+No sorryAx or cap increase. Source checks and negative mutations passed.
+The consumer reruns are justified by the changed dependency interfaces,
+not an unchanged full regression.
+
+First remaining composition: put the generated Result execution and this
+decoder together in the checked source-operation theorem (including scalar
+multiplication/constant), then bind actual mask arrays/loops and canonical
+input invariants. Field/nonresidue integration, complete extraction-pipeline
+certification, full-transcript privacy and malicious-prover soundness bounds
+remain separate. Production paths and negative regressions are unchanged.
+
 ## Actual quadratic-tower ring identities — 2026-09-21
 
 Base revision `ca11059d` plus this changeset. QuadraticTowerOperations.lean
