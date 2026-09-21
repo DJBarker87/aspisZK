@@ -9,7 +9,7 @@ from check_r17_generated_reducer import pinned, blocks_match
 from check_r17_field_slice import PINS
 from check_r17_half import CHUNK_PIN
 
-def check(stage, scalar, mul_by_r=None, products=None):
+def check(stage, scalar, mul_by_r=None, products=None, linear=None):
     sources = pinned(stage, {**PINS, "FunsChunk06.lean": CHUNK_PIN})
     pattern = re.compile(r"^-- GENERATED ([\w.]+)\n(.*?)\n-- END GENERATED$", re.M | re.S)
     def validate(text):
@@ -68,6 +68,24 @@ def check(stage, scalar, mul_by_r=None, products=None):
                 raise ValueError("product mutation accepted")
         result["products"] = {"source_blocks": 2, "negative_mutations_rejected": 2,
                               "sha256": hashlib.sha256(products.read_bytes()).hexdigest()}
+    if linear is not None:
+        value = linear.read_text()
+        def validate_linear(body):
+            blocks_match(pattern.findall(body), ["FunsChunk04.lean"] * 2, sources)
+        validate_linear(value)
+        for before, after in [("CM31.sub self.c1 rhs.c1", "CM31.sub self.c0 rhs.c1"),
+                              ("CM31.add self.c1 rhs.c1", "CM31.add self.c1 rhs.c0")]:
+            changed = value.replace(before, after, 1)
+            if changed == value:
+                raise ValueError("ineffective linear mutation")
+            try:
+                validate_linear(changed)
+            except ValueError:
+                pass
+            else:
+                raise ValueError("linear mutation accepted")
+        result["linear"] = {"source_blocks": 2, "negative_mutations_rejected": 2,
+                            "sha256": hashlib.sha256(linear.read_bytes()).hexdigest()}
     return result
 
 if __name__ == "__main__":
@@ -76,5 +94,6 @@ if __name__ == "__main__":
     parser.add_argument("--scalar", type=Path, required=True)
     parser.add_argument("--mul-by-r", type=Path)
     parser.add_argument("--products", type=Path)
+    parser.add_argument("--linear", type=Path)
     args = parser.parse_args()
-    print(json.dumps(check(args.stage, args.scalar, args.mul_by_r, args.products), sort_keys=True))
+    print(json.dumps(check(args.stage, args.scalar, args.mul_by_r, args.products, args.linear), sort_keys=True))

@@ -1,5 +1,37 @@
 # R16 soundness preservation obligations
 
+## Current QM31 linear wrappers — 2026-09-21
+
+Base revision `27f24bce` plus this changeset. GeneratedQM31Linear.lean
+retains the complete QM31.add and QM31.sub declarations from pinned
+FunsChunk04. Composing the current CM31 results proves success, canonicality
+and exact four-word modular addition/subtraction for every canonical pair
+of inputs. Source authentication rejects two wrong-component mutations.
+
+Exact target `AspisV8R17/GeneratedQM31Linear.lean`, SHA256
+`b9185d993738888baf0822e20e5fdd064334554cb3d412fe5121ff872fb0f73d`.
+Cached Linux Lean 4.32.0 `-j1 -M1800`, scope `aspis-r17-qm31-linear-r1`,
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64:
+exit 0, wall 0.76 s, peak RSS 1631908 KiB, swaps 0. Both #print axioms
+results are `[propext, Quot.sound]`; no sorryAx, failed attempts or new
+assumptions. Existing product/scalar/mul_by_r authentication also passed;
+unchanged Lean targets were not recompiled.
+
+The precise next arithmetic interpretation is the retained
+`AspisFormal/V5ComponentCQM31TowerExact.lean` explicit tower
+`CM31 = ZMod P[i]/(i²+1)`, `QM31 = CM31[u]/(u²-(2+i))`, whose coordinates
+are the four source limbs. The older cardinality-only Galois-field
+representation is NOT an arithmetic correspondence. This turn inspected
+the retained tower, not recompiled or source-instantiated it. Its large
+representation/sampler import closure should not be pulled into the focused
+runtime leaf; use a small justified arithmetic interface or split first.
+
+Next proposition: interpreting the current exact modular-word operation
+formulas in that explicit tower commutes with add/sub/mul/square/scalar
+multiplication. Actual source mask-loop/array refinement and all global
+privacy/soundness obligations remain open. No production code or negative
+regression changed.
+
 ## Complete current QM31 product graphs — 2026-09-21
 
 Base revision `134d3e7b` plus this changeset. GeneratedQM31Products.lean
