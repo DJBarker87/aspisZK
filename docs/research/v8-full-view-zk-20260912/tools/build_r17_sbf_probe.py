@@ -26,6 +26,14 @@ def check_after(name, expected):
         change = stage['move_prepared'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('fast_g_reuse', {}):
+        change = stage['fast_g_reuse'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    if name in stage.get('fast_g_reuse_only', {}):
+        change = stage['fast_g_reuse_only'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'owned_weights' in stage:
     assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == stage['owned_weights_sha256']
@@ -38,7 +46,7 @@ if 'fixed_g_table' in stage:
         assert fast['before_sha256'] == expected
         expected = fast['after_sha256']
         for name in ('r17_fast_g.rs', 'r17_fast_g_generate.rs'):
-            assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == fast[name]
+            check_after(name, fast[name])
         assert hashlib.sha256((callback.parent / 'r17_fast_g_tables.rs').read_bytes()).hexdigest() == fast['tables_sha256']
     assert expected == stage['workspace_sha256']
     assert hashlib.sha256((callback.parent / 'r17_g_powers.rs').read_bytes()).hexdigest() == change['table_sha256']

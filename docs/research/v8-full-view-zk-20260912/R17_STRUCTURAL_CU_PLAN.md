@@ -82,3 +82,27 @@ product-tree implementation. Its second original-weight stage costs 24.54M
 CU, down from 26.65M, but extra workspace causes earlier SBF heap exhaustion.
 This is a measured partial optimization and a retained resource regression,
 not a completed repair, full source proof, or evidence of budget feasibility.
+
+R17 additionally reuses the G output for both numerator buffers and the
+consumed tensor scratch for G output. Its attempted four-product tree
+batching regresses CU and is explicitly rejected in favor of original merge
+order (R18), retaining the allocation savings and exhaustive coin-basis gate.
+The new R17 markers attribute 13.37M CU to the FFT section including buffer
+setup, both components, pointwise products, normalization and output copies;
+this is now a concrete optimization target, not an inference from total CU.
+
+One exact arithmetic candidate for the next butterfly implementation: fuse
+complex multiplication with addition/subtraction before canonical reduction.
+For canonical M31 limbs, P=2^31-1, let A=v.a*w.a, B=v.b*w.b,
+C=v.a*w.b and D=v.b*w.a as u64 integers. The four output limbs can be
+reduced directly from
+
+    u.a + A + P^2 - B,       u.b + C + D,
+    u.a + P^2 - A + B,       u.b + 2*P^2 - C - D.
+
+These are nonnegative, below 2^64, and have exactly the required residues.
+This eliminates intermediate complex-result reductions and canonical
+add/subtract steps. Check bounds and equality independently against source
+CM31 operations (including maximal limbs), then the whole existing basis
+gate and actual proof, before measuring. Keep trivial twiddles explicit.
+This is an unimplemented candidate, not a measured speedup or compiled lemma.

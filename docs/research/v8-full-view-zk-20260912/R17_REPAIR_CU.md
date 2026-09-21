@@ -500,3 +500,87 @@ the concrete tree, transform, truncation and field implementation yield the
 same 1024 canonical bytes as the retained power-sum map. No new Lean target
 was compiled this turn; #print axioms is not applicable to the Rust gates.
 Finite checks do not establish that universal refinement or full privacy.
+
+## R17 reused G workspaces and batched numerator merges
+
+Source base d18568cc plus this changeset. stage_r17_fast_g_reuse.py changes
+only the research kernel and its opening-weight caller. It computes the
+numerator using two disjoint 271-coordinate slices of the already allocated
+1024-coordinate output. After the nine merge levels it places the numerator
+in the first slice. The FFT copies all numerator c0 components before writing
+output c0, and copies the untouched numerator c1 components before writing
+output c1. No unsafe casts or allocator changes are used. The caller reuses
+the consumed tensor scratch as G output. This avoids two 4336-byte numerator
+allocations and a separate 16384-byte G output allocation (25056 bytes total).
+The 16384-byte CM31 transform workspace remains allocated.
+
+Each tree output now accumulates at most four canonical scalar products per
+u64 component before reduction. The product set is unchanged; association
+changes. Range endpoints explicitly select the two convolution diagonals.
+The inherited bound 4*(2147483646)^2 < 2^64 applies, with all outputs reduced
+before the next level. Field canonicality and source refinement are still
+formal obligations, not inferred from successful tests.
+
+The optimized host gate now additionally checks every one of the 271 coin
+basis positions at every one of the 1024 outputs, using distinct nonzero
+extension components (3,5,7,11) and reusing dirty output storage. All prior
+root/inverse/convolution/reference controls pass. The actual retained proof
+is accepted and the current G-final corruption rejected; both verifier paths
+and their equality assertion remain. 4G/6G/zero-swap scope:
+focused gate exit 0, 27.98 s including compilation, peak RSS 535184 KiB;
+positive exit 0, 9.43 s, 427004 KiB; negative exit 0, 0.00 s reported,
+3344 KiB. All zero swaps. The fixed polynomial tables are unchanged, so their
+generator was not rerun. No Lean target changed or compiled; an axioms audit
+is not applicable to these Rust gates. Full privacy is not established.
+
+R17 SBF source/table/frame gates pass: exit 0, 35.38 s, peak RSS 619492 KiB,
+zero swaps, scope 5G/7G/zero swap. Diagnostic second original-weight stage
+is **25403570 CU**, worse than R16's 24536806 (3.53%). Fixed additional
+markers isolate 8695076 CU from G-tree-start to G-tree-end and 13366564 CU
+from G-tree-end to G-fft-end (including buffer setup, both components,
+transforms, pointwise products, normalization, output copies and markers).
+Do not call the latter an isolated butterfly cost.
+
+The allocation change recovers the later endpoint: honest and corrupt reach
+query-schedule-end and then run out of heap before openings-end, at 36753510
+and 36752937 CU respectively. Both still exhaust 1.2M/1.4M CU. Heap remains
+256 KiB. Driver exit 0 is observations only: 0.14 s, peak RSS 26796 KiB,
+zero swaps, scope 3G/4G/zero swap. ELF SHA256:
+d88d48c8bae926bc3f1c3dcabea3080ba588bb53fa94b2c6c713f19e518932db.
+Evidence: r17-fast-g-reuse-host-r17.log, r17-fast-g-reuse-sbf-r17.log,
+r17-fast-g-reuse-svm-r17.{jsonl,log}.
+
+The batched-merge arithmetic experiment is rejected as a CU improvement;
+retain its failure evidence. The next R18 stage restores original arithmetic
+order but retains safe output/tensor buffer reuse, exhaustive basis checks
+and the new attribution markers. It does not raise memory or CU limits.
+
+## R18 retain allocation savings; restore original merge arithmetic
+
+Same source base d18568cc plus the R17/R18 changeset. The restored merge
+passes all focused controls including all 271 basis positions and dirty
+output reuse. Actual host proof accepted and G-final mutation rejected.
+Host 4G/6G/zero-swap scope: focused gate exit 0, 27.88 s, RSS 535588 KiB;
+positive exit 0, 9.40 s, 426640 KiB; negative exit 0, 0.00 s reported,
+3344 KiB. SBF source/table/frame gates pass: exit 0, 35.26 s, 619064 KiB,
+5G/7G/zero-swap scope. All zero swaps.
+
+Second original-weight stage is **24621207 CU**. G tree is 7909059 CU;
+FFT section is 13370660 CU under the same marker definitions as R17.
+The R17 batching regression is removed. R18 is slightly more CU than R16
+(which had no inner markers), but has the 25056-byte allocation saving and
+reaches query-schedule-end again. Honest/corrupt then run out of heap before
+openings-end at 35971177/35970604 CU to failure. These are not completed
+verification costs or checked negative rejections. Both still exhaust the
+1.2M and 1.4M budgets. Heap remains 256 KiB; no limit was raised.
+
+Observation driver exit 0, 0.12 s, RSS 26864 KiB, zero swaps,
+scope 3G/4G/zero swap. ELF SHA256:
+8e1f73c792051e15efde66200bd3c596769c1c55a993288a4ec8a842ddb20f43.
+Exact evidence: r17-reuse-only-host-r18.log, r17-reuse-only-sbf-r18.log,
+r17-reuse-only-svm-r18.{jsonl,log}. No Lean target compiled; universal
+source arithmetic/refinement and full-transcript privacy remain open.
+The next bounded optimization is a source-equivalent fused CM31 butterfly,
+with independent overflow/equality checks before the full finite basis gate.
+The existing sparse/aligned-basis and source-security obligations remain;
+none is discharged by the performance evidence here.
