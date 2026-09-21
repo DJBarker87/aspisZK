@@ -1,5 +1,75 @@
 # Fixed active-minor nonvanishing witness
 
+## Concrete determinant polynomial nonzero and degree bound — 2026-09-21
+
+Base `2604fcdc6cadeef772834f0ec84b89ce940119ef` plus this changeset.
+`SourceMinorPolynomial.lean` constructs the polynomial matrix using exactly
+the frozen source coefficient rows and selected columns. Its five theorems
+prove entry evaluation, entry total degree <=5, matrix evaluation,
+determinant evaluation and determinant total degree <=1070. The determinant
+evaluation is symbolic via the evaluation ring homomorphism; no large
+determinant is expanded or tested numerically.
+
+`SourceMinorNonzeroPolynomial.lean` defines `fixedMinorPolynomial` over
+ZMod 2147483647 and composes that evaluation theorem with the previously
+proved source-model determinant certificate. It proves:
+
+* evaluation at alpha=2,u=3,v=4 is nonzero;
+* the concrete determinant polynomial itself is nonzero;
+* its total degree is at most 1070.
+
+The chord values 13,11,-7 are checked from the normalized parameter formula.
+The algebraic evaluation is not an accepted source OOD execution. No
+challenge-density or security-loss assertion is contained in these proofs.
+
+`ActiveEntry.lean` is now generalized from fields to nontrivial commutative
+rings: its evaluation and degree arguments use no division or primality.
+The concrete nontriviality premise is discharged by a local kernel-checked
+Fact(1<2147483647), not assumed. Existing field applications remain covered.
+The only direct importer in this source tree is the new polynomial module.
+
+### First remaining source-specific proposition
+
+Justify a bound on the event that this concrete determinant vanishes when
+alpha,u,v come from the actual source transcript, including the shared
+oracle, prior observations, OOD rejection/normalization and alpha's later
+chronology. A nonzero polynomial and a degree bound alone do not supply
+that law; independent uniform coordinates must not be assumed. The
+coefficient-ring embedding into the source extension field and exact Rust
+representation/word refinement must also be justified. Per-variable
+degree bounds remain to be instantiated for a sharper sequential bound.
+Joint C1/G/H residual coverage and the commitment/seed, simulator,
+failure/retry/publication and soundness obligations remain separate.
+
+### Focused evidence
+
+All checks ran from `/Users/dominic/ZK/AspisFormal` with `/usr/bin/time -l`,
+the retained lake environment/worktree LEAN_PATH wrapper and
+`lean -j1 -M1800`. SOURCE_ROOT is this privacy worktree's
+`docs/research/v8-full-view-zk-20260912/lean`. All successful prerequisites
+and the generic polynomial module emitted required cached objects using
+`-R SOURCE_ROOT -o CACHED_TARGET.olean`; the final endpoint was checked
+directly. No full manifest or unchanged Rust suite was run.
+
+| Exact target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| ActiveEntry.lean, initial CommRing without Nontrivial | 1 | 7.33 | 1683849216 | 0 |
+| ActiveEntry.lean, explicit Nontrivial and cached object | 0 | 6.36 | 1702838272 | 0 |
+| MinorDegree.lean, missing prerequisite object | 0 | 7.44 | 1812725760 | 0 |
+| SourceMinorPolynomial.lean and object | 0 | 2.32 | 1823408128 | 0 |
+| SourceMinorDeterminant.lean, missing prerequisite object | 0 | 11.14 | 1799110656 | 0 |
+| SourceMinorNonzeroPolynomial.lean | 0 | 2.19 | 1817903104 | 0 |
+
+The first failure identified the missing nontriviality needed by the
+existing totalDegree_X simplifications; its sorryAx audits are rejected.
+All final new and generalized theorem audits use only propext,
+Classical.choice and Quot.sound. The retained 136 determinant audits were
+also emitted for the needed object. Exact output is in the command-tool
+record; its object log is
+`/tmp/aspis-r15-host.drHYn9/r17-polynomial-SourceMinorDeterminant-object.log`.
+Only harmless simp-style/unused-section warnings remain. No cap increase,
+production change, new hiding assumption or full privacy/soundness claim.
+
 ## Polynomial evaluation of assembled source-model coefficients
 
 Base `c5033ffc` plus this changeset. `ActiveEntry.lean` now proves

@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## Concrete nonzero polynomial certificate — 2026-09-21
+
+The frozen source-model minor now has a compiled determinant polynomial
+that is nonzero and has total degree <=1070. Evaluation at alpha=2,u=3,v=4
+is proved equal to the previously certified source-model determinant.
+No field/primality assumption is required for this algebraic certificate;
+the needed ring nontriviality is checked. The first remaining source-specific
+obligation is the actual adaptive parameter law and its determinant-zero
+bound, not another fixed-rank search. Source extension-field/word refinement
+and all other full-transcript privacy/soundness gates remain open.
+Exact proof boundary and evidence: `R17_ACTIVE_MINOR.md`.
+
 ## Fixed source-model determinant certificate complete — 2026-09-21
 
 All 133 concrete blocks now compose into a compiled nonzero determinant

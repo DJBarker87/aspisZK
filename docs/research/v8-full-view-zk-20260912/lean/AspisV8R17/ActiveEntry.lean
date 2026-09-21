@@ -11,8 +11,8 @@ set_option autoImplicit false
 namespace AspisV8R17
 noncomputable section
 open MvPolynomial
-variable {F : Type*} [Field F]
-abbrev ActivePoly (F : Type*) [Field F] := MvPolynomial (Fin 3) F
+variable {F : Type*} [CommRing F] [Nontrivial F]
+abbrev ActivePoly (F : Type*) [CommRing F] := MvPolynomial (Fin 3) F
 
 def activeChord (j : Fin 3) : ActivePoly F :=
   if j=0 then 1 + X 1 * X 2 else if j=1 then X 1 * X 2 - 1 else -(X 1 + X 2)
