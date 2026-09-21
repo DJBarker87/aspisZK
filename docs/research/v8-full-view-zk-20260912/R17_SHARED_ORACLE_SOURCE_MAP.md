@@ -1,5 +1,51 @@
 # R17 inspected shared-oracle entrypoint slice
 
+## Entropy adapter and public nonce boundary — 2026-09-21
+
+Base `ca6a52e64e9b8105c10bdfc801c68a276a7d5c19` plus this changeset.
+The selected performance_verifier.rs::verify API takes body, binding, public,
+transition. Its semantic prefix absorbs the R17 profile, positive-transfer
+descriptor, payment-extraction profile, binding, C1 root, lambda/chi and C2
+root in order. It has no public mask-nonce/context argument and does not call
+begin_state_only_hiding_precommit. It does NOT compare against a fixed fixture
+nonce; the nonce is absent from this verifier interface. Prover seed derivation
+uses the nonce in its private generation context. This observation alone is
+not a soundness attack or proof that a nonce must be a separate wire field.
+
+The reusable core helper begin_state_only_hiding_precommit validates a nonzero
+nonce and supported layout/factor fingerprints, then absorbs context.encode()
+under the hiding-precommit label. Its 81-byte encoding is version1, statement32,
+nonce32, layout8, factor8. `AspisV8R17/HidingContextBytes.lean` proves the length,
+exact nonce slice at drop33/take32, and different-nonce distinction for encoded
+contexts and their absorb preimages at a fixed state/label. Four #print axioms
+audits use propext only. No hash collision resistance is inferred from distinct
+preimages, and the existing helper's accepted fingerprints are not asserted
+to authorize the R17 structured-G/two-channel profile.
+
+The entropy-backed adapter must explicitly specify how the public attempt
+context is authenticated/bound (possibly through an outer binding), how both
+ends reconstruct the same precommit prefix, and where durable reservation and
+failure reporting occur. Merely replacing deterministic_spend_fixture with
+generate()/generate_for_mask_nonce() would leave that contract unproved.
+Neither verifier inputs nor wire bytes were silently changed in this audit.
+No wallet/account key generation or nonce-store operation was performed.
+
+The read-only checker now pins eleven staged artifacts plus six current files
+(17 comparisons), adding performance_verifier.rs and core state_only_hiding.rs.
+Its exact test-shim exception is restricted to the prover file, not all files
+with that basename. All comparisons pass. No old pin was waived.
+
+| Focused target | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| HidingContextBytes.lean, cached lake, -j1 -M1800 | 0 | 7.43 | 1195589632 | 0 |
+| Extended oracle-entrypoint pin checker | 0 | 0.04 | 20496384 | 0 |
+
+The Lean target emitted its matching r17 cached object and has two harmless
+unused-simp warnings. No unchanged Rust/Lean regression was rerun. Existing
+GatedRelease and RetryFailureBound remain conditional: a matching gate/view
+transport and a source conditional success bound must be proved, not assumed
+from entropy generation or the byte-framing lemmas.
+
 Date 2026-09-21. Base `df79427f151d8b23d64c4a2f81b4b3e61c1f53f9` plus
 this changeset. Scope is the selected v19 research host's mask/salt/D,
 transcript and Merkle pipeline, not a complete call graph or privacy theorem.

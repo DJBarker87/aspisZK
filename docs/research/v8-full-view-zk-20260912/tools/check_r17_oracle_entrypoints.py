@@ -13,11 +13,13 @@ EXPERIMENTS = "docs/research/v8-no-work-100-20260907/experiments/"
 PINS = {
     "r17-stage.json": "b6954128f7f09e9e75bcb2271c474e2749645262472bfc676126ec08b9825145",
     EXPERIMENTS + "performance.rs": "1000c12343e30eb33af82856a12d02daed168509ffb597ebdecaf63a6343b5f5",
+    EXPERIMENTS + "performance_verifier.rs": "7355b60338911409ac51b5d4fa95bc334e49d37f3c8b49afb2c376a3d946634d",
     EXPERIMENTS + "relation_callback.rs": "22c0837ec4f14a0b9a3795b6bdc40144911468c5499836eca48cc503ce698b9e",
     EXPERIMENTS + "positive_transfer.rs": "3a19043d2f40f168cb2127ba46e1795db7ea0751625c4fe48c73e02dab533cab",
     "crates/aspis-prover/src/state_only_entropy.rs": "78ebbb3176daf23935243452992548ff9d877aaaf853d73e5ee46b60d8cb3ec0",
     "crates/aspis-prover/src/state_only_hiding.rs": "0e8b83d50aaebc65dad86bc63c838d099428a166221990156b9f61164148fe0a",
     "crates/aspis-core/src/transcript.rs": "be036d144b9fe0c8119d9f6fdd8ca2167d1379f7d1d785fa2f197200b9f7d119",
+    "crates/aspis-core/src/state_only_hiding.rs": "18058112db3108a18f9d11f8d9ffb6f9c1b310b90b333010fd0f98cac480237f",
     "crates/aspis-core/src/v7_merkle208.rs": "071ade1236140fdae559bb7b607ac9b7ee299e74eccb16b3385e3b1bbf215fdf",
     "crates/aspis-core/src/state_only_private_merkle.rs": "f0edc31d07d30f5b19fcaf872fba18678d13d1ba5fac1199f1f4d2be74c74f9b",
 }
@@ -56,7 +58,7 @@ def main():
                        "sha256": check(data, expected, path)})
         if path.startswith("crates/"):
             current = (args.repo / path).read_bytes()
-            current_expected = CURRENT_HIDING if path.endswith("/state_only_hiding.rs") else expected
+            current_expected = CURRENT_HIDING if path == "crates/aspis-prover/src/state_only_hiding.rs" else expected
             checks.append({"surface": "worktree", "path": path,
                            "sha256": check(current, current_expected, path)})
             if current_expected != expected:
