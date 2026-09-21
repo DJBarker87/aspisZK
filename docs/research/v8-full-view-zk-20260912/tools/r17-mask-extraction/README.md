@@ -61,3 +61,13 @@ allocation behavior, field projection correspondence and full loop invariants
 remain open. Source inspection distinguishes default zip next from TrustedLen
 vector collection; see the ledger. Compilation/axioms audits do not close the
 remaining source-to-model or global security gaps.
+
+`run_allocation.sh PINNED_SOURCE_DIR FRESH_TASK` builds allocation_probe.rs with
+the cached nightly rustc -O and runs eight subprocess diagnostics. Run it in
+the same bounded zero-swap scope. It uses only unchanged pinned source files;
+core dumps are disabled for deliberately denied allocations. Success controls
+record fixed-buffer allocation traces; four negative controls require SIGABRT.
+These are finite instrumented-binary observations, not an allocation
+independence theorem. The Lean collector currently has no matching allocator
+state/process-abort observation; the ledger keeps that failure/publication
+obligation explicit.

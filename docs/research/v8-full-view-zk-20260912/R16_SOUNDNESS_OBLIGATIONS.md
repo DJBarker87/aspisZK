@@ -1,5 +1,78 @@
 # R16 soundness preservation obligations
 
+## Actual-source allocation-abort regression — 2026-09-21
+
+Base revision `09310660` plus this changeset. This turn adds focused Rust
+diagnostics, not a new Lean theorem or an attack-frequency search. The
+unchanged pinned field.rs and r17_structured_g.rs are compiled with a
+diagnostic global allocator and extraction-only module wiring. The allocator
+records size/alignment/kind in fixed atomic storage, and can deny a selected
+allocation by returning null. Input parsing/logging occurs outside the armed
+region. Each denial runs in a separate subprocess with core dumps disabled;
+no wallet, production process, shared allocator setting or production source
+is touched.
+
+New tools are allocation_probe.rs, check_allocation.py and run_allocation.sh
+under tools/r17-mask-extraction. Source pins remain 5795495e... (field) and
+147be74e... (research module), checked in full before compilation. The runner
+uses explicit cached nightly-2026-06-01 rustc, edition 2021 and -O; version
+1.98.0-nightly (14210df0e 2026-05-31). Expected work was one dependency-free
+optimized compilation and eight bounded diagnostic executions, not dense
+field elimination. Preflight showed no other task scope running.
+
+Scope aspis-r17-allocation-r2: MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64. An initial r1 launcher stopped at exit 127 before
+compilation because noninteractive PATH lacked rustc; the runner was changed
+to its absolute cached path and r2 used a fresh directory. No failed source
+test or memory-pressure job was retried unchanged.
+
+| Target | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Optimized allocation_probe.rs compilation | 0 | 0.38 | 145584 | 0 |
+| check_allocation.py, eight child cases | 0 | 4.38 | 13728 | 0 |
+
+Verified finite observations in this instrumented optimized binary:
+
+- mixing_row(0) and mixing_row(1) each returned 1024 field elements and each
+  made one 16384-byte, alignment-4 allocation.
+- mask_weights for two explicit canonical point arrays each returned 1024
+  elements and each made 272 such allocations; their recorded allocation
+  traces match. This is a two-input control, NOT a universal independence law.
+- denying mixing_row's first allocation, or mask_weights allocations 1, 2,
+  or 272, caused SIGABRT (subprocess returncode -6) with the 16384-byte OOM
+  diagnostic and no returned result. The harness requires all four aborts.
+
+The allocator is a test instrument, not the production allocator, and Rust
+may optimize allocations. Counts are evidence for this pinned instrumented
+binary, not a language-level allocation guarantee or a production release
+test. No runtime assertion proves global privacy or a malicious-prover bound.
+
+Host artifacts: `aspis-r17-mask-extract.aRLUCU/allocation-r2` under the retained
+project-offloads root. SHA256s:
+
+- allocation_probe.rs: 6ba37bb64cf7ab6f4716771fd357eb4d9323f994f14c09ff5d652a541f75e19c;
+- optimized binary: 34f4d889be0160a45afd54b136dee0e88b9b3ec45159137878c4bb75d7382f4c;
+- results.json: f91c07ea8d7f02f5aa71be48a0beb8d2933545c21137f6602f573893cecd6585.
+
+Additional source inspection: cached alloc/src/vec/mod.rs, SHA256
+a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f,
+extend_trusted at lines 4056ff reserves the size-hint amount, then uses
+for_each with ptr::write and SetLenOnDrop. Thus capacity, allocation abort,
+traversal order and partial-state destruction are distinct source obligations;
+the cached collector's final Usize length check does not establish them.
+
+Precise remaining obstruction: the current Lean Result model has no allocator
+state or process-abort observation corresponding to these Rust executions.
+An unconditional Rust-to-Result claim including all allocation environments
+would therefore be unjustified. Either the source/environment correspondence
+must explicitly represent aborts and their publication consequences, or the
+repair must establish a justified allocation discipline and its observable
+failure law. Merely assuming allocation succeeds, or extrapolating independence
+from the two successful traces, does not close the full-transcript goal.
+This is not a newly demonstrated privacy or soundness attack. Ordinary
+source mask-loop invariants and the field-projection connection also remain
+open; earlier compiled statements and negative regressions are preserved.
+
 ## Collector Result equivalence, instantiated in mixing_row — 2026-09-21
 
 Base revision `045e2f40` plus this changeset. New CollectorLaws.lean proves
