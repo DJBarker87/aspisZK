@@ -236,3 +236,51 @@ Remaining performance obligation: reduce the structured-G construction cost
 and further reduce ordinary/chord costs to the real budget, with corresponding
 source-correctness evidence. Full transcript privacy and soundness preservation
 remain open; this measured optimization does not close them.
+
+## R11 base-field powers: reaches the heap boundary
+
+Base 554be246 plus this changeset. stage_r17_base_powers.py creates a fresh
+stage, preserving the original pinned workspace source and all old stages.
+Nodes remain exactly 1..271; coin construction, output ordering and sum order
+are unchanged. Only the power recurrence uses M31 instead of its QM31 embedding,
+and each coefficient is scaled with mul_m31. No mask resampling, new map or
+hiding assumption is introduced. The intended arithmetic bridge is embedding
+compatibility for canonical M31 powers and QM31 scalar multiplication; it is
+not yet a compiled actual-source correspondence theorem.
+
+Optimized gates passed: 20 tensor cases x 1,024 entries; six G cases x 1,024
+entries versus the retained full-QM31-power mask implementation; six complete
+original-weight cases x both channels x 1,024 entries. This finite evidence does
+not prove universal correctness/privacy. Scope aspis-r17-base-gate-r11,
+4G/6G/zero-swap, TasksMax=128: exit 0, 26.01 s including compilation,
+peak process RSS 530,124 KiB, swaps 0. SBF source/table/frame checks pass;
+scope aspis-r17-base-sbf-r11, 5G/7G/zero-swap, TasksMax=128: exit 0,
+34.52 s, RSS 618,484 KiB, swaps 0. No Lean declaration changed.
+
+Actual same-fixture SVM execution at unchanged limits:
+
+- 1.2M and 1.4M: still CU exhaustion, not accepted.
+- Diagnostic 100M: structured original_weights completes. Its instrumented
+  interval is 93,104,371 - 60,088,726 = **33,015,645 CU**. This includes the
+  whole structured original-weight construction, not G alone.
+- Immediately afterwards, before the structured dual-end marker, the runtime
+  logs "memory allocation failed, out of memory" and "SBF program panicked".
+  The observed total is **39,911,418 CU to failure**, NOT total verification CU.
+  Honest and corrupted cases fail identically; no checked negative endpoint.
+
+Scope aspis-r17-base-svm-r11, 3G/4G/zero-swap, TasksMax=64: driver exit 0
+(observations only), 0.13 s, RSS 26,644 KiB, swaps 0. Simulator heap remains
+256 KiB. No host cgroup OOM occurred and neither heap nor CU limit was raised.
+ELF SHA256 6da823a798a70baad1b3de42404e8e3fcf54a15cdeeeb5b6feda6f5afff94ebc.
+Exact evidence: evidence/r17-base-gate-r11.log, r17-base-sbf-r11.log,
+r17-base-svm-r11.{jsonl,log}. The proof and driver are unchanged from R7.
+
+Next source implementation obligation is allocation reuse across original
+weights, basis dual and chord transpose. The present chord path alone clones
+and grows its input and materializes five intermediate vectors before its
+output; dropped Vec allocations are not reclaimed by the SBF bump allocator.
+The observed allocation failure is between the second original-end and dual-end
+markers. Optimize ownership/scratch reuse without changing the fixed map or
+checks, then remeasure. Even after resolving this heap failure, the measured
+33M weight stage is far above the deployable budget and needs a substantially
+cheaper evaluation route. Full privacy and soundness preservation remain open.
