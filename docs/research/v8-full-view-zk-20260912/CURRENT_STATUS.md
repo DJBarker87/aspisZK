@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## Latest certificate preflight — small blocks, 2026-09-21
+
+The fixed minor's challenge-independent support decomposes into 60 1x1,
+65 2x2 and 8 3x3 blocks. Exact source tests verify the triangular ordering
+and all diagonal block ranks at the fixed witness. `R17_MINOR_BLOCKS.md`
+records the resulting small-block formal certificate route. Frozen block
+data and formal determinant composition remain next; no global security
+gate is closed.
+
 ## Latest polynomial bridge — 2026-09-21
 
 `sourceEntry_eval` and `sourceEntry_degree` now compile: the polynomial

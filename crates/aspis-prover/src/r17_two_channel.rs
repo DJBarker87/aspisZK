@@ -143,6 +143,7 @@ fn r17_active_minor_polynomial_witness() {
     let chord=[K::ONE.add(u.mul(v)),u.mul(v).sub(K::ONE),K::ZERO.sub(u.add(v))];
     let active:Vec<_>=(0..N).filter(|&r|!transport().inactive[r]).collect();
     let mut matrix=vec![vec![];active.len()];
+    let mut possible=vec![vec![];active.len()];
     let powers=[alpha,alpha.square(),alpha.square().mul(alpha)];
     for degree in 22..255 { for channel in 0..3 {
         let mut q=vec![K::ZERO;N];
@@ -154,25 +155,67 @@ fn r17_active_minor_polynomial_witness() {
         let mut unit_a=vec![K::ZERO;N];unit_a[4*degree]=K::ONE;
         let mut unit_channel=vec![K::ZERO;N];unit_channel[4*degree+channel+1]=K::ONE;
         let mut reconstructed=vec![K::ZERO;N];
+        let mut support=vec![false;N];
         for j in 0..3 {
             let mut basis=[K::ZERO;3];basis[j]=K::ONE;
             let a=transport().inverse(&chord_product(&unit_channel,basis));
             let b=transport().inverse(&chord_product(&unit_a,basis));
             for &r in &active {
+                support[r]|=a[r]!=K::ZERO || b[r]!=K::ZERO;
                 reconstructed[r]=reconstructed[r].add(chord[j].mul(a[r].sub(powers[channel].mul(b[r]))));
             }
         }
         for (i,&r) in active.iter().enumerate(){
             assert_eq!(m[r],reconstructed[r],"six-constant entry degree={degree} channel={channel} row={r}");
             matrix[i].push(reconstructed[r]);
+            possible[i].push(support[r]);
         }
     }}
     let (_,pivots)=reduce(&matrix);
     assert_eq!(pivots.len(),214);
     let frozen=include_str!("../../../docs/research/v8-full-view-zk-20260912/evidence/r17-active-minor-columns.txt");
     assert_eq!(format!("{pivots:?}"),frozen.trim(),"fixed minor identity");
+    // Overapproximate polynomial support using all six constant coefficients,
+    // not zeros that happen only at this evaluation point.
+    let selected:Vec<Vec<bool>>=possible.iter().map(|row|pivots.iter().map(|&j|row[j]).collect()).collect();
+    let minor:Vec<Vec<K>>=matrix.iter().map(|row|pivots.iter().map(|&j|row[j]).collect()).collect();
+    let sizes=minor_support_blocks(&selected,&minor);
+    assert_eq!((sizes.iter().filter(|&&n|n==1).count(),sizes.iter().filter(|&&n|n==2).count(),sizes.iter().filter(|&&n|n==3).count()),(60,65,8));
+    println!("R17_ACTIVE_MINOR_SYMBOLIC_SUPPORT entries={} block_sizes={sizes:?}",selected.iter().flatten().filter(|&&b|b).count());
     println!("R17_ACTIVE_MINOR_WITNESS alpha=2 u=3 v=4 rank=214 pivots={pivots:?}");
     println!("R17_ACTIVE_ENTRY_COEFFICIENTS entries_checked={} source_basis_maps_per_column=6 challenge_independent_constants=true",214*699);
+}
+
+fn minor_support_blocks(support:&[Vec<bool>],matrix:&[Vec<K>])->Vec<usize> {
+    fn augment(r:usize,s:&[Vec<bool>],seen:&mut[bool],owner:&mut[Option<usize>])->bool {
+        for c in 0..s.len() {if s[r][c] && !seen[c] {
+            seen[c]=true;
+            if owner[c].is_none() || augment(owner[c].unwrap(),s,seen,owner) {
+                owner[c]=Some(r);return true;
+            }
+        }}
+        false
+    }
+    let n=support.len();assert!(support.iter().all(|r|r.len()==n));
+    let mut owner=vec![None;n];
+    for r in 0..n {assert!(augment(r,support,&mut vec![false;n],&mut owner));}
+    let rows:Vec<_>=owner.into_iter().map(Option::unwrap).collect();
+    let mut reach:Vec<Vec<bool>>=rows.iter().map(|&r|support[r].clone()).collect();
+    for i in 0..n {assert!(reach[i][i]);}
+    for k in 0..n {for i in 0..n {if reach[i][k] {for j in 0..n {reach[i][j]|=reach[k][j];}}}}
+    let order:Vec<_>=reach.iter().map(|row|row.iter().filter(|&&v|v).count()).collect();
+    for i in 0..n {for j in 0..n {if support[rows[i]][j] && !reach[j][i] {
+        assert!(order[i]>order[j],"strict block triangular order");
+    }}}
+    let mut used=vec![false;n];let mut sizes=vec![];
+    for i in 0..n {if !used[i] {
+        let mut members=vec![];
+        for j in 0..n {if reach[i][j] && reach[j][i] {assert!(!used[j]);used[j]=true;members.push(j);}}
+        let block:Vec<Vec<K>>=members.iter().map(|&r|members.iter().map(|&c|matrix[rows[r]][c]).collect()).collect();
+        let (_,p)=reduce(&block);assert_eq!(p.len(),members.len(),"nonzero diagonal block");
+        sizes.push(members.len());
+    }}
+    assert_eq!(sizes.iter().sum::<usize>(),n);sizes.sort_unstable();sizes
 }
 
 // Returns an exact RREF and pivots; independently verifies a lower-rank
