@@ -1,5 +1,39 @@
 # R16 soundness preservation obligations
 
+## Import-floor localization — 2026-09-21
+
+Base `6cb30c9f5bd740822a51474644a1a58d260244b1` plus this changeset.
+Three distinct import probes ran with unchanged Lean `-j1 -M1800` and unchanged
+4G/6G/zero-swap systemd scope limits in the same pinned cached workspace.
+Each source was just the listed import, a diagnostic comment and the listed
+`#check`; no new theorem or new axiom was introduced.
+
+| Probe import / check | Scope (prefix aspis-r17-) | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Lean / Nat | lean-import-r1 | 0 | 0.55 | 1546656 | 0 |
+| Aeneas.Std.Primitives / Aeneas.Std.Result | primitives-import-r1 | 0 | 0.54 | 1554096 | 0 |
+| Aeneas.Tactic.Solver.ScalarTac.ScalarTac / Nat | scalartac-import-r1 | 134 | 1.81 | 2013936 | 0 |
+
+The first two checks printed their expected types. The third failed with the
+same interpreter memory exception before `#check`. Axioms audit: not applicable
+to these import-only probes, and no protocol theorem was compiled. The retained
+ScalarImportProbe now contains the third, narrower failing import.
+
+Inspection of Scalar/Core.lean found a direct dependency on this tactic module,
+which in turn imports RingNF, Linarith via ScalarTac.Core, and tactic extension
+modules. Scalar/Core itself uses scalar_tac in four proof locations (lines
+996, 1001, 1142 and 1146), in addition to registering scalar tactic attributes.
+Thus removing the tactic import from a copied runtime is not a one-line valid
+fix: its proof uses and attribute providers must be handled and recompiled,
+without changing scalar definitions or weakening their statements. The shared
+runtime and compiled cache were not modified. No cap was raised.
+
+This localizes an engineering obstacle; it is not a mathematical obstruction
+to the repair and not evidence of either privacy or soundness. The operational
+CM31 proof remains pending. A safe next route is a task-owned, authenticated
+runtime split separating scalar semantics from tactic-heavy proofs, with
+focused recompilation and exact definition checks before adapter use.
+
 ## Current extraction authentication and import-memory isolation — 2026-09-21
 
 Base `2c7a4a8d8f6f14856f1e1d4078c69a35969e0747` plus this changeset.
