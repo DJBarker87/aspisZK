@@ -18,6 +18,35 @@ fn dot(a: &[K], b: &[K]) -> K {
     a.iter().zip(b).fold(K::ZERO, |v, (&a, &b)| v.add(a.mul(b)))
 }
 
+/// Exhaust the fixed index schedules used by chord_product (x and x²).
+#[test]
+fn r17_times_x_scatter_basis_correspondence() {
+    let mut basis_checks=0;
+    for n in [512usize,513] {
+        let mut edges=Vec::new();
+        for j in 0..n {
+            let (mut row,mut bit,mut scale)=(j,0,M31::ONE);
+            while row & (1<<bit)!=0 {
+                row^=1<<bit;scale=scale.mul(M31_HALF);
+                edges.push((j,row,scale));bit+=1;
+            }
+            edges.push((j,row | (1<<bit),scale));
+        }
+        assert!(edges.iter().all(|&(i,r,_)|i<n && r<=n));
+        for column in 0..n {
+            let mut q=vec![K::ZERO;n];q[column]=K::ONE;
+            let actual=super::final_posterior::times_x(&q);
+            let mut scatter=vec![K::ZERO;n+1];
+            for &(i,r,w) in &edges {scatter[r]=scatter[r].add(q[i].mul_m31(w));}
+            assert_eq!(actual,scatter,"source scatter n={n} column={column}");
+            basis_checks+=1;
+        }
+        println!("R17_SCATTER_SCHEDULE input_length={n} edges={} output_length={}",edges.len(),n+1);
+    }
+    assert_eq!(basis_checks,1025);
+    println!("R17_SCATTER_BASIS checks={basis_checks} challenge_independent=true");
+}
+
 /// Source parameter recovery and chord identity at a retained accepted prefix.
 /// This checks arithmetic correspondence, not the sampler distribution.
 #[test]

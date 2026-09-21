@@ -1,5 +1,46 @@
 # Fixed active-minor nonvanishing witness
 
+## Source-shaped scatter linearity
+
+Base `289ddc7a` plus this changeset. `SourceScatter.lean` models the
+ordered updates `out[row] += weight * input[column]`. For every finite
+edge list it proves that the final accumulator is its initial value plus
+the explicit coefficient sum, and that this sum preserves arbitrary
+two-term linear combinations. The edge list may have repeated targets;
+no sparsity, disjointness, random sampling or nonzero premise is needed.
+
+In `r16_final_posterior.rs::times_x`, source inspection identifies exactly
+these updates. Their columns, rows and M31 weights depend only on the
+input length and public loop indices, never input coefficients. The new
+`r17_times_x_scatter_basis_correspondence` records that fixed edge schedule
+and checks every standard basis vector against the existing source
+routine. Length 512 has 1023 edges and output length 513; length 513 has
+1024 edges and output length 514. All 1025 basis checks pass and all
+edge indices are checked in bounds. These are precisely the two input
+lengths used in chord multiplication, including its second x application.
+
+This proves the generic loop algebra and checks the complete finite basis
+correspondence. It does not claim an extracted Rust semantics theorem.
+The next composition obligation is to combine the scatter maps, parity
+split/interleave, fixed chord components and active inverse-permutation
+projection into the already proved six-constant identity, with explicit
+source index correspondence and polynomial evaluation. Source field
+arithmetic refinement and the nonzero-minor certificate remain separate
+from a sampler probability law and global security obligations.
+
+Lean command from `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/SourceScatter.lean`.
+Exit 0, wall 8.22s, peak RSS 1347993600 bytes, swaps 0.
+`scatter_run_value` uses only propext; `scatter_value_linear` uses propext
+and Quot.sound. No sorryAx. Output is in the command-tool record.
+
+Rust command: `/usr/bin/time -l cargo test --offline --locked --release
+--jobs 1 -p aspis-prover --lib r17_times_x_scatter_basis_correspondence
+-- --nocapture`. Exit 0, one test passed, wall 24.00s, peak RSS 564051968
+bytes, swaps 0. Log: `/tmp/aspis-r15-host.drHYn9/r17-scatter-basis.log`.
+No production source or negative regression changed; no unchanged full
+suite or manifest was rerun.
+
 ## Six source coefficients and linearity bridge
 
 Base `fa7dac80` plus this changeset. The fixed-witness Rust test now
