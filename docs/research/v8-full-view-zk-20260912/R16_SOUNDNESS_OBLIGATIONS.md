@@ -1,5 +1,100 @@
 # R16 soundness preservation obligations
 
+## Staged full mask caller compiles with explicit iterator models — 2026-09-21
+
+Base revision `15bf4615` plus this changeset. The prior interrupted turn wrote
+the candidate adapter; this turn compiled and scrutinized it. Production
+Rust, the raw generated artifacts and all negative regressions are unchanged.
+
+New `tools/r17-mask-extraction/IteratorCompat.lean` supplies explicit
+borrow-aware FnOnce/FnMut records, Map construction/next, state-retaining
+collection, and mutable-slice/owned-vector zip construction/next. Map.next
+APPLIES the generated closure's returned write-back; collection retains the
+final iterator state instead of fabricating a value for its ignored return.
+Mutable zip advances its second iterator only after the first yields Some,
+and writes a replacement FIRST item back into the current first iterator.
+Its ordinary Iterator dictionary has a forward-only next; the actual mutable
+zip path explicitly calls the full next with its backward function.
+
+`stage_iterator.py` pins the complete raw Types/Funs and records 11 exact,
+count-checked replacements in iterator-stage.json: imports, enriched closure
+trait interfaces, map/collect dispatch and mutable zip dispatch. Field
+operation bodies, arithmetic/array instructions and the four generated loop
+bodies' remaining instructions are not rewritten. This is an EXPLICIT
+compatibility-model stage, NOT an authenticated compiler transformation or
+an end-to-end Rust refinement. In particular collectState is a candidate
+state-retaining version of the cached Vec collector; equivalence and concrete
+Rust iterator specialization/allocation behavior still require justification.
+No FunsExternal template was imported and no external axiom was added.
+
+Focused results, cached Lean 4.32.0 -j1 -M3200, sequential scopes with
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64. The host had only
+init.scope at preflight. Time is elaboration/kernel checking, not arithmetic
+generation or a dependency rebuild. Prefix of units is aspis-r17-.
+
+| Exact target / unit suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| AspisR17MaskSource/IteratorCompat.lean / iterator-r1 | 0 | 1.21 | 2574600 | 0 |
+| AspisR17MaskSource/Funs.lean / mask-funs-r1 | 0 | 1.44 | 2589192 | 0 |
+| AspisR17MaskSource/AuditCaller.lean / mask-audit-r1 | 0 | 1.08 | 2560540 | 0 |
+| AspisR17MaskSource/IteratorLaws.lean / iterator-laws-r1 | 0 | 1.34 | 2570808 | 0 |
+| AspisR17MaskSource/AuditCaller.lean / mask-audit-r2 | 1 | 1.10 | 2556232 | 0 |
+| AspisR17MaskSource/IteratorLaws.lean / iterator-laws-r2 | 0 | 1.31 | 2572224 | 0 |
+| AspisR17MaskSource/AuditCaller.lean / mask-audit-r3 | 0 | 1.11 | 2567064 | 0 |
+
+Audit r2 added actual_map_step but failed to rewrite the projected range
+dictionary; its sorryAx diagnostic was NOT accepted. R3 first normalizes the
+premise to the concrete range-next declaration and succeeds, with one harmless
+unused-simp-argument warning. Laws r2 removes the r1 unused simp arguments.
+No unchanged failing target was rerun or given a larger memory limit.
+
+Compiled propositions:
+
+- `actual_closure_body`: the schematic closure body is definitionally the
+  typed generated closure, with its unused Usize argument retained.
+- `actual_closure_closed`: closure write-back specialization to actual
+  generated QM31 multiplication, retaining failure and divergence.
+- `actual_map_step`: under the EXPLICIT range-next premise, the actual closure
+  emits oldPower and retains (newPower, node), including multiplication failure.
+- `zipMutNext_some`: exact retained write-back for the successful pair case.
+- `zipMutNext_forward`: dropping only the returned backward function from the
+  observation agrees with the cached ordinary Zip::next model for all inputs,
+  including failed/divergent results. This is NOT a Rust specialization theorem.
+
+Final #print axioms for the typed closure/map lemmas, mixing_row, all four
+loops and mask_weights: `[propext, Classical.choice, Quot.sound]` only.
+Map-next some and zip-some use propext/Quot.sound; map-next none uses propext;
+collector and zip-forward use the standard three. No sorryAx or external
+iterator/security assumptions remain in these accepted targets. An axioms
+audit of executable definitions does NOT prove that they refine Rust or
+terminate, nor that their output satisfies the retained mask specification.
+
+The existing generated Types and unchanged compiled dependencies were reused
+after byte comparison, not replayed. Final reproducible stage is
+`/home/dombarker/project-offloads/aspis-r17-mask-extract.aRLUCU/iterator-r2`;
+the earlier compile workspace is iterator-r1 (first adapter compiled in
+types-r1). Generator creation and --check both exit 0; final sources compare
+equal to the compiled sources before copying their oleans. SHA256s:
+
+- Funs: 056d1e552790ac0164909ea321ac6275a89f94ba98b7569d6ae74dc63e83f514;
+- IteratorCompat: 71d14a05713d2a1dcc2ecf1b611b6cc20cb440f24e9c544f703b73d952fcf0cf;
+- IteratorLaws: 7bce0fb0250e2b25ac297211efb83d420e73bfeb6418b8345578b5dd3b4190ca;
+- AuditCaller: 5fd674453f5e4a4355f35549ba5077d80a8b2049423be1af08c6310f84179ab2.
+
+`run_iterator.sh` pins the relevant runtime Ops/Iter/SliceIter/VecIter,
+mathlib revision and closure leaf, and compiles one allowlisted target. Run
+the generator's --check before invoking it; never treat unchecked staged
+edits as source-locked evidence.
+
+First remaining source proposition: justify collectState's output/state
+semantics and the concrete Rust mutable zip/collection specialization, then
+prove the actual caller's bounded reverse writes and accumulation refine the
+retained mask model. The fresh full-runtime field namespace still needs a
+proved connection to the earlier arithmetic projection; name/body similarity
+alone is insufficient. Full-transcript privacy, malicious-prover soundness,
+shared-oracle/seed expansion, failures/retries/publication and explicit losses
+remain open. This milestone clears compilation, not those release gates.
+
 ## Actual generated types and closure write-back boundary — 2026-09-21
 
 Base revision `b6e87f86` plus this changeset. GitHub's privacy branch was
