@@ -1,5 +1,66 @@
 # R16 soundness preservation obligations
 
+## Composed checked reducer and retained-bounds split — 2026-09-21
+
+Base `4bee9ede686290c30d147720ae8cbaf5a00aef20` plus this changeset.
+`UnsignedReducerExecution.lean` now proves, for EVERY U64 input, successful
+composition of two checked folds, exact U32 narrowing and the final conditional
+subtraction. Output equals RawReducer.rawReduceU64, is below P, and is exactly
+the input's remainder modulo P. The four audited statements are
+foldExecution_success, reduceExecution_success, reduceExecution_canonical and
+reduceExecution_mod. Each uses only `[propext, Classical.choice, Quot.sound]`.
+Final source SHA-256:
+`769cdd0b3ceab0182859cb80afd899332ff3b1972ed64b9a1cafe4e8bccfde6a`.
+
+To avoid importing field-algebra tactics into the operational proof, the
+retained Nat definitions/bounds were moved into RawReducerNat.lean. Their names,
+statements and reducer definitions are unchanged; closed numeric proofs use
+decide rather than norm_num. Importing core Nat bitwise lemmas instead of the
+Mathlib bitwise aggregate was necessary to fit the unchanged memory cap.
+RawReducer.lean imports this leaf and retains the ZMod and multiplication proofs.
+No prior theorem was removed. RawReducerNat adds fold31_mod and
+rawReduceU64_eq_mod_nat: the same residue argument expressed with Nat quotient
+identities and linear arithmetic, without importing ZMod. Final source hash:
+`d8ecc45a1dd3513557e68956d9b4b094cb0359f80c22ae9d7cae19abb9186605`.
+Its four printed audits (first-fold bound, exact narrowing, canonicality,
+Nat remainder) all report `[propext, Classical.choice, Quot.sound]`.
+
+Host jobs used the retained cached workspace, Lean 4.32.0 `-j1 -M1800`,
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64. No cap increase.
+
+| Target / scope suffix (prefix aspis-r17-) | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| UnsignedReducerExecution / reducer-execution-r1: combined algebra import OOM | 134 | 1.75 | 1990700 | 0 |
+| RawReducerNat / raw-nat-r1: initial split compiled | 0 | 0.82 | 1513600 | 0 |
+| UnsignedReducerExecution / reducer-execution-r2: Mathlib bitwise import OOM | 134 | 1.72 | 1890876 | 0 |
+| RawReducerNat / raw-nat-r2: core bitwise imports compiled | 0 | 0.52 | 942524 | 0 |
+| UnsignedReducerExecution / reducer-execution-r3: composition compiled | 0 | 0.69 | 1629852 | 0 |
+| RawReducerNat / raw-nat-r3: Nat modulo proof needed explicit P unfolding | 1 | 0.51 | 934284 | 0 |
+| RawReducerNat / raw-nat-r4: final Nat residue proof compiled | 0 | 0.56 | 942548 | 0 |
+| UnsignedReducerExecution / reducer-execution-r4: final remainder corollary | 0 | 0.72 | 1626700 | 0 |
+
+Memory failures were Lean interpreter exceptions, not successful compiles.
+The failed Nat modulo draft's sorryAx audit was rejected. All final targets
+above compiled without warnings. Existing RawReducer.lean was also checked in
+the local pinned Lean workspace after each dependency revision: exit 0, 10.25 s,
+1619017728 bytes RSS, zero swaps initially; final exit 0, 9.90 s,
+1624408064 bytes RSS, zero swaps. Its canonicality/residue/multiplication audits
+use the standard three axioms, and residue_rawM31Add uses propext/Quot.sound.
+These were focused changed-dependency checks, not full manifest replays.
+The dependent SourceLazyCM31.lean then compiled locally: exit 0, 5.06 s,
+1629929472 bytes RSS, zero swaps, no warnings; all five printed audits contain
+only `[propext, Classical.choice, Quot.sound]`.
+
+Boundary: reduceExecution composes authenticated runtime operations but uses
+explicit ofNatCore constants and a Nat-value comparison. It does NOT yet prove
+equality to the complete generated reduce_u64 declaration. The first remaining
+source-specific obligation is binding the generated #u32 literals, constant P,
+word comparison, lifts and operation order to this composition. In particular,
+foldExecution evaluates the pure AND at the addition rather than before the
+checked shift; the equality must justify that reordering. Only then may this
+result be used as a full extracted reducer theorem. CM31 reconstruction and
+end-to-end privacy/soundness remain open; production paths are unchanged.
+
 ## Checked reducer primitive operations — 2026-09-21
 
 Base `e40ee66066056ef9564df536f31f2ce955e64fa6` plus this changeset.
