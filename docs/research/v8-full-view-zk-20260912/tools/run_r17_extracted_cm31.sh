@@ -41,6 +41,7 @@ case "$target" in
   AspisV8R17/SignedShiftSlice) ;;
   AspisV8R17/SignedLiteralSupport) ;;
   AspisV8R17/GeneratedM31Half) ;;
+  AspisV8R17/GeneratedCM31Linear) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
@@ -95,6 +96,15 @@ if [[ "$target" == AspisV8R17/SignedLiteralSupport || "$target" == AspisV8R17/Ge
   fi
   python3 "$task/check_r17_half.py" --runtime "$runtime/Aeneas/Std/Scalar" \
     --literals "$task/AspisV8R17/SignedLiteralSupport.lean" "${half_args[@]}"
+fi
+if [[ "$target" == AspisV8R17/GeneratedCM31Linear ]]; then
+  python3 "$task/check_r17_generated_reducer.py" --runtime "$runtime/Aeneas/Std/Scalar" \
+    --stage "$stage/V7Tag73CurrentHelpersOpaque" \
+    --literals "$task/AspisV8R17/UnsignedLiteralSupport.lean" \
+    --generated "$task/AspisV8R17/GeneratedReducerExpanded.lean" \
+    --m31-add "$task/AspisV8R17/GeneratedM31Add.lean" \
+    --m31-sub "$task/AspisV8R17/GeneratedM31Sub.lean" \
+    --cm31-linear "$task/AspisV8R17/GeneratedCM31Linear.lean"
 fi
 cd "$runtime"
 test ! -L "$task/$target.olean"

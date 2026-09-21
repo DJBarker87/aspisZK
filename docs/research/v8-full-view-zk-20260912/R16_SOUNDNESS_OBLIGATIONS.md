@@ -1,5 +1,42 @@
 # R16 soundness preservation obligations
 
+## Current CM31 linear operations and caller dependency check — 2026-09-21
+
+Base revision `47bfb1de` plus this changeset. Inspection of the actual
+`r17_structured_g.rs:69` mask_weights body confirms that its K type is QM31:
+the round block uses add/sub/mul/square and the reverse scale uses
+`mul_m31(M31_HALF)`, NOT a call to half. Consequently, the completed M31/CM31
+half proof alone cannot close this caller. QM31 operation correspondence,
+the scalar half constant, and checked array/loop semantics remain required.
+
+`AspisV8R17/GeneratedCM31Linear.lean` now retains the complete generated
+CM31.add, CM31.sub and CM31.double declarations from pinned FunsChunk04.
+It composes the current M31 proofs to establish successful execution,
+canonical output coordinates and exact modular word formulas for every pair
+of canonical CM31 inputs. The subtraction result is additionally normalized
+to signed integer remainders, avoiding an invalid truncated-Nat interpretation.
+The canonicality predicate is explicit and is not asserted for arbitrary
+unvalidated input words.
+
+The extended source checker authenticated all three declarations and rejected
+three component/operation mutations, as well as checking the existing
+M31 add/sub and reducer dependencies. Leaf SHA256:
+`f514a4cbda54569c9c154c0bf4810285ef64989e9edae432774205548d2440a8`.
+
+Exact focused target `AspisV8R17/GeneratedCM31Linear.lean`, cached Linux
+Lean 4.32.0 `-j1 -M1800`, scope `aspis-r17-cm31-linear-r1`, MemoryHigh=4G,
+MemoryMax=6G, MemorySwapMax=0, TasksMax=64: exit 0, wall 0.73 s,
+peak RSS 1637180 KiB, swaps 0. All five #print axioms results are
+`[propext, Quot.sound]`; no sorryAx, new assumptions or failed attempts.
+
+First remaining arithmetic composition: the current QM31 operations used
+by mask_weights, including mul_by_r and mul_m31, must refine the retained
+extension-field formulas while preserving canonicality. Then the actual
+271-entry writes, point reads and 1024-entry accumulation must be connected
+to MaskWeightWrites/SourceMixingWeights. Source-projection authentication
+does not certify the full extraction pipeline or any full privacy/soundness
+claim. Production paths and negative regressions remain unchanged.
+
 ## Current generated halving execution — 2026-09-21
 
 Base revision `a4bdbc72` plus this changeset. GeneratedM31Half.lean retains

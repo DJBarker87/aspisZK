@@ -32,7 +32,7 @@ def blocks_match(blocks, expected, sources):
         if sources[name].count(body + "\n") != 1:
             raise ValueError("source block mismatch: " + name)
 
-def check(runtime, stage, literals, generated, m31_mul=None, m31_sub=None, cm31_mul=None, m31_add=None, cm31_square=None):
+def check(runtime, stage, literals, generated, m31_mul=None, m31_sub=None, cm31_mul=None, m31_add=None, cm31_square=None, cm31_linear=None):
     sources = pinned(runtime, {**RUNTIME_PINS, "Notations.lean": NOTATION_PIN})
     if sources["Notations.lean"].count(MACRO + "\n") != 1:
         raise ValueError("unexpected #u32 macro")
@@ -94,6 +94,9 @@ def check(runtime, stage, literals, generated, m31_mul=None, m31_sub=None, cm31_
                                 ("M31.add self self", "M31.add self aspis_core.field.P")]),
         (cm31_square, "cm31_square", 1, [("let i9 ← i7 - i8", "let i9 ← i7 + i8"),
                                         ("M31.double m1", "M31.double m")]),
+        (cm31_linear, "cm31_linear", 3, [("M31.sub self.b rhs.b", "M31.sub self.a rhs.b"),
+                                        ("M31.add self.b rhs.b", "M31.add self.b rhs.a"),
+                                        ("CM31.add self self", "CM31.sub self self")]),
     ]:
         if path is None:
             continue
@@ -125,7 +128,8 @@ if __name__ == "__main__":
     parser.add_argument("--cm31-mul", type=Path)
     parser.add_argument("--m31-add", type=Path)
     parser.add_argument("--cm31-square", type=Path)
+    parser.add_argument("--cm31-linear", type=Path)
     args = parser.parse_args()
     print(json.dumps(check(args.runtime, args.stage, args.literals, args.generated,
                           args.m31_mul, args.m31_sub, args.cm31_mul, args.m31_add,
-                          args.cm31_square), sort_keys=True))
+                          args.cm31_square, args.cm31_linear), sort_keys=True))
