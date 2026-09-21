@@ -11,6 +11,8 @@ and its generic linear-functional identity. All 149586 source entries
 match that reconstruction at the fixed witness,
 and the source-shaped scatter loop has a compiled linearity proof plus
 1025 passing basis checks at both chord-multiplication input lengths,
+with both parity formulas now composed into a universal source-shaped
+six-constant theorem,
 but a compiled polynomial/source bridge and actual adaptive probability
 law remain open. The algebraic evaluation is not an accepted OOD draw.
 No global privacy or soundness conclusion follows from this certificate.

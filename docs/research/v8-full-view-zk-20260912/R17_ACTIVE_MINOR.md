@@ -1,5 +1,39 @@
 # Fixed active-minor nonvanishing witness
 
+## Composed source-shaped chord theorem
+
+Base `330170d1` plus this changeset. `SourceScatter.lean` now defines
+the exact algebraic even/odd formulas used by `chord_product`, including
+the second scatter application in the even coefficient. It proves each
+formula linear in the input, decomposes it into its three chord basis
+components, and interleaves the two formulas by coefficient parity.
+`active_source_six_constants` proves for every edge schedule, every
+input pair q,s, scalar t, chord a,b,c and selected index r that the
+coefficient on q-t*s equals the corresponding six-constant expression.
+Thus the linear-map premise is discharged for this explicit source-shaped
+model; it is no longer merely an abstract assumed linear functional.
+
+This theorem selects any coefficient, permitting the active row's fixed
+inverse-permutation index. It does not itself prove the concrete Rust
+array-to-function representation, zero extension beyond vector lengths,
+the index schedule refinement, or the immutable transport permutation.
+Those source representation obligations and polynomial evaluation are the
+next bridge; existing exhaustive basis checks remain executable evidence,
+not an extracted semantics theorem. The assertion/truncation of the high
+four coefficients also remains distinct from this pre-truncation algebra.
+No probability, privacy, or malicious-prover soundness claim is added.
+
+Focused command in `/Users/dominic/ZK/AspisFormal` remained
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/SourceScatter.lean`.
+Initial nested-scatter rewrite failed: exit 1, 8.58s, RSS 1355939840
+bytes; its sorryAx audit is rejected. An explicit function-extensionality
+rewrite fixed the nesting: exit 0, 1.77s, RSS 1353285632 bytes. After
+adding parity composition and the six-constant theorem, final exit 0,
+2.88s, RSS 1355988992 bytes. Every run had zero swaps. All final audits
+use only propext and, where needed, Quot.sound; no sorryAx or new axiom.
+Outputs are in the command-tool record. No Rust source changed, so no
+unchanged runtime suite was repeated.
+
 ## Source-shaped scatter linearity
 
 Base `289ddc7a` plus this changeset. `SourceScatter.lean` models the
