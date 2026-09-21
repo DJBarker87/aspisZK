@@ -50,6 +50,7 @@ case "$target" in
   AspisV8R17/QuadraticTowerOperations) ;;
   AspisV8R17/QM31WordTower) ;;
   AspisV8R17/GeneratedQM31Tower) ;;
+  AspisV8R17/GeneratedQM31Constants) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
@@ -136,13 +137,18 @@ if [[ "$target" == AspisV8R17/GeneratedQM31Linear || "$target" == AspisV8R17/Gen
     --products "$task/AspisV8R17/GeneratedQM31Products.lean" \
     --linear "$task/AspisV8R17/GeneratedQM31Linear.lean"
 fi
+if [[ "$target" == AspisV8R17/GeneratedQM31Constants ]]; then
+  python3 "$task/check_r17_constants.py" --stage "$stage/V7Tag73CurrentHelpersOpaque" \
+    --runtime "$runtime/Aeneas/Std/Scalar" --field "$task/current-field.rs" \
+    --constants "$task/AspisV8R17/GeneratedQM31Constants.lean"
+fi
 cd "$runtime"
 test ! -L "$task/$target.olean"
 # The new composed runtime+algebra target has a larger measured import union.
 # Its proof is four direct theorem compositions, not generated normalization.
 # Keep every existing target at its prior limit; do not retry failed leaves here.
 lean_memory=1800
-if [[ "$target" == AspisV8R17/GeneratedQM31Tower ]]; then
+if [[ "$target" == AspisV8R17/GeneratedQM31Tower || "$target" == AspisV8R17/GeneratedQM31Constants ]]; then
   lean_memory=3200
 fi
 exec /usr/bin/time -v "$lean" -j1 -M"$lean_memory" -R "$task" \

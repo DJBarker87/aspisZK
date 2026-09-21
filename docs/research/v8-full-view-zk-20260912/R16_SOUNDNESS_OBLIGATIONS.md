@@ -1,5 +1,47 @@
 # R16 soundness preservation obligations
 
+## Generated zero/one and pinned half-word model — 2026-09-21
+
+Base revision `ec9195c8` plus this changeset. GeneratedQM31Constants.lean
+authenticates the complete generated QM31.ZERO/ONE declarations (including
+attributes), expanding only their closed #u32 literals. It proves canonical
+limbs and decoding to actual tower zero/one. A separate halfWord is an
+explicit direct model of pinned Rust `M31(0x4000_0000)`, not a newly extracted
+declaration. The checker pins the complete current field.rs at
+`5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8`,
+checks that exact constant declaration and verifies hex-to-decimal 1073741824.
+It also checks the pinned unsigned literal macro and rejects a ZERO/ONE
+limb mutation and a half-word mutation.
+
+Compiled half_value/half_canonical, half_add_half (in the actual tower),
+and half_scale_correct compose the existing generated scalar operation.
+The arithmetic no longer requires an unexplained half-value premise when
+using this word model. Relating the actual mask caller's constant argument
+to the model remains part of caller refinement, not silently assumed here.
+
+Exact target `AspisV8R17/GeneratedQM31Constants.lean`, final SHA256
+`e3654995291f35e9f66d802a0be2d2d04deeb36482eb586ba5b4567261d3f1a4`.
+Cached Linux Lean 4.32.0 `-j1 -M3200`, scopes aspis-r17-constants-r1/r2,
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64:
+
+| Attempt | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| r1, missing predicate unfolding/explicit casts | 1 | 1.12 | 2577076 | 0 |
+| r2, explicit canonical unfolding and tower coordinate proof | 0 | 1.12 | 2587944 | 0 |
+
+Final #print axioms: canonical/value lemmas use `[propext]`; zero/one
+decoding and half_add_half use `[propext, Quot.sound]`; half_scale_correct
+uses `[propext, Classical.choice, Quot.sound]`. No sorryAx/new assumptions.
+This dependent composition target uses the same preselected limit as its
+runtime/tower predecessor; no memory-failed job was retried or cap raised.
+
+First remaining source proposition: actual mask_weights point reads,
+reverse-round writes and final accumulation refine the retained mutation
+model using these operations/constants, with canonical inputs and all
+checked failures accounted for. The broader source-extraction, privacy,
+oracle/retry/publication and soundness boundaries remain unchanged and open.
+Production paths and negative regressions are untouched.
+
 ## Generated QM31 execution composed with tower arithmetic — 2026-09-21
 
 Base revision `a3ccf38c` plus this changeset. GeneratedQM31Tower.lean now
