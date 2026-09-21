@@ -45,12 +45,19 @@ do not erase it merely to obtain a type-correct adapter.
 compatibility stage. It records every count-checked replacement and extra
 model hash. Run the same command with `--check` to validate without writing.
 `run_iterator.sh TASK CLOSURE_WORKSPACE TARGET` compiles one of Types,
-IteratorCompat, IteratorLaws, Funs or AuditCaller in a caller-supplied bounded
+IteratorCompat, IteratorLaws, CollectorLaws, Funs or AuditCaller in a caller-supplied bounded
 zero-swap scope; dependencies must already be compiled in that task/cache.
 Run the smallest new dependency first, then Funs, then the audit. The full
 staged caller compiles without imported template axioms, and the typed
 closure/map step and zip forward/write-back lemmas compile.
 
-This stage is not a certified compiler pass. Collection equivalence, concrete
-Rust specialization, field projection correspondence and full loop invariants
-remain open. Passing compilation and #print axioms does not close those gaps.
+CollectorLaws proves unconditional observable Result equality with the cached
+list/vector collectors (including failure and divergence); AuditCaller now
+instantiates that equality in the generated mixing_row. Compile CollectorLaws
+before AuditCaller. No successful-termination premise is introduced.
+
+This stage is not a certified compiler pass. Concrete Rust collection and
+allocation behavior, field projection correspondence and full loop invariants
+remain open. Source inspection distinguishes default zip next from TrustedLen
+vector collection; see the ledger. Compilation/axioms audits do not close the
+remaining source-to-model or global security gaps.

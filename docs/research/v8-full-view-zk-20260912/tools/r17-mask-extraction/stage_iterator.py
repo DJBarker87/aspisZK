@@ -56,7 +56,7 @@ def main():
     target = args.destination / "AspisR17MaskSource"
     files = {"Types.lean": types.encode(), "Funs.lean": source.encode()}
     extras = {}
-    for name in ("IteratorCompat.lean", "IteratorLaws.lean", "AuditCaller.lean"):
+    for name in ("IteratorCompat.lean", "IteratorLaws.lean", "CollectorLaws.lean", "AuditCaller.lean"):
         data = Path(__file__).with_name(name).read_bytes()
         files[name] = data
         extras[name] = hashlib.sha256(data).hexdigest()

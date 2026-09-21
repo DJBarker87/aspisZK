@@ -1,5 +1,92 @@
 # R16 soundness preservation obligations
 
+## Collector Result equivalence, instantiated in mixing_row — 2026-09-21
+
+Base revision `045e2f40` plus this changeset. New CollectorLaws.lean proves
+UNCONDITIONALLY that observing the value component of collectListState equals
+the cached runtime's iterToList. The proof uses partial-fixpoint induction in
+both directions with the flat divergence order; it does not assume finite
+termination, supply fuel, or restrict the theorem to successful runs.
+collectState_observe lifts this through vector construction and the exact
+cached `length ≤ Usize.max` check. Values, failure constructors and divergence
+are preserved. Final iterator state remains available in the richer model.
+
+AuditCaller.actual_mixing_row_collect instantiates this result in the actual
+staged mixing_row, leaving its bounds assertion, wrapping index addition,
+scalar construction, captured closure, and map iterator instance intact.
+This closes the candidate collector's observable-Result correspondence to the
+CACHED MODEL; it does not prove that the cached model captures Rust allocator
+failures, Vec specialization, or the whole source pipeline.
+
+Exact focused commands use run_iterator.sh and the retained cache, Lean
+4.32.0 -j1 -M3200; each scope has MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64. Units below use the aspis-r17- prefix. No
+unchanged full replay, memory-pressure failure, or raised-cap retry occurred.
+
+| Exact target / unit suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| CollectorLaws.lean, signature probe / collector-probe-r1 | 0 | 1.07 | 2553068 | 0 |
+| CollectorLaws.lean / collector-r1 | 1 | 1.25 | 2561868 | 0 |
+| CollectorLaws.lean / collector-r2 | 1 | 1.20 | 2561420 | 0 |
+| CollectorLaws.lean, list theorem / collector-r3 | 0 | 1.16 | 2573120 | 0 |
+| CollectorLaws.lean, vector theorem added / collector-r4 | 0 | 1.25 | 2574356 | 0 |
+| CollectorLaws.lean, unused simp arguments removed / collector-r5 | 0 | 1.24 | 2573248 | 0 |
+| AuditCaller.lean, actual source instantiation / collector-source-r1 | 0 | 1.11 | 2569280 | 0 |
+
+All targets reside under AspisR17MaskSource. The initial probe only inspected
+Lean's generated induction/equation signatures. Attempts r1/r2 failed to infer
+the nested admissibility predicate/function types; r3 supplies those types
+explicitly. Their error-generated sorryAx outputs were NOT accepted. Final
+collectListState_observe, collectState_observe and actual_mixing_row_collect
+audits use only `[propext, Classical.choice, Quot.sound]`. The dependent audit
+also checks the generated mixing_row/four loops/mask_weights; no new axioms.
+The pre-existing harmless actual_map_step unused-simp warning remains.
+
+Generator staging and --check both pass for final host artifact directory
+`/home/dombarker/project-offloads/aspis-r17-mask-extract.aRLUCU/iterator-r3`.
+Compiled sources were byte-compared before cache reuse from iterator-r2;
+unchanged Funs, Types and iterator dependencies were not rebuilt. Final hashes:
+
+- CollectorLaws.lean: 7f8e10953754f2333759e62820224cf6df2a798bc8d310e1b28518ad42bb4ffc;
+- AuditCaller.lean: b7ad7d5920e546d27f5f4db9070de40a5b3ab3e29336160758d1131a7422fffd.
+
+### Concrete standard-library dispatch inspection (not a Lean theorem)
+
+Read the cached nightly-2026-06-01 Rust sources. For this caller's
+Zip<IterMut<QM31>, vec::IntoIter<QM31>>, the NoCoerce specialization includes
+zip_impl_general_defaults, whose next calls the two next operations in order.
+IntoIter explicitly does NOT implement TrustedRandomAccess (without
+NoCoerce); its source explains why. Thus the separate indexed Zip::next
+specialization must not be substituted for this call. This narrows the
+remaining correspondence problem; it is source inspection, not a certified
+rustc dispatch proof or a blanket theorem about all zip iterators.
+
+Collection is different: usize is TrustedStep, Range<usize> is TrustedLen,
+and Map preserves TrustedLen. Vec's nested TrustedLen collector allocates
+with the size-hint upper bound, then calls spec_extend/extend_trusted.
+The abstract cached list collector does not by itself justify that allocation
+and specialized traversal path. Full-transcript failure/publication behavior
+must not silently assume successful allocation merely because the fixed
+output length is 1024.
+
+Additional inspected source SHA256s (paths relative to rust/library):
+
+- alloc/src/vec/spec_from_iter.rs: 393d1f28cfc8d28d80e142cef6b612aae9b484160969cfa0c9f97bb894534807;
+- alloc/src/vec/spec_from_iter_nested.rs: f3c1a06f43734a65e102b6a107e2fd5adadd7d94d9a226d6ffe1610d1e7e1466;
+- alloc/src/vec/spec_extend.rs: a0816ad0f39b947889771bf06930bf8e0c4ce794846d83863349697ec7c415ec;
+- alloc/src/vec/into_iter.rs: 7fef46007c1e9e2fbbcc1967f824f9eb8031b18d46984be4903325fa8bd21564;
+- core/src/iter/adapters/zip.rs: 29d8c1c971d934d6a2f11c71516717ae39289d7a1b09e08e42238fb75188fb89;
+- core/src/slice/iter.rs: 83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251;
+- core/src/iter/range.rs: df884a169ec674a8d97312096d195b68f0d1761f4ef282a85450f02b1e4ca079.
+
+First remaining source proposition: the concrete TrustedLen vector collection
+and mutable slice/owned-vector operations refine the cached operational model,
+with their allocation/failure observations accounted for. The mask-loop
+invariants and full-runtime field/arithmetic-projection connection remain
+unproved. No full privacy/soundness claim follows; joint views, oracle/seed
+expansion, retries/publication and explicit security losses remain open.
+Production and negative regressions remain untouched.
+
 ## Staged full mask caller compiles with explicit iterator models — 2026-09-21
 
 Base revision `15bf4615` plus this changeset. The prior interrupted turn wrote

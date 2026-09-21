@@ -1,4 +1,5 @@
 import AspisR17MaskSource.Funs
+import AspisR17MaskSource.CollectorLaws
 
 open Aeneas.Std Result
 namespace AspisR17MaskSource
@@ -51,6 +52,30 @@ theorem actual_map_step
 #print axioms actual_closure_body
 #print axioms actual_closure_closed
 #print axioms actual_map_step
+
+/-- The actual staged mixing_row can use the cached vector collector without
+changing its Result. Its bounds assertion, scalar construction, map instance
+and arithmetic remain exactly the generated ones. This does not replace the
+separate obligation to validate the cached collector against Rust. -/
+theorem actual_mixing_row_collect (i : Usize) :
+    r17_structured_g.mixing_row i = (do
+      massert (i < r17_structured_g.N)
+      let i1 ← lift (Usize.wrapping_add i 1#usize)
+      let node ← r17_structured_g.scalar i1
+      let (m, _) ← IteratorCompat.mapDefault
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        r17_structured_g.mixing_row.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+        { start := 0#usize, «end» := r17_structured_g.N } (field.QM31.ONE, node)
+      core.iter.traits.iterator.Iterator.collect.default
+        (core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          r17_structured_g.mixing_row.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31)
+        (core.iter.traits.collect.FromIteratorVec field.QM31) m) := by
+  unfold r17_structured_g.mixing_row
+  simp only [← IteratorCompat.collectState_observe]
+  rfl
+
+#print axioms actual_mixing_row_collect
 #print axioms r17_structured_g.mixing_row
 #print axioms r17_structured_g.mask_weights_loop0_loop0
 #print axioms r17_structured_g.mask_weights_loop0
