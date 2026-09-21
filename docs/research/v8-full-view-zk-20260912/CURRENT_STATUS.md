@@ -11,8 +11,11 @@ and arbitrary-challenge source-model zero certificates, in 27 bounded
 chunks (214 exclusion and 214 zero theorems). Regeneration and all audits
 pass. Both 214-element row/column permutations now have compiled inverse
 laws, and the recursive source-entry block determinant gate compiles.
-The next gate is the concrete list-to-matrix correspondence and recursive
-determinant composition, not another support search.
+The frozen source minor and both reordered index projections now compile.
+The first concrete block has a checked diagonal entry and all 213 lower
+entries are proved zero for arbitrary challenges. A list-map/symbolic
+lookup proof replaced an over-cap direct lookup check, without raising caps.
+Next: bind the remaining 132 blocks and compose their determinants.
 This is not a full privacy/soundness theorem; see `R17_MINOR_BLOCKS.md`.
 
 ## Latest certificate preflight — small blocks, 2026-09-21
