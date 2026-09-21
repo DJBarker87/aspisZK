@@ -1,5 +1,88 @@
 # R16 soundness preservation obligations
 
+## Arithmetic source reuse audit and current CM31 deltas — 2026-09-21
+
+Base `841909cbf881fb07a636bf267ae61fbcd89b7d55` plus this changeset.
+Read-only inspection located the cached V7 Aeneas caller workspace on
+nuc.local at project-offloads/aspis-v7-aeneas-source-unblock-20260830,
+including staged-current-normalized-statement-owned-twohelpers-r19 and its
+CurrentCallerAudit. No extraction, replay, deployment or wallet action ran.
+Its input field.rs, its normalized field.rs, the current privacy worktree
+and v19 staged field.rs all have SHA-256
+`5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8`.
+The caller audit prints translated definitions and split-helper equalities;
+it does not prove the new R17 mask caller merely by existing.
+
+The tracked component-b-weight-at/arithmetic-lean432 README supersedes the
+older V5 formula-seam commentary about a general 4.31/4.32 gap: it reports
+a 4.32 replay of the source-authentic arithmetic proofs. HOWEVER its pinned
+field source is the older blob `a28ff94de05265102ca819849805a7f73c675800`,
+SHA-256 `dadd6bac7c6c44fcb13e1a1ca26e9d2b6f767370bb6e802640948f15fc795836`.
+Comparing that blob to current field.rs finds relevant body changes in
+M31::half (low-31 rotate), CM31::mul (unreduced cross-term sums), and
+CM31::square (unreduced real-coordinate factors), plus other helpers.
+An unchanged QM31 outer body does not erase changed CM31 dependencies.
+
+Manifest authentication was attempted, not assumed:
+
+- The 42-entry SOURCE_MANIFEST.sha256 itself matches
+  `7832fe9d7ed7ce56aedc2c568d40354330790af6197720edb58a2f6b0e438a01`.
+- The privacy-worktree copy lacks SumProductsComponentLoop.lean,
+  SumProductsFullCorrespondence.lean and SumProductsLoop.lean.
+- The main workspace has those three files with their expected manifest
+  hashes, but its complete check still fails on HalfProof.lean.
+- Both copies' HalfProof.lean hash is
+  `7f1ee2400114870347fc3b90eda801fcad63197f14c10f8cab06a4eca0a79d6d`,
+  whereas the manifest requires
+  `d7c073dd5b1740aad11cf7a949c43399f894f5e11c0ffa3fafd8bcd8b4da9fc0`.
+
+Neither copy is accepted as a fully authenticated release replay. No files
+were overwritten, copied into the branch or repinned to hide these failures.
+The retained LineNorm.lean separately contains the current rotate-half
+mathematics; it was inspected, not recompiled or promoted to an extracted
+current-source theorem in this turn.
+
+New RawReducer.lean is a narrow replay of retained proof bodies from
+V5M31RawMulReduction.lean (lines 55–232) and the addition proofs in
+V5ComponentCQM31RustFormulaSeam.lean (lines 160–193). Only the namespace,
+imports and minimal aliases change. The full cached reducer import pulled
+in the deployment/sampler aggregate and hit the UNCHANGED -M1800 cap.
+The replacement avoids those imports and rechecks the literal bit-fold
+reducer, canonicality, residue and canonical multiplication/addition facts.
+
+SourceLazyCM31.lean proves the actual new raw cross and square-real factors
+do not overflow u64 (and square subtraction cannot underflow), then reuses
+that reducer to establish canonical outputs and exact residues. For the
+cross term it proves equality to the older reduce-each-sum implementation
+as a canonical WORD, not only a congruence. This supplies the mathematical
+current-source delta, not equality of a freshly extracted Rust definition.
+
+First remaining source-specific proposition: connect the current extracted
+CM31 optimized bodies to these raw graphs and compose them with the retained
+QM31 operation correspondences in an authenticated, compatible extraction
+universe; then link the R17 mask caller to its mutation model. Existing
+source/proof pin failures remain visible. No global privacy, soundness,
+source sampler or full-transcript conclusion follows from this delta.
+
+Focused cached `/Users/dominic/ZK/AspisFormal` commands use `lake env lean
+-j1 -M1800 -R <research>/lean -o <r17-cache>/<leaf>.olean
+<research>/lean/AspisV8R17/<leaf>.lean`, timed with `/usr/bin/time -l`:
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| SourceLazyCM31, full cached reducer import | 134 | 45.04 | 4317741056 | 0 |
+| RawReducer, narrowed retained proof replay | 0 | 8.84 | 1630748672 | 0 |
+| SourceLazyCM31, explicit ModEq conversion still missing | 1 | 2.30 | 1613250560 | 0 |
+| SourceLazyCM31, explicit residue equality | 0 | 3.35 | 1630601216 | 0 |
+| Privacy-worktree manifest check | 1 | 0.03 | 7405568 | 0 |
+| Main-workspace manifest check | 1 | 0.01 | 7045120 | 0 |
+
+The memory failure was an import/dependency problem, not permission to raise
+the cap. All nine final axioms audits use only subsets of propext,
+Classical.choice and Quot.sound, no sorryAx, and both final leaves have no
+warnings. No production source, unrelated work, negative regression or pin
+was changed. No full manifest compilation or unchanged runtime suite ran.
+
 ## Reverse table writes and noninterference — 2026-09-21
 
 Base `2c038f925ba5500abc4aa1362dc07f5dca5d51fb` plus this changeset.
