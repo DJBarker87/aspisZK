@@ -1,5 +1,33 @@
 # R17 small-block certificate route
 
+## Sparse source-unit evaluation lemmas
+
+Base `5a7a2bff` plus this changeset. `WeightedScatter.lean` now proves
+`sourceScatter_unit`: for every j<n, applying the assembled source edge
+map to basis vector j equals just the short weighted index schedule for
+j, summed at the selected output index. The proof decomposes the edge
+concatenation into columns and symbolically eliminates every other column;
+it does not normalize 512 concrete zero columns.
+
+`sourceScatter_unit_sparse` exposes the entire resulting sparse vector.
+`scatter_sparse` distributes any further scatter over that sparse list,
+including repeated output positions. Together these are the named sparse
+rewrites required before generating x/x² unit-column certificate checks.
+The next source-block generation step must use these lemmas rather than
+unfold the full sourceEdges list for every entry. Concrete block equality,
+structural zeros and determinant composition remain open; no security
+claim is made from evaluation machinery alone.
+
+Focused cached command uses `/usr/bin/time -l lake env python3` only to
+set LEAN_PATH to worktree target/r17-lean and target/r16-lean plus the
+existing path, then exec `lean -j1 -M1800` on
+`docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/WeightedScatter.lean`.
+Column/unit lemmas compiled with exit 0, 8.63s, peak RSS 1391804416
+bytes, swaps 0. Final sparse-vector distribution additions compiled with
+exit 0, 5.58s, peak RSS 1394966528 bytes, swaps 0. The five new printed
+axioms audits use only propext and Quot.sound. No sorryAx. Output is in
+the command-tool record. No Rust changes or unchanged runtime/full replay.
+
 ## Frozen source active projection
 
 Base `212f6757` plus this changeset. The new

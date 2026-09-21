@@ -49,6 +49,83 @@ theorem active_transport_six_constants (half : F) (inactive : Finset ℕ)
   simp only [AspisV8R16.inverseTransport, if_neg hr]
   exact sourceChord_six_constants half q s a b c t (order.symm r)
 
+theorem scatter_append (xs ys : List (ScatterEdge ℕ ℕ F)) (q : ℕ → F) (r : ℕ) :
+    scatterValue (xs++ys) q r = scatterValue xs q r+scatterValue ys q r := by
+  simp [scatterValue, List.map_append, List.sum_append]
+
+theorem scatter_column (edges : List (ℕ × F)) (j : ℕ) (q : ℕ → F) (r : ℕ) :
+    scatterValue (edges.map fun e => (j,e.1,e.2)) q r =
+      q j * (edges.map fun e => if r=e.1 then e.2 else 0).sum := by
+  induction edges with
+  | nil => simp [scatterValue]
+  | cons e es ih =>
+      simp only [List.map_cons, scatterValue, List.sum_cons] at ih ⊢
+      rw [ih]
+      by_cases h : r=e.1 <;> simp only [h, ↓reduceIte] <;> ring
+
+theorem scatter_columns (columns : List ℕ) (edges : ℕ → List (ℕ × F))
+    (q : ℕ → F) (r : ℕ) :
+    scatterValue (columns.flatMap fun j => (edges j).map fun e => (j,e.1,e.2)) q r =
+      (columns.map fun j => q j * ((edges j).map fun e => if r=e.1 then e.2 else 0).sum).sum := by
+  induction columns with
+  | nil => simp [scatterValue]
+  | cons j js ih =>
+      simp only [List.flatMap_cons, scatter_append, scatter_column, ih, List.map_cons, List.sum_cons]
+
+theorem range_unit_sum (n j : ℕ) (f : ℕ → F) :
+    ((List.range n).map fun i => if i=j then f i else 0).sum = if j<n then f j else 0 := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      simp only [List.range_succ, List.map_append, List.sum_append, List.map_cons,
+        List.map_nil, List.sum_cons, List.sum_nil, add_zero, ih]
+      by_cases h : j<n
+      · have hn : n≠j := by omega
+        have hj : j<n+1 := by omega
+        simp [h,hn,hj]
+      · by_cases hn : n=j
+        · subst j
+          simp
+        · have hj : ¬j<n+1 := by omega
+          simp [h,hn,hj]
+
+theorem sourceScatter_unit (half : F) (n j r : ℕ) (hj : j<n) :
+    scatterValue (sourceEdges half n) (fun i => if i=j then 1 else 0) r =
+      (((weightedIndexLoop half 10 j 0 1).getD []).map
+        fun e => if r=e.1 then e.2 else 0).sum := by
+  rw [sourceEdges, scatter_columns]
+  simp only [ite_mul, one_mul, zero_mul]
+  rw [range_unit_sum, if_pos hj]
+
+def sparseVector (entries : List (ℕ × F)) (i : ℕ) : F :=
+  (entries.map fun e => if i=e.1 then e.2 else 0).sum
+
+theorem scatter_sparse (edges : List (ScatterEdge ℕ ℕ F))
+    (entries : List (ℕ × F)) (r : ℕ) :
+    scatterValue edges (sparseVector entries) r =
+      (entries.map fun e => e.2*scatterValue edges (fun i => if i=e.1 then 1 else 0) r).sum := by
+  induction entries with
+  | nil => simp [sparseVector, scatterValue]
+  | cons e es ih =>
+      have hs : sparseVector (e::es) = fun i =>
+          e.2*(if i=e.1 then 1 else 0)+1*sparseVector es i := by
+        funext i
+        simp only [sparseVector, List.map_cons, List.sum_cons, one_mul]
+        by_cases h : i=e.1 <;> simp [h]
+      rw [hs, scatter_value_linear, ih]
+      simp
+
+theorem sourceScatter_unit_sparse (half : F) (n j : ℕ) (hj : j<n) :
+    scatterValue (sourceEdges half n) (fun i => if i=j then 1 else 0) =
+      sparseVector ((weightedIndexLoop half 10 j 0 1).getD []) := by
+  funext r
+  exact sourceScatter_unit half n j r hj
+
+#print axioms scatter_sparse
+#print axioms sourceScatter_unit_sparse
+#print axioms sourceScatter_unit
+#print axioms scatter_columns
+#print axioms range_unit_sum
 #print axioms active_transport_six_constants
 #print axioms sourceEdges_bounds
 #print axioms sourceChord_six_constants
