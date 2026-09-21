@@ -22,9 +22,18 @@ def check_after(name, expected):
         change = stage['lazy_reference'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('move_prepared', {}):
+        change = stage['move_prepared'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'owned_weights' in stage:
     assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == stage['owned_weights_sha256']
+if 'fixed_g_table' in stage:
+    change = stage['fixed_g_table']
+    assert change['before_sha256'] == stage['base_power_specialization']['after_sha256']
+    assert change['after_sha256'] == stage['workspace_sha256']
+    assert hashlib.sha256((callback.parent / 'r17_g_powers.rs').read_bytes()).hexdigest() == change['table_sha256']
 if 'workspace_adapter' in stage:
     for name, hashes in stage['workspace_adapter'].items():
         if name in stage.get('tensor_prefix', {}):

@@ -1,0 +1,72 @@
+# Exact-map structural optimization boundary
+
+Source base: e32bac9b plus R14/R15 staged research changes. This is an
+implementation plan and algebraic derivation, not a compiled Lean theorem,
+completed CU measurement, or new privacy claim.
+
+## Preserve the map before changing the protocol
+
+The expensive source operation in `tools/r17_mask_workspace.rs` is
+`w[j] = sum_i a[i] * (i+1)^j`, for 271 coin weights and 1024 outputs.
+Its dense implementation is not a lower bound on verification cost.
+The R15 intermediate experiment fixes the public matrix in read-only storage
+and batches four canonical M31 products per reduction. It still does a dense
+matrix multiply and is not the final structural optimization.
+
+A faster exact route follows directly from the geometric-series identity.
+Work modulo X^1024, put n_i=i+1, and define
+
+    D(X) = product_i (1 - n_i X)
+    N(X) = sum_i a[i] product_{k != i} (1 - n_k X)
+    W(X) = N(X) / D(X) mod X^1024.
+
+Then coefficient j of W is exactly the current w[j]. D(0)=1, so the
+inverse exists without any challenge nonzero condition or rejection event.
+All D coefficients and the truncated inverse are fixed base-field constants.
+No change to the mask distribution, basis transport, transcript or proof
+format is required by this identity.
+
+Compute N with a balanced product tree. Each leaf has D_i=1-n_i X and
+N_i=a[i]. Merge by D=D_left D_right and
+N=N_left D_right + N_right D_left. The denominator tree is precomputable;
+only numerator combinations depend on the actual coin weights. Use a fast
+convolution kernel for both the tree and final multiplication, not a new
+quadratic implementation hidden behind polynomial notation. The four M31
+components share all fixed polynomial data. An ordinary radix-two transform
+cannot silently assume roots in M31; its multiplicative group has only one
+factor of two. Reuse/justify suitable extension-field or circle arithmetic,
+or measure a bounded-memory Karatsuba alternative.
+
+Next exact proposition: for every canonical source coin vector, the
+implemented product-tree numerator and truncated convolution produce the
+same 1024 canonical QM31 encodings as the retained power-sum implementation.
+This includes arithmetic overflow bounds, truncation indices, workspace
+ownership and the exact basis/order consumed by the transcript. First test
+the convolution, then one tree level, then full map and actual proof, before
+SBF profiling. Keep the direct implementation as a host reference.
+
+## Aligned bases and sparsity constraints
+
+The retained sparse chord scatter, low-quotient support and active-row
+geometry are useful exact facts, not permission to remove the second channel.
+See R17_MINOR_BLOCKS.md, R17_ACTIVE_MINOR.md and the source tests in
+crates/aspis-prover/src/r17_two_channel.rs. The old single-functional negative
+and first-271 direct-placement negative remain required.
+
+The current source absorbs both expanded ordinary weight arrays before tau.
+A symbolic accumulator can avoid materialization after absorption, but it
+cannot simply omit those bytes. Streaming the exact bytes needs an equivalent
+hash adapter; replacing them with a compact descriptor is a new transcript
+profile and must be justified separately. A sparse replacement mixing map
+likewise needs its joint observation/posterior argument, not merely full rank
+on its own. The first-271 placement regression already demonstrates why.
+
+After G, profile the still-expensive ordinary tensors and two chord duals.
+Exploit shared tensor factors and sparse correction terms, retaining exact
+fixed-basis transport. Do not rerun H1-only schedule searches. Ultimately
+remove the runtime dense reference pass only through an explicitly reviewed
+equivalence/release decision; the current research probe still executes both
+and compares their outcomes.
+
+Resource failures, full-transcript privacy, shared-oracle correspondence,
+retry/publication behavior and soundness remain separate outstanding gates.

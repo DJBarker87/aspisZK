@@ -372,3 +372,73 @@ into the weight accumulators even though ordinary is not needed afterwards.
 Move those vectors into the accumulators instead of allocating two new buffers.
 The broader fixed-heap lifetime budget and excessive CU remain unresolved.
 No Lean theorem changed; no source-refinement, privacy or soundness gate closes.
+
+## R14 consumed preparation vectors
+
+Base e32bac9b plus this changeset. stage_r17_move_prepared.py moves both
+ordinary vectors into their accumulators instead of cloning them, avoiding
+32 KiB of duplicate coefficient buffers. Both verifier paths remain intact.
+Actual host proof: accepted; modified current G-final: rejected (both exit 0).
+Host scope 4G/6G/zero swap: positive 35.15 s, peak RSS 532316 KiB;
+negative 0.00 s reported, 3344 KiB; both zero swaps.
+SBF source/table/frame gates pass: exit 0, 34.77 s, 619020 KiB, zero swaps,
+scope 5G/7G/zero swap. Source revision is e32bac9b plus staged R14 changes.
+
+SVM scope 3G/4G/zero swap: observation driver exit 0, 0.14 s,
+26384 KiB, zero swaps. Honest/corrupt still exhaust 1.2M and 1.4M CU.
+At diagnostic 100M, both now reach first-fold-end and query-schedule-end,
+then fail allocation before openings-end: honest 44341797 CU to failure,
+corrupt 44341224. These are not complete verification costs or a checked
+negative rejection. Heap remains 256 KiB; no limit was raised.
+ELF SHA256 cab8442e4acd54450cf9434acf432352d7426dc85cf33a5746acb45e3c7fa62c.
+Evidence: r17-move-host-r14.log, r17-move-sbf-r14.log,
+r17-move-svm-r14.{jsonl,log}. No Lean target changed; axioms audit not applicable
+to this Rust ownership change. Formal source refinement remains open.
+
+Structural optimization priority: retain sparse/structured weights and exploit
+aligned bases. The present source absorbs both expanded ordinary weight arrays
+into the transcript, so simply omitting expansion changes that transcript.
+Any such new profile needs explicit chronology and soundness/privacy arguments.
+An exact-preserving intermediate experiment precomputes the fixed G Vandermonde
+powers and batches four base-field products per reduction. It does not change
+the encoding, pads, challenges or transcript values. Finite equality tests are
+not its universal source-refinement proof, nor a full privacy theorem.
+
+## R15 fixed G powers and bounded four-product accumulation
+
+Base e32bac9b plus R14 and this changeset. stage_r17_fixed_g_table.py emits
+the same 277504 base-field powers in output-major read-only storage. Four
+canonical products per component are accumulated in u64, reduced, then added
+to the running M31 sum. The bound is 4*(2147483646)^2 < 2^64. The last block
+has three terms. Coin construction, output ordering and mathematical values
+are unchanged; arithmetic association changes. This remains a dense map.
+
+Focused optimized host gate checks every table entry against source M31
+power recurrence, the maximal four-product reduction, 20 owned-dual/chord
+cases, 20 tensor cases, six complete G maps and six pairs of complete opening
+weight maps against retained references. Actual host proof is accepted and
+current G-final corruption rejected; both verifier paths remain enabled.
+Scope 4G/6G/zero swap: focused gate exit 0, 27.62 s, RSS 533876 KiB;
+positive proof exit 0, 9.26 s, 404072 KiB; negative exit 0, 0.00 s reported,
+4400 KiB. All zero swaps. Source/table/frame SBF checks pass: exit 0,
+35.15 s, RSS 619400 KiB, zero swaps, scope 5G/7G/zero swap.
+
+Actual repaired-candidate SVM at the same diagnostic 100M budget reduces
+the second original-weight stage from 33015646 to **26650460 CU** (19.28%).
+The honest execution still runs out of heap after query-schedule-end at
+37976611 CU to failure; the corrupt execution at 37976038. Neither completes
+verification. Both 1.2M/1.4M pairs still exhaust CU. Heap stays 256 KiB.
+This is a stage improvement, not a completed verifier CU figure.
+Observation driver exit 0, 0.15 s, RSS 31712 KiB, zero swaps,
+scope 3G/4G/zero swap. ELF SHA256:
+3c9bd9cd9e2c219f54d3d4e52ecd9d6229616002634e038e84ba232546bcc62a.
+Exact evidence: r17-fixed-g-host-r15.log, r17-fixed-g-sbf-r15.log,
+r17-fixed-g-svm-r15.{jsonl,log}. Source revision e32bac9b plus the generators
+and builder recorded in this changeset; fixture and driver unchanged.
+
+No Lean target changed or new theorem compiled; #print axioms is not
+applicable to these Rust gates. Canonicality/overflow and reassociated-sum
+source refinement remain proof obligations. Full privacy and soundness
+remain open. R17_STRUCTURAL_CU_PLAN.md records the exact generating-function
+route to remove the dense multiplication, and the constraints on sparse
+mixing/aligned bases and the current transcript absorption.
