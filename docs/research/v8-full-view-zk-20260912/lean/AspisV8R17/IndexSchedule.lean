@@ -1,4 +1,5 @@
 import Mathlib.Data.Nat.Bitwise
+import Mathlib.Algebra.Group.Basic
 
 /-! Index-only source schedule: weights are represented by their exponent
 of one half. Ten fuel units suffice for the two concrete input lengths.
@@ -51,6 +52,44 @@ theorem source513_index_bounds (j : ℕ) (hj : j<513) :
   obtain ⟨edges,he,hb⟩ := scheduleBounded_sound 513 j schedule513_bounded hj
   exact ⟨edges,he,fun e hm => ⟨Nat.lt_succ_of_le (hb e hm).1,(hb e hm).2⟩⟩
 
+def weightedIndexLoop {F : Type*} [Monoid F] (half : F) :
+    ℕ → ℕ → ℕ → F → Option (List (ℕ × F))
+  | 0, _, _, _ => none
+  | fuel+1, row, bit, scale =>
+      if row &&& (2^bit) != 0 then
+        let next := row ^^^ (2^bit)
+        let nextScale := scale*half
+        (weightedIndexLoop half fuel next (bit+1) nextScale).map
+          (fun rest => (next,nextScale)::rest)
+      else some [(row ||| (2^bit),scale)]
+
+theorem weightedIndexLoop_powers {F : Type*} [Monoid F] (half : F)
+    (fuel row bit : ℕ) :
+    weightedIndexLoop half fuel row bit (half^bit) =
+      (indexLoop fuel row bit).map (List.map fun e => (e.1,half^e.2)) := by
+  induction fuel generalizing row bit with
+  | zero => rfl
+  | succ fuel ih =>
+      simp only [weightedIndexLoop, indexLoop]
+      split
+      · rw [← pow_succ, ih]
+        cases indexLoop fuel (row ^^^ 2^bit) (bit+1) <;> rfl
+      · rfl
+
+theorem weighted_schedule_bounds {F : Type*} [Monoid F] (half : F)
+    (n j : ℕ) (h : scheduleBounded n = true) (hj : j<n) :
+    ∃ edges, weightedIndexLoop half 10 j 0 1 = some edges ∧
+      ∀ e ∈ edges, e.1<n+1 ∧ ∃ k≤9, e.2=half^k := by
+  obtain ⟨indices,hi,hb⟩ := scheduleBounded_sound n j h hj
+  have hw := weightedIndexLoop_powers half 10 j 0
+  simp only [pow_zero, hi, Option.map_some] at hw
+  refine ⟨indices.map (fun e => (e.1,half^e.2)),hw,?_⟩
+  intro e he
+  obtain ⟨ix,hix,rfl⟩ := List.mem_map.mp he
+  exact ⟨Nat.lt_succ_of_le (hb ix hix).1,ix.2,(hb ix hix).2,rfl⟩
+
+#print axioms weighted_schedule_bounds
+#print axioms weightedIndexLoop_powers
 #print axioms scheduleBounded_sound
 #print axioms source512_index_bounds
 #print axioms source513_index_bounds

@@ -1,5 +1,37 @@
 # Fixed active-minor nonvanishing witness
 
+## Weighted schedule correspondence
+
+Base `2f915390` plus this changeset. `IndexSchedule.lean` adds a weighted
+version of the same loop with `nextScale=scale*half`, in the source order.
+`weightedIndexLoop_powers` proves for every fuel, row and bit, over any
+monoid, that starting at half^bit produces exactly the index-loop edge
+list with each exponent replaced by that power. The proof is structural
+induction, not evaluation over sample field elements.
+
+`weighted_schedule_bounds` combines this identity with the checked
+schedule: for every j<n where scheduleBounded n is certified, the loop
+started at scale one succeeds, all output indices are below n+1, and
+every weight is half^k for k<=9. The retained certificates discharge its
+schedule premise at n=512 and n=513. No nonzero, randomness or new hiding
+premise is needed for this loop identity.
+
+Next is to assemble the indexed weighted edges into the scatter/chord
+model and instantiate the active transport projection, then connect the
+polynomial evaluation and nonzero-minor certificate. This abstract algebra
+does not silently assert correctness of Rust's M31/QM31 representation,
+its embedding or machine-word operations. Full privacy/soundness and
+source adaptive probability accounting remain open.
+
+Focused command from `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/IndexSchedule.lean`.
+Weighted-loop identity pass: exit 0, 6.43s, peak RSS 1303429120 bytes,
+zero swaps. Final combined bounds pass: exit 0, 3.32s, peak RSS
+1305296896 bytes, zero swaps. New axioms audits: the identity uses only
+propext; the combined bounds use propext and Quot.sound. No sorryAx.
+Outputs are in the command-tool record. No Rust source changed and no
+unchanged runtime/full suite was rerun.
+
 ## Concrete bit-index bounds
 
 Base `7f0ee60a` plus this changeset. `IndexSchedule.lean` implements
