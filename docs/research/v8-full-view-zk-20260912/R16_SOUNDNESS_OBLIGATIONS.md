@@ -1,5 +1,39 @@
 # R16 soundness preservation obligations
 
+## Complete current QM31 product graphs — 2026-09-21
+
+Base revision `134d3e7b` plus this changeset. GeneratedQM31Products.lean
+retains the complete generated QM31.mul and QM31.square declarations from
+pinned FunsChunk04. It composes every checked CM31 operation, discharging
+all intermediate success/canonicality conditions. For all canonical inputs
+the complete Result is successful, the four output limbs are canonical,
+and their values equal explicit pure Nat modular-word formulas qmMulWords
+and qmSquareWords. The square proof uses the already compiled current
+CM31.square = CM31.mul-self theorem, not an assumed equality.
+
+The word formulas deliberately retain the source's Karatsuba/subtraction
+and extension-constant structure. They are NOT yet an equality to the
+abstract extension-field multiplication used by MaskWeightWrites. Their
+interpretation and the source-to-model caller bridge remain distinct tasks.
+
+Exact target `AspisV8R17/GeneratedQM31Products.lean`, SHA256
+`674aa22af8274146e6d37b2807236fad286bc956b471ee7fc2e06c18e5658b3f`.
+Source authentication passed for both complete declarations; swapped-square
+component and wrong-final-subtrahend mutations were rejected, alongside
+the existing type/scalar/mul_by_r checks. Cached Linux Lean 4.32.0,
+`-j1 -M1800`, scope `aspis-r17-qm31-products-r1`, MemoryHigh=4G,
+MemoryMax=6G, MemorySwapMax=0, TasksMax=64: exit 0, wall 0.74 s,
+peak RSS 1636896 KiB, swaps 0. Both #print axioms results are
+`[propext, Classical.choice, Quot.sound]`, with no sorryAx/new assumptions.
+No failed attempts or resource-cap increases.
+
+Next: bind the remaining QM31 linear wrappers and interpret the exact
+four-word products in the retained extension-field model. Then connect
+the source constant, actual mask arrays/loops and opening callers. Full
+extraction-pipeline certification, joint-view privacy, shared-oracle and
+retry/publication arguments, and protocol soundness losses remain open.
+Production protocol paths and negative regressions are unchanged.
+
 ## Current extension-constant multiplication — 2026-09-21
 
 Base revision `58e9836c` plus this changeset. GeneratedMulByR.lean retains

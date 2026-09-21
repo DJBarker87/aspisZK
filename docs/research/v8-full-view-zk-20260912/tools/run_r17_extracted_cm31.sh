@@ -44,6 +44,7 @@ case "$target" in
   AspisV8R17/GeneratedCM31Linear) ;;
   AspisV8R17/GeneratedQM31Scalar) ;;
   AspisV8R17/GeneratedMulByR) ;;
+  AspisV8R17/GeneratedQM31Products) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
@@ -116,6 +117,12 @@ if [[ "$target" == AspisV8R17/GeneratedMulByR ]]; then
   python3 "$task/check_r17_qm31.py" --stage "$stage/V7Tag73CurrentHelpersOpaque" \
     --scalar "$task/AspisV8R17/GeneratedQM31Scalar.lean" \
     --mul-by-r "$task/AspisV8R17/GeneratedMulByR.lean"
+fi
+if [[ "$target" == AspisV8R17/GeneratedQM31Products ]]; then
+  python3 "$task/check_r17_qm31.py" --stage "$stage/V7Tag73CurrentHelpersOpaque" \
+    --scalar "$task/AspisV8R17/GeneratedQM31Scalar.lean" \
+    --mul-by-r "$task/AspisV8R17/GeneratedMulByR.lean" \
+    --products "$task/AspisV8R17/GeneratedQM31Products.lean"
 fi
 cd "$runtime"
 test ! -L "$task/$target.olean"
