@@ -1,5 +1,61 @@
 # R16 soundness preservation obligations
 
+## Bounded source scatter/gather adjoint — 2026-09-21
+
+Base `3a53c79a5003755c885fd6b87e98b9d046a9d51d` plus this changeset.
+`AspisV8R17/ScatterDual.lean` proves the finite dot-product identity for
+the retained scatter edge lists and their gather operation. Input and output
+index bounds are explicit. It identifies the gather of sourceEdges with
+the weightedIndexLoop read sum, and instantiates the adjoint at any retained
+bounded schedule. This uses the existing index certificate, not another
+enumeration of dense field matrices.
+
+`AspisV8R17/SourceGatherLoop.lean` models the accumulator in the verifier's
+xt: on each set bit it clears the bit, multiplies scale by half, and adds
+the weighted read; the final read sets the first clear bit. It proves this
+loop equals the weighted read sum. The retained certificates discharge
+termination at all inputs below 512 and 513. The double-scatter adjoint
+preserves the actual 512 -> 513 -> 514 forward sizes and reverses them for
+the gather; the 513 intermediate coordinates are not discarded.
+
+Inspected local tools and identical v19 staged files:
+
+- r17_opening_weights.rs SHA-256
+  `bc0068b47eba5f871fac7ff809aad79bff738357ead553fa2ded7fd579428fec`.
+- r17_coupled_audit.rs SHA-256
+  `74f6ec7eff5c747656168dabd1cefd9cb7326fc29c9fd6ccf2d46a10e944c690`.
+
+The opening code pads weights from 1024 to 1028, splits even/odd lanes,
+gathers to 513 and then 512, and recombines 1024 weights. The audit's forward
+chord computes 1028 coefficients, asserts its high tail zero, then truncates.
+The new identities hold for arbitrary inputs at the stated dimensions;
+they do NOT assume or establish that high-tail assertion. In particular,
+an honest diagnostic assertion is not a malicious-prover image proof.
+
+Next exact proposition: combine these adjoints with the retained
+finiteChordEven/finiteChordOdd equations, preserving parity splitting and
+zero-extended weights, to prove the entire chord_transpose pairing. Then
+compose with TransportDual and the two distinct residual-weight formulas.
+Word-level Rust/field refinement, original-weight materialization, extraction,
+challenge bounds and the joint privacy obligations remain open. No new hiding
+or adjoint assumption was introduced.
+
+Focused cached workspace `/Users/dominic/ZK/AspisFormal`; command for each
+leaf: `lake env lean -j1 -M1800 -R <research>/lean -o <r17-cache>/<leaf>.olean
+<research>/lean/AspisV8R17/<leaf>.lean`, timed by `/usr/bin/time -l`.
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| ScatterDual, initial map-composition simplification | 1 | 10.18 | 1430159360 | 0 |
+| ScatterDual, explicit Function.comp_def | 0 | 4.62 | 1444233216 | 0 |
+| SourceGatherLoop, loop identities | 0 | 1.72 | 1445806080 | 0 |
+| SourceGatherLoop, added double-scatter bridge | 0 | 3.32 | 1447788544 | 0 |
+
+Three ScatterDual and five final SourceGatherLoop #print axioms results use
+only subsets of propext, Classical.choice, Quot.sound, with no sorryAx.
+The failed draft was not accepted evidence. No production changes, cap
+increases, full-manifest replay or unchanged runtime suites were performed.
+
 ## Universal inverse-dual algebra — 2026-09-21
 
 Base `7048dd6bb844a46ba49d5f224800720e915da3be` plus this changeset.
