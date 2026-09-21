@@ -1,5 +1,34 @@
 # R16 soundness preservation obligations
 
+## Focused retained halving mathematics — 2026-09-21
+
+Base revision `52742af4ca4b5d3da3aa798ead8043b20471681f` plus this changeset.
+`AspisV8R17/HalfRotateNat.lean` replays the retained LineNorm low-31 rotate
+argument with core imports instead of Mathlib.Tactic. It proves the arithmetic
+formula, canonical range, intermediate word ranges, and the added consequence
+`(2 * halfWord x) % p = x` for every `x < p`. This is a Nat theorem, not yet
+a theorem about successful execution of generated M31.half.
+
+Focused cached Linux host, Lean 4.32.0, `-j1 -M1800`, systemd scopes
+`aspis-r17-half-nat-r1` and `aspis-r17-half-nat-r2`, each MemoryHigh=4G,
+MemoryMax=6G, MemorySwapMax=0, TasksMax=64:
+
+| Exact target | Change | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| AspisV8R17/HalfRotateNat.lean | Retained three lemmas | 0 | 0.40 | 808584 | 0 |
+| AspisV8R17/HalfRotateNat.lean | Added half_double_mod | 0 | 0.37 | 810792 | 0 |
+
+`#print axioms`: half_arithmetic uses `[propext, Quot.sound]`; the range,
+word-range and modular-double theorems use
+`[propext, Classical.choice, Quot.sound]`. No sorryAx or new assumption.
+The runner's existing FunsChunk04 authentication still passes, but does NOT
+authenticate half: that declaration is in FunsChunk06 and uses signed i32
+shift counts. The first remaining primitive obligation is to authenticate
+that declaration and its literal/shift semantics, then prove its successful
+word execution equals halfWord. Full field/array caller composition,
+commitment extraction, shared-oracle chronology, retries/publication and
+end-to-end privacy/soundness remain open. No production paths changed.
+
 ## Current CM31 square and equality to self multiplication — 2026-09-21
 
 Base `b1a67fdd5385b51b5899422dbf00542248b314aa` plus this changeset.

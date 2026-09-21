@@ -37,6 +37,7 @@ case "$target" in
   AspisV8R17/GeneratedM31Add) ;;
   AspisV8R17/GeneratedCM31Square) ;;
   AspisV8R17/GeneratedCM31SquareNormalized) ;;
+  AspisV8R17/HalfRotateNat) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
