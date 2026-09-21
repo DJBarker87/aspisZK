@@ -1,5 +1,31 @@
 # R16 soundness preservation obligations
 
+## Current extension-constant multiplication — 2026-09-21
+
+Base revision `58e9836c` plus this changeset. GeneratedMulByR.lean retains
+the complete pinned FunsChunk04 mul_by_r declaration and composes the checked
+M31 double/sub/add theorems. For every canonical CM31 input it proves
+successful Result execution, canonical outputs and the exact intermediate
+word formulas, then normalizes them to signed real residue `2a-b` and
+imaginary residue `a+2b`. Intermediate canonicality is discharged explicitly;
+no success or arithmetic-operation premise is assumed.
+
+The checker authenticates the declaration and rejects sign and component
+mutations. Target `AspisV8R17/GeneratedMulByR.lean`, SHA256
+`a4ade35114e2f7af067842d6c02134c1b04c71535df152d85d3cbbe5c6b1f26c`.
+Cached Linux Lean 4.32.0 `-j1 -M1800`, scope `aspis-r17-mul-by-r-r1`,
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64:
+exit 0, wall 0.74 s, peak RSS 1636008 KiB, swaps 0.
+All four #print axioms results are `[propext, Quot.sound]`. No sorryAx,
+new assumption, failed compilation or higher-cap retry.
+
+The next arithmetic theorem must compose the complete QM31 multiplication
+and square graphs from these CM31 dependencies, not merely infer correctness
+from their names. Mapping the resulting word formulas into the retained
+extension-field model, the mask caller's arrays/constant, source extraction
+pipeline and all global privacy/soundness obligations remain separate.
+No production path or negative regression changed.
+
 ## Current QM31 scalar multiplication — 2026-09-21
 
 Base revision `14c11623` plus this changeset. GeneratedQM31Scalar.lean

@@ -9,7 +9,7 @@ from check_r17_generated_reducer import pinned, blocks_match
 from check_r17_field_slice import PINS
 from check_r17_half import CHUNK_PIN
 
-def check(stage, scalar):
+def check(stage, scalar, mul_by_r=None):
     sources = pinned(stage, {**PINS, "FunsChunk06.lean": CHUNK_PIN})
     pattern = re.compile(r"^-- GENERATED ([\w.]+)\n(.*?)\n-- END GENERATED$", re.M | re.S)
     def validate(text):
@@ -29,13 +29,33 @@ def check(stage, scalar):
             pass
         else:
             raise ValueError("mutation accepted")
-    return {"source_blocks": 3, "negative_mutations_rejected": 3,
+    result = {"source_blocks": 3, "negative_mutations_rejected": 3,
             "sha256": hashlib.sha256(scalar.read_bytes()).hexdigest(),
             "full_caller_refinement": False}
+    if mul_by_r is not None:
+        value = mul_by_r.read_text()
+        def validate_r(body):
+            blocks_match(pattern.findall(body), ["FunsChunk04.lean"], sources)
+        validate_r(value)
+        for before, after in [("M31.sub m x.b", "M31.add m x.b"),
+                              ("M31.add x.a m2", "M31.add x.b m2")]:
+            changed = value.replace(before, after, 1)
+            if changed == value:
+                raise ValueError("ineffective mul_by_r mutation")
+            try:
+                validate_r(changed)
+            except ValueError:
+                pass
+            else:
+                raise ValueError("mul_by_r mutation accepted")
+        result["mul_by_r"] = {"source_blocks": 1, "negative_mutations_rejected": 2,
+                              "sha256": hashlib.sha256(mul_by_r.read_bytes()).hexdigest()}
+    return result
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", type=Path, required=True)
     parser.add_argument("--scalar", type=Path, required=True)
+    parser.add_argument("--mul-by-r", type=Path)
     args = parser.parse_args()
-    print(json.dumps(check(args.stage, args.scalar), sort_keys=True))
+    print(json.dumps(check(args.stage, args.scalar, args.mul_by_r), sort_keys=True))
