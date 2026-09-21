@@ -1,5 +1,35 @@
 # R16 soundness preservation obligations
 
+## Requested CU smoke: retained baseline only — 2026-09-21
+
+At privacy-branch revision `427f1897`, the user requested a fresh CU check.
+One cached complete-transaction case was executed, not an unchanged full suite:
+maximum-body withdrawal, 255 populated pairs (rollover), proof seed 2, success.
+It PASSED at **1,047,041 CU**, with the transaction declaring 1,200,000 CU:
+152,959 CU headroom, identical to the retained historical case. The real
+verifier CPI consumed 968,521 CU. TxV1 size was 1,043 bytes. Settlement output
+checks passed. This is local LiteSVM 0.16.0 execution, with no RPC, deployment,
+external transaction, or wallet operation.
+
+IMPORTANT: this reused the historical terminal-stack verifier ELF SHA256
+`3d07a23833bac533f791b7ce2d619f4cd40aff6e1b5314c3b43be596b38c15a3`.
+The raw driver's historical label "repaired research V8" does NOT mean the
+current R17 privacy repair is integrated or measured. This evidence establishes
+only that the retained baseline still executes this fixture. It does not prove
+current-source build equivalence, repair CU cost, privacy, or universal CU fit.
+The new mask candidate still requires source integration before repair CU can
+be measured. No SBF rebuild or production change was performed.
+
+Raw evidence: evidence/r17-retained-baseline-cu-smoke.json and .log. The JSON
+pins verifier, Pool, Registry, Token control and proof artifacts; the log gives
+the exact command. Cached driver was the release performance-svm binary under
+`/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz`.
+Output retained at `/home/dombarker/project-offloads/aspis-r17-cu-smoke.FYeuP5`.
+Scope aspis-r17-cu-smoke-20260921: MemoryHigh=3G, MemoryMax=4G,
+MemorySwapMax=0, TasksMax=64. Preflight showed only init.scope. Exit 0,
+wall 0.05 s, peak RSS 29,492 KiB, swaps 0. No formal theorem changed or
+axioms audit was applicable to this runtime-only check.
+
 ## Retained reducer composition replay — 2026-09-21
 
 Base revision `eb02e5e2` plus this changeset. Full-runtime staging now includes
