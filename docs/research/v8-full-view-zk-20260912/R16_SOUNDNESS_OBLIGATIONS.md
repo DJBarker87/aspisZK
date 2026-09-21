@@ -1,5 +1,44 @@
 # R16 soundness preservation obligations
 
+## Standard complex residues and checked addition — 2026-09-21
+
+Base `65269efce1dc42d7982c36d1070b3692db43a2d7` plus this changeset.
+GeneratedCM31Normalized.lean proves that the complete generated multiplication
+returns the standard complex-product residues: real `(a*c-b*d) mod P` using
+SIGNED Int subtraction, imaginary `(a*d+b*c) mod P`, both canonical. It consumes
+generated_mul_words directly, so successful source execution is part of the
+conclusion, not an extra hypothesis. The two word-formula normalization lemmas
+hold for all Nat inputs. Their audits use `[propext, Quot.sound]`; the composed
+generated_mul_complex_residues audit uses `[propext, Classical.choice, Quot.sound]`.
+This establishes the explicit modular coordinate specification; a named adapter
+to any larger retained field/array datatype is not silently assumed.
+Source hash: `6fd573cd30e5a302964186679742565c3101945be7034a26886e63ce9c8810df`.
+
+GeneratedM31Add.lean copies current M31.add and M31.double, attributes included,
+and proves exact canonical sum/double remainders on canonical inputs. Both
+audits use `[propext, Quot.sound]`. The checker matched the two declarations
+against pinned FunsChunk04.lean, rejected sign/double-argument mutations, and
+passed the existing literal/reducer text checks, exit 0. Source hash:
+`c509d0c36918dd113a49320004b1959b1e79feaf332ff1151561b04bbdee1cba`.
+
+Both focused targets compiled on first attempts with no warnings or sorryAx.
+Retained host/cache, Lean 4.32.0 `-j1 -M1800`, MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64; no cap change or full replay:
+
+| Exact target | Scope | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| AspisV8R17/GeneratedCM31Normalized.lean | aspis-r17-cm31-normalized-r1 | 0 | 0.85 | 1644512 | 0 |
+| AspisV8R17/GeneratedM31Add.lean | aspis-r17-generated-m31add-r1 | 0 | 0.69 | 1634512 | 0 |
+
+First remaining source-specific arithmetic proposition: the SEPARATE current
+CM31.square implementation must execute successfully on canonical inputs,
+including the unreduced `(a+b)*(a+P-b)` real operand, and return canonical
+`(a*a-b*b, 2*a*b)` residues. Multiplication correctness alone does not prove
+that different source body. Its multiplication, subtraction, reducer and
+doubling dependencies are now available. R17 caller integration, field/array
+adapters, and full privacy/soundness obligations remain open. No production
+protocol path, source pin or negative regression was changed.
+
 ## Current subtraction and complete CM31 word execution — 2026-09-21
 
 Base `c7c9e3c710cb53786142bbbb116aa409766754fd` plus this changeset.
