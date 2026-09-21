@@ -207,14 +207,22 @@ fn minor_support_blocks(support:&[Vec<bool>],matrix:&[Vec<K>])->Vec<usize> {
     for i in 0..n {for j in 0..n {if support[rows[i]][j] && !reach[j][i] {
         assert!(order[i]>order[j],"strict block triangular order");
     }}}
-    let mut used=vec![false;n];let mut sizes=vec![];
+    let mut used=vec![false;n];let mut sizes=vec![];let mut certificate=String::new();
     for i in 0..n {if !used[i] {
         let mut members=vec![];
         for j in 0..n {if reach[i][j] && reach[j][i] {assert!(!used[j]);used[j]=true;members.push(j);}}
         let block:Vec<Vec<K>>=members.iter().map(|&r|members.iter().map(|&c|matrix[rows[r]][c]).collect()).collect();
         let (_,p)=reduce(&block);assert_eq!(p.len(),members.len(),"nonzero diagonal block");
+        let block_rows:Vec<_>=members.iter().map(|&j|rows[j]).collect();
+        let values:Vec<_>=block.iter().flatten().map(|&v|{
+            let value=v.c0.a.0;
+            assert_eq!(v,K::ONE.mul_m31(M31(value)),"base-field certificate");value
+        }).collect();
+        let record=format!("{{\"order\":{},\"rows\":{block_rows:?},\"columns\":{members:?},\"values\":{values:?}}}",order[i]);
+        certificate.push_str(&record);certificate.push('\n');
         sizes.push(members.len());
     }}
+    assert_eq!(certificate,include_str!("../../../docs/research/v8-full-view-zk-20260912/evidence/r17-minor-blocks.jsonl"),"frozen block layout and base-field values");
     assert_eq!(sizes.iter().sum::<usize>(),n);sizes.sort_unstable();sizes
 }
 

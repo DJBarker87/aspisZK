@@ -6,7 +6,8 @@ The fixed minor's challenge-independent support decomposes into 60 1x1,
 65 2x2 and 8 3x3 blocks. Exact source tests verify the triangular ordering
 and all diagonal block ranks at the fixed witness. `R17_MINOR_BLOCKS.md`
 records the resulting small-block formal certificate route. Frozen block
-data and formal determinant composition remain next; no global security
+data now matches the source exactly (133 blocks, 29 distinct evaluated
+matrices). Formal determinant leaves and composition remain next; no global security
 gate is closed.
 
 ## Latest polynomial bridge — 2026-09-21
