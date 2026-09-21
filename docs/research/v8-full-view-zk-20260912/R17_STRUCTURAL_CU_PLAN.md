@@ -142,3 +142,26 @@ roots/normalization and each selected merge against the current scalar merge
 before the complete basis and actual-proof gates. This is a planned exact-map
 optimization, not an implemented or measured speedup; no new mixing map or
 hiding assumption is justified by this plan.
+
+This candidate is now implemented as R23a. Its seven selected merges pass
+838 direct controls; the whole-map/proof gates pass. It saves only 0.24M
+primary CU because generalizing the transform regresses the final FFT.
+R24 then specializes fixed sizes/directions and quarter-turn twiddles,
+retaining the generic transform as a host reference. All focused gates pass.
+The primary checkpoint is now 24.47M CU (R22: 27.92M). G-tree/FFT intervals
+are 3.93M/6.61M. Exact evidence and the retained regression are in
+R17_REPAIR_CU.md. No universal transform/source proof follows from these tests.
+
+Next exact-map structural candidate: align forward/inverse spectral storage
+so convolutions do not reorder the same coordinates repeatedly. A forward
+DIF transform can emit bit-reversed frequencies and an inverse DIT can
+consume them directly, provided every fixed denominator/inverse spectrum
+uses exactly the same permutation. Preserve the current generic transform
+as a reference; compare every supported length/direction, selected node,
+whole G basis and actual proof before measuring. This is not implemented.
+The present fused DIT butterfly cannot simply be reused as a DIF butterfly:
+the twiddle multiplies a different intermediate. Derive its arithmetic and
+canonical bounds before implementing a fused DIF path. Small/sparse merges
+must remain direct. Avoid changing the fixed mixing map merely for a faster
+transform: that would be a new profile requiring renewed joint-observation
+analysis, not an equivalence optimization.

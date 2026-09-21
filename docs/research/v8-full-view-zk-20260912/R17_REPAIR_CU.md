@@ -5,8 +5,8 @@ measurement concerns AV8/R17/structuredG271-two-channel/research-v1, including
 its changed encoding, structured G and two quotient channels / Final512.
 Privacy and soundness preservation remain open regardless of a CU result.
 
-Latest boundary (R22): the primary deferred SBF pass accepts the retained
-honest proof at its terminal checkpoint (~27.92M diagnostic CU consumed).
+Latest boundary (R24): the primary deferred SBF pass accepts the retained
+honest proof at its terminal checkpoint (~24.47M diagnostic CU consumed).
 The unchanged second reference pass then exhausts heap. The full program
 still fails, both 1.2M/1.4M budgets fail, and no deployability/privacy claim
 follows. Detailed chronological evidence, including regressions, is below.
@@ -839,3 +839,127 @@ r17-tensor-complement-svm-r22.{jsonl,log}, r17-tensor-complement-lean-r22.log.
 Source field/tree/loop refinement and all full privacy/soundness/retry and
 publication obligations remain. These performance and one-fixture functional
 results do not discharge any broader security gate.
+
+## R23a hybrid balanced numerator merges
+
+Base dc6ca39e plus this changeset. The R23 staging preflight was corrected
+to pass a u8 normalization shift before any compilation; the tested fresh
+stage is r23a. Initial Tailscale transfers timed out, then connectivity
+recovered. All host jobs used 100.108.41.90, retained caches and zero-swap
+systemd scopes. Production paths and prior negative regressions are unchanged.
+
+stage_r17_hybrid_merge.py replaces only the seven fully balanced numerator
+nodes of widths 64/128/256 with short convolutions. Small nodes and the
+uneven final 256+15 split retain scalar scatter arithmetic. Each child
+numerator has degree < n/2, and its opposite denominator degree n/2, so
+the product degree is < n: the length-n cyclic convolution has no aliasing.
+This is the mathematical design argument, not a compiled source-refinement
+theorem. The single existing 2048-CM31 workspace is allocated before the
+tree and reused throughout; no additional heap buffer is introduced.
+
+Optimized Rust emits 14 fixed denominator spectra (1536 CM31 constants),
+separately from the unchanged original table. The builder pins both tables,
+the generator, merge helper, and full kernel modification chain. Generation
+exit 0, 26.36 s including compilation, peak RSS 536028 KiB, swaps 0;
+scope 4G/6G/zero swap, TasksMax=128. The numerical generation itself is tiny;
+compilation dominates. Exact source pins are retained in
+evidence/r17-hybrid-merge-source-pins-r23a.json.
+
+Focused optimized controls pass: exact root order/normalization and inverse
+round trips at 64/128/256/2048, all 14 spectra inverse-equal their opposite
+denominators, and 838 individual merge comparisons including every one of
+768 selected-node basis positions, zero, maximum limbs and full-limb vectors.
+The existing complete 271-basis G map, ordinary/complete weight, tensor,
+folding and arithmetic controls pass. Actual host honest proof accepted;
+current-profile G-final mutation rejected (the inherited log label
+R17_LEGACY_PROFILE_REJECTED does not describe a legacy fixture).
+Focused exit 0, 2.11 s, RSS 284792 KiB; positive exit 0, 9.50 s, RSS
+434652 KiB; negative exit 0, 0.00 s reported, RSS 3344 KiB. All swaps 0,
+scope 4G/6G/zero swap. Both verifier paths/reference checks are retained.
+
+SBF source/table/frame gates pass: exit 0, 35.62 s, peak RSS 619884 KiB,
+swaps 0; scope 5G/7G/zero swap. Observed cgroup peak 951857152 bytes.
+ELF SHA256:
+6fead68fd11d10d5fd625fd4aab7e5dadee3d59cbbdc8b5654580c344d830099.
+The G-tree marker interval falls from 5455352 to 4817466 CU, but the FFT
+interval rises from 8525873 to 8923499 CU. Buffer allocation now belongs
+to the tree interval rather than the FFT interval; whole-map/checkpoint
+comparisons avoid that attribution shift. The second original-weight
+interval is 16094716 CU. Primary terminal acceptance costs 27673220 CU
+versus R22's 27915528: only 242308 CU saved, about 0.87%.
+
+The full honest execution still fails on reference-pass heap allocation at
+27751605 CU; corrupt execution fails at 26957673 CU, not a completed
+checked rejection. Both 1.2M/1.4M pairs still exhaust CU; heap is 256 KiB.
+Observation driver exit 0, 0.12 s, RSS 26992 KiB, swaps 0, scope
+3G/4G/zero swap. Evidence: r17-hybrid-merge-{generate,host,sbf}-r23a.log,
+r17-hybrid-merge-svm-r23a.{jsonl,log}. No Lean file changed or theorem was
+newly compiled in this experiment. All source-transform equivalence,
+full-transcript privacy and soundness gates remain open.
+
+The partial improvement is retained, as is the final-FFT regression. The
+next experiment specializes the public transform size/direction and exact
+quarter-turn twiddles, with direct comparisons against this generic kernel.
+
+## R24 fixed transform schedules and quarter-turn butterflies
+
+Same base dc6ca39e plus this changeset, fresh stage r24 derived from r23a.
+stage_r17_fixed_fft.py instantiates length 64/128/256/2048 and direction as
+compile-time constants. The public wrapper selects one of eight kernels.
+The exact table has ROOTS[512]=-i and ROOTS[1536]=i. These butterflies use
+four base-field additions/subtractions, with no multiplications/negations.
+All other twiddles retain the earlier fused butterfly. No mask, mixing
+node, transcript byte, challenge, proof format or verifier check changes.
+The R23a generic transform is retained as a host-only reference; it is not
+compiled into the SBF path. No extra heap buffer is allocated.
+
+Focused release gates pass: 1250 quarter-turn boundary cases and 40 complete
+transform comparisons against the previous generic transform (all four
+lengths, both directions, zero/max/edge/full-limb vectors), plus every R23a
+merge/basis/weight/fold control. The actual retained host proof is accepted
+and its G-final mutation rejected, with both verifier paths and reference
+opening checks. Focused exit 0, 28.43 s, RSS 536580 KiB; positive exit 0,
+9.57 s, RSS 435776 KiB; negative exit 0, 0.00 s reported, RSS 3344 KiB.
+All swaps 0, scope 4G/6G/zero swap, TasksMax=128. Compilation dominates
+wall time. This is finite source testing, not a universal FFT/source proof.
+
+SBF source/table/frame checks pass: exit 0, 35.57 s, peak RSS 622040 KiB,
+swaps 0; scope 5G/7G/zero swap, TasksMax=128. Observed aggregate scope
+peak 953937920 bytes. ELF SHA256:
+a154b6121d98f0a7a002bb85afb8e9b256a5f873bef27fc0009798b9504ec8d0.
+Source pins: evidence/r17-fixed-fft-source-pins-r24.json. Generator and
+table are unchanged from R23a, so no unchanged regeneration was run.
+
+| Honest diagnostic interval/checkpoint | R22 CU | R23a CU | R24 CU |
+| --- | ---: | ---: | ---: |
+| G numerator tree | 5455352 | 4817466 | 3927402 |
+| G final FFT section | 8525873 | 8923499 | 6613012 |
+| G-containing original weights | 16337023 | 16094716 | 12894165 |
+| Primary terminal acceptance, cumulative | 27915528 | 27673220 | 24472669 |
+
+Tree/FFT allocation attribution changes at R23a as noted above. Cumulative
+primary saving versus R22 is 3442859 CU, about 12.33%; versus R23a it is
+3200551 CU. These two combined changes were measured together in R24;
+the reduction cannot be assigned separately to constant specialization or
+quarter-turn arithmetic without a further controlled experiment.
+
+Full honest execution still fails on heap in the second reference pass at
+24551054 CU; corrupt execution fails at 23757122 CU without a completed
+checked rejection. Both 1.2M/1.4M pairs exhaust CU. All cases keep 256 KiB
+heap; the 100M budget remains diagnostic only. Driver exit 0 means six
+observations captured, not verifier acceptance. Driver wall 0.12 s, peak
+RSS 27096 KiB, swaps 0; scope 3G/4G/zero swap, TasksMax=64.
+
+Evidence: r17-fixed-fft-{host,sbf}-r24.log and
+r17-fixed-fft-svm-r24.{jsonl,log}. Same retained proof SHA256
+a9d851aeeb68193c00791beeae2cbcd0aa894b1ae51e9f051c64020063612fb5
+and LiteSVM driver SHA256
+34d87c8d4d5cb9b850e22342328ec9cc25e9f36435d982f47c69315ea9dbc2b4.
+No Lean file changed or new theorem was compiled; #print axioms is not
+applicable to these Rust-only experiments. Existing proved boundaries have
+not advanced. First new source-refinement obligation is to identify this
+fixed product-tree/FFT implementation with sourceMixedWeight for arbitrary
+canonical QM31 inputs, including reduction, no-aliasing, buffer reuse and
+actual source loops. It cannot be discharged by the finite controls above.
+Reference allocation, supported-budget feasibility, full-transcript privacy,
+soundness, shared-oracle, retry and publication gates remain separate and open.

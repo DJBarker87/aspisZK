@@ -50,7 +50,19 @@ def check_after(name, expected):
         change = stage['tensor_complement'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('hybrid_merge', {}):
+        change = stage['hybrid_merge'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    if name in stage.get('fixed_fft', {}):
+        change = stage['fixed_fft'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+if 'hybrid_merge_files' in stage:
+    assert 'r17_merge_spectra.rs' in stage['hybrid_merge_files']
+    for name, expected in stage['hybrid_merge_files'].items():
+        assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'inplace_dense_fold' in stage:
     change = stage['inplace_dense_fold']
     assert change['before_sha256'] == '7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead'
