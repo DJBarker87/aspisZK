@@ -77,6 +77,13 @@ theorem with the repaired transport; actual source controls pass. See
 retained failures and the remaining sparse-contraction obligation. This is
 not yet an integrated compact verifier or a new CU measurement.
 
+R30–R33 subsequently implement weighted sparse corrections and the complete
+ordinary-channel compact terminal, then connect it to the primary research
+verifier while retaining expanded transcript binding, image/query terms and
+the G/reference paths. See [R17_WEIGHTED_COMPACT.md](R17_WEIGHTED_COMPACT.md)
+for source controls, the focused grouping proof and storage/build failures.
+This does not yet eliminate dense preparation or compact the G channel.
+
 For the inactive indicator, the dual transport yields only the pivot
 coordinate: inactive non-pivots have 1-1=0, active rows have 0, and the
 pivot has 1. R29's inactive_to_pivot now proves this specialization of the

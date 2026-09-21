@@ -1136,3 +1136,36 @@ an explicitly versioned research profile and fresh source/oracle obligations.
 No production path, G mixing map, verifier check, or negative regression was
 removed. Full privacy, soundness preservation and source correspondence remain
 open, separately from these arithmetic reuse and resource observations.
+
+## R30–R33 compact ordinary terminal: source success, resource regression
+
+Source base b453b56a plus this changeset. See R17_WEIGHTED_COMPACT.md for
+the exact retained-kernel extraction, weighted-grouping Lean proof, focused
+source controls, actual host-proof checks and storage changes. The ordinary
+terminal now reuses the baseline fused-row kernels with explicit sparse
+permutation, inactive-mask and pivot corrections. G, image residuals, fresh
+queries, expanded transcript bytes and the dense reference are retained.
+
+R32's host checks pass, but SBF emits an 8832-byte Description constructor
+frame. Compiler exit 0 is rejected by the frame gate (runner exit 1); no SVM
+measurement. Wall 40.73 s, RSS 619792 KiB, swaps 0, 5G/7G/zero-swap scope.
+R33 replaces stack factor tables with Vec storage and forms the permutation
+delta in place. Focused source checks and both actual host-proof paths pass;
+the corrupted G-final fixture is rejected. Detailed timings are in the linked
+ledger, including the preserved initial source-pin preflight failure.
+
+R33 SBF source/table/frame gates pass: exit 0, wall 40.41 s, RSS 618528 KiB,
+swaps 0, 5G/7G/zero-swap scope. ELF SHA256:
+e90911a84a1a1f08e6f52d379e67520d223af7bd7c50b1b7b9958ddeaaa0160e.
+However the honest diagnostic run exhausts the unchanged 256 KiB heap inside
+the new compact terminal, before primary acceptance, at 23663255 CU. This
+failure total is NOT a better verifier cost. Corrupt full failure is 23019836
+CU, also on heap; all four 1.2M/1.4M cases exhaust CU. Preparation remains
+19892834 CU because expanded transcript binding is unchanged.
+
+Driver exit 0, 0.13 s, RSS 31132 KiB, swaps 0; 3G/4G/zero-swap scope,
+TasksMax=64. All observations retained in r17-compact-storage-svm-r33.jsonl.
+R28's 24208293 CU primary acceptance remains the preferred measured endpoint.
+Next: reuse the consumed ordinary-weight allocation and remove temporary
+edge allocations, preserving reference/prover access and all checks. No
+heap increase, transcript/profile change or full privacy claim is made.

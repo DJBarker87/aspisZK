@@ -21,4 +21,4 @@ env.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',NO_DNA='1',RUSTFLAGS=
 subprocess.run(['/usr/bin/time','-v','/home/dombarker/.cargo/bin/cargo',
     'run','--offline','--locked','--release','--jobs','2','--features',meta['features'],
     '--manifest-path',str(exp/'performance-host/Cargo.toml'),
-    '--bin','r17-compact-transport-check'],env=env,cwd=root,check=True)
+    '--bin',pins.get('bin','r17-compact-transport-check')],env=env,cwd=root,check=True)

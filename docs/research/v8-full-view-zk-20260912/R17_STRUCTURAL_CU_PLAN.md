@@ -11,7 +11,9 @@ The larger target remains compact functional preparation through the repaired
 basis, with an explicit transcript-version boundary for descriptor binding.
 R29's [compact transport bridge](R17_COMPACT_TRANSPORT.md) now proves the
 exact correction formula and reuses the old fused-row theorem; focused
-source controls pass. Implementing a sparse correction contraction is next.
+source controls pass. R30–R33 implement that sparse contraction and connect
+the ordinary-channel terminal; [exact boundaries](R17_WEIGHTED_COMPACT.md).
+G contraction, dense transcript binding and complete source refinement remain.
 
 Source base: e32bac9b plus R14/R15 staged research changes. This is an
 implementation plan and algebraic derivation, not a compiled Lean theorem,

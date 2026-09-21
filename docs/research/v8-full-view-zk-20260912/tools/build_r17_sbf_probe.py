@@ -11,7 +11,6 @@ root = Path(sys.argv[1]).resolve()
 assert root.name.startswith('aspis-r17-sbf-probe-') and not (root / '.git').exists()
 stage = json.loads((root / 'r17-sbf-probe.json').read_text())
 callback = root / 'docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs'
-assert hashlib.sha256(callback.read_bytes()).hexdigest() == stage['callback_after_sha256']
 host = json.loads((root / 'r17-stage.json').read_text())
 def check_after(name, expected):
     if name in stage.get('owned_weights', {}):
@@ -72,6 +71,24 @@ def check_after(name, expected):
         expected = change['after_sha256']
     if name in stage.get('owned_primal', {}):
         change = stage['owned_primal'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    if name in stage.get('compact_verifier', {}):
+        change = stage['compact_verifier'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+# callback_after_sha256 already includes the earlier callback transformations.
+# Advance only the new change from that retained aggregate endpoint.
+callback_expected = stage['callback_after_sha256']
+if 'relation_callback.rs' in stage.get('compact_verifier', {}):
+    change = stage['compact_verifier']['relation_callback.rs']
+    assert change['before_sha256'] == callback_expected
+    callback_expected = change['after_sha256']
+assert hashlib.sha256(callback.read_bytes()).hexdigest() == callback_expected
+for name, expected in stage.get('compact_verifier_files', {}).items():
+    if name in stage.get('compact_storage', {}):
+        change = stage['compact_storage'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
