@@ -1,5 +1,45 @@
 # Fixed active-minor nonvanishing witness
 
+## Concrete bit-index bounds
+
+Base `7f0ee60a` plus this changeset. `IndexSchedule.lean` implements
+the index-only source loop: test the current bit, clear it by XOR when
+set, emit the new row with incremented half-power exponent, and finally
+emit the row OR current bit. Ten fuel units are used. The two concrete
+certificates prove success for every input column at lengths 512 and 513,
+with targets respectively below 513 and 514 and weight exponents <=9.
+`scheduleBounded_sound` proves the 16-column block checker covers every
+j<n by division/remainder; the final theorems expose existential successful
+edge lists and per-edge bounds, not merely Boolean test results.
+
+The source loop has at most nine cleared low bits at these lengths.
+Its finite certificates contain about a thousand edges, not a large
+field recurrence. An initial flat List.range traversal hit Lean's recursion
+depth limit; the certificate was reshaped into 16-column blocks instead
+of raising depth, heartbeat or memory limits. Native evaluation and
+native_decide were not used. These kernel checks depend only on propext
+(concrete Booleans) and propext/Quot.sound (coverage and bound theorems).
+
+Remaining correspondence: connect the schedule's half-power exponents
+to field weights and the source scatter execution, assemble the fixed
+active inverse permutation, and connect polynomial evaluation/nonzero
+minor evidence. The Nat index model is not by itself a Rust machine-word
+or field implementation proof. No adaptive sampler/security claim follows.
+
+Focused command from cached `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/IndexSchedule.lean`.
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Flat traversal, recursion-depth failure | 1 | 4.39 | 1241956352 | 0 |
+| Blocked finite certificates | 0 | 8.38 | 1294286848 | 0 |
+| Coverage theorem branch equality mismatch | 1 | 5.47 | 1301692416 | 0 |
+| Final coverage and both universal bounds | 0 | 2.31 | 1300512768 | 0 |
+
+Failed audits with sorryAx are rejected; all five final audits exclude it.
+Outputs are in the command-tool record. No Rust change or unchanged full
+regression replay occurred.
+
 ## Finite-length composition
 
 Base `7242aeb8` plus this changeset. `SourceScatter.lean` now defines
