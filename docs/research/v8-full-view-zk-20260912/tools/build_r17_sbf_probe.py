@@ -42,7 +42,16 @@ def check_after(name, expected):
         change = stage['scalar_fma'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('inplace_fold_relation', {}):
+        change = stage['inplace_fold_relation'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+if 'inplace_dense_fold' in stage:
+    change = stage['inplace_dense_fold']
+    assert change['before_sha256'] == '7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead'
+    assert change['path'] == 'crates/aspis-core/src/sumcheck.rs'
+    assert hashlib.sha256((root / change['path']).read_bytes()).hexdigest() == change['after_sha256']
 if 'owned_weights' in stage:
     assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == stage['owned_weights_sha256']
 if 'fixed_g_table' in stage:

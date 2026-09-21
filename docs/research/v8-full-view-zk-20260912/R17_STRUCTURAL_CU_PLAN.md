@@ -115,6 +115,11 @@ R20 implements scalar multiply-add in the original scatter order, retaining
 the failed diagonal-batching evidence. Its tree interval is 5.46M CU versus
 7.91M before. Reusing weight serialization storage saves another 16 KiB and
 lets the honest SBF execution complete openings and their reference check.
-It still exhausts heap afterwards. The next ownership targets are in-place
-dense dual folding and temporary injection scales; the ordinary tensors and
-both G transform sections remain well above the desired total CU budget.
+R21 implements in-place dense dual folding and stack injection scales, with
+100 differential folding schedules and a compiled generic storage-model
+proof. The honest SBF execution now reaches primary terminal acceptance at
+about 30.38M diagnostic CU; the unchanged second reference pass subsequently
+exhausts heap. Neither the full-program resource failure nor the above-budget
+primary cost is a release result. Ordinary tensors and both G transform
+sections remain major CU targets. Do not remove the reference silently or
+replace this scope with an easier verifier when reporting the result.

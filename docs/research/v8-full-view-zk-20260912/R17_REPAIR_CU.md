@@ -5,6 +5,12 @@ measurement concerns AV8/R17/structuredG271-two-channel/research-v1, including
 its changed encoding, structured G and two quotient channels / Final512.
 Privacy and soundness preservation remain open regardless of a CU result.
 
+Latest boundary (R21): the primary deferred SBF pass accepts the retained
+honest proof at its terminal checkpoint (~30.38M diagnostic CU consumed).
+The unchanged second reference pass then exhausts heap. The full program
+still fails, both 1.2M/1.4M budgets fail, and no deployability/privacy claim
+follows. Detailed chronological evidence, including regressions, is below.
+
 ## SBF preparation, 2026-09-21
 
 Base privacy branch revision e7c9cffb plus this changeset. New
@@ -708,3 +714,78 @@ index i can safely consume the already-read block 4*i..4*i+4 in place.
 The post-opening injection also builds temporary scale vectors that the
 accumulator immediately copies. Inspect and test those ownership changes
 without dropping either verifier or the reference opening check.
+
+## R21 in-place dense dual folds and stack scale scratch
+
+Base 370a08b9 plus this changeset. stage_r17_inplace_fold.py changes only the
+isolated staged sumcheck.rs, not the production worktree file. It checks the
+exact original SHA256 7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead,
+records the replacement hash, and the SBF builder enforces both. No source
+pin is waived. fold_dense_arity4 reads the four original values into its
+unchanged arithmetic expression, writes the completed output at index i,
+and truncates the existing vector after the loop. It no longer allocates a
+new Vec at each fold. Injection uses a 22-coordinate stack array instead of
+a temporary Vec; the accumulator still owns its validated copy. No verifier,
+authentication, opening reference or equality assertion is removed.
+
+Focused optimized tests cover 100 dense-fold schedules over lengths
+4,16,64,256,1024, all their rounds and coordinates, against the old allocating
+formula. Cases include zero/one/maximal inputs and challenges, and extension
+components. All previous map/FFT/basis/serialization controls pass. Actual
+host proof accepted and current G-final mutation rejected. Host scope
+4G/6G/zero swap: focused exit 0, 28.29 s, peak RSS 535708 KiB;
+positive exit 0, 9.36 s, 427048 KiB; negative exit 0, 0.00 s reported,
+3344 KiB. All task swaps zero.
+
+InPlaceDenseFold.lean proves unread-block preservation, equality of every
+completed output with the original input block's combine value, and bounds
+for all four input reads under the source loop's len/4 bound. Combine is
+arbitrary: this storage theorem introduces no field identity or hiding
+premise. It is a functional storage model, not extracted Rust Vec semantics.
+Connecting the actual loop, usize operations and truncation remains a source
+refinement obligation; it is not a proof of the entire verifier or privacy.
+
+Smallest-leaf compile: cached Lean 4.32.0, mathlib
+81a5d257c8e410db227a6665ed08f64fea08e997, lake env lean with explicit stage
+root, -j1 -M1600. Scope 1G/2G/zero swap, TasksMax=64: exit 0, 1.14 s,
+RSS 975688 KiB, swaps 0. #print axioms: unread uses propext and Quot.sound;
+written and read_in_bounds use propext, Classical.choice, Quot.sound.
+No sorryAx or added axiom in the successful audit. Initial focused compile
+failed because the minimal import did not introduce the Nat notation ℕ;
+using Nat fixed it (failed exit 1, 0.95 s, 954976 KiB, swaps 0). The error
+recovery audit in that failed log is not accepted evidence. Source revision
+370a08b9 plus this leaf; both attempts are retained. No manifest replay.
+
+R21 SBF source/table/frame checks pass: exit 0, 35.38 s, RSS 618532 KiB,
+zero swaps, scope 5G/7G/zero swap. On the same honest fixture at diagnostic
+100M, the primary pass reaches injected, tail-folds-end and
+primary-terminal-accepted. The last marker reports 69620863 CU remaining:
+30379137 CU consumed from the transaction budget to that checkpoint. The
+following second semantic-start marker establishes that the primary call
+returned and the reference pass began. The latter then exhausts heap;
+overall honest execution fails at 30457522 CU. This is **primary-pass
+acceptance**, not overall SBF acceptance or a supported-budget result.
+
+The corrupt proof has no primary acceptance marker; its first path exits
+during authentication, then the reference path later exhausts heap at
+29663590 CU. Overall failure remains a resource error, not an observed
+completed negative verifier result. Both 1.2M/1.4M pairs still exhaust CU.
+The first dual fold interval is 981291 CU versus R20's 977558; ownership
+reuse is a memory improvement, not a CU improvement in that interval.
+No G-map, transcript or authentication arithmetic changed. Heap is still
+256 KiB, and both passes/reference opening checks remain enabled.
+
+Observation driver exit 0, 0.12 s, RSS 26884 KiB, zero swaps, scope
+3G/4G/zero swap. ELF SHA256:
+0c29bf29b5215fb1c47e1ff09901ef955844eb52840d2c0683bec0d083e473d9.
+Evidence: r17-inplace-fold-host-r21.log, r17-inplace-fold-sbf-r21.log,
+r17-inplace-fold-svm-r21.{jsonl,log}, r17-inplace-fold-lean-initial-r21.log,
+r17-inplace-fold-lean-r21.log. The current production worktree sumcheck.rs
+still matches the original pinned hash above.
+
+The first remaining runtime obstruction is now reference-pass allocation,
+not failure to finish the primary relation check. This does not authorize
+silently removing the reference or relabeling a primary-only diagnostic as
+the full verifier. CU remains far above budget. Source-to-model storage
+refinement, whole-transform equivalence and all full privacy/soundness gates
+remain open independently of this one-fixture functional result.
