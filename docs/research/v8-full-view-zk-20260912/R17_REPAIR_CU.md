@@ -442,3 +442,61 @@ source refinement remain proof obligations. Full privacy and soundness
 remain open. R17_STRUCTURAL_CU_PLAN.md records the exact generating-function
 route to remove the dense multiplication, and the constraints on sparse
 mixing/aligned bases and the current transcript absorption.
+
+## R16 exact-map tree and extension-field convolution prototype
+
+Source base 0e8af97d plus this changeset. tools/r17_fast_g.rs implements
+the generating-function route in R17_STRUCTURAL_CU_PLAN.md. Its numerator
+uses a fixed denominator product tree (schoolbook merges for now); final
+multiplication by the truncated inverse denominator uses a 2048-point CM31
+transform. This changes no source nodes, coins, mathematical weights, basis,
+transcript bytes or proof format. It introduces no challenge denominator.
+The CM31 root is the retained source circle generator (2,1268011823) raised
+to 2^20; exact order 2048 is checked, not assumed from M31 roots of unity.
+The convolution degree is at most 270+1023=1293 < 2048, so there is no
+cyclic aliasing in this embedding. The inverse normalization is 2^20 in M31.
+
+Optimized Rust generates the fixed denominators, root powers and inverse
+spectrum in a 4G/6G/zero-swap scope. Most generation-command time is cached
+crate compilation, not the small fixed-polynomial generation step. Exit 0,
+26.38 s, peak RSS 534848 KiB, zero swaps. The generated table hash and kernel
+hashes are enforced by the source-pinned SBF builder; no pin is waived.
+
+Focused optimized gate checks exact root order and all powers, FFT roundtrip,
+the highest numerator basis impulse convolution, every coefficient of
+D * inverse(D) = 1 modulo X^1024, and six arbitrary coin maps (including
+maximal canonical limbs and the first/last basis edges) against direct
+power sums. Prior 20-case tensor/owned-dual/chord controls, six full G maps,
+and six pairs of complete opening-weight maps still pass. The actual host
+proof is accepted and G-final corruption rejected, with both verifier paths
+and the equality assertion retained. No negative regression was removed.
+
+4G/6G/zero-swap host scope: focused gate exit 0, 1.67 s, 286884 KiB;
+positive exit 0, 9.38 s, 427260 KiB; negative exit 0, 0.00 s reported,
+3344 KiB. All zero swaps. 5G/7G/zero-swap SBF scope: source/table/frame gates
+pass, exit 0, 35.42 s, 621220 KiB, zero swaps.
+
+Actual SBF second original-weight stage: **24536806 CU**, versus R15's
+26650460 (7.93% lower). It is not the whole verifier cost. The extra
+workspace worsens the heap endpoint: at diagnostic 100M, honest and corrupt
+both fail allocation at 34862199 CU, after first-fold-end but before
+query-schedule-end. R15 had reached query-schedule-end. This regression is
+retained explicitly; no heap limit was raised (still 256 KiB). Both 1.2M and
+1.4M pairs still exhaust CU. Neither honest acceptance nor checked negative
+rejection occurs in SBF. Observation driver exit 0, 0.13 s, 26908 KiB,
+zero swaps, scope 3G/4G/zero swap. ELF SHA256:
+0d0df8402e48a8ab99f70410dd4f60e6060316ce2e95b92f527975e97b1f4cbe.
+
+Evidence: r17-fast-g-generate-r16.log, r17-fast-g-host-r16.log,
+r17-fast-g-sbf-r16.log, r17-fast-g-svm-r16.{jsonl,log}. All stages use the
+same retained public proof and SVM driver. No deployment or wallet operation.
+
+Next implementation targets: the numerator's 75548 scalar products still
+use schoolbook merges; FFT workspace and both numerator buffers add heap
+pressure. Profile/isolate these, specialize or accelerate the large merges,
+and reuse workspace. The transform prototype is not yet a release replacement.
+First remaining proof proposition: for every canonical source coin vector,
+the concrete tree, transform, truncation and field implementation yield the
+same 1024 canonical bytes as the retained power-sum map. No new Lean target
+was compiled this turn; #print axioms is not applicable to the Rust gates.
+Finite checks do not establish that universal refinement or full privacy.

@@ -70,3 +70,15 @@ and compares their outcomes.
 
 Resource failures, full-transcript privacy, shared-oracle correspondence,
 retry/publication behavior and soundness remain separate outstanding gates.
+
+## Implemented first experiment
+
+R16 (base 0e8af97d plus its changeset) now implements the tree and a 2048-point
+CM31 convolution. Fixed tables are generated with optimized Rust. Root order,
+inverse denominator, convolution edge, complete weight references and actual
+host proof gates pass. See R17_REPAIR_CU.md for exact evidence. The first tree
+version still uses schoolbook numerator merges; it is not yet a fully fast
+product-tree implementation. Its second original-weight stage costs 24.54M
+CU, down from 26.65M, but extra workspace causes earlier SBF heap exhaustion.
+This is a measured partial optimization and a retained resource regression,
+not a completed repair, full source proof, or evidence of budget feasibility.

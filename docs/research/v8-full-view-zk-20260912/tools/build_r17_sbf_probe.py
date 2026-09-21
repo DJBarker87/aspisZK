@@ -32,7 +32,15 @@ if 'owned_weights' in stage:
 if 'fixed_g_table' in stage:
     change = stage['fixed_g_table']
     assert change['before_sha256'] == stage['base_power_specialization']['after_sha256']
-    assert change['after_sha256'] == stage['workspace_sha256']
+    expected = change['after_sha256']
+    if 'fast_g' in stage:
+        fast = stage['fast_g']
+        assert fast['before_sha256'] == expected
+        expected = fast['after_sha256']
+        for name in ('r17_fast_g.rs', 'r17_fast_g_generate.rs'):
+            assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == fast[name]
+        assert hashlib.sha256((callback.parent / 'r17_fast_g_tables.rs').read_bytes()).hexdigest() == fast['tables_sha256']
+    assert expected == stage['workspace_sha256']
     assert hashlib.sha256((callback.parent / 'r17_g_powers.rs').read_bytes()).hexdigest() == change['table_sha256']
 if 'workspace_adapter' in stage:
     for name, hashes in stage['workspace_adapter'].items():
