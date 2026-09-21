@@ -1,5 +1,41 @@
 # R16 soundness preservation obligations
 
+## Current QM31 scalar multiplication — 2026-09-21
+
+Base revision `14c11623` plus this changeset. GeneratedQM31Scalar.lean
+retains the current QM31 type and complete CM31.mul_m31/QM31.mul_m31
+declarations. The new checker authenticates these against pinned Types.lean
+and FunsChunk06.lean and rejects type/component mutations (three controls).
+The composed theorem proves successful checked execution, canonical output
+and exact four-coordinate modular products for ALL input words, without
+assuming canonical inputs; this stronger domain follows from the retained
+all-U32 M31 multiplication theorem.
+
+The separate qm31_half_scalar theorem requires canonical x and explicitly
+`s.val = 1073741824`. It proves that doubling each resulting coordinate
+recovers the input coordinate modulo P. Its generic modular arithmetic
+lemma is compiled, not assumed. The Rust source declares
+`pub const M31_HALF: M31 = M31(0x4000_0000);`; the actual caller's constant
+construction is not yet a compiled source binding, so the value premise
+is not silently discharged here.
+
+Exact target `AspisV8R17/GeneratedQM31Scalar.lean`, SHA256
+`e650b5f4c41c81c409a03c5a8afa3d5990024b3e1440980dd5c3eacafee722e8`.
+Cached Linux Lean 4.32.0 `-j1 -M1800`, systemd scope
+`aspis-r17-qm31-scalar-r1`, MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0,
+TasksMax=64: exit 0, wall 0.72 s, peak RSS 1634472 KiB, swaps 0.
+#print axioms: half_scalar_double uses `[propext]`; cm31_scalar_words,
+qm31_scalar_words and qm31_half_scalar use
+`[propext, Classical.choice, Quot.sound]`. No sorryAx, new assumption,
+failed compilation or cap increase.
+
+First remaining arithmetic composition: authenticate/compose QM31
+add/sub/mul/square and mul_by_r into the retained extension-field formulas,
+then bind the source constant and actual mask_weights arrays/loops. The
+current result is a source-projected scalar theorem, not a proof of the
+whole mask caller, the extraction pipeline, privacy or protocol soundness.
+Production code and negative regressions remain unchanged.
+
 ## Current CM31 linear operations and caller dependency check — 2026-09-21
 
 Base revision `47bfb1de` plus this changeset. Inspection of the actual
