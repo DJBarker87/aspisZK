@@ -35,6 +35,8 @@ case "$target" in
   AspisV8R17/GeneratedCM31Mul) ;;
   AspisV8R17/GeneratedCM31Normalized) ;;
   AspisV8R17/GeneratedM31Add) ;;
+  AspisV8R17/GeneratedCM31Square) ;;
+  AspisV8R17/GeneratedCM31SquareNormalized) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
@@ -44,16 +46,19 @@ if [[ "$target" == AspisV8R17/UnsignedLiteralSupport || "$target" == AspisV8R17/
     --literals "$task/AspisV8R17/UnsignedLiteralSupport.lean" \
     --generated "$task/AspisV8R17/GeneratedReducerExpanded.lean"
 fi
-if [[ "$target" == AspisV8R17/GeneratedM31Mul || "$target" == AspisV8R17/GeneratedM31Sub || "$target" == AspisV8R17/GeneratedCM31Mul || "$target" == AspisV8R17/GeneratedCM31Normalized || "$target" == AspisV8R17/GeneratedM31Add ]]; then
+if [[ "$target" == AspisV8R17/GeneratedM31Mul || "$target" == AspisV8R17/GeneratedM31Sub || "$target" == AspisV8R17/GeneratedCM31Mul || "$target" == AspisV8R17/GeneratedCM31Normalized || "$target" == AspisV8R17/GeneratedM31Add || "$target" == AspisV8R17/GeneratedCM31Square || "$target" == AspisV8R17/GeneratedCM31SquareNormalized ]]; then
   extra_checks=()
   if [[ "$target" != AspisV8R17/GeneratedM31Mul ]]; then
     extra_checks+=(--m31-sub "$task/AspisV8R17/GeneratedM31Sub.lean")
   fi
-  if [[ "$target" == AspisV8R17/GeneratedCM31Mul || "$target" == AspisV8R17/GeneratedCM31Normalized ]]; then
+  if [[ "$target" == AspisV8R17/GeneratedCM31Mul || "$target" == AspisV8R17/GeneratedCM31Normalized || "$target" == AspisV8R17/GeneratedCM31SquareNormalized ]]; then
     extra_checks+=(--cm31-mul "$task/AspisV8R17/GeneratedCM31Mul.lean")
   fi
-  if [[ "$target" == AspisV8R17/GeneratedM31Add ]]; then
+  if [[ "$target" == AspisV8R17/GeneratedM31Add || "$target" == AspisV8R17/GeneratedCM31Square || "$target" == AspisV8R17/GeneratedCM31SquareNormalized ]]; then
     extra_checks+=(--m31-add "$task/AspisV8R17/GeneratedM31Add.lean")
+  fi
+  if [[ "$target" == AspisV8R17/GeneratedCM31Square || "$target" == AspisV8R17/GeneratedCM31SquareNormalized ]]; then
+    extra_checks+=(--cm31-square "$task/AspisV8R17/GeneratedCM31Square.lean")
   fi
   python3 "$task/check_r17_generated_reducer.py" --runtime "$runtime/Aeneas/Std/Scalar" \
     --stage "$stage/V7Tag73CurrentHelpersOpaque" \

@@ -1,5 +1,58 @@
 # R16 soundness preservation obligations
 
+## Current CM31 square and equality to self multiplication — 2026-09-21
+
+Base `b1a67fdd5385b51b5899422dbf00542248b314aa` plus this changeset.
+GeneratedCM31Square.lean retains the full current generated square declaration,
+including attributes, byte-for-byte. The checked U64 operand proof covers both
+additions, subtraction without underflow, and multiplication without overflow
+for canonical a,b. It then composes the reducer, base multiplication and doubling
+to prove successful canonical output. Its exact words are
+`((a+b)*(a+P-b))%P` and `((a*b)%P+(a*b)%P)%P`.
+
+GeneratedCM31SquareNormalized.lean proves these are `(a*a-b*b) mod P` using
+SIGNED Int subtraction and `(a*b+a*b) mod P`. It also proves the full Result
+identity `CM31.square x = CM31.mul x x` on canonical limbs, by equality of the
+canonical output words, not merely by comparing a fixture. All intermediate
+success premises are discharged. The square is not inferred from multiplication;
+its distinct generated execution graph is proved first.
+
+Source hashes:
+
+- GeneratedCM31Square: `6e783cb37c8a88fa774ac8415b4b73a654ef739d8d07d6af23a5fb6b9f96065d`.
+- GeneratedCM31SquareNormalized: `d100cd8da24014e36b23d188cfb9c0958480b1ec882244ba2805275d6a9e2d5a`.
+
+The checker matched the square declaration against pinned FunsChunk04.lean,
+rejected subtraction-sign and doubling-input mutations, and passed the existing
+literal/reducer authentication, exit 0. Imported literals retain the earlier
+explicit macro-expansion boundary. No whole-caller extraction replay is claimed.
+
+Focused host evidence, Lean 4.32.0 `-j1 -M1800`, MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64, no warnings or failed attempts:
+
+| Exact target | Scope suffix (prefix aspis-r17-) | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| AspisV8R17/GeneratedCM31Square.lean | generated-square-r1 | 0 | 0.82 | 1637864 | 0 |
+| AspisV8R17/GeneratedCM31SquareNormalized.lean, residue result | square-normalized-r1 | 0 | 0.78 | 1637084 | 0 |
+| Same target, new equality-to-self-multiplication theorem | square-normalized-r2 | 0 | 0.77 | 1639556 | 0 |
+
+Audits: squareOperand_success, generated_square_graph, square_real_int and
+square_imag_mod use `[propext, Quot.sound]`; generated_square_words,
+generated_square_complex_residues and generated_square_eq_mul_self use
+`[propext, Classical.choice, Quot.sound]`. No sorryAx, new assumption or cap increase.
+
+The changed CM31 mul/square arithmetic now has current-source projected execution
+and standard modular-coordinate proofs. This is NOT a protocol soundness or
+privacy release gate. The earlier arithmetic-reuse audit also identified a
+changed M31.half body: current field.rs uses the low-31 rotate. First remaining
+primitive-source proposition is to bind that checked generated body to the
+retained LineNorm.halfWord result and prove canonicality and doubling residue.
+LineNorm already contains the mathematical range/double/cast lemmas; they were
+located, not re-proved or recompiled here. Then the field/array adapters and
+actual R17 mask/opening callers still need source composition. All joint-view,
+oracle/seed, retry/publication and full-transcript obligations remain separate.
+No production protocol path or negative regression changed.
+
 ## Standard complex residues and checked addition — 2026-09-21
 
 Base `65269efce1dc42d7982c36d1070b3692db43a2d7` plus this changeset.
