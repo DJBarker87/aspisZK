@@ -1,5 +1,71 @@
 # R16 soundness preservation obligations
 
+## Authenticated unsigned execution slice — 2026-09-21
+
+Base `fc8a65e5b4519d7355d8afc3f13075e05eb3b18a` plus this changeset.
+`AspisV8R17/UnsignedCoreSlice.lean` compiled in the pinned host workspace with
+Lean 4.32.0, `-j1 -M1800`, MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0,
+TasksMax=64. No full package replay, cap increase or production change ran.
+
+The slice imports Aeneas.Std.Primitives, BvEnumToBitVec and Nat notation only.
+Twelve marked blocks, including the unsigned type, bit width, bit-vector
+representation, checked constructor and add/mul definitions, match their
+original runtime source bytes. `check_r17_unsigned_slice.py` first authenticates
+the complete original Core.lean, Ops/Add.lean and Ops/Mul.lean against pinned
+SHA-256 hashes. It accepted all 12 blocks and rejected three in-memory mutations.
+The final slice SHA-256 is
+`dcdca5dd207a676a8c2d604e045ddc9f00868f66cc645841442b26bd50e9ce2c`.
+The checker authenticates marked source blocks, not surrounding framing or
+complete caller refinement. The slice cannot be imported with full Scalar.Core,
+because it intentionally retains the same unsigned declaration names.
+
+New kernel-checked statements:
+
+- `tryMk_success`: below the selected word-width bound, checked construction
+  returns an ok word whose value is exactly the supplied Nat.
+- `add_success` and `mul_success`: U64 checked addition/multiplication return
+  the exact sum/product under their explicit no-overflow bounds.
+- `tryMk_overflow`: outside the bound, the constructor returns integerOverflow.
+
+All four `#print axioms` results are exactly `[propext]`; there is no sorryAx
+or new hiding assumption. These are operational scalar facts, not a proof of
+the CM31 caller, field reduction, privacy or soundness of the repaired protocol.
+
+| Exact target | Scope (prefix aspis-r17-) | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| AspisV8R17/UnsignedCoreSlice, three success theorems | unsigned-slice-r1 | 0 | 0.70 | 1626412 | 0 |
+| AspisV8R17/UnsignedCoreSlice, plus overflow theorem and source checker | unsigned-slice-r2 | 0 | 0.76 | 1619332 | 0 |
+
+The preceding whole-Core split was NOT accepted. Its original source hash is
+`ceba1982545251f02d6e286abf23d01f4d2a691fe6934149f3a42d4a051af81e`;
+only task-owned copies were edited. Replacing four scalar_tac proof uses and
+the tactic import reached checking, but the helper imports needed for the full
+file again exceeded the cap. A module-mode experiment was incompatible with
+the existing non-module cache. Exact failed target: `Aeneas/Std/Scalar/Core`.
+
+| Scope (prefix aspis-r17-scalar-split-) | Result | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| r1 | Missing task overlay cache dependency | 1 | 0.21 | 539560 | 0 |
+| r2 | Missing notation/irreducible_def imports | 1 | 0.96 | 1663804 | 0 |
+| r3 | Missing order/tactic helpers | 1 | 5.19 | 1802584 | 0 |
+| r4 | Interpreter memory exception after helper imports | 134 | 2.42 | 1845168 | 0 |
+| r5 | Module/non-module import incompatibility | 1 | 0.20 | 502916 | 0 |
+| r6 | Interpreter memory exception with narrower integer-order import | 134 | 2.44 | 1844688 | 0 |
+
+No axioms audit was obtained from these failed candidates. The abandoned local
+candidate remains under target/r17-runtime-split; it is not release evidence.
+The task overlay used read-only symlink references to cached dependencies;
+the original shared runtime source still matches its hash. No new Core.olean
+was produced. A read-only link to the original Core.olean was restored in the
+overlay, and the runner now refuses to write an olean through a symlink.
+The final runner does not allow the abandoned full-Core build target.
+
+First remaining operational proposition: compose the authenticated U32-to-U64
+conversion and these checked operations to prove the CURRENT CM31 cross
+operand returns `(a+b)*(c+d)` for canonical M31 inputs; then connect the current
+reducer and coordinate reconstruction. Joint-view coverage, commitments,
+shared-oracle chronology, retries/publication and full soundness remain open.
+
 ## Import-floor localization — 2026-09-21
 
 Base `6cb30c9f5bd740822a51474644a1a58d260244b1` plus this changeset.
