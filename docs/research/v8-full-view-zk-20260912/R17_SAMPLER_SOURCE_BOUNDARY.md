@@ -1,5 +1,49 @@
 # R17 determinant sampler/source boundary
 
+## Adaptive law connected to retained memoization — 2026-09-21
+
+Base `c6dc9be83c5ee128e509d9480ec8277823dba273` plus this changeset.
+`AspisV8R17/AdaptiveMemoized.lean` imports both AdaptiveOracle and the
+retained FirstAssignment/R9 cache chain. It does not define a replacement
+queryStep. A compatible cache stores only answers from the same complete H.
+Each query returns H(i), including cache hits, and preserves compatibility.
+The adaptive memoRun interpreter using queryStep has exactly the same full
+address/answer trace as AdaptiveOracle.run, for any compatible starting table.
+
+The cache-domain theorem is stronger than compatibility: for any realized
+call list, the final table misses i iff the initial table misses i and no
+call has address i. From an empty cache this equates a genuine miss with the
+unread predicate in the deferred-decisions law. The final theorem establishes
+equal joint masses (memoized prior trace=tr, next answer=a) for all a when
+replaying tr leaves the next address absent. Public prequeries remain in tr;
+repeated addresses cannot satisfy this miss premise. No independent fresh
+value is asserted on a hit. The distribution is over complete uniform H,
+not a postulated per-call independent tape.
+
+Seven audited theorems compile. Five use propext alone; cache_missing_iff
+also uses Quot.sound; memoized_fresh_joint_probabilities additionally uses
+Classical.choice. No sorryAx, new cryptographic assumption or source mutation.
+
+Still required: connect the actual combined source/adversary log and its
+byte-address encoding to this causal interpreter, including expansion and
+commitment queries. Paired reservation/installation events require their
+own operational correspondence; the cache bridge is for ordinary queryStep.
+The multiword sampler and adaptive selection of joint determinant inputs
+still need explicit first-assignment/loss accounting. Full privacy, simulator
+construction, publication behavior and repair soundness are not concluded.
+
+Focused cached lake command uses -j1 -M1800 and matching objects:
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| AdaptiveMemoized, prerequisite object absent | 1 | 4.54 | 669532160 | 0 |
+| FirstAssignment prerequisite object emission | 0 | 2.36 | 875233280 | 0 |
+| AdaptiveMemoized final seven theorems | 0 | 4.44 | 1474527232 | 0 |
+
+FirstAssignment was recompiled only because its required object was missing,
+not as an unchanged regression replay. Its ten audits pass, with the retained
+unnecessary-simpa warning. No runtime suite or full Lean replay was run.
+
 ## Adaptive unread-cell law — 2026-09-21
 
 Base `78b6d5f84ebc1b013611b81f412717af1faed88c` plus this changeset.
