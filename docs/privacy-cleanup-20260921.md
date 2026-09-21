@@ -63,7 +63,7 @@ python3 tools/check_wallet_privacy.py --self-test
 python3 tools/test_v5_refund_cleanup.py
 ```
 
-The hash-based privacy check runs in the release-facts GitHub workflow and does
+The hash-based privacy check runs in its own wallet-privacy GitHub workflow and does
 not embed the retired identifier. The refund regression replays the archive and
 rejects altered pins, destinations, amounts, closure balances and fees.
 
