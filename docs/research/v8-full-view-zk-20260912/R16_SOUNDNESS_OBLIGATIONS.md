@@ -1,5 +1,64 @@
 # R16 soundness preservation obligations
 
+## Macro-expanded generated reducer binding — 2026-09-21
+
+Base commit `ea475f87` plus this changeset. UnsignedLiteralSupport.lean and
+GeneratedReducerExpanded.lean compiled in the retained pinned workspace.
+The latter contains the original generated P constant and reduce_u64 body,
+with ONLY the closed literals `2147483647#u32` and `31#u32` expanded to
+`(U32.ofNat 2147483647)` and `(U32.ofNat 31)`. It retains the original
+attributes, lifts, casts, checked shifts/additions, comparison and subtraction.
+
+The constructor definitions and comparison proposition are source-authenticated.
+The bound_suffices helper retains its original statement with a direct small
+proof; the DecidableRel instance retains its original statement with explicit
+Nat.decLe construction. These two proof implementations are NOT claimed to be
+byte-identical runtime copies. No premise or scalar definition was weakened.
+LiteralSupport proves constructor value, proof irrelevance, P=mask32, shift=31,
+word comparison equivalence and equality of the conditional branches. Five
+audits report `[propext]`; comparison_value has no axioms.
+
+The original notation source is pinned at SHA-256
+`45c40bf90ae960c24e2a82200393ceb184046be22582b428d5026d7d9577b133`.
+Its #u32 macro expands to U32.ofNat with `first | decide | scalar_tac` for the
+bound proof. Both closed literal bounds here succeed with decide. The literal
+proof-irrelevance theorem covers any successful proof term from that macro;
+the heavy scalar_tac fallback was not imported, executed or replaced by an axiom.
+This is explicit macro expansion, not a claim that the original macro was replayed.
+
+`generated_reducer_eq` proves equality to the checked reduceExecution graph for
+ALL U64 inputs, including the pure-AND/lift ordering and Result bind association.
+Its audit is `[propext, Quot.sound]`. `generated_reducer_mod` proves successful
+execution with output exactly x modulo P and below P; its audit is
+`[propext, Classical.choice, Quot.sound]`. No sorryAx appears in final targets.
+
+The new read-only checker authenticates all pinned runtime/generated input files,
+six literal-support source blocks, three operator instance blocks and two
+macro-expanded generated blocks. It accepts no other generated text rewrite.
+It rejected three in-memory changes (comparison orientation, shift literal,
+branch condition), exit 0. Final compiled/authenticated source hashes:
+
+- UnsignedLiteralSupport: `65f11d191b66b75ccc08c75b95f1b9fc6614d168a2abbcf1bbe2e4c128f9bf35`.
+- GeneratedReducerExpanded: `8dbcaa54ce0455c1d7b8da69872d5b5a28653bf01a4451a62178a1e28de13d5b`.
+
+All jobs used Lean 4.32.0 `-j1 -M1800`, MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0 and TasksMax=64 on nuc.local. No cap increase or whole replay.
+
+| Target / scope suffix (prefix aspis-r17-) | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| UnsignedLiteralSupport / literal-support-r1: instance-search failure | 1 | 0.72 | 1618508 | 0 |
+| UnsignedLiteralSupport / literal-support-r2: direct instance proof | 0 | 0.70 | 1627016 | 0 |
+| GeneratedReducerExpanded / generated-reducer-r1 | 0 | 0.72 | 1627032 | 0 |
+
+The first failed draft's sorryAx branch audit was rejected. Final targets had
+no warnings. These results close the reducer's literal/comparison/control-flow
+binding in this authenticated, macro-expanded source projection. They do NOT
+authenticate the entire extraction pipeline or replay the complete current
+caller. First remaining arithmetic proposition: successful current M31 mul/sub
+execution and the complete CM31 coordinate reconstruction using this reducer.
+The CM31 square delta and R17 caller still need composition. Full transcript
+privacy and soundness remain open, with no production or negative-test changes.
+
 ## Composed checked reducer and retained-bounds split — 2026-09-21
 
 Base `4bee9ede686290c30d147720ae8cbaf5a00aef20` plus this changeset.
