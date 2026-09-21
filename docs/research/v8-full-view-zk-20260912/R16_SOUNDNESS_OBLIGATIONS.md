@@ -1,5 +1,92 @@
 # R16 soundness preservation obligations
 
+## Caller-buffer mask candidate; direct extraction compiles — 2026-09-21
+
+Base revision `71a94b77` plus this changeset. Added a separate research source
+`tools/r17_mask_workspace.rs`; the pinned original r17_structured_g.rs and
+field.rs are unchanged. This candidate addresses the demonstrated allocator
+model gap by taking caller-owned `[QM31;271]` scratch and `[QM31;1024]` output
+buffers, computing the same reverse-round coin weights, then accumulating
+each mixing power directly. It uses bounded index loops rather than Vec,
+map/collect or mutable zip. It overwrites the buffers, does not draw new masks,
+and does not change commitment, oracle, pad or challenge chronology.
+
+This is not yet selected by the staged protocol or production. Its pure
+field-operation order interleaves power generation and accumulation where
+the original materializes a full row first; universal equivalence/totality
+must be proved, not inferred from the finite controls. Caller buffer
+acquisition and failure/publication behavior remain separate. The function
+does not allocate large local arrays, but callers must supply appropriate
+storage: the host probe's stack placement is NOT an SBF deployment plan.
+
+Optimized host controls compare all 1024 coordinates on 16 canonical point
+arrays, including all-zero, all-one and all limbs P-1. Buffers are reused
+without cleaning. While the candidate runs, a diagnostic allocator denies
+ALL allocation attempts; every candidate call returned and the attempt
+counter stayed zero. This is finite actual-source evidence, not a universal
+no-allocation theorem, field-equivalence proof or global privacy claim. The
+original allocation/abort regressions remain intact.
+
+New extraction-only workspace_lib.rs wires the unchanged original module,
+field and new candidate into the same dependency-free crate. Charon targets
+`crate::r17_mask_workspace::mask_weights_into` with the retained pinned binary,
+MIR built, preset aeneas, offline/locked/release/lib/no-default-features, one
+Cargo job. Aeneas uses the retained pinned binary/flags. Its raw output has
+only Types/Funs, no external template, no map/zip warnings, no Vec/allocator
+references and no axiom/sorry declaration. This is source extraction of the
+new implementation, not replacement of old source by a synthetic trace.
+
+`stage_workspace.py` authenticates both raw generated files and narrows ONLY
+imports for the cached Lean runtime. No declaration, loop, field operation,
+borrow signature or function body is rewritten; no IteratorCompat model is
+imported. The full extracted caller compiles with five loop definitions.
+AuditWorkspace prints only `[propext, Classical.choice, Quot.sound]` for all
+five loops and the caller. This audits executable definitions, not correctness
+or termination. The generator's --check passes against the compiled source.
+
+Focused scopes: MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64;
+preflight showed only init.scope. Rust is cached nightly-2026-06-01, rustc
+1.98.0-nightly (14210df0e), -O for the comparison/denial probe. Lean is cached
+4.32.0 -j1 -M3200. All jobs were sequential, no cold dependencies or unchanged
+full suite. Unit names below have prefix aspis-r17-.
+
+| Exact target / unit suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| workspace_probe.rs optimized build / workspace-r1 | 0 | 0.40 | 145084 | 0 |
+| workspace-probe, 16 cases / workspace-r1 | 0 | 0.14 | 2112 | 0 |
+| mask_weights_into to LLBC / workspace-extract-r1 | 0 | 0.96 | 213804 | 0 |
+| LLBC to raw Lean / workspace-translate-r2 | 0 | 0.89 | 103488 | 0 |
+| AspisR17MaskSource/Types.lean / workspace-types-r1 | 0 | 0.89 | 2114448 | 0 |
+| AspisR17MaskSource/Funs.lean / workspace-funs-r1 | 0 | 1.41 | 2579412 | 0 |
+| AspisR17MaskSource/AuditWorkspace.lean / workspace-audit-r1 | 0 | 1.06 | 2551032 | 0 |
+
+Translation launch r1 had no copied translate.sh and therefore never ran the
+translator (bash missing-file exit 127; enclosing diagnostic shell exit 1).
+After copying the retained script, r2 translated the SAME intact LLBC once.
+No source/tool pin was waived and no memory-failed job was retried.
+
+Host artifacts are under `aspis-r17-mask-extract.aRLUCU`,
+in `/home/dombarker/project-offloads`: workspace-r1, workspace-extract-r1,
+workspace-lean-r1 and workspace-staged-r1. SHA256s:
+
+- candidate Rust: 9ba932ba6ffabd31781b32dbc1f4a0f28020639bd0798aa3d8a7e1ec3be4e5b8;
+- optimized probe: 2beaf92cb57ddf960ed0419de99b3af26bdf1a6bb9e87194695bffeadb12fc57;
+- LLBC: 09a190991bdb71ad95eb2d348fbd4cbb538aeef81ee6504a01031f4d13f5cd2b;
+- raw Funs: 951d864bcc7238e6e61eaed240632fe7eb90e7d132ab63b97d75b9acef095b8f;
+- raw Types: a29d7a2e4067ece0ff887ebb0eff3a3e49f28aa6436cdba289bf9b3c07c5cc33;
+- compiled Funs: 5f2d6de84fdbdf05f4f6f9cede9409a4781d37eac21425b8c5f5b6a3819c33c9;
+- compiled Types: e212e91df0604408ac89fef369244cacaa6d6635d97bd855f02d0e5e239eaf06;
+- audit: 69638321e457e5220900a02d74d767ce58cdbf1cf402d5ac1a63fba69a3d0ca3.
+
+First remaining proposition: for every canonical point and every initial
+scratch/output buffer, the direct extracted index loops terminate, overwrite
+all coordinates and return exactly the retained mask functional. This needs
+the full-runtime arithmetic correspondence and loop bounds/invariants, not
+another finite comparison. Source-profile integration must then arrange
+buffer acquisition before using the candidate, retaining a justified visible
+failure law. Earlier oracle/commitment/retry/publication and soundness gates
+are unchanged and still open. No production switch or full repair claim.
+
 ## Actual-source allocation-abort regression — 2026-09-21
 
 Base revision `09310660` plus this changeset. This turn adds focused Rust

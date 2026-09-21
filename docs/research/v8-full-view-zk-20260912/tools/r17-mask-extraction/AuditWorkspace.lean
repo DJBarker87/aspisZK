@@ -1,0 +1,9 @@
+import AspisR17MaskSource.Funs
+namespace AspisR17MaskSource
+#print axioms r17_mask_workspace.mask_weights_into_loop0_loop0
+#print axioms r17_mask_workspace.mask_weights_into_loop0
+#print axioms r17_mask_workspace.mask_weights_into_loop1
+#print axioms r17_mask_workspace.mask_weights_into_loop2_loop0
+#print axioms r17_mask_workspace.mask_weights_into_loop2
+#print axioms r17_mask_workspace.mask_weights_into
+end AspisR17MaskSource

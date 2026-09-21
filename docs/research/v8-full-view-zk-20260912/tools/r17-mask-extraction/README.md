@@ -71,3 +71,22 @@ These are finite instrumented-binary observations, not an allocation
 independence theorem. The Lean collector currently has no matching allocator
 state/process-abort observation; the ledger keeps that failure/publication
 obligation explicit.
+
+Caller-buffer candidate (separate from the pinned original):
+
+- `../r17_mask_workspace.rs` computes into caller-provided scratch/output
+  arrays without Vec/collect/zip. It is research code, not selected by the
+  staged protocol or production yet.
+- `run_workspace.sh ORIGINAL_SOURCE CANDIDATE CANDIDATE_SHA FRESH_TASK` builds
+  an optimized differential probe and denies allocations during the candidate.
+  The 16 finite cases do not replace the universal equivalence proof.
+- `extract_workspace.sh` takes the same four arguments and extracts the actual
+  new caller with pinned Charon. Use translate.sh on its LLBC and recorded hash.
+- `stage_workspace.py RAW_MODULE FRESH_TASK` applies only import compatibility;
+  `--check` validates without writes. Compile Types then Funs then AuditWorkspace
+  using run_iterator.sh in bounded scopes. No iterator adapter is needed for
+  this candidate; the runner's extra retained runtime checks are conservative.
+
+Buffer acquisition, placement (especially SBF), complete loop invariants,
+field correspondence and protocol integration remain explicit obligations.
+The old implementation, its pins, proofs and abort regressions are preserved.
