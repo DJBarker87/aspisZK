@@ -143,6 +143,12 @@ fn r17_active_minor_polynomial_witness() {
     let chord=[K::ONE.add(u.mul(v)),u.mul(v).sub(K::ONE),K::ZERO.sub(u.add(v))];
     let active:Vec<_>=(0..N).filter(|&r|!transport().inactive[r]).collect();
     let mut matrix=vec![vec![];active.len()];
+    let coefficient_indices:Vec<_>=active.iter().map(|&r|{
+        assert_ne!(r,1023,"active projection excludes balancing pivot");
+        transport().order.iter().position(|&original|original==r).unwrap()
+    }).collect();
+    let row_record=format!("{{\"original_rows\":{active:?},\"coefficient_indices\":{coefficient_indices:?}}}");
+    assert_eq!(row_record,include_str!("../../../docs/research/v8-full-view-zk-20260912/evidence/r17-active-source-rows.json").trim(),"frozen active source projection");
     let mut possible=vec![vec![];active.len()];
     let powers=[alpha,alpha.square(),alpha.square().mul(alpha)];
     for degree in 22..255 { for channel in 0..3 {

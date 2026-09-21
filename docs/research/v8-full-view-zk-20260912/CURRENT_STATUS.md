@@ -11,7 +11,8 @@ matrices). All 29 small determinant leaves now compile with a passing
 regeneration check. Formal source-block binding and determinant composition
 remain next; the generic two-block, row-permutation and evaluated-nonzero
 composition gates now compile under the existing cap. No global security
-gate is closed.
+gate is closed. The 214 active source row/coefficient mappings are now
+frozen and checked exactly; formal sparse-unit-column binding remains.
 
 ## Latest polynomial bridge — 2026-09-21
 

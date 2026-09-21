@@ -7,11 +7,18 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'evidence/r17-minor-blocks.jsonl'
+ROWS = ROOT / 'evidence/r17-active-source-rows.json'
 TARGET = ROOT / 'lean/AspisV8R17/BlockDeterminants.lean'
 
 def render():
     raw = SOURCE.read_bytes()
     records = [json.loads(line) for line in raw.splitlines()]
+    projection = json.loads(ROWS.read_text())
+    assert len(projection['original_rows']) == len(projection['coefficient_indices']) == 214
+    assert projection['original_rows'] == sorted(set(projection['original_rows']))
+    assert len(set(projection['coefficient_indices'])) == 214
+    assert all(0 <= r < 1023 for r in projection['original_rows'])
+    assert all(100 <= j <= 1018 for j in projection['coefficient_indices'])
     assert len(records) == 133
     assert sorted(i for b in records for i in b['rows']) == list(range(214))
     assert sorted(i for b in records for i in b['columns']) == list(range(214))

@@ -1,5 +1,35 @@
 # R17 small-block certificate route
 
+## Frozen source active projection
+
+Base `212f6757` plus this changeset. The new
+`evidence/r17-active-source-rows.json` contains the actual source's ascending
+214 active original row IDs and, in exactly that order, their coefficient
+indices under the immutable transport. The source test computes the
+inverse-permutation indices directly from `transport().order`, rejects
+the balancing pivot for every active row, and requires an exact artifact
+match. This disambiguates the block records' `rows`: those positions now
+index an explicit source coefficient list, rather than an implicit ordering.
+
+The generator preflight requires the projection artifact, checks 214
+distinct indices, original row order and pivot exclusion, and coefficient
+bounds 100..1018. `--check` passes and the generated determinant leaves
+are byte-for-byte unchanged; they were not recompiled. The remaining
+formal binding must use these indices to instantiate the sparse unit-column
+source model and prove the block values/structural zeros, then apply the
+composition gates. The new artifact is source-checked data, not an
+extracted Rust semantics proof or a privacy/soundness result.
+
+Focused command: `/usr/bin/time -l cargo test --offline --locked --release
+--jobs 1 -p aspis-prover --lib r17_active_minor_polynomial_witness
+-- --nocapture`, in the privacy worktree. Export pass: exit 0, 24.74s,
+peak RSS 568147968 bytes, swaps 0. Final frozen-projection check: exit 0,
+24.05s, peak RSS 567853056 bytes, swaps 0. Both pass one test, retaining
+the full-minor, small-block and entry-correspondence checks. Logs:
+`/tmp/aspis-r15-host.drHYn9/r17-active-source-rows.log` and
+`/tmp/aspis-r15-host.drHYn9/r17-active-source-rows-frozen.log`.
+No Lean source changed, so no new axioms audit or full replay was run.
+
 ## Compiled lightweight composition gates
 
 Base `4d617337` plus this changeset. `BlockComposition.lean` proves:
