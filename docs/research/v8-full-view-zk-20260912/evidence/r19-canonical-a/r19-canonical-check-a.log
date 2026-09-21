@@ -1,0 +1,514 @@
+Running as unit: aspis-r19-canonical-check-a.scope; invocation ID: 1a21ead8d7e041a7bb27c36dee34ec8f
+warning: constant `M31_HALF` is never used
+  --> crates/aspis-core/src/field.rs:23:11
+   |
+23 | pub const M31_HALF: M31 = M31(0x4000_0000);
+   |           ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `M31_QUARTER` is never used
+  --> crates/aspis-core/src/field.rs:25:11
+   |
+25 | pub const M31_QUARTER: M31 = M31(0x2000_0000);
+   |           ^^^^^^^^^^^
+
+warning: function `square_n` is never used
+  --> crates/aspis-core/src/field.rs:44:4
+   |
+44 | fn square_n(mut value: M31, count: usize) -> M31 {
+   |    ^^^^^^^^
+
+warning: multiple associated items are never used
+   --> crates/aspis-core/src/field.rs:52:15
+    |
+ 51 | impl M31 {
+    | -------- associated items in this implementation
+ 52 |     pub const ZERO: M31 = M31(0);
+    |               ^^^^
+ 53 |     pub const ONE: M31 = M31(1);
+    |               ^^^
+...
+ 56 |     pub fn add(self, rhs: M31) -> M31 {
+    |            ^^^
+...
+ 62 |     pub fn sub(self, rhs: M31) -> M31 {
+    |            ^^^
+...
+ 68 |     pub fn neg(self) -> M31 {
+    |            ^^^
+...
+ 93 |     pub fn reduce_u62(value: u64) -> M31 {
+    |            ^^^^^^^^^^
+...
+109 |     pub fn reduce_u128(value: u128) -> M31 {
+    |            ^^^^^^^^^^^
+...
+123 |     pub fn mul_pow2(self, shift: u8) -> M31 {
+    |            ^^^^^^^^
+...
+129 |     pub fn double(self) -> M31 {
+    |            ^^^^^^
+...
+138 |     pub fn half(self) -> M31 {
+    |            ^^^^
+...
+142 |     pub fn pow(self, mut exp: u64) -> M31 {
+    |            ^^^
+...
+157 |     pub fn inv(self) -> M31 {
+    |            ^^^
+...
+176 |     pub fn is_zero(self) -> bool {
+    |            ^^^^^^^
+...
+181 |     pub fn from_le_bytes(bytes: [u8; 4]) -> Option<M31> {
+    |            ^^^^^^^^^^^^^
+...
+190 |     pub fn to_le_bytes(self) -> [u8; 4] {
+    |            ^^^^^^^^^^^
+
+warning: struct `CM31` is never constructed
+   --> crates/aspis-core/src/field.rs:197:12
+    |
+197 | pub struct CM31 {
+    |            ^^^^
+
+warning: multiple associated items are never used
+   --> crates/aspis-core/src/field.rs:203:15
+    |
+202 | impl CM31 {
+    | --------- associated items in this implementation
+203 |     pub const ZERO: CM31 = CM31 {
+    |               ^^^^
+...
+207 |     pub const ONE: CM31 = CM31 {
+    |               ^^^
+...
+213 |     pub fn new(a: M31, b: M31) -> CM31 {
+    |            ^^^
+...
+218 |     pub fn from_m31(a: M31) -> CM31 {
+    |            ^^^^^^^^
+...
+223 |     pub fn add(self, rhs: CM31) -> CM31 {
+    |            ^^^
+...
+231 |     pub fn sub(self, rhs: CM31) -> CM31 {
+    |            ^^^
+...
+239 |     pub fn neg(self) -> CM31 {
+    |            ^^^
+...
+248 |     pub fn mul(self, rhs: CM31) -> CM31 {
+    |            ^^^
+...
+267 |     pub fn square(self) -> CM31 {
+    |            ^^^^^^
+...
+280 |     pub fn mul_m31(self, rhs: M31) -> CM31 {
+    |            ^^^^^^^
+...
+288 |     pub fn double(self) -> CM31 {
+    |            ^^^^^^
+...
+293 |     pub fn half(self) -> CM31 {
+    |            ^^^^
+...
+302 |     pub fn conjugate(self) -> CM31 {
+    |            ^^^^^^^^^
+...
+311 |     pub fn mul_i(self) -> CM31 {
+    |            ^^^^^
+...
+318 |     pub fn pow(self, mut exp: u64) -> CM31 {
+    |            ^^^
+...
+332 |     pub fn inv(self) -> CM31 {
+    |            ^^^
+...
+338 |     pub fn inv_with(self, inverse: fn(M31) -> M31) -> CM31 {
+    |            ^^^^^^^^
+...
+348 |     pub fn is_zero(self) -> bool {
+    |            ^^^^^^^
+...
+352 |     pub fn from_le_bytes(bytes: &[u8]) -> Option<CM31> {
+    |            ^^^^^^^^^^^^^
+...
+358 |     pub fn write_le_bytes(self, out: &mut [u8]) {
+    |            ^^^^^^^^^^^^^^
+
+warning: struct `QM31` is never constructed
+   --> crates/aspis-core/src/field.rs:366:12
+    |
+366 | pub struct QM31 {
+    |            ^^^^
+
+warning: struct `PreparedQm31Multiplier` is never constructed
+   --> crates/aspis-core/src/field.rs:376:12
+    |
+376 | pub struct PreparedQm31Multiplier {
+    |            ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `mul` are never used
+   --> crates/aspis-core/src/field.rs:382:12
+    |
+380 | impl PreparedQm31Multiplier {
+    | --------------------------- associated items in this implementation
+381 |     #[inline(always)]
+382 |     pub fn new(value: QM31) -> Self {
+    |            ^^^
+...
+394 |     pub fn mul(self, rhs: QM31) -> QM31 {
+    |            ^^^
+
+warning: function `qm31_from_karatsuba_channel_sums` is never used
+   --> crates/aspis-core/src/field.rs:415:4
+    |
+415 | fn qm31_from_karatsuba_channel_sums(sums: [[u64; 3]; 3]) -> QM31 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_accumulate_product_channels` is never used
+   --> crates/aspis-core/src/field.rs:441:4
+    |
+441 | fn qm31_accumulate_product_channels(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_sum_products_small` is never used
+   --> crates/aspis-core/src/field.rs:468:4
+    |
+468 | fn qm31_sum_products_small<const N: usize>(left: [QM31; N], right: [QM31; N]) -> QM31 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_sum_products2` is never used
+   --> crates/aspis-core/src/field.rs:529:8
+    |
+529 | pub fn qm31_sum_products2(left: [QM31; 2], right: [QM31; 2]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_sum_products3` is never used
+   --> crates/aspis-core/src/field.rs:535:8
+    |
+535 | pub fn qm31_sum_products3(left: [QM31; 3], right: [QM31; 3]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_sum_products3` is never used
+   --> crates/aspis-core/src/field.rs:543:8
+    |
+543 | pub fn qm31_m31_sum_products3(left: [QM31; 3], right: [M31; 3]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_sum_products4` is never used
+   --> crates/aspis-core/src/field.rs:565:8
+    |
+565 | pub fn qm31_sum_products4(left: [QM31; 4], right: [QM31; 4]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_sum_products2_prepared` is never used
+   --> crates/aspis-core/src/field.rs:577:8
+    |
+577 | pub fn qm31_sum_products2_prepared(left: &[PreparedQm31Multiplier; 2], right: &[QM31; 2]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_sum_products3_prepared` is never used
+   --> crates/aspis-core/src/field.rs:612:8
+    |
+612 | pub fn qm31_sum_products3_prepared(left: &[PreparedQm31Multiplier; 3], right: &[QM31; 3]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_add_sum_products3_prepared` is never used
+   --> crates/aspis-core/src/field.rs:647:8
+    |
+647 | pub fn qm31_add_sum_products3_prepared(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_dot6_prepared` is never used
+   --> crates/aspis-core/src/field.rs:699:8
+    |
+699 | pub fn qm31_dot6_prepared(weights: &[PreparedQm31Multiplier; 6], values: &[QM31; 6]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_dot7_prepared` is never used
+   --> crates/aspis-core/src/field.rs:749:4
+    |
+749 | fn qm31_dot7_prepared(weights: &[PreparedQm31Multiplier; 7], values: &[QM31; 7]) -> QM31 {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `mul_by_r` is never used
+   --> crates/aspis-core/src/field.rs:794:4
+    |
+794 | fn mul_by_r(x: CM31) -> CM31 {
+    |    ^^^^^^^^
+
+warning: multiple associated items are never used
+   --> crates/aspis-core/src/field.rs:803:15
+    |
+802 | impl QM31 {
+    | --------- associated items in this implementation
+803 |     pub const ZERO: QM31 = QM31 {
+    |               ^^^^
+...
+813 |     pub const ONE: QM31 = QM31 {
+    |               ^^^
+...
+825 |     pub fn from_cm31(c0: CM31) -> QM31 {
+    |            ^^^^^^^^^
+...
+830 |     pub fn add(self, rhs: QM31) -> QM31 {
+    |            ^^^
+...
+838 |     pub fn sub(self, rhs: QM31) -> QM31 {
+    |            ^^^
+...
+846 |     pub fn neg(self) -> QM31 {
+    |            ^^^
+...
+854 |     pub fn half(self) -> QM31 {
+    |            ^^^^
+...
+863 |     pub fn mul(self, rhs: QM31) -> QM31 {
+    |            ^^^
+...
+877 |     pub fn square(self) -> QM31 {
+    |            ^^^^^^
+...
+888 |     pub fn mul_cm31(self, rhs: CM31) -> QM31 {
+    |            ^^^^^^^^
+...
+897 |     pub fn mul_m31(self, rhs: M31) -> QM31 {
+    |            ^^^^^^^
+...
+905 |     pub fn is_zero(self) -> bool {
+    |            ^^^^^^^
+...
+909 |     pub fn pow(self, mut exp: u64) -> QM31 {
+    |            ^^^
+...
+924 |     pub fn try_inv(self) -> Option<QM31> {
+    |            ^^^^^^^
+...
+936 |     pub fn inv(self) -> QM31 {
+    |            ^^^
+...
+940 |     pub fn from_le_bytes(bytes: &[u8]) -> Option<QM31> {
+    |            ^^^^^^^^^^^^^
+...
+946 |     pub fn write_le_bytes(self, out: &mut [u8]) {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `qm31_pack_base4` is never used
+   --> crates/aspis-core/src/field.rs:966:8
+    |
+966 | pub fn qm31_pack_base4(values: &[QM31]) -> QM31 {
+    |        ^^^^^^^^^^^^^^^
+
+warning: function `qm31_power_table` is never used
+    --> crates/aspis-core/src/field.rs:1003:8
+     |
+1003 | pub fn qm31_power_table<const N: usize>(gamma: QM31) -> [QM31; N] {
+     |        ^^^^^^^^^^^^^^^^
+
+warning: function `qm31_evaluate_degree72_horner` is never used
+    --> crates/aspis-core/src/field.rs:1021:8
+     |
+1021 | pub fn qm31_evaluate_degree72_horner(coefficients: &[QM31; 73], x: QM31) -> QM31 {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_evaluate_degree72_radix8` is never used
+    --> crates/aspis-core/src/field.rs:1041:8
+     |
+1041 | pub fn qm31_evaluate_degree72_radix8(coefficients: &[QM31; 73], x: QM31) -> QM31 {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_cm31_dot` is never used
+    --> crates/aspis-core/src/field.rs:1069:8
+     |
+1069 | pub fn qm31_cm31_dot(weights: &[QM31], values: &[CM31]) -> QM31 {
+     |        ^^^^^^^^^^^^^
+
+warning: function `finish_qm31_cm31_dot4` is never used
+    --> crates/aspis-core/src/field.rs:1102:4
+     |
+1102 | fn finish_qm31_cm31_dot4(sums: [[M31; 6]; 4]) -> [QM31; 4] {
+     |    ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_cm31_dot4` is never used
+    --> crates/aspis-core/src/field.rs:1124:8
+     |
+1124 | pub fn qm31_cm31_dot4(weights: &[QM31], values: [&[CM31]; 4]) -> [QM31; 4] {
+     |        ^^^^^^^^^^^^^^
+
+warning: struct `PreparedQm31Cm31Weights` is never constructed
+    --> crates/aspis-core/src/field.rs:1182:12
+     |
+1182 | pub struct PreparedQm31Cm31Weights<const N: usize> {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated functions `components`, `new`, and `geometric` are never used
+    --> crates/aspis-core/src/field.rs:1188:8
+     |
+1186 | impl<const N: usize> PreparedQm31Cm31Weights<N> {
+     | ----------------------------------------------- associated functions in this implementation
+1187 |     #[inline(always)]
+1188 |     fn components(weight: QM31) -> [M31; 6] {
+     |        ^^^^^^^^^^
+...
+1199 |     pub fn new(weights: &[QM31]) -> Self {
+     |            ^^^
+...
+1208 |     pub fn geometric(gamma: QM31) -> (Self, QM31) {
+     |            ^^^^^^^^^
+
+warning: function `qm31_cm31_dot4_prepared` is never used
+    --> crates/aspis-core/src/field.rs:1224:8
+     |
+1224 | pub fn qm31_cm31_dot4_prepared<const N: usize>(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_cm31_dot4_prepared_bytes` is never used
+    --> crates/aspis-core/src/field.rs:1274:8
+     |
+1274 | pub fn qm31_cm31_dot4_prepared_bytes<const N: usize>(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot_eager_outer` is never used
+    --> crates/aspis-core/src/field.rs:1335:8
+     |
+1335 | pub fn qm31_m31_dot_eager_outer(weights: &[QM31], values: &[M31]) -> QM31 {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot` is never used
+    --> crates/aspis-core/src/field.rs:1365:8
+     |
+1365 | pub fn qm31_m31_dot(weights: &[QM31], values: &[M31]) -> QM31 {
+     |        ^^^^^^^^^^^^
+
+warning: function `finish_qm31_m31_dot4` is never used
+    --> crates/aspis-core/src/field.rs:1411:4
+     |
+1411 | fn finish_qm31_m31_dot4(sums: [[u64; 4]; 4]) -> [QM31; 4] {
+     |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4` is never used
+    --> crates/aspis-core/src/field.rs:1429:8
+     |
+1429 | pub fn qm31_m31_dot4(weights: &[QM31], values: [&[M31]; 4]) -> [QM31; 4] {
+     |        ^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4_prepared_bytes` is never used
+    --> crates/aspis-core/src/field.rs:1476:8
+     |
+1476 | pub fn qm31_m31_dot4_prepared_bytes<const N: usize>(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4_prepared_limbs_bytes` is never used
+    --> crates/aspis-core/src/field.rs:1490:8
+     |
+1490 | pub fn qm31_m31_dot4_prepared_limbs_bytes<const N: usize>(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4_prepared_limbs_4b1_bytes` is never used
+    --> crates/aspis-core/src/field.rs:1540:8
+     |
+1540 | pub fn qm31_m31_dot4_prepared_limbs_4b1_bytes<const N: usize>(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4_prepared_limbs_4b_bytes` is never used
+    --> crates/aspis-core/src/field.rs:1598:8
+     |
+1598 | pub fn qm31_m31_dot4_prepared_limbs_4b_bytes<const N: usize>(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4_prepared_limbs_4b2_bytes` is never used
+    --> crates/aspis-core/src/field.rs:1645:8
+     |
+1645 | pub fn qm31_m31_dot4_prepared_limbs_4b2_bytes<const N: usize>(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4_prepared_limbs49_bytes` is never used
+    --> crates/aspis-core/src/field.rs:1707:8
+     |
+1707 | pub fn qm31_m31_dot4_prepared_limbs49_bytes(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot4_prepared_limbs49_bytes_two_rows` is never used
+    --> crates/aspis-core/src/field.rs:1767:8
+     |
+1767 | pub fn qm31_m31_dot4_prepared_limbs49_bytes_two_rows(
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_circle_to_line_fold4` is never used
+    --> crates/aspis-core/src/field.rs:1835:8
+     |
+1835 | pub fn qm31_circle_to_line_fold4(values: [QM31; 4], alpha: QM31, inv_2x: M31, inv_2y: M31) -> QM31 {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_m31_dot_u128` is never used
+    --> crates/aspis-core/src/field.rs:1852:8
+     |
+1852 | pub fn qm31_m31_dot_u128(weights: &[QM31], values: &[M31]) -> QM31 {
+     |        ^^^^^^^^^^^^^^^^^
+
+warning: function `qm31_dot` is never used
+    --> crates/aspis-core/src/field.rs:1876:8
+     |
+1876 | pub fn qm31_dot(weights: &[QM31], values: &[QM31]) -> QM31 {
+     |        ^^^^^^^^
+
+warning: function `qm31_dot3` is never used
+    --> crates/aspis-core/src/field.rs:1959:8
+     |
+1959 | pub fn qm31_dot3(weights: &[QM31], values: [&[QM31]; 3]) -> [QM31; 3] {
+     |        ^^^^^^^^^
+
+warning: function `m31_batch_inverse` is never used
+    --> crates/aspis-core/src/field.rs:2030:8
+     |
+2030 | pub fn m31_batch_inverse(values: &[M31], out: &mut [M31]) {
+     |        ^^^^^^^^^^^^^^^^^
+
+warning: function `m31_batch_inverse_with` is never used
+    --> crates/aspis-core/src/field.rs:2037:8
+     |
+2037 | pub fn m31_batch_inverse_with(values: &[M31], out: &mut [M31], inverse: fn(M31) -> M31) {
+     |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cm31_batch_inverse` is never used
+    --> crates/aspis-core/src/field.rs:2057:8
+     |
+2057 | pub fn cm31_batch_inverse(values: &[CM31], out: &mut [CM31]) {
+     |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `cm31_batch_inverse_with` is never used
+    --> crates/aspis-core/src/field.rs:2064:8
+     |
+2064 | pub fn cm31_batch_inverse_with(values: &[CM31], out: &mut [CM31], inverse: fn(M31) -> M31) {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 53 warnings emitted
+
+R19_CANONICAL_MUL_CHECK passed=true fullwidth_pairs=200000 edge_pairs=49 canonical_pairs=49 independent_u128=true general_reduce_2^62_minus_1=true one_fold_negative_control=true
+	Command being timed: "./r19_canonical_check"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1936
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

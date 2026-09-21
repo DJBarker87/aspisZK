@@ -1,0 +1,70 @@
+{
+  "host": "nuc",
+  "source_stage": "/home/dombarker/project-offloads/aspis-r19-channel-20260921-c",
+  "output_stage": "/home/dombarker/project-offloads/aspis-r19-channel-20260921-c/aspis-r19-canonical-20260921-a",
+  "profile": "AV8/R19/sparseG-T163/quadratic-channel-fold/research-v1",
+  "stale_outputs_excluded": ["sbf-primary", "host-c", "wire-controls-c", "logs", "keypair"],
+  "candidate_core_sha256": "99574b614ef26b948a0e64e189aff0f0bab96a074ec9494c19d617ed4f2f8d4c",
+  "original_core_sha256": "5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8",
+  "checker_sha256": "3e8bc23859566cbbda6ff4f853a7189cb37ffe7f7dcafa18a36d48b4c30c32d9",
+  "rustc": "rustc 1.94.1 (e408947bf 2026-03-25)",
+  "compile": {
+    "command": "systemd-run --user --scope --unit=aspis-r19-canonical-compile-a -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p TasksMax=128 rustc -O -C overflow-checks=yes --edition=2021 r19_canonical_check.rs -o r19_canonical_check",
+    "exit_status": 0,
+    "wall_seconds": 0.22,
+    "peak_rss_kib": 136112,
+    "swaps": 0,
+    "log_sha256": "a1628901568f6e3e5797aef85e5c11fb5aff071f081f8e495ebcd7ca8a95dd3c"
+  },
+  "run": {
+    "command": "systemd-run --user --scope --unit=aspis-r19-canonical-check-a -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p TasksMax=128 ./r19_canonical_check",
+    "exit_status": 0,
+    "fullwidth_pairs": 200000,
+    "edge_pairs": 49,
+    "canonical_pairs": 49,
+    "independent_u128_modulus": true,
+    "general_reducer_2^62_minus_1": true,
+    "one_fold_negative_control": true,
+    "wall_seconds": 0.00,
+    "peak_rss_kib": 1936,
+    "swaps": 0,
+    "log_sha256": "50d47fde541c163426b2fad086a16a3697fe205bb488e65413ffdd3437dd4b7a"
+  },
+  "memory_caps": {"MemoryHigh": "5G", "MemoryMax": "7G", "MemorySwapMax": "0", "TasksMax": 128},
+  "sbf_primary": {
+    "unit": "aspis-r19-canonical-sbf-a",
+    "command": "python3 build_r19_sbf.py --stage . --mode primary",
+    "exit_status": 0,
+    "source_table_gate": "PASS all 1024 source permutation and inactive entries match SBF table",
+    "frame_diagnostic": "no frame overflow diagnostic",
+    "wall_seconds": 43.83,
+    "peak_rss_kib": 633808,
+    "swaps": 0,
+    "elf_sha256": "7a8aebda609d17257e454a3d2ca968906eaed704267148c9063fcdc9e906b0ee",
+    "log_sha256": "643aa694786b97e2dc285c7ec20095708867bf573890d0c3f3d79c0975b5c0e7",
+    "rustflags_profile": "r17-sbf-probe.json selected-v7-kernels; primary adds --cfg r18_primary_only"
+  },
+  "cached_host_probe": {
+    "binary": "/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-svm/target/release/aspis-r17-svm-probe",
+    "caps": {"MemoryHigh": "2G", "MemoryMax": "3G", "MemorySwapMax": "0", "TasksMax": 128},
+    "world0": {
+      "fixture": "channel-c/host-c/fixture-world0",
+      "honest_100m_cu": 3279621,
+      "bad_g_final_100m_cu": 1840876,
+      "program_log_consumption_honest": 3279565,
+      "program_log_consumption_bad_g_final": 1840820,
+      "honest_1_4m": "failed at 1,400,000 CU",
+      "log_sha256": "f3e00d69006fff5ebe724bcfae1bb32bc4a7f8b97b357b1e822f494df0076c90"
+    },
+    "world1_resumed": {
+      "fixture": "channel-c/host-c/fixture-world1-resumed",
+      "honest_100m_cu": 3280813,
+      "bad_g_final_100m_cu": 1836703,
+      "program_log_consumption_honest": 3280757,
+      "program_log_consumption_bad_g_final": 1836647,
+      "honest_1_4m": "failed at 1,400,000 CU",
+      "log_sha256": "df4c1170019654a3f6e34a66e78b91bcbc86283ce515adde19cf41da8558cc69"
+    }
+  },
+  "proof_boundary": "Arithmetic/reference equivalence, source table gate, and benchmark diagnostics only; no security or guaranteed supported-budget claim."
+}

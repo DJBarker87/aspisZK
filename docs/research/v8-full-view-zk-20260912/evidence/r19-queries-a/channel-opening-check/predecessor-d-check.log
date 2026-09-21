@@ -1,0 +1,302 @@
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-core)
+   Compiling libc v0.2.189
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling cfg-if v1.0.4
+   Compiling getrandom v0.3.4
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+   Compiling zeroize v1.8.1
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-statement)
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-statement` to apply 4 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/home/dombarker/project-offloads/aspis-r19-channel-opening-check-20260921-d/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+error[E0428]: the name `main` is defined multiple times
+   --> ../relation_callback.rs:397:1
+    |
+318 | fn main(){fixtures::run();}
+    | --------- previous definition of the value `main` here
+...
+397 | fn main(){r19_channel_opening_check::run();}
+    | ^^^^^^^^^ `main` redefined here
+    |
+    = note: `main` must be defined only once in the value namespace of this module
+
+error[E0432]: unresolved import `super::inactive_binding`
+   --> ../r17_host_relation.rs:2:5
+    |
+  2 | use super::inactive_binding as row;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `inactive_binding` in the root
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:320:39
+    |
+319 | #[cfg(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction,v8_performance_sbf))]
+    |          --------------------------------------------------------------------------------- the item is gated here
+320 | #[path="inactive_row_binding.rs"] mod inactive_binding;
+    |                                       ^^^^^^^^^^^^^^^^
+
+error[E0432]: unresolved import `super::inactive_binding`
+   --> ../performance_verifier.rs:4:5
+    |
+  4 | use super::inactive_binding as row;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `inactive_binding` in the root
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:320:39
+    |
+319 | #[cfg(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction,v8_performance_sbf))]
+    |          --------------------------------------------------------------------------------- the item is gated here
+320 | #[path="inactive_row_binding.rs"] mod inactive_binding;
+    |                                       ^^^^^^^^^^^^^^^^
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `circle_norm`
+   --> ../r17_host_relation.rs:151:27
+    |
+151 |     let selected_points = circle_norm::Selected::new(queries)?;
+    |                           ^^^^^^^^^^^ use of unresolved module or unlinked crate `circle_norm`
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:43:30
+    |
+ 42 | #[cfg(any(v8_circle_norm,test))]
+    |          --------------------- the item is gated here
+ 43 | #[path="circle_norm.rs"] mod circle_norm;
+    |                              ^^^^^^^^^^^
+help: to make use of source file ../circle_norm.rs, use `mod circle_norm` in this file to declare the module
+   --> ../relation_callback.rs:6:1
+    |
+  6 + mod circle_norm;
+    |
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `quotient_fold`
+   --> ../r17_host_relation.rs:174:23
+    |
+174 |     let prepared_fold=quotient_fold::Prepared::new(alpha);
+    |                       ^^^^^^^^^^^^^ use of unresolved module or unlinked crate `quotient_fold`
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:45:32
+    |
+ 44 | #[cfg(v8_quotient_fused)]
+    |       ----------------- the item is gated here
+ 45 | #[path="quotient_fold.rs"] mod quotient_fold;
+    |                                ^^^^^^^^^^^^^
+help: there is an enum variant `aspis_statement::state_only_terminal::StateOnlyTerminalDiagnosticPhase::Prepared` and 1 other; try using the variant's enum
+    |
+174 -     let prepared_fold=quotient_fold::Prepared::new(alpha);
+174 +     let prepared_fold=aspis_statement::state_only_terminal::StateOnlyTerminalDiagnosticPhase::new(alpha);
+    |
+174 -     let prepared_fold=quotient_fold::Prepared::new(alpha);
+174 +     let prepared_fold=aspis_statement::state_only_verify::StateOnlyRelationStructuralPhase::new(alpha);
+    |
+help: to make use of source file ../quotient_fold.rs, use `mod quotient_fold` in this file to declare the module
+   --> ../relation_callback.rs:6:1
+    |
+  6 + mod quotient_fold;
+    |
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `circle_norm`
+   --> ../r17_host_relation.rs:326:27
+    |
+326 |     let selected_points = circle_norm::Selected::new(queries)?;
+    |                           ^^^^^^^^^^^ use of unresolved module or unlinked crate `circle_norm`
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:43:30
+    |
+ 42 | #[cfg(any(v8_circle_norm,test))]
+    |          --------------------- the item is gated here
+ 43 | #[path="circle_norm.rs"] mod circle_norm;
+    |                              ^^^^^^^^^^^
+help: to make use of source file ../circle_norm.rs, use `mod circle_norm` in this file to declare the module
+   --> ../relation_callback.rs:6:1
+    |
+  6 + mod circle_norm;
+    |
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `quotient_fold`
+   --> ../r17_host_relation.rs:349:23
+    |
+349 |     let prepared_fold=quotient_fold::Prepared::new(alpha);
+    |                       ^^^^^^^^^^^^^ use of unresolved module or unlinked crate `quotient_fold`
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:45:32
+    |
+ 44 | #[cfg(v8_quotient_fused)]
+    |       ----------------- the item is gated here
+ 45 | #[path="quotient_fold.rs"] mod quotient_fold;
+    |                                ^^^^^^^^^^^^^
+help: there is an enum variant `aspis_statement::state_only_terminal::StateOnlyTerminalDiagnosticPhase::Prepared` and 1 other; try using the variant's enum
+    |
+349 -     let prepared_fold=quotient_fold::Prepared::new(alpha);
+349 +     let prepared_fold=aspis_statement::state_only_terminal::StateOnlyTerminalDiagnosticPhase::new(alpha);
+    |
+349 -     let prepared_fold=quotient_fold::Prepared::new(alpha);
+349 +     let prepared_fold=aspis_statement::state_only_verify::StateOnlyRelationStructuralPhase::new(alpha);
+    |
+help: to make use of source file ../quotient_fold.rs, use `mod quotient_fold` in this file to declare the module
+   --> ../relation_callback.rs:6:1
+    |
+  6 + mod quotient_fold;
+    |
+
+warning: unused imports: `M31_HALF` and `M31`
+ --> ../r17_owned_weights.rs:2:69
+  |
+2 | use super::{basis_transport::transport, corelib::field::{QM31 as K, M31, M31_HALF}};
+  |                                                                     ^^^  ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0282]: type annotations needed
+  --> ../r17_host_relation.rs:31:5
+   |
+31 |     t.absorb(label::V6_INACTIVE_CLAIM, &bytes(&w.v[358..359]));
+   |     ^ cannot infer type
+
+error[E0282]: type annotations needed
+  --> ../r17_host_relation.rs:34:14
+   |
+34 |     let gp = gamma.pow(27);
+   |              ^^^^^ cannot infer type
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `query_arithmetic`
+   --> ../r17_host_relation.rs:186:19
+    |
+186 |         let all = query_arithmetic::gamma(&r[..403], &r[403..589], &powers)?;
+    |                   ^^^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `query_arithmetic`
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:55:35
+    |
+ 54 | #[cfg(v8_gamma_wrap)]
+    |       ------------- the item is gated here
+ 55 | #[path="query_arithmetic.rs"] mod query_arithmetic;
+    |                                   ^^^^^^^^^^^^^^^^
+help: to make use of source file ../query_arithmetic.rs, use `mod query_arithmetic` in this file to declare the module
+   --> ../relation_callback.rs:6:1
+    |
+  6 + mod query_arithmetic;
+    |
+
+error[E0282]: type annotations needed
+   --> ../r17_host_relation.rs:228:33
+    |
+228 |                         Err(_)=>denoms[4*i+slot].try_inv().ok_or(Error::Domain)?,
+    |                                 ^^^^^^^^^^^^^^^^ cannot infer type
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `query_arithmetic`
+   --> ../r17_host_relation.rs:361:19
+    |
+361 |         let all = query_arithmetic::gamma(&r[..403], &r[403..589], &powers)?;
+    |                   ^^^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `query_arithmetic`
+    |
+note: found an item that was configured out
+   --> ../relation_callback.rs:55:35
+    |
+ 54 | #[cfg(v8_gamma_wrap)]
+    |       ------------- the item is gated here
+ 55 | #[path="query_arithmetic.rs"] mod query_arithmetic;
+    |                                   ^^^^^^^^^^^^^^^^
+help: to make use of source file ../query_arithmetic.rs, use `mod query_arithmetic` in this file to declare the module
+   --> ../relation_callback.rs:6:1
+    |
+  6 + mod query_arithmetic;
+    |
+
+error[E0282]: type annotations needed
+   --> ../r17_host_relation.rs:399:33
+    |
+399 |                         Err(_)=>denoms[4*i+slot].try_inv().ok_or(Error::Domain)?,
+    |                                 ^^^^^^^^^^^^^^^^ cannot infer type
+
+error[E0599]: no method named `into_single_dense_for_workspace` found for struct `corelib::sumcheck::WeightAccumulator` in the current scope
+   --> ../r17_host_relation.rs:451:14
+    |
+450 | /         core::mem::replace(&mut weights[0],WeightAccumulator::empty(10))
+451 | |             .into_single_dense_for_workspace().ok_or(Error::Shape)?};
+    | |             -^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `corelib::sumcheck::WeightAccumulator`
+    | |_____________|
+    |
+
+error[E0277]: can't compare `&Vec<corelib::field::M31>` with `Vec<corelib::field::M31>`
+  --> ../r19_channel_opening_check.rs:37:17
+   |
+37 |                 assert_eq!(new_xs, *old_xs, "channel x coordinates");
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no implementation for `&Vec<corelib::field::M31> == Vec<corelib::field::M31>`
+   |
+   = help: the trait `PartialEq<Vec<corelib::field::M31>>` is not implemented for `&Vec<corelib::field::M31>`
+   = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+Some errors have detailed explanations: E0277, E0282, E0428, E0432, E0433, E0599.
+For more information about an error, try `rustc --explain E0277`.
+warning: `aspis-v8-performance-host` (bin "aspis-v8-performance-host") generated 1 warning
+error: could not compile `aspis-v8-performance-host` (bin "aspis-v8-performance-host") due to 15 previous errors; 1 warning emitted
+Command exited with non-zero status 101
+	Command being timed: "env RUSTFLAGS=--cfg v8_performance --cfg r19_channel_opening_check -A dead_code -A unexpected_cfgs cargo run --offline --locked --release --jobs 2 --features selected-v7-kernels,insecure-spend-fixture --manifest-path docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml --bin aspis-v8-performance-host"
+	User time (seconds): 36.20
+	System time (seconds): 0.93
+	Percent of CPU this job got: 136%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:27.17
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 531200
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 56
+	Minor (reclaiming a frame) page faults: 559272
+	Voluntary context switches: 2385
+	Involuntary context switches: 298
+	Swaps: 0
+	File system inputs: 136
+	File system outputs: 191000
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 101

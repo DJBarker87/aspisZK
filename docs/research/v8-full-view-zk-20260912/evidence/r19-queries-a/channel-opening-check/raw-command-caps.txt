@@ -1,0 +1,9 @@
+scope: systemd user scope aspis-r19-channel-opening-check-20260921-e
+MemoryHigh=2147483648
+MemoryMax=3221225472
+MemorySwapMax=0
+TasksMax=128
+command: env RUSTFLAGS='<r17-stage rustflags> --cfg r19_channel_opening_check' cargo run --offline --locked --release --jobs 2 --features selected-v7-kernels,insecure-spend-fixture --manifest-path docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml --bin aspis-v8-performance-host
+result: R19_CHANNEL_OPENING ... source_arbitrary_authenticated=32 betas=6 ... reference_retained=true; exit 0
+wall: 31.57 s; peak RSS: 531360 KB
+predecessors a/d retained separately; a had incomplete compile output, d failed before source execution due missing cfgs and unqualified x-coordinate comparison.

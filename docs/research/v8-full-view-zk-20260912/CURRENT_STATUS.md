@@ -1,5 +1,34 @@
 # Current V8 privacy-repair status
 
+## R19 channel-fold prototype measured — 2026-09-21
+
+The new 699-field quadratic-channel research profile, including a guarded
+exact-output M31 multiplication specialization, completes at
+**3,279,621 / 3,280,813 CU** on two genuine source fixtures. Both 1.2M and
+1.4M still exhaust. The mutated combined-final control rejects at the
+diagnostic cap, not within the supported budget. This is a new profile,
+not unchanged R18 proof bytes or a full privacy/soundness result.
+
+The same-profile opening-reference separation plus query sharing and factored
+T163 completes at **3,780,805 / 3,782,305 CU** on the unchanged R18 fixtures.
+Independent host references remain. The duplicate-opening implication is
+documented as a source audit plus Lean algebra and arbitrary authenticated
+record tests, not a machine-checked Rust refinement.
+
+Both new-profile actual-source opposite-witness tests retain p0/p2, the first
+relation polynomial and the combined Final256; the G system has rank 602 over
+626 equations with checked affine compatibility at these two prefixes.
+Nine algebraic Lean declarations compile. All 2,796 fixed-field canonical
+positions, both old-profile rejections and additional corruption controls pass;
+zero-recipient/change controls still reject at the semantic boundary.
+
+Universal source joint-image compatibility, the adaptive full-view simulator
+and exceptional-event law, coherent pre-beta pair extraction, and the actual
+shared-oracle challenge bound remain open. So does supported-budget execution.
+Current measurements, source reconciliation, artifacts and first remaining
+propositions: [R19_CHANNEL_FOLD.md](R19_CHANNEL_FOLD.md). R19 work is local;
+no deployment or wallet operation. The following sections retain prior history.
+
 ## R18 structural reset measured — 2026-09-21
 
 New, separately versioned **research** profile: sparse code-coordinate G,
