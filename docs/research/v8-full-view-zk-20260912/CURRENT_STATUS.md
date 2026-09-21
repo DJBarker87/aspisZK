@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## Source sampler premise audit — 2026-09-21
+
+The current core sampler matches the retained R17 stage byte-for-byte.
+The source has an extra three-attempt distinct-second-point loop and
+intervening observations before alpha. Five new actual-core tests pass,
+including a SHA-256 prequery control: cached public challenge inputs are
+not inherently negligible collision/secret-hit events. The next source
+probability proof must account at first oracle assignment and for transcript
+selection, not assert freshness at every sampler invocation. This is not a
+new protocol attack or a completed source probability theorem. See
+`R17_SAMPLER_SOURCE_BOUNDARY.md` for pins, exact chronology and evidence.
+
 ## Concrete nonzero polynomial certificate — 2026-09-21
 
 The frozen source-model minor now has a compiled determinant polynomial
