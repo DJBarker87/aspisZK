@@ -1,5 +1,61 @@
 # R16 soundness preservation obligations
 
+## Reverse table writes and noninterference — 2026-09-21
+
+Base `2c038f925ba5500abc4aa1362dc07f5dca5d51fb` plus this changeset.
+`ConsecutiveWrites.lean` proves sequential Function.update writes preserve
+every outside entry, write the intended inside entry, compose by list append,
+and commute for adjacent disjoint blocks. These facts are symbolic in lengths;
+the proof never normalizes a concrete 271-write chain.
+
+`MaskWeightWrites.lean` models the source's actual high-round-to-low-round
+chronology, writing each literal inner power-loop block and then writing
+the final carry scale at zero. The table equals writing the proved flat mask
+weights, entry by entry, for ANY initial table. Thus initialization values
+cannot leak into an unfilled coordinate in this model. The model leaves
+entries above 270 unchanged. A separate arithmetic lemma proves that every
+1+27*r+i address (r<10, i<27) is nonzero and below 271; another proves those
+addresses are injective. The final source_written_mask_pairing consumes this
+mutating-table model in the already-proved mixing/mask functional identity.
+
+The previous recursive-block-to-mutation-model gap is now discharged.
+This remains a mathematical mutation model, not an imported Charon/Aeneas
+translation of the pinned Rust function. No equality between extracted
+Rust code and this model is silently assumed or claimed proved.
+
+Read the retained V5ComponentCQM31RustFormulaSeam.lean and
+V5M31RawMulReduction.lean before considering field instantiation. The former
+explicitly states that executable-function equalities remain named premises
+(including RustCanonicalM31PrimitivesMatch), and documents a historical
+cross-toolchain raw-add seam. The latter proves the mathematical literal
+two-fold M31 reduction graph and canonical bounds. Their existence alone
+does not close the present Rust execution/field boundary. Existing exact
+tower and raw-operation work should be reused, not replaced with a new
+field assumption or another cold dependency replay.
+
+First remaining source-specific proposition: an exact pinned Rust execution
+refinement, or a composed source-locked semantics proof, connects mask_weights
+array mutation, its caller's point-array conversion and QM31 operations to
+sourceMaskTable and the exact tower. Point-construction, concrete order,
+commitment/image/fold/extraction and adaptive-challenge gates remain open.
+Joint privacy coverage and full-transcript simulation are not implied by
+this opening-functional result.
+
+Focused cached workspace `/Users/dominic/ZK/AspisFormal`, per-leaf command
+`lake env lean -j1 -M1800 -R <research>/lean -o <r17-cache>/<leaf>.olean
+<research>/lean/AspisV8R17/<leaf>.lean`, measured by `/usr/bin/time -l`:
+
+| Target | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| ConsecutiveWrites | 0 | 7.51 | 1214808064 | 0 |
+| MaskWeightWrites, dependent bridge | 0 | 8.98 | 1804025856 | 0 |
+
+All twelve #print axioms outputs use only subsets of propext,
+Classical.choice and Quot.sound, with no sorryAx. ConsecutiveWrites emits one
+unused simp-argument warning; MaskWeightWrites has no warnings. No production
+path, source pin or negative regression changed. No full manifest, cold
+dependency build, Aeneas replay or unchanged runtime suite was launched.
+
 ## Structured-mask weights, carry and source slices — 2026-09-21
 
 Base `42596fba8798302aaf5290d28a0303b9a7f27611` plus this changeset.
