@@ -1,5 +1,52 @@
 # R16 soundness preservation obligations
 
+## Current subtraction and complete CM31 word execution — 2026-09-21
+
+Base `c7c9e3c710cb53786142bbbb116aa409766754fd` plus this changeset.
+Both new focused targets compiled on their first attempts. M31.sub and
+CM31.mul are copied byte-for-byte, attributes included, from the pinned
+FunsChunk04.lean. Imported reducer literals retain the explicit expansion
+and constructor-proof justification documented below.
+
+GeneratedM31Sub proves successful subtraction on canonical inputs, with
+canonical output `(x.val + P - y.val) % P`. It proves both conditional branches,
+the initial checked U32 addition, and both possible checked subtractions.
+source_P_value uses `[propext]`; finishSub_mod and generated_sub_mod use
+`[propext, Quot.sound]`. Final source hash:
+`eb919af92c9138ef8834881d3d3c1f9057ff679f6fa354eed617f35e2b2318cd`.
+
+GeneratedCM31Mul proves an unconditional Result computation-graph identity,
+then successful complete execution for canonical a,b,c,d with canonical output
+words. Writing A=(a*c)%P, B=(b*d)%P, C=((a+b)*(c+d))%P, those words are exactly
+`(A+P-B)%P` and `((C+P-A)%P+P-B)%P`. This includes m0/m1, the actual lazy cross
+fragment, its reducer, and all three coordinate subtractions; no successful
+intermediate execution is left as an external premise. generated_mul_graph
+uses `[propext, Quot.sound]`; generated_mul_words uses
+`[propext, Classical.choice, Quot.sound]`. Final source hash:
+`be1b8b1b9348552464d00a773be37c879e6ec08b5af324e89ebc749f6952523e`.
+
+Host evidence, Lean 4.32.0 `-j1 -M1800`, MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64, no warnings or sorryAx:
+
+| Exact target | Scope | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| AspisV8R17/GeneratedM31Sub.lean | aspis-r17-generated-m31sub-r1 | 0 | 0.74 | 1636840 | 0 |
+| AspisV8R17/GeneratedCM31Mul.lean | aspis-r17-generated-cm31mul-r1 | 0 | 0.69 | 1633648 | 0 |
+
+Source authentication matched both new complete declarations and rejected two
+mutations each (subtraction sign/branch and CM31 operand/output routing), exit 0.
+The existing reducer/literal/M31 multiplication text checks also passed in that
+invocation. No unchanged Lean replay, memory-cap increase, production edit or
+negative-regression removal occurred.
+
+First remaining arithmetic proposition: map the two exact word formulas into
+the retained field model and prove equality to `(a*c-b*d, a*d+b*c)`, connecting
+the current execution theorem to the field-level CM31 specification. The current
+CM31 square still needs its separate source execution theorem. These arithmetic
+results do not close the R17 protocol caller or any full-transcript privacy or
+soundness release gate; joint observations, oracle/retry/publication premises
+remain separate and open.
+
 ## Current generated M31 multiplication — 2026-09-21
 
 Base `90a1f61af577e0bb4e7cc38b4929192be725b9ea` plus this changeset.

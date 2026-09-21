@@ -32,7 +32,7 @@ def blocks_match(blocks, expected, sources):
         if sources[name].count(body + "\n") != 1:
             raise ValueError("source block mismatch: " + name)
 
-def check(runtime, stage, literals, generated, m31_mul=None):
+def check(runtime, stage, literals, generated, m31_mul=None, m31_sub=None, cm31_mul=None):
     sources = pinned(runtime, {**RUNTIME_PINS, "Notations.lean": NOTATION_PIN})
     if sources["Notations.lean"].count(MACRO + "\n") != 1:
         raise ValueError("unexpected #u32 macro")
@@ -85,6 +85,31 @@ def check(runtime, stage, literals, generated, m31_mul=None):
                 raise ValueError("multiplication mutation accepted")
         result.update(m31_mul_blocks=2, m31_mul_negative_mutations_rejected=2,
                       m31_mul_sha256=hashlib.sha256(m31_mul.read_bytes()).hexdigest())
+    for path, label, edits in [
+        (m31_sub, "m31_sub", [("let i ← self + aspis_core.field.P", "let i ← self - aspis_core.field.P"),
+                              ("if s >=", "if s <=")]),
+        (cm31_mul, "cm31_mul", [("M31.mul self.b rhs.b", "M31.mul self.a rhs.b"),
+                                ("a := m, b := m4", "a := m4, b := m")]),
+    ]:
+        if path is None:
+            continue
+        text = path.read_text()
+        pattern = re.compile(r"^-- GENERATED ([\w.]+)\n(.*?)\n-- END GENERATED$", re.M | re.S)
+        def validate_leaf(value):
+            blocks_match(pattern.findall(value), ["FunsChunk04.lean"], source_generated)
+        validate_leaf(text)
+        for before, after in edits:
+            mutated = text.replace(before, after, 1)
+            if mutated == text:
+                raise ValueError("ineffective negative test: " + label)
+            try:
+                validate_leaf(mutated)
+            except ValueError:
+                pass
+            else:
+                raise ValueError("mutation accepted: " + label)
+        result[label] = {"generated_blocks": 1, "negative_mutations_rejected": len(edits),
+                         "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
     return result
 
 if __name__ == "__main__":
@@ -92,5 +117,8 @@ if __name__ == "__main__":
     for key in ("runtime", "stage", "literals", "generated"):
         parser.add_argument("--" + key, type=Path, required=True)
     parser.add_argument("--m31-mul", type=Path)
+    parser.add_argument("--m31-sub", type=Path)
+    parser.add_argument("--cm31-mul", type=Path)
     args = parser.parse_args()
-    print(json.dumps(check(args.runtime, args.stage, args.literals, args.generated, args.m31_mul), sort_keys=True))
+    print(json.dumps(check(args.runtime, args.stage, args.literals, args.generated,
+                          args.m31_mul, args.m31_sub, args.cm31_mul), sort_keys=True))
