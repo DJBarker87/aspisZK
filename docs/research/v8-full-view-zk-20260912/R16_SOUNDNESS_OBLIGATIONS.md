@@ -1,5 +1,54 @@
 # R16 soundness preservation obligations
 
+## Current generated halving execution — 2026-09-21
+
+Base revision `a4bdbc72` plus this changeset. GeneratedM31Half.lean retains
+the generated FunsChunk06 M31.half and CM31.half declarations, with only the
+closed #i32/#u32 literals expanded to their authenticated constructors. It
+proves successful Result execution, canonical outputs and the inverse-of-two
+property on every canonical input (both components for CM31), composing the
+signed runtime shifts with the retained HalfRotateNat theorem. In particular,
+signed counts are not silently replaced with unsigned counts.
+
+`check_r17_half.py` pins FunsChunk06 at
+`f57cf84b503d6c0f03199a951872f3676bd7c9dcc644416372ab8289e6b52b9e`,
+the existing runtime files and Notations.lean. Seven signed literal blocks and
+three operator instances are byte-authenticated. One ofIntCore bounds proof
+is explicitly adapted: its executable modulo/toNat/BitVec construction and
+type are unchanged; the checker permits only the specified proof replacement.
+The bound_suffices helper retains the runtime statement with a direct proof.
+The exact #i32 and #u32 macros are checked; their closed bounds are decidable
+without the scalar_tac fallback. Literal proof irrelevance is compiled.
+The checker rejects two literal mutations and two generated-half mutations.
+It remains a source projection, not a full extraction-pipeline certificate.
+
+Focused cached Linux, Lean 4.32.0 `-j1 -M1800`; each systemd scope has
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64:
+
+| Exact target | Scope suffix (prefix aspis-r17-) | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| AspisV8R17/SignedLiteralSupport.lean, original proof missing imports | signed-literal-r1 | 1 | 0.99 | 1792416 | 0 |
+| Same target, expanded import set, memory exception before proof checking | signed-literal-r2 | 134 / signal 6 | 1.79 | 1941004 | 0 |
+| Same target, core bounds-proof replacement | signed-literal-r3 | 0 | 0.84 | 1633752 | 0 |
+| AspisV8R17/GeneratedM31Half.lean | generated-half-r1 | 0 | 0.70 | 1633864 | 0 |
+
+The memory-failed attempt was not rerun at a higher cap. Its time footer's
+zero is not success: the controlling process returned 134 and reported signal
+6. Failed-attempt error-generated sorryAx is excluded. All final literal and
+generated-half #print axioms results are `[propext, Classical.choice, Quot.sound]`,
+with no sorryAx or new assumptions. A subsequent source comment clarification
+does not change any declaration. Generated leaf SHA256:
+`e9961f4cee08a1e3a7e3cfabe5dbc3bc4e075b392e28c6546d52891e139cba8b`.
+
+This closes the changed halving primitive's projected execution obligation,
+alongside the existing current mul/square results. First remaining source
+composition obligation: the actual R17 mask/opening field and array callers
+must refine the retained algebraic identities on all reachable canonical
+states, including checked index/length/failure behavior. This does not close
+joint transcript privacy, commitment extraction, shared-oracle chronology,
+retry/publication or the end-to-end malicious-prover soundness bound. No
+production protocol paths or negative regressions changed.
+
 ## Signed shift runtime projection — 2026-09-21
 
 Base revision `b3bb9a6c` plus this changeset. SignedShiftSlice.lean authenticates
