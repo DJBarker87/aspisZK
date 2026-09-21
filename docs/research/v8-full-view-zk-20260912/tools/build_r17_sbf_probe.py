@@ -12,6 +12,15 @@ assert root.name.startswith('aspis-r17-sbf-probe-') and not (root / '.git').exis
 stage = json.loads((root / 'r17-sbf-probe.json').read_text())
 callback = root / 'docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs'
 host = json.loads((root / 'r17-stage.json').read_text())
+def advance_recent(name, expected):
+    for step in ('opening_reuse', 'group_dot', 'carry_shortcuts', 'cyclic_g',
+                 'g_prefix', 'compact_g'):
+        if name in stage.get(step, {}):
+            change = stage[step][name]
+            assert change['before_sha256'] == expected, (step, name)
+            expected = change['after_sha256']
+    return expected
+
 def check_after(name, expected):
     if name in stage.get('owned_weights', {}):
         change = stage['owned_weights'][name]
@@ -85,11 +94,14 @@ def check_after(name, expected):
         change = stage['compact_prepare'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    expected = advance_recent(name, expected)
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 # callback_after_sha256 already includes the earlier callback transformations.
 # Advance only the new change from that retained aggregate endpoint.
 callback_expected = stage['callback_after_sha256']
-for step in ['compact_verifier', 'compact_workspace', 'compact_prepare']:
+for step in ['compact_verifier', 'compact_workspace', 'compact_prepare',
+             'opening_reuse', 'group_dot', 'carry_shortcuts', 'cyclic_g',
+             'g_prefix', 'compact_g']:
     if 'relation_callback.rs' in stage.get(step, {}):
         change = stage[step]['relation_callback.rs']
         assert change['before_sha256'] == callback_expected
@@ -104,11 +116,17 @@ for name, expected in stage.get('compact_verifier_files', {}).items():
         change = stage['compact_workspace'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    expected = advance_recent(name, expected)
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 for name, expected in stage.get('compact_workspace_files', {}).items():
+    expected = advance_recent(name, expected)
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 for name, expected in stage.get('compact_prepare_files', {}).items():
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+for field in ('group_dot_files', 'carry_shortcuts_files', 'cyclic_g_files',
+              'g_prefix_files', 'g_geometric_files', 'compact_g_files'):
+    for name, expected in stage.get(field, {}).items():
+        assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'hybrid_merge_files' in stage:
     assert 'r17_merge_spectra.rs' in stage['hybrid_merge_files']
     for name, expected in stage['hybrid_merge_files'].items():
@@ -133,7 +151,7 @@ if 'inplace_dense_fold' in stage:
         expected = workspace['after_sha256']
     assert hashlib.sha256((root / change['path']).read_bytes()).hexdigest() == expected
 if 'owned_weights' in stage:
-    assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == stage['owned_weights_sha256']
+    assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == advance_recent('r17_owned_weights.rs', stage['owned_weights_sha256'])
 if 'fixed_g_table' in stage:
     change = stage['fixed_g_table']
     assert change['before_sha256'] == stage['base_power_specialization']['after_sha256']
@@ -153,7 +171,7 @@ if 'workspace_adapter' in stage:
             assert stage['tensor_prefix'][name]['before_sha256'] == hashes['after_sha256']
             continue
         assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == hashes['after_sha256']
-    assert hashlib.sha256((callback.parent / 'r17_mask_workspace.rs').read_bytes()).hexdigest() == stage['workspace_sha256']
+    assert hashlib.sha256((callback.parent / 'r17_mask_workspace.rs').read_bytes()).hexdigest() == advance_recent('r17_mask_workspace.rs', stage['workspace_sha256'])
 if 'tensor_prefix' in stage:
     for name, hashes in stage['tensor_prefix'].items():
         check_after(name, hashes['after_sha256'])

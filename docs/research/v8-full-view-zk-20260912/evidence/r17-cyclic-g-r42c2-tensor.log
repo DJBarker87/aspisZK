@@ -1,0 +1,99 @@
+Started aspis-r17-r42c2-finaltensor.service - /usr/bin/time -v /usr/bin/env PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin "RUSTFLAGS=-A unexpected_cfgs -A dead_code" /home/dombarker/.cargo/bin/cargo run --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml --bin r17-tensor-check.
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling libc v0.2.189
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-core)
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling cfg-if v1.0.4
+   Compiling getrandom v0.3.4
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling sha2 v0.10.9
+   Compiling zeroize v1.8.1
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-statement)
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+warning: unused import: `pool_v1_note_commitment`
+  --> /home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+warning: `aspis-statement` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-statement` to apply 4 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/home/dombarker/project-offloads/aspis-r17-sbf-probe-20260921-r42c2/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+warning: unused import: `CM31`
+ --> ../r17_mask_workspace.rs:4:29
+  |
+4 | use super::corelib::field::{CM31, M31, M31_HALF, QM31 as K};
+  |                             ^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+warning: `aspis-v8-performance-host` (bin "r17-tensor-check") generated 1 warning (run `cargo fix --bin "r17-tensor-check" -p aspis-v8-performance-host` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 29.07s
+     Running `docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/r17-tensor-check`
+PASS: all 1024 Boolean tensor points x 1024 coordinates, scaled one-hot output
+PASS: 100 dense-fold schedules, every round/coordinate equals old allocating formula
+PASS: cyclic 1084 four-limb basis cases, 32 full QM31 three-way/dirty vectors, 271 scale/DC constants, 1024 denominator identities and two malformed-algorithm controls
+PASS: 1250 quarter-turn boundary controls and 40 fixed-size/direction FFTs equal retained generic transform
+PASS: short-transform root order/normalization/roundtrips, all 14 denominator spectra, 838 individual merge controls (all 768 basis positions)
+PASS: 125 scalar FMA boundary triples, distinct limbs and checked intermediate bounds
+PASS: 15625 butterfly limb-boundary tuples, checked intermediates, all 2048 roots, normalization
+PASS: all 271 coin basis positions x 1024 outputs; distinct extension components; reused dirty output
+PASS: root order, FFT inverse, convolution edge, denominator inverse, six arbitrary coin maps
+PASS: all 277504 fixed powers equal source M31 recurrence; maximal four-product reduction
+PASS: 20 cases x 1024 owned dual and chord entries match references
+PASS: 20 cases x 1024 entries equal actual WeightAccumulator::weight_at
+PASS: 6 cases x 1024 G entries match retained QM31-power implementation
+PASS: 6 cases x 2 channels x 1024 complete original-weight entries
+	Command being timed: "/usr/bin/env PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin RUSTFLAGS=-A unexpected_cfgs -A dead_code /home/dombarker/.cargo/bin/cargo run --offline --locked --release --jobs 2 --features insecure-spend-fixture,selected-v7-kernels --manifest-path docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml --bin r17-tensor-check"
+	User time (seconds): 38.71
+	System time (seconds): 1.09
+	Percent of CPU this job got: 133%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:29.84
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 533364
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 71
+	Minor (reclaiming a frame) page faults: 635471
+	Voluntary context switches: 2917
+	Involuntary context switches: 359
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 197480
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+aspis-r17-r42c2-finaltensor.service: Consumed 39.822s CPU time, 512.0K memory peak, 0B memory swap peak.

@@ -1,5 +1,24 @@
 # Current V8 privacy-repair status
 
+## Reviewed CU pack measured — 2026-09-21
+
+Current best same-proof research-v2 primary checkpoint: **16,456,519 CU**
+(R43 cyclic 1024-point G plus nested carries/pivot, with R37/R38 reuse).
+This saves 3,773,031 CU against R38's 20,229,550. The exact-output Rust
+gate, same-proof host audit/mutation, source/table/frame gates and bounded
+SBF measurements pass their stated checks; 1.2M/1.4M execution still fails.
+The second dense reference still heap-aborts. Both reference paths remain.
+Six cyclic field lemmas and the nested-carry expansion compile without new
+axioms. These are not a complete Rust-word refinement or security proof.
+See `R17_CYCLIC_AND_CARRY.md` and `R17_PARALLEL_REUSE.md`.
+
+The separate full compact-G candidate also passes focused source comparisons
+and the same host proof, but its measured R44 primary is **18,281,174 CU**:
+slower than R43. It is retained as a research regression, not promoted as the
+best verifier. Its geometric terminal costs 5,503,873 CU. Exact boundary:
+`R17_COMPACT_G.md`. Production paths, negative regressions and the independent
+privacy/soundness/source-probability obligations below are unchanged.
+
 ## First-assignment provenance compiled — 2026-09-21
 
 Ten new Lean theorems reuse the R9 memoized oracle: returned answers persist,

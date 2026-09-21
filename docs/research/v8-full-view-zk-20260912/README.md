@@ -4,7 +4,9 @@ This directory is the isolated privacy workstream for the repaired,
 transfer-only positive COMPLETE profile at
 `9e432896a4e1515efebe940b71fd9b4f9f009189`.
 
-The current R7 milestone is deliberately narrow:
+For the latest R17 proof and CU boundaries, start with
+[CURRENT_STATUS.md](CURRENT_STATUS.md). The retained R7 milestone below is
+historical and deliberately narrow:
 
 - the literal honest validator and copy-helper source yield
   `H1_unpadded = D a` under complete active tuple matching and explicit pole
