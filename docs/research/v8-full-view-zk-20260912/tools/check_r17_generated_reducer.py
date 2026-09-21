@@ -32,7 +32,7 @@ def blocks_match(blocks, expected, sources):
         if sources[name].count(body + "\n") != 1:
             raise ValueError("source block mismatch: " + name)
 
-def check(runtime, stage, literals, generated):
+def check(runtime, stage, literals, generated, m31_mul=None):
     sources = pinned(runtime, {**RUNTIME_PINS, "Notations.lean": NOTATION_PIN})
     if sources["Notations.lean"].count(MACRO + "\n") != 1:
         raise ValueError("unexpected #u32 macro")
@@ -61,16 +61,36 @@ def check(runtime, stage, literals, generated):
             pass
         else:
             raise ValueError("negative mutation accepted")
-    return {"literal_source_blocks": 6, "operator_source_blocks": 3,
+    result = {"literal_source_blocks": 6, "operator_source_blocks": 3,
             "expanded_generated_blocks": 2, "negative_mutations_rejected": 3,
             "notation_pin": NOTATION_PIN,
             "literal_sha256": hashlib.sha256(literals.read_bytes()).hexdigest(),
             "generated_sha256": hashlib.sha256(generated.read_bytes()).hexdigest(),
             "full_caller_refinement": False}
+    if m31_mul is not None:
+        text = m31_mul.read_text()
+        pattern = re.compile(r"^-- GENERATED ([\w.]+)\n(.*?)\n-- END GENERATED$", re.M | re.S)
+        def validate_mul(value):
+            blocks_match(pattern.findall(value), ["FunsChunk04.lean"] * 2, source_generated)
+        validate_mul(text)
+        for mutated in [text.replace("let i2 ← i * i1", "let i2 ← i + i1", 1),
+                        text.replace("reduce_u64 value", "reduce_u64 (U32.ofNat 0)", 1)]:
+            if mutated == text:
+                raise ValueError("ineffective multiplication negative test")
+            try:
+                validate_mul(mutated)
+            except ValueError:
+                pass
+            else:
+                raise ValueError("multiplication mutation accepted")
+        result.update(m31_mul_blocks=2, m31_mul_negative_mutations_rejected=2,
+                      m31_mul_sha256=hashlib.sha256(m31_mul.read_bytes()).hexdigest())
+    return result
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     for key in ("runtime", "stage", "literals", "generated"):
         parser.add_argument("--" + key, type=Path, required=True)
+    parser.add_argument("--m31-mul", type=Path)
     args = parser.parse_args()
-    print(json.dumps(check(args.runtime, args.stage, args.literals, args.generated), sort_keys=True))
+    print(json.dumps(check(args.runtime, args.stage, args.literals, args.generated, args.m31_mul), sort_keys=True))

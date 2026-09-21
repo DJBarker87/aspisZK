@@ -1,5 +1,44 @@
 # R16 soundness preservation obligations
 
+## Current generated M31 multiplication — 2026-09-21
+
+Base `90a1f61af577e0bb4e7cc38b4929192be725b9ea` plus this changeset.
+Exact target `AspisV8R17/GeneratedM31Mul.lean` compiled on the first attempt.
+Its source SHA-256 is
+`b2c5f2991dff2d77f8f0051fbbff72140abb3e3bb87c2e321d827e283c6da24f`.
+The two generated declarations (M31.mul and M31.reduce_u64) are copied
+byte-for-byte, including attributes, from pinned FunsChunk04.lean. No literal
+macro rewrite is needed for these declarations; their imported reducer retains
+the previously documented explicit literal expansion.
+
+Three audited results:
+
+- cast_widen_value: current U32-to-U64 cast preserves the exact Nat value.
+- generated_mul_mod: for ANY two stored U32 words, the current generated M31
+  multiplication succeeds, returns `(x.val*y.val) % P`, and is canonical.
+  No canonical-input assumption is needed: both U32 operands are below 2^32,
+  hence their product fits U64. This uses symbolic multiplication monotonicity.
+- generated_wrapper_mod: the M31 reducer wrapper succeeds for every U64 input,
+  with the exact canonical remainder.
+
+The cast audit is `[propext, Quot.sound]`; both execution audits are
+`[propext, Classical.choice, Quot.sound]`. No warnings or sorryAx. Host scope
+`aspis-r17-generated-m31mul-r1`, Lean 4.32.0 `-j1 -M1800`, MemoryHigh=4G,
+MemoryMax=6G, MemorySwapMax=0, TasksMax=64: exit 0, wall 0.65 s, peak RSS
+1629996 KiB, swaps 0. No cap change or unchanged build replay occurred.
+
+The extended source checker matched both generated declarations against the
+full pinned source, rejected two multiplication/wrapper mutations, and repeated
+the existing literal/reducer text checks (three negative mutations), exit 0.
+This authenticates the focused source projection, not the entire extraction
+pipeline or R17 caller. No production paths or negative regressions changed.
+
+First remaining arithmetic proposition: current M31.sub must succeed on
+canonical inputs and return their difference modulo P; then compose the two
+base multiplications, cross-term reducer and three subtractions into the full
+CM31 multiplication theorem. The square delta and end-to-end privacy/soundness
+obligations remain open.
+
 ## Macro-expanded generated reducer binding — 2026-09-21
 
 Base commit `ea475f87` plus this changeset. UnsignedLiteralSupport.lean and

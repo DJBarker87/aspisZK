@@ -30,6 +30,7 @@ case "$target" in
   AspisV8R17/UnsignedReducerExecution) ;;
   AspisV8R17/UnsignedLiteralSupport) ;;
   AspisV8R17/GeneratedReducerExpanded) ;;
+  AspisV8R17/GeneratedM31Mul) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
@@ -38,6 +39,13 @@ if [[ "$target" == AspisV8R17/UnsignedLiteralSupport || "$target" == AspisV8R17/
     --stage "$stage/V7Tag73CurrentHelpersOpaque" \
     --literals "$task/AspisV8R17/UnsignedLiteralSupport.lean" \
     --generated "$task/AspisV8R17/GeneratedReducerExpanded.lean"
+fi
+if [[ "$target" == AspisV8R17/GeneratedM31Mul ]]; then
+  python3 "$task/check_r17_generated_reducer.py" --runtime "$runtime/Aeneas/Std/Scalar" \
+    --stage "$stage/V7Tag73CurrentHelpersOpaque" \
+    --literals "$task/AspisV8R17/UnsignedLiteralSupport.lean" \
+    --generated "$task/AspisV8R17/GeneratedReducerExpanded.lean" \
+    --m31-mul "$task/$target.lean"
 fi
 if [[ "$target" == AspisV8R17/UnsignedCoreSlice || "$target" == AspisV8R17/UnsignedCM31Cross || "$target" == AspisV8R17/UnsignedReducerOps || "$target" == AspisV8R17/UnsignedReducerExecution ]]; then
   python3 "$task/check_r17_unsigned_slice.py" --runtime "$runtime/Aeneas/Std/Scalar" \
