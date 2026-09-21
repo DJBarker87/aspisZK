@@ -1,5 +1,15 @@
 # Exact-map structural optimization boundary
 
+Current priority: [baseline reuse audit](R17_BASELINE_REUSE.md). Restore and
+compose existing optimized kernels/proofs before inventing replacements.
+The historical FFT candidate below is no longer the next primary task:
+R25's DIF implementation regressed CU, and R26 remains host-tested only.
+R27 restores several existing opening/folding kernels. R28's owned affine
+buffers restore primary acceptance at 24,208,293 CU; the unchanged second
+reference pass still exhausts heap and supported-budget cases still fail.
+The larger target remains compact functional preparation through the repaired
+basis, with an explicit transcript-version boundary for descriptor binding.
+
 Source base: e32bac9b plus R14/R15 staged research changes. This is an
 implementation plan and algebraic derivation, not a compiled Lean theorem,
 completed CU measurement, or new privacy claim.

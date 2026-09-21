@@ -5,8 +5,8 @@ measurement concerns AV8/R17/structuredG271-two-channel/research-v1, including
 its changed encoding, structured G and two quotient channels / Final512.
 Privacy and soundness preservation remain open regardless of a CU result.
 
-Latest boundary (R24): the primary deferred SBF pass accepts the retained
-honest proof at its terminal checkpoint (~24.47M diagnostic CU consumed).
+Latest boundary (R28): the primary deferred SBF pass accepts the retained
+honest proof at its terminal checkpoint (24,208,293 diagnostic CU consumed).
 The unchanged second reference pass then exhausts heap. The full program
 still fails, both 1.2M/1.4M budgets fail, and no deployability/privacy claim
 follows. Detailed chronological evidence, including regressions, is below.
@@ -963,3 +963,176 @@ canonical QM31 inputs, including reduction, no-aliasing, buffer reuse and
 actual source loops. It cannot be discharged by the finite controls above.
 Reference allocation, supported-budget feasibility, full-transcript privacy,
 soundness, shared-oracle, retry and publication gates remain separate and open.
+
+## R25 aligned DIF/DIT storage — rejected CU regression
+
+Base 6a08ffc4 plus this changeset. stage_r17_aligned_fft.py pairs a forward
+DIF transform with inverse DIT and separately generated bit-reversed fixed
+spectra. Both standalone permutation passes are removed. The new DIF
+butterfly forms x=u.a+P-v.a and y=u.b+P-v.b, then reduces
+x*w.a+2P²-y*w.b and x*w.b+y*w.a. It cannot reuse the prior DIT butterfly:
+the twiddle multiplies a different intermediate. Integer bounds were derived
+and compiled before the optimized candidate gate, as requested.
+
+DifButterflyBounds.lean proves padded subtraction safety, the widened product
+bound and every raw evaluation-order bound under canonical-limb premises.
+In particular, intermediates may exceed 2^63 but are below 2^64. Smallest-leaf
+compile exit 0, 1.35 s, peak RSS 1628908 KiB, swaps 0.
+#print axioms: padded_difference/raw_bounds use propext, Classical.choice,
+Quot.sound; wide_product uses propext and Quot.sound. No sorry or new axiom.
+This is not a reducer-residue or Rust-source equivalence theorem.
+
+SpectralReindex.lean proves pointwise product transport and cancellation
+through a reindexed convolution pipeline for any coordinate equivalence,
+arbitrary forward/inverse functions and a type with multiplication. Compile
+exit 0, 0.98 s, RSS 981220 KiB, swaps 0. #print axioms: product uses
+Quot.sound; unproduct/convolution_pipeline use propext and Quot.sound.
+It does not assume FFT inversion, field or privacy laws. The actual Rust
+bit reversal and DIF/DIT transforms still need source correspondence.
+Both leaves use the retained Lean 4.32.0/mathlib cached workspace, direct
+lake env lean -j1 -M1600 with explicit isolated root/output; each scope is
+MemoryHigh=1G, MemoryMax=2G, MemorySwapMax=0, TasksMax=64. Source revision
+6a08ffc4 plus these leaves. No full manifest or unchanged replay was run.
+
+Optimized generation permutes 2048 inverse and 1536 merge constants, checking
+each merge cell is written once. Exit 0, 26.48 s, RSS 537408 KiB, swaps 0;
+4G/6G/zero-swap scope, TasksMax=128. Compilation dominates; no dense arithmetic
+or rank search is performed. Builder pins generator, helper, new table,
+unchanged old tables and both changed kernel/merge source hashes.
+
+Host controls pass: 15625 new DIF boundary tuples including checked integer
+intermediates, all 3584 constants, 20 forward comparisons, 20 independent
+inverse comparisons, 20 round trips, all 838 merge controls and the retained
+complete G basis/weight/fold gates. Actual honest proof accepted, current
+G-final mutation rejected with both verifier paths/reference checks enabled.
+Focused exit 0, 2.46 s, RSS 300620 KiB; positive exit 0, 9.64 s, RSS
+448712 KiB; negative exit 0, 0.00 s reported, RSS 3168 KiB. All swaps 0,
+scope 4G/6G/zero swap. These finite controls are not a universal source proof.
+
+SBF source/table/frame gates pass: exit 0, 35.76 s, RSS 619336 KiB,
+swaps 0; scope 5G/7G/zero swap. ELF SHA256:
+1a81aae0e40adb2f27d770d268169a9774610e8e936ebf2527e65a1fca855f56.
+Primary acceptance costs **28653311 CU**, up from R24's 24472669:
+a **4180642 CU regression**, about 17.08%. G tree is 5074950 CU, final FFT
+9646106 CU, G-containing original weights 17074807 CU. The combined DIF
+arithmetic/schedule change is rejected as a preferred optimization; fewer
+permutation passes do not establish lower SBF cost. The precise instruction
+cause is not yet isolated, so this is not attributed to one unmeasured cause.
+
+Full honest execution fails in the second reference pass on heap at 28731696
+CU; corrupt at 27937764, not a completed checked rejection. Both 1.2M/1.4M
+pairs exhaust CU; 256 KiB heap and diagnostic 100M unchanged. Driver exit 0,
+0.13 s, RSS 27144 KiB, swaps 0, scope 3G/4G/zero swap. Evidence retained:
+r17-aligned-{generate,host-gate,build,lean,lean-reindex,svm-run}-r25.log,
+r17-aligned-svm-r25.jsonl, r17-aligned-source-pins-r25.json. Production code,
+negative regressions, mixing nodes and transcript remain unchanged.
+
+Next experiment R26 derives from the retained R24, not R25. It keeps the
+fast DIT butterflies and absorbs their input permutations into existing
+coefficient loads and pointwise spectral products. The permutation lemma
+above remains applicable to the algebraic layout, but the paired in-place
+source writes need their own correspondence argument and functional gates.
+
+## R26 host-only fused reordering control — not promoted
+
+Fresh r26 derives from R24 and retains its DIT butterflies, scattering
+coefficient loads and fusing bit reversal into spectral products. Host gates
+pass: all supported indices are in range/involutive, 40 preordered transforms
+equal the old FFT, and prior merge/G-basis/actual-proof controls pass. Focused
+exit 0, 28.63 s, RSS 535324 KiB; positive exit 0, 9.55 s, RSS 436648 KiB;
+negative exit 0, 0.00 s reported, RSS 3344 KiB. Swaps 0, 4G/6G/zero-swap
+scope. Evidence: r17-fused-reorder-host-r26.log. No R26 SBF build or CU
+measurement was run; this is not a preferred measured implementation.
+The user redirected priority to baseline reuse and compact structure before
+that measurement, so this pending experiment is preserved, not substituted
+for the baseline-reuse work.
+
+## R27 baseline kernel reuse — functional success, heap regression
+
+Fresh r27 derives from measured R24. Source base 6a08ffc4 plus this changeset.
+See R17_BASELINE_REUSE.md for the caller/proof reuse audit and the larger
+compact-functional boundary. circle_norm.rs, joined_inverse.rs, line_norm.rs,
+quotient_fold.rs and affine_primal.rs are byte-equal to the retained baseline;
+the stage and builder pin their hashes. The existing line/chord inversion
+is shared across both channels, the prepared quotient fold is reused,
+v8_affine_primal is enabled, and terminal weights use weight_prefix::<4>
+plus the existing four-product helper. No new inverse or field formula.
+
+Batch inverse errors are not returned early: individual inversion is retained
+as fallback at the original per-record position, preserving the logical
+canonical/domain error ordering. Earlier allocation exhaustion remains a
+separate possible behavior and in fact occurs in the SBF diagnostic below.
+Both verifier passes and the combined-opening reference remain enabled.
+
+Focused optimized tests pass: 256 two-channel inversion/fold profiles with
+zero denominator/base controls and 64 affine-primal/mixed dense-query
+terminal cases. The retained honest host proof is accepted and its G-final
+mutation rejected. Focused exit 0, 27.72 s, RSS 536248 KiB; positive exit 0,
+9.97 s, RSS 442448 KiB; negative exit 0, 0.00 s reported, RSS 3520 KiB.
+All swaps 0, scope 4G/6G/zero swap, TasksMax=128. Compilation dominates.
+Unchanged FFT/basis suites were not rerun for this opening-only change.
+
+Existing ChordNorm/CircleNorm/JoinedInverse/LineNorm/LineNormBuffer,
+QuotientFold, AffinePrimal and TerminalQuery results are reused within their
+documented scope. No unchanged Lean file was recompiled; no new universal
+caller, source-runtime, full privacy or soundness theorem is claimed.
+
+SBF source/table/frame gates pass: exit 0, 48.93 s, RSS 618744 KiB,
+swaps 0; scope 5G/7G/zero swap, TasksMax=128. Added baseline cfg flags
+require dependency recompilation; the cached workspace is retained.
+ELF SHA256:
+d91cb4510ed69e3431f431e17d0d2d752b6265038ad5fadc9f005c466597ff8c.
+Preparation costs are unchanged. Query-schedule-end through openings-end is
+1736356 CU versus R24's 1986631 CU: 250275 CU saved in that interval.
+The new helper allocations exhaust heap during the tail, before primary
+acceptance. Thus the 24109158 CU honest failure total is NOT a completed
+verifier cost or a better primary checkpoint. Corrupt failure total is
+23507686 CU, also a resource failure. All four supported-budget cases still
+exhaust CU. Heap 256 KiB and diagnostic budget 100M are unchanged.
+
+Driver exit 0, 0.12 s, RSS 27620 KiB, swaps 0; scope 3G/4G/zero swap,
+TasksMax=64. Evidence: r17-baseline-reuse-{host-gate,build,svm-run}-r27.log,
+r17-baseline-reuse-svm-r27.jsonl, r17-baseline-reuse-source-pins-r27.json.
+R28 retains the reused arithmetic and attempts to remove the regression by
+moving/reusing final coefficient buffers rather than allocating each fold.
+
+## R28 owned affine buffers — primary acceptance restored
+
+Base 6a08ffc4 plus this changeset; staged from R27. The existing prepared
+affine arithmetic is unchanged. Each final Vec is moved into an owned fold,
+old four-entry blocks are read before their lower output slots are written,
+and the same Vec is truncated. The retained InPlaceDenseFold storage lemma
+supplies the reusable abstract write-order argument; it is not a new proof
+of Rust Vec execution or the actual caller. No unchanged Lean replay.
+
+All 240 new owned-fold comparisons pass, covering incomplete chunks, zero
+and one challenges and maximal limbs; pointer and capacity are retained.
+The 256 shared inversion/fold and 64 affine/terminal controls also pass.
+Both host verifier paths accept the retained honest proof and reject its
+G-final mutation. Focused exit 0, 27.40 s, RSS 536196 KiB; positive exit 0,
+9.98 s, RSS 440540 KiB; negative exit 0, 0.00 s reported, RSS 3520 KiB.
+All swaps 0, scope 4G/6G/zero swap, TasksMax=128. Compilation dominates.
+
+SBF source/table/frame gates pass: exit 0, 36.32 s, RSS 621356 KiB,
+swaps 0; scope 5G/7G/zero swap, TasksMax=128. ELF SHA256:
+39f139dfb4e5c810b63da74d3ccc209271c58d58ed525e49b669ec7e89cc21ec.
+The primary terminal now accepts at **24208293 CU**, saving **264376 CU**
+against R24's 24472669 (about 1.08%). The opening interval remains 1736356
+CU, versus R24's 1986631. Preparation is unchanged at 19892834 CU.
+
+The full honest program still exhausts heap in the unchanged second
+reference pass, at 24245690 CU. The corrupt case's full execution fails on
+heap at 23507686 CU, not a completed checked rejection. All four 1.2M/1.4M
+budget cases still exhaust CU. Diagnostic budget 100M and heap 256 KiB
+are unchanged; neither a supported-budget success nor deployability follows.
+Driver exit 0, 0.12 s, RSS 27708 KiB, swaps 0; scope 3G/4G/zero swap,
+TasksMax=64. Evidence: r17-owned-primal-{host-gate,build,svm-run}-r28.log,
+r17-owned-primal-svm-r28.jsonl, r17-owned-primal-source-pins-r28.json.
+
+Next priority is the retained compact ordinary-functional evaluator and its
+formal basis/linear-transport composition, as specified in R17_BASELINE_REUSE.md.
+Changing expanded-vector transcript binding to a compact descriptor requires
+an explicitly versioned research profile and fresh source/oracle obligations.
+No production path, G mixing map, verifier check, or negative regression was
+removed. Full privacy, soundness preservation and source correspondence remain
+open, separately from these arithmetic reuse and resource observations.

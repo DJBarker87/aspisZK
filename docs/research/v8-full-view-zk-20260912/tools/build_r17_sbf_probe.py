@@ -58,11 +58,35 @@ def check_after(name, expected):
         change = stage['fixed_fft'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('aligned_fft', {}):
+        change = stage['aligned_fft'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    if name in stage.get('fused_reorder', {}):
+        change = stage['fused_reorder'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    if name in stage.get('baseline_reuse', {}):
+        change = stage['baseline_reuse'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    if name in stage.get('owned_primal', {}):
+        change = stage['owned_primal'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'hybrid_merge_files' in stage:
     assert 'r17_merge_spectra.rs' in stage['hybrid_merge_files']
     for name, expected in stage['hybrid_merge_files'].items():
+        check_after(name, expected)
+if 'aligned_fft_files' in stage:
+    assert 'r17_aligned_spectra.rs' in stage['aligned_fft_files']
+    for name, expected in stage['aligned_fft_files'].items():
         assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+for name, expected in stage.get('baseline_reuse_files', {}).items():
+    check_after(name, expected)
+if 'owned_primal_sha256' in stage:
+    assert hashlib.sha256((callback.parent / 'r17_owned_primal.rs').read_bytes()).hexdigest() == stage['owned_primal_sha256']
 if 'inplace_dense_fold' in stage:
     change = stage['inplace_dense_fold']
     assert change['before_sha256'] == '7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead'
