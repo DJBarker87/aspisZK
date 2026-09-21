@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## First-assignment provenance compiled — 2026-09-21
+
+Ten new Lean theorems reuse the R9 memoized oracle: returned answers persist,
+cached answers originate in the initial table or first assignments, and
+assignment count is bounded by call count. A prequery and repeated read
+are charged once. This is pathwise bookkeeping, not a source probability
+bound. Next: justify the joint determinant/sampler event at first assignments,
+including adaptive transcript selection and all shared-oracle calls.
+See `R17_SAMPLER_SOURCE_BOUNDARY.md` for exact premises and evidence.
+
 ## Source sampler premise audit — 2026-09-21
 
 The current core sampler matches the retained R17 stage byte-for-byte.

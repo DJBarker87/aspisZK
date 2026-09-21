@@ -1,5 +1,75 @@
 # R17 determinant sampler/source boundary
 
+## Compiled first-assignment provenance — 2026-09-21
+
+Base `3d5b2ae5cd9a75a4c781aecbd674016a3046079a` plus this changeset.
+`AspisV8R17/FirstAssignment.lean` imports the retained R9 memoized expansion
+and uses the exact retained `queryStep`, `Table` and cache laws. It does not
+replace them with a fresh-output-per-call model.
+
+The new interpreter records first assignments only when an address was
+absent. Separate returned-answer and final-table projections prove:
+
+* every returned answer persists in the final table;
+* every final cached answer originates in the initial table or in a recorded
+  first assignment;
+* from an empty table, every final answer has a recorded assignment;
+* selecting a bad returned/cached answer implies either an initially cached
+  bad answer or a bad recorded first assignment;
+* the number of recorded assignments is at most the number of calls;
+* a public prequery followed by the same sampler query records exactly one
+  assignment, ignoring the second call's unused fresh-tape value.
+
+All ten theorems compile. They hold pathwise for every realized call list,
+including lists produced adaptively. This does not assert a distribution
+on adaptive lists, nor that their fresh-tape components are independent.
+The initial-table alternative is explicit: prequeries are not discarded.
+An execution starting from an empty table must include external queries,
+commitment/seed-expansion queries and other shared-oracle calls in its
+provenance, not only sampler calls. Paired reservation/installation events
+also need correspondence to their earlier assignments when composing this
+fragment with the full eager/delayed operational machine.
+
+### Precise remaining probability premise
+
+The provenance theorem supports a union-bound route, but does not supply
+per-assignment probabilities. To use such a bound, the bad-answer predicate
+or candidate test must be justified relative to the information available
+before that answer's first assignment, with any later transcript selection
+explicitly accounted for. An arbitrary predicate chosen after seeing the
+answer can mark every observed answer bad; provenance alone cannot make
+that event rare. The actual determinant depends jointly on u,v,alpha and
+on bounded multiword sampler paths, so a static single-answer predicate is
+not yet a source instantiation. Establish the joint sampler/selection law
+at first assignments, preserving the distinct-point loop and visible aborts.
+No numerical source loss, full simulator or privacy/soundness result follows
+from these deterministic lemmas.
+
+### Focused Lean evidence
+
+Commands ran in `/Users/dominic/ZK/AspisFormal` via `/usr/bin/time -l`,
+the retained lake environment/LEAN_PATH wrapper and `lean -j1 -M1800`.
+The three unchanged prerequisites lacked cached objects in this workspace;
+they were emitted with `-R SOURCE_ROOT -o CACHED_TARGET.olean` before the
+new leaf. SOURCE_ROOT is the privacy worktree's
+`docs/research/v8-full-view-zk-20260912/lean`. No full replay occurred.
+
+| Exact target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| AspisV8PairedCommitment/Table.lean object | 0 | 5.68 | 868925440 | 0 |
+| AspisV8PairedCommitment/ShadowTable.lean object | 0 | 1.20 | 867729408 | 0 |
+| AspisV8R9/MemoizedExpansion.lean object | 0 | 1.18 | 858275840 | 0 |
+| AspisV8R17/FirstAssignment.lean initial | 1 | 1.31 | 863141888 | 0 |
+| FirstAssignment.lean corrected six-theorem fragment | 0 | 2.67 | 861880320 | 0 |
+| FirstAssignment.lean final returned-answer bridge | 0 | 2.89 | 864550912 | 0 |
+
+The first attempt needed the already-rewritten none=none proof and an
+explicit Nat.le_refl; its sorryAx audits are rejected. Final audits use
+propext only, except the length theorem also uses Quot.sound. Prerequisite
+audits use propext or no axioms. Exact output is in the command-tool record.
+Only an unnecessary-simpa warning remains in the new leaf. No Rust/source
+sampler change or unchanged runtime suite was run.
+
 Date: 2026-09-21. Base `48a2cd311687e1d1c836ecb7b876f3a351fc00a8`
 plus this changeset. This is an operational premise audit, not a new attack
 on SHA-256, a source probability theorem, or a privacy/soundness verdict.
