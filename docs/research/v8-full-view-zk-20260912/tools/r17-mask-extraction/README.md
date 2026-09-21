@@ -24,3 +24,20 @@ previous arithmetic projection must be checked, not inferred from names.
 Pinned evidence, command results and the remaining obligations are recorded in
 ../../R16_SOUNDNESS_OBLIGATIONS.md. Raw extraction artifacts remain in the
 task-owned Linux workspace identified there, outside accepted Lean targets.
+
+Follow-up focused checks:
+
+- `check_types.sh RAW_TYPES FRESH_TASK` compiles actual generated declarations
+  with the sole import narrowed to cached Scalar.Core. Use the same bounded
+  scope; this new runtime-import target has a preselected Lean -M3200 limit.
+  `AuditTypes.lean` separately audits the four emitted types in that workspace.
+- `check_closure.sh TASK RAW_FUNS` expects check_closure.py and
+  AspisV8R17/MaskClosureWriteback.lean in TASK. It checks the whole Funs pin,
+  exact schematic closure body and two mutation controls, then compiles at
+  -M1800. This proves the specific closure's borrow-closing algebra, NOT the
+  full generated closure trait instance or caller.
+
+The generated FnMut/FnOnce and map/collect return shapes differ from cached
+runtime interfaces. Applying the actual returned write-back is essential;
+do not erase it merely to obtain a type-correct adapter. The full caller and
+mutable zip compatibility remain open after these focused successes.

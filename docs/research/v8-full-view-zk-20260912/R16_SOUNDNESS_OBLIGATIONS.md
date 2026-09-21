@@ -1,5 +1,78 @@
 # R16 soundness preservation obligations
 
+## Actual generated types and closure write-back boundary — 2026-09-21
+
+Base revision `b6e87f86` plus this changeset. GitHub's privacy branch was
+read-only verified at that exact commit before continuing. The preceding
+soundness-answer turn was informational, not repair progress.
+
+Inspection of the pinned raw Funs reveals MORE than the two external holes:
+generated FnMut.call_mut returns `value × closure × (closure → closure)`,
+but cached Core/Ops.lean expects `value × closure`. Generated FnOnce.call_once
+returns `value × closure`, whereas the cached trait expects just value.
+The mixing_row caller destructures pairs from map and collect, but their
+external-template/runtime signatures respectively return just Map and Vec.
+The mutable zip loop also carries a write-back, requiring its own inspection.
+Consequently, supplying two ordinary map definitions alone would not make the
+actual caller type-correct or establish borrow semantics. No silent erasure
+or replacement of the generated caller was performed.
+
+New `MaskClosureWriteback.lean` checks the exact generated call_mut BODY,
+abstracting only `field.QM31.mul` into a result-valued multiplication argument.
+The unused Usize argument and concrete type are schematic here; this is NOT
+yet a typed invocation of the generated closure. `check_closure.py` pins the
+whole raw Funs file and rejects changed multiplication order or captured-node
+write-back. The compiled theorem proves that applying the returned backward
+function to its updated closure gives `(oldPower, (newPower, fixedNode))`,
+with multiplication failure/divergence preserved. A compiled negative
+regression shows an arbitrary write-back cannot simply be discarded.
+This supplies the specific borrow-closing algebra needed by a future adapter,
+not a generic permission to drop back functions and not a compiler theorem.
+
+Actual generated Types.lean compiled after ONLY narrowing `import Aeneas`
+to `import Aeneas.Std.Scalar.Core`; all declarations remain byte-identical.
+The reproducible `check_types.sh` validates the raw pin and stages this one
+mechanical import change in a fresh task directory. No template axiom was
+imported. `AuditTypes.lean` reports no axioms for M31, CM31, QM31 and the
+mixing-row closure type. No actual-source Funs compilation is claimed.
+
+Cached Linux Lean 4.32.0, one job; scopes all MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64. No other task scopes were running at preflight.
+Closure leaf uses -M1800; new concrete-runtime Types/audit targets use the
+preselected -M3200 budget. No memory failure or raised-cap retry occurred.
+
+| Exact target / scope suffix | Exit | Wall s | Peak RSS KiB | Swaps | Axioms |
+| --- | ---: | ---: | ---: | ---: | --- |
+| AspisV8R17/MaskClosureWriteback.lean / aspis-r17-closure-r1 | 1 | 0.60 | 1560828 | 0 | failed negative-test `decide`; sorryAx output NOT accepted |
+| AspisV8R17/MaskClosureWriteback.lean / aspis-r17-closure-r2 | 0 | 0.61 | 1571372 | 0 | all three theorems: propext only |
+| AspisR17MaskSource/Types.lean / aspis-r17-mask-types-r1 | 0 | 0.86 | 2114700 | 0 | audited next |
+| AuditTypes.lean / aspis-r17-mask-types-audit-r1 | 0 | 0.80 | 2093036 | 0 | four types: none |
+
+The failed negative-test proof lacked a Decidable instance on Result;
+replacement uses structural simplification, not an added assumption.
+Host artifacts remain in `aspis-r17-mask-extract.aRLUCU/closure-r1` and
+`types-r1`. SHA256s:
+
+- final MaskClosureWriteback.lean: 953ea55acef72a5f414d54f3ac23ca1f194df891fea962bbfbda3de26d40ed65;
+- staged Types.lean: 2809688293649c159ae2a8e976b1c1efd61a5ec865770609e04d926bc971c548;
+- cached Core/Ops.lean inspected: f5d4a2e02ad41205d05a707ef345297194928a9340bc6e8cf03c349065c855d2;
+- cached Core/Iter.lean inspected: 37e6d1901461e1df84f87a753ca3452eec4885e0779a12046630f5e26ea86985;
+- pinned nightly Rust iter/adapters/map.rs inspected: f1e47647ac44777030c282423e3aefb810629dfedca161cef56cff8ef74a03ad;
+- pinned nightly Rust iter/traits/iterator.rs inspected: db43b7acc33fca53d85fef3ddea29ec9f8c1e768df428676fe2de160f21d5f6b.
+
+Rust Map::new stores iterator/closure; Map::next calls next on the underlying
+iterator and applies the mutable closure only to Some. This source inspection
+is guidance for the external model, not proof that cached Vec collection or
+specialized iterator dispatch refines all Rust execution.
+
+First remaining proposition: instantiate a borrow-aware adapter for the
+ACTUAL generated mixing_row closure (including FnOnce/map/collect shapes),
+then justify the mutable zip write-back and compile the full caller without
+external axioms. Bind the new field namespace to proved arithmetic, and prove
+the real loop invariants afterward. Global privacy, adversarial soundness,
+shared oracle, retries and publication remain open; production and all
+existing negative regressions are unchanged.
+
 ## Actual R17 mask caller extracted; iterator model boundary — 2026-09-21
 
 Base revision `b6f3b236` plus this changeset. Read-only search confirmed the
