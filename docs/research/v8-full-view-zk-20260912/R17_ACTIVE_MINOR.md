@@ -1,5 +1,37 @@
 # Fixed active-minor nonvanishing witness
 
+## Compiled entry normal form
+
+On base `6d72748f` plus this changeset, `ActiveEntry.lean` defines the
+normalized chord as multivariate polynomials in alpha,u,v and the entry
+normal form `sum_j chord_j * (a_j - alpha^k*b_j)`, for six arbitrary
+field constants a_j,b_j. It proves chord degree <=2 and entry total degree
+<=5 whenever k<=3. This is the intended form because the quotient column
+is one channel unit minus alpha^k times its A-channel unit, while chord
+multiplication and inverse transport are linear in those coefficients.
+The six constants must still be instantiated with the fixed source
+basis maps, with a compiled correspondence theorem; that is the next
+source-specific obligation. Per-variable entry bounds also remain to be
+formalized. No source probability law is inferred from this algebra.
+
+Focused command from the cached `/Users/dominic/ZK/AspisFormal` workspace:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/ActiveEntry.lean`.
+The development attempts, all zero swaps, were:
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes |
+| --- | ---: | ---: | ---: |
+| Unavailable Omega import | 1 | 1.25 | 669499392 |
+| Vector notation/noncomputability errors | 1 | 4.70 | 1670529024 |
+| Concrete finite-case elaboration timeout and missing section end | 1 | 7.85 | 1670365184 |
+| Symbolic conditional branches, explicit polynomial types | 0 | 1.76 | 1664729088 |
+
+The failed finite-case elaboration was replaced rather than given a larger
+heartbeat or memory cap. Both final axioms audits are exactly
+`[propext, Classical.choice, Quot.sound]`; failed audits containing
+sorryAx are not accepted evidence. One non-failing simp-style warning
+remains. Output is in the command-tool record. No Rust or production
+changes, full regression or manifest replay occurred in this step.
+
 ## Compiled generic determinant-degree gate
 
 On base `d2e459cd` plus this changeset, `lean/AspisV8R17/MinorDegree.lean`
