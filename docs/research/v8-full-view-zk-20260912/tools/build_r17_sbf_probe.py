@@ -37,6 +37,11 @@ for item in host['r17_edits'] + host['r17_shared']:
     path = root / item['path']
     if path == callback:
         continue
+    if path.name in stage.get('cu_profile', {}):
+        change = stage['cu_profile'][path.name]
+        assert change['before_sha256'] == item.get('after_sha256', item.get('sha256'))
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == change['after_sha256']
+        continue
     if path.name in stage.get('workspace_adapter', {}):
         assert stage['workspace_adapter'][path.name]['before_sha256'] == item.get('after_sha256', item.get('sha256'))
         continue

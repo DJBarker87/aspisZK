@@ -136,3 +136,48 @@ functional constraints if replacing it with a faster evaluation method.
 Then address heap/CU limits without dropping checks and measure the integrated
 complete transaction. No deployment, external transaction or wallet operation
 occurred; no global privacy or soundness obligation was declared closed.
+
+## R8 stage attribution, same budgets
+
+Base 769dce0b plus this changeset. stage_r17_cu_profile.py creates a fresh
+copy of the candidate and inserts fixed public stage labels and remaining-CU
+syscalls. No witness values are logged. Verifier checks, transcript absorption,
+mask construction, and double verification remain unchanged. The build runner
+checks both pre-instrumentation hashes and resulting source hashes. These
+instrumented deltas include marker overhead and are not quiet-build CU totals.
+
+On the honest fixture at the same 100M diagnostic limit:
+
+| Interval | Remaining before | Remaining after | Instrumented delta |
+| --- | ---: | ---: | ---: |
+| Semantic verification | 99,948,085 | 99,215,212 | 732,873 |
+| First-channel original weights | 99,098,363 | 78,738,778 | 20,359,585 |
+| First-channel basis dual | 78,738,778 | 78,658,744 | 80,034 |
+| First-channel chord transpose | 78,658,744 | 76,383,448 | 2,275,296 |
+| Structured-channel original weights | 76,383,234 | exhaustion | incomplete |
+
+At 1.2M and 1.4M, execution exhausts inside first-channel original_weights.
+At 100M it reaches the second original_weights call and exhausts there before
+the original-end marker. Thus there is no complete verification at any tested
+budget. Corruption controls likewise exhaust; they are not checked rejections.
+The second interval includes the whole structured original-weight construction,
+not an isolated mask-only measurement. Do not attribute its entire cost to G
+without finer evidence. The two channels' dense construction is now a measured
+bottleneck, rather than an inference from code size.
+
+Source inspection: WeightAccumulator::weight_at multiplies all ten multilinear
+factors independently per coordinate. original_weights calls it 1,024 times
+for three point components (two for the structured channel), repeating prefix
+products. The next exact-preserving candidate is a shared-prefix tensor
+expansion, checked against this retained source. The 271-by-1024 G map needs
+separate optimization; dropping or replacing its constraints is not permitted.
+
+SBF build: scope aspis-r17-sbf-profile-r8, 5G/7G/zero-swap, TasksMax=128,
+exit 0, 34.42 s, peak process RSS 622,116 KiB, swaps 0; source equality and
+frame checks pass. Runtime: scope aspis-r17-svm-profile-r8, 3G/4G/zero-swap,
+TasksMax=64, driver exit 0, 0.19 s, RSS 26,280 KiB, swaps 0. Driver exit 0
+again means observations recorded, NOT candidate acceptance. Exact logs are
+evidence/r17-candidate-sbf-profile-r8.log and
+evidence/r17-candidate-svm-profile-r8.{jsonl,log}. Proof/driver unchanged from
+R7. No larger budget or unchanged quiet replay was run. No formal-security
+gate closes from this profile; the goal remains incomplete.
