@@ -1,5 +1,50 @@
 # R16 soundness preservation obligations
 
+## Checked reducer primitive operations — 2026-09-21
+
+Base `e40ee66066056ef9564df536f31f2ce955e64fa6` plus this changeset.
+Exact target `AspisV8R17/UnsignedReducerOps.lean`, SHA-256
+`ebe2dfa469ce28c4918e6a5ce6f8d8664d6fc6a107a51bb31c14cc41f48cdcde`,
+compiled on the first attempt. Scope `aspis-r17-reducer-ops-r1` in the retained
+host workspace; Lean 4.32.0 `-j1 -M1800`, MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64. Exit 0, wall 0.70 seconds, peak RSS 1626228 KiB,
+swaps 0, no warnings. No unchanged formal target was replayed.
+
+Seven statements were proved:
+
+- `cast_value`: unsigned casting is reduction modulo the destination width.
+- `narrow_exact`: U64-to-U32 casting is exact when the value fits in 32 bits.
+- `and_value`: machine-word AND has the corresponding Nat bitwise value.
+- `shift_success`: a checked right shift succeeds below the source width and
+  returns the exact shifted Nat value.
+- `sub_success`: checked subtraction succeeds when the second operand is no
+  larger, and returns the exact Nat difference.
+- `shift_overflow` and `sub_underflow`: the complementary invalid cases return
+  integerOverflow rather than silently yielding a word.
+
+`#print axioms`: and_value uses `[propext, Quot.sound]`; all other six use
+`[propext]`. No sorryAx or new assumptions. The retained Step.Init import
+supports the original cast attribute without importing full Scalar.Core.
+
+The five SOURCE blocks (cast including its attribute, shift, scalar-count
+shift adapter, AND, subtraction) match the pinned runtime source bytes.
+The updated checker authenticated all seven complete runtime source files,
+matched all five blocks and rejected three in-memory mutations (shift boundary,
+subtraction operator and source tag), exit 0. New complete source pins:
+
+- Bitwise.lean: `63e4b1d0906c972fb4fef953d8d8a60410dcf5313261d2583b1170b4a1a5ce29`.
+- Casts.lean: `fd709a15b1e66431b788bf2838b79ac662d4c2afd38acbcde078b775c8f1e668`.
+- Ops/Sub.lean: `bd6716dad017ce0c0e9cf9084f9223eb5407ece920853ae7675cbe2362dd5e37`.
+
+Boundary remains explicit: these are the real scalar operation definitions,
+not yet the full generated reducer. First remaining proposition is successful
+composition of both checked folds, exact narrowing and the final conditional
+subtraction, with output equal to retained RawReducer.rawReduceU64. The earlier
+first/second-fold bounds and residue theorem were inspected for reuse, not
+replayed or replaced. Full CM31 reconstruction and the complete repaired
+protocol privacy/soundness obligations remain open. No production paths or
+negative regressions were changed.
+
 ## Checked current CM31 cross fragment — 2026-09-21
 
 Base `6c8d69cea99dc0c2ead0e48ecde4e8bd786407b0` plus this changeset.
