@@ -13,6 +13,10 @@ stage = json.loads((root / 'r17-sbf-probe.json').read_text())
 callback = root / 'docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs'
 assert hashlib.sha256(callback.read_bytes()).hexdigest() == stage['callback_after_sha256']
 host = json.loads((root / 'r17-stage.json').read_text())
+if 'workspace_adapter' in stage:
+    for name, hashes in stage['workspace_adapter'].items():
+        assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == hashes['after_sha256']
+    assert hashlib.sha256((callback.parent / 'r17_mask_workspace.rs').read_bytes()).hexdigest() == stage['workspace_sha256']
 if 'basis_specialization' in stage:
     basis = callback.parent / 'r16_basis_transport.rs'
     table = callback.parent / 'r17_basis_tables.rs'
@@ -32,6 +36,9 @@ if 'basis_specialization' in stage:
 for item in host['r17_edits'] + host['r17_shared']:
     path = root / item['path']
     if path == callback:
+        continue
+    if path.name in stage.get('workspace_adapter', {}):
+        assert stage['workspace_adapter'][path.name]['before_sha256'] == item.get('after_sha256', item.get('sha256'))
         continue
     assert hashlib.sha256(path.read_bytes()).hexdigest() == item.get('after_sha256', item.get('sha256')), path
 env = dict(os.environ)
