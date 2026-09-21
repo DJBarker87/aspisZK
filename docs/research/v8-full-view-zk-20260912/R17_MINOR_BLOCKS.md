@@ -1,5 +1,66 @@
 # R17 small-block certificate route
 
+## All diagonal block entries now source-model bound
+
+Base `fa8edbb9` plus this changeset. `sourceChord_difference` composes
+the two unit inputs without unfolding the complete edge list.
+`SourceBlockPreflight.lean` first checks the concrete initial entry:
+original row 11/coefficient 100, selected column 6 (degree 24, channel B),
+at alpha=2,u=3,v=4, equals 1073741827 in ZMod 2147483647.
+
+`tools/r17_source_block_entries.py` then reads the frozen block layout,
+source projection and selected columns, hashes all three, and generates
+392 source-model entry equality theorems in 13 files
+`SourceBlockEntries00.lean` through `SourceBlockEntries12.lean`. Each
+entry applies the named difference and sparse parity lemmas before a
+small arithmetic decision check; no proof unfolds all 512 source columns.
+The generator performs formatting/index arithmetic, not elimination or
+field-value search. Its --check validates exact regeneration of all files.
+
+All 392 equalities compile. They bind every diagonal block value to the
+assembled weighted finite source model at the fixed algebraic witness.
+The first remaining formal certificate proposition is the off-diagonal
+zero pattern in the frozen block order, with the row/column permutation
+and reuse of the 29 determinant leaves to complete composition. These
+equalities do not prove that pattern, or replace Rust field/word semantic
+refinement, sampler probability, high-tail acceptance or full security.
+
+## Focused source-entry evidence
+
+All Lean commands ran from the cached `/Users/dominic/ZK/AspisFormal`
+workspace with `/usr/bin/time -l lake env python3` setting LEAN_PATH to
+worktree target/r17-lean and target/r16-lean plus its prior value, then
+execing `lean -j1 -M1800 SOURCE_ROOT/AspisV8R17/TARGET.lean`.
+SOURCE_ROOT is the privacy worktree's docs/research/v8-full-view-zk-20260912/lean.
+The changed WeightedScatter prerequisite also used `-R SOURCE_ROOT -o`
+to refresh its cached object before dependent checks. No full manifest
+or unchanged Rust regression ran. Every row below exited 0 with zero swaps.
+
+| Target | Wall seconds | Peak RSS bytes |
+| --- | ---: | ---: |
+| WeightedScatter changed lemma/object | 6.03 | 1416036352 |
+| SourceBlockPreflight | 2.59 | 1573699584 |
+| SourceBlockEntries00 | 4.90 | 1582235648 |
+| SourceBlockEntries01 | 2.85 | 1583153152 |
+| SourceBlockEntries02 | 2.21 | 1583857664 |
+| SourceBlockEntries03 | 2.19 | 1583136768 |
+| SourceBlockEntries04 | 2.18 | 1582678016 |
+| SourceBlockEntries05 | 2.13 | 1585004544 |
+| SourceBlockEntries06 | 2.22 | 1582399488 |
+| SourceBlockEntries07 | 2.12 | 1583742976 |
+| SourceBlockEntries08 | 2.20 | 1583955968 |
+| SourceBlockEntries09 | 2.21 | 1585020928 |
+| SourceBlockEntries10 | 2.42 | 1584447488 |
+| SourceBlockEntries11 | 2.10 | 1583366144 |
+| SourceBlockEntries12 | 1.70 | 1576501248 |
+
+All new final axioms audits are exactly propext, Classical.choice,
+Quot.sound. Chunks 01..12 have logs under
+`/tmp/aspis-r15-host.drHYn9/r17-SourceBlockEntriesNN.log`; the first
+three rows and chunk00 outputs are in the command-tool record.
+The 360 logged audits plus the 32 chunk00 audits cover all 392 entries.
+The unchanged WeightedScatter simp-style warning remains non-failing.
+
 ## Sparse chord-unit formulas
 
 Base `44f1ced5` plus this changeset. `WeightedScatter.lean` now proves

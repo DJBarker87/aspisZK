@@ -1,5 +1,13 @@
 # Current V8 privacy-repair status
 
+## Latest source-block binding — 2026-09-21
+
+All 392 diagonal-block entries now have compiled equalities to the
+assembled weighted finite source model, generated from the frozen indices
+in 13 bounded chunks. Regeneration and all axioms audits pass. Next is
+the off-diagonal zero pattern, permutation and determinant composition.
+This is not a full privacy/soundness theorem; see `R17_MINOR_BLOCKS.md`.
+
 ## Latest certificate preflight — small blocks, 2026-09-21
 
 The fixed minor's challenge-independent support decomposes into 60 1x1,

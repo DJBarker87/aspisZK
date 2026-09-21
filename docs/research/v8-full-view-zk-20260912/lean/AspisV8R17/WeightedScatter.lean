@@ -216,6 +216,21 @@ theorem sourceChord_unit_odd (half : F) (j r : ℕ) (hj : j<512) (a b c : F) :
   have heven : 2*(r/2) ≠ 2*j+1 := by omega
   simp [unitVector,heven]
 
+theorem sourceChord_difference (half : F) (q s : ℕ → F) (a b c t : F) (r : ℕ) :
+    sourceChord half (fun i => q i-t*s i) a b c r =
+      sourceChord half q a b c r-t*sourceChord half s a b c r := by
+  unfold sourceChord
+  simp only [finiteChordCoefficient_eq 512 _ _
+    (fun e he => (sourceEdges_bounds half 512 schedule512_bounded e he).2)
+    (fun e he => (sourceEdges_bounds half 513 schedule513_bounded e he).2)]
+  have hz := zeroExtend_linear 1024 q s 1 (-t)
+  simp only [one_mul,neg_mul,← sub_eq_add_neg] at hz
+  rw [hz]
+  have hc := chordCoefficient_linear (sourceEdges half 512) (sourceEdges half 513)
+    (zeroExtend 1024 q) (zeroExtend 1024 s) a b c 1 (-t) r
+  simpa only [one_mul,neg_mul,← sub_eq_add_neg] using hc
+
+#print axioms sourceChord_difference
 #print axioms sourceChord_unit_odd
 #print axioms sourceChord_unit_even
 #print axioms sourceScatter_twice_unit
