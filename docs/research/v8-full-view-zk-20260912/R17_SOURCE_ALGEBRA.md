@@ -1,5 +1,57 @@
 # R17 source-shaped algebra bridge
 
+## Legal balanced coordinates through full mixing — 2026-09-21
+
+Base `110e18ca12fc6e5b08696c17cf8dcb28ef5a314a` plus this changeset.
+LegalMaskCoordinates.lean reuses the R16 balance operation and constructs an
+explicit equivalence from all non-pivot coordinates to vectors with inactive
+sum zero. Active coordinates are preserved; they are not summed into that
+constraint. The dependent coordinate is reconstructed, and every already-legal
+vector is a fixed point of balancing. Theorems also show that an overwritten
+pivot value has no effect on the final balanced vector.
+
+LegalSourceMixing.lean carries this legal space through the COMPLETE retained
+mixing1024 equivalence. Its transformed constraint is the inactive sum of the
+inverse-mixed vector, not zero in an arbitrarily selected mixed coordinate.
+It composes free-coordinate parametrization with legal mixing and identifies
+each resulting coordinate with the source-shaped Horner loop. Forward and
+inverse mixing are additive; so is the transformed balance constraint.
+For an already-legal mixed vector, adding delta preserves legality iff delta
+has zero transformed balance constraint. All 1024 mixed coordinates remain
+present; no uniform independent 271-coordinate prefix law is asserted.
+
+Re-inspected state_only_hiding.rs first_inactive_row and
+balance_qm31_copy_inactive: the G/main-mask builder selects its first inactive
+row, whereas the separate R16 transport uses its own fixed pivot. Do not
+silently replace the builder's dependent coordinate with the transport pivot.
+The lemmas parameterize the inactive set and pivot with explicit membership;
+concrete source inventory/refinement is still required for instantiation.
+
+The overwritten-draw theorem concerns the VALUE after successful sampling.
+The source still draws that coordinate: its retries, consumed words, hash
+queries and possible exhaustion cannot be removed from a distribution or
+failure proof. Similarly, an exact free-coordinate equivalence does not by
+itself make seed-expanded source masks uniform on that space.
+
+This supplies a legal-space adapter for the joint posterior route, not joint
+C1/H1/G coverage. The next central proposition remains solving every required
+affine witness-offset target inside the legal space while retaining all
+raw/point/OOD/final/semantic/relation observations. The source field model,
+adaptive-prefix and full commitment/oracle/seed/failure/publication/soundness
+obligations remain open; no additional hiding assumption was added.
+
+Focused cached lake commands use -j1 -M1800, -R research/lean and matching
+r17 objects, smallest generic leaf before dependent bridge:
+
+| Target | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| LegalMaskCoordinates.lean, five audited declarations | 0 | 8.24 | 1329790976 | 0 |
+| LegalSourceMixing.lean, seven audited declarations | 0 | 8.41 | 1781940224 | 0 |
+
+All twelve #print axioms results use only propext, Classical.choice,
+Quot.sound. Both leaves compile without warnings. No production/source
+sampler change, runtime replay or full manifest replay occurred.
+
 ## Horner mixing bridge and duplicate-declaration repair — 2026-09-21
 
 Base `14f6ce72ccfafc17491aab3eb3a99a1af76d97ec` plus this changeset.
