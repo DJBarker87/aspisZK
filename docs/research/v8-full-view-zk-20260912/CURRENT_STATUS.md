@@ -9,8 +9,10 @@ the off-diagonal zero pattern, permutation and determinant composition.
 All 22,702 below-block-diagonal pairs now have compiled index-exclusion
 and arbitrary-challenge source-model zero certificates, in 27 bounded
 chunks (214 exclusion and 214 zero theorems). Regeneration and all audits
-pass. The next gate is the formal row/column permutation, list-to-matrix
-correspondence and determinant composition, not another support search.
+pass. Both 214-element row/column permutations now have compiled inverse
+laws, and the recursive source-entry block determinant gate compiles.
+The next gate is the concrete list-to-matrix correspondence and recursive
+determinant composition, not another support search.
 This is not a full privacy/soundness theorem; see `R17_MINOR_BLOCKS.md`.
 
 ## Latest certificate preflight — small blocks, 2026-09-21

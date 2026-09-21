@@ -1,5 +1,46 @@
 # R17 small-block certificate route
 
+## Checked permutations and recursive source gate — 2026-09-21
+
+Base `15a8538319b4a1037b32b84ce1a801803445f16e` plus this changeset.
+`tools/r17_block_ordering.py` reads the same frozen block artifact and
+stable descending order as the support generator. `BlockOrdering.lean`
+defines the 214-element row and column orders and their inverse lists.
+Four kernel-checked propositions prove both compositions are identity
+on every Fin 214, yielding actual `Equiv.Perm` values `rowPerm` and
+`columnPerm`. The use of modulo in the generic list lookup does not
+substitute for bijectivity: both inverse laws are checked. The generator
+also checks each emitted list is exactly a permutation of 0 through 213.
+
+`BlockComposition.lean` now supplies independent row/column reindexing
+preservation of determinant nonvanishing, and `split_source_det_ne_zero`.
+The latter consumes two explicit diagonal identifications, a lower-left
+entrywise zero proof, and the two diagonal determinant proofs. It works
+for an arbitrary-sized tail using the symbolic block determinant identity;
+no large determinant or recurrence is reduced.
+
+Focused checks used `/usr/bin/time -l lake env python3` from the cached
+`/Users/dominic/ZK/AspisFormal`, retained worktree LEAN_PATH, and
+`lean -j1 -M1800 SOURCE_ROOT/AspisV8R17/TARGET.lean`, with SOURCE_ROOT
+the privacy worktree's `docs/research/v8-full-view-zk-20260912/lean`.
+
+| Exact target | Exit | Wall seconds | Peak RSS bytes | Swaps | Axioms |
+| --- | ---: | ---: | ---: | ---: | --- |
+| BlockComposition.lean | 0 | 9.97 | 1743781888 | 0 | propext, Classical.choice, Quot.sound |
+| BlockOrdering.lean | 0 | 14.07 | 1786019840 | 0 | propext only for all four inverse proofs |
+
+The generator `--check` and `git diff --check` pass. Harmless unused
+IsDomain section-variable warnings remain in the generic composition file.
+No failed target, full manifest replay, or unchanged Rust suite was run.
+Exact output is retained in the command-tool record.
+
+The next proposition is still concrete matrix assembly: bind the ordered
+matrix's diagonal slices to the 392 source-entry equalities, and its
+lower-left slices to the checked per-column later-row lists, then recurse
+over the 133 blocks. The compiled permutations and conditional split gate
+do not themselves prove the source minor nonzero. Rust semantic refinement,
+adaptive probability and full privacy/soundness remain open.
+
 ## Concrete arbitrary-challenge zero certificates — 2026-09-21
 
 Base revision `8aa98d1eb065ee1a7bd8602aa051af3510dcf28d` plus this
