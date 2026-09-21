@@ -1,5 +1,40 @@
 # R16 soundness preservation obligations
 
+## Actual quadratic-tower ring identities — 2026-09-21
+
+Base revision `ca11059d` plus this changeset. QuadraticTowerOperations.lean
+uses the actual Mathlib QuadraticAlgebra type/operations with first relation
+i²=-1 and second relation u²=2+i. It replays the retained Karatsuba,
+extension-constant and square proof route over an arbitrary commutative base
+ring. cmul_eq/cr_eq/qmul_eq/qsquare_eq identify the explicit formulas with
+the actual tower multiplication, not with componentwise pair multiplication.
+This needs no nonresidue/field axiom: these are ring identities. The concrete
+ZMod instantiation and composition with QM31WordResidues are still next.
+
+Exact target `AspisV8R17/QuadraticTowerOperations.lean`, final SHA256
+`48fe57215f6f386dd5101d4006f8d31969efebe5a6505eeda19c03b0589d8192`.
+Cached Linux Lean 4.32.0 `-j1 -M1800`; scopes `aspis-r17-tower-ops-rN`,
+all MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64:
+
+| Attempt | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| r1, Defs plus broad Ring import, import-memory failure | 134 / signal 6 | 1.72 | 2000808 | 0 |
+| r2, Ring.Basic instead, import-memory failure | 134 / signal 6 | 1.74 | 2001008 | 0 |
+| r3, module/public interface with private tactic import, two reassociation goals | 1 | 1.00 | 1192476 | 0 |
+| r4, solved reassociation, two tactic-style warnings | 0 | 1.05 | 1203336 | 0 |
+| r5, removed unnecessary sequence-focus syntax | 0 | 1.11 | 1204484 | 0 |
+
+The memory remedy is module-scoped imports, NOT a cap increase or unchanged
+higher-cap rerun. Signal-6 time footers are not success. Failed-elaboration
+sorryAx output is excluded. Final #print axioms: cmul_eq and cr_eq use
+`[propext]`; qmul_eq and qsquare_eq use `[propext, Quot.sound]`; no sorryAx.
+
+First remaining proposition: the concrete shared-word decoder into this
+tower commutes with all verified source operations. Then source caller
+constants, canonical input invariants, actual arrays/loops, field/nonresidue
+integration, full-transcript privacy and protocol soundness remain to close.
+No production path, negative regression or security assumption changed.
+
 ## Product and square residue interpretation — 2026-09-21
 
 Base revision `a6a24282` plus this changeset. QM31WordResidues now proves

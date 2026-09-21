@@ -47,6 +47,7 @@ case "$target" in
   AspisV8R17/GeneratedQM31Products) ;;
   AspisV8R17/GeneratedQM31Linear) ;;
   AspisV8R17/QM31WordFormulas|AspisV8R17/QM31WordResidues) ;;
+  AspisV8R17/QuadraticTowerOperations) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
