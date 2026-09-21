@@ -1,5 +1,42 @@
 # R17 determinant sampler/source boundary
 
+## Exact ideal bounded-rejection law — 2026-09-21
+
+Base `82bc407b1cedf4cfb0346e83ba57c670fe820c4d` plus this changeset.
+`AspisV8R17/BoundedRejection.lean` now compiles eight audited theorems.
+For a finite alphabet D and n independent uniform tape entries, the sampler
+returns the first accepted entry, or an explicit none on exhaustion. An
+acceptance-preserving permutation transports output fibers bijectively;
+swapping two accepted symbols proves equal output counts and probabilities.
+The failure fiber is equivalent to n-tuples of rejected symbols, so its
+probability is exactly `(#rejected)^n / (#D)^n`. Zero attempts are included.
+This proves a finite ideal law, not independence of actual oracle answers,
+nor a full QM31/circle sampler, adaptive-selection, or publication theorem.
+
+Focused command: retained lake environment in `/Users/dominic/ZK/AspisFormal`,
+`/usr/bin/time -l`, retained r17/r16 LEAN_PATH, `lean -j1 -M1800 -R SOURCE_ROOT
+-o target/r17-lean/AspisV8R17/BoundedRejection.olean
+SOURCE_ROOT/AspisV8R17/BoundedRejection.lean` (output path absolute in invocation).
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| FiniteGames prerequisite object (missing cache) | 0 | 8.31 | 1297367040 | 0 |
+| BoundedRejection initial | 1 | 1.94 | 1330102272 | 0 |
+| BoundedRejection map fix / cardinal instance mismatch | 1 | 8.34 | 1330413568 | 0 |
+| BoundedRejection six counting theorems | 0 | 4.64 | 1475051520 | 0 |
+| BoundedRejection final eight theorems | 0 | 4.11 | 1476018176 | 0 |
+
+The fixes use explicit list-map transport and instance-independent Nat.card
+equalities, not stronger premises. Failed-attempt sorryAx audits are rejected.
+Final eight `#print axioms` results contain only propext, Quot.sound, and
+(for counting/probability) Classical.choice. No production changes or
+unchanged full-suite replays occurred.
+
+Next source-specific obligation remains the joint law of the actual bounded
+multiword sampler under shared-oracle first assignments and adaptive transcript
+selection, including public prequeries, distinct-point retries, intervening
+absorbs, and visible aborts. The ideal law does not discharge that premise.
+
 ## Compiled first-assignment provenance — 2026-09-21
 
 Base `3d5b2ae5cd9a75a4c781aecbd674016a3046079a` plus this changeset.
