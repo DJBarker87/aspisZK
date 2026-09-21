@@ -45,7 +45,7 @@ claimed Rust/LLVM/SBF or privacy theorem.
 | affine_primal.rs; AffinePrimal raw injection/cast/range results | R27 enables the existing v8_affine_primal route for both final vectors. Source copied unchanged, not reimplemented. |
 | R17 InPlaceDenseFold storage lemma | R28 reuses its abstract write-order argument for owned final buffers and retains the existing prepared affine arithmetic. Actual Vec/source correspondence remains separate; 240 finite comparisons and allocation-retention checks pass. |
 | WeightAccumulator::weight_prefix and qm31_sum_products4; TerminalQuery prefix_shared, halved_vector_indexed, partial_raw_result, four_product_range | R27 uses the existing four-entry path and dot helper on each mixed dense/query accumulator. The helper's documented fallback remains; this does not yet separate ordinary/query components. |
-| structured_weights::block_terminal_impl/grouped_terminal and sparse_grouped.rs; FusedRows.fuse_through_linear_transport, BlockHorner, ArithmeticRewrites | High-priority compact restoration, not yet connected. Existing algebra can be composed with the repair's fixed linear basis transport; the old unpermuted kernel cannot simply be called on different coordinates. |
+| structured_weights::block_terminal_impl/grouped_terminal and sparse_grouped.rs; FusedRows.fuse_through_linear_transport, BlockHorner, ArithmeticRewrites | R29–R35 connect the ordinary compact terminal through the repaired basis, including sparse corrections and caller-owned storage. Existing generic algebra is reused; Rust/source correspondence remains separate. Retaining dense preparation makes the combined route slower than R28. |
 | R16 TransportDual.inverseTransport_dot and transportDual_forward_dot; R17 SourceOriginalWeights.original_weights_transported_pairing | Reuse as the basis/chord bridge. Do not reprove generic inverse-dual pairing. The new compact evaluator must implement this SAME functional. |
 | shared_gamma.rs; SharedGammaDots | Present but R17 prepare still uses separate Horner batches and opened reconstructs query powers. Caller integration remains, not a claimed enabled optimization. |
 | semantic_carry.rs / semantic_boundary.rs and their existing proofs | Audit the R17 semantic caller before enabling; the changed initial G claim must remain correct. No wholesale transplant of old profile-specific initial-state behavior. |
@@ -83,6 +83,11 @@ verifier while retaining expanded transcript binding, image/query terms and
 the G/reference paths. See [R17_WEIGHTED_COMPACT.md](R17_WEIGHTED_COMPACT.md)
 for source controls, the focused grouping proof and storage/build failures.
 This does not yet eliminate dense preparation or compact the G channel.
+
+R34/R35's [consumed workspace](R17_COMPACT_WORKSPACE.md) restores SBF
+primary acceptance, but at 25127686 CU versus R28's 24208293. This is a
+retained regression, not the selected fastest implementation. The priority
+is now compact preparation with explicitly versioned descriptor binding.
 
 For the inactive indicator, the dual transport yields only the pivot
 coordinate: inactive non-pivots have 1-1=0, active rows have 0, and the

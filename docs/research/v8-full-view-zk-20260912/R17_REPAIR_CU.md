@@ -5,11 +5,18 @@ measurement concerns AV8/R17/structuredG271-two-channel/research-v1, including
 its changed encoding, structured G and two quotient channels / Final512.
 Privacy and soundness preservation remain open regardless of a CU result.
 
-Latest boundary (R28): the primary deferred SBF pass accepts the retained
+Best research-v1 boundary (R28): the primary deferred SBF pass accepts the retained
 honest proof at its terminal checkpoint (24,208,293 diagnostic CU consumed).
 The unchanged second reference pass then exhausts heap. The full program
 still fails, both 1.2M/1.4M budgets fail, and no deployability/privacy claim
 follows. Detailed chronological evidence, including regressions, is below.
+
+R35 restores compact-terminal primary acceptance at 25127686 CU but is slower
+than R28; see R17_COMPACT_WORKSPACE.md. R36 removes ordinary dense preparation
+under the separately versioned compact-binding research-v2 profile. Its fresh
+proof reaches primary acceptance at 20591164 CU; full execution still fails
+in the second reference pass. See R17_COMPACT_PREPARE.md for exact evidence,
+the changed-transcript boundary and the remaining 15.25M-CU G expansion.
 
 ## SBF preparation, 2026-09-21
 

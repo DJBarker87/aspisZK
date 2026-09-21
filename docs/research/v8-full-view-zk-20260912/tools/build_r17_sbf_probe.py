@@ -77,20 +77,37 @@ def check_after(name, expected):
         change = stage['compact_verifier'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('compact_workspace', {}):
+        change = stage['compact_workspace'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    if name in stage.get('compact_prepare', {}):
+        change = stage['compact_prepare'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 # callback_after_sha256 already includes the earlier callback transformations.
 # Advance only the new change from that retained aggregate endpoint.
 callback_expected = stage['callback_after_sha256']
-if 'relation_callback.rs' in stage.get('compact_verifier', {}):
-    change = stage['compact_verifier']['relation_callback.rs']
-    assert change['before_sha256'] == callback_expected
-    callback_expected = change['after_sha256']
+for step in ['compact_verifier', 'compact_workspace', 'compact_prepare']:
+    if 'relation_callback.rs' in stage.get(step, {}):
+        change = stage[step]['relation_callback.rs']
+        assert change['before_sha256'] == callback_expected
+        callback_expected = change['after_sha256']
 assert hashlib.sha256(callback.read_bytes()).hexdigest() == callback_expected
 for name, expected in stage.get('compact_verifier_files', {}).items():
     if name in stage.get('compact_storage', {}):
         change = stage['compact_storage'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('compact_workspace', {}):
+        change = stage['compact_workspace'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+for name, expected in stage.get('compact_workspace_files', {}).items():
+    assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+for name, expected in stage.get('compact_prepare_files', {}).items():
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'hybrid_merge_files' in stage:
     assert 'r17_merge_spectra.rs' in stage['hybrid_merge_files']
@@ -108,7 +125,13 @@ if 'inplace_dense_fold' in stage:
     change = stage['inplace_dense_fold']
     assert change['before_sha256'] == '7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead'
     assert change['path'] == 'crates/aspis-core/src/sumcheck.rs'
-    assert hashlib.sha256((root / change['path']).read_bytes()).hexdigest() == change['after_sha256']
+    expected = change['after_sha256']
+    if 'compact_workspace_core' in stage:
+        workspace = stage['compact_workspace_core']
+        assert workspace['path'] == change['path']
+        assert workspace['before_sha256'] == expected
+        expected = workspace['after_sha256']
+    assert hashlib.sha256((root / change['path']).read_bytes()).hexdigest() == expected
 if 'owned_weights' in stage:
     assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == stage['owned_weights_sha256']
 if 'fixed_g_table' in stage:
@@ -166,7 +189,7 @@ for item in host['r17_edits'] + host['r17_shared']:
     if path.name in stage.get('workspace_adapter', {}):
         assert stage['workspace_adapter'][path.name]['before_sha256'] == item.get('after_sha256', item.get('sha256'))
         continue
-    assert hashlib.sha256(path.read_bytes()).hexdigest() == item.get('after_sha256', item.get('sha256')), path
+    check_after(path.name, item.get('after_sha256', item.get('sha256')))
 env = dict(os.environ)
 env.update(NO_DNA='1',
     PATH='/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/active_release/bin:/usr/bin:/bin',

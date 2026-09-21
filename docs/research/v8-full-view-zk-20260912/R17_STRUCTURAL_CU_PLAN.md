@@ -15,6 +15,13 @@ source controls pass. R30–R33 implement that sparse contraction and connect
 the ordinary-channel terminal; [exact boundaries](R17_WEIGHTED_COMPACT.md).
 G contraction, dense transcript binding and complete source refinement remain.
 
+R36 now restores verifier-derived compact descriptor binding in an explicitly
+new research-v2 profile and removes ordinary dense preparation. Its fresh
+fixture reaches primary SBF acceptance at 20591164 CU. See
+[compact preparation](R17_COMPACT_PREPARE.md). G expansion/dual/chord still
+costs 15247174 CU and is now the primary structural target. Full-program
+reference heap failure, source refinement and security obligations remain.
+
 Source base: e32bac9b plus R14/R15 staged research changes. This is an
 implementation plan and algebraic derivation, not a compiled Lean theorem,
 completed CU measurement, or new privacy claim.
