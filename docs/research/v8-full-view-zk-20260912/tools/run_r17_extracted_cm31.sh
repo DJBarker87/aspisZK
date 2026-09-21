@@ -49,6 +49,7 @@ case "$target" in
   AspisV8R17/QM31WordFormulas|AspisV8R17/QM31WordResidues) ;;
   AspisV8R17/QuadraticTowerOperations) ;;
   AspisV8R17/QM31WordTower) ;;
+  AspisV8R17/GeneratedQM31Tower) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
@@ -128,7 +129,7 @@ if [[ "$target" == AspisV8R17/GeneratedQM31Products ]]; then
     --mul-by-r "$task/AspisV8R17/GeneratedMulByR.lean" \
     --products "$task/AspisV8R17/GeneratedQM31Products.lean"
 fi
-if [[ "$target" == AspisV8R17/GeneratedQM31Linear ]]; then
+if [[ "$target" == AspisV8R17/GeneratedQM31Linear || "$target" == AspisV8R17/GeneratedQM31Tower ]]; then
   python3 "$task/check_r17_qm31.py" --stage "$stage/V7Tag73CurrentHelpersOpaque" \
     --scalar "$task/AspisV8R17/GeneratedQM31Scalar.lean" \
     --mul-by-r "$task/AspisV8R17/GeneratedMulByR.lean" \
@@ -137,5 +138,12 @@ if [[ "$target" == AspisV8R17/GeneratedQM31Linear ]]; then
 fi
 cd "$runtime"
 test ! -L "$task/$target.olean"
-exec /usr/bin/time -v "$lean" -j1 -M1800 -R "$task" \
+# The new composed runtime+algebra target has a larger measured import union.
+# Its proof is four direct theorem compositions, not generated normalization.
+# Keep every existing target at its prior limit; do not retry failed leaves here.
+lean_memory=1800
+if [[ "$target" == AspisV8R17/GeneratedQM31Tower ]]; then
+  lean_memory=3200
+fi
+exec /usr/bin/time -v "$lean" -j1 -M"$lean_memory" -R "$task" \
   -o "$task/$target.olean" "$task/$target.lean"

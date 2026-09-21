@@ -1,5 +1,47 @@
 # R16 soundness preservation obligations
 
+## Generated QM31 execution composed with tower arithmetic — 2026-09-21
+
+Base revision `a3ccf38c` plus this changeset. GeneratedQM31Tower.lean now
+combines the authenticated current Result graphs and the concrete tower
+decoder in the same compiled theorem. mul_correct, square_correct,
+add_correct and sub_correct prove successful execution, canonical output,
+and equality to actual tower multiplication/squaring/addition/subtraction
+for canonical inputs. scalar_correct proves the corresponding scalar
+embedding multiplication for every input word, using the stronger M31
+product domain. There is no assumed execution-success or formula seam.
+
+This new composition target intentionally uses `-M3200` from its first
+attempt: prior focused leaves had already established their mathematical
+and runtime predecessors, while this target imports their union. Inspection
+showed direct theorem composition rather than generated numeric reduction.
+It is NOT an unchanged failed target retried with a higher cap. Existing
+targets retain `-M1800`; no prior memory-failed target was rerun. The caller
+scope remains MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64.
+
+Exact target `AspisV8R17/GeneratedQM31Tower.lean`, cached Linux Lean 4.32.0
+`-j1 -M3200`; scopes `aspis-r17-generated-tower-rN`:
+
+| Attempt | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| r1, unresolved implicit word-pair inference in subtraction | 1 | 1.15 | 2574488 | 0 |
+| r2, explicit decoder arguments | 0 | 1.09 | 2583740 | 0 |
+| r3, added scalar_correct | 0 | 1.34 | 2589048 | 0 |
+
+Final #print axioms: mul/square/scalar use
+`[propext, Classical.choice, Quot.sound]`; add/sub use
+`[propext, Quot.sound]`. No sorryAx or new assumption. Generated declaration
+authentication and existing negative mutation controls passed in each run.
+
+First remaining source obligation: bind the actual mask caller's constants,
+canonical input conditions and array/loop execution to this operation
+interface and the retained MaskWeightWrites model. This is still a
+source-projected arithmetic theorem, not certification of the entire
+extraction pipeline. Field/nonresidue integration, source transcript
+distribution, shared-oracle/retry/publication privacy and protocol-level
+malicious-prover soundness remain open. Production paths and negative
+regressions are unchanged.
+
 ## Concrete shared-word decoder into the actual tower — 2026-09-21
 
 Base revision `c74f0439` plus this changeset. QM31WordTower.lean instantiates
