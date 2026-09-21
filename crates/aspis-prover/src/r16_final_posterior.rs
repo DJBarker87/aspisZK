@@ -115,6 +115,8 @@ enum Placement {
     Vandermonde,
     VandermondeRelation,
     VandermondeJoint,
+    SparseCodeRelation,
+    SparseCodeJoint,
 }
 
 fn compatible_image(placement: Placement) -> usize {
@@ -151,6 +153,22 @@ fn r17_actual_source_prefix_joint_ready_image() {
         601
     );
     println!("R17_JOINT_READY_PREFIX compatible_rank=601 observations=625 source_log={path}");
+}
+
+#[test]
+#[ignore = "requires accepted R18 sparse-code source public-prefix audit log"]
+fn r18_actual_source_prefix_sparse_code_relation() {
+    let (path,prefix)=read_public_prefix();
+    assert_eq!(compatible_image_at(Placement::SparseCodeRelation,Some(prefix)),601);
+    println!("R18_SPARSE_CODE_PREFIX rank=601 observations=624 source_log={path}");
+}
+
+#[test]
+#[ignore = "requires accepted R18 sparse-code source public-prefix audit log"]
+fn r18_actual_source_prefix_sparse_code_joint() {
+    let (path,prefix)=read_public_prefix();
+    assert_eq!(compatible_image_at(Placement::SparseCodeJoint,Some(prefix)),601);
+    println!("R18_SPARSE_CODE_PREFIX rank=601 observations=625 source_log={path}");
 }
 
 pub(super) fn read_public_prefix() -> (String, PublicPrefix) {
@@ -203,10 +221,12 @@ pub(super) fn read_public_prefix() -> (String, PublicPrefix) {
 
 fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> usize {
     let structured = !matches!(placement, Placement::Original);
-    let has_terminal = matches!(placement, Placement::VandermondeJoint);
+    let sparse_code=matches!(placement,Placement::SparseCodeRelation|Placement::SparseCodeJoint);
+    let has_terminal = matches!(placement, Placement::VandermondeJoint|Placement::SparseCodeJoint);
     let has_relation = matches!(
         placement,
         Placement::VandermondeRelation | Placement::VandermondeJoint
+            | Placement::SparseCodeRelation | Placement::SparseCodeJoint
     );
     let PublicPrefix {
         z,
@@ -277,6 +297,11 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
         // semantic map is invertible, so use its underlying coin coordinates.
         earlier = (0..271)
             .map(|i| {
+                if sparse_code {
+                    let mut row=vec![K::ZERO;N];
+                    row[transport().order[super::sparse_coded_g::slot(i)]]=K::ONE;
+                    return row;
+                }
                 if matches!(
                     placement,
                     Placement::Vandermonde
@@ -302,11 +327,18 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
             (0..N).map(|r| w.weight_at(r as u32)).collect::<Vec<_>>()
         })
         .collect();
+    let selected_mask=|| {
+        if !sparse_code {return super::structured_g::mask_weights(&z);}
+        let mut coins=vec![K::ZERO;271];let mut out=vec![K::ZERO;N];
+        super::sparse_coded_g::original_weights_into(&z,
+            transport().order.as_slice().try_into().unwrap(),&mut coins,&mut out);
+        out
+    };
     if has_terminal {
         // This field is serialized, even though it is determined by the
         // G coin coordinates. Keep its compatibility equation explicit
         // before attempting joint H1/G composition.
-        point_weights.insert(0, super::structured_g::mask_weights(&z));
+        point_weights.insert(0, selected_mask());
     }
     let pts = selected_circle_fiber_points_shared(20, &queries).unwrap();
     let enc = CircleEncoder::new_for_domain_log(20);
@@ -328,9 +360,23 @@ fn compatible_image_at(placement: Placement, prefix: Option<PublicPrefix>) -> us
     let inactive_index = final_start + 256;
     let mut matrix =
         vec![vec![K::ZERO; 1022]; inactive_index + 1 + if has_relation { 6 } else { 0 }];
-    let original = has_relation.then(|| super::two_channel::original_weights(&z, kappa, true));
-    let relation =
-        has_relation.then(|| super::two_channel::quotient_weights(&z, kappa, abc, tau, true));
+    let original = has_relation.then(|| {
+        if !sparse_code {return super::two_channel::original_weights(&z,kappa,true);}
+        let mut ordinary=super::two_channel::original_weights(&z,kappa,false);
+        let mut first=WeightAccumulator::empty(10);
+        first.add_multilinear(K::ONE,v6_statement_points(&z)[0].to_vec()).unwrap();
+        let mask=selected_mask();
+        for i in 0..N {ordinary[i]=ordinary[i].add(kappa.mul(mask[i].sub(first.weight_at(i as u32))));}
+        ordinary
+    });
+    let relation=has_relation.then(|| {
+        if !sparse_code {return super::two_channel::quotient_weights(&z,kappa,abc,tau,true);}
+        let mut v=super::two_channel::chord_transpose(&transport().dual(original.as_ref().unwrap()),abc);
+        v[1023]=v[1023].add(tau.pow(3));
+        v[1022]=v[1022].add(tau.pow(4).mul(abc[1]));
+        v[1021]=v[1021].sub(tau.pow(4).mul(abc[2]));
+        let mut w=WeightAccumulator::empty(10);w.add_dense(v).unwrap();w
+    });
     let folded_relation = relation.clone().map(|mut w| {
         w.fold_deferred_relation_arity4(alpha);
         w

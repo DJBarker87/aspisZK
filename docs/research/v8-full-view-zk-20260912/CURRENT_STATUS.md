@@ -1,5 +1,31 @@
 # Current V8 privacy-repair status
 
+## R18 structural reset measured — 2026-09-21
+
+New, separately versioned **research** profile: sparse code-coordinate G,
+minimum-support T163 and shared ordinary contraction. Best whole-program
+primary is **4,781,147 / 4,784,274 CU** for two genuine witness fixtures at
+the 100M diagnostic cap, approximately 71% below historical R43. This is a
+new-profile comparison, not a same-proof optimization of R43. The final
+same-profile base-field scaling alone saves 61,986 / 61,991 CU. Both 1.2M
+and 1.4M still exhaust; no supported-budget execution or release is claimed.
+
+Unchanged-T sparse G was source-tested and measured first (5.62M), followed
+by the separate T163 profile. Both profiles pass actual opposite-witness
+C1/H1/G affine and full-observation checks at two genuine source prefixes;
+old negative regressions remain. Eight symbolic Lean declarations compile
+without new axioms. Finite source checks do not establish universal joint
+coverage or a full simulator. Minimum-T needs its H1 certificate correspondence
+rebound; joint compatible-image coverage and the real adaptive shared-oracle
+exceptional-event bound remain open, as do full privacy and soundness.
+
+The final double-verifier diagnostic heap-fails at 14,405,605 CU honest;
+this is not accepted CU. Dense host references and the internal primary
+cross-check remain. Production paths and the original privacy branch are
+preserved. Work is local, with no push, deployment or wallet operation.
+Exact profile IDs, source/ELF pins, measurements, formal boundary and failures:
+`R18_STRUCTURAL_RESET.md`.
+
 ## Reviewed CU pack measured — 2026-09-21
 
 Current best same-proof research-v2 primary checkpoint: **16,456,519 CU**
