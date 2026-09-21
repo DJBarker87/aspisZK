@@ -181,3 +181,58 @@ evidence/r17-candidate-sbf-profile-r8.log and
 evidence/r17-candidate-svm-profile-r8.{jsonl,log}. Proof/driver unchanged from
 R7. No larger budget or unchanged quiet replay was run. No formal-security
 gate closes from this profile; the goal remains incomplete.
+
+## R10 shared-prefix tensor implementation
+
+Base 139daff0 plus this changeset. r17_tensor_prefix.rs expands each existing
+multilinear tensor by shared prefixes. Each leaf retains exactly the old
+left-associated multiplication order; no division, reassociation, or zero
+exception is introduced. Descending parent indices prevent writes from
+overwriting unread parents. At level d the first 2^d slots hold that level's
+prefix products; each slot is initialized before use. Ten levels produce
+the same big-endian 1,024 leaves. This is the intended loop invariant, not
+yet a compiled source-refinement theorem.
+
+stage_r17_tensor_prefix.py uses a fresh research stage and preserves the old
+original_weights_reference on host. Contributions are added in the same point
+order, followed by the same inactive-row constant and the same G contribution.
+No source pins are waived: the runner authenticates the before/after chain,
+including the earlier workspace adapter and the unchanged instrumentation.
+The new scratch buffer adds 16 KiB of allocation per original_weights call;
+its effect on complete bump-heap usage remains open.
+
+Optimized actual-source gates passed:
+
+- 20 cases x 1,024 leaves match the actual core WeightAccumulator::weight_at,
+  including zero, one, P-1 points, zero scale and extension-field coordinates.
+- Six cases x both channels x 1,024 complete weights match the retained
+  original_weights reference, including inactive constants and G weights.
+
+These are finite differential tests, not a universal privacy/correctness proof.
+Host gate scope aspis-r17-tensor-gate-r10, 4G/6G/zero-swap, TasksMax=128:
+exit 0, wall 25.93 s including compilation, peak process RSS 531,196 KiB,
+swaps 0. SBF source equality/frame gate passes: scope aspis-r17-tensor-sbf-r10,
+5G/7G/zero-swap, TasksMax=128, exit 0, 34.67 s, RSS 619,372 KiB, swaps 0.
+No Lean file changed, so no new axioms audit applies.
+
+Same-fixture instrumented first-channel original_weights cost is now
+99,098,363 - 95,459,915 = **3,638,448 CU**, versus 20,359,585 in R8,
+saving 16,721,137 CU (about 82%). Basis dual and chord stages remain
+80,034 and 2,275,296 respectively. The second original_weights stage starts
+with 93,104,371 CU remaining and still exhausts the diagnostic budget.
+All six honest/corruption observations remain resource failures; no accepted
+proof or successful corruption-rejection endpoint was obtained. The limits
+are unchanged at 1.2M, 1.4M and diagnostic 100M.
+
+Runtime scope aspis-r17-tensor-svm-r10, 3G/4G/zero-swap, TasksMax=64:
+driver exit 0 (observations only), 0.18 s, RSS 26,716 KiB, swaps 0.
+ELF SHA256 67a4515db97223234c737952afeb3d645a534b666d1f5053bdc04d479b178342.
+Exact evidence: evidence/r17-tensor-gate-r10.log, r17-tensor-sbf-r10.log,
+r17-tensor-svm-r10.{jsonl,log}. Host stage r9 was a preliminary unbuilt draft;
+r10 includes the complete-channel differential gate. Neither is a new security
+profile: the mathematical weights and transcript inputs are unchanged.
+
+Remaining performance obligation: reduce the structured-G construction cost
+and further reduce ordinary/chord costs to the real budget, with corresponding
+source-correctness evidence. Full transcript privacy and soundness preservation
+remain open; this measured optimization does not close them.
