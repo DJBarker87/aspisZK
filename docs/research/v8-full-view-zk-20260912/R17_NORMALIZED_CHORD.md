@@ -1,5 +1,41 @@
 # R17 rational chord normalization
 
+## Parameter recovery extension
+
+On base `749918c1` plus the extension changeset, Lean additionally proves
+`rational_parameter_recovery` and `rational_parameter_injective`: under
+the explicit nonzero denominator and characteristic-not-two hypotheses,
+`1+x(u)` is nonzero, `y(u)/(1+x(u))=u`, and equal coordinate pairs imply
+equal parameters. The same focused command below passed: exit 0, wall
+8.35 seconds, peak RSS 1,361,543,168 bytes, swaps 0. All four printed
+theorems use only `[propext, Classical.choice, Quot.sound]`; four harmless
+tactic-style warnings remain.
+
+Inspection of `crates/aspis-core/src/circle.rs` confirms the implemented
+map uses these rational formulas, explicitly rejects a zero denominator
+via `try_inv`, then rejects parameters in CM31 for the OOD policy.
+This inspection is not a machine-checked Rust-to-Lean refinement.
+
+The new research-only test `r17_actual_prefix_normalized_chord` recovers
+both parameters from each retained prefix, checks nonzero denominators,
+calls the actual `secure_ood_circle_point_from_parameter` and requires
+exact coordinate equality, checks parameter distinctness and nonzero
+chord scale, then compares all three chord coefficients. Both retained
+worlds pass (one test each, zero failures). Commands use
+`cargo test --offline --locked --release --jobs 1 -p aspis-prover --lib
+r17_actual_prefix_normalized_chord -- --ignored --nocapture`, with
+`ASPIS_R17_PUBLIC_PREFIX_LOG` selecting the respective checked-in record.
+Measured by `/usr/bin/time -l`: world0 exit 0, 24.08 seconds,
+562,905,088 bytes peak RSS; world1 exit 0, 0.23 seconds, 81,264,640 bytes.
+Both report zero swaps. World1 output is retained at
+`/tmp/aspis-r15-host.drHYn9/r17-normalized-chord-world1.log`; world0 and
+Lean output were returned directly by the command tool.
+
+The first remaining coverage obligation is a fixed nonzero active minor
+with a degree certificate. General source/sampler correspondence and
+adaptive probability accounting remain separate from these two-prefix
+checks. No production source, negative regression or hiding premise changed.
+
 Date: 2026-09-21. Source base: `4330ae8dbc11040d9655b0f511bca4dc4c21ce0e`
 plus this changeset.
 

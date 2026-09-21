@@ -18,6 +18,31 @@ fn dot(a: &[K], b: &[K]) -> K {
     a.iter().zip(b).fold(K::ZERO, |v, (&a, &b)| v.add(a.mul(b)))
 }
 
+/// Source parameter recovery and chord identity at a retained accepted prefix.
+/// This checks arithmetic correspondence, not the sampler distribution.
+#[test]
+#[ignore = "requires accepted R17 host public-prefix audit log"]
+fn r17_actual_prefix_normalized_chord() {
+    let (_,p)=super::final_posterior::read_public_prefix();
+    let parameters:Vec<_>=[p.p0,p.p1].iter().map(|point| {
+        let inverse=K::ONE.add(point.x).try_inv().expect("finite rational image");
+        let u=point.y.mul(inverse);
+        assert_ne!(K::ONE.add(u.square()),K::ZERO);
+        assert_eq!(secure_ood_circle_point_from_parameter(u).unwrap(),*point);
+        u
+    }).collect();
+    let (u,v)=(parameters[0],parameters[1]);
+    assert_ne!(u,v);
+    let scale=v.sub(u).add(v.sub(u)).mul(
+        K::ONE.add(u.square()).mul(K::ONE.add(v.square())).try_inv().unwrap());
+    assert_ne!(scale,K::ZERO);
+    let normalized=[K::ONE.add(u.mul(v)),u.mul(v).sub(K::ONE),K::ZERO.sub(u.add(v))];
+    let actual=[p.p0.x.mul(p.p1.y).sub(p.p0.y.mul(p.p1.x)),
+        p.p0.y.sub(p.p1.y),p.p1.x.sub(p.p0.x)];
+    for i in 0..3 { assert_eq!(actual[i],scale.mul(normalized[i])); }
+    println!("R17_NORMALIZED_CHORD recovered_source_parameters=2 nonzero_scale=true coefficients_checked=3");
+}
+
 /// Immutable coefficient geometry only: no challenge or schedule sampling.
 #[test]
 fn r17_h1_active_coefficient_geometry() {
