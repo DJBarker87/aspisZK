@@ -46,6 +46,10 @@ def check_after(name, expected):
         change = stage['inplace_fold_relation'][name]
         assert change['before_sha256'] == expected
         expected = change['after_sha256']
+    if name in stage.get('tensor_complement', {}):
+        change = stage['tensor_complement'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
     assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
 if 'inplace_dense_fold' in stage:
     change = stage['inplace_dense_fold']
@@ -77,7 +81,7 @@ if 'workspace_adapter' in stage:
 if 'tensor_prefix' in stage:
     for name, hashes in stage['tensor_prefix'].items():
         check_after(name, hashes['after_sha256'])
-    assert hashlib.sha256((callback.parent / 'r17_tensor_prefix.rs').read_bytes()).hexdigest() == stage['tensor_prefix_sha256']
+    check_after('r17_tensor_prefix.rs', stage['tensor_prefix_sha256'])
 if 'basis_specialization' in stage:
     basis = callback.parent / 'r16_basis_transport.rs'
     table = callback.parent / 'r17_basis_tables.rs'

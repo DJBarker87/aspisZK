@@ -5,8 +5,8 @@ measurement concerns AV8/R17/structuredG271-two-channel/research-v1, including
 its changed encoding, structured G and two quotient channels / Final512.
 Privacy and soundness preservation remain open regardless of a CU result.
 
-Latest boundary (R21): the primary deferred SBF pass accepts the retained
-honest proof at its terminal checkpoint (~30.38M diagnostic CU consumed).
+Latest boundary (R22): the primary deferred SBF pass accepts the retained
+honest proof at its terminal checkpoint (~27.92M diagnostic CU consumed).
 The unchanged second reference pass then exhausts heap. The full program
 still fails, both 1.2M/1.4M budgets fail, and no deployability/privacy claim
 follows. Detailed chronological evidence, including regressions, is below.
@@ -789,3 +789,53 @@ silently removing the reference or relabeling a primary-only diagnostic as
 the full verifier. CU remains far above budget. Source-to-model storage
 refinement, whole-transform equivalence and all full privacy/soundness gates
 remain open independently of this one-fixture functional result.
+
+## R22 complementary tensor children
+
+Base f51a9bdd plus this changeset. stage_r17_tensor_complement.py computes
+right = parent*z once and left = parent-right, rather than computing both
+parent*(1-z) and parent*z. A length-1024 vector now uses 1023 full-field
+multiplications for splitting instead of 2046, plus subtractions. Descending
+parent traversal and output ordering remain; there is no division,
+challenge rejection or data-dependent zero skipping. The original source
+tensor helper remains retained, and the stage hash chain checks the change.
+
+New optimized gate checks all 1024 Boolean points at all 1024 coordinates
+against their scaled one-hot tensors, reusing dirty storage. Existing
+extension-field tensor, complete opening-weight, 271 G-basis, FFT, dense-fold
+and serialization controls all pass. The actual retained host proof is
+accepted and current G-final mutation rejected. Both verifier passes and
+opening reference checks remain. Host scope 4G/6G/zero swap: focused exit 0,
+28.19 s, peak RSS 535396 KiB; positive exit 0, 9.39 s, 426524 KiB;
+negative exit 0, 0.00 s reported, 3344 KiB. All task swaps zero.
+
+TensorComplement.lean proves the split identity and equality of the complete
+logical tensor tree for arbitrary list length, ring, scale and coordinates.
+It requires no nonzero coordinate premise. This is abstract ring/tree algebra,
+not extracted QM31 arithmetic or a source proof of the in-place array loop.
+Smallest-leaf compile using the same cached Lean 4.32.0 and mathlib
+81a5d257c8e410db227a6665ed08f64fea08e997: exit 0, 0.99 s, RSS 1144260 KiB,
+swaps 0; scope 1G/2G/zero swap, TasksMax=64, lake env lean -j1 -M1600,
+explicit isolated stage root. #print axioms: split has none; tensor_eq uses
+only propext. Source revision f51a9bdd plus this leaf and stage changes.
+No unchanged full replay or table regeneration was performed.
+
+SBF source/table/frame gates pass: exit 0, 35.33 s, 618576 KiB, zero swaps,
+scope 5G/7G/zero swap. Ordinary first-channel original-weight interval falls
+from 3662263 to **2185371 CU**. The G-containing original-weight interval
+falls from 17323740 to **16337023 CU**; G tree and FFT themselves are unchanged.
+Primary terminal acceptance reports 72084472 CU remaining out of diagnostic
+100M: **27915528 CU consumed to the checkpoint**, versus 30379137 before.
+The subsequent second semantic-start is reached, then reference-pass heap
+failure occurs. Overall honest execution fails at 27993913 CU; corrupt at
+27199981. No full-program acceptance or completed checked rejection occurs.
+Both 1.2M/1.4M pairs still exhaust CU, and heap stays 256 KiB.
+
+Observation driver exit 0, 0.12 s, RSS 26448 KiB, swaps 0, scope 3G/4G/zero
+swap. ELF SHA256:
+44746d79e8767f4c61fcdeb959f5ead11d167012ee9e5eaec3b386efdb2d797b.
+Evidence: r17-tensor-complement-host-r22.log, r17-tensor-complement-sbf-r22.log,
+r17-tensor-complement-svm-r22.{jsonl,log}, r17-tensor-complement-lean-r22.log.
+Source field/tree/loop refinement and all full privacy/soundness/retry and
+publication obligations remain. These performance and one-fixture functional
+results do not discharge any broader security gate.

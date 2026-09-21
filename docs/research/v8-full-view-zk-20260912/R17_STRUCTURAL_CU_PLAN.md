@@ -123,3 +123,22 @@ exhausts heap. Neither the full-program resource failure nor the above-budget
 primary cost is a release result. Ordinary tensors and both G transform
 sections remain major CU targets. Do not remove the reference silently or
 replace this scope with an easier verifier when reporting the result.
+
+R22 shares complementary tensor children using p*(1-z)=p-p*z. The complete
+logical-tree identity compiles in Lean; actual source-weight and host-proof
+controls pass. The primary SBF terminal checkpoint falls to 27.92M CU, while
+the full double-checking program still fails in the reference pass on heap.
+
+Next structural candidate: accelerate only the balanced numerator-tree
+merges at widths 64,128,256. Keep small and uneven merges (notably the final
+256+15 split) on the existing scalar scatter path. A balanced width-s merge
+has numerator degree at most s-1, so an s-point cyclic transform can compute
+it without aliasing. Both child denominators are fixed and their spectra
+can be precomputed; compute N_left*D_right + N_right*D_left pointwise and
+inverse-transform. Reuse the existing CM31 workspace, moving its allocation
+before the numerator rather than adding another buffer. Branch selection
+must depend only on this fixed public tree shape. Validate smaller transform
+roots/normalization and each selected merge against the current scalar merge
+before the complete basis and actual-proof gates. This is a planned exact-map
+optimization, not an implemented or measured speedup; no new mixing map or
+hiding assumption is justified by this plan.
