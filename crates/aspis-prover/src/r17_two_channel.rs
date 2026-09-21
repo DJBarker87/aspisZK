@@ -120,13 +120,30 @@ fn r17_active_minor_polynomial_witness() {
         q[4*degree]=K::ZERO.sub(powers[channel]);
         q[4*degree+channel+1]=K::ONE;
         let m=transport().inverse(&chord_product(&q,chord));
-        for (i,&r) in active.iter().enumerate(){matrix[i].push(m[r]);}
+        // Six constants per entry: apply each fixed chord basis map to
+        // the channel unit and A unit. No challenge enters these constants.
+        let mut unit_a=vec![K::ZERO;N];unit_a[4*degree]=K::ONE;
+        let mut unit_channel=vec![K::ZERO;N];unit_channel[4*degree+channel+1]=K::ONE;
+        let mut reconstructed=vec![K::ZERO;N];
+        for j in 0..3 {
+            let mut basis=[K::ZERO;3];basis[j]=K::ONE;
+            let a=transport().inverse(&chord_product(&unit_channel,basis));
+            let b=transport().inverse(&chord_product(&unit_a,basis));
+            for &r in &active {
+                reconstructed[r]=reconstructed[r].add(chord[j].mul(a[r].sub(powers[channel].mul(b[r]))));
+            }
+        }
+        for (i,&r) in active.iter().enumerate(){
+            assert_eq!(m[r],reconstructed[r],"six-constant entry degree={degree} channel={channel} row={r}");
+            matrix[i].push(reconstructed[r]);
+        }
     }}
     let (_,pivots)=reduce(&matrix);
     assert_eq!(pivots.len(),214);
     let frozen=include_str!("../../../docs/research/v8-full-view-zk-20260912/evidence/r17-active-minor-columns.txt");
     assert_eq!(format!("{pivots:?}"),frozen.trim(),"fixed minor identity");
     println!("R17_ACTIVE_MINOR_WITNESS alpha=2 u=3 v=4 rank=214 pivots={pivots:?}");
+    println!("R17_ACTIVE_ENTRY_COEFFICIENTS entries_checked={} source_basis_maps_per_column=6 challenge_independent_constants=true",214*699);
 }
 
 // Returns an exact RREF and pivots; independently verifies a lower-rank

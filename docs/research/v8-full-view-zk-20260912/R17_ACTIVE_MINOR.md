@@ -1,5 +1,42 @@
 # Fixed active-minor nonvanishing witness
 
+## Six source coefficients and linearity bridge
+
+Base `fa7dac80` plus this changeset. The fixed-witness Rust test now
+computes the six constants for every active entry by applying each of
+the three chord basis maps to the channel unit and the A unit, followed
+by the source inverse transport. These constants do not use alpha,u,v.
+It reconstructs all 214*699=149586 entries using the polynomial normal
+form, checks equality with direct source computation at alpha=2,u=3,v=4,
+then verifies the same frozen minor on the reconstructed matrix.
+
+`ActiveLinearForm.lean` proves the six-constant identity universally for
+three fixed linear functionals, and constructs a linear functional from
+any finite coefficient vector. Source inspection confirms inverse
+transport is a permutation except at the inactive pivot, so active rows
+only require the corresponding coefficient projection. The remaining
+compiled source bridge is the identification of the implemented
+`times_x`/chord maps with those fixed finite coefficient functionals
+(including their index rules), then composition with the polynomial
+evaluation theorem. This identity is not asserted merely from the
+single-point exhaustive entry check. No sampler or security gate is closed.
+
+Focused Rust command: `/usr/bin/time -l cargo test --offline --locked
+--release --jobs 1 -p aspis-prover --lib r17_active_minor_polynomial_witness
+-- --nocapture`. Exit 0, one test passed, wall 24.20s, peak RSS 563953664
+bytes, zero swaps; log `/tmp/aspis-r15-host.drHYn9/r17-active-entry.log`.
+
+Focused Lean command in `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/ActiveLinearForm.lean`.
+First attempt used an unavailable legacy import: exit 1, 0.95s,
+669696000 bytes RSS. After using the cached module paths, Field was not
+imported: exit 1, 5.04s, 1388609536 bytes. The theorem only requires a
+commutative ring, so that existing general interface replaced Field.
+Final compile: exit 0, 1.57s, 1399685120 bytes. Every attempt had zero
+swaps. Final axioms: active_linear_form uses propext, Classical.choice,
+Quot.sound; coefficientForm uses propext, Quot.sound. No accepted sorryAx.
+No production paths or negative regressions changed; no full replay ran.
+
 ## Compiled entry normal form
 
 On base `6d72748f` plus this changeset, `ActiveEntry.lean` defines the
