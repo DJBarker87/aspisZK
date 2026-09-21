@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## Latest coverage step — fixed active minor, 2026-09-21
+
+`R17_ACTIVE_MINOR.md` records a fixed 214-column nonvanishing witness at
+alpha=2,u=3,v=4, with independent inverse-product verification and frozen
+column indices. The degree argument gives (642,214,214) separate bounds,
+but a compiled polynomial/source bridge and actual adaptive probability
+law remain open. The algebraic evaluation is not an accepted OOD draw.
+No global privacy or soundness conclusion follows from this certificate.
+
 ## Latest algebra step — normalized chord, 2026-09-21
 
 `R17_NORMALIZED_CHORD.md` records a compiled rational-chord identity and

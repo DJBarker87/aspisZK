@@ -104,6 +104,31 @@ fn quotient_direction(col: usize, abc: [K; 3]) -> Vec<K> {
     q
 }
 
+/// A polynomial nonvanishing witness, deliberately not an accepted OOD draw.
+/// The evaluation point need not belong to the sampler's support to certify
+/// that the active-map minor polynomial is nonzero.
+#[test]
+fn r17_active_minor_polynomial_witness() {
+    let alpha=K::ONE.mul_m31(M31(2));
+    let u=K::ONE.mul_m31(M31(3));let v=K::ONE.mul_m31(M31(4));
+    let chord=[K::ONE.add(u.mul(v)),u.mul(v).sub(K::ONE),K::ZERO.sub(u.add(v))];
+    let active:Vec<_>=(0..N).filter(|&r|!transport().inactive[r]).collect();
+    let mut matrix=vec![vec![];active.len()];
+    let powers=[alpha,alpha.square(),alpha.square().mul(alpha)];
+    for degree in 22..255 { for channel in 0..3 {
+        let mut q=vec![K::ZERO;N];
+        q[4*degree]=K::ZERO.sub(powers[channel]);
+        q[4*degree+channel+1]=K::ONE;
+        let m=transport().inverse(&chord_product(&q,chord));
+        for (i,&r) in active.iter().enumerate(){matrix[i].push(m[r]);}
+    }}
+    let (_,pivots)=reduce(&matrix);
+    assert_eq!(pivots.len(),214);
+    let frozen=include_str!("../../../docs/research/v8-full-view-zk-20260912/evidence/r17-active-minor-columns.txt");
+    assert_eq!(format!("{pivots:?}"),frozen.trim(),"fixed minor identity");
+    println!("R17_ACTIVE_MINOR_WITNESS alpha=2 u=3 v=4 rank=214 pivots={pivots:?}");
+}
+
 // Returns an exact RREF and pivots; independently verifies a lower-rank
 // certificate against the original matrix and the zero remaining rows.
 fn reduce(matrix: &[Vec<K>]) -> (Vec<Vec<K>>, Vec<usize>) {
