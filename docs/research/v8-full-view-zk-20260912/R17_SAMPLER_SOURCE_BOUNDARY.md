@@ -1,5 +1,15 @@
 # R17 determinant sampler/source boundary
 
+## Seed/commitment source entrypoint audit — 2026-09-21
+
+See `R17_SHARED_ORACLE_SOURCE_MAP.md` and the read-only pinned checker
+`tools/check_r17_oracle_entrypoints.py`. The selected source forwards the same
+callback through mask/salt/D/transcript/Merkle calls, but the durable nonce
+ledger has a separate direct SHA invocation. The staged fixture does not use
+that ledger or production entropy. Expanders use 16 retries and retain words;
+the transcript uses eight retries and discards remaining block words between
+QM31 calls. These distinctions remain explicit source obligations.
+
 ## Literal transcript/commitment address boundary — 2026-09-21
 
 Base `856f3b90f28878c963c75e3c6f0da5f4499420b0` plus this changeset.
