@@ -1,5 +1,61 @@
 # R17 determinant sampler/source boundary
 
+## Literal transcript/commitment address boundary — 2026-09-21
+
+Base `856f3b90f28878c963c75e3c6f0da5f4499420b0` plus this changeset.
+Inspected transcript.rs DOM constants and absorb/absorb_two/squeeze_block,
+the actual V7 Merkle wrappers and private-leaf helper, and the retained v19
+relation_callback.rs hash backend. The backend hashes concatenated slices;
+slice boundaries are not additional address tags. Absorb framing is
+`state32 || 0 || label || data`, squeeze `state32 || 1`, advance `state32 || 2`.
+Private leaves start `16 || tree_tag || value || salt32`; parents start 17
+and have two 26-byte child digests. Merkle truncation affects returned digests,
+not the byte-address identity in the complete 256-bit shared oracle.
+
+`AspisV8R17/TranscriptAddresses.lean` reuses the retained Domains definitions
+and compiles seven proofs: squeeze/advance lengths 33; distinct squeeze and
+advance inputs even across arbitrary states; a length-33 address is neither
+a salted private leaf nor a fixed-width V7 parent; absorb_two concatenation;
+and explicit absorb/leaf grammar overlap. The overlap has a 32-byte state,
+32-byte salt and leaf value length 32+payload.length. It is a grammar witness,
+not a valid-witness/protocol-state reachability proof or SHA attack.
+
+Consequence: do not partition ALL transcript addresses from leaf addresses
+using tags alone. State is before the transcript domain, whereas the leaf
+tag is first. Squeeze/advance are separated from these commitment families
+by length; absorbs require actual shared-address/first-hit accounting. The
+existing R9 ascii-expander/leaf separation remains valid for its inspected
+families, but does not establish disjointness from state-prefixed absorbs.
+Adversarial oracle calls remain arbitrary byte addresses.
+
+This is source-checked framing algebra, not automatic Rust extraction. The
+first combined-execution obligation remains to bind every source/adversary
+call to the common byte log and justify its adaptive event bound, including
+absorb/leaf intersections and salt exposure. No independent-oracle or new
+hiding assumption has been introduced; production paths are unchanged.
+
+Checked source pins (core paths under crates/aspis-core/src):
+
+| File | SHA-256 |
+| --- | --- |
+| transcript.rs | be036d144b9fe0c8119d9f6fdd8ca2167d1379f7d1d785fa2f197200b9f7d119 |
+| v7_merkle208.rs, current and v19 identical | 071ade1236140fdae559bb7b607ac9b7ee299e74eccb16b3385e3b1bbf215fdf |
+| state_only_private_merkle.rs | f0edc31d07d30f5b19fcaf872fba18678d13d1ba5fac1199f1f4d2be74c74f9b |
+| v19 experiments/relation_callback.rs | 22c0837ec4f14a0b9a3795b6bdc40144911468c5499836eca48cc503ce698b9e |
+
+Focused cached lake command uses -j1 -M1800 and matching objects:
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| TranscriptAddresses, Domains object missing | 1 | 3.71 | 668811264 | 0 |
+| AspisV8PairedCommitment/Domains prerequisite object | 0 | 4.19 | 1196670976 | 0 |
+| AspisV8R17/TranscriptAddresses final seven proofs | 0 | 1.54 | 1201946624 | 0 |
+
+Seven #print axioms audits use propext, with Quot.sound on the length
+contradictions and overlap; no sorryAx or additional axioms. One unused-simp
+warning remains. Domains was emitted only because its required object was
+absent. No runtime or full-manifest replay occurred.
+
 ## Adaptive law connected to retained memoization — 2026-09-21
 
 Base `c6dc9be83c5ee128e509d9480ec8277823dba273` plus this changeset.
