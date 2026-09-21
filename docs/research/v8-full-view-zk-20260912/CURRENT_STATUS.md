@@ -6,8 +6,11 @@ All 392 diagonal-block entries now have compiled equalities to the
 assembled weighted finite source model, generated from the frozen indices
 in 13 bounded chunks. Regeneration and all axioms audits pass. Next is
 the off-diagonal zero pattern, permutation and determinant composition.
-Index-only support-exclusion lemmas now prove universal source-model zeros
-for both unit parities; concrete ordered-block exclusions remain next.
+All 22,702 below-block-diagonal pairs now have compiled index-exclusion
+and arbitrary-challenge source-model zero certificates, in 27 bounded
+chunks (214 exclusion and 214 zero theorems). Regeneration and all audits
+pass. The next gate is the formal row/column permutation, list-to-matrix
+correspondence and determinant composition, not another support search.
 This is not a full privacy/soundness theorem; see `R17_MINOR_BLOCKS.md`.
 
 ## Latest certificate preflight — small blocks, 2026-09-21

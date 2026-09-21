@@ -1,5 +1,82 @@
 # R17 small-block certificate route
 
+## Concrete arbitrary-challenge zero certificates — 2026-09-21
+
+Base revision `8aa98d1eb065ee1a7bd8602aa051af3510dcf28d` plus this
+changeset. `tools/r17_block_support.py` stably sorts the 133 frozen blocks
+by descending reachability order and emits one later-row list per selected
+column. It checks that block rows and columns each partition all 214
+positions, and records the hashes of the three frozen input artifacts.
+There are exactly 22,702 below-block-diagonal row/column pairs.
+
+All 214 bounded support-exclusion propositions and all 214 derived
+source-model zero theorems compile in `SourceBlockSupport00.lean` through
+`SourceBlockSupport26.lean`. The exclusions use kernel-checked index
+decisions, not field arithmetic. The zero theorems quantify over every
+commutative ring, half-weight, multiplier t and chord coefficients a,b,c;
+in particular they are not restricted to the fixed nonzero witness.
+Each proof applies named parity zero lemmas and the source difference
+identity, without expanding the full 512-column source scatter.
+
+The generator's `--check` passes for all 27 files. The assignment of
+these concrete lists to the matrix ordering still needs formal composition:
+prove the row/column permutation and its correspondence to these lists,
+identify the diagonal blocks with the 392 checked entries, and use the
+29 small determinant leaves to conclude the evaluated minor is nonzero.
+The generator is not a trusted replacement for that theorem. Source Rust
+field/word refinement, adaptive shared-oracle probability, joint residual
+coverage and full privacy/soundness remain open. Production is unchanged.
+
+### Focused verification
+
+Commands ran in the retained `/Users/dominic/ZK/AspisFormal` cache,
+with `/usr/bin/time -l lake env python3` setting LEAN_PATH to
+worktree `target/r17-lean:target/r16-lean` plus its existing value,
+then executing `lean -j1 -M1800 SOURCE_ROOT/AspisV8R17/TARGET.lean`.
+SOURCE_ROOT is this worktree's `docs/research/v8-full-view-zk-20260912/lean`.
+The changed prerequisite object used `-R SOURCE_ROOT -o` before the first
+dependent leaf. All targets below exited 0 and recorded zero swaps.
+All 428 new axioms audits contain only propext, Quot.sound, and
+Classical.choice where needed; none contains sorryAx or native evaluation.
+Logs for chunks 01–26 are retained at
+`/tmp/aspis-r15-host.drHYn9/r17-SourceBlockSupportNN.log`; the prerequisite
+and chunk 00 are in the command-tool record. No unchanged Rust/full-manifest
+regression was rerun.
+
+| Target | Wall seconds | Peak RSS bytes |
+| --- | ---: | ---: |
+| WeightedScatter (cached object refreshed) | 9.00 | 1422999552 |
+| SourceBlockSupport00 | 3.50 | 1436090368 |
+| SourceBlockSupport01 | 5.02 | 1432846336 |
+| SourceBlockSupport02 | 3.09 | 1430061056 |
+| SourceBlockSupport03 | 3.15 | 1424900096 |
+| SourceBlockSupport04 | 2.97 | 1425473536 |
+| SourceBlockSupport05 | 2.93 | 1423032320 |
+| SourceBlockSupport06 | 2.86 | 1419739136 |
+| SourceBlockSupport07 | 2.73 | 1419640832 |
+| SourceBlockSupport08 | 2.71 | 1418428416 |
+| SourceBlockSupport09 | 2.68 | 1417019392 |
+| SourceBlockSupport10 | 2.69 | 1415217152 |
+| SourceBlockSupport11 | 2.61 | 1412153344 |
+| SourceBlockSupport12 | 2.54 | 1409384448 |
+| SourceBlockSupport13 | 2.49 | 1409794048 |
+| SourceBlockSupport14 | 2.43 | 1404452864 |
+| SourceBlockSupport15 | 2.43 | 1408008192 |
+| SourceBlockSupport16 | 2.33 | 1405239296 |
+| SourceBlockSupport17 | 2.25 | 1402617856 |
+| SourceBlockSupport18 | 2.13 | 1398882304 |
+| SourceBlockSupport19 | 2.06 | 1396195328 |
+| SourceBlockSupport20 | 2.05 | 1393147904 |
+| SourceBlockSupport21 | 1.96 | 1392574464 |
+| SourceBlockSupport22 | 1.93 | 1390854144 |
+| SourceBlockSupport23 | 1.86 | 1387708416 |
+| SourceBlockSupport24 | 1.76 | 1385873408 |
+| SourceBlockSupport25 | 1.78 | 1384169472 |
+| SourceBlockSupport26 | 1.64 | 1382350848 |
+
+Log audit: 412 declarations in chunks 01–26, plus 16 in chunk 00: 428 total.
+
+
 ## Universal index-only zero support
 
 Base `eb3b0ec8` plus this changeset. `WeightedScatter.lean` adds
