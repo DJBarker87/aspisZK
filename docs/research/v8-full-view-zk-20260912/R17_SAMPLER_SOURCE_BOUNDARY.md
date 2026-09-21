@@ -1,5 +1,44 @@
 # R17 determinant sampler/source boundary
 
+## Sequential word-cursor model — 2026-09-21
+
+Base `4f05c559ad2b549b1e4f9f01000380d3ea5f1bca` plus this changeset.
+`AspisV8R17/RejectionCursor.lean` introduces a bounded scan returning both
+an accepted value and the exact unused suffix, and scanMany which threads
+that suffix through successive limbs. It does not assign each limb a fixed
+eight-word slice: the source's cursor advances only by actual attempts.
+
+Five audited theorems compile: projection to the retained firstAccepted
+model on take(fuel); evaluation on a rejected prefix followed by acceptance;
+the converse decomposition of every success; their iff; and sequential
+success giving the exact limb count, acceptance of every returned limb,
+and a consumed-prefix/retained-suffix decomposition of length at most
+fuel*limbs. For four limbs and fuel eight this is at most 32 words. Failure
+is explicit none, with no fallback; these theorems do not give its joint law.
+
+The next missing composition step is the finite-tape counting/bijection
+for this variable-length sequential cursor, retaining stopping information
+and unused suffixes. Rust decoding, block refills/discard behavior and the
+shared-oracle adaptive first-assignment law are separate source obligations.
+No ideal tape or cursor theorem here asserts that they are already satisfied.
+
+Focused cached command follows the earlier invocation with
+`AspisV8R17/RejectionCursor.lean`, matching object, -j1 -M1800. The initial
+broad Mathlib.Tactic import exceeded the Lean memory threshold; it was
+removed entirely, not retried with a larger cap. No extra tactic import was
+needed. A reserved identifier was then renamed. No production source or
+unchanged full regression was run.
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Broad tactic import, memory exception | 134 | 10.86 | 2372042752 | 0 |
+| Minimal imports, reserved identifier errors | 1 | 2.09 | 1453850624 | 0 |
+| Four scan theorems | 0 | 1.76 | 1472217088 | 0 |
+| Final five including sequential composition | 0 | 1.96 | 1478623232 | 0 |
+
+Final #print axioms: scan_projection uses propext only; the other four
+use propext, Classical.choice, Quot.sound. No sorryAx or new axioms.
+
 ## Single-sentinel ideal instantiation — 2026-09-21
 
 Base `6d875cd144dd9a6eb9cfeb88dcd7dd045d2713e0` plus this changeset.
