@@ -115,6 +115,63 @@ theorem active_source_six_constants (x xx : List (ScatterEdge ℕ ℕ F))
   rw [h, chordCoefficient_components x xx q, chordCoefficient_components x xx s]
   ring
 
+def zeroExtend (n : ℕ) (q : ℕ → F) (i : ℕ) : F := if i<n then q i else 0
+
+theorem zeroExtend_linear (n : ℕ) (q s : ℕ → F) (a b : F) :
+    zeroExtend n (fun i => a*q i+b*s i) =
+      fun i => a*zeroExtend n q i+b*zeroExtend n s i := by
+  funext i
+  unfold zeroExtend
+  split <;> simp
+
+theorem scatter_zeroExtend_input (edges : List (ScatterEdge ℕ ℕ F))
+    (n : ℕ) (h : ∀ e ∈ edges, e.1<n) (q : ℕ → F) (r : ℕ) :
+    scatterValue edges (zeroExtend n q) r = scatterValue edges q r := by
+  unfold scatterValue
+  congr 1
+  apply List.map_congr_left
+  intro e he
+  simp only [zeroExtend, if_pos (h e he)]
+
+theorem scatter_zero_above (edges : List (ScatterEdge ℕ ℕ F))
+    (n : ℕ) (h : ∀ e ∈ edges, e.2.1<n) (q : ℕ → F)
+    (r : ℕ) (hr : n≤r) : scatterValue edges q r = 0 := by
+  induction edges with
+  | nil => simp [scatterValue]
+  | cons e es ih =>
+      have he : r ≠ e.2.1 := by
+        intro eq
+        have := h e (by simp)
+        omega
+      have hs : ∀ e ∈ es, e.2.1<n := fun e he => h e (by simp [he])
+      simp only [scatterValue, List.map_cons, List.sum_cons, if_neg he, zero_add]
+      exact ih hs
+
+theorem scatter_zeroExtend_output (edges : List (ScatterEdge ℕ ℕ F))
+    (n : ℕ) (h : ∀ e ∈ edges, e.2.1<n) (q : ℕ → F) :
+    zeroExtend n (scatterValue edges q) = scatterValue edges q := by
+  funext r
+  unfold zeroExtend
+  split
+  · rfl
+  · exact (scatter_zero_above edges n h q r (by omega)).symm
+
+theorem zeroExtend_parity (n : ℕ) (q : ℕ → F) (r b : ℕ) (hb : b<2) :
+    zeroExtend n (fun i => q (2*i+b)) r = zeroExtend (2*n) q (2*r+b) := by
+  have h : r<n ↔ 2*r+b<2*n := by omega
+  simp only [zeroExtend, h]
+
+/-- Dropping a high tail does not change any retained coefficient. It does
+not establish the source's separate high-tail-zero acceptance assertion. -/
+theorem zeroExtend_retained (n : ℕ) (q : ℕ → F) (r : ℕ) (hr : r<n) :
+    zeroExtend n q r = q r := by simp [zeroExtend, hr]
+
+#print axioms zeroExtend_parity
+#print axioms zeroExtend_retained
+#print axioms zeroExtend_linear
+#print axioms scatter_zeroExtend_input
+#print axioms scatter_zero_above
+#print axioms scatter_zeroExtend_output
 #print axioms active_source_six_constants
 #print axioms chordCoefficient_linear
 #print axioms chordCoefficient_components

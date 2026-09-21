@@ -1,5 +1,34 @@
 # Fixed active-minor nonvanishing witness
 
+## Zero-extension boundary lemmas
+
+Base `877fcba3` plus this changeset. `SourceScatter.lean` now proves:
+zero extension preserves linear combinations; input padding is invisible
+to an edge list whose input indices are in bounds; bounded output edges
+produce zero above their bound; output padding is then the identity;
+splitting a length-2n input by either parity agrees with zero extending
+the length-n split; and truncation preserves every retained coefficient.
+All results quantify over arbitrary values and lengths. Bounds remain
+explicit hypotheses, with the relevant concrete schedules already checked
+at lengths 512 and 513 by the retained source-basis test.
+
+These lemmas remove the padding algebra obstacle to composing the source
+get-or-zero reads with the chord model. They do not waive the separate
+assertion that the high four output coefficients vanish: preserving a
+retained prefix does not prove acceptance of an arbitrary input. Concrete
+array/edge/transport instantiation, polynomial evaluation and the field
+implementation correspondence remain to be assembled. No sampler law,
+global privacy or soundness gate is closed by padding identities.
+
+Focused cached command in `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/SourceScatter.lean`.
+Initial four boundary lemmas: exit 0, wall 4.42s, peak RSS 1358430208
+bytes, zero swaps. Final file with parity and retained-index lemmas:
+exit 0, wall 1.98s, peak RSS 1360691200 bytes, zero swaps. Final
+`#print axioms` outputs contain only propext, Quot.sound and (for the
+parity arithmetic proof) Classical.choice. No sorryAx. Outputs are in the
+command-tool record. No Rust changes or unchanged full regressions.
+
 ## Composed source-shaped chord theorem
 
 Base `330170d1` plus this changeset. `SourceScatter.lean` now defines
