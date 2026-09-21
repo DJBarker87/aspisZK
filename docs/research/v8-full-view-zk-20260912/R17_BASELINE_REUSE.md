@@ -71,10 +71,16 @@ First establish that the fixed descriptor determines every coefficient,
 interpolant subtraction and image-residual coefficient of BOTH channels.
 Then use the existing transported pairing to construct the compact terminal.
 
+R29 now compiles the exact linear decomposition and composes the old fused-row
+theorem with the repaired transport; actual source controls pass. See
+[R17_COMPACT_TRANSPORT.md](R17_COMPACT_TRANSPORT.md) for exact targets, pins,
+retained failures and the remaining sparse-contraction obligation. This is
+not yet an integrated compact verifier or a new CU measurement.
+
 For the inactive indicator, the dual transport yields only the pivot
 coordinate: inactive non-pivots have 1-1=0, active rows have 0, and the
-pivot has 1. This is an immediate algebraic specialization of the retained
-transport definition; no new compiled theorem is claimed here. It is a
+pivot has 1. R29's inactive_to_pivot now proves this specialization of the
+retained transport definition under the explicit inactive-pivot premise. It is a
 useful simplification, not permission to discard the pivot/image residual.
 
 The source permutation is not identity: the first 89 slots contain legal

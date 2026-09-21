@@ -9,6 +9,9 @@ buffers restore primary acceptance at 24,208,293 CU; the unchanged second
 reference pass still exhausts heap and supported-budget cases still fail.
 The larger target remains compact functional preparation through the repaired
 basis, with an explicit transcript-version boundary for descriptor binding.
+R29's [compact transport bridge](R17_COMPACT_TRANSPORT.md) now proves the
+exact correction formula and reuses the old fused-row theorem; focused
+source controls pass. Implementing a sparse correction contraction is next.
 
 Source base: e32bac9b plus R14/R15 staged research changes. This is an
 implementation plan and algebraic derivation, not a compiled Lean theorem,
