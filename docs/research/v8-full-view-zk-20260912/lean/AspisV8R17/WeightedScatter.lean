@@ -121,6 +121,109 @@ theorem sourceScatter_unit_sparse (half : F) (n j : ℕ) (hj : j<n) :
   funext r
   exact sourceScatter_unit half n j r hj
 
+def unitVector (j i : ℕ) : F := if i=j then 1 else 0
+
+theorem unitVector_even_even (j : ℕ) :
+    (fun i => unitVector (F:=F) (2*j) (2*i)) = unitVector j := by
+  funext i
+  simp [unitVector]
+
+theorem unitVector_even_odd (j : ℕ) :
+    (fun i => unitVector (F:=F) (2*j) (2*i+1)) = fun _ => 0 := by
+  funext i
+  have h : 2*i+1 ≠ 2*j := by omega
+  simp [unitVector,h]
+
+theorem unitVector_odd_even (j : ℕ) :
+    (fun i => unitVector (F:=F) (2*j+1) (2*i)) = fun _ => 0 := by
+  funext i
+  have h : 2*i ≠ 2*j+1 := by omega
+  simp [unitVector,h]
+
+theorem unitVector_odd_odd (j : ℕ) :
+    (fun i => unitVector (F:=F) (2*j+1) (2*i+1)) = unitVector j := by
+  funext i
+  simp [unitVector]
+
+theorem zeroExtend_unit (n j : ℕ) (hj : j<n) :
+    zeroExtend n (unitVector (F:=F) j) = unitVector j := by
+  funext i
+  by_cases h : i=j
+  · subst i; simp [zeroExtend,unitVector,hj]
+  · simp [zeroExtend,unitVector,h]
+
+theorem scatter_zero (edges : List (ScatterEdge ℕ ℕ F)) (r : ℕ) :
+    scatterValue edges (fun _ => 0) r = 0 := by
+  simp [scatterValue]
+
+theorem scatter_zero_function (edges : List (ScatterEdge ℕ ℕ F)) :
+    scatterValue edges (fun _ => 0) = fun _ => 0 := by
+  funext r
+  exact scatter_zero edges r
+
+def sparseX (half : F) (j r : ℕ) : F :=
+  sparseVector ((weightedIndexLoop half 10 j 0 1).getD []) r
+
+def sparseXX (half : F) (j r : ℕ) : F :=
+  (((weightedIndexLoop half 10 j 0 1).getD []).map fun e => e.2*sparseX half e.1 r).sum
+
+theorem sourceScatter_twice_unit (half : F) (j r : ℕ) (hj : j<512) :
+    scatterValue (sourceEdges half 513)
+      (scatterValue (sourceEdges half 512) (unitVector j)) r = sparseXX half j r := by
+  unfold unitVector
+  rw [sourceScatter_unit_sparse half 512 j hj,scatter_sparse]
+  unfold sparseXX
+  apply congrArg (fun xs : List F => xs.sum)
+  apply List.map_congr_left
+  intro e he
+  obtain ⟨edges,hw,hb⟩ := weighted_schedule_bounds half 512 j schedule512_bounded hj
+  have hem : e ∈ edges := by simpa [hw] using he
+  rw [sourceScatter_unit half 513 e.1 r (hb e hem).1]
+  rfl
+
+theorem sourceChord_unit_even (half : F) (j r : ℕ) (hj : j<512) (a b c : F) :
+    sourceChord half (unitVector (2*j)) a b c r =
+      if r%2=0 then a*unitVector j (r/2)+b*sparseX half j (r/2)
+      else c*unitVector j (r/2) := by
+  unfold sourceChord
+  rw [finiteChordCoefficient_eq 512 _ _
+    (fun e he => (sourceEdges_bounds half 512 schedule512_bounded e he).2)
+    (fun e he => (sourceEdges_bounds half 513 schedule513_bounded e he).2)]
+  rw [zeroExtend_unit 1024 (2*j) (by omega)]
+  simp only [chordCoefficient, chordEven, chordOdd,
+    unitVector_even_even, unitVector_even_odd, scatter_zero_function, scatter_zero, mul_zero, sub_zero, add_zero]
+  have hs : scatterValue (sourceEdges half 512) (unitVector j) (r/2) = sparseX half j (r/2) :=
+    sourceScatter_unit half 512 j (r/2) hj
+  rw [hs]
+  have hodd : 2*(r/2)+1 ≠ 2*j := by omega
+  simp [unitVector,hodd]
+
+theorem sourceChord_unit_odd (half : F) (j r : ℕ) (hj : j<512) (a b c : F) :
+    sourceChord half (unitVector (2*j+1)) a b c r =
+      if r%2=0 then c*(unitVector j (r/2)-sparseXX half j (r/2))
+      else a*unitVector j (r/2)+b*sparseX half j (r/2) := by
+  unfold sourceChord
+  rw [finiteChordCoefficient_eq 512 _ _
+    (fun e he => (sourceEdges_bounds half 512 schedule512_bounded e he).2)
+    (fun e he => (sourceEdges_bounds half 513 schedule513_bounded e he).2)]
+  rw [zeroExtend_unit 1024 (2*j+1) (by omega)]
+  simp only [chordCoefficient, chordEven, chordOdd,
+    unitVector_odd_even, unitVector_odd_odd, scatter_zero, mul_zero, zero_add]
+  rw [sourceScatter_twice_unit half j (r/2) hj]
+  have hs : scatterValue (sourceEdges half 512) (unitVector j) (r/2) = sparseX half j (r/2) :=
+    sourceScatter_unit half 512 j (r/2) hj
+  rw [hs]
+  have heven : 2*(r/2) ≠ 2*j+1 := by omega
+  simp [unitVector,heven]
+
+#print axioms sourceChord_unit_odd
+#print axioms sourceChord_unit_even
+#print axioms sourceScatter_twice_unit
+#print axioms zeroExtend_unit
+#print axioms unitVector_even_even
+#print axioms unitVector_even_odd
+#print axioms unitVector_odd_even
+#print axioms unitVector_odd_odd
 #print axioms scatter_sparse
 #print axioms sourceScatter_unit_sparse
 #print axioms sourceScatter_unit

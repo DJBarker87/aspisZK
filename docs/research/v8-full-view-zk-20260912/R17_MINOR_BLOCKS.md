@@ -1,5 +1,40 @@
 # R17 small-block certificate route
 
+## Sparse chord-unit formulas
+
+Base `44f1ced5` plus this changeset. `WeightedScatter.lean` now proves
+`sourceChord_unit_even` and `sourceChord_unit_odd` for all unit inputs
+within the 1024-coefficient source model and all selected output indices.
+The even unit uses a delta and the short x schedule; the odd unit uses
+the delta, x schedule and sparse x² schedule. `sourceScatter_twice_unit`
+proves the second schedule equals the original composed 512/513 scatter,
+using the already certified output bounds. Unit parity and zero-extension
+lemmas eliminate irrelevant branches symbolically.
+
+These named rewrites are now ready for generated source-block equality
+leaves. The next gate is those concrete equality/structural-zero leaves,
+then the frozen permutation and determinant composition. None of these
+evaluation optimizations proves the remaining sampler law or full security.
+
+Focused command remains the cached LEAN_PATH wrapper for
+`lean -j1 -M1800 .../AspisV8R17/WeightedScatter.lean`, timed with
+`/usr/bin/time -l` from `/Users/dominic/ZK/AspisFormal`.
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Partial unit-function rewrite error | 1 | 5.49 | 1395556352 | 0 |
+| Broad congruence triggered recursion depth | 1 | 2.02 | 1396801536 | 0 |
+| Explicit sum congruence, sparse x² proof | 0 | 2.28 | 1397112832 | 0 |
+| Even chord, nested zero-function rewrite missing | 1 | 3.63 | 1399914496 | 0 |
+| Explicit zero-function identity, even formula | 0 | 8.92 | 1399668736 | 0 |
+| Final odd/even formulas | 0 | 4.74 | 1400913920 | 0 |
+
+The recursion-depth issue was fixed by avoiding broad congruence, not by
+raising resource limits. All final axioms audits contain only propext,
+Quot.sound and where needed Classical.choice; failed sorryAx audits are
+rejected. One harmless unused simp argument remains. Outputs are in the
+command-tool record. No Rust change or unchanged full replay.
+
 ## Sparse source-unit evaluation lemmas
 
 Base `5a7a2bff` plus this changeset. `WeightedScatter.lean` now proves
