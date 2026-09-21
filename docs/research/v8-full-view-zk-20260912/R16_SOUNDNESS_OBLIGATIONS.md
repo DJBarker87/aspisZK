@@ -1,5 +1,70 @@
 # R16 soundness preservation obligations
 
+## Original opening weights and mixing transpose — 2026-09-21
+
+Base `8a58262abc8429cefe370cccbc9e4f1f9e0f2a97` plus this changeset.
+`SourceOriginalWeights.lean` models the length-10 multilinear component's
+multiply-accumulator, with the exact big-endian bit-position expression
+`(index >> (9-coordinate)) & 1`. It proves the product form, then models the
+original_weights component list, inactive-row addition, and optional G term.
+The ordinary branch has all three point components with scales kappa,
+kappa^2, kappa^3. The structured branch replaces ONLY the first component
+with kappa times the supplied G-weight vector. The other two point components
+and inactive-sum claim remain. A composed theorem feeds this exact model into
+the retained transport/chord/residual opening identity for arbitrary q.
+
+The three length-10 point arrays are explicit inputs. The point functional
+is explicitly the dot product against the big-endian basis; this is not yet
+a refinement of every existing EvaluationClaim or point-construction API.
+The source v6_statement_points constructs z, a carry-propagated successor,
+and the point with coordinates 7 and 6 flipped; the model does not silently
+substitute independent points or assume those constructions have been proved.
+
+`SourceMixingWeights.lean` proves the power-row generation recurrence, the
+nested weighted-row accumulation formula, and its dot-product identity with
+the SAME 271 reverse-Horner outputs of the original 1024-entry vector.
+Its final theorem instantiates the structured original-weight functional
+with this mixing transpose, retaining the other two point functionals and
+the inactive sum. No fresh mask, uniform prefix law or new hiding assumption
+is introduced. The 271 coin weights remain explicit inputs.
+
+First remaining source-specific proposition: the actual reverse-round loop
+that writes coin_weights[0] and the ten 27-entry slices at 1+27*r produces
+the linear functional for the retained mask_eval, including the carry scale,
+zero-boundary coefficients, and complete round chronology. Then connect the
+point construction and Rust array/field operations to the model, rather than
+treating this source-shaped algebra as execution extraction. Source joint
+coverage, commitment extraction, image/fold/final consistency, shared-oracle
+challenge bounds and full privacy/soundness losses remain separate open gates.
+
+Inspected source pins (local and v19 staged core files identical):
+
+- sumcheck.rs, add_multilinear and weight_at:
+  `7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead`.
+- v6_transcript.rs, v6_statement_points:
+  `48275a37053ce5d33c7ec61caf6301863666f45a1e388c2c64bdb856708764cf`.
+- r17_structured_g.rs, mixing_row/mixed_coins/mask_weights:
+  `147be74e8651e05aa4680dbb412252751e8f21f5a6ad8a4de939d0f01bfb52c6`.
+
+The two modules were compiled smallest-first in cached
+`/Users/dominic/ZK/AspisFormal`, using `lake env lean -j1 -M1800 -R
+<research>/lean -o <r17-cache>/<leaf>.olean
+<research>/lean/AspisV8R17/<leaf>.lean`, measured by `/usr/bin/time -l`:
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| SourceOriginalWeights | 0 | 8.14 | 1480966144 | 0 |
+| SourceMixingWeights, broad simp/CharP recursion failure | 1 | 12.08 | 1767047168 | 0 |
+| SourceMixingWeights, restricted simp; remaining composition | 1 | 7.03 | 1781071872 | 0 |
+| SourceMixingWeights, explicit Function.comp_def and integrated bridge | 0 | 2.16 | 1803141120 | 0 |
+
+The fix was explicit symbolic rewriting, not a recursion/memory-cap increase.
+All ten final #print axioms outputs contain only subsets of propext,
+Classical.choice and Quot.sound, with no sorryAx. Both final leaves have no
+warnings. Failed drafts were not accepted as evidence. No production paths,
+negative regressions, full manifests or unchanged runtime suites were changed
+or replayed.
+
 ## Composed source-shaped opening identity — 2026-09-21
 
 Base `aba46950365f4b90214027d1e1441355b0a61b3f` plus this changeset.
