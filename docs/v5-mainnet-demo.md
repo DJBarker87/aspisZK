@@ -113,7 +113,7 @@ transactions:
 | Close ProgramData | [`uZ6q5a2…kBdHkWn`](https://explorer.solana.com/tx/uZ6q5a2jGYcscEZgnLghPrqNwp9Hxq3REgYmt6gnb3JuorkUUEQUeJkVWy2e88j9bSLHgRvT2DytjRW2kBdHkWn?cluster=mainnet-beta) | `435019804` | 2,520 | 10,000 lamports | 9,049,204,080 lamports directly to the pinned recipient |
 | Sweep payer | [`4haJ6dP…zbj1JyUW`](https://explorer.solana.com/tx/4haJ6dPmSFkscFKC57QoCUUcf46vU77av9Y8UfcRyCWjfydzHjCeJCsfuthmifXJfVWreZZM8JTDUdBgzbj1JyUW?cluster=mainnet-beta) | `435020068` | 150 | 5,000 lamports | 1,931,690,802 lamports to the pinned recipient |
 
-The release used a locally pinned configured refund recipient. It received
+The configured refund recipient was pinned locally. It received
 9,049,204,080 + 1,931,690,802 = **10,980,894,882 lamports**
 (10.980894882 SOL). The proof-account rent first returned to the payer and is
 therefore already included in the later payer sweep; it must not be added to
@@ -124,6 +124,15 @@ The cleanup path pins the refund address independently of mutable account
 balances. The ProgramData refund went directly to that address. The final
 sweep signed an exact payer-balance snapshot minus its transaction fee, so
 unrelated inbound lamports could not redirect the refund.
+
+The public record identifies the configured refund recipient by its role and
+the SHA-256 of the private pin file (base58 public key followed by a newline).
+The RPC archive verifier derives both refund destinations from the archived
+transaction messages, compares them with each other and with that recorded
+pin hash, and reconciles the closure and sweep balances. It does not print
+the destination. The pinning procedure is established by the executor code
+and recorded evidence; chain data alone cannot establish when a local file
+was configured. Transaction signatures still allow independent chain inspection.
 
 The earlier demonstration and its different lifecycle are preserved
 unchanged in [the historical mainnet record](mainnet-demo.md). Machine-readable

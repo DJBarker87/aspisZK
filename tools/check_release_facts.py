@@ -1625,7 +1625,7 @@ def check_public_claims(facts: dict[str, Any]) -> None:
             v5["mainnet"]["proof_close"]["signature"],
             v5["mainnet"]["programdata_close"]["signature"],
             v5["mainnet"]["payer_sweep"]["signature"],
-            v5["mainnet"]["refund"]["recipient"],
+            "configured refund recipient",
             f"{v5['mainnet']['refund']['direct_receipt_lamports']:,}",
             "84",
             "71",
@@ -1640,7 +1640,7 @@ def check_public_claims(facts: dict[str, Any]) -> None:
             f"{v5['compute']['mainnet_landed_cu']:,}",
             "nullifier PDA bump was exactly\n`255`",
             "exact signed-wire\nsimulation",
-            v5["mainnet"]["refund"]["recipient"],
+            "configured refund recipient",
         ],
     )
     require_literals(

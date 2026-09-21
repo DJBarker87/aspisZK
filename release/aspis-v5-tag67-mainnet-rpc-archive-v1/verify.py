@@ -590,6 +590,78 @@ def validate_rpc_response(
     return response
 
 
+def verify_refund_cleanup(decoded_transactions, binding, lifecycle):
+    """Bind observed refund destinations to the separately recorded private pin."""
+    by_signature = {item["row"]["signature"]: item for item in decoded_transactions}
+    identities = lifecycle["identities"]
+    transactions = lifecycle["transactions"]
+
+    def transaction(name):
+        item = by_signature[binding["named_transactions"][name]["signature"]]
+        expected = transactions[name]
+        result = item["result"]
+        if (result["meta"]["err"] is not None
+                or result["slot"] != expected["finalized_slot"]
+                or result["meta"]["fee"] != expected["fee_lamports"]
+                or result["meta"]["computeUnitsConsumed"] != expected["landed_compute_units"]):
+            fail(f"cleanup receipt mismatch: {name}")
+        return item
+
+    def balances(item, key):
+        index = item["message"]["keys"].index(key)
+        meta = item["result"]["meta"]
+        return meta["preBalances"][index], meta["postBalances"][index]
+
+    close = transaction("programdata_close")
+    sweep = transaction("payer_sweep")
+    proof = transaction("proof_close_tag64")
+    close_ix = [ix for ix in close["message"]["instructions"]
+                if ix["program"] == LOADER_ID and ix["data"] == struct.pack("<I", 5)]
+    if len(close_ix) != 1 or len(close_ix[0]["accounts"]) != 4:
+        fail("expected one loader ProgramData close")
+    accounts = close_ix[0]["accounts"]
+    recipient = accounts[1]
+    if accounts[0] != identities["programdata"] or accounts[3] != identities["program"]:
+        fail("ProgramData close account roles differ")
+    if not key_is_signer(close["message"], accounts[2]):
+        fail("ProgramData close authority did not sign")
+    if digest((recipient + "\n").encode("ascii")) != identities["refund_pin_sha256"]:
+        fail("observed refund destination differs from recorded private pin")
+    transfer = transactions["payer_sweep"]["transfer_to_pinned_recipient_lamports"]
+    instructions = sweep["message"]["instructions"]
+    if (len(instructions) != 1 or instructions[0]["program"] != SYSTEM_ID
+            or instructions[0]["accounts"] != [identities["payer"], recipient]
+            or instructions[0]["data"] != struct.pack("<IQ", 2, transfer)
+            or not key_is_signer(sweep["message"], identities["payer"])):
+        fail("payer sweep is not the exact transfer to the pinned destination")
+    if recipient in (identities["payer"], identities["programdata"], identities["proof_account"]):
+        fail("refund destination aliases a cleanup source")
+    programdata_before, programdata_after = balances(close, identities["programdata"])
+    close_before, close_after = balances(close, recipient)
+    expected_refund = transactions["programdata_close"]["refund_direct_to_pinned_recipient_lamports"]
+    if (programdata_after != 0 or programdata_before != expected_refund
+            or close_after - close_before != expected_refund):
+        fail("ProgramData closure refund does not reconcile")
+    if balances(close, identities["program"])[0] != balances(close, identities["program"])[1]:
+        fail("Program account balance changed during ProgramData close")
+    payer_before, payer_after = balances(sweep, identities["payer"])
+    sweep_before, sweep_after = balances(sweep, recipient)
+    if (payer_after != 0 or payer_before != transfer + sweep["result"]["meta"]["fee"]
+            or sweep_after - sweep_before != transfer):
+        fail("payer snapshot minus fee sweep does not reconcile")
+    proof_ix = [ix for ix in proof["message"]["instructions"] if ix["program"] == identities["program"]]
+    if (len(proof_ix) != 1 or proof_ix[0]["data"] != bytes([64])
+            or proof_ix[0]["accounts"] != [identities["proof_account"], identities["payer"]]):
+        fail("proof cleanup is not the expected Tag-64 close")
+    proof_before, proof_after = balances(proof, identities["proof_account"])
+    proof_payer_before, proof_payer_after = balances(proof, identities["payer"])
+    if (proof_after != 0 or proof_before != transactions["proof_close_tag64"]["refund_to_payer_lamports"]
+            or proof_payer_after - proof_payer_before != proof_before - proof["result"]["meta"]["fee"]):
+        fail("proof cleanup refund does not reconcile")
+    if expected_refund + transfer != lifecycle["refund_reconciliation"]["total_direct_receipt_by_pinned_recipient_lamports"]:
+        fail("direct refund total double-counts proof rent or otherwise differs")
+
+
 def main() -> int:
     index = load_json(INDEX_PATH)
     summary = load_json(SUMMARY_PATH)
@@ -789,6 +861,9 @@ def main() -> int:
         result = validate_rpc_response(raw, request_id)["result"]
         if not isinstance(result, dict) or result.get("value") is not None:
             fail(f"closed account had a non-null value at capture: {account}")
+
+    verify_refund_cleanup(decoded_transactions, binding, lifecycle)
+    print("PASS: ProgramData close, proof close, payer sweep and recorded refund pin reconcile without publishing the recipient.")
 
     proof_reconstruction = reconstruct_uploaded_proof(
         decoded_transactions,

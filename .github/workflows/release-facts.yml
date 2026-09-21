@@ -17,5 +17,9 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
+      - name: Check wallet privacy
+        run: python3 tools/check_wallet_privacy.py --self-test
+      - name: Verify archived V5 refunds and rejection controls
+        run: python3 tools/test_v5_refund_cleanup.py
       - name: Check release facts and public claims
         run: python3 tools/check_release_facts.py --self-test
