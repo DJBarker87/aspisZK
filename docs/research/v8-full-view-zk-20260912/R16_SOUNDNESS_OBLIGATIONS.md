@@ -1,5 +1,39 @@
 # R16 soundness preservation obligations
 
+## Product and square residue interpretation — 2026-09-21
+
+Base revision `a6a24282` plus this changeset. QM31WordResidues now proves
+decode_mul, decode_r, decode_qm_mul and decode_qm_square for the shared
+exact word formulas. CM31/QM31 products and square interpretation accept
+arbitrary Nat input coordinates; all modular subtrahends are canonical by
+construction. The extension-constant decode_r theorem explicitly requires
+canonical input, and its uses discharge that premise via mul_canonical.
+No field law or probability/hiding premise was added.
+
+The outputs are equal to explicitly defined modular coordinate operations
+cMul/cR/qMul/qSquare. This connects word reduction to the retained
+Karatsuba shape, NOT yet to a QuadraticAlgebra field instance. It does not
+turn the pair type's ordinary componentwise multiplication into tower
+multiplication. The subsequent tower identification remains mandatory.
+
+Exact target `AspisV8R17/QM31WordResidues.lean`, SHA256
+`5a302d607e8f72137002646d67cb5872f63ae16fb2fa2681f377bd0d8fd037c9`.
+Cached Linux Lean 4.32.0 `-j1 -M1800`, scope
+`aspis-r17-product-residues-r1`, MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64: exit 0, wall 0.96 s,
+peak RSS 1840620 KiB, swaps 0. mul_canonical has no axioms; all nine
+interpretation/cast #print axioms results use `[propext, Quot.sound]`.
+No sorryAx, failed attempts or cap increase. Unchanged generated consumers
+were not replayed because their imported formulas did not change.
+
+Next: identify these coordinate operations with the explicit retained
+quadratic tower. Import inspection shows QuadraticAlgebra.Basic also pulls
+in involution/norm and FieldSimp; QuadraticAlgebra.Defs is the relevant
+smaller ring-operation interface to inspect before another focused attempt.
+Source caller arrays/loops, field/nonresidue certification integration,
+full transcript privacy and malicious-prover soundness remain separate open
+obligations. Production paths and negative regressions remain unchanged.
+
 ## Shared pure word interface and linear residue interpretation — 2026-09-21
 
 Base revision `e0989f78` plus this changeset. QM31WordFormulas.lean separates
