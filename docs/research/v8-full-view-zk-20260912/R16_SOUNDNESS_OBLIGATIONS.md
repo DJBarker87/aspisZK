@@ -1,5 +1,67 @@
 # R16 soundness preservation obligations
 
+## Structured-mask weights, carry and source slices — 2026-09-21
+
+Base `42596fba8798302aaf5290d28a0303b9a7f27611` plus this changeset.
+Three new leaves discharge the earlier flat-coordinate algebraic gap:
+
+- `MaskWeightBlocks.lean` proves the scaled 27-entry round-block dot
+  product, matching list lengths, reverse-round block construction and
+  carry scale half^r. The complete carry-plus-block dot product equals the
+  literal mask loop and, at half=1/2, the retained structuredMask.
+- `MaskWeightVector.lean` proves the literal inner power-weight recurrence
+  and supplies a length-checked Fin 271 interface for the ten 27-entry
+  blocks plus carry. No truncated zip or omitted coordinate enters it.
+- `MaskSourceSlices.lean` proves that reads starting at 1 and advancing
+  by 27 flatten to exactly the original 271 coordinates including carry
+  at zero. The final source_mask_weights_pairing discharges the intermediate
+  slices equality premise for the SAME computed Horner outputs. Its final
+  source_original_mask_weight_dot composes the mask evaluation with G's
+  retained point-1, point-2 and inactive-sum terms.
+
+The final pairing is not conditional on a new hiding/coverage premise.
+It is deterministic source-shaped algebra for arbitrary m and challenge
+coordinates. In particular, no source coin is resampled and the 271 mixed
+coordinates are not asserted independent or uniform. The intermediate
+mixed_mask_weights_pairing still documents its slices premise; the final
+MaskSourceSlices theorem actually proves and instantiates that premise.
+
+Rechecked local and v19 staged r17_structured_g.rs, identical SHA-256
+`147be74e8651e05aa4680dbb412252751e8f21f5a6ad8a4de939d0f01bfb52c6`.
+The inner power recurrence, source slice offsets, reverse chronology and
+carry contribution are now represented and proved. The outer weight-table
+construction is a recursive block model: equality to every Rust mutable
+array write has NOT been claimed as an extracted execution theorem.
+
+First remaining source-specific proposition: the pinned Rust mask_weights
+array writes, field operations and point-array conversion refine these
+flat blocks and the composed opening functional. The point-construction
+API, concrete field representation, fixed inventory/order and full verifier
+acceptance/extraction still need their source connections. This does not
+discharge commitment binding, high-tail image validity, folds/final openings,
+adaptive challenge losses, joint legal C1/H1/G coverage or full privacy.
+
+Focused cached workspace `/Users/dominic/ZK/AspisFormal`; per leaf command
+`lake env lean -j1 -M1800 -R <research>/lean -o <r17-cache>/<leaf>.olean
+<research>/lean/AspisV8R17/<leaf>.lean`, measured by `/usr/bin/time -l`:
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| MaskWeightBlocks | 0 | 10.49 | 1705148416 | 0 |
+| MaskWeightVector | 0 | 8.77 | 1795915776 | 0 |
+| MaskSourceSlices, initial distribution/rewrite failure | 1 | 6.42 | 1790836736 | 0 |
+| MaskSourceSlices, side-restricted rewrite; congr recursion failure | 1 | 5.88 | 1773158400 | 0 |
+| MaskSourceSlices, explicit function equality | 0 | 3.93 | 1801912320 | 0 |
+| MaskSourceSlices, added original-weight composition | 0 | 1.94 | 1802960896 | 0 |
+
+Seventeen final #print axioms declarations contain only subsets of propext,
+Classical.choice and Quot.sound; no sorryAx. Final leaves have respectively
+one, two, and three unused-instance/simp-argument warnings. The failed
+drafts were not evidence. Their replacement uses symbolic distributivity,
+restricted rewriting and function extensionality, not increased limits or
+normalization of the 270-entry list. No production changes, removed negative
+regressions, full manifest replay or unchanged runtime replay occurred.
+
 ## Original opening weights and mixing transpose — 2026-09-21
 
 Base `8a58262abc8429cefe370cccbc9e4f1f9e0f2a97` plus this changeset.
