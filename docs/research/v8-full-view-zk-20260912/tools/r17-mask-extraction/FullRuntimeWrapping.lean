@@ -5,6 +5,19 @@ is explicit; no caller is allowed to silently assume these operations agree. -/
 namespace AspisV8R17.FullRuntimeWrapping
 open Aeneas.Std
 
+theorem shr31_value (x : U64) :
+    (U64.wrapping_shr x 31#u32).val = x.val >>> 31 := by
+  change (x.bv.ushiftRight 31).toNat = x.bv.toNat >>> 31
+  exact BitVec.toNat_ushiftRight _ _
+
+theorem shr31_agree (x : U64) :
+    UScalar.shiftRight x 31 = .ok (U64.wrapping_shr x 31#u32) := by
+  obtain ⟨z, hz, hv⟩ := UnsignedReducerOps.shift_success x 31 (by decide)
+  rw [hz]
+  congr 1
+  apply UScalar.eq_of_val_eq
+  rw [hv, shr31_value]
+
 theorem add_agree (x y : U64) (h : x.val + y.val < 2^64) :
     UScalar.add x y = .ok (U64.wrapping_add x y) := by
   obtain ⟨z, hz, hv⟩ := UnsignedCoreSlice.add_success x y h
@@ -51,6 +64,8 @@ theorem sub_underflow_disagrees :
   simp
 
 #print axioms add_agree
+#print axioms shr31_value
+#print axioms shr31_agree
 #print axioms mul_agree
 #print axioms sub_agree
 #print axioms sub_underflow_disagrees

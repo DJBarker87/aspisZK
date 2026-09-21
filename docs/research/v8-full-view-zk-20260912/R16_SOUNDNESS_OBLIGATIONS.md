@@ -1,5 +1,30 @@
 # R16 soundness preservation obligations
 
+## Actual-runtime reducer shift agreement — 2026-09-21
+
+Base revision `e0f2f72c` plus this changeset. FullRuntimeWrapping now proves
+shr31_value and shr31_agree for every U64: the actual wrapping shift by 31
+has value x.val >>> 31 and agrees with the successful checked shift. No caller
+bound or new assumption is required because 31 is below the U64 width.
+The proof uses BitVec.toNat_ushiftRight directly, not concrete input evaluation.
+WrappingOps/Shr.lean was inspected and hash-checked; the runner now pins it to
+34837809e785ceeaf47b042afd7fb747f68ce474c30f29670e9694fe129f1714.
+
+Focused target AspisV8R17/FullRuntimeWrapping.lean, cached Lean 4.32.0
+-j1 -M3200, in full-runtime-r3 on the retained R17 extraction host workspace.
+Sequential scopes aspis-r17-shift-r1/r2 used MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64. R1 failed (exit 1, 1.23 s, 2,556,964 KiB RSS,
+zero swaps): broad simp looped between scalar values and bitvectors. R2 replaced
+that tactic with the exact bitvector lemma (exit 0, 1.21 s, 2,568,892 KiB RSS,
+zero swaps). No recursion or resource cap was raised. All six final printed
+theorems audit to propext, Classical.choice and Quot.sound only. R1 sorryAx
+diagnostics were not accepted. Three pre-existing unused-simp warnings remain.
+
+The next obligation remains the actual extracted reduce_u64 equality: apply
+this shift agreement and derive addition/subtraction bounds from the retained
+reducer lemmas. This shift result alone does not assert caller equivalence,
+complete mask correctness, or privacy. Production and negative controls unchanged.
+
 ## Requested CU smoke: retained baseline only — 2026-09-21
 
 At privacy-branch revision `427f1897`, the user requested a fresh CU check.
