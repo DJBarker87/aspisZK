@@ -1,5 +1,52 @@
 # R17 small-block certificate route
 
+## Domain-free determinant composition route — 2026-09-21
+
+Base `51d1ded5eb55f4a6db386ef743b4908a0cd9f5e8` plus this changeset.
+`MatrixWindow.lean` defines a consecutive finite window of a Nat-indexed
+matrix. `matrixWindow_det_split` proves its determinant is the product of
+the head and tail determinants given the explicit lower-left zero entries.
+It uses the finite-sum index equivalence and the symbolic block determinant
+identity, with no large determinant expansion. `matrixWindow_isUnit`
+composes invertible determinants over any commutative ring.
+
+The determinant generator now preserves the 29 nonzero leaves and also
+proves all 29 small determinants are units in ZMod 2147483647. Each unit
+proof rewrites only its 1x1, 2x2 or 3x3 determinant, kernel-checks
+coprimality of its canonical value with the modulus, and applies
+`ZMod.isUnit_iff_coprime` and `ZMod.natCast_zmod_val`. No primality theorem,
+field assumption or new axiom is used. Unit composition therefore avoids
+needing a domain instance for this fixed-witness certificate: a product of
+units is a unit, and hence nonzero in this nontrivial ring. This is a
+stronger checked leaf property, not a weakening of the desired conclusion.
+
+Before selecting this route, the cached NormNum prime implementation was
+inspected; it warns of deep proofs above 25 bits. No large primality or
+Mersenne recurrence calculation was launched. Primality will still need
+justification wherever a later field-specific argument actually uses it.
+
+Focused commands ran in `/Users/dominic/ZK/AspisFormal` using
+`/usr/bin/time -l lake env python3`, the retained worktree LEAN_PATH,
+and `lean -j1 -M1800 SOURCE_ROOT/AspisV8R17/TARGET.lean`.
+SOURCE_ROOT is the privacy worktree's
+`docs/research/v8-full-view-zk-20260912/lean`. Both first attempts passed.
+
+| Exact target | Exit | Wall seconds | Peak RSS bytes | Swaps | Axioms audits |
+| --- | ---: | ---: | ---: | ---: | --- |
+| MatrixWindow.lean | 0 | 6.89 | 1739882496 | 0 | 2, standard axioms only |
+| BlockDeterminants.lean | 0 | 2.63 | 1761312768 | 0 | 58, standard axioms only |
+
+Standard axioms are exactly propext, Classical.choice and Quot.sound.
+The 31 new declarations and retained 29 leaves contain no sorryAx or
+native evaluation. Generator `--check` passes; exact compile output is in
+the command-tool record. No Rust/full-manifest replay or production change.
+
+Next: form the concrete source matrix windows, identify each finite
+diagonal slice using the already compiled scalar bindings, and recurse
+over all 133 blocks with these unit leaves and lower-entry theorems.
+The full source-model minor nonzero theorem is not yet assembled;
+adaptive source probability and full privacy/soundness remain open.
+
 ## All concrete block entries bound — 2026-09-21
 
 Base `c84c80e5e3bcdc608b15e6b25bfc804ec9b1c09e` plus this changeset.

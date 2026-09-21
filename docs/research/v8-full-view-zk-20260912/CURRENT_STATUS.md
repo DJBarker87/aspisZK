@@ -18,8 +18,11 @@ lookup proof replaced an over-cap direct lookup check, without raising caps.
 All remaining scalar bindings now compile: 392 diagonal entries and all
 22,702 lower-block pairs refer to this same ordered source minor. Both
 generators pass regeneration; 821 new theorem audits pass in 40 chunks
-plus one generic tail lemma. Next is finite-slice determinant composition
-and the justified field/domain instance, then polynomial/source probability.
+plus one generic tail lemma. The symbolic consecutive-window determinant
+rule now compiles, and all 29 small determinant leaves are proved units
+by checked coprimality. This supports composition without an assumed
+domain/prime instance. Next is the concrete window recursion, then
+polynomial/source probability.
 This is not a full privacy/soundness theorem; see `R17_MINOR_BLOCKS.md`.
 
 ## Latest certificate preflight — small blocks, 2026-09-21

@@ -16,6 +16,13 @@ theorem block0_det_ne_zero : block0.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block0_det_ne_zero
+theorem block0_det_isUnit : IsUnit block0.det := by
+  have hc : Nat.Coprime block0.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block0.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block0_det_isUnit
 
 def block1 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![1073741829]
@@ -23,6 +30,13 @@ theorem block1_det_ne_zero : block1.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block1_det_ne_zero
+theorem block1_det_isUnit : IsUnit block1.det := by
+  have hc : Nat.Coprime block1.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block1.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block1_det_isUnit
 
 def block2 : Matrix (Fin 3) (Fin 3) (ZMod 2147483647) :=
   !![805306369 , 27 , 28; 0 , 11 , 2147483640; 1879048192 , 2147483625 , 2147483616]
@@ -30,6 +44,13 @@ theorem block2_det_ne_zero : block2.det ≠ 0 := by
   rw [Matrix.det_fin_three]
   decide
 #print axioms block2_det_ne_zero
+theorem block2_det_isUnit : IsUnit block2.det := by
+  have hc : Nat.Coprime block2.det.val 2147483647 := by
+    rw [Matrix.det_fin_three]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block2.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block2_det_isUnit
 
 def block3 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![234881024 , 369098752; 11 , 2147483640]
@@ -37,6 +58,13 @@ theorem block3_det_ne_zero : block3.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block3_det_ne_zero
+theorem block3_det_isUnit : IsUnit block3.det := by
+  have hc : Nat.Coprime block3.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block3.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block3_det_isUnit
 
 def block4 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![1073741827 , 1073741829; 11 , 2147483640]
@@ -44,6 +72,13 @@ theorem block4_det_ne_zero : block4.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block4_det_ne_zero
+theorem block4_det_isUnit : IsUnit block4.det := by
+  have hc : Nat.Coprime block4.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block4.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block4_det_isUnit
 
 def block5 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![1610612737]
@@ -51,6 +86,13 @@ theorem block5_det_ne_zero : block5.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block5_det_ne_zero
+theorem block5_det_isUnit : IsUnit block5.det := by
+  have hc : Nat.Coprime block5.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block5.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block5_det_isUnit
 
 def block6 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![1610612737 , 2147483625; 1610612738 , 27]
@@ -58,6 +100,13 @@ theorem block6_det_ne_zero : block6.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block6_det_ne_zero
+theorem block6_det_isUnit : IsUnit block6.det := by
+  have hc : Nat.Coprime block6.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block6.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block6_det_isUnit
 
 def block7 : Matrix (Fin 3) (Fin 3) (ZMod 2147483647) :=
   !![1073741829 , 27 , 28; 0 , 11 , 2147483640; 1073741827 , 2147483625 , 2147483616]
@@ -65,6 +114,13 @@ theorem block7_det_ne_zero : block7.det ≠ 0 := by
   rw [Matrix.det_fin_three]
   decide
 #print axioms block7_det_ne_zero
+theorem block7_det_isUnit : IsUnit block7.det := by
+  have hc : Nat.Coprime block7.det.val 2147483647 := by
+    rw [Matrix.det_fin_three]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block7.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block7_det_isUnit
 
 def block8 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![1879048192]
@@ -72,6 +128,13 @@ theorem block8_det_ne_zero : block8.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block8_det_ne_zero
+theorem block8_det_isUnit : IsUnit block8.det := by
+  have hc : Nat.Coprime block8.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block8.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block8_det_isUnit
 
 def block9 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![469762048 , 738197504; 11 , 2147483640]
@@ -79,6 +142,13 @@ theorem block9_det_ne_zero : block9.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block9_det_ne_zero
+theorem block9_det_isUnit : IsUnit block9.det := by
+  have hc : Nat.Coprime block9.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block9.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block9_det_isUnit
 
 def block10 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![738197504]
@@ -86,6 +156,13 @@ theorem block10_det_ne_zero : block10.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block10_det_ne_zero
+theorem block10_det_isUnit : IsUnit block10.det := by
+  have hc : Nat.Coprime block10.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block10.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block10_det_isUnit
 
 def block11 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![1073741827 , 2147483625; 1073741829 , 27]
@@ -93,6 +170,13 @@ theorem block11_det_ne_zero : block11.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block11_det_ne_zero
+theorem block11_det_isUnit : IsUnit block11.det := by
+  have hc : Nat.Coprime block11.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block11.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block11_det_isUnit
 
 def block12 : Matrix (Fin 3) (Fin 3) (ZMod 2147483647) :=
   !![1610612738 , 27 , 28; 0 , 11 , 2147483640; 1610612737 , 2147483625 , 2147483616]
@@ -100,6 +184,13 @@ theorem block12_det_ne_zero : block12.det ≠ 0 := by
   rw [Matrix.det_fin_three]
   decide
 #print axioms block12_det_ne_zero
+theorem block12_det_isUnit : IsUnit block12.det := by
+  have hc : Nat.Coprime block12.det.val 2147483647 := by
+    rw [Matrix.det_fin_three]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block12.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block12_det_isUnit
 
 def block13 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![1610612737 , 1610612738; 11 , 2147483640]
@@ -107,6 +198,13 @@ theorem block13_det_ne_zero : block13.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block13_det_ne_zero
+theorem block13_det_isUnit : IsUnit block13.det := by
+  have hc : Nat.Coprime block13.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block13.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block13_det_isUnit
 
 def block14 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![117440512]
@@ -114,6 +212,13 @@ theorem block14_det_ne_zero : block14.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block14_det_ne_zero
+theorem block14_det_isUnit : IsUnit block14.det := by
+  have hc : Nat.Coprime block14.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block14.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block14_det_isUnit
 
 def block15 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![117440512 , 2147483625; 184549376 , 27]
@@ -121,6 +226,13 @@ theorem block15_det_ne_zero : block15.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block15_det_ne_zero
+theorem block15_det_isUnit : IsUnit block15.det := by
+  have hc : Nat.Coprime block15.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block15.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block15_det_isUnit
 
 def block16 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![1610612738]
@@ -128,6 +240,13 @@ theorem block16_det_ne_zero : block16.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block16_det_ne_zero
+theorem block16_det_isUnit : IsUnit block16.det := by
+  have hc : Nat.Coprime block16.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block16.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block16_det_isUnit
 
 def block17 : Matrix (Fin 3) (Fin 3) (ZMod 2147483647) :=
   !![738197504 , 27 , 28; 0 , 11 , 2147483640; 469762048 , 2147483625 , 2147483616]
@@ -135,6 +254,13 @@ theorem block17_det_ne_zero : block17.det ≠ 0 := by
   rw [Matrix.det_fin_three]
   decide
 #print axioms block17_det_ne_zero
+theorem block17_det_isUnit : IsUnit block17.det := by
+  have hc : Nat.Coprime block17.det.val 2147483647 := by
+    rw [Matrix.det_fin_three]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block17.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block17_det_isUnit
 
 def block18 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![1879048192 , 805306369; 11 , 2147483640]
@@ -142,6 +268,13 @@ theorem block18_det_ne_zero : block18.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block18_det_ne_zero
+theorem block18_det_isUnit : IsUnit block18.det := by
+  have hc : Nat.Coprime block18.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block18.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block18_det_isUnit
 
 def block19 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![234881024]
@@ -149,6 +282,13 @@ theorem block19_det_ne_zero : block19.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block19_det_ne_zero
+theorem block19_det_isUnit : IsUnit block19.det := by
+  have hc : Nat.Coprime block19.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block19.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block19_det_isUnit
 
 def block20 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![805306369]
@@ -156,6 +296,13 @@ theorem block20_det_ne_zero : block20.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block20_det_ne_zero
+theorem block20_det_isUnit : IsUnit block20.det := by
+  have hc : Nat.Coprime block20.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block20.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block20_det_isUnit
 
 def block21 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![11]
@@ -163,6 +310,13 @@ theorem block21_det_ne_zero : block21.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block21_det_ne_zero
+theorem block21_det_isUnit : IsUnit block21.det := by
+  have hc : Nat.Coprime block21.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block21.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block21_det_isUnit
 
 def block22 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![1879048192 , 2147483625; 805306369 , 27]
@@ -170,6 +324,13 @@ theorem block22_det_ne_zero : block22.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block22_det_ne_zero
+theorem block22_det_isUnit : IsUnit block22.det := by
+  have hc : Nat.Coprime block22.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block22.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block22_det_isUnit
 
 def block23 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![58720256]
@@ -177,6 +338,13 @@ theorem block23_det_ne_zero : block23.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block23_det_ne_zero
+theorem block23_det_isUnit : IsUnit block23.det := by
+  have hc : Nat.Coprime block23.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block23.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block23_det_isUnit
 
 def block24 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![939524096]
@@ -184,6 +352,13 @@ theorem block24_det_ne_zero : block24.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block24_det_ne_zero
+theorem block24_det_isUnit : IsUnit block24.det := by
+  have hc : Nat.Coprime block24.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block24.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block24_det_isUnit
 
 def block25 : Matrix (Fin 1) (Fin 1) (ZMod 2147483647) :=
   !![469762048]
@@ -191,6 +366,13 @@ theorem block25_det_ne_zero : block25.det ≠ 0 := by
   rw [Matrix.det_fin_one]
   decide
 #print axioms block25_det_ne_zero
+theorem block25_det_isUnit : IsUnit block25.det := by
+  have hc : Nat.Coprime block25.det.val 2147483647 := by
+    rw [Matrix.det_fin_one]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block25.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block25_det_isUnit
 
 def block26 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![939524096 , 2147483625; 1476395008 , 27]
@@ -198,6 +380,13 @@ theorem block26_det_ne_zero : block26.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block26_det_ne_zero
+theorem block26_det_isUnit : IsUnit block26.det := by
+  have hc : Nat.Coprime block26.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block26.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block26_det_isUnit
 
 def block27 : Matrix (Fin 2) (Fin 2) (ZMod 2147483647) :=
   !![469762048 , 2147483625; 738197504 , 27]
@@ -205,6 +394,13 @@ theorem block27_det_ne_zero : block27.det ≠ 0 := by
   rw [Matrix.det_fin_two]
   decide
 #print axioms block27_det_ne_zero
+theorem block27_det_isUnit : IsUnit block27.det := by
+  have hc : Nat.Coprime block27.det.val 2147483647 := by
+    rw [Matrix.det_fin_two]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block27.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block27_det_isUnit
 
 def block28 : Matrix (Fin 3) (Fin 3) (ZMod 2147483647) :=
   !![1073741829 , 27 , 28; 0 , 1879048192 , 805306369; 1073741827 , 2147483625 , 2147483616]
@@ -212,6 +408,13 @@ theorem block28_det_ne_zero : block28.det ≠ 0 := by
   rw [Matrix.det_fin_three]
   decide
 #print axioms block28_det_ne_zero
+theorem block28_det_isUnit : IsUnit block28.det := by
+  have hc : Nat.Coprime block28.det.val 2147483647 := by
+    rw [Matrix.det_fin_three]
+    decide
+  have hu := (ZMod.isUnit_iff_coprime block28.det.val 2147483647).mpr hc
+  simpa only [ZMod.natCast_zmod_val] using hu
+#print axioms block28_det_isUnit
 
 end BlockDeterminants
 end AspisV8R17

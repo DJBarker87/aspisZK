@@ -47,7 +47,14 @@ def render():
                 f'theorem block{i}_det_ne_zero : block{i}.det ≠ 0 := by',
                 '  rw [Matrix.det_fin_'+{1:'one',2:'two',3:'three'}[n]+']',
                 '  decide',
-                f'#print axioms block{i}_det_ne_zero', '']
+                f'#print axioms block{i}_det_ne_zero',
+                f'theorem block{i}_det_isUnit : IsUnit block{i}.det := by',
+                f'  have hc : Nat.Coprime block{i}.det.val 2147483647 := by',
+                '    rw [Matrix.det_fin_'+{1:'one',2:'two',3:'three'}[n]+']',
+                '    decide',
+                f'  have hu := (ZMod.isUnit_iff_coprime block{i}.det.val 2147483647).mpr hc',
+                '  simpa only [ZMod.natCast_zmod_val] using hu',
+                f'#print axioms block{i}_det_isUnit', '']
     out += ['end BlockDeterminants', 'end AspisV8R17', '']
     return '\n'.join(out)
 
