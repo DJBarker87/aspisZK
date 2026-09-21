@@ -1,5 +1,44 @@
 # Fixed active-minor nonvanishing witness
 
+## Polynomial evaluation of assembled source-model coefficients
+
+Base `c5033ffc` plus this changeset. `ActiveEntry.lean` now proves
+`activeEntry_eval`, evaluating its three-variable polynomial at alpha,u,v
+to the normalized chord's six-constant expression. `sourceBasisConstants`
+obtains those constants from the assembled concrete weighted-schedule
+chord model, not arbitrary placeholders. `sourceEntry_eval` proves the
+result equals that model's chord coefficient on q-alpha^k*s for every
+assignment. `sourceEntry_degree` proves this actual source-model polynomial
+has total degree <=5 for k<=3. No challenge distribution premise appears.
+
+This supplies the polynomial evaluation bridge for the weighted finite
+model. The next certificate gate is its fixed matrix/minor instantiation
+and a kernel-checked nonzero determinant witness. The concrete Rust
+permutation/field/machine-word refinement and high-tail acceptance are
+still not automatically proved by the model's identity. Per-variable entry
+bounds and adaptive probability accounting remain open; no global privacy
+or soundness conclusion is drawn.
+
+Focused commands use `/usr/bin/time -l lake env` in the cached formal
+workspace, Lean `-j1 -M1800`. The final command sets LEAN_PATH to the
+worktree target/r17-lean and target/r16-lean before the existing path,
+and checks `docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/ActiveEntry.lean`.
+The missing WeightedScatter object was generated with the same flags,
+`-R` set to that lean source root and `-o` to the corresponding retained
+target/r17-lean object; no full manifest replay occurred.
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| ActiveEntry eval, missing finite-sum import | 1 | 5.84 | 1676722176 | 0 |
+| ActiveEntry generic evaluation after import | 0 | 2.58 | 1681571840 | 0 |
+| WeightedScatter object for bridge import | 0 | 3.55 | 1396441088 | 0 |
+| Final source-model evaluation and degree | 0 | 3.33 | 1683800064 | 0 |
+
+All five final axioms audits list only propext, Classical.choice,
+Quot.sound. The failed initial sorryAx audit is not accepted. One existing
+simp-style warning remains. Outputs are in the command-tool record.
+No Rust change or unchanged runtime regression was repeated.
+
 ## Assembled weighted scatter and transport
 
 Base `1bc073f1` plus this changeset. `WeightedScatter.lean` defines the

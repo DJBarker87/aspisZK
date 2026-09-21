@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## Latest polynomial bridge — 2026-09-21
+
+`sourceEntry_eval` and `sourceEntry_degree` now compile: the polynomial
+built from the assembled weighted finite chord model evaluates exactly
+to its coefficient and has total degree <=5. Next is the fixed matrix/minor
+instantiation with a kernel-checked nonzero witness. Concrete Rust
+representation refinement and adaptive probability remain open; this is
+not a full privacy or soundness theorem. See `R17_ACTIVE_MINOR.md`.
+
 ## Latest coverage step — fixed active minor, 2026-09-21
 
 `R17_ACTIVE_MINOR.md` records a fixed 214-column nonvanishing witness at
