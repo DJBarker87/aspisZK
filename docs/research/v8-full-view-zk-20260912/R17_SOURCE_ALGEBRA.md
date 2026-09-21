@@ -1,5 +1,57 @@
 # R17 source-shaped algebra bridge
 
+## Horner mixing bridge and duplicate-declaration repair — 2026-09-21
+
+Base `14f6ce72ccfafc17491aab3eb3a99a1af76d97ec` plus this changeset.
+Inspection found that retained TerminalG.lean (commit d7692b0c) already
+defined replacedGTerminal/replacedGTerminal_eq, with the positive-transfer
+extra term retained, and proved old-G independence including cube sums.
+The preceding SourceZeroBoundary leaf had duplicated those declaration names.
+Its standalone compile did not establish compatibility with TerminalG.
+
+The duplicate definitions and redundant terminal wrappers are now removed;
+SourceZeroBoundary imports TerminalG and retains its five new loop/composition
+theorems. No earlier terminal theorem, negative regression, or source premise
+was removed. This supersedes the previous section's claim of eight new
+integrated declarations: three terminal audits were redundant, and two names
+collided across modules. The final dependent compile below includes both
+retained TerminalG and corrected SourceZeroBoundary.
+
+New SourceMixing.lean proves six facts about the literal reverse-list Horner
+loop used by mixed_coins: its cons recurrence, finite power-sum expression,
+additivity in coefficients, equality to the retained mix definition, equality
+to mixing1024, and identification of the source's first 271 outputs with the
+prefix of that complete equivalence. The field/characteristic premises are
+those of the retained Mixing module, not new hiding assumptions.
+
+This does not call the 271-coordinate projection a bijection. The remaining
+753 transformed coordinates are not discarded from the posterior. In
+particular the source G vector has an inactive balancing constraint; a
+bijection on the unrestricted 1024-dimensional space does not establish the
+law on that legal subspace. Joint retained-observation coverage and legal
+mask-space source correspondence remain required before applying WitnessShear.
+The concrete Rust scalar conversion, slice bounds and QM31 implementation
+refinement also remain explicit obligations.
+
+The initial prefix corollary hit elaborator recursion-depth while inferring
+the Fin 1024 index. Supplying that index explicitly and proving its bound
+symbolically fixed the failure; no recursion or memory cap was raised and
+no 1024-term numerical evaluation was introduced.
+
+Focused cached lake commands use -j1 -M1800, -R research/lean and matching
+r17 objects. No production or Rust source changed, no runtime replay.
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| SourceZeroBoundary importing retained TerminalG | 0 | 10.24 | 1695907840 | 0 |
+| SourceMixing, implicit prefix index failed | 1 | 10.17 | 1769177088 | 0 |
+| SourceMixing final integrated bridge | 0 | 7.42 | 1784348672 | 0 |
+
+Final five SourceZeroBoundary and six SourceMixing audits use only propext,
+Classical.choice and Quot.sound (Horner cons omits choice). Failed sorryAx
+output is rejected. SourceMixing has no warnings; prior unused-simp warnings
+in SourceZeroBoundary remain. The source anchor r17_structured_g.rs is unchanged.
+
 ## Inner power loop and old-G cancellation — 2026-09-21
 
 Base `9d75a42346c4298a9b119d87d0a5aa772ec05117` plus this changeset.

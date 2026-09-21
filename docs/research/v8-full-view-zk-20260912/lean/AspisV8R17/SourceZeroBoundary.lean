@@ -1,4 +1,4 @@
-import AspisV8R17.SourceMaskLoop
+import AspisV8R17.TerminalG
 import Mathlib.Data.List.OfFn
 
 /-! The inner zero_boundary power loop in r17_structured_g.rs. Symbolic
@@ -63,31 +63,9 @@ theorem literalMaskLoop_eq_structuredMask [NeZero (2 : F)] {width : ℕ}
   rw [literalMaskContributions_eq]
   exact sourceMaskLoop_eq_structuredMask r carry coins z
 
-/-- Literal staged terminal replacement: remove the ordinary G factor and
-add the serialized structured G claim. base contains all non-G terms. -/
-def replacedGTerminal (base factor g : F) : F := (base + factor*g) - g*factor + g
-
-theorem replacedGTerminal_eq (base factor g : F) :
-    replacedGTerminal base factor g = base + g := by
-  unfold replacedGTerminal
-  ring
-
-theorem old_g_cancels_from_context_offset (left right factor g : F) :
-    replacedGTerminal left factor g - replacedGTerminal right factor g = left-right := by
-  simp only [replacedGTerminal_eq]
-  ring
-
-theorem corrected_g_terminal (left right factor g delta : F) (h : delta = left-right) :
-    replacedGTerminal right factor (g+delta) = replacedGTerminal left factor g := by
-  simp only [replacedGTerminal_eq, h]
-  ring
-
 #print axioms zeroBoundaryLoop_closed
 #print axioms sourceZeroBoundary_eq_roundEval
 #print axioms sourceZeroBoundary_add
 #print axioms literalMaskContributions_eq
 #print axioms literalMaskLoop_eq_structuredMask
-#print axioms replacedGTerminal_eq
-#print axioms old_g_cancels_from_context_offset
-#print axioms corrected_g_terminal
 end AspisV8R17
