@@ -1,5 +1,62 @@
 # R17 determinant sampler/source boundary
 
+## Actual-core cursor differential gate — 2026-09-21
+
+Base `922852d39af704f9713f8d3e3e3017b8416ea9dd` plus this changeset.
+New `crates/aspis-core/tests/r17_rejection_cursor.rs` calls the actual
+Transcript::challenge_qm31 with a deterministic input-indexed hash backend.
+The independent cursor reference scans each limb's next eight candidates
+for the first canonical masked word, continuing at the actual consumed
+position, and preserves explicit exhaustion. It is an executable counterpart,
+not an extraction or formal Rust refinement of RejectionCursor.lean.
+
+Two tests pass, covering every bounded control-flow retry schedule:
+
+* 8^4=4096 successful schedules (0..7 rejections before each of four limbs).
+* 1+8+64+512=585 exhaustion schedules (0..3 preceding successful limbs,
+  followed by eight rejections on the failing limb).
+* Each runs twice with opposite high-bit phases: 9362 cases total. Both
+  encodings of masked P are exercised, and accepted examples include 0, 1,
+  P-1 and a mixed-byte value. This is not exhaustive over accepted values.
+* Every case checks all returned limbs/error, exact squeeze/advance call
+  order, block count ceil(consumed/8), and complete post-call state. A second
+  call checks that leftover words in the last block are discarded, including
+  after exhaustion; it starts at the next block, not the retained word suffix.
+
+This closes the finite schedule-regression gate only. It does not prove
+independent oracle outputs, all byte values, arbitrary oracle histories,
+or the joint four-limb failure mass. The formal model retains a word suffix;
+source composition across separate calls must apply the block-rounding discard
+projection, which these tests exercise but do not universally prove. Further
+unchanged schedule reruns are not needed; proceed to symbolic source refinement
+and adaptive first-assignment probability accounting.
+
+Checked SHA-256 pins:
+
+| File | SHA-256 |
+| --- | --- |
+| src/transcript.rs | be036d144b9fe0c8119d9f6fdd8ca2167d1379f7d1d785fa2f197200b9f7d119 |
+| src/field.rs | 5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8 |
+| tests/r17_rejection_cursor.rs | c37fb3eed5c0baa85fba2c76f7871839895fc996b1688b37d556aba17f047631 |
+
+All paths are under crates/aspis-core. Source files are unchanged.
+Command: `cargo test --offline --locked --release --jobs 1 -p aspis-core
+--test r17_rejection_cursor -- --nocapture`. Guard samples aggregate descendant
+RSS every 50ms, terminating above 786432 KiB or 120 seconds. This is a sampled
+process-group watchdog, not a kernel/cgroup memory cap; the small focused
+local gate stayed well below 8 GiB. Expected work was compilation, not heavy
+arithmetic. No full suite or unchanged Lean target was rerun.
+
+| Attempt | Exit | Wall seconds | time-l peak RSS bytes | Swaps | Sampled aggregate peak KiB |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Invalid --jobs1 syntax, no compilation | 1 | 0.12 | 17285120 | 0 | 4880 |
+| Correct --jobs 1, two tests / 9362 cases | 0 | 1.83 | 140836864 | 0 | 217376 |
+
+Optimized compilation reported 1.31s; tests 0.01s. Existing cfg(solana) and
+dead-code warnings remain. rustfmt --check and git diff --check pass.
+#print axioms is not applicable to this Rust-only gate; retained Lean audits
+are unchanged. Negative regressions and unrelated untracked work are preserved.
+
 ## Joint sequential ideal-tape symmetry — 2026-09-21
 
 Base `d0c22b8c212fd1eb0427a4f479e328b4f208ec8a` plus this changeset.
