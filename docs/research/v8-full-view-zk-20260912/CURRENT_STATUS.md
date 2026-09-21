@@ -14,6 +14,7 @@ and the source-shaped scatter loop has a compiled linearity proof plus
 with both parity formulas now composed into a universal source-shaped
 six-constant theorem,
 and compiled zero-extension/parity/bounded-output boundary lemmas,
+now composed through the finite 512/513/514-length chord reads,
 but a compiled polynomial/source bridge and actual adaptive probability
 law remain open. The algebraic evaluation is not an accepted OOD draw.
 No global privacy or soundness conclusion follows from this certificate.

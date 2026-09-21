@@ -1,5 +1,35 @@
 # Fixed active-minor nonvanishing witness
 
+## Finite-length composition
+
+Base `7242aeb8` plus this changeset. `SourceScatter.lean` now defines
+`finiteChordEven`/`finiteChordOdd` with explicit zero-extended length-n
+parity vectors, length-(n+1) first scatter outputs and length-(n+2)
+second scatter output. Their equivalence to the unbounded chord model
+is proved under explicit output-edge bounds. The interleaved
+`finiteChordCoefficient_eq` combines both branches, and
+`finite_source_six_constants` proves the full six-constant identity on
+these finite-length reads. Specializing n=512 matches the 512/513/514
+intermediate lengths inspected in `chord_product`.
+
+This closes the intermediate-padding composition within the source-shaped
+model, not an automatic extraction of Rust. The first remaining concrete
+correspondence obligation is the index-only bit schedule and fixed
+transport instantiation (including active rows not being the balancing
+pivot), followed by the polynomial evaluation bridge and kernel-checked
+nonzero certificate. Field implementation correctness, high-tail
+acceptance, sampler probability, and global privacy/soundness remain
+separate. The existing 1025 basis tests are not silently promoted into a
+full Rust refinement theorem.
+
+Cached focused command in `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/SourceScatter.lean`.
+The even/odd finite equality pass exited 0 in 4.24s, peak RSS 1365295104
+bytes. Final interleaved/six-constant pass exited 0 in 5.21s, peak RSS
+1365065728 bytes. Both had zero swaps. All four new axioms audits list
+only propext, Classical.choice, Quot.sound; no sorryAx. Outputs are in
+the command-tool record. No Rust change or unchanged full replay.
+
 ## Zero-extension boundary lemmas
 
 Base `877fcba3` plus this changeset. `SourceScatter.lean` now proves:

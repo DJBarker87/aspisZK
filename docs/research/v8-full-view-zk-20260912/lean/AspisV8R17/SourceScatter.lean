@@ -166,6 +166,81 @@ not establish the source's separate high-tail-zero acceptance assertion. -/
 theorem zeroExtend_retained (n : ℕ) (q : ℕ → F) (r : ℕ) (hr : r<n) :
     zeroExtend n q r = q r := by simp [zeroExtend, hr]
 
+def finiteChordEven (n : ℕ) (x xx : List (ScatterEdge ℕ ℕ F))
+    (q : ℕ → F) (a b c : F) (r : ℕ) : F :=
+  let e := zeroExtend n (fun i => q (2*i))
+  let o := zeroExtend n (fun i => q (2*i+1))
+  let xe := zeroExtend (n+1) (scatterValue x e)
+  let xo := zeroExtend (n+1) (scatterValue x o)
+  let xxo := zeroExtend (n+2) (scatterValue xx xo)
+  a*e r+b*xe r+c*(o r-xxo r)
+
+def finiteChordOdd (n : ℕ) (x : List (ScatterEdge ℕ ℕ F))
+    (q : ℕ → F) (a b c : F) (r : ℕ) : F :=
+  let e := zeroExtend n (fun i => q (2*i))
+  let o := zeroExtend n (fun i => q (2*i+1))
+  let xo := zeroExtend (n+1) (scatterValue x o)
+  c*e r+a*o r+b*xo r
+
+theorem finiteChordEven_eq (n : ℕ) (x xx : List (ScatterEdge ℕ ℕ F))
+    (hx : ∀ e ∈ x, e.2.1<n+1) (hxx : ∀ e ∈ xx, e.2.1<n+2)
+    (q : ℕ → F) (a b c : F) (r : ℕ) :
+    finiteChordEven n x xx q a b c r = chordEven x xx (zeroExtend (2*n) q) a b c r := by
+  have he : zeroExtend n (fun i => q (2*i)) = fun i => zeroExtend (2*n) q (2*i) := by
+    funext i
+    simpa using zeroExtend_parity n q i 0 (by decide)
+  have ho : zeroExtend n (fun i => q (2*i+1)) = fun i => zeroExtend (2*n) q (2*i+1) := by
+    funext i
+    exact zeroExtend_parity n q i 1 (by decide)
+  simp only [finiteChordEven, scatter_zeroExtend_output x (n+1) hx,
+    scatter_zeroExtend_output xx (n+2) hxx]
+  rw [he,ho]
+  rfl
+
+theorem finiteChordOdd_eq (n : ℕ) (x : List (ScatterEdge ℕ ℕ F))
+    (hx : ∀ e ∈ x, e.2.1<n+1)
+    (q : ℕ → F) (a b c : F) (r : ℕ) :
+    finiteChordOdd n x q a b c r = chordOdd x (zeroExtend (2*n) q) a b c r := by
+  have he : zeroExtend n (fun i => q (2*i)) = fun i => zeroExtend (2*n) q (2*i) := by
+    funext i
+    simpa using zeroExtend_parity n q i 0 (by decide)
+  have ho : zeroExtend n (fun i => q (2*i+1)) = fun i => zeroExtend (2*n) q (2*i+1) := by
+    funext i
+    exact zeroExtend_parity n q i 1 (by decide)
+  simp only [finiteChordOdd, scatter_zeroExtend_output x (n+1) hx]
+  rw [he,ho]
+  rfl
+
+def finiteChordCoefficient (n : ℕ) (x xx : List (ScatterEdge ℕ ℕ F))
+    (q : ℕ → F) (a b c : F) (r : ℕ) : F :=
+  if r%2=0 then finiteChordEven n x xx q a b c (r/2)
+  else finiteChordOdd n x q a b c (r/2)
+
+theorem finiteChordCoefficient_eq (n : ℕ) (x xx : List (ScatterEdge ℕ ℕ F))
+    (hx : ∀ e ∈ x, e.2.1<n+1) (hxx : ∀ e ∈ xx, e.2.1<n+2)
+    (q : ℕ → F) (a b c : F) (r : ℕ) :
+    finiteChordCoefficient n x xx q a b c r =
+      chordCoefficient x xx (zeroExtend (2*n) q) a b c r := by
+  simp only [finiteChordCoefficient, chordCoefficient,
+    finiteChordEven_eq n x xx hx hxx, finiteChordOdd_eq n x hx]
+
+theorem finite_source_six_constants (n : ℕ) (x xx : List (ScatterEdge ℕ ℕ F))
+    (hx : ∀ e ∈ x, e.2.1<n+1) (hxx : ∀ e ∈ xx, e.2.1<n+2)
+    (q s : ℕ → F) (a b c t : F) (r : ℕ) :
+    finiteChordCoefficient n x xx (fun i => q i-t*s i) a b c r =
+      a*(finiteChordCoefficient n x xx q 1 0 0 r-t*finiteChordCoefficient n x xx s 1 0 0 r) +
+      b*(finiteChordCoefficient n x xx q 0 1 0 r-t*finiteChordCoefficient n x xx s 0 1 0 r) +
+      c*(finiteChordCoefficient n x xx q 0 0 1 r-t*finiteChordCoefficient n x xx s 0 0 1 r) := by
+  have hz := zeroExtend_linear (2*n) q s 1 (-t)
+  simp only [one_mul, neg_mul, ← sub_eq_add_neg] at hz
+  simp only [finiteChordCoefficient_eq n x xx hx hxx]
+  rw [hz]
+  exact active_source_six_constants x xx (zeroExtend (2*n) q) (zeroExtend (2*n) s) a b c t r
+
+#print axioms finiteChordCoefficient_eq
+#print axioms finite_source_six_constants
+#print axioms finiteChordEven_eq
+#print axioms finiteChordOdd_eq
 #print axioms zeroExtend_parity
 #print axioms zeroExtend_retained
 #print axioms zeroExtend_linear
