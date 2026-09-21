@@ -1,5 +1,63 @@
 # R16 soundness preservation obligations
 
+## Actual R17 mask caller extracted; iterator model boundary — 2026-09-21
+
+Base revision `b6f3b236` plus this changeset. Read-only search confirmed the
+cached V7 generated namespace has no R17 mask_weights definition. The current
+research module and staged v19 module match SHA256
+`147be74e8651e05aa4680dbb412252751e8f21f5a6ad8a4de939d0f01bfb52c6`.
+The current field source still matches the retained 5795495e... pin.
+
+New tools/r17-mask-extraction wires those UNCHANGED files into a minimal
+aspis-core library. Only module wiring is new: field is public; corelib
+reexports it so the original research module imports resolve. No function
+body normalization, production edit or source-pin waiver occurred. The
+dependency-free crate permits focused real-source extraction, not a model
+substitution. The cached Rust toolchain is nightly-2026-06-01; Charon binary
+SHA256 b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c;
+Aeneas binary SHA256 e3e6e658ad26168421eb37627561930c1e13afa978f77b214a1201d9c4faa813.
+
+Authoritative Linux artifacts are under
+`/home/dombarker/project-offloads/aspis-r17-mask-extract.aRLUCU`:
+`extraction-r1/source`, `extraction-r1/output/R17MaskWeights.llbc`, and
+`lean-r1/AspisR17MaskSource`. Charon targeted
+`crate::r17_structured_g::mask_weights`, preset aeneas, MIR built, default
+sysroot, offline/locked/release/lib/no-default-features. Aeneas used sequential,
+abort-on-error, Lean backend, split-files, emit-json and AspisR17MaskSource
+namespace. Both ran in MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0,
+TasksMax=128 scopes, with one Cargo job; time was compilation/translation,
+not a dense arithmetic gate.
+
+| Target | Scope | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Actual mask_weights to LLBC | aspis-r17-mask-charon-r1 | 0 | 1.02 | 223072 | 0 |
+| LLBC to raw Lean | aspis-r17-mask-aeneas-r1 | 0 | 1.23 | 122848 | 0 |
+
+Artifact hashes:
+
+- LLBC: c79b46f32bf26d893339ec9d7160098e71c266d75423c0689ae57a03ed9ace6f.
+- Types.lean: 51e47fa8908d7776913478ae49e944d4de16777d9966fc33eadc50935c0e3554.
+- Funs.lean: e8b29608ef90d72b4dd3d8b0697f6619fb0e4896fdb475cdd8725fff4cc80fa3.
+- FunsExternal_Template.lean: 737c12e2468f69e81b535420946279ee2645d6e09503261e7b20295322539a7b.
+
+The real mask function and four loop bodies are present in Funs.lean. The
+translation warns that runtime trait metadata lacks map/zip/collect/rev
+fields and emits TWO external axioms: Iterator.map.default and Map.next.
+These are not accepted premises. No generated Lean target was compiled and
+no #print axioms security result is claimed. The template remains archival,
+not renamed into the imported FunsExternal module. Initial read-only use of
+`charon --version` was rejected by its CLI; recorded binary pins, not that
+command, identify the toolchain.
+
+First remaining source obligation: supply justified map-construction and
+map-next semantics compatible with the captured mixing-row closure, inspect
+the warned iterator dispatches, then compile the generated types/caller and
+bind this fresh field namespace to the proved arithmetic projection.
+Only then prove reverse array writes and final accumulation refine the
+retained mask model. Global privacy/soundness and source-tool correctness
+remain separate open obligations. No axioms, production edits, deployment,
+wallet operations or negative-regression removal were introduced.
+
 ## Generated zero/one and pinned half-word model — 2026-09-21
 
 Base revision `ec9195c8` plus this changeset. GeneratedQM31Constants.lean
