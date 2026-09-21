@@ -1,5 +1,38 @@
 # R16 soundness preservation obligations
 
+## Signed shift runtime projection — 2026-09-21
+
+Base revision `b3bb9a6c` plus this changeset. SignedShiftSlice.lean authenticates
+nine declaration bodies against the pinned Core.lean and Bitwise.lean runtime:
+signed scalar type/width/representation/value/toNat, left shift, both unsigned
+word shifts with signed counts, and OR. The toNat automation attributes are
+intentionally omitted; its body is identical. This remains a source projection,
+not a full-runtime elaboration/caller refinement theorem.
+
+The focused proofs establish exact right-shift values, left-shift values modulo
+word width for nonnegative in-range counts, failure for negative counts, and
+the OR value identity. The checker rejects three mutations (sign guard, width
+guard, OR changed to AND) and preserves the existing source pins.
+
+Exact target `AspisV8R17/SignedShiftSlice.lean`, cached Linux Lean 4.32.0,
+`-j1 -M1800`; systemd scopes `aspis-r17-signed-shift-r1/r2`, each
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64:
+
+| Attempt | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Initial missing Int notation import and implicit-argument misuse | 1 | 0.77 | 1624460 | 0 |
+| Added Int notation import; corrected toNat_shiftLeft application | 0 | 0.71 | 1633692 | 0 |
+
+Final SHA256 `39d1d64c4fcadb6fa2a7b76ea6a7f244fe3196786711f9a7800d6943d3135a93`.
+Final #print axioms: right_success and or_value use `[propext, Quot.sound]`;
+left_success and negative_counts_fail use `[propext]`. The failed attempt's
+error-generated sorryAx is not release evidence; final compilation has none.
+
+First remaining primitive proposition: authenticate the signed literal
+constructors for 1#i32 and 30#i32 and the generated FunsChunk06 M31.half body,
+then compose its actual Result graph with HalfRotateNat. No generated caller
+equality, production change, global privacy or soundness claim is made here.
+
 ## Focused retained halving mathematics — 2026-09-21
 
 Base revision `52742af4ca4b5d3da3aa798ead8043b20471681f` plus this changeset.

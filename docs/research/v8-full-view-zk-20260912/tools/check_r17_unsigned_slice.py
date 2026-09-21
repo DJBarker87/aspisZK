@@ -20,12 +20,14 @@ PINS = {
 }
 PATTERN = re.compile(r"^-- SOURCE ([\w/.]+)\n(.*?)\n-- END SOURCE$", re.M | re.S)
 
-def validate(sources, text, cross=False, reducer=False):
+def validate(sources, text, cross=False, reducer=False, signed=False):
     blocks = PATTERN.findall(text)
     expected = (["Core.lean"] * 2 + ["CoreConvertNum.lean", "Ops/Add.lean", "Ops/Mul.lean"] if cross else
                 ["Core.lean"] * 10 + ["Ops/Add.lean", "Ops/Mul.lean"])
     if reducer:
         expected = ["Casts.lean"] + ["Bitwise.lean"] * 3 + ["Ops/Sub.lean"]
+    if signed:
+        expected = ["Core.lean"] * 5 + ["Bitwise.lean"] * 4
     if [name for name, _ in blocks] != expected:
         raise ValueError("source block inventory mismatch")
     for name, body in blocks:
@@ -33,7 +35,7 @@ def validate(sources, text, cross=False, reducer=False):
             raise ValueError("source block not uniquely authenticated: " + name)
     return len(blocks)
 
-def check(runtime, sliced, cross=False, reducer=False):
+def check(runtime, sliced, cross=False, reducer=False, signed=False):
     sources = {}
     for name, digest in PINS.items():
         raw = (runtime / name).read_bytes()
@@ -42,7 +44,7 @@ def check(runtime, sliced, cross=False, reducer=False):
         sources[name] = raw.decode()
     raw = sliced.read_bytes()
     text = raw.decode()
-    count = validate(sources, text, cross, reducer)
+    count = validate(sources, text, cross, reducer, signed)
     mutations = ([
         text.replace("U32   := UScalar .U32", "U32   := UScalar .U64", 1),
         text.replace("x.bv.setWidth _", "x.bv.setWidth 32", 1),
@@ -58,11 +60,17 @@ def check(runtime, sliced, cross=False, reducer=False):
             text.replace("x.val - y.val", "x.val + y.val", 1),
             text.replace("-- SOURCE Casts.lean", "-- SOURCE Missing.lean", 1),
         ]
+    if signed:
+        mutations = [
+            text.replace("s.val ≥ 0", "s.val > 0", 1),
+            text.replace("s < ty.numBits", "s ≤ ty.numBits", 1),
+            text.replace("x.bv ||| y.bv", "x.bv &&& y.bv", 1),
+        ]
     for mutated in mutations:
         if mutated == text:
             raise ValueError("ineffective negative test")
         try:
-            validate(sources, mutated, cross, reducer)
+            validate(sources, mutated, cross, reducer, signed)
         except ValueError:
             pass
         else:
@@ -79,5 +87,6 @@ if __name__ == "__main__":
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--cross", action="store_true")
     mode.add_argument("--reducer", action="store_true")
+    mode.add_argument("--signed", action="store_true")
     args = parser.parse_args()
-    print(json.dumps(check(args.runtime, args.slice, args.cross, args.reducer), sort_keys=True))
+    print(json.dumps(check(args.runtime, args.slice, args.cross, args.reducer, args.signed), sort_keys=True))

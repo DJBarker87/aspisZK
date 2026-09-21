@@ -38,6 +38,7 @@ case "$target" in
   AspisV8R17/GeneratedCM31Square) ;;
   AspisV8R17/GeneratedCM31SquareNormalized) ;;
   AspisV8R17/HalfRotateNat) ;;
+  AspisV8R17/SignedShiftSlice) ;;
   AspisV8R17/RawReducerNat|AspisV8R17/RawReducer) ;;
   *) exit 2 ;;
 esac
@@ -80,6 +81,10 @@ fi
 if [[ "$target" == AspisV8R17/UnsignedReducerOps || "$target" == AspisV8R17/UnsignedReducerExecution ]]; then
   python3 "$task/check_r17_unsigned_slice.py" --runtime "$runtime/Aeneas/Std/Scalar" \
     --slice "$task/AspisV8R17/UnsignedReducerOps.lean" --reducer
+fi
+if [[ "$target" == AspisV8R17/SignedShiftSlice ]]; then
+  python3 "$task/check_r17_unsigned_slice.py" --runtime "$runtime/Aeneas/Std/Scalar" \
+    --slice "$task/AspisV8R17/SignedShiftSlice.lean" --signed
 fi
 cd "$runtime"
 test ! -L "$task/$target.olean"
