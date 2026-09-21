@@ -1,5 +1,53 @@
 # R16 soundness preservation obligations
 
+## Universal inverse-dual algebra — 2026-09-21
+
+Base `7048dd6bb844a46ba49d5f224800720e915da3be` plus this changeset.
+New `lean/AspisV8R16/TransportDual.lean` proves `inverseTransport_dot`:
+for EVERY coefficient vector c and weight vector w over a commutative ring,
+the dot product of w with inverseTransport(c) equals the dot product of the
+explicit transported weights with c. There is no honest-generation,
+balanced-mask, or legal-witness premise. The forward corollary uses the
+retained inverse theorem and pivot membership. This closes the universal
+model-level algebraic identity, not its exact-source refinement.
+
+The weight formula subtracts w(pivot) exactly at rows in inactive.erase(pivot),
+then permutes by order. This is the predicate `r != PIVOT && inactive[r]`
+in the inspected Rust `Transport::dual`. The generic permutation model still
+requires source inventory correspondence; the Rust forward/inverse loops
+specifically rely on their constructor leaving PIVOT in the final slot.
+
+Inspected identical local tool and v19 staged `r16_basis_transport.rs`:
+SHA-256 `36466ca34b091ee2e058deb3c66d1306164c0b6869719586175ddefa87a37dcf`.
+Inspected staged `r17_opening_weights.rs`:
+SHA-256 `bc0068b47eba5f871fac7ff809aad79bff738357ead553fa2ded7fd579428fec`.
+Its quotient_weights applies this dual to original_weights, then the chord
+transpose, then the separate ordinary/structured image residual weights.
+The new theorem does NOT prove that chord transpose, original-weight
+materialization, residual checks, Rust field operations or extraction.
+
+Focused cached compilation in `/Users/dominic/ZK/AspisFormal`, using
+`lake env lean -j1 -M1800 -R <research>/lean -o <r16-cache>/TransportDual.olean
+<research>/lean/AspisV8R16/TransportDual.lean`, measured with `/usr/bin/time -l`:
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Initial sum rewrite | 1 | 8.70 | 1424359424 | 0 |
+| Pointwise rewrite; remaining finite-set equality | 1 | 5.18 | 1423835136 | 0 |
+| Explicit finite-set extensionality | 0 | 3.19 | 1437286400 | 0 |
+
+Both final #print axioms results contain only propext, Classical.choice,
+Quot.sound; no sorryAx. Failed attempts were not accepted proof evidence.
+No resource cap increase, production change, unchanged runtime regression,
+or full-manifest replay was performed.
+
+First remaining soundness-specific proposition: the exact staged opening
+weight pipeline, including chord transpose and distinct channel residuals,
+computes the required functional on arbitrary extracted coefficient vectors.
+Its Rust/field refinement and subsequent binding, extraction, adaptive
+challenge and loss-accounting gates remain open. Joint legal C1/H1/G privacy
+coverage remains a separate obligation; this soundness lemma does not close it.
+
 Date: 2026-09-20. Base privacy revision `1d77761f`.
 
 The raw C1 privacy separator is not evidence of a soundness break. However,
