@@ -1,5 +1,39 @@
 # R17 small-block certificate route
 
+## Compiled lightweight composition gates
+
+Base `4d617337` plus this changeset. `BlockComposition.lean` proves:
+an upper two-block matrix with nonzero diagonal determinants has nonzero
+determinant; a row-permuted nonzero determinant implies the original is
+nonzero; and a nonzero determinant after a ring homomorphism implies the
+original determinant is nonzero. The last applies to polynomial evaluation.
+The two-block theorem can compose a balanced recursive block certificate
+without expanding any dense determinant. All premises remain explicit.
+
+The first attempted general BlockTriangular import exceeded the 1800 MB
+Lean allocation cap before producing a declaration result. Instead of
+raising the cap or rerunning it unchanged, the proof was changed to use
+the lighter determinant module's named two-block formula. This route
+compiles below the same cap. No source-specific zero-pattern or 133-block
+identification is claimed from these generic gates; that remains the next
+certificate proposition.
+
+Focused command from `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/BlockComposition.lean`.
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Broad block import, allocation cap | 134 | 9.19 | 1892122624 | 0 |
+| Lightweight two-block/permutation gates | 0 | 9.98 | 1731575808 | 0 |
+| Map bridge, map/mapMatrix rewrite mismatch | 1 | 3.70 | 1739653120 | 0 |
+| Final ring-homomorphism mapMatrix bridge | 0 | 4.45 | 1739472896 | 0 |
+
+All three final axioms audits use only propext, Classical.choice,
+Quot.sound. The failed bridge's sorryAx audit is rejected. Two harmless
+unused-IsDomain section-variable warnings remain. Outputs are in the
+command-tool record. No Rust source changed and no unchanged runtime
+regression or full formal manifest was replayed.
+
 ## Compiled tiny determinant leaves
 
 Base `b1ad6787` plus this changeset. `tools/r17_block_determinants.py`
