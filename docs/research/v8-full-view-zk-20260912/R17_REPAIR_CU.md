@@ -330,3 +330,45 @@ reference=false. Only the reference branch consumes those vectors. Next is
 conditional construction while retaining both verification paths and their
 agreement check. Further heap and major CU work remains, as do all outstanding
 full-transcript privacy, source-refinement and soundness obligations.
+
+## R13 reference-only dense allocation; actual host proof accepted
+
+Base 3c25e412 plus this changeset. stage_r17_lazy_reference.py allocates the
+two dense vectors only when reference=true. For reference=false they are empty
+and remain unused. Both verifier passes, their equality assertion, transcript,
+query schedule and opening checks remain. Fixed diagnostic markers were added
+after dense initialization, after first folding, after query scheduling and
+after openings. Source hashes are checked through the full prior edit chain.
+
+The actual retained world0 R17 proof is accepted by the updated host binary,
+which executes both paths and asserts their outcome agreement. A separate copy
+with byte 697*16 flipped is rejected. The historical reject-existing entrypoint
+prints R17_LEGACY_PROFILE_REJECTED for any rejected fixture; in this gate the
+fixture is explicitly a current-profile G-final corruption, not a legacy proof.
+Neither negative nor positive host result is an SBF result or global-security
+proof. Test copies contain public fixtures only; no keys are created or removed.
+
+Scope aspis-r17-lazy-host-r13: 4G/6G/zero-swap, TasksMax=128. Positive run
+including optimized compilation: exit 0, 35.06 s, RSS 537,356 KiB, swaps 0.
+Negative run: exit 0, 0.00 s reported, RSS 3,168 KiB, swaps 0. Exact source and
+commands are in tools/check_r17_host_proof.py and evidence/r17-lazy-host-r13.log.
+
+SBF source/table/frame gates pass. Scope aspis-r17-lazy-sbf-r13:
+5G/7G/zero-swap, TasksMax=128, exit 0, 34.59 s, RSS 618,780 KiB, swaps 0.
+At 100M diagnostic CU, the actual SBF run reaches prepare-end and dense-ready,
+then runs out of heap before first-fold-end, at **42,370,028 CU to failure**.
+This does not isolate the exact failing allocation among transcript/fold work
+in that interval. No SBF proof acceptance or checked malformed-proof rejection
+is observed. The 1.2M/1.4M cases still exhaust CU. The heap stays 256 KiB.
+
+Scope aspis-r17-lazy-svm-r13: 3G/4G/zero-swap, TasksMax=64, driver exit 0
+(observations only), 0.13 s, RSS 26,292 KiB, swaps 0. ELF SHA256:
+dadc4791399e4ed4b77ddd8e5a49d5716c67a47eb324495b95f35b7448366e10.
+Exact build/runtime evidence: evidence/r17-lazy-sbf-r13.log and
+evidence/r17-lazy-svm-r13.{jsonl,log}; proof and SVM driver unchanged.
+
+Next source ownership fix: prepare currently clones both ordinary vectors
+into the weight accumulators even though ordinary is not needed afterwards.
+Move those vectors into the accumulators instead of allocating two new buffers.
+The broader fixed-heap lifetime budget and excessive CU remain unresolved.
+No Lean theorem changed; no source-refinement, privacy or soundness gate closes.
