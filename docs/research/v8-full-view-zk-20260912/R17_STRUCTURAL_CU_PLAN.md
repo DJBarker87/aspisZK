@@ -105,4 +105,13 @@ This eliminates intermediate complex-result reductions and canonical
 add/subtract steps. Check bounds and equality independently against source
 CM31 operations (including maximal limbs), then the whole existing basis
 gate and actual proof, before measuring. Keep trivial twiddles explicit.
-This is an unimplemented candidate, not a measured speedup or compiled lemma.
+R19 now implements this butterfly, specializes the public index-zero twiddle,
+and uses the existing power-of-two inverse normalization. The focused bounds
+leaf compiles; all finite arithmetic/basis/actual-host-proof gates pass. The
+FFT marker interval falls from 13.37M to 8.53M CU. See R17_REPAIR_CU.md for
+exact evidence and proof limitations: the natural-number bounds do not yet
+establish source reducer correspondence or whole-transform correctness.
+The ordinary tensors and polynomial tree remain costly. Preserve the failed
+tree-batching evidence; the next arithmetic candidate is fused scalar
+multiply-add in the original scatter order, rather than reintroducing that
+output-diagonal batching loop. Full SBF verification still fails on heap.

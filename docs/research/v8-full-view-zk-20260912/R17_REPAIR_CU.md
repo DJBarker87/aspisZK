@@ -584,3 +584,67 @@ The next bounded optimization is a source-equivalent fused CM31 butterfly,
 with independent overflow/equality checks before the full finite basis gate.
 The existing sparse/aligned-basis and source-security obligations remain;
 none is discharged by the performance evidence here.
+
+## R19 fused CM31 butterflies and compiled arithmetic bounds
+
+Base 97f50b92 plus this changeset. stage_r17_fused_fft.py replaces the
+multiply-then-add/subtract butterfly with four canonical reductions of the
+raw expressions recorded in R17_STRUCTURAL_CU_PLAN.md. A public index-zero
+twiddle uses direct add/subtract. Inverse normalization uses the existing
+M31.mul_pow2(20), with the same factor 2^20. No data-dependent zero skipping,
+new rejection, sampled mask, transform ordering or transcript change occurs.
+
+New optimized checks compare 15625 limb-boundary tuples with source CM31
+operations, use checked u64 operations for each intermediate, and check
+every one of the 2048 fixed roots plus normalization. All prior checks pass,
+including 271 basis positions x 1024 outputs, unequal extension components,
+dirty-buffer reuse, six arbitrary coin maps and full opening-weight maps.
+The actual retained host proof is accepted; G-final corruption is rejected.
+Both verifier paths and their equality assertion remain enabled.
+
+Host 4G/6G/zero-swap scope: focused gate exit 0, 27.93 s, RSS 537672 KiB;
+positive exit 0, 9.46 s, 428224 KiB; negative exit 0, 0.00 s reported,
+3520 KiB. SBF source/table/frame gates pass: exit 0, 35.45 s,
+621408 KiB, scope 5G/7G/zero swap. All task swaps are zero.
+
+The measured FFT section falls from 13370660 to **8525873 CU** (36.23%).
+The G tree remains 7909059 CU; the complete second original-weight stage
+falls from 24621207 to **19776420 CU** (19.68%). These are marker intervals,
+not a completed verifier cost. Honest/corrupt still run out of heap after
+query-schedule-end, before openings-end, at 31126390/31125817 CU to failure.
+Both 1.2M/1.4M pairs still exhaust CU. Heap stays 256 KiB. No SBF proof
+acceptance or checked negative rejection was observed.
+Observation driver exit 0, 0.13 s, RSS 26568 KiB, zero swaps,
+scope 3G/4G/zero swap. ELF SHA256:
+f4b1783c546fc985ae04dd254c1f7a64bb0079d66a6b44be0cb7f535d513ff4c.
+Evidence: r17-fused-fft-host-r19.log, r17-fused-fft-sbf-r19.log,
+r17-fused-fft-svm-r19.{jsonl,log}.
+
+### Focused Lean boundary
+
+AspisV8R17/FusedButterflyBounds.lean compiles using cached Lean 4.32.0 and
+mathlib 81a5d257c8e410db227a6665ed08f64fea08e997, with lake env lean,
+-j1 -M1600. It proves the canonical product bound, each subtraction's
+non-underflow condition and addition/result bounds in the stated evaluation
+order, and identifies the padding constant with P^2. It does not yet prove
+that the Rust reducer returns those residues or that the entire FFT refines
+the retained source map. Canonical-input premises must still be source-bound.
+
+Scope 1G/2G/zero swap, TasksMax=64: exit 0, 1.51 s, peak RSS 1636136 KiB,
+swaps 0. Source revision 97f50b92 plus this leaf and staged kernel changes.
+#print axioms: canonical_product_bound uses propext and Quot.sound;
+raw_bounds uses propext, Classical.choice and Quot.sound;
+padding_is_prime_square uses propext. No sorryAx or user-added axiom.
+The first launch failed before theorem checking because the input lay outside
+Lake's default root (exit 1, 0.73 s, 818080 KiB, zero swaps); passing the
+isolated stage explicitly as --root fixed the environment. Both logs retained:
+r17-butterfly-bounds-root-failure-r19.log and r17-butterfly-bounds-r19.log.
+Only this smallest changed leaf was compiled; no unchanged manifest replay.
+The host had pre-existing swap usage; zero-swap scope limits and the listed
+task swap counts do not assert that the entire host had no swap in use.
+
+First remaining arithmetic proof step: connect canonical source operands and
+the retained reducer refinement to these raw integer bounds and the four
+field residues. Whole-transform source equivalence and all full-transcript
+privacy, soundness, retry/publication and resource-failure obligations remain
+separate. The performance improvement closes none of those broader gates.
