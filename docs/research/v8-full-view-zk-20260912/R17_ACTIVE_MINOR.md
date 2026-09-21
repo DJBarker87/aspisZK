@@ -1,5 +1,32 @@
 # Fixed active-minor nonvanishing witness
 
+## Compiled generic determinant-degree gate
+
+On base `d2e459cd` plus this changeset, `lean/AspisV8R17/MinorDegree.lean`
+proves two generic results for any finite square multivariate polynomial
+matrix over a commutative ring. If every entry has total degree <=d,
+the determinant has total degree <=card(I)*d. The same statement holds
+for degree in any specified variable. The proof bounds each Leibniz term
+symbolically and never enumerates concrete permutations.
+
+Thus the determinant-degree operation needed for 214*5=1070 and the
+separate bounds 214*3=642,214,214 is now kernel checked. The source entry
+degree bounds and concrete nonzero-minor certificate still need a compiled
+polynomial correspondence; these generic theorems do not discharge them.
+
+Focused command from `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/MinorDegree.lean`.
+Initial proof failed at simplifying the constant sign coefficient: exit
+1, wall 10.28s, peak RSS 1795358720 bytes, swaps 0; the failed audit
+reported sorryAx and is not accepted. Replaced that simplification with
+the named `totalDegree_C` lemma. Total-degree-only compile then passed:
+exit 0, 1.92s, RSS 1795440640 bytes, swaps 0. After adding the per-variable
+theorem, final compile passed: exit 0, 2.49s, RSS 1797390336 bytes, swaps
+0. Both final `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]`. Outputs were captured by the
+command tool. No Rust source changed, and the unchanged Rust regression
+was not rerun. No full manifest replay or global security claim is made.
+
 Base `291f0623` plus this changeset, 2026-09-21.
 
 The research-only `r17_active_minor_polynomial_witness` constructs the

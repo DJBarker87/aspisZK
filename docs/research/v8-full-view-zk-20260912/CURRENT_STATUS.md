@@ -5,6 +5,7 @@
 `R17_ACTIVE_MINOR.md` records a fixed 214-column nonvanishing witness at
 alpha=2,u=3,v=4, with independent inverse-product verification and frozen
 column indices. The degree argument gives (642,214,214) separate bounds,
+and the generic determinant total/per-variable degree lemmas now compile,
 but a compiled polynomial/source bridge and actual adaptive probability
 law remain open. The algebraic evaluation is not an accepted OOD draw.
 No global privacy or soundness conclusion follows from this certificate.
