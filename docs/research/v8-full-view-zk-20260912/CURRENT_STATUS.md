@@ -1,5 +1,13 @@
 # Current V8 privacy-repair status
 
+## Latest algebra step — normalized chord, 2026-09-21
+
+`R17_NORMALIZED_CHORD.md` records a compiled rational-chord identity and
+nonzero-scale theorem with explicit denominator/distinctness premises.
+Source parameter binding, a fixed active minor/degree certificate and
+the adaptive sampler law remain necessary before a loss bound. This is
+not a full privacy or soundness result.
+
 ## Latest coverage step — active/query separation, 2026-09-21
 
 `R17_ACTIVE_QUERY_SEPARATION.md` records fixed source geometry: active
