@@ -1,5 +1,34 @@
 # R16 soundness preservation obligations
 
+## Retained reducer composition replay — 2026-09-21
+
+Base revision `eb02e5e2` plus this changeset. Full-runtime staging now includes
+RawReducerNat and UnsignedReducerExecution byte-for-byte unchanged. Both compile
+in full-runtime-r3 against the actual cached runtime and the previously replayed
+foundations. The four unchanged foundation/bridge oleans were reused only after
+source byte comparison with full-runtime-r2. No full manifest was rerun.
+
+Exact targets under AspisV8R17, Lean 4.32.0 -j1 -M3200:
+
+| Target | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| RawReducerNat.lean | 0 | 0.49 | 538312 | 0 |
+| UnsignedReducerExecution.lean | 0 | 1.18 | 2569744 | 0 |
+
+Host cache: `/home/dombarker/project-offloads/aspis-r17-mask-extract.aRLUCU/full-runtime-r3`.
+Units aspis-r17-full-runtime-raw-r3 and aspis-r17-full-runtime-execution-r3 used
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64 sequentially; preflight
+showed only init.scope. All eight printed theorem audits use only propext,
+Classical.choice and Quot.sound. Staging authenticates the retained runtime
+source pins and records hashes for both complete unchanged leaves.
+
+This establishes the retained checked-operation reducer composition in the
+full-runtime environment: successful canonical output equal to input modulo P
+for every U64. It is NOT yet equality to the fresh extracted wrapping-operation
+reduce_u64 body. First remaining proposition is wrapping-shift agreement and
+the call-site bridge discharging the wrapping-add/sub bounds from these retained
+lemmas. Complete mask loops, source integration, and global security remain open.
+
 ## Retained arithmetic foundations replayed in full runtime — 2026-09-21
 
 Base revision `c479081a` plus this changeset. The source caller imports the

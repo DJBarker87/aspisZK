@@ -4,7 +4,7 @@ set -euo pipefail
 # Invoke one target per zero-swap, 4G-high/6G-max systemd scope.
 task=${1:?full-runtime stage}
 target=${2:?focused target}
-case "$target" in UnsignedCoreSlice|UnsignedCM31Cross|UnsignedReducerOps|FullRuntimeWrapping) ;; *) exit 2 ;; esac
+case "$target" in UnsignedCoreSlice|UnsignedCM31Cross|UnsignedReducerOps|RawReducerNat|UnsignedReducerExecution|FullRuntimeWrapping) ;; *) exit 2 ;; esac
 runtime=/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean
 packages=/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal
 test "$(git -C "$packages/.lake/packages/mathlib" rev-parse HEAD)" = 81a5d257c8e410db227a6665ed08f64fea08e997

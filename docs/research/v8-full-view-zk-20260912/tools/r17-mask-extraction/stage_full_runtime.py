@@ -47,6 +47,14 @@ def main():
                           "staged_sha256": hashlib.sha256(text.encode()).hexdigest(),
                           "runtime_blocks_replaced_by_import": count}
     target = args.output / "AspisV8R17"
+    # Pure bounds and their operation-level composition need no declaration
+    # replacement. Replay them unchanged in the same full-runtime environment.
+    for name in ("RawReducerNat", "UnsignedReducerExecution"):
+        original = (args.proofs / (name + ".lean")).read_text()
+        staged[name] = original
+        digest = hashlib.sha256(original.encode()).hexdigest()
+        manifest[name] = {"original_sha256": digest, "staged_sha256": digest,
+                          "runtime_blocks_replaced_by_import": 0}
     extra = Path(__file__).with_name("FullRuntimeWrapping.lean").read_text()
     staged["FullRuntimeWrapping"] = extra
     manifest["FullRuntimeWrapping"] = {"staged_sha256": hashlib.sha256(extra.encode()).hexdigest()}
@@ -61,7 +69,7 @@ def main():
         assert json.loads((args.output / "full-runtime-stage.json").read_text()) == manifest
     else:
         (args.output / "full-runtime-stage.json").write_text(json.dumps(manifest, indent=2) + "\n")
-    print("PASS: runtime source checks; 3 retained theorem blocks unchanged; wrapping bridge included")
+    print("PASS: runtime source checks; 3 retained theorem blocks and 2 complete leaves unchanged; wrapping bridge included")
 
 
 if __name__ == "__main__":
