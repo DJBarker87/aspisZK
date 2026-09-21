@@ -1,5 +1,60 @@
 # R16 soundness preservation obligations
 
+## Checked current CM31 cross fragment — 2026-09-21
+
+Base `6c8d69cea99dc0c2ead0e48ecde4e8bd786407b0` plus this changeset.
+Exact target: `AspisV8R17/UnsignedCM31Cross.lean`. Final source SHA-256:
+`993faf1f0594828d209c094fa67e54d49a886487100b34d1ffe0be8e506b7354`.
+Four new statements compiled in the same cached Lean 4.32.0 host workspace:
+
+- `widen_value`: the retained U32-to-U64 conversion preserves the Nat value.
+- `crossOperand_success`: for four canonical M31 words, the two checked U64
+  additions and checked multiplication succeed, returning `(a+b)*(c+d)`.
+- `generatedCrossFragment_eq`: the literal generated cross subexpression,
+  retaining its lifts, temporary names and checked operators, equals that
+  operational composition for all inputs, without canonicality premises.
+- `generatedCrossFragment_success`: the authenticated generated subexpression
+  succeeds with that exact value under the four canonicality bounds.
+
+All four final `#print axioms` results are `[propext, Quot.sound]`, with no
+sorryAx or new cryptographic assumptions. The product bound uses symbolic
+monotonicity on two factors below 2^32; no large recurrence was normalized.
+
+The unsigned runtime checker now authenticates five marked cross-leaf blocks
+(two aliases, conversion, and checked operator instances), as well as the
+unchanged 12-block predecessor. The additional complete source pin is
+CoreConvertNum.lean SHA-256
+`d7bbeaa3cc7422dcad0a52ffc1904a2d11751717a7b5d820d645404e0bf81eaa`.
+The cross checker rejected three in-memory runtime-block mutations.
+The generated-source checker separately authenticates the two original field
+type declarations and the contiguous cross fragment against the already pinned
+Types.lean/FunsChunk04.lean; it rejected two generated-block mutations.
+Both checks exited 0 against the final compiled source hash. These checks
+authenticate marked text, not a complete extraction/refinement pipeline.
+
+All builds used `-j1 -M1800` with MemoryHigh=4G, MemoryMax=6G,
+MemorySwapMax=0, TasksMax=64; no cap changed and no whole-package replay ran.
+
+| Scope (prefix aspis-r17-unsigned-cross-) | Result | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| r1 | Missing widening lemma and product elaboration mismatch | 1 | 0.82 | 1608468 | 0 |
+| r2 | Conversion and composed cross proof compiled | 0 | 0.74 | 1612268 | 0 |
+| r3 | Fragment bind lemma namespace / return identity errors | 1 | 0.74 | 1615064 | 0 |
+| r4 | Remaining definitional operator equality | 1 | 0.74 | 1614412 | 0 |
+| r5 | All four statements compiled, no warnings | 0 | 0.77 | 1626060 | 0 |
+
+Failed elaborations printed sorryAx and were rejected, not treated as evidence.
+The final equality closes by a small definitional operator-instance reduction,
+after the explicit Result right-unit proof; it is not a large concrete reduction.
+
+Boundary: the extracted fragment starts AFTER m0/m1 and stops BEFORE
+M31.reduce_u64. Its wrapper returns the cross operand, not a CM31 result.
+First remaining source-specific proposition is correctness and successful
+checked execution of the current extracted reducer on this bounded U64 input,
+then composition with m0/m1 and both reconstructed coordinates. The full
+CM31 multiplication/square, R17 caller, joint privacy and soundness obligations
+remain open. No production protocol path or negative regression was changed.
+
 ## Authenticated unsigned execution slice — 2026-09-21
 
 Base `fc8a65e5b4519d7355d8afc3f13075e05eb3b18a` plus this changeset.

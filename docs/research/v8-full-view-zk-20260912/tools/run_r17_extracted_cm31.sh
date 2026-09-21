@@ -25,11 +25,18 @@ target=${2:-AspisV8R17/CurrentFieldSlice}
 case "$target" in
   AspisV8R17/CurrentFieldSlice|AspisV8R17/ExtractedCM31Operands|AspisV8R17/ScalarImportProbe) ;;
   AspisV8R17/UnsignedCoreSlice) ;;
+  AspisV8R17/UnsignedCM31Cross) ;;
   *) exit 2 ;;
 esac
-if [[ "$target" == AspisV8R17/UnsignedCoreSlice ]]; then
+if [[ "$target" == AspisV8R17/UnsignedCoreSlice || "$target" == AspisV8R17/UnsignedCM31Cross ]]; then
   python3 "$task/check_r17_unsigned_slice.py" --runtime "$runtime/Aeneas/Std/Scalar" \
-    --slice "$task/$target.lean"
+    --slice "$task/AspisV8R17/UnsignedCoreSlice.lean"
+fi
+if [[ "$target" == AspisV8R17/UnsignedCM31Cross ]]; then
+  python3 "$task/check_r17_unsigned_slice.py" --runtime "$runtime/Aeneas/Std/Scalar" \
+    --slice "$task/$target.lean" --cross
+  python3 "$task/check_r17_field_slice.py" --stage "$stage/V7Tag73CurrentHelpersOpaque" \
+    --slice "$task/AspisV8R17/CurrentFieldSlice.lean" --cross-fragment "$task/$target.lean"
 fi
 cd "$runtime"
 test ! -L "$task/$target.olean"

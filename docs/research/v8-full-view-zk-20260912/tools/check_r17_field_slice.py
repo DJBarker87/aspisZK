@@ -68,10 +68,46 @@ def check(stage, sliced, self_test=False):
             "declaration_bytes_match": True, "negative_mutations_rejected": rejected,
             "full_r17_source_refinement": False}
 
+def check_cross_fragment(stage, sliced):
+    sources = {}
+    for name, digest in PINS.items():
+        raw = (stage / name).read_bytes()
+        if hashlib.sha256(raw).hexdigest() != digest:
+            raise ValueError("source pin mismatch: " + name)
+        sources[name] = raw.decode()
+    pattern = re.compile(r"^-- GENERATED ([\w.]+)\n(.*?)\n-- END GENERATED$", re.M | re.S)
+    def validate(text):
+        blocks = pattern.findall(text)
+        if [name for name, _ in blocks] != ["Types.lean", "Types.lean", "FunsChunk04.lean"]:
+            raise ValueError("generated fragment inventory mismatch")
+        for name, body in blocks:
+            if sources[name].count(body + "\n") != 1:
+                raise ValueError("generated fragment is not unique source text: " + name)
+    raw = sliced.read_bytes()
+    text = raw.decode()
+    validate(text)
+    for mutated in [text.replace("let i5 := rhs.a", "let i5 := self.a", 1),
+                    text.replace('rust_type "aspis_core::field::CM31"',
+                                 'rust_type "changed"', 1)]:
+        if mutated == text:
+            raise ValueError("ineffective generated-fragment negative test")
+        try:
+            validate(mutated)
+        except ValueError:
+            pass
+        else:
+            raise ValueError("generated-fragment mutation accepted")
+    return {"generated_blocks": 3, "negative_mutations_rejected": 2,
+            "slice_sha256": hashlib.sha256(raw).hexdigest(),
+            "full_caller_refinement": False}
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", type=Path, required=True)
     parser.add_argument("--slice", type=Path, required=True)
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--cross-fragment", type=Path)
     args = parser.parse_args()
     print(json.dumps(check(args.stage, args.slice, args.self_test), sort_keys=True))
+    if args.cross_fragment:
+        print(json.dumps(check_cross_fragment(args.stage, args.cross_fragment), sort_keys=True))
