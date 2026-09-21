@@ -1,5 +1,63 @@
 # R16 soundness preservation obligations
 
+## Actual buffer-clearing loop: termination and stale-state erasure — 2026-09-21
+
+Base revision `5e21b4c4` plus this changeset. New WorkspaceZero.lean imports
+the actual import-only-staged caller and proves its output-clearing loop,
+not a replacement trace. `workspace_zero_loop` uses well-founded induction
+on `1024 - j.val`, exact Array.update_spec and wrapping-add semantics. For
+any start j ≤ 1024 with the preceding prefix zero, it proves a successful
+return and all 1024 coordinates zero. `workspace_zero_from_start` discharges
+the prefix/start premises for j=0. `workspace_zero_independent` then proves
+the clearing loop's complete Result is identical for ANY two initial buffers.
+There is no canonical-field, termination, no-overflow or success premise on
+the initial buffer: it may contain arbitrary QM31 word values.
+
+This closes the candidate's stale-output-buffer initialization sub-obligation,
+not the later coin construction, accumulation, arithmetic correspondence,
+complete caller termination, global witness privacy or protocol integration.
+In particular it says nothing yet about the scratch coin buffer's overwrite.
+
+The proof first establishes symbolically that j<1024 makes j+1 fit usize,
+using the runtime's 32/64-bit platform split; it does not evaluate a 1024-step
+recurrence. The array argument stays symbolic throughout. All three final
+theorems audit to `[propext, Classical.choice, Quot.sound]` only.
+
+Target: AspisR17MaskSource/WorkspaceZero.lean in retained host
+`aspis-r17-mask-extract.aRLUCU/workspace-staged-r1`. Cached Lean 4.32.0,
+-j1 -M3200; sequential scopes MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0,
+TasksMax=64. Preflight showed only init.scope. No dependency rebuild or
+unchanged full replay. Unit prefix: aspis-r17-workspace-zero-.
+
+| Attempt | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| r1 | 1 | 1.17 | 2562324 | 0 |
+| r2 | 1 | 1.33 | 2561588 | 0 |
+| r3, loop/from-start theorems | 0 | 1.24 | 2571700 | 0 |
+| r4, buffer-independence corollary | 0 | 1.35 | 2573152 | 0 |
+
+R1 used reserved identifier `prefix` and an insufficient generic scalar tactic
+for the usize-size bound. R2 corrected the identifier but still needed the
+runtime's irreducible Usize.size/numBits wrappers unfolded and the explicit
+index bound in the set-at-current-position case. R3 fixes these; r4 adds
+array extensionality to show output independence. Failed attempts' sorryAx
+diagnostics were not accepted. Final r4 has two harmless unnecessary-simpa
+warnings and no errors. No memory limit changed.
+
+Final leaf SHA256:
+`d6f45e8444817caf080238835ab4e91bc11234352f44c307accdc4640eb2e44d`.
+stage_workspace.py now copies/checks the leaf alongside the unchanged raw-pin
+validated caller; --check passes. The focused runner allowlists WorkspaceZero.
+Production, candidate Rust, old implementation and negative controls are
+unchanged, so no unrelated Rust regression was rerun.
+
+Next source propositions: prove the reverse-round coin writes and subsequent
+mixing accumulation on the actual extracted buffers, with all field operations
+justified by the full-runtime arithmetic bridge. Then close universal
+equivalence and arrange staged-profile buffer acquisition/failure handling.
+The source-extraction/library trust boundary and full transcript/security
+obligations remain explicit and open.
+
 ## Caller-buffer mask candidate; direct extraction compiles — 2026-09-21
 
 Base revision `71a94b77` plus this changeset. Added a separate research source

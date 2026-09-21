@@ -34,11 +34,12 @@ def main():
             assert (target / name).read_text() == text, name
         else:
             (target / name).write_text(text)
-    audit = Path(__file__).with_name("AuditWorkspace.lean").read_bytes()
-    if args.check:
-        assert (target / "AuditWorkspace.lean").read_bytes() == audit
-    else:
-        (target / "AuditWorkspace.lean").write_bytes(audit)
+    for name in ("AuditWorkspace.lean", "WorkspaceZero.lean"):
+        data = Path(__file__).with_name(name).read_bytes()
+        if args.check:
+            assert (target / name).read_bytes() == data
+        else:
+            (target / name).write_bytes(data)
     print("PASS: raw pins; import-only staging, no declaration/body replacement")
 
 

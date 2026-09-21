@@ -4,7 +4,7 @@ set -euo pipefail
 task=${1:?staged task directory}
 closure=${2:?compiled MaskClosureWriteback workspace}
 target=${3:?Types, IteratorCompat, IteratorLaws, CollectorLaws, Funs, or AuditCaller}
-case "$target" in Types|IteratorCompat|IteratorLaws|CollectorLaws|Funs|AuditCaller|AuditWorkspace) ;; *) exit 2 ;; esac
+case "$target" in Types|IteratorCompat|IteratorLaws|CollectorLaws|Funs|AuditCaller|AuditWorkspace|WorkspaceZero) ;; *) exit 2 ;; esac
 runtime=/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean
 packages=/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal
 lean=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean

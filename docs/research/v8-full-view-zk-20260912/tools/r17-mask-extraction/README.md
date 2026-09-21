@@ -90,3 +90,10 @@ Caller-buffer candidate (separate from the pinned original):
 Buffer acquisition, placement (especially SBF), complete loop invariants,
 field correspondence and protocol integration remain explicit obligations.
 The old implementation, its pins, proofs and abort regressions are preserved.
+
+`WorkspaceZero.lean` now proves the ACTUAL candidate clearing loop terminates,
+zeros all 1024 coordinates and yields the same Result from any two initial
+buffers. Compile it after the workspace Funs using run_iterator.sh's
+WorkspaceZero target. The proof is symbolic and does not require canonical
+initial field values; it does not yet prove the coin or accumulation loops.
+stage_workspace.py also copies/checks this proof leaf.
