@@ -1,5 +1,75 @@
 # R17 small-block certificate route
 
+## Fixed source-model minor determinant proved — 2026-09-21
+
+Base `c9b5ee2ae1eb0996bb1f74d6d2c8f64cc062392e` plus this changeset.
+`SourceMinorDeterminant.lean` now proves, without an unproved rank premise:
+
+* `ordered_minor_det_isUnit`: the ordered 214-square source-model minor
+  has invertible determinant at half=1073741824, alpha=2 and chord=(13,11,-7).
+* `source_minor_det_ne_zero`: the original frozen source-model minor's
+  determinant is nonzero at the same algebraic witness.
+
+`SourceMatrixWindow.lean` identifies the bounded Nat-indexed wrapper with
+the same ordered source minor. The generated `SourceWindowBlocks00`–`16`
+prove 133 concrete diagonal matrix identifications, 133 unit determinants,
+and 133 lower-left zero propositions. Each finite case is size at most
+three and applies a named scalar source binding. The final generator emits
+134 tail-unit proofs, starting with the empty tail and applying the
+symbolic window rule backward through all 133 blocks. It then identifies
+the full window, uses the explicitly checked modulus>1 fact, and removes
+the checked row/column permutations. No dense determinant is expanded.
+
+Both new generators pass `--check`; all 537 new theorem audits contain
+only propext, Classical.choice and Quot.sound. No assumed primality,
+integral-domain instance, native evaluation, sorry or new hiding assumption
+is needed for this fixed-witness conclusion.
+
+### Exact boundary
+
+This is a theorem about the assembled finite source model and frozen
+source-derived layout, not a Rust operational extraction theorem. The
+witness alpha=2,u=3,v=4 is an algebraic evaluation, not an accepted source
+OOD execution. The next formal proposition is that the determinant of
+the concrete normalized polynomial minor evaluates to this nonzero value,
+with its concrete degree bound. The actual adaptive shared-oracle challenge
+law, retained observations, joint residual coverage, commitment/seed hops,
+failures/retries/publication, and full privacy/soundness are still open.
+
+### Focused evidence and corrected attempts
+
+`evidence/r17-source-minor-composition.json` records all 61 successful
+targets, exit status, wall time, peak RSS, swaps, audit counts and retained
+logs. Missing cached objects were emitted once for the new dependencies;
+existing objects were skipped. Each command used the retained
+`/Users/dominic/ZK/AspisFormal` lake environment/LEAN_PATH wrapper,
+`/usr/bin/time -l`, and `lean -j1 -M1800`. Objects also used
+`-R SOURCE_ROOT -o CACHED_TARGET.olean`, where SOURCE_ROOT is this privacy
+worktree's `docs/research/v8-full-view-zk-20260912/lean`.
+
+The final aggregate exited 0 in 4.45s, peak RSS 1770258432 bytes, swaps 0,
+with all 136 audits standard-only, including both endpoint theorems.
+Its exact log is
+`/tmp/aspis-r15-host.drHYn9/r17-compose-SourceMinorDeterminant-verified.log`.
+
+Corrected attempts (none accepted as proof):
+
+* SourceMatrixWindow first needed an explicit Nat.zero_add rewrite:
+  exit 1, 1.87s, RSS 1750843392, swaps 0; corrected object passed.
+* First slice check started before a prerequisite object finished:
+  exit 1, 1.15s, RSS 670105600, swaps 0. After that exact prerequisite
+  completed, the check passed: exit 0, 2.62s, RSS 1764163584, swaps 0.
+  Its later object emission is separately recorded for the aggregate.
+* Aggregate initially used matrix dot notation on function-valued minor
+  definitions: exit 1, 2.45s, RSS 1775042560, swaps 0. The generator now
+  emits explicit Matrix.det/reindex applications.
+* The next attempt needed the concrete Nontrivial instance, discharged
+  by a local checked Fact(1<2147483647): exit 1, 6.88s,
+  RSS 1775927296, swaps 0. The final passing attempt is above.
+
+All failed sorryAx audits are rejected. No cap was raised, no unchanged
+full regression was repeated, and no Rust/production protocol path changed.
+
 ## Domain-free determinant composition route — 2026-09-21
 
 Base `51d1ded5eb55f4a6db386ef743b4908a0cd9f5e8` plus this changeset.

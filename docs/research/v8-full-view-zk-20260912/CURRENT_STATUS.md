@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## Fixed source-model determinant certificate complete — 2026-09-21
+
+All 133 concrete blocks now compose into a compiled nonzero determinant
+theorem for the original frozen 214-square source-model minor. The proof
+uses checked unit determinants and explicit permutations, with no assumed
+rank, primality or hiding premise. All 537 new audits pass; the final
+aggregate took 4.45s with zero swaps under the unchanged cap.
+Next: concrete polynomial evaluation/nonzero and degree assembly, followed
+by the actual adaptive source probability obligations. This algebraic
+witness is not an accepted OOD execution or a full privacy/soundness proof.
+Exact evidence and remaining boundary: `R17_MINOR_BLOCKS.md`.
+
 ## Latest source-block binding — 2026-09-21
 
 All 392 diagonal-block entries now have compiled equalities to the
