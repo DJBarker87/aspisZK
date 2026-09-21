@@ -1,5 +1,35 @@
 # R17 small-block certificate route
 
+## Universal index-only zero support
+
+Base `eb3b0ec8` plus this changeset. `WeightedScatter.lean` adds
+`indexTargets` and proves it equals the output indices of the weighted
+loop for every half-weight. Sparse x and x² evaluations vanish outside
+the first and composed target lists. `evenUnitSupport` and `oddUnitSupport`
+are decidable, index-only predicates; their complement implies the
+corresponding source-model chord unit coefficient is zero for every chord
+and every half-weight. The result is not restricted to alpha=2,u=3,v=4.
+
+These symbolic zero lemmas are the intended route for the off-diagonal
+certificate: prove support exclusion from the frozen block order, apply
+the named zero lemma to each channel/base unit, and combine using the
+source difference theorem. No repeated field arithmetic or dense full
+source-edge expansion is needed. The concrete index exclusions and
+permutation/composition remain the next formal certificate gate. Full
+privacy, source probability and soundness remain open.
+
+Focused command uses the retained LEAN_PATH wrapper in
+`/Users/dominic/ZK/AspisFormal`, `/usr/bin/time -l`, and Lean `-j1 -M1800`
+on `.../AspisV8R17/WeightedScatter.lean`.
+Initial proof used an unavailable List.not_mem_cons name: exit 1,
+wall 5.77s, peak RSS 1404076032 bytes, swaps 0; its sorryAx audits are
+rejected. Replacing it with the explicit nonmembership conjunction gave
+exit 0, 4.04s, RSS 1403584512 bytes, swaps 0. Final even/odd universal
+zero-support theorems: exit 0, 2.33s, RSS 1409089536 bytes, swaps 0.
+All final new audits use only propext, Quot.sound and where required
+Classical.choice. Output is in the command-tool record. No Rust change
+or unchanged runtime/full replay occurred.
+
 ## All diagonal block entries now source-model bound
 
 Base `fa8edbb9` plus this changeset. `sourceChord_difference` composes

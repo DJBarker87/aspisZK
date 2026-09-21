@@ -230,6 +230,91 @@ theorem sourceChord_difference (half : F) (q s : ℕ → F) (a b c t : F) (r : �
     (zeroExtend 1024 q) (zeroExtend 1024 s) a b c 1 (-t) r
   simpa only [one_mul,neg_mul,← sub_eq_add_neg] using hc
 
+def indexTargets (j : ℕ) : List ℕ := ((indexLoop 10 j 0).getD []).map Prod.fst
+
+theorem weighted_targets (half : F) (j : ℕ) :
+    (((weightedIndexLoop half 10 j 0 1).getD []).map Prod.fst) = indexTargets j := by
+  have h := weightedIndexLoop_powers half 10 j 0
+  simp only [pow_zero] at h
+  rw [h]
+  unfold indexTargets
+  cases indexLoop 10 j 0 <;> simp [List.map_map]
+
+theorem sparseVector_zero (entries : List (ℕ × F)) (r : ℕ)
+    (h : r ∉ entries.map Prod.fst) : sparseVector entries r = 0 := by
+  induction entries with
+  | nil => simp [sparseVector]
+  | cons e es ih =>
+      have hn : r≠e.1 ∧ r ∉ es.map Prod.fst := by simpa using h
+      have he := hn.1
+      have hs := hn.2
+      simp only [sparseVector, List.map_cons, List.sum_cons, if_neg he, zero_add]
+      exact ih hs
+
+theorem sparseX_zero (half : F) (j r : ℕ) (h : r ∉ indexTargets j) :
+    sparseX half j r = 0 := by
+  apply sparseVector_zero
+  simpa only [weighted_targets] using h
+
+theorem sparseXX_zero (half : F) (j r : ℕ)
+    (h : r ∉ (indexTargets j).flatMap indexTargets) : sparseXX half j r = 0 := by
+  unfold sparseXX
+  have hz : ∀ e ∈ (weightedIndexLoop half 10 j 0 1).getD [], sparseX half e.1 r = 0 := by
+    intro e he
+    apply sparseX_zero
+    intro hm
+    apply h
+    apply List.mem_flatMap.mpr
+    refine ⟨e.1,?_,hm⟩
+    rw [← weighted_targets half j]
+    exact List.mem_map.mpr ⟨e,he,rfl⟩
+  have hm : (((weightedIndexLoop half 10 j 0 1).getD []).map
+      fun e => e.2*sparseX half e.1 r) =
+      (((weightedIndexLoop half 10 j 0 1).getD []).map fun _ => (0:F)) := by
+    apply List.map_congr_left
+    intro e he
+    rw [hz e he,mul_zero]
+  rw [hm]
+  simp
+
+def evenUnitSupport (j r : ℕ) : Prop := r/2=j ∨ r%2=0 ∧ r/2 ∈ indexTargets j
+def oddUnitSupport (j r : ℕ) : Prop := r/2=j ∨
+  if r%2=0 then r/2 ∈ (indexTargets j).flatMap indexTargets else r/2 ∈ indexTargets j
+
+instance (j r : ℕ) : Decidable (evenUnitSupport j r) := by unfold evenUnitSupport; infer_instance
+instance (j r : ℕ) : Decidable (oddUnitSupport j r) := by unfold oddUnitSupport; infer_instance
+
+theorem sourceChord_even_zero (half : F) (j r : ℕ) (hj : j<512)
+    (h : ¬evenUnitSupport j r) (a b c : F) :
+    sourceChord half (unitVector (2*j)) a b c r = 0 := by
+  have hd : r/2≠j := fun he => h (Or.inl he)
+  rw [sourceChord_unit_even half j r hj]
+  by_cases hp : r%2=0
+  · have hx : r/2 ∉ indexTargets j := fun hm => h (Or.inr ⟨hp,hm⟩)
+    simp [hp,unitVector,hd,sparseX_zero half j (r/2) hx]
+  · simp [hp,unitVector,hd]
+
+theorem sourceChord_odd_zero (half : F) (j r : ℕ) (hj : j<512)
+    (h : ¬oddUnitSupport j r) (a b c : F) :
+    sourceChord half (unitVector (2*j+1)) a b c r = 0 := by
+  have hd : r/2≠j := fun he => h (Or.inl he)
+  rw [sourceChord_unit_odd half j r hj]
+  by_cases hp : r%2=0
+  · have hx : r/2 ∉ (indexTargets j).flatMap indexTargets := by
+      intro hm
+      exact h (Or.inr (by simpa [hp] using hm))
+    simp [hp,unitVector,hd,sparseXX_zero half j (r/2) hx]
+  · have hx : r/2 ∉ indexTargets j := by
+      intro hm
+      exact h (Or.inr (by simpa [hp] using hm))
+    simp [hp,unitVector,hd,sparseX_zero half j (r/2) hx]
+
+#print axioms sourceChord_even_zero
+#print axioms sourceChord_odd_zero
+#print axioms weighted_targets
+#print axioms sparseVector_zero
+#print axioms sparseX_zero
+#print axioms sparseXX_zero
 #print axioms sourceChord_difference
 #print axioms sourceChord_unit_odd
 #print axioms sourceChord_unit_even
