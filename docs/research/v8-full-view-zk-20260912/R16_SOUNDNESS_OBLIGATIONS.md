@@ -1,5 +1,54 @@
 # R16 soundness preservation obligations
 
+## Current extraction authentication and import-memory isolation — 2026-09-21
+
+Base `2c7a4a8d8f6f14856f1e1d4078c69a35969e0747` plus this changeset.
+No new arithmetic theorem compiled in this checkpoint. The current-source
+checked-arithmetic adapter remains an uncompiled local draft, not release evidence.
+
+`CurrentFieldSlice.lean` retains 11 generated declarations and their attributes
+byte-for-byte from the cached current caller. The read-only checker authenticates
+both complete input files before comparing the declaration inventory and bodies:
+
+- Types.lean: `02c93204cbcaa6f5389fed89b9e67074536c6375f990a4504bba297c7780138b`.
+- FunsChunk04.lean: `e79e0726e1a58ebfe3701b83f4339ca52b042e46cae833d573df3190c4bd0c21`.
+- Narrow-import slice: `a012e37dfa23b84471e5571c73c7c758f774bb0a03aa06ca25f6f29e5e97667e`.
+
+Checker execution with `--self-test` exited 0: 11 declarations matched;
+four in-memory mutations (constant, attribute, missing name, extra declaration)
+were rejected. This authenticates a source projection, NOT source refinement,
+compiled kernel evidence, or an R17 caller theorem. Imports and namespace framing
+are outside the byte comparison. Do not import this slice alongside the complete
+caller: it deliberately retains the same declaration names.
+
+All following attempts ran on nuc.local in separate user systemd scopes, with
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64, Lean 4.32.0,
+`-j1 -M1800`, and the existing pinned mathlib/Aeneas caches. The task directory
+was `/home/dombarker/project-offloads/aspis-r17-extracted-cm31.JXBWPZ`.
+Time/RSS/swap are GNU time measurements. Every attempt terminated by signal 6
+with wrapper exit 134 (the time footer's exit 0 is not a successful compilation).
+
+| Target / change | Wall seconds | Peak RSS KiB | Swaps | Axioms audit |
+| --- | ---: | ---: | ---: | --- |
+| ExtractedCM31Operands, full caller import, scope cm31-operands-r1 | 3.36 | 2189380 | 0 | Not reached |
+| CurrentFieldSlice, Aeneas.Std import, scope cm31-slice-r2 | 1.76 | 2184892 | 0 | Not reached |
+| CurrentFieldSlice, narrowed scalar imports, scope cm31-slice-r3 | 1.74 | 2165128 | 0 | Not reached |
+| ScalarImportProbe, only Aeneas.Std.Scalar.Core, scope scalar-import-r1 | 1.89 | 2029900 | 0 | No theorem; check not reached |
+
+The first scope names above have prefix `aspis-r17-`; the last is
+`aspis-r17-scalar-import-r1`. Each failed with Lean's interpreter memory
+exception, not a cgroup OOM. The minimal probe contains only one import and
+`#check UScalar`, isolating the obstruction below our arithmetic proof bodies.
+No unchanged failed job was rerun with a larger cap; no whole-package build ran.
+The narrowed imports did not solve this cached runtime's import-memory floor.
+
+Next engineering step: inspect/reduce the cached Aeneas scalar import closure
+under the resource policy before retrying the adapter. First mathematical
+obligation remains successful checked execution of the CURRENT CM31 lazy
+cross operand with value `(a+b)*(c+d)`, followed by the actual reducer and
+coordinate reconstruction. The retained Nat/ZMod theorem does not itself
+establish this operational statement. Full privacy and soundness stay open.
+
 ## Arithmetic source reuse audit and current CM31 deltas — 2026-09-21
 
 Base `841909cbf881fb07a636bf267ae61fbcd89b7d55` plus this changeset.
