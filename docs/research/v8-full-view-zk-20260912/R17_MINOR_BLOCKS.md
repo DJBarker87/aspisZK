@@ -1,5 +1,43 @@
 # R17 small-block certificate route
 
+## Compiled tiny determinant leaves
+
+Base `b1ad6787` plus this changeset. `tools/r17_block_determinants.py`
+validates all 133 frozen records, verifies complete row/column coverage,
+checks canonical residue ranges and dimensions, deduplicates the 29
+matrices, and emits `lean/AspisV8R17/BlockDeterminants.lean` with an input
+SHA256. `--check` compares the entire regenerated file exactly; it passes.
+
+All 29 named `blockN_det_ne_zero` theorems compile over ZMod 2147483647.
+The generator explicitly applies `Matrix.det_fin_one`, `det_fin_two` or
+`det_fin_three`, then kernel-checks only the resulting tiny arithmetic
+expression. No 214-square determinant, inverse or recurrence is reduced.
+The largest case has at most six products of three 31-bit residues; there
+is no large reduction graph hidden in these leaves. No native_decide or
+new axiom is used. Each final axioms audit is exactly propext,
+Classical.choice, Quot.sound.
+
+These prove nonzero determinants of the frozen evaluated matrices only.
+The first remaining formal proposition is that the permuted source-model
+minor is block triangular with diagonal blocks given by these matrices
+(with their 133-record reuse), followed by determinant composition. The
+source executable checks are not substituted for that formal connection.
+Probability accounting and full privacy/soundness remain separate.
+
+Focused preflight: `python3 docs/research/v8-full-view-zk-20260912/tools/r17_block_determinants.py --check`
+from the privacy worktree reports blocks=133, unique=29, max_dimension=3,
+match=true. The generator writes to stdout; source edits used apply_patch.
+
+Lean command from `/Users/dominic/ZK/AspisFormal`:
+`/usr/bin/time -l lake env lean -j1 -M1800 /Users/dominic/ZK/.worktrees/ZK-v8-privacy-repair-20260913/docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/BlockDeterminants.lean`.
+Initial norm_num-based proofs left modular and matrix-entry goals: exit 1,
+wall 12.07s, peak RSS 1756856320 bytes, swaps 0. Their sorryAx audits are
+rejected. The generator was changed to the named determinant formula plus
+small direct decision proof, and its check reran successfully. Final
+compile: exit 0, wall 7.71s, peak RSS 1746747392 bytes, swaps 0.
+All 29 final audits pass. Output is in the command-tool record. No Rust
+source changed, and no unchanged runtime or full manifest was rerun.
+
 ## Frozen block artifact
 
 Base `00cc7a1e` plus this changeset. The source test now asserts exact
