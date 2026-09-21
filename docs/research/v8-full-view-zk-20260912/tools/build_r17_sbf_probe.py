@@ -13,6 +13,14 @@ stage = json.loads((root / 'r17-sbf-probe.json').read_text())
 callback = root / 'docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs'
 assert hashlib.sha256(callback.read_bytes()).hexdigest() == stage['callback_after_sha256']
 host = json.loads((root / 'r17-stage.json').read_text())
+def check_after(name, expected):
+    if name in stage.get('owned_weights', {}):
+        change = stage['owned_weights'][name]
+        assert change['before_sha256'] == expected
+        expected = change['after_sha256']
+    assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == expected
+if 'owned_weights' in stage:
+    assert hashlib.sha256((callback.parent / 'r17_owned_weights.rs').read_bytes()).hexdigest() == stage['owned_weights_sha256']
 if 'workspace_adapter' in stage:
     for name, hashes in stage['workspace_adapter'].items():
         if name in stage.get('tensor_prefix', {}):
@@ -22,7 +30,7 @@ if 'workspace_adapter' in stage:
     assert hashlib.sha256((callback.parent / 'r17_mask_workspace.rs').read_bytes()).hexdigest() == stage['workspace_sha256']
 if 'tensor_prefix' in stage:
     for name, hashes in stage['tensor_prefix'].items():
-        assert hashlib.sha256((callback.parent / name).read_bytes()).hexdigest() == hashes['after_sha256']
+        check_after(name, hashes['after_sha256'])
     assert hashlib.sha256((callback.parent / 'r17_tensor_prefix.rs').read_bytes()).hexdigest() == stage['tensor_prefix_sha256']
 if 'basis_specialization' in stage:
     basis = callback.parent / 'r16_basis_transport.rs'
@@ -50,7 +58,7 @@ for item in host['r17_edits'] + host['r17_shared']:
     if path.name in stage.get('cu_profile', {}):
         change = stage['cu_profile'][path.name]
         assert change['before_sha256'] == item.get('after_sha256', item.get('sha256'))
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == change['after_sha256']
+        check_after(path.name, change['after_sha256'])
         continue
     if path.name in stage.get('workspace_adapter', {}):
         assert stage['workspace_adapter'][path.name]['before_sha256'] == item.get('after_sha256', item.get('sha256'))

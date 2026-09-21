@@ -284,3 +284,49 @@ markers. Optimize ownership/scratch reuse without changing the fixed map or
 checks, then remeasure. Even after resolving this heap failure, the measured
 33M weight stage is far above the deployable budget and needs a substantially
 cheaper evaluation route. Full privacy and soundness preservation remain open.
+
+## R12 owned dual/chord: preparation completes
+
+Base 76be8af5 plus this changeset. r17_owned_weights.rs consumes the existing
+weight Vec rather than allocating fresh dual/chord output vectors. It first
+applies the same inactive-coordinate pivot subtraction, then gathers by the
+source-checked permutation using cycle rotation and a 1,024-byte visited array.
+Permutation validity remains checked by the retained host map gate. The chord
+routine reads zero-padded even/odd projections directly, materializes only
+xwa/xxwa/xwb, and writes each output pair into the original Vec after reading
+that pair. Arithmetic expressions/order remain those of the reference. No
+unsafe code, field assumption, map change, or dropped verifier check is added.
+The actual loop/source correspondence is not yet a compiled Lean theorem.
+
+Focused optimized tests pass: 20 cases x 1,024 dual and chord entries equal the
+retained references. The tensor, G, and complete-weight differential controls
+also pass. Stage_r17_owned_weights.py preserves before/after hashes and old
+reference functions. Runner verifies this new hash chain through the prior
+tensor and instrumentation stages. The change is isolated to research staging.
+
+Scopes/measurements, all zero swaps and TasksMax=128 except runtime=64:
+
+| Target / scope | Limits high/max/swap | Exit | Wall s | Peak RSS KiB |
+| --- | --- | ---: | ---: | ---: |
+| optimized gate / aspis-r17-owned-gate-r12 | 4G/6G/0 | 0 | 26.75 | 528576 |
+| SBF build / aspis-r17-owned-sbf-r12 | 5G/7G/0 | 0 | 34.56 | 619204 |
+| simulator / aspis-r17-owned-svm-r12 | 3G/4G/0 | 0 | 0.13 | 26364 |
+
+SBF source/table/frame checks pass. No Lean target changed. Runtime exit 0
+again means observations recorded, not successful proof verification.
+At diagnostic 100M, both original-weight/dual/chord stages now complete and
+the first prepare-end marker is reached with 57,636,780 CU remaining.
+The program then logs out-of-memory and panics at **42,363,431 CU to failure**.
+This later failure is progress past R11's preparation failure, not a full heap
+fix or a completed verification. Honest and corrupt cases both fail, and the
+1.2M/1.4M cases still exhaust CU. No heap/CU limit was increased.
+
+ELF SHA256 c38e36a1619474c9bb581143c9129b0d08cb7136864408763597197aae74a986.
+Exact evidence: evidence/r17-owned-gate-r12.log, r17-owned-sbf-r12.log,
+r17-owned-svm-r12.{jsonl,log}; fixture/driver unchanged. Source inspection
+identifies the next immediate allocation: r17_host_relation::verify constructs
+two dense 1,024-coordinate reference vectors unconditionally, even when
+reference=false. Only the reference branch consumes those vectors. Next is
+conditional construction while retaining both verification paths and their
+agreement check. Further heap and major CU work remains, as do all outstanding
+full-transcript privacy, source-refinement and soundness obligations.
