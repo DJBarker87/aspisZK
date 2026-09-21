@@ -1,5 +1,52 @@
 # Fixed active-minor nonvanishing witness
 
+## Assembled weighted scatter and transport
+
+Base `1bc073f1` plus this changeset. `WeightedScatter.lean` defines the
+full edge list by concatenating each concrete weighted column schedule.
+It proves every input/output bound from `weighted_schedule_bounds` and
+instantiates the finite chord identity at lengths 512/513 with no remaining
+edge-bound premise. `sourceChord_six_constants` therefore covers the
+assembled index, weight, scatter, parity and finite-read model.
+
+`active_transport_six_constants` composes this with the retained R16
+inverseTransport definition at any non-pivot row, using its fixed
+inverse-permutation index. The non-pivot premise remains explicit. Actual
+source active rows are non-pivot (the pivot is inactive), but the fixed
+Rust permutation is not represented by an extracted semantics artifact
+in this theorem. Similarly abstract half and field operations still need
+the stated source representation correspondence. The immediate next
+algebraic bridge is polynomial evaluation of these assembled six constants
+and the fixed-minor certificate; source field/word correctness and adaptive
+sampler probability remain distinct open obligations.
+
+## This step's focused evidence
+
+The two newly imported prerequisite oleans were missing, so they were
+built in the retained cache; this was not a full manifest replay. Commands
+ran from `/Users/dominic/ZK/AspisFormal` under `/usr/bin/time -l lake env`,
+with Lean `-j1 -M1800`. The source root is the worktree's
+`docs/research/v8-full-view-zk-20260912/lean`; outputs are under
+`target/r17-lean/AspisV8R17/{IndexSchedule,SourceScatter}.olean`.
+The successful prerequisite commands use `-R SOURCE_ROOT -o OUTPUT FILE`.
+The bridge command sets LEAN_PATH to worktree target/r17-lean and
+target/r16-lean ahead of the existing path, then invokes Lean on
+`SOURCE_ROOT/AspisV8R17/WeightedScatter.lean`.
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| IndexSchedule olean, missing -R | 1 | 3.69 | 669876224 | 0 |
+| SourceScatter olean, missing -R | 1 | 0.70 | 669728768 | 0 |
+| WeightedScatter, missing prerequisite object | 1 | 1.10 | 669745152 | 0 |
+| IndexSchedule olean with source root | 0 | 5.86 | 1319665664 | 0 |
+| SourceScatter olean with source root | 0 | 2.40 | 1383022592 | 0 |
+| WeightedScatter/chord composition | 0 | 1.59 | 1340866560 | 0 |
+| Final active transport composition | 0 | 3.70 | 1383038976 | 0 |
+
+All successful axioms audits use only propext, Classical.choice and
+Quot.sound (subsets as printed); no sorryAx. Outputs are in the command
+tool record. No Rust or production paths changed; no runtime replay.
+
 ## Weighted schedule correspondence
 
 Base `2f915390` plus this changeset. `IndexSchedule.lean` adds a weighted

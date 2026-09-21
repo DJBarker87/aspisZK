@@ -17,6 +17,8 @@ and compiled zero-extension/parity/bounded-output boundary lemmas,
 now composed through the finite 512/513/514-length chord reads,
 with kernel-checked success/index bounds for all 512 and 513 source columns,
 and a universal repeated-weight-to-power correspondence,
+now assembled into the chord theorem and composed with non-pivot inverse
+transport,
 but a compiled polynomial/source bridge and actual adaptive probability
 law remain open. The algebraic evaluation is not an accepted OOD draw.
 No global privacy or soundness conclusion follows from this certificate.
