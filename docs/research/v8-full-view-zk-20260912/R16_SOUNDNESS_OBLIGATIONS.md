@@ -1,5 +1,85 @@
 # R16 soundness preservation obligations
 
+## Composed source-shaped opening identity — 2026-09-21
+
+Base `aba46950365f4b90214027d1e1441355b0a61b3f` plus this changeset.
+Four focused leaves now connect the previously separate algebraic steps:
+
+- `ChordDual.lean`: finite dot-product padding lemmas and the full-width
+  even/odd chord pairing. All 514 positions per output lane remain present.
+  The single-scatter extra coordinate is eliminated by its proved support
+  bound, while the double scatter retains the complete intermediate vector.
+- `SourceChordTranspose.lean`: parity-sum/interleaving identities and the
+  source-shaped 1024-coordinate chord transpose, with both weight lanes
+  zero-extended from 512 to 514. Its pairing holds for arbitrary q.
+- `SourceOpeningResidual.lean`: literal sequential updates at 1023, 1022,
+  1021, then the separate ordinary and structured-G channel pairing.
+- `TransportedOpening.lean`: composes the result with TransportDual's
+  arbitrary-coefficient identity, converting between finite row indices and
+  the natural-indexed source-loop model.
+
+The final theorem `transported_source_opening_pairing` states that the
+computed quotient-weight dot product is the original-weight dot product on
+inverseTransport(sourceChord(q)), PLUS the actual channel residual terms.
+There is no honest-generation, legal-mask or residual-zero premise on q.
+The theorem parameterizes the public order and inactive set; exact source
+inventory correspondence remains required.
+
+The compiled two-channel formula retains precisely:
+
+```
+tau   * qR[1023]
++ tau^2 * (b*qR[1022] - c*qR[1021])
++ tau^3 * qG[1023]
++ tau^4 * (b*qG[1022] - c*qG[1021]).
+```
+
+These are not silently set to zero. The combined image check still needs
+the ordinary/carried-error term and its degree-4 accounting from the retained
+two-channel argument. The pairing is deterministic algebra, not a root-count
+or Fiat--Shamir distribution theorem.
+
+Crucially, weight zero-padding proves a pairing with the retained low 1024
+forward coefficients even if the four high output coefficients are nonzero.
+This does not prove high-tail-zero acceptance or that a malicious quotient
+lies in the required image. The audit's high-tail assertion is not inherited
+as an assumption. That distinction preserves the separate image soundness gate.
+
+Rechecked local r16_basis_transport.rs SHA-256
+`36466ca34b091ee2e058deb3c66d1306164c0b6869719586175ddefa87a37dcf`;
+local and v19 staged r17_opening_weights.rs are identical at SHA-256
+`bc0068b47eba5f871fac7ff809aad79bff738357ead553fa2ded7fd579428fec`.
+This is a mathematical model of that source shape, not an extracted Rust
+execution proof. Original weights, the source field embedding/word operations,
+array reads/writes and the concrete fixed inventory remain source obligations.
+
+First remaining source-specific proposition: `original_weights` and its
+WeightAccumulator/structured-mask materialization, together with the actual
+field/array implementation of the composed pipeline, realize this identity
+for both channels and arbitrary extracted coefficients. Commitment extraction,
+image validity, all folds/final openings, adaptive challenges and explicit
+soundness loss still require their own proofs. The joint legal C1/H1/G
+coverage and full-transcript privacy gates are unchanged, not discharged.
+
+Focused cached workspace `/Users/dominic/ZK/AspisFormal`; each leaf compiled
+with `lake env lean -j1 -M1800 -R <research>/lean -o <r17-cache>/<leaf>.olean
+<research>/lean/AspisV8R17/<leaf>.lean`, measured with `/usr/bin/time -l`:
+
+| Target/attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| ChordDual, initial partial-application simplification | 1 | 8.55 | 1427341312 | 0 |
+| ChordDual, explicit unfolding of partial applications | 0 | 1.90 | 1445609472 | 0 |
+| SourceChordTranspose | 0 | 1.81 | 1444331520 | 0 |
+| SourceOpeningResidual | 0 | 2.99 | 1444249600 | 0 |
+| TransportedOpening, dependent composed bridge | 0 | 2.61 | 1468203008 | 0 |
+
+Twelve final #print axioms declarations use only subsets of propext,
+Classical.choice and Quot.sound. No sorryAx. SourceChordTranspose emits two
+unused section-instance warnings, SourceOpeningResidual one unused simp
+argument warning; the final bridge has no warnings. The failed initial draft
+was not proof evidence. No cap increase, production change, full manifest
+replay, or unchanged runtime regression occurred.
+
 ## Bounded source scatter/gather adjoint — 2026-09-21
 
 Base `3a53c79a5003755c885fd6b87e98b9d046a9d51d` plus this changeset.
