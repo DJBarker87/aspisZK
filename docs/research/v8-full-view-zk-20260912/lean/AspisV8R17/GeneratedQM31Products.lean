@@ -1,6 +1,7 @@
 import AspisV8R17.GeneratedQM31Scalar
 import AspisV8R17.GeneratedMulByR
 import AspisV8R17.GeneratedCM31SquareNormalized
+import AspisV8R17.QM31WordFormulas
 
 namespace V7Tag73CurrentHelpersOpaque
 open Aeneas Aeneas.Std Result
@@ -39,24 +40,8 @@ end V7Tag73CurrentHelpersOpaque
 namespace AspisV8R17.GeneratedQM31Products
 open Aeneas.Std V7Tag73CurrentHelpersOpaque RawReducer
 
-abbrev WordPair := Nat × Nat
 def words (x : aspis_core.field.CM31) : WordPair := (x.a.val,x.b.val)
-def addWords (x y : WordPair) : WordPair := ((x.1+y.1)%P,(x.2+y.2)%P)
-def subWords (x y : WordPair) : WordPair := ((x.1+P-y.1)%P,(x.2+P-y.2)%P)
-def mulWords (x y : WordPair) : WordPair :=
-  (GeneratedCM31Mul.realWord x.1 x.2 y.1 y.2,
-   GeneratedCM31Mul.imagWord x.1 x.2 y.1 y.2)
-def rWords (x : WordPair) : WordPair :=
-  (((x.1+x.1)%P+P-x.2)%P,(x.1+(x.2+x.2)%P)%P)
 def qmWords (x : aspis_core.field.QM31) := (words x.c0,words x.c1)
-def qmMulWords (x y : WordPair × WordPair) :=
-  let m0 := mulWords x.1 y.1
-  let m1 := mulWords x.2 y.2
-  (addWords m0 (rWords m1),
-   subWords (subWords (mulWords (addWords x.1 x.2) (addWords y.1 y.2)) m0) m1)
-def qmSquareWords (x : WordPair × WordPair) :=
-  (addWords (mulWords x.1 x.1) (rWords (mulWords x.2 x.2)),
-   addWords (mulWords x.1 x.2) (mulWords x.1 x.2))
 
 private theorem cm_add (x y : aspis_core.field.CM31)
     (hx : GeneratedCM31Linear.Canonical x) (hy : GeneratedCM31Linear.Canonical y) :

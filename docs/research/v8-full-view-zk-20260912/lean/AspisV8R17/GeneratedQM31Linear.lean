@@ -29,11 +29,6 @@ namespace AspisV8R17.GeneratedQM31Linear
 open Aeneas.Std V7Tag73CurrentHelpersOpaque GeneratedQM31Products
 open GeneratedQM31Scalar
 
-def qmAddWords (x y : WordPair × WordPair) :=
-  (addWords x.1 y.1, addWords x.2 y.2)
-def qmSubWords (x y : WordPair × WordPair) :=
-  (subWords x.1 y.1, subWords x.2 y.2)
-
 theorem generated_add_words (x y : aspis_core.field.QM31)
     (hx : Canonical x) (hy : Canonical y) :
     ∃ z, aspis_core.field.QM31.add x y = .ok z ∧ Canonical z ∧

@@ -1,5 +1,50 @@
 # R16 soundness preservation obligations
 
+## Shared pure word interface and linear residue interpretation — 2026-09-21
+
+Base revision `e0989f78` plus this changeset. QM31WordFormulas.lean separates
+the existing modular Nat pair formulas from generated-runtime imports.
+The CM31 product helpers are expanded definitionally; generated declarations
+and theorem statements are unchanged. GeneratedQM31Products and
+GeneratedQM31Linear were recompiled successfully against this shared interface.
+This split lets mathematical interpretation consume exactly the same formulas
+without loading Aeneas. Source authentication and negative mutations still pass.
+
+QM31WordResidues.lean proves two- and four-coordinate addition/subtraction
+interpretation in ZMod P. Addition is unconditional; subtraction requires
+canonical subtrahend limbs so Nat subtraction does not silently truncate.
+These are coordinatewise residue equalities, not a new tower/field instance
+or an end-to-end source caller theorem.
+
+All targets used cached Linux Lean 4.32.0 `-j1 -M1800`, systemd scopes with
+MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=64. Scope names below
+have prefix `aspis-r17-`; target paths have prefix `AspisV8R17/`.
+
+| Target / attempt | Scope suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | --- | ---: | ---: | ---: | ---: |
+| QM31WordFormulas.lean | word-formulas-r1 | 0 | 0.36 | 929416 | 0 |
+| QM31WordTower.lean, quadratic-algebra import memory exception | word-tower-r1 | 134 / signal 6 | 1.80 | 1845456 | 0 |
+| GeneratedQM31Products.lean, changed formula import | products-split-r1 | 0 | 0.72 | 1634340 | 0 |
+| QM31WordResidues.lean, cast-self simplification gap | word-residues-r1 | 1 | 0.97 | 1827028 | 0 |
+| GeneratedQM31Linear.lean, changed formula import | linear-split-r1 | 0 | 0.65 | 1627800 | 0 |
+| QM31WordResidues.lean, wrong lemma namespace | word-residues-r2 | 1 | 0.81 | 1827140 | 0 |
+| QM31WordResidues.lean, explicit ZMod.natCast_mod rewrite | word-residues-r3 | 0 | 0.84 | 1837836 | 0 |
+
+The failed tower draft was replaced by the smaller coordinate interface,
+not rerun at a higher cap or accepted as compiled. Its time footer zero is
+not success; controlling exit was 134. Failed elaborations' sorryAx output
+is excluded. Final five residue #print axioms results are
+`[propext, Quot.sound]`; products retain the standard three axioms and
+linear wrappers retain `[propext, Quot.sound]`. The formulas-only leaf
+introduces definitions, no axioms/theorems. No new security assumption.
+
+First remaining interpretation proposition: multiplication, squaring and
+extension-constant/scalar formulas must map to the explicit retained tower,
+using a resource-bounded algebra interface. The tower import failure does
+not justify replacing its arithmetic with a cardinality-only equivalence.
+Actual source mask arrays/loops and global privacy/soundness stay open.
+Production paths and negative regressions are unchanged.
+
 ## Current QM31 linear wrappers — 2026-09-21
 
 Base revision `27f24bce` plus this changeset. GeneratedQM31Linear.lean
