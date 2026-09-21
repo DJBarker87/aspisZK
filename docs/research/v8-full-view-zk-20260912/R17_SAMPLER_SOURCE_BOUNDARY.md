@@ -1,5 +1,36 @@
 # R17 determinant sampler/source boundary
 
+## Single-sentinel ideal instantiation — 2026-09-21
+
+Base `6d875cd144dd9a6eb9cfeb88dcd7dd045d2713e0` plus this changeset.
+`AspisV8R17/SingleSentinelSampler.lean` proves that rejecting only the last
+element of Fin(q+1) leaves exactly one rejected symbol, gives exact ideal
+failure probability `1/(q+1)^n`, and specializes q=2147483647,n=8 to
+`1/2^248`. The specialization uses the small base identity 2147483648=2^31
+and the symbolic power-of-power law, without enumerating tapes or alphabets.
+All three audited theorems use only propext, Classical.choice, Quot.sound.
+
+Re-inspected transcript.rs lines 378–416 and rechecked SHA-256
+`be036d144b9fe0c8119d9f6fdd8ca2167d1379f7d1d785fa2f197200b9f7d119`.
+The actual implementation masks each decoded word with P, rejects P, advances
+a shared word cursor across four limbs, refills after eight words, and aborts
+on limb exhaustion. This file proves the ideal single-limb mathematical law,
+not the Rust decoding/masking correspondence or the independence of the
+remaining words after an adaptively stopped limb. It does not yet prove the
+joint four-limb law or any full-protocol privacy/soundness loss.
+
+Focused cached invocation follows the previous section's command with target
+`AspisV8R17/SingleSentinelSampler.lean` and matching object, -j1 -M1800.
+No unchanged full-suite run or production edit was performed.
+
+| Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| Initial, missing tactic import | 1 | 4.95 | 1451606016 | 0 |
+| Imported tactic, redundant proof after congr closed goal | 1 | 1.95 | 1484324864 | 0 |
+| Final symbolic specialization | 0 | 1.67 | 1502593024 | 0 |
+
+The source-specific joint sampler/selection premise below remains open.
+
 ## Exact ideal bounded-rejection law — 2026-09-21
 
 Base `82bc407b1cedf4cfb0346e83ba57c670fe820c4d` plus this changeset.
