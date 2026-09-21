@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## Latest coverage step — active/query separation, 2026-09-21
+
+`R17_ACTIVE_QUERY_SEPARATION.md` records fixed source geometry: active
+coefficients start at 100, while the low raw/final correction ends at 90.
+All 264 low quotient/chord basis checks pass. The direct active map uses
+only alpha, chord and layout; it and the factored map have rank 214 at
+both prefixes. Next is a universal minor/exceptional-event argument for
+that direct map, then the remaining point/G constraints. This is not a
+full privacy or soundness result.
+
 ## Latest coverage step — balanced kernel, 2026-09-21
 
 `R17_BALANCED_KERNEL.md` records the compiled nonzero secant-normal

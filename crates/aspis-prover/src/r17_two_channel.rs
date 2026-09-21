@@ -18,6 +18,54 @@ fn dot(a: &[K], b: &[K]) -> K {
     a.iter().zip(b).fold(K::ZERO, |v, (&a, &b)| v.add(a.mul(b)))
 }
 
+/// Immutable coefficient geometry only: no challenge or schedule sampling.
+#[test]
+fn r17_h1_active_coefficient_geometry() {
+    let map=transport();
+    let positions:Vec<_>=map.order.iter().enumerate()
+        .filter(|(_,r)|!map.inactive[**r]).map(|(j,_)|j).collect();
+    assert_eq!(positions.len(),214);
+    assert!(positions.iter().all(|&j|j>=89 && j<1023));
+    assert_eq!(positions.first(),Some(&100));
+    assert_eq!(positions.last(),Some(&1018));
+    let mut histogram=[0usize;5];
+    let mut full=Vec::new();
+    for block in 0..256 {
+        let count=(0..4).filter(|s|positions.contains(&(4*block+s))).count();
+        histogram[count]+=1;
+        if count==4 {full.push(block);}
+    }
+    assert_eq!(histogram,[110,92,40,14,0]);
+    let mut runs=Vec::new();
+    for &j in &positions {
+        if let Some((_,end))=runs.last_mut() {
+            if *end+1==j {*end=j;continue;}
+        }
+        runs.push((j,j));
+    }
+    println!("R17_ACTIVE_GEOMETRY positions={} block_histogram={histogram:?} full_blocks={full:?} runs={runs:?}",positions.len());
+}
+
+#[test]
+fn r17_low_quotient_correction_preserves_active_rows() {
+    let map=transport();
+    let active:Vec<_>=(0..N).filter(|&r|!map.inactive[r]).collect();
+    for j in 0..88 {
+        let mut q=vec![K::ZERO;N];q[j]=K::ONE;
+        for k in 0..3 {
+            let mut chord=[K::ZERO;3];chord[k]=K::ONE;
+            let c=chord_product(&q,chord);
+            assert!(c[91..].iter().all(|&v|v==K::ZERO),"degree support j={j} k={k}");
+            let m=map.inverse(&c);
+            assert!(active.iter().all(|&r|m[r]==K::ZERO));
+            let mut applied=vec![K::ZERO;N];
+            crate::state_only_hiding::apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut applied,&m).unwrap();
+            assert_eq!(applied,m);
+        }
+    }
+    println!("R17_LOW_ACTIVE_SEPARATION quotient_basis=88 chord_basis=3 product_max_index=90 first_active_index=100 actual_padding_checks=264 no_challenges=true");
+}
+
 pub(super) use super::opening_weights::{chord_transpose, original_weights, quotient_weights};
 
 fn quotient_direction(col: usize, abc: [K; 3]) -> Vec<K> {
@@ -280,6 +328,7 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
     let gw=quotient_weights(&p.z,p.kappa,abc,p.tau,true);
     let active:Vec<_>=(0..1024).filter(|&r|!transport().inactive[r]).collect();assert_eq!(active.len(),214);
     let mut hm=vec![vec![];218];let mut gm=vec![vec![];281];
+    let mut active_direct=vec![vec![];214];
     let mut combined=vec![K::ZERO;1024];let mut last_pivot=None;let mut count=0;
     for degree in 22..=255 {
         assert_eq!(factor.len(),degree+1);assert_ne!(factor[degree],K::ZERO);
@@ -300,6 +349,16 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
             assert_eq!(q[1023],K::ZERO);assert_eq!(abc[1].mul(q[1022]),abc[2].mul(q[1021]));
             assert!(fold_coefficients(&q,p.alpha).iter().all(|&v|v==K::ZERO));
             let message=chord_product(&q,abc);let m=transport().inverse(&message);
+            if degree<255 {
+                let mut high=q.clone();high[..88].fill(K::ZERO);
+                let high_message=transport().inverse(&chord_product(&high,abc));
+                for &r in &active{assert_eq!(m[r],high_message[r],"query-factor low tail cannot affect active rows");}
+                let mut unit=vec![K::ZERO;1024];
+                unit[4*degree]=p.alpha.mul(scale[0]).add(p.alpha.square().mul(scale[1])).add(p.alpha.pow(3).mul(scale[2])).neg();
+                unit[4*degree+1]=scale[0];unit[4*degree+2]=scale[1];unit[4*degree+3]=scale[2];
+                let direct=transport().inverse(&chord_product(&unit,abc));
+                for (i,&r) in active.iter().enumerate(){active_direct[i].push(direct[r]);}
+            }
             for (i,&r) in active.iter().enumerate(){hm[i].push(m[r]);}
             let balance=(0..1024).filter(|&r|transport().inactive[r]).fold(K::ZERO,|s,r|s.add(m[r]));
             assert_eq!(balance,message[1023],"transport balancing coordinate");
@@ -328,6 +387,9 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
         .map(|(_,row)|row[..699].to_vec()).collect();
     let (_,hb)=reduce(&h_balanced);let (_,gb)=reduce(&g_balanced);
     assert_eq!(hb.len(),217);assert_eq!(gb.len(),278);
+    let (_,direct_pivots)=reduce(&active_direct);
+    let (_,factor_pivots)=reduce(&h_balanced[..214]);
+    assert_eq!(direct_pivots.len(),214);assert_eq!(factor_pivots.len(),214);
     let enc=CircleEncoder::new_for_domain_log(20);
     let qcode=enc.encode_c2_message(&combined).unwrap();
     let msg=chord_product(&combined,abc);let mcode=enc.encode_c2_message(&msg).unwrap();
@@ -336,6 +398,7 @@ fn r17_actual_prefix_factor_kernel_reduced_maps() {
     assert!(fold_coefficients(&combined,p.alpha).iter().all(|&v|v==K::ZERO));
     println!("R17_FACTOR_KERNEL independent_directions=700 polynomial_factors_checked=234 H_residual_rank=218 G_residual_rank=279 source_raw_zeros=176 source_ood_zeros=2 prefix_only=true");
     println!("R17_BALANCED_KERNEL independent_directions=699 high_coordinates_zero=3 source_balance_identity_checked=700 H_residual_rank=217 G_residual_rank=278 prefix_only=true");
+    println!("R17_ACTIVE_QUERY_SEPARATION direct_columns=699 direct_rank=214 factored_rank=214 low_tail_checks=699 active_map_depends_only_on_alpha_chord_layout=true");
 }
 
 /// Constructive compatible raw/final interpolation. This deliberately does
