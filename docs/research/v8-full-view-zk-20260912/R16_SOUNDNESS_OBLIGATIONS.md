@@ -1,5 +1,82 @@
 # R16 soundness preservation obligations
 
+## Retained arithmetic foundations replayed in full runtime — 2026-09-21
+
+Base revision `c479081a` plus this changeset. The source caller imports the
+full cached runtime, while earlier arithmetic proofs used authenticated
+declaration projections. Importing both copies into one environment is not
+an arithmetic correspondence proof. New stage_full_runtime.py authenticates
+the original runtime blocks using the existing checker, omits their 12/5/5
+duplicate declarations, imports Aeneas.Std, and REPLAYS the unchanged theorem
+statements/bodies of UnsignedCoreSlice, UnsignedCM31Cross and UnsignedReducerOps.
+The retained field declarations in UnsignedCM31Cross are not removed. Original
+tracked projection files/caches remain unchanged. The new proof cache excludes
+the old declaration-projection workspace from LEAN_PATH.
+
+All three focused leaves compile against the actual full-runtime constants.
+The existing checker verifies seven runtime source pins and rejects three
+mutations per mode; the staging generator verifies theorem-block byte equality,
+records original/staged hashes and supports read-only --check. This advances
+the foundational runtime bridge, NOT the complete new field namespace or
+the source mask loops.
+
+There is also an operational distinction beyond namespace/type ownership:
+the new source extraction explicitly uses wrapping operations where parts of
+the older retained arithmetic projection use checked operations. New
+FullRuntimeWrapping.lean proves actual-runtime checked/wrapping agreement for
+U64 addition/multiplication under their explicit no-overflow bounds and U32
+subtraction under y≤x. A compiled underflow negative regression proves they
+cannot be equated unconditionally. These are arithmetic preconditions to be
+discharged by the caller, not new cryptographic/hiding assumptions.
+
+Cached Lean 4.32.0 -j1 -M3200; sequential scopes with MemoryHigh=4G,
+MemoryMax=6G, MemorySwapMax=0, TasksMax=64. Preflight showed only init.scope.
+New full-runtime import environment justified the focused replays; there was
+no old full-manifest rerun or memory-failed target/cap increase. Units below
+have prefix aspis-r17-full-runtime-; targets are under AspisV8R17.
+
+| Exact target / unit suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| UnsignedCoreSlice.lean / core-r1 | 0 | 1.11 | 2559044 | 0 |
+| UnsignedCM31Cross.lean / cross-r1 | 0 | 1.23 | 2573844 | 0 |
+| UnsignedReducerOps.lean / reducer-r1 | 0 | 1.08 | 2561860 | 0 |
+| FullRuntimeWrapping.lean / wrapping-r1 | 1 | 1.08 | 2553384 | 0 |
+| FullRuntimeWrapping.lean / wrapping-r2 | 0 | 1.24 | 2568520 | 0 |
+
+Wrapping r1 attempted definitional reduction through irreducible runtime size
+constants; r2 uses their explicit size equations. R1's sorryAx diagnostics
+were not accepted. R2 has three harmless unused-simp-argument warnings.
+Final axioms: four core theorems use propext; four cross theorems use
+propext/Quot.sound; reducer-operation theorems use propext except and_value
+also uses Quot.sound; all four wrapping/agreement-negative theorems use
+`[propext, Classical.choice, Quot.sound]`. No new assumptions or sorryAx.
+
+Final cache: `/home/dombarker/project-offloads/aspis-r17-mask-extract.aRLUCU/full-runtime-r2`.
+Original inputs are in full-runtime-inputs-r1; compile workspace was
+full-runtime-r1. Creation/--check pass; compiled sources are byte-compared
+before olean reuse in r2. Original/staged SHA256s are in full-runtime-stage.json.
+Staged hashes:
+
+- UnsignedCoreSlice: 570ed7545ef492c17ac660764403447580e492e66cff5650c1df09ab6fe33183;
+- UnsignedCM31Cross: 377dd74616466e2e3e9f44276940214910f7da048a09ea3f36f8c585b0c4e6db;
+- UnsignedReducerOps: 5f222d185d9f260b9cb53e29f55e899df67fb34dfc885190781addcf7c50d915;
+- FullRuntimeWrapping: 931b014981e7fd221a78f02414926420536ffc2a11d707c3322e1099ae2e22fc.
+
+The runner additionally pins WrappingOps/Add, Mul and Sub respectively to
+6b20fc30c237b8bfac99f9cd1e45f8150edcaabe4c62fdca5b0ceeb3a4a9b1a4,
+4d6f81c964cfa9b3b6808bc6d2703d3f2dbde5c70ce3ae76541905304802beb8,
+a07d2e801092fe35e9e0fd376a9723a2e1486467ff08769faae7644f55ce898e.
+These source hashes were checked on the compile host. The added runner pin
+guards were syntax-checked; no unchanged theorem replay was needed for them.
+
+First remaining arithmetic proposition: discharge these bounds and the
+wrapping-shift correspondence in the actual new reduce_u64/M31/CM31/QM31
+bodies, retaining modular/canonical results and connecting the fresh field
+types. Then use those results for reverse coin construction and accumulation.
+No source mask-loop or global privacy/soundness obligation was declared closed
+by this foundation replay. Production, Rust candidate, source pins and all
+negative regressions are preserved.
+
 ## Actual buffer-clearing loop: termination and stale-state erasure — 2026-09-21
 
 Base revision `5e21b4c4` plus this changeset. New WorkspaceZero.lean imports

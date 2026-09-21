@@ -97,3 +97,18 @@ buffers. Compile it after the workspace Funs using run_iterator.sh's
 WorkspaceZero target. The proof is symbolic and does not require canonical
 initial field values; it does not yet prove the coin or accumulation loops.
 stage_workspace.py also copies/checks this proof leaf.
+
+Full-runtime arithmetic bridge:
+
+`stage_full_runtime.py PROOF_DIR RUNTIME_SCALAR CHECK_UNSIGNED_SCRIPT FRESH_TASK`
+authenticates the retained runtime projections, omits only their duplicate
+runtime declaration blocks, and keeps three arithmetic theorem blocks
+byte-identical. `--check` validates the stage. Compile UnsignedCoreSlice,
+UnsignedCM31Cross, UnsignedReducerOps, then FullRuntimeWrapping using
+`run_full_runtime.sh TASK TARGET` inside bounded scopes. Do not mix the old
+declaration-projection cache into this LEAN_PATH.
+
+These focused proofs now use the real full-runtime declarations. The wrapping
+bridge keeps explicit overflow/underflow premises and a negative control;
+callers must discharge those premises. This is not yet a correspondence proof
+for the complete fresh extracted field namespace or mask arithmetic.
