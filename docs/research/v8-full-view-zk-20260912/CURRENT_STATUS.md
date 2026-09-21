@@ -15,7 +15,11 @@ The frozen source minor and both reordered index projections now compile.
 The first concrete block has a checked diagonal entry and all 213 lower
 entries are proved zero for arbitrary challenges. A list-map/symbolic
 lookup proof replaced an over-cap direct lookup check, without raising caps.
-Next: bind the remaining 132 blocks and compose their determinants.
+All remaining scalar bindings now compile: 392 diagonal entries and all
+22,702 lower-block pairs refer to this same ordered source minor. Both
+generators pass regeneration; 821 new theorem audits pass in 40 chunks
+plus one generic tail lemma. Next is finite-slice determinant composition
+and the justified field/domain instance, then polynomial/source probability.
 This is not a full privacy/soundness theorem; see `R17_MINOR_BLOCKS.md`.
 
 ## Latest certificate preflight — small blocks, 2026-09-21

@@ -1,5 +1,54 @@
 # R17 small-block certificate route
 
+## All concrete block entries bound — 2026-09-21
+
+Base `c84c80e5e3bcdc608b15e6b25bfc804ec9b1c09e` plus this changeset.
+`TailLookup.lean` proves generic in-bounds membership in a list tail from
+its drop identity and length. It was compiled before generated consumers.
+`tools/r17_source_lower_blocks.py` permanently uses this symbolic route:
+214 checked drop identities connect the ordered source rows to the existing
+column support lists, then 214 arbitrary-parameter zero theorems establish
+every required lower-block entry of `SourceMinor.orderedMinor` is zero.
+All 27 chunks compile, covering the 22,702 below-block-diagonal pairs.
+
+`tools/r17_source_diagonal_blocks.py` preserves the `entry` head until its
+indices are fixed, rewrites the small natural index identities and 2^k,
+and applies the retained source-entry theorem. All 392 diagonal equalities
+now refer directly to coordinates of the same ordered source minor; all
+13 chunks compile. Both generators hash all three frozen input artifacts
+and pass exact `--check` regeneration. No full scatter is unfolded and no
+large field calculation, recurrence or determinant is kernel-reduced.
+
+This closes the concrete scalar-entry binding work, not determinant
+composition. The next proposition is nonvanishing of the evaluated
+214-square source minor: assemble its finite diagonal slices from these
+equalities, apply the 29 checked small determinant leaves, recurse using
+the symbolic split gate and undo the checked permutations. The field/domain
+instance used for that composition must itself be justified. Polynomial
+evaluation/degree assembly and the actual adaptive source probability law
+remain subsequent obligations. Rust exact-source semantic refinement,
+joint residual coverage and full privacy/soundness remain open.
+
+### Focused evidence
+
+All 79 exact targets, exits, wall times, peak RSS, swap counts and axioms
+audit counts are recorded in `evidence/r17-source-block-bindings.json`.
+This comprises one generic lemma, 40 new chunks, and 38 prerequisite
+object emissions needed because those previously checked files lacked
+cached objects. No unchanged complete regression was repeated.
+
+Commands ran in `/Users/dominic/ZK/AspisFormal` with `/usr/bin/time -l`,
+the retained lake environment/LEAN_PATH wrapper, and `lean -j1 -M1800`.
+Object emissions added `-R SOURCE_ROOT -o CACHED_TARGET.olean`.
+The lower and diagonal lanes briefly overlapped: at most two capped Lean
+processes, 3600 MiB total Lean allocation caps, below the 8 GiB local limit.
+All targets exited 0, all reported zero swaps; no failures or raised caps.
+The 821 new theorem audits use only propext, Classical.choice, Quot.sound;
+the 214 concrete drop equalities use no axioms. Logs for chunk 01 onward
+are `/tmp/aspis-r15-host.drHYn9/r17-bind-TARGET.log`; the generic and
+chunk-00 checks are in the command-tool record. No Rust or production
+protocol path changed, and no full manifest was run.
+
 ## Concrete source minor and first assembled block — 2026-09-21
 
 Base `aa4c8eead5aee2592fb3084a0d1c6a012c7ce37a` plus this changeset.
