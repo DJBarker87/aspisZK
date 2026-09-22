@@ -137,3 +137,20 @@ Accepted relation-loop snapshot preservation:
   only the exhausted-iterator accepted branch can return `Ok`; it embeds the
   supplied prechallenge snapshot unchanged. The final corollary applies this
   fact to the exact shifted insertion/tail dispatch from the enclosing helper.
+
+Exact loop trace and post-prechallenge composition:
+- Source revision before these focused additions: e4ac4879
+  (research/v7-gate-closure-20260914).
+- V7CallerCurrentReleaseR26AcceptedTailTrace.lean: exit=0 wall=1.25s
+  peak_kib=2549420 swap_kib=0.
+- V7CallerCurrentReleaseR26AcceptedPrechallengeComposition.lean: exit=0
+  wall=1.19s peak_kib=2528664 swap_kib=0.
+- #print axioms loop_success_yields_exact_trace,
+  accepted_relation_loop_has_exact_trace,
+  accepted_after_prechallenge_returns_supplied_snapshot, and
+  accepted_after_prechallenge_returns_captured_snapshot:
+  [propext, Classical.choice, Quot.sound].
+- The proof-relevant trace retains every exact body equation of the current
+  generated loop. The enclosing-helper theorem joins the already checked
+  shifted query insertion dispatch to that accepted loop and proves direct
+  transport of an enabled concrete `some snapshot` result.
