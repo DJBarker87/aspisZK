@@ -755,6 +755,164 @@ fn derive_first_compact_queries(
     Err(V6TranscriptError::CompactCandidatesExhausted)
 }
 
+/// Continue the accepted verifier after the pre-query observer point.  The
+/// split makes the source boundary explicit: the observer snapshot is fixed
+/// before frontier validation, query authentication, relation rounds, and the
+/// terminal dot check, then returned unchanged by the successful tail.
+#[allow(clippy::too_many_arguments)]
+#[inline(never)]
+fn finish_onefold_relation_after_prechallenge<QueryFold, Trace>(
+    mut transcript: Transcript,
+    c1_frontier: &[u8],
+    c2_frontier: &[u8],
+    frontier_node_bytes: usize,
+    query_batch_labels: (u8, u8),
+    shift_query_batch_for_tag73: bool,
+    expose_final256_to_query_fold: bool,
+    query_fold: QueryFold,
+    trace: &mut Trace,
+    gamma: QM31,
+    gamma_powers: &StateOnlySpendQueryPowers,
+    d_power: QM31,
+    mut running_claim: QM31,
+    mut weights: WeightAccumulator,
+    mut alpha: [QM31; V6_RELATION_ROUNDS],
+    mut folded_values: Box<[QM31; V6_FINAL_QM31_VALUES]>,
+    relation_fields: Box<[[QM31; V6_RELATION_SENT_VALUES]; V6_RELATION_ROUNDS]>,
+    selector: u8,
+    semantic_point: [QM31; V6_SEMANTIC_ROUNDS],
+    kappa: QM31,
+    queries: [u32; V6_QUERY_COUNT],
+    compact_counter: u8,
+    frontier_nodes: usize,
+    transcript_state_after_queries: [u8; 32],
+    prechallenge_snapshot: V6PrechallengeObserverOutput,
+) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
+where
+    QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
+    Trace: FnMut(V6RelationDiagnosticPhase),
+{
+    if frontier_node_bytes == 0
+        || c1_frontier.len() % frontier_node_bytes != 0
+        || c2_frontier.len() % frontier_node_bytes != 0
+    {
+        return Err(V6TranscriptError::Wire(V6WireError::WrongLength));
+    }
+    let c1_nodes = c1_frontier.len() / frontier_node_bytes;
+    let c2_nodes = c2_frontier.len() / frontier_node_bytes;
+    if c1_nodes != frontier_nodes || c2_nodes != frontier_nodes {
+        return Err(V6TranscriptError::FrontierCountMismatch {
+            expected: frontier_nodes,
+            c1: c1_nodes,
+            c2: c2_nodes,
+        });
+    }
+    transcript.absorb(query_batch_labels.0, &[]);
+    let query_batch_challenge = transcript
+        .challenge_nonzero_qm31()
+        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+    trace(V6RelationDiagnosticPhase::Queries);
+    let authenticated_queries = {
+        let query_view = V6QueryBatchView {
+            gamma,
+            gamma_powers,
+            d_power,
+            alpha0: alpha[0],
+            final256_coefficients: if expose_final256_to_query_fold {
+                Some(folded_values.as_ref())
+            } else {
+                None
+            },
+            queries,
+            selector,
+            compact_counter,
+            frontier_nodes,
+        };
+        query_fold(&query_view).map_err(V6TranscriptError::Wire)?
+    };
+    let query_claim = if shift_query_batch_for_tag73 {
+        add_v7_final256_query_batch_shifted(
+            &mut weights,
+            &mut running_claim,
+            queries,
+            authenticated_queries,
+            query_batch_challenge,
+        )
+    } else {
+        add_v6_final256_query_batch(
+            &mut weights,
+            &mut running_claim,
+            queries,
+            authenticated_queries,
+            query_batch_challenge,
+        )
+    }
+    .map_err(|_| V6TranscriptError::RelationShape)?;
+    let mut query_claim_bytes = [0u8; 16];
+    query_claim.write_le_bytes(&mut query_claim_bytes);
+    transcript.absorb(query_batch_labels.1, &query_claim_bytes);
+    trace(V6RelationDiagnosticPhase::QueryBatch);
+
+    for round in 1..V6_RELATION_ROUNDS {
+        let polynomial = decode_compact_relation_polynomial(&relation_fields[round], running_claim);
+        absorb_compact_relation_polynomial(&mut transcript, round, &polynomial);
+        alpha[round] = transcript
+            .challenge_qm31()
+            .map_err(|_| V6TranscriptError::ChallengeSampling)?;
+        running_claim = evaluate(&polynomial, alpha[round]);
+        trace(match round {
+            1 => V6RelationDiagnosticPhase::RoundOnePolynomial,
+            2 => V6RelationDiagnosticPhase::RoundTwoPolynomial,
+            _ => V6RelationDiagnosticPhase::RoundThreePolynomial,
+        });
+        if round == V6_RELATION_ROUNDS - 1
+            && !weights.fold_tag73_relation_tail_arity4([alpha[1], alpha[2], alpha[3]])
+        {
+            return Err(V6TranscriptError::RelationShape);
+        }
+        trace(match round {
+            1 => V6RelationDiagnosticPhase::RoundOneWeights,
+            2 => V6RelationDiagnosticPhase::RoundTwoWeights,
+            _ => V6RelationDiagnosticPhase::RoundThreeWeights,
+        });
+        match round {
+            1 => fold_values_prefix::<256>(&mut folded_values, alpha[round]),
+            2 => fold_values_prefix::<64>(&mut folded_values, alpha[round]),
+            _ => fold_values_prefix::<16>(&mut folded_values, alpha[round]),
+        }
+        trace(match round {
+            1 => V6RelationDiagnosticPhase::RoundOne,
+            2 => V6RelationDiagnosticPhase::RoundTwo,
+            _ => V6RelationDiagnosticPhase::RoundThree,
+        });
+    }
+    if weights.dot(&folded_values[..4]) != running_claim {
+        return Err(V6TranscriptError::RelationTerminal);
+    }
+    trace(V6RelationDiagnosticPhase::Terminal);
+    let folded_query_sum = authenticated_queries
+        .values
+        .into_iter()
+        .fold(QM31::ZERO, QM31::add);
+
+    Ok((
+        V6VerifiedTranscript {
+            gamma,
+            kappa,
+            alpha,
+            queries,
+            selector,
+            compact_counter,
+            frontier_nodes,
+            semantic_point,
+            query_batch_challenge,
+            folded_query_sum,
+            transcript_state_after_queries,
+        },
+        prechallenge_snapshot,
+    ))
+}
+
 #[allow(clippy::too_many_arguments)]
 #[inline(never)]
 fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields, Prechallenge>(
@@ -877,7 +1035,7 @@ where
     weights.fold_deferred_relation_arity4(alpha[0]);
     trace(V6RelationDiagnosticPhase::RoundZero);
 
-    let mut folded_values = decode_and_absorb_final256(&mut transcript, &mut fields)?;
+    let folded_values = decode_and_absorb_final256(&mut transcript, &mut fields)?;
     fields.finish()?;
     trace(V6RelationDiagnosticPhase::Final256);
 
@@ -908,134 +1066,36 @@ where
         compact_counter,
         frontier_nodes,
     };
-    let prechallenge_snapshot = capture_v6_query_batch_prechallenge(
-        capture_prechallenge_snapshot,
-        &prechallenge_view,
-    );
+    let prechallenge_snapshot =
+        capture_v6_query_batch_prechallenge(capture_prechallenge_snapshot, &prechallenge_view);
     prechallenge(&prechallenge_view);
-    if frontier_node_bytes == 0
-        || c1_frontier.len() % frontier_node_bytes != 0
-        || c2_frontier.len() % frontier_node_bytes != 0
-    {
-        return Err(V6TranscriptError::Wire(V6WireError::WrongLength));
-    }
-    let c1_nodes = c1_frontier.len() / frontier_node_bytes;
-    let c2_nodes = c2_frontier.len() / frontier_node_bytes;
-    if c1_nodes != frontier_nodes || c2_nodes != frontier_nodes {
-        return Err(V6TranscriptError::FrontierCountMismatch {
-            expected: frontier_nodes,
-            c1: c1_nodes,
-            c2: c2_nodes,
-        });
-    }
-    transcript.absorb(query_batch_labels.0, &[]);
-    let query_batch_challenge = transcript
-        .challenge_nonzero_qm31()
-        .map_err(|_| V6TranscriptError::ChallengeSampling)?;
-    trace(V6RelationDiagnosticPhase::Queries);
-    let authenticated_queries = {
-        let query_view = V6QueryBatchView {
-            gamma,
-            gamma_powers: &gamma_powers,
-            d_power,
-            alpha0: alpha[0],
-            final256_coefficients: if expose_final256_to_query_fold {
-                Some(folded_values.as_ref())
-            } else {
-                None
-            },
-            queries,
-            selector,
-            compact_counter,
-            frontier_nodes,
-        };
-        query_fold(&query_view).map_err(V6TranscriptError::Wire)?
-    };
-    let query_claim = if shift_query_batch_for_tag73 {
-        add_v7_final256_query_batch_shifted(
-            &mut weights,
-            &mut running_claim,
-            queries,
-            authenticated_queries,
-            query_batch_challenge,
-        )
-    } else {
-        add_v6_final256_query_batch(
-            &mut weights,
-            &mut running_claim,
-            queries,
-            authenticated_queries,
-            query_batch_challenge,
-        )
-    }
-    .map_err(|_| V6TranscriptError::RelationShape)?;
-    let mut query_claim_bytes = [0u8; 16];
-    query_claim.write_le_bytes(&mut query_claim_bytes);
-    transcript.absorb(query_batch_labels.1, &query_claim_bytes);
-    trace(V6RelationDiagnosticPhase::QueryBatch);
-
-    for round in 1..V6_RELATION_ROUNDS {
-        let polynomial = decode_compact_relation_polynomial(&relation_fields[round], running_claim);
-        absorb_compact_relation_polynomial(&mut transcript, round, &polynomial);
-        alpha[round] = transcript
-            .challenge_qm31()
-            .map_err(|_| V6TranscriptError::ChallengeSampling)?;
-        running_claim = evaluate(&polynomial, alpha[round]);
-        trace(match round {
-            1 => V6RelationDiagnosticPhase::RoundOnePolynomial,
-            2 => V6RelationDiagnosticPhase::RoundTwoPolynomial,
-            _ => V6RelationDiagnosticPhase::RoundThreePolynomial,
-        });
-        // Relation weights do not influence the transcript or the running
-        // claim between rounds. Collect all three challenges, then apply the
-        // exact structured tail once. The kernel still performs round one's
-        // checked multilinear merge before either later dual fold.
-        if round == V6_RELATION_ROUNDS - 1
-            && !weights.fold_tag73_relation_tail_arity4([alpha[1], alpha[2], alpha[3]])
-        {
-            return Err(V6TranscriptError::RelationShape);
-        }
-        trace(match round {
-            1 => V6RelationDiagnosticPhase::RoundOneWeights,
-            2 => V6RelationDiagnosticPhase::RoundTwoWeights,
-            _ => V6RelationDiagnosticPhase::RoundThreeWeights,
-        });
-        match round {
-            1 => fold_values_prefix::<256>(&mut folded_values, alpha[round]),
-            2 => fold_values_prefix::<64>(&mut folded_values, alpha[round]),
-            _ => fold_values_prefix::<16>(&mut folded_values, alpha[round]),
-        }
-        trace(match round {
-            1 => V6RelationDiagnosticPhase::RoundOne,
-            2 => V6RelationDiagnosticPhase::RoundTwo,
-            _ => V6RelationDiagnosticPhase::RoundThree,
-        });
-    }
-    if weights.dot(&folded_values[..4]) != running_claim {
-        return Err(V6TranscriptError::RelationTerminal);
-    }
-    trace(V6RelationDiagnosticPhase::Terminal);
-    let folded_query_sum = authenticated_queries
-        .values
-        .into_iter()
-        .fold(QM31::ZERO, QM31::add);
-
-    Ok((
-        V6VerifiedTranscript {
-            gamma,
-            kappa,
-            alpha,
-            queries,
-            selector,
-            compact_counter,
-            frontier_nodes,
-            semantic_point,
-            query_batch_challenge,
-            folded_query_sum,
-            transcript_state_after_queries,
-        },
+    finish_onefold_relation_after_prechallenge(
+        transcript,
+        c1_frontier,
+        c2_frontier,
+        frontier_node_bytes,
+        query_batch_labels,
+        shift_query_batch_for_tag73,
+        expose_final256_to_query_fold,
+        query_fold,
+        &mut trace,
+        gamma,
+        &gamma_powers,
+        d_power,
+        running_claim,
+        weights,
+        alpha,
+        folded_values,
+        relation_fields,
+        selector,
+        semantic_point,
+        kappa,
+        queries,
+        compact_counter,
+        frontier_nodes,
+        transcript_state_after_queries,
         prechallenge_snapshot,
-    ))
+    )
 }
 
 #[allow(clippy::too_many_arguments)]
