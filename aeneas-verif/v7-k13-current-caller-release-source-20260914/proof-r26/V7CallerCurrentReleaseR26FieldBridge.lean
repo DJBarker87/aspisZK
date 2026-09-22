@@ -582,6 +582,28 @@ theorem generated_prepared_qm31_mul_corresponds
     simp [generatedQm31ToExact]
     ring
 
+theorem generated_prepared_qm31_mul_exact
+    (rho prior next : QM31)
+    (prepared : V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier)
+    (hrho : GeneratedCanonicalQM31 rho)
+    (hprior : GeneratedCanonicalQM31 prior)
+    (hnew : V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.new rho =
+      ok prepared)
+    (hmul : V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.mul
+      prepared prior = ok next) :
+    GeneratedCanonicalQM31 next ∧
+      generatedQm31ToExact next =
+        generatedQm31ToExact rho * generatedQm31ToExact prior := by
+  obtain ⟨preparedExpected, out, hnewExpected, hmulExpected, hcanonical,
+      hexact⟩ := generated_prepared_qm31_mul_corresponds rho prior hrho hprior
+  have hprepared : prepared = preparedExpected := by
+    exact Result.ok.inj (hnew.symm.trans hnewExpected)
+  subst prepared
+  have hout : next = out := by
+    exact Result.ok.inj (hmul.symm.trans hmulExpected)
+  subst next
+  exact ⟨hcanonical, hexact⟩
+
 private theorem generated_cm31_square_corresponds
     (x : GeneratedCM31) (hx : GeneratedCanonicalCM31 x) :
     ∃ out : GeneratedCM31,
@@ -753,5 +775,6 @@ theorem generated_qm31_square_corresponds
 #print axioms generated_qm31_mul_corresponds
 #print axioms generated_qm31_square_corresponds
 #print axioms generated_prepared_qm31_mul_corresponds
+#print axioms generated_prepared_qm31_mul_exact
 
 end V7CallerCurrentReleaseR26FieldBridge
