@@ -152,7 +152,11 @@ That theorem proves definitionally that the full observer snapshot wrapper is
 the translated shared verifier inner path with its generated no-op
 prechallenge closure and capture set to `true`. It does not assume acceptance,
 construct a snapshot, or hide the parser, transcript, terminal, relation, or
-query path. The remaining end-to-end work is to invert a successful full
+query path. The companion focused theorem
+`terminal_body_preserves_prechallenge_snapshot` replays the literal terminal
+branch and proves that it returns the exact incoming prechallenge option; it
+exited 0 in 1.98 seconds at 2,575,564 KiB with zero swap and the same clean
+axiom set. The remaining end-to-end work is to invert a successful full
 execution through that inner path, obtain the actual captured `Some` snapshot,
 and derive the K1 source obligations from its source checks.
 
