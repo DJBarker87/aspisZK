@@ -1,5 +1,9 @@
 # R21 ordinary-arithmetic pilot: measured and rejected
 
+Follow-up: [specialized wiring and balanced circuit](R21_STRUCTURED_WIRING.md)
+reduce the isolated helper to 14,600,544 / 14,600,921 CU, still a failed
+performance gate. The measurements below describe the preserved first pilot.
+
 2026-09-22. The ordinary/image helper is implemented and tested, but its
 complete isolated verification costs **29,796,433 / 29,793,326 CU**. The same
 native arithmetic with the same public inputs costs **791,311 / 791,499 CU**.
