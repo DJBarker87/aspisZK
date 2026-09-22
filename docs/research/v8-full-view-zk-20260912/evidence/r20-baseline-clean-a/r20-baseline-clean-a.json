@@ -1,0 +1,60 @@
+{
+  "artifact": "r20-baseline-clean-a",
+  "instrumented": false,
+  "driver": {
+    "source": "tools/r20_svm_probe.rs",
+    "sha256": "1608c61a0718bd26e3d1d8df0bab60ba1c52a3c2eb159e996583083f2d402239",
+    "binary_sha256": "29f711f3ec01b76e4bb90c88f6c5e3a3e04a175cafb7bc71416ff0323ea0e88a"
+  },
+  "elf": {
+    "path": "/home/dombarker/project-offloads/aspis-r20-baseline-clean-20260922-a/sbf-primary/aspis_v8_performance_sbf.so",
+    "sha256": "73dda2a55675440e166d9a49c8cf2733788d6c8847d4f49ec3bbc3ae7749cac0",
+    "sbf_build_exit": 0
+  },
+  "scope": {
+    "memory_high": "2G",
+    "memory_max": "3G",
+    "memory_swap_max": "0",
+    "tasks_max": 128,
+    "host": "nuc"
+  },
+  "command": "systemd-run --user --scope --unit=aspis-r20-baseline-clean-* -p MemoryHigh=2G -p MemoryMax=3G -p MemorySwapMax=0 -p TasksMax=128 /home/dombarker/project-offloads/aspis-r20-svm-20260922-a/r20-svm-probe /home/dombarker/project-offloads/aspis-r20-baseline-clean-20260922-a/sbf-primary/aspis_v8_performance_sbf.so <fixture-dir>",
+  "fixtures": {
+    "world0": {
+      "path": "/home/dombarker/project-offloads/aspis-r19-channel-20260921-c/host-c/fixture-world0",
+      "proof_sha256": "0f90e0670d5c7cedf1bea159640016eeec1574ac0de89dc94d83dd9255f07da7",
+      "public_sha256": "9e10f3c9eef4aba72ee047fdf48abdc3ab726a7085ae6381d5a8782bc34e19ad",
+      "transition_sha256": "f9474caef25594cf4fffd608428c482485f2764c5cc4da3eafdd5231a5e39766",
+      "binding_sha256": "5d8c10fd8d6b2d9846bbb445c7972e10b1c28ae04d97455dd1d239bc9d5afadd",
+      "wall_seconds": 0.06,
+      "peak_rss_kib": 30152,
+      "swaps": 0,
+      "exit": 0,
+      "log_sha256": "af50e2afd9b57f218ff85f8f0f2b7215a56b49eaa39df56b660142e29f19f100",
+      "results": {
+        "acceptance_honest": {"status": "resource_failure", "cu": 1000000},
+        "acceptance_bad_combined_final": {"status": "resource_failure", "cu": 1000000},
+        "diagnostic_honest": {"status": "accepted", "cu": 3277163},
+        "diagnostic_bad_combined_final": {"status": "custom_rejection", "cu": 1839446}
+      }
+    },
+    "world1-resumed": {
+      "path": "/home/dombarker/project-offloads/aspis-r19-channel-20260921-c/host-c/fixture-world1-resumed",
+      "proof_sha256": "ca868e8f9495e06368ecaa712486befecbfaadc6ab38e8caddf38e368134ca71",
+      "public_sha256": "9e10f3c9eef4aba72ee047fdf48abdc3ab726a7085ae6381d5a8782bc34e19ad",
+      "transition_sha256": "f9474caef25594cf4fffd608428c482485f2764c5cc4da3eafdd5231a5e39766",
+      "binding_sha256": "5d8c10fd8d6b2d9846bbb445c7972e10b1c28ae04d97455dd1d239bc9d5afadd",
+      "wall_seconds": 0.06,
+      "peak_rss_kib": 29700,
+      "swaps": 0,
+      "exit": 0,
+      "log_sha256": "2e2080f7c2ed46a242b0531315b48ba64dba4c54a629d3db9bff73fff11b3b7d",
+      "results": {
+        "acceptance_honest": {"status": "resource_failure", "cu": 1000000},
+        "acceptance_bad_combined_final": {"status": "resource_failure", "cu": 1000000},
+        "diagnostic_honest": {"status": "accepted", "cu": 3278356},
+        "diagnostic_bad_combined_final": {"status": "custom_rejection", "cu": 1835274}
+      }
+    }
+  }
+}

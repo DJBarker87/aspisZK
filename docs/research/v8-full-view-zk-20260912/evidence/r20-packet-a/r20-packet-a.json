@@ -1,0 +1,67 @@
+{
+  "host": "nuc",
+  "packet": "/home/dombarker/project-offloads/aspis-r20-packet-20260922-a",
+  "source_revision": "c9315d8b05efb2cdad976bb0f4db3574f1c24577",
+  "manifest_sha256": "57b61a142267bbcd500964e40be456d0b2363ec086da74bb97af32864dbeb83e",
+  "manifest_verification": {"command": "python3 tools/verify_manifest.py", "exit_status": 0, "result": "PASS 29 payload hashes"},
+  "packet_unchanged": true,
+  "scope": {"MemoryHigh": "2G", "MemoryMax": "3G", "MemorySwapMax": "0", "TasksMax": 128},
+  "checks": {
+    "run_checks_sanitize": {
+      "command": "python3 run_checks.py --sanitize",
+      "unit": "aspis-r20-packet-checks-a",
+      "exit_status": 0,
+      "wall_seconds": 2.39,
+      "peak_rss_kib": 190932,
+      "swaps": 0,
+      "all_passed": true,
+      "rust_executed": false,
+      "sbf_executed": false,
+      "log_sha256": "237ecbecea722dc4bcb74de5694c0682fa224b305de9bb50be3ee27a18110261"
+    },
+    "integer_bounds": {
+      "command": "python3 tools/check_integer_bounds.py",
+      "unit": "aspis-r20-packet-bounds-a",
+      "exit_status": 0,
+      "wall_seconds": 0.04,
+      "peak_rss_kib": 10912,
+      "swaps": 0,
+      "all_passed": true,
+      "method": "integer inequalities, not Lean",
+      "log_sha256": "52c35d33b8a28936f7fc8b0ab6720f11a8b22b2f42934d0732df570682842301"
+    },
+    "budget_gate_selftest": {
+      "command": "python3 tests/test_budget_gate.py",
+      "unit": "aspis-r20-packet-budget-a",
+      "exit_status": 0,
+      "wall_seconds": 0.25,
+      "peak_rss_kib": 12848,
+      "swaps": 0,
+      "all_passed": true,
+      "synthetic_gate_cases": 9,
+      "sbf_measurements": 0,
+      "log_sha256": "4f05acc7c31b55607f52acb37e59efb624ee68cd768ecbf1fab33daf8b20d074"
+    },
+    "cargo_test_release": {
+      "command": "NO_DNA=1 CARGO_TARGET_DIR=/home/dombarker/project-offloads/r20-target-a cargo test --release --offline --jobs 2",
+      "unit": "aspis-r20-packet-cargo-a",
+      "exit_status": 0,
+      "wall_seconds": 4.27,
+      "peak_rss_kib": 271244,
+      "swaps": 0,
+      "tests_run": 0,
+      "tests_passed": 0,
+      "tests_failed": 0,
+      "doc_tests_run": 0,
+      "log_sha256": "c0b0050fa4bb4baaa849eb837878dff017f1a1bc021319c4cd983c25bfc6ff4d"
+    }
+  },
+  "packet_file_hashes": {
+    "run_checks.py": "f7a0fc929394dfe6b4ca71b888a7baac82f0bf20cb7760f5ac6a7090589e50df",
+    "tests/check_new.cpp": "abf1b9e0e2700feb73d11fc7b9c80c7090fe93ec4261f9580251523003f76647",
+    "tools/check_integer_bounds.py": "b1a01b030569f38ebf960a7bfc28adf0352413b8e8e38599e25f261fd672d4ad",
+    "tests/test_budget_gate.py": "998625977d64caa573d5de61420c6c7621a73ffeff27feaf845d2937477face8",
+    "Cargo.toml": "c6fe6804e0c62fdfa8eae2930ee2f8e6d6efbb1cd11a5d0eeb9ef11cddb27df3"
+  },
+  "proof_boundary": "Packet checks and Rust compilation only; no source integration, SBF, protocol, security, privacy, or under-1M claim."
+}

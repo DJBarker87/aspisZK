@@ -1,0 +1,62 @@
+{
+  "host": "nuc",
+  "svm_project": "/home/dombarker/project-offloads/aspis-r20-svm-20260922-a",
+  "candidate_stage": "/home/dombarker/project-offloads/aspis-r20-opening-20260922-a",
+  "driver_sha256": "1608c61a0718bd26e3d1d8df0bab60ba1c52a3c2eb159e996583083f2d402239",
+  "cargo_toml_sha256": "be5547b09f378a1214ed298acb21f4f5a8b3a95eef9a5b424f2640949b2f0e56",
+  "cargo_lock_sha256": "1dda4c72cfce676a3ceacf65bbc584a4d178f6d43a8877df249dbee093b80f6a",
+  "candidate_elf": {
+    "path": "/home/dombarker/project-offloads/aspis-r20-opening-20260922-a/sbf-primary/aspis_v8_performance_sbf.so",
+    "sha256": "02984f6f34e3ae5373a89ecdbd0547f0dfea378bd284dc0186065d0cf3ce97c9",
+    "sbf_build_log_sha256": "cb241eb7876d46f9677a90acdc61f45c15e4fe6a470991884c17b532a3e13bf8",
+    "sbf_build_exit": 0,
+    "source_table_gate": "PASS all 1024 source permutation and inactive entries match SBF table",
+    "frame_diagnostic": "none observed",
+    "instrumented": "not asserted; parent audit required"
+  },
+  "build": {
+    "command": "NO_DNA=1 CARGO_TARGET_DIR=<existing performance-svm target> cargo build --release --offline --locked --jobs 2",
+    "unit": "aspis-r20-svm-build-a2",
+    "caps": {"MemoryHigh": "2G", "MemoryMax": "3G", "MemorySwapMax": "0", "TasksMax": 128},
+    "exit_status": 0,
+    "wall_seconds": 0.18,
+    "peak_rss_kib": 80224,
+    "swaps": 0,
+    "log_sha256": "3334f8d858067b1d25fbf35183caf169e0acd0987020e2ebd5aaf1791eebfeb4"
+  },
+  "driver_limits": {"acceptance": 1000000, "diagnostic": 100000000, "heap_bytes": 262144},
+  "fixtures": {
+    "world0": {
+      "fixture_dir": "/home/dombarker/project-offloads/aspis-r19-channel-20260921-c/host-c/fixture-world0",
+      "proof_sha256": "0f90e0670d5c7cedf1bea159640016eeec1574ac0de89dc94d83dd9255f07da7",
+      "public_sha256": "9e10f3c9eef4aba72ee047fdf48abdc3ab726a7085ae6381d5a8782bc34e19ad",
+      "transition_sha256": "f9474caef25594cf4fffd608428c482485f2764c5cc4da3eafdd5231a5e39766",
+      "binding_sha256": "5d8c10fd8d6b2d9846bbb445c7972e10b1c28ae04d97455dd1d239bc9d5afadd",
+      "exit_status": 0,
+      "honest_1m": {"status": "resource_failure", "cu": 1000000},
+      "bad_combined_final_1m": {"status": "resource_failure", "cu": 1000000},
+      "honest_100m": {"status": "accepted", "cu": 3095605},
+      "bad_combined_final_100m": {"status": "custom_rejection", "cu": 1656866},
+      "log_sha256": "75e1da09f6e8ca2c3a9e7c1bc7200c36ddc465bc03bb4bcc7b7e5c9dcbe6ae6b"
+    },
+    "world1_resumed": {
+      "fixture_dir": "/home/dombarker/project-offloads/aspis-r19-channel-20260921-c/host-c/fixture-world1-resumed",
+      "proof_sha256": "ca868e8f9495e06368ecaa712486befecbfaadc6ab38e8caddf38e368134ca71",
+      "public_sha256": "9e10f3c9eef4aba72ee047fdf48abdc3ab726a7085ae6381d5a8782bc34e19ad",
+      "transition_sha256": "f9474caef25594cf4fffd608428c482485f2764c5cc4da3eafdd5231a5e39766",
+      "binding_sha256": "5d8c10fd8d6b2d9846bbb445c7972e10b1c28ae04d97455dd1d239bc9d5afadd",
+      "exit_status": 0,
+      "honest_1m": {"status": "resource_failure", "cu": 1000000},
+      "bad_combined_final_1m": {"status": "resource_failure", "cu": 1000000},
+      "honest_100m": {"status": "accepted", "cu": 3096655},
+      "bad_combined_final_100m": {"status": "custom_rejection", "cu": 1652506},
+      "log_sha256": "c7b35f02022d423df901e9f50c7f332362444deaf34455f03aacbe88587847ac"
+    }
+  },
+  "copied_manifests": {
+    "r18-stage.json": "92fbecb220885d9c2a595fe73b8896973e720c7dbc2b687218302fc33f11b6a2",
+    "r17-stage.json": "c52e28311bb986e6f25792dd7ed7f90be211f84056079c9d9fea7a07d68ab2df",
+    "r17-sbf-probe.json": "90d99725d8be767715c1cdab3dbb0db48fffc108c901243cee797ae0e1534392"
+  },
+  "scope": "Instrumented diagnostic A/B only; parent must audit ELF instrumentation and gate status."
+}

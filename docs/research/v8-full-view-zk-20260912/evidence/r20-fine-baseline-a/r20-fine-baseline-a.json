@@ -1,0 +1,50 @@
+{
+  "artifact": "r20-fine-baseline-a",
+  "protocol_claim": false,
+  "instrumentation": "added semantic checkpoint diagnostics; diagnostic-only",
+  "stage": "/home/dombarker/project-offloads/aspis-r20-fine-baseline-20260922-a",
+  "base_git_commit": "c9315d8b05efb2cdad976bb0f4db3574f1c24577",
+  "legacy_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+  "driver_sha256": "1608c61a0718bd26e3d1d8df0bab60ba1c52a3c2eb159e996583083f2d402239",
+  "driver_binary_sha256": "29f711f3ec01b76e4bb90c88f6c5e3a3e04a175cafb7bc71416ff0323ea0e88a",
+  "r20_execution_source_changes": {
+    "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs": {"before": null, "after": "5e927a2b6b77a203bbc8aaa4e50e4bcb64193fba8f5efead12354cfeb68b9086"}
+  },
+  "elf_sha256": "83270745b9e7592ccf548c12f7afeec4aa3c8632f7fe53bae14c3f04c8ec5da5",
+  "sbf_build_log_sha256": "6f7a243ceec09f7626ddac368acad31f73c8511acbba670799bfce9ae134c197",
+  "sbf_build": {"exit": 0, "wall_seconds": 59.67, "peak_rss_kib": 636428, "swaps": 0, "frame_errors": false},
+  "run": {
+    "command": "systemd-run --user --scope --unit=aspis-r20-fine-baseline-svm-a -p MemoryHigh=2G -p MemoryMax=3G -p MemorySwapMax=0 -p TasksMax=128 /home/dombarker/project-offloads/aspis-r20-svm-20260922-a/r20-svm-probe <fine-baseline-elf> /home/dombarker/project-offloads/aspis-r19-channel-20260921-c/host-c/fixture-world0",
+    "fixture_proof_sha256": "0f90e0670d5c7cedf1bea159640016eeec1574ac0de89dc94d83dd9255f07da7",
+    "log_sha256": "bc10611566221e187da2658638b22d964b5b05341bdb8600d90524e05e2af703",
+    "exit": 0,
+    "wall_seconds": 0.06,
+    "peak_rss_kib": 29984,
+    "swaps": 0,
+    "results": {
+      "acceptance_honest": {"status": "resource_failure", "cu": 1000000},
+      "acceptance_bad_combined_final": {"status": "resource_failure", "cu": 1000000},
+      "diagnostic_honest": {"status": "accepted", "cu": 3284932},
+      "diagnostic_bad_combined_final": {"status": "custom_rejection", "cu": 1846187}
+    }
+  },
+  "semantic_checkpoint_definition": "remaining-CU difference from each named -start to -end pair; includes the second sol_log_compute_units syscall and common dispatch overhead",
+  "semantic_checkpoints": [
+    {"name":"semantic-rounds","start":"R17:semantic-start","end":"v8:semantic-rounds","start_remaining":99959615,"end_remaining":99816712,"interval":142903},
+    {"name":"selectors","start":"R20:selectors-start","end":"R20:selectors-end","start_remaining":99813032,"end_remaining":99769201,"interval":43831},
+    {"name":"poseidon","start":"R20:poseidon-start","end":"R20:poseidon-end","start_remaining":99768997,"end_remaining":99648365,"interval":120632},
+    {"name":"schedule","start":"R20:semantic-schedule-start","end":"R20:semantic-schedule-end","start_remaining":99647925,"end_remaining":99621967,"interval":25958},
+    {"name":"path","start":"R20:semantic-path-start","end":"R20:semantic-path-end","start_remaining":99621763,"end_remaining":99609174,"interval":12589},
+    {"name":"range","start":"R20:semantic-range-start","end":"R20:semantic-range-end","start_remaining":99608970,"end_remaining":99581005,"interval":27965},
+    {"name":"occupancy","start":"R20:semantic-occupancy-start","end":"R20:semantic-occupancy-end","start_remaining":99580801,"end_remaining":99570314,"interval":10487},
+    {"name":"digest","start":"R20:semantic-digest-start","end":"R20:semantic-digest-end","start_remaining":99570110,"end_remaining":99518917,"interval":51193},
+    {"name":"copy","start":"R20:copy-start","end":"R20:copy-end","start_remaining":99513442,"end_remaining":99321014,"interval":192428},
+    {"name":"thetafold","start":"R20:theta-fold-start","end":"R20:theta-fold-end","start_remaining":99320744,"end_remaining":99305858,"interval":14886},
+    {"name":"maskcost","start":"R20:mask-value-start","end":"R20:mask-value-end","start_remaining":99289404,"end_remaining":99269773,"interval":19631}
+  ],
+  "manifest_hashes": {
+    "r18_stage": "546e763e98f9b4c6e2b07300421a30af02b33648b3dfb8d16912b6788676c7d3",
+    "r17_stage": "c52e28311bb986e6f25792dd7ed7f90be211f84056079c9d9fea7a07d68ab2df",
+    "r17_sbf_probe": "3522b24e06e4e707c31b5ccde55c4b54e5bf9fff69b33b873166c1eafb70b9ca"
+  }
+}
