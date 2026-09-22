@@ -406,6 +406,12 @@ private theorem generated_prepared_cm31_mul_corresponds
     · simpa [generatedCm31ToExact, sub_eq_add_neg] using realExact
     · simpa [generatedCm31ToExact] using imagExact
 
+theorem generated_qm31_zero_canonical :
+    GeneratedCanonicalQM31 V7CallerCurrentReleaseR26.field.QM31.ZERO := by
+  simp only [GeneratedCanonicalQM31, GeneratedCanonicalCM31,
+    V7CallerCurrentReleaseR26.field.QM31.ZERO]
+  repeat' constructor <;> norm_num
+
 theorem generated_qm31_add_corresponds
     (x y : QM31) (hx : GeneratedCanonicalQM31 x)
     (hy : GeneratedCanonicalQM31 y) :
@@ -770,6 +776,7 @@ theorem generated_qm31_square_corresponds
       simp [pow_two, generatedQm31ToExact]
       ring
 
+#print axioms generated_qm31_zero_canonical
 #print axioms generated_qm31_add_corresponds
 #print axioms generated_qm31_sub_corresponds
 #print axioms generated_qm31_mul_corresponds
