@@ -70,6 +70,36 @@ theorem shifted_scale_seed_canonical
   · apply scale_array_set_same
     norm_num
 
+def exactScaleAt (values : Array field.QM31 16#usize) (index : Nat) :
+    ExactQM31 :=
+  generatedQm31ToExact values.val[index]!
+
+def ShiftedScalePrefix (rhoExact : ExactQM31)
+    (values : Array field.QM31 16#usize) (extent : Std.Usize) : Prop :=
+  CanonicalScaleArray values ∧ 1 ≤ extent.val ∧ extent.val ≤ 16 ∧
+    ∀ index : Nat, index < extent.val →
+      exactScaleAt values index = rhoExact ^ (index + 1)
+
+theorem shifted_scale_seed_prefix
+    (rho : field.QM31) (seed : Array field.QM31 16#usize)
+    (rhoExact : ExactQM31)
+    (hrho : GeneratedCanonicalQM31 rho)
+    (hrhoExact : generatedQm31ToExact rho = rhoExact)
+    (hseed : Array.update (Array.repeat 16#usize field.QM31.ZERO)
+      0#usize rho = ok seed) :
+    ShiftedScalePrefix rhoExact seed 1#usize := by
+  obtain ⟨hcanonical, hzero⟩ := shifted_scale_seed_canonical rho seed hrho hseed
+  refine ⟨hcanonical, by norm_num, by norm_num, ?_⟩
+  intro index hindex
+  have hOne : (1#usize).val = 1 := rfl
+  have hindexZero : index = 0 := by
+    rw [hOne] at hindex
+    omega
+  subst index
+  unfold exactScaleAt
+  rw [hzero, hrhoExact]
+  norm_num
+
 /-- A successful source iteration of the shifted-query scale loop has the
 exact multiplicative meaning required for the rho-power covector.  This keeps
 the generated iterator transition symbolic while using the source-authentic
@@ -101,6 +131,7 @@ theorem scale_loop_body_step_exact
       iterNext scales scalesNext ordinal predecessor prior next hNext hPredecessor
       hIndex hMultiply hUpdate⟩
 
+#print axioms shifted_scale_seed_prefix
 #print axioms shifted_scale_seed_canonical
 #print axioms scale_loop_body_step_exact
 
