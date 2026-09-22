@@ -1,0 +1,115 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -25,6 +25,27 @@
+     payment_relation::{PoolV1PrivateTransferPublicV1, PoolV1WithdrawalPublicV1},
+ };
+ 
++// Diagnostic-only checkpoints. The no-op branch keeps ordinary host builds
++// dependency-free; the Solana branch uses the SDK's raw syscall signatures.
++#[cfg(all(r20_fine_profile, target_os = "solana"))]
++unsafe extern "C" {
++    fn sol_log_(message: *const u8, len: u64);
++    fn sol_log_compute_units_();
++}
++
++#[inline(always)]
++#[cfg(all(r20_fine_profile, target_os = "solana"))]
++fn r20_fine_checkpoint(label: &'static [u8]) {
++    unsafe {
++        sol_log_(label.as_ptr(), label.len() as u64);
++        sol_log_compute_units_();
++    }
++}
++
++#[inline(always)]
++#[cfg(not(all(r20_fine_profile, target_os = "solana")))]
++fn r20_fine_checkpoint(_label: &'static [u8]) {}
++
+ pub const POOL_V1_PAIR_FOREST_TERMINAL_ROWS_V1: usize = 1024;
+ pub const POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1: usize = 16;
+ pub const POOL_V1_PAIR_FOREST_TERMINAL_POINTS_V1: usize = 3;
+@@ -1146,21 +1167,35 @@
+     selectors: &Selectors,
+ ) -> [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1] {
+     let mut packed = [QM31::ZERO; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1];
++    r20_fine_checkpoint(b"R20:semantic-schedule-start");
+     add_schedule_lanes(&mut packed, public, openings, selectors);
++    r20_fine_checkpoint(b"R20:semantic-schedule-end");
++    r20_fine_checkpoint(b"R20:semantic-path-start");
+     add_path_lanes(&mut packed, openings, selectors);
++    r20_fine_checkpoint(b"R20:semantic-path-end");
++    r20_fine_checkpoint(b"R20:semantic-range-start");
+     add_value_lanes(&mut packed, openings, selectors);
++    r20_fine_checkpoint(b"R20:semantic-range-end");
++    r20_fine_checkpoint(b"R20:semantic-occupancy-start");
+     add_occupancy_lanes(&mut packed, public, openings, selectors);
++    r20_fine_checkpoint(b"R20:semantic-occupancy-end");
+     #[cfg(not(feature = "pool-v1-pair-forest-packed-digest-audit"))]
++    r20_fine_checkpoint(b"R20:semantic-digest-start");
++    #[cfg(not(feature = "pool-v1-pair-forest-packed-digest-audit"))]
+     add_preweighted(
+         &mut packed,
+         84,
+         &public_digest_lanes(public, openings, selectors),
+     );
++    #[cfg(not(feature = "pool-v1-pair-forest-packed-digest-audit"))]
++    r20_fine_checkpoint(b"R20:semantic-digest-end");
+     #[cfg(feature = "pool-v1-pair-forest-packed-digest-audit")]
+     {
++        r20_fine_checkpoint(b"R20:semantic-digest-start");
+         let digests = public_digest_packed(public, openings, selectors);
+         packed[84 / 4] = packed[84 / 4].add(digests[0]);
+         packed[84 / 4 + 1] = packed[84 / 4 + 1].add(digests[1]);
++        r20_fine_checkpoint(b"R20:semantic-digest-end");
+     }
+     let asset_difference = openings.z[1].sub(lift_m31(public.asset_id));
+     let input_asset = selectors.row(2 * 16 + 12).mul(asset_difference);
+@@ -1250,11 +1285,18 @@
+             POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1 + column,
+         )
+     });
++    r20_fine_checkpoint(b"R20:selectors-start");
+     let selectors = Selectors::boxed_at_point(point);
++    r20_fine_checkpoint(b"R20:selectors-end");
++    r20_fine_checkpoint(b"R20:poseidon-start");
+     let poseidon =
+         evaluate_state_only_poseidon_oracle_projected(&openings, &poseidon_selectors(&selectors));
++    r20_fine_checkpoint(b"R20:poseidon-end");
++    r20_fine_checkpoint(b"R20:semantic-packed-start");
+     let semantic = semantic_packed(public, &openings, &selectors);
++    r20_fine_checkpoint(b"R20:semantic-packed-end");
+     let h1_z = selected_claim(claims, 0, SELECTED_H1_COLUMN);
++    r20_fine_checkpoint(b"R20:copy-start");
+     let copy = evaluate_with_selectors(
+         &openings.z,
+         h1_z,
+@@ -1264,14 +1306,17 @@
+         public.transition.live_snapshot.next_pair_index,
+         copy_variant(public.variant),
+     );
++    r20_fine_checkpoint(b"R20:copy-end");
+     let prepared_theta = PreparedQm31Multiplier::new(theta);
+     let mut composition = copy.residual;
++    r20_fine_checkpoint(b"R20:theta-fold-start");
+     for lane in semantic.into_iter().rev() {
+         composition = prepared_theta.mul(composition).add(lane);
+     }
+     for lane in poseidon.into_iter().rev() {
+         composition = prepared_theta.mul(composition).add(lane);
+     }
++    r20_fine_checkpoint(b"R20:theta-fold-end");
+     Ok((
+         composition,
+         openings.z,
+@@ -1417,7 +1462,10 @@
+                 zerocheck_point,
+                 mu,
+             )?;
+-            Ok(state_only_selected_mask_value(&c1, &mask_only, g, point).add(eta.mul(original)))
++            r20_fine_checkpoint(b"R20:mask-value-start");
++            let mask_value = state_only_selected_mask_value(&c1, &mask_only, g, point);
++            r20_fine_checkpoint(b"R20:mask-value-end");
++            Ok(mask_value.add(eta.mul(original)))
+         }
+     };
+ }
