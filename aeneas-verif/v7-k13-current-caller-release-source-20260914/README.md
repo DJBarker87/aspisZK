@@ -117,3 +117,21 @@ to the captured checkpoint and construct the concrete K1 source obligations;
 the semantic-terminal, two-tree authentication, batched residual, relation,
 and transaction-wrapper facts remain to be derived from source rather than
 assumed.
+
+## R24/R25 full-wrapper probe
+
+R24 re-extracted the complete observer snapshot-return wrapper against the R23
+source.  Charon completed in 4.52 seconds at 768,608 KiB with zero swap; LLBC
+SHA-256 was `44a0169370c52e30b366e01ff453a7ab59faaa532cc5bc9d42a594e2100ccf2f`.
+Aeneas completed in 220.81 seconds at 3,290,404 KiB with zero swap.  The raw
+Lean graph still has the known generated compatibility requirements and, after
+those are exposed, the R21 `FnMut` callback write-back mismatch remains in the
+snapshot wrapper.  R24 is therefore extraction evidence, not a checked graph.
+
+R25 tested replacing the no-op closures with named function items.  It passed
+the focused observer release test and production release check, but the pinned
+Aeneas backend rejected the wrapper's function-item lifetime shape in
+`RegionsHierarchy` before emitting Lean.  The experiment was reverted; the
+current source is byte-identical to the R23 capture-helper source.  No generated
+model, external axiom, or fabricated snapshot result was accepted as a
+workaround.
