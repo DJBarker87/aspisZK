@@ -84,3 +84,36 @@ The focused target failed at generated lines 23332, 23356 and 23384.  No opaque
 callback or fabricated `Some` value was introduced to make this compile.  The
 next source step is a source-level observer-return shape that the pinned backend
 can translate faithfully, followed by the actual accepted-path `Some` theorem.
+
+## R23 capture-branch extraction and bridge
+
+R21's observer-return wrapper exposed a generated mutable-closure write-back
+mismatch.  R23 avoids that backend shape without changing production
+acceptance: the default-off observer feature now calls the named local helper
+`capture_v6_query_batch_prechallenge`.  With capture enabled, the helper
+returns `Some` of the same borrowed pre-query snapshot; with capture disabled,
+it returns `None`.  The production feature builds the no-op helper, so the
+selected verifier path is unchanged.
+
+The extraction was rooted at the helper and its literal relation-tail call
+graph at source revision `f18928e4`.  The generated LLBC is
+`generated/V7SnapshotReturnR23/V7SnapshotReturnR23.llbc` with SHA-256
+`5c1c49a61593a70849cf4dec6f5c5aa380ffa9bb3bebc1ffd922a0bd407c21b9`.
+Aeneas completed in 219.31 seconds with 3,323,700 KiB peak RSS and zero swap
+inside the build-host 6 GiB zero-swap scope.  The focused release observer test
+and production-feature release check both passed.
+
+The `proof-r23/` chain replays the field, weight, 256-entry dot, snapshot,
+tail, and capture results against that generated graph.  In particular,
+`generated_capture_true_snapshot_witness` proves that enabled capture returns
+a concrete snapshot which copies the prechallenge fields and whose terminal
+discrepancy is the exact full 256-term residual.  The full focused chain and
+its axioms audits passed with only `propext`, `Classical.choice`, and
+`Quot.sound`.
+
+This is still not an end-to-end acceptance theorem.  The next source-to-model
+step must connect a successful generated `finish_onefold_relation` execution
+to the captured checkpoint and construct the concrete K1 source obligations;
+the semantic-terminal, two-tree authentication, batched residual, relation,
+and transaction-wrapper facts remain to be derived from source rather than
+assumed.
