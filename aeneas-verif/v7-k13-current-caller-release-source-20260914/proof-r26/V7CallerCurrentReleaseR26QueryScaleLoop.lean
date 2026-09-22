@@ -35,6 +35,21 @@ theorem scale_loop_body_step
   rw [hUpdate]
   rfl
 
+/-- The same loop returns its accumulated scale array unchanged once its
+range iterator is exhausted. -/
+theorem scale_loop_body_done
+    (prepared : field.PreparedQm31Multiplier)
+    (iter iterNext : core.ops.range.Range Std.Usize)
+    (scales : Array field.QM31 16#usize)
+    (hNext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter =
+      ok (none, iterNext)) :
+    v6_query_batch.add_final256_query_batch_with_initial_scale_loop.body
+        prepared iter scales = ok (done scales) := by
+  simp only [v6_query_batch.add_final256_query_batch_with_initial_scale_loop.body]
+  rw [hNext]
+  rfl
+
 #print axioms scale_loop_body_step
+#print axioms scale_loop_body_done
 
 end V7CallerCurrentReleaseR26QueryScaleLoop
