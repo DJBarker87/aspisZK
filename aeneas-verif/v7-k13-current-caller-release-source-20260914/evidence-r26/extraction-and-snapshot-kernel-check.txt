@@ -120,3 +120,20 @@ Accepted shifted insertion-to-tail dispatch:
   query challenge/callback, shifted query insertion, claim absorption, and
   query-batch trace, and proves that the exact insertion outputs feed the
   accepted named relation-loop call from that same execution.
+
+Accepted relation-loop snapshot preservation:
+- Source revision before this focused addition: b4b2e450
+  (research/v7-gate-closure-20260914).
+- Exact target: V7CallerCurrentReleaseR26AcceptedTailSnapshot.lean.
+- Exit status: 0; wall=2.07s; peak_kib=2588092; swap_kib=0 under the
+  same 6 GiB no-swap scope.
+- #print axioms loop_ok_has_done_origin,
+  tail_body_accepted_done_preserves_snapshot,
+  accepted_relation_loop_returns_supplied_snapshot, and
+  AcceptedShiftedTailDispatch.returnedSnapshotExact:
+  [propext, Classical.choice, Quot.sound].
+- Partial fixpoint induction proves that any successful generated loop return
+  originates at a literal `done` body step. Inversion of that body shows that
+  only the exhausted-iterator accepted branch can return `Ok`; it embeds the
+  supplied prechallenge snapshot unchanged. The final corollary applies this
+  fact to the exact shifted insertion/tail dispatch from the enclosing helper.
