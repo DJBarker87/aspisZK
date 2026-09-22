@@ -8,6 +8,68 @@ namespace V7CallerCurrentReleaseR26QueryScaleExactStep
 
 open V7CallerCurrentReleaseR26FieldBridge
 
+local instance : Inhabited field.QM31 := ⟨field.QM31.ZERO⟩
+
+def CanonicalScaleArray (values : Array field.QM31 16#usize) : Prop :=
+  ∀ index : Nat, index < 16 →
+    GeneratedCanonicalQM31 values.val[index]!
+
+theorem scale_array_set_same
+    (values : Array field.QM31 16#usize) (index : Std.Usize)
+    (value : field.QM31) (hindex : index.val < 16) :
+    (values.set index value).val[index.val]! = value := by
+  simp only [Array.set_val_eq]
+  apply List.set_getElem!_eq
+  exact ⟨by simpa [Array.length_eq] using hindex, rfl⟩
+
+theorem scale_array_set_ne
+    (values : Array field.QM31 16#usize) (index : Std.Usize)
+    (value : field.QM31) (other : Nat) (hne : other ≠ index.val) :
+    (values.set index value).val[other]! = values.val[other]! := by
+  apply List.set_getElem!_ne
+  omega
+
+theorem canonical_scale_array_set
+    (values : Array field.QM31 16#usize) (index : Std.Usize)
+    (value : field.QM31) (hindex : index.val < 16)
+    (hvalues : CanonicalScaleArray values)
+    (hvalue : GeneratedCanonicalQM31 value) :
+    CanonicalScaleArray (values.set index value) := by
+  intro other hother
+  by_cases hsame : other = index.val
+  · subst other
+    rw [scale_array_set_same values index value hindex]
+    exact hvalue
+  · rw [scale_array_set_ne values index value other hsame]
+    exact hvalues other hother
+
+theorem shifted_scale_seed_canonical
+    (rho : field.QM31) (seed : Array field.QM31 16#usize)
+    (hrho : GeneratedCanonicalQM31 rho)
+    (hseed : Array.update (Array.repeat 16#usize field.QM31.ZERO)
+      0#usize rho = ok seed) :
+    CanonicalScaleArray seed ∧ seed.val[0]! = rho := by
+  have hupdate := Array.update_spec
+    (Array.repeat 16#usize field.QM31.ZERO) 0#usize rho (by norm_num)
+  obtain ⟨updated, hupdateRun, hupdateEq⟩ := WP.spec_imp_exists hupdate
+  have hseedEq : seed = updated := Result.ok.inj (hseed.symm.trans hupdateRun)
+  have hseedSet : seed = (Array.repeat 16#usize field.QM31.ZERO).set 0#usize rho :=
+    hseedEq.trans hupdateEq
+  clear hupdate hupdateRun hupdateEq hseed hseedEq
+  rw [hseedSet]
+  constructor
+  · apply canonical_scale_array_set
+    · norm_num
+    · intro index hindex
+      rw [Array.repeat_val]
+      change GeneratedCanonicalQM31
+        (List.replicate 16 field.QM31.ZERO)[index]!
+      rw [List.getElem!_replicate field.QM31.ZERO hindex]
+      exact V7CallerCurrentReleaseR26FieldBridge.generated_qm31_zero_canonical
+    · exact hrho
+  · apply scale_array_set_same
+    norm_num
+
 /-- A successful source iteration of the shifted-query scale loop has the
 exact multiplicative meaning required for the rho-power covector.  This keeps
 the generated iterator transition symbolic while using the source-authentic
@@ -39,6 +101,7 @@ theorem scale_loop_body_step_exact
       iterNext scales scalesNext ordinal predecessor prior next hNext hPredecessor
       hIndex hMultiply hUpdate⟩
 
+#print axioms shifted_scale_seed_canonical
 #print axioms scale_loop_body_step_exact
 
 end V7CallerCurrentReleaseR26QueryScaleExactStep
