@@ -268,6 +268,32 @@ type V6PrechallengeObserverOutput = Option<V6QueryBatchPrechallengeSnapshot>;
 #[cfg(not(feature = "aeneas-observer"))]
 type V6PrechallengeObserverOutput = ();
 
+/// Isolated source-proof branch for the owned pre-query observation.  Keeping
+/// this as a named helper gives the Aeneas replay a small, symbolic target:
+/// with capture enabled it returns exactly the freshly materialized snapshot.
+#[cfg(feature = "aeneas-observer")]
+#[inline(never)]
+fn capture_v6_query_batch_prechallenge(
+    capture: bool,
+    view: &V6QueryBatchPrechallengeView<'_>,
+) -> V6PrechallengeObserverOutput {
+    if capture {
+        Some(snapshot_query_batch_prechallenge(view))
+    } else {
+        None
+    }
+}
+
+#[cfg(not(feature = "aeneas-observer"))]
+#[inline(always)]
+fn capture_v6_query_batch_prechallenge(
+    capture: bool,
+    view: &V6QueryBatchPrechallengeView<'_>,
+) -> V6PrechallengeObserverOutput {
+    let _ = capture;
+    let _ = view;
+}
+
 fn profile_root_salt(
     hash: HashFn,
     domain: &[u8],
@@ -882,16 +908,10 @@ where
         compact_counter,
         frontier_nodes,
     };
-    #[cfg(feature = "aeneas-observer")]
-    let prechallenge_snapshot = if capture_prechallenge_snapshot {
-        Some(snapshot_query_batch_prechallenge(&prechallenge_view))
-    } else {
-        None
-    };
-    #[cfg(not(feature = "aeneas-observer"))]
-    let prechallenge_snapshot = ();
-    #[cfg(not(feature = "aeneas-observer"))]
-    let _ = capture_prechallenge_snapshot;
+    let prechallenge_snapshot = capture_v6_query_batch_prechallenge(
+        capture_prechallenge_snapshot,
+        &prechallenge_view,
+    );
     prechallenge(&prechallenge_view);
     if frontier_node_bytes == 0
         || c1_frontier.len() % frontier_node_bytes != 0
