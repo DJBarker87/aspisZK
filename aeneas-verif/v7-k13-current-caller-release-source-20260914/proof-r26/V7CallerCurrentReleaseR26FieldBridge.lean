@@ -338,6 +338,74 @@ private theorem generated_mul_by_r_corresponds
       simp [generatedCm31ToExact, exactQm31R]
       ring
 
+private theorem generated_prepared_cm31_mul_corresponds
+    (x y : GeneratedCM31)
+    (xsum : M31)
+    (hx : GeneratedCanonicalCM31 x) (hy : GeneratedCanonicalCM31 y)
+    (hxsumCanonical :
+      AspisAeneasCM31Multiplicative.CanonicalRawM31 xsum.val)
+    (hxsumExact : ((xsum.val : Nat) : ExactM31) =
+      (x.a.val : ExactM31) + (x.b.val : ExactM31)) :
+    ∃ out : GeneratedCM31,
+      V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+          () (Array.make 3#usize [x.a, x.b, xsum], y) = ok out ∧
+      GeneratedCanonicalCM31 out ∧
+      generatedCm31ToExact out =
+        generatedCm31ToExact x * generatedCm31ToExact y := by
+  obtain ⟨m0, hm0, hm0Canonical, hm0Exact⟩ :=
+    generated_m31_mul_corresponds x.a y.a hx.1 hy.1
+  obtain ⟨m1, hm1, hm1Canonical, hm1Exact⟩ :=
+    generated_m31_mul_corresponds x.b y.b hx.2 hy.2
+  obtain ⟨ysum, hysum, hysumCanonical, hysumExact⟩ :=
+    generated_m31_add_corresponds y.a y.b hy.1 hy.2
+  obtain ⟨m2, hm2, hm2Canonical, hm2Exact⟩ :=
+    generated_m31_mul_corresponds xsum ysum hxsumCanonical hysumCanonical
+  obtain ⟨real, hreal, hrealCanonical, hrealExact⟩ :=
+    generated_m31_sub_corresponds m0 m1 hm0Canonical hm1Canonical
+  obtain ⟨imagPartial, himagPartial, himagPartialCanonical,
+      himagPartialExact⟩ :=
+    generated_m31_sub_corresponds m2 m0 hm2Canonical hm0Canonical
+  obtain ⟨imag, himag, himagCanonical, himagExact⟩ :=
+    generated_m31_sub_corresponds imagPartial m1
+      himagPartialCanonical hm1Canonical
+  have realExact :
+      ((real.val : Nat) : ExactM31) =
+        (x.a.val : ExactM31) * (y.a.val : ExactM31) -
+          (x.b.val : ExactM31) * (y.b.val : ExactM31) := by
+    rw [hrealExact, hm0Exact, hm1Exact]
+  have imagExact :
+      ((imag.val : Nat) : ExactM31) =
+        (x.a.val : ExactM31) * (y.b.val : ExactM31) +
+          (x.b.val : ExactM31) * (y.a.val : ExactM31) := by
+    calc
+      ((imag.val : Nat) : ExactM31) =
+          ((imagPartial.val : Nat) : ExactM31) -
+            ((m1.val : Nat) : ExactM31) := himagExact
+      _ = (((m2.val : Nat) : ExactM31) -
+            ((m0.val : Nat) : ExactM31)) -
+            ((m1.val : Nat) : ExactM31) := by rw [himagPartialExact]
+      _ = (((x.a.val : ExactM31) + (x.b.val : ExactM31)) *
+            ((y.a.val : ExactM31) + (y.b.val : ExactM31)) -
+            (x.a.val : ExactM31) * (y.a.val : ExactM31)) -
+            (x.b.val : ExactM31) * (y.b.val : ExactM31) := by
+          rw [hm2Exact, hxsumExact, hysumExact, hm0Exact, hm1Exact]
+      _ = (x.a.val : ExactM31) * (y.b.val : ExactM31) +
+            (x.b.val : ExactM31) * (y.a.val : ExactM31) := by ring
+  have hindex0 : Array.index_usize (Array.make 3#usize [x.a, x.b, xsum])
+      0#usize = ok x.a := by rfl
+  have hindex1 : Array.index_usize (Array.make 3#usize [x.a, x.b, xsum])
+      1#usize = ok x.b := by rfl
+  have hindex2 : Array.index_usize (Array.make 3#usize [x.a, x.b, xsum])
+      2#usize = ok xsum := by rfl
+  let out : GeneratedCM31 := ⟨real, imag⟩
+  refine ⟨out, ?_, ⟨hrealCanonical, himagCanonical⟩, ?_⟩
+  · simp [V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call,
+      hindex0, hm0, hindex1, hm1, hindex2, hysum, hm2, hreal,
+      himagPartial, himag, out]
+  · apply QuadraticAlgebra.ext
+    · simpa [generatedCm31ToExact, sub_eq_add_neg] using realExact
+    · simpa [generatedCm31ToExact] using imagExact
+
 theorem generated_qm31_add_corresponds
     (x y : QM31) (hx : GeneratedCanonicalQM31 x)
     (hy : GeneratedCanonicalQM31 y) :
@@ -420,6 +488,99 @@ theorem generated_qm31_mul_corresponds
         hysumExact, hm0Exact, hm1Exact]
       simp [generatedQm31ToExact]
       ring
+
+theorem generated_prepared_qm31_mul_corresponds
+    (x y : QM31) (hx : GeneratedCanonicalQM31 x)
+    (hy : GeneratedCanonicalQM31 y) :
+    ∃ prepared : V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier,
+      ∃ out : QM31,
+        V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.new x =
+          ok prepared ∧
+        V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.mul
+            prepared y = ok out ∧
+        GeneratedCanonicalQM31 out ∧
+        generatedQm31ToExact out =
+          generatedQm31ToExact x * generatedQm31ToExact y := by
+  obtain ⟨xsum, hxsum, hxsumCanonical, hxsumExact⟩ :=
+    generated_cm31_add_corresponds x.c0 x.c1 hx.1 hx.2
+  obtain ⟨x0sum, hx0sum, hx0sumCanonical, hx0sumExact⟩ :=
+    generated_m31_add_corresponds x.c0.a x.c0.b hx.1.1 hx.1.2
+  obtain ⟨x1sum, hx1sum, hx1sumCanonical, hx1sumExact⟩ :=
+    generated_m31_add_corresponds x.c1.a x.c1.b hx.2.1 hx.2.2
+  obtain ⟨xsumSum, hxsumSum, hxsumSumCanonical, hxsumSumExact⟩ :=
+    generated_m31_add_corresponds xsum.a xsum.b hxsumCanonical.1 hxsumCanonical.2
+  let c0components : Array M31 3#usize :=
+    Array.make 3#usize [x.c0.a, x.c0.b, x0sum]
+  let c1components : Array M31 3#usize :=
+    Array.make 3#usize [x.c1.a, x.c1.b, x1sum]
+  let sumcomponents : Array M31 3#usize :=
+    Array.make 3#usize [xsum.a, xsum.b, xsumSum]
+  let prepared : V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier :=
+    { components := Array.make 3#usize [c0components, c1components, sumcomponents] }
+  have hnew : V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.new x =
+      ok prepared := by
+    simp [V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.new,
+      V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.new.closure.Insts.CoreOpsFunctionFnTupleCM31ArrayM313.call,
+      hx0sum, hx1sum, hxsum, hxsumSum, c0components, c1components,
+      sumcomponents, prepared]
+  obtain ⟨m0, hm0, hm0Canonical, hm0Exact⟩ :=
+    generated_prepared_cm31_mul_corresponds x.c0 y.c0 x0sum hx.1 hy.1
+      hx0sumCanonical hx0sumExact
+  obtain ⟨m1, hm1, hm1Canonical, hm1Exact⟩ :=
+    generated_prepared_cm31_mul_corresponds x.c1 y.c1 x1sum hx.2 hy.2
+      hx1sumCanonical hx1sumExact
+  obtain ⟨ysum, hysum, hysumCanonical, hysumExact⟩ :=
+    generated_cm31_add_corresponds y.c0 y.c1 hy.1 hy.2
+  obtain ⟨m2, hm2, hm2Canonical, hm2Exact⟩ :=
+    generated_prepared_cm31_mul_corresponds xsum ysum xsumSum hxsumCanonical
+      hysumCanonical hxsumSumCanonical hxsumSumExact
+  obtain ⟨rm1, hrm1, hrm1Canonical, hrm1Exact⟩ :=
+    generated_mul_by_r_corresponds m1 hm1Canonical
+  obtain ⟨real, hreal, hrealCanonical, hrealExact⟩ :=
+    generated_cm31_add_corresponds m0 rm1 hm0Canonical hrm1Canonical
+  obtain ⟨crossPartial, hcrossPartial, hcrossPartialCanonical,
+      hcrossPartialExact⟩ :=
+    generated_cm31_sub_corresponds m2 m0 hm2Canonical hm0Canonical
+  obtain ⟨imag, himag, himagCanonical, himagExact⟩ :=
+    generated_cm31_sub_corresponds crossPartial m1
+      hcrossPartialCanonical hm1Canonical
+  have hindex0 : Array.index_usize prepared.components 0#usize = ok c0components := by
+    rfl
+  have hindex1 : Array.index_usize prepared.components 1#usize = ok c1components := by
+    rfl
+  have hindex2 : Array.index_usize prepared.components 2#usize = ok sumcomponents := by
+    rfl
+  have hcomponent0 :
+      V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+        () (c0components, y.c0) = ok m0 := by
+    simpa [c0components] using hm0
+  have hcomponent1 :
+      V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+        () (c1components, y.c1) = ok m1 := by
+    simpa [c1components] using hm1
+  have hcomponent2 :
+      V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+        () (sumcomponents, ysum) = ok m2 := by
+    simpa [sumcomponents] using hm2
+  let out : QM31 := ⟨real, imag⟩
+  have hmul : V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.mul
+      prepared y = ok out := by
+    simp [V7CallerCurrentReleaseR26.field.PreparedQm31Multiplier.impl.mul,
+      hindex0, hcomponent0, hindex1, hcomponent1, hindex2, hysum,
+      hcomponent2, hrm1, hreal, hcrossPartial, himag, prepared, out]
+  refine ⟨prepared, out, hnew, hmul, ⟨hrealCanonical, himagCanonical⟩, ?_⟩
+  apply QuadraticAlgebra.ext
+  · change generatedCm31ToExact real =
+      (generatedQm31ToExact x * generatedQm31ToExact y).re
+    rw [hrealExact, hm0Exact, hrm1Exact, hm1Exact]
+    simp [generatedQm31ToExact]
+    ring
+  · change generatedCm31ToExact imag =
+      (generatedQm31ToExact x * generatedQm31ToExact y).im
+    rw [himagExact, hcrossPartialExact, hm2Exact, hxsumExact,
+      hysumExact, hm0Exact, hm1Exact]
+    simp [generatedQm31ToExact]
+    ring
 
 private theorem generated_cm31_square_corresponds
     (x : GeneratedCM31) (hx : GeneratedCanonicalCM31 x) :
@@ -591,5 +752,6 @@ theorem generated_qm31_square_corresponds
 #print axioms generated_qm31_sub_corresponds
 #print axioms generated_qm31_mul_corresponds
 #print axioms generated_qm31_square_corresponds
+#print axioms generated_prepared_qm31_mul_corresponds
 
 end V7CallerCurrentReleaseR26FieldBridge
