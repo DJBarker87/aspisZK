@@ -262,6 +262,12 @@ pub fn snapshot_query_batch_prechallenge(
     }
 }
 
+#[cfg(feature = "aeneas-observer")]
+type V6PrechallengeObserverOutput = Option<V6QueryBatchPrechallengeSnapshot>;
+
+#[cfg(not(feature = "aeneas-observer"))]
+type V6PrechallengeObserverOutput = ();
+
 fn profile_root_salt(
     hash: HashFn,
     domain: &[u8],
@@ -745,8 +751,9 @@ fn finish_onefold_relation<QueryFold, DeriveQueries, Trace, Fields, Prechallenge
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
     mut prechallenge: Prechallenge,
+    capture_prechallenge_snapshot: bool,
     mut trace: Trace,
-) -> Result<V6VerifiedTranscript, V6TranscriptError>
+) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     DeriveQueries: FnOnce(
@@ -863,7 +870,7 @@ where
         accepted_query_transcript,
     ) = derive_queries(&transcript)?;
     transcript = accepted_query_transcript;
-    prechallenge(&V6QueryBatchPrechallengeView {
+    let prechallenge_view = V6QueryBatchPrechallengeView {
         transcript_state: transcript.diagnostic_state(),
         running_claim,
         weights: &weights,
@@ -874,7 +881,18 @@ where
         selector,
         compact_counter,
         frontier_nodes,
-    });
+    };
+    #[cfg(feature = "aeneas-observer")]
+    let prechallenge_snapshot = if capture_prechallenge_snapshot {
+        Some(snapshot_query_batch_prechallenge(&prechallenge_view))
+    } else {
+        None
+    };
+    #[cfg(not(feature = "aeneas-observer"))]
+    let prechallenge_snapshot = ();
+    #[cfg(not(feature = "aeneas-observer"))]
+    let _ = capture_prechallenge_snapshot;
+    prechallenge(&prechallenge_view);
     if frontier_node_bytes == 0
         || c1_frontier.len() % frontier_node_bytes != 0
         || c2_frontier.len() % frontier_node_bytes != 0
@@ -982,19 +1000,22 @@ where
         .into_iter()
         .fold(QM31::ZERO, QM31::add);
 
-    Ok(V6VerifiedTranscript {
-        gamma,
-        kappa,
-        alpha,
-        queries,
-        selector,
-        compact_counter,
-        frontier_nodes,
-        semantic_point,
-        query_batch_challenge,
-        folded_query_sum,
-        transcript_state_after_queries,
-    })
+    Ok((
+        V6VerifiedTranscript {
+            gamma,
+            kappa,
+            alpha,
+            queries,
+            selector,
+            compact_counter,
+            frontier_nodes,
+            semantic_point,
+            query_batch_challenge,
+            folded_query_sum,
+            transcript_state_after_queries,
+        },
+        prechallenge_snapshot,
+    ))
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1011,8 +1032,9 @@ fn finish_v6_relation<QueryFold, Trace, Prechallenge>(
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
     prechallenge: Prechallenge,
+    capture_prechallenge_snapshot: bool,
     trace: Trace,
-) -> Result<V6VerifiedTranscript, V6TranscriptError>
+) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     Trace: FnMut(V6RelationDiagnosticPhase),
@@ -1038,6 +1060,7 @@ where
         point_claims,
         query_fold,
         prechallenge,
+        capture_prechallenge_snapshot,
         trace,
     )
 }
@@ -1055,8 +1078,9 @@ fn finish_v7_compact_relation<QueryFold, Trace, Prechallenge>(
     point_claims: &[[QM31; V6_TOTAL_COLUMNS]; V6_POINT_CLAIM_ROWS],
     query_fold: QueryFold,
     prechallenge: Prechallenge,
+    capture_prechallenge_snapshot: bool,
     trace: Trace,
-) -> Result<V6VerifiedTranscript, V6TranscriptError>
+) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
 where
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
     Trace: FnMut(V6RelationDiagnosticPhase),
@@ -1096,6 +1120,7 @@ where
         point_claims,
         query_fold,
         prechallenge,
+        capture_prechallenge_snapshot,
         trace,
     )
 }
@@ -1202,8 +1227,10 @@ where
         &point_claims,
         query_fold,
         |_| {},
+        false,
         |_| {},
     )
+    .map(|(accepted, _)| accepted)
 }
 
 /// Verify the compact V7 transcript while reusing the frozen V6 semantic and
@@ -1260,7 +1287,8 @@ fn verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner<
     terminal_check: TerminalCheck,
     query_fold: QueryFold,
     prechallenge: Prechallenge,
-) -> Result<V6VerifiedTranscript, V6TranscriptError>
+    capture_prechallenge_snapshot: bool,
+) -> Result<(V6VerifiedTranscript, V6PrechallengeObserverOutput), V6TranscriptError>
 where
     TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
@@ -1296,6 +1324,7 @@ where
         &point_claims,
         query_fold,
         prechallenge,
+        capture_prechallenge_snapshot,
         |_| {},
     )
 }
@@ -1335,7 +1364,9 @@ where
         terminal_check,
         query_fold,
         |_| {},
+        false,
     )
+    .map(|(accepted, _)| accepted)
 }
 
 /// Default-off source-observation sibling of the selected V7 wrapper.
@@ -1379,7 +1410,9 @@ where
         terminal_check,
         query_fold,
         prechallenge,
+        false,
     )
+    .map(|(accepted, _)| accepted)
 }
 
 /// Source-proof wrapper that retains the exact pre-query snapshot produced by
@@ -1416,8 +1449,7 @@ where
     TerminalCheck: FnOnce(&V6SemanticView<'_>) -> bool,
     QueryFold: FnOnce(&V6QueryBatchView<'_>) -> Result<V6AuthenticatedQueryBatch, V6WireError>,
 {
-    let mut snapshot = None;
-    let accepted = verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe(
+    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_inner(
         hash,
         wire,
         context,
@@ -1427,9 +1459,9 @@ where
         check_pow,
         terminal_check,
         query_fold,
-        |view| snapshot = Some(snapshot_query_batch_prechallenge(view)),
-    )?;
-    Ok((accepted, snapshot))
+        |_| {},
+        true,
+    )
 }
 
 /// Measurement-only twin of the accepted V7 transcript using canonical
@@ -1509,8 +1541,10 @@ where
         &point_claims,
         query_fold,
         |_| {},
+        false,
         |_| {},
     )
+    .map(|(accepted, _)| accepted)
 }
 
 /// Diagnostic twin of
@@ -1576,8 +1610,10 @@ where
         &point_claims,
         query_fold,
         |_| {},
+        false,
         |phase| trace(V7TranscriptDiagnosticPhase::Relation(phase)),
     )
+    .map(|(accepted, _)| accepted)
 }
 
 /// Diagnostic twin of [`verify_v6_transcript_and_relation_prepared`]. It is
@@ -1636,8 +1672,10 @@ where
         &point_claims,
         query_fold,
         |_| {},
+        false,
         trace,
     )
+    .map(|(accepted, _)| accepted)
 }
 
 #[cfg(test)]
