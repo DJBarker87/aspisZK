@@ -154,3 +154,17 @@ Exact loop trace and post-prechallenge composition:
   generated loop. The enclosing-helper theorem joins the already checked
   shifted query insertion dispatch to that accepted loop and proves direct
   transport of an enabled concrete `some snapshot` result.
+
+Exact fixed-round accepted-loop execution:
+- Source revision: 6b4fc4b6 (research/v7-gate-closure-20260914).
+- Exact target: V7CallerCurrentReleaseR26AcceptedTailTrace.lean.
+- Exit status: 0; wall=4.40s; peak_kib=2642148; swap_kib=0 under the
+  same 6 GiB no-swap scope.
+- #print axioms loop_success_yields_exact_trace,
+  accepted_relation_loop_has_exact_trace, and
+  accepted_relation_loop_has_three_round_execution:
+  [propext, Classical.choice, Quot.sound].
+- The symbolic iterator proof establishes that an accepted loop started at
+  the literal range `1..V6_RELATION_ROUNDS` has exactly the round-one,
+  round-two, and round-three continuation equations followed by the accepted
+  terminal equation. No concrete recurrence or generated numeral is reduced.
