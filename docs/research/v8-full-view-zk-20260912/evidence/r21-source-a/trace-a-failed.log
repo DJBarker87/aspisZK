@@ -1,0 +1,101 @@
+{"stage": "/home/dombarker/project-offloads/aspis-r21-pilot-20260922-a", "phase": "compile then focused optimized source gate", "command": ["/home/dombarker/.cargo/bin/cargo", "run", "--release", "--offline", "--locked", "--jobs", "2", "--manifest-path", "/home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml", "--features", "insecure-spend-fixture,selected-v7-kernels", "--bin", "r21-trace"], "rustflags": "--cfg v8_positive_transfer --cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile --cfg v8_payment_extraction --cfg v8_performance --cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial -A dead_code -A unexpected_cfgs --cfg v8_circle_norm --cfg v8_chord_norm --cfg v8_joined_inverse --cfg v8_split_inverse --cfg v8_line_norm --cfg v8_quotient_fused --cfg v8_affine_primal --cfg v8_compact_workspace"}
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-statement` to apply 4 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+warning: unused imports: `M31`, `dot`, `qm31_sum_products2_prepared`, and `qm31_sum_products3`
+   --> ../r21_trace_field.rs:253:9
+    |
+253 |         qm31_sum_products2_prepared, qm31_sum_products3, qm31_sum_products3_prepared,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
+254 |         qm31_sum_products4, dot, PreparedQm31Multiplier, K as QM31, M31, M31_HALF,
+    |                             ^^^                                     ^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `CM31` and `P`
+   --> ../r21_trace_field.rs:256:41
+    |
+256 |     pub use crate::native_core::field::{CM31, P};
+    |                                         ^^^^  ^
+
+error[E0308]: mismatched types
+  --> ../r19_channel_ordinary.rs:67:17
+   |
+67 |     cycle(delta,&t.order);
+   |     -----       ^^^^^^^^ expected `&[usize]`, found `&&[usize; 1024]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected reference `&[usize]`
+              found reference `&&'static [usize; 1024]`
+note: function defined here
+  --> ../r19_channel_ordinary.rs:48:4
+   |
+48 | fn cycle(delta:&mut[K], order:&[usize]) {
+   |    ^^^^^                --------------
+
+For more information about this error, try `rustc --explain E0308`.
+warning: `aspis-v8-performance-host` (bin "r21-trace") generated 2 warnings
+error: could not compile `aspis-v8-performance-host` (bin "r21-trace") due to 1 previous error; 2 warnings emitted
+Command exited with non-zero status 101
+	Command being timed: "/home/dombarker/.cargo/bin/cargo run --release --offline --locked --jobs 2 --manifest-path /home/dombarker/project-offloads/aspis-r21-pilot-20260922-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml --features insecure-spend-fixture,selected-v7-kernels --bin r21-trace"
+	User time (seconds): 0.08
+	System time (seconds): 0.04
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.12
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 146020
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 15351
+	Voluntary context switches: 84
+	Involuntary context switches: 7
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 48
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 101
