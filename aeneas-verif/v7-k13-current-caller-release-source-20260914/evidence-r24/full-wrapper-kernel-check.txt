@@ -1,0 +1,26 @@
+R24 full-wrapper kernel check
+
+Source
+  branch: research/v7-gate-closure-20260914
+  v6_transcript.rs SHA-256: e0660c2c966356af105ca8181e26aa2f8a61651e3099c235ed0965ec7c0b2a5f
+  raw LLBC SHA-256: 44a0169370c52e30b366e01ff453a7ab59faaa532cc5bc9d42a594e2100ccf2f
+  raw Funs SHA-256: 80d2129d19326a823c10c764aec8cd6e53d37f57394079b7db1f81ceef5a7c7c
+  normalized Funs SHA-256: 59270731c9feb884a5675d0e22f9fb2926573d7a41506853a30f3b7d460a8247
+
+Scope
+  systemd-run --user --scope
+    MemorySwapMax=0 MemoryHigh=4G MemoryMax=6G
+  host: dombarker@100.108.41.90
+  Lean: 4.32.0
+
+Compilation results
+  TypesExternal.lean exit=0 wall=1.47s peak_rss=2,569,588KiB swap=0KiB
+  Types.lean         exit=0 wall=2.15s peak_rss=2,624,116KiB swap=0KiB
+  FunsExternal.lean  exit=0 wall=1.85s peak_rss=2,614,860KiB swap=0KiB
+  MutableIteratorCompat.lean exit=0 wall=1.33s peak_rss=2,564,436KiB swap=0KiB
+  Funs.lean          exit=0 wall=14.61s peak_rss=3,263,204KiB swap=0KiB
+  R24FullWrapper.lean exit=0 wall=1.44s peak_rss=2,556,952KiB swap=0KiB
+
+Axiom audit
+  #print axioms snapshot_wrapper_calls_captured_inner
+  [propext, Classical.choice, Quot.sound]

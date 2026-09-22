@@ -118,20 +118,48 @@ the semantic-terminal, two-tree authentication, batched residual, relation,
 and transaction-wrapper facts remain to be derived from source rather than
 assumed.
 
-## R24/R25 full-wrapper probe
+## R24 full-wrapper kernel bridge
 
-R24 re-extracted the complete observer snapshot-return wrapper against the R23
-source.  Charon completed in 4.52 seconds at 768,608 KiB with zero swap; LLBC
-SHA-256 was `44a0169370c52e30b366e01ff453a7ab59faaa532cc5bc9d42a594e2100ccf2f`.
-Aeneas completed in 220.81 seconds at 3,290,404 KiB with zero swap.  The raw
-Lean graph still has the known generated compatibility requirements and, after
-those are exposed, the R21 `FnMut` callback write-back mismatch remains in the
-snapshot wrapper.  R24 is therefore extraction evidence, not a checked graph.
+R24 re-extracted the complete observer snapshot-return wrapper against the
+restored R23 source (current `v6_transcript.rs` SHA-256
+`e0660c2c966356af105ca8181e26aa2f8a61651e3099c235ed0965ec7c0b2a5f`).
+Charon completed in 4.52 seconds at 768,608 KiB with zero swap; LLBC SHA-256
+was `44a0169370c52e30b366e01ff453a7ab59faaa532cc5bc9d42a594e2100ccf2f`.
+Aeneas completed in 220.81 seconds at 3,290,404 KiB with zero swap.
 
-R25 tested replacing the no-op closures with named function items.  It passed
+`toolchain/normalize-r24-full-wrapper.py` freezes the raw-graph shape and
+performs only checked Lean/Aeneas compatibility repairs: pinned imports,
+method-path spelling against executable library models, mutable-iterator ABI,
+Boolean equality, one tupled fold callback, erased shift widths, the two
+no-op `FnMut` unit results, and diagnostic strings represented by a
+kernel-constructed `Str`. The latter changes neither a verifier success value
+nor a `V6TranscriptError` value. It has no `sorry`, `admit`, `native_decide`,
+or axiom declaration. The raw and normalized function SHA-256 values are
+`80d2129d19326a823c10c764aec8cd6e53d37f57394079b7db1f81ceef5a7c7c` and
+`59270731c9feb884a5675d0e22f9fb2926573d7a41506853a30f3b7d460a8247`.
+
+The complete normalized graph compiled in a fresh 6 GiB, zero-swap cgroup:
+`TypesExternal` exited 0 in 1.47 seconds at 2,569,588 KiB; `Types` exited 0
+in 2.15 seconds at 2,624,116 KiB; `FunsExternal` exited 0 in 1.85 seconds at
+2,614,860 KiB; `MutableIteratorCompat` exited 0 in 1.33 seconds at 2,564,436
+KiB; and complete `Funs` exited 0 in 14.61 seconds at 3,263,204 KiB. The
+focused theorem `proof-r24/V7CallerCurrentReleaseR24FullWrapper.lean` then
+exited 0 in 1.44 seconds at 2,556,952 KiB. Its
+`#print axioms snapshot_wrapper_calls_captured_inner` result is exactly
+`[propext, Classical.choice, Quot.sound]`.
+
+That theorem proves definitionally that the full observer snapshot wrapper is
+the translated shared verifier inner path with its generated no-op
+prechallenge closure and capture set to `true`. It does not assume acceptance,
+construct a snapshot, or hide the parser, transcript, terminal, relation, or
+query path. The remaining end-to-end work is to invert a successful full
+execution through that inner path, obtain the actual captured `Some` snapshot,
+and derive the K1 source obligations from its source checks.
+
+R25 tested replacing the no-op closures with named function items. It passed
 the focused observer release test and production release check, but the pinned
 Aeneas backend rejected the wrapper's function-item lifetime shape in
-`RegionsHierarchy` before emitting Lean.  The experiment was reverted; the
-current source is byte-identical to the R23 capture-helper source.  No generated
+`RegionsHierarchy` before emitting Lean. The experiment was reverted; the
+current source is byte-identical to the R23 capture-helper source. No generated
 model, external axiom, or fabricated snapshot result was accepted as a
 workaround.
