@@ -149,7 +149,7 @@ theorem accepted_relation_loop_has_exact_trace
     (iter, transcript0, trace0, runningClaim, weights, alpha, foldedValues)
     (core.result.Result.Ok (verified, returnedSnapshot), traceOut) success
 
-private theorem range_next_some_exact
+theorem range_next_some_exact
     (iter iter' : core.ops.range.Range Std.Usize) (round : Std.Usize)
     (run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter =
       .ok (some round, iter')) :
@@ -189,7 +189,7 @@ private theorem bind_eq_ok_iff {Input Output : Type}
 /-- A continuation edge of the literal tail body can only come from the
 active iterator branch, and its successor carries the iterator returned by
 that exact `next` call. -/
-private theorem tail_body_cont_iterator_step
+theorem tail_body_cont_iterator_step
     {QueryFold Trace : Type}
     (queryFoldInst : core.ops.function.FnOnce QueryFold
       v6_transcript.V6QueryBatchView
@@ -344,7 +344,7 @@ private theorem tail_body_cont_iterator_step
                         next.1)
                     (ControlFlow.cont.inj (Result.ok.inj run).symm))
 
-private theorem range_next_none_exhausted
+theorem range_next_none_exhausted
     (iter iter' : core.ops.range.Range Std.Usize)
     (run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter =
       .ok (none, iter')) :
@@ -360,7 +360,7 @@ private theorem range_next_none_exhausted
 
 /-- An accepted `done` edge of the literal body can only come from the
 exhausted iterator branch. -/
-private theorem tail_body_accepted_done_iterator_exhausted
+theorem tail_body_accepted_done_iterator_none
     {QueryFold Trace : Type}
     (queryFoldInst : core.ops.function.FnOnce QueryFold
       v6_transcript.V6QueryBatchView
@@ -389,14 +389,16 @@ private theorem tail_body_accepted_done_iterator_exhausted
         queryBatchChallenge authenticatedQueries state =
           ok (done (core.result.Result.Ok (verified, returnedSnapshot),
             traceOut))) :
-    state.1.2.val ≤ state.1.1.val := by
+    ∃ iter',
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize state.1 =
+        ok (none, iter') := by
   unfold V7CallerCurrentReleaseR26AcceptedTailSnapshot.tailBody at run
   unfold v6_transcript.finish_onefold_relation_after_prechallenge_loop.body at run
   rw [bind_eq_ok_iff] at run
   obtain ⟨iteratorPair, iteratorRun, run⟩ := run
   rcases iteratorPair with ⟨option, iter'⟩
   cases option with
-  | none => exact range_next_none_exhausted state.1 iter' iteratorRun
+  | none => exact ⟨iter', iteratorRun⟩
   | some round =>
       simp only at run
       rw [bind_eq_ok_iff] at run
@@ -517,11 +519,12 @@ private theorem exact_trace_contCount_eq_remaining
     execution.contCount = state.1.2.val - state.1.1.val := by
   cases execution with
   | done equation =>
-      have exhausted := tail_body_accepted_done_iterator_exhausted
+      obtain ⟨iter', iteratorRun⟩ := tail_body_accepted_done_iterator_none
         queryFoldInst traceInst gamma relationFields selector semanticPoint
         kappa queries compactCounter frontierNodes transcriptStateAfterQueries
         snapshot queryBatchChallenge authenticatedQueries state verified
         returnedSnapshot traceOut equation
+      have exhausted := range_next_none_exhausted state.1 iter' iteratorRun
       simp [ExactLoopTrace.contCount, Nat.sub_eq_zero_of_le exhausted]
   | @cont state next _ equation tail =>
       have inductionHypothesis := exact_trace_contCount_eq_remaining
