@@ -110,6 +110,14 @@ pub enum V6RelationDiagnosticPhase {
     Terminal,
 }
 
+/// Named no-op callbacks keep the selected verifier and observer wrappers
+/// free of closure-state write-back while preserving their exact behavior.
+#[inline(always)]
+fn ignore_v6_relation_diagnostic_phase(_: V6RelationDiagnosticPhase) {}
+
+#[inline(always)]
+fn ignore_v6_query_batch_prechallenge(_: &V6QueryBatchPrechallengeView<'_>) {}
+
 /// Probe-only checkpoints spanning the compact V7 transcript prefix and the
 /// shared relation tail.  This enum is consumed only by diagnostic verifier
 /// builds; production verification continues to use the uninstrumented
@@ -1246,9 +1254,9 @@ where
         semantic_point,
         &point_claims,
         query_fold,
-        |_| {},
+        ignore_v6_query_batch_prechallenge,
         false,
-        |_| {},
+        ignore_v6_relation_diagnostic_phase,
     )
     .map(|(accepted, _)| accepted)
 }
@@ -1345,7 +1353,7 @@ where
         query_fold,
         prechallenge,
         capture_prechallenge_snapshot,
-        |_| {},
+        ignore_v6_relation_diagnostic_phase,
     )
 }
 
@@ -1383,7 +1391,7 @@ where
         check_pow,
         terminal_check,
         query_fold,
-        |_| {},
+        ignore_v6_query_batch_prechallenge,
         false,
     )
     .map(|(accepted, _)| accepted)
@@ -1479,7 +1487,7 @@ where
         check_pow,
         terminal_check,
         query_fold,
-        |_| {},
+        ignore_v6_query_batch_prechallenge,
         true,
     )
 }
@@ -1560,9 +1568,9 @@ where
         semantic_point,
         &point_claims,
         query_fold,
-        |_| {},
+        ignore_v6_query_batch_prechallenge,
         false,
-        |_| {},
+        ignore_v6_relation_diagnostic_phase,
     )
     .map(|(accepted, _)| accepted)
 }
@@ -1629,7 +1637,7 @@ where
         semantic_point,
         &point_claims,
         query_fold,
-        |_| {},
+        ignore_v6_query_batch_prechallenge,
         false,
         |phase| trace(V7TranscriptDiagnosticPhase::Relation(phase)),
     )
@@ -1691,7 +1699,7 @@ where
         semantic_point,
         &point_claims,
         query_fold,
-        |_| {},
+        ignore_v6_query_batch_prechallenge,
         false,
         trace,
     )
