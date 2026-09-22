@@ -1,0 +1,27 @@
+R26 named post-prechallenge tail extraction
+
+Source revision: 090b269e (research/v7-gate-closure-20260914)
+Build host: dombarker@100.108.41.90
+Scope: systemd-run --user --scope -p MemorySwapMax=0 -p MemoryHigh=4G -p MemoryMax=6G
+
+Rust validation:
+- RUSTUP_TOOLCHAIN=nightly-2026-06-01 cargo test --release -p aspis-core --features aeneas-observer v7
+- exit=0; 35 V7 tests passed, including the prequery observer and snapshot wrapper tests.
+
+Extraction:
+- Charon full snapshot wrapper: exit=0 wall=4.65s peak_kib=709436 swap_kib=0
+  LLBC sha256=76614da18796abef1bcb2d2e99d6d80eb1961c3c0ee4557f4862626ad5d593e0
+- Aeneas full wrapper: exit=0 wall=80.58s peak_kib=1894764 swap_kib=0
+  Funs raw sha256=30d3007d0bf2b72835d6f2a64b32ca08283beb86090a3c97f956985815bb066e
+  Types raw sha256=f87a0de3f39f3efe0f2d7e063c26d1b648af1e3ec55e14987496ae7cc1f3875c
+
+Generated module compilation (all exit 0; swap_kib=0):
+- TypesExternal wall=1.50s peak_kib=2571076
+- Types wall=2.22s peak_kib=2622780
+- FunsExternal wall=1.89s peak_kib=2613232
+- MutableIteratorCompat wall=1.35s peak_kib=2566428
+- Funs wall=13.76s peak_kib=3254532
+
+Exact snapshot dependencies compile independently; the terminal exact-capture target:
+- V7CallerCurrentReleaseR26ExactCapture.lean exit=0 wall=1.41s peak_kib=2674808 swap_kib=0
+- all #print axioms results: [propext, Classical.choice, Quot.sound].
