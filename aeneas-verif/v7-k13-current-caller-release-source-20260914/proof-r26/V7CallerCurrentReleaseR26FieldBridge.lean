@@ -32,6 +32,15 @@ def generatedCm31ToExact (x : GeneratedCM31) : ExactCM31 :=
 def generatedQm31ToExact (x : QM31) : ExactQM31 :=
   ⟨generatedCm31ToExact x.c0, generatedCm31ToExact x.c1⟩
 
+def generatedM31ToExact (x : M31) : ExactM31 :=
+  (x.val : ExactM31)
+
+def generatedM31ScalarToExactQM31 (x : M31) : ExactQM31 :=
+  ⟨⟨generatedM31ToExact x, 0⟩, 0⟩
+
+abbrev GeneratedCanonicalM31 (x : M31) : Prop :=
+  AspisAeneasCM31Multiplicative.CanonicalRawM31 x.val
+
 def GeneratedCanonicalCM31 (x : GeneratedCM31) : Prop :=
   AspisAeneasCM31Multiplicative.CanonicalRawM31 x.a.val ∧
     AspisAeneasCM31Multiplicative.CanonicalRawM31 x.b.val
@@ -495,6 +504,89 @@ theorem generated_qm31_mul_corresponds
       simp [generatedQm31ToExact]
       ring
 
+private theorem generated_cm31_mul_m31_corresponds
+    (x : GeneratedCM31) (y : M31)
+    (hx : GeneratedCanonicalCM31 x)
+    (hy : GeneratedCanonicalM31 y) :
+    ∃ out : GeneratedCM31,
+      V7CallerCurrentReleaseR26.field.CM31.mul_m31 x y = ok out ∧
+      GeneratedCanonicalCM31 out ∧
+      generatedCm31ToExact out =
+        generatedCm31ToExact x * ⟨generatedM31ToExact y, 0⟩ := by
+  obtain ⟨real, hreal, hrealCanonical, hrealExact⟩ :=
+    generated_m31_mul_corresponds x.a y hx.1 hy
+  obtain ⟨imag, himag, himagCanonical, himagExact⟩ :=
+    generated_m31_mul_corresponds x.b y hx.2 hy
+  let out : GeneratedCM31 := ⟨real, imag⟩
+  refine ⟨out, ?_, ⟨hrealCanonical, himagCanonical⟩, ?_⟩
+  · simp [V7CallerCurrentReleaseR26.field.CM31.mul_m31,
+      hreal, himag, out]
+  · apply QuadraticAlgebra.ext
+    · change ((real.val : Nat) : ExactM31) = _
+      rw [hrealExact]
+      simp [generatedCm31ToExact, generatedM31ToExact]
+    · change ((imag.val : Nat) : ExactM31) = _
+      rw [himagExact]
+      simp [generatedCm31ToExact, generatedM31ToExact]
+
+/-- Multiplication of a generated secure-field value by a canonical base-field
+word preserves canonicality and is scalar multiplication in the exact tower. -/
+theorem generated_qm31_mul_m31_corresponds
+    (x : QM31) (y : M31)
+    (hx : GeneratedCanonicalQM31 x)
+    (hy : GeneratedCanonicalM31 y) :
+    ∃ out : QM31,
+      V7CallerCurrentReleaseR26.field.QM31.mul_m31 x y = ok out ∧
+      GeneratedCanonicalQM31 out ∧
+      generatedQm31ToExact out =
+        generatedQm31ToExact x * generatedM31ScalarToExactQM31 y := by
+  obtain ⟨low, hlow, hlowCanonical, hlowExact⟩ :=
+    generated_cm31_mul_m31_corresponds x.c0 y hx.1 hy
+  obtain ⟨high, hhigh, hhighCanonical, hhighExact⟩ :=
+    generated_cm31_mul_m31_corresponds x.c1 y hx.2 hy
+  let out : QM31 := ⟨low, high⟩
+  refine ⟨out, ?_, ⟨hlowCanonical, hhighCanonical⟩, ?_⟩
+  · simp [V7CallerCurrentReleaseR26.field.QM31.mul_m31,
+      hlow, hhigh, out]
+  · apply QuadraticAlgebra.ext
+    · change generatedCm31ToExact low = _
+      rw [hlowExact]
+      simp [generatedQm31ToExact, generatedM31ScalarToExactQM31]
+    · change generatedCm31ToExact high = _
+      rw [hhighExact]
+      simp [generatedQm31ToExact, generatedM31ScalarToExactQM31]
+
+/-- The generated base-field circle doubling helper denotes `2*x^2 - 1`. -/
+theorem generated_double_x_m31_corresponds
+    (x : M31) (hx : GeneratedCanonicalM31 x) :
+    ∃ out : M31,
+      V7CallerCurrentReleaseR26.sumcheck.WeightAccumulator.impl.double_x_m31 x =
+        ok out ∧
+      GeneratedCanonicalM31 out ∧
+      generatedM31ToExact out =
+        2 * generatedM31ToExact x ^ 2 - 1 := by
+  obtain ⟨square, hsquare, hsquareCanonical, hsquareExact⟩ :=
+    generated_m31_mul_corresponds x x hx hx
+  obtain ⟨twice, htwice, htwiceCanonical, htwiceExact⟩ :=
+    generated_m31_double_corresponds square hsquareCanonical
+  have oneCanonical :
+      GeneratedCanonicalM31 V7CallerCurrentReleaseR26.field.M31.ONE := by
+    norm_num [GeneratedCanonicalM31,
+      AspisAeneasCM31Multiplicative.CanonicalRawM31,
+      V7CallerCurrentReleaseR26.field.M31.ONE,
+      AspisAeneasCM31Multiplicative.m31Modulus]
+  obtain ⟨out, hout, houtCanonical, houtExact⟩ :=
+    generated_m31_sub_corresponds twice
+      V7CallerCurrentReleaseR26.field.M31.ONE htwiceCanonical oneCanonical
+  refine ⟨out, ?_, houtCanonical, ?_⟩
+  · simp [V7CallerCurrentReleaseR26.sumcheck.WeightAccumulator.impl.double_x_m31,
+      hsquare, htwice, hout]
+  · change ((out.val : Nat) : ExactM31) = _
+    rw [houtExact, htwiceExact, hsquareExact]
+    norm_num [generatedM31ToExact,
+      V7CallerCurrentReleaseR26.field.M31.ONE, pow_two]
+    ring
+
 theorem generated_prepared_qm31_mul_corresponds
     (x y : QM31) (hx : GeneratedCanonicalQM31 x)
     (hy : GeneratedCanonicalQM31 y) :
@@ -780,6 +872,8 @@ theorem generated_qm31_square_corresponds
 #print axioms generated_qm31_add_corresponds
 #print axioms generated_qm31_sub_corresponds
 #print axioms generated_qm31_mul_corresponds
+#print axioms generated_qm31_mul_m31_corresponds
+#print axioms generated_double_x_m31_corresponds
 #print axioms generated_qm31_square_corresponds
 #print axioms generated_prepared_qm31_mul_corresponds
 #print axioms generated_prepared_qm31_mul_exact
