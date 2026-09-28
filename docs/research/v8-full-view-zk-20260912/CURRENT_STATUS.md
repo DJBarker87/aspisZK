@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R37 source-restricted residual polynomial — 2026-09-29
+
+[R37_SOURCE_RESTRICTED_RESIDUAL.md](R37_SOURCE_RESTRICTED_RESIDUAL.md)
+substitutes the 22-root construction and normalized circle chord into the
+residual polynomial. Eleven new Lean declarations compile, including exact
+determinant scaling and admissible nonzero equivalence. Both genuine prefixes
+match all 338 scaled matrix entries. One explicit algebraic specialization
+has executed M31 determinant 1171866436; **its kernel certificate is still
+open**, and it is not a source transcript or privacy bound.
+
+Next: certify that specialized model evaluation without exponential recurrence
+normalization, then prove the restricted polynomial nonzero. Source exception
+accounting/full privacy and the 1M execution target remain open; verifier and
+CU are unchanged.
+
 ## R36 explicit low residual polynomial — 2026-09-29
 
 [R36_SOURCE_RESIDUAL_MODEL.md](R36_SOURCE_RESIDUAL_MODEL.md) replaces the
