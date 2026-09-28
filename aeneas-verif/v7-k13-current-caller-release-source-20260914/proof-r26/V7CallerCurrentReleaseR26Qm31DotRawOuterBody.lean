@@ -85,7 +85,9 @@ theorem generated_raw_outer_body_active
         (weights.val[index.val]!.c1, values.val[index.val]!.c1),
         (weightSum, valueSum)]
       ∀ component, component < 3 →
-        ExactRawComponentStep raw rawNext component pairs.val[component]! := by
+        ExactRawComponentStep raw rawNext component pairs.val[component]! ∧
+          NaturalRawComponentStep raw rawNext component
+            pairs.val[component]! := by
   let weight := weights.val[index.val]!
   let value := values.val[index.val]!
   have weightRead : Slice.index_usize weights index = ok weight :=
@@ -140,6 +142,8 @@ theorem generated_raw_outer_body_active
   have innerRun := generated_raw_inner_loop_exact pairs raw pairsCanonical
   have innerExact := raw_after_components_three_corresponds pairs raw
     pairsCanonical componentBounds
+  have innerNatural := raw_after_components_three_natural pairs raw
+    pairsCanonical componentBounds
   refine ⟨weightSum, valueSum, rawAfterComponents pairs raw 3,
     ?_, weightSumRun, valueSumRun, weightSumCanonical, valueSumCanonical,
     weightSumExact, valueSumExact, ?_⟩
@@ -166,7 +170,12 @@ theorem generated_raw_outer_body_active
     simp only [bind_tc_ok]
     rw [innerRun]
     simp
-  · simpa [pairs, weight, value] using innerExact
+  · dsimp only
+    intro component componentBound
+    constructor
+    · simpa [pairs, weight, value] using innerExact component componentBound
+    · simpa [pairs, weight, value] using
+        innerNatural component componentBound
 
 #print axioms generated_raw_outer_body_active
 
