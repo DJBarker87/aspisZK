@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R34 low residual factor — 2026-09-29
+
+Latest formal/source milestone: [R34_LOW_RESIDUAL_FACTOR.md](R34_LOW_RESIDUAL_FACTOR.md).
+Eight new Lean declarations compile; two unchanged genuine source prefixes
+pass the low-block weight and query-factor basis identities. The factor
+basis scales the 13-by-13 residual determinant by `2^-269`. The polynomial
+model has degree at most 13 in query-polynomial coefficients, **not** a
+proved source failure probability. Universal source refinement/nonvanishing,
+the adaptive shared-oracle law and full privacy remain open.
+
+Latest selected CU remains **1,620,236 / 1,621,719**, with both actual 1M
+runs exhausted. R34 changes no verifier path and claims no new saving.
+The following sections are retained historical milestones, not the latest
+performance measurements or branch/push state.
+
 ## R19 channel-fold prototype measured — 2026-09-21
 
 The new 699-field quadratic-channel research profile, including a guarded
