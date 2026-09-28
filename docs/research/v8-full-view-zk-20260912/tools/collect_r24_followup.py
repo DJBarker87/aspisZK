@@ -2,7 +2,10 @@
 """Compact source-locked follow-up evidence; omit keys, ELF and raw traces."""
 import argparse,hashlib,json,shutil
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--stage',action='append',default=[]);p.add_argument('--artifact',action='append',default=[]);p.add_argument('--output',type=Path,required=True);a=p.parse_args();out=a.output
+p=argparse.ArgumentParser();p.add_argument('--stage',action='append',default=[]);p.add_argument('--artifact',action='append',default=[]);p.add_argument('--output',type=Path,required=True)
+p.add_argument('--base-revision',default='2ee34c1591fbdc6663fdb8529e559ba2eb14a675')
+p.add_argument('--control',type=Path,default=Path('/home/dombarker/project-offloads/aspis-r20-compose-20260928-c'))
+a=p.parse_args();out=a.output
 assert not out.exists();out.mkdir()
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def copy(src,name):
@@ -12,8 +15,8 @@ def small_tree(src,label):
     for f in sorted(src.rglob('*')):
         if f.is_file() and f.suffix in ['.log','.json','.jsonl','.txt'] and 'keypair' not in f.name:
             copy(f,label+'/'+str(f.relative_to(src)))
-summary={'source_base_revision':'2ee34c1591fbdc6663fdb8529e559ba2eb14a675','full_privacy_or_soundness_proved':False,'stages':{}}
-control=Path('/home/dombarker/project-offloads/aspis-r20-compose-20260928-c')
+summary={'source_base_revision':a.base_revision,'full_privacy_or_soundness_proved':False,'stages':{}}
+control=a.control
 for spec in a.stage:
     label,path=spec.split('=',1);s=Path(path);m=json.loads((s/'r18-stage.json').read_text())
     for n,h in m['files'].items():assert sha(s/n)==h,n
