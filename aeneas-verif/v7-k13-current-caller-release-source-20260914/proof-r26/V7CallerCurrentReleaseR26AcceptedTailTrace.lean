@@ -675,8 +675,114 @@ theorem accepted_relation_loop_has_three_round_execution
               | cont equation tailFour =>
                   simp [ExactLoopTrace.contCount] at count
 
+/-- The four retained body equations are pinned to the literal source
+iterator values `1`, `2`, `3`, and then exhaustion. -/
+theorem ThreeRoundAcceptedTailExecution.iterator_equations
+    {QueryFold Trace : Type}
+    (queryFoldInst : core.ops.function.FnOnce QueryFold
+      v6_transcript.V6QueryBatchView
+      (core.result.Result v6_query_batch.V6AuthenticatedQueryBatch
+        v6_onefold.V6WireError))
+    (traceInst : core.ops.function.FnMut Trace
+      v6_transcript.V6RelationDiagnosticPhase Unit)
+    (transcript0 : transcript.Transcript) (trace0 : Trace)
+    (gamma runningClaim : field.QM31)
+    (weights : sumcheck.WeightAccumulator)
+    (alpha : Array field.QM31 4#usize)
+    (foldedValues : Array field.QM31 256#usize)
+    (relationFields : Array (Array field.QM31 6#usize) 4#usize)
+    (selector : Std.U8) (semanticPoint : Array field.QM31 10#usize)
+    (kappa : field.QM31) (queries : Array Std.U32 16#usize)
+    (compactCounter : Std.U8) (frontierNodes : Std.Usize)
+    (transcriptStateAfterQueries : Array Std.U8 32#usize)
+    (snapshot : Option v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (queryBatchChallenge : field.QM31)
+    (authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch)
+    (verified : v6_transcript.V6VerifiedTranscript)
+    (returnedSnapshot : Option
+      v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (traceOut : Trace)
+    (execution : ThreeRoundAcceptedTailExecution queryFoldInst traceInst gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries
+      ({ start := 1#usize, «end» := v6_onefold.V6_RELATION_ROUNDS },
+        transcript0, trace0, runningClaim, weights, alpha, foldedValues)
+      verified returnedSnapshot traceOut) :
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize
+        ({ start := 1#usize, «end» := v6_onefold.V6_RELATION_ROUNDS } :
+          core.ops.range.Range Std.Usize) =
+        ok (some 1#usize, execution.afterOne.1) ∧
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize
+          execution.afterOne.1 =
+        ok (some 2#usize, execution.afterTwo.1) ∧
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize
+          execution.afterTwo.1 =
+        ok (some 3#usize, execution.afterThree.1) ∧
+      ∃ terminalIterator,
+        core.iter.range.IteratorRange.next core.iter.range.StepUsize
+            execution.afterThree.1 = ok (none, terminalIterator) := by
+  obtain ⟨roundOne, iterOne, nextOne, afterOneIterator⟩ :=
+    tail_body_cont_iterator_step queryFoldInst traceInst gamma relationFields
+      selector semanticPoint kappa queries compactCounter frontierNodes
+      transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries
+      ({ start := 1#usize, «end» := v6_onefold.V6_RELATION_ROUNDS },
+        transcript0, trace0, runningClaim, weights, alpha, foldedValues)
+      execution.afterOne execution.roundOne
+  obtain ⟨_, roundOneStart, nextOneStart, _⟩ :=
+    range_next_some_exact
+      ({ start := 1#usize, «end» := v6_onefold.V6_RELATION_ROUNDS } :
+        core.ops.range.Range Std.Usize)
+      iterOne roundOne nextOne
+  have roundOneExact : roundOne = 1#usize := by
+    simpa using roundOneStart
+  have afterOneStart : execution.afterOne.1.1.val = 2 := by
+    rw [afterOneIterator]
+    simpa using nextOneStart
+  obtain ⟨roundTwo, iterTwo, nextTwo, afterTwoIterator⟩ :=
+    tail_body_cont_iterator_step queryFoldInst traceInst gamma relationFields
+      selector semanticPoint kappa queries compactCounter frontierNodes
+      transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries execution.afterOne execution.afterTwo
+      execution.roundTwo
+  obtain ⟨_, roundTwoStart, nextTwoStart, _⟩ :=
+    range_next_some_exact execution.afterOne.1 iterTwo roundTwo nextTwo
+  have roundTwoExact : roundTwo = 2#usize := by
+    apply UScalar.eq_of_val_eq
+    rw [roundTwoStart]
+    exact afterOneStart
+  have afterTwoStart : execution.afterTwo.1.1.val = 3 := by
+    rw [afterTwoIterator]
+    have := nextTwoStart
+    rw [afterOneStart] at this
+    exact this
+  obtain ⟨roundThree, iterThree, nextThree, afterThreeIterator⟩ :=
+    tail_body_cont_iterator_step queryFoldInst traceInst gamma relationFields
+      selector semanticPoint kappa queries compactCounter frontierNodes
+      transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries execution.afterTwo execution.afterThree
+      execution.roundThree
+  obtain ⟨_, roundThreeStart, _, _⟩ :=
+    range_next_some_exact execution.afterTwo.1 iterThree roundThree nextThree
+  have roundThreeExact : roundThree = 3#usize := by
+    apply UScalar.eq_of_val_eq
+    rw [roundThreeStart]
+    exact afterTwoStart
+  obtain ⟨terminalIterator, terminalNext⟩ :=
+    tail_body_accepted_done_iterator_none queryFoldInst traceInst gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries execution.afterThree verified returnedSnapshot
+      traceOut execution.terminal
+  refine ⟨?_, ?_, ?_, terminalIterator, terminalNext⟩
+  · simpa [roundOneExact, afterOneIterator] using nextOne
+  · simpa [roundTwoExact, afterTwoIterator] using nextTwo
+  · simpa [roundThreeExact, afterThreeIterator] using nextThree
+
 #print axioms loop_success_yields_exact_trace
 #print axioms accepted_relation_loop_has_exact_trace
 #print axioms accepted_relation_loop_has_three_round_execution
+#print axioms ThreeRoundAcceptedTailExecution.iterator_equations
 
 end V7CallerCurrentReleaseR26AcceptedTailTrace
