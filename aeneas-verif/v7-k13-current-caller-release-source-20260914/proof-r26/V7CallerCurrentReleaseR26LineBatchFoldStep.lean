@@ -87,7 +87,9 @@ theorem active_line_batch_fold_step_exact
       generatedQm31ToExact scaleOut =
         generatedQm31ToExact scale *
           lineBatchFoldNumerator (generatedQm31ToExact alpha)
-            (generatedM31ToExact x) := by
+            (generatedM31ToExact x) ∧
+      scalesOut = scales.set index scaleOut ∧
+      xsOut = xs.set index xOut := by
   obtain ⟨high, highRun, highCanonical, highExact⟩ :=
     generated_double_x_m31_corresponds x hx
   obtain ⟨cross, crossRun, crossCanonical, crossExact⟩ :=
@@ -130,7 +132,8 @@ theorem active_line_batch_fold_step_exact
     Aeneas.Std.WP.spec_imp_exists
       (Slice.update_spec xs index expectedX xBound)
   refine ⟨scalesOut, xsOut, expectedScale, expectedX, ?_,
-    expectedXCanonical, expectedScaleCanonical, ?_, ?_⟩
+    expectedXCanonical, expectedScaleCanonical, ?_, ?_,
+    _scalesOutExact, _xsOutExact⟩
   · unfold
       sumcheck.WeightAccumulator.impl.fold_line_m31_batch_arity4_loop.body
     rw [if_pos active, xRead]
@@ -182,6 +185,72 @@ theorem active_line_batch_fold_step_exact
     unfold lineBatchFoldNumerator doubledM31
     ring_nf
 
+/-- Named result of one active line-batch body edge.  Keeping this adapter
+beside the arithmetic proof avoids repeatedly elaborating its nested
+existential/conjunction result in traversal proofs. -/
+structure ActiveLineBatchFoldStep
+    (scales : Slice RawQM31) (xs : Slice RawM31) (index : Std.Usize)
+    (scale : RawQM31) (x : RawM31)
+    (alpha alpha2 alpha3 : RawQM31) : Type where
+  scalesOut : Slice RawQM31
+  xsOut : Slice RawM31
+  scaleOut : RawQM31
+  xOut : RawM31
+  edge :
+    sumcheck.WeightAccumulator.impl.fold_line_m31_batch_arity4_loop.body
+        alpha alpha2 alpha3 scales xs index =
+      ok (cont (scalesOut, xsOut,
+        Std.Usize.wrapping_add index 1#usize))
+  xCanonical : GeneratedCanonicalM31 xOut
+  scaleCanonical : GeneratedCanonicalQM31 scaleOut
+  xExact : generatedM31ToExact xOut =
+    doubledM31 (doubledM31 (generatedM31ToExact x))
+  scaleExact : generatedQm31ToExact scaleOut =
+    generatedQm31ToExact scale *
+      lineBatchFoldNumerator (generatedQm31ToExact alpha)
+        (generatedM31ToExact x)
+  scalesSet : scalesOut = scales.set index scaleOut
+  xsSet : xsOut = xs.set index xOut
+
+theorem active_line_batch_fold_step_result
+    (scales : Slice RawQM31) (xs : Slice RawM31) (index : Std.Usize)
+    (scale : RawQM31) (x : RawM31)
+    (alpha alpha2 alpha3 : RawQM31)
+    (active : index < Slice.len scales)
+    (xBound : index.val < xs.val.length)
+    (hscale : GeneratedCanonicalQM31 scale)
+    (hx : GeneratedCanonicalM31 x)
+    (halpha : GeneratedCanonicalQM31 alpha)
+    (halpha2 : GeneratedCanonicalQM31 alpha2)
+    (halpha3 : GeneratedCanonicalQM31 alpha3)
+    (halpha2Exact : generatedQm31ToExact alpha2 =
+      generatedQm31ToExact alpha ^ 2)
+    (halpha3Exact : generatedQm31ToExact alpha3 =
+      generatedQm31ToExact alpha ^ 3)
+    (scaleRead : Slice.index_usize scales index = ok scale)
+    (xRead : Slice.index_usize xs index = ok x) :
+    Nonempty (ActiveLineBatchFoldStep scales xs index scale x
+      alpha alpha2 alpha3) := by
+  obtain ⟨scalesOut, xsOut, scaleOut, xOut, edge, xCanonical,
+      scaleCanonical, xExact, scaleExact, scalesSet, xsSet⟩ :=
+    active_line_batch_fold_step_exact scales xs index scale x
+      alpha alpha2 alpha3 active xBound hscale hx halpha halpha2 halpha3
+      halpha2Exact halpha3Exact scaleRead xRead
+  exact ⟨{
+    scalesOut := scalesOut
+    xsOut := xsOut
+    scaleOut := scaleOut
+    xOut := xOut
+    edge := edge
+    xCanonical := xCanonical
+    scaleCanonical := scaleCanonical
+    xExact := xExact
+    scaleExact := scaleExact
+    scalesSet := scalesSet
+    xsSet := xsSet }⟩
+
+
 #print axioms active_line_batch_fold_step_exact
+#print axioms active_line_batch_fold_step_result
 
 end V7CallerCurrentReleaseR26LineBatchFoldStep
