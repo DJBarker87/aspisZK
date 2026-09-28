@@ -1,5 +1,19 @@
 # Current V8 privacy-repair status
 
+## R36 explicit low residual polynomial — 2026-09-29
+
+[R36_SOURCE_RESIDUAL_MODEL.md](R36_SOURCE_RESIDUAL_MODEL.md) replaces the
+unspecified residual coefficient tensor with an explicit pinned T163,
+statement-point, chord and convolution model. Sixteen new declarations
+compile, including polynomial entry/matrix/determinant evaluation identities.
+Both retained genuine prefixes pass all 416 nontrivial residual-entry
+comparisons plus component checks and four negative-control families.
+
+The determinant is **not yet proved nonzero after source chord/query-root
+substitution**. Universal Rust correspondence and the real shared-oracle
+exception bound remain open. Full privacy and the 1M target are unfulfilled;
+selected CU remains 1,620,236 / 1,621,719, with no verifier change.
+
 ## R35 factor-basis leading coefficients — 2026-09-29
 
 [R35_FACTOR_LEADING.md](R35_FACTOR_LEADING.md) proves R34's fixed determinant

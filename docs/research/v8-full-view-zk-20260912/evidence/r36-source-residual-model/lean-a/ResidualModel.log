@@ -1,0 +1,146 @@
+info: r36_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:19:41: error: unexpected token ',*'; expected ']'
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:14:79: error: unsolved goals
+case none
+F : Type u_1
+inst✝ : CommRing F
+half : F
+j r : ℕ
+hw : weightedIndexLoop half 10 j 0 1 = Option.map (List.map fun e => (e.1, half ^ e.2)) (indexLoop 10 j 0)
+⊢ (List.map (fun e => if r = e.1 then half ^ e.2 else 0) ((indexLoop 10 j 0).getD [])).sum = 0
+
+case some
+F : Type u_1
+inst✝ : CommRing F
+half : F
+j r : ℕ
+hw : weightedIndexLoop half 10 j 0 1 = Option.map (List.map fun e => (e.1, half ^ e.2)) (indexLoop 10 j 0)
+val✝ : List (ℕ × ℕ)
+⊢ (List.map (fun e => if r = e.1 then half ^ e.2 else 0) ((indexLoop 10 j 0).getD [])).sum =
+    (List.map ((fun e => if r = e.1 then e.2 else 0) ∘ fun e => (e.1, half ^ e.2)) val✝).sum
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:29:42: error: unexpected token ',*'; expected ']'
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:24:82: error: unsolved goals
+case none
+F : Type u_1
+inst✝ : CommRing F
+half : F
+j r : ℕ
+hw : weightedIndexLoop half 10 j 0 1 = Option.map (List.map fun e => (e.1, half ^ e.2)) (indexLoop 10 j 0)
+⊢ (List.map (fun e => half ^ e.2 * xEntry half e.1 r) ((indexLoop 10 j 0).getD [])).sum = 0
+
+case some
+F : Type u_1
+inst✝ : CommRing F
+half : F
+j r : ℕ
+hw : weightedIndexLoop half 10 j 0 1 = Option.map (List.map fun e => (e.1, half ^ e.2)) (indexLoop 10 j 0)
+val✝ : List (ℕ × ℕ)
+⊢ (List.map (fun e => half ^ e.2 * xEntry half e.1 r) ((indexLoop 10 j 0).getD [])).sum =
+    (List.map ((fun e => e.2 * sparseX half e.1 r) ∘ fun e => (e.1, half ^ e.2)) val✝).sum
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:99:47: error: unsolved goals
+F : Type u_1
+inst✝¹ : CommRing F
+G : Type u_2
+inst✝ : CommRing G
+f : F →+* G
+half : F
+j r : ℕ
+⊢ (List.map (⇑f ∘ fun e => if r = e.1 then half ^ e.2 else 0) ((indexLoop 10 j 0).getD [])).sum =
+    (List.map (fun e => if r = e.1 then f half ^ e.2 else 0) ((indexLoop 10 j 0).getD [])).sum
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:100:41: warning: This simp argument is unused:
+  apply_ite
+
+Hint: Omit it from the simp argument list.
+  simp [̵x̵E̵n̵t̵r̵y̵,̵m̵a̵p̵_̵l̵i̵s̵t̵_̵s̵u̵m̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵]̵[̲x̲E̲n̲t̲r̲y̲,̲ ̲m̲a̲p̲_̲l̲i̲s̲t̲_̲s̲u̲m̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:102:49: error: unsolved goals
+F : Type u_1
+inst✝¹ : CommRing F
+G : Type u_2
+inst✝ : CommRing G
+f : F →+* G
+half : F
+j r : ℕ
+⊢ (List.map (⇑f ∘ fun e => half ^ e.2 * xEntry half e.1 r) ((indexLoop 10 j 0).getD [])).sum =
+    (List.map (fun e => f half ^ e.2 * xEntry (f half) e.1 r) ((indexLoop 10 j 0).getD [])).sum
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:103:42: warning: This simp argument is unused:
+  map_xEntry
+
+Hint: Omit it from the simp argument list.
+  simp [̵x̵x̵E̵n̵t̵r̵y̵,̵m̵a̵p̵_̵l̵i̵s̵t̵_̵s̵u̵m̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵m̵a̵p̵_̵x̵E̵n̵t̵r̵y̵]̵[̲x̲x̲E̲n̲t̲r̲y̲,̲ ̲m̲a̲p̲_̲l̲i̲s̲t̲_̲s̲u̲m̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:106:8: warning: Possibly looping simp theorem: `chordEntry.eq_1`
+
+Note: Possibly caused by: `delta`, `apply_ite`, `mul_one`, and `mul_zero`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:106:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:109:8: warning: Possibly looping simp theorem: `point.eq_1`
+
+Note: Possibly caused by: `carry`, `Fin.val_fin_lt`, and `apply_ite`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:109:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:122:8: warning: Possibly looping simp theorem: `quotient.eq_1`
+
+Note: Possibly caused by: `neg_mul` and `apply_ite`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:122:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:132:8: warning: Possibly looping simp theorem: `observation.eq_1`
+
+Note: Possibly caused by: `apply_ite`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean:132:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR19.ResidualModel.xEntry_eq' depends on axioms: [propext, sorryAx]
+'AspisR19.ResidualModel.xxEntry_eq' depends on axioms: [propext, sorryAx]
+'AspisR19.ResidualModel.chordEntry_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.ResidualModel.map_xEntry' depends on axioms: [propext, sorryAx]
+'AspisR19.ResidualModel.map_xxEntry' depends on axioms: [propext, sorryAx]
+'AspisR19.ResidualModel.map_chordEntry' depends on axioms: [propext, sorryAx]
+'AspisR19.ResidualModel.map_point' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.ResidualModel.map_pointWeight' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.ResidualModel.map_shift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.ResidualModel.map_quotient' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.ResidualModel.map_polyCoeff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR19.ResidualModel.map_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -R /home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r36-lean-20260929-a/lib/AspisV8R19/ResidualModel.olean /home/dombarker/project-offloads/aspis-r36-lean-src-20260929-a/AspisV8R19/ResidualModel.lean"
+	User time (seconds): 4.39
+	System time (seconds): 0.38
+	Percent of CPU this job got: 263%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.81
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2304316
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 57125
+	Voluntary context switches: 5062
+	Involuntary context switches: 99
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 40
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
