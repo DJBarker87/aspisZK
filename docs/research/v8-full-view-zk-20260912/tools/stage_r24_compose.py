@@ -34,7 +34,7 @@ if 'r24_qm' in n:
         shutil.copy2(a.native/name,dst/name);changed.append(dst/name)
     m['r24_qm']=n['r24_qm']
 if 'r24_inactive' in n:m['r24_inactive']=n['r24_inactive']
-for key in ['r24_addsub','r24_packed']:
+for key in ['r24_addsub','r24_packed','r24_prepared','r24_inline','r24_reconstruct']:
     if key in n:m[key]=n[key]
 for path in changed:m['files'][str(path.relative_to(dst))]=sha(path)
 m['r24_compose']={'control_manifest_sha256':sha(a.control/'r18-stage.json'),'native_manifest_sha256':sha(a.native/'r18-stage.json'),'scalar_transpose_installed':True,'source_files':{str(p.relative_to(dst)):sha(p)for p in changed}}
