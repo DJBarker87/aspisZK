@@ -37,6 +37,16 @@ def RawUniversalHeadroom (raw : Raw) : Prop :=
     GeneratedCanonicalM31 left → GeneratedCanonicalM31 right →
     raw.val[lane]!.val + rawM31Product left right < 2 ^ 64
 
+noncomputable def generatedInputPairs
+    (weight value : QM31) : Array Pair 3#usize :=
+  Array.make 3#usize [
+    (weight.c0, value.c0),
+    (weight.c1, value.c1),
+    (⟨canonicalM31Sum weight.c0.a weight.c1.a,
+       canonicalM31Sum weight.c0.b weight.c1.b⟩,
+     ⟨canonicalM31Sum value.c0.a value.c1.a,
+       canonicalM31Sum value.c0.b value.c1.b⟩)]
+
 private theorem slice_index_run
     {T : Type} [Inhabited T] (values : Slice T) (index : Std.Usize)
     (bound : index.val < values.length) :
@@ -177,6 +187,71 @@ theorem generated_raw_outer_body_active
     · simpa [pairs, weight, value] using
         innerNatural component componentBound
 
+/-- Canonicalized form used by the four-input loop invariant. -/
+theorem generated_raw_outer_body_active_canonical
+    (weights values : Slice QM31)
+    (iter nextIter : core.ops.range.Range Std.Usize)
+    (index : Std.Usize) (raw : Raw)
+    (iteratorRun :
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize iter =
+        ok (some index, nextIter))
+    (weightBound : index.val < weights.length)
+    (valueBound : index.val < values.length)
+    (weightCanonical :
+      GeneratedCanonicalQM31 weights.val[index.val]!)
+    (valueCanonical :
+      GeneratedCanonicalQM31 values.val[index.val]!)
+    (headroom : RawUniversalHeadroom raw) :
+    ∃ rawNext,
+      field.qm31_dot_loop0_loop0.body weights values iter raw =
+        ok (cont (nextIter, rawNext)) ∧
+      ∀ component, component < 3 →
+        ExactRawComponentStep raw rawNext component
+            (generatedInputPairs weights.val[index.val]!
+              values.val[index.val]!).val[component]! ∧
+          NaturalRawComponentStep raw rawNext component
+            (generatedInputPairs weights.val[index.val]!
+              values.val[index.val]!).val[component]! := by
+  obtain ⟨weightSum, valueSum, rawNext, bodyRun, weightSumRun,
+      valueSumRun, _weightSumCanonical, _valueSumCanonical,
+      _weightSumExact, _valueSumExact, steps⟩ :=
+    generated_raw_outer_body_active weights values iter nextIter index raw
+      iteratorRun weightBound valueBound weightCanonical valueCanonical
+      headroom
+  have weightA := canonicalM31Sum_spec
+    weights.val[index.val]!.c0.a weights.val[index.val]!.c1.a
+      weightCanonical.1.1 weightCanonical.2.1
+  have weightB := canonicalM31Sum_spec
+    weights.val[index.val]!.c0.b weights.val[index.val]!.c1.b
+      weightCanonical.1.2 weightCanonical.2.2
+  have valueA := canonicalM31Sum_spec
+    values.val[index.val]!.c0.a values.val[index.val]!.c1.a
+      valueCanonical.1.1 valueCanonical.2.1
+  have valueB := canonicalM31Sum_spec
+    values.val[index.val]!.c0.b values.val[index.val]!.c1.b
+      valueCanonical.1.2 valueCanonical.2.2
+  have weightSumExact : weightSum =
+      ⟨canonicalM31Sum weights.val[index.val]!.c0.a
+          weights.val[index.val]!.c1.a,
+        canonicalM31Sum weights.val[index.val]!.c0.b
+          weights.val[index.val]!.c1.b⟩ := by
+    unfold field.CM31.add at weightSumRun
+    rw [weightA.1, weightB.1] at weightSumRun
+    exact Result.ok.inj weightSumRun.symm
+  have valueSumExact : valueSum =
+      ⟨canonicalM31Sum values.val[index.val]!.c0.a
+          values.val[index.val]!.c1.a,
+        canonicalM31Sum values.val[index.val]!.c0.b
+          values.val[index.val]!.c1.b⟩ := by
+    unfold field.CM31.add at valueSumRun
+    rw [valueA.1, valueB.1] at valueSumRun
+    exact Result.ok.inj valueSumRun.symm
+  subst weightSum
+  subst valueSum
+  refine ⟨rawNext, bodyRun, ?_⟩
+  simpa [generatedInputPairs] using steps
+
 #print axioms generated_raw_outer_body_active
+#print axioms generated_raw_outer_body_active_canonical
 
 end V7CallerCurrentReleaseR26Qm31DotRawOuterBody
