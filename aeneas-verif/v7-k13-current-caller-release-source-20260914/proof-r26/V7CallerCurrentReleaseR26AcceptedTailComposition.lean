@@ -22,6 +22,54 @@ open V7CallerCurrentReleaseR26AcceptedTailSemantics
 abbrev TailState (Trace : Type) :=
   V7CallerCurrentReleaseR26AcceptedTailSnapshot.TailState Trace
 
+private theorem update_one_reads_one
+    (values updated : Array field.QM31 4#usize) (value : field.QM31)
+    (run : values.update 1#usize value = ok updated) :
+    updated.index_usize 1#usize = ok value := by
+  simp [Array.update] at run
+  subst updated
+  simp [Array.index_usize]
+
+private theorem update_two_preserves_one
+    (values updated : Array field.QM31 4#usize) (value : field.QM31)
+    (run : values.update 2#usize value = ok updated) :
+    updated.index_usize 1#usize = values.index_usize 1#usize := by
+  simp [Array.update] at run
+  subst updated
+  simp [Array.index_usize]
+
+private theorem update_two_reads_two
+    (values updated : Array field.QM31 4#usize) (value : field.QM31)
+    (run : values.update 2#usize value = ok updated) :
+    updated.index_usize 2#usize = ok value := by
+  simp [Array.update] at run
+  subst updated
+  simp [Array.index_usize]
+
+private theorem update_three_preserves_one
+    (values updated : Array field.QM31 4#usize) (value : field.QM31)
+    (run : values.update 3#usize value = ok updated) :
+    updated.index_usize 1#usize = values.index_usize 1#usize := by
+  simp [Array.update] at run
+  subst updated
+  simp [Array.index_usize]
+
+private theorem update_three_preserves_two
+    (values updated : Array field.QM31 4#usize) (value : field.QM31)
+    (run : values.update 3#usize value = ok updated) :
+    updated.index_usize 2#usize = values.index_usize 2#usize := by
+  simp [Array.update] at run
+  subst updated
+  simp [Array.index_usize]
+
+private theorem update_three_reads_three
+    (values updated : Array field.QM31 4#usize) (value : field.QM31)
+    (run : values.update 3#usize value = ok updated) :
+    updated.index_usize 3#usize = ok value := by
+  simp [Array.update] at run
+  subst updated
+  simp [Array.index_usize]
+
 /-- The four source steps obtained from one accepted production loop run. -/
 structure AcceptedTailSourceTrace
     {Trace : Type}
@@ -150,5 +198,93 @@ theorem accepted_relation_loop_exposes_source_trace
     roundTwo := roundTwo
     roundThree := roundThree
     terminal := terminal }⟩
+
+/-- The accepted transcript's three later alpha entries are exactly the
+values returned by the three literal source challenge calls. -/
+theorem AcceptedTailSourceTrace.verified_alpha_exact
+    {Trace : Type}
+    {gamma : field.QM31}
+    {relationFields : Array (Array field.QM31 6#usize) 4#usize}
+    {selector : Std.U8} {semanticPoint : Array field.QM31 10#usize}
+    {kappa : field.QM31} {queries : Array Std.U32 16#usize}
+    {compactCounter : Std.U8} {frontierNodes : Std.Usize}
+    {transcriptStateAfterQueries : Array Std.U8 32#usize}
+    {snapshot : Option v6_transcript.V6QueryBatchPrechallengeSnapshot}
+    {queryBatchChallenge : field.QM31}
+    {authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch}
+    {transcript0 : transcript.Transcript} {trace0 : Trace}
+    {runningClaim : field.QM31} {weights : sumcheck.WeightAccumulator}
+    {alpha : Array field.QM31 4#usize}
+    {foldedValues : Array field.QM31 256#usize}
+    {verified : v6_transcript.V6VerifiedTranscript}
+    {returnedSnapshot : Option
+      v6_transcript.V6QueryBatchPrechallengeSnapshot}
+    {traceOut : Trace}
+    (source : AcceptedTailSourceTrace gamma relationFields selector
+      semanticPoint kappa queries compactCounter frontierNodes
+      transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut) :
+    verified.alpha.index_usize 1#usize = ok source.roundOne.alphaOne ∧
+      verified.alpha.index_usize 2#usize = ok source.roundTwo.alphaTwo ∧
+      verified.alpha.index_usize 3#usize = ok source.roundThree.alphaThree := by
+  have outputAlpha :
+      verified.alpha = source.afterThree.2.2.2.2.2.1 :=
+    congrArg v6_transcript.V6VerifiedTranscript.alpha
+      source.terminal.outputExact
+  have one :
+      verified.alpha.index_usize 1#usize =
+        ok source.roundOne.alphaOne := by
+    calc
+      verified.alpha.index_usize 1#usize =
+          source.afterThree.2.2.2.2.2.1.index_usize 1#usize :=
+        congrArg (fun values => values.index_usize 1#usize) outputAlpha
+      _ = source.roundThree.alphaAfter.index_usize 1#usize :=
+        congrArg (fun values => values.index_usize 1#usize)
+          source.roundThree.alphaAfterExact
+      _ = source.afterTwo.2.2.2.2.2.1.index_usize 1#usize :=
+        update_three_preserves_one _ _ _
+          source.roundThree.alphaUpdateSuccess
+      _ = source.roundTwo.alphaAfter.index_usize 1#usize :=
+        congrArg (fun values => values.index_usize 1#usize)
+          source.roundTwo.alphaAfterExact
+      _ = source.afterOne.2.2.2.2.2.1.index_usize 1#usize :=
+        update_two_preserves_one _ _ _ source.roundTwo.alphaUpdateSuccess
+      _ = source.roundOne.alphaAfter.index_usize 1#usize :=
+        congrArg (fun values => values.index_usize 1#usize)
+          source.roundOne.alphaAfterExact
+      _ = ok source.roundOne.alphaOne :=
+        update_one_reads_one _ _ _ source.roundOne.alphaUpdateSuccess
+  have two :
+      verified.alpha.index_usize 2#usize =
+        ok source.roundTwo.alphaTwo := by
+    calc
+      verified.alpha.index_usize 2#usize =
+          source.afterThree.2.2.2.2.2.1.index_usize 2#usize :=
+        congrArg (fun values => values.index_usize 2#usize) outputAlpha
+      _ = source.roundThree.alphaAfter.index_usize 2#usize :=
+        congrArg (fun values => values.index_usize 2#usize)
+          source.roundThree.alphaAfterExact
+      _ = source.afterTwo.2.2.2.2.2.1.index_usize 2#usize :=
+        update_three_preserves_two _ _ _
+          source.roundThree.alphaUpdateSuccess
+      _ = source.roundTwo.alphaAfter.index_usize 2#usize :=
+        congrArg (fun values => values.index_usize 2#usize)
+          source.roundTwo.alphaAfterExact
+      _ = ok source.roundTwo.alphaTwo :=
+        update_two_reads_two _ _ _ source.roundTwo.alphaUpdateSuccess
+  have three :
+      verified.alpha.index_usize 3#usize =
+        ok source.roundThree.alphaThree := by
+    calc
+      verified.alpha.index_usize 3#usize =
+          source.afterThree.2.2.2.2.2.1.index_usize 3#usize :=
+        congrArg (fun values => values.index_usize 3#usize) outputAlpha
+      _ = source.roundThree.alphaAfter.index_usize 3#usize :=
+        congrArg (fun values => values.index_usize 3#usize)
+          source.roundThree.alphaAfterExact
+      _ = ok source.roundThree.alphaThree :=
+        update_three_reads_three _ _ _ source.roundThree.alphaUpdateSuccess
+  exact ⟨one, two, three⟩
 
 end V7CallerCurrentReleaseR26AcceptedTailComposition
