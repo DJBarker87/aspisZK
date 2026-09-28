@@ -28,6 +28,23 @@ private theorem bind_eq_ok_iff {Input Output : Type}
       ∃ value, input = ok value ∧ next value = ok output := by
   cases input <;> simp [Bind.bind, Aeneas.Std.bind]
 
+private theorem qm31_ne_ok_false_iff_eq
+    (left right : field.QM31) :
+    core.cmp.PartialEq.ne.trait_default
+        field.QM31.Insts.CoreCmpPartialEqQM31 left right = ok false ↔
+      left = right := by
+  rcases left with ⟨⟨left00, left01⟩, ⟨left10, left11⟩⟩
+  rcases right with ⟨⟨right00, right01⟩, ⟨right10, right11⟩⟩
+  by_cases h00 : left00 = right00 <;>
+    by_cases h01 : left01 = right01 <;>
+    by_cases h10 : left10 = right10 <;>
+    by_cases h11 : left11 = right11 <;>
+    simp [core.cmp.PartialEq.ne.trait_default,
+      core.cmp.PartialEq.ne.default,
+      field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+      field.CM31.Insts.CoreCmpPartialEqCM31.eq,
+      field.M31.Insts.CoreCmpPartialEqM31.eq, h00, h01, h10, h11]
+
 /-- Exact arithmetic and transcript facts exposed by the literal round-one
 continuation edge. -/
 structure RoundOneSourceStep
@@ -613,5 +630,149 @@ theorem round_three_edge_exposes_source_step
               foldedValuesAfterExact := foldedValuesExact.symm }⟩
           · simp only [foldedTrue] at edge
             cases edge
+
+/-- Exact facts exposed by the accepted terminal edge. -/
+structure AcceptedTerminalSourceStep
+    {Trace : Type}
+    (gamma : field.QM31) (kappa : field.QM31)
+    (selector : Std.U8) (semanticPoint : Array field.QM31 10#usize)
+    (queries : Array Std.U32 16#usize)
+    (compactCounter : Std.U8) (frontierNodes : Std.Usize)
+    (transcriptStateAfterQueries : Array Std.U8 32#usize)
+    (snapshot : Option v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (queryBatchChallenge : field.QM31)
+    (authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch)
+    (runningClaim : field.QM31) (weights : sumcheck.WeightAccumulator)
+    (alpha : Array field.QM31 4#usize)
+    (foldedValues : Array field.QM31 256#usize)
+    (verified : v6_transcript.V6VerifiedTranscript)
+    (returnedSnapshot : Option
+      v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (traceOut : Trace) : Type where
+  terminalPrefix : Slice field.QM31
+  terminalDot : field.QM31
+  queryIterator : core.array.iter.IntoIter field.QM31 16#usize
+  foldedQuerySum : field.QM31
+  terminalPrefixSuccess :
+    core.array.Array.index
+        (core.ops.index.IndexSlice
+          (core.slice.index.SliceIndexRangeToUsizeSlice field.QM31))
+        foldedValues { «end» := 4#usize } = ok terminalPrefix
+  terminalDotSuccess :
+    sumcheck.WeightAccumulator.impl.dot weights terminalPrefix = ok terminalDot
+  terminalNeSuccess :
+    core.cmp.PartialEq.ne.trait_default
+        field.QM31.Insts.CoreCmpPartialEqQM31 terminalDot runningClaim =
+      ok false
+  terminalExact : terminalDot = runningClaim
+  queryIteratorSuccess :
+    Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+      authenticatedQueries.values = ok queryIterator
+  foldedQuerySumSuccess :
+    core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+        (BuiltinFnMut (field.QM31 × field.QM31) field.QM31) queryIterator
+        field.QM31.ZERO (fun pair => field.QM31.add pair.1 pair.2) =
+      ok foldedQuerySum
+  outputExact : verified = {
+    gamma
+    kappa
+    alpha
+    queries
+    selector
+    compact_counter := compactCounter
+    frontier_nodes := frontierNodes
+    semantic_point := semanticPoint
+    query_batch_challenge := queryBatchChallenge
+    folded_query_sum := foldedQuerySum
+    transcript_state_after_queries := transcriptStateAfterQueries
+  }
+  snapshotExact : returnedSnapshot = snapshot
+
+/-- Inversion of the exact accepted terminal body edge. -/
+theorem terminal_edge_exposes_source_step
+    {QueryFold Trace : Type}
+    (queryFoldInst : core.ops.function.FnOnce QueryFold
+      v6_transcript.V6QueryBatchView
+      (core.result.Result v6_query_batch.V6AuthenticatedQueryBatch
+        v6_onefold.V6WireError))
+    (traceInst : core.ops.function.FnMut Trace
+      v6_transcript.V6RelationDiagnosticPhase Unit)
+    (gamma : field.QM31)
+    (relationFields : Array (Array field.QM31 6#usize) 4#usize)
+    (selector : Std.U8) (semanticPoint : Array field.QM31 10#usize)
+    (kappa : field.QM31) (queries : Array Std.U32 16#usize)
+    (compactCounter : Std.U8) (frontierNodes : Std.Usize)
+    (transcriptStateAfterQueries : Array Std.U8 32#usize)
+    (snapshot : Option v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (queryBatchChallenge : field.QM31)
+    (authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch)
+    (iter0 terminalIterator : core.ops.range.Range Std.Usize)
+    (transcript0 : transcript.Transcript) (trace0 : Trace)
+    (runningClaim : field.QM31) (weights : sumcheck.WeightAccumulator)
+    (alpha : Array field.QM31 4#usize)
+    (foldedValues : Array field.QM31 256#usize)
+    (verified : v6_transcript.V6VerifiedTranscript)
+    (returnedSnapshot : Option
+      v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (traceOut : Trace)
+    (iterator :
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize iter0 =
+        ok (none, terminalIterator))
+    (edge :
+      V7CallerCurrentReleaseR26AcceptedTailSnapshot.tailBody queryFoldInst
+        traceInst gamma relationFields selector semanticPoint kappa queries
+        compactCounter frontierNodes transcriptStateAfterQueries snapshot
+        queryBatchChallenge authenticatedQueries
+        (iter0, transcript0, trace0, runningClaim, weights, alpha,
+          foldedValues) =
+        ok (done (core.result.Result.Ok (verified, returnedSnapshot),
+          traceOut))) :
+    Nonempty (AcceptedTerminalSourceStep gamma kappa selector semanticPoint
+      queries compactCounter frontierNodes transcriptStateAfterQueries
+      snapshot queryBatchChallenge authenticatedQueries runningClaim weights
+      alpha foldedValues verified returnedSnapshot traceOut) := by
+  unfold V7CallerCurrentReleaseR26AcceptedTailSnapshot.tailBody at edge
+  unfold v6_transcript.finish_onefold_relation_after_prechallenge_loop.body at edge
+  rw [iterator] at edge
+  simp only [bind_tc_ok] at edge
+  rw [bind_eq_ok_iff] at edge
+  obtain ⟨terminalPrefix, hprefix, edge⟩ := edge
+  rw [bind_eq_ok_iff] at edge
+  obtain ⟨terminalDot, hdot, edge⟩ := edge
+  rw [bind_eq_ok_iff] at edge
+  obtain ⟨terminalMismatch, hne, edge⟩ := edge
+  by_cases mismatch : terminalMismatch = true
+  · simp [mismatch] at edge
+  · have mismatchFalse : terminalMismatch = false := Bool.eq_false_of_not_eq_true mismatch
+    simp only [mismatchFalse, Bool.false_eq_true, ↓reduceIte] at edge
+    rw [bind_eq_ok_iff] at edge
+    obtain ⟨tracePair, htrace, edge⟩ := edge
+    rw [bind_eq_ok_iff] at edge
+    obtain ⟨queryIterator, hqueryIterator, edge⟩ := edge
+    rw [bind_eq_ok_iff] at edge
+    obtain ⟨foldedQuerySum, hfoldedQuerySum, edge⟩ := edge
+    have doneExact := Result.ok.inj edge
+    have returnedPairExact := ControlFlow.done.inj doneExact
+    have acceptedResultExact := congrArg Prod.fst returnedPairExact
+    have acceptedPairExact := core.result.Result.Ok.inj acceptedResultExact
+    have outputExact := congrArg Prod.fst acceptedPairExact
+    have snapshotExact := congrArg Prod.snd acceptedPairExact
+    have neFalse :
+        core.cmp.PartialEq.ne.trait_default
+            field.QM31.Insts.CoreCmpPartialEqQM31 terminalDot runningClaim =
+          ok false := hne.trans (congrArg Result.ok mismatchFalse)
+    exact ⟨{
+      terminalPrefix := terminalPrefix
+      terminalDot := terminalDot
+      queryIterator := queryIterator
+      foldedQuerySum := foldedQuerySum
+      terminalPrefixSuccess := hprefix
+      terminalDotSuccess := hdot
+      terminalNeSuccess := neFalse
+      terminalExact := (qm31_ne_ok_false_iff_eq terminalDot runningClaim).mp neFalse
+      queryIteratorSuccess := hqueryIterator
+      foldedQuerySumSuccess := hfoldedQuerySum
+      outputExact := outputExact.symm
+      snapshotExact := snapshotExact.symm }⟩
 
 end V7CallerCurrentReleaseR26AcceptedTailSemantics
