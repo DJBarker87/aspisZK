@@ -1,0 +1,129 @@
+info: r35_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:32:6: error: unsolved goals
+case pos
+F : Type u_1
+inst✝ : CommRing F
+half : F
+r : ℕ
+e : ℕ × ℕ
+es : List (ℕ × ℕ)
+ih :
+  (List.map (fun e => if r = e.1 then half ^ e.2 else 0) es).sum =
+    (List.map (fun e => half ^ e.2) (List.filter (fun e => e.1 == r) es)).sum
+h : r = e.1
+⊢ (List.map (fun e_1 => if e.1 = e_1.1 then half ^ e_1.2 else 0) es).sum =
+    (List.map (fun e => half ^ e.2) (List.filter (fun e_1 => e_1.1 == e.1) es)).sum
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:32:14: warning: This simp argument is unused:
+  List.filter_cons
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵_̵c̵o̵n̵s̵,̵h̵,̵i̵h̵]̵[̲h̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:32:33: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [List.filter_cons, ̲h,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:34:14: warning: This simp argument is unused:
+  List.filter_cons
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵_̵c̵o̵n̵s̵,̵h̵,̵h̵n̵,̵i̵h̵]̵[̲h̲,̲ ̲h̲n̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:70:23: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ -1
+  0 ≤ a ≤ 27
+  a - b ≥ 1
+  a - d ≤ -1
+where
+ a := ↑n
+ b := ↑j
+ c := ↑(j, v.1, v.2).2.1
+ d := ↑v.1
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:123:14: error: Application type mismatch: The argument
+  ↑j
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.26
+of sort `Type (?u.26 + 1)` in the application
+  @PrincipalSeg ↑j
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:123:21: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.25
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:126:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ d ≤ 12
+  0 ≤ d - 3*e ≤ 2
+  c - e ≤ 0
+  0 ≤ 3*c + d - 3*e ≤ 12
+  0 ≤ b ≤ 12
+  0 ≤ a ≤ 12
+  a - b ≥ 1
+where
+ a := ↑↑(id i)
+ b := ↑↑(id j)
+ c := ↑↑i / 3
+ d := ↑↑j
+ e := ↑↑j / 3
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:130:82: error: unsolved goals
+F : Type u_1
+inst✝ : CommRing F
+half : F
+roots : List F
+hl : roots.length = 22
+i : Fin 13
+he : (List.replicate (↑i / 3) 0 ++ roots).length = 22 + ↑i / 3
+⊢ (if True then half ^ totalExponent (List.replicate (↑i / 3) 0 ++ roots).length else 0) =
+    half ^ totalExponent (List.replicate (↑i / 3) 0 ++ roots).length
+/home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean:132:26: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [changeMatrix,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR19.FactorLeading.top_index' depends on axioms: [propext]
+'AspisR19.FactorLeading.growth27' depends on axioms: [propext]
+'AspisR19.FactorLeading.sparseX_top' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR19.FactorLeading.small_growth' depends on axioms: [propext, Quot.sound]
+'AspisR19.FactorLeading.scatter_above' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR19.FactorLeading.scatter_top' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR19.FactorLeading.factor_support' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.FactorLeading.factor_leading' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.FactorLeading.change_upper' depends on axioms: [propext, sorryAx]
+'AspisR19.FactorLeading.change_diagonal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.FactorLeading.change_determinant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.FactorLeading.factor_minor_nonzero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -R /home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r35-lean-20260929-a/lib/AspisV8R19/FactorLeading.olean /home/dombarker/project-offloads/aspis-r35-lean-src-20260929-a/AspisV8R19/FactorLeading.lean"
+	User time (seconds): 2.28
+	System time (seconds): 0.73
+	Percent of CPU this job got: 160%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.87
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2289148
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 20
+	Minor (reclaiming a frame) page faults: 77050
+	Voluntary context switches: 3360
+	Involuntary context switches: 98
+	Swaps: 0
+	File system inputs: 5024
+	File system outputs: 48
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

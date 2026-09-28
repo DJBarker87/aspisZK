@@ -1,8 +1,18 @@
 # Current V8 privacy-repair status
 
+## R35 factor-basis leading coefficients — 2026-09-29
+
+[R35_FACTOR_LEADING.md](R35_FACTOR_LEADING.md) proves R34's fixed determinant
+scale from the source-shaped carry recurrence, for every list of 22 roots.
+Thirteen new Lean declarations compile without added axioms. This closes
+the determinant-scale premise for the explicit model, **not** universal
+observation-rank coverage or Rust semantics. The residual observation
+matrix/nonvanishing and actual shared-oracle exceptional-event law remain
+the next substantial source/security obligations. CU and verifier unchanged.
+
 ## R34 low residual factor — 2026-09-29
 
-Latest formal/source milestone: [R34_LOW_RESIDUAL_FACTOR.md](R34_LOW_RESIDUAL_FACTOR.md).
+Prior formal/source milestone: [R34_LOW_RESIDUAL_FACTOR.md](R34_LOW_RESIDUAL_FACTOR.md).
 Eight new Lean declarations compile; two unchanged genuine source prefixes
 pass the low-block weight and query-factor basis identities. The factor
 basis scales the 13-by-13 residual determinant by `2^-269`. The polynomial
