@@ -1,0 +1,30 @@
+{
+  "stage": "/home/dombarker/project-offloads/aspis-r20-shared-blocks-20260928-a",
+  "module": "docs/research/v8-no-work-100-20260907/experiments/r19_channel_ordinary.rs",
+  "scope": "heuristic static review only",
+  "assessment": "Low unwrap advisory retained. The new slice conversion takes exactly four elements, rounds are 1..4, and the only callers pass validated 20-element block slices. No code change or critical/high dismissal.",
+  "result": {
+    "issues": [
+      {
+        "severity": "low",
+        "rule": "unsafe-unwrap",
+        "title": "Use of `.unwrap()` may panic",
+        "location": "research/r19_channel_ordinary.rs:148:22",
+        "description": "`.unwrap()` panics the program on failure. Solana program panics abort the transaction and emit no useful diagnostics. Prefer `.ok_or(ProgramError::...)?` or `.map_err(|_| ...)?`.",
+        "suggestion": "Replace `.unwrap()` with explicit error handling: `.ok_or(ProgramError::InvalidArgument)?` (Option) or `.map_err(|_| ProgramError::InvalidAccountData)?` (Result), or `.expect(\"reason\")` to document why it cannot fail.",
+        "fingerprint": "unsafe-unwrap:c1ad079c1114"
+      }
+    ],
+    "suggestions": [],
+    "framework_detected": "unknown",
+    "false_positive_hints": {
+      "unsafe-unwrap": [
+        "value checked by preceding match/if-let/let-else, not an is_some/is_ok guard",
+        "guard diverges via ?/bail!/panic!, not return/break/continue",
+        "receiver infallible beyond modeled try_into/to_le_bytes shapes (first() on known non-empty)",
+        "validated by a helper before the call"
+      ]
+    },
+    "require_another_tool_call_after_fixing": false
+  }
+}

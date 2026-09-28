@@ -5,7 +5,7 @@ from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--stage',type=Path,required=True);p.add_argument('--mode',choices=['host','sbf','svm'],required=True);a=p.parse_args();s=a.stage;here=Path(__file__).parent
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 m=json.loads((s/'r18-stage.json').read_text());composed='r24_compose' in m
-expected_pins=((176 if 'r24_qm' in m else 175) if composed else 174)+(3 if 'r24_simple_dot' in m else 0)+(1 if 'r25_checked_dot' in m else 0)
+expected_pins=((176 if 'r24_qm' in m else 175) if composed else 174)+(3 if 'r24_simple_dot' in m else 0)+(1 if 'r25_checked_dot' in m else 0)+(2 if 'r27_sparse_prepare'in m else 0)
 assert len(m['files'])==expected_pins and m['r23_width']['rewrite_sites']==2
 for n,h in m['files'].items():assert sha(s/n)==h,n
 env=dict(os.environ,NO_DNA='1',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true')
@@ -17,7 +17,11 @@ ex=s/'docs/research/v8-no-work-100-20260907/experiments'
 if a.mode=='host':
     meta=json.loads((s/'r17-stage.json').read_text());cache=Path('/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-host/target')
     env.update(RUSTFLAGS=meta['rustflags'],CARGO_TARGET_DIR=str(cache))
-    if 'r24_simple_dot' in m:
+    if 'r27_sparse_prepare'in m:
+        run('ordinary-compile.log',['/home/dombarker/.cargo/bin/cargo','build','--release','--offline','--locked','--jobs','2','--manifest-path',str(ex/'performance-host/Cargo.toml'),'--features',meta['features'],'--bin','r27-check'])
+        inputs=[here/f'public-world{w}.bin' for w in range(2)]
+        run('ordinary-check.log',[str(cache/'release/r27-check'),str(out/'ordinary-generated'),*map(str,inputs)])
+    elif 'r24_simple_dot' in m:
         run('dot-compile.log',['/home/dombarker/.cargo/bin/cargo','build','--release','--offline','--locked','--jobs','2','--manifest-path',str(ex/'performance-host/Cargo.toml'),'--features',meta['features'],'--bin','r24-dot-check'])
         run('dot-check.log',[str(cache/'release/r24-dot-check')])
     run('compile.log',['/home/dombarker/.cargo/bin/cargo','build','--release','--offline','--locked','--jobs','2','--manifest-path',str(ex/'performance-host/Cargo.toml'),'--features',meta['features'],'--bin','aspis-v8-performance-host'])
