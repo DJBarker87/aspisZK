@@ -80,6 +80,19 @@ private theorem generated_m31_reduce_u64_from_reference
   simp [V7CallerCurrentReleaseR26.field.M31.reduce_u64,
     generated_reduce_u64_eq_reference, h]
 
+/-- The generated `M31.reduce_u64` returns the canonical residue represented
+by its input word.  The optimized dot-product proof uses this at each chunk
+boundary. -/
+theorem generated_m31_reduce_u64_corresponds (x : Std.U64) :
+    ∃ out : M31,
+      V7CallerCurrentReleaseR26.field.M31.reduce_u64 x = ok out ∧
+      GeneratedCanonicalM31 out ∧
+      generatedM31ToExact out = (x.val : ExactM31) := by
+  obtain ⟨out, run, _raw, canonical, exact⟩ :=
+    AspisAeneasM31ReduceU64.extracted_reduce_u64_corresponds x
+  exact ⟨out, generated_m31_reduce_u64_from_reference x out run,
+    canonical, exact⟩
+
 @[simp] private theorem from_u64_u32_eq_cast (x : Std.U32) :
     core.convert.num.FromU64U32.from x = UScalar.cast .U64 x := by
   apply UScalar.eq_of_val_eq
@@ -107,7 +120,7 @@ private theorem generated_m31_mul_eq_multiplicative (a b : M31) :
   simp only [Std.lift, bind_tc_ok]
   rw [generated_reduce_u64_eq_multiplicative]
 
-private theorem generated_m31_add_corresponds
+theorem generated_m31_add_corresponds
     (a b : M31)
     (ha : AspisAeneasCM31Multiplicative.CanonicalRawM31 a.val)
     (hb : AspisAeneasCM31Multiplicative.CanonicalRawM31 b.val) :
@@ -122,7 +135,7 @@ private theorem generated_m31_add_corresponds
   rw [generated_m31_add_eq_multiplicative]
   exact outputEquation
 
-private theorem generated_m31_sub_corresponds
+theorem generated_m31_sub_corresponds
     (a b : M31)
     (ha : AspisAeneasCM31Multiplicative.CanonicalRawM31 a.val)
     (hb : AspisAeneasCM31Multiplicative.CanonicalRawM31 b.val) :
@@ -137,7 +150,7 @@ private theorem generated_m31_sub_corresponds
   rw [generated_m31_sub_eq_multiplicative]
   exact outputEquation
 
-private theorem generated_m31_mul_corresponds
+theorem generated_m31_mul_corresponds
     (a b : M31)
     (ha : AspisAeneasCM31Multiplicative.CanonicalRawM31 a.val)
     (hb : AspisAeneasCM31Multiplicative.CanonicalRawM31 b.val) :
@@ -224,7 +237,7 @@ private theorem generated_reduce_sum_product_corresponds
     simpa [product, left, right] using hreduce
   · rw [hexact, hproduct, Nat.cast_mul, Nat.cast_add, Nat.cast_add]
 
-private theorem generated_cm31_add_corresponds
+theorem generated_cm31_add_corresponds
     (x y : GeneratedCM31)
     (hx : GeneratedCanonicalCM31 x) (hy : GeneratedCanonicalCM31 y) :
     ∃ out : GeneratedCM31,
@@ -243,7 +256,7 @@ private theorem generated_cm31_add_corresponds
     · exact hexactA
     · exact hexactB
 
-private theorem generated_cm31_sub_corresponds
+theorem generated_cm31_sub_corresponds
     (x y : GeneratedCM31)
     (hx : GeneratedCanonicalCM31 x) (hy : GeneratedCanonicalCM31 y) :
     ∃ out : GeneratedCM31,
@@ -262,7 +275,7 @@ private theorem generated_cm31_sub_corresponds
     · exact hexactA
     · exact hexactB
 
-private theorem generated_cm31_mul_corresponds
+theorem generated_cm31_mul_corresponds
     (x y : GeneratedCM31)
     (hx : GeneratedCanonicalCM31 x) (hy : GeneratedCanonicalCM31 y) :
     ∃ out : GeneratedCM31,
@@ -316,7 +329,7 @@ private theorem generated_cm31_mul_corresponds
     · simpa [generatedCm31ToExact, sub_eq_add_neg] using realExact
     · simpa [generatedCm31ToExact] using imagExact
 
-private theorem generated_mul_by_r_corresponds
+theorem generated_mul_by_r_corresponds
     (x : GeneratedCM31) (hx : GeneratedCanonicalCM31 x) :
     ∃ out : GeneratedCM31,
       V7CallerCurrentReleaseR26.field.mul_by_r x = ok out ∧
@@ -869,6 +882,7 @@ theorem generated_qm31_square_corresponds
       ring
 
 #print axioms generated_qm31_zero_canonical
+#print axioms generated_m31_reduce_u64_corresponds
 #print axioms generated_qm31_add_corresponds
 #print axioms generated_qm31_sub_corresponds
 #print axioms generated_qm31_mul_corresponds
