@@ -5,6 +5,13 @@ from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--project',type=Path,required=True);p.add_argument('--stage',type=Path,required=True);p.add_argument('--wires',type=Path,required=True);p.add_argument('--trace',action='store_true')
 a=p.parse_args();here=Path(__file__).parent
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+# A compiler exit zero is insufficient: the native build runner writes this
+# metadata only after also rejecting every SBF stack-frame diagnostic.
+build=json.loads((a.stage/'sbf/metadata.json').read_text())
+assert build['artifact_sha256']==sha(a.stage/'sbf/aspis_v8_performance_sbf.so')
+build_log=(a.stage/'sbf/compile.log').read_text()
+assert 'overflows the maximum allowed frame' not in build_log
+assert not ('Stack offset' in build_log and 'exceeded' in build_log)
 binary=a.project/'r22-svm';env=dict(os.environ,NO_DNA='1',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_TARGET_DIR='/home/dombarker/project-offloads/aspis-v8-performance-20260908.scS2Jz/docs/research/v8-no-work-100-20260907/experiments/performance-svm/target')
 if not binary.exists():
     assert not a.project.exists();(a.project/'src').mkdir(parents=True)
