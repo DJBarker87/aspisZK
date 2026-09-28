@@ -1,5 +1,5 @@
 import V7CallerCurrentReleaseR26AcceptedTailSemantics
-import V7CallerCurrentReleaseR26RelationEvaluatorSemantics
+import V7CallerCurrentReleaseR26RelationDecodeSemantics
 
 /-!
 # Exact running-claim arithmetic for the current R26 accepted tail
@@ -23,6 +23,9 @@ open V7CallerCurrentReleaseR26AcceptedTailSnapshot
 open V7CallerCurrentReleaseR26AcceptedTailSemantics
 open V7CallerCurrentReleaseR26FieldBridge
 open V7CallerCurrentReleaseR26RelationEvaluatorSemantics
+open V7CallerCurrentReleaseR26RelationDecodeSemantics
+open V7CallerCurrentReleaseR26K1QueryWeightBridge
+open AspisV6TranscriptRelationGrammar
 open AspisV5RelationSumcheckSoundness
 
 abbrev TailState (Trace : Type) :=
@@ -148,8 +151,116 @@ theorem RoundThreeSourceStep.runningClaimAfter_exact
     polynomialCanonical alphaReadCanonical source.evaluateSuccess
   rwa [alphaReadExact] at evaluated
 
+/-- Round one, stated directly in the maintained K1 relation-round model. -/
+theorem RoundOneSourceStep.runningClaimAfter_model_exact
+    {Trace : Type}
+    {transcript0 : transcript.Transcript}
+    {runningClaim : field.QM31} {weights : sumcheck.WeightAccumulator}
+    {alpha : Array field.QM31 4#usize}
+    {foldedValues : Array field.QM31 256#usize}
+    {relationFields : Array (Array field.QM31 6#usize) 4#usize}
+    {after : TailState Trace}
+    (source : RoundOneSourceStep transcript0 runningClaim weights alpha
+      foldedValues relationFields after)
+    (rowCanonical : CanonicalRelationRow source.relationRow)
+    (runningCanonical : GeneratedCanonicalQM31 runningClaim)
+    (alphaCanonical : GeneratedCanonicalQM31 source.alphaOne) :
+    GeneratedCanonicalQM31 source.runningClaimAfter ∧
+      sourceQm31ToModel (generatedQm31ToExact source.runningClaimAfter) =
+        relationEvaluate sourceQuarter
+          (sourceQm31ToModel (generatedQm31ToExact runningClaim))
+          (exactRelationParts source.relationRow)
+          (sourceQm31ToModel (generatedQm31ToExact source.alphaOne)) := by
+  have expectedRead := update_one_reads_one alpha source.alphaAfter
+    source.alphaOne source.alphaUpdateSuccess
+  have alphaReadExact : source.alphaRead = source.alphaOne := by
+    have readSuccess := source.alphaReadSuccess
+    rw [expectedRead] at readSuccess
+    exact (Result.ok.inj readSuccess).symm
+  have alphaReadCanonical : GeneratedCanonicalQM31 source.alphaRead := by
+    rw [alphaReadExact]
+    exact alphaCanonical
+  have exact := decode_and_evaluate_exact source.relationRow runningClaim
+    source.alphaRead source.polynomial source.runningClaimAfter rowCanonical
+    runningCanonical alphaReadCanonical source.polynomialSuccess
+    source.evaluateSuccess
+  rwa [alphaReadExact] at exact
+
+/-- Round two, stated directly in the maintained K1 relation-round model. -/
+theorem RoundTwoSourceStep.runningClaimAfter_model_exact
+    {Trace : Type}
+    {transcript0 : transcript.Transcript}
+    {runningClaim : field.QM31} {weights : sumcheck.WeightAccumulator}
+    {alpha : Array field.QM31 4#usize}
+    {foldedValues : Array field.QM31 256#usize}
+    {relationFields : Array (Array field.QM31 6#usize) 4#usize}
+    {after : TailState Trace}
+    (source : RoundTwoSourceStep transcript0 runningClaim weights alpha
+      foldedValues relationFields after)
+    (rowCanonical : CanonicalRelationRow source.relationRow)
+    (runningCanonical : GeneratedCanonicalQM31 runningClaim)
+    (alphaCanonical : GeneratedCanonicalQM31 source.alphaTwo) :
+    GeneratedCanonicalQM31 source.runningClaimAfter ∧
+      sourceQm31ToModel (generatedQm31ToExact source.runningClaimAfter) =
+        relationEvaluate sourceQuarter
+          (sourceQm31ToModel (generatedQm31ToExact runningClaim))
+          (exactRelationParts source.relationRow)
+          (sourceQm31ToModel (generatedQm31ToExact source.alphaTwo)) := by
+  have expectedRead := update_two_reads_two alpha source.alphaAfter
+    source.alphaTwo source.alphaUpdateSuccess
+  have alphaReadExact : source.alphaRead = source.alphaTwo := by
+    have readSuccess := source.alphaReadSuccess
+    rw [expectedRead] at readSuccess
+    exact (Result.ok.inj readSuccess).symm
+  have alphaReadCanonical : GeneratedCanonicalQM31 source.alphaRead := by
+    rw [alphaReadExact]
+    exact alphaCanonical
+  have exact := decode_and_evaluate_exact source.relationRow runningClaim
+    source.alphaRead source.polynomial source.runningClaimAfter rowCanonical
+    runningCanonical alphaReadCanonical source.polynomialSuccess
+    source.evaluateSuccess
+  rwa [alphaReadExact] at exact
+
+/-- Round three, stated directly in the maintained K1 relation-round model. -/
+theorem RoundThreeSourceStep.runningClaimAfter_model_exact
+    {Trace : Type}
+    {transcript0 : transcript.Transcript}
+    {runningClaim : field.QM31} {weights : sumcheck.WeightAccumulator}
+    {alpha : Array field.QM31 4#usize}
+    {foldedValues : Array field.QM31 256#usize}
+    {relationFields : Array (Array field.QM31 6#usize) 4#usize}
+    {after : TailState Trace}
+    (source : RoundThreeSourceStep transcript0 runningClaim weights alpha
+      foldedValues relationFields after)
+    (rowCanonical : CanonicalRelationRow source.relationRow)
+    (runningCanonical : GeneratedCanonicalQM31 runningClaim)
+    (alphaCanonical : GeneratedCanonicalQM31 source.alphaThree) :
+    GeneratedCanonicalQM31 source.runningClaimAfter ∧
+      sourceQm31ToModel (generatedQm31ToExact source.runningClaimAfter) =
+        relationEvaluate sourceQuarter
+          (sourceQm31ToModel (generatedQm31ToExact runningClaim))
+          (exactRelationParts source.relationRow)
+          (sourceQm31ToModel (generatedQm31ToExact source.alphaThree)) := by
+  have expectedRead := update_three_reads_three alpha source.alphaAfter
+    source.alphaThree source.alphaUpdateSuccess
+  have alphaReadExact : source.alphaRead = source.alphaThree := by
+    have readSuccess := source.alphaReadSuccess
+    rw [expectedRead] at readSuccess
+    exact (Result.ok.inj readSuccess).symm
+  have alphaReadCanonical : GeneratedCanonicalQM31 source.alphaRead := by
+    rw [alphaReadExact]
+    exact alphaCanonical
+  have exact := decode_and_evaluate_exact source.relationRow runningClaim
+    source.alphaRead source.polynomial source.runningClaimAfter rowCanonical
+    runningCanonical alphaReadCanonical source.polynomialSuccess
+    source.evaluateSuccess
+  rwa [alphaReadExact] at exact
+
 #print axioms RoundOneSourceStep.runningClaimAfter_exact
 #print axioms RoundTwoSourceStep.runningClaimAfter_exact
 #print axioms RoundThreeSourceStep.runningClaimAfter_exact
+#print axioms RoundOneSourceStep.runningClaimAfter_model_exact
+#print axioms RoundTwoSourceStep.runningClaimAfter_model_exact
+#print axioms RoundThreeSourceStep.runningClaimAfter_model_exact
 
 end V7CallerCurrentReleaseR26AcceptedTailArithmetic

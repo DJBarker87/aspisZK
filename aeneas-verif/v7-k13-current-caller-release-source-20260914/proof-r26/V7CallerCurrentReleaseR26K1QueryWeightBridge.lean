@@ -70,6 +70,11 @@ def sourceQm31ToModel (x : SourceQM31) : ModelQM31 :=
       sourceQm31ToModel x + sourceQm31ToModel y := by
   ext <;> rfl
 
+@[simp] theorem sourceQm31ToModel_sub (x y : SourceQM31) :
+    sourceQm31ToModel (x - y) =
+      sourceQm31ToModel x - sourceQm31ToModel y := by
+  rfl
+
 @[simp] theorem sourceQm31ToModel_mul (x y : SourceQM31) :
     sourceQm31ToModel (x * y) =
       sourceQm31ToModel x * sourceQm31ToModel y := by
