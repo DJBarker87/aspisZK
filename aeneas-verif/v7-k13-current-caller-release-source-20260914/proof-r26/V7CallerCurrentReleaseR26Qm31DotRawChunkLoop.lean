@@ -330,11 +330,28 @@ theorem generated_raw_chunk_loop_four
       simpa using currentInvariant
   · exact ⟨0, by omega, startExact, endExact, initial⟩
 
+theorem zero_raw_chunk_initial
+    (weights values : Slice QM31) (start : Nat) :
+    RawChunkInvariant weights values start 0
+      (Array.repeat 9#usize 0#u64) := by
+  constructor
+  · intro component componentBound
+    dsimp [ExactRawChunkPrefix]
+    have componentCases : component = 0 ∨ component = 1 ∨ component = 2 := by
+      omega
+    rcases componentCases with rfl | rfl | rfl <;> decide
+  · intro component componentBound
+    dsimp [RawComponentCountBound]
+    have componentCases : component = 0 ∨ component = 1 ∨ component = 2 := by
+      omega
+    rcases componentCases with rfl | rfl | rfl <;> decide
+
 #print axioms raw_component_count_bound_headroom
 #print axioms natural_component_steps_advance_count_bound
 #print axioms generated_input_pairs_canonical
 #print axioms exact_component_steps_advance_prefix
 #print axioms generated_raw_chunk_body_active
 #print axioms generated_raw_chunk_loop_four
+#print axioms zero_raw_chunk_initial
 
 end V7CallerCurrentReleaseR26Qm31DotRawChunkLoop
