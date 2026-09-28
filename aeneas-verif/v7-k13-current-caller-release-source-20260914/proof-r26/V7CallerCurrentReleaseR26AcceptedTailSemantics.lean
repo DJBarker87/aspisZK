@@ -46,7 +46,9 @@ private theorem qm31_ne_ok_false_iff_eq
       field.M31.Insts.CoreCmpPartialEqM31.eq, h00, h01, h10, h11]
 
 /-- Exact arithmetic and transcript facts exposed by the literal round-one
-continuation edge. -/
+continuation edge.  The running-claim evaluation and value fold are retained
+because they are the source data needed by the maintained candidate execution,
+not merely control-flow witnesses. -/
 structure RoundOneSourceStep
     {Trace : Type}
     (transcript0 : transcript.Transcript)
@@ -61,6 +63,10 @@ structure RoundOneSourceStep
   transcriptChallenge : transcript.Transcript
   alphaOne : field.QM31
   alphaAfter : Array field.QM31 4#usize
+  alphaRead : field.QM31
+  runningClaimAfter : field.QM31
+  foldValuesAlpha : field.QM31
+  foldedValuesAfter : Array field.QM31 256#usize
   relationRowSuccess : relationFields.index_usize 1#usize = ok relationRow
   polynomialSuccess :
     v6_transcript.decode_compact_relation_polynomial relationRow runningClaim =
@@ -72,9 +78,19 @@ structure RoundOneSourceStep
       transcriptAbsorb =
     ok (core.result.Result.Ok alphaOne, transcriptChallenge)
   alphaUpdateSuccess : alpha.update 1#usize alphaOne = ok alphaAfter
+  alphaReadSuccess : alphaAfter.index_usize 1#usize = ok alphaRead
+  evaluateSuccess : sumcheck.evaluate polynomial alphaRead =
+    ok runningClaimAfter
+  foldValuesAlphaSuccess : alphaAfter.index_usize 1#usize =
+    ok foldValuesAlpha
+  foldedValuesSuccess :
+    v6_transcript.fold_values_prefix 256#usize foldedValues foldValuesAlpha =
+      ok foldedValuesAfter
   transcriptAfterExact : after.2.1 = transcriptChallenge
+  runningClaimAfterExact : after.2.2.2.1 = runningClaimAfter
   weightsUnchanged : after.2.2.2.2.1 = weights
   alphaAfterExact : after.2.2.2.2.2.1 = alphaAfter
+  foldedValuesAfterExact : after.2.2.2.2.2.2 = foldedValuesAfter
 
 /-- Inversion of the exact round-one body edge. -/
 theorem round_one_edge_exposes_source_step
@@ -215,16 +231,26 @@ theorem round_one_edge_exposes_source_step
             transcriptChallenge := transcriptChallenge
             alphaOne := alphaOne
             alphaAfter := alphaAfter
+            alphaRead := alphaRead
+            runningClaimAfter := runningClaimAfter
+            foldValuesAlpha := foldAlpha
+            foldedValuesAfter := foldedValuesAfter
             relationRowSuccess := hrow
             polynomialSuccess := hpoly
             absorbSuccess := habsorb
             challengeSuccess := hchallenge
             alphaUpdateSuccess := halphaUpdate
+            alphaReadSuccess := halphaRead
+            evaluateSuccess := hevaluate
+            foldValuesAlphaSuccess := hfoldAlpha
+            foldedValuesSuccess := hfolded
             transcriptAfterExact := transcriptExact.symm
+            runningClaimAfterExact := runningClaimExact.symm
             weightsUnchanged := weightsExact.symm
-            alphaAfterExact := alphaExact.symm }⟩
+            alphaAfterExact := alphaExact.symm
+            foldedValuesAfterExact := foldedValuesExact.symm }⟩
 
-/-- Exact challenge and alpha-update facts exposed by the literal round-two
+/-- Exact arithmetic and transcript facts exposed by the literal round-two
 continuation edge. -/
 structure RoundTwoSourceStep
     {Trace : Type}
@@ -240,6 +266,10 @@ structure RoundTwoSourceStep
   transcriptChallenge : transcript.Transcript
   alphaTwo : field.QM31
   alphaAfter : Array field.QM31 4#usize
+  alphaRead : field.QM31
+  runningClaimAfter : field.QM31
+  foldValuesAlpha : field.QM31
+  foldedValuesAfter : Array field.QM31 256#usize
   relationRowSuccess : relationFields.index_usize 2#usize = ok relationRow
   polynomialSuccess :
     v6_transcript.decode_compact_relation_polynomial relationRow runningClaim =
@@ -251,9 +281,19 @@ structure RoundTwoSourceStep
       transcriptAbsorb =
     ok (core.result.Result.Ok alphaTwo, transcriptChallenge)
   alphaUpdateSuccess : alpha.update 2#usize alphaTwo = ok alphaAfter
+  alphaReadSuccess : alphaAfter.index_usize 2#usize = ok alphaRead
+  evaluateSuccess : sumcheck.evaluate polynomial alphaRead =
+    ok runningClaimAfter
+  foldValuesAlphaSuccess : alphaAfter.index_usize 2#usize =
+    ok foldValuesAlpha
+  foldedValuesSuccess :
+    v6_transcript.fold_values_prefix 64#usize foldedValues foldValuesAlpha =
+      ok foldedValuesAfter
   transcriptAfterExact : after.2.1 = transcriptChallenge
+  runningClaimAfterExact : after.2.2.2.1 = runningClaimAfter
   weightsUnchanged : after.2.2.2.2.1 = weights
   alphaAfterExact : after.2.2.2.2.2.1 = alphaAfter
+  foldedValuesAfterExact : after.2.2.2.2.2.2 = foldedValuesAfter
 
 /-- Inversion of the exact round-two body edge. -/
 theorem round_two_edge_exposes_source_step
@@ -392,14 +432,24 @@ theorem round_two_edge_exposes_source_step
             transcriptChallenge := transcriptChallenge
             alphaTwo := alphaTwo
             alphaAfter := alphaAfter
+            alphaRead := alphaRead
+            runningClaimAfter := runningClaimAfter
+            foldValuesAlpha := foldAlpha
+            foldedValuesAfter := foldedValuesAfter
             relationRowSuccess := hrow
             polynomialSuccess := hpoly
             absorbSuccess := habsorb
             challengeSuccess := hchallenge
             alphaUpdateSuccess := halphaUpdate
+            alphaReadSuccess := halphaRead
+            evaluateSuccess := hevaluate
+            foldValuesAlphaSuccess := hfoldAlpha
+            foldedValuesSuccess := hfolded
             transcriptAfterExact := transcriptExact.symm
+            runningClaimAfterExact := runningClaimExact.symm
             weightsUnchanged := weightsExact.symm
-            alphaAfterExact := alphaExact.symm }⟩
+            alphaAfterExact := alphaExact.symm
+            foldedValuesAfterExact := foldedValuesExact.symm }⟩
 
 /-- Exact facts exposed by the literal round-three edge, including the
 current source's single optimized relation-tail weight fold. -/
