@@ -228,9 +228,141 @@ theorem raw_component_step_corresponds
     rw [leftExact, rightExact] at castExact
     exact castExact
 
+def RawComponentBounds
+    (base : Raw) (component : Nat) (pair : Pair) : Prop :=
+  base.val[component * 3]!.val + rawM31Product pair.1.a pair.2.a < 2 ^ 64 ∧
+    base.val[component * 3 + 1]!.val +
+      rawM31Product pair.1.b pair.2.b < 2 ^ 64 ∧
+    base.val[component * 3 + 2]!.val +
+      rawM31Product (canonicalM31Sum pair.1.a pair.1.b)
+        (canonicalM31Sum pair.2.a pair.2.b) < 2 ^ 64
+
+private theorem exact_component_transport
+    (base before after : Raw) (component : Nat) (pair : Pair)
+    (exact : ExactRawComponentStep base before component pair)
+    (lane0 : after.val[component * 3]! = before.val[component * 3]!)
+    (lane1 : after.val[component * 3 + 1]! =
+      before.val[component * 3 + 1]!)
+    (lane2 : after.val[component * 3 + 2]! =
+      before.val[component * 3 + 2]!) :
+    ExactRawComponentStep base after component pair := by
+  unfold ExactRawComponentStep at exact ⊢
+  rw [lane0, lane1, lane2]
+  exact exact
+
+/-- After all three pair components, every group of three raw lanes contains
+the exact Karatsuba contribution for its corresponding CM31 pair. -/
+theorem raw_after_components_three_corresponds
+    (pairs : Array Pair 3#usize) (base : Raw)
+    (pairsCanonical : ∀ component, component < 3 →
+      GeneratedCanonicalCM31 pairs.val[component]!.1 ∧
+        GeneratedCanonicalCM31 pairs.val[component]!.2)
+    (bounds : ∀ component, component < 3 →
+      RawComponentBounds base component pairs.val[component]!) :
+    ∀ component, component < 3 →
+      ExactRawComponentStep base (rawAfterComponents pairs base 3)
+        component pairs.val[component]! := by
+  let pair0 := pairs.val[0]!
+  let pair1 := pairs.val[1]!
+  let pair2 := pairs.val[2]!
+  let raw0 := rawComponentStep base 0 pair0
+  let raw1 := rawComponentStep raw0 1 pair1
+  let raw2 := rawComponentStep raw1 2 pair2
+  have canonical0 := pairsCanonical 0 (by omega)
+  have canonical1 := pairsCanonical 1 (by omega)
+  have canonical2 := pairsCanonical 2 (by omega)
+  have bounds0 := bounds 0 (by omega)
+  have bounds1 := bounds 1 (by omega)
+  have bounds2 := bounds 2 (by omega)
+  have step0 : ExactRawComponentStep base raw0 0 pair0 ∧
+      ∀ lane, lane < 9 → lane ≠ 0 → lane ≠ 1 → lane ≠ 2 →
+        raw0.val[lane]! = base.val[lane]! := by
+    simpa [raw0, pair0, RawComponentBounds] using
+      (raw_component_step_corresponds base 0 pair0 (by omega)
+        canonical0 bounds0.1 bounds0.2.1 bounds0.2.2)
+  have raw0Lane3 : raw0.val[3]! = base.val[3]! :=
+    step0.2 3 (by omega) (by omega) (by omega) (by omega)
+  have raw0Lane4 : raw0.val[4]! = base.val[4]! :=
+    step0.2 4 (by omega) (by omega) (by omega) (by omega)
+  have raw0Lane5 : raw0.val[5]! = base.val[5]! :=
+    step0.2 5 (by omega) (by omega) (by omega) (by omega)
+  have step1 : ExactRawComponentStep raw0 raw1 1 pair1 ∧
+      ∀ lane, lane < 9 → lane ≠ 3 → lane ≠ 4 → lane ≠ 5 →
+        raw1.val[lane]! = raw0.val[lane]! := by
+    apply raw_component_step_corresponds raw0 1 pair1 (by omega) canonical1
+    · have laneExact := congrArg (fun word : Std.U64 => word.val) raw0Lane3
+      rw [laneExact]
+      simpa [RawComponentBounds, pair1] using bounds1.1
+    · have laneExact := congrArg (fun word : Std.U64 => word.val) raw0Lane4
+      rw [laneExact]
+      simpa [RawComponentBounds, pair1] using bounds1.2.1
+    · have laneExact := congrArg (fun word : Std.U64 => word.val) raw0Lane5
+      rw [laneExact]
+      simpa [RawComponentBounds, pair1] using bounds1.2.2
+  have raw1Lane6 : raw1.val[6]! = base.val[6]! := by
+    rw [step1.2 6 (by omega) (by omega) (by omega) (by omega),
+      step0.2 6 (by omega) (by omega) (by omega) (by omega)]
+  have raw1Lane7 : raw1.val[7]! = base.val[7]! := by
+    rw [step1.2 7 (by omega) (by omega) (by omega) (by omega),
+      step0.2 7 (by omega) (by omega) (by omega) (by omega)]
+  have raw1Lane8 : raw1.val[8]! = base.val[8]! := by
+    rw [step1.2 8 (by omega) (by omega) (by omega) (by omega),
+      step0.2 8 (by omega) (by omega) (by omega) (by omega)]
+  have step2 : ExactRawComponentStep raw1 raw2 2 pair2 ∧
+      ∀ lane, lane < 9 → lane ≠ 6 → lane ≠ 7 → lane ≠ 8 →
+        raw2.val[lane]! = raw1.val[lane]! := by
+    apply raw_component_step_corresponds raw1 2 pair2 (by omega) canonical2
+    · have laneExact := congrArg (fun word : Std.U64 => word.val) raw1Lane6
+      rw [laneExact]
+      simpa [RawComponentBounds, pair2] using bounds2.1
+    · have laneExact := congrArg (fun word : Std.U64 => word.val) raw1Lane7
+      rw [laneExact]
+      simpa [RawComponentBounds, pair2] using bounds2.2.1
+    · have laneExact := congrArg (fun word : Std.U64 => word.val) raw1Lane8
+      rw [laneExact]
+      simpa [RawComponentBounds, pair2] using bounds2.2.2
+  have exact0Raw1 : ExactRawComponentStep base raw1 0 pair0 :=
+    exact_component_transport base raw0 raw1 0 pair0 step0.1
+      (step1.2 0 (by omega) (by omega) (by omega) (by omega))
+      (step1.2 1 (by omega) (by omega) (by omega) (by omega))
+      (step1.2 2 (by omega) (by omega) (by omega) (by omega))
+  have exact0Raw2 : ExactRawComponentStep base raw2 0 pair0 :=
+    exact_component_transport base raw1 raw2 0 pair0 exact0Raw1
+      (step2.2 0 (by omega) (by omega) (by omega) (by omega))
+      (step2.2 1 (by omega) (by omega) (by omega) (by omega))
+      (step2.2 2 (by omega) (by omega) (by omega) (by omega))
+  have exact1Raw1 : ExactRawComponentStep base raw1 1 pair1 := by
+    have exact := step1.1
+    unfold ExactRawComponentStep at exact ⊢
+    rw [raw0Lane3, raw0Lane4, raw0Lane5] at exact
+    norm_num at exact ⊢
+    exact exact
+  have exact1Raw2 : ExactRawComponentStep base raw2 1 pair1 :=
+    exact_component_transport base raw1 raw2 1 pair1 exact1Raw1
+      (step2.2 3 (by omega) (by omega) (by omega) (by omega))
+      (step2.2 4 (by omega) (by omega) (by omega) (by omega))
+      (step2.2 5 (by omega) (by omega) (by omega) (by omega))
+  have exact2Raw2 : ExactRawComponentStep base raw2 2 pair2 := by
+    have exact := step2.1
+    unfold ExactRawComponentStep at exact ⊢
+    rw [raw1Lane6, raw1Lane7, raw1Lane8] at exact
+    norm_num at exact ⊢
+    exact exact
+  have finalRaw : rawAfterComponents pairs base 3 = raw2 := by
+    simp [rawAfterComponents, raw2, raw1, raw0, pair0, pair1, pair2]
+  intro component componentBound
+  rw [finalRaw]
+  have componentCases : component = 0 ∨ component = 1 ∨ component = 2 := by
+    omega
+  rcases componentCases with rfl | rfl | rfl
+  · simpa [pair0] using exact0Raw2
+  · simpa [pair1] using exact1Raw2
+  · simpa [pair2] using exact2Raw2
+
 #print axioms canonicalM31Sum_spec
 #print axioms generated_raw_component_body_step_exact
 #print axioms generated_raw_inner_loop_exact
 #print axioms raw_component_step_corresponds
+#print axioms raw_after_components_three_corresponds
 
 end V7CallerCurrentReleaseR26Qm31DotRawInnerLoop
