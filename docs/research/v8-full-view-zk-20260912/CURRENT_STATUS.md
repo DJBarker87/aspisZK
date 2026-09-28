@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## R38 root/shift certificate — 2026-09-29
+
+[R38_ROOT_CERTIFICATE.md](R38_ROOT_CERTIFICATE.md) kernel-certifies the
+explicit witness's 22 root steps and four shifts, with a bridge to the
+actual restricted-polynomial model. Thirty-nine declarations compile;
+702 one-step coordinate equations are checked without expanding the full
+recurrence. All final audits use only standard axioms.
+
+The point/chord, residual-entry and matrix-invertibility certificates remain
+to finish the specialization. Full privacy, source-exception accounting and
+the 1M target are still open. Verifier/CU unchanged.
+
 ## R37 source-restricted residual polynomial — 2026-09-29
 
 [R37_SOURCE_RESTRICTED_RESIDUAL.md](R37_SOURCE_RESTRICTED_RESIDUAL.md)
