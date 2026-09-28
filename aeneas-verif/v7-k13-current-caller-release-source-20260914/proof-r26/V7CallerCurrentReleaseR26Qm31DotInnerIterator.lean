@@ -40,7 +40,7 @@ def expectedPairIterator (pairs : Array Pair 3#usize) (processed : Nat) :
   { iter := { array := pairs, index := processed, backIndex := 3 },
     count := usizeOfNatTruncate processed }
 
-private theorem small_fits_usize {value : Nat} (bound : value ≤ 4) :
+theorem small_fits_usize {value : Nat} (bound : value ≤ 4) :
     value < UScalar.size .Usize := by
   have literalBound := UScalar.hSize (5#usize)
   rw [UScalar.size_UScalarTyUsize] at literalBound ⊢

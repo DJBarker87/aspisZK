@@ -93,7 +93,7 @@ theorem generated_m31_reduce_u64_corresponds (x : Std.U64) :
   exact ⟨out, generated_m31_reduce_u64_from_reference x out run,
     canonical, exact⟩
 
-@[simp] private theorem from_u64_u32_eq_cast (x : Std.U32) :
+@[simp] theorem from_u64_u32_eq_cast (x : Std.U32) :
     core.convert.num.FromU64U32.from x = UScalar.cast .U64 x := by
   apply UScalar.eq_of_val_eq
   simp [core.convert.num.FromU64U32.from_val_eq]
