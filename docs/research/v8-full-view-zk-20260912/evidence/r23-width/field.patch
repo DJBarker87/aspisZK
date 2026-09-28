@@ -1,0 +1,27 @@
+--- R20/field.rs
++++ R23/field.rs
+@@ -253,7 +253,7 @@
+         // each sum modulo P, and removes two canonical-add branches from
+         // every CM31 multiplication.
+         let m2 = M31::reduce_u64(
+-            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),
++            r23_product_u32_bounded(u64::from(self.a.0) + u64::from(self.b.0), u64::from(rhs.a.0) + u64::from(rhs.b.0)),
+         );
+         CM31 {
+             a: m0.sub(m1),
+@@ -269,8 +269,7 @@
+             // `(a+b)*(a-b)` with raw representatives. Both factors are
+             // below 2P and their product is strictly below 2^64.
+             a: M31::reduce_u64(
+-                (u64::from(self.a.0) + u64::from(self.b.0))
+-                    * (u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),
++                r23_product_u32_bounded(u64::from(self.a.0) + u64::from(self.b.0), u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),
+             ),
+             b: self.a.mul(self.b).double(),
+         }
+@@ -3167,3 +3166,5 @@
+         }
+     }
+ }
++
++include!("r23_width.rs");
