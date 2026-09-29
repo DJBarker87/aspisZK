@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R60 concrete inverse chain and circle bridge — 2026-09-29
+
+[R60_INVERSE_CHAIN.md](R60_INVERSE_CHAIN.md) adds **23 compiled Lean theorems**:
+the literal 38-multiplication base inverse chain on canonical raw words,
+norm/conjugate inverse correctness in the exact CM31/QM31 tower, and equality
+of the chain-based circle program with the retained bounded memoized-oracle
+model. A restricted source/Lean schedule audit matches all nine bindings and
+rejects five negative mutations. No inverse primitive or hiding premise is
+assumed in the new chain proof.
+
+First remaining source proposition: actual Rust/generated square-loop and
+guarded inverse execution, then word-level norm/equality/try-inverse composition.
+Structural source matching is not that universal refinement. Full observer/
+oracle/seed/commitment/semantic/retry/publication privacy and coherent pre-beta
+extraction remain open. Runtime unchanged: R59 **1,516,838 / 1,518,195 CU**;
+both actual 1M runs still exhaust. No new Rust/SBF rerun was needed.
+
 ## R59 four-accumulator checked dot — 2026-09-29
 
 [R59_PARTIAL_DOT.md](R59_PARTIAL_DOT.md) selects delayed dot-output reduction

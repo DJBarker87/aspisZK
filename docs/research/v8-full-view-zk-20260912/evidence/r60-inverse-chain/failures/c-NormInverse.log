@@ -1,0 +1,88 @@
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/NormInverse.lean:15:53: error(lean.unknownIdentifier): Unknown constant `ZMod.val_eq_zero.mp`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/NormInverse.lean:32:30: error: unsolved goals
+case re
+x : CM31Exact
+hx : x ≠ 0
+⊢ baseInverse (QuadraticAlgebra.norm x) = (QuadraticAlgebra.norm x)⁻¹ ∨ x.re = 0
+
+case im
+x : CM31Exact
+hx : x ≠ 0
+⊢ baseInverse (QuadraticAlgebra.norm x) = (QuadraticAlgebra.norm x)⁻¹ ∨ x.im = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/NormInverse.lean:33:28: warning: This simp argument is unused:
+  base_inverse_correct _ (complex_norm_nonzero x hx)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵m̵p̵l̵e̵x̵I̵n̵v̵e̵r̵s̵e̵,̵b̵a̵s̵e̵_̵i̵n̵v̵e̵r̵s̵e̵_̵c̵o̵r̵r̵e̵c̵t̵ ̵_̵ ̵(̵c̵o̵m̵p̵l̵e̵x̵_̵n̵o̵r̵m̵_̵n̵o̵n̵z̵e̵r̵o̵ ̵x̵ ̵h̵x̵)̵,̵c̵o̵m̵p̵l̵e̵x̵_̵n̵o̵r̵m̵_̵e̵q̵]̵[̲c̲o̲m̲p̲l̲e̲x̲I̲n̲v̲e̲r̲s̲e̲,̲ ̲c̲o̲m̲p̲l̲e̲x̲_̲n̲o̲r̲m̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/NormInverse.lean:51:30: error: unsolved goals
+case re.re
+x : QM31Exact
+hx : x ≠ 0
+⊢ x.re.re * (complexInverse (QuadraticAlgebra.norm x)).re + -(x.re.im * (complexInverse (QuadraticAlgebra.norm x)).im) =
+    (x.re.re * (QuadraticAlgebra.norm x).re + x.re.im * (QuadraticAlgebra.norm x).im) *
+      (QuadraticAlgebra.norm (QuadraticAlgebra.norm x))⁻¹
+
+case re.im
+x : QM31Exact
+hx : x ≠ 0
+⊢ x.re.re * (complexInverse (QuadraticAlgebra.norm x)).im + x.re.im * (complexInverse (QuadraticAlgebra.norm x)).re =
+    (QuadraticAlgebra.norm (QuadraticAlgebra.norm x))⁻¹ *
+      (-(x.re.re * (QuadraticAlgebra.norm x).im) + x.re.im * (QuadraticAlgebra.norm x).re)
+
+case im.re
+x : QM31Exact
+hx : x ≠ 0
+⊢ x.im.im * (complexInverse (QuadraticAlgebra.norm x)).im + -(x.im.re * (complexInverse (QuadraticAlgebra.norm x)).re) =
+    -((x.im.re * (QuadraticAlgebra.norm x).re + x.im.im * (QuadraticAlgebra.norm x).im) *
+        (QuadraticAlgebra.norm (QuadraticAlgebra.norm x))⁻¹)
+
+case im.im
+x : QM31Exact
+hx : x ≠ 0
+⊢ -(x.im.im * (complexInverse (QuadraticAlgebra.norm x)).re) +
+      -(x.im.re * (complexInverse (QuadraticAlgebra.norm x)).im) =
+    -((QuadraticAlgebra.norm (QuadraticAlgebra.norm x))⁻¹ *
+        (-(x.im.re * (QuadraticAlgebra.norm x).im) + x.im.im * (QuadraticAlgebra.norm x).re))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/NormInverse.lean:52:28: warning: This simp argument is unused:
+  complex_inverse_correct _ (quartic_norm_nonzero x hx)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵q̵u̵a̵r̵t̵i̵c̵I̵n̵v̵e̵r̵s̵e̵,̵c̵o̵m̵p̵l̵e̵x̵_̵i̵n̵v̵e̵r̵s̵e̵_̵c̵o̵r̵r̵e̵c̵t̵ ̵_̵ ̵(̵q̵u̵a̵r̵t̵i̵c̵_̵n̵o̵r̵m̵_̵n̵o̵n̵z̵e̵r̵o̵ ̵x̵ ̵h̵x̵)̵,̵q̵u̵a̵r̵t̵i̵c̵_̵n̵o̵r̵m̵_̵e̵q̵]̵[̲q̲u̲a̲r̲t̲i̲c̲I̲n̲v̲e̲r̲s̲e̲,̲ ̲q̲u̲a̲r̲t̲i̲c̲_̲n̲o̲r̲m̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.NormInverse.base_inverse_correct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.complex_norm_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.complex_norm_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.complex_inverse_correct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.quartic_norm_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.quartic_norm_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.quartic_inverse_correct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.try_inverse_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.try_inverse_some' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.NormInverse.circle_map_correct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r60-lean-20260929-c/lib/AspisV8R19/NormInverse.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/NormInverse.lean"
+	User time (seconds): 6.21
+	System time (seconds): 0.51
+	Percent of CPU this job got: 109%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:06.13
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3269104
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 78196
+	Voluntary context switches: 5396
+	Involuntary context switches: 156
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
