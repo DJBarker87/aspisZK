@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R51 duplex first-hit boundary — 2026-09-29
+
+[R51_DUPLEX_FIRST_HIT.md](R51_DUPLEX_FIRST_HIT.md) adds 27 compiled Lean
+theorems and three audited equivalence constructions. Actual byte framing,
+trace-preserving fresh-pair bijections and a uniform-state-only first-hit
+count are proved. New actual-source Rust controls pass, including prior
+external queries, repeated-state/cache hits, absorb framing and failures.
+
+Next: source-causal first-read/memoized coupling and explicit selection losses.
+Known-state lookahead can cause a cache hit deliberately; it is not a rare
+collision covered by a birthday bound. R50's later-root joint law remains
+open, along with the other full-privacy and soundness obligations.
+No verifier change or new SBF run; CU remains 1,620,236 / 1,621,719, and both
+1M-cap runs exhaust. Full privacy and the CU target are not complete.
+
 ## R50 fixed-query polynomial and source chord gate — 2026-09-29
 
 [R50_FIXED_QUERY_POLYNOMIAL.md](R50_FIXED_QUERY_POLYNOMIAL.md) adds 38
