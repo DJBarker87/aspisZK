@@ -1,5 +1,18 @@
 # Current V8 privacy-repair status
 
+## R70 canonical generated QM31 product — 2026-09-29
+
+[R70_CANONICAL_PRODUCT.md](R70_CANONICAL_PRODUCT.md) proves the exact R69
+guarded/public multiplication returns a canonical exact field product for
+every canonical input pair, without internal failure. Three focused Lean
+leaves compile with 25 theorem/axioms audits and no new assumptions. Source
+pins bind the proof to R69's measured, template-free extraction.
+
+Next: transport the retained inverse/square facts into that generated namespace
+and prove complete circle-map execution with actual error order, then bounded
+sampler composition. Full privacy/soundness remains open. No runtime change
+or new CU claim: **1,495,663 / 1,497,050**, both actual 1M runs still exhaust.
+
 ## R69 measured explicit kernel and exact extraction — 2026-09-29
 
 [R69_EXPLICIT_SOURCE.md](R69_EXPLICIT_SOURCE.md) selects the fixed-arity helper

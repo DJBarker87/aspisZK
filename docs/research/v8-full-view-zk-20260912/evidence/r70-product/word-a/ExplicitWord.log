@@ -1,0 +1,80 @@
+info: r70_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ExplicitWord.lean:47:59: error: Type mismatch
+  rfl
+has type
+  ?m.4 = ?m.4
+but is expected to have type
+  UScalar.cast UScalarTy.U64 field.P = word P
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ExplicitWord.lean:48:74: error: Type mismatch
+  rfl
+has type
+  ?m.3 = ?m.3
+but is expected to have type
+  core.convert.num.FromU64U32.from field.P = word P
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ExplicitWord.lean:58:91: error: Type mismatch
+  rfl
+has type
+  ?m.23 = ?m.23
+but is expected to have type
+  field.M31.reduce_u64 (word n) = AspisR66Field.field.M31.reduce_u64 (word n)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ExplicitWord.lean:73:4: error: 'change' tactic failed, pattern
+  ((↑x &&& PartialProduct.p) + ↑x >>> 31) % 2 ^ 64 = ?m.93
+is not definitionally equal to target
+  ((↑x &&& P) + ↑x >>> 31) % UScalar.size UScalarTy.U64 = ↑(word (PartialProduct.foldOnce ↑x))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ExplicitWord.lean:63:52: error: unsolved goals
+x : U64
+high : UScalar UScalarTy.U64
+hs : UScalar.shiftRight x 31 = ok high
+hv : ↑high = ↑x >>> 31
+hs' : x >>> 31#i32 = ok high
+hm : ↑(UScalar.and x (word P)) = ↑x &&& P
+hfold : PartialProduct.foldOnce ↑x < 2 ^ 34
+he : core.num.U64.wrapping_add (UScalar.and x (word P)) high = word (PartialProduct.foldOnce ↑x)
+⊢ ok (core.num.U64.wrapping_add (x &&& word P) high) = ok (word (PartialProduct.foldOnce ↑x))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ExplicitWord.lean:76:35: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call,
+  ̵  ̵ ̵ ̵prime_from,
+  ̲ ̲ ̲ ̲ ̲lift, ̲bind_tc_ok, ̲hs',̵h̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.ExplicitWord.word_val' depends on axioms: [propext]
+'AspisV8R19.ExplicitWord.word_add' depends on axioms: [propext]
+'AspisV8R19.ExplicitWord.word_sub' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.ExplicitWord.word_mul' depends on axioms: [propext]
+'AspisV8R19.ExplicitWord.widen_encode' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.ExplicitWord.prime_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.ExplicitWord.prime_from' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.ExplicitWord.two_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ExplicitWord.three_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ExplicitWord.pp_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ExplicitWord.reduce_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.ExplicitWord.partial_execution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.ExplicitWord.partial_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r70-word-20260929-a/lib/AspisV8R19/ExplicitWord.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ExplicitWord.lean"
+	User time (seconds): 2.79
+	System time (seconds): 0.54
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.31
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3679968
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86576
+	Voluntary context switches: 736
+	Involuntary context switches: 98
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 56
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

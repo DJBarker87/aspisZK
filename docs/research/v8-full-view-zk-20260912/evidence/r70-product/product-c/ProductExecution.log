@@ -1,0 +1,229 @@
+info: r70_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ProductExecution.lean:85:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ← word (ZMod.val x.im.re) * word (ZMod.val y.im.re)
+    let i3 ← word (ZMod.val x.im.im) * word (ZMod.val y.im.im)
+    let u ←
+      field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call ()
+          (core.num.U64.wrapping_sub (core.num.U64.wrapping_add i (word (P * P))) i3)
+    let i5 ← word (ZMod.val x.im.re) * word (ZMod.val y.im.im)
+    let i6 ← word (ZMod.val x.im.im) * word (ZMod.val y.im.re)
+    let v ← field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call () (core.num.U64.wrapping_add i5 i6)
+    let i8 ← word (ZMod.val x.re.re) * word (ZMod.val y.re.re)
+    let i10 ← word (ZMod.val x.re.im) * word (ZMod.val y.re.im)
+    let i12 ← word 2 * u
+    let out0 ←
+      field.M31.reduce_u64
+          (core.num.U64.wrapping_sub
+            (core.num.U64.wrapping_add
+              (core.num.U64.wrapping_add (core.num.U64.wrapping_sub (core.num.U64.wrapping_add i8 (word (P * P))) i10)
+                i12)
+              (word (3 * P)))
+            v)
+    let i18 ← word (ZMod.val x.re.re) * word (ZMod.val y.re.im)
+    let i19 ← word (ZMod.val x.re.im) * word (ZMod.val y.re.re)
+    let i22 ← word 2 * v
+    let out1 ←
+      field.M31.reduce_u64
+          (core.num.U64.wrapping_add (core.num.U64.wrapping_add (core.num.U64.wrapping_add i18 i19) u) i22)
+    let i24 ← word (ZMod.val x.re.re) * word (ZMod.val y.im.re)
+    let i25 ← word (ZMod.val x.im.re) * word (ZMod.val y.re.re)
+    let i29 ← word (ZMod.val x.re.im) * word (ZMod.val y.im.im)
+    let i31 ← word (ZMod.val x.im.im) * word (ZMod.val y.re.im)
+    let out2 ←
+      field.M31.reduce_u64
+          (core.num.U64.wrapping_sub
+            (core.num.U64.wrapping_sub
+              (core.num.U64.wrapping_add (core.num.U64.wrapping_add i24 i25) (word (2 * (P * P)))) i29)
+            i31)
+    let i33 ← word (ZMod.val x.re.re) * word (ZMod.val y.im.im)
+    let i34 ← word (ZMod.val x.re.im) * word (ZMod.val y.im.re)
+    let i36 ← word (ZMod.val x.im.re) * word (ZMod.val y.re.im)
+    let i38 ← word (ZMod.val x.im.im) * word (ZMod.val y.re.re)
+    let out3 ←
+      field.M31.reduce_u64
+          (core.num.U64.wrapping_add (core.num.U64.wrapping_add (core.num.U64.wrapping_add i33 i34) i36) i38)
+    ok (some { c0 := { a := out0, b := out1 }, c1 := { a := out2, b := out3 } })
+is not definitionally equal to the right-hand side
+  ok
+    (some
+      {
+        c0 :=
+          { a := encodeBase ↑(a * e + P * P - b * f + 2 * rawU c d g h + 3 * P - rawV c d g h),
+            b := encodeBase ↑(a * f + b * e + rawU c d g h + 2 * rawV c d g h) },
+        c1 :=
+          { a := encodeBase ↑(a * g + c * e + 2 * (P * P) - b * h - d * f),
+            b := encodeBase ↑(a * h + b * g + c * f + d * e) } })
+
+x y : QM31Exact
+a : ℕ := ZMod.val x.re.re
+ha : a < PartialProduct.p
+b : ℕ := ZMod.val x.re.im
+hb : b < PartialProduct.p
+c : ℕ := ZMod.val x.im.re
+hc : c < PartialProduct.p
+d : ℕ := ZMod.val x.im.im
+hd : d < PartialProduct.p
+e : ℕ := ZMod.val y.re.re
+he : e < PartialProduct.p
+f : ℕ := ZMod.val y.re.im
+hf : f < PartialProduct.p
+g : ℕ := ZMod.val y.im.re
+hg : g < PartialProduct.p
+h : ℕ := ZMod.val y.im.im
+hh : h < PartialProduct.p
+hae : a * e < PartialProduct.p * PartialProduct.p
+haf : a * f < PartialProduct.p * PartialProduct.p
+hag : a * g < PartialProduct.p * PartialProduct.p
+hah : a * h < PartialProduct.p * PartialProduct.p
+hbe : b * e < PartialProduct.p * PartialProduct.p
+hbf : b * f < PartialProduct.p * PartialProduct.p
+hbg : b * g < PartialProduct.p * PartialProduct.p
+hbh : b * h < PartialProduct.p * PartialProduct.p
+hce : c * e < PartialProduct.p * PartialProduct.p
+hcf : c * f < PartialProduct.p * PartialProduct.p
+hcg : c * g < PartialProduct.p * PartialProduct.p
+hch : c * h < PartialProduct.p * PartialProduct.p
+hde : d * e < PartialProduct.p * PartialProduct.p
+hdf : d * f < PartialProduct.p * PartialProduct.p
+hdg : d * g < PartialProduct.p * PartialProduct.p
+hdh : d * h < PartialProduct.p * PartialProduct.p
+hi :
+  d * h ≤ c * g + PartialProduct.p * PartialProduct.p ∧
+    c * g + PartialProduct.p * PartialProduct.p < 2 ^ 64 ∧
+      c * g + PartialProduct.p * PartialProduct.p - d * h < 2 * PartialProduct.p * PartialProduct.p ∧
+        c * h + d * g < 2 * PartialProduct.p * PartialProduct.p
+hu : rawU c d g h < 3 * P
+hv : rawV c d g h < 3 * P
+hfirst :
+  b * f ≤ a * e + PartialProduct.p * PartialProduct.p ∧
+    a * e + PartialProduct.p * PartialProduct.p < 2 ^ 64 ∧
+      rawV c d g h ≤ a * e + PartialProduct.p * PartialProduct.p - b * f + 2 * rawU c d g h + 3 * PartialProduct.p ∧
+        a * e + PartialProduct.p * PartialProduct.p - b * f + 2 * rawU c d g h + 3 * PartialProduct.p < 2 ^ 64 ∧
+          a * f + b * e + rawU c d g h + 2 * rawV c d g h < 2 ^ 64
+hthird :
+  a * g + c * e + 2 * PartialProduct.p * PartialProduct.p < 2 ^ 64 ∧
+    b * h ≤ a * g + c * e + 2 * PartialProduct.p * PartialProduct.p ∧
+      d * f ≤ a * g + c * e + 2 * PartialProduct.p * PartialProduct.p - b * h
+hfourth : a * h + b * g + c * f + d * e < 2 ^ 64
+⊢ (do
+      let i ← word (ZMod.val x.im.re) * word (ZMod.val y.im.re)
+      let i3 ← word (ZMod.val x.im.im) * word (ZMod.val y.im.im)
+      let u ←
+        field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call ()
+            (core.num.U64.wrapping_sub (core.num.U64.wrapping_add i (word (P * P))) i3)
+      let i5 ← word (ZMod.val x.im.re) * word (ZMod.val y.im.im)
+      let i6 ← word (ZMod.val x.im.im) * word (ZMod.val y.im.re)
+      let v ←
+        field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call () (core.num.U64.wrapping_add i5 i6)
+      let i8 ← word (ZMod.val x.re.re) * word (ZMod.val y.re.re)
+      let i10 ← word (ZMod.val x.re.im) * word (ZMod.val y.re.im)
+      let i12 ← word 2 * u
+      let out0 ←
+        field.M31.reduce_u64
+            (core.num.U64.wrapping_sub
+              (core.num.U64.wrapping_add
+                (core.num.U64.wrapping_add (core.num.U64.wrapping_sub (core.num.U64.wrapping_add i8 (word (P * P))) i10)
+                  i12)
+                (word (3 * P)))
+              v)
+      let i18 ← word (ZMod.val x.re.re) * word (ZMod.val y.re.im)
+      let i19 ← word (ZMod.val x.re.im) * word (ZMod.val y.re.re)
+      let i22 ← word 2 * v
+      let out1 ←
+        field.M31.reduce_u64
+            (core.num.U64.wrapping_add (core.num.U64.wrapping_add (core.num.U64.wrapping_add i18 i19) u) i22)
+      let i24 ← word (ZMod.val x.re.re) * word (ZMod.val y.im.re)
+      let i25 ← word (ZMod.val x.im.re) * word (ZMod.val y.re.re)
+      let i29 ← word (ZMod.val x.re.im) * word (ZMod.val y.im.im)
+      let i31 ← word (ZMod.val x.im.im) * word (ZMod.val y.re.im)
+      let out2 ←
+        field.M31.reduce_u64
+            (core.num.U64.wrapping_sub
+              (core.num.U64.wrapping_sub
+                (core.num.U64.wrapping_add (core.num.U64.wrapping_add i24 i25) (word (2 * (P * P)))) i29)
+              i31)
+      let i33 ← word (ZMod.val x.re.re) * word (ZMod.val y.im.im)
+      let i34 ← word (ZMod.val x.re.im) * word (ZMod.val y.im.re)
+      let i36 ← word (ZMod.val x.im.re) * word (ZMod.val y.re.im)
+      let i38 ← word (ZMod.val x.im.im) * word (ZMod.val y.re.re)
+      let out3 ←
+        field.M31.reduce_u64
+            (core.num.U64.wrapping_add (core.num.U64.wrapping_add (core.num.U64.wrapping_add i33 i34) i36) i38)
+      ok (some { c0 := { a := out0, b := out1 }, c1 := { a := out2, b := out3 } })) =
+    ok
+      (some
+        {
+          c0 :=
+            { a := encodeBase ↑(a * e + P * P - b * f + 2 * rawU c d g h + 3 * P - rawV c d g h),
+              b := encodeBase ↑(a * f + b * e + rawU c d g h + 2 * rawV c d g h) },
+          c1 :=
+            { a := encodeBase ↑(a * g + c * e + 2 * (P * P) - b * h - d * f),
+              b := encodeBase ↑(a * h + b * g + c * f + d * e) } })
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ProductExecution.lean:83:53: warning: This simp argument is unused:
+  word_add
+
+Hint: Omit it from the simp argument list.
+  simp (disch := (simp only [P, ̲PartialProduct.p] at *; omega)) only
+  ̵  ̵ ̵ ̵[pp_word, ̲prime_from, ̲two_word,
+  ̲ ̲ ̲ ̲ ̲three_word, ̲word_mul, ̲word_a̵d̵d̵,̵w̵o̵r̵d̵_̵sub,
+  ̵  ̵ ̵ ̵ ̵partial_word, ̲reduce_word, ̲field.CM31.new, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ProductExecution.lean:83:62: warning: This simp argument is unused:
+  word_sub
+
+Hint: Omit it from the simp argument list.
+  simp (disch := (simp only [P, ̲PartialProduct.p] at *; omega)) only
+  ̵  ̵ ̵ ̵[pp_word, ̲prime_from, ̲two_word,
+  ̲ ̲ ̲ ̲ ̲three_word, ̲word_mul, ̲word_add,w̵o̵r̵d̵_̵s̵u̵b̵,̵
+  ̵  ̵ ̵ ̵ ̵partial_word, ̲reduce_word, ̲field.CM31.new, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ProductExecution.lean:84:5: warning: This simp argument is unused:
+  partial_word
+
+Hint: Omit it from the simp argument list.
+  simp (disch := (simp only [P, ̲PartialProduct.p] at *; omega)) only
+  ̵  ̵ ̵ ̵[pp_word, ̲prime_from, ̲two_word,
+  ̲ ̲ ̲ ̲ ̲three_word, ̲word_mul, ̲word_add, ̲word_sub,
+  ̵  ̵ ̵ ̵ ̵p̵a̵rt̵i̵a̵l̵_̵w̵o̵r̵d̵,̵r̵educe_word, ̲field.CM31.new, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ProductExecution.lean:84:18: warning: This simp argument is unused:
+  reduce_word
+
+Hint: Omit it from the simp argument list.
+  simp (disch := (simp only [P, ̲PartialProduct.p] at *; omega)) only
+  ̵  ̵ ̵ ̵[pp_word, ̲prime_from, ̲two_word,
+  ̲ ̲ ̲ ̲ ̲three_word, ̲word_mul, ̲word_add, ̲word_sub,
+  ̵  ̵ ̵ ̵ ̵partial_word,r̵e̵d̵u̵c̵e̵_̵w̵o̵r̵d̵,̵ ̲field.CM31.new, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.ProductExecution.encoded_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ProductExecution.product_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r70-product-20260929-c/lib/AspisV8R19/ProductExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ProductExecution.lean"
+	User time (seconds): 19.44
+	System time (seconds): 0.59
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:19.96
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3873524
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86650
+	Voluntary context switches: 780
+	Involuntary context switches: 207
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 80
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
