@@ -74,6 +74,21 @@ theorem terminal_value_read
     simpa using bound
   simpa [exact, listExact] using run
 
+theorem vec_two_exact
+    (values : alloc.vec.Vec RawQM31) (length : values.val.length = 2) :
+    values.val = [values.val[0]!, values.val[1]!] := by
+  apply List.ext_getElem
+  · simp [length]
+  · intro index leftBound rightBound
+    have indexBound : index < 2 := by simpa using rightBound
+    interval_cases index
+    · symm
+      apply List.getElem!_of_getElem?
+      simpa [length]
+    · symm
+      apply List.getElem!_of_getElem?
+      simpa [length]
+
 private theorem multilinear_terminal_claim
     (scale p0 p1 : RawQM31) (values : Slice RawQM31) :
     multilinearTerminal scale p0 p1 values =
@@ -221,6 +236,7 @@ theorem terminal_six_sum_eq_candidate
 
 #print axioms terminal_value_array_canonical
 #print axioms terminal_value_read
+#print axioms vec_two_exact
 #print axioms terminal_six_sum_eq_candidate
 
 end V7CallerCurrentReleaseR26TerminalDotModelIdentity
