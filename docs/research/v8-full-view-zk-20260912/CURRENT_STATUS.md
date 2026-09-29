@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R78 actual circle-sampler value/error/state bridge — 2026-09-29
+
+[R78_SAMPLER_CIRCLE_BRIDGE.md](R78_SAMPLER_CIRCLE_BRIDGE.md) composes the actual
+QM31 sampler, circle arithmetic and three-attempt outer loop with the retained
+bounded-wrapper model under the explicit deterministic hash adapter. Values,
+the two exhaustion errors and advanced state agree exactly. Successful source
+points are canonical, on the circle and outside CM31.
+
+Seven leaves compile; 77 theorem audits (72 mechanically reused, five new),
+four with the inherited opaque `Formatter` dependency. Original extractions
+and old proofs are unchanged. A global generated-instance import collision
+was resolved by checked proof-script namespace reuse, not weakened premises.
+
+Next: universal source-observer/hash-query-history correspondence. Returned
+value/state equality is not trace equality or global privacy. Runtime/CU
+unchanged: **1,495,663 / 1,497,050**, both actual 1M runs exhaust.
+
 ## R77 complete QM31 challenge value/state bridge — 2026-09-29
 
 [R77_CHALLENGE_MODEL_BRIDGE.md](R77_CHALLENGE_MODEL_BRIDGE.md) proves the actual

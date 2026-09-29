@@ -1,0 +1,107 @@
+import AspisV8R19.CircleSourceExecution
+import AspisR72Sampler.Funs
+
+/-! Explicit transport between the two actual extracted field closures.
+No arithmetic correctness premise or replacement field implementation. -/
+set_option autoImplicit false
+namespace AspisV8R19.SamplerCircleTransport
+open Aeneas Aeneas.Std Result AspisR72Sampler
+
+def cm (x : AspisR69Explicit.field.CM31) : field.CM31 := ⟨x.a,x.b⟩
+def qm (x : AspisR69Explicit.field.QM31) : field.QM31 := ⟨cm x.c0,cm x.c1⟩
+def mapCM (r : Result AspisR69Explicit.field.CM31) : Result field.CM31 := do
+  let x ← r
+  ok (cm x)
+def mapQM (r : Result AspisR69Explicit.field.QM31) : Result field.QM31 := do
+  let x ← r
+  ok (qm x)
+
+theorem prime : field.P=AspisR69Explicit.field.P := by
+  simp only [field.P,AspisR69Explicit.field.P]
+theorem reducer (x : U64) : field.reduce_u64 x=AspisR69Explicit.field.reduce_u64 x := by
+  simp only [field.reduce_u64,AspisR69Explicit.field.reduce_u64,prime]
+theorem mul (x y : U32) : field.M31.mul x y=AspisR69Explicit.field.M31.mul x y := by
+  simp only [field.M31.mul,AspisR69Explicit.field.M31.mul,prime,reducer]
+theorem add (x y : U32) : field.M31.add x y=AspisR69Explicit.field.M31.add x y := by
+  simp only [field.M31.add,AspisR69Explicit.field.M31.add,prime]
+theorem sub (x y : U32) : field.M31.sub x y=AspisR69Explicit.field.M31.sub x y := by
+  simp only [field.M31.sub,AspisR69Explicit.field.M31.sub,prime]
+theorem neg (x : U32) : field.M31.neg x=AspisR69Explicit.field.M31.neg x := by
+  simp only [field.M31.neg,AspisR69Explicit.field.M31.neg,prime]
+theorem double (x : U32) : field.M31.double x=AspisR69Explicit.field.M31.double x := by
+  simp only [field.M31.double,AspisR69Explicit.field.M31.double,add]
+theorem square_body (r : core.ops.range.Range Usize) (x : U32) :
+    field.square_n_loop.body r x=AspisR69Explicit.field.square_n_loop.body r x := by
+  simp only [field.square_n_loop.body,AspisR69Explicit.field.square_n_loop.body,mul]
+  rfl
+theorem square_loop (r : core.ops.range.Range Usize) (x : U32) :
+    field.square_n_loop r x=AspisR69Explicit.field.square_n_loop r x := by
+  simp only [field.square_n_loop,AspisR69Explicit.field.square_n_loop,square_body]
+theorem square_n (x : U32) (n : Usize) :
+    field.square_n x n=AspisR69Explicit.field.square_n x n := by
+  simp only [field.square_n,AspisR69Explicit.field.square_n,square_loop]
+theorem inv (x : U32) : field.M31.inv x=AspisR69Explicit.field.M31.inv x := by
+  simp only [field.M31.inv,AspisR69Explicit.field.M31.inv,mul,square_n]
+theorem reduce (x : U64) : field.M31.reduce_u64 x=AspisR69Explicit.field.M31.reduce_u64 x := by
+  simp only [field.M31.reduce_u64,AspisR69Explicit.field.M31.reduce_u64,reducer]
+theorem width (x y : U64) :
+    field.r23_product_u32_bounded x y=AspisR69Explicit.field.r23_product_u32_bounded x y := rfl
+theorem zero (x : U32) : field.M31.is_zero x=AspisR69Explicit.field.M31.is_zero x := rfl
+
+theorem cm_add (x y : AspisR69Explicit.field.CM31) :
+    field.CM31.add (cm x) (cm y)=mapCM (AspisR69Explicit.field.CM31.add x y) := by
+  simp only [field.CM31.add,AspisR69Explicit.field.CM31.add,cm,mapCM,add,bind_assoc,bind_tc_ok]
+  rfl
+theorem cm_sub (x y : AspisR69Explicit.field.CM31) :
+    field.CM31.sub (cm x) (cm y)=mapCM (AspisR69Explicit.field.CM31.sub x y) := by
+  simp only [field.CM31.sub,AspisR69Explicit.field.CM31.sub,cm,mapCM,sub,bind_assoc,bind_tc_ok]
+  rfl
+theorem cm_neg (x : AspisR69Explicit.field.CM31) :
+    field.CM31.neg (cm x)=mapCM (AspisR69Explicit.field.CM31.neg x) := by
+  simp only [field.CM31.neg,AspisR69Explicit.field.CM31.neg,cm,mapCM,neg,bind_assoc,bind_tc_ok]
+  rfl
+theorem cm_mul_r (x : AspisR69Explicit.field.CM31) :
+    field.mul_by_r (cm x)=mapCM (AspisR69Explicit.field.mul_by_r x) := by
+  simp only [field.mul_by_r,AspisR69Explicit.field.mul_by_r,cm,mapCM,double,sub,add,bind_assoc,bind_tc_ok]
+  rfl
+theorem cm_square (x : AspisR69Explicit.field.CM31) :
+    field.CM31.square (cm x)=mapCM (AspisR69Explicit.field.CM31.square x) := by
+  simp only [field.CM31.square,AspisR69Explicit.field.CM31.square,cm,mapCM,prime,width,reduce,mul,double,bind_assoc,bind_tc_ok,lift]
+  rfl
+theorem cm_mul (x y : AspisR69Explicit.field.CM31) :
+    field.CM31.mul (cm x) (cm y)=mapCM (AspisR69Explicit.field.CM31.mul x y) := by
+  simp only [field.CM31.mul,AspisR69Explicit.field.CM31.mul,cm,mapCM,width,reduce,mul,sub,bind_assoc,bind_tc_ok,lift]
+  rfl
+theorem cm_inv (x : AspisR69Explicit.field.CM31) :
+    field.CM31.inv (cm x)=mapCM (AspisR69Explicit.field.CM31.inv x) := by
+  simp only [field.CM31.inv,AspisR69Explicit.field.CM31.inv,
+    field.CM31.inv_with,AspisR69Explicit.field.CM31.inv_with,
+    cm,mapCM,mul,add,inv,neg,bind_assoc,bind_tc_ok]
+  rfl
+theorem cm_zero (x : AspisR69Explicit.field.CM31) :
+    field.CM31.is_zero (cm x)=AspisR69Explicit.field.CM31.is_zero x := by
+  simp only [field.CM31.is_zero,AspisR69Explicit.field.CM31.is_zero,cm,zero]
+
+#print axioms prime
+#print axioms reducer
+#print axioms mul
+#print axioms add
+#print axioms sub
+#print axioms neg
+#print axioms double
+#print axioms square_body
+#print axioms square_loop
+#print axioms square_n
+#print axioms inv
+#print axioms reduce
+#print axioms width
+#print axioms zero
+#print axioms cm_add
+#print axioms cm_sub
+#print axioms cm_neg
+#print axioms cm_mul_r
+#print axioms cm_square
+#print axioms cm_mul
+#print axioms cm_inv
+#print axioms cm_zero
+end AspisV8R19.SamplerCircleTransport
