@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R54 bounded wrappers and exact-field policy — 2026-09-29
+
+[R54_SAMPLER_WRAPPERS.md](R54_SAMPLER_WRAPPERS.md) adds 35 compiled Lean
+theorems: cap-three nonzero/OOD/circle programs retain full traces and exact
+error/state behavior; canonical words decode consistently into QM31; the
+circle map is injective, on-circle and outside CM31 on accepted parameters.
+Actual Rust nonzero/OOD APIs match 358 Lean fixtures across 2,684 hash calls,
+including eight cache hits. This is not universal Rust extraction.
+
+Next: universal sampler/field correspondence (including guarded circle
+inversion), then full prover/observer chronology and retry/publication law.
+Conditional source challenge laws, full privacy and the CU target remain
+open. No verifier or SBF change; CU remains 1,620,236 / 1,621,719, with both
+actual 1M-cap runs exhausted.
+
 ## R53 bounded sampler programs — 2026-09-29
 
 [R53_BOUNDED_SAMPLER_PROGRAMS.md](R53_BOUNDED_SAMPLER_PROGRAMS.md) adds 37
