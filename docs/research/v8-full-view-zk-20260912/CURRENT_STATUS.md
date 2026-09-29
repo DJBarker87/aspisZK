@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R52 exact memoized-oracle interpreter law — 2026-09-29
+
+[R52_MEMOIZED_ORACLE_LAW.md](R52_MEMOIZED_ORACLE_LAW.md) adds 44 compiled
+Lean theorems and one audited swap equivalence. Uniform complete-oracle
+execution equals first-read-only sampling with cached replay, preserving
+the full query trace and terminal outcome. Finite all-branches support
+extends this to arbitrary byte addresses. Source transcript primitives and
+bounded stopping are connected; publication filtering is not assumed uniform.
+
+Next: compile the actual QM31/q22 bounded sampler loops with exact byte,
+error, state and call-trace behavior, then the complete prover/observer and
+retry/publication experiment. The source challenge joint law and full privacy
+remain unproved. No verifier change or new Rust/SBF run; CU remains
+1,620,236 / 1,621,719, with both 1M-cap runs exhausted.
+
 ## R51 duplex first-hit boundary — 2026-09-29
 
 [R51_DUPLEX_FIRST_HIT.md](R51_DUPLEX_FIRST_HIT.md) adds 27 compiled Lean
