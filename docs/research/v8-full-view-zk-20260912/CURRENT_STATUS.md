@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R43 fixed high witness and low-repair invariance — 2026-09-29
+
+[R43_HIGH_QUERY_WITNESS.md](R43_HIGH_QUERY_WITNESS.md) supplies a new fixed
+rank-13 residual witness using degree-24..27 B/C/D units plus degree-31 D.
+Thirty-nine Lean theorems certify the explicit matrix, its inverse, and
+invariance under every repair below coordinate 88. The corrected model
+retains the first sparse-G boundary weight; omitting it is a retained
+source/model negative. Source checks cover four controlled root schedules,
+112 normalized columns and 1,904 observation equalities.
+
+Next: compose the actual normalized root-kernel construction and the D31
+G-core boundary for every source query schedule, then lift the witness and
+derive a fixed-query large-field bound. The shared-oracle law/full privacy
+remain open. No verifier or protocol change, no new hiding premise, no SBF
+rerun or CU saving; the selected endpoint remains about 1.62M CU.
+
 ## R42 admissible-grid and query-source boundary — 2026-09-29
 
 [R42_ADMISSIBLE_GRID_AND_QUERY_SOURCE.md](R42_ADMISSIBLE_GRID_AND_QUERY_SOURCE.md)
