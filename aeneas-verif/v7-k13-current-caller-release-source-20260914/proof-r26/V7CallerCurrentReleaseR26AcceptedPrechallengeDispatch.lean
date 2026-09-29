@@ -89,6 +89,11 @@ structure AcceptedPrechallengeDispatch
   alpha : Array field.QM31 4#usize
   foldedValues : Array field.QM31 256#usize
   relationFields : Array (Array field.QM31 6#usize) 4#usize
+  fieldsAfterRelation : Fields
+  relationFieldsRun :
+    v6_transcript.decode_compact_relation_fields fieldsInst
+        origin.state.2.2.1 =
+      ok (.Ok relationFields, fieldsAfterRelation)
   queries : Array Std.U32 16#usize
   compactCounter : Std.U8
   frontierNodes : Std.Usize
@@ -162,7 +167,7 @@ theorem AcceptedCircleBodyOrigin.exposesPrechallengeDispatch
   obtain ⟨traceCirclePair, _, run⟩ := run
   rcases traceCirclePair with ⟨_, traceAfterCircle⟩
   rw [bind_eq_ok_iff] at run
-  obtain ⟨relationPair, _, run⟩ := run
+  obtain ⟨relationPair, relationRun, run⟩ := run
   rcases relationPair with ⟨relationResult, fieldsAfterRelation⟩
   rw [bind_eq_ok_iff] at run
   obtain ⟨relationFlow, relationBranch, run⟩ := run
@@ -326,6 +331,10 @@ theorem AcceptedCircleBodyOrigin.exposesPrechallengeDispatch
                                 alpha := alpha
                                 foldedValues := foldedValues
                                 relationFields := relationFields
+                                fieldsAfterRelation := fieldsAfterRelation
+                                relationFieldsRun := by
+                                  rw [relationExact] at relationRun
+                                  exact relationRun
                                 queries := queries
                                 compactCounter := compactCounter
                                 frontierNodes := frontierNodes

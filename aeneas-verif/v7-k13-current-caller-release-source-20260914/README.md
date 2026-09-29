@@ -275,8 +275,14 @@ The first of those facts is now discharged at its source boundary:
 `fixed_reader_next_qm31_canonical` proves that every successful literal
 fixed-field read returns a canonical QM31 value, using the four generated
 limb checks rather than a parser axiom.
-After that equality is instantiated, the remaining release composition is the
-accepted-trace implication into the maintained restored K1.2--K1.6 security
-bound and the outer transaction dispatch implication.  Exact focused evidence
-is recorded in
+The symbolic R30 decoder proofs lift that single-read result through each
+six-element mutable row and the complete four-row generated decoder.
+`accepted_production_tail_relation_rows_canonical` then uses the exact row
+lookups in the accepted source trace to discharge all three relation-row
+canonicality premises.  The remaining source invariants are the transcript
+challenge canonicality, the initial claim and 256 folded values, and the
+fixed seven-component accumulator layout and component premises.  After those
+are instantiated, the remaining release composition is the accepted-trace
+implication into the maintained restored K1.2--K1.6 security bound and the
+outer transaction dispatch implication. Exact focused evidence is recorded in
 `evidence-r30/production-observer-to-accepted-tail-kernel-check.txt`.

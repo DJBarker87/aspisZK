@@ -8,6 +8,7 @@ output=${4:?usage: replay-r28-r29-bridge.sh BUNDLE_DIR REPO_ROOT R26_OLEAN_DIR O
 
 generated="$bundle/generated/V7ProductionSnapshotObserverR28"
 proof="$bundle/proof-r28"
+proof_r26="$bundle/proof-r26"
 proof_r30="$bundle/proof-r30"
 old_callbacks="$repo/aeneas-verif/v7-tag73-current-caller-source-20260830/proof"
 stage="$output/staged-r29"
@@ -97,6 +98,10 @@ compile_to "$generated/FunsExternal.lean" \
   "$output/V7ProductionSnapshotObserverR28/FunsExternal.olean"
 compile_to "$generated/Funs.lean" \
   "$output/V7ProductionSnapshotObserverR28/Funs.olean"
+compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedPrechallengeDispatch.lean" \
+  "$output/V7CallerCurrentReleaseR26AcceptedPrechallengeDispatch.olean"
+compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedInnerToPrechallenge.lean" \
+  "$output/V7CallerCurrentReleaseR26AcceptedInnerToPrechallenge.olean"
 compile_to "$proof/V7ProductionSnapshotObserverR28SourceBridge.lean" \
   "$output/V7ProductionSnapshotObserverR28SourceBridge.olean"
 compile_to "$proof/V7ProductionSnapshotObserverR28ToR26Prechallenge.lean" \
@@ -105,5 +110,11 @@ compile_to "$proof/V7ProductionSnapshotObserverR28AcceptedTail.lean" \
   "$output/V7ProductionSnapshotObserverR28AcceptedTail.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30FixedFieldCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30FixedFieldCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30RelationFieldInnerCanonical.lean" \
+  "$output/V7CallerCurrentReleaseR30RelationFieldInnerCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30RelationFieldsCanonical.lean" \
+  "$output/V7CallerCurrentReleaseR30RelationFieldsCanonical.olean"
+compile_to "$proof_r30/V7ProductionSnapshotObserverR30RelationRowsCanonical.lean" \
+  "$output/V7ProductionSnapshotObserverR30RelationRowsCanonical.olean"
 
-echo "FINAL target=V7CallerCurrentReleaseR30FixedFieldCanonical status=passed"
+echo "FINAL target=V7ProductionSnapshotObserverR30RelationRowsCanonical status=passed"

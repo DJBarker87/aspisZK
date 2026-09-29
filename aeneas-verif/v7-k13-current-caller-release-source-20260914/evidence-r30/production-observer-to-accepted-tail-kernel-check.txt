@@ -112,3 +112,54 @@ The first two focused attempts failed while aligning the generated comparison
 normal form and simplifying the lifted `wrapping_sub`; the proof source was
 changed after each failure.  The final target is warning-free and ran under
 the same `MemoryHigh=7G`, `MemoryMax=8G`, `MemorySwapMax=0` policy.
+
+Relation decoder and accepted-row discharge
+-------------------------------------------
+
+Recorded UTC: 2026-09-29T21:55:00Z
+Base revision: d86f427c549c2425c4522cd76210edf61e5e3f93
+Source SHA-256:
+  0840193807b59ac490c989dbae9e0d4a03bc849dc96f8cf176270eca2f1c721b
+  proof-r26/V7CallerCurrentReleaseR26AcceptedPrechallengeDispatch.lean
+  a4db02c2b1c20db2046bb0db8bc4de13a3666dee0b3f26d287a404d2821d7a12
+  proof-r30/V7CallerCurrentReleaseR30RelationFieldInnerCanonical.lean
+  dbfb589142fffb21928fa1c5ffa9a82dd39b3d527980fec57de213ca160ccfce
+  proof-r30/V7CallerCurrentReleaseR30RelationFieldsCanonical.lean
+  1589efb4155e15a7aa9b1aabc3b9989335b869e5ac7240436cd76de7d27654d4
+  proof-r30/V7ProductionSnapshotObserverR30RelationRowsCanonical.lean
+
+The inner and outer proofs follow exact symbolic loop traces.  Each accepted
+fixed-field read is canonical, iterator back-functions preserve canonical
+cells, and the successful four-row decoder therefore returns 24 canonical
+QM31 entries.  The strengthened prechallenge dispatch retains the literal
+decoder equation.  The production-tail theorem transports the decoder result
+through its exact `index_usize` equations for rounds one, two, and three.
+
+  'V7CallerCurrentReleaseR30RelationFieldInnerCanonical.successful_inner_relation_field_loop_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  'V7CallerCurrentReleaseR30RelationFieldsCanonical.successful_relation_field_decode_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  'V7ProductionSnapshotObserverR30RelationRowsCanonical.accepted_production_tail_relation_rows_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+
+Focused final checks, all under `MemoryHigh=7G`, `MemoryMax=8G`, and
+`MemorySwapMax=0`:
+
+  RESULT R30RelationFieldInnerPending exit=0 wall_s=3.71 peak_kib=2693856 swaps=0
+  RESULT R30RelationFieldsCanonicalFullFinal10 exit=0 wall_s=2.72 peak_kib=2733352 swaps=0
+  RESULT R30RelationFieldsCanonicalIndexBridge2 exit=0 wall_s=5.48 peak_kib=7140712 swaps=0
+  RESULT V7CallerCurrentReleaseR26AcceptedPrechallengeDispatch exit=0 wall_s=6.10 peak_kib=7220756 swaps=0
+  RESULT V7CallerCurrentReleaseR26AcceptedInnerToPrechallenge exit=0 wall_s=4.83 peak_kib=7123304 swaps=0
+  RESULT V7ProductionSnapshotObserverR28ToR26Prechallenge exit=0 wall_s=4.53 peak_kib=7180284 swaps=0
+  RESULT V7ProductionSnapshotObserverR28AcceptedTail exit=0 wall_s=4.79 peak_kib=7224444 swaps=0
+  RESULT R30ProductionRelationRowsRebuilt exit=0 wall_s=4.47 peak_kib=7175952 swaps=0
+  RESULT R30RelationFieldsCanonicalWarningFree exit=0 wall_s=6.28 peak_kib=7138908 swaps=0
+  RESULT R30ProductionRelationRowsWarningFree exit=0 wall_s=5.12 peak_kib=7176068 swaps=0
+
+The three relation-row premises of `accepted_relation_loop_end_to_end` are now
+derived from the same accepted production execution.  The remaining source
+premises are transcript challenge canonicality, the initial running claim and
+folded-value canonicality, and the fixed accumulator layout/component facts.
