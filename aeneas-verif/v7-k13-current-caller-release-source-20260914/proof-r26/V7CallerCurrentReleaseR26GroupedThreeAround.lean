@@ -29,13 +29,13 @@ def threeAroundCoefficients11
     field.QM31.ZERO,
     field.QM31.ZERO]
 
-private def threeAroundCoefficientsAt
+def threeAroundCoefficientsAt
     (coefficient alpha3 : RawQM31) : Array RawQM31 4#usize :=
   Array.make 4#usize [coefficient, alpha3,
     field.QM31.ZERO,
     field.QM31.ZERO]
 
-private def threeAroundCounts21 : Array Std.U8 4#usize :=
+def threeAroundCounts21 : Array Std.U8 4#usize :=
   Array.make 4#usize [2#u8, 1#u8, 0#u8, 0#u8]
 
 private def threeAroundCounts31 : Array Std.U8 4#usize :=
@@ -54,7 +54,7 @@ private theorem threeAroundFindFirstDone
   simp [sumcheck.fold_group_tuple_loop0_loop0.body,
     indexRun]
 
-private theorem threeAroundFindFirst
+theorem threeAroundFindFirst
     (group0 group1 : Std.U8) :
     sumcheck.fold_group_tuple_loop0_loop0
         (oneThreeUnique2 group0 group1) 2#usize group0 0#usize =

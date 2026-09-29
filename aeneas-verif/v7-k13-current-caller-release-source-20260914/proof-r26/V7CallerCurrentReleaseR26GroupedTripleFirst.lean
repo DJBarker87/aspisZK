@@ -61,7 +61,7 @@ private theorem tripleFindNewGroup :
   rw [loop.eq_1]
   rw [tripleFindNewDone]
 
-private theorem castUsizeThreeU8 :
+theorem castUsizeThreeU8 :
     UScalar.cast .U8 3#usize = 3#u8 := by
   apply UScalar.val_eq_imp
   rw [UScalar.cast_val_eq]

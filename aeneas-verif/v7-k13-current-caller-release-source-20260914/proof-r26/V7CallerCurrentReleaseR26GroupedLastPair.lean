@@ -24,7 +24,7 @@ def groupsLastPair
     (group0 group1 group2 : Std.U8) : Array Std.U8 4#usize :=
   Array.make 4#usize [group0, group1, group2, group2]
 
-private def lastPairUnique3
+def lastPairUnique3
     (group0 group1 group2 : Std.U8) : Array Std.U8 4#usize :=
   Array.make 4#usize [group0, group1, group2, 0#u8]
 
@@ -92,7 +92,7 @@ private theorem lastPairFindNewDone
       ok (done 2#usize) := by
   simp [sumcheck.fold_group_tuple_loop0_loop0.body]
 
-private theorem lastPairFindNew
+theorem lastPairFindNew
     (group0 group1 group2 : Std.U8)
     (different02 : group0 ≠ group2) (different12 : group1 ≠ group2) :
     sumcheck.fold_group_tuple_loop0_loop0
