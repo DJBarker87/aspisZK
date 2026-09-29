@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R55 packed opening decoder — 2026-09-29
+
+[R55_OPENING_DECODE.md](R55_OPENING_DECODE.md) selects caller-owned decoding
+with a high-bit canonicality marker. Complete primary CU is now
+**1,612,162 / 1,613,637**, saving 8,074 / 8,082 against R27 on unchanged
+proofs. Both actual 1M-cap runs still exhaust. Buffer-only decoding was slower
+and is retained as a rejected experiment. Five Lean theorems prove the
+integer canonicality predicate; actual-source malformed-input, full-wire,
+stack and complete SVM gates pass. No protocol or production path changed.
+
+Next CU target: actual general multiplication/short dots and semantic selector
+reuse. R54's universal source refinement, full transcript composition,
+shared-oracle/retry/publication law and extraction obligations remain open.
+This execution improvement is not a full privacy or soundness result.
+
 ## R54 bounded wrappers and exact-field policy — 2026-09-29
 
 [R54_SAMPLER_WRAPPERS.md](R54_SAMPLER_WRAPPERS.md) adds 35 compiled Lean
