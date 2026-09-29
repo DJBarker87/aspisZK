@@ -1,0 +1,14 @@
+import AspisV8R19.NormalizedSectionBoundary
+
+/- Retained declarations compiled into this focused workspace, unchanged.
+New declaration audits live in their individual leaves. -/
+#print axioms AspisCircleTensorBinding.doubledFactor_eq_chebyshev
+#print axioms AspisCircleTensorBinding.naturalLineValue_eq_eval
+#print axioms AspisCircleTensorBinding.naturalLinePoly_ne_zero
+#print axioms AspisCircleTensorBinding.naturalLinePoly_natDegree
+#print axioms AspisCircleTensorBinding.naturalCoeffMatrix_det_ne_zero
+#print axioms AspisCircleTensorBinding.naturalCoeff_mul_monomialToNatural
+#print axioms AspisCircleTensorBinding.naturalEvalMatrix_eq_monomial_mul_coeff
+#print axioms AspisCircleTensorBinding.naturalEval_mul_monomialToNatural
+#print axioms AspisCircleTensorBinding.naturalEval_mul_monomialToNatural_rect
+#print axioms AspisCircleTensorBinding.weightedNaturalEval_mul_monomialToNatural

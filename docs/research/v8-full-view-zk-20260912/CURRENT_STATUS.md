@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R44 normalized fixed-query section — 2026-09-29
+
+[R44_NORMALIZED_QUERY_SECTION.md](R44_NORMALIZED_QUERY_SECTION.md) proves
+the normalized raw/final/G-core section for every distinct 22-root tuple.
+Forty-three new Lean theorems compile; the exact-QM31 selected matrix is
+the same invertible R43 specialization independently of the roots. The
+degree-31 D boundary and all 271 sparse G reads are preserved in the retained
+source-shaped model. The evidence gate passes with standard axioms only.
+
+Next: identify the executable remainder and legal balanced/active table
+transport with this section, including OOD/image and all residual equations;
+then prove the new fixed-query challenge polynomial's source correspondence
+and degree. The accepted-prefix shared-oracle law and full privacy remain
+open. No protocol/verifier change or new Rust/SBF execution; CU remains
+1,620,236 / 1,621,719, with both 1M-cap runs exhausted.
+
 ## R43 fixed high witness and low-repair invariance — 2026-09-29
 
 [R43_HIGH_QUERY_WITNESS.md](R43_HIGH_QUERY_WITNESS.md) supplies a new fixed
