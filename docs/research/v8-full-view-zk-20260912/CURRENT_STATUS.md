@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R46 exact-field source normalization — 2026-09-29
+
+[R46_SOURCE_NORMALIZATION.md](R46_SOURCE_NORMALIZATION.md) adds 37 compiled
+Lean theorems. The descending remainder loop has nonzero pivots, preserves
+root evaluations and removes the high tail. Its sequential writes, ordering
+and final overwrite yield exactly the normalized interpolation section,
+which now inherits R45's legal-G/OOD boundary. This is exact-field loop
+semantics, not a claim of extracted Rust word/array refinement.
+
+Next: compose the actual circle raw evaluator, selected query fibres and
+chord/division/fold equations, then all residual source equations and the
+new challenge polynomial. Full privacy, soundness closure and source oracle
+law remain open. No verifier change or Rust/SBF rerun; CU stays
+1,620,236 / 1,621,719 and both 1M runs exhaust.
+
 ## R45 source-mask transport and encoded OOD bridge — 2026-09-29
 
 [R45_SOURCE_MASK_TRANSPORT.md](R45_SOURCE_MASK_TRANSPORT.md) adds 46 compiled
