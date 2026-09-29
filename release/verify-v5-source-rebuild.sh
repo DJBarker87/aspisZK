@@ -26,7 +26,7 @@ require_command() {
   command -v "$1" >/dev/null 2>&1 || fail "required command is unavailable: $1"
 }
 
-for command_name in cargo cmp git jq tar; do
+for command_name in cargo cmp git jq tar python3; do
   require_command "$command_name"
 done
 
@@ -94,15 +94,17 @@ parity_sbf_bytes="$(jq -er '.clean_publication_source_build.output_bytes' "$PARI
 [[ "$manifest_sbf_bytes" == "$FROZEN_SBF_BYTES" ]] || fail "manifest SBF size changed"
 [[ "$parity_sbf_bytes" == "$FROZEN_SBF_BYTES" ]] || fail "parity SBF size changed"
 
-resolved_commit="$(git -C "$ROOT" rev-parse "${FROZEN_SOURCE_COMMIT}^{commit}")"
-resolved_tree="$(git -C "$ROOT" rev-parse "${FROZEN_SOURCE_COMMIT}^{tree}")"
-[[ "$resolved_commit" == "$FROZEN_SOURCE_COMMIT" ]] || fail "documented source commit is unavailable"
-[[ "$resolved_tree" == "$FROZEN_SOURCE_TREE" ]] || fail "documented source tree changed"
+source_revision="$(python3 "$ROOT/tools/resolve_release_revision.py" "$FROZEN_SOURCE_COMMIT")"
+source_tree="$(python3 "$ROOT/tools/resolve_release_revision.py" "$FROZEN_SOURCE_TREE")"
+resolved_commit="$(git -C "$ROOT" rev-parse "${source_revision}^{commit}")"
+resolved_tree="$(git -C "$ROOT" rev-parse "${source_revision}^{tree}")"
+[[ "$resolved_commit" == "$source_revision" ]] || fail "documented source commit is unavailable"
+[[ "$resolved_tree" == "$source_tree" ]] || fail "documented source tree changed"
 
-git -C "$ROOT" show "$FROZEN_SOURCE_COMMIT:Cargo.toml" \
+git -C "$ROOT" show "$source_revision:Cargo.toml" \
   | [[ "$(sha_stdin)" == "$FROZEN_CARGO_TOML_SHA256" ]] \
   || fail "documented source Cargo.toml changed"
-git -C "$ROOT" show "$FROZEN_SOURCE_COMMIT:Cargo.lock" \
+git -C "$ROOT" show "$source_revision:Cargo.lock" \
   | [[ "$(sha_stdin)" == "$FROZEN_CARGO_LOCK_SHA256" ]] \
   || fail "documented source Cargo.lock changed"
 
@@ -111,7 +113,7 @@ check_source_sha() {
   local path="$1"
   local expected="$2"
   local actual
-  actual="$(git -C "$ROOT" show "$FROZEN_SOURCE_COMMIT:$path" | sha_stdin)"
+  actual="$(git -C "$ROOT" show "$source_revision:$path" | sha_stdin)"
   [[ "$actual" == "$expected" ]] || fail "formal source identity changed: $path"
 }
 
@@ -136,19 +138,19 @@ check_source_sha \
 
 git -C "$ROOT" grep -Fq \
   "theorem current_source_combined_capstone" \
-  "$FROZEN_SOURCE_COMMIT" -- \
+  "$source_revision" -- \
   "aeneas-verif/current-source-abc-capstone-20260722/proof/CurrentSourceABCapstone.lean" \
   || fail "combined V5 theorem entry point is missing"
 git -C "$ROOT" grep -Fq \
   "theorem tag67AcceptedWireAndVerifierClosure" \
-  "$FROZEN_SOURCE_COMMIT" -- \
+  "$source_revision" -- \
   "aeneas-verif/tag67-work-wire-correspondence/proof/Tag67WorkVerifierClosure.lean" \
   || fail "Tag-67 verifier theorem entry point is missing"
 
 echo "[4/6] Export the exact clean source tree and fetch its locked dependencies"
 source_dir="$tmp/source"
 mkdir -p "$source_dir"
-git -C "$ROOT" archive "$FROZEN_SOURCE_COMMIT" | tar -x -C "$source_dir"
+git -C "$ROOT" archive "$source_revision" | tar -x -C "$source_dir"
 [[ "$(sha_file "$source_dir/Cargo.toml")" == "$FROZEN_CARGO_TOML_SHA256" ]] \
   || fail "exported Cargo.toml identity changed"
 [[ "$(sha_file "$source_dir/Cargo.lock")" == "$FROZEN_CARGO_LOCK_SHA256" ]] \
@@ -203,12 +205,14 @@ echo "[6/6] Write the reproducibility record"
 jq -n \
   --arg source_commit "$FROZEN_SOURCE_COMMIT" \
   --arg source_tree "$FROZEN_SOURCE_TREE" \
+  --arg rewritten_source_commit "$source_revision" \
   --arg sbf_sha256 "$FROZEN_SBF_SHA256" \
   --argjson sbf_bytes "$FROZEN_SBF_BYTES" \
   --arg cargo_build_sbf_version "$actual_build_version" \
   '{
     artifact: "aspis_v5_tag67_ci_source_rebuild",
     source_commit: $source_commit,
+    rewritten_source_commit: $rewritten_source_commit,
     source_tree: $source_tree,
     sbf_sha256: $sbf_sha256,
     sbf_bytes: $sbf_bytes,

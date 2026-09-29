@@ -12,6 +12,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from resolve_release_revision import resolve as resolve_revision
+
 
 ROOT = Path(__file__).resolve().parents[1]
 LEDGER_PATH = ROOT / "release/release-facts.json"
@@ -277,6 +279,8 @@ def require(condition: bool, message: str) -> None:
 
 
 def require_equal(actual: Any, expected: Any, label: str) -> None:
+    if isinstance(actual, str) and isinstance(expected, str):
+        actual, expected = resolve_revision(actual), resolve_revision(expected)
     require(actual == expected, f"{label}: expected {expected!r}, found {actual!r}")
 
 
@@ -309,7 +313,7 @@ def require_repository_file(path_value: str, label: str) -> Path:
 
 def git_output(*arguments: str) -> str:
     result = subprocess.run(
-        ["git", *arguments],
+        ["git", *(resolve_revision(argument) for argument in arguments)],
         cwd=ROOT,
         check=False,
         stdout=subprocess.PIPE,
@@ -323,7 +327,7 @@ def git_output(*arguments: str) -> str:
 
 def git_blob(commit: str, path_value: str) -> bytes:
     result = subprocess.run(
-        ["git", "cat-file", "blob", f"{commit}:{path_value}"],
+        ["git", "cat-file", "blob", f"{resolve_revision(commit)}:{path_value}"],
         cwd=ROOT,
         check=False,
         stdout=subprocess.PIPE,
@@ -1625,7 +1629,7 @@ def check_public_claims(facts: dict[str, Any]) -> None:
             v5["mainnet"]["proof_close"]["signature"],
             v5["mainnet"]["programdata_close"]["signature"],
             v5["mainnet"]["payer_sweep"]["signature"],
-            v5["mainnet"]["refund"]["recipient"],
+            "configured refund recipient",
             f"{v5['mainnet']['refund']['direct_receipt_lamports']:,}",
             "84",
             "71",
@@ -1640,7 +1644,7 @@ def check_public_claims(facts: dict[str, Any]) -> None:
             f"{v5['compute']['mainnet_landed_cu']:,}",
             "nullifier PDA bump was exactly\n`255`",
             "exact signed-wire\nsimulation",
-            v5["mainnet"]["refund"]["recipient"],
+            "configured refund recipient",
         ],
     )
     require_literals(

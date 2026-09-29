@@ -335,7 +335,7 @@ Temporary rent was then recovered in the prescribed order:
 | Close ProgramData directly to pinned wallet | [`uZ6q5a2…kBdHkWn`](https://explorer.solana.com/tx/uZ6q5a2jGYcscEZgnLghPrqNwp9Hxq3REgYmt6gnb3JuorkUUEQUeJkVWy2e88j9bSLHgRvT2DytjRW2kBdHkWn) | `435019804` | `9,049,204,080` lamports | `10,000` lamports |
 | Sweep dedicated payer to pinned wallet | [`4haJ6dP…zbj1JyUW`](https://explorer.solana.com/tx/4haJ6dPmSFkscFKC57QoCUUcf46vU77av9Y8UfcRyCWjfydzHjCeJCsfuthmifXJfVWreZZM8JTDUdBgzbj1JyUW) | `435020068` | `1,931,690,802` lamports | `5,000` lamports |
 
-The release used a locally pinned configured refund recipient. Its two direct receipt
+The configured refund recipient was pinned locally. Its two direct receipt
 transactions credited a total of `10,980,894,882` lamports. The payer was
 left at zero lamports. The sanitized evidence and offline verification
 materials are collected in
