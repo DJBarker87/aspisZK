@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R47 circle evaluator and prepared-fold bridge — 2026-09-29
+
+[R47_CIRCLE_OPENING_BRIDGE.md](R47_CIRCLE_OPENING_BRIDGE.md) adds 30 compiled
+Lean theorems. The source-shaped bit evaluator equals the four quotient
+channels; the algorithmic corrections preserve all four raw fibre values
+and the prepared folded quotient value under explicit circle/root and
+denominator conditions. Balance, sparse-G coins and OOD preservation use
+the same evaluator. A symbolic bit proof replaces an oversized finite check.
+
+Next: bind the remaining original-table point claims and relation-polynomial
+coefficients to these transported columns, retaining the degree-31/sparse-G
+boundary and Schur target. Actual sampler and Rust word/kernel refinement,
+the new residual degree and global privacy remain open. No verifier changes
+or Rust/SBF rerun; CU remains 1,620,236 / 1,621,719, with both 1M runs exhausted.
+
 ## R46 exact-field source normalization — 2026-09-29
 
 [R46_SOURCE_NORMALIZATION.md](R46_SOURCE_NORMALIZATION.md) adds 37 compiled
