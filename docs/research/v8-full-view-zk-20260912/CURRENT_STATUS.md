@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R48 full-support point/relation bridge — 2026-09-29
+
+[R48_FULL_POINT_FUNCTIONAL.md](R48_FULL_POINT_FUNCTIONAL.md) adds 21 compiled
+Lean theorems. T163 original-table point pairing, chord-transposed weights
+and all seven block-kernel coefficients now retain the full 131-coordinate
+output of the normalized corrections. The same algorithmic columns have
+these equations and R47's raw/OOD/final boundary. The extra 20 point-weight
+coordinates vanish at the retained fixed witness; its separate G boundary
+term is not discarded.
+
+Next: instantiate the actual ordinary/G source weights and point constructor
+in this full model, retain `hg`, identify the fixed residual matrix and prove
+the new polynomial degree. Rust word refinement and the actual shared-oracle
+law remain open; this is not full privacy. No verifier change or new Rust/SBF
+run; CU stays 1,620,236 / 1,621,719, with both 1M runs exhausted.
+
 ## R47 circle evaluator and prepared-fold bridge — 2026-09-29
 
 [R47_CIRCLE_OPENING_BRIDGE.md](R47_CIRCLE_OPENING_BRIDGE.md) adds 30 compiled
