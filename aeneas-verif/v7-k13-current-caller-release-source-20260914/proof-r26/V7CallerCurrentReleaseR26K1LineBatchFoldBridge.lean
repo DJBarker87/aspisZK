@@ -168,6 +168,29 @@ theorem lineBatchFoldPrefix_transports_weights_apply
     xs.val[position.val]! xsOut.val[position.val]! alpha deferred.val
     fibre.val entry.1 entry.2
 
+theorem lineBatchFoldPrefix_transports_weights
+    (rounds : Nat)
+    (scales : Slice RawQM31) (xs : Slice RawM31)
+    (deferred : Std.U8) (alpha : RawQM31)
+    (scalesOut : Slice RawQM31) (xsOut : Slice RawM31)
+    (deferredOut : Std.U8)
+    (processed : ∀ index, index < 16 →
+      generatedQm31ToExact scalesOut.val[index]! =
+        generatedQm31ToExact scales.val[index]! *
+          lineBatchFoldNumerator (generatedQm31ToExact alpha)
+            (generatedM31ToExact xs.val[index]!) ∧
+      generatedM31ToExact xsOut.val[index]! =
+        doubledM31 (doubledM31
+          (generatedM31ToExact xs.val[index]!)))
+    (deferredExact : deferredOut.val = deferred.val + 2) :
+    dualWeightFoldLayer (radix4Size rounds) (exactRaw alpha)
+        (lineBatchComponentWeights (rounds + 1) scales xs deferred.val) =
+      lineBatchComponentWeights rounds scalesOut xsOut deferredOut.val := by
+  funext fibre
+  exact lineBatchFoldPrefix_transports_weights_apply rounds scales xs deferred
+    alpha scalesOut xsOut deferredOut processed deferredExact fibre
+
 #print axioms lineBatchFoldPrefix_transports_weights_apply
+#print axioms lineBatchFoldPrefix_transports_weights
 
 end V7CallerCurrentReleaseR26K1LineBatchFoldBridge
