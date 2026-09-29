@@ -1,5 +1,18 @@
 # Current V8 privacy-repair status
 
+## R75 bounded rejection and mutable-limb execution — 2026-09-29
+
+[R75_SAMPLER_LOOPS.md](R75_SAMPLER_LOOPS.md) proves the actual eight-attempt
+inner loop, cursor/accepted-value invariant, mutable iterator finite recursion
+and four-slot challenge entry. Two Lean leaves compile with 14 theorem audits;
+seven retain the documented opaque `Formatter` type. No successful or uniform
+hash-output premise is introduced.
+
+Next: independent little-endian word correspondence and composition with the
+retained sampler model, deferred write-back, final QM31 reconstruction and
+oracle observations. Finite source control flow is not full sampler privacy.
+Runtime/CU unchanged: **1,495,663 / 1,497,050**, both actual 1M runs exhaust.
+
 ## R74 safe reads and actual inner-sampler step — 2026-09-29
 
 [R74_INNER_STEP.md](R74_INNER_STEP.md) source-binds safe four-byte reads,
