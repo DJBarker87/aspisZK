@@ -607,7 +607,7 @@ def CanonicalChannelMatrix
     AspisAeneasCM31Multiplicative.CanonicalRawM31
       (channelM31 components component channel).val
 
-private theorem generatedComponentMatrixCanonical
+theorem generatedComponentMatrixCanonical
     (q : RawQM31) (qsum : RawCM31) (m0 m1 m2 : RawM31)
     (hq : GeneratedCanonicalQM31 q) (hqsum : GeneratedCanonicalCM31 qsum)
     (hm0 : AspisAeneasCM31Multiplicative.CanonicalRawM31 m0.val)
@@ -623,7 +623,7 @@ private theorem generatedComponentMatrixCanonical
   all_goals simp only [channelM31, generatedComponentMatrix, Array.make]
   all_goals assumption
 
-private theorem generatedComponentMatrixExact
+theorem generatedComponentMatrixExact
     (q : RawQM31) (qsum : RawCM31) (m0 m1 m2 : RawM31)
     (hqsumExact : generatedCm31ToExact qsum =
       generatedCm31ToExact q.c0 + generatedCm31ToExact q.c1)
@@ -687,7 +687,7 @@ private theorem channelFactorLe
   change value.val < m31Modulus at hvalue
   omega
 
-private theorem channelProductLe
+theorem channelProductLe
     (left right : RawM31)
     (hleft : AspisAeneasCM31Multiplicative.CanonicalRawM31 left.val)
     (hright : AspisAeneasCM31Multiplicative.CanonicalRawM31 right.val) :
@@ -697,7 +697,7 @@ private theorem channelProductLe
   unfold channelProductBound
   simpa [pow_two] using Nat.mul_le_mul hl hr
 
-private theorem fourChannelProductsFitU64 :
+theorem fourChannelProductsFitU64 :
     4 * channelProductBound < u64Cardinality := by
   norm_num [channelProductBound, m31Modulus, u64Cardinality]
 
