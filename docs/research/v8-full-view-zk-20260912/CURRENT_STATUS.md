@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R81 native CU campaign — 2026-09-29
+
+[R81_NATIVE_CU.md](R81_NATIVE_CU.md) records eight complete native candidates.
+The selected endpoint is **1,356,211 / 1,357,487 CU**, saving about 139.5k
+against R69. Both honest proofs still exhaust at the actual 1M cap.
+The larger fixture remains **357,487 CU** above target.
+
+Guarded short arithmetic, cached semantic basis work and reuse of the
+ordinary adjoint for scalar G preserve the repaired protocol and checks.
+All 3,281 wire controls pass; checked malformed rejection is distinguished
+from resource exhaustion. Source pins, complete SBF receipts and focused
+differential checks are retained. No new Lean work or security weakening.
+
+User priority: continue native CU reduction without loss of security.
+Observer formalization below is paused. Existing global privacy/soundness
+obligations remain open; these runtime improvements do not close them.
+
 ## R80 complete instrumented QM31 trace — 2026-09-29
 
 [R80_QM31_OBSERVER.md](R80_QM31_OBSERVER.md) proves the instrumented QM31

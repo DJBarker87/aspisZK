@@ -1,0 +1,31 @@
+#[path="r20_semantic_basis.rs"] mod actual;
+#[path="r81_reference/r20_semantic_basis.rs"] mod reference;
+mod r20_private_dot_adapter {
+    pub(super) fn dot(a:&[aspis_core::field::QM31],b:&[aspis_core::field::QM31])->Option<aspis_core::field::QM31>{
+        aspis_core::field::r25_checked_dot(a,b)
+    }
+}
+use aspis_core::field::{QM31 as K,CM31,M31,P,M31_HALF};
+fn mk(v:[u32;4])->K{K{c0:CM31::new(M31(v[0]),M31(v[1])),c1:CM31::new(M31(v[2]),M31(v[3]))}}
+fn main(){
+    let mut rng=0x8b8b_afef_9944_3366u64;
+    let mut next=||{rng^=rng<<13;rng^=rng>>7;rng^=rng<<17;(rng%u64::from(P))as u32};
+    for case in 0..8192 {
+        let mut v=core::array::from_fn(|_|next());
+        if case<256{let vals=[0,1,P-2,P-1];let mut c=case;for x in &mut v{*x=vals[c%4];c/=4;}}
+        let x=mk(v);let mut a=[K::ZERO;27];let mut b=[K::ZERO;27];
+        actual::basis_into(x,&mut a);reference::basis_into(x,&mut b);assert_eq!(a,b);
+        let mut scale=M31::ONE;
+        for n in 0..=10 {assert_eq!(actual::scale_power_of_two(x,n),x.mul_m31(scale));scale=scale.mul(M31_HALF);}
+    }
+    actual::differential_check(|a,b|r20_private_dot_adapter::dot(a,b).unwrap());
+    let hook=std::panic::take_hook();std::panic::set_hook(Box::new(|_|{}));
+    for lane in 0..4{for bad in [P,P+1,u32::MAX]{let mut v=[1;4];v[lane]=bad;let x=mk(v);
+        let a=std::panic::catch_unwind(||{let mut out=[K::ZERO;27];actual::basis_into(x,&mut out);out});
+        let b=std::panic::catch_unwind(||{let mut out=[K::ZERO;27];reference::basis_into(x,&mut out);out});
+        match(a,b){(Ok(a),Ok(b))=>assert_eq!(a,b),(Err(_),Err(_))=>(),_=>panic!("raw basis behavior changed")}
+        let mut scale=M31::ONE;for n in 0..=10{assert_eq!(actual::scale_power_of_two(x,n),x.mul_m31(scale));scale=scale.mul(M31_HALF);}
+    }}
+    std::panic::set_hook(hook);
+    println!("R81_BASIS vectors=8192 scaling_comparisons=90112 semantic_rounds=2560 raw_basis=12 raw_scaling=132 reference_retained=true");
+}
