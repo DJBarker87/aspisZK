@@ -22,7 +22,7 @@ abbrev ExactQM31 := AspisV5ComponentCQM31TowerExact.QM31Exact
 def groupsThreeAround (group0 group1 : Std.U8) : Array Std.U8 4#usize :=
   Array.make 4#usize [group0, group1, group0, group0]
 
-private def threeAroundCoefficients11
+def threeAroundCoefficients11
     (alpha3 : RawQM31) : Array RawQM31 4#usize :=
   Array.make 4#usize [
     field.QM31.ONE, alpha3,
