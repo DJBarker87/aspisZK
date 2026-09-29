@@ -1,0 +1,188 @@
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:21:35: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:21:2: error: 'change' tactic failed, pattern
+  List.anyM (fun y => ?m.17) ↑v = ?m.22
+is not definitionally equal to target
+  core.slice.Slice.contains core.cmp.PartialEqU32 (alloc.vec.Vec.deref v) x = ok (decide (x ∈ ↑v))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:54:56: error: unexpected identifier; expected ':=', 'where' or '|'
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:54:22: error: Invalid pattern: Expected a constructor or constant marked with `[match_pattern]`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:78:19: error: unsolved goals
+case neg.fail
+mask : U32
+rest : Slice U8
+word : Word
+ws : List Word
+ih :
+  ∀ (out : Values) (draws : Usize),
+    transcript.Transcript.challenge_queries_without_replacement_loop0_loop0 (chunks ws rest) 22#usize 64#usize mask out
+        draws =
+      runWords mask ws out draws
+out : Values
+draws : Usize
+hc : ¬alloc.vec.Vec.len out = 22#usize
+hd : ¬draws = 64#usize
+e : Error
+hnext : draws + 1#usize = fail e
+⊢ (match sorry () with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            transcript.Transcript.challenge_queries_without_replacement_loop0_loop0.body 22#usize 64#usize mask x.1
+              x.2.1 x.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:79:16: error: unsolved goals
+case neg.div
+mask : U32
+rest : Slice U8
+word : Word
+ws : List Word
+ih :
+  ∀ (out : Values) (draws : Usize),
+    transcript.Transcript.challenge_queries_without_replacement_loop0_loop0 (chunks ws rest) 22#usize 64#usize mask out
+        draws =
+      runWords mask ws out draws
+out : Values
+draws : Usize
+hc : ¬alloc.vec.Vec.len out = 22#usize
+hd : ¬draws = 64#usize
+hnext : draws + 1#usize = div
+⊢ (match sorry () with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            transcript.Transcript.challenge_queries_without_replacement_loop0_loop0.body 22#usize 64#usize mask x.1
+              x.2.1 x.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:87:25: error: unsolved goals
+case neg.fail
+mask : U32
+rest : Slice U8
+word : Word
+ws : List Word
+ih :
+  ∀ (out : Values) (draws : Usize),
+    transcript.Transcript.challenge_queries_without_replacement_loop0_loop0 (chunks ws rest) 22#usize 64#usize mask out
+        draws =
+      runWords mask ws out draws
+out : Values
+draws : Usize
+hc : ¬alloc.vec.Vec.len out = 22#usize
+hd : ¬draws = 64#usize
+next : UScalar UScalarTy.Usize
+hnext : draws + 1#usize = ok next
+hm : core.num.U32.from_le_bytes word &&& mask ∉ ↑out
+e : Error
+hp : alloc.vec.Vec.push out (core.num.U32.from_le_bytes word &&& mask) = fail e
+⊢ (match sorry () with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            transcript.Transcript.challenge_queries_without_replacement_loop0_loop0.body 22#usize 64#usize mask x.1
+              x.2.1 x.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:88:22: error: unsolved goals
+case neg.div
+mask : U32
+rest : Slice U8
+word : Word
+ws : List Word
+ih :
+  ∀ (out : Values) (draws : Usize),
+    transcript.Transcript.challenge_queries_without_replacement_loop0_loop0 (chunks ws rest) 22#usize 64#usize mask out
+        draws =
+      runWords mask ws out draws
+out : Values
+draws : Usize
+hc : ¬alloc.vec.Vec.len out = 22#usize
+hd : ¬draws = 64#usize
+next : UScalar UScalarTy.Usize
+hnext : draws + 1#usize = ok next
+hm : core.num.U32.from_le_bytes word &&& mask ∉ ↑out
+hp : alloc.vec.Vec.push out (core.num.U32.from_le_bytes word &&& mask) = div
+⊢ (match sorry () with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            transcript.Transcript.challenge_queries_without_replacement_loop0_loop0.body 22#usize 64#usize mask x.1
+              x.2.1 x.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean:83:37: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [if_pos hm,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.QueryChunkExecution.contains_exact' depends on axioms: [propext, sorryAx]
+'AspisV8R19.QueryChunkExecution.body_word' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.QueryChunkExecution.source_loop' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.QueryChunkExecution.empty_does_not_detect_completion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.QueryChunkExecution.completed_stops_before_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.QueryChunkExecution.exhausted_stops_before_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r86-query-leaves-20260929-a/lib/AspisV8R19/QueryChunkExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkExecution.lean"
+	User time (seconds): 1.92
+	System time (seconds): 0.58
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.44
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3691016
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 3
+	Minor (reclaiming a frame) page faults: 86053
+	Voluntary context switches: 1051
+	Involuntary context switches: 83
+	Swaps: 0
+	File system inputs: 272
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

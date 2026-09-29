@@ -1,0 +1,187 @@
+info: r86_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:80:83: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ d ≤ 21
+  c ≥ 65
+  0 ≤ b ≤ 63
+  0 ≤ a ≤ 21
+where
+ a := ↑(↑out).length
+ b := ↑↑draws
+ c := ↑↑(UScalar.ofNatCore (↑draws + 1) ⋯)
+ d := ↑(view out draws).accepted.length
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:83:65: error: Application type mismatch: The argument
+  hstop
+has type
+  ¬(view out draws).accepted.length = 22 ∨ (view out draws).draws = 64
+but is expected to have type
+  ¬?m.310
+in the application
+  @if_neg ?m.310 ?m.311 hstop
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:82:14: error: Type mismatch: After simplification, term
+  hr
+ has type
+  runWords mask ws out (UScalar.ofNatCore (↑draws + 1) ⋯) =
+    ok
+      (out1, draws1,
+        if
+            (Q22WordScan.scan { accepted := List.map UScalar.val ↑out, draws := ↑(UScalar.ofNatCore (↑draws + 1) ⋯) }
+                  (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).2 =
+              true then
+          0#u32
+        else 1#u32)
+but is expected to have type
+  runWords mask ws out (UScalar.ofNatCore (↑draws + 1) ⋯) =
+    ok
+      (out1, draws1,
+        if
+            (if (List.map UScalar.val ↑out).length = 22 ∨ ↑draws = 64 then
+                  ({ accepted := List.map UScalar.val ↑out, draws := ↑draws }, true)
+                else
+                  Q22WordScan.scan { accepted := List.map UScalar.val ↑out, draws := ↑draws + 1 }
+                    (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).2 =
+              true then
+          0#u32
+        else 1#u32)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:85:75: error: Application type mismatch: The argument
+  hstop
+has type
+  ¬(view out draws).accepted.length = 22 ∨ (view out draws).draws = 64
+but is expected to have type
+  ¬?m.320
+in the application
+  @if_neg ?m.320 ?m.321 hstop
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:85:14: error: Type mismatch: After simplification, term
+  hv
+ has type
+  { accepted := List.map UScalar.val ↑out1, draws := ↑draws1 } =
+    (Q22WordScan.scan { accepted := List.map UScalar.val ↑out, draws := ↑(UScalar.ofNatCore (↑draws + 1) ⋯) }
+        (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).1
+but is expected to have type
+  { accepted := List.map UScalar.val ↑out1, draws := ↑draws1 } =
+    (if (List.map UScalar.val ↑out).length = 22 ∨ ↑draws = 64 then
+        ({ accepted := List.map UScalar.val ↑out, draws := ↑draws }, true)
+      else
+        Q22WordScan.scan { accepted := List.map UScalar.val ↑out, draws := ↑draws + 1 }
+          (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:91:40: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ d ≤ 21
+  c ≥ 65
+  0 ≤ b ≤ 63
+  0 ≤ a ≤ 21
+where
+ a := ↑(↑out).length
+ b := ↑↑draws
+ c := ↑↑(UScalar.ofNatCore (↑draws + 1) ⋯)
+ d := ↑(view out draws).accepted.length
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:95:65: error: Application type mismatch: The argument
+  hstop
+has type
+  ¬(view out draws).accepted.length = 22 ∨ (view out draws).draws = 64
+but is expected to have type
+  ¬?m.399
+in the application
+  @if_neg ?m.399 ?m.400 hstop
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:94:14: error: Type mismatch: After simplification, term
+  hr
+ has type
+  runWords mask ws ⟨↑out ++ [core.num.U32.from_le_bytes word &&& mask], ⋯⟩ (UScalar.ofNatCore (↑draws + 1) ⋯) =
+    ok
+      (out1, draws1,
+        if
+            (Q22WordScan.scan
+                  {
+                    accepted :=
+                      List.map UScalar.val ↑out ++
+                        ↑(core.num.U32.from_le_bytes word &&& mask) :: List.map UScalar.val [],
+                    draws := ↑(UScalar.ofNatCore (↑draws + 1) ⋯) }
+                  (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).2 =
+              true then
+          0#u32
+        else 1#u32)
+but is expected to have type
+  runWords mask ws ⟨↑out ++ [core.num.U32.from_le_bytes word &&& mask], ⋯⟩ (UScalar.ofNatCore (↑draws + 1) ⋯) =
+    ok
+      (out1, draws1,
+        if
+            (if (List.map UScalar.val ↑out).length = 22 ∨ ↑draws = 64 then
+                  ({ accepted := List.map UScalar.val ↑out, draws := ↑draws }, true)
+                else
+                  Q22WordScan.scan
+                    { accepted := List.map UScalar.val ↑out ++ [↑(core.num.U32.from_le_bytes word &&& mask)],
+                      draws := ↑draws + 1 }
+                    (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).2 =
+              true then
+          0#u32
+        else 1#u32)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:97:75: error: Application type mismatch: The argument
+  hstop
+has type
+  ¬(view out draws).accepted.length = 22 ∨ (view out draws).draws = 64
+but is expected to have type
+  ¬?m.409
+in the application
+  @if_neg ?m.409 ?m.410 hstop
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:97:14: error: Type mismatch: After simplification, term
+  hv
+ has type
+  { accepted := List.map UScalar.val ↑out1, draws := ↑draws1 } =
+    (Q22WordScan.scan
+        {
+          accepted :=
+            List.map UScalar.val ↑out ++ ↑(core.num.U32.from_le_bytes word &&& mask) :: List.map UScalar.val [],
+          draws := ↑(UScalar.ofNatCore (↑draws + 1) ⋯) }
+        (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).1
+but is expected to have type
+  { accepted := List.map UScalar.val ↑out1, draws := ↑draws1 } =
+    (if (List.map UScalar.val ↑out).length = 22 ∨ ↑draws = 64 then
+        ({ accepted := List.map UScalar.val ↑out, draws := ↑draws }, true)
+      else
+        Q22WordScan.scan
+          { accepted := List.map UScalar.val ↑out ++ [↑(core.num.U32.from_le_bytes word &&& mask)],
+            draws := ↑draws + 1 }
+          (List.map (fun w => ↑(core.num.U32.from_le_bytes w &&& mask)) ws)).1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:61:25: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp [runWords,h̵e̵,̵ ̲candidates, ̲Q22WordScan.scan, ̲view, ̲hlen]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean:69:64: warning: This simp argument is unused:
+  hdraw
+
+Hint: Omit it from the simp argument list.
+  simp [runWords, ̲he', ̲candidates, ̲Q22WordScan.scan, ̲view,̵h̵d̵r̵a̵w̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.QueryChunkModel.try_small64' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.QueryChunkModel.append_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.QueryChunkModel.mem_val' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.QueryChunkModel.run_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r86-query-model-20260929-a/lib/AspisV8R19/QueryChunkModel.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryChunkModel.lean"
+	User time (seconds): 1.69
+	System time (seconds): 0.53
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.18
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3700728
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86585
+	Voluntary context switches: 804
+	Involuntary context switches: 81
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 80
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R86–R90 native reuse and bounded query source — 2026-09-29
+
+[R90_NATIVE_REUSE_AND_QUERY.md](R90_NATIVE_REUSE_AND_QUERY.md) records the new
+complete **1,141,057 / 1,139,217 CU** research endpoint on the same R84 proofs.
+Reused Merkle/leaf and shared-gamma kernels plus specialized preparation save
+58,422 / 58,413 CU against R85. Alignment and persistent packed-Q experiments
+pass correctness but regress and are rejected. Both actual 1M honest runs
+still exhaust; **141,057 CU remains** on the larger fixture.
+
+Five focused Lean targets compile with 12 theorem audits: the actual extracted
+q22 inner loop implements the bounded scan, including duplicate handling,
+counter/vector bounds and the exact stop/continue flag. The outer loop,
+32-byte chunk production and public power-of-two guard remain separate; no
+opaque guard or ctpop axiom template is admitted. Full shared-oracle history,
+universal R84 joint coverage, causal privacy and pre-beta extraction remain
+open. R84/R90 is not security-promoted; R83 remains the old-profile control.
+
 ## R85 native composition and circle observer — 2026-09-29
 
 [R85_PRIVATE_KERNELS_AND_CIRCLE.md](R85_PRIVATE_KERNELS_AND_CIRCLE.md) records
