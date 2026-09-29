@@ -1,5 +1,19 @@
 # Current V8 privacy-repair status
 
+## R57 source-derived selector gather — 2026-09-29
+
+[R57_SELECTOR_GATHER.md](R57_SELECTOR_GATHER.md) selects a Copy-lane gather at
+**1,554,448 / 1,555,925 CU**, saving 31,648 / 31,638 versus R56. All 544
+source-derived terms, 70,720 binary-weight controls, 512 scratch/full-lane
+comparisons and the retained full-wire/SBF gates pass. Six arithmetic Lean
+theorems compile. The trace attributes the entire world-0 saving to the
+Copy-lane rewrite. Protocol, tags, patterns, active and residual equations
+are unchanged. Both actual 1M runs still exhaust; 555,925 CU remains.
+
+Next CU candidate: common-base tag factoring, followed by other semantic and
+ordinary work. Universal source refinement and full shared-oracle/transcript/
+retry/publication privacy composition remain open, as does pre-beta extraction.
+
 ## R56 partially reduced product intermediates — 2026-09-29
 
 [R56_PARTIAL_PRODUCT.md](R56_PARTIAL_PRODUCT.md) selects a guarded arithmetic
