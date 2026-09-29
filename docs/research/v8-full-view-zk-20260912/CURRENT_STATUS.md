@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R79 sampler observation boundaries — 2026-09-29
+
+[R79_SAMPLER_OBSERVER.md](R79_SAMPLER_OBSERVER.md) adds a checked mechanical
+instrumentation of nine extracted sampler definitions, without changing the
+original source. Lean proves the instrumented squeeze's ordered input/output
+records and erasure to the original squeeze, plus the exact observation
+behavior of exhaustion, existing-block reads and rollover in the inner body.
+
+Five leaves compile, with 17 theorem audits; four retain the inherited opaque
+`Formatter` type. The instrumentation checker is not a certified compiler.
+Neither the complete instrumented sampler trace nor complete observer/source
+refinement is claimed. Next: compose the per-limb rejection loop, four-limb
+write-back and outer retries with their observations, then the actual oracle
+experiment. Full privacy remains open. Runtime/CU unchanged:
+**1,495,663 / 1,497,050**, both actual 1M runs exhaust.
+
 ## R78 actual circle-sampler value/error/state bridge — 2026-09-29
 
 [R78_SAMPLER_CIRCLE_BRIDGE.md](R78_SAMPLER_CIRCLE_BRIDGE.md) composes the actual

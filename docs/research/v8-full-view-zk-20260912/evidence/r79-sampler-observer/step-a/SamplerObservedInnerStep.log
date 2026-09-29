@@ -1,0 +1,392 @@
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:33:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← core.iter.range.IteratorRange.next core.iter.range.StepU32 r
+    (match x.1 with
+        | none => pure (done (s, b, j, limb, false))
+        | some val =>
+          if j = 8#usize then do
+            let __x ← SamplerObservedSource.squeeze_block s
+            let __x ← pure (__x.2, __x.1, 0#usize)
+            let i ← liftM (__x.2.2 * 4#usize)
+            let i1 ← liftM (i + 4#usize)
+            let s ←
+              liftM
+                  (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                    __x.2.1 { start := i, «end» := i1 })
+            let r ← liftM (core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s)
+            let a ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r)
+            let word ← liftM (ok (core.num.U32.from_le_bytes a))
+            let word_index2 ← liftM (__x.2.2 + 1#usize)
+            let masked ← liftM (ok (word &&& field.P))
+            if (masked != field.P) = true then pure (done (__x.1, __x.2.1, word_index2, masked, true))
+              else pure (cont (x.2, __x.1, __x.2.1, word_index2))
+          else do
+            let __x ← pure (s, b, j)
+            let i ← liftM (__x.2.2 * 4#usize)
+            let i1 ← liftM (i + 4#usize)
+            let s ←
+              liftM
+                  (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                    __x.2.1 { start := i, «end» := i1 })
+            let r ← liftM (core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s)
+            let a ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r)
+            let word ← liftM (ok (core.num.U32.from_le_bytes a))
+            let word_index2 ← liftM (__x.2.2 + 1#usize)
+            let masked ← liftM (ok (word &&& field.P))
+            if (masked != field.P) = true then pure (done (__x.1, __x.2.1, word_index2, masked, true))
+              else pure (cont (x.2, __x.1, __x.2.1, word_index2)))
+        history
+is not definitionally equal to the right-hand side
+  do
+    let x ← core.iter.range.IteratorRange.next core.iter.range.StepU32 r
+    (match x.1 with
+        | none => pure (done (s, b, j, limb, false))
+        | some val =>
+          if j = 8#usize then do
+            let __x ← SamplerObservedSource.squeeze_block s
+            let __x ← pure (__x.2, __x.1, 0#usize)
+            let __x_1 ←
+              liftM do
+                  let i ← __x.2.2 * 4#usize
+                  let finish ← i + 4#usize
+                  let s ←
+                    core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                        __x.2.1 { start := i, «end» := finish }
+                  let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+                  let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+                  let next ← __x.2.2 + 1#usize
+                  ok (core.num.U32.from_le_bytes a, next)
+            if (__x_1.1 &&& field.P != field.P) = true then
+                pure (done (__x.1, __x.2.1, __x_1.2, __x_1.1 &&& field.P, true))
+              else pure (cont (x.2, __x.1, __x.2.1, __x_1.2))
+          else do
+            let __x ← pure (s, b, j)
+            let __x_1 ←
+              liftM do
+                  let i ← __x.2.2 * 4#usize
+                  let finish ← i + 4#usize
+                  let s ←
+                    core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                        __x.2.1 { start := i, «end» := finish }
+                  let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+                  let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+                  let next ← __x.2.2 + 1#usize
+                  ok (core.num.U32.from_le_bytes a, next)
+            if (__x_1.1 &&& field.P != field.P) = true then
+                pure (done (__x.1, __x.2.1, __x_1.2, __x_1.1 &&& field.P, true))
+              else pure (cont (x.2, __x.1, __x.2.1, __x_1.2)))
+        history
+
+limb : field.M31
+r : core.ops.range.Range U32
+s : transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+history : Trace
+⊢ (do
+      let x ← core.iter.range.IteratorRange.next core.iter.range.StepU32 r
+      (match x.1 with
+          | none => pure (done (s, b, j, limb, false))
+          | some val =>
+            if j = 8#usize then do
+              let __x ← SamplerObservedSource.squeeze_block s
+              let __x ← pure (__x.2, __x.1, 0#usize)
+              let i ← liftM (__x.2.2 * 4#usize)
+              let i1 ← liftM (i + 4#usize)
+              let s ←
+                liftM
+                    (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                      __x.2.1 { start := i, «end» := i1 })
+              let r ← liftM (core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s)
+              let a ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r)
+              let word ← liftM (ok (core.num.U32.from_le_bytes a))
+              let word_index2 ← liftM (__x.2.2 + 1#usize)
+              let masked ← liftM (ok (word &&& field.P))
+              if (masked != field.P) = true then pure (done (__x.1, __x.2.1, word_index2, masked, true))
+                else pure (cont (x.2, __x.1, __x.2.1, word_index2))
+            else do
+              let __x ← pure (s, b, j)
+              let i ← liftM (__x.2.2 * 4#usize)
+              let i1 ← liftM (i + 4#usize)
+              let s ←
+                liftM
+                    (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                      __x.2.1 { start := i, «end» := i1 })
+              let r ← liftM (core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s)
+              let a ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r)
+              let word ← liftM (ok (core.num.U32.from_le_bytes a))
+              let word_index2 ← liftM (__x.2.2 + 1#usize)
+              let masked ← liftM (ok (word &&& field.P))
+              if (masked != field.P) = true then pure (done (__x.1, __x.2.1, word_index2, masked, true))
+                else pure (cont (x.2, __x.1, __x.2.1, word_index2)))
+          history) =
+    do
+    let x ← core.iter.range.IteratorRange.next core.iter.range.StepU32 r
+    (match x.1 with
+        | none => pure (done (s, b, j, limb, false))
+        | some val =>
+          if j = 8#usize then do
+            let __x ← SamplerObservedSource.squeeze_block s
+            let __x ← pure (__x.2, __x.1, 0#usize)
+            let __x_1 ←
+              liftM do
+                  let i ← __x.2.2 * 4#usize
+                  let finish ← i + 4#usize
+                  let s ←
+                    core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                        __x.2.1 { start := i, «end» := finish }
+                  let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+                  let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+                  let next ← __x.2.2 + 1#usize
+                  ok (core.num.U32.from_le_bytes a, next)
+            if (__x_1.1 &&& field.P != field.P) = true then
+                pure (done (__x.1, __x.2.1, __x_1.2, __x_1.1 &&& field.P, true))
+              else pure (cont (x.2, __x.1, __x.2.1, __x_1.2))
+          else do
+            let __x ← pure (s, b, j)
+            let __x_1 ←
+              liftM do
+                  let i ← __x.2.2 * 4#usize
+                  let finish ← i + 4#usize
+                  let s ←
+                    core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+                        __x.2.1 { start := i, «end» := finish }
+                  let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+                  let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+                  let next ← __x.2.2 + 1#usize
+                  ok (core.num.U32.from_le_bytes a, next)
+            if (__x_1.1 &&& field.P != field.P) = true then
+                pure (done (__x.1, __x.2.1, __x_1.2, __x_1.1 &&& field.P, true))
+              else pure (cont (x.2, __x.1, __x.2.1, __x_1.2)))
+        history
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:31:47: warning: This simp argument is unused:
+  pure_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵S̵o̵u̵r̵c̵e̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵_̵q̵m̵3̵1̵_̵l̵o̵o̵p̵0̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵f̵a̵c̵t̵o̵r̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵a̵m̵p̵l̵e̵r̵W̵o̵r̵d̵R̵e̵a̵d̵.̵r̵e̵a̵d̵,̵d̵e̵c̵i̵d̵e̵W̵o̵r̵d̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵l̵i̵f̵t̵_̵a̵p̵p̵l̵y̵,̵m̵a̵p̵_̵a̵p̵p̵l̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲S̲o̲u̲r̲c̲e̲.̲c̲h̲a̲l̲l̲e̲n̲g̲e̲_̲q̲m̲3̲1̲_̲l̲o̲o̲p̲0̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲f̲a̲c̲t̲o̲r̲e̲d̲,̲ ̲S̲a̲m̲p̲l̲e̲r̲W̲o̲r̲d̲R̲e̲a̲d̲.̲r̲e̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲W̲o̲r̲d̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲l̲i̲f̲t̲_̲a̲p̲p̲l̲y̲,̲ ̲m̲a̲p̲_̲a̲p̲p̲l̲y̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:31:69: warning: This simp argument is unused:
+  map_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵S̵o̵u̵r̵c̵e̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵_̵q̵m̵3̵1̵_̵l̵o̵o̵p̵0̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵f̵a̵c̵t̵o̵r̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵a̵m̵p̵l̵e̵r̵W̵o̵r̵d̵R̵e̵a̵d̵.̵r̵e̵a̵d̵,̵d̵e̵c̵i̵d̵e̵W̵o̵r̵d̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵l̵i̵f̵t̵_̵a̵p̵p̵l̵y̵,̵m̵a̵p̵_̵a̵p̵p̵l̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲S̲o̲u̲r̲c̲e̲.̲c̲h̲a̲l̲l̲e̲n̲g̲e̲_̲q̲m̲3̲1̲_̲l̲o̲o̲p̲0̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲f̲a̲c̲t̲o̲r̲e̲d̲,̲ ̲S̲a̲m̲p̲l̲e̲r̲W̲o̲r̲d̲R̲e̲a̲d̲.̲r̲e̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲W̲o̲r̲d̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲p̲u̲r̲e̲_̲a̲p̲p̲l̲y̲,̲ ̲l̲i̲f̲t̲_̲a̲p̲p̲l̲y̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:67:14: error: Tactic `rfl` failed: The left-hand side
+  (if True then do
+      let __x ← SamplerObservedSource.squeeze_block s
+      let __x ← pure (__x.2, __x.1, 0#usize)
+      let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+      pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1)
+    else do
+      let __x ← pure (s, b, 8#usize)
+      let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+      pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1))
+    history
+is not definitionally equal to the right-hand side
+  do
+    let __x ← fail e
+    ok
+        (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1.2 __x.1.1 (small 1 ⋯)
+            (core.num.U32.from_le_bytes (four __x.1.1 0 ⋯)),
+          __x.2)
+
+case fail
+limb : field.M31
+r : core.ops.range.Range U32
+s : transcript.Transcript
+b : Std.Array U8 32#usize
+hr : ↑r.start < ↑r.end
+history : Trace
+e : Error
+h : SamplerObservedSource.squeeze_block s history = fail e
+⊢ (if True then do
+        let __x ← SamplerObservedSource.squeeze_block s
+        let __x ← pure (__x.2, __x.1, 0#usize)
+        let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+        pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1)
+      else do
+        let __x ← pure (s, b, 8#usize)
+        let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+        pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1))
+      history =
+    do
+    let __x ← fail e
+    ok
+        (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1.2 __x.1.1 (small 1 ⋯)
+            (core.num.U32.from_le_bytes (four __x.1.1 0 ⋯)),
+          __x.2)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:68:11: error: Tactic `rfl` failed: The left-hand side
+  (if True then do
+      let __x ← SamplerObservedSource.squeeze_block s
+      let __x ← pure (__x.2, __x.1, 0#usize)
+      let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+      pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1)
+    else do
+      let __x ← pure (s, b, 8#usize)
+      let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+      pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1))
+    history
+is not definitionally equal to the right-hand side
+  do
+    let __x ← div
+    ok
+        (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1.2 __x.1.1 (small 1 ⋯)
+            (core.num.U32.from_le_bytes (four __x.1.1 0 ⋯)),
+          __x.2)
+
+case div
+limb : field.M31
+r : core.ops.range.Range U32
+s : transcript.Transcript
+b : Std.Array U8 32#usize
+hr : ↑r.start < ↑r.end
+history : Trace
+h : SamplerObservedSource.squeeze_block s history = div
+⊢ (if True then do
+        let __x ← SamplerObservedSource.squeeze_block s
+        let __x ← pure (__x.2, __x.1, 0#usize)
+        let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+        pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1)
+      else do
+        let __x ← pure (s, b, 8#usize)
+        let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+        pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1))
+      history =
+    do
+    let __x ← div
+    ok
+        (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1.2 __x.1.1 (small 1 ⋯)
+            (core.num.U32.from_le_bytes (four __x.1.1 0 ⋯)),
+          __x.2)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:72:6: error: Tactic `rfl` failed: The left-hand side
+  (if True then do
+      let __x ← SamplerObservedSource.squeeze_block s
+      let __x ← pure (__x.2, __x.1, 0#usize)
+      let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+      pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1)
+    else do
+      let __x ← pure (s, b, 8#usize)
+      let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+      pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1))
+    history
+is not definitionally equal to the right-hand side
+  ok
+    (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } s1 b1 (small 1 ⋯)
+        (core.num.U32.from_le_bytes (four b1 0 ⋯)),
+      observed)
+
+case ok
+limb : field.M31
+r : core.ops.range.Range U32
+s : transcript.Transcript
+b : Std.Array U8 32#usize
+hr : ↑r.start < ↑r.end
+history observed : Trace
+b1 : Std.Array U8 32#usize
+s1 : transcript.Transcript
+h : SamplerObservedSource.squeeze_block s history = ok ((b1, s1), observed)
+⊢ (if True then do
+        let __x ← SamplerObservedSource.squeeze_block s
+        let __x ← pure (__x.2, __x.1, 0#usize)
+        let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+        pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1)
+      else do
+        let __x ← pure (s, b, 8#usize)
+        let __x_1 ← liftM (SamplerWordRead.read __x.2.1 __x.2.2)
+        pure (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } __x.1 __x.2.1 __x_1.2 __x_1.1))
+      history =
+    ok
+      (decideWord { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end } s1 b1 (small 1 ⋯)
+          (core.num.U32.from_le_bytes (four b1 0 ⋯)),
+        observed)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:65:26: warning: This simp argument is unused:
+  pure_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵c̵t̵o̵r̵e̵d̵,̵S̵a̵m̵p̵l̵e̵r̵O̵u̵t̵e̵r̵E̵x̵e̵c̵u̵t̵i̵o̵n̵.̵r̵a̵n̵g̵e̵_̵n̵e̵x̵t̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵r̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵_̵a̵p̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵n̵e̵x̵t̵R̵a̵n̵g̵e̵,̵i̵f̵_̵p̵o̵s̵[̲f̲a̲c̲t̲o̲r̲e̲d̲,̲ ̲S̲a̲m̲p̲l̲e̲r̲O̲u̲t̲e̲r̲E̲x̲e̲c̲u̲t̲i̲o̲n̲.̲r̲a̲n̲g̲e̲_̲n̲e̲x̲t̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲r̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲l̲i̲f̲t̲_̲a̲p̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲n̲e̲x̲t̲R̲a̲n̲g̲e̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:65:47: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵c̵t̵o̵r̵e̵d̵,̵S̵a̵m̵p̵l̵e̵r̵O̵u̵t̵e̵r̵E̵x̵e̵c̵u̵t̵i̵o̵n̵.̵r̵a̵n̵g̵e̵_̵n̵e̵x̵t̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵r̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵_̵a̵p̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵n̵e̵x̵t̵R̵a̵n̵g̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵[̲f̲a̲c̲t̲o̲r̲e̲d̲,̲ ̲S̲a̲m̲p̲l̲e̲r̲O̲u̲t̲e̲r̲E̲x̲e̲c̲u̲t̲i̲o̲n̲.̲r̲a̲n̲g̲e̲_̲n̲e̲x̲t̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲r̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲l̲i̲f̲t̲_̲a̲p̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲u̲r̲e̲_̲a̲p̲p̲l̲y̲,̲ ̲n̲e̲x̲t̲R̲a̲n̲g̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:71:17: warning: This simp argument is unused:
+  map_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [m̵a̵p̵_̵a̵p̵p̵l̵y̵,̵h, ̲bind_tc_ok, ̲read_success b1 0#usize (by decide)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:71:27: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [map_apply,h̵,̵ ̲bind_tc_ok, ̲read_success b1 0#usize (by decide)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean:71:40: warning: This simp argument is unused:
+  read_success b1 0#usize (by decide)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵_̵a̵p̵p̵l̵y̵,̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵_̵s̵u̵c̵c̵e̵s̵s̵ ̵b̵1̵ ̵0̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵]̵[̲m̲a̲p̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.SamplerObservedInnerStep.factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedInnerStep.exhausted' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedInnerStep.existing_block' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedInnerStep.rollover' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r79-step-20260929-a/lib/AspisV8R19/SamplerObservedInnerStep.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedInnerStep.lean"
+	User time (seconds): 2.17
+	System time (seconds): 0.72
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.83
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3690356
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 87904
+	Voluntary context switches: 712
+	Involuntary context switches: 76
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 48
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

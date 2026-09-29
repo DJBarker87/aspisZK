@@ -1,0 +1,225 @@
+info: r79_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:16:70: error: unsolved goals
+s : transcript.Transcript
+history : Trace
+hs : (↑s.state).length = 32
+ht : List.take 32 ↑s.state = ↑s.state
+⊢ (liftM
+          (ok
+            (⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                  0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                ⋯⟩,
+              fun o =>
+              ⟨List.take (min (↑o).length 33) ↑o ++
+                  List.drop (min (↑o).length 33)
+                    [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                      0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                      0#u8],
+                ⋯⟩)) >>=
+        fun __x => do
+        let s1 ← liftM (ok ⟨↑s.state, ⋯⟩)
+        let s2 ←
+          liftM (if Usize.ofNatCore (↑__x.1).length ⋯ = Usize.ofNatCore (↑s1).length ⋯ then ok s1 else fail Error.panic)
+        let squeeze2 ← liftM (ok ⟨(↑(__x.2 s2)).set 32 1#u8, ⋯⟩)
+        let s3 ← liftM (ok ⟨↑squeeze2, ⋯⟩)
+        let s4 ← liftM (ok ⟨[s3], ⋯⟩)
+        let out ← observeHash s.hash s4
+        let squeeze3 ← liftM (ok ⟨(↑squeeze2).set 32 2#u8, ⋯⟩)
+        let s5 ← liftM (ok ⟨↑squeeze3, ⋯⟩)
+        let s6 ← liftM (ok ⟨[s5], ⋯⟩)
+        (fun a => (out, { state := a, hash := s.hash })) <$> observeHash s.hash s6)
+      history =
+    do
+    let out ← s.hash ⟨[⟨↑s.state ++ [1#u8], ⋯⟩], ⋯⟩
+    let next ← s.hash ⟨[⟨↑s.state ++ [2#u8], ⋯⟩], ⋯⟩
+    ok
+        ((out, { state := next, hash := s.hash }),
+          history ++ [(⟨[⟨↑s.state ++ [1#u8], ⋯⟩], ⋯⟩, out), (⟨[⟨↑s.state ++ [2#u8], ⋯⟩], ⋯⟩, next)])
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:26:45: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵S̵o̵u̵r̵c̵e̵.̵s̵q̵u̵e̵e̵z̵e̵_̵b̵l̵o̵c̵k̵,̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵i̵n̵d̵e̵x̵.̵I̵n̵d̵e̵x̵M̵u̵t̵S̵l̵i̵c̵e̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲S̲o̲u̲r̲c̲e̲.̲s̲q̲u̲e̲e̲z̲e̲_̲b̲l̲o̲c̲k̲,̲ ̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲i̲n̲d̲e̲x̲.̲I̲n̲d̲e̲x̲M̲u̲t̲S̲l̲i̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut, A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵u̵p̵d̵a̵t̵e̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵S̵Q̵U̵E̵E̵Z̵E̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵A̵D̵V̵A̵N̵C̵E̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵e̵s̵s̵a̵g̵e̵,̵f̵r̵a̵m̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵,̵L̵i̵s̵t̵.̵s̵e̵t̵_̵a̵p̵p̵e̵n̵d̵,̵h̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵t̵a̵t̵e̵T̵.̵b̵i̵n̵d̵,̵S̵t̵a̵t̵e̵T̵.̵p̵u̵r̵e̵,̵S̵t̵a̵t̵e̵T̵.̵l̵i̵f̵t̵,̵o̵b̵s̵e̵r̵v̵e̵H̵a̵s̵h̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲u̲p̲d̲a̲t̲e̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲S̲Q̲U̲E̲E̲Z̲E̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲A̲D̲V̲A̲N̲C̲E̲,̲ ̲m̲e̲s̲s̲a̲g̲e̲,̲ ̲f̲r̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲t̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲b̲i̲n̲d̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲p̲u̲r̲e̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲b̲s̲e̲r̲v̲e̲H̲a̲s̲h̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:26:48: warning: This simp argument is unused:
+  List.set_append
+
+Hint: Omit it from the simp argument list.
+  simp [SamplerObservedSource.squeeze_block, ̲core.array.Array.index_mut,
+      core.ops.index.IndexMutSlice, ̲core.slice.index.Slice.index_mut,
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵Array.repeat, ̲Array.to_slice,
+  ̲ ̲ ̲ ̲ ̲Slice.length, ̲Slice.len,
+  ̵  ̵ ̵ ̵core.slice.Slice.copy_from_slice, ̲Array.from_slice, ̲List.setSlice!,
+  ̲ ̲ ̲ ̲ ̲List.slice,
+  ̵  ̵ ̵ ̵Array.update, ̲transcript.DOM_SQUEEZE, ̲transcript.DOM_ADVANCE,
+  ̵  ̵ ̵ ̵message, ̲frame,
+  ̲ ̲ ̲ ̲ ̲Array.make, ̲lift, ̲bind_tc_ok, ̲hs,L̵i̵s̵t̵.̵s̵e̵t̵_̵a̵p̵p̵e̵n̵d̵,̵ ̲ht,
+  ̵  ̵ ̵ ̵StateT.bind, ̲StateT.pure, ̲StateT.lift, ̲observeHash,
+  ̲ ̲ ̲ ̲ ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:26:64: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵S̵o̵u̵r̵c̵e̵.̵s̵q̵u̵e̵e̵z̵e̵_̵b̵l̵o̵c̵k̵,̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵i̵n̵d̵e̵x̵.̵I̵n̵d̵e̵x̵M̵u̵t̵S̵l̵i̵c̵e̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲S̲o̲u̲r̲c̲e̲.̲s̲q̲u̲e̲e̲z̲e̲_̲b̲l̲o̲c̲k̲,̲ ̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲i̲n̲d̲e̲x̲.̲I̲n̲d̲e̲x̲M̲u̲t̲S̲l̲i̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut, A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵u̵p̵d̵a̵t̵e̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵S̵Q̵U̵E̵E̵Z̵E̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵A̵D̵V̵A̵N̵C̵E̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵e̵s̵s̵a̵g̵e̵,̵f̵r̵a̵m̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵,̵L̵i̵s̵t̵.̵s̵e̵t̵_̵a̵p̵p̵e̵n̵d̵,̵h̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵t̵a̵t̵e̵T̵.̵b̵i̵n̵d̵,̵S̵t̵a̵t̵e̵T̵.̵p̵u̵r̵e̵,̵S̵t̵a̵t̵e̵T̵.̵l̵i̵f̵t̵,̵o̵b̵s̵e̵r̵v̵e̵H̵a̵s̵h̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲u̲p̲d̲a̲t̲e̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲S̲Q̲U̲E̲E̲Z̲E̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲A̲D̲V̲A̲N̲C̲E̲,̲ ̲m̲e̲s̲s̲a̲g̲e̲,̲ ̲f̲r̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲b̲i̲n̲d̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲p̲u̲r̲e̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲b̲s̲e̲r̲v̲e̲H̲a̲s̲h̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:27:4: warning: This simp argument is unused:
+  StateT.bind
+
+Hint: Omit it from the simp argument list.
+  simp [SamplerObservedSource.squeeze_block, ̲core.array.Array.index_mut,
+      core.ops.index.IndexMutSlice, ̲core.slice.index.Slice.index_mut,
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵Array.repeat, ̲Array.to_slice,
+  ̲ ̲ ̲ ̲ ̲Slice.length, ̲Slice.len,
+  ̵  ̵ ̵ ̵core.slice.Slice.copy_from_slice, ̲Array.from_slice, ̲List.setSlice!,
+  ̲ ̲ ̲ ̲ ̲List.slice,
+  ̵  ̵ ̵ ̵Array.update, ̲transcript.DOM_SQUEEZE, ̲transcript.DOM_ADVANCE,
+  ̵  ̵ ̵ ̵message, ̲frame,
+  ̲ ̲ ̲ ̲ ̲Array.make, ̲lift, ̲bind_tc_ok, ̲hs, ̲List.set_append, ̲ht,
+  ̵  ̵ ̵ ̵StateT.b̵i̵n̵d̵,̵S̵t̵a̵t̵e̵T̵.̵pure, ̲StateT.lift, ̲observeHash,
+  ̲ ̲ ̲ ̲ ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:27:16: warning: This simp argument is unused:
+  StateT.pure
+
+Hint: Omit it from the simp argument list.
+  simp [SamplerObservedSource.squeeze_block, ̲core.array.Array.index_mut,
+      core.ops.index.IndexMutSlice, ̲core.slice.index.Slice.index_mut,
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵Array.repeat, ̲Array.to_slice,
+  ̲ ̲ ̲ ̲ ̲Slice.length, ̲Slice.len,
+  ̵  ̵ ̵ ̵core.slice.Slice.copy_from_slice, ̲Array.from_slice, ̲List.setSlice!,
+  ̲ ̲ ̲ ̲ ̲List.slice,
+  ̵  ̵ ̵ ̵Array.update, ̲transcript.DOM_SQUEEZE, ̲transcript.DOM_ADVANCE,
+  ̵  ̵ ̵ ̵message, ̲frame,
+  ̲ ̲ ̲ ̲ ̲Array.make, ̲lift, ̲bind_tc_ok, ̲hs, ̲List.set_append, ̲ht,
+  ̵  ̵ ̵ ̵StateT.bind, ̲StateT.p̵u̵r̵e̵,̵S̵t̵a̵t̵e̵T̵.̵lift, ̲observeHash,
+  ̲ ̲ ̲ ̲ ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:27:28: warning: This simp argument is unused:
+  StateT.lift
+
+Hint: Omit it from the simp argument list.
+  simp [SamplerObservedSource.squeeze_block, ̲core.array.Array.index_mut,
+      core.ops.index.IndexMutSlice, ̲core.slice.index.Slice.index_mut,
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵Array.repeat, ̲Array.to_slice,
+  ̲ ̲ ̲ ̲ ̲Slice.length, ̲Slice.len,
+  ̵  ̵ ̵ ̵core.slice.Slice.copy_from_slice, ̲Array.from_slice, ̲List.setSlice!,
+  ̲ ̲ ̲ ̲ ̲List.slice,
+  ̵  ̵ ̵ ̵Array.update, ̲transcript.DOM_SQUEEZE, ̲transcript.DOM_ADVANCE,
+  ̵  ̵ ̵ ̵message, ̲frame,
+  ̲ ̲ ̲ ̲ ̲Array.make, ̲lift, ̲bind_tc_ok, ̲hs, ̲List.set_append, ̲ht,
+  ̵  ̵ ̵ ̵StateT.bind, ̲StateT.pure,S̵t̵a̵t̵e̵T̵.̵l̵i̵f̵t̵,̵ ̲observeHash,
+  ̲ ̲ ̲ ̲ ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:27:40: warning: This simp argument is unused:
+  observeHash
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵S̵o̵u̵r̵c̵e̵.̵s̵q̵u̵e̵e̵z̵e̵_̵b̵l̵o̵c̵k̵,̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵i̵n̵d̵e̵x̵.̵I̵n̵d̵e̵x̵M̵u̵t̵S̵l̵i̵c̵e̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲S̲o̲u̲r̲c̲e̲.̲s̲q̲u̲e̲e̲z̲e̲_̲b̲l̲o̲c̲k̲,̲ ̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲i̲n̲d̲e̲x̲.̲I̲n̲d̲e̲x̲M̲u̲t̲S̲l̲i̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut, A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵u̵p̵d̵a̵t̵e̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵S̵Q̵U̵E̵E̵Z̵E̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵A̵D̵V̵A̵N̵C̵E̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵e̵s̵s̵a̵g̵e̵,̵f̵r̵a̵m̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵,̵L̵i̵s̵t̵.̵s̵e̵t̵_̵a̵p̵p̵e̵n̵d̵,̵h̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵t̵a̵t̵e̵T̵.̵b̵i̵n̵d̵,̵S̵t̵a̵t̵e̵T̵.̵p̵u̵r̵e̵,̵S̵t̵a̵t̵e̵T̵.̵l̵i̵f̵t̵,̵o̵b̵s̵e̵r̵v̵e̵H̵a̵s̵h̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲u̲p̲d̲a̲t̲e̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲S̲Q̲U̲E̲E̲Z̲E̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲A̲D̲V̲A̲N̲C̲E̲,̲ ̲m̲e̲s̲s̲a̲g̲e̲,̲ ̲f̲r̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲t̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲b̲i̲n̲d̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲p̲u̲r̲e̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean:27:52: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵S̵o̵u̵r̵c̵e̵.̵s̵q̵u̵e̵e̵z̵e̵_̵b̵l̵o̵c̵k̵,̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵i̵n̵d̵e̵x̵.̵I̵n̵d̵e̵x̵M̵u̵t̵S̵l̵i̵c̵e̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲S̲o̲u̲r̲c̲e̲.̲s̲q̲u̲e̲e̲z̲e̲_̲b̲l̲o̲c̲k̲,̲ ̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲i̲n̲d̲e̲x̲.̲I̲n̲d̲e̲x̲M̲u̲t̲S̲l̲i̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+      core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut, A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵u̵p̵d̵a̵t̵e̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵S̵Q̵U̵E̵E̵Z̵E̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵D̵O̵M̵_̵A̵D̵V̵A̵N̵C̵E̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵e̵s̵s̵a̵g̵e̵,̵f̵r̵a̵m̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵,̵L̵i̵s̵t̵.̵s̵e̵t̵_̵a̵p̵p̵e̵n̵d̵,̵h̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵t̵a̵t̵e̵T̵.̵b̵i̵n̵d̵,̵S̵t̵a̵t̵e̵T̵.̵p̵u̵r̵e̵,̵S̵t̵a̵t̵e̵T̵.̵l̵i̵f̵t̵,̵o̵b̵s̵e̵r̵v̵e̵H̵a̵s̵h̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲u̲p̲d̲a̲t̲e̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲S̲Q̲U̲E̲E̲Z̲E̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲D̲O̲M̲_̲A̲D̲V̲A̲N̲C̲E̲,̲ ̲m̲e̲s̲s̲a̲g̲e̲,̲ ̲f̲r̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲t̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲b̲i̲n̲d̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲p̲u̲r̲e̲,̲ ̲S̲t̲a̲t̲e̲T̲.̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲b̲s̲e̲r̲v̲e̲H̲a̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.SamplerObservedSqueeze.execution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerObservedSqueeze.erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerObservedSqueeze.adapter_execution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.SamplerObservedSqueeze.raw_calls_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerObservedSqueeze.decoded_execution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r79-squeeze-20260929-a/lib/AspisV8R19/SamplerObservedSqueeze.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedSqueeze.lean"
+	User time (seconds): 1.74
+	System time (seconds): 0.81
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.51
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3676440
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 137376
+	Voluntary context switches: 926
+	Involuntary context switches: 81
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 96
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
