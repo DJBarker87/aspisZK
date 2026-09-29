@@ -1,5 +1,19 @@
 # Current V8 privacy-repair status
 
+## R65 generated CM31 inverse — 2026-09-29
+
+[R65_COMPLEX_INVERSE.md](R65_COMPLEX_INVERSE.md) proves the actual checked CM31
+inverse closure on all canonical word pairs: nonzero input returns the correct
+canonical inverse, and assertion failure occurs exactly at zero. Three focused
+leaves compile with 25 theorem/axioms audits, reusing R64's M31 execution and the
+retained exact-tower norm proof. No inverse-backend or nonsquare premise is added.
+
+First remaining source proposition: optimized CM31 square/mul/sub execution
+and QM31 zero/`try_inv` composition, then circle and bounded sampler observer.
+This is not a verified compiler or global privacy theorem; the full oracle/
+seed/transcript/retry/publication and pre-beta soundness gates remain open.
+Runtime/CU unchanged: **1,497,377 / 1,498,764**, both actual 1M runs exhaust.
+
 ## R64 guarded generated execution — 2026-09-29
 
 [R64_GUARDED_EXECUTION.md](R64_GUARDED_EXECUTION.md) closes the optimized M31

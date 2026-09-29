@@ -1,0 +1,90 @@
+info: r65_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean:51:4: error(lean.unknownIdentifier): Unknown constant `QuadraticAlgebra.zero_re`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean:51:30: error(lean.unknownIdentifier): Unknown constant `QuadraticAlgebra.zero_im`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean:52:24: error: Ambiguous term
+  inv_zero
+Possible interpretations:
+  _root_.inv_zero : 0⁻¹ = 0
+  
+  ComplexBaseExecution.inv_zero : field.M31.inv (encodeBase 0) = fail Error.assertionFailure
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean:49:78: error: unsolved goals
+⊢ (do
+      let inv_norm ←
+        field.M31.inv
+            (encodeBase (QuadraticAlgebra.re 0 * QuadraticAlgebra.re 0 + QuadraticAlgebra.im 0 * QuadraticAlgebra.im 0))
+      let m2 ← field.M31.mul (encodeBase (QuadraticAlgebra.re 0)) inv_norm
+      let m3 ← field.M31.neg (encodeBase (QuadraticAlgebra.im 0))
+      let m4 ← m3.mul inv_norm
+      ok { a := m2, b := m4 }) =
+    fail Error.assertionFailure
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean:52:4: warning: This simp argument is unused:
+  zero_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [field.CM31.inv, field.CM31.inv_with, encode,
+  ̵  ̵ ̵ ̵QuadraticAlgebra.zero_re,
+  ̲  ̲ ̲ ̲QuadraticAlgebra.zero_im, mul_encode, add_encode,
+  ̵  ̵ ̵ ̵zero_m̵u̵l̵,̵ ̵z̵e̵r̵o̵_̵add, inv_zero, bind_tc_ok, bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean:52:14: warning: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  simp only [field.CM31.inv, field.CM31.inv_with, encode,
+  ̵  ̵ ̵ ̵QuadraticAlgebra.zero_re,
+  ̲  ̲ ̲ ̲QuadraticAlgebra.zero_im, mul_encode, add_encode,
+  ̵  ̵ ̵ ̵zero_mul, z̵e̵r̵o̵_̵a̵d̵d̵,̵ ̵inv_zero, bind_tc_ok, bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean:52:46: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [field.CM31.inv, field.CM31.inv_with, encode,
+  ̵  ̵ ̵ ̵QuadraticAlgebra.zero_re,
+  ̲  ̲ ̲ ̲QuadraticAlgebra.zero_im, mul_encode, add_encode,
+  ̵  ̵ ̵ ̵zero_mul, zero_add, inv_zero, bind_tc_ok,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.ComplexInverseExecution.encode_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ComplexInverseExecution.decode_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ComplexInverseExecution.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ComplexInverseExecution.inverse_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ComplexInverseExecution.inverse_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.ComplexInverseExecution.inverse_execution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.ComplexInverseExecution.inverse_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.ComplexInverseExecution.zero_iff_limbs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.ComplexInverseExecution.inverse_failure_iff' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.ComplexInverseExecution.entry_execution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r65-inverse-20260929-a/lib/AspisV8R19/ComplexInverseExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/ComplexInverseExecution.lean"
+	User time (seconds): 1.22
+	System time (seconds): 0.54
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.76
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3662940
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 85558
+	Voluntary context switches: 824
+	Involuntary context switches: 74
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 64
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
