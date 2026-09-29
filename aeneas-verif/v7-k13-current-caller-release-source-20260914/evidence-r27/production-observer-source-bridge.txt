@@ -1,0 +1,80 @@
+R27 current production observer source bridge
+
+Source revision:
+- fd8ca3a715c234a46c2c436fa92eb05eb9ff0713
+- branch research/v7-gate-closure-20260914
+
+Build host:
+- dombarker@100.108.41.90
+- focused Lean scopes used MemorySwapMax=0, MemoryHigh=4G, MemoryMax=6G
+
+Rust validation:
+- cargo check --release --locked --package aspis-verifier --lib
+  --no-default-features --features v7-production-tag73,aeneas-observer
+- exit=0 wall=38.80s peak_kib=458404 swap_kib=0
+
+Current caller extraction:
+- root:
+  crate::v7_verifier::observe_v7_read_only_with_statement_digest
+- Charon exit=0 wall=88.50s peak_kib=468892 swap_kib=0
+- LLBC sha256:
+  b0b9ff628008b479bbbc0e11ea1d0da32b676484b430b3fe55b08c0264c376ce
+- LLBC bytes: 533143
+- patched Aeneas b59d5188 translator exit=0 wall=0.49s
+  peak_kib=80960 swap_kib=0
+- translator binary sha256:
+  37e7e1b87537daede9e176c5827a60a39c1b05c5b1d9154b19407d2b40a784fe
+- translator source-diff sha256:
+  f5ef9c962362b88ba0fed5d6dc3dfb4357f9c44f129bb2744b4d6c4c049f6220
+
+Generated output hashes before normalization:
+- Funs.lean:
+  603f718f1470eadf18014142981f72777f3cd16561e1eeafc7451d508de29151
+- FunsExternal_Template.lean:
+  f3cf6becc9f38ee199bbb23723a98573c6fc3f153ccb2b8050478c3426249470
+- Types.lean:
+  4d57d9931aaacfa4ec315a2ba13e1f06261eab1e030f79d03b84f8f29e53b010
+- TypesExternal_Template.lean:
+  001daa92b6d0ffb52d5040b11c1bd95d47577a524a0d4246fa0547089e32f505
+- translation.json:
+  14c265cf6ca7fa16d7b798c67017af4f4a604a0037abfecfbdb61741dc5d62bc
+
+Audited normalization:
+- R27-NORMALIZATION.patch records every change from raw output.
+- It narrows the broad Aeneas import to the pinned Lean-4.32 modules,
+  restores precedence around the captured query closure pair,
+  restores ordinary Aeneas FnMut state threading for the observer closure,
+  restores the updated callback state in the opaque shared-core signature,
+  and replaces Option.ok_or with its exact two-constructor definition.
+- The raw templates and translation.json are retained beside normalized
+  generated files.
+
+Focused Lean 4.32 compilation:
+- V7ProductionObserverR27/TypesExternal.lean:
+  exit=0 wall=1.34s peak_kib=2512408 swap_kib=0
+- V7ProductionObserverR27/Types.lean:
+  exit=0 wall=2.16s peak_kib=2558384 swap_kib=0
+- V7ProductionObserverR27/FunsExternal.lean:
+  exit=0 wall=1.49s peak_kib=2524376 swap_kib=0
+- V7ProductionObserverR27/Funs.lean:
+  exit=0 wall=1.46s peak_kib=2534512 swap_kib=0
+- V7ProductionObserverR27SourceBridge.lean:
+  exit=0 wall=1.80s peak_kib=2542416 swap_kib=0
+
+Focused theorem results:
+- productionObserver_success_exact:
+  exact successful interface results are returned unchanged by the current
+  production observer entry.
+- productionObserver_parser_rejection_is_fail_closed:
+  a parser rejection is returned as V7VerifyError.Query.
+- productionObserver_acceptance_exposes_core:
+  every accepted production-observer result exposes a successful exact parser
+  result, public-key byte conversion, hiding-context construction, frozen
+  schedule reads, and the successful shared-core result carrying the exact
+  captured prechallenge snapshot.
+- All three #print axioms results contain only the explicit generated external
+  interfaces plus propext, Classical.choice, and Quot.sound. No sorryAx occurs.
+
+This is a focused source-entry bridge. It is not the final end-to-end release
+claim: the remaining explicit interfaces must be replaced by their generated
+source proofs and composed with the R26 shared-core/K1 and security theorems.

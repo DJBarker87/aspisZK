@@ -197,3 +197,32 @@ from the capstone's dependency closure. The manifest pins the patch, all proof
 and generated sources, and the replay script. Exact hashes and resource
 measurements are recorded in
 `evidence-r26/extraction-and-snapshot-kernel-check.txt`.
+
+## R27 current production observer entry
+
+R27 extracts the feature-gated monomorphic
+`observe_v7_read_only_with_statement_digest` entry at source revision
+`fd8ca3a715c234a46c2c436fa92eb05eb9ff0713`. This entry uses the current
+production parser, hiding context, terminal predicate, authenticated query
+fold, and shared verifier. Its only observational change is to retain the
+pre-existing prechallenge callback value so the source proof can name the
+accepted execution's exact K1 boundary.
+
+The normalized generated graph compiles under Lean 4.32. The focused theorem
+`productionObserver_acceptance_exposes_core` proves by control-flow inversion
+that every accepted observer result exposes a successful exact parser result,
+public-key conversion, hiding-context construction, frozen schedule reads, and
+successful shared-core call carrying the returned prechallenge snapshot.
+Companion theorems prove forward exact result flow and fail-closed parser
+rejection. Their axiom audits contain only the explicit generated external
+interfaces plus `propext`, `Classical.choice`, and `Quot.sound`; there is
+no `sorryAx`.
+
+This still is not an end-to-end acceptance theorem. The shared-core call and
+production callback interfaces in the small outer graph remain explicit
+external declarations. They must be linked to the R26 generated shared-core
+proof and the existing parser, terminal, Merkle, and query-fold source proofs.
+The transaction-wrapper premises and final maintained security/probability
+conclusion also remain outside this bridge. Exact hashes, normalization, and
+focused resource measurements are recorded in
+`evidence-r27/production-observer-source-bridge.txt`.
