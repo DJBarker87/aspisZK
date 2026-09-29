@@ -28,7 +28,7 @@ def lastPairUnique3
     (group0 group1 group2 : Std.U8) : Array Std.U8 4#usize :=
   Array.make 4#usize [group0, group1, group2, 0#u8]
 
-private def lastPairCoefficients111
+def lastPairCoefficients111
     (alpha3 alpha2 : RawQM31) : Array RawQM31 4#usize :=
   Array.make 4#usize [
     field.QM31.ONE, alpha3, alpha2,
@@ -40,13 +40,13 @@ private def lastPairCoefficientsFinal
     field.QM31.ONE, alpha3, coefficient2,
     field.QM31.ZERO]
 
-private def lastPairCounts111 : Array Std.U8 4#usize :=
+def lastPairCounts111 : Array Std.U8 4#usize :=
   Array.make 4#usize [1#u8, 1#u8, 1#u8, 0#u8]
 
 private def lastPairCounts112 : Array Std.U8 4#usize :=
   Array.make 4#usize [1#u8, 1#u8, 2#u8, 0#u8]
 
-private def lastPairFirstSlots : Array Std.U8 4#usize :=
+def lastPairFirstSlots : Array Std.U8 4#usize :=
   Array.make 4#usize [0#u8, 1#u8, 2#u8, 0#u8]
 
 private theorem lastPairFindNewStep0
