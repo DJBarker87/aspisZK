@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R49 source G boundary and fixed residual matrix — 2026-09-29
+
+[R49_SOURCE_G_BOUNDARY.md](R49_SOURCE_G_BOUNDARY.md) adds 36 compiled Lean
+theorems. The ordered sparse-G scatter, ten scale updates and statement-point
+loops match the full-support functionals. The ordinary/G weights retain
+`hg` and match the certified fixed matrix. For every distinct exact-QM31
+22-root tuple, the source-shaped normalized matrix at the algebraic
+specialization equals the retained invertible matrix.
+
+Next: form the new fixed-query challenge polynomial, prove its evaluation
+identity/degree and normalized-to-actual chord transfer, then justify the
+actual shared-oracle law. This is not an accepted-prefix probability result
+or full privacy. Rust word/optimized-kernel refinement and other release
+obligations remain. No verifier changes or new Rust/SBF run; CU remains
+1,620,236 / 1,621,719, and both 1M-cap runs exhaust.
+
 ## R48 full-support point/relation bridge — 2026-09-29
 
 [R48_FULL_POINT_FUNCTIONAL.md](R48_FULL_POINT_FUNCTIONAL.md) adds 21 compiled
