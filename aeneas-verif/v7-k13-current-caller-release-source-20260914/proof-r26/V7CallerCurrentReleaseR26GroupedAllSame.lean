@@ -16,15 +16,15 @@ namespace V7CallerCurrentReleaseR26GroupedAllSame
 abbrev RawQM31 := field.QM31
 abbrev ExactQM31 := AspisV5ComponentCQM31TowerExact.QM31Exact
 
-@[simp] private theorem sourceQm31ToModel_generated (x : RawQM31) :
+@[simp] theorem sourceQm31ToModel_generated (x : RawQM31) :
     sourceQm31ToModel (generatedQm31ToExact x) = exactRaw x := rfl
 
-private theorem oneCanonical : GeneratedCanonicalQM31 field.QM31.ONE := by
+theorem oneCanonical : GeneratedCanonicalQM31 field.QM31.ONE := by
   norm_num [GeneratedCanonicalQM31, GeneratedCanonicalCM31,
     AspisAeneasCM31Multiplicative.CanonicalRawM31, field.QM31.ONE,
     AspisAeneasCM31Multiplicative.m31Modulus]
 
-private theorem zeroCanonical : GeneratedCanonicalQM31 field.QM31.ZERO := by
+theorem zeroCanonical : GeneratedCanonicalQM31 field.QM31.ZERO := by
   norm_num [GeneratedCanonicalQM31, GeneratedCanonicalCM31,
     AspisAeneasCM31Multiplicative.CanonicalRawM31, field.QM31.ZERO,
     AspisAeneasCM31Multiplicative.m31Modulus]
@@ -44,37 +44,37 @@ def allSameProgram
 def groupsAllSame (group : Std.U8) : Array Std.U8 4#usize :=
   Array.make 4#usize [group, group, group, group]
 
-private def powers
+def powers
     (alpha alpha2 alpha3 : RawQM31) : Array RawQM31 4#usize :=
   Array.make 4#usize [field.QM31.ONE, alpha3, alpha2, alpha]
 
-private def unique0 : Array Std.U8 4#usize :=
+def unique0 : Array Std.U8 4#usize :=
   Array.repeat 4#usize 0#u8
 
-private def unique1 (group : Std.U8) : Array Std.U8 4#usize :=
+def unique1 (group : Std.U8) : Array Std.U8 4#usize :=
   Array.make 4#usize [group, 0#u8, 0#u8, 0#u8]
 
-private def coefficients0 : Array RawQM31 4#usize :=
+def coefficients0 : Array RawQM31 4#usize :=
   Array.repeat 4#usize field.QM31.ZERO
 
-private def coefficients1 : Array RawQM31 4#usize :=
+def coefficients1 : Array RawQM31 4#usize :=
   Array.make 4#usize
     [field.QM31.ONE, field.QM31.ZERO, field.QM31.ZERO, field.QM31.ZERO]
 
-private def coefficientsAt (coefficient : RawQM31) : Array RawQM31 4#usize :=
+def coefficientsAt (coefficient : RawQM31) : Array RawQM31 4#usize :=
   Array.make 4#usize
     [coefficient, field.QM31.ZERO, field.QM31.ZERO, field.QM31.ZERO]
 
-private def countsAt (count : Std.U8) : Array Std.U8 4#usize :=
+def countsAt (count : Std.U8) : Array Std.U8 4#usize :=
   Array.make 4#usize [count, 0#u8, 0#u8, 0#u8]
 
-private def slots0 : Array Std.U8 4#usize :=
+def slots0 : Array Std.U8 4#usize :=
   Array.repeat 4#usize 0#u8
 
-private def rangeFrom (start : Std.Usize) : core.ops.range.Range Std.Usize :=
+def rangeFrom (start : Std.Usize) : core.ops.range.Range Std.Usize :=
   { start, «end» := 4#usize }
 
-private theorem arrayIndexRun
+theorem arrayIndexRun
     {T : Type} [Inhabited T] {N : Std.Usize}
     (values : Array T N) (index : Std.Usize) (hindex : index.val < N.val) :
     Array.index_usize values index = ok values.val[index.val]! := by
@@ -89,7 +89,7 @@ private theorem arrayIndexRun
     simp [hbound]
   simpa [valueEq, getExact] using run
 
-private theorem arrayMake4Index0
+theorem arrayMake4Index0
     {T : Type} [Inhabited T] (a b c d : T) :
     Array.index_usize (Array.make 4#usize [a, b, c, d]) 0#usize = ok a := by
   have run := arrayIndexRun (Array.make 4#usize [a, b, c, d]) 0#usize
@@ -98,7 +98,7 @@ private theorem arrayMake4Index0
     ok (([a, b, c, d] : List T)[0]!) at run
   exact run
 
-private theorem arrayMake4Index1
+theorem arrayMake4Index1
     {T : Type} [Inhabited T] (a b c d : T) :
     Array.index_usize (Array.make 4#usize [a, b, c, d]) 1#usize = ok b := by
   have run := arrayIndexRun (Array.make 4#usize [a, b, c, d]) 1#usize
@@ -107,7 +107,7 @@ private theorem arrayMake4Index1
     ok (([a, b, c, d] : List T)[1]!) at run
   exact run
 
-private theorem arrayMake4Index2
+theorem arrayMake4Index2
     {T : Type} [Inhabited T] (a b c d : T) :
     Array.index_usize (Array.make 4#usize [a, b, c, d]) 2#usize = ok c := by
   have run := arrayIndexRun (Array.make 4#usize [a, b, c, d]) 2#usize
@@ -116,7 +116,7 @@ private theorem arrayMake4Index2
     ok (([a, b, c, d] : List T)[2]!) at run
   exact run
 
-private theorem arrayMake4Index3
+theorem arrayMake4Index3
     {T : Type} [Inhabited T] (a b c d : T) :
     Array.index_usize (Array.make 4#usize [a, b, c, d]) 3#usize = ok d := by
   have run := arrayIndexRun (Array.make 4#usize [a, b, c, d]) 3#usize
@@ -125,7 +125,7 @@ private theorem arrayMake4Index3
     ok (([a, b, c, d] : List T)[3]!) at run
   exact run
 
-private theorem arrayUpdateExact {T : Type} {N : Std.Usize}
+theorem arrayUpdateExact {T : Type} {N : Std.Usize}
     (values : Array T N) (index : Std.Usize)
     (hindex : index.val < N.val) (value : T) :
     Array.update values index value = ok (values.set index value) := by
@@ -136,7 +136,7 @@ private theorem arrayUpdateExact {T : Type} {N : Std.Usize}
   apply Subtype.ext
   rfl
 
-private theorem rangeNext0 :
+theorem rangeNext0 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 0#usize, «end» := 4#usize } =
       ok (some 0#usize, { start := 1#usize, «end» := 4#usize }) := by
@@ -148,7 +148,7 @@ private theorem rangeNext0 :
     core.iter.range.UScalarStep.forward_checked,
     core.cmp.impls.PartialOrdUsize.lt, hmax]
 
-private theorem rangeNext1 :
+theorem rangeNext1 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 1#usize, «end» := 4#usize } =
       ok (some 1#usize, { start := 2#usize, «end» := 4#usize }) := by
@@ -160,7 +160,7 @@ private theorem rangeNext1 :
     core.iter.range.UScalarStep.forward_checked,
     core.cmp.impls.PartialOrdUsize.lt, hmax]
 
-private theorem rangeNext2 :
+theorem rangeNext2 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 2#usize, «end» := 4#usize } =
       ok (some 2#usize, { start := 3#usize, «end» := 4#usize }) := by
@@ -172,7 +172,7 @@ private theorem rangeNext2 :
     core.iter.range.UScalarStep.forward_checked,
     core.cmp.impls.PartialOrdUsize.lt, hmax]
 
-private theorem rangeNext3 :
+theorem rangeNext3 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 3#usize, «end» := 4#usize } =
       ok (some 3#usize, { start := 4#usize, «end» := 4#usize }) := by
@@ -184,7 +184,7 @@ private theorem rangeNext3 :
     core.iter.range.UScalarStep.forward_checked,
     core.cmp.impls.PartialOrdUsize.lt, hmax]
 
-private theorem rangeDone4 :
+theorem rangeDone4 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 4#usize, «end» := 4#usize } =
       ok (none, { start := 4#usize, «end» := 4#usize }) := by
@@ -192,7 +192,7 @@ private theorem rangeDone4 :
     core.iter.range.StepUsize, core.iter.range.UScalarStep,
     core.cmp.impls.PartialOrdUsize.lt]
 
-private theorem rangeNext0End1 :
+theorem rangeNext0End1 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 0#usize, «end» := 1#usize } =
       ok (some 0#usize, { start := 1#usize, «end» := 1#usize }) := by
@@ -204,7 +204,7 @@ private theorem rangeNext0End1 :
     core.iter.range.UScalarStep.forward_checked,
     core.cmp.impls.PartialOrdUsize.lt, hmax]
 
-private theorem rangeDone1 :
+theorem rangeDone1 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 1#usize, «end» := 1#usize } =
       ok (none, { start := 1#usize, «end» := 1#usize }) := by
@@ -212,38 +212,38 @@ private theorem rangeDone1 :
     core.iter.range.StepUsize, core.iter.range.UScalarStep,
     core.cmp.impls.PartialOrdUsize.lt]
 
-private theorem usizeZeroSucc :
+theorem usizeZeroSucc :
     Std.Usize.wrapping_add 0#usize 1#usize = 1#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (1#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem u8OneSucc : Std.U8.wrapping_add 1#u8 1#u8 = 2#u8 := by
+theorem u8OneSucc : Std.U8.wrapping_add 1#u8 1#u8 = 2#u8 := by
   apply UScalar.val_eq_imp
   rw [Std.U8.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (2#u8).hSize; scalar_tac)]
   norm_num
 
-private theorem u8TwoSucc : Std.U8.wrapping_add 2#u8 1#u8 = 3#u8 := by
+theorem u8TwoSucc : Std.U8.wrapping_add 2#u8 1#u8 = 3#u8 := by
   apply UScalar.val_eq_imp
   rw [Std.U8.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (3#u8).hSize; scalar_tac)]
   norm_num
 
-private theorem u8ThreeSucc : Std.U8.wrapping_add 3#u8 1#u8 = 4#u8 := by
+theorem u8ThreeSucc : Std.U8.wrapping_add 3#u8 1#u8 = 4#u8 := by
   apply UScalar.val_eq_imp
   rw [Std.U8.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (4#u8).hSize; scalar_tac)]
   norm_num
 
-private theorem castUsizeZeroU8 :
+theorem castUsizeZeroU8 :
     UScalar.cast .U8 0#usize = 0#u8 := by
   apply UScalar.val_eq_imp
   rw [UScalar.cast_val_eq]
   rfl
 
-private theorem fromU8ToUsizeExact (value : Std.U8) :
+theorem fromU8ToUsizeExact (value : Std.U8) :
     core.convert.num.FromUsizeU8.from value = UScalar.cast .Usize value := by
   apply UScalar.val_eq_imp
   rw [core.convert.num.FromUsizeU8.from_val_eq, UScalar.cast_val_eq]
@@ -252,14 +252,14 @@ private theorem fromU8ToUsizeExact (value : Std.U8) :
   rcases System.Platform.numBits_eq with hbits | hbits <;>
     norm_num [UScalarTy.numBits, hbits] at h ⊢ <;> omega
 
-private theorem findEmpty (group : Std.U8) :
+theorem findEmpty (group : Std.U8) :
     sumcheck.fold_group_tuple_loop0_loop0 unique0 0#usize group 0#usize =
       ok 0#usize := by
   unfold sumcheck.fold_group_tuple_loop0_loop0
   rw [loop.eq_1]
   simp [sumcheck.fold_group_tuple_loop0_loop0.body]
 
-private theorem findExisting (group : Std.U8) :
+theorem findExisting (group : Std.U8) :
     sumcheck.fold_group_tuple_loop0_loop0 (unique1 group) 1#usize group
         0#usize = ok 0#usize := by
   have read : Array.index_usize (unique1 group) 0#usize = ok group := by
