@@ -270,6 +270,63 @@ theorem findExisting (group : Std.U8) :
   rw [if_pos (by decide), read]
   simp
 
+theorem phaseFirstStep
+    (groups : Array Std.U8 4#usize) (group : Std.U8)
+    (alpha alpha2 alpha3 : RawQM31)
+    (groupRun : Array.index_usize groups 0#usize = ok group) :
+    sumcheck.fold_group_tuple_loop0.body groups (powers alpha alpha2 alpha3)
+        (rangeFrom 0#usize) unique0 coefficients0 unique0 slots0 0#usize =
+      ok (cont (rangeFrom 1#usize, unique1 group, coefficients1,
+        countsAt 1#u8, slots0, 1#usize)) := by
+  have uniqueRun : Array.update unique0 0#usize group = ok (unique1 group) := by
+    have setExact : unique0.set 0#usize group = unique1 group := by
+      apply Subtype.ext
+      rfl
+    rw [← setExact]
+    exact arrayUpdateExact unique0 0#usize (by decide) group
+  have powerRun : Array.index_usize (powers alpha alpha2 alpha3) 0#usize =
+      ok field.QM31.ONE := by
+    simpa [powers] using arrayMake4Index0 field.QM31.ONE alpha3 alpha2 alpha
+  have coefficientRun : Array.update coefficients0 0#usize field.QM31.ONE =
+      ok coefficients1 := by
+    have setExact : coefficients0.set 0#usize field.QM31.ONE = coefficients1 := by
+      apply Subtype.ext
+      rfl
+    rw [← setExact]
+    exact arrayUpdateExact coefficients0 0#usize (by decide) field.QM31.ONE
+  have countRun : Array.update unique0 0#usize 1#u8 = ok (countsAt 1#u8) := by
+    have setExact : unique0.set 0#usize 1#u8 = countsAt 1#u8 := by
+      apply Subtype.ext
+      rfl
+    rw [← setExact]
+    exact arrayUpdateExact unique0 0#usize (by decide) 1#u8
+  have slotRun : Array.update slots0 0#usize (UScalar.cast .U8 0#usize) =
+      ok slots0 := by
+    rw [castUsizeZeroU8]
+    have setExact : slots0.set 0#usize 0#u8 = slots0 := by
+      apply Subtype.ext
+      rfl
+    rw [← setExact]
+    exact arrayUpdateExact slots0 0#usize (by decide) 0#u8
+  unfold sumcheck.fold_group_tuple_loop0.body
+  simp only [rangeFrom]
+  rw [rangeNext0]
+  simp only [bind_tc_ok]
+  rw [groupRun]
+  simp only [bind_tc_ok]
+  rw [findEmpty]
+  simp only [bind_tc_ok]
+  rw [if_neg (by decide), uniqueRun]
+  simp only [bind_tc_ok]
+  rw [powerRun]
+  simp only [bind_tc_ok]
+  rw [coefficientRun]
+  simp only [bind_tc_ok]
+  rw [countRun]
+  simp only [bind_tc_ok, Std.lift]
+  rw [slotRun]
+  simp only [bind_tc_ok, usizeZeroSucc]
+
 private theorem phaseStep0
     (group : Std.U8) (alpha alpha2 alpha3 : RawQM31) :
     sumcheck.fold_group_tuple_loop0.body
