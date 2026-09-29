@@ -20,6 +20,8 @@ namespace V7CallerCurrentReleaseR26WeightFoldLoopTrace
 
 open V7CallerCurrentReleaseR26AcceptedTailTrace
 open V7CallerCurrentReleaseR26TailWeightFoldTrace
+open V7CallerCurrentReleaseR26FieldBridge
+open V7CallerCurrentReleaseR26PreparedSumSemantics
 
 abbrev RawQM31 := field.QM31
 abbrev RawPrepared := field.PreparedQm31Multiplier
@@ -107,6 +109,63 @@ theorem first_deferred_fold_exposes_exact_trace
     outputComponents := congrArg
       (fun value : RawWeights => value.components) outputExact }⟩
 
+structure FirstDeferredFoldPowerFacts
+    {input output : RawWeights} {alpha : RawQM31}
+    (trace : FirstDeferredFoldTrace input alpha output) : Prop where
+  alphaSquaredCanonical : GeneratedCanonicalQM31 trace.alphaSquared
+  alphaCubedCanonical : GeneratedCanonicalQM31 trace.alphaCubed
+  alphaSquaredExact : generatedQm31ToExact trace.alphaSquared =
+    generatedQm31ToExact alpha ^ 2
+  alphaCubedExact : generatedQm31ToExact trace.alphaCubed =
+    generatedQm31ToExact alpha ^ 3
+  preparedAlphaRepresents : RepresentsPrepared trace.preparedAlpha alpha
+  preparedAlphaSquaredRepresents :
+    RepresentsPrepared trace.preparedAlphaSquared trace.alphaSquared
+
+/-- The literal setup calls of the first fold prove all square, cube, and
+prepared-cache facts used by its component cases. -/
+theorem FirstDeferredFoldTrace.power_facts
+    {input output : RawWeights} {alpha : RawQM31}
+    (trace : FirstDeferredFoldTrace input alpha output)
+    (halpha : GeneratedCanonicalQM31 alpha) :
+    FirstDeferredFoldPowerFacts trace := by
+  obtain ⟨alphaSquaredExpected, alphaSquareExpected,
+      alphaSquaredCanonical, alphaSquaredExact⟩ :=
+    generated_qm31_square_corresponds alpha halpha
+  have alphaSquaredEq : trace.alphaSquared = alphaSquaredExpected :=
+    Result.ok.inj (trace.alphaSquareRun.symm.trans alphaSquareExpected)
+  subst alphaSquaredExpected
+  obtain ⟨preparedAlphaExpected, preparedAlphaRun,
+      preparedAlphaRepresents⟩ :=
+    generated_prepared_new_establishes alpha halpha
+  have preparedAlphaEq : trace.preparedAlpha = preparedAlphaExpected :=
+    Result.ok.inj (trace.prepareAlphaRun.symm.trans preparedAlphaRun)
+  subst preparedAlphaExpected
+  obtain ⟨preparedAlphaSquaredExpected, preparedAlphaSquaredRun,
+      preparedAlphaSquaredRepresents⟩ :=
+    generated_prepared_new_establishes trace.alphaSquared
+      alphaSquaredCanonical
+  have preparedAlphaSquaredEq :
+      trace.preparedAlphaSquared = preparedAlphaSquaredExpected :=
+    Result.ok.inj
+      (trace.prepareAlphaSquaredRun.symm.trans preparedAlphaSquaredRun)
+  subst preparedAlphaSquaredExpected
+  obtain ⟨alphaCubedCanonical, alphaCubedMulExact⟩ :=
+    generated_prepared_qm31_mul_exact alpha trace.alphaSquared
+      trace.alphaCubed trace.preparedAlpha halpha alphaSquaredCanonical
+      trace.prepareAlphaRun trace.alphaCubedRun
+  have alphaCubedExact : generatedQm31ToExact trace.alphaCubed =
+      generatedQm31ToExact alpha ^ 3 := by
+    rw [alphaCubedMulExact, alphaSquaredExact]
+    ring
+  exact {
+    alphaSquaredCanonical := alphaSquaredCanonical
+    alphaCubedCanonical := alphaCubedCanonical
+    alphaSquaredExact := alphaSquaredExact
+    alphaCubedExact := alphaCubedExact
+    preparedAlphaRepresents := preparedAlphaRepresents
+    preparedAlphaSquaredRepresents := preparedAlphaSquaredRepresents }
+
 /-- The accepted fused traversal is likewise a finite chain from the exact
 post-merge accumulator to its returned component vector. -/
 theorem accepted_tail_traversal_exposes_exact_trace
@@ -142,6 +201,7 @@ theorem accepted_tail_traversal_exposes_exact_trace
     (trace.finalLogLen, trace.finalComponents, true) traversalRun
 
 #print axioms first_deferred_fold_exposes_exact_trace
+#print axioms FirstDeferredFoldTrace.power_facts
 #print axioms accepted_tail_traversal_exposes_exact_trace
 
 end V7CallerCurrentReleaseR26WeightFoldLoopTrace
