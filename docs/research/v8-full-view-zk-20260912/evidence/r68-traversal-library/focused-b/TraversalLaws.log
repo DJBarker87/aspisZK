@@ -1,0 +1,159 @@
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:16:8: error: unsolved goals
+case nil
+T U F : Type
+call : F → T → Result (U × F)
+ys : List T
+state : F
+⊢ mapState call ys state = do
+    let __x ← mapState call ys state
+    ok __x
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:20:22: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:21:19: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:25:24: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [hc̵,̵h̵t]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:26:21: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [hc̵,̵h̵t]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:29:51: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵c̵,̵h̵t̵,̵h̵r̵]̵[̲h̲t̲,̲ ̲h̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:41:33: error: unexpected token ',*'; expected ']'
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:40:73: error: unsolved goals
+case cons
+T U F : Type
+f : T → U
+state : F
+head✝ : T
+tail✝ : List T
+tail_ih✝ : mapState (fun s x => ok (f x, s)) tail✝ state = ok (List.map f tail✝, state)
+⊢ (do
+      let __x ← mapState (fun s x => ok (f x, s)) tail✝ state
+      ok (f head✝ :: __x.1, __x.2)) =
+    ok (f head✝ :: List.map f tail✝, state)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:60:48: error: unsolved goals
+T U F : Type
+fn : core.ops.function.FnMut F T U
+a b c d : T
+a' b' c' d' : U
+s0 s1 s2 s3 s4 : F
+ha : fn.call_mut s0 a = ok (a', s1)
+hb : fn.call_mut s1 b = ok (b', s2)
+hc : fn.call_mut s2 c = ok (c', s3)
+hd : fn.call_mut s3 d = ok (d', s4)
+⊢ (match h : mapState fn.call_mut [a, b, c, d] s0 with
+    | ok (ys, _last) => ok ⟨ys, ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨[a', b', c', d'], ⋯⟩
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:61:40: warning: This simp argument is unused:
+  map_four
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵A̵r̵r̵a̵y̵.̵m̵a̵p̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵m̵a̵p̵_̵f̵o̵u̵r̵,̵h̵a̵,̵h̵b̵,̵h̵c̵,̵h̵d̵]̵[̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲A̲r̲r̲a̲y̲.̲m̲a̲p̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲h̲a̲,̲ ̲h̲b̲,̲ ̲h̲c̲,̲ ̲h̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:61:49: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp [core.array.Array.map, ̲Array.make, ̲map_four, ̲ha̵,̵h̵b, ̲hc, ̲hd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:61:52: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [core.array.Array.map, ̲Array.make, ̲map_four, ̲ha, ̲hb̵,̵h̵c, ̲hd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:61:55: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [core.array.Array.map, ̲Array.make, ̲map_four, ̲ha, ̲hb, ̲hc̵,̵h̵d]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:61:58: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp [core.array.Array.map, ̲Array.make, ̲map_four, ̲ha, ̲hb, ̲hc,̵h̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:72:29: error: failed to synthesize
+  Decidable (ok ([1, 3, 6], 6) ≠ ok ([1, 2, 3], 0))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:79:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:87:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:102:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean:110:2: error: No goals to be solved
+'AspisV8R19.TraversalLaws.map_append' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.TraversalLaws.map_first_failure' depends on axioms: [propext]
+'AspisV8R19.TraversalLaws.map_first_divergence' depends on axioms: [propext]
+'AspisV8R19.TraversalLaws.map_pure' depends on axioms: [propext, sorryAx]
+'AspisV8R19.TraversalLaws.map_eta' does not depend on any axioms
+'AspisV8R19.TraversalLaws.map_four' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.TraversalLaws.array_four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.TraversalLaws.array_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.TraversalLaws.stateful_map_control' does not depend on any axioms
+'AspisV8R19.TraversalLaws.stale_state_negative' depends on axioms: [sorryAx]
+'AspisV8R19.TraversalLaws.any_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.TraversalLaws.any_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.TraversalLaws.any_continue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.TraversalLaws.any_next_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.TraversalLaws.any_callback_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.TraversalLaws.chain_left_hit' depends on axioms: [propext]
+'AspisV8R19.TraversalLaws.chain_left_exhausted' depends on axioms: [propext]
+'AspisV8R19.TraversalLaws.chain_right_not_fused' depends on axioms: [propext]
+'AspisV8R19.TraversalLaws.option_some' does not depend on any axioms
+'AspisV8R19.TraversalLaws.option_none' does not depend on any axioms
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r68-library-20260929-b/lib/AspisV8R19/TraversalLaws.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/TraversalLaws.lean"
+	User time (seconds): 1.29
+	System time (seconds): 0.36
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.63
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2521148
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64506
+	Voluntary context switches: 1172
+	Involuntary context switches: 50
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R68 traversal models and generated integration — 2026-09-29
+
+[R68_TRAVERSAL_LIBRARY.md](R68_TRAVERSAL_LIBRARY.md) records five compiled Lean
+leaves, 25 proved traversal/caller theorems and three generated-definition
+axioms audits. Concrete library models allow the complete eta-normalized
+diagnostic circle extraction to compile without the rejected axiom templates.
+Declaration bodies are preserved modulo namespace. **Rust library refinement,
+eta normalization and circle arithmetic correctness are not yet proved.**
+
+First source obligation: the actual two-slice `Chain::try_fold`/`any` and
+array-map specializations must correspond to the models; then prove guarded
+QM31 multiplication and compose circle/sampler execution. No new assumptions
+or runtime changes. Full privacy/soundness remains open. Retained CU:
+**1,497,377 / 1,498,764**; both actual 1M runs still exhaust.
+
 ## R67 circle-map source-tool obstruction — 2026-09-29
 
 [R67_CIRCLE_SOURCE_OBSTRUCTION.md](R67_CIRCLE_SOURCE_OBSTRUCTION.md) records the
