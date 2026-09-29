@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## R83 unchanged-proof composition — 2026-09-29
+
+[R83_NATIVE_COMPOSITION.md](R83_NATIVE_COMPOSITION.md) records the selected
+complete **1,326,977 / 1,328,177 CU** endpoint, saving about 6.8k over R82.
+Both honest proofs still exhaust at the actual 1M cap; **328,177 CU** remains.
+Packed mixed-width opening dots and short-dot ordinary contraction compose.
+The slower tensor candidate and stack-unsafe opt-level-2 experiment are rejected.
+All source, malformed-wire, stack and runtime gates pass for the selection.
+Protocol and security checks remain unchanged; full security is still open.
+
 ## R82 composed native arithmetic — 2026-09-29
 
 [R82_NATIVE_FOLLOWUP.md](R82_NATIVE_FOLLOWUP.md) records seven measured
