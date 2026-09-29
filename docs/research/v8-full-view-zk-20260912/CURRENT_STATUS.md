@@ -1,5 +1,19 @@
 # Current V8 privacy-repair status
 
+## R71 complete extracted circle-map execution — 2026-09-29
+
+[R71_CIRCLE_EXECUTION.md](R71_CIRCLE_EXECUTION.md) proves the actual generated
+circle/OOD map matches the retained mathematical map for every canonical
+parameter: singularity-first error, nonsingular subfield rejection, exact
+canonical circle output, and no internal failure. Three Lean leaves compile
+with 48 theorem/axioms audits and no new assumptions, reusing R66 arithmetic
+and R70's product proof.
+
+Next: actual transcript `challenge_qm31` and `challenge_secure_circle_point`
+correspondence with bounded sampler/retry/state/observer semantics. Existing
+model laws are not that source proof. Full privacy/soundness remains open.
+No runtime/CU change: **1,495,663 / 1,497,050**, both actual 1M runs still exhaust.
+
 ## R70 canonical generated QM31 product — 2026-09-29
 
 [R70_CANONICAL_PRODUCT.md](R70_CANONICAL_PRODUCT.md) proves the exact R69
