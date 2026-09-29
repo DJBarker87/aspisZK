@@ -1,0 +1,89 @@
+V7 R30 production observer to accepted relation tail: focused kernel check
+==========================================================================
+
+Recorded UTC: 2026-09-29T19:56:46Z
+Local base revision: 6a441f41948eb78703944fbf6b0910ebd4d5d965
+Focused source SHA-256:
+  0f6f4e5b6e5aefa1a456b0e1b6af418d15ca6e5257814b0fffcde92cc5611c89
+  proof-r28/V7ProductionSnapshotObserverR28AcceptedTail.lean
+
+Build host
+----------
+
+Host: dombarker@100.108.41.90
+Kernel: Linux nuc 6.8.0-110-generic x86_64
+Lean: /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean
+R26 proof cache:
+  /home/dombarker/project-offloads/v7-gate-closure-prechallenge-return-r22/r26-proof-432
+R26 final cache:
+  /home/dombarker/project-offloads/v7-gate-closure-prechallenge-return-r22/r26-final-replay-34bb5ecd
+R29 callback cache:
+  /home/dombarker/project-offloads/v7-e2e-r27-output/callback-r29
+R30 output:
+  /home/dombarker/project-offloads/v7-e2e-r27-output/lean
+
+Every focused Lean command ran in its own user systemd scope with:
+  MemoryHigh=7G
+  MemoryMax=8G
+  MemorySwapMax=0
+
+Final focused result
+--------------------
+
+Exact target:
+  proof-r28/V7ProductionSnapshotObserverR28AcceptedTail.lean
+
+The final source-trace extension produced:
+
+  'AspisV7ProductionSnapshotObserverR28AcceptedTail.reaches_r26_prechallenge_reaches_accepted_tail' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  'AspisV7ProductionSnapshotObserverR28AcceptedTail.production_snapshot_observer_acceptance_reaches_accepted_tail' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  RESULT target=R28AcceptedTailSource exit=0 wall_s=4.17 peak_kib=7231336 swaps=0
+
+The theorem starts from acceptance of the current production-derived observer
+over proof bytes.  It retains the exact parser and context results, the R26
+inner and prechallenge chain, the shifted query insertion, the literal
+accepted relation loop, the three exact source rounds, the terminal source
+step, and the equality between the returned capture and supplied snapshot.
+It adds no premise beyond observer acceptance.
+
+Focused development history
+---------------------------
+
+The predecessor was rechecked after correcting the Lean search path:
+
+  RESULT target=R28ToR26Prechallenge exit=0 wall_s=4.17 peak_kib=7158252 swaps=0
+
+The first new-source attempt exposed a namespace shadowing error and then hit
+the declared 3,000,000-heartbeat limit while elaborating the invalid term:
+
+  RESULT target=R28AcceptedTail exit=1 wall_s=179.54 peak_kib=7763684 swaps=0
+
+The source was changed to qualify the transcript-label namespace and to
+destructure the Nonempty tail witness directly.  The corrected intermediate
+and top-level checks were:
+
+  RESULT target=R28AcceptedTail exit=0 wall_s=4.09 peak_kib=7207960 swaps=0
+  RESULT target=R28AcceptedTailTop exit=0 wall_s=4.47 peak_kib=7214592 swaps=0
+
+Two earlier environment-only failures identified missing R29 and R26 cache
+entries; neither reached theorem elaboration:
+
+  RESULT target=R28ToR26Prechallenge exit=1 wall_s=0.54 peak_kib=837088 swaps=0
+  RESULT target=R28ToR26Prechallenge exit=1 wall_s=0.56 peak_kib=849376 swaps=0
+
+Remaining boundary
+------------------
+
+The accepted source trace now reaches the exact input of the existing R26
+`accepted_relation_loop_end_to_end` theorem.  That theorem still requires the
+canonicality and fixed seven-component accumulator-layout facts for the
+accepted values.  Those facts must be derived from the fixed-field parser,
+transcript challenge sampler, accumulator construction, and query insertion;
+they are not being treated as acceptance assumptions.  The resulting exact
+K1 relation law must then be connected to the maintained restored K1.2--K1.6
+probability theorem, followed by the outer transaction/Tag-73 dispatch
+implication and one final frozen manifest replay.

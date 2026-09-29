@@ -254,3 +254,25 @@ of every R29 callback, are exactly `propext`, `Classical.choice`, and
 `Quot.sound`.  Focused commands, source hashes, cgroup limits, wall times, peak
 RSS, swap, and the remaining composition boundary are recorded in
 `evidence-r29/production-snapshot-to-prechallenge-kernel-check.txt`.
+
+## R30 accepted production relation tail
+
+`production_snapshot_observer_acceptance_reaches_accepted_tail` extends the
+R28/R29 production-entry theorem through the complete post-prechallenge
+helper.  From the same accepted observer call, it retains the exact shifted
+query-batch insertion, the literal three-round relation-loop execution, all
+three source relation rounds, the terminal comparison, and the equality
+showing that the returned capture is the observer's supplied snapshot.  The
+theorem has no new source or model premise.
+
+The focused Lean check uses the pinned R26 and R29 caches under an 8 GiB
+systemd limit with swap disabled.  It exits zero, peaks at 7,231,336 KiB, and
+its axiom audit is exactly `propext`, `Classical.choice`, and `Quot.sound`.
+The next proof boundary is narrower: derive the canonical field facts and
+seven-component accumulator layout already required by the axiom-clean R26
+`accepted_relation_loop_end_to_end` theorem from this accepted source trace.
+After that equality is instantiated, the remaining release composition is the
+accepted-trace implication into the maintained restored K1.2--K1.6 security
+bound and the outer transaction dispatch implication.  Exact focused evidence
+is recorded in
+`evidence-r30/production-observer-to-accepted-tail-kernel-check.txt`.

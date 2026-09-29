@@ -100,5 +100,7 @@ compile_to "$proof/V7ProductionSnapshotObserverR28SourceBridge.lean" \
   "$output/V7ProductionSnapshotObserverR28SourceBridge.olean"
 compile_to "$proof/V7ProductionSnapshotObserverR28ToR26Prechallenge.lean" \
   "$output/V7ProductionSnapshotObserverR28ToR26Prechallenge.olean"
+compile_to "$proof/V7ProductionSnapshotObserverR28AcceptedTail.lean" \
+  "$output/V7ProductionSnapshotObserverR28AcceptedTail.olean"
 
-echo "FINAL target=V7ProductionSnapshotObserverR28ToR26Prechallenge status=passed"
+echo "FINAL target=V7ProductionSnapshotObserverR28AcceptedTail status=passed"
