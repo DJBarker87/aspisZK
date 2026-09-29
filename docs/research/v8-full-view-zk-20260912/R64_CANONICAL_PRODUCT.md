@@ -1,5 +1,9 @@
 # R64 arithmetic bridge — generated execution still pending
 
+Historical arithmetic checkpoint. The later [generated execution bridge](R64_GUARDED_EXECUTION.md)
+retrieves the artifacts, corrects their overflow profile and closes the M31
+execution obligation. Its extension-field/full-privacy boundary remains open.
+
 Base `2a9d914ff615bfc9d046399074d05b8164791412`, same isolated branch
 `research/v8-r64-guarded-m31-20260929`. This follows the
 [extraction checkpoint](R64_EXTRACTION_CHECKPOINT.md); it does not complete

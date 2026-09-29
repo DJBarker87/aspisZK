@@ -1,5 +1,10 @@
 # R64 extraction checkpoint — proof not yet compiled
 
+Superseded by the [generated execution bridge](R64_GUARDED_EXECUTION.md): the
+NUC reconnected, and the initial wrapping-profile extraction below was audited
+and retained as a rejected control. The corrected checked-profile extraction
+and its M31 inverse proof are now available.
+
 Historical checkpoint: the later [canonical-product arithmetic step](R64_CANONICAL_PRODUCT.md)
 compiles the Nat-only draft locally. Artifact retrieval and generated execution
 are still pending; the extraction result below is unchanged.

@@ -20,7 +20,9 @@ for n in ['Cargo.toml','lib.rs']:shutil.copy2(kit/n,source/n)
 for n in ['field.rs','r23_width.rs','r24_guarded_qm.rs','r25_checked_dot.rs']:
     path='crates/aspis-core/src/'+n;assert path in manifest['files'];shutil.copy2(stage/path,source/n)
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLCHAIN='nightly-2026-06-01',
-    CARGO_BUILD_JOBS='1',CARGO_TARGET_DIR=str(a.output/'target'),NO_DNA='1')
+    CARGO_BUILD_JOBS='1',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',CARGO_TARGET_DIR=str(a.output/'target'),NO_DNA='1')
+(a.output/'environment.json').write_text(json.dumps({k:env[k] for k in [
+    'RUSTUP_TOOLCHAIN','CARGO_BUILD_JOBS','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS','CARGO_TARGET_DIR']},indent=2)+'\n')
 records=[]
 def run(label,cmd):
     with (a.output/(label+'.log')).open('w') as f:r=subprocess.run(['/usr/bin/time','-v',*map(str,cmd)],cwd=source,env=env,stdout=f,stderr=subprocess.STDOUT)

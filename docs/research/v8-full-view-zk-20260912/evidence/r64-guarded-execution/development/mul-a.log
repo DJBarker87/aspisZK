@@ -1,0 +1,294 @@
+info: r64_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:37:4: error: unsolved goals
+case neg.refine_1
+s : U64
+hs : ↑s < 2 * P
+h : ¬P ≤ ↑s
+hb : ↑s < 2 ^ 32
+⊢ (if False then do
+      let d ← UScalar.sub s mask64
+      ok (UScalar.cast UScalarTy.U32 d)
+    else ok (UScalar.cast UScalarTy.U32 s)) =
+    ok (UScalar.cast UScalarTy.U32 s)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:37:32: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [narrowCond, h,̵ ̵i̵f̵_̵n̵e̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:66:33: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val_eq`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:71:4: error: Tactic `rfl` failed: The left-hand side
+  if ↑a < ↑2147483647#u32 then
+    if ↑b < ↑2147483647#u32 then do
+      let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i4 ← x >>> 31#i32
+      let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+      if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+          let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+          ok (UScalar.cast UScalarTy.U32 i7)
+        else ok (UScalar.cast UScalarTy.U32 s)
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3
+  else do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← Old.reduce i2
+    ok i3
+is not definitionally equal to the right-hand side
+  do
+    let product ← (UScalar.cast UScalarTy.U64 a).mul (UScalar.cast UScalarTy.U64 b)
+    let x ← product.shiftRight 31
+    let s ← (product.and (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P mask32._proof_1))).add x
+    if P ≤ ↑s then do
+        let d ← UScalar.sub s (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P mask32._proof_1))
+        ok (UScalar.cast UScalarTy.U32 d)
+      else ok (UScalar.cast UScalarTy.U32 s)
+
+case pos
+a b : U32
+ha : ↑a < P
+hb : ↑b < P
+⊢ (if ↑a < ↑2147483647#u32 then
+      if ↑b < ↑2147483647#u32 then do
+        let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i4 ← x >>> 31#i32
+        let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+        if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+            let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+            ok (UScalar.cast UScalarTy.U32 i7)
+          else ok (UScalar.cast UScalarTy.U32 s)
+      else do
+        let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i3 ← Old.reduce i2
+        ok i3
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3) =
+    do
+    let product ← (UScalar.cast UScalarTy.U64 a).mul (UScalar.cast UScalarTy.U64 b)
+    let x ← product.shiftRight 31
+    let s ← (product.and (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P mask32._proof_1))).add x
+    if P ≤ ↑s then do
+        let d ← UScalar.sub s (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P mask32._proof_1))
+        ok (UScalar.cast UScalarTy.U32 d)
+      else ok (UScalar.cast UScalarTy.U32 s)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:66:33: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val_eq`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:71:4: error: Tactic `rfl` failed: The left-hand side
+  if ↑a < ↑2147483647#u32 then
+    if ↑b < ↑2147483647#u32 then do
+      let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i4 ← x >>> 31#i32
+      let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+      if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+          let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+          ok (UScalar.cast UScalarTy.U32 i7)
+        else ok (UScalar.cast UScalarTy.U32 s)
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3
+  else do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← Old.reduce i2
+    ok i3
+is not definitionally equal to the right-hand side
+  do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← V7Tag73CurrentHelpersOpaque.aspis_core.field.reduce_u64 i2
+    ok i3
+
+case neg
+a b : U32
+ha : ↑a < P
+hb : ¬↑b < P
+⊢ (if ↑a < ↑2147483647#u32 then
+      if ↑b < ↑2147483647#u32 then do
+        let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i4 ← x >>> 31#i32
+        let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+        if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+            let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+            ok (UScalar.cast UScalarTy.U32 i7)
+          else ok (UScalar.cast UScalarTy.U32 s)
+      else do
+        let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i3 ← Old.reduce i2
+        ok i3
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3) =
+    do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← V7Tag73CurrentHelpersOpaque.aspis_core.field.reduce_u64 i2
+    ok i3
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:66:33: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val_eq`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:71:4: error: Tactic `rfl` failed: The left-hand side
+  if ↑a < ↑2147483647#u32 then
+    if ↑b < ↑2147483647#u32 then do
+      let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i4 ← x >>> 31#i32
+      let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+      if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+          let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+          ok (UScalar.cast UScalarTy.U32 i7)
+        else ok (UScalar.cast UScalarTy.U32 s)
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3
+  else do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← Old.reduce i2
+    ok i3
+is not definitionally equal to the right-hand side
+  do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← V7Tag73CurrentHelpersOpaque.aspis_core.field.reduce_u64 i2
+    ok i3
+
+case pos
+a b : U32
+ha : ¬↑a < P
+hb : ↑b < P
+⊢ (if ↑a < ↑2147483647#u32 then
+      if ↑b < ↑2147483647#u32 then do
+        let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i4 ← x >>> 31#i32
+        let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+        if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+            let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+            ok (UScalar.cast UScalarTy.U32 i7)
+          else ok (UScalar.cast UScalarTy.U32 s)
+      else do
+        let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i3 ← Old.reduce i2
+        ok i3
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3) =
+    do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← V7Tag73CurrentHelpersOpaque.aspis_core.field.reduce_u64 i2
+    ok i3
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:66:33: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val_eq`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:71:4: error: Tactic `rfl` failed: The left-hand side
+  if ↑a < ↑2147483647#u32 then
+    if ↑b < ↑2147483647#u32 then do
+      let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i4 ← x >>> 31#i32
+      let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+      if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+          let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+          ok (UScalar.cast UScalarTy.U32 i7)
+        else ok (UScalar.cast UScalarTy.U32 s)
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3
+  else do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← Old.reduce i2
+    ok i3
+is not definitionally equal to the right-hand side
+  do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← V7Tag73CurrentHelpersOpaque.aspis_core.field.reduce_u64 i2
+    ok i3
+
+case neg
+a b : U32
+ha : ¬↑a < P
+hb : ¬↑b < P
+⊢ (if ↑a < ↑2147483647#u32 then
+      if ↑b < ↑2147483647#u32 then do
+        let x ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i4 ← x >>> 31#i32
+        let s ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i4
+        if s ≥ UScalar.cast UScalarTy.U64 2147483647#u32 then do
+            let i7 ← s - UScalar.cast UScalarTy.U64 2147483647#u32
+            ok (UScalar.cast UScalarTy.U32 i7)
+          else ok (UScalar.cast UScalarTy.U32 s)
+      else do
+        let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+        let i3 ← Old.reduce i2
+        ok i3
+    else do
+      let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+      let i3 ← Old.reduce i2
+      ok i3) =
+    do
+    let i2 ← UScalar.cast UScalarTy.U64 a * UScalar.cast UScalarTy.U64 b
+    let i3 ← V7Tag73CurrentHelpersOpaque.aspis_core.field.reduce_u64 i2
+    ok i3
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:67:27: warning: This simp argument is unused:
+  true_and
+
+Hint: Omit it from the simp argument list.
+  simp only [UScalar.lt_equiv, UScalar.ofNat_val_eq, ha, hb, and_self,
+  ̵  ̵ ̵ ̵ ̵ ̵and_true, and_false,
+  ̲ t̵r̵u̵e̵_̵a̵n̵d̵,̵  ̲ ̲ ̲ ̲false_and, if_true, if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:67:37: warning: This simp argument is unused:
+  false_and
+
+Hint: Omit it from the simp argument list.
+  simp only [UScalar.lt_equiv, UScalar.ofNat_val_eq, ha, hb, and_self, and_true, and_false,
+  ̲  ̲ ̲ ̲ ̲ ̲true_and, f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵ ̵if_true, if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean:79:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  V7Tag73CurrentHelpersOpaque.aspis_core.field.M31.mul a b
+in the target expression
+  ok z = Old.mul a b
+
+case isTrue
+a b : U32
+h : ↑a < P ∧ ↑b < P
+z : U32
+hz : fastMul a b = ok z
+hv : ↑z = ↑a * ↑b % P
+w : V7Tag73CurrentHelpersOpaque.aspis_core.field.M31
+hw : V7Tag73CurrentHelpersOpaque.aspis_core.field.M31.mul a b = ok w
+hwv : ↑w = ↑a * ↑b % P
+right✝ : ↑w < P
+⊢ ok z = Old.mul a b
+'AspisV8R19.GuardedM31Execution.reducer_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.GuardedM31Execution.narrowCond_success' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.GuardedM31Execution.fastMul_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.GuardedM31Execution.generated_branches' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.GuardedM31Execution.generated_mul_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.GuardedM31Execution.generated_mul_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r64-mul-20260929-a/lib/AspisV8R19/GuardedM31Execution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GuardedM31Execution.lean"
+	User time (seconds): 1.00
+	System time (seconds): 0.38
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.36
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2501976
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64140
+	Voluntary context switches: 642
+	Involuntary context switches: 48
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 80
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

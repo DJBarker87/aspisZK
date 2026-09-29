@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R64 guarded generated execution — 2026-09-29
+
+[R64_GUARDED_EXECUTION.md](R64_GUARDED_EXECUTION.md) closes the optimized M31
+generated-execution gap: 14 new compiled theorems prove all-U32 checked
+multiplication equivalence and transport it through the extracted square loop
+and inverse, preserving zero assertion failure and canonical nonzero inverse
+correctness. The nine arithmetic lemmas are reused; final replay audits 23
+theorems across four focused leaves. No new axioms.
+
+The NUC is reachable again. Audit rejected the earlier extraction's wrapping
+release profile; the corrected extraction matches the measured SBF overflow
+setting and retains unchanged source bytes. Both variants and negative controls
+are recorded. Next: actual CM31/QM31 norm/negation/equality/`try_inv` composition,
+then circle and bounded sampler observer. Full privacy, soundness and numerical
+loss composition remain open. No runtime/CU change: **1,497,377 / 1,498,764**.
+
 ## R64 canonical-product arithmetic — 2026-09-29
 
 [R64_CANONICAL_PRODUCT.md](R64_CANONICAL_PRODUCT.md) adds nine compiled Lean
