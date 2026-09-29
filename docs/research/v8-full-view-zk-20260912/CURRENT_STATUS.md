@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R56 partially reduced product intermediates — 2026-09-29
+
+[R56_PARTIAL_PRODUCT.md](R56_PARTIAL_PRODUCT.md) selects a guarded arithmetic
+rewrite at **1,586,096 / 1,587,563 CU**, saving 26,066 / 26,074 versus R55.
+Nine Lean theorems compile; independent/frozen-source product comparisons,
+dot gates, full-wire checks, stack checks and complete executions pass.
+The exact world-0 trace attributes the entire saving to three multiplier/dot
+functions. Both actual 1M-cap runs still exhaust; 587,563 CU remains to remove.
+Input guards, final canonical reductions, protocol and production paths remain
+unchanged. Next: semantic selector/common-factor reuse and native caller work.
+
+Full privacy is still open: universal sampler/field source refinement and
+complete shared-oracle/prover/observer/retry/publication composition are not
+established. The pre-beta extraction soundness obligation remains separate.
+
 ## R55 packed opening decoder — 2026-09-29
 
 [R55_OPENING_DECODE.md](R55_OPENING_DECODE.md) selects caller-owned decoding
