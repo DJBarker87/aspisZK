@@ -1,0 +1,397 @@
+   Compiling aspis-core v0.0.0 (/home/dombarker/project-offloads/aspis-r72-sampler-20260929-a/source)
+error: environment variable `OUT_DIR` not defined at compile time
+  --> src/circle_fri.rs:30:18
+   |
+30 | include!(concat!(env!("OUT_DIR"), "/circle_tables.rs"));
+   |                  ^^^^^^^^^^^^^^^
+   |
+   = help: `OUT_DIR` may not be available for the current Cargo target
+   = help: Cargo sets build script variables at run time. Use `std::env::var("OUT_DIR")` instead
+
+error[E0432]: unresolved imports `crate::circle_fri::FIXED_CIRCLE_INV_2X`, `crate::circle_fri::FIXED_CIRCLE_INV_2Y`, `crate::circle_fri::FIXED_FINAL_X`, `crate::circle_fri::FIXED_LINE1_INV`, `crate::circle_fri::FIXED_LINE2_INV`, `crate::circle_fri::FIXED_LINE3_INV`, `crate::circle_fri::RATE16_CIRCLE_INV_2X`, `crate::circle_fri::RATE16_CIRCLE_INV_2Y`, `crate::circle_fri::RATE16_FINAL_X`, `crate::circle_fri::RATE16_LINE1_INV`, `crate::circle_fri::RATE16_LINE2_INV`, `crate::circle_fri::RATE16_LINE3_INV`, `crate::circle_fri::RATE32_CIRCLE_INV_2X`, `crate::circle_fri::RATE32_CIRCLE_INV_2Y`, `crate::circle_fri::RATE32_FINAL_X`, `crate::circle_fri::RATE32_LINE1_INV`, `crate::circle_fri::RATE32_LINE2_INV`, `crate::circle_fri::RATE32_LINE3_INV`, `crate::circle_fri::RATE512_CIRCLE_INV_2X`, `crate::circle_fri::RATE512_CIRCLE_INV_2Y`, `crate::circle_fri::RATE512_FINAL_X`, `crate::circle_fri::RATE512_LINE1_INV`, `crate::circle_fri::RATE512_LINE2_INV`, `crate::circle_fri::RATE512_LINE3_INV`
+  --> src/circle_openings.rs:10:5
+   |
+10 |     FIXED_CIRCLE_INV_2X, FIXED_CIRCLE_INV_2Y, FIXED_FINAL_X, FIXED_LINE1_INV, FIXED_LINE2_INV,
+   |     ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^ no `FIXED_LINE2_INV` in `circle_fri`
+   |     |                    |                    |              |
+   |     |                    |                    |              no `FIXED_LINE1_INV` in `circle_fri`
+   |     |                    |                    no `FIXED_FINAL_X` in `circle_fri`
+   |     |                    no `FIXED_CIRCLE_INV_2Y` in `circle_fri`
+   |     no `FIXED_CIRCLE_INV_2X` in `circle_fri`
+11 |     FIXED_LINE3_INV, RATE16_CIRCLE_INV_2X, RATE16_CIRCLE_INV_2Y, RATE16_FINAL_X, RATE16_LINE1_INV,
+   |     ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^ no `RATE16_LINE1_INV` in `circle_fri`
+   |     |                |                     |                     |
+   |     |                |                     |                     no `RATE16_FINAL_X` in `circle_fri`
+   |     |                |                     no `RATE16_CIRCLE_INV_2Y` in `circle_fri`
+   |     |                no `RATE16_CIRCLE_INV_2X` in `circle_fri`
+   |     no `FIXED_LINE3_INV` in `circle_fri`
+12 |     RATE16_LINE2_INV, RATE16_LINE3_INV, RATE32_CIRCLE_INV_2X, RATE32_CIRCLE_INV_2Y, RATE32_FINAL_X,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+13 |     RATE32_LINE1_INV, RATE32_LINE2_INV, RATE32_LINE3_INV, RATE512_CIRCLE_INV_2X,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
+14 |     RATE512_CIRCLE_INV_2Y, RATE512_FINAL_X, RATE512_LINE1_INV, RATE512_LINE2_INV,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+15 |     RATE512_LINE3_INV,
+   |     ^^^^^^^^^^^^^^^^^
+
+error[E0425]: cannot find value `RATE512_CIRCLE_LOW8_WINDOW` in this scope
+   --> src/circle_fri.rs:264:34
+    |
+264 |             let [low_x, low_y] = RATE512_CIRCLE_LOW8_WINDOW[natural & 0xff];
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `RATE512_CIRCLE_HIGH9_WINDOW` in this scope
+   --> src/circle_fri.rs:271:40
+    |
+271 |                 let [high_x, high_y] = RATE512_CIRCLE_HIGH9_WINDOW[high_index];
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `V6_CIRCLE_LOW6_WINDOW` in this scope
+   --> src/circle_fri.rs:291:34
+    |
+291 |             let [low_x, low_y] = V6_CIRCLE_LOW6_WINDOW[natural & 0x3f];
+    |                                  ^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `V6_CIRCLE_MIDDLE6_WINDOW` in this scope
+   --> src/circle_fri.rs:298:44
+    |
+298 |                 let [middle_x, middle_y] = V6_CIRCLE_MIDDLE6_WINDOW[middle_index];
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `V6_CIRCLE_HIGH6_WINDOW` in this scope
+   --> src/circle_fri.rs:306:40
+    |
+306 |                 let [high_x, high_y] = V6_CIRCLE_HIGH6_WINDOW[high_index];
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+warning: unexpected `cfg` condition value: `v7-fixed-canonical-audit`
+  --> src/lib.rs:53:7
+   |
+53 | #[cfg(feature = "v7-fixed-canonical-audit")]
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+   |
+   = note: no expected values for `feature`
+   = help: consider adding `v7-fixed-canonical-audit` as a feature in `Cargo.toml`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition value: `insecure-test-framing`
+  --> src/lib.rs:65:7
+   |
+65 | #[cfg(feature = "insecure-test-framing")]
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+   |
+   = note: no expected values for `feature`
+   = help: consider adding `insecure-test-framing` as a feature in `Cargo.toml`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+  --> src/lib.rs:71:7
+   |
+71 | #[cfg(feature = "insecure-test-ordering")]
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+   |
+   = note: no expected values for `feature`
+   = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `formal-verification`
+   --> src/circle_pcs_shape.rs:206:7
+    |
+206 | #[cfg(feature = "formal-verification")]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `formal-verification` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> src/circle_prefix.rs:594:11
+    |
+594 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> src/circle_prefix.rs:638:11
+    |
+638 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `formal-verification`
+   --> src/circle_query.rs:284:7
+    |
+284 | #[cfg(feature = "formal-verification")]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `formal-verification` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `formal-verification`
+   --> src/circle_query.rs:291:7
+    |
+291 | #[cfg(feature = "formal-verification")]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `formal-verification` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `v8_compact_workspace`
+   --> src/sumcheck.rs:402:11
+    |
+402 |     #[cfg(v8_compact_workspace)]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(v8_compact_workspace)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(v8_compact_workspace)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `v7-gamma-four-slot-block-audit`
+   --> src/v6_onefold.rs:648:21
+    |
+648 | #[cfg(any(test, not(feature = "v7-gamma-four-slot-block-audit")))]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `v7-gamma-four-slot-block-audit` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `v7-gamma-four-slot-block-audit`
+   --> src/v6_onefold.rs:697:17
+    |
+697 | #[cfg(any(test, feature = "v7-gamma-four-slot-block-audit"))]
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `v7-gamma-four-slot-block-audit` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `v7-gamma-four-slot-block-audit`
+   --> src/v6_onefold.rs:624:15
+    |
+624 |     #[cfg(not(feature = "v7-gamma-four-slot-block-audit"))]
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `v7-gamma-four-slot-block-audit` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `v7-gamma-four-slot-block-audit`
+   --> src/v6_onefold.rs:626:11
+    |
+626 |     #[cfg(feature = "v7-gamma-four-slot-block-audit")]
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `v7-gamma-four-slot-block-audit` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `v7-fixed-canonical-audit`
+  --> src/v6_transcript.rs:40:7
+   |
+40 | #[cfg(feature = "v7-fixed-canonical-audit")]
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+   |
+   = note: no expected values for `feature`
+   = help: consider adding `v7-fixed-canonical-audit` as a feature in `Cargo.toml`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `v7-fixed-canonical-audit`
+   --> src/v6_transcript.rs:355:7
+    |
+355 | #[cfg(feature = "v7-fixed-canonical-audit")]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `v7-fixed-canonical-audit` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `v7-fixed-canonical-audit`
+    --> src/v6_transcript.rs:1214:7
+     |
+1214 | #[cfg(feature = "v7-fixed-canonical-audit")]
+     |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+     |
+     = note: no expected values for `feature`
+     = help: consider adding `v7-fixed-canonical-audit` as a feature in `Cargo.toml`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:830:7
+    |
+830 | #[cfg(feature = "insecure-test-ordering")]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:901:7
+    |
+901 | #[cfg(feature = "insecure-test-ordering")]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-framing`
+   --> src/verify.rs:939:7
+    |
+939 | #[cfg(feature = "insecure-test-framing")]
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-framing` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:847:11
+    |
+847 |     #[cfg(feature = "insecure-test-ordering")]
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:849:11
+    |
+849 |     #[cfg(feature = "insecure-test-ordering")]
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:851:11
+    |
+851 |     #[cfg(feature = "insecure-test-ordering")]
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:853:11
+    |
+853 |     #[cfg(feature = "insecure-test-ordering")]
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:855:11
+    |
+855 |     #[cfg(feature = "insecure-test-ordering")]
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:861:15
+    |
+861 |         #[cfg(feature = "insecure-test-ordering")]
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:869:15
+    |
+869 |         #[cfg(feature = "insecure-test-ordering")]
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:877:15
+    |
+877 |         #[cfg(feature = "insecure-test-ordering")]
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:885:15
+    |
+885 |         #[cfg(feature = "insecure-test-ordering")]
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `insecure-test-ordering`
+   --> src/verify.rs:893:15
+    |
+893 |         #[cfg(feature = "insecure-test-ordering")]
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+    |
+    = note: no expected values for `feature`
+    = help: consider adding `insecure-test-ordering` as a feature in `Cargo.toml`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+Some errors have detailed explanations: E0425, E0432.
+For more information about an error, try `rustc --explain E0425`.
+ERROR Code failed to compile
+warning: `aspis-core` (lib) generated 30 warnings
+error: could not compile `aspis-core` (lib) due to 7 previous errors; 30 warnings emitted
+Command exited with non-zero status 101
+	Command being timed: "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon cargo --preset aeneas --mir built --sysroot default --start-from crate::sampler_probe --include core::option --dest-file /home/dombarker/project-offloads/aspis-r72-sampler-20260929-a/R72Sampler.llbc -- --locked --offline --release --lib"
+	User time (seconds): 1.57
+	System time (seconds): 0.17
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.76
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 318384
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 137
+	Minor (reclaiming a frame) page faults: 79753
+	Voluntary context switches: 541
+	Involuntary context switches: 29
+	Swaps: 0
+	File system inputs: 31056
+	File system outputs: 296
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 101

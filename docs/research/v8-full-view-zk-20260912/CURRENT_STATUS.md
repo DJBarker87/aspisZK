@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R72 actual sampler extraction and outer execution — 2026-09-29
+
+[R72_SAMPLER_SOURCE.md](R72_SAMPLER_SOURCE.md) compiles template-free extraction
+of the actual sampler (49 functions, ten types) and proves eleven outer-loop
+execution facts, including cap three, inner-error propagation and advanced
+state retention. The original inner sampler and circle calls remain in the
+theorem; no successful/uniform-draw premise is added.
+
+Audit qualification: the cached runtime's opaque `core.fmt.Formatter : Type`
+appears through `unwrap`; this is recorded, not called standard-axioms-only.
+Next: generated squeeze/byte/limb correspondence, safe slicing, bounded inner
+retries and exact shared-oracle traces, then circle-model composition.
+Full privacy/soundness remains open. No runtime/CU change:
+**1,495,663 / 1,497,050**, both actual 1M runs still exhaust.
+
 ## R71 complete extracted circle-map execution — 2026-09-29
 
 [R71_CIRCLE_EXECUTION.md](R71_CIRCLE_EXECUTION.md) proves the actual generated

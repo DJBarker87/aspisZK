@@ -1,0 +1,204 @@
+info: r72_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:33:2: error: unsolved goals
+case pos
+r : core.ops.range.Range U32
+h : ↑r.start < ↑r.end
+hb : ↑r.start + 1 ≤ UScalar.max UScalarTy.U32
+hb' : ↑r.start < UScalar.max UScalarTy.U32
+⊢ (do
+      let n ← if h : ↑r.start < U32.max then ok (some (UScalar.ofNatCore (↑r.start + 1) ⋯)) else ok none
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some r.start, { start := n, «end» := r.end })) =
+    ok (some r.start, { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end })
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:41:70: warning: This simp argument is unused:
+  hb'
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵I̵t̵e̵r̵a̵t̵o̵r̵R̵a̵n̵g̵e̵.̵n̵e̵x̵t̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵S̵t̵e̵p̵U̵3̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵U̵S̵c̵a̵l̵a̵r̵S̵t̵e̵p̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵O̵r̵d̵U̵3̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵O̵r̵d̵U̵3̵2̵.̵l̵t̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵C̵l̵o̵n̵e̵U̵3̵2̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵F̵u̵n̵2̵,̵l̵i̵f̵t̵F̵u̵n̵1̵,̵h̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵U̵S̵c̵a̵l̵a̵r̵S̵t̵e̵p̵.̵f̵o̵r̵w̵a̵r̵d̵_̵c̵h̵e̵c̵k̵e̵d̵,̵h̵b̵'̵]̵[̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲I̲t̲e̲r̲a̲t̲o̲r̲R̲a̲n̲g̲e̲.̲n̲e̲x̲t̲,̲ ̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲S̲t̲e̲p̲U̲3̲2̲,̲ ̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲U̲S̲c̲a̲l̲a̲r̲S̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲O̲r̲d̲U̲3̲2̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲O̲r̲d̲U̲3̲2̲.̲l̲t̲,̲ ̲c̲o̲r̲e̲.̲c̲l̲o̲n̲e̲.̲C̲l̲o̲n̲e̲U̲3̲2̲,̲ ̲l̲i̲f̲t̲F̲u̲n̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲i̲f̲t̲F̲u̲n̲1̲,̲ ̲h̲,̲ ̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲U̲S̲c̲a̲l̲a̲r̲S̲t̲e̲p̲.̲f̲o̲r̲w̲a̲r̲d̲_̲c̲h̲e̲c̲k̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:93:22: error: Type mismatch
+  ih r' s1 hn'
+has type
+  transcript.Transcript.challenge_secure_circle_point_loop r' s1 = bounded n s1
+but is expected to have type
+  loop
+      (fun x => do
+        let __x ←
+          if h : ↑x.1.start < ↑x.1.end then
+              ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+            else ok (none, x.1)
+        match __x.1 with
+          | none => ok (done (core.result.Result.Err transcript.CirclePointSampleError.ParameterSampleExhausted, x.2))
+          | some val => do
+            let __x_1 ← x.2.challenge_qm31
+            let cf ←
+              match
+                  match __x_1.1 with
+                  | core.result.Result.Ok t => core.result.Result.Ok t
+                  | core.result.Result.Err a =>
+                    core.result.Result.Err transcript.CirclePointSampleError.ChallengeSampleExhausted with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r2 ← circle.secure_ood_circle_point_from_parameter val
+                match r2 with
+                  | core.result.Result.Ok point => ok (done (core.result.Result.Ok point, __x_1.2))
+                  | core.result.Result.Err a => ok (cont (__x.2, __x_1.2))
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let return_capture ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      circle.SecureCirclePoint (core.convert.FromSame transcript.CirclePointSampleError) residual
+                ok (done (return_capture, __x_1.2)))
+      ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1) =
+    bounded n s1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:74:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:75:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:80:20: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [h̵s̵,̵core.result.Result.Insts.CoreOpsTry.branch,
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+                  core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:82:16: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵s̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵[̲h̲s̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:84:25: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:86:32: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵p̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:87:29: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵p̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:90:34: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵p̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean:92:33: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.SamplerOuterExecution.range_next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerOuterExecution.map_error' does not depend on any axioms
+'AspisV8R19.SamplerOuterExecution.loop_execution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.entry_three' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.probe_three' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.zero_no_calls' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.inner_error_stops' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.accepted_stops' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.rejected_retains_state' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.inner_failure_propagates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerOuterExecution.inner_divergence_propagates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR72Sampler.transcript.Transcript.challenge_qm31' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR72Sampler.transcript.Transcript.squeeze_block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR72Sampler.transcript.Transcript.challenge_secure_circle_point' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r72-outer-20260929-a/lib/AspisV8R19/SamplerOuterExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerOuterExecution.lean"
+	User time (seconds): 1.55
+	System time (seconds): 0.53
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.05
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3693496
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 85991
+	Voluntary context switches: 1729
+	Involuntary context switches: 70
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
