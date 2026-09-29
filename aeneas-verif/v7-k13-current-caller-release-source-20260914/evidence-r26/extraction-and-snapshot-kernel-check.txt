@@ -168,3 +168,44 @@ Exact fixed-round accepted-loop execution:
   the literal range `1..V6_RELATION_ROUNDS` has exactly the round-one,
   round-two, and round-three continuation equations followed by the accepted
   terminal equation. No concrete recurrence or generated numeral is reduced.
+
+Final R26 accepted-loop-to-K1 release replay:
+- Proof source revision: 34bb5ecdd9bf9b4f30f2daf769541dbca33edd2d
+  (research/v7-gate-closure-20260914).
+- Frozen manifest: FINAL-MANIFEST.sha256, SHA-256
+  2602773d2cbb538cc58dec9d2efaa30be9cea1d57c0daf5a1c93f50b45760198.
+  It pins 124 files: 117 proof modules, five generated source modules, the
+  Aeneas formatter normalization patch, and the replay script.
+- Exact release target:
+  V7CallerCurrentReleaseR26AcceptedTerminalEndToEnd.lean, SHA-256
+  397d7a46aac17d4158be4598812daf51ef36f535c89ee2df07c380550e609f27.
+- Clean replay result: 122 compiled targets (five generated plus the
+  117-module transitive proof closure), 122 exit statuses equal to zero, no
+  nonzero swap observation, and final marker
+  `FINAL target=V7CallerCurrentReleaseR26AcceptedTerminalEndToEnd modules=117 status=passed`.
+- Capstone result: exit=0 wall_s=4.46 peak_kib=7252340 swaps=0.
+- Maximum target RSS in the replay was 7268020 KiB for
+  V7CallerCurrentReleaseR26GroupedRowsTwiceSemantics (wall_s=9.60,
+  exit=0, swaps=0). The sum of the individually measured target wall times
+  was 596.15 seconds. The whole replay ran in an 8 GiB cgroup with
+  MemorySwapMax=0.
+- #print axioms accepted_terminal_source_corresponds and
+  accepted_relation_loop_end_to_end:
+  [propext, Classical.choice, Quot.sound].
+- The exact replay log is retained on the build host at
+  /home/dombarker/project-offloads/v7-gate-closure-prechallenge-return-r22/
+  r26-final-bundle-34bb5ecd/final-replay.log, SHA-256
+  ab94368731c6efcda7b7fdf009d0202ca2fb45c49112fb6741a2052db0cdf9e9.
+- Aeneas revision b59d5188c082f704a418c7cb4e52ad69328002d1 was used with
+  AENEAS-FORMATTER-UNIT.patch (patch SHA-256
+  0c34cb5d6067fa3863c7dc7d09a157fffea9e89fcd61be5adea4313d63c9c443).
+  The patch replaces the backend's uninterpreted Formatter carrier with Unit;
+  this is faithful to the imported formatter operations, which ignore and
+  return that state unchanged. The replay checks the patched Fmt.lean source
+  SHA-256 e7e6e37c6271592f934dfcbde894a7b8e1afd19c2c8db41bd683e650beb889c8.
+- The capstone starts from a successful call to the literal generated
+  finish_onefold_relation_after_prechallenge_loop. It extracts the exact
+  three-round accepted source trace, proves the weight and value folds and the
+  production terminal dot, and concludes the maintained K1 candidate-claim
+  equality. The source-domain canonicality and fixed component-layout
+  obligations remain explicit premises.

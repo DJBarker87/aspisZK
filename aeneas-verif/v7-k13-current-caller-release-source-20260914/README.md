@@ -167,3 +167,33 @@ Aeneas backend rejected the wrapper's function-item lifetime shape in
 current source is byte-identical to the R23 capture-helper source. No generated
 model, external axiom, or fabricated snapshot result was accepted as a
 workaround.
+
+## R26 accepted relation loop to K1
+
+R26 closes the accepted post-prechallenge relation-loop source chain. The
+capstone theorem
+`V7CallerCurrentReleaseR26AcceptedTerminalEndToEnd.accepted_relation_loop_end_to_end`
+starts from a successful call to the literal generated
+`finish_onefold_relation_after_prechallenge_loop`. It extracts the three exact
+accepted relation rounds and connects the source implementation's component
+weights, 256-to-64-to-16-to-4 value folds, and production terminal dot to the
+maintained K1 `candidateClaim` equality. Canonical field representations,
+fixed component layout, and expected vector lengths are stated explicitly as
+source-domain premises.
+
+The final frozen replay at source revision
+`34bb5ecdd9bf9b4f30f2daf769541dbca33edd2d` compiled five generated modules and
+the complete 117-module proof closure. All 122 targets exited zero with zero
+swap. The capstone used 7,252,340 KiB peak RSS in 4.46 seconds, while the
+largest target used 7,268,020 KiB. Both capstone axiom audits reported exactly
+`[propext, Classical.choice, Quot.sound]`.
+
+The replay uses Aeneas revision
+`b59d5188c082f704a418c7cb4e52ad69328002d1` with the checked
+`AENEAS-FORMATTER-UNIT.patch`. That patch gives the backend's ignored formatter
+state the concrete carrier `Unit`, matching the imported formatter operations
+that return the state unchanged and removing the unrelated custom type axiom
+from the capstone's dependency closure. The manifest pins the patch, all proof
+and generated sources, and the replay script. Exact hashes and resource
+measurements are recorded in
+`evidence-r26/extraction-and-snapshot-kernel-check.txt`.
