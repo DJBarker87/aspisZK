@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R40 model-linked residual nonzero certificate — 2026-09-29
+
+[R40_RESIDUAL_NONZERO_CERTIFICATE.md](R40_RESIDUAL_NONZERO_CERTIFICATE.md)
+closes the concrete M31 specialization: all 169 residual entries match the
+explicit model, a checked right inverse proves its determinant nonzero,
+and the evaluation theorem proves the restricted determinant polynomial
+nonzero. All 481 new Lean theorems compile with standard axioms only; the
+source checks and offline evidence gate pass. The retained R37 matrix is
+unchanged, and this algebraic witness is not a source-prefix substitute.
+
+Next: lift to the exact QM31 tower and establish source-substituted degree
+bounds and the actual conditional challenge law. Formal nonvanishing alone
+does not bound failure on the accepted sampler support. Full privacy,
+soundness closure and the 1M target remain open; CU stays
+1,620,236 / 1,621,719, with no verifier changes.
+
 ## R39 point/code/chord-weight certificate — 2026-09-29
 
 [R39_POINT_WEIGHT_CERTIFICATE.md](R39_POINT_WEIGHT_CERTIFICATE.md)
