@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R39 point/code/chord-weight certificate — 2026-09-29
+
+[R39_POINT_WEIGHT_CERTIFICATE.md](R39_POINT_WEIGHT_CERTIFICATE.md)
+kernel-certifies the existing algebraic witness's three statement points,
+333 T163 dual-code entries and 324 transported weights, with explicit
+bridges to `ResidualModel.pointWeight`. All 782 new theorem declarations
+compile using standard axioms only; the source checker and evidence gate
+pass. A dense preflight's recursion-limit failure is retained and fixed
+using a proved sparse-sum restriction, without raising limits.
+
+Next: connect the root/shift and weight certificates to all 169 residual
+minor entries and prove that specialization invertible. Its polynomial
+nonvanishing, actual source exception accounting and full privacy are not
+yet closed. No verifier changes or new CU result: 1,620,236 / 1,621,719;
+both actual 1M-cap runs still exhaust.
+
 ## R38 root/shift certificate — 2026-09-29
 
 [R38_ROOT_CERTIFICATE.md](R38_ROOT_CERTIFICATE.md) kernel-certifies the
