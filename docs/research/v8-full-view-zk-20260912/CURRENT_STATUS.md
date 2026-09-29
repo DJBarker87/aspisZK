@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R59 four-accumulator checked dot — 2026-09-29
+
+[R59_PARTIAL_DOT.md](R59_PARTIAL_DOT.md) selects delayed dot-output reduction
+at **1,516,838 / 1,518,195 CU**, saving 23,664 / 23,762 against R58. All input
+guards and the raw product formula remain; only four output residues are
+accumulated before final canonical reduction. Eight arithmetic Lean theorems,
+independent actual-source comparisons, invalid-input controls, stack gate and
+complete executions pass. The exact trace attributes the entire world-0 saving
+to the checked dot. Both actual 1M runs still exhaust; **518,195 CU remains**.
+
+Next CU work: mixed-width opening dots and repeated native caller products,
+using the retained call-PC evidence. Full privacy still needs universal
+sampler/field source refinement and complete shared-oracle/transcript/retry/
+publication composition; coherent pre-beta extraction remains separate.
+
 ## R58 paired Copy tag-base factoring — 2026-09-29
 
 [R58_TAG_BASE.md](R58_TAG_BASE.md) selects paired small-offset tag sums and
