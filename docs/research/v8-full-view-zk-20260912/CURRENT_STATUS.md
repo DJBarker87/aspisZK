@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R91 arithmetic and outer query loop — 2026-09-30
+
+[R91_WIDE_ARITHMETIC_QUERY_LOOP.md](R91_WIDE_ARITHMETIC_QUERY_LOOP.md) records
+complete **1,135,747 / 1,134,007 CU** on unchanged R84 proofs. Bounded-width
+arithmetic retains raw checked fallbacks. Three initial stack failures are
+retained; moving the private recorder's existing transitions by ownership
+fixes the large array-copy frame without waiving the SBF gate. Both actual
+1M runs still exhaust, with **135,747 CU** remaining on the larger fixture.
+
+Three new focused Lean targets pass, with 11 theorem audits: exact 32-byte
+chunk production, one actual squeeze/scan step, and complete extracted outer
+query-loop output/state correspondence. The public guard and observed shared-
+oracle history remain open. Universal R84 coverage, causal privacy and
+pre-beta extraction are still unproved; this is not security promotion.
+
 ## R86–R90 native reuse and bounded query source — 2026-09-29
 
 [R90_NATIVE_REUSE_AND_QUERY.md](R90_NATIVE_REUSE_AND_QUERY.md) records the new
