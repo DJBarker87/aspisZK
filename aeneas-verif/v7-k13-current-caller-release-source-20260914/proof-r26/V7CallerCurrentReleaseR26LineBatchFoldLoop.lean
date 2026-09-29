@@ -30,6 +30,14 @@ abbrev FoldState := Slice RawQM31 × Slice RawM31 × Std.Usize
 local instance : Inhabited RawM31 := ⟨0#u32⟩
 local instance : Inhabited RawQM31 := ⟨field.QM31.ZERO⟩
 
+/-- Shared line-slice accessors fix the generated fallback instances once, so
+cross-module semantic statements use definitionally identical raw entries. -/
+def lineQM31At (values : Slice RawQM31) (index : Nat) : RawQM31 :=
+  values.val[index]!
+
+def lineM31At (values : Slice RawM31) (index : Nat) : RawM31 :=
+  values.val[index]!
+
 def CanonicalQM31Slice (values : Slice RawQM31) : Prop :=
   ∀ index, index < values.val.length →
     GeneratedCanonicalQM31 values.val[index]!
@@ -60,6 +68,19 @@ structure FoldPrefix
       index < baseScales.val.length →
       state.1.val[index]! = baseScales.val[index]! ∧
       state.2.1.val[index]! = baseXs.val[index]!
+
+/-- Exact result for one completed line entry. -/
+structure LineEntryExact
+    (alpha : ExactQM31) (baseScales : Slice RawQM31)
+    (baseXs : Slice RawM31) (scalesOut : Slice RawQM31)
+    (xsOut : Slice RawM31) (index : Nat) : Prop where
+  scale : generatedQm31ToExact (lineQM31At scalesOut index) =
+    generatedQm31ToExact (lineQM31At baseScales index) *
+        lineBatchFoldNumerator alpha
+          (generatedM31ToExact (lineM31At baseXs index))
+  x : generatedM31ToExact (lineM31At xsOut index) =
+    doubledM31 (doubledM31
+      (generatedM31ToExact (lineM31At baseXs index)))
 
 private theorem sliceSetSame
     {T : Type} [Inhabited T] (values : Slice T) (index : Std.Usize)
@@ -399,23 +420,81 @@ theorem fold_line_m31_batch_loop_exact
       sumcheck.WeightAccumulator.impl.fold_line_m31_batch_arity4_loop.body
         alpha alpha2 alpha3 state.1 state.2.1 state.2.2)
     (scales, xs, 0#usize) (scalesOut, xsOut) run
-  apply traceFinishesPrefix scales xs alpha alpha2 alpha3 halpha halpha2
-    halpha3 halpha2Exact halpha3Exact execution
-  refine {
-    stateScalesLength := rfl
-    stateXsLength := rfl
-    baseLengths := sameLength
-    baseLength := lengthExact
-    extentBound := by norm_num
-    currentScalesCanonical := hscales
-    currentXsCanonical := hxs
-    processed := ?_
-    untouched := ?_ }
-  · intro index impossible
-    norm_num at impossible
-  · intro index _ indexBound
-    exact ⟨rfl, rfl⟩
+  have linePrefix : FoldPrefix (generatedQm31ToExact alpha) scales xs
+      (scalesOut, xsOut, 16#usize) := by
+    apply traceFinishesPrefix scales xs alpha alpha2 alpha3 halpha halpha2
+      halpha3 halpha2Exact halpha3Exact execution
+    refine {
+      stateScalesLength := rfl
+      stateXsLength := rfl
+      baseLengths := sameLength
+      baseLength := lengthExact
+      extentBound := by norm_num
+      currentScalesCanonical := hscales
+      currentXsCanonical := hxs
+      processed := ?_
+      untouched := ?_ }
+    · intro index impossible
+      norm_num at impossible
+    · intro index _ indexBound
+      exact ⟨rfl, rfl⟩
+  exact linePrefix
+
+/-- Direct natural-number view of every entry produced by the completed loop.
+This is proved from the local trace so consumers never project the dependent
+field from an opaque `FoldPrefix` result. -/
+theorem fold_line_m31_batch_loop_processed
+    (scales : Slice RawQM31) (xs : Slice RawM31)
+    (scalesOut : Slice RawQM31) (xsOut : Slice RawM31)
+    (alpha alpha2 alpha3 : RawQM31)
+    (lengthExact : scales.val.length = 16)
+    (sameLength : xs.val.length = scales.val.length)
+    (hscales : CanonicalQM31Slice scales)
+    (hxs : CanonicalM31Slice xs)
+    (halpha : GeneratedCanonicalQM31 alpha)
+    (halpha2 : GeneratedCanonicalQM31 alpha2)
+    (halpha3 : GeneratedCanonicalQM31 alpha3)
+    (halpha2Exact : generatedQm31ToExact alpha2 =
+      generatedQm31ToExact alpha ^ 2)
+    (halpha3Exact : generatedQm31ToExact alpha3 =
+      generatedQm31ToExact alpha ^ 3)
+    (run :
+      sumcheck.WeightAccumulator.impl.fold_line_m31_batch_arity4_loop
+        scales xs alpha alpha2 alpha3 0#usize = ok (scalesOut, xsOut)) :
+    ∀ position : Fin 16,
+      LineEntryExact (generatedQm31ToExact alpha)
+        scales xs scalesOut xsOut position.val := by
+  unfold sumcheck.WeightAccumulator.impl.fold_line_m31_batch_arity4_loop at run
+  obtain ⟨execution⟩ := loop_success_yields_exact_trace
+    (fun state : FoldState =>
+      sumcheck.WeightAccumulator.impl.fold_line_m31_batch_arity4_loop.body
+        alpha alpha2 alpha3 state.1 state.2.1 state.2.2)
+    (scales, xs, 0#usize) (scalesOut, xsOut) run
+  have linePrefix : FoldPrefix (generatedQm31ToExact alpha) scales xs
+      (scalesOut, xsOut, 16#usize) := by
+    apply traceFinishesPrefix scales xs alpha alpha2 alpha3 halpha halpha2
+      halpha3 halpha2Exact halpha3Exact execution
+    refine {
+      stateScalesLength := rfl
+      stateXsLength := rfl
+      baseLengths := sameLength
+      baseLength := lengthExact
+      extentBound := by norm_num
+      currentScalesCanonical := hscales
+      currentXsCanonical := hxs
+      processed := ?_
+      untouched := ?_ }
+    · intro index impossible
+      norm_num at impossible
+    · intro index _ indexBound
+      exact ⟨rfl, rfl⟩
+  intro position
+  have facts := linePrefix.processed position.val (by
+    simpa only [UScalar.ofNatCore_val_eq] using position.isLt)
+  exact ⟨by simpa only [lineQM31At, lineM31At] using facts.1,
+    by simpa only [lineQM31At, lineM31At] using facts.2⟩
 
 #print axioms fold_line_m31_batch_loop_exact
+#print axioms fold_line_m31_batch_loop_processed
 
 end V7CallerCurrentReleaseR26LineBatchFoldLoop

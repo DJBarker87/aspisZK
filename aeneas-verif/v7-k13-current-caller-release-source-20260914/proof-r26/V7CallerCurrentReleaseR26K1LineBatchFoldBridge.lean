@@ -53,7 +53,7 @@ def lineBatchComponentWeights (rounds : Nat)
     (scales : Slice RawQM31) (xs : Slice RawM31) (deferred : Nat) :
     Fin (radix4Size rounds) → ModelQM31 :=
   fun index => ∑ position : Fin 16,
-    lineWeightAt scales.val[position.val]! xs.val[position.val]!
+    lineWeightAt (lineQM31At scales position.val) (lineM31At xs position.val)
       deferred index.val
 
 @[simp] private theorem sourceQm31ToModel_pow
@@ -91,21 +91,23 @@ private theorem doubledTwice_eq_doubledFactorTwo (x : SourceM31) :
   rw [exactInput]
   exact embedded_lineFactor_eq_doubledFactor x 2
 
-private theorem dualWeightFoldValue_lineWeightAt
-    (scale xScale : RawQM31) (x xOut : RawM31)
-    (alpha : RawQM31) (deferred : Nat) (fibre : Nat)
-    (scaleExact : generatedQm31ToExact xScale =
-      generatedQm31ToExact scale *
-        lineBatchFoldNumerator (generatedQm31ToExact alpha)
-          (generatedM31ToExact x))
-    (xExact : generatedM31ToExact xOut =
-      doubledM31 (doubledM31 (generatedM31ToExact x))) :
+private theorem dualWeightFoldValue_lineEntryExact
+    (scales scalesOut : Slice RawQM31) (xs xsOut : Slice RawM31)
+    (position : Fin 16) (alpha : RawQM31) (deferred fibre : Nat)
+    (entry : LineEntryExact (generatedQm31ToExact alpha)
+      scales xs scalesOut xsOut position.val) :
     dualWeightFoldValue (exactRaw alpha)
-        (fun slot => lineWeightAt scale x deferred (4 * fibre + slot.val)) =
-      lineWeightAt xScale xOut (deferred + 2) fibre := by
+        (fun slot => lineWeightAt (lineQM31At scales position.val)
+          (lineM31At xs position.val) deferred (4 * fibre + slot.val)) =
+      lineWeightAt (lineQM31At scalesOut position.val)
+        (lineM31At xsOut position.val) (deferred + 2) fibre := by
+  obtain ⟨scaleExact, xExact⟩ := entry
+  have mappedScaleExact := congrArg sourceQm31ToModel scaleExact
+  have mappedXExact := congrArg
+    (algebraMap ModelM31 ModelQM31) xExact
   unfold dualWeightFoldValue lineWeightAt exactRaw
   simp_rw [naturalLineValue_four_mul_add]
-  rw [scaleExact, xExact, sourceQm31ToModel_mul,
+  rw [mappedXExact, mappedScaleExact, sourceQm31ToModel_mul,
     mappedLineBatchFoldNumerator, doubledTwice_eq_doubledFactorTwo]
   have twoNonzero : (2 : ModelQM31) ≠ 0 := by decide
   rw [pow_add]
@@ -125,23 +127,17 @@ private theorem dualWeightFoldValue_fin_sum
   simp only [div_eq_mul_inv, Finset.mul_sum, add_mul, Finset.sum_mul,
     ← Finset.sum_add_distrib]
 
-/-- A completed source loop invariant and its public deferred-counter update
-are exactly one K1 dual fold of the complete 16-line component.  The source
-execution theorem supplies these two compact premises. -/
-theorem lineBatchFoldPrefix_transports_weights_apply
+/-- Terminal source-loop form of the line transport.  Its processed-entry
+premise is the same opaque proposition exported by the source loop. -/
+theorem lineBatchFoldCompleted16_transports_weights_apply
     (rounds : Nat)
     (scales : Slice RawQM31) (xs : Slice RawM31)
     (deferred : Std.U8) (alpha : RawQM31)
     (scalesOut : Slice RawQM31) (xsOut : Slice RawM31)
     (deferredOut : Std.U8)
-    (processed : ∀ index, index < 16 →
-      generatedQm31ToExact scalesOut.val[index]! =
-        generatedQm31ToExact scales.val[index]! *
-          lineBatchFoldNumerator (generatedQm31ToExact alpha)
-            (generatedM31ToExact xs.val[index]!) ∧
-      generatedM31ToExact xsOut.val[index]! =
-        doubledM31 (doubledM31
-          (generatedM31ToExact xs.val[index]!)))
+    (processed : ∀ position : Fin 16,
+      LineEntryExact (generatedQm31ToExact alpha)
+        scales xs scalesOut xsOut position.val)
     (deferredExact : deferredOut.val = deferred.val + 2)
     (fibre : Fin (radix4Size rounds)) :
     dualWeightFoldLayer (radix4Size rounds) (exactRaw alpha)
@@ -153,44 +149,37 @@ theorem lineBatchFoldPrefix_transports_weights_apply
   simp only [childIndex_val]
   change dualWeightFoldValue (exactRaw alpha)
       (fun slot => ∑ position : Fin 16,
-        lineWeightAt scales.val[position.val]! xs.val[position.val]!
-          deferred.val (4 * fibre.val + slot.val)) =
+        lineWeightAt (lineQM31At scales position.val)
+          (lineM31At xs position.val) deferred.val
+          (4 * fibre.val + slot.val)) =
     ∑ position : Fin 16,
-      lineWeightAt scalesOut.val[position.val]! xsOut.val[position.val]!
-        deferredOut.val fibre.val
+      lineWeightAt (lineQM31At scalesOut position.val)
+        (lineM31At xsOut position.val) deferredOut.val fibre.val
   rw [deferredExact]
   rw [dualWeightFoldValue_fin_sum]
   apply Finset.sum_congr rfl
   intro position _
-  have entry := processed position.val position.isLt
-  exact dualWeightFoldValue_lineWeightAt
-    scales.val[position.val]! scalesOut.val[position.val]!
-    xs.val[position.val]! xsOut.val[position.val]! alpha deferred.val
-    fibre.val entry.1 entry.2
+  exact dualWeightFoldValue_lineEntryExact scales scalesOut xs xsOut position
+    alpha deferred.val fibre.val (processed position)
 
-theorem lineBatchFoldPrefix_transports_weights
+theorem lineBatchFoldCompleted16_transports_weights
     (rounds : Nat)
     (scales : Slice RawQM31) (xs : Slice RawM31)
     (deferred : Std.U8) (alpha : RawQM31)
     (scalesOut : Slice RawQM31) (xsOut : Slice RawM31)
     (deferredOut : Std.U8)
-    (processed : ∀ index, index < 16 →
-      generatedQm31ToExact scalesOut.val[index]! =
-        generatedQm31ToExact scales.val[index]! *
-          lineBatchFoldNumerator (generatedQm31ToExact alpha)
-            (generatedM31ToExact xs.val[index]!) ∧
-      generatedM31ToExact xsOut.val[index]! =
-        doubledM31 (doubledM31
-          (generatedM31ToExact xs.val[index]!)))
+    (processed : ∀ position : Fin 16,
+      LineEntryExact (generatedQm31ToExact alpha)
+        scales xs scalesOut xsOut position.val)
     (deferredExact : deferredOut.val = deferred.val + 2) :
     dualWeightFoldLayer (radix4Size rounds) (exactRaw alpha)
         (lineBatchComponentWeights (rounds + 1) scales xs deferred.val) =
       lineBatchComponentWeights rounds scalesOut xsOut deferredOut.val := by
   funext fibre
-  exact lineBatchFoldPrefix_transports_weights_apply rounds scales xs deferred
-    alpha scalesOut xsOut deferredOut processed deferredExact fibre
+  exact lineBatchFoldCompleted16_transports_weights_apply rounds scales xs
+    deferred alpha scalesOut xsOut deferredOut processed deferredExact fibre
 
-#print axioms lineBatchFoldPrefix_transports_weights_apply
-#print axioms lineBatchFoldPrefix_transports_weights
+#print axioms lineBatchFoldCompleted16_transports_weights_apply
+#print axioms lineBatchFoldCompleted16_transports_weights
 
 end V7CallerCurrentReleaseR26K1LineBatchFoldBridge
