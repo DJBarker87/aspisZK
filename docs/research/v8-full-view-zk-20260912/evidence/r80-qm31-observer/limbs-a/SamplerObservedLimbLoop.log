@@ -1,0 +1,65 @@
+info: r80_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedLimbLoop.lean:80:6: error: 'change' tactic failed, pattern
+  (do
+      let __x ← SamplerObservedSource.challenge_qm31_loop0 initialIter (fun it => it) s1 b 0#usize t
+      match __x with
+        | (out, t1) => do
+          let result ← finish out
+          ok (result, t1)) =
+    ?m.159
+is not definitionally equal to target
+  (do
+      let __x ←
+        SamplerObservedSource.challenge_qm31_loop0 { slice := (Array.repeat 4#usize field.M31.ZERO).to_slice }
+            (fun im => im) s1 b 0#usize t
+      (match __x.1.2.1 with
+          | none => do
+            let m ← liftM (((Array.repeat 4#usize field.M31.ZERO).from_slice __x.1.2.2.slice).index_usize 0#usize)
+            let m1 ← liftM (((Array.repeat 4#usize field.M31.ZERO).from_slice __x.1.2.2.slice).index_usize 1#usize)
+            let m2 ← liftM (((Array.repeat 4#usize field.M31.ZERO).from_slice __x.1.2.2.slice).index_usize 2#usize)
+            let m3 ← liftM (((Array.repeat 4#usize field.M31.ZERO).from_slice __x.1.2.2.slice).index_usize 3#usize)
+            pure (core.result.Result.Ok { c0 := { a := m, b := m1 }, c1 := { a := m2, b := m3 } }, __x.1.1)
+          | some r => pure (r, __x.1.1))
+          __x.2) =
+    do
+    let __x ← bounded 4 initialIter (fun it => it) s1 b 0#usize t
+    let result ← finish __x.1
+    ok (result, __x.2)
+'AspisV8R19.SamplerObservedLimbLoop.exhausted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedLimbLoop.loop_execution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedLimbLoop.entry_four' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r80-limbs-20260929-a/lib/AspisV8R19/SamplerObservedLimbLoop.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedLimbLoop.lean"
+	User time (seconds): 1.97
+	System time (seconds): 0.83
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.78
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3697588
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 87407
+	Voluntary context switches: 1013
+	Involuntary context switches: 86
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 64
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

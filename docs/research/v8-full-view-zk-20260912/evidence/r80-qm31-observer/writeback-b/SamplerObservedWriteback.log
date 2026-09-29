@@ -1,0 +1,260 @@
+info: r80_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:9:56: error: unexpected token '('; expected command
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:39:21: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.146 = ?m.146
+but is expected to have type
+  (do
+      let __x ←
+        SamplerObservedSource.challenge_qm31_loop0_loop0 { start := 0#u32, «end» := transcript.CHALLENGE_RETRY_LIMIT }
+            (transcriptFor H c.state) (encodeState c.block)
+            (SamplerInnerLoop.index
+              { state := transcriptFor H c.state, block := encodeState c.block, index := c.index })
+            it.slice[it.i] history
+      (if __x.1.2.2.2.2 = true then
+            SamplerObservedLimbLoop.bounded n { slice := it.slice, i := it.i + 1 }
+              (fun out => back (store out it.i __x.1.2.2.2.1)) __x.1.1 __x.1.2.1 __x.1.2.2.1
+          else
+            pure
+              (__x.1.1, some (core.result.Result.Err ()),
+                back (store { slice := it.slice, i := it.i + 1 } it.i __x.1.2.2.2.1)))
+          __x.2) =
+    ok ((transcriptFor H (QM31SamplerProgram.limbRun H 8 c).2.2.state, some (core.result.Result.Err ()), ?m.144), t)
+in the application
+  Exists.intro ?m.144 rfl
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:48:22: error: Type mismatch: After simplification, term
+  hm
+ has type
+  ∃ out,
+    SamplerObservedLimbLoop.bounded n { slice := it.slice, i := it.i + 1 }
+        (fun out => back (store out it.i (encodeWord a))) (transcriptFor H (QM31SamplerProgram.limbRun H 8 c).2.2.state)
+        (encodeState (QM31SamplerProgram.limbRun H 8 c).2.2.block)
+        (SamplerInnerLoop.index
+          { state := transcriptFor H (QM31SamplerProgram.limbRun H 8 c).2.2.state,
+            block := encodeState (QM31SamplerProgram.limbRun H 8 c).2.2.block,
+            index := (QM31SamplerProgram.limbRun H 8 c).2.2.index })
+        t =
+      ok
+        ((transcriptFor H (QM31SamplerProgram.limbsRun H n (QM31SamplerProgram.limbRun H 8 c).2.2).2.2.state,
+            some (core.result.Result.Err ()), out),
+          t1)
+but is expected to have type
+  ∃ out,
+    (do
+        let __x ←
+          SamplerObservedSource.challenge_qm31_loop0_loop0 { start := 0#u32, «end» := transcript.CHALLENGE_RETRY_LIMIT }
+              (transcriptFor H c.state) (encodeState c.block)
+              (SamplerInnerLoop.index
+                { state := transcriptFor H c.state, block := encodeState c.block, index := c.index })
+              it.slice[it.i] history
+        (if __x.1.2.2.2.2 = true then
+              SamplerObservedLimbLoop.bounded n { slice := it.slice, i := it.i + 1 }
+                (fun out => back (store out it.i __x.1.2.2.2.1)) __x.1.1 __x.1.2.1 __x.1.2.2.1
+            else
+              pure
+                (__x.1.1, some (core.result.Result.Err ()),
+                  back (store { slice := it.slice, i := it.i + 1 } it.i __x.1.2.2.2.1)))
+            __x.2) =
+      ok
+        ((transcriptFor H (QM31SamplerProgram.limbsRun H n (QM31SamplerProgram.limbRun H 8 c).2.2).2.2.state,
+            some (core.result.Result.Err ()), out),
+          t1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:49:25: error: Type mismatch: After simplification, term
+  hm
+ has type
+  SamplerObservedLimbLoop.bounded n { slice := it.slice, i := it.i + 1 }
+      (fun out => back (store out it.i (encodeWord a))) (transcriptFor H (QM31SamplerProgram.limbRun H 8 c).2.2.state)
+      (encodeState (QM31SamplerProgram.limbRun H 8 c).2.2.block)
+      (SamplerInnerLoop.index
+        { state := transcriptFor H (QM31SamplerProgram.limbRun H 8 c).2.2.state,
+          block := encodeState (QM31SamplerProgram.limbRun H 8 c).2.2.block,
+          index := (QM31SamplerProgram.limbRun H 8 c).2.2.index })
+      t =
+    ok
+      ((transcriptFor H (QM31SamplerProgram.limbsRun H n (QM31SamplerProgram.limbRun H 8 c).2.2).2.2.state, none,
+          back (store (writeValues { slice := it.slice, i := it.i + 1 } vs) it.i (encodeWord a))),
+        t1)
+but is expected to have type
+  (do
+      let __x ←
+        SamplerObservedSource.challenge_qm31_loop0_loop0 { start := 0#u32, «end» := transcript.CHALLENGE_RETRY_LIMIT }
+            (transcriptFor H c.state) (encodeState c.block)
+            (SamplerInnerLoop.index
+              { state := transcriptFor H c.state, block := encodeState c.block, index := c.index })
+            it.slice[it.i] history
+      (if __x.1.2.2.2.2 = true then
+            SamplerObservedLimbLoop.bounded n { slice := it.slice, i := it.i + 1 }
+              (fun out => back (store out it.i __x.1.2.2.2.1)) __x.1.1 __x.1.2.1 __x.1.2.2.1
+          else
+            pure
+              (__x.1.1, some (core.result.Result.Err ()),
+                back (store { slice := it.slice, i := it.i + 1 } it.i __x.1.2.2.2.1)))
+          __x.2) =
+    ok
+      ((transcriptFor H (QM31SamplerProgram.limbsRun H n (QM31SamplerProgram.limbRun H 8 c).2.2).2.2.state, none,
+          back (store (writeValues { slice := it.slice, i := it.i + 1 } vs) it.i (encodeWord a))),
+        t1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:36:77: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedLimbLoop.bounded, ̲dif_pos h̵i̵,̵h̲i̲,̲ ̲bind_apply,h̵e̵,̵ ̲bind_tc_ok,
+               ̵ ̵encodeFinished, ̲hx, ̲Option.isSome_none, ̲encodeCursor, ̲Bool.false_eq_true, ̲if_false,
+               ̵ ̵pure_apply, ̲QM31SamplerProgram.limbsRun, ̲hx, ̲Matches]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:36:80: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵L̵i̵m̵b̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵h̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵h̵x̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵n̵o̵n̵e̵,̵e̵n̵c̵o̵d̵e̵C̵u̵r̵s̵o̵r̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵s̵R̵u̵n̵,̵h̵x̵,̵M̵a̵t̵c̵h̵e̵s̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲L̲i̲m̲b̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲F̲i̲n̲i̲s̲h̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲x̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲i̲s̲S̲o̲m̲e̲_̲n̲o̲n̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲C̲u̲r̲s̲o̲r̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲p̲u̲r̲e̲_̲a̲p̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲s̲R̲u̲n̲,̲ ̲h̲x̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:37:14: warning: This simp argument is unused:
+  encodeFinished
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵L̵i̵m̵b̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵h̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵h̵x̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵n̵o̵n̵e̵,̵e̵n̵c̵o̵d̵e̵C̵u̵r̵s̵o̵r̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵s̵R̵u̵n̵,̵h̵x̵,̵M̵a̵t̵c̵h̵e̵s̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲L̲i̲m̲b̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲i̲s̲S̲o̲m̲e̲_̲n̲o̲n̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲C̲u̲r̲s̲o̲r̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲p̲u̲r̲e̲_̲a̲p̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲s̲R̲u̲n̲,̲ ̲h̲x̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:37:29: warning: This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedLimbLoop.bounded, ̲dif_pos h̵i̵,̵h̲i̲,̲ ̲bind_apply, ̲he, ̲bind_tc_ok,
+               ̵ ̵encodeFinished,h̵x̵,̵ ̲Option.isSome_none, ̲encodeCursor, ̲Bool.false_eq_true, ̲if_false,
+               ̵ ̵pure_apply, ̲QM31SamplerProgram.limbsRun, ̲hx, ̲Matches]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:37:32: warning: This simp argument is unused:
+  Option.isSome_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵L̵i̵m̵b̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵h̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵h̵x̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵n̵o̵n̵e̵,̵e̵n̵c̵o̵d̵e̵C̵u̵r̵s̵o̵r̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵s̵R̵u̵n̵,̵h̵x̵,̵M̵a̵t̵c̵h̵e̵s̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲L̲i̲m̲b̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲n̲c̲o̲d̲e̲F̲i̲n̲i̲s̲h̲e̲d̲,̲ ̲h̲x̲,̲ ̲e̲n̲c̲o̲d̲e̲C̲u̲r̲s̲o̲r̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲p̲u̲r̲e̲_̲a̲p̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲s̲R̲u̲n̲,̲ ̲h̲x̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:37:64: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵L̵i̵m̵b̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵h̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵h̵x̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵n̵o̵n̵e̵,̵e̵n̵c̵o̵d̵e̵C̵u̵r̵s̵o̵r̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵s̵R̵u̵n̵,̵h̵x̵,̵M̵a̵t̵c̵h̵e̵s̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲L̲i̲m̲b̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲n̲c̲o̲d̲e̲F̲i̲n̲i̲s̲h̲e̲d̲,̲ ̲h̲x̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲i̲s̲S̲o̲m̲e̲_̲n̲o̲n̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲C̲u̲r̲s̲o̲r̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲p̲u̲r̲e̲_̲a̲p̲p̲l̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲s̲R̲u̲n̲,̲ ̲h̲x̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:37:83: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedLimbLoop.bounded, ̲dif_pos h̵i̵,̵h̲i̲,̲ ̲bind_apply, ̲he, ̲bind_tc_ok,
+               ̵ ̵encodeFinished, ̲hx, ̲Option.isSome_none, ̲encodeCursor, ̲Bool.false_eq_true,i̵f̵ ̲p̲u̲r̲e̲_f̵ap̲p̲ls̵e̵y̲,
+               ̵ ̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵QM31SamplerProgram.limbsRun, ̲hx, ̲Matches]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:38:14: warning: This simp argument is unused:
+  pure_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedLimbLoop.bounded, ̲dif_pos h̵i̵,̵h̲i̲,̲ ̲bind_apply, ̲he, ̲bind_tc_ok,
+               ̵ ̵encodeFinished, ̲hx, ̲Option.isSome_none, ̲encodeCursor, ̲Bool.false_eq_true, ̲if_false,
+               ̵ ̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵QM31SamplerProgram.limbsRun, ̲hx, ̲Matches]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:45:77: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedLimbLoop.bounded, ̲dif_pos h̵i̵,̵h̲i̲,̲ ̲bind_apply,h̵e̵,̵ ̲bind_tc_ok,
+               ̵ ̵encodeFinished, ̲hx, ̲Option.isSome_some, ̲encodeCursor, ̲if_true,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲QM31SamplerProgram.limbsRun, ̲hx]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:45:80: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵L̵i̵m̵b̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵h̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵h̵x̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵s̵o̵m̵e̵,̵e̵n̵c̵o̵d̵e̵C̵u̵r̵s̵o̵r̵,̵i̵f̵_̵t̵r̵u̵e̵,̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵s̵R̵u̵n̵,̵h̵x̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲L̲i̲m̲b̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲F̲i̲n̲i̲s̲h̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲x̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲i̲s̲S̲o̲m̲e̲_̲s̲o̲m̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲C̲u̲r̲s̲o̲r̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲s̲R̲u̲n̲,̲ ̲h̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:46:14: warning: This simp argument is unused:
+  encodeFinished
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵L̵i̵m̵b̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵h̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵h̵x̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵s̵o̵m̵e̵,̵e̵n̵c̵o̵d̵e̵C̵u̵r̵s̵o̵r̵,̵i̵f̵_̵t̵r̵u̵e̵,̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵s̵R̵u̵n̵,̵h̵x̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲L̲i̲m̲b̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲i̲s̲S̲o̲m̲e̲_̲s̲o̲m̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲C̲u̲r̲s̲o̲r̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲s̲R̲u̲n̲,̲ ̲h̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:46:29: warning: This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedLimbLoop.bounded, ̲dif_pos h̵i̵,̵h̲i̲,̲ ̲bind_apply, ̲he, ̲bind_tc_ok,
+               ̵ ̵encodeFinished,h̵x̵,̵ ̲Option.isSome_some, ̲encodeCursor, ̲if_true, ̲QM31SamplerProgram.limbsRun,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲hx]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:46:32: warning: This simp argument is unused:
+  Option.isSome_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵O̵b̵s̵e̵r̵v̵e̵d̵L̵i̵m̵b̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵h̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵h̵x̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵s̵o̵m̵e̵,̵e̵n̵c̵o̵d̵e̵C̵u̵r̵s̵o̵r̵,̵i̵f̵_̵t̵r̵u̵e̵,̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵s̵R̵u̵n̵,̵h̵x̵]̵[̲S̲a̲m̲p̲l̲e̲r̲O̲b̲s̲e̲r̲v̲e̲d̲L̲i̲m̲b̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲n̲c̲o̲d̲e̲F̲i̲n̲i̲s̲h̲e̲d̲,̲ ̲h̲x̲,̲ ̲e̲n̲c̲o̲d̲e̲C̲u̲r̲s̲o̲r̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲s̲R̲u̲n̲,̲ ̲h̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean:46:64: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedLimbLoop.bounded, ̲dif_pos h̵i̵,̵h̲i̲,̲ ̲bind_apply, ̲he, ̲bind_tc_ok,
+               ̵ ̵encodeFinished, ̲hx, ̲Option.isSome_some, ̲encodeCursor,i̵f̵_̵t̵r̵u̵e̵,̵ ̲QM31SamplerProgram.limbsRun, ̲hx]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.SamplerObservedWriteback.bounded_matches' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r80-writeback-20260929-b/lib/AspisV8R19/SamplerObservedWriteback.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedWriteback.lean"
+	User time (seconds): 1.27
+	System time (seconds): 0.58
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.82
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3689284
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 88370
+	Voluntary context switches: 492
+	Involuntary context switches: 62
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 96
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

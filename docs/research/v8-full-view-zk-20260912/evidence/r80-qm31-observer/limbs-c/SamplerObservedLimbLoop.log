@@ -1,0 +1,64 @@
+info: r80_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedLimbLoop.lean:84:18: error: unsolved goals
+case ok.ok.none
+s : transcript.Transcript
+history : Trace
+hlen : ↑initialIter.slice.len - initialIter.i = 4
+t : Trace
+b : Std.Array U8 32#usize
+s1 : transcript.Transcript
+hs : SamplerObservedSource.squeeze_block s history = ok ((b, s1), t)
+t1 : Trace
+s2 : transcript.Transcript
+it : Iter
+hb : bounded 4 initialIter (fun it => it) s1 b 0#usize t = ok ((s2, none, it), t1)
+⊢ ∀ (v : field.M31),
+    ((Array.repeat 4#usize field.M31.ZERO).from_slice it.slice).index_usize 0#usize = ok v →
+      ∀ (v_1 : field.M31),
+        ((Array.repeat 4#usize field.M31.ZERO).from_slice it.slice).index_usize 1#usize = ok v_1 →
+          ∀ (v_2 : field.M31),
+            ((Array.repeat 4#usize field.M31.ZERO).from_slice it.slice).index_usize 2#usize = ok v_2 →
+              ((fun a => (core.result.Result.Ok { c0 := { a := v, b := v_1 }, c1 := { a := v_2, b := a } }, s2)) <$>
+                    liftM (((Array.repeat 4#usize field.M31.ZERO).from_slice it.slice).index_usize 3#usize))
+                  t1 =
+                do
+                let x ← ((Array.repeat 4#usize field.M31.ZERO).from_slice it.slice).index_usize 3#usize
+                ok ((core.result.Result.Ok { c0 := { a := v, b := v_1 }, c1 := { a := v_2, b := x } }, s2), t1)
+'AspisV8R19.SamplerObservedLimbLoop.exhausted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedLimbLoop.loop_execution' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedLimbLoop.entry_four' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r80-limbs-20260929-c/lib/AspisV8R19/SamplerObservedLimbLoop.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedLimbLoop.lean"
+	User time (seconds): 2.23
+	System time (seconds): 0.90
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.11
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3697644
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 91508
+	Voluntary context switches: 1029
+	Involuntary context switches: 67
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 64
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

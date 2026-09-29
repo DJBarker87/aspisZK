@@ -1,5 +1,19 @@
 # Current V8 privacy-repair status
 
+## R80 complete instrumented QM31 trace — 2026-09-29
+
+[R80_QM31_OBSERVER.md](R80_QM31_OBSERVER.md) proves the instrumented QM31
+challenge's complete ordered query/answer history, result/error and state
+equal the retained oracle program under the explicit total hash adapter.
+Erasing observations recovers the original extracted challenge. Six leaves
+compile; 19 theorem audits, 16 retaining the inherited opaque `Formatter`
+type. The internal hash-function pointer is excluded from the public view.
+
+Next: instrumented secure-circle outer retry trace, then the complete source
+observer and actual coherent-oracle experiment. The R79 instrumentation
+checker is not formally certified. Full privacy/soundness remains open.
+Runtime/CU unchanged: **1,495,663 / 1,497,050**; both actual 1M runs exhaust.
+
 ## R79 sampler observation boundaries — 2026-09-29
 
 [R79_SAMPLER_OBSERVER.md](R79_SAMPLER_OBSERVER.md) adds a checked mechanical
