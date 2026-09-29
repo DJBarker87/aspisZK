@@ -1,5 +1,18 @@
 # Current V8 privacy-repair status
 
+## R76 exact word and per-limb model bridge — 2026-09-29
+
+[R76_LIMB_MODEL_BRIDGE.md](R76_LIMB_MODEL_BRIDGE.md) proves runtime byte decoding
+and masking equal the retained integer model, then proves the actual
+eight-attempt per-limb sampler's value/state/block/cursor equals the model
+under an explicit total deterministic hash adapter. Two leaves compile;
+13 theorem audits, one with the inherited opaque `Formatter` dependency.
+
+Next: four-limb deferred write-back and QM31 assembly correspondence, then
+source observer/trace and circle/outer composition. The current bridge uses
+the model's value/state projection, not its trace. Full privacy remains open.
+Runtime/CU unchanged: **1,495,663 / 1,497,050**, both actual 1M runs exhaust.
+
 ## R75 bounded rejection and mutable-limb execution — 2026-09-29
 
 [R75_SAMPLER_LOOPS.md](R75_SAMPLER_LOOPS.md) proves the actual eight-attempt

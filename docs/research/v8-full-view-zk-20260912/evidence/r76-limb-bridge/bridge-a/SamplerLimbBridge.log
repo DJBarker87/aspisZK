@@ -1,0 +1,107 @@
+info: r76_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerLimbBridge.lean:40:4: error: Type mismatch: After simplification, term
+  congrArg
+    (fun word => ok (encodeCursor H { state := (step H c.state).2, block := (step H c.state).1, index := 1 }, word)) hw
+ has type
+  @Eq (Result (SamplerInnerLoop.Cursor × U32))
+    (ok
+      (encodeCursor H { state := (step H c.state).2, block := (step H c.state).1, index := 1 },
+        core.num.U32.from_le_bytes (SamplerWordRead.four (encodeState (step H c.state).1) (↑0 * 4) ⋯)))
+    (ok
+      (encodeCursor H { state := (step H c.state).2, block := (step H c.state).1, index := 1 },
+        encodeWord (SamplerWords.word (step H c.state).1 0)))
+but is expected to have type
+  @Eq (Result (SamplerInnerLoop.Cursor × U32))
+    (ok
+      ({ state := transcriptFor H (step H c.state).2, block := encodeState (step H c.state).1,
+          index := ⟨1, SamplerInnerLoop.draw._proof_7⟩ },
+        core.num.U32.from_le_bytes (SamplerWordRead.four (encodeState (step H c.state).1) 0 ⋯)))
+    (ok
+      ({ state := transcriptFor H (step H c.state).2, block := encodeState (step H c.state).1, index := 1 },
+        encodeWord (SamplerWords.word (step H c.state).1 0)))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerLimbBridge.lean:89:10: error: Type mismatch: After simplification, term
+  hv
+ has type
+  @Eq ℕ (SamplerWords.masked 31 (QM31SamplerProgram.readRun H c).2.1) ↑2147483647#u32
+but is expected to have type
+  @Eq ℕ (SamplerWords.masked 31 (QM31SamplerProgram.readRun H c).2.1) 2147483647
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerLimbBridge.lean:84:6: error: unsolved goals
+case neg
+H : Bytes → State
+old : field.M31
+n : ℕ
+ih :
+  ∀ (c : QM31SamplerProgram.Cursor),
+    SamplerInnerLoop.bounded n (encodeCursor H c) old = ok (encodeFinished H (QM31SamplerProgram.limbRun H n c).2 old)
+c : QM31SamplerProgram.Cursor
+hb : (QM31SamplerProgram.readRun H c).2.1 < 4294967296
+hm : ¬SamplerWords.masked 31 (QM31SamplerProgram.readRun H c).2.1 = 2147483647
+hw : encodeWord (QM31SamplerProgram.readRun H c).2.1 &&& field.P ≠ field.P
+ht : (encodeWord (QM31SamplerProgram.readRun H c).2.1 &&& field.P != field.P) = true
+⊢ (if (encodeWord (SamplerWords.masked 31 (QM31SamplerProgram.readRun H c).2.1) != field.P) = true then
+      ok
+        ((encodeCursor H (QM31SamplerProgram.readRun H c).2.2).state,
+          (encodeCursor H (QM31SamplerProgram.readRun H c).2.2).block,
+          SamplerInnerLoop.index (encodeCursor H (QM31SamplerProgram.readRun H c).2.2),
+          encodeWord (SamplerWords.masked 31 (QM31SamplerProgram.readRun H c).2.1), true)
+    else SamplerInnerLoop.bounded n (encodeCursor H (QM31SamplerProgram.readRun H c).2.2) old) =
+    ok
+      ((encodeCursor H (QM31SamplerProgram.readRun H c).2.2).state,
+        (encodeCursor H (QM31SamplerProgram.readRun H c).2.2).block,
+        SamplerInnerLoop.index (encodeCursor H (QM31SamplerProgram.readRun H c).2.2),
+        encodeWord (SamplerWords.masked 31 (QM31SamplerProgram.readRun H c).2.1), true)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerLimbBridge.lean:92:66: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerInnerLoop.bounded, ̲draw_exact, ̲bind_tc_ok,h̵t̵,̵ ̲if_true,
+            QM31SamplerProgram.limbRun, ̲hm, ̲if_false, ̲encodeFinished, ̲mask_encoded _ hb,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Option.isSome_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerLimbBridge.lean:92:69: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵a̵m̵p̵l̵e̵r̵I̵n̵n̵e̵r̵L̵o̵o̵p̵.̵b̵o̵u̵n̵d̵e̵d̵,̵d̵r̵a̵w̵_̵e̵x̵a̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵t̵,̵i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵Q̵M̵3̵1̵S̵a̵m̵p̵l̵e̵r̵P̵r̵o̵g̵r̵a̵m̵.̵l̵i̵m̵b̵R̵u̵n̵,̵h̵m̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵n̵c̵o̵d̵e̵F̵i̵n̵i̵s̵h̵e̵d̵,̵m̵a̵s̵k̵_̵e̵n̵c̵o̵d̵e̵d̵[̲S̲a̲m̲p̲l̲e̲r̲I̲n̲n̲e̲r̲L̲o̲o̲p̲.̲b̲o̲u̲n̲d̲e̲d̲,̲ ̲d̲r̲a̲w̲_̲e̲x̲a̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲t̲,̲ ̲Q̲M̲3̲1̲S̲a̲m̲p̲l̲e̲r̲P̲r̲o̲g̲r̲a̲m̲.̲l̲i̲m̲b̲R̲u̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲m̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲n̲c̲o̲d̲e̲F̲i̲n̲i̲s̲h̲e̲d̲,̲ ̲m̲a̲s̲k̲_̲e̲n̲c̲o̲d̲e̲d̲ _ h̵b̵,̵O̵p̵t̵i̵o̵n̵.̵i̵s̵S̵o̵m̵e̵_̵s̵o̵m̵e̵]̵h̲b̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲i̲s̲S̲o̲m̲e̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.SamplerLimbBridge.word_value' depends on axioms: [propext]
+'AspisV8R19.SamplerLimbBridge.source_word_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerLimbBridge.read_bound' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.SamplerLimbBridge.draw_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerLimbBridge.mask_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerLimbBridge.mask_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerLimbBridge.limb_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerLimbBridge.source_limb_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r76-bridge-20260929-a/lib/AspisV8R19/SamplerLimbBridge.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerLimbBridge.lean"
+	User time (seconds): 1.37
+	System time (seconds): 0.55
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.90
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3690700
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86076
+	Voluntary context switches: 719
+	Involuntary context switches: 88
+	Swaps: 0
+	File system inputs: 48
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
