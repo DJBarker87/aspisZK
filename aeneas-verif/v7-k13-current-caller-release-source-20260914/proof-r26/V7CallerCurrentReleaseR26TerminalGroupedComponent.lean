@@ -148,15 +148,15 @@ private theorem groupedTerminalExact
     terminalValues, valuesLength]
 
 theorem dot_terminal_released_grouped_corresponds
-    (values : Slice RawQM31) (g0 g1 g2 g3 : RawQM31)
+    (values : Slice RawQM31) (groupMasks : alloc.vec.Vec Std.U16)
+    (g0 g1 g2 g3 : RawQM31)
     (valuesCanonical : CanonicalSlice values)
     (valuesLength : values.length = 4)
     (groupsCanonical : CanonicalFour g0 g1 g2 g3) :
     ∃ out,
       sumcheck.WeightAccumulator.impl.dot_terminal_component
           (.Grouped64x16BinaryDeferred releasedRowGroups4
-            (alloc.vec.Vec.with_capacity Std.U16 0#usize)
-            none (releasedFourValues g0 g1 g2 g3)) values = ok out ∧
+            groupMasks none (releasedFourValues g0 g1 g2 g3)) values = ok out ∧
       GeneratedCanonicalQM31 out ∧
       exactRaw out =
         candidateClaim

@@ -43,7 +43,7 @@ private theorem vecIndexRun
   rw [alloc.vec.Vec.index_slice_index]
   simpa [exact, listExact] using run
 
-private theorem componentAtSix
+theorem componentAtSix
     (components : alloc.vec.Vec Component)
     (c0 c1 c2 c3 c4 c5 : Component)
     (componentsExact : components.val = [c0, c1, c2, c3, c4, c5])
@@ -56,42 +56,42 @@ private theorem componentAtSix
     simpa [componentsExact] using positionBound
   simpa [componentsExact] using vecIndexRun components position bound
 
-private theorem usizeZeroSucc :
+theorem usizeZeroSucc :
     Std.Usize.wrapping_add 0#usize 1#usize = 1#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (1#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem usizeOneSucc :
+theorem usizeOneSucc :
     Std.Usize.wrapping_add 1#usize 1#usize = 2#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (2#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem usizeTwoSucc :
+theorem usizeTwoSucc :
     Std.Usize.wrapping_add 2#usize 1#usize = 3#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (3#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem usizeThreeSucc :
+theorem usizeThreeSucc :
     Std.Usize.wrapping_add 3#usize 1#usize = 4#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (4#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem usizeFourSucc :
+theorem usizeFourSucc :
     Std.Usize.wrapping_add 4#usize 1#usize = 5#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (5#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem usizeFiveSucc :
+theorem usizeFiveSucc :
     Std.Usize.wrapping_add 5#usize 1#usize = 6#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
