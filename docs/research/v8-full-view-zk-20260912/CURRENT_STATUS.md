@@ -1,5 +1,18 @@
 # Current V8 privacy-repair status
 
+## R82 composed native arithmetic — 2026-09-29
+
+[R82_NATIVE_FOLLOWUP.md](R82_NATIVE_FOLLOWUP.md) records seven measured
+follow-ups, including rejected regressions. Selected complete execution:
+**1,333,812 / 1,335,001 CU**, about 162k below R69. Both honest proofs still
+exhaust at the actual 1M cap; **335,001 CU** remains on the larger fixture.
+
+The new short-dot kernel makes ordinary two-product entries profitable.
+Packed affine combination and checked low contraction also win; generic
+multiply inlining and power unrolling regress and are rejected. All source,
+malformed-wire and complete-runtime gates pass. Protocol and security checks
+remain unchanged. Native CU work continues; formalization remains paused.
+
 ## R81 native CU campaign — 2026-09-29
 
 [R81_NATIVE_CU.md](R81_NATIVE_CU.md) records eight complete native candidates.
