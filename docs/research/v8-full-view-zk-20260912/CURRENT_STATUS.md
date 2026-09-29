@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R41 exact QM31 residual lift and degree — 2026-09-29
+
+[R41_QM31_RESIDUAL_AND_DEGREE.md](R41_QM31_RESIDUAL_AND_DEGREE.md)
+lifts R40's certificate through the retained exact field tower, proves the
+restricted determinant nonzero over QM31, and proves total degree ≤1,105.
+All 34 new theorems compile with standard axioms only. The selected residual
+map is surjective outside that determinant's zero set; the evidence gate
+passes. No assumption about challenge independence is introduced.
+
+Next: justify a vanishing-event bound for the actual shared-oracle and
+restricted without-replacement query sampler, including rejection/failure
+and retry/publication conditioning. The field-size fraction 1,105/|QM31|
+is **not** established. Full privacy/soundness and the 1M target remain open;
+no verifier change or new CU measurement.
+
 ## R40 model-linked residual nonzero certificate — 2026-09-29
 
 [R40_RESIDUAL_NONZERO_CERTIFICATE.md](R40_RESIDUAL_NONZERO_CERTIFICATE.md)
