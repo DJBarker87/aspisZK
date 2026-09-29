@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R42 admissible-grid and query-source boundary — 2026-09-29
+
+[R42_ADMISSIBLE_GRID_AND_QUERY_SOURCE.md](R42_ADMISSIBLE_GRID_AND_QUERY_SOURCE.md)
+proves heterogeneous-grid and conditioning bounds for the exact QM31
+residual determinant (six Lean theorems, standard axioms). All 262,144
+actual source roots match an independent integer model and are distinct;
+69 query-control cases pass, including the extra detection-block behavior.
+
+The actual shared-oracle sampler law remains unproved. Even its successful
+refinement would not turn the current conservative small-domain bound into
+a cryptographic privacy closure. Next: source first-hit/conditional-law
+refinement and stronger residual nonvanishing uniformly over actual query
+schedules (or a proved covering family). No new hiding premise, verifier
+change, or CU saving; full privacy and the 1M target remain open.
+
 ## R41 exact QM31 residual lift and degree — 2026-09-29
 
 [R41_QM31_RESIDUAL_AND_DEGREE.md](R41_QM31_RESIDUAL_AND_DEGREE.md)
