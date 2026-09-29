@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R50 fixed-query polynomial and source chord gate — 2026-09-29
+
+[R50_FIXED_QUERY_POLYNOMIAL.md](R50_FIXED_QUERY_POLYNOMIAL.md) adds 38
+compiled Lean theorems. For every distinct exact-QM31 22-root tuple, the
+full-support residual determinant is a nonzero polynomial of degree at
+most **819** in the fourteen earlier challenge coordinates. Evaluation
+equals the source-shaped normalized matrix; the actual rational-chord
+determinant differs by the proved nonzero chord-scale factor under explicit
+domain conditions. G's boundary and the degree-31 column remain intact.
+
+Next: prove the actual shared-oracle joint law, including later query-root
+selection, bounded samplers, first hits, failures and adaptive publication.
+The degree bound is not yet a numerical source privacy bound. Other joint
+coverage, simulation, soundness and word-refinement obligations remain.
+No verifier changes or new Rust/SBF run; CU remains 1,620,236 / 1,621,719,
+and both 1M-cap runs exhaust.
+
 ## R49 source G boundary and fixed residual matrix — 2026-09-29
 
 [R49_SOURCE_G_BOUNDARY.md](R49_SOURCE_G_BOUNDARY.md) adds 36 compiled Lean
