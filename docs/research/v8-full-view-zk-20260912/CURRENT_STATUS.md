@@ -1,5 +1,18 @@
 # Current V8 privacy-repair status
 
+## R77 complete QM31 challenge value/state bridge — 2026-09-29
+
+[R77_CHALLENGE_MODEL_BRIDGE.md](R77_CHALLENGE_MODEL_BRIDGE.md) proves the actual
+QM31 challenge entry equals the retained model's value/error and state under
+the explicit total deterministic hash adapter, including four-limb write-back
+and reconstruction. Successful outputs are canonical. Two leaves compile;
+eight theorem audits, six with the inherited opaque `Formatter` dependency.
+
+Next: observed hash-query-history correspondence and explicit circle-map
+namespace transport, then full circle/outer retry composition. Value/state
+equality is not trace equality or full privacy. Runtime/CU unchanged:
+**1,495,663 / 1,497,050**, both actual 1M runs exhaust.
+
 ## R76 exact word and per-limb model bridge — 2026-09-29
 
 [R76_LIMB_MODEL_BRIDGE.md](R76_LIMB_MODEL_BRIDGE.md) proves runtime byte decoding

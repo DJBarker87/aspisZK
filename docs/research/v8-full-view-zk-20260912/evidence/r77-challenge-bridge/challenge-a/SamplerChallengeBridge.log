@@ -1,0 +1,81 @@
+info: r77_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerChallengeBridge.lean:27:48: warning: This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲finish, ̲encodeResult,̵h̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerChallengeBridge.lean:35:53: warning: This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲finish_four, ̲encodeResult,̵h̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerChallengeBridge.lean:44:2: error: Type mismatch: After simplification, term
+  hm
+ has type
+  @Eq (Result (core.result.Result field.QM31 transcript.ChallengeSampleExhausted × transcript.Transcript))
+    (do
+      let out ←
+        bounded 4 initialIter (fun it => it) (transcriptFor H (step H s).2) (encodeState (step H s).1)
+            (UScalar.ofNatCore ↑0 ⋯)
+      finish out)
+    (ok
+      (encodeResult (QM31SamplerProgram.limbsRun H 4 { state := (step H s).2, block := (step H s).1, index := 0 }).2.1,
+        transcriptFor H
+          (QM31SamplerProgram.limbsRun H 4 { state := (step H s).2, block := (step H s).1, index := 0 }).2.2.state))
+but is expected to have type
+  @Eq (Result (core.result.Result field.QM31 transcript.ChallengeSampleExhausted × transcript.Transcript))
+    (do
+      let out ← bounded 4 initialIter (fun it => it) (transcriptFor H (step H s).2) (encodeState (step H s).1) 0#usize
+      finish out)
+    (ok
+      (encodeResult (QM31SamplerProgram.limbsRun H 4 { state := (step H s).2, block := (step H s).1, index := 0 }).2.1,
+        transcriptFor H
+          (QM31SamplerProgram.limbsRun H 4 { state := (step H s).2, block := (step H s).1, index := 0 }).2.2.state))
+'AspisV8R19.SamplerChallengeBridge.finish_model' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerChallengeBridge.challenge_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerChallengeBridge.challenge_exhaustion' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerChallengeBridge.challenge_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r77-challenge-20260929-a/lib/AspisV8R19/SamplerChallengeBridge.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerChallengeBridge.lean"
+	User time (seconds): 1.22
+	System time (seconds): 0.55
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.76
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3689376
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86242
+	Voluntary context switches: 669
+	Involuntary context switches: 70
+	Swaps: 0
+	File system inputs: 48
+	File system outputs: 64
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
