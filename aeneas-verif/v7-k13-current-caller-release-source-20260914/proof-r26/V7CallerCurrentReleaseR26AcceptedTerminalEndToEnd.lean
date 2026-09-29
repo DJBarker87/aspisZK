@@ -332,4 +332,214 @@ theorem accepted_terminal_source_corresponds
 
 #print axioms accepted_terminal_source_corresponds
 
+/-- The K1 terminal law carried by one accepted literal source trace. -/
+structure AcceptedLoopK1Law
+    {Trace : Type}
+    {gamma : RawQM31}
+    {relationFields : Array (Array RawQM31 6#usize) 4#usize}
+    {selector : Std.U8} {semanticPoint : Array RawQM31 10#usize}
+    {kappa : RawQM31} {queries : Array Std.U32 16#usize}
+    {compactCounter : Std.U8} {frontierNodes : Std.Usize}
+    {transcriptStateAfterQueries : Array Std.U8 32#usize}
+    {snapshot : Option v6_transcript.V6QueryBatchPrechallengeSnapshot}
+    {queryBatchChallenge : RawQM31}
+    {authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch}
+    {transcript0 : transcript.Transcript} {trace0 : Trace}
+    {runningClaim : RawQM31} {weights : sumcheck.WeightAccumulator}
+    {alpha : Array RawQM31 4#usize}
+    {foldedValues : Array RawQM31 256#usize}
+    {verified : v6_transcript.V6VerifiedTranscript}
+    {returnedSnapshot : Option
+      v6_transcript.V6QueryBatchPrechallengeSnapshot}
+    {traceOut : Trace}
+    (source : AcceptedTailSourceTrace gamma relationFields selector
+      semanticPoint kappa queries compactCounter frontierNodes
+      transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut)
+    (mScale0 mScale1 mScale2 : RawQM31)
+    (mPoint0 mPoint1 mPoint2 : alloc.vec.Vec RawQM31)
+    (deferredAlpha : RawQM31) (groupValues : alloc.vec.Vec RawQM31)
+    (tScale0 tScale1 : RawQM31)
+    (tFactors0 tFactors1 : alloc.vec.Vec RawQM31)
+    (lineScales : alloc.vec.Vec RawQM31)
+    (lineXs : alloc.vec.Vec RawM31) : Type where
+  semantics : AcceptedWeightFoldSemantics source.afterTwo.2.2.2.2.1
+    (Array.make 3#usize
+      [source.roundThree.q1, source.roundThree.q2, source.roundThree.q3])
+    source.roundThree.weightsAfter mScale0 mScale1 mScale2 mPoint0 mPoint1
+    mPoint2 deferredAlpha groupValues tScale0 tScale1 tFactors0 tFactors1
+    lineScales lineXs
+  runningClaimCanonical :
+    GeneratedCanonicalQM31 source.roundThree.runningClaimAfter
+  terminalCandidateExact : sourceQm31ToModel
+      (generatedQm31ToExact source.roundThree.runningClaimAfter) =
+    candidateClaim (outputWeightVector semantics)
+      (terminalValues source.terminal.terminalPrefix)
+  fullK1Exact : sourceQm31ToModel
+      (generatedQm31ToExact source.roundThree.runningClaimAfter) =
+    candidateClaim
+      (threeRoundWeightVector source.roundOne.alphaOne
+        source.roundTwo.alphaTwo source.roundThree.alphaThree mScale0 mScale1
+        mScale2 mPoint0 mPoint1 mPoint2 deferredAlpha tScale0 tScale1
+        tFactors0 tFactors1 lineScales lineXs)
+      (threeRoundValueVector foldedValues source.roundOne.alphaOne
+        source.roundTwo.alphaTwo source.roundThree.alphaThree)
+
+/-- A successful execution of the literal generated relation loop yields a
+source trace carrying the complete K1 terminal law.  The quantified row and
+challenge hypotheses are precisely the canonical source-domain obligations
+for whichever trace the successful execution exposes. -/
+theorem accepted_relation_loop_end_to_end
+    {QueryFold Trace : Type}
+    (queryFoldInst : core.ops.function.FnOnce QueryFold
+      v6_transcript.V6QueryBatchView
+      (core.result.Result v6_query_batch.V6AuthenticatedQueryBatch
+        v6_onefold.V6WireError))
+    (traceInst : core.ops.function.FnMut Trace
+      v6_transcript.V6RelationDiagnosticPhase Unit)
+    (transcript0 : transcript.Transcript) (trace0 : Trace)
+    (gamma runningClaim : RawQM31)
+    (weights : sumcheck.WeightAccumulator)
+    (alpha : Array RawQM31 4#usize)
+    (foldedValues : Array RawQM31 256#usize)
+    (relationFields : Array (Array RawQM31 6#usize) 4#usize)
+    (selector : Std.U8) (semanticPoint : Array RawQM31 10#usize)
+    (kappa : RawQM31) (queries : Array Std.U32 16#usize)
+    (compactCounter : Std.U8) (frontierNodes : Std.Usize)
+    (transcriptStateAfterQueries : Array Std.U8 32#usize)
+    (snapshot : Option v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (queryBatchChallenge : RawQM31)
+    (authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch)
+    (verified : v6_transcript.V6VerifiedTranscript)
+    (returnedSnapshot : Option
+      v6_transcript.V6QueryBatchPrechallengeSnapshot)
+    (traceOut : Trace)
+    (mScale0 mScale1 mScale2 : RawQM31)
+    (mPoint0 mPoint1 mPoint2 : alloc.vec.Vec RawQM31)
+    (deferredAlpha : RawQM31)
+    (groupValues : alloc.vec.Vec RawQM31)
+    (tScale0 tScale1 : RawQM31)
+    (tFactors0 tFactors1 : alloc.vec.Vec RawQM31)
+    (lineScales : alloc.vec.Vec RawQM31)
+    (lineXs : alloc.vec.Vec RawM31)
+    (runningCanonical : GeneratedCanonicalQM31 runningClaim)
+    (valuesCanonical : CanonicalValues foldedValues)
+    (inputComponents : weights.components.val =
+      [.Multilinear mScale0 mPoint0,
+       .Multilinear mScale1 mPoint1,
+       .Multilinear mScale2 mPoint2,
+       .Grouped64x16BinaryDeferred releasedRowGroups64 releasedMasks
+         (some deferredAlpha) groupValues,
+       .Tensor tScale0 tFactors0,
+       .Tensor tScale1 tFactors1,
+       .LineM31Batch lineScales lineXs 0#u8])
+    (deferredAlphaCanonical : GeneratedCanonicalQM31 deferredAlpha)
+    (mScale0Canonical : GeneratedCanonicalQM31 mScale0)
+    (mScale1Canonical : GeneratedCanonicalQM31 mScale1)
+    (mScale2Canonical : GeneratedCanonicalQM31 mScale2)
+    (mPoint0Canonical :
+      V7CallerCurrentReleaseR26MultilinearFoldSemantics.CanonicalList
+        mPoint0.val)
+    (mPoint1Canonical :
+      V7CallerCurrentReleaseR26MultilinearFoldSemantics.CanonicalList
+        mPoint1.val)
+    (mPoint2Canonical :
+      V7CallerCurrentReleaseR26MultilinearFoldSemantics.CanonicalList
+        mPoint2.val)
+    (mPoint0Length : mPoint0.val.length = 8)
+    (mPoint1Length : mPoint1.val.length = 8)
+    (mPoint2Length : mPoint2.val.length = 8)
+    (tScale0Canonical : GeneratedCanonicalQM31 tScale0)
+    (tScale1Canonical : GeneratedCanonicalQM31 tScale1)
+    (tFactors0Canonical :
+      V7CallerCurrentReleaseR26TensorFoldSemantics.CanonicalList tFactors0.val)
+    (tFactors1Canonical :
+      V7CallerCurrentReleaseR26TensorFoldSemantics.CanonicalList tFactors1.val)
+    (tFactors0Length : tFactors0.val.length = 8)
+    (tFactors1Length : tFactors1.val.length = 8)
+    (lineScalesLength : lineScales.val.length = 16)
+    (lineXsLength : lineXs.val.length = 16)
+    (lineScalesCanonical :
+      CanonicalQM31Slice (alloc.vec.Vec.deref lineScales))
+    (lineXsCanonical : CanonicalM31Slice (alloc.vec.Vec.deref lineXs))
+    (rowOneCanonical : ∀ source : AcceptedTailSourceTrace gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut,
+      CanonicalRelationRow source.roundOne.relationRow)
+    (rowTwoCanonical : ∀ source : AcceptedTailSourceTrace gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut,
+      CanonicalRelationRow source.roundTwo.relationRow)
+    (rowThreeCanonical : ∀ source : AcceptedTailSourceTrace gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut,
+      CanonicalRelationRow source.roundThree.relationRow)
+    (alphaOneCanonical : ∀ source : AcceptedTailSourceTrace gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut,
+      GeneratedCanonicalQM31 source.roundOne.alphaOne)
+    (alphaTwoCanonical : ∀ source : AcceptedTailSourceTrace gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut,
+      GeneratedCanonicalQM31 source.roundTwo.alphaTwo)
+    (alphaThreeCanonical : ∀ source : AcceptedTailSourceTrace gamma
+      relationFields selector semanticPoint kappa queries compactCounter
+      frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut,
+      GeneratedCanonicalQM31 source.roundThree.alphaThree)
+    (success :
+      v6_transcript.finish_onefold_relation_after_prechallenge_loop
+        queryFoldInst traceInst
+        { start := 1#usize, «end» := v6_onefold.V6_RELATION_ROUNDS }
+        transcript0 trace0 gamma runningClaim weights alpha foldedValues
+        relationFields selector semanticPoint kappa queries compactCounter
+        frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+        authenticatedQueries =
+          ok (core.result.Result.Ok (verified, returnedSnapshot), traceOut)) :
+    Nonempty (Σ source : AcceptedTailSourceTrace gamma relationFields selector
+      semanticPoint kappa queries compactCounter frontierNodes
+      transcriptStateAfterQueries snapshot queryBatchChallenge
+      authenticatedQueries transcript0 trace0 runningClaim weights alpha
+      foldedValues verified returnedSnapshot traceOut,
+      AcceptedLoopK1Law source mScale0 mScale1 mScale2 mPoint0 mPoint1 mPoint2
+        deferredAlpha groupValues tScale0 tScale1 tFactors0 tFactors1
+        lineScales lineXs) := by
+  obtain ⟨source⟩ := accepted_relation_loop_exposes_source_trace queryFoldInst
+    traceInst transcript0 trace0 gamma runningClaim weights alpha foldedValues
+    relationFields selector semanticPoint kappa queries compactCounter
+    frontierNodes transcriptStateAfterQueries snapshot queryBatchChallenge
+    authenticatedQueries verified returnedSnapshot traceOut success
+  obtain ⟨semantics, claimCanonical, terminalExact, fullExact⟩ :=
+    accepted_terminal_source_corresponds source mScale0 mScale1 mScale2
+      mPoint0 mPoint1 mPoint2 deferredAlpha groupValues tScale0 tScale1
+      tFactors0 tFactors1 lineScales lineXs runningCanonical valuesCanonical
+      (rowOneCanonical source) (rowTwoCanonical source)
+      (rowThreeCanonical source) (alphaOneCanonical source)
+      (alphaTwoCanonical source) (alphaThreeCanonical source) inputComponents
+      deferredAlphaCanonical mScale0Canonical mScale1Canonical
+      mScale2Canonical mPoint0Canonical mPoint1Canonical mPoint2Canonical
+      mPoint0Length mPoint1Length mPoint2Length tScale0Canonical
+      tScale1Canonical tFactors0Canonical tFactors1Canonical tFactors0Length
+      tFactors1Length lineScalesLength lineXsLength lineScalesCanonical
+      lineXsCanonical
+  exact ⟨⟨source, {
+    semantics := semantics
+    runningClaimCanonical := claimCanonical
+    terminalCandidateExact := terminalExact
+    fullK1Exact := fullExact }⟩⟩
+
+#print axioms accepted_relation_loop_end_to_end
+
 end V7CallerCurrentReleaseR26AcceptedTerminalEndToEnd
