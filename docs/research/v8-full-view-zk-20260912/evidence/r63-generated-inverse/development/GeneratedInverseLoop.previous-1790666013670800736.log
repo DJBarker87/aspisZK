@@ -1,0 +1,117 @@
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GeneratedInverseLoop.lean:62:55: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_core.field.square_n_loop.body r (encode x)
+in the target expression
+  (match
+      match (r, encode x) with
+      | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (encode (squares wordMul 0 x))
+
+case zero
+r : core.ops.range.Range Usize
+x : Word
+hn : ↑r.end - ↑r.start = 0
+h : ¬↑r.start < ↑r.end
+hb : aspis_core.field.square_n_loop.body r (encode x) = ok (done (encode x))
+⊢ (match
+      match (r, encode x) with
+      | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (encode (squares wordMul 0 x))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GeneratedInverseLoop.lean:76:55: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_core.field.square_n_loop.body r (encode x)
+in the target expression
+  (match
+      match (r, encode x) with
+      | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (encode (squares wordMul (n + 1) x))
+
+case succ
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range Usize) (x : Word),
+    ↑r.end - ↑r.start = n → aspis_core.field.square_n_loop r (encode x) = ok (encode (squares wordMul n x))
+r : core.ops.range.Range Usize
+x : Word
+hn : ↑r.end - ↑r.start = n + 1
+h : ↑r.start < ↑r.end
+r' : core.ops.range.Range Usize := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+hb : aspis_core.field.square_n_loop.body r (encode x) = ok (cont (r', encode (wordMul x x)))
+⊢ (match
+      match (r, encode x) with
+      | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, value1) => aspis_core.field.square_n_loop.body iter1 value1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (encode (squares wordMul (n + 1) x))
+'AspisV8R19.GeneratedInverseLoop.encode_val' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.GeneratedInverseLoop.mul_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.GeneratedInverseLoop.range_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.GeneratedInverseLoop.loop_exec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.GeneratedInverseLoop.square_n_exec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.GeneratedInverseLoop.inv_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.GeneratedInverseLoop.inv_nonzero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r63-runtime-20260929-a/AspisV8R19/GeneratedInverseLoop.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/GeneratedInverseLoop.lean"
+	User time (seconds): 1.53
+	System time (seconds): 0.79
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.27
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3652896
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 4
+	Minor (reclaiming a frame) page faults: 115160
+	Voluntary context switches: 931
+	Involuntary context switches: 83
+	Swaps: 0
+	File system inputs: 96
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

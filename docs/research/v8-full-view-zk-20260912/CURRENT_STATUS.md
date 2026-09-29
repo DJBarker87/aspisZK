@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R63 generated inverse-loop execution — 2026-09-29
+
+[R63_GENERATED_INVERSE_LOOP.md](R63_GENERATED_INVERSE_LOOP.md) proves the pinned
+generated range loop and guarded inverse against the full cached Aeneas runtime:
+all-count square execution, canonical nonzero inverse correctness and exact
+zero assertion failure. Three leaves compile with 30 axioms audits (21 replayed
+full-runtime support theorems and nine new bridge theorems), no new axioms.
+
+The audit caught a separate current-source boundary: R62 uses a guarded one-fold
+M31 multiply, while the extraction uses the original two-fold reducer. **First
+remaining proposition: optimized M31 execution equivalence**, then word-level
+CM31/QM31 inverse and sampler composition. This is not a current full-tower,
+compiler, full-privacy or soundness theorem. Oracle/seed/transcript/retry/
+publication and pre-beta extraction obligations remain. No runtime change:
+R62 **1,497,377 / 1,498,764 CU**, both actual 1M runs still exhaust.
+
 ## R62 ordinary correction gather — 2026-09-29
 
 [R62_ORDINARY_GATHER.md](R62_ORDINARY_GATHER.md) selects source-derived
