@@ -21,11 +21,30 @@ open V7ProductionObserverR27Outer
     Source: '/rustc/library/core/src/array/mod.rs', lines 110:0-112:52
     Name pattern: [core::array::from_fn]
     Visibility: public -/
+def core.array.fromFnList
+    {T F : Type} (fnMut : core.ops.function.FnMut F Std.Usize T) :
+    Nat → Std.Usize → F → Result (List T × F)
+  | 0, _, closure => .ok ([], closure)
+  | fuel + 1, index, closure => do
+      let (value, closureNext) ← fnMut.call_mut closure index
+      match fuel with
+      | 0 => .ok ([value], closureNext)
+      | remaining + 1 =>
+        let indexNext ← index + 1#usize
+        let (rest, closureFinal) ←
+          core.array.fromFnList fnMut (remaining + 1) indexNext closureNext
+        .ok (value :: rest, closureFinal)
+
 @[rust_fun "core::array::from_fn"]
-axiom core.array.from_fn
-  {T : Type} {F : Type} (N : Std.Usize) (opsfunctionFnMutFTupleUsizeTInst :
-  core.ops.function.FnMut F Std.Usize T) :
-  F → Result (Array T N)
+def core.array.from_fn
+    {T F : Type} (N : Std.Usize)
+    (fnMut : core.ops.function.FnMut F Std.Usize T)
+    (closure : F) : Result (Array T N) :=
+  match core.array.fromFnList fnMut N.val 0#usize closure with
+  | .fail error => .fail error
+  | .div => .div
+  | .ok (values, _) =>
+    if h : values.length = N.val then .ok ⟨values, h⟩ else .fail .panic
 
 /-- [core::option::{core::option::Option<T>}::ok_or]:
     Source: '/rustc/library/core/src/option.rs', lines 1334:4-1334:73
@@ -42,10 +61,11 @@ def core.option.Option.ok_or {T E : Type} :
     Name pattern: [core::result::{core::result::Result<@T, @E>}::is_ok_and]
     Visibility: public -/
 @[rust_fun "core::result::{core::result::Result<@T, @E>}::is_ok_and"]
-axiom core.result.Result.is_ok_and
-  {T : Type} {E : Type} {F : Type} (opsfunctionFnOnceFTupleTBoolInst :
-  core.ops.function.FnOnce F T Bool) :
-  (core.result.Result T E) → F → Result Bool
+def core.result.Result.is_ok_and
+    {T E F : Type} (fnOnce : core.ops.function.FnOnce F T Bool) :
+    core.result.Result T E → F → Result Bool
+  | .Ok value, closure => fnOnce.call_once closure value
+  | .Err _, _ => .ok false
 
 /-- [aspis_core::field::{impl core::cmp::PartialEq<aspis_core::field::QM31> for aspis_core::field::QM31}::eq]:
     Source: 'crates/aspis-core/src/field.rs', lines 359:22-359:31
@@ -53,8 +73,25 @@ axiom core.result.Result.is_ok_and
     Visibility: public -/
 @[rust_fun
   "aspis_core::field::{core::cmp::PartialEq<aspis_core::field::QM31, aspis_core::field::QM31>}::eq"]
-axiom aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq
-  : aspis_core.field.QM31 → aspis_core.field.QM31 → Result Bool
+def aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq
+    (self other : aspis_core.field.M31) : Result Bool :=
+  .ok (self = other)
+
+def aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq
+    (self other : aspis_core.field.CM31) : Result Bool := do
+  let b ← aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq self.a other.a
+  if b then
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq self.b other.b
+  else
+    .ok false
+
+def aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq
+    (self other : aspis_core.field.QM31) : Result Bool := do
+  let b ← aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq self.c0 other.c0
+  if b then
+    aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq self.c1 other.c1
+  else
+    .ok false
 
 /-- [aspis_core::state_only_hiding::{aspis_core::state_only_hiding::StateOnlyHidingContext}::atomic_spend_v3]:
     Source: 'crates/aspis-core/src/state_only_hiding.rs', lines 166:4-166:90
@@ -62,10 +99,15 @@ axiom aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq
     Visibility: public -/
 @[rust_fun
   "aspis_core::state_only_hiding::{aspis_core::state_only_hiding::StateOnlyHidingContext}::atomic_spend_v3"]
-axiom aspis_core.state_only_hiding.StateOnlyHidingContext.atomic_spend_v3
-  :
-  (Array Std.U8 32#usize) → (Array Std.U8 32#usize) → Result
-    aspis_core.state_only_hiding.StateOnlyHidingContext
+def aspis_core.state_only_hiding.StateOnlyHidingContext.atomic_spend_v3
+    (statement_digest mask_nonce : Array Std.U8 32#usize) :
+    Result aspis_core.state_only_hiding.StateOnlyHidingContext :=
+  .ok {
+    statement_digest
+    mask_nonce
+    mask_layout_fingerprint := 1142433538471546009#u64
+    layout_factor_fingerprint := 1224568225636605186#u64
+  }
 
 /-- [aspis_core::v6_onefold::prepare_v6_onefold_coordinates]:
     Source: 'crates/aspis-core/src/v6_onefold.rs', lines 929:0-931:46
@@ -159,9 +201,19 @@ axiom aspis_core.v7_onefold.verify_and_gamma_combine_v7_openings
     Visibility: public -/
 @[rust_fun
   "aspis_statement::atomic_state_only_terminal::atomic_state_only_copy_inactive_row_groups_v3"]
-axiom
+def
   aspis_statement.atomic_state_only_terminal.atomic_state_only_copy_inactive_row_groups_v3
-  : Result (Array Std.U8 64#usize)
+  : Result (Array Std.U8 64#usize) :=
+  .ok (Array.make 64#usize [
+    0#u8, 0#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8,
+    1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8,
+    1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 2#u8,
+    1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8,
+    1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8,
+    1#u8, 1#u8, 1#u8, 2#u8, 0#u8, 2#u8, 0#u8, 1#u8,
+    1#u8, 3#u8, 3#u8, 3#u8, 3#u8, 4#u8, 5#u8, 6#u8,
+    6#u8, 6#u8, 6#u8, 6#u8, 6#u8, 6#u8, 6#u8, 6#u8
+  ])
 
 /-- [aspis_statement::atomic_state_only_terminal::atomic_state_only_copy_inactive_group_masks_v3]:
     Source: 'crates/aspis-statement/src/atomic_state_only_terminal.rs', lines 146:0-146:73
@@ -169,9 +221,13 @@ axiom
     Visibility: public -/
 @[rust_fun
   "aspis_statement::atomic_state_only_terminal::atomic_state_only_copy_inactive_group_masks_v3"]
-axiom
+def
   aspis_statement.atomic_state_only_terminal.atomic_state_only_copy_inactive_group_masks_v3
-  : Result (Slice Std.U16)
+  : Result (Slice Std.U16) :=
+  .ok (Array.to_slice (Array.make 7#usize [
+    59391#u16, 59390#u16, 61438#u16, 0#u16,
+    65520#u16, 65530#u16, 65535#u16
+  ]))
 
 /-- [aspis_statement::atomic_state_only_terminal::atomic_state_only_selected_masked_terminal_value_compiled_tag73]:
     Source: 'crates/aspis-statement/src/atomic_state_only_terminal.rs', lines 1591:0-1601:41
@@ -195,5 +251,6 @@ axiom
     Name pattern: [solana_pubkey::{solana_pubkey::Pubkey}::to_bytes]
     Visibility: public -/
 @[rust_fun "solana_pubkey::{solana_pubkey::Pubkey}::to_bytes"]
-axiom solana_pubkey.Pubkey.to_bytes
-  : solana_pubkey.Pubkey → Result (Array Std.U8 32#usize)
+def solana_pubkey.Pubkey.to_bytes
+    (key : solana_pubkey.Pubkey) : Result (Array Std.U8 32#usize) :=
+  .ok key

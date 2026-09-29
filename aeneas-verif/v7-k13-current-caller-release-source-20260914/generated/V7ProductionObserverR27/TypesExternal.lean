@@ -40,4 +40,4 @@ axiom aspis_core.v7_onefold.V7CompactOneFoldWire : Type
     Name pattern: [solana_pubkey::Pubkey]
     Visibility: public -/
 @[rust_type "solana_pubkey::Pubkey"]
-axiom solana_pubkey.Pubkey : Type
+def solana_pubkey.Pubkey := Array Std.U8 32#usize

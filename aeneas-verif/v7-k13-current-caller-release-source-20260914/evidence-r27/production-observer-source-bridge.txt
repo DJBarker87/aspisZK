@@ -46,20 +46,24 @@ Audited normalization:
   restores ordinary Aeneas FnMut state threading for the observer closure,
   restores the updated callback state in the opaque shared-core signature,
   and replaces Option.ok_or with its exact two-constructor definition.
+- The second audited normalization stage replaces generic array construction,
+  Result.is_ok_and, field equality, Pubkey byte conversion, the atomic-spend
+  hiding-context constructor, and both frozen schedule accessors with their
+  exact source definitions/constants.
 - The raw templates and translation.json are retained beside normalized
   generated files.
 
 Focused Lean 4.32 compilation:
 - V7ProductionObserverR27/TypesExternal.lean:
-  exit=0 wall=1.34s peak_kib=2512408 swap_kib=0
+  exit=0 wall=1.22s peak_kib=2546320 swap_kib=0
 - V7ProductionObserverR27/Types.lean:
-  exit=0 wall=2.16s peak_kib=2558384 swap_kib=0
+  exit=0 wall=1.59s peak_kib=2589216 swap_kib=0
 - V7ProductionObserverR27/FunsExternal.lean:
-  exit=0 wall=1.49s peak_kib=2524376 swap_kib=0
+  exit=0 wall=1.47s peak_kib=2568060 swap_kib=0
 - V7ProductionObserverR27/Funs.lean:
-  exit=0 wall=1.46s peak_kib=2534512 swap_kib=0
+  exit=0 wall=1.43s peak_kib=2562376 swap_kib=0
 - V7ProductionObserverR27SourceBridge.lean:
-  exit=0 wall=1.80s peak_kib=2542416 swap_kib=0
+  exit=0 wall=1.45s peak_kib=2565828 swap_kib=0
 
 Focused theorem results:
 - productionObserver_success_exact:
@@ -72,8 +76,17 @@ Focused theorem results:
   result, public-key byte conversion, hiding-context construction, frozen
   schedule reads, and the successful shared-core result carrying the exact
   captured prechallenge snapshot.
-- All three #print axioms results contain only the explicit generated external
-  interfaces plus propext, Classical.choice, and Quot.sound. No sorryAx occurs.
+- All three #print axioms results contain only propext, Classical.choice,
+  Quot.sound, and these remaining explicit generated interfaces:
+  PreparedQm31Multiplier; WeightAccumulator; fold_v6_onefold_queries;
+  prepare_v6_onefold_coordinates; snapshot_query_batch_prechallenge;
+  verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe;
+  V7CompactOneFoldWire; verify_and_gamma_combine_v7_openings;
+  atomic_state_only_selected_masked_terminal_value_compiled_tag73; and
+  V7CompactOneFoldWire.parse_deferred_canonicality.
+- The two frozen schedule accessors, Pubkey conversion, atomic-spend hiding
+  context, generic array/Result helpers, and field equality no longer occur in
+  the axiom audit. No sorryAx occurs.
 
 This is a focused source-entry bridge. It is not the final end-to-end release
 claim: the remaining explicit interfaces must be replaced by their generated

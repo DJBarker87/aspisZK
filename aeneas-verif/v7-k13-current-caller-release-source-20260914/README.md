@@ -214,9 +214,11 @@ that every accepted observer result exposes a successful exact parser result,
 public-key conversion, hiding-context construction, frozen schedule reads, and
 successful shared-core call carrying the returned prechallenge snapshot.
 Companion theorems prove forward exact result flow and fail-closed parser
-rejection. Their axiom audits contain only the explicit generated external
-interfaces plus `propext`, `Classical.choice`, and `Quot.sound`; there is
-no `sorryAx`.
+rejection. Exact definitions now discharge the public-key conversion, hiding
+context construction, frozen schedule reads, generic array/Result helpers,
+and field equality. Their axiom audits contain the remaining parser,
+shared-core, onefold, snapshot, and terminal interfaces plus `propext`,
+`Classical.choice`, and `Quot.sound`; there is no `sorryAx`.
 
 This still is not an end-to-end acceptance theorem. The shared-core call and
 production callback interfaces in the small outer graph remain explicit
