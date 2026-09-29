@@ -72,6 +72,10 @@ structure ReleasedFourChunkTrace
     (iter2, values2) (iter3, values3)
   step3 : OptimizedChunkTrace groupValues basis
     (iter3, values3) (iter4, values4)
+  chunk0Exact : step0.chunk = chunk0
+  chunk1Exact : step1.chunk = chunk1
+  chunk2Exact : step2.chunk = chunk2
+  chunk3Exact : step3.chunk = chunk3
   outputExact : foldedValues = values4
 
 private theorem active_not_done
@@ -239,6 +243,22 @@ theorem released_outer_trace_exposes_four_chunks
                         step1 := step1'
                         step2 := step2'
                         step3 := step3'
+                        chunk0Exact := by
+                          have pair := Result.ok.inj
+                            (next0.symm.trans step0'.nextRun)
+                          simpa using (congrArg Prod.fst pair).symm
+                        chunk1Exact := by
+                          have pair := Result.ok.inj
+                            (next1.symm.trans step1'.nextRun)
+                          simpa using (congrArg Prod.fst pair).symm
+                        chunk2Exact := by
+                          have pair := Result.ok.inj
+                            (next2.symm.trans step2'.nextRun)
+                          simpa using (congrArg Prod.fst pair).symm
+                        chunk3Exact := by
+                          have pair := Result.ok.inj
+                            (next3.symm.trans step3'.nextRun)
+                          simpa using (congrArg Prod.fst pair).symm
                         outputExact := outputExact }⟩
                   | @cont state4' state5 output4 equation4 tail4 =>
                       have terminal := exhausted_body_result_is_done
