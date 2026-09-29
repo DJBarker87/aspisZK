@@ -7,9 +7,16 @@ output=${2:?usage: replay-r26-final-manifest.sh BUNDLE_DIR OUTPUT_DIR}
 proof="$bundle/proof-r26"
 generated="$bundle/generated/V7CallerCurrentReleaseR26"
 arith=/home/dombarker/project-offloads/v7-gate-closure-prechallenge-return-r22/arithmetic-lean432-cache-current
-backend=/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean
+backend=/home/dombarker/project-offloads/v7-gate-closure-prechallenge-return-r22/aeneas-lean-formatter-unit-r26
 aspis=/home/dombarker/project-offloads/aspis-v7-root-sweep-20260909/AspisFormal
 lean=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean
+formatter_source="$backend/Aeneas/Std/Core/Fmt.lean"
+formatter_hash=e7e6e37c6271592f934dfcbde894a7b8e1afd19c2c8db41bd683e650beb889c8
+
+if [ "$(sha256sum "$formatter_source" | cut -d ' ' -f 1)" != "$formatter_hash" ]; then
+  echo "unexpected concrete Aeneas formatter source" >&2
+  exit 5
+fi
 
 if [ -e "$output" ]; then
   echo "refusing to reuse final replay output: $output" >&2
