@@ -1,0 +1,258 @@
+info: r85_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:22:12: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.Ok`
+
+Note: Inferred this name from the expected resulting type of `.Ok`:
+  Result (core.result.Result circle.SecureCirclePoint circle.CirclePointError)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:51:18: error: unsolved goals
+case succ.ok.Err
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range U32) (s : transcript.Transcript),
+    ↑r.end - ↑r.start = n →
+      ∀ (history : Trace), SamplerObservedSource.challenge_secure_circle_point_loop r s history = bounded n s history
+r : core.ops.range.Range U32
+s : transcript.Transcript
+hn : ↑r.end - ↑r.start = n + 1
+history : Trace
+hr : ↑r.start < ↑r.end
+r' : core.ops.range.Range U32 := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+observed : Trace
+s1 : transcript.Transcript
+e : transcript.ChallengeSampleExhausted
+hs : SamplerObservedSource.challenge_qm31 s history = ok ((core.result.Result.Err e, s1), observed)
+⊢ (do
+      let __x ←
+        ((fun a => done (a, s1)) <$>
+              liftM (ok (core.result.Result.Err transcript.CirclePointSampleError.ChallengeSampleExhausted)))
+            observed
+      match __x.1 with
+        | cont s1 =>
+          observedLoop
+            (fun x => do
+              let __x ←
+                liftM
+                    (if h : ↑x.1.start < ↑x.1.end then
+                      ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                    else ok (none, x.1))
+              match __x.1 with
+                | none =>
+                  pure (done (core.result.Result.Err transcript.CirclePointSampleError.ParameterSampleExhausted, x.2))
+                | some val => do
+                  let __x_1 ← SamplerObservedSource.challenge_qm31 x.2
+                  let r1 ←
+                    liftM
+                        (ok
+                          (match __x_1.1 with
+                          | core.result.Result.Ok t => core.result.Result.Ok t
+                          | core.result.Result.Err a =>
+                            core.result.Result.Err transcript.CirclePointSampleError.ChallengeSampleExhausted))
+                  let cf ←
+                    liftM
+                        (match r1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let r2 ← liftM (circle.secure_ood_circle_point_from_parameter val)
+                      match r2 with
+                        | core.result.Result.Ok point => pure (done (core.result.Result.Ok point, __x_1.2))
+                        | core.result.Result.Err a => pure (cont (__x.2, __x_1.2))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      (fun a => done (a, __x_1.2)) <$>
+                        liftM
+                          (match residual with
+                          | core.result.Result.Ok x =>
+                            core.convert.Infallible.rec
+                              (fun x =>
+                                Result (core.result.Result circle.SecureCirclePoint transcript.CirclePointSampleError))
+                              x
+                          | core.result.Result.Err v => ok (core.result.Result.Err v)))
+            s1 __x.2
+        | done a => ok (a, __x.2)) =
+    sorry () observed
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:59:23: error: unsolved goals
+case succ.ok.Ok.fail
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range U32) (s : transcript.Transcript),
+    ↑r.end - ↑r.start = n →
+      ∀ (history : Trace), SamplerObservedSource.challenge_secure_circle_point_loop r s history = bounded n s history
+r : core.ops.range.Range U32
+s : transcript.Transcript
+hn : ↑r.end - ↑r.start = n + 1
+history : Trace
+hr : ↑r.start < ↑r.end
+r' : core.ops.range.Range U32 := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+observed : Trace
+s1 : transcript.Transcript
+t : field.QM31
+hs : SamplerObservedSource.challenge_qm31 s history = ok ((core.result.Result.Ok t, s1), observed)
+e : Error
+hp : circle.secure_ood_circle_point_from_parameter t = fail e
+⊢ fail e = sorry () observed
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:60:20: error: unsolved goals
+case succ.ok.Ok.div
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range U32) (s : transcript.Transcript),
+    ↑r.end - ↑r.start = n →
+      ∀ (history : Trace), SamplerObservedSource.challenge_secure_circle_point_loop r s history = bounded n s history
+r : core.ops.range.Range U32
+s : transcript.Transcript
+hn : ↑r.end - ↑r.start = n + 1
+history : Trace
+hr : ↑r.start < ↑r.end
+r' : core.ops.range.Range U32 := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+observed : Trace
+s1 : transcript.Transcript
+t : field.QM31
+hs : SamplerObservedSource.challenge_qm31 s history = ok ((core.result.Result.Ok t, s1), observed)
+hp : circle.secure_ood_circle_point_from_parameter t = div
+⊢ div = sorry () observed
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:63:25: error: unsolved goals
+case succ.ok.Ok.ok.Ok
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range U32) (s : transcript.Transcript),
+    ↑r.end - ↑r.start = n →
+      ∀ (history : Trace), SamplerObservedSource.challenge_secure_circle_point_loop r s history = bounded n s history
+r : core.ops.range.Range U32
+s : transcript.Transcript
+hn : ↑r.end - ↑r.start = n + 1
+history : Trace
+hr : ↑r.start < ↑r.end
+r' : core.ops.range.Range U32 := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+observed : Trace
+s1 : transcript.Transcript
+t : field.QM31
+hs : SamplerObservedSource.challenge_qm31 s history = ok ((core.result.Result.Ok t, s1), observed)
+p : circle.SecureCirclePoint
+hp : circle.secure_ood_circle_point_from_parameter t = ok (core.result.Result.Ok p)
+⊢ (do
+      let __x ← pure (done (core.result.Result.Ok p, s1)) observed
+      match __x.1 with
+        | cont s1 =>
+          observedLoop
+            (fun x => do
+              let __x ←
+                liftM
+                    (if h : ↑x.1.start < ↑x.1.end then
+                      ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                    else ok (none, x.1))
+              match __x.1 with
+                | none =>
+                  pure (done (core.result.Result.Err transcript.CirclePointSampleError.ParameterSampleExhausted, x.2))
+                | some val => do
+                  let __x_1 ← SamplerObservedSource.challenge_qm31 x.2
+                  let r1 ←
+                    liftM
+                        (ok
+                          (match __x_1.1 with
+                          | core.result.Result.Ok t => core.result.Result.Ok t
+                          | core.result.Result.Err a =>
+                            core.result.Result.Err transcript.CirclePointSampleError.ChallengeSampleExhausted))
+                  let cf ←
+                    liftM
+                        (match r1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let r2 ← liftM (circle.secure_ood_circle_point_from_parameter val)
+                      match r2 with
+                        | core.result.Result.Ok point => pure (done (core.result.Result.Ok point, __x_1.2))
+                        | core.result.Result.Err a => pure (cont (__x.2, __x_1.2))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      (fun a => done (a, __x_1.2)) <$>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            circle.SecureCirclePoint (core.convert.FromSame transcript.CirclePointSampleError)
+                            residual))
+            s1 __x.2
+        | done a => ok (a, __x.2)) =
+    sorry () observed
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:34:74: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:44:52: warning: This simp argument is unused:
+  pure_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [SamplerObservedSource.challenge_secure_circle_point_loop.body, r̵a̵n̵g̵e̵_̵n̵e̵x̵t̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵r̵,̵b̵i̵n̵d̵_̵a̵p̵p̵l̵y̵,̵l̵i̵f̵t̵_̵a̵p̵p̵l̵y̵,̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵o̵u̵n̵d̵e̵d̵]̵r̲a̲n̲g̲e̲_̲n̲e̲x̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲r̲,̲ ̲b̲i̲n̲d̲_̲a̲p̲p̲l̲y̲,̲ ̲l̲i̲f̲t̲_̲a̲p̲p̲l̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲o̲u̲n̲d̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:54:16: warning: This simp argument is unused:
+  bind_apply
+
+Hint: Omit it from the simp argument list.
+  simp [map_error, ̲core.result.Result.Insts.CoreOpsTry.branch,
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+                  b̵i̵n̵d̵_̵a̵p̵p̵ly̵,̵l̵ift_apply, ̲pure_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:54:27: warning: This simp argument is unused:
+  lift_apply
+
+Hint: Omit it from the simp argument list.
+  simp [map_error, ̲core.result.Result.Insts.CoreOpsTry.branch,
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+                  bind_apply,l̵i̵f̵t̵_̵a̵ ̲pp̵l̵y̵,̵p̵ure_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:54:38: warning: This simp argument is unused:
+  pure_apply
+
+Hint: Omit it from the simp argument list.
+  simp [map_error, ̲core.result.Result.Insts.CoreOpsTry.branch,
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+                  bind_apply, ̲lift_apply,̵p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean:56:68: warning: This simp argument is unused:
+  pure_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲map_error, ̲bind_apply, ̲lift_apply,p̵u̵r̵e̵_̵a̵p̵p̵l̵y̵,̵
+                  core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.SamplerObservedCircleLoop.loop_execution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerObservedCircleLoop.entry_three' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r85-circle-loop-20260929-a/lib/AspisV8R19/SamplerObservedCircleLoop.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerObservedCircleLoop.lean"
+	User time (seconds): 2.18
+	System time (seconds): 0.92
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.04
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3699280
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 100608
+	Voluntary context switches: 777
+	Involuntary context switches: 89
+	Swaps: 0
+	File system inputs: 4584
+	File system outputs: 96
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

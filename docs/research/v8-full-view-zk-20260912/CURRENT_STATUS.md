@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R85 native composition and circle observer — 2026-09-29
+
+[R85_PRIVATE_KERNELS_AND_CIRCLE.md](R85_PRIVATE_KERNELS_AND_CIRCLE.md) records
+complete **1,199,479 / 1,197,630 CU** on the same two R84 proofs. Private
+quotient and ordinary kernels compose, saving about 13.2k CU. Both actual
+1M honest runs still exhaust; **199,479 CU** remains on the larger fixture.
+R84/R85 is not security-promoted; R83 remains the unchanged-profile control.
+
+The user resumed the full security proof alongside CU reduction. Four Lean
+leaves compile with 12 theorem audits: complete instrumented secure-circle
+retry history, result/error/state, erasure to the retained source and the
+memoized ideal-oracle law with arbitrary prior cached answers. Eight audits
+retain the inherited opaque Formatter type; no new axioms or admissions.
+Next observer step: exact q22 source history and whole-experiment composition.
+Universal R84 affine coverage, causal privacy, pre-beta extraction and the
+full security/resource gates remain open.
+
 ## R84 tensor transport experiment — 2026-09-29
 
 [R84_TENSOR_TRANSPORT.md](R84_TENSOR_TRANSPORT.md) records a **new-profile**
