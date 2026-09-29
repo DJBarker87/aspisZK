@@ -1,5 +1,16 @@
 # Current V8 privacy-repair status
 
+## R64 extraction checkpoint — 2026-09-29 (proof pending)
+
+[R64_EXTRACTION_CHECKPOINT.md](R64_EXTRACTION_CHECKPOINT.md) records successful
+fresh Charon/Aeneas extraction of the inverse closure from unchanged selected
+R62 field sources. The NUC connection then timed out over both Tailscale
+addresses. Artifact retrieval/audit and the new Lean compilation are pending;
+no optimized multiplication bridge is claimed. The extraction recipe is
+committed; uncompiled Lean drafts remain local. Inspect the named remote unit
+and output before resuming, and do not rerun the completed extraction unchanged.
+R63's proved boundary and R62's CU remain unchanged.
+
 ## R63 generated inverse-loop execution — 2026-09-29
 
 [R63_GENERATED_INVERSE_LOOP.md](R63_GENERATED_INVERSE_LOOP.md) proves the pinned
