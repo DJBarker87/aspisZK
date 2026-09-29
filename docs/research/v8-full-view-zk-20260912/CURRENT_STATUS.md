@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## R92–R94 native contraction and rejected products — 2026-09-30
+
+[R94_NATIVE_PRODUCTS.md](R94_NATIVE_PRODUCTS.md) records complete
+**1,130,010 / 1,128,272 CU** on unchanged R84 proofs. Streamed sparse G and
+outlined mixed opening limbs compose; two twelve-product arithmetic variants
+pass correctness but regress and are rejected. Exact instruction traces explain
+the wide-multiply helper in the first rejected build without equating product
+counts with CU. Both actual 1M honest runs still exhaust; **130,010 CU remains**.
+No new Lean target, security promotion or changed security parameters. The
+universal R84 joint-coverage, causal privacy and pre-beta extraction obligations
+remain open, alongside the sampler public guard and full observed history.
+
 ## R91 arithmetic and outer query loop — 2026-09-30
 
 [R91_WIDE_ARITHMETIC_QUERY_LOOP.md](R91_WIDE_ARITHMETIC_QUERY_LOOP.md) records

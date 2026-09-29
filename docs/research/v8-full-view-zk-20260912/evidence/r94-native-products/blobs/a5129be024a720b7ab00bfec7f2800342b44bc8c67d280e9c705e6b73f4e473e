@@ -1,0 +1,21 @@
+// Private helper: all eight input limbs must already be canonical (<P).
+// Each pair sum <=2(P-1); its product <=4(P-1)^2<2^64.
+// (a+b)(e+f)-ae-bf=af+be>=0, so both subtractions are exact.
+// Partial representatives and four final raw bounds are the retained R56
+// expressions, merely using twelve integer products instead of sixteen.
+#[inline(always)]
+fn r94_raw(x:[u32;4],y:[u32;4])->[u64;4] {
+    let [a,b,c,d]=x.map(u64::from);let [e,f,g,h]=y.map(u64::from);
+    const PP:u64=(P as u64)*(P as u64);
+    let ab=a+b;let cd=c+d;let ef=e+f;let gh=g+h;
+    let ae=a*e;let bf=b*f;let cg=c*g;let dh=d*h;
+    let ag=a*g;let bh=b*h;let ce=c*e;let df=d*f;
+    let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31);
+    let u=partial(cg.wrapping_add(PP).wrapping_sub(dh));
+    let v=partial((cd*gh).wrapping_sub(cg).wrapping_sub(dh));
+    [ae.wrapping_add(PP).wrapping_sub(bf).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v),
+     (ab*ef).wrapping_sub(ae).wrapping_sub(bf).wrapping_add(u).wrapping_add(2*v),
+     ag.wrapping_add(ce).wrapping_add(2*PP).wrapping_sub(bh).wrapping_sub(df),
+     (ab*gh).wrapping_sub(ag).wrapping_sub(bh)
+       .wrapping_add((cd*ef).wrapping_sub(ce).wrapping_sub(df))]
+}
