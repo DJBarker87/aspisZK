@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R64 canonical-product arithmetic — 2026-09-29
+
+[R64_CANONICAL_PRODUCT.md](R64_CANONICAL_PRODUCT.md) adds nine compiled Lean
+theorems: the exact one-fold product bound, canonical modular result, full
+guarded natural-number formula equality on all U32 inputs (including fallback),
+word-width bounds and the retained invalid-general-u62 counterexample. Focused
+checks used the laptop's pinned existing cache, with a 1 GiB Lean heap cap;
+no cold or heavy build occurred. All nine axioms audits pass.
+
+The NUC is still unreachable. The completed fresh extraction has not been
+retrieved, and **generated optimized-word execution remains unproved**. Next:
+audit those artifacts, compose checked operations using these bounds, then
+transport the result through R63's inverse loop. Full privacy/soundness and
+the 1M target remain open; runtime and CU are unchanged.
+
 ## R64 extraction checkpoint — 2026-09-29 (proof pending)
 
 [R64_EXTRACTION_CHECKPOINT.md](R64_EXTRACTION_CHECKPOINT.md) records successful

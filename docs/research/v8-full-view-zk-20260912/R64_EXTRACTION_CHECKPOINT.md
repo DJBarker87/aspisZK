@@ -1,5 +1,9 @@
 # R64 extraction checkpoint — proof not yet compiled
 
+Historical checkpoint: the later [canonical-product arithmetic step](R64_CANONICAL_PRODUCT.md)
+compiles the Nat-only draft locally. Artifact retrieval and generated execution
+are still pending; the extraction result below is unchanged.
+
 Base `3a3cc6f2e9ae1d34ec2b6933bba686e16c86d722` (R63), branch
 `research/v8-r64-guarded-m31-20260929`.
 
