@@ -1,0 +1,37 @@
+{
+  "source_manifest_sha256": "eb4dac79ff63b4400c3e452174ab10e79e1c02a2291baeb1cff27cb194f676ae",
+  "binary_sha256": "46e451020b850b207231751c3df345472a3cb4e9d47bb7be4e3b0122a6d5e450",
+  "fixture_sha256": "0c54f42689e50f9f3e91a7625db463009a493b458beccc74ece18f3477abbdbd",
+  "overflow_checks": true,
+  "commands": [
+    {
+      "phase": "compile",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "--release",
+        "--jobs",
+        "2",
+        "--features",
+        "insecure-spend-fixture,selected-v7-kernels",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/aspis-r53-source-20260929-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml",
+        "--bin",
+        "r53-query-control"
+      ],
+      "exit": 0
+    },
+    {
+      "phase": "query-control",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r53-source-20260929-a/check-a/r53-query-control",
+        "/home/dombarker/project-offloads/aspis-r53-replay-20260929-a/fixtures.txt"
+      ],
+      "exit": 0
+    }
+  ],
+  "sampler_law": false,
+  "full_privacy": false
+}

@@ -1,0 +1,70 @@
+info: r53_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r53-lean-src-20260929-a/AspisV8R19/Q22SamplerProgram.lean:42:8: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (OracleProgramOps.bind (squeezeProgram s) fun p =>
+      if (scan q (words 18 p.1)).2 = true then Program.done (finish (scan q (words 18 p.1)).1, p.2)
+      else loopProgram n p.2 (scan q (words 18 p.1)).1)
+is not definitionally equal to the right-hand side
+  (calls H s ++ (loopRun H n (step H s).2 (scan q (words 18 (step H s).1)).1).1,
+    (loopRun H n (step H s).2 (scan q (words 18 (step H s).1)).1).2)
+
+case neg
+H : Bytes → State
+n : ℕ
+ih : ∀ (s : State) (q : ScanState), eval H (loopProgram n s q) = loopRun H n s q
+s : State
+q : ScanState
+hd : q.draws < 64
+h✝ : ¬(scan q (words 18 (step H s).1)).2 = true
+⊢ eval H
+      (OracleProgramOps.bind (squeezeProgram s) fun p =>
+        if (scan q (words 18 p.1)).2 = true then Program.done (finish (scan q (words 18 p.1)).1, p.2)
+        else loopProgram n p.2 (scan q (words 18 p.1)).1) =
+    (calls H s ++ (loopRun H n (step H s).2 (scan q (words 18 (step H s).1)).1).1,
+      (loopRun H n (step H s).2 (scan q (words 18 (step H s).1)).1).2)
+/home/dombarker/project-offloads/aspis-r53-lean-src-20260929-a/AspisV8R19/Q22SamplerProgram.lean:37:14: error: unsolved goals
+case neg
+H : Bytes → State
+n : ℕ
+ih : ∀ (s : State) (q : ScanState), eval H (loopProgram n s q) = loopRun H n s q
+s : State
+q : ScanState
+hd : ¬q.draws < 64
+⊢ eval H (Program.done (finish q, s)) = ([], finish q, s)
+/home/dombarker/project-offloads/aspis-r53-lean-src-20260929-a/AspisV8R19/Q22SamplerProgram.lean:41:33: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [eval,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.Q22SamplerProgram.loop_exact' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.Q22SamplerProgram.sufficient_fuel_source_exec' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.Q22SamplerProgram.challenge_exact' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.Q22SamplerProgram.no_artificial_cutoff' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.Q22SamplerProgram.completion_detection_block' depends on axioms: [propext, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -R /home/dombarker/project-offloads/aspis-r53-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r53-lean-20260929-e/lib/AspisV8R19/Q22SamplerProgram.olean /home/dombarker/project-offloads/aspis-r53-lean-src-20260929-a/AspisV8R19/Q22SamplerProgram.lean"
+	User time (seconds): 1.23
+	System time (seconds): 0.50
+	Percent of CPU this job got: 112%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3257308
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77348
+	Voluntary context switches: 4391
+	Involuntary context switches: 74
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 48
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

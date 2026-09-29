@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R53 bounded sampler programs — 2026-09-29
+
+[R53_BOUNDED_SAMPLER_PROGRAMS.md](R53_BOUNDED_SAMPLER_PROGRAMS.md) adds 37
+compiled Lean theorems. Source-shaped QM31 and fixed-q22 causal programs
+retain exact words, rejections, failures, states and complete oracle traces;
+their memoized-oracle laws are proved. Q22's fuel suffices for its unfuelled
+operational relation. Actual Rust matched 4,753 Lean-exported fixtures across
+26,472 hash calls, including 20 cache hits, byte-for-byte.
+
+Next: universal Rust/model sampler correspondence beyond finite replay,
+bounded nonzero/OOD/circle wrappers, then complete prover/observer and
+retry/publication composition. Independent conditional challenge laws and
+full privacy remain unproved. No verifier/SBF change; CU remains
+1,620,236 / 1,621,719, with both 1M-cap runs exhausted.
+
 ## R52 exact memoized-oracle interpreter law — 2026-09-29
 
 [R52_MEMOIZED_ORACLE_LAW.md](R52_MEMOIZED_ORACLE_LAW.md) adds 44 compiled
