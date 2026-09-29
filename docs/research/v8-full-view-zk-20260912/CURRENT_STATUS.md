@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## R74 safe reads and actual inner-sampler step — 2026-09-29
+
+[R74_INNER_STEP.md](R74_INNER_STEP.md) source-binds safe four-byte reads,
+canonical masked acceptance, exhaustion and rollover to the actual generated
+inner-loop body. Two Lean leaves compile with 14 theorem audits; six retain
+the documented opaque `Formatter` type dependency. No new assumptions.
+
+Next: actual eight-attempt loop and cursor invariant, four-limb mutable
+iteration, and independent byte/integer/model-observer correspondence.
+One-step execution is not full sampler privacy. Runtime/CU unchanged:
+**1,495,663 / 1,497,050**, both actual 1M runs still exhaust.
+
 ## R73 actual squeeze framing and explicit adapter — 2026-09-29
 
 [R73_SQUEEZE_SOURCE.md](R73_SQUEEZE_SOURCE.md) proves exact generated squeeze

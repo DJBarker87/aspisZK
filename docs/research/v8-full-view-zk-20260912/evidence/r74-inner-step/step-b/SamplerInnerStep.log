@@ -1,0 +1,114 @@
+info: r74_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerInnerStep.lean:35:31: error: unsolved goals
+limb : field.M31
+r : core.ops.range.Range U32
+s : transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+⊢ (do
+      let __x ← core.iter.range.IteratorRange.next core.iter.range.StepU32 r
+      match __x.1 with
+        | none => ok (done (s, b, j, limb, false))
+        | some val =>
+          if j = 8#usize then do
+            let __x_1 ← s.squeeze_block
+            let i ← 0#usize * 4#usize
+            let i1 ← i + 4#usize
+            let s ←
+              core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x_1.1
+                  { start := i, «end» := i1 }
+            let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+            let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+            let word_index2 ← 0#usize + 1#usize
+            if (core.num.U32.from_le_bytes a &&& field.P != field.P) = true then
+                ok (done (__x_1.2, __x_1.1, word_index2, core.num.U32.from_le_bytes a &&& field.P, true))
+              else ok (cont (__x.2, __x_1.2, __x_1.1, word_index2))
+          else do
+            let i ← j * 4#usize
+            let i1 ← i + 4#usize
+            let s_1 ←
+              core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+                  { start := i, «end» := i1 }
+            let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+            let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+            let word_index2 ← j + 1#usize
+            if (core.num.U32.from_le_bytes a &&& field.P != field.P) = true then
+                ok (done (s, b, word_index2, core.num.U32.from_le_bytes a &&& field.P, true))
+              else ok (cont (__x.2, s, b, word_index2))) =
+    do
+    let __x ← core.iter.range.IteratorRange.next core.iter.range.StepU32 r
+    match __x.1 with
+      | none => ok (done (s, b, j, limb, false))
+      | some val =>
+        if j = 8#usize then do
+          let __x_1 ← s.squeeze_block
+          let x ← 0#usize * 4#usize
+          let x_1 ← x + 4#usize
+          let x ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x_1.1
+                { start := x, «end» := x_1 }
+          let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+          let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+          let x_2 ← 0#usize + 1#usize
+          if (core.num.U32.from_le_bytes x &&& field.P != field.P) = true then
+              ok (done (__x_1.2, __x_1.1, x_2, core.num.U32.from_le_bytes x &&& field.P, true))
+            else ok (cont (__x.2, __x_1.2, __x_1.1, x_2))
+        else do
+          let x ← j * 4#usize
+          let x_1 ← x + 4#usize
+          let x ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+                { start := x, «end» := x_1 }
+          let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+          let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+          let x_2 ← j + 1#usize
+          if (core.num.U32.from_le_bytes x &&& field.P != field.P) = true then
+              ok (done (s, b, x_2, core.num.U32.from_le_bytes x &&& field.P, true))
+            else ok (cont (__x.2, s, b, x_2))
+'AspisV8R19.SamplerInnerStep.factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerInnerStep.exhausted' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerInnerStep.existing_block' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerInnerStep.rollover' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerInnerStep.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerInnerStep.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r74-step-20260929-b/lib/AspisV8R19/SamplerInnerStep.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerInnerStep.lean"
+	User time (seconds): 1.47
+	System time (seconds): 0.53
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.97
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3691912
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 85980
+	Voluntary context switches: 863
+	Involuntary context switches: 72
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

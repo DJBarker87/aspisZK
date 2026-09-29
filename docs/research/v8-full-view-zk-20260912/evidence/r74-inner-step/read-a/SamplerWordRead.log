@@ -1,0 +1,173 @@
+info: r74_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:42:57: error(lean.unknownIdentifier): Unknown identifier `core.slice.Slice.index`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:45:32: warning: This simp argument is unused:
+  Slice.len
+
+Hint: Omit it from the simp argument list.
+  simp [core.array.Array.index, ̲core.ops.index.IndexSlice, ̲core.slice.Slice.index,
+      core.slice.index.SliceIndexRangeUsizeSlice,
+  ̵  ̵ ̵ ̵core.slice.index.SliceIndexRangeUsizeSlice.index,
+      Array.to_slice, ̲Slice.length,S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵ ̲small_val, ̲four, ̲List.slice, ̲hb]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:70:12: error: Application type mismatch: The argument
+  ?m.50
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  j * 4#usize = ?m.50
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:70:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:70:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:73:12: error: Application type mismatch: The argument
+  ?m.84
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  small (↑j * 4) ?m.79 + 4#usize = ?m.84
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:74:6: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:74:6: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:77:12: error: Application type mismatch: The argument
+  ?m.122
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  j + 1#usize = ?m.122
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:77:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:77:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:80:57: error: Type mismatch: After simplification, term
+  have this := Decidable.byContradiction fun a => read_success._proof_1 j hj a;
+  this
+ has type
+  ↑j * 4 ≤ 28
+but is expected to have type
+  ↑?m.144 ≤ 28
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:69:37: error: unsolved goals
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j < 8
+hm : j * 4#usize = sorry
+ha : small (↑j * 4) ⋯ + 4#usize = sorry
+hn : j + 1#usize = sorry
+⊢ (do
+      let i ← sorry
+      let finish ← i + 4#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+            { start := i, «end» := finish }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let next ← sorry
+      ok (core.num.U32.from_le_bytes a, next)) =
+    ok (core.num.U32.from_le_bytes (four b (↑j * 4) ⋯), small (↑j + 1) ⋯)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:80:21: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [read, ̲hm,h̵a̵,̵ ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲slice_success b _ (by simpa only [small_val] using (show j.val ̲* ̲4 ≤ 28 by omega)),
+      conversion_success, ̲unwrap_success, ̲lift, ̲hn, ̲small_val]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:81:4: warning: This simp argument is unused:
+  conversion_success
+
+Hint: Omit it from the simp argument list.
+  simp only [read, ̲hm, ̲ha, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲slice_success b _ (by simpa only [small_val] using (show j.val ̲* ̲4 ≤ 28 by omega)),
+      c̵o̵n̵v̵e̵r̵s̵i̵o̵n̵_̵s̵uc̵c̵e̵s̵s̵,̵u̵nwrap_success, ̲lift, ̲hn, ̲small_val]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:81:23: warning: This simp argument is unused:
+  unwrap_success
+
+Hint: Omit it from the simp argument list.
+  simp only [read, ̲hm, ̲ha, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲slice_success b _ (by simpa only [small_val] using (show j.val ̲* ̲4 ≤ 28 by omega)),
+      conversion_success,u̵n̵w̵r̵a̵p̵_̵s̵u̵c̵c̵e̵s̵s̵,̵ ̲lift, ̲hn, ̲small_val]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:81:46: warning: This simp argument is unused:
+  small_val
+
+Hint: Omit it from the simp argument list.
+  simp only [read, ̲hm, ̲ha, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲slice_success b _ (by simpa only [small_val] using (show j.val ̲* ̲4 ≤ 28 by omega)),
+      conversion_success, ̲unwrap_success, ̲lift, ̲hn,̵s̵m̵a̵l̵l̵_̵v̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:86:2: error: Type mismatch
+  Nat.and_le_right
+has type
+  ?m.25 &&& ?m.26 ≤ ?m.26
+but is expected to have type
+  word.bv.toNat &&& field.P.bv.toNat ≤ 2147483647
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean:95:4: error: Type mismatch
+  he
+has type
+  ↑(word &&& field.P) = 2147483647
+but is expected to have type
+  ↑(word &&& field.P) = ↑field.P
+'AspisV8R19.SamplerWordRead.small_val' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.SamplerWordRead.try_small' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.SamplerWordRead.slice_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerWordRead.conversion_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerWordRead.unwrap_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerWordRead.read_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.SamplerWordRead.mask_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.SamplerWordRead.accepted_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r74-read-20260929-a/lib/AspisV8R19/SamplerWordRead.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/SamplerWordRead.lean"
+	User time (seconds): 1.46
+	System time (seconds): 0.48
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.93
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3695440
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 86086
+	Voluntary context switches: 957
+	Involuntary context switches: 80
+	Swaps: 0
+	File system inputs: 8
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
