@@ -1,0 +1,121 @@
+V7 production snapshot observer to R26 prechallenge evidence
+Date: 2026-09-29
+Host: dombarker@100.108.41.90
+Source parent revision: 7b85e541391800474da774d2e44e8bdf447ee114
+
+Source change
+-------------
+
+The default-off `aeneas-observer` entry now calls
+`verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot`
+directly.  The production feature path is unchanged.  The observed entry still
+uses the production parser, public-key conversion, hiding context, inactive
+schedule, terminal predicate, authenticated query fold, and shared verifier.
+
+Source file SHA-256 before this evidence commit:
+
+  9154bb3b3ec1fa3f212c7491e155a3ec280366d4d96da3df4dc8142ed3098253
+  programs/aspis-verifier/src/v7_verifier.rs
+
+Nightly production-feature check:
+
+  RUSTUP_TOOLCHAIN=nightly-2026-06-01 cargo check --release --locked \
+    --package aspis-verifier --lib --no-default-features \
+    --features v7-production-tag73,aeneas-observer
+
+  exit=0 wall_s=13.65 peak_bytes=463978496 swaps=0
+
+Extraction
+----------
+
+Charon and Aeneas ran on the dedicated Linux host in zero-swap cgroup scopes.
+
+  LLBC SHA-256:
+    56deab368a8b136f7957ec6b42a5719f9fc23d60597db833f578033bd7a5ebb6
+  Charon: exit=0 wall_s=50.11 peak_kib=435724 swaps=0
+  Aeneas: exit=0 wall_s=0.47 peak_kib=82544 swaps=0
+
+The generated R28 graph aliases its shared types to the frozen R26 graph.
+The five formerly external production dependencies are executable definitions:
+
+  * V7 parser;
+  * one-fold coordinate preparation;
+  * one-fold query folding;
+  * authenticated opening verification and gamma combination;
+  * compiled Tag-73 semantic terminal.
+
+Their source bodies were compared against the axiom-clean August 30 generated
+graph recovered at:
+
+  /home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/
+    normalized-source-statement-r9
+
+The parser, coordinate, fold, and terminal bodies are identical.  The current
+opening helper differs only by the `v7-query-order-source-bound-audit` cfg
+branch.  That feature is absent from the exact R28 feature set
+`v7-production-tag73,aeneas-observer`, so the selected body is the same
+`sort_unstable_by_key` path as the checked graph.
+
+`toolchain/stage-r29-production-callbacks.py` stages the reused graph with
+counted substitutions and validates all 142 Lean sources against aggregate
+SHA-256:
+
+  52993aea25dfa41d1e0f222726e5ed2da6f98b665b835708d19588edfd5d6465
+
+Focused kernel checks
+---------------------
+
+The evidence rerun used:
+
+  systemd-run --user --scope \
+    -p MemoryHigh=7G -p MemoryMax=8G -p MemorySwapMax=0 \
+    /tmp/v7-r29-evidence.sh
+
+The host reported 49 GiB MemAvailable before launch and no other build scope.
+The evidence log SHA-256 is:
+
+  870e4f4d5c0e9e7c0554e338bcd508061266aa1ba0f54cee998e430acb071346
+
+Results:
+
+  CheckCallbacks
+    exit=0 wall_s=1.33 peak_kib=2574796 swaps=0
+
+  V7ProductionSnapshotObserverR28SourceBridge
+    exit=0 wall_s=1.54 peak_kib=2601196 swaps=0
+
+  V7ProductionSnapshotObserverR28ToR26Prechallenge
+    exit=0 wall_s=3.43 peak_kib=7126356 swaps=0
+
+The two final theorem source hashes are:
+
+  9317b11fc19c9318e83cbef872290438c91252562f88123624d038ffb9e68ede
+  V7ProductionSnapshotObserverR28SourceBridge.lean
+
+  7844ec58c0dd6416ec8c2ef5dea6e4a49241a5c9697b68680afbb2be79e935f0
+  V7ProductionSnapshotObserverR28ToR26Prechallenge.lean
+
+Every printed axiom audit was exactly:
+
+  [propext, Classical.choice, Quot.sound]
+
+In particular, these final theorems have no parser, callback, verifier-core,
+project, runtime, `sorryAx`, or native-decision axiom:
+
+  productionSnapshotObserver_success_exact
+  productionSnapshotObserver_acceptance_exposes_r26_snapshot
+  snapshot_success_reaches_r26_prechallenge
+  production_snapshot_observer_acceptance_reaches_r26_prechallenge
+
+Scope and next gate
+-------------------
+
+The strongest theorem starts at acceptance by the current production-derived
+observer over proof bytes.  It exposes the exact parser and context results and
+constructs the dependent R26 accepted path through the complete shared verifier
+to its literal post-prechallenge relation call.
+
+This evidence does not yet instantiate the canonical/layout premises of
+`accepted_relation_loop_end_to_end`, construct the maintained restored K1
+source environment, or prove that a successful Tag-73 transaction dispatch
+implies observer acceptance.  Those are the remaining outer composition gates.

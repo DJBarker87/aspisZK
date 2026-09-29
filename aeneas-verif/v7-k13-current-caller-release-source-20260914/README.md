@@ -228,3 +228,29 @@ The transaction-wrapper premises and final maintained security/probability
 conclusion also remain outside this bridge. Exact hashes, normalization, and
 focused resource measurements are recorded in
 `evidence-r27/production-observer-source-bridge.txt`.
+
+## R28/R29 axiom-clean production snapshot bridge
+
+R28 replaces the observer's mutable callback capture with the shared
+verifier's existing snapshot-return entry.  Its current production-derived
+outer graph is therefore definitionally connected to the R26 shared verifier
+while retaining the exact parser result and accepted prechallenge snapshot.
+
+R29 removes the last five outer-graph project axioms.  The parser, coordinate
+preparation, query fold, opening verification/gamma combination, and compiled
+terminal use the already checked August 30 generated definitions.  Shared
+types are definitionally aliased to R28/R26.  The selected source bodies are
+identical; the opening helper's only source difference is a cfg branch absent
+from the exact R28 feature set.  The reproducible staging script refuses a
+changed input graph and validates all 142 staged Lean sources against a frozen
+aggregate SHA-256.
+
+The capstone
+`production_snapshot_observer_acceptance_reaches_r26_prechallenge` now starts
+from acceptance of the current observer over proof bytes, exposes the exact
+parser and context successes, and constructs the full dependent R26 path to
+the literal post-prechallenge relation call.  Its axiom set, and the axiom sets
+of every R29 callback, are exactly `propext`, `Classical.choice`, and
+`Quot.sound`.  Focused commands, source hashes, cgroup limits, wall times, peak
+RSS, swap, and the remaining composition boundary are recorded in
+`evidence-r29/production-snapshot-to-prechallenge-kernel-check.txt`.

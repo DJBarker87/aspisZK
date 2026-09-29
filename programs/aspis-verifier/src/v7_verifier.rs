@@ -20,7 +20,7 @@ use aspis_core::v6_transcript::{
 #[cfg(feature = "aeneas-observer")]
 use aspis_core::v6_transcript::{
     snapshot_query_batch_prechallenge,
-    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe,
+    verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot,
     V6QueryBatchPrechallengeSnapshot, V6QueryBatchPrechallengeView,
 };
 #[cfg(feature = "v7-pair-forest-fixed-canonical-audit")]
@@ -311,8 +311,8 @@ pub fn snapshot_prechallenge(
 
 /// Feature-gated, monomorphic observer root for the selected atomic Tag-73
 /// read-only verifier.  Its parser, hiding context, terminal predicate, and
-/// authenticated query fold are the production ones.  Only the pre-existing
-/// no-op callback is replaced with an owned observation for source proofs.
+/// authenticated query fold are the production ones.  The shared verifier's
+/// existing capture branch retains the prechallenge value for source proofs.
 #[cfg(feature = "aeneas-observer")]
 #[allow(clippy::too_many_arguments)]
 #[inline(never)]
@@ -334,9 +334,8 @@ pub fn observe_v7_read_only_with_statement_digest(
         statement_digest,
         attempt_id: attempt_id.to_bytes(),
     };
-    let mut observed = None;
-    let transcript =
-        verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_observe(
+    let (transcript, observed) =
+        verify_v7_compact_transcript_and_relation_prepared_with_hiding_context_snapshot(
             hash,
             &wire,
             &context,
@@ -346,7 +345,6 @@ pub fn observe_v7_read_only_with_statement_digest(
             check_pow,
             |view| terminal_matches(statement, view),
             |view| authenticate_and_fold_queries(hash, &wire, view),
-            |view| observed = Some(snapshot_prechallenge(view)),
         )?;
     let snapshot = observed.ok_or(V7VerifyError::PrechallengeObservationMissing)?;
     let folded_query_sum = transcript.folded_query_sum;
