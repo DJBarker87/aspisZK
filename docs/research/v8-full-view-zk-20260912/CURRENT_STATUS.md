@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R61 retained fixed-width opening kernel — 2026-09-29
+
+[R61_OPENING_REUSE.md](R61_OPENING_REUSE.md) restores the old optimized
+`v8_gamma_fixed` kernel, which was present but disabled in R59. Complete
+primary CU is **1,507,423 / 1,508,805**, saving 9,415 / 9,390 on unchanged
+proofs. Independent arbitrary-matrix, packed/canonical/error-order, full-wire,
+stack and complete SVM checks pass. The world-0 exact-text trace attributes
+the entire saving to `combine_beta`; all other exclusive counts are unchanged.
+The retained four-theorem summation proof is reused, not rerun or relabelled
+as a new Rust refinement. No production or protocol change.
+
+Both actual 1M-cap runs still exhaust; **508,805 CU remains**. Next CU work is
+repeated ordinary/semantic caller multiplication. R60's generated inverse-loop
+source refinement remains the first security proposition; full oracle/seed/
+transcript/retry/publication privacy and pre-beta extraction remain open.
+
 ## R60 concrete inverse chain and circle bridge — 2026-09-29
 
 [R60_INVERSE_CHAIN.md](R60_INVERSE_CHAIN.md) adds **23 compiled Lean theorems**:
