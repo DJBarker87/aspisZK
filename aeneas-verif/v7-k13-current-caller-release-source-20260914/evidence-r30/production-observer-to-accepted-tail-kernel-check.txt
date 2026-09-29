@@ -87,3 +87,28 @@ they are not being treated as acceptance assumptions.  The resulting exact
 K1 relation law must then be connected to the maintained restored K1.2--K1.6
 probability theorem, followed by the outer transaction/Tag-73 dispatch
 implication and one final frozen manifest replay.
+
+First source-invariant discharge
+--------------------------------
+
+Recorded UTC: 2026-09-29T20:01:29Z
+Base revision: 8c5a92711bad4206f600594764146c80b79b4a8a
+Source SHA-256:
+  2a538c15b975a14e9d9243415e1cc2415ac1842c09ce8cf6efa1ddc133b5810f
+  proof-r30/V7CallerCurrentReleaseR30FixedFieldCanonical.lean
+
+The lemma `fixed_reader_next_qm31_canonical` unfolds the current generated
+`V6FixedFieldReader::next_qm31` and proves that its successful branch makes all
+four M31 limbs strictly smaller than the source modulus.  This supplies the
+canonicality fact needed for relation-row entries once the 24 successful reads
+are transported through the generated relation-field decoder.
+
+  'V7CallerCurrentReleaseR30FixedFieldCanonical.fixed_reader_next_qm31_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  RESULT target=R30FixedFieldCanonicalFinal exit=0 wall_s=1.48 peak_kib=2658608 swaps=0
+
+The first two focused attempts failed while aligning the generated comparison
+normal form and simplifying the lifted `wrapping_sub`; the proof source was
+changed after each failure.  The final target is warning-free and ran under
+the same `MemoryHigh=7G`, `MemoryMax=8G`, `MemorySwapMax=0` policy.

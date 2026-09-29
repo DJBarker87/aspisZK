@@ -271,6 +271,10 @@ its axiom audit is exactly `propext`, `Classical.choice`, and `Quot.sound`.
 The next proof boundary is narrower: derive the canonical field facts and
 seven-component accumulator layout already required by the axiom-clean R26
 `accepted_relation_loop_end_to_end` theorem from this accepted source trace.
+The first of those facts is now discharged at its source boundary:
+`fixed_reader_next_qm31_canonical` proves that every successful literal
+fixed-field read returns a canonical QM31 value, using the four generated
+limb checks rather than a parser axiom.
 After that equality is instantiated, the remaining release composition is the
 accepted-trace implication into the maintained restored K1.2--K1.6 security
 bound and the outer transaction dispatch implication.  Exact focused evidence

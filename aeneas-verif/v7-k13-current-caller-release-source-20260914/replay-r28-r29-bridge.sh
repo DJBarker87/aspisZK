@@ -8,6 +8,7 @@ output=${4:?usage: replay-r28-r29-bridge.sh BUNDLE_DIR REPO_ROOT R26_OLEAN_DIR O
 
 generated="$bundle/generated/V7ProductionSnapshotObserverR28"
 proof="$bundle/proof-r28"
+proof_r30="$bundle/proof-r30"
 old_callbacks="$repo/aeneas-verif/v7-tag73-current-caller-source-20260830/proof"
 stage="$output/staged-r29"
 arith=/home/dombarker/project-offloads/v7-gate-closure-prechallenge-return-r22/arithmetic-lean432-cache-current
@@ -102,5 +103,7 @@ compile_to "$proof/V7ProductionSnapshotObserverR28ToR26Prechallenge.lean" \
   "$output/V7ProductionSnapshotObserverR28ToR26Prechallenge.olean"
 compile_to "$proof/V7ProductionSnapshotObserverR28AcceptedTail.lean" \
   "$output/V7ProductionSnapshotObserverR28AcceptedTail.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30FixedFieldCanonical.lean" \
+  "$output/V7CallerCurrentReleaseR30FixedFieldCanonical.olean"
 
-echo "FINAL target=V7ProductionSnapshotObserverR28AcceptedTail status=passed"
+echo "FINAL target=V7CallerCurrentReleaseR30FixedFieldCanonical status=passed"
