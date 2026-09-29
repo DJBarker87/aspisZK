@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/aspis-r45-lean-src-20260929-a/AspisV8R19/SourceNaturalShift.lean:16:55: error: Tactic `decide` failed for proposition
+  ∀ (b : Fin 17) (o : Fin 32),
+    let j := 32 * ↑b + ↑o;
+    j < 513 → indexLoop 10 j 0 = some (carryEdges j)
+because its `Decidable` instance
+  Nat.decidableForallFin fun b =>
+    ∀ (o : Fin 32),
+      let j := 32 * ↑b + ↑o;
+      j < 513 → indexLoop 10 j 0 = some (carryEdges j)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decidable_of_decidable_of_iff`, `decidable_of_iff`, `forall_prop_decidable`, `instDecidableEqBool`, `instDecidableEqList`, `instDecidableEqNat`, `Bool.decEq`, `Nat.decEq`, `Nat.decLe`, `Nat.decLt`, `Nat.decidableBallLT`, `Nat.decidableForallFin`, and `Option.instDecidableEq`, reduction got stuck at the `Decidable` instance
+  match carryEdges (32 * ↑⟨0, ⋯⟩ + ↑⟨0, ⋯⟩) with
+  | [] => isFalse ⋯
+  | b :: bs =>
+    match decEq (32 * ↑⟨0, ⋯⟩ + ↑⟨0, ⋯⟩ ||| 2 ^ 0, 0) b with
+    | isTrue hab =>
+      match [].hasDecEq bs with
+      | isTrue habs => isTrue ⋯
+      | isFalse nabs => isFalse ⋯
+    | isFalse nab => isFalse ⋯
+/home/dombarker/project-offloads/aspis-r45-lean-src-20260929-a/AspisV8R19/SourceNaturalShift.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ?f ↑i
+in the target expression
+  ∑ i, ((fun e => C (2⁻¹ ^ e.2) * naturalLinePoly K e.1) ∘ fun k => (j - (2 ^ (↑k + 1) - 1), ↑k + 1)) i +
+      C (2⁻¹ ^ trailingOnes j) * naturalLinePoly K (j + 1) =
+    X * naturalLinePoly K j
+
+K : Type u_1
+inst✝¹ : Field K
+inst✝ : NeZero 2
+j : ℕ
+h :
+  C (dyadic (trailingOnes j)) * naturalLinePoly K (j + 1) +
+      ∑ carry ∈ Finset.range (trailingOnes j), C (dyadic (carry + 1)) * naturalLinePoly K (j - (2 ^ (carry + 1) - 1)) =
+    X * naturalLinePoly K j
+⊢ ∑ i, ((fun e => C (2⁻¹ ^ e.2) * naturalLinePoly K e.1) ∘ fun k => (j - (2 ^ (↑k + 1) - 1), ↑k + 1)) i +
+      C (2⁻¹ ^ trailingOnes j) * naturalLinePoly K (j + 1) =
+    X * naturalLinePoly K j
+/home/dombarker/project-offloads/aspis-r45-lean-src-20260929-a/AspisV8R19/SourceNaturalShift.lean:46:14: error(lean.unknownIdentifier): Unknown constant `Polynomial.eval_list_sum`
+/home/dombarker/project-offloads/aspis-r45-lean-src-20260929-a/AspisV8R19/SourceNaturalShift.lean:46:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  eval x (List.map (fun e => C (2⁻¹ ^ e.2) * naturalLinePoly K e.1) (carryEdges j)).sum =
+    x * eval x (naturalLinePoly K j)
+but is expected to have type
+  (List.map (fun x_1 => 2⁻¹ ^ x_1.2 * eval x (naturalLinePoly K x_1.1)) (carryEdges j)).sum =
+    x * eval x (naturalLinePoly K j)
+'AspisR19.SourceNaturalShift.schedule_certificate' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR19.SourceNaturalShift.schedule_formula' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR19.SourceNaturalShift.carry_polynomial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR19.SourceNaturalShift.sourceGather_natural' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -R /home/dombarker/project-offloads/aspis-r45-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r45-lean-20260929-c/lib/AspisV8R19/SourceNaturalShift.olean /home/dombarker/project-offloads/aspis-r45-lean-src-20260929-a/AspisV8R19/SourceNaturalShift.lean"
+	User time (seconds): 0.86
+	System time (seconds): 0.32
+	Percent of CPU this job got: 119%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.99
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2288584
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 52940
+	Voluntary context switches: 3544
+	Involuntary context switches: 53
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

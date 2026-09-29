@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R45 source-mask transport and encoded OOD bridge — 2026-09-29
+
+[R45_SOURCE_MASK_TRANSPORT.md](R45_SOURCE_MASK_TRANSPORT.md) adds 46 compiled
+Lean theorems: the pinned T163 inverse lifts the normalized section to legal
+balanced G corrections, preserves all 271 sparse coins, and preserves both
+encoded OOD openings with proved image tails and safe truncation. The old
+generic carry proof is reused. G's active coordinates remain free; H1's
+active-zero condition is a separate obligation.
+
+First remaining: identify the executable descending remainder loop with
+the unique normalized interpolation section, then compose the actual raw
+circle evaluator and all residual source equations. The new degree bound,
+accepted-prefix oracle law and full privacy remain open. No verifier change
+or new Rust/SBF run; CU stays 1,620,236 / 1,621,719 and both 1M runs exhaust.
+
 ## R44 normalized fixed-query section — 2026-09-29
 
 [R44_NORMALIZED_QUERY_SECTION.md](R44_NORMALIZED_QUERY_SECTION.md) proves
