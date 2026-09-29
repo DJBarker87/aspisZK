@@ -1,5 +1,19 @@
 # Current V8 privacy-repair status
 
+## R73 actual squeeze framing and explicit adapter — 2026-09-29
+
+[R73_SQUEEZE_SOURCE.md](R73_SQUEEZE_SOURCE.md) proves exact generated squeeze
+framing for an arbitrary hash backend, preserving failure/divergence, and
+matches the retained duplex step under an explicitly constructed total hash
+adapter. Two Lean leaves compile; 17 theorem audits use standard Lean axioms
+only. This is not concrete SHA ideality, independent-answer sampling or a
+whole-program oracle trace theorem. R72's inner `Formatter` dependency remains.
+
+Next: actual inner-sampler safe slicing, little-endian words, P rejection,
+block rollover, bounded retries and mutable four-limb iteration. Full
+privacy/soundness remains open. Runtime and CU unchanged:
+**1,495,663 / 1,497,050**, both actual 1M runs still exhaust.
+
 ## R72 actual sampler extraction and outer execution — 2026-09-29
 
 [R72_SAMPLER_SOURCE.md](R72_SAMPLER_SOURCE.md) compiles template-free extraction
