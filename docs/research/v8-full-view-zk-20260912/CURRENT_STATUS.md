@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R58 paired Copy tag-base factoring — 2026-09-29
+
+[R58_TAG_BASE.md](R58_TAG_BASE.md) selects paired small-offset tag sums and
+pattern-base shifts at **1,540,502 / 1,541,957 CU**, saving 13,946 / 13,968
+versus R57 on unchanged proofs. The 9,600 coordinate, 640 finishing, retained
+source/full-lane and 3,281 wire controls pass, as do SBF stack and full SVM
+gates. Eight generic arithmetic Lean theorems compile. The exact trace
+attributes the saving to the tag rewrite and its caller overhead.
+Both actual 1M runs still exhaust; **541,957 CU remains** on the slower fixture.
+
+Next CU work: actual general/short-dot caller reuse and remaining native
+semantic/ordinary work, with measured selection. Universal sampler/field
+source refinement and full shared-oracle/transcript/retry/publication privacy
+composition remain open; pre-beta extraction is a separate soundness task.
+No protocol, hiding assumption or production path changed.
+
 ## R57 source-derived selector gather — 2026-09-29
 
 [R57_SELECTOR_GATHER.md](R57_SELECTOR_GATHER.md) selects a Copy-lane gather at
