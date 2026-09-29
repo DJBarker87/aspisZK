@@ -137,20 +137,20 @@ theorem usizeOneSucc :
     Nat.mod_eq_of_lt (by have h := (2#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem castUsizeTwoU8 :
+theorem castUsizeTwoU8 :
     UScalar.cast .U8 2#usize = 2#u8 := by
   apply UScalar.val_eq_imp
   rw [UScalar.cast_val_eq]
   rfl
 
-private theorem usizeTwoSucc :
+theorem usizeTwoSucc :
     Std.Usize.wrapping_add 2#usize 1#usize = 3#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
     Nat.mod_eq_of_lt (by have h := (3#usize).hSize; scalar_tac)]
   norm_num
 
-private theorem castUsizeOneU8 :
+theorem castUsizeOneU8 :
     UScalar.cast .U8 1#usize = 1#u8 := by
   apply UScalar.val_eq_imp
   rw [UScalar.cast_val_eq]
