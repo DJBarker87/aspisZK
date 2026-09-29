@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R62 ordinary correction gather — 2026-09-29
+
+[R62_ORDINARY_GATHER.md](R62_ORDINARY_GATHER.md) selects source-derived
+19-output/181-term gathering with R59's checked dot. Complete primary CU is
+**1,497,377 / 1,498,764**, saving 10,046 / 10,041 against R61. The existing
+two-product and generic-dot alternatives were slower and are retained as
+rejected controls. Source/general-terminal, poisoned workspace, full-wire,
+stack and complete SVM checks pass. Three focused arithmetic Lean theorems
+compile; they are not universal Rust refinement or a privacy theorem.
+
+Both actual 1M-cap runs still exhaust; **498,764 CU remains**. No protocol,
+T163, sparse G or validation change. R60's generated inverse-loop source bridge
+remains the first security proposition; full oracle/seed/transcript/retry/
+publication privacy and coherent pre-beta extraction are still open.
+
 ## R61 retained fixed-width opening kernel — 2026-09-29
 
 [R61_OPENING_REUSE.md](R61_OPENING_REUSE.md) restores the old optimized
