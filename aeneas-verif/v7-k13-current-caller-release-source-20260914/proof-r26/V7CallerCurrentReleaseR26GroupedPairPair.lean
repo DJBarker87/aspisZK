@@ -44,7 +44,7 @@ private def pairCounts22 : Array Std.U8 4#usize :=
 private def pairFirstSlots : Array Std.U8 4#usize :=
   Array.make 4#usize [0#u8, 2#u8, 0#u8, 0#u8]
 
-private theorem rangeNext0End2 :
+theorem rangeNext0End2 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 0#usize, «end» := 2#usize } =
       ok (some 0#usize, { start := 1#usize, «end» := 2#usize }) := by
@@ -56,7 +56,7 @@ private theorem rangeNext0End2 :
     core.iter.range.UScalarStep.forward_checked,
     core.cmp.impls.PartialOrdUsize.lt, hmax]
 
-private theorem rangeNext1End2 :
+theorem rangeNext1End2 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 1#usize, «end» := 2#usize } =
       ok (some 1#usize, { start := 2#usize, «end» := 2#usize }) := by
@@ -68,7 +68,7 @@ private theorem rangeNext1End2 :
     core.iter.range.UScalarStep.forward_checked,
     core.cmp.impls.PartialOrdUsize.lt, hmax]
 
-private theorem rangeDone2 :
+theorem rangeDone2 :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize
         { start := 2#usize, «end» := 2#usize } =
       ok (none, { start := 2#usize, «end» := 2#usize }) := by
@@ -130,7 +130,7 @@ private theorem pairFindSecondGroup :
   rw [loop.eq_1]
   rw [pairFindSecondDone]
 
-private theorem usizeOneSucc :
+theorem usizeOneSucc :
     Std.Usize.wrapping_add 1#usize 1#usize = 2#usize := by
   apply UScalar.val_eq_imp
   rw [Std.Usize.wrapping_add_val_eq,
