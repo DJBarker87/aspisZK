@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R84 tensor transport experiment — 2026-09-29
+
+[R84_TENSOR_TRANSPORT.md](R84_TENSOR_TRANSPORT.md) records a **new-profile**
+complete result of **1,212,653 / 1,210,833 CU**. Both actual 1M honest runs
+still exhaust; 212,653 CU remains. This profile is **not security-promoted**;
+R83 below remains the selected unchanged-profile control.
+
+The supplied one-swap map passes algebra but fails the retained H1 rank gate
+(539 versus 540). Its extra public dependency is localized to H1 rows 993/
+1008, balance and Final256[255]; both tested affine targets remain compatible.
+A separate second swap at code positions 126/1021 restores the expected H1
+rank and passes both actual C1/H1/G opposite-witness audits, including channel
+messages and first relation. Its compact evaluator, new honest proofs, wire
+controls and SBF execution pass. Universal source coverage/extraction/privacy
+remain open; no security parameters or checks were weakened. No Lean work.
+
 ## R83 unchanged-proof composition — 2026-09-29
 
 [R83_NATIVE_COMPOSITION.md](R83_NATIVE_COMPOSITION.md) records the selected

@@ -1,0 +1,98 @@
+//! Source-inventory and full-QM31 algebra preflight only; no security theorem.
+extern crate aspis_core as corelib;
+extern crate aspis_statement;
+#[path="r16_basis_transport.rs"] mod basis_transport;
+mod r17_tensor_prefix;
+mod r17_structured_g;
+use r17_structured_g as structured_g;
+mod r18_sparse_coded_g;
+mod r17_mask_workspace;
+mod r17_opening_weights;
+use corelib::field::{CM31,M31,QM31 as K,P};
+use corelib::sumcheck::WeightAccumulator;
+mod frozen {include!("r17_basis_tables.rs");}
+fn base(j:usize)->usize {(j&1)|(((j>>1)&63)<<4)|(((j>>7)^7)<<1)}
+fn transformed(z:[K;10])->[K;10] {
+    [z[0],z[4],z[5],z[6],z[7],z[8],z[9],K::ONE.sub(z[1]),K::ONE.sub(z[2]),K::ONE.sub(z[3])]
+}
+fn tensor(z:&[K;10],j:usize)->K {
+    (0..10).fold(K::ONE,|v,b|v.mul(if j&(1<<b)==0 {K::ONE.sub(z[b])}else{z[b]}))
+}
+fn sample(state:&mut u64)->K {
+    let mut limb=||{*state^=*state<<13;*state^=*state>>7;*state^=*state<<17;M31((*state%u64::from(P))as u32)};
+    K{c0:CM31::new(limb(),limb()),c1:CM31::new(limb(),limb())}
+}
+fn dot(a:&[K],b:&[K])->K {a.iter().zip(b).fold(K::ZERO,|s,(&x,&y)|s.add(x.mul(y)))}
+fn fold(v:Vec<K>,a:[K;4])->[K;4] {
+    let mut w=WeightAccumulator::empty(10);w.add_dense(v).unwrap();
+    for x in a {w.fold_deferred_relation_arity4(x);}w.weight_prefix::<4>()
+}
+fn main() {
+    let t=basis_transport::transport();let mut sorted=t.order.clone();sorted.sort_unstable();
+    assert_eq!(sorted,(0..1024).collect::<Vec<_>>());assert_eq!(t.order,frozen::ORDER);
+    assert_eq!(t.inactive,frozen::INACTIVE);assert_eq!(t.order[1023],1023);
+    let cells=aspis_statement::pool_v1::pool_v1_pair_forest_relation_free_mask_cells_v1().unwrap();
+    let active=aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_rows_v1().unwrap();
+    for j in 0..89 {
+        let r=t.order[j];assert_eq!(r,16*(j/2)+14+j%2);assert!(!active.contains(&(r as u16)));
+        assert!(r!=1014 && r!=1023);
+        for col in 0..16 {assert!(cells.iter().any(|c|c.row as usize==r && c.column as usize==col));}
+        let mut unit=vec![K::ZERO;1024];unit[r]=K::ONE;unit[1023]=K::ONE.neg();
+        let mut expected=vec![K::ZERO;1024];expected[j]=K::ONE;
+        assert_eq!(t.forward(&unit),expected);assert_eq!(t.inverse(&expected),unit);
+    }
+    for j in 0..1024 {
+        let mut unit=vec![K::ZERO;1024];unit[j]=K::ONE;
+        assert_eq!(t.inverse(&t.forward(&unit)),unit);
+        assert_eq!(t.forward(&t.inverse(&unit)),unit);
+    }
+    println!("R84_INVENTORY permutation=1024 all_column_legal_pads=89 balanced_pad_images=89 inverse_basis_cases=1024 pivot=1023 source_table_equal=true");
+    let mut seed=0x843719ac39b2645u64;
+    for case in 0..64 {
+        let z=core::array::from_fn(|_|if case==0 {K::ZERO}else if case==1 {K::ONE}else{sample(&mut seed)});
+        let zp=transformed(z);let h:Vec<_>=(0..1024).map(|_|sample(&mut seed)).collect();
+        let w:Vec<_>=(0..1024).map(|j|tensor(&z,j)).collect();
+        for j in 0..1024 {assert_eq!(w[base(j)],tensor(&zp,j));}
+        let wb:Vec<_>=(0..1024).map(|j|w[base(j)]).collect();
+        let ws:Vec<_>=t.order.iter().map(|&j|w[j]).collect();
+        assert_eq!(dot(&ws,&h).sub(dot(&wb,&h)),wb[1023].sub(wb[127]).mul(h[127].sub(h[1023])));
+        assert_eq!(dot(&t.forward(&h),&t.dual(&w)),dot(&h,&w));
+        // Full transported ordinary + G functional, not just a tensor map.
+        // The source's point convention is big-endian; convert explicitly.
+        let source_z: [K;10]=core::array::from_fn(|b|z[9-b]);
+        let points=corelib::v6_transcript::v6_statement_points(&source_z);
+        let k=sample(&mut seed);let k2=k.square();let scales=[k,k2,k2.mul(k)];
+        let beta=match case {0=>K::ZERO,1=>K::ONE,2=>K::ONE.neg(),_=>sample(&mut seed)};
+        let tau=sample(&mut seed);let abc=core::array::from_fn(|_|sample(&mut seed));
+        let a=core::array::from_fn(|_|if case==3 {K::ZERO}else if case==4 {K::ONE}else{sample(&mut seed)});
+        let finals:[K;4]=core::array::from_fn(|_|sample(&mut seed));
+        let mut cheap=vec![K::ZERO;1024];let mut pivot=K::ZERO;
+        for r in 0..3 {
+            let low: [K;10]=core::array::from_fn(|b|points[r][9-b]);
+            let tp=transformed(low);let scale=if r==0 {K::ONE.sub(beta).mul(scales[r])}else{scales[r]};
+            for j in 0..1024 {cheap[j]=cheap[j].add(scale.mul(tensor(&tp,j)));}
+            let swap=scale.mul(tensor(&tp,1023).sub(tensor(&tp,127)));
+            cheap[127]=cheap[127].add(swap);cheap[1023]=cheap[1023].sub(swap);
+            pivot=pivot.add(scale.mul(tensor(&low,1023)));
+        }
+        for j in 0..1023 {if t.inactive[t.order[j]] {cheap[j]=cheap[j].sub(pivot);}}
+        cheap[1023]=cheap[1023].add(K::ONE); // balanced inactive claim
+        let mut coins=vec![K::ZERO;271];r18_sparse_coded_g::coin_weights_into(&source_z,&mut coins);
+        for i in 0..271 {let j=r18_sparse_coded_g::slot(i);cheap[j]=cheap[j].add(beta.mul(k).mul(coins[i]));}
+        let wr=r17_opening_weights::original_weights_reference(&source_z,k,false);
+        let wg=r17_opening_weights::original_weights_reference(&source_z,k,true);
+        let original:Vec<_>=wr.iter().zip(&wg).map(|(&r,&g)|r.add(beta.mul(g.sub(r)))).collect();
+        assert_eq!(cheap,t.dual(&original),"full dual with inactive and balanced pivot");
+        let mut chord=r17_opening_weights::chord_transpose(&cheap,abc);
+        let image1=K::ONE.sub(beta).mul(tau).add(beta.mul(tau.pow(3)));
+        let image2=K::ONE.sub(beta).mul(tau.square()).add(beta.mul(tau.pow(4)));
+        chord[1023]=chord[1023].add(image1);
+        chord[1022]=chord[1022].add(image2.mul(abc[1]));
+        chord[1021]=chord[1021].sub(image2.mul(abc[2]));
+        let r=r17_opening_weights::quotient_weights(&source_z,k,abc,tau,false);
+        let g=r17_opening_weights::quotient_weights(&source_z,k,abc,tau,true);
+        let dense:Vec<_>=(0..1024).map(|i|r.weight_at(i).add(beta.mul(g.weight_at(i).sub(r.weight_at(i))))).collect();
+        assert_eq!(chord,dense);assert_eq!(dot(&fold(chord,a),&finals),dot(&fold(dense,a),&finals));
+    }
+    println!("R84_FUNCTIONAL qm31_cases=64 tensor_coefficients=65536 arbitrary_swap_pairings=64 full_dual_chord_image_final_cases=64 full_privacy_proved=false compact_sbf_implemented=false");
+}
