@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R67 circle-map source-tool obstruction — 2026-09-29
+
+[R67_CIRCLE_SOURCE_OBSTRUCTION.md](R67_CIRCLE_SOURCE_OBSTRUCTION.md) records the
+full-map extraction attempt: unchanged source reaches LLBC, then Aeneas rejects
+a pure conversion function item. A pinned extraction-only eta expansion gets
+past that error but exposes seven missing library model declarations. Its
+axiom templates are rejected as proof inputs. **No new Lean theorem or complete
+circle-map execution proof is claimed.**
+
+Next: source-grounded array/iterator/option support and pure-function-item
+lowering (or verified normalization), then guarded QM31/circle execution and
+the bounded sampler observer. Both jobs ended without memory pressure. R66's
+proved inverse boundary stands. Full privacy/soundness remains open; runtime
+and CU are unchanged at **1,497,377 / 1,498,764**.
+
 ## R66 generated QM31 try-inverse — 2026-09-29
 
 [R66_QUARTIC_INVERSE.md](R66_QUARTIC_INVERSE.md) proves the selected optimized
