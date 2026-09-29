@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R66 generated QM31 try-inverse — 2026-09-29
+
+[R66_QUARTIC_INVERSE.md](R66_QUARTIC_INVERSE.md) proves the selected optimized
+CM31 kernels and QM31 `try_inv` closure on every canonical input. Zero returns
+`None`; nonzero returns a canonical exact inverse; internal `Result` failures
+are excluded. A compiled corollary connects the result to R60's inverse model.
+Four focused leaves compile with 44 theorem/axioms audits and no new axioms.
+
+Next: source execution of the complete circle map, starting with its guarded
+QM31 multiplication path and preserving singularity-before-subfield error
+order, then the bounded sampler/observer. This is not a verified compiler or
+full-transcript privacy theorem. Oracle/seed/commitment/semantic/retry/
+publication and pre-beta soundness gates remain open. Runtime/CU unchanged:
+**1,497,377 / 1,498,764**; both actual 1M runs still exhaust.
+
 ## R65 generated CM31 inverse — 2026-09-29
 
 [R65_COMPLEX_INVERSE.md](R65_COMPLEX_INVERSE.md) proves the actual checked CM31
