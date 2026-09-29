@@ -230,17 +230,20 @@ theorem accepted_terminal_source_corresponds
   have alpha0Exact : semantics.trace.alpha0 = source.roundOne.alphaOne := by
     have read : semantics.trace.alpha0 = source.roundThree.q1 := by
       have run := semantics.trace.alpha0Read
-      simpa [Array.index_usize] using (Result.ok.inj run).symm
+      change ok source.roundThree.q1 = ok semantics.trace.alpha0 at run
+      exact (Result.ok.inj run).symm
     exact read.trans rounds.q1Exact
   have alpha1Exact : semantics.trace.alpha1 = source.roundTwo.alphaTwo := by
     have read : semantics.trace.alpha1 = source.roundThree.q2 := by
       have run := semantics.trace.alpha1Read
-      simpa [Array.index_usize] using (Result.ok.inj run).symm
+      change ok source.roundThree.q2 = ok semantics.trace.alpha1 at run
+      exact (Result.ok.inj run).symm
     exact read.trans rounds.q2Exact
   have alpha2Exact : semantics.trace.alpha2 = source.roundThree.alphaThree := by
     have read : semantics.trace.alpha2 = source.roundThree.q3 := by
       have run := semantics.trace.alpha2Read
-      simpa [Array.index_usize] using (Result.ok.inj run).symm
+      change ok source.roundThree.q3 = ok semantics.trace.alpha2 at run
+      exact (Result.ok.inj run).symm
     exact read.trans rounds.q3Exact
   let vector := accepted_weight_vector_corresponds semantics
   have finalWeightsExact :

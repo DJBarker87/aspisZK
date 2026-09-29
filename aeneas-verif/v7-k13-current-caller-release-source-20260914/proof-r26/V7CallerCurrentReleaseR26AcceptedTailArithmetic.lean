@@ -31,29 +31,56 @@ open AspisV5RelationSumcheckSoundness
 abbrev TailState (Trace : Type) :=
   V7CallerCurrentReleaseR26AcceptedTailSnapshot.TailState Trace
 
+private theorem arrayIndexRun
+    {T : Type} [Inhabited T] {N : Std.Usize}
+    (values : Array T N) (index : Std.Usize) (bound : index.val < N.val) :
+    Array.index_usize values index = ok values.val[index.val]! := by
+  obtain ⟨value, run, exact⟩ := Aeneas.Std.WP.spec_imp_exists
+    (Array.index_usize_spec values index (by
+      simpa [Array.length_eq] using bound))
+  have listBound : index.val < values.val.length := by
+    simpa [Array.length_eq] using bound
+  have listExact : values.val[index.val] = values.val[index.val]! := by
+    symm
+    apply List.getElem!_of_getElem?
+    simpa using listBound
+  simpa [exact, listExact] using run
+
+private theorem arrayUpdateReadsSame
+    {T : Type} [Inhabited T] {N : Std.Usize}
+    (values updated : Array T N) (index : Std.Usize) (value : T)
+    (bound : index.val < N.val)
+    (run : values.update index value = ok updated) :
+    updated.index_usize index = ok value := by
+  obtain ⟨expected, expectedRun, expectedExact⟩ :=
+    Aeneas.Std.WP.spec_imp_exists
+      (Array.update_spec values index value (by
+        simpa [Array.length_eq] using bound))
+  have updatedExact : updated = values.set index value :=
+    (Result.ok.inj (run.symm.trans expectedRun)).trans expectedExact
+  rw [updatedExact, arrayIndexRun (values.set index value) index bound]
+  congr 1
+  simp only [Array.set_val_eq]
+  apply List.set_getElem!_eq
+  exact ⟨by simpa [Array.length_eq] using bound, rfl⟩
+
 private theorem update_one_reads_one
     (values updated : Array field.QM31 4#usize) (value : field.QM31)
     (run : values.update 1#usize value = ok updated) :
-    updated.index_usize 1#usize = ok value := by
-  simp [Array.update] at run
-  subst updated
-  simp [Array.index_usize]
+    updated.index_usize 1#usize = ok value :=
+  arrayUpdateReadsSame values updated 1#usize value (by norm_num) run
 
 private theorem update_two_reads_two
     (values updated : Array field.QM31 4#usize) (value : field.QM31)
     (run : values.update 2#usize value = ok updated) :
-    updated.index_usize 2#usize = ok value := by
-  simp [Array.update] at run
-  subst updated
-  simp [Array.index_usize]
+    updated.index_usize 2#usize = ok value :=
+  arrayUpdateReadsSame values updated 2#usize value (by norm_num) run
 
 private theorem update_three_reads_three
     (values updated : Array field.QM31 4#usize) (value : field.QM31)
     (run : values.update 3#usize value = ok updated) :
-    updated.index_usize 3#usize = ok value := by
-  simp [Array.update] at run
-  subst updated
-  simp [Array.index_usize]
+    updated.index_usize 3#usize = ok value :=
+  arrayUpdateReadsSame values updated 3#usize value (by norm_num) run
 
 /-- The round-one evaluator consumes the challenge just written to alpha slot
 one and returns exact evaluation of the decoded degree-six polynomial. -/

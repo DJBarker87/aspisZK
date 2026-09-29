@@ -118,7 +118,8 @@ theorem accepted_relation_tail_weights_correspond
     intro trace
     have exact : trace.alpha0 = source.roundThree.q1 := by
       have run := trace.alpha0Read
-      simpa [Array.index_usize] using (Result.ok.inj run).symm
+      change ok source.roundThree.q1 = ok trace.alpha0 at run
+      exact (Result.ok.inj run).symm
     rw [exact]
     exact q1Canonical
   have alpha1Canonical : ∀ trace : AcceptedTailWeightFoldTrace
@@ -130,7 +131,8 @@ theorem accepted_relation_tail_weights_correspond
     intro trace
     have exact : trace.alpha1 = source.roundThree.q2 := by
       have run := trace.alpha1Read
-      simpa [Array.index_usize] using (Result.ok.inj run).symm
+      change ok source.roundThree.q2 = ok trace.alpha1 at run
+      exact (Result.ok.inj run).symm
     rw [exact]
     exact q2Canonical
   have alpha2Canonical : ∀ trace : AcceptedTailWeightFoldTrace
@@ -142,7 +144,8 @@ theorem accepted_relation_tail_weights_correspond
     intro trace
     have exact : trace.alpha2 = source.roundThree.q3 := by
       have run := trace.alpha2Read
-      simpa [Array.index_usize] using (Result.ok.inj run).symm
+      change ok source.roundThree.q3 = ok trace.alpha2 at run
+      exact (Result.ok.inj run).symm
     rw [exact]
     exact q3Canonical
   exact accepted_weight_fold_corresponds source.afterTwo.2.2.2.2.1
