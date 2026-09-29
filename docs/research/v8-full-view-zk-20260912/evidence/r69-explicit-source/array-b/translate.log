@@ -1,0 +1,291 @@
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/aspis-r69-array-20260929-b/R69Circle.llbc
+Uncaught exception:
+  
+  (Invalid_argument
+    "Can't get the list of fields of this adt:\
+   \n{ Generated_Types.def_id = 54;\
+   \n  item_meta =\
+   \n  { Generated_Types.name =\
+   \n    [(Generated_Types.PeIdent (\"core\", 0));\
+   \n      (Generated_Types.PeIdent (\"mem\", 0));\
+   \n      (Generated_Types.PeIdent (\"manually_drop\", 0));\
+   \n      (Generated_Types.PeIdent (\"ManuallyDrop\", 0))];\
+   \n    span =\
+   \n    { Generated_Meta.data =\
+   \n      { Generated_Meta.file =\
+   \n        { Generated_Meta.name =\
+   \n          (Generated_Meta.Local\
+   \n             \"/rustc/library/core/src/mem/manually_drop.rs\");\
+   \n          crate_name = \"core\"; contents = None };\
+   \n        beg_loc = { Generated_Meta.line = 161; col = 0 };\
+   \n        end_loc = { Generated_Meta.line = 161; col = 34 } };\
+   \n      generated_from_span = None };\
+   \n    source_text = None;\
+   \n    attr_info =\
+   \n    { Generated_Meta.attributes =\
+   \n      [(Generated_Meta.AttrDocComment\
+   \n          \" A wrapper to inhibit the compiler from automatically calling `T`\\226\\128\\153s\");\
+   \n        (Generated_Meta.AttrDocComment \" destructor. This wrapper is 0-cost.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" `ManuallyDrop<T>` is guaranteed to have the same layout and bit validity as\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" `T`, and is subject to the same layout optimizations as `T`. As a\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" consequence, it has *no effect* on the assumptions that the compiler makes\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" about its contents. For example, initializing a `ManuallyDrop<&mut T>` with\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [`mem::zeroed`] is undefined behavior. If you need to handle uninitialized\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" data, use [`MaybeUninit<T>`] instead.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Note that accessing the value inside a `ManuallyDrop<T>` is safe. This means\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" that a `ManuallyDrop<T>` whose content has been dropped must not be exposed\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" through a public safe API. Correspondingly, `ManuallyDrop::drop` is unsafe.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" # `ManuallyDrop` and drop order\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Rust has a well-defined [drop order] of values. To make sure that fields or\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" locals are dropped in a specific order, reorder the declarations such that\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" the implicit drop order is the correct one.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" It is possible to use `ManuallyDrop` to control the drop order, but this\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" requires unsafe code and is hard to do correctly in the presence of\");\
+   \n        (Generated_Meta.AttrDocComment \" unwinding.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" For example, if you want to make sure that a specific field is dropped after\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" the others, make it the last field of a struct:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" ```\");\
+   \n        (Generated_Meta.AttrDocComment \" struct Context;\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" struct Widget {\");\
+   \n        (Generated_Meta.AttrDocComment \"     children: Vec<Widget>,\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"     // `context` will be dropped after `children`.\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"     // Rust guarantees that fields are dropped in the order of declaration.\");\
+   \n        (Generated_Meta.AttrDocComment \"     context: Context,\");\
+   \n        (Generated_Meta.AttrDocComment \" }\");\
+   \n        (Generated_Meta.AttrDocComment \" ```\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" # Interaction with `Box`\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Currently, if you have a `ManuallyDrop<T>`, where the type `T` is a `Box` or\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" contains a `Box` inside, then dropping the `T` followed by moving the\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" `ManuallyDrop<T>` is [considered to be undefined\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" behavior](https://github.com/rust-lang/unsafe-code-guidelines/issues/245).\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" That is, the following code causes undefined behavior:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" ```no_run\");\
+   \n        (Generated_Meta.AttrDocComment \" use std::mem::ManuallyDrop;\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" let mut x = ManuallyDrop::new(Box::new(42));\");\
+   \n        (Generated_Meta.AttrDocComment \" unsafe {\");\
+   \n        (Generated_Meta.AttrDocComment \"     ManuallyDrop::drop(&mut x);\");\
+   \n        (Generated_Meta.AttrDocComment \" }\");\
+   \n        (Generated_Meta.AttrDocComment \" let y = x; // Undefined behavior!\");\
+   \n        (Generated_Meta.AttrDocComment \" ```\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" This is [likely to change in the\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" future](https://rust-lang.github.io/rfcs/3336-maybe-dangling.html). In the\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" meantime, consider using [`MaybeUninit`] instead.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" # Safety hazards when storing `ManuallyDrop` in a struct or an enum.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Special care is needed when all of the conditions below are met:\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" * A struct or enum contains a `ManuallyDrop`.\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" * The `ManuallyDrop` is not inside a `union`.\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" * The struct or enum is part of public API, or is stored in a struct or an\");\
+   \n        (Generated_Meta.AttrDocComment \"   enum that is part of public API.\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" * There is code that drops the contents of the `ManuallyDrop` field, and\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"   this code is outside the struct or enum's `Drop` implementation.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" In particular, the following hazards may occur:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" #### Storing generic types\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" If the `ManuallyDrop` contains a client-supplied generic type, the client\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" might provide a `Box` as that type. This would cause undefined behavior when\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" the struct or enum is later moved, as mentioned in the previous section. For\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" example, the following code causes undefined behavior:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" ```no_run\");\
+   \n        (Generated_Meta.AttrDocComment \" use std::mem::ManuallyDrop;\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" pub struct BadOption<T> {\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"     // Invariant: Has been dropped if `is_some` is false.\");\
+   \n        (Generated_Meta.AttrDocComment \"     value: ManuallyDrop<T>,\");\
+   \n        (Generated_Meta.AttrDocComment \"     is_some: bool,\");\
+   \n        (Generated_Meta.AttrDocComment \" }\");\
+   \n        (Generated_Meta.AttrDocComment \" impl<T> BadOption<T> {\");\
+   \n        (Generated_Meta.AttrDocComment \"     pub fn new(value: T) -> Self {\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"         Self { value: ManuallyDrop::new(value), is_some: true }\");\
+   \n        (Generated_Meta.AttrDocComment \"     }\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"     pub fn change_to_none(&mut self) {\");\
+   \n        (Generated_Meta.AttrDocComment \"         if self.is_some {\");\
+   \n        (Generated_Meta.AttrDocComment \"             self.is_some = false;\");\
+   \n        (Generated_Meta.AttrDocComment \"             unsafe {\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"                 // SAFETY: `value` hasn't been dropped yet, as per the invariant\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"                 // (This is actually unsound!)\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"                 ManuallyDrop::drop(&mut self.value);\");\
+   \n        (Generated_Meta.AttrDocComment \"             }\");\
+   \n        (Generated_Meta.AttrDocComment \"         }\");\
+   \n        (Generated_Meta.AttrDocComment \"     }\");\
+   \n        (Generated_Meta.AttrDocComment \" }\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" // In another crate:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" let mut option = BadOption::new(Box::new(42));\");\
+   \n        (Generated_Meta.AttrDocComment \" option.change_to_none();\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" let option2 = option; // Undefined behavior!\");\
+   \n        (Generated_Meta.AttrDocComment \" ```\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" #### Deriving traits\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Deriving `Debug`, `Clone`, `PartialEq`, `PartialOrd`, `Ord`, or `Hash` on\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" the struct or enum could be unsound, since the derived implementations of\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" these traits would access the `ManuallyDrop` field. For example, the\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" following code causes undefined behavior:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" ```no_run\");\
+   \n        (Generated_Meta.AttrDocComment \" use std::mem::ManuallyDrop;\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" // This derive is unsound in combination with the `ManuallyDrop::drop` call.\");\
+   \n        (Generated_Meta.AttrDocComment \" #[derive(Debug)]\");\
+   \n        (Generated_Meta.AttrDocComment \" pub struct Foo {\");\
+   \n        (Generated_Meta.AttrDocComment \"     value: ManuallyDrop<String>,\");\
+   \n        (Generated_Meta.AttrDocComment \" }\");\
+   \n        (Generated_Meta.AttrDocComment \" impl Foo {\");\
+   \n        (Generated_Meta.AttrDocComment \"     pub fn new() -> Self {\");\
+   \n        (Generated_Meta.AttrDocComment \"         let mut temp = Self {\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"             value: ManuallyDrop::new(String::from(\\\"Unsafe rust is hard.\\\"))\");\
+   \n        (Generated_Meta.AttrDocComment \"         };\");\
+   \n        (Generated_Meta.AttrDocComment \"         unsafe {\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"             // SAFETY: `value` hasn't been dropped yet.\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \"             ManuallyDrop::drop(&mut temp.value);\");\
+   \n        (Generated_Meta.AttrDocComment \"         }\");\
+   \n        (Generated_Meta.AttrDocComment \"         temp\");\
+   \n        (Generated_Meta.AttrDocComment \"     }\");\
+   \n        (Generated_Meta.AttrDocComment \" }\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" // In another crate:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" let foo = Foo::new();\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" println!(\\\"{:?}\\\", foo); // Undefined behavior!\");\
+   \n        (Generated_Meta.AttrDocComment \" ```\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [drop order]: https://doc.rust-lang.org/reference/destructors.html\");\
+   \n        (Generated_Meta.AttrDocComment \" [`mem::zeroed`]: crate::mem::zeroed\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [`MaybeUninit<T>`]: crate::mem::MaybeUninit\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [`MaybeUninit`]: crate::mem::MaybeUninit\")\
+   \n        ];\
+   \n      inline = None; rename = None; public = true };\
+   \n    is_local = false; opacity = Generated_Types.Foreign;\
+   \n    lang_item = (Some \"manually_drop\") };\
+   \n  generics =\
+   \n  { Generated_Types.regions = [];\
+   \n    types = [{ Generated_Types.index = 0; name = \"T\" }]; const_generics = [];\
+   \n    trait_clauses = []; regions_outlive = []; types_outlive = [];\
+   \n    trait_type_constraints = [] };\
+   \n  src = Generated_Types.TopLevelItem; kind = Generated_Types.Opaque;\
+   \n  layout = []; ptr_metadata = Generated_Types.NoMetadata }")
+
+Raised at Charon__TypesUtils.type_decl_get_fields in file "charon-ml/src/TypesUtils.ml", lines 66-68, characters 6-80
+Called from Charon__Substitute.type_decl_get_instantiated_field_types in file "charon-ml/src/Substitute.ml", line 392, characters 15-54
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_types in file "llbc/Contexts.ml" (inlined), line 635, characters 2-79
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_etypes in file "llbc/Contexts.ml" (inlined), lines 643-644, characters 4-14
+Called from Aeneas__InterpExpressions.eval_rvalue_aggregate in file "interp/InterpExpressions.ml", lines 1330-1331, characters 14-39
+Called from Aeneas__InterpExpressions.eval_rvalue_not_global in file "interp/InterpExpressions.ml", line 1502, characters 21-79
+Called from Aeneas__InterpStatements.eval_statement_raw.(fun) in file "interp/InterpStatements.ml", line 922, characters 27-75
+Called from Aeneas__InterpStatements.eval_statement.(fun) in file "interp/InterpStatements.ml", line 866, characters 10-44
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", line 875, characters 29-57
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Aeneas__InterpStatements.eval_function_body.(fun) in file "interp/InterpStatements.ml", line 1842, characters 26-52
+Called from Aeneas__Interp.evaluate_function_symbolic in file "interp/Interp.ml", line 605, characters 25-64
+Called from Aeneas__Translate.translate_function_to_symbolics in file "Translate.ml", line 35, characters 8-71
+Called from Aeneas__Translate.translate_function_to_pure_aux in file "Translate.ml", line 132, characters 4-61
+Called from Aeneas__Translate.translate_function_to_pure in file "Translate.ml", lines 288-289, characters 6-41
+Called from Aeneas__Translate.translate_crate_to_pure.process.(fun) in file "Translate.ml", lines 501-502, characters 16-45
+Called from Stdlib__List.filter_map in file "list.ml", line 280, characters 12-15
+Called from Stdlib__List.filter_map in file "list.ml", line 282, characters 23-37
+Called from Aeneas__Parallel.catch_reraise in file "Parallel.ml", line 17, characters 6-9
+Called from Aeneas__Translate.translate_crate_to_pure in file "Translate.ml", line 519, characters 22-62
+Called from Aeneas__Translate.translate_crate in file "Translate.ml", line 2199, characters 31-71
+Called from Dune__exe__Main in file "Main.ml", lines 743-744, characters 8-37
+Command exited with non-zero status 2
+	Command being timed: "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1 -sequential -no-progress-bar -abort-on-error -backend lean -namespace AspisR69Circle -dest /home/dombarker/project-offloads/aspis-r69-array-20260929-b/generated -subdir AspisR69Circle -split-files -emit-json /home/dombarker/project-offloads/aspis-r69-array-20260929-b/R69Circle.llbc"
+	User time (seconds): 0.47
+	System time (seconds): 0.02
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.50
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 91344
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 17165
+	Voluntary context switches: 1
+	Involuntary context switches: 2
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 40
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 2

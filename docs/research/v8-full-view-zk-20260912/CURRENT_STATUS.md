@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R69 measured explicit kernel and exact extraction — 2026-09-29
+
+[R69_EXPLICIT_SOURCE.md](R69_EXPLICIT_SOURCE.md) selects the fixed-arity helper
+at **1,495,663 / 1,497,050 CU**, 1,714 CU less per unchanged fixture than R62.
+Both actual 1M-cap executions still exhaust. Product differentials, malformed
+constructors, wire controls and complete host/SBF/SVM gates pass.
+
+The measured source extracts without normalization or new external templates:
+38 functions, zero opaque, six types. Three Lean leaves compile; four theorems
+prove noncanonical guard/fallback behavior and the extracted option branches.
+R68's replacement traversal models are not imported by this path. The first
+remaining proposition is **canonical generated-product execution correctness**,
+then circle and bounded sampler composition. Extraction is not that theorem;
+full privacy/soundness and loss bounds remain open. Protocol and transcript
+unchanged; no deployment or wallet operation.
+
 ## R68 traversal models and generated integration — 2026-09-29
 
 [R68_TRAVERSAL_LIBRARY.md](R68_TRAVERSAL_LIBRARY.md) records five compiled Lean

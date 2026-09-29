@@ -1,0 +1,58 @@
+[
+  {
+    "label": "lock",
+    "command": [
+      "cargo",
+      "generate-lockfile",
+      "--offline"
+    ],
+    "exit": 0
+  },
+  {
+    "label": "extract",
+    "command": [
+      "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+      "cargo",
+      "--preset",
+      "aeneas",
+      "--mir",
+      "built",
+      "--sysroot",
+      "default",
+      "--start-from",
+      "crate::circle_probe",
+      "--include",
+      "core::option",
+      "--dest-file",
+      "/home/dombarker/project-offloads/aspis-r69-explicit-extracted-20260929-a/R69Explicit.llbc",
+      "--",
+      "--locked",
+      "--offline",
+      "--release",
+      "--lib",
+      "--no-default-features"
+    ],
+    "exit": 0
+  },
+  {
+    "label": "translate",
+    "command": [
+      "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1",
+      "-sequential",
+      "-no-progress-bar",
+      "-abort-on-error",
+      "-backend",
+      "lean",
+      "-namespace",
+      "AspisR69Explicit",
+      "-dest",
+      "/home/dombarker/project-offloads/aspis-r69-explicit-extracted-20260929-a/generated",
+      "-subdir",
+      "AspisR69Explicit",
+      "-split-files",
+      "-emit-json",
+      "/home/dombarker/project-offloads/aspis-r69-explicit-extracted-20260929-a/R69Explicit.llbc"
+    ],
+    "exit": 0
+  }
+]
