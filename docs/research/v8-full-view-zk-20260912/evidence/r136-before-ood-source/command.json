@@ -1,0 +1,14 @@
+{
+  "extract": {
+    "runner": ["systemd-run", "--user", "--wait", "--collect", "--pipe", "-p", "MemoryHigh=5G", "-p", "MemoryMax=7G", "-p", "MemorySwapMax=0", "-p", "TasksMax=128"],
+    "command": ["/usr/bin/time", "-v", "charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--start-from", "crate::before_ood", "--include", "core::option", "--include", "core::result::_::map_err", "--dest-file", "R136BeforeOod.llbc", "--", "--offline", "--locked", "--release", "--jobs", "1", "--features", "insecure-spend-fixture,selected-v7-kernels", "--manifest-path", "PINNED_PERFORMANCE_HOST/Cargo.toml", "--bin", "aspis-v8-performance-host"]
+  },
+  "translate": {
+    "runner": ["systemd-run", "--user", "--wait", "--collect", "--pipe", "-p", "MemoryHigh=5G", "-p", "MemoryMax=7G", "-p", "MemorySwapMax=0", "-p", "TasksMax=128"],
+    "command": ["/usr/bin/time", "-v", "aeneas-repro-r1", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "AspisR136BeforeOod", "-dest", "generated", "-subdir", "AspisR136BeforeOod", "-split-files", "-emit-json", "R136BeforeOod.llbc"]
+  },
+  "lean": {
+    "runner": ["systemd-run", "--user", "--wait", "--collect", "--pipe", "-p", "MemoryHigh=5G", "-p", "MemoryMax=7G", "-p", "MemorySwapMax=0", "-p", "TasksMax=128"],
+    "command": ["/usr/bin/time", "-v", "lean", "-j1", "-M4500", "-o", "OUTPUT_ROOT/AspisV8R19/TwoSwapResidualPolynomial.olean", "SOURCE_ROOT/AspisV8R19/TwoSwapResidualPolynomial.lean"]
+  }
+}

@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## R136 first frozen-source binding boundary — 2026-09-30
+
+[R136_SOURCE_BINDING_BOUNDARY.md](R136_SOURCE_BINDING_BOUNDARY.md) records a
+direct Charon/Aeneas extraction of the frozen selected callback's
+`before_ood` body and one focused compiled two-swap source-matrix bridge.  The
+callback body is no longer represented only by a handwritten schedule, but
+its imported transcript operations remain explicit external templates.  The
+exact external implementation/result bridge, actual sampler admissibility,
+privacy and soundness remain open.
+
 ## R135 explicit selected-schedule execution — 2026-09-30
 
 [R135_SELECTED_SCHEDULE_EXECUTION.md](R135_SELECTED_SCHEDULE_EXECUTION.md)

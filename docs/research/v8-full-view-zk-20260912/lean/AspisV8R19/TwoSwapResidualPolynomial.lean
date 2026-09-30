@@ -50,6 +50,20 @@ theorem unused_coordinates (half quarter : F) (sectionValues : Fin 13 → Fin 32
 section Field
 variable {K : Type*} [Field K] [NeZero (2 : K)]
 
+theorem assigned_eq_source_matrix (half quarter tau : K) (previous : Fin 271 → K)
+    (t : Fin 22 → K) (ht : Function.Injective t) (noneOne : ∀ i, t i≠1)
+    (s : Fin 36 → K) :
+    assigned half quarter (TwoSwapResidualSource.querySection t ht noneOne) s=
+      TwoSwapResidualSource.matrix half quarter (1+s 12*s 13) (s 12*s 13-1)
+        (-(s 12+s 13)) (s 10) (s 11) tau
+        (fun i => s ⟨i.val,by omega⟩) previous t ht noneOne := by
+  unfold assigned normalizedMatrix
+  exact
+    (TwoSwapResidualSource.matrix_eq
+      half quarter (1+s 12*s 13) (s 12*s 13-1) (-(s 12+s 13))
+      (s 10) (s 11) tau (fun i => s ⟨i.val,by omega⟩)
+      previous t ht noneOne).symm
+
 theorem source_evaluation (half quarter tau : K) (previous : Fin 271 → K)
     (t : Fin 22 → K) (ht : Function.Injective t) (noneOne : ∀ i, t i≠1) (s : Fin 36 → K) :
     eval s (polynomial half quarter (TwoSwapResidualSource.querySection t ht noneOne)).det=
@@ -62,6 +76,7 @@ end Field
 #print axioms entry_evaluation
 #print axioms determinant_evaluation
 #print axioms unused_coordinates
+#print axioms assigned_eq_source_matrix
 #print axioms source_evaluation
 end
 end AspisR19.TwoSwapResidualPolynomial
