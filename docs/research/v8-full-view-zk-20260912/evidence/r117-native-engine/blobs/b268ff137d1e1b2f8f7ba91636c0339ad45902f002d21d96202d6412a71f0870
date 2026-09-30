@@ -1,0 +1,154 @@
+// Exact fixed tag matrix from all 136 source links, not a sampled fit.
+#[inline(never)]
+fn r114_tag_limb<const L:usize>(out:&mut[QM31],selectors:&Selectors){
+    assert!(out.len()>=30 && L<4);
+    let h0=u64::from(if L==0{selectors.high[0].c0.a.0}else if L==1{selectors.high[0].c0.b.0}else if L==2{selectors.high[0].c1.a.0}else{selectors.high[0].c1.b.0});
+    let h1=u64::from(if L==0{selectors.high[1].c0.a.0}else if L==1{selectors.high[1].c0.b.0}else if L==2{selectors.high[1].c1.a.0}else{selectors.high[1].c1.b.0});
+    let h2=u64::from(if L==0{selectors.high[2].c0.a.0}else if L==1{selectors.high[2].c0.b.0}else if L==2{selectors.high[2].c1.a.0}else{selectors.high[2].c1.b.0});
+    let h3=u64::from(if L==0{selectors.high[3].c0.a.0}else if L==1{selectors.high[3].c0.b.0}else if L==2{selectors.high[3].c1.a.0}else{selectors.high[3].c1.b.0});
+    let h4=u64::from(if L==0{selectors.high[4].c0.a.0}else if L==1{selectors.high[4].c0.b.0}else if L==2{selectors.high[4].c1.a.0}else{selectors.high[4].c1.b.0});
+    let h5=u64::from(if L==0{selectors.high[5].c0.a.0}else if L==1{selectors.high[5].c0.b.0}else if L==2{selectors.high[5].c1.a.0}else{selectors.high[5].c1.b.0});
+    let h6=u64::from(if L==0{selectors.high[6].c0.a.0}else if L==1{selectors.high[6].c0.b.0}else if L==2{selectors.high[6].c1.a.0}else{selectors.high[6].c1.b.0});
+    let h7=u64::from(if L==0{selectors.high[7].c0.a.0}else if L==1{selectors.high[7].c0.b.0}else if L==2{selectors.high[7].c1.a.0}else{selectors.high[7].c1.b.0});
+    let h8=u64::from(if L==0{selectors.high[8].c0.a.0}else if L==1{selectors.high[8].c0.b.0}else if L==2{selectors.high[8].c1.a.0}else{selectors.high[8].c1.b.0});
+    let h9=u64::from(if L==0{selectors.high[9].c0.a.0}else if L==1{selectors.high[9].c0.b.0}else if L==2{selectors.high[9].c1.a.0}else{selectors.high[9].c1.b.0});
+    let h10=u64::from(if L==0{selectors.high[10].c0.a.0}else if L==1{selectors.high[10].c0.b.0}else if L==2{selectors.high[10].c1.a.0}else{selectors.high[10].c1.b.0});
+    let h11=u64::from(if L==0{selectors.high[11].c0.a.0}else if L==1{selectors.high[11].c0.b.0}else if L==2{selectors.high[11].c1.a.0}else{selectors.high[11].c1.b.0});
+    let h12=u64::from(if L==0{selectors.high[12].c0.a.0}else if L==1{selectors.high[12].c0.b.0}else if L==2{selectors.high[12].c1.a.0}else{selectors.high[12].c1.b.0});
+    let h13=u64::from(if L==0{selectors.high[13].c0.a.0}else if L==1{selectors.high[13].c0.b.0}else if L==2{selectors.high[13].c1.a.0}else{selectors.high[13].c1.b.0});
+    let h14=u64::from(if L==0{selectors.high[14].c0.a.0}else if L==1{selectors.high[14].c0.b.0}else if L==2{selectors.high[14].c1.a.0}else{selectors.high[14].c1.b.0});
+    let h15=u64::from(if L==0{selectors.high[15].c0.a.0}else if L==1{selectors.high[15].c0.b.0}else if L==2{selectors.high[15].c1.a.0}else{selectors.high[15].c1.b.0});
+    let h16=u64::from(if L==0{selectors.high[16].c0.a.0}else if L==1{selectors.high[16].c0.b.0}else if L==2{selectors.high[16].c1.a.0}else{selectors.high[16].c1.b.0});
+    let h17=u64::from(if L==0{selectors.high[17].c0.a.0}else if L==1{selectors.high[17].c0.b.0}else if L==2{selectors.high[17].c1.a.0}else{selectors.high[17].c1.b.0});
+    let h18=u64::from(if L==0{selectors.high[18].c0.a.0}else if L==1{selectors.high[18].c0.b.0}else if L==2{selectors.high[18].c1.a.0}else{selectors.high[18].c1.b.0});
+    let h19=u64::from(if L==0{selectors.high[19].c0.a.0}else if L==1{selectors.high[19].c0.b.0}else if L==2{selectors.high[19].c1.a.0}else{selectors.high[19].c1.b.0});
+    let h20=u64::from(if L==0{selectors.high[20].c0.a.0}else if L==1{selectors.high[20].c0.b.0}else if L==2{selectors.high[20].c1.a.0}else{selectors.high[20].c1.b.0});
+    let h21=u64::from(if L==0{selectors.high[21].c0.a.0}else if L==1{selectors.high[21].c0.b.0}else if L==2{selectors.high[21].c1.a.0}else{selectors.high[21].c1.b.0});
+    let h22=u64::from(if L==0{selectors.high[22].c0.a.0}else if L==1{selectors.high[22].c0.b.0}else if L==2{selectors.high[22].c1.a.0}else{selectors.high[22].c1.b.0});
+    let h23=u64::from(if L==0{selectors.high[23].c0.a.0}else if L==1{selectors.high[23].c0.b.0}else if L==2{selectors.high[23].c1.a.0}else{selectors.high[23].c1.b.0});
+    let h24=u64::from(if L==0{selectors.high[24].c0.a.0}else if L==1{selectors.high[24].c0.b.0}else if L==2{selectors.high[24].c1.a.0}else{selectors.high[24].c1.b.0});
+    let h25=u64::from(if L==0{selectors.high[25].c0.a.0}else if L==1{selectors.high[25].c0.b.0}else if L==2{selectors.high[25].c1.a.0}else{selectors.high[25].c1.b.0});
+    let h26=u64::from(if L==0{selectors.high[26].c0.a.0}else if L==1{selectors.high[26].c0.b.0}else if L==2{selectors.high[26].c1.a.0}else{selectors.high[26].c1.b.0});
+    let h27=u64::from(if L==0{selectors.high[27].c0.a.0}else if L==1{selectors.high[27].c0.b.0}else if L==2{selectors.high[27].c1.a.0}else{selectors.high[27].c1.b.0});
+    let h28=u64::from(if L==0{selectors.high[28].c0.a.0}else if L==1{selectors.high[28].c0.b.0}else if L==2{selectors.high[28].c1.a.0}else{selectors.high[28].c1.b.0});
+    let h29=u64::from(if L==0{selectors.high[29].c0.a.0}else if L==1{selectors.high[29].c0.b.0}else if L==2{selectors.high[29].c1.a.0}else{selectors.high[29].c1.b.0});
+    let h30=u64::from(if L==0{selectors.high[30].c0.a.0}else if L==1{selectors.high[30].c0.b.0}else if L==2{selectors.high[30].c1.a.0}else{selectors.high[30].c1.b.0});
+    let h31=u64::from(if L==0{selectors.high[31].c0.a.0}else if L==1{selectors.high[31].c0.b.0}else if L==2{selectors.high[31].c1.a.0}else{selectors.high[31].c1.b.0});
+    let h32=u64::from(if L==0{selectors.high[32].c0.a.0}else if L==1{selectors.high[32].c0.b.0}else if L==2{selectors.high[32].c1.a.0}else{selectors.high[32].c1.b.0});
+    let h33=u64::from(if L==0{selectors.high[33].c0.a.0}else if L==1{selectors.high[33].c0.b.0}else if L==2{selectors.high[33].c1.a.0}else{selectors.high[33].c1.b.0});
+    let h34=u64::from(if L==0{selectors.high[34].c0.a.0}else if L==1{selectors.high[34].c0.b.0}else if L==2{selectors.high[34].c1.a.0}else{selectors.high[34].c1.b.0});
+    let h35=u64::from(if L==0{selectors.high[35].c0.a.0}else if L==1{selectors.high[35].c0.b.0}else if L==2{selectors.high[35].c1.a.0}else{selectors.high[35].c1.b.0});
+    let h36=u64::from(if L==0{selectors.high[36].c0.a.0}else if L==1{selectors.high[36].c0.b.0}else if L==2{selectors.high[36].c1.a.0}else{selectors.high[36].c1.b.0});
+    let h37=u64::from(if L==0{selectors.high[37].c0.a.0}else if L==1{selectors.high[37].c0.b.0}else if L==2{selectors.high[37].c1.a.0}else{selectors.high[37].c1.b.0});
+    let h38=u64::from(if L==0{selectors.high[38].c0.a.0}else if L==1{selectors.high[38].c0.b.0}else if L==2{selectors.high[38].c1.a.0}else{selectors.high[38].c1.b.0});
+    let h39=u64::from(if L==0{selectors.high[39].c0.a.0}else if L==1{selectors.high[39].c0.b.0}else if L==2{selectors.high[39].c1.a.0}else{selectors.high[39].c1.b.0});
+    let h40=u64::from(if L==0{selectors.high[40].c0.a.0}else if L==1{selectors.high[40].c0.b.0}else if L==2{selectors.high[40].c1.a.0}else{selectors.high[40].c1.b.0});
+    let h41=u64::from(if L==0{selectors.high[41].c0.a.0}else if L==1{selectors.high[41].c0.b.0}else if L==2{selectors.high[41].c1.a.0}else{selectors.high[41].c1.b.0});
+    let h42=u64::from(if L==0{selectors.high[42].c0.a.0}else if L==1{selectors.high[42].c0.b.0}else if L==2{selectors.high[42].c1.a.0}else{selectors.high[42].c1.b.0});
+    let h43=u64::from(if L==0{selectors.high[43].c0.a.0}else if L==1{selectors.high[43].c0.b.0}else if L==2{selectors.high[43].c1.a.0}else{selectors.high[43].c1.b.0});
+    let h44=u64::from(if L==0{selectors.high[44].c0.a.0}else if L==1{selectors.high[44].c0.b.0}else if L==2{selectors.high[44].c1.a.0}else{selectors.high[44].c1.b.0});
+    let h45=u64::from(if L==0{selectors.high[45].c0.a.0}else if L==1{selectors.high[45].c0.b.0}else if L==2{selectors.high[45].c1.a.0}else{selectors.high[45].c1.b.0});
+    let h46=u64::from(if L==0{selectors.high[46].c0.a.0}else if L==1{selectors.high[46].c0.b.0}else if L==2{selectors.high[46].c1.a.0}else{selectors.high[46].c1.b.0});
+    let h47=u64::from(if L==0{selectors.high[47].c0.a.0}else if L==1{selectors.high[47].c0.b.0}else if L==2{selectors.high[47].c1.a.0}else{selectors.high[47].c1.b.0});
+    let h48=u64::from(if L==0{selectors.high[48].c0.a.0}else if L==1{selectors.high[48].c0.b.0}else if L==2{selectors.high[48].c1.a.0}else{selectors.high[48].c1.b.0});
+    let h49=u64::from(if L==0{selectors.high[49].c0.a.0}else if L==1{selectors.high[49].c0.b.0}else if L==2{selectors.high[49].c1.a.0}else{selectors.high[49].c1.b.0});
+    let h50=u64::from(if L==0{selectors.high[50].c0.a.0}else if L==1{selectors.high[50].c0.b.0}else if L==2{selectors.high[50].c1.a.0}else{selectors.high[50].c1.b.0});
+    let h51=u64::from(if L==0{selectors.high[51].c0.a.0}else if L==1{selectors.high[51].c0.b.0}else if L==2{selectors.high[51].c1.a.0}else{selectors.high[51].c1.b.0});
+    let h52=u64::from(if L==0{selectors.high[52].c0.a.0}else if L==1{selectors.high[52].c0.b.0}else if L==2{selectors.high[52].c1.a.0}else{selectors.high[52].c1.b.0});
+    let h53=u64::from(if L==0{selectors.high[53].c0.a.0}else if L==1{selectors.high[53].c0.b.0}else if L==2{selectors.high[53].c1.a.0}else{selectors.high[53].c1.b.0});
+    let h54=u64::from(if L==0{selectors.high[54].c0.a.0}else if L==1{selectors.high[54].c0.b.0}else if L==2{selectors.high[54].c1.a.0}else{selectors.high[54].c1.b.0});
+    let h55=u64::from(if L==0{selectors.high[55].c0.a.0}else if L==1{selectors.high[55].c0.b.0}else if L==2{selectors.high[55].c1.a.0}else{selectors.high[55].c1.b.0});
+    let h56=u64::from(if L==0{selectors.high[56].c0.a.0}else if L==1{selectors.high[56].c0.b.0}else if L==2{selectors.high[56].c1.a.0}else{selectors.high[56].c1.b.0});
+    let h57=u64::from(if L==0{selectors.high[57].c0.a.0}else if L==1{selectors.high[57].c0.b.0}else if L==2{selectors.high[57].c1.a.0}else{selectors.high[57].c1.b.0});
+    let h58=u64::from(if L==0{selectors.high[58].c0.a.0}else if L==1{selectors.high[58].c0.b.0}else if L==2{selectors.high[58].c1.a.0}else{selectors.high[58].c1.b.0});
+    let h59=u64::from(if L==0{selectors.high[59].c0.a.0}else if L==1{selectors.high[59].c0.b.0}else if L==2{selectors.high[59].c1.a.0}else{selectors.high[59].c1.b.0});
+    let h60=u64::from(if L==0{selectors.high[60].c0.a.0}else if L==1{selectors.high[60].c0.b.0}else if L==2{selectors.high[60].c1.a.0}else{selectors.high[60].c1.b.0});
+    let h61=u64::from(if L==0{selectors.high[61].c0.a.0}else if L==1{selectors.high[61].c0.b.0}else if L==2{selectors.high[61].c1.a.0}else{selectors.high[61].c1.b.0});
+    let h62=u64::from(if L==0{selectors.high[62].c0.a.0}else if L==1{selectors.high[62].c0.b.0}else if L==2{selectors.high[62].c1.a.0}else{selectors.high[62].c1.b.0});
+    let h63=u64::from(if L==0{selectors.high[63].c0.a.0}else if L==1{selectors.high[63].c0.b.0}else if L==2{selectors.high[63].c1.a.0}else{selectors.high[63].c1.b.0});
+    let v=M31::reduce_u64(h4.wrapping_mul(18).wrapping_add(h63.wrapping_mul(14)));
+    if L==0{out[0].c0.a=v;}else if L==1{out[0].c0.b=v;}else if L==2{out[0].c1.a=v;}else{out[0].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(19));
+    if L==0{out[1].c0.a=v;}else if L==1{out[1].c0.b=v;}else if L==2{out[1].c1.a=v;}else{out[1].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(65).wrapping_add(h58.wrapping_mul(77)).wrapping_add(h59.wrapping_mul(89)).wrapping_add(h60.wrapping_mul(101)).wrapping_add(h61.wrapping_mul(113)).wrapping_add(h62.wrapping_mul(125)).wrapping_add(h63.wrapping_mul(15)));
+    if L==0{out[2].c0.a=v;}else if L==1{out[2].c0.b=v;}else if L==2{out[2].c1.a=v;}else{out[2].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(16));
+    if L==0{out[3].c0.a=v;}else if L==1{out[3].c0.b=v;}else if L==2{out[3].c1.a=v;}else{out[3].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(68).wrapping_add(h58.wrapping_mul(80)).wrapping_add(h59.wrapping_mul(92)).wrapping_add(h60.wrapping_mul(104)).wrapping_add(h61.wrapping_mul(116)).wrapping_add(h62.wrapping_mul(128)).wrapping_add(h63.wrapping_mul(17)));
+    if L==0{out[4].c0.a=v;}else if L==1{out[4].c0.b=v;}else if L==2{out[4].c1.a=v;}else{out[4].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(71).wrapping_add(h58.wrapping_mul(83)).wrapping_add(h59.wrapping_mul(95)).wrapping_add(h60.wrapping_mul(107)).wrapping_add(h61.wrapping_mul(119)).wrapping_add(h62.wrapping_mul(131)).wrapping_add(h63.wrapping_mul(23)));
+    if L==0{out[5].c0.a=v;}else if L==1{out[5].c0.b=v;}else if L==2{out[5].c1.a=v;}else{out[5].c1.b=v;}
+    let v=M31::reduce_u64(h0.wrapping_mul(7).wrapping_add(h2).wrapping_add(h3.wrapping_mul(64)).wrapping_add(h4.wrapping_mul(67)).wrapping_add(h5.wrapping_mul(70)).wrapping_add(h6.wrapping_mul(73)).wrapping_add(h7.wrapping_mul(76)).wrapping_add(h8.wrapping_mul(79)).wrapping_add(h9.wrapping_mul(82)).wrapping_add(h10.wrapping_mul(85)).wrapping_add(h11.wrapping_mul(88)).wrapping_add(h12.wrapping_mul(91)).wrapping_add(h13.wrapping_mul(94)).wrapping_add(h14.wrapping_mul(97)).wrapping_add(h15.wrapping_mul(100)).wrapping_add(h16.wrapping_mul(103)).wrapping_add(h17.wrapping_mul(106)).wrapping_add(h18.wrapping_mul(109)).wrapping_add(h19.wrapping_mul(112)).wrapping_add(h20.wrapping_mul(115)).wrapping_add(h21.wrapping_mul(118)).wrapping_add(h22.wrapping_mul(121)).wrapping_add(h23.wrapping_mul(124)).wrapping_add(h24.wrapping_mul(127)).wrapping_add(h25.wrapping_mul(2)).wrapping_add(h27.wrapping_mul(3)).wrapping_add(h28.wrapping_mul(4)).wrapping_add(h29.wrapping_mul(21)).wrapping_add(h30.wrapping_mul(5)).wrapping_add(h31.wrapping_mul(6)).wrapping_add(h32.wrapping_mul(20)).wrapping_add(h33.wrapping_mul(24)).wrapping_add(h34.wrapping_mul(26)).wrapping_add(h35.wrapping_mul(28)).wrapping_add(h36.wrapping_mul(30)).wrapping_add(h37.wrapping_mul(32)).wrapping_add(h38.wrapping_mul(34)).wrapping_add(h39.wrapping_mul(36)).wrapping_add(h40.wrapping_mul(38)).wrapping_add(h41.wrapping_mul(40)).wrapping_add(h42.wrapping_mul(42)).wrapping_add(h43.wrapping_mul(44)).wrapping_add(h44.wrapping_mul(46)).wrapping_add(h45.wrapping_mul(48)).wrapping_add(h46.wrapping_mul(50)).wrapping_add(h47.wrapping_mul(52)).wrapping_add(h48.wrapping_mul(54)).wrapping_add(h49.wrapping_mul(56)).wrapping_add(h50.wrapping_mul(58)).wrapping_add(h51.wrapping_mul(60)).wrapping_add(h52.wrapping_mul(62)).wrapping_add(h54.wrapping_mul(130)).wrapping_add(h55.wrapping_mul(133)));
+    if L==0{out[6].c0.a=v;}else if L==1{out[6].c0.b=v;}else if L==2{out[6].c1.a=v;}else{out[6].c1.b=v;}
+    let v=M31::reduce_u64(h0.wrapping_mul(8).wrapping_add(h2.wrapping_mul(9)).wrapping_add(h3.wrapping_mul(10)).wrapping_add(h28.wrapping_mul(12)).wrapping_add(h31.wrapping_mul(13)));
+    if L==0{out[7].c0.a=v;}else if L==1{out[7].c0.b=v;}else if L==2{out[7].c1.a=v;}else{out[7].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(74).wrapping_add(h58.wrapping_mul(86)).wrapping_add(h59.wrapping_mul(98)).wrapping_add(h60.wrapping_mul(110)).wrapping_add(h61.wrapping_mul(122)).wrapping_add(h62.wrapping_mul(134)));
+    if L==0{out[8].c0.a=v;}else if L==1{out[8].c0.b=v;}else if L==2{out[8].c1.a=v;}else{out[8].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(66).wrapping_add(h58.wrapping_mul(78)).wrapping_add(h59.wrapping_mul(90)).wrapping_add(h60.wrapping_mul(102)).wrapping_add(h61.wrapping_mul(114)).wrapping_add(h62.wrapping_mul(126)));
+    if L==0{out[9].c0.a=v;}else if L==1{out[9].c0.b=v;}else if L==2{out[9].c1.a=v;}else{out[9].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(69).wrapping_add(h58.wrapping_mul(81)).wrapping_add(h59.wrapping_mul(93)).wrapping_add(h60.wrapping_mul(105)).wrapping_add(h61.wrapping_mul(117)).wrapping_add(h62.wrapping_mul(129)));
+    if L==0{out[10].c0.a=v;}else if L==1{out[10].c0.b=v;}else if L==2{out[10].c1.a=v;}else{out[10].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(72).wrapping_add(h58.wrapping_mul(84)).wrapping_add(h59.wrapping_mul(96)).wrapping_add(h60.wrapping_mul(108)).wrapping_add(h61.wrapping_mul(120)).wrapping_add(h62.wrapping_mul(132)));
+    if L==0{out[11].c0.a=v;}else if L==1{out[11].c0.b=v;}else if L==2{out[11].c1.a=v;}else{out[11].c1.b=v;}
+    let v=M31::reduce_u64(h32.wrapping_mul(22).wrapping_add(h33.wrapping_mul(25)).wrapping_add(h34.wrapping_mul(27)).wrapping_add(h35.wrapping_mul(29)).wrapping_add(h36.wrapping_mul(31)).wrapping_add(h37.wrapping_mul(33)).wrapping_add(h38.wrapping_mul(35)).wrapping_add(h39.wrapping_mul(37)).wrapping_add(h40.wrapping_mul(39)).wrapping_add(h41.wrapping_mul(41)).wrapping_add(h42.wrapping_mul(43)).wrapping_add(h43.wrapping_mul(45)).wrapping_add(h44.wrapping_mul(47)).wrapping_add(h45.wrapping_mul(49)).wrapping_add(h46.wrapping_mul(51)).wrapping_add(h47.wrapping_mul(53)).wrapping_add(h48.wrapping_mul(55)).wrapping_add(h49.wrapping_mul(57)).wrapping_add(h50.wrapping_mul(59)).wrapping_add(h51.wrapping_mul(61)).wrapping_add(h52.wrapping_mul(63)));
+    if L==0{out[12].c0.a=v;}else if L==1{out[12].c0.b=v;}else if L==2{out[12].c1.a=v;}else{out[12].c1.b=v;}
+    let v=M31::reduce_u64(h2.wrapping_mul(11));
+    if L==0{out[13].c0.a=v;}else if L==1{out[13].c0.b=v;}else if L==2{out[13].c1.a=v;}else{out[13].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(75).wrapping_add(h58.wrapping_mul(87)).wrapping_add(h59.wrapping_mul(99)).wrapping_add(h60.wrapping_mul(111)).wrapping_add(h61.wrapping_mul(123)).wrapping_add(h62.wrapping_mul(135)));
+    if L==0{out[14].c0.a=v;}else if L==1{out[14].c0.b=v;}else if L==2{out[14].c1.a=v;}else{out[14].c1.b=v;}
+    let v=M31::reduce_u64(h3.wrapping_add(h4.wrapping_mul(66)).wrapping_add(h5.wrapping_mul(69)).wrapping_add(h6.wrapping_mul(72)).wrapping_add(h7.wrapping_mul(75)).wrapping_add(h8.wrapping_mul(78)).wrapping_add(h9.wrapping_mul(81)).wrapping_add(h10.wrapping_mul(84)).wrapping_add(h11.wrapping_mul(87)).wrapping_add(h12.wrapping_mul(90)).wrapping_add(h13.wrapping_mul(93)).wrapping_add(h14.wrapping_mul(96)).wrapping_add(h15.wrapping_mul(99)).wrapping_add(h16.wrapping_mul(102)).wrapping_add(h17.wrapping_mul(105)).wrapping_add(h18.wrapping_mul(108)).wrapping_add(h19.wrapping_mul(111)).wrapping_add(h20.wrapping_mul(114)).wrapping_add(h21.wrapping_mul(117)).wrapping_add(h22.wrapping_mul(120)).wrapping_add(h23.wrapping_mul(123)).wrapping_add(h24.wrapping_mul(126)).wrapping_add(h26.wrapping_mul(2)).wrapping_add(h28.wrapping_mul(3)).wrapping_add(h29.wrapping_mul(4)).wrapping_add(h31.wrapping_mul(5)).wrapping_add(h32.wrapping_mul(6)).wrapping_add(h33.wrapping_mul(23)).wrapping_add(h34.wrapping_mul(25)).wrapping_add(h35.wrapping_mul(27)).wrapping_add(h36.wrapping_mul(29)).wrapping_add(h37.wrapping_mul(31)).wrapping_add(h38.wrapping_mul(33)).wrapping_add(h39.wrapping_mul(35)).wrapping_add(h40.wrapping_mul(37)).wrapping_add(h41.wrapping_mul(39)).wrapping_add(h42.wrapping_mul(41)).wrapping_add(h43.wrapping_mul(43)).wrapping_add(h44.wrapping_mul(45)).wrapping_add(h45.wrapping_mul(47)).wrapping_add(h46.wrapping_mul(49)).wrapping_add(h47.wrapping_mul(51)).wrapping_add(h48.wrapping_mul(53)).wrapping_add(h49.wrapping_mul(55)).wrapping_add(h50.wrapping_mul(57)).wrapping_add(h51.wrapping_mul(59)).wrapping_add(h52.wrapping_mul(61)).wrapping_add(h53.wrapping_mul(63)).wrapping_add(h54.wrapping_mul(129)).wrapping_add(h55.wrapping_mul(132)).wrapping_add(h56.wrapping_mul(135)).wrapping_add(h63.wrapping_mul(11)));
+    if L==0{out[15].c0.a=v;}else if L==1{out[15].c0.b=v;}else if L==2{out[15].c1.a=v;}else{out[15].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(64).wrapping_add(h58.wrapping_mul(76)).wrapping_add(h59.wrapping_mul(88)).wrapping_add(h60.wrapping_mul(100)).wrapping_add(h61.wrapping_mul(112)).wrapping_add(h62.wrapping_mul(124)));
+    if L==0{out[16].c0.a=v;}else if L==1{out[16].c0.b=v;}else if L==2{out[16].c1.a=v;}else{out[16].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(12));
+    if L==0{out[17].c0.a=v;}else if L==1{out[17].c0.b=v;}else if L==2{out[17].c1.a=v;}else{out[17].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(13));
+    if L==0{out[18].c0.a=v;}else if L==1{out[18].c0.b=v;}else if L==2{out[18].c1.a=v;}else{out[18].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(67).wrapping_add(h58.wrapping_mul(79)).wrapping_add(h59.wrapping_mul(91)).wrapping_add(h60.wrapping_mul(103)).wrapping_add(h61.wrapping_mul(115)).wrapping_add(h62.wrapping_mul(127)));
+    if L==0{out[19].c0.a=v;}else if L==1{out[19].c0.b=v;}else if L==2{out[19].c1.a=v;}else{out[19].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(14));
+    if L==0{out[20].c0.a=v;}else if L==1{out[20].c0.b=v;}else if L==2{out[20].c1.a=v;}else{out[20].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(16));
+    if L==0{out[21].c0.a=v;}else if L==1{out[21].c0.b=v;}else if L==2{out[21].c1.a=v;}else{out[21].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(70).wrapping_add(h58.wrapping_mul(82)).wrapping_add(h59.wrapping_mul(94)).wrapping_add(h60.wrapping_mul(106)).wrapping_add(h61.wrapping_mul(118)).wrapping_add(h62.wrapping_mul(130)).wrapping_add(h63.wrapping_mul(18)));
+    if L==0{out[22].c0.a=v;}else if L==1{out[22].c0.b=v;}else if L==2{out[22].c1.a=v;}else{out[22].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(20));
+    if L==0{out[23].c0.a=v;}else if L==1{out[23].c0.b=v;}else if L==2{out[23].c1.a=v;}else{out[23].c1.b=v;}
+    let v=M31::reduce_u64(h1.wrapping_mul(7).wrapping_add(h4.wrapping_mul(65)).wrapping_add(h5.wrapping_mul(68)).wrapping_add(h6.wrapping_mul(71)).wrapping_add(h7.wrapping_mul(74)).wrapping_add(h8.wrapping_mul(77)).wrapping_add(h9.wrapping_mul(80)).wrapping_add(h10.wrapping_mul(83)).wrapping_add(h11.wrapping_mul(86)).wrapping_add(h12.wrapping_mul(89)).wrapping_add(h13.wrapping_mul(92)).wrapping_add(h14.wrapping_mul(95)).wrapping_add(h15.wrapping_mul(98)).wrapping_add(h16.wrapping_mul(101)).wrapping_add(h17.wrapping_mul(104)).wrapping_add(h18.wrapping_mul(107)).wrapping_add(h19.wrapping_mul(110)).wrapping_add(h20.wrapping_mul(113)).wrapping_add(h21.wrapping_mul(116)).wrapping_add(h22.wrapping_mul(119)).wrapping_add(h23.wrapping_mul(122)).wrapping_add(h24.wrapping_mul(125)).wrapping_add(h25.wrapping_mul(8)).wrapping_add(h26.wrapping_mul(9)).wrapping_add(h33.wrapping_mul(21)).wrapping_add(h34.wrapping_mul(24)).wrapping_add(h35.wrapping_mul(26)).wrapping_add(h36.wrapping_mul(28)).wrapping_add(h37.wrapping_mul(30)).wrapping_add(h38.wrapping_mul(32)).wrapping_add(h39.wrapping_mul(34)).wrapping_add(h40.wrapping_mul(36)).wrapping_add(h41.wrapping_mul(38)).wrapping_add(h42.wrapping_mul(40)).wrapping_add(h43.wrapping_mul(42)).wrapping_add(h44.wrapping_mul(44)).wrapping_add(h45.wrapping_mul(46)).wrapping_add(h46.wrapping_mul(48)).wrapping_add(h47.wrapping_mul(50)).wrapping_add(h48.wrapping_mul(52)).wrapping_add(h49.wrapping_mul(54)).wrapping_add(h50.wrapping_mul(56)).wrapping_add(h51.wrapping_mul(58)).wrapping_add(h52.wrapping_mul(60)).wrapping_add(h53.wrapping_mul(62)).wrapping_add(h54.wrapping_mul(128)).wrapping_add(h55.wrapping_mul(131)).wrapping_add(h56.wrapping_mul(134)));
+    if L==0{out[24].c0.a=v;}else if L==1{out[24].c0.b=v;}else if L==2{out[24].c1.a=v;}else{out[24].c1.b=v;}
+    let v=M31::reduce_u64(h57.wrapping_mul(73).wrapping_add(h58.wrapping_mul(85)).wrapping_add(h59.wrapping_mul(97)).wrapping_add(h60.wrapping_mul(109)).wrapping_add(h61.wrapping_mul(121)).wrapping_add(h62.wrapping_mul(133)));
+    if L==0{out[25].c0.a=v;}else if L==1{out[25].c0.b=v;}else if L==2{out[25].c1.a=v;}else{out[25].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(15));
+    if L==0{out[26].c0.a=v;}else if L==1{out[26].c0.b=v;}else if L==2{out[26].c1.a=v;}else{out[26].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(17));
+    if L==0{out[27].c0.a=v;}else if L==1{out[27].c0.b=v;}else if L==2{out[27].c1.a=v;}else{out[27].c1.b=v;}
+    let v=M31::reduce_u64(h63.wrapping_mul(19));
+    if L==0{out[28].c0.a=v;}else if L==1{out[28].c0.b=v;}else if L==2{out[28].c1.a=v;}else{out[28].c1.b=v;}
+    let v=M31::reduce_u64(h26.wrapping_mul(10).wrapping_add(h33.wrapping_mul(22)));
+    if L==0{out[29].c0.a=v;}else if L==1{out[29].c0.b=v;}else if L==2{out[29].c1.a=v;}else{out[29].c1.b=v;}
+}
+#[inline(never)]
+fn r114_tags_into(out:&mut[QM31],selectors:&Selectors){
+    r114_tag_limb::<0>(out,selectors);r114_tag_limb::<1>(out,selectors);r114_tag_limb::<2>(out,selectors);r114_tag_limb::<3>(out,selectors);
+}
+const _:()={
+    let offsets:[u16;31]=[0, 2, 3, 10, 11, 18, 25, 79, 84, 90, 96, 102, 108, 129, 130, 136, 189, 195, 196, 197, 203, 204, 205, 212, 213, 261, 267, 268, 269, 270, 272];
+    let terms:[(u8,u32);272]=[(63, 14),(4, 18),(57, 19),(63, 15),(57, 65),(58, 77),(59, 89),(60, 101),(61, 113),(62, 125),(63, 16),(63, 17),(57, 68),(58, 80),(59, 92),(60, 104),(61, 116),(62, 128),(63, 23),(57, 71),(58, 83),(59, 95),(60, 107),(61, 119),(62, 131),(1, 0),(2, 1),(25, 2),(27, 3),(28, 4),(30, 5),(31, 6),(0, 7),(32, 20),(29, 21),(33, 24),(34, 26),(35, 28),(36, 30),(37, 32),(38, 34),(39, 36),(40, 38),(41, 40),(42, 42),(43, 44),(44, 46),(45, 48),(46, 50),(47, 52),(48, 54),(49, 56),(50, 58),(51, 60),(52, 62),(3, 64),(4, 67),(5, 70),(6, 73),(7, 76),(8, 79),(9, 82),(10, 85),(11, 88),(12, 91),(13, 94),(14, 97),(15, 100),(16, 103),(17, 106),(18, 109),(19, 112),(20, 115),(21, 118),(22, 121),(23, 124),(24, 127),(54, 130),(55, 133),(0, 8),(2, 9),(3, 10),(28, 12),(31, 13),(57, 74),(58, 86),(59, 98),(60, 110),(61, 122),(62, 134),(57, 66),(58, 78),(59, 90),(60, 102),(61, 114),(62, 126),(57, 69),(58, 81),(59, 93),(60, 105),(61, 117),(62, 129),(57, 72),(58, 84),(59, 96),(60, 108),(61, 120),(62, 132),(32, 22),(33, 25),(34, 27),(35, 29),(36, 31),(37, 33),(38, 35),(39, 37),(40, 39),(41, 41),(42, 43),(43, 45),(44, 47),(45, 49),(46, 51),(47, 53),(48, 55),(49, 57),(50, 59),(51, 61),(52, 63),(2, 11),(57, 75),(58, 87),(59, 99),(60, 111),(61, 123),(62, 135),(2, 0),(3, 1),(26, 2),(28, 3),(29, 4),(31, 5),(32, 6),(63, 11),(33, 23),(34, 25),(35, 27),(36, 29),(37, 31),(38, 33),(39, 35),(40, 37),(41, 39),(42, 41),(43, 43),(44, 45),(45, 47),(46, 49),(47, 51),(48, 53),(49, 55),(50, 57),(51, 59),(52, 61),(53, 63),(4, 66),(5, 69),(6, 72),(7, 75),(8, 78),(9, 81),(10, 84),(11, 87),(12, 90),(13, 93),(14, 96),(15, 99),(16, 102),(17, 105),(18, 108),(19, 111),(20, 114),(21, 117),(22, 120),(23, 123),(24, 126),(54, 129),(55, 132),(56, 135),(57, 64),(58, 76),(59, 88),(60, 100),(61, 112),(62, 124),(63, 12),(63, 13),(57, 67),(58, 79),(59, 91),(60, 103),(61, 115),(62, 127),(63, 14),(63, 16),(63, 18),(57, 70),(58, 82),(59, 94),(60, 106),(61, 118),(62, 130),(63, 20),(1, 7),(25, 8),(26, 9),(33, 21),(34, 24),(35, 26),(36, 28),(37, 30),(38, 32),(39, 34),(40, 36),(41, 38),(42, 40),(43, 42),(44, 44),(45, 46),(46, 48),(47, 50),(48, 52),(49, 54),(50, 56),(51, 58),(52, 60),(53, 62),(4, 65),(5, 68),(6, 71),(7, 74),(8, 77),(9, 80),(10, 83),(11, 86),(12, 89),(13, 92),(14, 95),(15, 98),(16, 101),(17, 104),(18, 107),(19, 110),(20, 113),(21, 116),(22, 119),(23, 122),(24, 125),(54, 128),(55, 131),(56, 134),(57, 73),(58, 85),(59, 97),(60, 109),(61, 121),(62, 133),(63, 15),(63, 17),(63, 19),(26, 10),(33, 22)];
+    let mut i=0;while i<31{assert!(offsets[i]==COPY_TAG_COORDINATE_OFFSETS[i]);i+=1;}
+    i=0;while i<272{assert!(terms[i].0==COPY_TAG_TERMS.0[i]);assert!(terms[i].1+R58_TAG_BASE==COPY_TAG_TERMS.1[i]);i+=1;}
+};
+
+#[cfg(not(v8_performance_sbf))]
+pub fn r114_controls()->usize{
+    let mut state=0x114eeed42119u64;let mut next=||{state^=state<<13;state^=state>>7;state^=state<<17;M31(state as u32)};
+    let mut comparisons=0;
+    for case in 0..1024{
+        let mut high=core::array::from_fn(|_|QM31{c0:CM31::new(next(),next()),c1:CM31::new(next(),next())});
+        if case<64{high.fill(QM31::ZERO);high[case]=QM31::ONE;}
+        if case==64{high.fill(QM31::ZERO);}
+        if case==65{let v=M31(u32::MAX);high.fill(QM31{c0:CM31::new(v,v),c1:CM31::new(v,v)});}
+        let selectors=Selectors{high,low:[QM31::ONE;16]};let mut out=[QM31::ZERO;30];r114_tags_into(&mut out,&selectors);
+        for i in 0..30{assert_eq!(out[i],r58_tag_delta(i,&selectors));comparisons+=1;}
+    }
+    comparisons
+}

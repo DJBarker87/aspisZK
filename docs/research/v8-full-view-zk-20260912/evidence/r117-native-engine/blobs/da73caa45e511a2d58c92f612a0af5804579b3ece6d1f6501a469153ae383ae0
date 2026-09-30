@@ -1,0 +1,205 @@
+// Included in r19_channel_ordinary. This candidate changes arithmetic only.
+// The private geometry is derived here, never read from a prover cache.
+#[inline(never)]
+fn r106_geometry(high:&[CQ;16],finals:&[CQ;4],hb:&mut[CQ]) {
+    assert_eq!(hb.len(),128);hb.fill(CQ::ZERO);
+    for j in 0..64 {hb[j]=high[j&15].mul(finals[j>>4]);}
+    for j in 0usize..64 {
+        let mut value=hb[j];
+        for bit in 0..j.trailing_ones() as usize {
+            value=value.half();let row=j&!((1usize<<(bit+1))-1);
+            hb[64+row]=hb[64+row].add(value);
+        }
+        if j+1<64 {hb[65+j]=hb[65+j].add(value);}
+    }
+}
+#[inline(never)]
+fn r106_sparse(coins:&[K],hb:&[CQ],normal:&[CQ;16],carry:&[CQ;3])->Option<CQ> {
+    assert!(coins.len()>=271 && hb.len()==128);
+    let mut result=r85_private::Dot::new();
+    for low in 0..16 {
+        let mut normal_sum=r85_private::Dot::new();
+        let mut carry_sum=r85_private::Dot::new();
+        let mut i=(11*low)%16;
+        while i<271 {
+            let coin=r85_in(coins[i])?;let group=(128+3*i)>>4;
+            normal_sum.push(coin,hb[group]);
+            if low<3 {carry_sum.push(coin,hb[64+group]);}
+            i+=16;
+        }
+        result.push(normal[low],normal_sum.finish());
+        if low<3 {result.push(carry[low],carry_sum.finish());}
+    }
+    result.finish().half_pow(8)
+}
+fn r106_low(normal:&[CQ;16],carry:&[CQ;3],values:&[CQ;19])->CQ {
+    let mut dot=r85_private::Dot::new();
+    for i in 0..16 {dot.push(normal[i],values[i]);}
+    for i in 0..3 {dot.push(carry[i],values[16+i]);}
+    dot.finish().half_pow(8).expect("fixed half exponent")
+}
+#[inline(never)]
+fn r106_try_terminal(audit:&[K;11],abc:[K;3],alpha:[K;4],beta:K,finals:&[K;4],
+    kernel:&r17_weighted_groups::Kernel,coins:&[K])->Option<K> {
+    let (normal,carry,high)=kernel.geometry_parts();
+    let normal=r85_convert(*normal)?;let carry=r85_convert(*carry)?;
+    let high=r85_convert(*high)?;let qfinals=r85_convert(*finals)?;
+    let qbeta=r85_in(beta)?;let k=r85_in(audit[10])?;
+    let mut hb=vec![CQ::ZERO;128];r106_geometry(&high,&qfinals,&mut hb);
+    let mut entries=[K::ZERO;4];
+    let plain=r85_in(r85_prepare(audit,abc,alpha,beta,finals,&mut entries)?)?;
+    let entries=r85_convert(entries)?;
+    let coordinates=[127usize,1023,126,1021].map(|row| {
+        // All four low slots lie outside the three local carry slots.
+        assert!(row&15>=3);
+        normal[row&15].mul(hb[row>>4]).half_pow(8).expect("fixed half exponent")
+    });
+    let correction=CQ::dot([entries[1].sub(entries[0]),entries[3].sub(entries[2])],
+        [coordinates[0].sub(coordinates[1]),coordinates[2].sub(coordinates[3])]);
+    let inactive=r106_inactive(&hb);
+    let ordinary=plain.add(correction).sub(entries[0].mul(r106_low(&normal,&carry,&inactive))).add(coordinates[1]);
+    let sparse=r106_sparse(coins,&hb,&normal,&carry)?;
+    Some(r85_out(ordinary.add(sparse.mul(qbeta.mul(k)))))
+}
+#[inline(never)]
+pub(super) fn r106_terminal(audit:&[K;11],abc:[K;3],alpha:[K;4],beta:K,finals:&[K;4],
+    workspace:&mut[K],kernel:&r17_weighted_groups::Kernel,coins:&[K])->K {
+    assert!(workspace.len()>=531 && coins.len()>=271);
+    if let Some(result)=r106_try_terminal(audit,abc,alpha,beta,finals,kernel,coins) {return result;}
+    // Raw/noncanonical caller behavior remains at the retained boundary.
+    let ordinary=terminal_scalar(audit,abc,alpha,beta,finals,workspace,kernel);
+    let sparse=r81_sparse_scalar_after_ordinary(coins,workspace,kernel);
+    ordinary.add(sparse.mul(beta.mul(audit[10])))
+}
+#[cfg(not(target_os="solana"))]
+pub(super) fn r106_controls() {
+    use corelib::field::{CM31,P};
+    let mut rng=0x106ae3721098c47u64;
+    fn sample(r:&mut u64)->K {
+        let mut m=||{*r^=*r<<13;*r^=*r>>7;*r^=*r<<17;M31((*r%u64::from(corelib::field::P))as u32)};
+        K{c0:CM31::new(m(),m()),c1:CM31::new(m(),m())}
+    }
+    let mut geometry=0;let mut inactive=0;
+    for case in 0..512 {
+        let mut next=||match case {0=>K::ZERO,1=>K::ONE,2=>K{c0:CM31::new(M31(P-1),M31(P-1)),c1:CM31::new(M31(P-1),M31(P-1))},_=>sample(&mut rng)};
+        let high=core::array::from_fn(|_|next());let finals=core::array::from_fn(|_|next());
+        let mut hb=vec![CQ::ZERO;128];r106_geometry(&r85_convert(high).unwrap(),&r85_convert(finals).unwrap(),&mut hb);
+        let mut old=vec![K::ZERO;128];scalar_geometry(&high,&finals,&mut old);
+        assert_eq!(hb.iter().copied().map(r85_out).collect::<Vec<_>>(),old);geometry+=128;
+        let q=r106_inactive(&hb);let mut expected=[K::ZERO;19];r24_inactive_values(&old,&mut expected);
+        assert_eq!(q.map(r85_out),expected);inactive+=19;
+        let audit=core::array::from_fn(|_|next());let abc=core::array::from_fn(|_|next());
+        let alpha=core::array::from_fn(|_|next());let beta=if case%3==0{K::ZERO}else if case%3==1{K::ONE}else{next()};
+        let coins:Vec<_>=(0..271).map(|_|next()).collect();let kernel=r17_weighted_groups::Kernel::new(abc,alpha);
+        let mut workspace=vec![K::ZERO;531];
+        let ordinary=terminal_scalar(&audit,abc,alpha,beta,&finals,&mut workspace,&kernel);
+        let sparse=r81_sparse_scalar_after_ordinary(&coins,&workspace,&kernel);
+        let expected=ordinary.add(sparse.mul(beta.mul(audit[10])));
+        assert_eq!(r106_try_terminal(&audit,abc,alpha,beta,&finals,&kernel,&coins),Some(expected));
+        assert_eq!(r106_terminal(&audit,abc,alpha,beta,&finals,&mut workspace,&kernel,&coins),expected);
+    }
+    // All 128 basis directions bind the generated integer adder schedule.
+    for row in 0..128 {
+        let mut hb=vec![CQ::ZERO;128];hb[row]=CQ::ONE;
+        let raw:Vec<_>=hb.iter().copied().map(r85_out).collect();
+        let mut expected=[K::ZERO;19];r24_inactive_values(&raw,&mut expected);
+        assert_eq!(r106_inactive(&hb).map(r85_out),expected);inactive+=19;
+    }
+    let kernel=r17_weighted_groups::Kernel::new([K::ONE;3],[K::ONE;4]);let mut malformed=0;
+    for row in 0..271 {for limb in 0..4 {for bad in [P,P+1,u32::MAX] {
+        let mut coins=vec![K::ONE;271];let mut raw=[M31::ZERO;4];raw[limb]=M31(bad);
+        coins[row]=K{c0:CM31::new(raw[0],raw[1]),c1:CM31::new(raw[2],raw[3])};
+        // beta zero is deliberately not allowed to bypass validation.
+        assert_eq!(r106_try_terminal(&[K::ONE;11],[K::ONE;3],[K::ONE;4],K::ZERO,&[K::ONE;4],&kernel,&coins),None);malformed+=1;
+    }}}
+    println!("R106_TERMINAL profiles=512 geometry_coordinates={geometry} inactive_coordinates={inactive} malformed={malformed} exact_adder_coefficients=true beta_zero_one=true");
+}
+
+// Exact integer coefficient expansion checked by the source-pinned generator.
+#[inline(never)]
+fn r106_inactive(hb:&[CQ])->[CQ;19] {
+    assert_eq!(hb.len(),128);
+    let n0_64=hb[8].add(hb[9]);
+    let n0_65=hb[10].add(hb[13]);
+    let n0_66=hb[14].add(hb[57]);
+    let n0_67=hb[16].add(hb[17]);
+    let n0_68=hb[18].add(hb[20]);
+    let n0_69=hb[21].add(n0_67);
+    let n0_70=hb[58].add(hb[60]);
+    let n0_71=hb[61].add(hb[62]);
+    let n0_72=n0_64.add(n0_65);
+    let n0_73=n0_66.add(n0_70);
+    let n0_74=n0_68.add(n0_69);
+    let n0_75=n0_71.add(n0_72);
+    let n0_76=n0_73.add(n0_75);
+    let n0_77=hb[7].add(hb[12]);
+    let n0_78=hb[19].add(n0_74);
+    let n0_79=hb[23].add(hb[39]);
+    let n0_80=hb[55].add(n0_76);
+    let n0_81=n0_77.add(n0_79);
+    let n0_82=n0_80.add(n0_81);
+    let n0_83=hb[15].add(hb[31]);
+    let n0_84=hb[22].add(n0_78);
+    let n0_85=hb[47].add(hb[63]);
+    let n0_86=hb[56].add(n0_82);
+    let n0_87=hb[11].add(hb[59]);
+    let n0_88=n0_83.add(n0_85);
+    let n0_89=n0_86.add(n0_87);
+    let n0_90=n0_84.add(n0_88);
+    let s0_total=hb[0].add(hb[1]).add(hb[2]).add(hb[3]).add(hb[4]).add(hb[5]).add(hb[6]).add(hb[24]).add(hb[25]).add(hb[26]).add(hb[27]).add(hb[28]).add(hb[29]).add(hb[30]).add(hb[32]).add(hb[33]).add(hb[34]).add(hb[35]).add(hb[36]).add(hb[37]).add(hb[38]).add(hb[40]).add(hb[41]).add(hb[42]).add(hb[43]).add(hb[44]).add(hb[45]).add(hb[46]).add(hb[48]).add(hb[49]).add(hb[50]).add(hb[51]).add(hb[52]).add(hb[53]).add(hb[54]).add(n0_89).add(n0_90);
+    let s0_0=hb[15].add(hb[63]).add(n0_76).add(n0_87);
+    let v0_0=s0_total.sub(s0_0);
+    let s0_1=n0_84;
+    let v0_1=s0_total.sub(s0_1);
+    let s0_2=hb[11].add(n0_82);
+    let v0_2=s0_total.sub(s0_2);
+    let s0_3=n0_90;
+    let v0_3=s0_total.sub(s0_3);
+    let s0_4=n0_89;
+    let v0_4=s0_total.sub(s0_4);
+    let s0_5=hb[22].add(n0_74).add(n0_88);
+    let v0_5=s0_total.sub(s0_5);
+    let s0_6=n0_86;
+    let v0_6=s0_total.sub(s0_6);
+    let s0_7=hb[59].add(n0_86);
+    let v0_7=s0_total.sub(s0_7);
+    let s0_8=n0_78.add(n0_88);
+    let v0_8=s0_total.sub(s0_8);
+    let s0_9=hb[47].add(n0_83).add(n0_84);
+    let v0_9=s0_total.sub(s0_9);
+    let s0_10=n0_85.add(n0_89);
+    let v0_10=s0_total.sub(s0_10);
+    let s0_11=hb[31].add(hb[39]).add(hb[63]).add(n0_84);
+    let v0_11=s0_total.sub(s0_11);
+    let n1_64=hb[72].add(hb[73]);
+    let n1_65=hb[74].add(hb[75]);
+    let n1_66=hb[77].add(hb[78]);
+    let n1_67=hb[121].add(hb[122]);
+    let n1_68=hb[124].add(hb[125]);
+    let n1_69=hb[126].add(n1_64);
+    let n1_70=n1_65.add(n1_66);
+    let n1_71=n1_67.add(n1_68);
+    let n1_72=n1_69.add(n1_70);
+    let n1_73=n1_71.add(n1_72);
+    let n1_74=hb[71].add(hb[76]);
+    let n1_75=hb[79].add(hb[123]);
+    let n1_76=hb[80].add(hb[81]);
+    let n1_77=hb[82].add(hb[83]);
+    let n1_78=hb[84].add(hb[85]);
+    let n1_79=hb[86].add(n1_76);
+    let n1_80=hb[87].add(hb[103]);
+    let n1_81=hb[119].add(n1_73);
+    let n1_82=hb[127].add(n1_75);
+    let n1_83=n1_74.add(n1_80);
+    let n1_84=n1_77.add(n1_78);
+    let n1_85=n1_79.add(n1_84);
+    let n1_86=n1_81.add(n1_83);
+    let s1_total=hb[64].add(hb[65]).add(hb[66]).add(hb[67]).add(hb[68]).add(hb[69]).add(hb[70]).add(hb[88]).add(hb[89]).add(hb[90]).add(hb[91]).add(hb[92]).add(hb[93]).add(hb[94]).add(hb[95]).add(hb[96]).add(hb[97]).add(hb[98]).add(hb[99]).add(hb[100]).add(hb[101]).add(hb[102]).add(hb[104]).add(hb[105]).add(hb[106]).add(hb[107]).add(hb[108]).add(hb[109]).add(hb[110]).add(hb[111]).add(hb[112]).add(hb[113]).add(hb[114]).add(hb[115]).add(hb[116]).add(hb[117]).add(hb[118]).add(hb[120]).add(n1_82).add(n1_85).add(n1_86);
+    let s1_0=n1_73.add(n1_82);
+    let v1_0=s1_total.sub(s1_0);
+    let s1_1=n1_85;
+    let v1_1=s1_total.sub(s1_1);
+    let s1_2=n1_86;
+    let v1_2=s1_total.sub(s1_2);
+    [v0_0,v0_1,v0_2,v0_3,v0_4,v0_5,v0_6,v0_3,v0_4,v0_3,v0_7,v0_8,v0_6,v0_9,v0_10,v0_11,v1_0,v1_1,v1_2]
+}

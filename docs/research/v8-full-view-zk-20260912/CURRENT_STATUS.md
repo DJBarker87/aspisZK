@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R106–R117 native engine — 2026-09-30
+
+[R117_NATIVE_ENGINE.md](R117_NATIVE_ENGINE.md) records complete acceptance at
+**999,790 / 999,532 CU under the actual 1,000,000 cap**, on the same genuine
+proofs and 262,144-byte heap. Corrupted combined finals still reject with
+Custom(6). The larger run has only **210 CU margin**; this is a two-fixture
+verifier milestone, not a universal resource bound, settlement or release.
+
+Private arithmetic regions, source-derived Copy programs and specialized
+query/final-vector folds compose. Both packed-reader regressions and two
+host-harness compile failures remain in evidence. No new profile, security
+parameter reduction, removed validation or new Lean target. Full security
+is still open: universal actual-source joint C1/H1/G compatibility (including
+p0/p2) comes first, then causal/shared-oracle/retry/publication composition
+and the separate pre-beta extraction/soundness obligations. The active goal
+now proceeds from this measured performance milestone to those proofs.
+
 ## R101–R105 native authentication and parsing — 2026-09-30
 
 [R105_NATIVE_AUTH.md](R105_NATIVE_AUTH.md) records complete

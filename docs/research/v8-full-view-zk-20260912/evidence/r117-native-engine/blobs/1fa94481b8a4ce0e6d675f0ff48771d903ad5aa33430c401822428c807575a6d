@@ -1,0 +1,89 @@
+include!("r17_edges_iter.rs");
+#[cfg(not(target_os="solana"))]
+fn edges_reference(j:usize)->Vec<(usize,M31)>{let mut row=j;let mut bit=0;let mut s=M31::ONE;let mut out=vec![];
+    while row&(1<<bit)!=0{row^=1<<bit;s=s.mul(corelib::field::M31_HALF);out.push((row,s));bit+=1;}out.push((row|(1<<bit),s));out}
+fn basis(a: K, b: K) -> ([K; 16], usize) {
+    let a2 = a.mul(a);
+    let b2 = b.mul(b);
+    let ap = [K::ONE, a2.mul(a), a2, a];
+    let bp = [K::ONE, b2.mul(b), b2, b];
+    let mut out = [K::ZERO; 16];
+    let mut n = 4;
+    for j in 0..16 {
+        out[j] = if j < 4 {
+            ap[j]
+        } else if j % 4 == 0 {
+            bp[j / 4]
+        } else {
+            n += 1;
+            ap[j % 4].mul(bp[j / 4])
+        };
+    }
+    (out, n)
+}
+#[inline(never)]
+fn geometry([a,b,c]:[K;3],alpha:[K;4])->([K;16],[K;3],[K;16]) {
+    #[cfg(v8_grouped_linear)]
+    let prepared_chord=[a,b,c].map(corelib::field::PreparedQm31Multiplier::new);
+    let (low, mut products) = basis(alpha[0], alpha[1]);
+    let (high, np) = basis(alpha[2], alpha[3]);
+    products += np;
+    let mut xn = [K::ZERO; 16];
+    let mut xc = [K::ZERO; 16];
+    let mut yn = [K::ZERO; 16];
+    let mut yc = [K::ZERO; 16];
+    // Forward local operators: an overflow is an ACTIVE carry into the high row,
+    // not an ordinary integer increment of that row.
+    for input in 0..16 {
+        let y = input & 1;
+        let j = input >> 1;
+        for (r, s) in edges(j) {
+            let dest = 2 * (r % 8) + y;
+            if r < 8 {
+                xn[dest] = xn[dest].add(low[input].mul_m31(s));
+            } else {
+                xc[dest] = xc[dest].add(low[input].mul_m31(s));
+            }
+        }
+        if y == 0 {
+            yn[input + 1] = yn[input + 1].add(low[input]);
+        } else {
+            yn[input - 1] = yn[input - 1].add(low[input].half());
+            // y²=(1-T2)/2. Preserve bit zero of the line index.
+            for (r, s) in edges(j >> 1) {
+                let line = (r << 1) | (j & 1);
+                let dest = 2 * (line % 8);
+                let v = low[input].mul_m31(s).half();
+                if line < 8 {
+                    yn[dest] = yn[dest].sub(v);
+                } else {
+                    yc[dest] = yc[dest].sub(v);
+                }
+            }
+        }
+    }
+    #[cfg(not(v8_grouped_linear))]
+    let mut normal = [K::ZERO; 16];
+    let mut carry = [K::ZERO; 16];
+    #[cfg(not(v8_grouped_linear))]
+    for j in 0..16 {
+        normal[j] = a.mul(low[j]).add(b.mul(xn[j])).add(c.mul(yn[j]));
+        products += 3;
+    }
+    // x's carry exits only at low positions 0/1; y's only at 0/2.
+    // These follow from the largest line destinations 8 and 9 above.
+    debug_assert!(xc[2..].iter().all(|v| *v == K::ZERO));
+    debug_assert!(yc
+        .iter()
+        .enumerate()
+        .all(|(j, v)| j == 0 || j == 2 || *v == K::ZERO));
+    carry[0] = b.mul(xc[0]).add(c.mul(yc[0]));
+    carry[1] = b.mul(xc[1]);
+    carry[2] = c.mul(yc[2]);
+    products += 4;
+    #[cfg(v8_grouped_linear)]
+    let normal=core::array::from_fn(|j|corelib::field::qm31_sum_products3_prepared(
+        &prepared_chord,&[low[j],xn[j],yn[j]]));
+    let _=products;
+    (normal,[carry[0],carry[1],carry[2]],high)
+}

@@ -1,0 +1,40 @@
+#[cfg(not(v8_performance_sbf))]
+pub(super) fn r111_controls() {
+    fn pack(values:&[u32])->Vec<u8> {
+        let mut b=vec![0;values.len()*31/8];
+        for(i,x)in values.iter().enumerate(){for bit in 0..31{if x&(1<<bit)!=0{let at=31*i+bit;b[at/8]|=1<<(at%8);}}}b
+    }
+    fn check<const N:usize>(values:&[u32;N],offset:usize)->bool {
+        let packed=pack(values);let mut b=vec![37;offset];b.extend_from_slice(&packed);b.extend_from_slice(&[53;8]);
+        let bytes=&b[offset..offset+packed.len()];let mut old=[0;N];let mut new=[u32::MAX;N];
+        let a=r108_retained_decode(bytes,&mut old);let c=r55_decode_into(bytes,&mut new);assert_eq!(a,c);
+        if a.is_ok(){assert_eq!(old,new);assert_eq!(&new,values);true}else{false}
+    }
+    let mut bit_bases=0;
+    for bit in 0..(152*31) {for offset in 0..8 {
+        if bit<104*31 {let mut v=[0u32;104];v[bit/31]=1<<(bit%31);assert!(check(&v,offset));}
+        else {let bit=bit-104*31;let mut v=[0u32;48];v[bit/31]=1<<(bit%31);assert!(check(&v,offset));}
+        bit_bases+=1;
+    }}
+    println!("R111_BIT_BASIS comparisons={bit_bases} every_packed_bit=true offsets=8");
+    let mut rng=0x108de_82749e82au64;
+    let mut next=||{rng^=rng<<13;rng^=rng>>7;rng^=rng<<17;(rng%u64::from(corelib::field::P))as u32};
+    let mut accepted=0;let mut malformed=0;
+    for case in 0..2048 {
+        let all:[u32;152]=core::array::from_fn(|i|if case==0{0}else if case==1{corelib::field::P-1}
+            else if case<154{if i==case-2{corelib::field::P-1}else{0}}else{next()});
+        for offset in 0..8 {
+            assert!(check::<104>(all[..104].try_into().unwrap(),offset));
+            assert!(check::<48>(all[104..].try_into().unwrap(),offset));accepted+=2;
+        }
+    }
+    for bad in 0..152 {for offset in 0..8 {
+        let mut all=[0;152];all[bad]=corelib::field::P;
+        if bad<104{assert!(!check::<104>(all[..104].try_into().unwrap(),offset));}
+        else{assert!(!check::<48>(all[104..].try_into().unwrap(),offset));}malformed+=1;
+    }}
+    for n in 0..=404 {if n!=403 {assert_eq!(r55_decode_into(&vec![0;n],&mut[0;104]),Err(Error::Length));malformed+=1;}}
+    for n in 0..=187 {if n!=186 {assert_eq!(r55_decode_into(&vec![0;n],&mut[0;48]),Err(Error::Length));malformed+=1;}}
+    assert_eq!(r55_decode_into::<0>(&[],&mut[]),Err(Error::Length));
+    println!("R111_DECODE accepted_comparisons={accepted} malformed={malformed} offsets=8 exact_bytes=true all_152_canonicality_positions=true");
+}
