@@ -349,6 +349,26 @@ private theorem array_make_three_canonical
     · subst row
       simpa [Array.make] using canonical2 coordinate coordinateBound
 
+/-- A canonical statement-point entry through proof-carrying indexing.
+
+Keeping this form public lets downstream source bridges avoid coupling to the
+default-value instances used by generated array indexing. -/
+theorem canonical_points_entry
+    (points : Points) (canonical : CanonicalPoints points)
+    (row coordinate : Nat) (rowBound : row < points.val.length)
+    (coordinateBound : coordinate < (points.val[row]'rowBound).val.length) :
+    GeneratedCanonicalQM31
+      ((points.val[row]'rowBound).val[coordinate]'coordinateBound) := by
+  have rowBoundThree : row < 3 := by
+    simpa [Array.length_eq] using rowBound
+  have coordinateBoundTen : coordinate < 10 := by
+    simpa [Array.length_eq] using coordinateBound
+  have source := canonical row coordinate rowBoundThree coordinateBoundTen
+  rw [getElem!_pos points.val row rowBound] at source
+  rw [getElem!_pos (points.val[row]'rowBound).val coordinate coordinateBound]
+    at source
+  exact source
+
 theorem successful_v6_statement_points_canonical
     (z : Point) (points : Points)
     (canonical : CanonicalPoint z)
