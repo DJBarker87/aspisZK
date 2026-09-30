@@ -1,5 +1,23 @@
 # Current V8 privacy-repair status
 
+## R121 two-swap source polynomial — 2026-09-30
+
+[R121_TWO_SWAP_SOURCE_GATE.md](R121_TWO_SWAP_SOURCE_GATE.md) records
+12 compiled Lean targets and 76 clean axioms audits. The new permutation,
+arbitrary-challenge point/channel weights and ordered G scatter are bound to
+the exact-field source model. The augmented fixed-query determinant is
+nonzero over exact QM31, with a freshly checked degree bound of 819; the
+rational chord scaling retains its denominator and distinctness premises.
+All 1,024 source permutation/inactive entries are checked. The old ordering
+is not reused.
+
+No verifier change or new SBF run: **999,790 / 999,532 CU** remains the measured
+endpoint. First remaining for this component: justify its exceptional-event
+law in the actual adaptive shared-oracle experiment. Future query roots
+cannot simply be conditioned on as independent constants. Universal joint
+C1/H1/G coverage, causal privacy and the separate soundness/extraction gates
+remain open. Full security is not proved; the active goal continues.
+
 ## R118–R120 augmented query repair — 2026-09-30
 
 [R120_AUGMENTED_QUERY_REPAIR.md](R120_AUGMENTED_QUERY_REPAIR.md) records
