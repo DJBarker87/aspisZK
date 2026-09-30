@@ -1,5 +1,21 @@
 # Current V8 privacy-repair status
 
+## R125 circle-source observer and ideal OOD wrapper — 2026-09-30
+
+[R125_CIRCLE_SOURCE_BOUNDARY.md](R125_CIRCLE_SOURCE_BOUNDARY.md) records two
+compiled Lean targets and ten clean theorem audits. The full observed
+secure-circle sampler now retains an arbitrary visible prefix and reduces to
+sequential independent answers under explicit `FreshFrom`. Its actual source
+acceptance predicate is exactly `parameter.im != 0`. Three ideal uniform QM31
+attempts have exact failure `((P^2)^3)/((P^4)^3)` and equal mass for all
+accepted OOD parameters.
+
+The remaining source proposition is the distributional bridge from the actual
+four-limb eight-retry byte sampler to those ideal QM31 attempts, including
+visible exhaustion and shared-oracle state advances. No verifier change or new
+SBF run; the measured endpoint remains **999,790 / 999,532 CU**. Full privacy
+and soundness remain open.
+
 ## R124 observed q22 prefix and ideal distinct retry — 2026-09-30
 
 [R124_OBSERVED_RETRY_LAW.md](R124_OBSERVED_RETRY_LAW.md) records four compiled
