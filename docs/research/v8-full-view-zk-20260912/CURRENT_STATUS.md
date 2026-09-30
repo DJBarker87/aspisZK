@@ -1,5 +1,13 @@
 # Current V8 privacy-repair status
 
+## R130 raw independent law and fixed-tape mean — 2026-09-30
+
+[R130_RAW_INDEPENDENT_BOUNDARY.md](R130_RAW_INDEPENDENT_BOUNDARY.md) records
+three confirmed focused leaves: the raw OOD-pair independent law, the
+fixed-tape independent mean, and the conservative all-branches trace bound of
+66. `FreshFrom`, source callback/distribution, privacy, and soundness remain
+open.
+
 ## R129 answer transport and arbitrary-history OOD pair law — 2026-09-30
 
 [R129_ANSWER_HISTORY_BOUNDARY.md](R129_ANSWER_HISTORY_BOUNDARY.md) records two
