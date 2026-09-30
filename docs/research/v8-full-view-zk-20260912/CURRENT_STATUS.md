@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## R135 explicit selected-schedule execution — 2026-09-30
+
+[R135_SELECTED_SCHEDULE_EXECUTION.md](R135_SELECTED_SCHEDULE_EXECUTION.md)
+records one focused compiled leaf.  The complete typed schedule through rho
+now has an explicit pure run assembled from the checked component runs and an
+`eval_run` theorem; it is not a tautological `run := eval` definition.  The
+frozen selected Rust callback equality, source distribution, privacy and
+soundness remain open.
+
 ## R134 complete typed selected-schedule boundary — 2026-09-30
 
 [R134_SELECTED_SCHEDULE_BOUNDARY.md](R134_SELECTED_SCHEDULE_BOUNDARY.md)
