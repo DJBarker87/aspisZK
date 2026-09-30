@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## R137 exact transcript external closure — 2026-09-30
+
+[R137_TRANSCRIPT_EXTERNAL_CLOSURE.md](R137_TRANSCRIPT_EXTERNAL_CLOSURE.md)
+records the direct extraction of the pinned transcript/field primitives and
+their compiled integration into R136's generated `before_ood` callback.  All
+11 former external templates now have concrete exact-source implementations;
+six focused Lean targets pass with zero swap, and the two conversion theorems
+use no axioms.  The exact callback-to-program execution theorem is still open:
+first the packed/long absorb framing and QM31/nonzero sampler state bridges,
+then the selected callback composition.  Actual sampler admissibility,
+privacy and soundness remain open.
+
 ## R136 first frozen-source binding boundary — 2026-09-30
 
 [R136_SOURCE_BINDING_BOUNDARY.md](R136_SOURCE_BINDING_BOUNDARY.md) records a

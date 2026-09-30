@@ -1,0 +1,6 @@
+{
+  "resource_scope":["systemd-run","--user","--wait","--collect","--pipe","-p","MemoryHigh=5G","-p","MemoryMax=7G","-p","MemorySwapMax=0","-p","TasksMax=128"],
+  "extract":["/usr/bin/time","-v","charon","cargo","--preset","aeneas","--mir","built","--sysroot","default","--start-from","crate::r137_transcript_new_probe","--start-from","crate::r137_transcript_absorb_probe","--start-from","crate::r137_challenge_qm31_probe","--start-from","crate::r137_challenge_nonzero_qm31_probe","--start-from","crate::r137_write_qm31_probe","--start-from","crate::r137_labels_probe","--include","core::option","--include","core::result::_::map_err","--dest-file","R137Transcript.llbc","--","--offline","--locked","--release","--jobs","1","--manifest-path","source/Cargo.toml","--lib"],
+  "translate":["/usr/bin/time","-v","aeneas-repro-r1","-sequential","-no-progress-bar","-abort-on-error","-backend","lean","-namespace","AspisR137Transcript","-dest","generated","-subdir","AspisR137Transcript","-split-files","-emit-json","R137Transcript.llbc"],
+  "lean":["/usr/bin/time","-v","lean","-j1","-M4500","-o","OUTPUT_ROOT/TARGET.olean","SOURCE_ROOT/TARGET.lean"]
+}
