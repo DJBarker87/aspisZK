@@ -75,12 +75,23 @@ structure AcceptedOnefoldLoopDispatch
   traceAfterStart : Trace
   gamma : field.QM31
   kappa : field.QM31
+  inactiveClaim : field.QM31
   points : Array (Array field.QM31 10#usize) 3#usize
   pointScales : Array field.QM31 3#usize
+  combinedClaims : Array field.QM31 3#usize
+  claimContribution : field.QM31
   dPower : field.QM31
   gammaPowers : state_only_spend_query.StateOnlySpendQueryPowers
   runningClaim : field.QM31
   weights : sumcheck.WeightAccumulator
+  inactiveClaimRun :
+    fieldsInst.next_qm31 fields0 =
+      ok (.Ok inactiveClaim, fieldsAfterPrefix)
+  claimContributionRun :
+    field.qm31_sum_products3 pointScales combinedClaims =
+      ok claimContribution
+  runningClaimRun :
+    field.QM31.add inactiveClaim claimContribution = ok runningClaim
   loopSuccess :
     v6_transcript.finish_onefold_relation_loop0 queryFoldInst
       deriveQueriesInst traceInst fieldsInst prechallengeInst
@@ -247,9 +258,9 @@ theorem accepted_onefold_exposes_outer_loop
                   let pointScales : Array field.QM31 3#usize :=
                     Array.make 3#usize [field.QM31.ONE, kappa, gammaSquared]
                   rw [bind_eq_ok_iff] at success
-                  obtain ⟨claimContribution, _, success⟩ := success
+                  obtain ⟨claimContribution, claimContributionRun, success⟩ := success
                   rw [bind_eq_ok_iff] at success
-                  obtain ⟨runningClaim, _, success⟩ := success
+                  obtain ⟨runningClaim, runningClaimRun, success⟩ := success
                   rw [bind_eq_ok_iff] at success
                   obtain ⟨weights, _, success⟩ := success
                   rw [bind_eq_ok_iff] at success
@@ -267,12 +278,18 @@ theorem accepted_onefold_exposes_outer_loop
                         traceAfterStart := traceAfterStart
                         gamma := gamma
                         kappa := kappa
+                        inactiveClaim := inactiveClaim
                         points := points
                         pointScales := pointScales
+                        combinedClaims := combinedClaims
+                        claimContribution := claimContribution
                         dPower := dPower
                         gammaPowers := gammaPowers
                         runningClaim := runningClaim
                         weights := weights
+                        inactiveClaimRun := fieldRun
+                        claimContributionRun := claimContributionRun
+                        runningClaimRun := runningClaimRun
                         loopSuccess := loopRun }⟩
 
 #print axioms accepted_onefold_exposes_outer_loop
