@@ -1,5 +1,17 @@
 # Current V8 privacy-repair status
 
+## R126 sampler representation and typed callback prefix — 2026-09-30
+
+[R126_SAMPLER_PREFIX_BOUNDARY.md](R126_SAMPLER_PREFIX_BOUNDARY.md) records two
+focused R19 leaves compiled against the 272-pin R122 overlay: the pure
+32-byte/8-word representation transport and the typed relation-callback
+prefix through final256/grind-nonce. Four audits use only the recorded
+`propext`, `Classical.choice`, and `Quot.sound` axioms. The initial missing
+overlay and K1 OOD import-only attempts are explicitly failed/open; they are
+not release results. No source sampler distribution, callback/shared-oracle
+equivalence, privacy, or soundness claim is made. Full privacy and soundness
+remain open.
+
 ## R125 circle-source observer and ideal OOD wrapper — 2026-09-30
 
 [R125_CIRCLE_SOURCE_BOUNDARY.md](R125_CIRCLE_SOURCE_BOUNDARY.md) records two
