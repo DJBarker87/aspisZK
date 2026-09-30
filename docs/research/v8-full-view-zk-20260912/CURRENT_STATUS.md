@@ -1,5 +1,16 @@
 # Current V8 privacy-repair status
 
+## R132 uniform-state mean and fixed-tape circle/pair — 2026-09-30
+
+[R132_UNIFORM_AND_FIXED_TAPE_BOUNDARY.md](R132_UNIFORM_AND_FIXED_TAPE_BOUNDARY.md)
+records three focused compiled leaves, including the one-step
+`UniformStateFirstHitMean` exact result:
+`mean (badIndicator reads) = uniformBadFraction reads` and the bound
+`≤ reads.length / 256^32` for a uniform state and fixed prior read list.
+The fixed-tape circle/pair leaves also pass, with their theorem remaining
+conditional on explicit branch-wise `FreshFrom`. No source-callback/
+distribution, privacy, or soundness result is claimed.
+
 ## R131 fixed-tape QM31 and operational cursor bound — 2026-09-30
 
 [R131_CURSOR_TIGHT_BOUNDARY.md](R131_CURSOR_TIGHT_BOUNDARY.md) records two
