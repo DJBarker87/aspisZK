@@ -328,6 +328,7 @@ theorem
       v6_transcript.V6QueryBatchView
       (core.result.Result v6_query_batch.V6AuthenticatedQueryBatch
         v6_onefold.V6WireError)}
+    {queryFold : QueryFold}
     {traceInst : core.ops.function.FnMut Trace
       v6_transcript.V6RelationDiagnosticPhase Unit}
     {gamma : field.QM31}
@@ -343,7 +344,7 @@ theorem
     {returnedSnapshot : Option Snapshot} {traceOut : Trace}
     (dispatch :
       V7CallerCurrentReleaseR26AcceptedTailDispatch.AcceptedShiftedTailDispatch
-        queryFoldInst traceInst gamma relationFields selector semanticPoint
+        queryFoldInst queryFold traceInst gamma relationFields selector semanticPoint
         kappa queries compactCounter frontierNodes transcriptStateAfterQueries
         snapshot alpha foldedValues weights runningClaim verified
         returnedSnapshot traceOut) :

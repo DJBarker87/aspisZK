@@ -58,7 +58,7 @@ theorem accepted_after_prechallenge_returns_supplied_snapshot
     returnedSnapshot = snapshot ∧
       Nonempty
         (V7CallerCurrentReleaseR26AcceptedTailDispatch.AcceptedShiftedTailDispatch
-          queryFoldInst traceInst gamma relationFields selector semanticPoint
+          queryFoldInst queryFold traceInst gamma relationFields selector semanticPoint
           kappa queries compactCounter frontierNodes
           transcriptStateAfterQueries snapshot alpha foldedValues weights
           runningClaim verified returnedSnapshot traceOut) := by

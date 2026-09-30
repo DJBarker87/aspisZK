@@ -48,7 +48,7 @@ structure AcceptedProductionTail
       hash wire context hidingContext inactiveRowGroups inactiveGroupMasks
       checkPow statement queryFold () true transcript (some snapshot))
     (chain : AcceptedInnerPrechallengeChain inner) : Type where
-  tail : AcceptedShiftedTailDispatch queryFoldInst traceInst
+  tail : AcceptedShiftedTailDispatch queryFoldInst queryFold traceInst
     chain.outer.gamma chain.prechallengeDispatch.relationFields 0#u8
     inner.semanticPoint chain.outer.kappa chain.prechallengeDispatch.queries
     chain.prechallengeDispatch.compactCounter

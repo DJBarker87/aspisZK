@@ -30,6 +30,7 @@ structure AcceptedShiftedTailDispatch
       v6_transcript.V6QueryBatchView
       (core.result.Result v6_query_batch.V6AuthenticatedQueryBatch
         v6_onefold.V6WireError))
+    (queryFold : QueryFold)
     (traceInst : core.ops.function.FnMut Trace
       v6_transcript.V6RelationDiagnosticPhase Unit)
     (gamma : RawQM31)
@@ -51,7 +52,13 @@ structure AcceptedShiftedTailDispatch
     ∃ transcriptAbsorbed transcriptAfterChallenge,
       transcript.Transcript.impl.challenge_nonzero_qm31 transcriptAbsorbed =
         ok (.Ok queryBatchChallenge, transcriptAfterChallenge)
+  /-- The successful callback invocation which produced the exact authenticated
+  batch consumed by this tail.  Keeping the literal view and equation binds
+  representation facts about callback output to the accepted source path. -/
+  queryFoldView : v6_transcript.V6QueryBatchView
   authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch
+  queryFoldRun : queryFoldInst.call_once queryFold queryFoldView =
+    ok (.Ok authenticatedQueries)
   claimIncrement : RawQM31
   weightsAfter : RawWeights
   runningClaimAfter : RawQM31
@@ -105,7 +112,7 @@ theorem accepted_shifted_dispatch_feeds_tail
         semanticPoint kappa queries compactCounter frontierNodes
         transcriptStateAfterQueries snapshot =
           ok (core.result.Result.Ok (verified, returnedSnapshot), traceOut)) :
-    Nonempty (AcceptedShiftedTailDispatch queryFoldInst traceInst gamma
+    Nonempty (AcceptedShiftedTailDispatch queryFoldInst queryFold traceInst gamma
       relationFields selector semanticPoint kappa queries compactCounter
       frontierNodes transcriptStateAfterQueries snapshot alpha foldedValues
       weights runningClaim verified returnedSnapshot traceOut) := by
@@ -239,6 +246,14 @@ theorem accepted_shifted_dispatch_feeds_tail
                             queryBatchChallenge := queryBatchChallenge
                             queryBatchChallengeRun := ⟨transcriptAbsorbed,
                               transcriptAfterChallenge, hchallenge⟩
+                            queryFoldView :=
+                              { gamma := gamma, gamma_powers := gammaPowers,
+                                d_power := dPower, alpha0 := alphaZero,
+                                final256_coefficients := exposedFinal,
+                                queries := queries, selector := selector,
+                                compact_counter := compactCounter,
+                                frontier_nodes := frontierNodes }
+                            queryFoldRun := hqueryFold
                             authenticatedQueries := authenticatedQueries
                             claimIncrement := claimIncrement
                             weightsAfter := weightsAfter

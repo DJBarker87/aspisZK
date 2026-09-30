@@ -55,7 +55,7 @@ structure AcceptedCurrentFoldTail
     {accumulator : AcceptedCircleAccumulator prepared}
     (dispatch : AcceptedInitialPrechallengeDispatch accumulator.origin) : Type where
   tail : V7CallerCurrentReleaseR26AcceptedTailDispatch.AcceptedShiftedTailDispatch
-    queryFoldInst traceInst chain.outer.gamma dispatch.relationFields 0#u8
+    queryFoldInst queryFold traceInst chain.outer.gamma dispatch.relationFields 0#u8
     inner.semanticPoint chain.outer.kappa dispatch.queries dispatch.compactCounter
     dispatch.frontierNodes dispatch.transcriptStateAfterQueries
     dispatch.prechallengeSnapshot dispatch.alpha dispatch.foldedValues
