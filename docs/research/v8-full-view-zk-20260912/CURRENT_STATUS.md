@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R124 observed q22 prefix and ideal distinct retry — 2026-09-30
+
+[R124_OBSERVED_RETRY_LAW.md](R124_OBSERVED_RETRY_LAW.md) records four compiled
+Lean targets and nine clean theorem audits. The exact q22 observer now retains
+an arbitrary visible prefix and reduces to sequential independent answers
+under the explicit branch-wise `FreshFrom` premise. A fail-visible guard gives
+an unconditional fresh program without resampling cache hits. Over the exact
+nonzero-imaginary OOD subtype, the ideal three-attempt distinct-second-point
+wrapper has failure probability `1/sourceMinimum^3`, equal accepted-output
+probabilities and `sourceMinimum-1` accepted values.
+
+This is not yet the callback sampler law: the actual pre-q22 history/table,
+freshness-or-loss composition and secure-circle inner rejection sampler remain
+to be bound. Production V6 has no distinct-second-point wrapper. No verifier
+change or new SBF run; the measured endpoint remains **999,790 / 999,532 CU**.
+Full privacy and soundness remain open.
+
 ## R123 source-domain and one-step first-read bound — 2026-09-30
 
 [R123_SOURCE_DOMAIN_BOUND.md](R123_SOURCE_DOMAIN_BOUND.md) records six compiled
