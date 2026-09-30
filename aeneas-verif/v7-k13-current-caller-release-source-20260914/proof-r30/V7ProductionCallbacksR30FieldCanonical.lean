@@ -133,6 +133,13 @@ theorem u64_wrapping_shr31_val_le_one
   norm_num
   omega
 
+theorem u64_wrapping_shr31_val_le_four
+    (value : Std.U64) (hvalue : value.val ≤ 10737418223) :
+    (Std.U64.wrapping_shr value 31#u32).val ≤ 4 := by
+  rw [u64_wrapping_shr31_val_eq, Nat.shiftRight_eq_div_pow]
+  norm_num
+  omega
+
 theorem u64_size_eq : Std.U64.size = 18446744073709551616 := by
   rw [Std.U64.size, Std.U64.numBits]
   norm_num
@@ -415,6 +422,110 @@ theorem callback_mul_eq_current_mul
   · rw [Std.U32.cast_U64_val_eq, Std.U32.cast_U64_val_eq,
       UScalar.max_UScalarTy_U64_eq, Std.U64.max_eq]
     omega
+
+/-- The complex-field multiplication path reduces products of two sums of
+canonical limbs.  Those products can be almost four times the bound used by
+the scalar multiplication path, but still fit in `u64`; this establishes the
+same current-model reduction at that wider source bound. -/
+theorem callback_reduce_u64_eq_current_reduce_u64_wide
+    (value : Std.U64)
+    (hvalue : value.val ≤ 18446744039349813264) :
+    V7ProductionCallbacksR29.aspis_core.field.reduce_u64 value =
+      V7CallerCurrentReleaseR26.field.reduce_u64 value := by
+  unfold V7ProductionCallbacksR29.aspis_core.field.reduce_u64
+    V7CallerCurrentReleaseR26.field.reduce_u64
+  rw [p_eq]
+  have hmask :
+      (UScalar.cast .U64
+        V7CallerCurrentReleaseR26.field.P).val = 2147483647 := by
+    rw [Std.U32.cast_U64_val_eq, current_p_val_eq]
+  have hhigh :
+      (Std.U64.wrapping_shr value 31#u32).val ≤ 8589934576 := by
+    rw [u64_wrapping_shr31_val_eq, Nat.shiftRight_eq_div_pow]
+    norm_num
+    omega
+  have hand :
+      (value &&& UScalar.cast .U64
+        V7CallerCurrentReleaseR26.field.P).val ≤ 2147483647 := by
+    calc
+      _ ≤ (UScalar.cast .U64
+          V7CallerCurrentReleaseR26.field.P).val :=
+        u64_and_val_le_right _ _
+      _ = 2147483647 := hmask
+  have hfirst_sum :
+      (value &&& UScalar.cast .U64
+          V7CallerCurrentReleaseR26.field.P).val +
+        (Std.U64.wrapping_shr value 31#u32).val ≤ 10737418223 := by
+    omega
+  have hfirst_sum_lt_size :
+      (value &&& UScalar.cast .U64
+          V7CallerCurrentReleaseR26.field.P).val +
+        (Std.U64.wrapping_shr value 31#u32).val < Std.U64.size := by
+    rw [u64_size_eq]
+    omega
+  have hx1 :
+      (Std.U64.wrapping_add
+        (value &&& UScalar.cast .U64
+          V7CallerCurrentReleaseR26.field.P)
+        (Std.U64.wrapping_shr value 31#u32)).val ≤ 10737418223 := by
+    rw [Std.U64.wrapping_add_val_eq, UScalar.size_UScalarTyU64,
+      Nat.mod_eq_of_lt hfirst_sum_lt_size]
+    exact hfirst_sum
+  have hx1high :
+      (Std.U64.wrapping_shr
+        (Std.U64.wrapping_add
+          (value &&& UScalar.cast .U64
+            V7CallerCurrentReleaseR26.field.P)
+          (Std.U64.wrapping_shr value 31#u32)) 31#u32).val ≤ 4 := by
+    exact u64_wrapping_shr31_val_le_four _ hx1
+  have hx1and :
+      (Std.U64.wrapping_add
+          (value &&& UScalar.cast .U64
+            V7CallerCurrentReleaseR26.field.P)
+          (Std.U64.wrapping_shr value 31#u32) &&&
+        UScalar.cast .U64
+          V7CallerCurrentReleaseR26.field.P).val ≤ 2147483647 := by
+    calc
+      _ ≤ (UScalar.cast .U64
+          V7CallerCurrentReleaseR26.field.P).val :=
+        u64_and_val_le_right _ _
+      _ = 2147483647 := hmask
+  simp only [Std.lift, bind_tc_ok]
+  rw [checked_u64_shr31_eq_wrapping]
+  simp only [bind_tc_ok]
+  rw [checked_add_eq_wrapping]
+  · simp only [bind_tc_ok]
+    rw [generic_wrapping_add_eq_u64_wrapping_add]
+    rw [checked_u64_shr31_eq_wrapping]
+    simp only [bind_tc_ok]
+    rw [checked_add_eq_wrapping]
+    · simp only [bind_tc_ok]
+      rw [generic_wrapping_add_eq_u64_wrapping_add]
+      by_cases hreduce :
+          UScalar.cast .U32
+              (Std.U64.wrapping_add
+                (Std.U64.wrapping_add
+                    (value &&& UScalar.cast .U64
+                      V7CallerCurrentReleaseR26.field.P)
+                    (Std.U64.wrapping_shr value 31#u32) &&&
+                  UScalar.cast .U64
+                    V7CallerCurrentReleaseR26.field.P)
+                (Std.U64.wrapping_shr
+                  (Std.U64.wrapping_add
+                    (value &&& UScalar.cast .U64
+                      V7CallerCurrentReleaseR26.field.P)
+                    (Std.U64.wrapping_shr value 31#u32)) 31#u32)) ≥
+            V7CallerCurrentReleaseR26.field.P
+      · simp [hreduce]
+        rw [checked_sub_eq_wrapping]
+        · rw [generic_wrapping_sub_eq_u32_wrapping_sub]
+        · exact (UScalar.le_equiv _ _).1 hreduce
+      · simp [hreduce]
+    · rw [UScalar.max_UScalarTy_U64_eq, Std.U64.max_eq]
+      omega
+  · rw [UScalar.max_UScalarTy_U64_eq, Std.U64.max_eq]
+    omega
+
 open V7CallerCurrentReleaseR26FieldBridge
 
 abbrev CallbackM31 := V7ProductionCallbacksR29.aspis_core.field.M31
@@ -479,9 +590,125 @@ theorem callback_m31_sub_canonical
   · exact hleft
   · exact hright
 
+/-- Canonical callback limbs remain canonical through the generated complex
+multiplication.  The only non-scalar intermediate is a product of limb sums;
+the preceding wide reduction theorem accounts for its checked `u64` range. -/
+theorem callback_cm31_mul_canonical
+    (x y : V7ProductionCallbacksR29.aspis_core.field.CM31)
+    (hx : GeneratedCanonicalCM31 x)
+    (hy : GeneratedCanonicalCM31 y) :
+    ∃ output : V7ProductionCallbacksR29.aspis_core.field.CM31,
+      V7ProductionCallbacksR29.aspis_core.field.CM31.mul x y = ok output ∧
+      GeneratedCanonicalCM31 output := by
+  have hxa : x.a.val < 2147483647 := by
+    simpa [AspisAeneasCM31Multiplicative.CanonicalRawM31,
+      AspisAeneasCM31Multiplicative.m31Modulus] using hx.1
+  have hxb : x.b.val < 2147483647 := by
+    simpa [AspisAeneasCM31Multiplicative.CanonicalRawM31,
+      AspisAeneasCM31Multiplicative.m31Modulus] using hx.2
+  have hya : y.a.val < 2147483647 := by
+    simpa [AspisAeneasCM31Multiplicative.CanonicalRawM31,
+      AspisAeneasCM31Multiplicative.m31Modulus] using hy.1
+  have hyb : y.b.val < 2147483647 := by
+    simpa [AspisAeneasCM31Multiplicative.CanonicalRawM31,
+      AspisAeneasCM31Multiplicative.m31Modulus] using hy.2
+  obtain ⟨m0, hm0, hm0Canonical⟩ :=
+    callback_m31_mul_canonical x.a y.a hx.1 hy.1
+  obtain ⟨m1, hm1, hm1Canonical⟩ :=
+    callback_m31_mul_canonical x.b y.b hx.2 hy.2
+  let wideXA : Std.U64 := UScalar.cast .U64 x.a
+  let wideXB : Std.U64 := UScalar.cast .U64 x.b
+  let wideYA : Std.U64 := UScalar.cast .U64 y.a
+  let wideYB : Std.U64 := UScalar.cast .U64 y.b
+  let wideXSum : Std.U64 := Std.U64.wrapping_add wideXA wideXB
+  let wideYSum : Std.U64 := Std.U64.wrapping_add wideYA wideYB
+  have hxsumBound : wideXA.val + wideXB.val ≤ UScalar.max .U64 := by
+    simp only [wideXA, wideXB, Std.U32.cast_U64_val_eq,
+      UScalar.max_UScalarTy_U64_eq, Std.U64.max_eq]
+    omega
+  have hysumBound : wideYA.val + wideYB.val ≤ UScalar.max .U64 := by
+    simp only [wideYA, wideYB, Std.U32.cast_U64_val_eq,
+      UScalar.max_UScalarTy_U64_eq, Std.U64.max_eq]
+    omega
+  have hxsumRun : wideXA + wideXB = ok wideXSum := by
+    rw [checked_add_eq_wrapping]
+    · rw [generic_wrapping_add_eq_u64_wrapping_add]
+    · exact hxsumBound
+  have hysumRun : wideYA + wideYB = ok wideYSum := by
+    rw [checked_add_eq_wrapping]
+    · rw [generic_wrapping_add_eq_u64_wrapping_add]
+    · exact hysumBound
+  have hxsumVal : wideXSum.val = x.a.val + x.b.val := by
+    unfold wideXSum
+    rw [Std.U64.wrapping_add_val_eq, UScalar.size_UScalarTyU64,
+      Nat.mod_eq_of_lt]
+    · simp only [wideXA, wideXB, Std.U32.cast_U64_val_eq]
+    · simp only [wideXA, wideXB, Std.U32.cast_U64_val_eq]
+      rw [u64_size_eq]
+      nlinarith
+  have hysumVal : wideYSum.val = y.a.val + y.b.val := by
+    unfold wideYSum
+    rw [Std.U64.wrapping_add_val_eq, UScalar.size_UScalarTyU64,
+      Nat.mod_eq_of_lt]
+    · simp only [wideYA, wideYB, Std.U32.cast_U64_val_eq]
+    · simp only [wideYA, wideYB, Std.U32.cast_U64_val_eq]
+      rw [u64_size_eq]
+      nlinarith
+  let wideProduct : Std.U64 := Std.U64.wrapping_mul wideXSum wideYSum
+  have hproductUnderU64 :
+      wideXSum.val * wideYSum.val < Std.U64.size := by
+    rw [hxsumVal, hysumVal, u64_size_eq]
+    nlinarith
+  have hproductBound : wideProduct.val ≤ 18446744039349813264 := by
+    unfold wideProduct
+    rw [Std.U64.wrapping_mul_val_eq, UScalar.size_UScalarTyU64,
+      Nat.mod_eq_of_lt hproductUnderU64]
+    rw [hxsumVal, hysumVal]
+    nlinarith
+  have hproductRun : wideXSum * wideYSum = ok wideProduct := by
+    rw [checked_mul_eq_wrapping]
+    · rw [generic_wrapping_mul_eq_u64_wrapping_mul]
+    · rw [UScalar.max_UScalarTy_U64_eq, Std.U64.max_eq]
+      rw [u64_size_eq] at hproductUnderU64
+      omega
+  obtain ⟨m2, hm2Current, hm2Canonical, _⟩ :=
+    generated_m31_reduce_u64_corresponds wideProduct
+  have hm2 : V7ProductionCallbacksR29.aspis_core.field.M31.reduce_u64 wideProduct = ok m2 := by
+    calc
+      V7ProductionCallbacksR29.aspis_core.field.M31.reduce_u64 wideProduct =
+          V7CallerCurrentReleaseR26.field.M31.reduce_u64 wideProduct := by
+        unfold V7ProductionCallbacksR29.aspis_core.field.M31.reduce_u64
+          V7CallerCurrentReleaseR26.field.M31.reduce_u64
+        rw [callback_reduce_u64_eq_current_reduce_u64_wide wideProduct hproductBound]
+      _ = ok m2 := hm2Current
+  obtain ⟨real, hreal, hrealCanonical⟩ :=
+    callback_m31_sub_canonical m0 m1 hm0Canonical hm1Canonical
+  obtain ⟨imagPart, himagPart, himagPartCanonical⟩ :=
+    callback_m31_sub_canonical m2 m0 hm2Canonical hm0Canonical
+  obtain ⟨imag, himag, himagCanonical⟩ :=
+    callback_m31_sub_canonical imagPart m1 himagPartCanonical hm1Canonical
+  let output : V7ProductionCallbacksR29.aspis_core.field.CM31 := ⟨real, imag⟩
+  refine ⟨output, ?_, ⟨hrealCanonical, himagCanonical⟩⟩
+  unfold V7ProductionCallbacksR29.aspis_core.field.CM31.mul
+  simp only [hm0, bind_tc_ok, hm1, Std.lift]
+  simp only [from_u64_u32_eq_cast]
+  rw [show (UScalar.cast .U64 x.a : Std.U64) = wideXA by rfl]
+  rw [show (UScalar.cast .U64 x.b : Std.U64) = wideXB by rfl]
+  rw [hxsumRun]
+  simp only [bind_tc_ok]
+  rw [show (UScalar.cast .U64 y.a : Std.U64) = wideYA by rfl]
+  rw [show (UScalar.cast .U64 y.b : Std.U64) = wideYB by rfl]
+  rw [hysumRun]
+  simp only [bind_tc_ok]
+  rw [hproductRun]
+  simp only [bind_tc_ok, hm2, hreal, himagPart, himag]
+  rfl
+
 #print axioms callback_m31_mul_canonical
 #print axioms callback_m31_add_canonical
 #print axioms callback_m31_double_canonical
 #print axioms callback_m31_sub_canonical
+#print axioms callback_reduce_u64_eq_current_reduce_u64_wide
+#print axioms callback_cm31_mul_canonical
 
 end V7ProductionCallbacksR30FieldCanonical
