@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "base_revision": "d189e4def6fffd3b9ac2666bb5159bbbf93d12ca",
+  "targets": [
+    {
+      "target": "AspisR137Q22/Types",
+      "sha256": "a4f6c538a31a54c452eb5aacec8e21f662437f7afea9c6b3956a8394704af471",
+      "source_revision": "d189e4def6fffd3b9ac2666bb5159bbbf93d12ca",
+      "log": "logs/AspisR137Q22_Types.log",
+      "exit": 0,
+      "wall_seconds": 1.21,
+      "peak_rss_kib": 2532044,
+      "swap": 0,
+      "axioms": {}
+    },
+    {
+      "target": "AspisR137Q22/Funs",
+      "sha256": "89a233cf3ef68d8fac2f930bc9e311a1eaf9eb2155c500a7c6c969524860bb4e",
+      "source_revision": "d189e4def6fffd3b9ac2666bb5159bbbf93d12ca",
+      "log": "logs/AspisR137Q22_Funs.log",
+      "exit": 0,
+      "wall_seconds": 1.53,
+      "peak_rss_kib": 2529980,
+      "swap": 0,
+      "axioms": {}
+    },
+    {
+      "target": "AspisV8R19/R143QueryEntryBridge",
+      "sha256": "9d4487a415fbbbce3003afeef288bda32f0b6a8133a0d4d43467bbde4f4874cb",
+      "source_revision": "d189e4def6fffd3b9ac2666bb5159bbbf93d12ca",
+      "log": "logs/AspisV8R19_R143QueryEntryBridge.log",
+      "exit": 0,
+      "wall_seconds": 1.46,
+      "peak_rss_kib": 2547900,
+      "swap": 0,
+      "axioms": {
+        "AspisV8R19.R143QueryEntryBridge.small64_val": "[propext, Quot.sound]",
+        "AspisV8R19.R143QueryEntryBridge.try_small64": "[propext, Quot.sound]",
+        "AspisV8R19.R143QueryEntryBridge.bounded_draw_increment": "[propext, Classical.choice, Quot.sound]",
+        "AspisV8R19.R143QueryEntryBridge.wrapping_bound": "[propext, Classical.choice, Quot.sound]",
+        "AspisV8R19.R143QueryEntryBridge.checked_bound": "[propext, Classical.choice, Quot.sound]",
+        "AspisV8R19.R143QueryEntryBridge.wrapping_mask": "[propext, Classical.choice, Quot.sound]",
+        "AspisV8R19.R143QueryEntryBridge.cast_bound": "[propext, Classical.choice, Quot.sound]",
+        "AspisV8R19.R143QueryEntryBridge.selected_entry": "[propext,\n Classical.choice,\n Quot.sound,\n core.fmt.Formatter]",
+        "AspisR137Q22.r137_query_probe": "[propext, Classical.choice, Quot.sound, core.fmt.Formatter]",
+        "AspisR137Q22.transcript.Transcript.challenge_queries_without_replacement": "[propext,\n Classical.choice,\n Quot.sound,\n core.fmt.Formatter]"
+      }
+    },
+    {
+      "target": "AspisV8R19/R145QueryInnerBridge",
+      "sha256": "a156ab78d16ef0ff7de65f1562f4a3eca6e377ccabcc11519e49120475dd0474",
+      "source_revision": "d189e4def6fffd3b9ac2666bb5159bbbf93d12ca",
+      "log": "logs/AspisV8R19_R145QueryInnerBridge.log",
+      "exit": 0,
+      "wall_seconds": 2.03,
+      "peak_rss_kib": 3705156,
+      "swap": 0,
+      "axioms": {
+        "AspisV8R19.R145QueryInnerBridge.body_word": "[propext,\n Classical.choice,\n Quot.sound,\n core.fmt.Formatter]",
+        "AspisV8R19.R145QueryInnerBridge.inner_exact": "[propext,\n Classical.choice,\n Quot.sound,\n core.fmt.Formatter]"
+      }
+    }
+  ],
+  "artifacts": {
+    "R137Q22.llbc": "761b5e2b7ae1e26c469248ffa50b0df91b97400b09bcf35dd093e0b4d8556b47",
+    "source-checksums.txt": "b27238422f9812dc4c373bb17d695dc41624d8a64c9654c07285460bf7f7bd1e",
+    "q22-extraction-source.txt": "691f5b2d9ad68bcee69aaa06a70bef2252ca0c3a93a3d7aa46765f5baa036ab5",
+    "generated/translation.json": "807004bfdd90934101f76ad4e9f2a6b345551bd44ab2ba68935dc229363d95f8",
+    "source/Cargo.toml": "0a6e6a09980e9f76eb44e3f970a08f17cc66836c373c428d712a4cd051626cf7",
+    "source/lib.rs": "2df60729c94c7dffc98b3ab9f6e01e5f9ace6f9e367b5e27a67e41501e3f56e9",
+    "source/transcript.rs": "451357c6d61e3eaf750ead4bc4f3aa5d32db9771346d798818dd331d755bb546",
+    "source/Cargo.lock": "f45ff3c42f0f08cf35abcf4d5d92b5d9107cf5c3e684033092b5fe7124bc5397",
+    "source/field.rs": "639b6425fe672e0fa6019b99b702d1f08f56cd75c4d9ad6defef854b7640f499",
+    "generated/AspisR137Q22/Funs.lean": "5bc8fbd57d73df03cbec2feb89999833c95c366db2628d240e82a72decfa0319",
+    "generated/AspisR137Q22/Types.lean": "5181ef3b4ab6dc83fb44cc73e9dd0c0ffa96f1fcb6f9f6593431cbb1bc977548"
+  },
+  "compatibility_adaptations": [
+    "Import Aeneas.Std, Data.Discriminant, Tactic.RustAttributes explicitly for cached Lean 4.32 workspace.",
+    "Keep the generated error type and its 0/1/2 discriminants but name the instance explicitly to avoid an R86 global declaration collision.",
+    "Use 18#u32 as the wrapping_shl operand required by cached Aeneas; wrapping_bound and checked_bound both prove the exact Rust 1<<18 value 262144."
+  ],
+  "resource_cap": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128,
+    "threads": 1,
+    "lean_heap_mib": 4500
+  },
+  "proved_boundary": "The actual R137 entry reduces to its exact 22/262144/64 loop call. The generated inner scan on any list of four-byte words equals the actual imported QueryChunkExecution.runWords under draws.val<=64. Checked and wrapping increments are proved equal under draws.val<64; all Vec.push fail/div/success branches remain. All QuerySampleError constructors remain intact.",
+  "first_remaining_proposition": "Prove the R137 outer squeeze/scan loop and public value/error/state equality to Q22SamplerProgram.challengeRun.",
+  "axiom_note": "The Lean 4.32 cached Aeneas library adds core.fmt.Formatter (an opaque formatting type) to query method/loop audits through DebugTryFromSliceError. Complete audits are recorded; this is not hidden or counted as a source-oracle/cryptographic theorem. No sorryAx occurs.",
+  "claims": {
+    "q22_extraction": "COMPILED",
+    "q22_fixed_entry": "COMPILED",
+    "q22_bounded_inner_scan": "COMPILED",
+    "q22_public_source_bridge": "OPEN",
+    "shared_oracle_trace": "OPEN",
+    "privacy": false,
+    "soundness": false
+  }
+}
