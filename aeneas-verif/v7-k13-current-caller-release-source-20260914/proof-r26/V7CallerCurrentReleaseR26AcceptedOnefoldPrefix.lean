@@ -75,6 +75,8 @@ structure AcceptedOnefoldLoopDispatch
   traceAfterStart : Trace
   gamma : field.QM31
   kappa : field.QM31
+  transcriptBeforeKappa : transcript.Transcript
+  kappaSquared : field.QM31
   inactiveClaim : field.QM31
   points : Array (Array field.QM31 10#usize) 3#usize
   pointScales : Array field.QM31 3#usize
@@ -84,6 +86,19 @@ structure AcceptedOnefoldLoopDispatch
   gammaPowers : state_only_spend_query.StateOnlySpendQueryPowers
   runningClaim : field.QM31
   weights : sumcheck.WeightAccumulator
+  kappaRun :
+    transcript.Transcript.impl.challenge_nonzero_qm31
+        transcriptBeforeKappa =
+      ok (.Ok kappa, transcriptAfterPrefix)
+  pointsRun :
+    v6_transcript.v6_statement_points semanticPoint = ok points
+  kappaSquaredRun :
+    field.QM31.square kappa = ok kappaSquared
+  pointScalesExact :
+    pointScales =
+      Array.make 3#usize [field.QM31.ONE, kappa, kappaSquared]
+  weightsRun :
+    sumcheck.WeightAccumulator.impl.empty 10#u32 = ok weights
   inactiveClaimRun :
     fieldsInst.next_qm31 fields0 =
       ok (.Ok inactiveClaim, fieldsAfterPrefix)
@@ -227,13 +242,13 @@ theorem accepted_onefold_exposes_outer_loop
               rw [bind_eq_ok_iff] at success
               obtain ⟨inactiveBytes, _, success⟩ := success
               rw [bind_eq_ok_iff] at success
-              obtain ⟨inactiveReadSlice, _, success⟩ := success
+              obtain ⟨transcriptBeforeKappa, _, success⟩ := success
               rw [bind_eq_ok_iff] at success
-              obtain ⟨kappaPair, _, success⟩ := success
+              obtain ⟨kappaPair, kappaRun, success⟩ := success
               rcases kappaPair with ⟨kappaResult, transcriptAfterPrefix⟩
               simp only at success
               rw [bind_eq_ok_iff] at success
-              obtain ⟨kappaMapped, _, success⟩ := success
+              obtain ⟨kappaMapped, kappaMapRun, success⟩ := success
               rw [bind_eq_ok_iff] at success
               obtain ⟨kappaFlow, kappaBranch, success⟩ := success
               cases kappaFlow with
@@ -246,23 +261,36 @@ theorem accepted_onefold_exposes_outer_loop
               | Continue kappa =>
                   have kappaExact := branch_eq_ok_of_continue kappaMapped kappa
                     kappaBranch
+                  have kappaResultExact : kappaResult = .Ok kappa := by
+                    rw [kappaExact] at kappaMapRun
+                    cases kappaResult with
+                    | Ok actual =>
+                        have actualExact : actual = kappa := by
+                          simpa [core.result.Result.map_err] using kappaMapRun
+                        subst actual
+                        rfl
+                    | Err error =>
+                        simp [core.result.Result.map_err,
+                          v6_transcript.finish_onefold_relation.closure_1.Insts.CoreOpsFunctionFnOnceTupleChallengeSampleExhaustedV6TranscriptError.call_once]
+                          at kappaMapRun
+                  rw [kappaResultExact] at kappaRun
                   simp only at success
                   rw [bind_eq_ok_iff] at success
-                  obtain ⟨points, _, success⟩ := success
+                  obtain ⟨points, pointsRun, success⟩ := success
                   rw [bind_eq_ok_iff] at success
-                  obtain ⟨gammaSquared, _, success⟩ := success
+                  obtain ⟨kappaSquared, kappaSquaredRun, success⟩ := success
                   rw [bind_eq_ok_iff] at success
                   obtain ⟨claimPowers, _, success⟩ := success
                   rcases claimPowers with
                     ⟨combinedClaims, gammaPowers, dPower⟩
                   let pointScales : Array field.QM31 3#usize :=
-                    Array.make 3#usize [field.QM31.ONE, kappa, gammaSquared]
+                    Array.make 3#usize [field.QM31.ONE, kappa, kappaSquared]
                   rw [bind_eq_ok_iff] at success
                   obtain ⟨claimContribution, claimContributionRun, success⟩ := success
                   rw [bind_eq_ok_iff] at success
                   obtain ⟨runningClaim, runningClaimRun, success⟩ := success
                   rw [bind_eq_ok_iff] at success
-                  obtain ⟨weights, _, success⟩ := success
+                  obtain ⟨weights, weightsRun, success⟩ := success
                   rw [bind_eq_ok_iff] at success
                   obtain ⟨pendingReturn, loopRun, success⟩ := success
                   cases pendingReturn with
@@ -278,6 +306,8 @@ theorem accepted_onefold_exposes_outer_loop
                         traceAfterStart := traceAfterStart
                         gamma := gamma
                         kappa := kappa
+                        transcriptBeforeKappa := transcriptBeforeKappa
+                        kappaSquared := kappaSquared
                         inactiveClaim := inactiveClaim
                         points := points
                         pointScales := pointScales
@@ -287,6 +317,11 @@ theorem accepted_onefold_exposes_outer_loop
                         gammaPowers := gammaPowers
                         runningClaim := runningClaim
                         weights := weights
+                        kappaRun := kappaRun
+                        pointsRun := pointsRun
+                        kappaSquaredRun := kappaSquaredRun
+                        pointScalesExact := rfl
+                        weightsRun := weightsRun
                         inactiveClaimRun := fieldRun
                         claimContributionRun := claimContributionRun
                         runningClaimRun := runningClaimRun
