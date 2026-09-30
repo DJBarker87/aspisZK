@@ -1,5 +1,16 @@
 # Current V8 privacy-repair status
 
+## R128 raw execution and circle-pair prefix boundary — 2026-09-30
+
+[R128_RAW_EXECUTION_PAIR_BOUNDARY.md](R128_RAW_EXECUTION_PAIR_BOUNDARY.md)
+records two compiled R19 leaves: deterministic read/limb/four-limb/challenge
+recursion equality under `stateRawEquiv`, and the exact first-circle → absorb0
+→ three-attempt distinct-second → absorb1 eval/run with inner and exhaustion
+failures visible. Five audits are clean. Replacing independent uniform State
+answers with a flat/raw-attempt distribution and retaining advance ghosts,
+actual callback equivalence/freshness/loss, privacy, and soundness remain
+explicitly open.
+
 ## R127 raw cursor and distinct-circle program boundary — 2026-09-30
 
 [R127_CURSOR_DISTINCT_BOUNDARY.md](R127_CURSOR_DISTINCT_BOUNDARY.md) records
