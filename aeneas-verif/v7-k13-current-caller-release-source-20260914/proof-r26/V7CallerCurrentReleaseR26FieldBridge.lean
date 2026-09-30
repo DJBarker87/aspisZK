@@ -841,6 +841,17 @@ private theorem generated_cm31_square_corresponds
       simp [pow_two, generatedCm31ToExact]
       ring
 
+/-- The generated CM31 square body preserves canonical limbs and denotes
+exact squaring.  This public wrapper exposes the existing checked primitive
+to source-side callers that need the `QM31.try_inv` path. -/
+theorem generated_cm31_square_canonical
+    (x : GeneratedCM31) (hx : GeneratedCanonicalCM31 x) :
+    ∃ out : GeneratedCM31,
+      V7CallerCurrentReleaseR26.field.CM31.square x = ok out ∧
+      GeneratedCanonicalCM31 out ∧
+      generatedCm31ToExact out = generatedCm31ToExact x ^ 2 :=
+  generated_cm31_square_corresponds x hx
+
 /-- The specialized square body in the authentic combined evaluator
 extraction preserves canonical limbs and denotes exact squaring. -/
 theorem generated_qm31_square_corresponds
@@ -889,6 +900,7 @@ theorem generated_qm31_square_corresponds
 #print axioms generated_qm31_mul_m31_corresponds
 #print axioms generated_double_x_m31_corresponds
 #print axioms generated_qm31_square_corresponds
+#print axioms generated_cm31_square_canonical
 #print axioms generated_prepared_qm31_mul_corresponds
 #print axioms generated_prepared_qm31_mul_exact
 
