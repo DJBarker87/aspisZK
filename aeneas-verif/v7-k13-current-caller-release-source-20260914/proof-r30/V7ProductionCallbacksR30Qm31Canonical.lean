@@ -1,4 +1,5 @@
 import V7ProductionCallbacksR30FieldCanonical
+import V7CallerCurrentReleaseR26HalfBridge
 
 /-!
 # Canonicality of the production callback's secure-field primitives
@@ -23,6 +24,8 @@ open V7ProductionCallbacksR30FieldCanonical
 abbrev CallbackM31 := V7ProductionCallbacksR29.aspis_core.field.M31
 abbrev CallbackCM31 := V7ProductionCallbacksR29.aspis_core.field.CM31
 abbrev CallbackQM31 := V7ProductionCallbacksR29.aspis_core.field.QM31
+abbrev CallbackPreparedQM31 :=
+  V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier
 
 theorem callback_cm31_add_canonical
     (left right : CallbackCM31)
@@ -240,6 +243,175 @@ theorem callback_cm31_double_canonical
   unfold V7ProductionCallbacksR29.aspis_core.field.CM31.double
   exact houtput
 
+theorem callback_cm31_mul_m31_canonical
+    (value : CallbackCM31) (scalar : CallbackM31)
+    (valueCanonical : GeneratedCanonicalCM31 value)
+    (scalarCanonical : GeneratedCanonicalM31 scalar) :
+    ∃ output : CallbackCM31,
+      V7ProductionCallbacksR29.aspis_core.field.CM31.mul_m31 value scalar =
+        ok output ∧
+      GeneratedCanonicalCM31 output := by
+  obtain ⟨real, hreal, realCanonical⟩ :=
+    callback_m31_mul_canonical value.a scalar valueCanonical.1 scalarCanonical
+  obtain ⟨imaginary, himaginary, imaginaryCanonical⟩ :=
+    callback_m31_mul_canonical value.b scalar valueCanonical.2 scalarCanonical
+  let output : CallbackCM31 := ⟨real, imaginary⟩
+  refine ⟨output, ?_, ⟨realCanonical, imaginaryCanonical⟩⟩
+  simp [V7ProductionCallbacksR29.aspis_core.field.CM31.mul_m31,
+    hreal, himaginary, output]
+
+theorem callback_qm31_mul_m31_canonical
+    (value : CallbackQM31) (scalar : CallbackM31)
+    (valueCanonical : GeneratedCanonicalQM31 value)
+    (scalarCanonical : GeneratedCanonicalM31 scalar) :
+    ∃ output : CallbackQM31,
+      V7ProductionCallbacksR29.aspis_core.field.QM31.mul_m31 value scalar =
+        ok output ∧
+      GeneratedCanonicalQM31 output := by
+  obtain ⟨low, hlow, lowCanonical⟩ :=
+    callback_cm31_mul_m31_canonical value.c0 scalar valueCanonical.1 scalarCanonical
+  obtain ⟨high, hhigh, highCanonical⟩ :=
+    callback_cm31_mul_m31_canonical value.c1 scalar valueCanonical.2 scalarCanonical
+  let output : CallbackQM31 := ⟨low, high⟩
+  refine ⟨output, ?_, ⟨lowCanonical, highCanonical⟩⟩
+  simp [V7ProductionCallbacksR29.aspis_core.field.QM31.mul_m31,
+    hlow, hhigh, output]
+
+theorem callback_prepared_cm31_mul_canonical
+    (left right : CallbackCM31) (leftSum : CallbackM31)
+    (leftCanonical : GeneratedCanonicalCM31 left)
+    (rightCanonical : GeneratedCanonicalCM31 right)
+    (leftSumCanonical : GeneratedCanonicalM31 leftSum) :
+    ∃ output : CallbackCM31,
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+          () (Array.make 3#usize [left.a, left.b, leftSum], right) = ok output ∧
+      GeneratedCanonicalCM31 output := by
+  obtain ⟨m0, hm0, m0Canonical⟩ :=
+    callback_m31_mul_canonical left.a right.a leftCanonical.1 rightCanonical.1
+  obtain ⟨m1, hm1, m1Canonical⟩ :=
+    callback_m31_mul_canonical left.b right.b leftCanonical.2 rightCanonical.2
+  obtain ⟨rightSum, hrightSum, rightSumCanonical⟩ :=
+    callback_m31_add_canonical right.a right.b rightCanonical.1 rightCanonical.2
+  obtain ⟨m2, hm2, m2Canonical⟩ :=
+    callback_m31_mul_canonical leftSum rightSum leftSumCanonical rightSumCanonical
+  obtain ⟨real, hreal, realCanonical⟩ :=
+    callback_m31_sub_canonical m0 m1 m0Canonical m1Canonical
+  obtain ⟨cross, hcross, crossCanonical⟩ :=
+    callback_m31_sub_canonical m2 m0 m2Canonical m0Canonical
+  obtain ⟨imaginary, himaginary, imaginaryCanonical⟩ :=
+    callback_m31_sub_canonical cross m1 crossCanonical m1Canonical
+  have hindex0 :
+      Array.index_usize (Array.make 3#usize [left.a, left.b, leftSum])
+        0#usize = ok left.a := by
+    rfl
+  have hindex1 :
+      Array.index_usize (Array.make 3#usize [left.a, left.b, leftSum])
+        1#usize = ok left.b := by
+    rfl
+  have hindex2 :
+      Array.index_usize (Array.make 3#usize [left.a, left.b, leftSum])
+        2#usize = ok leftSum := by
+    rfl
+  let output : CallbackCM31 := ⟨real, imaginary⟩
+  refine ⟨output, ?_, ⟨realCanonical, imaginaryCanonical⟩⟩
+  simp [V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call,
+    hindex0, hm0, hindex1, hm1, hindex2, hrightSum, hm2, hreal, hcross,
+    himaginary, output]
+
+theorem callback_prepared_qm31_mul_canonical
+    (left right : CallbackQM31)
+    (leftCanonical : GeneratedCanonicalQM31 left)
+    (rightCanonical : GeneratedCanonicalQM31 right) :
+    ∃ prepared : CallbackPreparedQM31, ∃ output : CallbackQM31,
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.new left =
+        ok prepared ∧
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.mul
+          prepared right = ok output ∧
+      GeneratedCanonicalQM31 output := by
+  obtain ⟨leftSum, hleftSum, leftSumCanonical⟩ :=
+    callback_cm31_add_canonical left.c0 left.c1 leftCanonical.1 leftCanonical.2
+  obtain ⟨left0Sum, hleft0Sum, left0SumCanonical⟩ :=
+    callback_m31_add_canonical left.c0.a left.c0.b leftCanonical.1.1 leftCanonical.1.2
+  obtain ⟨left1Sum, hleft1Sum, left1SumCanonical⟩ :=
+    callback_m31_add_canonical left.c1.a left.c1.b leftCanonical.2.1 leftCanonical.2.2
+  obtain ⟨leftSumSum, hleftSumSum, leftSumSumCanonical⟩ :=
+    callback_m31_add_canonical leftSum.a leftSum.b leftSumCanonical.1 leftSumCanonical.2
+  let left0Components : Array CallbackM31 3#usize :=
+    Array.make 3#usize [left.c0.a, left.c0.b, left0Sum]
+  let left1Components : Array CallbackM31 3#usize :=
+    Array.make 3#usize [left.c1.a, left.c1.b, left1Sum]
+  let leftSumComponents : Array CallbackM31 3#usize :=
+    Array.make 3#usize [leftSum.a, leftSum.b, leftSumSum]
+  let prepared : CallbackPreparedQM31 :=
+    { components := Array.make 3#usize [left0Components, left1Components,
+      leftSumComponents] }
+  have hnew :
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.new left =
+        ok prepared := by
+    simp [V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.new,
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.new.closure.Insts.CoreOpsFunctionFnTupleCM31ArrayM313.call,
+      hleft0Sum, hleft1Sum, hleftSum, hleftSumSum, left0Components,
+      left1Components, leftSumComponents, prepared]
+  obtain ⟨m0, hm0, m0Canonical⟩ :=
+    callback_prepared_cm31_mul_canonical left.c0 right.c0 left0Sum
+      leftCanonical.1 rightCanonical.1 left0SumCanonical
+  obtain ⟨m1, hm1, m1Canonical⟩ :=
+    callback_prepared_cm31_mul_canonical left.c1 right.c1 left1Sum
+      leftCanonical.2 rightCanonical.2 left1SumCanonical
+  obtain ⟨rightSum, hrightSum, rightSumCanonical⟩ :=
+    callback_cm31_add_canonical right.c0 right.c1 rightCanonical.1 rightCanonical.2
+  obtain ⟨m2, hm2, m2Canonical⟩ :=
+    callback_prepared_cm31_mul_canonical leftSum rightSum leftSumSum
+      leftSumCanonical rightSumCanonical leftSumSumCanonical
+  obtain ⟨rM1, hrM1, rM1Canonical⟩ :=
+    callback_mul_by_r_canonical m1 m1Canonical
+  obtain ⟨low, hlow, lowCanonical⟩ :=
+    callback_cm31_add_canonical m0 rM1 m0Canonical rM1Canonical
+  obtain ⟨cross, hcross, crossCanonical⟩ :=
+    callback_cm31_sub_canonical m2 m0 m2Canonical m0Canonical
+  obtain ⟨high, hhigh, highCanonical⟩ :=
+    callback_cm31_sub_canonical cross m1 crossCanonical m1Canonical
+  have hindex0 : Array.index_usize prepared.components 0#usize = ok left0Components := by
+    rfl
+  have hindex1 : Array.index_usize prepared.components 1#usize = ok left1Components := by
+    rfl
+  have hindex2 : Array.index_usize prepared.components 2#usize = ok leftSumComponents := by
+    rfl
+  have hcomponent0 :
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+        () (left0Components, right.c0) = ok m0 := by
+    simpa [left0Components] using hm0
+  have hcomponent1 :
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+        () (left1Components, right.c1) = ok m1 := by
+    simpa [left1Components] using hm1
+  have hcomponent2 :
+      V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+        () (leftSumComponents, rightSum) = ok m2 := by
+    simpa [leftSumComponents] using hm2
+  let output : CallbackQM31 := ⟨low, high⟩
+  refine ⟨prepared, output, hnew, ?_, ⟨lowCanonical, highCanonical⟩⟩
+  simp [V7ProductionCallbacksR29.aspis_core.field.PreparedQm31Multiplier.mul,
+    hindex0, hcomponent0, hindex1, hcomponent1, hindex2, hrightSum,
+    hcomponent2, hrM1, hlow, hcross, hhigh, prepared, output]
+
+theorem callback_m31_half_eq_current_half (value : CallbackM31) :
+    V7ProductionCallbacksR29.aspis_core.field.M31.half value =
+      V7CallerCurrentReleaseR26.field.M31.half value := rfl
+
+theorem callback_qm31_half_canonical
+    (value : CallbackQM31) (canonical : GeneratedCanonicalQM31 value) :
+    ∃ output : CallbackQM31,
+      V7ProductionCallbacksR29.aspis_core.field.QM31.half value = ok output ∧
+      GeneratedCanonicalQM31 output := by
+  obtain ⟨output, currentRun, outputCanonical, _⟩ :=
+    V7CallerCurrentReleaseR26HalfBridge.generated_qm31_half_corresponds value canonical
+  refine ⟨output, ?_, outputCanonical⟩
+  simp only [V7ProductionCallbacksR29.aspis_core.field.QM31.half,
+    V7ProductionCallbacksR29.aspis_core.field.CM31.half,
+    callback_m31_half_eq_current_half]
+  exact currentRun
+
 theorem callback_qm31_add_canonical
     (left right : CallbackQM31)
     (hleft : GeneratedCanonicalQM31 left)
@@ -332,6 +504,11 @@ theorem callback_qm31_square_canonical
 #print axioms callback_mul_by_r_canonical
 #print axioms callback_cm31_square_canonical
 #print axioms callback_cm31_double_canonical
+#print axioms callback_cm31_mul_m31_canonical
+#print axioms callback_qm31_mul_m31_canonical
+#print axioms callback_prepared_cm31_mul_canonical
+#print axioms callback_prepared_qm31_mul_canonical
+#print axioms callback_qm31_half_canonical
 #print axioms callback_qm31_add_canonical
 #print axioms callback_qm31_sub_canonical
 #print axioms callback_qm31_mul_canonical
