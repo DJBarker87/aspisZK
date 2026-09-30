@@ -11,9 +11,10 @@ under product-uniform QM31 challenges is at most
 `819 / (2147483647^4)` (about `2^-114.3`).
 
 The number is not yet claimed for the actual source experiment. First remaining:
-compile the complete transcript program and prove first-read freshness or bound
-address-collision failure, then bind the accepted QM31/q22 observers without
-conditioning on future roots. No verifier change or new SBF run; the measured
+compile the honest challenge-generation segment and prove first-read freshness
+relative to its prior cache or bound address-collision failure. Intentional
+verifier replays remain memoized cache hits. Then bind the accepted QM31/q22
+observers without conditioning on future roots. No verifier change or new SBF run; the measured
 endpoint remains **999,790 / 999,532 CU**. Universal joint coverage, causal
 privacy composition and pre-beta extraction/soundness remain open.
 

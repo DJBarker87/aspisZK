@@ -17,9 +17,12 @@ most
 of product-uniform QM31 challenge assignments (approximately `2^-114.3`).
 
 This does **not** yet apply that number to the source protocol. The first-read
-premise for the complete source transcript, or a bound on its failure, remains
-open. The accepted source samplers must then be connected to the product-
-uniform challenge tuple while retaining failures, retries and publication.
+premise for the honest challenge-generation segment relative to its existing
+cache, or a bound on its failure, remains open. The complete prover/verifier
+experiment intentionally contains later cached verifier replays; those stay in
+the memoized semantics and must never be resampled. The accepted source
+samplers must then be connected to the product-uniform challenge tuple while
+retaining failures, retries and publication.
 No future q22 root is conditioned on in either new theorem.
 
 ## Exact proved boundary
@@ -72,12 +75,14 @@ genuine fixtures, with only 210 CU margin on the larger run.
 
 ## First remaining proposition
 
-Compile the complete source transcript into the causal oracle-program
-interface and prove `FreshFrom`, or bound the probability that a squeeze,
-advance or absorb address repeats a prior address. Then bind the already proved
-accepted QM31/q22 observer semantics to the independent-answer interpreter so
-the fixed-root `819/(2^31-1)^4` determinant bound applies to the actual accepted
-prefix without conditioning on future roots.
+Compile the honest source challenge-generation segment into the causal
+oracle-program interface and prove `FreshFrom` relative to its prior cache, or
+bound the probability that one of its designated squeeze/advance addresses was
+already read. Keep the complete prover/verifier experiment in the memoized
+semantics so intentional verifier replays remain cache hits. Then bind the
+already proved accepted QM31/q22 observer semantics to the independent-answer
+interpreter so the fixed-root `819/(2^31-1)^4` determinant bound applies to the
+actual accepted prefix without conditioning on future roots.
 
 This still does not close universal joint C1/H1/G affine-image compatibility,
 the causal posterior simulator, seed/C2/eight-way commitment composition,
