@@ -434,6 +434,21 @@ theorem callback_m31_mul_canonical
   · exact hleft
   · exact hright
 
+theorem callback_m31_add_canonical
+    (left right : CallbackM31)
+    (hleft : AspisAeneasCM31Multiplicative.CanonicalRawM31 left.val)
+    (hright : AspisAeneasCM31Multiplicative.CanonicalRawM31 right.val) :
+    ∃ output : CallbackM31,
+      V7ProductionCallbacksR29.aspis_core.field.M31.add left right = ok output ∧
+      AspisAeneasCM31Multiplicative.CanonicalRawM31 output.val := by
+  obtain ⟨output, currentRun, canonical, _⟩ :=
+    generated_m31_add_corresponds left right hleft hright
+  refine ⟨output, ?_, canonical⟩
+  rw [callback_add_eq_current_add left right]
+  · exact currentRun
+  · exact hleft
+  · exact hright
+
 theorem callback_m31_double_canonical
     (value : CallbackM31)
     (canonical : AspisAeneasCM31Multiplicative.CanonicalRawM31 value.val) :
@@ -465,6 +480,7 @@ theorem callback_m31_sub_canonical
   · exact hright
 
 #print axioms callback_m31_mul_canonical
+#print axioms callback_m31_add_canonical
 #print axioms callback_m31_double_canonical
 #print axioms callback_m31_sub_canonical
 
