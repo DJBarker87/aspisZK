@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R122 adaptive first-read law — 2026-09-30
+
+[R122_ADAPTIVE_FIRST_READ_BOUND.md](R122_ADAPTIVE_FIRST_READ_BOUND.md) records
+two compiled Lean targets and 11 clean axioms audits. A causal shared-oracle
+program with branch-wise first reads is now exactly reduced to sequential
+independent uniform answers, even with adaptive addresses and stopping. For
+every permitted fixed q22 root tuple, the R121 determinant's singular fraction
+under product-uniform QM31 challenges is at most
+`819 / (2147483647^4)` (about `2^-114.3`).
+
+The number is not yet claimed for the actual source experiment. First remaining:
+compile the complete transcript program and prove first-read freshness or bound
+address-collision failure, then bind the accepted QM31/q22 observers without
+conditioning on future roots. No verifier change or new SBF run; the measured
+endpoint remains **999,790 / 999,532 CU**. Universal joint coverage, causal
+privacy composition and pre-beta extraction/soundness remain open.
+
 ## R121 two-swap source polynomial — 2026-09-30
 
 [R121_TWO_SWAP_SOURCE_GATE.md](R121_TWO_SWAP_SOURCE_GATE.md) records
