@@ -2,6 +2,7 @@ import V7ProductionSnapshotObserverR30InitialFoldTail
 import V7CallerCurrentReleaseR30Final256Canonical
 import V7ProductionSnapshotObserverR30RelationRowsCanonical
 import V7ProductionSnapshotObserverR30ChallengesCanonical
+import V7CallerCurrentReleaseR30ChallengeNonzeroCanonical
 
 /-!
 # Canonical data retained by the current production initial-fold tail
@@ -31,6 +32,7 @@ open V7CallerCurrentReleaseR26FoldValuesPrefixSemantics
 open V7CallerCurrentReleaseR26RelationDecodeSemantics
 open V7CallerCurrentReleaseR26FieldBridge
 open V7CallerCurrentReleaseR30ChallengeCanonical
+open V7CallerCurrentReleaseR30ChallengeNonzeroCanonical
 open V7CallerCurrentReleaseR30RelationFieldsCanonical
 open V7ProductionSnapshotObserverR30RelationRowsCanonical
 open V7ProductionSnapshotObserverR30ChallengesCanonical
@@ -163,8 +165,37 @@ theorem accepted_current_fold_tail_challenges_canonical
       current.source.roundThree.alphaThree
       current.source.roundThree.challengeSuccess⟩
 
+/-- The scale passed into the literal query-batch insertion comes from the
+successful nonzero transcript sample retained with this exact production tail. -/
+theorem accepted_current_fold_tail_query_batch_challenge_canonical
+    {hash : HashFn} {wire : Wire}
+    {context : v6_transcript.V6TranscriptContext}
+    {hidingContext : HidingContext}
+    {inactiveRowGroups : Array Std.U8 64#usize}
+    {inactiveGroupMasks : Slice Std.U16} {checkPow : Bool}
+    {statement : Statement} {queryFold : QueryFold}
+    {transcript : AspisV7ProductionSnapshotObserverR28SourceBridge.Transcript}
+    {snapshot : AspisV7ProductionSnapshotObserverR28SourceBridge.Snapshot}
+    {inner : AcceptedInnerDispatch terminalInst queryFoldInst prechallengeInst
+      hash wire context hidingContext inactiveRowGroups inactiveGroupMasks
+      checkPow statement queryFold () true transcript (some snapshot)}
+    {chain : AcceptedInnerPrechallengeChain inner}
+    {prepared : V7CallerCurrentReleaseR30OuterAccumulator.AcceptedPreparedAccumulator
+      chain.outer}
+    {accumulator : V7CallerCurrentReleaseR30CircleAccumulator.AcceptedCircleAccumulator
+      prepared}
+    {dispatch : V7CallerCurrentReleaseR30InitialPrechallengeDispatch.AcceptedInitialPrechallengeDispatch
+      accumulator.origin}
+    (current : AcceptedCurrentFoldTail dispatch) :
+    GeneratedCanonicalQM31 current.tail.queryBatchChallenge := by
+  rcases current.tail.queryBatchChallengeRun with
+    ⟨transcriptAbsorbed, transcriptAfterChallenge, challengeRun⟩
+  exact successful_challenge_nonzero_qm31_canonical transcriptAbsorbed
+    transcriptAfterChallenge current.tail.queryBatchChallenge challengeRun
+
 #print axioms accepted_current_fold_tail_final256_canonical
 #print axioms accepted_current_fold_tail_relation_rows_canonical
 #print axioms accepted_current_fold_tail_challenges_canonical
+#print axioms accepted_current_fold_tail_query_batch_challenge_canonical
 
 end AspisV7ProductionSnapshotObserverR30CurrentTailCanonical

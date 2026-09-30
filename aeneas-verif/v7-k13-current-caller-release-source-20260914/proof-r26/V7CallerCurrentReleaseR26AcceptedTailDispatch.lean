@@ -44,6 +44,13 @@ structure AcceptedShiftedTailDispatch
     (verified : v6_transcript.V6VerifiedTranscript)
     (returnedSnapshot : Option Snapshot) (traceOut : Trace) : Type where
   queryBatchChallenge : RawQM31
+  /-- The literal nonzero transcript sample that produced the scale used by
+  the shifted query insertion.  Retaining this equation lets downstream
+  canonicality proofs stay attached to the production execution. -/
+  queryBatchChallengeRun :
+    ∃ transcriptAbsorbed transcriptAfterChallenge,
+      transcript.Transcript.impl.challenge_nonzero_qm31 transcriptAbsorbed =
+        ok (.Ok queryBatchChallenge, transcriptAfterChallenge)
   authenticatedQueries : v6_query_batch.V6AuthenticatedQueryBatch
   claimIncrement : RawQM31
   weightsAfter : RawWeights
@@ -230,6 +237,8 @@ theorem accepted_shifted_dispatch_feeds_tail
                           rcases hinsertionTrace with ⟨insertion⟩
                           exact ⟨{
                             queryBatchChallenge := queryBatchChallenge
+                            queryBatchChallengeRun := ⟨transcriptAbsorbed,
+                              transcriptAfterChallenge, hchallenge⟩
                             authenticatedQueries := authenticatedQueries
                             claimIncrement := claimIncrement
                             weightsAfter := weightsAfter
