@@ -1,0 +1,4 @@
+import AspisR136BeforeOod.TypesExternal
+namespace AspisR151QuerySchedule
+abbrev aspis_core.transcript.Transcript := AspisR136BeforeOod.aspis_core.transcript.Transcript
+end AspisR151QuerySchedule
