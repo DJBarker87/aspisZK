@@ -1,5 +1,16 @@
 # Current V8 privacy-repair status
 
+## R133 causal first-hit and typed selected-prefix boundary — 2026-09-30
+
+[R133_CAUSAL_PREFIX_BOUNDARY.md](R133_CAUSAL_PREFIX_BOUNDARY.md) records nine
+verified focused leaves: causal first-hit/union-bound plumbing, uniform-frame
+collision and injective/duplex collision plumbing, causal tape first-hit
+plumbing, the typed selected-research prefix using the direct circle-pair
+program, correspondence interface, source-frame plumbing, and relation query
+bounds. The explicit bridge premise remains unproved; type/source
+correspondence, actual callback/tape instantiation, GRIND/source callback
+equivalence, source sampler distribution, privacy, and soundness remain open.
+
 ## R132 uniform-state mean and fixed-tape circle/pair — 2026-09-30
 
 [R132_UNIFORM_AND_FIXED_TAPE_BOUNDARY.md](R132_UNIFORM_AND_FIXED_TAPE_BOUNDARY.md)
