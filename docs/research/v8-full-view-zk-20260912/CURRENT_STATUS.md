@@ -1,5 +1,22 @@
 # Current V8 privacy-repair status
 
+## R118–R120 augmented query repair — 2026-09-30
+
+[R120_AUGMENTED_QUERY_REPAIR.md](R120_AUGMENTED_QUERY_REPAIR.md) records
+42 compiled Lean targets, 83 clean axioms audits and source-pinned residual
+tests. The old T163 witness drops to rank 1 under the selected encoding.
+Adding the public root 1 to the correction section fixes the new witness's
+nonzero constant low map; its 13-by-13 inverse and query-root-independent
+transport are kernel checked. Generic mask/opening lemmas preserve sparse G,
+raw fibres, OOD zeros and final folding under their explicit premises.
+
+No verifier change or new CU run: **999,790 / 999,532 CU** remains the measured
+endpoint. This is a fixed algebraic-weight result, not full privacy or
+soundness. Next: arbitrary-challenge two-swap source-weight correspondence,
+a new nonzero/degree certificate, and the actual adaptive shared-oracle law;
+universal joint C1/H1/G coverage and the later composition/extraction gates
+remain open. The active goal continues.
+
 ## R106–R117 native engine — 2026-09-30
 
 [R117_NATIVE_ENGINE.md](R117_NATIVE_ENGINE.md) records complete acceptance at
