@@ -51,4 +51,9 @@ and the staging/replay tooling. The historical R26 manifest is left untouched.
 Twelve external arithmetic/Aeneas/Mathlib imports use the pinned compiled cache;
 this replay does not launch a cold dependency build.
 
-Final frozen manifest replay is the remaining verification step.
+The final frozen manifest replay subsequently passed at source revision
+`d62c8dea4`: all 336 targets green, only the three permitted audit axioms,
+zero swaps and no memory-pressure/OOM events. See
+[final replay evidence](v7-r30-frozen-replay-evidence-20261001.md) for exact
+metrics, manifest hashes, and the full log. No further source changes or
+unchanged full replay were required.
