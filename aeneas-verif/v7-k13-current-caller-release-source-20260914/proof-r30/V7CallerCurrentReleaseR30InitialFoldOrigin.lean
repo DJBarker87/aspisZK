@@ -1,5 +1,6 @@
 import V7CallerCurrentReleaseR30CircleAccumulator
 import V7CallerCurrentReleaseR26WeightFoldLoopTrace
+import V7CallerCurrentReleaseR30ChallengeCanonical
 
 /-!
 # Exact initial deferred-fold extraction
@@ -22,9 +23,21 @@ open V7CallerCurrentReleaseR26AcceptedCircleOrigin
 open V7CallerCurrentReleaseR26AcceptedCircleExhausted
 open V7CallerCurrentReleaseR26AcceptedOuterLoop
 open V7CallerCurrentReleaseR26WeightFoldLoopTrace
+open V7CallerCurrentReleaseR26FieldBridge
+open V7CallerCurrentReleaseR30ChallengeCanonical
 
 abbrev RawQM31 := field.QM31
 abbrev RawWeights := sumcheck.WeightAccumulator
+
+private theorem initial_alpha_read_exact
+    (sampledAlpha alpha : RawQM31) (values : Array RawQM31 4#usize)
+    (updateRun : Array.update (Array.repeat 4#usize field.QM31.ZERO)
+      0#usize sampledAlpha = ok values)
+    (readRun : Array.index_usize values 0#usize = ok alpha) :
+    alpha = sampledAlpha := by
+  simp [Array.update, Array.index_usize] at updateRun readRun
+  subst values
+  simpa using readRun.symm
 
 private theorem bind_eq_ok_iff {Input Output : Type}
     (input : Result Input) (next : Input → Result Output) (output : Output) :
@@ -43,12 +56,62 @@ private theorem branch_eq_ok_of_continue {Value Error : Type}
   | Err error =>
       simp [core.result.Result.Insts.CoreOpsTry.branch] at success
 
+theorem successful_challenge_qm31_bound_canonical
+    (self selfOut : transcript.Transcript) (challengeId : Std.U8)
+    (value : RawQM31)
+    (run : transcript.Transcript.impl.challenge_qm31_bound self challengeId =
+      ok (.Ok value, selfOut)) :
+    GeneratedCanonicalQM31 value := by
+  unfold transcript.Transcript.impl.challenge_qm31_bound at run
+  rw [bind_eq_ok_iff] at run
+  obtain ⟨challengePair, challengeRun, run⟩ := run
+  rcases challengePair with ⟨challengeResult, selfAfterChallenge⟩
+  rw [bind_eq_ok_iff] at run
+  obtain ⟨challengeFlow, challengeFlowRun, run⟩ := run
+  cases challengeFlow with
+  | Break residual =>
+      cases residual with
+      | Ok impossible => nomatch impossible
+      | Err error =>
+          simp [core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+            core.convert.FromSame.from] at run
+  | Continue sampled =>
+      have challengeExact := branch_eq_ok_of_continue challengeResult sampled
+        challengeFlowRun
+      rw [bind_eq_ok_iff] at run
+      obtain ⟨selfAfterBind, _, run⟩ := run
+      have outputExact : (core.result.Result.Ok sampled, selfAfterBind) =
+          (core.result.Result.Ok value, selfOut) :=
+        Result.ok.inj run
+      have sampledExact : sampled = value :=
+        core.result.Result.Ok.inj (congrArg Prod.fst outputExact)
+      rw [challengeExact, sampledExact] at challengeRun
+      exact successful_challenge_qm31_canonical self selfAfterChallenge value
+        challengeRun
+
 structure AcceptedInitialFold {circle : AcceptedCircleLoopDispatch outer}
     (origin : AcceptedCircleBodyOrigin circle) : Type where
   alpha : RawQM31
+  sampledAlpha : RawQM31
+  transcriptBeforeSample : transcript.Transcript
+  transcriptAfterSample : transcript.Transcript
+  sampleRun : transcript.Transcript.impl.challenge_qm31_bound
+    transcriptBeforeSample transcript.V7_ALPHA_ZERO_BIND_ID =
+      ok (.Ok sampledAlpha, transcriptAfterSample)
+  alphaExact : alpha = sampledAlpha
   weights : RawWeights
   foldRun : sumcheck.WeightAccumulator.impl.fold_deferred_relation_arity4
     origin.state.2.2.2.2 alpha = ok weights
+
+theorem AcceptedInitialFold.alpha_canonical
+    {circle : AcceptedCircleLoopDispatch outer}
+    {origin : AcceptedCircleBodyOrigin circle}
+    (first : AcceptedInitialFold origin) :
+    GeneratedCanonicalQM31 first.alpha := by
+  rw [first.alphaExact]
+  exact successful_challenge_qm31_bound_canonical first.transcriptBeforeSample
+    first.transcriptAfterSample transcript.V7_ALPHA_ZERO_BIND_ID
+    first.sampledAlpha first.sampleRun
 
 theorem AcceptedCircleBodyOrigin.exposesInitialFold
     {circle : AcceptedCircleLoopDispatch outer}
@@ -112,16 +175,16 @@ theorem AcceptedCircleBodyOrigin.exposesInitialFold
       | Continue _foldUnit =>
           simp only [↓reduceIte] at run
           rw [bind_eq_ok_iff] at run
-          obtain ⟨alphaChallengePair, _, run⟩ := run
+          obtain ⟨alphaChallengePair, alphaChallengePairRun, run⟩ := run
           rcases alphaChallengePair with
             ⟨alphaChallengeResult, transcriptAfterAlpha⟩
           simp only at run
           rw [bind_eq_ok_iff] at run
-          obtain ⟨alphaSwapped, _, run⟩ := run
+          obtain ⟨alphaSwapped, alphaSwappedRun, run⟩ := run
           rw [bind_eq_ok_iff] at run
-          obtain ⟨alphaMapped, _, run⟩ := run
+          obtain ⟨alphaMapped, alphaMappedRun, run⟩ := run
           rw [bind_eq_ok_iff] at run
-          obtain ⟨alphaFlow, _, run⟩ := run
+          obtain ⟨alphaFlow, alphaFlowRun, run⟩ := run
           cases alphaFlow with
           | Break residual =>
               cases residual with
@@ -130,15 +193,42 @@ theorem AcceptedCircleBodyOrigin.exposesInitialFold
                   simp [core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
                     core.convert.FromSame.from] at run
           | Continue alphaZero =>
+              have alphaMappedExact := branch_eq_ok_of_continue alphaMapped
+                alphaZero alphaFlowRun
+              have alphaSwappedExact : alphaSwapped =
+                  (transcriptAfterAlpha, alphaChallengeResult) :=
+                Result.ok.inj alphaSwappedRun.symm
+              subst alphaSwapped
+              have alphaChallengeExact : alphaChallengeResult = .Ok alphaZero := by
+                rw [alphaMappedExact] at alphaMappedRun
+                cases alphaChallengeResult with
+                | Ok actual =>
+                    have actualExact : actual = alphaZero := by
+                      simpa [core.result.Result.map_err] using alphaMappedRun
+                    subst actual
+                    rfl
+                | Err error =>
+                    simp [core.result.Result.map_err,
+                      v6_transcript.finish_onefold_relation.closure_7.Insts.CoreOpsFunctionFnOnceTupleChallengeSampleExhaustedV6TranscriptError.call_once]
+                      at alphaMappedRun
+              have sampleRun :
+                  transcript.Transcript.impl.challenge_qm31_bound
+                      transcriptAfterFoldWork transcript.V7_ALPHA_ZERO_BIND_ID =
+                    ok (.Ok alphaZero, transcriptAfterAlpha) := by
+                rw [alphaChallengeExact] at alphaChallengePairRun
+                exact alphaChallengePairRun
               rw [bind_eq_ok_iff] at run
-              obtain ⟨alpha, _, run⟩ := run
+              obtain ⟨alpha, alphaUpdateRun, run⟩ := run
               rw [bind_eq_ok_iff] at run
-              obtain ⟨alphaZeroRead, _, run⟩ := run
+              obtain ⟨alphaZeroRead, alphaZeroReadRun, run⟩ := run
+              have alphaExact := initial_alpha_read_exact alphaZero
+                alphaZeroRead alpha alphaUpdateRun alphaZeroReadRun
               rw [bind_eq_ok_iff] at run
               obtain ⟨runningClaim, _, run⟩ := run
               rw [bind_eq_ok_iff] at run
               obtain ⟨weights, foldRun, run⟩ := run
-              exact ⟨⟨alphaZeroRead, weights, foldRun⟩⟩
+              exact ⟨⟨alphaZeroRead, alphaZero, transcriptAfterFoldWork,
+                transcriptAfterAlpha, sampleRun, alphaExact, weights, foldRun⟩⟩
 
 theorem AcceptedCircleBodyOrigin.exposesInitialFoldTrace
     {circle : AcceptedCircleLoopDispatch outer}
@@ -151,4 +241,5 @@ theorem AcceptedCircleBodyOrigin.exposesInitialFoldTrace
 
 #print axioms AcceptedCircleBodyOrigin.exposesInitialFold
 #print axioms AcceptedCircleBodyOrigin.exposesInitialFoldTrace
+#print axioms AcceptedInitialFold.alpha_canonical
 end V7CallerCurrentReleaseR30InitialFoldOrigin
