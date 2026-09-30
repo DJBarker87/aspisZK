@@ -120,6 +120,10 @@ compile_to "$proof_r30/V7CallerCurrentReleaseR30FixedFieldCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30FixedFieldCanonical.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30PointClaimsCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30PointClaimsCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30SumProducts3Canonical.lean" \
+  "$output/V7CallerCurrentReleaseR30SumProducts3Canonical.olean"
+compile_to "$proof_r30/V7ProductionSnapshotObserverR30InitialClaimCanonical.lean" \
+  "$output/V7ProductionSnapshotObserverR30InitialClaimCanonical.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30RelationFieldInnerCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30RelationFieldInnerCanonical.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30RelationFieldsCanonical.lean" \
@@ -130,6 +134,8 @@ compile_to "$proof_r30/V7CallerCurrentReleaseR30ChallengeInnerCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30ChallengeInnerCanonical.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30ChallengeCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30ChallengeCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30ChallengeNonzeroCanonical.lean" \
+  "$output/V7CallerCurrentReleaseR30ChallengeNonzeroCanonical.olean"
 compile_to "$proof_r30/V7ProductionSnapshotObserverR30ChallengesCanonical.lean" \
   "$output/V7ProductionSnapshotObserverR30ChallengesCanonical.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30Final256Canonical.lean" \
