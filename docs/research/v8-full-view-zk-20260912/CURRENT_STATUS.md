@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R95–R98 native Merkle walk and public query entry — 2026-09-30
+
+[R98_NATIVE_QUERY_ENTRY.md](R98_NATIVE_QUERY_ENTRY.md) records complete
+**1,125,129 / 1,123,391 CU** on unchanged R84 proofs. A one-buffer Merkle walk
+saves 4,880 CU on each fixture without changing ordered hash calls. The square
+candidate regresses; opt-level 2 still fails the stack gate. Both are rejected.
+Both actual 1M honest runs still exhaust; **125,129 CU remains**.
+
+Two focused Lean targets compile with four theorem audits. The actual selected
+public query entry now has its guard, typed result and final transcript state
+bound to the model, without an opaque ctpop assumption. Complete observed query
+history and its shared-oracle law remain next. Universal R84 joint coverage,
+causal full-view privacy and pre-beta extraction remain open. No security
+promotion, weakened parameter, deployment or wallet operation.
+
 ## R92–R94 native contraction and rejected products — 2026-09-30
 
 [R94_NATIVE_PRODUCTS.md](R94_NATIVE_PRODUCTS.md) records complete

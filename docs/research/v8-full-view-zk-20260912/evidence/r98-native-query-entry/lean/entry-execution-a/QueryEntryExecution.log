@@ -1,0 +1,125 @@
+info: r98_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:21:54: error: failed to synthesize
+  Decidable (1#u32 <<< 18#i32 = ok 262144#u32)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:22:12: error: Application type mismatch: The argument
+  ?m.72
+has type
+  UScalar UScalarTy.U32
+but is expected to have type
+  Result (UScalar UScalarTy.U32)
+in the application
+  262144#u32 - 1#u32 = ?m.72
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:22:35: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  UScalar UScalarTy.U32
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:20:37: error: unsolved goals
+self : transcript.Transcript
+hs : 1#u32 <<< 18#i32 = ok 262144#u32
+hd : 262144#u32 - 1#u32 = sorry
+hc : UScalar.cast UScalarTy.Usize 262144#u32 = 262144#usize
+⊢ (do
+      let i ← sorry ()
+      if 262144 &&& ↑i = 0 then do
+          let __x ←
+            self.challenge_queries_without_replacement_loop0 22#usize 64#usize i
+                (alloc.vec.Vec.with_capacity U32 22#usize) 0#usize
+          if Usize.ofNatCore (↑__x.2).length ⋯ = 22#usize then ok (core.result.Result.Ok __x.2, __x.1)
+            else
+              ok
+                (core.result.Result.Err
+                    (transcript.QuerySampleError.DrawLimitExhausted (Usize.ofNatCore (↑__x.2).length ⋯) 64#usize),
+                  __x.1)
+        else ok (core.result.Result.Err (transcript.QuerySampleError.BoundNotPowerOfTwo 262144#u32), self)) =
+    do
+    let __x ←
+      self.challenge_queries_without_replacement_loop0 22#usize 64#usize 262143#u32
+          (alloc.vec.Vec.with_capacity U32 22#usize) 0#usize
+    ok
+        (if Usize.ofNatCore (↑__x.2).length ⋯ = 22#usize then core.result.Result.Ok __x.2
+          else
+            core.result.Result.Err
+              (transcript.QuerySampleError.DrawLimitExhausted (Usize.ofNatCore (↑__x.2).length ⋯) 64#usize),
+          __x.1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:27:7: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [̵q̵u̵e̵r̵y̵_̵p̵r̵o̵b̵e̵,̵h̵s̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵_̵q̵u̵e̵r̵i̵e̵s̵_̵w̵i̵t̵h̵o̵u̵t̵_̵r̵e̵p̵l̵a̵c̵e̵m̵e̵n̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵,̵h̵c̵,̵l̵i̵f̵t̵,̵f̵i̵n̵i̵s̵h̵S̵o̵u̵r̵c̵e̵]̵[̲q̲u̲e̲r̲y̲_̲p̲r̲o̲b̲e̲,̲ ̲h̲s̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲c̲h̲a̲l̲l̲e̲n̲g̲e̲_̲q̲u̲e̲r̲i̲e̲s̲_̲w̲i̲t̲h̲o̲u̲t̲_̲r̲e̲p̲l̲a̲c̲e̲m̲e̲n̲t̲,̲ ̲h̲d̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲i̲n̲i̲s̲h̲S̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:37:2: error: unsolved goals
+case pos
+out : Values
+h : alloc.vec.Vec.len out = 22#usize
+hv : (↑out).length = 22
+⊢ (match
+      if Usize.ofNatCore 22 ⋯ = 22#usize then core.result.Result.Ok out
+      else core.result.Result.Err (transcript.QuerySampleError.DrawLimitExhausted (Usize.ofNatCore 22 ⋯) 64#usize) with
+    | core.result.Result.Ok out => Except.ok (List.map UScalar.val ↑out)
+    | core.result.Result.Err (transcript.QuerySampleError.DrawLimitExhausted n a) => Except.error ↑n
+    | core.result.Result.Err a => Except.error 0) =
+    Except.ok (List.map UScalar.val ↑out)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:38:23: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [finishSource,h̵,̵ ̲decodeResult, ̲Q22WordScan.finish, ̲view, ̲hv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:52:2: error: Type mismatch: After simplification, term
+  congrArg (fun r => ok (r, (Q22SamplerProgram.challengeRun H s).2.2)) hf
+ has type
+  @Eq (Result (Except ℕ (List ℕ) × State))
+    (ok
+      (Q22WordScan.finish { accepted := List.map UScalar.val ↑out, draws := ↑0#usize },
+        (Q22SamplerProgram.loopRun H 8 s { accepted := [], draws := 0 }).2.2))
+    (ok
+      ((Q22SamplerProgram.loopRun H 8 s { accepted := [], draws := ↑0#usize }).2.1,
+        (Q22SamplerProgram.loopRun H 8 s { accepted := [], draws := 0 }).2.2))
+but is expected to have type
+  @Eq (Result (Except ℕ (List ℕ) × State))
+    (ok
+      (Q22WordScan.finish { accepted := List.map UScalar.val ↑out, draws := ↑0#usize },
+        (Q22SamplerProgram.loopRun H 8 s { accepted := [], draws := ↑0#usize }).2.2))
+    (ok (Q22SamplerProgram.loopRun H 8 s { accepted := [], draws := 0 }).2)
+'AspisV8R19.QueryEntryExecution.selected_entry' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.QueryEntryExecution.decode_finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.QueryEntryExecution.public_value_state' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r98-entry-execution-20260930-a/lib/AspisV8R19/QueryEntryExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean"
+	User time (seconds): 1.47
+	System time (seconds): 0.87
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.32
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3672060
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 148369
+	Voluntary context switches: 872
+	Involuntary context switches: 71
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 88
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

@@ -1,0 +1,67 @@
+info: r98_focused: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:20:37: error: unsolved goals
+self : transcript.Transcript
+hs : 1#u32 <<< 18#i32 = ok 262144#u32
+hd : 262144#u32 - 1#u32 = ok 262143#u32
+hc : UScalar.cast UScalarTy.Usize 262144#u32 = 262144#usize
+⊢ ∀ (a : transcript.Transcript) (b : alloc.vec.Vec U32),
+    self.challenge_queries_without_replacement_loop0 22#usize 64#usize 262143#u32
+          (alloc.vec.Vec.with_capacity U32 22#usize) 0#usize =
+        ok (a, b) →
+      (if Usize.ofNatCore (↑b).length ⋯ = 22#usize then ok (core.result.Result.Ok b, a)
+        else
+          ok
+            (core.result.Result.Err
+                (transcript.QuerySampleError.DrawLimitExhausted (Usize.ofNatCore (↑b).length ⋯) 64#usize),
+              a)) =
+        ok
+          (if Usize.ofNatCore (↑b).length ⋯ = 22#usize then core.result.Result.Ok b
+            else
+              core.result.Result.Err
+                (transcript.QuerySampleError.DrawLimitExhausted (Usize.ofNatCore (↑b).length ⋯) 64#usize),
+            a)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean:27:7: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [̵q̵u̵e̵r̵y̵_̵p̵r̵o̵b̵e̵,̵h̵s̵,̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵_̵q̵u̵e̵r̵i̵e̵s̵_̵w̵i̵t̵h̵o̵u̵t̵_̵r̵e̵p̵l̵a̵c̵e̵m̵e̵n̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵,̵h̵c̵,̵l̵i̵f̵t̵,̵f̵i̵n̵i̵s̵h̵S̵o̵u̵r̵c̵e̵]̵[̲q̲u̲e̲r̲y̲_̲p̲r̲o̲b̲e̲,̲ ̲h̲s̲,̲ ̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲c̲h̲a̲l̲l̲e̲n̲g̲e̲_̲q̲u̲e̲r̲i̲e̲s̲_̲w̲i̲t̲h̲o̲u̲t̲_̲r̲e̲p̲l̲a̲c̲e̲m̲e̲n̲t̲,̲ ̲h̲d̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲i̲n̲i̲s̲h̲S̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.QueryEntryExecution.selected_entry' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.QueryEntryExecution.decode_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.QueryEntryExecution.public_value_state' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r98-entry-execution-20260930-b/lib/AspisV8R19/QueryEntryExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/QueryEntryExecution.lean"
+	User time (seconds): 1.59
+	System time (seconds): 0.96
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3673688
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 4
+	Minor (reclaiming a frame) page faults: 149364
+	Voluntary context switches: 1180
+	Involuntary context switches: 73
+	Swaps: 0
+	File system inputs: 648
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

@@ -1,0 +1,57 @@
+[
+  {
+    "label": "lock",
+    "command": [
+      "cargo",
+      "generate-lockfile",
+      "--offline"
+    ],
+    "exit": 0
+  },
+  {
+    "label": "extract",
+    "command": [
+      "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+      "cargo",
+      "--preset",
+      "aeneas",
+      "--mir",
+      "built",
+      "--sysroot",
+      "default",
+      "--start-from",
+      "crate::query_probe",
+      "--include",
+      "core::option",
+      "--dest-file",
+      "/home/dombarker/project-offloads/aspis-r98-query-extracted-20260930-a/R98Query.llbc",
+      "--",
+      "--locked",
+      "--offline",
+      "--release",
+      "--lib"
+    ],
+    "exit": 0
+  },
+  {
+    "label": "translate",
+    "command": [
+      "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1",
+      "-sequential",
+      "-no-progress-bar",
+      "-abort-on-error",
+      "-backend",
+      "lean",
+      "-namespace",
+      "AspisR98Query",
+      "-dest",
+      "/home/dombarker/project-offloads/aspis-r98-query-extracted-20260930-a/generated",
+      "-subdir",
+      "AspisR98Query",
+      "-split-files",
+      "-emit-json",
+      "/home/dombarker/project-offloads/aspis-r98-query-extracted-20260930-a/R98Query.llbc"
+    ],
+    "exit": 0
+  }
+]
