@@ -62,6 +62,12 @@ theorem generic_wrapping_mul_eq_u64_wrapping_mul
   apply UScalar.eq_of_val_eq
   simp only [UScalar.wrapping_mul_val_eq, Std.U64.wrapping_mul_val_eq]
 
+theorem generic_wrapping_sub_eq_u64_wrapping_sub
+    (left right : Std.U64) :
+    UScalar.wrapping_sub left right = Std.U64.wrapping_sub left right := by
+  apply UScalar.eq_of_val_eq
+  simp only [UScalar.wrapping_sub_val_eq, Std.U64.wrapping_sub_val_eq]
+
 theorem checked_u64_shr31_eq_wrapping (value : Std.U64) :
     value >>> 31#u32 =
       Aeneas.Std.Result.ok (Std.U64.wrapping_shr value 31#u32) := by
@@ -134,7 +140,7 @@ theorem u64_wrapping_shr31_val_le_one
   omega
 
 theorem u64_wrapping_shr31_val_le_four
-    (value : Std.U64) (hvalue : value.val ≤ 10737418223) :
+    (value : Std.U64) (hvalue : value.val ≤ 10737418238) :
     (Std.U64.wrapping_shr value 31#u32).val ≤ 4 := by
   rw [u64_wrapping_shr31_val_eq, Nat.shiftRight_eq_div_pow]
   norm_num
@@ -429,7 +435,7 @@ the scalar multiplication path, but still fit in `u64`; this establishes the
 same current-model reduction at that wider source bound. -/
 theorem callback_reduce_u64_eq_current_reduce_u64_wide
     (value : Std.U64)
-    (hvalue : value.val ≤ 18446744039349813264) :
+    (hvalue : value.val ≤ 18446744073709551615) :
     V7ProductionCallbacksR29.aspis_core.field.reduce_u64 value =
       V7CallerCurrentReleaseR26.field.reduce_u64 value := by
   unfold V7ProductionCallbacksR29.aspis_core.field.reduce_u64
@@ -440,7 +446,7 @@ theorem callback_reduce_u64_eq_current_reduce_u64_wide
         V7CallerCurrentReleaseR26.field.P).val = 2147483647 := by
     rw [Std.U32.cast_U64_val_eq, current_p_val_eq]
   have hhigh :
-      (Std.U64.wrapping_shr value 31#u32).val ≤ 8589934576 := by
+      (Std.U64.wrapping_shr value 31#u32).val ≤ 8589934591 := by
     rw [u64_wrapping_shr31_val_eq, Nat.shiftRight_eq_div_pow]
     norm_num
     omega
@@ -455,7 +461,7 @@ theorem callback_reduce_u64_eq_current_reduce_u64_wide
   have hfirst_sum :
       (value &&& UScalar.cast .U64
           V7CallerCurrentReleaseR26.field.P).val +
-        (Std.U64.wrapping_shr value 31#u32).val ≤ 10737418223 := by
+        (Std.U64.wrapping_shr value 31#u32).val ≤ 10737418238 := by
     omega
   have hfirst_sum_lt_size :
       (value &&& UScalar.cast .U64
@@ -467,7 +473,7 @@ theorem callback_reduce_u64_eq_current_reduce_u64_wide
       (Std.U64.wrapping_add
         (value &&& UScalar.cast .U64
           V7CallerCurrentReleaseR26.field.P)
-        (Std.U64.wrapping_shr value 31#u32)).val ≤ 10737418223 := by
+        (Std.U64.wrapping_shr value 31#u32)).val ≤ 10737418238 := by
     rw [Std.U64.wrapping_add_val_eq, UScalar.size_UScalarTyU64,
       Nat.mod_eq_of_lt hfirst_sum_lt_size]
     exact hfirst_sum
@@ -679,7 +685,8 @@ theorem callback_cm31_mul_canonical
           V7CallerCurrentReleaseR26.field.M31.reduce_u64 wideProduct := by
         unfold V7ProductionCallbacksR29.aspis_core.field.M31.reduce_u64
           V7CallerCurrentReleaseR26.field.M31.reduce_u64
-        rw [callback_reduce_u64_eq_current_reduce_u64_wide wideProduct hproductBound]
+        rw [callback_reduce_u64_eq_current_reduce_u64_wide wideProduct (by
+          omega)]
       _ = ok m2 := hm2Current
   obtain ⟨real, hreal, hrealCanonical⟩ :=
     callback_m31_sub_canonical m0 m1 hm0Canonical hm1Canonical
