@@ -116,5 +116,11 @@ compile_to "$proof_r30/V7CallerCurrentReleaseR30RelationFieldsCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30RelationFieldsCanonical.olean"
 compile_to "$proof_r30/V7ProductionSnapshotObserverR30RelationRowsCanonical.lean" \
   "$output/V7ProductionSnapshotObserverR30RelationRowsCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30ChallengeInnerCanonical.lean" \
+  "$output/V7CallerCurrentReleaseR30ChallengeInnerCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30ChallengeCanonical.lean" \
+  "$output/V7CallerCurrentReleaseR30ChallengeCanonical.olean"
+compile_to "$proof_r30/V7ProductionSnapshotObserverR30ChallengesCanonical.lean" \
+  "$output/V7ProductionSnapshotObserverR30ChallengesCanonical.olean"
 
-echo "FINAL target=V7ProductionSnapshotObserverR30RelationRowsCanonical status=passed"
+echo "FINAL target=V7ProductionSnapshotObserverR30ChallengesCanonical status=passed"

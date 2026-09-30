@@ -279,9 +279,14 @@ The symbolic R30 decoder proofs lift that single-read result through each
 six-element mutable row and the complete four-row generated decoder.
 `accepted_production_tail_relation_rows_canonical` then uses the exact row
 lookups in the accepted source trace to discharge all three relation-row
-canonicality premises.  The remaining source invariants are the transcript
-challenge canonicality, the initial claim and 256 folded values, and the
-fixed seven-component accumulator layout and component premises.  After those
+canonicality premises.  The symbolic transcript proofs now follow the exact
+retry and four-limb loops, prove that a successful `challenge_qm31` result is
+canonical, and apply that result to all three literal challenge equations in
+the accepted source trace.  Thus all three relation rows and all three round
+challenges required by `accepted_relation_loop_end_to_end` are derived from
+the accepted production execution.  The remaining source invariants are the
+initial claim and 256 folded values and the fixed seven-component accumulator
+layout and component premises.  After those
 are instantiated, the remaining release composition is the accepted-trace
 implication into the maintained restored K1.2--K1.6 security bound and the
 outer transaction dispatch implication. Exact focused evidence is recorded in

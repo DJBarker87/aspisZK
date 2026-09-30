@@ -88,12 +88,19 @@ structure AcceptedPrechallengeDispatch
   weights : sumcheck.WeightAccumulator
   alpha : Array field.QM31 4#usize
   foldedValues : Array field.QM31 256#usize
+  transcriptBeforeFinal : transcript.Transcript
+  transcriptAfterFinalValues : transcript.Transcript
   relationFields : Array (Array field.QM31 6#usize) 4#usize
   fieldsAfterRelation : Fields
+  fieldsAfterFinal : Fields
   relationFieldsRun :
     v6_transcript.decode_compact_relation_fields fieldsInst
         origin.state.2.2.1 =
       ok (.Ok relationFields, fieldsAfterRelation)
+  foldedValuesRun :
+    v6_transcript.decode_and_absorb_final256 fieldsInst transcriptBeforeFinal
+        fieldsAfterRelation =
+      ok (.Ok foldedValues, transcriptAfterFinalValues, fieldsAfterFinal)
   queries : Array Std.U32 16#usize
   compactCounter : Std.U8
   frontierNodes : Std.Usize
@@ -240,11 +247,11 @@ theorem AcceptedCircleBodyOrigin.exposesPrechallengeDispatch
               obtain ⟨traceRoundPair, _, run⟩ := run
               rcases traceRoundPair with ⟨_, traceAfterRoundZero⟩
               rw [bind_eq_ok_iff] at run
-              obtain ⟨finalPair, _, run⟩ := run
+              obtain ⟨finalPair, finalPairRun, run⟩ := run
               rcases finalPair with
                 ⟨finalResult, transcriptAfterFinalValues, fieldsAfterFinal⟩
               rw [bind_eq_ok_iff] at run
-              obtain ⟨finalFlow, _, run⟩ := run
+              obtain ⟨finalFlow, finalBranch, run⟩ := run
               cases finalFlow with
               | Break residual =>
                   cases residual with
@@ -253,6 +260,8 @@ theorem AcceptedCircleBodyOrigin.exposesPrechallengeDispatch
                       simp [core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
                         core.convert.FromSame.from] at run
               | Continue foldedValues =>
+                  have finalExact := branch_eq_ok_of_continue finalResult
+                    foldedValues finalBranch
                   rw [bind_eq_ok_iff] at run
                   obtain ⟨finishResult, _, run⟩ := run
                   rw [bind_eq_ok_iff] at run
@@ -330,11 +339,18 @@ theorem AcceptedCircleBodyOrigin.exposesPrechallengeDispatch
                                 weights := weights
                                 alpha := alpha
                                 foldedValues := foldedValues
+                                transcriptBeforeFinal := alphaSwapped.1
+                                transcriptAfterFinalValues :=
+                                  transcriptAfterFinalValues
                                 relationFields := relationFields
                                 fieldsAfterRelation := fieldsAfterRelation
+                                fieldsAfterFinal := fieldsAfterFinal
                                 relationFieldsRun := by
                                   rw [relationExact] at relationRun
                                   exact relationRun
+                                foldedValuesRun := by
+                                  rw [finalExact] at finalPairRun
+                                  exact finalPairRun
                                 queries := queries
                                 compactCounter := compactCounter
                                 frontierNodes := frontierNodes

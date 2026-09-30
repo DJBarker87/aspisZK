@@ -163,3 +163,49 @@ The three relation-row premises of `accepted_relation_loop_end_to_end` are now
 derived from the same accepted production execution.  The remaining source
 premises are transcript challenge canonicality, the initial running claim and
 folded-value canonicality, and the fixed accumulator layout/component facts.
+
+Transcript challenge canonicality
+---------------------------------
+
+Recorded UTC: 2026-09-30
+Base revision: 85c08b61fa95484f3fa54d27b4271b91df6ebcb7
+Source SHA-256:
+  b444d1d57234298c8337dbf9bdab610d9e6bcbe97a576b6a12113586026a19a5
+  proof-r26/V7CallerCurrentReleaseR26AcceptedPrechallengeDispatch.lean
+  57a9a07382b71399e2b7add5e72132a15de0fb3064365ea0a76e35b58edcf8a9
+  proof-r30/V7CallerCurrentReleaseR30ChallengeInnerCanonical.lean
+  50002b215198420b2919053451b9b81f3eb4e410c2fe8b868ee0e2e8ee35cd18
+  proof-r30/V7CallerCurrentReleaseR30ChallengeCanonical.lean
+  45570ef33921b1dfa3351098f3cf73049fa9cef6db99e3a5a3d2fc2efbb55f7a
+  proof-r30/V7ProductionSnapshotObserverR30ChallengesCanonical.lean
+
+The inner theorem follows the exact rejection-sampling trace.  The accepted
+mask is strictly below the M31 modulus, the selected array cell is canonical,
+and every other limb is unchanged.  The outer theorem carries a canonical
+prefix through all four successful limb updates, excludes a successful value
+from the error-return path, and proves the reconstructed QM31 value canonical.
+The production theorem applies this result to the three exact challenge calls
+retained by the accepted relation-round trace.
+
+  'V7CallerCurrentReleaseR30ChallengeInnerCanonical.accepted_retry_loop_limb_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  'V7CallerCurrentReleaseR30ChallengeCanonical.successful_challenge_qm31_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  'V7ProductionSnapshotObserverR30ChallengesCanonical.accepted_production_tail_challenges_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+
+All final focused commands ran in separate scopes with `MemoryHigh=7G`,
+`MemoryMax=8G`, and `MemorySwapMax=0`:
+
+  RESULT R30ChallengeInnerCanonical exit=0 wall_s=1.91 peak_kib=2641888 swaps=0
+  RESULT R30ChallengeCanonical exit=0 wall_s=1.96 peak_kib=2645940 swaps=0
+  RESULT R30ProductionChallengesCanonical exit=0 wall_s=4.93 peak_kib=7086656 swaps=0
+  RESULT R26AcceptedPrechallengeDispatchFinal256Run exit=0 wall_s=6.01 peak_kib=7141088 swaps=0
+
+The strengthened prechallenge dispatch also retains the exact successful
+`decode_and_absorb_final256` equation for the next source-invariant proof.
+The remaining source premises are the initial running claim, all 256 decoded
+folded values, and the fixed seven-component accumulator layout/components.
