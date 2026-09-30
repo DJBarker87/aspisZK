@@ -1,0 +1,8 @@
+extern crate aspis_core as corelib;
+use corelib::{field::{M31,CM31,QM31 as K},state_only_spend_query::StateOnlySpendQueryPowers,
+    v6_onefold::gamma_combine_v6_packed_layer0};
+#[derive(Debug,PartialEq)]enum Error{Length,Canonical}
+mod query_arithmetic;
+mod r103_words;
+mod quotient_fold;
+fn main(){r103_words::controls();query_arithmetic::r55_controls();query_arithmetic::r83_packed_controls();quotient_fold::r85_controls();}

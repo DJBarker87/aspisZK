@@ -1,0 +1,518 @@
+//! Isolated R17 host profile. No production/deployment adapter or privacy claim.
+use super::inactive_binding as row;
+use super::*;
+#[path="r17_owned_primal.rs"] mod owned_primal;
+
+pub(super) struct Prepared {
+    pub(super) public_audit: [K; 11],
+    pub(super) p: Prefix,
+    pub(super) iv_g: [K; 2],
+    pub(super) weights: [WeightAccumulator; 2],
+    pub(super) claim: K,
+}
+
+pub(super) fn initial(old: K, g: &[K]) -> K {
+    let old_g = g.iter().enumerate().fold(K::ZERO, |s, (r, &v)| {
+        let z = core::array::from_fn(|bit| sc(((r >> (9 - bit)) & 1) as u32));
+        s.add(v.mul(corelib::state_only_hiding::state_only_explicit_g_mask_factor(&z)))
+    });
+    old.sub(old_g).add(structured_g::mixed_coins(g)[0])
+}
+
+pub(super) fn prepare(s: row::Semantic, w: &Wire<'_>) -> Result<Prepared, Error> {
+    prepare_mode(s,w,true)
+}
+pub(super) fn prepare_compact(s: row::Semantic, w: &Wire<'_>) -> Result<Prepared, Error> {
+    prepare_mode(s,w,false)
+}
+#[inline(never)]
+fn prepare_mode(s: row::Semantic, w: &Wire<'_>, dense_ordinary:bool) -> Result<Prepared, Error> {
+    let (mut t, points, gamma) = row::to_gamma(s.t, w)?;
+    t.absorb(label::V6_INACTIVE_CLAIM, &bytes(&w.v[358..359]));
+    let kappa = sample(&mut t, true)?;
+    let scales = [kappa, kappa.square(), kappa.pow(3)];
+    let gamma_powers=corelib::field::qm31_power_table::<29>(gamma);
+    let gp=gamma_powers[27];
+    let starts=[271usize,300,329,359,388];
+    let rows=starts.map(|i|w.v[i..i+29].try_into().unwrap());
+    let batches=shared_gamma::five(gamma_powers[1..].try_into().unwrap(),rows);
+    #[cfg(not(target_os="solana"))]
+    for i in 0..5 {
+        let expected=rows[i].iter().rev().fold(K::ZERO,|a,v|a.mul(gamma).add(*v));
+        assert_eq!(batches[i],expected,"R90 source public batch {i}");
+    }
+    let mut claim = w.v[358];
+    for r in 0..3 {
+        claim = claim.add(scales[r].mul(batches[r]));
+    }
+    let [p0, p1] = points;
+    let use_x = p0.x != p1.x;
+    let h0 = if use_x { p0.x } else { p0.y };
+    let h1 = if use_x { p1.x } else { p1.y };
+    let inv = h0.sub(h1).try_inv().ok_or(Error::Domain)?;
+    let all = [batches[3],batches[4]];
+    let gv = [gp.mul(w.v[359 + 27]), gp.mul(w.v[388 + 27])];
+    let rv = [all[0].sub(gv[0]), all[1].sub(gv[1])];
+    let line = |v: [K; 2]| {
+        let slope = v[0].sub(v[1]).mul(inv);
+        [v[0].sub(slope.mul(h0)), slope]
+    };
+    let iv = line(rv);
+    let iv_g = line(gv);
+    let abc = [
+        p0.x.mul(p1.y).sub(p0.y.mul(p1.x)),
+        p0.y.sub(p1.y),
+        p1.x.sub(p0.x),
+    ];
+    let mut ordinary = [Vec::new(), Vec::new()];
+    let (shared_pair,first_pair)=if !dense_ordinary {crate::r17_compact_prepare::ordinary_and_first(&s.z,kappa,use_x)} else {([K::ZERO;2],[K::ZERO;2])};
+    for channel in 0..2 {
+        if !dense_ordinary {
+            let mut pair=shared_pair;
+            if channel==1 {
+                let e=first_pair;
+                for j in 0..2 {pair[j]=pair[j].sub(kappa.mul(e[j]));}
+                // Sparse H is in code coordinates 128,131,...,938: its
+                // constant/x/y entries are identically zero, for every z.
+            }
+            let i=if channel==0 {iv}else{iv_g};
+            claim=claim.sub(i[0].mul(pair[0])).sub(i[1].mul(pair[1]));
+            if channel==0 {ordinary[0]=vec![K::ZERO;1024];}
+            continue;
+        }
+
+#[cfg(target_os="solana")] { (); (); }
+        let original = opening_weights::original_weights(&s.z, kappa, channel == 1);
+
+#[cfg(target_os="solana")] { (); (); }
+        let dual = crate::r17_owned_weights::dual(original);
+#[cfg(target_os="solana")] { (); (); }
+
+        let i = if channel == 0 { iv } else { iv_g };
+        claim = claim
+            .sub(i[0].mul(dual[0]))
+            .sub(i[1].mul(dual[if use_x { 2 } else { 1 }]));
+        ordinary[channel] = crate::r17_owned_weights::chord(dual, abc);
+#[cfg(target_os="solana")] { (); (); }
+
+    }
+    let mut descriptor=R87_DESCRIPTOR_PREFIX.to_vec();
+    #[cfg(not(target_os="solana"))] {
+    let mut descriptor = b"AV8/R84/functional/sparseG-bitperm-two-swaps/channel-fold/v2".to_vec();
+    let map = basis_transport::transport();
+    for &r in &map.order {
+        descriptor.extend((r as u16).to_le_bytes());
+    }
+    for &i in &map.inactive {
+        descriptor.push(i as u8);
+    }
+        assert_eq!(descriptor,R87_DESCRIPTOR_PREFIX);
+    }
+    // Fixed framing: map above plus every variable functional input.
+    // This description is derived by the verifier, never supplied as a hint.
+    descriptor.extend([20,22,10,4,4,2,use_x as u8]);
+    descriptor.extend(bytes(&s.z));
+    descriptor.extend(bytes(&[kappa]));
+    descriptor.extend(bytes(&abc));
+    descriptor.extend(bytes(&iv));
+    descriptor.extend(bytes(&iv_g));
+    descriptor.extend(bytes(&[p0.x,p0.y,p1.x,p1.y,gamma]));
+    t.absorb(label::PROFILE, &descriptor);
+    t.absorb(label::CLAIM, &bytes(&[claim]));
+    t.absorb(label::PROFILE, b"AV8/R84/four-image-residuals/pre-channel/v2");
+    let tau = sample(&mut t, true)?;
+    let [ordinary0, ordinary1] = ordinary;
+    let weights = [(0, ordinary0), (1, ordinary1)].map(|(channel, mut v)| {
+        if channel==1 && !dense_ordinary {return WeightAccumulator::empty(10);}
+        let a = if channel == 0 { tau } else { tau.pow(3) };
+        let b = if channel == 0 {
+            tau.square()
+        } else {
+            tau.pow(4)
+        };
+        v[1023] = v[1023].add(a);
+        v[1022] = v[1022].add(b.mul(abc[1]));
+        v[1021] = v[1021].sub(b.mul(abc[2]));
+        let mut weights = WeightAccumulator::empty(10);
+        weights.add_dense(v).unwrap();
+        weights
+    });
+    Ok(Prepared {
+        public_audit: core::array::from_fn(|i| if i < 10 { s.z[i] } else { kappa }),
+        p: Prefix {
+            t,
+            points,
+            gamma,
+            abc,
+            iv,
+            use_x,
+            tau,
+        },
+        iv_g,
+        weights,
+        claim,
+    })
+}
+
+pub(super) fn opened(
+    w: &Wire<'_>,
+    p: &Prefix,
+    iv_g: [K; 2],
+    queries: &[u32],
+    alpha: K,
+) -> Result<([Vec<K>; 2], Vec<M31>), Error> {
+    let selected_points = circle_norm::Selected::new(queries)?;
+    let pts = selected_points.points();
+    let mut denoms = Vec::with_capacity(4*queries.len());
+    let mut base_denoms = Vec::with_capacity(2*queries.len());
+    let mut lines = Vec::with_capacity(queries.len());
+    for base in pts {
+        base_denoms.extend([base.x.double(),base.y.double()]);
+        lines.push(base.x.mul(base.x).double().sub(M31::ONE));
+        let bx = p.abc[1].mul_m31(base.x);
+        let cy = p.abc[2].mul_m31(base.y);
+        for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumerate() {
+            let dx = if j < 2 { bx } else { bx.neg() };
+            let dy = if j == 0 || j == 3 { cy } else { cy.neg() };
+            denoms.push(p.abc[0].add(dx).add(dy));
+            #[cfg(not(target_os="solana"))]
+            assert_eq!(denoms.last().copied().unwrap(), p.abc[0].add(p.abc[1].mul_m31(x)).add(p.abc[2].mul_m31(y)));
+        }
+    }
+    // Exact baseline helper; same internally selected points/chord/line values.
+    // Both channels share the denominator, so invert this list only once.
+    // A batch failure is not returned here: preserve the original per-record
+    // canonical/domain failure ordering via the individual fallback below.
+    let inverse_batch=selected_points.inverse_lines(&denoms,p.abc,&base_denoms,&lines);
+    let prepared_fold=quotient_fold::Prepared::new(alpha);
+    #[cfg(target_os="solana")] { (); (); }
+    let powers = StateOnlySpendQueryPowers::new(p.gamma);
+    let gp = p.gamma.pow(27);
+    let mut entries = Vec::new();
+    let mut values = [Vec::new(), Vec::new()];
+    let mut xs = Vec::new();
+    for (i, base) in pts.iter().enumerate() {
+        let r = &w.records[i * REC..(i + 1) * REC];
+        let salt: &[u8; 32] = r[608..640].try_into().unwrap();
+        // This selected decoder validates ALL C1/C2 limbs before the G view
+        // is read by the otherwise non-validating packed accessor below.
+        let all = crate::r103_words::gamma_reference(&r[..416], &r[416..608], &powers)?;
+        #[cfg(not(target_os="solana"))]
+        assert_eq!(all, crate::r103_words::gamma_reference(&r[..416], &r[416..608], &powers).map_err(|_| Error::Canonical)?);
+
+        let gv: [K; 4] = core::array::from_fn(|slot| {
+            gp.mul(crate::r103_words::qm31_at(&r[416..608], 4 + slot).unwrap())
+        });
+        entries.push((
+            queries[i],
+            crate::r103_words::leaf(hash, V7_C1_TREE_TAG, &r[..416], salt),
+            crate::r103_words::leaf(hash, V7_C2_TREE_TAG, &r[416..608], salt),
+        ));
+        if base.x == M31::ZERO || base.y == M31::ZERO {
+            return Err(Error::Domain);
+        }
+        for channel in 0..2 {
+            let mut q = [K::ZERO; 4];
+            let iv = if channel == 0 { p.iv } else { iv_g };
+            let iv_delta = iv[1].mul_m31(if p.use_x { base.x } else { base.y });
+            for (slot, (x, y)) in [
+                (base.x, base.y),
+                (base.x, base.y.neg()),
+                (base.x.neg(), base.y.neg()),
+                (base.x.neg(), base.y),
+            ]
+            .into_iter()
+            .enumerate()
+            {
+                let v = if channel == 0 {
+                    all[slot].sub(gv[slot])
+                } else {
+                    gv[slot]
+                };
+                let same = if p.use_x { slot < 2 } else { slot == 0 || slot == 3 };
+                q[slot] = v
+                    .sub({
+                        #[cfg(not(target_os="solana"))]
+                        assert_eq!(if same { iv_delta } else { iv_delta.neg() }, iv[1].mul_m31(if p.use_x { x } else { y }));
+                        iv[0].add(if same { iv_delta } else { iv_delta.neg() })
+                    })
+                    .mul(match &inverse_batch {
+                        Ok((inverses,_))=>inverses[4*i+slot],
+                        Err(_)=>denoms[4*i+slot].try_inv().ok_or(Error::Domain)?,
+                    });
+            }
+            let (ix,iy)=match &inverse_batch {
+                Ok((_,base_inverses))=>(base_inverses[2*i],base_inverses[2*i+1]),
+                Err(_)=>(base.x.double().inv(),base.y.double().inv()),
+            };
+            let folded=prepared_fold.fold(q,ix,iy);
+            #[cfg(not(target_os="solana"))]
+            assert_eq!(folded,corelib::field::qm31_circle_to_line_fold4(q,alpha,base.x.double().inv(),base.y.double().inv()));
+            values[channel].push(folded);
+        }
+        xs.push(lines[i]);
+    }
+    #[cfg(target_os="solana")] { (); (); }
+    entries.sort_by_key(|e| e.0);
+    if !crate::r102_tree::verify_reference(hash,(&w.roots.0,&w.roots.1),6,&entries,w.frontiers) {
+        return Err(Error::Authentication);
+    }
+    #[cfg(target_os="solana")] { (); (); }
+    // Retain an independently implemented original combined-opening check.
+    let old = Prefix {
+        t: p.t.clone(),
+        points: p.points,
+        gamma: p.gamma,
+        abc: p.abc,
+        iv: [p.iv[0].add(iv_g[0]), p.iv[1].add(iv_g[1])],
+        use_x: p.use_x,
+        tau: p.tau,
+    };
+    let (reference, reference_xs) = opened_values_reference(w, &old, queries, alpha, hash)?;
+    if reference_xs != xs
+        || reference
+            .iter()
+            .enumerate()
+            .any(|(i, &v)| v != values[0][i].add(values[1][i]))
+    {
+        return Err(Error::Terminal);
+    }
+    Ok((values, xs))
+}
+
+pub(super) fn polynomial(q: &[Vec<K>; 2], weights: &[WeightAccumulator; 2]) -> [K; 7] {
+    let a = polynomial_for_extension(&q[0], &weights[0]);
+    let b = polynomial_for_extension(&q[1], &weights[1]);
+    core::array::from_fn(|i| a[i].add(b[i]))
+}
+
+pub(super) fn inject_two(
+    weights: &mut [WeightAccumulator; 2],
+    claim: &mut K,
+    values: &[Vec<K>; 2],
+    xs: &[M31],
+    rho: K,
+) -> Result<K, Error> {
+    let mut power = rho;
+    let mut total = K::ZERO;
+    for channel in 0..2 {
+        let scales: [K; Q] = core::array::from_fn(|_| {
+            let v = power;
+            power = power.mul(rho);
+            v
+        });
+        weights[channel]
+            .add_line_m31_batch(&scales, xs)
+            .map_err(|_| Error::Shape)?;
+        total = total.add(dot(&scales, &values[channel]));
+    }
+    *claim = claim.add(total);
+    Ok(total)
+}
+
+fn fold_dense(v: &[K], a: K) -> Vec<K> {
+    v.chunks_exact(4)
+        .map(|v| {
+            v[0].add(a.mul(v[3].add(a.mul(v[2].add(a.mul(v[1]))))))
+                .half()
+                .half()
+        })
+        .collect()
+}
+
+pub(super) fn opened_channel(
+    w: &Wire<'_>,
+    p: &Prefix,
+    iv_g: [K; 2],
+    queries: &[u32],
+    alpha: K,
+    beta: K,
+) -> Result<(Vec<K>,Vec<M31>),Error> {
+    let selected_points = circle_norm::Selected::new(queries)?;
+    let pts = selected_points.points();
+    let mut denoms = Vec::with_capacity(4*queries.len());
+    let mut base_denoms = Vec::with_capacity(2*queries.len());
+    let mut lines = Vec::with_capacity(queries.len());
+    for base in pts {
+        base_denoms.extend([base.x.double(),base.y.double()]);
+        lines.push(base.x.mul(base.x).double().sub(M31::ONE));
+        let bx = p.abc[1].mul_m31(base.x);
+        let cy = p.abc[2].mul_m31(base.y);
+        for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumerate() {
+            let dx = if j < 2 { bx } else { bx.neg() };
+            let dy = if j == 0 || j == 3 { cy } else { cy.neg() };
+            denoms.push(p.abc[0].add(dx).add(dy));
+            #[cfg(not(target_os="solana"))]
+            assert_eq!(denoms.last().copied().unwrap(), p.abc[0].add(p.abc[1].mul_m31(x)).add(p.abc[2].mul_m31(y)));
+        }
+    }
+    // Exact baseline helper; same internally selected points/chord/line values.
+    // Both channels share the denominator, so invert this list only once.
+    // A batch failure is not returned here: preserve the original per-record
+    // canonical/domain failure ordering via the individual fallback below.
+    let inverse_batch=selected_points.inverse_folded(&denoms,p.abc,&base_denoms,&lines,alpha);
+    let prepared_fold=quotient_fold::Prepared::new(alpha);
+    #[cfg(target_os="solana")] { (); (); }
+    let powers = query_arithmetic::BetaCoefficients::new(p.gamma,beta);
+    let iv = crate::r19_channel_fold::interpolant(p.iv,iv_g,beta);
+    let canonical=quotient_fold::Weighted::new(iv);
+    let mut entries = Vec::new();
+    let mut values = [Vec::new(), Vec::new()];
+    let mut xs = Vec::new();
+    for (i, base) in pts.iter().enumerate() {
+        let r = &w.records[i * REC..(i + 1) * REC];
+        let salt: &[u8; 32] = r[608..640].try_into().unwrap();
+        // Decode every limb even when its coefficient is zero (beta=0 or 1).
+        let all = query_arithmetic::combine_words(&r[..416], &r[416..608], &powers)?;
+        #[cfg(not(target_os="solana"))] {
+            let original=StateOnlySpendQueryPowers::new(p.gamma);
+            let old=crate::r103_words::gamma_reference(&r[..416],&r[416..608],&original).map_err(|_|Error::Canonical)?;
+            for slot in 0..4 {
+                let g=p.gamma.pow(27).mul(crate::r103_words::qm31_at(&r[416..608],4+slot).unwrap());
+                assert_eq!(all[slot],crate::r19_channel_fold::combined_raw(old[slot],g,beta));
+            }
+        }
+        entries.push((
+            queries[i],
+            crate::r103_words::leaf(hash, V7_C1_TREE_TAG, &r[..416], salt),
+            crate::r103_words::c2(hash, r),
+        ));
+        if base.x == M31::ZERO || base.y == M31::ZERO {
+            return Err(Error::Domain);
+        }
+        for channel in 0..1 {
+            if let (Some(canonical),Ok(inverses))=(&canonical,&inverse_batch) {
+                let weights:[K;4]=inverses[4*i..4*i+4].try_into().unwrap();
+                if let Some(folded)=canonical.fold(all,weights,if p.use_x{base.x}else{base.y},p.use_x) {
+                    values[channel].push(folded);continue;
+                }
+            }
+            let mut q = [K::ZERO; 4];
+            let iv_delta = iv[1].mul_m31(if p.use_x { base.x } else { base.y });
+            for (slot, (x, y)) in [
+                (base.x, base.y),
+                (base.x, base.y.neg()),
+                (base.x.neg(), base.y.neg()),
+                (base.x.neg(), base.y),
+            ]
+            .into_iter()
+            .enumerate()
+            {
+                let v=all[slot];
+                let same = if p.use_x { slot < 2 } else { slot == 0 || slot == 3 };
+                q[slot] = v
+                    .sub({
+                        #[cfg(not(target_os="solana"))]
+                        assert_eq!(if same { iv_delta } else { iv_delta.neg() }, iv[1].mul_m31(if p.use_x { x } else { y }));
+                        iv[0].add(if same { iv_delta } else { iv_delta.neg() })
+                    })
+                    // Fallback needs ordinary inverses, NEVER the folded weights.
+                    .mul(denoms[4*i+slot].try_inv().ok_or(Error::Domain)?);
+            }
+            let (ix,iy)=(base.x.double().inv(),base.y.double().inv());
+            let folded=prepared_fold.fold(q,ix,iy);
+            #[cfg(not(target_os="solana"))]
+            assert_eq!(folded,corelib::field::qm31_circle_to_line_fold4(q,alpha,base.x.double().inv(),base.y.double().inv()));
+            values[channel].push(folded);
+        }
+        xs.push(lines[i]);
+    }
+    #[cfg(target_os="solana")] { (); (); }
+    entries.sort_by_key(|e| e.0);
+    if !crate::r101_merkle::verify::<8>(hash,(&w.roots.0,&w.roots.1),6,&entries,w.frontiers) {
+        return Err(Error::Authentication);
+    }
+    #[cfg(target_os="solana")] { (); (); }
+    #[cfg(not(target_os="solana"))] {
+        let (old,old_xs)=opened(w,p,iv_g,queries,alpha)?;
+        assert_eq!(old_xs,xs);
+        assert_eq!(values[0],old[0].iter().zip(&old[1]).map(|(&r,&g)|crate::r19_channel_fold::lerp(r,g,beta)).collect::<Vec<_>>());
+    }
+    Ok((core::mem::take(&mut values[0]),xs))
+}
+
+// New-profile verifier suffix. No claim of source extraction or privacy.
+pub(super) fn channel_challenge(p:&mut Prefix,claim:K,sent:[K;2])->Result<(K,K),Error>{
+    p.t.absorb(label::PROFILE,b"AV8/R19/channel-polynomial/p0-p2/v1");
+    p.t.absorb(label::CLAIM,&bytes(&sent));
+    p.t.absorb(label::PROFILE,b"AV8/R19/channel-beta/v1");
+    let beta=sample(&mut p.t,false)?;
+    Ok((beta,crate::r19_channel_fold::evaluate(claim,sent,beta)))
+}
+
+pub(super) fn verify(w:&Wire<'_>,prepared:Prepared,reference:bool)->Result<(),Error>{
+    verify_cached(w,prepared,reference,None)
+}
+pub(super) fn verify_cached(w:&Wire<'_>,prepared:Prepared,reference:bool,coins:Option<&[K]>)->Result<(),Error>{
+    let Prepared{public_audit,mut p,iv_g,mut weights,claim:incoming}=prepared;
+    let (beta,mut claim)=channel_challenge(&mut p,incoming,[w.v[417],w.v[418]])?;
+    let mut dense=if reference {(0..1024).map(|i|crate::r19_channel_fold::lerp(
+        weights[0].weight_at(i),weights[1].weight_at(i),beta)).collect::<Vec<_>>()}else{vec![]};
+    let mut workspace=if reference {vec![]}else{
+        core::mem::replace(&mut weights[0],WeightAccumulator::empty(10))
+            .into_single_dense_for_workspace().ok_or(Error::Shape)?};
+    let mut query=WeightAccumulator::empty(8);
+    let first=compact(&w.v[419..425],claim);absorb_round(&mut p.t,0,&first);
+    let mut work=vec![0];work.extend_from_slice(&w.nonces[8..16]);
+    p.t.absorb(label::M31_CIRCLE_FOLD_POW_NONCE,&work);
+    let a=sample(&mut p.t,false)?;claim=evaluate(&first,a);
+    let mut alphas=[a,K::ZERO,K::ZERO,K::ZERO];
+    if reference {dense=fold_dense(&dense,a);}
+    let mut finals=w.v[443..699].to_vec();
+    let (queries,rho)=query_schedule(&mut p,&finals,w.nonces)?;
+    #[cfg(target_os="solana")] {();();}
+    let (values,xs)=opened_channel(w,&p,iv_g,&queries,a,beta)?;
+    #[cfg(target_os="solana")] {();();}
+    let inc=if reference {
+        let mut power=rho;let mut inc=K::ZERO;
+        for i in 0..Q {inc=inc.add(power.mul(values[i]));
+            for j in 0..256 {let mut unit=vec![K::ZERO;256];unit[j]=K::ONE;
+                dense[j]=dense[j].add(power.mul(corelib::v6_onefold::evaluate_final256_coefficients(&unit,xs[i]).map_err(|_|Error::Shape)?));}
+            power=power.mul(rho);
+        }
+        claim=claim.add(inc);inc
+    }else{inject(&mut query,&mut claim,&values,&xs,rho)?};
+    p.t.absorb(label::PROFILE,&bytes(&[inc]));
+    for r in 1..4 {
+        let poly=compact(&w.v[419+6*r..425+6*r],claim);absorb_round(&mut p.t,r,&poly);
+        let a=sample(&mut p.t,false)?;alphas[r]=a;claim=evaluate(&poly,a);
+        finals=owned_primal::fold(finals,a);
+        if reference{dense=fold_dense(&dense,a)}else{query.fold_deferred_relation_arity4(a)}
+    }
+    #[cfg(target_os="solana")] {();();}
+    let mut terminal=corelib::field::qm31_sum_products4(
+        if reference {core::array::from_fn(|i|dense[i])}else{query.weight_prefix::<4>()},
+        core::array::from_fn(|i|finals[i]));
+    if !reference {
+        let kernel=crate::r17_weighted_groups::Kernel::new(p.abc,alphas);
+        let ordinary=crate::r19_channel_ordinary::terminal_scalar(&public_audit,p.abc,alphas,beta,&core::array::from_fn(|i|finals[i]),&mut workspace,&kernel);
+        #[cfg(target_os="solana")] {();();}
+        let z=core::array::from_fn(|i|public_audit[i]);
+        let sparse=if let Some(coins)=coins {
+            let scalar=crate::r19_channel_ordinary::r81_sparse_scalar_after_ordinary(coins,&workspace,&kernel);
+            #[cfg(not(target_os="solana"))] {
+                let (normal,carry,high)=kernel.geometry_parts();
+                let old=crate::r20_sparse_whole::sparse_terminal(coins,normal,carry,high,&mut workspace);
+                assert_eq!(scalar,corelib::field::qm31_sum_products4(old,core::array::from_fn(|i|finals[i])));
+            }
+            scalar
+        }else{corelib::field::qm31_sum_products4(
+            crate::r18_compact_g::terminal_shared(&z,&kernel,&mut workspace),
+            core::array::from_fn(|i|finals[i]))};
+        terminal=terminal.add(ordinary).add(sparse.mul(beta.mul(public_audit[10])));
+        // i1=tau*i0 exactly; retains arbitrary image residuals, including beta0/1.
+        let image_scale=K::ONE.sub(beta).add(beta.mul(p.tau.square()));
+        terminal=terminal.add(image_scale.mul(image_terminal(p.tau,p.abc[1],p.abc[2],alphas)).mul(finals[3]));
+    }
+    if terminal!=claim{return Err(Error::Terminal)}
+    #[cfg(target_os="solana")] {();();}
+    if !reference && std::env::args().nth(1).as_deref()==Some("--audit-existing") {
+        let mut fields=public_audit.to_vec();fields.extend([p.tau,a,p.points[0].x,p.points[0].y,p.points[1].x,p.points[1].y,p.gamma,beta,w.v[417],w.v[418]]);
+        eprintln!("R19_PUBLIC_PREFIX {{\"fields\":{:?},\"queries\":{:?}}}",bytes(&fields),queries);
+    }
+    Ok(())
+}
+
+include!("r87_descriptor.rs");
+
+#[path="shared_gamma.rs"] mod shared_gamma;

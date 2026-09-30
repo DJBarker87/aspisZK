@@ -1,0 +1,161 @@
+[package]
+name = "aspis-v8-performance-host"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[workspace]
+
+[[bin]]
+name = "aspis-v8-performance-host"
+path = "../relation_callback.rs"
+
+[features]
+selected-v7-kernels = [
+ "aspis-core/v7-gamma-four-slot-block-audit",
+ "aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+ "aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit",
+ "aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit",
+ "aspis-statement/pool-v1-pair-forest-semantic-factor-audit",
+ "aspis-statement/pool-v1-pair-forest-pattern-window-audit",
+ "aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit",
+ "aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit",
+ "aspis-statement/pool-v1-pair-forest-packed-range-audit",
+ "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit",
+]
+insecure-spend-fixture = []
+
+[dependencies]
+aspis-core = { path = "../../../../../crates/aspis-core" }
+aspis-statement = { path = "../../../../../crates/aspis-statement", features = ["spend-dynamic-rate512", "pool-v1-kernel"] }
+sha2 = "=0.10.9"
+zeroize = "=1.8.1"
+getrandom = "=0.3.4"
+
+[profile.release]
+opt-level = 3
+debug = false
+codegen-units = 1
+
+[[bin]]
+name = "r17-export-basis"
+path = "../r17_export_basis.rs"
+
+[[bin]]
+name="r17-tensor-check"
+path="../r17_tensor_check.rs"
+
+[[bin]]
+name="r17-fast-g-generate"
+path="../r17_fast_g_generate.rs"
+
+[[bin]]
+name="r17-merge-generate"
+path="../r17_merge_generate.rs"
+
+[[bin]]
+name="r17-baseline-reuse-check"
+path="../r17_baseline_reuse_check.rs"
+
+[[bin]]
+name="r17-compact-transport-check"
+path="../r17_compact_transport_check.rs"
+
+[[bin]]
+name="r17-compact-ordinary-check"
+path="../r17_compact_ordinary_check.rs"
+
+[[bin]]
+name="r17-compact-workspace-check"
+path="../r17_compact_workspace_check.rs"
+
+[[bin]]
+name="r17-compact-prepare-check"
+path="../r17_compact_prepare_check.rs"
+
+[[bin]]
+name="r17-carry-shortcuts-check"
+path="../r17_carry_shortcuts_check.rs"
+
+[[bin]]
+name="r18-shared-ordinary-check"
+path="../r18_shared_ordinary_check.rs"
+[[bin]]
+name="r18-sparse-coded-g-check"
+path="../r18_sparse_coded_g_check.rs"
+
+[[bin]]
+name="r18-minimal-transport-check"
+path="../r18_minimal_transport_check.rs"
+
+[[bin]]
+name = "r24-dot-check"
+path = "../r24_dot_check.rs"
+
+[[bin]]
+name="r27-check"
+path="../r27_check.rs"
+
+[[bin]]
+name="r55-opening-check"
+path="../r55_opening_check.rs"
+
+[[bin]]
+name="r56-product-check"
+path="../r56_product_check.rs"
+
+[[bin]]
+name="r57-selector-check"
+path="../r57_selector_check.rs"
+
+[[bin]]
+name="r58-tag-check"
+path="../r58_tag_check.rs"
+
+[[bin]]
+name="r69-explicit-check"
+path="../r69_explicit_check.rs"
+
+[[bin]]
+name="r81-square-check"
+path="../r81_square_check.rs"
+
+[[bin]]
+name="r81-basis-check"
+path="../r81_basis_check.rs"
+
+[[bin]]
+name="r84-bitperm-check"
+path="../r84_bitperm_check.rs"
+
+[[bin]]
+name="r86-leaf-check"
+path="../r86_leaf_check.rs"
+
+[[bin]]
+name="r90-gamma-check"
+path="../r90_gamma_check.rs"
+
+[[bin]]
+name="r91-add-check"
+path="../r91_add_check.rs"
+
+[[bin]]
+name="r95-merkle-check"
+path="../r95_merkle_check.rs"
+
+[[bin]]
+name="r98-query-check"
+path="../r98_query_check.rs"
+
+[[bin]]
+name="r99-fold-check"
+path="../r99_fold_check.rs"
+
+[[bin]]
+name="r102-auth-check"
+path="../r102_auth_check.rs"
+
+[[bin]]
+name="r104-sum-check"
+path="../r104_sum_check.rs"

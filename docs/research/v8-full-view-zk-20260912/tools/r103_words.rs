@@ -1,0 +1,100 @@
+//! Separate versioned 32-bit leaf encoding. Never reduces untrusted limbs.
+use super::*;
+
+#[inline(never)]
+pub(super) fn decode<const N:usize>(bytes:&[u8],out:&mut[u32;N])->Result<(),Error>{
+    if N==0 || bytes.len()!=4*N{return Err(Error::Length);}
+    let mut invalid=0u32;
+    for (value,b) in out.iter_mut().zip(bytes.chunks_exact(4)){
+        let v=u32::from_le_bytes(b.try_into().unwrap());
+        *value=v;
+        // Bit 31 catches every v>=2^31; v+1 catches exactly P below it.
+        // Wrapping at u32::MAX is intentional: the original v still rejects.
+        invalid|=v|v.wrapping_add(1);
+    }
+    if invalid>>31!=0{Err(Error::Canonical)}else{Ok(())}
+}
+
+pub(super) fn leaf(hash:corelib::HashFn,tag:u8,value:&[u8],salt:&[u8;32])->[u8;26]{
+    corelib::v7_merkle208::truncate_sha256_v7(hash(&[&[0x20,tag],value,salt]))
+}
+#[inline]
+pub(super) fn c2(hash:corelib::HashFn,record:&[u8])->[u8;26]{
+    corelib::v7_merkle208::truncate_sha256_v7(hash(&[&[0x20,corelib::v7_merkle208::V7_C2_TREE_TAG],&record[416..640]]))
+}
+
+// Independent legacy arithmetic adapter: reference callers only. The primary
+// never repacks and authenticates the ORIGINAL word-encoded bytes.
+fn repack<const N:usize>(b:&[u8])->Result<Vec<u8>,Error>{
+    if b.len()!=4*N{return Err(Error::Length);}
+    let mut out=vec![0;N*31/8];
+    for (i,word) in b.chunks_exact(4).enumerate(){
+        let v=u32::from_le_bytes(word.try_into().unwrap());
+        if v>=corelib::field::P{return Err(Error::Canonical);}
+        for bit in 0..31{if v&(1<<bit)!=0{let at=31*i+bit;out[at/8]|=1<<(at%8);}}
+    }
+    Ok(out)
+}
+pub(super) fn gamma_reference(c1:&[u8],c2:&[u8],p:&StateOnlySpendQueryPowers)->Result<[K;4],Error>{
+    let a=repack::<104>(c1)?;let b=repack::<48>(c2)?;
+    corelib::v6_onefold::gamma_combine_v6_packed_layer0(&a,&b,p).map_err(|_|Error::Canonical)
+}
+pub(super) fn qm31_at(bytes:&[u8],i:usize)->Option<K>{
+    let b=bytes.get(16*i..16*(i+1))?;
+    let a=u32::from_le_bytes(b[0..4].try_into().ok()?);
+    let c=u32::from_le_bytes(b[4..8].try_into().ok()?);
+    let d=u32::from_le_bytes(b[8..12].try_into().ok()?);
+    let e=u32::from_le_bytes(b[12..16].try_into().ok()?);
+    if [a,c,d,e].iter().any(|v|*v>=corelib::field::P){return None;}
+    Some(K{c0:CM31::new(M31(a),M31(c)),c1:CM31::new(M31(d),M31(e))})
+}
+
+#[cfg(not(v8_performance_sbf))]
+pub(super) fn c1leaf(columns:&[Vec<M31>],id:usize)->Vec<u8>{
+    let mut b=Vec::with_capacity(416);
+    for slot in 0..4{for column in columns.iter().take(26){b.extend(column[4*id+slot].0.to_le_bytes());}}
+    b
+}
+#[cfg(not(v8_performance_sbf))]
+pub(super) fn c2leaf(columns:&[Vec<K>],id:usize)->Vec<u8>{
+    let mut b=Vec::with_capacity(192);
+    for column in columns.iter().take(3){for slot in 0..4{
+        let v=column[4*id+slot];
+        for x in [v.c0.a.0,v.c0.b.0,v.c1.a.0,v.c1.b.0]{b.extend(x.to_le_bytes());}
+    }}b
+}
+
+#[cfg(not(v8_performance_sbf))]
+pub(super) fn controls(){
+    let p=corelib::field::P;let mut state=0x103d_a55e_9801_ff21u64;
+    let mut next=||{state^=state<<13;state^=state>>7;state^=state<<17;(state%u64::from(p))as u32};
+    let mut good=0;let mut bad=0;
+    for case in 0..1024 {
+        let values:[u32;152]=core::array::from_fn(|i|match case{0=>0,1=>p-1,2..=153=>if i==case-2{p-1}else{0},_=>next()});
+        let words:Vec<u8>=values.iter().flat_map(|v|v.to_le_bytes()).collect();
+        let a=&words[..416];let b=&words[416..];
+        let aa=repack::<104>(a).unwrap();let bb=repack::<48>(b).unwrap();
+        let gamma=K{c0:CM31::new(M31(next()),M31(next())),c1:CM31::new(M31(next()),M31(next()))};
+        for beta in [K::ZERO,K::ONE,K::ONE.neg(),gamma]{
+            let powers=query_arithmetic::BetaCoefficients::new(gamma,beta);
+            assert_eq!(query_arithmetic::combine_words(a,b,&powers),query_arithmetic::combine_beta(&aa,&bb,&powers));good+=1;
+        }
+        let cols:Vec<Vec<M31>>=(0..26).map(|i|(0..4).map(|s|M31(values[26*s+i])).collect()).collect();
+        assert_eq!(c1leaf(&cols,0),a);
+        let cols:Vec<Vec<K>>=(0..3).map(|i|(0..4).map(|s|qm31_at(b,4*i+s).unwrap()).collect()).collect();
+        assert_eq!(c2leaf(&cols,0),b);
+    }
+    for beta in [K::ZERO,K::ONE,K::ONE.neg()]{
+        let powers=query_arithmetic::BetaCoefficients::new(K::ONE,beta);
+        for i in 0..152{for v in [p,1<<31,u32::MAX]{
+            let mut words=vec![0;608];words[4*i..4*i+4].copy_from_slice(&v.to_le_bytes());
+            assert_eq!(query_arithmetic::combine_words(&words[..416],&words[416..],&powers),Err(Error::Canonical));bad+=1;
+        }}
+        for n in 0..=417{if n!=416{assert_eq!(query_arithmetic::combine_words(&vec![0;n],&[0;192],&powers),Err(Error::Length));bad+=1;}}
+        for n in 0..=193{if n!=192{assert_eq!(query_arithmetic::combine_words(&[0;416],&vec![0;n],&powers),Err(Error::Length));bad+=1;}}
+        let mut a=[0;416];a[..4].copy_from_slice(&p.to_le_bytes());
+        assert_eq!(query_arithmetic::combine_words(&a,&[],&powers),Err(Error::Canonical));bad+=1;
+    }
+    let mut empty=[];assert_eq!(decode::<0>(&[],&mut empty),Err(Error::Length));
+    println!("R103_WORDS comparisons={good} malformed={bad} beta_zero_one=true all_152_positions=true high_bits_reject=true independent_repack=true encoding_roundtrips=2048");
+}

@@ -1,5 +1,20 @@
 # Current V8 privacy-repair status
 
+## R101–R105 native authentication and parsing — 2026-09-30
+
+[R105_NATIVE_AUTH.md](R105_NATIVE_AUTH.md) records complete
+**1,066,127 / 1,065,886 CU**. A separately versioned eight-way Merkle profile
+and same-proof fixed-field parser win. Word-aligned leaves and bounded inactive
+sums pass correctness but regress; Copy coalescing removes no terms and stops
+before SBF. The authentication-only pilot is kept separate from full execution.
+Both actual 1M honest runs still exhaust; **66,127 CU remains**.
+
+Both new profiles pass their actual fixed-prefix C1/H1/G opposite-witness
+gates, including p0/p2 and first relation; these are not universal coverage.
+No new Lean target or security promotion. Universal joint affine compatibility,
+full causal/shared-oracle privacy, eight-way commitment/source composition and
+pre-beta extraction remain open. Old profiles and negative regressions remain.
+
 ## R99–R100 folded openings and observed query law — 2026-09-30
 
 [R100_FOLDED_QUERY_OBSERVATION.md](R100_FOLDED_QUERY_OBSERVATION.md) records

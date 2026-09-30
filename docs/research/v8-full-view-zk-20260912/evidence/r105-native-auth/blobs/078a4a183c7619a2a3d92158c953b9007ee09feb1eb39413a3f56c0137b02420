@@ -1,0 +1,180 @@
+// Included inside the actual r19_channel_ordinary module. T163 is unchanged.
+fn scalar_geometry(high:&[K;16], finals:&[K;4], out:&mut[K]) {
+    assert!(out.len()>=128);out[..128].fill(K::ZERO);
+    for j in 0..64 {out[j]=high[j&15].mul(finals[j>>4]);}
+    // Adjoint of the EXACT nested-half carry read, including zero at row 64.
+    for j in 0usize..64 {
+        let mut value=out[j];let bits=j.trailing_ones() as usize;
+        for bit in 0..bits {
+            value=value.half();let row=j&!((1usize<<(bit+1))-1);
+            out[64+row]=out[64+row].add(value);
+        }
+        if j+1<64 {out[64+j+1]=out[64+j+1].add(value);}
+    }
+}
+fn scalar_low(normal:&[K;16],carry:&[K;3],values:&[K;19])->K {
+    let mut out=corelib::field::r25_checked_dot(normal,&values[..16])
+        .unwrap_or_else(||corelib::field::qm31_dot(normal,&values[..16]));
+    out=out.add(corelib::field::qm31_sum_products3([carry[0],carry[1],carry[2]],[values[16],values[17],values[18]]));
+    for _ in 0..8 {out=out.half();}out
+}
+#[inline(never)]
+pub(super) fn terminal_scalar_t163_retained(audit:&[K;11],abc:[K;3],alpha:[K;4],beta:K,
+    finals:&[K;4],workspace:&mut[K],kernel:&r17_weighted_groups::Kernel)->K {
+    assert!(workspace.len()>=531);
+    let (factors,rest)=workspace.split_at_mut(240);let(delta,hb)=rest.split_at_mut(163);
+    let plain=prepare_rows_scalar(audit,abc,alpha,beta,factors,finals);
+    let (normal,carry,high)=kernel.geometry_parts();scalar_geometry(high,finals,hb);
+    for j in 0..163 {delta[j]=r62_entry(factors,SUPPORT[j]);}
+    cycle(delta,&basis_transport::transport().order);
+    let mut selected=[K::ZERO;19];
+    let wp=r62_entry(factors,1023);
+    r62_gather(delta,hb,factors,&mut selected);
+    let correction=scalar_low(normal,carry,&selected);
+    let mut inactive=[K::ZERO;19];r24_inactive_values(hb,&mut inactive);
+    let inactive=scalar_low(normal,carry,&inactive);
+    let mut pivot=normal[15].mul(hb[63]);for _ in 0..8 {pivot=pivot.half();}
+    let result=plain.add(correction).sub(wp.mul(inactive)).add(pivot);result
+}
+
+#[cfg(not(target_os="solana"))]
+pub(super) fn adjoint_check(abc:[K;3],alpha:[K;4],finals:&[K;4]) {
+    let kernel=r17_weighted_groups::Kernel::new(abc,alpha);let(n,c,h)=kernel.geometry_parts();
+    let mut hb=[K::ZERO;128];scalar_geometry(h,finals,&mut hb);
+    for row in 0..1024 {
+        let low=row&15;let group=row>>4;
+        let mut actual=n[low].mul(hb[group]);if low<3 {actual=actual.add(c[low].mul(hb[64+group]));}
+        for _ in 0..8 {actual=actual.half();}
+        assert_eq!(actual,corelib::field::qm31_sum_products4(kernel.coordinate(row),*finals),"adjoint row {row}");
+    }
+}
+
+#[inline(never)]
+fn r24_inactive_values(hb:&[K],values:&mut[K;19]) {
+    if r104_inactive::values(hb,values) {
+        #[cfg(not(target_os="solana"))] {
+            let mut reference=[K::ZERO;19];r104_retained_inactive(hb,&mut reference);
+            assert_eq!(*values,reference);
+        }
+        return;
+    }
+    r104_retained_inactive(hb,values)
+}
+#[path="r104_inactive.rs"] mod r104_inactive;
+#[inline(never)]
+fn r104_retained_inactive(hb:&[K],values:&mut[K;19]) {
+    const MASKS:[u64;16]=[144115188075794687, 18446744073701228543, 9907918630450856063, 9223231297210580991, 9259400284109504639, 9223231297211105279, 9835861036412930175, 9223231297210580991, 9259400284109504639, 9223231297210580991, 9259400284109506687, 9223231297214775295, 9835861036412930175, 18446603334065356799, 35887509766373503, 9223371484943155199];
+    const IDS:[usize;16]=[0, 1, 2, 3, 4, 5, 6, 3, 4, 3, 7, 8, 6, 9, 10, 11];
+    const ENDS:[usize;13]=[0, 14, 21, 37, 48, 66, 76, 92, 109, 119, 129, 149, 159];
+    const ROWS:[usize;159]=[8, 9, 10, 11, 13, 14, 15, 57, 58, 59, 60, 61, 62, 63, 16, 17, 18, 19, 20, 21, 22, 7, 8, 9, 10, 11, 12, 13, 14, 23, 39, 55, 57, 58, 60, 61, 62, 15, 16, 17, 18, 19, 20, 21, 22, 31, 47, 63, 7, 8, 9, 10, 11, 12, 13, 14, 23, 39, 55, 56, 57, 58, 59, 60, 61, 62, 15, 16, 17, 18, 20, 21, 22, 31, 47, 63, 7, 8, 9, 10, 12, 13, 14, 23, 39, 55, 56, 57, 58, 60, 61, 62, 7, 8, 9, 10, 12, 13, 14, 23, 39, 55, 56, 57, 58, 59, 60, 61, 62, 15, 16, 17, 18, 19, 20, 21, 31, 47, 63, 15, 16, 17, 18, 19, 20, 21, 22, 31, 47, 7, 8, 9, 10, 11, 12, 13, 14, 23, 39, 47, 55, 56, 57, 58, 59, 60, 61, 62, 63, 16, 17, 18, 19, 20, 21, 22, 31, 39, 63];
+    const COMPLEMENT:[bool;12]=[true, true, true, true, true, true, true, true, true, true, true, true];
+    #[cfg(not(target_os="solana"))] {
+        let t=basis_transport::transport();
+        for low in 0..16 {let mut mask=0u64;for g in 0..64 {let row=t.order[16*g+low];if row!=1023 && t.inactive[row]{mask|=1u64<<g;}}assert_eq!(mask,MASKS[low]);}
+    }
+    let total=hb[..64].iter().copied().fold(K::ZERO,|s,x|s.add(x));
+    let mut shared=[K::ZERO;12];
+    for i in 0..12 {
+        let mut sum=K::ZERO;
+        for j in ENDS[i]..ENDS[i+1] {sum=sum.add(hb[ROWS[j]]);}
+        shared[i]=if COMPLEMENT[i]{total.sub(sum)}else{sum};
+    }
+    for low in 0..16 {values[low]=shared[IDS[low]];}
+    let total_b=hb[64..128].iter().copied().fold(K::ZERO,|s,x|s.add(x));
+    for low in 0..3 {
+        let i=IDS[low];let mut sum=K::ZERO;
+        for j in ENDS[i]..ENDS[i+1] {sum=sum.add(hb[64+ROWS[j]]);}
+        values[16+low]=if COMPLEMENT[i]{total_b.sub(sum)}else{sum};
+    }
+}
+
+// Included inside r19_channel_ordinary, after the retained scalar implementation.
+// terminal_scalar leaves its verifier-derived high/final adjoint at 403..531.
+// No prover-provided cache is accepted. The caller invokes this immediately
+// after terminal_scalar, before reusing the workspace for any other purpose.
+#[inline(never)]
+pub(super) fn r92_sparse_retained(
+    coins:&[K], workspace:&[K], kernel:&r17_weighted_groups::Kernel,
+)->K {
+    assert!(coins.len()>=271 && workspace.len()>=531);
+    let hb=&workspace[403..531];
+    let (normal,carry,_)=kernel.geometry_parts();
+    let mut values=[K::ZERO;19];
+    let mut left=[K::ZERO;17];let mut right=[K::ZERO;17];
+    for low in 0..16 {
+        // 3*11 = 1 mod 16; selected code row is exactly 128+3*i.
+        let start=(11*low)%16;let mut n=0;let mut i=start;
+        while i<271 {
+            left[n]=coins[i];right[n]=hb[(128+3*i)>>4];
+            n+=1;i+=16;
+        }
+        values[low]=corelib::field::r25_checked_dot(&left[..n],&right[..n])
+            .expect("canonical sparse normal operands");
+        if low<3 {
+            for j in 0..n {right[j]=hb[64+((128+3*(start+16*j))>>4)];}
+            values[16+low]=corelib::field::r25_checked_dot(&left[..n],&right[..n])
+                .expect("canonical sparse carry operands");
+        }
+    }
+    scalar_low(normal,carry,&values)
+}
+
+#[cfg(not(target_os="solana"))]
+pub(super) fn r81_sparse_scalar_check(x:&[K;24],case:usize) {
+    let audit=core::array::from_fn(|i|x[i]);
+    let abc=core::array::from_fn(|i|x[11+i]);
+    let alpha=core::array::from_fn(|i|x[14+i]);
+    let finals=core::array::from_fn(|i|x[19+i]);
+    let kernel=r17_weighted_groups::Kernel::new(abc,alpha);
+    let mut workspace=vec![K::ONE;531];
+    terminal_scalar(&audit,abc,alpha,x[18],&finals,&mut workspace,&kernel);
+    let (_,_,high)=kernel.geometry_parts();let mut independent_hb=[K::ZERO;128];
+    scalar_geometry(high,&finals,&mut independent_hb);
+    assert_eq!(&workspace[403..531],&independent_hb,"ordinary cache postcondition");
+    // Independent retained coordinate kernel, not the new low-group gather.
+    let weights:Vec<K>=(0..271).map(|i|corelib::field::qm31_sum_products4(
+        kernel.coordinate(128+3*i),finals)).collect();
+    let mut coins:Vec<K>=(0..271).map(|i|x[(7*i+5)%24]).collect();
+    let expected=coins.iter().zip(&weights).fold(K::ZERO,|s,(&a,&b)|s.add(a.mul(b)));
+    assert_eq!(r92_sparse_retained(&coins,&workspace,&kernel),expected);
+    assert_eq!(r81_sparse_scalar_after_ordinary(&coins,&workspace,&kernel),expected,
+        "sparse arbitrary case {case}");
+    if case==3 {
+        for i in 0..271 {
+            coins.fill(K::ZERO);coins[i]=K::ONE;
+            assert_eq!(r81_sparse_scalar_after_ordinary(&coins,&workspace,&kernel),weights[i],
+                "sparse selected basis {i}");
+        }
+    }
+}
+
+// Same scalar, streamed private contractions; no 17-element gather arrays.
+// Only the operands read by the retained kernel are validated/used here.
+#[inline(never)]
+pub(super) fn r81_sparse_scalar_after_ordinary(
+    coins:&[K],workspace:&[K],kernel:&r17_weighted_groups::Kernel,
+)->K {
+    assert!(coins.len()>=271 && workspace.len()>=531);
+    let hb=&workspace[403..531];
+    let (normal,carry,_)=kernel.geometry_parts();
+    let mut result=r85_private::Dot::new();
+    for low in 0..16 {
+        let mut normal_sum=r85_private::Dot::new();
+        let mut carry_sum=r85_private::Dot::new();
+        let mut i=(11*low)%16;
+        while i<271 {
+            let a=r85_in(coins[i]).expect("canonical sparse coin");
+            let group=(128+3*i)>>4;
+            normal_sum.push(a,r85_in(hb[group]).expect("canonical sparse normal operand"));
+            if low<3 {
+                carry_sum.push(a,r85_in(hb[64+group]).expect("canonical sparse carry operand"));
+            }
+            i+=16;
+        }
+        result.push(r85_in(normal[low]).expect("canonical sparse normal"),normal_sum.finish());
+        if low<3 {
+            result.push(r85_in(carry[low]).expect("canonical sparse carry"),carry_sum.finish());
+        }
+    }
+    r85_out(result.finish().half_pow(8).expect("fixed half exponent"))
+}

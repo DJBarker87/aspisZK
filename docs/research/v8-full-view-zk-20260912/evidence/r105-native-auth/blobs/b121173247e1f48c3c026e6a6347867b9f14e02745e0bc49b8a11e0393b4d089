@@ -1,0 +1,2 @@
+fn main(){let (terms,weights,cases)=aspis_statement::pool_v1::pair_forest_copy_terminal::r57_selector_controls();
+println!("R57_SELECTOR source_terms={terms} weight_checks={weights} scratch_and_full_lane_cases={cases} both_variants=true arbitrary_high_low=true original_source=true");}
