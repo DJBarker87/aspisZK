@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## R134 complete typed selected-schedule boundary — 2026-09-30
+
+[R134_SELECTED_SCHEDULE_BOUNDARY.md](R134_SELECTED_SCHEDULE_BOUNDARY.md)
+records two focused compiled leaves.  The actual selected callback chronology
+through rho is represented as one typed, error-preserving oracle program, and
+`program_within` constructs an all-branches certificate of at most 1815 raw
+oracle reads.  The actual Rust-to-program execution equality, source sampler
+distribution, privacy and soundness remain open.
+
 ## R133 causal first-hit and typed selected-prefix boundary — 2026-09-30
 
 [R133_CAUSAL_PREFIX_BOUNDARY.md](R133_CAUSAL_PREFIX_BOUNDARY.md) records nine
