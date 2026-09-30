@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## R127 raw cursor and distinct-circle program boundary — 2026-09-30
+
+[R127_CURSOR_DISTINCT_BOUNDARY.md](R127_CURSOR_DISTINCT_BOUNDARY.md) records
+two newly compiled R19 leaves: the deterministic one-read cursor bridge and
+the exact three-attempt distinct-second circle eval/run with inner and
+exhaustion failures visible. Both passed under the pinned 5G/7G zero-swap
+scope with four clean audits. Limb/whole-challenge raw-stream composition,
+actual callback equivalence/freshness/distribution, privacy, and soundness
+remain explicitly open.
+
 ## R126 sampler representation and typed callback prefix — 2026-09-30
 
 [R126_SAMPLER_PREFIX_BOUNDARY.md](R126_SAMPLER_PREFIX_BOUNDARY.md) records two
