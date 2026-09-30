@@ -1,5 +1,19 @@
 # Current V8 privacy-repair status
 
+## R99–R100 folded openings and observed query law — 2026-09-30
+
+[R100_FOLDED_QUERY_OBSERVATION.md](R100_FOLDED_QUERY_OBSERVATION.md) records
+complete **1,123,090 / 1,121,361 CU** on unchanged R84 proofs. Private canonical
+folded-inverse construction wins; its generic-arithmetic predecessor regresses
+and is rejected. Both actual 1M honest runs still exhaust; **123,090 CU remains**.
+
+Four focused Lean targets compile with 12 theorem audits: complete ordered q22
+hash observations, typed source erasure, returned value/state, and the memoized
+ideal-oracle law with arbitrary prior cached answers. Instrumentation remains
+an explicit mechanically checked boundary, not a certified compiler. The next
+observer task is whole-experiment composition. Universal R84 joint coverage,
+causal full-view privacy and pre-beta extraction still prevent full security.
+
 ## R95–R98 native Merkle walk and public query entry — 2026-09-30
 
 [R98_NATIVE_QUERY_ENTRY.md](R98_NATIVE_QUERY_ENTRY.md) records complete
