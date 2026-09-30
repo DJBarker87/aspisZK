@@ -180,6 +180,9 @@ structure AcceptedCircleStep {Fields : Type}
   appendRun :
     sumcheck.WeightAccumulator.impl.add_circle_tensor state.2.2.2.2
         scale point = ok (.Ok (), weightsAfter)
+  tensorRun :
+    sumcheck.WeightAccumulator.impl.add_tensor_factors state.2.2.2.2
+        scale factors = ok (.Ok (), weightsAfter)
   product : RawQM31
   runningAfter : RawQM31
   productRun : field.QM31.mul scale fieldValue = ok product
@@ -459,7 +462,8 @@ theorem AcceptedPreparedAccumulator.exposesCircleAccumulator
                             state.2.2.2.2 scale point =
                           ok (.Ok (), weightsAfter) := by
                       simpa [tensorResultExact] using tensorRun
-                    obtain ⟨factors, _, logExact, componentsExact⟩ :=
+                    obtain ⟨factors, tensorRunExact, logExact,
+                        componentsExact⟩ :=
                       successful_circle_append_exact state.2.2.2.2
                         weightsAfter scale point tensorSuccess
                     exact ⟨{
@@ -476,6 +480,7 @@ theorem AcceptedPreparedAccumulator.exposesCircleAccumulator
                       factors := factors
                       weightsAfter := weightsAfter
                       appendRun := tensorSuccess
+                      tensorRun := tensorRunExact
                       product := product
                       runningAfter := runningAfter
                       productRun := productRun
