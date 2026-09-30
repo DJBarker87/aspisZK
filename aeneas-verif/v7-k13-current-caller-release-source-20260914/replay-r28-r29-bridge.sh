@@ -122,5 +122,9 @@ compile_to "$proof_r30/V7CallerCurrentReleaseR30ChallengeCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30ChallengeCanonical.olean"
 compile_to "$proof_r30/V7ProductionSnapshotObserverR30ChallengesCanonical.lean" \
   "$output/V7ProductionSnapshotObserverR30ChallengesCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30Final256Canonical.lean" \
+  "$output/V7CallerCurrentReleaseR30Final256Canonical.olean"
+compile_to "$proof_r30/V7ProductionSnapshotObserverR30Final256Canonical.lean" \
+  "$output/V7ProductionSnapshotObserverR30Final256Canonical.olean"
 
-echo "FINAL target=V7ProductionSnapshotObserverR30ChallengesCanonical status=passed"
+echo "FINAL target=V7ProductionSnapshotObserverR30Final256Canonical status=passed"

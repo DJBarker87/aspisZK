@@ -209,3 +209,39 @@ The strengthened prechallenge dispatch also retains the exact successful
 `decode_and_absorb_final256` equation for the next source-invariant proof.
 The remaining source premises are the initial running claim, all 256 decoded
 folded values, and the fixed seven-component accumulator layout/components.
+
+Final-256 canonicality
+----------------------
+
+Recorded UTC: 2026-09-30
+Base revision: a78b868e0
+Source SHA-256:
+  fb7b0021fbc7e95eda0725da7b84a519bd6aef0afe02786b678bc7ffb72ade3a
+  proof-r30/V7CallerCurrentReleaseR30Final256Canonical.lean
+  56deaf05d13006b81430015218377f0b020168675e75ca358e2e4c7010b66402
+  proof-r30/V7ProductionSnapshotObserverR30Final256Canonical.lean
+
+The generic proof carries canonical membership through the exact generated
+256-step append loop.  It proves the error branch cannot return a successful
+array and transports the invariant through `into_boxed_slice`, fixed-length
+conversion, and `expect`.  The production theorem applies it to the exact
+decoder equation retained by the accepted prechallenge dispatch.
+
+  'V7CallerCurrentReleaseR30Final256Canonical.successful_final256_loop_facts' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  'V7CallerCurrentReleaseR30Final256Canonical.successful_decode_and_absorb_final256_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+  'V7ProductionSnapshotObserverR30Final256Canonical.accepted_production_final256_canonical' depends on axioms: [propext,
+   Classical.choice,
+   Quot.sound]
+
+Final focused checks ran with `MemoryHigh=7G`, `MemoryMax=8G`, and
+`MemorySwapMax=0`:
+
+  RESULT R30Final256Canonical exit=0 wall_s=1.91 peak_kib=2652684 swaps=0
+  RESULT R30ProductionFinal256Canonical exit=0 wall_s=4.33 peak_kib=7090388 swaps=0
+
+The remaining source premises are the initial running claim and the fixed
+seven-component accumulator layout/component facts.
