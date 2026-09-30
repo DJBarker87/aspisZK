@@ -1,5 +1,14 @@
 # Current V8 privacy-repair status
 
+## R131 fixed-tape QM31 and operational cursor bound — 2026-09-30
+
+[R131_CURSOR_TIGHT_BOUNDARY.md](R131_CURSOR_TIGHT_BOUNDARY.md) records two
+confirmed focused leaves: the structural fixed-tape QM31 certificate and the
+operational source-shaped challenge trace bound. The operational program has
+an exact bound of 8 queries; the fixed-tape certificate remains the
+conservative bound 66 because it retains branch/rollover ghosts. `FreshFrom`,
+source callback equivalence/distribution, privacy, and soundness remain open.
+
 ## R130 raw independent law and fixed-tape mean — 2026-09-30
 
 [R130_RAW_INDEPENDENT_BOUNDARY.md](R130_RAW_INDEPENDENT_BOUNDARY.md) records
