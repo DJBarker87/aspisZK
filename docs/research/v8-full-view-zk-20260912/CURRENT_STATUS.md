@@ -1,5 +1,15 @@
 # Current V8 privacy-repair status
 
+## R129 answer transport and arbitrary-history OOD pair law — 2026-09-30
+
+[R129_ANSWER_HISTORY_BOUNDARY.md](R129_ANSWER_HISTORY_BOUNDARY.md) records two
+compiled R19 leaves: exact `stateRawEquiv` reparameterization of already-
+independent State answers, and the complete arbitrary-history memoized OOD-pair
+law. Reduction to `independentMean` requires the explicit branch-wise
+`FreshFrom` premise. Prefix freshness/collision loss, flattening raw answers
+with advance ghosts into the accepted OOD law, actual Rust callback
+equivalence, privacy, and soundness remain open.
+
 ## R128 raw execution and circle-pair prefix boundary — 2026-09-30
 
 [R128_RAW_EXECUTION_PAIR_BOUNDARY.md](R128_RAW_EXECUTION_PAIR_BOUNDARY.md)
