@@ -105,6 +105,13 @@ structure AcceptedInitialPrechallengeDispatch
   transcriptBeforeFinal : transcript.Transcript
   transcriptAfterFinalValues : transcript.Transcript
   relationFields : Array (Array field.QM31 6#usize) 4#usize
+  firstEncoded : Array field.QM31 6#usize
+  firstEncodedRun : Array.index_usize relationFields 0#usize = ok firstEncoded
+  firstPolynomial : Array field.QM31 7#usize
+  firstPolynomialRun :
+    v6_transcript.decode_compact_relation_polynomial firstEncoded
+      origin.state.2.2.2.1 = ok firstPolynomial
+  firstEvaluateRun : sumcheck.evaluate firstPolynomial initialFold.alpha = ok runningClaim
   fieldsAfterRelation : Fields
   fieldsAfterFinal : Fields
   relationFieldsRun :
@@ -207,9 +214,9 @@ theorem AcceptedCircleBodyOrigin.exposesInitialPrechallengeDispatch
       obtain ⟨traceRelationPair, _, run⟩ := run
       rcases traceRelationPair with ⟨_, traceAfterRelation⟩
       rw [bind_eq_ok_iff] at run
-      obtain ⟨firstEncoded, _, run⟩ := run
+      obtain ⟨firstEncoded, firstEncodedRun, run⟩ := run
       rw [bind_eq_ok_iff] at run
-      obtain ⟨firstPolynomial, _, run⟩ := run
+      obtain ⟨firstPolynomial, firstPolynomialRun, run⟩ := run
       rw [bind_eq_ok_iff] at run
       obtain ⟨transcriptAfterPolynomial, _, run⟩ := run
       rw [bind_eq_ok_iff] at run
@@ -280,7 +287,7 @@ theorem AcceptedCircleBodyOrigin.exposesInitialPrechallengeDispatch
               have alphaExact := initial_alpha_read_exact alphaZero
                 alphaZeroRead alpha alphaUpdateRun alphaZeroReadRun
               rw [bind_eq_ok_iff] at run
-              obtain ⟨runningClaim, _, run⟩ := run
+              obtain ⟨runningClaim, firstEvaluateRun, run⟩ := run
               rw [bind_eq_ok_iff] at run
               obtain ⟨weights, foldRun, run⟩ := run
               let initialFold : AcceptedInitialFold origin := ⟨alphaZeroRead,
@@ -390,6 +397,11 @@ theorem AcceptedCircleBodyOrigin.exposesInitialPrechallengeDispatch
                                 transcriptAfterFinalValues :=
                                   transcriptAfterFinalValues
                                 relationFields := relationFields
+                                firstEncoded := firstEncoded
+                                firstEncodedRun := firstEncodedRun
+                                firstPolynomial := firstPolynomial
+                                firstPolynomialRun := firstPolynomialRun
+                                firstEvaluateRun := firstEvaluateRun
                                 fieldsAfterRelation := fieldsAfterRelation
                                 fieldsAfterFinal := fieldsAfterFinal
                                 relationFieldsRun := by
