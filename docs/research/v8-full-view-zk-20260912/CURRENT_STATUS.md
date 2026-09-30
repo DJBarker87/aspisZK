@@ -1,5 +1,24 @@
 # Current V8 privacy-repair status
 
+## R123 source-domain and one-step first-read bound — 2026-09-30
+
+[R123_SOURCE_DOMAIN_BOUND.md](R123_SOURCE_DOMAIN_BOUND.md) records six compiled
+Lean targets and 17 clean axioms audits. One actual byte-framed source squeeze
+is now connected to R122's independent-answer law whenever its squeeze and
+advance addresses are fresh; otherwise the independently uniform current-state
+bad fraction is at most the prior read-address count divided by `256^32`.
+
+The fixed-root two-swap determinant now has exact coordinate domains: full
+QM31 has `P^4` values, nonzero QM31 has `P^4-1`, and the accepted OOD parameter
+domain has `P^2*(P^2-1)`. The distinct-two-OOD restriction is nonempty and its
+acceptance-ratio cost remains explicit. This is not yet the pinned research
+callback's accepted sampler law. Production V6's independently sampled OOD
+pair remains a separate profile. Next: compose the callback's complete
+pre-query history/cache with the ordinary, nonzero, OOD and existing q22
+observer laws, including the three-attempt distinct retry and visible failure.
+No verifier change or new SBF run; the measured endpoint remains
+**999,790 / 999,532 CU**. Full privacy and soundness remain open.
+
 ## R122 adaptive first-read law — 2026-09-30
 
 [R122_ADAPTIVE_FIRST_READ_BOUND.md](R122_ADAPTIVE_FIRST_READ_BOUND.md) records
