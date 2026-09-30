@@ -118,6 +118,8 @@ compile_to "$proof/V7ProductionSnapshotObserverR28AcceptedTail.lean" \
   "$output/V7ProductionSnapshotObserverR28AcceptedTail.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30FixedFieldCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30FixedFieldCanonical.olean"
+compile_to "$proof_r30/V7CallerCurrentReleaseR30PointClaimsCanonical.lean" \
+  "$output/V7CallerCurrentReleaseR30PointClaimsCanonical.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30RelationFieldInnerCanonical.lean" \
   "$output/V7CallerCurrentReleaseR30RelationFieldInnerCanonical.olean"
 compile_to "$proof_r30/V7CallerCurrentReleaseR30RelationFieldsCanonical.lean" \
