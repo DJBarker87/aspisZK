@@ -98,6 +98,14 @@ compile_to "$generated/FunsExternal.lean" \
   "$output/V7ProductionSnapshotObserverR28/FunsExternal.olean"
 compile_to "$generated/Funs.lean" \
   "$output/V7ProductionSnapshotObserverR28/Funs.olean"
+compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedOnefoldPrefix.lean" \
+  "$output/V7CallerCurrentReleaseR26AcceptedOnefoldPrefix.olean"
+compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedOuterLoop.lean" \
+  "$output/V7CallerCurrentReleaseR26AcceptedOuterLoop.olean"
+compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedCircleOrigin.lean" \
+  "$output/V7CallerCurrentReleaseR26AcceptedCircleOrigin.olean"
+compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedCircleExhausted.lean" \
+  "$output/V7CallerCurrentReleaseR26AcceptedCircleExhausted.olean"
 compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedPrechallengeDispatch.lean" \
   "$output/V7CallerCurrentReleaseR26AcceptedPrechallengeDispatch.olean"
 compile_to "$proof_r26/V7CallerCurrentReleaseR26AcceptedInnerToPrechallenge.lean" \
