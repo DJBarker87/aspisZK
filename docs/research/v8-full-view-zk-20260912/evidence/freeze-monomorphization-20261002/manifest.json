@@ -1,0 +1,57 @@
+{
+  "source_revision": "21b47f15bfdc6515fb684cf970c085a235beebf9",
+  "selected_callback_sha256": "4f8f80e0847ec004a56fc693f6096308090de5f3cbed35722dba330afaa9820f",
+  "target": "Frozen selected freeze extraction with new monomorphization configurations",
+  "resources": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "runs": [
+    {
+      "name": "R185MonomorphicFreeze",
+      "charon_exit": 0,
+      "charon_wall_seconds": 14.02,
+      "charon_peak_rss_kib": 626540,
+      "aeneas_exit": 2,
+      "aeneas_wall_seconds": 0.17,
+      "aeneas_peak_rss_kib": 71456,
+      "swaps": 0,
+      "failure": "Nested-loop returns require exactly one Option language item",
+      "Option_lang_item_count": 7
+    },
+    {
+      "name": "R186PartialMutFreeze",
+      "charon_exit": 1,
+      "wall_seconds": 0.0,
+      "peak_rss_kib": 5456,
+      "swaps": 0,
+      "failure": "Explicit remove-adt-clauses required before preset expansion validation"
+    },
+    {
+      "name": "R186PartialMutFreezeB",
+      "charon_exit": 1,
+      "wall_seconds": 0.0,
+      "peak_rss_kib": 5456,
+      "swaps": 0,
+      "failure": "Explicit lift-associated-types=* required before preset expansion validation"
+    },
+    {
+      "name": "R186PartialMutFreezeC",
+      "charon_exit": 0,
+      "charon_wall_seconds": 14.38,
+      "charon_peak_rss_kib": 625032,
+      "aeneas_exit": 2,
+      "aeneas_wall_seconds": 3.52,
+      "aeneas_peak_rss_kib": 311728,
+      "swaps": 0,
+      "failure": "Can\u2019t copy a mutable borrow in iterator.rs2671:20\u20132671:31"
+    }
+  ],
+  "axioms_audit": "N/A: no Lean proof or generated Lean target completed.",
+  "proved_boundary": "Diagnostic only. No source correspondence proved. No failed configuration adopted.",
+  "first_remaining_proposition": "Identify the specialized generic-fold copied mutable reference and repair reborrow handling without changing Rust semantics; independently selected slice pointer override and Vec.extend remain unproved.",
+  "verifier_source_changed": false,
+  "CU_or_unchanged_regression_rerun": false
+}

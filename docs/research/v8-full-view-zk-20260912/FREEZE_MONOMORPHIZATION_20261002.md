@@ -1,0 +1,7 @@
+# Freeze monomorphization diagnostics
+
+The frozen selected callback was extracted under two new Charon configurations to investigate the captured-borrow fold interface. No verifier source changed. The cached release extraction was optimized and each job used a 5/7 GiB zero-swap cgroup. Complete commands, LLBC, logs, checksums and metrics are retained in the [manifest](evidence/freeze-monomorphization-20261002/manifest.json).
+
+Full monomorphization extracted successfully but failed translation: the return-preservation pass expects one generic `Option` language item, while the monomorphic crate has multiple concrete instances. Partial mutability monomorphization retaining generic type declarations passed extraction after making the preset’s required flags explicit; translation then failed while constructing a fold argument aggregate with “Can’t copy a mutable borrow” at Rust standard library `iterator.rs:2671`. Both initial command-validation rejections are retained too.
+
+These runs produced no usable full callback proof. No failed configuration was adopted and no axiom was used to replace it. R183 and R184 remain generic default-fold and explicit closed-callback results; they do not prove the selected pointer-based override or its captured-borrow dictionary. Next: inspect the exact copied reference and preserve actual reborrow behavior, then close the selected fold/extend and callback chronology. Privacy and soundness remain open. CU results and every security parameter are unchanged, with no benchmark or unchanged regression rerun.

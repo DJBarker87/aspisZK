@@ -1,0 +1,33 @@
+import pathlib,subprocess,shlex,sys
+fn=sys.argv[1];name=sys.argv[2];root=pathlib.Path(__file__).resolve().parent.parent
+host='dombarker@100.108.41.90';opts=['-o','BatchMode=yes','-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null']
+script=f'''import os,pathlib,hashlib,subprocess,json,shlex
+hostroot=pathlib.Path('/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a')
+source=hostroot/'docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs'
+assert hashlib.sha256(source.read_bytes()).hexdigest()=='4f8f80e0847ec004a56fc693f6096308090de5f3cbed35722dba330afaa9820f'
+root=pathlib.Path('/home/dombarker/project-offloads/aspis-'+{name.lower()!r}+'-extract-20261002-a');root.mkdir(exist_ok=True)
+os.environ['PATH']='/home/dombarker/.cargo/bin:/home/dombarker/.elan/bin:'+os.environ.get('PATH','')
+workspace=hostroot/'docs/research/v8-no-work-100-20260907/experiments/performance-host'
+fingerprints=list((workspace/'target/x86_64-unknown-linux-gnu/release/.fingerprint').glob('aspis-v8-performance-host*/bin-aspis-v8-performance-host.json'))
+flags=[json.loads(p.read_text())['rustflags'] for p in fingerprints]
+assert flags and all(x==flags[0] for x in flags)
+os.environ['RUSTFLAGS']=shlex.join(flags[0])
+manifest=workspace/'Cargo.toml'
+charon='/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon'
+cmd=[charon,'cargo','--preset','aeneas','--mir','built','--monomorphize-mut=except-types','--remove-adt-clauses','--sysroot','default','--start-from','crate::'+{fn!r},'--include','core::option','--include','core::result::_::map_err',*[x for p in {sys.argv[3:]!r} for x in ['--include',p]],'--dest-file',str(root/({name!r}+'.llbc')),'--','--offline','--locked','--release','--jobs','1','--features','insecure-spend-fixture,selected-v7-kernels','--manifest-path',str(manifest),'--bin','aspis-v8-performance-host']
+(root/'extract-command.json').write_text(json.dumps({{'command':cmd,'rustflags':flags[0],'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'expected_cost':'cached optimized release compilation and bounded one-function partial-mutability extraction'}},indent=2))
+with (root/'extract.log').open('w') as f:
+ r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=f,stderr=subprocess.STDOUT)
+print((root/'extract.log').read_text()[-2400:]);print('EXTRACT_EXIT',r.returncode)
+if r.returncode:raise SystemExit(r.returncode)
+aeneas='/home/dombarker/project-offloads/aspis-return-continuation-20261002-a/aeneas-return-continuation'
+cmd=[aeneas,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','Aspis'+{name!r},'-dest',str(root/'generated'),'-subdir','Aspis'+{name!r},'-split-files','-emit-json',str(root/({name!r}+'.llbc'))]
+(root/'translate-command.json').write_text(json.dumps(cmd,indent=2))
+with (root/'translate.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=f,stderr=subprocess.STDOUT)
+print((root/'translate.log').read_text()[-2500:]);print('TRANSLATE_EXIT',r.returncode)
+raise SystemExit(r.returncode)
+'''
+cmd=['systemd-run','--user','--wait','--collect','--pipe','--unit=aspis-'+name.lower(), '--working-directory=/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a','-p','MemoryHigh=5G','-p','MemoryMax=7G','-p','MemorySwapMax=0','-p','TasksMax=128','python3','-c',script]
+with (root/'.r21-scratch'/f'{name}-extract.log').open('w') as f:r=subprocess.run(['ssh',*opts,host,shlex.join(cmd)],stdout=f,stderr=subprocess.STDOUT)
+print((root/'.r21-scratch'/f'{name}-extract.log').read_text());print('EXIT',r.returncode)
+sys.exit(r.returncode)
