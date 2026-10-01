@@ -1,0 +1,149 @@
+--- before/Funs.lean
++++ after/Funs.lean
+@@ -1673,8 +1673,7 @@
+   (iter : core.ops.range.Range Std.I32) (t : aspis_core.transcript.Transcript)
+   :
+   Result (ControlFlow ((core.ops.range.Range Std.I32) ×
+-    aspis_core.transcript.Transcript) (Option (core.result.Result Prefix
+-    Error)))
++    aspis_core.transcript.Transcript) (core.result.Result Prefix Error))
+   := do
+   let (o, iter1) ←
+     core.iter.range.IteratorRange.next core.iter.range.StepI32 iter
+@@ -1784,7 +1783,7 @@
+             let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+             match cf4 with
+             | core.ops.control_flow.ControlFlow.Continue val3 =>
+-              ok (done (some (core.result.Result.Ok
++              ok (done (core.result.Result.Ok
+                 {
+                   t := t9,
+                   points := (Array.make 2#usize [ s, val ]),
+@@ -1793,32 +1792,32 @@
+                   iv := (Array.make 2#usize [ q6, slope ]),
+                   use_x,
+                   tau := val3
+-                })))
++                }))
+             | core.ops.control_flow.ControlFlow.Break residual =>
+-              let _ ←
++              let return_capture ←
+                 core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                   Prefix (core.convert.FromSame Error) residual
+-              ok (done none)
++              ok (done return_capture)
+           | core.ops.control_flow.ControlFlow.Break residual =>
+-            let _ ←
++            let return_capture ←
+               core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                 Prefix (core.convert.FromSame Error) residual
+-            ok (done none)
++            ok (done return_capture)
+         | core.ops.control_flow.ControlFlow.Break residual =>
+-          let _ ←
++          let return_capture ←
+             core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+               Prefix (core.convert.FromSame Error) residual
+-          ok (done none)
++          ok (done return_capture)
+       | core.ops.control_flow.ControlFlow.Break residual =>
+-        let _ ←
++        let return_capture ←
+           core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+             Prefix (core.convert.FromSame Error) residual
+-        ok (done none)
++        ok (done return_capture)
+     | core.ops.control_flow.ControlFlow.Break residual =>
+-      let _ ←
++      let return_capture ←
+         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+           Prefix (core.convert.FromSame Error) residual
+-      ok (done none)
++      ok (done return_capture)
+   | some _ =>
+     let (r, t1) ←
+       aspis_core.transcript.Transcript.challenge_secure_circle_point t
+@@ -1943,7 +1942,7 @@
+                 let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                 match cf5 with
+                 | core.ops.control_flow.ControlFlow.Continue val4 =>
+-                  ok (done (some (core.result.Result.Ok
++                  ok (done (core.result.Result.Ok
+                     {
+                       t := t10,
+                       points := (Array.make 2#usize [ s, val1 ]),
+@@ -1952,38 +1951,38 @@
+                       iv := (Array.make 2#usize [ q6, slope ]),
+                       use_x,
+                       tau := val4
+-                    })))
++                    }))
+                 | core.ops.control_flow.ControlFlow.Break residual =>
+-                  let _ ←
++                  let return_capture ←
+                     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                       Prefix (core.convert.FromSame Error) residual
+-                  ok (done none)
++                  ok (done return_capture)
+               | core.ops.control_flow.ControlFlow.Break residual =>
+-                let _ ←
++                let return_capture ←
+                   core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                     Prefix (core.convert.FromSame Error) residual
+-                ok (done none)
++                ok (done return_capture)
+             | core.ops.control_flow.ControlFlow.Break residual =>
+-              let _ ←
++              let return_capture ←
+                 core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                   Prefix (core.convert.FromSame Error) residual
+-              ok (done none)
++              ok (done return_capture)
+           | core.ops.control_flow.ControlFlow.Break residual =>
+-            let _ ←
++            let return_capture ←
+               core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                 Prefix (core.convert.FromSame Error) residual
+-            ok (done none)
++            ok (done return_capture)
+         | core.ops.control_flow.ControlFlow.Break residual =>
+-          let _ ←
++          let return_capture ←
+             core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+               Prefix (core.convert.FromSame Error) residual
+-          ok (done none)
++          ok (done return_capture)
+       else ok (cont (iter1, t1))
+     | core.ops.control_flow.ControlFlow.Break residual =>
+       let return_capture ←
+         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+           Prefix (core.convert.FromSame Error) residual
+-      ok (done (some return_capture))
++      ok (done return_capture)
+ 
+ /-- [aspis_v8_performance_host::freeze]: loop 0:
+     Source: '../relation_callback.rs', lines 1:0-145:1 -/
+@@ -1994,7 +1993,7 @@
+   (v : alloc.vec.Vec aspis_core.field.QM31)
+   (ordinary : Slice aspis_core.field.QM31) (claim : aspis_core.field.QM31)
+   (s : aspis_core.circle.SecureCirclePoint) :
+-  Result (Option (core.result.Result Prefix Error))
++  Result (core.result.Result Prefix Error)
+   := do
+   loop
+     (fun (iter1, t1) => freeze_loop.body w v ordinary claim s iter1 t1)
+@@ -2030,12 +2029,8 @@
+     let s1 := alloc.vec.Vec.deref ret1
+     let t2 ←
+       aspis_core.transcript.Transcript.absorb t1 V8_COMPONENT_OOD_VECTOR s1
+-    let pending_return ←
+-      freeze_loop w { start := 0#i32, «end» := 3#i32 } t2 w.v ordinary claim
+-        val
+-    match pending_return with
+-    | none => fail panic
+-    | some r2 => ok r2
++    freeze_loop w { start := 0#i32, «end» := 3#i32 } t2 w.v ordinary claim
++      val
+   | core.ops.control_flow.ControlFlow.Break residual =>
+     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+       Prefix (core.convert.FromSame Error) residual

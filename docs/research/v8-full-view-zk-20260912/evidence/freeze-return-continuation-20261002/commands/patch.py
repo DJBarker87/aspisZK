@@ -1,0 +1,97 @@
+from pathlib import Path
+p=Path('.r21-scratch/PrePasses-before-return.ml');old=p.read_text();start=old.index('let restore_structured_nested_returns ');end=old.index('\n(** Lower function returns',start);s=old[start:end]
+needle='''      let rec transform_block depth (block : block) : block =
+        { block with statements = transform_statements depth block.statements }
+      and transform_statements depth = function'''
+replacement='''      (* Track only a syntactically cleanup-only continuation to the function
+         return.  A loop break is terminal only if its matching post-loop
+         continuation is itself cleanup-only and reaches that return. *)
+      let rec continuation_returns outer_fallthrough break_returns = function
+        | [] -> outer_fallthrough
+        | { kind = Return; _ } :: _ -> true
+        | { kind = Break index; _ } :: _ ->
+            Option.value ~default:false (List.nth_opt break_returns index)
+        | { kind = StorageDead _ | Nop; _ } :: rest ->
+            continuation_returns outer_fallthrough break_returns rest
+        | { kind = Drop _; _ } :: rest when !Config.drop_as_no_op ->
+            continuation_returns outer_fallthrough break_returns rest
+        | { kind = Assign ({ kind = PlaceLocal local; _ },
+              Use (Constant { kind = CLiteral (VBool _); _ }, _)); _ } :: rest
+            when !Config.drop_as_no_op && local <> return_local ->
+            continuation_returns outer_fallthrough break_returns rest
+        | _ -> false
+      in
+      let rec transform_block depth break_returns outer_fallthrough
+          (block : block) : block =
+        { block with statements =
+            transform_statements depth break_returns outer_fallthrough
+              block.statements }
+      and transform_statements depth break_returns outer_fallthrough = function'''
+assert s.count(needle)==1;s=s.replace(needle,replacement)
+needle='''            match tail with
+            | ({ kind = Break _ | Return; _ } as leave) :: _ ->
+                (write :: cleanup) @ [ { leave with kind = Return } ]
+            | _ ->
+                transform_statement depth write
+                :: transform_statements depth rest)
+        | st :: rest ->
+            transform_statement depth st :: transform_statements depth rest
+        | [] -> []
+      and transform_statement depth (st : statement) : statement =
+        match st.kind with
+        | Loop loop ->
+            { st with kind = Loop (transform_block (depth + 1) loop) }
+        | _ ->
+            let visitor =
+              object
+                inherit [_] map_statement_base
+                method! visit_block _ block = transform_block depth block
+              end
+            in
+            visitor#visit_statement () st
+      in
+      let body = { body with body = transform_block 0 body.body } in'''
+replacement='''            match tail with
+            | ({ kind = Return; _ } as leave) :: _ ->
+                (write :: cleanup) @ [ leave ]
+            | ({ kind = Break index; _ } as leave) :: _
+              when Option.value ~default:false
+                     (List.nth_opt break_returns index) ->
+                (write :: cleanup) @ [ { leave with kind = Return } ]
+            | [] when outer_fallthrough ->
+                (* The branch rejoins only cleanup and the known function
+                   return. Re-expose that return before loop lowering. *)
+                (write :: cleanup)
+                @ [ { write with kind = Return; comments_before = [] } ]
+            | _ ->
+                transform_statement depth break_returns
+                  (continuation_returns outer_fallthrough break_returns rest)
+                  write
+                :: transform_statements depth break_returns outer_fallthrough rest)
+        | st :: rest ->
+            transform_statement depth break_returns
+              (continuation_returns outer_fallthrough break_returns rest) st
+            :: transform_statements depth break_returns outer_fallthrough rest
+        | [] -> []
+      and transform_statement depth break_returns child_fallthrough
+          (st : statement) : statement =
+        match st.kind with
+        | Loop loop ->
+            { st with kind = Loop
+                (transform_block (depth + 1)
+                  (child_fallthrough :: break_returns) false loop) }
+        | _ ->
+            let visitor =
+              object
+                inherit [_] map_statement_base
+                method! visit_block _ block =
+                  transform_block depth break_returns child_fallthrough block
+              end
+            in
+            visitor#visit_statement () st
+      in
+      let body = { body with body = transform_block 0 [] false body.body } in'''
+assert s.count(needle)==1;s=s.replace(needle,replacement)
+new=old[:start]+s+old[end:];Path('.r21-scratch/PrePasses-return-continuation.ml').write_text(new)
+import difflib
+Path('.r21-scratch/return-continuation.patch').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='a/src/PrePasses.ml',tofile='b/src/PrePasses.ml')))
