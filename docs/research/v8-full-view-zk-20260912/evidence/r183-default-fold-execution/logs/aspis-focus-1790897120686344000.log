@@ -1,0 +1,258 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790897120686344000.service; invocation ID: 66213d049b5548cd942181c72e304fcb
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:29:10: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:54:11: error: unsolved goals
+case zero
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+iter✝ : core.slice.iter.Iter T
+init✝ : B
+f✝ : F
+motive : ℕ → Prop :=
+  fun n =>
+    ∀ (iter : core.slice.iter.Iter T) (init : B) (f : F),
+      ↑iter.slice.len - iter.i = n →
+        loop
+            (fun st =>
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body
+                (core.iter.traits.iterator.IteratorSliceIter T) k st.1 st.2.1 st.2.2)
+            (iter, f, init) =
+          do
+          let __x ← foldMutList k (List.drop iter.i ↑iter.slice) f init
+          match __x with
+            | (acc, snd) => ok acc
+iter : core.slice.iter.Iter T
+init : B
+f : F
+hlen : ↑iter.slice.len - iter.i = 0
+hstop : ¬iter.i < ↑iter.slice.len
+⊢ (match do
+      let __x ←
+        if h : iter.i < (↑iter.slice).length then ok (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 })
+          else ok (none, iter)
+      match __x.1 with
+        | none => ok (done init)
+        | some x => do
+          let __x_1 ← k.call_mut f (init, x)
+          ok (cont (__x.2, __x_1.2, __x_1.1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun st => do
+            let __x ←
+              if h : st.1.i < (↑st.1.slice).length then
+                  ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+                else ok (none, st.1)
+            match __x.1 with
+              | none => ok (done st.2.2)
+              | some x => do
+                let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+                ok (cont (__x.2, __x_1.2, __x_1.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ← foldMutList k (List.drop iter.i ↑iter.slice) f init
+    ok __x.1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:74:17: error: unsolved goals
+case succ.fail
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+iter✝ : core.slice.iter.Iter T
+init✝ : B
+f✝ : F
+motive : ℕ → Prop :=
+  fun n =>
+    ∀ (iter : core.slice.iter.Iter T) (init : B) (f : F),
+      ↑iter.slice.len - iter.i = n →
+        loop
+            (fun st =>
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body
+                (core.iter.traits.iterator.IteratorSliceIter T) k st.1 st.2.1 st.2.2)
+            (iter, f, init) =
+          do
+          let __x ← foldMutList k (List.drop iter.i ↑iter.slice) f init
+          match __x with
+            | (acc, snd) => ok acc
+n : ℕ
+ih : motive n
+iter : core.slice.iter.Iter T
+init : B
+f : F
+hlen : ↑iter.slice.len - iter.i = n + 1
+hlt : iter.i < ↑iter.slice.len
+hlen' : ↑iter.slice.len - (iter.i + 1) = n
+hdrop : List.drop iter.i ↑iter.slice = (↑iter.slice)[iter.i] :: List.drop (iter.i + 1) ↑iter.slice
+e : Error
+hk : k.call_mut f (init, (↑iter.slice)[iter.i]) = fail e
+⊢ fail e = do
+    let x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+    let __x ← foldMutList k (List.drop (iter.i + 1) ↑iter.slice) x.2 x.1
+    ok __x.1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:75:14: error: unsolved goals
+case succ.div
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+iter✝ : core.slice.iter.Iter T
+init✝ : B
+f✝ : F
+motive : ℕ → Prop :=
+  fun n =>
+    ∀ (iter : core.slice.iter.Iter T) (init : B) (f : F),
+      ↑iter.slice.len - iter.i = n →
+        loop
+            (fun st =>
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body
+                (core.iter.traits.iterator.IteratorSliceIter T) k st.1 st.2.1 st.2.2)
+            (iter, f, init) =
+          do
+          let __x ← foldMutList k (List.drop iter.i ↑iter.slice) f init
+          match __x with
+            | (acc, snd) => ok acc
+n : ℕ
+ih : motive n
+iter : core.slice.iter.Iter T
+init : B
+f : F
+hlen : ↑iter.slice.len - iter.i = n + 1
+hlt : iter.i < ↑iter.slice.len
+hlen' : ↑iter.slice.len - (iter.i + 1) = n
+hdrop : List.drop iter.i ↑iter.slice = (↑iter.slice)[iter.i] :: List.drop (iter.i + 1) ↑iter.slice
+hk : k.call_mut f (init, (↑iter.slice)[iter.i]) = div
+⊢ div = do
+    let x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+    let __x ← foldMutList k (List.drop (iter.i + 1) ↑iter.slice) x.2 x.1
+    ok __x.1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:80:12: error: Type mismatch: After simplification, term
+  hrec
+ has type
+  loop
+      (fun st => do
+        let __x ←
+          if h : st.1.i < (↑st.1.slice).length then
+              ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+            else ok (none, st.1)
+        match __x.1 with
+          | none => ok (done st.2.2)
+          | some x => do
+            let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+            ok (cont (__x.2, __x_1.2, __x_1.1)))
+      ({ slice := iter.slice, i := iter.i + 1 }, f1, acc1) =
+    do
+    let __x ← foldMutList k (List.drop (iter.i + 1) ↑iter.slice) f1 acc1
+    ok __x.1
+but is expected to have type
+  loop
+      (fun st => do
+        let __x ←
+          if h : st.1.i < (↑st.1.slice).length then
+              ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+            else ok (none, st.1)
+        match __x.1 with
+          | none => ok (done st.2.2)
+          | some x => do
+            let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+            ok (cont (__x.2, __x_1.2, __x_1.1)))
+      ({ slice := iter.slice, i := iter.i + 1 }, f1, acc1) =
+    do
+    let x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+    let __x ← foldMutList k (List.drop (iter.i + 1) ↑iter.slice) x.2 x.1
+    ok __x.1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:59:10: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+            c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵core.slice.iter.IteratorSliceIter.next, Slice.len, hstop, foldMutList]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:60:61: warning: This simp argument is unused:
+  hstop
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+            core.iter.traits.iterator.IteratorSliceIter,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵core.slice.iter.IteratorSliceIter.next,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Slice.len, h̵s̵t̵o̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵foldMutList]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:61:10: warning: This simp argument is unused:
+  foldMutList
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+            core.iter.traits.iterator.IteratorSliceIter, core.slice.iter.IteratorSliceIter.next,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Slice.len, h̵s̵t̵o̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵f̵o̵l̵d̵M̵u̵t̵L̵i̵s̵t̵]̵h̲s̲t̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:69:10: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+            c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵core.slice.iter.IteratorSliceIter.next, Slice.len, dif_pos hlt, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:74:39: warning: This simp argument is unused:
+  hk
+
+Hint: Omit it from the simp argument list.
+  simp [foldMutList, h̵k̵,̵ ̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:75:36: warning: This simp argument is unused:
+  hk
+
+Hint: Omit it from the simp argument list.
+  simp [foldMutList, h̵k̵,̵ ̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:78:36: warning: This simp argument is unused:
+  hk
+
+Hint: Omit it from the simp argument list.
+  simp only [foldMutList, h̵k̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R183DefaultFoldExecution.foldMutList' does not depend on any axioms
+'AspisV8R19.R183DefaultFoldExecution.drop_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R183DefaultFoldExecution.default_fold_slice' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R183DefaultFoldExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean"
+	User time (seconds): 1.15
+	System time (seconds): 0.25
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.38
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2528432
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64893
+	Voluntary context switches: 817
+	Involuntary context switches: 36
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.409s
+CPU time consumed: 1.443s
+Memory peak: 324.0K
+Memory swap peak: 0B

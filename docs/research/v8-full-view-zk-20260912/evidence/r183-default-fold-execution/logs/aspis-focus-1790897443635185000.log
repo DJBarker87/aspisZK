@@ -1,0 +1,354 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790897443635185000.service; invocation ID: cd41d0ce37c54baeaaadd63c22b88790
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:29:10: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:78:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  k.call_mut f (init, (↑iter.slice)[iter.i])
+in the target expression
+  (match do
+      let __x ← fail e
+      ok (cont ({ slice := iter.slice, i := iter.i + 1 }, __x.2, __x.1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun st => do
+            let __x ←
+              if h : st.1.i < ↑st.1.slice.len then
+                  ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+                else ok (none, st.1)
+            match __x.1 with
+              | none => ok (done st.2.2)
+              | some x => do
+                let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+                ok (cont (__x.2, __x_1.2, __x_1.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ←
+      do
+        let __x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+        foldMutList k (List.drop (iter.i + 1) ↑iter.slice) __x.2 __x.1
+    ok __x.1
+
+case succ.fail
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+iter✝ : core.slice.iter.Iter T
+init✝ : B
+f✝ : F
+motive : ℕ → Prop :=
+  fun n =>
+    ∀ (iter : core.slice.iter.Iter T) (init : B) (f : F),
+      ↑iter.slice.len - iter.i = n →
+        loop
+            (fun st =>
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body
+                (core.iter.traits.iterator.IteratorSliceIter T) k st.1 st.2.1 st.2.2)
+            (iter, f, init) =
+          do
+          let __x ← foldMutList k (List.drop iter.i ↑iter.slice) f init
+          match __x with
+            | (acc, snd) => ok acc
+n : ℕ
+ih : motive n
+iter : core.slice.iter.Iter T
+init : B
+f : F
+hlen : ↑iter.slice.len - iter.i = n + 1
+hlt : iter.i < ↑iter.slice.len
+hlen' : ↑iter.slice.len - (iter.i + 1) = n
+hdrop : List.drop iter.i ↑iter.slice = (↑iter.slice)[iter.i] :: List.drop (iter.i + 1) ↑iter.slice
+e : Error
+hk : k.call_mut f (init, (↑iter.slice)[iter.i]) = fail e
+⊢ (match do
+      let __x ← fail e
+      ok (cont ({ slice := iter.slice, i := iter.i + 1 }, __x.2, __x.1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun st => do
+            let __x ←
+              if h : st.1.i < ↑st.1.slice.len then
+                  ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+                else ok (none, st.1)
+            match __x.1 with
+              | none => ok (done st.2.2)
+              | some x => do
+                let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+                ok (cont (__x.2, __x_1.2, __x_1.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ←
+      do
+        let __x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+        foldMutList k (List.drop (iter.i + 1) ↑iter.slice) __x.2 __x.1
+    ok __x.1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice T
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:82:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  k.call_mut f (init, (↑iter.slice)[iter.i])
+in the target expression
+  (match do
+      let __x ← div
+      ok (cont ({ slice := iter.slice, i := iter.i + 1 }, __x.2, __x.1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun st => do
+            let __x ←
+              if h : st.1.i < ↑st.1.slice.len then
+                  ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+                else ok (none, st.1)
+            match __x.1 with
+              | none => ok (done st.2.2)
+              | some x => do
+                let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+                ok (cont (__x.2, __x_1.2, __x_1.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ←
+      do
+        let __x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+        foldMutList k (List.drop (iter.i + 1) ↑iter.slice) __x.2 __x.1
+    ok __x.1
+
+case succ.div
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+iter✝ : core.slice.iter.Iter T
+init✝ : B
+f✝ : F
+motive : ℕ → Prop :=
+  fun n =>
+    ∀ (iter : core.slice.iter.Iter T) (init : B) (f : F),
+      ↑iter.slice.len - iter.i = n →
+        loop
+            (fun st =>
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body
+                (core.iter.traits.iterator.IteratorSliceIter T) k st.1 st.2.1 st.2.2)
+            (iter, f, init) =
+          do
+          let __x ← foldMutList k (List.drop iter.i ↑iter.slice) f init
+          match __x with
+            | (acc, snd) => ok acc
+n : ℕ
+ih : motive n
+iter : core.slice.iter.Iter T
+init : B
+f : F
+hlen : ↑iter.slice.len - iter.i = n + 1
+hlt : iter.i < ↑iter.slice.len
+hlen' : ↑iter.slice.len - (iter.i + 1) = n
+hdrop : List.drop iter.i ↑iter.slice = (↑iter.slice)[iter.i] :: List.drop (iter.i + 1) ↑iter.slice
+hk : k.call_mut f (init, (↑iter.slice)[iter.i]) = div
+⊢ (match do
+      let __x ← div
+      ok (cont ({ slice := iter.slice, i := iter.i + 1 }, __x.2, __x.1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun st => do
+            let __x ←
+              if h : st.1.i < ↑st.1.slice.len then
+                  ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+                else ok (none, st.1)
+            match __x.1 with
+              | none => ok (done st.2.2)
+              | some x => do
+                let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+                ok (cont (__x.2, __x_1.2, __x_1.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ←
+      do
+        let __x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+        foldMutList k (List.drop (iter.i + 1) ↑iter.slice) __x.2 __x.1
+    ok __x.1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice T
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:87:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  k.call_mut f (init, (↑iter.slice)[iter.i])
+in the target expression
+  (match do
+      let __x ← ok (acc1, f1)
+      ok (cont ({ slice := iter.slice, i := iter.i + 1 }, __x.2, __x.1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun st => do
+            let __x ←
+              if h : st.1.i < ↑st.1.slice.len then
+                  ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+                else ok (none, st.1)
+            match __x.1 with
+              | none => ok (done st.2.2)
+              | some x => do
+                let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+                ok (cont (__x.2, __x_1.2, __x_1.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ←
+      do
+        let __x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+        foldMutList k (List.drop (iter.i + 1) ↑iter.slice) __x.2 __x.1
+    ok __x.1
+
+case succ.ok
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+iter✝ : core.slice.iter.Iter T
+init✝ : B
+f✝ : F
+motive : ℕ → Prop :=
+  fun n =>
+    ∀ (iter : core.slice.iter.Iter T) (init : B) (f : F),
+      ↑iter.slice.len - iter.i = n →
+        loop
+            (fun st =>
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body
+                (core.iter.traits.iterator.IteratorSliceIter T) k st.1 st.2.1 st.2.2)
+            (iter, f, init) =
+          do
+          let __x ← foldMutList k (List.drop iter.i ↑iter.slice) f init
+          match __x with
+            | (acc, snd) => ok acc
+n : ℕ
+ih : motive n
+iter : core.slice.iter.Iter T
+init : B
+f : F
+hlen : ↑iter.slice.len - iter.i = n + 1
+hlt : iter.i < ↑iter.slice.len
+hlen' : ↑iter.slice.len - (iter.i + 1) = n
+hdrop : List.drop iter.i ↑iter.slice = (↑iter.slice)[iter.i] :: List.drop (iter.i + 1) ↑iter.slice
+acc1 : B
+f1 : F
+hk : k.call_mut f (init, (↑iter.slice)[iter.i]) = ok (acc1, f1)
+⊢ (match do
+      let __x ← ok (acc1, f1)
+      ok (cont ({ slice := iter.slice, i := iter.i + 1 }, __x.2, __x.1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun st => do
+            let __x ←
+              if h : st.1.i < ↑st.1.slice.len then
+                  ok (some st.1.slice[st.1.i], { slice := st.1.slice, i := st.1.i + 1 })
+                else ok (none, st.1)
+            match __x.1 with
+              | none => ok (done st.2.2)
+              | some x => do
+                let __x_1 ← k.call_mut st.2.1 (st.2.2, x)
+                ok (cont (__x.2, __x_1.2, __x_1.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ←
+      do
+        let __x ← k.call_mut f (init, (↑iter.slice)[iter.i])
+        foldMutList k (List.drop (iter.i + 1) ↑iter.slice) __x.2 __x.1
+    ok __x.1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice T
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:61:10: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+            c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵core.slice.iter.IteratorSliceIter.next, Slice.len, hstop', hnil, foldMutList]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean:71:10: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+            c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵core.slice.iter.IteratorSliceIter.next, dif_pos hlt, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R183DefaultFoldExecution.foldMutList' does not depend on any axioms
+'AspisV8R19.R183DefaultFoldExecution.drop_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R183DefaultFoldExecution.default_fold_slice' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R183DefaultFoldExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R183DefaultFoldExecution.lean"
+	User time (seconds): 1.14
+	System time (seconds): 0.28
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.39
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2528348
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64530
+	Voluntary context switches: 775
+	Involuntary context switches: 43
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.421s
+CPU time consumed: 1.457s
+Memory peak: 328.0K
+Memory swap peak: 0B
