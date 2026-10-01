@@ -1,0 +1,96 @@
+import AspisV8R19.R174GammaBatchStep
+import AspisV8R19.R183DefaultFoldExecution
+
+set_option autoImplicit false
+namespace AspisV8R19.R184GammaBatchFold
+
+open Aeneas Aeneas.Std Result
+open AspisR156FullFreeze.aspis_core
+open AspisV8R15.ExactTowerBase
+noncomputable section
+
+def closedGammaCallMut
+    (c : field.QM31 × field.QM31)
+    (args : field.QM31 × field.QM31) :
+    Result (field.QM31 × (field.QM31 × field.QM31)) :=
+  AspisV8R17.MaskClosureWriteback.finishCall
+    (R174GammaBatchStep.rawCallMut c args)
+
+def closedGammaCallOnce
+    (c : field.QM31 × field.QM31)
+    (args : field.QM31 × field.QM31) : Result field.QM31 := do
+  let (value, _) ← closedGammaCallMut c args
+  ok value
+
+def closedGammaFnOnce :
+    core.ops.function.FnOnce (field.QM31 × field.QM31)
+      (field.QM31 × field.QM31) field.QM31 := {
+  call_once := closedGammaCallOnce
+}
+
+def closedGamma :
+    core.ops.function.FnMut (field.QM31 × field.QM31)
+      (field.QM31 × field.QM31) field.QM31 := {
+  FnOnceInst := closedGammaFnOnce
+  call_mut := closedGammaCallMut
+}
+
+def gammaFold : List QM31Exact → QM31Exact → QM31Exact → QM31Exact →
+    QM31Exact × QM31Exact
+  | [], power, _gamma, acc => (acc, power)
+  | value :: values, power, gamma, acc =>
+      gammaFold values (power * gamma) gamma (acc + power * value)
+
+theorem closedGamma_foldMutList (values : List QM31Exact)
+    (power gamma acc : QM31Exact) :
+    R183DefaultFoldExecution.foldMutList closedGamma
+        (values.map R164ProductExecution.encode)
+        (R164ProductExecution.encode power, R164ProductExecution.encode gamma)
+        (R164ProductExecution.encode acc) =
+      .ok (R164ProductExecution.encode (gammaFold values power gamma acc).1,
+        (R164ProductExecution.encode (gammaFold values power gamma acc).2,
+          R164ProductExecution.encode gamma)) := by
+  induction values generalizing power acc with
+  | nil =>
+      simp [R183DefaultFoldExecution.foldMutList, gammaFold]
+  | cons value values ih =>
+      simp only [List.map_cons, R183DefaultFoldExecution.foldMutList,
+        gammaFold, closedGamma, closedGammaCallMut]
+      erw [R174GammaBatchStep.encoded_closed]
+      simp only [bind_tc_ok]
+      exact ih (power * gamma) (acc + power * value)
+
+def weightedSum : List QM31Exact → QM31Exact → QM31Exact
+  | [], _gamma => 0
+  | value :: values, gamma => value + gamma * weightedSum values gamma
+
+theorem gammaFold_closed_form (values : List QM31Exact)
+    (power gamma acc : QM31Exact) :
+    gammaFold values power gamma acc =
+      (acc + power * weightedSum values gamma, power * gamma ^ values.length) := by
+  induction values generalizing power acc with
+  | nil => simp [gammaFold, weightedSum]
+  | cons value values ih =>
+      rw [gammaFold, ih]
+      simp only [weightedSum, List.length_cons, pow_succ]
+      congr 1 <;> ring
+
+theorem closedGamma_foldSlice (iter : core.slice.iter.Iter field.QM31)
+    (values : List QM31Exact) (gamma : QM31Exact)
+    (hvalues : iter.slice.val.drop iter.i = values.map R164ProductExecution.encode) :
+    AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default
+        (core.iter.traits.iterator.IteratorSliceIter field.QM31)
+        closedGamma iter field.QM31.ZERO
+        (field.QM31.ONE, R164ProductExecution.encode gamma) =
+      .ok (R164ProductExecution.encode (weightedSum values gamma)) := by
+  rw [R183DefaultFoldExecution.default_fold_slice]
+  rw [R165QuarticExecution.zero, R165QuarticExecution.one]
+  erw [hvalues, closedGamma_foldMutList]
+  simp [gammaFold_closed_form, bind_tc_ok]
+
+#print axioms closedGamma_foldMutList
+#print axioms gammaFold_closed_form
+#print axioms closedGamma_foldSlice
+
+end
+end AspisV8R19.R184GammaBatchFold

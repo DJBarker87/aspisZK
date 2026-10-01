@@ -1,0 +1,86 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790897935941760000.service; invocation ID: fda4f8aba9bd457ebdea836f75e0d262
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R184GammaBatchFold.lean:59:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisV8R17.MaskClosureWriteback.finishCall
+    (R174GammaBatchStep.rawCallMut (R164ProductExecution.encode ?power, R164ProductExecution.encode ?gamma)
+      (R164ProductExecution.encode ?acc, R164ProductExecution.encode ?value))
+in the target expression
+  (do
+      let __x ←
+        AspisV8R17.MaskClosureWriteback.finishCall
+            (R174GammaBatchStep.rawCallMut (R164ProductExecution.encode power, R164ProductExecution.encode gamma)
+              (R164ProductExecution.encode acc, R164ProductExecution.encode value))
+      R183DefaultFoldExecution.foldMutList { FnOnceInst := closedGammaFnOnce, call_mut := closedGammaCallMut }
+          (List.map R164ProductExecution.encode values) __x.2 __x.1) =
+    ok
+      (R164ProductExecution.encode (gammaFold values (power * gamma) gamma (acc + power * value)).1,
+        R164ProductExecution.encode (gammaFold values (power * gamma) gamma (acc + power * value)).2,
+        R164ProductExecution.encode gamma)
+
+case cons
+gamma value : QM31Exact
+values : List QM31Exact
+ih :
+  ∀ (power acc : QM31Exact),
+    R183DefaultFoldExecution.foldMutList closedGamma (List.map R164ProductExecution.encode values)
+        (R164ProductExecution.encode power, R164ProductExecution.encode gamma) (R164ProductExecution.encode acc) =
+      ok
+        (R164ProductExecution.encode (gammaFold values power gamma acc).1,
+          R164ProductExecution.encode (gammaFold values power gamma acc).2, R164ProductExecution.encode gamma)
+power acc : QM31Exact
+⊢ (do
+      let __x ←
+        AspisV8R17.MaskClosureWriteback.finishCall
+            (R174GammaBatchStep.rawCallMut (R164ProductExecution.encode power, R164ProductExecution.encode gamma)
+              (R164ProductExecution.encode acc, R164ProductExecution.encode value))
+      R183DefaultFoldExecution.foldMutList { FnOnceInst := closedGammaFnOnce, call_mut := closedGammaCallMut }
+          (List.map R164ProductExecution.encode values) __x.2 __x.1) =
+    ok
+      (R164ProductExecution.encode (gammaFold values (power * gamma) gamma (acc + power * value)).1,
+        R164ProductExecution.encode (gammaFold values (power * gamma) gamma (acc + power * value)).2,
+        R164ProductExecution.encode gamma)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (R164ProductExecution.encode power, R164ProductExecution.encode gamma)
+  has type
+    field.QM31 × field.QM31
+  but is expected to have type
+    AspisR156FullFreeze.freeze.closure_2.closure
+  in the application
+    R174GammaBatchStep.rawCallMut (R164ProductExecution.encode power, R164ProductExecution.encode gamma)
+'AspisV8R19.R184GammaBatchFold.closedGamma_foldMutList' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R184GammaBatchFold.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R184GammaBatchFold.lean"
+	User time (seconds): 1.06
+	System time (seconds): 0.36
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.41
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3698356
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 86242
+	Voluntary context switches: 452
+	Involuntary context switches: 63
+	Swaps: 0
+	File system inputs: 32
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.445s
+CPU time consumed: 1.451s
+Memory peak: 552.0K
+Memory swap peak: 0B
