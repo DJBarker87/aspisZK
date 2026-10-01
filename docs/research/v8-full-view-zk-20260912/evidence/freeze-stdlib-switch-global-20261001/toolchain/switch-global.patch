@@ -1,0 +1,25 @@
+--- a/src/PrePasses.ml
++++ b/src/PrePasses.ml
+@@ -2825,6 +2825,14 @@
+                 let func = visitor#visit_fn_operand mk_unit_ty func in
+                 let args = List.map (visitor#visit_operand mk_unit_ty) args in
+                 Call ({ func; args; dest }, on_unwind)
++            | Switch (If (cond, yes, no)) ->
++                Switch (If (visitor#visit_operand mk_unit_ty cond, yes, no))
++            | Switch (SwitchInt (op, ty, branches, otherwise)) ->
++                Switch (SwitchInt
++                  (visitor#visit_operand mk_unit_ty op, ty, branches, otherwise))
++            | Switch (Match (scrut, branches, otherwise)) ->
++                Switch (Match
++                  (visitor#visit_place mk_unit_ty scrut, branches, otherwise))
+             | SetDiscriminant _ | StorageLive _ | StorageDead _ | PlaceMention _
+             | Drop (_, _, _, _)
+             | Abort _
+@@ -2833,7 +2841,6 @@
+             | Break _
+             | Continue _
+             | Nop
+-            | Switch _
+             | Loop _
+             | Error _ -> st.kind
+             | _ ->

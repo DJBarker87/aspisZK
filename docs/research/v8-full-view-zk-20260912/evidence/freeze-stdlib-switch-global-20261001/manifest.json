@@ -1,0 +1,83 @@
+{
+  "status": "DIAGNOSTICS_ONLY_NOT_A_FORMAL_MILESTONE",
+  "source_revision": "1a11e1887085b1e0eb4b94c6ccaecf00c4872765",
+  "selected_callback_sha256": "4f8f80e0847ec004a56fc693f6096308090de5f3cbed35722dba330afaa9820f",
+  "source_changed": false,
+  "runs": [
+    {
+      "log": "logs/values-extract.log",
+      "exit_status": 0,
+      "wall_time": "0:14.88",
+      "peak_rss_kib": 621304,
+      "gnu_time_swaps": 0
+    },
+    {
+      "log": "logs/values-translate.log",
+      "exit_status": 2,
+      "wall_time": "0:00.33",
+      "peak_rss_kib": 86064,
+      "gnu_time_swaps": 0
+    },
+    {
+      "log": "logs/layout-extract.log",
+      "exit_status": 0,
+      "wall_time": "0:14.10",
+      "peak_rss_kib": 626592,
+      "gnu_time_swaps": 0
+    },
+    {
+      "log": "logs/layout-translate.log",
+      "exit_status": 2,
+      "wall_time": "0:00.29",
+      "peak_rss_kib": 87296,
+      "gnu_time_swaps": 0
+    },
+    {
+      "log": "logs/switch-global-translate-full.log",
+      "exit_status": 2,
+      "wall_time": "0:03.71",
+      "peak_rss_kib": 346276,
+      "gnu_time_swaps": 0
+    }
+  ],
+  "required_scopes": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "toolchain_build": {
+    "exit_status": 0,
+    "wall_time": "0:07.49",
+    "gnu_time_client_peak_rss_kib": 28160,
+    "peak_memory_note": "GNU time wraps Docker client, not OCaml compiler. Actual container parent slice peak recorded separately.",
+    "slice_memory_peak_bytes": 803975168,
+    "slice_memory_swap_peak_bytes": 0,
+    "slice_properties": "toolchain/slice-properties.txt",
+    "binary_checksum": "toolchain/binary.sha256",
+    "image_id_prefix": "ef96e46342a4",
+    "scope": "Dedicated user systemd-run wrapper plus dedicated aspisswitchglobal.slice enclosing Docker container, same 5G/7G/zero-swap/128 cap; Docker memory=7g,memory-swap=7g,pids=128, offline network.",
+    "expected_cost": "Optimized OCaml PrePasses and translator dependent compilation, not Rust arithmetic/proof generation.",
+    "change": "Existing decompose_global_accesses pass extended to If/SwitchInt/Match scrutinees; no branch semantics discarded or new execution axioms.",
+    "full_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7"
+  },
+  "boundaries": [
+    "--consts values extraction succeeds but translator fails Invalid_argument option is None in FunsAnalysis on a missing initializer.",
+    "Switch-global fix builds successfully and advances saved R160 input past original global-access error; now fails on opaque slice Iter layout.",
+    "Forcing only Iter and NonNull layouts gives successful extraction but Aeneas rejects raw non-null pointer pattern type.",
+    "Tiny standalone return-after-loop diagnostics extract but do not translate: Could not match contexts. They are not substitutes for the selected callback."
+  ],
+  "full_freeze_return_concern": {
+    "raw_generated_source": "docs/research/v8-full-view-zk-20260912/evidence/r161-current-base-arithmetic/R156/generated/AspisR156FullFreeze/Funs.lean",
+    "sha256": "ca32f7628c0e78a9dfe721b4806b212f040911c69d6a2ab69f879b4daca33cca",
+    "ignored_residual_branches_with_done_none": 10,
+    "source_behavior": "Pinned Rust freeze uses ? for sampler/domain errors after distinct second-point selection. Such errors return Err.",
+    "generated_concern": "Saved full generated freeze discards some from_residual values and emits done none; outer freeze maps none to fail panic. This demands investigation before a complete source equality claim. It is a structural audit concern, not a proved reachable semantic counterexample.",
+    "existing_milestones": "FunsCore excludes full freeze. R171-R176 accepted targets do not rely on these full-freeze branches. No full freeze equality is asserted."
+  },
+  "first_remaining_proposition": "Provide source-faithful fold/extend and repair or justify complete freeze error-return correspondence before binding all callback oracle calls to SelectedResearchScheduleProgram.",
+  "print_axioms": "Not applicable: these are extraction/toolchain diagnostics, no Lean theorem is certified.",
+  "security_claim": false,
+  "CU_or_unchanged_regression_rerun": false,
+  "tiny_probe_evidence": "Both unchanged-source diagnostic snippets, complete commands and full logs retained. No successful theorem or selected-source replacement."
+}
