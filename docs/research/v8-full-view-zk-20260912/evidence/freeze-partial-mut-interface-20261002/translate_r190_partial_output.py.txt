@@ -1,0 +1,13 @@
+import pathlib,subprocess,shlex
+script=r'''import pathlib,shutil,json,subprocess
+root=pathlib.Path('/home/dombarker/project-offloads/aspis-r190-partial-output-20261002-a');root.mkdir(exist_ok=True)
+shutil.copyfile('/home/dombarker/project-offloads/R189AlphaRename.llbc',root/'R189AlphaRename.llbc')
+cmd=['/home/dombarker/project-offloads/aspis-return-continuation-20261002-a/aeneas-return-continuation','-sequential','-no-progress-bar','-backend','lean','-namespace','AspisR190PartialOutput','-dest',str(root/'generated'),'-subdir','AspisR190PartialOutput','-split-files','-emit-json',str(root/'R189AlphaRename.llbc')]
+(root/'command.json').write_text(json.dumps(cmd,indent=2))
+with (root/'translate.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=f,stderr=subprocess.STDOUT)
+print((root/'translate.log').read_text()[-5000:]);raise SystemExit(r.returncode)
+'''
+cmd=['systemd-run','--user','--wait','--collect','--pipe','--unit=aspis-r190-partial-output','--working-directory=/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a','-p','MemoryHigh=5G','-p','MemoryMax=7G','-p','MemorySwapMax=0','-p','TasksMax=128','python3','-c',script]
+log=pathlib.Path('.r21-scratch/r189-alpha-rename/partial-output-wrapper.log')
+with log.open('w') as f:r=subprocess.run(['ssh','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null','dombarker@100.108.41.90',shlex.join(cmd)],stdout=f,stderr=subprocess.STDOUT)
+print(log.read_text());raise SystemExit(r.returncode)

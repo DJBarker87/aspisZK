@@ -1,0 +1,57 @@
+{
+  "source_revision": "69ca6fc19e25b6d2d10e8768f262a1043ab9dbce",
+  "target": "Partial-mutability selected freeze extraction and name-only LLBC adaptation",
+  "selected_callback_sha256": "4f8f80e0847ec004a56fc693f6096308090de5f3cbed35722dba330afaa9820f",
+  "resources": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "runs": [
+    {
+      "name": "R188PartialMutOpaqueFold",
+      "extract_exit": 0,
+      "extract_wall_seconds": 14.21,
+      "extract_peak_rss_kib": 625808,
+      "translate_exit": 2,
+      "translate_wall_seconds": 4.17,
+      "translate_peak_rss_kib": 328888,
+      "swaps": 0,
+      "failure": "Builtin output name collision for generic and IterMut-instantiated Iterator.enumerate"
+    },
+    {
+      "name": "R189AlphaRename",
+      "translate_exit": 2,
+      "translate_wall_seconds": 4.25,
+      "translate_peak_rss_kib": 320652,
+      "swaps": 0,
+      "failure": "Builtin output names ignore function rename metadata and still collide"
+    },
+    {
+      "name": "R190PartialOutput",
+      "translate_exit": 1,
+      "translate_wall_seconds": 4.16,
+      "translate_peak_rss_kib": 320756,
+      "swaps": 0,
+      "failure": "Partial output emitted with14 reported errors including2unique error categories; naming collisions include instantiated FnMut/FnOnce traits"
+    }
+  ],
+  "name_only_adaptation": {
+    "changed_fun_ids": [
+      368,
+      369,
+      370
+    ],
+    "changed_fields": "item_meta.attr_info.rename only",
+    "all_body_signature_reference_type_ID_and_options_equal": true,
+    "independent_worker_audit": true
+  },
+  "actual_gamma_call_mut_byte_equal_to_R180": true,
+  "actual_gamma_raw_interface": "Result (QM31 \u00d7 capturedClosure \u00d7 (capturedClosure\u2192capturedClosure)) still attached to pair-shaped builtin FnMut",
+  "proved_boundary": "Diagnostics only. No partial files imported or formal security claim made.",
+  "first_remaining_proposition": "Provide a faithful typed captured-borrow interface and prove selected slice fold/Vec.extend source execution. Whole callback chronology including failures and oracle calls remains open.",
+  "axioms_audit": "N/A: no Lean target completed.",
+  "verifier_source_changed": false,
+  "CU_or_unchanged_regression_rerun": false
+}

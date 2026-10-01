@@ -1,0 +1,7 @@
+# Partial-mutability freeze interface diagnostics
+
+The extra generic `Iterator::fold` body was removed from the partial-mutability extraction to isolate the selected freeze path. Translation then reached a naming collision between generic and mutable-slice iterator declarations. Changing only three instantiated function output-name metadata fields preserved every body, signature, reference, type, ID and option; an independent mechanical audit confirmed this. The backend nevertheless retained its built-in name and failed again.
+
+A single run allowing partial diagnostic output retained all errors. Its generated callback gamma `call_mut` body is byte-identical to R180, including the backward function. The same captured-borrow triple remains attached to a pair-shaped built-in `FnMut`. Thus this configuration does not repair the actual callback interface. The partial files are saved as diagnostic evidence and are not imported or accepted as proof.
+
+Every job used the pinned capped workspace, 5/7 GiB memory and zero swap. Complete commands, source LLBC, metadata adaptation, logs, generated partial files and metrics are in the [manifest](evidence/freeze-partial-mut-interface-20261002/manifest.json). The full source still needs a faithful typed borrow interface, selected slice fold/Vec extension correspondence, and the callback chronology through rho with every failure and oracle call. Privacy and soundness remain open. Verifier source, genuine CU evidence and all parameters are unchanged; no benchmark or unchanged regression suite was rerun.
