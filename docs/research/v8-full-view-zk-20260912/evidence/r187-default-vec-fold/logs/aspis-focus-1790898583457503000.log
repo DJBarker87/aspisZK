@@ -1,0 +1,90 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790898583457503000.service; invocation ID: d274f3d597b943e88c54e4fc69d033db
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R187DefaultVecFoldExecution.lean:64:12: error: Type mismatch: After simplification, term
+  hrec
+ has type
+  loop
+      (fun x => do
+        let __x ←
+          match x.1 with
+            | ⟨[], property⟩ => ok (none, x.1)
+            | ⟨hd :: tl, property⟩ => ok (some hd, ⟨tl, ⋯⟩)
+        match __x.1 with
+          | none => ok (done x.2.2)
+          | some x_1 => do
+            let __x_1 ← k.call_mut x.2.1 (x.2.2, x_1)
+            ok (cont (__x.2, __x_1.2, __x_1.1)))
+      (⟨xs, hx'⟩, f1, acc1) =
+    do
+    let __x ← R183DefaultFoldExecution.foldMutList k xs f1 acc1
+    ok __x.1
+but is expected to have type
+  loop
+      (fun x => do
+        let __x ←
+          match x.1 with
+            | ⟨[], property⟩ => ok (none, x.1)
+            | ⟨hd :: tl, property⟩ => ok (some hd, ⟨tl, ⋯⟩)
+        match __x.1 with
+          | none => ok (done x.2.2)
+          | some x_1 => do
+            let __x_1 ← k.call_mut x.2.1 (x.2.2, x_1)
+            ok (cont (__x.2, __x_1.2, __x_1.1)))
+      (⟨xs, ⋯⟩, f1, acc1) =
+    do
+    let x ← k.call_mut f (init, x)
+    let __x ← R183DefaultFoldExecution.foldMutList k xs x.2 x.1
+    ok __x.1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R187DefaultVecFoldExecution.lean:39:10: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorVecIntoIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+            c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵V̵e̵c̵I̵n̵t̵o̵I̵t̵e̵r̵,̵alloc.vec.into_iter.IteratorIntoIter.next,
+            AspisV8R19.R183DefaultFoldExecution.foldMutList]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R187DefaultVecFoldExecution.lean:50:10: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorVecIntoIter
+
+Hint: Omit it from the simp argument list.
+  simp only [̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵8̵2̵I̵t̵e̵r̵a̵t̵o̵r̵D̵e̵f̵a̵u̵l̵t̵.̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵.̵f̵o̵l̵d̵.̵d̵e̵f̵a̵u̵l̵t̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵V̵e̵c̵I̵n̵t̵o̵I̵t̵e̵r̵,̵[̲A̲s̲p̲i̲s̲R̲1̲8̲2̲I̲t̲e̲r̲a̲t̲o̲r̲D̲e̲f̲a̲u̲l̲t̲.̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲t̲r̲a̲i̲t̲s̲.̲i̲t̲e̲r̲a̲t̲o̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲.̲f̲o̲l̲d̲.̲d̲e̲f̲a̲u̲l̲t̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+            alloc.vec.into_iter.IteratorIntoIter.next]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R187DefaultVecFoldExecution.default_fold_intoIter_list' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R187DefaultVecFoldExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R187DefaultVecFoldExecution.lean"
+	User time (seconds): 0.86
+	System time (seconds): 0.25
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.11
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2523272
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64692
+	Voluntary context switches: 400
+	Involuntary context switches: 34
+	Swaps: 0
+	File system inputs: 24
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.135s
+CPU time consumed: 1.149s
+Memory peak: 324.0K
+Memory swap peak: 0B

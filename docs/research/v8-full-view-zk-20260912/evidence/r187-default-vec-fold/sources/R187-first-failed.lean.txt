@@ -1,0 +1,77 @@
+import AspisV8R19.R183DefaultFoldExecution
+
+/-! The extracted generic Iterator::fold default on the builtin Vec into-iterator
+reduces to the list fold on its remaining payload. This theorem keeps the
+generic FnMut interface and makes no claim about the specialized Vec fold. -/
+set_option autoImplicit false
+namespace AspisV8R19.R187DefaultVecFoldExecution
+
+open Aeneas Aeneas.Std Result ControlFlow Error
+
+theorem default_fold_intoIter_list {T B F : Type}
+    (k : core.ops.function.FnMut F (B × T) B)
+    (iter : alloc.vec.into_iter.IntoIter T) (init : B) (f : F) :
+    AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default
+        (core.iter.traits.iterator.IteratorVecIntoIter T) k iter init f =
+      (do
+        let (acc, _) ← AspisV8R19.R183DefaultFoldExecution.foldMutList
+          k iter.val f init
+        ok acc) := by
+  let hlist := fun (xs : List T) (hx : xs.length ≤ Usize.max)
+      (init : B) (f : F) =>
+    AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default
+        (core.iter.traits.iterator.IteratorVecIntoIter T) k
+        (⟨xs, hx⟩ : alloc.vec.into_iter.IntoIter T) init f =
+      (do
+        let (acc, _) ← AspisV8R19.R183DefaultFoldExecution.foldMutList
+          k xs f init
+        ok acc)
+  have hlist_proof : ∀ xs hx init f, hlist xs hx init f := by
+    intro xs
+    induction xs with
+    | nil =>
+        intro hx init f
+        simp only [hlist,
+          AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default,
+          AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop]
+        rw [loop.eq_def]
+        simp [AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+          core.iter.traits.iterator.IteratorVecIntoIter,
+          alloc.vec.into_iter.IteratorIntoIter.next,
+          AspisV8R19.R183DefaultFoldExecution.foldMutList]
+    | cons x xs ih =>
+        intro hx init f
+        simp only [hlist,
+          AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default,
+          AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop]
+        rw [loop.eq_def]
+        simp only [
+          AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+          core.iter.traits.iterator.IteratorVecIntoIter,
+          alloc.vec.into_iter.IteratorIntoIter.next]
+        cases hk : k.call_mut f (init, x) with
+        | fail e =>
+            simp [hk, AspisV8R19.R183DefaultFoldExecution.foldMutList]
+        | div =>
+            simp [hk, AspisV8R19.R183DefaultFoldExecution.foldMutList]
+        | ok pair =>
+            rcases pair with ⟨acc1, f1⟩
+            simp only [hk, bind_tc_ok]
+            have hx' : xs.length ≤ Usize.max := by
+              simp at hx ⊢
+              omega
+            have hrec := ih hx' acc1 f1
+            simpa [hlist,
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default,
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop,
+              AspisR182IteratorDefault.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+              core.iter.traits.iterator.IteratorVecIntoIter,
+              alloc.vec.into_iter.IteratorIntoIter.next,
+              AspisV8R19.R183DefaultFoldExecution.foldMutList] using hrec
+  cases iter with
+  | mk xs hx =>
+      simpa [hlist] using hlist_proof xs hx init f
+
+#print axioms default_fold_intoIter_list
+
+end AspisV8R19.R187DefaultVecFoldExecution
