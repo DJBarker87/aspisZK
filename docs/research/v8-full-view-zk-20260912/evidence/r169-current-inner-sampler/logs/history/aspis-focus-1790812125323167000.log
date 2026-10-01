@@ -1,0 +1,95 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790812125323167000.service; invocation ID: 854f51c576174e858385216331f49a90
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:49:18: error: unsolved goals
+case e_a
+limb : U32
+r : core.ops.range.Range U32
+s : AspisR137Transcript.transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+h : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hj : j = 8#usize
+b1 : Std.Array U8 32#usize
+s1 : AspisR137Transcript.transcript.Transcript
+hs : s.squeeze_block = ok (b1, s1)
+slice : Slice U8
+raw : core.result.Result (Std.Array U8 4#usize) core.array.TryFromSliceError
+bytes : Std.Array U8 4#usize
+⊢ (if (core.num.U32.from_le_bytes bytes &&& 2147483647#u32 != 2147483647#u32) = true then
+      ok
+        (done
+          (fromR137 s1, b1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes bytes &&& 2147483647#u32,
+            true))
+    else ok (cont (r1, fromR137 s1, b1, Usize.wrapping_add 0#usize 1#usize))) =
+    do
+    let v ←
+      if (core.num.U32.from_le_bytes bytes &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (s1, b1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes bytes &&& 2147483647#u32, true))
+        else ok (cont (r1, s1, b1, Usize.wrapping_add 0#usize 1#usize))
+    ok
+        (match v with
+        | cont x => cont (x.1, fromR137 x.2.1, x.2.2.1, x.2.2.2)
+        | done x => done (fromR137 x.1, x.2.1, x.2.2.1, x.2.2.2.1, x.2.2.2.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:59:8: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:67:8: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  Slice U8 =
+    ControlFlow (core.ops.range.Range U32 × AspisR137Transcript.transcript.Transcript × Std.Array U8 32#usize × Usize)
+      (AspisR137Transcript.transcript.Transcript × Std.Array U8 32#usize × Usize × AspisR137Transcript.field.M31 × Bool)
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.49} {β : α → Sort ?u.48} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case neg.e_3
+limb : U32
+r : core.ops.range.Range U32
+s : AspisR137Transcript.transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+h : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hj : ¬j = 8#usize
+⊢ Slice U8 =
+    ControlFlow (core.ops.range.Range U32 × AspisR137Transcript.transcript.Transcript × Std.Array U8 32#usize × Usize)
+      (AspisR137Transcript.transcript.Transcript × Std.Array U8 32#usize × Usize × AspisR137Transcript.field.M31 × Bool)
+'AspisV8R19.R169InnerSamplerExecution.body_map' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R169InnerSamplerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean"
+	User time (seconds): 1.41
+	System time (seconds): 0.52
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.92
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3688760
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86300
+	Voluntary context switches: 519
+	Involuntary context switches: 74
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.955s
+CPU time consumed: 1.971s
+Memory peak: 288.0K
+Memory swap peak: 0B

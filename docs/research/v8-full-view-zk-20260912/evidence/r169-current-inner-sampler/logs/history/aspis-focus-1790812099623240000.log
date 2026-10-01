@@ -1,0 +1,152 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790812099623240000.service; invocation ID: 8d24e85fb2e54c6faad136fc391a1c2c
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:28:18: error: Type mismatch
+  AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0.body
+has type
+  AspisR137Transcript.field.M31 →
+    core.ops.range.Range U32 →
+      AspisR137Transcript.transcript.Transcript →
+        Std.Array U8 32#usize →
+          Usize →
+            Result
+              (ControlFlow
+                (core.ops.range.Range U32 × AspisR137Transcript.transcript.Transcript × Std.Array U8 32#usize × Usize)
+                (AspisR137Transcript.transcript.Transcript ×
+                  Std.Array U8 32#usize × Usize × AspisR137Transcript.field.M31 × Bool))
+but is expected to have type
+  Result ?m.7
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:29:10: error: Function expected at
+  limb
+but this term has type
+  U32
+
+Note: Expected a function because this term is being applied to the argument
+  r
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:51:10: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case pos.ok
+limb : U32
+r : core.ops.range.Range U32
+s : AspisR137Transcript.transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+h : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hj : j = 8#usize
+b1 : Std.Array U8 32#usize
+s1 : AspisR137Transcript.transcript.Transcript
+hs : s.squeeze_block = ok (b1, s1)
+⊢ (do
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b1
+            { start := Usize.wrapping_mul 0#usize 4#usize,
+              «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (fromR137 s1, b1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32,
+                true))
+        else ok (cont (r1, fromR137 s1, b1, Usize.wrapping_add 0#usize 1#usize))) =
+    do
+    let v ← sorry
+    sorry
+    ok
+        (match v with
+        | cont x => cont (x.1, fromR137 x.2.1, x.2.2.1, x.2.2.2)
+        | done x => done (fromR137 x.1, x.2.1, x.2.2.1, x.2.2.2.1, x.2.2.2.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:53:8: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case neg
+limb : U32
+r : core.ops.range.Range U32
+s : AspisR137Transcript.transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+h : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hj : ¬j = 8#usize
+⊢ (do
+      let s_1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+            { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (fromR137 s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+        else ok (cont (r1, fromR137 s, b, j.wrapping_add 1#usize))) =
+    do
+    let v ← sorry
+    sorry
+    ok
+        (match v with
+        | cont x => cont (x.1, fromR137 x.2.1, x.2.2.1, x.2.2.2)
+        | done x => done (fromR137 x.1, x.2.1, x.2.2.1, x.2.2.2.1, x.2.2.2.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:32:4: warning: This simp argument is unused:
+  AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0.body
+
+Hint: Omit it from the simp argument list.
+  simp only [transcript.Transcript.challenge_qm31_loop0_loop0.body, A̵s̵p̵i̵s̵R̵1̵3̵7̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵_̵q̵m̵3̵1̵_̵l̵o̵o̵p̵0̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵field.P,
+      AspisR137Transcript.field.P, squeeze_map, to_from, bind_assoc_eq, bind_tc_ok, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:33:13: warning: This simp argument is unused:
+  AspisR137Transcript.field.P
+
+Hint: Omit it from the simp argument list.
+  simp only [transcript.Transcript.challenge_qm31_loop0_loop0.body,
+      AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0.body,
+  ̵  ̵ ̵ ̵field.P, A̵sp̵i̵s̵R̵1̵3̵7̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵f̵i̵e̵l̵d̵.̵P̵,̵ ̵s̵queeze_map,
+  ̲  ̲ ̲ ̲to_from,
+  ̵  ̵ ̵ ̵bind_assoc_eq, bind_tc_ok, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:44:30: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [if_pos hj, bind_a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵b̵i̵n̵d̵_̵tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R169InnerSamplerExecution.body_map' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R169InnerSamplerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean"
+	User time (seconds): 1.30
+	System time (seconds): 0.52
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.82
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3685896
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86415
+	Voluntary context switches: 572
+	Involuntary context switches: 80
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.849s
+CPU time consumed: 1.862s
+Memory peak: 256.0K
+Memory swap peak: 0B

@@ -1,0 +1,179 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790812208442414000.service; invocation ID: f704e279a4804281a82f7324d5b1424f
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:51:21: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵b̵i̵n̵d̵_̵tc_ok, control, pending, finished]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:81:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  transcript.Transcript.challenge_qm31_loop0_loop0.body ?limb ?r (fromR137 ?s) ?b ?j
+in the target expression
+  (match
+      match (r, fromR137 s, b, j) with
+      | (iter1, self1, block1, word_index1) =>
+        transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1, block1, word_index1) =>
+              transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let v ← AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0 r s b j limb
+    ok (finished v)
+
+case zero
+limb : U32
+r : core.ops.range.Range U32
+s : AspisR137Transcript.transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+hn : ↑r.end - ↑r.start = 0
+hr : ¬↑r.start < ↑r.end
+⊢ (match
+      match (r, fromR137 s, b, j) with
+      | (iter1, self1, block1, word_index1) =>
+        transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1, block1, word_index1) =>
+              transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let v ← AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0 r s b j limb
+    ok (finished v)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean:95:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  transcript.Transcript.challenge_qm31_loop0_loop0.body ?limb ?r (fromR137 ?s) ?b ?j
+in the target expression
+  (match
+      match (r, fromR137 s, b, j) with
+      | (iter1, self1, block1, word_index1) =>
+        transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1, block1, word_index1) =>
+              transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let v ← AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0 r s b j limb
+    ok (finished v)
+
+case succ
+limb : U32
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range U32) (s : AspisR137Transcript.transcript.Transcript) (b : Std.Array U8 32#usize)
+    (j : Usize),
+    ↑r.end - ↑r.start = n →
+      transcript.Transcript.challenge_qm31_loop0_loop0 r (fromR137 s) b j limb = do
+        let v ← AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0 r s b j limb
+        ok (finished v)
+r : core.ops.range.Range U32
+s : AspisR137Transcript.transcript.Transcript
+b : Std.Array U8 32#usize
+j : Usize
+hn : ↑r.end - ↑r.start = n + 1
+hr : ↑r.start < ↑r.end
+hn' : ↑(R137SamplerInnerStep.nextRange r hr).end - ↑(R137SamplerInnerStep.nextRange r hr).start = n
+⊢ (match
+      match (r, fromR137 s, b, j) with
+      | (iter1, self1, block1, word_index1) =>
+        transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1, block1, word_index1) =>
+              transcript.Transcript.challenge_qm31_loop0_loop0.body limb iter1 self1 block1 word_index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let v ← AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0 r s b j limb
+    ok (finished v)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisV8R19.R169InnerSamplerExecution.body_map' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.R169InnerSamplerExecution.loop_map' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R169InnerSamplerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R169InnerSamplerExecution.lean"
+	User time (seconds): 1.67
+	System time (seconds): 0.53
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.18
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3693896
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86499
+	Voluntary context switches: 661
+	Involuntary context switches: 59
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.214s
+CPU time consumed: 2.234s
+Memory peak: 512.0K
+Memory swap peak: 0B
