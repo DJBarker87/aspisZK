@@ -1,0 +1,160 @@
+import AspisV8R19.R170LimbSamplerExecution
+import AspisV8R19.R139NonzeroModelBridge
+import AspisV8R19.SamplerOuterExecution
+
+/-! Exact selected nonzero wrapper with raw failure and state preservation. -/
+set_option autoImplicit false
+namespace AspisV8R19.R173NonzeroExecution
+
+open Aeneas Aeneas.Std Result ControlFlow
+open AspisR156FullFreeze.aspis_core
+open R167TranscriptPrimitiveExecution
+open R170LimbSamplerExecution (quartic outcome returned)
+
+abbrev Output :=
+  (core.result.Result field.QM31 transcript.ChallengeSampleExhausted) ×
+    transcript.Transcript
+
+def bounded : Nat → transcript.Transcript → Result Output
+  | 0, s => .ok (.Err (), s)
+  | n + 1, s => do
+      let (r, s1) ← transcript.Transcript.challenge_qm31 s
+      match r with
+      | .Err _ => .ok (.Err (), s1)
+      | .Ok value =>
+          let nonzero ← core.cmp.PartialEq.ne.trait_default
+            field.QM31.Insts.CoreCmpPartialEqQM31 value field.QM31.ZERO
+          if nonzero then .ok (.Ok value, s1) else bounded n s1
+
+theorem body_exhausted (r : core.ops.range.Range U32)
+    (s : transcript.Transcript) (h : ¬ r.start.val < r.end.val) :
+    transcript.Transcript.challenge_nonzero_qm31_loop.body r s =
+      .ok (.done (.Err (), s)) := by
+  simp only [transcript.Transcript.challenge_nonzero_qm31_loop.body,
+    SamplerOuterExecution.range_next, dif_neg h, bind_tc_ok]
+
+theorem loop_execution (n : Nat) (r : core.ops.range.Range U32)
+    (s : transcript.Transcript) (hn : r.end.val - r.start.val = n) :
+    transcript.Transcript.challenge_nonzero_qm31_loop r s = bounded n s := by
+  induction n generalizing r s with
+  | zero =>
+      have h : ¬ r.start.val < r.end.val := by omega
+      rw [transcript.Transcript.challenge_nonzero_qm31_loop, loop.eq_def]
+      simp only [body_exhausted r s h, bounded]
+  | succ n ih =>
+      have h : r.start.val < r.end.val := by omega
+      let r' : core.ops.range.Range U32 :=
+        { start := UScalar.ofNatCore (r.start.val + 1)
+            (by have := r.end.hBounds; omega), «end» := r.end }
+      have hn' : r'.end.val - r'.start.val = n := by
+        change r.end.val - (r.start.val + 1) = n
+        omega
+      rw [transcript.Transcript.challenge_nonzero_qm31_loop, loop.eq_def]
+      simp only [transcript.Transcript.challenge_nonzero_qm31_loop.body,
+        SamplerOuterExecution.range_next, dif_pos h, bind_tc_ok, bounded]
+      cases hs : transcript.Transcript.challenge_qm31 s with
+      | fail e => simp
+      | div => simp
+      | ok pair =>
+          rcases pair with ⟨result, s1⟩
+          cases result with
+          | Err e =>
+              simp [core.result.Result.Insts.CoreOpsTry.branch,
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+          | Ok value =>
+              simp only [bind_tc_ok,
+                core.result.Result.Insts.CoreOpsTry.branch]
+              cases hnz : core.cmp.PartialEq.ne.trait_default
+                  field.QM31.Insts.CoreCmpPartialEqQM31 value
+                  field.QM31.ZERO with
+              | fail e => simp
+              | div => simp
+              | ok nonzero =>
+                  cases nonzero with
+                  | true => simp
+                  | false =>
+                      simp only [bind_tc_ok, Bool.false_eq_true, if_false]
+                      simpa only [
+                        transcript.Transcript.challenge_nonzero_qm31_loop,
+                        transcript.Transcript.challenge_nonzero_qm31_loop.body,
+                        SamplerOuterExecution.range_next,
+                        core.result.Result.Insts.CoreOpsTry.branch,
+                        bind_tc_ok, r']
+                        using ih r' s1 hn'
+
+theorem entry_three (s : transcript.Transcript) :
+    transcript.Transcript.challenge_nonzero_qm31 s = bounded 3 s := by
+  apply loop_execution
+  simp only [transcript.NONZERO_QM31_RETRY_LIMIT]
+  rfl
+
+theorem ne_map (q : AspisR137Transcript.field.QM31) :
+    core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31
+        (quartic q) field.QM31.ZERO =
+      core.cmp.PartialEq.ne.trait_default
+        AspisR137Transcript.field.QM31.Insts.CoreCmpPartialEqQM31 q
+        AspisR137Transcript.field.QM31.ZERO := by
+  simp only [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
+    field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+    AspisR137Transcript.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+    field.CM31.Insts.CoreCmpPartialEqCM31.eq,
+    AspisR137Transcript.field.CM31.Insts.CoreCmpPartialEqCM31.eq,
+    field.M31.Insts.CoreCmpPartialEqM31.eq,
+    AspisR137Transcript.field.M31.Insts.CoreCmpPartialEqM31.eq,
+    field.QM31.ZERO,AspisR137Transcript.field.QM31.ZERO,
+    quartic,bind_tc_ok]
+
+theorem bounded_map (n : Nat) (s : AspisR137Transcript.transcript.Transcript) :
+    bounded n (fromR137 s) = (do
+      let x ← R137NonzeroLoop.bounded n s
+      ok (returned x)) := by
+  induction n generalizing s with
+  | zero => rfl
+  | succ n ih =>
+    simp only [bounded,R137NonzeroLoop.bounded,R170LimbSamplerExecution.challenge_map,
+      bind_assoc_eq,bind_tc_ok]
+    cases hs : AspisR137Transcript.transcript.Transcript.challenge_qm31 s with
+    | fail e => rfl
+    | div => rfl
+    | ok pair =>
+      rcases pair with ⟨r,s1⟩
+      cases r with
+      | Err e => rfl
+      | Ok q =>
+        simp only [returned,outcome,bind_tc_ok,ne_map]
+        cases hnz : core.cmp.PartialEq.ne.trait_default
+          AspisR137Transcript.field.QM31.Insts.CoreCmpPartialEqQM31 q
+          AspisR137Transcript.field.QM31.ZERO with
+        | fail e => rfl
+        | div => rfl
+        | ok nonzero =>
+          cases nonzero with
+          | true => rfl
+          | false =>
+            simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+            exact ih s1
+
+theorem challenge_map (s : AspisR137Transcript.transcript.Transcript) :
+    transcript.Transcript.challenge_nonzero_qm31 (fromR137 s) = (do
+      let x ← AspisR137Transcript.transcript.Transcript.challenge_nonzero_qm31 s
+      ok (returned x)) := by
+  rw [entry_three,R137NonzeroLoop.entry_three,bounded_map]
+
+theorem challenge_exact (H : DuplexFrames.Bytes → SourceDuplexStep.State)
+    (s : SourceDuplexStep.State) :
+    transcript.Transcript.challenge_nonzero_qm31 (transcriptFor H s) =
+      .ok (outcome (R139NonzeroModelBridge.encodePolicyResult
+        (SamplerWrapperPolicies.nonzeroRun H s).2.1),
+        transcriptFor H (SamplerWrapperPolicies.nonzeroRun H s).2.2) := by
+  rw [transcriptFor,challenge_map,R139NonzeroModelBridge.nonzero_source_model_exact]
+  rfl
+
+#print axioms ne_map
+#print axioms bounded_map
+#print axioms challenge_map
+#print axioms challenge_exact
+#print axioms body_exhausted
+#print axioms loop_execution
+#print axioms entry_three
+
+end AspisV8R19.R173NonzeroExecution
