@@ -1,0 +1,69 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790895065958205000.service; invocation ID: 9e49c4f56dd0431d8dd7ca7d6eb2b486
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R178CircleOutputCanonical.lean:22:12: error: unsolved goals
+case error
+H : Bytes → State
+s : State
+p : circle.SecureCirclePoint
+t : transcript.Transcript
+e : AspisR72Sampler.transcript.CirclePointSampleError
+hm : (SamplerCircleBridge.modelRun H 3 s).2.1 = Except.error e
+h :
+  (match Except.error e with
+      | Except.error AspisR72Sampler.transcript.CirclePointSampleError.ChallengeSampleExhausted =>
+        core.result.Result.Err transcript.CirclePointSampleError.ChallengeSampleExhausted
+      | Except.error AspisR72Sampler.transcript.CirclePointSampleError.ParameterSampleExhausted =>
+        core.result.Result.Err transcript.CirclePointSampleError.ParameterSampleExhausted
+      | Except.ok p => core.result.Result.Ok (R166CircleExecution.encodePoint p)) =
+      core.result.Result.Ok p ∧
+    R167TranscriptPrimitiveExecution.transcriptFor H (SamplerCircleBridge.modelRun H 3 s).2.2 = t
+⊢ ∃ xs,
+    xs.length = 4 ∧
+      (∀ a ∈ xs, a < 2147483647) ∧
+        p = R166CircleExecution.encodePoint (SamplerCirclePolicy.point (SamplerFieldDecode.decode xs))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R178CircleOutputCanonical.lean:29:8: error: Type mismatch: After simplification, term
+  hvalue
+ has type
+  R166CircleExecution.encodePoint q = p
+but is expected to have type
+  p = R166CircleExecution.encodePoint q
+'AspisV8R19.R178CircleOutputCanonical.successful_output_is_accepted_point' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.R178CircleOutputCanonical.successful_circle_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R178CircleOutputCanonical.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R178CircleOutputCanonical.lean"
+	User time (seconds): 1.14
+	System time (seconds): 0.38
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.52
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3707504
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 86390
+	Voluntary context switches: 356
+	Involuntary context switches: 52
+	Swaps: 0
+	File system inputs: 160
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.551s
+CPU time consumed: 1.556s
+Memory peak: 512.0K
+Memory swap peak: 0B

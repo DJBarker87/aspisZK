@@ -1,0 +1,50 @@
+import AspisV8R19.R177CircleScheduleBridge
+import AspisV8R19.R166CircleExecution
+
+set_option autoImplicit false
+namespace AspisV8R19.R178CircleOutputCanonical
+
+open Aeneas Aeneas.Std Result
+open AspisR156FullFreeze.aspis_core
+open AspisV8R15.ExactTowerBase
+open DuplexFrames SourceDuplexStep
+
+theorem successful_output_is_accepted_point
+    (H : Bytes → State) (s : State) (p : circle.SecureCirclePoint)
+    (t : transcript.Transcript)
+    (h : transcript.Transcript.challenge_secure_circle_point
+      (R167TranscriptPrimitiveExecution.transcriptFor H s) = .ok (.Ok p, t)) :
+    ∃ xs, xs.length = 4 ∧ (∀ a ∈ xs, a < 2147483647) ∧
+      p = R166CircleExecution.encodePoint
+        (SamplerCirclePolicy.point (SamplerFieldDecode.decode xs)) := by
+  rw [R177CircleScheduleBridge.challenge_schedule_exact] at h
+  cases hm : (SamplerCircleBridge.modelRun H 3 s).2.1 with
+  | error e =>
+      simp [R172CircleSamplerExecution.encodeOutput,
+        R177CircleScheduleBridge.encodeScheduleResult, hm] at h
+  | ok q =>
+      have hresult := Result.ok.inj h
+      have hp : p = R166CircleExecution.encodePoint q := by
+        have hvalue := congrArg Prod.fst hresult
+        simpa [R172CircleSamplerExecution.encodeOutput,
+          R177CircleScheduleBridge.encodeScheduleResult, hm] using hvalue
+      obtain ⟨xs, hlen, hcan, haccept⟩ :=
+        BoundedSamplerWrapper.successful_image _ _ _ H 3 s q hm
+      obtain ⟨_, _, hq⟩ := SamplerCirclePolicy.accept_policy xs q haccept
+      refine ⟨xs, hlen, hcan, ?_⟩
+      rw [hp, hq]
+
+theorem successful_circle_canonical
+    (H : Bytes → State) (s : State) (p : circle.SecureCirclePoint)
+    (t : transcript.Transcript)
+    (h : transcript.Transcript.challenge_secure_circle_point
+      (R167TranscriptPrimitiveExecution.transcriptFor H s) = .ok (.Ok p, t)) :
+    R165QuarticExecution.Canonical p.x ∧ R165QuarticExecution.Canonical p.y := by
+  obtain ⟨xs, hlen, hcan, hp⟩ := successful_output_is_accepted_point H s p t h
+  rw [hp]
+  exact R166CircleExecution.point_canonical
+    (SamplerCirclePolicy.point (SamplerFieldDecode.decode xs))
+
+#print axioms successful_output_is_accepted_point
+#print axioms successful_circle_canonical
+end AspisV8R19.R178CircleOutputCanonical
