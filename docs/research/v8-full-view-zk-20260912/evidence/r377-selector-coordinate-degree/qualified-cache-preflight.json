@@ -1,0 +1,7 @@
+{
+  "purpose": "Verify the specifically required qualified Lean cache object was absent before the one authorized focused compile.",
+  "command": "ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null dombarker@100.108.41.90 \"free -h; systemctl --user list-units --type=scope --state=running --no-legend | head -20; test -e /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R377SelectorCoordinateDegree.olean; echo qualified_olean_before=$?\"",
+  "observed_output": "Mem: total 62Gi, used 10Gi, free 5.1Gi, shared 467Mi, buff/cache 47Gi, available 51Gi; Swap: 8.0Gi total, 256Ki used, 8.0Gi free. Running user scopes: init.scope only. `qualified_olean_before=1` (test returned nonzero; qualified object absent).",
+  "observed_before_run_id": "1790952828600846000",
+  "no_Lean_source_changes": true
+}

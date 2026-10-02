@@ -1,0 +1,11 @@
+# R377 selector coordinate polynomial lemmas
+
+Status: four requested generic selector statements compile in the pinned focused Lean environment. This is polynomial plumbing only; it makes no Rust source correspondence, selector-implementation, privacy, or release claim.
+
+The scratch target is `R377SelectorCoordinateDegree.lean` (final SHA-256 `86eeaa805425c1c1122b9cbebf171326dc1450bcc11c417b3c91e24f0c4c8c08`). It imports promoted `AspisV8R19.R374SingleCoordinateDegree` (source SHA-256 `cf9c64577d06c8cb96df204fa34f8832b3b604d3ca6867de2299022eea1fa518`) and uses its `line`, `line_degree`, `line_eval`, and `sub_bound` results.
+
+The four proved statements are `selectorPolynomial_degree`, `selectorPolynomial_eval`, `weightedSelectorPolynomial_degree`, and `weightedSelectorPolynomial_eval`. The coordinate domain is `Fin 10`; the weighted family is indexed by arbitrary `Fin n`, with `bits : Fin n → Fin 10 → Bool` and `coeff : Fin n → F`. Each false selector factor is `1 - line z j k`. The weighted degree proof uses the uniform finite-sum bound and constant-coefficient multiplication bound. No selector-degree premise is assumed.
+
+The final successful run used `.r21-scratch/run_focus.py` (SHA-256 `d178bfcf47ebe981d552571b5f23f06394193a79f3949e01c758a92877f9d4ea`) against the pinned remote Lean environment. Receipt: `.r21-scratch/aspis-focus-1790951426811815000.receipt.json`; exit 0, wall 1.03 s, GNU-time Lean-child maximum RSS 2,297,784 KiB, swaps 0, `-j1 -M4500`, systemd `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, `TasksMax=128`. This is child RSS; the runner explicitly records that systemd wrapper peak is not aggregate Lean RSS.
+
+All four final `#print axioms` reports are exactly `[propext, Classical.choice, Quot.sound]`; no `sorryAx` appears in the successful run. Three earlier runs are retained with their logs, source snapshots, and receipts: run `1790951344531605000` failed because of a redundant `unfold weightedSelectorPolynomial`; run `1790951374239780000` and `1790951403732264000` failed while applying `natDegree_mul_le` as a function. These attempts were corrected in the final source; they are not successful proof evidence. The failed logs' interim `sorryAx` output is likewise not evidence about the final successful declarations.

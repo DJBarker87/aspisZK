@@ -1,0 +1,11 @@
+# R377: selector-coordinate polynomial fragment
+
+R377 proves model-level degree and evaluation facts for arbitrary Boolean selector bits. A selector product has degree at most 1 in the chosen coordinate when that coordinate is present in the product, and degree 0 otherwise. A finite weighted sum of such products has the same bound. The evaluation theorems identify the polynomial and weighted sum with the corresponding products evaluated at the point whose selected coordinate is updated.
+
+The promoted module is [R377SelectorCoordinateDegree.lean](lean/AspisV8R19/R377SelectorCoordinateDegree.lean). Four saved attempts are retained. The successful run exited 0 in 1.03 seconds, with 2,297,784 KiB peak Lean-child RSS and no swap. Its four complete `#print axioms` reports contain only `propext`, `Classical.choice`, and `Quot.sound`. Earlier failed attempts and their interim `sorryAx` reports remain identified as failed history. The successful log also retains two unused simp-argument warnings.
+
+The attached selector census records the source split: indices 0–5 feed `high`, indices 6–9 feed `low`; source call flow forms `block` from high entries 0–56 and sets `local` from the low table. This inventory is read-only source evidence, not a source-to-polynomial proof.
+
+The next obligation is to prove correspondence between the actual selected source's expansion and field operations and this product model, including how the expanded high/low arrays, row combination, and block/local values are computed. R377 does not prove that actual selected expansion or block/local execution matches its polynomial definitions. It also does not close the selected terminal's degree, source error/stopping behavior, privacy, or security.
+
+The four original proof attempts remain unchanged in the run archive. After a read-only cache probe found no `AspisV8R19/R377SelectorCoordinateDegree.olean`, one additional focused compile ran the same byte-identical source with the qualified target path required by dependent imports. It exited 0 in 0.99 seconds (2,297,272 KiB Lean-child RSS, no swap), reported the same four foundational-only axiom lists, and populated the qualified cache path recorded in the evidence bundle. This compile did not alter the module or expand its theorem boundary.
