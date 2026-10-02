@@ -1,0 +1,7 @@
+# R194 distinct-circle candidate fragment
+
+R194 connects a staged fragment built from the actual selected circle sampler and actual point comparison to the existing `DistinctCircleProgram`. It proves exact result and advanced state for every total hash adapter, initial state, first point and attempt count. Equal candidates retry; distinct candidates stop; circle failures and outer exhaustion map to the callback’s `Error::Sampler`. The generic count theorem covers the selected three outer attempts, each using the actual three-attempt inner circle sampler.
+
+The focused target compiled in the pinned capped Lean 4.32 cache: exit 0, 1.58 seconds, peak RSS 3,731,960 KiB, zero swaps. The complete axiom report contains the standard foundations and the previously audited opaque formatting Type `core.fmt.Formatter`. Full source, failed draft, logs and exact launcher are in the [evidence](evidence/r194-distinct-circle-fragment/manifest.json).
+
+The staged fragment has not been proved equal to the complete extracted `freeze_loop`. Factoring that loop, vector preparation, captured-borrow slice fold, `Vec::extend`, and the complete oracle call chronology through rho remain open. Result/state equality does not establish trace equality or a challenge probability law. End-to-end privacy and soundness are unproved. Verifier source, genuine CU results and parameters are preserved; no CU benchmark or unchanged regression was rerun.

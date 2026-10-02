@@ -1,0 +1,100 @@
+import AspisV8R19.R181SampledChordGuard
+import AspisV8R19.R177CircleScheduleBridge
+import AspisV8R19.DistinctCircleProgram
+
+/-! This is only the source-shaped bounded candidate-selection fragment.
+Generated provenance: R156 `Funs.lean`, `freeze_loop.body`, source annotation
+`../relation_callback.rs` lines 1:0–145:1; candidate challenge/test at generated
+lines 1823–1836, repeated-attempt continuation/exhaustion at lines 1981–1987.
+The retained Rust source places the corresponding `second=None; for _ in 0..3`
+fragment at `relation_callback.rs` line 130. This theorem does not factor or
+identify the complete extracted outer `freeze_loop`. -/
+set_option autoImplicit false
+namespace AspisV8R19.R194DistinctCircleFragment
+
+open Aeneas Aeneas.Std Result
+open AspisR156FullFreeze.aspis_core
+open AspisV8R15.ExactTowerBase
+
+local instance : DecidableEq circle.SecureCirclePoint := Classical.decEq _
+
+def bounded (first : circle.SecureCirclePoint) : Nat → transcript.Transcript →
+    Result (core.result.Result circle.SecureCirclePoint
+      AspisR156FullFreeze.Error × transcript.Transcript)
+  | 0, s => .ok (.Err .Sampler, s)
+  | n + 1, s => do
+      let (sample, next) ← transcript.Transcript.challenge_secure_circle_point s
+      match sample with
+      | .Err _ => ok (.Err .Sampler, next)
+      | .Ok p =>
+          let differs ← core.cmp.PartialEq.ne.trait_default
+            circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint
+            p first
+          if differs then
+            ok (.Ok p, next)
+          else
+            bounded first n next
+
+def encodeBoundedResult :
+    Except DistinctCircleProgram.CircleError DistinctCircleProgram.Point →
+      core.result.Result circle.SecureCirclePoint AspisR156FullFreeze.Error
+  | .error _ => .Err .Sampler
+  | .ok p => .Ok (R166CircleExecution.encodePoint p)
+
+theorem bounded_exact (H : DuplexFrames.Bytes → SourceDuplexStep.State)
+    (first : DistinctCircleProgram.Point) (n : Nat)
+    (s : SourceDuplexStep.State) :
+    bounded (R166CircleExecution.encodePoint first) n
+        (R167TranscriptPrimitiveExecution.transcriptFor H s) =
+      .ok (encodeBoundedResult
+          (DistinctCircleProgram.run H first n s).2.1,
+        R167TranscriptPrimitiveExecution.transcriptFor H
+          (DistinctCircleProgram.run H first n s).2.2) := by
+  induction n generalizing s with
+  | zero =>
+      simp [bounded, encodeBoundedResult, DistinctCircleProgram.run]
+  | succ n ih =>
+      simp only [bounded]
+      rw [R177CircleScheduleBridge.challenge_schedule_exact]
+      simp only [R172CircleSamplerExecution.encodeOutput]
+      cases hr : SamplerCircleBridge.modelRun H 3 s with
+      | mk trace result =>
+          rcases result with ⟨outcome, next⟩
+          cases outcome with
+          | error e =>
+              simp [R177CircleScheduleBridge.encodeScheduleResult,
+                encodeBoundedResult, DistinctCircleProgram.run, hr]
+          | ok point =>
+              by_cases hpoint : point = first
+              · subst point
+                have hcmp :=
+                  R181SampledChordGuard.raw_secure_circle_point_ne
+                    (R166CircleExecution.encodePoint first)
+                    (R166CircleExecution.encodePoint first)
+                simp only [ne_eq, not_true_eq_false, decide_false] at hcmp
+                simp [bounded, hcmp, DistinctCircleProgram.run, hr,
+                  encodeBoundedResult, ih]
+              · have hencoded_ne :
+                    R166CircleExecution.encodePoint point ≠
+                      R166CircleExecution.encodePoint first := by
+                  intro heq
+                  apply hpoint
+                  have hdecoded := congrArg R166CircleExecution.decodePoint heq
+                  simpa only [R166CircleExecution.decode_point] using hdecoded
+                have hcmp :=
+                  R181SampledChordGuard.raw_secure_circle_point_ne
+                    (R166CircleExecution.encodePoint point)
+                    (R166CircleExecution.encodePoint first)
+                have hcmp_true :
+                    core.cmp.PartialEq.ne.trait_default
+                      circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint
+                      (R166CircleExecution.encodePoint point)
+                      (R166CircleExecution.encodePoint first) = .ok true := by
+                  simpa [hencoded_ne] using hcmp
+                simp [R177CircleScheduleBridge.encodeScheduleResult,
+                  bounded, hcmp_true, DistinctCircleProgram.run, hr,
+                  encodeBoundedResult]
+
+#print axioms bounded_exact
+
+end AspisV8R19.R194DistinctCircleFragment

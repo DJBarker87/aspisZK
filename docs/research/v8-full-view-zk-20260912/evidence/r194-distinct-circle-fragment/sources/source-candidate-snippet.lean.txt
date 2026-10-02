@@ -1,0 +1,21 @@
+1823:     let (r, t1) ←
+1824:       aspis_core.transcript.Transcript.challenge_secure_circle_point t
+1825:     let r1 ←
+1826:       core.result.Result.map_err
+1827:         freeze.closure_1.Insts.CoreOpsFunctionFnOnceTupleCirclePointSampleErrorError
+1828:         r ()
+1829:     let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+1830:     match cf with
+1831:     | core.ops.control_flow.ControlFlow.Continue val =>
+1832:       let b ←
+1833:         core.cmp.PartialEq.ne.trait_default
+1834:           aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint
+1835:           val s
+1836:       if b
+1981:       else ok (cont (iter1, t1))
+1982:     | core.ops.control_flow.ControlFlow.Break residual =>
+1983:       let return_capture ←
+1984:         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+1985:           Prefix (core.convert.FromSame Error) residual
+1986:       ok (done (some return_capture))
+1987: 
