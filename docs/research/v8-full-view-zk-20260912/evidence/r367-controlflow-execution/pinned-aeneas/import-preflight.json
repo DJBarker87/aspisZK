@@ -1,0 +1,30 @@
+{
+  "scope": "read-only inspection of the configured pinned Aeneas tree; no alternate Aeneas root used, no Lean compile or source edit",
+  "pinned_root": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean",
+  "umbrella": {
+    "source": "Aeneas.lean",
+    "sha256": "1f5ebf36abfe52cbfa6e1edff1f9bc4e8aed1cebf8615bd97fcf8a9e6d0bde90",
+    "imports": ["Aeneas.Command", "Aeneas.Data", "Aeneas.Do", "Aeneas.Extract", "Aeneas.Std", "Aeneas.Tactic"],
+    "compiled_object_present": false,
+    "missing_transitive_umbrella_objects": ["Aeneas/Data.olean", "Aeneas/Tactic.olean"]
+  },
+  "observed_needed_modules": [
+    {"module": "Aeneas.Std", "source": "Aeneas/Std.lean", "source_sha256": "ca9af75f0e9552f702c0b4a756c97bad99fe6111653d64ad5c42b532fb96c08d", "olean_present": true, "provides": ["Std support including Result, massert and read_discriminant import closure", "Aeneas.Std.core.convert.Infallible"]},
+    {"module": "Aeneas.Extract.Extract", "source": "Aeneas/Extract/Extract.lean", "source_sha256": "f75b49fecd2ae15570d27ad3eb9f81d5c58cd702fb9d46d5c18a2f8a19fe3cc1", "olean_present": true, "provides": ["rust_type attribute syntax/registration (source lines 394 onward)", "rust_fun attribute syntax/registration (source lines 660 onward)"]},
+    {"module": "Aeneas.Data.Discriminant", "source": "Aeneas/Data/Discriminant.lean", "source_sha256": "98dca07cb483eda5c4fe4322806650d3288fd0c2504c3153e0cebc195e649d03", "olean_present": true, "provides": ["discriminant attribute syntax and elaboration (source line 142 onward)"]},
+    {"module": "Aeneas.Std.Core.Discriminant", "source": "Aeneas/Std/Core/Discriminant.lean", "olean_present": true, "provides": ["Aeneas.Std.Discriminant class and exported read_discriminant projection"]},
+    {"module": "Aeneas.Std.Core.Convert", "source": "Aeneas/Std/Core/Convert.lean", "source_sha256": "a192dd7f718f9e5ab7998e4f7fa0b994078e3663e505c8279cb33bba9db024a7", "olean_present": true, "provides": ["core.convert.Infallible, source line 11"]},
+    {"module": "Aeneas.Std.Primitives", "source": "Aeneas/Std/Primitives.lean", "olean_present": true, "provides": ["massert, source line 92"]}
+  ],
+  "proposed_import_only_normalization": {
+    "replace_generated_import_Aeneas_with": ["import Aeneas.Std", "import Aeneas.Extract.Extract", "import Aeneas.Data.Discriminant"],
+    "apply_to": ["AspisR364ControlFlowPattern/Types.lean", "AspisR364ControlFlowPattern/Funs.lean"],
+    "preserve": ["every generated declaration and byte after imports", "all rust_type, rust_fun, discriminant attributes", "all original result/error/control-flow bodies and assertions"],
+    "rationale": "These are the compiled modules that provide the generated files' referenced standard environment and attribute APIs. Aeneas.Std imports the primitive/result/discriminant support and defines native Infallible; Extract.Extract registers rust_type/rust_fun; Data.Discriminant defines the discriminant attribute. The umbrella additionally pulls in Data and Tactic umbrella modules whose oleans are absent from this configured cache.",
+    "not_yet_applied_or_compiled": true
+  },
+  "source_hashes": {
+    "Aeneas/Std/Core.lean": "ec2df48ce3f31e06d994af3fd18a71cea959f90331a4696676adab2fc2f5ba9b",
+    "Aeneas/Std/Core/Core.lean": "1a5baae098c73d2f8d072f75a0028b4e273670e01a9838fd26c8525dc69359bf"
+  }
+}
