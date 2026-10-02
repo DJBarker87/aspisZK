@@ -1,0 +1,82 @@
+{
+  "status": "mechanical wrapper staging; uncompiled",
+  "source_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r346-after-guards-raw/provenance/R292Funs.input.lean",
+  "source_sha256": "4d40a5b7b540adec90efef80a5ed8a5b4403704b388506af21f357761d95aec4",
+  "source_fragment_line_range_inclusive": [
+    527,
+    605
+  ],
+  "fragment_sha256": "60b8826b2e571096f83f7fcce73b0c6fa697d5d6695f50ffffcb51cfbe764c7e",
+  "output_sha256": "e85241f2b746489db398f0bca80c41784b30dd69f5de89c48a7c47943b7261a3",
+  "namespace": "AspisR346AfterGuardsRaw",
+  "wrapper": "selectedAfterGuards",
+  "exact_imports": [
+    "Aeneas.Std",
+    "AspisR318BatchPrefixRaw",
+    "AspisR305BatchReverseRaw",
+    "AspisR278PrivateInverseRaw",
+    "AspisR340BatchOutputRaw",
+    "AspisR156FullFreeze.Types"
+  ],
+  "bindings": {
+    "B": "AspisR249R110Raw.circle_norm.joined_inverse.line_norm.r110_norm.B = Std.U32",
+    "clone instance": "AspisR340BatchOutputRaw.circle_norm.joined_inverse.line_norm.r110_norm.B.Insts.CoreCloneClone",
+    "B.ZERO and B.inv": "AspisR278PrivateInverseRaw.circle_norm.joined_inverse.line_norm.r110_norm.B.ZERO / B.inv",
+    "B.input/add/sub/mul/reduce and P110": "AspisR249R110Raw.circle_norm.joined_inverse.line_norm.r110_norm existing raw definitions",
+    "batch_loop0/batch_loop1": "AspisR318BatchPrefixRaw.circle_norm.joined_inverse.line_norm.r110_norm",
+    "batch_loop2/batch_loop3": "AspisR305BatchReverseRaw.circle_norm.joined_inverse.line_norm.r110_norm",
+    "selectedOutput0/selectedOutput1 and VecU32": "AspisR340BatchOutputRaw",
+    "Slice.last": "AspisR316SliceLastRaw imported through AspisR318BatchPrefixRaw",
+    "Slice.len/is_empty/iter, vector, iterator adapters, collection, and option operations": "Aeneas.Std imported names referenced directly by the unchanged fragment"
+  },
+  "error_binding_audit": {
+    "R292_source_definition": {
+      "input_sha256": "972adf9e51991e13dee2e4f12621af6ba2ae613c04220bc7588ab3c8147ac833",
+      "lean_name": "AspisR292PrivateBatch.Error",
+      "source": "../relation_callback.rs:62:27-62:101",
+      "constructors": [
+        "Length",
+        "Canonical",
+        "Sampler",
+        "Shape",
+        "Authentication",
+        "Terminal",
+        "Domain"
+      ],
+      "attribute": "@[discriminant isize]"
+    },
+    "existing_candidate_binding": {
+      "input_sha256": "c8571b518bfb09350cf54b971838c284cd4c188296c356de0ebcafb34a6e3bd7",
+      "lean_name": "AspisR156FullFreeze.Error",
+      "source": "../relation_callback.rs:62:27-62:101",
+      "constructors": [
+        "Length",
+        "Canonical",
+        "Sampler",
+        "Shape",
+        "Authentication",
+        "Terminal",
+        "Domain"
+      ],
+      "discriminant_instance": "instR156CallbackError maps constructors 0 through 6"
+    },
+    "wrapper_choice": "Uses existing AspisR156FullFreeze.Error as the inner core.result.Result error parameter; the exact extracted R292 declaration is a distinct Lean declaration in AspisR292PrivateBatch and its generated Types module is not imported here.",
+    "uncertainty": "The compared declarations have identical recorded Rust source span, constructor names/order, and R156 has the explicit 0..6 discriminant instance; they are not definitionally the same namespaced Lean type. The selected suffix constructs only core.result.Result.Ok and never constructs an inner Error. No equivalence theorem or error-semantics claim is made; lead review must accept or revise this binding before compilation."
+  },
+  "source_boundary": {
+    "start": "Original line 527: else-branch body starts at `let i1 := Slice.len xs`, immediately after the source checks ending with `if b2 then ok (core.result.Result.Err Error.Domain) else` at lines 524-526.",
+    "end": "Original line 605: includes the final `ok (core.result.Result.Ok (ox2, oy2))` line in full.",
+    "guards_excluded": "The wrapper begins inside the validated else branch. It does not include or prove either input is nonempty, the earlier chain/any predicate, or the b2/error branch.",
+    "operations_preserved": "All operations from vector capacity/push and prefix loops through Slice.last/unwrap, B field calls, zero-vector allocation, reverse loops, index-zero writes, and final nested Result.Ok are the contiguous unchanged source fragment. No helper or body replacement is performed.",
+    "traversal": "The copied fragment explicitly constructs prefix iterators from slice ranges beginning at 1, then reverse range iterators with start 1 and end len for loop2/loop3. These are recorded syntactically; no traversal theorem is claimed.",
+    "std_from_elem": "Uses the exact R340 Clone instance name in the fragment; allocation remains the Aeneas.Std `alloc.vec.from_elem` binding.",
+    "compiler_unresolved": "No compiler/Lean compilation was run; source-to-model semantics and correspondence of imported Std helpers remain unresolved."
+  },
+  "axiom_report": "One #print axioms selectedAfterGuards command is emitted. No output is claimed because no Lean compile was run.",
+  "limits": [
+    "No compile.",
+    "No guard or full-callback theorem.",
+    "No error-type equivalence claim.",
+    "No tracked changes, staging, or commit."
+  ]
+}

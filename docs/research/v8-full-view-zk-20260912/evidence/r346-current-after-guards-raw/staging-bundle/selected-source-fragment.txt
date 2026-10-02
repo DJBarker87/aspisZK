@@ -1,0 +1,80 @@
+=== R292 validated branch exact fragment, lines 527-605 ===
+        let i1 := Slice.len xs
+        let px :=
+          alloc.vec.Vec.with_capacity
+            circle_norm.joined_inverse.line_norm.r110_norm.B i1
+        let b3 ← Slice.index_usize xs 0#usize
+        let px1 ← alloc.vec.Vec.push px b3
+        let s ←
+          core.slice.index.Slice.index
+            (core.slice.index.SliceIndexRangeFromUsizeSlice
+            circle_norm.joined_inverse.line_norm.r110_norm.B) xs
+            { start := 1#usize }
+        let iter ←
+          SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter
+            s
+        let px2 ←
+          circle_norm.joined_inverse.line_norm.r110_norm.batch_loop0 iter px1
+        let i2 := Slice.len ys
+        let py :=
+          alloc.vec.Vec.with_capacity
+            circle_norm.joined_inverse.line_norm.r110_norm.B i2
+        let b4 ← Slice.index_usize ys 0#usize
+        let py1 ← alloc.vec.Vec.push py b4
+        let s1 ←
+          core.slice.index.Slice.index
+            (core.slice.index.SliceIndexRangeFromUsizeSlice
+            circle_norm.joined_inverse.line_norm.r110_norm.B) ys
+            { start := 1#usize }
+        let iter1 ←
+          SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter
+            s1
+        let py2 ←
+          circle_norm.joined_inverse.line_norm.r110_norm.batch_loop1 iter1 py1
+        let s2 := alloc.vec.Vec.deref px2
+        let o ← core.slice.Slice.last s2
+        let p ← core.option.Option.unwrap o
+        let s3 := alloc.vec.Vec.deref py2
+        let o1 ← core.slice.Slice.last s3
+        let q ← core.option.Option.unwrap o1
+        let b5 ← circle_norm.joined_inverse.line_norm.r110_norm.B.mul p q
+        let total ← circle_norm.joined_inverse.line_norm.r110_norm.B.inv b5
+        let ix ← circle_norm.joined_inverse.line_norm.r110_norm.B.mul total q
+        let iy ← circle_norm.joined_inverse.line_norm.r110_norm.B.mul total p
+        let i3 := Slice.len xs
+        let ox ←
+          alloc.vec.from_elem
+            circle_norm.joined_inverse.line_norm.r110_norm.B.Insts.CoreCloneClone
+            circle_norm.joined_inverse.line_norm.r110_norm.B.ZERO i3
+        let i4 := Slice.len xs
+        let iter2 ←
+          core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator
+            core.iter.range.StepUsize) { start := 1#usize, «end» := i4 }
+        let (ix1, ox1) ←
+          circle_norm.joined_inverse.line_norm.r110_norm.batch_loop2 iter2 xs
+            px2 ix ox
+        let (_, index_mut_back) ←
+          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+            circle_norm.joined_inverse.line_norm.r110_norm.B) ox1 0#usize
+        let ox2 := index_mut_back ix1
+        let i5 := Slice.len ys
+        let oy ←
+          alloc.vec.from_elem
+            circle_norm.joined_inverse.line_norm.r110_norm.B.Insts.CoreCloneClone
+            circle_norm.joined_inverse.line_norm.r110_norm.B.ZERO i5
+        let i6 := Slice.len ys
+        let iter3 ←
+          core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator
+            core.iter.range.StepUsize) { start := 1#usize, «end» := i6 }
+        let (iy1, oy1) ←
+          circle_norm.joined_inverse.line_norm.r110_norm.batch_loop3 iter3 ys
+            py2 iy oy
+        let (_, index_mut_back1) ←
+          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+            circle_norm.joined_inverse.line_norm.r110_norm.B) oy1 0#usize
+        let oy2 := index_mut_back1 iy1
+        ok (core.result.Result.Ok (ox2, oy2))
