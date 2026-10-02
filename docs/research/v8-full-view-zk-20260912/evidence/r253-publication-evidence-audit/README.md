@@ -1,0 +1,1 @@
+Independent read-only saved evidence audit for R251–R253. All checksum copies, logs, axiom reports, failed drafts and capped resource measurements match. No Lean replay or regression rerun; no end-to-end security result.

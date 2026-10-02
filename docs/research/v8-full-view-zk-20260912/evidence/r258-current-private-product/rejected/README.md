@@ -1,0 +1,1 @@
+Rejected elaboration and bound drafts retained. Corrected proof route and explicit result types before the successful focused check; no resource cap increase. sorryAx in rejected reports is not accepted evidence.
