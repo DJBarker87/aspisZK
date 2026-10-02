@@ -1,0 +1,11 @@
+# R363–R364 ControlFlow pattern diagnostic
+
+R363’s approved two-file NameMatcher/LLBC utility overlay built successfully from the saved source snapshot. R364 then translated the exact saved ControlFlow projection with that executable and exited 0. This is a compiler diagnostic milestone only: this record includes no Lean compilation and does not establish source-to-model correspondence or close any semantic/security obligation. The subsequent focused Lean checks are recorded separately in [R367](R367_CURRENT_CONTROLFLOW_EXECUTION.md).
+
+The portable package at [the R363–R364 evidence bundle](evidence/r363-r364-controlflow-pattern/README.md) preserves R362 API provenance and limitations, R363 source/build history and postbuild comparison, the R364 LLBC/command/binary binding/generated files, and the completed R364 source census. It excludes the executable and build/Lean caches while retaining the executable SHA-256 and retrieval receipt.
+
+R363 build: exit 0, 90.76 seconds, GNU-time maximum RSS 589,484 KiB; container peak 693,850,112 bytes, zero swap, `OOMKilled=false`, OOM counters zero. Executable SHA-256: `3dc9ad6de1af901c8ead41940ba97097a0cf06f82d27dbc7d7c5eac03695e329`. Postbuild inventory: all 313 changes from the saved prebuild tree are under `_build`; the only source differences from R360 are the two approved paths; zero shared regular-file inodes.
+
+R364 translation: exit 0, source LLBC SHA-256 `8b9bd55e374866294b591758e1282d08998cb002e30b070207156b61f81a69ca`, using the R363 executable hash above. It emits `branch`, `from_output`, and `from_residual` plus the associated ControlFlow inductive types. `Lean_compiled` is false and `#print axioms` is not applicable. The static generated-source census is preserved as supplied by the R172 worker; it is an inventory, not a proof.
+
+Revision fields are distinct: R363 source snapshot `56a931fc3879354a2fa584e73bd0a1d412714851`; R363 launch/campaign revision `7c588ebcd62955448a0298b3d480aa7e23c408bb`; R362 Charon source revision `cb50ff16b9f1066b8a97dc06da704de2da2fa41c`. The R362 same-image and pinned Charon source files match byte-for-byte, but exact linked-object provenance for the earlier R349 executable was not established. See the package README for complete boundaries and verification instructions.

@@ -1,0 +1,24 @@
+{
+  "captured_utc": "2026-10-02T13:02:03.005853+00:00",
+  "argv": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=5",
+    "-o",
+    "StrictHostKeyChecking=no",
+    "-o",
+    "UserKnownHostsFile=/dev/null",
+    "dombarker@100.108.41.90",
+    "set +e\nR=/home/dombarker/project-offloads/aspis-r363-instantiated-pattern-candidate-20261002-a\nP=/home/dombarker/project-offloads/aspis-r360-comment-context-candidate-20261002-a\nA=\"$R/candidate-audit\"\nfor p in \"$R/src\" \"$A\" \"$P/aeneas-r360-comment-context-candidate\" \"$R/aeneas-r363-instantiated-pattern-candidate\" \"$A/run_cached_build.py\" \"$A/build-command.json\" \"$A/build-result.json\" \"$R/src/NameMatcher.ml\" \"$R/src/llbc/LlbcAstUtils.ml\" \"$R/src/extract/ExtractTypes.ml\" \"$R/src/_build/default/main.exe\" \"$A/R363-source-tree-manifest.json\" \"$A/clone-audit.json\"; do\n  if test -e \"$p\"; then printf 'EXISTS '; else printf 'MISSING '; fi; printf '%s\\n' \"$p\"\ndone\nfor p in \"$P/aeneas-r360-comment-context-candidate\" \"$R/src/NameMatcher.ml\" \"$R/src/llbc/LlbcAstUtils.ml\" \"$R/src/extract/ExtractTypes.ml\" \"$R/src/_build/default/main.exe\" \"$A/R363-source-tree-manifest.json\" \"$A/clone-audit.json\"; do sha256sum \"$p\" 2>&1; done\nprintf '\\nAUDIT LISTING\\n'; ls -la \"$A\" 2>&1\n"
+  ],
+  "exit_status": 0,
+  "elapsed_seconds": 3.779755665920675,
+  "stdout_sha256": "f950cd70cf1564b7b4d43199c9cef4f1ff0890ac1d4083b16a1c0252b7194f06",
+  "stderr_sha256": "93b8a13f03d49fcdd4b6cde0e56bac5e89d860d7ffa50143c7650f9d86912c5f",
+  "stdout_file": "preflight-per-check.stdout",
+  "stderr_file": "preflight-per-check.stderr",
+  "read_only_probe": true,
+  "build_command_run": false
+}

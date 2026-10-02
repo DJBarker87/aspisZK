@@ -1,0 +1,24 @@
+{
+  "captured_utc": "2026-10-02T13:03:24.332628+00:00",
+  "reason": "Initial R363 launch preflight found R360 inherited audit files in candidate-audit root; no build ran. Preserve parent audit and isolate R363 writes.",
+  "prior_attempt": {
+    "history": "history/launch-7c588ebcd629-20261002T130119Z",
+    "per_check": "preflight-per-check.json",
+    "exit_status": 1,
+    "build_command_run": false
+  },
+  "preserved_original_files": {
+    "run_cached_build.py": "4bb6f8d4693b905177d458a386adda519920898eb5c4d6374782bfad4fa840e7",
+    "launch_build.py": "27f429c489d3dac4c7433fb8f3cadd90cc6b4d2b73866323ccee89b4014baf4a",
+    "build-launch-plan.json": "58c96cef67600b1931ca4cd343c5697374e988d16191ca0633c188c6ed630762"
+  },
+  "changed_files": {
+    "run_cached_build.py": "cd01a86a062ffbc0c13eb43d54cc959fecb54d87566fdc84616acf52a5d19c64",
+    "launch_build.py": "f4210291aaa84a4bf5f7cb1a63645221581855ce048243aca97e606fe6c10753",
+    "build-launch-plan.json": "83c67fa34b30ad0f2c60b1140c9caacb4469015853ca5cb9e91e6bfd3b8f0285"
+  },
+  "routing": "source clone audit/manifest remain at candidate-audit root; runner and R363 outputs go to candidate-audit/r363-build; launcher requires child absent, creates only after all source/cache preflight checks pass; SCP collection copies child only",
+  "source_and_binary_mutations": false,
+  "runner_preflight_behavior": "Because launcher stages the runner in the fresh child directory before invoking it, runner verifies the child contains exactly the staged run_cached_build.py and no prior R363 build outputs.",
+  "additional_preflight_correction": "Restored one launch revision placeholder after a second local launcher assertion failed before SSH; see history/local-preflight-revision-placeholder-failure."
+}

@@ -1,0 +1,26 @@
+--- R360/src/llbc/LlbcAstUtils.ml
++++ R363/src/llbc/LlbcAstUtils.ml
+@@ -121,9 +121,9 @@
+ let name_to_pattern (span : Meta.span option) (ctx : Charon.NameMatcher.ctx)
+     (c : Charon.NameMatcher.to_pat_config) (n : name) =
+   let n = strip_target_suffix n in
+-  if !Config.fail_hard then Charon.NameMatcher.name_to_pattern ctx c n
++  if !Config.fail_hard then NameMatcher.name_to_pattern ctx c n
+   else
+-    try Charon.NameMatcher.name_to_pattern ctx c n
++    try NameMatcher.name_to_pattern ctx c n
+     with Not_found | Assert_failure _ ->
+       [%craise_opt_span] span "Could not convert the name to a pattern"
+ 
+@@ -143,9 +143,9 @@
+     (ctx : Charon.NameMatcher.ctx) (c : Charon.NameMatcher.to_pat_config)
+     (params : generic_params) (n : Charon.Types.name) (args : generic_args) =
+   if !Config.fail_hard then
+-    Charon.NameMatcher.name_with_generics_to_pattern ctx c params n args
++    NameMatcher.name_with_generics_to_pattern ctx c params n args
+   else
+-    try Charon.NameMatcher.name_with_generics_to_pattern ctx c params n args
++    try NameMatcher.name_with_generics_to_pattern ctx c params n args
+     with Not_found | Assert_failure _ ->
+       [%craise_opt_span] span "Could not convert the name to a pattern"
+ 

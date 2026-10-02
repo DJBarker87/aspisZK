@@ -1,0 +1,111 @@
+{
+  "captured_utc": "2026-10-02T12:40:12.304674+00:00",
+  "host": "dombarker@100.108.41.90",
+  "container_image": "ef96e46342a4",
+  "read_only_caps_for_image_commands": {
+    "memory_max": "512m",
+    "memory_swap_total": "512m (zero swap allowance)",
+    "pids": 32,
+    "network": "none"
+  },
+  "probes": [
+    {
+      "name": "r349-link",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=/dev/null",
+        "dombarker@100.108.41.90",
+        "set +e; ls -ld /home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a/src/charon; printf 'readlink='; readlink /home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a/src/charon; printf 'resolved='; readlink -f /home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a/src/charon; test -e /home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a/src/charon; rc=$?; printf 'target_exists_exit=%s\\n' \"$rc\"; exit 0"
+      ],
+      "exit_status": 0,
+      "elapsed_seconds": 0.49734212504699826,
+      "stdout_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/r349-link.stdout",
+      "stdout_sha256": "f8b035eaba5f38b9ef732df2406b63c8476268110525138f752c69876f517d9d",
+      "stdout_bytes": 294,
+      "stderr_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/r349-link.stderr",
+      "stderr_sha256": "93b8a13f03d49fcdd4b6cde0e56bac5e89d860d7ffa50143c7650f9d86912c5f",
+      "stderr_bytes": 82
+    },
+    {
+      "name": "image-package-query",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=/dev/null",
+        "dombarker@100.108.41.90",
+        "docker run --rm --network none --memory=512m --memory-swap=512m --pids-limit=32 --entrypoint bash ef96e46342a4 -lc 'set -e; cd /work/src 2>/dev/null || true; printf \"package_query=\"; opam exec -- ocamlfind query charon; printf \"package_version=\"; opam exec -- ocamlfind query -format %v charon; printf \"installed_source_stat=\"; stat -c %F\\\\\\\\ %s\\\\\\\\ %n /home/opam/.opam/5.2/lib/charon/NameMatcher.ml; printf \"installed_source_realpath=\"; readlink -f /home/opam/.opam/5.2/lib/charon/NameMatcher.ml; sha256sum /home/opam/.opam/5.2/lib/charon/NameMatcher.ml; printf \"meta_head:\\n\"; sed -n \"1,12p\" /home/opam/.opam/5.2/lib/charon/META'"
+      ],
+      "exit_status": 1,
+      "elapsed_seconds": 0.9010175000876188,
+      "stdout_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/image-package-query.stdout",
+      "stdout_sha256": "ee0824add838c2731572464e3949ace8eb00de725108f1f61691990c45911675",
+      "stdout_bytes": 103,
+      "stderr_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/image-package-query.stderr",
+      "stderr_sha256": "8c3db09bbba0b50ae3183ef2bc123bfb6090c10180c8581a7926d96c8613ea27",
+      "stderr_bytes": 186
+    },
+    {
+      "name": "image-installed-name-matcher",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=/dev/null",
+        "dombarker@100.108.41.90",
+        "docker run --rm --network none --memory=512m --memory-swap=512m --pids-limit=32 --entrypoint cat ef96e46342a4 /home/opam/.opam/5.2/lib/charon/NameMatcher.ml"
+      ],
+      "exit_status": 0,
+      "elapsed_seconds": 0.7199454589281231,
+      "stdout_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/image-installed-name-matcher.stdout",
+      "stdout_sha256": "a6aac1d07e356b864a9146723e31401ff26be569ce2ac71d7410bc14d1bb5061",
+      "stdout_bytes": 58610,
+      "stderr_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/image-installed-name-matcher.stderr",
+      "stderr_sha256": "93b8a13f03d49fcdd4b6cde0e56bac5e89d860d7ffa50143c7650f9d86912c5f",
+      "stderr_bytes": 82,
+      "saved_source_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/installed-NameMatcher.ml",
+      "saved_source_sha256": "a6aac1d07e356b864a9146723e31401ff26be569ce2ac71d7410bc14d1bb5061"
+    },
+    {
+      "name": "pinned-name-matcher-hash",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=/dev/null",
+        "dombarker@100.108.41.90",
+        "sha256sum /home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon-ml/src/NameMatcher.ml"
+      ],
+      "exit_status": 0,
+      "elapsed_seconds": 0.6274051659274846,
+      "stdout_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/pinned-name-matcher-hash.stdout",
+      "stdout_sha256": "455ec7a8c6805dc6427bbff87e8e1e7938ce44d6a706e011f6ea3ec3583935f2",
+      "stdout_bytes": 159,
+      "stderr_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r362-private-carrier-api-inventory/probes/pinned-name-matcher-hash.stderr",
+      "stderr_sha256": "93b8a13f03d49fcdd4b6cde0e56bac5e89d860d7ffa50143c7650f9d86912c5f",
+      "stderr_bytes": 82
+    }
+  ]
+}

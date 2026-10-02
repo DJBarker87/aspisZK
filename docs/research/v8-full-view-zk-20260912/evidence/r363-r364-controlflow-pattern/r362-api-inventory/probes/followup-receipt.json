@@ -1,0 +1,61 @@
+{
+  "captured_utc": "2026-10-02T12:40:35.347158+00:00",
+  "caps": {
+    "memory_max": "512m",
+    "memory_swap_total": "512m (zero swap allowance)",
+    "pids": 32,
+    "network": "none"
+  },
+  "probes": [
+    {
+      "name": "image-package-query-v2",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=/dev/null",
+        "dombarker@100.108.41.90",
+        "docker run --rm --network none --memory=512m --memory-swap=512m --pids-limit=32 --entrypoint bash ef96e46342a4 -lc 'set -e; printf \"package_query=\"; opam exec -- ocamlfind query charon; printf \"package_version=\"; opam exec -- ocamlfind query -format %v charon; ls -l /home/opam/.opam/5.2/lib/charon/NameMatcher.ml; readlink -f /home/opam/.opam/5.2/lib/charon/NameMatcher.ml; sha256sum /home/opam/.opam/5.2/lib/charon/NameMatcher.ml; sed -n \"1,12p\" /home/opam/.opam/5.2/lib/charon/META'"
+      ],
+      "exit_status": 0,
+      "elapsed_seconds": 0.9384472919628024,
+      "stdout_file": ".r21-scratch/r362-private-carrier-api-inventory/probes/image-package-query-v2.stdout",
+      "stdout_sha256": "7b3f8ad9a9996c6a23696d48f28e002a43b1b4e54b14cb73aa85d31f746174ac",
+      "stdout_bytes": 523,
+      "stderr_file": ".r21-scratch/r362-private-carrier-api-inventory/probes/image-package-query-v2.stderr",
+      "stderr_sha256": "93b8a13f03d49fcdd4b6cde0e56bac5e89d860d7ffa50143c7650f9d86912c5f",
+      "stderr_bytes": 82
+    },
+    {
+      "name": "pinned-name-matcher-source",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=5",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "UserKnownHostsFile=/dev/null",
+        "dombarker@100.108.41.90",
+        "cat /home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon-ml/src/NameMatcher.ml"
+      ],
+      "exit_status": 0,
+      "elapsed_seconds": 0.5568564999848604,
+      "stdout_file": ".r21-scratch/r362-private-carrier-api-inventory/probes/pinned-name-matcher-source.stdout",
+      "stdout_sha256": "a6aac1d07e356b864a9146723e31401ff26be569ce2ac71d7410bc14d1bb5061",
+      "stdout_bytes": 58610,
+      "stderr_file": ".r21-scratch/r362-private-carrier-api-inventory/probes/pinned-name-matcher-source.stderr",
+      "stderr_sha256": "93b8a13f03d49fcdd4b6cde0e56bac5e89d860d7ffa50143c7650f9d86912c5f",
+      "stderr_bytes": 82,
+      "saved_source_file": ".r21-scratch/r362-private-carrier-api-inventory/probes/pinned-NameMatcher.ml",
+      "saved_source_sha256": "a6aac1d07e356b864a9146723e31401ff26be569ce2ac71d7410bc14d1bb5061"
+    }
+  ]
+}

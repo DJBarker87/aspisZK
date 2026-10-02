@@ -1,0 +1,13 @@
+# R364 generated-source census
+
+This is a static inventory of the successful R364 translation output. The checker reads the saved LLBC and generated directory; it does not invoke Lean, Aeneas, Charon, or any build tool. Its output records source declarations, signatures/body text, imports, `rust_fun`/`rust_type` attributes, and axiom/opaque marker hits as observations only. It does not establish source semantics, compiler correctness, or dependency closure.
+
+The input LLBC is `.r21-scratch/r334-controlflow-source-projection/R334ControlFlowSourceProjection.llbc`, SHA-256 `8b9bd55e374866294b591758e1282d08998cb002e30b070207156b61f81a69ca`; its `has_errors` field is false. The saved R364 `result.json` reports exit 0, the same source hash, binary SHA-256 `3dc9ad6de1af901c8ead41940ba97097a0cf06f82d27dbc7d7c5eac03695e329`, and Lean compilation false. All three paths in its generated-file map match their recorded hashes.
+
+The LLBC inventory confirms the three function IDs and names: 37 `branch`, 39 `from_output`, and 40 `from_residual`. It also confirms type IDs 14, 20, and 21 are `ControlFlow` instantiations and 22 is `core::convert::Infallible`. Translation metadata maps the three functions to emitted non-opaque definitions in `AspisR364ControlFlowPattern/Funs.lean`; their source spans are `control_flow.rs` lines 115, 110, and 129, respectively. The emitted Lean definitions include the failure-capable `Result` wrappers and the explicit constructor matches/bodies captured in `census.json`.
+
+`Types.lean` emits three `ControlFlow` inductives. Their `rust_type` attributes identify `((), ())`, `((), Infallible)`, and `(ControlFlow<(), Infallible>, ())`; the saved source lines enumerate each `Continue` and `Break` payload. Type 22 itself is the Rust `Infallible` dependency and is not emitted as a new inductive in this output. Both generated files import `Aeneas`; `Funs.lean` also imports the generated `Types` module. The static marker scan finds no `axiom`, `sorry`, `admit`, `opaque`, `unsafe`, `extern`, `implemented_by`, or external-template markers in the generated Lean files.
+
+Generated file hashes: `Funs.lean` `33157e3a6778433da276fbe96c06ab84e7343546dc58ff37fb94ef203b306ea7`; `Types.lean` `a53c5e303c88b612bc833e4959f930b4b58ff2d3c4c289f725949f138f6b2dba`; `translation.json` `0830f9b27d0c6ec43fddd47b57ae1dc84aec41df81c5a69344072e114a20f17a`. Census script SHA-256 `9640b00199a00c4be4a2f9c9f756adcaff834fe4ba18722db9abf104f8330675`; census output SHA-256 `b977af3e5781bb3b897b928852799409123001f5602cb35a07bb35b696947d23`.
+
+The inventory is not a Lean check and does not independently verify that the generated functions implement their Rust declarations. That source-to-model and compiler correspondence remains open.
