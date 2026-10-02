@@ -1,0 +1,3 @@
+import AspisR335PrefixPairInverseRaw
+set_option pp.fullNames true
+#print AspisR335PrefixPairInverseRaw.selectedPairInverse

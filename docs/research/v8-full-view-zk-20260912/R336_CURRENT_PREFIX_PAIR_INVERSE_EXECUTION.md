@@ -1,0 +1,9 @@
+# R336: actual second prefix and shared inverse results
+
+`AspisV8R19/R336PrefixPairInverseExecution.lean` compiled successfully. The second-prefix fragment is definitionally equal to the first fragment for every raw Slice, including its empty arrayOutOfBounds error. Under explicit nonempty/canonical source reads it establishes length, every encoded sequential prefix read and final product; capacity is derived, zero entries/products remain allowed. The shared inverse fragment has its complete Result for canonical last products: zero product returns assertionFailure, otherwise it returns the two encoded inverse seeds. Both initialized vectors feed this Result without a separate nonzero or capacity premise. The source guard, reverse output setup, independent compiler/standard-library correspondence and whole batch/callback remain open.
+
+Compile revision `d04d10ffd971f0821e29afcbb6d04528a2873f9c`; exit 0; wall 0:01.68; child peak RSS 3710716 KiB; swaps 0. All complete axiom reports use only propext, Classical.choice and Quot.sound; no sorryAx, native proof or new execution assumption. Pinned Lean 4.32, `-j1 -M4500`, 5/7 GiB zero-swap scope. Complete evidence is in [the manifest](evidence/r336-current-prefix-pair-inverse-execution/manifest.json).
+
+First remaining proposition: Prove the original source guard/traversal, derive or preserve nonzero/zero outcomes under justified source conditions, and bind the initialized prefix selectors/inverse seeds to original reverse/output setup. Complete full callback chronology, universal joint privacy, oracle/publication simulation and probability losses, and source soundness.
+
+Full callback chronology, joint privacy and soundness remain open. Verifier source, security parameters and 999,790 / 999,532 CU results remain preserved. No benchmarks or unchanged regression suites reran.
