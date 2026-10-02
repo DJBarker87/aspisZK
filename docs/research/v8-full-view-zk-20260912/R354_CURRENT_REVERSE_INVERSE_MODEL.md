@@ -1,0 +1,13 @@
+# R354 — inverse values for the source-bound reverse recurrence
+
+`AspisV8R19/R354ReverseInverseModel.lean` compiled successfully. Symbolically proves each descending reverse-recurrence step writes the corresponding field inverse and advances to the inverse of the preceding prefix. The final accumulator is the inverse of the first source value; every valid final sourceOutput read equals the encoded inverse of its corresponding source value. The proof uses explicit nonempty input and nonzero source-indexed values, preserves arbitrary initial output contents above the descending count, and establishes safe read/update bounds. This is an algebraic model theorem for the already source-bound recurrence, not a new proof of actual guard/traversal/library/compiler execution.
+
+Compile revision `f924773364ea0610a39455a1e7610f85db6bb949`; exit 0; wall 0:01.80; child peak RSS 3722316 KiB; swaps 0. All seven complete axiom reports contain only propext, Classical.choice and Quot.sound. No sorryAx, native or new execution assumption. Pinned Lean 4.32, `-j1 -M4500`, 5/7 GiB zero-swap scope. Complete evidence is in [the manifest](evidence/r354-current-reverse-inverse-model/manifest.json).
+
+First remaining proposition: Bind the complete actual R350 Result to these field-inverse output entries, retaining its zero failure; prove original guard and full source batch execution and callback chronology before joint privacy/shared-oracle simulation and soundness.
+
+Full callback chronology, joint privacy and soundness remain open. Verifier source, security parameters and 999,790 / 999,532 CU results remain preserved. No benchmarks or unchanged regression suites reran.
+
+The evidence also carries the runner receipt/source snapshot and direct-import copies and hashes. R350 was uncommitted at this compile; the runner records the exact imported content hash `7d4b4ec38e640af40faed6d370126406fe24682ce05f323ada2b55c5e361728c`. R341’s direct import hash is `6e94af41b981bf55b986756729ff7c3c0624c997a0347918711ac2d74aab95b4`. The recorded compile revision is checked by ancestry against the audit checkout, rather than requiring the checkout HEAD to remain unchanged.
+
+Both failed attempts (`1790941138669848000` and `1790941193635720000`) are retained under the evidence `history/` with original source, logs, and receipts. Their partial outputs contain `sorryAx`; those reports are failed-history evidence only. The seven final reports contain only propext, Classical.choice and Quot.sound. `formatting-preservation.json` records exact original CRLF and whitespace findings without changing bytes, and `local-import-graph.json` records the local dependency graph and cycle check. A portable read-only checker validates the saved copies and compile-revision ancestry.
