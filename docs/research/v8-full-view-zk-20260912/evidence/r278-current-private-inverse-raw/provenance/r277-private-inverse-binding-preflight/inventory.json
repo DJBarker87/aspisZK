@@ -1,0 +1,169 @@
+{
+  "artifact": "R277 private inverse binding preflight inventory",
+  "scope": "Read-only name/span/dependency inventory for later raw binding. No implementation or semantic binding conclusion.",
+  "R266": {
+    "llbc_sha256": "f4ed281e203e81208acf5c9cbae790d6a15e6ae5c7d5367d21a683768d0bb4a9",
+    "source_revision_recorded": "975d79a80fa55407cd04575bc8d3b0169d6daddc",
+    "selected_start_from": [
+      "crate::circle_norm::joined_inverse::line_norm::r110_norm::B::neg",
+      "crate::circle_norm::joined_inverse::line_norm::r110_norm::B::inv"
+    ],
+    "leaves": {
+      "R266_fun0_Bneg": {
+        "name": "circle_norm.joined_inverse.line_norm.r110_norm.B.neg",
+        "source": "../r110_norm.rs",
+        "span": "12:21-12:61",
+        "source_text": "fn neg(self)->Self{Self::ZERO.sub(self)}",
+        "dependencies_seen_in_source": [
+          "B.ZERO",
+          "B.sub"
+        ]
+      },
+      "R266_fun1_Binv": {
+        "name": "circle_norm.joined_inverse.line_norm.r110_norm.B.inv",
+        "source": "../r110_norm.rs",
+        "span": "20:4-20:49",
+        "source_text": "fn inv(self)->Self{Self(M31(self.0).inv().0)}",
+        "dependencies_seen_in_source": [
+          "aspis_core.field.M31.inv",
+          "aspis_core.field.M31 representation/projection"
+        ]
+      },
+      "R266_B_zero": {
+        "name": "circle_norm.joined_inverse.line_norm.r110_norm.B.ZERO",
+        "source": "../r110_norm.rs",
+        "span": "7:4-7:28",
+        "source_text": "const ZERO:Self=Self(0);"
+      },
+      "R266_B_sub": {
+        "name": "circle_norm.joined_inverse.line_norm.r110_norm.B.sub",
+        "source": "../r110_norm.rs",
+        "span": "11:21-11:129",
+        "source_text": "fn sub(self,r:Self)->Self{let x=self.0.wrapping_add(P110).wrapping_sub(r.0);Self(if x>=P110{x-P110}else{x})}"
+      },
+      "R266_M31_inv": {
+        "name": "aspis_core.field.M31.inv",
+        "source": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-core/src/field.rs",
+        "span": "167:4-167:27",
+        "name_pattern": "aspis_core::field::{aspis_core::field::M31}::inv",
+        "body_direct_calls": [
+          "massert",
+          "aspis_core.field.M31.mul",
+          "aspis_core.field.square_n"
+        ]
+      },
+      "R266_M31_type": {
+        "name": "aspis_core.field.M31",
+        "source": ".../crates/aspis-core/src/field.rs",
+        "span": "20:0-20:14",
+        "representation": "Std.U32"
+      }
+    }
+  },
+  "R230_frozen_source": {
+    "r110_norm_sha256": "8459fc12322811b589f9a9d29bf474f3ee45e58aa13c716b8f324c2db81b160e",
+    "R266_r110_hash": "8459fc12322811b589f9a9d29bf474f3ee45e58aa13c716b8f324c2db81b160e",
+    "hash_match": true,
+    "campaign_revision": "07977092976005ff691cf381d3e539d3ac06b595",
+    "source_git_metadata": false
+  },
+  "existing_binding_candidates": {
+    "R249_B_alias": "circle_norm.joined_inverse.line_norm.r110_norm.B := Std.U32 (representation adaptation; R249 raw file, no local B struct)",
+    "R249_B_sub": {
+      "name": "circle_norm.joined_inverse.line_norm.r110_norm.B.sub",
+      "source_span": "11:21-11:129",
+      "present_in_R249": true,
+      "direct_dependencies": [
+        "Std.U32.wrapping_add",
+        "Std.U32.wrapping_sub",
+        "R249 P110"
+      ]
+    },
+    "R249_B_ZERO": {
+      "name": "circle_norm.joined_inverse.line_norm.r110_norm.B.ZERO",
+      "source_span": "7:4-7:28",
+      "present_in_R249": false,
+      "R276_translated": true
+    },
+    "R156_M31_inv": {
+      "name": "aspis_core.field.M31.inv",
+      "source_span": "167:4-167:27",
+      "R276_translated": true,
+      "saved_R156_translation_name_and_span_match": true,
+      "existing_in_promoted_R156_FunsCore": true
+    }
+  },
+  "M31_inv_observed_transitive_helper_inventory": [
+    {
+      "name": "aspis_core.field.M31.mul",
+      "role": "direct dependency; actual R276 translation body provides this definition"
+    },
+    {
+      "name": "aspis_core.field.square_n",
+      "role": "direct dependency; called with counts 2, 4, and 8"
+    },
+    {
+      "name": "aspis_core.field.square_n_loop",
+      "role": "transitive dependency emitted by R276"
+    },
+    {
+      "name": "aspis_core.field.square_n_loop.body",
+      "role": "transitive dependency emitted by R276; calls M31.mul"
+    },
+    {
+      "name": "core.iter.range.IteratorRange.next / core.iter.range.StepUsize",
+      "role": "iteration dependencies referenced by square_n_loop.body; supplied through imported Aeneas/core environment"
+    },
+    {
+      "name": "aspis_core.field.reduce_u64",
+      "role": "actual R276 M31.mul fallback dependency"
+    },
+    {
+      "name": "aspis_core.field.P",
+      "role": "global used by emitted R276 M31.mul and reduce_u64"
+    },
+    {
+      "name": "aspis_core.field.M31",
+      "role": "reducible Std.U32 representation from R276.Types and pinned R156.Types"
+    },
+    {
+      "name": "Aeneas massert and Std.U32 equality/inequality",
+      "role": "assertion guard in actual R276 M31.inv body; no explicit M31 PartialEq helper appears there"
+    }
+  ],
+  "review_notes": [
+    "R266 Fun0/Fun1 metadata names and spans align with the frozen R230 r110_norm.rs hash.",
+    "R266 M31.inv source name/span matches the saved R156 translation and promoted FunsCore declaration.",
+    "R249 already contains B.sub and P110; R249 B alias is Std.U32. R249 does not contain B.ZERO, while R276 generated output contains the B.ZERO row at the R230/R266 source span.",
+    "R276 generated output includes exactly the inverse support declarations listed in R276_emitted_inverse_support_declarations. Its M31.inv guard is `massert (self != 0#u32)` over the Std.U32 representation; its M31.mul fallback calls aspis_core.field.reduce_u64 directly. No M31.reduce_u64 wrapper or M31 PartialEq helper is emitted or required by these generated bodies."
+  ],
+  "input_sha256": {
+    "R266_LLBC": "f4ed281e203e81208acf5c9cbae790d6a15e6ae5c7d5367d21a683768d0bb4a9",
+    "R266_decoded": "1e9332b4276d55a1f55b4116d294ebec62fca3bf41dae44cf955708d186ab40f",
+    "R266_result": "d2d7993e8c2ffeef41ccdbb2e6cce4543101259fc3187c1c1c38efa67f7c4f10",
+    "R266_command": "54202cfa6fbcd57e4d689816ab29395ba487906559accef57ba28d4922665a8a",
+    "R230_frozen_r110": "8459fc12322811b589f9a9d29bf474f3ee45e58aa13c716b8f324c2db81b160e",
+    "R230_provenance": "c8df8cdb221dc549edd634128814ee0530094f3af350704503fb848dcc5b82f9",
+    "R249_raw": "f38d892beef83cba109b007a5d5b6851629ead6acc736d2fbff1c25a530f72cd",
+    "R156_FunsCore": "5ef8405549c6feff405715a6697ffff9a370610d5dc116fc452a1046fae0c1f2",
+    "R156_Types": "c8571b518bfb09350cf54b971838c284cd4c188296c356de0ebcafb34a6e3bd7",
+    "R156_saved_Funs": "ca32f7628c0e78a9dfe721b4806b212f040911c69d6a2ab69f879b4daca33cca",
+    "R156_saved_Types": "58e1bb28244d63fb502fe44e6565b63bd9febe6d72d6b3a27fcbac6ea7300b3c",
+    "R276_Funs": "3e3a3ee0630af9de63601a448c2a240e0f31fc6712de6def854c72de1e6b0269",
+    "R276_Types": "9ab2a6ec4c1482b1ebb95a5e749aa0013f616a533218086f6a97392101cc4c74"
+  },
+  "R276_emitted_inverse_support_declarations": [
+    "circle_norm.joined_inverse.line_norm.r110_norm.P110",
+    "circle_norm.joined_inverse.line_norm.r110_norm.B.sub",
+    "circle_norm.joined_inverse.line_norm.r110_norm.B.ZERO",
+    "circle_norm.joined_inverse.line_norm.r110_norm.B.neg",
+    "aspis_core.field.P",
+    "aspis_core.field.reduce_u64",
+    "aspis_core.field.M31.mul",
+    "aspis_core.field.square_n_loop.body",
+    "aspis_core.field.square_n_loop",
+    "aspis_core.field.square_n",
+    "aspis_core.field.M31.inv",
+    "circle_norm.joined_inverse.line_norm.r110_norm.B.inv"
+  ]
+}

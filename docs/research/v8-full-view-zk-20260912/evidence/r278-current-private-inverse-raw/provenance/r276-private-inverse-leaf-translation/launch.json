@@ -1,0 +1,28 @@
+{
+  "command": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r276-private-inverse-leaf-translation",
+    "--working-directory=/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "python3",
+    "-c",
+    "import pathlib,hashlib,subprocess,json\nroot=pathlib.Path('/home/dombarker/project-offloads/aspis-r276-private-inverse-leaf-translation-20261002-a');assert not root.exists();root.mkdir()\nmem={k:v for k,v in (line.split(':',1) for line in pathlib.Path('/proc/meminfo').read_text().splitlines()) if k in ('MemTotal','MemAvailable','SwapTotal','SwapFree')}\nassert int(mem['MemAvailable'].split()[0])>=24*1024*1024,mem\n(root/'host-reservation-before.json').write_text(json.dumps({'meminfo':mem,'active_user_services':subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--no-legend'],text=True),'reserved_MemoryMax':'7G, sole campaign build job; host OS/remote path reserved'},indent=2))\nsource=pathlib.Path('/home/dombarker/project-offloads/aspis-r276-private-inverse-leaf-input-20261002-a/R274PrivateInverseLeavesOrdered.llbc')\nbinary=pathlib.Path('/home/dombarker/project-offloads/aspis-return-continuation-20261002-a/aeneas-return-continuation')\nassert hashlib.sha256(source.read_bytes()).hexdigest()=='fb316e998775a411073d19667a06a15647af4cc9599188d7061596259b211768'\nassert hashlib.sha256(binary.read_bytes()).hexdigest()=='63b04a88532b8fb0aaa0d274881b5cacf00bc4f449243ece905178f0de9cc495'\ncmd=[str(binary),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR276PrivateInverseLeaves','-dest',str(root/'generated'),'-subdir','AspisR276PrivateInverseLeaves','-split-files','-emit-json',str(source)]\n(root/'translate-command.json').write_text(json.dumps({'command':cmd,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest()},indent=2))\nwith (root/'translate.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=f,stderr=subprocess.STDOUT)\nprint((root/'translate.log').read_text());print('TRANSLATE_EXIT',r.returncode)\n(root/'result.json').write_text(json.dumps({'exit_status':r.returncode,'generated':(root/'generated').exists()},indent=2));raise SystemExit(r.returncode)\n"
+  ],
+  "caps": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  }
+}

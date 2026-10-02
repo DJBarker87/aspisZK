@@ -1,0 +1,62 @@
+{
+  "task": "read-only inventory of R267 private inverse order metadata failure",
+  "no_build_or_translation_run": true,
+  "input": {
+    "artifact": ".r21-scratch/r266-private-inverse-leaf-extract/R266PrivateInverseLeaves.llbc",
+    "sha256": "f4ed281e203e81208acf5c9cbae790d6a15e6ae5c7d5367d21a683768d0bb4a9",
+    "decoded_json_sha256": "1e9332b4276d55a1f55b4116d294ebec62fca3bf41dae44cf955708d186ab40f",
+    "table_counts": {"type_decls": 46, "fun_decls": 150, "global_decls": 8, "trait_decls": 25, "trait_impls": 11}
+  },
+  "generator": {
+    "path": ".r21-scratch/r267-private-inverse-leaf-ordering/order_metadata.py",
+    "sha256": "4fa4282cfdf75e45fa7d93cefdf9e434c2977ce0e21f942cc44f27d2c8368fea",
+    "supported_ordering_groups": ["Type", "Fun", "Global"],
+    "failure_frontier": "At FunId 9, recursive reference scanner rejects TraitDecl/TraitImpl/trait_ref/impl_ref fields as unsupported trait frontier.",
+    "interpretation": "The referenced rows are present in R266; R267 has not implemented trait metadata closure support."
+  },
+  "roots": [
+    {"kind": "Fun", "id": 0, "name": "r110_norm::B::neg", "direct_calls": [{"kind": "Fun", "id": 2, "name": "B::sub"}], "direct_globals": [{"kind": "Global", "id": 0, "name": "B::ZERO"}]},
+    {"kind": "Fun", "id": 1, "name": "r110_norm::B::inv", "direct_calls": [{"kind": "Fun", "id": 3, "name": "aspis_core::field::M31::inv"}]}
+  ],
+  "relevant_function_frontier": [
+    {"kind": "Fun", "id": 3, "name": "aspis_core::field::M31::inv", "body_notes": ["contains an If/switch on self != 0", "panic abort branch references core::panicking::panic_fmt", "calls Fun7 M31::mul, Fun8 Arguments::from_str, and Fun9 square_n"]},
+    {"kind": "Fun", "id": 7, "name": "aspis_core::field::M31::mul", "direct_calls": [{"kind": "Fun", "id": 11, "name": "aspis_core::field::reduce_u64"}]},
+    {"kind": "Fun", "id": 8, "name": "core::fmt::Arguments::from_str", "table_body": "Opaque"},
+    {"kind": "Fun", "id": 9, "name": "aspis_core::field::square_n", "source_span": "field.rs:44:0-49:1", "direct_calls": [{"kind": "Fun", "id": 12, "name": "core::iter::traits::collect::{IntoIterator impl}::into_iter", "body": "Opaque"}, {"kind": "Fun", "id": 13, "name": "core::iter::range::{Iterator impl}::next", "body": "Opaque"}, {"kind": "Fun", "id": 7, "name": "aspis_core::field::M31::mul"}], "trait_refs": [
+      {"path": "Range.into_iter call", "kind": "TraitImpl", "id": 0, "trait_decl_id": 2, "trait": "core::iter::traits::collect::IntoIterator", "row_present": true, "vtable_global": 3, "vtable_present": true},
+      {"path": "Range iterator call", "kind": "TraitImpl", "id": 1, "trait_decl_id": 0, "trait": "core::iter::traits::iterator::Iterator", "row_present": true, "vtable_global": 4, "vtable_present": true},
+      {"path": "Range Step bound/generic", "kind": "TraitImpl", "id": 2, "trait_decl_id": 1, "trait": "core::iter::range::Step", "row_present": true, "vtable": null},
+      {"path": "TraitImpl2 implied refs", "kind": "TraitImpl", "ids": [4, 5], "rows_present": true}
+    ], "body_control": "structured loop over Range<usize>; statement 7 includes IntoIterator/Iterator references; statement 9 calls M31::mul"}
+  ],
+  "missing_refs": [],
+  "trait_reference_rows": {
+    "trait_decls": [
+      {"id": 0, "name": "core::iter::traits::iterator::Iterator", "present": true},
+      {"id": 1, "name": "core::iter::range::Step", "present": true},
+      {"id": 2, "name": "core::iter::traits::collect::IntoIterator", "present": true}
+    ],
+    "trait_impls": [
+      {"id": 0, "name": "core::iter::traits::collect::{impl Trait 0}", "impl_trait_id": 2, "vtable_global": 3, "present": true},
+      {"id": 1, "name": "core::iter::range::{impl Trait 1}", "impl_trait_id": 0, "for_type": "Range<A>", "vtable_global": 4, "present": true},
+      {"id": 2, "name": "core::iter::range::{impl Trait 2}", "impl_trait_id": 1, "for_type": "usize", "implied_trait_impl_ids": [4, 5], "vtable": null, "present": true},
+      {"id": 4, "name": "core::clone::impls::{impl Trait 4}", "present": true},
+      {"id": 5, "name": "core::cmp::impls::{impl Trait 5}", "present": true}
+    ]
+  },
+  "pinned_R156_reference": {
+    "path": "docs/research/v8-full-view-zk-20260912/lean/AspisR156FullFreeze/FunsCore.lean",
+    "sha256": "5ef8405549c6feff405715a6697ffff9a370610d5dc116fc452a1046fae0c1f2",
+    "M31_inv_lines": "409-426",
+    "square_n_lines": "365-403",
+    "observed_translated_forms": ["massert", "Range", "IteratorRange.next", "loop", "M31.mul"],
+    "Aeneas_builtin_mapping_source_located": false,
+    "limitation": "No assertion about raw-to-translated builtin mapping or semantic equivalence."
+  },
+  "hashes": {
+    "raw_llbc": "f4ed281e203e81208acf5c9cbae790d6a15e6ae5c7d5367d21a683768d0bb4a9",
+    "decoded_json": "1e9332b4276d55a1f55b4116d294ebec62fca3bf41dae44cf955708d186ab40f",
+    "r267_generator": "4fa4282cfdf75e45fa7d93cefdf9e434c2977ce0e21f942cc44f27d2c8368fea",
+    "r156_funs_core": "5ef8405549c6feff405715a6697ffff9a370610d5dc116fc452a1046fae0c1f2"
+  }
+}

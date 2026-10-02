@@ -1,0 +1,1 @@
+Focused private B::neg/inv source extraction with exact frozen selected flags and cached optimized release compiler. Expected time is cached compilation/extraction, about15seconds; no arithmetic release gate or CU run. This extraction alone proves no execution theorem.
