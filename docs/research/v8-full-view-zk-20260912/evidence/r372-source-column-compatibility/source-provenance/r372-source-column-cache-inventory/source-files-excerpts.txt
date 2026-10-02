@@ -1,0 +1,214 @@
+### AspisV8R19/SourceCircleBoundary.lean SHA256 d0cf5ee7129708bd910a32a2e2a428a33f1aca12aca60b23c9da9e6569cbf091
+import AspisV8R19.PreparedCircleFold
+import AspisV8R19.SourceNormalizationBoundary
+
+/-! The exact-field source normalization, evaluator, transport and prepared
+fold now share one observation boundary. Source sampler and word refinement
+are not smuggled in as assumptions about independent challenges. -/
+namespace AspisR19.SourceCircleBoundary
+open AspisV8R16 AspisCircleTensorBinding NormalizationLoopBridge
+open SourceMaskTransport SourceEncodedOpening CircleObservationBridge PreparedCircleFold
+noncomputable section
+variable {F : Type*} [Field F] [NeZero (2 : F)]
+
+def column (t : Fin 22 → F) (alpha : F) (j : Fin 13) :=
+  sourceQuotient t alpha (SparseHighWitness.degree j) (SparseHighWitness.slot j)
+
+theorem coefficient_fold_zero (t : Fin 22 → F) (ht : Function.Injective t) (alpha : F) (j : Fin 13) :
+    ∀ i, ∑ k : Fin 4, alpha^k.val*column t alpha j (i,k)=0 := by
+  rw [column,selected_sourceQuotient_eq t ht alpha j]
+  exact NormalizedQuotient.quotient_fold t ht alpha _ _
+
+theorem raw_point_zero (t : Fin 22 → F) (ht : Function.Injective t) (alpha : F)
+    (j : Fin 13) (rootIndex : Fin 22) (a b c x y : F)
+    (circle : x^2+y^2=1) (root : doubledFactor x 1=t rootIndex) :
+    sourceMaskEvaluate (mask (2:F)⁻¹ a b c (column t alpha j)) x y=0 := by
+  rw [column,selected_sourceQuotient_eq t ht alpha j]
+  exact mask_root_zero t ht alpha _ _ rootIndex a b c x y circle root
+
+theorem raw_fibre_zero (t : Fin 22 → F) (ht : Function.Injective t) (alpha : F)
+    (j : Fin 13) (rootIndex : Fin 22) (a b c x y : F)
+    (circle : x^2+y^2=1) (root : doubledFactor x 1=t rootIndex) :
+    let m := mask (2:F)⁻¹ a b c (column t alpha j)
+    sourceMaskEvaluate m x y=0 ∧ sourceMaskEvaluate m x (-y)=0 ∧
+      sourceMaskEvaluate m (-x) (-y)=0 ∧ sourceMaskEvaluate m (-x) y=0 := by
+  dsimp only
+  exact ⟨raw_point_zero t ht alpha j rootIndex a b c x y circle root,
+    raw_point_zero t ht alpha j rootIndex a b c x (-y) (by simpa using circle) root,
+    raw_point_zero t ht alpha j rootIndex a b c (-x) (-y) (by simpa using circle) (by rwa [doubled_neg]),
+    raw_point_zero t ht alpha j rootIndex a b c (-x) y (by simpa using circle) (by rwa [doubled_neg])⟩
+
+theorem final_value_zero (t : Fin 22 → F) (ht : Function.Injective t) (alpha : F) (j : Fin 13)
+    (a b c x y : F) (circle : x^2+y^2=1) (hx : x≠0) (hy : y≠0)
+    (l0 : a+b*x+c*y≠0) (l1 : a+b*x+c*(-y)≠0)
+    (l2 : a+b*(-x)+c*(-y)≠0) (l3 : a+b*(-x)+c*y≠0) :
+    let m := mask (2:F)⁻¹ a b c (column t alpha j)
+    polynomialFold (2*x)⁻¹ (2*y)⁻¹ alpha
+      (sourceMaskEvaluate m x y/(a+b*x+c*y))
+      (sourceMaskEvaluate m x (-y)/(a+b*x+c*(-y)))
+      (sourceMaskEvaluate m (-x) (-y)/(a+b*(-x)+c*(-y)))
+      (sourceMaskEvaluate m (-x) y/(a+b*(-x)+c*y))=0 :=
+  prepared_mask_final_zero _ alpha (coefficient_fold_zero t ht alpha j)
+    a b c x y circle hx hy l0 l1 l2 l3
+
+theorem legal_coins_OOD (t : Fin 22 → F) (ht : Function.Injective t) (alpha : F) (j : Fin 13)
+    (x0 y0 x1 y1 : F) (h0 : x0^2+y0^2=1) (h1 : x1^2+y1^2=1) :
+    let m := mask (2:F)⁻¹ (x0*y1-y0*x1) (y0-y1) (x1-x0) (column t alpha j)
+    (∑ r ∈ T163SourceTable.inactive,m r)=0 ∧
+    (∀ i, mixedCoin m i=0) ∧ sourceMaskEvaluate m x0 y0=0 ∧ sourceMaskEvaluate m x1 y1=0 := by
+  dsimp only
+  refine ⟨mask_balanced _ _ _ _ _,?_,?_,?_⟩
+  · rw [column,selected_sourceQuotient_eq t ht alpha j]
+    exact normalized_mask_coins_zero t ht _ _ _ _ _ j
+  · rw [sourceMaskEvaluate_eq]
+    exact mask_first_ood_zero _ _ _ _ _ h0
+  · rw [sourceMaskEvaluate_eq]
+    exact mask_second_ood_zero _ _ _ _ _ h1
+
+#print axioms coefficient_fold_zero
+#print axioms raw_point_zero
+#print axioms raw_fibre_zero
+#print axioms final_value_zero
+#print axioms legal_coins_OOD
+end
+end AspisR19.SourceCircleBoundary
+
+### AspisV8R19/FullQuotientWeights.lean SHA256 287646dc5040539d0584d126abea146ddfc110b758868a1f5975858ecb93bc82
+import AspisV8R19.FullPointFunctional
+
+/-! The complete transported source weight on quotient coordinates below 128.
+All 131 potentially nonzero chord outputs are retained. Image updates vanish
+here because of the coordinate bound, not because they are removed. -/
+namespace AspisR19.FullQuotientWeights
+open AspisV8R16 AspisV8R17 FullPointFunctional T163SourceTable
+noncomputable section
+variable {F : Type*} [CommRing F]
+
+def pointWeight (half a b c : F) (w : Fin 1024 → F) (r : Fin 128) : F :=
+  ∑ j : Fin 131,codeWeight w j*ResidualModel.chordEntry half a b c r.val j.val
+
+theorem unit_tail (half a b c : F) (r : Fin 128) (j : Fin 1024)
+    (hj : 131≤j.val) : sourceChord half (unitVector r.val) a b c j.val=0 := by
+  apply HighQueryGCore.sourceChord_support half _ 64 _ a b c _ hj
+  intro i hi
+  simp [unitVector,show i≠r.val by omega]
+
+theorem transpose_entry (half a b c : F) (w : Fin 1024 → F) (r : Fin 128) :
+    sourceChordTranspose half (extendFin1024 (transportDual inactive 1023 order w))
+      a b c r.val=pointWeight half a b c w r := by
+  have h := source_chord_transpose_pairing half (unitVector r.val)
+    (extendFin1024 (transportDual inactive 1023 order w)) a b c
+  rw [rangeDot_extendFin1024,low_dot_restrict _ _ (unit_tail half a b c r)] at h
+  have hr : r.val<1024 := by omega
+  simp only [rangeDot,unitVector,mul_ite,mul_one,mul_zero,
+    Finset.sum_ite_eq',Finset.mem_range,hr,if_true] at h
+  rw [← h]
+  unfold pointWeight
+  apply Finset.sum_congr rfl
+  intro j _
+  rw [codeWeight_eq,ResidualModel.chordEntry_eq half a b c r.val j.val hr]
+  rfl
+
+theorem quotient_entry (half a b c tau : F) (structured : Bool)
+    (w : Fin 1024 → F) (r : Fin 128) :
+    sourceQuotientWeights half (extendFin1024 (transportDual inactive 1023 order w))
+      a b c tau structured r.val=pointWeight half a b c w r := by
+  rw [sourceQuotientWeights,sourceImageUpdates_apply,transpose_entry]
+  simp [show r.val≠1023 by omega,show r.val≠1022 by omega,show r.val≠1021 by omega]
+
+#print axioms unit_tail
+#print axioms transpose_entry
+#print axioms quotient_entry
+end
+end AspisR19.FullQuotientWeights
+
+### AspisV8R19/BetaUniformCorrection.lean SHA256 7af7a0aa8360d7938a6d20ebf1c0f275ddbbe389f1f4c9da1e96d103b476a6d0
+/- Source-shaped coefficient identities for the R19 quadratic channel fold.
+   Existence of corrections at a source prefix is not assumed proven here. -/
+import Mathlib.Tactic.Ring
+import Mathlib.Algebra.BigOperators.Ring.Finset
+
+namespace AspisR19.BetaUniformCorrection
+variable {F : Type*} [CommRing F]
+
+/- rR=P(rq,wr), rG=P(rq,wg), gR=P(qg,wr), gG=P(qg,wg)
+   denotes any one of the seven coefficient positions. -/
+theorem expansion (rR rG gR gG s beta : F) :
+    (1-beta)*((1-beta)*rR+beta*rG)+s*beta*((1-beta)*gR+beta*gG) =
+    (1-beta)^2*rR+beta*(1-beta)*(rG+s*gR)+s*beta^2*gG := by ring
+
+theorem coefficient_zero (rR rG gR gG s beta : F)
+    (hr : rR=0) (hc : rG+s*gR=0) (hg : gG=0) :
+    (1-beta)*((1-beta)*rR+beta*rG)+s*beta*((1-beta)*gR+beta*gG)=0 := by
+  rw [expansion,hr,hc,hg]
+  ring
+
+theorem all_seven (rR rG gR gG : Fin 7 → F) (s : F)
+    (hr : ∀ i, rR i=0) (hc : ∀ i, rG i+s*gR i=0)
+    (hg : ∀ i, gG i=0) : ∀ beta i,
+    (1-beta)*((1-beta)*rR i+beta*rG i)+
+      s*beta*((1-beta)*gR i+beta*gG i)=0 := by
+  intro beta i
+  exact coefficient_zero _ _ _ _ _ _ (hr i) (hc i) (hg i)
+
+/- Apply to boundary moments: the same cross identity retains p2, so no
+   new p2 assumption is hidden in removing its separate solve row. -/
+theorem p2_retained (r0 r1 g0 g1 s : F)
+    (hr : r0=0) (hc : r1+s*g0=0) (hg : g1=0) :
+    s*(g1-g0)-(r1-r0)=0 := by
+  rw [hr,hg]
+  calc
+    _ = -(r1+s*g0) := by ring
+    _ = 0 := by rw [hc,neg_zero]
+
+section CoefficientModel
+variable {I J : Type*} [Fintype I] [Fintype J]
+
+/- For the source, I and J are (chunk, slot). A coefficient kernel is zero
+   between chunks and outside the convolution diagonal. Reversed weight
+   slots and the quarter factor belong to C, not to a new assumption. -/
+def coefficient (C : I → J → F) (q : I → F) (w : J → F) : F :=
+  ∑ i, ∑ j, C i j * q i * w j
+
+theorem coefficient_left (C : I → J → F) (q r : I → F) (w : J → F)
+    (a b : F) : coefficient C (fun i => a*q i+b*r i) w =
+    a*coefficient C q w+b*coefficient C r w := by
+  have term : ∀ i j, C i j*(a*q i+b*r i)*w j =
+      a*(C i j*q i*w j)+b*(C i j*r i*w j) := by intros; ring
+  simp only [coefficient, term, Finset.sum_add_distrib, Finset.mul_sum]
+
+theorem coefficient_right (C : I → J → F) (q : I → F) (w v : J → F)
+    (a b : F) : coefficient C q (fun j => a*w j+b*v j) =
+    a*coefficient C q w+b*coefficient C q v := by
+  have term : ∀ i j, C i j*q i*(a*w j+b*v j) =
+      a*(C i j*q i*w j)+b*(C i j*q i*v j) := by intros; ring
+  simp only [coefficient, term, Finset.sum_add_distrib, Finset.mul_sum]
+
+theorem folded_coefficient_zero (C : I → J → F) (r g : I → F)
+    (wr wg : J → F) (s beta : F)
+    (hr : coefficient C r wr=0)
+    (hc : coefficient C r wg+s*coefficient C g wr=0)
+    (hg : coefficient C g wg=0) :
+    coefficient C (fun i => (1-beta)*r i+s*beta*g i)
+      (fun j => (1-beta)*wr j+beta*wg j)=0 := by
+  rw [coefficient_left, coefficient_right, coefficient_right]
+  have h := coefficient_zero (coefficient C r wr) (coefficient C r wg)
+    (coefficient C g wr) (coefficient C g wg) s beta hr hc hg
+  simpa only [mul_assoc] using h
+end CoefficientModel
+
+/- q_i is paired with w_(4-j)%4 by the retained reversed dual convention.
+   Fin 4 ensures this is [0,3,2,1]. This model still needs a Rust semantics
+   correspondence; no extraction of the loop or field code is claimed. -/
+def sourceKernel (n k : Nat) (quarter : F)
+    (i j : Fin n × Fin 4) : F :=
+  if i.1=j.1 ∧ i.2.val+(4-j.2.val)%4=k then quarter else 0
+
+#print axioms expansion
+#print axioms coefficient_zero
+#print axioms all_seven
+#print axioms p2_retained
+#print axioms coefficient_left
+#print axioms coefficient_right
+#print axioms folded_coefficient_zero
+end AspisR19.BetaUniformCorrection
