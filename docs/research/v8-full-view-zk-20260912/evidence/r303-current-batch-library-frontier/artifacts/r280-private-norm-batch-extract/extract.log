@@ -1,0 +1,113 @@
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `state_only_terminal::CompiledCopyLink` is more private than the item `state_only_terminal::constants::COMPILED_COPY_LINKS`
+   --> /home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `state_only_terminal::constants::COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `state_only_terminal::CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-statement` to apply 4 suggestions)
+   Compiling aspis-v8-performance-host v0.0.0 (/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+warning: unused imports: `M31_HALF` and `M31`
+ --> ../r17_owned_weights.rs:2:69
+  |
+2 | use super::{basis_transport::transport, corelib::field::{QM31 as K, M31, M31_HALF}};
+  |                                                                     ^^^  ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `x`
+   --> ../relation_callback.rs:238:17
+    |
+238 | ...   for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumer...
+    |               ^ help: if this is intentional, prefix it with an underscore: `_x`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `y`
+   --> ../relation_callback.rs:238:19
+    |
+238 | ...   for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumer...
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_y`
+
+warning: variable does not need to be mutable
+   --> ../payment_extraction.rs:213:9
+    |
+213 |     let mut encoded:Vec<Vec<M31>>=selected.iter().map(|m|enc.encode_c1_message(m).unwrap()).collect();
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (Zip<A, B>: Iterator<&'a T>)
+            got: impl_Iterator_for_Zip<A, B, Clause0_Item, Clause1_Item>[TraitClause0, TraitClause1]: Iterator<Zip<A, B>, (Clause0_Item, Clause1_Item)>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl10), TraitClause1: (@Adt21<missing(@TypeBound(2, 0)), missing(@TypeBound(2, 1))>: @TraitDecl0<missing(@TypeBound(1, 1))>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl30<missing(@TypeBound(2, 0)), missing(@TypeBound(2, 1)), missing(@TypeBound(2, 2)), missing(@TypeBound(2, 3))>[missing(TraitClauseBound(2, 0)), missing(TraitClauseBound(2, 1))]::@AssocType0 = &missing('_Bound(1, 0)) missing(@TypeBound(1, 0))>
+         1: <A, B, Clause0_Item, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl0<missing(@TypeBound(1, 2))>), TraitClause1: (missing(@TypeBound(1, 1)): @TraitDecl0<missing(@TypeBound(1, 3))>)>
+ --> /rustc/library/core/src/iter/adapters/zip.rs:74:1
+
+warning: The extraction generated 1 warnings
+warning: `aspis-v8-performance-host` (bin "aspis-v8-performance-host") generated 4 warnings (run `cargo fix --bin "aspis-v8-performance-host" -p aspis-v8-performance-host` to apply 4 suggestions)
+    Finished `release` profile [optimized] target(s) in 13.92s
+	Command being timed: "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon cargo --preset aeneas --mir built --sysroot default --start-from crate::circle_norm::joined_inverse::line_norm::r110_norm::batch --start-from crate::circle_norm::joined_inverse::line_norm::r110_norm::try_norm --start-from aspis_core::field::QM31::neg --start-from aspis_core::field::QM31::mul_m31 --include core::option --include aspis_core::field --dest-file /home/dombarker/project-offloads/aspis-r280-private-norm-batch-extract-20261002-a/R280PrivateNormBatch.llbc -- --offline --locked --release --jobs 1 --features insecure-spend-fixture,selected-v7-kernels --manifest-path /home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml --bin aspis-v8-performance-host"
+	User time (seconds): 13.69
+	System time (seconds): 0.26
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:13.97
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 630720
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 17
+	Minor (reclaiming a frame) page faults: 166407
+	Voluntary context switches: 901
+	Involuntary context switches: 82
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 14232
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

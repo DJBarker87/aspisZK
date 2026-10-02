@@ -1,0 +1,44 @@
+    (fun_id : fn_ptr_kind) (sg : A.bound_fun_sig)
+    (input_names : string option list) : fun_sigs =
+  (* Retrieve the list of parent backward functions *)
+  let regions_hierarchy =
+    RegionsHierarchy.compute_regions_hierarchy_for_sig span decls_ctx.crate sg
+  in
+
+  let inst_sg : LlbcAst.inst_fun_sig =
+    let ({ T.inputs; output; _ } : T.fun_sig) = sg.item_binder_value in
+    [%sanity_check_opt_span] span
+      (sg.item_binder_params.trait_type_constraints = []);
+
+    let _, fresh_abs_id = V.AbsId.fresh_stateful_generator () in
+    let region_gr_id_abs_id_list =
+      List.map
+        (fun (rg : T.region_var_group) -> (rg.id, fresh_abs_id ()))
+    /// let triangular = (1..30).try_fold(0_u64, |prev, x| {
+    ///     if let Some(next) = prev.checked_add(x) {
+    ///         ControlFlow::Continue(next)
+    ///     } else {
+    ///         ControlFlow::Break(prev)
+    ///     }
+    /// });
+    /// assert_eq!(triangular, ControlFlow::Continue(435));
+    /// ```
+    #[inline]
+    #[stable(feature = "iterator_try_fold", since = "1.27.0")]
+    fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R
+    where
+        Self: Sized,
+        F: [const] FnMut(B, Self::Item) -> R + [const] Destruct,
+        R: [const] Try<Output = B>,
+    {
+        let mut accum = init;
+        while let Some(x) = self.next() {
+            accum = f(accum, x)?;
+        }
+        try { accum }
+    }
+
+    /// An iterator method that applies a fallible function to each item in the
+    /// iterator, stopping at the first error and returning that error.
+29f4a784b0edb1dccf895aba78ec6d5c15c081e8602f7778db264b21272c54a0  /home/dombarker/project-offloads/aspis-return-continuation-20261002-a/src/symbolic/SymbolicToPureTypes.ml
+db43b7acc33fca53d85fef3ddea29ec9f8c1e768df428676fe2de160f21d5f6b  /home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs

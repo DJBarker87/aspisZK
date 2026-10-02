@@ -1,0 +1,15 @@
+{
+  "repository": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon",
+  "commit": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "method": "read-only SSH source inspection and exact source-copy hashes; no translator/build invocation",
+  "facts_from_source": {
+    "main_flag": "CliOpts.monomorphize is a bool with #[clap(long, visible_alias = \"mono\")]; the CLI spelling is --monomorphize with alias --mono. The doc says generic items found in the crate are skipped; --start-from selects a particular call graph; dyn Trait is not currently supported.",
+    "separate_mutability_flag": "monomorphize_mut is a distinct optional-valued flag using require_equals=true and default_missing_value(\"all\"). Validation rejects ExceptTypes unless remove_adt_clauses is true.",
+    "aeneas_preset": "Preset::Aeneas adds associated-type lifting and several normalization/visibility options; it does not set monomorphize and does not set duplicate_defaulted_methods.",
+    "compatibility": "CliOpts::validate has no condition/conflict check for monomorphize with Preset::Aeneas. The option is declared independently; code inspection finds no incompatibility rejection. No actual CLI parse/translation was run.",
+    "preset_application": "driver calls options.apply_preset() for the selected crate before building TranslateOptions.",
+    "mapping": "CliOpts.monomorphize maps to TranslateOptions.monomorphize_with_hax; TranslateCtx::monomorphize() tests whether the current item source is Mono or MonoTrait.",
+    "defaulted_methods": "Trait declaration translation has a mono-mode early return with a TODO saying default methods/default consts are not supported there. Trait impl translation also returns early in mono mode. In its separate non-early-return branch, an impl item with no explicit body can reuse the trait declaration default. duplicate_defaulted_methods is a separate transformation option; the Aeneas preset does not turn it on."
+  },
+  "scope_limit": "This records code behavior only. It does not recommend or validate a semantic route for Iterator::any/try_fold and does not launch a diagnostic."
+}

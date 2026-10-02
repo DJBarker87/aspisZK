@@ -1,0 +1,330 @@
+===== options.rs:72-90 (CLI monomorphize declarations) =====
+  72:     /// Monomorphize the items encountered when possible. Generic items found in the crate are
+  73:     /// skipped. To only translate a particular call graph, use `--start-from`. Note: this doesn't
+  74:     /// currently support `dyn Trait`.
+  75:     #[clap(long, visible_alias = "mono")]
+  76:     #[serde(default)]
+  77:     pub monomorphize: bool,
+  78:     /// Partially monomorphize items to make it so that no item is ever monomorphized with a
+  79:     /// mutable reference (or type containing one); said differently, so that the presence of
+  80:     /// mutable references in a type is independent of its generics. This is used by Aeneas.
+  81:     #[clap(
+  82:         long,
+  83:         value_name("INCLUDE_TYPES"),
+  84:         num_args(0..=1),
+  85:         require_equals(true),
+  86:         default_missing_value("all"),
+  87:     )]
+  88:     #[serde(default)]
+  89:     pub monomorphize_mut: Option<MonomorphizeMut>,
+  90: 
+===== options.rs:160-170 (defaulted-method option) =====
+ 160:     /// them all.
+ 161:     #[clap(long)]
+ 162:     #[serde(default)]
+ 163:     pub translate_all_methods: bool,
+ 164:     /// Whenever an impl doesn't implement a method (because it has a default body), this creates a
+ 165:     /// duplicate method as if it had been implemented. This can simplify the call-graphs as
+ 166:     /// otherwise calls within the default body would be indirected through trait proofs.
+ 167:     #[clap(long)]
+ 168:     #[serde(default)]
+ 169:     pub duplicate_defaulted_methods: bool,
+ 170: 
+===== options.rs:431-493 (preset mutations, including Aeneas and Soteria) =====
+ 431:     pub fn apply_preset(&mut self) {
+ 432:         if let Some(preset) = self.preset {
+ 433:             match preset {
+ 434:                 Preset::OldDefaults => {
+ 435:                     self.treat_box_as_builtin = true;
+ 436:                     self.hide_allocator = true;
+ 437:                     self.ops_to_function_calls = true;
+ 438:                     self.index_to_function_calls = true;
+ 439:                     self.reconstruct_fallible_operations = true;
+ 440:                     self.reconstruct_asserts = true;
+ 441:                     self.unbind_item_vars = true;
+ 442:                     self.duplicate_defaulted_methods = true;
+ 443:                 }
+ 444:                 Preset::RawMir => {
+ 445:                     self.extract_opaque_bodies = true;
+ 446:                     self.raw_consts = true;
+ 447:                     self.ullbc = true;
+ 448:                 }
+ 449:                 Preset::Fast => {
+ 450:                     self.ullbc = true;
+ 451:                     self.no_typecheck = true;
+ 452:                     self.no_normalize = true;
+ 453:                     self.no_reorder_decls = true;
+ 454:                     self.hide_marker_traits = true;
+ 455:                     self.raw_consts = true;
+ 456:                 }
+ 457:                 Preset::Aeneas => {
+ 458:                     self.lift_associated_types.push("*".to_owned());
+ 459:                     self.treat_box_as_builtin = true;
+ 460:                     self.ops_to_function_calls = true;
+ 461:                     self.index_to_function_calls = true;
+ 462:                     self.reconstruct_fallible_operations = true;
+ 463:                     self.reconstruct_asserts = true;
+ 464:                     self.hide_marker_traits = true;
+ 465:                     self.hide_allocator = true;
+ 466:                     self.remove_unused_self_clauses = true;
+ 467:                     self.remove_adt_clauses = true;
+ 468:                     self.unbind_item_vars = true;
+ 469:                 }
+ 470:                 Preset::Eurydice => {
+ 471:                     self.hide_allocator = true;
+ 472:                     self.treat_box_as_builtin = true;
+ 473:                     self.ops_to_function_calls = true;
+ 474:                     self.index_to_function_calls = true;
+ 475:                     self.reconstruct_fallible_operations = true;
+ 476:                     self.reconstruct_asserts = true;
+ 477:                     self.lift_associated_types.push("*".to_owned());
+ 478:                     self.unbind_item_vars = true;
+ 479:                     self.duplicate_defaulted_methods = true;
+ 480:                     // Eurydice doesn't support opaque vtables it seems?
+ 481:                     self.include.push("core::marker::MetaSized".to_owned());
+ 482:                 }
+ 483:                 Preset::Soteria => {
+ 484:                     self.desugar_drops = true;
+ 485:                     self.extract_opaque_bodies = true;
+ 486:                     self.mir = Some(MirLevel::Elaborated);
+ 487:                     self.monomorphize = true;
+ 488:                     self.no_normalize = true;
+ 489:                     self.no_reorder_decls = true;
+ 490:                     self.precise_drops = true;
+ 491:                     self.consts = Some(ConstHandling::Values);
+ 492:                     self.ullbc = true;
+ 493:                 }
+===== options.rs:515-541 (validation constraints) =====
+ 515:     pub fn validate(&self) -> anyhow::Result<()> {
+ 516:         if self.dest_dir.is_some() {
+ 517:             display_unspanned_error(
+ 518:                 Level::WARNING,
+ 519:                 "`--dest` is deprecated, use `--dest-file` instead",
+ 520:             )
+ 521:         }
+ 522: 
+ 523:         if self.remove_adt_clauses && self.lift_associated_types.is_empty() {
+ 524:             anyhow::bail!(
+ 525:                 "`--remove-adt-clauses` should be used with `--lift-associated-types='*'` \
+ 526:                 to avoid missing clause errors",
+ 527:             )
+ 528:         }
+ 529:         if matches!(self.monomorphize_mut, Some(MonomorphizeMut::ExceptTypes))
+ 530:             && !self.remove_adt_clauses
+ 531:         {
+ 532:             anyhow::bail!(
+ 533:                 "`--monomorphize-mut=except-types` should be used with `--remove-adt-clauses` \
+ 534:                 to avoid generics mismatches"
+ 535:             )
+ 536:         }
+ 537:         if self.no_serialize && self.format.is_some() {
+ 538:             anyhow::bail!(
+ 539:                 "`--no-serialize` is not compatible with `--format`, the format is only relevant if we serialize"
+ 540:             );
+ 541:         }
+===== options.rs:800-823 (CliOpts to TranslateOptions mapping) =====
+ 800:             monomorphize_mut: options.monomorphize_mut,
+ 801:             hide_marker_traits: options.hide_marker_traits,
+ 802:             hide_allocator: options.hide_allocator,
+ 803:             hide_traits,
+ 804:             remove_unused_clauses: options.remove_unused_clauses,
+ 805:             remove_unused_self_clauses: options.remove_unused_self_clauses,
+ 806:             remove_adt_clauses: options.remove_adt_clauses,
+ 807:             monomorphize_with_hax: options.monomorphize,
+ 808:             ops_to_function_calls: options.ops_to_function_calls,
+ 809:             index_to_function_calls: options.index_to_function_calls,
+ 810:             print_built_llbc: options.print_built_llbc,
+ 811:             item_opacities,
+ 812:             treat_box_as_builtin: options.treat_box_as_builtin,
+ 813:             raw_consts: options.raw_consts,
+ 814:             consts: options.consts.unwrap_or_default(),
+ 815:             unsized_strings: options.unsized_strings,
+ 816:             reconstruct_fallible_operations: options.reconstruct_fallible_operations,
+ 817:             reconstruct_asserts: options.reconstruct_asserts,
+ 818:             lift_associated_types,
+ 819:             unbind_item_vars: options.unbind_item_vars,
+ 820:             translate_all_methods: options.translate_all_methods,
+ 821:             duplicate_defaulted_methods: options.duplicate_defaulted_methods,
+ 822:             no_typecheck: options.no_typecheck,
+ 823:             no_normalize: options.no_normalize,
+===== driver.rs:280-289 (preset application) =====
+ 280:         trace!("Skipping charon; running compiler normally instead.");
+ 281:         // Run the compiler normally.
+ 282:         run_compiler_with_callbacks(compiler_args, &mut RunCompilerNormallyCallbacks)?;
+ 283:         None
+ 284:     } else {
+ 285:         options.apply_preset();
+ 286: 
+ 287:         error_ctx.continue_on_failure = !options.abort_on_error;
+ 288:         error_ctx.error_on_warnings = options.error_on_warnings;
+ 289: 
+===== translate_ctx.rs:230-238 (per-item mono mode predicate) =====
+ 230: 
+ 231:     /// Whether to monomorphize items we encounter.
+ 232:     pub fn monomorphize(&self) -> bool {
+ 233:         matches!(
+ 234:             self.item_src.item,
+ 235:             RustcItem::Mono(..) | RustcItem::MonoTrait(..)
+ 236:         )
+ 237:     }
+ 238: 
+===== translate_items.rs:757-771 (trait declaration early return in mono mode) =====
+ 757:         // skip all associated items of trait decl in mono mode
+ 758:         // question: what if the associated methods (or consts) has default implmentation?
+ 759:         // TODO: support default methods and default consts
+ 760:         if self.monomorphize() {
+ 761:             return Ok(TraitDecl {
+ 762:                 def_id: trait_decl_id,
+ 763:                 item_meta,
+ 764:                 implied_clauses,
+ 765:                 generics: self.into_generics(),
+ 766:                 consts,
+ 767:                 types,
+ 768:                 methods,
+ 769:                 vtable,
+ 770:             });
+ 771:         }
+===== translate_items.rs:1051-1068 (trait implementation early return in mono mode) =====
+1051:         // Explore the associated items
+1052:         let mut consts: IndexMap<AssocConstId, _> = IndexMap::new();
+1053:         let mut types: IndexMap<AssocTypeId, _> = IndexMap::new();
+1054:         let mut methods: IndexMap<TraitMethodId, _> = IndexMap::new();
+1055: 
+1056:         // In mono mode, we do not translate any associated items in trait impl.
+1057:         if self.monomorphize() {
+1058:             return Ok(TraitImpl {
+1059:                 def_id,
+1060:                 item_meta,
+1061:                 impl_trait: implemented_trait,
+1062:                 generics: self.into_generics(),
+1063:                 implied_trait_refs,
+1064:                 consts,
+1065:                 types,
+1066:                 methods,
+1067:                 vtable,
+1068:             });
+===== translate_items.rs:1120-1142 (default method reuse branch) =====
+1120:                                 },
+1121:                             )?
+1122:                         }
+1123:                         None => {
+1124:                             // Reuse the default method from the trait declaration.
+1125:                             let bound_method = match self.get_or_translate(trait_id.into()) {
+1126:                                 Ok(ItemRef::TraitDecl(tdecl)) => {
+1127:                                     tdecl.methods.get(trait_method_id).cloned()
+1128:                                 }
+1129:                                 _ => None,
+1130:                             };
+1131:                             let Some(bound_method) = bound_method else {
+1132:                                 continue;
+1133:                             };
+1134:                             bound_method
+1135:                                 .substitute_with_tref(&self_predicate)
+1136:                                 .map(|method| {
+1137:                                     method
+1138:                                         .default
+1139:                                         .expect("default method should have a default")
+1140:                                 })
+1141:                         }
+1142:                     };
+===== duplicate_defaulted_methods.rs:1-100 (duplicate-defaulted-methods transform) =====
+   1: //! `--duplicate-defaulted-methods`: copy trait default methods into impls that use them.
+   2: use crate::ast::*;
+   3: use crate::options::TranslateOptions;
+   4: use crate::transform::{TransformCtx, ctx::TransformPass};
+   5: 
+   6: pub struct Transform;
+   7: 
+   8: impl Transform {
+   9:     fn prepare_defaulted_method_duplicate(
+  10:         ctx: &TransformCtx,
+  11:         trait_impl: &TraitImpl,
+  12:         method_id: TraitMethodId,
+  13:         method: &Binder<FunDeclRef>,
+  14:     ) -> Option<(FunDecl, Binder<GenericArgs>)> {
+  15:         let original_method_id = method.skip_binder.id;
+  16:         let original_method = ctx.translated.fun_decls.get(original_method_id)?;
+  17:         let ItemSource::TraitDecl { item_id, .. } = &original_method.src else {
+  18:             return None;
+  19:         };
+  20:         let item_id = *item_id;
+  21:         let original_method = original_method.clone();
+  22:         let method_name = ctx
+  23:             .translated
+  24:             .assoc_item_name(trait_impl.impl_trait.id, method_id);
+  25:         let mut name = ctx.translated.item_name(trait_impl.def_id).clone();
+  26:         name.name.push(PathElem::Ident(
+  27:             method_name.to_string(),
+  28:             Disambiguator::ZERO,
+  29:         ));
+  30: 
+  31:         // Flatten the impl binder and the method binder. The resulting substitution maps the
+  32:         // trait default method into the generic context of the duplicated impl method.
+  33:         let subst: Binder<FunDeclRef> = Binder {
+  34:             params: trait_impl.generics.clone(),
+  35:             skip_binder: method.clone(),
+  36:             kind: BinderKind::Other,
+  37:         }
+  38:         .flatten();
+  39:         let mut fun_decl = original_method.substitute_params(subst.map(|x| *x.generics));
+  40: 
+  41:         let ItemSource::TraitDecl { trait_ref, .. } = fun_decl.src else {
+  42:             unreachable!()
+  43:         };
+  44:         fun_decl.def_id = FunDeclId::MAX; // We fix it up on insertion
+  45:         fun_decl.item_meta = ItemMeta {
+  46:             name,
+  47:             opacity: trait_impl.item_meta.opacity,
+  48:             is_local: trait_impl.item_meta.is_local,
+  49:             span: trait_impl.item_meta.span,
+  50:             source_text: fun_decl.item_meta.source_text,
+  51:             attr_info: fun_decl.item_meta.attr_info,
+  52:             lang_item: fun_decl.item_meta.lang_item,
+  53:         };
+  54:         fun_decl.src = ItemSource::TraitImpl {
+  55:             impl_ref: TraitImplRef {
+  56:                 id: trait_impl.def_id,
+  57:                 generics: Box::new(trait_impl.generics.identity_args()),
+  58:             },
+  59:             trait_ref,
+  60:             item_id,
+  61:             reuses_default: true,
+  62:         };
+  63:         if !trait_impl.item_meta.opacity.is_transparent() {
+  64:             fun_decl.body = Body::Opaque;
+  65:         }
+  66: 
+  67:         let generics = trait_impl
+  68:             .generics
+  69:             .identity_args_at_depth(DeBruijnId::one())
+  70:             .concat(&method.params.identity_args_at_depth(DeBruijnId::zero()));
+  71:         let generics = method.map_ref(|_| generics);
+  72: 
+  73:         Some((fun_decl, generics))
+  74:     }
+  75: }
+  76: 
+  77: impl TransformPass for Transform {
+  78:     fn should_run(&self, options: &TranslateOptions) -> bool {
+  79:         options.duplicate_defaulted_methods
+  80:     }
+  81: 
+  82:     fn transform_ctx(&self, ctx: &mut TransformCtx) {
+  83:         let duplicated_methods: IndexMap<
+  84:             TraitImplId,
+  85:             Vec<(TraitMethodId, FunDecl, Binder<GenericArgs>)>,
+  86:         > = ctx.translated.trait_impls.map_ref(|trait_impl| {
+  87:             trait_impl
+  88:                 .methods
+  89:                 .iter_indexed()
+  90:                 .filter_map(|(method_id, method)| {
+  91:                     let (fun_decl, generics) = Transform::prepare_defaulted_method_duplicate(
+  92:                         ctx, trait_impl, method_id, method,
+  93:                     )?;
+  94:                     Some((method_id, fun_decl, generics))
+  95:                 })
+  96:                 .collect()
+  97:         });
+  98: 
+  99:         let mut methods_to_insert: Vec<(TraitMethodId, Binder<FunDeclRef>)> = Vec::new();
+ 100:         for (trait_impl_id, duplicates) in duplicated_methods.into_iter_indexed() {

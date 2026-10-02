@@ -1,0 +1,10 @@
+  1041	  let regions_hierarchy =
+  1042	    RegionsHierarchy.compute_regions_hierarchy_for_sig span decls_ctx.crate sg
+  1043	  in
+  1044	
+  1045	  let inst_sg : LlbcAst.inst_fun_sig =
+  1046	    let ({ T.inputs; output; _ } : T.fun_sig) = sg.item_binder_value in
+  1047	    [%sanity_check_opt_span] span
+  1048	      (sg.item_binder_params.trait_type_constraints = []);
+  1049	
+  1050	    let _, fresh_abs_id = V.AbsId.fresh_stateful_generator () in
