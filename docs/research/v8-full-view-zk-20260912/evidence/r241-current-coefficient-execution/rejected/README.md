@@ -1,0 +1,1 @@
+First draft failed (exit 1): finite Array index reductions did not close and the pure scalar embedding normalization was incomplete. sorryAx results rejected. Replacement uses the same premises and exact statements, finite Array primitive simplification and mapBase_mul.
