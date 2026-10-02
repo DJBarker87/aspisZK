@@ -1,0 +1,71 @@
+{
+  "task": "Mechanical source/import binding audit for R305 raw reverse-loop staging",
+  "status": "unverified staging; no Lean compilation or semantic theorem",
+  "source_rows": [
+    {
+      "lean_name": "circle_norm.joined_inverse.line_norm.r110_norm.batch_loop2.body",
+      "generated_file": "provenance/R292Funs.input.lean",
+      "generated_lines": "385-419 (doc + attribute + declaration; def begins line 388)",
+      "rust_source": "provenance/r110_norm.input.rs:66:38-66:107",
+      "source_sha256": "8459fc12322811b589f9a9d29bf474f3ee45e58aa13c716b8f324c2db81b160e",
+      "staged_body": "verbatim generated declaration block"
+    },
+    {
+      "lean_name": "circle_norm.joined_inverse.line_norm.r110_norm.batch_loop2",
+      "generated_file": "provenance/R292Funs.input.lean",
+      "generated_lines": "420-437 (doc + attribute + declaration)",
+      "rust_source": "provenance/r110_norm.input.rs:66:38-66:107",
+      "source_sha256": "8459fc12322811b589f9a9d29bf474f3ee45e58aa13c716b8f324c2db81b160e",
+      "staged_body": "verbatim generated declaration block"
+    },
+    {
+      "lean_name": "circle_norm.joined_inverse.line_norm.r110_norm.batch_loop3.body",
+      "generated_file": "provenance/R292Funs.input.lean",
+      "generated_lines": "438-472 (doc + attribute + declaration; def begins line 441)",
+      "rust_source": "provenance/r110_norm.input.rs:67:38-67:107",
+      "source_sha256": "8459fc12322811b589f9a9d29bf474f3ee45e58aa13c716b8f324c2db81b160e",
+      "staged_body": "verbatim generated declaration block"
+    },
+    {
+      "lean_name": "circle_norm.joined_inverse.line_norm.r110_norm.batch_loop3",
+      "generated_file": "provenance/R292Funs.input.lean",
+      "generated_lines": "473-490 (doc + attribute + declaration)",
+      "rust_source": "provenance/r110_norm.input.rs:67:38-67:107",
+      "source_sha256": "8459fc12322811b589f9a9d29bf474f3ee45e58aa13c716b8f324c2db81b160e",
+      "staged_body": "verbatim generated declaration block"
+    }
+  ],
+  "binding_facts": {
+    "B_alias_R292": "AspisR292PrivateBatch.circle_norm.joined_inverse.line_norm.r110_norm.B reduces to Std.U32 (Types.input.lean line 28).",
+    "B_alias_R249": "AspisR249R110Raw.circle_norm.joined_inverse.line_norm.r110_norm.B is marked reducible and reduces to Std.U32 (R249 source line 13).",
+    "B_mul_type": "Both generated R292 and R249 declare the fully qualified B.mul at the same argument/result type after unfolding the B aliases: Std.U32 -> Std.U32 -> Result Std.U32.",
+    "B_mul_body_difference": "The two full implementations differ at one literal in the wrapping shift: R292 Funs line 232 uses 31#i32, while imported R249 line 103 uses 31#u32. The staged four declarations do not redefine B.mul; their qualified calls resolve to imported R249. This report does not establish semantic equivalence of those bodies.",
+    "R249_source_copy": "provenance/AspisR249R110Raw.input.lean; byte-identical to tracked docs/research/v8-full-view-zk-20260912/lean/AspisR249R110Raw.lean, SHA-256 f38d892beef83cba109f9a9d29bf474f3ee45e58aa13c716d2fbff1c25a530f72cd.",
+    "R292_types_copy": "provenance/R292Types.input.lean, SHA-256 972adf9e51991e13dee2e4f12621af6ba2ae613c04220bc7588ab3c8147ac833."
+  },
+  "explicit_references_in_four_blocks": [
+    "Rev.Insts.CoreIterTraitsIteratorIterator.next",
+    "Range.Insts.DoubleEndedIterator StepUsize dictionary",
+    "Std.Usize.wrapping_sub",
+    "alloc.vec.Vec.index with SliceIndexUsizeSlice B",
+    "B.mul (two calls in each body)",
+    "alloc.vec.Vec.index_mut and its returned writeback closure",
+    "Slice.index_usize",
+    "Result and ControlFlow done/cont constructors",
+    "loop (called by each wrapper)"
+  ],
+  "library_boundary": "All Aeneas.Std dictionaries, iterators, vector/slice operations, scalar operations, and loop support used here are pinned library dependencies. Even where the saved Core/Iter.lean definitions (including Rev.next and Range.next_back) are executable, this emitted-root staging alone does not prove their correspondence to Rust library semantics or close the actual batch traversal.",
+  "direct_template_scan": {
+    "result": "The four copied blocks directly reference none of these six R292 opaque external-template names; this is only a direct textual scan of these four declarations, not a transitive closure result.",
+    "absent_names": [
+      "core.iter.traits.iterator.Iterator.any.default",
+      "core.iter.traits.iterator.Iterator.chain.default",
+      "core.iter.adapters.chain.Chain.Insts.CoreIterTraitsIteratorIterator.next",
+      "core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any",
+      "core.slice.Slice.last",
+      "core.iter.adapters.chain.Chain"
+    ]
+  },
+  "axioms": "Four #print axioms requests are present at the end of the staged file. They have not been run.",
+  "proof_boundary": "No Lean compile, source-to-model correspondence claim, reverse-loop invariant, batch traversal closure, or security claim is made."
+}
