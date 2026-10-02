@@ -1,0 +1,9 @@
+# R329: selected prefix initialization establishes loop conditions
+
+`AspisV8R19/R329PrefixInitializationExecution.lean` compiled successfully. The exact source fragment returns arrayOutOfBounds on an empty input (the enclosing full batch separately has its earlier Domain guard). For every nonempty valid Slice with canonical encoded source reads, it returns the first encoded word followed by the R321 exact sequential prefix products. Its actual initial zero read, Vec.with_capacity/push, range-from-one subslice, iterator initialization and loop are used; every required capacity bound is derived from the Slice bound, not supplied. No nonzero or success premise is needed. Canonicality and nonempty conditions remain explicit; the full batch guard, second vector and inverse are not proved, nor independent Rust-library/compiler correspondence.
+
+Compile revision `e7b379f519c8ca743ad866ebdfa3e26f3fed92d4`; exit 0; wall 0:01.62; child peak RSS 3721648 KiB; swaps 0. Both complete axiom reports use only propext, Classical.choice and Quot.sound; no sorryAx, native proof or new execution assumption. Pinned Lean 4.32, `-j1 -M4500`, 5/7 GiB zero-swap scope. Complete evidence is in [the manifest](evidence/r329-current-prefix-initialization-execution/manifest.json).
+
+First remaining proposition: Prove the complete source batch guard and both prefix initializations, derive every reverse-loop prefix read with R326, and connect total inverse/output initialization. Actual shared-oracle callback chronology, unresolved freeze fold/extend, privacy simulation/losses and soundness remain open.
+
+Full callback chronology, joint privacy and soundness remain open. Verifier source, security parameters and 999,790 / 999,532 CU results remain preserved. No benchmarks or unchanged regression suites reran.
