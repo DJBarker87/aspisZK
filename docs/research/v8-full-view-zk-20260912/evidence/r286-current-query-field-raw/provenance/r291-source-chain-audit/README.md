@@ -1,0 +1,13 @@
+# R281–R291 saved-artifact chain audit
+
+This read-only audit cross-checks the saved R281 LLBC, R284 ordering metadata, R289 Aeneas build, and R291 translation. The assertions in `audit_chain.py` passed; results are in `audit.json`. No build, translation, Lean compilation, or semantic/source-correspondence judgment was performed.
+
+R281 SHA-256 is `6ffca95bc433f10b0b01db769cdb76c9f99421c0d7c3cfb7b4644af2e33b3f01`, with `has_errors=false`. Fun 0 (`QM31::neg`) is a Structured body at frozen `field.rs:874`; Fun 1 (`QM31::mul_m31`) is Structured at `field.rs:927`. Both have `item_meta.is_local=false`, receiver `aspis_core::field::QM31`, and corresponding function rows in LLBC. Their body hashes are retained in the report.
+
+R284 SHA-256 is `37a693d55297515db02c3284f87226b8fc5f0df31cceeb3ec0d16460a69ddce5`. A decoded comparison confirms the only JSON change from R281 is `translated.ordered_decls`. The saved independent R284 audit agrees: non-order data identical, all 12 dependencies precede use, with no missing references or cycles.
+
+R289's patched `PrePasses.ml` contains exactly one occurrence of the new retention line and no old line. Replacing that line in memory reconstructs the parent file SHA `9271943fac2d2a75add181a268197a9e7eaaf2690a3b97507454d008f996d9e1`; patched SHA is `eb060cdec736ea1f5d222c42160d5f50ad20bd651c8f7c08baf56896c1835e68`. Saved tree metadata records only `PrePasses.ml` changed, no shared regular-file inodes, identical original-source/clone hashes before patch, and original source unchanged after build. Binary SHA is `3c741510837e33e0debca5798fb46ae81861ec06d5d561b7975b16f5705e42e9`. Build exited 0. `/usr/bin/time` observed 27,808 KiB maximum RSS for the outer Docker invocation; the aggregate `aspisr289.slice` peak was 564,322,304 bytes, with zero swap. Thus the lower DockerCLI-observed RSS is not substituted for aggregate cgroup usage. Limits were 5/7 GiB, no swap, 128 tasks.
+
+R291 used exact R284 LLBC and the verified R289 binary. Translation exited 0 under the recorded 5/7 GiB, zero-swap, 128-task systemd cap. Fun 0 QM31 neg and Fun 1 QM31 mul_m31 are emitted, each `is_opaque=false`. The full translation has 7 functions, 3 types, global `P`, no traits; exact IDs, source labels/spans, helper edges, and metrics appear in `audit.json` and R291 `inventory.json`. The accepted namespace spelling is `AspisAspisR291QueryFieldLeaves`; it is retained as this translation's provenance identity, with no rerun. Lean was not compiled.
+
+These checks establish artifact consistency and declaration presence only. They do not establish that the generated models correspond semantically to Rust or close any proof obligation.

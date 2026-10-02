@@ -1,0 +1,11 @@
+--- a/src/PrePasses.ml
++++ b/src/PrePasses.ml
+@@ -3408,7 +3408,7 @@
+   in
+   FunDeclId.Map.iter
+     (fun _ (f : fun_decl) ->
+-      if f.item_meta.is_local then visitor#visit_fun_decl_id () f.def_id;
++      if f.item_meta.is_local || (match f.body with StructuredBody _ -> true | _ -> false) then visitor#visit_fun_decl_id () f.def_id;
+       match f.body with
+       | StructuredBody body -> visitor#visit_block () body.body
+       | _ -> ())

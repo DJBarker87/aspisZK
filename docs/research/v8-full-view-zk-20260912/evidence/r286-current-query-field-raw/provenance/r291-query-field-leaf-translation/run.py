@@ -1,0 +1,25 @@
+import pathlib,subprocess,shlex,json,sys
+root=pathlib.Path(__file__).resolve().parent
+host='dombarker@100.108.41.90';opts=['-o','BatchMode=yes','-o','StrictHostKeyChecking=no','-o','UserKnownHostsFile=/dev/null']
+remote='/home/dombarker/project-offloads/aspis-r291-query-field-leaf-translation-20261002-a'
+script=r"""import pathlib,hashlib,subprocess,json
+root=pathlib.Path('/home/dombarker/project-offloads/aspis-r291-query-field-leaf-translation-20261002-a');assert not root.exists();root.mkdir()
+mem={k:v for k,v in (line.split(':',1) for line in pathlib.Path('/proc/meminfo').read_text().splitlines()) if k in ('MemTotal','MemAvailable','SwapTotal','SwapFree')}
+assert int(mem['MemAvailable'].split()[0])>=24*1024*1024,mem
+(root/'host-reservation-before.json').write_text(json.dumps({'meminfo':mem,'active_user_services':subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--no-legend'],text=True),'reserved_MemoryMax':'7G R291 plus 7G R292 concurrently; host OS/remote path reserved', 'campaign_revision':'380c7d46c9719dcfcab601fac2607861d47dee02', 'concurrent_R292_MemoryMax':'7G'},indent=2))
+source=pathlib.Path('/home/dombarker/project-offloads/aspis-r285-query-field-leaf-input-20261002-a/R284PrivateFieldLeavesOrdered.llbc')
+binary=pathlib.Path('/home/dombarker/project-offloads/aspis-r289-retention-candidate-20261002-a/aeneas-r289-retention-candidate')
+assert hashlib.sha256(source.read_bytes()).hexdigest()=='37a693d55297515db02c3284f87226b8fc5f0df31cceeb3ec0d16460a69ddce5'
+assert hashlib.sha256(binary.read_bytes()).hexdigest()=='3c741510837e33e0debca5798fb46ae81861ec06d5d561b7975b16f5705e42e9'
+cmd=[str(binary),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisAspisR291QueryFieldLeaves','-dest',str(root/'generated'),'-subdir','AspisAspisR291QueryFieldLeaves','-split-files','-emit-json',str(source)]
+(root/'translate-command.json').write_text(json.dumps({'command':cmd,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest()},indent=2))
+with (root/'translate.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=f,stderr=subprocess.STDOUT)
+print((root/'translate.log').read_text());print('TRANSLATE_EXIT',r.returncode)
+(root/'result.json').write_text(json.dumps({'exit_status':r.returncode,'generated':(root/'generated').exists()},indent=2));raise SystemExit(r.returncode)
+"""
+cmd=['systemd-run','--user','--wait','--collect','--pipe','--unit=aspis-r291-query-field-leaf-translation','--working-directory=/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a','-p','MemoryHigh=5G','-p','MemoryMax=7G','-p','MemorySwapMax=0','-p','TasksMax=128','python3','-c',script]
+(root/'launch.json').write_text(json.dumps({'command':cmd,'caps':{'MemoryHigh':'5G','MemoryMax':'7G','MemorySwapMax':0,'TasksMax':128}},indent=2))
+with (root/'launch.log').open('w') as f:r=subprocess.run(['ssh',*opts,host,shlex.join(cmd)],stdout=f,stderr=subprocess.STDOUT)
+print((root/'launch.log').read_text())
+subprocess.run(['scp','-r',*opts,host+':'+remote+'/.',str(root)],check=True)
+sys.exit(r.returncode)

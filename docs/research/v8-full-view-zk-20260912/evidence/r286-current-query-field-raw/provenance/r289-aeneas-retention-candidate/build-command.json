@@ -1,0 +1,41 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r289-retention-candidate-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr289.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r289-retention-candidate-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; AENEAS_VERSION=aspis-r289-retention-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r289-retention-candidate; chmod 755 /work/aeneas-r289-retention-candidate"
+  ],
+  "shell_build": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; AENEAS_VERSION=aspis-r289-retention-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r289-retention-candidate; chmod 755 /work/aeneas-r289-retention-candidate",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "profile": "dune build main.exe --profile release -j 1",
+  "static": "OCAMLPARAM=_,ccopt=-static",
+  "time_expectation": "cached incremental compilation of the modified OCaml module and native relink only; no proof generation",
+  "systemd_limits": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": "0",
+    "TasksMax": 128
+  },
+  "docker_limits": {
+    "memory_reservation": "5g",
+    "memory": "7g",
+    "memory_swap": "7g (equal to memory; no container swap)",
+    "pids_limit": 128,
+    "network": "none",
+    "cgroup_parent": "aspisr289.slice"
+  },
+  "source_campaign_revision_recorded": "380c7d46c9719dcfcab601fac2607861d47dee02"
+}
