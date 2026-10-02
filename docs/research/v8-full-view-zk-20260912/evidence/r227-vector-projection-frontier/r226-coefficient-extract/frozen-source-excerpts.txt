@@ -1,0 +1,62 @@
+//! Circle-only specialization of the retained six-coefficient norm.
+//! No prover-provided point can construct Selected; its fields are private.
+use super::*;
+use corelib::circle_fri::BaseCirclePoint;
+#[cfg(any(v8_joined_inverse,test))]
+#[path="joined_inverse.rs"] mod joined_inverse;
+fn times_r(z:CM31)->CM31{CM31::new(z.a.double().sub(z.b),z.a.add(z.b.double()))}
+fn norm(v:K)->CM31{v.c0.square().sub(times_r(v.c1.square()))}
+fn polar(v:K,w:K)->CM31{v.c0.mul(w.c0).sub(times_r(v.c1.mul(w.c1))).double()}
+struct Coeff([CM31;5]);
+impl Coeff{
+    fn new([a,b,c]:[K;3])->Self{
+        let nc=norm(c);
+        Self([norm(a).add(nc),norm(b).sub(nc),polar(a,b),polar(a,c),polar(b,c)])
+    }
+    #[inline]
+    fn four(&self,x:M31,y:M31)->[CM31;4]{
+        let c=&self.0;
+        let even=c[0].add(c[1].mul_m31(x.mul(x)));
+        let odd_x=c[2].mul_m31(x);let odd_y=c[3].mul_m31(y);let cross=c[4].mul_m31(x.mul(y));
+        let positive=even.add(odd_x);let negative=even.sub(odd_x);
+        let plus=odd_y.add(cross);let minus=odd_y.sub(cross);
+        [positive.add(plus),positive.sub(plus),negative.sub(minus),negative.add(minus)]
+    }
+}
+//! Borrow the SAME line-coordinate vector built by the callback's point loop.
+//! No public hint: a mismatched line vector is not covered by the source contract.
+use super::*;
+struct LineCoeff([CM31;5]);
+impl LineCoeff{
+    fn new(abc:[K;3])->Self{
+        let c=Coeff::new(abc).0;let half=c[1].half();
+        Self([c[0].add(half),half,c[2],c[3],c[4]])
+    }
+    #[inline]
+    fn four(&self,x:M31,y:M31,t:M31)->[CM31;4]{
+        let c=&self.0;let even=c[0].add(c[1].mul_m31(t));
+        let odd_x=c[2].mul_m31(x);let odd_y=c[3].mul_m31(y);let cross=c[4].mul_m31(x.mul(y));
+        let positive=even.add(odd_x);let negative=even.sub(odd_x);
+        let plus=odd_y.add(cross);let minus=odd_y.sub(cross);
+        [positive.add(plus),positive.sub(plus),negative.sub(minus),negative.add(minus)]
+    }
+}
+#[path="r99_fold_inverse.rs"] mod folded;
+pub(super) fn inverse_folded(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31],alpha:K)->Result<Vec<K>,Error>{
+    folded::inverse(selected,values,abc,base,lines,alpha)
+}
+fn r110_retained_norm(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<CM31>,Vec<M31>),Error>{
+    let points=selected.points();
+//! Same prefix/backward kernel, one base inverse across both denominator lists.
+//! Child module of circle_norm: uses the very same coefficient/point invariant.
+use super::*;
+#[cfg(any(v8_line_norm,test))]
+#[path="line_norm.rs"] mod line_norm;
+#[cfg(any(v8_line_norm,test))]
+pub(super) fn inverse_lines(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{
+    line_norm::inverse(selected,values,abc,base,lines)
+}
+pub(super) fn inverse_folded(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31],alpha:K)->Result<Vec<K>,Error>{
+    line_norm::inverse_folded(selected,values,abc,base,lines,alpha)
+}
+fn batch_two(xs:&[M31],ys:&[M31])->Result<(Vec<M31>,Vec<M31>),Error>{

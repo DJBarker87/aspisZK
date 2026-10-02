@@ -1,0 +1,51 @@
+   225	  let update_mut_regions mut_regions mut_region =
+   226	    match mut_region with
+   227	    | RStatic | RVar (Bound _) ->
+   228	        mut_regions (* We can have bound vars because of arrows *)
+   229	    | RErased -> [%internal_error_opt_span] span
+   230	    | RVar (Free rid) -> update_mut_regions_with_rid mut_regions rid
+   231	    | RBody _ -> [%craise_opt_span] span "unsupported: Body region"
+   270	    (* Add the region *)
+   271	    let updated_mut_regions =
+   272	      match mut_region with
+   273	      | None -> ty_info.mut_regions
+   274	      | Some mut_region -> update_mut_regions ty_info.mut_regions mut_region
+   275	    in
+   338	        let ty_b_info =
+   339	          {
+   340	            contains_static;
+   341	            contains_borrow;
+   342	            contains_mut_borrow;
+   343	            contains_nested_borrows;
+   344	            contains_borrow_under_mut;
+   345	            contains_nested_mut;
+   346	          }
+   347	        in
+   348	        let ty_info = update_ty_info ty_info region ty_b_info in
+   349	        (* Update the exploration info *)
+   350	        let expl_info =
+   351	          {
+   352	            under_borrow = true;
+   518	    let type_decl_info = type_decl_info_to_partial_type_info type_decl_info in
+   519	    (* TODO: substitute the types *)
+   520	    let type_decl_info =
+   521	      List.fold_left
+   522	        (fun type_decl_info ty ->
+   523	          analyze_full_ty (Some def.item_meta.span) updated infos type_decl_info
+   524	            ty)
+   525	        type_decl_info fields_tys
+   526	    in
+   527	    let type_decl_info = partial_type_info_to_type_decl_info type_decl_info in
+   528	    (* Update the information for the type definition we explored *)
+   529	    let infos = TypeDeclId.Map.add def.def_id type_decl_info infos in
+   560	  (* Analyze the types - this function simply computes a fixed-point *)
+   561	  let updated : bool ref = ref false in
+   562	  let rec analyze (infos : type_infos) : type_infos =
+   563	    let infos =
+   564	      List.fold_left
+   565	        (fun infos def -> analyze_type_decl updated infos def)
+   566	        infos decl_defs
+   567	    in
+   568	    if !updated then (
+   569	      updated := false;
+   570	      analyze infos)

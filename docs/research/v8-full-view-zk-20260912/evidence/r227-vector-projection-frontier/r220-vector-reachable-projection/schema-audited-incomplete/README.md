@@ -1,0 +1,7 @@
+# R220 schema-audited incomplete candidate
+
+This is a diagnostic repair candidate for the earlier R220 projection, which remains preserved unchanged under `../rejected-incomplete/`. The candidate adds the pinned Charon 0.1.223 reference forms omitted from the first walker: LLBC `Global` kind payloads, `TraitImpl.consts` and `TraitImpl.vtable` as `GlobalDeclRef`, and `TraitImpl.methods[*].skip_binder` as `FunDeclRef`. Source excerpts, hashes, and schema provenance are in `../schema-source/`.
+
+The candidate is still incomplete because the input declaration inventory has no `GlobalDecl` rows 24, 28, or 51. The raw references are present at `TraitImpl[26].vtable.id`, `TraitImpl[27].vtable.id`, and `TraitImpl[64].vtable.id`; corresponding slots are null in both R210 and its R207 input. The script records those exact missing-reference edges and does not fabricate declarations. Therefore `all_schema_references_resolve` is false and this output is not suitable for translation.
+
+The candidate adds the available Global rows and the function declarations identified through method binders. Every retained decoded row matches its original source row, original declaration indices and hash-cons values are preserved, and `CopyNonOverlapping` remains in the retained body. This remains a diagnostic projection only: no compiler or translator was run, and no opaque operation is accepted as a proof premise.

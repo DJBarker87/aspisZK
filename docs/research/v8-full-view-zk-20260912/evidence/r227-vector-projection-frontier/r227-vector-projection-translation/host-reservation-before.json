@@ -1,0 +1,29 @@
+{
+  "captured_utc": "2026-10-02T02:28:13.643245+00:00",
+  "MemTotal": "65135416 kB",
+  "MemAvailable": "53818860 kB",
+  "SwapTotal": "8388604 kB",
+  "SwapFree": "8388604 kB",
+  "project_offloads_disk": {
+    "total": 1965172678656,
+    "used": 1595795226624,
+    "free": 288382619648
+  },
+  "top_rss_processes_pid_kb_comm": [
+    "    PID   RSS COMMAND",
+    "   1848 4167724 qemu-system-x86",
+    "   4533 1618696 qemu-system-x86",
+    " 674287 1561756 bun",
+    "   3694 508596 immich",
+    "   4502 329180 immich-api",
+    "   3622 252068 uvicorn",
+    "   3956 247216 python",
+    " 674365 223268 postgres",
+    "   1458 179820 dockerd",
+    " 589171 153292 bun",
+    " 589164 147432 bun"
+  ],
+  "prior_R226_unit": "MemoryCurrent=[not set]\nMemoryPeak=[not set]\nMemoryHigh=infinity\nMemoryMax=infinity\nActiveState=inactive\n",
+  "prior_R226_show_returncode": 0,
+  "active_heavy_tool_processes": "676981 bash -c python3 - <<PY import json,pathlib,subprocess,datetime,shutil mem={} for line in pathlib.Path(\"/proc/meminfo\").read_text().splitlines():  k,v=line.split(\":\",1); mem[k]=v.strip() ps=subprocess.check_output([\"ps\",\"-eo\",\"pid,rss,comm\",\"--sort=-rss\"],text=True).splitlines()[:12] unit=subprocess.run([\"systemctl\",\"--user\",\"show\",\"aspis-r226-coefficient-extract.service\",\"-p\",\"ActiveState\",\"-p\",\"MemoryHigh\",\"-p\",\"MemoryMax\",\"-p\",\"MemoryCurrent\",\"-p\",\"MemoryPeak\"],text=True,capture_output=True) obj={\"captured_utc\":datetime.datetime.now(datetime.timezone.utc).isoformat(),\"MemTotal\":mem.get(\"MemTotal\"),\"MemAvailable\":mem.get(\"MemAvailable\"),\"SwapTotal\":mem.get(\"SwapTotal\"),\"SwapFree\":mem.get(\"SwapFree\"),\"project_offloads_disk\":shutil.disk_usage(\"/home/dombarker/project-offloads\")._asdict(),\"top_rss_processes_pid_kb_comm\":ps,\"prior_R226_unit\":unit.stdout,\"prior_R226_show_returncode\":unit.returncode,\"active_heavy_tool_processes\":subprocess.run([\"bash\",\"-lc\",\"pgrep -af \\\"aeneas|charon|lean|lake env lean\\\" || true\"],text=True,capture_output=True).stdout} print(json.dumps(obj,indent=2)) PY\n676985 bash -lc pgrep -af \"aeneas|charon|lean|lake env lean\" || true\n"
+}

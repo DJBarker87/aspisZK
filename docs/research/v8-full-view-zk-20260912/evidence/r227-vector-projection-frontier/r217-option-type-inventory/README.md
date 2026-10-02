@@ -1,0 +1,11 @@
+# R217 Option type-analysis inventory
+
+This is a read-only inventory for the R215 translation failure. The retained R210 projection has 83 type declarations and 162 non-null function declarations. It preserves the same 83 types as R207 and keeps all function signatures; the five bodies retained by R210 are IDs 9, 49, 50, 91, and 92.
+
+The error span `core/src/option.rs:597:0-597:18` maps to `Option<T>`. R210 type declaration 53 is the concrete `Option` instantiation whose type argument decodes to `Ref(Erased, Adt 48, Mut)`, where type declaration 48 is `AspisV8PerformanceHost::aspis_core::field::M31`. Its Option declaration has no remaining region/type/const generic parameters or trait clauses. The serialized `Some` payload refers to this same type argument.
+
+The direct signature reference to type 53 is function declaration 78, `core::slice::iter::IterMut::next`, whose body is `Opaque` and is not among the five retained executable bodies. It implements default `Iterator::next` (`Iterator` trait 10 / impl 40). Its input is a free-lifetime mutable reference to instantiated `IterMut<M31>` (type 52); its output is type 53. Function 78 has one region parameter, no type/const parameters or trait clauses. The associated output argument contains an erased mutable-reference region. Type 53 and function 78's decoded signature are unchanged from R207 to R210; this declaration was already present in the full R207 extraction and survives because R210 retained the declaration/signature inventory while replacing other bodies with opaque markers.
+
+The saved Aeneas excerpt identifies the failure path: `update_mut_regions` rejects `RErased` at `TypesAnalysis.ml:229`; `update_ty_info` invokes it at line 274; `analyze_full_ty` reaches that helper at line 348; the option field type is processed by `analyze_type_decl` at lines 521–525, during the declaration fixed-point at lines 564–566. The source excerpts and complete-file SHA256 values are recorded in `source-provenance.json`; raw and decoded LLBC declaration data is in `option-type-inventory.json`.
+
+This report records declaration IDs, signatures, generic metadata, and source locations only. It does not choose a preprocessing change, assign type semantics, or establish any source-to-model correspondence.

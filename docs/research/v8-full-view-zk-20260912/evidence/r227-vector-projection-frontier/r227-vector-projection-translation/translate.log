@@ -1,0 +1,211 @@
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a/R220ReachableProjection.llbc
+Uncaught exception:
+  
+  (Invalid_argument
+    "Can't get the list of fields of this adt:\
+   \n{ Generated_Types.def_id = 63;\
+   \n  item_meta =\
+   \n  { Generated_Types.name =\
+   \n    [(Generated_Types.PeIdent (\"core\", 0));\
+   \n      (Generated_Types.PeIdent (\"mem\", 0));\
+   \n      (Generated_Types.PeIdent (\"maybe_dangling\", 0));\
+   \n      (Generated_Types.PeIdent (\"MaybeDangling\", 0));\
+   \n      (Generated_Types.PeInstantiated\
+   \n         { Generated_Types.binder_params =\
+   \n           { Generated_Types.regions = []; types = []; const_generics = [];\
+   \n             trait_clauses = []; regions_outlive = []; types_outlive = [];\
+   \n             trait_type_constraints = [] };\
+   \n           binder_value =\
+   \n           { Generated_Types.regions = [];\
+   \n             types =\
+   \n             [(Generated_Types.TAdt\
+   \n                 { Generated_Types.id = (Generated_Types.TAdtId 14);\
+   \n                   generics =\
+   \n                   { Generated_Types.regions = []; types = [];\
+   \n                     const_generics = []; trait_refs = [] }\
+   \n                   })\
+   \n               ];\
+   \n             const_generics = []; trait_refs = [] }\
+   \n           })\
+   \n      ];\
+   \n    span =\
+   \n    { Generated_Meta.data =\
+   \n      { Generated_Meta.file =\
+   \n        { Generated_Meta.name =\
+   \n          (Generated_Meta.Local\
+   \n             \"/rustc/library/core/src/mem/maybe_dangling.rs\");\
+   \n          crate_name = \"core\"; contents = None };\
+   \n        beg_loc = { Generated_Meta.line = 74; col = 0 };\
+   \n        end_loc = { Generated_Meta.line = 74; col = 35 } };\
+   \n      generated_from_span = None };\
+   \n    source_text = None;\
+   \n    attr_info =\
+   \n    { Generated_Meta.attributes =\
+   \n      [(Generated_Meta.AttrDocComment\
+   \n          \" Allows wrapped [references] and [boxes] to dangle.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" That is, if a reference (or a `Box`) is wrapped in `MaybeDangling` (including when in a\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" (nested) field of a compound type wrapped in `MaybeDangling`), it does not have to follow\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" pointer aliasing rules or be dereferenceable.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" This can be useful when the value can become dangling while the function holding it is still\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" executing (particularly in concurrent code). As a somewhat absurd example, consider this code:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" ```rust,no_run\");\
+   \n        (Generated_Meta.AttrDocComment \" #![feature(box_as_ptr)]\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" # use std::alloc::{dealloc, Layout};\");\
+   \n        (Generated_Meta.AttrDocComment \" # use std::mem;\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" let mut boxed = Box::new(0_u32);\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" let ptr = Box::as_mut_ptr(&mut boxed);\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" // Safety: the pointer comes from a box and thus was allocated before; `box` is not used afterwards\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" unsafe { dealloc(ptr.cast(), Layout::new::<u32>()) };\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" mem::forget(boxed); // <-- this is UB!\");\
+   \n        (Generated_Meta.AttrDocComment \" ```\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Even though the `Box`'s destructor is not run (and thus we don't have a double free bug), this\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" code is still UB. This is because when moving `boxed` into `forget`, its validity invariants\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" are asserted, causing UB since the `Box` is dangling. The safety comment is as such wrong, as\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" moving the `boxed` variable as part of the `forget` call *is* a use.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" To fix this we could use `MaybeDangling`:\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" ```rust,no_run\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" #![feature(maybe_dangling, box_as_ptr)]\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" # use std::alloc::{dealloc, Layout};\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" # use std::mem::{self, MaybeDangling};\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" let mut boxed = MaybeDangling::new(Box::new(0_u32));\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" let ptr = Box::as_mut_ptr(boxed.as_mut());\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" // Safety: the pointer comes from a box and thus was allocated before; `box` is not used afterwards\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" unsafe { dealloc(ptr.cast(), Layout::new::<u32>()) };\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" mem::forget(boxed); // <-- this is OK!\");\
+   \n        (Generated_Meta.AttrDocComment \" ```\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Note that the bit pattern must still be valid for the wrapped type. That is, [references]\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" (and [boxes]) still must be aligned and non-null.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Additionally note that safe code can still assume that the inner value in a `MaybeDangling` is\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" **not** dangling -- functions like [`as_ref`] and [`into_inner`] are safe. It is not sound to\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" return a dangling reference in a `MaybeDangling` to safe code. However, it *is* sound\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" to hold such values internally inside your code -- and there's no way to do that without\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" this type. Note that other types can use this type and thus get the same effect; in particular,\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [`ManuallyDrop`] will use `MaybeDangling`.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" Note that `MaybeDangling` doesn't prevent drops from being run, which can lead to UB if the\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" drop observes a dangling value. If you need to prevent drops from being run use [`ManuallyDrop`]\");\
+   \n        (Generated_Meta.AttrDocComment \" instead.\");\
+   \n        (Generated_Meta.AttrDocComment \"\");\
+   \n        (Generated_Meta.AttrDocComment \" [references]: prim@reference\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [boxes]: ../../std/boxed/struct.Box.html\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [`into_inner`]: MaybeDangling::into_inner\");\
+   \n        (Generated_Meta.AttrDocComment \" [`as_ref`]: MaybeDangling::as_ref\");\
+   \n        (Generated_Meta.AttrDocComment\
+   \n           \" [`ManuallyDrop`]: crate::mem::ManuallyDrop\")\
+   \n        ];\
+   \n      inline = None; rename = None; public = true };\
+   \n    is_local = false; opacity = Generated_Types.Foreign;\
+   \n    lang_item = (Some \"maybe_dangling\") };\
+   \n  generics =\
+   \n  { Generated_Types.regions = []; types = []; const_generics = [];\
+   \n    trait_clauses = []; regions_outlive = []; types_outlive = [];\
+   \n    trait_type_constraints = [] };\
+   \n  src = Generated_Types.TopLevelItem; kind = Generated_Types.Opaque;\
+   \n  layout =\
+   \n  [(\"x86_64-unknown-linux-gnu\",\
+   \n    { Generated_Types.size = (Some 24); align = (Some 8);\
+   \n      discriminator = (Some (Generated_Types.Known 0)); uninhabited = false;\
+   \n      variant_layouts =\
+   \n      [(Some { Generated_Types.field_offsets = [0]; uninhabited = false;\
+   \n               tagger = [] })\
+   \n        ];\
+   \n      repr =\
+   \n      { Generated_Types.repr_algo = Generated_Types.Rust; align_modif = None;\
+   \n        transparent = true; explicit_discr_type = false }\
+   \n      })\
+   \n    ];\
+   \n  ptr_metadata = Generated_Types.NoMetadata }")
+
+Raised at Charon__TypesUtils.type_decl_get_fields in file "charon-ml/src/TypesUtils.ml", lines 66-68, characters 6-80
+Called from Charon__Substitute.type_decl_get_instantiated_field_types in file "charon-ml/src/Substitute.ml", line 392, characters 15-54
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_types in file "llbc/Contexts.ml" (inlined), line 635, characters 2-79
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_etypes in file "llbc/Contexts.ml" (inlined), lines 643-644, characters 4-14
+Called from Aeneas__InterpExpressions.eval_rvalue_aggregate in file "interp/InterpExpressions.ml", lines 1330-1331, characters 14-39
+Called from Aeneas__InterpExpressions.eval_rvalue_not_global in file "interp/InterpExpressions.ml", line 1502, characters 21-79
+Called from Aeneas__InterpStatements.eval_statement_raw.(fun) in file "interp/InterpStatements.ml", line 922, characters 27-75
+Called from Aeneas__InterpStatements.eval_statement.(fun) in file "interp/InterpStatements.ml", line 866, characters 10-44
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", line 875, characters 29-57
+Called from Aeneas__InterpStatements.eval_function_body.(fun) in file "interp/InterpStatements.ml", line 1842, characters 26-52
+Called from Aeneas__Interp.evaluate_function_symbolic in file "interp/Interp.ml", line 605, characters 25-64
+Called from Aeneas__Translate.translate_function_to_symbolics in file "Translate.ml", line 35, characters 8-71
+Called from Aeneas__Translate.translate_function_to_pure_aux in file "Translate.ml", line 132, characters 4-61
+Called from Aeneas__Translate.translate_function_to_pure in file "Translate.ml", lines 288-289, characters 6-41
+Called from Aeneas__Translate.translate_crate_to_pure.process.(fun) in file "Translate.ml", lines 501-502, characters 16-45
+Called from Stdlib__List.filter_map in file "list.ml", line 280, characters 12-15
+Called from Aeneas__Parallel.catch_reraise in file "Parallel.ml", line 17, characters 6-9
+Called from Aeneas__Translate.translate_crate_to_pure in file "Translate.ml", line 519, characters 22-62
+Called from Aeneas__Translate.translate_crate in file "Translate.ml", line 2199, characters 31-71
+Called from Dune__exe__Main in file "Main.ml", lines 743-744, characters 8-37
+Command exited with non-zero status 2
+	Command being timed: "/home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a/aeneas-copy-operands -sequential -no-progress-bar -abort-on-error -backend lean -namespace AspisR220VectorProjection -dest /home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a/generated -subdir AspisR220VectorProjection -split-files -emit-json /home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a/R220ReachableProjection.llbc"
+	User time (seconds): 0.16
+	System time (seconds): 0.01
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.17
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 54912
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 8082
+	Voluntary context switches: 1
+	Involuntary context switches: 1
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 24
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 2

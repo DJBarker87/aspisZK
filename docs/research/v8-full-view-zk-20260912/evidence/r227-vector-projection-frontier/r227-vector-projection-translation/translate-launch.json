@@ -1,0 +1,43 @@
+{
+  "systemd_argv": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r227-vector-projection-translate",
+    "--working-directory=/home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "python3",
+    "-c",
+    "import datetime,hashlib,json,pathlib,subprocess,sys\nroot=pathlib.Path(\"/home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a\")\nsrc=root/\"R220ReachableProjection.llbc\"\nbinpath=root/\"aeneas-copy-operands\"\nexpected_src=\"5bff089f4502d4a3a6bf90cb679807e25265d309ca9c509976996a62be26551b\"\nexpected_bin=\"7e3be7b0c24975c248ad769c80bac2cc896a5f1b89c2858b8f01a6024cf80ae3\"\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\nassert src.is_file() and sha(src)==expected_src,sha(src) if src.exists() else \"missing input\"\nassert binpath.is_file() and sha(binpath)==expected_bin,sha(binpath) if binpath.exists() else \"missing binary\"\ncmd=[str(binpath),\"-sequential\",\"-no-progress-bar\",\"-abort-on-error\",\"-backend\",\"lean\",\"-namespace\",\"AspisR220VectorProjection\",\"-dest\",str(root/\"generated\"),\"-subdir\",\"AspisR220VectorProjection\",\"-split-files\",\"-emit-json\",str(src)]\n(root/\"translate-command.json\").write_text(json.dumps({\"command\":cmd,\"input_sha256\":sha(src),\"binary_sha256\":sha(binpath),\"input_bytes\":src.stat().st_size,\"binary_bytes\":binpath.stat().st_size,\"source_revision\":\"ab9260ef1\",\"source_revision_basis\":\"lead-specified repository source revision; translator binary copied unchanged from audited R215 build\"},indent=2)+\"\\n\")\nmem={}\nfor line in pathlib.Path(\"/proc/meminfo\").read_text().splitlines():\n k,v=line.split(\":\",1);mem[k]=v.strip()\n(root/\"host-reservation-at-start.json\").write_text(json.dumps({\"captured_utc\":datetime.datetime.now(datetime.timezone.utc).isoformat(),\"MemTotal\":mem.get(\"MemTotal\"),\"MemAvailable\":mem.get(\"MemAvailable\"),\"SwapTotal\":mem.get(\"SwapTotal\"),\"SwapFree\":mem.get(\"SwapFree\")},indent=2)+\"\\n\")\nwith (root/\"translate.log\").open(\"w\") as f:r=subprocess.run([\"/usr/bin/time\",\"-v\",*cmd],stdout=f,stderr=subprocess.STDOUT)\nunit=subprocess.run([\"systemctl\",\"--user\",\"show\",\"aspis-r227-vector-projection-translate.service\",\"-p\",\"ActiveState\",\"-p\",\"MemoryHigh\",\"-p\",\"MemoryMax\",\"-p\",\"MemorySwapMax\",\"-p\",\"TasksMax\",\"-p\",\"MemoryCurrent\",\"-p\",\"MemoryPeak\",\"-p\",\"MemorySwapCurrent\",\"-p\",\"MemorySwapPeak\"],text=True,capture_output=True)\nmem2={}\nfor line in pathlib.Path(\"/proc/meminfo\").read_text().splitlines():\n k,v=line.split(\":\",1);mem2[k]=v.strip()\n(root/\"host-reservation-at-end.json\").write_text(json.dumps({\"captured_utc\":datetime.datetime.now(datetime.timezone.utc).isoformat(),\"MemTotal\":mem2.get(\"MemTotal\"),\"MemAvailable\":mem2.get(\"MemAvailable\"),\"SwapTotal\":mem2.get(\"SwapTotal\"),\"SwapFree\":mem2.get(\"SwapFree\"),\"systemd_unit_properties\":unit.stdout,\"systemd_show_returncode\":unit.returncode},indent=2)+\"\\n\")\n(root/\"translate-result.json\").write_text(json.dumps({\"child_exit_status\":r.returncode,\"input_sha256\":sha(src),\"binary_sha256\":sha(binpath),\"generated_dir_exists\":(root/\"generated\").exists(),\"source_revision\":\"ab9260ef1\",\"raw_log\":\"translate.log\"},indent=2)+\"\\n\")\nprint(\"R227_TRANSLATE_CHILD_EXIT\",r.returncode)\nprint((root/\"translate.log\").read_text()[-6500:])\nsys.exit(r.returncode)\n"
+  ],
+  "ssh_argv": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "StrictHostKeyChecking=no",
+    "-o",
+    "UserKnownHostsFile=/dev/null",
+    "dombarker@100.108.41.90",
+    "systemd-run --user --wait --collect --pipe --unit=aspis-r227-vector-projection-translate --working-directory=/home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p TasksMax=128 python3 -c 'import datetime,hashlib,json,pathlib,subprocess,sys\nroot=pathlib.Path(\"/home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a\")\nsrc=root/\"R220ReachableProjection.llbc\"\nbinpath=root/\"aeneas-copy-operands\"\nexpected_src=\"5bff089f4502d4a3a6bf90cb679807e25265d309ca9c509976996a62be26551b\"\nexpected_bin=\"7e3be7b0c24975c248ad769c80bac2cc896a5f1b89c2858b8f01a6024cf80ae3\"\nsha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()\nassert src.is_file() and sha(src)==expected_src,sha(src) if src.exists() else \"missing input\"\nassert binpath.is_file() and sha(binpath)==expected_bin,sha(binpath) if binpath.exists() else \"missing binary\"\ncmd=[str(binpath),\"-sequential\",\"-no-progress-bar\",\"-abort-on-error\",\"-backend\",\"lean\",\"-namespace\",\"AspisR220VectorProjection\",\"-dest\",str(root/\"generated\"),\"-subdir\",\"AspisR220VectorProjection\",\"-split-files\",\"-emit-json\",str(src)]\n(root/\"translate-command.json\").write_text(json.dumps({\"command\":cmd,\"input_sha256\":sha(src),\"binary_sha256\":sha(binpath),\"input_bytes\":src.stat().st_size,\"binary_bytes\":binpath.stat().st_size,\"source_revision\":\"ab9260ef1\",\"source_revision_basis\":\"lead-specified repository source revision; translator binary copied unchanged from audited R215 build\"},indent=2)+\"\\n\")\nmem={}\nfor line in pathlib.Path(\"/proc/meminfo\").read_text().splitlines():\n k,v=line.split(\":\",1);mem[k]=v.strip()\n(root/\"host-reservation-at-start.json\").write_text(json.dumps({\"captured_utc\":datetime.datetime.now(datetime.timezone.utc).isoformat(),\"MemTotal\":mem.get(\"MemTotal\"),\"MemAvailable\":mem.get(\"MemAvailable\"),\"SwapTotal\":mem.get(\"SwapTotal\"),\"SwapFree\":mem.get(\"SwapFree\")},indent=2)+\"\\n\")\nwith (root/\"translate.log\").open(\"w\") as f:r=subprocess.run([\"/usr/bin/time\",\"-v\",*cmd],stdout=f,stderr=subprocess.STDOUT)\nunit=subprocess.run([\"systemctl\",\"--user\",\"show\",\"aspis-r227-vector-projection-translate.service\",\"-p\",\"ActiveState\",\"-p\",\"MemoryHigh\",\"-p\",\"MemoryMax\",\"-p\",\"MemorySwapMax\",\"-p\",\"TasksMax\",\"-p\",\"MemoryCurrent\",\"-p\",\"MemoryPeak\",\"-p\",\"MemorySwapCurrent\",\"-p\",\"MemorySwapPeak\"],text=True,capture_output=True)\nmem2={}\nfor line in pathlib.Path(\"/proc/meminfo\").read_text().splitlines():\n k,v=line.split(\":\",1);mem2[k]=v.strip()\n(root/\"host-reservation-at-end.json\").write_text(json.dumps({\"captured_utc\":datetime.datetime.now(datetime.timezone.utc).isoformat(),\"MemTotal\":mem2.get(\"MemTotal\"),\"MemAvailable\":mem2.get(\"MemAvailable\"),\"SwapTotal\":mem2.get(\"SwapTotal\"),\"SwapFree\":mem2.get(\"SwapFree\"),\"systemd_unit_properties\":unit.stdout,\"systemd_show_returncode\":unit.returncode},indent=2)+\"\\n\")\n(root/\"translate-result.json\").write_text(json.dumps({\"child_exit_status\":r.returncode,\"input_sha256\":sha(src),\"binary_sha256\":sha(binpath),\"generated_dir_exists\":(root/\"generated\").exists(),\"source_revision\":\"ab9260ef1\",\"raw_log\":\"translate.log\"},indent=2)+\"\\n\")\nprint(\"R227_TRANSLATE_CHILD_EXIT\",r.returncode)\nprint((root/\"translate.log\").read_text()[-6500:])\nsys.exit(r.returncode)\n'"
+  ],
+  "caps": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": "0",
+    "TasksMax": 128
+  },
+  "fresh_remote_root": "/home/dombarker/project-offloads/aspis-r227-vector-projection-translation-20261002-a",
+  "input_sha256": "5bff089f4502d4a3a6bf90cb679807e25265d309ca9c509976996a62be26551b",
+  "binary_sha256": "7e3be7b0c24975c248ad769c80bac2cc896a5f1b89c2858b8f01a6024cf80ae3",
+  "source_revision": "ab9260ef1"
+}

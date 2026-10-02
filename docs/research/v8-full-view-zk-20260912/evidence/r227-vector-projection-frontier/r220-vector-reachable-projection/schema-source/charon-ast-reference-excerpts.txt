@@ -1,0 +1,53 @@
+Charon AST schema source excerpts (pinned source snapshot)
+
+   238	    PartialOrd,
+   239	    Ord,
+   240	    Hash,
+   241	    SerializeState,
+   242	    DeserializeState,
+   243	    Drive,
+   244	    DriveMut,
+   245	)]
+   246	pub struct FunDeclRef {
+   247	    pub id: FunDeclId,
+   248	    /// Generic arguments passed to the function.
+   249	    pub generics: BoxedArgs,
+   250	}
+   295	    SerializeState,
+   296	    DeserializeState,
+   297	    Drive,
+   298	    DriveMut,
+   299	)]
+   300	pub struct GlobalDeclRef {
+   301	    pub id: GlobalDeclId,
+   302	    pub generics: BoxedArgs,
+   303	}
+   443	pub struct TraitImpl {
+   444	    pub def_id: TraitImplId,
+   445	    pub item_meta: ItemMeta,
+   446	    /// The information about the implemented trait.
+   447	    /// Note that this contains the instantiation of the "parent"
+   448	    /// clauses.
+   449	    pub impl_trait: TraitDeclRef,
+   450	    pub generics: GenericParams,
+   451	    /// The trait references for the parent clauses (see [TraitDecl]).
+   452	    pub implied_trait_refs: IndexVec<TraitClauseId, TraitRef>,
+   453	    /// The implemented associated constants.
+   454	    pub consts: IndexMap<AssocConstId, GlobalDeclRef>,
+   455	    /// The implemented associated types.
+   456	    pub types: IndexMap<AssocTypeId, Binder<TraitAssocTyImpl>>,
+   457	    /// The implemented methods
+   458	    pub methods: IndexMap<TraitMethodId, Binder<FunDeclRef>>,
+   459	    /// The virtual table instance for this trait implementation. This is `Some` iff the trait is
+   460	    /// dyn-compatible.
+   461	    pub vtable: Option<GlobalDeclRef>,
+   462	}
+   367	pub struct RegionBinder<T> {
+   368	    #[cfg_attr(feature = "charon_on_charon", charon::rename("binder_regions"))]
+   369	    #[serde_state(stateless)]
+   370	    pub regions: IndexVec<RegionId, RegionParam>,
+   371	    /// Named this way to highlight accesses to the inner value that might be handling parameters
+   372	    /// incorrectly. Prefer using helper methods.
+   373	    #[cfg_attr(feature = "charon_on_charon", charon::rename("binder_value"))]
+   374	    pub skip_binder: T,
+   375	}
