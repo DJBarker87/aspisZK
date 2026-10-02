@@ -1,0 +1,382 @@
+{
+  "classification": "Read-only API and decoded-reference inventory; no build, transform, or semantic decision.",
+  "input": {
+    "path": "docs/research/v8-full-view-zk-20260912/evidence/r405-generic-batch-translation-frontier/provenance/r396-private-batch-unmonomorphized-plan/R396PrivateBatchUnmonomorphized.llbc",
+    "sha256": "399020435e94aaa7135c06d68445e9b936bd22fe6d1e1d197ee708d448d584ae",
+    "has_errors": false,
+    "hashcons_entries": 430
+  },
+  "lead_contract": {
+    "path": ".r21-scratch/r419-try-fold-equality-elimination/LEAD_CONTRACT.md",
+    "sha256": "375e209b643ba575b3b399091a598db14272ea5b5d670c9c7767d8104d045633",
+    "status": "lead-authored unverified contract; consulted as scope, not validated here"
+  },
+  "pinned_tools": {
+    "charon_commit": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "charon_binary_sha256": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+    "aeneas_binary_sha256": "f12977c5acd368d268d3af9562110ab29be60d7b4055dde937d0049f85409db5"
+  },
+  "charon_api": [
+    {
+      "symbol": "charon/src/ast/types_utils.rs::SubstVisitor",
+      "sha256": "0ee47a02016be0190b911da858e7764765b345333a9d6142907d2ba744c08d03",
+      "lines": [
+        1064,
+        1161
+      ],
+      "observed": "Substitutes bound/free generic variables while tracking nested binder depth and lifting variables that escape the binder."
+    },
+    {
+      "symbol": "charon/src/ast/types_utils.rs::TyVisitable::{substitute,substitute_inner_binder,try_substitute,...}",
+      "sha256": "0ee47a02016be0190b911da858e7764765b345333a9d6142907d2ba744c08d03",
+      "lines": [
+        1233,
+        1277
+      ],
+      "observed": "Visitor-backed substitution entry points; no generic binder-slot deletion/reindex helper in this API block."
+    },
+    {
+      "symbol": "charon/src/ast/gast_utils.rs::FunDecl::substitute_params",
+      "sha256": "a8385db197c0ab0ee806da8d9e66142c26b8790cf39473775c87904b694a0158",
+      "lines": [
+        100,
+        126
+      ],
+      "observed": "Replaces a declaration generic binder from a Binder<GenericArgs> and substitutes signature, source, and body. Does not itself rewrite other references or eliminate one slot."
+    },
+    {
+      "symbol": "charon/src/ast/gast.rs::{FunDecl,FunDeclRef,TraitMethod,TraitImpl}",
+      "sha256": "020cbf3cc93cd051030f786f5d5e0fa9283d47aca304a62b11a4922823aeaedc",
+      "lines": [
+        214,
+        250,
+        422,
+        462
+      ],
+      "observed": "Function declaration, regular function reference, trait method default reference and trait impl method reference data layouts."
+    },
+    {
+      "symbol": "charon/src/ast/expressions.rs::{FnPtrKind,FnPtr}",
+      "sha256": "7339c83c73fc0d3399d1da03aaae7f6190a9bc6bbfc8d6c6657e4a0690b6e3b5",
+      "lines": [
+        516,
+        555
+      ],
+      "observed": "Function pointer can be a regular FunId or a trait/method-id pair; generic args are stored separately."
+    },
+    {
+      "symbol": "charon/src/transform/simplify_output/hide_allocator_param.rs::RemoveLastParamVisitor",
+      "sha256": "145a580c9adcc6a7e925ce5e00b15ac9283c0cbfef1f46218735c1b45e611442",
+      "lines": [
+        1,
+        85
+      ],
+      "observed": "Restricted allocator-parameter handling for selected ADTs; rewrites type argument occurrences to TyKind::Error rather than preserving equality."
+    },
+    {
+      "symbol": "charon/src/transform/normalize/expand_associated_types.rs::UpdateItemBody::update_item_generics and visit hooks",
+      "sha256": "71e112ecb49615ca5f04282a4749e6a2ae643d24328a991f7a152910c2c093a6",
+      "lines": [
+        1040,
+        1135,
+        1315,
+        1345
+      ],
+      "observed": "Visits function refs, regular FnPtr, and trait-method FnPtr; missing associated parameters are appended, not arbitrary binder slots deleted."
+    }
+  ],
+  "aeneas_api": [
+    {
+      "symbol": "src/symbolic/SymbolicToPureTypes.ml::translate_generic_params",
+      "sha256": "29f4a784b0edb1dccf895aba78ec6d5c15c081e8602f7778db264b21272c54a0",
+      "lines": [
+        246,
+        270
+      ],
+      "observed": "Converts LLBC trait_type_constraints into Pure predicates."
+    },
+    {
+      "symbol": "src/symbolic/SymbolicToPureTypes.ml::translate_fun_sigs",
+      "sha256": "29f4a784b0edb1dccf895aba78ec6d5c15c081e8602f7778db264b21272c54a0",
+      "lines": [
+        1037,
+        1088
+      ],
+      "observed": "Asserts binder trait_type_constraints are empty at 1047-1048 and sets inst_fun_sig.trait_type_constraints=[] at 1072, while separately translating generic params/preds."
+    },
+    {
+      "symbol": "src/symbolic/SymbolicToPureTypes.ml::translate_flat_trait_method_sigs / translate_trait_method_sig",
+      "sha256": "29f4a784b0edb1dccf895aba78ec6d5c15c081e8602f7778db264b21272c54a0",
+      "lines": [
+        1122,
+        1155
+      ],
+      "observed": "Trait method signature translation calls translate_fun_sigs on the flattened signature before rebuilding method generics/predicates."
+    },
+    {
+      "symbol": "src/llbc/Substitute.ml::make_subst_from_generics / substitute_signature",
+      "sha256": "3e79251c04cda3c592490190fd4a6ec4fd0bf81b0d6ed036a99c11c7b03a4dac",
+      "lines": [
+        20,
+        85
+      ],
+      "observed": "Substitutes signature inputs/output and trait_type_constraints; no function-binder arity or whole-crate reference rewrite in this interface."
+    }
+  ],
+  "decoded_reference_summary": {
+    "function_binders_with_Try_Output_constraint": [
+      {
+        "fun_decl_id": 58,
+        "name": "core::iter::traits::iterator::Iterator::try_fold",
+        "source_span": {
+          "data": {
+            "file_id": 19,
+            "beg": {
+              "line": 2486,
+              "col": 4
+            },
+            "end": {
+              "line": 2490,
+              "col": 35
+            }
+          },
+          "generated_from_span": null
+        },
+        "type_param_names": [
+          "Self",
+          "B",
+          "F",
+          "R",
+          "Clause0_Item"
+        ]
+      },
+      {
+        "fun_decl_id": 120,
+        "name": "core::iter::adapters::chain::{impl}::try_fold",
+        "source_span": {
+          "data": {
+            "file_id": 10,
+            "beg": {
+              "line": 99,
+              "col": 4
+            },
+            "end": {
+              "line": 103,
+              "col": 29
+            }
+          },
+          "generated_from_span": null
+        },
+        "type_param_names": [
+          "A",
+          "B",
+          "Acc",
+          "F",
+          "R",
+          "Clause0_Item"
+        ]
+      },
+      {
+        "fun_decl_id": 169,
+        "name": "core::iter::adapters::rev::{impl}::try_fold",
+        "source_span": {
+          "data": {
+            "file_id": 18,
+            "beg": {
+              "line": 70,
+              "col": 4
+            },
+            "end": {
+              "line": 74,
+              "col": 27
+            }
+          },
+          "generated_from_span": null
+        },
+        "type_param_names": [
+          "I",
+          "B",
+          "F",
+          "R",
+          "Clause0_Clause0_Item"
+        ]
+      }
+    ],
+    "FunDeclRef_nodes_for_constraint_functions": [
+      {
+        "path": "$.trait_decls[0].methods[36].skip_binder.default",
+        "fun_decl_id": 58,
+        "arity": {
+          "regions": 1,
+          "types": 5,
+          "const_generics": 0,
+          "trait_refs": 4
+        }
+      },
+      {
+        "path": "$.trait_impls[2].methods[36].skip_binder",
+        "fun_decl_id": 58,
+        "arity": {
+          "regions": 1,
+          "types": 5,
+          "const_generics": 0,
+          "trait_refs": 4
+        }
+      },
+      {
+        "path": "$.trait_impls[4].methods[36].skip_binder",
+        "fun_decl_id": 120,
+        "arity": {
+          "regions": 1,
+          "types": 6,
+          "const_generics": 0,
+          "trait_refs": 4
+        }
+      },
+      {
+        "path": "$.trait_impls[11].methods[36].skip_binder",
+        "fun_decl_id": 58,
+        "arity": {
+          "regions": 1,
+          "types": 5,
+          "const_generics": 0,
+          "trait_refs": 4
+        }
+      },
+      {
+        "path": "$.trait_impls[15].methods[36].skip_binder",
+        "fun_decl_id": 169,
+        "arity": {
+          "regions": 1,
+          "types": 5,
+          "const_generics": 0,
+          "trait_refs": 3
+        }
+      }
+    ],
+    "Iterator_trait_method_binder_type_params": [
+      {
+        "index": 0,
+        "name": "B"
+      },
+      {
+        "index": 1,
+        "name": "F"
+      },
+      {
+        "index": 2,
+        "name": "R"
+      }
+    ],
+    "Iterator_trait_method_binder_constraint_count": 1,
+    "all_Iterator_trait_method36_impl_binders": [
+      {
+        "trait_impl_row_index": 2,
+        "trait_impl_def_id": 2,
+        "method_type_param_count": 3,
+        "constraint_count": 1,
+        "fun_decl_ref_id": 58,
+        "ref_arity": {
+          "regions": 1,
+          "types": 5,
+          "const_generics": 0,
+          "trait_refs": 4
+        }
+      },
+      {
+        "trait_impl_row_index": 4,
+        "trait_impl_def_id": 4,
+        "method_type_param_count": 3,
+        "constraint_count": 1,
+        "fun_decl_ref_id": 120,
+        "ref_arity": {
+          "regions": 1,
+          "types": 6,
+          "const_generics": 0,
+          "trait_refs": 4
+        }
+      },
+      {
+        "trait_impl_row_index": 11,
+        "trait_impl_def_id": 11,
+        "method_type_param_count": 3,
+        "constraint_count": 1,
+        "fun_decl_ref_id": 58,
+        "ref_arity": {
+          "regions": 1,
+          "types": 5,
+          "const_generics": 0,
+          "trait_refs": 4
+        }
+      },
+      {
+        "trait_impl_row_index": 15,
+        "trait_impl_def_id": 15,
+        "method_type_param_count": 3,
+        "constraint_count": 1,
+        "fun_decl_ref_id": 169,
+        "ref_arity": {
+          "regions": 1,
+          "types": 5,
+          "const_generics": 0,
+          "trait_refs": 3
+        }
+      }
+    ],
+    "Iterator_try_fold_trait_dispatch_calls": [
+      {
+        "path": "$.fun_decls[4].body.Structured.body.statements[5].kind.Call.call.func.Regular",
+        "method_id": 36,
+        "arity": {
+          "regions": 1,
+          "types": 3,
+          "const_generics": 0,
+          "trait_refs": 3
+        }
+      },
+      {
+        "path": "$.fun_decls[120].body.Structured.body.statements[6].kind.Switch.Match[1][0][1].statements[9].kind.Call.call.func.Regular",
+        "method_id": 36,
+        "arity": {
+          "regions": 1,
+          "types": 3,
+          "const_generics": 0,
+          "trait_refs": 3
+        }
+      },
+      {
+        "path": "$.fun_decls[120].body.Structured.body.statements[6].kind.Switch.Match[1][0][1].statements[14].kind.Switch.Match[1][0][1].statements[10].kind.Switch.Match[1][0][1].statements[10].kind.Call.call.func.Regular",
+        "method_id": 36,
+        "arity": {
+          "regions": 1,
+          "types": 3,
+          "const_generics": 0,
+          "trait_refs": 3
+        }
+      },
+      {
+        "path": "$.fun_decls[120].body.Structured.body.statements[6].kind.Switch.Match[1][1][1].statements[0].kind.Switch.Match[1][0][1].statements[10].kind.Call.call.func.Regular",
+        "method_id": 36,
+        "arity": {
+          "regions": 1,
+          "types": 3,
+          "const_generics": 0,
+          "trait_refs": 3
+        }
+      }
+    ],
+    "census_limits": [
+      "The 3 exact FunDeclRef occurrences are declaration-table refs found by the decoded `id=58` plus `generics` structural predicate. The 4 Trait method-id 36 occurrences are call dispatch refs with their separate method generic arguments. This census does not claim these are the only possible representation locations outside the inspected LLBC schema; all rows are retained for independent inspection.",
+      "The function-binder scan matches decoded trait constraints with associated type id 0 and trait declaration id 11 (`Try` in this R396 table); its three matches are preserved verbatim.",
+      "No proposed substitution/elimination was applied."
+    ]
+  },
+  "decoded_rows": "decoded-reference-census.json",
+  "source_excerpts": "source-excerpts.txt",
+  "source_manifest": "source-manifest.json",
+  "no_decision": "No valid transformation is asserted or applied. Lead retains equality preservation, source correspondence, and release decisions.",
+  "pinned_charon_workspace": "remote-workspace/report.json",
+  "pinned_charon_workspace_sha256": "3f965e9e208eed00ce2574ed60c4a6782a2c908829cb668d385ddfd47e840479",
+  "cached_native_postprocessor_route": "remote-workspace/rustc-cache-report.json",
+  "cached_native_postprocessor_route_sha256": "a8fbe7c8bbb1b3ab2dd7ea9d723466657deae69e4f3efb6c91f2084c7ed28520"
+}

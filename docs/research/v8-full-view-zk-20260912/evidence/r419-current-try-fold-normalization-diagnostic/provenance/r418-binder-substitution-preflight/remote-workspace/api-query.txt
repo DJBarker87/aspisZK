@@ -1,0 +1,57 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/export.rs:15:pub struct CrateData {
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/export.rs:75:impl CrateData {
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/export.rs:76:    pub fn new(ctx: TransformCtx) -> Self {
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/export.rs:85:    pub fn serialize_to_files(
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/export.rs:150:    pub fn deserialize_from_file(
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/transform/ctx.rs:14:pub struct TransformCtx {
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/transform/ctx.rs:108:impl TransformCtx {
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/export/multi_target.rs:767:    fn new(remap: &'a HashMap<ItemId, ItemId>) -> Self {
+224:/// If you need a more robust order, see `ordered_decls`.
+260:    pub item_names: SeqHashMap<ItemId, Name>,
+265:    pub assoc_item_names: IndexMap<TraitDeclId, AssocItemNames>,
+271:    pub type_decls: IndexMap<TypeDeclId, TypeDecl>,
+276:    pub fun_decls: IndexMap<FunDeclId, FunDecl>,
+282:    pub trait_impls: IndexMap<TraitImplId, TraitImpl>,
+296:    pub ordered_decls: Option<DeclarationsGroups>,
+303:        self.item_names.get(&id.into()).unwrap()
+310:        let names = &self.assoc_item_names[trait_id];
+327:            ItemId::Type(id) => self.type_decls.get(id).map(ItemRef::Type),
+328:            ItemId::Fun(id) => self.fun_decls.get(id).map(ItemRef::Fun),
+331:            ItemId::TraitImpl(id) => self.trait_impls.get(id).map(ItemRef::TraitImpl),
+336:            ItemId::Type(id) => self.type_decls.get_mut(id).map(ItemRefMut::Type),
+337:            ItemId::Fun(id) => self.fun_decls.get_mut(id).map(ItemRefMut::Fun),
+340:            ItemId::TraitImpl(id) => self.trait_impls.get_mut(id).map(ItemRefMut::TraitImpl),
+349:        self.item_names.swap_remove(&trans_id);
+355:        self.item_names
+366:            ItemId::Type(id) => self.type_decls.remove(id).map(ItemByVal::Type),
+367:            ItemId::Fun(id) => self.fun_decls.remove(id).map(ItemByVal::Fun),
+370:            ItemId::TraitImpl(id) => self.trait_impls.remove(id).map(ItemByVal::TraitImpl),
+378:            ItemByVal::Type(decl) => self.type_decls.set_slot(*id.as_type().unwrap(), decl),
+379:            ItemByVal::Fun(decl) => self.fun_decls.set_slot(*id.as_fun().unwrap(), decl),
+385:                .trait_impls
+391:        self.type_decls
+395:            .chain(self.trait_impls.all_indices().map(ItemId::TraitImpl))
+397:            .chain(self.fun_decls.all_indices().map(ItemId::Fun))
+400:        self.type_decls
+404:            .chain(self.trait_impls.iter().map(ItemRef::TraitImpl))
+406:            .chain(self.fun_decls.iter().map(ItemRef::Fun))
+409:        self.type_decls
+412:            .chain(self.trait_impls.iter_mut().map(ItemRefMut::TraitImpl))
+414:            .chain(self.fun_decls.iter_mut().map(ItemRefMut::Fun))
+613:        match &self.ordered_decls {
+616:                for d in &self.type_decls {
+625:                for d in &self.trait_impls {
+628:                for d in &self.fun_decls {
+632:            Some(ordered_decls) => {
+633:                for gr in ordered_decls {
+684:mk_index_impls!(TranslatedCrate.type_decls[TypeDeclId]: TypeDecl);
+685:mk_index_impls!(TranslatedCrate.fun_decls[FunDeclId]: FunDecl);
+688:mk_index_impls!(TranslatedCrate.trait_impls[TraitImplId]: TraitImpl);
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/lib.rs:8://! [`deserialize_llbc`].
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/lib.rs:62:pub fn deserialize_llbc(path: &std::path::Path) -> anyhow::Result<ast::TranslatedCrate> {
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/lib.rs:63:    deserialize_llbc_with_format(path, options::SerializationFormat::Json)
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/lib.rs:67:pub fn deserialize_llbc_with_format(
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/bin/generate-ml/main.rs:163:        charon_lib::deserialize_llbc_with_format(&charon_llbc, SerializationFormat::Json)?;
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/bin/charon/main.rs:62:                charon_lib::deserialize_llbc_with_format(&pretty_print.file, pretty_print.format)?;
+/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/ast/krate.rs:227:/// the resulting `crate_name.llbc` file using [`crate::deserialize_llbc`].

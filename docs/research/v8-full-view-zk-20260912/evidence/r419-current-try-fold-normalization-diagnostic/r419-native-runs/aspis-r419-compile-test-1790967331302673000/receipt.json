@@ -1,0 +1,88 @@
+{
+  "action": "compile-test",
+  "source_revision": "3f22e765d32b16d016f4ff603d599ea72838c37a",
+  "resources": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "expected_work": "focused optimized compilation and linking of downstream native-AST tool; no dependency rebuild",
+  "classification": "UNVERIFIED downstream AST tooling; no source execution or security theorem",
+  "toolchain": {
+    "channel": "nightly-2026-06-01",
+    "rustc": "1.98.0-nightly (14210df0e 2026-05-31)",
+    "rustc_commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "rustc_path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc",
+    "sysroot": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu",
+    "target_libdir": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib",
+    "rustc_driver_so": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/librustc_driver-845f1164de5a76fb.so",
+    "rustc_driver_so_sha256": "636553650ea76c08bcaf70acf98971039d59b6d15e779df923822f0d5f92b9fa",
+    "selected_toolchain_receipt": "../../../../r396-private-batch-unmonomorphized-plan/toolchain.txt"
+  },
+  "cached_artifacts": [
+    {
+      "crate": "charon_lib",
+      "path": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps/libcharon_lib-768e0a1fcf78a935.rlib",
+      "sha256": "e7d6e9427a2d2a953bb2fe5dfe0bdc8d69bf1b2de7a224d2779e95ad502cc1c5",
+      "bytes": 611971160,
+      "role": "entry point library; default+rustc feature"
+    },
+    {
+      "crate": "derive_generic_visitor",
+      "path": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps/libderive_generic_visitor-10c3816a2b60ff31.rlib",
+      "sha256": "43c9f75a747271c18fef80e4b6b0613460c8a4b7f41ec74487aa2dc187f0e747",
+      "bytes": 111010,
+      "role": "derive macro dependency present in warm cache"
+    },
+    {
+      "crate": "index_vec",
+      "path": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps/libindex_vec-c97aebe846a7effa.rlib",
+      "sha256": "5dc7712b1979a339d6ce985a6047b3d970c1f3c9f8b6503bd5c4af67fcda1d68",
+      "bytes": 1133104,
+      "role": "direct Charon dependency present"
+    },
+    {
+      "crate": "serde_json",
+      "path": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps/libserde_json-994978fe66d1d642.rlib",
+      "sha256": "ee49ac2fae6119ba217879e91fedeee78b82a0fbf08df9c9ca5018e7b38ed290",
+      "bytes": 5232060,
+      "role": "direct Charon dependency; needed only if helper source names serde_json APIs"
+    }
+  ],
+  "runner_sha256": "079de48da7ccbfd5b136228d2fd4eb19c01230b263dee00ace993517290658ba",
+  "source_sha256": {
+    "fixtures.rs": "05e22078741839185d2a497593e95e31e8a74c2d0242768612ec0ff74171a829",
+    "helper.rs": "b5cdc050fb6bdcfff13cd3786f0e6889c8d6ebf2d486c92e8ec81dda0a71a5c8",
+    "main.rs": "ecf53ba36b3dac93a6fff9bdcf1958fe23c3784843d511db0e8c4f5cc76be2f3"
+  },
+  "remote_working_directory": "/home/dombarker/project-offloads/aspis-r419-native-20261002-a/aspis-r419-compile-test-1790967331302673000",
+  "measurement_boundary": "GNU time child peak RSS and swaps; systemd scope peak is supplementary",
+  "command": [
+    "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2024",
+    "-C",
+    "opt-level=3",
+    "-C",
+    "debuginfo=0",
+    "-C",
+    "codegen-units=1",
+    "-L",
+    "dependency=/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps",
+    "--extern",
+    "charon_lib=/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps/libcharon_lib-768e0a1fcf78a935.rlib",
+    "--extern",
+    "derive_generic_visitor=/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps/libderive_generic_visitor-10c3816a2b60ff31.rlib",
+    "--extern",
+    "index_vec=/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target/release/deps/libindex_vec-c97aebe846a7effa.rlib",
+    "--test",
+    "main.rs",
+    "-o",
+    "native-tests"
+  ],
+  "exit_status": 0,
+  "wall_time": "0:02.59",
+  "peak_rss_kib": 1076156,
+  "swaps": 0,
+  "print_axioms": "Not applicable: Rust compiler/tool fixtures, no Lean theorem."
+}

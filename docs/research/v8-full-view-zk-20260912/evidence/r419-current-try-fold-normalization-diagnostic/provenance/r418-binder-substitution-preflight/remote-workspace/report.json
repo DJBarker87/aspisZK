@@ -1,0 +1,69 @@
+{
+  "classification": "Pinned-source and existing-cache read-only inventory only. No cargo/rustc/Charon build, test, extraction, transformation, or translation was run.",
+  "host": {
+    "name": "nuc",
+    "ssh_target": "dombarker@100.108.41.90",
+    "pinned_charon_repo": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon",
+    "pinned_charon_checkout_head": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "git_status_observation": "one unrelated pre-existing untracked path printed as `\"\\\"/\"`; no tracked changes observed by status output"
+  },
+  "tool": {
+    "path": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+    "sha256": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+    "size_bytes": 296187640,
+    "file": "ELF 64-bit x86-64 PIE, dynamically linked, not stripped"
+  },
+  "workspace_cache": {
+    "repo": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon",
+    "target_dir": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/target",
+    "du_observed": "2.2G",
+    "release_dir_present": true,
+    "release_artifacts": {
+      "charon_bytes": 296187640,
+      "charon_driver_bytes": 387575256,
+      "generate_ml_bytes": 280582016,
+      "libcharon_lib_rlib_bytes": 611971160,
+      "libcharon_lib_rmeta_bytes": 20474658
+    },
+    "artifact_scope": "filesystem inventory only; no attempt to establish cache validity beyond the pinned checkout, installed binary hash, and saved filesystem facts"
+  },
+  "cli_translation_route": {
+    "Cargo_command": "charon cargo starts Cargo build with RUSTC_WRAPPER=driver, RUSTC_WORKSPACE_WRAPPER fresh fingerprint, CHARON_USING_CARGO=1, and serialized CliOpts in CHARON_ARGS (main.rs:168-244).",
+    "start_from": "Options document it as selected starting items plus reachable references subject to opacity; absent roots defaults to crate. `translate_crate::translate` resolves each StartFrom and enqueues the selected item before translating, then driver `run_charon` calls the post-translation passes and serializes (options.rs:65-102, 695-730; translate_crate.rs:966-1007; driver/main.rs:72-99). This is a compiler extraction root selection, not an input-LLBC postprocess entrypoint.",
+    "pass_order": "Driver main calls `run_transformation_passes` after rustc translation succeeds and before `CrateData::new(ctx).serialize_to_files`; `transform/mod.rs` documents global passes, then body passes. Pass ordering source is copied and line-numbered in workspace-source-excerpts.txt."
+  },
+  "native_ast_api": {
+    "library": "`charon_lib::deserialize_llbc` publicly returns `ast::TranslatedCrate`; `deserialize_llbc_with_format` supports JSON/Postcard (lib.rs:62-74).",
+    "envelope": "Public `export::CrateData` carries public `translated`, `charon_version`, and `has_errors`; `deserialize_from_file` and `serialize_to_file` are public. Its JSON reader disables serde_json recursion limit, uses serde_stacker, and restores HashCons state (export.rs:15-27, 75-169). A standalone downstream binary could therefore load, mutate public AST data, then round-trip the envelope; this is capability evidence only.",
+    "ast": "`TranslatedCrate` fields include public declaration tables, item names, and optional ordered declaration groups (ast/krate.rs:230-303).",
+    "normal_pass_context": "`TransformPass`, `TransformCtx::run_pass` and `run_transformation_passes` are public, but `TransformCtx` has no public constructor in inspected source; its construction is in the rustc translation module. External postprocessing through a new pass context is not shown by this API inventory."
+  },
+  "custom_entrypoints": {
+    "package_bins": [
+      "charon",
+      "charon-driver",
+      "generate-ml"
+    ],
+    "integration_test_harnesses": [
+      "ui",
+      "cargo"
+    ],
+    "ui_test": "The `charon ui-test` command compiles a Rust fixture with magic comments and compares/prints its LLBC output; it is not a saved-LLBC AST transformation harness. Cargo.toml and cli.rs/ui_test.rs copies are included.",
+    "custom_binary": "Cargo manifest contains no existing saved-LLBC transform binary. A downstream/new binary is possible in principle from the public library and CrateData APIs, but no such target was added or built."
+  },
+  "remote_sources": {
+    "commit": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "manifest": "remote-workspace/pinned-charon-source/file-manifest.json",
+    "excerpts": "remote-workspace/workspace-source-excerpts.txt",
+    "source_file_count": 15
+  },
+  "access_probe_history": {
+    "initial_bad_alias": "ssh alias `buildhost` failed name resolution; explicitly superseded as wrong alias, not a host blocker.",
+    "authorized_exact_target": "Root supplied dombarker@100.108.41.90; subsequent read-only SSH probes succeeded. Raw probe outputs preserved in charon-layout-probe.txt, api-query.txt, cache-query.txt."
+  },
+  "limits": [
+    "No API pass was implemented or compiled.",
+    "No claim that a new AST pass is correct, equivalent, admissible, or sufficient for Aeneas.",
+    "Cache size/presence is observed; no builds were started to test reuse."
+  ]
+}

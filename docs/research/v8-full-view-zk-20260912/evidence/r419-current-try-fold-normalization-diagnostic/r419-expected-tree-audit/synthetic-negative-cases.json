@@ -1,0 +1,40 @@
+{
+  "classification": "synthetic guardrail tests only; no actual LLBC transform or semantic acceptance",
+  "cases": [
+    {
+      "case": "cyclic hash-cons",
+      "result": "rejected",
+      "message": "cyclic Deduplicated reference at id 0"
+    },
+    {
+      "case": "malformed wrapper extra key",
+      "result": "rejected",
+      "message": "malformed hash-cons wrapper keys: ['Deduplicated', 'extra']"
+    },
+    {
+      "case": "malformed hash-cons payload",
+      "result": "rejected",
+      "message": "HashConsedValue id must be a nonnegative integer"
+    },
+    {
+      "case": "root replacement",
+      "result": "rejected",
+      "message": "root replacement and malformed/empty paths are forbidden"
+    },
+    {
+      "case": "ancestor overlap",
+      "result": "rejected",
+      "message": "overlapping ancestor/descendant edit paths: ('translated', 'fun_decls', 58) and ('translated', 'fun_decls', 58, 'body')"
+    },
+    {
+      "case": "drop without exact resulting list",
+      "result": "rejected",
+      "message": "drop_list_item_exact requires exact path/kind/index/before_item/expected_after keys: {'path': ['args'], 'kind': 'drop_list_item_exact', 'index': 0, 'before_item': 1}"
+    },
+    {
+      "case": "exact leaf replacement preserves sibling executable field",
+      "result": "accepted-as-mechanical-operation-only",
+      "record_count": 1
+    }
+  ]
+}

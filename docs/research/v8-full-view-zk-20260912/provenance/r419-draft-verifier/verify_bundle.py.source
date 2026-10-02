@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""Verify staged-draft file copies/checksums and saved run metadata only."""
+from __future__ import annotations
+
+import hashlib
+import json
+import pathlib
+import re
+
+DRAFT = pathlib.Path(__file__).resolve().parent
+EVIDENCE = DRAFT / "evidence"
+
+
+def sha(p: pathlib.Path) -> str:
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def require(ok: bool, message: str) -> None:
+    if not ok:
+        raise AssertionError(message)
+
+
+def main() -> None:
+    inv = json.loads((EVIDENCE / "bundle-inventory.json").read_text())
+    listed = {x["path"]: x for x in inv["files"]}
+    actual = {
+        p.relative_to(DRAFT).as_posix(): p
+        for p in EVIDENCE.rglob("*")
+        if p.is_file() and p not in {EVIDENCE / "bundle-inventory.json", EVIDENCE / "SHA256SUMS"}
+    }
+    require(set(listed) == set(actual), "bundle inventory/file set mismatch")
+    for rel, record in listed.items():
+        p = DRAFT / rel
+        require(p.stat().st_size == record["bytes"], f"size mismatch: {rel}")
+        require(sha(p) == record["sha256"], f"hash mismatch: {rel}")
+    for line in (EVIDENCE / "SHA256SUMS").read_text().splitlines():
+        digest, rel = line.split("  ", 1)
+        p = EVIDENCE / rel
+        require(p.is_file() and sha(p) == digest, f"SHA256SUMS mismatch: {rel}")
+    require(not any("__pycache__" in p.parts for p in EVIDENCE.rglob("*")), "unexpected __pycache__ in bundle")
+
+    expected = EVIDENCE / "r419-expected-tree-audit/expected-candidate-comparison.json"
+    cmp = json.loads(expected.read_text())
+    require(cmp["expected_equals_candidate"] and cmp["remaining_diff_count"] == 0, "saved full AST comparison is not zero-diff")
+    for path, digest in cmp["evidence_sha256"].items():
+        if path.endswith("candidate.llbc"):
+            rel = "r419-native-runs/aspis-r419-candidate-1790967913444473000/candidate.llbc"
+        else:
+            # Comparison evidence copies are selected into the mirrored audit.
+            rel = path.removeprefix(".r21-scratch/r419-try-fold-equality-elimination/audit/")
+            rel = "r419-expected-tree-audit/" + rel
+        q = EVIDENCE / rel
+        require(q.is_file() and sha(q) == digest, f"expected comparison input mismatch: {path}")
+
+    base = EVIDENCE / "r419-native-runs"
+    run_rows = inv["files"]
+    require(any(x["path"].startswith("evidence/r419-native-runs/aspis-r419-") for x in run_rows), "run evidence missing")
+    candidate = base / "aspis-r419-candidate-1790967913444473000"
+    candidate_receipt = json.loads((candidate / "receipt.json").read_text())
+    candidate_result = json.loads((candidate / "result.json").read_text())
+    require(candidate_receipt["input_sha256"] == inv["original_r396_llbc_sha256"], "candidate input receipt mismatch")
+    require(sha(candidate / "candidate.llbc") == inv["candidate_llbc_sha256"], "candidate output SHA mismatch")
+    require(candidate_result["output_sha256"] == inv["candidate_llbc_sha256"], "candidate result SHA mismatch")
+
+    tid = "3f22e765d32b-20261002T193059Z"
+    tr = EVIDENCE / "r419-translation/output" / tid
+    result = json.loads((tr / "result.json").read_text())
+    command = json.loads((tr / "translate-command.json").read_text())
+    log = (tr / "translate.log").read_text(errors="replace")
+    require(result["translator_exit_status"] == 2 and inv["translation"]["exit_status"] == 2, "translation failure status mismatch")
+    require(command["candidate_sha256"] == inv["candidate_llbc_sha256"], "translation candidate input mismatch")
+    require(command["source_revision"] == inv["translation"]["source_and_launch_revision"], "translation revision mismatch")
+    require(command["binary_sha256"] == inv["translation"]["translator_binary_sha256"], "translation binary mismatch")
+    require(not result["translation_result"]["generated_dir_exists"] and not result["translation_result"]["translation_json_exists"], "translation unexpectedly generated Lean output")
+    require("RegionsHierarchy.ml, line 176" in log and "2897:8-2897:35" in log, "first error frontier mismatch")
+    wall = re.search(r"Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (\S+)", log)
+    rss = re.search(r"Maximum resident set size \(kbytes\): (\d+)", log)
+    swaps = re.search(r"Swaps: (\d+)", log)
+    exit_code = re.search(r"Exit status: (\d+)", log)
+    require(wall and wall.group(1) == inv["translation"]["wall_time"], "translation wall metric mismatch")
+    require(rss and int(rss.group(1)) == inv["translation"]["peak_rss_kib"], "translation RSS mismatch")
+    require(swaps and int(swaps.group(1)) == inv["translation"]["swaps"] == 0, "translation swap mismatch")
+    require(exit_code and int(exit_code.group(1)) == 2, "translation raw-log exit mismatch")
+    metrics = json.loads((tr / "metrics-receipt.json").read_text())
+    require(metrics["exit_status"] == 2 and metrics["wall_time"] == wall.group(1), "saved metrics receipt status/time mismatch")
+    require(metrics["peak_rss_kib"] == int(rss.group(1)) == inv["translation"]["peak_rss_kib"], "saved metrics receipt RSS mismatch")
+    require(metrics["swaps"] == int(swaps.group(1)) == 0, "saved metrics receipt swap mismatch")
+    print(f"PASS: {len(listed)} inventoried evidence files, expected-tree inputs, candidate identity, and translation failure record")
+
+
+if __name__ == "__main__":
+    main()

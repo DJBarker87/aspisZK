@@ -1,0 +1,1049 @@
+## Cargo.toml
+SHA256: a31bab7d34638f8c2a43f14263184a3328ab17366c2f9acf201d86b922c4176f
+
+### Lines 30-65
+30: edition.workspace = true
+31: license.workspace = true
+32: 
+33: [lib]
+34: name = "charon_lib"
+35: path = "src/lib.rs"
+36: 
+37: [[bin]]
+38: # The main entrypoint. This is a wrapper that handles toolchain and cargo
+39: # management and calls `charon-driver` for the real work.
+40: name = "charon"
+41: path = "src/bin/charon/main.rs"
+42: 
+43: [[bin]]
+44: # The rustc driver. The resulting binary dynamically links to rust dylibs
+45: # including `librustc_driver.so`. Do not call directly, call charon instead to
+46: # let it set up the right paths.
+47: name = "charon-driver"
+48: path = "src/bin/charon-driver/main.rs"
+49: 
+50: [[bin]]
+51: name = "generate-ml"
+52: path = "src/bin/generate-ml/main.rs"
+53: 
+54: [[test]]
+55: name = "ui"
+56: path = "tests/ui.rs"
+57: harness = false
+58: 
+59: [[test]]
+60: name = "cargo"
+61: path = "tests/cargo.rs"
+62: harness = false
+63: 
+64: [dependencies]
+65: hax-adt-into = { path = "./adt-into" }
+
+## src/lib.rs
+SHA256: 65264b10ff712b69d55d43aa7b2e081877c153919d8b4c075e71d9c36b0c5d38
+
+### Lines 60-74
+60: 
+61: /// Read a `.llbc` file.
+62: pub fn deserialize_llbc(path: &std::path::Path) -> anyhow::Result<ast::TranslatedCrate> {
+63:     deserialize_llbc_with_format(path, options::SerializationFormat::Json)
+64: }
+65: 
+66: /// Read a serialized (U)LLBC file.
+67: pub fn deserialize_llbc_with_format(
+68:     path: &std::path::Path,
+69:     format: options::SerializationFormat,
+70: ) -> anyhow::Result<ast::TranslatedCrate> {
+71:     use crate::export::CrateData;
+72:     Ok(CrateData::deserialize_from_file(path, format)?.translated)
+73: }
+
+## src/export.rs
+SHA256: 4d4c95573275caf0304a20ac648a62c5458af493419520758b641a4974eb713e
+
+### Lines 1-28
+1: pub mod multi_target;
+2: 
+3: use crate::ast::*;
+4: use crate::options::SerializationFormat;
+5: use crate::transform::TransformCtx;
+6: use serde::{Deserialize, Deserializer, Serialize};
+7: use serde_state::{DeserializeState, SerializeState};
+8: use std::fs::File;
+9: use std::io::{BufReader, BufWriter, Read};
+10: use std::path::{Path, PathBuf};
+11: 
+12: /// The data of a generic crate. We serialize this to pass it to `charon-ml`, so this must be as
+13: /// stable as possible. This is used for both ULLBC and LLBC.
+14: #[derive(SerializeState, DeserializeState)]
+15: pub struct CrateData {
+16:     /// The version of charon currently being used. `charon-ml` inspects this and errors if it is
+17:     /// trying to read an incompatible version (for now we compare versions for equality).
+18:     #[serde_state(stateless)]
+19:     pub charon_version: CharonVersion,
+20:     pub translated: TranslatedCrate,
+21:     #[serde_state(stateless)]
+22:     #[cfg_attr(feature = "charon_on_charon", charon::opaque)] // Don't change, this would break version detection for old charon-ml
+23:     /// If there were errors, this contains only a partial description of the input crate.
+24:     pub has_errors: bool,
+25: }
+26: 
+27: impl Serialize for CrateData {
+28:     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+
+### Lines 75-169
+75: impl CrateData {
+76:     pub fn new(ctx: TransformCtx) -> Self {
+77:         CrateData {
+78:             charon_version: CharonVersion(crate::VERSION.to_owned()),
+79:             has_errors: ctx.has_errors(),
+80:             translated: ctx.translated,
+81:         }
+82:     }
+83: 
+84:     #[allow(clippy::result_unit_err)]
+85:     pub fn serialize_to_files(
+86:         &self,
+87:         targets: Vec<(PathBuf, SerializationFormat)>,
+88:     ) -> Result<(), ()> {
+89:         for (target_filename, format) in targets {
+90:             self.serialize_to_file(&target_filename, format)?;
+91:         }
+92:         Ok(())
+93:     }
+94: 
+95:     /// Export the translated definitions to a file.
+96:     #[allow(clippy::result_unit_err)]
+97:     pub fn serialize_to_file(
+98:         &self,
+99:         target_filename: &Path,
+100:         format: SerializationFormat,
+101:     ) -> Result<(), ()> {
+102:         // Create the directory, if necessary (note that if the target directory
+103:         // is not specified, there is no need to create it: otherwise we
+104:         // couldn't have read the input file in the first place).
+105:         let target_dir = target_filename.parent().unwrap();
+106:         match std::fs::create_dir_all(target_dir) {
+107:             Ok(()) => (),
+108:             Err(_) => {
+109:                 error!("Could not create the directory: {:?}", target_dir);
+110:                 return Err(());
+111:             }
+112:         };
+113: 
+114:         // Create the file.
+115:         let std::io::Result::Ok(outfile) = File::create(target_filename) else {
+116:             error!("Could not open: {:?}", target_filename);
+117:             return Err(());
+118:         };
+119:         // Write to the file.
+120:         let mut writer = BufWriter::new(outfile);
+121:         match format {
+122:             SerializationFormat::Json => {
+123:                 if let Err(err) = serde_json::to_writer(&mut writer, self) {
+124:                     error!("Could not serialize to `{target_filename:?}`: {err:?}");
+125:                     return Err(());
+126:                 }
+127:             }
+128:             SerializationFormat::Postcard => {
+129:                 if let Err(err) = postcard::to_io(self, &mut writer) {
+130:                     error!("Could not serialize to `{target_filename:?}`: {err:?}");
+131:                     return Err(());
+132:                 }
+133:             }
+134:         }
+135: 
+136:         // We canonicalize (i.e., make absolute) the path before printing it; this makes it clearer
+137:         // to the user where to find the file.
+138:         let target_filename = std::fs::canonicalize(target_filename).unwrap();
+139:         if self.has_errors {
+140:             info!(
+141:                 "Generated the partial (because we encountered errors) file: {}",
+142:                 target_filename.to_str().unwrap()
+143:             );
+144:         } else {
+145:             info!("Generated the file: {}", target_filename.to_str().unwrap());
+146:         }
+147:         Ok(())
+148:     }
+149: 
+150:     pub fn deserialize_from_file(
+151:         path: &std::path::Path,
+152:         format: SerializationFormat,
+153:     ) -> anyhow::Result<Self> {
+154:         use crate::export::CrateData;
+155:         use anyhow::Context;
+156:         use serde::Deserialize;
+157:         use std::fs::File;
+158:         let file = File::open(path)
+159:             .with_context(|| format!("Failed to read llbc file {}", path.display()))?;
+160:         match format {
+161:             SerializationFormat::Json => {
+162:                 let reader = BufReader::new(file);
+163:                 let mut deserializer = serde_json::Deserializer::from_reader(reader);
+164:                 // Deserialize without recursion limit.
+165:                 deserializer.disable_recursion_limit();
+166:                 // Grow stack space as needed.
+167:                 let deserializer = serde_stacker::Deserializer::new(&mut deserializer);
+168:                 Ok(CrateData::deserialize(deserializer)?)
+169:             }
+
+## src/ast/krate.rs
+SHA256: 72b774a05f1e5de3b64e504376c35f6045f12b934943b96c330f0536aa211d23
+
+### Lines 220-302
+220: /// - Trait implementations.
+221: ///
+222: /// These can each be found in the corresponding `IndexVec`. They are in an unspecified (though
+223: /// deterministic) order.
+224: /// If you need a more robust order, see `ordered_decls`.
+225: ///
+226: /// To get a `TranslatedCrate`, run `charon cargo` inside a Rust crate, then deserialize
+227: /// the resulting `crate_name.llbc` file using [`crate::deserialize_llbc`].
+228: #[derive(Default, Clone, Drive, DriveMut, SerializeState, DeserializeState)]
+229: #[serde_state(state_implements = HashConsSerializerState)]
+230: pub struct TranslatedCrate {
+231:     /// The name of the crate.
+232:     #[drive(skip)]
+233:     pub crate_name: String,
+234: 
+235:     /// The options used when calling Charon. Can be used to check that Charon was called with the
+236:     /// options that a given consumer requires.
+237:     #[drive(skip)]
+238:     #[serde_state(stateless)]
+239:     pub options: crate::options::CliOpts,
+240: 
+241:     /// Information about each target platform for which the crate was translated. When translating
+242:     /// a crate normally this will have a single entry; when using `--targets` this will have one
+243:     /// entry per chosen target.
+244:     #[drive(skip)]
+245:     #[serde(with = "SeqHashMapToArray::<TargetTriple, TargetInfo>")]
+246:     pub target_information: SeqHashMap<TargetTriple, TargetInfo>,
+247: 
+248:     /// The source files composing the crate and its dependencies. Each [`Span`] refers to a byte
+249:     /// range within one of these files.
+250:     // This field must come before any field containing spans, as the OCaml deserialization of
+251:     // spans requires the files to be deserialized already.
+252:     #[serde_state(stateless)]
+253:     pub files: IndexVec<FileId, File>,
+254: 
+255:     /// The names of all registered items. Available so we can know the names even of items that
+256:     /// failed to translate.
+257:     /// Invariant: after translation, any existing `ItemId` must have an associated name, even
+258:     /// if the corresponding item wasn't translated.
+259:     #[serde(with = "SeqHashMapToArray::<ItemId, Name>")]
+260:     pub item_names: SeqHashMap<ItemId, Name>,
+261:     /// The names of all the registered associated items. Available so we can know the names even
+262:     /// of items that failed to translate.
+263:     /// Invariant: after translation, any existing `AssocItemId` must have an associated name, even
+264:     /// if the corresponding item wasn't translated.
+265:     pub assoc_item_names: IndexMap<TraitDeclId, AssocItemNames>,
+266:     /// Short names, for items whose last PathElem is unique.
+267:     #[serde(with = "SeqHashMapToArray::<ItemId, Name>")]
+268:     pub short_names: SeqHashMap<ItemId, Name>,
+269: 
+270:     /// The type definitions (structs, enums, ...).
+271:     pub type_decls: IndexMap<TypeDeclId, TypeDecl>,
+272:     /// The function definitions.
+273:     ///
+274:     /// Each item with a body becomes a function: actual functions, methods, and unevaluated
+275:     /// consts/statics.
+276:     pub fun_decls: IndexMap<FunDeclId, FunDecl>,
+277:     /// The global definitions, which are constants, statics, and thread locals.
+278:     pub global_decls: IndexMap<GlobalDeclId, GlobalDecl>,
+279:     /// The trait declarations.
+280:     pub trait_decls: IndexMap<TraitDeclId, TraitDecl>,
+281:     /// The trait implementations.
+282:     pub trait_impls: IndexMap<TraitImplId, TraitImpl>,
+283:     /// This contains a list of all the reachable items in the crate in a stable, logical order
+284:     /// based on crate and file order, then further grouped and sorted such that every item comes
+285:     /// after the items it depends on.
+286:     /// Mutually-dependent groups of items are identified as such.
+287:     /// This is meant for code-generation tools that want a stable output order.
+288:     ///
+289:     /// Not all the items in the `TranslatedCrate` are included: some trait impls are never
+290:     /// referred to by reachable items so could in principle be removed from the crate, but we keep
+291:     /// them around to be able to tell method implementations apart.
+292:     ///
+293:     /// `Some` after translation unless `--no-reorder-decls` is passed.
+294:     #[drive(skip)]
+295:     #[serde_state(stateless)]
+296:     pub ordered_decls: Option<DeclarationsGroups>,
+297: }
+298: 
+299: impl TranslatedCrate {
+300:     pub fn item_name(&self, id: impl Into<ItemId>) -> &Name {
+301:         // `unwrap` is ok because we ensure to translate the item name as soon as we create a new
+302:         // item id.
+
+## src/transform/ctx.rs
+SHA256: 1fa04d5706dd78da9ca803c3a52ef3a66de1867c78e25821f45ffe6619dc1575
+
+### Lines 1-28
+1: use crate::ast::*;
+2: use crate::errors::{ErrorCtx, Level};
+3: use crate::formatter::{FmtCtx, IntoFormatter};
+4: use crate::llbc_ast;
+5: use crate::options::TranslateOptions;
+6: use crate::pretty::FmtWithCtx;
+7: use crate::transform::CowBox;
+8: use crate::ullbc_ast;
+9: use std::cell::RefCell;
+10: use std::{fmt, mem};
+11: 
+12: /// Simpler context used for rustc-independent code transformation. This only depends on rustc for
+13: /// its error reporting machinery.
+14: pub struct TransformCtx {
+15:     /// The options that control transformation.
+16:     pub options: TranslateOptions,
+17:     /// The translated data.
+18:     pub translated: TranslatedCrate,
+19:     /// Context for tracking and reporting errors.
+20:     pub errors: RefCell<ErrorCtx>,
+21: }
+22: 
+23: /// A pass that modifies ullbc bodies and can be fused with previous passes so that we run all of
+24: /// them on a given body.
+25: pub trait UllbcPass: Sync {
+26:     /// Whether the pass should run.
+27:     fn should_run(&self, _options: &TranslateOptions) -> bool {
+28:         true
+
+### Lines 108-135
+108: impl TransformCtx {
+109:     pub(crate) fn has_errors(&self) -> bool {
+110:         self.errors.borrow().has_errors()
+111:     }
+112: 
+113:     /// Span an error and register the error.
+114:     pub(crate) fn span_err(&self, span: Span, msg: &str, level: Level) -> Error {
+115:         self.errors
+116:             .borrow_mut()
+117:             .span_err(&self.translated, span, msg, level)
+118:     }
+119: 
+120:     pub(crate) fn opacity_for_name(&self, name: &Name) -> ItemOpacity {
+121:         self.options.opacity_for_name(&self.translated, name)
+122:     }
+123: 
+124:     pub(crate) fn with_def_id<F, T>(
+125:         &mut self,
+126:         def_id: impl Into<ItemId>,
+127:         def_id_is_local: bool,
+128:         f: F,
+129:     ) -> T
+130:     where
+131:         F: FnOnce(&mut Self) -> T,
+132:     {
+133:         let mut errors = self.errors.borrow_mut();
+134:         let current_def_id = errors.def_id.replace(def_id.into());
+135:         let current_def_id_is_local = mem::replace(&mut errors.def_id_is_local, def_id_is_local);
+
+## src/transform/mod.rs
+SHA256: ac725524fc9b890eb568e21294c088344f5e0671a54461bb965f176fedfff129
+
+### Lines 78-170
+78: /// Run transformation passes on the crate before outputting it.
+79: pub fn run_transformation_passes(options: &CliOpts, ctx: &mut TransformCtx) {
+80:     // Passes that apply to the whole crate at once, typically those that change item signatures.
+81:     let global = |x| Pass::NonBody(CowBox::Borrowed(x));
+82:     // Passes that apply to bodies but work on either kind.
+83:     let mixed_body = |x| Pass::NonBody(CowBox::Borrowed(x));
+84: 
+85:     ctx.run_pass(Pass::NonBody(PrintCtxPass::new(
+86:         options.print_original_ullbc,
+87:         "# ULLBC after translation from MIR".to_string(),
+88:     )));
+89: 
+90:     // Item and type cleanup passes.
+91:     ctx.run_passes([
+92:         // `--duplicate-defaulted-methods`: copy default method bodies into impls that use them.
+93:         global(&simplify_output::duplicate_defaulted_methods::Transform),
+94:         // Compute short names. We do it early to make pretty-printed output more legible in traces.
+95:         global(&add_missing_info::compute_short_names::Transform),
+96:         // Check that translation emitted consistent types, and unify body lifetimes (best-effort).
+97:         global(&typecheck_and_unify::Check::PostTranslation),
+98:         // Filter the trait impls that were marked invisible since we couldn't filter them out
+99:         // earlier.
+100:         global(&finish_translation::filter_invisible_trait_impls::Transform),
+101:         // Move clauses on associated types to be implied clauses of the trait.
+102:         global(&simplify_output::lift_associated_item_clauses::Transform),
+103:         // Type aliases may use associated types without declaring the corresponding trait
+104:         // such missing trait clauses.
+105:         global(&add_missing_info::add_missing_alias_clauses::Transform),
+106:     ]);
+107: 
+108:     // Body cleanup passes on the ullbc.
+109:     let pass = Pass::FusedUnstructuredBody(Box::new([
+110:         // Compute the metadata & insert for Rvalue
+111:         CowBox::Borrowed(&finish_translation::insert_ptr_metadata::Transform),
+112:         // Add the missing assignments to the return value.
+113:         // When the function return type is unit, the generated MIR doesn't set the return value to
+114:         // `()`. This can be a concern: in the case of Aeneas, it means the return variable
+115:         // contains ⊥ upon returning. For this reason, when the function has return type unit, we
+116:         // insert an extra assignment just before returning.
+117:         CowBox::Borrowed(&finish_translation::insert_assign_return_unit::Transform),
+118:         // Insert storage markers for locals that don't have them (that's allowed in MIR).
+119:         CowBox::Borrowed(&finish_translation::insert_storage_statements::Transform),
+120:         // Transform Drops into Calls to drop_glue.
+121:         CowBox::Borrowed(&normalize::desugar_drops::Transform),
+122:         // Whenever we reference a trait method on a known type, refer to the method `FunDecl`
+123:         // directly instead of going via a `TraitRef`. This is done before associated-type lifting
+124:         // because it messes up generic args order.
+125:         CowBox::Borrowed(&normalize::skip_trait_refs_when_known::Transform),
+126:         // Transform dyn trait method calls to vtable function pointer calls.
+127:         // This should be early to handle the calls before other transformations.
+128:         CowBox::Borrowed(&normalize::transform_dyn_trait_calls::Transform),
+129:         // Replace promoted and inline consts with calls to their initializers.
+130:         simplify_output::anon_const_to_call::Transform::new(ctx),
+131:         // Inline promoted and inline consts, as well as dummy auto-generated panic functions.
+132:         simplify_output::inline_selected_functions::Transform::new(ctx),
+133:         // Remove drop statements that are noops.
+134:         CowBox::Borrowed(&simplify_output::filter_trivial_drops::Transform),
+135:         // Inline all asserts that correspond to dynamic checks into statements.
+136:         // The following pass will then merge the generated gotos as part of this substitution,
+137:         // and [reconstruct_fallible_operations] can then use the inlined asserts to
+138:         // reconstruct the fallible operations.
+139:         CowBox::Borrowed(&resugar::move_asserts_to_statements::Transform),
+140:         // Merge single-origin gotos into their parent. This drastically reduces the graph size
+141:         // of the CFG.
+142:         // This must be done early as some resugaring passes depend on it.
+143:         CowBox::Borrowed(&control_flow::merge_goto_chains::Transform),
+144:         // Remove overflow/div-by-zero/bounds checks since they are already part of the
+145:         // arithmetic/array operation in the semantics of (U)LLBC.
+146:         // **WARNING**: this pass uses the fact that the dynamic checks introduced by Rustc use a
+147:         // special "assert" construct. Because of this, it must happen *before* the
+148:         // [reconstruct_asserts] pass. See the comments in [crate::remove_dynamic_checks].
+149:         // **WARNING**: this pass relies on a precise structure of the MIR statements. Because of this,
+150:         // it must happen before passes that insert statements like [simplify_constants].
+151:         CowBox::Borrowed(&resugar::reconstruct_fallible_operations::Transform),
+152:         // Reconstruct `vec![x]` lowering to avoid unsafe operations.
+153:         // **WARNING**: this pass relies on a precise structure of the MIR statements. Because of
+154:         // this, it must happen before passes that insert statements like [simplify_constants].
+155:         // This must also happen after `inline_selected_functions`, and `merge_goto_chains`.
+156:         resugar::reconstruct_vec_boxes::Transform::new(ctx),
+157:         // Resugar the box derefs that got desugared in elaborated MIR.
+158:         CowBox::Borrowed(&resugar::reconstruct_box_derefs::Transform),
+159:         // Recognize calls to the `offset_of` intrinsics and replace them with the
+160:         // corresponding `NullOp`.
+161:         CowBox::Borrowed(&resugar::reconstruct_intrinsics::Transform),
+162:         // Reconstruct the asserts
+163:         CowBox::Borrowed(&resugar::reconstruct_asserts::Transform),
+164:         // Desugar the constants to other values/operands as much as possible.
+165:         CowBox::Borrowed(&simplify_output::simplify_constants::Transform),
+166:         // Introduce intermediate assignments in preparation of the [`index_to_function_calls`]
+167:         // pass.
+168:         CowBox::Borrowed(&simplify_output::index_intermediate_assigns::Transform),
+169:         // Remove locals of type `()` which show up a lot.
+170:         CowBox::Borrowed(&simplify_output::remove_unit_locals::Transform),
+
+### Lines 235-250
+235:         global(&normalize::partial_monomorphization::Transform),
+236:         // Reorder the graph of dependencies and compute the strictly connex components to:
+237:         // - compute the order in which to extract the definitions
+238:         // - find the recursive definitions
+239:         // - group the mutually recursive definitions
+240:         // This is done last to account for the final item graph, not the initial one.
+241:         global(&add_missing_info::reorder_decls::Transform),
+242:         // Check that types are still consistent after the transformation passes.
+243:         global(&typecheck_and_unify::Check::PostTransformation),
+244:         // Use `DeBruijnVar::Free` for the variables bound in item signatures.
+245:         mixed_body(&simplify_output::unbind_item_vars::Check),
+246:     ]);
+247: 
+248:     if options.ullbc {
+249:         // If we're not reconstructing control-flow, print the ullbc after finalizing passes.
+250:         ctx.run_pass(Pass::NonBody(PrintCtxPass::new(
+
+### Lines 283-330
+283: impl TransformCtx {
+284:     pub fn run_pass(&mut self, mut pass: Pass) {
+285:         match &mut pass {
+286:             Pass::NonBody(pass) => {
+287:                 if pass.should_run(&self.options) {
+288:                     trace!("# Starting pass {}", pass.name());
+289:                     pass.transform_ctx(self)
+290:                 }
+291:             }
+292:             Pass::FusedUnstructuredBody(passes) => {
+293:                 // Some passes carry function bodies, which must also be transformed. This applies
+294:                 // all the passes before pass `p` to the bodies potentially carried by pass `p`.
+295:                 for i in 0..passes.len() {
+296:                     if let (first_passes, [pass, ..]) = passes.split_at_mut(i)
+297:                         && let CowBox::Owned(pass) = pass
+298:                     {
+299:                         pass.apply_preceding_passes(self, first_passes);
+300:                     }
+301:                 }
+302:                 self.for_each_item_mut(|ctx, mut item| {
+303:                     for pass in passes.iter() {
+304:                         if pass.should_run(&ctx.options) {
+305:                             trace!("# Starting pass {}", pass.name());
+306:                             pass.transform_item(ctx, item.reborrow());
+307:                         }
+308:                     }
+309:                 });
+310:                 for pass in passes.iter() {
+311:                     pass.finalize(self);
+312:                 }
+313:             }
+314:             Pass::FusedStructuredBody(passes) => {
+315:                 self.for_each_fun_decl(|ctx, decl| {
+316:                     for pass in passes.iter() {
+317:                         if pass.should_run(&ctx.options) {
+318:                             trace!("# Starting pass {}", pass.name());
+319:                             pass.transform_function(ctx, decl);
+320:                         }
+321:                     }
+322:                 });
+323:             }
+324:         };
+325:     }
+326:     pub fn run_passes(&mut self, passes: impl IntoIterator<Item = Pass>) {
+327:         for pass in passes {
+328:             self.run_pass(pass);
+329:         }
+330:     }
+
+## src/options.rs
+SHA256: d68ea7c83465b3ce6ba9bea7d398c97ed03e0ff9abeee179f77ea04baabd7b04
+
+### Lines 65-102
+65:     /// for the standard library. You can pass a custom sysroot to use instead, or pass "default"
+66:     /// to use the normal distributed sysroot, which lacks MIR bodies for many standard library
+67:     /// functions.
+68:     #[clap(long)]
+69:     #[serde(default)]
+70:     pub sysroot: Option<String>,
+71: 
+72:     /// Monomorphize the items encountered when possible. Generic items found in the crate are
+73:     /// skipped. To only translate a particular call graph, use `--start-from`. Note: this doesn't
+74:     /// currently support `dyn Trait`.
+75:     #[clap(long, visible_alias = "mono")]
+76:     #[serde(default)]
+77:     pub monomorphize: bool,
+78:     /// Partially monomorphize items to make it so that no item is ever monomorphized with a
+79:     /// mutable reference (or type containing one); said differently, so that the presence of
+80:     /// mutable references in a type is independent of its generics. This is used by Aeneas.
+81:     #[clap(
+82:         long,
+83:         value_name("INCLUDE_TYPES"),
+84:         num_args(0..=1),
+85:         require_equals(true),
+86:         default_missing_value("all"),
+87:     )]
+88:     #[serde(default)]
+89:     pub monomorphize_mut: Option<MonomorphizeMut>,
+90: 
+91:     /// A list of item paths to use as starting points for the translation. We will translate these
+92:     /// items and any items they refer to, according to the opacity rules. When absent, we start
+93:     /// from the path `crate` (which translates the whole crate).
+94:     #[clap(long, value_delimiter = ',')]
+95:     #[serde(default)]
+96:     pub start_from: Vec<String>,
+97:     /// Same as --start-from, but won't raise an error if a pattern doesn't match any item. This is useful
+98:     /// when the patterns are generated by a build script and may be out of sync with the code.
+99:     #[clap(long, value_delimiter = ',')]
+100:     #[serde(default)]
+101:     pub start_from_if_exists: Vec<String>,
+102:     /// Use all the items annotated with the given attribute(s) as starting points for translation
+
+### Lines 695-730
+695:         let mut start_from = options
+696:             .start_from
+697:             .iter()
+698:             .filter_map(|path| parse_pattern(path).ok())
+699:             .map(|p| StartFrom::Pattern {
+700:                 pattern: p,
+701:                 strict: true,
+702:             })
+703:             .collect_vec();
+704:         start_from.extend(
+705:             options
+706:                 .start_from_if_exists
+707:                 .iter()
+708:                 .filter_map(|path| parse_pattern(path).ok())
+709:                 .map(|p| StartFrom::Pattern {
+710:                     pattern: p,
+711:                     strict: false,
+712:                 }),
+713:         );
+714:         for attr in options.start_from_attribute.iter().cloned() {
+715:             start_from.push(StartFrom::Attribute(attr));
+716:         }
+717:         if options.start_from_pub {
+718:             start_from.push(StartFrom::Pub);
+719:         }
+720:         if start_from.is_empty() {
+721:             start_from.push(StartFrom::Pattern {
+722:                 pattern: parse_pattern("crate").unwrap(),
+723:                 strict: true,
+724:             });
+725:         }
+726: 
+727:         let hide_traits = options
+728:             .hide_marker_traits
+729:             .then_some([
+730:                 "core::marker::Sized",
+
+## src/bin/charon/main.rs
+SHA256: 381774440aec829cb23ad9849102673f2085366910537a4ff56177133df6b35f
+
+### Lines 53-105
+53: pub fn main() -> Result<()> {
+54:     // Initialize the logger
+55:     logger::initialize_logger();
+56: 
+57:     // Parse the command-line
+58:     let cli = Cli::parse();
+59:     let exit_status = match cli.command {
+60:         Charon::PrettyPrint(pretty_print) => {
+61:             let krate =
+62:                 charon_lib::deserialize_llbc_with_format(&pretty_print.file, pretty_print.format)?;
+63:             println!("{krate}");
+64:             ExitStatus::default()
+65:         }
+66:         Charon::Cargo(subcmd_cargo) => {
+67:             let mut options = subcmd_cargo.opts;
+68:             let targets = std::mem::take(&mut options.targets);
+69:             if targets.is_empty() {
+70:                 translate_with_cargo(options, subcmd_cargo.cargo)?
+71:             } else {
+72:                 translate_multi_target(targets, options, |opts: CliOpts, target: &str| {
+73:                     let mut cargo_args = subcmd_cargo.cargo.clone();
+74:                     cargo_args.extend(["--target".to_owned(), target.to_owned()]);
+75:                     translate_with_cargo(opts, cargo_args)
+76:                 })?
+77:             }
+78:         }
+79:         Charon::Rustc(mut subcmd_rustc) => {
+80:             let mut options = subcmd_rustc.opts;
+81:             options.rustc_args.append(&mut subcmd_rustc.rustc);
+82:             let targets = std::mem::take(&mut options.targets);
+83:             if targets.is_empty() {
+84:                 translate_without_cargo(options)?
+85:             } else {
+86:                 translate_multi_target(targets, options, |mut opts: CliOpts, target: &str| {
+87:                     opts.rustc_args
+88:                         .extend(["--target".to_owned(), target.to_owned()]);
+89:                     translate_without_cargo(opts)
+90:                 })?
+91:             }
+92:         }
+93:         Charon::UiTest(args) => ui_test::run(args)?,
+94:         Charon::ToolchainPath(_) => {
+95:             let path = toolchain_path()?;
+96:             println!("{}", path.display());
+97:             ExitStatus::default()
+98:         }
+99:         Charon::ToolchainVersion => {
+100:             println!("{}", toolchain_version());
+101:             ExitStatus::default()
+102:         }
+103:         Charon::Version => {
+104:             println!("{}", charon_lib::VERSION);
+105:             ExitStatus::default()
+
+### Lines 168-244
+168:                 })
+169:             })
+170:             .collect();
+171:         handles
+172:             .into_iter()
+173:             .map(|h| h.join().expect("target translation thread panicked"))
+174:             .try_collect()
+175:     })?;
+176: 
+177:     // Merge all crates.
+178:     let merged = multi_target::merge(options.clone(), krates);
+179: 
+180:     if options.print_llbc || options.print_ullbc {
+181:         println!("{}", merged.translated);
+182:     }
+183: 
+184:     // Serialize the merged result
+185:     let targets = options.targets(&merged.translated.crate_name);
+186:     merged
+187:         .serialize_to_files(targets)
+188:         .map_err(|()| anyhow::anyhow!("failed to serialize merged crate"))?;
+189: 
+190:     Ok(ExitStatus::default())
+191: }
+192: 
+193: fn translate_with_cargo(
+194:     mut options: CliOpts,
+195:     cargo_args: Vec<String>,
+196: ) -> anyhow::Result<ExitStatus> {
+197:     ensure_rustup();
+198:     if let Some(toml) = toml_config::read_toml() {
+199:         options = toml.apply(options);
+200:     }
+201:     options.validate()?;
+202:     let mut cmd = toolchain::in_toolchain("cargo")?;
+203:     cmd.env("RUSTC_WRAPPER", toolchain::driver_path());
+204:     // We pass a random value to prevent cargo from considering a charon run cacheable.
+205:     cmd.env("RUSTC_WORKSPACE_WRAPPER", fresh_fingerprint());
+206:     cmd.env("CHARON_USING_CARGO", "1");
+207:     cmd.env_remove("CARGO_PRIMARY_PACKAGE");
+208:     cmd.env(CHARON_ARGS, serde_json::to_string(&options).unwrap());
+209:     cmd.arg("build");
+210:     if arg_value(&cargo_args, "--target").is_none() {
+211:         // Make sure the build target is explicitly set. This is needed to detect which crates are
+212:         // proc-macro/build-script in `charon-driver`.
+213:         cmd.arg("--target");
+214:         cmd.arg(&get_rustc_version()?.host);
+215:     }
+216:     cmd.args(cargo_args);
+217:     trace!("running {cmd:?}");
+218:     Ok(cmd
+219:         .spawn()
+220:         .expect("could not run cargo")
+221:         .wait()
+222:         .expect("failed to wait for cargo?"))
+223: }
+224: 
+225: fn translate_without_cargo(mut options: CliOpts) -> anyhow::Result<ExitStatus> {
+226:     ensure_rustup();
+227:     options.validate()?;
+228:     let mut cmd = toolchain::driver_cmd()?;
+229:     let is_specified = |arg| {
+230:         let mut iter = options.rustc_args.iter();
+231:         iter.any(|input| input.starts_with(arg))
+232:     };
+233:     if !is_specified("--target") {
+234:         // Make sure the build target is explicitly set. This is needed to detect which crates are
+235:         // proc-macro/build-script in `charon-driver`.
+236:         cmd.arg("--target");
+237:         cmd.arg(&get_rustc_version()?.host);
+238:     }
+239:     cmd.args(std::mem::take(&mut options.rustc_args));
+240:     cmd.env(CHARON_ARGS, serde_json::to_string(&options).unwrap());
+241:     Ok(cmd
+242:         .spawn()
+243:         .expect("could not run charon-driver")
+244:         .wait()
+
+## src/bin/charon/cli.rs
+SHA256: c25c87d0948c3ef80bd8ded3b91dcf654105bf3215bd2cddc4e7fbf6221d50e6
+
+### Lines 1-78
+1: use charon_lib::options::{CliOpts, SerializationFormat};
+2: use clap::{Args, Parser, Subcommand};
+3: use std::path::PathBuf;
+4: 
+5: #[derive(Debug, Parser)]
+6: #[clap(name = "Charon")]
+7: pub struct Cli {
+8:     #[command(subcommand)]
+9:     pub command: Charon,
+10: }
+11: 
+12: #[derive(Debug, Subcommand)]
+13: pub enum Charon {
+14:     /// Runs charon on a single rust file (and the modules it references, if any).
+15:     Rustc(RustcArgs),
+16:     /// Runs charon on a cargo project. If a `[package.metadata.charon]` section is present in
+17:     /// `Cargo.toml`, options are also read from it.
+18:     Cargo(CargoArgs),
+19:     /// Run charon on a single ui test, which is mostly like `charon rustc` but parses special
+20:     /// `//@` comments at the top.
+21:     #[command(name = "ui_test", alias = "ui-test")]
+22:     UiTest(UiTestArgs),
+23:     /// Print the path to the rustc toolchain used by charon.
+24:     ToolchainPath(ToolchainPathArgs),
+25:     /// Print the rustc toolchain version used by charon.
+26:     ToolchainVersion,
+27:     /// Pretty-print the given llbc file.
+28:     PrettyPrint(PrettyPrintArgs),
+29:     /// Print the version.
+30:     Version,
+31: }
+32: 
+33: /// Read a llbc or ullbc file and pretty print it.
+34: #[derive(Args, Debug)]
+35: pub struct PrettyPrintArgs {
+36:     /// Single file path to llbc or ullbc
+37:     pub file: PathBuf,
+38:     /// Serialization format of the input file.
+39:     #[arg(long, value_enum, default_value_t)]
+40:     pub format: SerializationFormat,
+41: }
+42: 
+43: /// Usage: `charon cargo [charon options] -- [rustc options]`
+44: #[derive(clap::Args, Debug)]
+45: pub struct RustcArgs {
+46:     #[command(flatten)]
+47:     pub opts: CliOpts,
+48: 
+49:     /// Args that `rustc` accepts.
+50:     #[arg(last = true)]
+51:     pub rustc: Vec<String>,
+52: }
+53: 
+54: /// Usage: `charon cargo [charon options] -- [cargo build options]`
+55: #[derive(clap::Args, Debug)]
+56: pub struct CargoArgs {
+57:     #[command(flatten)]
+58:     pub opts: CliOpts,
+59: 
+60:     /// Args that `cargo build` accepts.
+61:     #[arg(last = true)]
+62:     pub cargo: Vec<String>,
+63: }
+64: 
+65: /// Usage: `charon ui_test <file.rs> [charon args]...`
+66: #[derive(clap::Args, Debug)]
+67: pub struct UiTestArgs {
+68:     /// Rust UI test file to run.
+69:     pub file: PathBuf,
+70: 
+71:     /// Extra Charon arguments to add to the generated `charon rustc` invocation.
+72:     #[arg(allow_hyphen_values = true, trailing_var_arg = true)]
+73:     pub args: Vec<String>,
+74: }
+75: 
+76: /// Usage: `charon toolchain-path`
+77: #[derive(clap::Args, Debug)]
+78: pub struct ToolchainPathArgs {}
+
+## src/bin/charon/ui_test.rs
+SHA256: 63423fa41e2017137a7a9893f72cab3815e6c77bcabda4a67c0a528f333b9b01
+
+### Lines 1-110
+1: use anyhow::{Context, Result, anyhow, bail};
+2: use indoc::indoc as unindent;
+3: use std::{
+4:     fs,
+5:     path::{Path, PathBuf},
+6:     process::{Command, ExitStatus},
+7: };
+8: 
+9: use crate::cli::UiTestArgs;
+10: 
+11: enum TestKind {
+12:     PrettyLlbc,
+13:     KnownFailure,
+14:     KnownPanic,
+15:     IgnoreWarnings,
+16:     Ignore,
+17: }
+18: 
+19: struct MagicComments {
+20:     test_kind: TestKind,
+21:     /// The options with which to run charon.
+22:     charon_opts: Vec<String>,
+23:     /// The options to pass to rustc.
+24:     rustc_opts: Vec<String>,
+25:     /// Whether we should set some sensible default options (using --preset=test).
+26:     default_options: bool,
+27:     /// A list of paths to files that must be compiled as dependencies for this test.
+28:     auxiliary_crates: Vec<PathBuf>,
+29: }
+30: 
+31: static HELP_STRING: &str = unindent!(
+32:     "Options are:
+33:     - `//@ output=pretty-llbc`: record the pretty-printed llbc (default);
+34:     - `//@ known-failure`: a test that is expected to fail.
+35:     - `//@ known-panic`: a test that is expected to panic.
+36:     - `//@ ignore-warnings`: a test for which warnings should be ignored (instead of erroring).
+37:     - `//@ ignore`: skip the test.
+38: 
+39:     Other comments can be used to control the behavior of charon:
+40:     - `//@ charon-args=<charon cli options>`
+41:     - `//@ charon-arg=<single charon cli option>`
+42:     - `//@ rustc-args=<rustc cli options>`
+43:     - `//@ no-check-output`: don't store the output in a file; useful if the output is unstable or
+44:          differs between debug and release mode.
+45:     - `//@ no-default-options`: don't set default options like --hide-allocator
+46:     - `//@ aux-crate=<file path>`: compile this file as a crate dependency.
+47:     "
+48: );
+49: 
+50: pub fn run(args: UiTestArgs) -> Result<ExitStatus> {
+51:     let magic_comments = parse_magic_comments(&args.file)?;
+52:     if matches!(magic_comments.test_kind, TestKind::Ignore) {
+53:         return Ok(ExitStatus::default());
+54:     }
+55: 
+56:     // Dependencies.
+57:     let deps: Vec<_> = magic_comments
+58:         .auxiliary_crates
+59:         .iter()
+60:         .map(|path| {
+61:             let crate_name = path_to_crate_name(path).with_context(|| {
+62:                 format!(
+63:                     "failed to compute auxiliary crate name for {}",
+64:                     path.display()
+65:                 )
+66:             })?;
+67:             let rlib_file_name = format!("lib{crate_name}.rlib"); // yep it must start with "lib"
+68:             let rlib_path = path
+69:                 .parent()
+70:                 .with_context(|| format!("{} has no parent directory", path.display()))?
+71:                 .join(rlib_file_name);
+72:             Ok((crate_name, path.clone(), rlib_path))
+73:         })
+74:         .collect::<Result<_>>()?;
+75:     for (crate_name, rs_path, rlib_path) in deps.iter() {
+76:         let mut cmd = Command::new(std::env::current_exe()?);
+77:         let status = cmd
+78:             .arg("rustc")
+79:             .arg("--no-serialize")
+80:             .arg("--")
+81:             .arg("--crate-type=rlib")
+82:             .arg(format!("--crate-name={crate_name}"))
+83:             .arg("-o")
+84:             .arg(rlib_path)
+85:             .arg(rs_path)
+86:             // The main test crate consumes this as an extern dependency, so unlike regular
+87:             // `charon rustc` invocations we need rustc to leave the `.rlib` behind.
+88:             .env("CHARON_EMIT_ARTIFACTS", "1")
+89:             .status()?;
+90:         if !status.success() {
+91:             bail!("failed to compile auxiliary crate `{crate_name}` with status {status}");
+92:         }
+93:     }
+94: 
+95:     // Run Charon.
+96:     let mut cmd = Command::new(std::env::current_exe()?);
+97:     cmd.arg("rustc");
+98: 
+99:     // Charon args.
+100:     cmd.arg("--print-llbc");
+101:     if magic_comments.default_options {
+102:         cmd.arg("--preset=tests");
+103:     }
+104:     if !matches!(magic_comments.test_kind, TestKind::IgnoreWarnings) {
+105:         cmd.arg("--error-on-warnings");
+106:     }
+107:     if matches!(
+108:         magic_comments.test_kind,
+109:         TestKind::KnownPanic | TestKind::KnownFailure
+110:     ) {
+
+## src/bin/charon-driver/main.rs
+SHA256: 5f080733b555f9c56ce5902726c14f005cfd2da80dee04c2dc4f6fe946d24ec7
+
+### Lines 48-102
+48: 
+49: mod driver;
+50: #[macro_use]
+51: pub mod hax;
+52: mod translate;
+53: 
+54: use charon_lib::{export, logger, transform::run_transformation_passes};
+55: use std::{fmt, panic};
+56: 
+57: pub enum CharonFailure {
+58:     /// The usize is the number of errors.
+59:     CharonError(usize),
+60:     RustcError,
+61:     Panic,
+62:     Serialize,
+63: }
+64: 
+65: impl fmt::Display for CharonFailure {
+66:     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+67:         match self {
+68:             CharonFailure::RustcError => write!(f, "Code failed to compile")?,
+69:             CharonFailure::CharonError(err_count) => write!(
+70:                 f,
+71:                 "Charon failed to translate this code ({err_count} errors)"
+72:             )?,
+73:             CharonFailure::Panic => write!(f, "Compilation panicked")?,
+74:             CharonFailure::Serialize => write!(f, "Could not serialize output file")?,
+75:         }
+76:         Ok(())
+77:     }
+78: }
+79: 
+80: /// Run charon. Returns the number of warnings generated.
+81: fn run_charon() -> Result<usize, CharonFailure> {
+82:     // Run the driver machinery.
+83:     let Some((mut ctx, options)) = driver::run_rustc_driver()? else {
+84:         // We didn't run charon.
+85:         return Ok(0);
+86:     };
+87: 
+88:     // The bulk of the translation is done, we no longer need to interact with rustc internals. We
+89:     // run several passes that simplify the items and cleanup the bodies.
+90:     run_transformation_passes(&options, &mut ctx);
+91: 
+92:     let error_count = ctx.errors.borrow().error_count;
+93: 
+94:     // # Final step: generate the files.
+95:     let targets = options.targets(&ctx.translated.crate_name);
+96:     trace!("Targets: {:?}", targets);
+97:     export::CrateData::new(ctx)
+98:         .serialize_to_files(targets)
+99:         .map_err(|()| CharonFailure::Serialize)?;
+100: 
+101:     if options.error_on_warnings && error_count != 0 {
+102:         return Err(CharonFailure::CharonError(error_count));
+
+## src/bin/charon-driver/translate/translate_crate.rs
+SHA256: 275279e88a372d7e978a0777efee1df11ae3e0cd494b3819ccdc439f6e888653
+
+### Lines 955-1015
+955:         file_to_id: Default::default(),
+956:         items_to_translate: Default::default(),
+957:         processed: Default::default(),
+958:         translate_stack: Default::default(),
+959:         cached_item_metas: Default::default(),
+960:         cached_names: Default::default(),
+961:         lt_mutability_computer: Default::default(),
+962:     };
+963:     ctx.register_target_info();
+964: 
+965:     // Start translating from the selected items.
+966:     for start_from in ctx.options.start_from.clone() {
+967:         match start_from {
+968:             StartFrom::Pattern { pattern, strict } => {
+969:                 if let Ok(def_ids) = ctx.resolve_path(Span::dummy(), &pattern, strict) {
+970:                     for def_id in def_ids {
+971:                         let def_id: hax::DefId = def_id.sinto(&ctx.hax_state);
+972:                         ctx.enqueue_module_item(&def_id);
+973:                     }
+974:                 }
+975:             }
+976:             StartFrom::Attribute(attr_name) => {
+977:                 let attr_path = attr_name
+978:                     .split("::")
+979:                     .map(rustc_span::Symbol::intern)
+980:                     .collect_vec();
+981:                 let mut add_if_attr_matches = |ldid: rustc_hir::def_id::LocalDefId| {
+982:                     let def_id: hax::DefId = ldid.to_def_id().sinto(&ctx.hax_state);
+983:                     if !matches!(def_id.kind, hax::DefKind::Mod)
+984:                         && def_id.attrs(tcx).iter().any(|a| a.path_matches(&attr_path))
+985:                     {
+986:                         ctx.enqueue_module_item(&def_id);
+987:                     }
+988:                 };
+989:                 for ldid in tcx.hir_crate_items(()).definitions() {
+990:                     add_if_attr_matches(ldid)
+991:                 }
+992:             }
+993:             StartFrom::Pub => {
+994:                 let mut add_if_matches = |ldid: rustc_hir::def_id::LocalDefId| {
+995:                     let def_id: hax::DefId = ldid.to_def_id().sinto(&ctx.hax_state);
+996:                     if !matches!(def_id.kind, hax::DefKind::Mod)
+997:                         && def_id.visibility(tcx) == Some(true)
+998:                     {
+999:                         ctx.enqueue_module_item(&def_id);
+1000:                     }
+1001:                 };
+1002:                 for ldid in tcx.hir_crate_items(()).definitions() {
+1003:                     add_if_matches(ldid)
+1004:                 }
+1005:             }
+1006:         }
+1007:     }
+1008: 
+1009:     if ctx.errors.borrow().has_errors() {
+1010:         // Don't continue translating if there were errors while parsing options.
+1011:         return Err(Error::dummy());
+1012:     }
+1013: 
+1014:     trace!(
+1015:         "Queue after we explored the crate:\n{:?}",
+

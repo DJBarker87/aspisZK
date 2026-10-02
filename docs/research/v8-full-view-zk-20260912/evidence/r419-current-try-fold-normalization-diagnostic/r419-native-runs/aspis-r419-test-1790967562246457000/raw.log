@@ -1,0 +1,75 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-r419-test-1790967562246457000.service; invocation ID: 32a99b61391d4b11bd6dd2dd1f2ee778
+
+running 18 tests
+test additional_fixtures::constraint_region_bound_by_its_region_binder_cannot_escape ... ok
+test additional_fixtures::forgetting_old_b_argument_reconstructs_the_same_instantiated_signature ... ok
+test additional_fixtures::removing_middle_type_slot_preserves_names_indices_and_other_vectors ... ok
+test additional_fixtures::replacement_rejects_removed_bound_slot - should panic ... ok
+test additional_fixtures::replacement_rejects_removed_free_slot - should panic ... ok
+test helper::tests::adjacent_later_variable_becomes_new_slot_without_recursive_rewrite ... ok
+test helper::tests::bound_rewrite_crosses_nested_region_binder_without_changing_mode ... ok
+test helper::tests::projection_scope_is_preserved_under_region_binder ... 
+thread 'additional_fixtures::replacement_rejects_removed_bound_slot' (2006576) panicked at helper.rs:81:5:
+projection refers to the type parameter being removed
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'additional_fixtures::replacement_rejects_removed_free_slot' (2006577) panicked at helper.rs:81:5:
+projection refers to the type parameter being removed
+ok
+test helper::tests::replacement_reindexes_only_the_selected_mode ... ok
+test helper::tests::replacement_rejects_self_occurrence - should panic ... ok
+test helper::tests::rewrite_substitutes_projection_and_does_not_cross_modes ... ok
+test helper::tests::type_binder_protects_local_variable_and_shifts_replacement ... ok
+test tests::a_nonreflexive_transported_equality_is_not_erased - should panic ... ok
+test tests::bound_equality_is_reflexive_after_full_transport ... ok
+test tests::caller_argument_deletion_preserves_other_arguments ... ok
+test tests::constrained_self_cycle_is_rejected - should panic ... ok
+test tests::constraint_local_variable_is_rejected - should panic ... ok
+test tests::free_equality_is_reflexive_after_full_transport ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+thread 'helper::tests::replacement_rejects_self_occurrence' (2006582) panicked at helper.rs:81:5:
+projection refers to the type parameter being removed
+
+thread 'tests::a_nonreflexive_transported_equality_is_not_erased' (2006585) panicked at main.rs:44:5:
+assertion `left == right` failed: substituted equality is not reflexive
+  left: Ty(HashConsed(TypeVar(Free(0))))
+ right: Ty(HashConsed(TraitType(TraitRef(HashConsed(TraitRefContents { kind: SelfId, trait_decl_ref: RegionBinder { regions: [], skip_binder: TraitDeclRef { id: 0, generics: <@Type1> } } })), 0, )))
+
+thread 'tests::constrained_self_cycle_is_rejected' (2006588) panicked at helper.rs:81:5:
+projection refers to the type parameter being removed
+
+thread 'tests::constraint_local_variable_is_rejected' (2006589) panicked at main.rs:27:53:
+RHS scope escape
+	Command being timed: "/home/dombarker/project-offloads/aspis-r419-native-20261002-a/aspis-r419-compile-test-1790967549175270000/native-tests --nocapture --test-threads=1"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 50%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3344
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 135
+	Voluntary context switches: 37
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 541ms
+CPU time consumed: 541ms
+Memory peak: 292.0K
+Memory swap peak: 0B

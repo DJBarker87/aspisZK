@@ -1,0 +1,46 @@
+# R419 proposed constrained binder elimination
+
+Lead design record, UNVERIFIED. This is not a source correspondence or release closure.
+
+The selected R396 `Iterator::try_fold` declaration has type parameters Self, B, F, R, Item and a retained equality `<R as Try>::Output = B`. The projection uses R and its Try clause; it does not use B. The proposed normal form replaces every B occurrence by that projection, removes only B's generic binder slot, consistently renumbers the retained type variables, removes only the now reflexive equality, and removes exactly the corresponding instantiated type argument at every reference to that declaration. Trait evidence, all other constraints, all statement operations, errors, regions, and declaration order must remain.
+
+Why this is a permissible candidate: at each admissible original instantiation, B equals the projection by the original constraint. Forgetting B gives the remaining instantiation; reconstructing B with that projection is inverse. Substitution of all types and predicates therefore preserves the original admissible instances. The argument applies only when the projection is independent of B, substitution avoids capture, and all references and constraints are transported. It does not authorize erasing an arbitrary associated-type equality or dropping unconstrained parameters.
+
+Required gates before use:
+
+1. Identify the exact constraint by typed structure and source-qualified target, not an incidental numeric id. Check B is a single free type parameter and the replacement has no free B occurrence, no binding regions escaping its constraint binder, and no self-cycle through a solved variable. Reject all unsupported cases.
+2. Use the pinned AST's capture-avoiding substitution operations. Substitute signature, body/local types, trait clauses and remaining type/region predicates; reindex retained type parameters and free occurrences. Retain regions, trait clauses and constant generic arities. No statement deletion or body replacement is allowed.
+3. Enumerate and rewrite every regular function ref, fn-definition type, fn pointer, trait-method reference and trait declaration reference that carries the target function's generic arguments. Do not assume these share one representation. Validate arities before and after. For trait method refs whose argument layout cannot be recovered precisely, fail closed.
+4. Preserve the original constraint and binder in audit evidence. Prove/audit that the substituted equality is reflexive before removing it. Record original/restored/substituted signatures, generic arguments and all edited locations; verify the erased argument is the original constraint's instantiated RHS at each admissible use.
+5. Test a small constrained-binder fixture and nested-binder/callsite cases before a single changed real R396 translation. Preserve all failures. The original R396 source/LLBC/native order is immutable; no hand-edited JSON, external stdlib axiom, erased lifetime, or invented fold semantics.
+6. Even successful translation is only a compiler boundary. The resulting actual fold execution and its mutable power, early stopping, failure and return state still need focused Lean proofs before composing the full callback.
+
+Candidate implementation location remains to be chosen after R418's exact call-reference census. There is no authorization yet for a build or real translation in this record.
+
+## Chosen implementation boundary
+
+Use a standalone downstream binary linked to the exact cached Charon native AST library, without modifying the pinned Charon or Aeneas source. Load/save the public CrateData envelope through its native deserializer/serializer; perform capture-avoiding AST substitution with TyVisitable.visit_vars. This is not hand editing JSON. Keep the original R396 artifact immutable and use a new output path.
+
+The audited R396 scope is three function binders (Iterator, Chain, Rev try_fold), Iterator's method binder, four implementation method binders, five function-reference tables, and four trait dispatch references. Function-table argument arities are 5/6/5 as appropriate; method dispatch arity is 3. The function substitution uses free variables; method substitution uses bound variables at the method binder. Source-qualified Try/Output and Iterator/try_fold discovery plus exact structure/arity checks must precede any changes. Nested constraint region binders must be empty and moved out using the native binder API, rejecting any escape. The projection's type-variable occurrences must be reindexed before insertion; native substitution must avoid capturing nested bound variables.
+
+`native/main.rs` is the lead's UNVERIFIED candidate driver. Its additional count gates deliberately restrict the current candidate to the audited scope. It is not yet compiled or applied to the real artifact. A changed real translation remains unauthorized until the helper, small fixtures, complete before/after audit, and lead review pass. Even a successful normalization/translation will not prove actual fold execution or end-to-end security.
+
+## Focused native compilation and fixtures authorization
+
+The lead inspected the helper against the pinned VarsVisitor implementation and corrected its old/new-index namespace check. The original projection is checked for self-reference before reindexing; the reindexed projection may legitimately contain the numeric old slot, so no old-namespace check is applied to it afterward. Native exit-time substitution does not revisit inserted replacements. Adjacent-variable, Free/Bound, nested region, and nested type-binder fixtures now exercise this distinction. The helper integration changes only its imports to the external cached Charon crate.
+
+Authorize focused optimized direct-rustc compilation of `native/main.rs` with `--test`, followed only after compilation succeeds by these small fixtures. Use exact R418 cached library checksums, pinned nightly-2026-06-01, MemoryHigh=5G/MemoryMax=7G/MemorySwapMax=0/TasksMax=128, codegen-units=1. Expected cost is compilation/linking, with no dependency rebuild. This authorizes neither a real LLBC transformation nor a changed Aeneas translation. All unsuccessful compiler attempts and exact input snapshots must remain. No concurrent NUC reservation is active at this authorization.
+
+## Candidate COPY audit authorization
+
+All 18 focused native fixtures passed in run `aspis-r419-test-1790967562246457000`, including constraint transport/reflexivity, rejecting self-cycles and binder escapes, preserved generic vectors/indices, and original-admissible callsite reconstruction. The lead corrected the worker draft fixture to use the actual A/B argument order and bind its Free variable representation to Bound0 before invoking native substitution; the original draft remains untouched. This is a finite synthetic fixture, not a universal source theorem.
+
+The current driver adds exact frozen binder/arity gates and metadata nonchange gates. R418 API and R419 field/scope reports cover all stored function-reference and FnPtr shapes; MaybeBuiltinFunDeclRef is an unstored translator utility and therefore has no AST visitor hook. Current driver compiled in `aspis-r419-compile-main-1790967688370254000`.
+
+Authorize one fresh native candidate COPY of exact R396 input SHA `399020435e94aaa7135c06d68445e9b936bd22fe6d1e1d197ee708d448d584ae` solely to produce before/after audit evidence. The original artifact and pinned compilers remain immutable. This updates the earlier gate wording: a candidate copy must exist to perform the complete comparison; a changed real Aeneas translation remains unauthorized until that comparison and the lead semantic review pass. Resource caps remain 5G/7G/no-swap/128 tasks. No other NUC job is reserved. No compiler-to-source or security claim follows from candidate success.
+
+## Lead comparison review and translation inventory authorization
+
+Original-only v2 expected tree SHA `5867c46c3fed0a126381415a139bf08a7dcd1717dc06dcef032571b72d4c7d6e` matches the entire decoded native candidate exactly, with zero differences (root comparison exit0, wall0.245809s, peak172687360bytes, zero swap). The independent visitor was corrected and checked for namespaces, whole-binder depth, capture avoidance and escaping bound variables before the candidate comparison. All source-shape/identity/metadata/order/vector-retention gates passed. Type-bearing predicate payloads are transported by the exact visitor formula; retaining predicates does not mean keeping their obsolete type-variable indices. The failed stronger byte-equality draft gate is preserved as history.
+
+The lead reviewed the general admissible-instantiation argument stated above: original B equals its projection by the original source constraint, and forgetting/reconstructing B preserves all transported predicates. This is a documented typing argument supported by exact AST comparison and fixtures, not a universal Lean compiler theorem. The original Rust extraction remains intact. Approve one changed-input Aeneas translation inventory under the recorded capped pinned workspace, sequential/abort flags and new namespace, to identify the next actual-source execution boundary. No external templates may be filled or treated as axioms. No source/callback/security claim is authorized by translation success.
