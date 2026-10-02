@@ -1,0 +1,13 @@
+# R405 generic batch translation frontier evidence
+
+This directory is a portable, byte-preserving archive of the saved R394/R395 preflights, successful R396 extraction, and failed R398 translation. Each original milestone directory is copied under `provenance/`; its source/evidence files, nested checksum manifest, and any saved `FILES.json` inventory are retained. Incidental Python bytecode caches are excluded. The saved R398 run consumed the exact R396 LLBC by SHA-256. No extraction, translation, Lean compilation, or source file edit was performed while assembling this bundle.
+
+The R396 LLBC contains a structured body for generic `core::iter::traits::iterator::Iterator::try_fold` (Fun 58, `/rustc/library/core/src/iter/traits/iterator.rs:2486:4–2490:35`). It retains its type and trait binders, including the associated-type equality `Try::Output = B`, and its decoded signature contains no `Erased` region. R398 attempted the unchanged whole LLBC with the saved Aeneas R385 v2 binary. Aeneas exited 2 before emitting a generated output. Its first diagnostic is the assertion in `SymbolicToPureTypes.ml:1047–1048` that the signature's `trait_type_constraints` list is empty. The exact pinned source file, SHA, and excerpt are copied alongside the receipts.
+
+R394 and R395 are provenance inventories: R394 records Charon monomorphization and region-erasure implementation paths; R395 records the captured callback and closure type rows. They are not execution proofs. The R396 extraction used one changed extraction mode relative to its R327 predecessor: it omitted `--monomorphize`; the recorded source, ordered includes, pinned Charon/toolchain, and offline locked release settings are preserved in its command and toolchain records.
+
+**Boundary.** This evidence establishes that the saved generic extraction has a present structured body and retained source-level associated-type equality, and that the recorded translation attempt failed at a compiler assertion before generating Lean files. It provides no Lean theorem, source execution correspondence, iterator semantics, callback chronology, cryptographic claim, or security result. `#print axioms` is not applicable because R398 produced no Lean target.
+
+**First remaining work.** A supported translation route must preserve the `Try::Output = B` equality while representing the generic signature. After that, the selected standard-library dispatch/`next` behavior and complete callback execution still require source-correspondence proof. This note proposes no normalization or semantic replacement.
+
+Run `python3 verify_r405_evidence.py` from this directory to verify the archive without modifying it. `SHA256SUMS` covers every file under this evidence directory except the checksum file itself.
