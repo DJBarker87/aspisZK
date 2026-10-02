@@ -1,0 +1,220 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790901704765482000.service; invocation ID: 84925cebb40b455ebea91614633e9d6c
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:38:63: error: unsolved goals
+case pos
+iter : CurrentIter
+b : alloc.vec.Vec U8
+hlt : iter.iter.i < ↑iter.iter.slice.len
+⊢ (do
+      let x ←
+        if h : iter.iter.i < (↑iter.iter.slice).length then
+            ok (some iter.iter.slice[iter.iter.i], { slice := iter.iter.slice, i := iter.iter.i + 1 })
+          else ok (none, iter.iter)
+      let x ←
+        match x.1 with
+          | none => ok (none, { iter := x.2, count := iter.count })
+          | some a => do
+            let count' ← iter.count + 1#usize
+            ok (some (iter.count, a), { iter := x.2, count := count' })
+      let cf ←
+        match x.1 with
+          | none => ok (done b)
+          | some p => do
+            let __x ←
+              alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                  { start := p.1.wrapping_mul 16#usize, «end» := (p.1.wrapping_mul 16#usize).wrapping_add 16#usize }
+            let s1 ← (R196CurrentByteWriter.toBefore p.2).write_le_bytes __x.1
+            ok (cont (x.2, __x.2 s1))
+      ok
+          (match cf with
+          | cont (it, b) =>
+            cont
+              ({ iter := { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑it.iter.slice, ⋯⟩, i := it.iter.i },
+                  count := it.count },
+                b)
+          | done b => done b)) =
+    do
+    let x ←
+      if h : iter.iter.i < (↑iter.iter.slice).length then
+          ok
+            (some ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩[iter.iter.i],
+              { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩, i := iter.iter.i + 1 })
+        else ok (none, { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩, i := iter.iter.i })
+    let __x ←
+      match x.1 with
+        | none => ok (none, { iter := x.2, count := iter.count })
+        | some a => do
+          let count' ← iter.count + 1#usize
+          ok (some (iter.count, a), { iter := x.2, count := count' })
+    match __x.1 with
+      | none => ok (done b)
+      | some p => do
+        let __x_1 ←
+          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+              { start := p.1.wrapping_mul 16#usize, «end» := (p.1.wrapping_mul 16#usize).wrapping_add 16#usize }
+        let s1 ← AspisR136BeforeOod.aspis_core.field.QM31.write_le_bytes p.2 __x_1.1
+        ok (cont (__x.2, __x_1.2 s1))
+
+case neg
+iter : CurrentIter
+b : alloc.vec.Vec U8
+hlt : ¬iter.iter.i < ↑iter.iter.slice.len
+⊢ (do
+      let x ←
+        if h : iter.iter.i < (↑iter.iter.slice).length then
+            ok (some iter.iter.slice[iter.iter.i], { slice := iter.iter.slice, i := iter.iter.i + 1 })
+          else ok (none, iter.iter)
+      let x ←
+        match x.1 with
+          | none => ok (none, { iter := x.2, count := iter.count })
+          | some a => do
+            let count' ← iter.count + 1#usize
+            ok (some (iter.count, a), { iter := x.2, count := count' })
+      let cf ←
+        match x.1 with
+          | none => ok (done b)
+          | some p => do
+            let __x ←
+              alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                  { start := p.1.wrapping_mul 16#usize, «end» := (p.1.wrapping_mul 16#usize).wrapping_add 16#usize }
+            let s1 ← (R196CurrentByteWriter.toBefore p.2).write_le_bytes __x.1
+            ok (cont (x.2, __x.2 s1))
+      ok
+          (match cf with
+          | cont (it, b) =>
+            cont
+              ({ iter := { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑it.iter.slice, ⋯⟩, i := it.iter.i },
+                  count := it.count },
+                b)
+          | done b => done b)) =
+    do
+    let x ←
+      if h : iter.iter.i < (↑iter.iter.slice).length then
+          ok
+            (some ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩[iter.iter.i],
+              { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩, i := iter.iter.i + 1 })
+        else ok (none, { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩, i := iter.iter.i })
+    let __x ←
+      match x.1 with
+        | none => ok (none, { iter := x.2, count := iter.count })
+        | some a => do
+          let count' ← iter.count + 1#usize
+          ok (some (iter.count, a), { iter := x.2, count := count' })
+    match __x.1 with
+      | none => ok (done b)
+      | some p => do
+        let __x_1 ←
+          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+              { start := p.1.wrapping_mul 16#usize, «end» := (p.1.wrapping_mul 16#usize).wrapping_add 16#usize }
+        let s1 ← AspisR136BeforeOod.aspis_core.field.QM31.write_le_bytes p.2 __x_1.1
+        ok (cont (__x.2, __x_1.2 s1))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:44:4: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+  ̵  ̵ ̵ ̵AspisR151QuerySchedule.bytes_loop.body,
+      mapCF, mapIter, mapSlice,
+  ̵  ̵ ̵ ̵core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵liceI̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.s̵l̵ic̵e̵.̵i̵ter.IteratorSliceIter.next,
+  ̵  ̵ ̵ ̵AspisV8R19.R196CurrentByteWriter.qm_writer_bridge,
+      AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes,
+  ̵  ̵ ̵ ̵Slice.getElem_Nat_eq,
+  ̲  ̲ ̲ ̲List.getElem_map, Slice.len, hlt,
+  ̵  ̵ ̵ ̵bind_assoc_eq, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:48:4: warning: This simp argument is unused:
+  Slice.getElem_Nat_eq
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+  ̵  ̵ ̵ ̵AspisR151QuerySchedule.bytes_loop.body,
+      mapCF, mapIter, mapSlice,
+  ̵  ̵ ̵ ̵core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.iter.traits.iterator.IteratorSliceIter,
+  ̵  ̵ ̵ ̵core.slice.iter.IteratorSliceIter.next,
+      AspisV8R19.R196CurrentByteWriter.qm_writer_bridge,
+      AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes,
+  ̵  ̵ ̵ ̵S̵l̵i̵c̵e̵.̵g̵e̵t̵E̵l̵e̵m̵_̵N̵a̵t̵_̵e̵q̵,̵ ̵List.getElem_map, Slice.len, hlt,
+      bind_assoc_eq, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:48:26: warning: This simp argument is unused:
+  List.getElem_map
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body, AspisR151QuerySchedule.bytes_loop.body,
+      mapCF, mapIter, mapSlice, core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.iter.traits.iterator.IteratorSliceIter, core.slice.iter.IteratorSliceIter.next,
+      AspisV8R19.R196CurrentByteWriter.qm_writer_bridge,
+      AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes, Slice.getElem_Nat_eq, L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵m̵a̵p̵,̵ ̵Slice.len,
+  ̲  ̲ ̲ ̲hlt, bind_assoc_eq, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:48:55: warning: This simp argument is unused:
+  hlt
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+  ̵  ̵ ̵ ̵AspisR151QuerySchedule.bytes_loop.body,
+      mapCF, mapIter, mapSlice,
+  ̵  ̵ ̵ ̵core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.iter.traits.iterator.IteratorSliceIter,
+  ̵  ̵ ̵ ̵core.slice.iter.IteratorSliceIter.next,
+      AspisV8R19.R196CurrentByteWriter.qm_writer_bridge,
+      AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes,
+  ̵  ̵ ̵ ̵Slice.getElem_Nat_eq,
+  ̲  ̲ ̲ ̲List.getElem_map, Slice.len, h̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵bind_assoc_eq, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:49:4: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+  ̵  ̵ ̵ ̵AspisR151QuerySchedule.bytes_loop.body,
+      mapCF, mapIter, mapSlice,
+  ̵  ̵ ̵ ̵core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.iter.traits.iterator.IteratorSliceIter,
+  ̵  ̵ ̵ ̵core.slice.iter.IteratorSliceIter.next,
+      AspisV8R19.R196CurrentByteWriter.qm_writer_bridge,
+      AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes,
+  ̵  ̵ ̵ ̵Slice.getElem_Nat_eq,
+  ̲  ̲ ̲ ̲List.getElem_map, Slice.len, hlt,
+  ̵  ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R198CurrentBytesBodyMap.body_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R198CurrentBytesBodyMap.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean"
+	User time (seconds): 1.00
+	System time (seconds): 0.25
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.24
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2538828
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64731
+	Voluntary context switches: 651
+	Involuntary context switches: 45
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.275s
+CPU time consumed: 1.286s
+Memory peak: 288.0K
+Memory swap peak: 0B

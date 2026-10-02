@@ -1,0 +1,48 @@
+import AspisR197CurrentBytes.FunsBytes
+import AspisV8R19.R196CurrentByteWriter
+import AspisV8R19.R153ScheduleBytesBridge
+
+set_option autoImplicit false
+
+namespace AspisV8R19.R198CurrentBytesBodyMap
+
+open Aeneas Aeneas.Std Result ControlFlow Error
+open AspisR156FullFreeze
+
+abbrev CurrentIter := core.iter.adapters.enumerate.Enumerate
+  (core.slice.iter.Iter AspisR156FullFreeze.aspis_core.field.QM31)
+
+abbrev ScheduleIter := core.iter.adapters.enumerate.Enumerate
+  (core.slice.iter.Iter AspisR136BeforeOod.aspis_core.field.QM31)
+
+def mapSlice (v : Slice AspisR156FullFreeze.aspis_core.field.QM31) :
+    Slice AspisR136BeforeOod.aspis_core.field.QM31 :=
+  { val := v.val.map AspisV8R19.R196CurrentByteWriter.toBefore }
+
+def mapIter (it : CurrentIter) : ScheduleIter :=
+  { count := it.count
+    iter :=
+      { slice := mapSlice it.iter.slice
+        i := it.iter.i } }
+
+def mapCF : ControlFlow (CurrentIter × alloc.vec.Vec Std.U8) (alloc.vec.Vec Std.U8) →
+    ControlFlow (ScheduleIter × alloc.vec.Vec Std.U8) (alloc.vec.Vec Std.U8)
+  | .cont (it, b) => .cont (mapIter it, b)
+  | .done b => .done b
+
+theorem body_map (iter : CurrentIter) (b : alloc.vec.Vec Std.U8) :
+    (do
+      let cf ← AspisR197CurrentBytes.bytes_loop.body iter b
+      ok (mapCF cf)) =
+    AspisR151QuerySchedule.bytes_loop.body (mapIter iter) b := by
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+    AspisR151QuerySchedule.bytes_loop.body,
+    mapCF, mapIter, mapSlice,
+    core.iter.adapters.enumerate.IteratorEnumerate.next,
+    core.iter.traits.iterator.IteratorSliceIter,
+    core.slice.iter.IteratorSliceIter.next,
+    AspisV8R19.R196CurrentByteWriter.qm_writer_bridge]
+
+#print axioms body_map
+
+end AspisV8R19.R198CurrentBytesBodyMap

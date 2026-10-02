@@ -1,0 +1,99 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790901742551304000.service; invocation ID: fc787761c03a4d259d2cb673ab17efd4
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:38:63: error: unsolved goals
+case pos
+iter : CurrentIter
+b : alloc.vec.Vec U8
+hlt : iter.iter.i < (↑iter.iter.slice).length
+⊢ ∀ (v : UScalar UScalarTy.Usize),
+    iter.count + 1#usize = ok v →
+      ∀ (a : Slice U8) (b_1 : Slice U8 → alloc.vec.Vec U8),
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+              { start := iter.count.wrapping_mul 16#usize,
+                «end» := (iter.count.wrapping_mul 16#usize).wrapping_add 16#usize } =
+            ok (a, b_1) →
+          (do
+              let x ← (R196CurrentByteWriter.toBefore iter.iter.slice[iter.iter.i]).write_le_bytes a
+              ok
+                  (cont
+                    ({
+                        iter :=
+                          { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩,
+                            i := iter.iter.i + 1 },
+                        count := v },
+                      b_1 x))) =
+            do
+            let s1 ← (R196CurrentByteWriter.toBefore (↑iter.iter.slice)[iter.iter.i]).write_le_bytes a
+            ok
+                (cont
+                  ({
+                      iter :=
+                        { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩,
+                          i := iter.iter.i + 1 },
+                      count := v },
+                    b_1 s1))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:44:4: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+  ̵  ̵ ̵ ̵AspisR151QuerySchedule.bytes_loop.body,
+      mapCF, mapIter, mapSlice,
+  ̵  ̵ ̵ ̵core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵liceI̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.s̵l̵ic̵e̵.̵i̵ter.IteratorSliceIter.next,
+  ̵  ̵ ̵ ̵AspisV8R19.R196CurrentByteWriter.qm_writer_bridge,
+      AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes,
+  ̵  ̵ ̵ ̵Slice.getElem_Nat_eq,
+  ̲  ̲ ̲ ̲List.getElem_map, Slice.len, hlt,
+  ̵  ̵ ̵ ̵bind_assoc_eq, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:49:4: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+  ̵  ̵ ̵ ̵AspisR151QuerySchedule.bytes_loop.body,
+      mapCF, mapIter, mapSlice,
+  ̵  ̵ ̵ ̵core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.iter.traits.iterator.IteratorSliceIter,
+  ̵  ̵ ̵ ̵core.slice.iter.IteratorSliceIter.next,
+      AspisV8R19.R196CurrentByteWriter.qm_writer_bridge,
+      AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes,
+  ̵  ̵ ̵ ̵Slice.getElem_Nat_eq,
+  ̲  ̲ ̲ ̲List.getElem_map, Slice.len, hlt,
+  ̵  ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R198CurrentBytesBodyMap.body_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R198CurrentBytesBodyMap.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean"
+	User time (seconds): 0.97
+	System time (seconds): 0.26
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.22
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2541880
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64598
+	Voluntary context switches: 865
+	Involuntary context switches: 51
+	Swaps: 0
+	File system inputs: 56
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.252s
+CPU time consumed: 1.270s
+Memory peak: 288.0K
+Memory swap peak: 0B

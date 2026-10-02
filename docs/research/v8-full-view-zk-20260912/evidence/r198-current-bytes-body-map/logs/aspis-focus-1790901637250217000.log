@@ -1,0 +1,104 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790901637250217000.service; invocation ID: 85ef27a5a4454cb1a3c3a7d238fe978c
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:20:2: error: Fields missing: `property`
+
+Hint: Add missing fields:
+  
+  ̲ ̲ ̲ ̲ ̲p̲r̲o̲p̲e̲r̲t̲y̲ ̲:̲=̲ ̲_̲
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:37:63: error: unsolved goals
+iter : CurrentIter
+b : alloc.vec.Vec U8
+⊢ (do
+      let x ←
+        if h : iter.iter.i < (↑iter.iter.slice).length then
+            ok (some iter.iter.slice[iter.iter.i], { slice := iter.iter.slice, i := iter.iter.i + 1 })
+          else ok (none, iter.iter)
+      let x ←
+        match x.1 with
+          | none => ok (none, { iter := x.2, count := iter.count })
+          | some a => do
+            let count' ← iter.count + 1#usize
+            ok (some (iter.count, a), { iter := x.2, count := count' })
+      let cf ←
+        match x.1 with
+          | none => ok (done b)
+          | some p => do
+            let i1 ← lift (p.1.wrapping_mul 16#usize)
+            let i2 ← lift (p.1.wrapping_mul 16#usize)
+            let i3 ← lift (i2.wrapping_add 16#usize)
+            let __x ←
+              alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b { start := i1, «end» := i3 }
+            let s1 ← (R196CurrentByteWriter.toBefore p.2).write_le_bytes __x.1
+            ok (cont (x.2, __x.2 s1))
+      ok
+          (match cf with
+          | cont (it, b) =>
+            cont
+              ({ iter := { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑it.iter.slice, ⋯⟩, i := it.iter.i },
+                  count := it.count },
+                b)
+          | done b => done b)) =
+    do
+    let x ←
+      if h : iter.iter.i < (↑iter.iter.slice).length then
+          ok
+            (some ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩[iter.iter.i],
+              { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩, i := iter.iter.i + 1 })
+        else ok (none, { slice := ⟨List.map R196CurrentByteWriter.toBefore ↑iter.iter.slice, ⋯⟩, i := iter.iter.i })
+    let __x ←
+      match x.1 with
+        | none => ok (none, { iter := x.2, count := iter.count })
+        | some a => do
+          let count' ← iter.count + 1#usize
+          ok (some (iter.count, a), { iter := x.2, count := count' })
+    match __x.1 with
+      | none => ok (done b)
+      | some p => do
+        let i1 ← lift (p.1.wrapping_mul 16#usize)
+        let i2 ← lift (p.1.wrapping_mul 16#usize)
+        let i3 ← lift (i2.wrapping_add 16#usize)
+        let __x_1 ←
+          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b { start := i1, «end» := i3 }
+        let s1 ← AspisR151QuerySchedule.aspis_core.field.QM31.write_le_bytes p.2 __x_1.1
+        ok (cont (__x.2, __x_1.2 s1))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:40:20: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean:42:4: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body, AspisR151QuerySchedule.bytes_loop.body, mapCF,
+  ̲  ̲ ̲ ̲mapIter, mapSlice, core.iter.adapters.enumerate.IteratorEnumerate.next,
+      c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵core.slice.iter.IteratorSliceIter.next, AspisV8R19.R196CurrentByteWriter.qm_writer_bridge]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R198CurrentBytesBodyMap.body_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R198CurrentBytesBodyMap.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R198CurrentBytesBodyMap.lean"
+	User time (seconds): 0.89
+	System time (seconds): 0.26
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.16
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2539708
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 25
+	Minor (reclaiming a frame) page faults: 64542
+	Voluntary context switches: 643
+	Involuntary context switches: 52
+	Swaps: 0
+	File system inputs: 5016
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.187s
+CPU time consumed: 1.184s
+Memory peak: 328.0K
+Memory swap peak: 0B
