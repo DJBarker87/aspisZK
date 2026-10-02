@@ -1,0 +1,13 @@
+# R366 Lean dependency cache inventory
+
+Read-only inventory for `.r21-scratch/R366SemanticNormalization.lean`; no Lean command was run during this inventory. Current worktree revision is recorded in `inventory.json`.
+
+R366 directly imports `AspisV8R17.StructuredCube` and `AspisV8R17.MaskWeightVector`. Their recursive local Aspis dependency graph has 23 source modules. All 23 source hashes in the current frozen Lean tree match the corresponding R57 source-copy hashes. In R126's Lean 4.32.0 library cache, 12 of those 23 `.olean` files are present and 11 are absent; every external direct import object is present in the pinned Mathlib/Lean cache. The exact cached object paths and SHA-256 values are in `inventory.json`.
+
+The failed R366 focused attempt stopped immediately because `AspisV8R17.StructuredCube.olean` is missing. It exited 1 in 0.10 seconds, at 185288 KiB Lean-child RSS and zero swap. This confirms the missing-cache condition; it does not indicate a theorem error or a Lean-version mismatch. Both the repository toolchain and R126 focus workspace specify `leanprover/lean4:v4.32.0`; the remote compiler reports Lean 4.32.0, release, commit `8c9756b28d64dab099da31a4c09229a9e6a2ef35`.
+
+The smallest compile plan is to produce only the 11 missing unchanged local objects in the dependency order listed in `inventory.json`, then compile the R366 scratch target. Each object can use the existing R126 cache directory as output and the unchanged R57 source root as `-R` source root. Keep the existing focused-job resource policy and pinned `LEAN_PATH` from `.r21-scratch/run_focus.py`. This is a plan only; no command was launched. Existing objects are not candidates for rebuild. Direct Mathlib imports already resolve from the saved cache at `/home/dombarker/project-offloads/aspis-pool-single-decode-20260825-a3/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean`.
+
+The cache files were enumerated by module path and hashed, and R57 source copies were hashed read-only. The R126 Lake workspace has an explicit Lean 4.32.0 toolchain and a saved manifest hash. Individual `.olean` build receipts linking these historical objects back to exact source files were not found as part of this bounded inspection, so object hashes and source hashes are preserved as separate evidence.
+
+After this initial cache snapshot, the lead authorized the bounded missing-dependency replay. Exactly those 11 missing local objects were compiled; per-object command receipts and hashes are preserved in `../r366-dependency-cache-replay/`. R366 itself remains uncompiled. This initial inventory is retained as the before-state record.
