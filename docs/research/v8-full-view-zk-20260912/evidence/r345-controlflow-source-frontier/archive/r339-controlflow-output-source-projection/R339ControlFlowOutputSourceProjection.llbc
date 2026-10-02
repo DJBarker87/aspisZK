@@ -1,0 +1,3737 @@
+{
+  "charon_version": "0.1.223",
+  "translated": {
+    "crate_name": "aspis_v8_performance_host",
+    "options": {
+      "ullbc": false,
+      "precise_drops": false,
+      "skip_borrowck": false,
+      "mir": "Built",
+      "rustc_args": [],
+      "targets": [],
+      "sysroot": "default",
+      "monomorphize": true,
+      "monomorphize_mut": null,
+      "start_from": [
+        "crate::circle_norm::joined_inverse::line_norm::r110_norm::batch"
+      ],
+      "start_from_if_exists": [],
+      "start_from_attribute": [],
+      "start_from_pub": false,
+      "include": [
+        "core::option",
+        "aspis_core::field",
+        "core::iter::adapters::chain::Chain",
+        "core::iter::adapters::chain::_::next",
+        "core::iter::adapters::chain::_::try_fold",
+        "core::iter::traits::iterator::Iterator::any",
+        "core::iter::traits::iterator::Iterator::chain",
+        "core::slice::iter::_::any",
+        "core::slice::_::last",
+        "core::iter::traits::iterator::Iterator::try_fold",
+        "core::ops::control_flow::{impl core::ops::try_trait::Try for core::ops::control_flow::ControlFlow<_,_>}::branch",
+        "core::ops::control_flow::{impl core::ops::try_trait::Try for core::ops::control_flow::ControlFlow<_,_>}::from_output",
+        "core::ops::control_flow::{impl core::ops::try_trait::FromResidual<core::ops::control_flow::ControlFlow<_,core::convert::Infallible>> for core::ops::control_flow::ControlFlow<_,_>}::from_residual"
+      ],
+      "opaque": [],
+      "exclude": [],
+      "extract_opaque_bodies": false,
+      "translate_all_methods": false,
+      "duplicate_defaulted_methods": false,
+      "lift_associated_types": [
+        "*"
+      ],
+      "hide_marker_traits": true,
+      "hide_allocator": true,
+      "remove_unused_clauses": false,
+      "remove_unused_self_clauses": true,
+      "remove_adt_clauses": true,
+      "desugar_drops": false,
+      "ops_to_function_calls": true,
+      "index_to_function_calls": true,
+      "treat_box_as_builtin": true,
+      "raw_consts": false,
+      "consts": null,
+      "unsized_strings": false,
+      "reconstruct_fallible_operations": true,
+      "reconstruct_asserts": true,
+      "unbind_item_vars": true,
+      "print_original_ullbc": false,
+      "print_ullbc": false,
+      "print_built_llbc": false,
+      "print_llbc": false,
+      "dest_dir": null,
+      "dest_file": "/home/dombarker/project-offloads/aspis-r327-private-batch-source-try-fold-20261002-a/R327PrivateBatchSourceTryFold.llbc",
+      "no_dedup_serialized_ast": false,
+      "format": null,
+      "no_serialize": false,
+      "no_typecheck": false,
+      "no_normalize": false,
+      "no_reorder_decls": false,
+      "abort_on_error": false,
+      "error_on_warnings": false,
+      "preset": "Aeneas"
+    },
+    "target_information": [
+      {
+        "key": "x86_64-unknown-linux-gnu",
+        "value": {
+          "target_pointer_size": 8,
+          "is_little_endian": true
+        }
+      }
+    ],
+    "files": [
+      {
+        "id": 0,
+        "name": {
+          "Local": "../r110_norm.rs"
+        },
+        "crate_name": "aspis_v8_performance_host",
+        "contents": "//! Private canonical base/complex arithmetic across the existing norm batch.\n//! Same line coefficients, point order, zero checks and shared inversion.\nuse super::*;\nconst P110:u32=0x7fff_ffff;\n#[derive(Clone,Copy,PartialEq,Debug)]struct B(u32);\nimpl B {\n    const ZERO:Self=Self(0);\n    fn input(x:M31)->Option<Self>{if x.0<P110{Some(Self(x.0))}else{None}}\n    #[inline(always)]fn reduce(x:u64)->Self{Self(M31::reduce_u64(x).0)}\n    #[inline(always)]fn add(self,r:Self)->Self{let x=self.0.wrapping_add(r.0);Self(if x>=P110{x-P110}else{x})}\n    #[inline(always)]fn sub(self,r:Self)->Self{let x=self.0.wrapping_add(P110).wrapping_sub(r.0);Self(if x>=P110{x-P110}else{x})}\n    #[inline(always)]fn neg(self)->Self{Self::ZERO.sub(self)}\n    #[inline(always)]fn half(self)->Self{Self((self.0>>1)|((self.0&1)<<30))}\n    #[inline(always)]fn mul(self,r:Self)->Self{\n        // Canonical products, not arbitrary integers below 2^62: a single\n        // fold followed by one subtraction is canonical for this bound.\n        let x=u64::from(self.0)*u64::from(r.0);let s=(x&u64::from(P110))+(x>>31);\n        Self(if s>=u64::from(P110){(s-u64::from(P110))as u32}else{s as u32})\n    }\n    fn inv(self)->Self{Self(M31(self.0).inv().0)}\n}\n#[derive(Clone,Copy,PartialEq,Debug)]struct C(B,B);\nimpl C {\n    fn input(x:CM31)->Option<Self>{Some(Self(B::input(x.a)?,B::input(x.b)?))}\n    fn output(self)->CM31{CM31::new(M31(self.0.0),M31(self.1.0))}\n    #[inline(always)]fn add(self,r:Self)->Self{Self(self.0.add(r.0),self.1.add(r.1))}\n    #[inline(always)]fn sub(self,r:Self)->Self{Self(self.0.sub(r.0),self.1.sub(r.1))}\n    #[inline(always)]fn double(self)->Self{self.add(self)}\n    #[inline(always)]fn half(self)->Self{Self(self.0.half(),self.1.half())}\n    #[inline(always)]fn mul_m(self,r:B)->Self{Self(self.0.mul(r),self.1.mul(r))}\n    #[inline(always)]fn mul(self,r:Self)->Self {\n        const PP:u64=(P110 as u64)*(P110 as u64);\n        let (a,b,c,d)=(u64::from(self.0.0),u64::from(self.1.0),u64::from(r.0.0),u64::from(r.1.0));\n        // PP dominates b*d; both representatives are below 2*PP < 2^63.\n        Self(B::reduce((a*c).wrapping_add(PP).wrapping_sub(b*d)),B::reduce((a*d).wrapping_add(b*c)))\n    }\n    #[inline(always)]fn square(self)->Self {\n        let a=u64::from(self.0.0);let b=u64::from(self.1.0);\n        Self(B::reduce((a+b)*(a+u64::from(P110)-b)),self.0.mul(self.1).add(self.0.mul(self.1)))\n    }\n    #[inline(always)]fn times_r(self)->Self{Self(self.0.add(self.0).sub(self.1),self.0.add(self.1.add(self.1)))}\n    #[inline(always)]fn norm(self)->B{let a=u64::from(self.0.0);let b=u64::from(self.1.0);B::reduce(a*a+b*b)}\n}\nstruct Coeff110([C;5]);\nimpl Coeff110 {\n    fn new([a,b,c]:[K;3])->Option<Self>{\n        let a=[C::input(a.c0)?,C::input(a.c1)?];let b=[C::input(b.c0)?,C::input(b.c1)?];let c=[C::input(c.c0)?,C::input(c.c1)?];\n        let norm=|x:[C;2]|x[0].square().sub(x[1].square().times_r());\n        let polar=|x:[C;2],y:[C;2]|x[0].mul(y[0]).sub(x[1].mul(y[1]).times_r()).double();\n        let nc=norm(c);let half=norm(b).sub(nc).half();\n        Some(Self([norm(a).add(nc).add(half),half,polar(a,b),polar(a,c),polar(b,c)]))\n    }\n    #[inline(always)]fn four(&self,x:B,y:B,t:B)->[C;4]{\n        let c=&self.0;let even=c[0].add(c[1].mul_m(t));\n        let odd_x=c[2].mul_m(x);let odd_y=c[3].mul_m(y);let cross=c[4].mul_m(x.mul(y));\n        let positive=even.add(odd_x);let negative=even.sub(odd_x);\n        let plus=odd_y.add(cross);let minus=odd_y.sub(cross);\n        [positive.add(plus),positive.sub(plus),negative.sub(minus),negative.add(minus)]\n    }\n}\nfn batch(xs:&[B],ys:&[B])->Result<(Vec<B>,Vec<B>),Error>{\n    if xs.is_empty()||ys.is_empty()||xs.iter().chain(ys).any(|x|*x==B::ZERO){return Err(Error::Domain);}\n    let mut px=Vec::with_capacity(xs.len());px.push(xs[0]);for x in &xs[1..]{px.push(px.last().unwrap().mul(*x));}\n    let mut py=Vec::with_capacity(ys.len());py.push(ys[0]);for y in &ys[1..]{py.push(py.last().unwrap().mul(*y));}\n    let p=*px.last().unwrap();let q=*py.last().unwrap();let total=p.mul(q).inv();let mut ix=total.mul(q);let mut iy=total.mul(p);\n    let mut ox=vec![B::ZERO;xs.len()];for i in (1..xs.len()).rev(){ox[i]=px[i-1].mul(ix);ix=ix.mul(xs[i]);}ox[0]=ix;\n    let mut oy=vec![B::ZERO;ys.len()];for i in (1..ys.len()).rev(){oy[i]=py[i-1].mul(iy);iy=iy.mul(ys[i]);}oy[0]=iy;\n    Ok((ox,oy))\n}\npub(super) fn try_norm(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Option<Result<(Vec<CM31>,Vec<M31>),Error>>{\n    let points=selected.points();\n    if points.len()>Q||values.len()!=4*points.len()||base.len()!=2*points.len()||lines.len()!=points.len(){return Some(Err(Error::Shape));}\n    if values.is_empty()||values.contains(&K::ZERO){return Some(Err(Error::Domain));}\n    let coeff=Coeff110::new(abc)?;let mut norms=Vec::with_capacity(values.len());\n    for (p,&t)in points.iter().zip(lines){norms.extend(coeff.four(B::input(p.x)?,B::input(p.y)?,B::input(t)?));}\n    let norms_m:Vec<_>=norms.iter().map(|n|n.norm()).collect();\n    let base:Option<Vec<B>>=base.iter().copied().map(B::input).collect();let base=base?;\n    let (inverse,base_inverse)=match batch(&norms_m,&base){Ok(x)=>x,Err(e)=>return Some(Err(e))};\n    let out=norms.into_iter().zip(inverse).map(|(n,d)|C(n.0.mul(d),n.1.neg().mul(d)).output()).collect();\n    Some(Ok((out,base_inverse.into_iter().map(|x|M31(x.0)).collect())))\n}\n#[cfg(not(target_os=\"solana\"))]\npub(super) fn controls(){\n    let mut rng=0x110cea_918237abcdu64;\n    let mut next=||{rng^=rng<<13;rng^=rng>>7;rng^=rng<<17;M31((rng%u64::from(P110))as u32)};\n    for case in 0..65536{\n        let mut x:[M31;4]=core::array::from_fn(|_|next());\n        if case<256{let v=[0,1,P110-2,P110-1];let mut c=case;for i in &mut x{*i=M31(v[c%4]);c/=4;}}\n        let a=CM31::new(x[0],x[1]);let b=CM31::new(x[2],x[3]);let qa=C::input(a).unwrap();let qb=C::input(b).unwrap();\n        for (v,w)in [(qa.add(qb).output(),a.add(b)),(qa.sub(qb).output(),a.sub(b)),(qa.mul(qb).output(),a.mul(b)),(qa.square().output(),a.square()),(qa.mul_m(qb.0).output(),a.mul_m31(b.a))]{assert_eq!(v,w);}\n        assert_eq!(M31(qa.norm().0),a.a.mul(a.a).add(a.b.mul(a.b)));\n    }\n    let mut zero=0;\n    for at in 0..132 {let mut all=vec![B(1);132];all[at]=B::ZERO;assert_eq!(batch(&all[..88],&all[88..]),Err(Error::Domain));zero+=1;}\n    for case in 0..512 {\n        let all:Vec<_>=(0..132).map(|_|{let x=next();B(if x==M31::ZERO{1}else{x.0})}).collect();\n        let (a,b)=batch(&all[..88],&all[88..]).unwrap();\n        for (x,y)in all.iter().zip(a.iter().chain(&b)){assert_eq!(x.mul(*y),B(1));}\n        if case==0{assert_eq!(batch(&[B(1)],&[B(P110-1)]),Ok((vec![B(1)],vec![B(P110-1)])));}\n    }\n    for raw in [P110,P110+1,u32::MAX]{assert_eq!(B::input(M31(raw)),None);}\n    println!(\"R110_NORM arithmetic_profiles=65536 arithmetic_comparisons=393216 inversion_batches=512 zero_positions={zero} canonical_type_private=true\");\n}\n"
+      },
+      {
+        "id": 1,
+        "name": {
+          "Local": "../line_norm.rs"
+        },
+        "crate_name": "aspis_v8_performance_host",
+        "contents": "//! Borrow the SAME line-coordinate vector built by the callback's point loop.\n//! No public hint: a mismatched line vector is not covered by the source contract.\nuse super::*;\nstruct LineCoeff([CM31;5]);\nimpl LineCoeff{\n    fn new(abc:[K;3])->Self{\n        let c=Coeff::new(abc).0;let half=c[1].half();\n        Self([c[0].add(half),half,c[2],c[3],c[4]])\n    }\n    #[inline]\n    fn four(&self,x:M31,y:M31,t:M31)->[CM31;4]{\n        let c=&self.0;let even=c[0].add(c[1].mul_m31(t));\n        let odd_x=c[2].mul_m31(x);let odd_y=c[3].mul_m31(y);let cross=c[4].mul_m31(x.mul(y));\n        let positive=even.add(odd_x);let negative=even.sub(odd_x);\n        let plus=odd_y.add(cross);let minus=odd_y.sub(cross);\n        [positive.add(plus),positive.sub(plus),negative.sub(minus),negative.add(minus)]\n    }\n}\n#[path=\"r99_fold_inverse.rs\"] mod folded;\npub(super) fn inverse_folded(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31],alpha:K)->Result<Vec<K>,Error>{\n    folded::inverse(selected,values,abc,base,lines,alpha)\n}\nfn r110_retained_norm(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<CM31>,Vec<M31>),Error>{\n    let points=selected.points();\n    if points.len()>Q || values.len()!=4*points.len() || base.len()!=2*points.len() || lines.len()!=points.len(){return Err(Error::Shape);}\n    if values.is_empty() || values.iter().any(|v|*v==K::ZERO){return Err(Error::Domain);}\n    let coeff=LineCoeff::new(abc);\n    let norms:Vec<CM31>=points.iter().zip(lines).flat_map(|(p,t)|coeff.four(p.x,p.y,*t)).collect();\n    let norms_m:Vec<M31>=norms.iter().map(|n|n.a.mul(n.a).add(n.b.mul(n.b))).collect();\n    let (inv,base_inv)=batch_two(&norms_m,base)?;\n    let out=norms.into_iter().zip(inv).map(|(n,d)|CM31::new(n.a.mul(d),n.b.neg().mul(d))).collect();\n    Ok((out,base_inv))\n}\npub(super) fn inverse(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{\n    let (norms,base_inv)=norm_inverse(selected,values,abc,base,lines)?;\n    let out=values.iter().zip(norms).map(|(v,ni)|K{c0:v.c0.mul(ni),c1:v.c1.neg().mul(ni)}).collect();\n    Ok((out,base_inv))\n}\n#[cfg(test)]\nmod tests{\n    use super::*;\n    fn values(abc:[K;3],pts:&[BaseCirclePoint])->Vec<K>{pts.iter().flat_map(|p|\n        [(p.x,p.y),(p.x,p.y.neg()),(p.x.neg(),p.y.neg()),(p.x.neg(),p.y)]\n        .map(|(x,y)|abc[0].add(abc[1].mul_m31(x)).add(abc[2].mul_m31(y)))).collect()}\n    #[test]\n    fn shared_line_matches_circle_norm(){\n        let mut rng=0x6c69_6e65_6e6f_726du64;\n        fn m(r:&mut u64)->M31{*r^=*r<<13;*r^=*r>>7;*r^=*r<<17;M31((*r%u64::from(corelib::field::P)) as u32)}\n        fn k(r:&mut u64)->K{K{c0:CM31::new(m(r),m(r)),c1:CM31::new(m(r),m(r))}}\n        for case in 0..1024{\n            let n=if case<22{case+1}else{Q};\n            let ids:Vec<_>=(0..n).map(|i|((i*11719+case*131)%262144) as u32).collect();\n            let selected=Selected::new(&ids).unwrap();let pts=selected.points();\n            let mut abc=core::array::from_fn(|_|k(&mut rng));\n            if case==0{abc=[K::ZERO;3];}if case==1{abc=[K::ONE;3];}\n            if case%11==0{abc[0]=abc[1].mul_m31(pts[0].x).add(abc[2].mul_m31(pts[0].y)).neg();}\n            let v=values(abc,pts);\n            let mut base:Vec<_>=pts.iter().flat_map(|p|[p.x.double(),p.y.double()]).collect();\n            if case%13==0{base[case%(2*n)]=M31::ZERO;}\n            let lines:Vec<_>=pts.iter().map(|p|p.x.mul(p.x).double().sub(M31::ONE)).collect();\n            let c=LineCoeff::new(abc);let old=Coeff::new(abc);\n            for(p,t)in pts.iter().zip(&lines){assert_eq!(c.four(p.x,p.y,*t),old.four(p.x,p.y));}\n            assert_eq!(selected.inverse_lines(&v,abc,&base,&lines),inverse_split(&selected,&v,abc,&base));\n        }\n        // The affine identity also works at arbitrary base points, independently\n        // of the circle-only justification of the preceding norm coefficients.\n        for _ in 0..512{\n            let abc=core::array::from_fn(|_|k(&mut rng));let x=m(&mut rng);let y=m(&mut rng);\n            assert_eq!(LineCoeff::new(abc).four(x,y,x.mul(x).double().sub(M31::ONE)),Coeff::new(abc).four(x,y));\n            let z=m(&mut rng);assert!(z.half().0<corelib::field::P);assert_eq!(z.half().double(),z);\n        }\n        for z in [0,1,2,3,(1<<30)-1,1<<30,(1<<30)+1,corelib::field::P-2,corelib::field::P-1]{\n            assert_eq!(M31(z).half().double(),M31(z));\n        }\n        let c=LineCoeff::new([K::ZERO,K::ONE,K::ZERO]);\n        assert_ne!(c.four(M31::ONE,M31::ZERO,M31::ZERO),Coeff::new([K::ZERO,K::ONE,K::ZERO]).four(M31::ONE,M31::ZERO));\n        let p=Selected::new(&[0]).unwrap();\n        assert_eq!(p.inverse_lines(&[K::ONE;4],[K::ONE;3],&[M31::ONE;2],&[]),Err(Error::Shape));\n        let empty=Selected::new(&[]).unwrap();\n        assert_eq!(empty.inverse_lines(&[],[K::ZERO;3],&[],&[]),Err(Error::Domain));\n        println!(\"LINE_NORM chord_profiles=1024 arbitrary_point_profiles=512 lengths=1..22 mismatched_line_counterexample=true half_boundary_tests=9 zero_and_shape_rejection=true\");\n    }\n}\n\n#[path=\"r110_norm.rs\"]mod r110_norm;\nfn norm_inverse(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<CM31>,Vec<M31>),Error>{\n    if let Some(out)=r110_norm::try_norm(selected,values,abc,base,lines){\n        #[cfg(not(target_os=\"solana\"))] assert_eq!(out,r110_retained_norm(selected,values,abc,base,lines));\n        return out;\n    }\n    r110_retained_norm(selected,values,abc,base,lines)\n}\n#[cfg(not(target_os=\"solana\"))]pub(super)fn r110_controls(){r110_norm::controls();}\n"
+      },
+      {
+        "id": 2,
+        "name": {
+          "Local": "../joined_inverse.rs"
+        },
+        "crate_name": "aspis_v8_performance_host",
+        "contents": "//! Same prefix/backward kernel, one base inverse across both denominator lists.\n//! Child module of circle_norm: uses the very same coefficient/point invariant.\nuse super::*;\n#[cfg(any(v8_line_norm,test))]\n#[path=\"line_norm.rs\"] mod line_norm;\n#[cfg(any(v8_line_norm,test))]\npub(super) fn inverse_lines(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{\n    line_norm::inverse(selected,values,abc,base,lines)\n}\npub(super) fn inverse_folded(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31],alpha:K)->Result<Vec<K>,Error>{\n    line_norm::inverse_folded(selected,values,abc,base,lines,alpha)\n}\nfn batch_two(xs:&[M31],ys:&[M31])->Result<(Vec<M31>,Vec<M31>),Error>{\n    if xs.is_empty() || ys.is_empty() || xs.iter().chain(ys).any(|x|*x==M31::ZERO){return Err(Error::Domain);}\n    let mut px=Vec::with_capacity(xs.len());px.push(xs[0]);\n    for x in &xs[1..]{px.push(px.last().unwrap().mul(*x));}\n    let mut py=Vec::with_capacity(ys.len());py.push(ys[0]);\n    for y in &ys[1..]{py.push(py.last().unwrap().mul(*y));}\n    let p=*px.last().unwrap();let q=*py.last().unwrap();\n    let total=p.mul(q).inv();let mut ix=total.mul(q);let mut iy=total.mul(p);\n    let mut ox=vec![M31::ZERO;xs.len()];\n    for i in (1..xs.len()).rev(){ox[i]=px[i-1].mul(ix);ix=ix.mul(xs[i]);}ox[0]=ix;\n    let mut oy=vec![M31::ZERO;ys.len()];\n    for i in (1..ys.len()).rev(){oy[i]=py[i-1].mul(iy);iy=iy.mul(ys[i]);}oy[0]=iy;\n    Ok((ox,oy))\n}\npub(super) fn inverse_split(selected:&Selected,values:&[K],abc:[K;3],base:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{\n    let points=selected.points();\n    if points.len()>Q || values.len()!=4*points.len() || base.len()!=2*points.len(){return Err(Error::Shape);}\n    if values.is_empty() || values.iter().any(|v|*v==K::ZERO){return Err(Error::Domain);}\n    let coeff=Coeff::new(abc);\n    let norms:Vec<CM31>=points.iter().flat_map(|p|coeff.four(p.x,p.y)).collect();\n    let norms_m:Vec<M31>=norms.iter().map(|n|n.a.mul(n.a).add(n.b.mul(n.b))).collect();\n    let (inv,base_inv)=batch_two(&norms_m,base)?;\n    let out=values.iter().zip(norms).zip(inv).map(|((v,n),d)|{\n        let ni=CM31::new(n.a.mul(d),n.b.neg().mul(d));\n        K{c0:v.c0.mul(ni),c1:v.c1.neg().mul(ni)}\n    }).collect();\n    Ok((out,base_inv))\n}\npub(super) fn inverse(selected:&Selected,values:&[K],abc:[K;3],base:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{\n    let points=selected.points();\n    if points.len()>Q || values.len()!=4*points.len() || base.len()!=2*points.len(){return Err(Error::Shape);}\n    if values.is_empty() || values.iter().any(|v|*v==K::ZERO){return Err(Error::Domain);}\n    let coeff=Coeff::new(abc);\n    let norms:Vec<CM31>=points.iter().flat_map(|p|coeff.four(p.x,p.y)).collect();\n    let mut all=Vec::with_capacity(norms.len()+base.len());\n    for n in &norms{all.push(n.a.mul(n.a).add(n.b.mul(n.b)));}\n    all.extend_from_slice(base);\n    // Checks every norm and base denominator. No assumed nonzero suffix.\n    let inv=batch_inverse_m(&all)?;\n    let out=values.iter().zip(norms).zip(inv.iter()).map(|((v,n),d)|{\n        let ni=CM31::new(n.a.mul(*d),n.b.neg().mul(*d));\n        K{c0:v.c0.mul(ni),c1:v.c1.neg().mul(ni)}\n    }).collect();\n    // Borrow the tail at the caller; do not copy/split_off a second output Vec.\n    Ok((out,inv))\n}\n#[cfg(test)]\nmod tests{\n    use super::*;\n    fn values(abc:[K;3],pts:&[BaseCirclePoint])->Vec<K>{pts.iter().flat_map(|p|\n        [(p.x,p.y),(p.x,p.y.neg()),(p.x.neg(),p.y.neg()),(p.x.neg(),p.y)]\n        .map(|(x,y)|abc[0].add(abc[1].mul_m31(x)).add(abc[2].mul_m31(y)))).collect()}\n    #[test]\n    fn joined_matches_separate_and_zero_rejection(){\n        let mut rng=0x6a6f_696e_6564_7638u64;\n        fn m(r:&mut u64)->M31{*r^=*r<<13;*r^=*r>>7;*r^=*r<<17;M31((*r%u64::from(corelib::field::P)) as u32)}\n        fn k(r:&mut u64)->K{K{c0:CM31::new(m(r),m(r)),c1:CM31::new(m(r),m(r))}}\n        for case in 0..1024{\n            let n=if case<22{case+1}else{Q};\n            let ids:Vec<_>=(0..n).map(|i|((i*11719+case*131)%262144) as u32).collect();\n            let selected=Selected::new(&ids).unwrap();let pts=selected.points();\n            let mut abc=core::array::from_fn(|_|k(&mut rng));\n            if case==0{abc=[K::ZERO;3];}\n            if case==1{abc=[K::ONE;3];}\n            if case%11==0{abc[0]=abc[1].mul_m31(pts[0].x).add(abc[2].mul_m31(pts[0].y)).neg();}\n            let v=values(abc,pts);\n            let mut base:Vec<_>=pts.iter().flat_map(|p|[p.x.double(),p.y.double()]).collect();\n            if case%13==0{base[case%(2*n)]=M31::ZERO;}\n            let old=selected.inverse(&v,abc).and_then(|a|batch_inverse_m(&base).map(|b|(a,b)));\n            let joined=inverse(&selected,&v,abc,&base).map(|(a,b)|{\n                assert_eq!(b.len(),6*n);\n                for (x,y) in base.iter().zip(&b[4*n..]){assert_eq!(x.mul(*y),M31::ONE);}\n                (a,b[4*n..].to_vec())\n            });\n            assert_eq!(joined,old);\n            assert_eq!(inverse_split(&selected,&v,abc,&base),old);\n        }\n        // Every position of a general132-element list may be zero, even though\n        // source-derived fold denominators have stronger invariants.\n        for bad in 0..132{\n            let mut all=vec![M31::ONE;132];all[bad]=M31::ZERO;\n            let separate=batch_inverse_m(&all[..88]).and_then(|a|batch_inverse_m(&all[88..]).map(|b|(a,b)));\n            assert_eq!(separate,Err(Error::Domain));assert_eq!(batch_inverse_m(&all),Err(Error::Domain));\n            assert_eq!(batch_two(&all[..88],&all[88..]),Err(Error::Domain));\n        }\n        for case in 0..512{\n            let all:Vec<_>=(0..132).map(|_|{let x=m(&mut rng);if x==M31::ZERO{M31::ONE}else{x}}).collect();\n            let joined=batch_inverse_m(&all).unwrap();\n            assert_eq!(&joined[..88],batch_inverse_m(&all[..88]).unwrap());\n            assert_eq!(&joined[88..],batch_inverse_m(&all[88..]).unwrap());\n            assert_eq!(batch_two(&all[..88],&all[88..]).unwrap(),(joined[..88].to_vec(),joined[88..].to_vec()));\n            for(x,y)in all.iter().zip(joined){assert_eq!(x.mul(y),M31::ONE);}\n            if case==0{assert_eq!(batch_inverse_m(&vec![M31(corelib::field::P-1);132]).unwrap(),vec![M31(corelib::field::P-1);132]);}\n        }\n        let p=Selected::new(&[0]).unwrap();\n        assert_eq!(p.inverse_joined(&[K::ONE;4],[K::ONE;3],&[M31::ONE]),Err(Error::Shape));\n        assert_eq!(p.inverse_joined(&[K::ONE;3],[K::ONE;3],&[M31::ONE;2]),Err(Error::Shape));\n        let empty=Selected::new(&[]).unwrap();\n        assert_eq!(empty.inverse_joined(&[],[K::ZERO;3],&[]),Err(Error::Domain));\n        assert_eq!(batch_two(&[],&[M31::ONE]),Err(Error::Domain));\n        assert_eq!(batch_two(&[M31::ONE],&[]),Err(Error::Domain));\n        assert_eq!(batch_two(&[M31::ONE],&[M31::ONE]),Ok((vec![M31::ONE],vec![M31::ONE])));\n        println!(\"JOINED_INVERSE chord_profiles=1024 general_batches=512 zero_positions=132 lengths=1..22 shape_and_empty_rejection=true borrowed_tail=true\");\n    }\n}\n\n#[cfg(not(target_os=\"solana\"))]pub(super)fn r110_controls(){line_norm::r110_controls();}\n"
+      },
+      {
+        "id": 3,
+        "name": {
+          "Local": "../circle_norm.rs"
+        },
+        "crate_name": "aspis_v8_performance_host",
+        "contents": "//! Circle-only specialization of the retained six-coefficient norm.\n//! No prover-provided point can construct Selected; its fields are private.\nuse super::*;\nuse corelib::circle_fri::BaseCirclePoint;\n#[cfg(any(v8_joined_inverse,test))]\n#[path=\"joined_inverse.rs\"] mod joined_inverse;\nfn times_r(z:CM31)->CM31{CM31::new(z.a.double().sub(z.b),z.a.add(z.b.double()))}\nfn norm(v:K)->CM31{v.c0.square().sub(times_r(v.c1.square()))}\nfn polar(v:K,w:K)->CM31{v.c0.mul(w.c0).sub(times_r(v.c1.mul(w.c1))).double()}\nstruct Coeff([CM31;5]);\nimpl Coeff{\n    fn new([a,b,c]:[K;3])->Self{\n        let nc=norm(c);\n        Self([norm(a).add(nc),norm(b).sub(nc),polar(a,b),polar(a,c),polar(b,c)])\n    }\n    #[inline]\n    fn four(&self,x:M31,y:M31)->[CM31;4]{\n        let c=&self.0;\n        let even=c[0].add(c[1].mul_m31(x.mul(x)));\n        let odd_x=c[2].mul_m31(x);let odd_y=c[3].mul_m31(y);let cross=c[4].mul_m31(x.mul(y));\n        let positive=even.add(odd_x);let negative=even.sub(odd_x);\n        let plus=odd_y.add(cross);let minus=odd_y.sub(cross);\n        [positive.add(plus),positive.sub(plus),negative.sub(minus),negative.add(minus)]\n    }\n}\npub(super) struct Selected(Vec<BaseCirclePoint>);\nimpl Selected{\n    pub(super) fn inverse_folded(&self,values:&[K],abc:[K;3],base:&[M31],lines:&[M31],alpha:K)->Result<Vec<K>,Error>{\n        joined_inverse::inverse_folded(self,values,abc,base,lines,alpha)\n    }\n    #[cfg(any(v8_line_norm,test))]\n    pub(super) fn inverse_lines(&self,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{\n        joined_inverse::inverse_lines(self,values,abc,base,lines)\n    }\n    #[cfg(any(v8_joined_inverse,test))]\n    pub(super) fn inverse_joined(&self,values:&[K],abc:[K;3],base:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{\n        #[cfg(v8_split_inverse)] return joined_inverse::inverse_split(self,values,abc,base);\n        #[cfg(not(v8_split_inverse))]\n        joined_inverse::inverse(self,values,abc,base)\n    }\n    pub(super) fn new(queries:&[u32])->Result<Self,Error>{\n        Ok(Self(corelib::circle_fri::selected_circle_fiber_points_shared(20,queries).map_err(|_|Error::Domain)?))\n    }\n    pub(super) fn points(&self)->&[BaseCirclePoint]{&self.0}\n    // Sole non-test caller constructs denoms from SAME abc and self.points().\n    // An immutable borrow prevents replacing the validated point collection.\n    pub(super) fn inverse(&self,values:&[K],abc:[K;3])->Result<Vec<K>,Error>{\n        if self.0.len()>Q || values.len()!=4*self.0.len(){return Err(Error::Shape);}\n        if values.is_empty() || values.iter().any(|v|*v==K::ZERO){return Err(Error::Domain);}\n        let coeff=Coeff::new(abc);\n        let norms:Vec<CM31>=self.0.iter().flat_map(|p|coeff.four(p.x,p.y)).collect();\n        let norms_m:Vec<M31>=norms.iter().map(|n|n.a.mul(n.a).add(n.b.mul(n.b))).collect();\n        let inv=batch_inverse_m(&norms_m)?;\n        Ok(values.iter().zip(norms).zip(inv).map(|((v,n),d)|{\n            let ni=CM31::new(n.a.mul(d),n.b.neg().mul(d));\n            K{c0:v.c0.mul(ni),c1:v.c1.neg().mul(ni)}\n        }).collect())\n    }\n}\n#[cfg(test)]\nmod tests{\n    use super::*;\n    fn values(abc:[K;3],pts:&[BaseCirclePoint])->Vec<K>{pts.iter().flat_map(|p|\n        [(p.x,p.y),(p.x,p.y.neg()),(p.x.neg(),p.y.neg()),(p.x.neg(),p.y)]\n        .map(|(x,y)|abc[0].add(abc[1].mul_m31(x)).add(abc[2].mul_m31(y)))).collect()}\n    #[test]\n    fn all_selected_points_and_arbitrary_chords(){\n        let reference:Vec<u32>=include_str!(\"circle-window-points.json\").split(|c:char|!c.is_ascii_digit())\n            .filter(|s|!s.is_empty()).map(|s|s.parse().unwrap()).collect();\n        let actual:Vec<u32>=[corelib::circle_fri::V6_CIRCLE_LOW6_WINDOW,\n            corelib::circle_fri::V6_CIRCLE_MIDDLE6_WINDOW,corelib::circle_fri::V6_CIRCLE_HIGH6_WINDOW]\n            .into_iter().flatten().flatten().collect();\n        assert_eq!(actual,reference);\n        assert!(actual.iter().all(|v|*v<corelib::field::P));\n        // Exhaustive finite index/control-flow test, not QM31 enumeration.\n        for start in (0..262144).step_by(512){\n            let ids:Vec<_>=(start..start+512).collect();\n            let selected=Selected::new(&ids).unwrap();\n            for p in selected.points(){assert_eq!(p.x.mul(p.x).add(p.y.mul(p.y)),M31::ONE);}\n        }\n        assert!(matches!(Selected::new(&[262144]),Err(Error::Domain)));\n        assert!(matches!(Selected::new(&[u32::MAX]),Err(Error::Domain)));\n        assert!(matches!(Selected::new(&[0,262144,1]),Err(Error::Domain)));\n        let mut rng=0x6372_636c_6535_7638u64;\n        fn m(r:&mut u64)->M31{*r^=*r<<13;*r^=*r>>7;*r^=*r<<17;M31((*r%u64::from(corelib::field::P)) as u32)}\n        fn k(r:&mut u64)->K{K{c0:CM31::new(m(r),m(r)),c1:CM31::new(m(r),m(r))}}\n        for case in 0..1024{\n            let ids:Vec<_>=(0..Q).map(|i|((i*11719+case*131)%262144) as u32).collect();\n            let selected=Selected::new(&ids).unwrap();let pts=selected.points();\n            let mut abc=core::array::from_fn(|_|k(&mut rng));\n            if case==0{abc=[K::ZERO;3];}\n            if case==1{abc=[K::ONE;3];}\n            if (2..14).contains(&case){abc=[K::ZERO;3];let mut b=[M31::ZERO;4];b[(case-2)%4]=M31(corelib::field::P-1);abc[(case-2)/4]=K{c0:CM31::new(b[0],b[1]),c1:CM31::new(b[2],b[3])};}\n            if case==14{abc=[K{c0:CM31::new(M31(corelib::field::P-1),M31(corelib::field::P-1)),c1:CM31::new(M31(corelib::field::P-1),M31(corelib::field::P-1))};3];}\n            if case%11==0{abc[0]=abc[1].mul_m31(pts[3].x).add(abc[2].mul_m31(pts[3].y)).neg();}\n            let v=values(abc,pts);let c=Coeff::new(abc);\n            let ns:Vec<_>=pts.iter().flat_map(|p|c.four(p.x,p.y)).collect();\n            assert_eq!(ns,v.iter().copied().map(norm).collect::<Vec<_>>());\n            let iv=selected.inverse(&v,abc);\n            assert_eq!(iv,chord_norm::inverse(&v,abc,pts));\n            assert_eq!(iv,tower_inverse_k(&v));\n            if let Ok(iv)=iv{for (x,y) in v.iter().zip(iv){assert_eq!(x.mul(y),K::ONE);}}\n        }\n        // Legal unit points with zero coordinates, not in selected domain.\n        for (x,y) in [(M31::ZERO,M31::ONE),(M31::ONE,M31::ZERO),(M31::ZERO,M31::ONE.neg()),(M31::ONE.neg(),M31::ZERO)]{\n            let abc=core::array::from_fn(|_|k(&mut rng));let pts=[BaseCirclePoint{x,y}];\n            assert_eq!(Coeff::new(abc).four(x,y).to_vec(),values(abc,&pts).into_iter().map(norm).collect::<Vec<_>>());\n        }\n        assert_ne!(Coeff::new([K::ZERO,K::ZERO,K::ONE]).four(M31::ZERO,M31::ZERO),[CM31::ZERO;4]);\n        let empty=Selected::new(&[]).unwrap();\n        assert_eq!(empty.inverse(&[],[K::ZERO;3]),Err(Error::Domain));\n        assert_eq!(empty.inverse(&[K::ONE],[K::ZERO;3]),Err(Error::Shape));\n        let long=Selected::new(&vec![0;Q+1]).unwrap();\n        assert_eq!(long.inverse(&vec![K::ONE;4*(Q+1)],[K::ONE;3]),Err(Error::Shape));\n        println!(\"CIRCLE_NORM unit_domain_indices=262144 chord_profiles=1024 slots=4 legal_zero_coordinate_points=4 invalid_ids=3 zero_denominators_reject=true off_circle_counterexample=true\");\n    }\n}\n\n#[cfg(not(target_os=\"solana\"))]pub(super)fn r110_controls(){joined_inverse::r110_controls();}\n"
+      },
+      {
+        "id": 4,
+        "name": {
+          "Local": "../relation_callback.rs"
+        },
+        "crate_name": "aspis_v8_performance_host",
+        "contents": "//! Isolated complete RELATION suffix, not a payment verifier or deployment.\n//! Real canonical body, SHA transcript, two Merkle frontiers and quotient\n//! openings. No verifier function receives a full quotient coefficient vector.\n//! Public ordinary weights/claim come from the outer semantic verifier, whose\n//! Aspis-specific construction is NOT supplied by this research callback.\nextern crate aspis_core as corelib;\n#[cfg(not(v8_performance_sbf))]\nextern crate sha2;\nmod r16_basis_transport;\nuse r16_basis_transport as basis_transport;\nmod r17_structured_g;\nmod r18_sparse_coded_g;\nmod r18_compact_g;\nmod r18_shared_ordinary;\nmod r19_channel_ordinary;\nmod r19_channel_fold;\nmod r17_mask_workspace;\nmod r17_tensor_prefix;\nmod r17_owned_weights;\nmod r17_weighted_groups;\nmod r17_compact_ordinary;\nmod r17_compact_workspace;\nmod r17_compact_prepare;\nuse r17_structured_g as structured_g;\nmod r17_opening_weights;\nuse r17_opening_weights as opening_weights;\nmod r95_merkle;\nmod r101_merkle;\nmod r102_tree;\nmod r105_parse;\nmod r17_host_relation;\nuse r17_host_relation as r17_relation;\nuse corelib::{field::{QM31 as K,CM31,M31},transcript::{Transcript,label},sumcheck::{WeightAccumulator,evaluate,polynomial_for_extension},\n    circle::{SecureCirclePoint as Point},v6_onefold::gamma_combine_v6_packed_layer0,\n    state_only_spend_query::StateOnlySpendQueryPowers,v7_merkle208::*};\n#[cfg(not(v8_performance_sbf))]\nuse sha2::{Sha256,Digest};\nconst FIXED:usize=699; const Q:usize=22; const REC:usize=621; const HEAD:usize=FIXED*16+52+24;\nconst V8_COMPONENT_OOD_VECTOR:u8=62; // pinned V8 branch transcript.rs\n#[cfg(any(v8_leaf_record,test))]\n#[path=\"leaf_record.rs\"] mod leaf_record;\n#[cfg(any(v8_auth_order,test))]\n#[path=\"auth_order.rs\"] mod auth_order;\n#[cfg(any(v8_chord_norm,test))]\n#[path=\"chord_norm.rs\"] mod chord_norm;\n#[cfg(any(v8_circle_norm,test))]\n#[path=\"circle_norm.rs\"] mod circle_norm;\n#[cfg(v8_quotient_fused)]\n#[path=\"quotient_fold.rs\"] mod quotient_fold;\n#[cfg(v8_affine_primal)]\n#[path=\"affine_primal.rs\"] mod affine_primal;\n#[cfg(v8_semantic_carry)]\n#[path=\"semantic_carry.rs\"] mod semantic_carry;\n#[cfg(v8_semantic_boundary)]\n#[path=\"semantic_boundary.rs\"] mod semantic_boundary;\n#[cfg(v8_shared_gamma)]\n#[path=\"shared_gamma.rs\"] mod shared_gamma;\n#[cfg(v8_gamma_wrap)]\n#[path=\"query_arithmetic.rs\"] mod query_arithmetic;\n#[cfg(v8_positive_transfer)]\n#[path=\"positive_transfer.rs\"] mod positive_transfer;\n#[derive(Debug,PartialEq)] enum Error {Length,Canonical,Sampler,Shape,Authentication,Terminal,Domain}\n#[cfg(not(v8_performance_sbf))]\nfn hash(parts:&[&[u8]])->[u8;32] {let mut h=Sha256::new();for p in parts {h.update(p);}let digest=h.finalize().into();\n    #[cfg(v8_query_graph)] query_graph::record(parts);\n    #[cfg(v8_early_prefix)] early_c1_trace::record(parts,digest);\n    digest}\n#[cfg(v8_performance_sbf)]\nfn hash(parts:&[&[u8]])->[u8;32] {solana_program::hash::hashv(parts).to_bytes()}\nfn sc(x:u32)->K {K::from_cm31(CM31::from_m31(M31(x)))}\nfn bytes(v:&[K])->Vec<u8> {let mut b=vec![0;v.len()*16];for(i,v)in v.iter().enumerate(){v.write_le_bytes(&mut b[i*16..i*16+16]);}b}\nfn dot(a:&[K],b:&[K])->K {a.iter().zip(b).fold(K::ZERO,|s,(a,b)|s.add(a.mul(*b)))}\nfn primal_reference(v:&[K],a:K)->Vec<K>{v.chunks_exact(4).map(|v|v[0].add(a.mul(v[1].add(a.mul(v[2].add(a.mul(v[3]))))))).collect()}\n#[cfg(not(v8_query_kernels))]\nfn primal(v:&[K],a:K)->Vec<K>{primal_reference(v,a)}\n\nfn tower_inverse_k(values:&[K])->Result<Vec<K>,Error>{\n    if values.is_empty() || values.iter().any(|v|*v==K::ZERO){return Err(Error::Domain);}\n    let norms:Vec<CM31>=values.iter().map(|v|{\n        let b=v.c1.square();\n        let rb=CM31::new(b.a.double().sub(b.b),b.a.add(b.b.double()));\n        v.c0.square().sub(rb)\n    }).collect();\n    let norms_m:Vec<M31>=norms.iter().map(|n|n.a.mul(n.a).add(n.b.mul(n.b))).collect();\n    let inv=batch_inverse_m(&norms_m)?;\n    Ok(values.iter().zip(norms).zip(inv).map(|((v,n),d)|{\n        let ni=CM31::new(n.a.mul(d),n.b.neg().mul(d));\n        K{c0:v.c0.mul(ni),c1:v.c1.neg().mul(ni)}\n    }).collect())\n}\n#[cfg(all(v8_query_kernels,not(v8_affine_primal)))]\nfn primal(v:&[K],a:K)->Vec<K>{\n    use corelib::field::{PreparedQm31Multiplier as P,qm31_sum_products3_prepared};\n    let a2=a.square();let ps=[P::new(a),P::new(a2),P::new(a2.mul(a))];\n    let out:Vec<K>=v.chunks_exact(4).map(|c|c[0].add(qm31_sum_products3_prepared(&ps,&[c[1],c[2],c[3]]))).collect();\n    #[cfg(not(v8_performance_sbf))]\n    assert_eq!(out,primal_reference(v,a));\n    out\n}\n#[cfg(v8_affine_primal)]\nfn primal(v:&[K],a:K)->Vec<K>{affine_primal::fold(v,a)}\n\nfn image_terminal(t:K,b:K,c:K,a:[K;4])->K {\n    a[1].mul(a[2]).mul(a[3]).mul(t.mul(a[0]).add(t.square().mul(b.mul(a[0].square()).sub(c.mul(a[0].square().mul(a[0])))))).mul_m31(M31(8388608))\n}\nfn compact(sent:&[K],claim:K)->[K;7]{[sent[0],sent[1],sent[2],sent[3],claim.half().half().sub(sent[0]),sent[4],sent[5]]}\nfn absorb_round(t:&mut Transcript,r:usize,p:&[K;7]){let mut b=vec![r as u8];b.extend(bytes(&[p[0],p[1],p[2],p[3],p[5],p[6]]));t.absorb(label::V6_COMPACT_RELATION_ROUND,&b);}\nfn sample(t:&mut Transcript,nonzero:bool)->Result<K,Error>{if nonzero {t.challenge_nonzero_qm31()}else{t.challenge_qm31()}.map_err(|_|Error::Sampler)}\nstruct Wire<'a>{v:Vec<K>,roots:([u8;26],[u8;26]),nonces:&'a[u8],records:&'a[u8],frontiers:(&'a[u8],&'a[u8])}\nfn parse(b:&[u8])->Result<Wire<'_>,Error>{\n    if b.len()<HEAD+Q*REC || b.len()>59138 || (b.len()-HEAD-Q*REC)%52!=0{return Err(Error::Length);}\n    let v=r105_parse::fields(&b[..FIXED*16])?;\n    let n=(b.len()-HEAD-Q*REC)/2;\n    Ok(Wire{v,roots:(b[FIXED*16..FIXED*16+26].try_into().unwrap(),b[FIXED*16+26..FIXED*16+52].try_into().unwrap()),\n        nonces:&b[FIXED*16+52..HEAD],records:&b[HEAD..HEAD+Q*REC],frontiers:(&b[HEAD+Q*REC..HEAD+Q*REC+n],&b[HEAD+Q*REC+n..])})\n}\n// The wrapper is deliberately a distinct research transcript. It binds C1\n// before lambda/chi and C2 afterwards; the semantic prefix here is opaque.\n// It does NOT claim to run the payment zerocheck or its deployment preamble.\nfn before_ood(w:&Wire<'_>,statement:&[u8;32],hashfn:corelib::HashFn)->Result<Transcript,Error> {\n    let mut t=Transcript::new(hashfn);t.absorb(label::PROFILE,b\"AV8/relation-callback/v1\");t.absorb(label::STATEMENT,statement);\n    t.absorb(label::ROOT,&w.roots.0);let _=sample(&mut t,false)?;let _=sample(&mut t,false)?;\n    t.absorb(label::SECOND_PHASE_ROOT,&w.roots.1);t.absorb(label::V6_POINT_CLAIMS,&bytes(&w.v[..358]));\n    Ok(t)\n}\nstruct Prefix {t:Transcript, points:[Point;2],gamma:K,abc:[K;3],iv:[K;2],use_x:bool,tau:K}\nfn freeze(mut t:Transcript,w:&Wire<'_>,ordinary:&[K],claim:K)->Result<Prefix,Error>{\n    let s=t.challenge_secure_circle_point().map_err(|_|Error::Sampler)?;\n    let mut record=vec![0];record.extend(bytes(&w.v[359..388]));t.absorb(V8_COMPONENT_OOD_VECTOR,&record);\n    let mut second=None;for _ in 0..3 {let p=t.challenge_secure_circle_point().map_err(|_|Error::Sampler)?;if p!=s {second=Some(p);break;}}\n    let z=second.ok_or(Error::Sampler)?;let mut record=vec![1];record.extend(bytes(&w.v[388..417]));t.absorb(V8_COMPONENT_OOD_VECTOR,&record);\n    t.absorb(label::M31_PAYMENT_BATCH_POW_NONCE,&w.nonces[..8]);let gamma=sample(&mut t,true)?;\n    t.absorb(label::V6_INACTIVE_CLAIM,&bytes(&w.v[358..359]));let _kappa=sample(&mut t,true)?;\n    let batch=|v:&[K]|{let mut g=K::ONE;v.iter().fold(K::ZERO,|a,v|{let r=a.add(g.mul(*v));g=g.mul(gamma);r})};\n    let use_x=s.x!=z.x;let h0=if use_x{s.x}else{s.y};let h1=if use_x{z.x}else{z.y};\n    let slope=batch(&w.v[359..388]).sub(batch(&w.v[388..417])).mul(h0.sub(h1).try_inv().ok_or(Error::Domain)?);\n    let iv=[batch(&w.v[359..388]).sub(slope.mul(h0)),slope];\n    let abc=[s.x.mul(z.y).sub(s.y.mul(z.x)),s.y.sub(z.y),z.x.sub(s.x)];\n    // Freeze the public ordinary relation AFTER gamma/chord and BEFORE tau.\n    // No caller mutation/response callback is possible inside this boundary.\n    // Dense public-input binding costs a 16,384-byte hash input, not wire bytes.\n    t.absorb(label::PROFILE,&bytes(ordinary));t.absorb(label::CLAIM,&bytes(&[claim]));\n    t.absorb(label::PROFILE,b\"aspis-v8-image-gate-v1\");let tau=sample(&mut t,true)?;\n    Ok(Prefix{t,points:[s,z],gamma,abc,iv,use_x,tau})\n}\nfn query_schedule(p:&mut Prefix,finals:&[K],nonces:&[u8])->Result<(Vec<u32>,K),Error>{\n    p.t.absorb(label::V6_FINAL256,&bytes(finals));p.t.absorb(label::GRIND_NONCE,&nonces[16..24]);\n    let q=p.t.challenge_queries_without_replacement(22,1<<18,64).map_err(|_|Error::Sampler)?;\n    p.t.absorb(label::PROFILE,b\"AV8/query-batch/v1\");let rho=sample(&mut p.t,true)?;Ok((q,rho))\n}\nfn opened_values_reference(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:corelib::HashFn)->Result<(Vec<K>,Vec<M31>),Error>{\n    let pts=corelib::circle_fri::selected_circle_fiber_points_shared(20,queries).map_err(|_|Error::Domain)?;\n    let powers=StateOnlySpendQueryPowers::new(p.gamma);let mut entries=vec![];let mut values=vec![];let mut xs=vec![];\n    for (i,base) in pts.iter().enumerate(){\n        let r=&w.records[i*REC..(i+1)*REC];let salt:&[u8;32]=r[589..621].try_into().unwrap();\n        let combined=gamma_combine_v6_packed_layer0(&r[..403],&r[403..589],&powers).map_err(|_|Error::Canonical)?;\n        entries.push((queries[i],private_leaf_hash_v7(hashfn,V7_C1_TREE_TAG,&r[..403],salt),private_leaf_hash_v7(hashfn,V7_C2_TREE_TAG,&r[403..589],salt)));\n        let x=sc(base.x.0);let y=sc(base.y.0);let points=[(x,y),(x,y.neg()),(x.neg(),y.neg()),(x.neg(),y)];\n        let mut qv=[K::ZERO;4];for j in 0..4{let(x,y)=points[j];let h=if p.use_x{x}else{y};\n            qv[j]=combined[j].sub(p.iv[0].add(p.iv[1].mul(h))).mul(p.abc[0].add(p.abc[1].mul(x)).add(p.abc[2].mul(y)).try_inv().ok_or(Error::Domain)?);}\n        if base.x==M31::ZERO || base.y==M31::ZERO{return Err(Error::Domain);}\n        values.push(corelib::field::qm31_circle_to_line_fold4(qv,alpha,base.x.double().inv(),base.y.double().inv()));xs.push(base.x.mul(base.x).double().sub(M31::ONE));\n    }\n    entries.sort_by_key(|x|x.0);\n    if !crate::r102_tree::verify_reference(hashfn,(&w.roots.0,&w.roots.1),6,&entries,w.frontiers){return Err(Error::Authentication);}\n    Ok((values,xs))\n}\nfn query_checkpoint(name:&str){\n    #[cfg(all(v8_performance_sbf,v8_fine_profile))]\n    performance_verifier::checkpoint(name);\n    #[cfg(not(all(v8_performance_sbf,v8_fine_profile)))] let _=name;\n}\nfn batch_inverse_k(values:&[K])->Result<Vec<K>,Error>{\n    if values.is_empty() || values.iter().any(|x|*x==K::ZERO){return Err(Error::Domain);}\n    let mut prefix=Vec::with_capacity(values.len());prefix.push(values[0]);\n    for x in &values[1..]{prefix.push(prefix.last().unwrap().mul(*x));}\n    let mut inv=prefix.last().unwrap().try_inv().ok_or(Error::Domain)?;\n    let mut out=vec![K::ZERO;values.len()];\n    for i in (1..values.len()).rev(){out[i]=prefix[i-1].mul(inv);inv=inv.mul(values[i]);}\n    out[0]=inv;Ok(out)\n}\nfn batch_inverse_m(values:&[M31])->Result<Vec<M31>,Error>{\n    if values.is_empty() || values.iter().any(|x|*x==M31::ZERO){return Err(Error::Domain);}\n    let mut prefix=Vec::with_capacity(values.len());prefix.push(values[0]);\n    for x in &values[1..]{prefix.push(prefix.last().unwrap().mul(*x));}\n    let mut inv=prefix.last().unwrap().inv();let mut out=vec![M31::ZERO;values.len()];\n    for i in (1..values.len()).rev(){out[i]=prefix[i-1].mul(inv);inv=inv.mul(values[i]);}out[0]=inv;Ok(out)\n}\n#[inline(never)]\nfn opened_values(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:corelib::HashFn)->Result<(Vec<K>,Vec<M31>),Error>{\n    opened_values_prepared(w,p,queries,alpha,hashfn,None)\n}\n#[inline(never)]\nfn opened_values_prepared(w:&Wire<'_>,p:&Prefix,queries:&[u32],alpha:K,hashfn:corelib::HashFn,prepared:Option<&StateOnlySpendQueryPowers>)->Result<(Vec<K>,Vec<M31>),Error>{\n    #[cfg(v8_circle_norm)] let selected_points=circle_norm::Selected::new(queries)?;\n    #[cfg(v8_circle_norm)] let pts=selected_points.points();\n    #[cfg(not(v8_circle_norm))]\n    let pts=corelib::circle_fri::selected_circle_fiber_points_shared(20,queries).map_err(|_|Error::Domain)?;\n    query_checkpoint(\"v8:points\");\n    let owned;\n    let powers=match prepared{Some(p)=>p,None=>{owned=StateOnlySpendQueryPowers::new(p.gamma);&owned}};\n    let mut combined=Vec::with_capacity(queries.len());\n    for i in 0..queries.len(){\n        let r=&w.records[i*REC..(i+1)*REC];\n        #[cfg(not(v8_gamma_wrap))]\n        combined.push(gamma_combine_v6_packed_layer0(&r[..403],&r[403..589],&powers).map_err(|_|Error::Canonical)?);\n        #[cfg(v8_gamma_wrap)]\n        combined.push(query_arithmetic::gamma(&r[..403],&r[403..589],&powers)?);\n    }\n    query_checkpoint(\"v8:canonical-gamma\");\n    #[cfg(not(v8_auth_order))]\n    let entries={\n    let mut entries=Vec::with_capacity(queries.len());\n    for (i,&id) in queries.iter().enumerate(){\n        let r=&w.records[i*REC..(i+1)*REC];let salt:&[u8;32]=r[589..621].try_into().unwrap();\n        #[cfg(not(v8_leaf_record))]\n        entries.push((id,private_leaf_hash_v7(hashfn,V7_C1_TREE_TAG,&r[..403],salt),private_leaf_hash_v7(hashfn,V7_C2_TREE_TAG,&r[403..589],salt)));\n        #[cfg(v8_leaf_record)]\n        entries.push((id,private_leaf_hash_v7(hashfn,V7_C1_TREE_TAG,&r[..403],salt),leaf_record::c2(hashfn,r)));\n    }\n    query_checkpoint(\"v8:leaf-hashes\");\n    entries.sort_by_key(|x|x.0);\n    entries};\n    #[cfg(v8_auth_order)]\n    let entries=auth_order::entries(w.records,queries,hashfn)?;\n    #[cfg(v8_auth_order)] query_checkpoint(\"v8:ordered-leaf-hashes\");\n    if !crate::r102_tree::verify_reference(hashfn,(&w.roots.0,&w.roots.1),6,&entries,w.frontiers){return Err(Error::Authentication);}\n    query_checkpoint(\"v8:internal-auth\");\n    let mut denoms=Vec::with_capacity(4*queries.len());let mut numerators=Vec::with_capacity(4*queries.len());\n    let mut base_denoms=Vec::with_capacity(2*queries.len());let mut xs=Vec::with_capacity(queries.len());\n    for (i,base) in pts.iter().enumerate(){\n        if base.x==M31::ZERO || base.y==M31::ZERO{return Err(Error::Domain);}\n        base_denoms.extend([base.x.double(),base.y.double()]);\n        xs.push(base.x.mul(base.x).double().sub(M31::ONE));\n        #[cfg(v8_query_shared)]\n        let (bx,cy,delta)=(p.abc[1].mul_m31(base.x),p.abc[2].mul_m31(base.y),\n            p.iv[1].mul_m31(if p.use_x{base.x}else{base.y}));\n        for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumerate(){\n            // Same input/output field, preserve the reference generic products\n            // for the first measured batch-control ladder.\n            #[cfg(not(v8_query_kernels))] {\n                let x=sc(x.0);let y=sc(y.0);\n                denoms.push(p.abc[0].add(p.abc[1].mul(x)).add(p.abc[2].mul(y)));\n                numerators.push(combined[i][j].sub(p.iv[0].add(p.iv[1].mul(if p.use_x{x}else{y}))));\n            }\n            #[cfg(all(v8_query_kernels,not(v8_query_shared)))] {\n                denoms.push(p.abc[0].add(p.abc[1].mul_m31(x)).add(p.abc[2].mul_m31(y)));\n                numerators.push(combined[i][j].sub(p.iv[0].add(p.iv[1].mul_m31(if p.use_x{x}else{y}))));\n            }\n            #[cfg(v8_query_shared)] {\n                let dx=if j<2{bx}else{bx.neg()};\n                let dy=if j==0||j==3{cy}else{cy.neg()};\n                let same=if p.use_x{j<2}else{j==0||j==3};\n                denoms.push(p.abc[0].add(dx).add(dy));\n                numerators.push(combined[i][j].sub(p.iv[0].add(if same{delta}else{delta.neg()})));\n            }\n        }\n    }\n    query_checkpoint(\"v8:denominators\");\n    #[cfg(all(v8_tower_batch,not(v8_chord_norm)))] let inverses=tower_inverse_k(&denoms)?;\n    #[cfg(all(v8_chord_norm,not(v8_circle_norm)))] let inverses=chord_norm::inverse(&denoms,p.abc,&pts)?;\n    #[cfg(all(v8_circle_norm,not(v8_joined_inverse)))] let inverses=selected_points.inverse(&denoms,p.abc)?;\n    #[cfg(all(v8_joined_inverse,not(v8_line_norm)))] let (inverses,joined_m_inverse)=selected_points.inverse_joined(&denoms,p.abc,&base_denoms)?;\n    #[cfg(v8_line_norm)] let (inverses,joined_m_inverse)=selected_points.inverse_lines(&denoms,p.abc,&base_denoms,&xs)?;\n    #[cfg(all(v8_batch_k,not(any(v8_tower_batch,v8_chord_norm))))] let inverses=batch_inverse_k(&denoms)?;\n    #[cfg(not(any(v8_batch_k,v8_tower_batch,v8_chord_norm)))] let inverses=denoms.iter().map(|d|d.try_inv().ok_or(Error::Domain)).collect::<Result<Vec<_>,_>>()?;\n    query_checkpoint(\"v8:qm-inverses\");\n    #[cfg(all(v8_batch_m,not(v8_joined_inverse)))] let base_inverse=batch_inverse_m(&base_denoms)?;\n    #[cfg(all(v8_joined_inverse,not(v8_split_inverse)))] let base_inverse=&joined_m_inverse[denoms.len()..];\n    #[cfg(v8_split_inverse)] let base_inverse=&joined_m_inverse[..];\n    #[cfg(not(v8_batch_m))] let base_inverse:Vec<M31>=base_denoms.iter().map(|d|d.inv()).collect();\n    query_checkpoint(\"v8:base-inverses\");\n    #[cfg(all(v8_query_shared,not(v8_quotient_fused)))]\n    let prepared_alpha=[alpha,alpha.square()].map(corelib::field::PreparedQm31Multiplier::new);\n    #[cfg(v8_quotient_fused)] let prepared_fold=quotient_fold::Prepared::new(alpha);\n    let values=(0..queries.len()).map(|i|{\n        let qv=core::array::from_fn(|j|numerators[4*i+j].mul(inverses[4*i+j]));\n        #[cfg(not(v8_query_shared))]\n        {corelib::field::qm31_circle_to_line_fold4(qv,alpha,base_inverse[2*i],base_inverse[2*i+1])}\n        #[cfg(all(v8_query_shared,not(v8_quotient_fused)))]\n        {\n            let [v0,v1,v2,v3]=qv;\n            let positive=v0.add(v1).half().add(prepared_alpha[0].mul(v0.sub(v1).mul_m31(base_inverse[2*i+1])));\n            let negative=v2.add(v3).half().sub(prepared_alpha[0].mul(v2.sub(v3).mul_m31(base_inverse[2*i+1])));\n            let folded=positive.add(negative).half().add(prepared_alpha[1].mul(positive.sub(negative).mul_m31(base_inverse[2*i])));\n            #[cfg(not(v8_performance_sbf))]\n            assert_eq!(folded,corelib::field::qm31_circle_to_line_fold4(qv,alpha,base_inverse[2*i],base_inverse[2*i+1]));\n            folded\n        }\n        #[cfg(v8_quotient_fused)] {prepared_fold.fold(qv,base_inverse[2*i],base_inverse[2*i+1])}\n    }).collect::<Vec<_>>();\n    query_checkpoint(\"v8:quotient-folds\");\n    #[cfg(all(v8_structured,not(v8_performance_sbf)))]\n    assert_eq!((values.clone(),xs.clone()),opened_values_reference(w,p,queries,alpha,hashfn)?,\"query reference differential\");\n    Ok((values,xs))\n}\nfn inject(weights:&mut WeightAccumulator,c:&mut K,values:&[K],xs:&[M31],rho:K)->Result<K,Error>{\n    let mut power=rho;let scales:Vec<K>=(0..values.len()).map(|_|{let a=power;power=power.mul(rho);a}).collect();\n    weights.add_line_m31_batch(&scales,xs).map_err(|_|Error::Shape)?;let inc=dot(&scales,values);*c=c.add(inc);Ok(inc)\n}\n/// Complete callback endpoint: all compact rounds, canonical fields, actual\n/// authenticated virtual quotient checks and carried-image terminal. No Q input.\nfn verify_relation(body:&[u8],statement:[u8;32],ordinary:Vec<K>,claim:K,hashfn:corelib::HashFn)->Result<(),Error>{\n    if ordinary.len()!=1024{return Err(Error::Shape);}let w=parse(body)?;\n    let mut p=freeze(before_ood(&w,&statement,hashfn)?,&w,&ordinary,claim)?;\n    let mut weights=WeightAccumulator::empty(10);weights.add_dense(ordinary).map_err(|_|Error::Shape)?;\n    let mut c=claim;let mut a=[K::ZERO;4];let first=compact(&w.v[417..423],c);absorb_round(&mut p.t,0,&first);\n    let mut work=vec![0];work.extend_from_slice(&w.nonces[8..16]);p.t.absorb(label::M31_CIRCLE_FOLD_POW_NONCE,&work);\n    a[0]=sample(&mut p.t,false)?;c=evaluate(&first,a[0]);weights.fold_deferred_relation_arity4(a[0]);\n    let mut f=w.v[441..697].to_vec();let(queries,rho)=query_schedule(&mut p,&f,w.nonces)?;\n    let(values,xs)=opened_values(&w,&p,&queries,a[0],hashfn)?;let inc=inject(&mut weights,&mut c,&values,&xs,rho)?;\n    p.t.absorb(label::PROFILE,&bytes(&[inc]));\n    for r in 1..4{let poly=compact(&w.v[417+r*6..423+r*6],c);absorb_round(&mut p.t,r,&poly);\n        a[r]=sample(&mut p.t,false)?;c=evaluate(&poly,a[r]);weights.fold_deferred_relation_arity4(a[r]);f=primal(&f,a[r]);}\n    let terminal=(0..4).fold(K::ZERO,|v,i|v.add(weights.weight_at(i as u32).mul(f[i]))).add(image_terminal(p.tau,p.abc[1],p.abc[2],a).mul(f[3]));\n    if terminal!=c{return Err(Error::Terminal);}Ok(())\n}\n\n#[cfg(not(v8_performance_sbf))]\n#[path=\"relation_callback_fixtures.rs\"] mod fixtures;\n#[cfg(not(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction,v8_performance_sbf)))]\nfn main(){fixtures::run();}\n#[cfg(any(v8_inactive_binding,v8_radius_boundary,v8_payment_extraction,v8_performance_sbf))]\n#[path=\"inactive_row_binding.rs\"] mod inactive_binding;\n#[cfg(v8_inactive_binding)]\nfn main(){inactive_binding::run();}\n#[cfg(v8_radius_boundary)]\n#[path=\"radius_boundary.rs\"] mod radius_boundary;\n#[cfg(v8_radius_boundary)]\nfn main(){radius_boundary::run();}\n#[cfg(v8_payment_extraction)]\nextern crate aspis_core;\n#[cfg(v8_payment_extraction)]\nextern crate aspis_statement;\n#[cfg(v8_payment_extraction)]\nextern crate zeroize;\n#[cfg(v8_payment_extraction)]\n#[path=\"payment_source_modules.rs\"] mod payment_sources;\n#[cfg(v8_payment_extraction)]\nuse payment_sources::{circle_candidate,circle_candidate_openings,state_only_hiding,state_only_zerocheck,state_only_entropy};\n#[cfg(v8_payment_extraction)]\n#[path=\"recovered_witness.rs\"] mod witness_endpoint;\n#[cfg(v8_payment_extraction)]\n#[path=\"authenticated_c1.rs\"] mod authenticated_c1;\n#[cfg(v8_payment_extraction)]\n#[path=\"payment_extraction.rs\"] mod payment_extraction;\n#[cfg(v8_query_graph)]\n#[path=\"c1_query_graph.rs\"] mod query_graph;\n#[cfg(v8_early_prefix)]\n#[path=\"early_c1_trace.rs\"] mod early_c1_trace;\n#[cfg(v8_c1_gao)]\n#[path=\"c1_gao.rs\"] mod c1_gao;\n#[cfg(all(v8_payment_extraction,not(v8_graph_orders),not(v8_circle_coordinates),not(v8_gao_completeness),not(v8_performance)))]\nfn main(){payment_extraction::run();}\n#[cfg(v8_graph_orders)]\nfn main(){query_graph::exhaustive_depth_two_query_orders();}\n#[cfg(v8_circle_coordinates)]\n#[path=\"source_coordinate_gate.rs\"] mod source_coordinate_gate;\n#[cfg(v8_circle_coordinates)]\nfn main(){source_coordinate_gate::run();}\n#[cfg(v8_gao_completeness)]\nfn main(){c1_gao::completeness_controls();}\n#[cfg(v8_performance)]\nfn main(){payment_extraction::performance::run();}\n#[cfg(any(v8_performance,v8_performance_sbf))]\n#[path=\"performance_verifier.rs\"]\npub mod performance_verifier;\n\n\n// R17 read-only local SVM probe. No settlement/deployment adapter.\n#[cfg(v8_performance_sbf)]\nsolana_program::entrypoint!(r17_probe_entry);\n#[cfg(target_os=\"solana\")]\n#[global_allocator]\nstatic R17_ALLOC: solana_program::entrypoint::BumpAllocator =\n    solana_program::entrypoint::BumpAllocator {\n        start: solana_program::entrypoint::HEAP_START_ADDRESS as usize,\n        len: 256 * 1024,\n    };\n#[cfg(v8_performance_sbf)]\nfn r17_probe_entry(\n    _id: &solana_program::pubkey::Pubkey,\n    accounts: &[solana_program::account_info::AccountInfo],\n    instruction: &[u8],\n) -> solana_program::entrypoint::ProgramResult {\n    use solana_program::program_error::ProgramError;\n    if accounts.len() != 3 || instruction.len() != 32 ||\n        accounts.iter().any(|a| a.is_writable) {\n        return Err(ProgramError::InvalidArgument);\n    }\n    let body = accounts[0].try_borrow_data()?;\n    let public = accounts[1].try_borrow_data()?;\n    let transition = accounts[2].try_borrow_data()?;\n    performance_verifier::verify(&body, instruction.try_into().unwrap(),\n        &public, &transition).map_err(ProgramError::Custom)\n}\n\nmod r20_whole_dot;\nmod r20_semantic_basis;\n\nmod r20_sparse_whole;\n\nmod r20_private_dot_adapter;\n"
+      },
+      {
+        "id": 5,
+        "name": {
+          "Local": "/rustc/library/core/src/result.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 6,
+        "name": {
+          "Local": "/rustc/library/core/src/lib.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 7,
+        "name": {
+          "Local": "/rustc/library/alloc/src/vec/mod.rs"
+        },
+        "crate_name": "alloc",
+        "contents": null
+      },
+      {
+        "id": 8,
+        "name": {
+          "Local": "/rustc/library/alloc/src/lib.rs"
+        },
+        "crate_name": "alloc",
+        "contents": null
+      },
+      {
+        "id": 9,
+        "name": {
+          "Local": "/rustc/library/alloc/src/alloc.rs"
+        },
+        "crate_name": "alloc",
+        "contents": null
+      },
+      {
+        "id": 10,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/adapters/chain.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 11,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/adapters/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 12,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 13,
+        "name": {
+          "Local": "/rustc/library/core/src/slice/iter.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 14,
+        "name": {
+          "Local": "/rustc/library/core/src/slice/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 15,
+        "name": {
+          "Local": "/rustc/library/core/src/ops/range.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 16,
+        "name": {
+          "Local": "/rustc/library/core/src/ops/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 17,
+        "name": {
+          "Local": "/rustc/library/core/src/option.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 18,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/adapters/rev.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 19,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/traits/iterator.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 20,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/traits/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 21,
+        "name": {
+          "Local": "/rustc/library/core/src/marker.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 22,
+        "name": {
+          "Local": "/rustc/library/core/src/slice/index.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 23,
+        "name": {
+          "Local": "/rustc/library/core/src/slice/iter/macros.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 24,
+        "name": {
+          "Local": "/rustc/library/alloc/src/macros.rs"
+        },
+        "crate_name": "alloc",
+        "contents": null
+      },
+      {
+        "id": 25,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/traits/collect.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 26,
+        "name": {
+          "Local": "/rustc/library/core/src/ops/function.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 27,
+        "name": {
+          "Local": "/rustc/library/core/src/ops/control_flow.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 28,
+        "name": {
+          "Local": "/rustc/library/core/src/ops/index.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 29,
+        "name": {
+          "Local": "/rustc/library/core/src/ops/deref.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 30,
+        "name": {
+          "Local": "/rustc/library/core/src/convert/num.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 31,
+        "name": {
+          "Local": "/rustc/library/core/src/convert/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 32,
+        "name": {
+          "Local": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-core/src/field.rs"
+        },
+        "crate_name": "aspis_core",
+        "contents": null
+      },
+      {
+        "id": 33,
+        "name": {
+          "Local": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/crates/aspis-core/src/lib.rs"
+        },
+        "crate_name": "aspis_core",
+        "contents": null
+      },
+      {
+        "id": 34,
+        "name": {
+          "Local": "/rustc/library/core/src/cmp.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 35,
+        "name": {
+          "Local": "/rustc/library/core/src/panicking.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 36,
+        "name": {
+          "Local": "/rustc/library/core/src/panic.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 37,
+        "name": {
+          "Local": "/rustc/library/core/src/fmt/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 38,
+        "name": {
+          "Local": "/rustc/library/core/src/ptr/mod.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 39,
+        "name": {
+          "Local": "/rustc/library/core/src/ops/try_trait.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      },
+      {
+        "id": 40,
+        "name": {
+          "Local": "/rustc/library/core/src/iter/range.rs"
+        },
+        "crate_name": "core",
+        "contents": null
+      }
+    ],
+    "item_names": [
+      {
+        "key": {
+          "Type": 14
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ops",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "control_flow",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ControlFlow",
+              0
+            ]
+          },
+          {
+            "Instantiated": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "regions": [],
+                "types": [
+                  {
+                    "HashConsedValue": [
+                      587,
+                      {
+                        "Adt": {
+                          "id": "Tuple",
+                          "generics": {
+                            "regions": [],
+                            "types": [],
+                            "const_generics": [],
+                            "trait_refs": []
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "Deduplicated": 587
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              },
+              "kind": "Other"
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "Type": 22
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "convert",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "Infallible",
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "key": {
+          "Type": 21
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ops",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "control_flow",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ControlFlow",
+              0
+            ]
+          },
+          {
+            "Instantiated": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "regions": [],
+                "types": [
+                  {
+                    "Deduplicated": 587
+                  },
+                  {
+                    "HashConsedValue": [
+                      2439,
+                      {
+                        "Adt": {
+                          "id": {
+                            "Adt": 22
+                          },
+                          "generics": {
+                            "regions": [],
+                            "types": [],
+                            "const_generics": [],
+                            "trait_refs": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              },
+              "kind": "Other"
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "TraitImpl": 20
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ops",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "control_flow",
+              0
+            ]
+          },
+          {
+            "Impl": {
+              "Trait": 20
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "Fun": 39
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ops",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "control_flow",
+              0
+            ]
+          },
+          {
+            "Impl": {
+              "Trait": 20
+            }
+          },
+          {
+            "Ident": [
+              "from_output",
+              0
+            ]
+          },
+          {
+            "Instantiated": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "regions": [],
+                "types": [
+                  {
+                    "Deduplicated": 587
+                  },
+                  {
+                    "Deduplicated": 587
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              },
+              "kind": "Other"
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "TraitImpl": 23
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ops",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "control_flow",
+              0
+            ]
+          },
+          {
+            "Impl": {
+              "Trait": 23
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "TraitDecl": 10
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ops",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "try_trait",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "Try",
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "key": {
+          "TraitDecl": 11
+        },
+        "value": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "ops",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "try_trait",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "FromResidual",
+              0
+            ]
+          }
+        ]
+      }
+    ],
+    "assoc_item_names": [
+      {
+        "types": [],
+        "methods": [
+          "drop_glue"
+        ],
+        "consts": []
+      },
+      {
+        "types": [
+          "Output"
+        ],
+        "methods": [
+          "call_once"
+        ],
+        "consts": []
+      },
+      {
+        "types": [],
+        "methods": [
+          "call_mut"
+        ],
+        "consts": []
+      },
+      {
+        "types": [
+          "Item"
+        ],
+        "methods": [
+          "next",
+          "next_chunk",
+          "size_hint",
+          "count",
+          "last",
+          "advance_by",
+          "nth",
+          "step_by",
+          "chain",
+          "zip",
+          "intersperse",
+          "intersperse_with",
+          "map",
+          "for_each",
+          "filter",
+          "filter_map",
+          "enumerate",
+          "peekable",
+          "skip_while",
+          "take_while",
+          "map_while",
+          "skip",
+          "take",
+          "scan",
+          "flat_map",
+          "flatten",
+          "map_windows",
+          "fuse",
+          "inspect",
+          "by_ref",
+          "collect",
+          "try_collect",
+          "collect_into",
+          "partition",
+          "partition_in_place",
+          "is_partitioned",
+          "try_fold",
+          "try_for_each",
+          "fold",
+          "reduce",
+          "try_reduce",
+          "all",
+          "any",
+          "find",
+          "find_map",
+          "try_find",
+          "position",
+          "rposition",
+          "max",
+          "min",
+          "max_by_key",
+          "max_by",
+          "min_by_key",
+          "min_by",
+          "rev",
+          "unzip",
+          "copied",
+          "cloned",
+          "cycle",
+          "array_chunks",
+          "sum",
+          "product",
+          "cmp",
+          "cmp_by",
+          "partial_cmp",
+          "partial_cmp_by",
+          "eq",
+          "eq_by",
+          "ne",
+          "lt",
+          "le",
+          "gt",
+          "ge",
+          "is_sorted",
+          "is_sorted_by",
+          "is_sorted_by_key",
+          "__iterator_get_unchecked"
+        ],
+        "consts": []
+      },
+      {
+        "types": [
+          "Output"
+        ],
+        "methods": [
+          "index"
+        ],
+        "consts": []
+      },
+      {
+        "types": [
+          "Item",
+          "IntoIter"
+        ],
+        "methods": [
+          "into_iter"
+        ],
+        "consts": []
+      },
+      {
+        "types": [
+          "Target"
+        ],
+        "methods": [
+          "deref"
+        ],
+        "consts": []
+      },
+      {
+        "types": [],
+        "methods": [
+          "index_mut"
+        ],
+        "consts": []
+      },
+      {
+        "types": [],
+        "methods": [
+          "eq",
+          "ne"
+        ],
+        "consts": []
+      },
+      {
+        "types": [],
+        "methods": [
+          "from"
+        ],
+        "consts": []
+      },
+      {
+        "types": [
+          "Output",
+          "Residual"
+        ],
+        "methods": [
+          "from_output",
+          "branch"
+        ],
+        "consts": []
+      },
+      {
+        "types": [],
+        "methods": [
+          "from_residual"
+        ],
+        "consts": []
+      }
+    ],
+    "short_names": [
+      {
+        "key": {
+          "TraitImpl": 20
+        },
+        "value": [
+          {
+            "Impl": {
+              "Trait": 20
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "Fun": 39
+        },
+        "value": [
+          {
+            "Ident": [
+              "from_output",
+              0
+            ]
+          },
+          {
+            "Instantiated": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "regions": [],
+                "types": [
+                  {
+                    "Deduplicated": 587
+                  },
+                  {
+                    "Deduplicated": 587
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              },
+              "kind": "Other"
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "TraitImpl": 23
+        },
+        "value": [
+          {
+            "Impl": {
+              "Trait": 23
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "Type": 14
+        },
+        "value": [
+          {
+            "Ident": [
+              "ControlFlow",
+              0
+            ]
+          },
+          {
+            "Instantiated": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "regions": [],
+                "types": [
+                  {
+                    "Deduplicated": 587
+                  },
+                  {
+                    "Deduplicated": 587
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              },
+              "kind": "Other"
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "Type": 21
+        },
+        "value": [
+          {
+            "Ident": [
+              "ControlFlow",
+              0
+            ]
+          },
+          {
+            "Instantiated": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "regions": [],
+                "types": [
+                  {
+                    "Deduplicated": 587
+                  },
+                  {
+                    "Deduplicated": 2439
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              },
+              "kind": "Other"
+            }
+          }
+        ]
+      },
+      {
+        "key": {
+          "Type": 22
+        },
+        "value": [
+          {
+            "Ident": [
+              "Infallible",
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "key": {
+          "TraitDecl": 10
+        },
+        "value": [
+          {
+            "Ident": [
+              "Try",
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "key": {
+          "TraitDecl": 11
+        },
+        "value": [
+          {
+            "Ident": [
+              "FromResidual",
+              0
+            ]
+          }
+        ]
+      }
+    ],
+    "type_decls": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "def_id": 14,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ops",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "control_flow",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ControlFlow",
+                0
+              ]
+            },
+            {
+              "Instantiated": {
+                "params": {
+                  "regions": [],
+                  "types": [],
+                  "const_generics": [],
+                  "trait_clauses": [],
+                  "regions_outlive": [],
+                  "types_outlive": [],
+                  "trait_type_constraints": []
+                },
+                "skip_binder": {
+                  "regions": [],
+                  "types": [
+                    {
+                      "Deduplicated": 587
+                    },
+                    {
+                      "Deduplicated": 587
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": []
+                },
+                "kind": "Other"
+              }
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 27,
+              "beg": {
+                "line": 89,
+                "col": 0
+              },
+              "end": {
+                "line": 89,
+                "col": 31
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [
+              {
+                "DocComment": " Used to tell an operation whether it should exit early or go on as usual."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " This is used when exposing things (like graph traversals or visitors) where"
+              },
+              {
+                "DocComment": " you want the user to be able to choose whether to exit early."
+              },
+              {
+                "DocComment": " Having the enum makes it clearer -- no more wondering \"wait, what did `false`"
+              },
+              {
+                "DocComment": " mean again?\" -- and allows including a value."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " Similar to [`Option`] and [`Result`], this enum can be used with the `?` operator"
+              },
+              {
+                "DocComment": " to return immediately if the [`Break`] variant is present or otherwise continue normally"
+              },
+              {
+                "DocComment": " with the value inside the [`Continue`] variant."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " # Examples"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " Early-exiting from [`Iterator::try_for_each`]:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " use std::ops::ControlFlow;"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " let r = (2..100).try_for_each(|x| {"
+              },
+              {
+                "DocComment": "     if 403 % x == 0 {"
+              },
+              {
+                "DocComment": "         return ControlFlow::Break(x)"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": "     ControlFlow::Continue(())"
+              },
+              {
+                "DocComment": " });"
+              },
+              {
+                "DocComment": " assert_eq!(r, ControlFlow::Break(13));"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " A basic tree traversal:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " use std::ops::ControlFlow;"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " pub struct TreeNode<T> {"
+              },
+              {
+                "DocComment": "     value: T,"
+              },
+              {
+                "DocComment": "     left: Option<Box<TreeNode<T>>>,"
+              },
+              {
+                "DocComment": "     right: Option<Box<TreeNode<T>>>,"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " impl<T> TreeNode<T> {"
+              },
+              {
+                "DocComment": "     pub fn traverse_inorder<B>(&self, f: &mut impl FnMut(&T) -> ControlFlow<B>) -> ControlFlow<B> {"
+              },
+              {
+                "DocComment": "         if let Some(left) = &self.left {"
+              },
+              {
+                "DocComment": "             left.traverse_inorder(f)?;"
+              },
+              {
+                "DocComment": "         }"
+              },
+              {
+                "DocComment": "         f(&self.value)?;"
+              },
+              {
+                "DocComment": "         if let Some(right) = &self.right {"
+              },
+              {
+                "DocComment": "             right.traverse_inorder(f)?;"
+              },
+              {
+                "DocComment": "         }"
+              },
+              {
+                "DocComment": "         ControlFlow::Continue(())"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": "     fn leaf(value: T) -> Option<Box<TreeNode<T>>> {"
+              },
+              {
+                "DocComment": "         Some(Box::new(Self { value, left: None, right: None }))"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " let node = TreeNode {"
+              },
+              {
+                "DocComment": "     value: 0,"
+              },
+              {
+                "DocComment": "     left: TreeNode::leaf(1),"
+              },
+              {
+                "DocComment": "     right: Some(Box::new(TreeNode {"
+              },
+              {
+                "DocComment": "         value: -1,"
+              },
+              {
+                "DocComment": "         left: TreeNode::leaf(5),"
+              },
+              {
+                "DocComment": "         right: TreeNode::leaf(2),"
+              },
+              {
+                "DocComment": "     }))"
+              },
+              {
+                "DocComment": " };"
+              },
+              {
+                "DocComment": " let mut sum = 0;"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " let res = node.traverse_inorder(&mut |val| {"
+              },
+              {
+                "DocComment": "     if *val < 0 {"
+              },
+              {
+                "DocComment": "         ControlFlow::Break(*val)"
+              },
+              {
+                "DocComment": "     } else {"
+              },
+              {
+                "DocComment": "         sum += *val;"
+              },
+              {
+                "DocComment": "         ControlFlow::Continue(())"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": " });"
+              },
+              {
+                "DocComment": " assert_eq!(res, ControlFlow::Break(-1));"
+              },
+              {
+                "DocComment": " assert_eq!(sum, 6);"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " [`Break`]: ControlFlow::Break"
+              },
+              {
+                "DocComment": " [`Continue`]: ControlFlow::Continue"
+              }
+            ],
+            "inline": null,
+            "rename": null,
+            "public": true
+          },
+          "is_local": false,
+          "opacity": "Foreign",
+          "lang_item": "ControlFlow"
+        },
+        "generics": {
+          "regions": [],
+          "types": [],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "src": "TopLevel",
+        "kind": {
+          "Enum": [
+            {
+              "id": 0,
+              "span": {
+                "data": {
+                  "file_id": 27,
+                  "beg": {
+                    "line": 93,
+                    "col": 4
+                  },
+                  "end": {
+                    "line": 93,
+                    "col": 12
+                  }
+                },
+                "generated_from_span": null
+              },
+              "attr_info": {
+                "attributes": [
+                  {
+                    "DocComment": " Move on to the next phase of the operation as normal."
+                  }
+                ],
+                "inline": null,
+                "rename": null,
+                "public": true
+              },
+              "name": "Continue",
+              "fields": [
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 93,
+                        "col": 13
+                      },
+                      "end": {
+                        "line": 93,
+                        "col": 14
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "attr_info": {
+                    "attributes": [],
+                    "inline": null,
+                    "rename": null,
+                    "public": true
+                  },
+                  "name": null,
+                  "ty": {
+                    "Deduplicated": 587
+                  }
+                }
+              ],
+              "discriminant": {
+                "Scalar": {
+                  "Signed": [
+                    "Isize",
+                    "0"
+                  ]
+                }
+              }
+            },
+            {
+              "id": 1,
+              "span": {
+                "data": {
+                  "file_id": 27,
+                  "beg": {
+                    "line": 97,
+                    "col": 4
+                  },
+                  "end": {
+                    "line": 97,
+                    "col": 9
+                  }
+                },
+                "generated_from_span": null
+              },
+              "attr_info": {
+                "attributes": [
+                  {
+                    "DocComment": " Exit the operation without running subsequent phases."
+                  }
+                ],
+                "inline": null,
+                "rename": null,
+                "public": true
+              },
+              "name": "Break",
+              "fields": [
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 97,
+                        "col": 10
+                      },
+                      "end": {
+                        "line": 97,
+                        "col": 11
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "attr_info": {
+                    "attributes": [],
+                    "inline": null,
+                    "rename": null,
+                    "public": true
+                  },
+                  "name": null,
+                  "ty": {
+                    "Deduplicated": 587
+                  }
+                }
+              ],
+              "discriminant": {
+                "Scalar": {
+                  "Signed": [
+                    "Isize",
+                    "1"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "layout": [
+          {
+            "key": "x86_64-unknown-linux-gnu",
+            "value": {
+              "size": 1,
+              "align": 1,
+              "discriminator": {
+                "Branch": {
+                  "offset": 0,
+                  "int_ty": {
+                    "Unsigned": "U8"
+                  },
+                  "children": [
+                    [
+                      {
+                        "start": {
+                          "Unsigned": [
+                            "U8",
+                            "0"
+                          ]
+                        },
+                        "end": {
+                          "Unsigned": [
+                            "U8",
+                            "0"
+                          ]
+                        }
+                      },
+                      {
+                        "Known": 0
+                      }
+                    ],
+                    [
+                      {
+                        "start": {
+                          "Unsigned": [
+                            "U8",
+                            "1"
+                          ]
+                        },
+                        "end": {
+                          "Unsigned": [
+                            "U8",
+                            "1"
+                          ]
+                        }
+                      },
+                      {
+                        "Known": 1
+                      }
+                    ]
+                  ],
+                  "fallback": "Invalid"
+                }
+              },
+              "uninhabited": false,
+              "variant_layouts": [
+                {
+                  "field_offsets": [
+                    1
+                  ],
+                  "uninhabited": false,
+                  "tagger": [
+                    [
+                      0,
+                      {
+                        "Unsigned": [
+                          "U8",
+                          "0"
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "field_offsets": [
+                    1
+                  ],
+                  "uninhabited": false,
+                  "tagger": [
+                    [
+                      0,
+                      {
+                        "Unsigned": [
+                          "U8",
+                          "1"
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "repr": {
+                "repr_algo": "Rust",
+                "align_modif": null,
+                "transparent": false,
+                "explicit_discr_type": false
+              }
+            }
+          }
+        ],
+        "ptr_metadata": "None"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "def_id": 21,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ops",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "control_flow",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ControlFlow",
+                0
+              ]
+            },
+            {
+              "Instantiated": {
+                "params": {
+                  "regions": [],
+                  "types": [],
+                  "const_generics": [],
+                  "trait_clauses": [],
+                  "regions_outlive": [],
+                  "types_outlive": [],
+                  "trait_type_constraints": []
+                },
+                "skip_binder": {
+                  "regions": [],
+                  "types": [
+                    {
+                      "Deduplicated": 587
+                    },
+                    {
+                      "Deduplicated": 2439
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": []
+                },
+                "kind": "Other"
+              }
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 27,
+              "beg": {
+                "line": 89,
+                "col": 0
+              },
+              "end": {
+                "line": 89,
+                "col": 31
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [
+              {
+                "DocComment": " Used to tell an operation whether it should exit early or go on as usual."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " This is used when exposing things (like graph traversals or visitors) where"
+              },
+              {
+                "DocComment": " you want the user to be able to choose whether to exit early."
+              },
+              {
+                "DocComment": " Having the enum makes it clearer -- no more wondering \"wait, what did `false`"
+              },
+              {
+                "DocComment": " mean again?\" -- and allows including a value."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " Similar to [`Option`] and [`Result`], this enum can be used with the `?` operator"
+              },
+              {
+                "DocComment": " to return immediately if the [`Break`] variant is present or otherwise continue normally"
+              },
+              {
+                "DocComment": " with the value inside the [`Continue`] variant."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " # Examples"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " Early-exiting from [`Iterator::try_for_each`]:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " use std::ops::ControlFlow;"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " let r = (2..100).try_for_each(|x| {"
+              },
+              {
+                "DocComment": "     if 403 % x == 0 {"
+              },
+              {
+                "DocComment": "         return ControlFlow::Break(x)"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": "     ControlFlow::Continue(())"
+              },
+              {
+                "DocComment": " });"
+              },
+              {
+                "DocComment": " assert_eq!(r, ControlFlow::Break(13));"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " A basic tree traversal:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " use std::ops::ControlFlow;"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " pub struct TreeNode<T> {"
+              },
+              {
+                "DocComment": "     value: T,"
+              },
+              {
+                "DocComment": "     left: Option<Box<TreeNode<T>>>,"
+              },
+              {
+                "DocComment": "     right: Option<Box<TreeNode<T>>>,"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " impl<T> TreeNode<T> {"
+              },
+              {
+                "DocComment": "     pub fn traverse_inorder<B>(&self, f: &mut impl FnMut(&T) -> ControlFlow<B>) -> ControlFlow<B> {"
+              },
+              {
+                "DocComment": "         if let Some(left) = &self.left {"
+              },
+              {
+                "DocComment": "             left.traverse_inorder(f)?;"
+              },
+              {
+                "DocComment": "         }"
+              },
+              {
+                "DocComment": "         f(&self.value)?;"
+              },
+              {
+                "DocComment": "         if let Some(right) = &self.right {"
+              },
+              {
+                "DocComment": "             right.traverse_inorder(f)?;"
+              },
+              {
+                "DocComment": "         }"
+              },
+              {
+                "DocComment": "         ControlFlow::Continue(())"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": "     fn leaf(value: T) -> Option<Box<TreeNode<T>>> {"
+              },
+              {
+                "DocComment": "         Some(Box::new(Self { value, left: None, right: None }))"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " let node = TreeNode {"
+              },
+              {
+                "DocComment": "     value: 0,"
+              },
+              {
+                "DocComment": "     left: TreeNode::leaf(1),"
+              },
+              {
+                "DocComment": "     right: Some(Box::new(TreeNode {"
+              },
+              {
+                "DocComment": "         value: -1,"
+              },
+              {
+                "DocComment": "         left: TreeNode::leaf(5),"
+              },
+              {
+                "DocComment": "         right: TreeNode::leaf(2),"
+              },
+              {
+                "DocComment": "     }))"
+              },
+              {
+                "DocComment": " };"
+              },
+              {
+                "DocComment": " let mut sum = 0;"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " let res = node.traverse_inorder(&mut |val| {"
+              },
+              {
+                "DocComment": "     if *val < 0 {"
+              },
+              {
+                "DocComment": "         ControlFlow::Break(*val)"
+              },
+              {
+                "DocComment": "     } else {"
+              },
+              {
+                "DocComment": "         sum += *val;"
+              },
+              {
+                "DocComment": "         ControlFlow::Continue(())"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": " });"
+              },
+              {
+                "DocComment": " assert_eq!(res, ControlFlow::Break(-1));"
+              },
+              {
+                "DocComment": " assert_eq!(sum, 6);"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " [`Break`]: ControlFlow::Break"
+              },
+              {
+                "DocComment": " [`Continue`]: ControlFlow::Continue"
+              }
+            ],
+            "inline": null,
+            "rename": null,
+            "public": true
+          },
+          "is_local": false,
+          "opacity": "Foreign",
+          "lang_item": "ControlFlow"
+        },
+        "generics": {
+          "regions": [],
+          "types": [],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "src": "TopLevel",
+        "kind": {
+          "Enum": [
+            {
+              "id": 0,
+              "span": {
+                "data": {
+                  "file_id": 27,
+                  "beg": {
+                    "line": 93,
+                    "col": 4
+                  },
+                  "end": {
+                    "line": 93,
+                    "col": 12
+                  }
+                },
+                "generated_from_span": null
+              },
+              "attr_info": {
+                "attributes": [
+                  {
+                    "DocComment": " Move on to the next phase of the operation as normal."
+                  }
+                ],
+                "inline": null,
+                "rename": null,
+                "public": true
+              },
+              "name": "Continue",
+              "fields": [
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 93,
+                        "col": 13
+                      },
+                      "end": {
+                        "line": 93,
+                        "col": 14
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "attr_info": {
+                    "attributes": [],
+                    "inline": null,
+                    "rename": null,
+                    "public": true
+                  },
+                  "name": null,
+                  "ty": {
+                    "Deduplicated": 2439
+                  }
+                }
+              ],
+              "discriminant": {
+                "Scalar": {
+                  "Signed": [
+                    "Isize",
+                    "0"
+                  ]
+                }
+              }
+            },
+            {
+              "id": 1,
+              "span": {
+                "data": {
+                  "file_id": 27,
+                  "beg": {
+                    "line": 97,
+                    "col": 4
+                  },
+                  "end": {
+                    "line": 97,
+                    "col": 9
+                  }
+                },
+                "generated_from_span": null
+              },
+              "attr_info": {
+                "attributes": [
+                  {
+                    "DocComment": " Exit the operation without running subsequent phases."
+                  }
+                ],
+                "inline": null,
+                "rename": null,
+                "public": true
+              },
+              "name": "Break",
+              "fields": [
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 97,
+                        "col": 10
+                      },
+                      "end": {
+                        "line": 97,
+                        "col": 11
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "attr_info": {
+                    "attributes": [],
+                    "inline": null,
+                    "rename": null,
+                    "public": true
+                  },
+                  "name": null,
+                  "ty": {
+                    "Deduplicated": 587
+                  }
+                }
+              ],
+              "discriminant": {
+                "Scalar": {
+                  "Signed": [
+                    "Isize",
+                    "1"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "layout": [
+          {
+            "key": "x86_64-unknown-linux-gnu",
+            "value": {
+              "size": 0,
+              "align": 1,
+              "discriminator": {
+                "Known": 1
+              },
+              "uninhabited": false,
+              "variant_layouts": [
+                null,
+                {
+                  "field_offsets": [
+                    0
+                  ],
+                  "uninhabited": false,
+                  "tagger": []
+                }
+              ],
+              "repr": {
+                "repr_algo": "Rust",
+                "align_modif": null,
+                "transparent": false,
+                "explicit_discr_type": false
+              }
+            }
+          }
+        ],
+        "ptr_metadata": "None"
+      },
+      {
+        "def_id": 22,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "convert",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "Infallible",
+                0
+              ]
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 31,
+              "beg": {
+                "line": 930,
+                "col": 0
+              },
+              "end": {
+                "line": 930,
+                "col": 19
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [
+              {
+                "DocComment": " The error type for errors that can never happen."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " Since this enum has no variant, a value of this type can never actually exist."
+              },
+              {
+                "DocComment": " This can be useful for generic APIs that use [`Result`] and parameterize the error type,"
+              },
+              {
+                "DocComment": " to indicate that the result is always [`Ok`]."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " For example, the [`TryFrom`] trait (conversion that returns a [`Result`])"
+              },
+              {
+                "DocComment": " has a blanket implementation for all types where a reverse [`Into`] implementation exists."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " ```ignore (illustrates std code, duplicating the impl in a doctest would be an error)"
+              },
+              {
+                "DocComment": " impl<T, U> TryFrom<U> for T where U: Into<T> {"
+              },
+              {
+                "DocComment": "     type Error = Infallible;"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": "     fn try_from(value: U) -> Result<Self, Infallible> {"
+              },
+              {
+                "DocComment": "         Ok(U::into(value))  // Never returns `Err`"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " # Future compatibility"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " This enum has the same role as [the `!` \u201cnever\u201d type][never],"
+              },
+              {
+                "DocComment": " which is unstable in this version of Rust."
+              },
+              {
+                "DocComment": " When `!` is stabilized, we plan to make `Infallible` a type alias to it:"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " ```ignore (illustrates future std change)"
+              },
+              {
+                "DocComment": " pub type Infallible = !;"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " \u2026 and eventually deprecate `Infallible`."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " However there is one case where `!` syntax can be used"
+              },
+              {
+                "DocComment": " before `!` is stabilized as a full-fledged type: in the position of a function\u2019s return type."
+              },
+              {
+                "DocComment": " Specifically, it is possible to have implementations for two different function pointer types:"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " trait MyTrait {}"
+              },
+              {
+                "DocComment": " impl MyTrait for fn() -> ! {}"
+              },
+              {
+                "DocComment": " impl MyTrait for fn() -> std::convert::Infallible {}"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " With `Infallible` being an enum, this code is valid."
+              },
+              {
+                "DocComment": " However when `Infallible` becomes an alias for the never type,"
+              },
+              {
+                "DocComment": " the two `impl`s will start to overlap"
+              },
+              {
+                "DocComment": " and therefore will be disallowed by the language\u2019s trait coherence rules."
+              }
+            ],
+            "inline": null,
+            "rename": null,
+            "public": true
+          },
+          "is_local": false,
+          "opacity": "Foreign",
+          "lang_item": null
+        },
+        "generics": {
+          "regions": [],
+          "types": [],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "src": "TopLevel",
+        "kind": {
+          "Enum": []
+        },
+        "layout": [
+          {
+            "key": "x86_64-unknown-linux-gnu",
+            "value": {
+              "size": 0,
+              "align": 1,
+              "discriminator": null,
+              "uninhabited": true,
+              "variant_layouts": [],
+              "repr": {
+                "repr_algo": "Rust",
+                "align_modif": null,
+                "transparent": false,
+                "explicit_discr_type": false
+              }
+            }
+          }
+        ],
+        "ptr_metadata": "None"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "fun_decls": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "def_id": 39,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ops",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "control_flow",
+                0
+              ]
+            },
+            {
+              "Impl": {
+                "Trait": 20
+              }
+            },
+            {
+              "Ident": [
+                "from_output",
+                0
+              ]
+            },
+            {
+              "Instantiated": {
+                "params": {
+                  "regions": [],
+                  "types": [],
+                  "const_generics": [],
+                  "trait_clauses": [],
+                  "regions_outlive": [],
+                  "types_outlive": [],
+                  "trait_type_constraints": []
+                },
+                "skip_binder": {
+                  "regions": [],
+                  "types": [
+                    {
+                      "Deduplicated": 587
+                    },
+                    {
+                      "Deduplicated": 587
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": []
+                },
+                "kind": "Other"
+              }
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 27,
+              "beg": {
+                "line": 110,
+                "col": 4
+              },
+              "end": {
+                "line": 110,
+                "col": 48
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [],
+            "inline": "Hint",
+            "rename": null,
+            "public": true
+          },
+          "is_local": false,
+          "opacity": "Transparent",
+          "lang_item": null
+        },
+        "generics": {
+          "regions": [],
+          "types": [],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "signature": {
+          "is_unsafe": false,
+          "abi": "Rust",
+          "is_variadic": false,
+          "inputs": [
+            {
+              "Deduplicated": 587
+            }
+          ],
+          "output": {
+            "HashConsedValue": [
+              1944,
+              {
+                "Adt": {
+                  "id": {
+                    "Adt": 14
+                  },
+                  "generics": {
+                    "regions": [],
+                    "types": [],
+                    "const_generics": [],
+                    "trait_refs": []
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "src": {
+          "TraitImpl": {
+            "impl_ref": {
+              "id": 20,
+              "generics": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_refs": []
+              }
+            },
+            "trait_ref": {
+              "id": 10,
+              "generics": {
+                "regions": [],
+                "types": [
+                  {
+                    "Deduplicated": 1944
+                  }
+                ],
+                "const_generics": [],
+                "trait_refs": []
+              }
+            },
+            "item_id": {
+              "Method": 0
+            },
+            "reuses_default": true
+          }
+        },
+        "is_global_initializer": null,
+        "body": {
+          "Structured": {
+            "span": {
+              "data": {
+                "file_id": 27,
+                "beg": {
+                  "line": 110,
+                  "col": 4
+                },
+                "end": {
+                  "line": 112,
+                  "col": 5
+                }
+              },
+              "generated_from_span": null
+            },
+            "bound_body_regions": 0,
+            "locals": {
+              "arg_count": 1,
+              "locals": [
+                {
+                  "index": 0,
+                  "name": null,
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 110,
+                        "col": 44
+                      },
+                      "end": {
+                        "line": 110,
+                        "col": 48
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "ty": {
+                    "Deduplicated": 1944
+                  }
+                },
+                {
+                  "index": 1,
+                  "name": "output",
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 110,
+                        "col": 19
+                      },
+                      "end": {
+                        "line": 110,
+                        "col": 25
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "ty": {
+                    "Deduplicated": 587
+                  }
+                }
+              ]
+            },
+            "body": {
+              "span": {
+                "data": {
+                  "file_id": 27,
+                  "beg": {
+                    "line": 111,
+                    "col": 8
+                  },
+                  "end": {
+                    "line": 112,
+                    "col": 5
+                  }
+                },
+                "generated_from_span": null
+              },
+              "statements": [
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 111,
+                        "col": 8
+                      },
+                      "end": {
+                        "line": 111,
+                        "col": 37
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "id": 5784,
+                  "kind": {
+                    "StorageLive": 0
+                  },
+                  "comments_before": []
+                },
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 111,
+                        "col": 8
+                      },
+                      "end": {
+                        "line": 111,
+                        "col": 37
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "id": 5785,
+                  "kind": {
+                    "Assign": [
+                      {
+                        "kind": {
+                          "Local": 0
+                        },
+                        "ty": {
+                          "Deduplicated": 1944
+                        }
+                      },
+                      {
+                        "Aggregate": [
+                          {
+                            "Adt": [
+                              {
+                                "id": {
+                                  "Adt": 14
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              },
+                              0,
+                              null
+                            ]
+                          },
+                          [
+                            {
+                              "Copy": {
+                                "kind": {
+                                  "Local": 1
+                                },
+                                "ty": {
+                                  "Deduplicated": 587
+                                }
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  },
+                  "comments_before": []
+                },
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 112,
+                        "col": 5
+                      },
+                      "end": {
+                        "line": 112,
+                        "col": 5
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "id": 5786,
+                  "kind": {
+                    "StorageDead": 1
+                  },
+                  "comments_before": []
+                },
+                {
+                  "span": {
+                    "data": {
+                      "file_id": 27,
+                      "beg": {
+                        "line": 112,
+                        "col": 5
+                      },
+                      "end": {
+                        "line": 112,
+                        "col": 5
+                      }
+                    },
+                    "generated_from_span": null
+                  },
+                  "id": 5787,
+                  "kind": "Return",
+                  "comments_before": []
+                }
+              ]
+            },
+            "comments": []
+          }
+        }
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "global_decls": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "trait_decls": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "def_id": 10,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ops",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "try_trait",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "Try",
+                0
+              ]
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 39,
+              "beg": {
+                "line": 133,
+                "col": 0
+              },
+              "end": {
+                "line": 133,
+                "col": 41
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [
+              {
+                "DocComment": " The `?` operator and `try {}` blocks."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " `try_*` methods typically involve a type implementing this trait.  For"
+              },
+              {
+                "DocComment": " example, the closures passed to [`Iterator::try_fold`] and"
+              },
+              {
+                "DocComment": " [`Iterator::try_for_each`] must return such a type."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " `Try` types are typically those containing two or more categories of values,"
+              },
+              {
+                "DocComment": " some subset of which are so commonly handled via early returns that it's"
+              },
+              {
+                "DocComment": " worth providing a terse (but still visible) syntax to make that easy."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " This is most often seen for error handling with [`Result`] and [`Option`]."
+              },
+              {
+                "DocComment": " The quintessential implementation of this trait is on [`ControlFlow`]."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " # Using `Try` in Generic Code"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " `Iterator::try_fold` was stabilized to call back in Rust 1.27, but"
+              },
+              {
+                "DocComment": " this trait is much newer.  To illustrate the various associated types and"
+              },
+              {
+                "DocComment": " methods, let's implement our own version."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " As a reminder, an infallible version of a fold looks something like this:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " fn simple_fold<A, T>("
+              },
+              {
+                "DocComment": "     iter: impl Iterator<Item = T>,"
+              },
+              {
+                "DocComment": "     mut accum: A,"
+              },
+              {
+                "DocComment": "     mut f: impl FnMut(A, T) -> A,"
+              },
+              {
+                "DocComment": " ) -> A {"
+              },
+              {
+                "DocComment": "     for x in iter {"
+              },
+              {
+                "DocComment": "         accum = f(accum, x);"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": "     accum"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " So instead of `f` returning just an `A`, we'll need it to return some other"
+              },
+              {
+                "DocComment": " type that produces an `A` in the \"don't short circuit\" path.  Conveniently,"
+              },
+              {
+                "DocComment": " that's also the type we need to return from the function."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " Let's add a new generic parameter `R` for that type, and bound it to the"
+              },
+              {
+                "DocComment": " output type that we want:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " # #![feature(try_trait_v2)]"
+              },
+              {
+                "DocComment": " # use std::ops::Try;"
+              },
+              {
+                "DocComment": " fn simple_try_fold_1<A, T, R: Try<Output = A>>("
+              },
+              {
+                "DocComment": "     iter: impl Iterator<Item = T>,"
+              },
+              {
+                "DocComment": "     mut accum: A,"
+              },
+              {
+                "DocComment": "     mut f: impl FnMut(A, T) -> R,"
+              },
+              {
+                "DocComment": " ) -> R {"
+              },
+              {
+                "DocComment": "     todo!()"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " If we get through the entire iterator, we need to wrap up the accumulator"
+              },
+              {
+                "DocComment": " into the return type using [`Try::from_output`]:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " # #![feature(try_trait_v2)]"
+              },
+              {
+                "DocComment": " # use std::ops::{ControlFlow, Try};"
+              },
+              {
+                "DocComment": " fn simple_try_fold_2<A, T, R: Try<Output = A>>("
+              },
+              {
+                "DocComment": "     iter: impl Iterator<Item = T>,"
+              },
+              {
+                "DocComment": "     mut accum: A,"
+              },
+              {
+                "DocComment": "     mut f: impl FnMut(A, T) -> R,"
+              },
+              {
+                "DocComment": " ) -> R {"
+              },
+              {
+                "DocComment": "     for x in iter {"
+              },
+              {
+                "DocComment": "         let cf = f(accum, x).branch();"
+              },
+              {
+                "DocComment": "         match cf {"
+              },
+              {
+                "DocComment": "             ControlFlow::Continue(a) => accum = a,"
+              },
+              {
+                "DocComment": "             ControlFlow::Break(_) => todo!(),"
+              },
+              {
+                "DocComment": "         }"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": "     R::from_output(accum)"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " We'll also need [`FromResidual::from_residual`] to turn the residual back"
+              },
+              {
+                "DocComment": " into the original type.  But because it's a supertrait of `Try`, we don't"
+              },
+              {
+                "DocComment": " need to mention it in the bounds.  All types which implement `Try` can be"
+              },
+              {
+                "DocComment": " recreated from their corresponding residual, so we'll just call it:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " # #![feature(try_trait_v2)]"
+              },
+              {
+                "DocComment": " # use std::ops::{ControlFlow, Try};"
+              },
+              {
+                "DocComment": " pub fn simple_try_fold_3<A, T, R: Try<Output = A>>("
+              },
+              {
+                "DocComment": "     iter: impl Iterator<Item = T>,"
+              },
+              {
+                "DocComment": "     mut accum: A,"
+              },
+              {
+                "DocComment": "     mut f: impl FnMut(A, T) -> R,"
+              },
+              {
+                "DocComment": " ) -> R {"
+              },
+              {
+                "DocComment": "     for x in iter {"
+              },
+              {
+                "DocComment": "         let cf = f(accum, x).branch();"
+              },
+              {
+                "DocComment": "         match cf {"
+              },
+              {
+                "DocComment": "             ControlFlow::Continue(a) => accum = a,"
+              },
+              {
+                "DocComment": "             ControlFlow::Break(r) => return R::from_residual(r),"
+              },
+              {
+                "DocComment": "         }"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": "     R::from_output(accum)"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " But this \"call `branch`, then `match` on it, and `return` if it was a"
+              },
+              {
+                "DocComment": " `Break`\" is exactly what happens inside the `?` operator.  So rather than"
+              },
+              {
+                "DocComment": " do all this manually, we can just use `?` instead:"
+              },
+              {
+                "DocComment": " ```"
+              },
+              {
+                "DocComment": " # #![feature(try_trait_v2)]"
+              },
+              {
+                "DocComment": " # use std::ops::Try;"
+              },
+              {
+                "DocComment": " fn simple_try_fold<A, T, R: Try<Output = A>>("
+              },
+              {
+                "DocComment": "     iter: impl Iterator<Item = T>,"
+              },
+              {
+                "DocComment": "     mut accum: A,"
+              },
+              {
+                "DocComment": "     mut f: impl FnMut(A, T) -> R,"
+              },
+              {
+                "DocComment": " ) -> R {"
+              },
+              {
+                "DocComment": "     for x in iter {"
+              },
+              {
+                "DocComment": "         accum = f(accum, x)?;"
+              },
+              {
+                "DocComment": "     }"
+              },
+              {
+                "DocComment": "     R::from_output(accum)"
+              },
+              {
+                "DocComment": " }"
+              },
+              {
+                "DocComment": " ```"
+              }
+            ],
+            "inline": null,
+            "rename": null,
+            "public": true
+          },
+          "is_local": false,
+          "opacity": "Foreign",
+          "lang_item": "Try"
+        },
+        "generics": {
+          "regions": [],
+          "types": [
+            {
+              "index": 0,
+              "name": "Self"
+            }
+          ],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "implied_clauses": [
+          {
+            "clause_id": 0,
+            "span": {
+              "data": {
+                "file_id": 39,
+                "beg": {
+                  "line": 133,
+                  "col": 21
+                },
+                "end": {
+                  "line": 133,
+                  "col": 41
+                }
+              },
+              "generated_from_span": null
+            },
+            "origin": "WhereClauseOnTrait",
+            "trait_": {
+              "regions": [],
+              "skip_binder": {
+                "id": 11,
+                "generics": {
+                  "regions": [],
+                  "types": [
+                    {
+                      "HashConsedValue": [
+                        3332,
+                        {
+                          "TypeVar": {
+                            "Free": 0
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "HashConsedValue": [
+                        3335,
+                        {
+                          "TraitType": [
+                            {
+                              "HashConsedValue": [
+                                3334,
+                                {
+                                  "kind": "SelfId",
+                                  "trait_decl_ref": {
+                                    "regions": [],
+                                    "skip_binder": {
+                                      "id": 10,
+                                      "generics": {
+                                        "regions": [],
+                                        "types": [
+                                          {
+                                            "Deduplicated": 3332
+                                          }
+                                        ],
+                                        "const_generics": [],
+                                        "trait_refs": []
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            1,
+                            {
+                              "regions": [],
+                              "types": [],
+                              "const_generics": [],
+                              "trait_refs": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": []
+                }
+              }
+            }
+          }
+        ],
+        "consts": [],
+        "types": [],
+        "methods": [],
+        "vtable": null
+      },
+      {
+        "def_id": 11,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ops",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "try_trait",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "FromResidual",
+                0
+              ]
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 39,
+              "beg": {
+                "line": 310,
+                "col": 0
+              },
+              "end": {
+                "line": 310,
+                "col": 57
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [
+              {
+                "DocComment": " Used to specify which residuals can be converted into which [`crate::ops::Try`] types."
+              },
+              {
+                "DocComment": ""
+              },
+              {
+                "DocComment": " Every `Try` type needs to be recreatable from its own associated"
+              },
+              {
+                "DocComment": " `Residual` type, but can also have additional `FromResidual` implementations"
+              },
+              {
+                "DocComment": " to support interconversion with other `Try` types."
+              }
+            ],
+            "inline": null,
+            "rename": null,
+            "public": true
+          },
+          "is_local": false,
+          "opacity": "Foreign",
+          "lang_item": "FromResidual"
+        },
+        "generics": {
+          "regions": [],
+          "types": [
+            {
+              "index": 0,
+              "name": "Self"
+            },
+            {
+              "index": 1,
+              "name": "R"
+            }
+          ],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "implied_clauses": [],
+        "consts": [],
+        "types": [],
+        "methods": [],
+        "vtable": null
+      }
+    ],
+    "trait_impls": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "def_id": 20,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ops",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "control_flow",
+                0
+              ]
+            },
+            {
+              "Impl": {
+                "Trait": 20
+              }
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 27,
+              "beg": {
+                "line": 105,
+                "col": 0
+              },
+              "end": {
+                "line": 105,
+                "col": 47
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [],
+            "inline": null,
+            "rename": null,
+            "public": false
+          },
+          "is_local": false,
+          "opacity": "Foreign",
+          "lang_item": null
+        },
+        "impl_trait": {
+          "id": 10,
+          "generics": {
+            "regions": [],
+            "types": [
+              {
+                "Deduplicated": 1944
+              }
+            ],
+            "const_generics": [],
+            "trait_refs": []
+          }
+        },
+        "generics": {
+          "regions": [],
+          "types": [],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "implied_trait_refs": [
+          {
+            "HashConsedValue": [
+              3329,
+              {
+                "kind": {
+                  "TraitImpl": {
+                    "id": 23,
+                    "generics": {
+                      "regions": [],
+                      "types": [],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                },
+                "trait_decl_ref": {
+                  "regions": [],
+                  "skip_binder": {
+                    "id": 11,
+                    "generics": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "Deduplicated": 1944
+                        },
+                        {
+                          "HashConsedValue": [
+                            2440,
+                            {
+                              "Adt": {
+                                "id": {
+                                  "Adt": 21
+                                },
+                                "generics": {
+                                  "regions": [],
+                                  "types": [],
+                                  "const_generics": [],
+                                  "trait_refs": []
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "consts": [],
+        "types": [],
+        "methods": [],
+        "vtable": null
+      },
+      null,
+      null,
+      {
+        "def_id": 23,
+        "item_meta": {
+          "name": [
+            {
+              "Ident": [
+                "core",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "ops",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "control_flow",
+                0
+              ]
+            },
+            {
+              "Impl": {
+                "Trait": 23
+              }
+            }
+          ],
+          "span": {
+            "data": {
+              "file_id": 27,
+              "beg": {
+                "line": 127,
+                "col": 0
+              },
+              "end": {
+                "line": 127,
+                "col": 93
+              }
+            },
+            "generated_from_span": null
+          },
+          "source_text": null,
+          "attr_info": {
+            "attributes": [],
+            "inline": null,
+            "rename": null,
+            "public": false
+          },
+          "is_local": false,
+          "opacity": "Foreign",
+          "lang_item": null
+        },
+        "impl_trait": {
+          "id": 11,
+          "generics": {
+            "regions": [],
+            "types": [
+              {
+                "Deduplicated": 1944
+              },
+              {
+                "Deduplicated": 2440
+              }
+            ],
+            "const_generics": [],
+            "trait_refs": []
+          }
+        },
+        "generics": {
+          "regions": [],
+          "types": [],
+          "const_generics": [],
+          "trait_clauses": [],
+          "regions_outlive": [],
+          "types_outlive": [],
+          "trait_type_constraints": []
+        },
+        "implied_trait_refs": [],
+        "consts": [],
+        "types": [],
+        "methods": [],
+        "vtable": null
+      },
+      null,
+      null,
+      null,
+      null
+    ],
+    "ordered_decls": [
+      {
+        "Type": {
+          "NonRec": 22
+        }
+      },
+      {
+        "Type": {
+          "NonRec": 14
+        }
+      },
+      {
+        "Type": {
+          "NonRec": 21
+        }
+      },
+      {
+        "Fun": {
+          "NonRec": 39
+        }
+      }
+    ]
+  },
+  "has_errors": false
+}

@@ -1,0 +1,15 @@
+280:   let def = ctx_lookup_type_decl span ctx def_id in
+281:   [%sanity_check] span
+282:     (List.length generics.regions = List.length def.generics.regions);
+283:   (* Retrieve, for every variant, the list of its instantiated field types *)
+284:   let variants_fields_types =
+285:     Substitute.type_decl_get_instantiated_variants_fields_types span def
+286:       generics
+287:   in
+288:   (* Check if there is strictly more than one variant *)
+289:   if List.length variants_fields_types > 1 && not expand_enumerations then
+290:     [%craise] span "Not allowed to expand enumerations with several variants";
+291:   (* Initialize the expanded value for a given variant *)
+292:   let initialize ((variant_id, field_types) : VariantId.id option * rty list) :
+293:       symbolic_expansion =
+294:     let field_values =

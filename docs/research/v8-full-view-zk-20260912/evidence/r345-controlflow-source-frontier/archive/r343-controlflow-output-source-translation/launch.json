@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r343-controlflow-output-source-translation",
+    "--working-directory=/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "python3",
+    "-c",
+    "REMOTE='/home/dombarker/project-offloads/aspis-r343-controlflow-output-source-translation-20261002-a'\nBINARY='/home/dombarker/project-offloads/aspis-r312-slice-length-candidate-20261002-a/aeneas-r312-slice-length-candidate'\nSHA='0860e61790d9a0d5a750999a816fb378f8aa3f5b2c9073ae428945ea3325417d'\nBSHA='fff3717072567f291fc1444f52a3dc7c1f8ba4ddc5c3980e94c863cdceb60f4f'\nREV='2e1ece93ae5834f2586ae5f6f75cd0f9856ab801'\nimport pathlib,hashlib,json,subprocess,re\nroot=pathlib.Path(REMOTE);src=root/'R339ControlFlowOutputSourceProjection.llbc';binary=pathlib.Path(BINARY)\nassert hashlib.sha256(src.read_bytes()).hexdigest()==SHA\nassert hashlib.sha256(binary.read_bytes()).hexdigest()==BSHA\nmem=pathlib.Path('/proc/meminfo').read_text();av=int(re.search(r'MemAvailable:\\s+(\\d+)',mem)[1]);assert av>=24*1024*1024\nservices=subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--no-legend'],text=True)\n(root/'host-reservation-before.json').write_text(json.dumps({'meminfo':mem,'available_kib':av,'active_user_services':services,'caps':{'MemoryHigh':'5G','MemoryMax':'7G','MemorySwapMax':0,'TasksMax':128}},indent=2)+'\\n')\ncmd=[str(binary),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR343ControlFlowOutputSource','-dest',str(root/'generated'),'-subdir','AspisR343ControlFlowOutputSource','-split-files','-emit-json',str(src)]\n(root/'command.json').write_text(json.dumps({'command':cmd,'source_sha256':SHA,'binary_sha256':BSHA,'source_revision':REV,'scope':'Single exact source ControlFlow from_output projection; not a batch/traversal translation.'},indent=2)+'\\n')\nwith (root/'translate.log').open('w') as out:r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=out,stderr=subprocess.STDOUT)\nprint((root/'translate.log').read_text())\nfiles={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root/'generated').rglob('*')) if p.is_file()}\n(root/'result.json').write_text(json.dumps({'exit_status':r.returncode,'source_sha256':SHA,'binary_sha256':BSHA,'source_revision':REV,'generated_files':files,'Lean_compiled':False,'print_axioms':'N/A; translation only','first_remaining':'Audit emitted source bindings and every external dependency before any proof.'},indent=2)+'\\n')\nraise SystemExit(r.returncode)\n"
+  ],
+  "source_revision": "2e1ece93ae5834f2586ae5f6f75cd0f9856ab801",
+  "runner_sha256": "a5d033ef405effe77ffecc6ea7e11bab835008f13bfde4c623a67d4fc9759287",
+  "lead_review": "Lead reviewed exact Fun39-only projection: full recognized decoded closure includes original ADTs; no source row/signature/body/region/langitem altered; no loops; original metadata-only traits lacking order entries remain without invented ordering."
+}

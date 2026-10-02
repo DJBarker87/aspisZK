@@ -1,0 +1,9 @@
+# R339 metadata-only projection of `ControlFlow::from_output`
+
+This bundle filters the frozen, error-free R327 LLBC to the complete decoded typed-reference closure rooted at original Fun39, `core::ops::control_flow::{impl-trait#20}::from_output`. The projection generator is a copy of the R334 typed-reference/hash-cons projection builder with only its root list, exact audited root identity, and output filename changed. It does not run Charon, Aeneas, Lean, or any compiler.
+
+Input `input/R327PrivateBatchSourceTryFold.llbc` has SHA-256 `9ed7c0ab91051ac61d812d66651680112ac26fe907faa76f9d4d2d9a14d03442`; the original R327 source rows and body audit were checked before projection. The result retains 3 Type, 1 Fun, 0 Global, 2 TraitDecl, and 2 TraitImpl rows, with 18 recognized typed-reference occurrences, zero missing references, and zero unknown reference shapes. The decoded Fun39 row is byte-value-equivalent to the frozen input row after hash-cons expansion. All retained hash-cons definitions are original values and IDs.
+
+The unchanged original `ordered_decls` has four entries for the retained declarations: Type22, Type14, Type21, Fun39. TraitDecl10/11 and TraitImpl20/23 are retained with no original order entry; none was synthesized. The recognized graph contains a TraitDecl10 self-cycle. Type14 and Type21 are marked `ControlFlow`; Type22 is `core::convert::Infallible` and has no lang-item marker. Fun39 is Structured with no decoded loop-tagged nodes or explicit `Erased` markers. These are decoded-row inventories only.
+
+The projection changes only declaration slot arrays, `item_names`, `short_names`, and `ordered_decls`; it retains the other decoded translated fields and `assoc_item_names` unchanged. `implicit_prepass_dependencies` are not inferred by this projection. No source-to-model correspondence or semantic claim is made. See `projection-audit.json` and `reachable-declarations.json` for full references and row inventory.
