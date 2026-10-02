@@ -1,0 +1,39 @@
+{
+  "docker_argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r344-direct-empty-enum-candidate-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr344.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r344-direct-empty-enum-candidate-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v env AENEAS_VERSION=aspis-r344-direct-empty-enum-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r344-direct-empty-enum-candidate; chmod 755 /work/aeneas-r344-direct-empty-enum-candidate"
+  ],
+  "inner_build_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v env AENEAS_VERSION=aspis-r344-direct-empty-enum-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r344-direct-empty-enum-candidate; chmod 755 /work/aeneas-r344-direct-empty-enum-candidate",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "profile": "dune build main.exe --profile release -j 1",
+  "optimization": "Dune release profile; static native link via OCAMLPARAM=_,ccopt=-static",
+  "parallelism": {
+    "OPAMJOBS": 1,
+    "DUNEJOBS": 1,
+    "dune_jobs": 1
+  },
+  "expected_work": "cached compilation of the changed InterpExpansion.ml module plus native relink; no cold dependency build or proof generation",
+  "source_revision_recorded": "d3d12f9f5540a37f456672f59c07d90d30187da2",
+  "parent_binary_sha256": "fff3717072567f291fc1444f52a3dc7c1f8ba4ddc5c3980e94c863cdceb60f4f",
+  "parent_InterpExpansion_sha256": "30dc6e75bdafa31d04b29784e8235306f569161dcd5c73f8381ae18cd17ff7cd",
+  "patched_InterpExpansion_sha256": "da68f59bc0240bad9862f0733aecd7265c239dbe988669d5d8ddddafc5a79b19",
+  "unchanged_PrePasses_sha256": "09014aa93bffd2cafeebaf23d27a301d66986d9349f4cc9dca6e8d1dfe0ba7dd",
+  "parent_source_tree_sha256": "489a55478797418ff13d89b0ed694195dadcf087f8a92626fc3a39411141f6ce",
+  "candidate_source_tree_sha256_before_build": "d1791e6864a9ca48b3f3cfcf9950b0a3872e682947f5a0b62edbb732c01c8a40",
+  "candidate_InterpExpansion_sha256": "da68f59bc0240bad9862f0733aecd7265c239dbe988669d5d8ddddafc5a79b19"
+}

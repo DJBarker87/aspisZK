@@ -1,0 +1,42 @@
+ 281:   [%sanity_check] span
+ 282:     (List.length generics.regions = List.length def.generics.regions);
+ 283:   (* Retrieve, for every variant, the list of its instantiated field types *)
+ 284:   let variants_fields_types =
+ 285:     Substitute.type_decl_get_instantiated_variants_fields_types span def
+ 286:       generics
+ 287:   in
+ 288:   (* A direct field of an enum with no constructors cannot have a typed value.
+ 289:      Remove only variants whose instantiated fields directly name such an enum. *)
+ 290:   let is_direct_empty_enum_field (ty : rty) =
+ 291:     match ty with
+ 292:     | TAdt { id = TAdtId field_def_id; _ } ->
+ 293:         let field_def = ctx_lookup_type_decl span ctx field_def_id in
+ 294:         begin
+ 295:           match field_def.kind with
+ 296:           | Enum [] -> true
+ 297:           | _ -> false
+ 298:         end
+ 299:     | _ -> false
+ 300:   in
+ 301:   let variants_fields_types =
+ 302:     List.filter
+ 303:       (fun (_variant_id, field_types) ->
+ 304:         not (List.exists is_direct_empty_enum_field field_types))
+ 305:       variants_fields_types
+ 306:   in
+ 307:   (* Check if there is strictly more than one variant *)
+ 308:   if List.length variants_fields_types > 1 && not expand_enumerations then
+ 309:     [%craise] span "Not allowed to expand enumerations with several variants";
+ 310:   (* Initialize the expanded value for a given variant *)
+ 311:   let initialize ((variant_id, field_types) : VariantId.id option * rty list) :
+ 312:       symbolic_expansion =
+ 313:     let field_values =
+ 314:       List.map
+ 315:         (fun (ty : rty) -> mk_fresh_symbolic_value span ctx ty)
+ 316:         field_types
+ 317:     in
+ 318:     let see = SeAdt (variant_id, field_values) in
+ 319:     see
+ 320:   in
+ 321:   (* Initialize all the expanded values of all the variants *)
+ 322:   List.map initialize variants_fields_types

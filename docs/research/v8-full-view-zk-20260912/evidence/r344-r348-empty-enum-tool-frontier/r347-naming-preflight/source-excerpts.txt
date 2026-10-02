@@ -1,0 +1,175 @@
+===== sources/charon-ml/NameMatcher.ml =====
+--- lines 489-501 ---
+ 489:     ?(m : maps = mk_empty_maps ()) (p : pattern) (n : T.name)
+ 490:     (g : T.generic_args) : bool =
+ 491:   (* A [PeInstantiated] suffix is appended when the generics of an item are
+ 492:      modified; it records the map from the new generics to the old ones. Name
+ 493:      matching is expressed over the original item, so translate the generics of
+ 494:      the instantiated item back to the original generics before matching. *)
+ 495:   let n, g =
+ 496:     match List.rev n with
+ 497:     | PeInstantiated binder :: rest_rev ->
+ 498:         let g = instantiate_name_generics binder g in
+ 499:         (List.rev rest_rev, g)
+ 500:     | _ -> (n, g)
+ 501:   in
+--- lines 993-1016 ---
+ 993: 
+ 994: and name_to_pattern_aux (ctx : ctx) (c : to_pat_config) (n : T.name) : pattern =
+ 995:   name_with_generic_args_to_pattern_aux ctx c n None
+ 996: 
+ 997: and path_elem_with_generic_args_to_pattern (ctx : ctx) (c : to_pat_config)
+ 998:     (e : T.path_elem) (generics : generic_args option) : pattern_elem list =
+ 999:   match e with
+1000:   | PeIdent (s, d) -> begin
+1001:       let d = T.Disambiguator.to_int d in
+1002:       match generics with
+1003:       | None -> [ PIdent (s, d, []) ]
+1004:       | Some args -> [ PIdent (s, d, args) ]
+1005:     end
+1006:   | PeImpl impl -> [ impl_elem_to_pattern ctx c impl ]
+1007:   | PeTarget tgt -> begin
+1008:       match generics with
+1009:       | None -> [ PIdent (tgt, 0, []) ]
+1010:       | Some args -> [ PIdent (tgt, 0, args) ]
+1011:     end
+1012:   | PeInstantiated _ ->
+1013:       (* In pattern generation, we skip monomorphized elements since patterns
+1014:          are meant to match the logical structure, not the instantiation details *)
+1015:       []
+1016: 
+--- lines 1525-1548 ---
+1525:     let logical_name, instantiation_suffix =
+1526:       match List.rev n with
+1527:       | (PeInstantiated _ as suffix) :: rest_rev ->
+1528:           (List.rev rest_rev, [ suffix ])
+1529:       | _ -> (n, [])
+1530:     in
+1531:     if List.length p = List.length logical_name then
+1532:       if match_name_with_generics ctx c p n g then
+1533:         Some ([], TypesUtils.empty_generic_args)
+1534:       else None
+1535:     else if List.length p < List.length logical_name then
+1536:       let npre, nend = Collections.List.split_at logical_name (List.length p) in
+1537:       if match_name ctx c p npre then Some (nend @ instantiation_suffix, g)
+1538:       else None
+1539:     else None
+1540: 
+1541:   let rec find_with_generics_opt (ctx : ctx) (c : match_config)
+1542:       (name : Types.name) (g : Types.generic_args) (m : 'a t) : 'a option =
+1543:     let (Node (node_v, children)) = m in
+1544:     (* Check if we reached the destination *)
+1545:     match name with
+1546:     | [] | [ PeInstantiated _ ] ->
+1547:         (* For tree search, we also consider monomorphized elements as terminal
+1548:            since they represent instantiation details, not logical structure.
+===== sources/charon-ml/Generated_Types.ml =====
+--- lines 1155-1166 ---
+1155: 
+1156: (** See the comments for [Name] *)
+1157: and path_elem =
+1158:   | PeIdent of string * disambiguator
+1159:   | PeImpl of impl_elem
+1160:   | PeInstantiated of generic_args binder
+1161:       (** This item was obtained by instantiating its parent with the given
+1162:           args. The binder binds the parameters of the new items. If the binder
+1163:           binds nothing then this is a monomorphization. *)
+1164:   | PeTarget of string
+1165:       (** This item is only available on the given target. Only appears in
+1166:           multi-target mode. *)
+===== sources/charon-ml/PrintFmt.ml =====
+--- lines 895-921 ---
+ 895:     end
+ 896:   | PeImpl impl -> Format.fprintf fmt "{%a}" (pp_impl_elem env) impl
+ 897:   | PeInstantiated binder ->
+ 898:       let anon_params =
+ 899:         {
+ 900:           binder.binder_params with
+ 901:           regions =
+ 902:             List.map
+ 903:               (fun (r : region_param) -> { r with name = Some "_" })
+ 904:               binder.binder_params.regions;
+ 905:           types =
+ 906:             List.map
+ 907:               (fun (t : type_param) -> { t with name = "_" })
+ 908:               binder.binder_params.types;
+ 909:           const_generics =
+ 910:             List.map
+ 911:               (fun (c : const_generic_param) -> { c with name = "_" })
+ 912:               binder.binder_params.const_generics;
+ 913:           regions_outlive = [];
+ 914:           types_outlive = [];
+ 915:           trait_type_constraints = [];
+ 916:         }
+ 917:       in
+ 918:       let env = fmt_env_push_generics_and_preds env anon_params in
+ 919:       let explicits, _ = generic_args_to_strings env binder.binder_value in
+ 920:       Format.fprintf fmt "<%a>" (pp_sep_list ", " pp_string) explicits
+ 921:   | PeTarget target -> pp_string fmt target
+===== sources/aeneas/ExtractName.ml =====
+--- lines 137-176 ---
+ 137: (** Helper to convert name patterns to names for extraction.
+ 138: 
+ 139:     For impl blocks, we simply use the name of the type (without its arguments)
+ 140:     if all the arguments are variables. *)
+ 141: let pattern_to_extract_name (_span : Meta.span option) (name : pattern) :
+ 142:     string list =
+ 143:   let c = { tgt = TkName } in
+ 144:   let visitor = pattern_to_extract_name_visitor in
+ 145:   let name = visitor#visit_pattern () name in
+ 146:   List.map (pattern_elem_to_string c) name
+ 147: 
+ 148: let name_matcher_expr_to_extract_name (_span : Meta.span option) (name : expr) :
+ 149:     string =
+ 150:   let c = { tgt = TkName } in
+ 151:   let visitor = pattern_to_extract_name_visitor in
+ 152:   let name = visitor#visit_expr () name in
+ 153:   expr_to_string c name
+ 154: 
+ 155: let pattern_to_type_extract_name = pattern_to_extract_name None
+ 156: let pattern_to_fun_extract_name = pattern_to_extract_name None
+ 157: let pattern_to_trait_impl_extract_name = pattern_to_extract_name None
+ 158: 
+ 159: (* TODO: this is provisional. We just want to make sure that the extraction
+ 160:    names we derive from the patterns (for the builtin definitions) are
+ 161:    consistent with the extraction names we derive from the Rust names *)
+ 162: let name_to_simple_name (ctx : ctx) (n : Types.name) : string list =
+ 163:   let c = default_to_pat_config in
+ 164:   pattern_to_extract_name None (name_to_pattern ctx c n)
+ 165: 
+ 166: (** If the [prefix] is Some, we attempt to remove the common prefix between
+ 167:     [prefix] and [name] from [name] *)
+ 168: let name_with_generics_to_simple_name (ctx : ctx)
+ 169:     ?(prefix : Types.name option = None) (name : Types.name)
+ 170:     (p : Types.generic_params) (g : Types.generic_args) : string list =
+ 171:   let c = default_to_pat_config in
+ 172:   let name = name_with_generics_to_pattern ctx c p name g in
+ 173:   let name =
+ 174:     match prefix with
+ 175:     | None -> name
+ 176:     | Some prefix ->
+===== sources/aeneas/TranslateCore.ml =====
+--- lines 27-35 ---
+  27:   Print.name_to_string (trans_ctx_to_fmt_env ctx)
+  28: 
+  29: let fun_sig_to_string (ctx : trans_ctx) =
+  30:   Charon.Print.fun_sig_to_string (trans_ctx_to_fmt_env ctx) "" "  "
+  31: 
+  32: let name_to_simple_name (ctx : trans_ctx) (n : Types.name) : string list =
+  33:   let mctx = Charon.NameMatcher.ctx_from_crate ctx.crate in
+  34:   name_to_simple_name mctx n
+  35: 
+===== sources/aeneas/LlbcAstUtils.ml =====
+--- lines 94-105 ---
+  94:   match List.rev n with
+  95:   | Types.PeTarget _ :: rest -> List.rev rest
+  96:   | _ -> n
+  97: 
+  98: let strip_target_or_instantiated_suffix (n : name) : name =
+  99:   let rec strip_all (n : name) : name =
+ 100:     match n with
+ 101:     | (PeTarget _ | PeInstantiated _) :: rest -> strip_all rest
+ 102:     | _ -> List.rev n
+ 103:   in
+ 104:   strip_all (List.rev n)
+ 105: 

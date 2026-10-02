@@ -1,0 +1,28 @@
+--- interp/InterpExpansion.ml
++++ interp/InterpExpansion.ml
+@@ -285,6 +285,25 @@
+     Substitute.type_decl_get_instantiated_variants_fields_types span def
+       generics
+   in
++  (* A direct field of an enum with no constructors cannot have a typed value.
++     Remove only variants whose instantiated fields directly name such an enum. *)
++  let is_direct_empty_enum_field (ty : rty) =
++    match ty with
++    | TAdt { id = TAdtId field_def_id; _ } ->
++        let field_def = ctx_lookup_type_decl span ctx field_def_id in
++        begin
++          match field_def.kind with
++          | Enum [] -> true
++          | _ -> false
++        end
++    | _ -> false
++  in
++  let variants_fields_types =
++    List.filter
++      (fun (_variant_id, field_types) ->
++        not (List.exists is_direct_empty_enum_field field_types))
++      variants_fields_types
++  in
+   (* Check if there is strictly more than one variant *)
+   if List.length variants_fields_types > 1 && not expand_enumerations then
+     [%craise] span "Not allowed to expand enumerations with several variants";

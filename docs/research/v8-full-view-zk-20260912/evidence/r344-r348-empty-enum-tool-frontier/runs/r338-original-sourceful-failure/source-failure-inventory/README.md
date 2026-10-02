@@ -1,0 +1,7 @@
+# R338 read-only failure census
+
+This inventory records the R338 translator failure from the saved invocation and inspects its exact input rows. R338 exited 2 after 0.18 s (peak RSS 54,032 KiB, swap 0) with no generated files or Lean output. The recorded error is `Not allowed to expand enumerations with several variants` at pinned `interp/InterpExpansion.ml:290`.
+
+The failed input was the R334 projection (SHA-256 `8b9bd55e374866294b591758e1282d08998cb002e30b070207156b61f81a69ca`). Its selected Fun40 row and Type21/Type22 rows were decoded and checked equal to their original R327 source rows; `failure-census.json` records each full decoded row hash and the exact AST projection path. Fun40 is `core::ops::control_flow::{impl-trait#23}::from_residual`. At Rust file ID 27, source line 131, columns 31–32, its body contains a projection whose owner is ADT Type21, field index 0. Type21 is the ControlFlow enum row; Type22 is `core::convert::Infallible`. The corresponding external Rust source text was not present in the frozen LLBC (`contents: null`), so this inventory does not assert source text beyond the stored source span.
+
+The compiler excerpt is copied from the pinned Aeneas source clone at campaign revision `380c7d46c9719dcfcab601fac2607861d47dee02`; the clone has no Git metadata. The exact full file hash and excerpt are recorded in `failure-census.json`. This is diagnostic evidence only; no compiler repair or semantic interpretation is proposed.

@@ -1,0 +1,7 @@
+# R344 direct empty-enum expansion candidate
+
+This is a one-file Aeneas source candidate prepared from the exact `InterpExpansion.ml` in the R312 cached source tree. The full current R312 source/cache tree had 1,004 entries and SHA-256 `489a55478797418ff13d89b0ed694195dadcf087f8a92626fc3a39411141f6ce`; the parent file itself hashes to `30dc6e75bdafa31d04b29784e8235306f569161dcd5c73f8381ae18cd17ff7cd`. The staged candidate file hashes to `da68f59bc0240bad9862f0733aecd7265c239dbe988669d5d8ddddafc5a79b19`, with the sole insertion recorded in `InterpExpansion.patch`.
+
+The inserted check runs after the existing substitution obtains instantiated field types. It removes a parent variant only when one of those field types is directly a named `TAdtId` whose exact looked-up declaration has kind `Enum []`. It does not treat opaque, generic, reference, recursive, struct, builtin, or other types as empty. The existing multi-variant guard is unchanged. Existing fresh-value construction, retained variant IDs, and retained field-type lists are unchanged. A zero-variant parent enum and a zero-field parent variant do not meet the filtering predicate and remain untouched by this code.
+
+This candidate expresses the bounded lead-selected rule. It does not establish full compiler correspondence. No build or translation was run. `build-plan.json` records a future isolated clone/cache build plan matching R312's offline Dune release/static build and 5/7 GiB, zero-swap, 128-task limits. It is a plan only and must not be launched until lead review and authorization.

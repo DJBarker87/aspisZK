@@ -1,0 +1,12 @@
+{
+  "status": "plan only; do not launch without lead review/authorization",
+  "source_parent_tree": "/home/dombarker/project-offloads/aspis-r312-slice-length-candidate-20261002-a/src",
+  "source_parent_tree_sha256_at_inventory": "489a55478797418ff13d89b0ed694195dadcf087f8a92626fc3a39411141f6ce",
+  "fresh_remote_root": "/home/dombarker/project-offloads/aspis-r344-direct-empty-enum-candidate-20261002-a",
+  "clone_instruction": "After authorization, cp -a the R312 src tree into the fresh R344 root; verify full source/cache manifest and zero shared regular-file inodes before applying only InterpExpansion.patch. Preserve _build cache and all other files byte-identically.",
+  "systemd": {"unit_scope": "aspisr344.slice", "MemoryHigh": "5G", "MemoryMax": "7G", "MemorySwapMax": "0", "TasksMax": 128},
+  "docker": {"image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7", "network": "none", "memory_reservation": "5g", "memory": "7g", "memory_swap": "7g (equal to memory; no swap)", "pids_limit": 128, "cgroup_parent": "aspisr344.slice"},
+  "build": {"command": "cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v env AENEAS_VERSION=aspis-r344-direct-empty-enum-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r344-direct-empty-enum-candidate; chmod 755 /work/aeneas-r344-direct-empty-enum-candidate", "optimization": "Dune release profile; static native link", "expected_work": "cached compilation of changed InterpExpansion.ml plus native relink; no translation or Lean work"},
+  "prelaunch_requirements": "Recheck host reservation and active jobs at launch time; clone audit; verify image/cache; record exact source revision and commands. This file itself performs none of these operations.",
+  "R312_reference": {"binary_sha256": "fff3717072567f291fc1444f52a3dc7c1f8ba4ddc5c3980e94c863cdceb60f4f", "source_revision": "78d28cdea0f1ac2fd332f92026071c654b9b3a52", "build_caps": "5/7 GiB, zero systemd swap, TasksMax 128, offline Docker"}
+}

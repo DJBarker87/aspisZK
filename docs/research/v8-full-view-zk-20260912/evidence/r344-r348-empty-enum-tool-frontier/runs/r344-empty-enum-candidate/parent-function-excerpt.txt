@@ -1,0 +1,39 @@
+ 281:   [%sanity_check] span
+ 282:     (List.length generics.regions = List.length def.generics.regions);
+ 283:   (* Retrieve, for every variant, the list of its instantiated field types *)
+ 284:   let variants_fields_types =
+ 285:     Substitute.type_decl_get_instantiated_variants_fields_types span def
+ 286:       generics
+ 287:   in
+ 288:   (* Check if there is strictly more than one variant *)
+ 289:   if List.length variants_fields_types > 1 && not expand_enumerations then
+ 290:     [%craise] span "Not allowed to expand enumerations with several variants";
+ 291:   (* Initialize the expanded value for a given variant *)
+ 292:   let initialize ((variant_id, field_types) : VariantId.id option * rty list) :
+ 293:       symbolic_expansion =
+ 294:     let field_values =
+ 295:       List.map
+ 296:         (fun (ty : rty) -> mk_fresh_symbolic_value span ctx ty)
+ 297:         field_types
+ 298:     in
+ 299:     let see = SeAdt (variant_id, field_values) in
+ 300:     see
+ 301:   in
+ 302:   (* Initialize all the expanded values of all the variants *)
+ 303:   List.map initialize variants_fields_types
+ 305: let compute_expanded_symbolic_tuple_value (span : Meta.span) (ctx : eval_ctx)
+ 306:     (field_types : rty list) : symbolic_expansion =
+ 307:   (* Generate the field values *)
+ 308:   let field_values =
+ 309:     List.map (fun sv_ty -> mk_fresh_symbolic_value span ctx sv_ty) field_types
+ 310:   in
+ 311:   let variant_id = None in
+ 312:   let see = SeAdt (variant_id, field_values) in
+ 313:   see
+ 315: let compute_expanded_symbolic_box_value (span : Meta.span) (ctx : eval_ctx)
+ 316:     (boxed_ty : rty) : symbolic_expansion =
+ 317:   (* Introduce a fresh symbolic value *)
+ 318:   let boxed_value = mk_fresh_symbolic_value span ctx boxed_ty in
+ 319:   let see = SeAdt (None, [ boxed_value ]) in
+ 320:   see
+ 322: (** Compute the expansion of an adt value.
