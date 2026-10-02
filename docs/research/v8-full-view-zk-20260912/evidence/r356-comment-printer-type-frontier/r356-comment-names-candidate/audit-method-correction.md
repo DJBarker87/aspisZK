@@ -1,0 +1,3 @@
+# R356 tree-audit method note
+
+A preliminary strict comparison of the live R349 `src` against its saved candidate tree manifest failed under `_build`. That manifest was captured before the R349 native rebuild; the subsequent build changed cached artifacts under `_build`. The comparison was corrected without changing either source tree: the saved manifest verifies every non-`_build` source path, while a fresh recursive full-tree comparison of the current R349 `src` against R356 verifies that all cached artifacts match and the sole difference is `extract/ExtractTypes.ml`. This is the basis of `clone-audit.json`; it records 1004 entries and zero shared regular-file inodes.
