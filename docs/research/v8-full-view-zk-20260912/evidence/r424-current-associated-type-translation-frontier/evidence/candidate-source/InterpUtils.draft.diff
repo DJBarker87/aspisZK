@@ -1,0 +1,33 @@
+--- pinned/interp/InterpUtils.ml
++++ UNVERIFIED R424/interp/InterpUtils.ml
+@@ -909,8 +909,12 @@
+ 
+   (* Substitute the inputs and outputs *)
+   let open Substitute in
+-  let inputs = List.map (st_substitute_visitor#visit_ty subst) inputs in
+-  let output = st_substitute_visitor#visit_ty subst output in
++  let normalizer = ConcreteAssociatedTypes.normalize_visitor span ctx.crate in
++  let inputs = List.map
++    (fun ty -> normalizer#visit_ty []
++      (st_substitute_visitor#visit_ty subst ty)) inputs in
++  let output = normalizer#visit_ty []
++    (st_substitute_visitor#visit_ty subst output) in
+ 
+   (* Compute the regions hierarchy *)
+   let trait_type_constraints, regions_hierarchy =
+@@ -954,9 +958,14 @@
+              subst)
+           types_outlive
+       in
++      let trait_type_constraints =
++        List.map
++          (st_substitute_visitor#visit_region_binder
++            st_substitute_visitor#visit_trait_type_constraint subst)
++          trait_type_constraints in
+       (* For the type variables and const generic variables we simply reuse the
+          ones present in the context *)
+-      {
++      normalizer#visit_generic_params [] {
+         regions = fresh_region_vars;
+         types = ctx.type_vars;
+         const_generics = ctx.const_generic_vars;

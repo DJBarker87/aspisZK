@@ -1,0 +1,47 @@
+{
+  "docker_argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r424-main-build-v1",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr424.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r424-concrete-associated-types-candidate-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r424-main-build-v1/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r424-concrete-associated-types-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r424-concrete-associated-types-candidate; chmod 755 /work/aeneas-r424-concrete-associated-types-candidate"
+  ],
+  "inner_build_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r424-main-build-v1/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r424-concrete-associated-types-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r424-concrete-associated-types-candidate; chmod 755 /work/aeneas-r424-concrete-associated-types-candidate",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "profile": "dune build main.exe --profile release -j 1",
+  "optimization": "Dune release; static native link",
+  "parallelism": {
+    "OPAMJOBS": 1,
+    "DUNEJOBS": 1,
+    "dune_jobs": 1
+  },
+  "source_revision": "a3fe5df6b53caa52322339906642de5064fc2bbb",
+  "source_hashes": {
+    "src/llbc/ConcreteAssociatedTypes.ml": "48336b273fafc9fec71686f15896976cddf1a41367a5556749af0f13437ef4cf",
+    "src/dune": "8c83177da0f8e73850c8cb44d69c5bfb905a0ff29f2180eee272416d6d975e23",
+    "src/ConcreteAssociatedTypesFixture.ml": "c9e5bd6ee4da45efab2f9406d4d1022c42a77286d2096816746a37359c378177",
+    "source-fixtures/R396PrivateBatchUnmonomorphized.llbc": "399020435e94aaa7135c06d68445e9b936bd22fe6d1e1d197ee708d448d584ae",
+    "src/interp/InterpUtils.ml": "8b885a725def3c7a923cc634f05a7b91bd25b4334b62b2ba6a1d09faf0d8a65a"
+  },
+  "parent_interputils_sha256": "23c4394d0a7328d590e9092f813a1c372d7ef989d646375db65bb4ec9d5d03e1",
+  "fixture_execution_receipt_sha256": "a8c34b6cce3dcb5c410bb35a9aa885f751238abcdadb316e51ebec64b9eed1a0",
+  "fixture_executable_sha256": "a8f7fec43708590d256b7a4f313bb63814f9075deb77ef064768ba13318c055f",
+  "fixture_input_llbc_sha256": "399020435e94aaa7135c06d68445e9b936bd22fe6d1e1d197ee708d448d584ae",
+  "parent_binary_sha256": "f12977c5acd368d268d3af9562110ab29be60d7b4055dde937d0049f85409db5",
+  "container_cgroup_peak_authoritative": true,
+  "docker_cli_rss_label": "Docker CLI parent-process RSS only; not compiler or container RSS",
+  "compiler_gnu_time": "candidate-audit/r424-main-build-v1/compiler-gnu-time.txt",
+  "translation_or_Lean": false
+}

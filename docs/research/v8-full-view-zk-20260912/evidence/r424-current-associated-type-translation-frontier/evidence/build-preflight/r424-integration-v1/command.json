@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r424-typed-integration-v1",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr424.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r424-concrete-associated-types-candidate-20261002-a:/work",
+    "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r424-integration-v1/gnu-time.txt env AENEAS_VERSION=aspis-r424-concrete-associated-types-candidate OCAMLPARAM=_,ccopt=-static opam exec -- dune build .aeneas.objs/byte/aeneas__InterpUtils.cmo --profile release -j 1"
+  ],
+  "inner_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r424-integration-v1/gnu-time.txt env AENEAS_VERSION=aspis-r424-concrete-associated-types-candidate OCAMLPARAM=_,ccopt=-static opam exec -- dune build .aeneas.objs/byte/aeneas__InterpUtils.cmo --profile release -j 1",
+  "source_revision": "a3fe5df6b53caa52322339906642de5064fc2bbb",
+  "source_sha256": {
+    "src/llbc/ConcreteAssociatedTypes.ml": "48336b273fafc9fec71686f15896976cddf1a41367a5556749af0f13437ef4cf",
+    "src/dune": "fbb4eaef8b9f07b2d3073d6434333d89423c2ac7c8df8451cc3d6b70cc958ea5",
+    "src/interp/InterpUtils.ml": "8b885a725def3c7a923cc634f05a7b91bd25b4334b62b2ba6a1d09faf0d8a65a"
+  },
+  "target": ".aeneas.objs/byte/aeneas__InterpUtils.cmo",
+  "expected_work": "Typecheck smallest changed signature integration using pinned cache and the already typechecked unchanged reducer. No main executable, fixtures, translation, or Lean job.",
+  "axioms": "NA: OCaml compilation only"
+}

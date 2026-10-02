@@ -1,0 +1,65 @@
+{
+  "status": "PLAN ONLY; not run",
+  "target_workspace": "/home/dombarker/project-offloads/aspis-r424-concrete-associated-types-candidate-20261002-a/src",
+  "parent_workspace_read_only": "/home/dombarker/project-offloads/aspis-r385-private-return-carrier-candidate-20261002-a/src",
+  "input_fixture": ".r21-scratch/r396-private-batch-unmonomorphized-plan/R396PrivateBatchUnmonomorphized.llbc",
+  "module_to_add_to_fresh_candidate_library": "ConcreteAssociatedTypes",
+  "one_fixture_module": "ConcreteAssociatedTypesFixture",
+  "proposed_command": "opam exec -- dune exec ./ConcreteAssociatedTypesFixture.exe -- <R396PrivateBatchUnmonomorphized.llbc>",
+  "plan_scope": [
+    "typed library compilation of the selected candidate module",
+    "one standalone fixture executable using the exact R396 serialized crate",
+    "no package-wide test alias, translation, or Lean target"
+  ],
+  "resource_gate_inherited_from_R385": {
+    "systemd": {
+      "MemoryHigh": "5G",
+      "MemoryMax": "7G",
+      "MemorySwapMax": "0",
+      "TasksMax": 128
+    },
+    "docker": {
+      "memory_reservation": "5g",
+      "memory": "7g",
+      "memory_swap": "7g (equal to memory; no swap)",
+      "pids_limit": 128,
+      "network": "none"
+    },
+    "host_available_memory_minimum": "24 GiB MemAvailable",
+    "dune_jobs": 1,
+    "opam_jobs": 1,
+    "container_image": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7"
+  },
+  "unverified_api_points": [
+    "Dune module wrapping/name resolution for the fixture executable",
+    "Core.Map.set call form through Charon id-map aliases",
+    "exception type thrown by candidate reject helper (fixture accepts any exception for negative cases)",
+    "fixture constructs valid source-like associated trait references"
+  ],
+  "not_authorized_or_performed": [
+    "workspace copy",
+    "build",
+    "test execution",
+    "translation",
+    "Lean compile"
+  ],
+  "test_module_rename_on_authorized_integration": "ConcreteAssociatedTypesFixture.draft.ml -> ConcreteAssociatedTypesFixture.ml",
+  "proposed_commands": [
+    "opam exec -- dune build .aeneas.objs/byte/aeneas__ConcreteAssociatedTypes.cmo --profile release -j 1",
+    "opam exec -- dune exec ./ConcreteAssociatedTypesFixture.exe -- /path/to/R396PrivateBatchUnmonomorphized.llbc"
+  ],
+  "proposed_unit_and_container_names": {
+    "systemd_slice": "aspisr424fixture.slice",
+    "systemd_unit": "aspis-r424-concrete-associated-types-fixture",
+    "docker_container": "aspis-r424-concrete-associated-types-fixture"
+  },
+  "launch_dependencies": [
+    "lead approves fixture/integration and target spelling",
+    "a writable fresh R424 candidate with the helper already integrated",
+    "verified R396 LLBC input SHA 399020435e94aaa7135c06d68445e9b936bd22fe6d1e1d197ee708d448d584ae available read-only to the test process",
+    "fresh resource reservation check; no simultaneous cap conflict"
+  ],
+  "candidate_copy_or_input_transfer_performed": false,
+  "fixture_assertion_count_expected": 14,
+  "known_final_draft_boundary": "draft not compiled or executed; exception-message assertions and source projections remain unverified until lead run"
+}
