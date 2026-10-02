@@ -1,0 +1,1 @@
+Rejected array rewrite draft (exit1, sorryAx); normalizing the proved closure lemma patterns to the actual array representation fixed it. Only the successful target is accepted; no resource cap change.
