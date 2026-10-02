@@ -1,0 +1,11 @@
+# R221/R222: actual selected norm and polar execution
+
+Both `AspisR221NormExecutionRaw.lean` and `AspisV8R19/R222NormLeafExecution.lean` compiled. Exact three newly extracted selected circle_norm leaves. times_r agrees with current mul_by_r for every source value/result; canonical encoded norm/polar return the exact tower norm/polar. Composing norm with encoded affine values gives the proved norm expansion. Eight direct field-operation declarations match the R156 selected extraction text modulo whitespace, and their already proved word arithmetic is reused. No coefficient-loop, vector, line-coordinate or batch inverse identity is asserted.
+
+The small source closure was extracted from the frozen selected verifier workspace with its exact selected configuration. It contains three types and 21 function slots. Charon exit 0: 13.81 s, RSS 612,680 KiB, zero swaps. Aeneas exit 0: 0.27 s, RSS 61,600 KiB, zero swaps. Three raw leaf declarations are copied byte for byte from the generated output, with an import/namespace wrapper connecting the existing pinned field definitions. The eight operation bindings were checked against the earlier extraction. No field dependency or successful earlier proof was recompiled.
+
+Compile revision `0ee851799281e330edc8ad800ca6171a606bc801`. The raw leaf target exited 0 in 1.07 s, RSS 2,526,324 KiB; the proof target exited 0 in 1.48 s, RSS 3,708,844 KiB. Both used pinned Lean 4.32, `-j1 -M4500`, 5/7 GiB scope, zero swap. All eight complete axiom reports contain only `propext`, `Classical.choice`, and `Quot.sound`. Full source/checksums, raw outputs/logs, exact commands, extraction source pins, adapter/binding audits and resource evidence are retained in [the manifest](evidence/r222-selected-norm-leaves/manifest.json). The source snapshot lacks Git metadata; that limitation is recorded separately from the exact compile revision.
+
+First remaining proposition: Extract/bind actual Coeff/LineCoeff construction/four evaluation and shared line-coordinate provenance, then batch_two memory/control/inversion semantics and optimized-to-reference acceptance; captured gamma fold and full callback/oracle chronology still open.
+
+This does not close privacy or soundness. Verifier source, all security parameters and 999,790 / 999,532 CU results remain preserved; no benchmark or unchanged regression suite reran.
