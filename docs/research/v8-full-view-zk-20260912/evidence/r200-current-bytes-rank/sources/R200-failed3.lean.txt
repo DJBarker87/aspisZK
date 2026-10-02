@@ -1,0 +1,37 @@
+import AspisR197CurrentBytes.FunsBytes
+
+set_option autoImplicit false
+
+namespace AspisV8R19.R200CurrentBytesRank
+
+open Aeneas Aeneas.Std Result ControlFlow Error
+open AspisR156FullFreeze
+
+abbrev CurrentIter := core.iter.adapters.enumerate.Enumerate
+  (core.slice.iter.Iter AspisR156FullFreeze.aspis_core.field.QM31)
+
+def rank (st : CurrentIter × alloc.vec.Vec Std.U8) : Nat :=
+  st.1.iter.slice.val.length - st.1.iter.i
+
+theorem body_continuation_rank (iter : CurrentIter) (b : alloc.vec.Vec Std.U8)
+    (iter1 : CurrentIter) (b1 : alloc.vec.Vec Std.U8)
+    (h : AspisR197CurrentBytes.bytes_loop.body iter b =
+      .ok (.cont (iter1, b1))) :
+    rank (iter1, b1) < rank (iter, b) := by
+  unfold rank
+  have hactive : iter.iter.i < iter.iter.slice.val.length := by
+    by_contra hstop
+    simp [AspisR197CurrentBytes.bytes_loop.body,
+      core.iter.adapters.enumerate.IteratorEnumerate.next,
+      core.iter.traits.iterator.IteratorSliceIter,
+      core.slice.iter.IteratorSliceIter.next, Slice.len, hstop] at h
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+    core.iter.adapters.enumerate.IteratorEnumerate.next,
+    core.iter.traits.iterator.IteratorSliceIter,
+    core.slice.iter.IteratorSliceIter.next, Slice.len, hactive, lift] at h ⊢
+  trace_state
+  omega
+
+#print axioms body_continuation_rank
+
+end AspisV8R19.R200CurrentBytesRank

@@ -1,0 +1,83 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790901931735724000.service; invocation ID: 0aed5faff8a74e94924a40eb0f94482b
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R200CurrentBytesRank.lean:33:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  c ≥ 1
+  c - d + e ≤ 0
+  a ≥ 0
+  a + c ≥ 0
+where
+ a := ↑iter.iter.i
+ c := ↑((↑iter.iter.slice).length - iter.iter.i)
+ d := ↑(↑iter1.iter.slice).length
+ e := ↑iter1.iter.i
+iter : CurrentIter
+b : alloc.vec.Vec U8
+iter1 : CurrentIter
+b1 : alloc.vec.Vec U8
+hactive : iter.iter.i < (↑iter.iter.slice).length
+h :
+  (do
+      let x ← iter.count + 1#usize
+      let __x ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+            { start := iter.count.wrapping_mul 16#usize,
+              «end» := (iter.count.wrapping_mul 16#usize).wrapping_add 16#usize }
+      let s1 ← iter.iter.slice[iter.iter.i].write_le_bytes __x.1
+      ok (cont ({ iter := { slice := iter.iter.slice, i := iter.iter.i + 1 }, count := x }, __x.2 s1))) =
+    ok (cont (iter1, b1))
+⊢ (↑iter1.iter.slice).length - iter1.iter.i < (↑iter.iter.slice).length - iter.iter.i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R200CurrentBytesRank.lean:26:6: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body,
+        core.iter.adapters.enumerate.IteratorEnumerate.next, c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵core.slice.iter.IteratorSliceIter.next,
+        Slice.len, hstop] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R200CurrentBytesRank.lean:30:4: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR197CurrentBytes.bytes_loop.body, core.iter.adapters.enumerate.IteratorEnumerate.next,
+      c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵core.slice.iter.IteratorSliceIter.next, Slice.len, hactive, lift] at h ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R200CurrentBytesRank.body_continuation_rank' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R200CurrentBytesRank.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R200CurrentBytesRank.lean"
+	User time (seconds): 0.84
+	System time (seconds): 0.26
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.10
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2522812
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64241
+	Voluntary context switches: 450
+	Involuntary context switches: 46
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.131s
+CPU time consumed: 1.138s
+Memory peak: 328.0K
+Memory swap peak: 0B
