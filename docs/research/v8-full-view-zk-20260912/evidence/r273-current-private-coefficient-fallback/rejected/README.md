@@ -1,0 +1,1 @@
+Rejected focused attempts are retained. Failures were namespace resolution, missing decidability, and differing decision procedures for equivalent guards; the successful source compares guards by cases.

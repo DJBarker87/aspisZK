@@ -1,0 +1,1 @@
+Rejected focused attempts are retained. The prerequisite attempt stopped at a missing compiled R273 module; no source theorem was checked. The dependency was subsequently compiled before the successful check.
