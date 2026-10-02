@@ -1,0 +1,1 @@
+First draft exit 1: selected raw cache did not contain a named M31.ONE declaration; concrete QuadraticAlgebra numeral coordinates needed explicit normalization. sorryAx output rejected. Replacement uses literal 1#u32, matching the frozen source M31::ONE = M31(1), and kernel rfl coordinate facts. No premise changed.
