@@ -1,0 +1,1 @@
+Independent read-only audit of saved R249/R250 source, adapter, checksum, complete axiom and resource evidence. This is an evidence consistency audit; no Lean check or regression was repeated. It does not prove end-to-end security.

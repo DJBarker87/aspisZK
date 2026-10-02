@@ -1,0 +1,104 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790912056982490000.service; invocation ID: 7f88067d9a2b4711ba51624ef7f5bbe5
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R251PrivateAddSub.lean:36:74: error: unsolved goals
+a b : U32
+ha : ↑a < P
+hb : ↑b < P
+s : U32 := a.wrapping_add b
+hsum : ↑a + ↑b < 2 ^ 32
+hs : ↑s = ↑a + ↑b
+h2p : ↑s < 2 * AspisV8R17.RawReducer.P
+z : U32
+hz : R161WrappedMulExecution.finish32 s = ok z
+hzv : ↑z = ↑s % AspisV8R17.RawReducer.P
+hzc : ↑z < AspisV8R17.RawReducer.P
+hpw : P110 = AspisR156FullFreeze.aspis_core.field.P
+⊢ (if AspisV8R17.RawReducer.P ≤ ↑(a.wrapping_add b) then
+      ok ((a.wrapping_add b).wrapping_sub AspisR156FullFreeze.aspis_core.field.P)
+    else ok (a.wrapping_add b)) =
+    if AspisV8R17.RawReducer.P ≤ ↑s then ok (s.wrapping_sub AspisR156FullFreeze.aspis_core.field.P) else ok s
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R251PrivateAddSub.lean:77:74: error: unsolved goals
+a b : U32
+ha : ↑a < P
+hb : ↑b < P
+top : U32 := a.wrapping_add P110
+htop : ↑top = ↑a + P
+hge : ↑b ≤ ↑top
+d : UScalar UScalarTy.U32
+hd : UScalar.sub top b = ok d
+hdv : ↑d = ↑top - ↑b
+hw : top - b = ok (top.wrapping_sub b)
+hdeq : d = top.wrapping_sub b
+s : U32 := top.wrapping_sub b
+hs : ↑s = ↑a + P - ↑b
+h2p : ↑s < 2 * AspisV8R17.RawReducer.P
+z : U32
+hz : R161WrappedMulExecution.finish32 s = ok z
+hzv : ↑z = ↑s % AspisV8R17.RawReducer.P
+hzc : ↑z < AspisV8R17.RawReducer.P
+hpw : P110 = AspisR156FullFreeze.aspis_core.field.P
+⊢ (do
+      let i ← lift (a.wrapping_add AspisR156FullFreeze.aspis_core.field.P)
+      let x ← lift (i.wrapping_sub b)
+      if AspisV8R17.RawReducer.P ≤ ↑x then do
+          let x1 ← lift (x.wrapping_sub AspisR156FullFreeze.aspis_core.field.P)
+          ok x1
+        else ok x) =
+    if AspisV8R17.RawReducer.P ≤ (↑a + AspisV8R17.RawReducer.P + (U32.size - ↑b)) % U32.size then
+      ok
+        (((a.wrapping_add AspisR156FullFreeze.aspis_core.field.P).wrapping_sub b).wrapping_sub
+          AspisR156FullFreeze.aspis_core.field.P)
+    else ok ((a.wrapping_add AspisR156FullFreeze.aspis_core.field.P).wrapping_sub b)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R251PrivateAddSub.lean:110:23: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+  a - c ≥ 1
+  a - d ≥ 1
+  a - e + f ≤ -1
+where
+ a := ↑P
+ b := ↑↑(encodeBase x)
+ c := ↑↑(encodeBase y)
+ d := ↑(↑(encodeBase x) + P - ↑(encodeBase y)) % ↑P
+ e := ↑(ZMod.val y)
+ f := ↑(ZMod.val x)
+'AspisV8R19.R251PrivateAddSub.b_add_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R251PrivateAddSub.b_sub_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R251PrivateAddSub.b_add_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R251PrivateAddSub.b_sub_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R251PrivateAddSub.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R251PrivateAddSub.lean"
+	User time (seconds): 1.25
+	System time (seconds): 0.40
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3697996
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86872
+	Voluntary context switches: 587
+	Involuntary context switches: 71
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.672s
+CPU time consumed: 1.690s
+Memory peak: 328.0K
+Memory swap peak: 0B
