@@ -1,0 +1,29 @@
+### FullCoefficientBoundary.lean:11-25
+11: theorem coefficient_blocks (n k : Nat) (quarter : F)
+12:     (q w : Fin n × Fin 4 → F) :
+13:     coefficient (sourceKernel n k quarter) q w =
+14:       ∑ d : Fin n, ∑ s : Fin 4, ∑ t : Fin 4,
+15:         (if s.val+(4-t.val)%4=k then quarter else 0)*q (d,s)*w (d,t) := by
+16:   unfold coefficient
+17:   rw [Fintype.sum_prod_type]
+18:   apply Finset.sum_congr rfl
+19:   intro d _
+20:   apply Finset.sum_congr rfl
+21:   intro s _
+22:   rw [Fintype.sum_prod_type,Finset.sum_comm]
+23:   apply Finset.sum_congr rfl
+24:   intro t _
+25:   simp [sourceKernel,ite_and,ite_mul]
+
+### BetaUniformCorrection.lean:42-46 and 75-80
+42: /- For the source, I and J are (chunk, slot). A coefficient kernel is zero
+43:    between chunks and outside the convolution diagonal. Reversed weight
+44:    slots and the quarter factor belong to C, not to a new assumption. -/
+45: def coefficient (C : I → J → F) (q : I → F) (w : J → F) : F :=
+46:   ∑ i, ∑ j, C i j * q i * w j
+75: /- q_i is paired with w_(4-j)%4 by the retained reversed dual convention.
+76:    Fin 4 ensures this is [0,3,2,1]. This model still needs a Rust semantics
+77:    correspondence; no extraction of the loop or field code is claimed. -/
+78: def sourceKernel (n k : Nat) (quarter : F)
+79:     (i j : Fin n × Fin 4) : F :=
+80:   if i.1=j.1 ∧ i.2.val+(4-j.2.val)%4=k then quarter else 0
