@@ -1,0 +1,47 @@
+1724:         | core.ops.control_flow.ControlFlow.Continue _ =>
+1725:           let use_x ←
+1726:             core.cmp.PartialEq.ne.trait_default
+1727:               aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 s.x val.x
+1728:           let h0 ← if use_x
+1729:                      then ok s.x
+1730:                      else ok s.y
+1731:           let h1 ← if use_x
+1732:                      then ok val.x
+1733:                      else ok val.y
+1734:           let s6 ←
+1735:             alloc.vec.Vec.index (core.slice.index.SliceIndexRangeUsizeSlice
+1736:               aspis_core.field.QM31) v
+1737:               { start := 359#usize, «end» := 388#usize }
+1738:           let q ←
+1739:             freeze.closure_2.Insts.CoreOpsFunctionFnTupleSharedSliceQM31QM31.call
+1740:               val1 s6
+1741:           let q1 ←
+1742:             freeze.closure_2.Insts.CoreOpsFunctionFnTupleSharedSliceQM31QM31.call
+1743:               val1 s1
+1744:           let q2 ← aspis_core.field.QM31.sub q q1
+1745:           let q3 ← aspis_core.field.QM31.sub h0 h1
+1746:           let o1 ← aspis_core.field.QM31.try_inv q3
+1747:           let r3 ← core.option.Option.ok_or o1 Error.Domain
+1748:           let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+1749:           match cf3 with
+1750:           | core.ops.control_flow.ControlFlow.Continue val2 =>
+1751:             let slope ← aspis_core.field.QM31.mul q2 val2
+1752:             let q4 ←
+1753:               freeze.closure_2.Insts.CoreOpsFunctionFnTupleSharedSliceQM31QM31.call
+1754:                 val1 s6
+1755:             let q5 ← aspis_core.field.QM31.mul slope h0
+1756:             let q6 ← aspis_core.field.QM31.sub q4 q5
+1757:             let q7 ← aspis_core.field.QM31.mul s.x val.y
+1758:             let q8 ← aspis_core.field.QM31.mul s.y val.x
+1759:             let q9 ← aspis_core.field.QM31.sub q7 q8
+1760:             let q10 ← aspis_core.field.QM31.sub s.y val.y
+1761:             let q11 ← aspis_core.field.QM31.sub val.x s.x
+1762:             let v3 ← bytes ordinary
+1763:             let s7 := alloc.vec.Vec.deref v3
+1764:             let t6 ←
+1765:               aspis_core.transcript.Transcript.absorb t5
+1766:                 aspis_core.transcript.label.PROFILE s7
+1767:             let s8 ← lift (Array.to_slice (Array.make 1#usize [ claim ]))
+1768:             let v4 ← bytes s8
+1769:             let s9 := alloc.vec.Vec.deref v4
+1770:             let t7 ←

@@ -1,0 +1,224 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790902762350046000.service; invocation ID: ac1a26592d964643b8f2ead640548818
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:72:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s.x
+in the target expression
+  (do
+      let inv ← R175ChordInverseExecution.inverseDifference (encode (decode s.y)) z.y
+      match inv with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok val2 => do
+          let slope ← (encode (b0 - b1)).mul val2
+          let q5 ← slope.mul (encode (decode s.y))
+          let q6 ← (encode again).sub q5
+          let q7 ← z.x.mul z.y
+          let q8 ← (encode (decode s.y)).mul z.x
+          let q9 ← q7.sub q8
+          let q10 ← (encode (decode s.y)).sub z.y
+          let q11 ← z.x.sub z.x
+          ok (core.result.Result.Ok { iv := (q6, slope), abc := (q9, q10, q11), use_x := false })) =
+    ok (core.result.Result.Ok (exactData s z b0 b1 again))
+
+case pos
+s z : circle.SecureCirclePoint
+hsx : Canonical s.x
+hsy : Canonical s.y
+hzx : Canonical z.x
+hzy : Canonical z.y
+hsz : s ≠ z
+b0 b1 again : QM31Exact
+hc0 : Canonical (R175ChordInverseExecution.selectedCoordinates s z).1
+hc1 : Canonical (R175ChordInverseExecution.selectedCoordinates s z).2
+hne : (R175ChordInverseExecution.selectedCoordinates s z).1 ≠ (R175ChordInverseExecution.selectedCoordinates s z).2
+hx : s.x = encode (decode s.x)
+hy : s.y = encode (decode s.y)
+hz : z.x = encode (decode z.x)
+hw : z.y = encode (decode z.y)
+hcoord : s.x = z.x
+hinv :
+  R175ChordInverseExecution.inverseDifference (if z.x ≠ z.x then (z.x, z.x) else (s.y, z.y)).1
+      (if z.x ≠ z.x then (z.x, z.x) else (s.y, z.y)).2 =
+    ok
+      (core.result.Result.Ok
+        (encode
+          (decode (if z.x ≠ z.x then (z.x, z.x) else (s.y, z.y)).1 -
+              decode (if z.x ≠ z.x then (z.x, z.x) else (s.y, z.y)).2)⁻¹))
+⊢ (do
+      let inv ← R175ChordInverseExecution.inverseDifference (encode (decode s.y)) z.y
+      match inv with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok val2 => do
+          let slope ← (encode (b0 - b1)).mul val2
+          let q5 ← slope.mul (encode (decode s.y))
+          let q6 ← (encode again).sub q5
+          let q7 ← z.x.mul z.y
+          let q8 ← (encode (decode s.y)).mul z.x
+          let q9 ← q7.sub q8
+          let q10 ← (encode (decode s.y)).sub z.y
+          let q11 ← z.x.sub z.x
+          ok (core.result.Result.Ok { iv := (q6, slope), abc := (q9, q10, q11), use_x := false })) =
+    ok (core.result.Result.Ok (exactData s z b0 b1 again))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:82:6: error(lean.unknownIdentifier): Unknown identifier `decode_encode`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:76:2: error: unsolved goals
+case neg
+s z : circle.SecureCirclePoint
+hsx : Canonical s.x
+hsy : Canonical s.y
+hzx : Canonical z.x
+hzy : Canonical z.y
+hsz : s ≠ z
+b0 b1 again : QM31Exact
+hc0 : Canonical (R175ChordInverseExecution.selectedCoordinates s z).1
+hc1 : Canonical (R175ChordInverseExecution.selectedCoordinates s z).2
+hne : (R175ChordInverseExecution.selectedCoordinates s z).1 ≠ (R175ChordInverseExecution.selectedCoordinates s z).2
+hinv :
+  R175ChordInverseExecution.inverseDifference (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).1
+      (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).2 =
+    ok
+      (core.result.Result.Ok
+        (encode
+          (decode (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).1 -
+              decode (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).2)⁻¹))
+hx : s.x = encode (decode s.x)
+hy : s.y = encode (decode s.y)
+hz : z.x = encode (decode z.x)
+hw : z.y = encode (decode z.y)
+hcoord : ¬s.x = z.x
+⊢ (do
+      let inv ← R175ChordInverseExecution.inverseDifference (encode (decode s.x)) (encode (decode z.x))
+      match inv with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok val2 => do
+          let slope ← (encode (b0 - b1)).mul val2
+          let q5 ← slope.mul (encode (decode s.x))
+          let q6 ← (encode again).sub q5
+          ok
+              (core.result.Result.Ok
+                { iv := (q6, slope),
+                  abc :=
+                    (encode (decode s.x * decode z.y - decode s.y * decode z.x), encode (decode s.y - decode z.y),
+                      encode (decode z.x - decode s.x)),
+                  use_x := true })) =
+    ok
+      (core.result.Result.Ok
+        {
+          iv :=
+            (encode
+                (again -
+                  (b0 - b1) *
+                      (decode (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).1 -
+                          decode (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).2)⁻¹ *
+                    decode (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).1),
+              encode
+                ((b0 - b1) *
+                  (decode (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).1 -
+                      decode (if s.x ≠ z.x then (s.x, z.x) else (s.y, z.y)).2)⁻¹)),
+          abc :=
+            (encode (decode s.x * decode z.y - decode s.y * decode z.x), encode (decode s.y - decode z.y),
+              encode (decode z.x - decode s.x)),
+          use_x := decide (s.x ≠ z.x) })
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:68:70: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [R175ChordInverseExecution.selectedCoordinates, hcoord, n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵ ̵if_false] at hinv
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:68:89: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [R175ChordInverseExecution.selectedCoordinates, hcoord, not_true_eq_false,̵ ̵i̵f̵_̵f̵a̵l̵s̵e̵] at hinv
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:71:23: warning: This simp argument is unused:
+  hinv
+
+Hint: Omit it from the simp argument list.
+  simp only [rawData, R175ChordInverseExecution.raw_qm31_ne, hcoord,
+  ̵  ̵ ̵ ̵ ̵ ̵ne_eq, not_true_eq_false,
+  ̲  ̲ ̲ ̲ ̲ ̲decide_false, Bool.false_eq_true, if_false,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, sub,̵ ̵h̵i̵n̵v̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:76:62: warning: This simp argument is unused:
+  hcoord
+
+Hint: Omit it from the simp argument list.
+  simp only [R175ChordInverseExecution.selectedCoordinates, h̵c̵o̵o̵r̵d̵,̵ ̵if_true] at hinv
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:76:70: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [R175ChordInverseExecution.selectedCoordinates, hcoord,̵ ̵i̵f̵_̵t̵r̵u̵e̵] at hinv
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:78:71: warning: This simp argument is unused:
+  hinv
+
+Hint: Omit it from the simp argument list.
+  simp only [rawData, R175ChordInverseExecution.raw_qm31_ne, hcoord,
+  ̵  ̵ ̵ ̵ ̵ ̵ne_eq, not_false_eq_true,
+  ̲  ̲ ̲ ̲ ̲ ̲decide_true, if_true, bind_tc_ok, sub,̵ ̵h̵i̵n̵v̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:81:53: warning: This simp argument is unused:
+  hcoord
+
+Hint: Omit it from the simp argument list.
+  simp only [public_product, sub, bind_tc_ok, exactData,
+        R175ChordInverseExecution.selectedCoordinates, h̵c̵o̵o̵r̵d̵,̵ ̵if_true,
+  ̵  ̵ ̵ ̵ ̵ ̵decode_encode, decide_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:81:61: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [public_product, sub, bind_tc_ok, exactData,
+        R175ChordInverseExecution.selectedCoordinates, hcoord, i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵decode_encode, decide_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:82:21: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [public_product, sub, bind_tc_ok, exactData,
+        R175ChordInverseExecution.selectedCoordinates, hcoord, if_true,
+  ̵  ̵ ̵ ̵ ̵ ̵decode_encode,̵ ̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R203ChordDataExecution.rawData_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R203ChordDataExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean"
+	User time (seconds): 1.28
+	System time (seconds): 0.38
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.65
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3715824
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 15
+	Minor (reclaiming a frame) page faults: 86570
+	Voluntary context switches: 603
+	Involuntary context switches: 72
+	Swaps: 0
+	File system inputs: 2856
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.684s
+CPU time consumed: 1.689s
+Memory peak: 256.0K
+Memory swap peak: 0B

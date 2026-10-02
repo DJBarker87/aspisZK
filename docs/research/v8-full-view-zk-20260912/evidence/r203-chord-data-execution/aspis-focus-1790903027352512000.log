@@ -1,0 +1,111 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790903027352512000.service; invocation ID: 19ccb6cd0389488e91f721183328d0d7
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean:57:47: error: unsolved goals
+s z : circle.SecureCirclePoint
+hsx : Canonical s.x
+hsy : Canonical s.y
+hzx : Canonical z.x
+hzy : Canonical z.y
+hsz : s ≠ z
+b0 b1 again : QM31Exact
+hc0 : Canonical (R175ChordInverseExecution.selectedCoordinates s z).1
+hc1 : Canonical (R175ChordInverseExecution.selectedCoordinates s z).2
+hne : (R175ChordInverseExecution.selectedCoordinates s z).1 ≠ (R175ChordInverseExecution.selectedCoordinates s z).2
+hinv :
+  R175ChordInverseExecution.inverseDifference (R175ChordInverseExecution.selectedCoordinates s z).1
+      (R175ChordInverseExecution.selectedCoordinates s z).2 =
+    ok
+      (core.result.Result.Ok
+        (encode
+          (decode (R175ChordInverseExecution.selectedCoordinates s z).1 -
+              decode (R175ChordInverseExecution.selectedCoordinates s z).2)⁻¹))
+hmul : ∀ (a b : field.QM31), Canonical a → Canonical b → a.mul b = ok (encode (decode a * decode b))
+hsub : ∀ (a b : field.QM31), Canonical a → Canonical b → a.sub b = ok (encode (decode a - decode b))
+hfact :
+  rawData s z (encode b0) (encode b1) (encode again) = do
+    let q2 ← (encode b0).sub (encode b1)
+    let inv ←
+      R175ChordInverseExecution.inverseDifference (R175ChordInverseExecution.selectedCoordinates s z).1
+          (R175ChordInverseExecution.selectedCoordinates s z).2
+    match inv with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok val2 => do
+        let slope ← q2.mul val2
+        let q5 ← slope.mul (R175ChordInverseExecution.selectedCoordinates s z).1
+        let q6 ← (encode again).sub q5
+        let q7 ← s.x.mul z.y
+        let q8 ← s.y.mul z.x
+        let q9 ← q7.sub q8
+        let q10 ← s.y.sub z.y
+        let q11 ← z.x.sub s.x
+        ok (core.result.Result.Ok { iv := (q6, slope), abc := (q9, q10, q11), use_x := decide (s.x ≠ z.x) })
+h0 :
+  (R175ChordInverseExecution.selectedCoordinates s z).1 =
+    encode (decode (R175ChordInverseExecution.selectedCoordinates s z).1)
+⊢ ok
+      (core.result.Result.Ok
+        {
+          iv :=
+            (encode
+                (again -
+                  (b0 - b1) *
+                      (decode (encode (decode (R175ChordInverseExecution.selectedCoordinates s z).1)) -
+                          decode (R175ChordInverseExecution.selectedCoordinates s z).2)⁻¹ *
+                    decode (R175ChordInverseExecution.selectedCoordinates s z).1),
+              encode
+                ((b0 - b1) *
+                  (decode (encode (decode (R175ChordInverseExecution.selectedCoordinates s z).1)) -
+                      decode (R175ChordInverseExecution.selectedCoordinates s z).2)⁻¹)),
+          abc :=
+            (encode (decode s.x * decode z.y - decode s.y * decode z.x), encode (decode s.y - decode z.y),
+              encode (decode z.x - decode s.x)),
+          use_x := decide (s.x ≠ z.x) }) =
+    ok
+      (core.result.Result.Ok
+        {
+          iv :=
+            (encode
+                (again -
+                  (b0 - b1) *
+                      (decode (R175ChordInverseExecution.selectedCoordinates s z).1 -
+                          decode (R175ChordInverseExecution.selectedCoordinates s z).2)⁻¹ *
+                    decode (R175ChordInverseExecution.selectedCoordinates s z).1),
+              encode
+                ((b0 - b1) *
+                  (decode (R175ChordInverseExecution.selectedCoordinates s z).1 -
+                      decode (R175ChordInverseExecution.selectedCoordinates s z).2)⁻¹)),
+          abc :=
+            (encode (decode s.x * decode z.y - decode s.y * decode z.x), encode (decode s.y - decode z.y),
+              encode (decode z.x - decode s.x)),
+          use_x := decide (s.x ≠ z.x) })
+'AspisV8R19.R203ChordDataExecution.rawData_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R203ChordDataExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R203ChordDataExecution.lean"
+	User time (seconds): 1.46
+	System time (seconds): 0.37
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.82
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3721720
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86976
+	Voluntary context switches: 534
+	Involuntary context switches: 72
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.846s
+CPU time consumed: 1.863s
+Memory peak: 328.0K
+Memory swap peak: 0B
