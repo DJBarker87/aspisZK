@@ -1,0 +1,45 @@
+{
+  "argv": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r388-reduce-u62-translation",
+    "--working-directory=/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "python3",
+    "-c",
+    "REMOTE='/home/dombarker/project-offloads/aspis-r388-reduce-u62-translation-20261002-a'\nBINARY='/home/dombarker/project-offloads/aspis-r363-instantiated-pattern-candidate-20261002-a/aeneas-r363-instantiated-pattern-candidate'\nSOURCE_SHA='95480c0a8938629f770f7c381fe61a71f44e8275fe2e7275e9edfd4a4bb7f040'\nBINARY_SHA='3dc9ad6de1af901c8ead41940ba97097a0cf06f82d27dbc7d7c5eac03695e329'\nREV='0910b78908f2bc7194da93514d20831dea1f9940'\nimport pathlib,hashlib,json,subprocess,re\nroot=pathlib.Path(REMOTE);src=root/'R388ReduceU62Ordered.llbc';binary=pathlib.Path(BINARY)\nassert hashlib.sha256(src.read_bytes()).hexdigest()==SOURCE_SHA\nassert hashlib.sha256(binary.read_bytes()).hexdigest()==BINARY_SHA\nmem=pathlib.Path('/proc/meminfo').read_text();av=int(re.search(r'MemAvailable:\\s+(\\d+)',mem)[1]);assert av>=24*1024*1024\nservices=subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--no-legend'],text=True)\n(root/'host-reservation-before.json').write_text(json.dumps({'meminfo':mem,'available_kib':av,'active_user_services':services,'caps':{'MemoryHigh':'5G','MemoryMax':'7G','MemorySwapMax':0,'TasksMax':128}},indent=2)+'\\n')\ncmd=[str(binary),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR388ReduceU62','-dest',str(root/'generated'),'-subdir','AspisR388ReduceU62','-split-files','-emit-json',str(src)]\n(root/'command.json').write_text(json.dumps({'command':cmd,'input_sha256':SOURCE_SHA,'binary_sha256':BINARY_SHA,'campaign_revision':REV,'namespace':'AspisR388ReduceU62','scope':'R388 ordered reduce_u62 extraction only; translation diagnostic, no Lean compilation or template filling.'},indent=2)+'\\n')\nwith (root/'translate.log').open('w') as out:r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=out,stderr=subprocess.STDOUT)\nfiles={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.rglob('*')) if p.is_file() and p.name!='result.json'}\n(root/'result.json').write_text(json.dumps({'exit_status':r.returncode,'input_sha256':SOURCE_SHA,'binary_sha256':BINARY_SHA,'campaign_revision':REV,'generated_files':files,'Lean_compiled':False,'print_axioms':'N/A; translation only','template_filling':'not performed'},indent=2)+'\\n')\nprint((root/'translate.log').read_text());print('R388_TRANSLATION_EXIT',r.returncode)\nraise SystemExit(r.returncode)\n"
+  ],
+  "ssh_options": [
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=5",
+    "-o",
+    "StrictHostKeyChecking=no",
+    "-o",
+    "UserKnownHostsFile=/dev/null"
+  ],
+  "remote_root": "/home/dombarker/project-offloads/aspis-r388-reduce-u62-translation-20261002-a",
+  "remote_binary": "/home/dombarker/project-offloads/aspis-r363-instantiated-pattern-candidate-20261002-a/aeneas-r363-instantiated-pattern-candidate",
+  "input_sha256": "95480c0a8938629f770f7c381fe61a71f44e8275fe2e7275e9edfd4a4bb7f040",
+  "binary_sha256": "3dc9ad6de1af901c8ead41940ba97097a0cf06f82d27dbc7d7c5eac03695e329",
+  "campaign_revision": "0910b78908f2bc7194da93514d20831dea1f9940",
+  "caps": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "launcher_sha256": "f26b7cec883e09137f8fd596ccbf046efd9082c79c2296891ab06e6d1f83f214",
+  "status": "second launcher run; first wrapper stopped before Aeneas due preflight regex; this invocation runs the single authorized translation"
+}
