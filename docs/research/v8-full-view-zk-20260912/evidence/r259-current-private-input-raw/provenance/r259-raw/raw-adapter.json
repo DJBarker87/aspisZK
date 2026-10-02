@@ -1,0 +1,124 @@
+{
+  "artifact": "R259 private input raw staging",
+  "scope": "Mechanical staging only; no compile/build/Lean execution.",
+  "imports": [
+    "AspisR249R110Raw"
+  ],
+  "opens": [
+    "Aeneas Aeneas.Std Result ControlFlow Error",
+    "AspisR249R110Raw",
+    "AspisR156FullFreeze"
+  ],
+  "namespace": "AspisR259PrivateInputRaw",
+  "selected_generated_definitions": [
+    {
+      "name": "core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+      "source_sha256": "dd85c07aa0f8447ff660f6b9dfb9bc47a4db960d94d3f0aa34f5e9f0b0e2f81b",
+      "output_sha256": "dd85c07aa0f8447ff660f6b9dfb9bc47a4db960d94d3f0aa34f5e9f0b0e2f81b",
+      "byte_identical": true,
+      "replacement_count": 0
+    },
+    {
+      "name": "core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual",
+      "source_sha256": "549ee437c575a3e68e27ad8a9cb988d8e892e2dbb6a4f7423696ca5f0967f303",
+      "output_sha256": "549ee437c575a3e68e27ad8a9cb988d8e892e2dbb6a4f7423696ca5f0967f303",
+      "byte_identical": true,
+      "replacement_count": 0
+    },
+    {
+      "name": "circle_norm.joined_inverse.line_norm.r110_norm.C.input",
+      "source_sha256": "6bb61093a4559b04c799489d846740567c54e2d760bab7a1f208e6069a534e57",
+      "output_sha256": "6bb61093a4559b04c799489d846740567c54e2d760bab7a1f208e6069a534e57",
+      "byte_identical": true,
+      "replacement_count": 0
+    }
+  ],
+  "body_or_attribute_replacements": 0,
+  "added_source_support": {
+    "optionTag": "Option T \u2192 Isize with none \u21a6 0#isize, some _ \u21a6 1#isize",
+    "instance": "local Discriminant (Option T) Isize, read_discriminant := optionTag",
+    "tag_lemmas": [
+      "optionTag_none",
+      "optionTag_some"
+    ],
+    "source_row": {
+      "source": "R245 decoded TypeDeclId 3, core::option::Option; R255 is the same LLBC modulo ordered_decls metadata",
+      "row_sha256": "bfd149af4dcaf72b5142a50eba98a532c1a101d9afed6c3a696d6ca9e3b77c7e",
+      "row_sha256_definition": "SHA-256 recorded for the exact extracted Option TypeDecl row in option-type-source.json",
+      "variant_tags": [
+        [
+          "None",
+          {
+            "Scalar": {
+              "Signed": [
+                "Isize",
+                "0"
+              ]
+            }
+          }
+        ],
+        [
+          "Some",
+          {
+            "Scalar": {
+              "Signed": [
+                "Isize",
+                "1"
+              ]
+            }
+          }
+        ]
+      ],
+      "source_row_artifact": ".r21-scratch/r259-private-input-raw/option-type-source.json"
+    },
+    "scope": "Explicit discriminator API binding for the source Option variant tags; the three generated bodies are unchanged."
+  },
+  "initial_failure": {
+    "log": ".r21-scratch/aspis-focus-1790913120788357000.log",
+    "exit_status": 1,
+    "diagnostic": "Lean failed to synthesize `Discriminant (Option core.convert.Infallible) ?m.3`; the generated from_residual body constrains the discriminant result against `0#isize`.",
+    "log_sha256": "6fe8251c703918bb792f1c34fd1f8ea2c20a30a42a25a5c646285189320a00af",
+    "preserved": true
+  },
+  "lead_reported_success": {
+    "log": ".r21-scratch/aspis-focus-1790913218557130000.log",
+    "exit_status": 0,
+    "log_sha256": "cd2cc913ab86a10d1b3a6c73001ba2716838908ce63e5726b027c3907d51ea7d",
+    "campaign_result": "Reported by lead; this generator update does not rerun it.",
+    "axiom_output_summary": "optionTag and its two tag lemmas: propext, Classical.choice, Quot.sound; branch: no axioms; from_residual and C.input: propext, Classical.choice, Quot.sound."
+  },
+  "pinned_aeneas_source": {
+    "excerpt": "pinned-Discriminant.lean",
+    "sha256": "98dca07cb483eda5c4fe4322806650d3288fd0c2504c3153e0cebc195e649d03",
+    "module": "Aeneas.Data.Discriminant (pinned source excerpt containing Aeneas.Std.Discriminant and read_discriminant)",
+    "source_excerpt_sha256": "98dca07cb483eda5c4fe4322806650d3288fd0c2504c3153e0cebc195e649d03",
+    "prior_note": "Aeneas Data/Discriminant excerpt pin; ControlFlow and Infallible source extraction was not needed for this correction."
+  },
+  "shadow_representations_added": 0,
+  "existing_representation_binding": {
+    "B": "AspisR249R110Raw.circle_norm.joined_inverse.line_norm.r110_norm.B (alias Std.U32)",
+    "C": "AspisR249R110Raw.circle_norm.joined_inverse.line_norm.r110_norm.C (alias B \u00d7 B)",
+    "CM31": "AspisR156FullFreeze.aspis_core.field.CM31",
+    "source_adapter": ".r21-scratch/r249-r110-raw/AspisR249R110Raw.lean",
+    "raw_adapter_sha256": "f38d892beef83cba109b007a5d5b6851629ead6acc736d2fbff1c25a530f72cd"
+  },
+  "builtin_availability_inventory": {
+    "ControlFlow": "The generated declarations use the Aeneas Std ControlFlow type/constructors; the lead-reported successful Lean compile confirms resolution in the pinned build workspace. A separate source excerpt was not needed.",
+    "Infallible": "The generated declarations use Aeneas Std Infallible; the lead-reported successful Lean compile confirms resolution in the pinned build workspace. A separate source excerpt was not needed.",
+    "read_discriminant": "Pinned Discriminant source exports read_discriminant; the first compile lacked Discriminant (Option Infallible), and the lead-reported successful compile after the local Option instance confirms resolution. No compile was rerun here.",
+    "result": "ControlFlow, Infallible, and read_discriminant resolved in the lead-reported green Lean compile log."
+  },
+  "sha256": {
+    "generated_Funs_lean": "de9bc21245ab4305a2565f83ad102f2d6ea87785d06dc194302a879750026efa",
+    "R249_raw_adapter": "f38d892beef83cba109b007a5d5b6851629ead6acc736d2fbff1c25a530f72cd",
+    "R245_decoded": "f620d8de019fb1050b9cf2c9259ad75924b0fb313f93463c39f5fd0d8fadbdec",
+    "R255_ordered_LLBC": "65d240e27115591fa6dc459e9c4a94785667840cbf1f1deddafc892c764dca88",
+    "option_type_source": "bfd149af4dcaf72b5142a50eba98a532c1a101d9afed6c3a696d6ca9e3b77c7e",
+    "discriminant_binding": "cd4c368351915368f57befe8ab53133a0e5254e3926ab5de8045576fd9378318",
+    "pinned_Discriminant_source": "98dca07cb483eda5c4fe4322806650d3288fd0c2504c3153e0cebc195e649d03",
+    "initial_failure_log": "6fe8251c703918bb792f1c34fd1f8ea2c20a30a42a25a5c646285189320a00af",
+    "reported_success_log": "cd2cc913ab86a10d1b3a6c73001ba2716838908ce63e5726b027c3907d51ea7d",
+    "generator": "9e94d74b38e58bd7e6994957906d7ef4741257e8fe4f68843e081f9d3d9bcf17",
+    "output_lean": "de1fa32d535bf4e3d10bac3235300b9c71d7ec1a2234fb9ebc91f8e56d8b5255"
+  }
+}

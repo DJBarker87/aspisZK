@@ -1,0 +1,1 @@
+Rejected draft retained with failed exit and complete axiom output. Only the later successful target supports the milestone; sorryAx in this rejected log is not accepted evidence. No resource cap was raised.

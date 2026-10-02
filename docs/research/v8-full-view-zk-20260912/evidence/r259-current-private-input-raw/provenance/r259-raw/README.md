@@ -1,0 +1,7 @@
+# R259 private input raw staging
+
+Created `AspisR259PrivateInputRaw.lean` by copying the three requested generated R256 declaration blocks verbatim, including their docstrings and attributes. The block byte hashes are equal and replacement count is zero for each declaration. The scratch file imports `AspisR249R110Raw`, opens the existing raw and R156 namespaces, and adds no B, C, or CM31 shadow representation. Before those bodies, it emits the lead-approved local Option `Discriminant` support from R245 TypeDeclId 3: `None=0#isize`, `Some=1#isize`, plus `optionTag_none` and `optionTag_some`.
+
+The copied `C::input` and its Option `Try::branch`/`FromResidual::from_residual` helpers preserve the generated `ControlFlow`, `Infallible`, and `read_discriminant` names and control flow. No body was manually changed. The previous failure log records the absent `Discriminant (Option Infallible)` instance; the lead reports the new file compiled green in log `1790913218557130000`. This regeneration records that result and does not rerun compilation.
+
+The pinned `Aeneas.Data.Discriminant` excerpt and exact R245 Option type row (TypeDeclId 3; None tag 0 and Some tag 1, both signed Isize) are hash-recorded in `raw-adapter.json`. The original compile failed for lack of `Discriminant (Option Infallible)`; the lead reports the generated helpers and C::input compiled after the local instance was added. That compile and its axioms output are recorded from the log and were not rerun here. No compile or build was run during this generator update.
