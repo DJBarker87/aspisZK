@@ -1,0 +1,1 @@
+Independent read-only audit of saved R239–R243 publication evidence. No formal checks reran. The R242 launch/base caveat found here has been clarified in its manifest and note after the audit; proof source/log/metrics/axioms are unchanged. Audit result describes the saved evidence before this documentation clarification.
