@@ -1,0 +1,9 @@
+# R342: actual output allocation and final index-zero execution
+
+`AspisV8R19/R342OutputSetup.lean` compiled successfully. Both original selected output fragments have their exact successful Result under explicit nonempty source length, encoded source reads at 1 through length-1 and encoded prefix reads below length-1. Original cloned-zero allocation and default reverse-range setup establish the loop capacity and endpoints; the reverse recurrence preserves output length, establishing the final index-zero store. No supplied output vector/length, extra capacity, nonzero or caller-success premise is used. The selected outputs equal the reverse model followed by its original index-zero accumulator write; the second is definitionally the same operation. This proves execution against the pinned Aeneas Std from_elem/rev/index_mut definitions, not independent Rust-standard-library/compiler correspondence, original source guards, or complete batch/callback.
+
+Compile revision `d3d12f9f5540a37f456672f59c07d90d30187da2`; exit 0; wall 0:01.66; child peak RSS 3719400 KiB; swaps 0. All nine complete axiom reports use only propext, Classical.choice and Quot.sound; no sorryAx, native proof or new execution assumption. Pinned Lean 4.32, `-j1 -M4500`, 5/7 GiB zero-swap scope. Complete evidence is in [the manifest](evidence/r342-current-batch-output-setup/manifest.json).
+
+First remaining proposition: Compose the exact whole after-guards source branch with both initialized prefixes/shared inverse/output fragments; prove source zero-detection traversal and nonzero connection, full original batch/normalization/fold/extend execution and callback chronology, then universal joint privacy, shared-oracle publication simulation/probability losses and soundness.
+
+Full callback chronology, joint privacy and soundness remain open. Verifier source, security parameters and 999,790 / 999,532 CU results remain preserved. No benchmarks or unchanged regression suites reran.
