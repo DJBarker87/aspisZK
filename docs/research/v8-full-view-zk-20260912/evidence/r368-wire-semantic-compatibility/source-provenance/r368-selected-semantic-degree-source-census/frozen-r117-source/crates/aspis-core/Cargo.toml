@@ -1,0 +1,39 @@
+[package]
+name = "aspis-core"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+description = "Aspis native WHIR-style M31 PCS substrate: shared no_std verifier core (host + SBF byte-exact)"
+
+[features]
+# Exposes deliberately weakened Fiat-Shamir schedules solely so adversarial
+# tests can demonstrate their teeth. Never enable in a deployed verifier.
+insecure-test-ordering = []
+# Exposes a verifier mode that deliberately misclassifies the diagnostic M31
+# basis as the legacy CM31 wire shape. Teeth tests only; never deploy.
+insecure-test-framing = []
+# Exposes private decoder entry points to the isolated universal-equivalence
+# harness. This feature is never enabled by the verifier build.
+formal-verification = []
+# Default-off byte-for-CU experiment. This changes only the fixed-field wire
+# representation and is never enabled by a selected production build.
+v7-fixed-canonical-audit = []
+# Follow-up to the canonical fixed-field experiment.  The fixed records are
+# still checked by their one-pass transcript reader, while packed query limbs
+# are checked only by the gamma/opening consumer that already decodes all of
+# them.  This removes the audit parser's duplicate query-wide canonical scan.
+v7-fixed-canonical-exact-once-audit = ["v7-fixed-canonical-audit"]
+# Audit-only loop interchange for the fixed four-slot C1 gamma dot product.
+# The packed bytes, canonical decoder, powers, and resulting four QM31 values
+# are unchanged; only the order in which the same scalar products are summed
+# is specialized to reuse each 26-column power row across all four slots.
+v7-gamma-four-slot-block-audit = []
+
+[dependencies]
+
+[dev-dependencies]
+sha2 = "0.10.8"
+# Property/fuzz-style harnesses run on the pinned stable toolchain via
+# `cargo test`; cargo-fuzz's nightly+libFuzzer requirement would break the
+# stable pin, so the attack-surface fuzzing is expressed as proptest.
+proptest = "1"
