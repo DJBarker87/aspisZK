@@ -1,0 +1,205 @@
+SOURCE AND ARTIFACT PATHS / SHA256 ARE RECORDED IN binding-audit.json
+
+
+R239 generator script:
+import re,json,pathlib,hashlib
+p=pathlib.Path(__file__).resolve().parent;g=p.parent/'r238-coefficient-translation/generated/AspisR238CoeffLeaves';s=(g/'Funs.lean').read_text();t=(g/'Types.lean').read_text()
+names=['circle_norm.Coeff.new','aspis_core.field.CM31.mul_m31','circle_norm.Coeff.four','aspis_core.field.M31.half','aspis_core.field.CM31.half','circle_norm.joined_inverse.line_norm.LineCoeff.new','circle_norm.joined_inverse.line_norm.LineCoeff.four']
+def block(src,name):
+ start=src.index('def '+name+'\n');end=src.find('\n/--',start);end=src.index('\nend AspisR238CoeffLeaves',start)if end<0 else end;return src[start:end].rstrip()+'\n'
+blocks=[block(s,n)for n in names]
+original='\n'.join(blocks);adapted=original.replace('wrapping_shr self 1#i32','wrapping_shr self 1#u32').replace('wrapping_shl i1 30#i32','wrapping_shl i1 30#u32');assert original.count('1#i32')==1 and original.count('30#i32')==1
+aliases='def circle_norm.Coeff := Array aspis_core.field.CM31 5#usize\ndef circle_norm.joined_inverse.line_norm.LineCoeff :=\n  Array aspis_core.field.CM31 5#usize\n'
+header='import AspisR221NormExecutionRaw\nopen Aeneas Aeneas.Std Result\nopen AspisR156FullFreeze AspisR221NormExecutionRaw\nset_option autoImplicit false\nnamespace AspisR239CoeffExecutionRaw\n'
+counts='\n/-- Literal API adaptation: both signed source counts and unsigned API counts\nencode the same nonnegative integer and therefore the same low five bits. -/\ntheorem count_one : (1#i32 : I32).bv.toNat = (1#u32 : U32).val := by decide\ntheorem count_thirty : (30#i32 : I32).bv.toNat = (30#u32 : U32).val := by decide\n'
+raw=header+'\n'+aliases+'\n'+adapted+counts+'\n'+'\n'.join('#print axioms '+n for n in names+['count_one','count_thirty'])+'\nend AspisR239CoeffExecutionRaw\n'
+(p/'original-leaf-blocks.lean.txt').write_text(original);(p/'AspisR239CoeffExecutionRaw.lean').write_text(raw)
+(p/'raw-adapter.json').write_text(json.dumps(dict(generated_funs_sha256=hashlib.sha256(s.encode()).hexdigest(),generated_types_sha256=hashlib.sha256(t.encode()).hexdigest(),target_source_sha256=hashlib.sha256(raw.encode()).hexdigest(),selected_declarations=names,type_aliases='The two generated coefficient types are unchanged Array CM31 5 aliases, using pinned R156 CM31/QM31 types.',namespace_binding='Generated field and norm dependencies bind to previously compiled R156/R221 selected declarations. All direct bound bodies must be checked before promotion.',literal_api_adaptations=[dict(source='Std.U32.wrapping_shr self 1#i32',target='Std.U32.wrapping_shr self 1#u32',count_theorem='count_one'),dict(source='Std.U32.wrapping_shl i1 30#i32',target='Std.U32.wrapping_shl i1 30#u32',count_theorem='count_thirty')],scope='No standard-library fold/vector or memory operation is substituted. Raw generated leaf text retained; only these two nonnegative literal API types and wrapper namespace/import binding differ.'),indent=2)+'\n')
+print(hashlib.sha256(raw.encode()).hexdigest())
+
+
+R239 adapter metadata:
+{
+  "generated_funs_sha256": "aadc71aa97bddfbcb88487b16dbcc84b8ef481f803546de6ed23b230cbe3ed7a",
+  "generated_types_sha256": "be1e16c4b2a30219f110578573539e5d3552198f198ec3f6c2c265ae9ffd0b11",
+  "target_source_sha256": "2ce92e012706ba12c3d32cab93894d55d3569eaf8e6710c73fec8935b9208dd1",
+  "selected_declarations": [
+    "circle_norm.Coeff.new",
+    "aspis_core.field.CM31.mul_m31",
+    "circle_norm.Coeff.four",
+    "aspis_core.field.M31.half",
+    "aspis_core.field.CM31.half",
+    "circle_norm.joined_inverse.line_norm.LineCoeff.new",
+    "circle_norm.joined_inverse.line_norm.LineCoeff.four"
+  ],
+  "type_aliases": "The two generated coefficient types are unchanged Array CM31 5 aliases, using pinned R156 CM31/QM31 types.",
+  "namespace_binding": "Generated field and norm dependencies bind to previously compiled R156/R221 selected declarations. All direct bound bodies must be checked before promotion.",
+  "literal_api_adaptations": [
+    {
+      "source": "Std.U32.wrapping_shr self 1#i32",
+      "target": "Std.U32.wrapping_shr self 1#u32",
+      "count_theorem": "count_one"
+    },
+    {
+      "source": "Std.U32.wrapping_shl i1 30#i32",
+      "target": "Std.U32.wrapping_shl i1 30#u32",
+      "count_theorem": "count_thirty"
+    }
+  ],
+  "scope": "No standard-library fold/vector or memory operation is substituted. Raw generated leaf text retained; only these two nonnegative literal API types and wrapper namespace/import binding differ."
+}
+
+
+R239 imports and literal proof statements:
+import AspisR221NormExecutionRaw
+open Aeneas Aeneas.Std Result
+open AspisR156FullFreeze AspisR221NormExecutionRaw
+theorem count_one : (1#i32 : I32).bv.toNat = (1#u32 : U32).val := by decide
+theorem count_thirty : (30#i32 : I32).bv.toNat = (30#u32 : U32).val := by decide
+
+R238 M31.mul:
+def aspis_core.field.M31.mul
+  (self : aspis_core.field.M31) (rhs : aspis_core.field.M31) :
+  Result aspis_core.field.M31
+  := do
+  if self < aspis_core.field.P
+  then
+    if rhs < aspis_core.field.P
+    then
+      let i ← lift (UScalar.cast .U64 self)
+      let i1 ← lift (UScalar.cast .U64 rhs)
+      let x ← lift (Std.U64.wrapping_mul i i1)
+      let i2 ← lift (UScalar.cast .U64 aspis_core.field.P)
+      let i3 ← lift (x &&& i2)
+      let i4 ← lift (Std.U64.wrapping_shr x 31#i32)
+      let s ← lift (Std.U64.wrapping_add i3 i4)
+      let i5 ← lift (UScalar.cast .U64 aspis_core.field.P)
+      if s >= i5
+      then
+        let i6 ← lift (UScalar.cast .U64 aspis_core.field.P)
+        let i7 ← lift (Std.U64.wrapping_sub s i6)
+        let i8 ← lift (UScalar.cast .U32 i7)
+        ok i8
+      else let i6 ← lift (UScalar.cast .U32 s)
+           ok i6
+    else
+      let i ← lift (UScalar.cast .U64 self)
+      let i1 ← lift (UScalar.cast .U64 rhs)
+      let i2 ← lift (Std.U64.wrapping_mul i i1)
+      let i3 ← aspis_core.field.reduce_u64 i2
+      ok i3
+  else
+    let i ← lift (UScalar.cast .U64 self)
+    let i1 ← lift (UScalar.cast .U64 rhs)
+    let i2 ← lift (Std.U64.wrapping_mul i i1)
+    let i3 ← aspis_core.field.reduce_u64 i2
+    ok i3
+
+Pinned R156 M31.mul:
+def aspis_core.field.M31.mul
+  (self : aspis_core.field.M31) (rhs : aspis_core.field.M31) :
+  Result aspis_core.field.M31
+  := do
+  if self < aspis_core.field.P
+  then
+    if rhs < aspis_core.field.P
+    then
+      let i ← lift (UScalar.cast .U64 self)
+      let i1 ← lift (UScalar.cast .U64 rhs)
+      let x ← lift (Std.U64.wrapping_mul i i1)
+      let i2 ← lift (UScalar.cast .U64 aspis_core.field.P)
+      let i3 ← lift (x &&& i2)
+      let i4 ← lift (Std.U64.wrapping_shr x 31#u32)
+      let s ← lift (Std.U64.wrapping_add i3 i4)
+      let i5 ← lift (UScalar.cast .U64 aspis_core.field.P)
+      if s >= i5
+      then
+        let i6 ← lift (UScalar.cast .U64 aspis_core.field.P)
+        let i7 ← lift (Std.U64.wrapping_sub s i6)
+        let i8 ← lift (UScalar.cast .U32 i7)
+        ok i8
+      else let i6 ← lift (UScalar.cast .U32 s)
+           ok i6
+    else
+      let i ← lift (UScalar.cast .U64 self)
+      let i1 ← lift (UScalar.cast .U64 rhs)
+      let i2 ← lift (Std.U64.wrapping_mul i i1)
+      let i3 ← aspis_core.field.reduce_u64 i2
+      ok i3
+  else
+    let i ← lift (UScalar.cast .U64 self)
+    let i1 ← lift (UScalar.cast .U64 rhs)
+    let i2 ← lift (Std.U64.wrapping_mul i i1)
+    let i3 ← aspis_core.field.reduce_u64 i2
+    ok i3
+
+R238 M31.half:
+def aspis_core.field.M31.half
+  (self : aspis_core.field.M31) : Result aspis_core.field.M31 := do
+  let i ← lift (Std.U32.wrapping_shr self 1#i32)
+  let i1 ← lift (self &&& 1#u32)
+  let i2 ← lift (Std.U32.wrapping_shl i1 30#i32)
+  let i3 ← lift (i ||| i2)
+  ok i3
+
+R239 M31.half:
+def aspis_core.field.M31.half
+  (self : aspis_core.field.M31) : Result aspis_core.field.M31 := do
+  let i ← lift (Std.U32.wrapping_shr self 1#u32)
+  let i1 ← lift (self &&& 1#u32)
+  let i2 ← lift (Std.U32.wrapping_shl i1 30#u32)
+  let i3 ← lift (i ||| i2)
+  ok i3
+
+R238 CM31.half:
+def aspis_core.field.CM31.half
+  (self : aspis_core.field.CM31) : Result aspis_core.field.CM31 := do
+  let m ← aspis_core.field.M31.half self.a
+  let m1 ← aspis_core.field.M31.half self.b
+  ok { a := m, b := m1 }
+
+R156 CM31.half:
+[not found]
+
+R156 type layouts:
+def aspis_core.field.M31 := Std.U32
+
+[not found]
+
+[not found]
+
+R238 norm and polar:
+def circle_norm.norm
+  (v : aspis_core.field.QM31) : Result aspis_core.field.CM31 := do
+  let c ← aspis_core.field.CM31.square v.c0
+  let c1 ← aspis_core.field.CM31.square v.c1
+  let c2 ← circle_norm.times_r c1
+  aspis_core.field.CM31.sub c c2
+
+def circle_norm.polar
+  (v : aspis_core.field.QM31) (w : aspis_core.field.QM31) :
+  Result aspis_core.field.CM31
+  := do
+  let c ← aspis_core.field.CM31.mul v.c0 w.c0
+  let c1 ← aspis_core.field.CM31.mul v.c1 w.c1
+  let c2 ← circle_norm.times_r c1
+  let c3 ← aspis_core.field.CM31.sub c c2
+  aspis_core.field.CM31.double c3
+
+Pinned R221 norm and polar:
+def circle_norm.norm
+  (v : aspis_core.field.QM31) : Result aspis_core.field.CM31 := do
+  let c ← aspis_core.field.CM31.square v.c0
+  let c1 ← aspis_core.field.CM31.square v.c1
+  let c2 ← circle_norm.times_r c1
+  aspis_core.field.CM31.sub c c2
+
+def circle_norm.polar
+  (v : aspis_core.field.QM31) (w : aspis_core.field.QM31) :
+  Result aspis_core.field.CM31
+  := do
+  let c ← aspis_core.field.CM31.mul v.c0 w.c0
+  let c1 ← aspis_core.field.CM31.mul v.c1 w.c1
+  let c2 ← circle_norm.times_r c1
+  let c3 ← aspis_core.field.CM31.sub c c2
+  aspis_core.field.CM31.double c3

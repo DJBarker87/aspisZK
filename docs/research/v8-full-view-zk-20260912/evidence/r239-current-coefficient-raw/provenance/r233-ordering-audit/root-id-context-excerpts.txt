@@ -1,0 +1,279 @@
+95a13e460367fd95a6cc47d47373ef6333afe6831d3f30bc638f8c4e323f76eb  charon/src/bin/charon-driver/translate/translate_ctx.rs
+275279e88a372d7e978a0777efee1df11ae3e0cd494b3819ccdc439f6e888653  charon/src/bin/charon-driver/translate/translate_crate.rs
+1fa04d5706dd78da9ca803c3a52ef3a66de1867c78e25821f45ffe6619dc1575  charon/src/transform/ctx.rs
+8a1176e29a51a83c82ff5a7df2aa11021e3e0c254e9fd6c656c0a92314ba2632  charon/src/transform/add_missing_info/reorder_decls.rs
+fe5a28d97ceacc40833a01bf4f6cdf5038f55d654c1d92b6f2d2a79ffa75d7f8  charon/src/bin/charon-driver/translate/resolve_path.rs
+38e9012aacf67d4b2d46ed4e8927d81a25de3cf036f611cb48b9ff0dd8121ea5  charon/src/bin/charon-driver/translate/translate_items.rs
+
+TranslateCtx ids and root ID map
+    27	/// Translation context used while translating the crate data into our representation.
+    28	pub struct TranslateCtx<'tcx> {
+    29	    /// The Rust compiler type context
+    30	    pub tcx: TyCtxt<'tcx>,
+    31	    /// Path to the toolchain root.
+    32	    pub sysroot: PathBuf,
+    33	    /// The Hax context
+    34	    pub hax_state: hax::StateWithBase<'tcx>,
+    35	
+    36	    /// The options that control translation.
+    37	    pub options: TranslateOptions,
+    38	    /// The translated data.
+    39	    pub translated: TranslatedCrate,
+    40	
+    41	    /// Record data for each method whether it is ever used (called or implemented) and the
+    42	    /// `FunDeclId`s of the implementations. We use this to lazily translate methods, so that we
+    43	    /// skip unused default methods of large traits like `Iterator`.
+    44	    ///
+    45	    /// The complete scheme works as follows: by default we enqueue no methods for translation.
+    46	    /// When we find a use of a method, we mark it "used" using `mark_method_as_used`. This
+    47	    /// enqueues all known and future impls of this method. We also mark a method as used if we
+    48	    /// find an implementation of it in a non-opaque impl, and if the method is a required method.
+    49	    pub method_status: IndexMap<TraitDeclId, IndexVec<TraitMethodId, MethodStatus>>,
+    50	
+    51	    /// The map from rustc id to translated id.
+    52	    pub id_map: HashMap<TransItemSource, ItemId>,
+    53	    /// The reverse map of ids.
+    54	    pub reverse_id_map: HashMap<ItemId, TransItemSource>,
+    55	    /// Map from rustc id to associated item id
+    56	    pub assoc_item_id_map: HashMap<hax::DefId, AssocItemId>,
+    57	    /// The reverse filename map.
+    58	    pub file_to_id: HashMap<FileName, FileId>,
+    59	
+    60	    /// Context for tracking and reporting errors.
+    61	    pub errors: RefCell<ErrorCtx>,
+    62	    /// The declarations we came accross and which we haven't translated yet.
+    63	    pub items_to_translate: VecDeque<TransItemSource>,
+    64	    /// The declaration we've already processed (successfully or not).
+    65	    pub processed: HashSet<TransItemSource>,
+    66	    /// Stack of the translations currently happening. Used to avoid accidental cycles.
+    67	    pub translate_stack: Vec<ItemId>,
+    68	    /// Cache the names to compute them only once each.
+    69	    pub cached_names: HashMap<RustcItem, Name>,
+    70	    /// Cache the `ItemMeta`s to compute them only once each.
+    71	    pub cached_item_metas: HashMap<TransItemSource, ItemMeta>,
+    72	    /// Compute which lifetimes are used in a `&'a mut T`. This is a global fixpoint analysis.
+    73	    pub lt_mutability_computer: LifetimeMutabilityComputer,
+    74	}
+
+root resolution/enqueue
+   965	    // Start translating from the selected items.
+   966	    for start_from in ctx.options.start_from.clone() {
+   967	        match start_from {
+   968	            StartFrom::Pattern { pattern, strict } => {
+   969	                if let Ok(def_ids) = ctx.resolve_path(Span::dummy(), &pattern, strict) {
+   970	                    for def_id in def_ids {
+   971	                        let def_id: hax::DefId = def_id.sinto(&ctx.hax_state);
+   972	                        ctx.enqueue_module_item(&def_id);
+   973	                    }
+   974	                }
+   975	            }
+
+root enqueue id discard
+   274	    /// Add this item to the queue of items to translate. Each translated item will then
+   275	    /// recursively register the items it refers to. We call this on the crate root and end up
+   276	    /// exploring the whole crate.
+   277	    #[tracing::instrument(skip(self))]
+   278	    pub fn enqueue_module_item(&mut self, def_id: &hax::DefId) {
+   279	        if let Some(trait_def_id) = self.is_method_decl_without_default(def_id) {
+   280	            // Don't translate the method itself as it doesn't correspond to an item, translate the
+   281	            // trait instead.
+   282	            self.enqueue_module_item(&trait_def_id);
+   283	            return;
+   284	        }
+   285	        let Some(kind) = self.base_kind_for_item(def_id) else {
+   286	            return;
+   287	        };
+   288	        let item_src = if self.options.monomorphize_with_hax {
+   289	            if let Ok(def) = self.poly_hax_def(def_id)
+   290	                && !def.has_any_generics()
+   291	            {
+   292	                // Monomorphize this item and the items it depends on.
+   293	                TransItemSource::monomorphic(def.this(), kind)
+   294	            } else {
+   295	                // Skip polymorphic items and items that cause errors.
+   296	                return;
+   297	            }
+   298	        } else {
+   299	            TransItemSource::polymorphic(def_id, kind)
+   300	        };
+   301	        let _: Option<ItemId> = self.register_and_enqueue(&None, item_src);
+   302	    }
+   303	
+
+register ID mapping
+   304	    pub(crate) fn register_no_enqueue<T: TryFrom<ItemId>>(
+   305	        &mut self,
+   306	        dep_src: &Option<DepSource>,
+   307	        src: &TransItemSource,
+   308	    ) -> Option<T> {
+   309	        let item_id = match self.id_map.get(src) {
+   310	            Some(tid) => *tid,
+   311	            None => {
+   312	                use TransItemSourceKind::*;
+   313	                let trans_id = match src.kind {
+   314	                    Type | VTable => ItemId::Type(self.translated.type_decls.reserve_slot()),
+   315	                    TraitDecl => ItemId::TraitDecl(self.translated.trait_decls.reserve_slot()),
+   316	                    TraitImpl(..) => ItemId::TraitImpl(self.translated.trait_impls.reserve_slot()),
+   317	                    Global | VTableInstance(..) => {
+   318	                        ItemId::Global(self.translated.global_decls.reserve_slot())
+   319	                    }
+   320	                    Fun
+   321	                    | ClosureMethod(..)
+   322	                    | ClosureAsFnCast
+   323	                    | DropGlueMethod(..)
+   324	                    | VTableInstanceInitializer(..)
+   325	                    | VTableMethod
+   326	                    | VTableDropShim => ItemId::Fun(self.translated.fun_decls.reserve_slot()),
+   327	                    InherentImpl | Module => return None,
+   328	                };
+   329	                // Add the id to the queue of declarations to translate
+   330	                self.id_map.insert(src.clone(), trans_id);
+   331	                self.reverse_id_map.insert(trans_id, src.clone());
+   332	                // Store the name early so the name matcher can identify paths.
+   333	                if let Ok(name) = self.translate_name(src) {
+   334	                    self.translated.item_names.insert(trans_id, name);
+   335	                }
+   336	                trans_id
+   337	            }
+   338	        };
+   339	        self.errors
+   340	            .borrow_mut()
+   341	            .register_dep_source(dep_src, item_id, src.def_id().is_local());
+   342	        item_id.try_into().ok()
+   343	    }
+   344	
+   345	    /// Register this item source and enqueue it for translation.
+   346	    pub(crate) fn register_and_enqueue<T: TryFrom<ItemId>>(
+   347	        &mut self,
+   348	        dep_src: &Option<DepSource>,
+   349	        item_src: TransItemSource,
+   350	    ) -> Option<T> {
+   351	        let id = self.register_no_enqueue(dep_src, &item_src);
+   352	        self.items_to_translate.push_back(item_src);
+   353	        id
+
+TransformCtx handoff
+  1034	    // Remove methods not marked as "used". They are never called and we made sure not to translate
+  1035	    // them. This removes them from the traits and impls.
+  1036	    ctx.remove_unused_methods();
+  1037	
+  1038	    // Return the context, dropping the hax state and rustc `tcx`.
+  1039	    Ok(TransformCtx {
+  1040	        options: ctx.options,
+  1041	        translated: ctx.translated,
+  1042	        errors: ctx.errors,
+  1043	    })
+  1044	}
+
+TransformCtx fields
+    12	/// Simpler context used for rustc-independent code transformation. This only depends on rustc for
+    13	/// its error reporting machinery.
+    14	pub struct TransformCtx {
+    15	    /// The options that control transformation.
+    16	    pub options: TranslateOptions,
+    17	    /// The translated data.
+    18	    pub translated: TranslatedCrate,
+    19	    /// Context for tracking and reporting errors.
+    20	    pub errors: RefCell<ErrorCtx>,
+    21	}
+    22	
+
+ordering root graph
+   303	fn compute_declarations_graph(ctx: &TransformCtx) -> DiGraphMap<ItemId, ()> {
+   304	    let mut deps = Deps::default();
+   305	    // Start from the items included in `start_from`. We've mostly only translated items accessible
+   306	    // from that, but some passes render items inaccessible again, which we filter out here.
+   307	    deps.unprocessed = ctx
+   308	        .translated
+   309	        .all_items()
+   310	        .filter(|item| {
+   311	            ctx.options
+   312	                .start_from
+   313	                .iter()
+   314	                .any(|pat| pat.matches(&ctx.translated, item.item_meta()))
+   315	        })
+   316	        .map(|item| item.id())
+   317	        .collect();
+   318	
+   319	    // Explore reachable items.
+   320	    while let Some(id) = deps.unprocessed.pop() {
+   321	        if !deps.visited.insert(id) {
+   322	            continue;
+   323	        }
+   324	        let Some(item) = ctx.translated.get_item(id) else {
+   325	            continue;
+   326	        };
+   327	        let mut visitor = deps.visitor_for_item(ctx, item);
+   328	        match item {
+   329	            ItemRef::Type(..) | ItemRef::TraitImpl(..) | ItemRef::Global(..) => {
+   330	                let _ = item.drive(&mut visitor);
+   331	            }
+   332	            ItemRef::Fun(d) => {
+   333	                let FunDecl {
+   334	                    def_id,
+   335	                    item_meta: _,
+   336	                    generics,
+   337	                    signature,
+   338	                    src,
+   339	                    is_global_initializer: _,
+   340	                    body,
+   341	                } = d;
+   342	                let _ = def_id.drive(&mut visitor); // For `seen_current_id`
+   343	                // Skip `d.is_global_initializer` to avoid incorrect mutual dependencies.
+   344	                // TODO: add `is_global_initializer` to `ItemSource`.
+   345	                let _ = generics.drive(&mut visitor);
+   346	                let _ = signature.drive(&mut visitor);
+   347	                let _ = body.drive(&mut visitor);
+   348	                if let ItemSource::TraitDecl { trait_ref, .. } = src {
+   349	                    visitor.insert_edge(trait_ref.id);
+   350	                }
+   351	            }
+   352	            ItemRef::TraitDecl(d) => {
+   353	                let TraitDecl {
+   354	                    def_id,
+   355	                    item_meta: _,
+   356	                    generics,
+   357	                    implied_clauses: parent_clauses,
+   358	                    consts,
+   359	                    types,
+   360	                    methods,
+   361	                    vtable,
+   362	                } = d;
+   363	                let _ = def_id.drive(&mut visitor); // For `seen_current_id`
+   364	                // Visit the traits referenced in the generics
+   365	                let _ = generics.drive(&mut visitor);
+   366	
+   367	                // Visit the parent clauses
+   368	                let _ = parent_clauses.drive(&mut visitor);
+   369	
+   370	                // Visit the items
+   371	                let _ = types.drive(&mut visitor);
+   372	                let _ = vtable.drive(&mut visitor);
+   373	
+   374	                // We consider that a trait decl only contains the function/constant signatures.
+   375	                // Therefore we don't explore the default const/method ids.
+   376	                for assoc_const in consts {
+   377	                    let TraitAssocConst {
+   378	                        name: _,
+   379	                        attr_info: _,
+   380	                        ty,
+   381	                        default,
+   382	                    } = assoc_const;
+   383	                    let _ = ty.drive(&mut visitor);
+   384	                    if let Some(gref) = default {
+   385	                        visitor.insert_node(gref.id); // Still count the item as reachable.
+   386	                        let _ = gref.generics.drive(&mut visitor);
+   387	                    }
+   388	                }
+   389	                for bound_method in methods {
+   390	                    let _ = bound_method.params.drive(&mut visitor);
+   391	                    let _ = bound_method.skip_binder.signature.drive(&mut visitor);
+   392	                    if let Some(funref) = &bound_method.skip_binder.default {
+   393	                        visitor.insert_node(funref.id); // Still count the item as reachable.
+   394	                        let _ = funref.generics.drive(&mut visitor);
+   395	                    }
+   396	                }
+   397	            }
+   398	        }
+   399	    }
+   400	    deps.graph

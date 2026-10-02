@@ -1,0 +1,1 @@
+First draft exit 1: explicit HOr-to-UScalar.or expression and concrete CM31 two-coordinate normalization were missing. sorryAx output is rejected. Replacement uses the already proved word-operation theorem and component algebra, with no weakening.

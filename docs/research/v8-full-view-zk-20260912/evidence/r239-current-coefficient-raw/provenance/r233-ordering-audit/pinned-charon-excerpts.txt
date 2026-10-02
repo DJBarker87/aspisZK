@@ -1,0 +1,243 @@
+charon_commit=cb50ff16b9f1066b8a97dc06da704de2da2fa41c
+
+8a1176e29a51a83c82ff5a7df2aa11021e3e0c254e9fd6c656c0a92314ba2632  charon/src/transform/add_missing_info/reorder_decls.rs
+c9ac2cb3b5c868da191f77a185868c635ff574ab3e02bd97fac95b12e7796da6  charon/src/name_matcher/mod.rs
+d68ea7c83465b3ce6ba9bea7d398c97ed03e0ff9abeee179f77ea04baabd7b04  charon/src/options.rs
+fe5a28d97ceacc40833a01bf4f6cdf5038f55d654c1d92b6f2d2a79ffa75d7f8  charon/src/bin/charon-driver/translate/resolve_path.rs
+83ef70b79b857297f3d5f0b4a9b112e0cb4a0b8afa29bdbc693b019327714f99  charon/src/bin/charon-driver/hax/types/new/full_def.rs
+38e9012aacf67d4b2d46ed4e8927d81a25de3cf036f611cb48b9ff0dd8121ea5  charon/src/bin/charon-driver/translate/translate_items.rs
+
+REORDER ROOT SELECTION
+   303	fn compute_declarations_graph(ctx: &TransformCtx) -> DiGraphMap<ItemId, ()> {
+   304	    let mut deps = Deps::default();
+   305	    // Start from the items included in `start_from`. We've mostly only translated items accessible
+   306	    // from that, but some passes render items inaccessible again, which we filter out here.
+   307	    deps.unprocessed = ctx
+   308	        .translated
+   309	        .all_items()
+   310	        .filter(|item| {
+   311	            ctx.options
+   312	                .start_from
+   313	                .iter()
+   314	                .any(|pat| pat.matches(&ctx.translated, item.item_meta()))
+   315	        })
+   316	        .map(|item| item.id())
+   317	        .collect();
+   318	
+   319	    // Explore reachable items.
+   320	    while let Some(id) = deps.unprocessed.pop() {
+   321	        if !deps.visited.insert(id) {
+   322	            continue;
+   323	        }
+   324	        let Some(item) = ctx.translated.get_item(id) else {
+   325	            continue;
+
+MATCHER INHERENT IMPL CASE
+   246	impl PatElem {
+   247	    fn matches_with_generics(
+   248	        &self,
+   249	        ctx: &TranslatedCrate,
+   250	        elem: &PathElem,
+   251	        args: Option<&GenericArgs>,
+   252	    ) -> bool {
+   253	        match (self, elem) {
+   254	            (PatElem::Glob, _) => true,
+   255	            (
+   256	                PatElem::Ident {
+   257	                    name: pat_ident,
+   258	                    generics,
+   259	                    ..
+   260	                },
+   261	                PathElem::Ident(ident, _),
+   262	            ) => {
+   263	                // `crate` is a special keyword that referes to the current crate.
+   264	                let same_ident =
+   265	                    pat_ident == ident || (pat_ident == "crate" && ident == &ctx.crate_name);
+   266	                same_ident && PatTy::matches_generics(ctx, generics, args)
+   267	            }
+   268	            (PatElem::Impl(_pat), PathElem::Impl(ImplElem::Ty(..))) => {
+   269	                // TODO
+   270	                false
+   271	            }
+   272	            (PatElem::Impl(pat), PathElem::Impl(ImplElem::Trait(impl_id))) => {
+   273	                let Some(timpl) = ctx.trait_impls.get(*impl_id) else {
+   274	                    return false;
+   275	                };
+   276	                let trait_name = ctx.item_name(timpl.impl_trait.id);
+   277	                pat.matches_with_generics(ctx, trait_name, Some(&timpl.impl_trait.generics))
+   278	            }
+   279	            _ => false,
+   280	        }
+   281	    }
+
+OPACITY CLI OPTION DOCS
+   124	            Whitelist of items to translate. These use the name-matcher syntax (note: this differs
+   125	            a bit from the ocaml NameMatcher).
+   126	
+   127	            Note: This is very rough at the moment. E.g. this parses `u64` as a path instead of the
+   128	            built-in type. It is also not possible to filter a trait impl (this will only filter
+   129	            its methods). Please report bugs or missing features.
+   130	
+   131	            Examples:
+   132	              - `crate::module1::module2::item`: refers to this item and all its subitems (e.g.
+   133	                  submodules or trait methods);
+   134	              - `crate::module1::module2::item::_`: refers only to the subitems of this item;
+   135	              - `core::convert::{impl core::convert::Into<_> for _}`: retrieve the body of this
+   136	                  very useful impl;
+   137	
+   138	            When multiple patterns in the `--include` and `--opaque` options match the same item,
+   139	            the most precise pattern wins. E.g.: `charon --opaque crate::module --include
+   140	            crate::module::_` makes the `module` opaque (we won't explore its contents), but the
+   141	            items in it transparent (we will translate them if we encounter them.)
+   142	    "))]
+   143	    #[serde(default)]
+   144	    #[cfg_attr(feature = "charon_on_charon", charon::rename("included"))]
+   145	    pub include: Vec<String>,
+   146	    /// Blacklist of items to keep opaque. Works just like `--include`, see the doc there.
+   147	    #[clap(long)]
+   148	    #[serde(default)]
+   149	    pub opaque: Vec<String>,
+   150	    /// Blacklist of items to not translate at all. Works just like `--include`, see the doc there.
+   151	    #[clap(long)]
+   152	    #[serde(default)]
+   153	    pub exclude: Vec<String>,
+
+OPTIONS PATTERN CONSTRUCTION
+   695	        let mut start_from = options
+   696	            .start_from
+   697	            .iter()
+   698	            .filter_map(|path| parse_pattern(path).ok())
+   699	            .map(|p| StartFrom::Pattern {
+   700	                pattern: p,
+   701	                strict: true,
+   702	            })
+   703	            .collect_vec();
+   704	        start_from.extend(
+   705	            options
+   706	                .start_from_if_exists
+   707	                .iter()
+   708	                .filter_map(|path| parse_pattern(path).ok())
+   709	                .map(|p| StartFrom::Pattern {
+   710	                    pattern: p,
+   711	                    strict: false,
+   712	                }),
+   713	        );
+   714	        for attr in options.start_from_attribute.iter().cloned() {
+   715	            start_from.push(StartFrom::Attribute(attr));
+   716	        }
+   717	        if options.start_from_pub {
+   718	            start_from.push(StartFrom::Pub);
+   719	        }
+   720	        if start_from.is_empty() {
+   721	            start_from.push(StartFrom::Pattern {
+   722	                pattern: parse_pattern("crate").unwrap(),
+   723	                strict: true,
+   724	            });
+   725	        }
+   726	
+   727	        let hide_traits = options
+   728	            .hide_marker_traits
+   729	            .then_some([
+   730	                "core::marker::Sized",
+   731	                "core::marker::MetaSized",
+   732	                "core::marker::PointeeSized",
+   733	                "core::marker::Tuple",
+   734	                "core::clone::TrivialClone",
+   735	            ])
+   736	            .into_iter()
+   737	            .flatten()
+   738	            .chain(options.hide_allocator.then_some("core::alloc::Allocator"))
+   739	            .filter_map(|s| parse_pattern(s).ok())
+   740	            .collect_vec();
+   741	
+   742	        let item_opacities = {
+   743	            use ItemOpacity::*;
+   744	            let mut opacities = vec![];
+   745	
+   746	            // This is how to treat items that don't match any other pattern.
+   747	            if options.extract_opaque_bodies {
+   748	                opacities.push(("_".to_string(), Transparent));
+   749	            } else {
+   750	                opacities.push(("_".to_string(), Foreign));
+   751	            }
+   752	
+   753	            if options.treat_box_as_builtin {
+   754	                // Include this item's body, we inline it in a pass.
+   755	                opacities.push((
+   756	                    "alloc::boxed::box_assume_init_into_vec_unsafe".to_string(),
+   757	                    Transparent,
+   758	                ));
+   759	            }
+   760	
+   761	            // We always include the items from the crate.
+   762	            opacities.push(("crate".to_owned(), Transparent));
+   763	
+   764	            for pat in options.include.iter() {
+   765	                opacities.push((pat.to_string(), Transparent));
+   766	            }
+   767	            for pat in options.opaque.iter() {
+   768	                opacities.push((pat.to_string(), Opaque));
+   769	            }
+   770	            for pat in options.exclude.iter() {
+   771	                opacities.push((pat.to_string(), Invisible));
+   772	            }
+   773	
+   774	            for trait_name in &hide_traits {
+   775	                opacities.push((trait_name.to_string(), Invisible));
+   776	            }
+   777	
+   778	            // Hide trait impls and defs for the excluded traits.
+   779	            let hide_traits = hide_traits
+   780	                .iter()
+   781	                .cloned()
+   782	                .flat_map(|pat| [pat.clone(), NamePattern::impl_for(pat)])
+   783	                .map(|pat| (pat, Invisible));
+   784	            opacities
+   785	                .into_iter()
+   786	                .filter_map(|(s, opacity)| parse_pattern(&s).ok().map(|pat| (pat, opacity)))
+   787	                .chain(hide_traits)
+   788	                .collect()
+
+ITEM INVISIBILITY EARLY RETURN
+    58	    pub(crate) fn translate_item_aux(
+    59	        &mut self,
+    60	        item_src: &TransItemSource,
+    61	        trans_id: Option<ItemId>,
+    62	    ) -> Result<(), Error> {
+    63	        // Translate the meta information
+    64	        let name = self.translate_name(item_src)?;
+    65	        if let Some(trans_id) = trans_id {
+    66	            self.translated.item_names.insert(trans_id, name.clone());
+    67	        }
+    68	        let opacity = self.opacity_for_name(&name);
+    69	        if opacity.is_invisible() {
+    70	            // Don't even start translating the item. In particular don't call `hax_def` on it.
+    71	            return Ok(());
+    72	        }
+    73	        let def = self.hax_def_for_item(&item_src.item)?;
+    74	        let item_meta = self.translate_item_meta(&def, item_src, name, opacity);
+    75	        if item_meta.opacity.is_invisible() {
+    76	            return Ok(());
+
+RESOLVER WILDCARD/PATTERN HANDLING
+   148	        } else {
+   149	            let nameable_children = items.iter().copied().flat_map(|def_id| {
+   150	                let hax_def: Arc<hax::FullDef<'tcx>> = def_id.sinto(s).full_def(s);
+   151	                hax_def.nameable_children(s)
+   152	            });
+   153	            match elem {
+   154	                PatElem::Ident { name: elem, .. } => {
+   155	                    items = nameable_children
+   156	                        .filter(|(child_name, _)| child_name.as_str() == elem)
+   157	                        .filter_map(|(_, def_id)| def_id.as_real_def_id())
+   158	                        .collect();
+   159	                }
+   160	                PatElem::Glob => {
+   161	                    items = nameable_children
+   162	                        .filter_map(|(_, def_id)| def_id.as_real_def_id())
+   163	                        .collect();
+   164	                }
+   165	                PatElem::Impl(_) => bail!(
+   166	                    "`--start-from` only supports impl patterns if they're the first element of the path"
+   167	                ),
+   168	            }

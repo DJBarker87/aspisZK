@@ -1,0 +1,118 @@
+charon_git_commit=cb50ff16b9f1066b8a97dc06da704de2da2fa41c
+
+resolve_path.rs sha256=fe5a28d97ceacc40833a01bf4f6cdf5038f55d654c1d92b6f2d2a79ffa75d7f8  charon/src/bin/charon-driver/translate/resolve_path.rs
+   100	                PatElem::Impl(impl_pat) => match impl_pat.elems.as_slice() {
+   101	                    [
+   102	                        ..,
+   103	                        PatElem::Ident {
+   104	                            generics,
+   105	                            is_trait: true,
+   106	                            ..
+   107	                        },
+   108	                    ] => match generics.as_slice() {
+   109	                        [] => bail!("malformed trait impl pattern"),
+   110	                        [PatTy::Pat(self_pat)] => {
+   111	                            let impls = def_path_def_ids(s, impl_pat, strict)?
+   112	                                .into_iter()
+   113	                                .flat_map(|trait_def_id| tcx.all_impls(trait_def_id));
+   114	                            match self_pat.elems.as_slice() {
+   115	                                [PatElem::Glob] => {
+   116	                                    items = impls.collect_vec();
+   117	                                }
+   118	                                _ => {
+   119	                                    let self_ty_def_ids = def_path_def_ids(s, self_pat, strict)?;
+   120	                                    items = impls
+   121	                                        .filter(|impl_def_id| {
+   122	                                            let impl_self_ty = tcx
+   123	                                                .impl_trait_ref(*impl_def_id)
+   124	                                                .skip_binder()
+   125	                                                .self_ty();
+   126	                                            if let ty::Adt(adt_def, _) = impl_self_ty.kind() {
+   127	                                                self_ty_def_ids.contains(&adt_def.did())
+   128	                                            } else {
+   129	                                                false
+   130	                                            }
+   131	                                        })
+   132	                                        .collect_vec();
+   133	                                }
+   134	                            }
+   135	                        }
+   136	                        [_] => bail!("`--start-from` only supports implementations on named types"),
+   137	                        [_, _, ..] => bail!("`--start-from` does not support trait generics"),
+   138	                    },
+   139	                    [
+   140	                        ..,
+   141	                        PatElem::Ident {
+   142	                            is_trait: false, ..
+   143	                        },
+   144	                    ] => bail!("`--start-from` does not support inherent impls"),
+   145	                    _ => bail!("`--start-from` does not support this impl pattern"),
+   146	                },
+   147	            }
+   148	        } else {
+   149	            let nameable_children = items.iter().copied().flat_map(|def_id| {
+   150	                let hax_def: Arc<hax::FullDef<'tcx>> = def_id.sinto(s).full_def(s);
+   151	                hax_def.nameable_children(s)
+   152	            });
+   153	            match elem {
+   154	                PatElem::Ident { name: elem, .. } => {
+   155	                    items = nameable_children
+   156	                        .filter(|(child_name, _)| child_name.as_str() == elem)
+   157	                        .filter_map(|(_, def_id)| def_id.as_real_def_id())
+   158	                        .collect();
+   159	                }
+   160	                PatElem::Glob => {
+   161	                    items = nameable_children
+   162	                        .filter_map(|(_, def_id)| def_id.as_real_def_id())
+   163	                        .collect();
+   164	                }
+   165	                PatElem::Impl(_) => bail!(
+   166	                    "`--start-from` only supports impl patterns if they're the first element of the path"
+   167	                ),
+   168	            }
+   169	        }
+   170	        if strict && items.is_empty() {
+   171	            let prefix = NamePattern {
+   172	                elems: pat.elems[..=i].to_vec(),
+
+full_def.rs sha256=83ef70b79b857297f3d5f0b4a9b112e0cb4a0b8afa29bdbc693b019327714f99  charon/src/bin/charon-driver/hax/types/new/full_def.rs
+  1183	    /// Lists the children of this item that can be named, in the way of normal rust paths. For
+  1184	    /// types, this includes inherent items.
+  1185	    pub fn nameable_children(&self, s: &impl BaseState<'tcx>) -> Vec<(Symbol, DefId)> {
+  1186	        let mut children = match self.kind() {
+  1187	            FullDefKind::Mod { items } => items
+  1188	                .iter()
+  1189	                .filter_map(|(opt_ident, def_id)| Some((opt_ident.as_ref()?.0, def_id.clone())))
+  1190	                .collect(),
+  1191	            FullDefKind::Adt {
+  1192	                adt_kind: AdtKind::Enum,
+  1193	                variants,
+  1194	                ..
+  1195	            } => variants
+  1196	                .iter()
+  1197	                .map(|variant| (variant.name, variant.def_id.clone()))
+  1198	                .collect(),
+  1199	            FullDefKind::InherentImpl { items, .. } | FullDefKind::Trait { items, .. } => items
+  1200	                .iter()
+  1201	                .filter_map(|item| Some((item.name?, item.def_id.clone())))
+  1202	                .collect(),
+  1203	            FullDefKind::TraitImpl { items, .. } => items
+  1204	                .iter()
+  1205	                .filter_map(|item| Some((item.name?, item.def_id()?.clone())))
+  1206	                .collect(),
+  1207	            _ => vec![],
+  1208	        };
+  1209	        // Add inherent impl items if any.
+  1210	        if let Some(rust_def_id) = self.def_id().as_real_def_id() {
+  1211	            let tcx = s.base().tcx;
+  1212	            for impl_def_id in tcx.inherent_impls(rust_def_id) {
+  1213	                children.extend(
+  1214	                    tcx.associated_items(*impl_def_id)
+  1215	                        .in_definition_order()
+  1216	                        .filter_map(|assoc| Some((assoc.opt_name()?, assoc.def_id).sinto(s))),
+  1217	                );
+  1218	            }
+  1219	        }
+  1220	        children
+  1221	    }
+  1222	}

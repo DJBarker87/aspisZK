@@ -1,0 +1,14 @@
+import re,json,pathlib,hashlib
+p=pathlib.Path(__file__).resolve().parent;g=p.parent/'r238-coefficient-translation/generated/AspisR238CoeffLeaves';s=(g/'Funs.lean').read_text();t=(g/'Types.lean').read_text()
+names=['circle_norm.Coeff.new','aspis_core.field.CM31.mul_m31','circle_norm.Coeff.four','aspis_core.field.M31.half','aspis_core.field.CM31.half','circle_norm.joined_inverse.line_norm.LineCoeff.new','circle_norm.joined_inverse.line_norm.LineCoeff.four']
+def block(src,name):
+ start=src.index('def '+name+'\n');end=src.find('\n/--',start);end=src.index('\nend AspisR238CoeffLeaves',start)if end<0 else end;return src[start:end].rstrip()+'\n'
+blocks=[block(s,n)for n in names]
+original='\n'.join(blocks);adapted=original.replace('wrapping_shr self 1#i32','wrapping_shr self 1#u32').replace('wrapping_shl i1 30#i32','wrapping_shl i1 30#u32');assert original.count('1#i32')==1 and original.count('30#i32')==1
+aliases='def circle_norm.Coeff := Array aspis_core.field.CM31 5#usize\ndef circle_norm.joined_inverse.line_norm.LineCoeff :=\n  Array aspis_core.field.CM31 5#usize\n'
+header='import AspisR221NormExecutionRaw\nopen Aeneas Aeneas.Std Result\nopen AspisR156FullFreeze AspisR221NormExecutionRaw\nset_option autoImplicit false\nnamespace AspisR239CoeffExecutionRaw\n'
+counts='\n/-- Literal API adaptation: both signed source counts and unsigned API counts\nencode the same nonnegative integer and therefore the same low five bits. -/\ntheorem count_one : (1#i32 : I32).bv.toNat = (1#u32 : U32).val := by decide\ntheorem count_thirty : (30#i32 : I32).bv.toNat = (30#u32 : U32).val := by decide\n'
+raw=header+'\n'+aliases+'\n'+adapted+counts+'\n'+'\n'.join('#print axioms '+n for n in names+['count_one','count_thirty'])+'\nend AspisR239CoeffExecutionRaw\n'
+(p/'original-leaf-blocks.lean.txt').write_text(original);(p/'AspisR239CoeffExecutionRaw.lean').write_text(raw)
+(p/'raw-adapter.json').write_text(json.dumps(dict(generated_funs_sha256=hashlib.sha256(s.encode()).hexdigest(),generated_types_sha256=hashlib.sha256(t.encode()).hexdigest(),target_source_sha256=hashlib.sha256(raw.encode()).hexdigest(),selected_declarations=names,type_aliases='The two generated coefficient types are unchanged Array CM31 5 aliases, using pinned R156 CM31/QM31 types.',namespace_binding='Generated field and norm dependencies bind to previously compiled R156/R221 selected declarations. All direct bound bodies must be checked before promotion.',literal_api_adaptations=[dict(source='Std.U32.wrapping_shr self 1#i32',target='Std.U32.wrapping_shr self 1#u32',count_theorem='count_one'),dict(source='Std.U32.wrapping_shl i1 30#i32',target='Std.U32.wrapping_shl i1 30#u32',count_theorem='count_thirty')],scope='No standard-library fold/vector or memory operation is substituted. Raw generated leaf text retained; only these two nonnegative literal API types and wrapper namespace/import binding differ.'),indent=2)+'\n')
+print(hashlib.sha256(raw.encode()).hexdigest())

@@ -1,0 +1,13 @@
+# R239 transitive binding audit follow-up
+
+This augments the preserved first-pass stop record in `README-binding-audit.md` and `binding-audit.json`; it does not rewrite those files. No source changes, Lean runs, or tests were performed.
+
+I read `R161_CURRENT_BASE_ARITHMETIC.md` and `.r21-scratch/r156-evidence-staging/provenance.md`. The provenance explicitly records two promoted `Std.U64.wrapping_shr` arguments changed from generated `31#i32` to `31#u32`; `R161_CURRENT_BASE_ARITHMETIC.md` records that the type correction retained the shift count. The follow-up applies exactly that one normalization, and only to compare `aspis_core.field.M31.mul`: pinned R156 `31#u32` is normalized to original generated R238 `31#i32` once. The two `M31.half` changes remain the separately recorded R239 count adaptations (`1` and `30`) with corresponding count lemmas.
+
+Starting from all seven selected R239 leaves and recursively following every call to an R238-declared project function reaches 26 R238 declarations. The 19 reachable dependency functions that have same-named declarations in pinned R156 `FunsCore.lean` or R221 `NormExecutionRaw.lean` all match after whitespace normalization and the one authorized M31.mul normalization. This includes the R221 `norm`/`polar`/`times_r` chain and the R156 field chain down through raw add/sub, reduce, P and the bounded-product helper. The existing R221 shared-operation audit is retained as supporting evidence for its eight shared field operations.
+
+Seven selected bodies have no same-named declaration in the pinned R156/R221 files: the four new coefficient/line-coefficient methods and the three selected field methods `CM31.mul_m31`, `M31.half`, and `CM31.half`. They are the newly selected R238 bodies themselves, not dependency mismatches; R239-versus-R238 normalized body checks are recorded in `binding-audit.json`, with only the two allowed half count adaptations. No corresponding R156/R221 declaration is asserted for those methods.
+
+Direct project function calls from the seven raw leaves include the selected local field helpers and the imported `CM31.add/sub`, `M31.mul`, `circle_norm.norm`, and `circle_norm.polar`. The exact external operation frontier retained by the raw bodies includes `Array.index_usize`, `Array.make`, U32 shifts and bit operators, `lift`, and `ok`; none were replaced by a custom standard-library implementation. The complete call graph, per-block hashes, source-file hashes, and comparison statuses are in `transitive-binding-audit.json`.
+
+No remaining named declaration-text mismatches were found within the pinned comparison boundary. This is a syntactic binding audit only: it does not assert source-to-model semantic correspondence or close a proof obligation.
