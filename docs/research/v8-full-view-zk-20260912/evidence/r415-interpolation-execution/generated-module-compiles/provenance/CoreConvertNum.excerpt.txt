@@ -1,0 +1,24 @@
+
+def FromU32U8.from (x : U8) : U32 := ⟨ x.bv.setWidth _ ⟩
+def FromU32U16.from (x : U16) : U32 := ⟨ x.bv.setWidth _ ⟩
+def FromU32U32.from (x : U32) : U32 := ⟨ x.bv.setWidth _ ⟩
+
+def FromU64U8.from (x : U8) : U64 := ⟨ x.bv.setWidth _ ⟩
+def FromU64U16.from (x : U16) : U64 := ⟨ x.bv.setWidth _ ⟩
+def FromU64U32.from (x : U32) : U64 := ⟨ x.bv.setWidth _ ⟩
+def FromU64U64.from (x : U64) : U64 := ⟨ x.bv.setWidth _ ⟩
+
+def FromU128U8.from (x : U8) : U128 := ⟨ x.bv.setWidth _ ⟩
+def FromU128U16.from (x : U16) : U128 := ⟨ x.bv.setWidth _ ⟩
+def FromU128U32.from (x : U32) : U128 := ⟨ x.bv.setWidth _ ⟩
+def FromU128U64.from (x : U64) : U128 := ⟨ x.bv.setWidth _ ⟩
+  «from» := fun x => ok (num.FromU64U16.from x)
+}
+
+@[reducible]
+def FromU64U32 : core.convert.From U64 U32 := {
+  «from» := fun x => ok (num.FromU64U32.from x)
+}
+
+@[reducible]
+def FromU64U64 : core.convert.From U64 U64 := {
