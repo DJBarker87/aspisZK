@@ -1,0 +1,28 @@
+let named_binop_name (binop : binop) : string =
+  let add_int_name int_ty =
+    (* Remark: the Lean case is actually not used *)
+    match backend () with
+    | Lean -> int_name int_ty ^ "."
+    | FStar | Coq | HOL4 -> int_name int_ty ^ "_"
+  in
+  match binop with
+  | Div (_, ty) -> add_int_name ty ^ "div"
+  | Rem (_, ty) -> add_int_name ty ^ "rem"
+  | Add (_, ty) -> add_int_name ty ^ "add"
+  | Sub (_, ty) -> add_int_name ty ^ "sub"
+  | Mul (_, ty) -> add_int_name ty ^ "mul"
+  | Lt ty -> add_int_name (PureUtils.literal_as_integer ty) ^ "lt"
+  | Le ty -> add_int_name (PureUtils.literal_as_integer ty) ^ "le"
+  | Ge ty -> add_int_name (PureUtils.literal_as_integer ty) ^ "ge"
+  | Gt ty -> add_int_name (PureUtils.literal_as_integer ty) ^ "gt"
+  | BitXor ty -> add_int_name ty ^ "xor"
+  | BitAnd ty -> add_int_name ty ^ "and"
+  | BitOr ty -> add_int_name ty ^ "or"
+  | Shl (_, ty, _) -> add_int_name ty ^ "shl"
+  | Shr (_, ty, _) -> add_int_name ty ^ "shr"
+  | BoolAnd -> "bool_and"
+  | BoolOr -> "bool_or"
+  | BoolXor -> "bool_xor"
+  | _ -> raise (Failure "Unreachable")
+
+let dyn_constructor () = "Dyn.mk" (* TODO: backends other than Lean *)

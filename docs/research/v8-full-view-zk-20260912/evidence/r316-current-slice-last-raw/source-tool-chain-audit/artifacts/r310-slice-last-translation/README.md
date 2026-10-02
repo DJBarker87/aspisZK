@@ -1,0 +1,11 @@
+# R310 focused translation of the R309 Slice.last projection
+
+R310 ran the authorized focused Aeneas translation of the exact R309 input, retaining Type9, Fun5 (`slice_len_fn`), and Fun12 with ordered declarations Type NonRec9, Fun NonRec5, Fun NonRec12. Input SHA256: `9264aea58bf430b023ed8124bf8737ef6943e97230f08aa7982648f4f7557421`. The pinned R289 translator SHA256 is `3c741510837e33e0debca5798fb46ae81861ec06d5d561b7975b16f5705e42e9`. The actual campaign HEAD at dispatch was `04d7d1b635ddb7c9af2ee3e2df3cdb68ae68bb43`.
+
+The exact invocation and input gates are in `translate-command.json`. It used sequential, abort-on-error, Lean backend, namespace and subdirectory `AspisR310SliceLast`, split files, and JSON manifest. Host preflight had 54,862,552 KiB available RAM and all 8,388,604 KiB swap free; R289's existing slice was capped at 5 GiB high / 7 GiB max / zero swap. R310 used its own systemd service with MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0, TasksMax 128; together with R289 the reserved maxima were 14 GiB.
+
+The translator imported R309 and exited 2 with `Unhandled Len` at `/rustc/library/core/src/slice/mod.rs:282:20-282:24`, compiler source `interp/InterpExpressions.ml:1504`. The complete translator output and GNU time report are in `translate.log`; the systemd/SSH wrapper report is in `launch.log`. GNU time reports 0.20 s wall time, maximum RSS 56,672 KiB, zero swaps, exit 2. The service reports 429 ms runtime, 328 KiB memory peak, zero swap; GNU time gives the translator process RSS.
+
+No generated directory or translation manifest was emitted, so there is no root payload or external-template file to inspect. The empty template-hole arrays mean no template files existed because translation aborted; they do not mean template holes were checked and found absent. No retry, source or AST change, template fill, Lean compile, or source-semantics claim was made. R300's prior `Inconsistent projection` failure remains preserved in its own directory.
+
+`run_translation.py`, `launch.json`, `launch.log`, `translate-command.json`, `translate.log`, resource snapshots, `translation-result.json`, and `result.json` comprise the execution receipt. `SHA256SUMS` covers the receipt and R309 input.

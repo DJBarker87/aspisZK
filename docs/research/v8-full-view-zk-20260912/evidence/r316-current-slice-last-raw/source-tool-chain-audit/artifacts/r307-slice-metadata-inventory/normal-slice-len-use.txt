@@ -1,0 +1,29 @@
+Source: .r21-scratch/r156-full-freeze/generated/AspisR156FullFreeze/Funs.lean
+SHA256: ca32f7628c0e78a9dfe721b4806b212f040911c69d6a2ab69f879b4daca33cca
+
+R156 Funs.lean lines 1040-1052
+ 1040     Visibility: public -/
+ 1041 @[rust_fun
+ 1042   "aspis_core::transcript::{aspis_core::transcript::Transcript}::absorb"]
+ 1043 def aspis_core.transcript.Transcript.absorb
+ 1044   (self : aspis_core.transcript.Transcript) (label : Std.U8)
+ 1045   (data : Slice Std.U8) :
+ 1046   Result aspis_core.transcript.Transcript
+ 1047   := do
+ 1048   let i := Slice.len data
+ 1049   let i1 ←
+ 1050     lift (Std.Usize.wrapping_sub
+ 1051       aspis_core.transcript.Transcript.absorb.PACKED_ABSORB_BYTES 34#usize)
+ 1052   if i <= i1
+
+R156 Funs.lean lines 1498-1507
+ 1498 
+ 1499 /-- [aspis_v8_performance_host::bytes]:
+ 1500     Source: '../relation_callback.rs', lines 71:0-71:131 -/
+ 1501 def bytes
+ 1502   (v : Slice aspis_core.field.QM31) : Result (alloc.vec.Vec Std.U8) := do
+ 1503   let i := Slice.len v
+ 1504   let i1 ← lift (Std.Usize.wrapping_mul i 16#usize)
+ 1505   let b ← alloc.vec.from_elem core.clone.CloneU8 0#u8 i1
+ 1506   let i2 ← core.slice.Slice.iter v
+ 1507   let iter ←

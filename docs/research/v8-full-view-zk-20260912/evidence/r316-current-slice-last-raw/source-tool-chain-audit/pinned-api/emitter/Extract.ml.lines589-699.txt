@@ -1,0 +1,111 @@
+let extract_binop (span : Meta.span) (ctx : extraction_ctx)
+    (extract_expr : inside:bool -> texpr -> unit) (fmt : F.formatter)
+    ~(inside : bool) (binop : binop) (arg0 : texpr) (arg1 : texpr) : unit =
+  if inside then F.pp_print_string fmt "(";
+  (* Some binary operations have a special notation depending on the backend *)
+  (match (backend (), binop) with
+  | HOL4, (Eq _ | Ne _)
+  | (FStar | Coq | Lean), (Eq _ | Lt _ | Le _ | Ne _ | Ge _ | Gt _)
+  | (FStar | Lean), (BoolAnd | BoolOr)
+  | Lean, BoolXor
+  | ( Lean,
+      ( Div (OPanic, _)
+      | Rem (OPanic, _)
+      | Add (OPanic, _)
+      | Sub (OPanic, _)
+      | Mul (OPanic, _)
+      | Shl (OPanic, _, _)
+      | Shr (OPanic, _, _)
+      | BitXor _ | BitOr _ | BitAnd _ ) ) ->
+      let binop_str =
+        match binop with
+        | Eq _ -> "="
+        | Lt _ -> "<"
+        | Le _ -> "<="
+        | Ne _ -> if backend () = Lean then "!=" else "<>"
+        | Ge _ -> ">="
+        | Gt _ -> ">"
+        | Div (OPanic, _) -> "/"
+        | Rem (OPanic, _) -> "%"
+        | Add (OPanic, _) -> "+"
+        | Sub (OPanic, _) -> "-"
+        | Mul (OPanic, _) -> "*"
+        | Shl (OPanic, _, _) -> "<<<"
+        | Shr (OPanic, _, _) -> ">>>"
+        | BitXor _ -> "^^^"
+        | BitOr _ -> "|||"
+        | BitAnd _ -> "&&&"
+        | BoolAnd -> "&&"
+        | BoolOr -> "||"
+        | BoolXor -> "^^"
+        | _ ->
+            [%add_loc] admit_string span
+              ("Unimplemented binary operation: " ^ binop_to_string ctx binop)
+      in
+      let binop_str =
+        match (backend (), binop) with
+        | Coq, _ -> "s" ^ binop_str
+        | _ -> binop_str
+      in
+      extract_expr ~inside:true arg0;
+      F.pp_print_space fmt ();
+      F.pp_print_string fmt binop_str;
+      F.pp_print_space fmt ();
+      extract_expr ~inside:true arg1
+  | ( Lean,
+      ( Add (OWrap, _)
+      | Sub (OWrap, _)
+      | Mul (OWrap, _)
+      | Div (OWrap, _)
+      | Shl (OWrap, _, _)
+      | Shr (OWrap, _, _) ) ) ->
+      let binop =
+        match binop with
+        | Add _ -> "add"
+        | Sub _ -> "sub"
+        | Mul _ -> "mul"
+        | Div _ -> "div"
+        | Shl _ -> "shl"
+        | Shr _ -> "shr"
+        | _ ->
+            [%add_loc] admit_string span "Internal error: please file an issue"
+      in
+      let ty = ty_as_integer span arg0.ty in
+      let binop =
+        "Std."
+        ^ StringUtils.capitalize_first_letter (int_name ty)
+        ^ ".wrapping_" ^ binop
+      in
+      F.pp_print_string fmt binop;
+      F.pp_print_space fmt ();
+      extract_expr ~inside:true arg0;
+      F.pp_print_space fmt ();
+      extract_expr ~inside:true arg1
+  | _ ->
+      let binop_is_shift =
+        match binop with
+        | Shl _ | Shr _ -> true
+        | _ -> false
+      in
+      let binop = named_binop_name binop in
+      F.pp_print_string fmt binop;
+      (* In the case of F*, for shift operations, because machine integers
+         are simply integers with a refinement, if the second argument is a
+         constant we need to provide the second implicit type argument *)
+      if binop_is_shift && backend () = FStar && is_const arg1 then (
+        F.pp_print_space fmt ();
+        let ty = ty_as_integer span arg1.ty in
+        F.pp_print_string fmt
+          ("#" ^ StringUtils.capitalize_first_letter (int_name ty)));
+      F.pp_print_space fmt ();
+      extract_expr ~inside:true arg0;
+      F.pp_print_space fmt ();
+      extract_expr ~inside:true arg1);
+  if inside then F.pp_print_string fmt ")"
+
+(** [inside]: controls the introduction of parentheses. See [extract_ty]
+
+    TODO: replace the formatting boolean [inside] with something more general?
+    Also, it seems we don't really use it... Cases to consider:
+    - right-expression in a let: [let x = re in _] (never parentheses?)
+    - next expression in a let: [let x = _ in next_e] (never parentheses?)

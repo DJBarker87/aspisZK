@@ -1,0 +1,225 @@
+
+### Pinned R289 PrePasses.ml: direct and raw pointer metadata recognition/rewrite (lines 128-210)
+
+  128 let eliminate_metadata_only_slice_raw_pointers (crate : crate) (f : fun_decl) :
+  129     fun_decl =
+  130   let metadata_definition (st : statement) :
+  131       (local_id * metadata_only_slice_raw_pointer) option =
+  132     match st.kind with
+  133     | Assign
+  134         ( {
+  135             kind = PlaceLocal local;
+  136             ty = TRawPtr (TSlice raw_elem_ty, raw_kind);
+  137           },
+  138           RawPtr
+  139             ( { kind = PlaceProjection (reference, Deref); ty = TSlice elem_ty },
+  140               ptr_kind,
+  141               (Copy metadata_place | Move metadata_place) ) )
+  142       when raw_elem_ty = elem_ty && raw_kind = ptr_kind
+  143            && metadata_place.ty = mk_usize_ty -> (
+  144         match (reference.ty, metadata_place.kind) with
+  145         | ( TRef (_, TSlice reference_elem_ty, _),
+  146             PlaceProjection (metadata_reference, PtrMetadata) )
+  147           when reference_elem_ty = elem_ty && metadata_reference = reference
+  148           -> (
+  149             match reference.ty with
+  150             | TRef (_, _, RShared) ->
+  151                 Some
+  152                   (local, { definition = st.statement_id; reference; elem_ty })
+  153             | _ -> None)
+  154         | _ -> None)
+  155     | _ -> None
+  156   in
+  157   (* The generated call deliberately targets Charon's existing slice-length
+  158      language item.  If it is absent or ambiguous we decline the rewrite. *)
+  159   let slice_len_ids =
+  160     FunDeclId.Map.fold
+  161       (fun id (decl : fun_decl) ids ->
+  162         if decl.item_meta.lang_item = Some "slice_len_fn" then id :: ids
+  163         else ids)
+  164       crate.fun_decls []
+  165   in
+  166   match slice_len_ids with
+  167   | [ slice_len_id ] -> (
+  168       let slice_len_call (st : statement) (dest : place) (reference : place)
+  169           (elem_ty : ty) : statement_kind =
+  170         let generics =
+  171           TypesUtils.mk_generic_args [ RErased ] [ elem_ty ] [] []
+  172         in
+  173         let call =
+  174           {
+  175             func =
+  176               FnOpRegular { kind = FunId (FRegular slice_len_id); generics };
+  177             args = [ Copy reference ];
+  178             dest;
+  179           }
+  180         in
+  181         Call (call, { span = st.span; statements = [] })
+  182       in
+  183       (* Some slice patterns lower directly to a metadata read on a shared safe
+  184          slice reference, without an intermediate raw pointer.  This is the
+  185          same length operation and can be rewritten without any use analysis. *)
+  186       let direct_metadata_rewriter =
+  187         object
+  188           inherit [_] map_statement as super
+  189 
+  190           method! visit_statement env st =
+  191             match st.kind with
+  192             | Assign
+  193                 (dest, Use ((Copy metadata_place | Move metadata_place), _retag))
+  194               when dest.ty = mk_usize_ty && metadata_place.ty = mk_usize_ty -> (
+  195                 match metadata_place.kind with
+  196                 | PlaceProjection
+  197                     ( ({ ty = TRef (_, TSlice elem_ty, RShared); _ } as reference),
+  198                       PtrMetadata ) ->
+  199                     { st with kind = slice_len_call st dest reference elem_ty }
+  200                 | _ -> super#visit_statement env st)
+  201             | _ -> super#visit_statement env st
+  202         end
+  203       in
+  204       let f =
+  205         match f.body with
+  206         | StructuredBody body ->
+  207             let body =
+  208               {
+  209                 body with
+  210                 body = direct_metadata_rewriter#visit_block () body.body;
+
+### Pinned R289 PrePasses.ml: raw metadata read classifier (lines 260-278)
+
+  260               reads :=
+  261                 LocalId.Map.update local
+  262                   (fun count -> Some (1 + Option.value ~default:0 count))
+  263                   !reads
+  264             in
+  265             let rec root_local (p : place) : local_id option =
+  266               match p.kind with
+  267               | PlaceLocal local -> Some local
+  268               | PlaceProjection (p, _) -> root_local p
+  269               | PlaceGlobal _ -> None
+  270             in
+  271             let metadata_read (p : place) : local_id option =
+  272               match p.kind with
+  273               | PlaceProjection
+  274                   ( { kind = PlaceLocal local; ty = TRawPtr (TSlice _, _) },
+  275                     PtrMetadata )
+  276                 when p.ty = mk_usize_ty && LocalId.Map.mem local candidates ->
+  277                   Some local
+  278               | _ -> None
+
+### Pinned R289 PrePasses.ml: pass fallbacks (lines 383-388)
+
+  383                 let env = Print.crate_to_fmt_env crate in
+  384                 "After eliminating metadata-only slice raw pointers:\n"
+  385                 ^ Print.fun_decl_to_string env "" " " f];
+  386               f
+  387       | _ -> f)
+  388   | _ -> f
+
+### Pinned R289 PrePasses.ml: pass registration (lines 3534-3554)
+
+ 3534 let apply_passes (crate : crate) : crate =
+ 3535   (* Passes that apply to the whole crate *)
+ 3536   let crate = update_array_default crate in
+ 3537   (* Passes that apply to individual function bodies *)
+ 3538   let function_passes =
+ 3539     [
+ 3540       ("fix_closure_lifetimes", fix_closure_lifetimes);
+ 3541       ("erase_body_regions", erase_body_regions);
+ 3542       ( "eliminate_metadata_only_slice_raw_pointers",
+ 3543         eliminate_metadata_only_slice_raw_pointers );
+ 3544       ("remove_unreachable", remove_unreachable);
+ 3545       ("restore_structured_nested_returns", restore_structured_nested_returns);
+ 3546       ("lower_nested_loop_returns", lower_nested_loop_returns);
+ 3547       ("eliminate_outer_loop_control", eliminate_outer_loop_control);
+ 3548       ("update_loop", update_loops);
+ 3549       ("remove_useless_joins", remove_useless_joins);
+ 3550       ( "remove_shallow_borrows_storage_live_dead",
+ 3551         remove_shallow_borrows_storage_live_dead );
+ 3552       ("decompose_str_borrows", decompose_str_borrows);
+ 3553       ("simplify_panics", simplify_panics);
+ 3554       ("decompose_global_accesses", decompose_global_accesses);
+
+### Pinned R289 SymbolicToPureValues.ml: mprojection PtrMetadata handling (lines 662-670)
+
+  662 let translate_mprojection_elem span (pe : E.projection_elem) :
+  663     mprojection_elem option =
+  664   match pe with
+  665   | Deref -> None
+  666   | Field (pkind, field_id) -> Some { pkind; field_id }
+  667   | ProjIndex _ | Subslice _ -> None
+  668   | PtrMetadata ->
+  669       [%craise_opt_span] span "supported place projection: pointer metadata"
+  670 
+
+### Pinned R289 InterpMatchCtxs.ml: TPtrMetadata type matching (lines 418-423)
+
+  418   | TDynTrait _, TDynTrait _ | TFnDef _, TFnDef _ ->
+  419       [%craise_recover] recover span "Not implemented yet"
+  420   | TPtrMetadata ty0, TPtrMetadata ty1 ->
+  421       let ty = match_rec ty0 ty1 in
+  422       TPtrMetadata ty
+  423   | _ -> match_distinct_types ty0 ty1
+
+### Pinned R289 Builtin.ml: Slice.len builtin signature (lines 194-206)
+
+  194   (** Helper: [fn<T>(&'a [T]) -> usize] *)
+  195   let slice_len_sig : bound_fun_sig =
+  196     let generics =
+  197       mk_generic_params [ region_param_0 ] [ type_param_0 ] [] (* <'a, T> *)
+  198     in
+  199     let inputs =
+  200       [ mk_ref_ty rvar_0 (mk_slice_ty tvar_0) false (* &'a [T] *) ]
+  201     in
+  202     let output =
+  203       mk_usize_ty
+  204       (* usize *)
+  205     in
+  206     mk_sig generics inputs output
+
+### Pinned R289 ExtractBuiltinLean.ml: Rust path to Lean Slice.len mapping (lines 1102-1104)
+
+ 1102     (* file: "Aeneas/Std/Slice.lean", line: 49 *)
+ 1103     mk_fun "core::slice::{[@T]}::len" "Slice.len" ~can_fail:false ~lift:false;
+ 1104     (* file: "Aeneas/Std/Slice.lean", line: 333 *)
+
+### Pinned R289 InterpPaths.ml: generic inconsistent projection failure (lines 231-237)
+
+  231   | _, VBottom, _ -> [%craise] span "Can not apply a projection to the ⊥ value"
+  232   | pe, ((VLiteral _ | VAdt _ | VBorrow _) as v), ty -> begin
+  233       let pe = "- pe: " ^ show_projection_elem pe in
+  234       let v = "- v:\n" ^ show_value v in
+  235       let ty = "- ty:\n" ^ show_ety ty in
+  236       [%craise] span ("Inconsistent projection:\n" ^ pe ^ "\n" ^ v ^ "\n" ^ ty)
+  237     end
+
+### Aeneas standard Slice.lean: Slice.len Lean implementation (lines 49-55)
+
+   49 @[rust_fun "core::slice::{[@T]}::len" -canFail -lift]
+   50 abbrev Slice.len {α : Type u} (v : Slice α) : Usize :=
+   51   Usize.ofNatCore v.val.length (by scalar_tac)
+   52 
+   53 @[simp, scalar_tac_simps]
+   54 theorem Slice.len_val {α : Type u} (v : Slice α) : (Slice.len v).val = v.length :=
+   55   by simp
+
+### R300 translation failure log exact selected lines
+
+    1 [[92mInfo[39m ] Imported: /home/dombarker/project-offloads/aspis-r300-slice-last-translation-20261002-a/R299SliceLastProjection.llbc
+    2 [[91mError[39m] Inconsistent projection:
+    3 - pe: Generated_Expressions.PtrMetadata
+    5 (Values.VBorrow (Values.VSharedBorrow (0, 0)))
+    7 (Generated_Types.TRef (Generated_Types.RErased,
+   10 Source: '/rustc/library/core/src/slice/mod.rs', lines 282:15-282:25
+   11 Compiler source: interp/InterpPaths.ml, line 236
+   16     "Inconsistent projection:\
+   17    \n- pe: Generated_Expressions.PtrMetadata\
+   19    \n(Values.VBorrow (Values.VSharedBorrow (0, 0)))\
+   21    \n(Generated_Types.TRef (Generated_Types.RErased,\
+   24    \nSource: '/rustc/library/core/src/slice/mod.rs', lines 282:15-282:25\
+   25    \nCompiler source: interp/InterpPaths.ml, line 236")
+   50 Command exited with non-zero status 2
+   55 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.16
+   60 	Maximum resident set size (kbytes): 53152
+   66 	Swaps: 0
+   73 	Exit status: 2

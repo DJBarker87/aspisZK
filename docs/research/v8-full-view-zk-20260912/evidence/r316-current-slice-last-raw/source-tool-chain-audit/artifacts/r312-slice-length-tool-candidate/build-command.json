@@ -1,0 +1,36 @@
+{
+  "docker_argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r312-slice-length-candidate-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr312.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r312-slice-length-candidate-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v env AENEAS_VERSION=aspis-r312-slice-length-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r312-slice-length-candidate; chmod 755 /work/aeneas-r312-slice-length-candidate"
+  ],
+  "inner_build_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v env AENEAS_VERSION=aspis-r312-slice-length-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r312-slice-length-candidate; chmod 755 /work/aeneas-r312-slice-length-candidate",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "profile": "dune build main.exe --profile release -j 1",
+  "optimization": "Dune release profile; static native link via OCAMLPARAM=_,ccopt=-static",
+  "parallelism": {
+    "OPAMJOBS": 1,
+    "DUNEJOBS": 1,
+    "dune_jobs": 1
+  },
+  "expected_work": "cached compilation of the changed PrePasses.ml module plus native relink; no cold dependency build or proof generation",
+  "source_revision_recorded": "78d28cdea0f1ac2fd332f92026071c654b9b3a52",
+  "parent_binary_sha256": "3c741510837e33e0debca5798fb46ae81861ec06d5d561b7975b16f5705e42e9",
+  "parent_PrePasses_sha256": "eb060cdec736ea1f5d222c42160d5f50ad20bd651c8f7c08baf56896c1835e68",
+  "patched_PrePasses_sha256": "09014aa93bffd2cafeebaf23d27a301d66986d9349f4cc9dca6e8d1dfe0ba7dd",
+  "llbc_for_later_translation_sha256": "9264aea58bf430b023ed8124bf8737ef6943e97230f08aa7982648f4f7557421"
+}

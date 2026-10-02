@@ -1,0 +1,34 @@
+--- a/PrePasses.ml (R289 parent)
++++ b/PrePasses.ml (R312 candidate)
+@@ -180,15 +180,28 @@
+         in
+         Call (call, { span = st.span; statements = [] })
+       in
+-      (* Some slice patterns lower directly to a metadata read on a shared safe
+-         slice reference, without an intermediate raw pointer.  This is the
+-         same length operation and can be rewritten without any use analysis. *)
++      (* A safe shared-slice length operation can be represented either as a
++         direct metadata read or as Len of a dereferenced shared slice. Both
++         lower to the existing slice_len_fn call, preserving the statement span. *)
+       let direct_metadata_rewriter =
+         object
+           inherit [_] map_statement as super
+ 
+           method! visit_statement env st =
+             match st.kind with
++            | Assign
++                ( dest,
++                  Len
++                    ( { kind = PlaceProjection (reference, Deref);
++                        ty = TSlice elem_ty },
++                      TSlice len_elem_ty,
++                      None ) )
++              when dest.ty = mk_usize_ty && elem_ty = len_elem_ty -> (
++                match reference.ty with
++                | TRef (_, TSlice reference_elem_ty, RShared)
++                  when reference_elem_ty = elem_ty ->
++                    { st with kind = slice_len_call st dest reference elem_ty }
++                | _ -> super#visit_statement env st)
+             | Assign
+                 (dest, Use ((Copy metadata_place | Move metadata_place), _retag))
+               when dest.ty = mk_usize_ty && metadata_place.ty = mk_usize_ty -> (

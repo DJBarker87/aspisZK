@@ -1,0 +1,11 @@
+{
+  "source_revision": "b268da1cb6878d9b1ab6c2cab79b0592d04dd0ca",
+  "exact_source_rows": "R294\u2192R309 retains complete Type9/Fun5/Fun12 rows; restoration of Fun5 is an implicit existing prepass dependency, not a body edit. Earlier failed projection and Len translation are preserved.",
+  "tool_patch": "R312 matches only safe shared slice Len of the same element type with usize destination and lowers through the existing unique slice_len_fn; all other expressions follow existing traversal. Tool/compiler correctness is not claimed.",
+  "subtraction": "Fun12 Sub:UB emits Usize.sub through Extract.ml/ExtractBase.ml. The explicit UScalar.sub identifier adapter uses checked unsigned subtraction. These modes are not asserted equivalent on arbitrary words. R317 proves from the original guard that subtraction cannot underflow and the index is in bounds for every valid Slice, so this checked failure cannot alter that body execution on its valid domain.",
+  "proved": "R316 elaboration; R317 universal Slice result under retained primitive/library extraction model; R318 exact four prefix declarations elaborate.",
+  "not_proved": "Independent Rust compiler/primitive correspondence, complete prefix loops, complete batch caller, fold/extend, callback chronology, universal joint privacy, probability and soundness.",
+  "metrics": "Lean GNU-time child RSS retained; tiny systemd wrapper peaks are not aggregate Lean RSS. R312 container build GNU-time and cgroup peaks are separately recorded; Docker CLI RSS is not aggregate build RSS.",
+  "historical_metadata": "Earlier staging compiled=false statuses in copied archival tools are historical. Final success logs/manifests and R317 theorem are authoritative. R318 pre-wrapper source/audit/checksums preserved together; final wrapper/binding hash updated without changing any declaration body.",
+  "rechecks": "Saved artifacts inspected; no unchanged Lean or runtime checks rerun."
+}
