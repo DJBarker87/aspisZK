@@ -1,0 +1,11 @@
+# R417: bounded Q22 success law
+
+`uniform_success` proves that, for every result observer which is zero on every error, its expectation under the exact bounded independent-answer candidate kernel equals the actual success mass multiplied by its uniform mean over legal ordered 22-tuples. Error mass remains in the kernel; the equality concerns these error-vanishing observers. The accompanying lemmas establish finite-sum linearity, expand the kernel over the legal-result support, and identify equal atom mass across legal queries. This is an unconditional algebraic law for the stated candidate kernel; the theorem uses an explicit representative legal query to provide the nonempty finite type.
+
+The green source is byte-identical to the saved compiler input (SHA-256 `39bc20001fd5d502adc68c2d3626a9a4be6ac84e6c0e12e36d4bf051f2b8d8b6`). The focused target was `AspisV8R19/R417Q22SuccessLaw.lean`, exit status 0, wall time 1.61 s, peak Lean-child RSS 3,244,316 KiB, swap 0, source revision `c145fb14be60e3b2553713927228ac62876dbab2`. It ran with `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, `TasksMax=128`, and flags `-j1 -M4500`; GNU time's Lean-child RSS is distinct from the wrapper-reported memory peak.
+
+All eight complete axiom reports match the saved successful log and receipt. Each uses only `propext`, `Classical.choice`, and `Quot.sound`. The earlier failed draft is preserved as rejected history; its `kernel_congr_valid` and dependent theorems contain `sorryAx` only in the failed-run reports and are not accepted proof evidence. The source directly imports R411 and R412 at the exact saved source hashes included in this bundle.
+
+The next open bridge is the actual shared-oracle/source-prefix first-read-origin relation and explicit loss accounting, followed by the remaining causal composition. This theorem does not establish actual source callback behavior, conditional publication, shared-oracle chronology, or security.
+
+The failed attempt also reached the constructor-name linter recursion limit while traversing the finite-sum theorem. The final source disables only `linter.constructorNameAsVariable` locally around `kernel_expansion`; proof heartbeats, proof recursion limits, and resource caps were not raised. The failed proof draft and full log remain preserved.
