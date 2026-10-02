@@ -91,7 +91,7 @@ for run in inv["runs"]:
 success = next(r for r in inv["runs"] if r["id"] == inv["successful_run_id"])
 require(success["exit_status"] == 0 and success["swaps"] == 0, "green status/swap")
 require(inv["boundary"] and inv["no_rebuild"] is True, "scope and no-rebuild record")
-note = HERE.parents[2] / inv["publication_note"]
+note = HERE.parents[1] / inv["publication_note"]
 require(note.is_file() and sha(note) == inv["publication_note_sha256"], "publication note hash")
 
 # The root checksum file is deliberately not self-listed.
