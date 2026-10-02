@@ -1,0 +1,13 @@
+# R357 — exact source zero-predicate declarations
+
+`AspisR357BatchZeroPredicateRaw.lean` compiled successfully. Compiles six literal frozen R292 declarations: Unit closure type, source B PartialEq comparison, mutable and consuming callbacks, and both FnOnce/FnMut implementation values. There are no operation replacements; source callback state is retained. This is raw executable compilation, not iterator/any/guard execution or independent source-library/compiler correspondence.
+
+Compile revision `4dc195a7537d01ddb2ffd139c2a1d79fd836a847`; exit 0; wall 0:01.00; child peak RSS 2531080 KiB; swaps 0. The closure type and scalar equality declaration have no axioms; the remaining four complete reports contain only propext, Classical.choice and Quot.sound. No sorryAx, native or new execution assumption. Pinned Lean 4.32, `-j1 -M4500`, 5/7 GiB zero-swap scope. Complete evidence is in [the manifest](evidence/r357-current-batch-zero-predicate-raw/manifest.json).
+
+First remaining proposition: Prove exact predicate execution on all raw words and canonical encoded field values, preserving closure state; then bind source chain/any traversal and the original Domain failures to the full selected batch. Full callback privacy and soundness remain open.
+
+Full callback chronology, joint privacy and soundness remain open. Verifier source, security parameters and 999,790 / 999,532 CU results remain preserved. No benchmarks or unchanged regression suites reran.
+
+The evidence bundle includes the exact compile receipt and snapshot, the complete pre-compile raw-staging bundle, and direct imported source copies/hashes. It preserves all six selected R292 declaration blocks as byte-exact excerpts (the `B` equality implementation, closure callbacks and trait implementation values); the wrappers only provide the named imports and namespace. The historical staging README says “uncompiled” because it predates the successful compile; it is retained as staging history. The compiled Lean file closes its namespace at end-of-file, which Lean accepts; that source is preserved unchanged and was not cosmetically edited or recompiled.
+
+The direct local import hashes are recorded in the compile receipt and `release-provenance.json`. `source-block-audit.json` checks the selected source lines and block hashes, exact block order, and name bindings. `formatting-preservation.json` records raw CR/whitespace findings without normalizing files, and `local-import-graph.json` inventories the present local source dependency graph and cycle check. `audit_saved_evidence.py` performs a read-only copy/hash/axiom/ancestry audit using saved source copies; it does not compile or rerun the builder.
