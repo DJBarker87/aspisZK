@@ -1,0 +1,12 @@
+2486:     fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R
+2487:     where
+2488:         Self: Sized,
+2489:         F: [const] FnMut(B, Self::Item) -> R + [const] Destruct,
+2490:         R: [const] Try<Output = B>,
+2491:     {
+2492:         let mut accum = init;
+2493:         while let Some(x) = self.next() {
+2494:             accum = f(accum, x)?;
+2495:         }
+2496:         try { accum }
+2497:     }

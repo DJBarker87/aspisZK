@@ -1,0 +1,9 @@
+61: fn batch(xs:&[B],ys:&[B])->Result<(Vec<B>,Vec<B>),Error>{
+62:     if xs.is_empty()||ys.is_empty()||xs.iter().chain(ys).any(|x|*x==B::ZERO){return Err(Error::Domain);}
+63:     let mut px=Vec::with_capacity(xs.len());px.push(xs[0]);for x in &xs[1..]{px.push(px.last().unwrap().mul(*x));}
+64:     let mut py=Vec::with_capacity(ys.len());py.push(ys[0]);for y in &ys[1..]{py.push(py.last().unwrap().mul(*y));}
+65:     let p=*px.last().unwrap();let q=*py.last().unwrap();let total=p.mul(q).inv();let mut ix=total.mul(q);let mut iy=total.mul(p);
+66:     let mut ox=vec![B::ZERO;xs.len()];for i in (1..xs.len()).rev(){ox[i]=px[i-1].mul(ix);ix=ix.mul(xs[i]);}ox[0]=ix;
+67:     let mut oy=vec![B::ZERO;ys.len()];for i in (1..ys.len()).rev(){oy[i]=py[i-1].mul(iy);iy=iy.mul(ys[i]);}oy[0]=iy;
+68:     Ok((ox,oy))
+69: }

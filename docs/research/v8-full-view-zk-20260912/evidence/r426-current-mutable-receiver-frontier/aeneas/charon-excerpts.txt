@@ -1,0 +1,264 @@
+### Charon rust operand copy/move translation
+   897	    /// Translate an operand
+   898	    fn translate_operand(
+   899	        &mut self,
+   900	        span: Span,
+   901	        operand: &mir::Operand<'tcx>,
+   902	    ) -> Result<Operand, Error> {
+   903	        Ok(match operand {
+   904	            mir::Operand::Copy(place) => {
+   905	                let p = self.translate_place(span, place)?;
+   906	                Operand::Copy(p)
+   907	            }
+   908	            mir::Operand::Move(place) => {
+   909	                let p = self.translate_place(span, place)?;
+   910	                Operand::Move(p)
+   911	            }
+   912	            mir::Operand::Constant(const_op) => {
+   913	                let const_op = self.catch_sinto(span, &const_op)?;
+   914	                match &const_op.kind {
+   915	                    hax::ConstOperandKind::Value(constant) => {
+   916	                        let constant = self.translate_constant_expr(span, constant)?;
+   917	                        Operand::Const(Box::new(constant))
+   918	                    }
+   919	                    hax::ConstOperandKind::Promoted(item) => {
+   920	                        // A promoted constant that could not be evaluated.
+   921	                        let global_ref = self.translate_global_decl_ref(span, item)?;
+   922	                        let constant = ConstantExpr {
+   923	                            kind: ConstantExprKind::Global(global_ref),
+   924	                            ty: self.translate_ty(span, &const_op.ty)?,
+   925	                        };
+   926	                        Operand::Const(Box::new(constant))
+   927	                    }
+   928	                }
+   929	            }
+   930	            mir::Operand::RuntimeChecks(check) => {
+### Charon rust PtrMetadata lowering
+  1082	            mir::Rvalue::UnaryOp(unop, operand) => {
+  1083	                let operand = self.translate_operand(span, operand)?;
+  1084	                let unop = match unop {
+  1085	                    mir::UnOp::Not => UnOp::Not,
+  1086	                    mir::UnOp::Neg => UnOp::Neg(OverflowMode::Wrap),
+  1087	                    mir::UnOp::PtrMetadata => match operand {
+  1088	                        Operand::Copy(p) | Operand::Move(p) => {
+  1089	                            return Ok(Rvalue::Use(
+  1090	                                Operand::Copy(
+  1091	                                    p.project(ProjectionElem::PtrMetadata, tgt_ty.clone()),
+  1092	                                ),
+  1093	                                WithRetag::No,
+  1094	                            ));
+  1095	                        }
+  1096	                        Operand::Const(_) => {
+  1097	                            panic!("unexpected metadata operand")
+  1098	                        }
+  1099	                    },
+  1100	                };
+  1101	                Ok(Rvalue::UnaryOp(unop, operand))
+### Charon reconstruct-fallible array/slice pattern (no mutable-reborrow transform)
+   200	        // Sometimes that instead looks like:
+   201	        //   a := &raw const *z
+   202	        //   l := use(copy a.metadata)
+   203	        //   b := copy x < copy l
+   204	        //   assert(move b == true)
+   205	        [
+   206	            Statement {
+   207	                kind:
+   208	                    StatementKind::Assign(
+   209	                        reborrow,
+   210	                        Rvalue::RawPtr {
+   211	                            kind: RefKind::Shared,
+   212	                            ..
+   213	                        },
+   214	                    ),
+   215	                ..
+   216	            },
+   217	            Statement {
+   218	                kind: StatementKind::Assign(len, Rvalue::Use(Operand::Copy(len_op), _)),
+   219	                ..
+   220	            },
+   221	            Statement {
+   222	                kind:
+   223	                    StatementKind::Assign(
+   224	                        is_in_bounds,
+   225	                        Rvalue::BinaryOp(BinOp::Lt, _, Operand::Copy(lt_op2)),
+   226	                    ),
+   227	                ..
+   228	            },
+   229	            Statement {
+   230	                kind:
+   231	                    StatementKind::Assert {
+   232	                        assert:
+   233	                            Assert {
+   234	                                cond: Operand::Move(cond),
+   235	                                expected: true,
+   236	                                check_kind: Some(BuiltinAssertKind::BoundsCheck { .. }),
+   237	                            },
+   238	                        ..
+   239	                    },
+   240	                ..
+   241	            },
+   242	            rest @ ..,
+   243	        ] if lt_op2 == len
+   244	            && cond == is_in_bounds
+   245	            && let Some((slice_place, ProjectionElem::PtrMetadata)) = len_op.as_projection()
+   246	            && reborrow == slice_place =>
+   247	        {
+   248	            rest
+   249	        }
+   250	
+### Charon transform driver body-pass order behavior
+   283	impl TransformCtx {
+   284	    pub fn run_pass(&mut self, mut pass: Pass) {
+   285	        match &mut pass {
+   286	            Pass::NonBody(pass) => {
+   287	                if pass.should_run(&self.options) {
+   288	                    trace!("# Starting pass {}", pass.name());
+   289	                    pass.transform_ctx(self)
+   290	                }
+   291	            }
+   292	            Pass::FusedUnstructuredBody(passes) => {
+   293	                // Some passes carry function bodies, which must also be transformed. This applies
+   294	                // all the passes before pass `p` to the bodies potentially carried by pass `p`.
+   295	                for i in 0..passes.len() {
+   296	                    if let (first_passes, [pass, ..]) = passes.split_at_mut(i)
+   297	                        && let CowBox::Owned(pass) = pass
+   298	                    {
+   299	                        pass.apply_preceding_passes(self, first_passes);
+   300	                    }
+   301	                }
+   302	                self.for_each_item_mut(|ctx, mut item| {
+   303	                    for pass in passes.iter() {
+   304	                        if pass.should_run(&ctx.options) {
+   305	                            trace!("# Starting pass {}", pass.name());
+   306	                            pass.transform_item(ctx, item.reborrow());
+   307	                        }
+   308	                    }
+   309	                });
+   310	                for pass in passes.iter() {
+   311	                    pass.finalize(self);
+   312	                }
+   313	            }
+   314	            Pass::FusedStructuredBody(passes) => {
+   315	                self.for_each_fun_decl(|ctx, decl| {
+   316	                    for pass in passes.iter() {
+   317	                        if pass.should_run(&ctx.options) {
+   318	                            trace!("# Starting pass {}", pass.name());
+   319	                            pass.transform_function(ctx, decl);
+   320	                        }
+   321	                    }
+   322	                });
+   323	            }
+   324	        };
+### symbol search
+charon/src/bin/charon-driver/translate/translate_closures.rs:451:                    args: vec![Operand::Move(reborrow), Operand::Move(args)],
+### Charon call argument lowering
+  1495	    /// Translate a function call statement.
+  1496	    /// Note that `body` is the body of the function being translated, not of the
+  1497	    /// function referenced in the function call: we need it in order to translate
+  1498	    /// the blocks we go to after the function call returns.
+  1499	    #[allow(clippy::too_many_arguments)]
+  1500	    fn translate_function_call(
+  1501	        &mut self,
+  1502	        span: Span,
+  1503	        func: &mir::Operand<'tcx>,
+  1504	        args: &[hax::Spanned<mir::Operand<'tcx>>],
+  1505	        destination: &mir::Place<'tcx>,
+  1506	        target: &Option<mir::BasicBlock>,
+  1507	        unwind: &mir::UnwindAction,
+  1508	    ) -> Result<TerminatorKind, Error> {
+  1509	        let tcx = self.tcx;
+  1510	        let op_ty = func.ty(self.local_decls, tcx);
+  1511	        // There are two cases, depending on whether this is a "regular"
+  1512	        // call to a top-level function identified by its id, or if we
+  1513	        // are using a local function pointer (i.e., the operand is a "move").
+  1514	        let lval = self.translate_place(span, destination)?;
+  1515	        let on_unwind = self.translate_unwind_action(span, unwind);
+  1516	        // Translate the function operand.
+  1517	        let fn_operand = match op_ty.kind() {
+  1518	            ty::TyKind::FnDef(def_id, generics) => {
+  1519	                // The type of the value is one of the singleton types that corresponds to each function,
+  1520	                // which is enough information.
+  1521	                let item = &hax::translate_item_ref(&self.hax_state, *def_id, generics);
+  1522	                trace!("func: {:?}", item.def_id);
+  1523	                let fun_def = self.hax_def(item)?;
+  1524	                let item_src =
+  1525	                    TransItemSource::from_item(item, TransItemSourceKind::Fun, self.monomorphize());
+  1526	                let name = self.t_ctx.translate_name(&item_src)?;
+  1527	                let panic_lang_items = &["panic", "panic_fmt", "begin_panic"];
+  1528	                let panic_names = &[&["core", "panicking", "assert_failed"], EXPLICIT_PANIC_NAME];
+  1529	
+  1530	                if fun_def
+  1531	                    .lang_item
+  1532	                    .as_ref()
+  1533	                    .is_some_and(|lang_it| panic_lang_items.iter().contains(&lang_it.as_str()))
+  1534	                    || panic_names.iter().any(|panic| name.equals_ref_name(panic))
+  1535	                {
+  1536	                    // If the call is `panic!`, then the target is `None`.
+  1537	                    // I don't know in which other cases it can be `None`.
+  1538	                    assert!(target.is_none());
+  1539	                    // We ignore the arguments
+  1540	                    // TODO: shouldn't we do something with the unwind edge?
+  1541	                    return Ok(TerminatorKind::Abort(AbortKind::Panic(Some(name))));
+  1542	                } else {
+  1543	                    let fn_ptr = self.translate_fn_ptr(span, item, TransItemSourceKind::Fun)?;
+  1544	                    FnOperand::Regular(fn_ptr)
+  1545	                }
+  1546	            }
+  1547	            _ => {
+  1548	                // Call to a function pointer.
+  1549	                let op = self.translate_operand(span, func)?;
+  1550	                FnOperand::Dynamic(op)
+  1551	            }
+  1552	        };
+  1553	        let args = self.translate_arguments(span, args)?;
+  1554	        let call = Call {
+  1555	            func: fn_operand,
+  1556	            args,
+  1557	            dest: lval,
+  1558	        };
+  1670	    /// Evaluate function arguments in a context, and return the list of computed
+  1671	    /// values.
+  1672	    fn translate_arguments(
+  1673	        &mut self,
+  1674	        span: Span,
+  1675	        args: &[hax::Spanned<mir::Operand<'tcx>>],
+  1676	    ) -> Result<Vec<Operand>, Error> {
+  1677	        let mut t_args: Vec<Operand> = Vec::new();
+  1678	        for arg in args.iter().map(|x| &x.node) {
+  1679	            // Translate
+  1680	            let op = self.translate_operand(span, arg)?;
+  1681	            t_args.push(op);
+  1682	        }
+  1683	        Ok(t_args)
+  1684	    }
+  1685	}
+### Charon WithRetag model docs
+   747	/// Used for [`Rvalue::Use`] to indicate whether the operand should be retagged (this is used
+   748	/// for Rust's aliasing model).
+   749	#[derive(Debug, Hash, PartialEq, Eq, Clone, SerializeState, DeserializeState, Drive, DriveMut)]
+   750	#[cfg_attr(feature = "charon_on_charon", charon::variants_suffix("Retag"))]
+   751	pub enum WithRetag {
+   752	    No,
+   753	    Yes,
+   754	}
+   755	
+### Charon Call argument record
+   485	/// A function operand is used in function calls.
+   486	/// It either designates a top-level function, or a place in case
+   487	/// we are using function pointers stored in local variables.
+   488	#[derive(Debug, PartialEq, Eq, Clone, SerializeState, DeserializeState, Drive, DriveMut)]
+   489	#[cfg_attr(feature = "charon_on_charon", charon::variants_prefix("FnOp"))]
+   490	pub enum FnOperand {
+   491	    /// Regular case: call to a top-level function, trait method, etc.
+   492	    Regular(FnPtr),
+   493	    /// Use of a function pointer.
+   494	    Dynamic(Operand),
+   495	}
+   496	
+   497	#[derive(Debug, PartialEq, Eq, Clone, SerializeState, DeserializeState, Drive, DriveMut)]
+   498	pub struct Call {
+   499	    pub func: FnOperand,
+   500	    pub args: Vec<Operand>,
+   501	    pub dest: Place,
+   502	}
+   503	

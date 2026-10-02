@@ -1,0 +1,45 @@
+{
+  "classification": "read-only pinned source and existing-output inventory; no extraction, compilation, or source edit",
+  "result": "No existing Charon CLI or logging mechanism was found that prints a selected nonlocal rustc MIR body with WithRetag before operand translation.",
+  "pinned_charon": {
+    "repository": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon",
+    "revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "binary": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+    "binary_sha256": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+    "binary_bytes": 296187640,
+    "tracked_source_worktree": "clean for the inspected pinned source files"
+  },
+  "cli_prints": {
+    "print_original_ullbc": "ULLBC immediately after Charon translates from MIR",
+    "print_ullbc": "ULLBC after micro-passes / before control-flow reconstruction, or final ULLBC when requested",
+    "print_built_llbc": "LLBC after control-flow reconstruction",
+    "print_llbc": "final cleaned LLBC",
+    "raw_rustc_mir_printer": null
+  },
+  "query_and_translation": {
+    "nonlocal_query": "get_mir_for_def_id_and_level uses tcx.optimized_mir for an available nonlocal function; requested --mir level selects local crate MIR only",
+    "earliest_existing_printer": "PrintCtxPass at transform/mod.rs:85-89, after MIR-to-ULLBC conversion",
+    "minimal_observation_hook_location": "translate_bodies.rs:149-157, in Some(body) after get_mir returns and before translate_body consumes the rustc mir::Body",
+    "tracing": "get_mir_for_def_id_and_level is tracing::instrument(skip(tcx)); this does not print the MIR body",
+    "rustc_args": "Forwarded to selected crate rustc invocation. No evidence that -Zdump-mir or -Zunpretty=mir dumps the encoded nonlocal default-sysroot body fetched via optimized_mir. Neither flag was tried."
+  },
+  "observed_earliest_ullbc": {
+    "capture": "R426 --print-original-ullbc",
+    "function": "core::iter::traits::iterator::Iterator::try_fold",
+    "line_in_saved_stdout": 2498,
+    "call": "_5 = TraitClause0::next<'4>(copy self)",
+    "interpretation_limit": "The receiver is represented as copy self in ULLBC. This is post-MIR-translation and carries no rustc WithRetag metadata, so it does not establish the source MIR operand form."
+  },
+  "artifacts": {
+    "charon_source_excerpt": "charon-cli-mir-excerpts.txt",
+    "r426_stdout_copy": "R426-original-ullbc.stdout",
+    "r426_stdout_sha256": "203ba64981a75e9348e96bdf2920f1905f42c6d756de3c644e60006a440ab412",
+    "r426_serialized_llbc_sha256": "ed43306eac05443a2f4f91121ba8e943a000a66b0d7273eabc40735c64c6f15d",
+    "original_extract_command": "../extract-command.json"
+  },
+  "nonclaims": [
+    "No raw rustc MIR body was emitted or inspected.",
+    "No MIR predecessor or WithRetag value is attributed to the LLBC copy.",
+    "No compiler hook, CLI option, extraction retry, sysroot rebuild, or semantic repair is authorized by this inventory."
+  ]
+}

@@ -1,0 +1,13 @@
+# R426 selected-root call inventory
+
+This read-only inventory pairs the R396 extraction's `verified_source_hashes` with the immutable R117 source snapshots already retained in the repository, then records the relevant function-call AST paths in R396 and R327. No extraction, compilation, translation, test, or proof was run.
+
+The selected root path is `crate::circle_norm::joined_inverse::line_norm::r110_norm::batch`. The copied `circle_norm.rs` blob is selected by the R396 recorded hash from the R117 immutable content store. The `joined_inverse.rs`, `line_norm.rs`, and `r110_norm.rs` copies from the R230 selected-inverse-route archive each match their R396 recorded source hash. The module edges are visible in the source excerpts: `circle_norm` includes `joined_inverse`, which includes `line_norm`, which includes `r110_norm`.
+
+At the selected root's source span `r110_norm.rs:62`, the call expression is `xs.iter().chain(ys).any(...)`. In R396's non-monomorphized AST, function 0 calls default Iterator `chain` function 3 and `any` function 4. In `any` function 4, statement 4192 is an unresolved trait call to Iterator method slot 36, named `try_fold`; the default source body is function 58. R396 also contains Chain `try_fold` function 120, but the trait call in its generic body is not itself represented as a selected concrete dispatch at this stage.
+
+The separately saved R327 AST is monomorphized from the same source hashes. Its recorded regular-call edges give this path: batch Fun 0 calls `Iterator::chain` Fun 3 and `Iterator::any` Fun 4; Fun 4 calls instantiated Chain `try_fold` Fun 24; Fun 24 calls the instantiated generic `Iterator::try_fold` bodies Fun 36 and Fun 38 (the two chain components); those functions call the selected slice iterator `next` function Fun 10. The exact statement IDs and spans are in `root-calls.json`. This is an AST callgraph record only, not a source-semantic theorem.
+
+The R396 command explicitly includes more methods than this path needs. Its body census contains Chain `next` Fun 114 and SliceIter `any` Fun 106, while neither appears as a function node in R327's selected instantiated function set; conversely Iterator `chain`, Iterator `any`, Chain `try_fold`, both Iterator `try_fold` instances, and Slice `last` do appear. These are artifact table/census observations, not claims that omitted methods are semantically irrelevant.
+
+`selected-source/` contains the four byte-exact selected source files. The line-numbered `.excerpt.txt` files are focused views. `root-calls.json` includes both LLBC hashes and the path-to-source hashes; the sibling `SHA256SUMS` authenticates this inventory's own files. This evidence does not resolve receiver borrow/Retag ancestry or claim source execution correspondence.

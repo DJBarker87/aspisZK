@@ -1,0 +1,9 @@
+# R426 versus R396 original-ULLBC comparison
+
+This is a read-only decoded-JSON comparison of the saved R426 `--print-original-ullbc` run with its R396 baseline. The original R426 runner comparison failure is preserved at [`history/runner-result-comparison-failure.json`](history/runner-result-comparison-failure.json); Charon itself exited 0, and the runner’s strict raw-array comparison returned false.
+
+The independent comparator finds 336 raw leaf differences: the two specifically asserted operational options (`translated.options.dest_file` and `translated.options.print_original_ullbc`) and row-order differences in `translated.short_names`. The latter has 347 unique keys in each file and identical key/value mappings; 167 row positions differ, first at 178 and last at 346. Every other decoded field is exactly equal, including all lists in their original order. No hash-cons identifiers or AST lists are stripped, sorted, or normalized.
+
+The source copies and hashes in [`pinned-source-manifest.json`](pinned-source-manifest.json) document the pinned Charon field and serializer: `short_names` is a `SeqHashMap` (`IndexMap`) serialized as key/value rows, accessed by key, and populated by iteration over a standard `HashMap`. This supports comparing this one field as a unique keyed map for this audit. It is not a general list-order rule or a source-semantics theorem.
+
+Run the checker against archived or copied inputs with: `python3 compare_r426_r396.py --old PATH_TO_R396.llbc --new PATH_TO_R426.llbc --out OUTPUT_DIR`. It pins both input SHA-256 values and all four source-copy hashes, asserts the exact before/after option values, checks unique and equal keyed entries, and requires exact equality everywhere else. Its defaults refer to the original scratch inputs. The report preserves all raw leaf changes in `raw-leaf-diffs.json`.

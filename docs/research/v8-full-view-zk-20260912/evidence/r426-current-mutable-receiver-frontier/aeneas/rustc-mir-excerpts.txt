@@ -1,0 +1,192 @@
+### rustc CopyForDeref and no-retag lowering
+     1	//! This pass converts all `DerefTemp` locals into normal temporaries
+     2	//! and turns their `CopyForDeref` rvalues into normal copies.
+     3	
+     4	use rustc_middle::mir::visit::MutVisitor;
+     5	use rustc_middle::mir::*;
+     6	use rustc_middle::ty::TyCtxt;
+     7	
+     8	struct EraseDerefTempsVisitor<'tcx> {
+     9	    tcx: TyCtxt<'tcx>,
+    10	}
+    11	
+    12	impl<'tcx> MutVisitor<'tcx> for EraseDerefTempsVisitor<'tcx> {
+    13	    fn tcx(&self) -> TyCtxt<'tcx> {
+    14	        self.tcx
+    15	    }
+    16	
+    17	    fn visit_rvalue(&mut self, rvalue: &mut Rvalue<'tcx>, _: Location) {
+    18	        if let &mut Rvalue::CopyForDeref(place) = rvalue {
+    19	            // We do *NOT* want a retag here! This assignment might copy a mutable reference we
+    20	            // can't actually copy, we just need it temporarily to create another pointer.
+    21	            *rvalue = Rvalue::Use(Operand::Copy(place), WithRetag::No)
+    22	        }
+    23	    }
+    24	
+    25	    fn visit_local_decl(&mut self, _: Local, local_decl: &mut LocalDecl<'tcx>) {
+    26	        if local_decl.is_deref_temp() {
+    27	            let info = local_decl.local_info.as_mut().unwrap_crate_local();
+    28	            **info = LocalInfo::Boring;
+    29	        }
+    30	    }
+    31	}
+    32	
+    33	pub(super) struct EraseDerefTemps;
+    34	
+    35	impl<'tcx> crate::MirPass<'tcx> for EraseDerefTemps {
+    36	    fn run_pass(&self, tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
+    37	        EraseDerefTempsVisitor { tcx }.visit_body_preserves_cfg(body);
+    38	    }
+    39	
+    40	    fn is_required(&self) -> bool {
+    41	        true
+    42	    }
+    43	}
+### MIR CopyForDeref documentation
+  1450	    ///
+  1451	    /// Disallowed after deaggregation for all aggregate kinds except `Array` and `Coroutine`. After
+  1452	    /// coroutine lowering, `Coroutine` aggregate kinds are disallowed too.
+  1453	    Aggregate(Box<AggregateKind<'tcx>>, IndexVec<FieldIdx, Operand<'tcx>>),
+  1454	
+  1455	    /// A CopyForDeref is equivalent to a read from a place at the
+  1456	    /// codegen level, but is treated specially by drop elaboration. When such a read happens, it
+  1457	    /// is guaranteed (via nature of the mir_opt `Derefer` in rustc_mir_transform/src/deref_separator)
+  1458	    /// that the returned value is written into a `DerefTemp` local and that its only use is a deref operation,
+  1459	    /// immediately followed by one or more projections. Drop elaboration treats this rvalue as if the
+  1460	    /// read never happened and just projects further. This allows simplifying various MIR
+  1461	    /// optimizations and codegen backends that previously had to handle deref operations anywhere
+  1462	    /// in a place.
+  1463	    ///
+  1464	    /// Disallowed in runtime MIR and is replaced by normal copies.
+  1465	    CopyForDeref(Place<'tcx>),
+  1466	
+  1467	    /// Wraps a value in an unsafe binder.
+  1468	    WrapUnsafeBinder(Operand<'tcx>, Ty<'tcx>),
+  1469	
+  1470	    /// Creates a bitwise copy of the indicated place with the same type (if Mut) or its
+  1471	    /// CoerceShared target type (if Not). The type is known to be an ADT with exactly one lifetime
+  1472	    /// parameter, and it is known to implement the Reborrow trait (for Mut), and the CoerceShared
+  1473	    /// trait (only if Not). The CoerceShared target type is known to also have exactly one lifetime
+  1474	    /// parameter, implement Copy and (currently) have the same memory layout as the source type.
+  1475	    ///
+  1476	    /// The borrow checker uses the single lifetime in the source and target types to create a
+  1477	    /// Covariant outlives-bound between the source and target with the Mutability of the Reborrow.
+  1478	    /// This makes accessing the source value for writes (and reads if Mut) for the lifetime of the
+  1479	    /// target value a borrow check error, imitating `&mut T` and `&T`'s reborrowing on user ADTs.
+  1480	    ///
+  1481	    /// Future work may add support for multiple lifetimes and changing memory layout as part of
+  1482	    /// CoerceShared. These may be end up implemented as multiple MIR operations.
+  1483	    ///
+  1484	    /// This is produced by the [`ExprKind::Reborrow`].
+  1485	    ///
+  1486	    /// [`ExprKind::Reborrow`]: crate::thir::ExprKind::Reborrow
+  1487	    Reborrow(Ty<'tcx>, Mutability, Place<'tcx>),
+  1488	}
+### runtime-lowering phase sequence
+   625	/// Returns the sequence of passes that lowers analysis to runtime MIR.
+   626	fn run_runtime_lowering_passes<'tcx>(tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
+   627	    let passes: &[&dyn MirPass<'tcx>] = &[
+   628	        // These next passes must be executed together.
+   629	        &add_call_guards::CriticalCallEdges,
+   630	        // Must be done before drop elaboration because we need to drop opaque types, too.
+   631	        &post_analysis_normalize::PostAnalysisNormalize,
+   632	        // Calling this after `PostAnalysisNormalize` ensures that we don't deal with opaque types.
+   633	        &add_subtyping_projections::Subtyper,
+   634	        &elaborate_drops::ElaborateDrops,
+   635	        // Needs to happen after drop elaboration.
+   636	        &Lint(check_call_recursion::CheckDropRecursion),
+   637	        // This will remove extraneous landing pads which are no longer
+   638	        // necessary as well as forcing any call in a non-unwinding
+   639	        // function calling a possibly-unwinding function to abort the process.
+   640	        &abort_unwinding_calls::AbortUnwindingCalls,
+   641	        // AddMovesForPackedDrops needs to run after drop
+   642	        // elaboration.
+   643	        &add_moves_for_packed_drops::AddMovesForPackedDrops,
+   644	        &erase_deref_temps::EraseDerefTemps,
+   645	        &elaborate_box_derefs::ElaborateBoxDerefs,
+   646	        &coroutine::StateTransform,
+   647	        &Lint(known_panics_lint::KnownPanicsLint),
+   648	    ];
+   649	    pm::run_passes_no_validate(tcx, body, passes, Some(MirPhase::Runtime(RuntimePhase::Initial)));
+   650	}
+### MIR Copy and Call contracts
+   790	    /// Roughly speaking, evaluates the `func` operand and the arguments, and starts execution of
+   791	    /// the referred to function. The operand types must match the argument types of the function.
+   792	    /// The return place type must match the return type. The type of the `func` operand must be
+   793	    /// callable, meaning either a function pointer, a function type, or a closure type.
+   794	    ///
+   795	    /// **Needs clarification**: The exact semantics of this. Current backends rely on `move`
+   796	    /// operands not aliasing the return place. It is unclear how this is justified in MIR, see
+   797	    /// [#71117].
+   798	    ///
+   799	    /// [#71117]: https://github.com/rust-lang/rust/issues/71117
+   800	    Call {
+   801	        /// The function that’s being called.
+   802	        func: Operand<'tcx>,
+   803	        /// Arguments the function is called with.
+   804	        /// These are owned by the callee, which is free to modify them.
+   805	        /// This allows the memory occupied by "by-value" arguments to be
+   806	        /// reused across function calls without duplicating the contents.
+   807	        /// The span for each arg is also included
+   808	        /// (e.g. `a` and `b` in `x.foo(a, b)`).
+   809	        args: Box<[Spanned<Operand<'tcx>>]>,
+   810	        /// Where the returned value will be written
+   811	        destination: Place<'tcx>,
+   812	        /// Where to go after this call returns. If none, the call necessarily diverges.
+   813	        target: Option<BasicBlock>,
+   814	        /// Action to be taken if the call unwinds.
+   815	        unwind: UnwindAction,
+   816	        /// Where this call came from in HIR/THIR.
+   817	        call_source: CallSource,
+   818	        /// This `Span` is the span of the function, without the dot and receiver
+   819	        /// e.g. `foo(a, b)` in `x.foo(a, b)`
+   820	        fn_span: Span,
+   821	    },
+  1288	/// An operand in MIR represents a "value" in Rust, the definition of which is undecided and part of
+  1289	/// the memory model. One proposal for a definition of values can be found [on UCG][value-def].
+  1290	///
+  1291	/// [value-def]: https://github.com/rust-lang/unsafe-code-guidelines/blob/master/wip/value-domain.md
+  1292	///
+  1293	/// The most common way to create values is via loading a place. Loading a place is an operation
+  1294	/// which reads the memory of the place and converts it to a value. This is a fundamentally *typed*
+  1295	/// operation. The nature of the value produced depends on the type of the conversion. Furthermore,
+  1296	/// there may be other effects: if the type has a validity constraint loading the place might be UB
+  1297	/// if the validity constraint is not met.
+  1298	///
+  1299	/// **Needs clarification:** Is loading a place that has its variant index set well-formed? Miri
+  1300	/// currently implements it, but it seems like this may be something to check against in the
+  1301	/// validator.
+  1302	#[derive(Clone, PartialEq, TyEncodable, TyDecodable, Hash, StableHash, TypeFoldable, TypeVisitable)]
+  1303	pub enum Operand<'tcx> {
+  1304	    /// Creates a value by loading the given place.
+  1305	    ///
+  1306	    /// Before drop elaboration, the type of the place must be `Copy`. After drop elaboration there
+  1307	    /// is no such requirement.
+  1308	    Copy(Place<'tcx>),
+  1309	
+  1310	    /// Creates a value by performing loading the place, just like the `Copy` operand.
+  1311	    ///
+  1312	    /// This *may* additionally overwrite the place with `uninit` bytes, depending on how we decide
+  1313	    /// in [UCG#188]. You should not emit MIR that may attempt a subsequent second load of this
+  1314	    /// place without first re-initializing it.
+  1315	    ///
+  1316	    /// **Needs clarification:** The operational impact of `Move` is unclear. Currently (both in
+  1317	    /// Miri and codegen) it has no effect at all unless it appears in an argument to `Call`; for
+  1318	    /// `Call` it allows the argument to be passed to the callee "in-place", i.e. the callee might
+  1319	    /// just get a reference to this place instead of a full copy. Miri implements this with a
+  1320	    /// combination of aliasing model "protectors" and putting `uninit` into the place. Ralf
+  1321	    /// proposes that we don't want these semantics for `Move` in regular assignments, because
+  1322	    /// loading a place should not have side-effects, and the aliasing model "protectors" are
+  1323	    /// inherently tied to a function call. Are these the semantics we want for MIR? Is this
+  1324	    /// something we can even decide without knowing more about Rust's memory model?
+  1325	    ///
+  1326	    /// [UCG#188]: https://github.com/rust-lang/unsafe-code-guidelines/issues/188
+  1327	    Move(Place<'tcx>),
+  1328	
+  1329	    /// Constants are already semantically values, and remain unchanged.
+  1330	    Constant(Box<ConstOperand<'tcx>>),
+  1331	
+  1332	    /// Query the compilation session of the current crate for a particular flag. This is not quite
+  1333	    /// a const since its value can differ across crates within a single crate graph.
+  1334	    RuntimeChecks(RuntimeChecks),
+  1335	}

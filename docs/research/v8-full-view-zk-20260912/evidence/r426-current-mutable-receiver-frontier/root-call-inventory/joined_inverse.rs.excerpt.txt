@@ -1,0 +1,9 @@
+1: //! Same prefix/backward kernel, one base inverse across both denominator lists.
+2: //! Child module of circle_norm: uses the very same coefficient/point invariant.
+3: use super::*;
+4: #[cfg(any(v8_line_norm,test))]
+5: #[path="line_norm.rs"] mod line_norm;
+6: #[cfg(any(v8_line_norm,test))]
+7: pub(super) fn inverse_lines(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<K>,Vec<M31>),Error>{
+8:     line_norm::inverse(selected,values,abc,base,lines)
+9: }

@@ -1,0 +1,8 @@
+1: //! Circle-only specialization of the retained six-coefficient norm.
+2: //! No prover-provided point can construct Selected; its fields are private.
+3: use super::*;
+4: use corelib::circle_fri::BaseCirclePoint;
+5: #[cfg(any(v8_joined_inverse,test))]
+6: #[path="joined_inverse.rs"] mod joined_inverse;
+7: fn times_r(z:CM31)->CM31{CM31::new(z.a.double().sub(z.b),z.a.add(z.b.double()))}
+8: fn norm(v:K)->CM31{v.c0.square().sub(times_r(v.c1.square()))}

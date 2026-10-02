@@ -1,0 +1,481 @@
+### InterpExpressions.ml 176-273 copy_value
+   176	let rec copy_value (span : Meta.span) (allow_adt_copy : bool) (config : config)
+   177	    (ctx : eval_ctx) (v : tvalue) :
+   178	    tvalue * tvalue * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+   179	  [%ltrace
+   180	    tvalue_to_string ~span:(Some span) ctx v
+   181	    ^ "\n- context:\n"
+   182	    ^ eval_ctx_to_string ~span:(Some span) ctx];
+   183	  (* Remark: at some point we rewrote this function to use iterators, but then
+   184	   * we reverted the changes: the result was less clear actually. In particular,
+   185	   * the fact that we have exhaustive matches below makes very obvious the cases
+   186	   * in which we need to fail *)
+   187	  match v.value with
+   188	  | VLiteral _ -> (v, v, ctx, fun e -> e)
+   189	  | VAdt av ->
+   190	      (* Sanity check *)
+   191	      (match v.ty with
+   192	      | TAdt
+   193	          {
+   194	            id = TBuiltin TBox;
+   195	            generics = { types = [ boxed_ty ]; _ };
+   196	          } ->
+   197	          [%cassert] span (ty_is_copyable boxed_ty)
+   198	            "The compiler-generated shared Box dereference is not copyable";
+   199	          [%cassert] span (not (tvalue_has_borrows (Some span) ctx v))
+   200	            "The compiler-generated shared Box dereference contains borrows"
+   201	      | TAdt { id = TAdtId _; _ } as ty ->
+   202	          [%sanity_check] span (allow_adt_copy || ty_is_copyable ty)
+   203	      | TAdt { id = TTuple; _ } -> () (* Ok *)
+   204	      | TArray (ty, _) | TSlice ty ->
+   205	          [%cassert] span (ty_is_copyable ty)
+   206	            "The type is not primitively copyable"
+   207	      | _ -> [%craise] span "Unreachable");
+   208	      let (ctx, cc), fields =
+   209	        List.fold_left_map
+   210	          (fun (ctx, cc) v ->
+   211	            let v, copied, ctx, cc1 =
+   212	              copy_value span allow_adt_copy config ctx v
+   213	            in
+   214	            ((ctx, cc_comp cc cc1), (v, copied)))
+   215	          (ctx, fun e -> e)
+   216	          av.fields
+   217	      in
+   218	      let fields, copied_fields = List.split fields in
+   219	      let copied = { v with value = VAdt { av with fields = copied_fields } } in
+   220	      let v = { v with value = VAdt { av with fields } } in
+   221	      (v, copied, ctx, cc)
+   222	  | VBottom -> [%craise] span "Can't copy ⊥"
+   223	  | VBorrow bc -> (
+   224	      (* We can only copy shared borrows *)
+   225	      match bc with
+   226	      | VSharedBorrow (bid, _) ->
+   227	          (* We need to create a new borrow id for the copied borrow, and
+   228	           * update the context accordingly *)
+   229	          let sid' = ctx.fresh_shared_borrow_id () in
+   230	          ( v,
+   231	            { v with value = VBorrow (VSharedBorrow (bid, sid')) },
+   232	            ctx,
+   233	            fun e -> e )
+   234	      | VMutBorrow (_, _) -> [%craise] span "Can't copy a mutable borrow"
+   235	      | VReservedMutBorrow _ ->
+   236	          [%craise] span "Can't copy a reserved mut borrow")
+   237	  | VLoan lc -> (
+   238	      (* We can only copy shared loans *)
+   239	      match lc with
+   240	      | VMutLoan _ -> [%craise] span "Can't copy a mutable loan"
+   241	      | VSharedLoan (sids, sv) ->
+   242	          (* We don't copy the shared loan: only the shared value inside *)
+   243	          let updt_value, copied_value, ctx, cf =
+   244	            copy_value span allow_adt_copy config ctx sv
+   245	          in
+   246	          ( { v with value = VLoan (VSharedLoan (sids, updt_value)) },
+   247	            copied_value,
+   248	            ctx,
+   249	            cf ))
+   250	  | VSymbolic sp ->
+   251	      (* We can copy only if the type is "primitively" copyable.
+   252	         Note that in the general case, copy is a trait: copying values
+   253	         thus requires calling the proper function. Here, we copy values
+   254	         for very simple types such as integers, shared borrows, etc. *)
+   255	      [%cassert] span
+   256	        (ty_is_copyable (Substitute.erase_regions sp.sv_ty))
+   257	        "Not primitively copyable";
+   258	      (* Check if the symbolic value contains borrows: if it does, we need to
+   259	         introduce au auxiliary region abstraction (see document of the function) *)
+   260	      if not (ty_has_borrows (Some span) ctx.type_ctx.type_infos v.ty) then
+   261	        (* No borrows: do nothing *)
+   262	        (v, v, ctx, fun e -> e)
+   263	      else begin
+   264	        (* There are borrows: check that they are all live (i.e., the symbolic
+   265	           value doesn't contain bottom) *)
+   266	        [%cassert] span
+   267	          (not (symbolic_value_has_ended_regions ctx.ended_regions sp))
+   268	          "Attempted to copy a symbolic value containing ended borrows";
+   269	        let ctx0 = ctx in
+   270	        (* There are borrows: we need to introduce one region abstraction per live
+   271	           region present in the type *)
+   272	        let regions, ty =
+   273	          InterpBorrowsCore.refresh_live_regions_in_ty span ctx sp.sv_ty
+### InterpExpressions.ml 380-399 operand preparation
+   380	    (op : operand) : cm_fun =
+   381	 fun ctx ->
+   382	  match op with
+   383	  | Constant _ ->
+   384	      (* No need to reorganize the context *)
+   385	      (ctx, fun e -> e)
+   386	  | Copy p ->
+   387	      (* Access the value *)
+   388	      let access = Read in
+   389	      (* Expand the symbolic values, if necessary *)
+   390	      let greedy_expand = true in
+   391	      access_rplace_reorganize config span greedy_expand access p ctx
+   392	  | Move p ->
+   393	      (* Access the value *)
+   394	      let access = Move in
+   395	      let greedy_expand = false in
+   396	      access_rplace_reorganize config span greedy_expand access p ctx
+   397	
+   398	(** Evaluate an operand, without reorganizing the context before *)
+   399	let eval_operand_no_reorganize (config : config) (span : Meta.span)
+### InterpExpressions.ml 580-605 Copy/Move operands
+   580	  | Copy p ->
+   581	      (* Access the value *)
+   582	      let access = Read in
+   583	      let _, v = read_place_check span access p ctx in
+   584	      (* Sanity checks *)
+   585	      [%cassert] span
+   586	        (not (bottom_in_value ctx.ended_regions v))
+   587	        "Can not copy a value containing bottom";
+   588	      [%sanity_check] span
+   589	        (Option.is_none
+   590	           (find_first_expandable_sv_with_borrows (Some span)
+   591	              ctx.type_ctx.type_decls ctx.type_ctx.type_infos v));
+   592	      (* Copy the value *)
+   593	      let allow_adt_copy = false in
+   594	      let updated_value, copied_value, ctx, cc =
+   595	        copy_value span allow_adt_copy config ctx v
+   596	      in
+   597	      (* Update the original value *)
+   598	      let ctx = write_place span access p updated_value ctx in
+   599	      (* *)
+   600	      (copied_value, ctx, cc)
+   601	  | Move p ->
+   602	      (* Access the value *)
+   603	      let access = Move in
+   604	      let _, v = read_place_check span access p ctx in
+   605	      (* Check that there are no bottoms in the value we are about to move *)
+### InterpExpressions.ml 1270-1303 mutable/reborrow evaluation
+  1270	        | _ -> [%craise] span "Unreachable"
+  1271	      in
+  1272	      let rv_ty = TRef (RErased, v.ty, ref_kind) in
+  1273	      let bc =
+  1274	        match bkind with
+  1275	        | BShared | BShallow ->
+  1276	            (* See the remark at the beginning of the match branch: we
+  1277	               handle shallow borrows like shared borrows *)
+  1278	            VSharedBorrow (bid, sid)
+  1279	        | BTwoPhaseMut -> VReservedMutBorrow (bid, sid)
+  1280	        | _ -> [%craise] span "Unreachable"
+  1281	      in
+  1282	      let rv : tvalue = { value = VBorrow bc; ty = rv_ty } in
+  1283	      (* Return *)
+  1284	      (rv, ctx, cc)
+  1285	  | BMut | BUniqueImmutable ->
+  1286	      (* We treat unique immutable borrows or mutable borrows: the difference is not
+  1287	         that important in our case *)
+  1288	      (* Access the value *)
+  1289	      let access = Write in
+  1290	      let greedy_expand = false in
+  1291	      let _, v, ctx, cc =
+  1292	        access_rplace_reorganize_and_read config span greedy_expand access p ctx
+  1293	      in
+  1294	      (* Compute the rvalue - wrap the value in a mutable borrow with a fresh id *)
+  1295	      let bid = ctx.fresh_borrow_id () in
+  1296	      let rv_ty = TRef (RErased, v.ty, RMut) in
+  1297	      let rv : tvalue = { value = VBorrow (VMutBorrow (bid, v)); ty = rv_ty } in
+  1298	      (* Compute the loan value with which to replace the value at place p *)
+  1299	      let nv = { v with value = VLoan (VMutLoan bid) } in
+  1300	      (* Update the value in the context to replace it with the loan *)
+  1301	      let ctx = write_place span access p nv ctx in
+  1302	      (* Return *)
+  1303	      (rv, ctx, cc)
+### PrePasses.ml 125-375 exact ptr-metadata slice rewrite
+   125	  elem_ty : ty;
+   126	}
+   127	
+   128	let eliminate_metadata_only_slice_raw_pointers (crate : crate) (f : fun_decl) :
+   129	    fun_decl =
+   130	  let metadata_definition (st : statement) :
+   131	      (local_id * metadata_only_slice_raw_pointer) option =
+   132	    match st.kind with
+   133	    | Assign
+   134	        ( {
+   135	            kind = PlaceLocal local;
+   136	            ty = TRawPtr (TSlice raw_elem_ty, raw_kind);
+   137	          },
+   138	          RawPtr
+   139	            ( { kind = PlaceProjection (reference, Deref); ty = TSlice elem_ty },
+   140	              ptr_kind,
+   141	              (Copy metadata_place | Move metadata_place) ) )
+   142	      when raw_elem_ty = elem_ty && raw_kind = ptr_kind
+   143	           && metadata_place.ty = mk_usize_ty -> (
+   144	        match (reference.ty, metadata_place.kind) with
+   145	        | ( TRef (_, TSlice reference_elem_ty, _),
+   146	            PlaceProjection (metadata_reference, PtrMetadata) )
+   147	          when reference_elem_ty = elem_ty && metadata_reference = reference
+   148	          -> (
+   149	            match reference.ty with
+   150	            | TRef (_, _, RShared) ->
+   151	                Some
+   152	                  (local, { definition = st.statement_id; reference; elem_ty })
+   153	            | _ -> None)
+   154	        | _ -> None)
+   155	    | _ -> None
+   156	  in
+   157	  (* The generated call deliberately targets Charon's existing slice-length
+   158	     language item.  If it is absent or ambiguous we decline the rewrite. *)
+   159	  let slice_len_ids =
+   160	    FunDeclId.Map.fold
+   161	      (fun id (decl : fun_decl) ids ->
+   162	        if decl.item_meta.lang_item = Some "slice_len_fn" then id :: ids
+   163	        else ids)
+   164	      crate.fun_decls []
+   165	  in
+   166	  match slice_len_ids with
+   167	  | [ slice_len_id ] -> (
+   168	      let slice_len_call (st : statement) (dest : place) (reference : place)
+   169	          (elem_ty : ty) : statement_kind =
+   170	        let generics =
+   171	          TypesUtils.mk_generic_args [ RErased ] [ elem_ty ] [] []
+   172	        in
+   173	        let call =
+   174	          {
+   175	            func =
+   176	              FnOpRegular { kind = FunId (FRegular slice_len_id); generics };
+   177	            args = [ Copy reference ];
+   178	            dest;
+   179	          }
+   180	        in
+   181	        Call (call, { span = st.span; statements = [] })
+   182	      in
+   183	      (* A safe shared-slice length operation can be represented either as a
+   184	         direct metadata read or as Len of a dereferenced shared slice. Both
+   185	         lower to the existing slice_len_fn call, preserving the statement span. *)
+   186	      let direct_metadata_rewriter =
+   187	        object
+   188	          inherit [_] map_statement as super
+   189	
+   190	          method! visit_statement env st =
+   191	            match st.kind with
+   192	            | Assign
+   193	                ( dest,
+   194	                  Len
+   195	                    ( { kind = PlaceProjection (reference, Deref);
+   196	                        ty = TSlice elem_ty },
+   197	                      TSlice len_elem_ty,
+   198	                      None ) )
+   199	              when dest.ty = mk_usize_ty && elem_ty = len_elem_ty -> (
+   200	                match reference.ty with
+   201	                | TRef (_, TSlice reference_elem_ty, RShared)
+   202	                  when reference_elem_ty = elem_ty ->
+   203	                    { st with kind = slice_len_call st dest reference elem_ty }
+   204	                | _ -> super#visit_statement env st)
+   205	            | Assign
+   206	                (dest, Use ((Copy metadata_place | Move metadata_place), _retag))
+   207	              when dest.ty = mk_usize_ty && metadata_place.ty = mk_usize_ty -> (
+   208	                match metadata_place.kind with
+   209	                | PlaceProjection
+   210	                    ( ({ ty = TRef (_, TSlice elem_ty, RShared); _ } as reference),
+   211	                      PtrMetadata ) ->
+   212	                    { st with kind = slice_len_call st dest reference elem_ty }
+   213	                | _ -> super#visit_statement env st)
+   214	            | _ -> super#visit_statement env st
+   215	        end
+   216	      in
+   217	      let f =
+   218	        match f.body with
+   219	        | StructuredBody body ->
+   220	            let body =
+   221	              {
+   222	                body with
+   223	                body = direct_metadata_rewriter#visit_block () body.body;
+   224	              }
+   225	            in
+   226	            { f with body = StructuredBody body }
+   227	        | _ -> f
+   228	      in
+   229	      match f.body with
+   230	      | StructuredBody body ->
+   231	          (* First collect definitions.  A local with more than one definition is
+   232	         intentionally not a candidate. *)
+   233	          let definitions = ref LocalId.Map.empty in
+   234	          let collector =
+   235	            object
+   236	              inherit [_] iter_statement as super
+   237	
+   238	              method! visit_statement env st =
+   239	                (match metadata_definition st with
+   240	                | None -> ()
+   241	                | Some (local, definition) ->
+   242	                    definitions :=
+   243	                      LocalId.Map.update local
+   244	                        (fun previous ->
+   245	                          Some
+   246	                            (definition
+   247	                            ::
+   248	                            (match previous with
+   249	                            | None -> []
+   250	                            | Some xs -> xs)))
+   251	                        !definitions);
+   252	                super#visit_statement env st
+   253	            end
+   254	          in
+   255	          collector#visit_block () body.body;
+   256	          let candidates =
+   257	            LocalId.Map.filter_map
+   258	              (fun _ definitions ->
+   259	                match definitions with
+   260	                | [ definition ] -> Some definition
+   261	                | _ -> None)
+   262	              !definitions
+   263	          in
+   264	          if LocalId.Map.is_empty candidates then f
+   265	          else
+   266	            (* Classify every use.  Exact [copy/move raw.metadata] operands are the
+   267	           sole permitted use.  Every other place rooted at the raw local is
+   268	           forbidden.  Storage markers contain a local id rather than a place
+   269	           and are deliberately ignored. *)
+   270	            let invalid = ref LocalId.Set.empty in
+   271	            let reads = ref LocalId.Map.empty in
+   272	            let add_read local =
+   273	              reads :=
+   274	                LocalId.Map.update local
+   275	                  (fun count -> Some (1 + Option.value ~default:0 count))
+   276	                  !reads
+   277	            in
+   278	            let rec root_local (p : place) : local_id option =
+   279	              match p.kind with
+   280	              | PlaceLocal local -> Some local
+   281	              | PlaceProjection (p, _) -> root_local p
+   282	              | PlaceGlobal _ -> None
+   283	            in
+   284	            let metadata_read (p : place) : local_id option =
+   285	              match p.kind with
+   286	              | PlaceProjection
+   287	                  ( { kind = PlaceLocal local; ty = TRawPtr (TSlice _, _) },
+   288	                    PtrMetadata )
+   289	                when p.ty = mk_usize_ty && LocalId.Map.mem local candidates ->
+   290	                  Some local
+   291	              | _ -> None
+   292	            in
+   293	            let classifier =
+   294	              object (self)
+   295	                inherit [_] iter_statement as super
+   296	
+   297	                method! visit_statement env st =
+   298	                  match metadata_definition st with
+   299	                  | Some (local, definition)
+   300	                    when LocalId.Map.mem local candidates
+   301	                         && definition.definition = st.statement_id ->
+   302	                      (* Visit the source place and metadata operand, but not the
+   303	                     defining destination local. *)
+   304	                      self#visit_rvalue env
+   305	                        (match st.kind with
+   306	                        | Assign (_, rv) -> rv
+   307	                        | _ -> assert false)
+   308	                  | _ -> super#visit_statement env st
+   309	
+   310	                method! visit_operand env op =
+   311	                  match op with
+   312	                  | Copy p | Move p -> (
+   313	                      match metadata_read p with
+   314	                      | Some local -> add_read local
+   315	                      | None -> super#visit_operand env op)
+   316	                  | Constant _ -> super#visit_operand env op
+   317	
+   318	                method! visit_place env p =
+   319	                  match root_local p with
+   320	                  | Some local when LocalId.Map.mem local candidates ->
+   321	                      invalid := LocalId.Set.add local !invalid
+   322	                  | _ -> super#visit_place env p
+   323	
+   324	                method! visit_local_id _ _ = ()
+   325	              end
+   326	            in
+   327	            classifier#visit_block () body.body;
+   328	            let candidates =
+   329	              LocalId.Map.filter
+   330	                (fun local _ ->
+   331	                  (not (LocalId.Set.mem local !invalid))
+   332	                  && LocalId.Map.find_opt local !reads = Some 1)
+   333	                candidates
+   334	            in
+   335	            if LocalId.Map.is_empty candidates then f
+   336	            else
+   337	              let rewriter =
+   338	                object
+   339	                  inherit [_] map_statement as super
+   340	
+   341	                  method! visit_statement env st =
+   342	                    match metadata_definition st with
+   343	                    | Some (local, definition) -> (
+   344	                        match LocalId.Map.find_opt local candidates with
+   345	                        | Some candidate
+   346	                          when candidate.definition = definition.definition ->
+   347	                            {
+   348	                              st with
+   349	                              kind =
+   350	                                slice_len_call st
+   351	                                  { kind = PlaceLocal local; ty = mk_usize_ty }
+   352	                                  candidate.reference candidate.elem_ty;
+   353	                            }
+   354	                        | _ -> super#visit_statement env st)
+   355	                    | None -> super#visit_statement env st
+   356	
+   357	                  method! visit_operand env op =
+   358	                    match op with
+   359	                    | (Copy p | Move p) as original -> (
+   360	                        match metadata_read p with
+   361	                        | Some local -> (
+   362	                            match LocalId.Map.find_opt local candidates with
+   363	                            | Some _ -> (
+   364	                                let p =
+   365	                                  { kind = PlaceLocal local; ty = mk_usize_ty }
+   366	                                in
+   367	                                match original with
+   368	                                | Copy _ -> Copy p
+   369	                                | Move _ -> Move p
+   370	                                | _ -> assert false)
+   371	                            | None -> super#visit_operand env op)
+   372	                        | None -> super#visit_operand env op)
+   373	                    | Constant _ -> super#visit_operand env op
+   374	                end
+   375	              in
+### PrePasses.ml 3597-3631 pass order
+  3597	let apply_passes (crate : crate) : crate =
+  3598	  (* Passes that apply to the whole crate *)
+  3599	  let crate = update_array_default crate in
+  3600	  let crate, pending_type_id = add_pending_return_carrier crate in
+  3601	  (* Passes that apply to individual function bodies *)
+  3602	  let function_passes =
+  3603	    [
+  3604	      ("fix_closure_lifetimes", fix_closure_lifetimes);
+  3605	      ("erase_body_regions", erase_body_regions);
+  3606	      ( "eliminate_metadata_only_slice_raw_pointers",
+  3607	        eliminate_metadata_only_slice_raw_pointers );
+  3608	      ("remove_unreachable", remove_unreachable);
+  3609	      ("restore_structured_nested_returns", restore_structured_nested_returns);
+  3610	      ( "lower_nested_loop_returns",
+  3611	        (fun crate f ->
+  3612	          match pending_type_id with
+  3613	          | Some id -> lower_nested_loop_returns id crate f
+  3614	          | None -> f) );
+  3615	      ("eliminate_outer_loop_control", eliminate_outer_loop_control);
+  3616	      ("update_loop", update_loops);
+  3617	      ("remove_useless_joins", remove_useless_joins);
+  3618	      ( "remove_shallow_borrows_storage_live_dead",
+  3619	        remove_shallow_borrows_storage_live_dead );
+  3620	      ("decompose_str_borrows", decompose_str_borrows);
+  3621	      ("simplify_panics", simplify_panics);
+  3622	      ("decompose_global_accesses", decompose_global_accesses);
+  3623	      ("refresh_statement_ids", refresh_statement_ids);
+  3624	    ]
+  3625	  in
+  3626	  (* Attempt to apply a pass: if it fails we replace the body by [None] *)
+  3627	  let apply_function_pass (pass_name : string)
+  3628	      (pass : crate -> fun_decl -> fun_decl) (f : fun_decl) =
+  3629	    try
+  3630	      let f = pass crate f in
+  3631	      [%ltrace
+### Main.ml 731-740 invocation
+   731	        ());
+   732	
+   733	      (* Apply the pre-passes *)
+   734	      let m = Aeneas.PrePasses.apply_passes m in
+   735	
+   736	      (* Test the unit functions with the concrete interpreter *)
+   737	      if !test_unit_functions then Test.test_unit_functions m;
+   738	
+   739	      (* Translate or borrow-check the crate *)
+   740	      let extracted_opaque = ref false in

@@ -1,0 +1,98 @@
+{
+  "task": "R426 read-only Aeneas evaluator/prepass and pinned Charon source inventory",
+  "candidate_source_root": "/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/src",
+  "pinned_aeneas_source_sha256": {
+    "interp/InterpExpressions.ml": "a686db5af43c4463b357e066330a21f01287bafe0cc2c13394b4b2b4f458f190",
+    "interp/InterpStatements.ml": "061c0b53ee02aa2b19ab2998ad84a7a5e3f3add06f66deaec839f8dff7343982",
+    "interp/InterpUtils.ml": "8b885a725def3c7a923cc634f05a7b91bd25b4334b62b2ba6a1d09faf0d8a65a",
+    "PrePasses.ml": "579f332212ad75b386b088ef7835783f7cb84a835b1acb96031d49847fc53a17",
+    "Main.ml": "b268d72e877bd3e409e78e149445ab96e43fa3e107f2adb9491578b9e6627d24"
+  },
+  "copy_semantics_source_locations": {
+    "Copy_operand": "interp/InterpExpressions.ml:580-597",
+    "Move_operand": "interp/InterpExpressions.ml:599-605+",
+    "copy_value": "interp/InterpExpressions.ml:176-273",
+    "mutable_borrow_construction": "interp/InterpExpressions.ml:1231-1303",
+    "eval_operands": "interp/InterpExpressions.ml:628-640"
+  },
+  "observed_copy_value_cases": {
+    "VSharedBorrow": "copies borrow with fresh shared-borrow id",
+    "VMutBorrow": "raises Can't copy a mutable borrow",
+    "VReservedMutBorrow": "raises Can't copy a reserved mut borrow",
+    "VMutLoan": "raises Can't copy a mutable loan"
+  },
+  "metadata_prepass": {
+    "function": "PrePasses.eliminate_metadata_only_slice_raw_pointers",
+    "source_location": "PrePasses.ml:125-375",
+    "requires_same_reference_metadata": true,
+    "requires_shared_slice_reference": true,
+    "requires_single_definition_and_single_metadata_read": true,
+    "replacement_call_argument": "Copy reference",
+    "is_mutable_receiver_reborrow_rewrite": false,
+    "phase_order": [
+      "fix_closure_lifetimes",
+      "erase_body_regions",
+      "eliminate_metadata_only_slice_raw_pointers",
+      "remove_unreachable",
+      "restore_structured_nested_returns",
+      "lower_nested_loop_returns",
+      "eliminate_outer_loop_control",
+      "update_loop",
+      "remove_useless_joins",
+      "remove_shallow_borrows_storage_live_dead",
+      "decompose_str_borrows",
+      "simplify_panics",
+      "decompose_global_accesses",
+      "refresh_statement_ids"
+    ],
+    "whole_crate_postpasses": [
+      "strip_unnecessary_target_suffixes",
+      "filter_marker_traits",
+      "filter_type_aliases",
+      "replace_static",
+      "remove_vtables",
+      "rename_type_vars",
+      "simplify_trait_calls"
+    ]
+  },
+  "pinned_charon": {
+    "root": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon",
+    "git_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "source_sha256": {
+      "charon/src/bin/charon-driver/translate/translate_bodies.rs": "b4c231efcd5a44f713de1269f93b5389ed2c9879723169470f47b1e8a7559a4c",
+      "charon/src/transform/resugar/reconstruct_fallible_operations.rs": "27f16fd6764004cb48445965ced79448fa658e3abafd7c548e7d98391ec729ef",
+      "charon/src/transform/mod.rs": "ac725524fc9b890eb568e21294c088344f5e0671a54461bb965f176fedfff129",
+      "charon/src/ast/expressions.rs": "7339c83c73fc0d3399d1da03aaae7f6190a9bc6bbfc8d6c6657e4a0690b6e3b5",
+      "charon/src/ast/gast.rs": "020cbf3cc93cd051030f786f5d5e0fa9283d47aca304a62b11a4922823aeaedc"
+    },
+    "translate_operand": "rustc MIR Copy/Move are copied as corresponding LLBC Copy/Move",
+    "ptr_metadata": "lowered to LLBC Use(Copy(place.ptr_metadata))",
+    "bounded_reborrow_symbol_search": "no matching call-argument reborrow helper/name found in charon/src, charon-ml/src, or charon/tests; search evidence preserved in charon-excerpts.txt"
+  },
+  "limitations": [
+    "No source/build/LLBC mutation or retry",
+    "No conclusion about a valid Copy-to-Move transformation",
+    "Exact R419 LLBC receiver-use census is delegated to r241",
+    "Rustc CopyForDeref evidence documents a possible MIR representation of temporary mutable-reference reads; no claim is made that it is the exact provenance of the R419 receiver argument."
+  ],
+  "pinned_rustc_source": {
+    "version": "rustc 1.98.0-nightly (14210df0e 2026-05-31)",
+    "commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "root": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/rustc-src/rust/compiler",
+    "sha256": {
+      "rustc_middle/src/mir/syntax.rs": "dd77a1dddc833bf073bec4b35274d5f519819f2e309f48411371e2e9cd376679",
+      "rustc_mir_transform/src/erase_deref_temps.rs": "1a163cf0e065a60ba1f2696d4cfb62a5da60e95be1cca9782df57cd2868e1e1a"
+    },
+    "relevant_finding": "EraseDerefTemps rewrites CopyForDeref to Use(Copy(place), WithRetag::No), with source comment that the assignment may copy a mutable reference that cannot actually be copied; exact R419 receiver-origin link is not established by this inventory.",
+    "copyforderef_note": "Pinned rustc source documents CopyForDeref and EraseDerefTemps lowering; this is a plausible representation route but no exact MIR ancestry claim for R419 is made."
+  },
+  "observed_failure": {
+    "receipt": "../../r425-unit-constant-frontier/translation-runner/output/ee7ba72da456-20261002T210856Z/metrics-receipt.json",
+    "candidate_llbc_sha256": "7f82eaabe855e89d735b21f9af5f6a983abea6b2f4d93d4b8bae747abd2829e2",
+    "complete_log_sha256": "aab03d0d23dcc6e65bb4760e2a88d474d2b56a6b91e65aa1cc08fe91344379c8",
+    "diagnostic": "Can't copy a mutable borrow at InterpExpressions.ml:234; call operand path eval_operand_no_reorganize:595 -> Cps.map_apply_continuation -> eval_operands:640 -> call evaluation",
+    "source_span": "core/src/iter/traits/iterator.rs:78:4-78:45, Iterator::next",
+    "r241_preliminary_llbc_finding": "R419 fun_decls/58 Iterator::try_fold has failing receiver operand Copy(Local 1), local1 named self, type Ref(Body 1, Dedup10, Mut); exact artifact path/hash pending final r241 inventory",
+    "status": "translation failed; no Lean output"
+  }
+}

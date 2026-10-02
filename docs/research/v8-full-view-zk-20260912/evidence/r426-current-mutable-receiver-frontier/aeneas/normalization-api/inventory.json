@@ -1,0 +1,50 @@
+{
+  "task": "read-only R426 mutable borrow/call receiver source API inventory",
+  "scope": "pinned source excerpts and API inventory only; no source edits, builds, translation retries, or semantics decision",
+  "aeneas_source": {
+    "path": "/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/src",
+    "git_revision": null,
+    "note": "Copied candidate source; a Git revision is not asserted. Per-file hashes are in source-hashes.txt."
+  },
+  "charon_source": {
+    "path": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon",
+    "revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "mir_query": "For non-local std DefIds, get_mir uses optimized_mir when MIR is available, even when requested level is Built; local built-MIR query path does not apply."
+  },
+  "rustc_source": {
+    "toolchain": "nightly-2026-06-01",
+    "commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "driver_settings": "Pinned Charon driver sets always_encode_mir=true, mir_opt_level=0, mir_preserve_ub=true.",
+    "candidate_paths": [
+      "deref_separator may make an intermediate-deref temp using CopyForDeref; EraseDerefTemps lowers this to no-retag Copy.",
+      "InstSimplify::simplify_ref_deref can turn &(*a) into Copy(base) with retag mode, but the pass is gated by mir_opt_level()>0."
+    ],
+    "ancestry_limit": "No saved Rustc MIR dump/query trace proves which lowering produced the retained LLBC Copy(Local 1). Neither pattern is attributed to it."
+  },
+  "llbc_operand": {
+    "artifact": ".r21-scratch/r426-mutable-borrow-copy-frontier/llbc/R419-selected-functions.json",
+    "function": 58,
+    "location": "loop top-level statement 6, nested loop statement 1, call argument 0; statement id 4440",
+    "operand": "Copy(Local 1)",
+    "local_type": "Ref(Body 1, Deduplicated 10, Mut)",
+    "rust_source_call": "iterator.rs:2493:28-2493:39, self.next() inside try_fold",
+    "reported_translation_span": "iterator.rs:78:4-78:45, Iterator::next trait declaration metadata rather than try_fold body"
+  },
+  "aeneas_behavior": {
+    "copy_value": "Aeneas InterpExpressions.copy_value rejects VMutBorrow; eval_operand of Copy uses this path.",
+    "current_reborrow_temp_passes": ["decompose_str_borrows", "decompose_global_accesses"],
+    "ptr_metadata": "eval_rvalue_not_global ignores RvRef ptr_metadata; InterpPaths has no PtrMetadata projection case and reaches generic inconsistent-projection failure.",
+    "no_receiver_pass": "No current R425 PrePasses pass inserts a mutable receiver reborrow into a call argument."
+  },
+  "normalization_api": {
+    "new_locals": "Existing passes allocate LocalId from current locals length and append Local records with type/name/span.",
+    "new_statements": "Existing passes insert Assign(RvRef(...)) using zero statement ID and original statement span; pass sequence refreshes IDs later.",
+    "statement_mapping": "LlbcAstUtils.map_statement maps a statement to a statement list and flattens in sequence order.",
+    "reference_evaluation": "RvRef evaluator discards metadata and BMut creates a VMutBorrow while replacing the place with VMutLoan."
+  },
+  "nonclaims": [
+    "Does not establish rustc MIR ancestry for the LLBC Copy.",
+    "Does not decide whether a new temporary is a faithful source reborrow or how lifetimes/liveness must be preserved.",
+    "Does not authorize Copy-to-Move replacement or any translator patch."
+  ]
+}

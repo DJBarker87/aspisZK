@@ -1,0 +1,25 @@
+# R426 focused raw-MIR diagnostic preflight (read-only)
+
+## Finding
+
+No saved R396 artifact contains the rustc MIR body for the imported standard-library `Iterator::try_fold`. R396 preserves only the LLBC JSON and the extraction command/log. The pinned Charon CLI help has no `--print-mir` or MIR-dump option. Its available print switches are `--print-original-ullbc`, `--print-ullbc`, `--print-built-llbc`, and `--print-llbc`; these print Charon's ULLBC/LLBC representations after MIR has already been translated, at the stages described in `source/pinned-charon/options.rs` and `source/pinned-charon/transform/mod.rs`. They cannot by themselves show the exact imported rustc MIR before LLBC conversion.
+
+The pinned `get_mir.rs` states the important boundary: `--mir` chooses a stage for the current crate; for non-local dependency functions Charon can retrieve only optimized MIR, and the code reads `tcx.optimized_mir` when MIR is available. It also documents that `-Zalways-encode-mir` applies to dependencies Charon compiled itself, but not the standard library; std MIR is available only for const items and generic/inlineable functions. `--sysroot default` selects the distributed sysroot, which the CLI help/source docs say lacks MIR bodies for many standard-library functions. `Iterator::try_fold` is generic, and its LLBC body is present, but no direct raw-MIR output path for this exact imported body is evidenced in the saved run.
+
+`--rustc-arg` is documented as forwarding extra flags to rustc, so a `-Zdump-mir`/`-Zunpretty=mir` style argument is only a candidate for further authorized investigation. The R396 invocation points Charon at a Cargo workspace and uses `--sysroot default`; the saved record does not show that this flag recompiles the prebuilt sysroot `core` or captures external crate MIR in the workspace. Therefore this plan does not assert that such rustc flags would emit the sought dependency body. No compiler, rustc, Charon extraction command, or Cargo build was invoked here.
+
+## Exact retained context
+
+R396 used pinned Charon binary SHA `b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c`, from source commit `cb50ff16b9f1066b8a97dc06da704de2da2fa41c`, with selected toolchain `nightly-2026-06-01`, rustc commit `14210df0e27ccd7d9e6a05b8085cbd438e4bbc65`. Its exact invocation/config is copied to `R396-extract-command.json` and `R396-extraction-plan.json`; the actual manifest/workspace and Cargo lock path/hash are in that plan. Charon selected `--mir built --sysroot default`, `--preset aeneas`, `--start-from crate::circle_norm::joined_inverse::line_norm::r110_norm::batch`, the exact ordered includes, and Cargo `--offline --locked --release --jobs 1`.
+
+The saved help output `source/charon-cargo-help.txt` is the exact stdout from a read-only `charon cargo --help` query on the pinned NUC path. The only other output is SSH's host-key notice in `charon-cargo-help.stderr.txt`. The query did not run the cargo subcommand or compiler.
+
+## Prepared next diagnostic (not launched)
+
+The lead selected one focused follow-up: rerun the exact R396 extraction command against its same frozen source/cache/toolchain, add only `--print-original-ullbc`, and use a new R426 destination. This prints the ULLBC immediately after MIR translation and before the documented micro-passes. It can determine whether Charon's earliest translated body already represents the receiver as a `Copy`, but it is still ULLBC, not a raw rustc MIR dump. `run_original_ullbc.py` is launch-gated and was not executed. Its launch plan keeps the exact ordered R396 arguments/includes, `--mir built`, default sysroot, Cargo offline/locked/release/jobs1 settings, 5G/7G/0swap/128 caps, checks all seven source/manifest/lock hashes before and after, verifies the pinned Charon/toolchain, verifies R396 baseline LLBC SHA before and after, saves complete ULLBC stdout separately from stderr/GNU time, and compares the entire final serialized LLBC to R396 after normalizing only the fresh `dest_file` and enabled `print_original_ullbc` option.
+
+The raw rustc MIR diagnostic remains unresolved: the pinned Charon help/source exposes no `--print-mir` CLI option, and the R396 saved invocation uses `--sysroot default`. The source says nonlocal dependencies use optimized MIR and that `-Zalways-encode-mir` does not apply to the standard library; it does not show that forwarding `-Zdump-mir` through `--rustc-arg` can dump an already-built external `core` body. Do not run a custom-sysroot, rebuilt-std, or rustc driver experiment without a new focused authorization. The existing LLBC call/copy census is in `../llbc/` and does not attribute the emitted operand to a particular MIR statement.
+
+## Source provenance
+
+The three Charon source files were copied byte-for-byte from the R394 pinned Git-object snapshot. Their source revision and binary relationship are recorded in `../../r394-charon-monomorphizer-preflight/provenance.json` (worktree-relative path: `.r21-scratch/r394-charon-monomorphizer-preflight/provenance.json`). Full local source copies and hashes are listed in `manifest.json`/`SHA256SUMS`.

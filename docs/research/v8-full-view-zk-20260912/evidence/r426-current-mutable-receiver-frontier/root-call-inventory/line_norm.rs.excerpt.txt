@@ -1,0 +1,9 @@
+84: 
+85: #[path="r110_norm.rs"]mod r110_norm;
+86: fn norm_inverse(selected:&Selected,values:&[K],abc:[K;3],base:&[M31],lines:&[M31])->Result<(Vec<CM31>,Vec<M31>),Error>{
+87:     if let Some(out)=r110_norm::try_norm(selected,values,abc,base,lines){
+88:         #[cfg(not(target_os="solana"))] assert_eq!(out,r110_retained_norm(selected,values,abc,base,lines));
+89:         return out;
+90:     }
+91:     r110_retained_norm(selected,values,abc,base,lines)
+92: }

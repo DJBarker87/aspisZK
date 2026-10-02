@@ -1,0 +1,114 @@
+=== InstSimplify pass enable + ref-deref rewrite ===
+    23	            InstSimplify::BeforeInline => "InstSimplify-before-inline",
+    24	            InstSimplify::AfterSimplifyCfg => "InstSimplify-after-simplifycfg",
+    25	        }
+    26	    }
+    27	
+    28	    fn is_enabled(&self, sess: &rustc_session::Session) -> bool {
+    29	        sess.mir_opt_level() > 0
+    30	    }
+    31	
+    32	    fn run_pass(&self, tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
+    33	        let preserve_ub_checks = find_attr!(tcx.hir_krate_attrs(), RustcPreserveUbChecks);
+    34	        if !preserve_ub_checks {
+   144	    /// Transform `&(*a)` ==> `a`.
+   145	    fn simplify_ref_deref(&self, rvalue: &mut Rvalue<'tcx>) {
+   146	        if let Rvalue::Ref(_, _, place) | Rvalue::RawPtr(_, place) = rvalue
+   147	            && let Some((base, ProjectionElem::Deref)) = place.as_ref().last_projection()
+   148	            && rvalue.ty(self.local_decls, self.tcx) == base.ty(self.local_decls, self.tcx).ty
+   149	        {
+   150	            *rvalue = Rvalue::Use(
+   151	                Operand::Copy(Place {
+   152	                    local: base.local,
+   153	                    projection: self.tcx.mk_place_elems(base.projection),
+   154	                }),
+   155	                // This might have been a two-phase borrow, which we should not upgrade
+   156	                // to a full `&mut` reborrow.
+   157	                // FIXME: Once Stacked Borrows is fully removed, we can use `Yes` here as
+   158	                // Tree Borrows treats two-phase and full borrows the same.
+   159	                if matches!(
+   160	                    rvalue,
+   161	                    Rvalue::Ref(_, BorrowKind::Mut { kind: MutBorrowKind::TwoPhaseBorrow }, _)
+   162	                ) {
+   163	                    WithRetag::No
+   164	                } else {
+   165	                    WithRetag::Yes
+   166	                },
+   167	            );
+   168	        }
+   169	    }
+=== Deref separator temporary / CopyForDeref ===
+    31	            for (idx, elem) in place.projection[0..].iter().enumerate() {
+    32	                if *elem == ProjectionElem::Deref {
+    33	                    last_deref_idx = idx;
+    34	                }
+    35	            }
+    36	
+    37	            for (idx, (p_ref, p_elem)) in place.iter_projections().enumerate() {
+    38	                if !p_ref.projection.is_empty() && p_elem == ProjectionElem::Deref {
+    39	                    let ty = p_ref.ty(self.local_decls, self.tcx).ty;
+    40	                    let temp = self.patcher.new_local_with_info(
+    41	                        ty,
+    42	                        self.local_decls[p_ref.local].source_info.span,
+    43	                        if self.add_deref_metadata {
+    44	                            LocalInfo::DerefTemp
+    45	                        } else {
+    46	                            LocalInfo::Boring
+    47	                        },
+    48	                    );
+    49	
+    50	                    // We are adding current p_ref's projections to our
+    51	                    // temp value, excluding projections we already covered.
+    52	                    let deref_place = Place::from(place_local)
+    53	                        .project_deeper(&p_ref.projection[last_len..], self.tcx);
+    54	
+    55	                    self.patcher.add_assign(
+    56	                        loc,
+    57	                        Place::from(temp),
+    58	                        if self.add_deref_metadata {
+    59	                            Rvalue::CopyForDeref(deref_place)
+    60	                        } else {
+    61	                            // FIXME: Unfortunately, `add_deref_metadata` is not documented. So who
+    62	                            // knows what is supposed to happen here -- retag or not? `CopyForDeref`
+    63	                            // later turns into a no-retag assignment so probably maybe that's also
+    64	                            // what we need here.
+    65	                            Rvalue::Use(Operand::Copy(deref_place), WithRetag::No)
+    66	                        },
+    67	                    );
+=== EraseDerefTemps lowering ===
+     1	//! This pass converts all `DerefTemp` locals into normal temporaries
+     2	//! and turns their `CopyForDeref` rvalues into normal copies.
+     3	
+     4	use rustc_middle::mir::visit::MutVisitor;
+     5	use rustc_middle::mir::*;
+     6	use rustc_middle::ty::TyCtxt;
+     7	
+     8	struct EraseDerefTempsVisitor<'tcx> {
+     9	    tcx: TyCtxt<'tcx>,
+    10	}
+    11	
+    12	impl<'tcx> MutVisitor<'tcx> for EraseDerefTempsVisitor<'tcx> {
+    13	    fn tcx(&self) -> TyCtxt<'tcx> {
+    14	        self.tcx
+    15	    }
+    16	
+    17	    fn visit_rvalue(&mut self, rvalue: &mut Rvalue<'tcx>, _: Location) {
+    18	        if let &mut Rvalue::CopyForDeref(place) = rvalue {
+    19	            // We do *NOT* want a retag here! This assignment might copy a mutable reference we
+    20	            // can't actually copy, we just need it temporarily to create another pointer.
+    21	            *rvalue = Rvalue::Use(Operand::Copy(place), WithRetag::No)
+    22	        }
+    23	    }
+    24	
+=== Iterator::try_fold source ===
+  2486	    fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R
+  2487	    where
+  2488	        Self: Sized,
+  2489	        F: [const] FnMut(B, Self::Item) -> R + [const] Destruct,
+  2490	        R: [const] Try<Output = B>,
+  2491	    {
+  2492	        let mut accum = init;
+  2493	        while let Some(x) = self.next() {
+  2494	            accum = f(accum, x)?;
+  2495	        }
+  2496	        try { accum }

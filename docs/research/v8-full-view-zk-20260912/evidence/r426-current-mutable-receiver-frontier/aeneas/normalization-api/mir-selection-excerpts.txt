@@ -1,0 +1,257 @@
+### Charon MIR selector
+    15	impl<'tcx> ItemTransCtx<'tcx, '_> {
+    16	    pub fn get_mir(
+    17	        &mut self,
+    18	        item_ref: &hax::ItemRef,
+    19	        span: Span,
+    20	    ) -> Result<Option<mir::Body<'tcx>>, Error> {
+    21	        // Stopgap measure because there are still many panics in charon and hax.
+    22	        let mut this = panic::AssertUnwindSafe(&mut *self);
+    23	        let res = panic::catch_unwind(move || this.get_mir_inner(item_ref));
+    24	        match res {
+    25	            Ok(Ok(body)) => Ok(body),
+    26	            // Translation error
+    27	            Ok(Err(e)) => Err(e),
+    28	            Err(_) => {
+    29	                raise_error!(self, span, "Thread panicked when extracting body.");
+    30	            }
+    31	        }
+    32	    }
+    33	
+    34	    fn get_mir_inner(&mut self, item_ref: &hax::ItemRef) -> Result<Option<mir::Body<'tcx>>, Error> {
+    35	        let tcx = self.t_ctx.tcx;
+    36	        let mir_level = self.t_ctx.options.mir_level;
+    37	        let def_id = &item_ref.def_id;
+    38	        Ok(match get_mir_for_def_id_and_level(tcx, def_id, mir_level) {
+    39	            Some(body) => {
+    40	                let s = self.hax_state_with_id();
+    41	                Some(if self.monomorphize() {
+    42	                    let typing_env = s.typing_env();
+    43	                    let args = item_ref.rustc_args(s);
+    44	                    hax::substitute(tcx, typing_env, Some(args), body)
+    45	                } else {
+    46	                    body
+    47	                })
+    48	            }
+    49	            None => None,
+    50	        })
+    51	    }
+    52	}
+    53	
+    54	/// Query the MIR for a function at a specific level. Return `None` in the case of a foreign body
+    55	/// with no MIR available.
+    56	#[tracing::instrument(skip(tcx))]
+    57	fn get_mir_for_def_id_and_level<'tcx>(
+    58	    tcx: ty::TyCtxt<'tcx>,
+    59	    def_id: &hax::DefId,
+    60	    level: MirLevel,
+    61	) -> Option<mir::Body<'tcx>> {
+    62	    match def_id.base {
+    63	        hax::DefIdBase::Real(rust_def_id) => {
+    64	            if let Some(local_def_id) = rust_def_id.as_local() {
+    65	                match level {
+    66	                    MirLevel::Built => {
+    67	                        let body = tcx.mir_built(local_def_id);
+    68	                        if !body.is_stolen() {
+    69	                            return Some(body.borrow().clone());
+    70	                        }
+    71	                    }
+    72	                    MirLevel::Promoted => {
+    73	                        let (body, _) = tcx.mir_promoted(local_def_id);
+    74	                        if !body.is_stolen() {
+    75	                            return Some(body.borrow().clone());
+    76	                        }
+    77	                    }
+    78	                    MirLevel::Elaborated => {
+    79	                        let body = tcx.mir_drops_elaborated_and_const_checked(local_def_id);
+    80	                        if !body.is_stolen() {
+    81	                            return Some(body.borrow().clone());
+    82	                        }
+    83	                    }
+    84	                    MirLevel::Optimized => {}
+    85	                }
+    86	                // We fall back to optimized MIR if the requested body was stolen.
+    87	            }
+    88	
+    89	            // There are only two MIRs we can fetch for non-local bodies: CTFE mir for globals and const
+    90	            // fns, and optimized MIR for functions.
+    91	            //
+    92	            // We pass `-Zalways-encode-mir` so that we get MIR for all the dependencies we compiled
+    93	            // ourselves. This doesn't apply to the stdlib; there we only get MIR for const items and
+    94	            // generic or inlineable functions.
+    95	            let is_global = matches!(
+    96	                def_id.kind,
+    97	                hax::DefKind::Const { .. }
+    98	                    | hax::DefKind::AnonConst
+    99	                    | hax::DefKind::AssocConst { .. }
+   100	                    | hax::DefKind::InlineConst
+   101	            );
+   102	            let is_static = matches!(def_id.kind, hax::DefKind::Static { .. });
+   103	            let mir_available = tcx.is_mir_available(rust_def_id);
+   104	
+   105	            if mir_available && !is_global && !is_static {
+   106	                Some(tcx.optimized_mir(rust_def_id).clone())
+   107	            } else if (is_global && !tcx.is_trivial_const(rust_def_id))
+   108	                || (is_static && rust_def_id.is_local())
+   109	                || tcx.is_const_fn(rust_def_id)
+   110	            {
+   111	                Some(tcx.mir_for_ctfe(rust_def_id).clone())
+   112	            } else {
+   113	                trace!("mir not available for {:?}", rust_def_id);
+   114	                None
+   115	            }
+   116	        }
+   117	        hax::DefIdBase::Promoted(rust_def_id, promoted_id) => {
+   118	            Some(hax::get_promoted_mir(tcx, rust_def_id, promoted_id))
+   119	        }
+   120	        _ => unreachable!(),
+   121	    }
+   122	}
+### MIR level options docs/default
+   320	    pub preset: Option<Preset>,
+   321	}
+   322	
+   323	/// The MIR stage to use. This is only relevant for the current crate: for dependencies, only mir
+   324	/// optimized is available (or mir elaborated for consts).
+   325	#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Serialize, Deserialize)]
+   326	pub enum MirLevel {
+   327	    /// The MIR just after MIR lowering.
+   328	    Built,
+   329	    /// The MIR after const promotion. This is the MIR used by the borrow-checker.
+   330	    Promoted,
+   331	    /// The MIR after drop elaboration. This is the first MIR to include all the runtime
+   332	    /// information.
+   333	    Elaborated,
+   334	    /// The MIR after optimizations. Charon disables all the optimizations it can, so this is
+   335	    /// sensibly the same MIR as the elaborated MIR.
+   336	    Optimized,
+   337	}
+   338	
+   339	/// Presets to make it easier to tweak options without breaking dependent projects. Eventually we
+   681	impl TranslateOptions {
+   682	    pub fn new(error_ctx: &mut ErrorCtx, options: &CliOpts) -> Self {
+   683	        let mut parse_pattern = |s: &str| -> Result<_, Error> {
+   684	            match NamePattern::parse(s) {
+   685	                Ok(p) => Ok(p),
+   686	                Err(e) => raise_error!(error_ctx, no_crate, "failed to parse pattern `{s}` ({e})"),
+   687	            }
+   688	        };
+   689	
+   690	        let mut mir_level = options.mir.unwrap_or(MirLevel::Promoted);
+   691	        if options.precise_drops {
+   692	            mir_level = std::cmp::max(mir_level, MirLevel::Elaborated);
+   693	        }
+   694	
+   695	        let mut start_from = options
+   696	            .start_from
+   697	            .iter()
+   698	            .filter_map(|path| parse_pattern(path).ok())
+   699	            .map(|p| StartFrom::Pattern {
+   700	                pattern: p,
+   701	                strict: true,
+   702	            })
+   703	            .collect_vec();
+   704	        start_from.extend(
+   705	            options
+### driver MIR compiler config
+    30	/// Tweak options to get usable MIR even for foreign crates.
+    31	fn set_mir_options(config: &mut Config) {
+    32	    config.opts.unstable_opts.always_encode_mir = true;
+    33	    config.opts.unstable_opts.mir_opt_level = Some(0);
+    34	    config.opts.unstable_opts.mir_preserve_ub = true;
+    35	    let disabled_mir_passes = ["CheckAlignment", "CheckNull"];
+    36	    for pass in disabled_mir_passes {
+    37	        config
+    38	            .opts
+    39	            .unstable_opts
+    40	            .mir_enable_passes
+    41	            .push((pass.to_owned(), false));
+    42	    }
+    43	}
+### runtime pass path to optimized MIR
+   565	    run_analysis_to_runtime_passes(tcx, &mut body);
+   566	
+   567	    tcx.alloc_steal_mir(body)
+   568	}
+   569	
+   570	// Made public so that `mir_drops_elaborated_and_const_checked` can be overridden
+   571	// by custom rustc drivers, running all the steps by themselves. See #114628.
+   572	pub fn run_analysis_to_runtime_passes<'tcx>(tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
+   573	    assert!(body.phase == MirPhase::Analysis(AnalysisPhase::Initial));
+   574	    let did = body.source.def_id();
+   575	
+   576	    debug!("analysis_mir_cleanup({:?})", did);
+   577	    run_analysis_cleanup_passes(tcx, body);
+   578	    assert!(body.phase == MirPhase::Analysis(AnalysisPhase::PostCleanup));
+   579	
+   580	    // Do a little drop elaboration before const-checking if `const_precise_live_drops` is enabled.
+   581	    if check_consts::post_drop_elaboration::checking_enabled(&ConstCx::new(tcx, body)) {
+   582	        pm::run_passes(
+   583	            tcx,
+   584	            body,
+   585	            &[
+   586	                &remove_uninit_drops::RemoveUninitDrops,
+   587	                &simplify::SimplifyCfg::RemoveFalseEdges,
+   588	                &Lint(post_drop_elaboration::CheckLiveDrops),
+   589	            ],
+   590	            None,
+   591	            pm::Optimizations::Allowed,
+   592	        );
+   593	    }
+   594	
+   595	    debug!("runtime_mir_lowering({:?})", did);
+   596	    run_runtime_lowering_passes(tcx, body);
+   597	    assert!(body.phase == MirPhase::Runtime(RuntimePhase::Initial));
+   598	
+   599	    debug!("runtime_mir_cleanup({:?})", did);
+   600	    run_runtime_cleanup_passes(tcx, body);
+   601	    assert!(body.phase == MirPhase::Runtime(RuntimePhase::PostCleanup));
+   602	}
+   603	
+   604	// FIXME(JakobDegen): Can we make these lists of passes consts?
+   605	
+   606	/// After this series of passes, no lifetime analysis based on borrowing can be done.
+   607	fn run_analysis_cleanup_passes<'tcx>(tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
+   608	    let passes: &[&dyn MirPass<'tcx>] = &[
+   609	        &impossible_predicates::ImpossiblePredicates,
+   610	        &cleanup_post_borrowck::CleanupPostBorrowck,
+   611	        &remove_noop_landing_pads::RemoveNoopLandingPads,
+   612	        &simplify::SimplifyCfg::PostAnalysis,
+   613	        &deref_separator::Derefer,
+   614	    ];
+   615	
+   616	    pm::run_passes(
+   617	        tcx,
+   618	        body,
+   619	        passes,
+   620	        Some(MirPhase::Analysis(AnalysisPhase::PostCleanup)),
+   621	        pm::Optimizations::Allowed,
+   622	    );
+   623	}
+   624	
+   625	/// Returns the sequence of passes that lowers analysis to runtime MIR.
+   626	fn run_runtime_lowering_passes<'tcx>(tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
+   627	    let passes: &[&dyn MirPass<'tcx>] = &[
+   628	        // These next passes must be executed together.
+   629	        &add_call_guards::CriticalCallEdges,
+   630	        // Must be done before drop elaboration because we need to drop opaque types, too.
+   631	        &post_analysis_normalize::PostAnalysisNormalize,
+   632	        // Calling this after `PostAnalysisNormalize` ensures that we don't deal with opaque types.
+   633	        &add_subtyping_projections::Subtyper,
+   634	        &elaborate_drops::ElaborateDrops,
+   635	        // Needs to happen after drop elaboration.
+   636	        &Lint(check_call_recursion::CheckDropRecursion),
+   637	        // This will remove extraneous landing pads which are no longer
+   638	        // necessary as well as forcing any call in a non-unwinding
+   639	        // function calling a possibly-unwinding function to abort the process.
+   640	        &abort_unwinding_calls::AbortUnwindingCalls,
+   641	        // AddMovesForPackedDrops needs to run after drop
+   642	        // elaboration.
+   643	        &add_moves_for_packed_drops::AddMovesForPackedDrops,
+   644	        &erase_deref_temps::EraseDerefTemps,
+   645	        &elaborate_box_derefs::ElaborateBoxDerefs,
+   646	        &coroutine::StateTransform,
+   647	        &Lint(known_panics_lint::KnownPanicsLint),
+   648	    ];
+   649	    pm::run_passes_no_validate(tcx, body, passes, Some(MirPhase::Runtime(RuntimePhase::Initial)));
+   650	}

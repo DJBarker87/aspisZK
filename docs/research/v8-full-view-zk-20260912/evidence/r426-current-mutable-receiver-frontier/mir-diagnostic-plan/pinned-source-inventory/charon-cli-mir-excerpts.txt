@@ -1,0 +1,276 @@
+=== CLI option declarations ===
+    49	    /// The MIR stage to extract. This is only relevant for the current crate; for dependencies only
+    50	    /// MIR optimized is available.
+    51	    #[arg(long)]
+    52	    pub mir: Option<MirLevel>,
+    53	    /// Extra flags to pass to rustc.
+    54	    #[clap(long = "rustc-arg")]
+    55	    #[serde(default)]
+    56	    pub rustc_args: Vec<String>,
+    57	    /// A list of target architectures to translate for. Charon will run the compiler once for each
+    58	    /// target and aggregate the results, which is useful if the code includes `#[cfg(..)]`
+    59	    /// filters.
+    60	    /// Warning: this is an initial implementation which is extremely slow.
+    61	    #[clap(long, value_delimiter = ',')]
+    62	    #[serde(default)]
+    63	    pub targets: Vec<String>,
+    64	    /// Sysroot to use for rustc invocations. By default Charon builds a sysroot that has full MIR
+    65	    /// for the standard library. You can pass a custom sysroot to use instead, or pass "default"
+    66	    /// to use the normal distributed sysroot, which lacks MIR bodies for many standard library
+    67	    /// functions.
+    68	    #[clap(long)]
+    69	    #[serde(default)]
+    70	    pub sysroot: Option<String>,
+    71	
+   256	    /// Pretty-print the ULLBC immediately after extraction from MIR.
+   257	    #[clap(long)]
+   258	    #[serde(default)]
+   259	    pub print_original_ullbc: bool,
+   260	    /// Pretty-print the ULLBC after applying the micro-passes (before serialization/control-flow reconstruction).
+   261	    #[clap(long)]
+   262	    #[serde(default)]
+   263	    pub print_ullbc: bool,
+   264	    /// Pretty-print the LLBC just after we built it (i.e., immediately after loop reconstruction).
+   265	    #[clap(long)]
+   266	    #[serde(default)]
+   267	    pub print_built_llbc: bool,
+   268	    /// Pretty-print the final LLBC (after all the cleaning micro-passes).
+   269	    #[clap(long)]
+   270	    #[serde(default)]
+   271	    pub print_llbc: bool,
+   272	    /// The destination directory. Files will be generated as
+=== MIR acquisition ===
+    54	/// Query the MIR for a function at a specific level. Return `None` in the case of a foreign body
+    55	/// with no MIR available.
+    56	#[tracing::instrument(skip(tcx))]
+    57	fn get_mir_for_def_id_and_level<'tcx>(
+    58	    tcx: ty::TyCtxt<'tcx>,
+    59	    def_id: &hax::DefId,
+    60	    level: MirLevel,
+    61	) -> Option<mir::Body<'tcx>> {
+    62	    match def_id.base {
+    63	        hax::DefIdBase::Real(rust_def_id) => {
+    64	            if let Some(local_def_id) = rust_def_id.as_local() {
+    65	                match level {
+    66	                    MirLevel::Built => {
+    67	                        let body = tcx.mir_built(local_def_id);
+    68	                        if !body.is_stolen() {
+    69	                            return Some(body.borrow().clone());
+    70	                        }
+    71	                    }
+    72	                    MirLevel::Promoted => {
+    73	                        let (body, _) = tcx.mir_promoted(local_def_id);
+    74	                        if !body.is_stolen() {
+    75	                            return Some(body.borrow().clone());
+    76	                        }
+    77	                    }
+    78	                    MirLevel::Elaborated => {
+    79	                        let body = tcx.mir_drops_elaborated_and_const_checked(local_def_id);
+    80	                        if !body.is_stolen() {
+    81	                            return Some(body.borrow().clone());
+    82	                        }
+    83	                    }
+    84	                    MirLevel::Optimized => {}
+    85	                }
+    86	                // We fall back to optimized MIR if the requested body was stolen.
+    87	            }
+    88	
+    89	            // There are only two MIRs we can fetch for non-local bodies: CTFE mir for globals and const
+    90	            // fns, and optimized MIR for functions.
+    91	            //
+    92	            // We pass `-Zalways-encode-mir` so that we get MIR for all the dependencies we compiled
+    93	            // ourselves. This doesn't apply to the stdlib; there we only get MIR for const items and
+    94	            // generic or inlineable functions.
+    95	            let is_global = matches!(
+    96	                def_id.kind,
+    97	                hax::DefKind::Const { .. }
+    98	                    | hax::DefKind::AnonConst
+    99	                    | hax::DefKind::AssocConst { .. }
+   100	                    | hax::DefKind::InlineConst
+   101	            );
+   102	            let is_static = matches!(def_id.kind, hax::DefKind::Static { .. });
+   103	            let mir_available = tcx.is_mir_available(rust_def_id);
+   104	
+   105	            if mir_available && !is_global && !is_static {
+   106	                Some(tcx.optimized_mir(rust_def_id).clone())
+   107	            } else if (is_global && !tcx.is_trivial_const(rust_def_id))
+   108	                || (is_static && rust_def_id.is_local())
+   109	                || tcx.is_const_fn(rust_def_id)
+   110	            {
+   111	                Some(tcx.mir_for_ctfe(rust_def_id).clone())
+   112	            } else {
+   113	                trace!("mir not available for {:?}", rust_def_id);
+   114	                None
+   115	            }
+   116	        }
+=== Body translation boundary ===
+   139	impl<'tcx> ItemTransCtx<'tcx, '_> {
+   140	    /// Translate the MIR body of this definition if it has one. Catches any error and returns
+   141	    /// `Body::Error` instead
+   142	    pub fn translate_def_body(&mut self, span: Span, def: &hax::FullDef<'tcx>) -> Body {
+   143	        match self.translate_def_body_inner(span, def) {
+   144	            Ok(body) => body,
+   145	            Err(e) => Body::Error(e),
+   146	        }
+   147	    }
+   148	
+   149	    fn translate_def_body_inner(
+   150	        &mut self,
+   151	        span: Span,
+   152	        def: &hax::FullDef<'tcx>,
+   153	    ) -> Result<Body, Error> {
+   154	        // Retrieve the body
+   155	        if let Some(body) = self.get_mir(def.this(), span)? {
+   156	            Ok(self.translate_body(span, body, &def.source_text))
+   157	        } else if let Some(value) = self.evaluate_const_def(def) {
+   158	            // For globals without MIR, generate a body by evaluating the global.
+   159	            // TODO: we lost the MIR of some consts on a rustc update. A trait assoc const
+   160	            // default value no longer has a cross-crate MIR so it's unclear how to retreive
+   161	            // the value. See the `trait-default-const-cross-crate` test.
+   162	            let c = self.translate_constant_expr(span, &value)?;
+   163	            let mut bb = BodyBuilder::new(span, 0);
+   164	            let ret = bb.new_var(None, c.ty.clone());
+   165	            bb.push_statement(StatementKind::Assign(
+   166	                ret,
+   167	                Rvalue::Use(Operand::Const(Box::new(c)), WithRetag::No),
+   168	            ));
+   169	            Ok(Body::Unstructured(bb.build()))
+   170	        } else {
+   171	            Ok(Body::Missing)
+   172	        }
+   173	    }
+   174	
+   175	    /// Translate a function body. Catches errors and returns `Body::Error` instead.
+   176	    /// That's the entrypoint of this module.
+   177	    pub fn translate_body(
+   178	        &mut self,
+   179	        span: Span,
+   180	        body: mir::Body<'tcx>,
+   181	        source_text: &Option<String>,
+   182	    ) -> Body {
+   183	        let drop_kind = match body.phase {
+   184	            mir::MirPhase::Built | mir::MirPhase::Analysis(..) => DropKind::Conditional,
+   185	            mir::MirPhase::Runtime(..) => DropKind::Precise,
+   186	        };
+   187	        let mut ctx = panic::AssertUnwindSafe(&mut *self);
+   188	        let body = panic::AssertUnwindSafe(body);
+   189	        // Stopgap measure because there are still many panics in charon and hax.
+   190	        let res = panic::catch_unwind(move || {
+   191	            let body = Rc::new({ body }.0);
+   192	            let ctx = BodyTransCtx::new(*ctx, &body, drop_kind);
+   193	            ctx.translate_body(&body, source_text)
+   194	        });
+   195	        match res {
+   196	            Ok(Ok(body)) => body,
+   197	            // Translation error
+   198	            Ok(Err(e)) => Body::Error(e),
+   199	            // Panic
+   200	            Err(_) => {
+   201	                let e = register_error!(self, span, "Thread panicked when extracting body.");
+   202	                Body::Error(e)
+   203	            }
+   204	        }
+   205	    }
+=== raw MIR access wrapper ===
+    53	        pub trait IsMirKind: Clone + std::fmt::Debug {
+    54	            // CPS to deal with stealable bodies cleanly.
+    55	            fn get_mir<'tcx, T>(
+    56	                tcx: TyCtxt<'tcx>,
+    57	                id: DefId,
+    58	                f: impl FnOnce(&Body<'tcx>) -> T,
+    59	            ) -> Option<T>;
+    60	        }
+    61	
+    62	        impl IsMirKind for Optimized {
+    63	            fn get_mir<'tcx, T>(
+    64	                tcx: TyCtxt<'tcx>,
+    65	                id: DefId,
+    66	                f: impl FnOnce(&Body<'tcx>) -> T,
+    67	            ) -> Option<T> {
+    68	                tcx.is_mir_available(id).then(|| f(tcx.optimized_mir(id)))
+    69	            }
+    70	        }
+    71	
+    72	        impl IsMirKind for CTFE {
+    73	            fn get_mir<'tcx, T>(
+    74	                tcx: TyCtxt<'tcx>,
+    75	                id: DefId,
+    76	                f: impl FnOnce(&Body<'tcx>) -> T,
+    77	            ) -> Option<T> {
+    78	                (!tcx.is_trivial_const(id)).then(|| f(tcx.mir_for_ctfe(id)))
+    79	            }
+    80	        }
+    81	
+    82	        impl IsMirKind for Unknown {
+    83	            fn get_mir<'tcx, T>(
+    84	                _tcx: TyCtxt<'tcx>,
+    85	                _id: DefId,
+    86	                _f: impl FnOnce(&Body<'tcx>) -> T,
+    87	            ) -> Option<T> {
+    88	                None
+    89	            }
+    90	        }
+=== CLI print handling and rustc args ===
+   176	
+   177	    // Merge all crates.
+   178	    let merged = multi_target::merge(options.clone(), krates);
+   179	
+   180	    if options.print_llbc || options.print_ullbc {
+   181	        println!("{}", merged.translated);
+   182	    }
+   183	
+   184	    // Serialize the merged result
+   185	    let targets = options.targets(&merged.translated.crate_name);
+   186	    merged
+   187	        .serialize_to_files(targets)
+   188	        .map_err(|()| anyhow::anyhow!("failed to serialize merged crate"))?;
+   189	
+   190	    Ok(ExitStatus::default())
+   225	fn translate_without_cargo(mut options: CliOpts) -> anyhow::Result<ExitStatus> {
+   226	    ensure_rustup();
+   227	    options.validate()?;
+   228	    let mut cmd = toolchain::driver_cmd()?;
+   229	    let is_specified = |arg| {
+   230	        let mut iter = options.rustc_args.iter();
+   231	        iter.any(|input| input.starts_with(arg))
+   232	    };
+   233	    if !is_specified("--target") {
+   234	        // Make sure the build target is explicitly set. This is needed to detect which crates are
+   235	        // proc-macro/build-script in `charon-driver`.
+   236	        cmd.arg("--target");
+   237	        cmd.arg(&get_rustc_version()?.host);
+   238	    }
+   239	    cmd.args(std::mem::take(&mut options.rustc_args));
+   240	    cmd.env(CHARON_ARGS, serde_json::to_string(&options).unwrap());
+   241	    Ok(cmd
+   242	        .spawn()
+   243	        .expect("could not run charon-driver")
+   244	        .wait()
+   245	        .expect("failed to wait for charon-driver?"))
+=== rustc config and MIR flags ===
+    31	fn set_mir_options(config: &mut Config) {
+    32	    config.opts.unstable_opts.always_encode_mir = true;
+    33	    config.opts.unstable_opts.mir_opt_level = Some(0);
+    34	    config.opts.unstable_opts.mir_preserve_ub = true;
+    35	    let disabled_mir_passes = ["CheckAlignment", "CheckNull"];
+    36	    for pass in disabled_mir_passes {
+    37	        config
+   285	        options.apply_preset();
+   286	
+   287	        error_ctx.continue_on_failure = !options.abort_on_error;
+   288	        error_ctx.error_on_warnings = options.error_on_warnings;
+   289	
+   290	        for extra_flag in options.rustc_args.iter().cloned() {
+   291	            compiler_args.push(extra_flag);
+   292	        }
+   293	
+   294	        // Call the Rust compiler with our custom callback.
+   295	        let mut callback = CharonCallbacks {
+   296	            options: &options,
+   297	            emit_artifacts,
+   298	            codegen,
+   299	            error_ctx: Some(error_ctx),
+   300	            transform_ctx: None,
+   301	        };
+   302	        run_compiler_with_callbacks(compiler_args, &mut callback)?;
+   303	        // If `transform_ctx` is not set here, there was a fatal error.

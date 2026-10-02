@@ -1,0 +1,453 @@
+### place/projection/borrow kinds
+    10	#[derive(Debug, PartialEq, Eq, Clone, SerializeState, DeserializeState, Drive, DriveMut)]
+    11	#[serde_state(state_implements = HashConsSerializerState)] // Avoid corecursive impls due to perfect derive
+    12	pub struct Place {
+    13	    pub kind: PlaceKind,
+    14	    pub ty: Ty,
+    15	}
+    16	
+    17	#[derive(
+    18	    Debug,
+    19	    PartialEq,
+    20	    Eq,
+    21	    Clone,
+    22	    EnumIsA,
+    23	    EnumAsGetters,
+    24	    EnumToGetters,
+    25	    SerializeState,
+    26	    DeserializeState,
+    27	    Drive,
+    28	    DriveMut,
+    29	)]
+    30	#[cfg_attr(feature = "charon_on_charon", charon::variants_prefix("Place"))]
+    31	pub enum PlaceKind {
+    32	    /// A local variable in a function body.
+    33	    Local(LocalId),
+    34	    /// A subplace of a place.
+    35	    Projection(Box<Place>, ProjectionElem),
+    36	    /// A global (const or static).
+    37	    /// Not present in MIR; introduced in [simplify_constants.rs].
+    38	    Global(GlobalDeclRef),
+    39	}
+    40	
+    41	/// Note that we don't have the equivalent of "downcasts".
+    42	/// Downcasts are actually necessary, for instance when initializing enumeration
+    43	/// values: the value is initially `Bottom`, and we need a way of knowing the
+    44	/// variant.
+    45	/// For example:
+    46	/// `((_0 as Right).0: T2) = move _1;`
+    47	/// In MIR, downcasts always happen before field projections: in our internal
+    48	/// language, we thus merge downcasts and field projections.
+    49	#[derive(
+    50	    Debug,
+    51	    PartialEq,
+    52	    Eq,
+    53	    Clone,
+    54	    EnumIsA,
+    55	    EnumAsGetters,
+    56	    EnumToGetters,
+    57	    VariantName,
+    58	    SerializeState,
+    59	    DeserializeState,
+    60	    Drive,
+    61	    DriveMut,
+    62	)]
+    63	pub enum ProjectionElem {
+    64	    /// Dereference a shared/mutable reference, a box, or a raw pointer.
+    65	    Deref,
+    66	    /// Projection from ADTs (variants, structures).
+    67	    /// We allow projections to be used as left-values and right-values.
+    68	    /// We should never have projections to fields of symbolic variants (they
+    69	    /// should have been expanded before through a match).
+    70	    Field(FieldProjKind, FieldId),
+    71	    /// A built-in pointer (a reference, raw pointer, or `Box`) in Rust is always a fat pointer: it
+    72	    /// contains an address and metadata for the pointed-to place. This metadata is empty for sized
+    73	    /// types, it's the length for slices, and the vtable for `dyn Trait`.
+    74	    ///
+    75	    /// We consider such pointers to be like a struct with two fields; this represent access to the
+    76	    /// metadata "field".
+    77	    PtrMetadata,
+    78	    /// MIR imposes that the argument to an index projection be a local variable, meaning
+    79	    /// that even constant indices into arrays are let-bound as separate variables.
+    80	    /// We **eliminate** this variant in a micro-pass for LLBC.
+    81	    #[cfg_attr(feature = "charon_on_charon", charon::rename("ProjIndex"))]
+    82	    Index {
+    83	        offset: Box<Operand>,
+    84	        #[drive(skip)]
+    85	        from_end: bool,
+    86	    },
+    87	    /// Take a subslice of a slice or array. If `from_end` is `true` this is
+    88	    /// `slice[from..slice.len() - to]`, otherwise this is `slice[from..to]`.
+    89	    /// We **eliminate** this variant in a micro-pass for LLBC.
+    90	    Subslice {
+    91	        from: Box<Operand>,
+    92	        to: Box<Operand>,
+    93	        #[drive(skip)]
+    94	        from_end: bool,
+    95	    },
+    96	}
+    97	
+    98	#[derive(
+    99	    Debug,
+   100	    PartialEq,
+   101	    Eq,
+   102	    Copy,
+   103	    Clone,
+   104	    EnumIsA,
+   105	    EnumAsGetters,
+   106	    SerializeState,
+   107	    DeserializeState,
+   108	    Drive,
+   109	    DriveMut,
+   110	)]
+   111	#[cfg_attr(feature = "charon_on_charon", charon::variants_prefix("Proj"))]
+   112	pub enum FieldProjKind {
+   113	    Adt(TypeDeclId, Option<VariantId>),
+   114	    /// If we project from a tuple, the projection kind gives the arity of the tuple.
+   115	    #[drive(skip)]
+   116	    Tuple(usize),
+   117	}
+   118	
+   119	#[derive(
+   120	    Debug,
+   121	    PartialEq,
+   122	    Eq,
+   123	    Copy,
+   124	    Clone,
+   125	    EnumIsA,
+   126	    EnumAsGetters,
+   127	    Serialize,
+   128	    Deserialize,
+   129	    Drive,
+   130	    DriveMut,
+   131	)]
+   132	#[cfg_attr(feature = "charon_on_charon", charon::variants_prefix("B"))]
+   133	pub enum BorrowKind {
+   134	    Shared,
+   135	    Mut,
+   136	    /// See <https://doc.rust-lang.org/beta/nightly-rustc/rustc_middle/mir/enum.MutBorrowKind.html#variant.TwoPhaseBorrow>
+   137	    /// and <https://rustc-dev-guide.rust-lang.org/borrow_check/two_phase_borrows.html>
+   138	    TwoPhaseMut,
+   139	    /// Those are typically introduced when using guards in matches, to make sure guards don't
+   140	    /// change the variant of an enum value while me match over it.
+   141	    ///
+   142	    /// See <https://doc.rust-lang.org/beta/nightly-rustc/rustc_middle/mir/enum.FakeBorrowKind.html#variant.Shallow>.
+   143	    Shallow,
+   144	    /// Data must be immutable but not aliasable. In other words you can't mutate the data but you
+   145	    /// can mutate *through it*, e.g. if it points to a `&mut T`. This is only used in closure
+   146	    /// captures, e.g.
+   147	    /// ```rust,ignore
+   148	    /// let mut z = 3;
+   149	    /// let x: &mut isize = &mut z;
+   150	    /// let y = || *x += 5;
+   151	    /// ```
+   152	    /// Here the captured variable can't be `&mut &mut x` since the `x` binding is not mutable, yet
+   153	    /// we must be able to mutate what it points to.
+   154	    ///
+   155	    /// See <https://doc.rust-lang.org/beta/nightly-rustc/rustc_middle/mir/enum.MutBorrowKind.html#variant.ClosureCapture>.
+### RvRef ptr_metadata AST
+   770	    Drive,
+   771	    DriveMut,
+   772	)]
+   773	pub enum Rvalue {
+   774	    /// Lifts an operand as an rvalue.
+   775	    Use(Operand, #[drive(skip)] WithRetag),
+   776	    /// Takes a reference to the given place.
+   777	    /// The `Operand` refers to the init value of the metadata, it is `()` if no metadata
+   778	    #[cfg_attr(feature = "charon_on_charon", charon::rename("RvRef"))]
+   779	    Ref {
+   780	        place: Place,
+   781	        #[serde_state(stateless)]
+   782	        kind: BorrowKind,
+   783	        ptr_metadata: Operand,
+   784	    },
+   785	    /// Takes a raw pointer with the given mutability to the given place. This is generated by
+   786	    /// pointer casts like `&v as *const _` or raw borrow expressions like `&raw const v.`
+   787	    /// Like `Ref`, the `Operand` refers to the init value of the metadata, it is `()` if no metadata.
+   788	    RawPtr {
+   789	        place: Place,
+   790	        kind: RefKind,
+   791	        ptr_metadata: Operand,
+   792	    },
+   793	    /// Binary operations (note that we merge "checked" and "unchecked" binops)
+   794	    BinaryOp(BinOp, Operand, Operand),
+   795	    /// Unary operation (e.g. not, neg)
+### call and statement AST
+    31	pub enum StatementKind {
+    32	    /// Assigns an `Rvalue` to a `Place`. e.g. `let y = x;` could become
+    33	    /// `y := move x` which is represented as `Assign(y, Rvalue::Use(Operand::Move(x)))`.
+    34	    Assign(Place, Rvalue),
+    35	    /// Not used today because we take MIR built.
+    36	    SetDiscriminant(Place, VariantId),
+    37	    /// Equivalent to std::intrinsics::copy_nonoverlapping; this is not modelled as a function
+    38	    /// call as it cannot diverge
+    39	    CopyNonOverlapping(Box<CopyNonOverlapping>),
+    40	    /// Indicates that this local should be allocated; if it is already allocated, this frees
+    41	    /// the local and re-allocates it. The arguments do not receive a `StorageLive`. We ensure in
+    42	    /// the micro-pass `insert_storage_statements` that all other locals have a `StorageLive`
+    43	    /// associated with them.
+    44	    StorageLive(LocalId),
+    45	    /// Indicates that this local should be deallocated; if it is already deallocated, this is
+    46	    /// a no-op. A local may not have a `StorageDead` in the function's body, in which case it
+    47	    /// is implicitly deallocated at the end of the function. The return local does not receive a
+    48	    /// `StorageDead`. We ensure in the micro-pass `insert_storage_statements` that all other locals
+    49	    /// have a `StorageDead` before function exits.
+    50	    StorageDead(LocalId),
+    51	    /// A place is mentioned, but not accessed. The place itself must still be valid though, so
+    52	    /// this statement is not a no-op: it can trigger UB if the place's projections are not valid
+    53	    /// (e.g. because they go out of bounds).
+    54	    PlaceMention(Place),
+    55	    /// Drop the value at the given place.
+    56	    ///
+    57	    /// Depending on `DropKind`, this may be a real call to `drop_glue`, or a conditional call
+    58	    /// that should only happen if the place has not been moved out of. See the docs of `DropKind`
+    59	    /// for more details; to get precise drops use `--precise-drops`.
+    60	    Drop {
+    77	        on_unwind: Block,
+    78	    },
+    79	    Call {
+    80	        call: Call,
+    81	        on_unwind: Block,
+    82	    },
+    83	    /// Panic also handles "unreachable". We keep the name of the panicking function that was
+    84	    /// called.
+    85	    Abort(AbortKind),
+    86	    Return,
+    87	    /// Unwind out of the current function into its caller.
+    88	    UnwindResume,
+    89	    /// Break to outer loops.
+    90	    /// The `usize` gives the index of the outer loop to break to:
+    91	    /// * 0: break to first outer loop (the current loop)
+    92	    /// * 1: break to second outer loop
+    93	    /// * ...
+    94	    #[drive(skip)]
+    95	    Break(usize),
+    96	    /// Continue to outer loops.
+    97	    /// The `usize` gives the index of the outer loop to continue to:
+    98	    /// * 0: continue to first outer loop (the current loop)
+    99	    /// * 1: continue to second outer loop
+   100	    /// * ...
+   101	    #[drive(skip)]
+   102	    Continue(usize),
+   103	    /// No-op.
+   104	    Nop,
+   105	    Switch(Switch),
+   106	    Loop(Block),
+   107	    #[drive(skip)]
+   108	    Error(String),
+   109	}
+   110	
+   111	#[derive(Debug, Eq, Clone, SerializeState, DeserializeState, Drive, DriveMut)]
+   112	pub struct Statement {
+   113	    pub span: Span,
+   114	    /// Integer uniquely identifying this statement among the statmeents in the current body. To
+   115	    /// simplify things we generate globally-fresh ids when creating a new `Statement`.
+   116	    #[cfg_attr(feature = "charon_on_charon", charon::rename("statement_id"))]
+   117	    pub id: StatementId,
+   118	    pub kind: StatementKind,
+   119	    /// Comments that precede this statement.
+   120	    // This is filled in a late pass after all the control-flow manipulation.
+   121	    #[drive(skip)]
+   122	    pub comments_before: Vec<String>,
+   123	}
+### locals
+    13	/// A variable
+    14	#[derive(Debug, PartialEq, Eq, Clone, SerializeState, DeserializeState, Drive, DriveMut)]
+    15	pub struct Local {
+    16	    /// Unique index identifying the variable
+    17	    pub index: LocalId,
+    18	    /// Variable name - may be `None` if the variable was introduced by Rust
+    19	    /// through desugaring.
+    20	    #[drive(skip)]
+    21	    pub name: Option<String>,
+    22	    /// Span of the variable declaration.
+    23	    pub span: Span,
+    24	    /// The variable type
+    25	    #[cfg_attr(feature = "charon_on_charon", charon::rename("local_ty"))]
+    26	    pub ty: Ty,
+    27	}
+    28	#[deprecated(note = "use `Local` intead")]
+    29	pub type Var = Local;
+    30	#[deprecated(note = "use `LocalId` intead")]
+    31	pub type VarId = LocalId;
+    32	
+    33	/// The local variables of a body.
+    34	#[derive(
+    35	    Debug, PartialEq, Eq, Default, Clone, SerializeState, DeserializeState, Drive, DriveMut,
+    36	)]
+    37	pub struct Locals {
+    38	    /// The number of local variables used for the input arguments.
+    39	    #[drive(skip)]
+    40	    pub arg_count: usize,
+    41	    /// The local variables.
+    42	    /// We always have, in the following order:
+    43	    /// - the local used for the return value (index 0)
+    44	    /// - the `arg_count` input arguments
+    45	    /// - the remaining locals, used for the intermediate computations
+    46	    pub locals: IndexVec<LocalId, Local>,
+    47	}
+### generated OCaml place/RvRef constructors
+   193	and place = { kind : place_kind; ty : ty }
+   194	
+   195	and place_kind =
+   196	  | PlaceLocal of local_id  (** A local variable in a function body. *)
+   197	  | PlaceProjection of place * projection_elem  (** A subplace of a place. *)
+   198	  | PlaceGlobal of global_decl_ref
+   199	      (** A global (const or static). Not present in MIR; introduced in
+   200	          [simplify_constants.rs]. *)
+   201	
+   202	(** Note that we don't have the equivalent of "downcasts". Downcasts are
+   203	    actually necessary, for instance when initializing enumeration values: the
+   204	    value is initially [Bottom], and we need a way of knowing the variant. For
+   205	    example: [((_0 as Right).0: T2) = move _1;] In MIR, downcasts always happen
+   206	    before field projections: in our internal language, we thus merge downcasts
+   207	    and field projections. *)
+   208	and projection_elem =
+   209	  | Deref
+   210	      (** Dereference a shared/mutable reference, a box, or a raw pointer. *)
+   211	  | Field of field_proj_kind * field_id
+   212	      (** Projection from ADTs (variants, structures). We allow projections to
+   213	          be used as left-values and right-values. We should never have
+   214	          projections to fields of symbolic variants (they should have been
+   215	          expanded before through a match). *)
+   216	  | PtrMetadata
+   217	      (** A built-in pointer (a reference, raw pointer, or [Box]) in Rust is
+   218	          always a fat pointer: it contains an address and metadata for the
+   219	          pointed-to place. This metadata is empty for sized types, it's the
+   220	          length for slices, and the vtable for [dyn Trait].
+   221	
+   222	          We consider such pointers to be like a struct with two fields; this
+   223	          represent access to the metadata "field". *)
+   224	  | ProjIndex of operand * bool
+   225	      (** MIR imposes that the argument to an index projection be a local
+   226	          variable, meaning that even constant indices into arrays are let-bound
+   227	          as separate variables. We **eliminate** this variant in a micro-pass
+   228	          for LLBC.
+   229	
+   230	          Fields:
+   231	          - [offset]
+   232	          - [from_end] *)
+   233	  | Subslice of operand * operand * bool
+   234	      (** Take a subslice of a slice or array. If [from_end] is [true] this is
+   235	          [slice[from..slice.len() - to]], otherwise this is [slice[from..to]].
+   236	          We **eliminate** this variant in a micro-pass for LLBC.
+   237	
+   238	          Fields:
+   239	          - [from]
+   240	          - [to]
+   241	          - [from_end] *)
+   242	
+   243	(** TODO: we could factor out [Rvalue] and function calls (for LLBC, not ULLBC).
+   244	    We can also factor out the unops, binops with the function calls. TODO: move
+   245	    the aggregate kind to operands TODO: we should prefix the type variants with
+   246	    "R" or "Rv", this would avoid collisions *)
+   247	and rvalue =
+   248	  | Use of operand * with_retag  (** Lifts an operand as an rvalue. *)
+   249	  | RvRef of place * borrow_kind * operand
+   250	      (** Takes a reference to the given place. The [Operand] refers to the init
+   251	          value of the metadata, it is [()] if no metadata
+   252	
+   253	          Fields:
+   254	          - [place]
+   255	          - [kind]
+   256	          - [ptr_metadata] *)
+   257	  | RawPtr of place * ref_kind * operand
+   258	      (** Takes a raw pointer with the given mutability to the given place. This
+   259	          is generated by pointer casts like [&v as *const _] or raw borrow
+   260	          expressions like [&raw const v.] Like [Ref], the [Operand] refers to
+### generated OCaml Statement/Local records
+     7	module StatementId = IdGen ()
+     8	
+     9	type block = { span : span; statements : statement list }
+    10	
+    11	and statement = {
+    12	  span : span;
+    13	  statement_id : statement_id;
+    14	      (** Integer uniquely identifying this statement among the statmeents in
+    15	          the current body. To simplify things we generate globally-fresh ids
+    16	          when creating a new [Statement]. *)
+    17	  kind : statement_kind;
+    18	  comments_before : string list;  (** Comments that precede this statement. *)
+    19	}
+    20	
+    21	and statement_id = (StatementId.id[@visitors.opaque])
+    22	
+    23	(** A raw statement: a statement without meta data. *)
+    24	and statement_kind =
+    25	  | Assign of place * rvalue
+    26	      (** Assigns an [Rvalue] to a [Place]. e.g. [let y = x;] could become
+    27	          [y := move x] which is represented as
+    28	          [Assign(y, Rvalue::Use(Operand::Move(x)))]. *)
+    29	  | SetDiscriminant of place * variant_id
+    30	      (** Not used today because we take MIR built. *)
+    31	  | CopyNonOverlapping of copy_non_overlapping
+    32	      (** Equivalent to std::intrinsics::copy_nonoverlapping; this is not
+    33	          modelled as a function call as it cannot diverge *)
+    34	  | StorageLive of local_id
+    35	      (** Indicates that this local should be allocated; if it is already
+    36	          allocated, this frees the local and re-allocates it. The arguments do
+    37	          not receive a [StorageLive]. We ensure in the micro-pass
+    38	          [insert_storage_statements] that all other locals have a [StorageLive]
+    39	          associated with them. *)
+    40	  | StorageDead of local_id
+    41	      (** Indicates that this local should be deallocated; if it is already
+    42	          deallocated, this is a no-op. A local may not have a [StorageDead] in
+    43	          the function's body, in which case it is implicitly deallocated at the
+    44	          end of the function. The return local does not receive a
+    45	          [StorageDead]. We ensure in the micro-pass [insert_storage_statements]
+   126	(** A variable *)
+   127	and local = {
+   128	  index : local_id;  (** Unique index identifying the variable *)
+   129	  name : string option;
+   130	      (** Variable name - may be [None] if the variable was introduced by Rust
+   131	          through desugaring. *)
+   132	  span : span;  (** Span of the variable declaration. *)
+   133	  local_ty : ty;  (** The variable type *)
+   134	}
+   135	
+   136	(** The local variables of a body. *)
+   137	and locals = {
+   138	  arg_count : int;
+   139	      (** The number of local variables used for the input arguments. *)
+   140	  locals : local list;
+   141	      (** The local variables. We always have, in the following order:
+   142	          - the local used for the return value (index 0)
+   143	          - the [arg_count] input arguments
+   144	          - the remaining locals, used for the intermediate computations *)
+   145	}
+   146	[@@deriving
+### ID generator signature and implementation
+    95	    unit -> generator ref * Set.t ref * (int -> unit) * (unit -> id)
+    96	
+    97	  (** Similar to [fresh_marked_stateful_generator], but initializes the set of
+    98	      marked ids with the provided set of ids *)
+    99	  val fresh_stateful_generator_with_marked :
+   100	    Set.t -> generator ref * Set.t ref * (int -> unit) * (unit -> id)
+   101	
+   102	  val mk_stateful_generator : generator -> generator ref * (unit -> id)
+   103	  val mk_stateful_generator_starting_at_id : id -> generator ref * (unit -> id)
+   104	  val incr : id -> id
+   105	
+   106	  (** This function returns the current value of the counter, without
+   107	      incrementing it *)
+   108	  val get_counter_value : generator -> id
+   109	
+   110	  (* TODO: this should be stateful! - but we may want to be able to duplicate
+   228	  let generator_from_incr_id id = incr id
+   229	
+   230	  let mk_stateful_generator g =
+   231	    let g = ref g in
+   232	    let fresh () =
+   233	      let id = !g in
+   234	      g := incr id;
+   235	      id
+   236	    in
+   237	    (g, fresh)
+   238	
+   239	  let mk_stateful_generator_starting_at_id id = mk_stateful_generator id
+   240	  let get_counter_value gen = gen
+   241	  let fresh_stateful_generator () = mk_stateful_generator 0
+   242	
+   243	  exception FoundMarked of id
+   244	
+   245	  let fresh_stateful_generator_with_marked (marked : Set.t) =
