@@ -1,0 +1,42 @@
+{
+  "docker_argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r349-output-name-alpha-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr349.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r349-output-name-alpha-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r349-output-name-alpha-candidate; chmod 755 /work/aeneas-r349-output-name-alpha-candidate"
+  ],
+  "inner_build_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r349-output-name-alpha-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r349-output-name-alpha-candidate; chmod 755 /work/aeneas-r349-output-name-alpha-candidate",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "profile": "dune build main.exe --profile release -j 1",
+  "optimization": "Dune release profile; static native link via OCAMLPARAM=_,ccopt=-static",
+  "parallelism": {
+    "OPAMJOBS": 1,
+    "DUNEJOBS": 1,
+    "dune_jobs": 1
+  },
+  "expected_work": "cached compilation of changed TranslateCore.ml plus native relink only; no cold dependency build, translation, or proof generation",
+  "source_revision": "56a931fc3879354a2fa584e73bd0a1d412714851",
+  "parent_R344_binary_sha256": "7da5d7b8f3ade389eff0c87594609f5be24860b41eb171f55baa1b867896204b",
+  "parent_source_tree_sha256": "c84f1c1d6acdbe963999cadd0659a851a4608b1c08546f803e515d38b8f57c41",
+  "candidate_source_tree_sha256_before_build": "833502f292ecbdbfbba806fddd3d24a5fde5ac085d8088f0d29e86f61ed2f7e9",
+  "parent_TranslateCore_sha256": "2368456969bd85545b57cda2e701949b8814fc445a419b1e4e96795b91af57b7",
+  "patched_TranslateCore_sha256": "4f5db3cd77a10a3861539958d7b8566f09e6bcc3b72981fcc40388611d639cb9",
+  "unchanged_InterpExpansion_sha256": "da68f59bc0240bad9862f0733aecd7265c239dbe988669d5d8ddddafc5a79b19",
+  "unchanged_PrePasses_sha256": "09014aa93bffd2cafeebaf23d27a301d66986d9349f4cc9dca6e8d1dfe0ba7dd",
+  "container_cgroup_peak_is_authoritative_for_container_memory": true,
+  "docker_cli_time_rss_label": "Docker CLI parent-process RSS only; not aggregate compiler or container RSS",
+  "compiler_gnu_time_path": "candidate-audit/compiler-gnu-time.txt"
+}

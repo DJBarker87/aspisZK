@@ -1,0 +1,14 @@
+{
+  "status": "launch preparation only; no build launched",
+  "root_launcher": "launch_build.py",
+  "launch_capable_runner": "run_cached_build.py",
+  "remote_root": "/home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a",
+  "systemd_run": ["systemd-run", "--user", "--wait", "--collect", "--pipe", "--unit=aspis-r349-output-name-alpha-build", "--working-directory=/home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a/src", "-p", "MemoryHigh=5G", "-p", "MemoryMax=7G", "-p", "MemorySwapMax=0", "-p", "TasksMax=128", "python3", "/home/dombarker/project-offloads/aspis-r349-output-name-alpha-candidate-20261002-a/candidate-audit/run_cached_build.py"],
+  "docker": {"image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7", "memory_reservation": "5g", "memory": "7g", "memory_swap": "7g (equal to memory; zero swap)", "network": "none", "pids_limit": 128, "cgroup_parent": "aspisr349.slice"},
+  "build": {"profile": "dune build main.exe --profile release -j 1", "optimization": "Dune release profile; static native link", "expected_work": "cached TranslateCore.ml compilation plus relink only"},
+  "metrics": ["compiler GNU time report in candidate-audit/compiler-gnu-time.txt", "Docker CLI timing/RSS separately in candidate-audit/docker-cli-time.txt (CLI parent process RSS, not compiler/container RSS)", "sampled actual container cgroup memory.peak and memory.swap.peak in candidate-audit/cgroup-samples.json", "build-host reservation before/after and command/result receipts"],
+  "dynamic_source_revision": "launch_build.py captures git rev-parse HEAD immediately when invoked and stores it in a timestamped history receipt, runner, build command, and result",
+  "history": "Exact R344 audited runner/launcher copies are under history; launcher also retains its pre-revision-capture runner and launcher before any authorized invocation.",
+  "source_and_inode_audit": "Existing R349 parent/prepatch/postpatch manifests and audits are preserved; only TranslateCore.ml differs from the R344 parent, with zero shared regular-file inodes.",
+  "launch_authorization": "Lead must inspect and authorize before invoking launch_build.py."
+}
