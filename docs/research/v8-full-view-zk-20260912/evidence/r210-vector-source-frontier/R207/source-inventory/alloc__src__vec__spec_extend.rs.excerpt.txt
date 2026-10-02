@@ -1,0 +1,33 @@
+--- alloc/src/vec/spec_extend.rs:8-39 ---
+8: // Specialization trait used for Vec::extend
+9: pub(super) trait SpecExtend<T, I> {
+10:     fn spec_extend(&mut self, iter: I);
+11: }
+12: 
+13: impl<T, I, A: Allocator> SpecExtend<T, I> for Vec<T, A>
+14: where
+15:     I: Iterator<Item = T>,
+16: {
+17:     default fn spec_extend(&mut self, iter: I) {
+18:         self.extend_desugared(iter)
+19:     }
+20: }
+21: 
+22: impl<T, I, A: Allocator> SpecExtend<T, I> for Vec<T, A>
+23: where
+24:     I: TrustedLen<Item = T>,
+25: {
+26:     default fn spec_extend(&mut self, iterator: I) {
+27:         self.extend_trusted(iterator)
+28:     }
+29: }
+30: 
+31: impl<T, A1: Allocator, A2: Allocator> SpecExtend<T, IntoIter<T, A2>> for Vec<T, A1> {
+32:     fn spec_extend(&mut self, iterator: IntoIter<T, A2>) {
+33:         unsafe {
+34:             self.append_elements(iterator.as_slice() as _);
+35:         }
+36:         iterator.forget_remaining_elements_and_dealloc();
+37:     }
+38: }
+39: 

@@ -1,0 +1,77 @@
+--- alloc/src/vec/into_iter.rs:248-271 ---
+248: impl<T, A: Allocator> Iterator for IntoIter<T, A> {
+249:     type Item = T;
+250: 
+251:     #[inline]
+252:     fn next(&mut self) -> Option<T> {
+253:         let ptr = if T::IS_ZST {
+254:             if self.ptr.as_ptr() == self.end as *mut T {
+255:                 return None;
+256:             }
+257:             // `ptr` has to stay where it is to remain aligned, so we reduce the length by 1 by
+258:             // reducing the `end`.
+259:             self.end = self.end.wrapping_byte_sub(1);
+260:             self.ptr
+261:         } else {
+262:             if self.ptr == non_null!(self.end, T) {
+263:                 return None;
+264:             }
+265:             let old = self.ptr;
+266:             self.ptr = unsafe { old.add(1) };
+267:             old
+268:         };
+269:         Some(unsafe { ptr.read() })
+270:     }
+271: 
+--- alloc/src/vec/into_iter.rs:347-378 ---
+347:     fn fold<B, F>(mut self, mut accum: B, mut f: F) -> B
+348:     where
+349:         F: FnMut(B, Self::Item) -> B,
+350:     {
+351:         if T::IS_ZST {
+352:             while self.ptr.as_ptr() != self.end.cast_mut() {
+353:                 // SAFETY: we just checked that `self.ptr` is in bounds.
+354:                 let tmp = unsafe { self.ptr.read() };
+355:                 // See `next` for why we subtract from `end` here.
+356:                 self.end = self.end.wrapping_byte_sub(1);
+357:                 accum = f(accum, tmp);
+358:             }
+359:         } else {
+360:             // SAFETY: `self.end` can only be null if `T` is a ZST.
+361:             while self.ptr != non_null!(self.end, T) {
+362:                 // SAFETY: we just checked that `self.ptr` is in bounds.
+363:                 let tmp = unsafe { self.ptr.read() };
+364:                 // SAFETY: the maximum this can be is `self.end`.
+365:                 // Increment `self.ptr` first to avoid double dropping in the event of a panic.
+366:                 self.ptr = unsafe { self.ptr.add(1) };
+367:                 accum = f(accum, tmp);
+368:             }
+369:         }
+370: 
+371:         // There are in fact no remaining elements to forget, but by doing this we can avoid
+372:         // potentially generating a needless loop to drop the elements that cannot exist at
+373:         // this point.
+374:         self.forget_remaining_elements_and_dealloc();
+375: 
+376:         accum
+377:     }
+378: 
+--- alloc/src/vec/into_iter.rs:88-90 ---
+88:     pub fn as_slice(&self) -> &[T] {
+89:         unsafe { slice::from_raw_parts(self.ptr.as_ptr(), self.len()) }
+90:     }
+--- alloc/src/vec/into_iter.rs:172-185 ---
+172:     /// Forgets to Drop the remaining elements and frees the backing allocation.
+173:     /// Consuming version of [`Self::forget_remaining_elements()`].
+174:     ///
+175:     /// This can be used in place of `drop(self)` when `self` is known to be exhausted,
+176:     /// to avoid producing a needless `drop_in_place::<[T]>()`.
+177:     #[inline]
+178:     pub(crate) fn forget_remaining_elements_and_dealloc(self) {
+179:         let mut this = ManuallyDrop::new(self);
+180:         // SAFETY: `this` is in ManuallyDrop, so it will not be double-freed.
+181:         unsafe {
+182:             this.dealloc_only();
+183:         }
+184:     }
+185: 

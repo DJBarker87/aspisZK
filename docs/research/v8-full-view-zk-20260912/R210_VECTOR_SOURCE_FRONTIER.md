@@ -1,0 +1,9 @@
+# R204/R207/R210 selected vector source frontier
+
+New bounded source extractions expose the actual monomorphized vector-extension dispatch. R204 resolves `Vec::extend` to `Vec::into_iter` and the concrete `SpecExtend` body. R207 also extracts its slice access and append bodies, including raw-pointer slice construction, reserve, the copy precondition and `CopyNonOverlapping` primitive. Both extractions report exit 0 and no Charon errors. Their wall times are 14.43 and 14.29 seconds, peak RSS 627,328 and 627,952 KiB, with zero swap under the retained 5/7 GiB caps.
+
+The focused R210 projection preserves exactly five vector bodies and checks their decoded content hashes, signatures and supporting metadata. Aeneas parses it but stops at `PrePasses.ml:2015` on `CopyNonOverlapping` from `core/ptr/mod.rs:551`. The failed translation takes 0.15 seconds, peak RSS 55,264 KiB, zero swap. Its child exit is 2; the launcher’s exit 0 only reflects a wrapper that prints the child status. An earlier upload-name failure before Aeneas invocation is also retained.
+
+This is source/translation evidence, not a Lean vector theorem. No opaque declaration is adopted as an axiom or proof premise. The copy operation must gain justified memory/source semantics; erasing it or assuming equality with `Vec::extend_from_slice` would not close the obligation. The [bundle](evidence/r210-vector-source-frontier/bundle-manifest.json) records exact commands, checksums, source pins, resources, logs, projection audit and the missing R204 launch revision without inventing one.
+
+Selected vector extension, the captured gamma fold and complete actual callback/oracle chronology remain open. Privacy and soundness remain unproved. Verifier source, genuine CU results and every security parameter are unchanged; no benchmark or unchanged regression was repeated.

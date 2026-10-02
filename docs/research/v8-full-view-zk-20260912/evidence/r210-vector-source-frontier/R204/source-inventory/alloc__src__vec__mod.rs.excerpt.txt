@@ -1,0 +1,64 @@
+--- alloc/src/vec/mod.rs:3938-3976 ---
+3938: impl<T, A: Allocator> IntoIterator for Vec<T, A> {
+3939:     type Item = T;
+3940:     type IntoIter = IntoIter<T, A>;
+3941: 
+3942:     /// Creates a consuming iterator, that is, one that moves each value out of
+3943:     /// the vector (from start to end). The vector cannot be used after calling
+3944:     /// this.
+3945:     ///
+3946:     /// # Examples
+3947:     ///
+3948:     /// ```
+3949:     /// let v = vec!["a".to_string(), "b".to_string()];
+3950:     /// let mut v_iter = v.into_iter();
+3951:     ///
+3952:     /// let first_element: Option<String> = v_iter.next();
+3953:     ///
+3954:     /// assert_eq!(first_element, Some("a".to_string()));
+3955:     /// assert_eq!(v_iter.next(), Some("b".to_string()));
+3956:     /// assert_eq!(v_iter.next(), None);
+3957:     /// ```
+3958:     #[inline]
+3959:     fn into_iter(self) -> Self::IntoIter {
+3960:         unsafe {
+3961:             let me = ManuallyDrop::new(self);
+3962:             let alloc = ManuallyDrop::new(ptr::read(me.allocator()));
+3963:             let buf = me.buf.non_null();
+3964:             let begin = buf.as_ptr();
+3965:             let end = if T::IS_ZST {
+3966:                 begin.wrapping_byte_add(me.len())
+3967:             } else {
+3968:                 begin.add(me.len()) as *const T
+3969:             };
+3970:             let cap = me.buf.capacity();
+3971:             IntoIter { buf, phantom: PhantomData, cap, alloc, ptr: buf, end }
+3972:         }
+3973:     }
+3974: }
+3975: 
+3976: #[stable(feature = "rust1", since = "1.0.0")]
+--- alloc/src/vec/mod.rs:3998-4004 ---
+3998: impl<T, A: Allocator> Extend<T> for Vec<T, A> {
+3999:     #[inline]
+4000:     fn extend<I: IntoIterator<Item = T>>(&mut self, iter: I) {
+4001:         <Self as SpecExtend<T, I::IntoIter>>::spec_extend(self, iter.into_iter())
+4002:     }
+4003: 
+4004:     #[inline]
+--- alloc/src/vec/mod.rs:2937-2951 ---
+2937:     unsafe fn append_elements(&mut self, other: *const [T]) {
+2938:         let count = other.len();
+2939:         self.reserve(count);
+2940:         let len = self.len();
+2941:         if count > 0 {
+2942:             unsafe {
+2943:                 ptr::copy_nonoverlapping(other as *const T, self.as_mut_ptr().add(len), count)
+2944:             };
+2945:         }
+2946:         self.len += count;
+2947:     }
+2948: 
+2949:     /// Removes the subslice indicated by the given range from the vector,
+2950:     /// returning a double-ended iterator over the removed subslice.
+2951:     ///

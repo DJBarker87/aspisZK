@@ -1,0 +1,67 @@
+--- core/src/iter/traits/collect.rs:300-330 ---
+300:     ///
+301:     /// ```
+302:     /// let v = [1, 2, 3];
+303:     /// let mut iter = v.into_iter();
+304:     ///
+305:     /// assert_eq!(Some(1), iter.next());
+306:     /// assert_eq!(Some(2), iter.next());
+307:     /// assert_eq!(Some(3), iter.next());
+308:     /// assert_eq!(None, iter.next());
+309:     /// ```
+310:     #[lang = "into_iter"]
+311:     #[stable(feature = "rust1", since = "1.0.0")]
+312:     fn into_iter(self) -> Self::IntoIter;
+313: }
+314: 
+315: #[stable(feature = "rust1", since = "1.0.0")]
+316: #[rustc_const_unstable(feature = "const_iter", issue = "92476")]
+317: const impl<I: [const] Iterator> IntoIterator for I {
+318:     type Item = I::Item;
+319:     type IntoIter = I;
+320: 
+321:     #[inline]
+322:     fn into_iter(self) -> I {
+323:         self
+324:     }
+325: }
+326: 
+327: /// Extend a collection with the contents of an iterator.
+328: ///
+329: /// Iterators produce a series of values, and collections can also be thought
+330: /// of as a series of values. The `Extend` trait bridges this gap, allowing you
+--- core/src/iter/traits/collect.rs:397-430 ---
+397: pub trait Extend<A> {
+398:     /// Extends a collection with the contents of an iterator.
+399:     ///
+400:     /// As this is the only required method for this trait, the [trait-level] docs
+401:     /// contain more details.
+402:     ///
+403:     /// [trait-level]: Extend
+404:     ///
+405:     /// # Examples
+406:     ///
+407:     /// ```
+408:     /// // You can extend a String with some chars:
+409:     /// let mut message = String::from("abc");
+410:     ///
+411:     /// message.extend(['d', 'e', 'f'].iter());
+412:     ///
+413:     /// assert_eq!("abcdef", &message);
+414:     /// ```
+415:     #[stable(feature = "rust1", since = "1.0.0")]
+416:     fn extend<T: IntoIterator<Item = A>>(&mut self, iter: T);
+417: 
+418:     /// Extends a collection with exactly one element.
+419:     #[unstable(feature = "extend_one", issue = "72631")]
+420:     fn extend_one(&mut self, item: A) {
+421:         self.extend(Some(item));
+422:     }
+423: 
+424:     /// Reserves capacity in a collection for the given number of additional elements.
+425:     ///
+426:     /// The default implementation does nothing.
+427:     #[unstable(feature = "extend_one", issue = "72631")]
+428:     fn extend_reserve(&mut self, additional: usize) {
+429:         let _ = additional;
+430:     }
