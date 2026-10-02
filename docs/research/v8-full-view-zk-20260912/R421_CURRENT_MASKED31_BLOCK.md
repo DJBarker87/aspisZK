@@ -1,0 +1,9 @@
+# R421: uniform masked 31-bit word block
+
+The focused theorem proves a finite-bijection mean identity: a uniform 32-byte block, interpreted through the exact R406 byte-to-word map and then masked to 31 bits, has the same output mean for every `f : List Nat → ℚ` as eight uniform values in `Fin (2^31)`. The source keeps the 32-bit word encoding and changes the per-word split to `Fin 2 × Fin (2^31)`; the high-bit block contributes only a constant factor in the product mean.
+
+This does not establish the actual ordinary QM31 sampler kernel, its per-limb eight-word budget, shared word cursor, refills, stopping/failure behavior, or advanced state. It does not establish a QM31 challenge law or freshness. Those source-level obligations remain open, followed by the bounded circle/nonzero law and causal composition for the actual shared oracle.
+
+The promoted source is byte-identical to the successful compiler input (SHA-256 `631c8a5623e2aa42194fe45bf270b1a0f0ee90e3219c9be302fc4b15c45701b0`). The focused target was `AspisV8R19/R421UniformMasked31Block.lean`, exit 0, wall time 1.26 s, peak Lean-child RSS 3,229,852 KiB, swap 0, source revision `6b5f6a1274aaf7f258ee2233ebfad4eb0ce8bd76`. It used `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, `TasksMax=128`, and Lean flags `-j1 -M4500`. GNU time's Lean-child RSS is distinct from the wrapper memory peak.
+
+All three complete `#print axioms` reports match the saved run log and receipt and contain only `propext`, `Classical.choice`, and `Quot.sound`. The compile receipt directly records R406 at SHA-256 `b7b3aa0f3f42e39ce5945f3d4bdaad7544f2dfd39292ecf0bc26b9ea9eac1ed9`; exact R406 source and a supplemental set of relevant source imports are copied into the evidence bundle. `supplemental-source-cache-audit.json` records additional source and `.olean` hashes observed after the run; it is explicitly not a run-time cache snapshot and does not claim the listed sources are a complete import closure.
