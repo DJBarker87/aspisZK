@@ -1,0 +1,48 @@
+{
+  "docker_argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r385-private-return-carrier-v2-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr385.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r385-private-return-carrier-candidate-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r385-v2-build/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r385-private-return-carrier-v2-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r385-private-return-carrier-v2-candidate; chmod 755 /work/aeneas-r385-private-return-carrier-v2-candidate"
+  ],
+  "inner_build_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r385-v2-build/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r385-private-return-carrier-v2-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r385-private-return-carrier-v2-candidate; chmod 755 /work/aeneas-r385-private-return-carrier-v2-candidate",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "profile": "dune build main.exe --profile release -j 1",
+  "optimization": "Dune release profile; static native link via OCAMLPARAM=_,ccopt=-static",
+  "parallelism": {
+    "OPAMJOBS": 1,
+    "DUNEJOBS": 1,
+    "dune_jobs": 1
+  },
+  "launch_revision": "a962b9ac222caa6d2f715882240b9b9856158261",
+  "source_hashes": {
+    "candidate_PrePasses": "579f332212ad75b386b088ef7835783f7cb84a835b1acb96031d49847fc53a17",
+    "parent_PrePasses": "09014aa93bffd2cafeebaf23d27a301d66986d9349f4cc9dca6e8d1dfe0ba7dd",
+    "NameMatcher": "bdafe5b3f4a688d0fa0b4df7f2e8a3d907f70be9fdaf64420ea600ceab597aa8",
+    "LlbcAstUtils": "17cb1b5cd3e0cf119f4c4eee776e0fc49e2a39c6ee7abbaa339f70d466484b97",
+    "cached_R363_binary": "3dc9ad6de1af901c8ead41940ba97097a0cf06f82d27dbc7d7c5eac03695e329"
+  },
+  "prior_R385_v1_attempt": {
+    "exit_status": 1,
+    "wall_seconds": 3.25,
+    "container_cgroup_peak_bytes": 555118592,
+    "swap_peak_bytes": 0,
+    "source_sha256": "ea353ee571da9d5c00f5fa6bc7041954eb3c10b3ac5abe9798d1b3bdbcafcb75"
+  },
+  "container_cgroup_peak_is_authoritative_for_container_memory": true,
+  "docker_cli_time_rss_label": "Docker CLI parent-process RSS only; not aggregate compiler or container RSS",
+  "compiler_gnu_time_path": "candidate-audit/r385-v2-build/compiler-gnu-time.txt"
+}

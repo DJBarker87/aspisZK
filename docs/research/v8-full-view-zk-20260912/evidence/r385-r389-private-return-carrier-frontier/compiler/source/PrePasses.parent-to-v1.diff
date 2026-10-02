@@ -1,0 +1,162 @@
+--- .r21-scratch/r385-private-return-carrier/parent-source/PrePasses.ml	2026-10-02 16:14:59
++++ .r21-scratch/r385-private-return-carrier/PrePasses.candidate.ml	2026-10-02 16:13:02
+@@ -937,7 +937,70 @@
+     so the loop interpreter never has to distinguish an original return from a
+     propagated one. Newly-created statements receive id zero; the existing
+     statement-id refresh pass assigns their final ids. *)
+-let lower_nested_loop_returns (crate : crate) (f : fun_decl) : fun_decl =
++(* A lowering-only carrier. It is not any source Rust Option instance. The
++   original source declarations and their monomorphized instantiations remain
++   unchanged. Its payload parameter is instantiated with each function's exact
++   return type; None/Some are private variant IDs used only by this prepass. *)
++let pending_none_id = VariantId.of_int 0
++let pending_some_id = VariantId.of_int 1
++
++let add_pending_return_carrier (crate : crate) : crate * type_decl_id option =
++  match FunDeclId.Map.bindings crate.fun_decls with
++  | [] -> (crate, None)
++  | (_, template) :: _ ->
++      let max_id =
++        TypeDeclId.Map.fold
++          (fun id _ m -> max (TypeDeclId.to_int id) m) crate.type_decls (-1)
++      in
++      let _, fresh =
++        TypeDeclId.mk_stateful_generator_starting_at_id
++          (TypeDeclId.of_int (max_id + 1))
++      in
++      let id = fresh () in
++      let name =
++        [ PeIdent (crate.name, Disambiguator.zero);
++          PeIdent ("__aeneas_pending_return_" ^ string_of_int (TypeDeclId.to_int id),
++                   Disambiguator.zero) ]
++      in
++      if List.exists (fun (_, existing) -> existing = name) crate.item_names then
++        [%craise] template.item_meta.span "Private pending-return carrier name collision";
++      let attrs : Meta.attr_info =
++        { attributes = []; inline = None; rename = None; public = false }
++      in
++      let span = template.item_meta.span in
++      let payload : field =
++        { span; attr_info = attrs; field_name = None;
++          field_ty = TVar (Free TypeVarId.zero) }
++      in
++      let variant id variant_name fields discriminant : variant =
++        { id; span; attr_info = attrs; variant_name; fields;
++          discriminant = Values.VScalar
++            (Values.UnsignedScalar (Values.U8, Z.of_int discriminant)) }
++      in
++      let decl : type_decl =
++        { def_id = id;
++          item_meta =
++            { name; span; source_text = None; attr_info = attrs;
++              is_local = true; opacity = Transparent; lang_item = None };
++          generics =
++            { TypesUtils.empty_generic_params with
++              types = [ { index = TypeVarId.zero; name = "T" } ] };
++          src = TopLevelItem;
++          kind = Enum [ variant pending_none_id "None" [] 0;
++                        variant pending_some_id "Some" [ payload ] 1 ];
++          layout = []; ptr_metadata = NoMetadata }
++      in
++      let crate =
++        { crate with
++          type_decls = TypeDeclId.Map.add id decl crate.type_decls;
++          declarations = TypeGroup (NonRecGroup id) :: crate.declarations;
++          item_names = (TypeId id, name) :: crate.item_names;
++          short_names = (TypeId id, name) :: crate.short_names }
++      in
++      (crate, Some id)
++
++let lower_nested_loop_returns (pending_type_id : type_decl_id)
++    (_crate : crate) (f : fun_decl) : fun_decl =
+   match f.body with
+   | StructuredBody body ->
+       let has_nested_return =
+@@ -955,20 +1018,7 @@
+       in
+       if not has_nested_return then f
+       else
+-        let option_ids =
+-          TypeDeclId.Map.fold
+-            (fun id (decl : type_decl) ids ->
+-              if decl.item_meta.lang_item = Some "Option" then id :: ids
+-              else ids)
+-            crate.type_decls []
+-        in
+-        let option_id =
+-          match option_ids with
+-          | [ id ] -> id
+-          | _ ->
+-              [%craise] f.item_meta.span
+-                "Nested-loop returns require exactly one Option language item"
+-        in
++        let option_id = pending_type_id in
+         let return_local =
+           match body.locals.locals with
+           | return_local :: _ -> return_local
+@@ -1069,7 +1119,7 @@
+                     PlaceProjection
+                       ( pending_place,
+                         Field
+-                          ( ProjAdt (option_id, Some Types.option_some_id),
++                          ( ProjAdt (option_id, Some pending_some_id),
+                             FieldId.of_int 0 ) );
+                   ty = return_ty;
+                 }
+@@ -1096,7 +1146,7 @@
+             (Switch
+                (Match
+                   ( pending_place,
+-                    [ ([ Types.option_some_id ], then_block) ],
++                    [ ([ pending_some_id ], then_block) ],
+                     Some else_block )))
+         in
+         (* A cleanup-only bare return after the outer loop reads LLBC local
+@@ -1124,7 +1174,7 @@
+         in
+         let lowered_return (st : statement) : statement * statement =
+           ( mk_pending_assignment ~comments_before:st.comments_before st.span
+-              Types.option_some_id [ Move return_place ],
++              pending_some_id [ Move return_place ],
+             { st with kind = Break 0; comments_before = [] } )
+         in
+         let rec take_cleanup reversed = function
+@@ -1320,7 +1370,7 @@
+                   let assignment =
+                     mk_pending_assignment
+                       ~comments_before:return_st.comments_before return_st.span
+-                      Types.option_some_id [ Move capture_place ]
++                      pending_some_id [ Move capture_place ]
+                   in
+                   let leave =
+                     { return_st with kind = Break 0; comments_before = [] }
+@@ -1426,7 +1476,7 @@
+               [ visitor#visit_statement depth st ]
+         in
+         let initialization =
+-          mk_pending_assignment f.item_meta.span Types.option_none_id []
++          mk_pending_assignment f.item_meta.span pending_none_id []
+         in
+         let body_body = transform_block 0 [] false body.body in
+         let body_body =
+@@ -3547,6 +3597,7 @@
+ let apply_passes (crate : crate) : crate =
+   (* Passes that apply to the whole crate *)
+   let crate = update_array_default crate in
++  let crate, pending_type_id = add_pending_return_carrier crate in
+   (* Passes that apply to individual function bodies *)
+   let function_passes =
+     [
+@@ -3556,7 +3607,11 @@
+         eliminate_metadata_only_slice_raw_pointers );
+       ("remove_unreachable", remove_unreachable);
+       ("restore_structured_nested_returns", restore_structured_nested_returns);
+-      ("lower_nested_loop_returns", lower_nested_loop_returns);
++      ( "lower_nested_loop_returns",
++        (fun crate f ->
++          match pending_type_id with
++          | Some id -> lower_nested_loop_returns id crate f
++          | None -> f) );
+       ("eliminate_outer_loop_control", eliminate_outer_loop_control);
+       ("update_loop", update_loops);
+       ("remove_useless_joins", remove_useless_joins);

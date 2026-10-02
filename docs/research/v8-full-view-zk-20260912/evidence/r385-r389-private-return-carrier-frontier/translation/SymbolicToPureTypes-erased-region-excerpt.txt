@@ -1,0 +1,23 @@
+472: 
+473: (** Compute the *number* of levels of sub-abstractions existing for a given
+474:     region type. *)
+475: and compute_back_ty_num_levels (span : Meta.span option)
+476:     (decls_ctx : C.decls_ctx) (get_region_group : T.region -> T.region_group_id)
+477:     (gid : T.region_group_id) (ty : T.ty) : int =
+478:   let type_infos = decls_ctx.type_ctx.type_infos in
+479:   let keep_region r = gid = get_region_group r in
+844:   in
+845:   let get_region_group (r : T.region) : T.RegionGroupId.id =
+846:     match r with
+847:     | T.RStatic -> [%craise_opt_span] span "Unimplemented: static region"
+848:     | RErased -> [%craise_opt_span] span "Unexpected erased region"
+849:     | RVar (Bound _ as var) ->
+850:         [%craise_opt_span] span
+851:           ("Unexpected bound region: "
+852:           ^ Charon.Print.region_db_var_to_pretty_string var)
+853:     | RBody _ -> [%craise_opt_span] None "unsupported: Body region"
+854:     | RVar (Free rid) -> (
+855:         match T.RegionId.Map.find_opt rid rg_to_gr_id with
+856:         | Some gr -> gr
+857:         | None -> [%internal_error_opt_span] span)
+858:   in
