@@ -1,0 +1,447 @@
+{
+  "title": "Frozen R117 selected payment_terminal expression inventory",
+  "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a",
+  "frozen_root_has_git_metadata": false,
+  "r117_stage_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+  "r230_campaign_revision": "07977092976005ff691cf381d3e539d3ac06b595",
+  "active_worktree_revision": "7c588ebcd62955448a0298b3d480aa7e23c408bb",
+  "positive_transfer_cfg": {
+    "status": "resolved-from-exact-staged-profile",
+    "enabled": true,
+    "stage_file": "r117-r17-stage.json",
+    "stage_sha256": "5efe649ea258413090ba648313984b20312b4dafe4723984293ef36cb241077e",
+    "stage_profile": "AV8/R18/sparse-coded-G128-step3/minimal-T163/research-v2",
+    "features": "insecure-spend-fixture,selected-v7-kernels",
+    "exact_rustflags": "--cfg v8_positive_transfer --cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile --cfg v8_payment_extraction --cfg v8_performance --cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial -A dead_code -A unexpected_cfgs --cfg v8_circle_norm --cfg v8_chord_norm --cfg v8_joined_inverse --cfg v8_split_inverse --cfg v8_line_norm --cfg v8_quotient_fused --cfg v8_affine_primal --cfg v8_compact_workspace --cfg v8_gamma_fixed --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record",
+    "wrapper_evidence": "run_r117_full delegates to run_r107_full; run_r107_full delegates to run_r106_full; run_r106_full delegates to run_r84_full; run_r84_full loads r17-stage.json and sets RUSTFLAGS=meta[\"rustflags\"] before host cargo. run_r118_source independently sets the same meta rustflags. Exact stage file was fetched read-only from the frozen root and matches the saved r18-stage pinned hash."
+  },
+  "selected_v7_features": [
+    "aspis-core/v7-gamma-four-slot-block-audit",
+    "aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+    "aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit",
+    "aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit",
+    "aspis-statement/pool-v1-pair-forest-semantic-factor-audit",
+    "aspis-statement/pool-v1-pair-forest-pattern-window-audit",
+    "aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit",
+    "aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit",
+    "aspis-statement/pool-v1-pair-forest-packed-range-audit",
+    "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit"
+  ],
+  "selected_v7_feature_implications_from_frozen_Cargo_toml": {
+    "pool-v1-pair-forest-packed-digest-selector-tensor-audit": [
+      "pool-v1-pair-forest-packed-digest-audit"
+    ],
+    "pool-v1-pair-forest-copy-tag-dot-basis-audit": [
+      "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
+      "pool-v1-pair-forest-copy-pattern-basis-audit"
+    ],
+    "pool-v1-pair-forest-copy-finish-dot-basis-audit": [
+      "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
+      "pool-v1-pair-forest-copy-pattern-basis-audit"
+    ]
+  },
+  "selected_call_chain": {
+    "performance_entry": "performance_verifier.rs::semantic_cached",
+    "terminal": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1",
+    "verifier_call": "performance_verifier.rs::payment_terminal",
+    "wrapping_macro": "define_variant_terminal! (private transfer instance)"
+  },
+  "source_call_map": [
+    {
+      "functions": [
+        "semantic_cached",
+        "payment_terminal"
+      ],
+      "notes": "Ten semantic rounds; 27 values each; 84 claims indexed 271+(i/28)*29+i%28.",
+      "stage": "verifier transcript/query"
+    },
+    {
+      "functions": [
+        "v6_statement_points",
+        "Selectors::boxed_at_point"
+      ],
+      "notes": "Successor source uses a descending carry loop.",
+      "points": [
+        "z",
+        "successor",
+        "xor12 (coordinates 7 and 6 toggled)"
+      ],
+      "stage": "point selection"
+    },
+    {
+      "functions": [
+        "composition_parts",
+        "terminal_parts",
+        "private_public",
+        "state_only_selected_mask_value",
+        "evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1"
+      ],
+      "notes": "Loads point-0 C1/mask-only, H1 and G; evaluates projected Poseidon, semantic packed lanes and Copy; reverse-folds semantic/Poseidon lanes around Copy residual; combines equality-weighted composition, H1/copy-active, then mask value + eta original.",
+      "stage": "selected terminal composition"
+    },
+    {
+      "functions": [
+        "semantic_packed",
+        "add_schedule_lanes",
+        "add_path_lanes",
+        "add_value_lanes",
+        "add_occupancy_lanes",
+        "public_digest_lanes",
+        "scalar_lanes",
+        "add_preweighted",
+        "add_preweighted_shared_selector"
+      ],
+      "notes": "24 packed lanes; source describes 94 source semantic lanes. Feature variants present.",
+      "stage": "semantic lanes"
+    },
+    {
+      "functions": [
+        "evaluate_state_only_poseidon_oracle_projected",
+        "leading_pair_packed",
+        "interpolated_full_pair_packed",
+        "interpolated_internal_pair_packed"
+      ],
+      "notes": "Three opening point vectors feed projected packed lanes.",
+      "stage": "Poseidon"
+    },
+    {
+      "functions": [
+        "evaluate_with_selectors",
+        "pattern_values",
+        "link_weight",
+        "accumulate_endpoint"
+      ],
+      "notes": "Uses z opening, H1, selectors, lambda, chi, append index, variant; feature-selected basis paths.",
+      "stage": "Copy"
+    },
+    {
+      "functions": [
+        "state_only_selected_mask_value",
+        "state_only_selected_mask_value_with_factors",
+        "state_only_mask_factors",
+        "state_only_explicit_g_mask_factor",
+        "explicit_mask_factor"
+      ],
+      "notes": "Selected factors include a Horner loop; verifier subtracts claim[27] times explicit factor and adds claim[27].",
+      "stage": "mask polynomial"
+    },
+    {
+      "functions": [
+        "residual",
+        "selector",
+        "equality",
+        "composition_delta",
+        "terminal_delta"
+      ],
+      "notes": "ROW1014/COL3/LANE94; selector folds ten challenge coordinates; packs weighted residual at lane2, multiplies by the theta addition chain and equality/eta. R117 v8_positive_transfer cfg is enabled by exact staged profile R17 stage SHA256 5efe649ea258413090ba648313984b20312b4dafe4723984293ef36cb241077e (R369).",
+      "stage": "optional positive transfer"
+    }
+  ],
+  "terminal_components": [
+    {
+      "stage": "input projection",
+      "function": "performance_verifier.rs::semantic_cached",
+      "source_lines": "90-92",
+      "expression": "claims[i] = w.v[271 + (i/28)*29 + i%28]; payment_terminal(public, transition, &claims, &s.z, &s)",
+      "claim_indexing": "claim i maps point=i/28, column=i%28; each source point segment has stride 29 in w.v, so points 0/1/2 start at w.v indices 271/300/329 respectively."
+    },
+    {
+      "stage": "challenge bundle",
+      "function": "performance_verifier.rs::semantic_cached",
+      "source_lines": "39-53",
+      "expression": "lambda and chi sampled; bat supplies theta/zerocheck_point/mu; eta is sampled by begin_state_only_masked_sumcheck; ten s.z values are sampled one per semantic round."
+    },
+    {
+      "stage": "selected terminal dispatch",
+      "function": "performance_verifier.rs::payment_terminal",
+      "source_lines": "117-131",
+      "expression": "Under cfg(v8_positive_transfer), reject a public enum other than PrivateTransfer; call evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1; value := selected_terminal; value := value - claims[27]*state_only_explicit_g_mask_factor(z) + claims[27]; return value + positive_transfer::terminal_delta(...)."
+    },
+    {
+      "stage": "opening claims / point columns",
+      "function": "pair_forest_semantic_terminal.rs::selected_claim and composition_parts",
+      "source_lines": "1185-1191,1241-1252",
+      "expression": "selected_claim(claims,p,c)=claims[p*28+c]. z openings use point 0 columns 0..15 => claims[0..15]; succ_z use point 1 columns 0..15 => claims[28..43]; xor12_z use point 2 columns 0..15 => claims[56..71]. mask_only C1 uses point 0 columns 16..25 => claims[16..25]."
+    },
+    {
+      "stage": "H1 and G",
+      "function": "composition_parts / terminal_parts / payment_terminal",
+      "source_lines": "1257-1281,1303-1309,126",
+      "expression": "h1_z=claims[26] (point0 column26); explicit G=claims[27] (point0 column27). H1 also enters Copy residual and original terminal terms; G enters mask polynomial then explicit G subtraction/addition."
+    },
+    {
+      "stage": "Poseidon",
+      "function": "evaluate_state_only_poseidon_oracle_projected",
+      "source_lines": "pair_forest_semantic_terminal.rs:1253-1256; state_only_poseidon.rs:585-617",
+      "expression": "selectors are built at the ten-coordinate challenge point; projected oracle evaluates leading, full-pair and internal-pair functions from openings z/succ_z/xor12_z; 4 packed outputs are returned."
+    },
+    {
+      "stage": "semantic relation lanes",
+      "function": "semantic_packed",
+      "source_lines": "pair_forest_semantic_terminal.rs:1143-1183",
+      "expression": "Build 24 packed lanes from schedule/initial+absorption (add_schedule_lanes), path (add_path_lanes), value/range+conservation (add_value_lanes), occupancy (add_occupancy_lanes), public digest (packed-digest path), and two scalar lanes (asset selectors, private-transfer output term)."
+    },
+    {
+      "stage": "range/value constraints",
+      "function": "add_value_lanes",
+      "source_lines": "465-519",
+      "expression": "Constructs 33 values: z/succ_z/xor12_z bit residuals x^2-x for coordinates 0..9, three reconstructed high-limb residuals, and three final-limb residuals; multiplies by range selector and packs at source offset49. Adds two conservation residuals at source offset82."
+    },
+    {
+      "stage": "occupancy constraints",
+      "function": "add_occupancy_lanes",
+      "source_lines": "530-605",
+      "expression": "Builds 12 occupancy residuals from active selectors and openings.z, then packs at source offset0."
+    },
+    {
+      "stage": "Copy residual/active",
+      "function": "evaluate_with_selectors / copy_residual / Selectors::active",
+      "source_lines": "pair_forest_copy_terminal.rs:931-1099,339-377,224-229",
+      "expression": "pattern_values(openings.z,lambda); 136 link gather under selected tensor path; finish four producer/consumer values and weights; active=selectors.active(); residual=active*copy_residual(row,claims[26],chi)."
+    },
+    {
+      "stage": "terminal composition / H1",
+      "function": "composition_parts and terminal_parts",
+      "source_lines": "1216-1310",
+      "expression": "Initialize composition=copy.residual; fold semantic packed lanes in reverse with theta, then Poseidon packed lanes in reverse with theta. original=eq(zerocheck_point,z)*composition + mu*h1_z + mu^2*(1-copy.active)*h1_z."
+    },
+    {
+      "stage": "mask polynomial",
+      "function": "state_only_selected_mask_value",
+      "source_lines": "state_only_hiding.rs:634-675",
+      "expression": "Uses 16 C1 inputs claims[0..15], 10 mask-only C1 inputs claims[16..25], and G claim[27]. It forms a selected shared linear form and exponent coefficient table then Horner-folds exponents 26..0; adds (1+mask_power_26(explicit_linear))*G. Selected schedules copied from source: C1 factors family 0 with exponents [0,2,4,6,8,10,12,14,16,18,20,22,24,26,13,25]; mask-only exponents [1,3,5,7,9,11,15,17,19,21]; explicit G factor family 16, exponent 26."
+    },
+    {
+      "stage": "masked selected terminal",
+      "function": "define_variant_terminal! generated private-transfer masked wrapper",
+      "source_lines": "pair_forest_semantic_terminal.rs:1396-1431",
+      "expression": "Returns state_only_selected_mask_value(c1,mask_only,g,z) + eta*original from terminal_parts."
+    },
+    {
+      "stage": "positive-transfer selected delta",
+      "function": "positive_transfer::{selector,residual,equality,composition_delta,terminal_delta}",
+      "source_lines": "positive_transfer.rs:72-96; payment_terminal.rs:128-130",
+      "expression": "ROW=1014, COL=3, LANE=94. residual=claims[1]*claims[29]*claims[3]-1. selector is the product over ten z coordinates of z[j] for set bits in ROW (using bit order 9-j) or 1-z[j] otherwise. equality is the ten-coordinate product 1-a-b+2ab for z and zc. composition_delta packs [0,0,selector*residual,0] and multiplies by theta addition chain t16*t8*t2*theta. terminal_delta=eta*equality*composition_delta; payment_terminal adds it."
+    }
+  ],
+  "claim_layout": {
+    "selected_terminal_points": 3,
+    "columns_per_point": 28,
+    "claims_total": 84,
+    "claim_formula": "claims[p*28+c]",
+    "point0": {
+      "c1_columns": "0..15",
+      "mask_only_c1_columns": "16..25",
+      "H1_column": 26,
+      "G_column": 27,
+      "w_v_index_span": "271..298"
+    },
+    "point1": {
+      "opening_columns": "0..15",
+      "claim_index_span": "28..43",
+      "w_v_index_span": "300..315"
+    },
+    "point2": {
+      "opening_columns": "0..15",
+      "claim_index_span": "56..71",
+      "w_v_index_span": "329..344"
+    },
+    "w_v_projection": "w.v[271 + (i/28)*29 + i%28]"
+  },
+  "function_sources": [
+    {
+      "label": "performance_verifier.rs",
+      "path": ".r21-scratch/r368-selected-semantic-degree-source-census/frozen-r117-source/docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs",
+      "sha256": "d6dad89eaa8d735f467055e96a8df12de7a391e2475ec26c44b2bc493624a62a",
+      "bytes": 9897,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "R368 frozen copy",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "positive_transfer.rs",
+      "path": ".r21-scratch/r368-selected-semantic-degree-source-census/frozen-r117-source/docs/research/v8-no-work-100-20260907/experiments/positive_transfer.rs",
+      "sha256": "3a19043d2f40f168cb2127ba46e1795db7ea0751625c4fe48c73e02dab533cab",
+      "bytes": 6617,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "R368 frozen copy",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "pair_forest_semantic_terminal.rs",
+      "path": ".r21-scratch/r368-selected-semantic-degree-source-census/frozen-r117-source/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "sha256": "13b68f6db428268b2504068d79c88262e36d9abd22fb60e345612eff6e2cd90b",
+      "bytes": 67908,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "R368 frozen copy",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "pair_forest_copy_terminal.rs",
+      "path": ".r21-scratch/r368-selected-semantic-degree-source-census/frozen-r117-source/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+      "sha256": "7371e743a71357f259a58a20c7169188d5c3adb4010c13b6a792c6c65b8cb4a0",
+      "bytes": 70611,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "R368 frozen copy",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "state_only_poseidon.rs",
+      "path": ".r21-scratch/r368-selected-semantic-degree-source-census/frozen-r117-source/crates/aspis-statement/src/state_only_poseidon.rs",
+      "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "bytes": 46644,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "R368 frozen copy",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "state_only_hiding.rs",
+      "path": ".r21-scratch/r368-selected-semantic-degree-source-census/frozen-r117-source/crates/aspis-core/src/state_only_hiding.rs",
+      "sha256": "18058112db3108a18f9d11f8d9ffb6f9c1b310b90b333010fd0f98cac480237f",
+      "bytes": 49493,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "R368 frozen copy",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "aspis-statement-Cargo.toml",
+      "path": ".r21-scratch/r368-selected-semantic-degree-source-census/frozen-r117-source/crates/aspis-statement/Cargo.toml",
+      "sha256": "cf8babeac16a1987ed1dbd05454f77cb0f217779c33d6384a986eccf9e5b5231",
+      "bytes": 3494,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "R368 frozen copy",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "r20_digest_factored.rs",
+      "path": ".r21-scratch/r373-terminal-expression-inventory/pinned-extra-source/r20_digest_factored.rs",
+      "sha256": "4691528b9c577d9fcbf8bdbd24f47675cac22d507de1c53bebe1836214e4c556",
+      "bytes": 3864,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "read-only copy from frozen host source root",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "r57_selector_gather.rs",
+      "path": ".r21-scratch/r373-terminal-expression-inventory/pinned-extra-source/r57_selector_gather.rs",
+      "sha256": "6ad2756dff971727facbdc47a52161052d146460bcd3a34836e7c8583d674646",
+      "bytes": 6663,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "read-only copy from frozen host source root",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    },
+    {
+      "label": "r113_gather.rs",
+      "path": ".r21-scratch/r373-terminal-expression-inventory/pinned-extra-source/r113_gather.rs",
+      "sha256": "97cdf2ceb3b8a2135006462efffe9f984f0126d0094ee5eb5df22511c16c732d",
+      "bytes": 57288,
+      "pinned_source_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+      "source_origin": "read-only copy from frozen host source root",
+      "frozen_root": "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a"
+    }
+  ],
+  "existing_lean_scope_references": [
+    {
+      "file": "AspisV8R19/SourceStatementPoints.lean",
+      "names": [
+        "successor_eq",
+        "xor12_eq",
+        "points_eq"
+      ],
+      "scope": "Explicit 10-coordinate construction equals ResidualModel.point; no selected-terminal degree theorem here."
+    },
+    {
+      "file": "AspisV8R19/ResidualDegree.lean",
+      "names": [
+        "point_degree",
+        "point_weight_degree",
+        "tensor_degree",
+        "code_degree"
+      ],
+      "scope": "ResidualModel polynomial; coordinate degree \u22641 gives point coordinate \u226410-i.val; point_weight \u226457."
+    },
+    {
+      "file": "AspisV8R19/FixedQueryDegree.lean",
+      "names": [
+        "full_code_degree",
+        "point_weight_degree",
+        "g_degree",
+        "weight_degree",
+        "column_degree",
+        "coefficient_degree",
+        "observation_degree"
+      ],
+      "scope": "FixedQueryModel/FullPointFunctional; bounds 55,57,2,60,3,63,63 respectively."
+    },
+    {
+      "file": "AspisV8R19/SourceResidualDegree.lean",
+      "names": [
+        "observation_degree",
+        "entry_degree",
+        "determinant_degree"
+      ],
+      "scope": "Separate source residual polynomial model; bounds 85,85,1105."
+    }
+  ],
+  "prior_source_inventory": "R368 .r21-scratch/r368-selected-semantic-degree-source-census; R369 .r21-scratch/r369-cross-target-law-source-census",
+  "source_limitations": [
+    "Frozen root has no Git metadata; source identity is the R117 stage/source receipt and exact saved byte hashes.",
+    "R368 original frozen-copy set omitted the two `#[path]/include!` helper files and their nested include; exact files r20_digest_factored.rs, r57_selector_gather.rs, and r113_gather.rs were copied read-only from the same frozen root and are included here.",
+    "The function inventory follows direct source calls and selected cfg/profile; it is not a source-to-model correspondence proof and makes no degree or security conclusion.",
+    "No builds, tests, Lean compilations, or theorem changes were performed."
+  ],
+  "mask_schedule": {
+    "source_function": "aspis-core/src/state_only_hiding.rs constants and state_only_selected_mask_value",
+    "source_lines": "391-397,653-675",
+    "factor_families": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "factor_exponents": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      13,
+      25
+    ],
+    "mask_only_factor_exponents": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11,
+      15,
+      17,
+      19,
+      21
+    ],
+    "explicit_factor_family": 16,
+    "explicit_factor_exponent": 26
+  }
+}

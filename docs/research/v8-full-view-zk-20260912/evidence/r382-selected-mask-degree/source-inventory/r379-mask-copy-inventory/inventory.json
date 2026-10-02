@@ -1,0 +1,188 @@
+{
+  "scope": "Read-only field-expression inventory; no new semantics, premises, Lean execution, or source correspondence theorem is asserted.",
+  "R373_inventory_sha256": "be1252d384d204b71d414cc05e823d731613286682ff2a7c2cc8f7b641c04948",
+  "source_profile": {
+    "r117_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+    "positive_transfer_cfg": {
+      "status": "resolved-from-exact-staged-profile",
+      "enabled": true,
+      "stage_file": "r117-r17-stage.json",
+      "stage_sha256": "5efe649ea258413090ba648313984b20312b4dafe4723984293ef36cb241077e",
+      "stage_profile": "AV8/R18/sparse-coded-G128-step3/minimal-T163/research-v2",
+      "features": "insecure-spend-fixture,selected-v7-kernels",
+      "exact_rustflags": "--cfg v8_positive_transfer --cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile --cfg v8_payment_extraction --cfg v8_performance --cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial -A dead_code -A unexpected_cfgs --cfg v8_circle_norm --cfg v8_chord_norm --cfg v8_joined_inverse --cfg v8_split_inverse --cfg v8_line_norm --cfg v8_quotient_fused --cfg v8_affine_primal --cfg v8_compact_workspace --cfg v8_gamma_fixed --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record",
+      "wrapper_evidence": "run_r117_full delegates to run_r107_full; run_r107_full delegates to run_r106_full; run_r106_full delegates to run_r84_full; run_r84_full loads r17-stage.json and sets RUSTFLAGS=meta[\"rustflags\"] before host cargo. run_r118_source independently sets the same meta rustflags. Exact stage file was fetched read-only from the frozen root and matches the saved r18-stage pinned hash."
+    },
+    "selected_features": [
+      "aspis-core/v7-gamma-four-slot-block-audit",
+      "aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+      "aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit",
+      "aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit",
+      "aspis-statement/pool-v1-pair-forest-semantic-factor-audit",
+      "aspis-statement/pool-v1-pair-forest-pattern-window-audit",
+      "aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit",
+      "aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit",
+      "aspis-statement/pool-v1-pair-forest-packed-range-audit",
+      "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit"
+    ],
+    "feature_implications": {
+      "pool-v1-pair-forest-packed-digest-selector-tensor-audit": [
+        "pool-v1-pair-forest-packed-digest-audit"
+      ],
+      "pool-v1-pair-forest-copy-tag-dot-basis-audit": [
+        "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
+        "pool-v1-pair-forest-copy-pattern-basis-audit"
+      ],
+      "pool-v1-pair-forest-copy-finish-dot-basis-audit": [
+        "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
+        "pool-v1-pair-forest-copy-pattern-basis-audit"
+      ]
+    }
+  },
+  "mask_schedule": {
+    "source_function": "aspis-core/src/state_only_hiding.rs constants and state_only_selected_mask_value",
+    "source_lines": "391-397,653-675",
+    "factor_families": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "factor_exponents": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      13,
+      25
+    ],
+    "mask_only_factor_exponents": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11,
+      15,
+      17,
+      19,
+      21
+    ],
+    "explicit_factor_family": 16,
+    "explicit_factor_exponent": 26
+  },
+  "field_expressions": {
+    "selected_mask_horner": {
+      "source": "aspis-core/src/state_only_hiding.rs; lines 391-427, 484-510, 520-526, 634-675",
+      "linear_forms": {
+        "L0": "\u03a3_{i=0}^{9}(3+22i) z_i",
+        "L16": "\u03a3_{i=0}^{9}(275+150i) z_i"
+      },
+      "q_schedule": "q starts all zero; C1 columns assign mul_tower_basis(c1[column], column&3) to q at exponents [0,2,4,6,8,10,12,14,16,18,20,22,24,26,13,25]; ten mask-only columns assign the analogous rotated values at [1,3,5,7,9,11,15,17,19,21]. Compile-time check confirms distinct schedule coverage of 0..26 except 23.",
+      "horner_expression": "h := q_26; for e=25,...,0, h := L0*h + q_e.",
+      "explicit_G_expression": "h + (1 + L16^26)*explicit_g; source computes exponent 26 using x\u00b2,x\u2074,x\u2078,x\u00b9\u2076 and x\u00b9\u2076*x\u2078*x\u00b2.",
+      "degree_relevant_inputs": "c1, mask_only_c1 and explicit_g are the terminal claim values; only L0 and L16 depend on the varying ten-coordinate challenge point."
+    },
+    "selected_copy_terminal": {
+      "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs and copy constants, plus the included R57/R113 gather files.",
+      "selector_construction": "expand begins with weights[0]=1; for each coordinate it replaces parent by parent*(1-coordinate) and parent*coordinate. at_point uses point[..6] to create 64 high weights and point[6..] to create 16 low weights. row(r)=high[r>>4]*low[r&15].",
+      "selected_feature_path": "R373 frozen selected feature list includes copy-tag-dot-basis-audit and copy-finish-dot-basis-audit; the saved Cargo feature-implication map selects copy-selector-tensor-basis-audit for those. The tensor path accumulates generated registry terms and combines high-side gathered forms with low selectors. Exact code lines are excerpted.",
+      "endpoint_data": "patterns are lambda-weighted sums of the 16 opening values plus lifted constant offsets. For every COPY_LINKS entry, each producer and consumer endpoint contributes a row selector times a tag-plus-pattern value to a two-slot values array, and a row selector times its edge weight to a two-slot weights array. Selected 136-link/14-pattern arrays are frozen generated constants.",
+      "copy_residual": "Set d0=chi-producer_values[0], d1=chi-producer_values[1], d2=chi-consumer_values[0], d3=chi-consumer_values[1]; P=d0*d1 and C=d2*d3; Pn=producer_weights[0]*d1+producer_weights[1]*d0; Cn=consumer_weights[0]*d3+consumer_weights[1]*d2. Then R=P*(h1*C+Cn)-C*Pn.",
+      "copy_terminal_output": "active is computed from the selector table; return residual=active*R and active. The semantic composition starts with this residual, folds 24 semantic packed lanes and then four Poseidon packed lanes; scalar skeleton therefore contains theta^28*active*R."
+    },
+    "terminal_context": {
+      "source": "pair_forest_semantic_terminal.rs:1216-1310,1396-1431; payment_terminal exact wrapper is indexed by R373 inventory.",
+      "expression": "composition starts at copy.residual and reverse-folds semantic then Poseidon lanes. original=eq(zerocheck_point,point)*composition + mu*h1 + mu^2*(1-active)*h1. The selected masked terminal returns mask_value + eta*original. Under selected cfg, payment_terminal subsequently subtracts claims[27]*explicit_g_mask_factor and adds claims[27], then adds positive-transfer delta."
+    }
+  },
+  "existing_formal_models": [
+    {
+      "name": "AspisR19.R374SingleCoordinateDegree",
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R374SingleCoordinateDegree.lean",
+      "sha256": "cf9c64577d06c8cb96df204fa34f8832b3b604d3ca6867de2299022eea1fa518",
+      "definitions_and_lemmas": [
+        "line",
+        "line_degree",
+        "carry",
+        "carry_degree",
+        "point",
+        "point_degree",
+        "tensor",
+        "tensor_degree",
+        "claimPolynomial",
+        "claim_degree",
+        "claim_eval"
+      ],
+      "coverage": "one-coordinate statement-point polynomials and 1024-entry tensor claim polynomial; not selected mask or Copy."
+    },
+    {
+      "name": "AspisR19.R376SimplePointDegree",
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R376SimplePointDegree.lean",
+      "sha256": "48813cbb186fb3f2405aac968c86c8f26d813beaf28342e8a08710d1588aea81",
+      "definitions_and_lemmas": [
+        "simple_point_degree",
+        "simple_tensor_degree",
+        "simple_claim_degree"
+      ],
+      "coverage": "which\u22601 point/tensor/table claim degree\u22641 in the R374 model; no equality to the Rust terminal c1/mask-only/G vectors is stated here."
+    },
+    {
+      "name": "AspisR19.R378PairedFifthDegree",
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R378PairedFifthDegree.lean",
+      "sha256": "6cb2cfc099d5722cacc04fe604c19ee67f5e079bd3eab2f8bcf9fdf239f1e810",
+      "definitions_and_lemmas": [
+        "linearLayer",
+        "fifthRound",
+        "paired_fifth_degree",
+        "absorbedState",
+        "absorbed_degree",
+        "leading_pair_degree"
+      ],
+      "coverage": "absorbed modeled claim and two fifth-power rounds; not mask Horner or Copy."
+    },
+    {
+      "name": "AspisV8R10.CopySlope",
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R10/CopySlope.lean",
+      "sha256": "cd21c591a13a8409e37f60bf509fb64330e1e0edad200ccfd9a62d75f0efaf83",
+      "definitions_and_lemmas": [
+        "copyResidual",
+        "copy_residual_slope",
+        "selectedTerminal",
+        "h1Multiplier",
+        "selected_terminal_h1_slope"
+      ],
+      "coverage": "scalar Copy residual arithmetic and terminal theta^28/active/H1 skeleton; algebraic H1-slope identity only, with no selector or natDegree model."
+    }
+  ],
+  "remaining_mismatches": [
+    "No inspected Lean file defines the selected state_only_selected_mask_value Horner expression, its L0/L16 forms, exact q-index schedule, or a source-to-polynomial identity for them.",
+    "R376 proves the ordinary/xor model table claim bound, but the inspected files do not identify source terminal c1/mask_only/explicit_g inputs with those formal model evaluations.",
+    "R10 CopySlope matches the scalar copy_residual arithmetic and terminal response skeleton but omits the selected 136-link/14-pattern data, lambda-compressed openings, challenge-dependent selectors, and exact tag/gather/edge-weight construction.",
+    "R374/R376/R378 do not supply natDegree bounds for the Copy producer/consumer values, weights, active selector, or composed Copy residual as challenge-coordinate polynomials.",
+    "No inspected file has the full selected terminal degree theorem joining the mask Horner, Copy lane, semantic/Poseidon folds, G replacement, and frozen selected profile."
+  ],
+  "route_reference": ".r21-scratch/r374-lead-degree-route.md states Copy and all semantic helper expressions must be represented and bounded from exact selected source, with no placeholder degree premise; ordinary C1/mask-only/G linear factors contribute through exponent 26. R369 README notes no direct theorem for a different arbitrary-q,w sourceKernel coefficient identity; that is a separate scope."
+}

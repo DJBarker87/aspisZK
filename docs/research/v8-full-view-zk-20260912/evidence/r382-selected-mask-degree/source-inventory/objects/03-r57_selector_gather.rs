@@ -1,0 +1,126 @@
+// Included only in the selected tensor/tag profile. Derive all terms from
+// the unchanged endpoint registry; no hand-maintained replacement schedule.
+#[derive(Clone,Copy)]
+struct R57Term { high:u8, kind:u8, level:u8 }
+const fn r57_table()->([u16;74],[R57Term;544]) {
+    let mut offsets=[0u16;74];
+    let mut terms=[R57Term{high:0,kind:0,level:0};544];
+    let mut next=0usize;let mut coordinate=0usize;
+    while coordinate<73 {
+        let mut index=0usize;
+        while index<constants::COPY_LINKS.len() {
+            let link=constants::COPY_LINKS[index];let mut side=0usize;
+            while side<2 {
+                let ep=if side==0{link.producer}else{link.consumer};
+                let group=2*side+ep.slot as usize;let local=ep.row as usize&15;
+                let target=if coordinate<30{COPY_GROUP_LOCAL_COORDINATES[group][local]as usize}
+                    else{30+COPY_PATTERN_LOCAL_COORDINATES[group][ep.pattern as usize][local]as usize};
+                if target==coordinate {
+                    assert!(next<544 && ep.row<1024 && link.weight_kind<=4 && link.weight_level<64);
+                    terms[next]=R57Term{high:(ep.row>>4)as u8,
+                        kind:if coordinate<30{link.weight_kind}else{0},level:link.weight_level};
+                    next+=1;
+                }
+                side+=1;
+            }
+            index+=1;
+        }
+        offsets[coordinate+1]=next as u16;coordinate+=1;
+    }
+    assert!(next==544);
+    (offsets,terms)
+}
+static R57_TABLE:([u16;74],[R57Term;544])=r57_table();
+
+#[inline(always)]
+fn r57_enabled(term:R57Term,append:u64,variant:PoolV1PairForestCompiledVariantV1)->bool {
+    match term.kind {
+        0=>true,
+        1=>variant==PoolV1PairForestCompiledVariantV1::PrivateTransfer,
+        2=>variant==PoolV1PairForestCompiledVariantV1::Withdrawal,
+        3=>((append>>term.level)&1)==0,
+        4=>((append>>term.level)&1)==1,
+        _=>unreachable!("source-generated Copy weight kind"),
+    }
+}
+
+#[inline(never)]
+fn r113_retained_gather(scratch:&mut[QM31],selectors:&Selectors,append:u64,variant:PoolV1PairForestCompiledVariantV1){
+    for coordinate in 0..73 {
+        let mut raw=[0u64;4];
+        let mut index=usize::from(R57_TABLE.0[coordinate]);
+        let end=usize::from(R57_TABLE.0[coordinate+1]);
+        while index<end {
+            let term=R57_TABLE.1[index];
+            if r57_enabled(term,append,variant) {
+                let value=selectors.high[usize::from(term.high)];
+                // At most 272 terms in a slot; each limb is at most u32::MAX.
+                // Therefore no u64 overflow, even before canonicality is used.
+                raw[0]=raw[0].wrapping_add(u64::from(value.c0.a.0));
+                raw[1]=raw[1].wrapping_add(u64::from(value.c0.b.0));
+                raw[2]=raw[2].wrapping_add(u64::from(value.c1.a.0));
+                raw[3]=raw[3].wrapping_add(u64::from(value.c1.b.0));
+            }
+            index+=1;
+        }
+        scratch[30+coordinate]=QM31{c0:CM31::new(M31::reduce_u64(raw[0]),M31::reduce_u64(raw[1])),
+            c1:CM31::new(M31::reduce_u64(raw[2]),M31::reduce_u64(raw[3]))};
+    }
+}
+
+#[cfg(not(v8_performance_sbf))]
+pub fn r57_selector_controls()->(usize,usize,usize) {
+    // Enumerate exact ordered source fibres independently of the const builder.
+    let mut terms=0usize;let mut weight_checks=0usize;
+    for coordinate in 0..73 {
+        let mut next=usize::from(R57_TABLE.0[coordinate]);
+        for link in constants::COPY_LINKS {
+            for (side,ep) in [(0usize,link.producer),(2usize,link.consumer)] {
+                let group=side+usize::from(ep.slot);let local=usize::from(ep.row)&15;
+                let target=if coordinate<30{usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local])}
+                    else{30+usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(ep.pattern)][local])};
+                if target!=coordinate {continue;}
+                let term=R57_TABLE.1[next];assert_eq!(usize::from(term.high),usize::from(ep.row)>>4);
+                if coordinate<30 {
+                    assert_eq!((term.kind,term.level),(link.weight_kind,link.weight_level));
+                    for variant in [PoolV1PairForestCompiledVariantV1::PrivateTransfer,PoolV1PairForestCompiledVariantV1::Withdrawal]{
+                        for i in 0..130 {
+                            let append=match i{0=>0,1=>u64::MAX,2..=65=>1u64<<(i-2),_=>!(1u64<<(i-66))};
+                            assert_eq!(r57_enabled(term,append,variant),link_weight(link,append,variant)==M31::ONE);weight_checks+=1;
+                        }
+                    }
+                } else {assert_eq!(term.kind,0);}
+                next+=1;terms+=1;
+            }
+        }
+        assert_eq!(next,usize::from(R57_TABLE.0[coordinate+1]));
+    }
+    let mut rng=0x57ce_198f_a662_3001u64;
+    let mut sample=||{let mut word=||{rng^=rng<<13;rng^=rng>>7;rng^=rng<<17;M31((rng%u64::from(aspis_core::field::P))as u32)};
+        QM31{c0:CM31::new(word(),word()),c1:CM31::new(word(),word())}};
+    let mut comparisons=0;
+    for case in 0..256 {
+        let mut high=core::array::from_fn(|_|sample());let low=core::array::from_fn(|_|sample());
+        if case<64 {high.fill(QM31::ZERO);high[case]=QM31::ONE;}
+        if case==64 {high.fill(QM31::ZERO);}
+        if case==65 {let v=M31(aspis_core::field::P-1);high.fill(QM31{c0:CM31::new(v,v),c1:CM31::new(v,v)});}
+        let selectors=Selectors{high,low};
+        let append=match case{0=>0,1=>u64::MAX,2..=65=>1u64<<(case-2),66..=129=>!(1u64<<(case-66)),_=>0x9ef1_7312_55a0_923b^case as u64};
+        for variant in [PoolV1PairForestCompiledVariantV1::PrivateTransfer,PoolV1PairForestCompiledVariantV1::Withdrawal] {
+            let mut original=vec![QM31::ZERO;103];let mut actual=vec![QM31::ZERO;103];
+            for link in constants::COPY_LINKS {
+                let weight=link_weight(link,append,variant);
+                accumulate_endpoint_selector_tensor_basis(&mut original,0,link.producer,link.tag,weight,&selectors);
+                accumulate_endpoint_selector_tensor_basis(&mut original,2,link.consumer,link.tag,weight,&selectors);
+            }
+            r57_gather(&mut actual,&selectors,append,variant);assert_eq!(actual,original);
+            let openings=core::array::from_fn(|_|sample());let h=sample();let lambda=sample();let chi=sample();
+            assert_eq!(evaluate_with_selectors(&openings,h,&selectors,lambda,chi,append,variant),
+                r57_reference_evaluate(&openings,h,&selectors,lambda,chi,append,variant));
+            comparisons+=1;
+        }
+    }
+    (terms,weight_checks,comparisons)
+}
+
+include!("r113_gather.rs");

@@ -1,0 +1,932 @@
+## state_only_hiding.rs (source SHA-256 18058112db3108a18f9d11f8d9ffb6f9c1b310b90b333010fd0f98cac480237f)
+### original lines 391-397
+ 391: const FACTOR_FAMILIES: [u8; STATE_ONLY_HIDING_C1_COLUMNS] = [0; 16];
+ 392: const FACTOR_EXPONENTS: [u8; STATE_ONLY_HIDING_C1_COLUMNS] =
+ 393:     [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 13, 25];
+ 394: const MASK_ONLY_FACTOR_EXPONENTS: [u8; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS] =
+ 395:     [1, 3, 5, 7, 9, 11, 15, 17, 19, 21];
+ 396: const EXPLICIT_FACTOR_EXPONENT: usize = STATE_ONLY_HIDING_FACTOR_DEGREE;
+ 397: const EXPLICIT_FACTOR_FAMILY: usize = 16;
+
+### original lines 467-510
+ 467: /// Cache the shared dense linear form's complete power table once. The exact
+ 468: /// exponent/tower schedule is pinned by the complete-view rank gate: using
+ 469: /// the same factor for explicit G drops four required M31 directions, so G
+ 470: /// deliberately remains on its independent family below.
+ 471: #[inline(never)]
+ 472: fn state_only_shared_factor_powers(
+ 473:     point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],
+ 474: ) -> [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1] {
+ 475:     let linear = mask_linear(0, point);
+ 476:     let mut powers = [QM31::ONE; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
+ 477:     powers[1] = linear;
+ 478:     for exponent in 2..=STATE_ONLY_HIDING_FACTOR_DEGREE {
+ 479:         powers[exponent] = powers[exponent - 1].mul(linear);
+ 480:     }
+ 481:     powers
+ 482: }
+ 483: 
+ 484: fn mask_linear(family: usize, point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS]) -> QM31 {
+ 485:     point
+ 486:         .iter()
+ 487:         .enumerate()
+ 488:         .fold(QM31::ZERO, |sum, (variable, value)| {
+ 489:             let scalar = 3 + 22 * variable + family * (17 + 8 * variable);
+ 490:             sum.add(value.mul_m31(M31(scalar as u32)))
+ 491:         })
+ 492: }
+ 493: 
+ 494: /// Evaluate the two linear forms used by the selected terminal from the same
+ 495: /// add-only sufficient statistics. With `S0 = sum z_i` and
+ 496: /// `S1 = sum i*z_i`, the frozen forms are exactly
+ 497: /// `L0 = 3*S0 + 22*S1` and `L16 = 275*S0 + 150*S1`.
+ 498: #[inline(always)]
+ 499: fn selected_mask_linears(point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS]) -> (QM31, QM31) {
+ 500:     let mut suffix = QM31::ZERO;
+ 501:     let mut weighted = QM31::ZERO;
+ 502:     for variable in (0..STATE_ONLY_HIDING_SUMCHECK_ROUNDS).rev() {
+ 503:         suffix = suffix.add(point[variable]);
+ 504:         if variable != 0 {
+ 505:             weighted = weighted.add(suffix);
+ 506:         }
+ 507:     }
+ 508:     (
+ 509:         suffix.mul_m31(M31(3)).add(weighted.mul_m31(M31(22))),
+ 510:         suffix.mul_m31(M31(275)).add(weighted.mul_m31(M31(150))),
+
+### original lines 514-533
+ 514: fn mask_power(value: QM31, exponent: usize) -> QM31 {
+ 515:     (0..exponent).fold(QM31::ONE, |power, _| power.mul(value))
+ 516: }
+ 517: 
+ 518: /// Exact fixed addition chain for the explicit degree-26 factor.
+ 519: #[inline(always)]
+ 520: fn mask_power_26(value: QM31) -> QM31 {
+ 521:     let x2 = value.square();
+ 522:     let x4 = x2.square();
+ 523:     let x8 = x4.square();
+ 524:     let x16 = x8.square();
+ 525:     x16.mul(x8).mul(x2)
+ 526: }
+ 527: 
+ 528: fn explicit_mask_factor(point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS]) -> QM31 {
+ 529:     QM31::ONE.add(mask_power(
+ 530:         mask_linear(EXPLICIT_FACTOR_FAMILY, point),
+ 531:         EXPLICIT_FACTOR_EXPONENT,
+ 532:     ))
+ 533: }
+
+### original lines 634-675
+ 634: pub fn state_only_selected_mask_value_with_factors(
+ 635:     c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS],
+ 636:     mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
+ 637:     explicit_g: QM31,
+ 638:     factors: &StateOnlyMaskFactors,
+ 639: ) -> QM31 {
+ 640:     mask_only_c1.iter().copied().zip(factors.mask_only_c1).fold(
+ 641:         state_only_mask_value_with_factors(c1, explicit_g, factors),
+ 642:         |sum, (value, factor)| sum.add(factor.mul(value)),
+ 643:     )
+ 644: }
+ 645: 
+ 646: #[inline(never)]
+ 647: pub fn state_only_selected_mask_value(
+ 648:     c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS],
+ 649:     mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
+ 650:     explicit_g: QM31,
+ 651:     point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],
+ 652: ) -> QM31 {
+ 653:     let (linear, explicit_linear) = selected_mask_linears(point);
+ 654:     let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
+ 655:     for column in 0..STATE_ONLY_HIDING_C1_COLUMNS {
+ 656:         coefficients[usize::from(FACTOR_EXPONENTS[column])] =
+ 657:             mul_tower_basis(c1[column], column & 3);
+ 658:     }
+ 659:     for column in 0..STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
+ 660:         coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])] =
+ 661:             mul_tower_basis(mask_only_c1[column], column & 3);
+ 662:     }
+ 663: 
+ 664:     let prepared_linear = PreparedQm31Multiplier::new(linear);
+ 665:     let mut shared = coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];
+ 666:     for exponent in (0..STATE_ONLY_HIDING_FACTOR_DEGREE).rev() {
+ 667:         shared = prepared_linear.mul(shared).add(coefficients[exponent]);
+ 668:     }
+ 669: 
+ 670:     shared.add(
+ 671:         QM31::ONE
+ 672:             .add(mask_power_26(explicit_linear))
+ 673:             .mul(explicit_g),
+ 674:     )
+ 675: }
+
+## pair_forest_copy_terminal.rs (source SHA-256 7371e743a71357f259a58a20c7169188d5c3adb4010c13b6a792c6c65b8cb4a0)
+### original lines 119-159
+ 119: fn selector_mask_sum_16(values: &[QM31; 16], mut mask: u16) -> QM31 {
+ 120:     let complement = mask.count_ones() > 8;
+ 121:     if complement {
+ 122:         mask = !mask;
+ 123:     }
+ 124:     let mut sum = if complement { QM31::ONE } else { QM31::ZERO };
+ 125:     while mask != 0 {
+ 126:         let index = mask.trailing_zeros() as usize;
+ 127:         sum = if complement {
+ 128:             sum.sub(values[index])
+ 129:         } else {
+ 130:             sum.add(values[index])
+ 131:         };
+ 132:         mask &= mask - 1;
+ 133:     }
+ 134:     sum
+ 135: }
+ 136: 
+ 137: #[derive(Clone, Copy)]
+ 138: pub(crate) struct Selectors {
+ 139:     pub(crate) high: [QM31; 64],
+ 140:     pub(crate) low: [QM31; 16],
+ 141: }
+ 142: 
+ 143: impl Selectors {
+ 144:     fn expand<const N: usize>(coordinates: &[QM31]) -> [QM31; N] {
+ 145:         let mut weights = [QM31::ZERO; N];
+ 146:         weights[0] = QM31::ONE;
+ 147:         let mut len = 1usize;
+ 148:         for coordinate in coordinates {
+ 149:             let prepared = PreparedQm31Multiplier::new(*coordinate);
+ 150:             for index in (0..len).rev() {
+ 151:                 let parent = weights[index];
+ 152:                 let right = prepared.mul(parent);
+ 153:                 weights[2 * index] = parent.sub(right);
+ 154:                 weights[2 * index + 1] = right;
+ 155:             }
+ 156:             len *= 2;
+ 157:         }
+ 158:         weights
+ 159:     }
+
+### original lines 161-177
+ 161:     pub(crate) fn at_point(point: &[QM31; 10]) -> Self {
+ 162:         Self {
+ 163:             high: Self::expand(&point[..6]),
+ 164:             low: Self::expand(&point[6..]),
+ 165:         }
+ 166:     }
+ 167: 
+ 168:     #[inline(never)]
+ 169:     pub(crate) fn boxed_at_point(point: &[QM31; 10]) -> Box<Self> {
+ 170:         Box::new(Self::at_point(point))
+ 171:     }
+ 172: 
+ 173:     #[inline(always)]
+ 174:     pub(crate) fn row(&self, row: usize) -> QM31 {
+ 175:         debug_assert!(row < POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1);
+ 176:         self.high[row >> 4].mul(self.low[row & 15])
+ 177:     }
+
+### original lines 179-229
+ 179:     #[cfg(any(test, not(feature = "pool-v1-pair-forest-active-mask-basis-audit")))]
+ 180:     fn active_literal(&self) -> QM31 {
+ 181:         let mut sum = QM31::ZERO;
+ 182:         let mut block = 0usize;
+ 183:         while block < 64 {
+ 184:             let mask = constants::ACTIVE_ROW_MASKS[block];
+ 185:             if mask != 0 {
+ 186:                 sum = sum.add(self.high[block].mul(selector_mask_sum_16(&self.low, mask)));
+ 187:             }
+ 188:             block += 1;
+ 189:         }
+ 190:         sum
+ 191:     }
+ 192: 
+ 193:     #[cfg(any(test, feature = "pool-v1-pair-forest-active-mask-basis-audit"))]
+ 194:     fn active_mask_basis(&self) -> QM31 {
+ 195:         const MASKS: [u16; 7] = [6144, 6145, 4097, 2048, 2049, 26214, 1749];
+ 196:         let mut high_sums = [QM31::ZERO; MASKS.len()];
+ 197:         let mut block = 0usize;
+ 198:         while block < constants::ACTIVE_ROW_MASKS.len() {
+ 199:             let mask = constants::ACTIVE_ROW_MASKS[block];
+ 200:             let coordinate = match mask {
+ 201:                 6144 => 0,
+ 202:                 6145 => 1,
+ 203:                 4097 => 2,
+ 204:                 2048 => 3,
+ 205:                 2049 => 4,
+ 206:                 26214 => 5,
+ 207:                 1749 => 6,
+ 208:                 _ => unreachable!("generated Copy active mask outside frozen basis"),
+ 209:             };
+ 210:             high_sums[coordinate] = high_sums[coordinate].add(self.high[block]);
+ 211:             block += 1;
+ 212:         }
+ 213:         let mut sum = QM31::ZERO;
+ 214:         let mut coordinate = 0usize;
+ 215:         while coordinate < MASKS.len() {
+ 216:             sum = sum
+ 217:                 .add(high_sums[coordinate].mul(selector_mask_sum_16(&self.low, MASKS[coordinate])));
+ 218:             coordinate += 1;
+ 219:         }
+ 220:         sum
+ 221:     }
+ 222: 
+ 223:     #[inline(always)]
+ 224:     fn active(&self) -> QM31 {
+ 225:         #[cfg(not(feature = "pool-v1-pair-forest-active-mask-basis-audit"))]
+ 226:         return self.active_literal();
+ 227:         #[cfg(feature = "pool-v1-pair-forest-active-mask-basis-audit")]
+ 228:         return self.active_mask_basis();
+ 229:     }
+
+### original lines 233-263
+ 233: fn pattern_values_literal(
+ 234:     openings: &[QM31; POSEIDON2_WIDTH],
+ 235:     lambda: QM31,
+ 236: ) -> [QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1] {
+ 237:     let mut powers = [QM31::ZERO; POSEIDON2_WIDTH];
+ 238:     let mut power = lambda;
+ 239:     let mut limb = 0usize;
+ 240:     while limb < POSEIDON2_WIDTH {
+ 241:         powers[limb] = power;
+ 242:         power = power.mul(lambda);
+ 243:         limb += 1;
+ 244:     }
+ 245:     let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];
+ 246:     let mut pattern_index = 0usize;
+ 247:     while pattern_index < POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1 {
+ 248:         let pattern = constants::COPY_PATTERNS[pattern_index];
+ 249:         let mut value = QM31::ZERO;
+ 250:         limb = 0;
+ 251:         while limb < POSEIDON2_WIDTH {
+ 252:             if pattern.kinds[limb] == 1 {
+ 253:                 let source = openings[usize::from(pattern.columns[limb])]
+ 254:                     .add(lift_m31(M31(pattern.offsets[limb])));
+ 255:                 value = value.add(powers[limb].mul(source));
+ 256:             }
+ 257:             limb += 1;
+ 258:         }
+ 259:         result[pattern_index] = value;
+ 260:         pattern_index += 1;
+ 261:     }
+ 262:     result
+ 263: }
+
+### original lines 321-357
+ 321: fn pattern_values(
+ 322:     openings: &[QM31; POSEIDON2_WIDTH],
+ 323:     lambda: QM31,
+ 324: ) -> [QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1] {
+ 325:     #[cfg(not(feature = "pool-v1-pair-forest-pattern-window-audit"))]
+ 326:     return pattern_values_literal(openings, lambda);
+ 327:     #[cfg(feature = "pool-v1-pair-forest-pattern-window-audit")]
+ 328:     return pattern_values_windowed(openings, lambda);
+ 329: }
+ 330: 
+ 331: #[derive(Clone, Copy)]
+ 332: struct CopyRowExtension {
+ 333:     producer_values: [QM31; 2],
+ 334:     producer_weights: [QM31; 2],
+ 335:     consumer_values: [QM31; 2],
+ 336:     consumer_weights: [QM31; 2],
+ 337: }
+ 338: 
+ 339: fn copy_residual(row: CopyRowExtension, helper: QM31, chi: QM31) -> QM31 {
+ 340:     let denominators = [
+ 341:         chi.sub(row.producer_values[0]),
+ 342:         chi.sub(row.producer_values[1]),
+ 343:         chi.sub(row.consumer_values[0]),
+ 344:         chi.sub(row.consumer_values[1]),
+ 345:     ];
+ 346:     let producer_denominator = denominators[0].mul(denominators[1]);
+ 347:     let consumer_denominator = denominators[2].mul(denominators[3]);
+ 348:     let producer_numerator = row.producer_weights[0]
+ 349:         .mul(denominators[1])
+ 350:         .add(row.producer_weights[1].mul(denominators[0]));
+ 351:     let consumer_numerator = row.consumer_weights[0]
+ 352:         .mul(denominators[3])
+ 353:         .add(row.consumer_weights[1].mul(denominators[2]));
+ 354:     producer_denominator
+ 355:         .mul(helper.mul(consumer_denominator).add(consumer_numerator))
+ 356:         .sub(consumer_denominator.mul(producer_numerator))
+ 357: }
+
+### original lines 424-450
+ 424: fn accumulate_endpoint(
+ 425:     values: &mut [QM31; 2],
+ 426:     weights: &mut [QM31; 2],
+ 427:     endpoint: CompiledPoolV1PairForestEndpoint,
+ 428:     tag: u32,
+ 429:     weight: M31,
+ 430:     patterns: &[QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1],
+ 431:     selectors: &Selectors,
+ 432:     #[cfg(feature = "pool-v1-pair-forest-endpoint-selector-cache-audit")]
+ 433:     selector_cache: &mut EndpointSelectorCache,
+ 434: ) {
+ 435:     #[cfg(not(feature = "pool-v1-pair-forest-endpoint-selector-cache-audit"))]
+ 436:     let selector = selectors.row(usize::from(endpoint.row));
+ 437:     #[cfg(feature = "pool-v1-pair-forest-endpoint-selector-cache-audit")]
+ 438:     let selector = selector_cache.selector(endpoint.row, selectors);
+ 439:     let slot = usize::from(endpoint.slot);
+ 440:     #[cfg(not(feature = "pool-v1-pair-forest-binary-copy-weights-audit"))]
+ 441:     {
+ 442:         weights[slot] = weights[slot].add(selector.mul_m31(weight));
+ 443:     }
+ 444:     #[cfg(feature = "pool-v1-pair-forest-binary-copy-weights-audit")]
+ 445:     {
+ 446:         weights[slot] = add_binary_weight(weights[slot], selector, weight);
+ 447:     }
+ 448:     let compressed = lift_m31(M31(tag)).add(patterns[usize::from(endpoint.pattern)]);
+ 449:     values[slot] = values[slot].add(selector.mul(compressed));
+ 450: }
+
+### original lines 812-929
+ 812: fn accumulate_endpoint_selector_tensor_basis(
+ 813:     scratch: &mut [QM31],
+ 814:     side: usize,
+ 815:     endpoint: CompiledPoolV1PairForestEndpoint,
+ 816:     tag: u32,
+ 817:     weight: M31,
+ 818:     selectors: &Selectors,
+ 819: ) {
+ 820:     let group = side + usize::from(endpoint.slot);
+ 821:     let row = usize::from(endpoint.row);
+ 822:     let local = row & 15;
+ 823:     let high = selectors.high[row >> 4];
+ 824:     let group_local = usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);
+ 825:     #[cfg(not(feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+ 826:     {
+ 827:         scratch[COPY_SELECTOR_TENSOR_TAG_OFFSET + group_local] =
+ 828:             scratch[COPY_SELECTOR_TENSOR_TAG_OFFSET + group_local].add(high.mul_m31(M31(tag)));
+ 829:     }
+ 830:     #[cfg(feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit")]
+ 831:     let _ = tag;
+ 832:     let weight_index = COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + group_local;
+ 833:     scratch[weight_index] =
+ 834:         scratch[weight_index].add(selected_binary_weight(high, weight));
+ 835:     let pattern_local =
+ 836:         usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
+ 837:     scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + pattern_local] =
+ 838:         scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + pattern_local].add(high);
+ 839: }
+ 840: 
+ 841: #[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+ 842: fn finish_selector_tensor_basis(
+ 843:     scratch: &[QM31],
+ 844:     patterns: &[QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1],
+ 845:     selectors: &Selectors,
+ 846: ) -> ([QM31; 4], [QM31; 4]) {
+ 847:     #[cfg(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+ 848:     let mut shifted_patterns = *patterns;
+ 849:     #[cfg(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+ 850:     for pattern in &mut shifted_patterns { pattern.c0.a = pattern.c0.a.add(M31(R58_TAG_BASE)); }
+ 851:     #[cfg(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+ 852:     let patterns = &shifted_patterns;
+ 853: 
+ 854:     #[cfg(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+ 855:     let mut r114_tags=vec![QM31::ZERO;30];
+ 856:     #[cfg(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+ 857:     r114_tags_into(&mut r114_tags,selectors);
+ 858:     let r114_value=|coordinate:usize|{
+ 859:         #[cfg(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))] {r114_tags[coordinate]}
+ 860:         #[cfg(not(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit")))] {copy_tag_coordinate_value(scratch,coordinate,selectors)}
+ 861:     };
+ 862:     let mut values = [QM31::ZERO; 4];
+ 863:     let mut weights = [QM31::ZERO; 4];
+ 864:     #[cfg(not(feature = "pool-v1-pair-forest-copy-finish-dot-basis-audit"))]
+ 865:     {
+ 866:         let mut coordinate = 0usize;
+ 867:         while coordinate < COPY_GROUP_LOCAL_COORDINATE_GROUPS.len() {
+ 868:             let group = usize::from(COPY_GROUP_LOCAL_COORDINATE_GROUPS[coordinate]);
+ 869:             let low = selectors.low[usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate])];
+ 870:             let tag_value = r114_value(coordinate);
+ 871:             values[group] = values[group].add(tag_value.mul(low));
+ 872:             weights[group] = weights[group]
+ 873:                 .add(scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + coordinate].mul(low));
+ 874:             coordinate += 1;
+ 875:         }
+ 876:     }
+ 877:     #[cfg(feature = "pool-v1-pair-forest-copy-finish-dot-basis-audit")]
+ 878:     {
+ 879:         let mut group = 0usize;
+ 880:         while group < values.len() {
+ 881:             let end = COPY_GROUP_LOCAL_GROUP_OFFSETS[group + 1];
+ 882:             let mut coordinate = COPY_GROUP_LOCAL_GROUP_OFFSETS[group];
+ 883:             while coordinate < end {
+ 884:                 let count = core::cmp::min(4, end - coordinate);
+ 885:                 let tag_values: [QM31; 4] = core::array::from_fn(|index| {
+ 886:                     if index < count {
+ 887:                         r114_value(coordinate+index)
+ 888:                     } else {
+ 889:                         QM31::ZERO
+ 890:                     }
+ 891:                 });
+ 892:                 let weight_values: [QM31; 4] = core::array::from_fn(|index| {
+ 893:                     if index < count {
+ 894:                         scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + coordinate + index]
+ 895:                     } else {
+ 896:                         QM31::ZERO
+ 897:                     }
+ 898:                 });
+ 899:                 let lows: [QM31; 4] = core::array::from_fn(|index| {
+ 900:                     if index < count {
+ 901:                         selectors.low
+ 902:                             [usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate + index])]
+ 903:                     } else {
+ 904:                         QM31::ZERO
+ 905:                     }
+ 906:                 });
+ 907:                 values[group] =
+ 908:                     values[group].add(qm31_sum_products_up_to4(tag_values, lows, count));
+ 909:                 weights[group] =
+ 910:                     weights[group].add(qm31_sum_products_up_to4(weight_values, lows, count));
+ 911:                 coordinate += count;
+ 912:             }
+ 913:             group += 1;
+ 914:         }
+ 915:     }
+ 916:     let mut pattern_selectors = [QM31::ZERO; 26];
+ 917:     let mut coordinate = 0;
+ 918:     while coordinate < COPY_PATTERN_LOCAL_COORDINATE_GROUPS.len() {
+ 919:         let output = usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);
+ 920:         let low = selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];
+ 921:         pattern_selectors[output] = pattern_selectors[output]
+ 922:             .add(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + coordinate].mul(low));
+ 923:         coordinate += 1;
+ 924:     }
+ 925:     (
+ 926:         finish_pattern_basis_values(values, pattern_selectors, patterns),
+ 927:         weights,
+ 928:     )
+ 929: }
+
+### original lines 931-1099
+ 931: pub(crate) fn evaluate_with_selectors(
+ 932:     openings: &[QM31; POSEIDON2_WIDTH],
+ 933:     h1_z: QM31,
+ 934:     selectors: &Selectors,
+ 935:     lambda: QM31,
+ 936:     chi: QM31,
+ 937:     append_index: u64,
+ 938:     variant: PoolV1PairForestCompiledVariantV1,
+ 939: ) -> PoolV1PairForestCompiledCopyTerminalV1 {
+ 940:     let patterns = pattern_values(openings, lambda);
+ 941:     let mut row = CopyRowExtension {
+ 942:         producer_values: [QM31::ZERO; 2],
+ 943:         producer_weights: [QM31::ZERO; 2],
+ 944:         consumer_values: [QM31::ZERO; 2],
+ 945:         consumer_weights: [QM31::ZERO; 2],
+ 946:     };
+ 947:     #[cfg(all(
+ 948:         feature = "pool-v1-pair-forest-endpoint-selector-cache-audit",
+ 949:         not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+ 950:     ))]
+ 951:     let mut selector_cache = EndpointSelectorCache::new();
+ 952:     #[cfg(all(
+ 953:         feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
+ 954:         not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+ 955:     ))]
+ 956:     let mut tag_values = [QM31::ZERO; 4];
+ 957:     #[cfg(all(
+ 958:         feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
+ 959:         not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+ 960:     ))]
+ 961:     let mut pattern_selectors = [QM31::ZERO; 26];
+ 962:     #[cfg(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")]
+ 963:     let mut selector_tensor_scratch = vec![QM31::ZERO; COPY_SELECTOR_TENSOR_SCRATCH];
+ 964:     #[cfg(not(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit")))]
+ 965:     {
+ 966:     let mut link_index = 0usize;
+ 967:     while link_index < POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1 {
+ 968:         let link = constants::COPY_LINKS[link_index];
+ 969:         let weight = link_weight(link, append_index, variant);
+ 970:         #[cfg(all(
+ 971:             not(feature = "pool-v1-pair-forest-copy-pattern-basis-audit"),
+ 972:             not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+ 973:         ))]
+ 974:         #[cfg(not(feature = "pool-v1-pair-forest-endpoint-selector-cache-audit"))]
+ 975:         {
+ 976:             accumulate_endpoint(
+ 977:                 &mut row.producer_values,
+ 978:                 &mut row.producer_weights,
+ 979:                 link.producer,
+ 980:                 link.tag,
+ 981:                 weight,
+ 982:                 &patterns,
+ 983:                 selectors,
+ 984:             );
+ 985:             accumulate_endpoint(
+ 986:                 &mut row.consumer_values,
+ 987:                 &mut row.consumer_weights,
+ 988:                 link.consumer,
+ 989:                 link.tag,
+ 990:                 weight,
+ 991:                 &patterns,
+ 992:                 selectors,
+ 993:             );
+ 994:         }
+ 995:         #[cfg(all(
+ 996:             not(feature = "pool-v1-pair-forest-copy-pattern-basis-audit"),
+ 997:             not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+ 998:         ))]
+ 999:         #[cfg(feature = "pool-v1-pair-forest-endpoint-selector-cache-audit")]
+1000:         {
+1001:             accumulate_endpoint(
+1002:                 &mut row.producer_values,
+1003:                 &mut row.producer_weights,
+1004:                 link.producer,
+1005:                 link.tag,
+1006:                 weight,
+1007:                 &patterns,
+1008:                 selectors,
+1009:                 &mut selector_cache,
+1010:             );
+1011:             accumulate_endpoint(
+1012:                 &mut row.consumer_values,
+1013:                 &mut row.consumer_weights,
+1014:                 link.consumer,
+1015:                 link.tag,
+1016:                 weight,
+1017:                 &patterns,
+1018:                 selectors,
+1019:                 &mut selector_cache,
+1020:             );
+1021:         }
+1022:         #[cfg(all(
+1023:             feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
+1024:             not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+1025:         ))]
+1026:         {
+1027:             accumulate_endpoint_pattern_basis(
+1028:                 &mut tag_values,
+1029:                 &mut pattern_selectors,
+1030:                 &mut row.producer_weights,
+1031:                 0,
+1032:                 link.producer,
+1033:                 link.tag,
+1034:                 weight,
+1035:                 selectors,
+1036:                 #[cfg(feature = "pool-v1-pair-forest-endpoint-selector-cache-audit")]
+1037:                 &mut selector_cache,
+1038:             );
+1039:             accumulate_endpoint_pattern_basis(
+1040:                 &mut tag_values,
+1041:                 &mut pattern_selectors,
+1042:                 &mut row.consumer_weights,
+1043:                 2,
+1044:                 link.consumer,
+1045:                 link.tag,
+1046:                 weight,
+1047:                 selectors,
+1048:                 #[cfg(feature = "pool-v1-pair-forest-endpoint-selector-cache-audit")]
+1049:                 &mut selector_cache,
+1050:             );
+1051:         }
+1052:         #[cfg(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")]
+1053:         {
+1054:             accumulate_endpoint_selector_tensor_basis(
+1055:                 &mut selector_tensor_scratch,
+1056:                 0,
+1057:                 link.producer,
+1058:                 link.tag,
+1059:                 weight,
+1060:                 selectors,
+1061:             );
+1062:             accumulate_endpoint_selector_tensor_basis(
+1063:                 &mut selector_tensor_scratch,
+1064:                 2,
+1065:                 link.consumer,
+1066:                 link.tag,
+1067:                 weight,
+1068:                 selectors,
+1069:             );
+1070:         }
+1071:         link_index += 1;
+1072:     }
+1073:     }
+1074:     #[cfg(all(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit", feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+1075:     r57_gather(&mut selector_tensor_scratch, selectors, append_index, variant);
+1076:     #[cfg(all(
+1077:         feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
+1078:         not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+1079:     ))]
+1080:     {
+1081:         let values = finish_pattern_basis_values(tag_values, pattern_selectors, &patterns);
+1082:         row.producer_values = [values[0], values[1]];
+1083:         row.consumer_values = [values[2], values[3]];
+1084:     }
+1085:     #[cfg(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")]
+1086:     {
+1087:         let (values, weights) =
+1088:             finish_selector_tensor_basis(&selector_tensor_scratch, &patterns, selectors);
+1089:         row.producer_values = [values[0], values[1]];
+1090:         row.consumer_values = [values[2], values[3]];
+1091:         row.producer_weights = [weights[0], weights[1]];
+1092:         row.consumer_weights = [weights[2], weights[3]];
+1093:     }
+1094:     let active = selectors.active();
+1095:     PoolV1PairForestCompiledCopyTerminalV1 {
+1096:         residual: active.mul(copy_residual(row, h1_z, chi)),
+1097:         active,
+1098:     }
+1099: }
+
+### original lines 1101-1129
+1101: /// Evaluate the exact 136-link pair-forest Copy lane from the frozen sixteen
+1102: /// merged-C1 openings and one H1 opening. This performs one fixed-size
+1103: /// selector allocation and, under the selected tensor-basis evaluator, one
+1104: /// fixed 103-QM31 scratch allocation. There is no registry- or input-dependent
+1105: /// allocation.
+1106: pub fn evaluate_pool_v1_pair_forest_copy_terminal_compiled_v1(
+1107:     openings: &[QM31; POSEIDON2_WIDTH],
+1108:     h1_z: QM31,
+1109:     point: &[QM31; 10],
+1110:     lambda: QM31,
+1111:     chi: QM31,
+1112:     append_index: u64,
+1113:     variant: PoolV1PairForestCompiledVariantV1,
+1114: ) -> PoolV1PairForestCompiledCopyTerminalV1 {
+1115:     let selectors = Selectors::boxed_at_point(point);
+1116:     evaluate_with_selectors(
+1117:         openings,
+1118:         h1_z,
+1119:         &selectors,
+1120:         lambda,
+1121:         chi,
+1122:         append_index,
+1123:         variant,
+1124:     )
+1125: }
+1126: 
+1127: pub fn pool_v1_pair_forest_copy_active_at_point_compiled_v1(point: &[QM31; 10]) -> QM31 {
+1128:     Selectors::at_point(point).active()
+1129: }
+
+## r57_selector_gather.rs (source SHA-256 6ad2756dff971727facbdc47a52161052d146460bcd3a34836e7c8583d674646)
+### original lines 1-69
+   1: // Included only in the selected tensor/tag profile. Derive all terms from
+   2: // the unchanged endpoint registry; no hand-maintained replacement schedule.
+   3: #[derive(Clone,Copy)]
+   4: struct R57Term { high:u8, kind:u8, level:u8 }
+   5: const fn r57_table()->([u16;74],[R57Term;544]) {
+   6:     let mut offsets=[0u16;74];
+   7:     let mut terms=[R57Term{high:0,kind:0,level:0};544];
+   8:     let mut next=0usize;let mut coordinate=0usize;
+   9:     while coordinate<73 {
+  10:         let mut index=0usize;
+  11:         while index<constants::COPY_LINKS.len() {
+  12:             let link=constants::COPY_LINKS[index];let mut side=0usize;
+  13:             while side<2 {
+  14:                 let ep=if side==0{link.producer}else{link.consumer};
+  15:                 let group=2*side+ep.slot as usize;let local=ep.row as usize&15;
+  16:                 let target=if coordinate<30{COPY_GROUP_LOCAL_COORDINATES[group][local]as usize}
+  17:                     else{30+COPY_PATTERN_LOCAL_COORDINATES[group][ep.pattern as usize][local]as usize};
+  18:                 if target==coordinate {
+  19:                     assert!(next<544 && ep.row<1024 && link.weight_kind<=4 && link.weight_level<64);
+  20:                     terms[next]=R57Term{high:(ep.row>>4)as u8,
+  21:                         kind:if coordinate<30{link.weight_kind}else{0},level:link.weight_level};
+  22:                     next+=1;
+  23:                 }
+  24:                 side+=1;
+  25:             }
+  26:             index+=1;
+  27:         }
+  28:         offsets[coordinate+1]=next as u16;coordinate+=1;
+  29:     }
+  30:     assert!(next==544);
+  31:     (offsets,terms)
+  32: }
+  33: static R57_TABLE:([u16;74],[R57Term;544])=r57_table();
+  34: 
+  35: #[inline(always)]
+  36: fn r57_enabled(term:R57Term,append:u64,variant:PoolV1PairForestCompiledVariantV1)->bool {
+  37:     match term.kind {
+  38:         0=>true,
+  39:         1=>variant==PoolV1PairForestCompiledVariantV1::PrivateTransfer,
+  40:         2=>variant==PoolV1PairForestCompiledVariantV1::Withdrawal,
+  41:         3=>((append>>term.level)&1)==0,
+  42:         4=>((append>>term.level)&1)==1,
+  43:         _=>unreachable!("source-generated Copy weight kind"),
+  44:     }
+  45: }
+  46: 
+  47: #[inline(never)]
+  48: fn r113_retained_gather(scratch:&mut[QM31],selectors:&Selectors,append:u64,variant:PoolV1PairForestCompiledVariantV1){
+  49:     for coordinate in 0..73 {
+  50:         let mut raw=[0u64;4];
+  51:         let mut index=usize::from(R57_TABLE.0[coordinate]);
+  52:         let end=usize::from(R57_TABLE.0[coordinate+1]);
+  53:         while index<end {
+  54:             let term=R57_TABLE.1[index];
+  55:             if r57_enabled(term,append,variant) {
+  56:                 let value=selectors.high[usize::from(term.high)];
+  57:                 // At most 272 terms in a slot; each limb is at most u32::MAX.
+  58:                 // Therefore no u64 overflow, even before canonicality is used.
+  59:                 raw[0]=raw[0].wrapping_add(u64::from(value.c0.a.0));
+  60:                 raw[1]=raw[1].wrapping_add(u64::from(value.c0.b.0));
+  61:                 raw[2]=raw[2].wrapping_add(u64::from(value.c1.a.0));
+  62:                 raw[3]=raw[3].wrapping_add(u64::from(value.c1.b.0));
+  63:             }
+  64:             index+=1;
+  65:         }
+  66:         scratch[30+coordinate]=QM31{c0:CM31::new(M31::reduce_u64(raw[0]),M31::reduce_u64(raw[1])),
+  67:             c1:CM31::new(M31::reduce_u64(raw[2]),M31::reduce_u64(raw[3]))};
+  68:     }
+  69: }
+
+## r113_gather.rs (source SHA-256 97cdf2ceb3b8a2135006462efffe9f984f0126d0094ee5eb5df22511c16c732d)
+### original lines 1-8
+   1: // Generated from the pinned registry; exact integer expansion checked.
+   2: // Every positive intermediate has <=272 u32 terms, hence <2^41.
+   3: #[inline(never)]
+   4: fn r113_limb<const L:usize>(scratch:&mut[QM31],selectors:&Selectors,append:u64,variant:PoolV1PairForestCompiledVariantV1){
+   5:     assert!(scratch.len()>=103 && L<4);
+   6:     let v0=u64::from(if L==0{selectors.high[0].c0.a.0}else if L==1{selectors.high[0].c0.b.0}else if L==2{selectors.high[0].c1.a.0}else{selectors.high[0].c1.b.0});
+   7:     let v1=u64::from(if L==0{selectors.high[1].c0.a.0}else if L==1{selectors.high[1].c0.b.0}else if L==2{selectors.high[1].c1.a.0}else{selectors.high[1].c1.b.0});
+   8:     let v2=u64::from(if L==0{selectors.high[2].c0.a.0}else if L==1{selectors.high[2].c0.b.0}else if L==2{selectors.high[2].c1.a.0}else{selectors.high[2].c1.b.0});
+
+### original lines 364-368
+ 364: #[inline(never)]
+ 365: fn r57_gather(scratch:&mut[QM31],selectors:&Selectors,append:u64,variant:PoolV1PairForestCompiledVariantV1){
+ 366:     r113_limb::<0>(scratch,selectors,append,variant);r113_limb::<1>(scratch,selectors,append,variant);
+ 367:     r113_limb::<2>(scratch,selectors,append,variant);r113_limb::<3>(scratch,selectors,append,variant);
+ 368: }
+
+## pair_forest_copy_terminal_constants.rs (source SHA-256 cfce7ec499d3cfd54cf91eb88675e45d89ada5ce073fe00c78be5211204fbc50)
+### original lines 1-25
+   1: // @generated by examples/generate_pool_v1_pair_forest_copy_terminal_constants.rs.
+   2: // Do not hand-edit. Host identity and off-domain tests bind these constants.
+   3: 
+   4: pub(crate) const ACTIVE_ROWS_FINGERPRINT: u64 = 0xdf394a5a8554d09c;
+   5: pub(crate) const ACTIVE_ROW_MASKS: [u16; 64] = [6144, 6144, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6144, 4097, 2048, 6145, 2049, 2048, 6145, 2049, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 6145, 4097, 6145, 6145, 4097, 26214, 26214, 26214, 26214, 26214, 26214, 1749];
+   6: 
+   7: pub(crate) const INACTIVE_ROW_GROUPS: [u8; 64] = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 3, 1, 4, 3, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 5, 5, 5, 5, 5, 5, 6];
+   8: pub(crate) const INACTIVE_GROUP_MASKS: [u16; 7] = [59391, 59390, 61438, 63487, 63486, 39321, 63786];
+   9: 
+  10: pub(crate) const COPY_PATTERNS: [CompiledPoolV1PairForestPattern; 14] = [
+  11:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  12:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  13:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  14:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  15:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  16:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  17:     CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  18:     CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  19:     CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  20:     CompiledPoolV1PairForestPattern { kinds: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  21:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [8, 9, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 1051521018, 0, 0, 0, 0, 0, 0, 0, 0] },
+  22:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  23:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  24:     CompiledPoolV1PairForestPattern { kinds: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], columns: [8, 9, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0], offsets: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  25: ];
+
+## pair_forest_semantic_terminal.rs (source SHA-256 13b68f6db428268b2504068d79c88262e36d9abd22fb60e345612eff6e2cd90b)
+### original lines 1201-1213
+1201: fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {
+1202:     let factor = |a: QM31, b: QM31| {
+1203:         let ab = a.mul(b);
+1204:         QM31::ONE.sub(a).sub(b).add(ab).add(ab)
+1205:     };
+1206:     let mut product = factor(left[0], right[0]);
+1207:     let mut index = 1usize;
+1208:     while index < left.len() {
+1209:         product = product.mul(factor(left[index], right[index]));
+1210:         index += 1;
+1211:     }
+1212:     product
+1213: }
+
+### original lines 1215-1283
+1215: #[allow(clippy::type_complexity)]
+1216: fn composition_parts(
+1217:     public: SemanticPublic<'_>,
+1218:     claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
+1219:     point: &[QM31; 10],
+1220:     lambda: QM31,
+1221:     chi: QM31,
+1222:     theta: QM31,
+1223: ) -> Result<
+1224:     (
+1225:         QM31,
+1226:         [QM31; 16],
+1227:         [QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
+1228:         QM31,
+1229:         QM31,
+1230:         QM31,
+1231:     ),
+1232:     PoolV1PairForestSemanticTerminalErrorV1,
+1233: > {
+1234:     if public
+1235:         .withdrawal_amount
+1236:         .is_some_and(|amount| amount == 0 || amount >= (1 << 30))
+1237:     {
+1238:         return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);
+1239:     }
+1240:     validate_transition(public)?;
+1241:     let openings = StateOnlyPoseidonOpenings {
+1242:         z: core::array::from_fn(|column| selected_claim(claims, 0, column)),
+1243:         succ_z: core::array::from_fn(|column| selected_claim(claims, 1, column)),
+1244:         xor12_z: core::array::from_fn(|column| selected_claim(claims, 2, column)),
+1245:     };
+1246:     let mask_only = core::array::from_fn(|column| {
+1247:         selected_claim(
+1248:             claims,
+1249:             0,
+1250:             POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1 + column,
+1251:         )
+1252:     });
+1253:     let selectors = Selectors::boxed_at_point(point);
+1254:     let poseidon =
+1255:         evaluate_state_only_poseidon_oracle_projected(&openings, &poseidon_selectors(&selectors));
+1256:     let semantic = semantic_packed(public, &openings, &selectors);
+1257:     let h1_z = selected_claim(claims, 0, SELECTED_H1_COLUMN);
+1258:     let copy = evaluate_with_selectors(
+1259:         &openings.z,
+1260:         h1_z,
+1261:         &selectors,
+1262:         lambda,
+1263:         chi,
+1264:         public.transition.live_snapshot.next_pair_index,
+1265:         copy_variant(public.variant),
+1266:     );
+1267:     let prepared_theta = PreparedQm31Multiplier::new(theta);
+1268:     let mut composition = copy.residual;
+1269:     for lane in semantic.into_iter().rev() {
+1270:         composition = prepared_theta.mul(composition).add(lane);
+1271:     }
+1272:     for lane in poseidon.into_iter().rev() {
+1273:         composition = prepared_theta.mul(composition).add(lane);
+1274:     }
+1275:     Ok((
+1276:         composition,
+1277:         openings.z,
+1278:         mask_only,
+1279:         selected_claim(claims, 0, SELECTED_G_COLUMN),
+1280:         h1_z,
+1281:         copy.active,
+1282:     ))
+1283: }
+
+### original lines 1285-1310
+1285: fn terminal_parts(
+1286:     public: SemanticPublic<'_>,
+1287:     claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
+1288:     point: &[QM31; 10],
+1289:     lambda: QM31,
+1290:     chi: QM31,
+1291:     theta: QM31,
+1292:     zerocheck_point: &[QM31; 10],
+1293:     mu: QM31,
+1294: ) -> Result<
+1295:     (
+1296:         QM31,
+1297:         [QM31; 16],
+1298:         [QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
+1299:         QM31,
+1300:     ),
+1301:     PoolV1PairForestSemanticTerminalErrorV1,
+1302: > {
+1303:     let (composition, c1, mask_only, g, h1_z, copy_active) =
+1304:         composition_parts(public, claims, point, lambda, chi, theta)?;
+1305:     let original = equality_value(zerocheck_point, point)
+1306:         .mul(composition)
+1307:         .add(mu.mul(h1_z))
+1308:         .add(mu.mul(mu).mul(QM31::ONE.sub(copy_active).mul(h1_z)));
+1309:     Ok((original, c1, mask_only, g))
+1310: }
+
+### original lines 1396-1431
+1396:         #[allow(clippy::too_many_arguments)]
+1397:         #[inline(never)]
+1398:         pub fn $masked(
+1399:             public: &$public_ty,
+1400:             transition: &PoolV1PairLatePublicStatementV1,
+1401:             claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
+1402:             point: &[QM31; 10],
+1403:             lambda: QM31,
+1404:             chi: QM31,
+1405:             theta: QM31,
+1406:             zerocheck_point: &[QM31; 10],
+1407:             mu: QM31,
+1408:             eta: QM31,
+1409:         ) -> Result<QM31, PoolV1PairForestSemanticTerminalErrorV1> {
+1410:             let (original, c1, mask_only, g) = terminal_parts(
+1411:                 $convert(public, transition),
+1412:                 claims,
+1413:                 point,
+1414:                 lambda,
+1415:                 chi,
+1416:                 theta,
+1417:                 zerocheck_point,
+1418:                 mu,
+1419:             )?;
+1420:             Ok(state_only_selected_mask_value(&c1, &mask_only, g, point).add(eta.mul(original)))
+1421:         }
+1422:     };
+1423: }
+1424: 
+1425: define_variant_terminal!(
+1426:     evaluate_pool_v1_pair_forest_private_transfer_selected_constraint_composition_compiled_v1,
+1427:     evaluate_pool_v1_pair_forest_private_transfer_selected_unmasked_terminal_compiled_tag73_v1,
+1428:     evaluate_pool_v1_pair_forest_private_transfer_selected_masked_terminal_compiled_tag73_v1,
+1429:     PoolV1PrivateTransferPublicV1,
+1430:     private_public
+1431: );
+
