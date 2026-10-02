@@ -1,0 +1,153 @@
+{
+  "task": "R425 pinned Aeneas unit constant frontier source inventory",
+  "status": "read-only; no source edits, build, test, or translation retry",
+  "trigger": {
+    "prior_failure": "R424 translation; InterpExpressions.ml:574 Found unexpected constant: ()",
+    "source_site": "Iterator::try_fold definition span 2486:4-2490:35",
+    "immutable_LLBC_row": "recorded separately by r241; not duplicated here"
+  },
+  "source_roots": {
+    "aeneas": "/home/dombarker/project-offloads/aspis-r385-private-return-carrier-candidate-20261002-a/src",
+    "charon_ml": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon-ml/src",
+    "charon_tests": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/tests/ui",
+    "aeneas_git_metadata": "campaign record states frozen source root has no Git metadata; file hashes are used"
+  },
+  "files": [
+    {
+      "path": "aeneas/interp/InterpExpressions.ml",
+      "sha256": "531b0ee1c6d26d463d07c6e1dbdc75a7cce32cf970adcbc59dfafd75bfdd914f",
+      "ranges": [
+        "399-578"
+      ],
+      "finding": "Constant evaluator has explicit CLiteral, CTraitConst, CVar, CFnDef, CRawMemory, COpaque branches; final wildcard raises Found unexpected constant. No CAdt branch."
+    },
+    {
+      "path": "aeneas/interp/InterpStatements.ml",
+      "sha256": "061c0b53ee02aa2b19ab2998ad84a7a5e3f3add06f66deaec839f8dff7343982",
+      "ranges": [
+        "432-433"
+      ],
+      "finding": "Call arguments go through eval_operands before call evaluation."
+    },
+    {
+      "path": "aeneas/PrePasses.ml",
+      "sha256": "579f332212ad75b386b088ef7835783f7cb84a835b1acb96031d49847fc53a17",
+      "ranges": [
+        "3597-3665"
+      ],
+      "finding": "apply_passes crate-wide array-default and pending-return-carrier transforms, then listed function passes; none explicitly names unit/CAdt lowering."
+    },
+    {
+      "path": "aeneas/Main.ml",
+      "sha256": "b268d72e877bd3e409e78e149445ab96e43fa3e107f2adb9491578b9e6627d24",
+      "ranges": [
+        "734-750"
+      ],
+      "finding": "apply_passes precedes optional unit-function testing and translate_crate."
+    },
+    {
+      "path": "aeneas/llbc/Contexts.ml",
+      "sha256": "8e6598bc7b5a2104b64de0c14a7f4733a1fc1bddbe1e8596c7b43d1a75eaa600",
+      "ranges": [
+        "648-672"
+      ],
+      "finding": "Tuple field type lookup validates no variant/no regions and returns tuple type arguments."
+    },
+    {
+      "path": "aeneas/llbc/ValuesUtils.ml",
+      "sha256": "ff1f7619b2b33046d64c9e90c98572c821aaef46e786702d5085b945716a9320",
+      "ranges": [
+        "53-60"
+      ],
+      "finding": "Runtime tuple constructor creates EAdt with TTuple; distinct from constant evaluator."
+    },
+    {
+      "path": "aeneas/symbolic/SymbolicToPureTypes.ml",
+      "sha256": "29f4a784b0edb1dccf895aba78ec6d5c15c081e8602f7778db264b21272c54a0",
+      "ranges": [
+        "28-33"
+      ],
+      "finding": "Const-generic translator supports CGlobal/CVar/CLiteral only; separate path from function-operand interpreter."
+    },
+    {
+      "path": "charon-ml/src/ExpressionsUtils.ml",
+      "sha256": "0b0ba4a2e4aaf12d97a5f6f5ead3744ad8ddbcd39f382418e6042f1bc76d6381",
+      "ranges": [
+        "19"
+      ],
+      "finding": "mk_unit_const = CAdt(None,[]) with mk_unit_ty."
+    },
+    {
+      "path": "charon-ml/src/PrintFmt.ml",
+      "sha256": "85535800f514b53b5827c1ed726c0f479b7519e1744472afc4ce7419cb30dd60",
+      "ranges": [
+        "477-484",
+        "528-532"
+      ],
+      "finding": "Tuple aggregate formatting uses parenthesized fields; CAdt dispatches to aggregate formatter."
+    },
+    {
+      "path": "charon-tests/ui/matches.rs",
+      "sha256": "d67d61d109290bb83a00bc8103ffe7acefc739c97af54e54bd11dcf8c578c7ed",
+      "ranges": [
+        "63"
+      ],
+      "finding": "Source fixture contains let () = ();."
+    },
+    {
+      "path": "charon-tests/ui/matches.out",
+      "sha256": "494df3825552f63494b93ce6f963a0749a85c3e582f6fc2b40ee9ec02853dd49",
+      "finding": "Expected MIR contains unit assignment; not an Aeneas translator acceptance test."
+    },
+    {
+      "path": "charon-tests/ui/rvalues.rs",
+      "sha256": "900b60d4a97caafd1cff535d668237c1a2c85a034c1ecec578eddcdf113038c7",
+      "finding": "Rust UI fixture includes unit-valued closures/expressions."
+    },
+    {
+      "path": "charon-tests/ui/rvalues.out",
+      "sha256": "db03ef11cc67635b03b1c149797d3efaab884346625a363e6a48e54eec75c0f7",
+      "finding": "Expected MIR output includes unit assignments."
+    },
+    {
+      "path": "charon-tests/ui/iterator.rs",
+      "sha256": "8d63c90353d148b67f51371442b70cb61cc343e1b01b9450cc6b524f12888ef0",
+      "finding": "Iterator source fixture searched; no any()-specific unit constant acceptance case identified."
+    },
+    {
+      "path": "charon-tests/ui/iterator.out",
+      "sha256": "3e2b1c3bbb1ff1707d5c62b9655a83af67632b85d5367e05f3b6abad85d7fc65",
+      "finding": "Iterator expectations contain try_fold declarations; no Aeneas acceptance result."
+    },
+    {
+      "path": "charon-ml/src/generated/Generated_Types.ml",
+      "sha256": "6e977831c8fb7a3e1b6b77e1b98e5cc71de8841186f98c5de5fd68c93fdb9794",
+      "ranges": [
+        "354-386"
+      ],
+      "finding": "AST comment documents CAdt elimination by the named regularize_constant_adts.rs micro-pass; implementation source was absent from inspected checkout."
+    },
+    {
+      "path": "charon/src/ast/expressions.rs",
+      "sha256": "7339c83c73fc0d3399d1da03aaae7f6190a9bc6bbfc8d6c6657e4a0690b6e3b5",
+      "ranges": [
+        "608-630"
+      ],
+      "finding": "Mirrors CAdt micro-pass documentation; named implementation source was absent from inspected checkout."
+    }
+  ],
+  "bounded_search": {
+    "direct_CAdt_search": "No direct CAdt occurrence found in named Aeneas PrePasses, InterpExpressions, ValuesUtils, or Contexts source files.",
+    "test_search": "Charon UI fixtures confirm frontend unit MIR representation; no Aeneas test proving acceptance of this operand was found in bounded search."
+  },
+  "interpretation_limit": "This inventory establishes the current rejection path only. It does not specify a repair or claim semantic/source correspondence.",
+  "phase_provenance": {
+    "R396_input_sha256": "399020435e94aaa7135c06d68445e9b936bd22fe6d1e1d197ee708d448d584ae",
+    "R419_candidate_sha256": "7f82eaabe855e89d735b21f9af5f6a983abea6b2f4d93d4b8bae747abd2829e2",
+    "same_unit_node_path": "function58/body/Structured/body/statements/6/kind/Loop/statements/8/kind/Assign/1/Ref/ptr_metadata",
+    "kind": "Adt [null, []] in both",
+    "resolved_type": "empty tuple in both; hash-cons ID 594 in R396 and 19 in R419",
+    "interpretation": "The unit constant predates the R419 projection rewrite; this does not identify which Charon stage retained it.",
+    "Charon_documentation": "Generated_Types.ml and Rust ast/expressions.rs state CAdt is eliminated by regularize_constant_adts.rs; named implementation file was absent in inspected pinned checkout, so its code/order could not be verified."
+  }
+}

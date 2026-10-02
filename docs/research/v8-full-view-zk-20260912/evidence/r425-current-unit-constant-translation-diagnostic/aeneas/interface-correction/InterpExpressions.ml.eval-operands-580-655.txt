@@ -1,0 +1,76 @@
+  | Copy p ->
+      (* Access the value *)
+      let access = Read in
+      let _, v = read_place_check span access p ctx in
+      (* Sanity checks *)
+      [%cassert] span
+        (not (bottom_in_value ctx.ended_regions v))
+        "Can not copy a value containing bottom";
+      [%sanity_check] span
+        (Option.is_none
+           (find_first_expandable_sv_with_borrows (Some span)
+              ctx.type_ctx.type_decls ctx.type_ctx.type_infos v));
+      (* Copy the value *)
+      let allow_adt_copy = false in
+      let updated_value, copied_value, ctx, cc =
+        copy_value span allow_adt_copy config ctx v
+      in
+      (* Update the original value *)
+      let ctx = write_place span access p updated_value ctx in
+      (* *)
+      (copied_value, ctx, cc)
+  | Move p ->
+      (* Access the value *)
+      let access = Move in
+      let _, v = read_place_check span access p ctx in
+      (* Check that there are no bottoms in the value we are about to move *)
+      [%cassert] span
+        (not (bottom_in_value ctx.ended_regions v))
+        "There should be no bottoms in the value we are about to move";
+      (* Move the value *)
+      let bottom : tvalue = { value = VBottom; ty = v.ty } in
+      let ctx = write_place span access p bottom ctx in
+      (v, ctx, fun e -> e)
+
+let eval_operand (config : config) (span : Meta.span) (op : operand)
+    (ctx : eval_ctx) :
+    tvalue * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+  (* Debug *)
+  [%ltrace
+    "op: " ^ operand_to_string ctx op ^ "\n- ctx:\n"
+    ^ eval_ctx_to_string ~span:(Some span) ctx];
+  (* We reorganize the context, then evaluate the operand *)
+  let ctx, cc = prepare_eval_operand_reorganize config span op ctx in
+  comp2 cc (eval_operand_no_reorganize config span op ctx)
+
+(** Small utility.
+
+    See [prepare_eval_operand_reorganize]. *)
+let prepare_eval_operands_reorganize (config : config) (span : Meta.span)
+    (ops : operand list) : cm_fun =
+  fold_left_apply_continuation (prepare_eval_operand_reorganize config span) ops
+
+(** Evaluate several operands. *)
+let eval_operands (config : config) (span : Meta.span) (ops : operand list)
+    (ctx : eval_ctx) :
+    tvalue list * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+  (* Prepare the operands *)
+  let ctx, cc = prepare_eval_operands_reorganize config span ops ctx in
+  (* Evaluate the operands *)
+  comp2 cc
+    (map_apply_continuation (eval_operand_no_reorganize config span) ops ctx)
+
+let eval_two_operands (config : config) (span : Meta.span) (op1 : operand)
+    (op2 : operand) (ctx : eval_ctx) :
+    (tvalue * tvalue) * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+  let res, ctx, cc = eval_operands config span [ op1; op2 ] ctx in
+  let res =
+    match res with
+    | [ v1; v2 ] -> (v1, v2)
+    | _ -> [%craise] span "Unreachable"
+  in
+  (res, ctx, cc)
+
+let eval_unary_op_concrete (config : config) (span : Meta.span) (unop : unop)
+    (op : operand) (ctx : eval_ctx) :
+    (tvalue, eval_error) result

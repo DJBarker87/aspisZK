@@ -1,0 +1,34 @@
+{
+  "status": "read-only API correction; no source edit/build/test",
+  "candidate_root": "/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/src",
+  "historical_private_proposal": {
+    "file": "../eval-context-inventory.md",
+    "api": "InterpExpressions.eval_operand_no_reorganize",
+    "status": "not exported by InterpExpressions.mli; direct fixture call is unbound; preserve as historical proposal only"
+  },
+  "public_api": {
+    "interface_path": "interp/InterpExpressions.mli",
+    "interface_sha256": "f0a15cdb3a491148f9bad38077c9c5126411fb5ea4502e38ba1bcb44153371e1",
+    "implementation_sha256": "a686db5af43c4463b357e066330a21f01287bafe0cc2c13394b4b2b4f458f190",
+    "exported_functions": ["eval_operand", "eval_operands"],
+    "not_exported": ["eval_operand_no_reorganize"]
+  },
+  "corrected_fixture_call": "InterpExpressions.eval_operands config span [ Constant charon_unit ] ctx",
+  "expected_result_shape": "tvalue list * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr); the one-element result list is [expected_unit]",
+  "identity_checks": {
+    "context": "ctx_out == ctx",
+    "continuation": "continue witness == witness with an allocated SymbolicAst.Assertion"
+  },
+  "source_path": {
+    "preparation": "prepare_eval_operand_reorganize Constant _ -> (ctx, fun e -> e)",
+    "operands": "eval_operands prepares operands then calls map_apply_continuation over the list"
+  },
+  "malformed_case": "Run valid CAdt(None,[unit]) with a one-element tuple type through public eval_operands; expect same old Errors.CFailure unsupported-constant diagnostic.",
+  "evidence_files": {
+    "full_interface": "InterpExpressions.mli",
+    "implementation_excerpt": "InterpExpressions.ml.eval-operands-580-655.txt",
+    "constant_preparation_excerpt_and_hash": "prepare-operands-source-and-hash.txt",
+    "remote_hash_receipt": "remote-hashes.txt"
+  },
+  "source_edition_or_test": false
+}

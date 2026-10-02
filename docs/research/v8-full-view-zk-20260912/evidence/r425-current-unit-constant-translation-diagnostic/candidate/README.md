@@ -1,0 +1,7 @@
+# R425 exact-unit helper and native fixture drafts
+
+The source helper draft is `UnitConstant.draft.ml`. It recognizes only `CAdt(None,[])` whose type is structurally exactly `mk_unit_ty`, and returns the existing runtime zero-field tuple representation with that original type. Every other expression returns `None`; the caller is expected to preserve the existing evaluator rejection fallback. This was the lead-specified scope. The helper has not been compiled or integrated into tracked source.
+
+The native fixture draft is `fixtures/UnitConstantFixture.draft.ml`. It loads the exact R419 LLBC through `LlbcOfJson.crate_of_json_file`, traverses function ID 58 with the native LLBC statement visitor, and requires exactly one unit constant at that function, equal to `Charon.ExpressionsUtils.mk_unit_const`. It also checks acceptance/value equality and rejection for nonempty fields, a `Some` variant, non-unit tuple type, region/const/trait generic arguments on a tuple, and a non-aggregate constant kind. Expected marker: `R425 unit constant fixture assertions passed: 12`.
+
+`fixtures/dune.draft` is a proposal for adding `UnitConstant` to the fresh candidate library module list and a focused test stanza using the same `aeneas charon core` fixture libraries as R424. It is not applied. API visibility, visitor method typing, and fixture compilation remain unverified. No translation, build, source edit, or test was run.

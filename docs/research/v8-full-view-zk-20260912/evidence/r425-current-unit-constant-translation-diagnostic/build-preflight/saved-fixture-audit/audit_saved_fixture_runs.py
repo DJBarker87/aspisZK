@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""Read-only consistency check for saved R425 fixture build and execution."""
+import hashlib,json,pathlib,re,subprocess
+BASE=pathlib.Path(__file__).resolve().parents[1]
+OUT=pathlib.Path(__file__).resolve().parent
+checks=[]
+def ck(n,ok,d):checks.append({'check':n,'pass':bool(ok),'detail':d})
+def j(p):return json.loads(p.read_text())
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def timed(p):
+ t=p.read_text(); w=re.search(r'Elapsed \(wall clock\) time .*: ([0-9:]+\.[0-9]+)',t).group(1); q=w.split(':'); wall=sum(float(x)*60**(len(q)-i-1) for i,x in enumerate(q)); rss=int(re.search(r'Maximum resident set size \(kbytes\): (\d+)',t).group(1)); sw=int(re.search(r'Swaps: (\d+)',t).group(1)); ex=int(re.search(r'Exit status: (\d+)',t).group(1)); return {'wall_seconds':wall,'peak_rss_kib':rss,'swaps':sw,'exit_status':ex,'sha256':sha(p)}
+root=BASE/'r425-unit-fixture-build-v1'; exe=BASE/'r425-unit-fixture-execution-v1'; c=j(root/'command.json'); r=j(root/'result.json'); e=j(exe/'command.json'); er=j(exe/'result.json'); inputs=j(BASE/'fixture-execution-inputs.reviewed-v2.json')
+# All phase snapshots match the build command, execution command, reviewed input and candidate files.
+for rel,want in c['source_sha256'].items():
+ bp=root/'source'/('R419_candidate.llbc' if rel=='R419_candidate.llbc' else rel)
+ ep=exe/'source'/('R419_candidate.llbc' if rel=='R419_candidate.llbc' else rel)
+ ck('build snapshot '+rel,bp.is_file() and sha(bp)==want,{'expected':want,'actual':sha(bp) if bp.is_file() else None})
+ ck('execution snapshot '+rel,ep.is_file() and sha(ep)==want,{'expected':want,'actual':sha(ep) if ep.is_file() else None})
+ ck('execution expected source '+rel,e['source_sha256'].get(rel)==want and inputs['source_sha256'].get(rel)==want,{'build':want,'execution':e['source_sha256'].get(rel),'input':inputs['source_sha256'].get(rel)})
+ candidate=pathlib.Path('.r21-scratch/r425-unit-constant-frontier/fixtures/UnitConstantFixture.reviewed.ml') if rel=='src/UnitConstantFixture.ml' else pathlib.Path('.r21-scratch/r425-unit-constant-frontier/fixtures/dune.reviewed') if rel=='src/dune' else None
+ if candidate: ck('reviewed staged '+rel,sha(candidate)==want,{'path':str(candidate),'sha256':sha(candidate)})
+ck('phase source revision',c['source_revision']==r['source_revision']==e['source_revision']==er['source_revision']==inputs['source_revision']=='ee7ba72da456d5f353bca9f6739b23750a5dfffa',{'build':c['source_revision'],'execution':e['source_revision'],'input':inputs['source_revision']})
+ck('build was only the fixture executable',c['target']=='UnitConstantFixture.exe' and c['expected_work'].startswith('Build only') and c['axioms']=='NA: OCaml compilation only',{'target':c['target'],'expected_work':c['expected_work'],'axioms':c['axioms']})
+bm=timed(root/'gnu-time.txt'); em=timed(exe/'gnu-time.txt')
+ck('build GNU-time status and measurements',bm['exit_status']==0 and bm['wall_seconds']==82.57 and bm['peak_rss_kib']==590016 and bm['swaps']==0,bm)
+ck('execution GNU-time status and measurements',em['exit_status']==0 and em['wall_seconds']==0.08 and em['peak_rss_kib']==38896 and em['swaps']==0,em)
+for phase,path,metrics in [('build',root,bm),('execution',exe,em)]:
+ ins=j(path/'docker-inspect.json')[0]; h=ins['HostConfig']; sl=j(path/'reservation-before.json')['slice']; state=ins['State']
+ good=h['MemoryReservation']==5368709120 and h['Memory']==7516192768 and h['MemorySwap']==7516192768 and h['PidsLimit']==128 and h['NetworkMode']=='none' and h['CgroupParent']=='aspisr425.slice' and state['ExitCode']==0 and not state['OOMKilled'] and all(t in sl for t in ('MemoryHigh=5368709120','MemoryMax=7516192768','MemorySwapMax=0','TasksMax=128'))
+ ck(phase+' Docker/systemd scope and status',good,{'exit_code':state['ExitCode'],'oom':state['OOMKilled'],'container':{k:h[k] for k in ('MemoryReservation','Memory','MemorySwap','PidsLimit','NetworkMode','CgroupParent')},'slice':sl})
+# Executable hash is a recorded build artifact and matched by the exact execution command; no local binary copy is required/claimed.
+ck('execution bound to build executable and exact LLBC',r['fixture_executable_sha256']==e['fixture_executable_sha256'] and e['fixture_executable_sha256']=='aafe08b79439a651164588059df4703b159d327b21820ed0c76a12b2c611ebd1' and e['input_sha256']==c['source_sha256']['R419_candidate.llbc'] and e['lead_approval'] is True,{'build_executable_sha256':r['fixture_executable_sha256'],'execution_executable_sha256':e['fixture_executable_sha256'],'input_sha256':e['input_sha256'],'approval':e['lead_approval'],'verification_boundary':'recorded build hash is checked by execution runner against remote executable; binary was not copied locally for a second hash'})
+raw=(exe/'raw.log').read_text(); marker='R425 unit constant fixture assertions passed: 11'
+ck('fixture output result matches marker',er['exit_status']==0 and er['all_checks_passed'] is True and er['assertions_passed']==11 and er['success_marker_count']==1 and marker in raw and er['raw_log_sha256']==sha(exe/'raw.log'),{'execution_result':er,'raw_log_sha256':sha(exe/'raw.log')})
+pre=(BASE/'fixture-execution-preflight-v1.log').read_text()
+ck('failed v1 preflight retained and excluded from fixture run',"postbuild-executable-receipt.json" in pre and 'FileNotFoundError' in pre and 'Running as unit: aspis-r425-unit-fixture-execution.service' in pre and 'status=1' in pre,{'file':'fixture-execution-preflight-v1.log','classification':'preflight aborted before the audited execution audit directory and before fixture executable invocation'})
+launch=(BASE/'fixture-execution-launch-v2.log').read_text(); runner=(BASE/'run_fixture_execution.reviewed-v2.py').read_text(); ck('reviewed v2 execution launcher receipt present', 'aspis-r425-unit-fixture-execution-v2.service' in launch and marker in launch and 'Main processes terminated with: code=exited/status=0' in launch,{'launcher_log_sha256':sha(BASE/'fixture-execution-launch-v2.log')})
+ck('reviewed v2 runner binds saved build hash to executable', "build['fixture_executable_sha256']" in runner and "sha(exe)==exe_receipt['executable_sha256']" in runner and "assert expected['lead_approved'] is True" in runner, {'runner_sha256':sha(BASE/'run_fixture_execution.reviewed-v2.py'),'uses_build_record':True,'hashes_remote_executable':True,'approval_gate':True})
+ck('reviewed execution approval and expected check count',inputs['lead_approved'] is True and inputs['expected_assertions']==11 and e['expected_assertions']==11, {'lead_approved':inputs['lead_approved'],'expected_assertions':e['expected_assertions']})
+ck('axiom reporting N/A',c['axioms']=='NA: OCaml compilation only' and e['axioms']=='NA: finite OCaml fixture checks, not Lean.','No Lean theorem was compiled.')
+rawfiles=[root/'command.json',root/'result.json',root/'gnu-time.txt',root/'build.log',root/'docker-inspect.json',root/'reservation-before.json',exe/'command.json',exe/'result.json',exe/'gnu-time.txt',exe/'raw.log',exe/'docker-inspect.json',exe/'reservation-before.json',BASE/'fixture-execution-preflight-v1.log',BASE/'fixture-execution-launch-v2.log',BASE/'fixture-execution-inputs.reviewed-v2.json',BASE/'run_fixture_execution.reviewed-v2.py']
+rawsha={str(p.relative_to(BASE)):sha(p) for p in rawfiles}
+metrics={'source_revision':c['source_revision'],'build':{'target':c['target'],'exit_status':bm['exit_status'],'wall_seconds':bm['wall_seconds'],'peak_rss_kib':bm['peak_rss_kib'],'swaps':bm['swaps'],'fixture_executable_sha256':r['fixture_executable_sha256'],'raw_gnu_time_sha256':bm['sha256']},'execution':{'exit_status':em['exit_status'],'wall_seconds':em['wall_seconds'],'peak_rss_kib':em['peak_rss_kib'],'swaps':em['swaps'],'assertions_passed':er['assertions_passed'],'success_marker':marker,'fixture_executable_sha256':e['fixture_executable_sha256'],'input_sha256':e['input_sha256'],'raw_gnu_time_sha256':em['sha256'],'raw_output_sha256':sha(exe/'raw.log')},'resource_scope':{'systemd':'MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128','docker':'reservation=5GiB, memory=7GiB, memory-swap=7GiB (no extra container swap), pids=128, network=none, parent=aspisr425.slice'},'axioms':'Not applicable: native OCaml fixture compile and finite fixture checks, not Lean.','source_sha256':c['source_sha256'],'raw_artifact_sha256':rawsha}
+(OUT/'metrics-receipt.json').write_text(json.dumps(metrics,indent=2)+'\n')
+a={'result':'PASS' if all(x['pass'] for x in checks) else 'FAIL','scope':'Saved R425 fixture build/execution evidence only; no rerun. Fixture success is finite native-check evidence on the exact saved R419 LLBC, not a translator/source correspondence theorem.','checks':checks,'raw_artifact_sha256':rawsha}
+(OUT/'audit.json').write_text(json.dumps(a,indent=2)+'\n')
+(OUT/'REPORT.md').write_text('# R425 saved fixture build and execution audit\n\n'+a['result']+' — '+a['scope']+'\n\nThe fixture executable target built with exit 0 in 1:22.57, peak RSS 590016 KiB, and zero swaps. The reviewed execution then reported 11 assertions passed exactly once, exit 0 in 0.08 s, peak RSS 38896 KiB, and zero swaps. Both phases have capped systemd and Docker receipts. The earlier v1 execution preflight aborted before execution because the build sidecar receipt was missing; it is retained as a preflight failure, not a fixture failure. The reviewed v2 runner used the saved build hash and checked it against the remote executable before invoking the fixture. Axiom reporting is not applicable. These checks do not establish Aeneas translation or Lean/source execution correspondence.\n')
+print(a['result']);[print(('PASS ' if x['pass'] else 'FAIL ')+x['check']) for x in checks]

@@ -1,0 +1,87 @@
+              Invariants.opt_type_check_abs span ctx abs;
+              (* *)
+              abs
+              (*mk_abs rid [ sv; updated_sv; copied_sv ]*))
+            (RegionId.Map.values regions)
+        in
+        let abs = List.map (fun a -> EAbs a) (List.rev abs) in
+        let ctx = { ctx with env = abs @ ctx.env } in
+        (* Create the continuation: we need to introduce intermediate let-bindings *)
+        let cf e =
+          let mk sv e =
+            SymbolicAst.IntroSymbolic
+              (ctx0, None, sv, SymbolicAst.VaSingleValue v, e)
+          in
+          mk updated_sv (mk copied_sv e)
+        in
+        ( mk_tvalue_from_symbolic_value updated_sv,
+          mk_tvalue_from_symbolic_value copied_sv,
+          ctx,
+          cf )
+      end
+
+(** Reorganize the environment in preparation for the evaluation of an operand.
+
+    Evaluating an operand requires reorganizing the environment to get access to
+    a given place (by ending borrows, expanding symbolic values...) then
+    applying the operand operation (move, copy, etc.).
+
+    Sometimes, we want to decouple the two operations. Consider the following
+    example:
+    {[
+      context = {
+        x -> shared_borrow l0
+        y -> shared_loan {l0} v
+      }
+
+      dest <- f(move x, move y);
+      ...
+    ]}
+
+    Because of the way {!end_borrow} is implemented, when giving back the borrow
+    [l0] upon evaluating [move y], if we have already moved the value of x, we
+    won't notice that [shared_borrow l0] has disappeared from the environment
+    (it has been moved and not assigned yet, and so is hanging in "thin air").
+
+    By first "preparing" the operands evaluation, we make sure no such thing
+    happens. To be more precise, we make sure all the updates to borrows
+    triggered by access *and* move operations have already been applied.
+
+    Rem.: in the formalization, we always have an explicit "reorganization" step
+    in the rule premises, before the actual operand evaluation, that allows to
+    reorganize the environment so that it satisfies the proper conditions. This
+    function's role is to do the reorganization.
+
+    Rem.: doing this is actually not completely necessary because when
+    generating MIR, rustc introduces intermediate assignments for all the
+    function parameters. Still, it is better for soundness purposes, and
+    corresponds to what we do in the formalization (because we don't enforce the
+    same constraints as MIR in the formalization). *)
+let prepare_eval_operand_reorganize (config : config) (span : Meta.span)
+    (op : operand) : cm_fun =
+ fun ctx ->
+  match op with
+  | Constant _ ->
+      (* No need to reorganize the context *)
+      (ctx, fun e -> e)
+  | Copy p ->
+      (* Access the value *)
+      let access = Read in
+      (* Expand the symbolic values, if necessary *)
+      let greedy_expand = true in
+      access_rplace_reorganize config span greedy_expand access p ctx
+  | Move p ->
+      (* Access the value *)
+      let access = Move in
+      let greedy_expand = false in
+      access_rplace_reorganize config span greedy_expand access p ctx
+
+(** Evaluate an operand, without reorganizing the context before *)
+let eval_operand_no_reorganize (config : config) (span : Meta.span)
+    (op : operand) (ctx : eval_ctx) :
+    tvalue * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+  (* Debug *)
+  [%ltrace
+    "op: " ^ operand_to_string ctx op ^ "\n- ctx:\n"
+    ^ eval_ctx_to_string ~span:(Some span) ctx];
+a686db5af43c4463b357e066330a21f01287bafe0cc2c13394b4b2b4f458f190  /home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/src/interp/InterpExpressions.ml

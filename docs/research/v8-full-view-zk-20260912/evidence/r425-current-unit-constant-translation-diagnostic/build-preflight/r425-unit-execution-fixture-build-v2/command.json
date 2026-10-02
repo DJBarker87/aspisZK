@@ -1,0 +1,36 @@
+{
+  "argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r425-unit-execution-fixture-build-v2",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr425.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a:/work",
+    "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r425-unit-execution-fixture-build-v2/gnu-time.txt env AENEAS_VERSION=aspis-r425-unit-constant-candidate OCAMLPARAM=_,ccopt=-static opam exec -- dune build UnitConstantExecutionFixture.exe --profile release -j 1"
+  ],
+  "inner_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r425-unit-execution-fixture-build-v2/gnu-time.txt env AENEAS_VERSION=aspis-r425-unit-constant-candidate OCAMLPARAM=_,ccopt=-static opam exec -- dune build UnitConstantExecutionFixture.exe --profile release -j 1",
+  "source_revision": "ee7ba72da456d5f353bca9f6739b23750a5dfffa",
+  "source_sha256": {
+    "src/llbc/UnitConstant.ml": "2f0fa49b456a026d4cc8ece6d02b017d3a60dc37c3a26d01c65b9f52ae0da28e",
+    "src/interp/InterpExpressions.ml": "a686db5af43c4463b357e066330a21f01287bafe0cc2c13394b4b2b4f458f190",
+    "src/UnitConstantFixture.ml": "4fa9281de3b1a3b5d637693e156a05b3be58188da09c1ad8157dfb748274ff78",
+    "src/dune": "0d37f4f57c2920077ec9594da2e8881c91408afb000e01e6222e73695f808ef0",
+    "R419_candidate.llbc": "7f82eaabe855e89d735b21f9af5f6a983abea6b2f4d93d4b8bae747abd2829e2",
+    "src/UnitConstantExecutionFixture.ml": "2bf4937f01e2ed053c0599071862239204c54945805490a3f6261ccbcbdd7a00"
+  },
+  "target": "UnitConstantExecutionFixture.exe",
+  "expected_assertions": 8,
+  "expected_marker": "R425 unit execution checks passed: 8",
+  "expected_work": "Build only the focused native test executable. Do not execute the fixture, build main.exe, translate, or run Lean.",
+  "axioms": "NA: OCaml compilation only"
+}
