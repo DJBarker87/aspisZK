@@ -1,0 +1,33 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r214-copy-routing-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr214.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r214-copy-routing-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; AENEAS_VERSION=aspis-r214-copy-routing-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-copy-routing; chmod 755 /work/aeneas-copy-routing"
+  ],
+  "shell_build": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; AENEAS_VERSION=aspis-r214-copy-routing-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-copy-routing; chmod 755 /work/aeneas-copy-routing",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "release": "dune build main.exe --profile release -j 1",
+  "static": "OCAMLPARAM=_,ccopt=-static",
+  "limits": {
+    "docker_memory_reservation": "5g",
+    "docker_memory": "7g",
+    "docker_memory_swap": "7g (equal to memory; no container swap)",
+    "docker_pids_limit": 128,
+    "cgroup_parent": "aspisr214.slice"
+  },
+  "source_revision_recorded": "237d48bc3f70c262a27e9a8595b9ac51d12b4e77"
+}

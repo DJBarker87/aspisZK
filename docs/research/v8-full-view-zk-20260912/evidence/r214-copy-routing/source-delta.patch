@@ -1,0 +1,11 @@
+--- a/src/PrePasses.ml
++++ b/src/PrePasses.ml
+@@ -2009,7 +2009,7 @@
+                 (can_inline, st :: ls)
+             | BinaryOp _ | UnaryOp _ | Discriminant _ | Len _ | Repeat _ ->
+                 (false, st :: ls))
+-        | SetDiscriminant _ | Assert (_, _, _) | Call (_, _) | Error _ ->
++        | SetDiscriminant _ | Assert (_, _, _) | Call (_, _) | Error _ | CopyNonOverlapping _ ->
+             (false, st :: ls)
+         | _ ->
+             [%craise] st.span
