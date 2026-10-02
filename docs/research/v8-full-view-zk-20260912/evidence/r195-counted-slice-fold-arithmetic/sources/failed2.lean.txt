@@ -1,0 +1,53 @@
+import Aeneas.Std
+
+/-! Bounded arithmetic facts for the safe counted-loop successor.  This file
+proves only that the checked `usize` addition succeeds under the stated bound;
+it does not identify this operation with source `unchecked_add` or establish
+pointer/index semantics. -/
+set_option autoImplicit false
+
+namespace AspisV8R19.R195CountedSliceFoldArithmetic
+
+open Aeneas Aeneas.Std Result
+
+theorem successor_bound (i len : Usize) (hi : i.val < len.val) :
+    i.val + 1 < 2 ^ UScalarTy.Usize.numBits := by
+  have hlen : len.val < Usize.size := by
+    simpa [Usize.size, Usize.numBits, UScalarTy.Usize_numBits_eq] using
+      len.hBounds
+  have hnext : i.val + 1 < Usize.size := by omega
+  simpa [Usize.size, Usize.numBits, UScalarTy.Usize_numBits_eq] using hnext
+
+theorem checked_successor (i len : Usize) (hi : i.val < len.val) :
+    ∃ j : Usize,
+      UScalar.add i (1#usize) = .ok j ∧
+      j.val = i.val + 1 ∧
+      j.val ≤ len.val ∧
+      (j ≠ len → j.val < len.val) := by
+  have hpow := successor_bound i len hi
+  have hspec := @UScalar.add_equiv .Usize i 1#usize
+  have hsame : (i + 1#usize : Result Usize) = UScalar.add i 1#usize := rfl
+  rw [hsame] at hspec
+  cases hrun : UScalar.add i (1#usize) with
+  | fail error =>
+      rw [hrun] at hspec
+      simp [UScalar.inBounds] at hspec
+      omega
+  | div =>
+      rw [hrun] at hspec
+      simp at hspec
+  | ok j =>
+      rw [hrun] at hspec
+      have hjval : j.val = i.val + 1 := by
+        simpa using hspec.2.1
+      refine ⟨j, rfl, hjval, ?_, ?_⟩
+      · omega
+      · intro hjne
+        by_contra hnotlt
+        have hjlen : j.val = len.val := by omega
+        exact hjne (UScalar.eq_of_val_eq hjlen)
+
+#print axioms successor_bound
+#print axioms checked_successor
+
+end AspisV8R19.R195CountedSliceFoldArithmetic
