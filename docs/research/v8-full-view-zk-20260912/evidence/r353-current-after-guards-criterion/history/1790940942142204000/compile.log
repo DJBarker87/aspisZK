@@ -1,0 +1,144 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790940942142204000.service; invocation ID: 03db52f391204647997ab4f134ce8e46
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:60:2: error: unsolved goals
+case pos
+xs ys : Slice U32
+f g : ℕ → M31Exact
+hx : 0 < (↑xs).length
+hy : 0 < (↑ys).length
+hf : ∀ j < (↑xs).length, (↑xs)[j]? = some (encodeBase (f j))
+hg : ∀ j < (↑ys).length, (↑ys)[j]? = some (encodeBase (g j))
+hcriterion :
+  sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1) ≠ 0 ↔
+    (∀ j < (↑xs).length, f j ≠ 0) ∧ ∀ j < (↑ys).length, g j ≠ 0
+hziff :
+  sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1) = 0 ↔
+    ¬((∀ j < (↑xs).length, f j ≠ 0) ∧ ∀ j < (↑ys).length, g j ≠ 0)
+hz : sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1) = 0
+⊢ (if True then fail Error.assertionFailure
+      else
+        ok
+          (core.result.Result.Ok
+            (sourceOutput xs f (0⁻¹ * sourcePrefixValue g ((↑ys).length - 1)),
+              sourceOutput ys g (0⁻¹ * sourcePrefixValue f ((↑xs).length - 1))))) =
+      fail Error.assertionFailure ↔
+    True
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:61:2: error: unsolved goals
+case neg
+xs ys : Slice U32
+f g : ℕ → M31Exact
+hx : 0 < (↑xs).length
+hy : 0 < (↑ys).length
+hf : ∀ j < (↑xs).length, (↑xs)[j]? = some (encodeBase (f j))
+hg : ∀ j < (↑ys).length, (↑ys)[j]? = some (encodeBase (g j))
+hcriterion :
+  sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1) ≠ 0 ↔
+    (∀ j < (↑xs).length, f j ≠ 0) ∧ ∀ j < (↑ys).length, g j ≠ 0
+hziff :
+  sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1) = 0 ↔
+    ¬((∀ j < (↑xs).length, f j ≠ 0) ∧ ∀ j < (↑ys).length, g j ≠ 0)
+hz : ¬sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1) = 0
+⊢ (if False then fail Error.assertionFailure
+      else
+        ok
+          (core.result.Result.Ok
+            (sourceOutput xs f
+                ((sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1))⁻¹ *
+                  sourcePrefixValue g ((↑ys).length - 1)),
+              sourceOutput ys g
+                ((sourcePrefixValue f ((↑xs).length - 1) * sourcePrefixValue g ((↑ys).length - 1))⁻¹ *
+                  sourcePrefixValue f ((↑xs).length - 1))))) =
+      fail Error.assertionFailure ↔
+    False
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:60:15: warning: This simp argument is unused:
+  if_pos hz
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵h̵z̵,̵ ̵h̵z̵,̵[̲h̲z̲,̲ iff_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:60:30: warning: This simp argument is unused:
+  iff_self
+
+Hint: Omit it from the simp argument list.
+  simp only [if_pos hz, hz,̵ ̵i̵f̵f̵_̵s̵e̵l̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:61:15: warning: This simp argument is unused:
+  if_neg hz
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵f̵_̵n̵e̵g̵ ̵h̵z̵,̵ ̵reduceCtorEq, hz, iff_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:61:26: warning: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg hz, r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵,̵ ̵hz, iff_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:61:44: warning: This simp argument is unused:
+  iff_self
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg hz, reduceCtorEq, hz,̵ ̵i̵f̵f̵_̵s̵e̵l̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:70:44: error: unsolved goals
+xs ys : Slice U32
+f g : ℕ → M31Exact
+hx : 0 < (↑xs).length
+hy : 0 < (↑ys).length
+hf : ∀ j < (↑xs).length, (↑xs)[j]? = some (encodeBase (f j))
+hg : ∀ j < (↑ys).length, (↑ys)[j]? = some (encodeBase (g j))
+⊢ ((∃ x, ∃ (_ : x < (↑xs).length), f x = 0) ∨ ∃ x, ∃ (_ : x < (↑ys).length), g x = 0) ↔
+    (∃ j < (↑xs).length, f j = 0) ∨ ∃ j < (↑ys).length, g j = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean:73:37: warning: This simp argument is unused:
+  Classical.not_imp
+
+Hint: Omit it from the simp argument list.
+  simp only [not_and_or, not_forall, C̵l̵a̵s̵s̵i̵c̵a̵l̵.̵n̵o̵t̵_̵i̵m̵p̵,̵ ̵not_not]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R353AfterGuardsCriterion.after_guards_succeeds_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R353AfterGuardsCriterion.after_guards_assertion_failure_iff' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R353AfterGuardsCriterion.after_guards_failure_has_zero_iff' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R353AfterGuardsCriterion.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R353AfterGuardsCriterion.lean"
+	User time (seconds): 1.12
+	System time (seconds): 0.38
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.50
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3698516
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86125
+	Voluntary context switches: 377
+	Involuntary context switches: 57
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.535s
+CPU time consumed: 1.544s
+Memory peak: 512.0K
+Memory swap peak: 0B
