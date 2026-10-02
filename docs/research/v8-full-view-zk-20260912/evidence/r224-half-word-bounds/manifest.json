@@ -1,0 +1,77 @@
+{
+  "target": "AspisV8R19/R224HalfWordBounds.lean",
+  "source_revision": "5de2ac01e31c4a42d9ae7a042e9503fbb12edec3",
+  "source_sha256": "b5733c3549ecc4e3dd8b3b4a1cfd94a1246612b0ed7f2d5884a56e11a2c20b73",
+  "log": "logs/aspis-focus-1790907123213196000.log",
+  "exit_status": 0,
+  "wall_time": "0:01.38",
+  "peak_rss_kib": 3234464,
+  "swaps": 0,
+  "cgroup_memory_swap_peak": "0B",
+  "lean_version": "4.32.0 (8c9756b28d64dab099da31a4c09229a9e6a2ef35)",
+  "resources": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128,
+    "flags": "-j1 -M4500",
+    "launch_evidence": "Executed runner retained. GNU time Lean child RSS, not wrapper MemoryPeak."
+  },
+  "complete_print_axioms": [
+    "'AspisV8R19.R224HalfWordBounds.value' depends on axioms: [propext, Quot.sound]",
+    "'AspisV8R19.R224HalfWordBounds.canonical' depends on axioms: [propext, Quot.sound]",
+    "'AspisV8R19.R224HalfWordBounds.double_value' depends on axioms: [propext, Quot.sound]"
+  ],
+  "axiom_audit": "Only propext and Quot.sound; all earlier native/self/sorry axioms rejected.",
+  "proved_boundary": "Symbolic low-31-bit rotation of any canonical 32-bit word w<P: exact Nat value floor(w/2)+(w mod2)*2^30, result<P, and exact unreduced identity 2*result=w+(w mod2)*P. Kernel proof uses Nat bitwise/division facts and arithmetic, no native checker or new axiom. This is a word-level predecessor, not an actual half source-method correspondence.",
+  "first_remaining_proposition": "Extract and prove actual selected M31/CM31 half and connect the line-coordinate coefficient optimization and source array evaluation to the field algebra.",
+  "failed_predecessors": [
+    {
+      "source": "failed/R224HalfWordBounds.rejected-native.lean",
+      "source_sha256": "dcb1c576176e68564d27488f7c78a2b6bc90df8e6e15df72b2452f6a3292c4a6",
+      "log": "logs/aspis-focus-1790906868710771000.log",
+      "exit_status": 0,
+      "disposition": "REJECTED: native bv_decide axioms; not relied on",
+      "complete_print_axioms": [
+        "'AspisV8R19.R224HalfWordBounds.canonical' depends on axioms: [propext,\n Classical.choice,\n Quot.sound,\n canonical._native.bv_decide.ax_1_5]",
+        "'AspisV8R19.R224HalfWordBounds.double_word' depends on axioms: [propext,\n Classical.choice,\n Quot.sound,\n double_word._native.bv_decide.ax_1_5]"
+      ],
+      "wall_time": "0:01.45",
+      "peak_rss_kib": 3285932,
+      "swaps": 0
+    },
+    {
+      "source": "failed/R224HalfWordBounds.failed-1.lean",
+      "source_sha256": "42abc208d90f90936e6cc890faa3a28ca5c0d76817541e0be6d80db0c5dc772f",
+      "log": "logs/aspis-focus-1790906989867706000.log",
+      "exit_status": 1,
+      "disposition": "Failed literal rewriting and wrapped proof elaboration; sorryAx rejected",
+      "complete_print_axioms": [
+        "'AspisV8R19.R224HalfWordBounds.value' depends on axioms: [propext, sorryAx, Quot.sound]",
+        "'AspisV8R19.R224HalfWordBounds.canonical' depends on axioms: [propext, sorryAx, Quot.sound]",
+        "'AspisV8R19.R224HalfWordBounds.double_word' depends on axioms: [propext, sorryAx, Quot.sound]"
+      ],
+      "wall_time": "0:01.31",
+      "peak_rss_kib": 3220224,
+      "swaps": 0
+    },
+    {
+      "source": "failed/R224HalfWordBounds.failed-2.lean",
+      "source_sha256": "6adea483f20d90f16811d36da08ef54efe3f748d01dc58b18c874e1daa6df19c",
+      "log": "logs/aspis-focus-1790907061856554000.log",
+      "exit_status": 1,
+      "disposition": "Kernel excessive memory in double_word at -M4500; own double_word axiom emitted for failed declaration is rejected",
+      "complete_print_axioms": [
+        "'AspisV8R19.R224HalfWordBounds.value' depends on axioms: [propext, Quot.sound]",
+        "'AspisV8R19.R224HalfWordBounds.canonical' depends on axioms: [propext, Quot.sound]",
+        "'AspisV8R19.R224HalfWordBounds.double_word' depends on axioms: [propext, Quot.sound, double_word]"
+      ],
+      "wall_time": "0:08.67",
+      "peak_rss_kib": 4608980,
+      "swaps": 0
+    }
+  ],
+  "replacement_after_memory_failure": "Isolated double_word wrapped BitVec equality; retained fast value/canonical route, changed theorem to exact Nat double_value from quotient/remainder identity. Same caps; no unchanged larger-cap retry.",
+  "verifier_source_changed": false,
+  "CU_or_unchanged_regression_rerun": false
+}
