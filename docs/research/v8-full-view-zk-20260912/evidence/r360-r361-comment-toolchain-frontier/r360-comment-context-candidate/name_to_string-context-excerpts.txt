@@ -1,0 +1,73 @@
+===== .r21-scratch/r360-comment-context-candidate/source-r349/extract/ExtractBase.ml:630-636 =====
+630: 
+631: let extraction_ctx_to_llbc_fmt_env (ctx : extraction_ctx) : Print.fmt_env =
+632:   TranslateCore.trans_ctx_to_fmt_env ctx.trans_ctx
+633: 
+634: let name_to_string (ctx : extraction_ctx) =
+635:   PrintPure.name_to_string (extraction_ctx_to_fmt_env ctx)
+636: 
+===== .r21-scratch/r360-comment-context-candidate/source-r349/extract/ExtractTypes.ml:828-850 =====
+828:                         | Some (_, n) -> n
+829:                         | None ->
+830:                             [%warn] span
+831:                               ("Could not find field '" ^ rust_name
+832:                              ^ "' in the builtin information for '"
+833:                               ^ name_to_string ctx def.item_meta.name
+834:                               ^ "'; the " ^ backend_name ()
+835:                               ^ " model is probably incorrect.");
+836:                             mk_field_name rust_name
+837:                       in
+838:                       (fid, name))
+839:                     fields
+840:                 in
+841:                 (field_names, cons_name)
+842:             | Some info ->
+843:                 [%warn] span
+844:                   ("Invalid builtin information for type "
+845:                   ^ name_to_string ctx def.item_meta.name
+846:                   ^ ": expected builtin information about a structure, got:\n"
+847:                   ^ show_builtin_type_info info
+848:                   ^ ". The " ^ Config.backend_name ()
+849:                   ^ " model defined in the standard library seems to be wrong."
+850:                   );
+===== .r21-scratch/r360-comment-context-candidate/source-r349/extract/ExtractTypes.ml:900-909 =====
+900:                     (variant_id, StringMap.find variant.variant_name variant_map))
+901:                   variants
+902:             | Some info ->
+903:                 [%craise] span
+904:                   ("Invalid builtin information for type "
+905:                   ^ name_to_string ctx def.item_meta.name
+906:                   ^ ": expected builtin information about an enumeration, got:\n"
+907:                   ^ show_builtin_type_info info)
+908:           in
+909:           List.fold_left
+===== .r21-scratch/r360-comment-context-candidate/source-r349/extract/ExtractTypes.ml:1242-1270 =====
+1242: let extract_comment_with_span (ctx : extraction_ctx) (fmt : F.formatter)
+1243:     (sl : string list) (name : Types.name option)
+1244:     ?(generics : (Types.generic_params * Types.generic_args) option = None)
+1245:     ?(public : bool = false) (span : Meta.span) : unit =
+1246:   let name =
+1247:     match (name, generics) with
+1248:     | None, _ -> []
+1249:     | Some name, None ->
+1250:         [
+1251:           "Name pattern: ["
+1252:           ^ name_to_pattern_string (Some span) ctx.trans_ctx name
+1253:           ^ "]";
+1254:         ]
+1255:     | Some name, Some (params, args) ->
+1256:         [
+1257:           "Name pattern: ["
+1258:           ^ name_with_generics_to_pattern_string (Some span) ctx.trans_ctx name
+1259:               params args
+1260:           ^ "]";
+1261:         ]
+1262:   in
+1263:   let span = Errors.span_to_string span in
+1264:   let visibility = if public then [ "Visibility: public" ] else [] in
+1265:   extract_doc_comment fmt (sl @ [ span ] @ name @ visibility)
+1266: 
+1267: let extract_attributes (span : Meta.span) (ctx : extraction_ctx)
+1268:     (fmt : F.formatter) (name : Types.name)
+1269:     (generics : (Types.generic_params * Types.generic_args) option)
+1270:     (attributes : string list) (rust_model_attr : string)

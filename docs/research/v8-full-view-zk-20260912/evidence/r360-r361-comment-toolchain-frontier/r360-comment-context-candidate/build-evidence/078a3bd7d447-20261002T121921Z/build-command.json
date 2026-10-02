@@ -1,0 +1,40 @@
+{
+  "docker_argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r360-comment-names-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "--cgroup-parent=aspisr360.slice",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r360-comment-context-candidate-20261002-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r360-comment-context-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r360-comment-context-candidate; chmod 755 /work/aeneas-r360-comment-context-candidate"
+  ],
+  "inner_build_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/compiler-gnu-time.txt env AENEAS_VERSION=aspis-r360-comment-context-candidate-20261002-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r360-comment-context-candidate; chmod 755 /work/aeneas-r360-comment-context-candidate",
+  "docker_image_id": "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+  "profile": "dune build main.exe --profile release -j 1",
+  "optimization": "Dune release profile; static native link via OCAMLPARAM=_,ccopt=-static",
+  "parallelism": {
+    "OPAMJOBS": 1,
+    "DUNEJOBS": 1,
+    "dune_jobs": 1
+  },
+  "expected_work": "cached compilation of changed extract/ExtractTypes.ml and necessary dependency/relink work only; no cold dependency build, translation, or proof generation",
+  "launch_revision": "078a3bd7d4471a5f10549843e7818b956163bb77",
+  "source_revision_of_R349_candidate": "56a931fc3879354a2fa584e73bd0a1d412714851",
+  "R349_binary_sha256": "dc4b9d209c645a0d951bdd78f7e0f9d6fb9d09b0e88491edded1ee7beb791cd6",
+  "candidate_source_tree_sha256_before_build": "3a855903889ca3cdffc0580065e974c408087f2d83d467260704c5a39a7efff8",
+  "R349_ExtractTypes_sha256": "cb59112741c428671764a44af7478117d2a324270ac0aec5c41052a3a2833a25",
+  "R360_ExtractTypes_sha256": "0f8ee29aa89c9456ea6c266ff8d767dcb8a83af5bbe8096d04e53582cb32c527",
+  "container_cgroup_peak_is_authoritative_for_container_memory": true,
+  "docker_cli_time_rss_label": "Docker CLI parent-process RSS only; not aggregate compiler or container RSS",
+  "compiler_gnu_time_path": "candidate-audit/compiler-gnu-time.txt"
+}

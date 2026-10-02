@@ -1,0 +1,243 @@
+===== TranslateCore.ml:74-96 =====
+74: let name_to_pattern_string (span : Meta.span option) (ctx : trans_ctx)
+75:     (n : Types.name) : string =
+76:   let mctx = Charon.NameMatcher.ctx_from_crate ctx.crate in
+77:   let c : Charon.NameMatcher.to_pat_config =
+78:     { tgt = TkPattern; use_trait_decl_refs = match_with_trait_decl_refs }
+79:   in
+80:   let pat = LlbcAstUtils.name_to_pattern span mctx c n in
+81:   Charon.NameMatcher.pattern_to_string { tgt = TkPattern } pat
+82: 
+83: let name_with_generics_to_pattern_string (span : Meta.span option)
+84:     (ctx : trans_ctx) (n : Types.name) (params : Types.generic_params)
+85:     (args : Types.generic_args) : string =
+86:   let mctx = Charon.NameMatcher.ctx_from_crate ctx.crate in
+87:   let c : Charon.NameMatcher.to_pat_config =
+88:     { tgt = TkPattern; use_trait_decl_refs = match_with_trait_decl_refs }
+89:   in
+90:   let pat =
+91:     LlbcAstUtils.name_with_generics_to_pattern span mctx c params n args
+92:   in
+93:   Charon.NameMatcher.pattern_to_string { tgt = TkPattern } pat
+===== extract/ExtractTypes.ml:1242-1298 =====
+1242: let extract_comment_with_span (ctx : extraction_ctx) (fmt : F.formatter)
+1243:     (sl : string list) (name : Types.name option)
+1244:     ?(generics : (Types.generic_params * Types.generic_args) option = None)
+1245:     ?(public : bool = false) (span : Meta.span) : unit =
+1246:   let name =
+1247:     match (name, generics) with
+1248:     | None, _ -> []
+1249:     | Some name, None ->
+1250:         [
+1251:           "Name pattern: ["
+1252:           ^ name_to_pattern_string (Some span) ctx.trans_ctx name
+1253:           ^ "]";
+1254:         ]
+1255:     | Some name, Some (params, args) ->
+1256:         [
+1257:           "Name pattern: ["
+1258:           ^ name_with_generics_to_pattern_string (Some span) ctx.trans_ctx name
+1259:               params args
+1260:           ^ "]";
+1261:         ]
+1262:   in
+1263:   let span = Errors.span_to_string span in
+1264:   let visibility = if public then [ "Visibility: public" ] else [] in
+1265:   extract_doc_comment fmt (sl @ [ span ] @ name @ visibility)
+1266: 
+1267: let extract_attributes (span : Meta.span) (ctx : extraction_ctx)
+1268:     (fmt : F.formatter) (name : Types.name)
+1269:     (generics : (Types.generic_params * Types.generic_args) option)
+1270:     (attributes : string list) (rust_model_attr : string)
+1271:     (rust_model_attr_options : string list) ~(is_external : bool) : unit =
+1272:   if backend () = Lean then (
+1273:     let name_pattern : string list list =
+1274:       if is_external then
+1275:         match generics with
+1276:         | None ->
+1277:             [
+1278:               [
+1279:                 rust_model_attr;
+1280:                 "\""
+1281:                 ^ name_to_pattern_string (Some span) ctx.trans_ctx name
+1282:                 ^ "\"";
+1283:               ]
+1284:               @ rust_model_attr_options;
+1285:             ]
+1286:         | Some (params, args) ->
+1287:             [
+1288:               [
+1289:                 rust_model_attr;
+1290:                 "\""
+1291:                 ^ name_with_generics_to_pattern_string (Some span) ctx.trans_ctx
+1292:                     name params args
+1293:                 ^ "\"";
+1294:               ]
+1295:               @ rust_model_attr_options;
+1296:             ]
+1297:       else []
+1298:     in
+===== extract/ExtractTypes.ml:1505-1523 =====
+1505:   (* Add a break before *)
+1506:   if backend () <> HOL4 || not (decl_is_first_from_group kind) then
+1507:     F.pp_print_break fmt 0 0;
+1508:   (* Print a comment to link the extracted type to its original rust definition *)
+1509:   (let name =
+1510:      if !Config.extract_external_name_patterns && not def.item_meta.is_local
+1511:      then Some def.item_meta.name
+1512:      else None
+1513:    in
+1514:    extract_comment_with_span ctx fmt
+1515:      [ "[" ^ name_to_string ctx def.item_meta.name ^ "]" ]
+1516:      name ~public:def.item_meta.attr_info.public span;
+1517:    F.pp_print_break fmt 0 0;
+1518:    (* Extract the attributes.
+1519: 
+1520:       Note that we need the [reducible] attribute in Lean, otherwise Lean sometimes
+1521:       doesn't manage to typecheck the expressions when it needs to coerce the type. *)
+1522:    let reducible_attr =
+1523:      if is_tuple_struct_one_or_zero_field && backend () = Lean then
+===== Translate.ml:704-716 =====
+704:     (is_opaque && config.extract_opaque)
+705:     || ((not is_opaque) && config.extract_transparent)
+706:   in
+707:   if extract then (
+708:     if extract_decl then (
+709:       Extract.extract_type_decl ctx fmt type_decl_group kind def;
+710:       EmitJson.record_type_if_enabled ctx def);
+711:     if extract_extra_info then
+712:       Extract.extract_type_decl_extra_info ctx fmt kind def)
+713: 
+714: (** Export a group of types.
+715: 
+716:     [is_rec]: [true] if the types are recursive. Necessarily [true] if there is
+===== Translate.ml:1268-1280 =====
+1268:         [%craise_opt_span] None
+1269:           "Mixed-recursive declaration groups are not supported"
+1270:   in
+1271: 
+1272:   List.iter
+1273:     (fun g ->
+1274:       try export_decl_group g
+1275:       with CFailure _ ->
+1276:         (* An exception was raised: ignore it *)
+1277:         ())
+1278:     ctx.crate.declarations
+1279: 
+1280: type extract_file_info = {
+===== extract/Extract.ml:2067-2081 =====
+2067:       | Some (id, true) -> " loop body " ^ LoopId.to_string id ^ ":"
+2068:     in
+2069:     [ comment_pre ^ loop_comment ]
+2070:   in
+2071:   let name =
+2072:     if !extract_external_name_patterns && not def.item_meta.is_local then
+2073:       Some def.item_meta.name
+2074:     else None
+2075:   in
+2076:   extract_comment_with_span ctx fmt comment name
+2077:     ~public:def.item_meta.attr_info.public def.item_meta.span
+2078: 
+2079: (** Extract a function declaration.
+2080: 
+2081:     This function is for all function declarations and all backends **at the
+===== Translate.ml:287-303 =====
+287:     Some
+288:       (translate_function_to_pure_aux trans_ctx marked_ids pure_type_decls
+289:          pure_global_decls fun_sigs fdef)
+290:   with CFailure error ->
+291:     let name = name_to_string trans_ctx fdef.item_meta.name in
+292:     let name_pattern =
+293:       try
+294:         name_to_pattern_string (Some fdef.item_meta.span) trans_ctx
+295:           fdef.item_meta.name
+296:       with CFailure _ ->
+297:         "(could not compute the name pattern due to a different error)"
+298:     in
+299:     [%warn_opt_span] error.span
+300:       ("Could not translate the function '" ^ name
+301:      ^ " because of previous error.\nName pattern: '" ^ name_pattern ^ "'"
+302:      ^ "\nDefinition span: "
+303:       ^ Errors.raw_span_to_string fdef.item_meta.span
+===== Translate.ml:1568-1585 =====
+1568:       (fun ctx def ->
+1569:         try Extract.extract_type_decl_register_names ctx def
+1570:         with CFailure error ->
+1571:           (* An exception was raised: ignore it *)
+1572:           let name = name_to_string trans_ctx def.item_meta.name in
+1573:           let name_pattern =
+1574:             try
+1575:               name_to_pattern_string (Some def.item_meta.span) trans_ctx
+1576:                 def.item_meta.name
+1577:             with CFailure _ ->
+1578:               "(could not compute the name pattern due to a different error)"
+1579:           in
+1580:           [%warn_opt_span] error.span
+1581:             ("Could not generate names for the type declaration '" ^ name
+1582:            ^ " because of previous error\nName pattern: '" ^ name_pattern ^ "'"
+1583:            ^ "\nDefinition span: "
+1584:             ^ Errors.raw_span_to_string def.item_meta.span
+1585:             ^ compute_local_uses_error_message trans_ctx (IdType def.def_id));
+===== symbolic/SymbolicToPure.ml:134-151 =====
+134:     (fun d ->
+135:       try Some (translate_type_decl ctx d)
+136:       with CFailure error ->
+137:         let env = PrintPure.decls_ctx_to_fmt_env ctx in
+138:         let name = PrintPure.name_to_string env d.item_meta.name in
+139:         let name_pattern =
+140:           try
+141:             TranslateCore.name_to_pattern_string (Some d.item_meta.span) ctx
+142:               d.item_meta.name
+143:           with CFailure _ ->
+144:             "(could not compute the name pattern due to a different error)"
+145:         in
+146:         [%warn_opt_span] error.span
+147:           ("Could not translate type decl '" ^ name
+148:          ^ " because of previous error\nName pattern: '" ^ name_pattern ^ "'"
+149:           ^ Contexts.compute_local_uses_error_message ctx (IdType d.def_id));
+150:         None)
+151:     (TypeDeclId.Map.values ctx.type_ctx.to_extract)
+===== pure/PureMicroPassesAnnots.ml:423-442 =====
+423:       decl
+424:     with Errors.CFailure error ->
+425:       let name = name_to_string trans_ctx decl.item_meta.name in
+426:       let name_pattern =
+427:         try
+428:           name_to_pattern_string (Some decl.item_meta.span) trans_ctx
+429:             decl.item_meta.name
+430:         with Errors.CFailure _ ->
+431:           "(could not compute the name pattern due to a different error)"
+432:       in
+433:       [%warn_opt_span] error.span
+434:         ("Could not add type annotations to the fun declaration '" ^ name
+435:        ^ " because of previous error\nName pattern: '" ^ name_pattern
+436:        ^ "'.\n\
+437:          \ We will generate code without annotations but it may not type-check."
+438:         );
+439:       (* Keep the unchanged decl *)
+440:       decl
+441:   in
+442:   List.map
+===== interp/Interp.ml:608-629 =====
+608:       if synthesize then Some (cc el) else None
+609:     with CFailure error ->
+610:       let name = name_to_string () in
+611:       let name_pattern =
+612:         try
+613:           TranslateCore.name_to_pattern_string (Some fdef.item_meta.span)
+614:             decls_ctx fdef.item_meta.name
+615:         with CFailure _ ->
+616:           "(could not compute the name pattern due to a different error)"
+617:       in
+618:       let action = if synthesize then "translate" else "borrow-check" in
+619:       [%warn_opt_span] error.span
+620:         ("Could not " ^ action ^ " the body of function '" ^ name
+621:        ^ " because of previous error\nName pattern: '" ^ name_pattern ^ "'"
+622:        ^ "\nDefinition span: "
+623:         ^ Errors.raw_span_to_string fdef.item_meta.span
+624:         ^ compute_local_uses_error_message decls_ctx (IdFun fdef.def_id));
+625:       if synthesize then Some (Error (error.span, error.msg)) else None
+626:   in
+627:   (* Return *)
+628:   (input_svs, symbolic)
+629: 

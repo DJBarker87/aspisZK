@@ -1,0 +1,16 @@
+--- R349/extract/ExtractTypes.ml
++++ R360/extract/ExtractTypes.ml
+@@ -1246,6 +1246,13 @@
+   let name =
+     match (name, generics) with
+     | None, _ -> []
++    | Some name, _
++      when List.exists (function Types.PeInstantiated _ -> true | _ -> false) name ->
++        [
++          "Instantiated source name: ["
++          ^ name_to_string ctx name
++          ^ "]";
++        ]
+     | Some name, None ->
+         [
+           "Name pattern: ["

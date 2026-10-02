@@ -1,0 +1,228 @@
+{
+  "status": "read-only R352 comment-emission/naming preflight; no tool/source edits, builds, extraction or translation",
+  "R349_source": {
+    "candidate_revision": "56a931fc3879354a2fa584e73bd0a1d412714851",
+    "candidate_tree_manifest_sha256": "b18fe0f5e8451a0cd699ebf27016a543b3421792ee71154d9c3a4cf81b9ace62",
+    "candidate_binary_sha256": "dc4b9d209c645a0d951bdd78f7e0f9d6fb9d09b0e88491edded1ee7beb791cd6",
+    "files_match_built_candidate_tree_manifest": {
+      "TranslateCore.ml": "4f5db3cd77a10a3861539958d7b8566f09e6bcc3b72981fcc40388611d639cb9",
+      "Translate.ml": "19f7e1b91e2a066e24c4231322ae3d5a78464c9ad0f56e8d2cb6358a65837ea5",
+      "extract/ExtractTypes.ml": "cb59112741c428671764a44af7478117d2a324270ac0aec5c41052a3a2833a25",
+      "extract/Extract.ml": "caf4139ec75cdfb721ed44e823e49134927035b1d0655a050d07c06e3fc0cd14",
+      "symbolic/SymbolicToPure.ml": "15019f32e7c39cff383cf213fe0747709dbaab8201e8595c138c6f6eeda7bea7",
+      "pure/PureMicroPassesAnnots.ml": "d00d4d941e5d1e6567adf06cc60e73e7be477fca5fb104c1eccd39e852151606",
+      "interp/Interp.ml": "b597a7276d7fd1d6e721f7902ad9f4f03c8281cf581a81521c0ba1031ddba308",
+      "NameMatcher.ml": "32c60e5ad98d4953790d2a4be557229be66951738ef8c4f8b25a170db21c4cef"
+    },
+    "R349_TranslateCore_is_only_candidate_source_delta": "R349 build record says only TranslateCore.ml changed from R344; ExtractTypes and other copied call-site files match candidate and parent tree manifests."
+  },
+  "R351_failure": {
+    "source_projection_sha256": "8b9bd55e374866294b591758e1282d08998cb002e30b070207156b61f81a69ca",
+    "binary_sha256": "dc4b9d209c645a0d951bdd78f7e0f9d6fb9d09b0e88491edded1ee7beb791cd6",
+    "source_revision": "d5c1940c724e776fdcb68b475c5ad64cba5d8da2",
+    "exit_status": 2,
+    "generated_partial_Types_sha256": "59049403286ba42df9c717da12e9f17283ff5ae22cefbb31c9b8155d83d63031",
+    "partial_Types_contains_only_scaffold": false,
+    "first_failure": "Charon NameMatcher.name_to_pattern assert at source lines 1166-1173; stack then TranslateCore.name_to_pattern_string line 80; ExtractTypes.extract_comment_with_span line 1252; ExtractTypes.extract_type_decl_gen lines 1514-1516; Translate.export_type line 709.",
+    "no_completed_translation": true
+  },
+  "comment_only_evidence": {
+    "extract_comment_with_span_body": "For Some name, this helper constructs a Name pattern comment string; it then adds source span and optional visibility and calls extract_doc_comment. The failing line 1252 is inside this comment-only construction.",
+    "type_declaration_callsite": "extract_type_decl_gen calls extract_comment_with_span and emits a formatter break before subsequent extract_attributes call; translation failure occurs before that later output.",
+    "call_count": 8,
+    "all_comment_call_sites": [
+      {
+        "file": "extract/Extract.ml",
+        "line": 1890,
+        "call": "extract_comment_with_span ctx fmt",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      },
+      {
+        "file": "extract/Extract.ml",
+        "line": 1969,
+        "call": "extract_comment_with_span ctx fmt",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      },
+      {
+        "file": "extract/Extract.ml",
+        "line": 2028,
+        "call": "extract_comment_with_span ctx fmt",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      },
+      {
+        "file": "extract/Extract.ml",
+        "line": 2076,
+        "call": "extract_comment_with_span ctx fmt comment name",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      },
+      {
+        "file": "extract/Extract.ml",
+        "line": 2657,
+        "call": "extract_comment_with_span ctx fmt",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      },
+      {
+        "file": "extract/Extract.ml",
+        "line": 3112,
+        "call": "extract_comment_with_span ctx fmt",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      },
+      {
+        "file": "extract/Extract.ml",
+        "line": 3482,
+        "call": "extract_comment_with_span ctx fmt",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      },
+      {
+        "file": "extract/ExtractTypes.ml",
+        "line": 1514,
+        "call": "extract_comment_with_span ctx fmt",
+        "classification": "calls helper that assembles lines and sends them to extract_doc_comment formatter"
+      }
+    ]
+  },
+  "name_pattern_call_sites": {
+    "name_to_pattern_string_count": 15,
+    "sites": [
+      {
+        "file": "Translate.ml",
+        "line": 294,
+        "call": "name_to_pattern_string (Some fdef.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 350,
+        "call": "name_to_pattern_string (Some global.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 387,
+        "call": "name_to_pattern_string (Some fdef.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 557,
+        "call": "name_to_pattern_string (Some d.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 589,
+        "call": "name_to_pattern_string (Some d.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 1575,
+        "call": "name_to_pattern_string (Some def.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 1614,
+        "call": "name_to_pattern_string (Some trans.f.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 1640,
+        "call": "name_to_pattern_string (Some def.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 1664,
+        "call": "name_to_pattern_string (Some def.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "Translate.ml",
+        "line": 1689,
+        "call": "name_to_pattern_string (Some def.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "extract/ExtractTypes.ml",
+        "line": 1252,
+        "call": "^ name_to_pattern_string (Some span) ctx.trans_ctx name",
+        "classification": "display metadata within doc-comment builder; failure stack points here"
+      },
+      {
+        "file": "extract/ExtractTypes.ml",
+        "line": 1281,
+        "call": "^ name_to_pattern_string (Some span) ctx.trans_ctx name",
+        "classification": "generates a Lean rust_model_attr string for external declarations; output attribute, not a comment"
+      },
+      {
+        "file": "interp/Interp.ml",
+        "line": 613,
+        "call": "TranslateCore.name_to_pattern_string (Some fdef.item_meta.span)",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "pure/PureMicroPassesAnnots.ml",
+        "line": 428,
+        "call": "name_to_pattern_string (Some decl.item_meta.span) trans_ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      },
+      {
+        "file": "symbolic/SymbolicToPure.ml",
+        "line": 141,
+        "call": "TranslateCore.name_to_pattern_string (Some d.item_meta.span) ctx",
+        "classification": "exception-reporting name pattern inside a caught translation/registration/annotation failure path"
+      }
+    ],
+    "name_with_generics_to_pattern_string_count": 2,
+    "sites_generic": [
+      {
+        "file": "extract/ExtractTypes.ml",
+        "line": 1258,
+        "call": "^ name_with_generics_to_pattern_string (Some span) ctx.trans_ctx name",
+        "classification": "ExtractTypes comment metadata"
+      },
+      {
+        "file": "extract/ExtractTypes.ml",
+        "line": 1291,
+        "call": "^ name_with_generics_to_pattern_string (Some span) ctx.trans_ctx",
+        "classification": "generates external Lean rust_model_attr string; output attribute, not a comment"
+      }
+    ],
+    "interpretation_boundary": "Most direct calls are in CFailure reporting branches. The two ExtractTypes comment-builder calls are display metadata. The separate calls in extract_attributes produce Rust-model attributes for external declarations and are not comment-only. Do not generalize comment-only status to the helper globally."
+  },
+  "R347_Charon_linkage_caveat": {
+    "preflight_pinned_Charon_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "NameMatcher_source_sha256": "a6aac1d07e356b864a9146723e31401ff26be569ce2ac71d7410bc14d1bb5061",
+    "preflight_note": "R347 preflight itself says its Aeneas/Charon linkage to its binary was unestablished.",
+    "R349_remote_observation": "Candidate tree manifest records a 27-byte NameMatcher.ml with content `include Charon.NameMatcher`; the candidate root relative `charon` symlink resolves to a nonexistent path on the host when inspected. Therefore R347 source is not asserted to be the exact NameMatcher implementation linked into R349 binary."
+  },
+  "lead_supplied_unimplemented_route": {
+    "proposed_scope": "Only the Some source-name comment constructor when the name contains PeInstantiated; display name_to_string under label Instantiated source name; preserve other comments and leave AST, signatures, source metadata and name matching untouched.",
+    "status": "lead-proposed route recorded for review only; no implementation, validation or semantic conclusion here."
+  },
+  "artifacts": {
+    "copied_source_hashes": {
+      "TranslateCore.ml": "4f5db3cd77a10a3861539958d7b8566f09e6bcc3b72981fcc40388611d639cb9",
+      "Translate.ml": "19f7e1b91e2a066e24c4231322ae3d5a78464c9ad0f56e8d2cb6358a65837ea5",
+      "extract/ExtractTypes.ml": "cb59112741c428671764a44af7478117d2a324270ac0aec5c41052a3a2833a25",
+      "extract/Extract.ml": "caf4139ec75cdfb721ed44e823e49134927035b1d0655a050d07c06e3fc0cd14",
+      "symbolic/SymbolicToPure.ml": "15019f32e7c39cff383cf213fe0747709dbaab8201e8595c138c6f6eeda7bea7",
+      "pure/PureMicroPassesAnnots.ml": "d00d4d941e5d1e6567adf06cc60e73e7be477fca5fb104c1eccd39e852151606",
+      "interp/Interp.ml": "b597a7276d7fd1d6e721f7902ad9f4f03c8281cf581a81521c0ba1031ddba308"
+    },
+    "R351_log_sha256": "0e6ab34aa2337742f67fde932a1da65a0816cdc9c6de4fc81500daf5e6250e20",
+    "R351_partial_types_sha256": "59049403286ba42df9c717da12e9f17283ff5ae22cefbb31c9b8155d83d63031",
+    "exact_context_excerpt_sha256": "4712341ebd3458229d99f4451765502d9d7a1d5a0efdcf24a6aa7baee6b265b5",
+    "R349_NameMatcher_stub_sha256": "32c60e5ad98d4953790d2a4be557229be66951738ef8c4f8b25a170db21c4cef",
+    "R349_Charon_linkage_probe_sha256": "e61436e7553aad6fd55d3efc522bf556bb157e1384339cbb58e3c9a8eddf0ae4"
+  },
+  "R349_Charon_linkage_probe": {
+    "source_stub_path": "src/NameMatcher.ml",
+    "source_stub_sha256": "32c60e5ad98d4953790d2a4be557229be66951738ef8c4f8b25a170db21c4cef",
+    "source_stub_content": "include Charon.NameMatcher",
+    "remote_probe_sha256": "e61436e7553aad6fd55d3efc522bf556bb157e1384339cbb58e3c9a8eddf0ae4",
+    "observed": "relative charon target is ../charon; readlink -f resolves lexically to the candidate-root path but that target directory does not exist on this host at inspection time."
+  }
+}
