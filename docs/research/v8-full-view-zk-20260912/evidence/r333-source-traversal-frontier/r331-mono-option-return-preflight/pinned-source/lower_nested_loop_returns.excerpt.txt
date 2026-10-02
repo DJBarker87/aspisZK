@@ -1,0 +1,111 @@
+   940	let lower_nested_loop_returns (crate : crate) (f : fun_decl) : fun_decl =
+   941	  match f.body with
+   942	  | StructuredBody body ->
+   943	      let has_nested_return =
+   944	        let visitor =
+   945	          object
+   946	            inherit [_] iter_statement as super
+   947	            method! visit_Loop depth loop = super#visit_Loop (depth + 1) loop
+   948	            method! visit_Return depth = if depth >= 1 then raise Found
+   949	          end
+   950	        in
+   951	        try
+   952	          visitor#visit_block 0 body.body;
+   953	          false
+   954	        with Found -> true
+   955	      in
+   956	      if not has_nested_return then f
+   957	      else
+   958	        let option_ids =
+   959	          TypeDeclId.Map.fold
+   960	            (fun id (decl : type_decl) ids ->
+   961	              if decl.item_meta.lang_item = Some "Option" then id :: ids
+   962	              else ids)
+   963	            crate.type_decls []
+   964	        in
+   965	        let option_id =
+   966	          match option_ids with
+   967	          | [ id ] -> id
+   968	          | _ ->
+   969	              [%craise] f.item_meta.span
+   970	                "Nested-loop returns require exactly one Option language item"
+   971	        in
+   972	        let return_local =
+   973	          match body.locals.locals with
+   974	          | return_local :: _ -> return_local
+   975	          | [] -> [%internal_error] f.item_meta.span
+   976	        in
+   977	        let return_ty = return_local.local_ty in
+   978	        let option_ref : type_decl_ref =
+   979	          {
+   980	            id = TAdtId option_id;
+   981	            generics = TypesUtils.mk_generic_args [] [ return_ty ] [] [];
+   982	          }
+   983	        in
+   984	        let pending_ty = TAdt option_ref in
+   985	        let _, gen =
+   986	          LocalId.mk_stateful_generator_starting_at_id
+   987	            (LocalId.of_int (List.length body.locals.locals))
+   988	        in
+   989	        let pending_local : local =
+   990	          {
+   991	            index = gen ();
+   992	            local_ty = pending_ty;
+   993	            name = Some "pending_return";
+   994	            span = f.item_meta.span;
+   995	          }
+   996	        in
+   997	        let pending_place : place =
+   998	          { kind = PlaceLocal pending_local.index; ty = pending_ty }
+   999	        in
+  1000	        let capture_local : local =
+  1001	          {
+  1002	            index = gen ();
+  1003	            local_ty = return_ty;
+  1004	            name = Some "return_capture";
+  1005	            span = f.item_meta.span;
+  1006	          }
+  1007	        in
+  1008	        let capture_place : place =
+  1009	          { kind = PlaceLocal capture_local.index; ty = return_ty }
+  1010	        in
+  1011	        let return_place : place =
+  1012	          { kind = PlaceLocal return_local.index; ty = return_ty }
+  1013	        in
+  1014	        let writes_return_place (st : statement) =
+  1015	          match st.kind with
+  1016	          | Assign ({ kind = PlaceLocal local; _ }, _) ->
+  1017	              local = return_local.index
+  1018	          | Call ({ dest = { kind = PlaceLocal local; _ }; _ }, _) ->
+  1019	              local = return_local.index
+  1020	          | _ -> false
+  1021	        in
+  1022	        let retarget_return_write (st : statement) : statement =
+  1023	          match st.kind with
+  1024	          | Assign ({ kind = PlaceLocal local; _ }, rv)
+  1025	            when local = return_local.index ->
+  1026	              { st with kind = Assign (capture_place, rv) }
+  1027	          | Call
+  1028	              ( ({ dest = { kind = PlaceLocal local; _ }; _ } as call),
+  1029	                on_unwind )
+  1030	            when local = return_local.index ->
+  1031	              { st with kind = Call ({ call with dest = capture_place }, on_unwind) }
+  1032	          | _ -> [%internal_error] st.span
+  1033	        in
+  1034	        let mk_statement ?(comments_before = []) span kind : statement =
+  1035	          { span; statement_id = StatementId.zero; kind; comments_before }
+  1036	        in
+  1037	        let fresh_cleanup (cleanup : statement list) : statement list =
+  1038	          List.map
+  1039	            (fun (st : statement) ->
+  1040	              { st with statement_id = StatementId.zero })
+  1041	            cleanup
+  1042	        in
+  1043	        let mk_pending_assignment ?(comments_before = []) span variant fields =
+  1044	          mk_statement ~comments_before span
+  1045	            (Assign
+  1046	               ( pending_place,
+  1047	                 Aggregate
+  1048	                   (AggregatedAdt (option_ref, Some variant, None), fields) ))
+  1049	        in
+  1050	        let block_contains_return (block : block) : bool =

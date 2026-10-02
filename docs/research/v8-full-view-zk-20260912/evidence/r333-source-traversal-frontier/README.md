@@ -1,0 +1,1 @@
+R333 records reviewed source/tool diagnostics only. See frontier-manifest.json and exact nested saved files. No Lean proof or stdlib/compiler correspondence is claimed. The draft metadata and checksum inventory are retained in history. The historical numeric-ID-only report was overwritten and cannot be recovered; corrected identity matching is retained.

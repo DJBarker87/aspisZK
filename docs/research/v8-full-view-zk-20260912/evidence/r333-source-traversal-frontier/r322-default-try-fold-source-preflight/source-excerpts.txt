@@ -1,0 +1,299 @@
+Source excerpts from checksum-pinned copies. R294/R297 row details are preserved structurally in source-rows-and-candidate-patterns.json.
+
+===== options.rs:130-145 =====
+130: 
+131:             Examples:
+132:               - `crate::module1::module2::item`: refers to this item and all its subitems (e.g.
+133:                   submodules or trait methods);
+134:               - `crate::module1::module2::item::_`: refers only to the subitems of this item;
+135:               - `core::convert::{impl core::convert::Into<_> for _}`: retrieve the body of this
+136:                   very useful impl;
+137: 
+138:             When multiple patterns in the `--include` and `--opaque` options match the same item,
+139:             the most precise pattern wins. E.g.: `charon --opaque crate::module --include
+140:             crate::module::_` makes the `module` opaque (we won't explore its contents), but the
+141:             items in it transparent (we will translate them if we encounter them.)
+142:     "))]
+143:     #[serde(default)]
+144:     #[cfg_attr(feature = "charon_on_charon", charon::rename("included"))]
+145:     pub include: Vec<String>,
+
+===== options.rs:748-772 =====
+748:                 opacities.push(("_".to_string(), Transparent));
+749:             } else {
+750:                 opacities.push(("_".to_string(), Foreign));
+751:             }
+752: 
+753:             if options.treat_box_as_builtin {
+754:                 // Include this item's body, we inline it in a pass.
+755:                 opacities.push((
+756:                     "alloc::boxed::box_assume_init_into_vec_unsafe".to_string(),
+757:                     Transparent,
+758:                 ));
+759:             }
+760: 
+761:             // We always include the items from the crate.
+762:             opacities.push(("crate".to_owned(), Transparent));
+763: 
+764:             for pat in options.include.iter() {
+765:                 opacities.push((pat.to_string(), Transparent));
+766:             }
+767:             for pat in options.opaque.iter() {
+768:                 opacities.push((pat.to_string(), Opaque));
+769:             }
+770:             for pat in options.exclude.iter() {
+771:                 opacities.push((pat.to_string(), Invisible));
+772:             }
+
+===== options.rs:830-844 =====
+830:     /// Find the opacity requested for the given name. This does not take into account
+831:     /// `#[charon::opaque]` annotations, only cli parameters.
+832:     #[tracing::instrument(skip(self, krate), ret)]
+833:     pub fn opacity_for_name(&self, krate: &TranslatedCrate, name: &Name) -> ItemOpacity {
+834:         // Find the most precise pattern that matches this name. There is always one since
+835:         // the list contains the `_` pattern. If there are conflicting settings for this item, we
+836:         // err on the side of being more opaque.
+837:         let (_, opacity) = self
+838:             .item_opacities
+839:             .iter()
+840:             .filter(|(pat, _)| pat.matches(krate, name))
+841:             .max()
+842:             .unwrap();
+843:         *opacity
+844:     }
+
+===== name_matcher_mod.rs:57-65 =====
+57:     pub fn matches(&self, ctx: &TranslatedCrate, name: &Name) -> bool {
+58:         self.matches_with_generics(ctx, name, None)
+59:     }
+60: 
+61:     pub fn matches_item(&self, ctx: &TranslatedCrate, item: ItemRef<'_>) -> bool {
+62:         let generics = item.identity_args();
+63:         let name = &item.item_meta().name;
+64:         self.matches_with_generics(ctx, name, Some(&generics))
+65:     }
+
+===== name_matcher_mod.rs:75-108 =====
+75:         if let [prefix @ .., PathElem::Instantiated(instantiation)] = scrutinee_elems {
+76:             // An `Instantiated` suffix is appended when the generics of an item are modified; it
+77:             // records the map from the new generics to the old ones.
+78:             args = match args {
+79:                 None => None,
+80:                 Some(args) if instantiation.params.is_empty() => {
+81:                     // HACK: Monomorphization doesn't handle late-bound regions properly, so we
+82:                     // append them here manually.
+83:                     assert!(
+84:                         args.len() == args.regions.len(),
+85:                         "In pattern \"{}\" matching against name \"{}\": we have both monomorphized generics {} and regular generics {}",
+86:                         self,
+87:                         name.with_ctx(&ctx.into_fmt()),
+88:                         instantiation.skip_binder.with_ctx(&ctx.into_fmt()),
+89:                         args.with_ctx(&ctx.into_fmt())
+90:                     );
+91:                     // We can ignore the binder because binding levels shouldn't affect matching.
+92:                     let mut mono_args = instantiation.skip_binder.clone();
+93:                     mono_args.regions.extend(args.regions);
+94:                     Some(mono_args)
+95:                 }
+96:                 Some(args) => {
+97:                     assert!(
+98:                         generic_args_match_params(&instantiation.params, &args),
+99:                         "In pattern \"{}\" matching against name \"{}\": the instantiated item generics {} do not match the item parameters",
+100:                         self,
+101:                         name.with_ctx(&ctx.into_fmt()),
+102:                         args.with_ctx(&ctx.into_fmt())
+103:                     );
+104:                     Some(instantiation.as_ref().clone().apply(&args))
+105:                 }
+106:             };
+107:             scrutinee_elems = prefix;
+108:         };
+
+===== name_matcher_mod.rs:110-142 =====
+110:         // Patterns that start with an impl block match that impl block anywhere. In such a case we
+111:         // truncate the scrutinee name to start with the rightmost impl in its name. This isn't
+112:         // fully precise in case of impls within impls, but we'll ignore that.
+113:         if let Some(PatElem::Impl(_)) = self.elems.first()
+114:             && let Some((i, _)) = scrutinee_elems
+115:                 .iter()
+116:                 .enumerate()
+117:                 .rfind(|(_, elem)| elem.is_impl())
+118:         {
+119:             scrutinee_elems = &scrutinee_elems[i..];
+120:         }
+121: 
+122:         let zipped = self.elems.iter().zip_longest(scrutinee_elems).collect_vec();
+123:         let zipped_len = zipped.len();
+124:         for (i, x) in zipped.into_iter().enumerate() {
+125:             let is_last = i + 1 == zipped_len;
+126:             match x {
+127:                 EitherOrBoth::Both(pat, elem) => {
+128:                     let args = if is_last { args } else { None };
+129:                     if !pat.matches_with_generics(ctx, elem, args) {
+130:                         return false;
+131:                     }
+132:                 }
+133:                 // The pattern is shorter than the scrutinee and the previous elements match: we
+134:                 // count that as matching.
+135:                 EitherOrBoth::Right(_) => return true,
+136:                 // The pattern is longer than the scrutinee; they don't match.
+137:                 EitherOrBoth::Left(_) => return false,
+138:             }
+139:         }
+140:         // Both had the same length and all the elements matched.
+141:         true
+142:     }
+
+===== name_matcher_mod.rs:144-151 =====
+144:     pub fn matches_ty(&self, ctx: &TranslatedCrate, ty: &Ty) -> bool {
+145:         if let [PatElem::Glob] = self.elems.as_slice() {
+146:             return true;
+147:         }
+148:         match ty.kind() {
+149:             TyKind::Adt(tref) => {
+150:                 let args = &tref.generics;
+151:                 match tref.id {
+
+===== name_matcher_parser.rs:72-101 =====
+72: fn parse_pat_elem(i: &str) -> ParseResult<'_, PatElem> {
+73:     let parse_glob = tag("*").map(|_| PatElem::Glob);
+74:     parse_glob
+75:         .or(parse_impl_elem)
+76:         .or(parse_simple_elem)
+77:         .parse(i)
+78: }
+79: 
+80: fn parse_simple_elem(i: &str) -> ParseResult<'_, PatElem> {
+81:     let ident = take_while(|c: char| c.is_alphanumeric() || c == '_');
+82:     let (i, ident) = ident.followed_by(multispace0).parse(i)?;
+83:     if ident == "_" {
+84:         success(PatElem::Glob).parse(i)
+85:     } else {
+86:         let args = delimited(
+87:             tag("<").followed_by(multispace0),
+88:             separated_list0(
+89:                 tag(",").followed_by(multispace0),
+90:                 parse_pat_ty.followed_by(multispace0),
+91:             ),
+92:             tag(">"),
+93:         );
+94:         args.opt()
+95:             .map(|args| PatElem::Ident {
+96:                 name: ident.to_string(),
+97:                 generics: args.unwrap_or_default(),
+98:                 is_trait: false,
+99:             })
+100:             .parse(i)
+101:     }
+
+===== name_matcher_parser.rs:104-137 =====
+104: fn parse_impl_elem(i: &str) -> ParseResult<'_, PatElem> {
+105:     let for_ty = preceded(
+106:         tag("for").followed_by(multispace1),
+107:         parse_pat_ty.followed_by(multispace0),
+108:     );
+109:     let impl_contents = parse_pattern.followed_by(multispace0).and(for_ty.opt());
+110:     let impl_pattern = tag("{").followed_by(multispace0).precedes(
+111:         delimited(
+112:             tag("impl").followed_by(multispace1.cut()).opt(),
+113:             impl_contents,
+114:             tag("}"),
+115:         )
+116:         .cut(),
+117:     );
+118:     map_res(impl_pattern, |(mut pat, for_ty)| {
+119:         if let Some(for_ty) = for_ty {
+120:             let last_elem = pat
+121:                 .elems
+122:                 .last_mut()
+123:                 .ok_or_else(|| anyhow::anyhow!("trait path must be nonempty"))?;
+124:             let PatElem::Ident {
+125:                 generics, is_trait, ..
+126:             } = last_elem
+127:             else {
+128:                 return Err(anyhow::anyhow!("trait path must end in an ident"));
+129:             };
+130:             // Set the type as the first generic arg.
+131:             generics.insert(0, for_ty);
+132:             *is_trait = true;
+133:         }
+134:         Ok(PatElem::Impl(pat.into()))
+135:     })
+136:     .parse(i)
+137: }
+
+===== iterator-rustc-e408947bfd.rs:2424-2437 =====
+2424:     #[inline]
+2425:     #[stable(feature = "iterator_try_fold", since = "1.27.0")]
+2426:     fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R
+2427:     where
+2428:         Self: Sized,
+2429:         F: FnMut(B, Self::Item) -> R,
+2430:         R: Try<Output = B>,
+2431:     {
+2432:         let mut accum = init;
+2433:         while let Some(x) = self.next() {
+2434:             accum = f(accum, x)?;
+2435:         }
+2436:         try { accum }
+2437:     }
+
+===== iterator-nightly-2026-06-01.rs:2484-2497 =====
+2484:     #[inline]
+2485:     #[stable(feature = "iterator_try_fold", since = "1.27.0")]
+2486:     fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R
+2487:     where
+2488:         Self: Sized,
+2489:         F: [const] FnMut(B, Self::Item) -> R + [const] Destruct,
+2490:         R: [const] Try<Output = B>,
+2491:     {
+2492:         let mut accum = init;
+2493:         while let Some(x) = self.next() {
+2494:             accum = f(accum, x)?;
+2495:         }
+2496:         try { accum }
+2497:     }
+
+===== control_flow-rustc-e408947bfd.rs:101-135 =====
+101: }
+102: 
+103: #[unstable(feature = "try_trait_v2", issue = "84277", old_name = "try_trait")]
+104: #[rustc_const_unstable(feature = "const_try", issue = "74935")]
+105: impl<B, C> const ops::Try for ControlFlow<B, C> {
+106:     type Output = C;
+107:     type Residual = ControlFlow<B, convert::Infallible>;
+108: 
+109:     #[inline]
+110:     fn from_output(output: Self::Output) -> Self {
+111:         ControlFlow::Continue(output)
+112:     }
+113: 
+114:     #[inline]
+115:     fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {
+116:         match self {
+117:             ControlFlow::Continue(c) => ControlFlow::Continue(c),
+118:             ControlFlow::Break(b) => ControlFlow::Break(ControlFlow::Break(b)),
+119:         }
+120:     }
+121: }
+122: 
+123: #[unstable(feature = "try_trait_v2", issue = "84277", old_name = "try_trait")]
+124: #[rustc_const_unstable(feature = "const_try", issue = "74935")]
+125: // Note: manually specifying the residual type instead of using the default to work around
+126: // https://github.com/rust-lang/rust/issues/99940
+127: impl<B, C> const ops::FromResidual<ControlFlow<B, convert::Infallible>> for ControlFlow<B, C> {
+128:     #[inline]
+129:     fn from_residual(residual: ControlFlow<B, convert::Infallible>) -> Self {
+130:         match residual {
+131:             ControlFlow::Break(b) => ControlFlow::Break(b),
+132:         }
+133:     }
+134: }
+135: 
+
+===== Candidate precise --include patterns (inferred, not CLI parsed) =====
+core::iter::traits::iterator::Iterator::try_fold
+core::ops::control_flow::{impl core::ops::try_trait::Try for core::ops::control_flow::ControlFlow<_,_>}::branch
+core::ops::control_flow::{impl core::ops::try_trait::Try for core::ops::control_flow::ControlFlow<_,_>}::from_output
+core::ops::control_flow::{impl core::ops::try_trait::FromResidual<core::ops::control_flow::ControlFlow<_,core::convert::Infallible>> for core::ops::control_flow::ControlFlow<_,_>}::from_residual
+

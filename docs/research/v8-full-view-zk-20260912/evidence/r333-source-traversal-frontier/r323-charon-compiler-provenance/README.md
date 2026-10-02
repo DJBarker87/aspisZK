@@ -1,0 +1,13 @@
+# R323 Charon compiler and sysroot provenance
+
+This read-only investigation corrects the compiler attribution in R294/R322. It did not invoke Cargo or extraction, compile code, or alter any toolchain. Captured files are copies of pinned Charon source/configuration and Rust library source; `commands-and-results.txt` records the read-only host queries.
+
+R294's `toolchain.txt` is not evidence for the compiler used by Charon. The saved R294 runner explicitly ran `rustup run stable rustc --version` and `rustup run stable cargo --version` before invoking Charon. Its command invokes the pinned Charon ELF, whose source embeds `charon/rust-toolchain`. At pinned Charon commit `cb50ff16b9f1066b8a97dc06da704de2da2fa41c`, that file selects `nightly-2026-06-01`. The pinned `charon` CLI source sends Cargo through `in_toolchain("cargo")`, sets `RUSTC_WRAPPER` to its companion `charon-driver`, and the toolchain helper runs the driver through `rustup run <embedded channel>`. The Charon driver is dynamically linked to `librustc_driver-845f1164de5a76fb.so`; `ldd` under the selected rustup environment resolves it inside the selected nightly sysroot.
+
+The observed selected toolchain reports rustc `1.98.0-nightly (14210df0e 2026-05-31)`, Cargo `1.98.0-nightly (fbb61be30 2026-05-26)`, and sysroot `/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu`. The actual installed nightly `rust-src` `iterator.rs` hash is `db43b7acc33fca53d85fef3ddea29ec9f8c1e768df428676fe2de160f21d5f6b`; it has `try_fold` at line 2486 and the `[const] Destruct` bound at line 2489, matching R294 Fun58's span and bound. This resolves the earlier source-span mismatch against stable rustc commit `e408947...`, which the runner measured but Charon did not select.
+
+The R294 invocation passes `--sysroot default`. Pinned Charon source documents `default` as the normal distributed sysroot and leaves the rustc argument untouched in this case. This provenance identifies the compiler/sysroot selection mechanism from the exact invocation, pinned source, installed toolchain, and resolved dynamic link. It does not establish any semantic translation claim about the opaque Fun58 body. R294's LLBC body remains Opaque.
+
+The R294 frozen manifest and lockfile were hashed in its saved command record; no `rust-toolchain*` or `.cargo/config*` selector was found in the frozen project snapshot. Charon's embedded selector is therefore the observed compiler selection path. The runner's `RUSTFLAGS` and Cargo options are separately recorded in R294.
+
+`SHA256SUMS` covers this evidence directory except the checksum file itself. Run `python3 verify_provenance.py` from the repository root to validate copied sources and checksums.

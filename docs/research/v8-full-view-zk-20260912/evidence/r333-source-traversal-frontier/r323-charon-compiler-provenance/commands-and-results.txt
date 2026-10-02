@@ -1,0 +1,45 @@
+Host: dombarker@100.108.41.90
+All commands below were read-only; no Cargo build, rustc compilation, or extraction was invoked. Charon queries were run with the same prepended PATH in R294: /home/dombarker/.cargo/bin:/home/dombarker/.elan/bin:$PATH.
+
+R294 runner evidence:
+- R294 runner SHA256: a485fe0bbb47fe3bfe35aae113de2c2e9c1c6db1060d661aa60cea730cf4d3f2
+- R294 extract-command.json SHA256: 45139a91440ac005d91d3b565790751c65f08237c3221e90fe4465287b12a409
+- R294 LLBC SHA256: bf5ea0b6f68ab17ef73d3e721c70c9193a0682d95dcbcaf693e93187cf71da6f
+- R294 toolchain.txt SHA256: 15d639dfa699f5e2dfd405ba694173fa5daf33e9d7b46f39977713d18783857e
+- runner source lines 69: explicitly runs `/home/dombarker/.cargo/bin/rustup run stable rustc --version` and stable Cargo version, then hashes `charon`; line 41 prepends `.cargo/bin` and `.elan/bin`; lines 60–61 invoke pinned Charon with `cargo ... --sysroot default`.
+- Extract command Charon path: `/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon`.
+
+Pinned Charon:
+- git revision: cb50ff16b9f1066b8a97dc06da704de2da2fa41c
+- `charon version`: 0.1.223
+- `charon --help`: supports subcommands `toolchain-path`, `toolchain-version`, `version`; `--version` is rejected (correct CLI spelling is `charon version`).
+- `charon toolchain-version`: nightly-2026-06-01
+- `charon toolchain-path`: /home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu
+- `rustup which rustc --toolchain nightly-2026-06-01`: /home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc
+- `rustup run nightly-2026-06-01 rustc --version --verbose`: rustc 1.98.0-nightly (14210df0e 2026-05-31); commit-hash 14210df0e27ccd7d9e6a05b8085cbd438e4bbc65; host x86_64-unknown-linux-gnu; LLVM 22.1.6.
+- `rustup which cargo --toolchain nightly-2026-06-01`: /home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/cargo
+- `rustup run nightly-2026-06-01 cargo --version`: cargo 1.98.0-nightly (fbb61be30 2026-05-26).
+- `rustup show active-toolchain`: stable-x86_64-unknown-linux-gnu (default). This explains why bare/default stable queries differed.
+- selected rustc `--print sysroot`: /home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu.
+- selected rust-src iterator file SHA256: db43b7acc33fca53d85fef3ddea29ec9f8c1e768df428676fe2de160f21d5f6b.
+- installed stable rust-src iterator file at its expected path: absent. Separately, R322 retained fetched source for stable compiler commit e408947, SHA256 d1e767ee2018c20100362f56e35dbcb1efa592a31e972ccba0a469c9b5832589.
+
+Binary observations:
+- charon ELF SHA256 b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c.
+- charon-driver ELF SHA256 4cb603ad51132f298a63a9c2a8cc8c629c73edeff22516fbf56ba5decee70938.
+- `ldd charon-driver` outside rustup env reports its rustc_driver dependency unresolved.
+- `rustup run nightly-2026-06-01 ldd charon-driver` resolves `librustc_driver-845f1164de5a76fb.so` to the selected nightly sysroot; that library SHA256 is 636553650ea76c08bcaf70acf98971039d59b6d15e779df923822f0d5f92b9fa.
+
+Pinned Charon source SHA256:
+- `charon/src/bin/charon/toolchain.rs`: c1eb50a7ecdfc4d816f70c474617400d88dfb4bf0eee5ab7f2b7177f27b001c6
+- `charon/src/bin/charon/main.rs`: 381774440aec829cb23ad9849102673f2085366910537a4ff56177133df6b35f
+- `charon/src/bin/charon-driver/driver.rs`: 41e7a384d484fc31603578086d273a61f15ea0d3ba76ff534805435a47aafa84
+- `charon/Cargo.toml`: a31bab7d34638f8c2a43f14263184a3328ab17366c2f9acf201d86b922c4176f
+- `charon/Cargo.lock`: c755a326679e9b3dbce560ff15130bdc83ae16178f2c1af568e391b8470d2e67
+- `rust-toolchain`: 27e050e8fc5ac827e1264abf38c27fcaf18e73f4305104c866179cb84721898c
+
+R294 source correspondence:
+- Fun58 source span: iterator.rs:2486:4–2490:35, as audited in R322 source-rows-and-candidate-patterns.json.
+- Selected nightly source function signature at line 2486 and `[const] Destruct` at line 2489 match the span/extra bound.
+- Stable source commit e408947 had line 2426 and lacked Destruct; it was not the Charon-selected compiler.
+- The generated R294 Fun58 body is still Opaque.

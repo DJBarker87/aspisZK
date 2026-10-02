@@ -1,0 +1,24 @@
+Selected nightly `iterator.rs`, exact installed rust-src copy, lines 2484–2497:
+2484:     #[inline]
+2485:     #[stable(feature = "iterator_try_fold", since = "1.27.0")]
+2486:     fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R
+2487:     where
+2488:         Self: Sized,
+2489:         F: [const] FnMut(B, Self::Item) -> R + [const] Destruct,
+2490:         R: [const] Try<Output = B>,
+2491:     {
+2492:         let mut accum = init;
+2493:         while let Some(x) = self.next() {
+2494:             accum = f(accum, x)?;
+2495:         }
+2496:         try { accum }
+2497:     }
+
+Pinned toolchain helper, copied `toolchain.rs`, lines 5–6, 44–48, 67–80, 83–111, 114–120. See full source copy.
+The helper embeds ../../../rust-toolchain, `run` executes `rustup run <channel> <program>`, toolchain_version returns that embedded channel, driver_path selects adjacent charon-driver, driver_cmd runs it within selected toolchain, and toolchain_path asks selected rustc for --print=sysroot.
+
+Pinned Charon cargo launcher, copied main.rs, lines 193–223. See full source copy.
+Cargo translation sets RUSTC_WRAPPER to driver_path and invokes cargo through in_toolchain("cargo").
+
+Pinned driver default sysroot behavior, copied driver.rs, lines 264–276. See full source copy.
+When sysroot is "default", the driver appends no explicit --sysroot, retaining the selected rustc default.
