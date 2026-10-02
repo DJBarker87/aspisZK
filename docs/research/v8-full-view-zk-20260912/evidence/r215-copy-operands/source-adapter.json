@@ -1,0 +1,16 @@
+{
+  "source_campaign_recorded": "9f15ca80a",
+  "source_revision_basis": "campaign identifier lead-specified; copied Aeneas source snapshot has no captured Git revision",
+  "source_path": "/home/dombarker/project-offloads/aspis-r214-copy-routing-20261002-a/src",
+  "clone_path": "/home/dombarker/project-offloads/aspis-r215-copy-operands-20261002-a/src",
+  "parent_source_PrePasses_sha256": "92a8e2e8de4d8357acef2fe5c76f900aeb1d49588cfe15db9ba38d2ad2265e99",
+  "patched_PrePasses_sha256": "b02ae350ea59d2f0a0029a5cab2cbecf253636835594309708fec2372206b7a5",
+  "copy_mode": "shutil.copytree with shutil.copy2; symlinks preserved; no regular-file inode sharing verified",
+  "copied_regular_file_count": 965,
+  "copied_regular_file_bytes": 222516315,
+  "shared_regular_file_inodes": [],
+  "expected_added_branch_lines": 5,
+  "removed_source_lines": 0,
+  "unified_diff": "--- a/src/PrePasses.ml\n+++ b/src/PrePasses.ml\n@@ -2863,6 +2863,11 @@\n                 let func = visitor#visit_fn_operand mk_unit_ty func in\n                 let args = List.map (visitor#visit_operand mk_unit_ty) args in\n                 Call ({ func; args; dest }, on_unwind)\n+            | CopyNonOverlapping { src; dst; count } ->\n+                CopyNonOverlapping\n+                  { src = visitor#visit_operand mk_unit_ty src;\n+                    dst = visitor#visit_operand mk_unit_ty dst;\n+                    count = visitor#visit_operand mk_unit_ty count }\n             | Switch (If (cond, yes, no)) ->\n                 Switch (If (visitor#visit_operand mk_unit_ty cond, yes, no))\n             | Switch (SwitchInt (op, ty, branches, otherwise)) ->\n",
+  "patch_effect": "CopyNonOverlapping src/dst/count operands pass through the existing visitor; statement remains intact; no interpreter or pointer semantics changed"
+}

@@ -1,0 +1,39 @@
+{
+  "systemd_argv": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r215-copy-operands-translate",
+    "--working-directory=/home/dombarker/project-offloads/aspis-return-continuation-20261002-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "python3",
+    "-c",
+    "import pathlib,subprocess,json,hashlib\nroot=pathlib.Path(\"/home/dombarker/project-offloads/aspis-r215-copy-operands-20261002-a\")\nsrc=pathlib.Path(\"/home/dombarker/project-offloads/aspis-r210-vector-leaf-diagnostic-20261002-a/R210VectorLeaf.llbc\")\nbinary=root/\"aeneas-copy-operands\"\nassert src.is_file() and hashlib.sha256(src.read_bytes()).hexdigest()==\"b8ecd783e8c71da66dd929d43d7f5054521752fc7e111b2db102f16c5166fae5\"\nassert binary.is_file()\ncmd=[str(binary),\"-sequential\",\"-no-progress-bar\",\"-abort-on-error\",\"-backend\",\"lean\",\"-namespace\",\"AspisR210VectorLeaf\",\"-dest\",str(root/\"generated\"),\"-subdir\",\"AspisR210VectorLeaf\",\"-split-files\",\"-emit-json\",str(src)]\n(root/\"translate-command.json\").write_text(json.dumps({\"command\":cmd,\"input_sha256\":hashlib.sha256(src.read_bytes()).hexdigest(),\"binary_sha256\":hashlib.sha256(binary.read_bytes()).hexdigest(),\"input_unchanged_from_R210\":True,\"flags_unchanged_from_R210\":True},indent=2))\nwith (root/\"translate.log\").open(\"w\") as f:r=subprocess.run([\"/usr/bin/time\",\"-v\",*cmd],stdout=f,stderr=subprocess.STDOUT)\n(root/\"translate-result.json\").write_text(json.dumps({\"translate_exit_status\":r.returncode,\"input_sha256\":hashlib.sha256(src.read_bytes()).hexdigest(),\"binary_sha256\":hashlib.sha256(binary.read_bytes()).hexdigest(),\"generated_dir_exists\":(root/\"generated\").exists()},indent=2))\n(root/\"slice-properties-after-translate.txt\").write_bytes(subprocess.check_output([\"systemctl\",\"show\",\"aspisr215.slice\",\"-p\",\"MemoryHigh\",\"-p\",\"MemoryMax\",\"-p\",\"MemorySwapMax\",\"-p\",\"TasksMax\",\"-p\",\"MemoryCurrent\",\"-p\",\"MemoryPeak\",\"-p\",\"MemorySwapCurrent\",\"-p\",\"MemorySwapPeak\"]))\nprint((root/\"translate.log\").read_text()[-5000:]);print(\"R215_TRANSLATE_EXIT\",r.returncode)\nraise SystemExit(r.returncode)\n"
+  ],
+  "ssh_argv": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "StrictHostKeyChecking=no",
+    "-o",
+    "UserKnownHostsFile=/dev/null",
+    "dombarker@100.108.41.90",
+    "systemd-run --user --wait --collect --pipe --unit=aspis-r215-copy-operands-translate --working-directory=/home/dombarker/project-offloads/aspis-return-continuation-20261002-a -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p TasksMax=128 python3 -c 'import pathlib,subprocess,json,hashlib\nroot=pathlib.Path(\"/home/dombarker/project-offloads/aspis-r215-copy-operands-20261002-a\")\nsrc=pathlib.Path(\"/home/dombarker/project-offloads/aspis-r210-vector-leaf-diagnostic-20261002-a/R210VectorLeaf.llbc\")\nbinary=root/\"aeneas-copy-operands\"\nassert src.is_file() and hashlib.sha256(src.read_bytes()).hexdigest()==\"b8ecd783e8c71da66dd929d43d7f5054521752fc7e111b2db102f16c5166fae5\"\nassert binary.is_file()\ncmd=[str(binary),\"-sequential\",\"-no-progress-bar\",\"-abort-on-error\",\"-backend\",\"lean\",\"-namespace\",\"AspisR210VectorLeaf\",\"-dest\",str(root/\"generated\"),\"-subdir\",\"AspisR210VectorLeaf\",\"-split-files\",\"-emit-json\",str(src)]\n(root/\"translate-command.json\").write_text(json.dumps({\"command\":cmd,\"input_sha256\":hashlib.sha256(src.read_bytes()).hexdigest(),\"binary_sha256\":hashlib.sha256(binary.read_bytes()).hexdigest(),\"input_unchanged_from_R210\":True,\"flags_unchanged_from_R210\":True},indent=2))\nwith (root/\"translate.log\").open(\"w\") as f:r=subprocess.run([\"/usr/bin/time\",\"-v\",*cmd],stdout=f,stderr=subprocess.STDOUT)\n(root/\"translate-result.json\").write_text(json.dumps({\"translate_exit_status\":r.returncode,\"input_sha256\":hashlib.sha256(src.read_bytes()).hexdigest(),\"binary_sha256\":hashlib.sha256(binary.read_bytes()).hexdigest(),\"generated_dir_exists\":(root/\"generated\").exists()},indent=2))\n(root/\"slice-properties-after-translate.txt\").write_bytes(subprocess.check_output([\"systemctl\",\"show\",\"aspisr215.slice\",\"-p\",\"MemoryHigh\",\"-p\",\"MemoryMax\",\"-p\",\"MemorySwapMax\",\"-p\",\"TasksMax\",\"-p\",\"MemoryCurrent\",\"-p\",\"MemoryPeak\",\"-p\",\"MemorySwapCurrent\",\"-p\",\"MemorySwapPeak\"]))\nprint((root/\"translate.log\").read_text()[-5000:]);print(\"R215_TRANSLATE_EXIT\",r.returncode)\nraise SystemExit(r.returncode)\n'"
+  ],
+  "caps": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": "0",
+    "TasksMax": 128
+  }
+}

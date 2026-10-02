@@ -1,0 +1,14 @@
+--- a/src/PrePasses.ml
++++ b/src/PrePasses.ml
+@@ -2863,6 +2863,11 @@
+                 let func = visitor#visit_fn_operand mk_unit_ty func in
+                 let args = List.map (visitor#visit_operand mk_unit_ty) args in
+                 Call ({ func; args; dest }, on_unwind)
++            | CopyNonOverlapping { src; dst; count } ->
++                CopyNonOverlapping
++                  { src = visitor#visit_operand mk_unit_ty src;
++                    dst = visitor#visit_operand mk_unit_ty dst;
++                    count = visitor#visit_operand mk_unit_ty count }
+             | Switch (If (cond, yes, no)) ->
+                 Switch (If (visitor#visit_operand mk_unit_ty cond, yes, no))
+             | Switch (SwitchInt (op, ty, branches, otherwise)) ->
