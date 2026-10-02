@@ -1,0 +1,218 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790911528300059000.service; invocation ID: ec464c60398f4b17b364e5119bcc17e0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:15:38: error: Ambiguous term
+  P
+Possible interpretations:
+  AspisV8R17.RawReducer.P : ℕ
+  
+  AspisV8R15.ExactTowerBase.P : ℕ
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:15:57: error: Ambiguous term
+  P
+Possible interpretations:
+  AspisV8R17.RawReducer.P : ℕ
+  
+  AspisV8R15.ExactTowerBase.P : ℕ
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:15:43: error: unsolved goals
+⊢ sorry () = 2147483647
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:18:27: error: Ambiguous term
+  P
+Possible interpretations:
+  AspisV8R17.RawReducer.P : ℕ
+  
+  AspisV8R15.ExactTowerBase.P : ℕ
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:21:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:38:46: error: Ambiguous term
+  P
+Possible interpretations:
+  AspisV8R17.RawReducer.P : ℕ
+  
+  AspisV8R15.ExactTowerBase.P : ℕ
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:38:63: error: Ambiguous term
+  P
+Possible interpretations:
+  AspisV8R17.RawReducer.P : ℕ
+  
+  AspisV8R15.ExactTowerBase.P : ℕ
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:43:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ← lift (core.convert.num.FromU64U32.from a)
+    let i1 ← lift (core.convert.num.FromU64U32.from b)
+    let x ← lift (i.wrapping_mul i1)
+    let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+    let i3 ← lift (x &&& i2)
+    let i4 ← lift (x.wrapping_shr 31#u32)
+    let s ← lift (U64.wrapping_add i3 i4)
+    let i5 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+    if s ≥ i5 then do
+        let i6 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+        let i7 ← lift (s.wrapping_sub i6)
+        let i8 ← lift (UScalar.cast UScalarTy.U32 i7)
+        ok i8
+      else do
+        let i8 ← lift (UScalar.cast UScalarTy.U32 s)
+        ok i8
+is not definitionally equal to the right-hand side
+  if ↑a < ↑2147483647#u32 then
+    if ↑b < ↑2147483647#u32 then do
+      let i ← lift (UScalar.cast UScalarTy.U64 a)
+      let i1 ← lift (UScalar.cast UScalarTy.U64 b)
+      let x ← lift (U64.wrapping_mul i i1)
+      let i2 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+      let i3 ← lift (x &&& i2)
+      let i4 ← lift (x.wrapping_shr 31#u32)
+      let s ← lift (U64.wrapping_add i3 i4)
+      let i5 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+      if s ≥ i5 then do
+          let i6 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+          let i7 ← lift (s.wrapping_sub i6)
+          let i8 ← lift (UScalar.cast UScalarTy.U32 i7)
+          ok i8
+        else do
+          let i8 ← lift (UScalar.cast UScalarTy.U32 s)
+          ok i8
+    else do
+      let i ← lift (UScalar.cast UScalarTy.U64 a)
+      let i1 ← lift (UScalar.cast UScalarTy.U64 b)
+      let i2 ← lift (U64.wrapping_mul i i1)
+      let i3 ← AspisR156FullFreeze.aspis_core.field.reduce_u64 i2
+      ok i3
+  else do
+    let i ← lift (UScalar.cast UScalarTy.U64 a)
+    let i1 ← lift (UScalar.cast UScalarTy.U64 b)
+    let i2 ← lift (U64.wrapping_mul i i1)
+    let i3 ← AspisR156FullFreeze.aspis_core.field.reduce_u64 i2
+    ok i3
+
+a b : U32
+ha : ↑a < sorry
+hb : ↑b < sorry
+⊢ (do
+      let i ← lift (core.convert.num.FromU64U32.from a)
+      let i1 ← lift (core.convert.num.FromU64U32.from b)
+      let x ← lift (i.wrapping_mul i1)
+      let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+      let i3 ← lift (x &&& i2)
+      let i4 ← lift (x.wrapping_shr 31#u32)
+      let s ← lift (U64.wrapping_add i3 i4)
+      let i5 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+      if s ≥ i5 then do
+          let i6 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+          let i7 ← lift (s.wrapping_sub i6)
+          let i8 ← lift (UScalar.cast UScalarTy.U32 i7)
+          ok i8
+        else do
+          let i8 ← lift (UScalar.cast UScalarTy.U32 s)
+          ok i8) =
+    if ↑a < ↑2147483647#u32 then
+      if ↑b < ↑2147483647#u32 then do
+        let i ← lift (UScalar.cast UScalarTy.U64 a)
+        let i1 ← lift (UScalar.cast UScalarTy.U64 b)
+        let x ← lift (U64.wrapping_mul i i1)
+        let i2 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+        let i3 ← lift (x &&& i2)
+        let i4 ← lift (x.wrapping_shr 31#u32)
+        let s ← lift (U64.wrapping_add i3 i4)
+        let i5 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+        if s ≥ i5 then do
+            let i6 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+            let i7 ← lift (s.wrapping_sub i6)
+            let i8 ← lift (UScalar.cast UScalarTy.U32 i7)
+            ok i8
+          else do
+            let i8 ← lift (UScalar.cast UScalarTy.U32 s)
+            ok i8
+      else do
+        let i ← lift (UScalar.cast UScalarTy.U64 a)
+        let i1 ← lift (UScalar.cast UScalarTy.U64 b)
+        let i2 ← lift (U64.wrapping_mul i i1)
+        let i3 ← AspisR156FullFreeze.aspis_core.field.reduce_u64 i2
+        ok i3
+    else do
+      let i ← lift (UScalar.cast UScalarTy.U64 a)
+      let i1 ← lift (UScalar.cast UScalarTy.U64 b)
+      let i2 ← lift (U64.wrapping_mul i i1)
+      let i3 ← AspisR156FullFreeze.aspis_core.field.reduce_u64 i2
+      ok i3
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:41:21: warning: This simp argument is unused:
+  R159WideBaseExecution.p_val
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵.̵m̵u̵l̵,̵A̵s̵p̵i̵s̵R̵1̵5̵6̵F̵u̵l̵l̵F̵r̵e̵e̵z̵e̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵m̵u̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵l̵t̵_̵e̵q̵u̵i̵v̵,̵R̵1̵5̵9̵W̵i̵d̵e̵B̵a̵s̵e̵E̵x̵e̵c̵u̵t̵i̵o̵n̵.̵p̵_̵v̵a̵l̵,̵h̵a̵,̵h̵b̵,̵i̵f̵_̵t̵r̵u̵e̵,̵P̵1̵1̵0̵,̵[̲B̲.̲m̲u̲l̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲5̲6̲F̲u̲l̲l̲F̲r̲e̲e̲z̲e̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲m̲u̲l̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲l̲t̲_̲e̲q̲u̲i̲v̲,̲ ̲h̲a̲,̲ ̲h̲b̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲1̲1̲0̲,̲ AspisR156FullFreeze.aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:41:49: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [B.mul, ̲AspisR156FullFreeze.aspis_core.field.M31.mul,
+  ̵  ̵ ̵ ̵UScalar.lt_equiv,
+  ̲ ̲ ̲ ̲ ̲R159WideBaseExecution.p_val, ̲ha̵,̵h̵b, ̲if_true, ̲P110,
+  ̵  ̵ ̵ ̵AspisR156FullFreeze.aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:41:52: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [B.mul, ̲AspisR156FullFreeze.aspis_core.field.M31.mul,
+  ̵  ̵ ̵ ̵UScalar.lt_equiv,
+  ̲ ̲ ̲ ̲ ̲R159WideBaseExecution.p_val, ̲ha,h̵b̵,̵ ̲if_true, ̲P110,
+  ̵  ̵ ̵ ̵AspisR156FullFreeze.aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:41:55: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [B.mul, ̲AspisR156FullFreeze.aspis_core.field.M31.mul,
+  ̵  ̵ ̵ ̵UScalar.lt_equiv,
+  ̲ ̲ ̲ ̲ ̲R159WideBaseExecution.p_val, ̲ha, ̲hb,i̵f̵_̵t̵r̵u̵e̵,̵ ̲P110,
+  ̵  ̵ ̵ ̵AspisR156FullFreeze.aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean:46:68: error: unsolved goals
+x y : M31Exact
+⊢ B.mul (encodeBase x) (encodeBase y) = ok (encodeBase (x * y))
+'AspisV8R19.R250PrivateBaseExecution.p110_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.input_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.input_encoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.half_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.half_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.reduce_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.mul_current' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.mul_encoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.add_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.sub_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R250PrivateBaseExecution.output_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R250PrivateBaseExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R250PrivateBaseExecution.lean"
+	User time (seconds): 1.16
+	System time (seconds): 0.39
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.53
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3692880
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86537
+	Voluntary context switches: 739
+	Involuntary context switches: 83
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.559s
+CPU time consumed: 1.589s
+Memory peak: 548.0K
+Memory swap peak: 0B

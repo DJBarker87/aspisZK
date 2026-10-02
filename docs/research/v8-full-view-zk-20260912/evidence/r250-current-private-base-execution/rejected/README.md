@@ -1,0 +1,1 @@
+Two failed drafts preserved, both exit 1 and rejected sorryAx reports. First had ambiguous P namespace and canonical guard normalization errors. Second needed explicit encoded-word valuation rewrites and sequential guarded-branch rewrites before unfolding P. The replacement keeps the same mathematical statements and canonical premises; no cap increase or benchmark rerun.
