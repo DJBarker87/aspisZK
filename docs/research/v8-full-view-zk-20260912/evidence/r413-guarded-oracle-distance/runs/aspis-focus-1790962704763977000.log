@@ -1,0 +1,94 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790962704763977000.service; invocation ID: d6aba980d99245d581abc611a31a3018
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R413GuardedOracleDistance.lean:78:26: error: linarith failed to find a contradiction
+case ask.some.left
+I A O : Type
+inst✝² : Fintype A
+inst✝¹ : Nonempty A
+inst✝ : DecidableEq I
+i : I
+next : A → Program I A O
+ih :
+  ∀ (a : A) (t : Table I A) (observe : View I A O → ℚ),
+    (∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1) →
+      |lazyMean (next a) t observe - independentMean (next a) observe| ≤
+        independentMean (guardFresh (next a) t) fun v => if v.2 = none then 1 else 0
+t : Table I A
+observe : View I A O → ℚ
+bounded : ∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1
+a : A
+ht : t i = some a
+hl : 0 ≤ lazyMean (Program.ask i next) t observe ∧ lazyMean (Program.ask i next) t observe ≤ 1
+hr : 0 ≤ independentMean (Program.ask i next) observe ∧ independentMean (Program.ask i next) observe ≤ 1
+a✝ :
+  (lazyMean (Program.ask i next) t observe -
+      mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)) <
+    -1
+⊢ False
+failed
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R413GuardedOracleDistance.lean:78:26: error: linarith failed to find a contradiction
+case ask.some.right
+I A O : Type
+inst✝² : Fintype A
+inst✝¹ : Nonempty A
+inst✝ : DecidableEq I
+i : I
+next : A → Program I A O
+ih :
+  ∀ (a : A) (t : Table I A) (observe : View I A O → ℚ),
+    (∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1) →
+      |lazyMean (next a) t observe - independentMean (next a) observe| ≤
+        independentMean (guardFresh (next a) t) fun v => if v.2 = none then 1 else 0
+t : Table I A
+observe : View I A O → ℚ
+bounded : ∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1
+a : A
+ht : t i = some a
+hl : 0 ≤ lazyMean (Program.ask i next) t observe ∧ lazyMean (Program.ask i next) t observe ≤ 1
+hr : 0 ≤ independentMean (Program.ask i next) observe ∧ independentMean (Program.ask i next) observe ≤ 1
+a✝ :
+  1 <
+    lazyMean (Program.ask i next) t observe -
+      mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)
+⊢ False
+failed
+'AspisV8R19.R413GuardedOracleDistance.mean_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.mean_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.mean_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.abs_mean_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.independent_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.lazy_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.guarded_distance' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R413GuardedOracleDistance.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R413GuardedOracleDistance.lean"
+	User time (seconds): 1.12
+	System time (seconds): 0.32
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.45
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3222636
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 9
+	Minor (reclaiming a frame) page faults: 76672
+	Voluntary context switches: 1023
+	Involuntary context switches: 73
+	Swaps: 0
+	File system inputs: 1560
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.479s
+CPU time consumed: 1.486s
+Memory peak: 256.0K
+Memory swap peak: 0B
