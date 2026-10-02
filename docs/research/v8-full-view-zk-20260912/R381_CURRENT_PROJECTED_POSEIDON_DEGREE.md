@@ -1,0 +1,9 @@
+# R381: projected Poseidon degree fragment
+
+R381 proves degree bounds for a declared exact-field expression of the projected Poseidon checks. From the model selector polynomials and R378/R380 round lemmas, it derives branch bounds of 25 for the declared leading, full, and internal components and 10 for the successor table opening. The projected expression has degree at most 26 in the selected univariate variable: its high-coordinate block factor and low-coordinate local factor have disjoint coordinate supports, so their bounds sum to 1. Multiplication by the declared equality factor gives the final model-expression bound of 27. No output-degree premise is assumed.
+
+The promoted target is [R381ProjectedPoseidonDegree.lean](lean/AspisV8R19/R381ProjectedPoseidonDegree.lean). The successful focused run exited 0 in 11.11 seconds, with 4,542,884 KiB peak Lean-child RSS and no swap. Its six complete `#print axioms` reports contain only `propext`, `Classical.choice`, and `Quot.sound`. Two failed drafts and their full logs and interim axiom reports remain archived separately as rejected history.
+
+The evidence includes the exact R377/R380 direct imports and local source dependency copies, plus the R378/R376/R374/SourceStatementPoints source chain and the pinned polynomial API source. The selected-source material is limited to the saved selector-coordinate census and the paired fifth-power source excerpt; both are provenance only.
+
+The first remaining proposition is to establish that the actual selected Rust word loops, field reductions, packing, and array expansion implement these declared field expressions while preserving source errors and stopping behavior. R381 proves no such execution correspondence and does not establish the selected terminal's source degree, correction existence, universal coverage, privacy, or security.
