@@ -7,3 +7,5 @@ Compile revision `04d7d1b635ddb7c9af2ee3e2df3cdb68ae68bb43`; exit 0; wall 0:01.5
 First remaining proposition: Prove complete reverse-loop termination and its output under explicit local invariants, then derive those invariants and all success/error conditions from the actual batch guard, prefix traversal, total inverse and initialization.
 
 Full callback chronology, joint privacy and soundness remain open. Verifier source, security parameters and 999,790 / 999,532 CU results remain preserved. No benchmarks or unchanged regression suites reran.
+
+Subsequent result: [R311](R311_CURRENT_BATCH_REVERSE_LOOP_EXECUTION.md) proves complete reverse-loop termination/output under the explicit local invariants. The next missing argument is establishing those invariants from the actual forward prefixes, vector allocation and batch initialization, then composing all guards and failures. The R313 evidence records the frontier at its own compilation.
