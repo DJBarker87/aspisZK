@@ -1,0 +1,89 @@
+import AspisV8R19.R183DefaultFoldExecution
+
+/-! A Nat-indexed control model of the selected counted slice fold. This proves
+only loop/callback control flow; pointer reads and the source `usize` operations
+still require a separate correspondence argument. -/
+set_option autoImplicit false
+namespace AspisV8R19.R193CountedSliceFoldControl
+
+open Aeneas Aeneas.Std Result ControlFlow Error
+
+def countedBody {T B F : Type}
+    (load : Nat → Result T) (len : Nat)
+    (k : core.ops.function.FnMut F (B × T) B)
+    (st : Nat × F × B) : Result (ControlFlow (Nat × F × B) B) := do
+  let (i, f, acc) := st
+  let value ← load i
+  let (acc1, f1) ← k.call_mut f (acc, value)
+  let j := i + 1
+  if j = len then
+    ok (done acc1)
+  else
+    ok (cont (j, f1, acc1))
+
+def countedFold {T B F : Type}
+    (load : Nat → Result T) (len : Nat)
+    (k : core.ops.function.FnMut F (B × T) B)
+    (init : B) (f : F) : Result B :=
+  if len = 0 then
+    ok init
+  else
+    loop (countedBody load len k) (0, f, init)
+
+theorem countedFold_list {T B F : Type}
+    (xs : List T)
+    (k : core.ops.function.FnMut F (B × T) B)
+    (f : F) (init : B)
+    (load : Nat → Result T)
+    (hload : ∀ i (hi : i < xs.length), load i = ok xs[i]'hi) :
+    countedFold load xs.length k init f = (do
+      let (acc, _) ← AspisV8R19.R183DefaultFoldExecution.foldMutList k xs f init
+      ok acc) := by
+  cases xs with
+  | nil =>
+      simp [countedFold,
+        AspisV8R19.R183DefaultFoldExecution.foldMutList]
+  | cons x xs =>
+      let body := countedBody load (x :: xs).length k
+      have hloop : ∀ n i, i < (x :: xs).length →
+          (x :: xs).length - i = n → ∀ f acc,
+          loop body (i, f, acc) = (do
+            let (result, _) ← AspisV8R19.R183DefaultFoldExecution.foldMutList
+              k ((x :: xs).drop i) f acc
+            ok result) := by
+        intro n
+        induction n using Nat.strong_induction_on with
+        | h n ih =>
+            intro i hi hremain f acc
+            have hdrop := AspisV8R19.R183DefaultFoldExecution.drop_split
+              (x :: xs) i hi
+            rw [loop.eq_def]
+            cases hk : k.call_mut f (acc, (x :: xs)[i]) with
+            | fail e =>
+                simp [body, countedBody, hload i hi, hk, hdrop,
+                  AspisV8R19.R183DefaultFoldExecution.foldMutList]
+            | div =>
+                simp [body, countedBody, hload i hi, hk, hdrop,
+                  AspisV8R19.R183DefaultFoldExecution.foldMutList]
+            | ok pair =>
+                rcases pair with ⟨acc1, f1⟩
+                by_cases hend : i + 1 = (x :: xs).length
+                · have htail : (x :: xs).drop (i + 1) = [] := by
+                    apply List.drop_eq_nil_of_le
+                    omega
+                  simp only [body, countedBody, hload i hi, hk, bind_tc_ok, hdrop, hend,
+                    if_pos, htail, AspisV8R19.R183DefaultFoldExecution.foldMutList]
+                · have hnext : i + 1 < (x :: xs).length := by omega
+                  have hremain' : (x :: xs).length - (i + 1) < n := by
+                    omega
+                  have hrec := ih _ hremain' (i + 1) hnext (by omega) f1 acc1
+                  simp only [body, countedBody, hload i hi, hk, bind_tc_ok, hdrop, hend,
+                    if_neg, AspisV8R19.R183DefaultFoldExecution.foldMutList, hrec]
+      have hlen : (x :: xs).length ≠ 0 := by simp
+      rw [countedFold, if_neg hlen]
+      have hstart := hloop (x :: xs).length 0 (by simp) (by simp) f init
+      simpa [body, List.drop_zero] using hstart
+
+#print axioms countedFold_list
+
+end AspisV8R19.R193CountedSliceFoldControl

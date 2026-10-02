@@ -1,0 +1,154 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1790900189846600000.service; invocation ID: 007d9398d4c4495d96d816b78e69e50c
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R193CountedSliceFoldControl.lean:71:16: error: unsolved goals
+case pos
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+f✝ : F
+init : B
+load : ℕ → Result T
+x : T
+xs : List T
+hload : ∀ (i : ℕ) (hi : i < (x :: xs).length), load i = ok ((x :: xs).get ⟨i, hi⟩)
+body : ℕ × F × B → Result (ControlFlow (ℕ × F × B) B) := countedBody load (x :: xs).length k
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ i < (x :: xs).length,
+      (x :: xs).length - i = m →
+        ∀ (f : F) (acc : B),
+          loop body (i, f, acc) = do
+            let __x ← R183DefaultFoldExecution.foldMutList k (List.drop i (x :: xs)) f acc
+            match __x with
+              | (result, snd) => ok result
+i : ℕ
+hi : i < (x :: xs).length
+hremain : (x :: xs).length - i = n
+f : F
+acc : B
+hdrop : List.drop i (x :: xs) = (x :: xs)[i] :: List.drop (i + 1) (x :: xs)
+acc1 : B
+f1 : F
+hk : k.call_mut f (acc, (x :: xs)[i]) = ok (acc1, f1)
+hend : i + 1 = (x :: xs).length
+htail : List.drop (i + 1) (x :: xs) = []
+⊢ (match do
+      let __x ← k.call_mut f (acc, (x :: xs).get ⟨i, hi⟩)
+      ok (done __x.1) with
+    | ok r =>
+      match r with
+      | cont x_1 => loop (countedBody load (x :: xs).length k) x_1
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ← R183DefaultFoldExecution.foldMutList k (List.drop (x :: xs).length (x :: xs)) f1 acc1
+    ok __x.1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R193CountedSliceFoldControl.lean:76:16: error: unsolved goals
+case neg
+T B F : Type
+k : core.ops.function.FnMut F (B × T) B
+f✝ : F
+init : B
+load : ℕ → Result T
+x : T
+xs : List T
+hload : ∀ (i : ℕ) (hi : i < (x :: xs).length), load i = ok ((x :: xs).get ⟨i, hi⟩)
+body : ℕ × F × B → Result (ControlFlow (ℕ × F × B) B) := countedBody load (x :: xs).length k
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ i < (x :: xs).length,
+      (x :: xs).length - i = m →
+        ∀ (f : F) (acc : B),
+          loop body (i, f, acc) = do
+            let __x ← R183DefaultFoldExecution.foldMutList k (List.drop i (x :: xs)) f acc
+            match __x with
+              | (result, snd) => ok result
+i : ℕ
+hi : i < (x :: xs).length
+hremain : (x :: xs).length - i = n
+f : F
+acc : B
+hdrop : List.drop i (x :: xs) = (x :: xs)[i] :: List.drop (i + 1) (x :: xs)
+acc1 : B
+f1 : F
+hk : k.call_mut f (acc, (x :: xs)[i]) = ok (acc1, f1)
+hend : ¬i + 1 = (x :: xs).length
+hnext : i + 1 < (x :: xs).length
+hremain' : (x :: xs).length - (i + 1) < n
+hrec :
+  loop body (i + 1, f1, acc1) = do
+    let __x ← R183DefaultFoldExecution.foldMutList k (List.drop (i + 1) (x :: xs)) f1 acc1
+    match __x with
+      | (result, snd) => ok result
+⊢ (match do
+      let __x ← k.call_mut f (acc, (x :: xs).get ⟨i, hi⟩)
+      if False then ok (done __x.1) else ok (cont (i + 1, __x.2, __x.1)) with
+    | ok r =>
+      match r with
+      | cont x_1 => loop (countedBody load (x :: xs).length k) x_1
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ← R183DefaultFoldExecution.foldMutList k (List.drop (i + 1) (x :: xs)) f1 acc1
+    ok __x.1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R193CountedSliceFoldControl.lean:75:28: warning: This simp argument is unused:
+  htail
+
+Hint: Omit it from the simp argument list.
+  simp only [body, countedBody, hload i hi, hk, bind_tc_ok, hdrop, hend, if_pos,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̵t̵a̵i̵l̵,̵ ̵AspisV8R19.R183DefaultFoldExecution.foldMutList]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R193CountedSliceFoldControl.lean:81:20: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [body, countedBody, hload i hi, hk, bind_tc_ok, hdrop, hend,
+                      i̵f̵_̵n̵e̵g̵,̵ ̵AspisV8R19.R183DefaultFoldExecution.foldMutList, hrec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R193CountedSliceFoldControl.lean:81:77: warning: This simp argument is unused:
+  hrec
+
+Hint: Omit it from the simp argument list.
+  simp only [body, countedBody, hload i hi, hk, bind_tc_ok, hdrop, hend, if_neg,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵1̵8̵3̵D̵e̵f̵a̵u̵l̵t̵F̵o̵l̵d̵E̵x̵e̵c̵u̵t̵i̵o̵n̵.̵f̵o̵l̵d̵M̵u̵t̵L̵i̵s̵t̵,̵ ̵h̵r̵e̵c̵]̵A̲s̲p̲i̲s̲V̲8̲R̲1̲9̲.̲R̲1̲8̲3̲D̲e̲f̲a̲u̲l̲t̲F̲o̲l̲d̲E̲x̲e̲c̲u̲t̲i̲o̲n̲.̲f̲o̲l̲d̲M̲u̲t̲L̲i̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R193CountedSliceFoldControl.countedFold_list' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R193CountedSliceFoldControl.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R193CountedSliceFoldControl.lean"
+	User time (seconds): 0.98
+	System time (seconds): 0.26
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.21
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2528780
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64533
+	Voluntary context switches: 552
+	Involuntary context switches: 52
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.240s
+CPU time consumed: 1.274s
+Memory peak: 288.0K
+Memory swap peak: 0B
