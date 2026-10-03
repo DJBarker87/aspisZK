@@ -1,0 +1,79 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791017215453667000.service; invocation ID: ef7735e8842f43a68106858500210ad2
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R454RefillProgramShape.lean:32:63: error: unsolved goals
+c : Cursor
+n : ℕ
+hc : ↑c.index = 8
+hn : n + 1 ≤ 8
+htail :
+  ∀ (p : State × State),
+    limbProgram n { state := p.2, block := p.1, index := 1 } =
+      Program.done (limbRun (fun x => p.2) n { state := p.2, block := p.1, index := 1 }).2
+p : State × State
+⊢ (if masked 31 (word p.1 0) = 2147483647 then limbRun (fun x => p.2) n { state := p.2, block := p.1, index := 1 }
+      else ([], some (masked 31 (word p.1 0)), { state := p.2, block := p.1, index := 1 })).2 =
+    if masked 31 (word p.1 0) = 2147483647 then (limbRun (fun x => p.2) n { state := p.2, block := p.1, index := 1 }).2
+    else (some (masked 31 (word p.1 0)), { state := p.2, block := p.1, index := 1 })
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R454RefillProgramShape.lean:21:65: error: unsolved goals
+c : Cursor
+n : ℕ
+hc : ↑c.index = 8
+hn : n + 1 ≤ 8
+htail :
+  ∀ (p : State × State),
+    limbProgram n { state := p.2, block := p.1, index := 1 } =
+      Program.done (limbRun (fun x => p.2) n { state := p.2, block := p.1, index := 1 }).2
+hrun :
+  ∀ (p : State × State),
+    (limbRun (fun x => p.2) (n + 1) { state := p.2, block := p.1, index := 0 }).2 =
+      if masked 31 (word p.1 0) = 2147483647 then
+        (limbRun (fun x => p.2) n { state := p.2, block := p.1, index := 1 }).2
+      else (some (masked 31 (word p.1 0)), { state := p.2, block := p.1, index := 1 })
+⊢ (fun a =>
+      Program.ask (DuplexFrames.advance (SourceDuplexStep.bytes c.state)) fun a_1 =>
+        if masked 31 (word a 0) = 2147483647 then limbProgram n { state := a_1, block := a, index := 1 }
+        else Program.done (some (masked 31 (word a 0)), { state := a_1, block := a, index := 1 })) =
+    fun a =>
+    Program.ask (DuplexFrames.advance (SourceDuplexStep.bytes c.state)) fun a_1 =>
+      Program.done
+        (if masked 31 (word a 0) = 2147483647 then (limbRun (fun x => a_1) n { state := a_1, block := a, index := 1 }).2
+        else (some (masked 31 (word a 0)), { state := a_1, block := a, index := 1 }))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R454RefillProgramShape.lean:35:38: warning: This simp argument is unused:
+  htail
+
+Hint: Omit it from the simp argument list.
+  simp [limbProgram, readProgram, hc, SourceOraclePrograms.squeezeProgram,
+      AspisV8R19.OracleProgramOps.bind, ht̵a̵i̵l̵,̵ ̵h̵run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R454RefillProgramShape.limbProgram_refill_shape' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R454RefillProgramShape.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R454RefillProgramShape.lean"
+	User time (seconds): 0.89
+	System time (seconds): 0.34
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.23
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3213468
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76556
+	Voluntary context switches: 354
+	Involuntary context switches: 62
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.255s
+CPU time consumed: 1.263s
+Memory peak: 552.0K
+Memory swap peak: 0B
