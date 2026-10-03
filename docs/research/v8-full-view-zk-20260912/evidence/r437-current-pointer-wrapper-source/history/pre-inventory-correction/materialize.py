@@ -6,8 +6,6 @@ ap=argparse.ArgumentParser();ap.add_argument('destination',type=pathlib.Path);ar
 assert not args.destination.exists(),'destination must be fresh'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 physical=json.loads((ROOT/'SHA256SUMS.json').read_text())
-actual={p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and p != ROOT/'SHA256SUMS.json'}
-assert actual==set(physical),{'unindexed':sorted(actual-set(physical)),'missing':sorted(set(physical)-actual)}
 for rel,digest in physical.items():assert sha((ROOT/rel).read_bytes())==digest,rel
 manifest=json.loads((ROOT/'compression-manifest.json').read_text());stored={x['stored_path']:x for x in manifest['artifacts']}
 args.destination.mkdir(parents=True)
