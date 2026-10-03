@@ -1,0 +1,70 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791028237528337000.service; invocation ID: e009b9fcfe214d7eb7bcfb205b102129
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R471NonNullPointerValidity.lean:68:8: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  ptr.address = a.base + offset ∧
+    offset + count * 16 ≤ a.cells.length * 16 ∧
+      { address := ptr.address + count * 16, origin := some (id, offset + count * 16) } = last
+of `h`
+
+Hint: If you meant to destruct this conjunction, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isFalse.some.some
+T : Type
+heap : Heap T
+ptr last : Pointer
+count : ℕ
+h✝ : ¬count = 0
+id offset : ℕ
+ho : ptr.origin = some (id, offset)
+a : Allocation T
+ha : heap id = some a
+h :
+  ptr.address = a.base + offset ∧
+    offset + count * 16 ≤ a.cells.length * 16 ∧
+      { address := ptr.address + count * 16, origin := some (id, offset + count * 16) } = last
+⊢ ptr.address ≤ last.address
+'AspisV8R19.R471NonNullPointerValidity.wrap_success_iff' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R471NonNullPointerValidity.wrap_exact' depends on axioms: [propext]
+'AspisV8R19.R471NonNullPointerValidity.wrap_unwrap' depends on axioms: [propext]
+'AspisV8R19.R471NonNullPointerValidity.unwrap_wrap' depends on axioms: [propext]
+'AspisV8R19.R471NonNullPointerValidity.wrap_preserves_pointer' does not depend on any axioms
+'AspisV8R19.R471NonNullPointerValidity.wrap_preserves_origin' does not depend on any axioms
+'AspisV8R19.R471NonNullPointerValidity.wrap_null' depends on axioms: [propext]
+'AspisV8R19.R471NonNullPointerValidity.add_address_mono' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R471NonNullPointerValidity.add_preserves_nonzero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R471NonNullPointerValidity.iterator_endpoints_valid' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R471NonNullPointerValidity.iterator_casts_total' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R471NonNullPointerValidity.empty_dangling_cast' depends on axioms: [propext]
+'AspisV8R19.R471NonNullPointerValidity.backed_endpoint_cast' depends on axioms: [propext, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R471NonNullPointerValidity.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R471NonNullPointerValidity.lean"
+	User time (seconds): 1.01
+	System time (seconds): 0.26
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.26
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2528368
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64630
+	Voluntary context switches: 1214
+	Involuntary context switches: 64
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.293s
+CPU time consumed: 1.307s
+Memory peak: 512.0K
+Memory swap peak: 0B
