@@ -1,0 +1,207 @@
+{
+  "classification": "read-only pinned Rust source inventory; no Rust execution, aliasing, pointer refinement, or selected-type layout claim",
+  "toolchain": {
+    "channel": "nightly-2026-06-01",
+    "rustc": "1.98.0-nightly (14210df0e 2026-05-31)",
+    "rustc_commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "source_root": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library"
+  },
+  "selected_source": {
+    "path": "core/src/slice/iter/macros.rs",
+    "span": "259-289",
+    "function": "macro-generated Iterator::fold"
+  },
+  "sources": [
+    {
+      "copy_path": "source/core/slice/iter/macros.rs",
+      "pinned_path": "core/src/slice/iter/macros.rs",
+      "sha256": "0ac47d295999ba8847d0df93557292fbad65d256db0c6521c396798d2e37677d",
+      "ranges": [
+        "1-61 if_zst/is_empty/len",
+        "259-289 fold body"
+      ],
+      "copy_provenance": "R428 source/core/slice/iter/macros.rs; earlier R390 byte snapshot"
+    },
+    {
+      "copy_path": "source/core/slice/iter.rs",
+      "pinned_path": "core/src/slice/iter.rs",
+      "sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251",
+      "ranges": [
+        "67-104 Iter fields/constructor",
+        "140 Iter macro instantiation"
+      ],
+      "copy_provenance": "R428 source/core/slice/iter.rs; earlier R390 byte snapshot"
+    },
+    {
+      "copy_path": "source/core/ptr/non_null.rs",
+      "pinned_path": "core/src/ptr/non_null.rs",
+      "sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+      "ranges": [
+        "398-404 as_ptr",
+        "648-657 add",
+        "941-951 offset_from_unsigned",
+        "1707-1716 Eq/PartialEq"
+      ],
+      "copy_provenance": "R428 source/core/ptr/non_null.rs"
+    },
+    {
+      "copy_path": "source/core/ptr/const_ptr.rs",
+      "pinned_path": "core/src/ptr/const_ptr.rs",
+      "sha256": "31b329bf53c20da62d603a9361aaa5c748051b30b1372121d0524021db89e705",
+      "ranges": [
+        "701-730 offset_from_unsigned"
+      ],
+      "copy_provenance": "copied from pinned toolchain for R429 inventory"
+    },
+    {
+      "copy_path": "source/core/mem/mod.rs",
+      "pinned_path": "core/src/mem/mod.rs",
+      "sha256": "9f450467849a7e829d2f57fe826518b7334df8a8eb206052d571ad7b5d018b9e",
+      "ranges": [
+        "1375-1420 SizedTypeProperties::IS_ZST",
+        "1442-1444 blanket impl"
+      ],
+      "copy_provenance": "R428 source/core/mem/mod.rs"
+    },
+    {
+      "copy_path": "source/core/num/uint_macros.rs",
+      "pinned_path": "core/src/num/uint_macros.rs",
+      "sha256": "27b60f61c397a3e42930743c72fdbd01497f3d04bd5ab8cc65a53747fa236454",
+      "ranges": [
+        "935-973 unchecked_add"
+      ],
+      "copy_provenance": "copied from pinned toolchain for R429 inventory"
+    },
+    {
+      "copy_path": "source/core/num/mod.rs",
+      "pinned_path": "core/src/num/mod.rs",
+      "sha256": "f0820f9dfb94999440c8cb4a349736fa21df7e5668e19b6b49e016ff67c05ce3",
+      "ranges": [
+        "1445-1475 64-bit usize uint_impl! instantiation"
+      ],
+      "copy_provenance": "copied from pinned toolchain for R429 inventory"
+    },
+    {
+      "copy_path": "source/core/intrinsics/mod.rs",
+      "pinned_path": "core/src/intrinsics/mod.rs",
+      "sha256": "03dda038cf27a27058e4e3476b5eee5605e712112c2093f8218d4708036947fe",
+      "ranges": [
+        "893-897 offset",
+        "1988-1993 unchecked_add",
+        "2275-2280 ptr_offset_from_unsigned",
+        "2778-2781 size_of"
+      ],
+      "copy_provenance": "copied from pinned toolchain for R429 inventory"
+    },
+    {
+      "copy_path": "source/core/ops/function.rs",
+      "pinned_path": "core/src/ops/function.rs",
+      "sha256": "9fcac884a9d77f0cf13327a165a3e820051845df2b5c4b2b404b4a2dd2b27a5b",
+      "ranges": [
+        "160-167 FnMut and call_mut"
+      ],
+      "copy_provenance": "R390 std-source-copy/core/ops/function.rs"
+    }
+  ],
+  "source_call_inventory": [
+    {
+      "source_operation": "if is_empty!(self), early return init",
+      "helper": "is_empty! -> if_zst!",
+      "source": "core/src/slice/iter/macros.rs:39-47,10-36"
+    },
+    {
+      "source_operation": "let len = len!(self)",
+      "helper": "len! -> if_zst!",
+      "source": "core/src/slice/iter/macros.rs:49-61,10-36"
+    },
+    {
+      "source_operation": "call f(acc, &*self.ptr.add(i).as_ptr())",
+      "dependencies": [
+        "NonNull::add",
+        "NonNull::as_ptr",
+        "raw pointer dereference and shared borrow",
+        "FnMut::call_mut"
+      ],
+      "source": [
+        "core/src/ptr/non_null.rs:648-657,398-404",
+        "core/src/ops/function.rs:163-166"
+      ]
+    },
+    {
+      "source_operation": "i = i.unchecked_add(1)",
+      "dependencies": [
+        "usize uint_impl! instantiation for target_pointer_width=64",
+        "uint_impl unchecked_add",
+        "core::intrinsics::unchecked_add"
+      ],
+      "source": [
+        "core/src/num/mod.rs:1445-1475",
+        "core/src/num/uint_macros.rs:935-973",
+        "core/src/intrinsics/mod.rs:1988-1993"
+      ]
+    },
+    {
+      "source_operation": "if i == len { break }",
+      "classification": "source-level loop stop comparison"
+    },
+    {
+      "helper_operation": "non-ZST is_empty pointer equality",
+      "dependency": "NonNull PartialEq delegates to as_ptr pointer comparison",
+      "source": "core/src/ptr/non_null.rs:1707-1716"
+    },
+    {
+      "helper_operation": "non-ZST len from end offset",
+      "dependencies": [
+        "NonNull::offset_from_unsigned",
+        "raw const pointer offset_from_unsigned",
+        "ptr_offset_from_unsigned intrinsic"
+      ],
+      "source": [
+        "core/src/ptr/non_null.rs:941-951",
+        "core/src/ptr/const_ptr.rs:701-730",
+        "core/src/intrinsics/mod.rs:2275-2280"
+      ]
+    },
+    {
+      "helper_operation": "T::IS_ZST branch selector",
+      "dependencies": [
+        "SizedTypeProperties::IS_ZST defaults to SIZE == 0",
+        "SIZE defaults to size_of::<Self>()",
+        "size_of intrinsic"
+      ],
+      "source": [
+        "core/src/mem/mod.rs:1375-1420",
+        "core/src/intrinsics/mod.rs:2778-2781"
+      ]
+    },
+    {
+      "helper_operation": "NonNull::add pointer advancement",
+      "dependency": "core::intrinsics::offset declaration",
+      "source": [
+        "core/src/ptr/non_null.rs:648-657",
+        "core/src/intrinsics/mod.rs:893-897"
+      ]
+    }
+  ],
+  "source_comment_facts": [
+    "fold source comments call this a do-while loop and state its own iteration index is intended to range 0..len",
+    "non-ZST len macro comment states its pointer type invariant as aligned pointers with start <= end",
+    "next body is macro-generated for immutable Iter and IterMut; immutable specialization supplies no mutable reference token"
+  ],
+  "copied_source_hashes_already_present": {
+    "R428": [
+      "core/src/slice/iter/macros.rs",
+      "core/src/slice/iter.rs",
+      "core/src/ptr/non_null.rs",
+      "core/src/mem/mod.rs"
+    ],
+    "R390": [
+      "core/src/ops/function.rs"
+    ]
+  },
+  "excerpt": {
+    "path": "source-excerpts.txt",
+    "sha256": "7f71d79a81204feb0bd4daa2b55f3218efdb30e6c3ef952d3159a6985e3ac4d9"
+  },
+  "scope_limit": "The inventory does not show that this selected body was executed, does not prove aliasing or pointer safety, and does not determine any concrete element type layout or Rust-to-Lean correspondence."
+}

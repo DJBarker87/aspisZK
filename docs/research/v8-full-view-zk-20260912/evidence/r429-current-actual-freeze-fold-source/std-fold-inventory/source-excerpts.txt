@@ -1,0 +1,394 @@
+### core/src/slice/iter/macros.rs — if_zst/is_empty/len macros and Iterator::fold
+lines 1-61:
+    1 //! Macros used by iterators of slice.
+    2 
+    3 /// Convenience & performance macro for consuming the `end_or_len` field, by
+    4 /// giving a `(&mut) usize` or `(&mut) NonNull<T>` depending whether `T` is
+    5 /// or is not a ZST respectively.
+    6 ///
+    7 /// Internally, this reads the `end` through a pointer-to-`NonNull` so that
+    8 /// it'll get the appropriate non-null metadata in the backend without needing
+    9 /// to call `assume` manually.
+   10 macro_rules! if_zst {
+   11     (mut $this:ident, $len:ident => $zst_body:expr, $end:ident => $other_body:expr,) => {{
+   12         #![allow(unused_unsafe)] // we're sometimes used within an unsafe block
+   13 
+   14         if T::IS_ZST {
+   15             // SAFETY: for ZSTs, the pointer is storing a provenance-free length,
+   16             // so consuming and updating it as a `usize` is fine.
+   17             let $len = unsafe { &mut *(&raw mut $this.end_or_len).cast::<usize>() };
+   18             $zst_body
+   19         } else {
+   20             // SAFETY: for non-ZSTs, the type invariant ensures it cannot be null
+   21             let $end = unsafe { &mut *(&raw mut $this.end_or_len).cast::<NonNull<T>>() };
+   22             $other_body
+   23         }
+   24     }};
+   25     ($this:ident, $len:ident => $zst_body:expr, $end:ident => $other_body:expr,) => {{
+   26         #![allow(unused_unsafe)] // we're sometimes used within an unsafe block
+   27 
+   28         if T::IS_ZST {
+   29             let $len = $this.end_or_len.addr();
+   30             $zst_body
+   31         } else {
+   32             // SAFETY: for non-ZSTs, the type invariant ensures it cannot be null
+   33             let $end = unsafe { mem::transmute::<*const T, NonNull<T>>($this.end_or_len) };
+   34             $other_body
+   35         }
+   36     }};
+   37 }
+   38 
+   39 // Inlining is_empty and len makes a huge performance difference
+   40 macro_rules! is_empty {
+   41     ($self: ident) => {
+   42         if_zst!($self,
+   43             len => len == 0,
+   44             end => $self.ptr == end,
+   45         )
+   46     };
+   47 }
+   48 
+   49 macro_rules! len {
+   50     ($self: ident) => {{
+   51         if_zst!($self,
+   52             len => len,
+   53             end => {
+   54                 // To get rid of some bounds checks (see `position`), we use ptr_sub instead of
+   55                 // offset_from (Tested by `codegen/slice-position-bounds-check`.)
+   56                 // SAFETY: by the type invariant pointers are aligned and `start <= end`
+   57                 unsafe { end.offset_from_unsigned($self.ptr) }
+   58             },
+   59         )
+   60     }};
+   61 }
+
+lines 259-289:
+  259             fn fold<B, F>(self, init: B, mut f: F) -> B
+  260                 where
+  261                     F: FnMut(B, Self::Item) -> B,
+  262             {
+  263                 // this implementation consists of the following optimizations compared to the
+  264                 // default implementation:
+  265                 // - do-while loop, as is llvm's preferred loop shape,
+  266                 //   see https://releases.llvm.org/16.0.0/docs/LoopTerminology.html#more-canonical-loops
+  267                 // - bumps an index instead of a pointer since the latter case inhibits
+  268                 //   some optimizations, see #111603
+  269                 // - avoids Option wrapping/matching
+  270                 if is_empty!(self) {
+  271                     return init;
+  272                 }
+  273                 let mut acc = init;
+  274                 let mut i = 0;
+  275                 let len = len!(self);
+  276                 loop {
+  277                     // SAFETY: the loop iterates `i in 0..len`, which always is in bounds of
+  278                     // the slice allocation
+  279                     acc = f(acc, unsafe { & $( $mut_ )? *self.ptr.add(i).as_ptr() });
+  280                     // SAFETY: `i` can't overflow since it'll only reach usize::MAX if the
+  281                     // slice had that length, in which case we'll break out of the loop
+  282                     // after the increment
+  283                     i = unsafe { i.unchecked_add(1) };
+  284                     if i == len {
+  285                         break;
+  286                     }
+  287                 }
+  288                 acc
+  289             }
+
+### core/src/slice/iter.rs — immutable Iter representation, constructor, macro specialization
+lines 67-104:
+   67 pub struct Iter<'a, T: 'a> {
+   68     /// The pointer to the next element to return, or the past-the-end location
+   69     /// if the iterator is empty.
+   70     ///
+   71     /// This address will be used for all ZST elements, never changed.
+   72     ptr: NonNull<T>,
+   73     /// For non-ZSTs, the non-null pointer to the past-the-end element.
+   74     ///
+   75     /// For ZSTs, this is `ptr::without_provenance_mut(len)`.
+   76     end_or_len: *const T,
+   77     _marker: PhantomData<&'a T>,
+   78 }
+   79 
+   80 #[stable(feature = "core_impl_debug", since = "1.9.0")]
+   81 impl<T: fmt::Debug> fmt::Debug for Iter<'_, T> {
+   82     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+   83         f.debug_tuple("Iter").field(&self.as_slice()).finish()
+   84     }
+   85 }
+   86 
+   87 #[stable(feature = "rust1", since = "1.0.0")]
+   88 unsafe impl<T: Sync> Sync for Iter<'_, T> {}
+   89 #[stable(feature = "rust1", since = "1.0.0")]
+   90 unsafe impl<T: Sync> Send for Iter<'_, T> {}
+   91 
+   92 impl<'a, T> Iter<'a, T> {
+   93     #[inline]
+   94     pub(super) const fn new(slice: &'a [T]) -> Self {
+   95         let len = slice.len();
+   96         let ptr: NonNull<T> = NonNull::from_ref(slice).cast();
+   97         // SAFETY: Similar to `IterMut::new`.
+   98         unsafe {
+   99             let end_or_len =
+  100                 if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };
+  101 
+  102             Self { ptr, end_or_len, _marker: PhantomData }
+  103         }
+  104     }
+
+lines 140-140:
+  140 iterator! {struct Iter -> *const T, &'a T, const, {/* no mut */}, as_ref, each_ref, {
+
+### core/src/ptr/non_null.rs — NonNull::as_ptr, add, offset_from_unsigned, PartialEq
+lines 398-404:
+  398     pub const fn as_ptr(self) -> *mut T {
+  399         // This is a transmute for the same reasons as `NonZero::get`.
+  400 
+  401         // SAFETY: `NonNull` is `transparent` over a `*const T`, and `*const T`
+  402         // and `*mut T` have the same layout, so transitively we can transmute
+  403         // our `NonNull` to a `*mut T` directly.
+  404         unsafe { mem::transmute::<Self, *mut T>(self) }
+
+lines 648-657:
+  648     pub const unsafe fn add(self, count: usize) -> Self
+  649     where
+  650         T: Sized,
+  651     {
+  652         // SAFETY: the caller must uphold the safety contract for `offset`.
+  653         // Additionally safety contract of `offset` guarantees that the resulting pointer is
+  654         // pointing to an allocation, there can't be an allocation at null, thus it's safe to
+  655         // construct `NonNull`.
+  656         unsafe { transmute(intrinsics::offset(self.as_ptr(), count)) }
+  657     }
+
+lines 941-951:
+  941     #[inline]
+  942     #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces
+  943     #[stable(feature = "ptr_sub_ptr", since = "1.87.0")]
+  944     #[rustc_const_stable(feature = "const_ptr_sub_ptr", since = "1.87.0")]
+  945     pub const unsafe fn offset_from_unsigned(self, subtracted: NonNull<T>) -> usize
+  946     where
+  947         T: Sized,
+  948     {
+  949         // SAFETY: the caller must uphold the safety contract for `offset_from_unsigned`.
+  950         unsafe { self.as_ptr().offset_from_unsigned(subtracted.as_ptr()) }
+  951     }
+
+lines 1707-1716:
+ 1707 impl<T: PointeeSized> Eq for NonNull<T> {}
+ 1708 
+ 1709 #[stable(feature = "nonnull", since = "1.25.0")]
+ 1710 impl<T: PointeeSized> PartialEq for NonNull<T> {
+ 1711     #[inline]
+ 1712     #[allow(ambiguous_wide_pointer_comparisons)]
+ 1713     fn eq(&self, other: &Self) -> bool {
+ 1714         self.as_ptr() == other.as_ptr()
+ 1715     }
+ 1716 }
+
+### core/src/ptr/const_ptr.rs — raw pointer offset_from_unsigned implementation
+lines 701-730:
+  701     pub const unsafe fn offset_from_unsigned(self, origin: *const T) -> usize
+  702     where
+  703         T: Sized,
+  704     {
+  705         #[rustc_allow_const_fn_unstable(const_eval_select)]
+  706         const fn runtime_ptr_ge(this: *const (), origin: *const ()) -> bool {
+  707             const_eval_select!(
+  708                 @capture { this: *const (), origin: *const () } -> bool:
+  709                 if const {
+  710                     true
+  711                 } else {
+  712                     this >= origin
+  713                 }
+  714             )
+  715         }
+  716 
+  717         ub_checks::assert_unsafe_precondition!(
+  718             check_language_ub,
+  719             "ptr::offset_from_unsigned requires `self >= origin`",
+  720             (
+  721                 this: *const () = self as *const (),
+  722                 origin: *const () = origin as *const (),
+  723             ) => runtime_ptr_ge(this, origin)
+  724         );
+  725 
+  726         let pointee_size = size_of::<T>();
+  727         assert!(0 < pointee_size && pointee_size <= isize::MAX as usize);
+  728         // SAFETY: the caller must uphold the safety contract for `ptr_offset_from_unsigned`.
+  729         unsafe { intrinsics::ptr_offset_from_unsigned(self, origin) }
+  730     }
+
+### core/src/num/uint_macros.rs — unsigned integer unchecked_add macro implementation
+lines 935-973:
+  935         /// Unchecked integer addition. Computes `self + rhs`, assuming overflow
+  936         /// cannot occur.
+  937         ///
+  938         /// Calling `x.unchecked_add(y)` is semantically equivalent to calling
+  939         /// `x.`[`checked_add`]`(y).`[`unwrap_unchecked`]`()`.
+  940         ///
+  941         /// If you're just trying to avoid the panic in debug mode, then **do not**
+  942         /// use this.  Instead, you're looking for [`wrapping_add`].
+  943         ///
+  944         /// # Safety
+  945         ///
+  946         /// This results in undefined behavior when
+  947         #[doc = concat!("`self + rhs > ", stringify!($SelfT), "::MAX`,")]
+  948         /// i.e. when [`checked_add`] would return `None`.
+  949         ///
+  950         /// [`unwrap_unchecked`]: option/enum.Option.html#method.unwrap_unchecked
+  951         #[doc = concat!("[`checked_add`]: ", stringify!($SelfT), "::checked_add")]
+  952         #[doc = concat!("[`wrapping_add`]: ", stringify!($SelfT), "::wrapping_add")]
+  953         #[stable(feature = "unchecked_math", since = "1.79.0")]
+  954         #[rustc_const_stable(feature = "unchecked_math", since = "1.79.0")]
+  955         #[must_use = "this returns the result of the operation, \
+  956                       without modifying the original"]
+  957         #[inline(always)]
+  958         #[track_caller]
+  959         pub const unsafe fn unchecked_add(self, rhs: Self) -> Self {
+  960             assert_unsafe_precondition!(
+  961                 check_language_ub,
+  962                 concat!(stringify!($SelfT), "::unchecked_add cannot overflow"),
+  963                 (
+  964                     lhs: $SelfT = self,
+  965                     rhs: $SelfT = rhs,
+  966                 ) => !lhs.overflowing_add(rhs).1,
+  967             );
+  968 
+  969             // SAFETY: this is guaranteed to be safe by the caller.
+  970             unsafe {
+  971                 intrinsics::unchecked_add(self, rhs)
+  972             }
+  973         }
+
+### core/src/num/mod.rs — 64-bit usize uint_impl macro specialization
+lines 1445-1475:
+ 1445 #[doc(auto_cfg = false)]
+ 1446 #[cfg(target_pointer_width = "64")]
+ 1447 impl usize {
+ 1448     uint_impl! {
+ 1449         Self = usize,
+ 1450         ActualT = u64,
+ 1451         SignedT = isize,
+ 1452         BITS = 64,
+ 1453         BITS_MINUS_ONE = 63,
+ 1454         MAX = 18446744073709551615,
+ 1455         rot = 12,
+ 1456         rot_op = "0xaa00000000006e1",
+ 1457         rot_result = "0x6e10aa",
+ 1458         fsh_op = "0x2fe78e45983acd98",
+ 1459         fshl_result = "0x6e12fe",
+ 1460         fshr_result = "0x6e12fe78e45983ac",
+ 1461         clmul_lhs = "0x7890123456789012",
+ 1462         clmul_rhs = "0xdd358416f52ecd34",
+ 1463         clmul_result = "0xa6299579b980928",
+ 1464         swap_op = "0x1234567890123456",
+ 1465         swapped = "0x5634129078563412",
+ 1466         reversed = "0x6a2c48091e6a2c48",
+ 1467         le_bytes = "[0x56, 0x34, 0x12, 0x90, 0x78, 0x56, 0x34, 0x12]",
+ 1468         be_bytes = "[0x12, 0x34, 0x56, 0x78, 0x90, 0x12, 0x34, 0x56]",
+ 1469         to_xe_bytes_doc = usize_isize_to_xe_bytes_doc!(),
+ 1470         from_xe_bytes_doc = usize_isize_from_xe_bytes_doc!(),
+ 1471         bound_condition = " on 64-bit targets",
+ 1472     }
+ 1473     midpoint_impl! { usize, u128, unsigned }
+ 1474     carrying_carryless_mul_impl! { usize, u128 }
+ 1475 }
+
+### core/src/intrinsics/mod.rs — intrinsic declarations called by integer/pointer helpers
+lines 893-897:
+  893 #[must_use = "returns a new pointer rather than modifying its argument"]
+  894 #[rustc_intrinsic_const_stable_indirect]
+  895 #[rustc_nounwind]
+  896 #[rustc_intrinsic]
+  897 pub const unsafe fn offset<Ptr: bounds::BuiltinDeref, Delta>(dst: Ptr, offset: Delta) -> Ptr;
+
+lines 1988-1993:
+ 1988 #[rustc_intrinsic_const_stable_indirect]
+ 1989 #[rustc_nounwind]
+ 1990 #[rustc_intrinsic]
+ 1991 pub const unsafe fn unchecked_add<T: Copy>(x: T, y: T) -> T;
+ 1992 
+ 1993 /// Returns the result of an unchecked subtraction, resulting in
+
+lines 2275-2280:
+ 2275 #[rustc_nounwind]
+ 2276 #[rustc_intrinsic]
+ 2277 #[rustc_intrinsic_const_stable_indirect]
+ 2278 pub const unsafe fn ptr_offset_from_unsigned<T>(ptr: *const T, base: *const T) -> usize;
+ 2279 
+ 2280 /// See documentation of `<*const T>::guaranteed_eq` for details.
+
+### core/src/ops/function.rs — FnMut trait and call_mut declaration
+lines 160-167:
+  160 #[fundamental] // so that regex can rely that `&str: !FnMut`
+  161 #[must_use = "closures are lazy and do nothing unless called"]
+  162 #[rustc_const_unstable(feature = "const_trait_impl", issue = "143874")]
+  163 pub const trait FnMut<Args: Tuple>: FnOnce<Args> {
+  164     /// Performs the call operation.
+  165     #[unstable(feature = "fn_traits", issue = "29625")]
+  166     extern "rust-call" fn call_mut(&mut self, args: Args) -> Self::Output;
+  167 }
+
+### core/src/mem/mod.rs — SizedTypeProperties and IS_ZST
+lines 1373-1420:
+ 1373 #[doc(hidden)]
+ 1374 #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1375 pub trait SizedTypeProperties: Sized {
+ 1376     #[doc(hidden)]
+ 1377     #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1378     #[lang = "mem_size_const"]
+ 1379     const SIZE: usize = intrinsics::size_of::<Self>();
+ 1380 
+ 1381     #[doc(hidden)]
+ 1382     #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1383     #[lang = "mem_align_const"]
+ 1384     const ALIGN: usize = intrinsics::align_of::<Self>();
+ 1385 
+ 1386     #[doc(hidden)]
+ 1387     #[unstable(feature = "ptr_alignment_type", issue = "102070")]
+ 1388     const ALIGNMENT: Alignment = {
+ 1389         // This can't panic since type alignment is always a power of two.
+ 1390         Alignment::new(Self::ALIGN).unwrap()
+ 1391     };
+ 1392 
+ 1393     /// `true` if this type requires no storage.
+ 1394     /// `false` if its [size](size_of) is greater than zero.
+ 1395     ///
+ 1396     /// # Examples
+ 1397     ///
+ 1398     /// ```
+ 1399     /// #![feature(sized_type_properties)]
+ 1400     /// use core::mem::SizedTypeProperties;
+ 1401     ///
+ 1402     /// fn do_something_with<T>() {
+ 1403     ///     if T::IS_ZST {
+ 1404     ///         // ... special approach ...
+ 1405     ///     } else {
+ 1406     ///         // ... the normal thing ...
+ 1407     ///     }
+ 1408     /// }
+ 1409     ///
+ 1410     /// struct MyUnit;
+ 1411     /// assert!(MyUnit::IS_ZST);
+ 1412     ///
+ 1413     /// // For negative checks, consider using UFCS to emphasize the negation
+ 1414     /// assert!(!<i32>::IS_ZST);
+ 1415     /// // As it can sometimes hide in the type otherwise
+ 1416     /// assert!(!String::IS_ZST);
+ 1417     /// ```
+ 1418     #[doc(hidden)]
+ 1419     #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1420     const IS_ZST: bool = Self::SIZE == 0;
+
+lines 1442-1444:
+ 1442 #[doc(hidden)]
+ 1443 #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1444 impl<T> SizedTypeProperties for T {}
+
+### core/src/intrinsics/mod.rs — size_of intrinsic used by SizedTypeProperties::SIZE
+lines 2778-2781:
+ 2778 #[unstable(feature = "core_intrinsics", issue = "none")]
+ 2779 #[rustc_intrinsic_const_stable_indirect]
+ 2780 #[rustc_intrinsic]
+ 2781 pub const fn size_of<T>() -> usize;
