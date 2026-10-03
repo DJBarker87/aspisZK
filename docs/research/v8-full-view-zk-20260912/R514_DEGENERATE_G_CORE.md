@@ -1,0 +1,7 @@
+# R514 degenerate G-core and legal-direction boundary
+
+The exact-field source-shaped target proves that selected G directions preserve the high-coordinate repair column for arbitrary roots (including duplicates) and arbitrary `alpha` (including zero). Its legal-G boundary records the full direction tuple: legal transport equality, inactive balance, all 271 mixed coins, both OOD evaluations, tail and pivot constraints, selected query-root zeros, and first-fold zero. The prepared final-zero theorem has explicit nonzero-coordinate and denominator premises; division guards stay explicit and no `Domain` failure impossibility is asserted.
+
+Final target: `AspisV8R19/R514DegenerateGCore.lean`; source revision `f6b4dd9e03d257a0e1a71f90f2f30b887933813d`; source SHA-256 `ea29bd6cdaa9c6dfdf709e5f3c47c3615c33cf9007518024d028099a34f1b21d`. Final run `1791053728886568000` exited 0, wall 1.36 s, peak Lean-child RSS 2,303,920 KiB, swap 0. It used pinned Lean 4.32, `-j1 -M4500`, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. Seven complete axiom outputs use only standard axioms `[propext, Classical.choice, Quot.sound]` (selected degree/slot lemmas use `[propext, Quot.sound]`).
+
+This does not prove universal joint C1/H1/G target coverage or actual whole-prover Rust execution. Those are the first remaining obligations, followed by full-view simulation/probability accounting and soundness extraction. Exact source and all four attempt triples are in `evidence/r514-degenerate-g-core/`. Full end-to-end privacy and security are not claimed.

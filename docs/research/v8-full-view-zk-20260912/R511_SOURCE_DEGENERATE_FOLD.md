@@ -1,0 +1,7 @@
+# R511 source-shaped degenerate fold compatibility
+
+The compiled exact-field statements cover arbitrary `t : Fin 22 → F`, including duplicate roots, and arbitrary `alpha`, including zero. R511 proves that the source-shaped quotient factors into `finished` and `slotFactor`, that selected columns have zero first fold using the actual selected-slot nonzero fact, and that selected columns and their linear combinations extend to zero kernel evaluations on 256 blocks.
+
+Final target: `AspisV8R19/R511SourceDegenerateFold.lean`; source revision `f6b4dd9e03d257a0e1a71f90f2f30b887933813d`; source SHA-256 `71512d9f120422d367282ba5ed35d38107a38453d987fe574c88ef29ed698ee2`. Final run `1791053023435294000` exited 0, wall 1.16 s, peak Lean-child RSS 2,303,048 KiB, swap 0. It used the pinned Lean 4.32 cached workspace, `-j1 -M4500`, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. All eight complete axiom reports contain only `[propext, Classical.choice, Quot.sound]`.
+
+This does not prove raw-query zero, legal-mask coverage, actual Rust execution, full joint C1/H1/G compatibility, or privacy. R513 now proves the source-shaped root-zero subclaims without distinctness. The first remaining proposition is legal G-read preservation, followed by universal target coverage for joint C1/H1/G compatibility. Evidence and all five focused attempts are in `evidence/r511-source-degenerate-fold/`. Full privacy and security are not claimed.

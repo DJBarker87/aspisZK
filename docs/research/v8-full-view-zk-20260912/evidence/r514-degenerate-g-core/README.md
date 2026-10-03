@@ -1,0 +1,9 @@
+# R514 degenerate G-core and legal-direction boundary
+
+The final compiled target proves that, for arbitrary `t : Fin 22 → F` (including repeated roots), arbitrary `alpha` (including zero), and the stated field/pivot premises, the selected source-shaped G direction preserves the high-coordinate repair G-core. It proves the complete legal-G direction observation tuple in `source_legal_G_boundary`: transport equality, inactive balance, all 271 mixed coins, both OOD evaluations, tail/pivot constraints, selected query-root zeros, and first-fold zero. It also proves the prepared final-zero statement under its explicit circle, nonzero-coordinate, and four denominator premises. Division guards remain explicit; no claim that Domain failures are impossible is made.
+
+This is an exact-field source-shaped algebraic boundary only. It proves neither actual Rust execution nor universal joint C1/H1/G target coverage. The first remaining obligations are universal joint C1/H1/G target coverage and actual whole-prover Rust execution, followed by a full-view simulator/probability accounting and soundness extraction.
+
+Final source: `lean/AspisV8R19/R514DegenerateGCore.lean`; source revision `f6b4dd9e03d257a0e1a71f90f2f30b887933813d`; SHA-256 `ea29bd6cdaa9c6dfdf709e5f3c47c3615c33cf9007518024d028099a34f1b21d`. Final run `1791053728886568000` exited 0, wall 1.36 s, peak Lean-child RSS 2,303,920 KiB, swap 0; Lean `-j1 -M4500`, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. All seven complete axiom outputs contain only `[propext, Classical.choice, Quot.sound]`, with the degree/slot helper facts using `[propext, Quot.sound]`.
+
+All four attempts are preserved as source snapshot, full log, and receipt under `attempts/`: two initial failures, the first-five-theorem green, and this final green. The evidence does not promote any claim about native pointers or Rust execution.

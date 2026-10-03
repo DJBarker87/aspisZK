@@ -1,0 +1,7 @@
+# R513 source-shaped degenerate root-zero subclaims
+
+R513 extends R511's arbitrary-root fold result to root-zero statements for the exact source-shaped field definitions. With `[NeZero (2 : F)]` for the actual pivot argument, it proves `finished = unit - remainder`, evaluates `finished` to zero at every `t j`, factors the source quotient through R511's slot factor, and derives selected-column slot root-zero. It then proves selected source-circle evaluation zero, selected mask evaluation zero at a legal circle point/root, and zero across the four sign-related fiber points. Duplicate roots and `alpha = 0` remain allowed.
+
+Final target: `AspisV8R19/R513SourceDegenerateRoots.lean`; source revision `f6b4dd9e03d257a0e1a71f90f2f30b887933813d`; source SHA-256 `822cdd89d587039b49e421e725e26a020a01a8835a4369fdb25cb352f7719792`. Final run `1791053466621626000` exited 0, wall 1.23 s, peak Lean-child RSS 2,307,564 KiB, swap 0. Pinned Lean 4.32, flags `-j1 -M4500`, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. All seven complete axiom reports contain only `[propext, Classical.choice, Quot.sound]`.
+
+This is exact-field algebra only. It does not establish actual Rust execution, legal G-read preservation, universal joint C1/H1/G target coverage, or privacy. The first remaining proposition is legal G-read preservation, followed by universal target coverage for C1/H1/G. Exact source, every attempt, logs, receipts, and axioms are in `evidence/r513-source-degenerate-roots/`. Full privacy and security are not claimed.
