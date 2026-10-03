@@ -1,0 +1,26 @@
+{
+  "kind": "read-only pinned Rust core source inventory",
+  "campaign": "R431 actual slice construction pointer contracts",
+  "source_root": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src",
+  "toolchain": "nightly-2026-06-01-x86_64-unknown-linux-gnu",
+  "files": [
+    {"path": "source/core/ptr/non_null.rs", "upstream": "ptr/non_null.rs", "sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd", "ranges": ["607-656 add + safety contract", "882-950 offset_from_unsigned docs/body", "398-405 as_ptr", "1706-1716 Eq/PartialEq"]},
+    {"path": "source/core/ptr/const_ptr.rs", "upstream": "ptr/const_ptr.rs", "sha256": "31b329bf53c20da62d603a9361aaa5c748051b30b1372121d0524021db89e705", "ranges": ["331-385 offset wrapper", "527-620 offset_from safety contract/body", "640-730 offset_from_unsigned docs/body", "1605-1617 raw-pointer Eq"]},
+    {"path": "source/core/ptr/mod.rs", "upstream": "ptr/mod.rs", "sha256": "1c8d5c84054712cb2f349be93ea140ff1f8b61835d59b329755ccbdd3bdd9d78", "ranges": ["module source identity; contextual pointer APIs"]},
+    {"path": "source/core/ptr/docs/add.md", "upstream": "ptr/docs/add.md", "sha256": "3e51e10441c020263a930481e04896dd150ccec5f194a99a9f61b8e68fa2d40f", "ranges": ["1-32 full raw-pointer add safety documentation"]},
+    {"path": "source/core/ptr/docs/offset.md", "upstream": "ptr/docs/offset.md", "sha256": "f60b7f382b3e50646a8197044b74fc12eefa230f33775c3630f619cbe99f22a8", "ranges": ["full file, included by const_ptr.rs offset"]},
+    {"path": "source/core/slice/iter.rs", "upstream": "slice/iter.rs", "sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251", "ranges": ["67-104 Iter representation and inline new constructor", "140 Iter macro instantiation"]},
+    {"path": "source/core/slice/iter/macros.rs", "upstream": "slice/iter/macros.rs", "sha256": "0ac47d295999ba8847d0df93557292fbad65d256db0c6521c396798d2e37677d", "ranges": ["1-60 if_zst/is_empty/len macros", "152-192 Iterator::next body", "63-114 shared iterator macro/helpers"]},
+    {"path": "source/core/slice/mod.rs", "upstream": "slice/mod.rs", "sha256": "354992a6a3d69a0185eef9044a07ea5180e767bdb467aef55e69ee3d44317840", "ranges": ["1022-1043 slice::iter wrapper"]},
+    {"path": "source/core/intrinsics/mod.rs", "upstream": "intrinsics/mod.rs", "sha256": "03dda038cf27a27058e4e3476b5eee5605e712112c2093f8218d4708036947fe", "ranges": ["883-897 pointer offset intrinsic", "1983-1991 unchecked_add intrinsic", "2268-2278 pointer difference intrinsics"]},
+    {"path": "source/core/num/uint_macros.rs", "upstream": "num/uint_macros.rs", "sha256": "27b60f61c397a3e42930743c72fdbd01497f3d04bd5ab8cc65a53747fa236454", "ranges": ["940-973 integer unchecked_add wrapper"]}
+  ],
+  "mechanical_findings": {
+    "nonnull_add": "The unsafe NonNull::add wrapper transmutes the result of intrinsics::offset(self.as_ptr(), count); its docs inherit raw pointer add's in-allocation/no-overflow safety contract.",
+    "nonnull_offset_from_unsigned": "The unsafe NonNull wrapper passes self.as_ptr() and subtracted.as_ptr() to the raw-pointer method; docs require nonnegative distance, all raw offset_from preconditions, and disallow ZST (panic). Raw-pointer wrapper asserts runtime self >= origin, checks nonzero pointee size bounded by isize::MAX, then invokes intrinsics::ptr_offset_from_unsigned.",
+    "as_ptr_equality": "NonNull::as_ptr transmutes the transparent wrapper to *mut T. NonNull PartialEq compares these raw pointers; raw pointer PartialEq body compares `*self == *other`, with nearby source documentation describing pointer equality by address.",
+    "slice_iterator": "Slice::iter has #[inline] and calls Iter::new. Iter::new is #[inline], caches slice.len(), constructs NonNull from a shared slice reference, and sets end_or_len to provenance-free len for T::IS_ZST or to ptr.add(len) otherwise.",
+    "iterator_next": "The macro-generated Iterator::next branch uses T::IS_ZST; returns None on zero length; ZST uses unchecked_sub(1) on length; non-ZST compares current pointer to end via NonNull equality, returns None if equal, otherwise advances with add(1); then returns the current pointee as a reference."
+  },
+  "limitations": ["No compiler/build or source execution was run.", "Unsafe contracts were recorded, not proven discharged for a particular source execution.", "No pointer/aliasing semantics or source-to-LLBC/Aeneas/Lean correspondence claim is made."]
+}

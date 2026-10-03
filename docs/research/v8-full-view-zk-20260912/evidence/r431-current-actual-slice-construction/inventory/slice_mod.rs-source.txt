@@ -1,0 +1,23 @@
+1021: 
+1022:     /// Returns an iterator over the slice.
+1023:     ///
+1024:     /// The iterator yields all items from start to end.
+1025:     ///
+1026:     /// # Examples
+1027:     ///
+1028:     /// ```
+1029:     /// let x = &[1, 2, 4];
+1030:     /// let mut iterator = x.iter();
+1031:     ///
+1032:     /// assert_eq!(iterator.next(), Some(&1));
+1033:     /// assert_eq!(iterator.next(), Some(&2));
+1034:     /// assert_eq!(iterator.next(), Some(&4));
+1035:     /// assert_eq!(iterator.next(), None);
+1036:     /// ```
+1037:     #[stable(feature = "rust1", since = "1.0.0")]
+1038:     #[rustc_const_unstable(feature = "const_slice_make_iter", issue = "137737")]
+1039:     #[inline]
+1040:     #[rustc_diagnostic_item = "slice_iter"]
+1041:     pub const fn iter(&self) -> Iter<'_, T> {
+1042:         Iter::new(self)
+1043:     }

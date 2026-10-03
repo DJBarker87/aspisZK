@@ -1,0 +1,115 @@
+{
+  "task": "read-only index of existing formal pointer/valid-slice/memory contracts relevant to actual Fun70",
+  "worktree": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922",
+  "scope": "tracked Lean and documentation plus already committed R430 copied Aeneas library sources; scratch excluded; no compilation",
+  "contracts": [
+    {
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R193CountedSliceFoldControl.lean",
+      "sha256": "bc4294e3049bc04bc68cb644212d0c0e3a431e16f20d4e0fd2ebdd3b64c36f21",
+      "items": [
+        "countedBody",
+        "countedFold",
+        "countedFold_list"
+      ],
+      "locations": {
+        "countedBody": "11-22",
+        "countedFold": "24-31",
+        "countedFold_list": "33-40"
+      },
+      "assumptions": [
+        "hload supplies ok(xs[i]) for every i < xs.length",
+        "FnMut callback abstraction"
+      ],
+      "boundary": "Nat-indexed control-flow/list-fold result only; file explicitly excludes pointer-read and source-usize correspondence"
+    },
+    {
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R183DefaultFoldExecution.lean",
+      "sha256": "aa5e1ad4988fb2bd7e5391d88216d61a7b4892e29ca32172940f0f5d64e4cb70",
+      "items": [
+        "foldMutList",
+        "drop_split",
+        "default_fold_slice"
+      ],
+      "locations": {
+        "foldMutList": "13-19",
+        "drop_split": "21-31",
+        "default_fold_slice": "33-40"
+      },
+      "assumptions": [
+        "builtin slice iterator/default fold model"
+      ],
+      "boundary": "default fold over list-backed iter.slice.val.drop iter.i; not selected pointer-based slice-fold override"
+    },
+    {
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R195CountedSliceFoldArithmetic.lean",
+      "sha256": "a6d981971af09a884c447bec037fcb17429d5dadb7a37fa4035e78b29f5bf205",
+      "items": [
+        "successor_bound",
+        "checked_successor"
+      ],
+      "locations": {
+        "successor_bound": "13-19",
+        "checked_successor": "21-49"
+      },
+      "assumptions": [
+        "i.val < len.val",
+        "Usize bound proofs"
+      ],
+      "boundary": "checked UScalar.add successor only; explicitly not source unchecked_add or pointer/index correspondence"
+    },
+    {
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R199FiniteLoopMap.lean",
+      "items": [
+        "loop_map"
+      ],
+      "locations": {
+        "loop_map": "14-31"
+      },
+      "assumptions": [
+        "explicit step equality hstep",
+        "strictly decreasing rank hdecr"
+      ],
+      "boundary": "generic abstract loop simulation; no concrete memory contract",
+      "sha256": "d02e1df03a7ebfca7a461c4cc774d25ecef48138990e16acfb6534afeabcbc86"
+    },
+    {
+      "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R430ReadonlyConstantGraph.lean",
+      "sha256": "9bb531624461a6ba3d6605a870f779d5cc603ab670551dd44c3755c718dc7335",
+      "items": [
+        "targetLayoutSize",
+        "functionBody",
+        "globalInitializer",
+        "eval",
+        "sizeof_qm31",
+        "size_global",
+        "is_zst_global",
+        "size_read_context",
+        "is_zst_read_context"
+      ],
+      "locations": {
+        "model disclaimer": "3-7",
+        "selected layout": "24-39",
+        "evaluator": "46-58",
+        "results": "60-97"
+      },
+      "boundary": "captured constant graph only; explicitly not heap/pointer semantics or whole fold theorem"
+    }
+  ],
+  "aeneas_library_evidence": {
+    "evidence_dir": "docs/research/v8-full-view-zk-20260912/evidence/r430-current-readonly-constant-graph/pointer-api-inventory",
+    "inventory_sha256": "d587af3aef92d4a9b214a807d2a2b2e90cadab6d617e8160a4827f9fb9e05c43",
+    "files": {
+      "source/Aeneas/Std/RawPtr.lean": "752bb5fdf1b79c10262a1c7cc03d780b51e47ef0c473ac259c57408af6c82f47",
+      "source/Aeneas/Std/Slice.lean": "e3297bf6d38564e500ab798776624239134ae4d03eb704132a1d17eb6dff2d03",
+      "source/Aeneas/Std/Core/Ptr.lean": "e17c4bbe0e6844253edc14eea24ae5a91d46319c96ac0088092d5b962f5ec2b0"
+    },
+    "relevant_lines": {
+      "RawPtr wrapper/cast": "RawPtr.lean:8-30",
+      "Slice indexed lookup/spec": "Slice.lean:115-137",
+      "Slice unchecked lookup placeholder": "Slice.lean:362-369",
+      "Core.Ptr layout/allocation signatures": "Core/Ptr.lean:78-100"
+    },
+    "boundary": "Aeneas model/API source, not Rust pointer adequacy; RawPtr arithmetic absent; unchecked operations fail/placeholder"
+  },
+  "conclusion_of_inventory": "No existing tracked theorem found that establishes allocation identity/provenance, NonNull/raw-pointer validity, pointer stride/offset validity, or actual Fun70 loads equal list-backed Slice lookup. The closest reusable theorem countedFold_list requires exactly such a successful-load premise."
+}

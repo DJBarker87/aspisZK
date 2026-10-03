@@ -1,0 +1,31 @@
+259:             fn fold<B, F>(self, init: B, mut f: F) -> B
+260:                 where
+261:                     F: FnMut(B, Self::Item) -> B,
+262:             {
+263:                 // this implementation consists of the following optimizations compared to the
+264:                 // default implementation:
+265:                 // - do-while loop, as is llvm's preferred loop shape,
+266:                 //   see https://releases.llvm.org/16.0.0/docs/LoopTerminology.html#more-canonical-loops
+267:                 // - bumps an index instead of a pointer since the latter case inhibits
+268:                 //   some optimizations, see #111603
+269:                 // - avoids Option wrapping/matching
+270:                 if is_empty!(self) {
+271:                     return init;
+272:                 }
+273:                 let mut acc = init;
+274:                 let mut i = 0;
+275:                 let len = len!(self);
+276:                 loop {
+277:                     // SAFETY: the loop iterates `i in 0..len`, which always is in bounds of
+278:                     // the slice allocation
+279:                     acc = f(acc, unsafe { & $( $mut_ )? *self.ptr.add(i).as_ptr() });
+280:                     // SAFETY: `i` can't overflow since it'll only reach usize::MAX if the
+281:                     // slice had that length, in which case we'll break out of the loop
+282:                     // after the increment
+283:                     i = unsafe { i.unchecked_add(1) };
+284:                     if i == len {
+285:                         break;
+286:                     }
+287:                 }
+288:                 acc
+289:             }

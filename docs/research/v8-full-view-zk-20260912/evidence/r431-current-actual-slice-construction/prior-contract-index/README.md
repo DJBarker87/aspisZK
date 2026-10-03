@@ -1,0 +1,25 @@
+# Prior formal contracts relevant to the selected slice fold
+
+Read-only index of tracked formal files and the committed R430 pointer-model source inventory. No module was compiled, and no source was changed. This is an index of reusable statements and their assumptions, not a claim that actual `Fun70` pointer execution is verified.
+
+## Closest reusable loop contracts
+
+- `AspisV8R19.R193CountedSliceFoldControl.countedFold_list` in `docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R193CountedSliceFoldControl.lean:33-40` equates a Nat-indexed counted loop with `R183DefaultFoldExecution.foldMutList`. Its hypotheses include `hload : ∀ i (hi : i < xs.length), load i = ok (xs.get ⟨i, hi⟩)`. The file header at lines 3-5 explicitly limits this result to control flow and says pointer reads and source `usize` operations need a separate correspondence argument. Thus the exact missing bridge for using it with the raw slice fold is the pointer-backed `load`/length/empty-test correspondence (plus the actual source loop/callback binding).
+- `AspisV8R19.R183DefaultFoldExecution.foldMutList` at `.../R183DefaultFoldExecution.lean:13-19` is a recursive `List` fold carrying the `FnMut` state. `default_fold_slice` at lines 33-40 and 41-98 connects the builtin slice-iterator *default* fold to `iter.slice.val.drop iter.i`; it does not establish the specialized pointer-based `core::slice::iter::fold` body selected for Fun70.
+- `AspisV8R19.R195CountedSliceFoldArithmetic.successor_bound` and `checked_successor` at `.../R195CountedSliceFoldArithmetic.lean:13-26` show a bounded checked `usize` increment succeeds and has the expected value. Their source file header (lines 3-6) expressly says this does not identify checked addition with source `unchecked_add`, nor establish pointer/index semantics.
+- `AspisV8R19.R199FiniteLoopMap.loop_map` at `.../R199FiniteLoopMap.lean:14-31` is a generic loop simulation theorem. It requires an explicit per-step equality `hstep` and decreasing rank `hdecr`; it supplies no concrete pointer, load, allocation, or memory invariant.
+
+## Existing data and memory abstractions
+
+- The committed R430 module `AspisV8R19.R430ReadonlyConstantGraph` (`.../R430ReadonlyConstantGraph.lean:3-7, 12-58`) models only a finite constant-expression fragment for the captured `IS_ZST`/`SIZE` graph. The comment explicitly says it is not Rust heap/pointer semantics or a whole-fold theorem. Its `targetLayoutSize` recognizes only captured type id 2 and returns 16 (`:24-26`); the evaluator is not a general layout API.
+- The committed pointer-model inventory at `docs/research/v8-full-view-zk-20260912/evidence/r430-current-readonly-constant-graph/pointer-api-inventory/README.md:5-11` records the configured Aeneas Lean library shape: `RawPtr` is a one-field wrapper (“We don't really use raw pointers for now”); scalar cast returns `Result.fail .undef`; `Core.Ptr` has alignment/layout and `GlobalAlloc.alloc/dealloc` signatures but no pointer arithmetic; Slice unchecked pointer indexing returns `.fail .undef`, and generic `Slice.get_unchecked` is `sorry`. This inventory is a library-source observation, not a soundness judgment.
+- That same inventory records an OCaml Aeneas source search for `NonNull`, `RawPtr`, `size_of`, `offset_from`, and pointer-offset identifiers with no matches in the inspected pinned source; it also notes translation processes `to_extract` functions through opaque/transparent passes rather than exposing a per-function selector. The complete copied model files and their hashes are listed in `pointer-api-inventory/SHA256SUMS`.
+- The copied `Aeneas.Std.Slice` model has list-backed element observations. In its saved source, `Slice.index_usize` returns bounds error on a missing list element and `Slice.index_usize_spec` (`source/Aeneas/Std/Slice.lean:115-137`) proves in-bounds lookup equals `v.val[i.val]`; this is a contract for that list model. `Slice.get_unchecked` (`:362-369`) is an explicit `sorry`, so it cannot serve as the actual raw pointer load contract.
+
+## Source-binding boundary
+
+The committed R193/R195 docs (`R193_COUNTED_SLICE_FOLD_CONTROL.md:5-7`, `R195_COUNTED_SLICE_FOLD_ARITHMETIC.md:5-7`) identify the pointer reads, length/empty tests, and unchecked increment as remaining correspondence obligations. The later R430 pointer inventory and current R429/R430 evidence likewise do not provide a Lean theorem connecting actual `NonNull::add`, pointer dereference, or `offset_from_unsigned` to the list-backed `Slice` model. Consequently the reusable formal boundary is conditional loop control over a supplied successful `load` function, not pointer validity/provenance/allocation or actual slice construction. No existing contract located here discharges allocation identity, pointer provenance, non-null validity, element-layout/stride, offset validity, or equivalence of actual loads to list indexing for Fun70.
+
+## Pins
+
+Tracked formal module hashes and copied Aeneas source hashes are in `index.json`; they were read directly from the current worktree. The working tree had unrelated pre-existing untracked items; this task did not modify them.

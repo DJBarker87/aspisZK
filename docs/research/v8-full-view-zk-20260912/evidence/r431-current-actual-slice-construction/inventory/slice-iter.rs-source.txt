@@ -1,0 +1,38 @@
+67: pub struct Iter<'a, T: 'a> {
+68:     /// The pointer to the next element to return, or the past-the-end location
+69:     /// if the iterator is empty.
+70:     ///
+71:     /// This address will be used for all ZST elements, never changed.
+72:     ptr: NonNull<T>,
+73:     /// For non-ZSTs, the non-null pointer to the past-the-end element.
+74:     ///
+75:     /// For ZSTs, this is `ptr::without_provenance_mut(len)`.
+76:     end_or_len: *const T,
+77:     _marker: PhantomData<&'a T>,
+78: }
+79: 
+80: #[stable(feature = "core_impl_debug", since = "1.9.0")]
+81: impl<T: fmt::Debug> fmt::Debug for Iter<'_, T> {
+82:     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+83:         f.debug_tuple("Iter").field(&self.as_slice()).finish()
+84:     }
+85: }
+86: 
+87: #[stable(feature = "rust1", since = "1.0.0")]
+88: unsafe impl<T: Sync> Sync for Iter<'_, T> {}
+89: #[stable(feature = "rust1", since = "1.0.0")]
+90: unsafe impl<T: Sync> Send for Iter<'_, T> {}
+91: 
+92: impl<'a, T> Iter<'a, T> {
+93:     #[inline]
+94:     pub(super) const fn new(slice: &'a [T]) -> Self {
+95:         let len = slice.len();
+96:         let ptr: NonNull<T> = NonNull::from_ref(slice).cast();
+97:         // SAFETY: Similar to `IterMut::new`.
+98:         unsafe {
+99:             let end_or_len =
+100:                 if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };
+101: 
+102:             Self { ptr, end_or_len, _marker: PhantomData }
+103:         }
+104:     }

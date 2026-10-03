@@ -1,0 +1,61 @@
+1: //! Macros used by iterators of slice.
+2: 
+3: /// Convenience & performance macro for consuming the `end_or_len` field, by
+4: /// giving a `(&mut) usize` or `(&mut) NonNull<T>` depending whether `T` is
+5: /// or is not a ZST respectively.
+6: ///
+7: /// Internally, this reads the `end` through a pointer-to-`NonNull` so that
+8: /// it'll get the appropriate non-null metadata in the backend without needing
+9: /// to call `assume` manually.
+10: macro_rules! if_zst {
+11:     (mut $this:ident, $len:ident => $zst_body:expr, $end:ident => $other_body:expr,) => {{
+12:         #![allow(unused_unsafe)] // we're sometimes used within an unsafe block
+13: 
+14:         if T::IS_ZST {
+15:             // SAFETY: for ZSTs, the pointer is storing a provenance-free length,
+16:             // so consuming and updating it as a `usize` is fine.
+17:             let $len = unsafe { &mut *(&raw mut $this.end_or_len).cast::<usize>() };
+18:             $zst_body
+19:         } else {
+20:             // SAFETY: for non-ZSTs, the type invariant ensures it cannot be null
+21:             let $end = unsafe { &mut *(&raw mut $this.end_or_len).cast::<NonNull<T>>() };
+22:             $other_body
+23:         }
+24:     }};
+25:     ($this:ident, $len:ident => $zst_body:expr, $end:ident => $other_body:expr,) => {{
+26:         #![allow(unused_unsafe)] // we're sometimes used within an unsafe block
+27: 
+28:         if T::IS_ZST {
+29:             let $len = $this.end_or_len.addr();
+30:             $zst_body
+31:         } else {
+32:             // SAFETY: for non-ZSTs, the type invariant ensures it cannot be null
+33:             let $end = unsafe { mem::transmute::<*const T, NonNull<T>>($this.end_or_len) };
+34:             $other_body
+35:         }
+36:     }};
+37: }
+38: 
+39: // Inlining is_empty and len makes a huge performance difference
+40: macro_rules! is_empty {
+41:     ($self: ident) => {
+42:         if_zst!($self,
+43:             len => len == 0,
+44:             end => $self.ptr == end,
+45:         )
+46:     };
+47: }
+48: 
+49: macro_rules! len {
+50:     ($self: ident) => {{
+51:         if_zst!($self,
+52:             len => len,
+53:             end => {
+54:                 // To get rid of some bounds checks (see `position`), we use ptr_sub instead of
+55:                 // offset_from (Tested by `codegen/slice-position-bounds-check`.)
+56:                 // SAFETY: by the type invariant pointers are aligned and `start <= end`
+57:                 unsafe { end.offset_from_unsigned($self.ptr) }
+58:             },
+59:         )
+60:     }};
+61: }
