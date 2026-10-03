@@ -1,0 +1,352 @@
+### Main.ml option table
+    76	  let spec_ls =
+    77	    [
+    78	      ( "-version",
+    79	        Arg.Unit
+    80	          (fun () ->
+    81	            let v =
+    82	              match GitVersion.commit with
+    83	              | Some h -> h
+    84	              | None -> "unknown"
+    85	            in
+    86	            print_endline ("aeneas " ^ v);
+    87	            exit 0),
+    88	        " Print the version (git commit) and exit" );
+    89	      ( "-print-error-emitters",
+    90	        Arg.Set print_error_emitters,
+    91	        " Whenever reporting an error, print the span of the source code of \
+    92	         Aeneas which emitted the error" );
+    93	      ( "-borrow-check",
+    94	        Arg.Set borrow_check,
+    95	        " Only borrow-check the program and do not generate any translation" );
+    96	      ( "-backend",
+    97	        Arg.Symbol (backend_names, set_backend),
+    98	        " Specify the target backend (" ^ String.concat ", " backend_names ^ ")"
+    99	      );
+   100	      ( "-namespace",
+   101	        Arg.String set_namespace,
+   102	        " Set the namespace of the definitions in the pure model" );
+   103	      ("-dest", Arg.Set_string dest_dir, " Specify the output directory");
+   104	      ( "-subdir",
+   105	        Arg.String set_subdir,
+   106	        " Extract the files in a sub-folder; this option has an impact on the \
+   107	         import paths of the generated files" );
+   108	      ( "-test-units",
+   109	        Arg.Set test_unit_functions,
+   110	        " Test the unit functions with the concrete (i.e., not symbolic) \
+   111	         interpreter" );
+   112	      ( "-decreases-clauses",
+   113	        Arg.Set extract_decreases_clauses,
+   114	        " Use decreases clauses/termination measures for the recursive \
+   115	         definitions" );
+   116	      ( "-use-fuel",
+   117	        Arg.Set use_fuel,
+   118	        " Use a fuel parameter to control divergence" );
+   119	      ( "-no-template-clauses",
+   120	        Arg.Clear extract_template_decreases_clauses,
+   121	        " Do not generate templates for the required decreases \
+   122	         clauses/termination measures, in a dedicated file, if you also put \
+   123	         the option -decreases-clauses" );
+   124	      ( "-split-files",
+   125	        Arg.Set split_files,
+   126	        " Split the definitions between different files for types, functions, \
+   127	         etc." );
+   128	      ( "-checks",
+   129	        Arg.Set sanity_checks,
+   130	        " Activate extensive sanity checks (warning: causes a ~100 times slow \
+   131	         down)." );
+   132	      ( "-gen-lib-entry",
+   133	        Arg.Set generate_lib_entry_point,
+   134	        " Add an entry point file to the generated library (only valid if the \
+   135	         crate is split between different files)" );
+   136	      ( "-lean-default-lakefile",
+   137	        Arg.Clear lean_gen_lakefile,
+   138	        " Generate a default lakefile.lean (Lean only)" );
+   139	      ( "-emit-json",
+   140	        Arg.Set emit_json,
+   141	        " Emit a translation.json file alongside the Lean files (Lean only)" );
+   142	      ("-print-llbc", Arg.Set print_llbc, " Print the imported LLBC");
+   143	      ( "-abort-on-error",
+   144	        Arg.Set fail_hard,
+   145	        " Abort on the first encountered error" );
+   146	      ( "-warnings-as-errors",
+   147	        Arg.Set warnings_as_errors,
+   148	        " Treat warnings as errors" );
+   149	      ( "-tuple-nested-proj",
+   150	        Arg.Set use_nested_tuple_projectors,
+   151	        " Use nested projectors for tuples (e.g., (0, 1, 2).snd.fst instead of \
+   152	         (0, 1, 2).1)." );
+   153	      ( "-print-unknown-externals",
+   154	        Arg.Set print_unknown_externals,
+   155	        " Print all the external definitions which are not listed in the \
+   156	         builtin functions" );
+   157	      ( "-log",
+   158	        Arg.String (add_activated_loggers EL.Trace),
+   159	        " Activate trace log for a given logger designated by its name. It is \
+   160	         possible to specifiy a list of names if they are separated by commas \
+   161	         without spaces; for instance: '-log Interp,SymbolicToPure'. The \
+   162	         existing loggers are: {"
+   163	        ^ String.concat ", " (Collections.StringMap.keys !loggers)
+   164	        ^ "}" );
+   165	      ( "-log-debug",
+   166	        Arg.String (add_activated_loggers EL.Debug),
+   167	        " Same as '-log' but sets the level to the more verbose 'debug' rather \
+   168	         than 'trace'" );
+   169	      ( "-log-error",
+   170	        Arg.String (add_activated_loggers EL.Error),
+   171	        " Activate error log for a given logger designated by its name. It is \
+   172	         possible to specifiy a list of names if they are separated by commas \
+   173	         without spaces; for instance: '-log Interp,SymbolicToPure'. The \
+   174	         existing loggers are: {"
+   175	        ^ String.concat ", " (Collections.StringMap.keys !loggers)
+   176	        ^ "}" );
+   177	      ( "-mark-ids",
+   178	        Arg.String add_marked_ids,
+   179	        " For developers: mark some identifiers to throw an exception if we \
+   180	         generate them; this is useful to insert breakpoints when debugging by \
+   181	         using the log. For example, one can mark the symbolic value ids 1 and \
+   182	         2 with '-mark-ids s1,s2', or '-mark-ids s@1, s@2. The supported \
+   183	         prefixes are: 's' (symbolic value id), 'b' (borrow id), 'a' \
+   184	         (abstraction id), 'r' (region id), 'f' (pure free variable id)." );
+   185	      ("-sequential", Arg.Clear parallel, " Execute sequentially");
+   186	      ( "-no-progress-bar",
+   187	        Arg.Clear progress_bar,
+   188	        " Do not display a progress bar" );
+   189	      ( "-max-error-spans",
+   190	        Arg.Int (fun x -> max_error_spans := x),
+   191	        " Maximum number of local uses of an external definition which \
+   192	         triggered an error that we print (if < 0 we print them all)" );
+   193	      ( "-strict-joins",
+   194	        Arg.Clear recover_joins,
+   195	        " Report an error whenever joining contexts fails rather than \
+   196	         duplicating the code after the branching statement" );
+   197	      ( "-color",
+   198	        Arg.Set log_with_colors,
+   199	        " Use colors when printing log messages" );
+   200	      ( "-borrow-check-globals",
+   201	        Arg.Set borrow_check_globals,
+   202	        " Borrow-check globals - an over-simplification in the LLBC provided \
+   203	         by Charon for the global initialization functions currently prevents \
+   204	         us from borrow-checking globals which contain static references" );
+   205	      ( "-print-error-diagnostics",
+   206	        Arg.Set print_error_diagnostics,
+   207	        " Print additional diagnostics about the kind of errors encountered" );
+   208	      ( "-impl-namespace",
+   209	        Arg.Set method_names_in_impl_namespace,
+   210	        " For Lean: always prefix method names with \"impl\" to avoid \
+   211	         collisions with field projectors. Example: the `len` method in `impl \
+   212	         Struct { fn len(&self) -> usize { ... } }` would be named \
+   213	         `Struct.impl.len`." );
+   214	      ( "-all-computable",
+   215	        Arg.Set all_computable,
+   216	        " For Lean: do not insert `noncomputable section` at the top of the \
+   217	         extracted files if there are external definitions not covered by the \
+   218	         standard library." );
+   219	      ( "-loops-to-rec",
+   220	        Arg.Set loops_to_recursive_functions,
+   221	        " Always extract loops to recursive functions." );
+   222	      ( "-loops-no-rec",
+   223	        Arg.Set no_recursive_loops,
+   224	        " Never attempt to extract loops to recursive functions." );
+   225	      ( "-max-heartbeats",
+   226	        Arg.Int
+   227	          (fun x ->
+   228	            set_max_heartbeats := true;
+   229	            max_heartbeats := x),
+   230	        "For Lean: set the value of the `set_option maxHeartBeats ...` command \
+   231	         at the top of the generated files" );
+   232	      ( "-max-recdepth",
+   233	        Arg.Int
+   234	          (fun x ->
+   235	            set_max_recdepth := true;
+   236	            max_recdepth := x),
+   237	        "For Lean: set the value of the `set_option maxRecDepth ...` command \
+   238	         at the top of the generated files" );
+   239	      ( "-eval-drops",
+   240	        Arg.Clear drop_as_no_op,
+   241	        "Evaluate the drops. By default we do not borrow-check them by \
+   242	         treating them as no-ops." );
+   243	      ( "-diagnose-translation",
+   244	        Arg.Set diagnose_translation,
+   245	        " Measure the time it takes to translate every function and print the \
+   246	         results sorted from longest to shortest" );
+   247	      ( "-diagnose-micro-passes",
+   248	        Arg.Set diagnose_micro_passes,
+   249	        " Measure the time it takes to apply the micro-passes on every \
+   250	         function and print them from longest to shortest" );
+   251	      ( "-diagnose-detailed",
+   252	        Arg.Set diagnose_detailed,
+   253	        " In combination with -diagnose-micro-passes, compute per-function, \
+   254	         per -micro-pass time measurements" );
+   255	      ( "-diagnose-limit",
+   256	        Arg.Int (fun x -> diagnose_limit := x),
+   257	        " Upper bound on the number of lines printed for the -diagnose \
+   258	         options. If positive, print at most this many lines. If negative, \
+   259	         print everything" );
+   260	    ]
+   261	  in
+   262	
+   263	  let spec = Arg.align spec_ls in
+   264	  let filenames = ref [] in
+   265	  let add_filename f = filenames := f :: !filenames in
+### Translate.ml extracted declarations and all-function loop
+   390	                "(could not compute the name pattern due to a different error)"
+   391	            in
+   392	            [%warn_opt_span] error.span
+   393	              ("Could not translate the function signature of '" ^ name
+   394	             ^ " because of previous error\nName pattern: '" ^ name_pattern
+   395	             ^ "'" ^ "\nDefinition span: "
+   396	              ^ Errors.raw_span_to_string fdef.item_meta.span
+   397	              ^ compute_local_uses_error_message trans_ctx (IdFun fdef.def_id));
+   398	            None)
+   399	        (FunDeclId.Map.values trans_ctx.fun_ctx.to_extract)
+   400	    in
+   401	
+   402	    let method_sigs =
+   403	      let translate_method_sig (trait_decl : LlbcAst.trait_decl)
+   404	          (method_id : TraitMethodId.id)
+   405	          (bound_method : LlbcAst.trait_method Types.binder) =
+   406	        let sg =
+   407	          SymbolicToPureTypes.translate_flat_trait_method_sigs trans_ctx
+   408	            trait_decl method_id bound_method
+   409	        in
+   410	        (FunOrMethodId.Method (trait_decl.def_id, method_id), sg)
+   411	      in
+   412	      let translate_trait_methods (trait_decl : LlbcAst.trait_decl) =
+   413	        let methods =
+   414	          TraitDeclId.Map.find trait_decl.def_id
+   415	            trans_ctx.trait_methods_to_extract
+   416	        in
+   417	        List.map
+   418	          (fun (method_id, bound_method) ->
+   419	            translate_method_sig trait_decl method_id bound_method)
+   420	          (TraitMethodId.Map.to_list methods)
+   421	      in
+   422	      let entries =
+   423	        List.concat
+   424	          (List.map translate_trait_methods
+   425	             (TraitDeclId.Map.values trans_ctx.trait_decls_to_extract))
+   426	      in
+   427	      FunOrMethodId.Map.of_list entries
+   428	    in
+   429	
+   430	    FunOrMethodId.Map.of_list
+   444	  (* Translate all the functions.
+   445	
+   446	     Remark: [translate_function_to_pure] catches errors of type [CFailure]
+   447	     to allow the compilation to make progress.
+   448	
+   449	     We do it in two steps: the opaque functions first, then the transparent functions.
+   450	  *)
+   451	  let pure_translations =
+   452	    let funs = FunDeclId.Map.values trans_ctx.fun_ctx.to_extract in
+   453	    (* Split between opaque and transparent *)
+   454	    let opaque, transparent =
+   455	      List.partition
+   456	        (fun (d : fun_decl) -> not (LlbcAstUtils.body_is_translatable d.body))
+   457	        funs
+   458	    in
+   459	
+   460	    (* Reorder the transparent functions to have the biggest first:
+   461	       because the execution is parallel, we want to start processing the bigger
+   462	       functions as early as possible.
+   463	
+   464	       TODO: this doesn't seem to have much effect.
+   465	    *)
+   466	    let transparent =
+   467	      if !Config.parallel then
+   468	        let funs =
+   469	          List.map
+   470	            (fun f -> (f, LlbcAstUtils.compute_fun_decl_size f))
+   471	            transparent
+   472	        in
+   473	        List.map fst (List.sort (fun (_, n) (_, n') -> n' - n) funs)
+   474	      else transparent
+   475	    in
+   476	
+   477	    (* Assign size-based ranks (rank 1 = biggest):
+   478	       transparent functions are already sorted by decreasing size *)
+   479	    let n_transparent = List.length transparent in
+   480	    let transparent_ranked = List.mapi (fun i f -> (i + 1, f)) transparent in
+   481	    let opaque_ranked =
+   482	      List.mapi (fun i f -> (n_transparent + i + 1, f)) opaque
+   483	    in
+   484	
+   485	    let diagnose_transl_data : (string * float * int * int) list ref = ref [] in
+   486	    let diagnose_transl_mutex = Mutex.create () in
+   487	
+   488	    (* Process a function *)
+   489	    let process (kind : string) (funs : (int * fun_decl) list) =
+   490	      let num_decls = List.length funs in
+   491	      ProgressBar.with_parallel_reporter num_decls
+   492	        ("Translated " ^ kind ^ " functions: ")
+   493	        (fun report ->
+   494	          parallel_filter_map
+   495	            (fun (rank, x) ->
+   496	              let start =
+   497	                if !Config.diagnose_translation then Unix.gettimeofday ()
+   498	                else 0.0
+   499	              in
+   500	              let f =
+   501	                translate_function_to_pure trans_ctx marked_ids type_decls_map
+   502	                  global_decls_map fun_sigs x
+   503	              in
+   504	              if !Config.diagnose_translation then begin
+   505	                let elapsed = Unix.gettimeofday () -. start in
+   506	                let fname = name_to_string trans_ctx x.item_meta.name in
+   507	                let size = LlbcAstUtils.compute_fun_decl_size x in
+   508	                Mutex.lock diagnose_transl_mutex;
+   509	                diagnose_transl_data :=
+   510	                  (fname, elapsed, size, rank) :: !diagnose_transl_data;
+   511	                Mutex.unlock diagnose_transl_mutex
+   512	              end;
+   513	              report 1;
+   514	              f)
+   515	            funs)
+### Translate.ml translation config categories
+   620	      trait_impls;
+   621	    } )
+   622	
+   623	type gen_ctx = ExtractBase.extraction_ctx
+   624	
+   625	type gen_config = {
+   626	  extract_types : bool;
+   627	  extract_decreases_clauses : bool;
+   628	  extract_template_decreases_clauses : bool;
+   629	  extract_fun_decls : bool;
+   630	  extract_trait_decls : bool;
+   631	  extract_trait_impls : bool;
+   632	  extract_transparent : bool;
+   633	      (** If [true], extract the transparent declarations, otherwise ignore. *)
+   634	  extract_opaque : bool;
+   635	      (** If [true], extract the opaque declarations, otherwise ignore.
+   636	
+   637	          For now, this controls only the opaque *functions*, not the opaque
+   638	          globals or types. TODO: update this. This is not trivial if we want to
+   639	          extract the opaque types in an opaque module, because some non-opaque
+   640	          types may refer to opaque types and vice-versa. *)
+   641	  extract_globals : bool;
+   642	      (** If [true], generate a definition/declaration for top-level (global)
+   643	          declarations *)
+   644	  interface : bool;
+   645	      (** [true] if we generate an interface file, [false] otherwise. For now,
+   646	          this only impacts whether we use [val] or [assume val] for the opaque
+   647	          definitions. In the future, we might want to extract all the
+   648	          declarations in an interface file, together with an implementation
+   649	          file if needed. *)
+   650	}
+   651	
+   652	(** Returns the pair: (has opaque type decls, has opaque fun decls).
+   653	
+   654	    [filter_builtin]: if [true], do not consider as opaque the external
+   655	    definitions that we will map to definitions from the standard library. *)
+   656	let crate_has_opaque_non_builtin_decls (ctx : gen_ctx) (filter_builtin : bool) :
+   657	    bool * bool =
+   658	  let types, funs =
+   659	    LlbcAstUtils.crate_get_opaque_non_builtin_decls ctx.crate filter_builtin
+   660	      ctx.trans_ctx.type_ctx.to_extract ctx.trans_ctx.fun_ctx.to_extract
+   661	  in
+   662	  [%ldebug
+   663	    "- opaque types:\n"
+   664	    ^ String.concat "\n\n"
+   665	        (List.map

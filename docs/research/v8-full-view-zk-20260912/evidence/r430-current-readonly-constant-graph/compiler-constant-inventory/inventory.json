@@ -1,0 +1,29 @@
+{
+  "kind": "read-only pinned Rustc CTFE and Charon layout source inventory",
+  "campaign": "R430 actual-freeze-fold compiler constant boundary",
+  "rustc_source_root": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/rustc-src/rust/compiler",
+  "rustc_toolchain_label": "nightly-2026-06-01-x86_64-unknown-linux-gnu",
+  "rustc_source_revision": "not available from this source-tree checkout; source-file hashes recorded",
+  "charon_source_root": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src",
+  "charon_source_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "files": [
+    {"path": "source/rustc_const_eval/interpret/intrinsics.rs", "upstream": "rustc_const_eval/src/interpret/intrinsics.rs", "sha256": "e591232b9ef4fd7ccc9ab76ee0986d74e4116b1c596e2d5d8499ab74ddf867d0", "ranges": ["212-220"]},
+    {"path": "source/rustc_middle/src/mir/interpret/value.rs", "upstream": "rustc_middle/src/mir/interpret/value.rs", "sha256": "291ca0e9d8b67966fea25cb9d6df13e82b27a942ac59a8be7caf91b3fd8d89c3", "ranges": ["168-171"]},
+    {"path": "source/rustc_const_eval/interpret/operator.rs", "upstream": "rustc_const_eval/src/interpret/operator.rs", "sha256": "58793a0bdbf94eae50fbb835b2f10abafe99d0bfda0f52d2155eb636276465b3", "ranges": ["84-100", "160-172", "230-245"]},
+    {"path": "source/rustc_mir_build/builder/expr/as_constant.rs", "upstream": "rustc_mir_build/src/builder/expr/as_constant.rs", "sha256": "d0d7399fd2bec26a02f518d51eb9ec3fd00744b4cc076a05e6550dc90ca798be", "ranges": ["44-48", "72-85"]},
+    {"path": "source/rustc_const_eval/interpret/operand.rs", "upstream": "rustc_const_eval/src/interpret/operand.rs", "sha256": "28b5a1754018bd9a63b00ed82d34ff7d4d04ff1c0d4680aeb15d94fee7c811cd", "ranges": ["828-863"]},
+    {"path": "source/rustc_const_eval/interpret/eval_context.rs", "upstream": "rustc_const_eval/src/interpret/eval_context.rs", "sha256": "532857b75d4f12500a3c1b6d8cf5c266c2b82f5ea420edb5a100f9f9ff4b5980", "ranges": ["602-629"]},
+    {"path": "source/rustc_middle/src/mir/consts.rs", "upstream": "rustc_middle/src/mir/consts.rs", "sha256": "247d2997c33c27451eae56782416689c0143f82283d27a4734a5fab5442c824a", "ranges": ["312-341"]},
+    {"path": "source/rustc_const_eval/const_eval/eval_queries.rs", "upstream": "rustc_const_eval/src/const_eval/eval_queries.rs", "sha256": "140a1578e00b05bf26fba984f8d078c5fce9463762a40bd890c1a1497d42bed7", "ranges": ["367-429"]},
+    {"path": "source/charon/translate/translate_types.rs", "upstream": "charon/src/bin/charon-driver/translate/translate_types.rs", "sha256": "8bc6952842edd41687cd5d7464cc1871c33e8cfcd88214ff6d7c46979c24b6cc", "ranges": ["498-584", "585-719"]},
+    {"path": "source/charon/translate/translate_items.rs", "upstream": "charon/src/bin/charon-driver/translate/translate_items.rs", "sha256": "38e9012aacf67d4b2d46ed4e8927d81a25de3cf036f611cb48b9ff0dd8121ea5", "ranges": ["448-466"]}
+  ],
+  "mechanical_findings": {
+    "ctfe_size_of": "The intrinsic reads type argument 0, calls layout_of, rejects unsized layout by span_bug, takes layout.size.bytes(), and writes Scalar::from_target_usize.",
+    "target_usize": "Scalar::from_target_usize uses cx.data_layout().pointer_offset() as the scalar width.",
+    "integer_equality": "binary_int_op obtains scalar integers, checks compatible type layouts (except shifts), converts to unsigned values after signed-order special cases, and the Eq arm compares l == r to return a bool.",
+    "named_const_path": "THIR ExprKind::NamedConst becomes Const::Ty for type consts or MIR Const::Unevaluated otherwise; Operand::Constant evaluation calls eval_mir_constant; mir::Const::eval calls tcx.const_eval_resolve for Const::Unevaluated; the const-eval query provider evaluates the MIR body in the CTFE interpreter.",
+    "charon_type_layout": "translate_layout instantiates and normalizes the item type, constructs a typing-env query input, queries tcx.layout_of, and maps sized size/alignment plus variant/discriminator details into the restricted Layout. translate_items attaches that layout under the target triple on TypeDecl."
+  },
+  "limitations": ["No compiler execution, build, extraction, test, or proof was run.", "No Runtime-pointer or aliasing claim is made.", "No correspondence between Rustc CTFE, Charon, Aeneas, LLBC, or Lean is established."]
+}

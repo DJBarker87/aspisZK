@@ -1,0 +1,66 @@
+   1 /- Arrays/Slices -/
+   2 import Aeneas.Data.List
+   3 import Aeneas.Std.Array.Core
+   4 import Aeneas.Std.Range
+   5 import Aeneas.Std.Core.Ops
+   6 import Aeneas.Std.RawPtr
+   7 import Aeneas.Tactic.Simp.SimpScalar.SimpScalar
+   8 import Aeneas.Std.SliceDef
+   9 
+  10 namespace Aeneas.Std
+  11 
+  12 open Result Error core.ops.range WP
+  13 
+  14 local macro_rules
+  15 | `(tactic| get_elem_tactic) => `(tactic| grind)
+--- Usize checked/unchecked access ---
+ 536 }
+ 537 
+ 538 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get"]
+ 539 abbrev core.slice.index.Usize.get
+ 540   {T : Type} (i : Usize) (s : Slice T) : Result (Option T) :=
+ 541   ok s[i]?
+ 542 
+ 543 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get_mut"]
+ 544 abbrev core.slice.index.Usize.get_mut
+ 545   {T : Type} (i : Usize) (s : Slice T) : Result (Option T × (Option T → Slice T)) :=
+ 546   ok (s[i]?, s.set_opt i)
+ 547 
+ 548 @[rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get_unchecked"]
+ 549 def core.slice.index.Usize.get_unchecked
+ 550   {T : Type} : Usize → ConstRawPtr (Slice T) → Result (ConstRawPtr T) :=
+ 551   -- We don't have a model for now
+ 552   fun _ _ => fail .undef
+ 553 
+ 554 @[rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get_unchecked_mut"]
+ 555 def core.slice.index.Usize.get_unchecked_mut
+ 556   {T : Type} : Usize → MutRawPtr (Slice T) → Result (MutRawPtr T) :=
+ 557   -- We don't have a model for now
+ 558   fun _ _ => fail .undef
+ 559 
+ 560 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::index"]
+ 561 abbrev core.slice.index.Usize.index {T : Type} (i : Usize) (s : Slice T) : Result T :=
+ 562   Slice.index_usize s i
+ 563 
+ 564 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::index_mut"]
+ 565 abbrev core.slice.index.Usize.index_mut {T : Type}
+--- generic unchecked slice method ---
+ 339 
+ 340 @[rust_trait "core::slice::index::SliceIndex" (parentClauses := ["sealedInst"])]
+ 341 structure core.slice.index.SliceIndex (Self T Output : Type) where
+ 342   sealedInst : core.slice.index.private_slice_index.Sealed Self
+ 343   get : Self → T → Result (Option Output)
+ 344   get_mut : Self → T → Result (Option Output × (Option Output → T))
+ 345   get_unchecked : Self → ConstRawPtr T → Result (ConstRawPtr Output)
+ 346   get_unchecked_mut : Self → MutRawPtr T → Result (MutRawPtr Output)
+ 347   index : Self → T → Result Output
+ 348   index_mut : Self → T → Result (Output × (Output → T))
+ 349 
+ 350 @[rust_fun "core::slice::index::{core::ops::index::Index<[@T], @I, @O>}::index"]
+ 351 def core.slice.index.Slice.index
+ 352   {T I Output : Type} (inst : core.slice.index.SliceIndex I (Slice T) Output)
+ 353   (slice : Slice T) (i : I) : Result Output :=
+ 354   inst.index i slice
+ 355 
+ 356 @[rust_fun "core::slice::{[@T]}::get"]
+ 357 def core.slice.Slice.get

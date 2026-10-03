@@ -1,0 +1,24 @@
+{
+  "kind": "read-only pinned Aeneas source inventory",
+  "campaign": "R430 actual-freeze-fold size/global primitive boundary",
+  "aeneas_source_root": "/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/src",
+  "aeneas_source_revision": "not independently recorded; no revision inferred",
+  "charon_source_root": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src",
+  "files": [
+    {"path": "source/InterpExpressions.ml", "upstream": "interp/InterpExpressions.ml", "sha256": "a686db5af43c4463b357e066330a21f01287bafe0cc2c13394b4b2b4f458f190", "ranges": ["1489-1510"]},
+    {"path": "source/InterpStatements.ml", "upstream": "interp/InterpStatements.ml", "sha256": "061c0b53ee02aa2b19ab2998ad84a7a5e3f3add06f66deaec839f8dff7343982", "ranges": ["799-842", "912-969", "1021-1053"]},
+    {"path": "source/InterpUtils.ml", "upstream": "interp/InterpUtils.ml", "sha256": "8b885a725def3c7a923cc634f05a7b91bd25b4334b62b2ba6a1d09faf0d8a65a", "ranges": ["438-450"]},
+    {"path": "source/InterpPaths.ml", "upstream": "interp/InterpPaths.ml", "sha256": "d72a6ec2a45bc738fab3e5c666e552dc0f28c031ddcba5a9f46a05415c3cf10e", "ranges": ["270-294"]},
+    {"path": "source/Expressions.ml", "upstream": "llbc/Expressions.ml", "sha256": "e5e4b95cf207c5f075e79d195f7329f91306a192fe6d1edf0551b9412c5083aa", "ranges": ["1-1; includes Charon.Expressions"]},
+    {"path": "source/ExpressionsUtils.ml", "upstream": "llbc/ExpressionsUtils.ml", "sha256": "41e75cc675b2cb93f3774652a2021aaede4753454fc2e94d50097aaea466f2b3", "ranges": ["5-25"]},
+    {"path": "source/FunsAnalysis.ml", "upstream": "llbc/FunsAnalysis.ml", "sha256": "bb46649cb8466a7bf028df8f0baa6af1367e900d6cff0ad4157cab30085fe580", "ranges": ["148-197"]},
+    {"path": "source/PrePasses.ml", "upstream": "PrePasses.ml", "sha256": "579f332212ad75b386b088ef7835783f7cb84a835b1acb96031d49847fc53a17", "ranges": ["2068-2075", "2835-2916"]},
+    {"path": "charon-source/ast/expressions.rs", "upstream": "charon/ast/expressions.rs", "sha256": "7339c83c73fc0d3399d1da03aaae7f6190a9bc6bbfc8d6c6657e4a0690b6e3b5", "ranges": ["197-204", "773-798"]}
+  ],
+  "mechanical_findings": {
+    "nullary_size_of_ast": "Charon AST defines NullOp::SizeOf and Rvalue::NullaryOp(NullOp, Ty).",
+    "size_of_interpreter_match": "No direct SizeOf or size_of evaluator match was found in the listed Aeneas interpreter/prepass files; eval_rvalue_not_global has a fallback Unsupported operation case.",
+    "global_read_routes": ["rvalue_accesses_global detects PlaceGlobal", "eval_statement_raw dispatches global assignments to eval_rvalue_global", "eval_rvalue_global accepts shared RvRef PlaceGlobal", "eval_global_ref ConcreteMode raises Unimplemented; SymbolicMode synthesizes a global evaluation via a fresh symbolic value and dummy shared loan", "decompose_global_accesses lowers global place references to a temporary shared borrow and dereference", "FunsAnalysis checks built-in globals then follows initializer function for failure reachability"]
+  },
+  "limitations": ["No R429-specific LLBC operation was mapped in this inventory.", "No Rust source correspondence, Aeneas execution result, Lean theorem, or semantic claim was produced.", "No compilation, extraction, or test was run."]
+}
