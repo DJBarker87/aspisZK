@@ -1,0 +1,7 @@
+# R525 finite-family OOD zeros and pair preservation
+
+For the exact determinant chord coefficients `a = x0*y1-y0*x1`, `b = y0-y1`, `c = x1-x0`, the weighted selected family mask has zero first-OOD opening under the first circle premise and zero second-OOD opening under the second circle premise. Both statements follow from the existing per-mask line-zero identities and weighted source-mask evaluator linearity. The final `family_add_preserves_ood_pair` theorem shows that one shared correction—same weights and same supplied G table—preserves both published OOD openings simultaneously.
+
+There are no root distinctness, challenge nonzero, or injectivity assumptions. Final target `AspisV8R19/R525FamilyOODZero.lean`; source revision `20175e063c189d1239b95ebfe99b05c2c67d24b8`; SHA-256 `a3d703074519e3c5cfbce6620a288231aa579c5f7cdcd93011ea8531f812e8a9`. Final run `1791055791949671000`: exit 0, wall 0.98 s, peak Lean-child RSS 2,296,820 KiB, swap 0; pinned Lean 4.32, `-j1 -M4500`, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. All five complete axiom outputs contain only `[propext, Classical.choice, Quot.sound]`; no warnings.
+
+All four attempt triples are preserved under `attempts/`, including the earlier recursion-depth failure and the root's Prod.ext failure. This proves only exact-field OOD pair preservation for the selected finite family. It establishes no universal joint C1/H1/G coverage, whole-source execution, privacy, or soundness. Those remain open.
