@@ -1,0 +1,124 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791038106070315000.service; invocation ID: 290e1076f8a743019c6630406e2cad51
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:90:4: error: Tactic `rfl` failed: No `[refl]` lemma registered for relation
+  frame
+
+Hint: Add the `[refl]` attribute to reflexivity lemmas for `frame` to use this tactic
+
+case h_2
+state : State
+dst src : ℕ
+x✝¹ : Option Value
+x✝ : ∀ (ptr : WordPointer), state.locals src = some (Value.rawMut ptr) → False
+⊢ frame state state
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:97:4: error: Tactic `rfl` failed: No `[refl]` lemma registered for relation
+  frame
+
+Hint: Add the `[refl]` attribute to reflexivity lemmas for `frame` to use this tactic
+
+case h_2
+state : State
+dst src : ℕ
+x✝¹ : Option Value
+x✝ : ∀ (reference : SharedRef), state.locals src = some (Value.shared reference) → False
+⊢ frame state state
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:108:18: error: unsolved goals
+case some.some
+state : State
+ptr : WordPointer
+id offset : ℕ
+ho : ptr.origin = some (id, offset)
+cell : BitVec 128
+hr : readPacked state ptr = some cell
+⊢ ∃ a, readPacked state ptr = some a ∧ decodeQM31 a = decodeQM31 cell
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:129:2: error: 'change' tactic failed, pattern
+  R432PointerPrimitive.read state.heap (decodePointer ?m.76) = ?m.78
+is not definitionally equal to target
+  (do
+      let __x ← some (id, index * 16)
+      if (state.alive __x.1 && state.readable __x.1) = true then
+          R432PointerPrimitive.read state.heap
+            (decodePointer { address := BitVec.ofNat 64 (a.base + index * 16), origin := some (id, index * 16) })
+        else none) =
+    some a.cells[index]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:127:40: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [readPacked, backedPointer, O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵ ̵halive, hread, Bool.true_and, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:127:58: warning: This simp argument is unused:
+  halive
+
+Hint: Omit it from the simp argument list.
+  simp only [readPacked, backedPointer, Option.bind_some, ha̵l̵i̵v̵e̵,̵ ̵h̵read,
+  ̵  ̵ ̵ ̵Bool.true_and, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:127:66: warning: This simp argument is unused:
+  hread
+
+Hint: Omit it from the simp argument list.
+  simp only [readPacked, backedPointer, Option.bind_some, halive, h̵r̵e̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵Bool.true_and, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:128:4: warning: This simp argument is unused:
+  Bool.true_and
+
+Hint: Omit it from the simp argument list.
+  simp only [readPacked, backedPointer, Option.bind_some, halive, hread, B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵a̵n̵d̵,̵ ̵if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean:128:19: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [readPacked, backedPointer, Option.bind_some, halive, hread,
+  ̵  ̵ ̵ ̵Bool.true_and,̵ ̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R483SharedReadPlace.readPacked' depends on axioms: [propext]
+'AspisV8R19.R483SharedReadPlace.acquireShared' depends on axioms: [propext]
+'AspisV8R19.R483SharedReadPlace.copyShared' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R483SharedReadPlace.refSharedDeref' depends on axioms: [propext]
+'AspisV8R19.R483SharedReadPlace.copySharedDeref' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R483SharedReadPlace.put_frame' depends on axioms: [propext]
+'AspisV8R19.R483SharedReadPlace.refSharedDeref_frame' depends on axioms: [propext, sorryAx]
+'AspisV8R19.R483SharedReadPlace.copySharedDeref_frame' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R483SharedReadPlace.copy_acquired' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R483SharedReadPlace.readPacked_backed' depends on axioms: [propext, sorryAx]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R483SharedReadPlace.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R483SharedReadPlace.lean"
+	User time (seconds): 1.26
+	System time (seconds): 0.38
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.63
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3720952
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86538
+	Voluntary context switches: 1645
+	Involuntary context switches: 80
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.664s
+CPU time consumed: 1.682s
+Memory peak: 328.0K
+Memory swap peak: 0B
