@@ -1,0 +1,13 @@
+# R442–R445: finite rejection alphabet and initial block law
+
+R442 identifies a `Fin (p + 1)` alphabet with `Option (Fin p)`, where the extra value is the rejection sentinel. Its `firstAccepted_map` lemma shows that scanning a finite option tape for the first accepted value commutes with applying any permutation of the accepted alphabet.
+
+R443 proves exact masses for a finite uniform tape of `n` option values. Its `run` returns the first `some a`, or `none` if every entry is the rejection sentinel. For `p > 0`, the failure mass is `(1 / (p + 1))^n`; each `a : Fin p` has value mass `(1 - (1 / (p + 1))^n) / p`.
+
+R445 applies the alphabet and tape results to the formal initial-block projection, using the [R421 masked-block bijection result](R421_CURRENT_MASKED31_BLOCK.md). For `p = 2^31 - 1` and eight masked words, `initial_block_failure` gives `(1 / 2^31)^8`, and each accepted word has mass `(1 - (1 / 2^31)^8) / (2^31 - 1)`. This is the distribution of the model’s finite initial-block tape, not a statement that the Rust sampler consumes independent shared-oracle draws.
+
+The sources are [R442RejectionAlphabet.lean](lean/AspisV8R19/R442RejectionAlphabet.lean), [R443BoundedRejectionMass.lean](lean/AspisV8R19/R443BoundedRejectionMass.lean), and [R445InitialBlockRejectionLaw.lean](lean/AspisV8R19/R445InitialBlockRejectionLaw.lean). Each compiled at its matching `AspisV8R19/...` target on source revision `b393ed66b04d179ef0156ef92331bd3dd968b012`. R442 exited 0 in 1.27 s at 3,231,916 KiB RSS; R443 exited 0 in 1.59 s at 3,246,584 KiB RSS; R445 exited 0 in 1.31 s at 3,234,832 KiB RSS. Swap was 0 for all three. Each run used `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, `TasksMax=128`, and Lean flags `-j1 -M4500`. RSS is the GNU-time Lean-child measurement, separate from the systemd wrapper peak.
+
+The complete reports are preserved in the evidence bundle. R442 `alphabetEquiv` uses `[propext, Quot.sound]` and `firstAccepted_map` uses `[Quot.sound]`. All three R443 theorems use `[propext, Classical.choice, Quot.sound]`. All four R445 theorems use `[propext, Classical.choice, Quot.sound]`. The evidence includes the earlier failed drafts; any `sorryAx` reports in failed R443 drafts are rejected history only.
+
+The proved scope is finite uniformization and the exact initial-block rejection/value law. The first remaining proposition is equality between this initial-block scan and the existing source-shaped limb runner, including its consumed-word count and cursor state. The probability coupling for refills, subsequent limbs and blocks, and the actual shared oracle remains open. Earlier source-execution correspondences are retained. This milestone makes no full sampler-distribution, challenge-freshness, or security claim.
