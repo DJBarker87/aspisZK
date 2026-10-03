@@ -1,0 +1,33 @@
+{
+  "llbc_path": "docs/research/v8-full-view-zk-20260912/evidence/r440-current-monomorphic-callback-binding/actual-source-preflight/aeneas-plan/fun29/R440GammaExecutionSelection.llbc",
+  "llbc_sha256": "96135e91c71f93dcd3aeec7b693eb737e7cf05027456ca973242cf2586088c48",
+  "function_id": 0,
+  "name": [
+    {
+      "Ident": [
+        "aspis_v8_performance_host",
+        0
+      ]
+    },
+    {
+      "Ident": [
+        "freeze",
+        0
+      ]
+    }
+  ],
+  "source_text": "fn freeze(mut t:Transcript,w:&Wire<'_>,ordinary:&[K],claim:K)->Result<Prefix,Error>{\n    let s=t.challenge_secure_circle_point().map_err(|_|Error::Sampler)?;\n    let mut record=vec![0];record.extend(bytes(&w.v[359..388]));t.absorb(V8_COMPONENT_OOD_VECTOR,&record);\n    let mut second=None;for _ in 0..3 {let p=t.challenge_secure_circle_point().map_err(|_|Error::Sampler)?;if p!=s {second=Some(p);break;}}\n    let z=second.ok_or(Error::Sampler)?;let mut record=vec![1];record.extend(bytes(&w.v[388..417]));t.absorb(V8_COMPONENT_OOD_VECTOR,&record);\n    t.absorb(label::M31_PAYMENT_BATCH_POW_NONCE,&w.nonces[..8]);let gamma=sample(&mut t,true)?;\n    t.absorb(label::V6_INACTIVE_CLAIM,&bytes(&w.v[358..359]));let _kappa=sample(&mut t,true)?;\n    let batch=|v:&[K]|{let mut g=K::ONE;v.iter().fold(K::ZERO,|a,v|{let r=a.add(g.mul(*v));g=g.mul(gamma);r})};\n    let use_x=s.x!=z.x;let h0=if use_x{s.x}else{s.y};let h1=if use_x{z.x}else{z.y};\n    let slope=batch(&w.v[359..388]).sub(batch(&w.v[388..417])).mul(h0.sub(h1).try_inv().ok_or(Error::Domain)?);\n    let iv=[batch(&w.v[359..388]).sub(slope.mul(h0)),slope];\n    let abc=[s.x.mul(z.y).sub(s.y.mul(z.x)),s.y.sub(z.y),z.x.sub(s.x)];\n    // Freeze the public ordinary relation AFTER gamma/chord and BEFORE tau.\n    // No caller mutation/response callback is possible inside this boundary.\n    // Dense public-input binding costs a 16,384-byte hash input, not wire bytes.\n    t.absorb(label::PROFILE,&bytes(ordinary));t.absorb(label::CLAIM,&bytes(&[claim]));\n    t.absorb(label::PROFILE,b\"aspis-v8-image-gate-v1\");let tau=sample(&mut t,true)?;\n    Ok(Prefix{t,points:[s,z],gamma,abc,iv,use_x,tau})\n}",
+  "source_sha256": "4f8f80e0847ec004a56fc693f6096308090de5f3cbed35722dba330afaa9820f",
+  "primitive": "alloc.vec.Vec.index (core.slice.index.SliceIndexRangeUsizeSlice QM31)",
+  "ranges": [
+    [
+      359,
+      388
+    ],
+    [
+      388,
+      417
+    ]
+  ],
+  "boundary": "Association of frozen source text and the existing Aeneas range primitive. This is not certified JSON decoding, native caller memory validity, or a whole-freeze execution proof."
+}
