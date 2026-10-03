@@ -1,0 +1,116 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791039746354800000.service; invocation ID: cc776949c119456d8273d2cd48c29e2f
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:15:47: error: unsolved goals
+mask : BitVec 32
+⊢ mask >>> 31 = 0#32 ↔ mask.toNat < 2147483648
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:16:18: warning: This simp argument is unused:
+  ← BitVec.toNat_eq
+
+Hint: Omit it from the simp argument list.
+  simp [accepted, ←̵ ̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵e̵q̵,̵ ̵BitVec.toNat_ushiftRight, Nat.shiftRight_eq_div_pow, Nat.div_eq_zero_iff]
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:16:37: warning: This simp argument is unused:
+  BitVec.toNat_ushiftRight
+
+Hint: Omit it from the simp argument list.
+  simp [accepted, ← BitVec.toNat_eq, B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵u̵s̵h̵i̵f̵t̵R̵i̵g̵h̵t̵,̵Nat.shiftRight_eq_div_pow, Nat.div_eq_zero_iff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:17:4: warning: This simp argument is unused:
+  Nat.shiftRight_eq_div_pow
+
+Hint: Omit it from the simp argument list.
+  simp [accepted, ← BitVec.toNat_eq, BitVec.toNat_ushiftRight, N̵a̵t̵.̵s̵h̵i̵f̵t̵R̵i̵g̵h̵t̵_̵e̵q̵_̵d̵i̵v̵_̵p̵o̵w̵,̵ ̵Nat.div_eq_zero_iff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:17:31: warning: This simp argument is unused:
+  Nat.div_eq_zero_iff
+
+Hint: Omit it from the simp argument list.
+  simp [accepted, ← BitVec.toNat_eq, BitVec.toNat_ushiftRight, N̵a̵t̵.̵s̵h̵i̵f̵t̵R̵i̵g̵h̵t̵_̵e̵q̵_̵d̵i̵v̵_̵p̵o̵w̵,̵ ̵N̵a̵t̵.̵d̵i̵v̵_̵e̵q̵_̵z̵e̵r̵o̵_̵i̵f̵f̵]̵N̲a̲t̲.̲s̲h̲i̲f̲t̲R̲i̲g̲h̲t̲_̲e̲q̲_̲d̲i̲v̲_̲p̲o̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:23:39: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.25 ||| ?m.26 = 0#?m.24
+in the target expression
+  x >>> 31 ||| y >>> 31 = 0 ↔ x >>> 31 = 0 ∧ y >>> 31 = 0
+
+mask word x y : BitVec 32
+⊢ x >>> 31 ||| y >>> 31 = 0 ↔ x >>> 31 = 0 ∧ y >>> 31 = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:33:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (word.toNat + 1) % 4294967296
+in the target expression
+  (word.toNat + BitVec.toNat 1) % 4294967296 < 2147483648
+
+case mp
+mask word : BitVec 32
+hor : ∀ (x y : BitVec 32), accepted (x ||| y) ↔ accepted x ∧ accepted y
+hm : accepted mask
+hw : word.toNat < 2147483648
+hmod : (word.toNat + 1) % 4294967296 = word.toNat + 1
+hs : (word.toNat + BitVec.toNat 1) % 4294967296 < 2147483648
+⊢ word.toNat < 2147483647
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:39:29: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 4294967295
+  0 ≤ a ≤ 2147483646
+  a + b ≥ 4294967296
+where
+ a := ↑word.toNat
+ b := ↑(BitVec.toNat 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:40:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 4294967295
+  0 ≤ a ≤ 2147483646
+  a + b ≥ 2147483648
+where
+ a := ↑word.toNat
+ b := ↑(BitVec.toNat 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean:25:31: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [BitVec.toNat_add, BitVec.t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵,̵ ̵B̵i̵t̵V̵e̵c̵.̵lt_def, canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R486ParserCanonicalMask.step' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R486ParserCanonicalMask.accepted_iff' depends on axioms: [propext, sorryAx]
+'AspisV8R19.R486ParserCanonicalMask.step_accepted' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R486ParserCanonicalMask.accumulated_accepted' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R486ParserCanonicalMask.complete_mask' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R486ParserCanonicalMask.rejects_prime' does not depend on any axioms
+'AspisV8R19.R486ParserCanonicalMask.rejects_high_bit' does not depend on any axioms
+'AspisV8R19.R486ParserCanonicalMask.rejects_max' does not depend on any axioms
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R486ParserCanonicalMask.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R486ParserCanonicalMask.lean"
+	User time (seconds): 1.13
+	System time (seconds): 0.36
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.48
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3709080
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86606
+	Voluntary context switches: 700
+	Involuntary context switches: 81
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.514s
+CPU time consumed: 1.524s
+Memory peak: 288.0K
+Memory swap peak: 0B
