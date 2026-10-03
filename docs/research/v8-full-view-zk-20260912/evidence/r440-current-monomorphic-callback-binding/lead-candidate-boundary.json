@@ -1,0 +1,26 @@
+{
+  "status": "diagnostic candidate preparation; no build or proof yet",
+  "source_revision": "3b9e8d7f0122e6dc966a809904adbd722ae3079d",
+  "tool_source_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "allowed_edit": "Only remove mono early return immediately before compiler-constructed closure method binder insertion in translate_closures.rs. Preserve original source and binaries. No manual LLBC call or binder rewriting.",
+  "reason": "The source constructs the exact compiler closure method binder before discarding it in mono mode; the existing known-impl resolver can inspect this retained binder and applies both generic binders using its existing checks.",
+  "not_yet_justified": [
+    "Retaining metadata passes all pinned validation stages.",
+    "The actual selected fold resolves the call using correct region substitution.",
+    "The translated direct callback and caller preserve borrowed state, restoration, all failures, and unwind paths.",
+    "Whole source callback/fold execution correspondence."
+  ],
+  "gates_before_actual_source": [
+    "Audit exact source diff and build/cache provenance.",
+    "Capped optimized candidate build isolated from original pinned source and binaries.",
+    "Focused captured mutable/shared closure fixture; preserve native method/call/region output and inspect complete diagnostics.",
+    "Independent full actual-source IR diff if fixture passes, before Lean bridge or proof claims."
+  ],
+  "forbidden": [
+    "Changing verifier source, fields, security parameters or CU results.",
+    "Dropping returned closure state or backward restoration.",
+    "Inventing dictionary or lifetime semantics.",
+    "Claiming a passing fixture proves actual verifier correspondence."
+  ],
+  "first_remaining_proposition": "Actual selected FnMut invocation inside the fold corresponds to the concrete callback with correct captured mutable-power and shared-gamma restoration, preserving every failure and state."
+}

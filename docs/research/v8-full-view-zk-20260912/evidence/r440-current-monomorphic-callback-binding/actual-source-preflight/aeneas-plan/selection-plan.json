@@ -1,0 +1,109 @@
+{
+  "status": "UNLAUNCHED_LEAD_REVIEW_PLAN",
+  "input": {
+    "r440_llbc_sha256": "01cd5ddc7086bba5f4e92802f90e59cce4034cf519d495ec35f925b91a6f033d",
+    "source_path": "../lead-launch-a/saved-output/R440ActualMonoClosure.llbc",
+    "projection_path": "fun29/R440GammaExecutionSelection.llbc",
+    "projection_sha256": "96135e91c71f93dcd3aeec7b693eb737e7cf05027456ca973242cf2586088c48",
+    "projection_receipt": "fun29/projection-receipt.json",
+    "only_changed_json_field": "translated.ordered_decls",
+    "preservation": "All declaration rows, bodies, source metadata, signatures, types, regions, globals, trait rows, hash-cons records, and all other JSON values remain decoded-equal to R440 input; prefix and suffix JSON bytes are byte-identical."
+  },
+  "roots": [
+    {
+      "kind": "Fun",
+      "id": 29,
+      "name": "aspis_v8_performance_host::freeze::{Trait 4}::call",
+      "evidence": "R440 raw fun_decls[29]; source item is the closure call method from line 134, column 14\u2013110; R440 raw fun_decls[0] has six direct call references to Fun29."
+    }
+  ],
+  "required_native_refs": [
+    {
+      "kind": "Fun",
+      "id": 24,
+      "name": "aspis_core::field::<QM31>::mul"
+    },
+    {
+      "kind": "Fun",
+      "id": 29,
+      "name": "aspis_v8_performance_host::freeze::{Trait 4}::call"
+    },
+    {
+      "kind": "Fun",
+      "id": 70,
+      "name": "core::slice::iter::{Trait 36}::fold [instantiated]"
+    },
+    {
+      "kind": "Fun",
+      "id": 112,
+      "name": "aspis_v8_performance_host::freeze::closure[2]::{Trait 35}::call_mut"
+    }
+  ],
+  "typed_dependency_audit": {
+    "pinned_charon_reorder_source_sha256": "8a1176e29a51a83c82ff5a7df2aa11021e3e0c254e9fd6c656c0a92314ba2632",
+    "roots": [
+      [
+        "Fun",
+        29
+      ]
+    ],
+    "ordered_groups": 262,
+    "ordered_members": 262,
+    "reachable_groups": 62,
+    "reachable_nodes": 62,
+    "reachable_kind_counts": {
+      "Fun": 40,
+      "Global": 7,
+      "Type": 15
+    },
+    "typed_edge_count": 1066,
+    "missing_refs": [],
+    "unclassified_id_generics": [],
+    "all_reachable_groups_already_ordered": true
+  },
+  "aeneas_reader_facts": {
+    "pinned_source_copy": ".r21-scratch/r439-closure-execution-preflight/tool-filter-inventory/pinned-aeneas/interp/Interp.ml",
+    "pinned_source_sha256": "b597a7276d7fd1d6e721f7902ad9f4f03c8281cf581a81521c0ba1031ddba308",
+    "facts": "Interp.compute_contexts collects declarations to extract from declaration groups; separately, trait_methods_to_extract visits selected function item_source and FnPtr nodes. The typed ordered-group graph excludes ItemSource as pinned by Charon DepsForItem. The selected source methods observed on Fun29/Fun70/Fun112 are recorded in fun29/inventory/aeneas-trait-method-selection.json. This does not establish that additional impl groups are unnecessary for the candidate transformation; Aeneas output must confirm."
+  },
+  "translation_candidate": {
+    "binary": "/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/aeneas-r425-unit-constant-candidate",
+    "binary_sha256": "eadb205fc1e00cf7e32197dd7cbbbd82aa42b59442d8f186cfdca7c8fdca9b01",
+    "namespace": "AspisR440GammaExecution",
+    "proposed_fresh_remote_root": "/home/dombarker/project-offloads/aspis-r440-gamma-execution-20261003-a",
+    "argv": [
+      "/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/aeneas-r425-unit-constant-candidate",
+      "-sequential",
+      "-no-progress-bar",
+      "-abort-on-error",
+      "-backend",
+      "lean",
+      "-namespace",
+      "AspisR440GammaExecution",
+      "-dest",
+      "/home/dombarker/project-offloads/aspis-r440-gamma-execution-20261003-a/generated",
+      "-subdir",
+      "AspisR440GammaExecution",
+      "-split-files",
+      "-emit-json",
+      "/home/dombarker/project-offloads/aspis-r440-gamma-execution-20261003-a/R440GammaExecutionSelection.llbc"
+    ],
+    "required_systemd_scope": "MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128, RuntimeMaxSec=600s; lead launch approval still required."
+  },
+  "observed_unresolved_source_primitive_frontier": [
+    {
+      "fun_id": 70,
+      "body": "Transparent actual instantiated core slice iterator fold",
+      "items": [
+        "RawPtr typed locals, including mutable and shared raw pointers",
+        "RawPtr casts and Transmute in fold body",
+        "direct calls to Fun114 offset_from_unsigned precondition_check, Fun115 unchecked_add precondition_check, and Fun116 core::intrinsics::ptr_offset_from_unsigned"
+      ],
+      "types": [
+        "Type42 core::slice::iter::Iter",
+        "Type58/69/72/73 core::ptr::NonNull instantiations"
+      ]
+    }
+  ],
+  "explicit_boundary": "No Aeneas translation was launched for this projection. The primitive list identifies operations present in the extracted body, not an observed translator failure or a source-to-model proof. Lean compilation, source execution correspondence, callback chronology, pointer semantics, full freeze, and security remain unproved."
+}

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=5",
+    "-o",
+    "StrictHostKeyChecking=no",
+    "-o",
+    "UserKnownHostsFile=/dev/null",
+    "dombarker@100.108.41.90",
+    "systemd-run --user --wait --collect --pipe --unit=aspis-r440-native-fixture-candidate --working-directory=/home/dombarker/project-offloads/aspis-r440-mono-closure-binding-20261003-a/charon -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p TasksMax=128 -p RuntimeMaxSec=600 -p KillMode=control-group -p TimeoutStopSec=10 /usr/bin/python3 - '{\"source\": \"#![allow(dead_code)]\\n\\nfn invoke<F>(f: &mut F, acc: u32, value: &u32) -> u32\\nwhere\\n    F: FnMut(u32, &u32) -> u32,\\n{\\n    f(acc, value)\\n}\\n\\npub fn gamma_step(gamma: u32, acc: u32, value: &u32) -> (u32, u32) {\\n    let mut power = 1u32;\\n    let mut callback = |a: u32, v: &u32| {\\n        let weighted = power * *v;\\n        let result = a + weighted;\\n        power *= gamma;\\n        result\\n    };\\n    let result = invoke(&mut callback, acc, value);\\n    (result, power)\\n}\\n\", \"sha256\": \"86f696b86419a99bc2a9da74fb99b47694bca8d66f67c7bf6b6bf2d263075554\", \"revision\": \"3b9e8d7f0122e6dc966a809904adbd722ae3079d\"}'"
+  ],
+  "runner_sha256": "c491e50421668e7dcd5d88d61ee5c970bd9f1559d21622095e2dc33e9b342868",
+  "fixture_sha256": "86f696b86419a99bc2a9da74fb99b47694bca8d66f67c7bf6b6bf2d263075554"
+}

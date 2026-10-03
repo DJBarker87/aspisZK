@@ -1,0 +1,100 @@
+{
+  "default_method_path": {
+    "operation": "split generic args after trait declaration generics, then reuse impl method lookup/binder application",
+    "requirements": [
+      "FnPtr is regular Fun",
+      "ctx translated.fun_decls contains it",
+      "FunDecl.src is TraitDecl method",
+      "first self trait proof contains known TraitImpl"
+    ],
+    "source": "src/transform/normalize/skip_trait_refs_when_known.rs:21-64"
+  },
+  "file_sha256": {
+    "src/ast/gast.rs": "020cbf3cc93cd051030f786f5d5e0fa9283d47aca304a62b11a4922823aeaedc",
+    "src/ast/krate.rs": "72b774a05f1e5de3b64e504376c35f6045f12b934943b96c330f0536aa211d23",
+    "src/ast/meta.rs": "ca1d9eb0b8317e33f9b08a909bfc3a992563a6d1929419ff7f767229b2c80065",
+    "src/ast/types.rs": "144d183af79a5341424cc0ffaa99fe99a414546c05fdfccfd364e5bc2e6de5eb",
+    "src/bin/charon-driver/main.rs": "5f080733b555f9c56ce5902726c14f005cfd2da80dee04c2dc4f6fe946d24ec7",
+    "src/bin/charon-driver/translate/translate_closures.rs": "8e98e7f89edcb686d6386b2ee8d410fefc56adeb5844904fb0cc1362be48384e",
+    "src/bin/charon-driver/translate/translate_items.rs": "38e9012aacf67d4b2d46ed4e8927d81a25de3cf036f611cb48b9ff0dd8121ea5",
+    "src/transform/ctx.rs": "1fa04d5706dd78da9ca803c3a52ef3a66de1867c78e25821f45ffe6619dc1575",
+    "src/transform/mod.rs": "ac725524fc9b890eb568e21294c088344f5e0671a54461bb965f176fedfff129",
+    "src/transform/normalize/skip_trait_refs_when_known.rs": "ce5090040b58bdf0d260ed2f49f87a1c276deac2eaf7a33560ba32c6515f32f7",
+    "src/transform/simplify_output/duplicate_defaulted_methods.rs": "a465caa80b7a0bb9582da6fba9572b944cf85da96ce06fa0d0d7eef8906aa2c5",
+    "src/transform/typecheck_and_unify.rs": "8f784d2a88f8d7663c7a09da30733dc2f79ef524e4b6699d66cc678cafa94228"
+  },
+  "known_impl_path": {
+    "requirements": [
+      "FnPtrKind::Trait",
+      "TraitRefKind::TraitImpl",
+      "matching TraitImpl row",
+      "TraitImpl.methods[method_id] present",
+      "method_generics.matches(bound_fn.params)"
+    ],
+    "result": "nested impl and method Binder application, then FnPtrKind::Fun(FunId::Regular)",
+    "source": "src/transform/normalize/skip_trait_refs_when_known.rs:66-103"
+  },
+  "language_item_facts": {
+    "ItemMeta_field": "Option<String>",
+    "ItemMeta_source": "src/ast/meta.rs:216-244; lang_item is drive-skipped metadata",
+    "closure_synthesized_method_order": "translate_closures.rs:563-580 builds call_fn_binder then mono-returns; registration is lines 582-584",
+    "lead_specified_scope": "temporary method handling is restricted to TraitDecl.item_meta.lang_item in {fn, fn_mut, fn_once}; preserve all other maps; no mutation in this inventory",
+    "mono_trait_decl_source": "src/bin/charon-driver/translate/translate_items.rs:757-771 returns the incoming item_meta unchanged and leaves associated methods empty (apart from the earlier Destruct special case)",
+    "r437_llbc": {
+      "path": ".r21-scratch/r438-fnmut-source-selection/inventory/R437PointerWrapperLayout.llbc",
+      "sha256": "bafe9c1297a8ea92eaea3c37c685da3f5d3fe2e04c335ac9f1f4d64c4312386c",
+      "trait_decls": {
+        "0": "destruct",
+        "1": "fn",
+        "2": "fn_once",
+        "3": "fn_mut"
+      },
+      "trait_id_0_interpretation": "Destruct in this artifact; these are nonempty map rows, not Clone-trait impls",
+      "trait_impls_with_impl_trait_id_0_and_nonempty_methods": 12
+    }
+  },
+  "main_and_order": {
+    "call_site": "src/bin/charon-driver/main.rs:83-99",
+    "known_normalizer_position": "src/transform/mod.rs:122-125",
+    "native_pass_sequence": "src/transform/mod.rs:90-128",
+    "preceding_body_passes": [
+      "insert pointer metadata",
+      "insert unit return assignment",
+      "insert storage markers",
+      "desugar drops"
+    ],
+    "preceding_global_passes": [
+      "optional duplicate_defaulted_methods",
+      "compute_short_names",
+      "PostTranslation typecheck",
+      "filter invisible trait impls",
+      "lift associated-item clauses",
+      "add missing alias clauses"
+    ]
+  },
+  "mono_validation": {
+    "closure_specific_slot_registration": "src/bin/charon-driver/translate/translate_closures.rs:579-585",
+    "method_count_check": "src/transform/typecheck_and_unify.rs:566-623",
+    "mono_regular_trait_impl_empty_methods": "src/bin/charon-driver/translate/translate_items.rs:1056-1069",
+    "mono_trait_decl_empty_methods": "src/bin/charon-driver/translate/translate_items.rs:757-771",
+    "post_transformation_check": "src/transform/mod.rs:243"
+  },
+  "no_patch_build_or_test": true,
+  "source_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "source_root": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon",
+  "standard_pass_scope": {
+    "dispatch": "TransformCtx.for_each_item_mut, temporarily removes current item, applies item callback, restores it",
+    "fnptr_type_source": "src/ast/types.rs:1030-1082, TyKind::FnPtr",
+    "item_ids_source": "src/transform/ctx.rs:176-185",
+    "item_kinds": [
+      "Type",
+      "Fun",
+      "Global",
+      "TraitDecl",
+      "TraitImpl"
+    ],
+    "itemref_mut_drive_source": "src/ast/krate.rs:588-595",
+    "pass_source": "src/transform/normalize/skip_trait_refs_when_known.rs:105-109"
+  },
+  "task": "read-only native normalizer data-dependency and scope inventory"
+}

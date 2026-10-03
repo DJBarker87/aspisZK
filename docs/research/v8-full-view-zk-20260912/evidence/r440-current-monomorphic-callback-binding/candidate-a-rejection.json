@@ -1,0 +1,14 @@
+{
+  "status": "candidate A rejected at source preflight; not built",
+  "source_revision": "3b9e8d7f0122e6dc966a809904adbd722ae3079d",
+  "candidate_sha256": "93d29b0184be8503aafd8884f13f56eb73ea4f5eacdecb751bed5a28cc3fd5ed",
+  "reason": "Mono trait declarations retain empty method maps. Populating exported closure implementation method map alone can fail native PostTransformation method-count validation. No validator will be weakened.",
+  "source_guard": "typecheck_and_unify.rs602-623; transform/mod.rs243",
+  "next_diagnostic": "Candidate B: invoke the original known-impl FnPtr resolver with compiler-created closure binders before ordinary pipeline; restore originally empty mono method maps before native validators/export. Candidate is not built, proven, or authorized for actual-source extraction.",
+  "required_review": [
+    "Native early-resolver prerequisites and visitor coverage.",
+    "Two driver-only source edits and byte-for-byte cached library preservation.",
+    "Native fixture diagnostics and complete IR; direct callback and region substitution.",
+    "Actual-source full IR diff before any correspondence claim."
+  ]
+}

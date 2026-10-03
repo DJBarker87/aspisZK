@@ -1,0 +1,43 @@
+--- a/src/bin/charon-driver/main.rs
++++ b/src/bin/charon-driver/main.rs
+@@ -85,6 +85,28 @@
+         return Ok(0);
+     };
+ 
++    // In mono mode, visit function bodies with the known-trait-impl resolver before
++    // restoring the empty exported method maps required by mono validation.
++    if options.monomorphize {
++        let pass = charon_lib::transform::normalize::skip_trait_refs_when_known::Transform;
++        let fun_ids = ctx.translated.fun_decls.all_indices().collect::<Vec<_>>();
++        for id in fun_ids {
++            if let Some(mut decl) = ctx.translated.fun_decls.get(id).cloned() {
++                charon_lib::transform::ctx::UllbcPass::transform_item(
++                    &pass,
++                    &mut ctx,
++                    charon_lib::ast::ItemRefMut::Fun(&mut decl),
++                );
++                if let Some(slot) = ctx.translated.fun_decls.get_mut(id) {
++                    *slot = decl;
++                }
++            }
++        }
++        for timpl in ctx.translated.trait_impls.iter_mut() {
++            timpl.methods.clear();
++        }
++    }
++
+     // The bulk of the translation is done, we no longer need to interact with rustc internals. We
+     // run several passes that simplify the items and cleanup the bodies.
+     run_transformation_passes(&options, &mut ctx);
+--- a/src/bin/charon-driver/translate/translate_closures.rs
++++ b/src/bin/charon-driver/translate/translate_closures.rs
+@@ -576,9 +576,6 @@
+                 fn_decl_ref,
+             )
+         };
+-        if self.monomorphize() {
+-            return Ok(timpl);
+-        }
+         timpl
+             .methods
+             .set_slot_extend(trait_method_id, call_fn_binder);

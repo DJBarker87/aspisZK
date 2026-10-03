@@ -1,0 +1,15 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=5",
+    "-o",
+    "StrictHostKeyChecking=no",
+    "-o",
+    "UserKnownHostsFile=/dev/null",
+    "dombarker@100.108.41.90",
+    "systemd-run --user --wait --collect --pipe --unit=aspis-r440-source-clone --working-directory=/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p TasksMax=128 -p RuntimeMaxSec=600 -p KillMode=control-group -p TimeoutStopSec=10 /usr/bin/env R440_ALLOW_CLONE=1 /usr/bin/python3 -"
+  ]
+}
