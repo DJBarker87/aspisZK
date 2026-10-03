@@ -1,0 +1,7 @@
+# R516 finite G-family preservation
+
+The final target proves that arbitrary weighted combinations of the 13 selected source-shaped G masks retain inactive-table balance and all 271 mixed-coin values. Adding such a family direction to any supplied G table preserves those coin values; adding it preserves balance when the original table is balanced. The roots and coefficients are arbitrary. No claim is made that these directions cover every joint C1/H1/G target or that the actual Rust prover executes this family construction.
+
+Final target: `AspisV8R19/R516FiniteGFamily.lean`. Source revision `1caad4fb9ba028a51ccf3aa742a4d65fdff010e4`; SHA-256 `82ca398eb89e769cb3b145abb77e3f232cacc9503e45fb6ed48bb39d50ea1155`. Final run `1791054461238562000`: exit 0, wall 0.98 s, peak Lean-child RSS 2,297,900 KiB, swap 0. Pinned Lean 4.32; `-j1 -M4500`; MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. Complete axiom output for each of the four named theorems is `[propext, Classical.choice, Quot.sound]`.
+
+All three attempts are preserved under `attempts/`: the initial failed argument-order version, its corrected two-theorem green version, and the final strengthened four-theorem green version. The first remaining obligations are universal joint C1/H1/G target coverage and actual whole-prover Rust execution, then the full-view simulator and probability accounting and soundness extraction. This result does not establish end-to-end privacy or security.
