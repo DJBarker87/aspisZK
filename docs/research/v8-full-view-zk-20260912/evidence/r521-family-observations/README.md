@@ -1,0 +1,7 @@
+# R521 finite G-family observations
+
+The final target proves that the selected weighted family mask has zero source opening at any supplied root satisfying `doubledFactor x 1 = t rootIndex` on the circle, and that all four sign-related fibre openings vanish. Adding this family mask preserves an arbitrary supplied G table's opening at each of those points. Roots may repeat; `alpha` is arbitrary, including zero.
+
+Final target: `AspisV8R19/R521FamilyObservations.lean`. Source revision `1d01ab5c3e43eac493f11b105fdaaf297e9b28cb`; SHA-256 `3930b2c776029b40661e1bec5d245b6d0e7104eb76fa37b9dc314f874ea1bc6b`. Final run `1791055369043607000`: exit 0, wall 1.00 s, peak Lean-child RSS 2,299,144 KiB, swap 0; pinned Lean 4.32, `-j1 -M4500`, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. All five complete axiom outputs contain only `[propext, Classical.choice, Quot.sound]`; the final source compiled without warnings.
+
+All four focused attempt triples are preserved under `attempts/`, including two failures, the earlier green, and the final green. This exact-field finite-family observation proves no universal joint C1/H1/G target coverage, full-rank compatibility, or actual Rust execution. First remaining obligations are universal joint target coverage and whole-prover execution correspondence; then full-view simulation/probability accounting and soundness extraction. End-to-end privacy and security are not claimed.
