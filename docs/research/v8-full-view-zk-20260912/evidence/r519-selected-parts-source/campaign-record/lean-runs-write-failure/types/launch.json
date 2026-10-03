@@ -1,0 +1,28 @@
+{
+  "unit": "aspis-r519-parts-lean-types",
+  "target": "Types.lean",
+  "source_sha256": "281a7e5f31bfb1fad36aab0f767c09d527da320c0065c2ad1515479bbfbf0e00",
+  "source_revision": "924864affb551a525e854cd7233e54bde0926a6a",
+  "command": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r519-parts-lean-types",
+    "--working-directory=/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "-p",
+    "RuntimeMaxSec=600s",
+    "python3",
+    "-c",
+    "import os,pathlib,subprocess,hashlib,json,re\nroot=pathlib.Path('/home/dombarker/project-offloads/aspis-r519-parts-lean-20261003-a/types');root.mkdir(parents=True,exist_ok=True)\nsrc=pathlib.Path('/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisR519SharedGammaPartsV3/Types.lean');assert hashlib.sha256(src.read_bytes()).hexdigest()=='281a7e5f31bfb1fad36aab0f767c09d527da320c0065c2ad1515479bbfbf0e00'\nunit='aspis-r519-parts-lean-types'; cap=7*1024**3\nunits=subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--plain','--no-legend'],text=True)\nreservations=[]\nfor line in units.splitlines():\n n=line.split()[0]\n if n.startswith('aspis'):\n  m=subprocess.check_output(['systemctl','--user','show',n,'-p','MemoryMax'],text=True).strip().split('=',1)[1]\n  assert m.isdigit(),(n,m);reservations.append((n,int(m)))\nassert sum(v for _,v in reservations)<=40*1024**3,reservations\ncgpath=pathlib.Path('/sys/fs/cgroup')/next(x.split('::')[1].lstrip('/') for x in pathlib.Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0::'))\nassert (cgpath/'memory.high').read_text().strip()==str(5*1024**3)\nassert (cgpath/'memory.max').read_text().strip()==str(7*1024**3)\nassert (cgpath/'memory.swap.max').read_text().strip()=='0'\nassert (cgpath/'pids.max').read_text().strip()=='128'\nmem={k:int(v.split()[0])*1024 for k,v in (x.split(':',1) for x in pathlib.Path('/proc/meminfo').read_text().splitlines()) if k in ['MemTotal','MemAvailable']}\nassert mem['MemAvailable']-cap>=24*1024**3,mem\ncache='/home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib';deps=sorted(__import__('glob').glob('/home/dombarker/project-offloads/aspis-pool-single-decode-20260825-a3/AspisFormal/.lake/packages/*/.lake/build/lib/lean'))\naeneas='/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/build/lib/lean'\nos.environ['LEAN_PATH']=':'.join([cache,*deps,aeneas])\nworkspace=pathlib.Path('/home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace');assert (workspace/'lean-toolchain').read_text().strip()=='leanprover/lean4:v4.32.0'\nbase=['/home/dombarker/.elan/bin/lake','--dir',str(workspace),'env','lean']\nversion=subprocess.check_output([*base,'--version'],text=True);assert '4.32.0' in version,version\ncmd=[*base,'-j1','-M4500','-R','/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a']\nif '/home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisR519SharedGammaPartsV3/Types.olean':cmd+=['-o','/home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisR519SharedGammaPartsV3/Types.olean']\ncmd.append(str(src))\n(root/'preflight.json').write_text(json.dumps({'target':'Types.lean','source_sha256':'281a7e5f31bfb1fad36aab0f767c09d527da320c0065c2ad1515479bbfbf0e00','lean_version':version,'reservations':reservations,'cgroup':{k:(cgpath/k).read_text().strip() for k in ['memory.high','memory.max','memory.swap.max','pids.max']},'meminfo_bytes':mem,'LEAN_PATH':os.environ['LEAN_PATH'],'command':cmd,'revision':'924864affb551a525e854cd7233e54bde0926a6a'},indent=2)+'\\n')\nwith (root/'lean.log').open('w') as log:result=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=log,stderr=subprocess.STDOUT)\ntxt=(root/'lean.log').read_text()\ndef metric(p):\n m=re.search(p,txt);return m.group(1) if m else None\naxioms=re.findall(r\"'[^\\n]+' (?:depends on axioms: \\[[\\s\\S]*?\\]|does not depend on any axioms)\",txt)\nreceipt={'target':'Types.lean','source_sha256':'281a7e5f31bfb1fad36aab0f767c09d527da320c0065c2ad1515479bbfbf0e00','source_revision':'924864affb551a525e854cd7233e54bde0926a6a','exit_status':result.returncode,'wall_time':metric(r'Elapsed \\(wall clock\\) time \\(h:mm:ss or m:ss\\): (\\S+)'),'peak_rss_kib':metric(r'Maximum resident set size \\(kbytes\\): (\\d+)'),'swaps':metric(r'Swaps: (\\d+)'),'lean_version':version,'lean_path':os.environ['LEAN_PATH'],'command':cmd,'axiom_report_lines':axioms,'olean_sha256':hashlib.sha256(pathlib.Path('/home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisR519SharedGammaPartsV3/Types.olean').read_bytes()).hexdigest() if '/home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisR519SharedGammaPartsV3/Types.olean' and result.returncode==0 else None}\n(root/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\\n')\nprint(json.dumps(receipt,indent=2));raise SystemExit(result.returncode)\n"
+  ]
+}
