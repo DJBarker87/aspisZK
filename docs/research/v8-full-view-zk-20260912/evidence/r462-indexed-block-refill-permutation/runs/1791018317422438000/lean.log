@@ -1,0 +1,150 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791018317422438000.service; invocation ID: 49f4b4c3f4ed4e61beaa79981b1b7879
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:15:41: error: Type mismatch
+  transformTape σ offset n fun j => t j.succ
+has type
+  Tape p n
+but is expected to have type
+  Option (Fin p)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:17:20: error: Type mismatch
+  transformTape σ (offset + 1) n fun j => t j.succ
+has type
+  Tape p n
+but is expected to have type
+  Option (Fin p)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:23:2: error: Unnecessary `generalizing` argument: Variable `t` is generalized automatically
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:29:6: error: unsolved goals
+case succ.refine_2.none
+p : ℕ
+σ : ℕ → Equiv.Perm (Fin p)
+n : ℕ
+ih : ∀ (offset : ℕ) (t : Tape p n), transformTape (fun i => Equiv.symm (σ i)) offset n (transformTape σ offset n t) = t
+offset : ℕ
+t : Tape p (n + 1)
+i : Fin (n + 1)
+j : Fin n
+h : t 0 = none
+⊢ sorry () = t j.succ
+
+case succ.refine_2.some
+p : ℕ
+σ : ℕ → Equiv.Perm (Fin p)
+n : ℕ
+ih : ∀ (offset : ℕ) (t : Tape p n), transformTape (fun i => Equiv.symm (σ i)) offset n (transformTape σ offset n t) = t
+offset : ℕ
+t : Tape p (n + 1)
+i : Fin (n + 1)
+j : Fin n
+val✝ : Fin p
+h : t 0 = some val✝
+⊢ sorry () = t j.succ
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:28:32: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:29:50: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [transformTape, h,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:35:2: error: Unnecessary `generalizing` argument: Variable `t` is generalized automatically
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:41:6: error: unsolved goals
+case succ.refine_2.none
+p : ℕ
+σ : ℕ → Equiv.Perm (Fin p)
+n : ℕ
+ih : ∀ (offset : ℕ) (t : Tape p n), transformTape σ offset n (transformTape (fun i => Equiv.symm (σ i)) offset n t) = t
+offset : ℕ
+t : Tape p (n + 1)
+i : Fin (n + 1)
+j : Fin n
+h : t 0 = none
+⊢ sorry () = t j.succ
+
+case succ.refine_2.some
+p : ℕ
+σ : ℕ → Equiv.Perm (Fin p)
+n : ℕ
+ih : ∀ (offset : ℕ) (t : Tape p n), transformTape σ offset n (transformTape (fun i => Equiv.symm (σ i)) offset n t) = t
+offset : ℕ
+t : Tape p (n + 1)
+i : Fin (n + 1)
+j : Fin n
+val✝ : Fin p
+h : t 0 = some val✝
+⊢ sorry () = t j.succ
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:40:32: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:41:50: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [transformTape, h,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:54:2: error: Unnecessary `generalizing` argument: Variable `t` is generalized automatically
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:56:14: error: unsolved goals
+case succ.none
+p : ℕ
+σ : ℕ → Equiv.Perm (Fin p)
+n : ℕ
+ih :
+  ∀ (offset : ℕ) (t : Tape p n),
+    List.ofFn (transformTape σ offset n t) = R456IndexedWordPermutation.transform σ offset (List.ofFn t)
+offset : ℕ
+t : Tape p (n + 1)
+h : t 0 = none
+⊢ List.replicate n (sorry ()) = R456IndexedWordPermutation.transform σ offset (List.ofFn fun i => t i.succ)
+
+case succ.some
+p : ℕ
+σ : ℕ → Equiv.Perm (Fin p)
+n : ℕ
+ih :
+  ∀ (offset : ℕ) (t : Tape p n),
+    List.ofFn (transformTape σ offset n t) = R456IndexedWordPermutation.transform σ offset (List.ofFn t)
+offset : ℕ
+t : Tape p (n + 1)
+val✝ : Fin p
+h : t 0 = some val✝
+⊢ List.replicate n (sorry ()) = R456IndexedWordPermutation.transform σ (offset + 1) (List.ofFn fun i => t i.succ)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:59:14: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean:59:81: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [transformTape, h, AspisV8R19.R456IndexedWordPermutation.transform,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R459IndexedFiniteTape.transformTape_inverse_left' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R459IndexedFiniteTape.transformTape_inverse_right' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R459IndexedFiniteTape.finiteTapeEquiv' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R459IndexedFiniteTape.ofFn_transformTape' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R459IndexedFiniteTape.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R459IndexedFiniteTape.lean"
+	User time (seconds): 1.04
+	System time (seconds): 0.33
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.35
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3219840
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76524
+	Voluntary context switches: 352
+	Involuntary context switches: 60
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.388s
+CPU time consumed: 1.409s
+Memory peak: 256.0K
+Memory swap peak: 0B

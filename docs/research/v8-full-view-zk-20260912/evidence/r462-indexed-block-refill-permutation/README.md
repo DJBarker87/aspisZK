@@ -1,0 +1,9 @@
+# R459–R462 indexed block/refill component evidence
+
+The four successful targets are byte-identical to their saved compiler inputs. Receipts, full logs, exact command strings, runner, caps, and complete axiom reports are retained. The package includes the initial R459 `sorryAx` draft, first failed R460 compile, and two rejected R463 `sorryAx` drafts as rejected history. It also retains the earlier successful R461 filepath-target compile as module-identity history; the accepted R461 receipt targets the canonical `AspisV8R19/R461OptionScanCount.lean` module.
+
+R459 and R461 give the indexed finite-tape/list count model. R460 relates the decoded eight-word block, initial accepted result, and stopping count to that model under position-sensitive accepted-value permutations. R462 relates the actual source-shaped refill branch’s calls, returned value, carry state, transformed block, and stopping index. R463 identifies the number of accepted entries before the first accepted item (zero if none, one if some) and gives the corresponding consumed-prefix offset update. The adaptive-prefix preservation theorem has an explicit `Fresh` premise.
+
+The next obligation is the actual four-coordinate execution/tape law connecting eight decoded block coordinates to the model while preserving source cursor, shared-oracle queries, cached values, sentinel skips, and refill chronology. This package does not establish actual four-limb uniformity. Prior R447–R451 and R458 bundles are linked below rather than duplicated. Run `python3 verify_evidence.py` for a read-only integrity check. No compiler reruns were performed.
+
+Linked: [R447](../r447-source-initial-block-law/README.md), [R448](../r448-refill-source-limb/README.md), [R449](../r449-block-permutation/README.md), [R450/R451](../r450-r451-refill-permutation-coupling/README.md), and [R458](../r458-indexed-tape-scan-component/README.md).
