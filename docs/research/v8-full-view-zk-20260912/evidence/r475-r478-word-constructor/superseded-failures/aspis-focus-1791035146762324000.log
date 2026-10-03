@@ -1,0 +1,117 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791035146762324000.service; invocation ID: 82d4bdf8e0bf44ca837f7f5f5c7c668f
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean:16:22: error: unsolved goals
+case mk
+address : ℕ
+origin : Option (ℕ × ℕ)
+haddress : { address := address, origin := origin }.address < 2 ^ 64
+⊢ address < 18446744073709551616
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean:17:60: warning: This simp argument is unused:
+  Nat.mod_eq_of_lt haddress
+
+Hint: Omit it from the simp argument list.
+  simp [encodePointer, decodePointer, BitVec.toNat_ofNat,̵ ̵N̵a̵t̵.̵m̵o̵d̵_̵e̵q̵_̵o̵f̵_̵l̵t̵ ̵h̵a̵d̵d̵r̵e̵s̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean:27:2: error: unsolved goals
+case left
+T : Type
+id : ℕ
+a : Allocation T
+start : ℕ
+hstart : start ≤ a.cells.length
+hn : a.base + a.cells.length * 16 < 2 ^ 64
+hs : a.base + start * 16 < 2 ^ 64
+⊢ a.base + start * 16 < 18446744073709551616
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean:27:60: warning: This simp argument is unused:
+  Nat.mod_eq_of_lt hs
+
+Hint: Omit it from the simp argument list.
+  simp [encodePointer, backedPointer, BitVec.toNat_ofNat,̵ ̵N̵a̵t̵.̵m̵o̵d̵_̵e̵q̵_̵o̵f̵_̵l̵t̵ ̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean:56:33: error: Application type mismatch: The argument
+  hiCells
+has type
+  index < a.cells.length
+of sort `Prop` but is expected to have type
+  ℕ
+of sort `Type` in the application
+  word_index_fits a hiCells
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean:57:57: error: unsolved goals
+T : Type
+heap : Heap T
+id : ℕ
+a : Allocation T
+hlookup : heap id = some a
+start length : ℕ
+hbound : start + length ≤ a.cells.length
+index : ℕ
+hindex : index < length
+hs : start ≤ a.cells.length
+hiCells : index < a.cells.length
+hfit : sorry < a.cells.length → sorry < 2 ^ 64
+⊢ index < 18446744073709551616
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean:68:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Option.bind ?m.120 (Option.map ?m.119 ∘ ?m.118)
+in the target expression
+  ((offset heap (encodePointer (backedPointer id a start)) (BitVec.ofNat 64 index)).bind fun ptr =>
+      R432PointerPrimitive.read heap (decodePointer ptr)) =
+    (add heap (backedPointer id a start) index).bind (R432PointerPrimitive.read heap)
+
+T : Type
+heap : Heap T
+id : ℕ
+a : Allocation T
+hlookup : heap id = some a
+start length : ℕ
+hbound : start + length ≤ a.cells.length
+index : ℕ
+hindex : index < length
+hs : start ≤ a.cells.length
+hiCells : index < a.cells.length
+hfit : sorry < a.cells.length → sorry < 2 ^ 64
+hcount : (BitVec.ofNat 64 index).toNat = index
+hdecode : decodePointer (encodePointer (backedPointer id a start)) = backedPointer id a start
+hoff :
+  Option.map decodePointer (offset heap (encodePointer (backedPointer id a start)) (BitVec.ofNat 64 index)) =
+    add heap (backedPointer id a start) index
+⊢ ((offset heap (encodePointer (backedPointer id a start)) (BitVec.ofNat 64 index)).bind fun ptr =>
+      R432PointerPrimitive.read heap (decodePointer ptr)) =
+    (add heap (backedPointer id a start) index).bind (R432PointerPrimitive.read heap)
+'AspisV8R19.R477BackedPointerWordImage.encodePointer' does not depend on any axioms
+'AspisV8R19.R477BackedPointerWordImage.decode_encode' depends on axioms: [propext, sorryAx]
+'AspisV8R19.R477BackedPointerWordImage.backed_pointer_bound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R477BackedPointerWordImage.backed_pointer_decode' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R477BackedPointerWordImage.word_index_fits' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R477BackedPointerWordImage.backed_word_offset_read_view' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R477BackedPointerWordImage.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R477BackedPointerWordImage.lean"
+	User time (seconds): 0.87
+	System time (seconds): 0.27
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.12
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2532040
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64319
+	Voluntary context switches: 507
+	Involuntary context switches: 32
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.161s
+CPU time consumed: 1.179s
+Memory peak: 256.0K
+Memory swap peak: 0B

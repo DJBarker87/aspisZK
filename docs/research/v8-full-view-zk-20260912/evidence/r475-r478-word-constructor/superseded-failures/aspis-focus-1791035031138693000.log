@@ -1,0 +1,228 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791035031138693000.service; invocation ID: 733fb304a0ca4e4a9e62ac31791e20d3
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:41:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:123:19: error: unsolved goals
+case cast.some
+T : Type
+heap : Heap T
+locals : WordLocals
+dst src : ℕ
+kind : Cast
+value : WordValue
+hs : locals src = some value
+⊢ ((checkedCast kind value).bind fun a =>
+      some
+        (Control.cont
+          (R433ConstructorFragment.put (decodeLocals locals) dst
+            (some
+              (match a with
+              | WordValue.sliceRef ptr len => Value.sliceRef (decodePointer ptr) len.toNat
+              | WordValue.rawFat mutability ptr len => Value.rawFat mutability (decodePointer ptr) len.toNat
+              | WordValue.nonNullFat ptr len => Value.nonNullFat (decodePointer ptr) len.toNat
+              | WordValue.rawThin mutability ptr => Value.rawThin mutability (decodePointer ptr)
+              | WordValue.nonNullThin ptr => Value.nonNullThin (decodePointer ptr)
+              | WordValue.word value => Value.word value.toNat
+              | WordValue.marker => Value.marker
+              | WordValue.iterator value =>
+                Value.iterator { first := decodePointer value.first, last := decodePointer value.last }))))) =
+    (R472CheckedConstructor.checkedCast kind
+          (match value with
+          | WordValue.sliceRef ptr len => Value.sliceRef (decodePointer ptr) len.toNat
+          | WordValue.rawFat mutability ptr len => Value.rawFat mutability (decodePointer ptr) len.toNat
+          | WordValue.nonNullFat ptr len => Value.nonNullFat (decodePointer ptr) len.toNat
+          | WordValue.rawThin mutability ptr => Value.rawThin mutability (decodePointer ptr)
+          | WordValue.nonNullThin ptr => Value.nonNullThin (decodePointer ptr)
+          | WordValue.word value => Value.word value.toNat
+          | WordValue.marker => Value.marker
+          | WordValue.iterator value =>
+            Value.iterator { first := decodePointer value.first, last := decodePointer value.last })).bind
+      fun result => some (Control.cont (R433ConstructorFragment.put (decodeLocals locals) dst (some result)))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:134:19: error: unsolved goals
+case offset.some.rawThin.mut.some.word
+T : Type
+heap : Heap T
+locals : WordLocals
+dst pointerSource countSource : ℕ
+ptr : WordPointer
+hp : locals pointerSource = some (WordValue.rawThin Mutability.mut ptr)
+value✝ : BitVec 64
+hc : locals countSource = some (WordValue.word value✝)
+⊢ ((offset heap ptr value✝).bind fun a =>
+      some
+        (Control.cont
+          (R433ConstructorFragment.put (decodeLocals locals) dst
+            (some (Value.rawThin Mutability.mut (decodePointer a)))))) =
+    (add heap (decodePointer ptr) value✝.toNat).bind fun ptr1 =>
+      some
+        (Control.cont
+          (R433ConstructorFragment.put (decodeLocals locals) dst (some (Value.rawThin Mutability.mut ptr1))))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:118:36: warning: This simp argument is unused:
+  word_length_eq_iff
+
+Hint: Omit it from the simp argument list.
+  simp [command, R472CheckedConstructor.command, evalCommand,
+                decodeLocals, hs, hm, w̵o̵r̵d̵_̵l̵e̵n̵g̵t̵h̵_̵e̵q̵_̵i̵f̵f̵,̵ ̵put_decode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:122:63: warning: This simp argument is unused:
+  evalCommand
+
+Hint: Omit it from the simp argument list.
+  simp [command, R472CheckedConstructor.command, e̵v̵a̵l̵C̵o̵m̵m̵a̵n̵d̵,̵ ̵decodeLocals, hs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:124:55: warning: This simp argument is unused:
+  evalCommand
+
+Hint: Omit it from the simp argument list.
+  simp [command, R472CheckedConstructor.command, e̵v̵a̵l̵C̵o̵m̵m̵a̵n̵d̵,̵ ̵decodeLocals, hs, checked_cast_decode,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲put_decode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:125:10: warning: This simp argument is unused:
+  checked_cast_decode
+
+Hint: Omit it from the simp argument list.
+  simp [command, R472CheckedConstructor.command, evalCommand, decodeLocals, hs, c̵h̵e̵c̵k̵e̵d̵_̵c̵a̵s̵t̵_̵d̵e̵c̵o̵d̵e̵,̵ ̵put_decode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:136:36: warning: This simp argument is unused:
+  offset_decode
+
+Hint: Omit it from the simp argument list.
+  simp [command, R472CheckedConstructor.command, evalCommand, decodeLocals,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲hp, hc, o̵f̵f̵s̵e̵t̵_̵d̵e̵c̵o̵d̵e̵,̵ ̵put_decode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:169:38: error: unsolved goals
+case seq
+T : Type
+heap : Heap T
+first second : Program
+ihFirst :
+  ∀ (locals : WordLocals),
+    Option.map decodeControl (program heap locals first) =
+      R472CheckedConstructor.program heap (decodeLocals locals) first
+ihSecond :
+  ∀ (locals : WordLocals),
+    Option.map decodeControl (program heap locals second) =
+      R472CheckedConstructor.program heap (decodeLocals locals) second
+locals : WordLocals
+⊢ ((program heap locals first).bind fun a =>
+      Option.map decodeControl
+        (match a with
+        | WordControl.cont locals1 => program heap locals1 second
+        | WordControl.returned value locals1 => some (WordControl.returned value locals1))) =
+    (R472CheckedConstructor.program heap (decodeLocals locals) first).bind fun __do_lift =>
+      match __do_lift with
+      | Control.cont locals1 => R472CheckedConstructor.program heap locals1 second
+      | Control.returned value locals1 => some (Control.returned value locals1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:172:46: error: unsolved goals
+case globalIf
+T : Type
+heap : Heap T
+id : ℕ
+ifTrue ifFalse : Program
+ihTrue :
+  ∀ (locals : WordLocals),
+    Option.map decodeControl (program heap locals ifTrue) =
+      R472CheckedConstructor.program heap (decodeLocals locals) ifTrue
+ihFalse :
+  ∀ (locals : WordLocals),
+    Option.map decodeControl (program heap locals ifFalse) =
+      R472CheckedConstructor.program heap (decodeLocals locals) ifFalse
+locals : WordLocals
+⊢ ((R470R440ReadonlyConstantGraph.eval 7 (R470R440ReadonlyConstantGraph.Expr.global id)).bind fun a =>
+      Option.map decodeControl
+        (match a with
+        | R470R440ReadonlyConstantGraph.Value.bool value =>
+          if value = true then program heap locals ifTrue else program heap locals ifFalse
+        | x => none)) =
+    (R470R440ReadonlyConstantGraph.eval 7 (R470R440ReadonlyConstantGraph.Expr.global id)).bind fun __x =>
+      match __x with
+      | R470R440ReadonlyConstantGraph.Value.bool value =>
+        if value = true then R472CheckedConstructor.program heap (decodeLocals locals) ifTrue
+        else R472CheckedConstructor.program heap (decodeLocals locals) ifFalse
+      | x => none
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:170:53: warning: This simp argument is unused:
+  ihFirst
+
+Hint: Omit it from the simp argument list.
+  simp [program, R472CheckedConstructor.program, i̵h̵F̵i̵r̵s̵t̵,̵ ̵ihSecond, decodeControl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:170:62: warning: This simp argument is unused:
+  ihSecond
+
+Hint: Omit it from the simp argument list.
+  simp [program, R472CheckedConstructor.program, ihFirst, i̵h̵S̵e̵c̵o̵n̵d̵,̵decodeControl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:171:8: warning: This simp argument is unused:
+  decodeControl
+
+Hint: Omit it from the simp argument list.
+  simp [program, R472CheckedConstructor.program, ihFirst, ihSecond,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵o̵d̵e̵C̵o̵n̵t̵r̵o̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:173:53: warning: This simp argument is unused:
+  ihTrue
+
+Hint: Omit it from the simp argument list.
+  simp [program, R472CheckedConstructor.program, i̵h̵T̵r̵u̵e̵,̵ ̵ihFalse, decodeControl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:173:61: warning: This simp argument is unused:
+  ihFalse
+
+Hint: Omit it from the simp argument list.
+  simp [program, R472CheckedConstructor.program, ihTrue, i̵h̵F̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵decodeControl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean:174:8: warning: This simp argument is unused:
+  decodeControl
+
+Hint: Omit it from the simp argument list.
+  simp [program, R472CheckedConstructor.program, ihTrue, ihFalse,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵d̵e̵c̵o̵d̵e̵C̵o̵n̵t̵r̵o̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R476WordConstructorExecution.command_decode' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R476WordConstructorExecution.program_decode' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R476WordConstructorExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R476WordConstructorExecution.lean"
+	User time (seconds): 14.23
+	System time (seconds): 0.29
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:14.50
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2556520
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 69105
+	Voluntary context switches: 2391
+	Involuntary context switches: 157
+	Swaps: 0
+	File system inputs: 168
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 14.531s
+CPU time consumed: 14.558s
+Memory peak: 288.0K
+Memory swap peak: 0B
