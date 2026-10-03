@@ -1,0 +1,1 @@
+Complete #print axioms output: not applicable. This milestone is a compiled Rust source-based finite diagnostic, not a Lean theorem. It does not close universal source semantics, the full published-view simulator, probability losses, or soundness. The immutable executable remains in scratch, with its exact SHA-256 in receipt.json.
