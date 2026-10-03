@@ -1,0 +1,47 @@
+{
+  "status": "AUDITED_STRUCTURAL_CENSUS",
+  "input_sha256": "76eefed780e23eb3243413b913e935dc7a9b661bceeb0fc0346668621ab07fb6",
+  "source_schema_sha256": {
+    "reorder_decls.rs": "8a1176e29a51a83c82ff5a7df2aa11021e3e0c254e9fd6c656c0a92314ba2632",
+    "Generated_Types.ml": "6e977831c8fb7a3e1b6b77e1b98e5cc71de8841186f98c5de5fd68c93fdb9794",
+    "Generated_OfJson.ml": "873cc528d0f3af4d63d79e444e2e733abcfbd97cdf59ba6da9390d89c3f19a3e",
+    "Aeneas_SymbolicToPure.ml": "15019f32e7c39cff383cf213fe0747709dbaab8201e8595c138c6f6eeda7bea7"
+  },
+  "reachable_counts_from_Fun284_and_TraitImpl47": {
+    "total": 40,
+    "Fun": 27,
+    "Global": 3,
+    "TraitDecl": 2,
+    "TraitImpl": 2,
+    "Type": 6,
+    "all_in_original_ordered_decls": true
+  },
+  "verified_schema_reference_shapes": [
+    "TypeDeclRef: {id: Adt(TypeId), generics}; found in ADT type IDs and TraitDecl.vtable",
+    "GlobalDeclRef: {id: GlobalId, generics}; found in Global operands, TraitImpl consts, and TraitImpl.vtable",
+    "FunDeclRef: {id: FunId, generics}; found in TraitImpl.methods binders and trait defaults",
+    "TraitDeclRef: {id: TraitDeclId, generics}; found in TraitImpl.impl_trait, TraitRef.trait_decl_ref binders, and TraitParam.trait binders",
+    "TraitImplRef: {id: TraitImplId, generics}; found in TraitRefKind::TraitImpl",
+    "FunId::FRegular: int FunDeclId; builtins use FBuiltin and are not FunDecl rows"
+  ],
+  "specific_corrections_to_approximate_scanner": [
+    "TraitImpl.impl_trait.id is TraitDeclId, not TraitImplId.",
+    "TraitImpl.methods[*].skip_binder.id is FunDeclId.",
+    "TraitDecl.vtable is Option<TypeDeclRef>; TraitImpl.vtable is Option<GlobalDeclRef>.",
+    "TraitDecl method and const defaults are respectively optional FunDeclRef and GlobalDeclRef.",
+    "TraitRef.kind.TraitImpl.id is TraitImplId; TraitRef.trait_decl_ref.skip_binder.id is TraitDeclId.",
+    "Broad path-substring classification such as any path containing 'trait_' is unsafe; field and wrapper shape must determine the ID namespace."
+  ],
+  "unresolved_or_absent": [
+    {"from": "TraitDecl0.vtable", "target_kind": "Type", "target_id": 25, "slot": "null", "note": "kept as original optional typed reference; pinned reorder visitor inserts only translated existing items"},
+    {"from": "TraitDecl9.vtable", "target_kind": "Type", "target_id": 64, "slot": "null", "note": "kept as original optional typed reference; pinned reorder visitor inserts only translated existing items"}
+  ],
+  "pinned_visitor_scope": {
+    "included": ["Fun def_id/generics/signature/body", "Type rows", "Global rows", "TraitImpl rows", "TraitDecl generics/implied clauses/types/vtable/const types+defaults/method params+signatures+defaults"],
+    "excluded": ["ItemMeta", "ItemSource"],
+    "function_special_case": "Function whose source is TraitDecl adds its TraitDecl edge; Fun284 is TraitImplItem and parent TraitImpl47 is suppressed as its enclosing impl.",
+    "absent_item_handling": "insert_edge adds graph edge/queue node only if translated.get_item(target) is Some; absent TypeDecl rows 25 and 64 are not inserted.",
+    "aeneas_trait_translation": "Pinned SymbolicToPure.translate_trait_decl and translate_trait_impl pattern-match vtable = _; this supports only a translation-field non-use observation, not a runtime-vtable conclusion."
+  },
+  "boundary": "This is a source-schema and dependency-visitor inventory, not an accepted projection, extraction, Rust correspondence proof, or security claim. Any proposed ordered-declaration projection must retain every other decoded row and field byte-for-byte and still undergo independent fail-closed reference validation."
+}

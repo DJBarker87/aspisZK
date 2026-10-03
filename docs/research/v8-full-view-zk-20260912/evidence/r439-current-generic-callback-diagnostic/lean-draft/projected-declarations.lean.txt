@@ -1,0 +1,55 @@
+/-- [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnMut<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}::call_mut]:
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+def
+  currentCallMut
+  (c : AspisR156FullFreeze.freeze.closure_2.closure)
+  (tupled_args : (AspisR156FullFreeze.aspis_core.field.QM31 × AspisR156FullFreeze.aspis_core.field.QM31)) :
+  Result (AspisR156FullFreeze.aspis_core.field.QM31 × AspisR156FullFreeze.freeze.closure_2.closure ×
+    (AspisR156FullFreeze.freeze.closure_2.closure → AspisR156FullFreeze.freeze.closure_2.closure))
+  := do
+  let (q, q1) := c
+  let (a, v) := tupled_args
+  let q2 ← AspisR156FullFreeze.aspis_core.field.QM31.mul q v
+  let r ← AspisR156FullFreeze.aspis_core.field.QM31.add a q2
+  let q3 ← AspisR156FullFreeze.aspis_core.field.QM31.mul q q1
+  let back := fun c1 => let (q4, _) := c1
+                        (q4, q1)
+  ok (r, (q3, q1), back)
+
+/-- [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnOnce<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}::call_once]:
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+def
+  currentCallOnce
+  (c : AspisR156FullFreeze.freeze.closure_2.closure)
+  (p : (AspisR156FullFreeze.aspis_core.field.QM31 × AspisR156FullFreeze.aspis_core.field.QM31)) :
+  Result (AspisR156FullFreeze.aspis_core.field.QM31 × AspisR156FullFreeze.freeze.closure_2.closure)
+  := do
+  let (_, q) := c
+  let (q1, c1, call_mut_back) ←
+    currentCallMut
+      c p
+  let (q2, _) := call_mut_back c1
+  ok (q1, (q2, q))
+
+/-- Trait implementation: [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnOnce<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}]
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+@[reducible]
+def currentFnOnce
+  : core.ops.function.FnOnce AspisR156FullFreeze.freeze.closure_2.closure (AspisR156FullFreeze.aspis_core.field.QM31 ×
+  AspisR156FullFreeze.aspis_core.field.QM31) AspisR156FullFreeze.aspis_core.field.QM31 := {
+  call_once :=
+    currentCallOnce
+}
+
+/-- Trait implementation: [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnMut<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}]
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+@[reducible]
+def currentFnMut :
+  core.ops.function.FnMut AspisR156FullFreeze.freeze.closure_2.closure (AspisR156FullFreeze.aspis_core.field.QM31 ×
+  AspisR156FullFreeze.aspis_core.field.QM31) AspisR156FullFreeze.aspis_core.field.QM31 := {
+  FnOnceInst :=
+    currentFnOnce
+  call_mut :=
+    currentCallMut
+}
+

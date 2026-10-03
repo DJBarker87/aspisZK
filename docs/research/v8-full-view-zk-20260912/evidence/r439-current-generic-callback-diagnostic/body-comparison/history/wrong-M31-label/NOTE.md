@@ -1,0 +1,1 @@
+Historical report snapshot with a mistaken human-readable label: Type2 was called M31. Both captured declarations actually name this type `aspis_core::field::QM31`. Raw captured LLBC bytes were always intact. Current reports are regenerated from the original captures with the names corrected; this history snapshot is retained only to record the reporting correction.

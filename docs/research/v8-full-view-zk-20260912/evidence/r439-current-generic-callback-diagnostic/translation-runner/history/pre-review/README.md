@@ -1,0 +1,9 @@
+# R439 focused Aeneas translation runner preparation
+
+Status: `PREPARED_NOT_LAUNCHED`. No remote command was sent and no build, translation, or Lean compilation ran for this runner. It is intentionally fail-closed: the projected LLBC local path and SHA-256 are still lead-supplied sentinels in `launch_collect.py`.
+
+Pinned translator: `/home/dombarker/project-offloads/aspis-r425-unit-constant-candidate-20261002-a/aeneas-r425-unit-constant-candidate`, SHA-256 `eadb205fc1e00cf7e32197dd7cbbbd82aa42b59442d8f186cfdca7c8fdca9b01`. Translation namespace: `AspisR439GenericGamma`. Command flags are copied from the reviewed R425 translation runner: sequential mode, no progress bar, abort on error, Lean backend, split files, JSON manifest. The remote job is configured for its own systemd scope with MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0, TasksMax 128, and RuntimeMaxSec 600 seconds.
+
+The remote payload records input and binary hashes, source revision, cgroup before/after snapshots, GNU time wall/RSS/swap/status, generated-file hashes, external-template axiom names, and the count of manifest function rows with native `def_id=284`. It first checks that the input has no extraction errors and includes function row 284. Output/translation failures are retained in result files. The local launcher stages the projection only after a separate lead approval receipt matches its path/SHA, target function ID 284, and namespace. Without that receipt, `--launch` fails closed; `--prepare-only` is the only currently usable mode. The prepared remote output path is fresh and every remote/systemd launch also checks it is absent.
+
+No translation result, external-axiom conclusion, execution correspondence, source-semantic conclusion, or cryptographic/security claim is included here. The expected manifest root is an inventory gate only.

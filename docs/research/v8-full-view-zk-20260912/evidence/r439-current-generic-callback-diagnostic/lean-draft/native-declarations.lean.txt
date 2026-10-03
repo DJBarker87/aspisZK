@@ -1,0 +1,55 @@
+/-- [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnMut<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}::call_mut]:
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+def
+  freeze.closure_2.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+  (c : freeze.closure_2.closure)
+  (tupled_args : (aspis_core.field.QM31 × aspis_core.field.QM31)) :
+  Result (aspis_core.field.QM31 × freeze.closure_2.closure ×
+    (freeze.closure_2.closure → freeze.closure_2.closure))
+  := do
+  let (q, q1) := c
+  let (a, v) := tupled_args
+  let q2 ← aspis_core.field.QM31.mul q v
+  let r ← aspis_core.field.QM31.add a q2
+  let q3 ← aspis_core.field.QM31.mul q q1
+  let back := fun c1 => let (q4, _) := c1
+                        (q4, q1)
+  ok (r, (q3, q1), back)
+
+/-- [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnOnce<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}::call_once]:
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+def
+  freeze.closure_2.closure.Insts.CoreOpsFunctionFnOncePairQM31SharedQM31QM31.call_once
+  (c : freeze.closure_2.closure)
+  (p : (aspis_core.field.QM31 × aspis_core.field.QM31)) :
+  Result (aspis_core.field.QM31 × freeze.closure_2.closure)
+  := do
+  let (_, q) := c
+  let (q1, c1, call_mut_back) ←
+    freeze.closure_2.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+      c p
+  let (q2, _) := call_mut_back c1
+  ok (q1, (q2, q))
+
+/-- Trait implementation: [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnOnce<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}]
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+@[reducible]
+def freeze.closure_2.closure.Insts.CoreOpsFunctionFnOncePairQM31SharedQM31QM31
+  : core.ops.function.FnOnce freeze.closure_2.closure (aspis_core.field.QM31 ×
+  aspis_core.field.QM31) aspis_core.field.QM31 := {
+  call_once :=
+    freeze.closure_2.closure.Insts.CoreOpsFunctionFnOncePairQM31SharedQM31QM31.call_once
+}
+
+/-- Trait implementation: [aspis_v8_performance_host::freeze::closure#2::{impl core::ops::function::FnMut<(aspis_core::field::QM31, &'_ aspis_core::field::QM31), aspis_core::field::QM31> for aspis_v8_performance_host::freeze::closure#2::closure<'_0, '_1>}]
+    Source: '../relation_callback.rs', lines 134:62-134:108 -/
+@[reducible]
+def freeze.closure_2.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31 :
+  core.ops.function.FnMut freeze.closure_2.closure (aspis_core.field.QM31 ×
+  aspis_core.field.QM31) aspis_core.field.QM31 := {
+  FnOnceInst :=
+    freeze.closure_2.closure.Insts.CoreOpsFunctionFnOncePairQM31SharedQM31QM31
+  call_mut :=
+    freeze.closure_2.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+}
+
