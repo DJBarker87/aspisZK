@@ -1,0 +1,17 @@
+--- compiled-observer/get_mir.rs
++++ canonical-selector/get_mir.rs
+@@ -109,9 +109,13 @@
+                 if !rust_def_id.is_local()
+                     && std::env::var("ASPIS_R427_OBSERVE_MIR").as_deref() == Ok("1")
+                 {
+-                    let name = tcx.def_path_str(rust_def_id);
++                    let display_name = tcx.def_path_str(rust_def_id);
++                    let name = ty::print::with_no_trimmed_paths!(ty::print::with_no_visible_paths!(
++                        tcx.def_path_str(rust_def_id)
++                    ));
+                     if name == "core::iter::traits::iterator::Iterator::try_fold" {
+                         eprintln!("ASPIS_R427_RAW_MIR_BEGIN name={name} def_id={rust_def_id:?}");
++                        eprintln!("ASPIS_R427_DISPLAY_NAME name={display_name}");
+                         eprintln!("{body:#?}");
+                         // Rustc's custom Debug omits statement/terminator source_info
+                         // and prints Use retagging by a prefix. Preserve them explicitly.

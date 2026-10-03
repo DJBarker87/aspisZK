@@ -1,0 +1,94 @@
+{
+  "task": "R427 raw MIR observation preflight",
+  "status": "read-only preflight complete; build and observer hook not launched",
+  "pinned_source": {
+    "repository": "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon",
+    "git_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "git_status": "tracked files clean; unrelated untracked path reported as ?? \\\"\\/",
+    "manifest": "charon/Cargo.toml",
+    "package": "charon 0.1.223",
+    "targets": [
+      "charon",
+      "charon-driver",
+      "generate-ml"
+    ],
+    "build_rs": false,
+    "cargo_config_found_within_repo_depth_4": false,
+    "custom_profile_section": false,
+    "manifest_sha256": "a31bab7d34638f8c2a43f14263184a3328ab17366c2f9acf201d86b922c4176f",
+    "lock_sha256": "c755a326679e9b3dbce560ff15130bdc83ae16178f2c1af568e391b8470d2e67",
+    "toolchain_file_sha256": "27e050e8fc5ac827e1264abf38c27fcaf18e73f4305104c866179cb84721898c"
+  },
+  "toolchain": {
+    "channel": "nightly-2026-06-01",
+    "rustc": "rustc 1.98.0-nightly (14210df0e 2026-05-31)",
+    "rustc_commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "cargo": "cargo 1.98.0-nightly (fbb61be30 2026-05-26)",
+    "release_profile": "standard Cargo --release; no custom profile stanza",
+    "fingerprint_features": [
+      "default",
+      "rustc"
+    ],
+    "fingerprint_rustflags": [],
+    "fingerprint_profile_hash": 12468216108105302490,
+    "fingerprint_json_sha256": "8dc3164f5ab061327ec3f39dc3785f728ad9618a11c5d817d8215bf6bcfddaed"
+  },
+  "existing_release_artifacts": {
+    "charon_target_size": "approximately 2.2 GiB (du summary)",
+    "charon_wrapper": {
+      "path": "charon/target/release/charon",
+      "size": 296187640,
+      "sha256_matches_top_level_bin_charon": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+      "inode": 36331747
+    },
+    "top_level_bin_charon": {
+      "path": "bin/charon",
+      "size": 296187640,
+      "sha256": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+      "inode": 36331727
+    },
+    "charon_driver": {
+      "path": "charon/target/release/charon-driver",
+      "size": 387575256,
+      "sha256": "4cb603ad51132f298a63a9c2a8cc8c629c73edeff22516fbf56ba5decee70938",
+      "inode": 36331736
+    },
+    "cargo_registry_size": "approximately 1.3 GiB (du summary)",
+    "cache_caveat": "target/release/charon-driver.d records absolute original-workspace paths; relocated fingerprint reuse is not established. Stop if the candidate would trigger a broad/cold dependency rebuild."
+  },
+  "selected_observer": {
+    "source": "charon/src/bin/charon-driver/translate/get_mir.rs",
+    "source_sha256": "e6461421d16dc4e9e1a7e5f097e8aab455513b1a290b780c90afc4f3f5765964",
+    "location": "nonlocal optimized_mir branch after tcx.optimized_mir(rust_def_id), before Some(body.clone())",
+    "guard": "ASPIS_R427_OBSERVE_MIR=1 and exact def_path_str == core::iter::traits::iterator::Iterator::try_fold",
+    "behavior": "stderr-only diagnostic; return original body clone unchanged",
+    "debug_limit": "Body Debug includes basic blocks, but custom Statement/Terminator formatters omit source_info; Rvalue::Use encodes No retag with a prefix and Yes implicitly. Lead draft separately prints explicit Use tags, source_info, and call args/spans. This is diagnostic output, not a complete MIR serialization."
+  },
+  "native_debug_source_sha256": {
+    "rustc_middle/src/mir/mod.rs": "3990dc3ef2bc63ea4086841b023ad1f6136ae467429d14e374e32048bb8bfb50",
+    "rustc_middle/src/mir/basic_blocks.rs": "a1461276f35c6998ad5adcee4f2a639d8f565eee58f1a080f0cd552b1781dfed",
+    "rustc_middle/src/mir/syntax.rs": "dd77a1dddc833bf073bec4b35274d5f519819f2e309f48411371e2e9cd376679",
+    "rustc_middle/src/mir/statement.rs": "acff65d81366c666de6cf66ebb62208ad608a5e67409a5ea26ac4934ecc91dc4",
+    "rustc_middle/src/mir/terminator.rs": "5705a09aedcb641a46f71a49ceaf44704c58e839b50d84333644ac6f401d16e5",
+    "rustc_span/src/lib.rs": "d31581e1890af0ec0e1aad3de20d84bcab203a89d047519d5cfb6d29dbf5cceb",
+    "rustc_middle/src/mir/pretty.rs": "0977feb5471a06071b764e18df6b12310cbd0e96e8f14495a12b4b2f7fb5fc89"
+  },
+  "proposed_build_only_not_run": {
+    "command": "CARGO_TARGET_DIR=<candidate>/charon/target cargo build --manifest-path <candidate>/charon/Cargo.toml --release --offline --locked --jobs 1 --bin charon-driver",
+    "scope": "systemd user scope, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128",
+    "host_snapshot_utc": "2026-10-02T22:13:00Z approximate",
+    "host_ram_gib": 62,
+    "host_available_gib": 51,
+    "host_swap_used_gib": 5.2,
+    "host_swap_total_gib": 8,
+    "host_disk_free_gib": 252,
+    "active_build_jobs_at_snapshot": 0
+  },
+  "source_pin_receipt": {
+    "path": "lead-audit/remote-source-pins.stdout.json",
+    "classification": "machine-generated primary file hash receipt; source reads only",
+    "charon_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+    "rustc_commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "sha256": "33206b0ee9c68c5ffb13eb88e60b14a367e548398e4a7013db681f645f80b65a"
+  }
+}

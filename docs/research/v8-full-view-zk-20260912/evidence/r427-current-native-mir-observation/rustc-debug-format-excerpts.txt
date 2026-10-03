@@ -1,0 +1,163 @@
+   204	/// The lowered representation of a single function.
+   205	#[derive(Clone, TyEncodable, TyDecodable, Debug, StableHash, TypeFoldable, TypeVisitable)]
+   206	pub struct Body<'tcx> {
+   207	    /// A list of basic blocks. References to basic block use a newtyped index type [`BasicBlock`]
+   208	    /// that indexes into this vector.
+   209	    pub basic_blocks: BasicBlocks<'tcx>,
+   210	
+   211	    /// Records how far through the "desugaring and optimization" process this particular
+   212	    /// MIR has traversed. This is particularly useful when inlining, since in that context
+   213	    /// we instantiate the promoted constants and add them to our promoted vector -- but those
+   214	    /// promoted items have already been optimized, whereas ours have not. This field allows
+   215	    /// us to see the difference and forego optimization on the inlined promoted items.
+   216	    pub phase: MirPhase,
+   217	
+   218	    /// How many passes we have executed since starting the current phase. Used for debug output.
+   219	    pub pass_count: usize,
+   220	
+   221	    pub source: MirSource<'tcx>,
+   222	
+   223	    /// A list of source scopes; these are referenced by statements
+   224	    /// and used for debuginfo. Indexed by a `SourceScope`.
+   225	    pub source_scopes: IndexVec<SourceScope, SourceScopeData<'tcx>>,
+   226	
+  1314	/// Data for a basic block, including a list of its statements.
+  1315	///
+  1316	/// See [`BasicBlock`] for documentation on what basic blocks are at a high level.
+  1317	#[derive(Clone, Debug, TyEncodable, TyDecodable, StableHash, TypeFoldable, TypeVisitable)]
+  1318	#[non_exhaustive]
+  1319	pub struct BasicBlockData<'tcx> {
+  1320	    /// List of statements in this block.
+  1321	    pub statements: Vec<Statement<'tcx>>,
+  1322	
+  1323	    /// All debuginfos happen before the statement.
+  1324	    /// Put debuginfos here when the last statement is eliminated.
+  1325	    pub after_last_stmt_debuginfos: StmtDebugInfos<'tcx>,
+  1326	
+  1327	    /// Terminator for this block.
+  1328	    ///
+  1329	    /// N.B., this should generally ONLY be `None` during construction.
+  1330	    /// Therefore, you should generally access it via the
+  1331	    /// `terminator()` or `terminator_mut()` methods. The only
+  1332	    /// exception is that certain passes, such as `simplify_cfg`, swap
+  1333	    /// out the terminator temporarily with `None` while they continue
+  1334	    /// to recurse over the set of basic blocks.
+  1335	    pub terminator: Option<Terminator<'tcx>>,
+  1336	
+  1337	    /// If true, this block lies on an unwind path. This is used
+  1338	    /// during codegen where distinct kinds of basic blocks may be
+    14	#[derive(Clone, TyEncodable, TyDecodable, Debug, StableHash, TypeFoldable, TypeVisitable)]
+    15	pub struct BasicBlocks<'tcx> {
+    16	    basic_blocks: IndexVec<BasicBlock, BasicBlockData<'tcx>>,
+    17	    /// Use an `Arc` so we can share the cache when we clone the MIR body, as borrowck does.
+    18	    cache: Arc<Cache>,
+    19	}
+   864	impl Debug for StatementKind<'_> {
+   865	    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
+   866	        use self::StatementKind::*;
+   867	        match *self {
+   868	            Assign((ref place, ref rv)) => write!(fmt, "{place:?} = {rv:?}"),
+   869	            FakeRead((ref cause, ref place)) => {
+   870	                write!(fmt, "FakeRead({cause:?}, {place:?})")
+   871	            }
+   872	            StorageLive(ref place) => write!(fmt, "StorageLive({place:?})"),
+   873	            StorageDead(ref place) => write!(fmt, "StorageDead({place:?})"),
+   874	            SetDiscriminant { ref place, variant_index } => {
+   875	                write!(fmt, "discriminant({place:?}) = {variant_index:?}")
+   876	            }
+   877	            PlaceMention(ref place) => {
+   878	                write!(fmt, "PlaceMention({place:?})")
+   879	            }
+   880	            AscribeUserType((ref place, ref c_ty), ref variance) => {
+   881	                write!(fmt, "AscribeUserType({place:?}, {variance:?}, {c_ty:?})")
+   882	            }
+   883	            Coverage(ref kind) => write!(fmt, "Coverage::{kind:?}"),
+   884	            Intrinsic(ref intrinsic) => write!(fmt, "{intrinsic}"),
+   885	            ConstEvalCounter => write!(fmt, "ConstEvalCounter"),
+   886	            Nop => write!(fmt, "nop"),
+   887	            BackwardIncompatibleDropHint { ref place, reason: _ } => {
+   888	                // For now, we don't record the reason because there is only one use case,
+   889	                // which is to report breaking change in drop order by Edition 2024
+   890	                write!(fmt, "BackwardIncompatibleDropHint({place:?})")
+   891	            }
+   892	        }
+   893	    }
+   894	}
+   895	impl Debug for Statement<'_> {
+   896	    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
+   897	        self.kind.fmt(fmt)
+   898	    }
+   899	}
+   925	impl<'tcx> Debug for TerminatorKind<'tcx> {
+   926	    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
+   927	        self.fmt_head(fmt)?;
+   928	        let successor_count = self.successors().count();
+   929	        let labels = self.fmt_successor_labels();
+   930	        assert_eq!(successor_count, labels.len());
+   931	
+   932	        // `Cleanup` is already included in successors
+   933	        let show_unwind = !matches!(self.unwind(), None | Some(UnwindAction::Cleanup(_)));
+   934	        let fmt_unwind = |fmt: &mut Formatter<'_>| -> fmt::Result {
+   935	            write!(fmt, "unwind ")?;
+   936	            match self.unwind() {
+   937	                // Not needed or included in successors
+   938	                None | Some(UnwindAction::Cleanup(_)) => unreachable!(),
+   939	                Some(UnwindAction::Continue) => write!(fmt, "continue"),
+   940	                Some(UnwindAction::Unreachable) => write!(fmt, "unreachable"),
+   941	                Some(UnwindAction::Terminate(reason)) => {
+   942	                    write!(fmt, "terminate({})", reason.as_short_str())
+   943	                }
+   944	            }
+   945	        };
+   946	
+   947	        match (successor_count, show_unwind) {
+   948	            (0, false) => Ok(()),
+   949	            (0, true) => {
+   950	                write!(fmt, " -> ")?;
+   951	                fmt_unwind(fmt)
+   952	            }
+   953	            (1, false) => write!(fmt, " -> {:?}", self.successors().next().unwrap()),
+   954	            _ => {
+   955	                write!(fmt, " -> [")?;
+   956	                for (i, target) in self.successors().enumerate() {
+   957	                    if i > 0 {
+   958	                        write!(fmt, ", ")?;
+   959	                    }
+   960	                    write!(fmt, "{}: {:?}", labels[i], target)?;
+   961	                }
+   962	                if show_unwind {
+   963	                    write!(fmt, ", ")?;
+   964	                    fmt_unwind(fmt)?;
+   965	                }
+   966	                write!(fmt, "]")
+   967	            }
+   968	        }
+   969	    }
+   970	}
+   971	impl Debug for Terminator<'_> {
+   972	    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
+   973	        self.kind.fmt(fmt)
+   974	    }
+   975	}
+  1141	impl<'tcx> Debug for Rvalue<'tcx> {
+  1142	    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
+  1143	        use self::Rvalue::*;
+  1144	
+  1145	        match *self {
+  1146	            Use(ref operand, with_retag) => {
+  1147	                // With retag is more common so we only print when it's without.
+  1148	                write!(fmt, "{}{operand:?}", if with_retag.no() { "no_retag " } else { "" })
+  1149	            }
+   494	/// Describes whether this operand use performs a retag.
+   495	#[derive(Copy, Clone, TyEncodable, TyDecodable, Debug, PartialEq, Eq, Hash, StableHash)]
+   496	#[rustc_pass_by_value]
+   497	pub enum WithRetag {
+   498	    Yes,
+   499	    No,
+   500	}
+  1362	#[derive(Clone, TyEncodable, TyDecodable, Hash, StableHash, PartialEq, TypeFoldable, TypeVisitable)]
+  1363	pub enum Rvalue<'tcx> {
+  1364	    /// Yields the operand unchanged, except for a potential retag.
+  1365	    Use(Operand<'tcx>, WithRetag),
+  1366	
+  1367	    /// Creates an array where each element is the value of the operand.

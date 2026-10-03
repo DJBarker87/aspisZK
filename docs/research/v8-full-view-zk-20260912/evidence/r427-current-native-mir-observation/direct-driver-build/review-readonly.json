@@ -1,0 +1,54 @@
+{
+  "classification": "independent read-only review of saved direct-driver runner draft; no launch, no edits to runner",
+  "command_review": {
+    "cfg_args_only_root_features": [
+      "feature=\"default\"",
+      "feature=\"rustc\""
+    ],
+    "dependency_build_cfg_not_propagated": true,
+    "externs_are_explicitly_selected_46": true,
+    "flags_equal_saved_selection": true,
+    "historical_cargo_profile_equivalence_claimed": false,
+    "native_search_path_includes_psm_out": true,
+    "no_cargo_command": true,
+    "sysroot_selected_by_rustup_nightly_channel": true
+  },
+  "custody_review": {
+    "checks_full_parent_and_candidate_tracked_manifests_against_saved_clone_audit": true,
+    "checks_native_inputs_before_and_after": true,
+    "checks_original_release_deps_hashes_before_and_after": true,
+    "checks_selected_artifact_hashes_before_and_after": true,
+    "checks_source_revision_and_parent_clean": true,
+    "toolchain_identity": "rustup channel and rustc commit checked; complete rustc/sysroot dylib bytes are not hash-pinned by this runner"
+  },
+  "extern_audit": {
+    "all_46_names_paths_sizes_sha_match_prior_fingerprint_artifact_map": true,
+    "comparison_source": "../compile-invocation-inventory/cached-dependency-artifacts.json",
+    "selected_count": 46,
+    "unique_names": 46
+  },
+  "home_environment": "No HOME override in reviewed current script. PATH is prepended with /home/dombarker/.cargo/bin; RUSTUP_TOOLCHAIN is set to the pinned nightly. Rustup path is absolute.",
+  "native_input_audit": {
+    "all_entries_match_saved_target_manifest": true,
+    "path": "release/build/psm-0054b740d3e1ad34/out",
+    "selected_entries": 2
+  },
+  "nonblocking_notes": [
+    "Runner\u2019s full tracked-tree checks cover candidate main.rs and other source bytes despite no separate main hash constant.",
+    "The original Cargo failure log showed proc-macro2 compilation; this runner avoids Cargo by design, but prior build failure cause remains outside this review."
+  ],
+  "overall": "Core input selection and non-Cargo invocation are mechanically consistent. Before launch, resolve cancellation cleanup and ensure aggregate reservation accounting includes active scopes; preserve distinction between GNU-time on rustup and actual cgroup peak.",
+  "resource_and_cancellation": {
+    "aggregate_cgroup_sampler": true,
+    "caps_checked": "5G high / 7G max / 0 swap / 128 tasks",
+    "gnu_time_wraps_rustup_not_rustc_directly": "GNU time wraps rustup run; trust cgroup peak for aggregate Rustc tree RSS, and distinguish GNU-time metric label.",
+    "inactivity_stop": "600 seconds without stdout or output-binary size growth",
+    "keyboard_interrupt_cleanup_gap": "Popen starts a new session; no signal handler/finally cleanup is visible for KeyboardInterrupt or arbitrary Python exceptions after launch. The timeout/OOM path kills discovered descendants, but external cancellation safety is incomplete.",
+    "reservation_scan_gap": "reservations() lists --type=service only; scope units may not be represented in its aggregate reservation accounting."
+  },
+  "runner_path": ".r21-scratch/r427-raw-mir-observation-preflight/direct-driver-build/run_direct_driver_remote.py",
+  "runner_sha256_at_review": "bc176077e2f3b299fa53c5626683bf205fa8928be1e95ee00e9994b59c8a3b0b",
+  "selection_path": ".r21-scratch/r427-raw-mir-observation-preflight/direct-driver-build/direct-driver-input-selection.json",
+  "selection_sha256": "98cb2179333d9225be055ed61267a09286448b87b3b1e7fafad15de009790d97",
+  "syntax": "PASS: Python AST parse succeeded for reviewed runner snapshot"
+}

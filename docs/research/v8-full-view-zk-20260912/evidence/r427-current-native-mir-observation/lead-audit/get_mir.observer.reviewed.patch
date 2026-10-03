@@ -1,0 +1,44 @@
+--- pinned/get_mir.rs
++++ observer/get_mir.rs
+@@ -103,7 +103,40 @@
+             let mir_available = tcx.is_mir_available(rust_def_id);
+ 
+             if mir_available && !is_global && !is_static {
+-                Some(tcx.optimized_mir(rust_def_id).clone())
++                let body = tcx.optimized_mir(rust_def_id);
++                // R427 diagnostic only: observe the selected encoded foreign body.
++                // No MIR, operands, regions, phases, or returned body are modified.
++                if !rust_def_id.is_local()
++                    && std::env::var("ASPIS_R427_OBSERVE_MIR").as_deref() == Ok("1")
++                {
++                    let name = tcx.def_path_str(rust_def_id);
++                    if name == "core::iter::traits::iterator::Iterator::try_fold" {
++                        eprintln!("ASPIS_R427_RAW_MIR_BEGIN name={name} def_id={rust_def_id:?}");
++                        eprintln!("{body:#?}");
++                        // Rustc's custom Debug omits statement/terminator source_info
++                        // and prints Use retagging by a prefix. Preserve them explicitly.
++                        for (bb, block) in body.basic_blocks.iter_enumerated() {
++                            for (index, statement) in block.statements.iter().enumerate() {
++                                eprintln!("ASPIS_R427_STATEMENT_SOURCE bb={bb:?} index={index} source_info={:?}", statement.source_info);
++                                if let mir::StatementKind::Assign(pair) = &statement.kind {
++                                    if let mir::Rvalue::Use(_, retag) = &pair.1 {
++                                        eprintln!("ASPIS_R427_USE_RETAG bb={bb:?} index={index} retag={retag:?}");
++                                    }
++                                }
++                            }
++                            if let Some(terminator) = &block.terminator {
++                                eprintln!("ASPIS_R427_TERMINATOR_SOURCE bb={bb:?} source_info={:?}", terminator.source_info);
++                                if let mir::TerminatorKind::Call { args, .. } = &terminator.kind {
++                                    for (index, arg) in args.iter().enumerate() {
++                                        eprintln!("ASPIS_R427_CALL_ARG bb={bb:?} index={index} operand={:?} span={:?}", arg.node, arg.span);
++                                    }
++                                }
++                            }
++                        }
++                        eprintln!("ASPIS_R427_RAW_MIR_END name={name} def_id={rust_def_id:?}");
++                    }
++                }
++                Some(body.clone())
+             } else if (is_global && !tcx.is_trivial_const(rust_def_id))
+                 || (is_static && rust_def_id.is_local())
+                 || tcx.is_const_fn(rust_def_id)

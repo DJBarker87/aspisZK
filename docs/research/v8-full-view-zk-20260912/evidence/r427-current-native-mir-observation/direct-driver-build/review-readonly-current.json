@@ -1,0 +1,48 @@
+{
+  "classification": "independent read-only review; no edits to runner and no launch",
+  "custody": {
+    "parent_git": "new runner also compares pinned parent HEAD and tracked porcelain before/after",
+    "source": "checks pinned parent HEAD/clean state, complete tracked source snapshots for parent and candidate against clone audit, source wrapper/driver, all selected externs, PSM native entries, and full release/deps cache hash map before and after; output wrapper copied with inode independence check",
+    "toolchain": "checks rustup channel nightly-2026-06-01 and rustc commit; does not hash every sysroot shared library"
+  },
+  "direct_inputs": {
+    "cargo": "no Cargo invocation; direct rustup run nightly rustc command",
+    "cfg": "only lead-selected root feature=\"default\" and feature=\"rustc\"; dependency build-script cfgs are not propagated",
+    "extern_count": 46,
+    "flags": [
+      "--crate-name",
+      "charon_driver",
+      "--edition=2024",
+      "--crate-type",
+      "bin",
+      "--cfg",
+      "feature=\"default\"",
+      "--cfg",
+      "feature=\"rustc\"",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "codegen-units=16",
+      "-C",
+      "debuginfo=0",
+      "-C",
+      "panic=unwind",
+      "--emit=link"
+    ],
+    "native_search_path": "explicit dependency= release/deps and native= PSM build output; two selected native entries were matched to saved target manifest in prior audit",
+    "profile_caveat": "explicit standalone diagnostic profile; does not claim reconstruction/equivalence to prior Cargo invocation",
+    "selection_manifest": "46 selected extern rows; prior independently saved artifact-map comparison passed all path/name/size/SHA256 matches",
+    "unique_extern_names": 46
+  },
+  "environment": "No HOME override. PATH is prepended with /home/dombarker/.cargo/bin; RUSTUP_TOOLCHAIN set explicitly.",
+  "review_result": "Selected inputs and explicit rustc command are mechanically consistent with the saved 46-extern map, PSM native inputs, lead-selected cfg/optimization flags, and no-Cargo diagnostic scope. The safety gaps above remain for lead disposition before any launch.",
+  "runner_path": ".r21-scratch/r427-raw-mir-observation-preflight/direct-driver-build/run_direct_driver_remote.py",
+  "runner_sha256": "9ff7626104f18c60d4e435a3d0d74849de6cb6c8463cd03ecddf1f0ed16815f3",
+  "safety_gaps": [
+    "Reservation enumeration uses systemctl --user list-units --type=service only; active .scope units may be omitted from aggregate cap accounting.",
+    "Subprocess uses start_new_session=True. Timeout/OOM cleanup kills discovered descendants, but there is no finally/signal handler around the post-Popen region; KeyboardInterrupt or another Python exception can leave compiler descendants running.",
+    "600-second inactivity gate checks stdout and output target growth; GNU time wraps rustup (not rustc directly), so GNU RSS is process accounting as reported by time, while cgroup samples are the aggregate scope measurement."
+  ],
+  "selection_sha256": "98cb2179333d9225be055ed61267a09286448b87b3b1e7fafad15de009790d97",
+  "syntax": "Python AST parse PASS"
+}

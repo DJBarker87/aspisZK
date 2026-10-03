@@ -1,0 +1,59 @@
+    38	#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+    39	pub struct ItemRef {
+    40	    pub(crate) contents: HashConsed<ItemRefContents>,
+    41	}
+    42	
+    43	/// Contents of `ItemRef`.
+    44	#[derive(AdtInto)]
+    45	#[args(<'tcx, S: UnderOwnerState<'tcx>>, from: rustc_trait_elaboration::ItemRef<'tcx, DefId>, state: S as s)]
+    46	#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+    47	pub struct ItemRefContents {
+    48	    /// The item being refered to.
+    49	    #[value(self.def_id.clone())]
+    50	    pub def_id: DefId,
+    51	    /// The generics passed to the item. If `in_trait` is `Some`, these are only the generics of
+    52	    /// the method/type/const itself; generics for the traits are available in
+    53	    /// `in_trait.unwrap().trait`.
+    54	    #[value(self.assoc_generics().sinto(s))]
+    55	    pub generic_args: Vec<GenericArg>,
+    56	    /// Witnesses of the trait clauses required by the item, e.g. `T: Sized` for `Option<T>` or `B:
+    57	    /// ToOwned` for `Cow<'a, B>`. Same as above, for associated items this only includes clauses
+    58	    /// for the item itself.
+    59	    #[value(self.assoc_trait_proofs().sinto(s))]
+    60	    pub trait_proofs: Vec<TraitProof>,
+    61	    /// If we're referring to a trait associated item, this gives the trait clause/impl we're
+    62	    /// referring to.
+    63	    #[value(self.in_trait.as_ref().map(|(x, _)| x).sinto(s))]
+    64	    pub in_trait: Option<TraitProof>,
+    65	    /// Whether this contains any reference to a type/lifetime/const parameter.
+    66	    #[value(self.has_param)]
+   263	impl std::ops::Deref for ItemRef {
+   264	    type Target = ItemRefContents;
+   265	    fn deref(&self) -> &Self::Target {
+   266	        self.contents()
+   267	    }
+   268	}
+    82	#[derive(Clone, PartialEq, Eq)]
+    83	pub struct DefId {
+    84	    pub(crate) contents: HashConsed<DefIdContents>,
+    85	}
+    86	
+    87	#[derive(Debug, Hash, Clone, PartialEq, Eq)]
+    88	pub struct DefIdContents {
+    89	    pub base: DefIdBase,
+    90	    /// The kind of definition this `DefId` points to.
+    91	    pub kind: crate::hax::DefKind,
+    92	}
+    93	
+    94	#[derive(Debug, Hash, Clone, Copy, PartialEq, Eq)]
+    95	pub enum DefIdBase {
+    96	    Real(RDefId),
+    97	    Promoted(RDefId, PromotedId),
+    98	    /// This represents the context made of the trait impl generics plus the associated item
+    99	    /// generics declared in the trait. We use that context to trait solve the mapping from
+   100	    /// declared method generics to implemented method generics.
+   101	    ImplAssocItem(VirtualImplAssocItem),
+   102	    /// A completely fictitious item, we use this for arrays, slices and tuples to make
+   103	    /// monomorphization and other shenanigans easier.
+   104	    Synthetic(SyntheticItem),
+   105	}

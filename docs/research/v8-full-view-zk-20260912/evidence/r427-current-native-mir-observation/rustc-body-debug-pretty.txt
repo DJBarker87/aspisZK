@@ -1,0 +1,53 @@
+/// The lowered representation of a single function.
+#[derive(Clone, TyEncodable, TyDecodable, Debug, StableHash, TypeFoldable, TypeVisitable)]
+pub struct Body<'tcx> {
+    /// A list of basic blocks. References to basic block use a newtyped index type [`BasicBlock`]
+    /// that indexes into this vector.
+    pub basic_blocks: BasicBlocks<'tcx>,
+
+    /// Records how far through the "desugaring and optimization" process this particular
+    /// MIR has traversed. This is particularly useful when inlining, since in that context
+    /// we instantiate the promoted constants and add them to our promoted vector -- but those
+    /// promoted items have already been optimized, whereas ours have not. This field allows
+    /// us to see the difference and forego optimization on the inlined promoted items.
+    pub phase: MirPhase,
+
+    /// How many passes we have executed since starting the current phase. Used for debug output.
+    pub pass_count: usize,
+
+    pub source: MirSource<'tcx>,
+
+    /// A list of source scopes; these are referenced by statements
+    /// and used for debuginfo. Indexed by a `SourceScope`.
+    pub source_scopes: IndexVec<SourceScope, SourceScopeData<'tcx>>,
+
+    /// Additional information carried by a MIR body when it is lowered from a coroutine.
+    ///
+    /// Note that the coroutine drop shim, any promoted consts, and other synthetic MIR
+    /// bodies that come from processing a coroutine body are not typically coroutines
+/// Does the writing of MIR to output, e.g. a file.
+pub struct MirWriter<'a, 'tcx> {
+    tcx: TyCtxt<'tcx>,
+    extra_data: &'a dyn Fn(PassWhere, &mut dyn io::Write) -> io::Result<()>,
+    options: PrettyPrintMirOptions,
+}
+
+impl<'a, 'tcx> MirWriter<'a, 'tcx> {
+    pub fn new(tcx: TyCtxt<'tcx>) -> Self {
+        MirWriter { tcx, extra_data: &|_, _| Ok(()), options: PrettyPrintMirOptions::from_cli(tcx) }
+    }
+
+    /// Write out a human-readable textual representation for the given function.
+    pub fn write_mir_fn(&self, body: &Body<'tcx>, w: &mut dyn io::Write) -> io::Result<()> {
+        write_mir_intro(self.tcx, body, w, self.options)?;
+        for block in body.basic_blocks.indices() {
+            (self.extra_data)(PassWhere::BeforeBlock(block), w)?;
+            self.write_basic_block(block, body, w)?;
+            if block.index() + 1 != body.basic_blocks.len() {
+                writeln!(w)?;
+            }
+        }
+
+        writeln!(w, "}}")?;
+
+        write_allocations(self.tcx, body, w)?;
