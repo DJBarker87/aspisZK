@@ -1,0 +1,177 @@
+### slice/iter/macros.rs — macro-generated Iterator::next body
+lines 153-192:
+  153         impl<'a, T> Iterator for $name<'a, T> {
+  154             type Item = $elem;
+  155 
+  156             #[inline]
+  157             fn next(&mut self) -> Option<$elem> {
+  158                 // intentionally not using the helpers because this is
+  159                 // one of the most mono'd things in the library.
+  160 
+  161                 let ptr = self.ptr;
+  162                 let end_or_len = self.end_or_len;
+  163                 // SAFETY: See inner comments. (For some reason having multiple
+  164                 // block breaks inlining this -- if you can fix that please do!)
+  165                 unsafe {
+  166                     if T::IS_ZST {
+  167                         let len = end_or_len.addr();
+  168                         if len == 0 {
+  169                             return None;
+  170                         }
+  171                         // SAFETY: just checked that it's not zero, so subtracting one
+  172                         // cannot wrap.  (Ideally this would be `checked_sub`, which
+  173                         // does the same thing internally, but as of 2025-02 that
+  174                         // doesn't optimize quite as small in MIR.)
+  175                         self.end_or_len = without_provenance_mut(len.unchecked_sub(1));
+  176                     } else {
+  177                         // SAFETY: by type invariant, the `end_or_len` field is always
+  178                         // non-null for a non-ZST pointee.  (This transmute ensures we
+  179                         // get `!nonnull` metadata on the load of the field.)
+  180                         if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {
+  181                             return None;
+  182                         }
+  183                         // SAFETY: since it's not empty, per the check above, moving
+  184                         // forward one keeps us inside the slice, and this is valid.
+  185                         self.ptr = ptr.add(1);
+  186                     }
+  187                     // SAFETY: Now that we know it wasn't empty and we've moved past
+  188                     // the first one (to avoid giving a duplicate `&mut` next time),
+  189                     // we can give out a reference to it.
+  190                     Some({ptr}.$into_ref())
+  191                 }
+  192             }
+
+### slice/iter.rs — Iter fields, constructor, and iterator! specialization
+lines 67-104:
+   67 pub struct Iter<'a, T: 'a> {
+   68     /// The pointer to the next element to return, or the past-the-end location
+   69     /// if the iterator is empty.
+   70     ///
+   71     /// This address will be used for all ZST elements, never changed.
+   72     ptr: NonNull<T>,
+   73     /// For non-ZSTs, the non-null pointer to the past-the-end element.
+   74     ///
+   75     /// For ZSTs, this is `ptr::without_provenance_mut(len)`.
+   76     end_or_len: *const T,
+   77     _marker: PhantomData<&'a T>,
+   78 }
+   79 
+   80 #[stable(feature = "core_impl_debug", since = "1.9.0")]
+   81 impl<T: fmt::Debug> fmt::Debug for Iter<'_, T> {
+   82     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+   83         f.debug_tuple("Iter").field(&self.as_slice()).finish()
+   84     }
+   85 }
+   86 
+   87 #[stable(feature = "rust1", since = "1.0.0")]
+   88 unsafe impl<T: Sync> Sync for Iter<'_, T> {}
+   89 #[stable(feature = "rust1", since = "1.0.0")]
+   90 unsafe impl<T: Sync> Send for Iter<'_, T> {}
+   91 
+   92 impl<'a, T> Iter<'a, T> {
+   93     #[inline]
+   94     pub(super) const fn new(slice: &'a [T]) -> Self {
+   95         let len = slice.len();
+   96         let ptr: NonNull<T> = NonNull::from_ref(slice).cast();
+   97         // SAFETY: Similar to `IterMut::new`.
+   98         unsafe {
+   99             let end_or_len =
+  100                 if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };
+  101 
+  102             Self { ptr, end_or_len, _marker: PhantomData }
+  103         }
+  104     }
+
+lines 140-140:
+  140 iterator! {struct Iter -> *const T, &'a T, const, {/* no mut */}, as_ref, each_ref, {
+
+### ptr/non_null.rs — NonNull::as_ptr, as_ref, add
+lines 398-404:
+  398     pub const fn as_ptr(self) -> *mut T {
+  399         // This is a transmute for the same reasons as `NonZero::get`.
+  400 
+  401         // SAFETY: `NonNull` is `transparent` over a `*const T`, and `*const T`
+  402         // and `*mut T` have the same layout, so transitively we can transmute
+  403         // our `NonNull` to a `*mut T` directly.
+  404         unsafe { mem::transmute::<Self, *mut T>(self) }
+
+lines 433-442:
+  433     #[stable(feature = "nonnull", since = "1.25.0")]
+  434     #[rustc_const_stable(feature = "const_nonnull_as_ref", since = "1.73.0")]
+  435     #[must_use]
+  436     #[inline(always)]
+  437     pub const unsafe fn as_ref<'a>(&self) -> &'a T {
+  438         // SAFETY: the caller must guarantee that `self` meets all the
+  439         // requirements for a reference.
+  440         // `cast_const` avoids a mutable raw pointer deref.
+  441         unsafe { &*self.as_ptr().cast_const() }
+  442     }
+
+lines 648-657:
+  648     pub const unsafe fn add(self, count: usize) -> Self
+  649     where
+  650         T: Sized,
+  651     {
+  652         // SAFETY: the caller must uphold the safety contract for `offset`.
+  653         // Additionally safety contract of `offset` guarantees that the resulting pointer is
+  654         // pointing to an allocation, there can't be an allocation at null, thus it's safe to
+  655         // construct `NonNull`.
+  656         unsafe { transmute(intrinsics::offset(self.as_ptr(), count)) }
+  657     }
+
+### mem/mod.rs — SizedTypeProperties::IS_ZST and blanket implementation
+lines 1373-1420:
+ 1373 #[doc(hidden)]
+ 1374 #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1375 pub trait SizedTypeProperties: Sized {
+ 1376     #[doc(hidden)]
+ 1377     #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1378     #[lang = "mem_size_const"]
+ 1379     const SIZE: usize = intrinsics::size_of::<Self>();
+ 1380 
+ 1381     #[doc(hidden)]
+ 1382     #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1383     #[lang = "mem_align_const"]
+ 1384     const ALIGN: usize = intrinsics::align_of::<Self>();
+ 1385 
+ 1386     #[doc(hidden)]
+ 1387     #[unstable(feature = "ptr_alignment_type", issue = "102070")]
+ 1388     const ALIGNMENT: Alignment = {
+ 1389         // This can't panic since type alignment is always a power of two.
+ 1390         Alignment::new(Self::ALIGN).unwrap()
+ 1391     };
+ 1392 
+ 1393     /// `true` if this type requires no storage.
+ 1394     /// `false` if its [size](size_of) is greater than zero.
+ 1395     ///
+ 1396     /// # Examples
+ 1397     ///
+ 1398     /// ```
+ 1399     /// #![feature(sized_type_properties)]
+ 1400     /// use core::mem::SizedTypeProperties;
+ 1401     ///
+ 1402     /// fn do_something_with<T>() {
+ 1403     ///     if T::IS_ZST {
+ 1404     ///         // ... special approach ...
+ 1405     ///     } else {
+ 1406     ///         // ... the normal thing ...
+ 1407     ///     }
+ 1408     /// }
+ 1409     ///
+ 1410     /// struct MyUnit;
+ 1411     /// assert!(MyUnit::IS_ZST);
+ 1412     ///
+ 1413     /// // For negative checks, consider using UFCS to emphasize the negation
+ 1414     /// assert!(!<i32>::IS_ZST);
+ 1415     /// // As it can sometimes hide in the type otherwise
+ 1416     /// assert!(!String::IS_ZST);
+ 1417     /// ```
+ 1418     #[doc(hidden)]
+ 1419     #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1420     const IS_ZST: bool = Self::SIZE == 0;
+
+lines 1442-1444:
+ 1442 #[doc(hidden)]
+ 1443 #[unstable(feature = "sized_type_properties", issue = "none")]
+ 1444 impl<T> SizedTypeProperties for T {}
+

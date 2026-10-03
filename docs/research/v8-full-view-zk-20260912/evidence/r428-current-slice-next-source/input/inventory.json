@@ -1,0 +1,69 @@
+{
+  "classification": "read-only pinned Rust source inventory; no builds, selected-type layout inference, pointer semantics proof, or source-to-Lean correspondence claim",
+  "toolchain": {
+    "channel": "nightly-2026-06-01",
+    "rustc": "1.98.0-nightly (14210df0e 2026-05-31)",
+    "rustc_commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "source_root": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src"
+  },
+  "source_files": [
+    {
+      "path": "source/core/slice/iter/macros.rs",
+      "source_path": "core/src/slice/iter/macros.rs",
+      "sha256": "0ac47d295999ba8847d0df93557292fbad65d256db0c6521c396798d2e37677d",
+      "ranges": [
+        "153-192 shared iterator! next body"
+      ]
+    },
+    {
+      "path": "source/core/slice/iter.rs",
+      "source_path": "core/src/slice/iter.rs",
+      "sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251",
+      "ranges": [
+        "67-78 immutable Iter fields",
+        "92-104 Iter::new(slice)",
+        "140 immutable Iter iterator! invocation"
+      ]
+    },
+    {
+      "path": "source/core/ptr/non_null.rs",
+      "source_path": "core/src/ptr/non_null.rs",
+      "sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+      "ranges": [
+        "398-404 as_ptr",
+        "433-442 as_ref",
+        "607-657 add docs and body"
+      ]
+    },
+    {
+      "path": "source/core/mem/mod.rs",
+      "source_path": "core/src/mem/mod.rs",
+      "sha256": "9f450467849a7e829d2f57fe826518b7334df8a8eb206052d571ad7b5d018b9e",
+      "ranges": [
+        "1375-1420 SizedTypeProperties and IS_ZST default",
+        "1442-1444 blanket impl"
+      ]
+    }
+  ],
+  "next_body_operation_inventory": [
+    "loads self.ptr and self.end_or_len",
+    "branches on T::IS_ZST",
+    "ZST path obtains end_or_len.addr(), returns None at zero, otherwise stores without_provenance_mut(len.unchecked_sub(1))",
+    "non-ZST path compares ptr to transmute::<$ptr, NonNull<T>>(end_or_len), returns None on equality, otherwise stores ptr.add(1)",
+    "returns Some({ptr}.$into_ref()); immutable Iter specialization supplies $into_ref = as_ref"
+  ],
+  "source_stated_local_invariants": [
+    "Iter fields document ptr as next element or past-end location; end_or_len as non-null past-end pointer for non-ZST and provenance-free length for ZST",
+    "constructor comments identify ZST length vs non-ZST ptr.add(len)",
+    "next macro comments state non-ZST end_or_len is non-null by type invariant and, after nonempty test, advancing one remains inside slice"
+  ],
+  "parent_source_inventory": {
+    "path": ".r21-scratch/r390-opaque-guard-api-preflight/inventory.json",
+    "toolchain_source_copy_hashes_match": true
+  },
+  "excerpt_file": {
+    "path": "slice-iterator-excerpts.txt",
+    "sha256": "93f866f7e4e2e96aedc127ff92e76a2b2e2cd943be2f8d885619ab0ae01bbc13"
+  },
+  "scope_limit": "No claim about selected QM31 size/layout, concrete machine behavior, safety proof, pointer provenance equivalence, Lean correspondence, or source execution."
+}
