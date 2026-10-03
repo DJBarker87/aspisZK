@@ -1,0 +1,15 @@
+ 126 struct Prefix {t:Transcript, points:[Point;2],gamma:K,abc:[K;3],iv:[K;2],use_x:bool,tau:K}
+ 127 fn freeze(mut t:Transcript,w:&Wire<'_>,ordinary:&[K],claim:K)->Result<Prefix,Error>{
+ 128     let s=t.challenge_secure_circle_point().map_err(|_|Error::Sampler)?;
+ 129     let mut record=vec![0];record.extend(bytes(&w.v[359..388]));t.absorb(V8_COMPONENT_OOD_VECTOR,&record);
+ 130     let mut second=None;for _ in 0..3 {let p=t.challenge_secure_circle_point().map_err(|_|Error::Sampler)?;if p!=s {second=Some(p);break;}}
+ 131     let z=second.ok_or(Error::Sampler)?;let mut record=vec![1];record.extend(bytes(&w.v[388..417]));t.absorb(V8_COMPONENT_OOD_VECTOR,&record);
+ 132     t.absorb(label::M31_PAYMENT_BATCH_POW_NONCE,&w.nonces[..8]);let gamma=sample(&mut t,true)?;
+ 133     t.absorb(label::V6_INACTIVE_CLAIM,&bytes(&w.v[358..359]));let _kappa=sample(&mut t,true)?;
+ 134     let batch=|v:&[K]|{let mut g=K::ONE;v.iter().fold(K::ZERO,|a,v|{let r=a.add(g.mul(*v));g=g.mul(gamma);r})};
+ 135     let use_x=s.x!=z.x;let h0=if use_x{s.x}else{s.y};let h1=if use_x{z.x}else{z.y};
+ 136     let slope=batch(&w.v[359..388]).sub(batch(&w.v[388..417])).mul(h0.sub(h1).try_inv().ok_or(Error::Domain)?);
+ 137     let iv=[batch(&w.v[359..388]).sub(slope.mul(h0)),slope];
+ 138     let abc=[s.x.mul(z.y).sub(s.y.mul(z.x)),s.y.sub(z.y),z.x.sub(s.x)];
+ 139     // Freeze the public ordinary relation AFTER gamma/chord and BEFORE tau.
+ 140     // No caller mutation/response callback is possible inside this boundary.
