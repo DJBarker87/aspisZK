@@ -1,0 +1,99 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791016803795709000.service; invocation ID: de3d3b5bf9f6400881212db04ed38e14
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:13:35: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:13:43: error(lean.unknownIdentifier): Unknown identifier `State`
+
+Note: It is not possible to treat `State` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:16:6: error(lean.unknownIdentifier): Unknown identifier `Program.done`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:18:9: error: unsolved goals
+case zero
+H : sorry → sorry
+c : Cursor
+h : ↑c.index + 0 ≤ 8
+⊢ MemoizedProgramLaw.Program.done (none, c) = sorry ()
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:30:34: error: Ambiguous term
+  bind
+Possible interpretations:
+  OracleProgramOps.bind : MemoizedProgramLaw.Program ?m.97 ?m.98 ?m.99 →
+    (?m.99 → MemoizedProgramLaw.Program ?m.97 ?m.98 ?m.100) → MemoizedProgramLaw.Program ?m.97 ?m.98 ?m.100
+  
+  Bind.bind : ?m.97 ?m.99 → (?m.99 → ?m.97 ?m.100) → ?m.97 ?m.100
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:37:6: error: unsolved goals
+case neg
+H : sorry → sorry
+n : ℕ
+ih : ∀ (c : Cursor), ↑c.index + n ≤ 8 → limbProgram n c = sorry
+c : Cursor
+h : ↑c.index + (n + 1) ≤ 8
+hlt : ↑c.index < 8
+hneq : ↑c.index ≠ 8
+i : Fin 8 := ⟨↑c.index, hlt⟩
+c' : Cursor := { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }
+hp : readProgram c = MemoizedProgramLaw.Program.done (word c.block i, c')
+hr : readRun sorry c = ([], word c.block i, c')
+hs : ¬masked 31 (word c.block i) = 2147483647
+⊢ (OracleProgramOps.bind (MemoizedProgramLaw.Program.done (word c.block i, c')) fun r =>
+      if masked 31 r.1 = 2147483647 then limbProgram n r.2
+      else MemoizedProgramLaw.Program.done (some (masked 31 r.1), r.2)) =
+    sorry ()
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:19:25: warning: This simp argument is unused:
+  limbRun
+
+Hint: Omit it from the simp argument list.
+  simp [limbProgram,̵ ̵l̵i̵m̵b̵R̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:30:40: warning: This simp argument is unused:
+  limbRun
+
+Hint: Omit it from the simp argument list.
+  simp only [limbProgram, hp, bind, l̵i̵m̵b̵R̵u̵n̵,̵ ̵hr]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:30:49: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [limbProgram, hp, bind, limbRun,̵ ̵h̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean:37:14: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R452NoRefillProgram.limbProgram_no_refill' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R452NoRefillProgram.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R452NoRefillProgram.lean"
+	User time (seconds): 0.89
+	System time (seconds): 0.33
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.21
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3217040
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76443
+	Voluntary context switches: 388
+	Involuntary context switches: 55
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.246s
+CPU time consumed: 1.259s
+Memory peak: 292.0K
+Memory swap peak: 0B
