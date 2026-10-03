@@ -18,8 +18,4 @@ match the recorded hashes: `performance.rs` =
 and helper =
 `2635d2ac9573d0d5f22c5b1216810eea84f7a636450207b26e9aea2827d2c3c5`.
 
-The status-recorded successful-build RSS values cannot be matched exactly to
-the preserved build logs: status gives 541,224 KiB for sequential and 546,284
-KiB for C1, while `build4.log` records 537,132 KiB and `build3.log` records
-540,440 KiB. The logs are retained as observed artifacts, not relabelled as
-exact matching receipts.
+The initially packaged root-level build3/build4 logs were earlier builds, not the matching final certificate builds. The matching NUC `logs/build-ledger.log` and `logs/build-initial-preserve-ledgers.log` have now been recovered, without rerunning anything. They record respectively exit 0, 11.74 seconds, 541,224 KiB RSS, zero swap; and exit 0, 11.05 seconds, 546,284 KiB RSS, zero swap. The earlier logs remain preserved. This resolves the apparent resource-receipt mismatch; it does not restore the missing sequential source snapshots.

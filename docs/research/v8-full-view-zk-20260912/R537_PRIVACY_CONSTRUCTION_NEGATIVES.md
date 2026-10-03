@@ -46,6 +46,8 @@ security claim changed. The next task is a faithful full published-view joint
 model with shared oracle, seed/retry/stopping/publication behavior and a
 universal compatibility or incompatibility argument.
 
-Source context: frozen R117 revision `6677d5f1310ff7373301fbd79f186278f772e68a`; campaign parent `5dff53d0e8f7e52289d21c4f0749d8cd0f17c14b`. Evidence is under `evidence/r537-privacy-construction-negatives/`. Complete Lean axiom output is not applicable: these are Rust diagnostics and finite matrix certificates, not Lean theorems. The recorded status and raw logs are preserved verbatim, including the documented provenance discrepancies.
+Source context: frozen R117 revision `6677d5f1310ff7373301fbd79f186278f772e68a`; campaign parent `5dff53d0e8f7e52289d21c4f0749d8cd0f17c14b`. Evidence is under `evidence/r537-privacy-construction-negatives/`. Complete Lean axiom output is not applicable: these are Rust diagnostics and finite matrix certificates, not Lean theorems. The recorded status and raw logs are preserved verbatim, including the documented missing sequential source snapshots.
 
 The next focused experiment chooses jointly among the original 108-row C1 solutions to preserve the total initial claim, then runs the existing H1/G checks. A successful example would still not prove universal compatibility or whole-view privacy.
+
+Receipt recovery: the matching NUC final build logs were recovered after the first archival commit. They agree with the status-recorded resource figures; the initially packaged build3/build4 logs were earlier builds. No diagnostic was rerun.
