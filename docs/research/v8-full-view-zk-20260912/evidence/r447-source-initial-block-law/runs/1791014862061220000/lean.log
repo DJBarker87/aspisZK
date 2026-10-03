@@ -1,0 +1,94 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791014862061220000.service; invocation ID: bbc02d6786734bac8ba9b8beb4c5643a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:24:60: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:63:59: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:67:39: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:92:8: error: unsolved goals
+case neg.refine_1
+H : Bytes → State
+n : ℕ
+ih :
+  ∀ (c : Cursor) (h : ↑c.index + n ≤ 8),
+    (limbRun H n c).1 = [] ∧
+      (limbRun H n c).2.1 = (scanAt c.block ⟨↑c.index, ⋯⟩ n h).1 ∧
+        (limbRun H n c).2.2.state = c.state ∧
+          (limbRun H n c).2.2.block = c.block ∧
+            ↑(limbRun H n c).2.2.index = ↑c.index + (scanAt c.block ⟨↑c.index, ⋯⟩ n h).2
+c : Cursor
+h : ↑c.index + (n + 1) ≤ 8
+hlt : ↑c.index < 8
+hneq : ↑c.index ≠ 8
+i : Fin 8 := ⟨↑c.index, hlt⟩
+c' : Cursor := { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }
+hr : readRun H c = ([], word c.block i, c')
+hs : ¬masked 31 (word c.block i) = 2147483647
+⊢ some (masked 31 (word c.block i)) =
+    (if masked 31 (masked 31 (word c.block ⟨↑c.index, ⋯⟩)) = 2147483647 then
+        ((sourceScan (blockSuffix c.block ⟨↑c.index + 1, ⋯⟩ n ⋯)).1,
+          (sourceScan (blockSuffix c.block ⟨↑c.index + 1, ⋯⟩ n ⋯)).2 + 1)
+      else (some (masked 31 (masked 31 (word c.block ⟨↑c.index, ⋯⟩))), 1)).1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:69:35: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:69:35: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:84:27: warning: This simp argument is unused:
+  hsuffix
+
+Hint: Omit it from the simp argument list.
+  simp only [scanAt, h̵s̵u̵f̵f̵i̵x̵,̵ ̵sourceScan, hs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:84:36: warning: This simp argument is unused:
+  sourceScan
+
+Hint: Omit it from the simp argument list.
+  simp only [scanAt, hsuffix, s̵o̵u̵r̵c̵e̵S̵c̵a̵n̵,̵ ̵hs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:92:49: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [scanAt, blockSuffix, sourceScan,̵ ̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:93:49: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [scanAt, blockSuffix, sourceScan,̵ ̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R444InitialSourceLimb.limbRun_no_refill' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R444InitialSourceLimb.limbRun_scanAt' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean"
+	User time (seconds): 1.08
+	System time (seconds): 0.34
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.41
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3222500
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76912
+	Voluntary context switches: 748
+	Involuntary context switches: 62
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.444s
+CPU time consumed: 1.456s
+Memory peak: 256.0K
+Memory swap peak: 0B

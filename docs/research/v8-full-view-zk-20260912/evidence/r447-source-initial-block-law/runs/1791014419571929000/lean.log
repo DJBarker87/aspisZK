@@ -1,0 +1,104 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791014419571929000.service; invocation ID: 442219c040e94c16af418c948c70be5b
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:10:25: error(lean.unknownIdentifier): Unknown identifier `State`
+
+Note: It is not possible to treat `State` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:14:60: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:24:20: error(lean.unknownIdentifier): Unknown identifier `State`
+
+Note: It is not possible to treat `State` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:27:31: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:27:39: error(lean.unknownIdentifier): Unknown identifier `State`
+
+Note: It is not possible to treat `State` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:34:9: error: unsolved goals
+case zero
+H : sorry → sorry
+c : Cursor
+h : ↑c.index + 0 ≤ 8
+⊢ ↑c.index ≤ 8
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:49:57: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ d ≤ 8
+  b ≥ 0
+  b + d ≥ 9
+  0 ≤ a ≤ 7
+  a + b ≤ 7
+where
+ a := ↑↑c.index
+ b := ↑n
+ d := ↑↑{ state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }.index
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:73:62: error: unexpected identifier; expected '}'
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:59:28: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:59:36: error(lean.unknownIdentifier): Unknown identifier `State`
+
+Note: It is not possible to treat `State` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:62:59: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:66:39: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:73:25: error: Fields missing: `index`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:69:14: error: unsolved goals
+case succ
+H : sorry → sorry
+n : ℕ
+ih :
+  ∀ (c : Cursor) (h : ↑c.index + n ≤ 8),
+    (limbRun sorry n c).1 = [] ∧
+      (limbRun sorry n c).2.1 = (scanAt sorry ⟨↑c.index, ⋯⟩ n h).1 ∧
+        (limbRun sorry n c).2.2.state = c.state ∧
+          (limbRun sorry n c).2.2.block = c.block ∧
+            ↑(limbRun sorry n c).2.2.index = ↑c.index + (scanAt sorry ⟨↑c.index, ⋯⟩ n h).2
+c : Cursor
+h : ↑c.index + (n + 1) ≤ 8
+hlt : ↑c.index < 8
+hneq : ↑c.index ≠ 8
+i : Fin 8 := ⟨↑c.index, hlt⟩
+c' : Cursor := { state := c.state, block := c.block, index := sorry }
+⊢ (limbRun sorry (n + 1) c).1 = [] ∧
+    (limbRun sorry (n + 1) c).2.1 = (scanAt sorry ⟨↑c.index, ⋯⟩ (n + 1) h).1 ∧
+      (limbRun sorry (n + 1) c).2.2.state = c.state ∧
+        (limbRun sorry (n + 1) c).2.2.block = c.block ∧
+          ↑(limbRun sorry (n + 1) c).2.2.index = ↑c.index + (scanAt sorry ⟨↑c.index, ⋯⟩ (n + 1) h).2
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:68:27: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:68:35: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:68:35: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:68:35: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:68:35: warning: declaration uses `sorry`
+'R444InitialSourceLimb.limbRun_no_refill' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R444InitialSourceLimb.limbRun_scanAt' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean"
+	User time (seconds): 1.04
+	System time (seconds): 0.34
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.37
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3224908
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77053
+	Voluntary context switches: 723
+	Involuntary context switches: 63
+	Swaps: 0
+	File system inputs: 256
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.403s
+CPU time consumed: 1.419s
+Memory peak: 516.0K
+Memory swap peak: 0B

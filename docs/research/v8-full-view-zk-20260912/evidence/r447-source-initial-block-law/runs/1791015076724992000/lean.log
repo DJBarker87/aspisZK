@@ -1,0 +1,58 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791015076724992000.service; invocation ID: 691ae3a7e8424afebb4f9a1244bbc564
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean:87:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ j ≤ 8
+  g ≥ 0
+  f ≥ 0
+  0 ≤ e ≤ 8
+  1 ≤ e - f ≤ 8
+  e - f + g - j ≥ 2
+  d ≥ 0
+  0 ≤ b ≤ 8
+  0 ≤ b + d ≤ 8
+  a ≥ 0
+  a + e - f ≤ 8
+where
+ a := ↑n
+ b := ↑↑c'.index
+ d := ↑(scanAt c'.block (↑c'.index) n ⋯).2
+ e := ↑↑(limbRun H n { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }).2.2.index
+ f := ↑(sourceScan (blockSuffix c.block (↑c.index + 1) n ⋯)).2
+ g := ↑(if True then
+      ((sourceScan (blockSuffix c.block (↑c.index + 1) n hcidx)).1,
+        (sourceScan (blockSuffix c.block (↑c.index + 1) n hcidx)).2 + 1)
+    else (some 2147483647, 1)).2
+ j := ↑↑(if True then ([] ++ (limbRun H n c').1, (limbRun H n c').2) else ([], some 2147483647, c')).2.2.index
+'R444InitialSourceLimb.limbRun_no_refill' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R444InitialSourceLimb.limbRun_scanAt' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/.r21-scratch/r444-initial-source-limb/R444InitialSourceLimb.lean"
+	User time (seconds): 1.21
+	System time (seconds): 0.32
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.53
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3221640
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76875
+	Voluntary context switches: 786
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.556s
+CPU time consumed: 1.566s
+Memory peak: 328.0K
+Memory swap peak: 0B
