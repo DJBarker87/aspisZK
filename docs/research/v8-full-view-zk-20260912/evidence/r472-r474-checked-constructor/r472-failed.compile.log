@@ -1,0 +1,358 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791030748189283000.service; invocation ID: 559fe9b3100c46278d6a198e73837604
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:81:32: error: Invalid simp theorem: Expected a proposition, but found
+  List Command → Program
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:80:9: error: unsolved goals
+case none
+T : Type
+heap : Heap T
+ptr : Pointer
+length : ℕ
+hptr : 0 < ptr.address
+hglobal :
+  R470R440ReadonlyConstantGraph.eval 7 (R470R440ReadonlyConstantGraph.Expr.global 31) =
+    some (R470R440ReadonlyConstantGraph.Value.bool false)
+hAdd : add heap ptr length = none
+⊢ ∀ (a : Control),
+    ((program heap (put (fun x => none) 1 (some (Value.sliceRef ptr length)))
+              (R433ConstructorFragment.sequence
+                [Command.live 0, Command.live 5, Command.live 2, Command.metadata 2 1, Command.live 3, Command.live 4,
+                  Command.live 8, Command.rawSlice 8 1 1, Command.cast 4 8 Cast.sharedFatToNonNullFat, Command.dead 8,
+                  Command.live 9, Command.live 10, Command.cast 10 4 Cast.nonNullFatToMutFat,
+                  Command.cast 9 10 Cast.mutFatToMutThin, Command.dead 10, Command.cast 3 9 Cast.mutThinToNonNullThin,
+                  Command.dead 9, Command.dead 4])).bind
+          fun __do_lift =>
+          match __do_lift with
+          | Control.cont locals1 =>
+            (program heap locals1
+                  (R433ConstructorFragment.sequence
+                    [Command.live 6, Command.live 7, Command.cast 7 3 Cast.nonNullThinToMutThin, Command.offset 6 7 2,
+                      Command.dead 7, Command.cast 5 6 Cast.mutThinToSharedThin, Command.dead 6])).bind
+              fun __do_lift =>
+              match __do_lift with
+              | Control.cont locals1 =>
+                program heap locals1
+                  (R433ConstructorFragment.sequence
+                    [Command.live 11, Command.marker 11, Command.iterator 0 3 5 11, Command.dead 3, Command.dead 2,
+                      Command.dead 5, Command.dead 1, Command.dead 11, Command.ret])
+              | Control.returned value locals1 => some (Control.returned value locals1)
+          | Control.returned value locals1 => some (Control.returned value locals1)) =
+        some a →
+      (match a with
+        | Control.returned (Value.iterator iter) locals => some iter
+        | x => none) =
+        none
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:85:32: error: Ambiguous term
+  sequence
+Possible interpretations:
+  _root_.sequence : ?m.56 (?m.58 ?m.57) → ?m.58 (?m.56 ?m.57)
+  
+  R433ConstructorFragment.sequence : List Command → Program
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:84:14: error: unsolved goals
+case some
+T : Type
+heap : Heap T
+ptr : Pointer
+length : ℕ
+hptr : 0 < ptr.address
+hglobal :
+  R470R440ReadonlyConstantGraph.eval 7 (R470R440ReadonlyConstantGraph.Expr.global 31) =
+    some (R470R440ReadonlyConstantGraph.Value.bool false)
+last : Pointer
+hAdd : add heap ptr length = some last
+⊢ (((program heap (put (fun x => none) 1 (some (Value.sliceRef ptr length)))
+              (R433ConstructorFragment.sequence
+                [Command.live 0, Command.live 5, Command.live 2, Command.metadata 2 1, Command.live 3, Command.live 4,
+                  Command.live 8, Command.rawSlice 8 1 1, Command.cast 4 8 Cast.sharedFatToNonNullFat, Command.dead 8,
+                  Command.live 9, Command.live 10, Command.cast 10 4 Cast.nonNullFatToMutFat,
+                  Command.cast 9 10 Cast.mutFatToMutThin, Command.dead 10, Command.cast 3 9 Cast.mutThinToNonNullThin,
+                  Command.dead 9, Command.dead 4])).bind
+          fun __do_lift =>
+          match __do_lift with
+          | Control.cont locals1 =>
+            (program heap locals1
+                  (R433ConstructorFragment.sequence
+                    [Command.live 6, Command.live 7, Command.cast 7 3 Cast.nonNullThinToMutThin, Command.offset 6 7 2,
+                      Command.dead 7, Command.cast 5 6 Cast.mutThinToSharedThin, Command.dead 6])).bind
+              fun __do_lift =>
+              match __do_lift with
+              | Control.cont locals1 =>
+                program heap locals1
+                  (R433ConstructorFragment.sequence
+                    [Command.live 11, Command.marker 11, Command.iterator 0 3 5 11, Command.dead 3, Command.dead 2,
+                      Command.dead 5, Command.dead 1, Command.dead 11, Command.ret])
+              | Control.returned value locals1 => some (Control.returned value locals1)
+          | Control.returned value locals1 => some (Control.returned value locals1)).bind
+      fun __x =>
+      match __x with
+      | Control.returned (Value.iterator iter) locals => some iter
+      | x => none) =
+    some { first := ptr, last := last }
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:81:51: warning: This simp argument is unused:
+  command
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, c̵o̵m̵m̵a̵n̵d̵,̵ ̵evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:81:60: warning: This simp argument is unused:
+  evalCommand
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, e̵v̵a̵l̵C̵o̵m̵m̵a̵n̵d̵,̵initial, put, checkedCast, castValue,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:82:17: warning: This simp argument is unused:
+  put
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵initial, p̵u̵t̵,̵ ̵checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, validCastResult, hptr, hglobal,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:82:22: warning: This simp argument is unused:
+  checkedCast
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, c̵h̵e̵c̵k̵e̵d̵C̵a̵s̵t̵,̵ ̵castValue,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:82:35: warning: This simp argument is unused:
+  castValue
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̵a̵s̵t̵V̵a̵l̵u̵e̵,̵ ̵validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:82:46: warning: This simp argument is unused:
+  validCastResult
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, v̵a̵l̵i̵d̵C̵a̵s̵t̵R̵e̵s̵u̵l̵t̵,̵ ̵hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:82:63: warning: This simp argument is unused:
+  hptr
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, validCastResult, h̵p̵t̵r̵,̵ ̵hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:85:51: warning: This simp argument is unused:
+  command
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, c̵o̵m̵m̵a̵n̵d̵,̵ ̵evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:85:60: warning: This simp argument is unused:
+  evalCommand
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, e̵v̵a̵l̵C̵o̵m̵m̵a̵n̵d̵,̵initial, put, checkedCast, castValue,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:86:17: warning: This simp argument is unused:
+  put
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵initial, p̵u̵t̵,̵ ̵checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, validCastResult, hptr, hglobal,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:86:22: warning: This simp argument is unused:
+  checkedCast
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, c̵h̵e̵c̵k̵e̵d̵C̵a̵s̵t̵,̵ ̵castValue,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:86:35: warning: This simp argument is unused:
+  castValue
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̵a̵s̵t̵V̵a̵l̵u̵e̵,̵ ̵validCastResult, hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:86:46: warning: This simp argument is unused:
+  validCastResult
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, v̵a̵l̵i̵d̵C̵a̵s̵t̵R̵e̵s̵u̵l̵t̵,̵ ̵hptr, hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:86:63: warning: This simp argument is unused:
+  hptr
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, validCastResult, h̵p̵t̵r̵,̵ ̵hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:92:28: error: Invalid simp theorem: Expected a proposition, but found
+  List Command → Program
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:91:42: error: unsolved goals
+T : Type
+heap : Heap T
+origin : Option (ℕ × ℕ)
+length : ℕ
+⊢ ∀ (a : Control),
+    ((program heap (put (fun x => none) 1 (some (Value.sliceRef { address := 0, origin := origin } length)))
+              (R433ConstructorFragment.sequence
+                [Command.live 0, Command.live 5, Command.live 2, Command.metadata 2 1, Command.live 3, Command.live 4,
+                  Command.live 8, Command.rawSlice 8 1 1, Command.cast 4 8 Cast.sharedFatToNonNullFat, Command.dead 8,
+                  Command.live 9, Command.live 10, Command.cast 10 4 Cast.nonNullFatToMutFat,
+                  Command.cast 9 10 Cast.mutFatToMutThin, Command.dead 10, Command.cast 3 9 Cast.mutThinToNonNullThin,
+                  Command.dead 9, Command.dead 4])).bind
+          fun __do_lift =>
+          match __do_lift with
+          | Control.cont locals1 =>
+            ((R470R440ReadonlyConstantGraph.eval 7 (R470R440ReadonlyConstantGraph.Expr.global 31)).bind fun __x =>
+                  match __x with
+                  | R470R440ReadonlyConstantGraph.Value.bool value =>
+                    if value = true then
+                      program heap locals1 (R433ConstructorFragment.sequence [Command.cast 5 2 Cast.wordToSharedThin])
+                    else
+                      program heap locals1
+                        (R433ConstructorFragment.sequence
+                          [Command.live 6, Command.live 7, Command.cast 7 3 Cast.nonNullThinToMutThin,
+                            Command.offset 6 7 2, Command.dead 7, Command.cast 5 6 Cast.mutThinToSharedThin,
+                            Command.dead 6])
+                  | x => none).bind
+              fun __do_lift =>
+              match __do_lift with
+              | Control.cont locals1 =>
+                program heap locals1
+                  (R433ConstructorFragment.sequence
+                    [Command.live 11, Command.marker 11, Command.iterator 0 3 5 11, Command.dead 3, Command.dead 2,
+                      Command.dead 5, Command.dead 1, Command.dead 11, Command.ret])
+              | Control.returned value locals1 => some (Control.returned value locals1)
+          | Control.returned value locals1 => some (Control.returned value locals1)) =
+        some a →
+      (match a with
+        | Control.returned (Value.iterator iter) locals => some iter
+        | x => none) =
+        none
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:92:47: warning: This simp argument is unused:
+  command
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, c̵o̵m̵m̵a̵n̵d̵,̵ ̵evalCommand,
+  ̵  ̵ ̵ ̵initial, put, checkedCast, castValue,
+  ̲  ̲ ̲ ̲validCastResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:92:56: warning: This simp argument is unused:
+  evalCommand
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, e̵v̵a̵l̵C̵o̵m̵m̵a̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵initial, put, checkedCast, castValue,
+  ̲  ̲ ̲ ̲validCastResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:93:13: warning: This simp argument is unused:
+  put
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand,
+  ̵  ̵ ̵ ̵initial, p̵u̵t̵,̵ ̵checkedCast,
+  ̲  ̲ ̲ ̲castValue, validCastResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:93:18: warning: This simp argument is unused:
+  checkedCast
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, c̵h̵e̵c̵k̵e̵d̵C̵a̵s̵t̵,̵ ̵castValue,
+  ̲  ̲ ̲ ̲validCastResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:93:31: warning: This simp argument is unused:
+  castValue
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand,
+  ̵  ̵ ̵ ̵initial, put, checkedCast,
+  ̲ c̵a̵s̵t̵V̵a̵l̵u̵e̵,̵  ̲ ̲validCastResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean:93:42: warning: This simp argument is unused:
+  validCastResult
+
+Hint: Omit it from the simp argument list.
+  simp [run, constructor86, sequence, program, command, evalCommand, initial, put, checkedCast,
+  ̲  ̲ ̲ ̲c̵a̵s̵t̵V̵a̵l̵u̵e̵,̵ ̵v̵a̵l̵i̵d̵C̵a̵s̵t̵R̵e̵s̵u̵l̵t̵]̵c̲a̲s̲t̲V̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R472CheckedConstructor.validCastResult' depends on axioms: [propext]
+'AspisV8R19.R472CheckedConstructor.checkedCast' depends on axioms: [propext]
+'AspisV8R19.R472CheckedConstructor.command' depends on axioms: [propext]
+'AspisV8R19.R472CheckedConstructor.program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R472CheckedConstructor.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R472CheckedConstructor.checked_fat_nonnull' depends on axioms: [propext]
+'AspisV8R19.R472CheckedConstructor.checked_thin_nonnull' depends on axioms: [propext]
+'AspisV8R19.R472CheckedConstructor.checked_fat_null' depends on axioms: [propext]
+'AspisV8R19.R472CheckedConstructor.checked_thin_null' depends on axioms: [propext]
+'AspisV8R19.R472CheckedConstructor.complete_constructor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R472CheckedConstructor.complete_null_rejection' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R472CheckedConstructor.complete_empty_dangling' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R472CheckedConstructor.complete_backed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R472CheckedConstructor.complete_endpoint_casts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R472CheckedConstructor.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R472CheckedConstructor.lean"
+	User time (seconds): 1.48
+	System time (seconds): 0.26
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.70
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2533156
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 12
+	Minor (reclaiming a frame) page faults: 65000
+	Voluntary context switches: 1769
+	Involuntary context switches: 67
+	Swaps: 0
+	File system inputs: 4224
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.734s
+CPU time consumed: 1.776s
+Memory peak: 288.0K
+Memory swap peak: 0B
