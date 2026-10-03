@@ -1,0 +1,7 @@
+# R541: joint correction criterion
+
+The focused Lean target `AspisV8R19/R541JointSchurEquivalence.lean` compiled successfully on the pinned Lean 4.32 cached workspace. Its complete axiom output contains only `propext`, `Classical.choice`, and `Quot.sound`. Exact source snapshots, attempt logs, checksums and resource receipts are retained in `evidence/r541-joint-schur-equivalence/`. Final exit status was 0; wall time 0.95 seconds; peak Lean-child RSS 1,763,636 KiB; swaps 0; source revision `15fff778d94ca208a5ea8cc97fb08e0a8e0f9259`. The job used the prescribed 5G/7G cgroup, disabled swap, TasksMax 128, and `-j1 -M4500`.
+
+The theorem proves that a joint affine correction exists exactly when the complete obstruction system has a solution. Its hypotheses explicitly require a starting H solution, a complete parametrization of the H kernel, and a complete characterization of the G image by the obstruction map. Both directions are proved; target solvability is not assumed. This is the generic algebraic criterion for the coupled H1/G solver.
+
+The first remaining proposition is to instantiate those complete kernel/image hypotheses for the actual selected source systems and prove the resulting obstruction system soluble for every legal same-public witness difference and adaptive or degenerate prefix. R541 does not prove that universal solvability, a full published-view simulator, or end-to-end privacy or security. The selected verifier, security parameters, and saved CU results are unchanged.
