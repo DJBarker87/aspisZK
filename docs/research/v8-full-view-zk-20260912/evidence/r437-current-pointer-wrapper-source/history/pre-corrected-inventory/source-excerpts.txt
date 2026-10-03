@@ -1,0 +1,1085 @@
+
+### aeneas/InterpExpressions.ml:216-246 — Copying borrow content
+  216           av.fields
+  217       in
+  218       let fields, copied_fields = List.split fields in
+  219       let copied = { v with value = VAdt { av with fields = copied_fields } } in
+  220       let v = { v with value = VAdt { av with fields } } in
+  221       (v, copied, ctx, cc)
+  222   | VBottom -> [%craise] span "Can't copy ⊥"
+  223   | VBorrow bc -> (
+  224       (* We can only copy shared borrows *)
+  225       match bc with
+  226       | VSharedBorrow (bid, _) ->
+  227           (* We need to create a new borrow id for the copied borrow, and
+  228            * update the context accordingly *)
+  229           let sid' = ctx.fresh_shared_borrow_id () in
+  230           ( v,
+  231             { v with value = VBorrow (VSharedBorrow (bid, sid')) },
+  232             ctx,
+  233             fun e -> e )
+  234       | VMutBorrow (_, _) -> [%craise] span "Can't copy a mutable borrow"
+  235       | VReservedMutBorrow _ ->
+  236           [%craise] span "Can't copy a reserved mut borrow")
+  237   | VLoan lc -> (
+  238       (* We can only copy shared loans *)
+  239       match lc with
+  240       | VMutLoan _ -> [%craise] span "Can't copy a mutable loan"
+  241       | VSharedLoan (sids, sv) ->
+  242           (* We don't copy the shared loan: only the shared value inside *)
+  243           let updt_value, copied_value, ctx, cf =
+  244             copy_value span allow_adt_copy config ctx sv
+  245           in
+  246           ( { v with value = VLoan (VSharedLoan (sids, updt_value)) },
+
+### aeneas/InterpExpressions.ml:1070-1139 — Concrete binary operation evaluation
+ 1070     | VLiteral (VScalar sv1), VLiteral (VScalar sv2) -> begin
+ 1071         let sv1_value, sv2_value = (get_val sv1, get_val sv2) in
+ 1072         let sv1_int_ty, sv2_int_ty = (get_ty sv1, get_ty sv2) in
+ 1073         (* There are binops which require the two operands to have the same
+ 1074            type, and binops for which it is not the case.
+ 1075            There are also binops which return booleans, and binops which
+ 1076            return integers.
+ 1077         *)
+ 1078         match binop with
+ 1079         | Lt | Le | Ge | Gt ->
+ 1080             (* The two operands must have the same type and the result is a boolean *)
+ 1081             [%sanity_check] span (sv1_int_ty = sv2_int_ty);
+ 1082             let b =
+ 1083               match binop with
+ 1084               | Lt -> Z.lt sv1_value sv2_value
+ 1085               | Le -> Z.leq sv1_value sv2_value
+ 1086               | Ge -> Z.geq sv1_value sv2_value
+ 1087               | Gt -> Z.gt sv1_value sv2_value
+ 1088               | _ -> [%craise] span "Unreachable"
+ 1089             in
+ 1090             Ok ({ value = VLiteral (VBool b); ty = TLiteral TBool } : tvalue)
+ 1091         | Div OPanic
+ 1092         | Rem OPanic
+ 1093         | Add OPanic
+ 1094         | Sub OPanic
+ 1095         | Mul OPanic
+ 1096         | BitXor | BitAnd | BitOr -> (
+ 1097             (* The two operands must have the same type and the result is an integer *)
+ 1098             [%sanity_check] span (sv1_int_ty = sv2_int_ty);
+ 1099             let res : _ result =
+ 1100               match binop with
+ 1101               | Div OPanic ->
+ 1102                   if sv2_value = Z.zero then Error ()
+ 1103                   else
+ 1104                     let ptr_size = get_target_ptr_size span ctx.crate in
+ 1105                     mk_scalar ptr_size sv1_int_ty (Z.div sv1_value sv2_value)
+ 1106               | Rem OPanic ->
+ 1107                   (* See [https://github.com/ocaml/Zarith/blob/master/z.mli] *)
+ 1108                   if sv2_value = Z.zero then Error ()
+ 1109                   else
+ 1110                     let ptr_size = get_target_ptr_size span ctx.crate in
+ 1111                     mk_scalar ptr_size sv1_int_ty (Z.rem sv1_value sv2_value)
+ 1112               | Add OPanic ->
+ 1113                   let ptr_size = get_target_ptr_size span ctx.crate in
+ 1114                   mk_scalar ptr_size sv1_int_ty (Z.add sv1_value sv2_value)
+ 1115               | Sub OPanic ->
+ 1116                   let ptr_size = get_target_ptr_size span ctx.crate in
+ 1117                   mk_scalar ptr_size sv1_int_ty (Z.sub sv1_value sv2_value)
+ 1118               | Mul OPanic ->
+ 1119                   let ptr_size = get_target_ptr_size span ctx.crate in
+ 1120                   mk_scalar ptr_size sv1_int_ty (Z.mul sv1_value sv2_value)
+ 1121               | BitXor -> raise Unimplemented
+ 1122               | BitAnd -> raise Unimplemented
+ 1123               | BitOr -> raise Unimplemented
+ 1124               | _ -> [%craise] span "Unreachable"
+ 1125             in
+ 1126             match res with
+ 1127             | Error _ -> Error EPanic
+ 1128             | Ok sv ->
+ 1129                 Ok
+ 1130                   {
+ 1131                     value = VLiteral (VScalar sv);
+ 1132                     ty = TLiteral (integer_as_literal sv1_int_ty);
+ 1133                   })
+ 1134         | Ne | Eq -> [%craise] span "Unreachable"
+ 1135         | _ ->
+ 1136             [%craise] span
+ 1137               ("Unimplemented binary operation: " ^ binop_to_string binop)
+ 1138       end
+ 1139     | _ -> [%craise] span ("Invalid inputs for binop: " ^ binop_to_string binop)
+
+### aeneas/InterpExpressions.ml:1141-1200 — Symbolic binary operation classification
+ 1141 let eval_binary_op_concrete (config : config) (span : Meta.span) (binop : binop)
+ 1142     (op1 : operand) (op2 : operand) (ctx : eval_ctx) :
+ 1143     (tvalue, eval_error) result
+ 1144     * eval_ctx
+ 1145     * (SymbolicAst.expr -> SymbolicAst.expr) =
+ 1146   (* Evaluate the operands *)
+ 1147   let (v1, v2), ctx, cc = eval_two_operands config span op1 op2 ctx in
+ 1148   (* Compute the result of the binop *)
+ 1149   let r = eval_binary_op_concrete_compute span binop v1 v2 ctx in
+ 1150   (* Return *)
+ 1151   (r, ctx, cc)
+ 1152 
+ 1153 let eval_binary_op_symbolic (config : config) (span : Meta.span) (binop : binop)
+ 1154     (op1 : operand) (op2 : operand) (ctx : eval_ctx) :
+ 1155     (tvalue, eval_error) result
+ 1156     * eval_ctx
+ 1157     * (SymbolicAst.expr -> SymbolicAst.expr) =
+ 1158   (* Evaluate the operands *)
+ 1159   let (v1, v2), ctx, cc = eval_two_operands config span op1 op2 ctx in
+ 1160   (* Generate a fresh symbolic value to store the result *)
+ 1161   let res_sv_id = ctx.fresh_symbolic_value_id () in
+ 1162   let res_sv_ty =
+ 1163     if binop = Eq || binop = Ne then (
+ 1164       (* Equality operations *)
+ 1165       [%sanity_check] span (v1.ty = v2.ty);
+ 1166       (* Equality/inequality check is primitive only for a subset of types *)
+ 1167       [%cassert] span (ty_is_copyable v1.ty)
+ 1168         "The type is not primitively copyable";
+ 1169       TLiteral TBool)
+ 1170     else
+ 1171       (* Other operations: input types can be booleans for comparison operators
+ 1172        (booleans are ordered: [false < true]), or bitwise operators (&, |, ^).
+ 1173        In the other cases, input types are integers *)
+ 1174       match (v1.ty, v2.ty) with
+ 1175       | TLiteral TBool, TLiteral TBool
+ 1176         when binop = Lt || binop = Le || binop = Ge || binop = Gt
+ 1177              || binop = BitAnd || binop = BitOr || binop = BitXor ->
+ 1178           TLiteral TBool
+ 1179       | TLiteral lty1, TLiteral lty2
+ 1180         when literal_type_is_integer lty1 && literal_type_is_integer lty2 -> (
+ 1181           let int_ty1, int_ty2 = (ty_as_integer v1.ty, ty_as_integer v2.ty) in
+ 1182           match binop with
+ 1183           | Lt | Le | Ge | Gt ->
+ 1184               [%sanity_check] span (int_ty1 = int_ty2);
+ 1185               TLiteral TBool
+ 1186           | Div _ | Rem _ | Add _ | Sub _ | Mul _ | BitXor | BitAnd | BitOr ->
+ 1187               [%sanity_check] span (int_ty1 = int_ty2);
+ 1188               TLiteral (integer_as_literal int_ty1)
+ 1189           | Cmp ->
+ 1190               [%sanity_check] span (int_ty1 = int_ty2);
+ 1191               TLiteral (TInt I8)
+ 1192           (* These return `(int, bool)` / a pointer which isn't a literal type *)
+ 1193           | AddChecked | SubChecked | MulChecked | Offset ->
+ 1194               [%craise] span "Unimplemented binary operation"
+ 1195           | Shl _ | Shr _ ->
+ 1196               (* The number of bits can be of a different integer type
+ 1197                  than the operand *)
+ 1198               TLiteral (integer_as_literal int_ty1)
+ 1199           | Ne | Eq -> [%craise] span "Unreachable")
+ 1200       | _ -> [%craise] span "Invalid inputs for binop"
+
+### aeneas/InterpExpressions.ml:1222-1303 — Reference creation
+ 1222 (** Evaluate an rvalue which creates a reference (i.e., an rvalue which is `&p`
+ 1223     or `&mut p` or `&two-phase p`) *)
+ 1224 let eval_rvalue_ref (config : config) (span : Meta.span) (p : place)
+ 1225     (bkind : borrow_kind) (ctx : eval_ctx) :
+ 1226     tvalue * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+ 1227   match bkind with
+ 1228   | BShared | BTwoPhaseMut | BShallow ->
+ 1229       (* **REMARK**: we initially treated shallow borrows like shared borrows.
+ 1230          In practice this restricted the behaviour too much, so for now we
+ 1231          forbid them and remove them in the prepasses (see the comments there
+ 1232          as to why this is sound).
+ 1233       *)
+ 1234       [%sanity_check] span (bkind <> BShallow);
+ 1235 
+ 1236       (* Access the value *)
+ 1237       let access =
+ 1238         match bkind with
+ 1239         | BShared | BShallow -> Read
+ 1240         | BTwoPhaseMut -> Write
+ 1241         | _ -> [%craise] span "Unreachable"
+ 1242       in
+ 1243 
+ 1244       let greedy_expand = false in
+ 1245       let lid, v, ctx, cc =
+ 1246         access_rplace_reorganize_and_read config span greedy_expand access p ctx
+ 1247       in
+ 1248       (* Generate the fresh shared borrow id *)
+ 1249       let sid = ctx.fresh_shared_borrow_id () in
+ 1250       (* Compute the loan value, with which to replace the value at place p *)
+ 1251       let bid, nv =
+ 1252         match (lid, v.value) with
+ 1253         | Some lid, _ | None, VLoan (VSharedLoan (lid, _)) ->
+ 1254             (* The value is (directly inside) a shared loan: we do not need to do anything *)
+ 1255             (lid, v)
+ 1256         | _ ->
+ 1257             (* Not a shared loan: add a wrapper *)
+ 1258             let bid = ctx.fresh_borrow_id () in
+ 1259             let v' = VLoan (VSharedLoan (bid, v)) in
+ 1260             (bid, { v with value = v' })
+ 1261       in
+ 1262       (* Update the value in the context to replace it with the loan *)
+ 1263       let ctx = write_place span access p nv ctx in
+ 1264       (* Compute the rvalue - simply a shared borrow with the fresh id.
+ 1265        * Note that the reference is *mutable* if we do a two-phase borrow *)
+ 1266       let ref_kind =
+ 1267         match bkind with
+ 1268         | BShared | BShallow -> RShared
+ 1269         | BTwoPhaseMut -> RMut
+ 1270         | _ -> [%craise] span "Unreachable"
+ 1271       in
+ 1272       let rv_ty = TRef (RErased, v.ty, ref_kind) in
+ 1273       let bc =
+ 1274         match bkind with
+ 1275         | BShared | BShallow ->
+ 1276             (* See the remark at the beginning of the match branch: we
+ 1277                handle shallow borrows like shared borrows *)
+ 1278             VSharedBorrow (bid, sid)
+ 1279         | BTwoPhaseMut -> VReservedMutBorrow (bid, sid)
+ 1280         | _ -> [%craise] span "Unreachable"
+ 1281       in
+ 1282       let rv : tvalue = { value = VBorrow bc; ty = rv_ty } in
+ 1283       (* Return *)
+ 1284       (rv, ctx, cc)
+ 1285   | BMut | BUniqueImmutable ->
+ 1286       (* We treat unique immutable borrows or mutable borrows: the difference is not
+ 1287          that important in our case *)
+ 1288       (* Access the value *)
+ 1289       let access = Write in
+ 1290       let greedy_expand = false in
+ 1291       let _, v, ctx, cc =
+ 1292         access_rplace_reorganize_and_read config span greedy_expand access p ctx
+ 1293       in
+ 1294       (* Compute the rvalue - wrap the value in a mutable borrow with a fresh id *)
+ 1295       let bid = ctx.fresh_borrow_id () in
+ 1296       let rv_ty = TRef (RErased, v.ty, RMut) in
+ 1297       let rv : tvalue = { value = VBorrow (VMutBorrow (bid, v)); ty = rv_ty } in
+ 1298       (* Compute the loan value with which to replace the value at place p *)
+ 1299       let nv = { v with value = VLoan (VMutLoan bid) } in
+ 1300       (* Update the value in the context to replace it with the loan *)
+ 1301       let ctx = write_place span access p nv ctx in
+ 1302       (* Return *)
+ 1303       (rv, ctx, cc)
+
+### aeneas/InterpExpressions.ml:1377-1389 — Aggregate raw pointer case
+ 1377           (value, fun e -> e)
+ 1378         else
+ 1379           let saggregated = mk_fresh_symbolic_tvalue span ctx ty in
+ 1380           (* Update the symbolic ast *)
+ 1381           let cf e =
+ 1382             (* Introduce the symbolic value in the AST *)
+ 1383             let sv = ValuesUtils.value_as_symbolic span saggregated.value in
+ 1384             SymbolicAst.IntroSymbolic (ctx, None, sv, VaArray values, e)
+ 1385           in
+ 1386           (saggregated, cf)
+ 1387     | AggregatedRawPtr _ ->
+ 1388         [%craise] span "Aggregated raw pointers are not supported yet"
+ 1389   in
+
+### aeneas/InterpExpressions.ml:1492-1510 — Rvalue dispatch and unsupported fallback
+ 1492     * eval_ctx
+ 1493     * (SymbolicAst.expr -> SymbolicAst.expr) =
+ 1494   [%ltrace ""];
+ 1495   (* Small helper *)
+ 1496   let wrap_in_result (v, ctx, cc) = (Ok v, ctx, cc) in
+ 1497   (* Delegate to the proper auxiliary function *)
+ 1498   match rvalue with
+ 1499   | Use (op, _) -> wrap_in_result (eval_operand config span op ctx)
+ 1500   | RvRef (p, bkind, _) ->
+ 1501       wrap_in_result (eval_rvalue_ref config span p bkind ctx)
+ 1502   | UnaryOp (unop, op) -> eval_unary_op config span unop op ctx
+ 1503   | BinaryOp (binop, op1, op2) -> eval_binary_op config span binop op1 op2 ctx
+ 1504   | Aggregate (aggregate_kind, ops) ->
+ 1505       wrap_in_result (eval_rvalue_aggregate config span aggregate_kind ops ctx)
+ 1506   | Discriminant p -> wrap_in_result (eval_discriminant config span p ctx)
+ 1507   | Len _ -> [%craise] span "Unhandled Len"
+ 1508   | _ ->
+ 1509       [%craise] span
+ 1510         ("Unsupported operation: " ^ Print.EvalCtx.rvalue_to_string ctx rvalue)
+
+
+### aeneas/InterpPaths.ml:108-122 — Raw-pointer dereference rejection
+  108        * enumeration value *)
+  109       Error (FailBottom (current_place, pe))
+  110   (* Raw pointer dereference: not supported yet.
+  111 
+  112      It is important that this appears before the symbolic value case, otherwise
+  113      we would be tempted to expand a raw pointer symbolic value (which we can't,
+  114      and would lead to an obscure error from the user point of view). *)
+  115   | Deref, _, TRawPtr _ ->
+  116       [%craise] span "Aeneas does not yet support dereferencing raw pointers."
+  117   (* Symbolic value: needs to be expanded *)
+  118   | _, VSymbolic sp, _ ->
+  119       (* Expand the symbolic value *)
+  120       Error (FailSymbolic (current_place, sp))
+  121   (* Box dereferencement *)
+  122   | ( Deref,
+
+### aeneas/InterpPaths.ml:137-205 — Borrow projection and mutable-borrow path
+  137   | Deref, VBorrow bc, _ ->
+  138       (* Compute the projected value to explore and a backward function to update the result *)
+  139       let res : _ path_access_result =
+  140         match bc with
+  141         | VSharedBorrow _ when not access.lookup_shared_borrows ->
+  142             Error (FailBorrow bc)
+  143         | VSharedBorrow (bid, _) -> begin
+  144             (* Lookup the loan content, and explore from there *)
+  145             match ctx_lookup_loan span ek bid ctx with
+  146             | _, Concrete (VMutLoan _) ->
+  147                 [%craise] span "Expected a shared loan"
+  148             | _, Concrete (VSharedLoan (bid, sv)) ->
+  149                 (* Return the shared value *)
+  150                 Ok
+  151                   ( Some bid,
+  152                     sv,
+  153                     fun (ctx, updated) ->
+  154                       let ctx =
+  155                         update_loan span ek bid (VSharedLoan (bid, updated)) ctx
+  156                       in
+  157                       (ctx, v) )
+  158             | ( _,
+  159                 Abstract
+  160                   ( AMutLoan _
+  161                   | AEndedMutLoan _
+  162                   | AEndedSharedLoan _
+  163                   | AIgnoredMutLoan _
+  164                   | AEndedIgnoredMutLoan _
+  165                   | AIgnoredSharedLoan _ ) ) ->
+  166                 [%craise] span "Expected a shared (abstraction) loan"
+  167             | _, Abstract (ASharedLoan (pm, bid, sv, _av)) -> begin
+  168                 (* Sanity check: projection markers can only appear when we're doing a join *)
+  169                 [%sanity_check] span (pm = PNone);
+  170                 (* Return the shared value *)
+  171                 Ok
+  172                   ( Some bid,
+  173                     sv,
+  174                     fun (ctx, updated) ->
+  175                       let av =
+  176                         match ctx_lookup_loan span ek bid ctx with
+  177                         | _, Abstract (ASharedLoan (_, _, _, av)) -> av
+  178                         | _ -> [%craise] span "Unexpected"
+  179                       in
+  180                       let ctx =
+  181                         update_aloan span ek bid
+  182                           (ASharedLoan (pm, bid, updated, av))
+  183                           ctx
+  184                       in
+  185                       (ctx, v) )
+  186               end
+  187           end
+  188         | VReservedMutBorrow (bid, sid) ->
+  189             Error (FailReservedMutBorrow (bid, sid))
+  190         | VMutBorrow _ when not access.enter_mut_borrows ->
+  191             Error (FailBorrow bc)
+  192         | VMutBorrow (bid, bv) ->
+  193             Ok
+  194               ( None,
+  195                 bv,
+  196                 fun (ctx, updated) ->
+  197                   let value = VBorrow (VMutBorrow (bid, updated)) in
+  198                   (ctx, { v with value }) )
+  199       in
+  200       res
+  201   | _, VLoan lc, _ -> begin
+  202       match lc with
+  203       | VMutLoan bid -> Error (FailMutLoan bid)
+  204       | VSharedLoan (bids, _) when not access.enter_shared_loans ->
+  205           Error (FailSharedLoan bids)
+
+### aeneas/InterpPaths.ml:265-283 — Place projection/global access boundary
+  265             "Assertion failed: new value doesn't have the same type as its \
+  266              destination");
+  267         (ctx, updated)
+  268       in
+  269       Ok (None, v, backward)
+  270   | PlaceProjection (p', pe) -> begin
+  271       match access_place span access ek ctx p' with
+  272       | Error err -> Error err
+  273       | Ok (_, v, backward) -> begin
+  274           match project_value span access ek p' ctx pe v with
+  275           | Error err -> Error err
+  276           | Ok (lid, pv, new_back) -> begin
+  277               let backward = Core.Fn.compose backward new_back in
+  278               Ok (lid, pv, backward)
+  279             end
+  280         end
+  281     end
+  282   | PlaceGlobal _ -> [%craise] span "Unexpected access to a global"
+  283 
+
+
+### aeneas/InterpStatements.ml:420-475 — Call argument evaluation, frame push/pop, builtin dispatch
+  420   let dest = call.dest in
+  421   match call.func with
+  422   | FnOpDynamic _ ->
+  423       (* Function pointer case: TODO *)
+  424       [%craise] span "Function pointers are not supported yet"
+  425   | FnOpRegular func ->
+  426       let generics = func.generics in
+  427       (* Sanity check: we don't fully handle the const generic vars environment
+  428          in concrete mode yet *)
+  429       [%sanity_check] span (generics.const_generics = []);
+  430 
+  431       (* Evaluate the operands *)
+  432       (*      let ctx, args_vl = eval_operands config ctx args in *)
+  433       let args_vl, ctx, cc = eval_operands config span args ctx in
+  434 
+  435       (* Evaluate the call
+  436        *
+  437        * Style note: at some point we used {!comp_transmit} to
+  438        * transmit the result of {!eval_operands} above down to {!push_vars}
+  439        * below, without having to introduce an intermediary function call,
+  440        * but it made it less clear where the computed values came from,
+  441        * so we reversed the modifications. *)
+  442       (* Push the stack frame: we initialize the frame with the return variable,
+  443          and one variable per input argument *)
+  444       let ctx = push_frame ctx in
+  445 
+  446       (* Create and push the return variable *)
+  447       let ret_vid = LocalId.zero in
+  448       let ret_ty = get_builtin_function_return_type span fid generics in
+  449       let ret_var = mk_var ret_vid (Some "@return") ret_ty span in
+  450       let ctx = push_uninitialized_var span ret_var ctx in
+  451 
+  452       (* Create and push the input variables *)
+  453       let input_vars =
+  454         LocalId.mapi_from1
+  455           (fun id (v : tvalue) -> (mk_var id None v.ty span, v))
+  456           args_vl
+  457       in
+  458       let ctx = push_vars span input_vars ctx in
+  459 
+  460       (* "Execute" the function body. As the functions are builtin, here we call
+  461        * custom functions to perform the proper manipulations: we don't have
+  462        * access to a body. *)
+  463       let ctx, cf_eval_body =
+  464         match fid with
+  465         | BoxNew -> eval_box_new_concrete config span generics ctx
+  466         | Index _
+  467         | ArrayToSliceShared
+  468         | ArrayToSliceMut
+  469         | ArrayRepeat
+  470         | PtrFromParts _ -> [%craise] span "Unimplemented"
+  471       in
+  472       let cc = cc_comp cc cf_eval_body in
+  473 
+  474       (* Pop the frame *)
+  475       comp cc (pop_frame_assign config span dest ctx)
+
+### aeneas/InterpStatements.ml:908-930 — Assignment/global dispatch
+  908 and eval_statement_raw (config : config) (st : statement) : stl_cm_fun =
+  909  fun ctx ->
+  910   [%ltrace "statement:\n" ^ statement_to_string_with_tab ctx st ^ "\n"];
+  911   match st.kind with
+  912   | Assign (p, rvalue) ->
+  913       if
+  914         (* We handle global assignments separately as a specific case. *)
+  915         ExpressionsUtils.rvalue_accesses_global rvalue
+  916       then (
+  917         [%ltrace "The rvalue is a global access"];
+  918         eval_rvalue_global config st.span p rvalue ctx)
+  919       else (
+  920         [%ltrace "The rvalue is not a global access"];
+  921         (* Evaluate the rvalue *)
+  922         let res, ctx, cc = eval_rvalue_not_global config st.span rvalue ctx in
+  923         (* Assign *)
+  924         [%ltrace
+  925           "about to assign to place: " ^ place_to_string ctx p
+  926           ^ "\n- Context:\n"
+  927           ^ eval_ctx_to_string ~span:(Some st.span) ctx];
+  928         let (ctx, res), cf_assign =
+  929           match res with
+  930           | Error EPanic -> ((ctx, Panic), fun e -> e)
+
+### aeneas/InterpStatements.ml:1021-1053 — Shared global reference handling
+ 1021 and eval_rvalue_global (config : config) (span : Meta.span) (dest : place)
+ 1022     (rv : rvalue) : stl_cm_fun =
+ 1023  fun ctx ->
+ 1024   (* One of the micro-passes makes sures there is only one case to handle *)
+ 1025   match rv with
+ 1026   | RvRef ({ kind = PlaceGlobal gref; ty = _ }, BShared, _) ->
+ 1027       eval_global_ref config span dest gref RShared ctx
+ 1028   | _ ->
+ 1029       [%craise] span
+ 1030         ("Unsupported case of rvalue accessing a global:\n"
+ 1031         ^ Print.EvalCtx.rvalue_to_string ctx rv)
+ 1032 
+ 1033 and eval_global_ref (config : config) (span : Meta.span) (dest : place)
+ 1034     (gref : global_decl_ref) (rk : ref_kind) : stl_cm_fun =
+ 1035  fun ctx ->
+ 1036   (* We only support shared references to globals *)
+ 1037   [%cassert] span (rk = RShared)
+ 1038     "Can only create shared references to global values";
+ 1039   match config.mode with
+ 1040   | ConcreteMode ->
+ 1041       (* We should treat the evaluation of the global as a call to the global body,
+ 1042          then create a reference *)
+ 1043       [%craise] span "Unimplemented"
+ 1044   | SymbolicMode ->
+ 1045       (* Generate a fresh symbolic value. In the translation, this fresh symbolic value will be
+ 1046        * defined as equal to the value of the global (see {!S.synthesize_global_eval}).
+ 1047        * We then create a reference to the global. *)
+ 1048       let ctx, sval, cf = eval_global_as_fresh_symbolic_value span gref ctx in
+ 1049       (* Create a shared loan containing the global, as well as a shared borrow *)
+ 1050       let ctx, borrow = push_value_to_dummy_shared_loan span ctx sval in
+ 1051       (* Assign the borrow to its destination *)
+ 1052       let ctx, cc = assign_to_place config span borrow dest ctx in
+ 1053       ([ (ctx, Unit) ], cc_singleton __FILE__ __LINE__ span (cc_comp cf cc))
+
+
+### aeneas/InterpUtils.ml:440-456 — Rvalue place extraction
+  440 let rvalue_get_place (rv : rvalue) : place option =
+  441   match rv with
+  442   | Use ((Copy p | Move p), _) -> Some p
+  443   | Use (Constant _, _) -> None
+  444   | Len (p, _, _) | RvRef (p, _, _) | RawPtr (p, _, _) -> Some p
+  445   | NullaryOp _
+  446   | UnaryOp _
+  447   | BinaryOp _
+  448   | Discriminant _
+  449   | Aggregate _
+  450   | Repeat _ -> None
+  451 
+  452 (** See {!ValuesUtils.symbolic_value_has_borrows} *)
+  453 let symbolic_value_has_borrows span (ctx : eval_ctx) (sv : symbolic_value) :
+  454     bool =
+  455   ValuesUtils.symbolic_value_has_borrows span ctx.type_ctx.type_infos sv
+  456 
+
+
+### aeneas/ExpressionsUtils.ml:1-30 — Global access detector
+    1 include Charon.ExpressionsUtils
+    2 open Charon.Expressions
+    3 open Charon.Utils
+    4 
+    5 (** Return [true] if a place accesses a global *)
+    6 let rec place_accesses_global (p : place) : bool =
+    7   match p.kind with
+    8   | PlaceLocal _ -> false
+    9   | PlaceGlobal _ -> true
+   10   | PlaceProjection (p, _) -> place_accesses_global p
+   11 
+   12 (** Return [true] if an rvalue accesses a global *)
+   13 let rvalue_accesses_global (rv : rvalue) : bool =
+   14   let visitor =
+   15     object
+   16       inherit [_] iter_rvalue
+   17 
+   18       method! visit_place _ p =
+   19         if place_accesses_global p then raise Found else ()
+   20     end
+   21   in
+   22   try
+   23     visitor#visit_rvalue () rv;
+   24     false
+   25   with Found -> true
+
+
+### aeneas/PrePasses.ml:115-160 — Raw slice-pointer metadata candidate recognition
+  115     - it has exactly one definition.
+  116 
+  117     Any dereference, cast, comparison, address observation, call escape,
+  118     reassignment, or second use leaves the raw pointer untouched. The normal
+  119     interpreter will then reject it as unsupported. Requiring a single read also
+  120     ensures that the transformed [usize] temporary has the same linear
+  121     definition/use shape as the original raw-pointer temporary. *)
+  122 type metadata_only_slice_raw_pointer = {
+  123   definition : statement_id;
+  124   reference : place;
+  125   elem_ty : ty;
+  126 }
+  127 
+  128 let eliminate_metadata_only_slice_raw_pointers (crate : crate) (f : fun_decl) :
+  129     fun_decl =
+  130   let metadata_definition (st : statement) :
+  131       (local_id * metadata_only_slice_raw_pointer) option =
+  132     match st.kind with
+  133     | Assign
+  134         ( {
+  135             kind = PlaceLocal local;
+  136             ty = TRawPtr (TSlice raw_elem_ty, raw_kind);
+  137           },
+  138           RawPtr
+  139             ( { kind = PlaceProjection (reference, Deref); ty = TSlice elem_ty },
+  140               ptr_kind,
+  141               (Copy metadata_place | Move metadata_place) ) )
+  142       when raw_elem_ty = elem_ty && raw_kind = ptr_kind
+  143            && metadata_place.ty = mk_usize_ty -> (
+  144         match (reference.ty, metadata_place.kind) with
+  145         | ( TRef (_, TSlice reference_elem_ty, _),
+  146             PlaceProjection (metadata_reference, PtrMetadata) )
+  147           when reference_elem_ty = elem_ty && metadata_reference = reference
+  148           -> (
+  149             match reference.ty with
+  150             | TRef (_, _, RShared) ->
+  151                 Some
+  152                   (local, { definition = st.statement_id; reference; elem_ty })
+  153             | _ -> None)
+  154         | _ -> None)
+  155     | _ -> None
+  156   in
+  157   (* The generated call deliberately targets Charon's existing slice-length
+  158      language item.  If it is absent or ambiguous we decline the rewrite. *)
+  159   let slice_len_ids =
+  160     FunDeclId.Map.fold
+
+### aeneas/PrePasses.ml:2835-2916 — Global access decomposition
+ 2835 (** This micro-pass introduces intermediate assignments to access the global
+ 2836     values in order to simplify the semantics.
+ 2837 
+ 2838     Whenever we access a constant, we introduce a shared borrow and a
+ 2839     dereference. Ex.:
+ 2840 
+ 2841     {[
+ 2842       let x = copy C;
+ 2843 
+ 2844         ~~>
+ 2845 
+ 2846       let tmp = &C;
+ 2847       let x = copy *C;
+ 2848     ]}
+ 2849 
+ 2850     Remark: we use the crate to lookup the type of the globals.
+ 2851 
+ 2852     TODO: generalize the evaluation of globals in the symbolic interpreter. *)
+ 2853 let decompose_global_accesses (crate : crate) (f : fun_decl) : fun_decl =
+ 2854   (* Map  *)
+ 2855   let body =
+ 2856     match f.body with
+ 2857     | StructuredBody body -> (
+ 2858         let new_locals = ref [] in
+ 2859         let _, gen =
+ 2860           LocalId.mk_stateful_generator_starting_at_id
+ 2861             (LocalId.of_int (List.length body.locals.locals))
+ 2862         in
+ 2863         let fresh_local ty =
+ 2864           let local =
+ 2865             {
+ 2866               index = gen ();
+ 2867               local_ty = ty;
+ 2868               name = None;
+ 2869               span = f.item_meta.span;
+ 2870             }
+ 2871           in
+ 2872           new_locals := local :: !new_locals;
+ 2873           local.index
+ 2874         in
+ 2875 
+ 2876         (* Function to decompose the operands in a statement *)
+ 2877         let decompose_in_statement (st : statement) : statement list =
+ 2878           let span = st.span in
+ 2879           let new_statements = ref [] in
+ 2880 
+ 2881           (* Visit the rvalue *)
+ 2882           let visitor =
+ 2883             object
+ 2884               inherit [_] map_statement as super
+ 2885               method! visit_place _ p = super#visit_place p.ty p
+ 2886 
+ 2887               method! visit_PlaceGlobal ty gref =
+ 2888                 (* Compute the type of the reference *)
+ 2889                 let ref_ty = TRef (RErased, ty, RShared) in
+ 2890 
+ 2891                 (* Introduce the intermediate reference *)
+ 2892                 let local_id =
+ 2893                   let local_id = fresh_local ref_ty in
+ 2894                   let metadata = Constant mk_unit_const in
+ 2895                   let st =
+ 2896                     {
+ 2897                       span;
+ 2898                       statement_id = StatementId.zero;
+ 2899                       kind =
+ 2900                         Assign
+ 2901                           ( { kind = PlaceLocal local_id; ty = ref_ty },
+ 2902                             RvRef
+ 2903                               ( { kind = PlaceGlobal gref; ty },
+ 2904                                 BShared,
+ 2905                                 metadata ) );
+ 2906                       comments_before = [];
+ 2907                     }
+ 2908                   in
+ 2909                   new_statements := st :: !new_statements;
+ 2910                   local_id
+ 2911                 in
+ 2912 
+ 2913                 (* Finally we can update the place *)
+ 2914                 PlaceProjection
+ 2915                   ({ kind = PlaceLocal local_id; ty = ref_ty }, Deref)
+ 2916             end
+
+
+### lean/Aeneas/Std/RawPtr.lean:1-33 — RawPtr type and scalar cast
+    1 import Aeneas.Std.Scalar.Core
+    2 
+    3 namespace Aeneas.Std
+    4 
+    5 inductive Mutability where
+    6 | Mut | Const
+    7 
+    8 -- We don't really use raw pointers for now
+    9 structure RawPtr (T : Type) (M : Mutability) where
+   10   v : T
+   11 
+   12 abbrev MutRawPtr (T : Type) := RawPtr T .Mut
+   13 abbrev ConstRawPtr (T : Type) := RawPtr T .Const
+   14 
+   15 inductive ScalarKind where
+   16 | Signed (ty : IScalarTy)
+   17 | Unsigned (ty : UScalarTy)
+   18 
+   19 class IsScalar (T : Type) where
+   20   isScalar : (∃ ty, T = UScalar ty) ∨ (∃ ty, T = IScalar ty)
+   21 
+   22 instance {ty} : IsScalar (UScalar ty) where
+   23   isScalar := by simp
+   24 
+   25 instance {ty} : IsScalar (IScalar ty) where
+   26   isScalar := by simp
+   27 
+   28 -- TODO: we can properly define this once we have separation logic
+   29 def RawPtr.cast_scalar {T} {M} (T' : Type) (M' : Mutability) [IsScalar T] [IsScalar T'] (_ : RawPtr T M) :
+   30   Result (RawPtr T' M') :=
+   31   .fail .undef
+   32 
+   33 end Aeneas.Std
+
+
+### lean/Aeneas/Std/Core/Ptr.lean:74-88 — Layout and GlobalAlloc declarations
+   74 @[reducible, rust_type "core::ptr::alignment::Alignment"]
+   75 def core.ptr.alignment.Alignment :=
+   76 core.ptr.alignment.AlignmentEnum
+   77 
+   78 @[rust_type "core::alloc::layout::Layout"]
+   79 structure core.alloc.layout.Layout where
+   80   size : Usize
+   81   align : core.ptr.alignment.Alignment
+   82 
+   83 @[rust_trait "core::alloc::global::GlobalAlloc"]
+   84 structure core.alloc.global.GlobalAlloc (Self : Type) where
+   85   alloc : Self → core.alloc.layout.Layout → Result (MutRawPtr U8)
+   86   dealloc : Self → MutRawPtr U8 → core.alloc.layout.Layout → Result Unit
+   87 
+   88 end Aeneas.Std
+
+
+### lean/Aeneas/Std/Slice.lean:23-54 — List-facing Slice operations and length
+   23 /-- We need this to coerce slices to lists without marking `Slice` as reducible.
+   24     Also not that we *do not* want to mark `Slice` as reducible: it triggers issues.
+   25 -/
+   26 instance (α : Type u) : CoeOut (Slice α) (List α) where
+   27   coe := λ v => v.val
+   28 
+   29 instance [BEq α] : BEq (Slice α) := SubtypeBEq _
+   30 
+   31 instance [BEq α] [LawfulBEq α] : LawfulBEq (Slice α) := SubtypeLawfulBEq _
+   32 
+   33 instance [DecidableEq α] : DecidableEq (Slice α) := inferInstanceAs (DecidableEq { _l : List α // _ })
+   34 
+   35 theorem Slice.length_ineq {α : Type u} (s : Slice α) : s.val.length ≤ Usize.max := by
+   36   cases s; simp[*]
+   37 
+   38 @[simp, scalar_tac_simps, simp_scalar_safe, simp_lists_safe]
+   39 abbrev Slice.length {α : Type u} (v : Slice α) : Nat := v.val.length
+   40 
+   41 @[simp, scalar_tac_simps, simp_scalar_safe, simp_lists_safe]
+   42 abbrev Slice.v {α : Type u} (v : Slice α) : List α := v.val
+   43 
+   44 example {a: Type u} (v : Slice a) : v.length ≤ Usize.max := by
+   45   scalar_tac
+   46 
+   47 def Slice.new (α : Type u) : Slice α := ⟨ [], by simp ⟩
+   48 
+   49 @[rust_fun "core::slice::{[@T]}::len" -canFail -lift]
+   50 abbrev Slice.len {α : Type u} (v : Slice α) : Usize :=
+   51   Usize.ofNatCore v.val.length (by scalar_tac)
+   52 
+   53 @[simp, scalar_tac_simps]
+   54 theorem Slice.len_val {α : Type u} (v : Slice α) : (Slice.len v).val = v.length :=
+
+### lean/Aeneas/Std/Slice.lean:337-368 — SliceIndex and get_unchecked sorry
+  337 @[rust_trait "core::slice::index::private_slice_index::Sealed"]
+  338 structure core.slice.index.private_slice_index.Sealed (Self : Type) where
+  339 
+  340 @[rust_trait "core::slice::index::SliceIndex" (parentClauses := ["sealedInst"])]
+  341 structure core.slice.index.SliceIndex (Self T Output : Type) where
+  342   sealedInst : core.slice.index.private_slice_index.Sealed Self
+  343   get : Self → T → Result (Option Output)
+  344   get_mut : Self → T → Result (Option Output × (Option Output → T))
+  345   get_unchecked : Self → ConstRawPtr T → Result (ConstRawPtr Output)
+  346   get_unchecked_mut : Self → MutRawPtr T → Result (MutRawPtr Output)
+  347   index : Self → T → Result Output
+  348   index_mut : Self → T → Result (Output × (Output → T))
+  349 
+  350 @[rust_fun "core::slice::index::{core::ops::index::Index<[@T], @I, @O>}::index"]
+  351 def core.slice.index.Slice.index
+  352   {T I Output : Type} (inst : core.slice.index.SliceIndex I (Slice T) Output)
+  353   (slice : Slice T) (i : I) : Result Output :=
+  354   inst.index i slice
+  355 
+  356 @[rust_fun "core::slice::{[@T]}::get"]
+  357 def core.slice.Slice.get
+  358   {T I Output : Type} (inst : core.slice.index.SliceIndex I (Slice T) Output)
+  359   (s : Slice T) (i : I) : Result (Option Output) :=
+  360   inst.get i s
+  361 
+  362 @[rust_fun "core::slice::{[@T]}::get_unchecked"]
+  363 def core.slice.Slice.get_unchecked
+  364   {T : Type} {I : Type} {Output : Type}
+  365   (SliceIndexInst : core.slice.index.SliceIndex I (Slice T) Output)
+  366   (s : Slice T) (i : I) : Result Output :=
+  367   -- TODO: we should actually use the `SliceIndexInst.get_unchecked` method
+  368   sorry
+
+### lean/Aeneas/Std/Slice.lean:397-407 — Unchecked range index fails undef
+  397 @[rust_fun "core::slice::index::{core::slice::index::SliceIndex<core::ops::range::Range<usize>, [@T], [@T]>}::get_unchecked"]
+  398 def core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked {T : Type} :
+  399   Range Usize → ConstRawPtr (Slice T) → Result (ConstRawPtr (Slice T)) :=
+  400   -- Don't know what the model should be - for now we always fail
+  401   fun _ _ => fail .undef
+  402 
+  403 @[rust_fun "core::slice::index::{core::slice::index::SliceIndex<core::ops::range::Range<usize>, [@T], [@T]>}::get_unchecked_mut"]
+  404 def core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut {T : Type} :
+  405   Range Usize → MutRawPtr (Slice T) → Result (MutRawPtr (Slice T)) :=
+  406   -- Don't know what the model should be - for now we always fail
+  407   fun _ _ => fail .undef
+
+### lean/Aeneas/Std/Slice.lean:538-590 — Unchecked usize index fails undef and specification sorry
+  538 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get"]
+  539 abbrev core.slice.index.Usize.get
+  540   {T : Type} (i : Usize) (s : Slice T) : Result (Option T) :=
+  541   ok s[i]?
+  542 
+  543 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get_mut"]
+  544 abbrev core.slice.index.Usize.get_mut
+  545   {T : Type} (i : Usize) (s : Slice T) : Result (Option T × (Option T → Slice T)) :=
+  546   ok (s[i]?, s.set_opt i)
+  547 
+  548 @[rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get_unchecked"]
+  549 def core.slice.index.Usize.get_unchecked
+  550   {T : Type} : Usize → ConstRawPtr (Slice T) → Result (ConstRawPtr T) :=
+  551   -- We don't have a model for now
+  552   fun _ _ => fail .undef
+  553 
+  554 @[rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::get_unchecked_mut"]
+  555 def core.slice.index.Usize.get_unchecked_mut
+  556   {T : Type} : Usize → MutRawPtr (Slice T) → Result (MutRawPtr T) :=
+  557   -- We don't have a model for now
+  558   fun _ _ => fail .undef
+  559 
+  560 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::index"]
+  561 abbrev core.slice.index.Usize.index {T : Type} (i : Usize) (s : Slice T) : Result T :=
+  562   Slice.index_usize s i
+  563 
+  564 @[simp, step_simps, rust_fun "core::slice::index::{core::slice::index::SliceIndex<usize, [@T], @T>}::index_mut"]
+  565 abbrev core.slice.index.Usize.index_mut {T : Type}
+  566   (i : Usize) (s : Slice T) : Result (T × (T → (Slice T))) :=
+  567   Slice.index_mut_usize s i
+  568 
+  569 @[rust_trait_impl "core::slice::index::private_slice_index::Sealed<usize>"]
+  570 def core.slice.index.private_slice_index.SealedUsize
+  571   : core.slice.index.private_slice_index.Sealed Usize := {}
+  572 
+  573 @[reducible, rust_trait_impl "core::slice::index::SliceIndex<usize, [@T], @T>"]
+  574 def core.slice.index.SliceIndexUsizeSlice (T : Type) :
+  575   core.slice.index.SliceIndex Usize (Slice T) T := {
+  576   sealedInst := core.slice.index.private_slice_index.SealedUsize
+  577   get := core.slice.index.Usize.get
+  578   get_mut := core.slice.index.Usize.get_mut
+  579   get_unchecked := core.slice.index.Usize.get_unchecked
+  580   get_unchecked_mut := core.slice.index.Usize.get_unchecked_mut
+  581   index := core.slice.index.Usize.index
+  582   index_mut := core.slice.index.Usize.index_mut
+  583 }
+  584 
+  585 @[step]
+  586 theorem core.slice.Slice.get_unchecked_SliceIndexUsizeSlice_spec {T s i} [Inhabited T]
+  587   (h : i.val < s.length) :
+  588   core.slice.Slice.get_unchecked  (core.slice.index.SliceIndexUsizeSlice T) s i
+  589   ⦃ x => x = s[i] ⦄ := by
+  590   sorry
+
+
+### charon/ast/types.rs:1092-1105 — Charon TyKind includes Pattern(Ty,TypePattern)
+ 1092     /// As a marker of taking out metadata from a given type
+ 1093     /// The internal type is assumed to be a type variable
+ 1094     PtrMetadata(Ty),
+ 1095     /// An array type `[T; N]`
+ 1096     Array(Ty, Box<ConstantExpr>),
+ 1097     /// A slice type `[T]`
+ 1098     Slice(Ty),
+ 1099     /// A pattern type. This is a newtype over the first type whose valid values are restricted by
+ 1100     /// the pattern.
+ 1101     Pattern(Ty, TypePattern),
+ 1102     /// A type that could not be computed or was incorrect.
+ 1103     #[drive(skip)]
+ 1104     Error(String),
+ 1105 }
+
+### charon/ast/types.rs:1280-1301 — TypePattern constructors, including NotNull
+ 1280 /// A type-level pattern used by [`TyKind::Pattern`].
+ 1281 #[derive(
+ 1282     Debug,
+ 1283     Clone,
+ 1284     PartialEq,
+ 1285     Eq,
+ 1286     PartialOrd,
+ 1287     Ord,
+ 1288     Hash,
+ 1289     VariantName,
+ 1290     EnumIsA,
+ 1291     SerializeState,
+ 1292     DeserializeState,
+ 1293     Drive,
+ 1294     DriveMut,
+ 1295 )]
+ 1296 #[serde_state(state_implements = HashConsSerializerState)] // Avoid corecursive impls due to perfect derive
+ 1297 pub enum TypePattern {
+ 1298     Range(Box<ConstantExpr>, Box<ConstantExpr>),
+ 1299     OrPattern(Vec<TypePattern>),
+ 1300     NotNull,
+ 1301 }
+
+
+### charon/bin/charon-driver/hax/types/ty.rs:750-763 — Hax TyKind Pat source variant
+  750     Foreign(ItemRef),
+  751     /// The `ItemRef` uses the fake `Array` def_id.
+  752     #[custom_arm(FROM_TYPE::Array(ty, len) => TO_TYPE::Array({
+  753         let args = s.base().tcx.mk_args(&[(*ty).into(), (*len).into()]);
+  754         ItemRef::translate_synthetic(s, SyntheticItem::Array, args)
+  755     }),)]
+  756     Array(ItemRef),
+  757     Pat(Ty, Pattern),
+  758     /// The `ItemRef` uses the fake `Slice` def_id.
+  759     #[custom_arm(FROM_TYPE::Slice(ty) => TO_TYPE::Slice({
+  760         let args = s.base().tcx.mk_args(&[(*ty).into()]);
+  761         ItemRef::translate_synthetic(s, SyntheticItem::Slice, args)
+  762     }),)]
+  763     Slice(ItemRef),
+
+### charon/bin/charon-driver/hax/types/ty.rs:905-920 — Hax Pattern enum and conversion
+  905 #[derive(AdtInto)]
+  906 #[args(<'tcx, S: UnderOwnerState<'tcx>>, from: ty::pattern::PatternKind<'tcx>, state: S as gstate)]
+  907 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
+  908 pub enum Pattern {
+  909     Range {
+  910         start: ConstantExpr,
+  911         end: ConstantExpr,
+  912     },
+  913     Or(Vec<Pattern>),
+  914     NotNull,
+  915 }
+  916 
+  917 impl<'tcx, S: UnderOwnerState<'tcx>> SInto<S, Pattern> for ty::Pattern<'tcx> {
+  918     fn sinto(&self, s: &S) -> Pattern {
+  919         self.kind().sinto(s)
+  920     }
+
+
+### charon/bin/charon-driver/translate/translate_types.rs:175-190 — Charon TyKind Pattern construction
+  175                 assert!(args.types.len() == 1 && args.const_generics.len() == 1);
+  176                 TyKind::Array(
+  177                     args.types.pop().unwrap(),
+  178                     Box::new(args.const_generics.pop().unwrap()),
+  179                 )
+  180             }
+  181             hax::TyKind::Pat(ty, pat) => {
+  182                 let ty = self.translate_ty(span, ty)?;
+  183                 let pat = self.translate_pattern(span, pat)?;
+  184                 TyKind::Pattern(ty, pat)
+  185             }
+  186             hax::TyKind::Slice(item_ref) => {
+  187                 let mut args = self.translate_generic_args(span, &item_ref.generic_args, &[])?;
+  188                 assert!(args.types.len() == 1);
+  189                 TyKind::Slice(args.types.pop().unwrap())
+  190             }
+
+### charon/bin/charon-driver/translate/translate_types.rs:319-337 — Hax Pattern to TypePattern mapping
+  319     pub fn translate_pattern(
+  320         &mut self,
+  321         span: Span,
+  322         pat: &hax::Pattern,
+  323     ) -> Result<TypePattern, Error> {
+  324         Ok(match pat {
+  325             hax::Pattern::Range { start, end } => TypePattern::Range(
+  326                 Box::new(self.translate_constant_expr(span, start)?),
+  327                 Box::new(self.translate_constant_expr(span, end)?),
+  328             ),
+  329             hax::Pattern::Or(patterns) => TypePattern::OrPattern(
+  330                 patterns
+  331                     .iter()
+  332                     .map(|pat| self.translate_pattern(span, pat))
+  333                     .try_collect()?,
+  334             ),
+  335             hax::Pattern::NotNull => TypePattern::NotNull,
+  336         })
+  337     }
+
+
+### aeneas/llbc/Types.ml:1-13 — Aeneas LLBC.Types directly includes Charon.Types
+    1 include Charon.Types
+    2 
+    3 type region_id_set = RegionId.Set.t [@@deriving show, eq, ord]
+    4 
+    5 (** A normalized projection type.
+    6 
+    7     A type where regions are either:
+    8     - the free region of id 0 (the regions we want to keep during a projection)
+    9     - erased (the regions we want to discard during a projection)
+   10 
+   11     Note that using this type (rather than, e.g., [ty]) only has an informative
+   12     purpose. *)
+   13 type norm_proj_ty = ty [@@deriving show, eq, ord]
+
+
+### aeneas/symbolic/SymbolicToPureTypes.ml:155-216 — Aeneas pure-type translation cases and unsupported fallback
+  155 (** Translate a signature type - TODO: factor out the different translation
+  156     functions *)
+  157 let rec translate_sty (span : Meta.span option) (ty : T.ty) : ty =
+  158   let translate = translate_sty in
+  159   match ty with
+  160   | T.TAdt { id; generics } -> (
+  161       let generics = translate_sgeneric_args span generics in
+  162       match id with
+  163       | T.TAdtId adt_id -> TAdt (TAdtId adt_id, generics)
+  164       | T.TTuple ->
+  165           [%sanity_check_opt_span] span (generics.const_generics = []);
+  166           mk_simpl_tuple_ty generics.types
+  167       | T.TBuiltin aty -> (
+  168           match aty with
+  169           | T.TBox -> (
+  170               (* Eliminate the boxes *)
+  171               match generics.types with
+  172               | [ ty ] -> ty
+  173               | _ ->
+  174                   [%craise_opt_span] span
+  175                     "Box/vec/option type with incorrect number of arguments")
+  176           | T.TStr -> TAdt (TBuiltin TStr, generics)))
+  177   | T.TArray (ty, len) ->
+  178       let ty = translate span ty in
+  179       let len = translate_constant_expr_kind span len.kind in
+  180       TAdt
+  181         ( TBuiltin TArray,
+  182           { types = [ ty ]; const_generics = [ len ]; trait_refs = [] } )
+  183   | T.TSlice ty ->
+  184       let ty = translate span ty in
+  185       TAdt
+  186         ( TBuiltin TSlice,
+  187           { types = [ ty ]; const_generics = []; trait_refs = [] } )
+  188   | TVar var ->
+  189       TVar var
+  190       (* Note: the `de_bruijn_id`s are incorrect, see comment on `translate_region_binder` *)
+  191   | TLiteral ty -> TLiteral (translate_literal_type ty)
+  192   | TNever -> TNever
+  193   | TRef (_, rty, _) -> translate span rty
+  194   | TRawPtr (ty, rkind) ->
+  195       let mut =
+  196         match rkind with
+  197         | RMut -> Mut
+  198         | RShared -> Const
+  199       in
+  200       let ty = translate span ty in
+  201       let generics = { types = [ ty ]; const_generics = []; trait_refs = [] } in
+  202       TAdt (TBuiltin (TRawPtr mut), generics)
+  203   | TTraitType (trait_ref, type_name, generics) ->
+  204       let trait_ref = translate_strait_ref span trait_ref in
+  205       [%cassert_opt_span] span
+  206         (generics = TypesUtils.empty_generic_args)
+  207         "Unimplemented";
+  208       TTraitType (trait_ref, type_name)
+  209   | TFnDef _ -> [%craise_opt_span] span "Arrow types are not supported yet"
+  210   | TFnPtr fn_sig -> translate_fn_ptr_ty span (translate span) fn_sig
+  211   | TDynTrait _ ->
+  212       [%craise_opt_span] span "Dynamic trait types are not supported yet"
+  213   | TError _ ->
+  214       [%craise_opt_span] span "Found type error in the output of charon"
+  215   | _ -> [%craise_opt_span] span ("unsupported type: " ^ T.show_ty ty)
+  216 
