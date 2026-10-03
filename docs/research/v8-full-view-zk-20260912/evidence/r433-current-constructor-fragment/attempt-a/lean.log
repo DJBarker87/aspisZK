@@ -1,0 +1,222 @@
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:108:4: error: fail to show termination for
+  AspisV8R19.R433ConstructorFragment.evalProgram
+with errors
+failed to infer structural recursion:
+Not considering parameter T of AspisV8R19.R433ConstructorFragment.evalProgram:
+  it is unchanged in the recursive calls
+Not considering parameter heap of AspisV8R19.R433ConstructorFragment.evalProgram:
+  it is unchanged in the recursive calls
+Not considering parameter locals of AspisV8R19.R433ConstructorFragment.evalProgram:
+  its type is not an inductive
+Cannot use parameter #4:
+  failed to eliminate recursive application
+    evalProgram heap locals (if value = true then ifTrue else ifFalse)
+
+
+failed to prove termination, possible solutions:
+  - Use `have`-expressions to prove the remaining goals
+  - Use `termination_by` to specify a different well-founded relation
+  - Use `decreasing_by` to specify your own tactic for discharging this kind of goal
+locals : Locals
+globalId : ℕ
+ifTrue ifFalse : Program
+value : Bool
+⊢ sizeOf (if value = true then ifTrue else ifFalse) < 1 + globalId + sizeOf ifTrue + sizeOf ifFalse
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:153:9: error: unsolved goals
+case none
+T : Type
+heap : Heap T
+ptr : Pointer
+length : ℕ
+hglobal :
+  R430ReadonlyConstantGraph.eval 7 (R430ReadonlyConstantGraph.Expr.global 31) =
+    some (R430ReadonlyConstantGraph.Value.bool false)
+hAdd : add heap ptr length = none
+⊢ ∀ (a : Control),
+    evalProgram heap (put (fun x => none) 1 (some (Value.sliceRef ptr length)))
+          (((Program.one (Command.live 0)).seq
+                ((Program.one (Command.live 5)).seq
+                  ((Program.one (Command.live 2)).seq
+                    ((Program.one (Command.metadata 2 1)).seq
+                      ((Program.one (Command.live 3)).seq
+                        ((Program.one (Command.live 4)).seq
+                          ((Program.one (Command.live 8)).seq
+                            ((Program.one (Command.rawSlice 8 1 1)).seq
+                              ((Program.one (Command.cast 4 8 Cast.sharedFatToNonNullFat)).seq
+                                ((Program.one (Command.dead 8)).seq
+                                  ((Program.one (Command.live 9)).seq
+                                    ((Program.one (Command.live 10)).seq
+                                      ((Program.one (Command.cast 10 4 Cast.nonNullFatToMutFat)).seq
+                                        ((Program.one (Command.cast 9 10 Cast.mutFatToMutThin)).seq
+                                          ((Program.one (Command.dead 10)).seq
+                                            ((Program.one (Command.cast 3 9 Cast.mutThinToNonNullThin)).seq
+                                              ((Program.one (Command.dead 9)).seq
+                                                ((Program.one (Command.dead 4)).seq Program.nop)))))))))))))))))).seq
+            ((Program.globalIf 31 ((Program.one (Command.cast 5 2 Cast.wordToSharedThin)).seq Program.nop)
+                  ((Program.one (Command.live 6)).seq
+                    ((Program.one (Command.live 7)).seq
+                      ((Program.one (Command.cast 7 3 Cast.nonNullThinToMutThin)).seq
+                        ((Program.one (Command.offset 6 7 2)).seq
+                          ((Program.one (Command.dead 7)).seq
+                            ((Program.one (Command.cast 5 6 Cast.mutThinToSharedThin)).seq
+                              ((Program.one (Command.dead 6)).seq Program.nop)))))))).seq
+              ((Program.one (Command.live 11)).seq
+                ((Program.one (Command.marker 11)).seq
+                  ((Program.one (Command.iterator 0 3 5 11)).seq
+                    ((Program.one (Command.dead 3)).seq
+                      ((Program.one (Command.dead 2)).seq
+                        ((Program.one (Command.dead 5)).seq
+                          ((Program.one (Command.dead 1)).seq
+                            ((Program.one (Command.dead 11)).seq ((Program.one Command.ret).seq Program.nop))))))))))) =
+        some a →
+      (match a with
+        | Control.returned (Value.iterator iter) locals => some iter
+        | x => none) =
+        none
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:156:14: error: unsolved goals
+case some
+T : Type
+heap : Heap T
+ptr : Pointer
+length : ℕ
+hglobal :
+  R430ReadonlyConstantGraph.eval 7 (R430ReadonlyConstantGraph.Expr.global 31) =
+    some (R430ReadonlyConstantGraph.Value.bool false)
+last : Pointer
+hAdd : add heap ptr length = some last
+⊢ ((evalProgram heap (put (fun x => none) 1 (some (Value.sliceRef ptr length)))
+          (((Program.one (Command.live 0)).seq
+                ((Program.one (Command.live 5)).seq
+                  ((Program.one (Command.live 2)).seq
+                    ((Program.one (Command.metadata 2 1)).seq
+                      ((Program.one (Command.live 3)).seq
+                        ((Program.one (Command.live 4)).seq
+                          ((Program.one (Command.live 8)).seq
+                            ((Program.one (Command.rawSlice 8 1 1)).seq
+                              ((Program.one (Command.cast 4 8 Cast.sharedFatToNonNullFat)).seq
+                                ((Program.one (Command.dead 8)).seq
+                                  ((Program.one (Command.live 9)).seq
+                                    ((Program.one (Command.live 10)).seq
+                                      ((Program.one (Command.cast 10 4 Cast.nonNullFatToMutFat)).seq
+                                        ((Program.one (Command.cast 9 10 Cast.mutFatToMutThin)).seq
+                                          ((Program.one (Command.dead 10)).seq
+                                            ((Program.one (Command.cast 3 9 Cast.mutThinToNonNullThin)).seq
+                                              ((Program.one (Command.dead 9)).seq
+                                                ((Program.one (Command.dead 4)).seq Program.nop)))))))))))))))))).seq
+            ((Program.globalIf 31 ((Program.one (Command.cast 5 2 Cast.wordToSharedThin)).seq Program.nop)
+                  ((Program.one (Command.live 6)).seq
+                    ((Program.one (Command.live 7)).seq
+                      ((Program.one (Command.cast 7 3 Cast.nonNullThinToMutThin)).seq
+                        ((Program.one (Command.offset 6 7 2)).seq
+                          ((Program.one (Command.dead 7)).seq
+                            ((Program.one (Command.cast 5 6 Cast.mutThinToSharedThin)).seq
+                              ((Program.one (Command.dead 6)).seq Program.nop)))))))).seq
+              ((Program.one (Command.live 11)).seq
+                ((Program.one (Command.marker 11)).seq
+                  ((Program.one (Command.iterator 0 3 5 11)).seq
+                    ((Program.one (Command.dead 3)).seq
+                      ((Program.one (Command.dead 2)).seq
+                        ((Program.one (Command.dead 5)).seq
+                          ((Program.one (Command.dead 1)).seq
+                            ((Program.one (Command.dead 11)).seq
+                              ((Program.one Command.ret).seq Program.nop)))))))))))).bind
+      fun __x =>
+      match __x with
+      | Control.returned (Value.iterator iter) locals => some iter
+      | x => none) =
+    some { first := ptr, last := last }
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:154:53: warning: This simp argument is unused:
+  evalProgram
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, e̵v̵a̵l̵P̵r̵o̵g̵r̵a̵m̵,̵ ̵evalCommand, initial, put, castValue, hglobal,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:154:66: warning: This simp argument is unused:
+  evalCommand
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, e̵v̵a̵l̵C̵o̵m̵m̵a̵n̵d̵,̵initial, put, castValue, hglobal,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:155:17: warning: This simp argument is unused:
+  put
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, evalCommand,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵initial, p̵u̵t̵,̵ ̵castValue,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:155:22: warning: This simp argument is unused:
+  castValue
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, evalCommand, initial, put,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̵a̵s̵t̵V̵a̵l̵u̵e̵,̵ ̵hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:155:33: warning: This simp argument is unused:
+  hglobal
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, evalCommand, initial, put,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, h̵g̵l̵o̵b̵a̵l̵,̵ ̵hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:157:53: warning: This simp argument is unused:
+  evalProgram
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, e̵v̵a̵l̵P̵r̵o̵g̵r̵a̵m̵,̵ ̵evalCommand, initial, put, castValue, hglobal,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:157:66: warning: This simp argument is unused:
+  evalCommand
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, e̵v̵a̵l̵C̵o̵m̵m̵a̵n̵d̵,̵initial, put, castValue, hglobal,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:158:17: warning: This simp argument is unused:
+  put
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, evalCommand,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵initial, p̵u̵t̵,̵ ̵castValue,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:158:22: warning: This simp argument is unused:
+  castValue
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, evalCommand, initial, put,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̵a̵s̵t̵V̵a̵l̵u̵e̵,̵ ̵hglobal, hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R433ConstructorFragment.lean:158:33: warning: This simp argument is unused:
+  hglobal
+
+Hint: Omit it from the simp argument list.
+  simp [runConstructor, constructor86, sequence, evalProgram, evalCommand, initial, put,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲castValue, h̵g̵l̵o̵b̵a̵l̵,̵ ̵hAdd, newIter]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R433ConstructorFragment.constructor86' does not depend on any axioms
+'AspisV8R19.R433ConstructorFragment.constructor_fragment' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R433ConstructorFragment.constructor_empty' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R433ConstructorFragment.constructor_backed' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
