@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "docker",
+    "run",
+    "--name",
+    "aspis-r497-slice-len-concrete-build",
+    "--network",
+    "none",
+    "--memory-reservation=5g",
+    "--memory=7g",
+    "--memory-swap=7g",
+    "--pids-limit=128",
+    "-v",
+    "/home/dombarker/project-offloads/aspis-r490-slice-len-concrete-20261003-a:/work",
+    "ef96e46342a4",
+    "bash",
+    "-lc",
+    "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r497-slice-len-concrete-build/compiler-time.txt env AENEAS_VERSION=aspis-r497-slice-len-concrete-20261003-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r497-slice-len-concrete-candidate; chmod 755 /work/aeneas-r497-slice-len-concrete-candidate"
+  ],
+  "inner_command": "set -eu; cd /work/src; export OPAMJOBS=1 DUNEJOBS=1; /usr/bin/time -v -o /work/candidate-audit/r497-slice-len-concrete-build/compiler-time.txt env AENEAS_VERSION=aspis-r497-slice-len-concrete-20261003-a OCAMLPARAM=_,ccopt=-static opam exec -- dune build main.exe --profile release -j 1; cp _build/default/main.exe /work/aeneas-r497-slice-len-concrete-candidate; chmod 755 /work/aeneas-r497-slice-len-concrete-candidate",
+  "profile": "dune build main.exe --profile release -j 1",
+  "reason": "compile only the reviewed PrePasses change against the copied pinned cache; no translation/Lean compile"
+}

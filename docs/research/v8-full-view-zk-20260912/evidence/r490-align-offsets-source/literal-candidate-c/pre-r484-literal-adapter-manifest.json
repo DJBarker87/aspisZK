@@ -1,0 +1,156 @@
+{
+  "status": "scratch_candidate_generated_unverified",
+  "input_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r490-align-offsets-source/R490AlignToOffsetsSourceSelection.llbc",
+  "input_sha256": "384d170f403306449c7435e81da6050ae3f447b28a9ab0dc881450c9322621af",
+  "expected_input_sha256": "384d170f403306449c7435e81da6050ae3f447b28a9ab0dc881450c9322621af",
+  "reachability_input_sha256": "ff1671c1d0c74369b9b1a4c13224a60cbdfb0221a553fd8fbe8fb7520277d013",
+  "original_order_input_sha256": "97036298748bee0526948d4cf77841bda7123c8aacc06cf8295c6db1e6a37d65",
+  "pinned_prepasses_path": "docs/research/v8-full-view-zk-20260912/evidence/r430-current-readonly-constant-graph/size-global-inventory/source/PrePasses.ml",
+  "pinned_prepasses_sha256": "579f332212ad75b386b088ef7835783f7cb84a835b1acb96031d49847fc53a17",
+  "capture_source_revision": "a9c2ad3d78c693f597c050674eb19592bf76f990",
+  "capture_source_commit": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "generator_sha256": "b189ce3c2ffd76b0d1858414ca4d35747e6dcbd93395e9331864af28c2b1ddaa",
+  "output_path": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r490-align-offsets-source/R490LiteralInitializerCandidate.llbc",
+  "output_sha256": "a3295333237b0dfad164b826a6d8ce6b2d183d177ca1453489e0e1d2a74a2698",
+  "helper_fun_20_body_sha256_before_after": "e6cb1ca1a0b892d66813da0e94b925c744378c35c85b484ebe87efc12e44bdc4",
+  "transformation": "reachable NamedConst exact compiler Literal scalar/bool -> fresh zero-input regular initializer; replace only global value with empty-generics Call; append function declarations and insert each new ordered-decl group immediately before its matching Global group; restore the unique existing slice_len_fn ordered-decl group required by pinned compiler lowering before helper Fun20",
+  "selected_globals": [
+    {
+      "global_id": 7,
+      "function_id": 42,
+      "statement_ids": [
+        1997,
+        1998,
+        1999
+      ],
+      "old_value": {
+        "kind": {
+          "Literal": {
+            "Scalar": {
+              "Unsigned": [
+                "Usize",
+                "4"
+              ]
+            }
+          }
+        },
+        "ty": {
+          "Deduplicated": 595
+        }
+      },
+      "new_value": {
+        "kind": {
+          "Call": [
+            {
+              "kind": {
+                "Fun": {
+                  "Regular": 42
+                }
+              },
+              "generics": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_refs": []
+              }
+            },
+            []
+          ]
+        },
+        "ty": {
+          "Deduplicated": 595
+        }
+      }
+    },
+    {
+      "global_id": 8,
+      "function_id": 43,
+      "statement_ids": [
+        2000,
+        2001,
+        2002
+      ],
+      "old_value": {
+        "kind": {
+          "Literal": {
+            "Scalar": {
+              "Unsigned": [
+                "Usize",
+                "1"
+              ]
+            }
+          }
+        },
+        "ty": {
+          "Deduplicated": 595
+        }
+      },
+      "new_value": {
+        "kind": {
+          "Call": [
+            {
+              "kind": {
+                "Fun": {
+                  "Regular": 43
+                }
+              },
+              "generics": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_refs": []
+              }
+            },
+            []
+          ]
+        },
+        "ty": {
+          "Deduplicated": 595
+        }
+      }
+    }
+  ],
+  "new_function_ids": [
+    42,
+    43
+  ],
+  "new_statement_id_range": [
+    1997,
+    2002
+  ],
+  "preservation_check": "passed: removing exactly generated functions/order rows and restoring selected original global values gives exact input JSON",
+  "ordered_group_check": "passed: each generated initializer Fun NonRec group immediately precedes its corresponding existing Global NonRec group; the pinned existing slice_len_fn Fun group was restored from original ordered declarations immediately before root helper Fun20; original projection groups retain relative order",
+  "compiler_induced_dependency": {
+    "function_id": 1,
+    "lang_item": "slice_len_fn",
+    "exact_name_ident_components": [
+      "core",
+      "slice",
+      "len"
+    ],
+    "signature": {
+      "is_unsafe": false,
+      "abi": "Rust",
+      "is_variadic": false,
+      "inputs": [
+        {
+          "Deduplicated": 2888
+        }
+      ],
+      "output": {
+        "Deduplicated": 595
+      }
+    },
+    "body": "Opaque",
+    "group_source": "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/.r21-scratch/r490-align-offsets-source/original-ordered-decls.json",
+    "source_reason": "pinned PrePasses.eliminate_metadata_only_slice_raw_pointers lowers the helper PtrMetadata read into this lang-item call; it is compiler-tool-induced, not a direct source call"
+  },
+  "recursive_statement_id_check": "passed: scanned every recursively nested statement node identified by exact keys ['comments_before', 'id', 'kind', 'span']; generated IDs begin above recursive source maximum 1996",
+  "typed_literal_check": "passed for each selected global: value.ty JSON exactly equals declared global.ty JSON; initializer local, result type, and constant type retain that same captured JSON type reference",
+  "scope_limit": "This lowering only transforms value shape. It does not establish native address, lifetime, or reference semantics for references to constants.",
+  "not_run": [
+    "Aeneas translation",
+    "Lean compilation",
+    "source semantic correspondence proof"
+  ]
+}
