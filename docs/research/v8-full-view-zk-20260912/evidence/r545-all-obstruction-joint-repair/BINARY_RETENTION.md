@@ -1,0 +1,1 @@
+The exact tested binary remains at `.r21-scratch/r117-joint-privacy-stress/evidence/aggregate-all-schur/run/aspis-v8-performance-host` and the pinned NUC evidence workspace. Its SHA-256 is `45a48112015bb1f3eecce9a410c4a354f1ddc5d7b920861891c0564efee1b99e`. ARTIFACTS.sha256 is the original complete scratch manifest; SHA256SUMS.txt describes this published evidence subset.

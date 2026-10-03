@@ -1,0 +1,184 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-r117-schur-build-20261004c.service; invocation ID: b64f3a11030a4d4d8f61ce71f5821ade
+       Fresh version_check v0.9.5
+       Fresh typenum v1.20.1
+       Fresh generic-array v0.14.7
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs:235:33
+    |
+235 |     pub unsafe fn iter_position(&mut self) -> (slice::IterMut<T>, &mut usize) {
+    |                                 ^^^^^^^^^      ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^ the same lifetime is elided here
+    |                                 |              |
+    |                                 |              the same lifetime is hidden here
+    |                                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+235 |     pub unsafe fn iter_position(&mut self) -> (slice::IterMut<'_, T>, &mut usize) {
+    |                                                               +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs:290:33
+    |
+290 |     pub unsafe fn iter_position(&mut self) -> (slice::Iter<T>, &mut usize) {
+    |                                 ^^^^^^^^^      ^^^^^^^^^^^^^^  ^^^^^^^^^^ the same lifetime is elided here
+    |                                 |              |
+    |                                 |              the same lifetime is hidden here
+    |                                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+290 |     pub unsafe fn iter_position(&mut self) -> (slice::Iter<'_, T>, &mut usize) {
+    |                                                            +++
+
+warning: `generic-array` (lib) generated 2 warnings
+       Fresh crypto-common v0.1.7
+       Fresh block-buffer v0.10.4
+       Fresh cfg-if v1.0.4
+       Fresh digest v0.10.7
+       Fresh libc v0.2.189
+       Fresh aspis-core v0.1.0 (/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-core)
+       Fresh cpufeatures v0.2.17
+       Fresh sha2 v0.10.9
+       Fresh aspis-statement v0.1.0 (/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-statement)
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> /home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> /home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> /home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> /home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type `CompiledCopyLink` is more private than the item `COMPILED_COPY_LINKS`
+   --> /home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> /home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: `aspis-statement` (lib) generated 5 warnings (run `cargo fix --lib -p aspis-statement` to apply 4 suggestions)
+       Fresh getrandom v0.3.4
+       Fresh zeroize v1.8.1
+warning: unnecessary qualification
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:415:63
+    |
+415 |             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+    |                                                               ^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:7:41
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
+    |                                         ^^^^^^^^^^^^^^^^^^^^^
+help: remove the unnecessary path segments
+    |
+415 -             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+415 +             volatile_set((self as *mut Self).cast::<u8>(), 0, size_of::<Self>());
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:460:43
+    |
+460 |         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+    |                                           ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+460 -         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+460 +         let size = self.len().checked_mul(size_of::<Z>()).unwrap();
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:840:16
+    |
+840 |     let size = mem::size_of::<F>();
+    |                ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+840 -     let size = mem::size_of::<F>();
+840 +     let size = size_of::<F>();
+    |
+
+warning: `zeroize` (lib) generated 3 warnings
+   Compiling aspis-v8-performance-host v0.0.0 (/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host)
+     Running `CARGO=/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo CARGO_BIN_NAME=aspis-v8-performance-host CARGO_CRATE_NAME=aspis_v8_performance_host CARGO_MANIFEST_DIR=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host CARGO_MANIFEST_PATH=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml CARGO_PKG_AUTHORS='' CARGO_PKG_DESCRIPTION='' CARGO_PKG_HOMEPAGE='' CARGO_PKG_LICENSE='' CARGO_PKG_LICENSE_FILE='' CARGO_PKG_NAME=aspis-v8-performance-host CARGO_PKG_README='' CARGO_PKG_REPOSITORY='' CARGO_PKG_RUST_VERSION='' CARGO_PKG_VERSION=0.0.0 CARGO_PKG_VERSION_MAJOR=0 CARGO_PKG_VERSION_MINOR=0 CARGO_PKG_VERSION_PATCH=0 CARGO_PKG_VERSION_PRE='' CARGO_PRIMARY_PACKAGE=1 LD_LIBRARY_PATH='/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps:/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib' /home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc --crate-name aspis_v8_performance_host --edition=2021 ../relation_callback.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type bin --emit=dep-info,link -C opt-level=3 -C embed-bitcode=no -C codegen-units=1 -C overflow-checks=on --cfg 'feature="insecure-spend-fixture"' --cfg 'feature="selected-v7-kernels"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("insecure-spend-fixture", "selected-v7-kernels"))' -C metadata=8d043e92d2d921c2 -C extra-filename=-f53df362645c0e74 --out-dir /home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps --extern aspis_core=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps/libaspis_core-fe2a250508f9a993.rlib --extern aspis_statement=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps/libaspis_statement-d36faca38070a205.rlib --extern getrandom=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps/libgetrandom-8bf0d09b85be458c.rlib --extern sha2=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps/libsha2-b481612af4eb9520.rlib --extern zeroize=/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a/docs/research/v8-no-work-100-20260907/experiments/performance-host/target/release/deps/libzeroize-78d86337c3a7b094.rlib --cfg v8_positive_transfer --cfg v8_complete --cfg v8_performance_fast --cfg v8_structured --cfg v8_fine_profile --cfg v8_batch_m --cfg v8_tower_batch --cfg v8_query_kernels --cfg v8_fused_rows --cfg v8_shared_weights --cfg v8_block_horner --cfg v8_gamma_wrap --cfg v8_reuse_gamma --cfg v8_grouped_linear --cfg v8_query_shared --cfg v8_range_m31 --cfg v8_range_cm31 --cfg v8_sparse_groups --cfg v8_range_dots --cfg v8_cm_schoolbook --cfg v8_prepared_schoolbook --cfg v8_quiet_profile --cfg v8_payment_extraction --cfg v8_performance --cfg v8_qm_hybrid --cfg v8_qm_lazy_c0 --cfg v8_gamma_partial -A dead_code -A unexpected_cfgs --cfg v8_circle_norm --cfg v8_chord_norm --cfg v8_joined_inverse --cfg v8_split_inverse --cfg v8_line_norm --cfg v8_quotient_fused --cfg v8_affine_primal --cfg v8_compact_workspace --cfg v8_gamma_fixed --cfg v8_merkle_slices --cfg v8_merkle_borrow --cfg v8_leaf_record`
+warning: unused imports: `M31_HALF` and `M31`
+ --> ../r17_owned_weights.rs:2:69
+  |
+2 | use super::{basis_transport::transport, corelib::field::{QM31 as K, M31, M31_HALF}};
+  |                                                                     ^^^  ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `reduce`
+   --> ../r17_c1_witness_audit.rs:154:60
+    |
+154 |     use r17_coupled_audit::{chord,dot,eval_weights,qvector,reduce};
+    |                                                            ^^^^^^
+
+warning: unused imports: `dot` and `qvector`
+   --> ../r17_c1_witness_audit.rs:448:29
+    |
+448 |     use r17_coupled_audit::{dot,qvector};
+    |                             ^^^ ^^^^^^^
+
+warning: unused variable: `x`
+   --> ../relation_callback.rs:238:17
+    |
+238 | ...   for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumer...
+    |               ^ help: if this is intentional, prefix it with an underscore: `_x`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `y`
+   --> ../relation_callback.rs:238:19
+    |
+238 | ...   for (j,(x,y)) in [(base.x,base.y),(base.x,base.y.neg()),(base.x.neg(),base.y.neg()),(base.x.neg(),base.y)].into_iter().enumer...
+    |                 ^ help: if this is intentional, prefix it with an underscore: `_y`
+
+warning: variable does not need to be mutable
+   --> ../payment_extraction.rs:213:9
+    |
+213 |     let mut encoded:Vec<Vec<M31>>=selected.iter().map(|m|enc.encode_c1_message(m).unwrap()).collect();
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `aspis-v8-performance-host` (bin "aspis-v8-performance-host") generated 6 warnings (run `cargo fix --bin "aspis-v8-performance-host" -p aspis-v8-performance-host` to apply 6 suggestions)
+    Finished `release` profile [optimized] target(s) in 12.28s
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 12.300s
+CPU time consumed: 12.319s
+Memory peak: 288.0K
+Memory swap peak: 0B

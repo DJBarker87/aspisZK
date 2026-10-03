@@ -1,0 +1,60 @@
+{
+  "milestone": "R545 focused R117 joint H1/G all-residual Schur diagnostic",
+  "classification": "optimized Rust diagnostic; not a formal Lean milestone",
+  "source_freeze_revision": "6677d5f1310ff7373301fbd79f186278f772e68a",
+  "source_workspace": "/home/dombarker/project-offloads/aspis-r117-joint-privacy-schur-20261004-a",
+  "changed_source_inputs": {
+    "performance.rs": "ca6fa4a31dad793376541511873235a3ec42b29fe64deeea1babac110317bb3e",
+    "r17_c1_witness_audit.rs": "57f77712e88375d29f5de93bb1a0c65c93a0b687afa079678b56b332425cc550"
+  },
+  "source_map_and_included_module": {
+    "r17_h1_semantic_audit.rs": "f16df7cda242734d0de3b64bdec1a1972123d763183211c2aedf22fa054141b6",
+    "payment_extraction.rs": "957060c7556d2a0365c1cb3d2bf0576a72399c6c20bfbb47ea531f110dba54f5"
+  },
+  "unchanged_selected_source_pin_check": "unchanged-source-check.log; six unchanged hashes verified, excluding the two intentionally replaced research driver/helper files",
+  "compiler": "rustc 1.94.1 (e408947bfd200af42db322daf0fadfe7e26d3bd1), stable x86_64-unknown-linux-gnu",
+  "cargo_manifest": "docs/research/v8-no-work-100-20260907/experiments/performance-host/Cargo.toml",
+  "cargo_lock_sha256": "a2e3d525c3a0f01428b56df55001ba304981a6b8c26cca08badf7b09b7029814",
+  "rustflags_sha256": "df02f7fe2415264263ea8dca33d686314b1c06ef27bf4d039df9e587513d28b8",
+  "release_flags": "--offline --locked --release --jobs 1; CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; verbose rustc invocation in build-fixed.log includes -C opt-level=3 and -C overflow-checks=on",
+  "build": {
+    "unit": "aspis-r117-schur-build-20261004c.service",
+    "exit_status": 0,
+    "wall_seconds": 12.300,
+    "swap_peak": 0,
+    "cgroup": {"MemoryHigh": "5G", "MemoryMax": "7G", "MemorySwapMax": "0", "TasksMax": 128},
+    "child_peak_rss": "not recorded; systemd's displayed Memory peak is not treated as a reliable rustc RSS measurement",
+    "binary_sha256": "45a48112015bb1f3eecce9a410c4a354f1ddc5d7b920861891c0564efee1b99e"
+  },
+  "run": {
+    "unit": "aspis-r117-schur-run-20261004.service",
+    "case": "only zero-low22: z=0^10; distinct query indices 0..21; alpha=0; gamma=kappa=tau=1; beta retained from original run",
+    "exit_status": 0,
+    "wall_seconds": 56.460,
+    "user_seconds": 56.33,
+    "peak_rss_kib": 306224,
+    "swap_peak_kib": 0,
+    "cgroup": {"MemoryHigh": "5G", "MemoryMax": "7G", "MemorySwapMax": "0", "TasksMax": 128}
+  },
+  "build_failures_preserved": [
+    {"attempt": "aspis-r117-schur-build-20261004", "exit_status": 127, "reason": "systemd service used its default working directory; no source compilation occurred", "log": "build.log"},
+    {"attempt": "aspis-r117-schur-build-20261004b", "exit_status": 101, "reason": "first changed-source compile found one WeightAccumulator argument mismatch", "log": "build-corrected.log", "source_sha256": "7d09308bf27b468065e240e1c240fb2f44ca57c69cd7affd3f9fcd5d414fe0a5"}
+  ],
+  "run_result": {
+    "baseline_G_rank": 600,
+    "baseline_G_rows": 626,
+    "baseline_G_residual_rows": 26,
+    "baseline_G_incompatible_rhs": 1,
+    "H1_rank": 544,
+    "H1_rows": 568,
+    "H1_kernel_directions": 478,
+    "Schur_rank": 1,
+    "Schur_variables": 478,
+    "Schur_rows": 26,
+    "Schur_incompatible_rows": 0,
+    "final_G_all_626_rows": "passed",
+    "fresh_source_semantic_delta_all_271_coordinates": "passed",
+    "p0_p2_all_7_relation_coefficients_raw_point_ood_final_encoder_and_same_public_checks": "passed"
+  },
+  "scope_limit": "The case is synthetic and explicitly FS-history-inconsistent. It demonstrates that this fixed-prefix H1 choice can be adjusted to resolve all measured G compatibility rows for this case. It is not a transcript-coupling proof, simulator, universal privacy theorem, or end-to-end security proof."
+}
