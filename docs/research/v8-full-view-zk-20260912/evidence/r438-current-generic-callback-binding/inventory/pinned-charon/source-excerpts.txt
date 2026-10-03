@@ -1,0 +1,141 @@
+  1025	
+  1026	      impl Foo for ... {
+  1027	          fn bar(x : u32) -> u32 { x } // trait item implementation
+  1028	      }
+  1029	
+  1030	      fn test(...) { ... } // regular
+  1031	
+  1032	      impl Type {
+  1033	          fn test(...) { ... } // regular
+  1034	      }
+  1035	    ]} *)
+  1036	and item_source =
+  1037	  | TopLevelItem  (** This item stands on its own. *)
+  1038	  | ClosureItem of closure_info
+  1039	      (** This is a closure in a function body.
+  1040	
+  1041	          Fields:
+  1042	          - [info] *)
+  1043	  | TraitDeclItem of trait_decl_ref * assoc_item_id
+  1044	      (** This is the default value of an associated const or method in a trait
+  1045	          declaration.
+  1046	
+  1047	          Fields:
+  1048	          - [trait_ref]: The trait declaration this item belongs to.
+  1049	          - [item_id]: The associated item this corresponds to. Note that a
+  1050	            function could have [AssocItemId::Const] if it's the initializer of
+  1051	            a trait const. *)
+  1052	  | TraitImplItem of trait_impl_ref * trait_decl_ref * assoc_item_id * bool
+  1053	      (** This is an associated const or method in a trait implementation.
+  1054	
+  1055	          Fields:
+  1056	          - [impl_ref]: The trait implementation the method belongs to.
+  1057	          - [trait_ref]: The trait declaration that the impl block implements.
+  1058	          - [item_id]: The associated item this corresponds to. Note that a
+  1059	            function could have [AssocItemId::Const] if it's the initializer of
+  1060	            a trait const.
+  1061	          - [reuses_default]: True if the trait decl had a default
+  1062	            implementation for this function/const and this item is a copy of
+  1063	            the default item. *)
+  1064	  | TargetDependentItem of fun_decl_ref
+   289	  item_meta : item_meta;
+   290	  generics : generic_params;
+   291	  implied_clauses : trait_param list;
+   292	      (** The "parent" clauses: the supertraits.
+   293	
+   294	          Supertraits are actually regular where clauses, but we decided to have
+   295	          a custom treatment.
+   296	          {@rust[
+   297	            trait Foo : Bar {
+   298	                        ^^^
+   299	                    supertrait, that we treat as a parent predicate
+   300	            }
+   301	          ]}
+   302	          TODO: actually, as of today, we consider that all trait clauses of
+   303	          trait declarations are parent clauses. *)
+   304	  consts : trait_assoc_const assoc_const_id_map;
+   305	      (** The associated constants declared in the trait. *)
+   306	  types : trait_assoc_ty binder assoc_type_id_map;
+   307	      (** The associated types declared in the trait. The binder binds the
+   308	          generic parameters of the type if it is a GAT (Generic Associated
+   309	          Type). For a plain associated type the binder binds nothing. *)
+   310	  methods : trait_method binder trait_method_id_map;
+   311	      (** The methods declared by the trait. The binder binds the generic
+   312	          parameters of the method.
+   313	
+   330	  name : trait_item_name;
+   331	  item_meta : item_meta;
+   332	  signature : fun_sig;
+   333	  default : fun_decl_ref option;
+   334	      (** The default method implementation, if there is one. *)
+   335	}
+   336	[@@deriving
+   337	  show,
+   338	  eq,
+   339	  ord,
+   340	  visitors
+   341	    {
+   342	      name = "iter_trait_decl";
+   343	      monomorphic = [ "env" ];
+   344	      variety = "iter";
+   345	      ancestors = [ "iter_trait_decl_base" ];
+   346	      nude = true (* Don't inherit VisitorsRuntime *);
+   347	    },
+   348	  visitors
+   349	    {
+   350	      name = "map_trait_decl";
+   351	      monomorphic = [ "env" ];
+   352	      variety = "map";
+   353	      ancestors = [ "map_trait_decl_base" ];
+   354	      nude = true (* Don't inherit VisitorsRuntime *);
+   355	    }]
+   356	
+   357	(** An expression body. TODO: arg_count should be stored in GFunDecl below. But
+   358	    then, the print is obfuscated and Aeneas may need some refactoring. *)
+   359	type 'a0 gexpr_body = {
+   360	  span : span;
+   361	  bound_body_regions : int;
+   362	      (** The number of regions existentially bound in this body. We introduce
+   363	          fresh such regions during translation instead of the erased regions
+   364	          that rustc gives us. *)
+   365	  locals : locals;  (** The local variables. *)
+   366	  body : 'a0;  (** The statements and blocks that compose this body. *)
+   367	}
+   368	
+   369	(** A trait **implementation**.
+   370	
+   371	    For instance:
+   372	    {@rust[
+   373	      impl Foo for List {
+   374	        type Bar = ...
+   375	
+   376	        fn baz(...) { ... }
+   377	      }
+   378	    ]} *)
+   379	and trait_impl = {
+   380	  def_id : trait_impl_id;
+   381	  item_meta : item_meta;
+   382	  impl_trait : trait_decl_ref;
+   383	      (** The information about the implemented trait. Note that this contains
+   384	          the instantiation of the "parent" clauses. *)
+   385	  generics : generic_params;
+   386	  implied_trait_refs : trait_ref list;
+   387	      (** The trait references for the parent clauses (see [TraitDecl]). *)
+   388	  consts : global_decl_ref assoc_const_id_map;
+   389	      (** The implemented associated constants. *)
+   390	  types : trait_assoc_ty_impl binder assoc_type_id_map;
+   391	      (** The implemented associated types. *)
+   392	  methods : fun_decl_ref binder trait_method_id_map;
+   393	      (** The implemented methods *)
+   394	  vtable : global_decl_ref option;
+   395	      (** The virtual table instance for this trait implementation. This is
+   396	          [Some] iff the trait is dyn-compatible. *)
+   397	}
+   398	[@@deriving
+   399	  show,
+   400	  eq,
+   401	  ord,
+   402	  visitors
+   403	    {
+   404	      name = "iter_trait_impl";
+   405	      monomorphic = [ "env" ];

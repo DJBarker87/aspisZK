@@ -1,0 +1,569 @@
+
+## InterpExpressions.ml, SHA256 a686db5af43c4463b357e066330a21f01287bafe0cc2c13394b4b2b4f458f190
+
+### lines 176-248: copy_value borrow/loan cases
+  176 let rec copy_value (span : Meta.span) (allow_adt_copy : bool) (config : config)
+  177     (ctx : eval_ctx) (v : tvalue) :
+  178     tvalue * tvalue * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+  179   [%ltrace
+  180     tvalue_to_string ~span:(Some span) ctx v
+  181     ^ "\n- context:\n"
+  182     ^ eval_ctx_to_string ~span:(Some span) ctx];
+  183   (* Remark: at some point we rewrote this function to use iterators, but then
+  184    * we reverted the changes: the result was less clear actually. In particular,
+  185    * the fact that we have exhaustive matches below makes very obvious the cases
+  186    * in which we need to fail *)
+  187   match v.value with
+  188   | VLiteral _ -> (v, v, ctx, fun e -> e)
+  189   | VAdt av ->
+  190       (* Sanity check *)
+  191       (match v.ty with
+  192       | TAdt
+  193           {
+  194             id = TBuiltin TBox;
+  195             generics = { types = [ boxed_ty ]; _ };
+  196           } ->
+  197           [%cassert] span (ty_is_copyable boxed_ty)
+  198             "The compiler-generated shared Box dereference is not copyable";
+  199           [%cassert] span (not (tvalue_has_borrows (Some span) ctx v))
+  200             "The compiler-generated shared Box dereference contains borrows"
+  201       | TAdt { id = TAdtId _; _ } as ty ->
+  202           [%sanity_check] span (allow_adt_copy || ty_is_copyable ty)
+  203       | TAdt { id = TTuple; _ } -> () (* Ok *)
+  204       | TArray (ty, _) | TSlice ty ->
+  205           [%cassert] span (ty_is_copyable ty)
+  206             "The type is not primitively copyable"
+  207       | _ -> [%craise] span "Unreachable");
+  208       let (ctx, cc), fields =
+  209         List.fold_left_map
+  210           (fun (ctx, cc) v ->
+  211             let v, copied, ctx, cc1 =
+  212               copy_value span allow_adt_copy config ctx v
+  213             in
+  214             ((ctx, cc_comp cc cc1), (v, copied)))
+  215           (ctx, fun e -> e)
+  216           av.fields
+  217       in
+  218       let fields, copied_fields = List.split fields in
+  219       let copied = { v with value = VAdt { av with fields = copied_fields } } in
+  220       let v = { v with value = VAdt { av with fields } } in
+  221       (v, copied, ctx, cc)
+  222   | VBottom -> [%craise] span "Can't copy ⊥"
+  223   | VBorrow bc -> (
+  224       (* We can only copy shared borrows *)
+  225       match bc with
+  226       | VSharedBorrow (bid, _) ->
+  227           (* We need to create a new borrow id for the copied borrow, and
+  228            * update the context accordingly *)
+  229           let sid' = ctx.fresh_shared_borrow_id () in
+  230           ( v,
+  231             { v with value = VBorrow (VSharedBorrow (bid, sid')) },
+  232             ctx,
+  233             fun e -> e )
+  234       | VMutBorrow (_, _) -> [%craise] span "Can't copy a mutable borrow"
+  235       | VReservedMutBorrow _ ->
+  236           [%craise] span "Can't copy a reserved mut borrow")
+  237   | VLoan lc -> (
+  238       (* We can only copy shared loans *)
+  239       match lc with
+  240       | VMutLoan _ -> [%craise] span "Can't copy a mutable loan"
+  241       | VSharedLoan (sids, sv) ->
+  242           (* We don't copy the shared loan: only the shared value inside *)
+  243           let updt_value, copied_value, ctx, cf =
+  244             copy_value span allow_adt_copy config ctx sv
+  245           in
+  246           ( { v with value = VLoan (VSharedLoan (sids, updt_value)) },
+  247             copied_value,
+  248             ctx,
+
+### lines 379-397: Copy and Move context preparation
+  379 let prepare_eval_operand_reorganize (config : config) (span : Meta.span)
+  380     (op : operand) : cm_fun =
+  381  fun ctx ->
+  382   match op with
+  383   | Constant _ ->
+  384       (* No need to reorganize the context *)
+  385       (ctx, fun e -> e)
+  386   | Copy p ->
+  387       (* Access the value *)
+  388       let access = Read in
+  389       (* Expand the symbolic values, if necessary *)
+  390       let greedy_expand = true in
+  391       access_rplace_reorganize config span greedy_expand access p ctx
+  392   | Move p ->
+  393       (* Access the value *)
+  394       let access = Move in
+  395       let greedy_expand = false in
+  396       access_rplace_reorganize config span greedy_expand access p ctx
+  397 
+
+### lines 580-613: Copy/Move evaluation and place updates
+  580   | Copy p ->
+  581       (* Access the value *)
+  582       let access = Read in
+  583       let _, v = read_place_check span access p ctx in
+  584       (* Sanity checks *)
+  585       [%cassert] span
+  586         (not (bottom_in_value ctx.ended_regions v))
+  587         "Can not copy a value containing bottom";
+  588       [%sanity_check] span
+  589         (Option.is_none
+  590            (find_first_expandable_sv_with_borrows (Some span)
+  591               ctx.type_ctx.type_decls ctx.type_ctx.type_infos v));
+  592       (* Copy the value *)
+  593       let allow_adt_copy = false in
+  594       let updated_value, copied_value, ctx, cc =
+  595         copy_value span allow_adt_copy config ctx v
+  596       in
+  597       (* Update the original value *)
+  598       let ctx = write_place span access p updated_value ctx in
+  599       (* *)
+  600       (copied_value, ctx, cc)
+  601   | Move p ->
+  602       (* Access the value *)
+  603       let access = Move in
+  604       let _, v = read_place_check span access p ctx in
+  605       (* Check that there are no bottoms in the value we are about to move *)
+  606       [%cassert] span
+  607         (not (bottom_in_value ctx.ended_regions v))
+  608         "There should be no bottoms in the value we are about to move";
+  609       (* Move the value *)
+  610       let bottom : tvalue = { value = VBottom; ty = v.ty } in
+  611       let ctx = write_place span access p bottom ctx in
+  612       (v, ctx, fun e -> e)
+  613 
+
+### lines 1222-1303: Reference creation for shared and mutable borrows
+ 1222 (** Evaluate an rvalue which creates a reference (i.e., an rvalue which is `&p`
+ 1223     or `&mut p` or `&two-phase p`) *)
+ 1224 let eval_rvalue_ref (config : config) (span : Meta.span) (p : place)
+ 1225     (bkind : borrow_kind) (ctx : eval_ctx) :
+ 1226     tvalue * eval_ctx * (SymbolicAst.expr -> SymbolicAst.expr) =
+ 1227   match bkind with
+ 1228   | BShared | BTwoPhaseMut | BShallow ->
+ 1229       (* **REMARK**: we initially treated shallow borrows like shared borrows.
+ 1230          In practice this restricted the behaviour too much, so for now we
+ 1231          forbid them and remove them in the prepasses (see the comments there
+ 1232          as to why this is sound).
+ 1233       *)
+ 1234       [%sanity_check] span (bkind <> BShallow);
+ 1235 
+ 1236       (* Access the value *)
+ 1237       let access =
+ 1238         match bkind with
+ 1239         | BShared | BShallow -> Read
+ 1240         | BTwoPhaseMut -> Write
+ 1241         | _ -> [%craise] span "Unreachable"
+ 1242       in
+ 1243 
+ 1244       let greedy_expand = false in
+ 1245       let lid, v, ctx, cc =
+ 1246         access_rplace_reorganize_and_read config span greedy_expand access p ctx
+ 1247       in
+ 1248       (* Generate the fresh shared borrow id *)
+ 1249       let sid = ctx.fresh_shared_borrow_id () in
+ 1250       (* Compute the loan value, with which to replace the value at place p *)
+ 1251       let bid, nv =
+ 1252         match (lid, v.value) with
+ 1253         | Some lid, _ | None, VLoan (VSharedLoan (lid, _)) ->
+ 1254             (* The value is (directly inside) a shared loan: we do not need to do anything *)
+ 1255             (lid, v)
+ 1256         | _ ->
+ 1257             (* Not a shared loan: add a wrapper *)
+ 1258             let bid = ctx.fresh_borrow_id () in
+ 1259             let v' = VLoan (VSharedLoan (bid, v)) in
+ 1260             (bid, { v with value = v' })
+ 1261       in
+ 1262       (* Update the value in the context to replace it with the loan *)
+ 1263       let ctx = write_place span access p nv ctx in
+ 1264       (* Compute the rvalue - simply a shared borrow with the fresh id.
+ 1265        * Note that the reference is *mutable* if we do a two-phase borrow *)
+ 1266       let ref_kind =
+ 1267         match bkind with
+ 1268         | BShared | BShallow -> RShared
+ 1269         | BTwoPhaseMut -> RMut
+ 1270         | _ -> [%craise] span "Unreachable"
+ 1271       in
+ 1272       let rv_ty = TRef (RErased, v.ty, ref_kind) in
+ 1273       let bc =
+ 1274         match bkind with
+ 1275         | BShared | BShallow ->
+ 1276             (* See the remark at the beginning of the match branch: we
+ 1277                handle shallow borrows like shared borrows *)
+ 1278             VSharedBorrow (bid, sid)
+ 1279         | BTwoPhaseMut -> VReservedMutBorrow (bid, sid)
+ 1280         | _ -> [%craise] span "Unreachable"
+ 1281       in
+ 1282       let rv : tvalue = { value = VBorrow bc; ty = rv_ty } in
+ 1283       (* Return *)
+ 1284       (rv, ctx, cc)
+ 1285   | BMut | BUniqueImmutable ->
+ 1286       (* We treat unique immutable borrows or mutable borrows: the difference is not
+ 1287          that important in our case *)
+ 1288       (* Access the value *)
+ 1289       let access = Write in
+ 1290       let greedy_expand = false in
+ 1291       let _, v, ctx, cc =
+ 1292         access_rplace_reorganize_and_read config span greedy_expand access p ctx
+ 1293       in
+ 1294       (* Compute the rvalue - wrap the value in a mutable borrow with a fresh id *)
+ 1295       let bid = ctx.fresh_borrow_id () in
+ 1296       let rv_ty = TRef (RErased, v.ty, RMut) in
+ 1297       let rv : tvalue = { value = VBorrow (VMutBorrow (bid, v)); ty = rv_ty } in
+ 1298       (* Compute the loan value with which to replace the value at place p *)
+ 1299       let nv = { v with value = VLoan (VMutLoan bid) } in
+ 1300       (* Update the value in the context to replace it with the loan *)
+ 1301       let ctx = write_place span access p nv ctx in
+ 1302       (* Return *)
+ 1303       (rv, ctx, cc)
+
+## InterpPaths.ml, SHA256 d72a6ec2a45bc738fab3e5c666e552dc0f28c031ddcba5a9f46a05415c3cf10e
+
+### lines 100-210: Field projection and Deref through borrows
+  100         let nvalues = FieldId.update_nth adt.fields field_id updated in
+  101         let value = VAdt { adt with fields = nvalues } in
+  102         (ctx, { v with value })
+  103       in
+  104       Ok (None, fv, backward)
+  105     end
+  106   | Field ((ProjAdt (_, _) | ProjTuple _), _), VBottom, _ ->
+  107       (* If we reach Bottom, it may mean we need to expand an uninitialized
+  108        * enumeration value *)
+  109       Error (FailBottom (current_place, pe))
+  110   (* Raw pointer dereference: not supported yet.
+  111 
+  112      It is important that this appears before the symbolic value case, otherwise
+  113      we would be tempted to expand a raw pointer symbolic value (which we can't,
+  114      and would lead to an obscure error from the user point of view). *)
+  115   | Deref, _, TRawPtr _ ->
+  116       [%craise] span "Aeneas does not yet support dereferencing raw pointers."
+  117   (* Symbolic value: needs to be expanded *)
+  118   | _, VSymbolic sp, _ ->
+  119       (* Expand the symbolic value *)
+  120       Error (FailSymbolic (current_place, sp))
+  121   (* Box dereferencement *)
+  122   | ( Deref,
+  123       VAdt { variant_id = None; fields = [ fv ] },
+  124       TAdt { id = TBuiltin TBox; _ } ) -> begin
+  125       (* We allow moving outside of boxes. In practice, this kind of
+  126        * manipulations should happen only inside unsafe code, so
+  127        * it shouldn't happen due to user code, and we leverage it
+  128        * when implementing box dereferencement for the concrete
+  129        * interpreter *)
+  130       let backward (ctx, updated) =
+  131         let value = VAdt { variant_id = None; fields = [ updated ] } in
+  132         (ctx, { v with value })
+  133       in
+  134       Ok (None, fv, backward)
+  135     end
+  136   (* Borrows *)
+  137   | Deref, VBorrow bc, _ ->
+  138       (* Compute the projected value to explore and a backward function to update the result *)
+  139       let res : _ path_access_result =
+  140         match bc with
+  141         | VSharedBorrow _ when not access.lookup_shared_borrows ->
+  142             Error (FailBorrow bc)
+  143         | VSharedBorrow (bid, _) -> begin
+  144             (* Lookup the loan content, and explore from there *)
+  145             match ctx_lookup_loan span ek bid ctx with
+  146             | _, Concrete (VMutLoan _) ->
+  147                 [%craise] span "Expected a shared loan"
+  148             | _, Concrete (VSharedLoan (bid, sv)) ->
+  149                 (* Return the shared value *)
+  150                 Ok
+  151                   ( Some bid,
+  152                     sv,
+  153                     fun (ctx, updated) ->
+  154                       let ctx =
+  155                         update_loan span ek bid (VSharedLoan (bid, updated)) ctx
+  156                       in
+  157                       (ctx, v) )
+  158             | ( _,
+  159                 Abstract
+  160                   ( AMutLoan _
+  161                   | AEndedMutLoan _
+  162                   | AEndedSharedLoan _
+  163                   | AIgnoredMutLoan _
+  164                   | AEndedIgnoredMutLoan _
+  165                   | AIgnoredSharedLoan _ ) ) ->
+  166                 [%craise] span "Expected a shared (abstraction) loan"
+  167             | _, Abstract (ASharedLoan (pm, bid, sv, _av)) -> begin
+  168                 (* Sanity check: projection markers can only appear when we're doing a join *)
+  169                 [%sanity_check] span (pm = PNone);
+  170                 (* Return the shared value *)
+  171                 Ok
+  172                   ( Some bid,
+  173                     sv,
+  174                     fun (ctx, updated) ->
+  175                       let av =
+  176                         match ctx_lookup_loan span ek bid ctx with
+  177                         | _, Abstract (ASharedLoan (_, _, _, av)) -> av
+  178                         | _ -> [%craise] span "Unexpected"
+  179                       in
+  180                       let ctx =
+  181                         update_aloan span ek bid
+  182                           (ASharedLoan (pm, bid, updated, av))
+  183                           ctx
+  184                       in
+  185                       (ctx, v) )
+  186               end
+  187           end
+  188         | VReservedMutBorrow (bid, sid) ->
+  189             Error (FailReservedMutBorrow (bid, sid))
+  190         | VMutBorrow _ when not access.enter_mut_borrows ->
+  191             Error (FailBorrow bc)
+  192         | VMutBorrow (bid, bv) ->
+  193             Ok
+  194               ( None,
+  195                 bv,
+  196                 fun (ctx, updated) ->
+  197                   let value = VBorrow (VMutBorrow (bid, updated)) in
+  198                   (ctx, { v with value }) )
+  199       in
+  200       res
+  201   | _, VLoan lc, _ -> begin
+  202       match lc with
+  203       | VMutLoan bid -> Error (FailMutLoan bid)
+  204       | VSharedLoan (bids, _) when not access.enter_shared_loans ->
+  205           Error (FailSharedLoan bids)
+  206       | VSharedLoan (bids, sv) -> begin
+  207           (* If we can enter a shared loan, we ignore the loan. Pay attention
+  208              to the fact that we need to reexplore the *whole* place (i.e, we
+  209              mustn't ignore the current projection element).
+  210 
+
+### lines 290-378: Backwards updates and Read/Write/Move policy
+  290 let access_update_place (span : Meta.span) (access : projection_access)
+  291     (* Function to (eventually) update the value we find *)
+  292       (update : tvalue -> tvalue) (p : place) (ctx : eval_ctx) :
+  293     (eval_ctx * loan_id option * tvalue) path_access_result =
+  294   (* For looking up/updating shared loans *)
+  295   let ek : exploration_kind =
+  296     { enter_shared_loans = true; enter_mut_borrows = true; enter_abs = true }
+  297   in
+  298   (* Apply the projection *)
+  299   match access_place span access ek ctx p with
+  300   | Error err -> Error err
+  301   | Ok (lid, v, backward) ->
+  302       let nv = update v in
+  303       (* Update the ctx with the updated value *)
+  304       let ctx, _ = backward (ctx, nv) in
+  305       Ok (ctx, lid, v)
+  306 
+  307 type access_kind =
+  308   | Read  (** We can go inside borrows and loans *)
+  309   | Write  (** Don't enter shared borrows or shared loans *)
+  310   | Move  (** Don't enter borrows or loans *)
+  311 
+  312 let access_kind_to_projection_access (access : access_kind) : projection_access
+  313     =
+  314   match access with
+  315   | Read ->
+  316       {
+  317         enter_shared_loans = true;
+  318         enter_mut_borrows = true;
+  319         lookup_shared_borrows = true;
+  320       }
+  321   | Write ->
+  322       {
+  323         enter_shared_loans = false;
+  324         enter_mut_borrows = true;
+  325         lookup_shared_borrows = false;
+  326       }
+  327   | Move ->
+  328       {
+  329         enter_shared_loans = false;
+  330         enter_mut_borrows = false;
+  331         lookup_shared_borrows = false;
+  332       }
+  333 
+  334 (** Attempt to read the value at a given place, provided the place **does not
+  335     refer to a global** (globals are handled elsewhere).
+  336 
+  337     Note that we only access the value at the place, and do not check that the
+  338     value is "well-formed" (for instance that it doesn't contain bottoms). *)
+  339 let try_read_place (span : Meta.span) (access : access_kind) (p : place)
+  340     (ctx : eval_ctx) : (loan_id option * tvalue) path_access_result =
+  341   let access = access_kind_to_projection_access access in
+  342   (* The update function is the identity *)
+  343   let update v = v in
+  344   match access_update_place span access update p ctx with
+  345   | Error err -> Error err
+  346   | Ok (_ctx1, lid, read_value) ->
+  347       (* Note that we ignore the new environment: it should be the same as the
+  348          original one. *)
+  349       Ok (lid, read_value)
+  350 
+  351 let read_place (span : Meta.span) (access : access_kind) (p : place)
+  352     (ctx : eval_ctx) : loan_id option * tvalue =
+  353   match try_read_place span access p ctx with
+  354   | Error e -> [%craise] span ("Unreachable: " ^ show_path_fail_kind e)
+  355   | Ok (lid, v) -> (lid, v)
+  356 
+  357 (** Attempt to update the value at a given place, provided the place **does not
+  358     refer to a global** (globals are handled elsewhere). *)
+  359 let try_write_place (span : Meta.span) (access : access_kind) (p : place)
+  360     (nv : tvalue) (ctx : eval_ctx) : eval_ctx path_access_result =
+  361   let access = access_kind_to_projection_access access in
+  362   (* The update function substitutes the value with the new value *)
+  363   let update _ = nv in
+  364   match access_update_place span access update p ctx with
+  365   | Error err -> Error err
+  366   | Ok (ctx, _, _) ->
+  367       (* We ignore the read value *)
+  368       Ok ctx
+  369 
+  370 let write_place (span : Meta.span) (access : access_kind) (p : place)
+  371     (nv : tvalue) (ctx : eval_ctx) : eval_ctx =
+  372   match try_write_place span access p nv ctx with
+  373   | Error e -> [%craise] span ("Unreachable: " ^ show_path_fail_kind e)
+  374   | Ok ctx -> ctx
+  375 
+  376 let compute_expanded_bottom_adt_value (span : Meta.span) (ctx : eval_ctx)
+  377     (def_id : TypeDeclId.id) (opt_variant_id : VariantId.id option)
+  378     (generics : generic_args) : tvalue =
+
+## InterpStatements.ml, SHA256 061c0b53ee02aa2b19ab2998ad84a7a5e3f3add06f66deaec839f8dff7343982
+
+### lines 420-475: Call operands and frame setup/return
+  420   let dest = call.dest in
+  421   match call.func with
+  422   | FnOpDynamic _ ->
+  423       (* Function pointer case: TODO *)
+  424       [%craise] span "Function pointers are not supported yet"
+  425   | FnOpRegular func ->
+  426       let generics = func.generics in
+  427       (* Sanity check: we don't fully handle the const generic vars environment
+  428          in concrete mode yet *)
+  429       [%sanity_check] span (generics.const_generics = []);
+  430 
+  431       (* Evaluate the operands *)
+  432       (*      let ctx, args_vl = eval_operands config ctx args in *)
+  433       let args_vl, ctx, cc = eval_operands config span args ctx in
+  434 
+  435       (* Evaluate the call
+  436        *
+  437        * Style note: at some point we used {!comp_transmit} to
+  438        * transmit the result of {!eval_operands} above down to {!push_vars}
+  439        * below, without having to introduce an intermediary function call,
+  440        * but it made it less clear where the computed values came from,
+  441        * so we reversed the modifications. *)
+  442       (* Push the stack frame: we initialize the frame with the return variable,
+  443          and one variable per input argument *)
+  444       let ctx = push_frame ctx in
+  445 
+  446       (* Create and push the return variable *)
+  447       let ret_vid = LocalId.zero in
+  448       let ret_ty = get_builtin_function_return_type span fid generics in
+  449       let ret_var = mk_var ret_vid (Some "@return") ret_ty span in
+  450       let ctx = push_uninitialized_var span ret_var ctx in
+  451 
+  452       (* Create and push the input variables *)
+  453       let input_vars =
+  454         LocalId.mapi_from1
+  455           (fun id (v : tvalue) -> (mk_var id None v.ty span, v))
+  456           args_vl
+  457       in
+  458       let ctx = push_vars span input_vars ctx in
+  459 
+  460       (* "Execute" the function body. As the functions are builtin, here we call
+  461        * custom functions to perform the proper manipulations: we don't have
+  462        * access to a body. *)
+  463       let ctx, cf_eval_body =
+  464         match fid with
+  465         | BoxNew -> eval_box_new_concrete config span generics ctx
+  466         | Index _
+  467         | ArrayToSliceShared
+  468         | ArrayToSliceMut
+  469         | ArrayRepeat
+  470         | PtrFromParts _ -> [%craise] span "Unimplemented"
+  471       in
+  472       let cc = cc_comp cc cf_eval_body in
+  473 
+  474       (* Pop the frame *)
+  475       comp cc (pop_frame_assign config span dest ctx)
+
+### lines 908-990: Assignment writes, Drop and StorageDead
+  908 and eval_statement_raw (config : config) (st : statement) : stl_cm_fun =
+  909  fun ctx ->
+  910   [%ltrace "statement:\n" ^ statement_to_string_with_tab ctx st ^ "\n"];
+  911   match st.kind with
+  912   | Assign (p, rvalue) ->
+  913       if
+  914         (* We handle global assignments separately as a specific case. *)
+  915         ExpressionsUtils.rvalue_accesses_global rvalue
+  916       then (
+  917         [%ltrace "The rvalue is a global access"];
+  918         eval_rvalue_global config st.span p rvalue ctx)
+  919       else (
+  920         [%ltrace "The rvalue is not a global access"];
+  921         (* Evaluate the rvalue *)
+  922         let res, ctx, cc = eval_rvalue_not_global config st.span rvalue ctx in
+  923         (* Assign *)
+  924         [%ltrace
+  925           "about to assign to place: " ^ place_to_string ctx p
+  926           ^ "\n- Context:\n"
+  927           ^ eval_ctx_to_string ~span:(Some st.span) ctx];
+  928         let (ctx, res), cf_assign =
+  929           match res with
+  930           | Error EPanic -> ((ctx, Panic), fun e -> e)
+  931           | Ok rv ->
+  932               (* Update the synthesized AST - here we store additional span-information.
+  933                  We do it only in specific cases (it is not always useful, and
+  934                  also it can lead to issues - for instance, if we borrow a
+  935                  reserved borrow, we later can't translate it to pure values...) *)
+  936               let cc =
+  937                 match rvalue with
+  938                 | Len _ -> [%craise] st.span "Len is not handled yet"
+  939                 | Repeat _ ->
+  940                     [%craise] st.span
+  941                       "Repeat should have been removed in a micropass"
+  942                 | Use _
+  943                 | RvRef
+  944                     ( _,
+  945                       ( BShared
+  946                       | BMut
+  947                       | BTwoPhaseMut
+  948                       | BShallow
+  949                       | BUniqueImmutable ),
+  950                       _ )
+  951                 | NullaryOp _
+  952                 | UnaryOp _
+  953                 | BinaryOp _
+  954                 | Discriminant _
+  955                 | Aggregate _
+  956                 | RawPtr _ ->
+  957                     let p = S.mk_mplace st.span p ctx in
+  958                     let rp = rvalue_get_place rvalue in
+  959                     let rp =
+  960                       Option.map (fun rp -> S.mk_mplace st.span rp ctx) rp
+  961                     in
+  962                     S.synthesize_assignment ctx p rv rp
+  963               in
+  964               let ctx, cc = comp cc (assign_to_place config st.span rv p ctx) in
+  965               ((ctx, Unit), cc)
+  966         in
+  967         let cc = cc_comp cc cf_assign in
+  968         (* Compose and apply *)
+  969         ([ (ctx, res) ], cc_singleton __FILE__ __LINE__ st.span cc))
+  970   | SetDiscriminant (p, variant_id) ->
+  971       let (ctx, res), cc = set_discriminant config st.span p variant_id ctx in
+  972       ([ (ctx, res) ], cc_singleton __FILE__ __LINE__ st.span cc)
+  973   | PlaceMention _ ->
+  974       (* A place mention just needs to check the place projections are valid; for
+  975          now we treat this as a no-op *)
+  976       ([ (ctx, Unit) ], cc_singleton __FILE__ __LINE__ st.span (fun e -> e))
+  977   | Drop (p, _, _, _) ->
+  978       if !Config.drop_as_no_op then
+  979         ([ (ctx, Unit) ], cf_singleton __FILE__ __LINE__ st.span)
+  980       else
+  981         let ctx, cc = drop_value config st.span p ctx in
+  982         ([ (ctx, Unit) ], cc_singleton __FILE__ __LINE__ st.span cc)
+  983   | StorageDead local ->
+  984       let p = mk_place_from_var_id ctx st.span local in
+  985       let ctx, cc = drop_value config st.span p ctx in
+  986       (* A StorageDead statement ends the lifetime of the local immediately.
+  987          The ordinary drop path preserves its value in a dummy binding while
+  988          outstanding borrows are returned.  Simplify that dead binding before
+  989          the MIR reuses the local in an enclosing loop; otherwise an IterMut
+  990          from the preceding iteration can look like a live mutable escape when

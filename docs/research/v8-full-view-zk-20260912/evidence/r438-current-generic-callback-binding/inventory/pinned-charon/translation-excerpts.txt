@@ -1,0 +1,231 @@
+   750	                        signature,
+   751	                    },
+   752	                )
+   753	            };
+   754	            methods.set_slot_extend(method_id, method);
+   755	        }
+   756	
+   757	        // skip all associated items of trait decl in mono mode
+   758	        // question: what if the associated methods (or consts) has default implmentation?
+   759	        // TODO: support default methods and default consts
+   760	        if self.monomorphize() {
+   761	            return Ok(TraitDecl {
+   762	                def_id: trait_decl_id,
+   763	                item_meta,
+   764	                implied_clauses,
+   765	                generics: self.into_generics(),
+   766	                consts,
+   767	                types,
+   768	                methods,
+   769	                vtable,
+   770	            });
+   771	        }
+   772	
+   773	        for hax_item in items {
+   774	            let item_def_id = &hax_item.def_id;
+   775	            let item_span = self.def_span(item_def_id);
+   776	            let assoc_item_id = self.translate_assoc_item_id(trait_decl_id, item_def_id)?;
+   777	            let item_name = self
+   778	                .translated
+   779	                .assoc_item_name(trait_decl_id, assoc_item_id);
+   780	
+   781	            // In --mono mode, we keep only non-polymorphic items; in not-mono mode, we use the
+   782	            // polymorphic item as usual.
+   783	            let trans_kind = match hax_item.kind {
+   784	                hax::AssocKind::Fn { .. } => TransItemSourceKind::Fun,
+   785	                hax::AssocKind::Const { .. } => TransItemSourceKind::Global,
+   786	                hax::AssocKind::Type { .. } => TransItemSourceKind::Type,
+   787	            };
+   788	
+   789	            let item_def = self.poly_hax_def(item_def_id)?;
+   790	            let item_src = TransItemSource::polymorphic(item_def_id, trans_kind);
+   791	            let attr_info = self.translate_attr_info(&item_def);
+   792	
+   793	            match item_def.kind() {
+   794	                hax::FullDefKind::AssocFn {
+   795	                    sig,
+   796	                    associated_item,
+   797	                    ..
+   798	                } => {
+   799	                    let trait_method_id = *assoc_item_id.as_method().unwrap();
+   800	                    let method_name = self.translate_name(&item_src)?;
+   801	                    let method_opacity = self.opacity_for_name(&method_name);
+   802	                    let method_item_meta =
+   803	                        self.translate_item_meta(&item_def, &item_src, method_name, method_opacity);
+   804	                    // By default we only enqueue required methods (those that don't have a default
+   805	                    // impl). If the trait is transparent, we enqueue all its methods.
+   806	                    if self.options.translate_all_methods
+   807	                        || item_meta.opacity.is_transparent()
+   808	                        || !hax_item.has_value
+   809	                    {
+   810	                        self.mark_method_as_used(trait_decl_id, trait_method_id);
+   811	                    }
+   812	                    let default_fun_id = associated_item.has_value.then(|| {
+   813	                        let fun_id = self.register_no_enqueue(item_span, &item_src);
+   814	                        // Register this method.
+   815	                        self.register_method_impl(trait_decl_id, trait_method_id, fun_id);
+   816	                        fun_id
+   817	                    });
+   818	
+   819	                    let binder_kind = BinderKind::TraitMethod(trait_decl_id, trait_method_id);
+   820	                    let mut method = self.translate_binder_for_def(
+   821	                        item_span,
+   822	                        binder_kind,
+   823	                        &item_def,
+   824	                        |bt_ctx| {
+   825	                            assert_eq!(bt_ctx.binding_levels.len(), 2);
+   992	    pub fn translate_trait_impl(
+   993	        mut self,
+   994	        def_id: TraitImplId,
+   995	        item_meta: ItemMeta,
+   996	        def: &hax::FullDef<'tcx>,
+   997	    ) -> Result<TraitImpl, Error> {
+   998	        let span = item_meta.span;
+   999	
+  1000	        let hax::FullDefKind::TraitImpl {
+  1001	            trait_pred,
+  1002	            implied_trait_proofs,
+  1003	            items: impl_items,
+  1004	            ..
+  1005	        } = &def.kind
+  1006	        else {
+  1007	            unreachable!()
+  1008	        };
+  1009	
+  1010	        // Retrieve the information about the implemented trait.
+  1011	        let implemented_trait = self.translate_trait_ref(span, &trait_pred.trait_ref)?;
+  1012	        let trait_id = implemented_trait.id;
+  1013	        // A `TraitRef` that points to this impl with the correct generics.
+  1014	        let self_predicate = TraitRef::new(
+  1015	            TraitRefKind::TraitImpl(TraitImplRef {
+  1016	                id: def_id,
+  1017	                generics: Box::new(self.the_only_binder().params.identity_args()),
+  1018	            }),
+  1019	            RegionBinder::empty(implemented_trait.clone()),
+  1020	        );
+  1021	
+  1022	        let vtable =
+  1023	            self.translate_vtable_instance_ref_no_enqueue(span, &trait_pred.trait_ref, def.this())?;
+  1024	
+  1025	        // The trait refs which implement the parent clauses of the implemented trait decl.
+  1026	        let implied_trait_refs = self.translate_trait_proofs(span, implied_trait_proofs)?;
+  1027	
+  1028	        {
+  1029	            // Debugging
+  1030	            let ctx = self.into_fmt();
+  1031	            let refs = implied_trait_refs
+  1032	                .iter()
+  1033	                .map(|c| c.with_ctx(&ctx))
+  1034	                .format("\n");
+  1035	            trace!(
+  1036	                "Trait impl: {:?}\n- implied_trait_refs:\n{}",
+  1037	                def.def_id(),
+  1038	                refs
+  1039	            );
+  1040	        }
+  1041	
+  1042	        let implemented_trait_def = self.poly_hax_def(&trait_pred.trait_ref.def_id)?;
+  1043	        if implemented_trait_def.lang_item == Some(sym::destruct) {
+  1044	            raise_error!(
+  1045	                self,
+  1046	                span,
+  1047	                "found an explicit impl of `core::marker::Destruct`, this should not happen"
+  1048	            );
+  1049	        }
+  1050	
+  1051	        // Explore the associated items
+  1052	        let mut consts: IndexMap<AssocConstId, _> = IndexMap::new();
+  1053	        let mut types: IndexMap<AssocTypeId, _> = IndexMap::new();
+  1054	        let mut methods: IndexMap<TraitMethodId, _> = IndexMap::new();
+  1055	
+  1056	        // In mono mode, we do not translate any associated items in trait impl.
+  1057	        if self.monomorphize() {
+  1058	            return Ok(TraitImpl {
+  1059	                def_id,
+  1060	                item_meta,
+  1061	                impl_trait: implemented_trait,
+  1062	                generics: self.into_generics(),
+  1063	                implied_trait_refs,
+  1064	                consts,
+  1065	                types,
+  1066	                methods,
+  1067	                vtable,
+  1068	            });
+  1069	        }
+  1070	
+    35	
+    36	    /// The options that control translation.
+    37	    pub options: TranslateOptions,
+    38	    /// The translated data.
+    39	    pub translated: TranslatedCrate,
+    40	
+    41	    /// Record data for each method whether it is ever used (called or implemented) and the
+    42	    /// `FunDeclId`s of the implementations. We use this to lazily translate methods, so that we
+    43	    /// skip unused default methods of large traits like `Iterator`.
+    44	    ///
+    45	    /// The complete scheme works as follows: by default we enqueue no methods for translation.
+    46	    /// When we find a use of a method, we mark it "used" using `mark_method_as_used`. This
+    47	    /// enqueues all known and future impls of this method. We also mark a method as used if we
+    48	    /// find an implementation of it in a non-opaque impl, and if the method is a required method.
+    49	    pub method_status: IndexMap<TraitDeclId, IndexVec<TraitMethodId, MethodStatus>>,
+    50	
+    51	    /// The map from rustc id to translated id.
+    52	    pub id_map: HashMap<TransItemSource, ItemId>,
+    53	    /// The reverse map of ids.
+    54	    pub reverse_id_map: HashMap<ItemId, TransItemSource>,
+    55	    /// Map from rustc id to associated item id
+    56	    pub assoc_item_id_map: HashMap<hax::DefId, AssocItemId>,
+    57	    /// The reverse filename map.
+    58	    pub file_to_id: HashMap<FileName, FileId>,
+   275	        def_id: &hax::DefId,
+   276	    ) -> Result<Arc<hax::FullDef<'tcx>>, Error> {
+   277	        self.t_ctx.poly_hax_def(def_id)
+   278	    }
+   279	}
+   280	
+   281	impl<'tcx> Deref for ItemTransCtx<'tcx, '_> {
+   282	    type Target = TranslateCtx<'tcx>;
+   283	    fn deref(&self) -> &Self::Target {
+   284	        self.t_ctx
+   285	    }
+   286	}
+   287	impl<'tcx> DerefMut for ItemTransCtx<'tcx, '_> {
+   288	    fn deref_mut(&mut self) -> &mut Self::Target {
+   289	        self.t_ctx
+   290	    }
+   291	}
+   292	
+   293	impl<'a> IntoFormatter for &'a TranslateCtx<'_> {
+   294	    type C = FmtCtx<'a>;
+   295	    fn into_fmt(self) -> Self::C {
+   296	        self.translated.into_fmt()
+   297	    }
+   298	}
+   299	
+   300	impl<'a> IntoFormatter for &'a ItemTransCtx<'_, '_> {
+   301	    type C = FmtCtx<'a>;
+   302	    fn into_fmt(self) -> Self::C {
+   303	        FmtCtx {
+   304	            translated: Some(&self.t_ctx.translated),
+   305	            generics: self.binding_levels.map_ref(|bl| Cow::Borrowed(&bl.params)),
+   306	            local_names: None,
+   307	            indent_level: 0,
+   308	        }
+   148	                    // Ensure serialization so we can load the result.
+   149	                    opts.no_serialize = false;
+   150	                    opts.format = Some(format.into());
+   151	                    // Keep variables bound so that we can manipulate them when merging. We'll
+   152	                    // apply the pass at the end if needed.
+   153	                    opts.unbind_item_vars = false;
+   154	                    // Make sure that traits have the same methods translated in each target. We
+   155	                    // filter unused methods after merge.
+   156	                    opts.translate_all_methods = true;
+   157	
+   158	                    let status = translate_one(opts, target)?;
+   159	                    if !status.success() {
+   160	                        eprintln!("translation for target {target} failed with status {status}");
+   161	                        handle_exit_status(status)?;
+   162	                    }
+38e9012aacf67d4b2d46ed4e8927d81a25de3cf036f611cb48b9ff0dd8121ea5  /home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/bin/charon-driver/translate/translate_items.rs
+95a13e460367fd95a6cc47d47373ef6333afe6831d3f30bc638f8c4e323f76eb  /home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/bin/charon-driver/translate/translate_ctx.rs
+381774440aec829cb23ad9849102673f2085366910537a4ff56177133df6b35f  /home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/charon/src/bin/charon/main.rs
