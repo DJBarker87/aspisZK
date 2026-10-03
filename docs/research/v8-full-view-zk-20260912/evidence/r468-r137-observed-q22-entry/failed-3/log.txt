@@ -1,0 +1,210 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791021446624879000.service; invocation ID: 41f3ee654c9f4e328f6b24b588a92964
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R468R137ObservedQ22EntryScratch.lean:72:58: error: unsolved goals
+H : Bytes → State
+s : State
+history : SamplerObservation.Trace
+out : QueryChunkExecution.Values
+observed : SamplerObservation.Trace
+hobs :
+  QueryObservedSource.query_probe (QueryBlockStep.queryTranscript H s) history =
+    ok
+      ((QueryEntryExecution.finishSource out,
+          QueryBlockStep.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+        observed)
+hfinish : Q22WordScan.finish (QueryChunkModel.view out 0#usize) = (Q22SamplerProgram.challengeRun H s).2.1
+_hout : (↑out).length ≤ 22
+htrace :
+  SamplerObservation.decodeTrace observed =
+    SamplerObservation.decodeTrace history ++ (Q22SamplerProgram.challengeRun H s).1
+hencoded :
+  R150QueryPublicBridge.encodeModelResult (Q22SamplerProgram.challengeRun H s).2.1 =
+    ok (R143QueryEntryBridge.finishSource out)
+⊢ (match
+      if Usize.ofNatCore (↑out).length ⋯ = 22#usize then core.result.Result.Ok out
+      else
+        core.result.Result.Err
+          (AspisR86Query.transcript.QuerySampleError.DrawLimitExhausted (Usize.ofNatCore (↑out).length ⋯) 64#usize) with
+    | core.result.Result.Ok out => core.result.Result.Ok out
+    | core.result.Result.Err e =>
+      core.result.Result.Err
+        (match e with
+        | AspisR86Query.transcript.QuerySampleError.BoundNotPowerOfTwo bound =>
+          AspisR137Q22.transcript.QuerySampleError.BoundNotPowerOfTwo bound
+        | AspisR86Query.transcript.QuerySampleError.CountExceedsBound count bound =>
+          AspisR137Q22.transcript.QuerySampleError.CountExceedsBound count bound
+        | AspisR86Query.transcript.QuerySampleError.DrawLimitExhausted count maxDraws =>
+          AspisR137Q22.transcript.QuerySampleError.DrawLimitExhausted count maxDraws)) =
+    if Usize.ofNatCore (↑out).length ⋯ = 22#usize then core.result.Result.Ok out
+    else
+      core.result.Result.Err
+        (AspisR137Q22.transcript.QuerySampleError.DrawLimitExhausted (Usize.ofNatCore (↑out).length ⋯) 64#usize)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R468R137ObservedQ22EntryScratch.lean:79:77: error: unsolved goals
+H : Bytes → State
+s : State
+history : SamplerObservation.Trace
+out : QueryChunkExecution.Values
+observed : SamplerObservation.Trace
+hobs :
+  QueryObservedSource.query_probe (QueryBlockStep.queryTranscript H s) history =
+    ok
+      ((QueryEntryExecution.finishSource out,
+          QueryBlockStep.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+        observed)
+hfinish : Q22WordScan.finish (QueryChunkModel.view out 0#usize) = (Q22SamplerProgram.challengeRun H s).2.1
+_hout : (↑out).length ≤ 22
+htrace :
+  SamplerObservation.decodeTrace observed =
+    SamplerObservation.decodeTrace history ++ (Q22SamplerProgram.challengeRun H s).1
+hencoded :
+  R150QueryPublicBridge.encodeModelResult (Q22SamplerProgram.challengeRun H s).2.1 =
+    ok (R143QueryEntryBridge.finishSource out)
+hfinishMap : mapEntryResult (QueryEntryExecution.finishSource out) = R143QueryEntryBridge.finishSource out
+⊢ (fun a => ((mapEntryResult a.1.1, R147QuerySqueezeBridge.toR137 a.1.2), a.2)) <$>
+      ok
+        ((QueryEntryExecution.finishSource out,
+            QueryBlockStep.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+          observed) =
+    ok
+      ((R143QueryEntryBridge.finishSource out,
+          R147QuerySqueezeBridge.toR137 (QueryBlockStep.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2)),
+        observed)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R468R137ObservedQ22EntryScratch.lean:87:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR137Q22.r137_query_probe (R150QueryPublicBridge.queryTranscript ?H ?s)
+in the target expression
+  AspisR137Q22.r137_query_probe (R148QueryBlockBridge.queryTranscript H s) =
+    ok
+      (R143QueryEntryBridge.finishSource out,
+        R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2)
+
+H : Bytes → State
+s : State
+history : SamplerObservation.Trace
+out : QueryChunkExecution.Values
+observed : SamplerObservation.Trace
+hobs :
+  QueryObservedSource.query_probe (QueryBlockStep.queryTranscript H s) history =
+    ok
+      ((QueryEntryExecution.finishSource out,
+          QueryBlockStep.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+        observed)
+hfinish : Q22WordScan.finish (QueryChunkModel.view out 0#usize) = (Q22SamplerProgram.challengeRun H s).2.1
+_hout : (↑out).length ≤ 22
+htrace :
+  SamplerObservation.decodeTrace observed =
+    SamplerObservation.decodeTrace history ++ (Q22SamplerProgram.challengeRun H s).1
+hencoded :
+  R150QueryPublicBridge.encodeModelResult (Q22SamplerProgram.challengeRun H s).2.1 =
+    ok (R143QueryEntryBridge.finishSource out)
+hfinishMap : mapEntryResult (QueryEntryExecution.finishSource out) = R143QueryEntryBridge.finishSource out
+hmapped :
+  observedR137Entry H s history =
+    ok
+      ((mapEntryResult (QueryEntryExecution.finishSource out),
+          R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+        observed)
+⊢ AspisR137Q22.r137_query_probe (R148QueryBlockBridge.queryTranscript H s) =
+    ok
+      (R143QueryEntryBridge.finishSource out,
+        R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R468R137ObservedQ22EntryScratch.lean:95:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ←
+      ok
+          ((mapEntryResult (QueryEntryExecution.finishSource out),
+              R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+            observed)
+    match __x with
+      | ((result, next), snd) => pure (result, next)
+is not definitionally equal to the right-hand side
+  ok
+    (R143QueryEntryBridge.finishSource out,
+      R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2)
+
+H : Bytes → State
+s : State
+history : SamplerObservation.Trace
+out : QueryChunkExecution.Values
+observed : SamplerObservation.Trace
+hobs :
+  QueryObservedSource.query_probe (QueryBlockStep.queryTranscript H s) history =
+    ok
+      ((QueryEntryExecution.finishSource out,
+          QueryBlockStep.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+        observed)
+hfinish : Q22WordScan.finish (QueryChunkModel.view out 0#usize) = (Q22SamplerProgram.challengeRun H s).2.1
+_hout : (↑out).length ≤ 22
+htrace :
+  SamplerObservation.decodeTrace observed =
+    SamplerObservation.decodeTrace history ++ (Q22SamplerProgram.challengeRun H s).1
+hencoded :
+  R150QueryPublicBridge.encodeModelResult (Q22SamplerProgram.challengeRun H s).2.1 =
+    ok (R143QueryEntryBridge.finishSource out)
+hfinishMap : mapEntryResult (QueryEntryExecution.finishSource out) = R143QueryEntryBridge.finishSource out
+hmapped :
+  observedR137Entry H s history =
+    ok
+      ((mapEntryResult (QueryEntryExecution.finishSource out),
+          R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+        observed)
+hactual :
+  AspisR137Q22.r137_query_probe (R148QueryBlockBridge.queryTranscript H s) =
+    ok
+      (R143QueryEntryBridge.finishSource out,
+        R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2)
+⊢ (do
+      let __x ←
+        ok
+            ((mapEntryResult (QueryEntryExecution.finishSource out),
+                R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2),
+              observed)
+      match __x with
+        | ((result, next), snd) => pure (result, next)) =
+    ok
+      (R143QueryEntryBridge.finishSource out,
+        R148QueryBlockBridge.queryTranscript H (Q22SamplerProgram.challengeRun H s).2.2)
+'AspisV8R19.R468R137ObservedQ22Entry.mapQueryError' does not depend on any axioms
+'AspisV8R19.R468R137ObservedQ22Entry.mapEntryResult' depends on axioms: [propext]
+'AspisV8R19.R468R137ObservedQ22Entry.observedR137Entry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.R468R137ObservedQ22Entry.eraseObservedR137Entry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.R468R137ObservedQ22Entry.observed_entry_model' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R468R137ObservedQ22EntryScratch.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R468R137ObservedQ22EntryScratch.lean"
+	User time (seconds): 1.15
+	System time (seconds): 0.40
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.55
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3695456
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86201
+	Voluntary context switches: 643
+	Involuntary context switches: 66
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.580s
+CPU time consumed: 1.591s
+Memory peak: 288.0K
+Memory swap peak: 0B
