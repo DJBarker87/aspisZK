@@ -1,0 +1,9 @@
+# R773 all low normalization directions vanish on every active row
+
+Lean proves every source-shaped sparse direction with block d<23 vanishes on all214 active rows, for arbitrary half/alpha/a/b/c over any commutative ring. The proof uses exact low single/double index-target bounds and a finite actual-order table check excluding active rows below96. It then applies existing sourceChord support-zero theorems; no field recurrence is normalized and no witness or query-root premise is required. This proves the active rows cannot be changed by any R767 low-direction repair. Two rejected drafts are preserved (finite-table recursion depth and negative-bound/linear rewrite plumbing, then the typed Fin-zero rewrite). The final symbolic support proof retains every source term.
+
+Target `AspisV8R19/R773LowActiveKernel.lean`; source revision `1607c08aceb4f747f8b4586a267955bd0f2eb89a`; SHA256 `ad3fca704be4504c0d8c0567c8bdaf5a2cc7c14a878d79d45369613d98169f69`. Exit0; wall 0:06.81; peak Lean-child RSS 3766248KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All 10 complete axiom reports use only standard propext/Classical.choice/Quot.sound or subsets. Exact successful source, full log, receipt and runner are saved, along with every listed rejected attempt. No unchanged successful check was repeated.
+
+First remaining proposition: consume the active zero facts in R767 normalized entry correspondence, and prove the required point/coefficient low rows at the fixed witness. Full fixed-witness matrix binding, determinant assembly, universal/adaptive compatibility and actual-source security remain open.
+
+Verifier results999,790/999,532CU and all security parameters unchanged. No native execution, full privacy, shared-oracle law, published-view simulation, probability loss or soundness claim follows beyond the stated proved boundary.
