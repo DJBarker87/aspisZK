@@ -1,0 +1,70 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791085139018200000.service; invocation ID: f5f7e516a9574b40a4a4a779adf6f891
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R580SourceWordStream.lean:98:8: error: (kernel) excessive memory consumption detected
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R580SourceWordStream.lean:111:31: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵ ̵Option.map_none, eval]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R580SourceWordStream.lean:113:25: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵ ̵Option.map_some, ih, eval_bind, eval]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R580SourceWordStream.lean:123:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  { state := (step ?H ?s).2, block := (step ?H ?s).1, index := 0 }
+in the target expression
+  (have p := step H s;
+      have tail := limbsRun H 4 { state := p.2, block := p.1, index := 0 };
+      (calls H s ++ tail.1, tail.2.1, tail.2.2.state)).2 =
+    let r := (eval (streamAnswer H s) (limbs 8 4 0)).2;
+    (Option.map (List.map Fin.val) r.1, (globalCursor H s r.2).state)
+
+H : DuplexFrames.Bytes → State
+s : State
+⊢ (have p := step H s;
+      have tail := limbsRun H 4 { state := p.2, block := p.1, index := 0 };
+      (calls H s ++ tail.1, tail.2.1, tail.2.2.state)).2 =
+    let r := (eval (streamAnswer H s) (limbs 8 4 0)).2;
+    (Option.map (List.map Fin.val) r.1, (globalCursor H s r.2).state)
+'AspisV8R19.R580SourceWordStream.limbs_stream' depends on axioms: [propext, Classical.choice, Quot.sound, limbs_stream]
+'AspisV8R19.R580SourceWordStream.challenge_stream' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R580SourceWordStream.scan_stream' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R580SourceWordStream.initial_cursor' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R580SourceWordStream.localIndex_succ' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R580SourceWordStream.read_stream' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R580SourceWordStream.stream_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R580SourceWordStream.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R580SourceWordStream.lean"
+	User time (seconds): 8.19
+	System time (seconds): 0.51
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:08.69
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4615360
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 100076
+	Voluntary context switches: 1165
+	Involuntary context switches: 113
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 8.726s
+CPU time consumed: 8.733s
+Memory peak: 288.0K
+Memory swap peak: 0B
