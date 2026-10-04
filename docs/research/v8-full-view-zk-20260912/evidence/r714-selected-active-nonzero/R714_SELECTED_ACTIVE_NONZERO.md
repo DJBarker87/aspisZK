@@ -1,0 +1,13 @@
+# R714: Selected active polynomial nonzero and product-domain bound
+
+This verified Lean target proves nonzeroness and a degree bound for the selected QM31Exact polynomial determinant, followed by a finite uniform product-domain Schwartz–Zippel bound. These are mathematical finite-domain results; the target does not establish that the actual adaptive transcript sampler realizes that product law.
+
+Canonical target: `AspisV8R19/R714SelectedActiveNonzero.lean`, SHA-256 `9d2af294dc8f013a3b6307072717768e42d7140f17366991d872c0ac35fd32cd`, compiled at source revision `01dc9c9d6843b3e570a0132d6a8fe8415b45ff49`. Green run `1791129331715288000`: exit 0, wall 1.70 s, peak Lean-child RSS 3,333,940 KiB, swap 0; pinned Lean 4.32, `-j1 -M4500`, systemd `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, `TasksMax=128`.
+
+`selected_polynomial_ne_zero` proves the generic finite-field result under the explicit cardinal bound; `selectedDet_ne_zero` specializes it to `QM31Exact` and the embedded selected half; `selectedDet_degree` proves total degree at most 1070. `product_domain_bad_fraction` bounds the fraction of roots among triples from the full field by `1070 / card(QM31Exact)`. The explicit theorem uses `card(QM31Exact) = P^4`, `P = 2147483647`, so the bound is `1070 / 2147483647^4`. Six complete `#print axioms` outputs are preserved; each lists only `[propext, Classical.choice, Quot.sound]`.
+
+Direct dependency source pins from the green receipt: R711 `548557932cad685f79de750cad17dc2067bee88101e2d026d48235aecb35e8da`; R712 `18d8e29006b385f4dd45131dee744f34a6a6d63feb3e366267b83e9a1a945a4b`; R713 `0af1423c1e5ebe0e83b127f37ae3fa2c614e8eb6a631f7f0b5fc208b1ed58a51`; `TwoSwapFixedRootProbability.lean` `222a76750c4e473a876c8bd261fa12d86932ae6dd17346202551b43cbaa87522`. R711/R713 are the promoted byte-identical targets; all dependency hashes are included in the manifest.
+
+Both attempts are preserved under `evidence/r714-selected-active-nonzero/attempts/`. The first failed because the `AspisV8R17` and `AspisR19` namespaces were not opened, leaving the field metavariable in `determinant_degree _` unresolved. The successful source adds those namespace opens; theorem premises and the selected field/domain are unchanged.
+
+The first remaining campaign obligations are to prove an H1-active-preserving residual-image result and bind the finite product-domain argument to the actual adaptive shared-oracle normalized sampler, including retries and stopping behavior. Native source adequacy and full privacy/security remain open. No actual-source challenge probability or end-to-end security loss is claimed here.
