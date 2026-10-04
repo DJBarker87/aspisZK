@@ -1,0 +1,119 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791105005427539000.service; invocation ID: da67345ff5854c42b1de1968fe63a395
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:45:32: error: overloaded, errors 
+  Function expected at
+    _root_.Array U32
+  but this term has type
+    Type
+  
+  Note: Expected a function because this term is being applied to the argument
+    N
+  
+  45:46 Unknown identifier `N`
+  
+  Note: It is not possible to treat `N` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:60:52: error: unexpected identifier; expected ':=', 'where' or '|'
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:60:23: error: Variable `iter1` cannot be mutated. Only variables declared using `let mut` can be mutated.
+      If you did not intend to mutate but define `iter1`, consider using `let iter1` instead
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:100:25: error: Variable `iter1` cannot be mutated. Only variables declared using `let mut` can be mutated.
+      If you did not intend to mutate but define `iter1`, consider using `let iter1` instead
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:86:14: error: unsolved goals
+case hbody
+N block : Usize
+v : Std.Array U64 8#usize
+n : ℕ
+ih :
+  ∀ (iter : DecoderIter) (out : Std.Array U32 N) (invalid : U32),
+    ↑iter.end - ↑iter.start = n →
+      AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0 iter out invalid block v =
+        wordRun block v n iter out invalid
+iter : DecoderIter
+out : Std.Array U32 N
+invalid : U32
+hn : ↑iter.end - ↑iter.start = n + 1
+hlt : ↑iter.start < ↑iter.end
+iter1 : DecoderIter := { start := UScalar.ofNatCore (↑iter.start + 1) ⋯, «end» := iter.end }
+hn1 : ↑iter1.end - ↑iter1.start = n
+⊢ AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0.body block v iter out invalid = do
+    let __x ← wordStep block v iter.start out invalid
+    match __x with
+      | (out1, invalid1) => sorry
+
+case succ
+N block : Usize
+v : Std.Array U64 8#usize
+n : ℕ
+ih :
+  ∀ (iter : DecoderIter) (out : Std.Array U32 N) (invalid : U32),
+    ↑iter.end - ↑iter.start = n →
+      AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0 iter out invalid block v =
+        wordRun block v n iter out invalid
+iter : DecoderIter
+out : Std.Array U32 N
+invalid : U32
+hn : ↑iter.end - ↑iter.start = n + 1
+hlt : ↑iter.start < ↑iter.end
+iter1 : DecoderIter := { start := UScalar.ofNatCore (↑iter.start + 1) ⋯, «end» := iter.end }
+hn1 : ↑iter1.end - ↑iter1.start = n
+hbody :
+  AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0.body block v iter out invalid = do
+    let __x ← wordStep block v iter.start out invalid
+    match __x with
+      | (out1, invalid1) => sorry
+⊢ (match
+      match (iter, out, invalid) with
+      | (iter1, out1, invalid1) =>
+        AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0.body block v iter1 out1 invalid1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, out1, invalid1) =>
+              AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0.body block v iter1 out1
+                invalid1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    wordRun block v (n + 1) iter out invalid
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:101:8: error: unexpected identifier; expected command
+'AspisV8R19.R624DecoderInnerExecution.wordStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.body_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec_eight' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R624DecoderInnerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean"
+	User time (seconds): 1.28
+	System time (seconds): 0.37
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.63
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3728808
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86456
+	Voluntary context switches: 774
+	Involuntary context switches: 60
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.664s
+CPU time consumed: 1.697s
+Memory peak: 516.0K
+Memory swap peak: 0B

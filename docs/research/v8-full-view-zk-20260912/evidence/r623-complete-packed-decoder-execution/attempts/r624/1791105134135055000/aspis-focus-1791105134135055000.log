@@ -1,0 +1,105 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791105134135055000.service; invocation ID: c7f780a64cb347e5ab214cd523af5338
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:87:14: error: unsolved goals
+case succ
+N block : Usize
+v : Std.Array U64 8#usize
+n : ℕ
+ih :
+  ∀ (iter : DecoderIter) (out : Std.Array U32 N) (invalid : U32),
+    ↑iter.end - ↑iter.start = n →
+      AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0 iter out invalid block v =
+        wordRun block v n iter out invalid
+iter : DecoderIter
+out : Std.Array U32 N
+invalid : U32
+hn : ↑iter.end - ↑iter.start = n + 1
+hlt : ↑iter.start < ↑iter.end
+iter1 : DecoderIter := { start := UScalar.ofNatCore (↑iter.start + 1) ⋯, «end» := iter.end }
+hn1 : ↑iter1.end - ↑iter1.start = n
+hbody_at :
+  ∀ (r : DecoderIter) (a : Std.Array U32 N) (z : U32),
+    AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0.body block v r a z = do
+      let __x ← core.iter.range.IteratorRange.next core.iter.range.StepUsize r
+      match __x with
+        | (o, rnext) =>
+          match o with
+          | none => ok (done (a, z))
+          | some j => do
+            let __x ← wordStep block v j a z
+            match __x with
+              | (a1, z1) => ok (cont (rnext, a1, z1))
+hih :
+  ∀ (a : Std.Array U32 N) (z : U32),
+    AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0 iter1 a z block v =
+      wordRun block v n iter1 a z
+⊢ (match do
+      let __x ← wordStep block v iter.start out invalid
+      ok (cont ({ start := UScalar.ofNatCore (↑iter.start + 1) ⋯, «end» := iter.end }, __x)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ←
+              if h : ↑x.1.start < ↑x.1.end then
+                  ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                else ok (none, x.1)
+            match __x.1 with
+              | none => ok (done x.2)
+              | some j => do
+                let __x_1 ← wordStep block v j x.2.1 x.2.2
+                ok (cont (__x.2, __x_1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let __x ← wordStep block v iter.start out invalid
+    wordRun block v n { start := UScalar.ofNatCore (↑iter.start + 1) ⋯, «end» := iter.end } __x.1 __x.2
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:114:20: warning: This simp argument is unused:
+  iter1
+
+Hint: Omit it from the simp argument list.
+  simp [wordRun, AspisV8R19.GeneratedInverseLoop.range_next, hlt,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵bind_tc_ok,̵ ̵i̵t̵e̵r̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R624DecoderInnerExecution.wordStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.body_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec_eight' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R624DecoderInnerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean"
+	User time (seconds): 1.30
+	System time (seconds): 0.37
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3730800
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86454
+	Voluntary context switches: 997
+	Involuntary context switches: 72
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.669s
+CPU time consumed: 1.703s
+Memory peak: 256.0K
+Memory swap peak: 0B
