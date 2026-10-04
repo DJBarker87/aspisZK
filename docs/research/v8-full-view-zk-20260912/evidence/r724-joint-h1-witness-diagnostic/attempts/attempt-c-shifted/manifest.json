@@ -1,0 +1,111 @@
+{
+  "task": "R724 shifted-z 241-column H1 projected-residual matrix diagnostic",
+  "target_status": "completed diagnostic only; no proof or native verifier result",
+  "source": {
+    "local_snapshot": "src/main.rs",
+    "sha256": "fee6f8ca583f27a981c00a5fcdbe8e3cf472af08a14e6702de15714d5fb1a87a",
+    "remote_project": "/home/dombarker/project-offloads/aspis-r724-h1-shifted-20261004-c",
+    "runner": "run-c.sh",
+    "runner_sha256": "96134b6b2ad7f65deaff070398e7a0c5627b60b1bda8a1b84ac7d96bded76067",
+    "cargo_toml_sha256": "2ec04695b115df1d4ed6b37d0c713c8193dff02ceb3d0cf90a86527506bb07c8",
+    "cargo_lock_sha256": "03b8eac78accb5aca38455743db3145f187e638a43ceff56df24692b494b9680"
+  },
+  "pins": {
+    "selected_source_stage": "R117 stage6677d5f1310ff7373301fbd79f186278f772e68a",
+    "rustflags_sha256": "df02f7fe2415264263ea8dca33d686314b1c06ef27bf4d039df9e587513d28b8",
+    "r16_basis_transport_sha256": "678c64e08e7d14bb6bc160042f0ee01cb39e260748ec1ac95cce008969d586ae",
+    "r17_opening_weights_sha256": "cfe40c2743b2df43222469cdc853fcbd88b745deba77ab12ed92ccc871a51afc",
+    "r17_tensor_prefix_sha256": "0e599a6cda291c211eb00775534b37b4bdd8bdc6eb5e2c92b2685abbe045b6b8",
+    "r17_coupled_audit_sha256": "74f6ec7eff5c747656168dabd1cefd9cb7326fc29c9fd6ccf2d46a10e944c690",
+    "field_rs_sha256": "639b6425fe672e0fa6019b99b702d1f08f56cd75c4d9ad6defef854b7640f499",
+    "sumcheck_rs_sha256": "49be183b01321a5432b45262f8ba6d870502317fae5b139d857faad805b99bf5",
+    "v6_transcript_rs_sha256": "48275a37053ce5d33c7ec61caf6301863666f45a1e388c2c64bdb856708764cf"
+  },
+  "execution": {
+    "systemd_unit": "aspis-r724-shifted-c-20261004.service",
+    "invocation_id": "0871d52f0bfb4f4297ed774fdc7d347c",
+    "scope": {
+      "MemoryHigh": "5G",
+      "MemoryMax": "7G",
+      "MemorySwapMax": "0",
+      "TasksMax": 128
+    },
+    "rustflags_loaded_from": "/home/dombarker/project-offloads/aspis-r117-g-obstruction-source-certificate-20261004-a/rustflags.txt",
+    "overflow_checks": true,
+    "cargo": "cargo build -vv --offline --locked --release --jobs 1 --manifest-path Cargo.toml --bin r724_h1_projected_residual_probe",
+    "release_profile": {
+      "opt_level": 3,
+      "codegen_units": 1
+    },
+    "statuses": {
+      "build": 0,
+      "shifted_preflight": 0,
+      "matrix": 0
+    },
+    "preflight": "all_23x3=true; 0 differing pairs/69; transport/source-order mismatches=0",
+    "matrix": {
+      "rows": 222,
+      "columns": 241,
+      "rank": 221,
+      "left_nullity": 1,
+      "core_pivots": 214,
+      "supplemental_pivot_columns": [
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        228
+      ]
+    },
+    "metrics": {
+      "wall_seconds": 23.48,
+      "user_seconds": 22.87,
+      "system_seconds": 0.64,
+      "peak_rss_kib": 595092,
+      "swap": 0,
+      "exit": 0
+    }
+  },
+  "artifacts": {
+    "raw_matrix": {
+      "path": "remote-run/attempt-c-shifted/matrix.raw.tsv",
+      "sha256": "5b2589052d7138fae11c6f780551ab70192aec3a03a1435cd8fea2f915601a4e"
+    },
+    "matrix_log": {
+      "path": "remote-run/matrix.log",
+      "sha256": "f86d2412e2de54ff1be3b15366bd334a10081c5bd530bed5b807a67bfdd679b3"
+    },
+    "nullspace_vector": "left-nullspace.tsv",
+    "nullspace_check": "left-nullspace-check.txt",
+    "pivot_lists": "pivot-summary.txt",
+    "full_logs": "remote-run/"
+  },
+  "scope_limit": "Source-shaped arithmetic diagnostic only. Shifted z is not asserted to be an accepted selected sampler prefix. Does not bind native callback execution, actual adaptive challenge law, full privacy, or soundness. Rank deficiency is an incomplete candidate, not evidence of a verifier leak.",
+  "parameters": {
+    "z_m31": [
+      1,
+      1,
+      2,
+      3,
+      4,
+      2,
+      2,
+      3,
+      0,
+      2
+    ],
+    "alpha_m31": 7,
+    "kappa_m31": 5,
+    "abc_m31": [
+      7,
+      5,
+      2147483642
+    ],
+    "field_modulus": 2147483647,
+    "core_columns": 214,
+    "supplemental_pairs": "all distinct pairs (d,s) with 22 <= d <= 254 and 1 <= s <= 3, excluding core pairs",
+    "actual_status_of_shifted_z": "algebraic diagnostic witness only; no selected-sampler acceptance claim"
+  }
+}

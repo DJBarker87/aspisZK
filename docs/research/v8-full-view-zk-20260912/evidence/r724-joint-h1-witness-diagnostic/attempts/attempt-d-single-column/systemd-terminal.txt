@@ -1,0 +1,23 @@
+Command launched over SSH as:
+systemd-run --user --wait --collect --pipe --unit=aspis-r724-single-column-d-20261004 --working-directory=/home/dombarker/project-offloads/aspis-r724-h1-single-column-20261004-d -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p TasksMax=128 /bin/bash -lc 'IFS= read -r RUSTFLAGS < /home/dombarker/project-offloads/aspis-r117-g-obstruction-source-certificate-20261004-a/rustflags.txt; export RUSTFLAGS CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true; exec /usr/bin/time -v /bin/bash ./run-d.sh'
+
+systemd output:
+Running as unit: aspis-r724-single-column-d-20261004.service; invocation ID: fe0dc42228f74d13a72c6be220d2e205
+
+/usr/bin/time output:
+Command being timed: "/bin/bash ./run-d.sh"
+User time (seconds): 22.74
+System time (seconds): 0.62
+Percent of CPU this job got: 100%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0:23.34
+Maximum resident set size (kbytes): 597924
+Swaps: 0
+Exit status: 0
+
+systemd terminal tail:
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 23.348s
+CPU time consumed: 23.378s
+Memory peak: 328.0K
+Memory swap peak: 0B
