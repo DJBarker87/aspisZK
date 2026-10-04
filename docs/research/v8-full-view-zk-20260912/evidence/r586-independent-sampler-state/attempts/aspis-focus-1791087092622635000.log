@@ -1,0 +1,106 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087092622635000.service; invocation ID: 439f76f6c0d34b7cb654d15479ef7eba
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R586IndependentSamplerState.lean:26:6: error: unsolved goals
+case pos
+budget : ℕ
+ih :
+  ∀ (s s' b : State) (j : Fin 9) (f : Option ℕ → State → Fin 9 → ℚ),
+    (independentMean (limbProgram budget { state := s, block := b, index := j }) fun v =>
+        f v.2.1 v.2.2.block v.2.2.index) =
+      independentMean (limbProgram budget { state := s', block := b, index := j }) fun v =>
+        f v.2.1 v.2.2.block v.2.2.index
+s s' b : State
+j : Fin 9
+f : Option ℕ → State → Fin 9 → ℚ
+hj : ↑j = 8
+⊢ (independentMean
+      (OracleProgramOps.bind
+        (Program.ask (squeeze (bytes s)) fun out =>
+          Program.ask (advance (bytes s)) fun next => Program.done (out, next))
+        fun p => Program.done (word p.1 0, { state := p.2, block := p.1, index := 1 }))
+      fun first =>
+      independentMean
+        (if masked 31 first.2.1 = 2147483647 then limbProgram budget first.2.2
+        else Program.done (some (masked 31 first.2.1), first.2.2))
+        fun second => f second.2.1 second.2.2.block second.2.2.index) =
+    independentMean
+      (OracleProgramOps.bind
+        (Program.ask (squeeze (bytes s')) fun out =>
+          Program.ask (advance (bytes s')) fun next => Program.done (out, next))
+        fun p => Program.done (word p.1 0, { state := p.2, block := p.1, index := 1 }))
+      fun first =>
+      independentMean
+        (if masked 31 first.2.1 = 2147483647 then limbProgram budget first.2.2
+        else Program.done (some (masked 31 first.2.1), first.2.2))
+        fun second => f second.2.1 second.2.2.block second.2.2.index
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R586IndependentSamplerState.lean:38:8: error: unsolved goals
+case neg
+budget : ℕ
+ih :
+  ∀ (s s' b : State) (j : Fin 9) (f : Option ℕ → State → Fin 9 → ℚ),
+    (independentMean (limbProgram budget { state := s, block := b, index := j }) fun v =>
+        f v.2.1 v.2.2.block v.2.2.index) =
+      independentMean (limbProgram budget { state := s', block := b, index := j }) fun v =>
+        f v.2.1 v.2.2.block v.2.2.index
+s s' b : State
+j : Fin 9
+f : Option ℕ → State → Fin 9 → ℚ
+hj : ¬↑j = 8
+hjlt : ↑j < 8
+i : Fin 8 := ⟨↑j, hjlt⟩
+j' : Fin 9 := ⟨↑j + 1, ⋯⟩
+hreject : ¬masked 31 (word b i) = 2147483647
+⊢ (independentMean (Program.done (some (masked 31 (word b ⟨↑j, ⋯⟩)), { state := s, block := b, index := ⟨↑j + 1, ⋯⟩ }))
+      fun second => f second.2.1 second.2.2.block second.2.2.index) =
+    independentMean
+      (Program.done (some (masked 31 (word b ⟨↑j, ⋯⟩)), { state := s', block := b, index := ⟨↑j + 1, ⋯⟩ }))
+      fun second => f second.2.1 second.2.2.block second.2.2.index
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R586IndependentSamplerState.lean:29:10: warning: This simp argument is unused:
+  independentMean
+
+Hint: Omit it from the simp argument list.
+  simp only [readProgram, hj, ↓reduceDIte, SourceOraclePrograms.squeezeProgram,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵n̵d̵e̵p̵e̵n̵d̵e̵n̵t̵M̵e̵a̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R586IndependentSamplerState.lean:38:28: warning: This simp argument is unused:
+  j'
+
+Hint: Omit it from the simp argument list.
+  simp [hreject, i,̵ ̵j̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R586IndependentSamplerState.limb_independent_state' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R586IndependentSamplerState.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R586IndependentSamplerState.lean"
+	User time (seconds): 0.88
+	System time (seconds): 0.33
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.20
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3239088
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76524
+	Voluntary context switches: 288
+	Involuntary context switches: 69
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.232s
+CPU time consumed: 1.246s
+Memory peak: 288.0K
+Memory swap peak: 0B
