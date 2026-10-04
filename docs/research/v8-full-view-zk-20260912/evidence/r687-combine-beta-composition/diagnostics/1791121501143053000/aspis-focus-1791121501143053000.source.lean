@@ -1,0 +1,11 @@
+import AspisV8R19.R635DecoderWholeCanonical
+import AspisV8R19.R638CombineAcceptedInputs
+import AspisV8R19.R663CombineWrapperExecution
+import AspisV8R19.R677C1ChunkCanonical
+import AspisV8R19.R616MixedLimbExecution
+#print axioms AspisV8R19.R635DecoderWholeCanonical.decoder_accepted_canonical
+#print axioms AspisV8R19.R638CombineAcceptedInputs.combine_accepted_inputs
+#print axioms AspisV8R19.R663CombineWrapperExecution.combine_beta_wrapper_execution
+#print axioms AspisV8R19.R677C1ChunkCanonical.c1Chunk_getElem
+#print axioms AspisV8R19.R677C1ChunkCanonical.c1Chunk_pointwise
+#print axioms AspisV8R19.R616MixedLimbExecution.r83_mixed_limb_full
