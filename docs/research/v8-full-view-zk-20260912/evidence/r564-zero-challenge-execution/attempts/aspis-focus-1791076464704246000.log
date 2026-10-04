@@ -1,0 +1,110 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791076464704246000.service; invocation ID: 2966ff6c7ba34e3586043c7b8228a835
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:15:2: error: Tactic `simp` failed with a nested error:
+(deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:21:60: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  4 ≤ a ≤ 8
+where
+ a := ↑↑{ state := state, block := block, index := 0 }.index
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:23:60: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  4 ≤ a ≤ 8
+where
+ a := ↑↑{ state := state, block := block, index := 1 }.index
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:25:60: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  4 ≤ a ≤ 8
+where
+ a := ↑↑{ state := state, block := block, index := 2 }.index
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:27:60: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  4 ≤ a ≤ 8
+where
+ a := ↑↑{ state := state, block := block, index := 3 }.index
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:19:85: error: unsolved goals
+H : Bytes → State
+state block : State
+hz : ∀ (j : Fin 4), masked 31 (word block ⟨↑j, ⋯⟩) = 0
+l0 :
+  limbRun H 8 { state := state, block := block, index := 0 } =
+    ([], some 0, { state := state, block := block, index := 1 })
+l1 :
+  limbRun H 8 { state := state, block := block, index := 1 } =
+    ([], some 0, { state := state, block := block, index := 2 })
+l2 :
+  limbRun H 8 { state := state, block := block, index := 2 } =
+    ([], some 0, { state := state, block := block, index := 3 })
+l3 :
+  limbRun H 8 { state := state, block := block, index := 3 } =
+    ([], some 0, { state := state, block := block, index := 4 })
+⊢ ([] ++ ([] ++ ([] ++ ([] ++ []))),
+      Option.map (fun x => 0 :: x)
+        (Option.map (fun x => 0 :: x) (Option.map (fun x => 0 :: x) (Option.map (fun x => 0 :: x) (some [])))),
+      { state := state, block := block, index := 4 }) =
+    ([], some [0, 0, 0, 0], { state := state, block := block, index := 4 })
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:36:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  limbsRun H 4 { state := ?m.44, block := (step H s).1, index := 0 }
+in the target expression
+  (have p := step H s;
+    have tail := limbsRun H 4 { state := p.2, block := p.1, index := 0 };
+    (calls H s ++ tail.1, tail.2.1, tail.2.2.state)) =
+    (calls H s, some [0, 0, 0, 0], (step H s).2)
+
+H : Bytes → State
+s : State
+hz : ∀ (j : Fin 4), masked 31 (word (step H s).1 ⟨↑j, ⋯⟩) = 0
+⊢ (have p := step H s;
+    have tail := limbsRun H 4 { state := p.2, block := p.1, index := 0 };
+    (calls H s ++ tail.1, tail.2.1, tail.2.2.state)) =
+    (calls H s, some [0, 0, 0, 0], (step H s).2)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:42:4: error(lean.unknownIdentifier): Unknown identifier `transcript.Transcript.challenge_qm31`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:44:6: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Aeneas.Std.Result.ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+'AspisV8R19.R564ZeroChallengeExecution.limb_run_first_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R564ZeroChallengeExecution.limbs_run_four_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R564ZeroChallengeExecution.challengeRun_firstFourZero' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean:52:14: error(lean.unknownIdentifier): Unknown constant `challenge_source_firstFourZero`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R564ZeroChallengeExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecution.lean"
+	User time (seconds): 9.09
+	System time (seconds): 0.39
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:09.48
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3693508
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 87864
+	Voluntary context switches: 414
+	Involuntary context switches: 124
+	Swaps: 0
+	File system inputs: 736
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 9.519s
+CPU time consumed: 9.525s
+Memory peak: 292.0K
+Memory swap peak: 0B

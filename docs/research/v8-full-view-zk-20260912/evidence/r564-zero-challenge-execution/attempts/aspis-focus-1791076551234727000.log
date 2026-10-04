@@ -1,0 +1,103 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791076551234727000.service; invocation ID: 5873a4a448e042c0b4e1538cdb4c4f7f
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:16:67: error: unsolved goals
+H : Bytes → State
+c : Cursor
+hidx : ↑c.index < 4
+hz : masked 31 (word c.block ⟨↑c.index, ⋯⟩) = 0
+hn : ↑c.index ≠ 8
+hr : readRun H c = ([], word c.block ⟨↑c.index, ⋯⟩, { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ })
+hreject : ¬masked 31 (word c.block ⟨↑c.index, ⋯⟩) = 2147483647
+⊢ (if 0 = 2147483647 then
+      ((limbRun H 7 { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }).1,
+        (limbRun H 7 { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }).2)
+    else ([], some 0, { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ })) =
+    ([], some 0, { state := c.state, block := c.block, index := ⟨↑c.index + 1, ⋯⟩ })
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:26:17: warning: This simp argument is unused:
+  if_neg hreject
+
+Hint: Omit it from the simp argument list.
+  simp only [hz, i̵f̵_̵n̵e̵g̵ ̵h̵r̵e̵j̵e̵c̵t̵,̵ ̵List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:32:60: error: Expected type must not contain free variables
+  ↑{ state := state, block := block, index := 0 }.index < 4
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:34:60: error: Expected type must not contain free variables
+  ↑{ state := state, block := block, index := 1 }.index < 4
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:36:60: error: Expected type must not contain free variables
+  ↑{ state := state, block := block, index := 2 }.index < 4
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:38:60: error: Expected type must not contain free variables
+  ↑{ state := state, block := block, index := 3 }.index < 4
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:30:85: error: unsolved goals
+H : Bytes → State
+state block : State
+hz : ∀ (j : Fin 4), masked 31 (word block ⟨↑j, ⋯⟩) = 0
+l0 :
+  limbRun H 8 { state := state, block := block, index := 0 } =
+    ([], some 0, { state := state, block := block, index := 1 })
+l1 :
+  limbRun H 8 { state := state, block := block, index := 1 } =
+    ([], some 0, { state := state, block := block, index := 2 })
+l2 :
+  limbRun H 8 { state := state, block := block, index := 2 } =
+    ([], some 0, { state := state, block := block, index := 3 })
+l3 :
+  limbRun H 8 { state := state, block := block, index := 3 } =
+    ([], some 0, { state := state, block := block, index := 4 })
+⊢ (limbsRun H 0 { state := state, block := block, index := 4 }).1 = [] ∧
+    (limbsRun H 0 { state := state, block := block, index := 4 }).2.1 = some [] ∧
+      (limbsRun H 0 { state := state, block := block, index := 4 }).2.2 = { state := state, block := block, index := 4 }
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:67:4: error(lean.unknownIdentifier): Unknown identifier `transcript.Transcript.challenge_qm31`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:69:6: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+'AspisV8R19.R564ZeroChallengeExecutionV2.limb_run_first_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R564ZeroChallengeExecutionV2.limbs_run_four_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R564ZeroChallengeExecutionV2.challengeRun_firstFourZero' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean:77:14: error(lean.unknownIdentifier): Unknown constant `challenge_source_firstFourZero`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R564ZeroChallengeExecutionV2.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R564ZeroChallengeExecutionV2.lean"
+	User time (seconds): 1.39
+	System time (seconds): 0.39
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.76
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3702752
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86435
+	Voluntary context switches: 383
+	Involuntary context switches: 64
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.792s
+CPU time consumed: 1.818s
+Memory peak: 552.0K
+Memory swap peak: 0B
