@@ -1,0 +1,111 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791114400138254000.service; invocation ID: 8c2c079c9aef4446814f82c5075fde0c
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R664FullMomentP2.lean:27:4: error: 'change' tactic failed, pattern
+  coefficient C (fun i => scale * g i) wG = 0
+is not definitionally equal to target
+  (coefficient C (fun i => (1 - 1) * r i + scale * 1 * g i) fun j => (1 - 1) * wR j + 1 * wG j) = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R664FullMomentP2.lean:32:4: error: 'change' tactic failed, pattern
+  (coefficient C (fun i => -r i + scale * 2 * g i) fun j => -wR j + 2 * wG j) = 0
+is not definitionally equal to target
+  (coefficient C (fun i => (1 - 2) * r i + scale * 2 * g i) fun j => (1 - 2) * wR j + 2 * wG j) = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R664FullMomentP2.lean:67:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  coefficient (sourceKernel n (↑0) quarter) r wR
+in the target expression
+  coefficient (sourceKernel n 0 quarter) r wR + coefficient (sourceKernel n 4 quarter) r wR =
+    quarter * ∑ d, ∑ s, r (d, s) * wR (d, s)
+
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+n : ℕ
+quarter scale : F
+hquarter : quarter ≠ 0
+hscale : scale ≠ 0
+r g wR wG : Fin n × Fin 4 → F
+hquad :
+  ∀ (beta : F) (k : Fin 7),
+    (coefficient (sourceKernel n (↑k) quarter) (fun i => (1 - beta) * r i + scale * beta * g i) fun j =>
+        (1 - beta) * wR j + beta * wG j) =
+      0
+comp :
+  ∀ (k : Fin 7),
+    coefficient (sourceKernel n (↑k) quarter) r wR = 0 ∧
+      coefficient (sourceKernel n (↑k) quarter) r wG + scale * coefficient (sourceKernel n (↑k) quarter) g wR = 0 ∧
+        coefficient (sourceKernel n (↑k) quarter) g wG = 0
+hr0 : coefficient (sourceKernel n (↑0) quarter) r wR = 0
+hc0 : coefficient (sourceKernel n (↑0) quarter) r wG + scale * coefficient (sourceKernel n (↑0) quarter) g wR = 0
+hg0 : coefficient (sourceKernel n (↑0) quarter) g wG = 0
+hr4 : coefficient (sourceKernel n (↑4) quarter) r wR = 0
+hc4 : coefficient (sourceKernel n (↑4) quarter) r wG + scale * coefficient (sourceKernel n (↑4) quarter) g wR = 0
+hg4 : coefficient (sourceKernel n (↑4) quarter) g wG = 0
+h :
+  coefficient (sourceKernel n 0 quarter) r wR + coefficient (sourceKernel n 4 quarter) r wR =
+    quarter * ∑ d, ∑ s, r (d, s) * wR (d, s)
+⊢ ∑ d, ∑ s, r (d, s) * wR (d, s) = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R664FullMomentP2.lean:71:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  coefficient (sourceKernel n (↑0) quarter) g wG
+in the target expression
+  coefficient (sourceKernel n 0 quarter) g wG + coefficient (sourceKernel n 4 quarter) g wG =
+    quarter * ∑ d, ∑ s, g (d, s) * wG (d, s)
+
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+n : ℕ
+quarter scale : F
+hquarter : quarter ≠ 0
+hscale : scale ≠ 0
+r g wR wG : Fin n × Fin 4 → F
+hquad :
+  ∀ (beta : F) (k : Fin 7),
+    (coefficient (sourceKernel n (↑k) quarter) (fun i => (1 - beta) * r i + scale * beta * g i) fun j =>
+        (1 - beta) * wR j + beta * wG j) =
+      0
+comp :
+  ∀ (k : Fin 7),
+    coefficient (sourceKernel n (↑k) quarter) r wR = 0 ∧
+      coefficient (sourceKernel n (↑k) quarter) r wG + scale * coefficient (sourceKernel n (↑k) quarter) g wR = 0 ∧
+        coefficient (sourceKernel n (↑k) quarter) g wG = 0
+hr0 : coefficient (sourceKernel n (↑0) quarter) r wR = 0
+hc0 : coefficient (sourceKernel n (↑0) quarter) r wG + scale * coefficient (sourceKernel n (↑0) quarter) g wR = 0
+hg0 : coefficient (sourceKernel n (↑0) quarter) g wG = 0
+hr4 : coefficient (sourceKernel n (↑4) quarter) r wR = 0
+hc4 : coefficient (sourceKernel n (↑4) quarter) r wG + scale * coefficient (sourceKernel n (↑4) quarter) g wR = 0
+hg4 : coefficient (sourceKernel n (↑4) quarter) g wG = 0
+hmR : ∑ d, ∑ s, r (d, s) * wR (d, s) = 0
+h :
+  coefficient (sourceKernel n 0 quarter) g wG + coefficient (sourceKernel n 4 quarter) g wG =
+    quarter * ∑ d, ∑ s, g (d, s) * wG (d, s)
+⊢ ∑ d, ∑ s, g (d, s) * wG (d, s) = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R664FullMomentP2.lean:77:10: error(lean.unknownIdentifier): Unknown constant `Finset.mul_add`
+'AspisV8R19.R664FullMomentP2.full_moment_p2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R664FullMomentP2.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R664FullMomentP2.lean"
+	User time (seconds): 1.09
+	System time (seconds): 0.36
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.44
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3273684
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77229
+	Voluntary context switches: 283
+	Involuntary context switches: 74
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.470s
+CPU time consumed: 1.481s
+Memory peak: 328.0K
+Memory swap peak: 0B
