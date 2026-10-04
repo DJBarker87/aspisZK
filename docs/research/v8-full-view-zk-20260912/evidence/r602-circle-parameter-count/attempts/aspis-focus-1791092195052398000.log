@@ -1,0 +1,62 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791092195052398000.service; invocation ID: f5c87690adae4a63877b2ca2a056356a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R602CircleParameterCount.lean:56:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Fintype.card (Fin ?n)
+in the target expression
+  (Finset.filter pred Finset.univ).card + p ^ 2 = Fintype.card (Fin 4 → Fin p)
+
+p : ℕ
+hp : 0 < p
+z : Fin p := finZero hp
+bad : Finset (Fin 4 → Fin p) := {x | x 2 = z ∧ x 3 = z}
+hbad : bad.card = p ^ 2
+pred : (Fin 4 → Fin p) → Prop := fun x => x 2 ≠ z ∨ x 3 ≠ z
+hpart : (Finset.filter pred Finset.univ).card + p ^ 2 = Fintype.card (Fin 4 → Fin p)
+hnot : {x | ¬pred x} = bad
+⊢ {x | x 2 ≠ finZero hp ∨ x 3 ≠ finZero hp}.card = p ^ 4 - p ^ 2
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R602CircleParameterCount.lean:39:10: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵F̵i̵n̵t̵y̵p̵e̵.̵c̵a̵r̵d̵_̵f̵u̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R602CircleParameterCount.fixedTailEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R602CircleParameterCount.circle_parameter_count' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R602CircleParameterCount.selected_circle_parameter_count' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R602CircleParameterCount.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R602CircleParameterCount.lean"
+	User time (seconds): 1.40
+	System time (seconds): 0.32
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.72
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3255488
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76676
+	Voluntary context switches: 736
+	Involuntary context switches: 58
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.747s
+CPU time consumed: 1.758s
+Memory peak: 328.0K
+Memory swap peak: 0B
