@@ -1,0 +1,9 @@
+# Exact selected transport marker transpose
+
+For every commutative ring, the transported inactive marker is exactly the source unit vector at1023, because the selected order fixes the pivot. Its complete chord transpose is proved with even/odd lane511 and the actual source gather retained. The marker transpose vanishes at all coordinates below1021: even coordinates use unit-vector exclusion, and odd coordinates have lane index below510 and use exact finite target exclusion. Failed attempts proposing pivot preimage127 or exclusion at lane510 are retained and are not premises: indexTargets510 can contain511. The successful proof uses only the correct bounds and source table.
+
+Target `AspisV8R19/R793MarkerTranspose.lean`; source revision `b6b449ee8e1f9f8cc6d3e81977babb27ac70b153`; SHA256 `33ccf6bad8265615d626ea14b1e16259e4cf8380bdea1d25be6a7ff539b476a7`. Exit0; wall 0:07.43; peak Lean-child RSS 3496068KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All 5 complete axiom reports use only standard propext/Classical.choice/Quot.sound or subsets. Exact successful source, full log, receipt and runner are saved, along with every listed rejected attempt. No unchanged successful check was repeated.
+
+First remaining proposition: Combine this generic marker bound with exact ordinary decomposition to bind retained coefficient rows from point weights, then finish the full joint source certificate/determinant. Actual native freeze, legal witness compatibility, adaptive oracle losses, entire published-view simulator and soundness remain open.
+
+Verifier results999,790/999,532CU and all security parameters unchanged. No native execution, full privacy, shared-oracle law, published-view simulation, probability loss or soundness claim follows beyond the stated proved boundary.
