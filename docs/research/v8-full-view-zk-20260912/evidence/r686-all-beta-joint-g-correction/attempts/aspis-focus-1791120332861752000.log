@@ -1,0 +1,108 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791120332861752000.service; invocation ID: 9634b8fce4d34da18aa203f04c727f05
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R686AllBetaJointGCorrection.lean:113:6: error: ring failed, ring expressions not equal
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hcore : (coreMatrix half alpha a b c).det ≠ 0
+hresidual : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+r : Index 256 → F
+hfoldr : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hplainr : ∀ (k : Fin 7), fullRelation half quarter a b c kappa tau z previous false r ↑k = 0
+hstructuredmoment : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+coinsTarget : Fin 271 → F
+hcoinmoment : ∑ i, SourceGConstant.finishCoins half previous i * coinsTarget i = 0
+hrelrR :
+  R652ResidualCoefficientCompletion.evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous false r ↑k)
+      alpha =
+    0
+hrelrG :
+  R652ResidualCoefficientCompletion.evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous true r ↑k)
+      alpha =
+    0
+hboundaryrG :
+  fullRelation half quarter a b c kappa tau z previous true r 0 +
+      fullRelation half quarter a b c kappa tau z previous true r 4 =
+    0
+ordinaryTarget : Fin 7 → F := ⋯
+structuredTarget : Fin 7 → F := ⋯
+hevalO : R652ResidualCoefficientCompletion.evalSeven ordinaryTarget alpha = 0
+hevalG : R652ResidualCoefficientCompletion.evalSeven structuredTarget alpha = 0
+hboundaryO : ordinaryTarget 0 + ordinaryTarget 4 = quarter * (kappa * 0 + kappa ^ 2 * 0 + kappa ^ 3 * 0)
+hboundaryG :
+  structuredTarget 0 + structuredTarget 4 =
+    quarter * (kappa * ∑ i, SourceGConstant.finishCoins half previous i * coinsTarget i + kappa ^ 2 * 0 + kappa ^ 3 * 0)
+g : Index 256 → F
+hcoins : ∀ (i : Fin 271), actualCoin (indexedMask half a b c g) i = coinsTarget i
+hpoints : ∀ (i : Fin 3), sourcePointFunctional (SourceStatementPoints.points z i) (indexedMask half a b c g) = 0
+hgR : ∀ (k : Fin 7), fullRelation half quarter a b c kappa tau z previous false g ↑k = ordinaryTarget k
+hgG : ∀ (k : Fin 7), fullRelation half quarter a b c kappa tau z previous true g ↑k = structuredTarget k
+hquery : ∀ (slot : Fin 4) (root : Fin 22), evaluate256 (fun d => g (d, slot)) (t root) = 0
+hfoldg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g d = 0
+hbalance : ∑ r ∈ TwoSwapSourceTable.inactive, indexedMask half a b c g r = 0
+hquad :
+  ∀ (beta : F) (k : Fin 7),
+    (coefficient (sourceKernel 256 (↑k) quarter) (fun i => (1 - beta) * r i + scale * beta * g i) fun i =>
+        (1 - beta) * fullWeight half a b c kappa tau z previous false i +
+          beta * fullWeight half a b c kappa tau z previous true i) =
+      0
+hplainrmoment : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+h0 : fullRelation half quarter a b c kappa tau z previous false g 0 = ordinaryTarget 0
+h4 : fullRelation half quarter a b c kappa tau z previous false g 4 = ordinaryTarget 4
+h :
+  fullRelation half quarter a b c kappa tau z previous false g 0 +
+      fullRelation half quarter a b c kappa tau z previous false g 4 =
+    quarter * ∑ d, ∑ s, g (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+⊢ -(scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑4) +
+      scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r 4 =
+    0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R686AllBetaJointGCorrection.lean:112:30: warning: This simp argument is unused:
+  Fin.val_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [Fin.val_zero,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R686AllBetaJointGCorrection.all_beta_joint_g_correction' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R686AllBetaJointGCorrection.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R686AllBetaJointGCorrection.lean"
+	User time (seconds): 1.26
+	System time (seconds): 0.32
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3296784
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 79924
+	Voluntary context switches: 691
+	Involuntary context switches: 48
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.614s
+CPU time consumed: 1.626s
+Memory peak: 256.0K
+Memory swap peak: 0B
