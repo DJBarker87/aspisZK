@@ -1,0 +1,100 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791091679529564000.service; invocation ID: 8a0b6c365aa54ff397411e7dd4139ca9
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean:22:37: error: Type mismatch: After simplification, term
+  hlen
+ has type
+  xs.length = 4
+but is expected to have type
+  List.length ?m.27 = 4
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean:25:12: error(lean.invalidField): Invalid field notation: Type of
+  v
+is not known; cannot resolve field `isLt`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `BitVec.isLt`
+  • `Fin.isLt`
+  • `Lean.Grind.isLt`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean:20:69: error: unsolved goals
+q : QM31Exact
+xs : List (Fin modulus)
+hlen : xs.length = 4
+hq : tupleField (tupleFieldEquiv.symm q) = q
+⊢ fieldEvent q (some (List.map Fin.val xs)) = tupleEvent (tupleFieldEquiv.symm q) (some (List.map Fin.val xs))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean:39:30: error(lean.unknownIdentifier): Unknown identifier `blockAnswer`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean:42:9: error: unsolved goals
+case none
+q : QM31Exact
+hm :
+  (mean fun blocks =>
+      tupleEvent (tupleFieldEquiv.symm q)
+        (Option.map (List.map Fin.val)
+          (resultEval (R589IndexedReplyExecution.blockAnswer (extendBlocks blocks)) (limbs 8 4 0)).1)) =
+    ((1 - (1 / 2147483648) ^ 8) / 2147483647) ^ 4
+blocks : R579FourBlockTape.Blocks
+next : ℕ
+hr : resultEval sorry (limbs 8 4 0) = (none, next)
+⊢ (if
+        ∃ a,
+          (resultEval (R589IndexedReplyExecution.blockAnswer (extendBlocks blocks)) (limbs 8 4 0)).1 = some a ∧
+            SamplerFieldDecode.decode (List.map Fin.val a) = q then
+      1
+    else 0) =
+    if
+        ∃ a,
+          (resultEval (R589IndexedReplyExecution.blockAnswer (extendBlocks blocks)) (limbs 8 4 0)).1 = some a ∧
+            List.map Fin.val a =
+              [↑(tupleFieldEquiv.symm q 0), ↑(tupleFieldEquiv.symm q 1), ↑(tupleFieldEquiv.symm q 2),
+                ↑(tupleFieldEquiv.symm q 3)] then
+      1
+    else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean:45:9: error(lean.unknownIdentifier): Unknown identifier `blockAnswer`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean:46:6: error: Type mismatch: After simplification, term
+  canonical_field_event q xs hlen
+ has type
+  fieldEvent q (some (List.map Fin.val xs)) = tupleEvent (tupleFieldEquiv.symm q) (some (List.map Fin.val xs))
+but is expected to have type
+  fieldEvent q
+      (Option.map (List.map Fin.val)
+        (resultEval (R589IndexedReplyExecution.blockAnswer (extendBlocks blocks)) (limbs 8 4 0)).1) =
+    tupleEvent (tupleFieldEquiv.symm q)
+      (Option.map (List.map Fin.val)
+        (resultEval (R589IndexedReplyExecution.blockAnswer (extendBlocks blocks)) (limbs 8 4 0)).1)
+'AspisV8R19.R601ExactFieldMass.canonical_field_event' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R601ExactFieldMass.block_field_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R601ExactFieldMass.source_independent_field_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R601ExactFieldMass.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R601ExactFieldMass.lean"
+	User time (seconds): 1.29
+	System time (seconds): 0.34
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.62
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3254068
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76757
+	Voluntary context switches: 641
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.653s
+CPU time consumed: 1.666s
+Memory peak: 552.0K
+Memory swap peak: 0B
