@@ -1,0 +1,14 @@
+diff --git a/.r21-scratch/r565-initial-claim-plus-one/staged-source/performance.before-lifetime-fix.rs b/.r21-scratch/r565-initial-claim-plus-one/staged-source/performance.rs
+index 58e9ce5d1..f5f1da04b 100644
+--- a/.r21-scratch/r565-initial-claim-plus-one/staged-source/performance.before-lifetime-fix.rs
++++ b/.r21-scratch/r565-initial-claim-plus-one/staged-source/performance.rs
+@@ -249,7 +249,8 @@ pub fn run(){
+                 "R565 binding bytes equal published R555 seed-1 input");
+             assert_eq!(std::fs::read(format!("{prior}/transition.bin")).unwrap(),transition_bytes,
+                 "R565 transition bytes equal published R555 seed-1 input");
+-            let prior_wire=parse(&std::fs::read(format!("{prior}/proof-1.bin")).unwrap())
++            let prior_proof_bytes=std::fs::read(format!("{prior}/proof-1.bin")).unwrap();
++            let prior_wire=parse(&prior_proof_bytes)
+                 .expect("published R555 proof parses");
+             assert_eq!(prior_wire.roots.0,a[18][0],"R565 C1 root equals published R555 root");
+             assert_eq!(prior_wire.roots.1,b[18][0],"R565 C2 root equals published R555 root");

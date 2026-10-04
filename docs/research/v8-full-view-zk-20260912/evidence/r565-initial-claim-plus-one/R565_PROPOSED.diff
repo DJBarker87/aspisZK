@@ -1,0 +1,63 @@
+--- r555-base/payment_extraction.rs
++++ r565-candidate/payment_extraction.rs
+@@ -136,8 +136,40 @@ fn semantic_negative_fixture(v:&mut[K],mut s:row::Semantic,p:&impl PaymentInput,
+             for assignment in 0..1<<left{for j in 0..left{z[r+1+j]=sc(((assignment>>(left-1-j))&1)as u32);}
+                 samples[x]=samples[x].add(terminal_with_g(p,tr,m,&z,&s,&gc));}}
+         let poly=interpolate_degree27(&samples);
++        #[cfg(v8_initial_claim_plus_one)] if r==0 {
++            // This check changes only `eta` temporarily.  The three arrays are
++            // independently rebuilt from terminal_with_g and degree-27 interpolation.
++            let first_round_coefficients = |semantic: &row::Semantic| {
++                let mut values=[K::ZERO;28];
++                for x in 0..28 {let mut z=semantic.z;z[0]=sc(x as u32);
++                    for assignment in 0..1<<9 {for j in 0..9 {
++                        z[1+j]=sc(((assignment>>(8-j))&1)as u32);
++                    }
++                    values[x]=values[x].add(terminal_with_g(p,tr,m,&z,semantic,&gc));}
++                }
++                interpolate_degree27(&values)
++            };
++            let actual_eta=s.eta;
++            let at_actual=first_round_coefficients(&s);
++            s.eta=K::ZERO;
++            let at_zero=first_round_coefficients(&s);
++            s.eta=K::ONE;
++            let at_one=first_round_coefficients(&s);
++            s.eta=actual_eta;
++            assert_eq!(poly,at_actual,"first-round actual-eta terminal coefficients");
++            for coefficient in 0..28 {
++                assert_eq!(at_actual[coefficient],
++                    at_zero[coefficient].add(at_one[coefficient].sub(at_zero[coefficient]).mul(actual_eta)),
++                    "first-round terminal coefficient {coefficient} is affine in eta");
++            }
++            println!("R565_FIRST_ROUND_TERMINAL_AFFINE all_coefficients=28 eta_points=0,1,actual terminal_with_g=true interpolate_degree27=true transcript_oracle_calls=0");
++        }
+         if r==0{first_boundary_wrong=state_only_boundary_sum(&poly)!=s.claim;}
+         let sent=&mut v[1+27*r..1+27*(r+1)];sent[0]=poly[0];sent[1..].copy_from_slice(&poly[2..]);
+--- r555-base/performance.rs
++++ r565-candidate/performance.rs
+@@ -240,6 +240,24 @@ pub fn run(){
+         let initial=crate::r17_relation::initial(state_only_initial_mask_claim(&trace,&masks.mask_only_c1,&masks.g).unwrap(),&masks.g);
+         phase(seed,"c2_helpers_encode",clock);let clock=Instant::now();
+         let b=crate::r102_tree::tree(hash,(0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C2_TREE_TAG,&c2leaf(&c2encoded,i,false),&salts[i])).collect());
++        #[cfg(v8_initial_claim_plus_one)] {
++            // The R555 artifact is an immutable comparison input, supplied by
++            // the launch wrapper.  These byte/root equalities run before the
++            // claim is changed and before semantic_start.
++            let prior=std::env::var("ASPIS_R565_R555_ARTIFACT_DIR")
++                .expect("explicit immutable R555 artifact directory");
++            assert_eq!(std::fs::read(format!("{prior}/public.bin")).unwrap(),public_bytes,
++                "R565 public bytes equal published R555 seed-1 input");
++            assert_eq!(std::fs::read(format!("{prior}/binding.bin")).unwrap().as_slice(),binding.as_slice(),
++                "R565 binding bytes equal published R555 seed-1 input");
++            assert_eq!(std::fs::read(format!("{prior}/transition.bin")).unwrap(),transition_bytes,
++                "R565 transition bytes equal published R555 seed-1 input");
++            let prior_wire=parse(&std::fs::read(format!("{prior}/proof-1.bin")).unwrap())
++                .expect("published R555 proof parses");
++            assert_eq!(prior_wire.roots.0,a[18][0],"R565 C1 root equals published R555 root");
++            assert_eq!(prior_wire.roots.1,b[18][0],"R565 C2 root equals published R555 root");
++            println!("R565_FROZEN_INPUTS_EQUAL c1_root={:02x?} c2_root={:02x?}",a[18][0],b[18][0]);
++        }
++        #[cfg(v8_initial_claim_plus_one)] let initial=initial.add(K::ONE);
+         phase(seed,"c2_pack_tree",clock);let clock=Instant::now();
+         let mut v=vec![K::ZERO;FIXED];v[0]=initial;

@@ -1,0 +1,27 @@
+diff --git a/.r21-scratch/r555-zero-output-rejoin/zero-output-rejoin-evidence/source-snapshot/performance.rs b/.r21-scratch/r565-initial-claim-plus-one/staged-source/performance.rs
+index 987db7bdd..58e9ce5d1 100644
+--- a/.r21-scratch/r555-zero-output-rejoin/zero-output-rejoin-evidence/source-snapshot/performance.rs
++++ b/.r21-scratch/r565-initial-claim-plus-one/staged-source/performance.rs
+@@ -240,6 +240,22 @@ pub fn run(){
+         let initial=crate::r17_relation::initial(state_only_initial_mask_claim(&trace,&masks.mask_only_c1,&masks.g).unwrap(),&masks.g);
+         phase(seed,"c2_helpers_encode",clock);let clock=Instant::now();
+         let b=crate::r102_tree::tree(hash,(0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C2_TREE_TAG,&c2leaf(&c2encoded,i,false),&salts[i])).collect());
++        #[cfg(v8_initial_claim_plus_one)] {
++            let prior=std::env::var("ASPIS_R565_R555_ARTIFACT_DIR")
++                .expect("explicit immutable R555 artifact directory");
++            assert_eq!(std::fs::read(format!("{prior}/public.bin")).unwrap(),public_bytes,
++                "R565 public bytes equal published R555 seed-1 input");
++            assert_eq!(std::fs::read(format!("{prior}/binding.bin")).unwrap().as_slice(),binding.as_slice(),
++                "R565 binding bytes equal published R555 seed-1 input");
++            assert_eq!(std::fs::read(format!("{prior}/transition.bin")).unwrap(),transition_bytes,
++                "R565 transition bytes equal published R555 seed-1 input");
++            let prior_wire=parse(&std::fs::read(format!("{prior}/proof-1.bin")).unwrap())
++                .expect("published R555 proof parses");
++            assert_eq!(prior_wire.roots.0,a[18][0],"R565 C1 root equals published R555 root");
++            assert_eq!(prior_wire.roots.1,b[18][0],"R565 C2 root equals published R555 root");
++            println!("R565_FROZEN_INPUTS_EQUAL c1_root={:02x?} c2_root={:02x?}",a[18][0],b[18][0]);
++        }
++        #[cfg(v8_initial_claim_plus_one)] let initial=initial.add(K::ONE);
+         phase(seed,"c2_pack_tree",clock);let clock=Instant::now();
+         let mut v=vec![K::ZERO;FIXED];v[0]=initial;
+         #[cfg(all(v8_positive_transfer,not(v8_semantic_rejoin)))] if positive_case!="honest"{
