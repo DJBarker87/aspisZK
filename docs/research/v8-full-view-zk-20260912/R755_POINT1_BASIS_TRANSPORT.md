@@ -1,0 +1,7 @@
+# R755 point-1 basis-value transport
+
+Lean proves, for every j:Fin1024 and every b equal to the exact fixed-point source basis at order(j), that R748.w(j)=b+576 when order(j) belongs to inactive.erase1023, and b otherwise. The theorem unfolds the actual transportDual formula and uses the already-proved pivot value -576. It preserves the correction for inactive coordinates. The equality premise is explicit and must be supplied by the finite basis proofs; it is not a privacy premise or an assumed source-to-model correspondence.
+
+Exact target `AspisV8R19/R755Point1BasisTransport.lean`; source revision `314534acd0a39102b0f8cf46a2952034b1738f05`; source SHA256 `360f0bb52c86dd99c09f38a80ece0e5b4886205f8d9e8c84dc760a8a044208ab`. Exit0; wall 0:01.23; peak Lean-child RSS 3299152KiB; swap 0. Pinned Lean4.32, -j1 -M4500, own systemd scope5G/7G/swap0/TasksMax128. Complete #print axioms: 'AspisR19.R755Point1BasisTransport.w_from_basis' depends on axioms: [propext, Classical.choice, Quot.sound]. Exact source, receipt, log and runner are saved. No unchanged check was repeated.
+
+First remaining proposition: supply all required fixed-point basis values and gather weights, then bind the complete chosen matrix to the literal certificate. Remaining block inverses, below-block zeros and permutation, adaptive shared-oracle law, published-view simulator, privacy and soundness remain open. This theorem proves a source-formula identity for one fixed algebraic point; it does not prove native callback execution or end-to-end security. Verifier/CU/security parameters unchanged.
