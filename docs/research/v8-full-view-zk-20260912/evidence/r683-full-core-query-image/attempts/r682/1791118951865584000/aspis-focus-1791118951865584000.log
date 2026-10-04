@@ -1,0 +1,182 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791118951865584000.service; invocation ID: 2c74ed2fdb974210b8f02e212e775f4d
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:12:0: warning: automatically included section variable(s) unused in theorem `AspisV8R19.R682FullQueryNormalization.extendLow256_sum`:
+  [NeZero 2]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [NeZero 2] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:47:4: error: ring failed, ring expressions not equal
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+q : HighRepairInvariant.Index 256 → F
+alpha : F
+t : Fin 22 → F
+ht : Function.Injective t
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha q d = 0
+low : Fin 4 → Fin 22 → F := ⋯
+hl :
+  ∀ (s : Fin 4) (root : Fin 22), evaluate256 (extendLow256 (low s)) (t root) = evaluate256 (fun d => q (d, s)) (t root)
+corr : HighRepairInvariant.Index 256 → F := ⋯
+d : Fin 256
+h :
+  q (d, 0) +
+      (q (d, Fin.succ 0) * alpha ^ (0 + 1) +
+        (q (d, (Fin.succ 0).succ) * alpha ^ (0 + 1 + 1) +
+          (q (d, (Fin.succ 0).succ.succ) * alpha ^ (0 + 1 + 1 + 1) +
+            ∑ x, q (d, x.succ.succ.succ.succ) * alpha ^ (↑x + 1 + 1 + 1 + 1)))) =
+    0
+⊢ alpha * q (d, 1) - alpha * q (d, Fin.succ 0) + alpha ^ 2 * q (d, 2) - alpha ^ 2 * q (d, (Fin.succ 0).succ) +
+        alpha ^ 3 * q (d, 3) -
+      alpha ^ 3 * q (d, (Fin.succ 0).succ.succ) =
+    0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:60:6: error: 'change' tactic failed, pattern
+  -alpha * evaluate256 (extendLow256 (low 1)) (t root) - alpha ^ 2 * evaluate256 (extendLow256 (low 2)) (t root) -
+      alpha ^ 3 * evaluate256 (extendLow256 (low 3)) (t root) =
+    ?m.463
+is not definitionally equal to target
+  ∑ x, -alpha * (extendLow256 (low 1) x * naturalLineValue (t root) ↑x) -
+        ∑ x, alpha ^ 2 * (extendLow256 (low 2) x * naturalLineValue (t root) ↑x) -
+      ∑ x, alpha ^ 3 * (extendLow256 (low 3) x * naturalLineValue (t root) ↑x) =
+    ∑ x, q (x, 0) * naturalLineValue (t root) ↑x
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:66:82: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+q : HighRepairInvariant.Index 256 → F
+alpha : F
+t : Fin 22 → F
+ht : Function.Injective t
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha q d = 0
+low : Fin 4 → Fin 22 → F := fun s => Classical.choose ⋯
+hl :
+  ∀ (s : Fin 4) (root : Fin 22), evaluate256 (extendLow256 (low s)) (t root) = evaluate256 (fun d => q (d, s)) (t root)
+corr : HighRepairInvariant.Index 256 → F :=
+  fun i =>
+    if i.2 = 0 then
+      -alpha * extendLow256 (low 1) i.1 - alpha ^ 2 * extendLow256 (low 2) i.1 - alpha ^ 3 * extendLow256 (low 3) i.1
+    else extendLow256 (low i.2) i.1
+hq0 : ∀ (d : Fin 256), q (d, 0) = -alpha * q (d, 1) - alpha ^ 2 * q (d, 2) - alpha ^ 3 * q (d, 3)
+heq0 :
+  ∀ (y : F),
+    evaluate256 (fun d => q (d, 0)) y =
+      -alpha * evaluate256 (fun d => q (d, 1)) y - alpha ^ 2 * evaluate256 (fun d => q (d, 2)) y -
+        alpha ^ 3 * evaluate256 (fun d => q (d, 3)) y
+hc :
+  ∀ (root : Fin 22) (slot : Fin 4),
+    evaluate256 (fun d => corr (d, slot)) (t root) = evaluate256 (fun d => q (d, slot)) (t root)
+d : Fin 256
+⊢ (((-(alpha * extendLow256 (low 1) d) +
+              alpha *
+                if Fin.succ 0 = 0 then
+                  -(alpha * extendLow256 (low 1) d) - alpha ^ 2 * extendLow256 (low 2) d -
+                    alpha ^ 3 * extendLow256 (low 3) d
+                else extendLow256 (low (Fin.succ 0)) d) -
+            alpha ^ 2 * extendLow256 (low 2) d +
+          alpha ^ 2 *
+            if (Fin.succ 0).succ = 0 then
+              -(alpha * extendLow256 (low 1) d) - alpha ^ 2 * extendLow256 (low 2) d -
+                alpha ^ 3 * extendLow256 (low 3) d
+            else extendLow256 (low (Fin.succ 0).succ) d) -
+        alpha ^ 3 * extendLow256 (low 3) d +
+      alpha ^ 3 *
+        if (Fin.succ 0).succ.succ = 0 then
+          -(alpha * extendLow256 (low 1) d) - alpha ^ 2 * extendLow256 (low 2) d - alpha ^ 3 * extendLow256 (low 3) d
+        else extendLow256 (low (Fin.succ 0).succ.succ) d) =
+    0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:83:2: error: unsolved goals
+case refine_3
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+q : HighRepairInvariant.Index 256 → F
+alpha : F
+t : Fin 22 → F
+ht : Function.Injective t
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha q d = 0
+low : Fin 4 → Fin 22 → F := fun s => Classical.choose ⋯
+hl :
+  ∀ (s : Fin 4) (root : Fin 22), evaluate256 (extendLow256 (low s)) (t root) = evaluate256 (fun d => q (d, s)) (t root)
+corr : HighRepairInvariant.Index 256 → F :=
+  fun i =>
+    if i.2 = 0 then
+      -alpha * extendLow256 (low 1) i.1 - alpha ^ 2 * extendLow256 (low 2) i.1 - alpha ^ 3 * extendLow256 (low 3) i.1
+    else extendLow256 (low i.2) i.1
+hq0 : ∀ (d : Fin 256), q (d, 0) = -alpha * q (d, 1) - alpha ^ 2 * q (d, 2) - alpha ^ 3 * q (d, 3)
+heq0 :
+  ∀ (y : F),
+    evaluate256 (fun d => q (d, 0)) y =
+      -alpha * evaluate256 (fun d => q (d, 1)) y - alpha ^ 2 * evaluate256 (fun d => q (d, 2)) y -
+        alpha ^ 3 * evaluate256 (fun d => q (d, 3)) y
+hc :
+  ∀ (root : Fin 22) (slot : Fin 4),
+    evaluate256 (fun d => corr (d, slot)) (t root) = evaluate256 (fun d => q (d, slot)) (t root)
+hcf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha corr d = 0
+i : HighRepairInvariant.Index 256
+hi : 22 ≤ ↑i.1
+hz : ∀ (s : Fin 4), extendLow256 (low s) i.1 = 0
+⊢ (q i - if i.2 = 0 then -0 else 0) = q i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:59:31: warning: This simp argument is unused:
+  Finset.mul_sum
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵r̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵e̵v̵a̵l̵u̵a̵t̵e̵2̵5̵6̵,̵s̵u̵b̵_̵m̵u̵l̵,̵m̵u̵l̵_̵a̵s̵s̵o̵c̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵s̵u̵b̵_̵d̵i̵s̵t̵r̵i̵b̵,̵F̵i̵n̵s̵e̵t̵.̵m̵u̵l̵_̵s̵u̵m̵]̵[̲c̲o̲r̲r̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲r̲f̲l̲,̲ ̲e̲v̲a̲l̲u̲a̲t̲e̲2̲5̲6̲,̲ ̲s̲u̲b̲_̲m̲u̲l̲,̲ ̲m̲u̲l̲_̲a̲s̲s̲o̲c̲,̲ ̲F̲i̲n̲s̲e̲t̲.̲s̲u̲m̲_̲s̲u̲b̲_̲d̲i̲s̲t̲r̲i̲b̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:70:24: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [ite_true,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean:86:49: warning: This simp argument is unused:
+  ite_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵r̵,̵h̵z̵,̵m̵u̵l̵_̵z̵e̵r̵o̵,̵n̵e̵g̵_̵m̵u̵l̵,̵s̵u̵b̵_̵z̵e̵r̵o̵,̵i̵t̵e̵_̵s̵e̵l̵f̵]̵[̲c̲o̲r̲r̲,̲ ̲h̲z̲,̲ ̲m̲u̲l̲_̲z̲e̲r̲o̲,̲ ̲n̲e̲g̲_̲m̲u̲l̲,̲ ̲s̲u̲b̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R682FullQueryNormalization.extendLow256_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R682FullQueryNormalization.full_query_normalization' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R682FullQueryNormalization.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R682FullQueryNormalization.lean"
+	User time (seconds): 1.52
+	System time (seconds): 0.32
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.82
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3298136
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77846
+	Voluntary context switches: 875
+	Involuntary context switches: 50
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.853s
+CPU time consumed: 1.873s
+Memory peak: 516.0K
+Memory swap peak: 0B
