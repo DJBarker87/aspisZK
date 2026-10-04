@@ -1,0 +1,273 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791084878140398000.service; invocation ID: 6d369a7f92b44f2ca36ad4a382ad13fa
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:25:18: error: unsolved goals
+case mk
+state : Std.Array U8 32#usize
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+hs : (↑state).length = 32
+ht : List.take 32 ↑state = ↑state
+⊢ (do
+      let out ← hash ⟨[⟨↑state ++ [1#u8], ⋯⟩], ⋯⟩
+      let a ← hash ⟨[⟨↑state ++ [2#u8], ⋯⟩], ⋯⟩
+      ok (out, { state := a, hash := hash })) =
+    do
+    let (b, t) ← { state := state, hash := hash }.squeeze_block
+    ok (b, { state := t.state, hash := t.hash })
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:38:6: warning: This simp argument is unused:
+  R147QuerySqueezeBridge.message
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.squeeze_block,
+        core.array.Array.index_mut, core.ops.index.IndexMutSlice,
+  ̵  ̵ ̵ ̵ ̵ ̵core.slice.index.Slice.index_mut,
+        core.slice.index.SliceIndexRangeToUsizeSlice,
+        core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵ ̵ ̵Array.repeat, Array.to_slice,
+  ̲  ̲ ̲ ̲ ̲ ̲Slice.length, Slice.len,
+  ̵  ̵ ̵ ̵ ̵ ̵core.slice.Slice.copy_from_slice, Array.from_slice, List.setSlice!,
+        List.slice, Array.update,
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.DOM_SQUEEZE,
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.DOM_ADVANCE,
+        R147QuerySqueezeBridge.m̵e̵s̵s̵a̵g̵e̵,̵ ̵R̵1̵4̵7̵Q̵u̵e̵r̵y̵S̵q̵u̵e̵e̵z̵e̵B̵r̵i̵d̵g̵e̵.̵frame,
+  ̵  ̵ ̵ ̵ ̵ ̵Array.make, lift, bind_tc_ok, hs, List.set_append, ht,
+        toCurrentTranscript, fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:38:38: warning: This simp argument is unused:
+  R147QuerySqueezeBridge.frame
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.squeeze_block,
+        core.array.Array.index_mut, core.ops.index.IndexMutSlice,
+  ̵  ̵ ̵ ̵ ̵ ̵core.slice.index.Slice.index_mut,
+        core.slice.index.SliceIndexRangeToUsizeSlice,
+        core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵ ̵ ̵Array.repeat, Array.to_slice,
+  ̲  ̲ ̲ ̲ ̲ ̲Slice.length, Slice.len,
+  ̵  ̵ ̵ ̵ ̵ ̵core.slice.Slice.copy_from_slice, Array.from_slice, List.setSlice!,
+        List.slice, Array.update,
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.DOM_SQUEEZE,
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.DOM_ADVANCE,
+        R147QuerySqueezeBridge.message, R̵1̵4̵7̵Q̵u̵e̵r̵y̵S̵q̵u̵e̵e̵z̵e̵B̵r̵i̵d̵g̵e̵.̵f̵r̵a̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵Array.make, lift, bind_tc_ok, hs, List.set_append, ht,
+        toCurrentTranscript, fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:118:10: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ←
+      let (b, t) := (b1, s1)
+        ok (b, fromCurrentTranscript t)
+    let s ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x.1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+    let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+        ok
+          (done
+            (__x.2, __x.1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+      else ok (cont (r1, __x.2, __x.1, Usize.wrapping_add 0#usize 1#usize))
+is not definitionally equal to the right-hand side
+  do
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+    let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+    let v ←
+      if (core.num.U32.from_le_bytes x &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (s1, b1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes x &&& 2147483647#u32, true))
+        else ok (cont (r1, s1, b1, Usize.wrapping_add 0#usize 1#usize))
+    ok
+        (match v with
+        | cont x => cont (x.1, fromCurrentTranscript x.2.1, x.2.2.1, x.2.2.2)
+        | done x => done (fromCurrentTranscript x.1, x.2.1, x.2.2.1, x.2.2.2.1, x.2.2.2.2))
+
+case pos.ok
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : j = 8#usize
+b1 : Std.Array U8 32#usize
+s1 : AspisR156FullFreeze.aspis_core.transcript.Transcript
+hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.squeeze_block (toCurrentTranscript s) = ok (b1, s1)
+h0 : ↑0#usize ≤ 8
+hm0 : 0#usize * 4#usize = ok (Usize.wrapping_mul 0#usize 4#usize)
+ha0 : Usize.wrapping_mul 0#usize 4#usize + 4#usize = ok ((Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize)
+hn0 : 0#usize + 1#usize = ok (Usize.wrapping_add 0#usize 1#usize)
+⊢ (do
+      let __x ←
+        let (b, t) := (b1, s1)
+          ok (b, fromCurrentTranscript t)
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x.1
+            { start := Usize.wrapping_mul 0#usize 4#usize,
+              «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (__x.2, __x.1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+        else ok (cont (r1, __x.2, __x.1, Usize.wrapping_add 0#usize 1#usize))) =
+    do
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+    let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+    let v ←
+      if (core.num.U32.from_le_bytes x &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (s1, b1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes x &&& 2147483647#u32, true))
+        else ok (cont (r1, s1, b1, Usize.wrapping_add 0#usize 1#usize))
+    ok
+        (match v with
+        | cont x => cont (x.1, fromCurrentTranscript x.2.1, x.2.2.1, x.2.2.2)
+        | done x => done (fromCurrentTranscript x.1, x.2.1, x.2.2.1, x.2.2.2.1, x.2.2.2.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:132:23: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:133:16: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:140:32: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 9
+  0 ≤ c ≤ 28
+  0 ≤ a ≤ 7
+where
+ a := ↑↑j✝
+ c := ↑↑(j✝.wrapping_mul 4#usize)
+ d := ↑↑j
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:142:8: error: Tactic `rfl` failed: The left-hand side
+  do
+    let s_1 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+          { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+    let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+        ok (done (s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+      else ok (cont (r1, s, b, j.wrapping_add 1#usize))
+is not definitionally equal to the right-hand side
+  do
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+          { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize }
+    let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+    let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+    let v ←
+      if (core.num.U32.from_le_bytes x &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (toCurrentTranscript s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes x &&& 2147483647#u32, true))
+        else ok (cont (r1, toCurrentTranscript s, b, j.wrapping_add 1#usize))
+    ok (nativeControl v)
+
+case neg
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj✝ : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : ¬j = 8#usize
+hj : ↑j < 8
+hmj : j * 4#usize = ok (j.wrapping_mul 4#usize)
+hjmul : ↑(j.wrapping_mul 4#usize) ≤ 28
+haj : j.wrapping_mul 4#usize + 4#usize = ok ((j.wrapping_mul 4#usize).wrapping_add 4#usize)
+hn : ∀ (j : Usize), j + 1#usize = ok (j.wrapping_add 1#usize)
+⊢ (do
+      let s_1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+            { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+        else ok (cont (r1, s, b, j.wrapping_add 1#usize))) =
+    do
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+          { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize }
+    let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+    let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+    let v ←
+      if (core.num.U32.from_le_bytes x &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (toCurrentTranscript s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes x &&& 2147483647#u32, true))
+        else ok (cont (r1, toCurrentTranscript s, b, j.wrapping_add 1#usize))
+    ok (nativeControl v)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:112:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_tc_ok, nativeControl, pendingNative, finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean"
+	User time (seconds): 2.39
+	System time (seconds): 0.39
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.76
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3745756
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 87124
+	Voluntary context switches: 1000
+	Involuntary context switches: 72
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.792s
+CPU time consumed: 2.818s
+Memory peak: 548.0K
+Memory swap peak: 0B

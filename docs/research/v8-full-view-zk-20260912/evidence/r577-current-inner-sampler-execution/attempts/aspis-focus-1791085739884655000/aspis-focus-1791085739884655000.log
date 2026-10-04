@@ -1,0 +1,166 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791085739884655000.service; invocation ID: e24f21e31f4642618f925d0b062bca65
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:54:4: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:52:54: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [toCurrentTranscript, fromCurrentTranscript, b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵bind_tc_ok, Prod.fst, Prod.snd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:53:6: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp [toCurrentTranscript, fromCurrentTranscript, bind_assoc_eq, bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵Prod.f̵st̵,̵ ̵P̵r̵o̵d̵.̵s̵nd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:53:16: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp [toCurrentTranscript, fromCurrentTranscript, bind_assoc_eq, bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:122:16: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case pos.ok
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : j = 8#usize
+b1 : Std.Array U8 32#usize
+s1 : AspisR156FullFreeze.aspis_core.transcript.Transcript
+hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.squeeze_block (toCurrentTranscript s) = ok (b1, s1)
+h0 : ↑0#usize ≤ 8
+hm0 : 0#usize * 4#usize = ok (Usize.wrapping_mul 0#usize 4#usize)
+ha0 : Usize.wrapping_mul 0#usize 4#usize + 4#usize = ok ((Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize)
+hn0 : 0#usize + 1#usize = ok (Usize.wrapping_add 0#usize 1#usize)
+⊢ (do
+      let __x ←
+        let (b, t) := (b1, s1)
+          ok (b, fromCurrentTranscript t)
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x.1
+            { start := Usize.wrapping_mul 0#usize 4#usize,
+              «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (__x.2, __x.1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+        else ok (cont (r1, __x.2, __x.1, Usize.wrapping_add 0#usize 1#usize))) =
+    do
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+    let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+    let v ←
+      if (core.num.U32.from_le_bytes x &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (s1, b1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes x &&& 2147483647#u32, true))
+        else ok (cont (r1, s1, b1, Usize.wrapping_add 0#usize 1#usize))
+    ok
+        (match v with
+        | cont x => cont (x.1, fromCurrentTranscript x.2.1, x.2.2.1, x.2.2.2)
+        | done x => done (fromCurrentTranscript x.1, x.2.1, x.2.2.1, x.2.2.2.1, x.2.2.2.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:148:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case neg
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj✝ : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : ¬j = 8#usize
+hj : ↑j < 8
+hmj : j * 4#usize = ok (j.wrapping_mul 4#usize)
+hjmul : ↑(j.wrapping_mul 4#usize) ≤ 28
+haj : j.wrapping_mul 4#usize + 4#usize = ok ((j.wrapping_mul 4#usize).wrapping_add 4#usize)
+hnj : j + 1#usize = ok (j.wrapping_add 1#usize)
+⊢ (do
+      let s_1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+            { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s_1
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+        else ok (cont (r1, s, b, j.wrapping_add 1#usize))) =
+    do
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) b
+          { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize }
+    let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+    let x ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x
+    let v ←
+      if (core.num.U32.from_le_bytes x &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (toCurrentTranscript s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes x &&& 2147483647#u32, true))
+        else ok (cont (r1, toCurrentTranscript s, b, j.wrapping_add 1#usize))
+    ok (nativeControl v)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_assoc_eq, bind_tc_ok, nativeControl, pendingNative, finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:25: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, bind_a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵b̵i̵n̵d̵_̵tc_ok, nativeControl, pendingNative, finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean"
+	User time (seconds): 2.09
+	System time (seconds): 0.39
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.45
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3746128
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 87398
+	Voluntary context switches: 742
+	Involuntary context switches: 66
+	Swaps: 0
+	File system inputs: 16
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.485s
+CPU time consumed: 2.524s
+Memory peak: 256.0K
+Memory swap peak: 0B

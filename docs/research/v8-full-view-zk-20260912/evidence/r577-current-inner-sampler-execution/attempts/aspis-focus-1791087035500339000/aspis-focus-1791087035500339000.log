@@ -1,0 +1,334 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087035500339000.service; invocation ID: 004d1fda607e48d7a05c968ec81c2899
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:52:54: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [toCurrentTranscript, fromCurrentTranscript, b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵bind_tc_ok, Prod.fst, Prod.snd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:53:6: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp [toCurrentTranscript, fromCurrentTranscript, bind_assoc_eq, bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵Prod.f̵st̵,̵ ̵P̵r̵o̵d̵.̵s̵nd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:53:16: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp [toCurrentTranscript, fromCurrentTranscript, bind_assoc_eq, bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:112:20: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← { state := s.state, hash := s.hash }.squeeze_block
+    let __x ←
+      let (b, t) := x
+        ok (b, { state := t.state, hash := t.hash })
+    let i ← 0#usize * 4#usize
+    let i1 ← i + 4#usize
+    let s ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x.1
+          { start := i, «end» := i1 }
+    let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+    let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let word_index2 ← 0#usize + 1#usize
+    if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+        ok (done (__x.2, __x.1, word_index2, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+      else ok (cont (r1, __x.2, __x.1, word_index2))
+is not definitionally equal to the right-hand side
+  do
+    let x ← { state := s.state, hash := s.hash }.squeeze_block
+    let x_1 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) x.1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let x_2 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x_1
+    let x_3 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x_2
+    let v ←
+      if (core.num.U32.from_le_bytes x_3 &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (x.2, x.1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes x_3 &&& 2147483647#u32, true))
+        else ok (cont (r1, x.2, x.1, Usize.wrapping_add 0#usize 1#usize))
+    ok (nativeControl v)
+
+case pos.fail
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : j = 8#usize
+e : Error
+hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.squeeze_block (toCurrentTranscript s) = fail e
+⊢ (do
+      let x ← { state := s.state, hash := s.hash }.squeeze_block
+      let __x ←
+        let (b, t) := x
+          ok (b, { state := t.state, hash := t.hash })
+      let i ← 0#usize * 4#usize
+      let i1 ← i + 4#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x.1
+            { start := i, «end» := i1 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let word_index2 ← 0#usize + 1#usize
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (__x.2, __x.1, word_index2, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+        else ok (cont (r1, __x.2, __x.1, word_index2))) =
+    do
+    let x ← { state := s.state, hash := s.hash }.squeeze_block
+    let x_1 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) x.1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let x_2 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x_1
+    let x_3 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x_2
+    let v ←
+      if (core.num.U32.from_le_bytes x_3 &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (x.2, x.1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes x_3 &&& 2147483647#u32, true))
+        else ok (cont (r1, x.2, x.1, Usize.wrapping_add 0#usize 1#usize))
+    ok (nativeControl v)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:113:17: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← { state := s.state, hash := s.hash }.squeeze_block
+    let __x ←
+      let (b, t) := x
+        ok (b, { state := t.state, hash := t.hash })
+    let i ← 0#usize * 4#usize
+    let i1 ← i + 4#usize
+    let s ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x.1
+          { start := i, «end» := i1 }
+    let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+    let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let word_index2 ← 0#usize + 1#usize
+    if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+        ok (done (__x.2, __x.1, word_index2, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+      else ok (cont (r1, __x.2, __x.1, word_index2))
+is not definitionally equal to the right-hand side
+  do
+    let x ← { state := s.state, hash := s.hash }.squeeze_block
+    let x_1 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) x.1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let x_2 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x_1
+    let x_3 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x_2
+    let v ←
+      if (core.num.U32.from_le_bytes x_3 &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (x.2, x.1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes x_3 &&& 2147483647#u32, true))
+        else ok (cont (r1, x.2, x.1, Usize.wrapping_add 0#usize 1#usize))
+    ok (nativeControl v)
+
+case pos.div
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : j = 8#usize
+hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.squeeze_block (toCurrentTranscript s) = div
+⊢ (do
+      let x ← { state := s.state, hash := s.hash }.squeeze_block
+      let __x ←
+        let (b, t) := x
+          ok (b, { state := t.state, hash := t.hash })
+      let i ← 0#usize * 4#usize
+      let i1 ← i + 4#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) __x.1
+            { start := i, «end» := i1 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let word_index2 ← 0#usize + 1#usize
+      if (core.num.U32.from_le_bytes a &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok (done (__x.2, __x.1, word_index2, core.num.U32.from_le_bytes a &&& 2147483647#u32, true))
+        else ok (cont (r1, __x.2, __x.1, word_index2))) =
+    do
+    let x ← { state := s.state, hash := s.hash }.squeeze_block
+    let x_1 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) x.1
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+    let x_2 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x_1
+    let x_3 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError x_2
+    let v ←
+      if (core.num.U32.from_le_bytes x_3 &&& 2147483647#u32 != 2147483647#u32) = true then
+          ok
+            (done
+              (x.2, x.1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes x_3 &&& 2147483647#u32, true))
+        else ok (cont (r1, x.2, x.1, Usize.wrapping_add 0#usize 1#usize))
+    ok (nativeControl v)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:127:10: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  (Std.Array U8 32#usize × AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript) = Slice U8
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.134} {β : α → Sort ?u.133} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case e_a.e_3
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : j = 8#usize
+b1 : Std.Array U8 32#usize
+s1 : AspisR156FullFreeze.aspis_core.transcript.Transcript
+hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.squeeze_block (toCurrentTranscript s) = ok (b1, s1)
+h0 : ↑0#usize ≤ 8
+hm0 : 0#usize * 4#usize = ok (Usize.wrapping_mul 0#usize 4#usize)
+ha0 : Usize.wrapping_mul 0#usize 4#usize + 4#usize = ok ((Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize)
+hn0 : 0#usize + 1#usize = ok (Usize.wrapping_add 0#usize 1#usize)
+slice : Std.Array U8 32#usize × AspisR156FullFreeze.aspis_core.transcript.Transcript
+⊢ (Std.Array U8 32#usize × AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript) = Slice U8
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:100:4: warning: This simp argument is unused:
+  current_roundtrip
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0.body,
+      AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0.body,
+      AspisR569MaskedClaimCompleteConsts.aspis_core.field.P,
+  ̵  ̵ ̵ ̵AspisR156FullFreeze.aspis_core.field.P,
+      nativeSqueeze_map, toCurrentTranscript, fromCurrentTranscript,
+  ̵  ̵ ̵ ̵c̵u̵r̵r̵e̵n̵t̵_̵r̵o̵u̵n̵d̵t̵r̵i̵p̵,̵ ̵bind_assoc_eq, bind_tc_ok, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵,̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵[̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ bind_tc_ok, Prod.fst, Prod.snd, nativeControl, pendingNative,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:25: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵bind_tc_ok, Prod.fst, Prod.snd, nativeControl, pendingNative,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:40: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, bind_assoc_eq, b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̵Prod.fst, Prod.snd, nativeControl, pendingNative,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:52: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, bind_assoc_eq, bind_tc_ok, P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵Prod.snd, nativeControl, pendingNative,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:62: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, bind_assoc_eq, bind_tc_ok, Prod.fst, P̵r̵o̵d̵.̵s̵n̵d̵,̵nativeControl, pendingNative,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:122:36: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [hm0, ha0, hn0, b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵bind_tc_ok, nativeControl, pendingNative, finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:123:12: warning: This simp argument is unused:
+  nativeControl
+
+Hint: Omit it from the simp argument list.
+  simp only [hm0, ha0, hn0, bind_assoc_eq, bind_tc_ok, n̵a̵t̵i̵v̵e̵C̵o̵n̵t̵r̵o̵l̵,̵ ̵pendingNative, finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:123:27: warning: This simp argument is unused:
+  pendingNative
+
+Hint: Omit it from the simp argument list.
+  simp only [hm0, ha0, hn0, bind_assoc_eq, bind_tc_ok, nativeControl, p̵e̵n̵d̵i̵n̵g̵N̵a̵t̵i̵v̵e̵,̵ ̵finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:123:42: warning: This simp argument is unused:
+  finishedNative
+
+Hint: Omit it from the simp argument list.
+  simp only [hm0, ha0, hn0, bind_assoc_eq, bind_tc_ok, nativeControl, p̵e̵n̵d̵i̵n̵g̵N̵a̵t̵i̵v̵e̵,̵ ̵f̵i̵n̵i̵s̵h̵e̵d̵N̵a̵t̵i̵v̵e̵]̵p̲e̲n̲d̲i̲n̲g̲N̲a̲t̲i̲v̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:137:30: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg hr,̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean"
+	User time (seconds): 2.06
+	System time (seconds): 0.40
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.42
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3746200
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86966
+	Voluntary context switches: 719
+	Involuntary context switches: 64
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.466s
+CPU time consumed: 2.502s
+Memory peak: 256.0K
+Memory swap peak: 0B

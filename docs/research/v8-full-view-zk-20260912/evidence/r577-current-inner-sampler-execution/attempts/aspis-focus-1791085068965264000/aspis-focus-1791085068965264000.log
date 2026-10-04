@@ -1,0 +1,183 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791085068965264000.service; invocation ID: 67e7dc33a1104fa48e9c20d667acb8ef
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:25:0: warning: Definition `nativeSqueeze_map` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:106:18: error: unsolved goals
+case pos.ok
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : j = 8#usize
+b1 : Std.Array U8 32#usize
+s1 : AspisR156FullFreeze.aspis_core.transcript.Transcript
+hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.squeeze_block (toCurrentTranscript s) = ok (b1, s1)
+h0 : ↑0#usize ≤ 8
+hm0 : 0#usize * 4#usize = ok (Usize.wrapping_mul 0#usize 4#usize)
+ha0 : Usize.wrapping_mul 0#usize 4#usize + 4#usize = ok ((Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize)
+hn0 : 0#usize + 1#usize = ok (Usize.wrapping_add 0#usize 1#usize)
+⊢ ∀ (v : Slice U8),
+    core.slice.index.SliceIndexRangeUsizeSlice.index
+          { start := Usize.wrapping_mul 0#usize 4#usize,
+            «end» := (Usize.wrapping_mul 0#usize 4#usize).wrapping_add 4#usize }
+          b1.to_slice =
+        ok v →
+      ∀ (v_1 : core.result.Result (Std.Array U8 4#usize) core.array.TryFromSliceError),
+        core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 v = ok v_1 →
+          ∀ (v : Std.Array U8 4#usize),
+            core.result.Result.unwrap core.fmt.DebugTryFromSliceError v_1 = ok v →
+              (if ↑(core.num.U32.from_le_bytes v) &&& 2147483647 = 2147483647 then
+                  ok (cont (r1, { state := s1.state, hash := s1.hash }, b1, Usize.wrapping_add 0#usize 1#usize))
+                else
+                  ok
+                    (done
+                      ({ state := s1.state, hash := s1.hash }, b1, Usize.wrapping_add 0#usize 1#usize,
+                        core.num.U32.from_le_bytes v &&& 2147483647#u32, true))) =
+                do
+                let v ←
+                  if ↑(core.num.U32.from_le_bytes v) &&& 2147483647 = 2147483647 then
+                      ok (cont (r1, s1, b1, Usize.wrapping_add 0#usize 1#usize))
+                    else
+                      ok
+                        (done
+                          (s1, b1, Usize.wrapping_add 0#usize 1#usize, core.num.U32.from_le_bytes v &&& 2147483647#u32,
+                            true))
+                ok
+                    (match v with
+                    | cont x => cont (x.1, { state := x.2.1.state, hash := x.2.1.hash }, x.2.2)
+                    | done x => done ({ state := x.1.state, hash := x.1.hash }, x.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:137:32: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 9
+  0 ≤ c ≤ 28
+  0 ≤ a ≤ 7
+where
+ a := ↑↑j✝
+ c := ↑↑(j✝.wrapping_mul 4#usize)
+ d := ↑↑j
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:116:6: error: unsolved goals
+case neg
+limb : AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31
+r : core.ops.range.Range U32
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj✝ : ↑j ≤ 8
+hmul : ∀ (x : Usize), ↑x ≤ 8 → x * 4#usize = ok (x.wrapping_mul 4#usize)
+hadd : ∀ (x : Usize), ↑x ≤ 28 → x + 4#usize = ok (x.wrapping_add 4#usize)
+hone : ∀ (x : Usize), ↑x ≤ 8 → x + 1#usize = ok (x.wrapping_add 1#usize)
+r1 : core.ops.range.Range (UScalar UScalarTy.U32)
+v : UScalar UScalarTy.U32
+hi : core.iter.range.IteratorRange.next core.iter.range.StepU32 r = ok (some v, r1)
+hr : ¬j = 8#usize
+hj : ↑j < 8
+hmj : j * 4#usize = ok (j.wrapping_mul 4#usize)
+hjmul : ↑(j.wrapping_mul 4#usize) ≤ 28
+haj : j.wrapping_mul 4#usize + 4#usize = ok ((j.wrapping_mul 4#usize).wrapping_add 4#usize)
+hn : ∀ (j : Usize), j + 1#usize = ok (j.wrapping_add 1#usize)
+⊢ ∀ (v : Slice U8),
+    core.slice.index.SliceIndexRangeUsizeSlice.index
+          { start := j.wrapping_mul 4#usize, «end» := (j.wrapping_mul 4#usize).wrapping_add 4#usize } b.to_slice =
+        ok v →
+      ∀ (v_1 : core.result.Result (Std.Array U8 4#usize) core.array.TryFromSliceError),
+        core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 v = ok v_1 →
+          ∀ (v : Std.Array U8 4#usize),
+            core.result.Result.unwrap core.fmt.DebugTryFromSliceError v_1 = ok v →
+              (if ↑(core.num.U32.from_le_bytes v) &&& 2147483647 = 2147483647 then
+                  ok (cont (r1, s, b, j.wrapping_add 1#usize))
+                else ok (done (s, b, j.wrapping_add 1#usize, core.num.U32.from_le_bytes v &&& 2147483647#u32, true))) =
+                do
+                let v ←
+                  if ↑(core.num.U32.from_le_bytes v) &&& 2147483647 = 2147483647 then
+                      ok (cont (r1, { state := s.state, hash := s.hash }, b, j.wrapping_add 1#usize))
+                    else
+                      ok
+                        (done
+                          ({ state := s.state, hash := s.hash }, b, j.wrapping_add 1#usize,
+                            core.num.U32.from_le_bytes v &&& 2147483647#u32, true))
+                ok
+                    (match v with
+                    | cont x => cont (x.1, { state := x.2.1.state, hash := x.2.1.hash }, x.2.2)
+                    | done x => done ({ state := x.1.state, hash := x.1.hash }, x.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:108:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_assoc_eq, bind_tc_ok, nativeControl, pendingNative, finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:108:25: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, bind_a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵b̵i̵n̵d̵_̵tc_ok, nativeControl, pendingNative, finishedNative]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:114:16: warning: This simp argument is unused:
+  nativeControl
+
+Hint: Omit it from the simp argument list.
+  simp [̵n̵a̵t̵i̵v̵e̵C̵o̵n̵t̵r̵o̵l̵,̵ ̵p̵e̵n̵d̵i̵n̵g̵N̵a̵t̵i̵v̵e̵,̵[̲p̲e̲n̲d̲i̲n̲g̲N̲a̲t̲i̲v̲e̲,̲ finishedNative, toCurrentTranscript, fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:114:31: warning: This simp argument is unused:
+  pendingNative
+
+Hint: Omit it from the simp argument list.
+  simp [nativeControl, p̵e̵n̵d̵i̵n̵g̵N̵a̵t̵i̵v̵e̵,̵ ̵finishedNative, toCurrentTranscript, fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:114:46: warning: This simp argument is unused:
+  finishedNative
+
+Hint: Omit it from the simp argument list.
+  simp [nativeControl, pendingNative, f̵i̵n̵i̵s̵h̵e̵d̵N̵a̵t̵i̵v̵e̵,̵ ̵toCurrentTranscript, fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean:114:62: warning: This simp argument is unused:
+  toCurrentTranscript
+
+Hint: Omit it from the simp argument list.
+  simp [nativeControl, pendingNative, finishedNative, t̵o̵C̵u̵r̵r̵e̵n̵t̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R577NativeInnerSamplerExecution.lean"
+	User time (seconds): 2.17
+	System time (seconds): 0.38
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.52
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3745016
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 88544
+	Voluntary context switches: 815
+	Involuntary context switches: 70
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.549s
+CPU time consumed: 2.588s
+Memory peak: 548.0K
+Memory swap peak: 0B
