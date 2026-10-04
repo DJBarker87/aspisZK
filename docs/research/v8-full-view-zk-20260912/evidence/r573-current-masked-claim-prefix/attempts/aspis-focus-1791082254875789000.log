@@ -1,0 +1,67 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791082254875789000.service; invocation ID: 10dbcf80312b45ccaf5d762028b83305
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R573ClaimPrefixExecution.lean:110:36: error: unsolved goals
+t : NTranscript
+q : NQM31
+data : Slice U8
+hdata : ↑data = claimBytes q
+⊢ (have record1 := Array.repeat 18#usize 0#u8;
+    do
+    let i ← lift (UScalar.cast UScalarTy.U8 aspis_core.state_only_hiding.STATE_ONLY_HIDING_MASKED_ORACLE_DEGREE)
+    let record2 ← record1.update 0#usize i
+    let i1 ← lift (UScalar.cast UScalarTy.U8 aspis_core.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS)
+    let record3 ← record2.update 1#usize i1
+    let __x ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+          record3 { start := 2#usize }
+    match __x with
+      | (s, index_mut_back) => do
+        let s1 ← aspis_core.field.QM31.write_le_bytes q s
+        have record4 : Std.Array U8 18#usize := index_mut_back s1
+        let s2 ← lift record4.to_slice
+        let transcript1 ←
+          aspis_core.transcript.Transcript.absorb t aspis_core.transcript.label.M31_STATE_ONLY_HIDING_MASK_CLAIM s2
+        let __x ← transcript1.challenge_nonzero_qm31
+        match __x with
+          | (r, transcript2) => do
+            let r1 ←
+              core.result.Result.map_err
+                  (BuiltinFnOnce aspis_core.transcript.ChallengeSampleExhausted
+                    aspis_core.state_only_hiding.StateOnlyHidingScheduleError)
+                  r
+                  aspis_core.state_only_hiding.StateOnlyHidingScheduleError.Insts.CoreConvertFromChallengeSampleExhausted.from
+            ok (r1, transcript2)) =
+    do
+    let t1 ← aspis_core.transcript.Transcript.absorb t 31#u8 data
+    let (r, t2) ← t1.challenge_nonzero_qm31
+    ok (scheduleResult r, t2)
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace-r573 env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R573ClaimPrefixExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R573ClaimPrefixExecution.lean"
+	User time (seconds): 1.06
+	System time (seconds): 0.42
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.49
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3738700
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 10
+	Minor (reclaiming a frame) page faults: 86574
+	Voluntary context switches: 410
+	Involuntary context switches: 71
+	Swaps: 0
+	File system inputs: 1840
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.517s
+CPU time consumed: 1.512s
+Memory peak: 288.0K
+Memory swap peak: 0B

@@ -1,0 +1,63 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791082296542526000.service; invocation ID: 610aa6dae1a048de946837b46bbdbd8b
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R573ClaimPrefixExecution.lean:110:36: error: unsolved goals
+t : NTranscript
+q : NQM31
+data : Slice U8
+hdata : ↑data = claimBytes q
+⊢ (do
+      let s1 ←
+        aspis_core.field.QM31.write_le_bytes q
+            (Slice.drop
+              ⟨[27#8#uscalar, 10#8#uscalar, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                  0#u8, 0#u8, 0#u8, 0#u8],
+                ⋯⟩
+              2#usize)
+      let transcript1 ←
+        aspis_core.transcript.Transcript.absorb t 31#u8
+            ⟨[27#8#uscalar, 10#8#uscalar, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                    0#u8, 0#u8, 0#u8].setSlice!
+                2 ↑s1,
+              ⋯⟩
+      let __x ← transcript1.challenge_nonzero_qm31
+      let r1 ←
+        core.result.Result.map_err
+            (BuiltinFnOnce aspis_core.transcript.ChallengeSampleExhausted
+              aspis_core.state_only_hiding.StateOnlyHidingScheduleError)
+            __x.1
+            aspis_core.state_only_hiding.StateOnlyHidingScheduleError.Insts.CoreConvertFromChallengeSampleExhausted.from
+      ok (r1, __x.2)) =
+    do
+    let t1 ← aspis_core.transcript.Transcript.absorb t 31#u8 data
+    let (r, t2) ← t1.challenge_nonzero_qm31
+    ok (scheduleResult r, t2)
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace-r573 env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R573ClaimPrefixExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R573ClaimPrefixExecution.lean"
+	User time (seconds): 1.22
+	System time (seconds): 0.38
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.60
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3735556
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86525
+	Voluntary context switches: 485
+	Involuntary context switches: 71
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.635s
+CPU time consumed: 1.635s
+Memory peak: 288.0K
+Memory swap peak: 0B
