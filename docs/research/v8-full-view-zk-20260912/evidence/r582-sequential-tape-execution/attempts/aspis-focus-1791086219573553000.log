@@ -1,0 +1,87 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791086219573553000.service; invocation ID: 55c1daf538394434a839e27a3e57a7e7
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R582SequentialTapeExecution.lean:22:18: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 : Type) → Program x_0 x_1 x_2 → (x_2 → Program x_0 x_1 x_3) → Program x_0 x_1 x_3
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R582SequentialTapeExecution.lean:22:24: error: Invalid `←` modifier: Cannot be applied to a rule that rewrites to `True`
+
+Note: This simp theorem will rewrite
+  Sequential cursor (Program.done output)
+to `True`, which should not be applied in the reverse direction
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R582SequentialTapeExecution.lean:22:6: error: Type mismatch: After simplification, term
+  hn output
+ has type
+  Sequential output.2 (next output)
+but is expected to have type
+  Sequential cursor (OracleProgramOps.bind (Program.done output) next)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R582SequentialTapeExecution.lean:68:19: error: unsolved goals
+case succ.ask
+p : ℕ
+O : Type
+answer : ℕ → Option (Fin p)
+fuel : ℕ
+ih :
+  ∀ (cursor : ℕ) (program : Program ℕ (Option (Fin p)) (O × ℕ)),
+    Sequential cursor program →
+      Bounded fuel program →
+        ∀ (tape : Tape p fuel),
+          (∀ (i : Fin fuel), tape i = answer (cursor + ↑i)) → runTape fuel program tape = some (eval answer program)
+cursor : ℕ
+tape : Tape p (fuel + 1)
+agree : ∀ (i : Fin (fuel + 1)), tape i = answer (cursor + ↑i)
+i : ℕ
+next : Option (Fin p) → Program ℕ (Option (Fin p)) (O × ℕ)
+hs : Sequential cursor (Program.ask i next)
+hb : Bounded (fuel + 1) (Program.ask i next)
+hfirst : tape 0 = answer i
+htail : ∀ (j : Fin fuel), tape j.succ = answer (cursor + 1 + ↑j)
+hrec : (runTape fuel (next (tape 0)) fun j => tape j.succ) = some (eval answer (next (tape 0)))
+⊢ Option.map (fun v => ((i, answer i) :: v.1, v.2)) (runTape fuel (next (answer i)) fun j => tape j.succ) =
+    some ((i, answer i) :: (eval answer (next (answer i))).1, (eval answer (next (answer i))).2)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R582SequentialTapeExecution.lean:75:30: warning: This simp argument is unused:
+  hrec
+
+Hint: Omit it from the simp argument list.
+  simp only [runTape, h̵r̵e̵c̵,̵ ̵Option.map_some, eval, hfirst]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R582SequentialTapeExecution.lean:75:36: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [runTape, hrec, O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵ ̵eval, hfirst]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R582SequentialTapeExecution.sequential_bind' depends on axioms: [sorryAx]
+'AspisV8R19.R582SequentialTapeExecution.scan_sequential' does not depend on any axioms
+'AspisV8R19.R582SequentialTapeExecution.limbs_sequential' depends on axioms: [sorryAx]
+'AspisV8R19.R582SequentialTapeExecution.runTape_eval' depends on axioms: [propext, sorryAx]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R582SequentialTapeExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R582SequentialTapeExecution.lean"
+	User time (seconds): 0.91
+	System time (seconds): 0.29
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.20
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3242928
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76492
+	Voluntary context switches: 386
+	Involuntary context switches: 58
+	Swaps: 0
+	File system inputs: 8
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.227s
+CPU time consumed: 1.236s
+Memory peak: 324.0K
+Memory swap peak: 0B
