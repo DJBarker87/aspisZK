@@ -1,0 +1,7 @@
+# R738 joint observation model
+
+The focused Lean file defines the 222-row ordinary joint observation model over a commutative ring: 214 selected chord rows, all three statement-point rows, and ordinary coefficient rows 1, 2, 3, 5, 6. Four theorems prove exact definitional correspondence with the existing full field model for flattening, inverse-transported chord masks, ordinary quotient weights, and residual coefficients. The ordinary branch agrees for every previous G array. All image updates are retained.
+
+Target: `AspisV8R19/R738JointObservationModel.lean`. Source revision: `a30c5897a11f29958a5b746125f9d3d7f939f5e3`. Source SHA-256: `6ac3f3dcae7040f92249da2364a016c434647e5ed050177675cead77defea9d7`. Focused run `1791138270891935000`: exit 0, wall 1.50 s, peak Lean-child RSS 3,304,308 KiB, swap 0. Pinned Lean 4.32; cgroup 5G/7G, no swap, TasksMax 128; flags `-j1 -M4500`. All four complete axiom reports are saved: only propext, Classical.choice, and Quot.sound (flattening does not use Classical.choice). No unchanged checks were rerun.
+
+This supplies a ring-valued model for the next joint determinant argument. It does not prove that determinant nonzero, source callback execution, optimized tensor equivalence, legal witness compatibility, an oracle law, privacy, or soundness. First remaining proposition: a nonzero determinant polynomial for the source-shaped joint minor, followed by query repair preserving its observations. The complete privacy and security goal remains open. Verifier source, CU results, and security parameters are unchanged.
