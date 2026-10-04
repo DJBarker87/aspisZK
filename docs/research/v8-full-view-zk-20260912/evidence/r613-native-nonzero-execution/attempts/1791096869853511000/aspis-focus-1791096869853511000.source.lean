@@ -1,0 +1,221 @@
+import AspisV8R19.R598NativeOrdinarySampler
+import AspisV8R19.R173NonzeroExecution
+import AspisV8R19.SamplerOuterExecution
+
+set_option autoImplicit false
+namespace AspisV8R19.R613NativeNonzeroExecution
+open Aeneas Aeneas.Std Result ControlFlow
+
+abbrev NTranscript := AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript
+abbrev CTranscript := AspisR156FullFreeze.aspis_core.transcript.Transcript
+abbrev NQM31 := AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+abbrev CQM31 := AspisR156FullFreeze.aspis_core.field.QM31
+abbrev NExhausted := AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted
+abbrev CExhausted := AspisR156FullFreeze.aspis_core.transcript.ChallengeSampleExhausted
+abbrev Range := core.ops.range.Range U32
+abbrev NResult := core.result.Result NQM31 NExhausted
+abbrev CResult := core.result.Result CQM31 CExhausted
+
+open AspisR156FullFreeze.aspis_core
+
+/-- Convert the successful field value while preserving the native error and state. -/
+def returned (x : CResult × CTranscript) : NResult × NTranscript :=
+  ((match x.1 with
+    | .Ok q => .Ok (AspisV8R19.R598NativeOrdinarySampler.nativeQM31 q)
+    | .Err e => .Err e),
+   AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript x.2)
+
+def mapPending (x : Range × CTranscript) : Range × NTranscript :=
+  (x.1, AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript x.2)
+
+def mapControl (x : ControlFlow (Range × CTranscript) (CResult × CTranscript)) :
+    ControlFlow (Range × NTranscript) (NResult × NTranscript) :=
+  match x with
+  | .cont p => .cont (mapPending p)
+  | .done r => .done (returned r)
+
+theorem ne_map (q : CQM31) :
+    core.cmp.PartialEq.ne.trait_default
+      AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+      (AspisV8R19.R598NativeOrdinarySampler.nativeQM31 q)
+      AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO =
+    core.cmp.PartialEq.ne.trait_default
+      AspisR156FullFreeze.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+      q AspisR156FullFreeze.aspis_core.field.QM31.ZERO := by
+  simp only [core.cmp.PartialEq.ne.trait_default, core.cmp.PartialEq.ne.default,
+    AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+    AspisR156FullFreeze.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+    AspisR569MaskedClaimCompleteConsts.aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq,
+    AspisR156FullFreeze.aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq,
+    AspisR569MaskedClaimCompleteConsts.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+    AspisR156FullFreeze.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+    AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO,
+    AspisR156FullFreeze.aspis_core.field.QM31.ZERO,
+    AspisV8R19.R598NativeOrdinarySampler.nativeQM31,
+    bind_tc_ok]
+
+theorem body_map (r : Range) (s : NTranscript) :
+    AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body r s = (do
+      let x ← AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body
+        r (AspisV8R19.R598NativeOrdinarySampler.toCurrentTranscript s)
+      ok (mapControl x)) := by
+  simp only [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body,
+    AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body,
+    SamplerOuterExecution.range_next, bind_assoc_eq, lift, bind_tc_ok,
+    AspisV8R19.R598NativeOrdinarySampler.challenge_map]
+  by_cases h : r.start.val < r.end.val
+  · simp only [dif_pos h, bind_tc_ok]
+    cases hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31
+        (AspisV8R19.R598NativeOrdinarySampler.toCurrentTranscript s) with
+    | fail e => simp [hs]
+    | div => simp [hs]
+    | ok pair =>
+        rcases pair with ⟨res, s1⟩
+        cases res with
+        | Err e => simp [hs, returned, mapControl,
+            AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+            AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+            AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+            AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent,
+            core.result.Result.Insts.CoreOpsTry.branch,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+        | Ok q =>
+            simp only [hs, bind_tc_ok, returned, mapControl,
+              AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+              AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+              core.result.Result.Insts.CoreOpsTry.branch, ne_map]
+            cases hz : core.cmp.PartialEq.ne.trait_default
+                AspisR156FullFreeze.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                AspisR156FullFreeze.aspis_core.field.QM31.ZERO with
+            | fail e => simp [hz, bind_tc_fail, mapControl, mapPending, returned]
+            | div => simp [hz, bind_tc_div, mapControl, mapPending, returned]
+            | ok nz => cases nz <;> simp [hz, mapControl, mapPending, returned,
+                AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+                AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+  · simp only [dif_neg h, bind_tc_ok]
+    rfl
+
+def nativeBounded : Nat → NTranscript → Aeneas.Std.Result (NResult × NTranscript)
+  | 0, s => .ok (.Err (), s)
+  | n + 1, s => do
+      let (r, s1) ← AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31 s
+      match r with
+      | .Err _ => .ok (.Err (), s1)
+      | .Ok q =>
+          let nonzero ← core.cmp.PartialEq.ne.trait_default
+            AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+            q AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if nonzero then .ok (.Ok q, s1) else nativeBounded n s1
+
+theorem native_loop_execution (n : Nat) (r : Range) (s : NTranscript)
+    (hn : r.end.val - r.start.val = n) :
+    AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop r s = nativeBounded n s := by
+  induction n generalizing r s with
+  | zero =>
+      have h : ¬ r.start.val < r.end.val := by omega
+      rw [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop, loop.eq_def]
+      simp only [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body,
+        SamplerOuterExecution.range_next, dif_neg h, bind_tc_ok, nativeBounded]
+  | succ n ih =>
+      have h : r.start.val < r.end.val := by omega
+      let r' : Range :=
+        { start := UScalar.ofNatCore (r.start.val + 1)
+            (by have := r.end.hBounds; omega), «end» := r.end }
+      have hn' : r'.end.val - r'.start.val = n := by
+        change r.end.val - (r.start.val + 1) = n
+        omega
+      rw [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop, loop.eq_def]
+      simp only [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body,
+        SamplerOuterExecution.range_next, dif_pos h, bind_tc_ok, nativeBounded]
+      cases hs : AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31 s with
+      | fail e => simp [hs]
+      | div => simp [hs]
+      | ok pair =>
+          rcases pair with ⟨result, s1⟩
+          cases result with
+          | Err e => simp [hs, core.result.Result.Insts.CoreOpsTry.branch,
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+          | Ok q =>
+              simp only [hs, bind_tc_ok, core.result.Result.Insts.CoreOpsTry.branch]
+              cases hnz : core.cmp.PartialEq.ne.trait_default
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO with
+              | fail e => simp [hnz]
+              | div => simp [hnz]
+              | ok nonzero =>
+                  cases nonzero with
+                  | true => simp [hnz]
+                  | false =>
+                      simp only [hnz, Bool.false_eq_true, if_false, bind_tc_ok]
+                      simpa only [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop,
+                        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body,
+                        SamplerOuterExecution.range_next, bind_tc_ok, r'] using ih r' s1 hn'
+
+theorem nativeBounded_map (n : Nat) (s : NTranscript) :
+    nativeBounded n s = (do
+      let x ← AspisV8R19.R173NonzeroExecution.bounded n
+        (AspisV8R19.R598NativeOrdinarySampler.toCurrentTranscript s)
+      ok (returned x)) := by
+  induction n generalizing s with
+  | zero => rfl
+  | succ n ih =>
+      simp only [nativeBounded, AspisV8R19.R173NonzeroExecution.bounded,
+        AspisV8R19.R598NativeOrdinarySampler.challenge_map, bind_assoc_eq, bind_tc_ok]
+      cases hs : AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31
+          (AspisV8R19.R598NativeOrdinarySampler.toCurrentTranscript s) with
+      | fail e => rfl
+      | div => rfl
+      | ok pair =>
+          rcases pair with ⟨result, s1⟩
+          cases result with
+          | Err e => simp [hs, returned, AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+              AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+              AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+          | Ok q =>
+              simp only [hs, bind_tc_ok, returned,
+                AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                AspisV8R19.R598NativeOrdinarySampler.nativeOutcome, ne_map]
+              cases hnz : core.cmp.PartialEq.ne.trait_default
+                  AspisR156FullFreeze.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                  AspisR156FullFreeze.aspis_core.field.QM31.ZERO with
+              | fail e => simp [hnz]
+              | div => simp [hnz]
+              | ok nonzero =>
+                  cases nonzero with
+                  | true => rfl
+                  | false =>
+                      simp only [hnz, Bool.false_eq_true, if_false, bind_tc_ok]
+                      simpa only [AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent] using ih s1
+
+theorem loop_map (n : Nat) (r : Range) (s : NTranscript)
+    (hn : r.end.val - r.start.val = n) :
+    AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop r s = (do
+      let x ← AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop
+        r (AspisV8R19.R598NativeOrdinarySampler.toCurrentTranscript s)
+      ok (returned x)) := by
+  rw [native_loop_execution n r s hn,
+    AspisV8R19.R173NonzeroExecution.loop_execution n r
+      (AspisV8R19.R598NativeOrdinarySampler.toCurrentTranscript s) hn,
+    nativeBounded_map]
+
+theorem challenge_map (s : NTranscript) :
+    AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31 s = (do
+      let x ← AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_nonzero_qm31
+        (AspisV8R19.R598NativeOrdinarySampler.toCurrentTranscript s)
+      ok (returned x)) := by
+  simp only [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31,
+    AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_nonzero_qm31,
+    AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.NONZERO_QM31_RETRY_LIMIT,
+    AspisR156FullFreeze.aspis_core.transcript.NONZERO_QM31_RETRY_LIMIT]
+  rw [loop_map 3 _ _ (by rfl)]
+
+#print axioms returned
+#print axioms mapPending
+#print axioms mapControl
+#print axioms ne_map
+#print axioms body_map
+#print axioms loop_map
+#print axioms challenge_map
+end AspisV8R19.R613NativeNonzeroExecution

@@ -1,0 +1,939 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791096399795680000.service; invocation ID: 23aa60d781a8432e93b7975f284cb879
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:75:16: error: unsolved goals
+case pos.ok.Err
+r : Range
+s : NTranscript
+h : ↑r.start < ↑r.end
+s1 : transcript.Transcript
+e : transcript.ChallengeSampleExhausted
+hs :
+  transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) =
+    ok (core.result.Result.Err e, s1)
+⊢ (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err e)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, { state := s1.state, hash := s1.hash }))
+            else
+              ok
+                (cont
+                  ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end },
+                    { state := s1.state, hash := s1.hash }))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, { state := s1.state, hash := s1.hash }))) =
+    do
+    let x ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err e)
+    let x ←
+      match x with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, s1))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+          ok (done (return_capture, s1))
+    ok
+        (match x with
+        | cont p => cont (mapPending p)
+        | done r =>
+          done
+            (match r.1 with
+              | core.result.Result.Ok q => core.result.Result.Ok (R598NativeOrdinarySampler.nativeQM31 q)
+              | core.result.Result.Err e => core.result.Result.Err e,
+              { state := r.2.state, hash := r.2.hash }))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:89:21: error: unsolved goals
+case pos.ok.Ok.fail
+r : Range
+s : NTranscript
+h : ↑r.start < ↑r.end
+s1 : transcript.Transcript
+q : field.QM31
+hs :
+  transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) =
+    ok (core.result.Result.Ok q, s1)
+e : Error
+hz : core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 q field.QM31.ZERO = fail e
+⊢ (do
+      let cf ←
+        core.result.Result.Insts.CoreOpsTry.branch
+            (core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } })
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, R598NativeOrdinarySampler.fromCurrentTranscript s1))
+            else
+              ok
+                (cont
+                  ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end },
+                    R598NativeOrdinarySampler.fromCurrentTranscript s1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, R598NativeOrdinarySampler.fromCurrentTranscript s1))) =
+    do
+    let x ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok q)
+    let x ←
+      match x with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, s1))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+          ok (done (return_capture, s1))
+    ok
+        (match x with
+        | cont p => cont (mapPending p)
+        | done r =>
+          done
+            (match r.1 with
+              | core.result.Result.Ok q =>
+                core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } }
+              | core.result.Result.Err e => core.result.Result.Err e,
+              R598NativeOrdinarySampler.fromCurrentTranscript r.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:91:18: error: unsolved goals
+case pos.ok.Ok.div
+r : Range
+s : NTranscript
+h : ↑r.start < ↑r.end
+s1 : transcript.Transcript
+q : field.QM31
+hs :
+  transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) =
+    ok (core.result.Result.Ok q, s1)
+hz : core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 q field.QM31.ZERO = div
+⊢ (do
+      let cf ←
+        core.result.Result.Insts.CoreOpsTry.branch
+            (core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } })
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, R598NativeOrdinarySampler.fromCurrentTranscript s1))
+            else
+              ok
+                (cont
+                  ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end },
+                    R598NativeOrdinarySampler.fromCurrentTranscript s1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, R598NativeOrdinarySampler.fromCurrentTranscript s1))) =
+    do
+    let x ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok q)
+    let x ←
+      match x with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, s1))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+          ok (done (return_capture, s1))
+    ok
+        (match x with
+        | cont p => cont (mapPending p)
+        | done r =>
+          done
+            (match r.1 with
+              | core.result.Result.Ok q =>
+                core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } }
+              | core.result.Result.Err e => core.result.Result.Err e,
+              R598NativeOrdinarySampler.fromCurrentTranscript r.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:93:20: error: unsolved goals
+case pos.ok.Ok.ok.false
+r : Range
+s : NTranscript
+h : ↑r.start < ↑r.end
+s1 : transcript.Transcript
+q : field.QM31
+hs :
+  transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) =
+    ok (core.result.Result.Ok q, s1)
+hz : core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 q field.QM31.ZERO = ok false
+⊢ (do
+      let cf ←
+        core.result.Result.Insts.CoreOpsTry.branch
+            (core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } })
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, { state := s1.state, hash := s1.hash }))
+            else
+              ok
+                (cont
+                  ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end },
+                    { state := s1.state, hash := s1.hash }))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, { state := s1.state, hash := s1.hash }))) =
+    do
+    let x ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok q)
+    let x ←
+      match x with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, s1))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+          ok (done (return_capture, s1))
+    ok
+        (match x with
+        | cont p => cont (p.1, { state := p.2.state, hash := p.2.hash })
+        | done r =>
+          done
+            (match r.1 with
+              | core.result.Result.Ok q =>
+                core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } }
+              | core.result.Result.Err e => core.result.Result.Err e,
+              { state := r.2.state, hash := r.2.hash }))
+
+case pos.ok.Ok.ok.true
+r : Range
+s : NTranscript
+h : ↑r.start < ↑r.end
+s1 : transcript.Transcript
+q : field.QM31
+hs :
+  transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) =
+    ok (core.result.Result.Ok q, s1)
+hz : core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 q field.QM31.ZERO = ok true
+⊢ (do
+      let cf ←
+        core.result.Result.Insts.CoreOpsTry.branch
+            (core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } })
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, { state := s1.state, hash := s1.hash }))
+            else
+              ok
+                (cont
+                  ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end },
+                    { state := s1.state, hash := s1.hash }))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, { state := s1.state, hash := s1.hash }))) =
+    do
+    let x ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok q)
+    let x ←
+      match x with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, s1))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+          ok (done (return_capture, s1))
+    ok
+        (match x with
+        | cont p => cont (p.1, { state := p.2.state, hash := p.2.hash })
+        | done r =>
+          done
+            (match r.1 with
+              | core.result.Result.Ok q =>
+                core.result.Result.Ok { c0 := { a := q.c0.a, b := q.c0.b }, c1 := { a := q.c1.a, b := q.c1.b } }
+              | core.result.Result.Err e => core.result.Result.Err e,
+              { state := r.2.state, hash := r.2.hash }))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:64:53: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body,
+      AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop.body,
+      SamplerOuterExecution.range_next, bind_assoc_eq, l̵i̵f̵t̵,̵ ̵bind_tc_ok,
+      AspisV8R19.R598NativeOrdinarySampler.challenge_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:70:22: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:71:19: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:75:25: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [h̵s̵,̵ ̵returned, mapControl,
+             ̵ ̵AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+             ̵ ̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+             ̵ ̵AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+             ̵ ̵AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:79:12: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent
+
+Hint: Omit it from the simp argument list.
+  simp [hs, returned, mapControl,
+            AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+            AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+            A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵f̵r̵o̵m̵C̵u̵r̵r̵e̵n̵t̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵t̵o̵C̵u̵r̵r̵e̵n̵t̵_̵f̵r̵o̵m̵C̵u̵r̵r̵e̵n̵t̵]̵A̲s̲p̲i̲s̲V̲8̲R̲1̲9̲.̲R̲5̲9̲8̲N̲a̲t̲i̲v̲e̲O̲r̲d̲i̲n̲a̲r̲y̲S̲a̲m̲p̲l̲e̲r̲.̲f̲r̲o̲m̲C̲u̲r̲r̲e̲n̲t̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:81:23: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_tc_ok, returned, mapControl,
+                AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                AspisV8R19.R598NativeOrdinarySampler.nativeQM31,
+                AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ne_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:85:14: warning: This simp argument is unused:
+  ne_map
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, bind_tc_ok, returned, mapControl,
+                AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                AspisV8R19.R598NativeOrdinarySampler.nativeQM31,
+                AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵n̵e̵_̵m̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:89:30: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp [h̵z̵,̵ ̵AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:89:34: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.returnedChallenge
+
+Hint: Omit it from the simp argument list.
+  simp [hz, A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵r̵e̵t̵u̵r̵n̵e̵d̵C̵h̵a̵l̵l̵e̵n̵g̵e̵,̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:90:16: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.nativeOutcome
+
+Hint: Omit it from the simp argument list.
+  simp [hz, AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵n̵a̵t̵i̵v̵e̵O̵u̵t̵c̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:91:27: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp [h̵z̵,̵ ̵AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:91:31: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.returnedChallenge
+
+Hint: Omit it from the simp argument list.
+  simp [hz, A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵r̵e̵t̵u̵r̵n̵e̵d̵C̵h̵a̵l̵l̵e̵n̵g̵e̵,̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:92:16: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.nativeOutcome
+
+Hint: Omit it from the simp argument list.
+  simp [hz, AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵n̵a̵t̵i̵v̵e̵O̵u̵t̵c̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:93:42: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp [h̵z̵,̵ ̵mapControl, mapPending, returned,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:93:46: warning: This simp argument is unused:
+  mapControl
+
+Hint: Omit it from the simp argument list.
+  simp [hz, mapC̵o̵n̵t̵r̵o̵l̵,̵ ̵m̵a̵p̵Pending, returned,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:93:70: warning: This simp argument is unused:
+  returned
+
+Hint: Omit it from the simp argument list.
+  simp [hz, mapControl, mapPending, ̵r̵e̵t̵u̵r̵n̵e̵d̵,̵
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+                 ̵ ̵AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:94:16: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.returnedChallenge
+
+Hint: Omit it from the simp argument list.
+  simp [hz, mapControl, mapPending, returned,
+                A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵r̵e̵t̵u̵r̵n̵e̵d̵C̵h̵a̵l̵l̵e̵n̵g̵e̵,̵AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+                AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:95:16: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.nativeOutcome
+
+Hint: Omit it from the simp argument list.
+  simp [hz, mapControl, mapPending, returned,
+                AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵n̵a̵t̵i̵v̵e̵O̵u̵t̵c̵o̵m̵e̵,̵AspisV8R19.R598NativeOrdinarySampler.fromCurrentTranscript,
+                AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:97:16: warning: This simp argument is unused:
+  AspisV8R19.R598NativeOrdinarySampler.toCurrent_fromCurrent
+
+Hint: Omit it from the simp argument list.
+  simp [hz, mapControl, mapPending, returned,
+                AspisV8R19.R598NativeOrdinarySampler.returnedChallenge,
+                AspisV8R19.R598NativeOrdinarySampler.nativeOutcome,
+                A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵f̵r̵o̵m̵C̵u̵r̵r̵e̵n̵t̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵9̵8̵N̵a̵t̵i̵v̵e̵O̵r̵d̵i̵n̵a̵r̵y̵S̵a̵m̵p̵l̵e̵r̵.̵t̵o̵C̵u̵r̵r̵e̵n̵t̵_̵f̵r̵o̵m̵C̵u̵r̵r̵e̵n̵t̵]̵A̲s̲p̲i̲s̲V̲8̲R̲1̲9̲.̲R̲5̲9̲8̲N̲a̲t̲i̲v̲e̲O̲r̲d̲i̲n̲a̲r̲y̲S̲a̲m̲p̲l̲e̲r̲.̲f̲r̲o̲m̲C̲u̲r̲r̲e̲n̲t̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:137:15: error: unsolved goals
+case succ.fail
+n : ℕ
+ih :
+  ∀ (r : Range) (s : NTranscript),
+    ↑r.end - ↑r.start = n →
+      AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop r s = do
+        let x ← transcript.Transcript.challenge_nonzero_qm31_loop r (R598NativeOrdinarySampler.toCurrentTranscript s)
+        ok (returned x)
+r : Range
+s : NTranscript
+hn : ↑r.end - ↑r.start = n + 1
+h : ↑r.start < ↑r.end
+r' : Range := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+e : Error
+hs : transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) = fail e
+⊢ (match do
+      let __x ← AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31 s
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, __x.2))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, __x.2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, __x.2)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ←
+              if h : ↑x.1.start < ↑x.1.end then
+                  ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                else ok (none, x.1)
+            match __x.1 with
+              | none => ok (done (core.result.Result.Err (), x.2))
+              | some val => do
+                let __x_1 ← x.2.challenge_qm31
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch __x_1.1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let b ←
+                      core.cmp.PartialEq.ne.trait_default
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+                    if b = true then ok (done (core.result.Result.Ok val, __x_1.2)) else ok (cont (__x.2, __x_1.2))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let return_capture ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                          (core.convert.FromSame
+                            AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                          residual
+                    ok (done (return_capture, __x_1.2)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:138:12: error: unsolved goals
+case succ.div
+n : ℕ
+ih :
+  ∀ (r : Range) (s : NTranscript),
+    ↑r.end - ↑r.start = n →
+      AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop r s = do
+        let x ← transcript.Transcript.challenge_nonzero_qm31_loop r (R598NativeOrdinarySampler.toCurrentTranscript s)
+        ok (returned x)
+r : Range
+s : NTranscript
+hn : ↑r.end - ↑r.start = n + 1
+h : ↑r.start < ↑r.end
+r' : Range := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+hs : transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) = div
+⊢ (match do
+      let __x ← AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31 s
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, __x.2))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, __x.2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, __x.2)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ←
+              if h : ↑x.1.start < ↑x.1.end then
+                  ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                else ok (none, x.1)
+            match __x.1 with
+              | none => ok (done (core.result.Result.Err (), x.2))
+              | some val => do
+                let __x_1 ← x.2.challenge_qm31
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch __x_1.1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let b ←
+                      core.cmp.PartialEq.ne.trait_default
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+                    if b = true then ok (done (core.result.Result.Ok val, __x_1.2)) else ok (cont (__x.2, __x_1.2))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let return_capture ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                          (core.convert.FromSame
+                            AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                          residual
+                    ok (done (return_capture, __x_1.2)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:142:18: error: unsolved goals
+case succ.ok.Err
+n : ℕ
+ih :
+  ∀ (r : Range) (s : NTranscript),
+    ↑r.end - ↑r.start = n →
+      AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop r s = do
+        let x ← transcript.Transcript.challenge_nonzero_qm31_loop r (R598NativeOrdinarySampler.toCurrentTranscript s)
+        ok (returned x)
+r : Range
+s : NTranscript
+hn : ↑r.end - ↑r.start = n + 1
+h : ↑r.start < ↑r.end
+r' : Range := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+s1 : transcript.Transcript
+e : transcript.ChallengeSampleExhausted
+hs :
+  transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) =
+    ok (core.result.Result.Err e, s1)
+⊢ (match do
+      let __x ← AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31 s
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, __x.2))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, __x.2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, __x.2)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ←
+              if h : ↑x.1.start < ↑x.1.end then
+                  ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                else ok (none, x.1)
+            match __x.1 with
+              | none => ok (done (core.result.Result.Err (), x.2))
+              | some val => do
+                let __x_1 ← x.2.challenge_qm31
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch __x_1.1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let b ←
+                      core.cmp.PartialEq.ne.trait_default
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+                    if b = true then ok (done (core.result.Result.Ok val, __x_1.2)) else ok (cont (__x.2, __x_1.2))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let return_capture ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                          (core.convert.FromSame
+                            AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                          residual
+                    ok (done (return_capture, __x_1.2)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let x ←
+      match do
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err e)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+              if b = true then ok (done (core.result.Result.Ok val, s1))
+                else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let return_capture ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                    (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+              ok (done (return_capture, s1)) with
+        | ok r =>
+          match r with
+          | cont x =>
+            loop
+              (fun x => do
+                let __x ←
+                  if h : ↑x.1.start < ↑x.1.end then
+                      ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                    else ok (none, x.1)
+                match __x.1 with
+                  | none => ok (done (core.result.Result.Err (), x.2))
+                  | some val => do
+                    let __x_1 ← x.2.challenge_qm31
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch __x_1.1
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue val => do
+                        let b ←
+                          core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+                        if b = true then ok (done (core.result.Result.Ok val, __x_1.2)) else ok (cont (__x.2, __x_1.2))
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let return_capture ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                              (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+                        ok (done (return_capture, __x_1.2)))
+              x
+          | done x => ok x
+        | fail e => fail e
+        | div => div
+    ok
+        (match x.1 with
+          | core.result.Result.Ok q => core.result.Result.Ok (R598NativeOrdinarySampler.nativeQM31 q)
+          | core.result.Result.Err e => core.result.Result.Err e,
+          R598NativeOrdinarySampler.fromCurrentTranscript x.2)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:148:26: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:149:23: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:152:25: error: unsolved goals
+case succ.ok.Ok.ok.true
+n : ℕ
+ih :
+  ∀ (r : Range) (s : NTranscript),
+    ↑r.end - ↑r.start = n →
+      AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_nonzero_qm31_loop r s = do
+        let x ← transcript.Transcript.challenge_nonzero_qm31_loop r (R598NativeOrdinarySampler.toCurrentTranscript s)
+        ok (returned x)
+r : Range
+s : NTranscript
+hn : ↑r.end - ↑r.start = n + 1
+h : ↑r.start < ↑r.end
+r' : Range := { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }
+hn' : ↑r'.end - ↑r'.start = n
+s1 : transcript.Transcript
+q : field.QM31
+hs :
+  transcript.Transcript.challenge_qm31 (R598NativeOrdinarySampler.toCurrentTranscript s) =
+    ok (core.result.Result.Ok q, s1)
+hz : core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 q field.QM31.ZERO = ok true
+⊢ (match do
+      let __x ← AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31 s
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            core.cmp.PartialEq.ne.trait_default
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Ok val, __x.2))
+            else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, __x.2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                (core.convert.FromSame
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                residual
+          ok (done (return_capture, __x.2)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ←
+              if h : ↑x.1.start < ↑x.1.end then
+                  ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                else ok (none, x.1)
+            match __x.1 with
+              | none => ok (done (core.result.Result.Err (), x.2))
+              | some val => do
+                let __x_1 ← x.2.challenge_qm31
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch __x_1.1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let b ←
+                      core.cmp.PartialEq.ne.trait_default
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31.ZERO
+                    if b = true then ok (done (core.result.Result.Ok val, __x_1.2)) else ok (cont (__x.2, __x_1.2))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let return_capture ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR569MaskedClaimCompleteConsts.aspis_core.field.QM31
+                          (core.convert.FromSame
+                            AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.ChallengeSampleExhausted)
+                          residual
+                    ok (done (return_capture, __x_1.2)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let x ←
+      match do
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok q)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+              if b = true then ok (done (core.result.Result.Ok val, s1))
+                else ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, s1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let return_capture ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                    (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+              ok (done (return_capture, s1)) with
+        | ok r =>
+          match r with
+          | cont x =>
+            loop
+              (fun x => do
+                let __x ←
+                  if h : ↑x.1.start < ↑x.1.end then
+                      ok (some x.1.start, { start := UScalar.ofNatCore (↑x.1.start + 1) ⋯, «end» := x.1.end })
+                    else ok (none, x.1)
+                match __x.1 with
+                  | none => ok (done (core.result.Result.Err (), x.2))
+                  | some val => do
+                    let __x_1 ← x.2.challenge_qm31
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch __x_1.1
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue val => do
+                        let b ←
+                          core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 val field.QM31.ZERO
+                        if b = true then ok (done (core.result.Result.Ok val, __x_1.2)) else ok (cont (__x.2, __x_1.2))
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let return_capture ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual field.QM31
+                              (core.convert.FromSame transcript.ChallengeSampleExhausted) residual
+                        ok (done (return_capture, __x_1.2)))
+              x
+          | done x => ok x
+        | fail e => fail e
+        | div => div
+    ok
+        (match x.1 with
+          | core.result.Result.Ok q => core.result.Result.Ok (R598NativeOrdinarySampler.nativeQM31 q)
+          | core.result.Result.Err e => core.result.Result.Err e,
+          R598NativeOrdinarySampler.fromCurrentTranscript x.2)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:154:22: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:137:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:138:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:142:27: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [h̵s̵,̵ ̵returned]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:144:25: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_tc_ok, ne_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:144:41: warning: This simp argument is unused:
+  ne_map
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, bind_tc_ok,̵ ̵n̵e̵_̵m̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean:152:34: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp [h̵z̵,̵ ̵returned]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R613NativeNonzeroExecution.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R613NativeNonzeroExecution.mapPending' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R613NativeNonzeroExecution.mapControl' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R613NativeNonzeroExecution.ne_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R613NativeNonzeroExecution.body_map' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.R613NativeNonzeroExecution.loop_map' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisV8R19.R613NativeNonzeroExecution.challenge_map' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R613NativeNonzeroExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R613NativeNonzeroExecution.lean"
+	User time (seconds): 1.98
+	System time (seconds): 0.36
+	Percent of CPU this job got: 103%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.27
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3754792
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86943
+	Voluntary context switches: 1281
+	Involuntary context switches: 103
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.302s
+CPU time consumed: 2.378s
+Memory peak: 328.0K
+Memory swap peak: 0B
