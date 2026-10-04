@@ -1,0 +1,153 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791126587560289000.service; invocation ID: 06a077f892a249a097bd38817511084e
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:79:6: error: unsolved goals
+F : Type u_1
+inst✝ : CommRing F
+x : High → F
+j : High
+⊢ ∑ x_1 ∈ highActive.attach with ↑↑x_1 / 4 = ↑↑j / 4, x x_1 =
+    ∑ x_1 ∈ highActive.attach, if ↑↑x_1 / 4 = ↑↑j / 4 then x x_1 else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:85:72: error: unsolved goals
+F : Type u_1
+inst✝ : CommRing F
+x : High → F
+j i : High
+a✝ : i ∈ Finset.univ
+hb : block i = block j
+k0 : Fin 3 := ⟨selectedLocal ↑i, ⋯⟩
+⊢ ↑↑i / 4 - 22 = ↑↑j / 4 - 22
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:95:8: error: Tactic `apply` failed: could not unify the conclusion of `hk`
+  False
+with the goal
+  x i = 0
+
+Note: The full type of `hk` is
+  k ≠ k0
+
+case h₀
+F : Type u_1
+inst✝ : CommRing F
+x : High → F
+j i : High
+a✝¹ : i ∈ Finset.univ
+hb : block i = block j
+k0 : Fin 3 := ⟨selectedLocal ↑i, ⋯⟩
+hcol : ↑(selectedColumn i) = 3 * (block j - 22) + ↑k0
+k : Fin 3
+a✝ : k ∈ Finset.univ
+hk : k ≠ k0
+he : ↑(selectedColumn i) = 3 * (block j - 22) + ↑k
+⊢ x i = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:84:2: error: unsolved goals
+case pos
+F : Type u_1
+inst✝ : CommRing F
+x : High → F
+j i : High
+a✝ : i ∈ Finset.univ
+hb : block i = block j
+k0 : Fin 3 := ⟨selectedLocal ↑i, ⋯⟩
+hcol : ↑(selectedColumn i) = 3 * (block j - 22) + ↑k0
+hsum : (∑ k, if ↑(selectedColumn i) = 3 * (block j - 22) + ↑k then x i else 0) = x i
+⊢ ¬↑↑i / 4 = ↑↑j / 4 → x i = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:105:2: error: unsolved goals
+case neg
+F : Type u_1
+inst✝ : CommRing F
+x : High → F
+j i : High
+a✝ : i ∈ Finset.univ
+hb : ¬block i = block j
+hzero : ∀ (k : Fin 3), (if ↑(selectedColumn i) = 3 * (block j - 22) + ↑k then x i else 0) = 0
+hsumzero : (∑ k, if ↑(selectedColumn i) = 3 * (block j - 22) + ↑k then x i else 0) = 0
+⊢ ↑↑i / 4 = ↑↑j / 4 → 0 = x i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:87:12: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [h̵b̵,̵ ̵k0]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:104:10: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵b̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:119:10: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵b̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:133:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ k, coeff x (3 * (block i - 22) + ↑k)
+in the target expression
+  -∑ k, coeff x (3 * (↑↑i / 4 - 22) + ↑k) = if zero i then -∑ i ∈ blockRows block i, x i else x i
+
+case pos
+F : Type u_1
+inst✝ : CommRing F
+x : High → F
+i : High
+hb : 22 ≤ block i ∧ block i ≤ 254
+hvalid : 22 ≤ ↑↑i / 4 ∧ ↑↑i / 4 < 255
+hz : ↑↑i % 4 = 0
+hsum : ∑ k, coeff x (3 * (block i - 22) + ↑k) = ∑ i ∈ blockRows block i, x i
+⊢ -∑ k, coeff x (3 * (↑↑i / 4 - 22) + ↑k) = if zero i then -∑ i ∈ blockRows block i, x i else x i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:138:4: error: Type mismatch: After simplification, term
+  hcol
+ has type
+  coeff x (3 * (↑↑i / 4 - 22) + selectedLocal ↑i) = x i
+but is expected to have type
+  coeff x (3 * (↑↑i / 4 - 22) + (↑↑i % 4 - 1)) = x i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean:181:4: error: `simp` made no progress
+'AspisV8R19.R702ActiveScalarEmbedding.coeff_at_selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R702ActiveScalarEmbedding.sum_channels_block' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R702ActiveScalarEmbedding.chosenQ_at_high' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R702ActiveScalarEmbedding.high_block_involution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R702ActiveScalarEmbedding.coeff_extraTop_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R702ActiveScalarEmbedding.chosenQ_1018_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R702ActiveScalarEmbedding.chosenQ_top_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R702ActiveScalarEmbedding.scalar_chord_row' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R702ActiveScalarEmbedding.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R702ActiveScalarEmbedding.lean"
+	User time (seconds): 1.88
+	System time (seconds): 0.33
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.17
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3280312
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 79098
+	Voluntary context switches: 1470
+	Involuntary context switches: 79
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.201s
+CPU time consumed: 2.251s
+Memory peak: 328.0K
+Memory swap peak: 0B
