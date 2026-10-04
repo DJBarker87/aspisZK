@@ -1,0 +1,167 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791106045128269000.service; invocation ID: 94bd41b32e5d4e639181cc8fdd726b9e
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:98:17: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]̵[̲P̲r̲o̲d̲.̲s̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:98:27: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:106:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:107:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:110:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:163:39: warning: This simp argument is unused:
+  Array.getElem?_eq_getElem
+
+Hint: Omit it from the simp argument list.
+  simp [Array.index_usize, sourceWord, A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵,̵ ̵hv, hj]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:169:30: warning: This simp argument is unused:
+  Array.getElem?_eq_getElem
+
+Hint: Omit it from the simp argument list.
+  simp [Array.update, setNat, A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵,̵ ̵hout, hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:175:28: error: Type mismatch
+  BitVec.isLt N.bv
+has type
+  N.bv.toNat < 2 ^ System.Platform.numBits
+but is expected to have type
+  ↑N < 2 ^ 64
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:178:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_add ?x ?y)
+in the target expression
+  ↑((Usize.wrapping_mul 8#usize block).wrapping_add j) = sourceOutputIndex block j
+
+N block j : Usize
+hindex : 8 * ↑block + ↑j < ↑N
+hN : ↑N < 2 ^ 64
+hproduct : 8 * ↑block < 2 ^ 64
+hsum : 8 * ↑block + ↑j < 2 ^ 64
+⊢ ↑((Usize.wrapping_mul 8#usize block).wrapping_add j) = sourceOutputIndex block j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:200:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sourceMaskCast ?w
+in the target expression
+  (do
+      let i1 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+      let i2 ← lift (sourceWord v j hj &&& i1)
+      let value ← lift (UScalar.cast UScalarTy.U32 i2)
+      let i3 ← lift (Usize.wrapping_mul 8#usize block)
+      let i4 ← lift (i3.wrapping_add j)
+      let a ← out.update i4 value
+      let i5 ← lift (U32.wrapping_add value 1#u32)
+      let invalid1 ← lift (invalid ||| i5)
+      ok (a, invalid1)) =
+    ok
+      (setNat out (sourceOutputIndex block j) (sourceMaskedValue (sourceWord v j hj)),
+        sourceInvalid invalid (sourceMaskedValue (sourceWord v j hj)))
+
+N block : Usize
+v : Std.Array U64 8#usize
+j : Usize
+out : Std.Array U32 N
+invalid : U32
+hj : ↑j < 8
+hindex : sourceOutputIndex block j < ↑N
+hstepidx : ↑((Usize.wrapping_mul 8#usize block).wrapping_add j) = sourceOutputIndex block j
+hwrite : ↑((Usize.wrapping_mul 8#usize block).wrapping_add j) < ↑N
+⊢ (do
+      let i1 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+      let i2 ← lift (sourceWord v j hj &&& i1)
+      let value ← lift (UScalar.cast UScalarTy.U32 i2)
+      let i3 ← lift (Usize.wrapping_mul 8#usize block)
+      let i4 ← lift (i3.wrapping_add j)
+      let a ← out.update i4 value
+      let i5 ← lift (U32.wrapping_add value 1#u32)
+      let invalid1 ← lift (invalid ||| i5)
+      ok (a, invalid1)) =
+    ok
+      (setNat out (sourceOutputIndex block j) (sourceMaskedValue (sourceWord v j hj)),
+        sourceInvalid invalid (sourceMaskedValue (sourceWord v j hj)))
+'AspisV8R19.R624DecoderInnerExecution.sourceMaskedValue_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.source_index_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.source_update_success' depends on axioms: [propext]
+'AspisV8R19.R624DecoderInnerExecution.source_index_arithmetic' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordStep_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.sourceMaskCast_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.body_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec_eight' depends on axioms: [propext, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R624DecoderInnerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean"
+	User time (seconds): 1.72
+	System time (seconds): 0.41
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.11
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3736792
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86746
+	Voluntary context switches: 1544
+	Involuntary context switches: 64
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.141s
+CPU time consumed: 2.170s
+Memory peak: 512.0K
+Memory swap peak: 0B

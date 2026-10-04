@@ -1,0 +1,130 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791107056246090000.service; invocation ID: bc6fa5448fe6460a8467f502b34d30bc
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:101:17: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]̵[̲P̲r̲o̲d̲.̲s̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:101:27: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:109:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:110:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:113:21: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:161:39: warning: This simp argument is unused:
+  Array.getElem?_eq_getElem
+
+Hint: Omit it from the simp argument list.
+  simp [Array.index_usize, sourceWord, A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵,̵ ̵hv, hj]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:167:30: warning: This simp argument is unused:
+  Array.getElem?_eq_getElem
+
+Hint: Omit it from the simp argument list.
+  simp [Array.update, setNat, A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵,̵ ̵hout, hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean:239:14: error: unsolved goals
+case succ
+N block : Usize
+v : Std.Array U64 8#usize
+hblock : 8 * (↑block + 1) ≤ ↑N
+n : ℕ
+ih :
+  ∀ (start : ℕ) (iter : DecoderIter) (out : Std.Array U32 N) (invalid : U32),
+    ↑iter.end - ↑iter.start = n →
+      ↑iter.start = start →
+        ∀ (hwithin : start + n ≤ 8),
+          wordRun block v n iter out invalid = ok (blockAcc block v hblock start n hwithin out invalid)
+start : ℕ
+iter : DecoderIter
+out : Std.Array U32 N
+invalid : U32
+hlen : ↑iter.end - ↑iter.start = n + 1
+hstart : ↑iter.start = start
+hwithin : start + (n + 1) ≤ 8
+hlt : ↑iter.start < ↑iter.end
+hword : ↑iter.start < 8
+hidx : sourceOutputIndex block iter.start < ↑N
+iter1 : DecoderIter := { start := UScalar.ofNatCore (↑iter.start + 1) ⋯, «end» := iter.end }
+hlen1 : ↑iter1.end - ↑iter1.start = n
+hstart1 : ↑iter1.start = start + 1
+hwithin1 : start + 1 + n ≤ 8
+⊢ blockAcc block v hblock (start + 1) n hwithin1
+      (setNat out (8 * ↑block + start) (sourceMaskedValue (sourceWord v iter.start hword)))
+      (sourceInvalid invalid (sourceMaskedValue (sourceWord v iter.start hword))) =
+    blockAcc block v hblock (start + 1) n ⋯
+      (setNat out (8 * ↑block + start) (sourceMaskedValue (sourceWordNat v start ⋯)))
+      (sourceInvalid invalid (sourceMaskedValue (sourceWordNat v start ⋯)))
+'AspisV8R19.R624DecoderInnerExecution.sourceMaskedValue_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.source_index_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.source_update_success' depends on axioms: [propext]
+'AspisV8R19.R624DecoderInnerExecution.source_index_arithmetic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordStep_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.blockAcc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordRun_block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.sourceMaskCast_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.wordRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.body_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R624DecoderInnerExecution.loop_exec_eight' depends on axioms: [propext, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R624DecoderInnerExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R624DecoderInnerExecution.lean"
+	User time (seconds): 2.05
+	System time (seconds): 0.41
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.44
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3745012
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86694
+	Voluntary context switches: 2104
+	Involuntary context switches: 73
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.473s
+CPU time consumed: 2.498s
+Memory peak: 512.0K
+Memory swap peak: 0B

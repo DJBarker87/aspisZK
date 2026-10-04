@@ -1,7 +1,6 @@
 import AspisR614SelectedCombineBeta.Funs
 import AspisV8R19.GeneratedInverseLoop
 import AspisV8R19.InverseRuntimeMul
-import AspisV8R19.R486ParserCanonicalMask
 
 set_option autoImplicit false
 namespace AspisV8R19.R624DecoderInnerExecution
@@ -276,145 +275,6 @@ theorem loop_exec_eight {N : Std.Usize} (block : Std.Usize)
   apply loop_exec
   simp
 
-/-- The eight canonical candidates written by one source block, in write order. -/
-def blockWords (v : Array Std.U64 8#usize) : List Std.U32 :=
-  [ sourceMaskedValue (sourceWordNat v 0 (by omega)),
-    sourceMaskedValue (sourceWordNat v 1 (by omega)),
-    sourceMaskedValue (sourceWordNat v 2 (by omega)),
-    sourceMaskedValue (sourceWordNat v 3 (by omega)),
-    sourceMaskedValue (sourceWordNat v 4 (by omega)),
-    sourceMaskedValue (sourceWordNat v 5 (by omega)),
-    sourceMaskedValue (sourceWordNat v 6 (by omega)),
-    sourceMaskedValue (sourceWordNat v 7 (by omega)) ]
-
-/-- The concrete array after all eight source-order writes in one chunk. -/
-def blockOutput8 {N : Std.Usize} (block : Std.Usize)
-    (v : Array Std.U64 8#usize) (out : Array Std.U32 N) : Array Std.U32 N :=
-  let o0 := setNat out (8 * block.val + 0)
-    (sourceMaskedValue (sourceWordNat v 0 (by omega)))
-  let o1 := setNat o0 (8 * block.val + 1)
-    (sourceMaskedValue (sourceWordNat v 1 (by omega)))
-  let o2 := setNat o1 (8 * block.val + 2)
-    (sourceMaskedValue (sourceWordNat v 2 (by omega)))
-  let o3 := setNat o2 (8 * block.val + 3)
-    (sourceMaskedValue (sourceWordNat v 3 (by omega)))
-  let o4 := setNat o3 (8 * block.val + 4)
-    (sourceMaskedValue (sourceWordNat v 4 (by omega)))
-  let o5 := setNat o4 (8 * block.val + 5)
-    (sourceMaskedValue (sourceWordNat v 5 (by omega)))
-  let o6 := setNat o5 (8 * block.val + 6)
-    (sourceMaskedValue (sourceWordNat v 6 (by omega)))
-  setNat o6 (8 * block.val + 7)
-    (sourceMaskedValue (sourceWordNat v 7 (by omega)))
-
-theorem sourceInvalid_accepted (mask value : Std.U32)
-    (hv : value.val ≤ 2147483647) :
-    AspisV8R19.R486ParserCanonicalMask.accepted (sourceInvalid mask value).bv ↔
-      AspisV8R19.R486ParserCanonicalMask.accepted mask.bv ∧
-        value.val < 2147483647 := by
-  change AspisV8R19.R486ParserCanonicalMask.accepted
-      (mask.bv ||| (value.bv + 1#32)) ↔ _
-  have hor (x y : BitVec 32) :
-      AspisV8R19.R486ParserCanonicalMask.accepted (x ||| y) ↔
-        AspisV8R19.R486ParserCanonicalMask.accepted x ∧
-          AspisV8R19.R486ParserCanonicalMask.accepted y := by
-    unfold AspisV8R19.R486ParserCanonicalMask.accepted
-    rw [BitVec.ushiftRight_or_distrib, BitVec.or_eq_zero_iff]
-  rw [hor, AspisV8R19.R486ParserCanonicalMask.accepted_iff
-    (value.bv + 1#32)]
-  simp only [BitVec.toNat_add, BitVec.toNat_ofNat]
-  have hn : (value.bv.toNat + 1) % 4294967296 = value.bv.toNat + 1 := by
-    change (value.val + 1) % 4294967296 = value.val + 1
-    exact Nat.mod_eq_of_lt (by omega)
-  change (AspisV8R19.R486ParserCanonicalMask.accepted mask.bv ∧
-      (value.bv.toNat + 1) % 4294967296 < 2147483648) ↔ _
-  rw [hn]
-  change (AspisV8R19.R486ParserCanonicalMask.accepted mask.bv ∧
-      value.bv.toNat + 1 < 2147483648) ↔ _
-  change (AspisV8R19.R486ParserCanonicalMask.accepted mask.bv ∧
-      value.val + 1 < 2147483648) ↔ _
-  constructor <;> rintro ⟨hm, hv⟩ <;> exact ⟨hm, by omega⟩
-
-theorem sourceInvalid_fold_accepted (mask : Std.U32) (words : List Std.U32)
-    (hwords : ∀ value ∈ words, value.val ≤ 2147483647) :
-    AspisV8R19.R486ParserCanonicalMask.accepted
-        (words.foldl sourceInvalid mask).bv ↔
-      AspisV8R19.R486ParserCanonicalMask.accepted mask.bv ∧
-        ∀ value ∈ words, value.val < 2147483647 := by
-  induction words generalizing mask with
-  | nil => simp
-  | cons head tail ih =>
-      have hh : head.val ≤ 2147483647 := hwords head (by simp)
-      have ht : ∀ value ∈ tail, value.val ≤ 2147483647 := by
-        intro value hv
-        exact hwords value (by simp [hv])
-      simp only [List.foldl_cons]
-      rw [ih (sourceInvalid mask head) ht, sourceInvalid_accepted mask head hh]
-      simp only [List.mem_cons, forall_eq_or_imp]
-      tauto
-
-/-- The source's eight writes leave exactly the canonical-mask accumulator
-obtained by folding the eight masked words in source order. -/
-theorem blockAcc_eight_mask {N : Std.Usize} (block : Std.Usize)
-    (v : Array Std.U64 8#usize) (hblock : 8 * (block.val + 1) ≤ N.val)
-    (out : Array Std.U32 N) (invalid : Std.U32) :
-    (blockAcc block v hblock 0 8 (by omega) out invalid).2 =
-      (blockWords v).foldl sourceInvalid invalid := by
-  simp [blockAcc, blockWords, sourceInvalid]
-
-/-- The complete successful eight-write result: every destination assignment
-and the final invalid accumulator are preserved explicitly. -/
-theorem blockAcc_eight_result {N : Std.Usize} (block : Std.Usize)
-    (v : Array Std.U64 8#usize) (hblock : 8 * (block.val + 1) ≤ N.val)
-    (out : Array Std.U32 N) (invalid : Std.U32) :
-    blockAcc block v hblock 0 8 (by omega) out invalid =
-      (blockOutput8 block v out,
-        (blockWords v).foldl sourceInvalid invalid) := by
-  apply Prod.ext
-  · simp [blockAcc, blockOutput8, sourceOutputIndex, sourceWordNat]
-  · exact blockAcc_eight_mask block v hblock out invalid
-
-/-- The complete actual inner-loop result for an eight-word chunk, with all
-eight writes and the exact source-order rejection accumulator. -/
-theorem wordRun_eight_result {N : Std.Usize} (block : Std.Usize)
-    (v : Array Std.U64 8#usize) (hblock : 8 * (block.val + 1) ≤ N.val)
-    (out : Array Std.U32 N) (invalid : Std.U32) :
-    wordRun block v 8 {start := 0#usize, «end» := 8#usize} out invalid =
-      .ok (blockOutput8 block v out,
-        (blockWords v).foldl sourceInvalid invalid) := by
-  rw [wordRun_block block v hblock 0 8
-    {start := 0#usize, «end» := 8#usize} out invalid (by simp) (by simp) (by omega)]
-  rw [blockAcc_eight_result]
-
-/-- The generated source loop itself succeeds with the exact eight-write
-result, under the only required output-bound condition. -/
-theorem sourceLoop_eight_result {N : Std.Usize} (block : Std.Usize)
-    (v : Array Std.U64 8#usize) (hblock : 8 * (block.val + 1) ≤ N.val)
-    (out : Array Std.U32 N) (invalid : Std.U32) :
-    AspisR614SelectedCombineBeta.query_arithmetic.r55_decode_into_loop0_loop0
-      {start := 0#usize, «end» := 8#usize} out invalid block v =
-      .ok (blockOutput8 block v out,
-        (blockWords v).foldl sourceInvalid invalid) := by
-  rw [loop_exec_eight, wordRun_eight_result block v hblock out invalid]
-
-/-- Masking permits the boundary value P; the selected rejection fold marks
-that value invalid while accepting exactly the strictly smaller values. -/
-theorem blockAcc_eight_canonical_iff {N : Std.Usize} (block : Std.Usize)
-    (v : Array Std.U64 8#usize) (hblock : 8 * (block.val + 1) ≤ N.val)
-    (out : Array Std.U32 N) (invalid : Std.U32) :
-    AspisV8R19.R486ParserCanonicalMask.accepted
-        ((blockAcc block v hblock 0 8 (by omega) out invalid).2).bv ↔
-      AspisV8R19.R486ParserCanonicalMask.accepted invalid.bv ∧
-        ∀ value ∈ blockWords v, value.val < 2147483647 := by
-  rw [blockAcc_eight_mask]
-  have hwords : ∀ value ∈ blockWords v, value.val ≤ 2147483647 := by
-    intro value hv
-    simp only [blockWords, List.mem_cons, List.mem_singleton] at hv
-    simp only [List.mem_nil_iff, or_false] at hv
-    rcases hv with h | h | h | h | h | h | h | h <;>
-      subst value <;> exact sourceMaskedValue_bound _
-  exact sourceInvalid_fold_accepted invalid (blockWords v) hwords
-
 #print axioms sourceMaskedValue_bound
 #print axioms source_index_success
 #print axioms source_update_success
@@ -428,12 +288,5 @@ theorem blockAcc_eight_canonical_iff {N : Std.Usize} (block : Std.Usize)
 #print axioms body_factor
 #print axioms loop_exec
 #print axioms loop_exec_eight
-#print axioms blockAcc_eight_mask
-#print axioms blockAcc_eight_result
-#print axioms wordRun_eight_result
-#print axioms sourceLoop_eight_result
-#print axioms blockAcc_eight_canonical_iff
-#print axioms sourceInvalid_accepted
-#print axioms sourceInvalid_fold_accepted
 
 end AspisV8R19.R624DecoderInnerExecution

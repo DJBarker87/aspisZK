@@ -349,7 +349,7 @@ theorem sourceInvalid_fold_accepted (mask : Std.U32) (words : List Std.U32)
         intro value hv
         exact hwords value (by simp [hv])
       simp only [List.foldl_cons]
-      rw [ih (sourceInvalid mask head) ht, sourceInvalid_accepted mask head hh]
+      rw [ih ht, sourceInvalid_accepted mask head hh]
       simp only [List.mem_cons, forall_eq_or_imp]
       tauto
 
