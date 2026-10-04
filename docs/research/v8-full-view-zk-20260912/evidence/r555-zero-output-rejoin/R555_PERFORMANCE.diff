@@ -1,0 +1,66 @@
+--- .r21-scratch/r117-semantic-rejoin-diagnostic/source/performance.rs	2026-10-04 01:01:38
++++ .r21-scratch/r555-zero-output-rejoin/candidate/performance.rs	2026-10-04 01:35:46
+@@ -120,7 +120,7 @@
+         }
+     }.unwrap();
+     #[cfg(v8_positive_transfer)] let positive_case=std::env::var("ASPIS_V8_POSITIVE_CASE").unwrap_or_else(|_|"honest".into());
+-    #[cfg(v8_semantic_rejoin)] assert_eq!(positive_case,"honest","diagnostic requires the legal baseline case");
++    #[cfg(v8_semantic_rejoin)] assert_eq!(positive_case,"recipient_zero","diagnostic requires the predeclared recipient_zero fixture");
+     #[cfg(v8_positive_transfer)] let compiled={
+         assert!(matches!(payment,PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_)),"transfer-only profile");
+         let p=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("transfer-only")};
+@@ -162,6 +162,18 @@
+     };
+     let mut transition_bytes=vec![0;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES];
+     encode_pool_v1_pair_late_public_statement_v1(&transition,&mut transition_bytes).unwrap();
++    #[cfg(v8_semantic_rejoin)] {
++        let PoolV1PairForestTerminalPaymentV1::PrivateTransfer(selected_public)=payment else { panic!("transfer-only diagnostic"); };
++        let decoded_public=decode_pool_v1_private_transfer_public_v1(&public_bytes)
++            .expect("selected raw public decoder accepts rewritten recipient_zero statement");
++        validate_pool_v1_private_transfer_public_v1(&decoded_public)
++            .expect("selected typed public validator accepts rewritten statement");
++        assert_eq!(decoded_public,selected_public);
++        let decoded_transition=decode_pool_v1_pair_late_public_statement_v1(&transition_bytes)
++            .expect("selected raw transition decoder accepts recipient_zero transition");
++        assert_eq!(decoded_transition,transition);
++        println!("ZERO_OUTPUT_SETUP raw_public_decode=ok typed_public_validate=ok raw_transition_decode=ok before_oracle_arm=true");
++    }
+     std::fs::write(format!("{out}/public.bin"),&public_bytes).unwrap();
+     std::fs::write(format!("{out}/transition.bin"),&transition_bytes).unwrap();
+     let binding=complete_context.as_ref().map(|(_,b)|*b).unwrap_or_else(||hash(&[b"AV8 synthetic account fixture",&public_bytes,format!("{transition:?}").as_bytes()]));
+@@ -185,18 +197,21 @@
+             let before=trace.clone();
+             if positive_case=="honest"{super::super::positive_transfer::install(&mut trace).unwrap();}
+             else {
+-                assert_eq!(super::super::positive_transfer::install(&mut trace),Err(Error::Domain));
+-                trace.c1[3][1014]=M31::ZERO; // fixed malicious inverse, not a bypass in the verifier
++                let install_result=super::super::positive_transfer::install(&mut trace);
++                assert_eq!(install_result,Err(Error::Domain));
++                #[cfg(v8_semantic_rejoin)] println!("ZERO_OUTPUT_SETUP private_install=Domain producer_bypassed_install=true");
++                trace.c1[3][1014]=M31::ZERO; // malicious producer path only; verifier relation remains untouched
+             }
+             for col in 0..16{for r in 0..1024{if col!=3 || r!=1014{assert_eq!(trace.c1[col][r],before.c1[col][r]);}}}
+             assert!(trace.c1.iter().flatten().all(|v|v.0<corelib::field::P));
+             assert_eq!(we::decode(&trace),we::decode(&before));
+-            assert_eq!(we::extract_checked(&trace,match &payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("transfer-only")},&transition,authoritative).is_ok(),positive_case=="honest");
++            let checked_extractor_accepts=we::extract_checked(&trace,match &payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("transfer-only")},&transition,authoritative).is_ok();
++            assert_eq!(checked_extractor_accepts,positive_case=="honest");
++            #[cfg(v8_semantic_rejoin)] println!("ZERO_OUTPUT_SETUP checked_extractor_accepts={checked_extractor_accepts} public_transition_unchanged_after_setup=true");
+             let active=pool_v1_pair_forest_copy_active_rows_v1().unwrap();
+             for col in 0..16{assert_eq!((0..1024).filter(|r|!active.contains(&(*r as u16))).fold(M31::ZERO,|a,r|a.add(trace.c1[col][r])),M31::ZERO);}
+         }
+-        #[cfg(v8_semantic_rejoin)] {
+-            assert_eq!(positive_case,"honest","only the legal unmutated public baseline is used");
++        #[cfg(v8_semantic_rejoin)] if positive_case=="honest" {
+             let public=match &payment {PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p,_=>panic!("transfer-only selected verifier")};
+             assert!(we::extract_checked(&trace,public,&transition,authoritative).is_ok(),"normal public installation/extraction must succeed before mutation");
+             trace.c1[0][12]=trace.c1[0][12].add(M31::ONE);
+@@ -227,7 +242,7 @@
+         let b=crate::r102_tree::tree(hash,(0..N/4).map(|i|private_leaf_hash_v7(hash,V7_C2_TREE_TAG,&c2leaf(&c2encoded,i,false),&salts[i])).collect());
+         phase(seed,"c2_pack_tree",clock);let clock=Instant::now();
+         let mut v=vec![K::ZERO;FIXED];v[0]=initial;
+-        #[cfg(v8_positive_transfer)] if positive_case!="honest"{
++        #[cfg(all(v8_positive_transfer,not(v8_semantic_rejoin)))] if positive_case!="honest"{
+             let s=semantic_negative_fixture(&mut v,semantic_start(t.clone(),&b,initial,lambda,chi),&payment,&transition,&messages);
+             v[271..358].copy_from_slice(&point_rows(&messages,&s.z));
+             // Well-shaped body with actual fixed roots/semantic responses and
