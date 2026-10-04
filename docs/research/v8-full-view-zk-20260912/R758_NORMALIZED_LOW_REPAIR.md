@@ -1,0 +1,7 @@
+# R758 generic normalized low-coordinate repair
+
+Lean proves the exact weighted contraction of the R739 normalized256-coordinate query direction. For arbitrary weights w, it equals w(d) minus the complete23-coordinate interpolated low-weight sum. It also equals the diagnostic difference w(d)-w(0) minus the complete sum of low(j)*(w(j)-w(0)). No constant-low-weight premise is made and no correction is dropped.
+
+Target `AspisV8R19/R758NormalizedLowRepair.lean`, source revision `85d62fc9e25cf6bbd08eecbdf45ded24b6f8322c`, SHA256 `0fc7c2219068a24f5015a6120d67920c1bbc266241bf8465880b467aa9173279`. Exit0; wall 0:01.34; peak Lean-child RSS 3299504KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. Both complete #print axioms outputs contain only propext/Classical.choice/Quot.sound, preserved with exact source, runner, log and receipt. No unchanged checks repeated.
+
+First remaining proposition: bind every actual joint observation row to these generic normalized contractions, then justify normalized rank and its adaptive challenge probability law. The raw fixed-witness determinant certificate is still being bound to source entries; its constant-low behavior cannot be extrapolated to arbitrary z. This formula does not prove source callback execution, full rank, privacy, simulator correctness or security. No new leak is established. Verifier/CU/security parameters unchanged.
