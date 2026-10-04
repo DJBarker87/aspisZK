@@ -1,0 +1,7 @@
+# R753 complete required point-1 basis values
+
+Seven focused Lean chunks prove all196 distinct planned nonzero sourcePointBasis values for the exact R748 point1. Every leaf reduces the ten coordinate factors after the already-proved point equality. The optimized Rust generator proposes literals; Lean proves each value. The shared pivot1023 is separately proved by R754 and is reused.
+
+All seven targets compiled green with196 complete #print axioms reports, each only propext/Classical.choice/Quot.sound. Total chunk Lean wall 221.88s; maximum Lean-child RSS 3493380KiB; swap0. Exact source, target, revision, checksum, exit, wall, RSS, swap and complete reports are saved per target. The one-leaf predecessor is also saved without rerun. Pinned Lean4.32 cache, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope per job. Rust generation used explicit edition2021, opt-level3/codegen-units1/overflow-checks=yes, deterministic --check and pinned inputs; exact source and original logs saved, including the initial default-edition compile failure. Lead independently verified exact196-index coverage and source/receipt hashes.
+
+First remaining proposition: all196 corresponding transported weights using R755, then343 pointWeight gathers and complete chosen-source matrix binding. This is a fixed algebraic witness, rejected by native OOD; it establishes source-formula values, not native callback execution, universal privacy, full rank, or security. Adaptive shared-oracle, simulator and soundness arguments remain open. Verifier/CU/security parameters unchanged.
