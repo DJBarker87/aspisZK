@@ -1,0 +1,131 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087456728362000.service; invocation ID: 211165ee8aed40638e2dc65f62e86549
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:28:12: error: Type mismatch
+  Within.ask () (fun block => Program.done (?m.111 block)) ?m.112 fun block => Within.done (?m.111 block) ?m.112
+has type
+  Within (Program.ask () fun block => Program.done (?m.111 block)) (?m.112 + 1)
+but is expected to have type
+  Within (readBlockProgram c) 1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:31:14: error: Type mismatch: After simplification, term
+  ih r.2
+ has type
+  Within (limbBlockProgram budget r.2) (rolloverCount budget r.2.index)
+but is expected to have type
+  Within (limbBlockProgram budget r.2) (rolloverCount budget 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:32:14: error: Type mismatch
+  Within.done ?m.142 ?m.143
+has type
+  Within (Program.done ?m.142) ?m.143
+but is expected to have type
+  Within (if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount budget ⟨1, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:33:8: error: Type mismatch: After simplification, term
+  h
+ has type
+  Within
+    (OracleProgramOps.bind (readBlockProgram c) fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (1 + rolloverCount budget 1)
+but is expected to have type
+  Within
+    (OracleProgramOps.bind (Program.ask () fun block => Program.done (word block 0, { block := block, index := 1 }))
+      fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (1 + rolloverCount budget 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:39:10: error: Tactic `apply` failed: could not unify the conclusion of `withinBind 0 (rolloverCount budget ⟨↑c.index + 1, ?m.216⟩)`
+  Within (OracleProgramOps.bind ?p ?next) (0 + rolloverCount budget ⟨↑c.index + 1, ?m.216⟩)
+with the goal
+  Within
+    (OracleProgramOps.bind (readBlockProgram c) fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount budget ⟨↑c.index + 1, ⋯⟩)
+
+Note: The full type of `withinBind 0 (rolloverCount budget ⟨↑c.index + 1, ?m.216⟩)` is
+  (p : Program ?m.202 ?m.203 ?m.204) →
+    (next : ?m.204 → Program ?m.202 ?m.203 ?m.205) →
+      Within p 0 →
+        ((o : ?m.204) → Within (next o) (rolloverCount budget ⟨↑c.index + 1, ?m.216⟩)) →
+          Within (OracleProgramOps.bind p next) (0 + rolloverCount budget ⟨↑c.index + 1, ?m.216⟩)
+
+budget : ℕ
+ih : (c : BlockCursor) → Within (limbBlockProgram budget c) (rolloverCount budget c.index)
+c : BlockCursor
+hi : ¬↑c.index = 8
+⊢ Within
+    (OracleProgramOps.bind (readBlockProgram c) fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount budget ⟨↑c.index + 1, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:45:8: error: Type mismatch: After simplification, term
+  h
+ has type
+  Within
+    (OracleProgramOps.bind (readBlockProgram c) fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount budget ⟨↑c.index + 1, ⋯⟩)
+but is expected to have type
+  Within
+    (OracleProgramOps.bind (Program.done (word c.block ⟨↑c.index, ⋯⟩, { block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }))
+      fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount budget ⟨↑c.index + 1, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:51:58: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 2
+  b ≥ 2
+  0 ≤ a ≤ 1
+where
+ a := ↑(rolloverCount 8 (mirror c).index)
+ b := ↑(rolloverCount 8 c.index)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:77:6: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Within Unit SourceDuplexStep.State (Option (List ℕ) × BlockCursor)
+    (OracleProgramOps.bind (limbBlockProgram 8 c) fun r =>
+      match r.1 with
+      | none => Program.done (none, r.2)
+      | some a =>
+        OracleProgramOps.bind (limbsBlockProgram count r.2) fun tail =>
+          Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+    (count + 1)
+but is expected to have type
+  @Within Unit SourceDuplexStep.State (Option (List ℕ) × BlockCursor)
+    (OracleProgramOps.bind (limbBlockProgram 8 c) fun r =>
+      match r.1 with
+      | none => Program.done (none, r.2)
+      | some a =>
+        OracleProgramOps.bind (limbsBlockProgram count r.2) fun tail =>
+          Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+    (count + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:93:0: error: type of theorem `AspisV8R19.R587BlockSamplerBound.challengeBlockProgram_within_four` is not a proposition
+  Within challengeBlockProgram 4
+'AspisV8R19.R587BlockSamplerBound.challengeBlockProgram_within_four' does not depend on any axioms
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R587BlockSamplerBound.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean"
+	User time (seconds): 0.96
+	System time (seconds): 0.32
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.25
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3255144
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76695
+	Voluntary context switches: 394
+	Involuntary context switches: 53
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.281s
+CPU time consumed: 1.319s
+Memory peak: 516.0K
+Memory swap peak: 0B

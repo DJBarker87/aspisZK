@@ -1,0 +1,133 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087429614246000.service; invocation ID: 5e67dd02f40346cfb670bb573b1d3299
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:23:8: error: Tactic `apply` failed: could not unify the conclusion of `withinBind 1 (rolloverCount budget ⟨1, ?m.48⟩)`
+  Within (OracleProgramOps.bind ?p ?next) (1 + rolloverCount budget ⟨1, ?m.48⟩)
+with the goal
+  Within
+    (OracleProgramOps.bind (Program.ask () fun block => Program.done (word block 0, { block := block, index := 1 }))
+      fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount (budget + 1) c.index)
+
+Note: The full type of `withinBind 1 (rolloverCount budget ⟨1, ?m.48⟩)` is
+  (p : Program ?m.39 ?m.40 ?m.41) →
+    (next : ?m.41 → Program ?m.39 ?m.40 ?m.42) →
+      Within p 1 →
+        ((o : ?m.41) → Within (next o) (rolloverCount budget ⟨1, ?m.48⟩)) →
+          Within (OracleProgramOps.bind p next) (1 + rolloverCount budget ⟨1, ?m.48⟩)
+
+case pos
+budget : ℕ
+ih : (c : BlockCursor) → Within (limbBlockProgram budget c) (rolloverCount budget c.index)
+c : BlockCursor
+hi : ↑c.index = 8
+⊢ Within
+    (OracleProgramOps.bind (Program.ask () fun block => Program.done (word block 0, { block := block, index := 1 }))
+      fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount (budget + 1) c.index)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:30:8: error: Tactic `apply` failed: could not unify the conclusion of `withinBind 0 (rolloverCount budget ⟨↑c.index + 1, ?m.68⟩)`
+  Within (OracleProgramOps.bind ?p ?next) (0 + rolloverCount budget ⟨↑c.index + 1, ?m.68⟩)
+with the goal
+  Within
+    (OracleProgramOps.bind (Program.done (word c.block ⟨↑c.index, ⋯⟩, { block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }))
+      fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount (budget + 1) c.index)
+
+Note: The full type of `withinBind 0 (rolloverCount budget ⟨↑c.index + 1, ?m.68⟩)` is
+  (p : Program ?m.54 ?m.55 ?m.56) →
+    (next : ?m.56 → Program ?m.54 ?m.55 ?m.57) →
+      Within p 0 →
+        ((o : ?m.56) → Within (next o) (rolloverCount budget ⟨↑c.index + 1, ?m.68⟩)) →
+          Within (OracleProgramOps.bind p next) (0 + rolloverCount budget ⟨↑c.index + 1, ?m.68⟩)
+
+case neg
+budget : ℕ
+ih : (c : BlockCursor) → Within (limbBlockProgram budget c) (rolloverCount budget c.index)
+c : BlockCursor
+hi : ¬↑c.index = 8
+⊢ Within
+    (OracleProgramOps.bind (Program.done (word c.block ⟨↑c.index, ⋯⟩, { block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }))
+      fun r =>
+      if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2 else Program.done (some (masked 31 r.1), r.2))
+    (rolloverCount (budget + 1) c.index)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:16:0: error: type of theorem `_private.AspisV8R19.R587BlockSamplerBound.0.AspisV8R19.R587BlockSamplerBound.limbBlock_within_rollover` is not a proposition
+  (budget : ℕ) → (c : BlockCursor) → Within (limbBlockProgram budget c) (rolloverCount budget c.index)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:41:2: error: Type mismatch
+  pad h (1 - rolloverCount 8 c.index)
+has type
+  Within (limbBlockProgram 8 c) (rolloverCount 8 c.index + (1 - rolloverCount 8 c.index))
+but is expected to have type
+  Within (limbBlockProgram 8 c) 1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:37:0: error: type of theorem `_private.AspisV8R19.R587BlockSamplerBound.0.AspisV8R19.R587BlockSamplerBound.limbBlock_eight_within_one` is not a proposition
+  (c : BlockCursor) → Within (limbBlockProgram 8 c) 1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:43:0: error: type of theorem `_private.AspisV8R19.R587BlockSamplerBound.0.AspisV8R19.R587BlockSamplerBound.limbBlock_initial_within_zero` is not a proposition
+  (b : State) → Within (limbBlockProgram 8 { block := b, index := 0 }) 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:53:6: error: Tactic `apply` failed: could not unify the conclusion of `withinBind 1 count (limbBlockProgram 8 c)`
+  Within (OracleProgramOps.bind (limbBlockProgram 8 c) ?next) (1 + count)
+with the goal
+  Within
+    (OracleProgramOps.bind (limbBlockProgram 8 c) fun r =>
+      match r.1 with
+      | none => Program.done (none, r.2)
+      | some a =>
+        OracleProgramOps.bind (limbsBlockProgram count r.2) fun tail =>
+          Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+    (count + 1)
+
+Note: The full type of `withinBind 1 count (limbBlockProgram 8 c)` is
+  (next : Option ℕ × BlockCursor → Program Unit SourceDuplexStep.State ?m.29) →
+    Within (limbBlockProgram 8 c) 1 →
+      ((o : Option ℕ × BlockCursor) → Within (next o) count) →
+        Within (OracleProgramOps.bind (limbBlockProgram 8 c) next) (1 + count)
+
+case succ
+count : ℕ
+ih : (c : BlockCursor) → Within (limbsBlockProgram count c) count
+c : BlockCursor
+⊢ Within
+    (OracleProgramOps.bind (limbBlockProgram 8 c) fun r =>
+      match r.1 with
+      | none => Program.done (none, r.2)
+      | some a =>
+        OracleProgramOps.bind (limbsBlockProgram count r.2) fun tail =>
+          Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+    (count + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:47:0: error: type of theorem `_private.AspisV8R19.R587BlockSamplerBound.0.AspisV8R19.R587BlockSamplerBound.limbsBlock_within` is not a proposition
+  (count : ℕ) → (c : BlockCursor) → Within (limbsBlockProgram count c) count
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:64:0: error: type of theorem `_private.AspisV8R19.R587BlockSamplerBound.0.AspisV8R19.R587BlockSamplerBound.limbsBlock_initial_within_three` is not a proposition
+  (b : State) → Within (limbsBlockProgram 4 { block := b, index := 0 }) 3
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:78:0: error: type of theorem `AspisV8R19.R587BlockSamplerBound.challengeBlockProgram_within_four` is not a proposition
+  Within challengeBlockProgram 4
+'AspisV8R19.R587BlockSamplerBound.challengeBlockProgram_within_four' does not depend on any axioms
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R587BlockSamplerBound.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean"
+	User time (seconds): 0.92
+	System time (seconds): 0.32
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.24
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3245544
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 6
+	Minor (reclaiming a frame) page faults: 76659
+	Voluntary context switches: 533
+	Involuntary context switches: 64
+	Swaps: 0
+	File system inputs: 1328
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.269s
+CPU time consumed: 1.274s
+Memory peak: 324.0K
+Memory swap peak: 0B

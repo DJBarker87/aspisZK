@@ -1,0 +1,90 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087519636223000.service; invocation ID: 3ecfd50c74a1477e8ab71dc864255563
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:24:8: error: Tactic `apply` failed: could not unify the conclusion of `Within.ask () ?m.42 (rolloverCount budget ⟨1, ?m.46⟩)`
+  Within (Program.ask () ?m.42) (rolloverCount budget ⟨1, ?m.46⟩ + 1)
+with the goal
+  Within
+    (Program.ask () fun a =>
+      if masked 31 (word a 0) = 2147483647 then limbBlockProgram budget { block := a, index := 1 }
+      else Program.done (some (masked 31 (word a 0)), { block := a, index := 1 }))
+    (rolloverCount (budget + 1) c.index)
+
+Note: The full type of `Within.ask () ?m.42 (rolloverCount budget ⟨1, ?m.46⟩)` is
+  ((a : ?m.40) → Within (?m.42 a) (rolloverCount budget ⟨1, ?m.46⟩)) →
+    Within (Program.ask () ?m.42) (rolloverCount budget ⟨1, ?m.46⟩ + 1)
+
+case pos
+budget : ℕ
+ih : (c : BlockCursor) → Within (limbBlockProgram budget c) (rolloverCount budget c.index)
+c : BlockCursor
+hi : ↑c.index = 8
+⊢ Within
+    (Program.ask () fun a =>
+      if masked 31 (word a 0) = 2147483647 then limbBlockProgram budget { block := a, index := 1 }
+      else Program.done (some (masked 31 (word a 0)), { block := a, index := 1 }))
+    (rolloverCount (budget + 1) c.index)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:35:10: error: 'change' tactic failed, pattern
+  Within (limbBlockProgram budget { block := c.block, index := ⟨↑c.index + 1, ⋯⟩ })
+    (rolloverCount budget ⟨↑c.index + 1, ⋯⟩)
+is not definitionally equal to target
+  Within
+    (if masked 31 (word c.block ⟨↑c.index, ⋯⟩) = 2147483647 then
+      limbBlockProgram budget { block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }
+    else Program.done (some (masked 31 (word c.block ⟨↑c.index, ⋯⟩)), { block := c.block, index := ⟨↑c.index + 1, ⋯⟩ }))
+    (rolloverCount (budget + 1) c.index)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:48:54: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:74:6: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Within Unit SourceDuplexStep.State (Option (List ℕ) × BlockCursor)
+    (OracleProgramOps.bind (limbBlockProgram 8 c) fun r =>
+      match r.1 with
+      | none => Program.done (none, r.2)
+      | some a =>
+        OracleProgramOps.bind (limbsBlockProgram count r.2) fun tail =>
+          Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+    (count + 1)
+but is expected to have type
+  @Within Unit SourceDuplexStep.State (Option (List ℕ) × BlockCursor)
+    (OracleProgramOps.bind (limbBlockProgram 8 c) fun r =>
+      match r.1 with
+      | none => Program.done (none, r.2)
+      | some a =>
+        OracleProgramOps.bind (limbsBlockProgram count r.2) fun tail =>
+          Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+    (count + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean:90:0: error: type of theorem `AspisV8R19.R587BlockSamplerBound.challengeBlockProgram_within_four` is not a proposition
+  Within challengeBlockProgram 4
+'AspisV8R19.R587BlockSamplerBound.challengeBlockProgram_within_four' does not depend on any axioms
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R587BlockSamplerBound.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R587BlockSamplerBound.lean"
+	User time (seconds): 0.96
+	System time (seconds): 0.34
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.28
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3255520
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76699
+	Voluntary context switches: 495
+	Involuntary context switches: 63
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.314s
+CPU time consumed: 1.338s
+Memory peak: 552.0K
+Memory swap peak: 0B
