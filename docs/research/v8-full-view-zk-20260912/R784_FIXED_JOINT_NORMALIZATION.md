@@ -1,0 +1,9 @@
+# Complete fixed joint normalization for every legal root tuple
+
+At the fixed M31 algebraic witness, every one of the69 low correction directions vanishes on all222 joint observation rows:214 active rows, three statement-point rows and five ordinary coefficient rows. For every injective22-root tuple avoiding one, each normalized direction has precisely the raw source-formula joint observation. The complete222-by222 selected normalized matrix equals the raw selected source-formula matrix, and their determinants are equal. No fixed query-root choice is assumed. The witness is algebraic and is not a native accepted out-of-domain prefix; neither determinant nonzeroness nor generic legal-witness privacy follows from this equality alone.
+
+Target `AspisV8R19/R784FixedJointNormalization.lean`; source revision `9f50415f1c7964e5ff89f24c3800f10a3e863513`; SHA256 `76dbf7c02a2409f4281584d9b7a13f4c71b47d2d8cecb12952a2742c5a123c25`. Exit0; wall 0:01.46; peak Lean-child RSS 3311248KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All 4 complete axiom reports use only standard propext/Classical.choice/Quot.sound or subsets. Exact successful source, full log, receipt and runner are saved, along with every listed rejected attempt. No unchanged successful check was repeated.
+
+First remaining proposition: Bind the raw selected source-formula matrix to the exact literal certificate and prove its complete determinant nonzero. Then establish the generic joint construction for legal witness differences and the actual adaptive shared-oracle distribution with all losses. Native callback execution, full published-view simulator and original-quotient soundness remain open.
+
+Verifier results999,790/999,532CU and all security parameters unchanged. No native execution, full privacy, shared-oracle law, published-view simulation, probability loss or soundness claim follows beyond the stated proved boundary.
