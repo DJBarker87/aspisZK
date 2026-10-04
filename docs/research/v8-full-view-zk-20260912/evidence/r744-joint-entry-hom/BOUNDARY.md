@@ -1,0 +1,3 @@
+R744 proves ring-map naturality of arbitrary finite four-slot row weights and all sparse point and ordinary-coefficient rows in R743, with mapped half, quarter, chord coordinates, kappa, tau, alpha, and statement-point input. No active chord branch is claimed here.
+
+First remaining proposition: polynomial evaluation for every joint entry, followed by exact source-entry and determinant certificate checks. No native execution, optimized tensor equivalence, joint rank, universal legal witness compatibility, simulator, adaptive shared-oracle law, probability loss, privacy, soundness, or 100-bit claim.
