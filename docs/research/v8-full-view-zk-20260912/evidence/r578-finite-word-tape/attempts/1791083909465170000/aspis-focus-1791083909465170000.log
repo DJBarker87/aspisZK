@@ -1,0 +1,58 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791083909465170000.service; invocation ID: 1d90a9c91d084a1692e16fd3f7057afa
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R578FiniteWordTape.lean:44:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun p => ?f p.1 p.2
+in the target expression
+  (mean fun x => observeTape observe (runTape (n + 1) (Program.ask i next) ((splitTape p n).symm x))) =
+    independentMean (Program.ask i next) observe
+
+case succ.ask
+p : ℕ
+I O : Type
+n : ℕ
+ih :
+  ∀ (program : Program I (Option (Fin p)) O),
+    Bounded n program →
+      ∀ (observe : View I (Option (Fin p)) O → ℚ),
+        (mean fun t => observeTape observe (runTape n program t)) = independentMean program observe
+observe : View I (Option (Fin p)) O → ℚ
+i : I
+next : Option (Fin p) → Program I (Option (Fin p)) O
+hb : Bounded (n + 1) (Program.ask i next)
+⊢ (mean fun x => observeTape observe (runTape (n + 1) (Program.ask i next) ((splitTape p n).symm x))) =
+    independentMean (Program.ask i next) observe
+'AspisV8R19.R578FiniteWordTape.tape_mean' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R578FiniteWordTape.bounded_bind' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R578FiniteWordTape.scan_bounded' does not depend on any axioms
+'AspisV8R19.R578FiniteWordTape.limbs_bounded' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R578FiniteWordTape.finite_tuple_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R578FiniteWordTape.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R578FiniteWordTape.lean"
+	User time (seconds): 1.02
+	System time (seconds): 0.33
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.35
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3249412
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77019
+	Voluntary context switches: 1034
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.377s
+CPU time consumed: 1.388s
+Memory peak: 332.0K
+Memory swap peak: 0B

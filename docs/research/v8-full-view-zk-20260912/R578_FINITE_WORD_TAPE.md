@@ -1,0 +1,11 @@
+# R578: finite sequential word-tape law
+
+R578 connects the complete sequential word program from R572 to a finite, uniformly sampled tape. The tape is consumed in order, including rejected words, across all limbs. For budget 8 and count 4 the sufficient tape length is 32. The proof does not allocate a separate fixed eight-word row to each limb; each successful scan starts the next scan at its actual advanced cursor.
+
+`tape_mean` proves equality of expectations for every rational observation of the full abstract returned view, including query labels, answers, stopping, failure outcomes and final cursor. `runTape_success` proves the outer tape-fuel failure is impossible under the proved query bound. A limb rejection failure remains a returned outcome; it is not conditioned away. `finite_tuple_mass` gives the exact successful ordered-tuple mass `((1-(1/(p+1))^budget)/p)^count` by reusing R572.
+
+Canonical target: `AspisV8R19/R578FiniteWordTape.lean`. Source SHA256: `662fc24c06647084545d7ee3d684c9bfa32953456ca3150fd0b610910afe8470`. Campaign source revision: `f6e4900ea23a4befe0055741bf3ba47332514a95`. The final pinned Lean 4.32 focused run `1791084002661179000` exited 0, wall 1.57 s, peak Lean-child RSS 3,268,060 KiB, swap 0. It used `lake env lean -j1 -M4500` in the cached workspace and its own systemd scope with MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128.
+
+All four attempts, including two failures, an earlier green predecessor and the final extension proving no tape-fuel failure, are retained with exact source snapshots, logs and receipts. The complete seven `#print axioms` reports are in the final log: only foundational `propext`, `Classical.choice`, and `Quot.sound` appear; `scan_bounded` has no axioms. Runner and exact direct import pin are retained.
+
+This is a finite **independent word-tape** law. It does not yet identify the actual 32-byte block refill, state-advance hash calls or discarded block tail with that tape, establish a lazy shared-oracle law or adaptive freshness, provide a full-view simulator or justify a 100-bit security bound. The first remaining proposition is exact actual block/cursor execution correspondence to the flattened finite tape, followed by the independent-block projection and shared-oracle collision/retry accounting.
