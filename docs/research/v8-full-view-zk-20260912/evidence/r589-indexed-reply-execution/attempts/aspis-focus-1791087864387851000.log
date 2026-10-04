@@ -1,0 +1,240 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087864387851000.service; invocation ID: d52c583b074947949bc2fc20411359dc
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:83:4: error: unsolved goals
+case pos
+answer : ℕ → State
+n : ℕ
+hn : ¬n = 0
+hlocal : ↑(localIndex n) = (n - 1) % 8 + 1
+hr : (n - 1) % 8 = 7
+hdiv : n / 8 = (n - 1) / 8 + 1
+hmod : n % 8 = 0
+hindex : ↑(localIndex n) = 8
+⊢ ((runIndexed answer
+            (if h : ↑(if n = 0 then 0 else ⟨(n - 1) % 8 + 1, ⋯⟩) = 8 then
+              Program.ask () fun block => Program.done (word block 0, { block := block, index := 1 })
+            else
+              Program.done
+                (word (answer ((n - 1) / 8)) ⟨↑(if n = 0 then 0 else ⟨(n - 1) % 8 + 1, ⋯⟩), ⋯⟩,
+                  { block := answer ((n - 1) / 8), index := ⟨↑(if n = 0 then 0 else ⟨(n - 1) % 8 + 1, ⋯⟩) + 1, ⋯⟩ }))
+            ((n - 1) / 8 + 1)).1.2,
+      (runIndexed answer
+          (if h : ↑(if n = 0 then 0 else ⟨(n - 1) % 8 + 1, ⋯⟩) = 8 then
+            Program.ask () fun block => Program.done (word block 0, { block := block, index := 1 })
+          else
+            Program.done
+              (word (answer ((n - 1) / 8)) ⟨↑(if n = 0 then 0 else ⟨(n - 1) % 8 + 1, ⋯⟩), ⋯⟩,
+                { block := answer ((n - 1) / 8), index := ⟨↑(if n = 0 then 0 else ⟨(n - 1) % 8 + 1, ⋯⟩) + 1, ⋯⟩ }))
+          ((n - 1) / 8 + 1)).2) =
+    ((word (answer ((n - 1) / 8 + 1)) ⟨0, ⋯⟩, { block := answer ((n - 1) / 8 + 1), index := ⟨0 + 1, ⋯⟩ }),
+      (n - 1) / 8 + 1 + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:89:4: error: unsolved goals
+case neg
+answer : ℕ → State
+n : ℕ
+hn : ¬n = 0
+hlocal : ↑(localIndex n) = (n - 1) % 8 + 1
+hr : ¬(n - 1) % 8 = 7
+hdiv : n / 8 = (n - 1) / 8
+hmod : n % 8 = (n - 1) % 8 + 1
+hindex : ¬↑(localIndex n) = 8
+⊢ ((runIndexed answer
+            (if h : (n - 1) % 8 + 1 = 8 then
+              Program.ask () fun block => Program.done (word block 0, { block := block, index := 1 })
+            else
+              Program.done
+                (word (answer ((n - 1) / 8)) ⟨(n - 1) % 8 + 1, ⋯⟩,
+                  { block := answer ((n - 1) / 8), index := ⟨(n - 1) % 8 + 1 + 1, ⋯⟩ }))
+            ((n - 1) / 8 + 1)).1.2,
+      (runIndexed answer
+          (if h : (n - 1) % 8 + 1 = 8 then
+            Program.ask () fun block => Program.done (word block 0, { block := block, index := 1 })
+          else
+            Program.done
+              (word (answer ((n - 1) / 8)) ⟨(n - 1) % 8 + 1, ⋯⟩,
+                { block := answer ((n - 1) / 8), index := ⟨(n - 1) % 8 + 1 + 1, ⋯⟩ }))
+          ((n - 1) / 8 + 1)).2) =
+    ((word (answer ((n - 1) / 8)) ⟨(n - 1) % 8 + 1, ⋯⟩,
+        { block := answer ((n - 1) / 8), index := ⟨(n - 1) % 8 + 1 + 1, ⋯⟩ }),
+      (n - 1) / 8 + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:79:20: warning: This simp argument is unused:
+  runIndexed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵b̵l̵o̵c̵k̵C̵u̵r̵s̵o̵r̵A̵t̵,̵l̵o̵c̵a̵l̵I̵n̵d̵e̵x̵,̵b̵l̵o̵c̵k̵W̵o̵r̵d̵,̵n̵e̵x̵t̵B̵l̵o̵c̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵s̵u̵b̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵d̵i̵v̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵m̵o̵d̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲r̲e̲a̲d̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲b̲l̲o̲c̲k̲C̲u̲r̲s̲o̲r̲A̲t̲,̲ ̲l̲o̲c̲a̲l̲I̲n̲d̲e̲x̲,̲ ̲b̲l̲o̲c̲k̲W̲o̲r̲d̲,̲ ̲n̲e̲x̲t̲B̲l̲o̲c̲k̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲s̲u̲b̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲d̲i̲v̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲m̲o̲d̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:86:48: warning: This simp argument is unused:
+  hindex
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵b̵l̵o̵c̵k̵C̵u̵r̵s̵o̵r̵A̵t̵,̵h̵i̵n̵d̵e̵x̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵l̵o̵c̵k̵W̵o̵r̵d̵,̵n̵e̵x̵t̵B̵l̵o̵c̵k̵,̵h̵d̵i̵v̵,̵h̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵b̵_̵c̵a̵n̵c̵e̵l̵,̵l̵o̵c̵a̵l̵I̵n̵d̵e̵x̵,̵[̲r̲e̲a̲d̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲b̲l̲o̲c̲k̲C̲u̲r̲s̲o̲r̲A̲t̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲D̲I̲t̲e̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲r̲u̲n̲I̲n̲d̲e̲x̲e̲d̲,̲ ̲b̲l̲o̲c̲k̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲B̲l̲o̲c̲k̲,̲ ̲h̲d̲i̲v̲,̲ ̲h̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲s̲u̲b̲_̲c̲a̲n̲c̲e̲l̲,̲ ̲l̲o̲c̲a̲l̲I̲n̲d̲e̲x̲,̲ show ¬̵n̵+̵1̵=̵0̵¬̲n̲ ̲+̲ ̲1̲ ̲=̲ ̲0̲ by o̵m̵e̵g̵a̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵o̲m̲e̲g̲a̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:86:55: warning: This simp argument is unused:
+  ↓reduceDIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵b̵l̵o̵c̵k̵C̵u̵r̵s̵o̵r̵A̵t̵,̵h̵i̵n̵d̵e̵x̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵l̵o̵c̵k̵W̵o̵r̵d̵,̵n̵e̵x̵t̵B̵l̵o̵c̵k̵,̵h̵d̵i̵v̵,̵h̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵b̵_̵c̵a̵n̵c̵e̵l̵,̵l̵o̵c̵a̵l̵I̵n̵d̵e̵x̵,̵[̲r̲e̲a̲d̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲b̲l̲o̲c̲k̲C̲u̲r̲s̲o̲r̲A̲t̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲r̲u̲n̲I̲n̲d̲e̲x̲e̲d̲,̲ ̲b̲l̲o̲c̲k̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲B̲l̲o̲c̲k̲,̲ ̲h̲d̲i̲v̲,̲ ̲h̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲s̲u̲b̲_̲c̲a̲n̲c̲e̲l̲,̲ ̲l̲o̲c̲a̲l̲I̲n̲d̲e̲x̲,̲ show ¬̵n̵+̵1̵=̵0̵¬̲n̲ ̲+̲ ̲1̲ ̲=̲ ̲0̲ by o̵m̵e̵g̵a̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵o̲m̲e̲g̲a̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:86:81: warning: This simp argument is unused:
+  runIndexed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵b̵l̵o̵c̵k̵C̵u̵r̵s̵o̵r̵A̵t̵,̵h̵i̵n̵d̵e̵x̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵l̵o̵c̵k̵W̵o̵r̵d̵,̵n̵e̵x̵t̵B̵l̵o̵c̵k̵,̵h̵d̵i̵v̵,̵h̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵b̵_̵c̵a̵n̵c̵e̵l̵,̵l̵o̵c̵a̵l̵I̵n̵d̵e̵x̵,̵[̲r̲e̲a̲d̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲b̲l̲o̲c̲k̲C̲u̲r̲s̲o̲r̲A̲t̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲D̲I̲t̲e̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲b̲l̲o̲c̲k̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲B̲l̲o̲c̲k̲,̲ ̲h̲d̲i̲v̲,̲ ̲h̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲s̲u̲b̲_̲c̲a̲n̲c̲e̲l̲,̲ ̲l̲o̲c̲a̲l̲I̲n̲d̲e̲x̲,̲ show ¬̵n̵+̵1̵=̵0̵¬̲n̲ ̲+̲ ̲1̲ ̲=̲ ̲0̲ by o̵m̵e̵g̵a̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵o̲m̲e̲g̲a̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:92:48: warning: This simp argument is unused:
+  hindex
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵b̵l̵o̵c̵k̵C̵u̵r̵s̵o̵r̵A̵t̵,̵h̵i̵n̵d̵e̵x̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵l̵o̵c̵k̵W̵o̵r̵d̵,̵n̵e̵x̵t̵B̵l̵o̵c̵k̵,̵h̵d̵i̵v̵,̵h̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵b̵_̵c̵a̵n̵c̵e̵l̵,̵l̵o̵c̵a̵l̵I̵n̵d̵e̵x̵,̵h̵n̵,̵[̲r̲e̲a̲d̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲b̲l̲o̲c̲k̲C̲u̲r̲s̲o̲r̲A̲t̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲D̲I̲t̲e̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲r̲u̲n̲I̲n̲d̲e̲x̲e̲d̲,̲ ̲b̲l̲o̲c̲k̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲B̲l̲o̲c̲k̲,̲ ̲h̲d̲i̲v̲,̲ ̲h̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲s̲u̲b̲_̲c̲a̲n̲c̲e̲l̲,̲ ̲l̲o̲c̲a̲l̲I̲n̲d̲e̲x̲,̲ ̲h̲n̲,̲ show ¬̵n̵+̵1̵=̵0̵¬̲n̲ ̲+̲ ̲1̲ ̲=̲ ̲0̲ by o̵m̵e̵g̵a̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵o̲m̲e̲g̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:92:55: warning: This simp argument is unused:
+  ↓reduceDIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵b̵l̵o̵c̵k̵C̵u̵r̵s̵o̵r̵A̵t̵,̵h̵i̵n̵d̵e̵x̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵l̵o̵c̵k̵W̵o̵r̵d̵,̵n̵e̵x̵t̵B̵l̵o̵c̵k̵,̵h̵d̵i̵v̵,̵h̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵b̵_̵c̵a̵n̵c̵e̵l̵,̵l̵o̵c̵a̵l̵I̵n̵d̵e̵x̵,̵h̵n̵,̵[̲r̲e̲a̲d̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲b̲l̲o̲c̲k̲C̲u̲r̲s̲o̲r̲A̲t̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲r̲u̲n̲I̲n̲d̲e̲x̲e̲d̲,̲ ̲b̲l̲o̲c̲k̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲B̲l̲o̲c̲k̲,̲ ̲h̲d̲i̲v̲,̲ ̲h̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲s̲u̲b̲_̲c̲a̲n̲c̲e̲l̲,̲ ̲l̲o̲c̲a̲l̲I̲n̲d̲e̲x̲,̲ ̲h̲n̲,̲ show ¬̵n̵+̵1̵=̵0̵¬̲n̲ ̲+̲ ̲1̲ ̲=̲ ̲0̲ by o̵m̵e̵g̵a̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵o̲m̲e̲g̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:92:81: warning: This simp argument is unused:
+  runIndexed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵b̵l̵o̵c̵k̵C̵u̵r̵s̵o̵r̵A̵t̵,̵h̵i̵n̵d̵e̵x̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵l̵o̵c̵k̵W̵o̵r̵d̵,̵n̵e̵x̵t̵B̵l̵o̵c̵k̵,̵h̵d̵i̵v̵,̵h̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵b̵_̵c̵a̵n̵c̵e̵l̵,̵l̵o̵c̵a̵l̵I̵n̵d̵e̵x̵,̵h̵n̵,̵[̲r̲e̲a̲d̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲b̲l̲o̲c̲k̲C̲u̲r̲s̲o̲r̲A̲t̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲D̲I̲t̲e̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲b̲l̲o̲c̲k̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲B̲l̲o̲c̲k̲,̲ ̲h̲d̲i̲v̲,̲ ̲h̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲s̲u̲b̲_̲c̲a̲n̲c̲e̲l̲,̲ ̲l̲o̲c̲a̲l̲I̲n̲d̲e̲x̲,̲ ̲h̲n̲,̲ show ¬̵n̵+̵1̵=̵0̵¬̲n̲ ̲+̲ ̲1̲ ̲=̲ ̲0̲ by o̵m̵e̵g̵a̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵o̲m̲e̲g̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:110:15: error: unsolved goals
+case succ.some
+answer : ℕ → State
+budget : ℕ
+ih :
+  ∀ (n : ℕ),
+    indexedResult answer (limbBlockProgram budget (blockCursorAt answer n)) (nextBlock n) =
+      let r := resultEval (blockAnswer answer) (scan budget n);
+      ((Option.map Fin.val r.1, blockCursorAt answer r.2), nextBlock r.2)
+n : ℕ
+hm : ↑((alphabetEquiv modulus).symm (blockAnswer answer n)) = masked 31 (blockWord answer n)
+a : Fin modulus
+ha : blockAnswer answer n = some a
+hw : masked 31 (blockWord answer n) = ↑a
+hne : ↑a ≠ 2147483647
+⊢ ((runIndexed answer
+            (OracleProgramOps.bind (readBlockProgram (blockCursorAt answer n)) fun r =>
+              if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2
+              else Program.done (some (masked 31 r.1), r.2))
+            (nextBlock n)).1.2,
+      (runIndexed answer
+          (OracleProgramOps.bind (readBlockProgram (blockCursorAt answer n)) fun r =>
+            if masked 31 r.1 = 2147483647 then limbBlockProgram budget r.2
+            else Program.done (some (masked 31 r.1), r.2))
+          (nextBlock n)).2) =
+    ((some ↑a, blockCursorAt answer (n + 1)), nextBlock (n + 1))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:116:38: warning: This simp argument is unused:
+  indexedResult_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵m̵b̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵r̵e̵a̵d̵B̵l̵o̵c̵k̵_̵i̵n̵d̵e̵x̵e̵d̵,̵h̵w̵,̵h̵n̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵s̵c̵a̵n̵,̵r̵e̵s̵u̵l̵t̵E̵v̵a̵l̵,̵h̵a̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]̵[̲l̲i̲m̲b̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲r̲e̲a̲d̲B̲l̲o̲c̲k̲_̲i̲n̲d̲e̲x̲e̲d̲,̲ ̲h̲w̲,̲ ̲h̲n̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲u̲n̲I̲n̲d̲e̲x̲e̲d̲,̲ ̲s̲c̲a̲n̲,̲ ̲r̲e̲s̲u̲l̲t̲E̲v̲a̲l̲,̲ ̲h̲a̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:116:57: warning: This simp argument is unused:
+  readBlock_indexed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵m̵b̵B̵l̵o̵c̵k̵P̵r̵o̵g̵r̵a̵m̵,̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵r̵e̵a̵d̵B̵l̵o̵c̵k̵_̵i̵n̵d̵e̵x̵e̵d̵,̵h̵w̵,̵h̵n̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵n̵d̵e̵x̵e̵d̵R̵e̵s̵u̵l̵t̵,̵r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵s̵c̵a̵n̵,̵r̵e̵s̵u̵l̵t̵E̵v̵a̵l̵,̵h̵a̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]̵[̲l̲i̲m̲b̲B̲l̲o̲c̲k̲P̲r̲o̲g̲r̲a̲m̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲_̲b̲i̲n̲d̲,̲ ̲h̲w̲,̲ ̲h̲n̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲n̲d̲e̲x̲e̲d̲R̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲u̲n̲I̲n̲d̲e̲x̲e̲d̲,̲ ̲s̲c̲a̲n̲,̲ ̲r̲e̲s̲u̲l̲t̲E̲v̲a̲l̲,̲ ̲h̲a̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:116:75: warning: This simp argument is unused:
+  hw
+
+Hint: Omit it from the simp argument list.
+  simp only [limbBlockProgram, ̲indexedResult_bind, ̲readBlock_indexed, ̲hw̵,̵h̵ne, ̲if_false,
+              indexedResult, ̲runIndexed, ̲scan, ̲resultEval, ̲ha, ̲Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:116:78: warning: This simp argument is unused:
+  hne
+
+Hint: Omit it from the simp argument list.
+  simp only [limbBlockProgram, ̲indexedResult_bind, ̲readBlock_indexed, ̲hw,h̵n̵e̵,̵ ̲if_false,
+              indexedResult, ̲runIndexed, ̲scan, ̲resultEval, ̲ha, ̲Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:116:82: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [limbBlockProgram, ̲indexedResult_bind, ̲readBlock_indexed, ̲hw, ̲hne,i̵f̵_̵f̵a̵l̵s̵e̵,̵
+              indexedResult, ̲runIndexed, ̲scan, ̲resultEval, ̲ha, ̲Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean:117:26: warning: This simp argument is unused:
+  runIndexed
+
+Hint: Omit it from the simp argument list.
+  simp only [limbBlockProgram, ̲indexedResult_bind, ̲readBlock_indexed, ̲hw, ̲hne, ̲if_false,
+              indexedResult,r̵u̵n̵I̵n̵d̵e̵x̵e̵d̵,̵ ̲scan, ̲resultEval, ̲ha, ̲Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R589IndexedReplyExecution.indexedResult_bind' depends on axioms: [propext]
+'AspisV8R19.R589IndexedReplyExecution.block_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R589IndexedReplyExecution.readBlock_indexed' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R589IndexedReplyExecution.limbBlock_indexed' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R589IndexedReplyExecution.runIndexed_bind' depends on axioms: [propext]
+'AspisV8R19.R589IndexedReplyExecution.evalTape_runIndexed' depends on axioms: [propext, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R589IndexedReplyExecution.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R589IndexedReplyExecution.lean"
+	User time (seconds): 1.40
+	System time (seconds): 0.33
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.70
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3261224
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76568
+	Voluntary context switches: 1116
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.730s
+CPU time consumed: 1.771s
+Memory peak: 552.0K
+Memory swap peak: 0B
