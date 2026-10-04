@@ -1,0 +1,9 @@
+import AspisV8R19.R624DecoderInnerExecution
+#check List.ext_getElem_iff
+#check List.ext_getElem
+#check List.getElem?_set
+#check List.getElem_set
+#check List.getElem_set_self
+#check List.getElem_set_ne
+#check List.take_append_drop
+#check List.append_take_drop

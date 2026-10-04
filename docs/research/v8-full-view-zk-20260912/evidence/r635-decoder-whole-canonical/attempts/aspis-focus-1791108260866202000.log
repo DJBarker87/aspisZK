@@ -1,0 +1,109 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791108260866202000.service; invocation ID: 25a306918e4a4b73b42577a412a9fcaa
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R635DecoderWholeCanonical.lean:46:15: error: unsolved goals
+case cons.fail
+N : Usize
+out1 : Std.Array U32 N
+invalid1 : U32
+haccepted : accepted invalid1
+b : Slice U8
+bs : List (Slice U8)
+ih :
+  ∀ (count : Usize) (out : Std.Array U32 N) (invalid : U32),
+    (∀ b ∈ bs, (↑b).length = 31) →
+      8 * (↑count + bs.length) ≤ ↑N → runChunks bs count out invalid = ok (out1, invalid1) → accepted invalid
+count : Usize
+out : Std.Array U32 N
+invalid : U32
+hchunks : ∀ b_1 ∈ b :: bs, (↑b_1).length = 31
+hbound : 8 * (↑count + (b :: bs).length) ≤ ↑N
+hb : (↑b).length = 31
+ba : Std.Array U8 31#usize := ⟨↑b, ⋯⟩
+hb_eq : ba.to_slice = b
+hblock : 8 * (↑count + 1) ≤ ↑N
+hdecode :
+  decodeBlock count b out invalid =
+    ok (blockOutput8 count (blockValues ba) out, List.foldl sourceInvalid invalid (blockWords (blockValues ba)))
+e : Error
+hn : count + 1#usize = fail e
+hexec : fail e = ok (out1, invalid1)
+⊢ accepted invalid
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R635DecoderWholeCanonical.lean:47:12: error: unsolved goals
+case cons.div
+N : Usize
+out1 : Std.Array U32 N
+invalid1 : U32
+haccepted : accepted invalid1
+b : Slice U8
+bs : List (Slice U8)
+ih :
+  ∀ (count : Usize) (out : Std.Array U32 N) (invalid : U32),
+    (∀ b ∈ bs, (↑b).length = 31) →
+      8 * (↑count + bs.length) ≤ ↑N → runChunks bs count out invalid = ok (out1, invalid1) → accepted invalid
+count : Usize
+out : Std.Array U32 N
+invalid : U32
+hchunks : ∀ b_1 ∈ b :: bs, (↑b_1).length = 31
+hbound : 8 * (↑count + (b :: bs).length) ≤ ↑N
+hb : (↑b).length = 31
+ba : Std.Array U8 31#usize := ⟨↑b, ⋯⟩
+hb_eq : ba.to_slice = b
+hblock : 8 * (↑count + 1) ≤ ↑N
+hdecode :
+  decodeBlock count b out invalid =
+    ok (blockOutput8 count (blockValues ba) out, List.foldl sourceInvalid invalid (blockWords (blockValues ba)))
+hn : count + 1#usize = div
+hexec : div = ok (out1, invalid1)
+⊢ accepted invalid
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R635DecoderWholeCanonical.lean:51:37: error: Application type mismatch: The argument
+  hn
+has type
+  count + 1#usize = ok next
+but is expected to have type
+  ↑?m.233 + ↑?m.234 ≤ UScalar.max ?m.232
+in the application
+  UScalar.add_spec hn
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R635DecoderWholeCanonical.lean:59:21: error: Function expected at
+  ih next (blockOutput8 count (blockValues ba) out) (List.foldl sourceInvalid invalid (blockWords (blockValues ba))) hs
+    hbound1 hexec
+but this term has type
+  accepted (List.foldl sourceInvalid invalid (blockWords (blockValues ba)))
+
+Note: Expected a function because this term is being applied to the argument
+  haccepted
+'AspisV8R19.R635DecoderWholeCanonical.block_mask_backwards' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R635DecoderWholeCanonical.chunks_mask_backwards' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R635DecoderWholeCanonical.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R635DecoderWholeCanonical.lean"
+	User time (seconds): 1.08
+	System time (seconds): 0.35
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.43
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3737220
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 86257
+	Voluntary context switches: 433
+	Involuntary context switches: 80
+	Swaps: 0
+	File system inputs: 64
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.464s
+CPU time consumed: 1.468s
+Memory peak: 324.0K
+Memory swap peak: 0B

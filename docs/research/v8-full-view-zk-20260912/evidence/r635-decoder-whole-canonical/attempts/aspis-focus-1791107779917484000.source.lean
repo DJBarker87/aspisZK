@@ -1,0 +1,9 @@
+import AspisV8R19.R624DecoderInnerExecution
+#check List.getElem_append
+#check List.getElem_append_left
+#check List.getElem_append_right
+#check List.getElem?_append
+#check List.getElem?_take
+#check List.getElem?_drop
+#check List.length_take
+#check List.length_drop
