@@ -1,0 +1,22 @@
+Frozen selected source base:
+/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a
+source revision: 6677d5f1310ff7373301fbd79f186278f772e68a
+
+Frozen R117 source SHA-256:
+4f8f80e0847ec004a56fc693f6096308090de5f3cbed35722dba330afaa9820f  docs/research/v8-no-work-100-20260907/experiments/relation_callback.rs
+957060c7556d2a0365c1cb3d2bf0576a72399c6c20bfbb47ea531f110dba54f5  docs/research/v8-no-work-100-20260907/experiments/payment_extraction.rs
+4c575d4d1004bf39b0bb1f8069495e315e63a7ec9f423a60ec93f3487f4eb8b5  docs/research/v8-no-work-100-20260907/experiments/performance.rs
+d6dad89eaa8d735f467055e96a8df12de7a391e2475ec26c44b2bc493624a62a  docs/research/v8-no-work-100-20260907/experiments/performance_verifier.rs
+
+The isolated diagnostic copy used a host-only `HashFn` adapter from
+semantic_rejoin_oracle.rs. `performance_verifier.rs` is byte-identical to the
+frozen selected R117 file; the host adapter's single function pointer is shared
+by prover and verifier code. Only relation_callback.rs, payment_extraction.rs,
+and performance.rs differ from frozen R117; their exact diffs are in
+changes.patch. The adapter source and exact sources compiled for both run
+attempts are retained as `run1-*.rs` and `recovery-*.rs`.
+
+Selected host flags SHA-256:
+df02f7fe2415264263ea8dca33d686314b1c06ef27bf4d039df9e587513d28b8  selected-rustflags.txt
+The compiler command appended only `--cfg v8_semantic_rejoin` and set
+CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS=true.
