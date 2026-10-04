@@ -1,0 +1,170 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791072992361569000.service; invocation ID: b10aa8f8b77e4914996281db24f41bbc
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:22:8: warning: Possibly looping simp theorem: `nodeInput.eq_1`
+
+Note: Possibly caused by: `Fin.isValue`, `nodeBytes`, `List.ofFn_succ`, `Fin.succ_zero_eq_one`, `Fin.succ_one_eq_two`, and `Fin.reduceSucc`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:22:19: warning: Possibly looping simp theorem: `nodeBytes.eq_1`
+
+Note: Possibly caused by: `List.ofFn_succ`, `Fin.isValue`, `Fin.succ_zero_eq_one`, `Fin.succ_one_eq_two`, and `Fin.reduceSucc`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:22:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:30:43: error: Application type mismatch: The argument
+  congrArg List.tail h
+has type
+  (nodeBytes left).tail = (nodeBytes right).tail
+but is expected to have type
+  List.ofFn ?m.31 = List.ofFn ?m.32
+in the application
+  List.ofFn_injective (congrArg List.tail h)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:31:35: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  0 ≤ b ≤ 25
+  0 ≤ a ≤ 7
+  26*a + b - c ≥ 0
+where
+ a := ↑↑child
+ b := ↑↑byte
+ c := ↑?m.39
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:24:62: error: unsolved goals
+left right : Children
+h : nodeBytes left = nodeBytes right
+child : Fin 8
+byte : Fin 26
+⊢ left child byte = right child byte
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:70:53: error: don't know how to synthesize placeholder for argument `slot`
+context:
+hash : List Byte → Digest
+head✝ : Fin 8
+tail✝ : List (Fin 8)
+siblings : Children
+tail : Path tail✝
+current : Digest
+⊢ Fin 8
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:76:40: error: don't know how to synthesize placeholder for argument `slot`
+context:
+hash : List Byte → Digest
+head✝ : Fin 8
+tail✝ : List (Fin 8)
+siblings : Children
+tail : Path tail✝
+current : Digest
+⊢ Fin 8
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:98:28: error: Application type mismatch: The argument
+  heq
+has type
+  foldPath hash Path.nil left = foldPath hash Path.nil right
+but is expected to have type
+  left = right
+in the application
+  hne heq
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:110:30: error: unsolved goals
+hash : List Byte → Digest
+slot : Fin 8
+slots : List (Fin 8)
+ih :
+  ∀ (leftPath rightPath : Path slots) {left right : Digest},
+    left ≠ right →
+      foldPath hash leftPath left = foldPath hash rightPath right →
+        CrossTraceCollision hash (inputTrace hash leftPath left) (inputTrace hash rightPath right)
+left right : Digest
+hne : left ≠ right
+leftSiblings : Children
+leftTail : Path slots
+rightSiblings : Children
+rightTail : Path slots
+heq : foldPath hash (Path.cons leftSiblings leftTail) left = foldPath hash (Path.cons rightSiblings rightTail) right
+leftInput : List Byte := nodeInput (fillChild slot leftSiblings left)
+rightInput : List Byte := nodeInput (fillChild slot rightSiblings right)
+hinputs : leftInput ≠ rightInput
+hhash : hash leftInput = hash rightInput
+⊢ nodeInput (fillChild slot leftSiblings left) ∈ sorry hash (Path.cons leftSiblings leftTail) left
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:111:26: error: unsolved goals
+hash : List Byte → Digest
+slot : Fin 8
+slots : List (Fin 8)
+ih :
+  ∀ (leftPath rightPath : Path slots) {left right : Digest},
+    left ≠ right →
+      foldPath hash leftPath left = foldPath hash rightPath right →
+        CrossTraceCollision hash (inputTrace hash leftPath left) (inputTrace hash rightPath right)
+left right : Digest
+hne : left ≠ right
+leftSiblings : Children
+leftTail : Path slots
+rightSiblings : Children
+rightTail : Path slots
+heq : foldPath hash (Path.cons leftSiblings leftTail) left = foldPath hash (Path.cons rightSiblings rightTail) right
+leftInput : List Byte := nodeInput (fillChild slot leftSiblings left)
+rightInput : List Byte := nodeInput (fillChild slot rightSiblings right)
+hinputs : leftInput ≠ rightInput
+hhash : hash leftInput = hash rightInput
+⊢ nodeInput (fillChild slot rightSiblings right) ∈ sorry hash (Path.cons rightSiblings rightTail) right
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:110:39: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:114:23: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:116:39: warning: This simp argument is unused:
+  List.mem_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [inputTrace,̵ ̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:119:39: warning: This simp argument is unused:
+  List.mem_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [inputTrace,̵ ̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean:145:28: warning: Variable name `hdepth` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisV8R19.R549.nodeInput_length' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R549.nodeBytes_injective' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R549.nodeInput_injective' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R549.fillChild_ne' does not depend on any axioms
+'AspisV8R19.R549.nodeInput_ne_of_current_ne' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R549.foldPath_cross_trace_collision' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R549.foldPath_injective_of_collisionFreeOn' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R549.depth6_cross_trace_collision' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R549Merkle8PathBinding.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R549Merkle8PathBinding.lean"
+	User time (seconds): 1.09
+	System time (seconds): 0.15
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.21
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1476920
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 38472
+	Voluntary context switches: 939
+	Involuntary context switches: 33
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.243s
+CPU time consumed: 1.270s
+Memory peak: 328.0K
+Memory swap peak: 0B
