@@ -1,0 +1,96 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791150911698093000.service; invocation ID: 3e097ddeaebd4962869b2cfd7ecf061a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R785SourceTransposeLinear.lean:57:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun r =>
+    sourceGather half (fun q => x * zeroExtend 512 (fun r => w (2 * r)) q + y * zeroExtend 512 (fun r => v (2 * r)) q) r
+in the target expression
+  c *
+          ((fun r => x * zeroExtend 512 (fun r => w (2 * r)) r + y * zeroExtend 512 (fun r => v (2 * r)) r) (i / 2) -
+            sourceGather half
+              (sourceGather half fun r =>
+                x * zeroExtend 512 (fun r => w (2 * r)) r + y * zeroExtend 512 (fun r => v (2 * r)) r)
+              (i / 2)) +
+        a * zeroExtend 512 (fun i => x * w (2 * i + 1) + y * v (2 * i + 1)) (i / 2) +
+      b * sourceGather half (zeroExtend 512 fun i => x * w (2 * i + 1) + y * v (2 * i + 1)) (i / 2) =
+    x *
+        (c *
+              (zeroExtend 512 (fun i => w (2 * i)) (i / 2) -
+                sourceGather half (sourceGather half (zeroExtend 512 fun i => w (2 * i))) (i / 2)) +
+            a * zeroExtend 512 (fun i => w (2 * i + 1)) (i / 2) +
+          b * sourceGather half (zeroExtend 512 fun i => w (2 * i + 1)) (i / 2)) +
+      y *
+        (c *
+              (zeroExtend 512 (fun i => v (2 * i)) (i / 2) -
+                sourceGather half (sourceGather half (zeroExtend 512 fun i => v (2 * i))) (i / 2)) +
+            a * zeroExtend 512 (fun i => v (2 * i + 1)) (i / 2) +
+          b * sourceGather half (zeroExtend 512 fun i => v (2 * i + 1)) (i / 2))
+
+case isFalse
+F : Type u_1
+inst✝ : CommRing F
+half x y a b c : F
+w v : ℕ → F
+i : ℕ
+hzero :
+  ∀ (n : ℕ) (u v : ℕ → F) (r : ℕ),
+    zeroExtend n (fun j => x * u j + y * v j) r = x * zeroExtend n u r + y * zeroExtend n v r
+hzeroFun :
+  ∀ (n : ℕ) (u v : ℕ → F),
+    (zeroExtend n fun j => x * u j + y * v j) = fun r => x * zeroExtend n u r + y * zeroExtend n v r
+hgatherFun :
+  ∀ (u v : ℕ → F),
+    (fun r => sourceGather half (fun q => x * u q + y * v q) r) = fun r =>
+      x * sourceGather half u r + y * sourceGather half v r
+h✝ : ¬i % 2 = 0
+⊢ c *
+          ((fun r => x * zeroExtend 512 (fun r => w (2 * r)) r + y * zeroExtend 512 (fun r => v (2 * r)) r) (i / 2) -
+            sourceGather half
+              (sourceGather half fun r =>
+                x * zeroExtend 512 (fun r => w (2 * r)) r + y * zeroExtend 512 (fun r => v (2 * r)) r)
+              (i / 2)) +
+        a * zeroExtend 512 (fun i => x * w (2 * i + 1) + y * v (2 * i + 1)) (i / 2) +
+      b * sourceGather half (zeroExtend 512 fun i => x * w (2 * i + 1) + y * v (2 * i + 1)) (i / 2) =
+    x *
+        (c *
+              (zeroExtend 512 (fun i => w (2 * i)) (i / 2) -
+                sourceGather half (sourceGather half (zeroExtend 512 fun i => w (2 * i))) (i / 2)) +
+            a * zeroExtend 512 (fun i => w (2 * i + 1)) (i / 2) +
+          b * sourceGather half (zeroExtend 512 fun i => w (2 * i + 1)) (i / 2)) +
+      y *
+        (c *
+              (zeroExtend 512 (fun i => v (2 * i)) (i / 2) -
+                sourceGather half (sourceGather half (zeroExtend 512 fun i => v (2 * i))) (i / 2)) +
+            a * zeroExtend 512 (fun i => v (2 * i + 1)) (i / 2) +
+          b * sourceGather half (zeroExtend 512 fun i => v (2 * i + 1)) (i / 2))
+'AspisV8R19.R785SourceTransposeLinear.source_gather_linear' depends on axioms: [propext]
+'AspisV8R19.R785SourceTransposeLinear.source_chord_transpose_linear' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R785SourceTransposeLinear.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R785SourceTransposeLinear.lean"
+	User time (seconds): 0.61
+	System time (seconds): 0.17
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.77
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1682988
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 41602
+	Voluntary context switches: 422
+	Involuntary context switches: 38
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 816ms
+CPU time consumed: 830ms
+Memory peak: 288.0K
+Memory swap peak: 0B
