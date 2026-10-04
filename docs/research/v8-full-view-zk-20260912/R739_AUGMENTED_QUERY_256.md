@@ -1,0 +1,7 @@
+# R739 full-domain augmented query normalization
+
+The prior augmented-23 normalization was defined over Fin32. R739 extends it to the full Fin256 coefficient domain. For every 22 distinct roots excluding 1, the normalized basis direction vanishes at all query roots and at public root 1, sums to zero, and retains coordinates at least 23. An arbitrary functional constant on the low 23 coordinates evaluates to w(d) minus w(0). The low-constant condition remains an explicit premise.
+
+Target: `AspisV8R19/R739AugmentedQuery256.lean`. Source revision `a30c5897a11f29958a5b746125f9d3d7f939f5e3`; source SHA-256 `14a6b1dc99523e3446804fd94bbb091789338e45203aa32716e3665da7b54143`. Focused run `1791138390591047000`: exit 0, wall 1.51 s, peak Lean-child RSS 3,300,152 KiB, swap 0. Pinned Lean 4.32; 5G/7G cgroup, no swap, TasksMax128, flags `-j1 -M4500`. Nine complete axiom reports contain only propext, Classical.choice, Quot.sound. Exact source, import pins, runner, log, and receipt are saved. No unchanged successful checks were rerun.
+
+This proves finite field interpolation, not an adaptive challenge law or privacy. Four-slot fold preservation and every source observation must still be bound to these directions. First remaining proposition: prove the selected algebraic joint witness has constant low observations and bind query repair to the joint minor. Native source, legal witness, simulator, soundness, and probability obligations remain open. Verifier source, CU results, and security parameters are unchanged.
