@@ -1,0 +1,112 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791138800273112000.service; invocation ID: 43ec99fcec934ecc85b289503b0df18f
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R741SparseCoefficientObservation.lean:28:26: error: Application type mismatch: The argument
+  w
+has type
+  Fin n × Fin 4 → F
+but is expected to have type
+  Fin 256 × Fin 4 → F
+in the application
+  rowWeight k quarter w
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R741SparseCoefficientObservation.lean:28:38: error: unsolved goals
+F : Type u_1
+inst✝ : CommRing F
+n k : ℕ
+quarter : F
+w : Fin n × Fin 4 → F
+d : Fin n
+slot : Fin 4
+⊢ (∑ x, ∑ x_1, if x = d ∧ x_1 = slot then ∑ x_2, if ↑x_1 + (4 - ↑x_2) % 4 = k then quarter * w (x, x_2) else 0 else 0) =
+    ∑ x, if ↑slot + (4 - ↑x) % 4 = k then quarter * sorry () (sorry (), x) else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R741SparseCoefficientObservation.lean:30:31: warning: This simp argument is unused:
+  Finset.sum_ite_eq'
+
+Hint: Omit it from the simp argument list.
+  simp [̵i̵n̵d̵e̵x̵e̵d̵B̵a̵s̵i̵s̵,̵r̵o̵w̵W̵e̵i̵g̵h̵t̵,̵F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵i̵t̵e̵_̵e̵q̵'̵,̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]̵[̲i̲n̲d̲e̲x̲e̲d̲B̲a̲s̲i̲s̲,̲ ̲r̲o̲w̲W̲e̲i̲g̲h̲t̲,̲ ̲m̲u̲l̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R741SparseCoefficientObservation.lean:30:50: warning: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [̵i̵n̵d̵e̵x̵e̵d̵B̵a̵s̵i̵s̵,̵r̵o̵w̵W̵e̵i̵g̵h̵t̵,̵F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵i̵t̵e̵_̵e̵q̵'̵,̵m̵u̵l̵_̵a̵s̵s̵o̵c̵]̵[̲i̲n̲d̲e̲x̲e̲d̲B̲a̲s̲i̲s̲,̲ ̲r̲o̲w̲W̲e̲i̲g̲h̲t̲,̲ ̲F̲i̲n̲s̲e̲t̲.̲s̲u̲m̲_̲i̲t̲e̲_̲e̲q̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R741SparseCoefficientObservation.lean:36:53: error: unsolved goals
+F : Type u_1
+inst✝ : CommRing F
+alpha : F
+k : ℕ
+quarter : F
+w : Fin 256 × Fin 4 → F
+d : Fin 256
+s : Fin 3
+⊢ rowWeight k quarter sorry sorry ⟨1 + ↑s, ⋯⟩ - alpha * alpha ^ ↑s * rowWeight k quarter sorry sorry 0 =
+    -(alpha * alpha ^ ↑s * rowWeight k quarter w d 0) + rowWeight k quarter w d ⟨1 + ↑s, ⋯⟩
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R741SparseCoefficientObservation.lean:78:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Eq.{1} (4 * ↑i.1 + ↑i.2) (4 * ↑(cast255 d) + (↑s + 1))
+in the target expression
+  Eq.{u_1 + 1}
+    ((if i = (cast255 d, ⟨↑s + 1, ⋯⟩) then 1 else 0) - alpha ^ (↑s + 1) * if i = (cast255 d, 0) then 1 else 0)
+    (AspisV8R17.unitVector (4 * ↑d + ↑s + 1) (4 * ↑i.1 + ↑i.2) -
+      alpha ^ (↑s + 1) * AspisV8R17.unitVector (4 * ↑d) (4 * ↑i.1 + ↑i.2))
+
+F : Type u_1
+inst✝ : CommRing F
+alpha : F
+d : Fin 255
+s : Fin 3
+i : Fin 256 × Fin 4
+hslot : ∀ (e : Fin 256) (u : Fin 4), 4 * ↑i.1 + ↑i.2 = 4 * ↑e + ↑u ↔ i = (e, u)
+⊢ ((if i = (cast255 d, ⟨↑s + 1, ⋯⟩) then 1 else 0) - alpha ^ (↑s + 1) * if i = (cast255 d, 0) then 1 else 0) =
+    AspisV8R17.unitVector (4 * ↑d + ↑s + 1) (4 * ↑i.1 + ↑i.2) -
+      alpha ^ (↑s + 1) * AspisV8R17.unitVector (4 * ↑d) (4 * ↑i.1 + ↑i.2)
+'AspisV8R19.R741SparseCoefficientObservation.coefficient_indexedBasis' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R741SparseCoefficientObservation.coefficient_indexedPair' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R741SparseCoefficientObservation.coefficient_direction' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R741SparseCoefficientObservation.indexedPair_qPair' depends on axioms: [propext, sorryAx, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R741SparseCoefficientObservation.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R741SparseCoefficientObservation.lean"
+	User time (seconds): 1.77
+	System time (seconds): 0.39
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.15
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3299192
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 5
+	Minor (reclaiming a frame) page faults: 78353
+	Voluntary context switches: 1368
+	Involuntary context switches: 69
+	Swaps: 0
+	File system inputs: 728
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.180s
+CPU time consumed: 2.192s
+Memory peak: 332.0K
+Memory swap peak: 0B
