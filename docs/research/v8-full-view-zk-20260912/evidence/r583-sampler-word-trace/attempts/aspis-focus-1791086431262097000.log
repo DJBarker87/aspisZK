@@ -1,0 +1,106 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791086431262097000.service; invocation ID: bda444711b9b4ba38c9b3b5a9a9e59f4
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:31:4: error: unsolved goals
+case neg
+H : DuplexFrames.Bytes → State
+s : State
+n : ℕ
+hn : ¬n = 0
+hlocal : ↑(localIndex n) = (n - 1) % 8 + 1
+hr : ¬(n - 1) % 8 = 7
+hmod : n % 8 ≠ 0
+hindex : ¬↑(localIndex n) = 8
+⊢ [] = if False ∨ n % 8 ≠ 0 then [] else calls H (advanceSeq H s (n / 8))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:33:76: warning: This simp argument is unused:
+  hmod
+
+Hint: Omit it from the simp argument list.
+  simp only [readRun, globalCursor, hindex, ↓reduceDIte, wordCalls, hn, h̵m̵od̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵o̵r_true, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:34:8: warning: This simp argument is unused:
+  or_true
+
+Hint: Omit it from the simp argument list.
+  simp only [readRun, globalCursor, hindex, ↓reduceDIte, wordCalls, hn, hmod,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵o̵r̵_̵t̵r̵u̵e̵,̵ ̵↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:34:17: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [readRun, globalCursor, hindex, ↓reduceDIte, wordCalls, hn, hmod, o̵r̵_̵t̵r̵u̵e̵,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵o̲r̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:57:15: error: unsolved goals
+case succ.some
+H : DuplexFrames.Bytes → State
+s : State
+budget : ℕ
+ih : ∀ (n : ℕ), (limbRun H budget (globalCursor H s n)).1 = wordTrace H s (eval (streamAnswer H s) (scan budget n)).1
+n : ℕ
+hm : ↑((alphabetEquiv modulus).symm (streamAnswer H s n)) = masked 31 (streamWord H s n)
+a : Fin modulus
+ha : streamAnswer H s n = some a
+hw : masked 31 (streamWord H s n) = ↑a
+hne : ↑a ≠ 2147483647
+⊢ wordCalls H s n = List.flatMap (fun r => wordCalls H s r.1) [(n, some a)]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:66:28: warning: This simp argument is unused:
+  wordTrace_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [limbRun, read_stream, read_stream_calls, hw, hne, if_false, scan, eval, ha,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲w̵o̵r̵d̵T̵r̵a̵c̵e̵_̵c̵o̵n̵s̵,̵ ̵wordTrace, List.flatMap_nil, List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:66:55: warning: This simp argument is unused:
+  List.flatMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [limbRun, read_stream, read_stream_calls, hw, hne, if_false, scan, eval, ha,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲wordTrace_cons, wordTrace, L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵ ̵List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean:66:73: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [limbRun, read_stream, read_stream_calls, hw, hne, if_false, scan, eval, ha,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲wordTrace_cons, wordTrace, L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵ ̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R583SamplerWordTrace.read_stream_calls' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R583SamplerWordTrace.wordTrace_cons' depends on axioms: [propext]
+'AspisV8R19.R583SamplerWordTrace.scan_stream_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R583SamplerWordTrace.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R583SamplerWordTrace.lean"
+	User time (seconds): 1.04
+	System time (seconds): 0.31
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.35
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3249348
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 77492
+	Voluntary context switches: 582
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 328
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.382s
+CPU time consumed: 1.392s
+Memory peak: 328.0K
+Memory swap peak: 0B
