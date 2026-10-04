@@ -1,0 +1,4 @@
+import AspisV8R19.R687CombineBetaComposition
+#check finProdFinEquiv_apply
+#check finProdFinEquiv_apply_symm
+#check Fin.prodFinEquiv

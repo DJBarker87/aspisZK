@@ -1,0 +1,299 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791122435291552000.service; invocation ID: ea6bab6d4b524c43ba1ae697b76c138a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:101:25: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:173:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (∑ i, ?f i).re.im
+in the target expression
+  ((∑ i, c1Scalar a1 slot i • coeffVec powers i).re +
+        (∑ group,
+            matrixAction (mixedMatrix powers group) (base (arrayAt a2 (c2Index group slot 0)))
+              (base (arrayAt a2 (c2Index group slot 1))) (base (arrayAt a2 (c2Index group slot 2)))
+              (base (arrayAt a2 (c2Index group slot 3)))).re).im =
+    ∑ x, base (arrayAt (c1Chunk a1 slot) x) * base (arrayAt (arrayAt powers.c1_limbs x) ⟨1, ⋯⟩) +
+      ∑ x,
+        matrixCoordinate (mixedMatrix powers x) (base (arrayAt a2 (c2Index x slot 0)))
+          (base (arrayAt a2 (c2Index x slot 1))) (base (arrayAt a2 (c2Index x slot 2)))
+          (base (arrayAt a2 (c2Index x slot 3))) ⟨1, ⋯⟩
+
+case «1»
+a1 : Std.Array U32 104#usize
+a2 : Std.Array U32 48#usize
+powers : query_arithmetic.BetaCoefficients
+slot : U4
+⊢ ((∑ i, c1Scalar a1 slot i • coeffVec powers i).re +
+        (∑ group,
+            matrixAction (mixedMatrix powers group) (base (arrayAt a2 (c2Index group slot 0)))
+              (base (arrayAt a2 (c2Index group slot 1))) (base (arrayAt a2 (c2Index group slot 2)))
+              (base (arrayAt a2 (c2Index group slot 3)))).re).im =
+    ∑ x, base (arrayAt (c1Chunk a1 slot) x) * base (arrayAt (arrayAt powers.c1_limbs x) ⟨1, ⋯⟩) +
+      ∑ x,
+        matrixCoordinate (mixedMatrix powers x) (base (arrayAt a2 (c2Index x slot 0)))
+          (base (arrayAt a2 (c2Index x slot 1))) (base (arrayAt a2 (c2Index x slot 2)))
+          (base (arrayAt a2 (c2Index x slot 3))) ⟨1, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (26 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:169:65: warning: This simp argument is unused:
+  QuadraticAlgebra.im_add
+
+Hint: Omit it from the simp argument list.
+  simp only [coordinate, interpreted, QuadraticAlgebra.re_add,̵ ̵Q̵u̵a̵d̵r̵a̵t̵i̵c̵A̵l̵g̵e̵b̵r̵a̵.̵i̵m̵_̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:178:65: warning: This simp argument is unused:
+  QuadraticAlgebra.re_add
+
+Hint: Omit it from the simp argument list.
+  simp only [coordinate, interpreted, QuadraticAlgebra.im_add,̵ ̵Q̵u̵a̵d̵r̵a̵t̵i̵c̵A̵l̵g̵e̵b̵r̵a̵.̵r̵e̵_̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+a1 : Std.Array U32 104#usize
+a2 : Std.Array U32 48#usize
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok (), a1)
+h2 : query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Ok (), a2)
+hp1 : ∀ (i : Fin 26) (r : Fin 4), ↑(arrayAt (arrayAt powers.c1_limbs i) r) < 2147483647
+hp2 : ∀ (i : Fin 12) (r : Fin 4), ↑(arrayAt (arrayAt powers.mixed i) r) < 2147483647
+lane : AspisV8R19.R687CombineBetaComposition.U4✝ → AspisV8R19.R687CombineBetaComposition.U4✝ → U32
+hcombine : query_arithmetic.combine_beta c1 c2 powers = ok (core.result.Result.Ok (laneArray lane))
+hlanes :
+  ∀ (slot limb : AspisV8R19.R687CombineBetaComposition.U4✝),
+    ↑(lane slot limb) < AspisV8R19.R687CombineBetaComposition.P✝ ∧ ↑(lane slot limb) = mixed38 a1 a2 powers slot limb
+slot : U4
+⊢ ∑ i, base (arrayAt (c1Chunk a1 slot) i) * base (arrayAt (arrayAt powers.c1_limbs i) 0) +
+      ∑ j,
+        base (arrayAt a2 ⟨16 * (↑j / 4) + 4 * ↑(sourceIndex slot) + ↑j % 4, ⋯⟩) *
+          base (arrayAt (arrayAt powers.mixed j) 0) =
+    (∑ i, c1Scalar a1 slot i • coeffVec powers i +
+          ∑ group,
+            {
+              re :=
+                {
+                  re :=
+                    base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑0, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨0, matrixCoordinate._proof_1⟩)
+                                ⟨0, matrixAction._proof_1⟩) +
+                          base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑1, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨1, matrixCoordinate._proof_2⟩)
+                                ⟨0, matrixAction._proof_1⟩) +
+                        base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑2, ⋯⟩) *
+                          base
+                            (arrayAt
+                              (arrayAt
+                                (Array.make 4#usize
+                                  [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                  ⋯)
+                                ⟨2, matrixCoordinate._proof_3⟩)
+                              ⟨0, matrixAction._proof_1⟩) +
+                      base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑3, ⋯⟩) *
+                        base
+                          (arrayAt
+                            (arrayAt
+                              (Array.make 4#usize
+                                [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                  arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                ⋯)
+                              ⟨3, matrixCoordinate._proof_4⟩)
+                            ⟨0, matrixAction._proof_1⟩),
+                  im :=
+                    base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑0, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨0, matrixCoordinate._proof_1⟩)
+                                ⟨1, matrixAction._proof_2⟩) +
+                          base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑1, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨1, matrixCoordinate._proof_2⟩)
+                                ⟨1, matrixAction._proof_2⟩) +
+                        base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑2, ⋯⟩) *
+                          base
+                            (arrayAt
+                              (arrayAt
+                                (Array.make 4#usize
+                                  [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                  ⋯)
+                                ⟨2, matrixCoordinate._proof_3⟩)
+                              ⟨1, matrixAction._proof_2⟩) +
+                      base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑3, ⋯⟩) *
+                        base
+                          (arrayAt
+                            (arrayAt
+                              (Array.make 4#usize
+                                [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                  arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                ⋯)
+                              ⟨3, matrixCoordinate._proof_4⟩)
+                            ⟨1, matrixAction._proof_2⟩) },
+              im :=
+                {
+                  re :=
+                    base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑0, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨0, matrixCoordinate._proof_1⟩)
+                                ⟨2, matrixAction._proof_3⟩) +
+                          base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑1, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨1, matrixCoordinate._proof_2⟩)
+                                ⟨2, matrixAction._proof_3⟩) +
+                        base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑2, ⋯⟩) *
+                          base
+                            (arrayAt
+                              (arrayAt
+                                (Array.make 4#usize
+                                  [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                  ⋯)
+                                ⟨2, matrixCoordinate._proof_3⟩)
+                              ⟨2, matrixAction._proof_3⟩) +
+                      base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑3, ⋯⟩) *
+                        base
+                          (arrayAt
+                            (arrayAt
+                              (Array.make 4#usize
+                                [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                  arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                ⋯)
+                              ⟨3, matrixCoordinate._proof_4⟩)
+                            ⟨2, matrixAction._proof_3⟩),
+                  im :=
+                    base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑0, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨0, matrixCoordinate._proof_1⟩)
+                                ⟨3, matrixAction._proof_4⟩) +
+                          base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑1, ⋯⟩) *
+                            base
+                              (arrayAt
+                                (arrayAt
+                                  (Array.make 4#usize
+                                    [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                      arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                    ⋯)
+                                  ⟨1, matrixCoordinate._proof_2⟩)
+                                ⟨3, matrixAction._proof_4⟩) +
+                        base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑2, ⋯⟩) *
+                          base
+                            (arrayAt
+                              (arrayAt
+                                (Array.make 4#usize
+                                  [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩,
+                                    arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                  ⋯)
+                                ⟨2, matrixCoordinate._proof_3⟩)
+                              ⟨3, matrixAction._proof_4⟩) +
+                      base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + ↑3, ⋯⟩) *
+                        base
+                          (arrayAt
+                            (arrayAt
+                              (Array.make 4#usize
+                                [arrayAt powers.mixed ⟨4 * ↑group + ↑0, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑1, ⋯⟩,
+                                  arrayAt powers.mixed ⟨4 * ↑group + ↑2, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + ↑3, ⋯⟩]
+                                ⋯)
+                              ⟨3, matrixCoordinate._proof_4⟩)
+                            ⟨3, matrixAction._proof_4⟩) } }).re.re
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:182:8: warning: declaration uses `sorry`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R688CombineBetaFieldInterpretation.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean"
+	User time (seconds): 1.72
+	System time (seconds): 0.38
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.08
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3759924
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 87126
+	Voluntary context switches: 837
+	Involuntary context switches: 83
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.115s
+CPU time consumed: 2.142s
+Memory peak: 328.0K
+Memory swap peak: 0B

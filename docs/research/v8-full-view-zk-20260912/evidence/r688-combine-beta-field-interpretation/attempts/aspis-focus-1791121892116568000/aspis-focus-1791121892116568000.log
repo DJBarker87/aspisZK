@@ -1,0 +1,137 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791121892116568000.service; invocation ID: d41ee6dcae024b508b239dad3c85e3f1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:32:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  0 ≤ c ≤ 3
+  0 ≤ b ≤ 3
+  0 ≤ a ≤ 2
+  16*a + 4*b + c - d ≥ 0
+where
+ a := ↑↑group
+ b := ↑↑slot
+ c := ↑↑limb
+ d := ↑↑48#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:37:44: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 2
+  4*a - b ≥ 0
+where
+ a := ↑↑group
+ b := ↑↑12#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:38:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 2
+  4*a - b ≥ -1
+where
+ a := ↑↑group
+ b := ↑↑12#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:39:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 2
+  4*a - b ≥ -2
+where
+ a := ↑↑group
+ b := ↑↑12#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:40:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 2
+  4*a - b ≥ -3
+where
+ a := ↑↑group
+ b := ↑↑12#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:63:53: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  0 ≤ b ≤ 3
+  0 ≤ a ≤ 2
+  16*a + 4*b - c ≥ 0
+where
+ a := ↑↑group
+ b := ↑↑slot
+ c := ↑↑48#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:64:55: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  0 ≤ b ≤ 3
+  0 ≤ a ≤ 2
+  16*a + 4*b - c ≥ -1
+where
+ a := ↑↑group
+ b := ↑↑slot
+ c := ↑↑48#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:65:55: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  0 ≤ b ≤ 3
+  0 ≤ a ≤ 2
+  16*a + 4*b - c ≥ -2
+where
+ a := ↑↑group
+ b := ↑↑slot
+ c := ↑↑48#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean:66:55: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  0 ≤ b ≤ 3
+  0 ≤ a ≤ 2
+  16*a + 4*b - c ≥ -3
+where
+ a := ↑↑group
+ b := ↑↑slot
+ c := ↑↑48#usize
+def AspisV8R19.R688CombineBetaFieldInterpretation.base : U32 → M31Exact :=
+fun x => ↑↑x
+def AspisV8R19.R688CombineBetaFieldInterpretation.decode4 : (U4 → U32) → QM31Exact :=
+fun x => { re := { re := base (x 0), im := base (x 1) }, im := { re := base (x 2), im := base (x 3) } }
+def AspisV8R19.R688CombineBetaFieldInterpretation.coeffVec : query_arithmetic.BetaCoefficients → Fin 26 → QM31Exact :=
+fun powers i => decode4 fun limb => arrayAt (arrayAt powers.c1_limbs i) limb
+def AspisV8R19.R688CombineBetaFieldInterpretation.mixedMatrix : query_arithmetic.BetaCoefficients →
+  Fin 3 → Std.Array (Std.Array U32 4#usize) 4#usize :=
+fun powers group =>
+  Array.make 4#usize
+    [arrayAt powers.mixed ⟨4 * ↑group, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + 1, ⋯⟩,
+      arrayAt powers.mixed ⟨4 * ↑group + 2, ⋯⟩, arrayAt powers.mixed ⟨4 * ↑group + 3, ⋯⟩]
+    ⋯
+def AspisV8R19.R688CombineBetaFieldInterpretation.interpreted : Std.Array U32 104#usize →
+  Std.Array U32 48#usize → query_arithmetic.BetaCoefficients → U4 → QM31Exact :=
+fun a1 a2 powers slot =>
+  ∑ i, c1Scalar a1 slot i • coeffVec powers i +
+    ∑ group,
+      matrixAction (mixedMatrix powers group) (base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot, ⋯⟩))
+        (base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + 1, ⋯⟩)) (base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + 2, ⋯⟩))
+        (base (arrayAt a2 ⟨16 * ↑group + 4 * ↑slot + 3, ⋯⟩))
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R688CombineBetaFieldInterpretation.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R688CombineBetaFieldInterpretation.lean"
+	User time (seconds): 1.14
+	System time (seconds): 0.40
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.53
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3740296
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86726
+	Voluntary context switches: 318
+	Involuntary context switches: 66
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.569s
+CPU time consumed: 1.576s
+Memory peak: 288.0K
+Memory swap peak: 0B
