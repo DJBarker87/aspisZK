@@ -1,0 +1,190 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791116828726288000.service; invocation ID: 280fc42ca4684ec99b9dd0a816d2c237
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:164:113: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+beta : F
+r g0 : Index 256 → F
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hbeta : beta ≠ 0
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hfg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g0 d = 0
+hrm : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+hgm : ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+hcrossm :
+  ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) +
+      scale * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s) =
+    0
+hdet : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+theta : F := (1 - beta) / (scale * beta)
+desired : Fin 7 → F :=
+  fun k =>
+    -theta * fullRelation half quarter a b c kappa tau z previous false r ↑k -
+        scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k -
+      fullRelation half quarter a b c kappa tau z previous false g0 ↑k
+desiredG : Fin 7 → F := fun k => -fullRelation half quarter a b c kappa tau z previous true g0 ↑k
+eval_add :
+  ∀ (u v w : Fin 7 → F) (A B : F),
+    evalSeven (fun k => A * u k + B * v k + w k) alpha =
+      A * evalSeven u alpha + B * evalSeven v alpha + evalSeven w alpha
+hd : evalSeven desired alpha = 0
+hdG : evalSeven desiredG alpha = 0
+hbG : desiredG 0 + desiredG 4 = 0
+hb : desired 0 + desired 4 = 0
+x : Fin 13 → F
+hO :
+  ∀ (k : Fin 7),
+    TwoSwapResidualSource.relation half quarter a b c kappa tau z previous false (combination t ht noneOne alpha x) ↑k =
+      desired k
+hG :
+  ∀ (k : Fin 7),
+    TwoSwapResidualSource.relation half quarter a b c kappa tau z previous true (combination t ht noneOne alpha x) ↑k =
+      desiredG k
+hpoints :
+  ∀ (i : Fin 3),
+    sourcePointFunctional (SourceStatementPoints.points z i)
+        (actualMask half a b c (combination t ht noneOne alpha x)) =
+      0
+hcoins : ∀ (i : Fin 271), actualCoin (actualMask half a b c (combination t ht noneOne alpha x)) i = 0
+hqueries :
+  ∀ (slot : Fin 4) (root : Fin 22),
+    NormalizedQuerySection.evaluate (fun d => combination t ht noneOne alpha x (d, slot)) (t root) = 0
+hfold : ∀ (d : Fin 32), R370KernelEvaluation.firstFold 32 alpha (combination t ht noneOne alpha x) d = 0
+hbalance : ∑ i ∈ TwoSwapSourceTable.inactive, actualMask half a b c (combination t ht noneOne alpha x) i = 0
+k : Fin 7
+C : Fin 256 × Fin 4 → Fin 256 × Fin 4 → F := sourceKernel 256 (↑k) quarter
+wR : Index 256 → F := fullWeight half a b c kappa tau z previous false
+wG : Index 256 → F := fullWeight half a b c kappa tau z previous true
+corr : Index 256 → F := extendCorrection (combination t ht noneOne alpha x)
+hcR : coefficient C corr wR = desired k
+hcG : coefficient C corr wG = desiredG k
+hadd : coefficient C (fun i => g0 i + corr i) wR = coefficient C g0 wR + coefficient C corr wR
+⊢ coefficient C g0 wR - theta * fullRelation half quarter a b c kappa tau z previous false r ↑k -
+        scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k -
+      fullRelation half quarter a b c kappa tau z previous false g0 ↑k =
+    -(theta * coefficient C r wR) - scale⁻¹ * coefficient C r wG
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:170:62: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+beta : F
+r g0 : Index 256 → F
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hbeta : beta ≠ 0
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hfg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g0 d = 0
+hrm : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+hgm : ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+hcrossm :
+  ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) +
+      scale * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s) =
+    0
+hdet : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+theta : F := (1 - beta) / (scale * beta)
+desired : Fin 7 → F :=
+  fun k =>
+    -theta * fullRelation half quarter a b c kappa tau z previous false r ↑k -
+        scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k -
+      fullRelation half quarter a b c kappa tau z previous false g0 ↑k
+desiredG : Fin 7 → F := fun k => -fullRelation half quarter a b c kappa tau z previous true g0 ↑k
+eval_add :
+  ∀ (u v w : Fin 7 → F) (A B : F),
+    evalSeven (fun k => A * u k + B * v k + w k) alpha =
+      A * evalSeven u alpha + B * evalSeven v alpha + evalSeven w alpha
+hd : evalSeven desired alpha = 0
+hdG : evalSeven desiredG alpha = 0
+hbG : desiredG 0 + desiredG 4 = 0
+hb : desired 0 + desired 4 = 0
+x : Fin 13 → F
+hO :
+  ∀ (k : Fin 7),
+    TwoSwapResidualSource.relation half quarter a b c kappa tau z previous false (combination t ht noneOne alpha x) ↑k =
+      desired k
+hG :
+  ∀ (k : Fin 7),
+    TwoSwapResidualSource.relation half quarter a b c kappa tau z previous true (combination t ht noneOne alpha x) ↑k =
+      desiredG k
+hpoints :
+  ∀ (i : Fin 3),
+    sourcePointFunctional (SourceStatementPoints.points z i)
+        (actualMask half a b c (combination t ht noneOne alpha x)) =
+      0
+hcoins : ∀ (i : Fin 271), actualCoin (actualMask half a b c (combination t ht noneOne alpha x)) i = 0
+hqueries :
+  ∀ (slot : Fin 4) (root : Fin 22),
+    NormalizedQuerySection.evaluate (fun d => combination t ht noneOne alpha x (d, slot)) (t root) = 0
+hfold : ∀ (d : Fin 32), R370KernelEvaluation.firstFold 32 alpha (combination t ht noneOne alpha x) d = 0
+hbalance : ∑ i ∈ TwoSwapSourceTable.inactive, actualMask half a b c (combination t ht noneOne alpha x) i = 0
+k : Fin 7
+C : Fin 256 × Fin 4 → Fin 256 × Fin 4 → F := sourceKernel 256 (↑k) quarter
+wR : Index 256 → F := fullWeight half a b c kappa tau z previous false
+wG : Index 256 → F := fullWeight half a b c kappa tau z previous true
+corr : Index 256 → F := extendCorrection (combination t ht noneOne alpha x)
+hcR : coefficient C corr wR = desired k
+hcG : coefficient C corr wG = desiredG k
+hgR : coefficient C (fun i => g0 i + corr i) wR = -theta * coefficient C r wR - scale⁻¹ * coefficient C r wG
+hadd : coefficient C (fun i => g0 i + corr i) wG = coefficient C g0 wG + coefficient C corr wG
+⊢ coefficient C g0 wG - fullRelation half quarter a b c kappa tau z previous true g0 ↑k = 0
+'AspisV8R19.R672FixedBetaWeakMomentRepair.fixed_beta_weak_moment_repair' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R672FixedBetaWeakMomentRepair.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean"
+	User time (seconds): 1.54
+	System time (seconds): 0.35
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.89
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3314080
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 78235
+	Voluntary context switches: 684
+	Involuntary context switches: 75
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.916s
+CPU time consumed: 1.930s
+Memory peak: 328.0K
+Memory swap peak: 0B

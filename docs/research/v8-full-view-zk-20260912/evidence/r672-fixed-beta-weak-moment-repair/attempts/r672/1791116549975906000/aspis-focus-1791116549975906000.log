@@ -1,0 +1,164 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791116549975906000.service; invocation ID: 6dde3bef3c20458aa25ac2832fa83292
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:78:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  -∑ x ∈ ?m.737, ?f x
+in the target expression
+  ∑ i, -fullRelation half quarter a b c kappa tau z previous false g0 ↑i * alpha ^ ↑i = 0
+
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+beta : F
+r g0 : Index 256 → F
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hbeta : beta ≠ 0
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hfg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g0 d = 0
+hrm : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+hgm : ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+hcrossm :
+  ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) +
+      scale * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s) =
+    0
+hdet : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+theta : F := (1 - beta) / (scale * beta)
+desired : Fin 7 → F :=
+  fun k =>
+    -theta * fullRelation half quarter a b c kappa tau z previous false r ↑k -
+        scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k -
+      fullRelation half quarter a b c kappa tau z previous false g0 ↑k
+desiredG : Fin 7 → F := fun k => -fullRelation half quarter a b c kappa tau z previous true g0 ↑k
+eval_add :
+  ∀ (u v w : Fin 7 → F) (A B : F),
+    evalSeven (fun k => A * u k + B * v k + w k) alpha =
+      A * evalSeven u alpha + B * evalSeven v alpha + evalSeven w alpha
+hrR : evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous false r ↑k) alpha = 0
+hrG : evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous true r ↑k) alpha = 0
+hgR : evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous false g0 ↑k) alpha = 0
+e :
+  evalSeven
+      (fun k =>
+        -theta * fullRelation half quarter a b c kappa tau z previous false r ↑k +
+            -scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k +
+          -fullRelation half quarter a b c kappa tau z previous false g0 ↑k)
+      alpha =
+    -theta * evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous false r ↑k) alpha +
+        -scale⁻¹ * evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous true r ↑k) alpha +
+      evalSeven (fun k => -fullRelation half quarter a b c kappa tau z previous false g0 ↑k) alpha
+⊢ ∑ i, -fullRelation half quarter a b c kappa tau z previous false g0 ↑i * alpha ^ ↑i = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:117:79: error: Type mismatch: After simplification, term
+  hR
+ has type
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    quarter * ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+but is expected to have type
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:123:6: error: ring failed, ring expressions not equal
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+beta : F
+r g0 : Index 256 → F
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hbeta : beta ≠ 0
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hfg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g0 d = 0
+hrm : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+hgm : ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+hcrossm :
+  ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) +
+      scale * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s) =
+    0
+hdet : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+theta : F := ⋯
+desired : Fin 7 → F := ⋯
+desiredG : Fin 7 → F := ⋯
+eval_add :
+  ∀ (u v w : Fin 7 → F) (A B : F),
+    evalSeven (fun k => A * u k + B * v k + w k) alpha =
+      A * evalSeven u alpha + B * evalSeven v alpha + evalSeven w alpha
+hd : evalSeven desired alpha = 0
+hdG : evalSeven desiredG alpha = 0
+hbG : desiredG 0 + desiredG 4 = 0
+hR :
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    quarter * ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+hRG :
+  fullRelation half quarter a b c kappa tau z previous true r 0 +
+      fullRelation half quarter a b c kappa tau z previous true r 4 =
+    quarter * ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s)
+hG :
+  fullRelation half quarter a b c kappa tau z previous false g0 0 +
+      fullRelation half quarter a b c kappa tau z previous false g0 4 =
+    quarter * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+hm :
+  fullRelation half quarter a b c kappa tau z previous true r 0 +
+        fullRelation half quarter a b c kappa tau z previous true r 4 +
+      scale *
+        (fullRelation half quarter a b c kappa tau z previous false g0 0 +
+          fullRelation half quarter a b c kappa tau z previous false g0 4) =
+    0
+hinv : scale * scale⁻¹ = 1
+hrz :
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    0
+⊢ fullRelation half quarter a b c kappa tau z previous true r 0 * 2 +
+          fullRelation half quarter a b c kappa tau z previous true r 4 * 2 +
+        scale * fullRelation half quarter a b c kappa tau z previous false g0 0 * 2 +
+      scale * fullRelation half quarter a b c kappa tau z previous false g0 4 * 2 =
+    0
+'AspisV8R19.R672FixedBetaWeakMomentRepair.fixed_beta_weak_moment_repair' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R672FixedBetaWeakMomentRepair.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean"
+	User time (seconds): 1.28
+	System time (seconds): 0.30
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3305820
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77653
+	Voluntary context switches: 635
+	Involuntary context switches: 49
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.622s
+CPU time consumed: 1.632s
+Memory peak: 328.0K
+Memory swap peak: 0B

@@ -1,0 +1,260 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791116658882454000.service; invocation ID: d516a34a28624defa44a705f2fd75a4b
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:122:78: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+beta : F
+r g0 : Index 256 → F
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hbeta : beta ≠ 0
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hfg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g0 d = 0
+hrm : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+hgm : ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+hcrossm :
+  ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) +
+      scale * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s) =
+    0
+hdet : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+theta : F := (1 - beta) / (scale * beta)
+desired : Fin 7 → F :=
+  fun k =>
+    -theta * fullRelation half quarter a b c kappa tau z previous false r ↑k -
+        scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k -
+      fullRelation half quarter a b c kappa tau z previous false g0 ↑k
+desiredG : Fin 7 → F := fun k => -fullRelation half quarter a b c kappa tau z previous true g0 ↑k
+eval_add :
+  ∀ (u v w : Fin 7 → F) (A B : F),
+    evalSeven (fun k => A * u k + B * v k + w k) alpha =
+      A * evalSeven u alpha + B * evalSeven v alpha + evalSeven w alpha
+hd : evalSeven desired alpha = 0
+hdG : evalSeven desiredG alpha = 0
+hbG : desiredG 0 + desiredG 4 = 0
+hR :
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    quarter * ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+hRG :
+  fullRelation half quarter a b c kappa tau z previous true r 0 +
+      fullRelation half quarter a b c kappa tau z previous true r 4 =
+    quarter * ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s)
+hG :
+  fullRelation half quarter a b c kappa tau z previous false g0 0 +
+      fullRelation half quarter a b c kappa tau z previous false g0 4 =
+    quarter * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+hm :
+  fullRelation half quarter a b c kappa tau z previous true r 0 +
+        fullRelation half quarter a b c kappa tau z previous true r 4 +
+      scale *
+        (fullRelation half quarter a b c kappa tau z previous false g0 0 +
+          fullRelation half quarter a b c kappa tau z previous false g0 4) =
+    0
+hinv : scale * scale⁻¹ = 1
+hR0 hrz :
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    0
+hs :
+  scale *
+      (scale⁻¹ *
+          (fullRelation half quarter a b c kappa tau z previous true r 0 +
+            fullRelation half quarter a b c kappa tau z previous true r 4) +
+        (fullRelation half quarter a b c kappa tau z previous false g0 0 +
+          fullRelation half quarter a b c kappa tau z previous false g0 4)) =
+    fullRelation half quarter a b c kappa tau z previous true r 0 +
+        fullRelation half quarter a b c kappa tau z previous true r 4 +
+      scale *
+        (fullRelation half quarter a b c kappa tau z previous false g0 0 +
+          fullRelation half quarter a b c kappa tau z previous false g0 4)
+⊢ scale⁻¹ *
+        (fullRelation half quarter a b c kappa tau z previous true r 0 +
+          fullRelation half quarter a b c kappa tau z previous true r 4) +
+      (fullRelation half quarter a b c kappa tau z previous false g0 0 +
+        fullRelation half quarter a b c kappa tau z previous false g0 4) =
+    0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:95:41: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+beta : F
+r g0 : Index 256 → F
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hbeta : beta ≠ 0
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hfg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g0 d = 0
+hrm : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+hgm : ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+hcrossm :
+  ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) +
+      scale * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s) =
+    0
+hdet : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+theta : F := (1 - beta) / (scale * beta)
+desired : Fin 7 → F :=
+  fun k =>
+    -theta * fullRelation half quarter a b c kappa tau z previous false r ↑k -
+        scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k -
+      fullRelation half quarter a b c kappa tau z previous false g0 ↑k
+desiredG : Fin 7 → F := fun k => -fullRelation half quarter a b c kappa tau z previous true g0 ↑k
+eval_add :
+  ∀ (u v w : Fin 7 → F) (A B : F),
+    evalSeven (fun k => A * u k + B * v k + w k) alpha =
+      A * evalSeven u alpha + B * evalSeven v alpha + evalSeven w alpha
+hd : evalSeven desired alpha = 0
+hdG : evalSeven desiredG alpha = 0
+hbG : desiredG 0 + desiredG 4 = 0
+hR :
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    quarter * ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+hRG :
+  fullRelation half quarter a b c kappa tau z previous true r 0 +
+      fullRelation half quarter a b c kappa tau z previous true r 4 =
+    quarter * ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s)
+hG :
+  fullRelation half quarter a b c kappa tau z previous false g0 0 +
+      fullRelation half quarter a b c kappa tau z previous false g0 4 =
+    quarter * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s)
+hm :
+  fullRelation half quarter a b c kappa tau z previous true r 0 +
+        fullRelation half quarter a b c kappa tau z previous true r 4 +
+      scale *
+        (fullRelation half quarter a b c kappa tau z previous false g0 0 +
+          fullRelation half quarter a b c kappa tau z previous false g0 4) =
+    0
+hinv : scale * scale⁻¹ = 1
+hR0 hrz :
+  fullRelation half quarter a b c kappa tau z previous false r 0 +
+      fullRelation half quarter a b c kappa tau z previous false r 4 =
+    0
+hcancel :
+  scale⁻¹ *
+        (fullRelation half quarter a b c kappa tau z previous true r 0 +
+          fullRelation half quarter a b c kappa tau z previous true r 4) +
+      (fullRelation half quarter a b c kappa tau z previous false g0 0 +
+        fullRelation half quarter a b c kappa tau z previous false g0 4) =
+    0
+⊢ desired 0 + desired 4 = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:51:106: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+half quarter a b c kappa alpha tau scale : F
+z : Fin 10 → F
+previous : Fin 271 → F
+beta : F
+r g0 : Index 256 → F
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hscale : scale ≠ 0
+hbeta : beta ≠ 0
+hf : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha r d = 0
+hfg : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha g0 d = 0
+hrm : ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous false (d, s) = 0
+hgm : ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous true (d, s) = 0
+hcrossm :
+  ∑ d, ∑ s, r (d, s) * fullWeight half a b c kappa tau z previous true (d, s) +
+      scale * ∑ d, ∑ s, g0 (d, s) * fullWeight half a b c kappa tau z previous false (d, s) =
+    0
+hdet : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+theta : F := (1 - beta) / (scale * beta)
+desired : Fin 7 → F :=
+  fun k =>
+    -theta * fullRelation half quarter a b c kappa tau z previous false r ↑k -
+        scale⁻¹ * fullRelation half quarter a b c kappa tau z previous true r ↑k -
+      fullRelation half quarter a b c kappa tau z previous false g0 ↑k
+desiredG : Fin 7 → F := fun k => -fullRelation half quarter a b c kappa tau z previous true g0 ↑k
+eval_add :
+  ∀ (u v w : Fin 7 → F) (A B : F),
+    evalSeven (fun k => A * u k + B * v k + w k) alpha =
+      A * evalSeven u alpha + B * evalSeven v alpha + evalSeven w alpha
+hd : evalSeven desired alpha = 0
+hdG : evalSeven desiredG alpha = 0
+hbG : desiredG 0 + desiredG 4 = 0
+hb : desired 0 + desired 4 = 0
+⊢ ∃ x,
+    (∀ (k : Fin 7),
+        (coefficient (sourceKernel 256 (↑k) quarter)
+            (fun i => (1 - beta) * r i + scale * beta * (g0 i + extendCorrection (combination t ht noneOne alpha x) i))
+            fun i =>
+            (1 - beta) * fullWeight half a b c kappa tau z previous false i +
+              beta * fullWeight half a b c kappa tau z previous true i) =
+          0) ∧
+      scale *
+              (rangeDot 1024 (TwoSwapResidualSource.quotientWeight half a b c kappa tau z previous true)
+                  (flattenFull fun j => g0 j + extendCorrection (combination t ht noneOne alpha x) j) -
+                rangeDot 1024 (TwoSwapResidualSource.quotientWeight half a b c kappa tau z previous false)
+                  (flattenFull fun j => g0 j + extendCorrection (combination t ht noneOne alpha x) j)) -
+            (rangeDot 1024 (TwoSwapResidualSource.quotientWeight half a b c kappa tau z previous true) (flattenFull r) -
+              rangeDot 1024 (TwoSwapResidualSource.quotientWeight half a b c kappa tau z previous false)
+                (flattenFull r)) =
+          0 ∧
+        (∀ (i : Fin 271),
+            actualCoin (indexedMask half a b c fun j => g0 j + extendCorrection (combination t ht noneOne alpha x) j)
+                i =
+              actualCoin (indexedMask half a b c g0) i) ∧
+          (∀ (i : Fin 3),
+              sourcePointFunctional (SourceStatementPoints.points z i)
+                  (indexedMask half a b c fun j => g0 j + extendCorrection (combination t ht noneOne alpha x) j) =
+                sourcePointFunctional (SourceStatementPoints.points z i) (indexedMask half a b c g0)) ∧
+            ∑ v ∈ TwoSwapSourceTable.inactive,
+                  indexedMask half a b c (fun j => g0 j + extendCorrection (combination t ht noneOne alpha x) j) v =
+                ∑ v ∈ TwoSwapSourceTable.inactive, indexedMask half a b c g0 v ∧
+              (∀ (slot : Fin 4) (root : Fin 22),
+                  NormalizedQuerySection.evaluate (fun d => combination t ht noneOne alpha x (d, slot)) (t root) = 0) ∧
+                ∀ (d : Fin 32), R370KernelEvaluation.firstFold 32 alpha (combination t ht noneOne alpha x) d = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean:133:8: error: unexpected token '_'; expected command
+'AspisV8R19.R672FixedBetaWeakMomentRepair.fixed_beta_weak_moment_repair' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R672FixedBetaWeakMomentRepair.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R672FixedBetaWeakMomentRepair.lean"
+	User time (seconds): 1.24
+	System time (seconds): 0.30
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3297876
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77554
+	Voluntary context switches: 571
+	Involuntary context switches: 60
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.574s
+CPU time consumed: 1.585s
+Memory peak: 516.0K
+Memory swap peak: 0B
