@@ -1,0 +1,126 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791109100523845000.service; invocation ID: 9acaf4354370491ca2c82d73cc7d0bc9
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:29:13: error(lean.unknownIdentifier): Unknown identifier `bind_tc_bind`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:36:12: error: unsolved goals
+case ok.Err
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+e : AspisR614SelectedCombineBeta.Error
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Err e, a1)
+h :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err e)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let __x ← query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32)
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch __x.1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let out1 ←
+                query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1 __x.2
+                    (Array.repeat 4#usize aspis_core.field.QM31.ZERO)
+              ok (core.result.Result.Ok out1)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+            residual) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2,
+    ok (core.result.Result.Err e, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Ok (), a2) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:46:16: error: unsolved goals
+case ok.Ok.unit.ok.Err
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a1)
+a2 : Std.Array U32 48#usize
+e : AspisR614SelectedCombineBeta.Error
+h2 : query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Err e, a2)
+h :
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+      (core.result.Result.Err e) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2_1,
+    ok (core.result.Result.Ok PUnit.unit, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      ok (core.result.Result.Err e, a2) = ok (core.result.Result.Ok (), a2_1) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2_1, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2_1
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:58:28: error: Application type mismatch: The argument
+  h1
+has type
+  query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a1)
+but is expected to have type
+  ok (core.result.Result.Ok PUnit.unit, a1) = ok (core.result.Result.Ok (), a1)
+in the application
+  And.intro h1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:58:32: error: Application type mismatch: The argument
+  h2
+has type
+  query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a2)
+but is expected to have type
+  ok (core.result.Result.Ok PUnit.unit, a2) = ok (core.result.Result.Ok (), a2)
+in the application
+  And.intro h2
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:59:51: error: Expected type must not contain metavariables
+  ↑104#usize ≤ 104
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:61:51: error: Expected type must not contain metavariables
+  ↑48#usize ≤ 104
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:49:20: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp [h2,̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R638CombineAcceptedInputs.combine_accepted_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R638CombineAcceptedInputs.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean"
+	User time (seconds): 1.19
+	System time (seconds): 0.34
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.53
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3744012
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 6
+	Minor (reclaiming a frame) page faults: 86323
+	Voluntary context switches: 294
+	Involuntary context switches: 62
+	Swaps: 0
+	File system inputs: 1456
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.576s
+CPU time consumed: 1.577s
+Memory peak: 256.0K
+Memory swap peak: 0B

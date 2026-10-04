@@ -1,0 +1,349 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791109118173897000.service; invocation ID: 040c235d740d4c1dac4a9028d901590f
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:35:12: error: unsolved goals
+case ok.Err
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+e : AspisR614SelectedCombineBeta.Error
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Err e, a1)
+h :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err e)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let __x ← query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32)
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch __x.1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let out1 ←
+                query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1 __x.2
+                    (Array.repeat 4#usize aspis_core.field.QM31.ZERO)
+              ok (core.result.Result.Ok out1)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x =>
+                    Result
+                      (core.result.Result (Std.Array aspis_core.field.QM31 4#usize) AspisR614SelectedCombineBeta.Error))
+                  x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x =>
+                Result
+                  (core.result.Result (Std.Array aspis_core.field.QM31 4#usize) AspisR614SelectedCombineBeta.Error))
+              x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2,
+    ok (core.result.Result.Err e, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Ok (), a2) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:40:15: error: unsolved goals
+case ok.Ok.unit.fail
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a1)
+e : Std.Error
+h2 : query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = fail e
+h :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => fail e
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x =>
+                Result
+                  (core.result.Result (Std.Array aspis_core.field.QM31 4#usize) AspisR614SelectedCombineBeta.Error))
+              x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2,
+    ok (core.result.Result.Ok PUnit.unit, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      fail e = ok (core.result.Result.Ok (), a2) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:41:12: error: unsolved goals
+case ok.Ok.unit.div
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a1)
+h2 : query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = div
+h :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => div
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x =>
+                Result
+                  (core.result.Result (Std.Array aspis_core.field.QM31 4#usize) AspisR614SelectedCombineBeta.Error))
+              x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2,
+    ok (core.result.Result.Ok PUnit.unit, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      div = ok (core.result.Result.Ok (), a2) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:45:16: error: unsolved goals
+case ok.Ok.unit.ok.Err
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a1)
+a2 : Std.Array U32 48#usize
+e : AspisR614SelectedCombineBeta.Error
+h2 : query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Err e, a2)
+h :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err e)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let out1 ←
+                query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1 a2
+                    (Array.repeat 4#usize aspis_core.field.QM31.ZERO)
+              ok (core.result.Result.Ok out1)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x =>
+                    Result
+                      (core.result.Result (Std.Array aspis_core.field.QM31 4#usize) AspisR614SelectedCombineBeta.Error))
+                  x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x =>
+                Result
+                  (core.result.Result (Std.Array aspis_core.field.QM31 4#usize) AspisR614SelectedCombineBeta.Error))
+              x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2_1,
+    ok (core.result.Result.Ok PUnit.unit, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      ok (core.result.Result.Err e, a2) = ok (core.result.Result.Ok (), a2_1) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2_1, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2_1
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:52:19: error: unsolved goals
+case ok.Ok.unit.ok.Ok.unit.fail
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a1)
+a2 : Std.Array U32 48#usize
+h2 : query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a2)
+e : Std.Error
+hloop :
+  query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1 a2
+      (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+    fail e
+h :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => fail e
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+            residual) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2_1,
+    ok (core.result.Result.Ok PUnit.unit, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      ok (core.result.Result.Ok PUnit.unit, a2) = ok (core.result.Result.Ok (), a2_1) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2_1, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2_1
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:53:16: error: unsolved goals
+case ok.Ok.unit.ok.Ok.unit.div
+c1 c2 : Slice U8
+powers : query_arithmetic.BetaCoefficients
+z : Std.Array aspis_core.field.QM31 4#usize
+a1 : Std.Array U32 104#usize
+h1 : query_arithmetic.r55_decode_into c1 (Array.repeat 104#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a1)
+a2 : Std.Array U32 48#usize
+h2 : query_arithmetic.r55_decode_into c2 (Array.repeat 48#usize 0#u32) = ok (core.result.Result.Ok PUnit.unit, a2)
+hloop :
+  query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1 a2
+      (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+    div
+h :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => div
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+            residual) =
+    ok (core.result.Result.Ok z)
+⊢ ∃ a1_1 a2_1,
+    ok (core.result.Result.Ok PUnit.unit, a1) = ok (core.result.Result.Ok (), a1_1) ∧
+      ok (core.result.Result.Ok PUnit.unit, a2) = ok (core.result.Result.Ok (), a2_1) ∧
+        (∀ value ∈ ↑a1_1, ↑value < 2147483647) ∧
+          (∀ value ∈ ↑a2_1, ↑value < 2147483647) ∧
+            query_arithmetic.combine_beta_loop { start := 0#usize, «end» := 4#usize } powers a1_1 a2_1
+                (Array.repeat 4#usize aspis_core.field.QM31.ZERO) =
+              ok z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:55:35: error: Type mismatch: After simplification, term
+  h
+ has type
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok PUnit.unit)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok z1)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 4#usize) (core.convert.FromSame AspisR614SelectedCombineBeta.Error)
+            residual) =
+    ok (core.result.Result.Ok z)
+but is expected to have type
+  z1 = z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:57:31: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:57:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:30:108: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [h1,
+  ̲  ̲ ̲ ̲c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:31:105: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [h1,
+  ̲  ̲ ̲ ̲c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:35:109: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [h1,
+  ̲  ̲ ̲ ̲ ̲ ̲c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:40:112: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [h2,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:41:109: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [h2,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean:45:113: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [h2,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R638CombineAcceptedInputs.combine_accepted_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R638CombineAcceptedInputs.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R638CombineAcceptedInputs.lean"
+	User time (seconds): 1.31
+	System time (seconds): 0.39
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.69
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3743900
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86348
+	Voluntary context switches: 256
+	Involuntary context switches: 59
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.724s
+CPU time consumed: 1.739s
+Memory peak: 516.0K
+Memory swap peak: 0B
