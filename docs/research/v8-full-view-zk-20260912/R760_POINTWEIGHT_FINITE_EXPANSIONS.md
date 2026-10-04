@@ -1,0 +1,11 @@
+# R760 fixed-witness finite point-weight expansions
+
+Twelve focused targets prove all343 planned `pointWeight` values for the fixed R748 point-1 witness: 339 generated values plus the four existing R748 values at indices 0, 3, 188, and191. The generated values consist of a 19-leaf densest prototype and 11 chunks (32 values each except the final18). Each theorem unfolds only its concrete even or odd `sourceChordTranspose` branch, rewrites a named finite gather or nested-gather schedule, reduces only the named `zeroExtend 512` positions, and rewrites the listed R756 guarded or R759 nonzero transport leaves. It retains the exact `b + 576` leaf expressions and powers of the fixed half constant; the emitter performs no field arithmetic.
+
+Every green target used the pinned Lean4.32 cache with `-j1 -M4500` in a 5GiB-high/7GiB-max/no-swap/128-task systemd scope. All339 complete `#print axioms` reports contain only `propext`, `Classical.choice`, and `Quot.sound`. The green target receipts record 0 swap; wall time ranged from4.78seconds for the prototype to1:28.99 for a 32-value chunk, and peak Lean-child RSS ranged from3,600,092KiB to3,672,832KiB.
+
+The final emitter and exact generated source manifest passed `--check`. The evidence bundle contains source snapshots, full logs, receipts, all direct source pins and read-only remote `.olean` hashes for every green target. It separately preserves the seven changed rejected prototype attempts, including the first two byte-identical source attempts, and the rejected first Chunk00 source before the explicit even/odd renderer fix. No green target was replayed.
+
+This is finite source-formula coverage for a fixed algebraic witness only. It does not prove the chosen matrix has full rank, native selected-verifier execution, a legal H1/C1 witness construction, oracle behavior, privacy, or security.
+
+First remaining proposition: consume these exact finite expressions in all selected point-1 matrix entries, then bind the other two points, active and coefficient rows and the complete matrix certificate. Universal witness compatibility, adaptive shared-oracle law, native execution, full-view simulation and soundness remain open. Exact per-target revisions, hashes, exit status, wall time, peak RSS, swap and all axiom reports are in the green receipts. Verifier CU and security parameters unchanged.
