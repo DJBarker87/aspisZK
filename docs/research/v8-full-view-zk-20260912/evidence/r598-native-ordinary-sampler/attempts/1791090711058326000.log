@@ -1,0 +1,134 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791090711058326000.service; invocation ID: 2411972ed58347ad8698614c9cacd816
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:23:23: error: Function expected at
+  Result CQM31
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  Unit
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:23:44: error: Function expected at
+  Result NQM31
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  Unit
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:29:42: error: Function expected at
+  Result NQM31
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  Unit
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:30:42: error: Function expected at
+  Result CQM31
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  Unit
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:34:4: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:64:6: error(lean.unknownIdentifier): Unknown identifier `r`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:65:14: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:66:11: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:71:61: error: Application type mismatch: The argument
+  j
+has type
+  Usize
+but is expected to have type
+  Std.Array U8 32#usize
+in the application
+  R137SamplerInnerLoop.source_result_invariant 8 { start := 0#u32, «end» := 8#u32 } sourceState sr br j
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:72:15: error: Tactic `rfl` failed: The left-hand side
+  ↑jr
+is not definitionally equal to the right-hand side
+  8
+
+s : CTranscript
+b : Std.Array U8 32#usize
+j : Usize
+limb value : AspisR156FullFreeze.aspis_core.field.M31
+s1 : CTranscript
+b1 : Std.Array U8 32#usize
+j1 : Usize
+hj : ↑j ≤ 8
+sourceState : AspisR137Transcript.transcript.Transcript := R167TranscriptPrimitiveExecution.toR137 s
+h :
+  (do
+      let v ←
+        AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0
+            { start := 0#u32, «end» := AspisR137Transcript.transcript.CHALLENGE_RETRY_LIMIT } sourceState b j limb
+      ok (R167TranscriptPrimitiveExecution.fromR137 v.1, v.2.1, v.2.2.1, v.2.2.2.1, v.2.2.2.2)) =
+    ok (s1, b1, j1, value, true)
+hround : R167TranscriptPrimitiveExecution.fromR137 sourceState = s
+hmap :
+  AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+      { start := 0#u32, «end» := AspisR156FullFreeze.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+      (R167TranscriptPrimitiveExecution.fromR137 sourceState) b j limb =
+    do
+    let v ←
+      AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0
+          { start := 0#u32, «end» := AspisR137Transcript.transcript.CHALLENGE_RETRY_LIMIT } sourceState b j limb
+    ok (R169InnerSamplerExecution.finished v)
+sr : AspisR137Transcript.transcript.Transcript
+br : Std.Array U8 32#usize
+jr : Usize
+vr : AspisR137Transcript.field.M31
+accepted : Bool
+hs :
+  AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0 sorry sourceState b j limb =
+    ok (sr, br, jr, vr, accepted)
+⊢ ↑jr ≤ 8
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:73:6: error: Dependent elimination failed: Failed to solve equation
+  ok (s1, b1, j1, value, true) =
+    match
+      AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0
+        { start := 0#u32, «end» := AspisR137Transcript.transcript.CHALLENGE_RETRY_LIMIT } sourceState b j limb with
+    | ok v => (fun v => ok (R167TranscriptPrimitiveExecution.fromR137 v.1, v.2.1, v.2.2.1, v.2.2.2.1, v.2.2.2.2)) v
+    | fail v => fail v
+    | div => div
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:69:17: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵ ̵bind_tc_ok, AspisV8R19.R169InnerSamplerExecution.finished] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:69:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̵AspisV8R19.R169InnerSamplerExecution.finished] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R598NativeOrdinarySampler.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean"
+	User time (seconds): 1.05
+	System time (seconds): 0.41
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.46
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3733688
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86106
+	Voluntary context switches: 339
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.485s
+CPU time consumed: 1.488s
+Memory peak: 512.0K
+Memory swap peak: 0B

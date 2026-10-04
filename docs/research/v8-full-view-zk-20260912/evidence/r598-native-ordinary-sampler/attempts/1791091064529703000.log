@@ -1,0 +1,67 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791091064529703000.service; invocation ID: 03deece8f5d34f5d945aa187f384cbde
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:82:8: error: Tactic `injection` failed: too many identifiers provided, unused: [heq]
+
+s : CTranscript
+b : Std.Array U8 32#usize
+j : Usize
+limb value : AspisR156FullFreeze.aspis_core.field.M31
+s1 : CTranscript
+b1 : Std.Array U8 32#usize
+j1 : Usize
+hj : ↑j ≤ 8
+sourceState : AspisR137Transcript.transcript.Transcript := R167TranscriptPrimitiveExecution.toR137 s
+hround : R167TranscriptPrimitiveExecution.fromR137 sourceState = s
+hmap :
+  AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+      { start := 0#u32, «end» := AspisR156FullFreeze.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+      (R167TranscriptPrimitiveExecution.fromR137 sourceState) b j limb =
+    do
+    let v ←
+      AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0
+          { start := 0#u32, «end» := AspisR137Transcript.transcript.CHALLENGE_RETRY_LIMIT } sourceState b j limb
+    ok (R169InnerSamplerExecution.finished v)
+r : core.ops.range.Range U32 := { start := 0#u32, «end» := AspisR137Transcript.transcript.CHALLENGE_RETRY_LIMIT }
+sr : AspisR137Transcript.transcript.Transcript
+br : Std.Array U8 32#usize
+jr : Usize
+vr : AspisR137Transcript.field.M31
+accepted : Bool
+hs :
+  AspisR137Transcript.transcript.Transcript.challenge_qm31_loop0_loop0 r sourceState b j limb =
+    ok (sr, br, jr, vr, accepted)
+h : ok (R167TranscriptPrimitiveExecution.fromR137 sr, br, jr, vr, accepted) = ok (s1, b1, j1, value, true)
+hn : ↑r.end - ↑r.start = 8
+hinv : ↑jr ≤ 8 ∧ (accepted = true → ↑vr < 2147483647) ∧ (accepted = false → vr = limb)
+htuple : (R167TranscriptPrimitiveExecution.fromR137 sr, br, jr, vr, accepted) = (s1, b1, j1, value, true)
+⊢ jr = j1
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R598NativeOrdinarySampler.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean"
+	User time (seconds): 1.04
+	System time (seconds): 0.36
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.40
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3740744
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86212
+	Voluntary context switches: 360
+	Involuntary context switches: 77
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.435s
+CPU time consumed: 1.436s
+Memory peak: 512.0K
+Memory swap peak: 0B

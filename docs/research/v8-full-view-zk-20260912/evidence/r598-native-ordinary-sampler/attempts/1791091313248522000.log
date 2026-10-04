@@ -1,0 +1,237 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791091313248522000.service; invocation ID: e18136bf0907422cb5aa4637861d1f05
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:62:31: error: Application type mismatch: The argument
+  v
+has type
+  AspisR156FullFreeze.aspis_core.transcript.Transcript ×
+    Option
+        (core.result.Result AspisR156FullFreeze.aspis_core.field.QM31
+          AspisR156FullFreeze.aspis_core.transcript.ChallengeSampleExhausted) ×
+      core.slice.iter.IterMut AspisR156FullFreeze.aspis_core.field.M31
+but is expected to have type
+  ControlFlow CPending CFinished
+in the application
+  nativeControlOuter v
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:64:9: error: unsolved goals
+case zero
+it : NIter
+back : NIter → NIter
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hn : ↑it.slice.len - it.i = 0
+h : ¬it.i < ↑it.slice.len
+⊢ (s, none, back it) = sorry ()
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:90:15: error: unsolved goals
+case succ.fail
+n : ℕ
+ih :
+  ∀ (it : NIter) (back : NIter → NIter) (s : NTranscript) (b : Std.Array U8 32#usize) (j : Usize),
+    ↑j ≤ 8 →
+      ↑it.slice.len - it.i = n →
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31_loop0 it back s b j = do
+          let _ ←
+            AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31_loop0 it back (toCurrentTranscript s) b
+                j
+          ok sorry
+it : NIter
+back : NIter → NIter
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hn : ↑it.slice.len - it.i = n + 1
+h : it.i < ↑it.slice.len
+hn' : ↑it.slice.len - (it.i + 1) = n
+e : Error
+hc :
+  AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+      { start := 0#u32, «end» := AspisR156FullFreeze.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+      (toCurrentTranscript s) b j it.slice[it.i] =
+    fail e
+⊢ (match do
+      let __x ←
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+            { start := 0#u32, «end» := AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+            s b j it.slice[it.i]
+      if __x.2.2.2.2 = true then
+          ok
+            (cont
+              ({ slice := it.slice, i := it.i + 1 }, fun im =>
+                back { slice := im.slice.setAtNat it.i __x.2.2.2.1, i := im.i }, __x.1, __x.2.1, __x.2.2.1))
+        else
+          ok
+            (done
+              (__x.1, some (core.result.Result.Err ()),
+                back { slice := it.slice.setAtNat it.i __x.2.2.2.1, i := it.i + 1 })) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ←
+              if h : x.1.i < (↑x.1.slice).length then
+                  ok
+                    (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 }, fun it' x_1 =>
+                      match x_1 with
+                      | none => it'
+                      | some x_2 => { slice := it'.slice.setAtNat x.1.i x_2, i := it'.i })
+                else ok (none, x.1, fun it x => it)
+            match __x.1 with
+              | none => ok (done (x.2.2.1, none, x.2.1 (__x.2.2 __x.2.1 none)))
+              | some limb => do
+                let __x_1 ←
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+                      { start := 0#u32,
+                        «end» := AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+                      x.2.2.1 x.2.2.2.1 x.2.2.2.2 limb
+                if __x_1.2.2.2.2 = true then
+                    ok
+                      (cont
+                        (__x.2.1, fun im => x.2.1 (__x.2.2 im (some __x_1.2.2.2.1)), __x_1.1, __x_1.2.1, __x_1.2.2.1))
+                  else
+                    ok (done (__x_1.1, some (core.result.Result.Err ()), x.2.1 (__x.2.2 __x.2.1 (some __x_1.2.2.2.1)))))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:91:12: error: unsolved goals
+case succ.div
+n : ℕ
+ih :
+  ∀ (it : NIter) (back : NIter → NIter) (s : NTranscript) (b : Std.Array U8 32#usize) (j : Usize),
+    ↑j ≤ 8 →
+      ↑it.slice.len - it.i = n →
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31_loop0 it back s b j = do
+          let _ ←
+            AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31_loop0 it back (toCurrentTranscript s) b
+                j
+          ok sorry
+it : NIter
+back : NIter → NIter
+s : NTranscript
+b : Std.Array U8 32#usize
+j : Usize
+hj : ↑j ≤ 8
+hn : ↑it.slice.len - it.i = n + 1
+h : it.i < ↑it.slice.len
+hn' : ↑it.slice.len - (it.i + 1) = n
+hc :
+  AspisR156FullFreeze.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+      { start := 0#u32, «end» := AspisR156FullFreeze.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+      (toCurrentTranscript s) b j it.slice[it.i] =
+    div
+⊢ (match do
+      let __x ←
+        AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+            { start := 0#u32, «end» := AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+            s b j it.slice[it.i]
+      if __x.2.2.2.2 = true then
+          ok
+            (cont
+              ({ slice := it.slice, i := it.i + 1 }, fun im =>
+                back { slice := im.slice.setAtNat it.i __x.2.2.2.1, i := im.i }, __x.1, __x.2.1, __x.2.2.1))
+        else
+          ok
+            (done
+              (__x.1, some (core.result.Result.Err ()),
+                back { slice := it.slice.setAtNat it.i __x.2.2.2.1, i := it.i + 1 })) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let __x ←
+              if h : x.1.i < (↑x.1.slice).length then
+                  ok
+                    (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 }, fun it' x_1 =>
+                      match x_1 with
+                      | none => it'
+                      | some x_2 => { slice := it'.slice.setAtNat x.1.i x_2, i := it'.i })
+                else ok (none, x.1, fun it x => it)
+            match __x.1 with
+              | none => ok (done (x.2.2.1, none, x.2.1 (__x.2.2 __x.2.1 none)))
+              | some limb => do
+                let __x_1 ←
+                  AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.Transcript.challenge_qm31_loop0_loop0
+                      { start := 0#u32,
+                        «end» := AspisR569MaskedClaimCompleteConsts.aspis_core.transcript.CHALLENGE_RETRY_LIMIT }
+                      x.2.2.1 x.2.2.2.1 x.2.2.2.2 limb
+                if __x_1.2.2.2.2 = true then
+                    ok
+                      (cont
+                        (__x.2.1, fun im => x.2.1 (__x.2.2 im (some __x_1.2.2.2.1)), __x_1.1, __x_1.2.1, __x_1.2.2.1))
+                  else
+                    ok (done (__x_1.1, some (core.result.Result.Err ()), x.2.1 (__x.2.2 __x.2.1 (some __x_1.2.2.2.1)))))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:74:12: warning: This simp argument is unused:
+  nativeControlOuter
+
+Hint: Omit it from the simp argument list.
+  simp [n̵a̵t̵i̵v̵e̵C̵o̵n̵t̵r̵o̵l̵O̵u̵t̵e̵r̵,̵ ̵finishedNativeOuter, fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:74:32: warning: This simp argument is unused:
+  finishedNativeOuter
+
+Hint: Omit it from the simp argument list.
+  simp [nativeControlOuter, f̵i̵n̵i̵s̵h̵e̵d̵N̵a̵t̵i̵v̵e̵O̵u̵t̵e̵r̵,̵ ̵fromCurrentTranscript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:74:53: warning: This simp argument is unused:
+  fromCurrentTranscript
+
+Hint: Omit it from the simp argument list.
+  simp [nativeControlOuter, finishedNativeOuter,̵ ̵f̵r̵o̵m̵C̵u̵r̵r̵e̵n̵t̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:90:24: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean:91:21: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R598NativeOrdinarySampler.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R598NativeOrdinarySampler.lean"
+	User time (seconds): 1.51
+	System time (seconds): 0.38
+	Percent of CPU this job got: 103%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.83
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3749832
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86299
+	Voluntary context switches: 652
+	Involuntary context switches: 75
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.865s
+CPU time consumed: 1.923s
+Memory peak: 288.0K
+Memory swap peak: 0B
