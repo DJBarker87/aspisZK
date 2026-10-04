@@ -1,0 +1,64 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791117386535837000.service; invocation ID: c048c4021ae848e7a9e6c416fce551ef
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R677C1ChunkCanonical.lean:15:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => _a[↑j] = (↑c1)[26 * ↑slot + ↑j]
+Error: Application type mismatch: The argument
+  List.Vector.length_val (c1Chunk c1 slot)
+has type
+  (↑(c1Chunk c1 slot)).length = ↑26#usize
+but is expected to have type
+  _a.length = ↑26#usize
+in the application
+  Eq.trans (List.Vector.length_val (c1Chunk c1 slot))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+c1 : Std.Array U32 104#usize
+slot : Fin 4
+j : Fin 26
+⊢ (↑(c1Chunk c1 slot))[↑j] = (↑c1)[26 * ↑slot + ↑j]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (26 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisV8R19.R677C1ChunkCanonical.c1Chunk_getElem' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R677C1ChunkCanonical.c1Chunk_pointwise' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R677C1ChunkCanonical.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R677C1ChunkCanonical.lean"
+	User time (seconds): 1.33
+	System time (seconds): 0.38
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.71
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3725360
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86612
+	Voluntary context switches: 224
+	Involuntary context switches: 65
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.745s
+CPU time consumed: 1.753s
+Memory peak: 256.0K
+Memory swap peak: 0B
