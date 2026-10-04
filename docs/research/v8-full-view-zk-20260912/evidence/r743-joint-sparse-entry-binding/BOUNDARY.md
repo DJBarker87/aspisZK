@@ -1,0 +1,3 @@
+R743 proves the guarded full flattening of the indexed sparse direction equals the existing Nat-indexed direction, and every one of its 222 ordinary joint observations equals the exact sparse active, point, or coefficient formula. All quotient image updates are retained. It holds over any commutative ring.
+
+This is not native execution, optimized tensor equivalence, a joint rank or nonzero determinant theorem, universal legal witness compatibility, a shared-oracle law, probability losses, a simulator, privacy, or soundness. First remaining proposition: exact polynomial evaluation of these joint entries followed by source entry and block inverse certificate verification.
