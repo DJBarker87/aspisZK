@@ -1,0 +1,51 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-r759-point1-transport-179114.service; invocation ID: e3013baf02c34c86a3e6c0a66b513bff
+warning: constant `MODULUS` is never used
+ --> input/emit_point1_transport.rs:9:7
+  |
+9 | const MODULUS: u64 = 2_147_483_647;
+  |       ^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `P` is never used
+  --> input/emit_point1_transport.rs:10:7
+   |
+10 | const P: [i64; 10] = [1, 1, 2, 3, 4, 2, 2, 3, 2, -1];
+   |       ^
+
+warning: 2 warnings emitted
+
+	Command being timed: "rustc --edition=2021 -C opt-level=3 -C codegen-units=1 -C overflow-checks=yes input/emit_point1_transport.rs -o point1_transport_emitter"
+	User time (seconds): 0.74
+	System time (seconds): 0.06
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.79
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 152316
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 28
+	Minor (reclaiming a frame) page faults: 24092
+	Voluntary context switches: 479
+	Involuntary context switches: 22
+	Swaps: 0
+	File system inputs: 504
+	File system outputs: 8232
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+thread 'main' (2214838) panicked at input/emit_point1_transport.rs:63:59:
+called `Result::unwrap()` on an `Err` value: ParseIntError { kind: InvalidDigit }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=101
+Service runtime: 804ms
+CPU time consumed: 820ms
+Memory peak: 508.0K
+Memory swap peak: 0B
