@@ -1,0 +1,13 @@
+# R704: Last-row determinant reduction
+
+This formal milestone proves a generic determinant identity for the exact block shape needed by the active-core route, plus a separate symbolic polynomial nonzero fact. It does not prove the actual R700 matrix has that shape.
+
+The Lean target is `AspisV8R19/R704LastRowDeterminant.lean`, compiled from source revision `0c9b2f592b22632ebe32c1fbd8addb6302106c58`. The successful source SHA-256 is `5719276f9c922fb4d0be4446330e7cffbfb775cc36dd47edd6e0c5da03818ac9`. The final focused run was `1791126933248526000`: exit 0, wall time 1.27 s, peak Lean-child RSS 3,251,252 KiB, swap 0. It used the pinned Lean 4.32 cached workspace, `-j1 -M4500`, systemd `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, and `TasksMax=128`. The main direct Mathlib source pins were `Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean` SHA-256 `1eadd186be7ddad177a9f6749fda5cef57976765f6f33e7a51e29f5791f69205`, `Mathlib/Algebra/Polynomial/BigOperators.lean` SHA-256 `3855de2b1a1f005bb6769a8e6c3813a2220881457d43fe0a2604a3b2f7d94b55`, and `Mathlib/Tactic.lean` SHA-256 `c6f2c548596b635a3d5c8aff8b19cbdeb60dd54e41bb89a1cd03b1a54d335fa5`.
+
+`update_last_row_block_det` states that if an arbitrary matrix on `I ⊕ Unit` becomes `fromBlocks A B 0 d` after adding `r` times a distinct pivot row into the final row, its determinant equals `det A * d`. It applies the distinct-row determinant operation and the block-triangular determinant lemma. `polynomial_x_squared_factor_ne_zero` states that over an integral domain, `κ ≠ 0` and `Q.eval 0 ≠ 0` imply `C κ * X^2 * Q ≠ 0`.
+
+Both complete `#print axioms` outputs contain only `[propext, Classical.choice, Quot.sound]`. The complete logs and byte-identical source snapshots for all attempts are in `evidence/r704-last-row-determinant/attempts/`.
+
+Two failed attempts are preserved: `1791126901797655000` used a nonexistent cached import path for `Mathlib.LinearAlgebra.Polynomial.Basic`; `1791126918073629000` exposed the missing `NoZeroDivisors (Polynomial R)` instance under only `[Nontrivial R]`. The corrected target imports `Mathlib.Algebra.Polynomial.BigOperators` and requires `[IsDomain R]` for the polynomial fact. No failed source was overwritten.
+
+The first missing proposition for the campaign is to establish the exact actual active-matrix row/update equality and identify its complementary minor with the intended 213-dimensional core. Actual-prefix determinant nonvanishing, sampled normalized-circle coverage and law, native source-scatter binding, universal privacy, and security accounting remain unproved by this milestone.
