@@ -1,0 +1,3 @@
+R746 fixes the exact 222-column joint minor: 214 selected core pairs, (23,1..3), (24,1..3), (27,3), and (47,3), with slot numbers here stated in the source nonconstant-slot convention. The Lean selector uses Fin3 values0..2. It proves exact polynomial matrix/determinant evaluation and the observation index cardinality222.
+
+It does not prove a nonzero determinant, link a saved TSV ordering to the source matrix, establish query repair, native execution, optimized tensor equality, universal legal witness compatibility, an adaptive shared-oracle law, privacy, soundness, or probability losses. First remaining proposition: exact source-entry equality with the chosen certificate matrix and in-kernel verification of its block inverses and below-block zeros.

@@ -1,0 +1,7 @@
+# R746 selected joint minor
+
+R746 fixes the exact 222-column joint minor: 214 selected core pairs, (23,1..3), (24,1..3), (27,3), and (47,3), with slot numbers here stated in the source nonconstant-slot convention. The Lean selector uses Fin3 values0..2. It proves exact polynomial matrix/determinant evaluation and the observation index cardinality222.
+
+It does not prove a nonzero determinant, link a saved TSV ordering to the source matrix, establish query repair, native execution, optimized tensor equality, universal legal witness compatibility, an adaptive shared-oracle law, privacy, soundness, or probability losses. First remaining proposition: exact source-entry equality with the chosen certificate matrix and in-kernel verification of its block inverses and below-block zeros.
+
+Target `AspisV8R19/R746SelectedJointMinor.lean`; revision `c1ff8c0fc2ec436f89d003c0314f9b3f005ac89e`; SHA-256 `f2f1623052e035a0d9a8d6e635df38a9cfd3ee7177b84255a1f7065ea60ee399`. Run `1791139944757844000`: exit0, wall2.13s, peak Lean-child RSS3,361,144KiB, swap0. Pinned Lean4.32; cgroup5G/7G/no-swap/TasksMax128, flags `-j1 -M4500`. All three complete axiom reports contain only standard axioms. Exact source, direct import receipt plus supplemental cached R745 source/olean pins, complete logs, and runner are saved. Three failed focused drafts are retained separately and are not release evidence. No unchanged successful checks were rerun. Verifier source, CU results, and security parameters are unchanged.
