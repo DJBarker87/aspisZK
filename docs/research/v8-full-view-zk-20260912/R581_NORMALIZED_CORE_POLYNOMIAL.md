@@ -1,0 +1,11 @@
+# R581 normalized sparse G core polynomial
+
+R581 proves that substituting the normalized circle chord into the reviewed R574 sparse G-core polynomial gives a nonzero determinant polynomial with total degree at most 1,355. The polynomial variables are distinct: `alpha = X 0`, `u = X 1`, and `v = X 2`; the chord coordinates are `a = 1 + u*v`, `b = u*v - 1`, and `c = -(u+v)`. The proof keeps the three separate chord-component families from R574.
+
+The determinant evaluation is witnessed at `alpha = 1`, `u = i`, `v = -i` under the explicit premise `i*i = -1`. At this point the normalized chord is `(2,0,0)`. This is an algebraic witness at the excluded circle pole; it is not an admissible sampled prefix.
+
+The proved boundary is polynomial substitution, equality of the evaluated matrix with the R574 `coreMatrix`, nonvanishing under the explicit square-root premise, entry total degree at most 5, and determinant total degree at most 1,355. It does not prove actual-source normalized challenge correspondence, that the witness is sampled, a probability bound, low repair, the full G image, or privacy/security closure. The next proposition is to justify the square-root premise in the selected QM31 field and connect the normalized polynomial/challenge law to actual selected-source prefixes without using the excluded witness as a sampled point.
+
+Canonical target: `AspisV8R19/R581NormalizedCorePolynomial.lean`. Exact source SHA256: `7098a3e742aa7615564154304a49b664474304db18600383663afdb7f7d87d29`. Source revision at check: `a11c00dcdf04c2fd3565ed2dd0e81a2ac2adb137`. Canonical-path compilation exited 0 in 0:02.27; peak Lean-child RSS 2272288 KiB; swap 0. Pinned runner settings: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128, Lean `-j1 -M4500`. Direct import hashes: R574 `ccd4bab7796221eada233ba04de5c83a09e8565f69009d24115d7a822abc4b16`; `MinorDegree` `8f38c6baf1612ecbbc0c24f979ad48ba93ba4c317b0f0827bb957672a8d0dae5`.
+
+The canonical run printed complete axioms for all eight principal lemmas; each reports only `[propext, Classical.choice, Quot.sound]`. Fourteen scratch-target attempts are archived, including eleven failures and three greens; the separate canonical module-path check is green and archived as the fifteenth attempt. No verifier source or campaign benchmark was changed or rerun.
