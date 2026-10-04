@@ -1,0 +1,73 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791083370470855000.service; invocation ID: cbd551218f7b4047a0de8a6eec92d333
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R575NativeClaimHashCall.lean:18:4: error: Tactic `apply` failed: could not unify the conclusion of `@UScalar.sub_spec`
+  ?x - ?y ⦃ z => ↑z = ↑?x - ↑?y ∧ ↑?y ≤ ↑?x ⦄
+with the goal
+  192#usize - 34#usize ⦃ x => ↑x = 158 ⦄
+
+Note: The full type of `@UScalar.sub_spec` is
+  ∀ {ty : UScalarTy} {x y : UScalar ty}, ↑y ≤ ↑x → x - y ⦃ z => ↑z = ↑x - ↑y ∧ ↑y ≤ ↑x ⦄
+
+⊢ 192#usize - 34#usize ⦃ x => ↑x = 158 ⦄
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R575NativeClaimHashCall.lean:37:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 192
+  b - c ≤ 33
+  0 ≤ a ≤ 158
+where
+ a := ↑(↑data).length
+ b := ↑Usize.max
+ c := ↑data.length
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R575NativeClaimHashCall.lean:40:4: error: Type mismatch
+  R137TranscriptPrimitiveBridge.packed_payload_limit
+has type
+  ↑(AspisR137Transcript.transcript.Transcript.absorb.PACKED_ABSORB_BYTES.wrapping_sub 34#usize) = 158
+but is expected to have type
+  ↑(Usize.wrapping_sub 192#usize 34#usize) = ↑158#usize
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R575NativeClaimHashCall.lean:67:4: error: Type mismatch: After simplification, term
+  hd
+ has type
+  (↑data).length ≤ 158
+but is expected to have type
+  (↑data).length ≤ ↑(Usize.wrapping_sub 192#usize 34#usize)
+'AspisV8R19.R575NativeClaimHashCall.checked_limit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R575NativeClaimHashCall.absorb_map_short' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R575NativeClaimHashCall.claim_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R575NativeClaimHashCall.claim_absorb_execution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R575NativeClaimHashCall.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R575NativeClaimHashCall.lean"
+	User time (seconds): 1.22
+	System time (seconds): 0.50
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.71
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3750984
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 4
+	Minor (reclaiming a frame) page faults: 88498
+	Voluntary context switches: 602
+	Involuntary context switches: 81
+	Swaps: 0
+	File system inputs: 1200
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.746s
+CPU time consumed: 1.761s
+Memory peak: 328.0K
+Memory swap peak: 0B
