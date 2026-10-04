@@ -1,0 +1,378 @@
+--- parent-current/src/extract/Extract.ml
++++ E/src/extract/Extract.ml
+@@ -647,6 +647,22 @@
+       | Div (OWrap, _)
+       | Shl (OWrap, _, _)
+       | Shr (OWrap, _, _) ) ) ->
++      let shift_count_literal =
++        let shift_width =
++          match arg0.ty with
++          | TLiteral (TUInt U32) -> Some 32
++          | TLiteral (TUInt U64) -> Some 64
++          | _ -> None
++        in
++        match (binop, shift_width, arg1.ty, arg1.e) with
++        | ( (Shl (OWrap, _, _) | Shr (OWrap, _, _)),
++            Some width,
++            TLiteral (TInt I32),
++            Const (VScalar (SignedScalar (I32, value))) )
++          when Z.geq value Z.zero && Z.lt value (Z.of_int width) ->
++            Some (VScalar (UnsignedScalar (U32, value)))
++        | _ -> None
++      in
+       let binop =
+         match binop with
+         | Add _ -> "add"
+@@ -668,7 +684,10 @@
+       F.pp_print_space fmt ();
+       extract_expr ~inside:true arg0;
+       F.pp_print_space fmt ();
+-      extract_expr ~inside:true arg1
++      (match shift_count_literal with
++      | Some literal ->
++          extract_literal span fmt ~is_pattern:false ~inside:true literal
++      | None -> extract_expr ~inside:true arg1)
+   | _ ->
+       let binop_is_shift =
+         match binop with
+@@ -923,6 +942,37 @@
+   | Fun fun_id, _ ->
+       let use_brackets = inside in
+       if use_brackets then F.pp_print_string fmt "(";
++      (* Narrow printer compatibility for the retained phantom const argument
++         at the selected closure call. The LLBC argument remains unchanged;
++         this only ensures Lean receives the already-present argument. *)
++      let force_selected_phantom_const =
++        match fun_id with
++        | FromLlbc (FunId (FRegular fun_decl_id), None)
++          when backend () = Lean
++               && generics.types = []
++               && generics.trait_refs = []
++               && (match generics.const_generics with
++                  | [ CgVar (Free _) ] -> true
++                  | _ -> false) ->
++            let resolved_name = ctx_get_function span fun_id ctx in
++            if
++              resolved_name
++              <>
++              "query_arithmetic.r55_decode_into.closure.Insts.CoreOpsFunctionFnTupleUsizeU64.call"
++            then false
++            else
++              (match ctx_lookup_fun_decl_info ctx fun_decl_id with
++              | None -> false
++              | Some trans_fun ->
++                  let f = trans_fun.f in
++                  f.builtin_info = None
++                  && f.signature.generics.types = []
++                  && f.signature.generics.trait_clauses = []
++                  && List.length f.signature.generics.const_generics = 1
++                  && f.signature.explicit_info.explicit_types = []
++                  && f.signature.explicit_info.explicit_const_generics = [ Implicit ])
++        | _ -> false
++      in
+       (* Print the function name.
+ 
+          For the function name: the id is not the same depending on whether
+@@ -991,7 +1041,8 @@
+           F.pp_print_string fmt ("." ^ add_brackets fun_name)
+       | _ ->
+           let fun_name = ctx_get_function span fun_id ctx in
+-          F.pp_print_string fmt fun_name);
++          F.pp_print_string fmt
++            (if force_selected_phantom_const then "@" ^ fun_name else fun_name));
+ 
+       (* Sanity check: HOL4 doesn't support const generics *)
+       [%sanity_check] span (generics.const_generics = [] || backend () <> HOL4);
+@@ -1057,6 +1108,12 @@
+           (* Fallback if, for instance, we could not lookup the declaration *)
+           [%save_error] span "Internal error";
+           None
++      in
++      let explicit =
++        if force_selected_phantom_const then
++          Some
++            { explicit_types = []; explicit_const_generics = [ Explicit ] }
++        else explicit
+       in
+       (* Filter the generics.
+ 
+--- parent-current/src/interp/InterpExpressions.ml
++++ E/src/interp/InterpExpressions.ml
+@@ -1154,58 +1154,79 @@
+     * (SymbolicAst.expr -> SymbolicAst.expr) =
+   (* Evaluate the operands *)
+   let (v1, v2), ctx, cc = eval_two_operands config span op1 op2 ctx in
+-  (* Generate a fresh symbolic value to store the result *)
+-  let res_sv_id = ctx.fresh_symbolic_value_id () in
+-  let res_sv_ty =
+-    if binop = Eq || binop = Ne then (
+-      (* Equality operations *)
+-      [%sanity_check] span (v1.ty = v2.ty);
+-      (* Equality/inequality check is primitive only for a subset of types *)
+-      [%cassert] span (ty_is_copyable v1.ty)
+-        "The type is not primitively copyable";
+-      TLiteral TBool)
+-    else
+-      (* Other operations: input types can be booleans for comparison operators
+-       (booleans are ordered: [false < true]), or bitwise operators (&, |, ^).
+-       In the other cases, input types are integers *)
+-      match (v1.ty, v2.ty) with
+-      | TLiteral TBool, TLiteral TBool
+-        when binop = Lt || binop = Le || binop = Ge || binop = Gt
+-             || binop = BitAnd || binop = BitOr || binop = BitXor ->
+-          TLiteral TBool
+-      | TLiteral lty1, TLiteral lty2
+-        when literal_type_is_integer lty1 && literal_type_is_integer lty2 -> (
+-          let int_ty1, int_ty2 = (ty_as_integer v1.ty, ty_as_integer v2.ty) in
+-          match binop with
+-          | Lt | Le | Ge | Gt ->
+-              [%sanity_check] span (int_ty1 = int_ty2);
+-              TLiteral TBool
+-          | Div _ | Rem _ | Add _ | Sub _ | Mul _ | BitXor | BitAnd | BitOr ->
+-              [%sanity_check] span (int_ty1 = int_ty2);
+-              TLiteral (integer_as_literal int_ty1)
+-          | Cmp ->
+-              [%sanity_check] span (int_ty1 = int_ty2);
+-              TLiteral (TInt I8)
+-          (* These return `(int, bool)` / a pointer which isn't a literal type *)
+-          | AddChecked | SubChecked | MulChecked | Offset ->
+-              [%craise] span "Unimplemented binary operation"
+-          | Shl _ | Shr _ ->
+-              (* The number of bits can be of a different integer type
+-                 than the operand *)
+-              TLiteral (integer_as_literal int_ty1)
+-          | Ne | Eq -> [%craise] span "Unreachable")
+-      | _ -> [%craise] span "Invalid inputs for binop"
++  let is_same_integer_literal =
++    match (v1.ty, v1.value, v2.ty, v2.value) with
++    | TLiteral (TInt ty1), VLiteral (VScalar (SignedScalar (sv_ty1, _))),
++      TLiteral (TInt ty2), VLiteral (VScalar (SignedScalar (sv_ty2, _))) ->
++        ty1 = ty2 && sv_ty1 = ty1 && sv_ty2 = ty2
++    | TLiteral (TUInt ty1), VLiteral (VScalar (UnsignedScalar (sv_ty1, _))),
++      TLiteral (TUInt ty2), VLiteral (VScalar (UnsignedScalar (sv_ty2, _))) ->
++        ty1 = ty2 && sv_ty1 = ty1 && sv_ty2 = ty2
++    | _ -> false
+   in
+-  let res_sv = { sv_id = res_sv_id; sv_ty = res_sv_ty } in
+-  let v = mk_tvalue_from_symbolic_value res_sv in
+-  (* Synthesize the symbolic AST *)
+-  let p1 = mk_opt_place_from_op span op1 ctx in
+-  let p2 = mk_opt_place_from_op span op2 ctx in
+-  let cc =
+-    cc_comp cc (synthesize_binary_op span ctx binop v1 p1 v2 p2 res_sv None)
++  let symbolic_result () =
++    (* Generate a fresh symbolic value to store the result *)
++    let res_sv_id = ctx.fresh_symbolic_value_id () in
++    let res_sv_ty =
++      if binop = Eq || binop = Ne then (
++        (* Equality operations *)
++        [%sanity_check] span (v1.ty = v2.ty);
++        (* Equality/inequality check is primitive only for a subset of types *)
++        [%cassert] span (ty_is_copyable v1.ty)
++          "The type is not primitively copyable";
++        TLiteral TBool)
++      else
++        (* Other operations: input types can be booleans for comparison operators
++         (booleans are ordered: [false < true]), or bitwise operators (&, |, ^).
++         In the other cases, input types are integers *)
++        match (v1.ty, v2.ty) with
++        | TLiteral TBool, TLiteral TBool
++          when binop = Lt || binop = Le || binop = Ge || binop = Gt
++               || binop = BitAnd || binop = BitOr || binop = BitXor ->
++            TLiteral TBool
++        | TLiteral lty1, TLiteral lty2
++          when literal_type_is_integer lty1 && literal_type_is_integer lty2 -> (
++            let int_ty1, int_ty2 = (ty_as_integer v1.ty, ty_as_integer v2.ty) in
++            match binop with
++            | Lt | Le | Ge | Gt ->
++                [%sanity_check] span (int_ty1 = int_ty2);
++                TLiteral TBool
++            | Div _ | Rem _ | Add _ | Sub _ | Mul _ | BitXor | BitAnd | BitOr ->
++                [%sanity_check] span (int_ty1 = int_ty2);
++                TLiteral (integer_as_literal int_ty1)
++            | Cmp ->
++                [%sanity_check] span (int_ty1 = int_ty2);
++                TLiteral (TInt I8)
++            (* These return `(int, bool)` / a pointer which isn't a literal type *)
++            | AddChecked | SubChecked | MulChecked | Offset ->
++                [%craise] span "Unimplemented binary operation"
++            | Shl _ | Shr _ ->
++                (* The number of bits can be of a different integer type
++                   than the operand *)
++                TLiteral (integer_as_literal int_ty1)
++            | Ne | Eq -> [%craise] span "Unreachable")
++        | _ -> [%craise] span "Invalid inputs for binop"
++    in
++    let res_sv = { sv_id = res_sv_id; sv_ty = res_sv_ty } in
++    let v = mk_tvalue_from_symbolic_value res_sv in
++    (* Synthesize the symbolic AST *)
++    let p1 = mk_opt_place_from_op span op1 ctx in
++    let p2 = mk_opt_place_from_op span op2 ctx in
++    let cc =
++      cc_comp cc (synthesize_binary_op span ctx binop v1 p1 v2 p2 res_sv None)
++    in
++    (* Compose and apply *)
++    (Ok v, ctx, cc)
++
+   in
+-  (* Compose and apply *)
+-  (Ok v, ctx, cc)
++  let supported_literal_op =
++    match binop with Lt | Add OPanic | Sub OPanic -> true | _ -> false
++  in
++  if supported_literal_op && is_same_integer_literal then
++    match eval_binary_op_concrete_compute span binop v1 v2 ctx with
++    | Ok value -> (Ok value, ctx, cc)
++    | Error _ -> symbolic_result ()
++  else symbolic_result ()
+ 
+ let eval_binary_op (config : config) (span : Meta.span) (binop : binop)
+     (op1 : operand) (op2 : operand) (ctx : eval_ctx) :
+--- parent-current/src/interp/InterpExpressions.mli
++++ E/src/interp/InterpExpressions.mli
+@@ -111,3 +111,10 @@
+   ty ->
+   ty ->
+   (type_decl_id * generic_args * FieldId.id * ty * ty) option
++
++(** Convert a literal integer constant to its typed interpreter value. *)
++val literal_to_tvalue : Meta.span -> literal_type -> literal -> eval_ctx -> tvalue
++
++(** Compute a binary operation after its operands have been evaluated. *)
++val eval_binary_op_concrete_compute :
++  Meta.span -> binop -> tvalue -> tvalue -> eval_ctx -> (tvalue, eval_error) result
+--- parent-current/src/interp/InterpStatements.ml
++++ E/src/interp/InterpStatements.ml
+@@ -796,12 +796,132 @@
+   let ctx = ctx_push_dummy_var ctx dummy_id loan in
+   (ctx, borrow)
+ 
++(** Recognize only a scalar integer NamedConst whose initializer is one of the
++    two exact compiler-emitted bodies below. Any other shape falls back to the
++    ordinary symbolic-global path. *)
++let eval_named_const_scalar_initializer (span : Meta.span)
++    (gref : global_decl_ref) (global : global_decl) (ctx : eval_ctx) : tvalue option =
++  let integer_literal_to_value (lit : literal) : tvalue option =
++    match (global.ty, lit) with
++    | TLiteral (TInt expected as lit_ty),
++      VScalar (SignedScalar (actual, _) as scalar)
++      when expected = actual ->
++        Some (literal_to_tvalue span lit_ty (VScalar scalar) ctx)
++    | TLiteral (TUInt expected as lit_ty),
++      VScalar (UnsignedScalar (actual, _) as scalar)
++      when expected = actual ->
++        Some (literal_to_tvalue span lit_ty (VScalar scalar) ctx)
++    | _ -> None
++  in
++  let constant_integer_literal = function
++    | Constant { kind = CLiteral lit; ty } when ty = global.ty ->
++        integer_literal_to_value lit
++    | _ -> None
++  in
++  let is_local_id n id = id = LocalId.of_int n in
++  if
++    global.global_kind <> NamedConst
++    || global.generics <> empty_generic_params
++    || gref.generics <> empty_generic_args
++    || global.value.ty <> global.ty
++  then None
++  else
++    match global.value.kind with
++    | CCall
++        ({ kind = FunId (FRegular fid); generics }, [])
++      when generics = empty_generic_args ->
++        (match FunDeclId.Map.find_opt fid ctx.crate.fun_decls with
++        | None -> None
++        | Some fdef ->
++            if
++              fdef.is_global_initializer <> Some global.def_id
++              || fdef.generics <> empty_generic_params
++              || fdef.signature.inputs <> []
++              || fdef.signature.output <> global.ty
++            then None
++            else
++              match body_as_body fdef.body with
++              | None -> None
++              | Some body
++                when body.bound_body_regions = 0
++                     && body.locals.arg_count = 0 ->
++                  (match body.body.statements with
++                  | [
++                   {
++                     kind =
++                       Assign
++                         ( { kind = PlaceLocal dest_id; ty = dest_ty },
++                           Use
++                             ( Constant { kind = CLiteral lit; ty = const_ty },
++                               (NoRetag | YesRetag) ) );
++                     _;
++                   };
++                   { kind = Return; _ };
++                  ]
++                    when is_local_id 0 dest_id
++                         && dest_ty = global.ty
++                         && const_ty = global.ty ->
++                      (match body.locals.locals with
++                      | [ret]
++                        when is_local_id 0 ret.index
++                             && ret.local_ty = global.ty ->
++                          integer_literal_to_value lit
++                      | _ -> None)
++                  | [
++                   {
++                     kind =
++                       Assign
++                         ( { kind = PlaceLocal tmp_dest; ty = tmp_dest_ty },
++                           BinaryOp (Add OPanic, op1, op2) );
++                     _;
++                   };
++                   {
++                     kind =
++                       Assign
++                         ( { kind = PlaceLocal ret_dest; ty = ret_dest_ty },
++                           Use
++                             ( Move { kind = PlaceLocal moved_tmp; ty = moved_ty },
++                               (NoRetag | YesRetag) ) );
++                     _;
++                   };
++                   { kind = Return; _ };
++                  ]
++                    when is_local_id 1 tmp_dest
++                         && tmp_dest_ty = global.ty
++                         && is_local_id 0 ret_dest
++                         && ret_dest_ty = global.ty
++                         && is_local_id 1 moved_tmp
++                         && moved_ty = global.ty ->
++                      (match body.locals.locals with
++                      | [ ret; tmp ]
++                        when is_local_id 0 ret.index
++                             && ret.local_ty = global.ty
++                             && is_local_id 1 tmp.index
++                             && tmp.local_ty = global.ty ->
++                          (match (constant_integer_literal op1,
++                                  constant_integer_literal op2) with
++                          | Some v1, Some v2 ->
++                              (match
++                                 eval_binary_op_concrete_compute span
++                                   (Add OPanic) v1 v2 ctx
++                               with
++                              | Ok value when value.ty = global.ty -> Some value
++                              | Ok _ | Error _ -> None)
++                          | _ -> None)
++                      | _ -> None)
++                  | _ -> None)
++              | Some _ -> None)
++    | _ -> None
++
+ (** Helper: introduce a fresh symbolic value for a global *)
+ let eval_global_as_fresh_symbolic_value (span : Meta.span)
+     (gref : global_decl_ref) (ctx : eval_ctx) :
+     eval_ctx * tvalue * (SA.expr -> SA.expr) =
+   let generics = gref.generics in
+   let global = ctx_lookup_global_decl span ctx gref.id in
++  match eval_named_const_scalar_initializer span gref global ctx with
++  | Some value -> (ctx, value, fun e -> e)
++  | None ->
+   (* The global might itself be a (static) reference - TODO: generalize *)
+   match global.ty with
+   | TRef (RStatic, _, RShared) ->

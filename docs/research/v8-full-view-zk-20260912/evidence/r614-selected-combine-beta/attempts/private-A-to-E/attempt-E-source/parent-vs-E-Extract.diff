@@ -1,0 +1,98 @@
+--- parent-current/src/extract/Extract.ml
++++ E/src/extract/Extract.ml
+@@ -647,6 +647,22 @@
+       | Div (OWrap, _)
+       | Shl (OWrap, _, _)
+       | Shr (OWrap, _, _) ) ) ->
++      let shift_count_literal =
++        let shift_width =
++          match arg0.ty with
++          | TLiteral (TUInt U32) -> Some 32
++          | TLiteral (TUInt U64) -> Some 64
++          | _ -> None
++        in
++        match (binop, shift_width, arg1.ty, arg1.e) with
++        | ( (Shl (OWrap, _, _) | Shr (OWrap, _, _)),
++            Some width,
++            TLiteral (TInt I32),
++            Const (VScalar (SignedScalar (I32, value))) )
++          when Z.geq value Z.zero && Z.lt value (Z.of_int width) ->
++            Some (VScalar (UnsignedScalar (U32, value)))
++        | _ -> None
++      in
+       let binop =
+         match binop with
+         | Add _ -> "add"
+@@ -668,7 +684,10 @@
+       F.pp_print_space fmt ();
+       extract_expr ~inside:true arg0;
+       F.pp_print_space fmt ();
+-      extract_expr ~inside:true arg1
++      (match shift_count_literal with
++      | Some literal ->
++          extract_literal span fmt ~is_pattern:false ~inside:true literal
++      | None -> extract_expr ~inside:true arg1)
+   | _ ->
+       let binop_is_shift =
+         match binop with
+@@ -923,6 +942,37 @@
+   | Fun fun_id, _ ->
+       let use_brackets = inside in
+       if use_brackets then F.pp_print_string fmt "(";
++      (* Narrow printer compatibility for the retained phantom const argument
++         at the selected closure call. The LLBC argument remains unchanged;
++         this only ensures Lean receives the already-present argument. *)
++      let force_selected_phantom_const =
++        match fun_id with
++        | FromLlbc (FunId (FRegular fun_decl_id), None)
++          when backend () = Lean
++               && generics.types = []
++               && generics.trait_refs = []
++               && (match generics.const_generics with
++                  | [ CgVar (Free _) ] -> true
++                  | _ -> false) ->
++            let resolved_name = ctx_get_function span fun_id ctx in
++            if
++              resolved_name
++              <>
++              "query_arithmetic.r55_decode_into.closure.Insts.CoreOpsFunctionFnTupleUsizeU64.call"
++            then false
++            else
++              (match ctx_lookup_fun_decl_info ctx fun_decl_id with
++              | None -> false
++              | Some trans_fun ->
++                  let f = trans_fun.f in
++                  f.builtin_info = None
++                  && f.signature.generics.types = []
++                  && f.signature.generics.trait_clauses = []
++                  && List.length f.signature.generics.const_generics = 1
++                  && f.signature.explicit_info.explicit_types = []
++                  && f.signature.explicit_info.explicit_const_generics = [ Implicit ])
++        | _ -> false
++      in
+       (* Print the function name.
+ 
+          For the function name: the id is not the same depending on whether
+@@ -991,7 +1041,8 @@
+           F.pp_print_string fmt ("." ^ add_brackets fun_name)
+       | _ ->
+           let fun_name = ctx_get_function span fun_id ctx in
+-          F.pp_print_string fmt fun_name);
++          F.pp_print_string fmt
++            (if force_selected_phantom_const then "@" ^ fun_name else fun_name));
+ 
+       (* Sanity check: HOL4 doesn't support const generics *)
+       [%sanity_check] span (generics.const_generics = [] || backend () <> HOL4);
+@@ -1057,6 +1108,12 @@
+           (* Fallback if, for instance, we could not lookup the declaration *)
+           [%save_error] span "Internal error";
+           None
++      in
++      let explicit =
++        if force_selected_phantom_const then
++          Some
++            { explicit_types = []; explicit_const_generics = [ Explicit ] }
++        else explicit
+       in
+       (* Filter the generics.
+ 

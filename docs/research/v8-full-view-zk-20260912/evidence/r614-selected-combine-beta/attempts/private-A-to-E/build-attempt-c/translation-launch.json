@@ -1,0 +1,37 @@
+{
+  "systemd_argv": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r614-combine-beta-translation-20261004-c",
+    "--working-directory=/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "-p",
+    "RuntimeMaxSec=200s",
+    "python3",
+    "-c",
+    "import pathlib,json,hashlib,subprocess,re,sys\nbinary=pathlib.Path('/home/dombarker/project-offloads/aspis-r614-scalar-constants-build-output-20261004-c/aeneas-r614-scalar-constants-candidate-20261004-c');inp=pathlib.Path('/home/dombarker/project-offloads/aspis-r604-combine-beta-generic-20261004-b/R604CombineBetaGeneric.llbc');out=pathlib.Path('/home/dombarker/project-offloads/aspis-r614-combine-beta-translation-20261004-c')\ndef h(p):return hashlib.sha256(p.read_bytes()).hexdigest()\nassert h(binary)=='f6b4985ce5530bc200b5c77855648863953ee1214b145ba611db4177c7b0ed77' and h(inp)=='5391af65767eee12ff76fbddbe2be730f4cad8af24d526f6030140539fc4ec44'\nassert not out.exists(),out\nfor p,sha in {'/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpStatements.ml': '6eec2bd4bc3e13b44ef1a73903bf2a3d4cfa563cfd626b8ab049dea5097049cb', '/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpExpressions.ml': '6c6e83a9c1b23f9ae6d918dd434789c7828a837e2f21b407f0f77e3bf83c8987', '/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpExpressions.mli': 'b8e9801d61e1e4a0cf951614a4a1dc0032c1e8ce4bcbf6df24233f5e157739ea'}.items():assert h(pathlib.Path(p))==sha,(p,sha)\ncg=pathlib.Path('/sys/fs/cgroup')/pathlib.Path('/proc/self/cgroup').read_text().strip().split('::',1)[1].lstrip('/')\nlimits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max','pids.max']}\nassert limits=={'memory.high':str(5*2**30),'memory.max':str(7*2**30),'memory.swap.max':'0','pids.max':'128'},limits\nreservations=[]\nfor line in subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--plain','--no-legend'],text=True).splitlines():\n q=line.split()\n if q and q[0].startswith('aspis'):\n  v=subprocess.check_output(['systemctl','--user','show',q[0],'-p','MemoryMax'],text=True).strip().split('=',1)[1]\n  if v.isdigit():reservations.append((q[0],int(v)))\nassert sum(v for _,v in reservations)<=40*2**30,reservations\nout.mkdir(mode=0o700)\ncmd=[str(binary),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR614SelectedCombineBeta','-dest',str(out/'generated'),'-subdir','AspisR614SelectedCombineBeta','-split-files','-emit-json',str(inp)]\n(out/'command.json').write_text(json.dumps({'command':cmd,'literal_candidate_binary_sha':'f6b4985ce5530bc200b5c77855648863953ee1214b145ba611db4177c7b0ed77','immutable_input_sha':'5391af65767eee12ff76fbddbe2be730f4cad8af24d526f6030140539fc4ec44','caps':limits,'reservations':reservations,'timeout_seconds':180,'source_pins':{'/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpStatements.ml': '6eec2bd4bc3e13b44ef1a73903bf2a3d4cfa563cfd626b8ab049dea5097049cb', '/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpExpressions.ml': '6c6e83a9c1b23f9ae6d918dd434789c7828a837e2f21b407f0f77e3bf83c8987', '/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpExpressions.mli': 'b8e9801d61e1e4a0cf951614a4a1dc0032c1e8ce4bcbf6df24233f5e157739ea'},'formal_status':'private diagnostic translation only'},indent=2)+'\\n')\nwith (out/'translation.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v','timeout','--signal=TERM','--kill-after=5s','180s',*cmd],stdout=f,stderr=subprocess.STDOUT)\nt=(out/'translation.log').read_text(errors='replace')\ndef metric(rx):\n m=re.search(rx,t);return m.group(1) if m else None\nfiles={str(p.relative_to(out)):h(p) for p in sorted((out/'generated').rglob('*')) if p.is_file()}\nd={'exit_status':r.returncode,'wall_time':metric(r'Elapsed \\(wall clock\\) time \\(h:mm:ss or m:ss\\): (\\S+)'),'peak_rss_kib':metric(r'Maximum resident set size \\(kbytes\\): (\\d+)'),'swaps':metric(r'Swaps: (\\d+)'),'input_sha':h(inp),'binary_sha':h(binary),'generated_files':files,'lean_compiled':False,'axioms':'N/A translation not a formal proof'}\n(out/'result.json').write_text(json.dumps(d,indent=2)+'\\n');print(json.dumps(d));sys.exit(r.returncode)\n"
+  ],
+  "approval": {
+    "source_diff_reviewed": true,
+    "build_exit_status": 0,
+    "binary_path": "/home/dombarker/project-offloads/aspis-r614-scalar-constants-build-output-20261004-c/aeneas-r614-scalar-constants-candidate-20261004-c",
+    "binary_sha256": "f6b4985ce5530bc200b5c77855648863953ee1214b145ba611db4177c7b0ed77",
+    "source_pins": {
+      "/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpStatements.ml": "6eec2bd4bc3e13b44ef1a73903bf2a3d4cfa563cfd626b8ab049dea5097049cb",
+      "/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpExpressions.ml": "6c6e83a9c1b23f9ae6d918dd434789c7828a837e2f21b407f0f77e3bf83c8987",
+      "/home/dombarker/project-offloads/aspis-r614-scalar-constants-candidate-20261004-a/src/interp/InterpExpressions.mli": "b8e9801d61e1e4a0cf951614a4a1dc0032c1e8ce4bcbf6df24233f5e157739ea"
+    },
+    "review_boundary": "Exact post-pass2/3stmt scalar initializer shapes (existing pass removes StorageLive), literal Lt/Add/Sub success-only; interface-only existing helper exports.",
+    "formal_proof": false
+  }
+}
