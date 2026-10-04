@@ -1,0 +1,257 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791095316215766000.service; invocation ID: 8bf923151fd74364b163f98e1adbba5c
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:33:18: error: unsolved goals
+case ask
+I A O : Type
+inst✝ : Fintype A
+f : O → ℚ
+c : ℚ
+i : I
+next : A → Program I A O
+ih : ∀ (a : A), (outputMean (next a) fun o => f o * c) = outputMean (next a) f * c
+⊢ (∑ x, (independentMean (next x) fun v => f v.2) * c) * (↑(Fintype.card A))⁻¹ =
+    c * (↑(Fintype.card A))⁻¹ * ∑ x, independentMean (next x) fun v => f v.2
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:36:52: warning: This simp argument is unused:
+  Finset.sum_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [outputMean, independentMean, mean,̵ ̵F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵m̵u̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:59:43: error(lean.unknownIdentifier): Unknown identifier `tupleField`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:60:17: error(lean.unknownIdentifier): Unknown identifier `tupleFieldEquiv.symm`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:60:70: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:57:14: error: unsolved goals
+case some
+s : State
+xs : List ℕ
+hex : ∃ x ∈ Finset.univ, SamplerFieldDecode.decode xs = sorry
+⊢ ∃ x, SamplerFieldDecode.decode xs = R599CanonicalFieldTuple.tupleField x
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:62:33: warning: This simp argument is unused:
+  hex
+
+Hint: Omit it from the simp argument list.
+  simp [missing, setEvent,̵ ̵h̵e̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:121:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  outputMean ?m.268 fun o =>
+    outputMean
+      (match o.1 with
+      | none => Program.done (Except.error Error.challengeExhausted, o.2)
+      | some xs =>
+        match SamplerCirclePolicy.accept xs with
+        | some y => Program.done (Except.ok y, o.2)
+        | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+      fun v => successEvent a v.1
+in the target expression
+  (outputMean (QM31SamplerProgram.challengeProgram s) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, o.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, o.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+        fun r => successEvent a r.1) =
+    lambda * retrySum (n + 1)
+
+case succ
+a : QM31Exact
+ha : a.im ≠ 0
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n s) fun r =>
+        successEvent a r.1) =
+      lambda * retrySum n
+s : State
+hobs :
+  ∀ (r : Option (List ℕ) × State),
+    (outputMean
+        (match r.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, r.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, r.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n r.2)
+        fun v => successEvent a v.1) =
+      fieldEvent a r.1 + rejected r.1 * (lambda * retrySum n)
+⊢ (outputMean (QM31SamplerProgram.challengeProgram s) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, o.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, o.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+        fun r => successEvent a r.1) =
+    lambda * retrySum (n + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:162:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  outputMean ?m.213 fun o =>
+    outputMean
+      (match o.1 with
+      | none => Program.done (Except.error Error.challengeExhausted, o.2)
+      | some xs =>
+        match SamplerCirclePolicy.accept xs with
+        | some y => Program.done (Except.ok y, o.2)
+        | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+      fun v => errorEvent Error.parameterExhausted v.1
+in the target expression
+  (outputMean (QM31SamplerProgram.challengeProgram s) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, o.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, o.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+        fun r => errorEvent Error.parameterExhausted r.1) =
+    retry ^ (n + 1)
+
+case succ
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n s) fun r =>
+        errorEvent Error.parameterExhausted r.1) =
+      retry ^ n
+s : State
+hobs :
+  ∀ (r : Option (List ℕ) × State),
+    (outputMean
+        (match r.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, r.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, r.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n r.2)
+        fun v => errorEvent Error.parameterExhausted v.1) =
+      rejected r.1 * retry ^ n
+⊢ (outputMean (QM31SamplerProgram.challengeProgram s) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, o.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, o.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+        fun r => errorEvent Error.parameterExhausted r.1) =
+    retry ^ (n + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean:192:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  outputMean ?m.261 fun o =>
+    outputMean
+      (match o.1 with
+      | none => Program.done (Except.error Error.challengeExhausted, o.2)
+      | some xs =>
+        match SamplerCirclePolicy.accept xs with
+        | some y => Program.done (Except.ok y, o.2)
+        | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+      fun v => errorEvent Error.challengeExhausted v.1
+in the target expression
+  (outputMean (QM31SamplerProgram.challengeProgram s) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, o.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, o.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+        fun r => errorEvent Error.challengeExhausted r.1) =
+    (1 - ↑(modulus ^ 4) * lambda) * retrySum (n + 1)
+
+case succ
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n s) fun r =>
+        errorEvent Error.challengeExhausted r.1) =
+      (1 - ↑(modulus ^ 4) * lambda) * retrySum n
+s : State
+hobs :
+  ∀ (r : Option (List ℕ) × State),
+    (outputMean
+        (match r.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, r.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, r.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n r.2)
+        fun v => errorEvent Error.challengeExhausted v.1) =
+      missing r.1 + rejected r.1 * ((1 - ↑(modulus ^ 4) * lambda) * retrySum n)
+⊢ (outputMean (QM31SamplerProgram.challengeProgram s) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (Except.error Error.challengeExhausted, o.2)
+        | some xs =>
+          match SamplerCirclePolicy.accept xs with
+          | some y => Program.done (Except.ok y, o.2)
+          | none => program SamplerCirclePolicy.accept Error.challengeExhausted Error.parameterExhausted n o.2)
+        fun r => errorEvent Error.challengeExhausted r.1) =
+    (1 - ↑(modulus ^ 4) * lambda) * retrySum (n + 1)
+'AspisV8R19.R609CircleRetryLaw.outputMean_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.outputMean_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.outputMean_const' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.independent_missing_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.independent_retry_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.independent_point_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.selected_three_attempt_point_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.independent_outer_error_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.independent_inner_error_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R609CircleRetryLaw.selected_three_attempt_errors' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R609CircleRetryLaw.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R609CircleRetryLaw.lean"
+	User time (seconds): 1.50
+	System time (seconds): 0.35
+	Percent of CPU this job got: 103%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.79
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3277192
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77390
+	Voluntary context switches: 1277
+	Involuntary context switches: 59
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.819s
+CPU time consumed: 1.887s
+Memory peak: 516.0K
+Memory swap peak: 0B
