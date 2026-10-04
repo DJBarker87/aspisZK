@@ -1,0 +1,34 @@
+{
+  "unit": "aspis-r569-complete-consts-translate-20261004",
+  "systemd_argv": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r569-complete-consts-translate-20261004",
+    "--working-directory=/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "-p",
+    "RuntimeMaxSec=600s",
+    "python3",
+    "-c",
+    "import hashlib,json,pathlib,subprocess,sys,os\nbinary=pathlib.Path('/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1'); root=pathlib.Path('/home/dombarker/project-offloads/aspis-r569-masked-claim-complete-consts-translate-20261004-a'); inp=root/'R569MaskedClaimCompleteConsts.llbc'\ndef sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()\nassert sha(binary)=='e3e6e658ad26168421eb37627561930c1e13afa978f77b214a1201d9c4faa813' and sha(inp)=='a40beff355e21359851b01e9e1f53d86d244e302a80e740a02c87645534bed52'\nassert not (root/'generated').exists()\ncg=pathlib.Path('/sys/fs/cgroup')/pathlib.Path('/proc/self/cgroup').read_text().strip().split('::',1)[1].lstrip('/')\nresources={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max','pids.max']}\nassert resources=={'memory.high':str(5*2**30),'memory.max':str(7*2**30),'memory.swap.max':'0','pids.max':'128'},resources\nunits=subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--plain','--no-legend'],text=True)\nreservations=[]\nfor line in units.splitlines():\n p=line.split()\n if p and p[0].startswith('aspis'):\n  v=subprocess.check_output(['systemctl','--user','show',p[0],'-p','MemoryMax'],text=True).strip().split('=',1)[1]\n  if v.isdigit():reservations.append((p[0],int(v)))\nassert sum(v for _,v in reservations)<=40*1024**3,reservations\ncmd=[str(binary),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR569MaskedClaimCompleteConsts','-dest',str(root/'generated'),'-subdir','AspisR569MaskedClaimCompleteConsts','-split-files','-emit-json',str(inp)]\n(root/'resources.json').write_text(json.dumps({'cgroup':str(cg),'limits':resources,'other_active_aspis_reservations':reservations,'aggregate_limit_bytes':40*1024**3},indent=2)+'\\n')\n(root/'command.json').write_text(json.dumps({'command':cmd,'llbc_sha256':'a40beff355e21359851b01e9e1f53d86d244e302a80e740a02c87645534bed52','llbc_bytes':inp.stat().st_size,'aeneas_binary':str(binary),'aeneas_sha256':'e3e6e658ad26168421eb37627561930c1e13afa978f77b214a1201d9c4faa813','isolated_output':str(root),'scope':'translation only; no Lean compile'},indent=2)+'\\n')\nwith (root/'translation.log').open('w') as log:\n r=subprocess.run(['/usr/bin/time','-v',*cmd],stdout=log,stderr=subprocess.STDOUT)\nfiles={str(p.relative_to(root)):sha(p) for p in sorted((root/'generated').rglob('*')) if p.is_file()} if (root/'generated').exists() else {}\nresult={'exit_status':r.returncode,'llbc_sha256':'a40beff355e21359851b01e9e1f53d86d244e302a80e740a02c87645534bed52','aeneas_sha256':'e3e6e658ad26168421eb37627561930c1e13afa978f77b214a1201d9c4faa813','generated_files':files,'lean_compiled':False,'formal_axioms':'N/A; translation only'}\n(root/'result.json').write_text(json.dumps(result,indent=2)+'\\n')\nprint(json.dumps(result),flush=True); sys.exit(r.returncode)\n"
+  ],
+  "caps": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "aeneas_sha256": "e3e6e658ad26168421eb37627561930c1e13afa978f77b214a1201d9c4faa813",
+  "llbc_sha256": "a40beff355e21359851b01e9e1f53d86d244e302a80e740a02c87645534bed52",
+  "output": "/home/dombarker/project-offloads/aspis-r569-masked-claim-complete-consts-translate-20261004-a"
+}
