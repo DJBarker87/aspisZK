@@ -1,0 +1,73 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791075430923140000.service; invocation ID: ca7f918a31d14abf8a7c0077e8c6ae04
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R561SparseGPairing.lean:26:4: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_eq_single i`
+  ∑ x ∈ ?m.66, ?m.67 x = ?m.67 i
+with the goal
+  (∑ i_1, if order (coinIndex i_1) = order (coinIndex i) then weights i_1 else 0) = weights i
+
+Note: The full type of `Finset.sum_eq_single i` is
+  (∀ b ∈ ?m.66, b ≠ i → ?m.67 b = 0) → (i ∉ ?m.66 → ?m.67 i = 0) → ∑ x ∈ ?m.66, ?m.67 x = ?m.67 i
+
+case pos
+F : Type u_1
+inst✝ : Field F
+weights : Fin 271 → F
+i : Fin 271
+⊢ (∑ i_1, if order (coinIndex i_1) = order (coinIndex i) then weights i_1 else 0) = weights i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R561SparseGPairing.lean:41:19: error: Application type mismatch: The argument
+  hi
+has type
+  r = order (coinIndex i)
+but is expected to have type
+  order (coinIndex i) = r
+in the application
+  hoff i hi
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R561SparseGPairing.lean:67:6: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_eq_single (order (coinIndex i))`
+  ∑ x ∈ ?m.227, ?m.228 x = ?m.228 (order (coinIndex i))
+with the goal
+  ∑ r, (if order (coinIndex i) = r then weights i else 0) * m r = weights i * m (order (coinIndex i))
+
+Note: The full type of `Finset.sum_eq_single (order (coinIndex i))` is
+  (∀ b ∈ ?m.227, b ≠ order (coinIndex i) → ?m.228 b = 0) →
+    (order (coinIndex i) ∉ ?m.227 → ?m.228 (order (coinIndex i)) = 0) →
+      ∑ x ∈ ?m.227, ?m.228 x = ?m.228 (order (coinIndex i))
+
+F : Type u_1
+inst✝ : Field F
+weights : Fin 271 → F
+m : Fin 1024 → F
+i : Fin 271
+a✝ : i ∈ Finset.univ
+⊢ ∑ r, (if order (coinIndex i) = r then weights i else 0) * m r = weights i * m (order (coinIndex i))
+'AspisV8R19.R561.original_pairing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R561.maskWeights_sparse_pairing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R561SparseGPairing.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R561SparseGPairing.lean"
+	User time (seconds): 0.68
+	System time (seconds): 0.24
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.91
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2294648
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 24
+	Minor (reclaiming a frame) page faults: 53498
+	Voluntary context switches: 435
+	Involuntary context switches: 38
+	Swaps: 0
+	File system inputs: 5408
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 947ms
+CPU time consumed: 956ms
+Memory peak: 288.0K
+Memory swap peak: 0B
