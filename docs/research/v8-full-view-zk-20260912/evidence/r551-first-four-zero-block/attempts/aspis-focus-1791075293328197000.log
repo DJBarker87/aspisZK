@@ -1,0 +1,95 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791075293328197000.service; invocation ID: 891433630f5545d19acc7695508a19cd
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:28:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x, if x = a then 1 else 0
+in the target expression
+  (∑ x, (fun x => if x = a then 1 else 0) x) / ↑(Fintype.card A) = 1 / ↑(Fintype.card A)
+
+A : Type
+inst✝² : Fintype A
+inst✝¹ : Nonempty A
+inst✝ : DecidableEq A
+a : A
+hs : (∑ x, if x = a then 1 else 0) = 1
+⊢ (∑ x, (fun x => if x = a then 1 else 0) x) / ↑(Fintype.card A) = 1 / ↑(Fintype.card A)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:38:4: error: unsolved goals
+case isFalse
+A : Type
+f : Fin 8 → A
+i : Fin 8
+h✝ : ¬↑i < 4
+⊢ 4 + (↑i - 4) = ↑i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:50:6: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:69:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Nonempty (Fin 4 → Fin modulus)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:57:33: error: unsolved goals
+hu : ∀ (f : Fin 4 → Fin modulus), lowFourZero f ↔ f = zeroFn4
+⊢ Nonempty (Fin 4 → Fin modulus)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:71:10: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵F̵i̵n̵t̵y̵p̵e̵.̵c̵a̵r̵d̵_̵f̵u̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:96:15: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:89:8: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:110:17: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:115:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun p => ?f p.1 p.2
+in the target expression
+  (mean fun p => indicator (lowFourZero p.1)) = mean fun f => indicator (lowFourZero f)
+
+hblock :
+  (mean fun block => indicator (firstFourZero block)) = mean fun p => indicator (∀ (j : Fin 4), p.2 ⟨↑j, ⋯⟩ = z31)
+htransport : (mean fun f => indicator (∀ (j : Fin 4), f ⟨↑j, ⋯⟩ = z31)) = mean fun p => indicator (lowFourZero p.1)
+⊢ (mean fun p => indicator (lowFourZero p.1)) = mean fun f => indicator (lowFourZero f)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean:122:16: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisV8R19.R551FirstFourZeroBlockV3.mean_singleton' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R551FirstFourZeroBlockV3.splitFin8Four' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R551FirstFourZeroBlockV3.lowFourZero_mean' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R551FirstFourZeroBlockV3.firstFourZero_mean' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R551FirstFourZeroBlockV3.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlockV3.lean"
+	User time (seconds): 1.27
+	System time (seconds): 0.32
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3230808
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77500
+	Voluntary context switches: 935
+	Involuntary context switches: 80
+	Swaps: 0
+	File system inputs: 16
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.606s
+CPU time consumed: 1.617s
+Memory peak: 552.0K
+Memory swap peak: 0B

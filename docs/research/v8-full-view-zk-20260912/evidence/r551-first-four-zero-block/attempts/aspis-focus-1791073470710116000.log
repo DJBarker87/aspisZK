@@ -1,0 +1,109 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791073470710116000.service; invocation ID: fdc43684dbae4635aea99fc471f947fb
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:33:6: error: Tactic `apply` failed: could not unify the conclusion of `@Fin.ext`
+  ?a = ?b
+with the goal
+  f ⟨4 + (↑i - 4), ⋯⟩ = f i
+
+Note: The full type of `@Fin.ext` is
+  ∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+
+case neg
+A : Type
+f : Fin 8 → A
+i : Fin 8
+h : ¬↑i < 4
+⊢ f ⟨4 + (↑i - 4), ⋯⟩ = f i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:38:12: warning: This simp argument is unused:
+  Fin.ext_iff
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵F̵i̵n̵.̵e̵x̵t̵_̵i̵f̵f̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:40:12: warning: This simp argument is unused:
+  Fin.ext_iff
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵F̵i̵n̵.̵e̵x̵t̵_̵i̵f̵f̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:56:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:63:41: error: unsolved goals
+hone : ∀ (f : Fin 4 → Fin (2 ^ 31)), lowFourZero f ↔ f = 0
+hsum : (∑ f, if f = 0 then 1 else 0) = 1
+f : Fin 4 → Fin (2 ^ 31)
+⊢ (if f = 0 then 1 else 0) = if f = 0 then 1 else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:76:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ f, if f = 0 then 1 else 0
+in the target expression
+  (∑ x, if x = 0 then 1 else 0) / 21267647932558653966460912964485513216 = (1 / 2 ^ 31) ^ 4
+
+hone : ∀ (f : Fin 4 → Fin (2 ^ 31)), lowFourZero f ↔ f = 0
+hsum : (∑ f, if f = 0 then 1 else 0) = 1
+hcongr : (mean fun f => indicator (lowFourZero f)) = mean fun f => if f = 0 then 1 else 0
+hcard : Fintype.card (Fin 4 → Fin (2 ^ 31)) = Fintype.card (Fin (2 ^ 31)) ^ Fintype.card (Fin 4)
+⊢ (∑ x, if x = 0 then 1 else 0) / 21267647932558653966460912964485513216 = (1 / 2 ^ 31) ^ 4
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:104:10: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:97:10: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:130:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun x => 1
+in the target expression
+  (mean fun x => mean fun x_1 => indicator (lowFourZero x)) = (1 / 2 ^ 31) ^ 4
+
+htransport :
+  (mean fun block => indicator (firstFourZero block)) = mean fun p => indicator (∀ (j : Fin 4), p.2 ⟨↑j, ⋯⟩ = 0)
+hequiv : (mean fun x => indicator (lowFourZero (splitFin8Four x).1)) = mean fun p => indicator (lowFourZero p.1)
+htransport' : (mean fun f => indicator (∀ (j : Fin 4), f ⟨↑j, ⋯⟩ = 0)) = mean fun p => indicator (lowFourZero p.1)
+hsecond : (mean fun x => 1) = 1
+⊢ (mean fun x => mean fun x_1 => indicator (lowFourZero x)) = (1 / 2 ^ 31) ^ 4
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:132:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun p => indicator (∀ (j : Fin 4), p.2 ⟨↑j, ⋯⟩ = 0)
+in the target expression
+  (mean fun x => mean fun f => indicator (∀ (j : Fin 4), f ⟨↑j, ⋯⟩ = 0)) = (1 / 2 ^ 31) ^ 4
+
+htransport :
+  (mean fun block => indicator (firstFourZero block)) = mean fun p => indicator (∀ (j : Fin 4), p.2 ⟨↑j, ⋯⟩ = 0)
+hfirst : (mean fun f => indicator (∀ (j : Fin 4), f ⟨↑j, ⋯⟩ = 0)) = (1 / 2 ^ 31) ^ 4
+⊢ (mean fun x => mean fun f => indicator (∀ (j : Fin 4), f ⟨↑j, ⋯⟩ = 0)) = (1 / 2 ^ 31) ^ 4
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean:124:31: warning: declaration uses `sorry`
+'AspisV8R19.R551FirstFourZeroBlock.splitFin8Four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R551FirstFourZeroBlock.lowFourZero_mean' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R551FirstFourZeroBlock.firstFourZero_mean' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R551FirstFourZeroBlock.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R551FirstFourZeroBlock.lean"
+	User time (seconds): 1.24
+	System time (seconds): 0.35
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.58
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3226004
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 76722
+	Voluntary context switches: 584
+	Involuntary context switches: 58
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.612s
+CPU time consumed: 1.629s
+Memory peak: 552.0K
+Memory swap peak: 0B
