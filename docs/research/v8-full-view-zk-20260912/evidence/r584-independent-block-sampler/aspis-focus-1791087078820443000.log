@@ -1,0 +1,107 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087078820443000.service; invocation ID: 6e77d06ebecd4382ab1d55febef937be
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R584IndependentBlockSampler.lean:75:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun x =>
+    independentMean
+      (if masked 31 (word block 0) = 2147483647 then limbProgram budget { state := x, block := block, index := 1 }
+      else Program.done (some (masked 31 (word block 0)), { state := x, block := block, index := 1 }))
+      fun r => observe (r.2.1, project r.2.2)
+in the target expression
+  (independentMean
+      ((fun a =>
+          OracleProgramOps.bind
+            ((fun out => Program.ask (DuplexFrames.advance (bytes c.state)) fun next => Program.done (out, next)) a)
+            fun p => Program.done (word p.1 0, { state := p.2, block := p.1, index := 1 }))
+        block)
+      fun r =>
+      (fun v =>
+          independentMean
+            (if masked 31 v.2.1 = 2147483647 then limbProgram budget v.2.2
+            else Program.done (some (masked 31 v.2.1), v.2.2))
+            fun v => observe (v.2.1, { block := v.2.2.block, index := v.2.2.index }))
+        ((DuplexFrames.squeeze (bytes c.state), block) :: r.1, r.2)) =
+    independentMean
+      (if masked 31 (word block 0) = 2147483647 then limbBlockProgram budget { block := block, index := 1 }
+      else Program.done (some (masked 31 (word block 0)), { block := block, index := 1 }))
+      fun v => observe v.2
+
+case pos
+observe : Option ℕ × BlockCursor → ℚ
+budget : ℕ
+ih :
+  ∀ (c : Cursor),
+    (outputMean (limbProgram budget c) fun r => observe (r.1, project r.2)) =
+      outputMean (limbBlockProgram budget (project c)) observe
+c : Cursor
+hi : ↑c.index = 8
+block : State
+hconst :
+  ∀ (next : State),
+    (independentMean
+        (if masked 31 (word block 0) = 2147483647 then limbProgram budget { state := next, block := block, index := 1 }
+        else Program.done (some (masked 31 (word block 0)), { state := next, block := block, index := 1 }))
+        fun r => observe (r.2.1, project r.2.2)) =
+      outputMean
+        (if masked 31 (word block 0) = 2147483647 then limbBlockProgram budget { block := block, index := 1 }
+        else Program.done (some (masked 31 (word block 0)), { block := block, index := 1 }))
+        observe
+⊢ (independentMean
+      ((fun a =>
+          OracleProgramOps.bind
+            ((fun out => Program.ask (DuplexFrames.advance (bytes c.state)) fun next => Program.done (out, next)) a)
+            fun p => Program.done (word p.1 0, { state := p.2, block := p.1, index := 1 }))
+        block)
+      fun r =>
+      (fun v =>
+          independentMean
+            (if masked 31 v.2.1 = 2147483647 then limbProgram budget v.2.2
+            else Program.done (some (masked 31 v.2.1), v.2.2))
+            fun v => observe (v.2.1, { block := v.2.2.block, index := v.2.2.index }))
+        ((DuplexFrames.squeeze (bytes c.state), block) :: r.1, r.2)) =
+    independentMean
+      (if masked 31 (word block 0) = 2147483647 then limbBlockProgram budget { block := block, index := 1 }
+      else Program.done (some (masked 31 (word block 0)), { block := block, index := 1 }))
+      fun v => observe v.2
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R584IndependentBlockSampler.lean:58:10: warning: This simp argument is unused:
+  outputMean_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [readProgram, readBlockProgram, project, hi, ↓reduceDIte, o̵u̵t̵p̵u̵t̵M̵e̵a̵n̵_̵b̵i̵n̵d̵,̵ ̵squeezeProgram,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲outputMean, independentMean]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R584IndependentBlockSampler.outputMean_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R584IndependentBlockSampler.limb_independent_block' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R584IndependentBlockSampler.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R584IndependentBlockSampler.lean"
+	User time (seconds): 1.01
+	System time (seconds): 0.36
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.37
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3149832
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 95239
+	Voluntary context switches: 898
+	Involuntary context switches: 40
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.418s
+CPU time consumed: 1.424s
+Memory peak: 1.0M
+Memory swap peak: 0B

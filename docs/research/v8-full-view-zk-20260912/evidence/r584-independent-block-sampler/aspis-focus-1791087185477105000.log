@@ -1,0 +1,94 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791087185477105000.service; invocation ID: bb9ee675ce6745af8783138a4c89f6ab
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R584IndependentBlockSampler.lean:119:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  outputMean ?m.244 fun o =>
+    outputMean
+      (match o.1 with
+      | none => Program.done (none, o.2)
+      | some a =>
+        OracleProgramOps.bind (limbsProgram count o.2) fun tail =>
+          Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+      fun r => observe (r.1, project r.2)
+in the target expression
+  (outputMean (limbProgram 8 c) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (none, o.2)
+        | some a =>
+          OracleProgramOps.bind (limbsProgram count o.2) fun tail =>
+            Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+        fun r => observe (r.1, project r.2)) =
+    outputMean (limbsBlockProgram (count + 1) (project c)) observe
+
+case succ
+count : ℕ
+ih :
+  ∀ (c : Cursor) (observe : Option (List ℕ) × BlockCursor → ℚ),
+    (outputMean (limbsProgram count c) fun r => observe (r.1, project r.2)) =
+      outputMean (limbsBlockProgram count (project c)) observe
+c : Cursor
+observe : Option (List ℕ) × BlockCursor → ℚ
+nextObserve : Option ℕ × BlockCursor → ℚ :=
+  fun first =>
+    match first.1 with
+    | none => observe (none, first.2)
+    | some a =>
+      outputMean (limbsBlockProgram count first.2) fun tail => observe (Option.map (fun x => a :: x) tail.1, tail.2)
+hnext :
+  ∀ (first : Option ℕ × Cursor),
+    (outputMean
+        (match first.1 with
+        | none => Program.done (none, first.2)
+        | some a =>
+          OracleProgramOps.bind (limbsProgram count first.2) fun tail =>
+            Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+        fun r => observe (r.1, project r.2)) =
+      nextObserve (first.1, project first.2)
+⊢ (outputMean (limbProgram 8 c) fun o =>
+      outputMean
+        (match o.1 with
+        | none => Program.done (none, o.2)
+        | some a =>
+          OracleProgramOps.bind (limbsProgram count o.2) fun tail =>
+            Program.done (Option.map (fun x => a :: x) tail.1, tail.2))
+        fun r => observe (r.1, project r.2)) =
+    outputMean (limbsBlockProgram (count + 1) (project c)) observe
+'AspisV8R19.R584IndependentBlockSampler.outputMean_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R584IndependentBlockSampler.limbs_independent_block' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R584IndependentBlockSampler.outputMean_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R584IndependentBlockSampler.limb_independent_block' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R584IndependentBlockSampler.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R584IndependentBlockSampler.lean"
+	User time (seconds): 1.04
+	System time (seconds): 0.33
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.37
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3255480
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77039
+	Voluntary context switches: 922
+	Involuntary context switches: 55
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.409s
+CPU time consumed: 1.418s
+Memory peak: 288.0K
+Memory swap peak: 0B
