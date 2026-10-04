@@ -1,0 +1,215 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791139565078621000.service; invocation ID: afa44000108848e1b9ebddb22613cb07
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:58:66: error: unsolved goals
+case right
+F : Type u_1
+inst✝¹ : CommRing F
+inst✝ : Nontrivial F
+alpha u v kappa tau : F
+z : Fin 10 → F
+⊢ Fin.cases alpha
+        (fun i => Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i) 1 =
+      u ∧
+    Fin.cases alpha
+          (fun i => Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+          2 =
+        v ∧
+      Fin.cases alpha
+            (fun i => Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+            3 =
+          kappa ∧
+        Fin.cases alpha
+            (fun i => Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+            4 =
+          tau
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:70:88: error: unsolved goals
+F : Type u_1
+inst✝¹ : CommRing F
+inst✝ : Nontrivial F
+half quarter alpha u v kappa tau : F
+z : Fin 10 → F
+d : Fin 255
+s : Fin 3
+j : J
+i : ℕ
+⊢ unitVector (1 + ↑d * 4 + ↑s) i - unitVector (1 + ↑s) i - alpha * alpha ^ ↑s * unitVector (↑d * 4) i +
+      alpha * alpha ^ ↑s * unitVector 0 i =
+    unitVector (1 + ↑d * 4 + ↑s) i - alpha * alpha ^ ↑s * unitVector (↑d * 4) i +
+        alpha * alpha ^ ↑s * unitVector (↑0 * 4) i -
+      unitVector (1 + ↑s + ↑0 * 4) i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:74:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun i => qdiff d s i - alpha ^ (↑s + 1) * sdiff d i
+in the target expression
+  (1 +
+          Fin.cases alpha
+              (fun i =>
+                Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+              1 *
+            Fin.cases alpha
+              (fun i =>
+                Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+              2) *
+        (sourceBasisConstants half (qdiff d s) (R707FullActiveDeterminant.rowCode j) 0 -
+          alpha ^ (↑s + 1) * sourceBasisConstants half (sdiff d) (R707FullActiveDeterminant.rowCode j) 0) +
+      ((Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                1 *
+              Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                2 -
+            1) *
+          (sourceBasisConstants half (qdiff d s) (R707FullActiveDeterminant.rowCode j) 1 -
+            alpha ^ (↑s + 1) * sourceBasisConstants half (sdiff d) (R707FullActiveDeterminant.rowCode j) 1) +
+        (-Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                2 +
+            -Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                1) *
+          (sourceBasisConstants half (qdiff d s) (R707FullActiveDeterminant.rowCode j) 2 -
+            alpha ^ (↑s + 1) * sourceBasisConstants half (sdiff d) (R707FullActiveDeterminant.rowCode j) 2)) =
+    sourceChord half (rawFlatten (indexedDirection alpha d s)) (1 + u * v) (u * v - 1) (-v + -u)
+      (R707FullActiveDeterminant.rowCode j)
+
+case inl
+F : Type u_1
+inst✝¹ : CommRing F
+inst✝ : Nontrivial F
+half quarter alpha u v kappa tau : F
+z : Fin 10 → F
+d : Fin 255
+s : Fin 3
+j : J
+hq : (fun i => qdiff d s i - alpha ^ (↑s + 1) * sdiff d i) = direction alpha d s
+⊢ (1 +
+          Fin.cases alpha
+              (fun i =>
+                Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+              1 *
+            Fin.cases alpha
+              (fun i =>
+                Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+              2) *
+        (sourceBasisConstants half (qdiff d s) (R707FullActiveDeterminant.rowCode j) 0 -
+          alpha ^ (↑s + 1) * sourceBasisConstants half (sdiff d) (R707FullActiveDeterminant.rowCode j) 0) +
+      ((Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                1 *
+              Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                2 -
+            1) *
+          (sourceBasisConstants half (qdiff d s) (R707FullActiveDeterminant.rowCode j) 1 -
+            alpha ^ (↑s + 1) * sourceBasisConstants half (sdiff d) (R707FullActiveDeterminant.rowCode j) 1) +
+        (-Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                2 +
+            -Fin.cases alpha
+                (fun i =>
+                  Fin.cases u (fun i => Fin.cases v (fun i => Fin.cases kappa (fun i => Fin.cases tau z i) i) i) i)
+                1) *
+          (sourceBasisConstants half (qdiff d s) (R707FullActiveDeterminant.rowCode j) 2 -
+            alpha ^ (↑s + 1) * sourceBasisConstants half (sdiff d) (R707FullActiveDeterminant.rowCode j) 2)) =
+    sourceChord half (rawFlatten (indexedDirection alpha d s)) (1 + u * v) (u * v - 1) (-v + -u)
+      (R707FullActiveDeterminant.rowCode j)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:81:36: error(lean.unknownIdentifier): Unknown identifier `evalRingHom`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:87:42: error(lean.unknownIdentifier): Unknown identifier `evalRingHom`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:93:46: error: Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  col
+has type `ι` which does not have the necessary form.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:93:52: error: Invalid projection: Projection operates on types of the form `C ...` where C is a constant. The expression
+  col
+has type `ι` which does not have the necessary form.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:97:87: error: Application type mismatch: The argument
+  cols
+has type
+  ι → Fin 255 × Fin 3
+of sort `Type (max u_2 0)` but is expected to have type
+  ObservationRow → Fin 255 × Fin 3
+of sort `Type` in the application
+  polynomialMatrix half quarter cols
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:99:32: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  col
+has type `J ⊕ Fin 3 ⊕ Fin 5` which is not a one-constructor inductive type.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:99:38: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  col
+has type `J ⊕ Fin 3 ⊕ Fin 5` which is not a one-constructor inductive type.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:101:64: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  col
+has type `J ⊕ Fin 3 ⊕ Fin 5` which is not a one-constructor inductive type.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:101:70: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  col
+has type `J ⊕ Fin 3 ⊕ Fin 5` which is not a one-constructor inductive type.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:108:59: error: Application type mismatch: The argument
+  row
+has type
+  ι
+of sort `Type u_2` but is expected to have type
+  R738JointObservationModel.ObservationRow
+of sort `Type` in the application
+  rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z
+    (indexedDirection alpha (cols col).1 (cols col).2) row
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:106:44: error: Application type mismatch: The argument
+  polynomialMatrix half quarter cols
+has type
+  Matrix.{0, u_2, u_1} ObservationRow ι (JointPoly F)
+but is expected to have type
+  Matrix.{?u.41, ?u.41, u_1} ?m.15 ?m.15 (MvPolynomial (Fin 15) F)
+in the application
+  (polynomialMatrix half quarter cols).det
+'AspisV8R19.R745JointObservationPolynomial.eval_pvars' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R745JointObservationPolynomial.eval_polynomialEntry' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R745JointObservationPolynomial.eval_polynomialMatrix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean:114:14: error(lean.unknownIdentifier): Unknown constant `eval_polynomialMatrix_det`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R745JointObservationPolynomial.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R745JointObservationPolynomial.lean"
+	User time (seconds): 1.68
+	System time (seconds): 0.33
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3299460
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 78154
+	Voluntary context switches: 1441
+	Involuntary context switches: 67
+	Swaps: 0
+	File system inputs: 120
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.034s
+CPU time consumed: 2.053s
+Memory peak: 288.0K
+Memory swap peak: 0B
