@@ -1,0 +1,9 @@
+# R727: Balanced query-preserving selected H1 core
+
+Exact target `AspisV8R19/R727TopBalance.lean`, source SHA-256 `90940c8949bd1dbb855bf7ce7a9624a1dfd9b30680e5f7f047bbfd60538c40cc`, source revision `d6a4f48bd785b03ba542c98e7b59fca469ff92ca`. Focused pinned Lean 4.32 run `1791132100523992000` exited 0 in 1.67 seconds, peak Lean-child RSS 3,325,708 KiB, swap 0. Cgroup MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128; Lean -j1 -M4500. All three complete axiom reports contain only propext, Classical.choice, Quot.sound; full output is retained.
+
+The symbolic full-source chord boundary is exactly `c*q[1022]+a*q[1023]+b*q[1021]` at row 1023. The actual inverse-transport algebra identifies the inactive-coordinate balance with this boundary. The R720 construction therefore also has zero inactive balance, while matching all 214 selected active targets, satisfying all 88 query equations and all 256 first-fold equations, and retaining all four top quotient zeros. The nonzero selected determinant, injective query roots and NeZero 2 remain explicit premises.
+
+This closes the balance equation for the constructed source-shaped core. It does not prove three point equations, ordinary relation equations, universal legal C1/H1/G compatibility, native execution, the actual challenge law, a simulator, privacy or security. The first remaining proposition is the active/query/fold/balance-preserving H1 residual image for the remaining points and independent ordinary relation coefficients, followed by actual legal-target compatibility.
+
+All three attempts are preserved. The first draft mistakenly used quotient index 1020 for the b-term; Lean rejected that statement. The corrected index is 1021, justified by the pinned odd-channel source scatter. The final run adds the dependent balanced-core theorem. The final unused-NeZero helper warning is preserved; no unchanged successful target was rerun.
