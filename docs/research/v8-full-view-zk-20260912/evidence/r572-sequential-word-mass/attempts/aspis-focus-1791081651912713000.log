@@ -1,0 +1,177 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791081651912713000.service; invocation ID: 2a97c84343be45fd876f60b5c4f6f4b1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:65:4: error: Type mismatch: After simplification, term
+  scanMass_cursor n (cursor + 1) cursor f
+ has type
+  (independentMean (scan n (cursor + 1)) fun view => f view.2.1) =
+    independentMean (scan n cursor) fun view => f view.2.1
+but is expected to have type
+  ((independentMean (scan n (cursor + 1)) fun view => f view.2.1) +
+      ∑ x, independentMean (Program.done (some x, cursor + 1)) fun view => f view.2.1) =
+    (independentMean (scan n cursor) fun view => f view.2.1) + ∑ a, f (some a)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:66:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:79:6: warning: 'change ((1 - (1 / (p + 1 : ℚ)) ^ n) / p + 1) / (p + 1 : ℚ) = _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:88:51: warning: This simp argument is unused:
+  mean_const
+
+Hint: Omit it from the simp argument list.
+  simp [scanMass, scan, independentMean,̵ ̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:105:2: error: Tactic `apply` failed: could not unify the conclusion of `@mean_congr`
+  mean ?f = mean ?g
+with the goal
+  (independentMean (limbs budget count cursor) fun first =>
+      independentMean (Program.done (prependResult a first.2)) fun second =>
+        observedList (head :: tailTarget) (first.1 ++ second.1, second.2)) =
+    if a = head then independentMean (limbs budget count cursor) (observedList tailTarget) else 0
+
+Note: The full type of `@mean_congr` is
+  ∀ {X : Type ?u.18} [inst : Fintype X] {f g : X → ℚ}, (∀ (x : X), f x = g x) → mean f = mean g
+
+p budget count cursor : ℕ
+a head : Fin p
+tailTarget : List (Fin p)
+⊢ (independentMean (limbs budget count cursor) fun first =>
+      independentMean (Program.done (prependResult a first.2)) fun second =>
+        observedList (head :: tailTarget) (first.1 ++ second.1, second.2)) =
+    if a = head then independentMean (limbs budget count cursor) (observedList tailTarget) else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:119:12: error: Function expected at
+  ih answer
+but this term has type
+  independentMean (next answer) f = independentMean (next answer) g
+
+Note: Expected a function because this term is being applied to the argument
+  (fun view => h ((address, answer) :: view.1, view.2))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:134:70: error: unsolved goals
+p : ℕ
+hp : 0 < p
+budget count : ℕ
+ih :
+  ∀ (cursor : ℕ) (target : Fin count → Fin p),
+    independentMean (limbs budget count cursor) (observedList (List.ofFn target)) =
+      ((1 - (1 / (↑p + 1)) ^ budget) / ↑p) ^ count
+cursor : ℕ
+target : Fin (count + 1) → Fin p
+tail : Fin count → Fin p
+⊢ (target 0 :: List.ofFn fun i => target i.succ) = target 0 :: List.ofFn tail
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:160:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean
+    (OracleProgramOps.bind (limbs ?budget ?count ?cursor) fun tail => Program.done (prependResult ?a tail))
+    (observedList (?head :: ?tailTarget))
+in the target expression
+  (independentMean
+      (match some a with
+      | none => Program.done (none, first.2.2)
+      | some a => OracleProgramOps.bind (limbs budget count first.2.2) fun rest => Program.done (prependResult a rest))
+      fun second => observedList (target 0 :: List.ofFn tail) (first.1 ++ second.1, second.2)) =
+    if some a = some (target 0) then tailMass else 0
+
+case some
+p : ℕ
+hp : 0 < p
+budget count : ℕ
+ih :
+  ∀ (cursor : ℕ) (target : Fin count → Fin p),
+    independentMean (limbs budget count cursor) (observedList (List.ofFn target)) =
+      ((1 - (1 / (↑p + 1)) ^ budget) / ↑p) ^ count
+cursor : ℕ
+target : Fin (count + 1) → Fin p
+tail : Fin count → Fin p
+htarget : List.ofFn target = target 0 :: List.ofFn tail
+tailMass : ℚ := ((1 - (1 / (↑p + 1)) ^ budget) / ↑p) ^ count
+first : View ℕ (Option (Fin p)) (Option (Fin p) × ℕ)
+a : Fin p
+hout : first.2.1 = some a
+⊢ (independentMean
+      (match some a with
+      | none => Program.done (none, first.2.2)
+      | some a => OracleProgramOps.bind (limbs budget count first.2.2) fun rest => Program.done (prependResult a rest))
+      fun second => observedList (target 0 :: List.ofFn tail) (first.1 ++ second.1, second.2)) =
+    if some a = some (target 0) then tailMass else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:175:79: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean (limbs budget count ?cursor) (observedList (List.ofFn ?target))
+in the target expression
+  tailMass * valueMass p budget (target 0) = ((1 - (1 / (↑p + 1)) ^ budget) / ↑p) ^ (count + 1)
+
+case succ
+p : ℕ
+hp : 0 < p
+budget count : ℕ
+ih :
+  ∀ (cursor : ℕ) (target : Fin count → Fin p),
+    independentMean (limbs budget count cursor) (observedList (List.ofFn target)) =
+      ((1 - (1 / (↑p + 1)) ^ budget) / ↑p) ^ count
+cursor : ℕ
+target : Fin (count + 1) → Fin p
+tail : Fin count → Fin p
+htarget : List.ofFn target = target 0 :: List.ofFn tail
+tailMass : ℚ := ((1 - (1 / (↑p + 1)) ^ budget) / ↑p) ^ count
+hcontinuation :
+  ∀ (first : View ℕ (Option (Fin p)) (Option (Fin p) × ℕ)),
+    (independentMean
+        (match first.2.1 with
+        | none => Program.done (none, first.2.2)
+        | some a =>
+          OracleProgramOps.bind (limbs budget count first.2.2) fun rest => Program.done (prependResult a rest))
+        fun second => observedList (target 0 :: List.ofFn tail) (first.1 ++ second.1, second.2)) =
+      if first.2.1 = some (target 0) then tailMass else 0
+hscan :
+  (independentMean (scan budget cursor) fun first => if first.2.1 = some (target 0) then tailMass else 0) =
+    tailMass * scanMass budget cursor fun x => if x = some (target 0) then 1 else 0
+hc : (scanMass budget cursor fun x => if x = some (target 0) then 1 else 0) = valueMass p budget (target 0)
+⊢ tailMass * valueMass p budget (target 0) = ((1 - (1 / (↑p + 1)) ^ budget) / ↑p) ^ (count + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:128:50: warning: This simp argument is unused:
+  mean_const
+
+Hint: Omit it from the simp argument list.
+  simp [limbs, independentMean, observedList,̵ ̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:158:24: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp [h̵o̵u̵t̵,̵ ̵independentMean, observedList]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R572SequentialWordMass.scanMass_cursor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R572SequentialWordMass.scanMass_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R572SequentialWordMass.scanMass_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R572SequentialWordMass.limbs_exact_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean:183:0: error: Unexpected name `AspisV8R19.R572SequentialWordMass` after `end`: The current section is unnamed
+
+Hint: Delete the name `AspisV8R19.R572SequentialWordMass` to end the current unnamed scope; outer named scopes can then be closed using additional `end` command(s):
+  end ̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵5̵7̵2̵S̵e̵q̵u̵e̵n̵t̵i̵a̵l̵W̵o̵r̵d̵M̵a̵s̵s̵
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R572SequentialWordMass.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R572SequentialWordMass.lean"
+	User time (seconds): 1.29
+	System time (seconds): 0.32
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.59
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3239288
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77609
+	Voluntary context switches: 1363
+	Involuntary context switches: 69
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.622s
+CPU time consumed: 1.646s
+Memory peak: 516.0K
+Memory swap peak: 0B
