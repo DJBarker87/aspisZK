@@ -9,3 +9,7 @@ For an exact-tower parameter, R730 proves that an exact successful return `.ok (
 This proves conversion success is outside CM31. It does not prove an attempt condition, whole sampler or callback chronology, original parameter recovery, source-image premises, oracle law, privacy, or security.
 
 The first remaining proposition is to connect these successful parameter conversions to the parameters actually consumed by the complete three-attempt circle sampler and selected callback; the shared-oracle trace and H1 legal-target proof remain open.
+
+## Existing-proof provenance correction
+
+`R166CircleExecution.successful_output` already proves the decoded imaginary coordinate is nonzero for the same canonical source input and exact successful conversion result, together with coordinate canonicality, exact point equality, and the unit-circle equation. R730 is a redundant specialized corollary, not a newly closed security obligation. Reuse R166 for the source circle facts. The original compiled source and raw evidence are retained without a replay.
