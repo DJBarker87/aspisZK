@@ -1,0 +1,7 @@
+# R740 sparse source point observations
+
+Four Lean theorems reduce a point functional of the exact inverse-transported source chord to its transposed weights. The selected pair direction needs two weight coordinates; subtracting the same slot at block zero needs four. The result holds over any commutative ring and for arbitrary point coordinates, with no tail, rank, image, or honesty premise. It provides sparse formulas for the three point rows of the joint minor.
+
+Target `AspisV8R19/R740SparsePointObservation.lean`; source revision `b36a25ee228a1212b309088c64127d4c5a83c789`; source SHA-256 `72bd62fda1766099b0dd352b193152544d2e2470335261ad735482eecc257bb2`. Final focused run `1791138671110877000`: exit 0, wall 1.39 s, peak Lean-child RSS 3,305,940 KiB, swap 0. Pinned Lean4.32, cgroup5G/7G/no-swap/TasksMax128, flags `-j1 -M4500`. All four axiom reports contain only propext, Classical.choice, Quot.sound. Three earlier mechanical rewrite failures are retained separately; their failed axiom output is not release evidence. No unchanged successful checks were rerun.
+
+The Nat-indexed identity still needs the full indexed flattening bridge. First remaining proposition: bind joint matrix entries to the sparse point and coefficient formulas, then prove the determinant polynomial nonzero. This does not prove native execution, universal legal witness compatibility, privacy, soundness, or any adaptive challenge law. Verifier source, CU results, and security parameters are unchanged.

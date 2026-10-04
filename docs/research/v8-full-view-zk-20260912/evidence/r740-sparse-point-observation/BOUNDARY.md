@@ -1,0 +1,3 @@
+Over any commutative ring, every point functional of the source inverse-transported chord equals the exact transposed point-weight pairing. For the selected pair and same-slot block-zero-subtracted direction, the pairing reduces to two and four weight coordinates respectively. No tail, honesty, rank, oracle, or image premise is used.
+
+This is a Nat-indexed source-shaped algebraic identity; the R738 guarded indexed flattening bridge and coefficient rows still need binding. No native execution, joint rank, legal-prefix witness compatibility, simulator, probability law, privacy, or soundness claim. First remaining proposition: bind the full indexed joint entries to these sparse formulas and polynomialize them.
