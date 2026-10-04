@@ -1,0 +1,11 @@
+import AspisV8R19.R481NativeQM31Cell
+#check Nat.testBit_two_pow_sub_one
+#check Nat.testBit_two_pow_sub_one_iff
+#check Nat.testBit_and
+#check Nat.testBit_sub
+#check Nat.testBit_one
+#check Nat.testBit_add
+#check Nat.testBit_mod_two_pow
+#check BitVec.getLsbD_ofNat
+#check BitVec.getLsbD_setWidth
+#check List.getElem?_ofFn

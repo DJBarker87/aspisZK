@@ -1,0 +1,42 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791110045575972000.service; invocation ID: 7ab38f95546a45b0a8039804fdc61c1d
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.UScalar.and : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv &&& y.bv)#uscalar
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R642SourceScalarWrapper.lean:12:69: error: unsolved goals
+w : U64
+⊢ U32.bv
+      (BitVec.zeroExtend UScalarTy.U32.numBits
+          (w.bv &&& BitVec.zeroExtend UScalarTy.U64.numBits 2147483647#u32.bv)#uscalar) =
+    BitVec.extractLsb' 0 32 (w.bv &&& 2147483647)
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R642SourceScalarWrapper.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R642SourceScalarWrapper.lean"
+	User time (seconds): 0.91
+	System time (seconds): 0.40
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.31
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3729336
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86107
+	Voluntary context switches: 112
+	Involuntary context switches: 63
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.342s
+CPU time consumed: 1.346s
+Memory peak: 324.0K
+Memory swap peak: 0B

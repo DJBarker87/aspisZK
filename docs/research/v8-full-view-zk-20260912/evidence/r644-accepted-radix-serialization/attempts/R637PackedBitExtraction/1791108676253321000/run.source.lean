@@ -1,0 +1,11 @@
+import AspisV8R19.R481NativeQM31Cell
+#check BitVec.getLsbD_and
+#check BitVec.getLsbD_or
+#check BitVec.getLsbD_ofNat
+#check BitVec.getLsbD_zeroExtend
+#check BitVec.getLsbD_ushiftLeft_of_lt
+#check BitVec.getLsbD_ushiftLeft
+#check BitVec.getLsbD_ushiftLeft_eq
+#check BitVec.getLsbD_append
+#check BitVec.getLsbD_ofNat
+#check BitVec.getLsbD_ushiftRight

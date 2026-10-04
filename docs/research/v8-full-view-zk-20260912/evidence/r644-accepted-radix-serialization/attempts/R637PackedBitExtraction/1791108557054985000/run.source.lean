@@ -1,0 +1,11 @@
+import AspisV8R19.R481NativeQM31Cell
+#check BitVec.zeroExtend
+#check BitVec.zeroExtend_ofNat
+#check BitVec.extractLsb'_eq_extractLsb
+#check BitVec.extractLsb'_append
+#check BitVec.extractLsb'_ushiftRight
+#check BitVec.extractLsb'_shiftRight
+#check BitVec.extractLsb'_ushiftLeft
+#check BitVec.ushiftRight_or_distrib
+#check BitVec.extractLsb'_and
+#print BitVec.extractLsb'

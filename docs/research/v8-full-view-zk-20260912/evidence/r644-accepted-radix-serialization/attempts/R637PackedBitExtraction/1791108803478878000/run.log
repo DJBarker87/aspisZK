@@ -1,0 +1,48 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791108803478878000.service; invocation ID: fd1a8cf84d164a7f9cef563f224a8796
+BitVec.getLsbD_setWidth {n : ℕ} (m : ℕ) (x : BitVec n) (i : ℕ) :
+  (BitVec.setWidth m x).getLsbD i = (decide (i < m) && x.getLsbD i)
+BitVec.setWidth_eq {n : ℕ} (x : BitVec n) : BitVec.setWidth n x = x
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:4:7: error(lean.unknownIdentifier): Unknown constant `BitVec.setWidth_ofNat`
+BitVec.getLsbD_ofNat (n x i : ℕ) : (BitVec.ofNat n x).getLsbD i = (decide (i < n) && x.testBit i)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:6:7: error(lean.unknownIdentifier): Unknown constant `BitVec.getLsbD_eq_getLsbD`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:7:7: error(lean.unknownIdentifier): Unknown constant `BitVec.getLsbD_eq_testBit`
+BitVec.getLsbD_append {n m i : ℕ} {x : BitVec n} {y : BitVec m} :
+  (x ++ y).getLsbD i = if i < m then y.getLsbD i else x.getLsbD (i - m)
+BitVec.testBit_toNat {w i : ℕ} (x : BitVec w) : x.toNat.testBit i = x.getLsbD i
+BitVec.toNat_eq {n : ℕ} {x y : BitVec n} : x = y ↔ x.toNat = y.toNat
+BitVec.toNat_append {m n : ℕ} (x : BitVec m) (y : BitVec n) : (x ++ y).toNat = x.toNat <<< n ||| y.toNat
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:12:7: error(lean.unknownIdentifier): Unknown constant `BitVec.ofNat_eq`
+Nat.testBit_mod_two_pow (x j i : ℕ) : (x % 2 ^ j).testBit i = (decide (i < j) && x.testBit i)
+Nat.testBit_two_pow {n m : ℕ} : (2 ^ n).testBit m = decide (n = m)
+Nat.testBit_lt_two_pow {x i : ℕ} (lt : x < 2 ^ i) : x.testBit i = false
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R637PackedBitExtraction.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean"
+	User time (seconds): 0.91
+	System time (seconds): 0.40
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.31
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3721788
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86302
+	Voluntary context switches: 26
+	Involuntary context switches: 72
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.340s
+CPU time consumed: 1.347s
+Memory peak: 512.0K
+Memory swap peak: 0B

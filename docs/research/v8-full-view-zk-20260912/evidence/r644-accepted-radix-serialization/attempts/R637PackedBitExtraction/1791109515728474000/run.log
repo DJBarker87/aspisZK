@@ -1,0 +1,159 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791109515728474000.service; invocation ID: 9b53663aa8d34037bf268afb6666e497
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:22:35: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:43:12: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [h0̵,̵ ̵h̵1a, h128]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:45:17: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h0̵,̵ ̵h̵128, if_false, if_neg h1a]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:49:19: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h0̵,̵ ̵h̵128, h1a, h2a, h192, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:49:23: warning: This simp argument is unused:
+  h128
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, h12̵8̵,̵ ̵h̵1̵a, h2a, h192, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:49:29: warning: This simp argument is unused:
+  h1a
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, h128, h1̵a̵,̵ ̵h̵2a, h192, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:52:19: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h0̵,̵ ̵h̵128, h1a, h2a, h192, if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:52:23: warning: This simp argument is unused:
+  h128
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, h12̵8̵,̵ ̵h̵1̵a, h2a, h192, if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:52:29: warning: This simp argument is unused:
+  h1a
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, h128, h1̵a̵,̵ ̵h̵2a, h192, if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:147:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (sourceWords w0 w1 w2 w3)[↑j].getLsbD i
+in the target expression
+  (decide (i < 32) &&
+      ([w0, w0 >>> 31, w0 >>> 62 ||| w1 <<< 2, w1 >>> 29, w1 >>> 60 ||| w2 <<< 4, w2 >>> 27, w2 >>> 58 ||| w3 <<< 6,
+                w3 >>> 25][↑j].getLsbD
+          i &&
+        decide (i < 31))) =
+    (decide (i < 32) && (decide (i < 31) && (packed256 w0 w1 w2 w3).getLsbD (31 * ↑j + i)))
+
+case pos
+w0 w1 w2 w3 : BitVec 64
+j : Fin 8
+i : ℕ
+hi : i < 32
+h31 : i < 31
+⊢ (decide (i < 32) &&
+      ([w0, w0 >>> 31, w0 >>> 62 ||| w1 <<< 2, w1 >>> 29, w1 >>> 60 ||| w2 <<< 4, w2 >>> 27, w2 >>> 58 ||| w3 <<< 6,
+                w3 >>> 25][↑j].getLsbD
+          i &&
+        decide (i < 31))) =
+    (decide (i < 32) && (decide (i < 31) && (packed256 w0 w1 w2 w3).getLsbD (31 * ↑j + i)))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl
+      [w0, w0 >>> 31, w0 >>> 62 ||| w1 <<< 2, w1 >>> 29, w1 >>> 60 ||| w2 <<< 4, w2 >>> 27, w2 >>> 58 ||| w3 <<< 6,
+        w3 >>> 25]
+  has type
+    @Eq (List (BitVec 64))
+      [w0, w0 >>> 31, w0 >>> 62 ||| w1 <<< 2, w1 >>> 29, w1 >>> 60 ||| w2 <<< 4, w2 >>> 27, w2 >>> 58 ||| w3 <<< 6,
+        w3 >>> 25]
+      [w0, w0 >>> 31, w0 >>> 62 ||| w1 <<< 2, w1 >>> 29, w1 >>> 60 ||| w2 <<< 4, w2 >>> 27, w2 >>> 58 ||| w3 <<< 6,
+        w3 >>> 25]
+  but is expected to have type
+    @Eq (List (BitVec 64)) (sourceWords w0 w1 w2 w3)
+      [w0, w0 >>> 31, w0 >>> 62 ||| w1 <<< 2, w1 >>> 29, w1 >>> 60 ||| w2 <<< 4, w2 >>> 27, w2 >>> 58 ||| w3 <<< 6,
+        w3 >>> 25]
+  in the application
+    id
+      (Eq.refl
+        [w0, w0 >>> 31, w0 >>> 62 ||| w1 <<< 2, w1 >>> 29, w1 >>> 60 ||| w2 <<< 4, w2 >>> 27, w2 >>> 58 ||| w3 <<< 6,
+          w3 >>> 25])
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:142:39: warning: This simp argument is unused:
+  List.getElem_cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [maskedLow32, sourceWords, L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵List.getElem_cons_succ, BitVec.getLsbD_extractLsb',
+  ̲  ̲ ̲ ̲BitVec.getLsbD_and, BitVec.getLsbD_setWidth]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:143:4: warning: This simp argument is unused:
+  List.getElem_cons_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [maskedLow32, sourceWords, List.getElem_cons_zero, L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵ ̵BitVec.getLsbD_extractLsb',
+  ̲  ̲ ̲ ̲BitVec.getLsbD_and, BitVec.getLsbD_setWidth]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R637PackedBitExtraction.source_word_masked_extract' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R637PackedBitExtraction.source_word_bit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R637PackedBitExtraction.packed_lsbD' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R637PackedBitExtraction.mask_bit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R637PackedBitExtraction.getLsbD_false_of_ge' depends on axioms: [propext, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R637PackedBitExtraction.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean"
+	User time (seconds): 1.81
+	System time (seconds): 0.37
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.16
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3759244
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86950
+	Voluntary context switches: 918
+	Involuntary context switches: 62
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.194s
+CPU time consumed: 2.213s
+Memory peak: 328.0K
+Memory swap peak: 0B

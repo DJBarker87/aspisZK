@@ -1,0 +1,52 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791108773358270000.service; invocation ID: ac01525c601b4a009c5d3bfcb8742b2e
+BitVec.getLsbD_ushiftRight {n : ℕ} (x : BitVec n) (i j : ℕ) : (x >>> i).getLsbD j = x.getLsbD (i + j)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:3:7: error(lean.unknownIdentifier): Unknown constant `BitVec.getLsbD_shiftRight`
+BitVec.getLsbD_shiftLeft {m i : ℕ} (x : BitVec m) (n : ℕ) :
+  (x <<< n).getLsbD i = (decide (i < m) && !decide (i < n) && x.getLsbD (i - n))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:5:7: error(lean.unknownIdentifier): Unknown constant `BitVec.getLsbD_ushiftLeft`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:6:7: error(lean.unknownIdentifier): Unknown constant `BitVec.ushiftLeft`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:7:7: error(lean.unknownIdentifier): Unknown constant `BitVec.toNat_ushiftLeft`
+BitVec.toNat_ushiftRight {n : ℕ} (x : BitVec n) (i : ℕ) : (x >>> i).toNat = x.toNat >>> i
+BitVec.getLsbD_ofNat (n x i : ℕ) : (BitVec.ofNat n x).getLsbD i = (decide (i < n) && x.testBit i)
+BitVec.getLsbD_append {n m i : ℕ} {x : BitVec n} {y : BitVec m} :
+  (x ++ y).getLsbD i = if i < m then y.getLsbD i else x.getLsbD (i - m)
+BitVec.getLsbD_and {v i : ℕ} {x y : BitVec v} : (x &&& y).getLsbD i = (x.getLsbD i && y.getLsbD i)
+BitVec.getLsbD_or {v i : ℕ} {x y : BitVec v} : (x ||| y).getLsbD i = (x.getLsbD i || y.getLsbD i)
+BitVec.getLsbD_extractLsb' {n : ℕ} (start len : ℕ) (x : BitVec n) (i : ℕ) :
+  (BitVec.extractLsb' start len x).getLsbD i = (decide (i < len) && x.getLsbD (start + i))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:14:7: error(lean.unknownIdentifier): Unknown constant `BitVec.getLsbD_zeroExtend`
+BitVec.eq_of_getLsbD_eq {w : ℕ} {x y : BitVec w} (pred : ∀ i < w, x.getLsbD i = y.getLsbD i) : x = y
+Nat.testBit_mul_two_pow (x j i : ℕ) : (x * 2 ^ i).testBit j = (decide (i ≤ j) && x.testBit (j - i))
+Nat.testBit_shiftLeft {i j : ℕ} (x : ℕ) : (x <<< i).testBit j = (decide (j ≥ i) && x.testBit (j - i))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean:18:7: error(lean.unknownIdentifier): Unknown constant `Nat.testBit_eq`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R637PackedBitExtraction.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R637PackedBitExtraction.lean"
+	User time (seconds): 0.96
+	System time (seconds): 0.35
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.30
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3722116
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86339
+	Voluntary context switches: 157
+	Involuntary context switches: 65
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.337s
+CPU time consumed: 1.347s
+Memory peak: 256.0K
+Memory swap peak: 0B

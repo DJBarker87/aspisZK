@@ -1,0 +1,10 @@
+import AspisV8R19.R481NativeQM31Cell
+#check Nat.testBit_mul_two_pow
+#check Nat.testBit_mul_two_pow_iff
+#check Nat.testBit_shiftLeft
+#check Nat.testBit_shiftLeft_iff
+#check Nat.testBit_ushiftLeft
+#check Nat.testBit_ushiftRight
+#check BitVec.ushiftLeft
+#check BitVec.getLsbD
+#check BitVec.toNat_ushiftLeft

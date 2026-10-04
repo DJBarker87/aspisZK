@@ -1,0 +1,15 @@
+import AspisV8R19.R481NativeQM31Cell
+#check BitVec.getLsbD_setWidth
+#check BitVec.setWidth_eq
+#check BitVec.setWidth_ofNat
+#check BitVec.getLsbD_ofNat
+#check BitVec.getLsbD_eq_getLsbD
+#check BitVec.getLsbD_eq_testBit
+#check BitVec.getLsbD_append
+#check BitVec.testBit_toNat
+#check BitVec.toNat_eq
+#check BitVec.toNat_append
+#check BitVec.ofNat_eq
+#check Nat.testBit_mod_two_pow
+#check Nat.testBit_two_pow
+#check Nat.testBit_lt_two_pow
