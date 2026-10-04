@@ -1,0 +1,9 @@
+# Complete fixed joint normalization over extension-field roots
+
+For any field K with nonzero2 and any ring homomorphism from the exact M31 witness field to K, all69 mapped low directions vanish on all222 joint rows. Every injective22-root tuple in K avoiding one, including roots outside the M31 subfield, yields the same complete normalized and raw selected source-formula matrix at the mapped witness. Point and coefficient zero identities are transported by exact source observation ring-map theorems; active identities are universal. This is an algebraic fixed-witness equality, not determinant nonzeroness, native acceptance, a legal transcript law or end-to-end privacy.
+
+Target `AspisV8R19/R789MappedJointNormalization.lean`; source revision `05988d4368f6ddd5b644b9dfcc03027e474d134a`; SHA256 `aa6aa9c3a913656cfe1528aeee0a57521c7d953f2eb0c0c11b19a308868fef37`. Exit0; wall 0:01.64; peak Lean-child RSS 3315048KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All 3 complete axiom reports use only standard propext/Classical.choice/Quot.sound or subsets. Exact successful source, full log, receipt and runner are saved, along with every listed rejected attempt. No unchanged successful check was repeated.
+
+First remaining proposition: Bind the complete source-formula matrix to the literal determinant certificate and prove its nonzeroness, specialize the exact selected QM31 embedding, and close generic legal witness compatibility and actual shared-oracle probability accounting. Native callback correspondence, entire published-view simulation and original-quotient soundness remain open.
+
+Verifier results999,790/999,532CU and all security parameters unchanged. No native execution, full privacy, shared-oracle law, published-view simulation, probability loss or soundness claim follows beyond the stated proved boundary.
