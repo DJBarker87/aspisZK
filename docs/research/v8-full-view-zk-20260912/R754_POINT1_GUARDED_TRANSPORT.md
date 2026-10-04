@@ -1,0 +1,7 @@
+# R754 shared guarded point1 transport leaves
+
+Lean proves the exact point1 basis at pivot1023 is2147483071=-576 in ZMod2147483647. For every j:Fin1024 whose ordered original source index has bit9 or8 clear, it proves R748.w(j.val)=576 when order(j) belongs to inactive.erase1023, and0 otherwise. Thus source-basis zero preserves the required inactive-pivot subtraction; it is not replaced by a zero transported weight. This symbolic theorem covers the guarded leaves without enumerating the1024-element Finset.
+
+This concerns the fixed algebraic witness point1, not every legal witness or native callback execution. No matrix/determinant rank, query-normalized compatibility, oracle law, simulator, privacy, soundness, or probability conclusion. First remaining proposition: instantiate the guarded leaf branches, prove the remaining nonzero leaf values, and assemble exact source entries against the selected certificate.
+
+Target `AspisV8R19/R754Point1GuardedTransport.lean`; revision95fdde9b40c9dd30bcfbbccd4a7781a12dd276d2; SHA256f7af56ed8c49709ed749747f26f5d955b4e89ea1487f36043125f5dcdee3e7d0. Green1791143459747965000: exit0, wall1.94s, peak Lean-child RSS3,305,460KiB, swap0. Pinned Lean4.32, flags-j1 -M4500, systemd5G/7G/no-swap/TasksMax128. Three complete axiom reports contain only propext/Classical.choice/Quot.sound. Exact source/import pins, log, receipt, runner, and earlier failed module-path/scalar/branch drafts saved separately. No unchanged successful checks rerun; verifier/CU/security parameters unchanged.
