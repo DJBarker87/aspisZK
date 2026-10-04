@@ -1,0 +1,158 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791119938289496000.service; invocation ID: c9e813331539472b9efcffb564dd8faf
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R685FullJointGImage.lean:16:0: warning: automatically included section variable(s) unused in theorem `AspisV8R19.R685FullJointGImage.extend_correction_at`:
+  [NeZero 2]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [NeZero 2] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R685FullJointGImage.lean:114:15: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R685FullJointGImage.lean:153:14: error(lean.unknownIdentifier): Unknown identifier `combination`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R685FullJointGImage.lean:72:77: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter a b c kappa alpha tau : F
+z : Fin 10 → F
+previous : Fin 271 → F
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+hquarter : quarter ≠ 0
+hkappa : kappa ≠ 0
+hcore : (coreMatrix half alpha a b c).det ≠ 0
+hresidual : (TwoSwapResidualSource.matrix half quarter a b c kappa alpha tau z previous t ht noneOne).det ≠ 0
+coinsTarget : Fin 271 → F
+pointsTarget : Fin 3 → F
+ordinaryTarget structuredTarget : Fin 7 → F
+hordinaryeval : R652ResidualCoefficientCompletion.evalSeven ordinaryTarget alpha = 0
+hstructuredeval : R652ResidualCoefficientCompletion.evalSeven structuredTarget alpha = 0
+hordinaryboundary :
+  ordinaryTarget 0 + ordinaryTarget 4 =
+    quarter * (kappa * pointsTarget 0 + kappa ^ 2 * pointsTarget 1 + kappa ^ 3 * pointsTarget 2)
+hstructuredboundary :
+  structuredTarget 0 + structuredTarget 4 =
+    quarter *
+      (kappa * ∑ i, SourceGConstant.finishCoins half previous i * coinsTarget i + kappa ^ 2 * pointsTarget 1 +
+        kappa ^ 3 * pointsTarget 2)
+x : Fin 271 → F
+hcorecoins : ∀ (i : Fin 271), actualCoin (indexedMask half a b c (coreQuotient alpha x)) i = coinsTarget i
+hcorefold : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha (coreQuotient alpha x) d = 0
+hcorebalance : ∑ r ∈ TwoSwapSourceTable.inactive, indexedMask half a b c (coreQuotient alpha x) r = 0
+q0 : Index 256 → F
+hquery0 : ∀ (slot : Fin 4) (root : Fin 22), evaluate256 (fun d => q0 (d, slot)) (t root) = 0
+hfold0 : ∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha q0 d = 0
+hsame : ∀ (i : Index 256), 22 ≤ ↑i.1 → q0 i = coreQuotient alpha x i
+hcoins0 : ∀ (i : Fin 271), actualCoin (indexedMask half a b c q0) i = coinsTarget i
+hbalance0 : ∑ r ∈ TwoSwapSourceTable.inactive, indexedMask half a b c q0 r = 0
+htail : ∀ (r : ℕ), 940 ≤ r → flattenFull q0 r = 0
+htail1021 : flattenFull q0 1021 = 0
+htail1022 : flattenFull q0 1022 = 0
+htail1023 : flattenFull q0 1023 = 0
+hpair0 :
+  ∑ r, TwoSwapSourceG.original (SourceGConstant.finishCoins half previous) r * indexedMask half a b c q0 r =
+    ∑ i, SourceGConstant.finishCoins half previous i * coinsTarget i
+hboundary0R :
+  fullRelation half quarter a b c kappa tau z previous false q0 0 +
+      fullRelation half quarter a b c kappa tau z previous false q0 4 =
+    quarter *
+      (kappa * sourcePointFunctional (SourceStatementPoints.points z 0) (indexedMask half a b c q0) +
+          kappa ^ 2 * sourcePointFunctional (SourceStatementPoints.points z 1) (indexedMask half a b c q0) +
+        kappa ^ 3 * sourcePointFunctional (SourceStatementPoints.points z 2) (indexedMask half a b c q0))
+hboundary0G :
+  fullRelation half quarter a b c kappa tau z previous true q0 0 +
+      fullRelation half quarter a b c kappa tau z previous true q0 4 =
+    quarter *
+      (kappa * ∑ i, SourceGConstant.finishCoins half previous i * coinsTarget i +
+          kappa ^ 2 * sourcePointFunctional (SourceStatementPoints.points z 1) (indexedMask half a b c q0) +
+        kappa ^ 3 * sourcePointFunctional (SourceStatementPoints.points z 2) (indexedMask half a b c q0))
+desired : Fin 7 → F := fun k => ordinaryTarget k - fullRelation half quarter a b c kappa tau z previous false q0 ↑k
+desiredG : Fin 7 → F := fun k => structuredTarget k - fullRelation half quarter a b c kappa tau z previous true q0 ↑k
+points : Fin 3 → F :=
+  fun i => pointsTarget i - sourcePointFunctional (SourceStatementPoints.points z i) (indexedMask half a b c q0)
+hrel0R :
+  R652ResidualCoefficientCompletion.evalSeven
+      (fun k => fullRelation half quarter a b c kappa tau z previous false q0 ↑k) alpha =
+    0
+hrel0G :
+  R652ResidualCoefficientCompletion.evalSeven (fun k => fullRelation half quarter a b c kappa tau z previous true q0 ↑k)
+      alpha =
+    0
+hdeval : R652ResidualCoefficientCompletion.evalSeven desired alpha = 0
+hdGeval : R652ResidualCoefficientCompletion.evalSeven desiredG alpha = 0
+hdboundary : desired 0 + desired 4 = quarter * (kappa * points 0 + kappa ^ 2 * points 1 + kappa ^ 3 * points 2)
+hdGboundary : desiredG 0 + desiredG 4 = quarter * (kappa ^ 2 * points 1 + kappa ^ 3 * points 2)
+xrepair : Fin 13 → F
+hsR :
+  ∀ (k : Fin 7),
+    TwoSwapResidualSource.relation half quarter a b c kappa tau z previous false
+        (R649TwoSwapResidualRepair.combination t ht noneOne alpha xrepair) ↑k =
+      desired k
+hsG :
+  ∀ (k : Fin 7),
+    TwoSwapResidualSource.relation half quarter a b c kappa tau z previous true
+        (R649TwoSwapResidualRepair.combination t ht noneOne alpha xrepair) ↑k =
+      desiredG k
+hspoints :
+  ∀ (i : Fin 3),
+    sourcePointFunctional (SourceStatementPoints.points z i)
+        (actualMask half a b c (R649TwoSwapResidualRepair.combination t ht noneOne alpha xrepair)) =
+      points i
+hscoins :
+  ∀ (i : Fin 271),
+    actualCoin (actualMask half a b c (R649TwoSwapResidualRepair.combination t ht noneOne alpha xrepair)) i = 0
+hsqueries :
+  ∀ (slot : Fin 4) (root : Fin 22),
+    NormalizedQuerySection.evaluate
+        (fun d => R649TwoSwapResidualRepair.combination t ht noneOne alpha xrepair (d, slot)) (t root) =
+      0
+hsfold :
+  ∀ (d : Fin 32),
+    R370KernelEvaluation.firstFold 32 alpha (R649TwoSwapResidualRepair.combination t ht noneOne alpha xrepair) d = 0
+hsbalance :
+  ∑ r ∈ TwoSwapSourceTable.inactive,
+      actualMask half a b c (R649TwoSwapResidualRepair.combination t ht noneOne alpha xrepair) r =
+    0
+⊢ ∃ q,
+    (∀ (i : Fin 271), actualCoin (indexedMask half a b c q) i = coinsTarget i) ∧
+      (∀ (i : Fin 3),
+          sourcePointFunctional (SourceStatementPoints.points z i) (indexedMask half a b c q) = pointsTarget i) ∧
+        (∀ (k : Fin 7), fullRelation half quarter a b c kappa tau z previous false q ↑k = ordinaryTarget k) ∧
+          (∀ (k : Fin 7), fullRelation half quarter a b c kappa tau z previous true q ↑k = structuredTarget k) ∧
+            (∀ (slot : Fin 4) (root : Fin 22), evaluate256 (fun d => q (d, slot)) (t root) = 0) ∧
+              (∀ (d : Fin 256), R370KernelEvaluation.firstFold 256 alpha q d = 0) ∧
+                ∑ r ∈ TwoSwapSourceTable.inactive, indexedMask half a b c q r = 0
+'AspisV8R19.R685FullJointGImage.extend_correction_at' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R685FullJointGImage.firstFold_extend_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R685FullJointGImage.evaluate256_extend' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R685FullJointGImage.full_joint_g_image' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R685FullJointGImage.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R685FullJointGImage.lean"
+	User time (seconds): 1.34
+	System time (seconds): 0.35
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.66
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3304748
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77540
+	Voluntary context switches: 853
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.691s
+CPU time consumed: 1.730s
+Memory peak: 288.0K
+Memory swap peak: 0B
