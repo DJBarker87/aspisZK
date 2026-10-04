@@ -1,0 +1,47 @@
+{
+  "systemd_argv": [
+    "systemd-run",
+    "--user",
+    "--wait",
+    "--collect",
+    "--pipe",
+    "--unit=aspis-r664-option-wrapper-aeneas-20261004-a",
+    "--working-directory=/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a",
+    "-p",
+    "MemoryHigh=5G",
+    "-p",
+    "MemoryMax=7G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "-p",
+    "RuntimeMaxSec=200s",
+    "python3",
+    "-c",
+    "import pathlib,json,hashlib,subprocess,re,sys\nbinary=pathlib.Path('/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-build-output-20261004-b/aeneas-r614-m31-result-constructor-candidate-20261004-b');inp=pathlib.Path('/home/dombarker/project-offloads/aspis-r664-owned-fold-option-wrappers-capture-20261004-a/R664OwnedPrimalFoldOptionWrappers.llbc');out=pathlib.Path('/home/dombarker/project-offloads/aspis-r664-option-wrapper-aeneas-20261004-a')\ndef h(p):return hashlib.sha256(p.read_bytes()).hexdigest()\nassert binary.is_file() and h(binary)=='0632dabd94aa511685d721738c5685921fd1110663fc1295318053d5c1f8530a',(binary,h(binary))\nassert inp.is_file() and h(inp)=='090797a384c3ecefcc28b03ec4b61f0796804bf68326a7044c61aa2e9b217a2a',(inp,h(inp))\nassert not out.exists(),out\nfor p,sha in {'/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/ExtractBase.ml': '9706e37373540d079da15ff7ce06ce1186210ea43e96fe41bd579fc17b1c8385', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/Extract.ml': '9a5bba343ebfc6a030cad9611eb0afa88266851c78f2704e5cead33fe8eec251', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/ExtractTypes.ml': 'cb59112741c428671764a44af7478117d2a324270ac0aec5c41052a3a2833a25', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/Translate.ml': '19f7e1b91e2a066e24c4231322ae3d5a78464c9ad0f56e8d2cb6358a65837ea5', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/symbolic/SymbolicToPureTypes.ml': '0e4a4f44c6fcad311e4d67f831d7c5c0efd862b01bb315d1b28f3d0867a47e02', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/symbolic/SymbolicToPureExpressions.ml': 'fbb961950190f41296090ce5281704f521cbb6d36a4d56a1e27df8db2884009b'}.items():assert h(pathlib.Path(p))==sha,(p,sha)\ncg=pathlib.Path('/sys/fs/cgroup')/pathlib.Path('/proc/self/cgroup').read_text().strip().split('::',1)[1].lstrip('/')\nlimits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max','pids.max']}\nassert limits=={'memory.high':str(5*2**30),'memory.max':str(7*2**30),'memory.swap.max':'0','pids.max':'128'},limits\nreservations=[]\nfor line in subprocess.check_output(['systemctl','--user','list-units','--type=service','--state=running','--plain','--no-legend'],text=True).splitlines():\n q=line.split()\n if q and q[0].startswith('aspis'):\n  v=subprocess.check_output(['systemctl','--user','show',q[0],'-p','MemoryMax'],text=True).strip().split('=',1)[1]\n  if v.isdigit():reservations.append((q[0],int(v)))\nassert sum(v for _,v in reservations)<=40*2**30,reservations\nout.mkdir(mode=0o700)\ncmd=[str(binary),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR664OwnedFoldOptionWrappers','-dest',str(out/'generated'),'-subdir','AspisR664OwnedFoldOptionWrappers','-split-files','-emit-json',str(inp)]\n(out/'command.json').write_text(json.dumps({'command':cmd,'binary_sha256':'0632dabd94aa511685d721738c5685921fd1110663fc1295318053d5c1f8530a','input_sha256':'090797a384c3ecefcc28b03ec4b61f0796804bf68326a7044c61aa2e9b217a2a','caps':limits,'reservations':reservations,'timeout_seconds':180,'source_pins':{'/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/ExtractBase.ml': '9706e37373540d079da15ff7ce06ce1186210ea43e96fe41bd579fc17b1c8385', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/Extract.ml': '9a5bba343ebfc6a030cad9611eb0afa88266851c78f2704e5cead33fe8eec251', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/ExtractTypes.ml': 'cb59112741c428671764a44af7478117d2a324270ac0aec5c41052a3a2833a25', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/Translate.ml': '19f7e1b91e2a066e24c4231322ae3d5a78464c9ad0f56e8d2cb6358a65837ea5', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/symbolic/SymbolicToPureTypes.ml': '0e4a4f44c6fcad311e4d67f831d7c5c0efd862b01bb315d1b28f3d0867a47e02', '/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/symbolic/SymbolicToPureExpressions.ml': 'fbb961950190f41296090ce5281704f521cbb6d36a4d56a1e27df8db2884009b'},'formal_status':'diagnostic translation only; not a proof'},indent=2)+'\\n')\nwith (out/'translation.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v','timeout','--signal=TERM','--kill-after=5s','180s',*cmd],stdout=f,stderr=subprocess.STDOUT)\nt=(out/'translation.log').read_text(errors='replace')\ndef metric(rx):\n m=re.search(rx,t);return m.group(1) if m else None\nfiles={str(p.relative_to(out)):h(p) for p in sorted((out/'generated').rglob('*')) if p.is_file()}\nd={'exit_status':r.returncode,'wall_time':metric(r'Elapsed \\\\(wall clock\\\\) time \\\\(h:mm:ss or m:ss\\\\): (\\\\S+)'),'peak_rss_kib':metric(r'Maximum resident set size \\\\(kbytes\\\\): (\\\\d+)'),'swaps':metric(r'Swaps: (\\\\d+)'),'input_sha':h(inp),'binary_sha':h(binary),'generated_files':files,'lean_compiled':False,'axioms':'N/A; translation is not a formal proof'}\n(out/'result.json').write_text(json.dumps(d,indent=2)+'\\n');print(json.dumps(d));sys.exit(r.returncode)\n"
+  ],
+  "binary": "/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-build-output-20261004-b/aeneas-r614-m31-result-constructor-candidate-20261004-b",
+  "binary_sha256": "0632dabd94aa511685d721738c5685921fd1110663fc1295318053d5c1f8530a",
+  "input": "/home/dombarker/project-offloads/aspis-r664-owned-fold-option-wrappers-capture-20261004-a/R664OwnedPrimalFoldOptionWrappers.llbc",
+  "input_sha256": "090797a384c3ecefcc28b03ec4b61f0796804bf68326a7044c61aa2e9b217a2a",
+  "fresh_output_root": "/home/dombarker/project-offloads/aspis-r664-option-wrapper-aeneas-20261004-a",
+  "source_pins": {
+    "/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/ExtractBase.ml": "9706e37373540d079da15ff7ce06ce1186210ea43e96fe41bd579fc17b1c8385",
+    "/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/Extract.ml": "9a5bba343ebfc6a030cad9611eb0afa88266851c78f2704e5cead33fe8eec251",
+    "/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/extract/ExtractTypes.ml": "cb59112741c428671764a44af7478117d2a324270ac0aec5c41052a3a2833a25",
+    "/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/Translate.ml": "19f7e1b91e2a066e24c4231322ae3d5a78464c9ad0f56e8d2cb6358a65837ea5",
+    "/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/symbolic/SymbolicToPureTypes.ml": "0e4a4f44c6fcad311e4d67f831d7c5c0efd862b01bb315d1b28f3d0867a47e02",
+    "/home/dombarker/project-offloads/aspis-r614-m31-result-constructor-candidate-20261004-a/src/symbolic/SymbolicToPureExpressions.ml": "fbb961950190f41296090ce5281704f521cbb6d36a4d56a1e27df8db2884009b"
+  },
+  "preflight_memavailable_bytes": 56022675456,
+  "preflight_running_aspis_units": [],
+  "caps": {
+    "MemoryHigh": "5G",
+    "MemoryMax": "7G",
+    "MemorySwapMax": "0",
+    "TasksMax": 128,
+    "RuntimeMaxSec": "200s"
+  },
+  "authorized_scope": "one unchanged-binary translation of exact new Option LLBC"
+}

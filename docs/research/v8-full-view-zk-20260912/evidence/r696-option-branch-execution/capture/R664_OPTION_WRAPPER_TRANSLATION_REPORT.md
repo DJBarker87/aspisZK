@@ -1,0 +1,9 @@
+# R664 Option wrapper translation result
+
+The one authorized Aeneas translation completed successfully on the unchanged captured LLBC. This is a diagnostic translation only; generated Lean was not compiled, and no external-template axiom was filled or accepted.
+
+Input: `R664OwnedPrimalFoldOptionWrappers.llbc`, SHA-256 `090797a384c3ecefcc28b03ec4b61f0796804bf68326a7044c61aa2e9b217a2a`. Aeneas binary: R614 result-guard binary, SHA-256 `0632dabd94aa511685d721738c5685921fd1110663fc1295318053d5c1f8530a`. Exit status 0. `/usr/bin/time`: 6.59 s, peak RSS 238,832 KiB, swap 0. systemd service: 6.738 s, peak memory 56.3 MB, swap 0. The job used MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0, TasksMax 128; preflight showed 56,022,675,456 bytes available and no running `aspis*` service reservation.
+
+The translation emitted `Funs.lean`, `Types.lean`, both external-template files, and `translation.json`. `Option::branch` and `Option::from_residual` now have generated Lean definitions from their captured structured bodies. The branch maps `None` to `ControlFlow.Break none` and `Some v` to `Continue v`; `from_residual` retains the discriminant assertion before returning `None`. `Option::unwrap_or_else` remains an opaque external template. The generated external template lists ten opaque functions: array `from_fn` and `map`; Iterator `any`, `all`, `chain`, and Chain `next`; Option `unwrap_or_else`; slice-iterator `any` and `all`; and Vec `truncate`. This is the first unresolved library/source frontier in this translation. No conclusion is made about how those library operations should be modeled.
+
+Exact command, source pins, generated hashes, raw logs, and the full translated LLBC are retained in this directory. The separate capture report records the Charon source revision and result. `formal axioms` is N/A because no Lean target was compiled.
