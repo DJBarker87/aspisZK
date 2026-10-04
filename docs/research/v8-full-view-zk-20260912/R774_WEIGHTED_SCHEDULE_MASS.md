@@ -1,0 +1,7 @@
+# R774 symbolic weighted-schedule constant preservation
+
+For any commutative ring, half+half=1 and every successful weightedIndexLoop result, Lean proves the returned weight mass equals its input scale. If the observed vector equals C at every returned target, the weighted sum equals scale*C. The proof follows the actual finite schedule definition by induction on fuel and retains the successful-result premise; it does not replace failure with a result. No concrete recurrence enumeration or field reduction is used.
+
+Target `AspisV8R19/R774WeightedScheduleMass.lean`; revision `1607c08aceb4f747f8b4586a267955bd0f2eb89a`; SHA256 `daa65b2965c96613c864d71533e761868f788a3609e11ead2a1869f5d7ac7176`. Exit0; wall 0:00.70; peak Lean-child RSS 1589588KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. Complete axiom outputs: mass uses propext only; constant mass uses propext/Quot.sound. Two rejected plumbing drafts and their exact source/log/receipts are retained. No unchanged green check replayed.
+
+First remaining proposition: prove bounded low schedules succeed and all their target weights are constant for the fixed source point, then consume this lemma to remove all low point repairs. This model lemma alone proves no source execution, rank, legal witness compatibility, oracle law, privacy, simulator or soundness. Verifier CU and security parameters unchanged.
