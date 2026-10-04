@@ -1,0 +1,7 @@
+# R771 full fixed-point zero-pivot transport
+
+Lean proves the exact basis at pivot1023 is zero for both fixed source points0 and2. For any source point with a proved zero pivot, transportDual equals the source basis at the actual order index for every Fin1024 index. Both fixed-point specializations therefore preserve every source basis value without a pivot correction. This explicitly proves the pivot condition; it does not assume the inactive branch vanishes.
+
+Target `AspisV8R19/R771Point02Transport.lean`; revision `ef8685fae1873c70e15e59f0ec5c9f3c6ebcc213`; source SHA256 `ee74843bcd7d457281a9d8f2625441f80b20405cdfcb129c90027bfecc06df73`. Exit0; wall 0:01.26; peak Lean-child RSS 3300256KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All five complete axiom reports use only propext/Classical.choice/Quot.sound. One rejected binder-elaboration draft is retained; explicit generic field-type annotations fixed the source without changing any premise.
+
+First remaining proposition: consume these all-index transport identities with the R750/R752 support facts and all R768 factor identities in every required point0/2 gather. Full source-matrix binding, joint rank within the query/fold kernel, universal legal witness compatibility, adaptive shared-oracle law, native execution, published-view simulator, probability losses and soundness remain open. Verifier results999,790/999,532CU and all security parameters unchanged.
