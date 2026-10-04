@@ -1,0 +1,70 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791103194747153000.service; invocation ID: cb56c509d4c94b69b53878c990e02876
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R620MatrixAction.lean:61:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  {
+    re :=
+      { re := ?a * ?e - ?b * ?f + (2 * ?c - ?d) * ?g - (?c + 2 * ?d) * ?h,
+        im := ?b * ?e + ?a * ?f + (?c + 2 * ?d) * ?g + (2 * ?c - ?d) * ?h },
+    im := { re := ?c * ?e - ?d * ?f + ?a * ?g - ?b * ?h, im := ?d * ?e + ?c * ?f + ?b * ?g + ?a * ?h } }
+in the target expression
+  {
+      re :=
+        { re := e * a + f * -b + g * (2 * c - d) + h * -(c + 2 * d),
+          im := e * b + f * a + g * (c + 2 * d) + h * (2 * c - d) },
+      im := { re := e * c + f * -d + g * a + h * -b, im := e * d + f * c + g * b + h * a } } =
+    {
+      re :=
+        { re := a * e + -1 * b * f, im := a * f + b * e + 0 * b * f } +
+          AspisV8R15.ExactTowerBase.qm31R * { re := c, im := d } * { re := g, im := h },
+      im :=
+        { re := a * g + -1 * b * h, im := a * h + b * g + 0 * b * h } +
+            { re := c * e + -1 * d * f, im := c * f + d * e + 0 * d * f } +
+          0 * { re := c, im := d } * { re := g, im := h } }
+
+case refine_2
+a b c d e f g h : M31Exact
+⊢ {
+      re :=
+        { re := e * a + f * -b + g * (2 * c - d) + h * -(c + 2 * d),
+          im := e * b + f * a + g * (c + 2 * d) + h * (2 * c - d) },
+      im := { re := e * c + f * -d + g * a + h * -b, im := e * d + f * c + g * b + h * a } } =
+    {
+      re :=
+        { re := a * e + -1 * b * f, im := a * f + b * e + 0 * b * f } +
+          AspisV8R15.ExactTowerBase.qm31R * { re := c, im := d } * { re := g, im := h },
+      im :=
+        { re := a * g + -1 * b * h, im := a * h + b * g + 0 * b * h } +
+            { re := c * e + -1 * d * f, im := c * f + d * e + 0 * d * f } +
+          0 * { re := c, im := d } * { re := g, im := h } }
+'AspisV8R19.R620MatrixAction.qm31_product_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R620MatrixAction.actual_matrix_action' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R620MatrixAction.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R620MatrixAction.lean"
+	User time (seconds): 1.28
+	System time (seconds): 0.37
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3739468
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86254
+	Voluntary context switches: 604
+	Involuntary context switches: 68
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.676s
+CPU time consumed: 1.687s
+Memory peak: 552.0K
+Memory swap peak: 0B
