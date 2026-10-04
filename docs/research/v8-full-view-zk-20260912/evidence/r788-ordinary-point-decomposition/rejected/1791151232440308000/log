@@ -1,0 +1,138 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791151232440308000.service
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:24:64: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:30:21: warning: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:30:21: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:43:4: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  order j = 1023
+
+case pos
+F : Type u_1
+inst✝ : CommRing F
+z : Fin 10 → F
+kappa : F
+j : Fin 1024
+hp : order j = 1023
+⊢ transportDual inactive 1023 order (rawOrdinaryOriginal z kappa) j =
+    kappa * transportDual inactive 1023 order (fun i => sourcePointBasis (SourceStatementPoints.points z 0) ↑i) j +
+          kappa ^ 2 *
+            transportDual inactive 1023 order (fun i => sourcePointBasis (SourceStatementPoints.points z 1) ↑i) j +
+        kappa ^ 3 *
+          transportDual inactive 1023 order (fun i => sourcePointBasis (SourceStatementPoints.points z 2) ↑i) j +
+      if order j = 1023 then 1 else 0
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:48:4: error: unsolved goals
+case pos
+F : Type u_1
+inst✝ : CommRing F
+z : Fin 10 → F
+kappa : F
+j : Fin 1024
+hp : ¬order j = 1023
+hi : order j ∈ inactive.erase 1023
+hinactive : order j ∈ inactive
+⊢ (1 + kappa * sourcePointBasis (SourceStatementPoints.points z 0) ↑(order j) -
+                kappa * sourcePointBasis (SourceStatementPoints.points z 0) 1023 +
+              kappa ^ 2 * sourcePointBasis (SourceStatementPoints.points z 1) ↑(order j) -
+            kappa ^ 2 * sourcePointBasis (SourceStatementPoints.points z 1) 1023 +
+          kappa ^ 3 * sourcePointBasis (SourceStatementPoints.points z 2) ↑(order j) -
+        kappa ^ 3 * sourcePointBasis (SourceStatementPoints.points z 2) 1023 -
+      if 1023 ∈ inactive then 1 else 0) =
+    kappa * sourcePointBasis (SourceStatementPoints.points z 0) ↑(order j) -
+              kappa * sourcePointBasis (SourceStatementPoints.points z 0) 1023 +
+            kappa ^ 2 * sourcePointBasis (SourceStatementPoints.points z 1) ↑(order j) -
+          kappa ^ 2 * sourcePointBasis (SourceStatementPoints.points z 1) 1023 +
+        kappa ^ 3 * sourcePointBasis (SourceStatementPoints.points z 2) ↑(order j) -
+      kappa ^ 3 * sourcePointBasis (SourceStatementPoints.points z 2) 1023
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:57:6: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:77:12: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:72:8: error: (kernel) declaration has metavariables 'AspisV8R19.R788OrdinaryPointDecomposition.extended_original_decomposition'
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:93:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sourceChordTranspose half (fun j => kappa * wp z 0 j + 1 * (kappa ^ 2 * wp z 1 j + (kappa ^ 3 * wp z 2 j + marker j)))
+    a b c r
+in the target expression
+  sourceChordTranspose half (fun r => kappa * wp z 0 r + (kappa ^ 2 * wp z 1 r + (kappa ^ 3 * wp z 2 r + marker r))) a b
+      c r =
+    kappa * pointWeight half a b c (SourceStatementPoints.points z 0) r +
+          kappa ^ 2 * pointWeight half a b c (SourceStatementPoints.points z 1) r +
+        kappa ^ 3 * pointWeight half a b c (SourceStatementPoints.points z 2) r +
+      sourceChordTranspose half marker a b c r
+
+F : Type u_1
+inst✝ : CommRing F
+half a b c kappa : F
+z : Fin 10 → F
+r : ℕ
+hext :
+  extendFin1024 (transportDual inactive 1023 order (rawOrdinaryOriginal z kappa)) = fun r =>
+    kappa * wp z 0 r + (kappa ^ 2 * wp z 1 r + (kappa ^ 3 * wp z 2 r + marker r))
+⊢ sourceChordTranspose half (fun r => kappa * wp z 0 r + (kappa ^ 2 * wp z 1 r + (kappa ^ 3 * wp z 2 r + marker r))) a b
+      c r =
+    kappa * pointWeight half a b c (SourceStatementPoints.points z 0) r +
+          kappa ^ 2 * pointWeight half a b c (SourceStatementPoints.points z 1) r +
+        kappa ^ 3 * pointWeight half a b c (SourceStatementPoints.points z 2) r +
+      sourceChordTranspose half marker a b c r
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean:116:2: error: No goals to be solved
+'AspisV8R19.R788OrdinaryPointDecomposition.pivot_mem_inactive' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R788OrdinaryPointDecomposition.transported_original_decomposition' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R788OrdinaryPointDecomposition.extended_original_decomposition' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ extended_original_decomposition]
+'AspisV8R19.R788OrdinaryPointDecomposition.transpose_original_decomposition' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ extended_original_decomposition]
+'AspisV8R19.R788OrdinaryPointDecomposition.raw_ordinary_weight_decomposition' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ extended_original_decomposition]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R788OrdinaryPointDecomposition.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R788OrdinaryPointDecomposition.lean"
+	User time (seconds): 1.59
+	System time (seconds): 0.33
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.89
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3296324
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 78225
+	Voluntary context switches: 915
+	Involuntary context switches: 61
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.932s
+CPU time consumed: 1.958s
+Memory peak: 2.5M
+Memory swap peak: 0B
