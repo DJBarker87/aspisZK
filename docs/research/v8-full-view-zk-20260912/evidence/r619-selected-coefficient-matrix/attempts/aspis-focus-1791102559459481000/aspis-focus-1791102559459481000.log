@@ -1,0 +1,77 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791102559459481000.service; invocation ID: 9a127d77c35f4e6c8b3db4ede9995a1c
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R619MatrixArithmeticBridge.lean:14:84: error: unsolved goals
+a b : M31Exact
+s : U64 :=
+  (core.convert.num.FromU64U32.from (encodeBase a)).wrapping_add (core.convert.num.FromU64U32.from (encodeBase b))
+hv : ↑s = ↑(encodeBase a) + ↑(encodeBase b)
+hmax : ¬s > core.convert.num.FromU64U32.from core.num.U32.MAX
+⊢ ∀ (v : U64),
+    lift (core.convert.num.FromU64U32.from (encodeBase a)) = Result.ok v →
+      ∀ (v_1 : U64),
+        lift (core.convert.num.FromU64U32.from (encodeBase b)) = Result.ok v_1 →
+          ∀ (v_2 : U64),
+            lift (v.wrapping_add v_1) = Result.ok v_2 →
+              ∀ (v : U64),
+                lift (core.convert.num.FromU64U32.from core.num.U32.MAX) = Result.ok v →
+                  (if ↑v < ↑v_2 then AspisR618SelectedMatrix.aspis_core.field.r91_raw_add (encodeBase a) (encodeBase b)
+                    else do
+                      let i3 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+                      if ↑i3 ≤ ↑v_2 then do
+                          let i4 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+                          let i5 ← lift (v_2.wrapping_sub i4)
+                          let i6 ← lift (UScalar.cast UScalarTy.U32 i5)
+                          Result.ok i6
+                        else do
+                          let i6 ← lift (UScalar.cast UScalarTy.U32 v_2)
+                          Result.ok i6) =
+                    if ↑v < ↑v_2 then AspisR156FullFreeze.aspis_core.field.r91_raw_add (encodeBase a) (encodeBase b)
+                    else do
+                      let i3 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+                      if ↑i3 ≤ ↑v_2 then do
+                          let i4 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+                          let i5 ← lift (v_2.wrapping_sub i4)
+                          let i6 ← lift (UScalar.cast UScalarTy.U32 i5)
+                          Result.ok i6
+                        else do
+                          let i6 ← lift (UScalar.cast UScalarTy.U32 v_2)
+                          Result.ok i6
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R619MatrixArithmeticBridge.lean:41:44: warning: This simp argument is unused:
+  hmax
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR618SelectedMatrix.aspis_core.field.M31.add,
+      AspisR156FullFreeze.aspis_core.field.M31.add,
+  ̵  ̵ ̵ ̵AspisR156FullFreeze.aspis_core.field.P,̵ ̵h̵m̵a̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R619MatrixArithmeticBridge.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R619MatrixArithmeticBridge.lean"
+	User time (seconds): 1.28
+	System time (seconds): 0.42
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.69
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3722560
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 86332
+	Voluntary context switches: 160
+	Involuntary context switches: 74
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.726s
+CPU time consumed: 1.738s
+Memory peak: 436.0K
+Memory swap peak: 0B
