@@ -1,0 +1,1 @@
+Exact tested binary retained at `.r21-scratch/r117-joint-privacy-stress/evidence/actual-seed1-schur/run/aspis-v8-performance-host` and pinned NUC stage. SHA-256 `6c9758ce6841277bd4779f0fdae31ebd43cc686c082ca802e01541a9b94a6535`. Original ARTIFACTS.sha256 describes full scratch evidence; SHA256SUMS.txt describes this published subset.

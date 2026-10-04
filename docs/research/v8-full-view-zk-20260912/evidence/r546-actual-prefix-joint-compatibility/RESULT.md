@@ -1,0 +1,7 @@
+# R546 — actual seed-1 fixed-prefix H1/G compatibility
+
+The modified production-caller diagnostic compiled in optimized release mode and ran only the existing seed-1 schedule. The original H1 system had 568 equations, rank 545 and 477 kernel directions. The baseline G system had rank 602 with 24 residual rows and no incompatible target. The all-row Schur matrix therefore had rank 0 and no incompatible rows. The diagnostic independently recomputed all 271 source semantic coordinates and passed the original 626 G equations, p0/p2, seven relation coefficients, raw/query, point, OOD, final, encoder, initial-claim, same-public and channel checks. The original baseline proof was accepted by the verifier.
+
+Build: 35.854 s, 591,604 KiB peak RSS, zero swap. Run: 59.737 s, 305,684 KiB peak RSS, zero swap. Both used the pinned Rust 1.94.1 optimized release build with locked/offline dependencies, overflow checks enabled, and separate 5G/7G, no-swap, 128-task service scopes. Exact source snapshots, scripts, logs, fingerprint, pins, binary and proof inputs/outputs are saved beside this report.
+
+This establishes compatibility for one actual sampled prefix. The alternate witness is tested while holding the original transcript challenges fixed. The run does not construct or compare alternate commitments, shared-oracle histories, retries, stopping behavior, or published views. It is not a privacy, soundness, or end-to-end security proof.
