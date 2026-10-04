@@ -1,0 +1,9 @@
+# Fixed ordinary coefficient low kernel
+
+At the exact fixed M31 witness, actual source-shaped ordinary original weights, including the inactive indicator and erased-pivot subtraction, give transported low weight14400 on all96 positions. Exact source single and double gathers then give ordinary quotient weights100800 on even and172800 on odd indices below92. All three source image updates are retained and proved irrelevant at these bounded coordinates. Their four-slot periodicity proves every one of the five retained ordinary coefficient observations vanishes on all69 low correction directions. This is fixed algebraic witness source-formula execution, not native callback or generic legal-prefix compatibility.
+
+Target `AspisV8R19/R783FixedOrdinaryLowKernel.lean`; source revision `dda1ae4c5931ad9c00528afa7ea97b7d3ff1ea64`; SHA256 `0f9b66144b2a3556121c454b9ac0933d7a5341c6ea898c81e55def816a572c24`. Exit0; wall 0:03.59; peak Lean-child RSS 3408176KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All 7 complete axiom reports use only standard propext/Classical.choice/Quot.sound or subsets. Exact successful source, full log, receipt and runner are saved, along with every listed rejected attempt. No unchanged successful check was repeated.
+
+First remaining proposition: Combine active, three point and five coefficient low kernels into the full normalized fixed witness matrix identity for every distinct non-one query-root tuple. Then bind all actual source entries to the literal certificate, prove full determinant and compatibility, and finish native execution, adaptive shared-oracle laws, simulation and soundness.
+
+Verifier results999,790/999,532CU and all security parameters unchanged. No native execution, full privacy, shared-oracle law, published-view simulation, probability loss or soundness claim follows beyond the stated proved boundary.
