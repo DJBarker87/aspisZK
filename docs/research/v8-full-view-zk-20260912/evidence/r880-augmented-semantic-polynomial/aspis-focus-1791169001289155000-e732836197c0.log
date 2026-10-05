@@ -1,0 +1,143 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791169001289155000-e732836197c0.service; invocation ID: fdfb06c9ff2e498e913938edc308b96a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:78:4: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_congr rfl`
+  Finset.sum ?m.138 ?m.135 = Finset.sum ?m.138 ?m.136
+with the goal
+  ∑ i,
+      (eval (assignment alpha u v kappa tau z)) (weights i) *
+        actualCoin
+          (indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+            (indexedDirection alpha (selectedColumns c).1 (selectedColumns c).2))
+          i =
+    Matrix.fromBlocks (chosenSourceMatrix half quarter alpha u v kappa tau z)
+      (fun r x =>
+        rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z (indexedDirection alpha 96 0) r)
+      (fun x c =>
+        ∑ i,
+          maskWeights271 half coins i *
+            actualCoin
+              (indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+                (indexedDirection alpha (selectedColumns c).1 (selectedColumns c).2))
+              i)
+      (fun x x_1 =>
+        ∑ i,
+          maskWeights271 half coins i *
+            actualCoin (indexedMask half (1 + u * v) (u * v - 1) (-(u + v)) (indexedDirection alpha 96 0)) i)
+      (Sum.inr unit) (Sum.inl c)
+
+Note: The full type of `Finset.sum_congr rfl` is
+  (∀ x ∈ ?m.138, ?m.135 x = ?m.136 x) → Finset.sum ?m.138 ?m.135 = Finset.sum ?m.138 ?m.136
+
+case inr.inl
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter alpha u v kappa tau : F
+z : Fin 10 → F
+coins : RoundCoins F 10
+weights : Fin 271 → JointPoly F
+hw : ∀ (i : Fin 271), (eval (assignment alpha u v kappa tau z)) (weights i) = maskWeights271 half coins i
+unit : Unit
+c : Obs
+⊢ ∑ i,
+      (eval (assignment alpha u v kappa tau z)) (weights i) *
+        actualCoin
+          (indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+            (indexedDirection alpha (selectedColumns c).1 (selectedColumns c).2))
+          i =
+    Matrix.fromBlocks (chosenSourceMatrix half quarter alpha u v kappa tau z)
+      (fun r x =>
+        rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z (indexedDirection alpha 96 0) r)
+      (fun x c =>
+        ∑ i,
+          maskWeights271 half coins i *
+            actualCoin
+              (indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+                (indexedDirection alpha (selectedColumns c).1 (selectedColumns c).2))
+              i)
+      (fun x x_1 =>
+        ∑ i,
+          maskWeights271 half coins i *
+            actualCoin (indexedMask half (1 + u * v) (u * v - 1) (-(u + v)) (indexedDirection alpha 96 0)) i)
+      (Sum.inr unit) (Sum.inl c)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:81:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:71:22: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:71:51: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:92:20: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:92:47: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:103:78: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter : F
+weights : Fin 271 → JointPoly F
+hw : ∀ (i : Fin 271), totalDegree (weights i) ≤ 27
+h : (augmentedPolynomial half quarter weights).det.totalDegree ≤ Fintype.card (Obs ⊕ Unit) * 63
+⊢ R698ActiveCoreLayout.highActive.card = 213
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean:104:28: warning: This simp argument is unused:
+  R746SelectedJointMinor.observation_card
+
+Hint: Omit it from the simp argument list.
+  simp [Fintype.card_sum,̵ ̵R̵7̵4̵6̵S̵e̵l̵e̵c̵t̵e̵d̵J̵o̵i̵n̵t̵M̵i̵n̵o̵r̵.̵o̵b̵s̵e̵r̵v̵a̵t̵i̵o̵n̵_̵c̵a̵r̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R880AugmentedSemanticPolynomial.actualCoin_eq_sourceChord' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R880AugmentedSemanticPolynomial.eval_semanticPolynomial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R880AugmentedSemanticPolynomial.semanticPolynomial_degree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R880AugmentedSemanticPolynomial.eval_augmentedPolynomial' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R880AugmentedSemanticPolynomial.augmentedPolynomial_entry_degree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R880AugmentedSemanticPolynomial.augmentedPolynomial_det_degree' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R880AugmentedSemanticPolynomial.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R880AugmentedSemanticPolynomial.lean"
+	User time (seconds): 1.36
+	System time (seconds): 0.35
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.67
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3297540
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 9
+	Minor (reclaiming a frame) page faults: 77594
+	Voluntary context switches: 1254
+	Involuntary context switches: 49
+	Swaps: 0
+	File system inputs: 1112
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.711s
+CPU time consumed: 1.744s
+Memory peak: 288.0K
+Memory swap peak: 0B
