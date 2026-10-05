@@ -1,0 +1,17 @@
+[package]
+name = "aspis-wide-field-screen-probe"
+version = "0.0.0"
+edition = "2021"
+publish = false
+[workspace]
+[lib]
+crate-type = ["cdylib", "lib"]
+[dependencies]
+# Frozen R101 stage copy of aspis-core on the build host; not the production crate.
+aspis-core = { path = "/home/dombarker/project-offloads/aspis-r101-auth-20260930-a/crates/aspis-core" }
+solana-program = "=2.3.0"
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+overflow-checks = true
