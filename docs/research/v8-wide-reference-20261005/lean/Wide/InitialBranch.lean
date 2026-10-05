@@ -1,0 +1,113 @@
+import Wide.InitialRoot
+
+/-!
+# Exact initial V7 branch-to-message lift
+-/
+
+set_option autoImplicit false
+set_option maxRecDepth 262144
+
+namespace AspisWide.Terminal
+
+variable {E : Type} [Field E] [Fintype E] [DecidableEq E]
+  [Algebra (ZMod AspisCircleGroupOrder.P) E]
+
+
+open Polynomial
+open AspisWide.Agreement
+open AspisWide.Interpolation
+open AspisWide.Factors
+open AspisWide.LocalFactors
+open AspisWide.Smooth
+open AspisWide.FunctionField
+open AspisWide.PowerSeriesLift
+open AspisWide.RegularHensel
+open AspisWide.RegularWeights
+open AspisWide.FactorBudgets
+open AspisWide.ConcreteBranch
+open AspisWide.OuterSelection
+open AspisWide.GRSConversion
+open AspisWide.FinalEncoder
+open AspisPool.AlgorithmicCircleDecoderV7
+open AspisWide.InitialEncoder
+open AspisV5FriDegreeThreeCorrelatedAgreement
+open AspisV6Width29CorrelatedAgreement
+open AspisV6PublishedTheoremInterfaces
+open AspisCircleGroupOrder (P)
+
+noncomputable section
+
+set_option maxRecDepth 1048576 in
+set_option maxHeartbeats 1000000 in
+/-- Close one selected initial branch through finite-characteristic Hensel
+lifting and the exact released-message image theorem. -/
+theorem exists_exactV7Initial_components_of_branchSelection
+    (lanes : Fin 29 → InitialWord E)
+    (strategy : Width29ProximateStrategy E (Fin 1048576)
+      (InitialMessage E))
+    (globalFactor : TrivariatePolynomial E)
+    (x₀ : E) (localFactor : BivariatePolynomial E)
+    (selected : Finset E)
+    (globalPositive : 0 < globalFactor.natDegree)
+    (certificateAtPoint : (Polynomial.Bivariate.swap
+      (separabilityCertificate globalFactor)).eval (C x₀) ≠ 0)
+    (localMem : localFactor ∈ bivariatePrimeFactors
+      (specializeEvaluationPoint x₀ globalFactor))
+    (localPositive : 0 < localFactor.natDegree)
+    (selectedLarge :
+      29 * fixedBranchEvaluationBudget 1024 28 globalFactor.natDegree
+          localFactor.natDegree (localBivariateWeight 28 localFactor)
+          (trivariateYZWeight 28 globalFactor) +
+        (28 * 1048576 + 1) < selected.card)
+    (selectedValid : ∀ gamma ∈ selected,
+      Width29ValidResponse exactInitialEncoder 38229 lanes strategy gamma)
+    (selectedSpec : ∀ gamma ∈ selected,
+      challengeCandidateHom gamma
+          ((exactInitialGRSConversion (K := E)).messagePolynomial
+            (strategy.candidate gamma)) globalFactor = 0 ∧
+      SimpleSpecializedRoot globalFactor x₀ gamma
+          ((exactInitialGRSConversion (K := E)).messagePolynomial
+            (strategy.candidate gamma)) ∧
+      localChallengeCandidateHom gamma
+          (((exactInitialGRSConversion (K := E)).messagePolynomial
+            (strategy.candidate gamma)).eval x₀) localFactor = 0 ∧
+      gamma ∉ localPoleChallengeSet localFactor) :
+    ∃ components : Fin 29 → InitialMessage E,
+      ∀ gamma ∈ selected,
+        Width29CandidateOnCurve exactInitialEncoder strategy components
+          gamma := by
+  classical
+  have parentNeZero : specializeEvaluationPoint x₀ globalFactor ≠ 0 :=
+    specializeEvaluationPoint_ne_zero_of_certificate globalFactor x₀
+      globalPositive certificateAtPoint
+  letI : Fact (Irreducible (localFactorOverRational localFactor)) :=
+    ⟨localFactorOverRational_irreducible
+      (specializeEvaluationPoint x₀ globalFactor) localFactor parentNeZero
+        localMem localPositive⟩
+  have localNeZero : localFactor ≠ 0 :=
+    (bivariatePrimeFactors_prime _ parentNeZero localFactor localMem).ne_zero
+  obtain ⟨root, rootEquation, rootConstant⟩ :=
+    exists_exactV7_fixedBranch_powerSeriesRoot globalFactor x₀
+      certificateAtPoint localFactor localMem localPositive
+  have etaNeZero := exactV7_regularizedHenselDerivative_ne_zero globalFactor
+    x₀ certificateAtPoint localFactor localMem localPositive
+  have localRoot : ∀ gamma ∈ selected,
+      localFactor.eval₂ (Polynomial.evalRingHom gamma)
+        (((exactInitialGRSConversion (K := E)).messagePolynomial
+          (strategy.candidate gamma)).eval x₀) = 0 := by
+    intro gamma gammaMem
+    rw [Polynomial.eval₂_eq_eval_map]
+    exact (selectedSpec gamma gammaMem).2.2.1
+  exact exists_exactInitial_components_of_fixed_branch lanes strategy
+    globalFactor globalPositive x₀ localFactor localNeZero localPositive root
+    rootEquation rootConstant etaNeZero selected selectedValid localRoot
+    (fun gamma gammaMem => (selectedSpec gamma gammaMem).1)
+    (fun gamma gammaMem => (selectedSpec gamma gammaMem).2.1)
+    (fun gamma gammaMem => (selectedSpec gamma gammaMem).2.2.2)
+    selectedLarge
+
+#print axioms exists_exactV7Initial_components_of_branchSelection
+
+end
+
+end AspisWide.Terminal
