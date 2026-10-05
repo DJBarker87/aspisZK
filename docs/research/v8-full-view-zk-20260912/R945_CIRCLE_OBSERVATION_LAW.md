@@ -1,0 +1,9 @@
+# R945: complete circle sampler output observation law
+
+For every retry cap, starting transcript state and arbitrary rational-valued output observer, proves the complete independent-answer law of the source-shaped circle wrapper. It keeps parameter exhaustion and inner challenge exhaustion separate, with their exact masses, and sums accepted observations over canonical ordinary tuples with the exact retry factor. The existing three-attempt circleProgram is specialized directly. The proof reuses the ordinary observation law and the already proved circle rejection mass, retaining the state returned at every rejected sample. No success conditioning or return-state independence is assumed. This is not yet a joint law for the distinct-second circle wrapper, the full native callback or a shared oracle.
+
+Target `AspisV8R19/R945CircleObservationLaw.lean`; source revision `507920b92d2b280ac7844341d56b2c32ee08716d`; SHA256 `1d325ce61342d00fafd45abf3a222aed2555a1cc4d4eb8b7b4ae80c9165c39cf`. Exit0; wall 0:02.06; peak Lean-child RSS 3288784KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All 7 complete axiom reports use only standard propext/Classical.choice/Quot.sound or subsets. Exact successful source, full log, receipt and runner are saved, along with every listed rejected attempt. No unchanged successful check was repeated.
+
+First remaining proposition: Compose the distinct-second circle wrapper and adaptive callback stage laws, then bind the selected native chronology and account for shared-oracle and publication losses.
+
+Verifier results999,790/999,532CU and all security parameters unchanged. No native execution, full privacy, shared-oracle law, published-view simulation, probability loss or soundness claim follows beyond the stated proved boundary.
