@@ -1,0 +1,9 @@
+# R932 exact nonzero sampling mass with exhaustion retained
+
+For every starting duplex state, the existing nonzeroProgram under independent oracle answers gives every nonzero canonical four-limb tuple the exact mass lambda*(1+lambda+lambda^2), where lambda is the already proved ordinary-QM31 atom mass. Its exact challengeExhausted mass is lambda^3+(1-modulus^4*lambda)*(1+lambda+lambda^2). The first term covers three successful zero draws; the second covers inner sampler exhaustion after zero, one or two rejected draws. General attempt-count recurrences are proved before specializing the unchanged cap of three. This result is about the existing source-shaped Program model; it does not establish the complete actual callback or a shared-oracle distribution.
+
+Target `AspisV8R19/R932NonzeroIndependentMass.lean`; source revision `723cbc3956dcbc49da4a02a6e8b3ba2ad82d6e9b`; SHA256 `a73ea7691d6ec9e579451b9916812f52ba61c3a6e9d946eec310b06d9dbce99e`. Exit0; wall 0:01.77; peak Lean-child RSS 3286240KiB; swap0. Pinned Lean4.32 cached workspace, -j1 -M4500, own5G/7G/swap0/TasksMax128 scope. All 6 complete axiom reports use only standard propext/Classical.choice/Quot.sound or subsets. Exact successful source, full log, receipt and runner are saved, along with every listed rejected attempt. No unchanged successful check was repeated.
+
+First remaining proposition: Derive whole-test successful-output laws from the canonical support and atom masses, apply R931 to the actual stage sequence, and then connect the joint determinant bound with explicit shared-oracle, stopping and publication losses.
+
+Verifier results999,790/999,532CU and all security parameters unchanged. No native execution, full privacy, shared-oracle law, published-view simulation, probability loss or soundness claim follows beyond the stated proved boundary.

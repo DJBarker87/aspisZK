@@ -1,0 +1,238 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791197350762682000-e7b25a0a2da4.service; invocation ID: a414ba9df01440fa89b91e781d672b46
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:83:12: error: unsolved goals
+case pos
+target : Fin 4 → Fin modulus
+htarget : List.map Fin.val (List.ofFn target) ≠ [0, 0, 0, 0]
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n s) fun r =>
+        outputEvent (List.map Fin.val (List.ofFn target)) r.1) =
+      lambda * retrySum n
+s t : State
+xs : List ℕ
+hz : xs = [0, 0, 0, 0]
+⊢ (outputMean (program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n t) fun v =>
+      if v.1 = Except.ok [↑(target 0), ↑(target 1), ↑(target 2), ↑(target 3)] then 1 else 0) =
+    (if 0 = ↑(target 0) ∧ 0 = ↑(target 1) ∧ 0 = ↑(target 2) ∧ 0 = ↑(target 3) then 1 else 0) + lambda * retrySum n
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:86:14: error: unsolved goals
+case pos
+target : Fin 4 → Fin modulus
+htarget : List.map Fin.val (List.ofFn target) ≠ [0, 0, 0, 0]
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n s) fun r =>
+        outputEvent (List.map Fin.val (List.ofFn target)) r.1) =
+      lambda * retrySum n
+s t : State
+hz : ¬List.map Fin.val (List.ofFn target) = [0, 0, 0, 0]
+⊢ (outputMean
+      (match
+        if target 0 = 0 ∧ target 1 = 0 ∧ target 2 = 0 ∧ target 3 = 0 then none
+        else some [↑(target 0), ↑(target 1), ↑(target 2), ↑(target 3)] with
+      | some y => Program.done (Except.ok y, t)
+      | none => program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n t)
+      fun v => if v.1 = Except.ok [↑(target 0), ↑(target 1), ↑(target 2), ↑(target 3)] then 1 else 0) =
+    1 + if target 0 = 0 ∧ target 1 = 0 ∧ target 2 = 0 ∧ target 3 = 0 then lambda * retrySum n else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:89:14: error: unsolved goals
+case neg
+target : Fin 4 → Fin modulus
+htarget : List.map Fin.val (List.ofFn target) ≠ [0, 0, 0, 0]
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n s) fun r =>
+        outputEvent (List.map Fin.val (List.ofFn target)) r.1) =
+      lambda * retrySum n
+s t : State
+xs : List ℕ
+hz : ¬xs = [0, 0, 0, 0]
+ht : ¬xs = List.map Fin.val (List.ofFn target)
+⊢ (outputMean (Program.done (Except.ok xs, t)) fun v =>
+      if v.1 = Except.ok [↑(target 0), ↑(target 1), ↑(target 2), ↑(target 3)] then 1 else 0) =
+    if xs = [↑(target 0), ↑(target 1), ↑(target 2), ↑(target 3)] then 1 else 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:96:8: error: Type mismatch
+  hterm r
+has type
+  (outputMean
+      (match r.1 with
+      | none => Program.done (Except.error Error.challengeExhausted, r.2)
+      | some xs =>
+        match nonzeroAccept xs with
+        | some y => Program.done (Except.ok y, r.2)
+        | none => program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n r.2)
+      fun v => outputEvent (List.map Fin.val (List.ofFn target)) v.1) =
+    (if r.1 = some (List.map Fin.val (List.ofFn target)) then 1 else 0) + rawZero r.1 * (lambda * retrySum n)
+but is expected to have type
+  (outputMean
+      (match r.1 with
+      | none => Program.done (Except.error Error.challengeExhausted, r.2)
+      | some xs =>
+        match nonzeroAccept xs with
+        | some y => Program.done (Except.ok y, r.2)
+        | none => program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n r.2)
+      fun r => outputEvent (List.map Fin.val (List.ofFn target)) r.1) =
+    (if r.1 = some (List.map Fin.val (List.ofFn target)) then 1 else 0) + rawZero r.1 * (lambda * retrySum n)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:83:61: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, hz, rawZero, outputEvent, i̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ofFn_four_values, htarget]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:84:16: warning: This simp argument is unused:
+  ofFn_four_values
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, hz, rawZero, outputEvent, ih, o̵f̵F̵n̵_̵f̵o̵u̵r̵_̵v̵a̵l̵u̵e̵s̵,̵ ̵htarget]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:84:34: warning: This simp argument is unused:
+  htarget
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, hz, rawZero, outputEvent, ih, o̵f̵F̵n̵_̵f̵o̵u̵r̵_̵v̵a̵l̵u̵e̵s̵,̵ ̵h̵t̵a̵r̵g̵e̵t̵]̵o̲f̲F̲n̲_̲f̲o̲u̲r̲_̲v̲a̲l̲u̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:87:59: warning: This simp argument is unused:
+  htarget
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, rawZero, outputEvent, h̵t̵a̵r̵g̵e̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ofFn_four_values]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:88:18: warning: This simp argument is unused:
+  ofFn_four_values
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, rawZero, outputEvent, htarget,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵o̵f̵F̵n̵_̵f̵o̵u̵r̵_̵v̵a̵l̵u̵e̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:89:41: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, hz, h̵t̵,̵ ̵rawZero, outputEvent, ofFn_four_values]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:90:18: warning: This simp argument is unused:
+  ofFn_four_values
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, hz, ht, rawZero, outputEvent,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵o̵f̵F̵n̵_̵f̵o̵u̵r̵_̵v̵a̵l̵u̵e̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:133:12: error: unsolved goals
+case pos
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n s) fun r =>
+        exhaustionEvent r.1) =
+      lambda ^ n + (1 - ↑(modulus ^ 4) * lambda) * retrySum n
+s t : State
+xs : List ℕ
+hz : xs = [0, 0, 0, 0]
+⊢ (outputMean (program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n t) fun v =>
+      if v.1 = Except.error Error.challengeExhausted then 1 else 0) =
+    lambda ^ n + (1 - 2147483647 ^ 4 * lambda) * retrySum n
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:134:12: error: unsolved goals
+case neg
+n : ℕ
+ih :
+  ∀ (s : State),
+    (outputMean (program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n s) fun r =>
+        exhaustionEvent r.1) =
+      lambda ^ n + (1 - ↑(modulus ^ 4) * lambda) * retrySum n
+s t : State
+xs : List ℕ
+hz : ¬xs = [0, 0, 0, 0]
+⊢ (outputMean (Program.done (Except.ok xs, t)) fun v => if v.1 = Except.error Error.challengeExhausted then 1 else 0) =
+    0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:140:8: error: Type mismatch
+  hterm r
+has type
+  (outputMean
+      (match r.1 with
+      | none => Program.done (Except.error Error.challengeExhausted, r.2)
+      | some xs =>
+        match nonzeroAccept xs with
+        | some y => Program.done (Except.ok y, r.2)
+        | none => program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n r.2)
+      fun v => exhaustionEvent v.1) =
+    missing r.1 + rawZero r.1 * (lambda ^ n + (1 - ↑(modulus ^ 4) * lambda) * retrySum n)
+but is expected to have type
+  (outputMean
+      (match r.1 with
+      | none => Program.done (Except.error Error.challengeExhausted, r.2)
+      | some xs =>
+        match nonzeroAccept xs with
+        | some y => Program.done (Except.ok y, r.2)
+        | none => program nonzeroAccept Error.challengeExhausted Error.challengeExhausted n r.2)
+      fun r => exhaustionEvent r.1) =
+    missing r.1 + rawZero r.1 * (lambda ^ n + (1 - ↑(modulus ^ 4) * lambda) * retrySum n)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean:133:74: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [nonzeroAccept, hz, exhaustionEvent, missing, rawZero,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R932NonzeroIndependentMass.independent_raw_zero_mass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R932NonzeroIndependentMass.independent_missing_mass' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R932NonzeroIndependentMass.independent_output_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R932NonzeroIndependentMass.independent_exhaustion_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R932NonzeroIndependentMass.selected_three_attempt_nonzero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R932NonzeroIndependentMass.selected_three_attempt_exhaustion' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R932NonzeroIndependentMass.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R932NonzeroIndependentMass.lean"
+	User time (seconds): 1.37
+	System time (seconds): 0.33
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.66
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3272580
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77849
+	Voluntary context switches: 962
+	Involuntary context switches: 76
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.693s
+CPU time consumed: 1.738s
+Memory peak: 328.0K
+Memory swap peak: 0B
