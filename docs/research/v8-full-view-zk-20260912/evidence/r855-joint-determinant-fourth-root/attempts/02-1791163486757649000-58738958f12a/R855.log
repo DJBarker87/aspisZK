@@ -1,0 +1,204 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791163486757649000-58738958f12a.service; invocation ID: 2384941f65564c4f8b2fd35eac143c97
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:72:79: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter alpha u v kappa tau : F
+z : Fin 10 → F
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+hdet : (normalizedSelectedMatrix half quarter alpha u v kappa tau z t ht noneOne).det ≠ 0
+ha4 : alpha ^ 4 = 1
+target : R738JointObservationModel.ObservationRow → F :=
+  fun x =>
+    match x with
+    | Sum.inl val => 0
+    | Sum.inr (Sum.inl val) => 0
+    | Sum.inr (Sum.inr j) => if ↑j = 0 then 1 else 0
+x : R738JointObservationModel.ObservationRow → F
+hobs :
+  ∀ (row : R738JointObservationModel.ObservationRow),
+    rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z (combination alpha t ht noneOne x) row =
+      target row
+hfold : ∀ (d : Fin 256), firstFold 256 alpha (combination alpha t ht noneOne x) d = 0
+hquery :
+  ∀ (slot : Fin 4) (root : Fin 22),
+    R682FullQueryNormalization.evaluate256 (fun d => combination alpha t ht noneOne x (d, slot)) (t root) = 0
+haug :
+  ∀ (slot : Fin 4) (root : Fin 23),
+    R682FullQueryNormalization.evaluate256 (fun d => combination alpha t ht noneOne x (d, slot))
+        (AugmentedQuerySection.roots t root) =
+      0
+hTop : ∀ (r : ℕ), 1020 ≤ r → R662FullIndexedMaskPreservation.flattenFull (combination alpha t ht noneOne x) r = 0
+hbalance :
+  ∑ r ∈ TwoSwapSourceTable.inactive,
+      rawMask half (1 + u * v) (u * v - 1) (-(u + v)) (combination alpha t ht noneOne x) r =
+    0
+q : Index256 → F := combination alpha t ht noneOne x
+hpoint0 :
+  sourcePointFunctional (SourceStatementPoints.points z 0) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hpoint1 :
+  sourcePointFunctional (SourceStatementPoints.points z 1) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hpoint2 :
+  sourcePointFunctional (SourceStatementPoints.points z 2) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hrel1 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 1 = 1
+hrel2 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 2 = 0
+hrel3 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 3 = 0
+hrel5 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 5 = 0
+hrel6 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 6 = 0
+htopRaw : ∀ (r : ℕ), 1020 ≤ r → rawFlatten q r = 0
+⊢ quarter = 0 ∨
+    kappa *
+            sourcePointFunctional (SourceStatementPoints.points z 0)
+              (rawMask half (1 + u * v) (u * v - 1) (-v + -u) q) +
+          kappa ^ 2 *
+            sourcePointFunctional (SourceStatementPoints.points z 1)
+              (rawMask half (1 + u * v) (u * v - 1) (-v + -u) q) +
+        kappa ^ 3 *
+          sourcePointFunctional (SourceStatementPoints.points z 2) (rawMask half (1 + u * v) (u * v - 1) (-v + -u) q) =
+      0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:78:13: error(lean.invalidField): Invalid field `val`: The environment does not contain `Prod.val`, so it is not possible to project the field `val` from an expression
+  i.1
+of type `Fin 256 × Fin 4`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:79:48: error: Application type mismatch: The argument
+  w
+has type
+  Index256 × Fin 4 → F
+but is expected to have type
+  Fin 256 × Fin 4 → F
+in the application
+  kernelEval 256 quarter alpha q w
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:80:61: error: Application type mismatch: The argument
+  w
+has type
+  Index256 × Fin 4 → F
+but is expected to have type
+  Fin 256 × Fin 4 → F
+in the application
+  kernel_eval_zero_of_first_fold 256 quarter alpha q w
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:86:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:91:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:94:4: error: linarith failed to find a contradiction
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter alpha u v kappa tau : F
+z : Fin 10 → F
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+hdet : (normalizedSelectedMatrix half quarter alpha u v kappa tau z t ht noneOne).det ≠ 0
+ha4 : alpha ^ 4 = 1
+target : R738JointObservationModel.ObservationRow → F :=
+  fun x =>
+    match x with
+    | Sum.inl val => 0
+    | Sum.inr (Sum.inl val) => 0
+    | Sum.inr (Sum.inr j) => if ↑j = 0 then 1 else 0
+x : R738JointObservationModel.ObservationRow → F
+hobs :
+  ∀ (row : R738JointObservationModel.ObservationRow),
+    rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z (combination alpha t ht noneOne x) row =
+      target row
+hfold : ∀ (d : Fin 256), firstFold 256 alpha (combination alpha t ht noneOne x) d = 0
+hquery :
+  ∀ (slot : Fin 4) (root : Fin 22),
+    R682FullQueryNormalization.evaluate256 (fun d => combination alpha t ht noneOne x (d, slot)) (t root) = 0
+haug :
+  ∀ (slot : Fin 4) (root : Fin 23),
+    R682FullQueryNormalization.evaluate256 (fun d => combination alpha t ht noneOne x (d, slot))
+        (AugmentedQuerySection.roots t root) =
+      0
+hTop : ∀ (r : ℕ), 1020 ≤ r → R662FullIndexedMaskPreservation.flattenFull (combination alpha t ht noneOne x) r = 0
+hbalance :
+  ∑ r ∈ TwoSwapSourceTable.inactive,
+      rawMask half (1 + u * v) (u * v - 1) (-(u + v)) (combination alpha t ht noneOne x) r =
+    0
+q : Index256 → F := combination alpha t ht noneOne x
+hpoint0 :
+  sourcePointFunctional (SourceStatementPoints.points z 0) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hpoint1 :
+  sourcePointFunctional (SourceStatementPoints.points z 1) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hpoint2 :
+  sourcePointFunctional (SourceStatementPoints.points z 2) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hrel1 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 1 = 1
+hrel2 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 2 = 0
+hrel3 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 3 = 0
+hrel5 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 5 = 0
+hrel6 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 6 = 0
+htopRaw : ∀ (r : ℕ), 1020 ≤ r → rawFlatten q r = 0
+hboundary :
+  rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 0 +
+      rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 4 =
+    0
+w : Index256 × Fin 4 → F :=
+  fun i => rawOrdinaryWeight half (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z (4 * sorry + ↑i.2)
+hkernel : kernelEval 256 quarter alpha q sorry = 0
+hsum : ∑ k, rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑k * alpha ^ ↑k = 0
+hpoly :
+  rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 0 + alpha +
+      1 * rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 4 =
+    0
+⊢ False
+failed
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:75:10: warning: This simp argument is unused:
+  hpoint0
+
+Hint: Omit it from the simp argument list.
+  simp [hpoint0̵,̵ ̵h̵p̵o̵i̵n̵t̵1, hpoint2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:75:19: warning: This simp argument is unused:
+  hpoint1
+
+Hint: Omit it from the simp argument list.
+  simp [hpoint0, hpoint1̵,̵ ̵h̵p̵o̵i̵n̵t̵2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:75:28: warning: This simp argument is unused:
+  hpoint2
+
+Hint: Omit it from the simp argument list.
+  simp [hpoint0, hpoint1,̵ ̵h̵p̵o̵i̵n̵t̵2̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R855JointDeterminantFourthRoot.determinant_excludes_fourth_root' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R855JointDeterminantFourthRoot.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean"
+	User time (seconds): 1.98
+	System time (seconds): 0.38
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.33
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3334428
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 4
+	Minor (reclaiming a frame) page faults: 79939
+	Voluntary context switches: 1035
+	Involuntary context switches: 65
+	Swaps: 0
+	File system inputs: 808
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.365s
+CPU time consumed: 2.394s
+Memory peak: 328.0K
+Memory swap peak: 0B

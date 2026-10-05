@@ -1,0 +1,138 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791163572941217000-14a86644853c.service; invocation ID: e98455e6946d4e92a2e7b7ba7f8e3782
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean:96:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 1
+in the target expression
+  rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑0 * alpha ^ ↑0 +
+      (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0) * alpha ^ ↑(Fin.succ 0) +
+        (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0).succ *
+            alpha ^ ↑(Fin.succ 0).succ +
+          (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0).succ.succ *
+              alpha ^ ↑(Fin.succ 0).succ.succ +
+            (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0).succ.succ.succ *
+                alpha ^ ↑(Fin.succ 0).succ.succ.succ +
+              (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q
+                    ↑(Fin.succ 0).succ.succ.succ.succ *
+                  alpha ^ ↑(Fin.succ 0).succ.succ.succ.succ +
+                (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q
+                      ↑(Fin.succ 0).succ.succ.succ.succ.succ *
+                    alpha ^ ↑(Fin.succ 0).succ.succ.succ.succ.succ +
+                  ∑ i,
+                    rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q
+                        ↑i.succ.succ.succ.succ.succ.succ.succ *
+                      alpha ^ ↑i.succ.succ.succ.succ.succ.succ.succ)))))) =
+    0
+
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter alpha u v kappa tau : F
+z : Fin 10 → F
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+hdet : (normalizedSelectedMatrix half quarter alpha u v kappa tau z t ht noneOne).det ≠ 0
+ha4 : alpha ^ 4 = 1
+target : R738JointObservationModel.ObservationRow → F :=
+  fun x =>
+    match x with
+    | Sum.inl val => 0
+    | Sum.inr (Sum.inl val) => 0
+    | Sum.inr (Sum.inr j) => if ↑j = 0 then 1 else 0
+x : R738JointObservationModel.ObservationRow → F
+hobs :
+  ∀ (row : R738JointObservationModel.ObservationRow),
+    rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z (combination alpha t ht noneOne x) row =
+      target row
+hfold : ∀ (d : Fin 256), firstFold 256 alpha (combination alpha t ht noneOne x) d = 0
+hquery :
+  ∀ (slot : Fin 4) (root : Fin 22),
+    R682FullQueryNormalization.evaluate256 (fun d => combination alpha t ht noneOne x (d, slot)) (t root) = 0
+haug :
+  ∀ (slot : Fin 4) (root : Fin 23),
+    R682FullQueryNormalization.evaluate256 (fun d => combination alpha t ht noneOne x (d, slot))
+        (AugmentedQuerySection.roots t root) =
+      0
+hTop : ∀ (r : ℕ), 1020 ≤ r → R662FullIndexedMaskPreservation.flattenFull (combination alpha t ht noneOne x) r = 0
+hbalance :
+  ∑ r ∈ TwoSwapSourceTable.inactive,
+      rawMask half (1 + u * v) (u * v - 1) (-(u + v)) (combination alpha t ht noneOne x) r =
+    0
+q : Index256 → F := combination alpha t ht noneOne x
+hpoint0 :
+  sourcePointFunctional (SourceStatementPoints.points z 0) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hpoint1 :
+  sourcePointFunctional (SourceStatementPoints.points z 1) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hpoint2 :
+  sourcePointFunctional (SourceStatementPoints.points z 2) (rawMask half (1 + u * v) (u * v - 1) (-(u + v)) q) = 0
+hrel1 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 1 = 1
+hrel2 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 2 = 0
+hrel3 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 3 = 0
+hrel5 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 5 = 0
+hrel6 : rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 6 = 0
+htopRaw : ∀ (r : ℕ), 1020 ≤ r → rawFlatten q r = 0
+hboundary :
+  rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 0 +
+      rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 4 =
+    0
+w : Fin 256 × Fin 4 → F :=
+  fun i => rawOrdinaryWeight half (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z (4 * ↑i.1 + ↑i.2)
+hkernel : kernelEval 256 quarter alpha q w = 0
+hsum : ∑ k, rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑k * alpha ^ ↑k = 0
+hh :
+  rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑0 * alpha ^ ↑0 +
+      (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0) * alpha ^ ↑(Fin.succ 0) +
+        (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0).succ *
+            alpha ^ ↑(Fin.succ 0).succ +
+          (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0).succ.succ *
+              alpha ^ ↑(Fin.succ 0).succ.succ +
+            (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q ↑(Fin.succ 0).succ.succ.succ *
+                alpha ^ ↑(Fin.succ 0).succ.succ.succ +
+              (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q
+                    ↑(Fin.succ 0).succ.succ.succ.succ *
+                  alpha ^ ↑(Fin.succ 0).succ.succ.succ.succ +
+                (rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q
+                      ↑(Fin.succ 0).succ.succ.succ.succ.succ *
+                    alpha ^ ↑(Fin.succ 0).succ.succ.succ.succ.succ +
+                  ∑ i,
+                    rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q
+                        ↑i.succ.succ.succ.succ.succ.succ.succ *
+                      alpha ^ ↑i.succ.succ.succ.succ.succ.succ.succ)))))) =
+    0
+⊢ rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 0 + alpha +
+      alpha ^ 4 * rawRelation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z q 4 =
+    0
+'AspisV8R19.R855JointDeterminantFourthRoot.determinant_excludes_fourth_root' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R855JointDeterminantFourthRoot.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R855JointDeterminantFourthRoot.lean"
+	User time (seconds): 1.64
+	System time (seconds): 0.41
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.02
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3337600
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 79684
+	Voluntary context switches: 898
+	Involuntary context switches: 122
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.064s
+CPU time consumed: 2.103s
+Memory peak: 512.0K
+Memory swap peak: 0B
