@@ -1,0 +1,241 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791167639087773000-87029446abc5.service; invocation ID: 4b55e5a4068f43e1afa6465db170a689
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:33:74: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:217:64: warning: Variable name `hi` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:227:63: warning: Variable name `hi` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:302:6: warning: 'exact p1_sourceW_576 _ (by decide) (Or.inr (by decide)) (by decide)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:302:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:311:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pw point (2 * 192)
+in the target expression
+  pw point (384 + ↑((fun i => i) ⟨0, ⋯⟩)) = 7 * we point 0 + 5 * sourceGather half (we point) 0 - 5 * wo point 0
+
+case «0»
+point : Fin 10 → M
+C : M
+hw : ∀ n ∈ stencilPositions, sourceW point n = C
+h0 : pw point (2 * 0) = 7 * we point 0 + 5 * sourceGather half (we point) 0 - 5 * wo point 0
+h192 : pw point (2 * 192) = 7 * we point 192 + 5 * sourceGather half (we point) 192 - 5 * wo point 192
+⊢ pw point (384 + ↑((fun i => i) ⟨0, ⋯⟩)) = 7 * we point 0 + 5 * sourceGather half (we point) 0 - 5 * wo point 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 4
+  has type
+    4 ≤ 4
+  but is expected to have type
+    3 < 4
+  in the application
+    Nat.le_of_lt (Nat.le_refl 4)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:322:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sourceGather half (we point) 0
+in the target expression
+  (-5 *
+          ((if 192 < 512 then
+              extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 192)
+            else 0) -
+            sourceGather half
+              (sourceGather half
+                (zeroExtend 512 fun i =>
+                  extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i)))
+              192) +
+        7 *
+          if 192 < 512 then
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 192 + 1)
+          else 0) +
+      5 *
+        sourceGather half
+          (zeroExtend 512 fun i =>
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i + 1))
+          192 =
+    (-5 *
+          ((if 0 < 512 then extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 0)
+            else 0) -
+            sourceGather half
+              (sourceGather half
+                (zeroExtend 512 fun i =>
+                  extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i)))
+              0) +
+        7 *
+          if 0 < 512 then
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 0 + 1)
+          else 0) +
+      5 *
+        sourceGather half
+          (zeroExtend 512 fun i =>
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i + 1))
+          0
+
+case «1»
+point : Fin 10 → M
+C : M
+hw : ∀ n ∈ stencilPositions, sourceW point n = C
+h1 :
+  pw point (2 * 0 + 1) =
+    -5 * (we point 0 - sourceGather half (sourceGather half (we point)) 0) + 7 * wo point 0 +
+      5 * sourceGather half (wo point) 0
+h193 :
+  pw point (2 * 192 + 1) =
+    -5 * (we point 192 - sourceGather half (sourceGather half (we point)) 192) + 7 * wo point 192 +
+      5 * sourceGather half (wo point) 192
+⊢ (-5 *
+          ((if 192 < 512 then
+              extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 192)
+            else 0) -
+            sourceGather half
+              (sourceGather half
+                (zeroExtend 512 fun i =>
+                  extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i)))
+              192) +
+        7 *
+          if 192 < 512 then
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 192 + 1)
+          else 0) +
+      5 *
+        sourceGather half
+          (zeroExtend 512 fun i =>
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i + 1))
+          192 =
+    (-5 *
+          ((if 0 < 512 then extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 0)
+            else 0) -
+            sourceGather half
+              (sourceGather half
+                (zeroExtend 512 fun i =>
+                  extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i)))
+              0) +
+        7 *
+          if 0 < 512 then
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * 0 + 1)
+          else 0) +
+      5 *
+        sourceGather half
+          (zeroExtend 512 fun i =>
+            extendFin1024 (transportDual inactive 1023 order fun j => sourcePointBasis point ↑j) (2 * i + 1))
+          0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:332:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pw point (2 * 193)
+in the target expression
+  pw point (384 + ↑((fun i => i) ⟨2, ⋯⟩)) = 7 * we point 1 + 5 * sourceGather half (we point) 1 - 5 * wo point 1
+
+case «2»
+point : Fin 10 → M
+C : M
+hw : ∀ n ∈ stencilPositions, sourceW point n = C
+h1 : pw point (2 * 1) = 7 * we point 1 + 5 * sourceGather half (we point) 1 - 5 * wo point 1
+h193 : pw point (2 * 193) = 7 * we point 193 + 5 * sourceGather half (we point) 193 - 5 * wo point 193
+⊢ pw point (384 + ↑((fun i => i) ⟨2, ⋯⟩)) = 7 * we point 1 + 5 * sourceGather half (we point) 1 - 5 * wo point 1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 4
+  has type
+    4 ≤ 4
+  but is expected to have type
+    3 < 4
+  in the application
+    Nat.le_of_lt (Nat.le_refl 4)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:341:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pw point (2 * 193 + 1)
+in the target expression
+  pw point (384 + ↑((fun i => i) ⟨3, ⋯⟩)) =
+    -5 * (we point 1 - sourceGather half (sourceGather half (we point)) 1) + 7 * wo point 1 +
+      5 * sourceGather half (wo point) 1
+
+case «3»
+point : Fin 10 → M
+C : M
+hw : ∀ n ∈ stencilPositions, sourceW point n = C
+h1 :
+  pw point (2 * 1 + 1) =
+    -5 * (we point 1 - sourceGather half (sourceGather half (we point)) 1) + 7 * wo point 1 +
+      5 * sourceGather half (wo point) 1
+h193 :
+  pw point (2 * 193 + 1) =
+    -5 * (we point 193 - sourceGather half (sourceGather half (we point)) 193) + 7 * wo point 193 +
+      5 * sourceGather half (wo point) 193
+⊢ pw point (384 + ↑((fun i => i) ⟨3, ⋯⟩)) =
+    -5 * (we point 1 - sourceGather half (sourceGather half (we point)) 1) + 7 * wo point 1 +
+      5 * sourceGather half (wo point) 1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 4
+  has type
+    4 ≤ 4
+  but is expected to have type
+    3 < 4
+  in the application
+    ⟨3, ⋯⟩
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:355:9: error(lean.unknownIdentifier): Unknown identifier `AspisV8R19.R750WitnessPointSupport.zFin10`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:358:9: error(lean.unknownIdentifier): Unknown identifier `AspisV8R19.R750WitnessPointSupport.zFin10`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:362:10: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean:352:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisV8R19.R865PointWeightBlock.all_three_point_weight_blocks' does not depend on any axioms
+AspisV8R19.R865PointWeightBlock.pw_even_formula (point : Fin 10 → M) (i : ℕ) (hi : i < 512) :
+  pw point (2 * i) = 7 * we point i + 5 * sourceGather half (we point) i - 5 * wo point i
+AspisV8R19.R865PointWeightBlock.pw_odd_formula (point : Fin 10 → M) (i : ℕ) (hi : i < 512) :
+  pw point (2 * i + 1) =
+    -5 * (we point i - sourceGather half (sourceGather half (we point)) i) + 7 * wo point i +
+      5 * sourceGather half (wo point) i
+'_private.AspisV8R19.R865PointWeightBlock.0.AspisV8R19.R865PointWeightBlock.pw_even_formula' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.AspisV8R19.R865PointWeightBlock.0.AspisV8R19.R865PointWeightBlock.pw_odd_formula' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R865PointWeightBlock.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R865PointWeightBlock.lean"
+	User time (seconds): 14.21
+	System time (seconds): 0.38
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:14.57
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3350144
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 83389
+	Voluntary context switches: 1624
+	Involuntary context switches: 140
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 14.602s
+CPU time consumed: 14.620s
+Memory peak: 328.0K
+Memory swap peak: 0B
