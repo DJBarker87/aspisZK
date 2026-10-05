@@ -1,0 +1,68 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791171929906875000-227b9729160a.service; invocation ID: 7722313757a74471a4d13191d9205e16
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R896OrdinarySourceTailBoundary.lean:74:4: error: No goals to be solved
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter a b c kappa tau : F
+z : Fin 10 → F
+q : Index256 → F
+hpair :
+  rangeDot 1024 (rawOrdinaryWeight half a b c kappa tau z) (flattenFull q) =
+    ∑ d, ∑ s, q (d, s) * rawOrdinaryWeight half a b c kappa tau z (4 * ↑d + ↑s)
+⊢ ∑ x ∈ Finset.range 1024,
+      (kappa * pointWeight half a b c (SourceStatementPoints.points z 0) x * rawFlatten q x +
+                  kappa ^ 2 * pointWeight half a b c (SourceStatementPoints.points z 1) x * rawFlatten q x +
+                kappa ^ 3 * pointWeight half a b c (SourceStatementPoints.points z 2) x * rawFlatten q x +
+              sourceChordTranspose half marker a b c x * rawFlatten q x +
+            (if x = 1023 then tau else 0) * rawFlatten q x +
+          (if x = 1022 then tau ^ 2 * b else 0) * rawFlatten q x -
+        (if x = 1021 then tau ^ 2 * c else 0) * rawFlatten q x) =
+    kappa * ∑ i ∈ Finset.range 1024, pointWeight half a b c (SourceStatementPoints.points z 0) i * rawFlatten q i +
+                kappa ^ 2 *
+                  ∑ i ∈ Finset.range 1024,
+                    pointWeight half a b c (SourceStatementPoints.points z 1) i * rawFlatten q i +
+              kappa ^ 3 *
+                ∑ i ∈ Finset.range 1024, pointWeight half a b c (SourceStatementPoints.points z 2) i * rawFlatten q i +
+            ∑ i ∈ Finset.range 1024, sourceChordTranspose half marker a b c i * rawFlatten q i +
+          tau * rawFlatten q 1023 +
+        tau ^ 2 * b * rawFlatten q 1022 -
+      tau ^ 2 * c * rawFlatten q 1021
+'AspisV8R19.R896OrdinarySourceTailBoundary.ordinary_source_tail_boundary' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R896OrdinarySourceTailBoundary.ordinary_source_boundary_of_image_tails' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R896OrdinarySourceTailBoundary.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R896OrdinarySourceTailBoundary.lean"
+	User time (seconds): 1.11
+	System time (seconds): 0.37
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.47
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3295604
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 78028
+	Voluntary context switches: 589
+	Involuntary context switches: 72
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.498s
+CPU time consumed: 1.511s
+Memory peak: 328.0K
+Memory swap peak: 0B
