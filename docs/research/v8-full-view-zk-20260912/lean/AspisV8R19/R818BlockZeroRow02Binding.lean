@@ -1,0 +1,54 @@
+import AspisV8R19.R817BlockZeroRow00Binding
+import AspisV8R19.R812SourceBlock00Cells02
+import AspisV8R19.R752SCC00Matrix
+
+set_option autoImplicit false
+namespace AspisV8R19.R818BlockZeroRow02Binding
+open AspisV8R19.R815BlockZeroSourceView
+open AspisV8R19.R817BlockZeroRow00Binding
+open AspisV8R19.R812SourceBlock00Cells02
+open AspisV8R19.R807SourceBlock01Binding
+open AspisV8R19.R814BlockZeroReindex
+open R752SCC00Matrix
+noncomputable section
+abbrev M := R807SourceBlock01Binding.M
+
+def row02Values : Fin 6 → M := ![268432784, 1610598954, 536774443, 142125, 874200, 6122550]
+
+theorem source_row02_values :
+    (fun j : Fin 6 => fixedSourceMatrix (218 : Fin 222) (block00Columns j)) = row02Values := by
+  funext j
+  fin_cases j
+  · simpa [row02Values, block00Columns] using source_cell_2_0
+  · simpa [row02Values, block00Columns] using source_cell_2_1
+  · simpa [row02Values, block00Columns] using source_cell_2_2
+  · simpa [row02Values, block00Columns] using source_cell_2_3
+  · simpa [row02Values, block00Columns] using source_cell_2_4
+  · simpa [row02Values, block00Columns] using source_cell_2_5
+
+theorem certificate_row02_values :
+    (fun j : Fin 6 => A_scc (2 : Fin 6) j) = row02Values := by
+  funext j
+  fin_cases j <;> rfl
+
+theorem block00_row_generic_any {R : Type*} (A : Matrix (Fin 222) (Fin 222) R) (i : Fin 6) :
+    (A.submatrix block00Rows block00Columns) i =
+      fun j : Fin 6 => A (block00Rows i) (block00Columns j) := by
+  rfl
+
+theorem source_block00_row2_eq_certificate :
+    block00SourceMatrix (2 : Fin 6) = A_scc (2 : Fin 6) := by
+  calc
+    block00SourceMatrix (2 : Fin 6) =
+        (fun j : Fin 6 => fixedSourceMatrix (block00Rows (2 : Fin 6)) (block00Columns j)) :=
+      block00_row_generic_any fixedSourceMatrix (2 : Fin 6)
+    _ = (fun j : Fin 6 => fixedSourceMatrix (218 : Fin 222) (block00Columns j)) := by rfl
+    _ = row02Values := source_row02_values
+    _ = (fun j : Fin 6 => A_scc (2 : Fin 6) j) := certificate_row02_values.symm
+
+#print axioms source_row02_values
+#print axioms certificate_row02_values
+#print axioms block00_row_generic_any
+#print axioms source_block00_row2_eq_certificate
+end
+end AspisV8R19.R818BlockZeroRow02Binding
