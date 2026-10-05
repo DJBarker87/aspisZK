@@ -1,0 +1,187 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791168978936649000-4ba69c32aee4.service; invocation ID: 3ef7362ccf84445ebebdce07da33deee
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R879QM31Full223Normalization.lean:96:4: error: Type mismatch: After simplification, term
+  qm31_normalized_matrix t ht noneOne
+ has type
+  @Eq (Matrix R738JointObservationModel.ObservationRow R738JointObservationModel.ObservationRow QM31Exact)
+    (normalizedSelectedMatrix (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 2 3 5 0
+      (fun i => witnessEmbedding (R748JointWitnessPointEntry.z i)) t ht noneOne)
+    (chosenSourceMatrix (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 2 3 5 0 fun i =>
+      witnessEmbedding (R748JointWitnessPointEntry.z i))
+but is expected to have type
+  @Eq (Matrix R738JointObservationModel.ObservationRow R738JointObservationModel.ObservationRow QM31Exact)
+    (normalizedSelectedMatrix (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 2 3 5 (witnessEmbedding 0)
+      (fun i => witnessEmbedding (R748JointWitnessPointEntry.z i)) t ht noneOne)
+    (chosenSourceMatrix (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 2 3 5 (witnessEmbedding 0) fun i =>
+      witnessEmbedding (R748JointWitnessPointEntry.z i))
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R879QM31Full223Normalization.lean:117:8: error: Type mismatch: After simplification, term
+  mapped_normalized_observation witnessEmbedding t ht noneOne 96 0 r
+ has type
+  @Eq QM31Exact
+    (rawObservation (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 5 (-5) 5 0
+      (fun i => witnessEmbedding (R748JointWitnessPointEntry.z i)) (normalizedPair 7 t ht noneOne (cast255 96) 0) r)
+    (sparseObservation (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 5 (-5) 5 0 7
+      (fun i => witnessEmbedding (R748JointWitnessPointEntry.z i)) 96 0 r)
+but is expected to have type
+  @Eq QM31Exact
+    (rawObservation (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 5 (-5) 5 (witnessEmbedding 0)
+      (fun i => witnessEmbedding (R748JointWitnessPointEntry.z i)) (normalizedPair 7 t ht noneOne (cast255 96) 0) r)
+    (sparseObservation (witnessEmbedding R779FixedPoint1LowKernel.half) 536870912 7 5 (-5) 5 0 7
+      (fun i => witnessEmbedding (R748JointWitnessPointEntry.z i)) 96 0 r)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R879QM31Full223Normalization.lean:123:14: error: Function expected at
+  rawObservation_indexedDirection ?m.400 ?m.401 ?m.402 ?m.403 ?m.404 ?m.405 ?m.406 ?m.407 ?m.408 ?m.409 ?m.410
+but this term has type
+  rawObservation ?m.400 ?m.401 ?m.402 ?m.403 ?m.404 ?m.405 ?m.406 ?m.408 (indexedDirection ?m.407 ?m.409 ?m.410) =
+    sparseObservation ?m.400 ?m.401 ?m.402 ?m.403 ?m.404 ?m.405 ?m.406 ?m.407 ?m.408 ?m.409 ?m.410
+
+Note: Expected a function because this term is being applied to the argument
+  _
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R879QM31Full223Normalization.lean:124:15: error: unsolved goals
+t : Fin 22 → QM31Exact
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+hhalf : halfSelected = R779FixedPoint1LowKernel.half
+hz : z = R748JointWitnessPointEntry.z
+ha : 1 + 2 * 3 = 7
+hb : 2 * 3 - 1 = 5
+hc : -(2 + 3) = -5
+hA :
+  (fun r c =>
+      rawObservation (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding 7)
+        (witnessEmbedding 5) (witnessEmbedding (-5)) (witnessEmbedding 5) (witnessEmbedding 0)
+        (fun i => witnessEmbedding (z i))
+        (normalizedPair (witnessEmbedding 7) t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2) r) =
+    chosenSourceMatrix (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding 7)
+      (witnessEmbedding 2) (witnessEmbedding 3) (witnessEmbedding 5) (witnessEmbedding 0) fun i =>
+      witnessEmbedding (z i)
+r : R738JointObservationModel.ObservationRow
+u : Unit
+⊢ rawObservation (witnessEmbedding halfSelected) 536870912 7 5 (-5) 5 0 (fun i => witnessEmbedding (z i))
+      (indexedDirection 7 96 0) r =
+    rawObservation (witnessEmbedding halfSelected) 536870912 7 5 (-5) 5 (witnessEmbedding 0)
+      (fun i => witnessEmbedding (z i)) (indexedDirection 7 96 0) r
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R879QM31Full223Normalization.lean:71:50: error: unsolved goals
+t : Fin 22 → QM31Exact
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+hhalf : halfSelected = R779FixedPoint1LowKernel.half
+hz : z = R748JointWitnessPointEntry.z
+ha : 1 + 2 * 3 = 7
+hb : 2 * 3 - 1 = 5
+hc : -(2 + 3) = -5
+hA :
+  (fun r c =>
+      rawObservation (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding 7)
+        (witnessEmbedding 5) (witnessEmbedding (-5)) (witnessEmbedding 5) (witnessEmbedding 0)
+        (fun i => witnessEmbedding (z i))
+        (normalizedPair (witnessEmbedding 7) t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2) r) =
+    chosenSourceMatrix (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding 7)
+      (witnessEmbedding 2) (witnessEmbedding 3) (witnessEmbedding 5) (witnessEmbedding 0) fun i =>
+      witnessEmbedding (z i)
+htop :
+  (fun r x =>
+      rawObservation (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding 7)
+        (witnessEmbedding 5) (witnessEmbedding (-5)) (witnessEmbedding 5) (witnessEmbedding 0)
+        (fun i => witnessEmbedding (z i)) (normalizedPair (witnessEmbedding 7) t ht noneOne (cast255 96) 0) r) =
+    fun r x =>
+    rawObservation (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding (1 + 2 * 3))
+      (witnessEmbedding (2 * 3 - 1)) (witnessEmbedding (-(2 + 3))) (witnessEmbedding 5) (witnessEmbedding 0)
+      (fun i => witnessEmbedding (z i)) (indexedDirection (witnessEmbedding 7) 96 0) r
+hbottom :
+  (fun x c =>
+      ∑ i,
+        maskWeights271 (witnessEmbedding halfSelected) (mapCoins witnessEmbedding 10 semanticZ) i *
+          actualCoin
+            (R662FullIndexedMaskPreservation.indexedMask (witnessEmbedding halfSelected) (witnessEmbedding 7)
+              (witnessEmbedding 5) (witnessEmbedding (-5))
+              (normalizedPair (witnessEmbedding 7) t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2))
+            i) =
+    fun x c =>
+    semanticEntry (witnessEmbedding halfSelected) (witnessEmbedding (1 + 2 * 3)) (witnessEmbedding (2 * 3 - 1))
+      (witnessEmbedding (-(2 + 3))) (mapCoins witnessEmbedding 10 semanticZ)
+      (indexedDirection (witnessEmbedding 7) (selectedColumns c).1 (selectedColumns c).2)
+hdelta :
+  (fun x x_1 =>
+      ∑ i,
+        maskWeights271 (witnessEmbedding halfSelected) (mapCoins witnessEmbedding 10 semanticZ) i *
+          actualCoin
+            (R662FullIndexedMaskPreservation.indexedMask (witnessEmbedding halfSelected) (witnessEmbedding 7)
+              (witnessEmbedding 5) (witnessEmbedding (-5))
+              (normalizedPair (witnessEmbedding 7) t ht noneOne (cast255 96) 0))
+            i) =
+    fun x x_1 =>
+    semanticEntry (witnessEmbedding halfSelected) (witnessEmbedding (1 + 2 * 3)) (witnessEmbedding (2 * 3 - 1))
+      (witnessEmbedding (-(2 + 3))) (mapCoins witnessEmbedding 10 semanticZ)
+      (indexedDirection (witnessEmbedding 7) 96 0)
+⊢ (Matrix.fromBlocks
+      (chosenSourceMatrix (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding 7)
+        (witnessEmbedding 2) (witnessEmbedding 3) (witnessEmbedding 5) (witnessEmbedding 0) fun i =>
+        witnessEmbedding (z i))
+      (fun r x =>
+        rawObservation (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding (1 + 2 * 3))
+          (witnessEmbedding (2 * 3 - 1)) (witnessEmbedding (-(2 + 3))) (witnessEmbedding 5) (witnessEmbedding 0)
+          (fun i => witnessEmbedding (z i)) (indexedDirection (witnessEmbedding 7) 96 0) r)
+      (fun x c =>
+        semanticEntry (witnessEmbedding halfSelected) (witnessEmbedding (1 + 2 * 3)) (witnessEmbedding (2 * 3 - 1))
+          (witnessEmbedding (-(2 + 3))) (mapCoins witnessEmbedding 10 semanticZ)
+          (indexedDirection (witnessEmbedding 7) (selectedColumns c).1 (selectedColumns c).2))
+      fun x x_1 =>
+      semanticEntry (witnessEmbedding halfSelected) (witnessEmbedding (1 + 2 * 3)) (witnessEmbedding (2 * 3 - 1))
+        (witnessEmbedding (-(2 + 3))) (mapCoins witnessEmbedding 10 semanticZ)
+        (indexedDirection (witnessEmbedding 7) 96 0)) =
+    Matrix.fromBlocks
+      (chosenSourceMatrix (witnessEmbedding halfSelected) (witnessEmbedding 536870912) (witnessEmbedding 7)
+        (witnessEmbedding 2) (witnessEmbedding 3) (witnessEmbedding 5) (witnessEmbedding 0) fun i =>
+        witnessEmbedding (z i))
+      (fun r x =>
+        rawObservation (witnessEmbedding halfSelected) (witnessEmbedding 536870912)
+          (1 + witnessEmbedding 2 * witnessEmbedding 3) (witnessEmbedding 2 * witnessEmbedding 3 - 1)
+          (-(witnessEmbedding 2 + witnessEmbedding 3)) (witnessEmbedding 5) (witnessEmbedding 0)
+          (fun i => witnessEmbedding (z i)) (indexedDirection (witnessEmbedding 7) 96 0) r)
+      (fun x c =>
+        semanticEntry (witnessEmbedding halfSelected) (1 + witnessEmbedding 2 * witnessEmbedding 3)
+          (witnessEmbedding 2 * witnessEmbedding 3 - 1) (-(witnessEmbedding 2 + witnessEmbedding 3))
+          (mapCoins witnessEmbedding 10 semanticZ)
+          (indexedDirection (witnessEmbedding 7) (selectedColumns c).1 (selectedColumns c).2))
+      fun x x_1 =>
+      semanticEntry (witnessEmbedding halfSelected) (1 + witnessEmbedding 2 * witnessEmbedding 3)
+        (witnessEmbedding 2 * witnessEmbedding 3 - 1) (-(witnessEmbedding 2 + witnessEmbedding 3))
+        (mapCoins witnessEmbedding 10 semanticZ) (indexedDirection (witnessEmbedding 7) 96 0)
+'AspisV8R19.R879QM31Full223Normalization.normalized223_eq_qm31Augmented' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R879QM31Full223Normalization.normalized223_det_ne_zero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R879QM31Full223Normalization.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R879QM31Full223Normalization.lean"
+	User time (seconds): 2.77
+	System time (seconds): 0.38
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.12
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3588172
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 83442
+	Voluntary context switches: 906
+	Involuntary context switches: 74
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 3.158s
+CPU time consumed: 3.193s
+Memory peak: 328.0K
+Memory swap peak: 0B
