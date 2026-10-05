@@ -1,0 +1,51 @@
+import AspisV8R19.R752SCC12Matrix
+import AspisV8R19.R806LiteralBlockLayout
+import AspisV8R19.R807SourceBlock01Binding
+import AspisV8R19.R807SourceBlock12RowsChunk00
+import AspisV8R19.R807SourceBlock12RowsChunk01
+import AspisV8R19.R807SourceBlock12RowsChunk02
+import AspisV8R19.R807SourceBlock12RowsChunk03
+import AspisV8R19.R807SourceBlock12RowsChunk04
+import AspisV8R19.R807SourceBlock12RowsChunk05
+import AspisV8R19.R807SourceBlock12RowsChunk06
+import AspisV8R19.R807SourceBlock12RowsChunk07
+import AspisV8R19.R807SourceBlock12RowsChunk08
+import AspisV8R19.R807SourceBlock12RowsChunk09
+import AspisV8R19.R807SourceBlock12RowsChunk10
+import AspisV8R19.R807SourceBlock12RowsChunk11
+import AspisV8R19.R807SourceBlock12RowsChunk12
+import AspisV8R19.R807SourceBlock12RowsChunk13
+import AspisV8R19.R807SourceBlock12RowsChunk14
+import AspisV8R19.R807SourceBlock12RowsChunk15
+import AspisV8R19.R813FiniteFunctionExt16
+
+set_option autoImplicit false
+set_option maxRecDepth 32768
+set_option maxHeartbeats 800000
+namespace AspisV8R19.R807SourceBlock12Binding
+open AspisV8R19.R807SourceBlock01Binding
+open AspisV8R19.R806LiteralBlockLayout
+noncomputable section
+
+theorem source_block12_eq_certificate : diagonalSourceBlock 12 = R752SCC12Matrix.A_scc := by
+  apply AspisV8R19.R813FiniteFunctionExt16.fin16_ext
+  · exact AspisV8R19.R807SourceBlock12RowsChunk00.source_block12_row00
+  · exact AspisV8R19.R807SourceBlock12RowsChunk01.source_block12_row01
+  · exact AspisV8R19.R807SourceBlock12RowsChunk02.source_block12_row02
+  · exact AspisV8R19.R807SourceBlock12RowsChunk03.source_block12_row03
+  · exact AspisV8R19.R807SourceBlock12RowsChunk04.source_block12_row04
+  · exact AspisV8R19.R807SourceBlock12RowsChunk05.source_block12_row05
+  · exact AspisV8R19.R807SourceBlock12RowsChunk06.source_block12_row06
+  · exact AspisV8R19.R807SourceBlock12RowsChunk07.source_block12_row07
+  · exact AspisV8R19.R807SourceBlock12RowsChunk08.source_block12_row08
+  · exact AspisV8R19.R807SourceBlock12RowsChunk09.source_block12_row09
+  · exact AspisV8R19.R807SourceBlock12RowsChunk10.source_block12_row10
+  · exact AspisV8R19.R807SourceBlock12RowsChunk11.source_block12_row11
+  · exact AspisV8R19.R807SourceBlock12RowsChunk12.source_block12_row12
+  · exact AspisV8R19.R807SourceBlock12RowsChunk13.source_block12_row13
+  · exact AspisV8R19.R807SourceBlock12RowsChunk14.source_block12_row14
+  · exact AspisV8R19.R807SourceBlock12RowsChunk15.source_block12_row15
+#print axioms source_block12_eq_certificate
+end
+
+end AspisV8R19.R807SourceBlock12Binding

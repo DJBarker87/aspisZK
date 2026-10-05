@@ -1,0 +1,22 @@
+import AspisV8R19.R752SCC20Matrix
+import AspisV8R19.R806LiteralBlockLayout
+import AspisV8R19.R807SourceBlock01Binding
+import AspisV8R19.R807SourceBlock20RowsChunk00
+import AspisV8R19.R813FiniteFunctionExt2
+
+set_option autoImplicit false
+set_option maxRecDepth 32768
+set_option maxHeartbeats 800000
+namespace AspisV8R19.R807SourceBlock20Binding
+open AspisV8R19.R807SourceBlock01Binding
+open AspisV8R19.R806LiteralBlockLayout
+noncomputable section
+
+theorem source_block20_eq_certificate : diagonalSourceBlock 20 = R752SCC20Matrix.A_scc := by
+  apply AspisV8R19.R813FiniteFunctionExt2.fin2_ext
+  · exact AspisV8R19.R807SourceBlock20RowsChunk00.source_block20_row00
+  · exact AspisV8R19.R807SourceBlock20RowsChunk00.source_block20_row01
+#print axioms source_block20_eq_certificate
+end
+
+end AspisV8R19.R807SourceBlock20Binding

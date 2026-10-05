@@ -1,0 +1,25 @@
+import AspisV8R19.R752SCC11Matrix
+import AspisV8R19.R806LiteralBlockLayout
+import AspisV8R19.R807SourceBlock01Binding
+import AspisV8R19.R807SourceBlock11RowsChunk00
+import AspisV8R19.R807SourceBlock11RowsChunk01
+import AspisV8R19.R813FiniteFunctionExt4
+
+set_option autoImplicit false
+set_option maxRecDepth 32768
+set_option maxHeartbeats 800000
+namespace AspisV8R19.R807SourceBlock11Binding
+open AspisV8R19.R807SourceBlock01Binding
+open AspisV8R19.R806LiteralBlockLayout
+noncomputable section
+
+theorem source_block11_eq_certificate : diagonalSourceBlock 11 = R752SCC11Matrix.A_scc := by
+  apply AspisV8R19.R813FiniteFunctionExt4.fin4_ext
+  · exact AspisV8R19.R807SourceBlock11RowsChunk00.source_block11_row00
+  · exact AspisV8R19.R807SourceBlock11RowsChunk00.source_block11_row01
+  · exact AspisV8R19.R807SourceBlock11RowsChunk01.source_block11_row02
+  · exact AspisV8R19.R807SourceBlock11RowsChunk01.source_block11_row03
+#print axioms source_block11_eq_certificate
+end
+
+end AspisV8R19.R807SourceBlock11Binding

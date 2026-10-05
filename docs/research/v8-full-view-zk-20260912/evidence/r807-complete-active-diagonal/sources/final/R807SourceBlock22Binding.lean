@@ -1,0 +1,31 @@
+import AspisV8R19.R752SCC22Matrix
+import AspisV8R19.R806LiteralBlockLayout
+import AspisV8R19.R807SourceBlock01Binding
+import AspisV8R19.R807SourceBlock22RowsChunk00
+import AspisV8R19.R807SourceBlock22RowsChunk01
+import AspisV8R19.R807SourceBlock22RowsChunk02
+import AspisV8R19.R807SourceBlock22RowsChunk03
+import AspisV8R19.R813FiniteFunctionExt8
+
+set_option autoImplicit false
+set_option maxRecDepth 32768
+set_option maxHeartbeats 800000
+namespace AspisV8R19.R807SourceBlock22Binding
+open AspisV8R19.R807SourceBlock01Binding
+open AspisV8R19.R806LiteralBlockLayout
+noncomputable section
+
+theorem source_block22_eq_certificate : diagonalSourceBlock 22 = R752SCC22Matrix.A_scc := by
+  apply AspisV8R19.R813FiniteFunctionExt8.fin8_ext
+  · exact AspisV8R19.R807SourceBlock22RowsChunk00.source_block22_row00
+  · exact AspisV8R19.R807SourceBlock22RowsChunk00.source_block22_row01
+  · exact AspisV8R19.R807SourceBlock22RowsChunk01.source_block22_row02
+  · exact AspisV8R19.R807SourceBlock22RowsChunk01.source_block22_row03
+  · exact AspisV8R19.R807SourceBlock22RowsChunk02.source_block22_row04
+  · exact AspisV8R19.R807SourceBlock22RowsChunk02.source_block22_row05
+  · exact AspisV8R19.R807SourceBlock22RowsChunk03.source_block22_row06
+  · exact AspisV8R19.R807SourceBlock22RowsChunk03.source_block22_row07
+#print axioms source_block22_eq_certificate
+end
+
+end AspisV8R19.R807SourceBlock22Binding
