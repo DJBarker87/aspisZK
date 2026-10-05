@@ -1,0 +1,1351 @@
+{
+ "schema": "aspis.v8.audit.manifest.v1",
+ "date": "2026-10-05",
+ "base_commit": "4e0f47381bd152611a6e3b87a46cf6469e8c6de2",
+ "profile": "AV8/R102/sparseG-bitperm-two-swaps/quadratic-channel-fold/merkle8-research-v1",
+ "status_definitions": {
+  "closed": "the node statement is exactly an existing theorem; bound in the skeleton and typechecked with only propext, Classical.choice, Quot.sound",
+  "conditional": "follows from the named existing theorem (lean_theorem) or a paper argument once the outstanding_premises hold; the premises are open",
+  "open": "no proof; basis says whether a paper argument exists",
+  "deferred": "source refinement; not decomposed"
+ },
+ "nodes": [
+  {
+   "id": "P01",
+   "pillar": "privacy",
+   "statement": "The seven hop bounds give the privacy goal. This is six applications of the triangle inequality P40; it is not written out because Phase 1 adds no proofs.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [
+    "every ledger term assigned a number"
+   ],
+   "depends_on": [
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P40"
+   ],
+   "ledger_term": null,
+   "basis": "paper: six applications of P40",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P02",
+   "pillar": "refinement",
+   "statement": "A ledger entry is a numeric target or UNASSIGNED. -/ inductive Target where | assigned (bound : ℚ) | unassigned def Target.value : Target → Option ℚ | .assigned bound => some bound | .unassigned => none /-- The seven named terms of `PRIVACY_LEDGER.md`. -/ structure Ledger where seed : Target salt : Target commit : Target algebraicBad : Target fsConflict : Target samplerAbort : Target source : Target /-- The total is defined only when every term is assigned. -/ def Ledger.total (L : Ledger) : Option ℚ := do let seed ← L.seed.value let salt ← L.salt.value let commit ← L.commit.value let algebraicBad ← L.algebraicBad.value let fsConflict ← L.fsConflict.value let samplerAbort ← L.samplerAbort.value let source ← L.source.value pure (seed + salt + commit + algebraicBad + fsConflict + samplerAbort + source) /-- The ledger at 4e0f47381. `PRIVACY_LEDGER.md` assigns no number to any term (\"No numerical global privacy bound is assigned\"), and no later note does. All seven terms are UNASSIGNED; `Ledger.total r102Ledger = none`. -/ def r102Ledger : Ledger := { seed := .unassigned, salt := .unassigned, commit := .unassigned, algebraicBad := .unassigned, fsConflict := .unassigned, samplerAbort := .unassigned, source := .unassigned } /-- `p = 2^31 - 1`. -/ def p : ℕ := 2147483647 /-- Sum of the four determinant certificates in the tree (P30 819, P31 1355, P26 1070, P28 14049), each over `p^4`. This is a component of `epsilon_algebraic_bad` under product-uniform fixed-root laws, about `2^-109.9`. It is not the ledger term: it omits every event with no certificate and is not transferred to the adaptive law (P13). -/ def algebraicBadCertifiedComponent : ℚ := (819 + 1355 + 1070 + 14049 : ℚ) / (p : ℚ) ^ 4 /-! ## Experiment -/ /-- One session of the honest R102 prover against an adaptive observer who shares the random oracle. `View` is the complete published view: both roots, both frontiers, the 699 fixed fields (initial claim, semantic rounds, point rows, inactive sum, component OOD vectors, channel coefficients, relation rounds, Final256), 22 paired opening records with shared salts, every visible failure, retry and terminal status, and the observer's own oracle answers. Games: 0 literal source; 1 mathematical model; 2 ideal field-mask tape; 3 ideal salt tape; 4 lazy commitment table; 5 fresh challenges with no programming conflict; 6 witness-independent abort law. -/ structure Experiment where Obs : Type Stmt : Type Wit : Type View : Type allowed : Obs → Prop valid : Stmt → Wit → Prop Coin : Fin 7 → Type coinFintype : ∀ i, Fintype (Coin i) coinNonempty : ∀ i, Nonempty (Coin i) game : ∀ i, Obs → Stmt → Wit → Coin i → View SimCoin : Type simFintype : Fintype SimCoin simNonempty : Nonempty SimCoin sim : Obs → Stmt → SimCoin → View instance (E : Experiment) (i : Fin 7) : Fintype (E.Coin i) := E.coinFintype i instance (E : Experiment) (i : Fin 7) : Nonempty (E.Coin i) := E.coinNonempty i instance (E : Experiment) : Fintype E.SimCoin := E.simFintype instance (E : Experiment) : Nonempty E.SimCoin := E.simNonempty instance : Inhabited Experiment := ⟨{ Obs := Unit, Stmt := Unit, Wit := Unit, View := Unit, allowed := fun _ => True, valid := fun _ _ => True, Coin := fun _ => Unit, coinFintype := fun _ => inferInstance, coinNonempty := fun _ => inferInstance, game := fun _ _ _ _ _ => (), SimCoin := Unit, simFintype := inferInstance, simNonempty := inferInstance, sim := fun _ _ _ => () }⟩ /-- The R102 experiment. Opaque: no node below can be proved by unfolding. -/ opaque r102 : Experiment /-- Event distance at most `ε` between games `i` and `j`, for every allowed observer, every statement and every valid witness. -/ def hop (E : Experiment) (i j : Fin 7) (ε : ℚ) : Prop := ∀ a, E.allowed a → ∀ x w, E.valid x w → EventDistanceBound (E.game i a x w) (E.game j a x w) ε /-- A hop is within a ledger entry only if that entry is assigned. -/ def hopWithin (E : Experiment) (i j : Fin 7) (t : Target) : Prop := ∃ ε, t.value = some ε ∧ hop E i j ε /-- Full-view zero knowledge at ledger `L`: the source view is within the ledger total of a simulator that receives the statement and no witness. -/ def PrivacyGoalAt (E : Experiment) (L : Ledger) : Prop := ∃ ε, L.total = some ε ∧ ∀ a, E.allowed a → ∀ x w, E.valid x w → EventDistanceBound (E.game 0 a x w) (E.sim a x) ε /-- PRIVACY GOAL. For every public statement and every valid witness (hence every pair of valid witnesses), the complete published R102 view under the shared random oracle is within `epsilon_total` of a statement-only simulator, where `epsilon_total` is the sum of the seven ledger terms. With the ledger at 4e0f47381 the total is undefined, so this proposition cannot hold until every term is assigned a number. -/ def PrivacyGoal : Prop := PrivacyGoalAt r102 r102Ledger /-! ## Vocabulary for the last hop (Question A) -/ /-- The ordinary-channel residual of a same-public witness pair at an accepted prefix: the quotient-coordinate difference that remains after the C1 corrections and before the H1 repair of P27. `good` is the event that every determinant certificate (P26, P28, P30, P31) is nonzero at the prefix. No construction of `residual` exists in the tree. -/ structure OrdinaryResidual (E : Experiment) where Prefix : Type good : Prefix → Prop alpha : Prefix → AspisV8R15.ExactTowerBase.QM31Exact u : Prefix → AspisV8R15.ExactTowerBase.QM31Exact v : Prefix → AspisV8R15.ExactTowerBase.QM31Exact residual : Prefix → E.Stmt → E.Wit → E.Wit → (AspisV8R19.R738JointObservationModel.Index256 → AspisV8R15.ExactTowerBase.QM31Exact) instance (E : Experiment) : Inhabited (OrdinaryResidual E) := ⟨{ Prefix := Unit, good := fun _ => True, alpha := fun _ => 0, u := fun _ => 0, v := fun _ => 0, residual := fun _ _ _ _ _ => 0 }⟩ opaque r102Residual : OrdinaryResidual r102 /-- Named propositions about R102 objects that have no Lean model in the tree. None is asserted. The docstring of the node that uses a field is its statement. -/ structure Claims where merkle8CommitTrace : Prop honestChallengeFirstRead : Prop samplerChronologyLaw : Prop abortWitnessIndependent : Prop determinantLawTransfer : Prop c1JointCoverage : Prop ordinaryRepairApplies : Prop gPremises : Prop gRepairApplies : Prop viewPreservingCoupling : Prop retryPublicationLaw : Prop instance : Inhabited Claims := ⟨⟨True, True, True, True, True, True, True, True, True, True, True⟩⟩ opaque r102Claims : Claims /-! ## Hop nodes, one per ledger term -/ /-- P02 (DEFERRED, refinement). The literal R102 prover, serializer and publication path produce the same view law as the mathematical model, up to `epsilon_source`. Not decomposed.",
+   "kind": "refinement",
+   "status": "deferred",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_source",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P03",
+   "pillar": "privacy",
+   "statement": "Replacing the two private 32-byte seeds' expansions by an ideal field-mask tape changes the view by at most `epsilon_seed`, a random-oracle forbidden-query bound in the observer's query count.",
+   "kind": "oracle",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_seed",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P04",
+   "pillar": "privacy",
+   "statement": "Replacing the derived per-index leaf salts, shared by C1 and C2, by an ideal salt tape changes the view by at most `epsilon_salt`.",
+   "kind": "oracle",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_salt",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P05",
+   "pillar": "privacy",
+   "statement": "Replacing both eight-way commitments by one lazily sampled table that exposes only 208-bit digests of opened paths changes the view by at most `epsilon_commit`.",
+   "kind": "oracle",
+   "status": "conditional",
+   "lean_theorem": "AspisV8PairedCommitment.finite_witness_retaining_commitment_hop",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8PairedCommitment/ForwardHop.lean",
+   "outstanding_premises": [
+    "P09"
+   ],
+   "depends_on": [
+    "P09",
+    "P44",
+    "P05c"
+   ],
+   "ledger_term": "epsilon_commit",
+   "basis": "Lean reduction P44 once P09 supplies the trace",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P05c",
+   "pillar": "privacy",
+   "statement": "P44 applied to the trace of P09 gives P05.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P09",
+    "P44"
+   ],
+   "ledger_term": "epsilon_commit",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P06",
+   "pillar": "privacy",
+   "statement": "Replacing every honest Fiat–Shamir challenge by a fresh sample, with no overwrite of an answer the observer already holds, changes the view by at most `epsilon_fs_conflict`.",
+   "kind": "oracle",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R19.AdaptiveFirstReadLaw.lazyMean_eq_independentMean",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/AdaptiveFirstReadLaw.lean",
+   "outstanding_premises": [
+    "P10"
+   ],
+   "depends_on": [
+    "P10",
+    "P45",
+    "P46",
+    "P47",
+    "P06c"
+   ],
+   "ledger_term": "epsilon_fs_conflict",
+   "basis": "Lean laws P45-P47 once P10 supplies freshness",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P06c",
+   "pillar": "privacy",
+   "statement": "P45, P46 and P47 applied under P10 give P06.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P10",
+    "P45",
+    "P46",
+    "P47"
+   ],
+   "ledger_term": "epsilon_fs_conflict",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P07",
+   "pillar": "privacy",
+   "statement": "Sampler exhaustion, duplicate OOD, q22 failure, singular denominators and every other visible abort have a law that does not depend on the witness, up to `epsilon_sampler_abort`.",
+   "kind": "probabilistic",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R19.R931AdaptiveSuccessDomination.adaptive_success_domination",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R931AdaptiveSuccessDomination.lean",
+   "outstanding_premises": [
+    "P11",
+    "P12"
+   ],
+   "depends_on": [
+    "P11",
+    "P12",
+    "P48",
+    "P49",
+    "P50",
+    "P07c"
+   ],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "Lean stage laws P48-P50 once P11 and P12 hold",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P07c",
+   "pillar": "privacy",
+   "statement": "P50 applied to the law of P11, with P12, gives P07.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P11",
+    "P12",
+    "P50"
+   ],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P08",
+   "pillar": "privacy",
+   "statement": "In the idealised game the published view has a law that a statement-only simulator reproduces up to `epsilon_algebraic_bad`.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P13",
+    "P14",
+    "P18",
+    "P19",
+    "P1A",
+    "P1B",
+    "P08c"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P08c",
+   "pillar": "privacy",
+   "statement": "The C1, H1 and G repairs, their coupling, the determinant event and the retry law give the algebraic hop P08.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P13",
+    "P14",
+    "P18",
+    "P19",
+    "P1A",
+    "P1B",
+    "P41",
+    "P42"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P09",
+   "pillar": "privacy",
+   "statement": "The honest R102 commitment phase (two eight-way trees of depth six, 437-byte and 220-byte leaf inputs, one shared 32-byte salt per index, interleaved frontiers, 26-byte digest projection) is a forward trace in the sense of P44, and its bad-coin mass is at most `epsilon_commit`.",
+   "kind": "oracle",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S30"
+   ],
+   "ledger_term": "epsilon_commit",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P10",
+   "pillar": "privacy",
+   "statement": "Every squeeze and advance address of the honest challenge-generation segment is unread in the cache that precedes it, except on an event whose mass is bounded in the observer's query count; verifier replays stay cache hits.",
+   "kind": "oracle",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_fs_conflict",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P11",
+   "pillar": "privacy",
+   "statement": "The stage laws P48, P49 and the ordinary and nonzero sampler laws compose, through the distinct-second circle wrapper and the selected callback order, into the exact joint law of all R102 challenges and their failures.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P48",
+    "P49"
+   ],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P12",
+   "pillar": "privacy",
+   "statement": "Helper-pole and denominator-zero events, and every other prover-side abort, occur with probability that differs between any two valid witnesses of one statement by at most a stated multiple of `1 / p^4`.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P13",
+   "pillar": "privacy",
+   "statement": "Under the actual adaptive accepted-prefix law, where the 22 query roots depend on earlier challenges, the probability that some determinant of P26, P28, P30, P31 vanishes is at most the sum of their fixed-root bounds plus the first-read losses of P10.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P26",
+    "P28",
+    "P30",
+    "P31",
+    "P10",
+    "P45"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P14",
+   "pillar": "privacy",
+   "statement": "At every accepted prefix and for each of the 16 semantic columns, the 108 base-field observation equations (88 raw openings, three point claims, two OOD values) have full row rank on that column's legal mask cells, and the 16 solutions can be chosen so that the total initial mask claim is unchanged.",
+   "kind": "algebraic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P20",
+    "P21",
+    "P22"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "none (rank 108 measured at two actual prefixes)",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P15",
+   "pillar": "privacy",
+   "statement": "For every accepted prefix in the good event and every pair of valid witnesses of one statement, the ordinary residual has zero first fold: `Σ_s r(d,s) α^s = 0` for all 256 blocks `d`.",
+   "kind": "algebraic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P14"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "none; Question A gap A1",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P16",
+   "pillar": "privacy",
+   "statement": "Under the same quantifiers the residual is an exact chord quotient: `r₁₀₂₃ = 0` and `(uv - 1)·r₁₀₂₂ + (u + v)·r₁₀₂₁ = 0`.",
+   "kind": "algebraic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P14"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "paper given P14: equivalent to both OOD vectors unchanged",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P17",
+   "pillar": "privacy",
+   "statement": "Under the same quantifiers the inverse-transported mask of the residual sums to zero over the 810 copy-inactive rows.",
+   "kind": "algebraic",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R19.R940MarkerBalance.marker_pairing_eq_inactive_balance",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R940MarkerBalance.lean",
+   "outstanding_premises": [
+    "P02: every committed column has zero copy-inactive sum (balance_m31_copy_inactive / balance_qm31_copy_inactive)"
+   ],
+   "depends_on": [
+    "P32",
+    "P02"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P18",
+   "pillar": "privacy",
+   "statement": "For every same-public pair on the good event there is an H1 change, legal on all 809 pad rows, that takes the 214 active rows to the second witness's helper values and leaves raw openings, point claims, the seven ordinary relation coefficients and Final256 unchanged.",
+   "kind": "algebraic",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R19.R941BalancedSource223Repair.balanced_source_compatible_223_repair",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R941BalancedSource223Repair.lean",
+   "outstanding_premises": [
+    "P13",
+    "P14",
+    "P15",
+    "P16",
+    "P17"
+   ],
+   "depends_on": [
+    "P13",
+    "P14",
+    "P15",
+    "P16",
+    "P17",
+    "P25",
+    "P27",
+    "P18c"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "Lean reduction P27 once its premises hold for the native residual",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P18c",
+   "pillar": "privacy",
+   "statement": "P27 applied to the residual of P15–P17, on the good event of P13 and after the C1 step P14, gives P18.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P13",
+    "P14",
+    "P15",
+    "P16",
+    "P17",
+    "P27"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P19",
+   "pillar": "privacy",
+   "statement": "For every same-public pair on the good event there is a legal G change that cancels the complete 271-coordinate semantic-message difference and both channel coefficients while leaving G's openings, points and fold unchanged.",
+   "kind": "algebraic",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R19.R686AllBetaJointGCorrection.all_beta_joint_g_correction",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R686AllBetaJointGCorrection.lean",
+   "outstanding_premises": [
+    "P13",
+    "P19a"
+   ],
+   "depends_on": [
+    "P13",
+    "P19a",
+    "P29",
+    "P19c"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "Lean reduction P29 once its premises hold",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P19a",
+   "pillar": "privacy",
+   "statement": "For every same-public pair the residual handed to the G step has all seven plain relation coefficients zero and zero structured moment, and the 271-coordinate semantic-message difference has zero finish-coin moment.",
+   "kind": "algebraic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P18"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P19c",
+   "pillar": "privacy",
+   "statement": "P29 under P19a and the good event of P13 gives P19.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P13",
+    "P19a",
+    "P29"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P1A",
+   "pillar": "privacy",
+   "statement": "The C1, H1 and G corrections compose into a bijection of ideal prover coins, defined from the view alone, that maps executions of one witness to executions of the other with the identical complete view; by P41 the two view laws then coincide on the good event.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P14",
+    "P18",
+    "P19",
+    "P41",
+    "P33"
+   ],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P1B",
+   "pillar": "privacy",
+   "statement": "Failed attempts, retries, the visible attempt count and terminal failure have a joint law covered by a per-attempt coupling bound and a positive conditional release bound at every reachable failed history (P42 then applies).",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "P42"
+   ],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Privacy.lean"
+  },
+  {
+   "id": "P20",
+   "pillar": "privacy",
+   "statement": "The R16 basis transport `T` has a two-sided inverse on all of `F^I`: `T (T⁻¹ c) = c` for every coefficient vector `c`, with no legality premise.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R16.transport_inverse",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R16/BalancedTransport.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P21",
+   "pillar": "privacy",
+   "statement": "Verifier weights transport through `T` by the explicit dual: for every `w` and `c`, `⟨w, T⁻¹ c⟩ = ⟨T* w, c⟩`.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R16.inverseTransport_dot",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R16/TransportDual.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P22",
+   "pillar": "privacy",
+   "statement": "For any `n` distinct fold coordinates, the first `n` natural-basis coefficients in each of the four slot channels realise arbitrary values at all `4n` raw opening positions (raw coverage for every injective schedule).",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R16.natural_four_slot_coverage",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R16/NaturalCoverage.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P23",
+   "pillar": "privacy",
+   "statement": "Raw values at `n` distinct roots and a prescribed final polynomial of degree `< m` are simultaneously realisable whenever they agree under the four-point fold at every root.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R17.compatible_raw_final_coverage",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/RawFinalCoverage.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P24",
+   "pillar": "privacy",
+   "statement": "The sparse-G slot map `i ↦ 128 + 3 i` selects exactly 271 of the 1023 non-pivot code coordinates.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R18.selected_card",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R18/SparseCoordinates.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P25",
+   "pillar": "privacy",
+   "statement": "H1 active-core image. If the selected active determinant is nonzero at `(alpha, u, v0)`, every target on the 214 copy-active rows is met by a quotient vector that vanishes at all 22 query roots, has zero first fold, zero top four coefficients and zero inactive balance.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R727TopBalance.balanced_query_active_core_image",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R727TopBalance.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P26",
+   "pillar": "privacy",
+   "statement": "Over uniform `(alpha, u, v0) ∈ QM31³` the selected active determinant vanishes with probability at most `1070 / p⁴`.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R714SelectedActiveNonzero.product_domain_bad_fraction_explicit",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R714SelectedActiveNonzero.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P27",
+   "pillar": "privacy",
+   "statement": "Full-223 ordinary repair (R941). For an ordinary quotient vector with zero first fold, `q₁₀₂₃ = 0`, `b·q₁₀₂₂ − c·q₁₀₂₁ = 0` and zero inactive balance, and a nonzero normalised 223 determinant, a combination of the 223 selected directions matches all 214 active rows, three point rows, seven relation coefficients and an arbitrary semantic pairing target while vanishing at the 22 query roots and keeping fold, tail and balance zero.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R941BalancedSource223Repair.balanced_source_compatible_223_repair",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R941BalancedSource223Repair.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P28",
+   "pillar": "privacy",
+   "statement": "For every fixed legal 22-root tuple, the selected 223 determinant vanishes on at most a `14049 / m` fraction of any 15-coordinate product grid whose sides have at least `m` elements.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R885CompleteSemanticGridBound.selected_root_grid_bound",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R885CompleteSemanticGridBound.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P29",
+   "pillar": "privacy",
+   "statement": "Joint G correction for every beta (R686). With nonzero core and residual determinants, a fold-free ordinary residual whose seven plain relation coefficients and structured moment vanish admits a G change realising any 271-coin target of zero finish-moment, with zero point rows and query roots.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R686AllBetaJointGCorrection.all_beta_joint_g_correction",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R686AllBetaJointGCorrection.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P30",
+   "pillar": "privacy",
+   "statement": "For every fixed legal 22-root tuple, the two-swap G-residual 13×13 determinant vanishes on at most `819 / p⁴` of product-uniform QM31 assignments of its 36 challenge coordinates.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisR19.TwoSwapFixedRootProbability.bad_fraction_le_explicit",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/TwoSwapFixedRootProbability.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P31",
+   "pillar": "privacy",
+   "statement": "The normalised sparse-G core determinant vanishes on at most a `1355 / m` fraction of any three-coordinate product grid of side at least `m`.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R588NormalizedCoreDomainBound.normalizedDet_domain_fraction_bound",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R588NormalizedCoreDomainBound.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P32",
+   "pillar": "privacy",
+   "statement": "The marker contraction of a quotient vector equals the inactive-row sum of its inverse-transported mask, over any commutative ring.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R940MarkerBalance.marker_pairing_eq_inactive_balance",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R940MarkerBalance.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P33",
+   "pillar": "privacy",
+   "statement": "Joint H1/G criterion. Given a complete parametrisation of the H1 kernel and of the G image, a joint affine correction exists exactly when the finite obstruction system is solvable.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R541.joint_schur_equivalence",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R541JointSchurEquivalence.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyAlgebra.lean"
+  },
+  {
+   "id": "P40",
+   "pillar": "privacy",
+   "statement": "Hybrid triangle: event-distance bounds `ε₁` and `ε₂` on two consecutive finite games give `ε₁ + ε₂` on the composite.",
+   "kind": "composition",
+   "status": "closed",
+   "lean_theorem": "AspisV8Privacy.event_distance_trans",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8Privacy/HybridBudget.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P41",
+   "pillar": "privacy",
+   "statement": "A bijection of prover coins that commutes with the observation gives identical observation laws (the coupling step of a mask-translation argument).",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8Privacy.sameUniformLaw_of_coinEquiv",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8Privacy/FiniteGames.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_algebraic_bad",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P42",
+   "pillar": "privacy",
+   "statement": "If each attempt fails with conditional probability at most `1 - a`, the probability of `n` consecutive failures is at most `(1 - a)^n`.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8Privacy.bounded_retry_failure",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8Privacy/RetryFailureBound.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P43",
+   "pillar": "privacy",
+   "statement": "A same-public witness pair with a test of advantage above `2ε` excludes every statement-only `ε`-simulator.",
+   "kind": "composition",
+   "status": "closed",
+   "lean_theorem": "AspisV8Privacy.no_statement_only_simulator_of_pairwise_separator",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8Privacy/SeparatorObstruction.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P44",
+   "pillar": "privacy",
+   "statement": "Finite causal paired-commitment hop: along any forward trace of commitment-oracle steps, the eager and delayed views differ on any test by at most the weight of the bad-coin event.",
+   "kind": "oracle",
+   "status": "closed",
+   "lean_theorem": "AspisV8PairedCommitment.finite_witness_retaining_commitment_hop",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8PairedCommitment/ForwardHop.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_commit",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P45",
+   "pillar": "privacy",
+   "statement": "Adaptive first-read law: a memoised oracle program whose every reached address is unread has exactly the law of the same program run on fresh independent uniform answers, for adaptive addresses and stopping.",
+   "kind": "oracle",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.AdaptiveFirstReadLaw.lazyMean_eq_independentMean",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/AdaptiveFirstReadLaw.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_fs_conflict",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P46",
+   "pillar": "privacy",
+   "statement": "q22 challenge under a cache: for any prior table, the memoised q22 challenge program is within the cache-hit mass of the ideal candidate kernel.",
+   "kind": "oracle",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R414Q22CacheHitDistance.challenge_distance",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R414Q22CacheHitDistance.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_fs_conflict",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P47",
+   "pillar": "privacy",
+   "statement": "QM31 field challenge under a cache: the probability of any fixed field value is within the non-fresh mass of its exact ideal value.",
+   "kind": "oracle",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R605GuardedFieldLaw.cached_field_mass_distance",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R605GuardedFieldLaw.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_fs_conflict",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P48",
+   "pillar": "privacy",
+   "statement": "Conditioned on success, the bounded q22 scan is uniform over legal query schedules.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R417Q22SuccessLaw.uniform_success",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R417Q22SuccessLaw.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P49",
+   "pillar": "privacy",
+   "statement": "Exact output law of the three-attempt circle sampler on independent answers, with parameter exhaustion and challenge exhaustion kept as separate outcomes of stated mass.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R945CircleObservationLaw.circleProgram_observation_law",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R945CircleObservationLaw.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "P50",
+   "pillar": "privacy",
+   "statement": "Per-stage successful-output density bounds valid from every starting state compose through any finite adaptive sequence of sampler stages.",
+   "kind": "probabilistic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R931AdaptiveSuccessDomination.adaptive_success_domination",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R931AdaptiveSuccessDomination.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "epsilon_sampler_abort",
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/PrivacyOracle.lean"
+  },
+  {
+   "id": "S01",
+   "pillar": "soundness",
+   "statement": "The nine round bounds, the arithmetic and the compilation theorem are, by definition, the soundness goal.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S03",
+    "S04",
+    "S10",
+    "S11",
+    "S12",
+    "S13",
+    "S14",
+    "S15",
+    "S16",
+    "S17",
+    "S18"
+   ],
+   "ledger_term": null,
+   "basis": "definitional",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S02",
+   "pillar": "refinement",
+   "statement": "`p = 2^31 - 1`; the challenge field is `K = F_{p^4}`. -/ def p : ℕ := 2147483647 def K : ℚ := (p : ℚ) ^ 4 /-- Rounds of the R102 interactive protocol that draw fresh verifier coins. -/ inductive Round where /-- theta, ten zerocheck coordinates, mu, eta, ten degree-27 semantic rounds and the terminal check against the 87 point claims -/ | semantic /-- two sequential distinct circle points, each answered by 29 components -/ | oodPair /-- nonzero gamma batching the 29 committed columns -/ | gamma /-- beta folding the ordinary and sparse-G channels after p0 and p2 -/ | beta /-- tau mixing the chord-image residuals -/ | tau /-- alpha0 for the single four-to-one circle fold producing Final256 -/ | alpha0 /-- 22 distinct fibres out of 262144 -/ | query /-- rho batching the 44 per-channel query-consistency residuals -/ | rho /-- kappa and the four degree-six relation rounds with their terminal -/ | relation /-- Round-by-round targets at the exact R102 parameters. `gamma` and `alpha0` carry the list factor 100; `oodPair` is the two-point collision bound for a list of 100 tuples of degree at most 1024. These are the numbers of the conditional 7 September arithmetic; whether each is a proved bound is the content of nodes S10–S18. -/ def target : Round → ℚ | .semantic => 396430 / (K - 1) | .oodPair => (100 ^ 2 * 1024 ^ 2 : ℚ) / ((K - (p : ℚ) ^ 2) * (K - (p : ℚ) ^ 2 - 1)) | .gamma => 2800 / (K - 1) | .beta => 2 / K | .tau => 4 / (K - 1) | .alpha0 => 300 / K | .query => (Nat.choose 9557 22 : ℚ) / (Nat.choose 262144 22 : ℚ) | .rho => 44 / (K - 1) | .relation => 24 / K def targetTotal : ℚ := target .semantic + target .oodPair + target .gamma + target .beta + target .tau + target .alpha0 + target .query + target .rho + target .relation /-- Commitment and compilation loss as a function of the number of oracle queries, in the shape of the BCS bound for a 208-bit digest. A target shape: no theorem in the tree states it for the R102 transcript. -/ def authTarget (queries : ℕ) : ℚ := 3 * ((queries : ℚ) ^ 2 + 1) / 2 ^ 208 /-- The Fiat–Shamir-compiled R102 verifier against a prover with oracle access. `queries` counts every oracle call, including all three nonce regions; no error is divided by a work factor. -/ structure VerifierExperiment where Adv : Type queries : Adv → ℕ /-- probability that the verifier accepts and the extractor returns no valid payment witness -/ acceptWithoutWitness : Adv → ℚ /-- round-by-round knowledge error of the interactive protocol -/ roundError : Round → ℚ instance : Inhabited VerifierExperiment := ⟨{ Adv := Unit, queries := fun _ => 0, acceptWithoutWitness := fun _ => 0, roundError := fun _ => 0 }⟩ opaque r102 : VerifierExperiment def roundTotal (E : VerifierExperiment) : ℚ := E.roundError .semantic + E.roundError .oodPair + E.roundError .gamma + E.roundError .beta + E.roundError .tau + E.roundError .alpha0 + E.roundError .query + E.roundError .rho + E.roundError .relation /-- SOUNDNESS GOAL. Knowledge soundness of the Fiat–Shamir-compiled R102 verifier at 100 bits with zero grinding credit: every round-by-round error is at most its explicit target, the targets sum to at most `2^-100`, and every prover with `Q` oracle queries makes the verifier accept without an extractable payment witness with probability at most `(Q + 1)·Σ errors + authTarget Q`. -/ def SoundnessGoal : Prop := (∀ r, r102.roundError r ≤ target r) ∧ targetTotal ≤ 1 / 2 ^ 100 ∧ ∀ A, r102.acceptWithoutWitness A ≤ ((r102.queries A : ℚ) + 1) * roundTotal r102 + authTarget (r102.queries A) /-- Named propositions about R102 objects with no Lean model in the tree. None is asserted; the docstring of the node using a field is its statement. -/ structure Claims where verifierRefinement : Prop preGammaTupleList : Prop preBetaQuotientPair : Prop farFinalBounded : Prop paymentWitnessExtraction : Prop listCapAtExactParameters : Prop instance : Inhabited Claims := ⟨⟨True, True, True, True, True, True⟩⟩ opaque r102Claims : Claims /-! ## Composition, compilation and arithmetic -/ /-- S02 (DEFERRED, refinement). The Rust/SBF verifier of source manifest 26755a42… accepts exactly the proofs the model verifier accepts and draws the same challenges from the same transcript. Not decomposed.",
+   "kind": "refinement",
+   "status": "deferred",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S03",
+   "pillar": "soundness",
+   "statement": "Fiat–Shamir compilation for the R102 transcript in the random-oracle model: acceptance without an extractable witness is at most `(Q + 1)·Σ round errors + authTarget Q`, with adaptive queries, cache hits, sampler rejection and the three prover-chosen nonces all inside `Q`.",
+   "kind": "oracle",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S30",
+    "S23"
+   ],
+   "ledger_term": "fs_compilation",
+   "basis": "none at the R102 transcript; V7 K1.6 theorem is for the V7 transcript",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S04",
+   "pillar": "soundness",
+   "statement": "The nine targets sum to at most `2^-100`. Exact rational evaluation outside Lean gives `2^-104.2615`.",
+   "kind": "algebraic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": "total",
+   "basis": "paper: exact rational arithmetic gives 2^-104.2615",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S10",
+   "pillar": "soundness",
+   "statement": "Semantic rounds: a false masked claim survives the ten degree-27 rounds, the helper, zerocheck, copy and point-lane checks with probability at most `396430 / (p^4 - 1)`, the V7 fixed-family inventory.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S23",
+    "S35"
+   ],
+   "ledger_term": "semantic",
+   "basis": "conditional arithmetic ported from V7 inventory",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S11",
+   "pillar": "soundness",
+   "statement": "OOD pair: two distinct tuples of a pre-committed list of at most 100 agree on both 29-component OOD vectors with probability at most the two-point collision bound.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S20",
+    "S24"
+   ],
+   "ledger_term": "ood_pair",
+   "basis": "paper given S20",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S12",
+   "pillar": "soundness",
+   "statement": "Gamma: if the committed 29-column word is not explained on more than 38229 symbols by a listed tuple with the claimed OOD values, the gamma-batched quotient is close to the code with probability at most `2800 / (p^4 - 1)`.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S20",
+    "S24",
+    "S11",
+    "S12c"
+   ],
+   "ledger_term": "gamma",
+   "basis": "none; V7 proved curve bound at these thresholds is 2^-75.74",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S12c",
+   "pillar": "soundness",
+   "statement": "S20 with S24 and S11 reduce the gamma round to a root count of a fixed nonzero degree-28 polynomial per listed tuple.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S20",
+    "S24",
+    "S11"
+   ],
+   "ledger_term": "gamma",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S13",
+   "pillar": "soundness",
+   "statement": "Beta: if the pre-beta quotient pair does not satisfy both channel claims, the folded claim `p0 + beta p1 + beta² p2` holds for at most two beta.",
+   "kind": "probabilistic",
+   "status": "conditional",
+   "lean_theorem": "AspisR19.ChannelFold.quadratic_dot_product",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/ChannelFold.lean",
+   "outstanding_premises": [
+    "S21"
+   ],
+   "depends_on": [
+    "S21",
+    "S32",
+    "S13c"
+   ],
+   "ledger_term": "beta",
+   "basis": "Lean identity S32 once S21 fixes the pair",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S13c",
+   "pillar": "soundness",
+   "statement": "S21 with the quadratic identity S32 gives S13.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S21",
+    "S32"
+   ],
+   "ledger_term": "beta",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S14",
+   "pillar": "soundness",
+   "statement": "Tau: a nonzero vector of chord-image residuals passes the combined image check for at most four tau.",
+   "kind": "probabilistic",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R17.badImageChallenges_card",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/TwoChannelImageGate.lean",
+   "outstanding_premises": [
+    "S21: residual vector fixed before tau"
+   ],
+   "depends_on": [
+    "S21",
+    "S33"
+   ],
+   "ledger_term": "tau",
+   "basis": "Lean root count S33",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S15",
+   "pillar": "soundness",
+   "statement": "Alpha0: if the virtual quotient word is far from the degree-1023 code, its four-to-one fold is within the final list radius of a degree-255 polynomial with probability at most `300 / p^4`.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S20",
+    "S21",
+    "S22",
+    "S24",
+    "S15c"
+   ],
+   "ledger_term": "alpha0",
+   "basis": "none; V7 proved curve bound at these thresholds is 2^-80.90",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S15c",
+   "pillar": "soundness",
+   "statement": "S20, S21, S22 and S24 give the alpha0 and query rounds S15 and S16.",
+   "kind": "composition",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S20",
+    "S21",
+    "S22",
+    "S24"
+   ],
+   "ledger_term": "alpha0",
+   "basis": "paper",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S16",
+   "pillar": "soundness",
+   "statement": "Query: if Final256 disagrees with the fold of the committed word on all but at most 9557 fibres, 22 uniform distinct fibres all miss the disagreement with probability `C(9557,22) / C(262144,22)`.",
+   "kind": "probabilistic",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R19.R417Q22SuccessLaw.uniform_success",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R417Q22SuccessLaw.lean",
+   "outstanding_premises": [
+    "S20",
+    "S21",
+    "S22"
+   ],
+   "depends_on": [
+    "S20",
+    "S21",
+    "S22",
+    "P48"
+   ],
+   "ledger_term": "query",
+   "basis": "counting plus uniform-schedule law P48 once the bad set is fixed before sampling",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S17",
+   "pillar": "soundness",
+   "statement": "Rho: 44 per-channel query residuals fixed before rho, not all zero, cancel in the batched check for at most 44 rho.",
+   "kind": "probabilistic",
+   "status": "conditional",
+   "lean_theorem": "AspisV8R17.badCombinedChallenges_card",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/TwoChannelImageGate.lean",
+   "outstanding_premises": [
+    "S21",
+    "S30 collision term"
+   ],
+   "depends_on": [
+    "S21",
+    "S30",
+    "S34"
+   ],
+   "ledger_term": "rho",
+   "basis": "Lean root count S34",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S18",
+   "pillar": "soundness",
+   "statement": "Relation: a false ordinary claim survives kappa and the four degree-six relation rounds with probability at most `24 / p^4`.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S21"
+   ],
+   "ledger_term": "relation",
+   "basis": "paper given S21",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S20",
+   "pillar": "soundness",
+   "statement": "Before gamma is drawn, the committed C1 and C2 words and the two OOD vectors determine a list of at most 100 codeword tuples such that every accepting continuation is explained by a member of the list, including branches where a partial provider returns none (the good-anchor/same-final and no-close-anchor classes of the 7 September decision).",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S24"
+   ],
+   "ledger_term": "gamma",
+   "basis": "none; full-fibre construction refutes the unconditional form",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S21",
+   "pillar": "soundness",
+   "statement": "Before beta is drawn, the ordinary and sparse-G quotient words and their weights are fixed, so that the pair, not only its beta-combination, is extractable; list multiplicity and gamma dependence enter the bound.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S20"
+   ],
+   "ledger_term": "beta",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S22",
+   "pillar": "soundness",
+   "statement": "Accepted executions whose Final256 is not the fold of any listed candidate (far-final accepted extraction) have total probability bounded by the alpha0 and query targets.",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S20",
+    "S21"
+   ],
+   "ledger_term": "alpha0",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S23",
+   "pillar": "soundness",
+   "statement": "An accepted execution whose extracted coefficients satisfy every linear check yields a valid payment witness, except on semantic-challenge events of stated probability (including a zero compact-round challenge).",
+   "kind": "probabilistic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S35"
+   ],
+   "ledger_term": "semantic",
+   "basis": "none",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S24",
+   "pillar": "soundness",
+   "statement": "At agreement above 38229 of `2^20` symbols the initial code, and above 9557 of `2^18` the final code, have at most 100 and 99 codewords in any ball; the V7 theorems apply to the R102 code because the basis transport does not change the codebook (S31).",
+   "kind": "algebraic",
+   "status": "open",
+   "lean_theorem": null,
+   "file": null,
+   "outstanding_premises": [],
+   "depends_on": [
+    "S31"
+   ],
+   "ledger_term": "gamma",
+   "basis": "Lean theorems exist for the V7 encoders in AspisFormal/K1 (V7ExactCorrelatedAgreement chain); not bound here: outside the audit cache and stated for V7 objects",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S30",
+   "pillar": "soundness",
+   "statement": "Eight-way depth-six commitment binding: two authenticated openings of one root at the same slots either agree on packed values and salt or exhibit a collision in the full hash trace.",
+   "kind": "oracle",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R552.depth6_leaf_path_binding",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R552Merkle8LeafPathBinding.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S31",
+   "pillar": "soundness",
+   "statement": "The basis transport is injective with explicit inverse on all of `F^I`, so `range (E ∘ T) = range E`: distance and list bounds of the code are unchanged by the R16 repair and by the two-swap order.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R16.inverse_transport",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R16/BalancedTransport.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S32",
+   "pillar": "soundness",
+   "statement": "Channel-fold identity: `Σ lerp(qR,qG,β)·lerp(wR,wG,β)` is the quadratic `P0 + β·(P1 + β·P2)` in beta with coefficients fixed by the pair.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisR19.ChannelFold.quadratic_dot_product",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/ChannelFold.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S33",
+   "pillar": "soundness",
+   "statement": "A nonzero vector of four image residuals is annihilated by at most three image challenges.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R17.badImageChallenges_card",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/TwoChannelImageGate.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S34",
+   "pillar": "soundness",
+   "statement": "A nonzero vector of `n + 1` residuals is annihilated by at most `n` batching challenges.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R17.badCombinedChallenges_card",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R17/TwoChannelImageGate.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  },
+  {
+   "id": "S35",
+   "pillar": "soundness",
+   "statement": "Compact-round rejoin: with the linear coefficient reconstructed from a false carried claim, the reconstructed and true degree-27 round polynomials agree at a challenge `x` exactly when `x = 0`.",
+   "kind": "algebraic",
+   "status": "closed",
+   "lean_theorem": "AspisV8R19.R548.reconstructed_eval_eq_iff_zero",
+   "file": "docs/research/v8-full-view-zk-20260912/lean/AspisV8R19/R548CompactBoundaryRejoin.lean",
+   "outstanding_premises": [],
+   "depends_on": [],
+   "ledger_term": null,
+   "basis": "lean",
+   "skeleton_file": "lean/V8Audit/Soundness.lean"
+  }
+ ]
+}
