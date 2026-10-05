@@ -1,0 +1,73 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791159952034126000-9947dd403dc2.service; invocation ID: 38fd5da7a478493f895d723283566cc1
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R831JointCombinationBalance.lean:25:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => combination alpha t ht noneOne x (⟨_a, ⋯⟩, ⟨r % 4, ⋯⟩) = 0
+Error: Application type mismatch: The argument
+  flattenFull._proof_2 r htop
+has type
+  r / 4 < 256
+but is expected to have type
+  _a < 256
+in the application
+  ⟨_a, ⋯⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+alpha : F
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+x : ObservationRow → F
+r : ℕ
+hr : 1020 ≤ r
+htop : r < 1024
+hd : r / 4 = 255
+⊢ combination alpha t ht noneOne x (⟨r / 4, ⋯⟩, ⟨r % 4, ⋯⟩) = 0
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R831JointCombinationBalance.lean:33:11: error(lean.unknownIdentifier): Unknown identifier `TwoSwapSourceTable.inactive`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R831JointCombinationBalance.lean:36:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisV8R19.R831JointCombinationBalance.flatten_combination_top' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R831JointCombinationBalance.rawMask_combination_balanced' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R831JointCombinationBalance.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R831JointCombinationBalance.lean"
+	User time (seconds): 1.01
+	System time (seconds): 0.32
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.33
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3319740
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 78314
+	Voluntary context switches: 415
+	Involuntary context switches: 55
+	Swaps: 0
+	File system inputs: 40
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.367s
+CPU time consumed: 1.370s
+Memory peak: 256.0K
+Memory swap peak: 0B
