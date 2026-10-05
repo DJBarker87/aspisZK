@@ -1,0 +1,9 @@
+# R834 normalized joint polynomial degree bound
+
+With only the explicit uniform premise that every ordinary selected R745 polynomial entry has total degree at most `D`, this target proves: (1) each root-fixed normalized entry has total degree at most `D`; (2) every entry of the root-fixed normalized matrix has that bound; and (3) its determinant has total degree at most `222 * D`. The correction term is a finite sum of low-coefficient constants times R745 entries; constants have degree zero, and the standard MvPolynomial sum/product/subtraction bounds preserve `D`. The determinant result applies the existing `AspisV8R17.minor_totalDegree` and `R746.observation_card`.
+
+The uniform raw-entry degree bound is an explicit premise, not discharged here. No probability, nonzero determinant, native-source correspondence, or security claim follows from this lemma alone.
+
+Exact target `AspisV8R19/R834NormalizedJointDegree.lean`, source SHA256 `bb453c1199ee7eac2d6c05ea2be6778937ed5bcb1243a3c3b742e2b99d1ae243`. Final focused run `1791160990949743000-87f58317b2e3`: exit 0; wall 1.60s; peak Lean RSS 3,303,160 KiB; swap 0; `-j1 -M4500`; MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. Full axiom reports for all three theorem declarations: `[propext, Classical.choice, Quot.sound]`.
+
+Four failed iterations are preserved separately. They record ambiguity between imported `ObservationRow` aliases, missing `low`/`cast255` namespace openings, default-instance mismatches for the observation-card theorem, and the need to type the constant polynomial explicitly before applying the degree product bound. The final source resolves these by using R833's `Obs`, opening the exact R739/R741 namespaces, relying on the default finite observation instance, and an explicit `JointPoly F` type annotation.
