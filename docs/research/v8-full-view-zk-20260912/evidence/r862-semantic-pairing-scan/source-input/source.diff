@@ -1,0 +1,99 @@
+--- .r21-scratch/r724-h1-projected-residual-probe/attempt-d-single-column/src/main.rs	2026-10-04 18:48:05
++++ .r21-scratch/r862-semantic-pairing-probe-draft-a/proposed-workspace/src/main.rs	2026-10-05 02:46:56
+@@ -4,6 +4,8 @@
+ 
+ #[path = "/home/dombarker/project-offloads/aspis-r20-r117-primal-20260930-a/docs/research/v8-no-work-100-20260907/experiments/r16_basis_transport.rs"]
+ mod basis_transport;
++#[path = "r18_sparse_coded_g.rs"]
++mod r18_sparse_coded_g;
+ fn scalar(n: u32) -> K { K::from_cm31(CM31::from_m31(M31(n))) }
+ 
+ fn pow_small(x: K, n: usize) -> K {
+@@ -164,6 +166,69 @@
+     out
+ }
+ 
++// Exact requested sparse semantic-basis pairing: r18 derives 271 weights
++// from the fixed z, then reads the same inverse-mask coordinates selected by
++// the frozen transport.  This does not alter the existing 222 observations.
++fn semantic_basis_pairing(m: &[K], coins: &[K]) -> K {
++    let order = &basis_transport::transport().order;
++    assert!(m.len() >= r18_sparse_coded_g::N);
++    assert!(coins.len() >= r18_sparse_coded_g::COINS);
++    (0..r18_sparse_coded_g::COINS).fold(K::ZERO, |acc, i| {
++        acc.add(coins[i].mul(m[order[r18_sparse_coded_g::slot(i)]]))
++    })
++}
++
++fn write_semantic_scan(path: &str, rows: &[(usize, usize, Vec<K>, K)]) {
++    use std::io::Write;
++    let mut f = std::fs::File::create(path).expect("create semantic scan");
++    writeln!(f, "rows=699 old_observations=222 appended=semantic_basis_pairing").unwrap();
++    for (d, s, old, semantic) in rows {
++        write!(f, "candidate\t{d}\t{s}").unwrap();
++        for value in old {
++            let [a,b,c,d] = limbs(*value);
++            write!(f, "\t{a},{b},{c},{d}").unwrap();
++        }
++        let [a,b,c,d] = limbs(*semantic);
++        writeln!(f, "\t{a},{b},{c},{d}").unwrap();
++    }
++}
++
++// This mode deliberately does not invoke low_constancy_check or pivots.
++// It records each old 222-vector and the requested appended scalar for the
++// complete d=22..254, s=1..3 candidate bank.
++fn semantic_scan(z: [K; 10]) {
++    assert_eq!(z, [1,1,2,3,4,2,2,3,0,2].map(scalar), "R862 fixed shifted witness");
++    let rows = active_rows();
++    let alpha = scalar(7); let kappa = scalar(5);
++    let abc = [scalar(7), scalar(5), scalar(P-5)];
++    let rel = ordinary_relation_weights(&z, kappa, abc);
++    let points: Vec<Vec<K>> = corelib::v6_transcript::v6_statement_points(&z).iter().map(|p| {
++        let mut w = WeightAccumulator::empty(10);
++        w.add_multilinear(K::ONE, p.to_vec()).unwrap();
++        (0..1024).map(|i| w.weight_at(i as u32)).collect()
++    }).collect();
++    let mut coins = vec![K::ZERO; r18_sparse_coded_g::COINS];
++    r18_sparse_coded_g::coin_weights_into(&z, &mut coins);
++    let mut saved = Vec::with_capacity(699);
++    let mut witnesses = Vec::new();
++    for d in 22..255 { for s in 1..4 {
++        let low = pair(0, s, alpha);
++        let mut q = pair(d, s, alpha); sub_assign(&mut q, &low);
++        assert!(fold_zero(&q, alpha), "first-fold zero failed for {d},{s}");
++        let old = observations(&q, &rows, &points, &rel);
++        let c = chord(&q, abc);
++        let m = basis_transport::transport().inverse(&c);
++        let semantic = semantic_basis_pairing(&m, &coins);
++        if old.iter().all(|&x| x == K::ZERO) && semantic != K::ZERO {
++            witnesses.push((d,s));
++        }
++        saved.push((d,s,old,semantic));
++    }}
++    assert_eq!(saved.len(), 699);
++    write_semantic_scan("semantic-scan.tsv", &saved);
++    println!("R862_SEMANTIC_SCAN candidates={} old222_zero_new_nonzero={:?}", saved.len(), witnesses);
++}
++
+ fn observations(
+     q: &[K], rows: &[usize], points: &[Vec<K>], relation_weights: &WeightAccumulator,
+ ) -> Vec<K> {
+@@ -298,12 +363,16 @@
+         // Shift the zero from z[5] to z[8]: the first block retains the
+         // no-carry property while the exceptional source order 1009 receives
+         // nonzero z[5] and z[8]=0.
+-        "shifted" | "shifted-matrix" | "shifted242-matrix" => [1,1,2,3,4,2,2,3,0,2],
++        "shifted" | "shifted-matrix" | "shifted242-matrix" | "semantic-scan" => [1,1,2,3,4,2,2,3,0,2],
+         _ => [1,1,2,3,4,0,2,3,4,2],
+     };
+     assert_eq!(M31_HALF.0,(P+1)/2);
+     assert_eq!(M31_QUARTER.0,(P+1)/4);
+     let z=vals.map(scalar);
++    if mode == "semantic-scan" {
++        semantic_scan(z);
++        return;
++    }
+     let (ok,fail,total)=low_constancy_check(z);
+     println!("R724_LOW_CONSTANCY mode={mode} all_23x3={ok} differing_pairs={fail} tested_pairs={total}");
+     let transport=basis_transport::transport();
