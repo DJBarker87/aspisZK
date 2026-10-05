@@ -1,0 +1,167 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791168405645537000-0e5076ecbd06.service; invocation ID: 3044ef9569ca4653b1d54dea10cf0e82
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:46:10: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 2
+where
+ a := ↑(r + 1) * ↑(width + 1)
+ b := ↑width
+ c := ↑r * ↑(width + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:43:48: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [mirrorReverseWeightBlocks, P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵List.length_append, mirrorRoundWeightBlock,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲List.length_cons, List.length_ofFn]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:50:71: error: unsolved goals
+R : Type u
+inst✝ : CommRing R
+width : ℕ
+half : R
+r : ℕ
+z : RoundCoins R r
+⊢ r * (width + 1) + 1 = 1 + r * (width + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:56:4: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:83:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => mirrorListAsFin 271 _a ⋯ i = listAsFin 271 (flatMaskWeights 26 half 10 z) ⋯ i
+Error: Application type mismatch: The argument
+  mirrorMaskWeights271._proof_1 half z
+has type
+  (mirrorFlatMaskWeights 26 half 10 z).length = 271
+but is expected to have type
+  _a.length = 271
+in the application
+  mirrorListAsFin 271 _a ⋯
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+R : Type u
+inst✝ : Field R
+half : R
+z : RoundCoins R 10
+i : Fin 271
+⊢ mirrorListAsFin 271 (mirrorFlatMaskWeights 26 half 10 z) ⋯ i = listAsFin 271 (flatMaskWeights 26 half 10 z) ⋯ i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:86:57: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  NonAssocSemiring R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:107:16: error: unsolved goals
+case succ.mk
+R : Type u
+S : Type v
+inst✝¹ : CommRing R
+inst✝ : CommRing S
+f : R →+* S
+width : ℕ
+half : R
+r : ℕ
+ih :
+  ∀ (z : RoundCoins R r),
+    (List.map (⇑f) (mirrorReverseWeightBlocks width half r z).1, f (mirrorReverseWeightBlocks width half r z).2) =
+      mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r z)
+z : R
+zs : RoundCoins R r
+hb :
+  (List.map (⇑f) (mirrorReverseWeightBlocks width half r zs).1, f (mirrorReverseWeightBlocks width half r zs).2) =
+    mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)
+hl :
+  List.map (⇑f) (mirrorReverseWeightBlocks width half r zs).1 =
+    (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).1
+hs :
+  f (mirrorReverseWeightBlocks width half r zs).2 =
+    (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2
+⊢ (mirrorRoundWeightBlock width (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 (f z) ++
+        (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).1,
+      (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 * f half) =
+    (mirrorRoundWeightBlock width (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 sorry ++
+        (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).1,
+      (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 * f half)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:104:45: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:104:45: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:104:45: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:104:45: warning: This simp argument is unused:
+  mapRoundCoins
+
+Hint: Omit it from the simp argument list.
+  simp [mirrorReverseWeightBlocks,̵ ̵m̵a̵p̵R̵o̵u̵n̵d̵C̵o̵i̵n̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:116:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:127:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:158:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:163:78: error: unsolved goals
+i : Fin 271
+⊢ mirrorMaskWeights271 1073741824 actualSemanticCoins i = maskWeights271 1073741824 actualSemanticCoins i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:165:31: warning: This simp argument is unused:
+  assignment
+
+Hint: Omit it from the simp argument list.
+  simp [evalHom, selectedEval, a̵s̵s̵i̵g̵n̵m̵e̵n̵t̵,̵ ̵R745JointObservationPolynomial.pZ,
+  ̵  ̵ ̵ ̵R864SemanticKernel.halfSelected]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:165:43: warning: This simp argument is unused:
+  R745JointObservationPolynomial.pZ
+
+Hint: Omit it from the simp argument list.
+  simp [evalHom, selectedEval, assignment, R7̵4̵5̵J̵o̵i̵n̵t̵O̵b̵s̵e̵r̵v̵a̵t̵i̵o̵n̵P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵.̵p̵Z̵,̵
+  ̵ ̵ ̵ ̵ ̵R̵864SemanticKernel.halfSelected]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorRound_eq_actual' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorReverse_eq_actual' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorFlat_eq_actual' depends on axioms: [propext, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorMaskWeights_eq_actual' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorRound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorReverse' depends on axioms: [propext, sorryAx]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorFlat' depends on axioms: [propext, sorryAx]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorMaskWeights271' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.eval_polyZCoins' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.semanticWeightPoly_eval' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:178:0: error: Unexpected name `AspisV8R19.R876SemanticWeightPolynomial` after `end`: The current section is unnamed
+
+Hint: Delete the name `AspisV8R19.R876SemanticWeightPolynomial` to end the current unnamed scope; outer named scopes can then be closed using additional `end` command(s):
+  end ̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵8̵7̵6̵S̵e̵m̵a̵n̵t̵i̵c̵W̵e̵i̵g̵h̵t̵P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R876SemanticWeightPolynomial.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean"
+	User time (seconds): 1.75
+	System time (seconds): 0.37
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.08
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3298368
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 78152
+	Voluntary context switches: 1838
+	Involuntary context switches: 71
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.119s
+CPU time consumed: 2.154s
+Memory peak: 256.0K
+Memory swap peak: 0B

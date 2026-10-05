@@ -1,0 +1,169 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791168312366383000-fd540a4ccc44.service; invocation ID: 6c288a337e9a4e2189d7ad95de33515a
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:37:4: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : ℕ), (mirrorFlatMaskWeights 26 half x z).length = 271
+
+R : Type u
+inst✝ : CommRing R
+half : R
+z : RoundCoins R 10
+⊢ (mirrorFlatMaskWeights 26 half 10 z).length = 271
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:45:43: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Field R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:53:16: error: unsolved goals
+case succ.mk
+R : Type u
+inst✝ : Field R
+width : ℕ
+half : R
+r : ℕ
+ih : ∀ (z : RoundCoins R r), mirrorReverseWeightBlocks width half r z = reverseWeightBlocks width half r z
+z : R
+zs : RoundCoins R r
+⊢ sorry () = roundWeightBlock width (reverseWeightBlocks width half r zs).2 z
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:68:14: error: unsolved goals
+case succ.mk
+R : Type u
+inst✝ : CommRing R
+width : ℕ
+half : R
+r : ℕ
+ih : ∀ (z : RoundCoins R r), (mirrorFlatMaskWeights width half r z).length = 1 + r * (width + 1)
+z : R
+zs : RoundCoins R r
+⊢ 1 + (width + (mirrorReverseWeightBlocks width half r zs).1.length) = width + 1 + r * (width + 1)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:69:32: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [mirrorFlatMaskWeights, mirrorReverseWeightBlocks,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵mirrorRoundWeightBlock,
+  ̲ i̵h̵,̵  ̲ ̲ ̲ ̲Nat.add_mul, Nat.add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:73:63: error: unsolved goals
+R : Type u
+inst✝ : Field R
+half : R
+z : RoundCoins R 10
+i : Fin 271
+⊢ mirrorListAsFin 271 (flatMaskWeights 26 half 10 z) ⋯ i = listAsFin 271 (flatMaskWeights 26 half 10 z) ⋯ i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:77:57: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  NonAssocSemiring R
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:98:16: error: unsolved goals
+case succ.mk
+R : Type u
+S : Type v
+inst✝¹ : CommRing R
+inst✝ : CommRing S
+f : R →+* S
+width : ℕ
+half : R
+r : ℕ
+ih :
+  ∀ (z : RoundCoins R r),
+    (List.map (⇑f) (mirrorReverseWeightBlocks width half r z).1, f (mirrorReverseWeightBlocks width half r z).2) =
+      mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r z)
+z : R
+zs : RoundCoins R r
+hb :
+  (List.map (⇑f) (mirrorReverseWeightBlocks width half r zs).1, f (mirrorReverseWeightBlocks width half r zs).2) =
+    mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)
+hl :
+  List.map (⇑f) (mirrorReverseWeightBlocks width half r zs).1 =
+    (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).1
+hs :
+  f (mirrorReverseWeightBlocks width half r zs).2 =
+    (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2
+⊢ (mirrorRoundWeightBlock width (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 (f z) ++
+        (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).1,
+      (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 * f half) =
+    (mirrorRoundWeightBlock width (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 sorry ++
+        (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).1,
+      (mirrorReverseWeightBlocks width (f half) r (mapRoundCoins sorry r zs)).2 * f half)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:95:45: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:95:45: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:95:45: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:95:45: warning: This simp argument is unused:
+  mapRoundCoins
+
+Hint: Omit it from the simp argument list.
+  simp [mirrorReverseWeightBlocks,̵ ̵m̵a̵p̵R̵o̵u̵n̵d̵C̵o̵i̵n̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:107:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:118:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:149:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:154:78: error: unsolved goals
+i : Fin 271
+⊢ mirrorMaskWeights271 1073741824 actualSemanticCoins i = maskWeights271 1073741824 actualSemanticCoins i
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:156:31: warning: This simp argument is unused:
+  assignment
+
+Hint: Omit it from the simp argument list.
+  simp [evalHom, selectedEval, a̵s̵s̵i̵g̵n̵m̵e̵n̵t̵,̵ ̵R745JointObservationPolynomial.pZ,
+  ̵  ̵ ̵ ̵R864SemanticKernel.halfSelected]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:156:43: warning: This simp argument is unused:
+  R745JointObservationPolynomial.pZ
+
+Hint: Omit it from the simp argument list.
+  simp [evalHom, selectedEval, assignment, R7̵4̵5̵J̵o̵i̵n̵t̵O̵b̵s̵e̵r̵v̵a̵t̵i̵o̵n̵P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵.̵p̵Z̵,̵
+  ̵ ̵ ̵ ̵ ̵R̵864SemanticKernel.halfSelected]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorRound_eq_actual' depends on axioms: [sorryAx]
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorReverse_eq_actual' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorFlat_eq_actual' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.mirrorMaskWeights_eq_actual' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorRound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorReverse' depends on axioms: [propext, sorryAx]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorFlat' depends on axioms: [propext, sorryAx]
+'AspisV8R19.R876SemanticWeightPolynomial.map_mirrorMaskWeights271' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.eval_polyZCoins' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R876SemanticWeightPolynomial.semanticWeightPoly_eval' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean:169:0: error: Unexpected name `AspisV8R19.R876SemanticWeightPolynomial` after `end`: The current section is unnamed
+
+Hint: Delete the name `AspisV8R19.R876SemanticWeightPolynomial` to end the current unnamed scope; outer named scopes can then be closed using additional `end` command(s):
+  end ̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵R̵8̵7̵6̵S̵e̵m̵a̵n̵t̵i̵c̵W̵e̵i̵g̵h̵t̵P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R876SemanticWeightPolynomial.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R876SemanticWeightPolynomial.lean"
+	User time (seconds): 1.64
+	System time (seconds): 0.36
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.99
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3298400
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 78183
+	Voluntary context switches: 1873
+	Involuntary context switches: 54
+	Swaps: 0
+	File system inputs: 8
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 2.034s
+CPU time consumed: 2.054s
+Memory peak: 256.0K
+Memory swap peak: 0B
