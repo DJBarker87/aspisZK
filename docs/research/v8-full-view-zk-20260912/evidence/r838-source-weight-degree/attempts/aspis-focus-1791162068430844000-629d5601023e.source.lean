@@ -1,0 +1,153 @@
+import AspisV8R19.R742SourceObservationHom
+import AspisV8R19.R745JointObservationPolynomial
+import Mathlib.Algebra.MvPolynomial.CommRing
+
+set_option autoImplicit false
+set_option maxRecDepth 4096
+namespace AspisV8R19.R838SourceWeightDegree
+open MvPolynomial
+open AspisV8R16 AspisV8R17 AspisR19
+open AspisV8R19.R742SourceObservationHom
+open AspisV8R19.R745JointObservationPolynomial
+noncomputable section
+variable {F : Type*} [CommRing F]
+
+lemma list_sum_degree_le {xs : List (JointPoly F)} {D : Nat}
+    (hxs : ∀ x ∈ xs, x.totalDegree ≤ D) : xs.sum.totalDegree ≤ D := by
+  induction xs with
+  | nil => simp
+  | cons x xs ih =>
+      simp only [List.sum_cons]
+      apply (totalDegree_add _ _).trans
+      apply max_le
+      · exact hxs x (by simp)
+      · apply ih
+        intro y hy
+        exact hxs y (by simp [hy])
+
+lemma constant_pow_degree_le {p : JointPoly F} (hp : p.totalDegree ≤ 0) (n : Nat) :
+    (p^n).totalDegree ≤ 0 := by
+  have hpow := totalDegree_pow p n
+  exact hpow.trans (by simpa using Nat.mul_le_mul_left n hp)
+
+lemma sourceGather_degree_of_constant (half : JointPoly F)
+    (hhalf : half.totalDegree ≤ 0) (w : Nat → JointPoly F) (D : Nat)
+    (hw : ∀ n, (w n).totalDegree ≤ D) (i : Nat) :
+    (sourceGather half w i).totalDegree ≤ D := by
+  rw [sourceGather_powers]
+  apply list_sum_degree_le
+  intro e he
+  have hmul := totalDegree_mul (half^e.2) (w e.1)
+  exact hmul.trans (by
+    simpa using Nat.add_le_add (constant_pow_degree_le hhalf e.2) (hw e.1))
+
+theorem sourceGather_degree (half : F) (w : Nat → JointPoly F) (D : Nat)
+    (hw : ∀ n, (w n).totalDegree ≤ D) (i : Nat) :
+    (sourceGather (C half : JointPoly F) w i).totalDegree ≤ D := by
+  exact sourceGather_degree_of_constant (C half : JointPoly F) (by simp) w D hw i
+
+lemma zeroExtend_degree_le (n : Nat) (w : Nat → JointPoly F) (D : Nat)
+    (hw : ∀ i, (w i).totalDegree ≤ D) (i : Nat) :
+    (zeroExtend n w i).totalDegree ≤ D := by
+  unfold zeroExtend
+  split_ifs with h
+  · exact hw i
+  · simp
+
+lemma interleave_degree_le (e o : Nat → JointPoly F) (D : Nat)
+    (he : ∀ i, (e i).totalDegree ≤ D) (ho : ∀ i, (o i).totalDegree ≤ D) (i : Nat) :
+    (interleave e o i).totalDegree ≤ D := by
+  unfold interleave
+  split_ifs with h
+  · exact he (i / 2)
+  · exact ho (i / 2)
+
+lemma chordDualEven_degree_le (half : JointPoly F) (hhalf : half.totalDegree ≤ 0)
+    (we wo : Nat → JointPoly F) (a b c : JointPoly F) (D E : Nat)
+    (hwe : ∀ i, (we i).totalDegree ≤ D)
+    (hwo : ∀ i, (wo i).totalDegree ≤ D)
+    (ha : a.totalDegree ≤ E) (hb : b.totalDegree ≤ E) (hc : c.totalDegree ≤ E)
+    (i : Nat) :
+    (chordDualEven half we wo a b c i).totalDegree ≤ D + E := by
+  unfold chordDualEven
+  have hA : (a * we i).totalDegree ≤ D + E := by
+    have hmul := totalDegree_mul a (we i)
+    simpa [Nat.add_comm] using hmul.trans (Nat.add_le_add ha (hwe i))
+  have hB : (b * sourceGather half we i).totalDegree ≤ D + E := by
+    have hg := sourceGather_degree_of_constant half hhalf we D hwe i
+    have hmul := totalDegree_mul b (sourceGather half we i)
+    simpa [Nat.add_comm] using hmul.trans (Nat.add_le_add hb hg)
+  have hC : (c * wo i).totalDegree ≤ D + E := by
+    have hmul := totalDegree_mul c (wo i)
+    simpa [Nat.add_comm] using hmul.trans (Nat.add_le_add hc (hwo i))
+  exact (totalDegree_add _ _).trans (max_le
+    ((totalDegree_add _ _).trans (max_le hA hB)) hC)
+
+lemma chordDualOdd_degree_le (half : JointPoly F) (hhalf : half.totalDegree ≤ 0)
+    (we wo : Nat → JointPoly F) (a b c : JointPoly F) (D E : Nat)
+    (hwe : ∀ i, (we i).totalDegree ≤ D)
+    (hwo : ∀ i, (wo i).totalDegree ≤ D)
+    (hdouble : ∀ i, (sourceGather half (fun j => sourceGather half we j) i).totalDegree ≤ D)
+    (hwoGather : ∀ i, (sourceGather half wo i).totalDegree ≤ D)
+    (ha : a.totalDegree ≤ E) (hb : b.totalDegree ≤ E) (hc : c.totalDegree ≤ E)
+    (i : Nat) :
+    (chordDualOdd half we wo a b c i).totalDegree ≤ D + E := by
+  unfold chordDualOdd
+  have hsub : (we i - sourceGather half (fun j => sourceGather half we j) i).totalDegree ≤ D :=
+    (totalDegree_sub _ _).trans (max_le (hwe i) (hdouble i))
+  have hC : (c * (we i - sourceGather half (fun j => sourceGather half we j) i)).totalDegree ≤ D + E := by
+    have hmul := totalDegree_mul c (we i - sourceGather half (fun j => sourceGather half we j) i)
+    simpa [Nat.add_comm] using hmul.trans (Nat.add_le_add hc hsub)
+  have hA : (a * wo i).totalDegree ≤ D + E := by
+    have hmul := totalDegree_mul a (wo i)
+    simpa [Nat.add_comm] using hmul.trans (Nat.add_le_add ha (hwo i))
+  have hB : (b * sourceGather half wo i).totalDegree ≤ D + E := by
+    have hg := sourceGather_degree_of_constant half hhalf wo D hwo i
+    have hmul := totalDegree_mul b (sourceGather half wo i)
+    simpa [Nat.add_comm] using hmul.trans (Nat.add_le_add hb hg)
+  exact (totalDegree_add _ _).trans (max_le
+    ((totalDegree_add _ _).trans (max_le hC hA)) hB)
+
+theorem sourceChordTranspose_degree (half : F) (w : Nat → JointPoly F)
+    (a b c : JointPoly F) (D E : Nat)
+    (hw : ∀ n, (w n).totalDegree ≤ D)
+    (ha : a.totalDegree ≤ E) (hb : b.totalDegree ≤ E) (hc : c.totalDegree ≤ E)
+    (i : Nat) :
+    (sourceChordTranspose (C half : JointPoly F) w a b c i).totalDegree ≤ D + E := by
+  unfold sourceChordTranspose
+  apply interleave_degree_le
+  · intro n
+    apply chordDualEven_degree_le (C half : JointPoly F) (by simp)
+    · intro j
+      exact zeroExtend_degree_le 512 (fun k => w (2*k)) D (fun k => hw (2*k)) j
+    · intro j
+      exact zeroExtend_degree_le 512 (fun k => w (2*k+1)) D (fun k => hw (2*k+1)) j
+    · exact ha
+    · exact hb
+    · exact hc
+    · exact n
+  · intro n
+    have hwe : ∀ j, (zeroExtend 512 (fun k => w (2*k)) j).totalDegree ≤ D :=
+      fun j => zeroExtend_degree_le 512 (fun k => w (2*k)) D (fun k => hw (2*k)) j
+    have hwo : ∀ j, (zeroExtend 512 (fun k => w (2*k+1)) j).totalDegree ≤ D :=
+      fun j => zeroExtend_degree_le 512 (fun k => w (2*k+1)) D (fun k => hw (2*k+1)) j
+    apply chordDualOdd_degree_le (C half : JointPoly F) (by simp)
+    · exact hwe
+    · exact hwo
+    · intro j
+      exact sourceGather_degree_of_constant (C half : JointPoly F) (by simp)
+        (fun k => sourceGather (C half : JointPoly F) (zeroExtend 512 (fun m => w (2*m))) k)
+        D (fun k => sourceGather_degree_of_constant (C half : JointPoly F) (by simp)
+          (zeroExtend 512 (fun m => w (2*m))) D hwe k) j
+    · intro j
+      exact sourceGather_degree_of_constant (C half : JointPoly F) (by simp)
+        (zeroExtend 512 (fun k => w (2*k+1))) D hwo j
+    · exact ha
+    · exact hb
+    · exact hc
+    · exact n
+
+#print axioms sourceGather_degree
+#print axioms sourceChordTranspose_degree
+end
+end AspisV8R19.R838SourceWeightDegree
