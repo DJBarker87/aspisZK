@@ -1,0 +1,206 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791169337074667000-0f2178bd52c9.service; invocation ID: c218b5c45e254ed5a056409ab32f1201
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:34:21: error(lean.unknownIdentifier): Unknown identifier `low`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:37:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:51:2: warning: 'exact
+  (normalized_sparse_entry half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau alpha z row t ht noneOne d
+      s).symm' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:133:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval (assignment alpha u v kappa tau z)).mapMatrix (rootFixedMatrix half quarter t ht noneOne)
+in the target expression
+  (eval (assignment alpha u v kappa tau z)).mapMatrix
+      (Matrix.fromBlocks (rootFixedMatrix half quarter t ht noneOne)
+        (fun r x => normalizedEntry half quarter t ht noneOne 96 0 r)
+        (fun x c => semanticPolynomial half weights (selectedColumns c).1 (selectedColumns c).2) fun x x_1 =>
+        semanticPolynomial half weights 96 0) =
+    Matrix.fromBlocks
+      (fun r c =>
+        rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z
+          (normalizedPair alpha t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2) r)
+      (fun r x =>
+        rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z
+          (normalizedPair alpha t ht noneOne (cast255 96) 0) r)
+      (fun x c =>
+        ∑ i,
+          maskWeights271 half coins i *
+            R645TwoSwapHighDirections.actualCoin
+              (R662FullIndexedMaskPreservation.indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+                (normalizedPair alpha t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2))
+              i)
+      fun x x_1 =>
+      ∑ i,
+        maskWeights271 half coins i *
+          R645TwoSwapHighDirections.actualCoin
+            (R662FullIndexedMaskPreservation.indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+              (normalizedPair alpha t ht noneOne (cast255 96) 0))
+            i
+
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter alpha u v kappa tau : F
+z : Fin 10 → F
+coins : RoundCoins F 10
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+weights : Fin 271 → JointPoly F
+hw : ∀ (i : Fin 271), (eval (assignment alpha u v kappa tau z)) (weights i) = maskWeights271 half coins i
+hA :
+  (eval (assignment alpha u v kappa tau z)).mapMatrix (rootFixedMatrix half quarter t ht noneOne) =
+    R781NormalizedActivePreservation.normalizedSelectedMatrix half quarter alpha u v kappa tau z t ht noneOne
+htop :
+  (fun r x => (eval (assignment alpha u v kappa tau z)) (normalizedEntry half quarter t ht noneOne 96 0 r)) = fun r x =>
+    rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z
+      (normalizedPair alpha t ht noneOne (cast255 96) 0) r
+hs :
+  ∀ (d : Fin 255) (s : Fin 3),
+    (eval (assignment alpha u v kappa tau z)) (semanticPolynomial half weights d s) =
+      ∑ i,
+        maskWeights271 half coins i *
+          R645TwoSwapHighDirections.actualCoin
+            (R662FullIndexedMaskPreservation.indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+              (normalizedPair alpha t ht noneOne (cast255 d) s))
+            i
+hbottom :
+  (fun x c =>
+      (eval (assignment alpha u v kappa tau z))
+        (semanticPolynomial half weights (selectedColumns c).1 (selectedColumns c).2)) =
+    fun x c =>
+    ∑ i,
+      maskWeights271 half coins i *
+        R645TwoSwapHighDirections.actualCoin
+          (R662FullIndexedMaskPreservation.indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+            (normalizedPair alpha t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2))
+          i
+hdelta :
+  (fun x x_1 => (eval (assignment alpha u v kappa tau z)) (semanticPolynomial half weights 96 0)) = fun x x_1 =>
+    ∑ i,
+      maskWeights271 half coins i *
+        R645TwoSwapHighDirections.actualCoin
+          (R662FullIndexedMaskPreservation.indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+            (normalizedPair alpha t ht noneOne (cast255 96) 0))
+          i
+⊢ (eval (assignment alpha u v kappa tau z)).mapMatrix
+      (Matrix.fromBlocks (rootFixedMatrix half quarter t ht noneOne)
+        (fun r x => normalizedEntry half quarter t ht noneOne 96 0 r)
+        (fun x c => semanticPolynomial half weights (selectedColumns c).1 (selectedColumns c).2) fun x x_1 =>
+        semanticPolynomial half weights 96 0) =
+    Matrix.fromBlocks
+      (fun r c =>
+        rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z
+          (normalizedPair alpha t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2) r)
+      (fun r x =>
+        rawObservation half quarter (1 + u * v) (u * v - 1) (-(u + v)) kappa tau z
+          (normalizedPair alpha t ht noneOne (cast255 96) 0) r)
+      (fun x c =>
+        ∑ i,
+          maskWeights271 half coins i *
+            R645TwoSwapHighDirections.actualCoin
+              (R662FullIndexedMaskPreservation.indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+                (normalizedPair alpha t ht noneOne (cast255 (selectedColumns c).1) (selectedColumns c).2))
+              i)
+      fun x x_1 =>
+      ∑ i,
+        maskWeights271 half coins i *
+          R645TwoSwapHighDirections.actualCoin
+            (R662FullIndexedMaskPreservation.indexedMask half (1 + u * v) (u * v - 1) (-(u + v))
+              (normalizedPair alpha t ht noneOne (cast255 96) 0))
+            i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun r x => normalizedEntry half quarter t ht noneOne 96 0 r
+  has type
+    Obs → Unit → JointPoly F
+  but is expected to have type
+    Matrix Obs Unit (JointPoly F)
+  in the application
+    Matrix.fromBlocks (rootFixedMatrix half quarter t ht noneOne) fun r x =>
+      normalizedEntry half quarter t ht noneOne 96 0 r
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:100:13: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:121:11: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:131:11: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:148:75: error: unexpected token '('; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:143:24: error(lean.unknownIdentifier): Unknown identifier `low`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:147:22: error(lean.unknownIdentifier): Unknown identifier `low`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:140:75: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half quarter : F
+t : Fin 22 → F
+ht : Function.Injective t
+noneOne : ∀ (i : Fin 22), t i ≠ 1
+D : ℕ
+hraw : ∀ (d : Fin 255) (s : Fin 3) (row : Obs), totalDegree (polynomialEntry half quarter d s row) ≤ D
+d : Fin 255
+s : Fin 3
+row : Obs
+hcorrection : (∑ j, C sorry * polynomialEntry half quarter ⟨↑j, ⋯⟩ s row).totalDegree ≤ D
+⊢ totalDegree (polynomialEntry half quarter d s row - ∑ j, C sorry * polynomialEntry half quarter ⟨↑j, ⋯⟩ s row) ≤ D
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:157:20: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean:157:47: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisV8R19.R882RootFixedAugmentedPolynomial.eval_normalizedEntry' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R882RootFixedAugmentedPolynomial.eval_rootFixedAugmentedPolynomial' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R882RootFixedAugmentedPolynomial.normalizedEntry_totalDegree_le' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R882RootFixedAugmentedPolynomial.rootFixedAugmentedPolynomial_entry_degree' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R882RootFixedAugmentedPolynomial.rootFixedAugmentedPolynomial_det_degree' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R882RootFixedAugmentedPolynomial.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R882RootFixedAugmentedPolynomial.lean"
+	User time (seconds): 1.40
+	System time (seconds): 0.36
+	Percent of CPU this job got: 102%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.72
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3303096
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 78033
+	Voluntary context switches: 932
+	Involuntary context switches: 58
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.760s
+CPU time consumed: 1.800s
+Memory peak: 324.0K
+Memory swap peak: 0B
