@@ -1,0 +1,6 @@
+import AspisV8R19.R872NormalizedAugmentedSemanticMatrix
+
+#print axioms AspisV8R19.R872NormalizedAugmentedSemanticMatrix.selected_entry
+#print axioms AspisV8R19.R872NormalizedAugmentedSemanticMatrix.extra_entry
+#print axioms AspisV8R19.R872NormalizedAugmentedSemanticMatrix.semantic_selected_entry
+#print axioms AspisV8R19.R872NormalizedAugmentedSemanticMatrix.semantic_extra_entry
