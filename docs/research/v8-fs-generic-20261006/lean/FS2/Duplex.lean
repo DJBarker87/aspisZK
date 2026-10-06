@@ -84,9 +84,12 @@ def squeezeA (p : Params M Cv L) (s : State) : Addr L :=
 def advanceA (p : Params M Cv L) (s : State) : Addr L :=
   Addr.ofBytes (advance (bytes s)) (by simp [advance, bytes_length]; have := p.hL; omega)
 
-theorem squeezeA_ne_advanceA (p : Params M Cv L) (s : State) : squeezeA p s ≠ advanceA p s := by
+theorem squeezeA_ne_advanceA' (p : Params M Cv L) (s t : State) : squeezeA p s ≠ advanceA p t := by
   intro h
   exact cross_disjoint _ _ (Addr.ofBytes_injective _ _ _ _ h)
+
+theorem squeezeA_ne_advanceA (p : Params M Cv L) (s : State) : squeezeA p s ≠ advanceA p s :=
+  squeezeA_ne_advanceA' p s s
 
 theorem squeezeA_injective (p : Params M Cv L) : Function.Injective (squeezeA p) := by
   intro s s' h

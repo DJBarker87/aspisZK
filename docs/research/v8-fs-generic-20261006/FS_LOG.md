@@ -297,3 +297,79 @@ cured each time by stating the counting lemma over an abstract finite type
 (the tree's own practice) or by `simp only [protocol]` at reducible
 transparency instead of `rfl`. Remaining linter warnings (unused section
 variables / simp arguments) are cosmetic and listed in the attempt logs.
+
+---
+
+# Addendum 2026-10-06 (later): `DecodesSpec` proved — the duplex theorem is unconditional
+
+`FS2.Duplex.decodesSpec` and `FS2.Duplex.duplex_fiat_shamir_verifier`
+(`lean/FS2/DuplexDecodes.lean`) close the obligation left open above. With
+the chain-running verifier `FS2.verifier` (runs every round's sampler program
+in order, then decides), the duplex Fiat–Shamir bound
+
+```
+Pr_H[V accepts ∧ extractor fails] ≤ Q_tot · max_{i<r} ε_i + 2·Q_tot²/2^256
+```
+
+holds from (D1), (D2′), (D3) and the `Q_tot` bound alone; (INJ) is discharged.
+All `#print axioms`: `propext, Classical.choice, Quot.sound`; no `sorry`,
+`axiom`, `native_decide`, `admit`, `maxRecDepth`, `maxHeartbeats` (grep).
+
+## Proof structure (new files)
+
+| File | Content |
+|---|---|
+| `FS2/Verifier.lean` | `verifier`/`verifierFrom` (generic), its trace is the concatenation of the chains' traces (`verifier_eval`, `verifier_reads`); `follow_multi_complete`: a `multi` whose cells are all absent from the table and read later on a consistent trace is followed to its continuation on the oracle's values |
+| `FS2/DuplexTrace.lean` | trace calculus: `firstIdx`, `Read`, `Before` (total on reads, transitive, irreflexive); `tableBefore_eq`: on a consistent trace `tableBefore ∅ tr a b = if Before b a then some (H b) else none`; `card_dom_lt`: the number of distinct first reads bounds every table's domain; `noColl`, `noColl_injective`, `noColl_prefix_after`: outside the collision event an output is never `iv`, distinct read addresses have distinct outputs, and an address whose 32-byte prefix is a read address's output is read strictly after it |
+| `FS2/DuplexWalk.lean` | the transcript's cells `absC i`, `sqC i`, `adC i`, absorbed state `sv' i`, state `sv i`; `chal_eq`, `sv_succ`, `transcript_rounds`, `recs_eq`; `walk_eq`: any sub-table of a non-colliding execution containing the earlier `advance`/`absorb` cells walks back from `sv i` to the records |
+| `FS2/DuplexDecodes.lean` | `traceFrom_eq`; ordering: `abs_before_sq`, `abs_before_ad`, `ad_before_abs`, `abs_before_abs`, `ad_before_abs'`, `sv'_ne`; `decodesSpec`; `duplex_fiat_shamir_verifier` |
+
+The argument, as proved: every chain cell is read (by the verifier at the
+latest); the fresh absorbed state's bytes prefix the round's `squeeze` and
+`advance` cells, so those are read after the absorb; the advance output
+prefixes the next absorb, so all earlier cells precede a round's absorb and
+are in its first-read table; outputs are injective on read addresses, so the
+walk's `advance`/`absorb` preimages are unique and the decoded sampler is the
+round's; the absorbed state is not an earlier one (so the collision-guard
+branch is not taken); the round's two cells and every missing earlier squeeze
+cell are fresh at the absorb's first read and read later, so `follow`
+completes; the completion's squeeze values are the oracle's, so the completed
+prefix is the transcript's and the challenge is `(σ_i (H sq), H ad)`.
+
+## Evidence (clean replay, attempts 360–370; `-M4500`, `MemoryMax=7G`, zero swaps)
+
+| Target | SHA-256 | wall | peak RSS KiB | warnings (cosmetic) |
+|---|---|---:|---:|---:|
+| `lean/FS2/Statement.lean` | `e472de7d36479495d55e10436635344bf7d2187f223ae73bd0b1db3c78718b36` | 1.97 s | 3,338,000 | 0 |
+| `lean/FS2/LemmaA.lean` | `bc20b02b6cf5b5506acc3887ccd83e571cbcf2934220675fc13bd126275fad03` | 2.69 s | 3,353,044 | 0 |
+| `lean/FS2/Theorem.lean` | `77de94a4a2d61ce458e82d571f7a1f282821816f0be1a8c9fc25c631828abfe1` | 2.11 s | 3,338,764 | 3 |
+| `lean/FS2/Verifier.lean` | `6ee7184cfb3d8d9a8edc1fcc40f8a80b08d3a48ef6089ee36f40a3a1ae390bf1` | 1.86 s | 3,332,748 | 1 |
+| `lean/FS2/Duplex.lean` | `3a2c1330dfd39d59b10cdf1fc68b218432775b855c98e700d1ba938eeac2d88b` | 2.50 s | 3,354,784 | 2 |
+| `lean/FS2/DuplexDecode.lean` | `9aa6e9a61007ad3ec6b6dd23cf5cb6edf466306032d9e28de9ce04dddf673f3c` | 2.04 s | 3,337,772 | 2 |
+| `lean/FS2/DuplexDensity.lean` | `f912efd0346c04b20d930b06512c7a792d3e0143dbafc1305914d1c1978eced3` | 1.89 s | 3,342,252 | 4 |
+| `lean/FS2/DuplexInj.lean` | `d1e924dbb826082c0f744cefd031d0f6e3fe27d960e3d5e28b80ed8760e79e5d` | 1.58 s | 3,325,312 | 0 |
+| `lean/FS2/DuplexTrace.lean` | `4bd97d37b38e19e981faa86466182f2ca215b1dcca2c5949f5308710b7d1da9f` | 2.89 s | 3,342,364 | 3 |
+| `lean/FS2/DuplexWalk.lean` | `206f5cf79a51b4254d9bf60a70ba85c1b7c188f00e1bbe49445a6319681c875c` | 2.04 s | 3,337,232 | 1 |
+| `lean/FS2/DuplexDecodes.lean` | `e0bc8715cb65768fcfaa6dfa1a16fc417693797c0ff0478cc7aba596d169fe93` | 2.93 s | 3,363,136 | 0 |
+
+All exit 0. Attempts 248–356 (109 launches) all under the fixed caps; no cap
+raised; no unchanged failing job rerun.
+
+## Engineering note worth keeping
+
+Three times the elaborator hit the recursion limit on terms that were
+*syntactically identical* (`h : collOutput T f ⊢ collOutput T f := h`): the
+definition's body was a `Finset` membership at `Fin 32 → Byte`, and Lean
+unfolded it and evaluated `Finset.univ` (`Fintype.elems`, `Multiset.bind`,
+`Fin.foldr.loop`) while comparing `Fintype` instance terms. Cure, applied
+throughout: state collision predicates with plain existentials, prove all
+counting over abstract finite types, and never let a concrete
+`Finset.univ` over `State` or `Addr L` appear in a term that is unified
+(`theUnique_preimages`/`theUnique_cellsWith` are stated generically for this
+reason).
+
+## Still open (unchanged)
+
+Porting R0's state function to v2 (`R0FS` is on the v1 interface; the v2
+challenge is `(value, state)`), the 𝔼 sampler law (`SamplerLaws`), the
+`z₀`/`z₁` ledger rows, premise SEM, and the Rust-to-model refinement.

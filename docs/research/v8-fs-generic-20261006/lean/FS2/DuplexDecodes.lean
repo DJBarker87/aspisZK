@@ -14,6 +14,7 @@ namespace FS2.Duplex
 
 open FS FS2 AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisV8R19.AdaptiveFirstReadLaw
+open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
 open AspisV8PairedCommitment AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 noncomputable section
 
@@ -124,6 +125,218 @@ theorem sv'_ne (j i : Nat) (hji : j < i) (hi : i < r) :
   exact before_ne tr (abs_before_abs p x msg extract H π tr hcons Qtot hQ hcoll r hread j i hji hi)
 
 end Order
+
+
+/-! ## The assembly -/
+
+section Assembly
+variable (p : Params M Cv L) (x : X) (msg : Pf → Nat → M)
+  (extract : X → Table (Addr L) State → Option W)
+  (decision : Prefix X M (Chal Cv) → M → Bool) (P : Program (Addr L) State Pf) (Qtot : Nat)
+
+local notation "pr" => protocol p x msg extract
+local notation "V" => verifier (protocol p x msg extract) decision
+
+theorem decodesSpec (hQ : ∀ H, distinctFirstReads (eval H (experiment P (V) x)) ≤ Qtot) :
+    DecodesSpec p x msg extract P (V) Qtot := by
+  intro H hcoll i a hi
+  dsimp only
+  intro ha
+  -- the execution
+  set v := eval H (experiment P (V) x) with hv
+  set tr := v.1 with htr
+  have hπ : v.2.1 = (eval H P).2 := by rw [hv, experiment_eval]
+  set π := (eval H P).2 with hπdef
+  rw [hπ] at ha ⊢
+  have hcons : ∀ q ∈ tr, q.2 = H q.1 := FS.eval_consistent H _
+  have hQ' : firstReads emptyTable tr ≤ Qtot := hQ H
+  have hcoll' : ¬ hitsBad (badColl p Qtot) emptyTable tr := hcoll
+  have hr : (pr).r = p.rounds := rfl
+  -- every chain cell of every round is read (by the verifier)
+  have hread : ∀ j < p.rounds, Read tr (absC p x msg extract H π j) ∧
+      Read tr (sqC p x msg extract H π j) ∧ Read tr (adC p x msg extract H π j) := by
+    intro j hj
+    have hV : ∀ c, c ∈ (eval H ((pr).chain H x π j).toProgram).1.map Prod.fst → Read tr c := by
+      intro c hc
+      have := verifier_reads (pr) decision H x π j hj c hc
+      rw [htr, hv, experiment_eval]
+      unfold Read
+      simp only [List.map_append, List.mem_append]
+      exact Or.inr this
+    rw [chain_trace] at hV
+    simp only [List.map_cons, List.map_nil, List.mem_cons, List.not_mem_nil, or_false] at hV
+    exact ⟨hV _ (Or.inl rfl), hV _ (Or.inr (Or.inl rfl)), hV _ (Or.inr (Or.inr rfl))⟩
+  have hread2 : ∀ j < p.rounds, Read tr (absC p x msg extract H π j) ∧ Read tr (adC p x msg extract H π j) :=
+    fun j hj => ⟨(hread j hj).1, (hread j hj).2.2⟩
+  have ha' : a = absC p x msg extract H π i := by
+    rw [firstCell_chain] at ha
+    exact (Option.some.inj ha).symm
+  subst ha'
+  -- the table at the absorb's first read
+  set T := tableBefore emptyTable tr (absC p x msg extract H π i) with hT
+  have hT' : ∀ b w, T b = some w → w = H b ∧ Read tr b := by
+    intro b w hbw
+    rw [hT, tableBefore_eq H tr emptyTable _ b hcons] at hbw
+    split at hbw
+    · rename_i hB
+      exact ⟨(Option.some.inj hbw).symm, hB.1⟩
+    · cases hbw
+  have hT_before : ∀ b, Before tr b (absC p x msg extract H π i) → T b ≠ none := by
+    intro b hB
+    rw [hT, tableBefore_eq H tr emptyTable _ b hcons, if_pos hB]
+    exact Option.some_ne_none _
+  have hT_none : ∀ b, ¬ Before tr b (absC p x msg extract H π i) → T b = none := by
+    intro b hB
+    rw [hT, tableBefore_eq H tr emptyTable _ b hcons, if_neg hB]; rfl
+  have hcells : ∀ j < i, T (adC p x msg extract H π j) ≠ none ∧ T (absC p x msg extract H π j) ≠ none := by
+    intro j hj
+    exact ⟨hT_before _ (ad_before_abs' p x msg extract H π tr hcons Qtot hQ' hcoll' p.rounds hread j i hj hi),
+      hT_before _ (abs_before_abs p x msg extract H π tr hcons Qtot hQ' hcoll' p.rounds hread j i hj hi)⟩
+  have hwalk := walk_eq p x msg extract H π tr hcons Qtot hQ' hcoll' p.rounds hread2 i p.rounds
+    (le_of_lt hi) (le_of_lt hi) T hT' hcells
+  -- the decoded sampler
+  have hcollide : ¬ collides (recs p x msg extract H π i) (sv' p x msg extract H π i) := by
+    intro hc
+    rw [collides, recs_eq, List.map_map, List.mem_map] at hc
+    obtain ⟨j, hj, hje⟩ := hc
+    rw [List.mem_range] at hj
+    exact sv'_ne p x msg extract H π tr hcons Qtot hQ' hcoll' p.rounds hread j i hj hi hje
+  have hdec : (pr).decode (absC p x msg extract H π i) T =
+      some (.ask (absC p x msg extract H π i) fun s' =>
+        if collides (recs p x msg extract H π i) s' then
+          .done (⟨x, List.replicate p.rounds (msg π i, (p.σ 0 s', s'))⟩, msg π i, (p.σ 0 s', s'))
+        else
+          .multi (squeezeA p s') (advanceA p s' :: missingCells p T (recs p x msg extract H π i) s')
+            (missingCells_nodup p T (recs p x msg extract H π i) s') fun acc =>
+              .done (completePrefix p x T (recs p x msg extract H π i) acc, msg π i,
+                (p.σ (recs p x msg extract H π i).length (acc (squeezeA p s')),
+                  acc (advanceA p s')))) := by
+    simp only [protocol, decode, parseAbsorb_absC, p.decEnc, hwalk]
+  refine ⟨_, hdec, ?_⟩
+  · -- follow the sampler from the absorb's first read
+    obtain ⟨rest, hrest, hrcons, hmem⟩ := traceFrom_eq H tr _ hcons (hread i hi).1
+    rw [hrest]
+    change follow (Sampler.ask _ _) T ((absC p x msg extract H π i, sv' p x msg extract H π i) :: rest) = _
+    simp only [follow, if_true]
+    rw [hT, tableBefore_self H tr _ hcons]
+    simp only [if_true]
+    rw [if_neg hcollide]
+    have hfresh : ∀ c ∈ squeezeA p (sv' p x msg extract H π i) ::
+        advanceA p (sv' p x msg extract H π i) :: missingCells p T (recs p x msg extract H π i)
+          (sv' p x msg extract H π i),
+        (put T (absC p x msg extract H π i) (sv' p x msg extract H π i)) c = none ∧
+          c ∈ rest.map Prod.fst := by
+      intro c hc
+      have hsq := abs_before_sq p x msg extract H π tr hcons Qtot hQ' hcoll' p.rounds hread i hi
+      have had := abs_before_ad p x msg extract H π tr hcons Qtot hQ' hcoll' p.rounds hread i hi
+      have hne1 : ∀ s, squeezeA p s ≠ absC p x msg extract H π i := by
+        intro s; unfold absC; exact squeezeA_ne_absorbA p _ _ _ _ _
+      have hne2 : ∀ s, advanceA p s ≠ absC p x msg extract H π i := by
+        intro s; unfold absC; exact advanceA_ne_absorbA p _ _ _ _ _
+      simp only [List.mem_cons] at hc
+      rcases hc with rfl | rfl | hc
+      · refine ⟨?_, hmem _ (hread i hi).2.1 hsq⟩
+        rw [put, if_neg (hne1 _)]
+        apply hT_none
+        intro h
+        exact lt_asymm hsq.2 h.2
+      · refine ⟨?_, hmem _ (hread i hi).2.2 had⟩
+        rw [put, if_neg (hne2 _)]
+        apply hT_none
+        intro h
+        exact lt_asymm had.2 h.2
+      · rw [missingCells, List.mem_dedup, List.mem_filter, List.mem_map] at hc
+        obtain ⟨⟨r', hr', rfl⟩, hfilt⟩ := hc
+        have hfilt' := decide_eq_true_iff.mp hfilt
+        rw [recs_eq, List.mem_map] at hr'
+        obtain ⟨j, hj, rfl⟩ := hr'
+        rw [List.mem_range] at hj
+        dsimp only at hfilt' ⊢
+        refine ⟨?_, ?_⟩
+        · rw [put, if_neg (hne1 _)]
+          exact hfilt'.1
+        · apply hmem _ (hread j (by omega)).2.1
+          rcases before_total tr _ _ (hread i hi).1 (hread j (by omega)).2.1
+            (Ne.symm (hne1 _)) with h | h
+          · exact h
+          · exact absurd hfilt'.1 (hT_before _ h)
+    rw [← hT]
+    rw [follow_multi_complete H rest _ _ _ _ _ hrcons hfresh]
+    -- the output is the round's prefix, message and challenge
+    congr 1
+    refine Prod.ext ?_ (Prod.ext rfl ?_)
+    · set acc := accOf H (squeezeA p (sv' p x msg extract H π i) ::
+        advanceA p (sv' p x msg extract H π i) ::
+          missingCells p T (recs p x msg extract H π i) (sv' p x msg extract H π i)) default with hacc
+      show completePrefix p x T (recs p x msg extract H π i) acc = (pr).transcript H x π i
+      have hstmt := transcript_statement p x msg extract H π i
+      have hrounds : completeRounds p T acc 0 (recs p x msg extract H π i) =
+          ((pr).transcript H x π i).rounds := by
+        apply completeRounds_recs
+        intro j hj
+        cases hTj : T (sqC p x msg extract H π j) with
+        | some w => simp only [Option.getD_some]; exact (hT' _ _ hTj).1
+        | none =>
+            simp only [Option.getD_none]
+            rw [hacc, accOf_apply]
+            have hmemc : sqC p x msg extract H π j ∈ squeezeA p (sv' p x msg extract H π i) ::
+                advanceA p (sv' p x msg extract H π i) ::
+                  missingCells p T (recs p x msg extract H π i) (sv' p x msg extract H π i) := by
+              right; right
+              unfold missingCells
+              apply List.mem_dedup.mpr
+              apply List.mem_filter.mpr
+              refine ⟨?_, ?_⟩
+              · apply List.mem_map.mpr
+                refine ⟨(sv p x msg extract H π j, sv' p x msg extract H π j, msg π j,
+                  H (adC p x msg extract H π j)), ?_, rfl⟩
+                rw [recs_eq]
+                exact List.mem_map.mpr ⟨j, List.mem_range.mpr hj, rfl⟩
+              · apply decide_eq_true_iff.mpr
+                refine ⟨hTj, ?_, ?_⟩
+                · intro e
+                  exact sv'_ne p x msg extract H π tr hcons Qtot hQ' hcoll' p.rounds hread j i hj hi
+                    (squeezeA_injective p e)
+                · exact squeezeA_ne_advanceA' p _ _
+            rw [if_pos hmemc]
+      cases h : (pr).transcript H x π i with
+      | mk st rs =>
+          simp only [completePrefix]
+          rw [h] at hstmt hrounds
+          simp only at hstmt hrounds
+          rw [hstmt, hrounds]
+    · show (p.σ (recs p x msg extract H π i).length _, _) = (pr).chal H x π i
+      rw [recs_length, chal_eq, accOf_apply, accOf_apply]
+      simp only [List.mem_cons, true_or, or_true, if_true, Prod.mk.injEq]
+      try exact ⟨rfl, rfl⟩
+
+/-- A chain's first cell is in its own trace (any transcript statement). -/
+theorem firstCell_mem_chain (x' : X) (H : Addr L → State) (π : Pf) (j : Nat) (a : Addr L)
+    (ha : firstCell ((pr).chain H x' π j) = some a) :
+    a ∈ (eval H ((pr).chain H x' π j).toProgram).1.map Prod.fst := by
+  change firstCell (samp p j _ _) = some a at ha
+  change a ∈ (eval H (samp p j _ _).toProgram).1.map Prod.fst
+  simp only [samp, firstCell, Option.some.injEq] at ha
+  subst ha
+  simp [samp, Sampler.toProgram, eval, multiProg]
+
+/-- The duplex Fiat–Shamir bound with the chain-running verifier: no
+remaining (INJ) obligation. -/
+theorem duplex_fiat_shamir_verifier (rb : RoundByRound' X M (Chal Cv) (Addr L) State)
+    (hD1 : FS2.D1 (pr) rb) (hD2 : FS2.D2 (pr) rb) (hD3 : FS2.D3 (pr) rb (V))
+    (hQ : ∀ H, distinctFirstReads (eval H (experiment P (V) x)) ≤ Qtot) :
+    mean (fun H : Addr L → State =>
+        indicator (accepts (eval H (experiment P (V) x)) ∧
+          extractFails (pr) x (eval H (experiment P (V) x)))) ≤
+      (Qtot : ℚ) * maxErr rb.ε p.rounds + κ Qtot :=
+  duplex_fiat_shamir p x msg extract rb P (V) Qtot hD1 hD2 hD3
+    (fun H x' π j a hj ha => verifier_reads (pr) decision H x' π j hj a
+      (firstCell_mem_chain p x msg extract x' H π j a ha))
+    hQ (decodesSpec p x msg extract decision P Qtot hQ)
+
+#print axioms decodesSpec
+#print axioms duplex_fiat_shamir_verifier
+end Assembly
 
 end
 end FS2.Duplex
