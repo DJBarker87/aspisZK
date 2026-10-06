@@ -1927,3 +1927,204 @@ Failed attempts (all exit 1; no memory limit was raised):
 - CitedKernelImport (R370 + WideTower): the same duplicate natural-basis constant; 1.79 s, 5655472 KiB, zero swaps; the R370-only import and audit passed.
 - RoundNormalization-04: the new comparison witness needed an explicit coefficient-of-one simplification at index 4; 3.87 s, 6732484 KiB, zero swaps; RoundNormalization-05 passed.
 - Local evidence-summary glob included a scope-command JSON list; restricted it to the four exact final target reports, then verified every local SHA against the compiled source.
+
+## R0 corrected opening-layer replay 2026-10-06
+
+The corrected F5, F6 and the opening-layer theorem of §5 are compiled from
+source. F4 is retained unchanged and replayed. No further mathematical error
+or missing paper hypothesis was found; no threshold, cap, list size, code
+image, challenge exclusion, or protocol parameter was changed. R0 remains
+unreviewed; this record does not establish end-to-end soundness.
+
+- `AspisR0.Round.F5` / `wideF5`: degree at most six, the explicit nonzero
+  quarter `((2:K)*2)⁻¹`, quarter-scaled evaluation, and coefficient boundary.
+  `Round.fold_eq_core`, `dual_eq_core`, `polynomial_eq_core` and
+  `KernelCorrespondence.correspondence` connect the exact F4 fold to the
+  literal R370 `firstFold`, unscaled `dualFold`, `kernelEval`, and every
+  source coefficient through the shared `RoundCore` definitions. The two
+  historical counterexample files now explicitly concern the old unscaled
+  statement, resolved by `cd5eb4226`.
+- `AspisR0.Chord.F6` / `wideF6`: the actual exact-encoder image, its two
+  linear image conditions, quotient pairing, a fixed linear degree-one
+  interpolant, and no chord zero on the domain. Writing a message as
+  `p0(x)+y*p1(x)`, both degrees at most 511, the conditions are
+  `p1.coeff 511=0` and `b*p0.coeff 511-c*p1.coeff 510=0` for
+  `L=a+b*x+c*y`. The three possible spillover coefficients reduce to these
+  two because the secant has `b≠0 ∨ c≠0`. No third condition is required.
+  Quotient weights are the transpose of line multiplication followed by
+  coefficient truncation in this exact message basis; on the two-condition
+  kernel, no truncation occurs. This does not close source-refinement gap 8.
+- `ListsResponses` defines Close, Lambda, LambdaR, and both response notions.
+  Tuples use unique exact messages; `LambdaCodewords` is their encoded image.
+  `gamma_matched_iff` and the imported final matching equivalence identify
+  precisely the paper's message-level matches. Existential bad responses
+  are bounded by selecting an offending response per challenge, then using
+  the existing strategy theorems. `FibreRestoration.matched_close` restores
+  all four symbols and uses `4*9558=38232`, without changing 38230 or 9558.
+- `AspisR0.Opening.binding`, `wideBinding`, and `wideProtocolBinding` prove
+  all three extraction conclusions and subfield descent. Every committed
+  word, challenge and prover message is a variable; V1, corrected V2,
+  reconstruction and the degree check are explicit. Semantic acceptance
+  and authentication are abstract predicates, not newly proved premises.
+  `protocolField` uses the base-field image for lanes 0–25 and the QM31
+  image for lanes 26–28. The theorem permits any fixed inactive set and
+  therefore applies to the stated 810-row set; no source layout is asserted.
+- `QueryLaw.uniform_subset_bound` proves the exact uniform q-subset count
+  ratio and its bound when `|M|≤9557`; `uniform_q22_bound` specializes it.
+  The actual `R417Q22SuccessLaw.uniform_success` imports successfully and
+  is audited by `QueryLaw.source_uniform_success`; no substitute sampler-law
+  hypothesis was needed. Its bounded independent-answer kernel retains its
+  success-mass factor. No shared-oracle or production-execution law is claimed.
+
+`Opening.bad_set_cardinalities` gives, in order B1 through B7:
+`336869026605739, 5600, 8400, 300, 200, 9396508281246, 600`.
+`Opening.grouped_cardinalities` gives the gamma union cap
+`336869026605739+14000` and alpha union cap `9396508281246+600`.
+Thus the exact constants agree with §6's **14000, 300, 200, 600**.
+B2 and B3 are subsets of the protocol's nonzero gamma challenge space;
+`gamma≠0` is explicit in the binding theorem. The root bounds cite
+`width29_nonzero_collision_card_le`; the other union bounds use the exact
+single and joint lists and polynomial degrees 3, 2 and 6.
+
+Environment and scope:
+
+- Started at `cd5eb422611e26b377a080a70b560ad47e752ede`; concurrent committed
+  FS work advanced the same branch to `efcfd20704b20d71fe45c111eb2983af5322206b`
+  and was preserved. The source revision is that parent plus the exact
+  source hashes below, in the commit containing this record. No FS files
+  were edited or used to discharge an R0 premise.
+- The Linux reservation check rejected three launches before Lean started:
+  existing populated outer caps totaled 60.375 GiB against a 55 GiB safe
+  limit; another 7 GiB scope was unavailable. No other workload was stopped
+  or recapped. The owner then explicitly instructed: “just do it locally on mac”.
+- macOS arm64, Darwin 25.5.0, 24 GiB RAM. Pinned Lean **4.32.0**, commit
+  `8c9756b28d64dab099da31a4c09229a9e6a2ef35`; executable SHA-256
+  `1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554`.
+  Mathlib: `81a5d257c8e410db227a6665ed08f64fea08e997`.
+- Read-only package objects: `/Users/dominic/ZK/AspisFormal/.lake/packages/*/.lake/build/lib/lean`.
+  Project objects were copied from the remote replay's `pinned-v7`, Wide
+  `objects`, prior R0 objects, and `aspis-r126-release-20260930-a/lib`, in
+  that precedence order, keeping earlier duplicates. They are combined at
+  `/tmp/aspis-r0-resume/local/project-cache`. The original caches were not
+  edited. There was no `lake build`, package build, or numerical certificate
+  generation. The separate V8 kernel environment avoids the known duplicate
+  natural-basis namespace; shared `RoundCore` bridges the formulas.
+- Every source check used `lake env lean -j1 -M7000 -DElab.async=false`;
+  neither the Lean memory setting nor any host cap was raised after failure.
+  macOS has no systemd scope: no Linux cgroup or zero-swap cap is claimed for
+  these owner-authorized local checks. `/usr/bin/time -l` reports zero swaps
+  in every recorded local check.
+- Scheduling deviation: the first small `RoundCore` and `ChordDegree` pilots
+  overlapped by approximately 1.55 seconds (completion timestamps minus
+  measured runtimes). Their individual peaks summed to about 5.30 GiB.
+  A process lock was then added; all subsequent jobs were serialized.
+  Each final launch also checked that no other Lean process was active.
+
+Import-only local measurements, before the corresponding proof families:
+
+| Import target | Exit | Wall | Peak RSS KiB | Swaps |
+|---|---:|---:|---:|---:|
+| Polynomial evaluation + Mathlib.Tactic | 0 | 20.00 s | 2655360 | 0 |
+| R0.Fold + Wide.EncoderLinearity | 0 | 78.72 s | 3697312 | 0 |
+| Wide.JointList + Wide.MatchedInstances + Wide.SubfieldDescent | 0 | 7.52 s | 5366032 | 0 |
+
+These footprints supported the unchanged `-M7000` setting. Concrete-width
+natural-basis reduction hit that limit during a pilot; the replacement
+proves linearity at symbolic width and only then instantiates width 512.
+The final replay used a fresh output tree, with no R0 object fallback:
+`/tmp/aspis-r0-resume/final/objects` precedes the merged project cache and
+local read-only package paths in `LEAN_PATH`. One 25-file final replay ran;
+the unchanged Wide and V8 manifests were not repeated.
+
+```sh
+/usr/bin/time -l \
+  /Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env \
+  /Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean \
+  -j1 -M7000 -DElab.async=false \
+  -R /Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/docs/research/v8-wide-reference-20261005/lean \
+  -o "/tmp/aspis-r0-resume/final/objects/R0/$name.olean" \
+  "/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922/docs/research/v8-wide-reference-20261005/lean/R0/$name.lean"
+```
+
+The driver uses absolute source paths and a temporary minimal Lake workspace.
+Final records below use Apple `time` wall seconds and RSS converted from
+bytes to KiB. PCQ means exactly `propext, Classical.choice, Quot.sound` in
+every printed report. The definitions-only file is audited through its
+consuming theorems. All source hashes were checked against the final replay.
+
+| File under lean/R0/ | SHA-256 | Exit | Wall | Peak RSS KiB | Swaps | Axioms |
+|---|---|---:|---:|---:|---:|---|
+| RoundCore.lean | `ed8ec17a9bd129581f8f06ad13be58f6fc66adc3b45c17832c93deaecf3b7454` | 0 | 7.42 s | 2795520 | 0 | 1 reports, PCQ |
+| KernelCorrespondence.lean | `c6da048ce4097d4163eb4d0fbfc6b8719ed224c5ec7eb10090169d1cf10c97f5` | 0 | 1.67 s | 2802624 | 0 | 1 reports, PCQ |
+| CitedKernelAudit.lean | `df9c613428d796a05f0a3de573c4b4dbb10d83dbe08b075ae8fb3bf481d1fa50` | 0 | 1.18 s | 1967504 | 0 | 2 reports, PCQ |
+| ChordDegree.lean | `3cdb65a53141e834b422b4e17ffeec20e6069682c23d7fe2e0eeaca2b9683248` | 0 | 1.85 s | 2801760 | 0 | 2 reports, PCQ |
+| ChordGeometry.lean | `1fe7c50563c7da85dad935fd4aa1567debd785e2488c8138290fcce3e72819e6` | 0 | 2.16 s | 2812384 | 0 | 2 reports, PCQ |
+| LinearDual.lean | `f6e20b5694301d4fe0c82a0ef03aa7605576de49af5b94bc439892d4d4c59388` | 0 | 1.64 s | 2793152 | 0 | 1 reports, PCQ |
+| RootCounts.lean | `e24d2db97d260aef358874644030f4b8e18b34e86b1eeb31b2a94583386ab42c` | 0 | 1.57 s | 2786640 | 0 | 2 reports, PCQ |
+| ResponseSelection.lean | `4a9b5979019924b6cc538480ec06b802d4eac1bd14ba5a098890bc5a346075fd` | 0 | 1.52 s | 2783936 | 0 | 1 reports, PCQ |
+| FunctionalWeights.lean | `d5387a5ffe8a6ba824312fff112d7cb998a68e38cd1a36b8acdd79bebd9f96d0` | 0 | 1.61 s | 2793664 | 0 | 1 reports, PCQ |
+| Fold.lean | `fab2b0dc3cf0e32dd414e6737660d208989e2b8eb4ecd35eeb23354cd0e93329` | 0 | 17.79 s | 5532832 | 0 | 2 reports, PCQ |
+| RoundNormalization.lean | `de099073bffc2c73d24b161213d286ab66d80fc8649f0199fdc07ece7dbcb60a` | 0 | 4.46 s | 5491280 | 0 | 5 reports, PCQ |
+| Round.lean | `ac4c9c948dc832a1abb54ce73ac3889e169b8ca4a144e3722986141cb40f33e8` | 0 | 3.52 s | 5428448 | 0 | 6 reports, PCQ |
+| PolynomialPair.lean | `0c1772aadc2902ac392c9d086161deaf131565c611619ae538c4bdcf5e51099f` | 0 | 4.29 s | 5538160 | 0 | 3 reports, PCQ |
+| ChordImage.lean | `63dcc3d21f38eb7f83649a4a2691998e3200c64f8e8ccc33110233364f4dc06d` | 0 | 4.94 s | 5596400 | 0 | 4 reports, PCQ |
+| Chord.lean | `ade2d0d7ccbaa66cac517578e8c4ead02b674d81fb1e2f1638f3746c2b01d189` | 0 | 4.73 s | 5457280 | 0 | 4 reports, PCQ |
+| ListsResponses.lean | `cd96f9fd4c3ee6fdfc5882b9b09e00004d8f2320e8f40f7b38e7cbce0c3a2902` | 0 | 3.80 s | 5489696 | 0 | 9 reports, PCQ |
+| FibreRestoration.lean | `f8c3800d14d941c92cc697fa4a0e36c4a722dc22e795d2283ba6651ba910ca2a` | 0 | 3.64 s | 5495008 | 0 | 3 reports, PCQ |
+| OpeningDefinitions.lean | `6368b282b28ff076b54dae55fd53556c8f09c5cae8710ac9e4782c64ef57138a` | 0 | 3.58 s | 5471056 | 0 | definitions; downstream audit |
+| BadSetBounds.lean | `5a9af89ca089c0367f322685a10259b9935306435256bbfdfe1a1ce001562d72` | 0 | 4.13 s | 5501488 | 0 | 12 reports, PCQ |
+| OpeningAlgebra.lean | `07d47e9bcb0c6322e4d3da97485e6188cec4ea12b400e0003113fb541ad778a4` | 0 | 3.68 s | 5495008 | 0 | 3 reports, PCQ |
+| Binding.lean | `21a81a23a7cee4086d3e24959520990c9074f5cb8c0944b8330fa44d5059d4f9` | 0 | 3.86 s | 5505280 | 0 | 7 reports, PCQ |
+| ProtocolFields.lean | `eae34ca574b6fc77e20edea6362f1cb4d971dcac151c689c058fb8ab1b415e16` | 0 | 3.87 s | 5445536 | 0 | 3 reports, PCQ |
+| Ledger.lean | `31ce33bfc0e4754eb28ad1230eb9fc30b9ce5c581acae0b4ec52ef78d5fd608c` | 0 | 3.42 s | 5521696 | 0 | 3 reports, PCQ |
+| QueryLaw.lean | `d48fb07703abcfb962c6a14d161e2ef27435686b4cb44c4749c6f3ec6ce47197` | 0 | 1.65 s | 2794816 | 0 | 3 reports, PCQ |
+| Audit.lean | `6c98f3cfa558dd84498e9a4fb2f3f7e831f496516b974f05edfae2c43eb714ac` | 0 | 3.19 s | 5371904 | 0 | 14 reports, PCQ |
+
+All 25 targets exited 0: **94 axiom reports**, all PCQ; total measured
+wall time 95.17 s; largest target RSS 5596400 KiB; zero swaps.
+Exact commands, paths, raw stdout, Apple time records and hashes are retained
+in `/tmp/aspis-r0-resume/final/evidence/Final-*.{stdout,time,json}` and
+`final-manifest.json`; focused attempts are under `local/evidence/`.
+The driver monotonic wall clock differed from Apple time for two early
+pre-final checks; the final table consistently uses Apple time.
+
+Failed attempts, one line per recorded launch (all local swaps zero):
+
+- `ResumeCoreImport`: remote reservation rejected before compiler launch; no scope started.
+- `ResumeWideImport`: remote reservation rejected before compiler launch; no scope started.
+- `Resume-Core-01`: remote reservation rejected before compiler launch; no scope started.
+- `Local-BadSetBounds-01`: exit 1, 4.20 s, 5349360 KiB; finite lists unfolded during elaboration and coefficient lemmas were incomplete; protect lists locally and calculate coefficients.
+- `Local-BadSetBounds-02`: exit 1, 20.39 s, 5347456 KiB; unfold pointDefect and turn the constant coefficient equation into an equality.
+- `Local-BadSetBounds-03`: exit 1, 9.88 s, 5391824 KiB; constant coefficient remained a subtraction equation; apply sub_eq_zero.
+- `Local-Binding-01`: exit 1, 3.89 s, 5353776 KiB; local support abbreviations and pair projections were not normalized for the matching lemmas.
+- `Local-Chord-01`: exit 1, 10.40 s, 5372768 KiB; axis decidability, polynomial-X qualification and explicit specialization type were missing.
+- `Local-Chord-02`: exit 1, 32.69 s, 5395744 KiB; degree/axis simplification and concrete Wide specialization; use guarded rewrites and type_of%.
+- `Local-ChordGeometry-01`: exit 1, 4.10 s, 2763024 KiB; coefficient simplification expanded constant powers; use restricted coefficient lemmas.
+- `Local-ChordGeometry-02`: exit 1, 3.64 s, 2761968 KiB; simplifier returned a disjunction for the zero product; eliminate its impossible branches.
+- `Local-ChordImage-01`: exit 1, 6.27 s, 5380960 KiB; coordinate embeddings/slot rewrite and linear-map conversion needed explicit bridges.
+- `Local-ChordImage-02`: exit 1, 6.98 s, 5451424 KiB; congr unfolded the chosen lift; use congrArg on the fixed lift map.
+- `Local-FibreRestoration-01`: exit 1, 6.31 s, 5342672 KiB; slot/curve/product representations needed explicit equality lemmas.
+- `Local-FibreRestoration-02`: exit 1, 48.32 s, 5210832 KiB; Fin projections and expanded final curve blocked arithmetic; expose projections and the finite sum.
+- `Local-ListsResponses-01`: exit 1, 20.08 s, 5379696 KiB; concrete finite-list conversion and response default instances; expose representation lemmas.
+- `Local-ListsResponses-02`: exit 1, 23.51 s, 5344960 KiB; list conversion recursion and support projection in arithmetic; simplify projections explicitly.
+- `Local-ListsResponses-03`: exit 1, 21.86 s, 5328624 KiB; finite-list elaboration still unfolded enumerations; abstract the family before applying the bound.
+- `Local-ListsResponses-04`: exit 1, 29.49 s, 5339936 KiB; rewriting the family under a dependent subtype gave an invalid motive; change the cardinality proof.
+- `Local-ListsResponses-05`: exit 1, 33.10 s, 5313360 KiB; subtype conversion still recursed; use Fintype.card_subtype directly, as the existing GS theorem does.
+- `Local-OpeningAlgebra-01`: exit 1, 4.57 s, 5349968 KiB; explicit dot-product arguments and the global map_sum lemma were required.
+- `Local-PairTrace-01`: exit 1, 29.92 s, 7333744 KiB; kernel memory limit at concrete naturalLinear; replace it by a symbolic-width theorem, keeping -M7000.
+- `Local-PolynomialPair-01`: exit 143, 425.46 s, 5452864 KiB; stopped the slow concrete-width attempt; isolate declarations before retrying.
+- `Local-PolynomialPair-02`: exit 1, 14.05 s, 5429456 KiB; conversion recursion in composed linear maps; expose named apply lemmas.
+- `Local-PolynomialPair-03`: exit 1, 13.01 s, 5433648 KiB; linear-map projection did not simplify; prove the coordinate-function equality explicitly.
+- `Local-PolynomialPair-04`: exit 1, 12.34 s, 5434112 KiB; implicit even/odd width and conversion recursion; specify n=512 and simplify product projections.
+- `Local-PolynomialPair-05`: exit 1, 13.84 s, 5432304 KiB; concrete truncateLinear conversion recursed; isolate truncation add/smul facts.
+- `Local-PolynomialPair-06`: exit 1, 7.00 s, 5445680 KiB; truncateLinear apply still recursed; use direct symbolic polynomial equalities.
+- `Local-ProtocolFields-01`: exit 1, 21.15 s, 5340368 KiB; two open namespaces supplied P; qualify AspisCircleGroupOrder.P.
+- `Local-QueryLaw-01`: exit 1, 1.59 s, 2742656 KiB; numeric field notation for Nat.choose was invalid; use the qualified function.
+- `Local-WideImport-01`: exit 1, 1.06 s, 109472 KiB; R0 root shadowed the cached Fold object; symlink the missing prior R0 objects into the temporary output root.
+
+No §5 stop condition was reached after the owner's quarter correction.
+Gaps 1–5 are closed by their named Lean endpoints; gap 13 is unchanged and
+resolved. SEM, R0-specific FS instantiation, privacy, source refinement,
+wide-field sampler implementation, extraction complexity, review, and the
+round-by-round state function remain open or outside this task. No Rust,
+SBF, CU, production protocol or parameter change is included.

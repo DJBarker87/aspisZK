@@ -2,7 +2,8 @@ import AspisV8R19.R370KernelEvaluation
 
 /-! An independent audit of the literal R370 constants cited by the paper.
 Keep separate from Wide imports, which conflict with the V8 natural-basis
-namespace. No interpretation of the paper's unspecified DualFold is selected. -/
+namespace. These historical counterexamples refute only the former unscaled
+form, corrected by owner decision in cd5eb4226. -/
 set_option autoImplicit false
 namespace AspisR0.CitedKernelAudit
 open AspisR19.R370KernelEvaluation

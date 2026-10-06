@@ -1,20 +1,22 @@
-import R0.RoundNormalization
-import Wide.MatchedInstances
-import Wide.JointList
-import Wide.SubfieldDescent
+import R0.ProtocolFields
+import R0.Ledger
 
-/-! Integration and axiom audit. The opening-layer theorem is deliberately
-absent: R0_SOUNDNESS.md gap 13 records the stopped F5/(V2) comparison.
-The literal V8 citation audit is separate because its natural-basis names
-conflict with the pinned V7 names required by Wide. -/
+/-! Integration and axiom audit for the corrected opening-layer theorem.
+The original-kernel correspondence and uniform-query law are audited in
+separate modules, without merging incompatible historical basis namespaces.
+Gap 13's counterexamples concern the superseded unscaled statement only. -/
 
 #print axioms AspisR0.Fold.F4
 #print axioms AspisR0.Fold.wideF4
-#print axioms AspisR0.RoundNormalization.wide_cited_round_identities
-#print axioms AspisR0.RoundNormalization.wide_unscaled_F5_counterexample
-#print axioms AspisR0.RoundNormalization.comparison_step_counterexample
-#print axioms AspisWide.Instances.wideInitialWidth29CurveDecodable
-#print axioms AspisWide.Instances.wideFinalDegreeThreeCurveDecodable
-#print axioms AspisWide.MatchedInstances.wideFinal_bad_response_challenges_card_le
-#print axioms AspisWide.JointList.wideJointInitialCodewords_card_le_100
+#print axioms AspisR0.Round.F5
+#print axioms AspisR0.Round.wideF5
+#print axioms AspisR0.Chord.F6
+#print axioms AspisR0.Chord.wideF6
+#print axioms AspisR0.Chord.interpolationLinear
+#print axioms AspisR0.FibreRestoration.matched_close
+#print axioms AspisR0.Opening.bad_set_cardinalities
+#print axioms AspisR0.Opening.grouped_cardinalities
+#print axioms AspisR0.Opening.binding
+#print axioms AspisR0.Opening.wideBinding
+#print axioms AspisR0.Opening.wideProtocolBinding
 #print axioms AspisWide.SubfieldDescent.wideInitialCodeword_subfield_descent

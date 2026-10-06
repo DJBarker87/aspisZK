@@ -130,10 +130,10 @@ $a_\gamma=336869026605739$, $a_f=9396508281246$.
   $P_{q,w}(\alpha)=\tfrac14\langle\mathrm{Fold}_\alpha q,\mathrm{DualFold}_\alpha w\rangle$
   and $c_0+c_4=\tfrac14\langle q,w\rangle$. Lean: `kernel_eval_pairing`
   (`R370KernelEvaluation.lean`), `coefficient_boundary`
-  (`R653SourceCoefficientBoundary`). **OPEN: normalisation finding, gap 13.**
-  `AspisR0.RoundNormalization.wide_unscaled_F5_counterexample` refutes the
-  displayed evaluation equality when `DualFold` means the cited unscaled
-  `dualFold`; F5 is not marked proved.
+  (`R653SourceCoefficientBoundary`). **Lean over the exact encoders:**
+  `AspisR0.Round.F5`, `AspisR0.Round.wideF5` (`lean/R0/Round.lean`), with the
+  literal source correspondence `AspisR0.KernelCorrespondence.correspondence`.
+  Gap 13 concerns the superseded unscaled statement and remains resolved.
 - **F6 (image and pairing).** There are linear functionals $e_1,e_2$ on
   $\mathbb E^{1024}$, depending only on the chord, with
   $L\cdot\mathrm{Enc}(q)\in\mathcal C\iff e_1(q)=e_2(q)=0$; and for such $q$,
@@ -142,7 +142,9 @@ $a_\gamma=336869026605739$, $a_f=9396508281246$.
   `ordinary_source_boundary_of_image_tails` (`R896`),
   `source_chord_transpose_pairing`, `inverseTransport_dot`
   (`AspisV8R16/TransportDual.lean`), `original_weights_transported_pairing`
-  (`AspisV8R17/SourceOriginalWeights.lean`). Gap 3.
+  (`AspisV8R17/SourceOriginalWeights.lean`). **Lean over the exact image:**
+  `AspisR0.Chord.F6`, `AspisR0.Chord.wideF6` (`lean/R0/Chord.lean`), with
+  `AspisR0.Chord.interpolationLinear`; gap 3 closed, compiled 2026-10-06.
 - **F7 (distance).** Two distinct codewords of $\mathcal C$ agree on at most
   1024 points of $D$ (V7 exact GRS conversion; `decision.md` §1 uses the same
   root bound).
@@ -179,7 +181,7 @@ Nothing found. That is not a proof of absence.
 
 ## 5. The opening-layer theorem
 
-**2026-10-06 formalisation finding:** the F5/(V2) comparison after step 6 is incomplete as written, and false with the cited unscaled dual fold; see gap 13.
+**2026-10-06 formalisation status:** the corrected opening-layer theorem is `AspisR0.Opening.binding`, with `wideBinding` and `wideProtocolBinding`; all seven bad-set bounds and the uniform-subset statement are compiled. No further §5 error was found. Gap 13 remains the resolved historical finding; R0 is still unreviewed.
 
 Fix the committed words $W=(W_l)$. For a word $f$ on $D$ write
 $\mathrm{Close}(f)=\{q:\mathrm{Enc}(q)\text{ agrees with }f\text{ on}\ge38230\text{ points}\}$.
@@ -344,14 +346,14 @@ Step 5 is the one that is not routine.
 2. **CLOSED (Replay 2026-10-06):** the matched form of F2 is
    `AspisWide.MatchedInstances.wideFinal_bad_response_challenges_card_le`;
    `final_matchingDecomposition_iff` identifies the message-level match.
-3. F6 as one statement (the image equivalence and the pairing with the
-   interpolant correction) is assembled here from several Lean lemmas about
-   the source-shaped weights; no single theorem states it.
-4. **PARTLY CLOSED (2026-10-06):** F4 for the exact encoders is
-   `AspisR0.Fold.F4` / `AspisR0.Fold.wideF4`. F5 remains open because of
-   gap 13; the cited normalisation is audited by
-   `AspisR0.RoundNormalization.cited_round_identities` and
-   `AspisR0.CitedKernelAudit.literal_cited_kernel`.
+3. **CLOSED (2026-10-06):** `AspisR0.Chord.F6` / `AspisR0.Chord.wideF6`
+   state the exact-image equivalence, quotient pairing, interpolant values,
+   and absence of domain zeros. `AspisR0.Opening.binding` combines the pairing
+   with the interpolant correction.
+4. **CLOSED (2026-10-06):** F4 for the exact encoders is
+   `AspisR0.Fold.F4` / `AspisR0.Fold.wideF4`; corrected F5 is
+   `AspisR0.Round.F5` / `AspisR0.Round.wideF5`, with literal kernel
+   correspondence `AspisR0.KernelCorrespondence.correspondence`.
 5. **CLOSED (Replay 2026-10-06):** F3 is
    `AspisWide.MultiplicityThreeGS.exactInitialCloseCandidate_card_lt_101`;
    the joint-list bound is

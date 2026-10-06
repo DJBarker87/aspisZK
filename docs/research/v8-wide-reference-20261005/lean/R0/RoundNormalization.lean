@@ -1,14 +1,11 @@
 import R0.Fold
 
-/-! Audit of F5 as cited in R0_SOUNDNESS.md. This file retains the unscaled
-dual fold of `AspisR19.R370KernelEvaluation.dualFold` and the quarter-scaled
-source coefficient formula. It does not choose a new meaning for the paper's
-undefined `DualFold`, or change verifier equation (V2).
+/-! Historical counterexamples below refute only the unscaled form, corrected
+by owner decision in cd5eb4226. The quarter-scaled identities are current F5.
 
 The V8 module cannot be imported alongside Wide: its NaturalBasisCore
-redeclares constants from the pinned V7 CircleNaturalBasis. The small kernel
-formula is therefore given explicitly, with its evaluation and boundary
-proved directly. -/
+redeclares constants from the pinned V7 CircleNaturalBasis. RoundCore and
+KernelCorrespondence now provide a shared formula bridge. -/
 set_option autoImplicit false
 namespace AspisR0.RoundNormalization
 open Polynomial
@@ -131,9 +128,8 @@ theorem quarter_ne_one : quarter (K := K) ≠ 1 := by
   apply threeNonzero
   linear_combination fourOne
 
-/-- Literal counterexample to the paper's unscaled equality with the cited
-dual fold: q=w is the first coordinate vector. This is not a counterexample
-to every possible definition of the paper's unspecified `DualFold`. -/
+/-- Historical counterexample to the former unscaled equality, corrected in
+cd5eb4226; q=w is the first coordinate vector. -/
 theorem unscaled_F5_counterexample (alpha : K) :
     (roundPolynomial (unitMessage (K := K)) unitMessage).eval alpha = quarter ∧
     dot (foldMessage alpha (unitMessage (K := K)))
@@ -148,7 +144,7 @@ theorem unscaled_F5_counterexample (alpha : K) :
     rw [round_eval, pair, mul_one]
   exact ⟨value, pair, by rw [value, pair]; exact quarter_ne_one⟩
 
-/-- The exact blocked inference in §5: the unscaled (V2) and the prescribed
+/-- The formerly blocked inference in §5 (resolved in cd5eb4226): the unscaled (V2) and the prescribed
 coefficient reconstruction can both hold, while the evaluation equality
 needed to invoke exclusion from B7 fails. This is a local counterexample to
 that inference, not an assertion that a complete R0 transcript exists. -/
