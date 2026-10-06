@@ -86,13 +86,41 @@ theorem theUnique_eq_some {α : Type} (s : Finset α) (a : α) :
     have := Classical.choose_spec hex
     exact (Finset.singleton_inj.mp (h.symm.trans this)).symm
 
+section Generic
+variable {I S : Type} [Fintype I] [Fintype S] [DecidableEq I] [DecidableEq S]
+
+/-- States whose image cell outputs `v`. -/
+def preimages (g : S → I) (T : Table I S) (v : S) : Finset S := by
+  classical exact Finset.univ.filter fun s' => T (g s') = some v
+
+/-- Cells outputting `v` that satisfy `ok`. -/
+def cellsWith (T : Table I S) (v : S) (ok : I → Prop) : Finset I := by
+  classical exact Finset.univ.filter fun a => T a = some v ∧ ok a
+
+theorem theUnique_preimages (g : S → I) (T : Table I S) (v : S) (s0 : S)
+    (h : ∀ s', T (g s') = some v ↔ s' = s0) : theUnique (preimages g T v) = some s0 := by
+  classical
+  rw [theUnique_eq_some]
+  ext s'
+  simp [preimages, h]
+
+theorem theUnique_cellsWith (T : Table I S) (v : S) (ok : I → Prop) (a0 : I)
+    (h : ∀ a, (T a = some v ∧ ok a) ↔ a = a0) : theUnique (cellsWith T v ok) = some a0 := by
+  classical
+  rw [theUnique_eq_some]
+  ext a
+  simp only [cellsWith, Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
+  exact h a
+
+end Generic
+
 /-- States whose `advance` cell outputs `s`. -/
-def advPre (p : Params M Cv L) (T : Table (Addr L) State) (s : State) : Finset State := by
-  classical exact Finset.univ.filter fun s' => T (advanceA p s') = some s
+def advPre (p : Params M Cv L) (T : Table (Addr L) State) (s : State) : Finset State :=
+  preimages (advanceA p) T s
 
 /-- Absorb addresses whose cell outputs `s'`. -/
-def absCells (T : Table (Addr L) State) (s' : State) : Finset (Addr L) := by
-  classical exact Finset.univ.filter fun a => T a = some s' ∧ (parseAbsorb a).isSome
+def absCells (T : Table (Addr L) State) (s' : State) : Finset (Addr L) :=
+  cellsWith T s' fun a => (parseAbsorb a).isSome
 
 /-- One round record: absorbed-from state, absorbed state, message, next state. -/
 abbrev Rec (M : Type) := State × State × M × State

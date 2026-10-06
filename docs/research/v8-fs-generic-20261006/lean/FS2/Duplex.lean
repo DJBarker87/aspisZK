@@ -92,6 +92,25 @@ theorem squeezeA_injective (p : Params M Cv L) : Function.Injective (squeezeA p)
   intro s s' h
   exact bytes_injective (squeeze_injective (Addr.ofBytes_injective _ _ _ _ h))
 
+theorem advanceA_injective (p : Params M Cv L) : Function.Injective (advanceA p) := by
+  intro s s' h
+  exact bytes_injective (advance_injective (Addr.ofBytes_injective _ _ _ _ h))
+
+theorem toBytes_squeezeA (p : Params M Cv L) (s : State) :
+    (squeezeA p s).toBytes.take 32 = bytes s := by
+  rw [squeezeA, Addr.toBytes_ofBytes, squeeze, List.take_append_of_le_length (by rw [bytes_length]),
+    List.take_of_length_le (by rw [bytes_length])]
+
+theorem toBytes_advanceA (p : Params M Cv L) (s : State) :
+    (advanceA p s).toBytes.take 32 = bytes s := by
+  rw [advanceA, Addr.toBytes_ofBytes, advance, List.take_append_of_le_length (by rw [bytes_length]),
+    List.take_of_length_le (by rw [bytes_length])]
+
+theorem toBytes_absorbA (p : Params M Cv L) (s : State) (l : Byte) (data : Bytes)
+    (h : data.length ≤ p.D) : (absorbA p s l data h).toBytes.take 32 = bytes s := by
+  rw [absorbA, Addr.toBytes_ofBytes, absorb, List.append_assoc,
+    List.take_append_of_le_length (by rw [bytes_length]), List.take_of_length_le (by rw [bytes_length])]
+
 /-- Challenge: a value and the next state. -/
 abbrev Chal (Cv : Type) := Cv × State
 
