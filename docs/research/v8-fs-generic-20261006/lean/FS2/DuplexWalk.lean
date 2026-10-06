@@ -95,26 +95,52 @@ theorem parseAbsorb_absC (i : Nat) :
 theorem recs_length (i : Nat) : (recs p x msg extract H π i).length = i := by
   rw [recs_eq]; simp
 
+theorem transcript_statement (i : Nat) : ((pr).transcript H x π i).statement = x := by
+  induction i with
+  | zero => rfl
+  | succ i ih => rw [transcript_succ, Prefix.ext]; exact ih
+
+/-- The completed rounds are the transcript's when every squeeze value read
+by the completion is the oracle's. -/
+theorem completeRounds_recs (T : Table (Addr L) State) (acc : Addr L → State) :
+    ∀ i : Nat, (∀ j < i, (T (sqC p x msg extract H π j)).getD (acc (sqC p x msg extract H π j)) =
+        H (sqC p x msg extract H π j)) →
+      completeRounds p T acc 0 (recs p x msg extract H π i) = ((pr).transcript H x π i).rounds := by
+  intro i
+  induction i with
+  | zero => intro _; rfl
+  | succ i ih =>
+      intro h
+      rw [recs, completeRounds_append, ih (fun j hj => h j (Nat.lt_succ_of_lt hj)), transcript_succ,
+        Prefix.ext, recs_length, zero_add]
+      simp only [chal_eq]
+      have hi := h i (Nat.lt_succ_self i)
+      unfold sqC at hi
+      rw [hi]
+      rfl
+
 /-! ## The table walk -/
 
 /-- Any sub-table of a non-colliding execution that contains the first `i`
 rounds' `advance` and `absorb` cells walks back from `sv i` to the records. -/
 theorem walk_eq (tr : List (Addr L × State)) (hcons : ∀ q ∈ tr, q.2 = H q.1) (Qtot : Nat)
     (hQ : firstReads emptyTable tr ≤ Qtot) (hcoll : ¬ hitsBad (badColl p Qtot) emptyTable tr)
-    (hread : ∀ j, Read tr (absC p x msg extract H π j) ∧ Read tr (adC p x msg extract H π j)) :
-    ∀ (i n : Nat), i ≤ n → ∀ (T' : Table (Addr L) State),
+    (r : Nat)
+    (hread : ∀ j < r, Read tr (absC p x msg extract H π j) ∧ Read tr (adC p x msg extract H π j)) :
+    ∀ (i n : Nat), i ≤ r → i ≤ n → ∀ (T' : Table (Addr L) State),
       (∀ b v, T' b = some v → v = H b ∧ Read tr b) →
       (∀ j < i, T' (adC p x msg extract H π j) ≠ none ∧ T' (absC p x msg extract H π j) ≠ none) →
       walk p T' n (sv p x msg extract H π i) = some (recs p x msg extract H π i) := by
   intro i
   induction i with
   | zero =>
-      intro n _ T' _ _
+      intro n _ _ T' _ _
       cases n <;> simp [walk, sv_zero, recs]
   | succ i ih =>
-      intro n hn T' hT' hcells
+      intro n hir hn T' hT' hcells
       obtain ⟨n', rfl⟩ : ∃ n', n = n' + 1 := ⟨n - 1, by omega⟩
-      have hadRead := (hread i).2
+      have hreadi := hread i (by omega)
+      have hadRead := hreadi.2
       have hne : sv p x msg extract H π (i + 1) ≠ p.iv := by
         rw [sv_succ]
         exact (noColl p Qtot H tr hcons hQ hcoll _ hadRead).1
@@ -144,14 +170,14 @@ theorem walk_eq (tr : List (Addr L × State)) (hcons : ∀ q ∈ tr, q.2 = H q.1
         · rintro ⟨h, _⟩
           obtain ⟨hv, hr⟩ := hT' _ _ h
           by_contra hne'
-          exact noColl_injective p Qtot H tr hcons hQ hcoll _ _ hr (hread i).1 hne' hv.symm
+          exact noColl_injective p Qtot H tr hcons hQ hcoll _ _ hr hreadi.1 hne' hv.symm
         · rintro rfl
           obtain ⟨v, hv⟩ := Option.ne_none_iff_exists'.mp (hcells i (Nat.lt_succ_self i)).2
           have := (hT' _ _ hv).1
           subst this
           refine ⟨hv, ?_⟩
           rw [parseAbsorb_absC]; rfl
-      have hih := ih n' (by omega) T' hT' (fun j hj => hcells j (Nat.lt_succ_of_lt hj))
+      have hih := ih n' (by omega) (by omega) T' hT' (fun j hj => hcells j (Nat.lt_succ_of_lt hj))
       simp only [walk, hne, if_false, hadv, habs, parseAbsorb_absC, p.decEnc, hih,
         Option.map_some, recs]
       rw [sv_succ]

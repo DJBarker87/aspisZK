@@ -180,6 +180,19 @@ theorem completeRounds_update (p : Params M Cv L) (T : Table (Addr L) State)
       rw [Function.update_of_ne (h r (List.mem_cons_self ..)),
         ih (j + 1) (fun r' hr' => h r' (List.mem_cons_of_mem _ hr'))]
 
+theorem completeRounds_append (p : Params M Cv L) (T : Table (Addr L) State)
+    (acc : Addr L → State) : ∀ (j : Nat) (l : List (Rec M)) (r : Rec M),
+    completeRounds p T acc j (l ++ [r]) = completeRounds p T acc j l ++
+      [(r.2.2.1, (p.σ (j + l.length) ((T (squeezeA p r.2.1)).getD (acc (squeezeA p r.2.1))), r.2.2.2))] := by
+  intro j l
+  induction l generalizing j with
+  | nil => intro r; simp [completeRounds]
+  | cons q rs ih =>
+      intro r
+      simp only [List.cons_append, completeRounds, ih (j + 1), List.length_cons]
+      have : j + 1 + rs.length = j + (rs.length + 1) := by omega
+      rw [this]
+
 theorem completePrefix_round {X : Type} (p : Params M Cv L) (x : X) (T : Table (Addr L) State)
     (recs : List (Rec M)) (acc : Addr L → State) :
     (completePrefix p x T recs acc).round = recs.length := by

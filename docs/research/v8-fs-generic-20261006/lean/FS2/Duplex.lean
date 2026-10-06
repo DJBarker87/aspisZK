@@ -111,6 +111,20 @@ theorem toBytes_absorbA (p : Params M Cv L) (s : State) (l : Byte) (data : Bytes
   rw [absorbA, Addr.toBytes_ofBytes, absorb, List.append_assoc,
     List.take_append_of_le_length (by rw [bytes_length]), List.take_of_length_le (by rw [bytes_length])]
 
+theorem squeezeA_ne_absorbA (p : Params M Cv L) (s s' : State) (l : Byte) (data : Bytes)
+    (h : data.length ≤ p.D) : squeezeA p s ≠ absorbA p s' l data h := by
+  intro e
+  have := congrArg (fun a : Addr L => a.toBytes.length) e
+  simp [squeezeA, absorbA, Addr.toBytes_ofBytes, squeeze, absorb, bytes_length] at this
+  omega
+
+theorem advanceA_ne_absorbA (p : Params M Cv L) (s s' : State) (l : Byte) (data : Bytes)
+    (h : data.length ≤ p.D) : advanceA p s ≠ absorbA p s' l data h := by
+  intro e
+  have := congrArg (fun a : Addr L => a.toBytes.length) e
+  simp [advanceA, absorbA, Addr.toBytes_ofBytes, advance, absorb, bytes_length] at this
+  omega
+
 /-- Challenge: a value and the next state. -/
 abbrev Chal (Cv : Type) := Cv × State
 
