@@ -139,6 +139,11 @@ def D3 (pr : Protocol X M C W Pf I A) (rb : RoundByRound' X M C I A)
   ∀ (H : I → A) (x : X) (π : Pf) (T : Table I A),
     rb.doomed (pr.transcript H x π pr.r) T → (eval H (V x π)).2 = false
 
+/-- Every round's sampler reads the oracle (a round with a deterministic
+challenge has no first read to charge; its flip mass would be uncounted). -/
+def ChainsRead (pr : Protocol X M C W Pf I A) : Prop :=
+  ∀ (i : Nat) (P : Prefix X M C) (m : M), i < pr.r → firstCell (pr.samp i P m) ≠ none
+
 /-- §2 verifier: it reads the first cell of every round's chain. -/
 def ReadsChains (pr : Protocol X M C W Pf I A) (V : X → Pf → Program I A Bool) : Prop :=
   ∀ (H : I → A) (x : X) (π : Pf) (i : Nat) (a : I), i < pr.r →
@@ -194,7 +199,7 @@ def d2Bad (pr : Protocol X M C W Pf I A) (rb : RoundByRound' X M C I A)
 def Theorem4 (pr : Protocol X M C W Pf I A) (rb : RoundByRound' X M C I A)
     (P : Program I A Pf) (V : X → Pf → Program I A Bool) (x : X)
     (κ : Nat → ℚ) (Qtot : Nat) : Prop :=
-  D1 pr rb → D2 pr rb → D3 pr rb V → ReadsChains pr V →
+  D1 pr rb → D2 pr rb → D3 pr rb V → ChainsRead pr → ReadsChains pr V →
   Inj pr P V x κ Qtot →
   (∀ H, distinctFirstReads (eval H (experiment P V x)) ≤ Qtot) →
   mean (fun H : I → A =>
@@ -205,7 +210,7 @@ def Theorem4 (pr : Protocol X M C W Pf I A) (rb : RoundByRound' X M C I A)
 def LemmaB (pr : Protocol X M C W Pf I A) (rb : RoundByRound' X M C I A)
     (P : Program I A Pf) (V : X → Pf → Program I A Bool) (x : X)
     (κ : Nat → ℚ) (Qtot : Nat) : Prop :=
-  D1 pr rb → D2 pr rb → D3 pr rb V → ReadsChains pr V →
+  D1 pr rb → D2 pr rb → D3 pr rb V → ChainsRead pr → ReadsChains pr V →
   ∀ (inj : Inj pr P V x κ Qtot) (H : I → A),
     ¬ inj.Coll (eval H (experiment P V x)) →
     accepts (eval H (experiment P V x)) → extractFails pr x (eval H (experiment P V x)) →

@@ -23,6 +23,7 @@ open AspisV8PairedCommitment
 section Chain
 variable {I A C O : Type} [DecidableEq I] [Fintype A] [Nonempty A]
 
+omit [DecidableEq I] [Nonempty A] in
 theorem independentMean_nonneg (s : Program I A C) {f : View I A C → ℚ}
     (h : ∀ w, 0 ≤ f w) : 0 ≤ independentMean s f := by
   induction s generalizing f with
@@ -31,6 +32,7 @@ theorem independentMean_nonneg (s : Program I A C) {f : View I A C → ℚ}
       simp only [independentMean]
       exact mean_nonneg fun a => ih a fun w => h _
 
+omit [DecidableEq I] [Nonempty A] in
 theorem independentMean_outcome (s : Program I A C) (g : C → ℚ) (f : View I A C → ℚ)
     (h : ∀ w, f w = g w.2) :
     independentMean s f = independentMean s (fun w => g w.2) := by
@@ -40,6 +42,7 @@ theorem independentMean_outcome (s : Program I A C) (g : C → ℚ) (f : View I 
       simp only [independentMean]
       exact mean_congr fun a => ih a _ fun w => h _
 
+omit [Fintype A] [Nonempty A] in
 /-- `follow` of a completed sampler ignores the trace. -/
 theorem follow_done (c : C) (t : Table I A) (tr : List (I × A)) :
     follow (.done c : Program I A C) t tr = some c := by
