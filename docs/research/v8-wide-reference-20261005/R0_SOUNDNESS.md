@@ -120,13 +120,18 @@ $a_\gamma=336869026605739$, $a_f=9396508281246$.
   and $\varphi$ is invertible on each fibre. Lean, natural-basis model:
   `fold_channels` (`AspisV8R16/FinalConsistency.lean`), `four_slot_inverse`
   (`AspisV8R16/FibreInterpolation.lean`), `firstFold`
-  (`AspisV8R19/R370KernelEvaluation.lean`). Gap 4.
+  (`AspisV8R19/R370KernelEvaluation.lean`). **Lean over the exact encoders:**
+  `AspisR0.Fold.F4`, `AspisR0.Fold.wideF4` (`lean/R0/Fold.lean`);
+  F4 portion of gap 4 closed, compiled 2026-10-06.
 - **F5 (round polynomial).** For $q,w\in\mathbb E^{1024}$ let $P_{q,w}$ be
   the degree-6 polynomial with coefficients $c_k(q,w)$. Then
   $P_{q,w}(\alpha)=\langle\mathrm{Fold}_\alpha q,\mathrm{DualFold}_\alpha w\rangle$
   and $c_0+c_4=\tfrac14\langle q,w\rangle$. Lean: `kernel_eval_pairing`
   (`R370KernelEvaluation.lean`), `coefficient_boundary`
-  (`R653SourceCoefficientBoundary`).
+  (`R653SourceCoefficientBoundary`). **OPEN: normalisation finding, gap 13.**
+  `AspisR0.RoundNormalization.wide_unscaled_F5_counterexample` refutes the
+  displayed evaluation equality when `DualFold` means the cited unscaled
+  `dualFold`; F5 is not marked proved.
 - **F6 (image and pairing).** There are linear functionals $e_1,e_2$ on
   $\mathbb E^{1024}$, depending only on the chord, with
   $L\cdot\mathrm{Enc}(q)\in\mathcal C\iff e_1(q)=e_2(q)=0$; and for such $q$,
@@ -171,6 +176,8 @@ $a_\gamma=336869026605739$, $a_f=9396508281246$.
 Nothing found. That is not a proof of absence.
 
 ## 5. The opening-layer theorem
+
+**2026-10-06 formalisation finding:** the F5/(V2) comparison after step 6 is incomplete as written, and false with the cited unscaled dual fold; see gap 13.
 
 Fix the committed words $W=(W_l)$. For a word $f$ on $D$ write
 $\mathrm{Close}(f)=\{q:\mathrm{Enc}(q)\text{ agrees with }f\text{ on}\ge38230\text{ points}\}$.
@@ -328,19 +335,26 @@ Step 5 is the one that is not routine.
 
 ## 9. Gaps
 
-1. F1 and F2 are Lean theorems over $K$. Over $\mathbb E$ they must be
-   re-proved. The 40-file chain names only the field's size, its
-   characteristic and $2\ne0$; the exact encoders over $\mathbb E$ are also
-   needed. Not attempted.
-2. The matched form of F2 (step 6) is not in the tree for degree three.
+1. **CLOSED (Replay 2026-10-06):** F1 and F2 over $\mathbb E$ are
+   `AspisWide.Instances.wideInitialWidth29CurveDecodable` and
+   `AspisWide.Instances.wideFinalDegreeThreeCurveDecodable`, for the exact
+   encoders and unchanged thresholds/caps.
+2. **CLOSED (Replay 2026-10-06):** the matched form of F2 is
+   `AspisWide.MatchedInstances.wideFinal_bad_response_challenges_card_le`;
+   `final_matchingDecomposition_iff` identifies the message-level match.
 3. F6 as one statement (the image equivalence and the pairing with the
    interpolant correction) is assembled here from several Lean lemmas about
    the source-shaped weights; no single theorem states it.
-4. F4 and F5 are Lean facts about the natural-basis model. Their link to
-   `exactInitialEncoder` and `exactFinalEncoder` is V7's K1.3 material and
-   was not re-checked for the transported encoder.
-5. F3 is cited from the audit record, not from a located theorem name. The
-   joint-list bound of step 1 is new.
+4. **PARTLY CLOSED (2026-10-06):** F4 for the exact encoders is
+   `AspisR0.Fold.F4` / `AspisR0.Fold.wideF4`. F5 remains open because of
+   gap 13; the cited normalisation is audited by
+   `AspisR0.RoundNormalization.cited_round_identities` and
+   `AspisR0.CitedKernelAudit.literal_cited_kernel`.
+5. **CLOSED (Replay 2026-10-06):** F3 is
+   `AspisWide.MultiplicityThreeGS.exactInitialCloseCandidate_card_lt_101`;
+   the joint-list bound is
+   `AspisWide.JointList.jointInitialList_card_le_100` (messages) and
+   `jointInitialCodewords_card_le_100` (codewords), with WideExact instances.
 6. SEM is V7's inventory. It is not re-derived for R0's semantic layer (V8
    positive-transfer adapter, point-claim layout), and it contains three
    small V7 opening-layer terms that §5 counts separately.
@@ -359,3 +373,25 @@ Step 5 is the one that is not routine.
     size over $K$; mask capacity must be re-derived before R0 is frozen.
 12. No published result was re-fetched, and this argument has had no
     review.
+13. **NEW, OPEN (2026-10-06): F5/(V2) quarter normalisation.** The paper
+    does not define `DualFold`. The cited `R370KernelEvaluation.dualFold`
+    is unscaled, and `kernel_eval_pairing` states
+    `P_{q,w}(alpha) = (1/4) * dot(firstFold q, dualFold w)`, with the
+    same quarter used in `c0+c4 = (1/4) * dot(q,w)`. For `q=w=e0`,
+    the first value is `1/4` and the unscaled pairing is `1`, for every
+    alpha, including over WideExact. Compiled witnesses:
+    `AspisR0.RoundNormalization.wide_unscaled_F5_counterexample` and
+    `AspisR0.CitedKernelAudit.literal_cited_counterexample`. The precise
+    stopped inference is “By (V2) and F5” in the proof after step 6:
+    `comparison_step_counterexample` has claimed polynomial `1` and
+    claim-prime `4`, satisfying the local (V2) and reconstruction equation,
+    but failing the evaluation equality needed for B7. This is a local
+    inference counterexample, not a complete accepting R0 transcript.
+    The smallest specification addition that makes this comparison
+    provable is to define the paper's `DualFold` as `(1/4)` times the
+    cited `dualFold`. Alternatively, if the unscaled dual is intended,
+    (V2) needs the factor `1/4`. Neither change has been made. No extra
+    challenge exclusion or new premise has been inserted. The requested
+    stop condition is reached; F6 and the remaining Part B formalisation
+    are not claimed complete. See PORT_LOG.md, “R0 structural audit and
+    stop finding 2026-10-06”.

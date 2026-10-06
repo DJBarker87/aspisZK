@@ -1794,3 +1794,136 @@ historical input to this investigation, not additional attempts made here.
   No protocol, parameter, Rust, SBF, CU, frozen V7 or other research change
   was made. The earlier Phase 4 checkpoint status is historical and is
   superseded only by the specific source results recorded in this section.
+
+## R0 structural audit and stop finding 2026-10-06
+
+Source revision: `baa76e94ca718c22e1a648b8601b3a6d71a873cd` plus the four
+new `lean/R0/` sources with exact hashes below. Branch:
+`research/v8-wide-reference-20261005`; worktree:
+`/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922`.
+The final local source hashes match the compiled build-host bytes.
+
+**Outcome: F4 proved from source; the requested stop condition is reached
+at F5/(V2), in the §5 proof's comparison after step 6.** The paper never
+defines `DualFold`. The cited `AspisR19.R370KernelEvaluation.dualFold` is
+unscaled, whereas `kernel_eval_pairing` includes a factor `quarter` outside
+the pairing. With the source quarter `4⁻¹` and `q=w=e₀`, for every alpha:
+
+```text
+P_{q,w}(alpha) = 1/4
+<firstFold(alpha,q), cited dualFold(alpha,w)> = 1
+1/4 != 1, including over WideExact
+```
+
+This is a missing normalisation specification; with the cited unscaled
+meaning, F5's displayed evaluation equality is false. It is not a proof
+that every possible meaning of the unspecified `DualFold` fails.
+The exact blocked inference is “By (V2) and F5” before using exclusion
+from B7. `comparison_step_counterexample` exhibits claimed polynomial `1`
+and claim-prime `4`: the local unscaled (V2) and `c0+c4=claim-prime/4` hold,
+but the evaluation equality with the source polynomial fails at every
+alpha. This is a counterexample to that inference, not a complete accepting
+R0 transcript or a cryptographic attack.
+
+The smallest specification addition making this comparison provable is
+`DualFold := (1/4) * cited dualFold`. If the unscaled dual is intended,
+(V2) instead needs the factor `1/4`. Neither change was made. No premise,
+threshold, cap, list size, or bad set was changed to accommodate the issue.
+R0_SOUNDNESS.md retains the argument and records gap 13 and a §5 status line.
+
+`AspisR0.Fold.F4` / `wideF4` package the exact encoded-channel identity,
+fold commutation, and both inverses of the fibre transform. Fibres use
+`childIndex u s` in order `(x,y),(x,-y),(-x,-y),(-x,y)`. Nonzero coordinates
+follow from injectivity of the stored four domain points; inverse-table
+correctness is not assumed. The exact encoders' existing circle-lift
+identity supplies the basis correspondence directly.
+
+`AspisR0.RoundNormalization.cited_round_identities` proves the degree bound
+at most six, the quarter-scaled evaluation identity, and the exact
+`c0+c4=(1/4)*dot(q,w)` boundary for the explicit source coefficient formula.
+`wide_cited_round_identities` instantiates it at WideExact.
+`unscaled_F5_counterexample` / `wide_unscaled_F5_counterexample` prove the
+witness above. Independently, `AspisR0.CitedKernelAudit.literal_cited_kernel`
+and `literal_cited_counterexample` apply the actual imported R370 theorem
+and constants to the same impulse, with an arbitrary quarter (and, for the
+inequality, the explicit condition `quarter != 1`). The Wide theorem proves
+that condition for `4⁻¹`; it is not a new premise on R0.
+
+F5 is not marked proved. F6 was not completed or refuted. The seven bad-set
+definitions/bounds, binding theorem, and step-7 sampler theorem were not
+implemented after this stop; no new Part B constants or sampler-law import
+claim is made. Gaps 1, 2, and 5 are marked closed by the prior replay's named
+results, and gap 4 only partly closed by F4. SEM, FS, privacy, and §6's state
+function remain outside this work. R0 remains unreviewed and unestablished.
+
+Environment: build host `dombarker@100.108.41.90`, separate workspace
+`/home/dombarker/project-offloads/aspis-r0-20261006`; Lean 4.32.0, commit
+`8c9756b28d64dab099da31a4c09229a9e6a2ef35`, binary SHA-256
+`e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550`;
+Mathlib `81a5d257c8e410db227a6665ed08f64fea08e997`.
+Read-only project objects are merged by symlinks in `cache/`: pinned V7
+from `aspis-wide-replay-20261006/pinned-v7` first, replayed Wide objects
+second, then `aspis-r126-release-20260930-a/lib`, keeping earlier duplicates.
+Package paths are the replay's ordered Cli, batteries, Qq, aesop,
+proofwidgets, importGraph, LeanSearchClient, plausible, mathlib, and Lean
+library paths. `objects/` precedes `cache/`. The exact environment is retained
+in `evidence/environment.json`; `evidence/lake-env-path.txt` records Lake's
+additional empty local build path and toolchain prefix. No cache source or
+object was edited, and no `lake build` or dependency build ran.
+
+Import footprints (GNU time, no `-M`, each in the same capped scope):
+
+| Import-only target | Exit | Wall | Peak RSS KiB | Swaps |
+|---|---:|---:|---:|---:|
+| Wide.FinalEncoder + WideTower | 0 | 2.70 s | 6710836 | 0 |
+| Wide.MatchedInstances + Wide.JointList + Wide.SubfieldDescent | 0 | 2.71 s | 6728872 | 0 |
+| AspisV8R19.R370KernelEvaluation alone | 0 | 0.96 s | 2336044 | 0 |
+
+Source setting fixed from these footprints: `-j1 -M7000 -DElab.async=false`.
+Every scope used `MemoryHigh=6500M`, `MemoryMax=7G`, `MemorySwapMax=0`,
+`TasksMax=128`; all jobs were sequential. Before each final target the
+existing populated, non-double-counted caps totaled 44.375 GiB; plus this
+scope, 51.375 GiB, below the 55 GiB host limit. No other Lean process ran.
+All final jobs had zero cgroup swap peak and zero OOM events.
+
+The focused source checks were followed by one final four-file R0 replay,
+including the integration/axiom audit; the unchanged Wide manifest was not
+repeated. Final command, from the new build workspace, inside its own scope:
+
+```sh
+/usr/bin/time -v -o "evidence/Final-$name.time" \
+  timeout --signal=TERM --kill-after=10 600 \
+  /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env \
+  /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean \
+  -j1 -M7000 -DElab.async=false \
+  -R /home/dombarker/project-offloads/aspis-r0-20261006/sources \
+  -o "objects/R0/$name.olean" "sources/R0/$name.lean"
+```
+
+Final source records (paths relative to `lean/R0/`; PCQ means exactly
+`[propext, Classical.choice, Quot.sound]` for every printed theorem):
+
+| File | SHA-256 | Exit | Wall | Peak RSS KiB | Swaps | Axioms |
+|---|---|---:|---:|---:|---:|---|
+| Fold.lean | `fab2b0dc3cf0e32dd414e6737660d208989e2b8eb4ecd35eeb23354cd0e93329` | 0 | 3.92 s | 6809044 | 0 | 2 reports, PCQ |
+| RoundNormalization.lean | `40b4abf0878b27e29d3f952c209bc2fb3d71ac0ced9efbf8d9185eabdd3511e4` | 0 | 4.41 s | 6767156 | 0 | 5 reports, PCQ |
+| CitedKernelAudit.lean | `4c3ba9d5b698b955b639b40d01e80d298c4ef58d4a59a7d6332833cf883b22a5` | 0 | 1.17 s | 2354408 | 0 | 2 reports, PCQ |
+| Audit.lean | `45038de83348884273bdc0d9222a4707a8c9c81898eb9b0e3fc73592939f81ed` | 0 | 2.84 s | 6732216 | 0 | 10 reports, PCQ |
+
+The 19 reports include the new endpoints above and the existing wide initial
+and final agreement, matched response, joint codeword list, and subfield
+descent endpoints. Raw output, exact commands, resource/cgroup records, and
+source hashes are retained in `evidence/Final-*.{stdout,time,json}` and
+`evidence/final-manifest.json` on the build host. `Audit.lean` imports the Wide
+results together with the new exact-encoder proofs; the literal V8 citation
+audit is necessarily a separate Lean environment.
+
+Failed attempts (all exit 1; no memory limit was raised):
+
+- Combined Wide/R370 import: duplicate `AspisCircleTensorBinding.monomialToNatural` from V7 CircleNaturalBasis and V8 NaturalBasisCore; 1.68 s, 5667820 KiB, zero swaps; split the environments and prove the small exact-encoder formula directly.
+- Fold-01: explicit unfolding of coordinate embeddings, restricted coordinate simplification, qualified `two_ne_zero`, and a theorem type annotation were needed; 3.33 s, 6784436 KiB, zero swaps; Fold-02 passed.
+- RoundNormalization-01: nonexistent `Fin.val_three` and sparse-impulse simplification; 4.31 s, 6734088 KiB, zero swaps; use the literal small Fin value and symbolic child-index simplification.
+- RoundNormalization-02: dependent decidable-`if` rewriting failed; 4.02 s, 6732388 KiB, zero swaps; simplify the explicit child index; RoundNormalization-03 passed.
+- CitedKernelImport (R370 + WideTower): the same duplicate natural-basis constant; 1.79 s, 5655472 KiB, zero swaps; the R370-only import and audit passed.
+- RoundNormalization-04: the new comparison witness needed an explicit coefficient-of-one simplification at index 4; 3.87 s, 6732484 KiB, zero swaps; RoundNormalization-05 passed.
+- Local evidence-summary glob included a scope-command JSON list; restricted it to the four exact final target reports, then verified every local SHA against the compiled source.
