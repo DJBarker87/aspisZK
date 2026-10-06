@@ -68,6 +68,8 @@ structure Params (M Cv : Type) (L : Nat) where
   lbl : Nat → Byte
   σ : Nat → State → Cv
   iv : State
+  /-- number of challenge rounds (the decoder's walk fuel) -/
+  rounds : Nat
 
 variable {M Cv : Type} {L : Nat}
 
@@ -85,6 +87,10 @@ def advanceA (p : Params M Cv L) (s : State) : Addr L :=
 theorem squeezeA_ne_advanceA (p : Params M Cv L) (s : State) : squeezeA p s ≠ advanceA p s := by
   intro h
   exact cross_disjoint _ _ (Addr.ofBytes_injective _ _ _ _ h)
+
+theorem squeezeA_injective (p : Params M Cv L) : Function.Injective (squeezeA p) := by
+  intro s s' h
+  exact bytes_injective (squeeze_injective (Addr.ofBytes_injective _ _ _ _ h))
 
 /-- Challenge: a value and the next state. -/
 abbrev Chal (Cv : Type) := Cv × State
