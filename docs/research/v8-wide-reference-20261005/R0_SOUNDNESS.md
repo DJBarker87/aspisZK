@@ -83,7 +83,9 @@ functionals (F6). The verifier accepts iff the semantic checks pass, the
 openings authenticate, and
 
 - (V1) for every $u\in S$: $\mathrm{Fin}(F)(u)=\mathrm{Fold}_{\alpha_0}(R_\gamma)(u)$;
-- (V2) $P(\alpha_0)=\langle F,\mathrm{DualFold}_{\alpha_0}(w_{\rm tot})\rangle$.
+- (V2) $P(\alpha_0)=\tfrac14\langle F,\mathrm{DualFold}_{\alpha_0}(w_{\rm tot})\rangle$, where
+  $\mathrm{DualFold}_\alpha(w)(d)=\sum_{t<4}w_{d,t}\,\alpha^{(4-t)\bmod 4}$ is the unscaled
+  `dualFold` of `R370KernelEvaluation`; the quarter is written explicitly.
 
 **Differences from R102.** $\gamma,\kappa,\tau,\alpha_0$, $v$, $P$ and $F$
 are over $\mathbb E$. $G$ is a plain lane and there is one channel, so no
@@ -125,7 +127,7 @@ $a_\gamma=336869026605739$, $a_f=9396508281246$.
   F4 portion of gap 4 closed, compiled 2026-10-06.
 - **F5 (round polynomial).** For $q,w\in\mathbb E^{1024}$ let $P_{q,w}$ be
   the degree-6 polynomial with coefficients $c_k(q,w)$. Then
-  $P_{q,w}(\alpha)=\langle\mathrm{Fold}_\alpha q,\mathrm{DualFold}_\alpha w\rangle$
+  $P_{q,w}(\alpha)=\tfrac14\langle\mathrm{Fold}_\alpha q,\mathrm{DualFold}_\alpha w\rangle$
   and $c_0+c_4=\tfrac14\langle q,w\rangle$. Lean: `kernel_eval_pairing`
   (`R370KernelEvaluation.lean`), `coefficient_boundary`
   (`R653SourceCoefficientBoundary`). **OPEN: normalisation finding, gap 13.**
@@ -373,7 +375,7 @@ Step 5 is the one that is not routine.
     size over $K$; mask capacity must be re-derived before R0 is frozen.
 12. No published result was re-fetched, and this argument has had no
     review.
-13. **NEW, OPEN (2026-10-06): F5/(V2) quarter normalisation.** The paper
+13. **F5/(V2) quarter normalisation (found 2026-10-06; resolved below).** The paper
     does not define `DualFold`. The cited `R370KernelEvaluation.dualFold`
     is unscaled, and `kernel_eval_pairing` states
     `P_{q,w}(alpha) = (1/4) * dot(firstFold q, dualFold w)`, with the
@@ -395,3 +397,10 @@ Step 5 is the one that is not routine.
     stop condition is reached; F6 and the remaining Part B formalisation
     are not claimed complete. See PORT_LOG.md, “R0 structural audit and
     stop finding 2026-10-06”.
+
+    **Resolved 2026-10-06 by specification correction (owner decision).** The
+    quarter belongs on both identities, as `kernel_eval_pairing` states; F5 and
+    (V2) above now carry it. The inference after step 6 is unchanged: (V2)
+    gives $P(\alpha_0)=P_{q,w_{\rm tot}}(\alpha_0)$, hence $P=P_{q,w_{\rm tot}}$,
+    hence $\tfrac14\langle w_{\rm tot},q\rangle=c_0+c_4=\tfrac14\,\mathrm{claim}'$.
+    The cited counterexamples refute the earlier unscaled statement only.
