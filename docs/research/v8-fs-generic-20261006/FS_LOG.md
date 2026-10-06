@@ -197,3 +197,103 @@ assigns to the formaliser (prefix representation, address-map interface
 including `decode`, Lemma A's induction) plus the literal quantifier readings
 of (D2)/(D3) recorded in finding 1 and the §2 verifier property made an
 explicit hypothesis (finding 2).
+
+---
+
+# Addendum 2026-10-06: v2 (rounds as sampler programs) and the duplex instance
+
+Sources: `lean/FS2/{Statement,LemmaA,Theorem,Duplex,DuplexDecode,DuplexDensity,DuplexInj}.lean`.
+Same host, toolchain, runner and caps as above (`run.sh`, `-M4500`,
+`MemoryMax=7G`); every `#print axioms` is `propext, Classical.choice,
+Quot.sound`; no `sorry`/`axiom`/`native_decide`/`admit`/`maxRecDepth`/
+`maxHeartbeats` in the sources (grep).
+
+## Why v2
+
+Preparing (INJ) for the duplex of `AspisV8R19.DuplexFrames` showed two
+things the v1 statement cannot express:
+
+1. A round's challenge address is `squeeze(bytes(H(absorb …)))`, a function
+   of `H`; and `squeeze s'`/`advance s'` are read as a pair in either order.
+   v1's `addr : Prefix → M → I` with one block per round fits only a
+   one-call-per-round duplex. The tree's sampler laws are stated for sampler
+   *programs*, which is the model that fits.
+2. A prover may absorb the next message before squeezing the current
+   challenge. When round `j`'s chain starts, earlier challenge cells can
+   still be unread, so round `j`'s flip depends on cells read *later*. The
+   union bound survives by independence (Fubini over the late cells), but
+   "decode (prefix, message) at the first read" cannot state it: the
+   prefix's challenge values are not yet in the table.
+
+v2 therefore has: `Sampler` (single reads, and `multi` — a nonempty
+duplicate-free set of determined cells read in any order); `samp i P m` per
+round; `decode a T` returning the *completing sampler* of the round starting
+at the first read of `a` (it reads `a`, the round's remaining cells and the
+late challenge cells, and outputs prefix, message and challenge); and the
+per-read charge `ChainDensity` (the completing sampler's law on fresh
+answers), which an instantiation derives from (D2′). `ChainsRead` (every
+round reads the oracle) is a structural hypothesis: a read-free round has no
+first read to charge. (D1), (D3), `Q_tot`, `maxErr`, prefixes, tables are
+v1's.
+
+## What is proved
+
+| Theorem | Content |
+|---|---|
+| `FS2.chainLemma` | embedded-chain lemma: in any continuation program, Pr[sampler's cells first-read in an admissible order ∧ output bad] ≤ `independentMean` of the sampler; `multi` by permuting means (`multi_erase_mean`) |
+| `FS2.lemmaA` | union bound over first reads that decode to a completing sampler, `N·ε` |
+| `FS2.lemmaB` | first flip round; (INJ) gives the completing sampler followed to the round's prefix, message, challenge |
+| `FS2.theorem4` | `Pr ≤ Q_tot·max_i ε_i + κ(Q_tot)` from D1, ChainDensity, D3, ChainsRead, ReadsChains, Inj, Q_tot |
+| `FS2.follow_consistent` | a followed sampler on a consistent trace outputs the oracle run's result (for instantiations) |
+| `FS2.Duplex.coll_mass` | collision event (fresh state = iv, = an earlier output, or a 32-byte prefix of an address read so far) has mass ≤ `κ(Q_tot) = 2·Q_tot²/2^256`, by v1's Lemma A |
+| `FS2.Duplex.chainDensity` | (D2′) ⇒ ChainDensity for the duplex decoder (`listMean_perm`, `listMean_late_bound`, `samp_mean`) |
+| `FS2.Duplex.duplex_fiat_shamir` | the duplex bound from D1, D2′, D3, ReadsChains, Q_tot and `DecodesSpec` |
+
+Duplex model: addresses `Addr L = List.Vector (Option Byte) L` (padded byte
+strings of length ≤ L; `toBytes_ofBytes`), frames `absorb`/`squeeze`/
+`advance` of `DuplexFrames`, challenge = (value, next state); `samp i P m =
+ask (absorb (state P) lbl_i (enc m)) (s' ↦ multi {squeeze s', advance s'}
+(acc ↦ (σ_i (acc squeeze), acc advance)))`; `decode` parses the absorb
+address (`parseAbsorb_absorbA`), walks the table back through unique
+`advance`/`absorb` cells by output (`theUnique`, `walk`), and reads the
+missing earlier `squeeze` cells; a fresh absorbed state repeating an earlier
+one decodes to a never-counted round-`r` dummy.
+
+## Open: `FS2.Duplex.DecodesSpec`
+
+The deterministic content of (INJ) — outside the collision event, every
+transcript round's absorb cell decodes at the table of its first read to a
+completing sampler followed to the round's prefix, message and challenge —
+is stated as a `Prop` and taken as a hypothesis of `duplex_fiat_shamir`. Its
+proof is the table-walk argument: (i) ordering: `advance s'_{i−1}` is read
+before `absorb(s_i, m_i)` (else the fresh advance output is a 32-byte prefix
+of an already-read address: collision), and `squeeze s'`, `advance s'` are
+unread when `absorb` is first read (same reason); (ii) uniqueness: two cells
+with equal output are a collision; (iii) `follow` completes because the
+verifier reads every chain cell after the absorb's first read
+(`follow_consistent`). Estimated several hundred lines of trace bookkeeping;
+not attempted in this session.
+
+## Evidence (clean replay, attempts 241–247)
+
+| Target | SHA-256 | exit | wall | peak RSS KiB | swaps |
+|---|---|---:|---:|---:|---:|
+| `lean/FS2/Statement.lean` | `e472de7d36479495d55e10436635344bf7d2187f223ae73bd0b1db3c78718b36` | 0 | 1.72 s | 3,338,516 | 0 |
+| `lean/FS2/LemmaA.lean` | `bc20b02b6cf5b5506acc3887ccd83e571cbcf2934220675fc13bd126275fad03` | 0 | 2.36 s | 3,352,820 | 0 |
+| `lean/FS2/Theorem.lean` | `77de94a4a2d61ce458e82d571f7a1f282821816f0be1a8c9fc25c631828abfe1` | 0 | 1.86 s | 3,338,708 | 0 |
+| `lean/FS2/Duplex.lean` | `b393d2bea6956eae0635729a5a1c42fe4ef79235654923ee18e844296997359e` | 0 | 2.06 s | 3,352,080 | 0 |
+| `lean/FS2/DuplexDecode.lean` | `1d7adcf908b1a9a6236a783b4a6f26b18d575ed083cb34910de023c8ebebf3de` | 0 | 1.70 s | 3,336,860 | 0 |
+| `lean/FS2/DuplexDensity.lean` | `f912efd0346c04b20d930b06512c7a792d3e0143dbafc1305914d1c1978eced3` | 0 | 1.72 s | 3,341,660 | 0 |
+| `lean/FS2/DuplexInj.lean` | `d1e924dbb826082c0f744cefd031d0f6e3fe27d960e3d5e28b80ed8760e79e5d` | 0 | 1.38 s | 3,323,980 | 0 |
+
+Attempts 200–240: 41 launches, all under the fixed caps, zero swaps, no cap
+raised, no unchanged failing job rerun. Recurring causes of failed attempts:
+`rw` motives through dependent `Nodup` proofs (`conv_rhs`), higher-order
+patterns in `rw` (lemmas restated syntactically), accidental `rfl` closure
+followed by dead branches (steps named as `have`s), and — three times — a
+defeq or `simp` reaching a concrete `Finset.univ` over `Fin 32 → Byte` or
+`List.Vector`, which expands `List.finRange` and hits the recursion limit;
+cured each time by stating the counting lemma over an abstract finite type
+(the tree's own practice) or by `simp only [protocol]` at reducible
+transparency instead of `rfl`. Remaining linter warnings (unused section
+variables / simp arguments) are cosmetic and listed in the attempt logs.
