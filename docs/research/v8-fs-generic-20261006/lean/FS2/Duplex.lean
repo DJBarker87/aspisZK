@@ -112,28 +112,13 @@ def samp {X : Type} (p : Params M Cv L) (i : Nat) (P : Prefix X M (Chal Cv)) (m 
 /-! ## Counting over an abstract finite answer type
 
 Stated for abstract finite types so that no concrete `Finset.univ` over
-`Fin 32 → Byte` is ever unfolded. -/
+`Fin 32 → Byte` is ever unfolded; the collision predicate below mentions no
+`Finset`, only existentials, for the same reason. -/
 
 section Counting
 variable {I S B : Type} [Fintype I] [Fintype S] [DecidableEq I] [DecidableEq S] [Nonempty S]
 
 def dom (T : Table I S) : Finset I := Finset.univ.filter fun a => T a ≠ none
-
-def outputs (T : Table I S) : Finset S := Finset.univ.filter fun f => ∃ a, T a = some f
-
-omit [DecidableEq I] in
-theorem outputs_card_le (T : Table I S) : (outputs T).card ≤ (dom T).card := by
-  calc (outputs T).card ≤ ((dom T).image fun a => (T a).getD (Classical.arbitrary _)).card := by
-        apply Finset.card_le_card
-        intro f hf
-        rw [outputs, Finset.mem_filter] at hf
-        obtain ⟨a, ha⟩ := hf.2
-        rw [Finset.mem_image]
-        refine ⟨a, ?_, ?_⟩
-        · rw [dom, Finset.mem_filter]
-          exact ⟨Finset.mem_univ _, by rw [ha]; exact Option.some_ne_none _⟩
-        · rw [ha]; rfl
-    _ ≤ (dom T).card := Finset.card_image_le
 
 omit [Fintype I] [DecidableEq I] [DecidableEq S] [Nonempty S] in
 theorem mean_indicator_card (q : S → Prop) [DecidablePred q] :
@@ -147,24 +132,65 @@ theorem mean_indicator_card (q : S → Prop) [DecidablePred q] :
   by_cases h : q f <;> simp [indicator, h]
 
 omit [Fintype I] [DecidableEq I] [Nonempty S] in
-theorem mean_indicator_mem (X : Finset S) :
-    mean (fun f : S => indicator (f ∈ X)) = (X.card : ℚ) / (Fintype.card S : ℚ) := by
-  rw [mean_indicator_card (fun f => f ∈ X), Finset.filter_mem_eq_inter, Finset.univ_inter]
-
-omit [Fintype I] [DecidableEq I] [Nonempty S] in
 theorem mean_indicator_eq (c : S) :
     mean (fun f : S => indicator (f = c)) = 1 / (Fintype.card S : ℚ) := by
   rw [mean_indicator_card (fun f => f = c)]
   simp [Finset.filter_eq']
 
-omit [Fintype I] [DecidableEq I] [DecidableEq S] [Nonempty S] in
-theorem mean_indicator_inj_mem [DecidableEq B] (e : S → B) (he : Function.Injective e)
-    (X : Finset B) :
-    mean (fun f : S => indicator (e f ∈ X)) ≤ (X.card : ℚ) / (Fintype.card S : ℚ) := by
-  rw [mean_indicator_card (fun f => e f ∈ X)]
+omit [DecidableEq S] in
+/-- Outputs of a table: at most as many as its domain. -/
+theorem mean_exists_output_le (T : Table I S) :
+    mean (fun f : S => indicator (∃ a, T a = some f)) ≤ ((dom T).card : ℚ) / (Fintype.card S : ℚ) := by
+  classical
+  rw [mean_indicator_card (fun f => ∃ a, T a = some f)]
   apply div_le_div_of_nonneg_right _ (by positivity)
-  exact_mod_cast Finset.card_le_card_of_injOn e
-    (fun f hf => (Finset.mem_filter.mp hf).2) (fun f _ g _ h => he h)
+  have : (Finset.univ.filter fun f : S => ∃ a, T a = some f) ⊆
+      (dom T).image fun a => (T a).getD (Classical.arbitrary S) := by
+    intro f hf
+    rw [Finset.mem_filter] at hf
+    obtain ⟨a, ha⟩ := hf.2
+    rw [Finset.mem_image]
+    refine ⟨a, ?_, ?_⟩
+    · rw [dom, Finset.mem_filter]
+      exact ⟨Finset.mem_univ _, by rw [ha]; exact Option.some_ne_none _⟩
+    · rw [ha]; rfl
+  exact_mod_cast (Finset.card_le_card this).trans Finset.card_image_le
+
+omit [DecidableEq I] [DecidableEq S] [Nonempty S] in
+/-- Values whose image under an injection hits the image of a predicate's
+domain: at most as many as that domain. -/
+theorem mean_exists_prefix_le [DecidableEq B] (e : S → B) (he : Function.Injective e)
+    (P : I → Prop) [DecidablePred P] (g : I → B) :
+    mean (fun f : S => indicator (∃ b, P b ∧ g b = e f)) ≤
+      ((Finset.univ.filter P).card : ℚ) / (Fintype.card S : ℚ) := by
+  classical
+  rw [mean_indicator_card (fun f => ∃ b, P b ∧ g b = e f)]
+  apply div_le_div_of_nonneg_right _ (by positivity)
+  have h1 : (Finset.univ.filter fun f : S => ∃ b, P b ∧ g b = e f).card ≤
+      ((Finset.univ.filter P).image g).card := by
+    apply Finset.card_le_card_of_injOn e
+    · intro f hf
+      rw [Finset.mem_coe, Finset.mem_filter] at hf
+      obtain ⟨b, hb, hg⟩ := hf.2
+      rw [Finset.mem_coe, Finset.mem_image]
+      exact ⟨b, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hb⟩, hg⟩
+    · intro f _ f' _ h
+      exact he h
+  exact_mod_cast h1.trans Finset.card_image_le
+
+omit [Fintype S] [DecidableEq S] [Nonempty S] in
+theorem card_filter_insert_le (T : Table I S) (a : I) :
+    (Finset.univ.filter fun b : I => b = a ∨ T b ≠ none).card ≤ (dom T).card + 1 := by
+  calc (Finset.univ.filter fun b : I => b = a ∨ T b ≠ none).card
+      ≤ (insert a (dom T)).card := by
+        apply Finset.card_le_card
+        intro b hb
+        rw [Finset.mem_filter] at hb
+        rw [Finset.mem_insert]
+        rcases hb.2 with h | h
+        · exact Or.inl h
+        · exact Or.inr (Finset.mem_filter.mpr ⟨Finset.mem_univ _, h⟩)
+    _ ≤ (dom T).card + 1 := Finset.card_insert_le _ _
 
 end Counting
 
@@ -175,41 +201,57 @@ earlier output, or a 32-byte prefix of an address read so far (the current
 one included).  The size guard ties the density to `Q_tot`. -/
 def badColl (p : Params M Cv L) (Qtot : Nat) (a : Addr L) (T : Table (Addr L) State)
     (f : State) : Prop :=
-  (dom T).card < Qtot ∧ (f = p.iv ∨ f ∈ outputs T ∨
-    bytes f ∈ (insert a (dom T)).image fun a => a.toBytes.take 32)
+  (dom T).card < Qtot ∧ (f = p.iv ∨ (∃ b, T b = some f) ∨
+    ∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f)
+
+theorem badColl_of_iv (p : Params M Cv L) (Qtot : Nat) (a : Addr L) (T : Table (Addr L) State)
+    (f : State) (hsz : (dom T).card < Qtot) (h : f = p.iv) : badColl p Qtot a T f :=
+  ⟨hsz, Or.inl h⟩
+
+theorem badColl_of_output (p : Params M Cv L) (Qtot : Nat) (a : Addr L) (T : Table (Addr L) State)
+    (f : State) (hsz : (dom T).card < Qtot) (b : Addr L) (h : T b = some f) : badColl p Qtot a T f :=
+  ⟨hsz, Or.inr (Or.inl ⟨b, h⟩)⟩
+
+theorem badColl_of_prefix (p : Params M Cv L) (Qtot : Nat) (a : Addr L) (T : Table (Addr L) State)
+    (f : State) (hsz : (dom T).card < Qtot) (b : Addr L) (hb : b = a ∨ T b ≠ none)
+    (h : b.toBytes.take 32 = bytes f) : badColl p Qtot a T f :=
+  ⟨hsz, Or.inr (Or.inr ⟨b, hb, h⟩)⟩
 
 theorem badColl_density (p : Params M Cv L) (Qtot : Nat) (a : Addr L) (T : Table (Addr L) State) :
     mean (fun f : State => indicator (badColl p Qtot a T f)) ≤
       (2 * Qtot : ℚ) / (Fintype.card State : ℚ) := by
+  classical
   by_cases hsz : (dom T).card < Qtot
-  · set Pr : Finset Bytes := (insert a (dom T)).image fun a => a.toBytes.take 32 with hPr
-    have h1 : ∀ f, indicator (badColl p Qtot a T f) ≤
-        indicator (f = p.iv) + indicator (f ∈ outputs T) + indicator (bytes f ∈ Pr) := by
+  · have h1 : ∀ f, indicator (badColl p Qtot a T f) ≤
+        indicator (f = p.iv) + indicator (∃ b, T b = some f) +
+          indicator (∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f) := by
       intro f
       calc indicator (badColl p Qtot a T f)
-          ≤ indicator (f = p.iv ∨ f ∈ outputs T ∨ bytes f ∈ Pr) := indicator_mono fun h => h.2
-        _ ≤ indicator (f = p.iv) + indicator (f ∈ outputs T ∨ bytes f ∈ Pr) := indicator_or_le _ _
+          ≤ indicator (f = p.iv ∨ (∃ b, T b = some f) ∨
+              ∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f) :=
+            indicator_mono fun h => h.2
+        _ ≤ indicator (f = p.iv) + indicator ((∃ b, T b = some f) ∨
+              ∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f) := indicator_or_le _ _
         _ ≤ _ := by
-            have := indicator_or_le (f ∈ outputs T) (bytes f ∈ Pr)
+            have := indicator_or_le (∃ b, T b = some f)
+              (∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f)
             linarith
-    have hpre : (Pr.card : ℚ) ≤ ((dom T).card : ℚ) + 1 := by
-      have : Pr.card ≤ (dom T).card + 1 :=
-        Finset.card_image_le.trans (Finset.card_insert_le _ _)
-      exact_mod_cast this
-    have hout : ((outputs T).card : ℚ) ≤ ((dom T).card : ℚ) := by exact_mod_cast outputs_card_le T
     have hcard : (0 : ℚ) < (Fintype.card State : ℚ) := by positivity
+    have hout := mean_exists_output_le T
+    have hfilt : ((Finset.univ.filter fun b : Addr L => b = a ∨ T b ≠ none).card : ℚ) ≤
+        ((dom T).card : ℚ) + 1 := by exact_mod_cast card_filter_insert_le T a
+    have hpre := (mean_exists_prefix_le bytes bytes_injective (fun b : Addr L => b = a ∨ T b ≠ none)
+      (fun b => b.toBytes.take 32)).trans (div_le_div_of_nonneg_right hfilt hcard.le)
     calc mean (fun f : State => indicator (badColl p Qtot a T f))
-        ≤ mean (fun f : State => indicator (f = p.iv) + indicator (f ∈ outputs T) +
-            indicator (bytes f ∈ Pr)) := mean_mono h1
-      _ = mean (fun f : State => indicator (f = p.iv)) + mean (fun f : State => indicator (f ∈ outputs T)) +
-            mean (fun f : State => indicator (bytes f ∈ Pr)) := by
+        ≤ mean (fun f : State => indicator (f = p.iv) + indicator (∃ b, T b = some f) +
+            indicator (∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f)) := mean_mono h1
+      _ = mean (fun f : State => indicator (f = p.iv)) +
+            mean (fun f : State => indicator (∃ b, T b = some f)) +
+            mean (fun f : State => indicator (∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f)) := by
           rw [mean_add, mean_add]
       _ ≤ 1 / (Fintype.card State : ℚ) + ((dom T).card : ℚ) / (Fintype.card State : ℚ) +
             (((dom T).card : ℚ) + 1) / (Fintype.card State : ℚ) := by
-          rw [mean_indicator_eq, mean_indicator_mem]
-          have h2 := div_le_div_of_nonneg_right hout hcard.le
-          have h3 := (mean_indicator_inj_mem bytes bytes_injective Pr).trans
-            (div_le_div_of_nonneg_right hpre hcard.le)
+          rw [mean_indicator_eq]
           linarith
       _ ≤ (2 * Qtot : ℚ) / (Fintype.card State : ℚ) := by
           rw [← add_div, ← add_div]
