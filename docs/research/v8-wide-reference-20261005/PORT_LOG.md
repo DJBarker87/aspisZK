@@ -1,6 +1,6 @@
 # Wide-field port log
 
-Status: **Phases 1–4 complete.** Both agreement theorems are proved generically and at WideExact; the QM31 regressions reproduce the original V7 statements. All endpoint audits contain only propext, Classical.choice and Quot.sound (or a subset).
+Historical status (2026-10-05): **Phases 1–4 complete.** Both agreement theorems are proved generically and at WideExact; the QM31 regressions reproduce the original V7 statements. All endpoint audits contain only propext, Classical.choice and Quot.sound (or a subset).
 Finishing at the requested Phase 4 checkpoint. **Phase 5 was not started:** the matched degree-three bound, joint-list bound and subfield-descent lemma remain unproved by this port. The R0 paper argument remains unreviewed; this port does not establish its complete 100-bit soundness claim. The V8 round loop remains paused.
 
 ## Completed results
@@ -211,3 +211,1586 @@ Every successful final-source row records the number of `#print axioms` reports 
 - Attempt 087: `AspisWideTower.qm31_wideU_not_isSquare` — propext, Classical.choice, Quot.sound; `AspisWideTower.wideExact_card` — propext, Classical.choice, Quot.sound; `AspisWideTower.wideExact_natCast_ne_zero_of_pos_of_lt_characteristic` — propext, Classical.choice, Quot.sound; `AspisWideTower.wideExact_two_ne_zero` — propext, Classical.choice, Quot.sound; `AspisWideTower.qm31_to_wide_injective` — propext, Classical.choice, Quot.sound.
 - Attempt 088: `AspisWide.Instances.wideInitialWidth29CurveDecodable` — propext, Classical.choice, Quot.sound; `AspisWide.Instances.wideFinalDegreeThreeCurveDecodable` — propext, Classical.choice, Quot.sound; `AspisWide.Instances.unchangedChallengeCaps` — none.
 - Attempt 089: `AspisWide.Regression.qm31InitialWidth29CurveDecodable` — propext, Classical.choice, Quot.sound; `AspisWide.Regression.qm31FinalDegreeThreeCurveDecodable` — propext, Classical.choice, Quot.sound; `AspisWide.Regression.initialResult_eq_v7` — propext, Classical.choice, Quot.sound; `AspisWide.Regression.finalResult_eq_v7` — propext, Classical.choice, Quot.sound.
+
+## Replay 2026-10-06
+
+Replay source revision: `1aa58a9e9dac2c9c9cc6b6b09998e4a38d25a2c4`.
+Worktree: `/Users/dominic/ZK/.worktrees/ZK-v8-r21-public-arithmetic-20260922`.
+Separate build-host workspace: `/home/dombarker/project-offloads/aspis-wide-replay-20261006`.
+The author's workspace is read-only evidence. Its Wide objects are used only
+for import-footprint measurement, never as fallback during source compilation.
+All 48 source files were extracted from the commit and checked byte-for-byte
+against the worktree; the replay object directory started empty.
+
+Import-only probes ran sequentially with `-j1 -DElab.async=false`, GNU
+`/usr/bin/time -v`, a 600-second timeout and one systemd scope per target.
+Measurement used no Lean `-M` option; memory was bounded by the scope:
+`MemoryHigh=6500M`, `MemoryMax=7G`, `MemorySwapMax=0`.
+
+| Import-only target | Exit | Wall seconds | Peak RSS KiB | Swaps | Cgroup swap peak |
+|---|---:|---:|---:|---:|---:|
+| `import Wide.Terminal` | 0 | 2.73 | 6711216 | 0 | 0 |
+| `import Wide.Instances` + `import Wide.Regression` | 0 | 2.76 | 6868880 | 0 | 0 |
+
+After these measurements, the source-replay setting is fixed at **`-M7000`**,
+about 292 MiB above the larger measured import RSS (6707.89 MiB). The scope
+limits remain unchanged. This is an import-based setting, not a retry after
+a failing proof. The full source replay below subsequently passed at this setting.
+
+### Environment and exact source command
+
+Lean binary: `/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean`.
+Version: `Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)`.
+Binary SHA-256: `e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550`.
+
+Mathlib revision: `81a5d257c8e410db227a6665ed08f64fea08e997`.
+The 267 copied V7 `.olean` files match every hash in the author’s
+`evidence/pinned-object-hashes.json`. The older NUC project-object root is
+excluded from this replay. No dependency build or `lake build` was run.
+
+The complete ordered `LEAN_PATH` for source compilation is:
+
+```text
+/home/dombarker/project-offloads/aspis-wide-replay-20261006/objects
+/home/dombarker/project-offloads/aspis-wide-replay-20261006/pinned-v7
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean
+/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean
+```
+
+Import probes append `/home/dombarker/project-offloads/aspis-wide-port-20261005/objects`
+as entry 13; that entry is absent from all source-replay commands.
+
+Object-set listings are sorted UTF-8 lines `SHA256  size_bytes  relative_path`,
+including `.olean`, `.olean.private`, `.olean.server` and `.ir` files.
+Below, entry numbers refer to the ordered search path above. Listings and raw
+compiler evidence remain in the replay workspace’s `evidence/` directory.
+
+| Search-path entry | Artifact count before replay | Listing SHA-256 |
+|---:|---:|---|
+| 1 | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| 2 | 267 | `172f987aaec752424794eaa056f9d363e71ef7ba3ef1de67a24367f3a94439b0` |
+| 3 | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| 4 | 753 | `dcf5877b3555302d05232f35a344b091b9eb82c11990bd68b97ddef87a01a716` |
+| 5 | 56 | `40e3dbf935ce2159a6457a1a75c30a2c890066a98ebfd97b3ec77c510b21714d` |
+| 6 | 528 | `d8fe51972479b58153267b704bdfe919b14b451be6462b3dc7148b9b6bfc6b4b` |
+| 7 | 92 | `d6ecba0cc4c2ee3eb0d4a64eb00e52e97d14c23e9afbec603a72108679f97745` |
+| 8 | 84 | `11ea7e2e4effd0eba1167c5c4ceb3be0c580ee230116ff3ad9fb3962e0221f83` |
+| 9 | 16 | `bf7c59f945fe4918f90d1568d489c545e83f81560fd60f432a04208d8979acff` |
+| 10 | 52 | `58fedb95c7a159012d47156551273318cf6ec9d0198a09a4c9de50c4cb587ef6` |
+| 11 | 33070 | `ed83c0c1d17caac84c70031f5bfc5fdf04845acfcf647524071211d5527f3ce4` |
+| 12 | 9726 | `d813aff42029d95af7f8b81d8c373ed1c9f864a5af8abdf103d31349ccdb4d86` |
+
+Entry 1 was empty; entry 2 is the copied V7 set; entry 11 is Mathlib.
+Entries 3–10 are the exact cached Mathlib dependencies; entry 12 is the
+toolchain library. Listing files are named `object-set-00.txt` through
+`object-set-11.txt` (zero-based).
+
+Before every job, a cgroup inventory checked populated finite caps, avoided
+double-counting capped descendants, and checked that no other Lean process
+was running. At the import probes, existing caps totaled 44.375 GiB; with
+the new 7 GiB scope this was 51.375 GiB, below the 55 GiB host limit.
+
+Exact command template (with the captured compiler environment restored and
+the ordered `LEAN_PATH` above):
+
+```sh
+systemd-run --user --scope --quiet --unit="aspis-wide-replay-$tag" \
+  -p MemoryHigh=6500M -p MemoryMax=7G -p MemorySwapMax=0 \
+  python3 /home/dombarker/project-offloads/aspis-wide-replay-20261006/replay.py \
+  inside "$tag" "$source" "$output" 0
+```
+
+The scope wrapper executes, in the replay workspace:
+
+```sh
+/usr/bin/time -v -o "evidence/$tag.time" \
+  timeout --signal=TERM --kill-after=10 600 \
+  /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean \
+  -j1 -M7000 -DElab.async=false \
+  -R /home/dombarker/project-offloads/aspis-wide-replay-20261006/sources \
+  -o "$output" "$source"
+```
+
+For each job, `evidence/$tag.json` records the full expanded command, exact
+source SHA-256, all search-path entries, exit status, GNU time metrics,
+effective cgroup limits, cgroup memory/swap peaks and OOM counters, and the
+literal axiom output. `$tag.stdout` and `$tag.time` retain raw output.
+
+### Footprint discrepancy
+
+The discrepancy remains **unexplained**. The pinned V7 hashes and Lean/Mathlib
+revisions match the author’s records; no current Mathlib object has an mtime
+later than 2026-10-05 23:40 UTC. The author’s logged final commands and this
+replay both disable asynchronous elaboration. Historical full Mathlib object
+hashes and the successful per-job copied cache views are unavailable, so
+mtime and revision agreement do not establish byte-for-byte historical
+Mathlib equivalence.
+
+The author used fresh copied Mathlib views with `MemoryHigh=3G`; this replay
+reads the pinned Mathlib path directly and uses `MemoryHigh=6500M`.
+A live `Wide.RegularRing` sample had RSS 6,705,352 KiB, file PSS 6,255,352 KiB,
+anonymous PSS 447,840 KiB and swap 0. Its mappings contained 31,256 `.olean`
+segments, including 12 newly compiled Wide objects and 29 pinned V7 objects,
+with no mappings from the author’s Wide object directory. This demonstrates
+that mapped file pages dominate the measured footprint; it does **not**
+establish why the historical `-M4500` run succeeded at about 4.0 GB.
+
+### Part A: complete source replay
+
+**PASS: 48/48 source files**, in the dependency order below, with 303 clean
+`#print axioms` reports. No proof source was changed. Every row uses source
+revision `1aa58a9e9dac2c9c9cc6b6b09998e4a38d25a2c4`, `-M7000` and the scope
+limits above. GNU time reports peak RSS in KiB (multiply by 1024 for bytes).
+All cgroup swap peaks and OOM-kill counts were zero. The maximum measured RSS
+was 7,003,368 KiB (6.679 GiB), in `Wide.Interpolation`.
+
+The audit column gives the number of literal reports reproduced below;
+`PCQ` means exactly `[propext, Classical.choice, Quot.sound]`, with a subset
+where the output says otherwise. Raw files use the numbered target tag,
+for example `01-Wide-InitialEncoder.stdout` and `.time`.
+
+| Order / target | Source SHA-256 | Exit | Wall | Peak RSS KiB | Swaps | Audit |
+|---|---|---:|---|---:|---:|---|
+| 01 `Wide/InitialEncoder.lean` | `518bf5e70161f11981f3c0b97f95f88efe08e0d3065d54848079e507138552b2` | 0 | 0:03.08 | 6728984 | 0 | 4, PCQ/subset |
+| 02 `Wide/FinalEncoder.lean` | `6ae59a2d5f9d2d5d56b70ac6c67121d3bcb26f42470bafb3e2d798429590488f` | 0 | 0:04.35 | 6755612 | 0 | 4, PCQ/subset |
+| 03 `Wide/EncoderLinearity.lean` | `14fab916cb20666ee40cf6e62281c4282cfd36c23af38fca4042dce249c8ee5f` | 0 | 0:03.72 | 6747336 | 0 | 4, PCQ/subset |
+| 04 `Wide/GRSConversion.lean` | `df621ca75572edf4e5291d1c64b802a158303e404a5b7f0ec3e63630acd39255` | 0 | 0:03.87 | 6746236 | 0 | 16, PCQ/subset |
+| 05 `Wide/MultiplicityThreeGS.lean` | `73252b85be6db2b7a0180d9f942e1872a75a57e6257dfb36124139bb27f277b5` | 0 | 0:08.77 | 6989380 | 0 | 19, PCQ/subset |
+| 06 `Wide/Interpolation.lean` | `834bdc8c5b3d16c42d25e55d9be9895e2d6ed2a035c949487369667bbe3dec4a` | 0 | 0:07.98 | 7003368 | 0 | 8, PCQ/subset |
+| 07 `Wide/Agreement.lean` | `783b14e3f958071f52a7dafe8d4bb76a4360e7a49e4de3a22f87eda2023b0338` | 0 | 0:03.34 | 6751896 | 0 | 8, PCQ/subset |
+| 08 `Wide/Factors.lean` | `44cbdc81be8d8aa519c170fbd511dc4cd70885bfe0a1762f7e3de97d82e647f7` | 0 | 0:05.73 | 6758064 | 0 | 10, PCQ/subset |
+| 09 `Wide/Smooth.lean` | `236ddbdc270bc67d62b1deea5d5a1ce01cdd8884584fc54c9a002c783735dc7e` | 0 | 0:06.77 | 6771324 | 0 | 10, PCQ/subset |
+| 10 `Wide/Hensel.lean` | `92342560420c536f7b622c2c0031d4a233c545af82e1392409446bf7ed8ff890` | 0 | 0:04.42 | 6755888 | 0 | 5, PCQ/subset |
+| 11 `Wide/LocalFactors.lean` | `d6225243413d8ac80843063d3f1d99468f6a51a852083ce8a980de1a3252fdb7` | 0 | 0:03.85 | 6747864 | 0 | 7, PCQ/subset |
+| 12 `Wide/FunctionField.lean` | `c4bfa3d14cbf56ca5686be890a375746e6711d57b029514cff81a1b5ab56a41c` | 0 | 0:05.33 | 6754064 | 0 | 4, PCQ/subset |
+| 13 `Wide/PowerSeriesLift.lean` | `2932fdc22cdf579950bb29e8c822e0c1e23f56bcb1c0e99b336928874e874c93` | 0 | 0:07.45 | 6746836 | 0 | 3, PCQ/subset |
+| 14 `Wide/RegularWeights.lean` | `7b583549cc3d32cb23c569ab4643243449e0fd0567694284452944e4c2660b6e` | 0 | 0:05.14 | 6770576 | 0 | 15, PCQ/subset |
+| 15 `Wide/RegularRing.lean` | `51023907cbdb8889f21187fc6cbf0bede997bc01eb9ac65f4f1c637a91cb9310` | 0 | 0:06.14 | 6767368 | 0 | 18, PCQ/subset |
+| 16 `Wide/RegularZeroCount.lean` | `32ea002db6bebd19d3628efd91f974bf8a95bcdff2bd91637ac1341472478912` | 0 | 0:05.95 | 6756508 | 0 | 8, PCQ/subset |
+| 17 `Wide/HenselCombinatorics.lean` | `b0171895d4a4a6acaaf06e92d5360457e4ac55e905616eb55482750b04c3f001` | 0 | 0:05.09 | 6764552 | 0 | 16, PCQ/subset |
+| 18 `Wide/HenselRecurrence.lean` | `46658b8d22df6786e1442da16470ddf8e49bb6d2fef4c6d9ae4396f4095fb148` | 0 | 0:03.54 | 6739252 | 0 | 1, PCQ/subset |
+| 19 `Wide/RegularEvaluation.lean` | `a116ef5450c482aa291df40e008840305ffde91d856b3b8bce3d34aef8ee874d` | 0 | 0:05.21 | 6754436 | 0 | 5, PCQ/subset |
+| 20 `Wide/RegularHensel.lean` | `e2c4af177e5e802d43c4d81db90b182002bfcd6850ae344314382202dc0f661d` | 0 | 0:05.21 | 6749416 | 0 | 5, PCQ/subset |
+| 21 `Wide/FactorBudgets.lean` | `9703a2245522f18e90b29b84ab353c92630daa56487381db92f2d4fedb07d196` | 0 | 0:06.02 | 6777144 | 0 | 16, PCQ/subset |
+| 22 `Wide/HenselWeights.lean` | `7f95af03f66b47170eb3efa75bcc17e5a15b59977ee9b4b661c031466109ced8` | 0 | 0:08.34 | 6777428 | 0 | 21, PCQ/subset |
+| 23 `Wide/HenselIntegralLift.lean` | `ecd52be61f8c171a699e4ef69963aeb6a7a90b72416a8bf7b41f347780018a80` | 0 | 0:15.96 | 6812336 | 0 | 15, PCQ/subset |
+| 24 `Wide/HenselSpecialization.lean` | `d7e48ffa237f8f31a0362986fb3b8b87afedbb49c33aa0460e12e700991a3b2f` | 0 | 0:06.42 | 6768228 | 0 | 13, PCQ/subset |
+| 25 `Wide/FiniteBranch.lean` | `cf72efcdc93a02a613250adde3c5ae29981005cd061aee801b5e1c19f6af28f0` | 0 | 0:08.67 | 6765520 | 0 | 8, PCQ/subset |
+| 26 `Wide/BranchEvaluation.lean` | `d23b7e1579f449a5f2f538467f5ed06f443b65a2877152e6226f5b0e672f5f41` | 0 | 0:08.31 | 6777632 | 0 | 11, PCQ/subset |
+| 27 `Wide/AmbientCurve.lean` | `23d46d5d838ec039207e0da64fbf75f467e3d130ef387770df950a54826a17bc` | 0 | 0:02.92 | 6751584 | 0 | 3, PCQ/subset |
+| 28 `Wide/Cardinality.lean` | `373ba7d10692b6ddad737919145cc3b1c2672ff22716ae7ff664939740b82fb9` | 0 | 0:00.64 | 1545812 | 0 | 2, PCQ/subset |
+| 29 `Wide/FixedBranchCurve.lean` | `dfd6574eaa4a7777253b2ca7061d1661176d27998669c29365aea434f716ae53` | 0 | 0:02.94 | 6749612 | 0 | 1, PCQ/subset |
+| 30 `Wide/ReleasedLift.lean` | `fd04f0b241ee320b200be7340f97017982adba2fa1bb59131b621adc704d555d` | 0 | 0:03.28 | 6743696 | 0 | 4, PCQ/subset |
+| 31 `Wide/ConcreteBranch.lean` | `2af45f9a045e4d91a196d59957fb5728defe555469e2ec0ae6284b586204d1a9` | 0 | 0:03.58 | 6768528 | 0 | 2, PCQ/subset |
+| 32 `Wide/EncoderRegression.lean` | `4535cbb3a56a47bbec7f95175fa30c4ccf69e5788018bc5b505119283e832d48` | 0 | 0:02.90 | 6864960 | 0 | 2, PCQ/subset |
+| 33 `Wide/OuterSelection.lean` | `ae6bd2a461611ab79ecc0c67bae571887cbef031505629e90bb4004e4ebc45b7` | 0 | 0:05.04 | 6782304 | 0 | 5, PCQ/subset |
+| 34 `Wide/FinalRoot.lean` | `aa8ad2e10b8c455cdbf9a08c11f0650aacf849fe66750bc7118f870fed988ad3` | 0 | 0:03.13 | 6751848 | 0 | 2, PCQ/subset |
+| 35 `Wide/FinalBranch.lean` | `38bfe106ddfc3c9fff5893d48aa31236022bbdfe0e80951a4880a8e9b16e86e5` | 0 | 0:02.98 | 6748372 | 0 | 1, PCQ/subset |
+| 36 `Wide/FinalSelection.lean` | `f54b193d353e0f706a98d88fbcb3b059cb9713bc40ac54df8111117988ba8ec9` | 0 | 0:03.00 | 6752804 | 0 | 1, PCQ/subset |
+| 37 `Wide/FinalCurveBranch.lean` | `27fc6fc66a96534662506fc17171936cada63ab2c0dc4e1f031a6e4e966733fa` | 0 | 0:02.95 | 6747936 | 0 | 1, PCQ/subset |
+| 38 `Wide/FinalCurve.lean` | `a65691e03f23e30147f549c86f954c8046192f182b27d1acd1b4aa2c181ef416` | 0 | 0:03.07 | 6748528 | 0 | 2, PCQ/subset |
+| 39 `Wide/Terminal.lean` | `943d9b78b162fe3f60709309db5bd28ec9acd99088f90eb6203ea49bb26b0daf` | 0 | 0:03.13 | 6760572 | 0 | 2, PCQ/subset |
+| 40 `Wide/InitialRoot.lean` | `2c0c645d5892f2d34f4162ff8b97caa6da39956e7d68cc09e5244eb3bbe06adf` | 0 | 0:03.10 | 6759972 | 0 | 2, PCQ/subset |
+| 41 `Wide/InitialBranch.lean` | `c01ee2940d3149a9c7353625e23e2dd9039957360c809b1e7f5434c5aa09f81e` | 0 | 0:03.19 | 6748784 | 0 | 1, PCQ/subset |
+| 42 `Wide/InitialSelection.lean` | `1c1cadb34447617d5927c4146c8368d924741c63b1544abdb88f82398bf86d5d` | 0 | 0:03.25 | 6752008 | 0 | 1, PCQ/subset |
+| 43 `Wide/InitialCurveBranch.lean` | `45ebd8f90dd47722adb36af792745c3bcdc6d0c1ef718e7fcf4f36dfb515e1a3` | 0 | 0:03.19 | 6748584 | 0 | 1, PCQ/subset |
+| 44 `Wide/InitialCurve.lean` | `dce9f637cd7b50d4962e7e09432dd43ed8966c2b2750b7720a2320e745d4415e` | 0 | 0:03.28 | 6749588 | 0 | 2, PCQ/subset |
+| 45 `Wide/Initial.lean` | `7e74ef9f528d196f712641c579b530cee93fb8e1a0e7eb96ababd2397c7ea509` | 0 | 0:03.24 | 6753096 | 0 | 2, PCQ/subset |
+| 46 `WideTower.lean` | `f55bd736f0e8bb3fedda8c862bf8311fe3be609b17b72a01f0e476b33c34c538` | 0 | 0:05.58 | 6746804 | 0 | 5, PCQ/subset |
+| 47 `Wide/Instances.lean` | `7a7612bf7f5c5d7e03c3ba20706ce0e7ce8f1b69fa57410385e51b3e2a4cd8ca` | 0 | 0:03.34 | 6759848 | 0 | 3, PCQ/subset |
+| 48 `Wide/Regression.lean` | `5c4b7d447452ba43590d4e6539a473e192214bacc16a26a98bef91b879ec9b27` | 0 | 0:03.16 | 6899236 | 0 | 4, PCQ/subset |
+
+<details>
+<summary>Complete per-file axiom output from this source replay</summary>
+
+`Wide/InitialEncoder.lean`:
+
+```text
+'AspisWide.InitialEncoder.two_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.InitialEncoder.exactInitialPolynomialPair_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.InitialEncoder.exactInitialEncoderCircleRealization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.InitialEncoder.exactInitialEncoder_overlap_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/FinalEncoder.lean`:
+
+```text
+'AspisWide.FinalEncoder.exactFinalLinear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FinalEncoder.exactFinalEncoder_overlap_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FinalEncoder.exactFinalEncoder_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FinalEncoder.exactInitialEncoder_eq_circleLift' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/EncoderLinearity.lean`:
+
+```text
+'AspisWide.Agreement.exactInitialEncoder_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exactInitialLinear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exactInitialEncoder_messageCurve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exactFinalEncoder_messageCurve' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/GRSConversion.lean`:
+
+```text
+'AspisWide.GRSConversion.exactFinalGRSConversion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactFinalEncoder_eq_grs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactFinalAgreementCount_eq_grs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactFinalThreshold_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactFinalMessagePolynomial_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.GRSConversion.exactFinal9558_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactCircleGRSPoint_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactCircleGRSMultiplier_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactCircleGRSPolynomial_degree_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactCircleGRSPolynomial_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactInitialEncoder_coordinate_grs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactInitialGRSConversion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactInitialEncoder_eq_grs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactInitialAgreementCount_eq_grs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactInitialThreshold_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.GRSConversion.exactInitial38230_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/MultiplicityThreeGS.lean`:
+
+```text
+'AspisWide.MultiplicityThreeGS.exactInitialAmbientDegreeConvention' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactFinalAmbientDegreeConvention' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactFinalInterpolationBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactInitialInterpolationBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exists_nonzero_interpolationKernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exists_exactFinalInterpolation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exists_exactInitialInterpolation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.interpolationMultiplicityThree_dvd' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.interpolationSubstitute_eq_zero_of_agreement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactFinalPolynomialAgreement_card_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactFinalRootCandidates_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactFinalGSDecode_mem_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactFinalGSDecode_length_le_99' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactFinalMultiplicityThreeGS' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactInitialPolynomialAgreement_card_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactInitialRootCandidates_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactInitialGSDecode_mem_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactInitialGSDecode_length_le_100' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MultiplicityThreeGS.exactInitialMultiplicityThreeGS' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/Interpolation.lean`:
+
+```text
+'AspisWide.Interpolation.curveConstraintPolynomial_eq_zero_of_mem_kernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Interpolation.interpolationConstraint_specializeCurveCoefficients' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Interpolation.exists_curveCoefficientPolynomial_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Interpolation.zeroCurveSpecializations_card_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Interpolation.specializeCurveCoefficients_mem_kernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Interpolation.exists_nonzero_curveInterpolationKernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Interpolation.exactInitialCurveInterpolationBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Interpolation.exactFinalCurveInterpolationBudget' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/Agreement.lean`:
+
+```text
+'AspisWide.Agreement.exactInitialEncoder_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exactInitialEncoder_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exactFinalEncoder_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exactFinalEncoder_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exists_exactInitialCurveInterpolation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exists_exactFinalCurveInterpolation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Agreement.exactFinalValidCandidate_substitute_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Agreement.exactInitialValidCandidate_substitute_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/Factors.lean`:
+
+```text
+'AspisWide.Factors.specializeChallenge_curveTrivariatePolynomial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Factors.candidate_linearFactor_dvd_of_substitute_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Factors.curveTrivariatePolynomial_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Factors.weightedBivariatePolynomial_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Factors.curveTrivariatePolynomial_natDegree_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Factors.curvePrimeFactors_product_associated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Factors.positiveYPrimeFactors_card_le_natDegree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Factors.sum_positiveYPrimeFactors_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Factors.exists_positiveDegree_primeFactor_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Factors.exists_frequent_positiveDegree_primeFactor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/Smooth.lean`:
+
+```text
+'AspisWide.Smooth.curvePrimeFactor_resultant_derivative_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Smooth.separabilityCertificate_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Smooth.separabilityCertificate_xNatDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Smooth.exists_exactV7_uniformSmoothEvaluationPoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Smooth.resultant_eq_zero_of_common_root_of_natDegree_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Smooth.simpleSpecializedRoot_of_certificate_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Smooth.nonsimpleChallengeSet_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Smooth.exactV7Initial_nonsimpleChallengeSet_card_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Smooth.exactV7Final_nonsimpleChallengeSet_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Smooth.simpleSpecializedRoot_of_not_mem_nonsimpleChallengeSet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/Hensel.lean`:
+
+```text
+'AspisWide.Hensel.exists_powerSeries_root_of_monic_simple_constant_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Hensel.exists_powerSeries_root_of_unitLeading_simple_constant_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Hensel.exists_adic_root_of_simple_approximation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Hensel.exists_powerSeries_root_of_simple_constant_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Hensel.powerSeries_root_unique_of_simple_constant_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/LocalFactors.lean`:
+
+```text
+'AspisWide.LocalFactors.bivariatePrimeFactors_product_associated' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.LocalFactors.exists_leadingCoeff_quotient_of_bivariatePrimeFactor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.LocalFactors.leadingCoeff_quotient_natDegree_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.LocalFactors.positiveYBivariatePrimeFactors_card_le_natDegree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.LocalFactors.sum_positiveYBivariatePrimeFactors_natDegree_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.LocalFactors.exists_localPrimeFactor_for_simpleSpecializedRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.LocalFactors.exists_frequent_localPrimeFactor' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/FunctionField.lean`:
+
+```text
+'AspisWide.FunctionField.localFactorOverRational_irreducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FunctionField.exactV7_localPrimeFactor_derivative_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FunctionField.localBranchRoot_isRoot_parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FunctionField.localBranchRoot_not_isRoot_parentDerivative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/PowerSeriesLift.lean`:
+
+```text
+'AspisWide.PowerSeriesLift.constantCoeff_comp_localCoefficientPowerSeriesHom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.PowerSeriesLift.constantCoeff_liftedGlobalFactor_eval_C' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.PowerSeriesLift.exists_exactV7_fixedBranch_powerSeriesRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/RegularWeights.lean`:
+
+```text
+'AspisWide.RegularWeights.localBivariateWeight_add_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.localBivariateWeight_mul_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.weightedHomogeneousComponent_top_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularWeights.weightedHomogeneousComponent_mul_top' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularWeights.weightedTotalDegree_mul_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.localBivariateWeight_mul_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.localBivariateWeight_multiset_prod_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularWeights.localBivariateWeight_pow_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.localBivariateWeight_C_le_natDegree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularWeights.localBivariateWeight_monomial_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.localBivariateWeight_le_of_coeff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.iteratedBivariateWeight_add_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.iteratedBivariateWeight_mul_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularWeights.iteratedBivariateWeight_le_of_coeff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularWeights.iteratedBivariateWeight_modByMonic_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/RegularRing.lean`:
+
+```text
+'AspisWide.RegularRing.integralLocalFactor_monic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralBranchGenerator_isRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralLocalFactor_root_of_localFactor_root' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularRing.integralBranchToFunctionField_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.canonicalRegularRepresentative_natDegree_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularRing.integralBranchSpecialization_eq_eval_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularRing.integralLocalFactor_coefficientWeight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularRing.integralLocalFactor_weight_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralLocalFactor_iteratedWeight_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.canonicalRegularRepresentative_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_mul_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_add_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_pow_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_finset_sum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_finset_prod_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_mk_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_of_le_natDegree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularRing.integralBranchIteratedWeight_root_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/RegularZeroCount.lean`:
+
+```text
+'AspisWide.RegularZeroCount.matrix_det_natDegree_le_of_potentials' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularZeroCount.resultant_natDegree_le_mul_weight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularZeroCount.canonicalRegularRepresentative_resultant_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularZeroCount.eval_canonicalRegularRepresentative_resultant_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularZeroCount.canonicalRegularRepresentative_resultant_natDegree_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularZeroCount.card_rootPair_specializations_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularZeroCount.integralBranch_eq_zero_of_mul_weight_lt_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularZeroCount.integralBranchToFunctionField_injective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/HenselCombinatorics.lean`:
+
+```text
+'AspisWide.HenselCombinatorics.sum_henselDenominatorExponent_add_positivePartCount' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.sum_henselDenominatorExponent_le_two_mul_sub_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.sum_henselDenominatorExponent_le_two_mul_sub_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.sum_henselDenominatorExponent_le_two_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.sum_henselDenominatorExponent_le_target_sub_one_of_total_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.clear_hensel_product_denominators' depends on axioms: [propext, Quot.sound]
+'AspisWide.HenselCombinatorics.exists_unique_full_part_of_positivePartCount_eq_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.positivePartCount_range_eq_of_coeffProduct_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.convolution_henselExponent_le_two_mul_sub_two' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.coeff_pow_eq_linear_add_nonlinear' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.coeff_pow_eq_linear_add_nonlinear_all' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.coeff_mul_eq_constant_add_positive' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.coeff_eval_eq_derivative_mul_add_nonlinear' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.derivative_mul_coeff_eq_neg_nonlinear_of_isRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.nonlinearEvaluationCoefficientOn_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselCombinatorics.derivative_mul_coeff_eq_neg_nonlinearOn_of_isRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/HenselRecurrence.lean`:
+
+```text
+'AspisWide.HenselRecurrence.exactV7_fixedBranch_coefficient_recurrence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/RegularEvaluation.lean`:
+
+```text
+'AspisWide.RegularEvaluation.integralBranchToFunctionField_regularizedBranchEvaluation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularEvaluation.integralBranchSpecialization_regularizedBranchEvaluation_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularEvaluation.integralBranchSpecialization_regularizedBranchEvaluation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularEvaluation.regularizedPolynomial_iteratedWeight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularEvaluation.integralBranchIteratedWeight_regularizedBranchEvaluation_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/RegularHensel.lean`:
+
+```text
+'AspisWide.RegularHensel.integralBranchToFunctionField_regularizedHenselDerivative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularHensel.exactV7_regularizedHenselDerivative_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.RegularHensel.mem_localPoleChallengeSet_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularHensel.localPoleChallengeSet_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.RegularHensel.specialization_regularizedHenselDerivative_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/FactorBudgets.lean`:
+
+```text
+'AspisWide.FactorBudgets.coeff_equivMvPolynomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FactorBudgets.fixedBranchEvaluationBudget_le' depends on axioms: [propext, Quot.sound]
+'AspisWide.FactorBudgets.coeff_weight_le_localBivariateWeight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.localBivariateWeight_eq_iteratedBivariateWeight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.localBivariateWeight_specializeEvaluationPoint_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.trivariateXYWeight_curveTrivariatePolynomial_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.trivariateYZWeight_curveTrivariatePolynomial_lt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.sum_positiveGlobalFactorWeights_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FactorBudgets.sum_positiveGlobalFactorYZWeights_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.sum_positiveLocalFactorWeights_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FactorBudgets.exactInitial_improvedBranchBudget_lt_releaseCap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.exactFinal_improvedBranchBudget_lt_releaseCap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FactorBudgets.exactInitial_incidence_of_branchSelection' depends on axioms: [propext, Quot.sound]
+'AspisWide.FactorBudgets.exactFinal_incidence_of_branchSelection' depends on axioms: [propext, Quot.sound]
+'AspisWide.FactorBudgets.exactInitial_concurrency_of_branchSelection' depends on axioms: [propext, Quot.sound]
+'AspisWide.FactorBudgets.exactFinal_concurrency_of_branchSelection' depends on axioms: [propext, Quot.sound]
+```
+
+`Wide/HenselWeights.lean`:
+
+```text
+'AspisWide.HenselWeights.derivative_coefficientWeight_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.HenselWeights.integralBranchIteratedWeight_regularizedHenselDerivative_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.leading_mul_constantBranchRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.HenselWeights.shiftedXCoefficientHom_eq_coe_taylor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.coeff_shiftedXCoefficientHom' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.HenselWeights.coeff_shiftedChallengeCoefficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.HenselWeights.shiftedChallengeCoefficient_natDegree_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.shiftedChallengeCoefficient_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.integralBranchIteratedWeight_shiftedCoefficient_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.coeff_localCoefficientPowerSeriesHom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.coeff_liftedGlobalFactor_coefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.map_regularClearedPowerCoefficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.HenselWeights.map_regularClearedSupportedPowerCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.map_regularClearedSupportedPowerCoefficient_of_specialization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.integralBranchToFunctionField_regularClearedHenselCoefficientZero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.regularClearedHenselCoefficientZero_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.regularClearedCoefficientProduct_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.regularClearedPowerCoefficient_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.regularClearedSupportedPowerCoefficient_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.nonsaturatedLinearBranch_irreducible' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselWeights.nonsaturatedLinearBranch_generator_ceiling_ne_leading_add_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/HenselIntegralLift.lean`:
+
+```text
+'AspisWide.HenselIntegralLift.map_clearedTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Wide.HenselIntegralLift.0.AspisWide.HenselIntegralLift.nonlinear_supported_exponentBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.Wide.HenselIntegralLift.0.AspisWide.HenselIntegralLift.positive_shift_exponentBound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.map_regularClearedNonlinearEvaluationCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.map_regularClearedNonlinearEvaluationCoefficientOn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.map_neg_regularClearedNonlinearEvaluationCoefficientOn_of_isRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.map_neg_regularClearedNonlinearEvaluationCoefficient_of_isRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.regularClearedNonlinearEvaluationCoefficient_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.integralBranchToFunctionField_regularLiftedGlobalCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.integralBranchIteratedWeight_localLeading_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.regularLiftedGlobalCoefficient_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.exact_regularizedHensel_structuralBudget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.regularClearedHenselNext_image' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.HenselIntegralLift.exists_regularClearedHenselCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselIntegralLift.exists_regularClearedHenselCoefficient_with_weight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/HenselSpecialization.lean`:
+
+```text
+'AspisWide.HenselSpecialization.chosenRegularClearedHenselCoefficient_image' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.chosenRegularClearedHenselCoefficient_succ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.specialization_regularizedHenselDerivative' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.specialization_chosenRegularClearedHenselCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.chosenRegularClearedHenselCoefficient_weight_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.chosenRegularClearedHenselCoefficient_eq_zero_of_many_specializations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.coeff_fixedBranchRoot_eq_zero_of_chosenRegularCleared_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.coeff_fixedBranchRoot_eq_zero_of_many_specializations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.specializedShiftedCoefficientHom_eq_comp' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.coeff_specializedShiftedCoefficientHom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.integralBranchSpecialization_regularLiftedGlobalCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.shiftedCandidateSeries_isRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.HenselSpecialization.constantCoeff_specializedLiftedGlobalFactor_derivative_eval_C' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/FiniteBranch.lean`:
+
+```text
+'AspisWide.FiniteBranch.trunc_eval_coe_trunc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FiniteBranch.trunc_eval_coe_trunc_eq_zero_of_isRoot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FiniteBranch.map_coe_polynomialLiftedGlobalFactor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FiniteBranch.natDegree_eval_le_localBivariateWeight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FiniteBranch.polynomialTruncation_isRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.FiniteBranch.polynomialTruncation_isRoot_of_gap_coefficients_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FiniteBranch.fixedBranchRoot_eq_coe_truncation_of_gap_coefficients_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.FiniteBranch.fixedBranchRoot_eq_coe_truncation_of_many_specializations' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/BranchEvaluation.lean`:
+
+```text
+'AspisWide.BranchEvaluation.henselDenominatorExponent_le_of_lt' depends on axioms: [propext, Quot.sound]
+'AspisWide.BranchEvaluation.integralBranchToFunctionField_clearedFiniteBranchEvaluation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.specialization_clearedFiniteBranchEvaluation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.sum_coeff_shiftedCandidateSeries_eq_eval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.specialization_clearedFiniteBranchDiscrepancy_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.finiteBranchValue_eq_received_of_discrepancy_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.candidate_eval_eq_received_of_discrepancy_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.integralBranchIteratedWeight_clearedFiniteBranchEvaluation_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.integralBranchIteratedWeight_sub_triple_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.integralBranchIteratedWeight_clearedFiniteBranchDiscrepancy_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.BranchEvaluation.finiteBranchValue_eq_received_of_many_agreements' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/AmbientCurve.lean`:
+
+```text
+'AspisWide.AmbientCurve.lagrangeAmbientCurve_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.AmbientCurve.lagrangeAmbientCurve_at_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.AmbientCurve.candidate_eval_eq_lagrangeAmbientCurve_eval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/Cardinality.lean`:
+
+```text
+'AspisWide.Cardinality.card_fin_of_fintype' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Cardinality.card_fin_lt_of_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/FixedBranchCurve.lean`:
+
+```text
+'AspisWide.FixedBranchCurve.exists_ambient_curve_of_fixed_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/ReleasedLift.lean`:
+
+```text
+'AspisWide.ReleasedLift.releasedInterpolationComponents_curve_eq_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.ReleasedLift.exists_released_components_of_ambient_curve' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.ReleasedLift.exists_exactInitial_components_of_ambient_curve' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.ReleasedLift.exists_exactFinal_components_of_ambient_curve' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/ConcreteBranch.lean`:
+
+```text
+'AspisWide.ConcreteBranch.exists_exactFinal_components_of_fixed_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.ConcreteBranch.exists_exactInitial_components_of_fixed_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/EncoderRegression.lean`:
+
+```text
+'AspisWide.EncoderRegression.initialEncoder_eq_v7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.EncoderRegression.finalEncoder_eq_v7' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/OuterSelection.lean`:
+
+```text
+'AspisWide.OuterSelection.zeroSpecializationChallengeSet_card_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.OuterSelection.sum_toFinset_le_multiset_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.OuterSelection.sigma_card_le_of_local_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.OuterSelection.sigma_scaledBudget_sum_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.OuterSelection.exists_weighted_fixed_branch' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/FinalRoot.lean`:
+
+```text
+'AspisWide.Terminal.final_challengeCandidateHom_curveTrivariatePolynomial_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Terminal.exactFinal_challengeCandidateHom_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/FinalBranch.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Final_components_of_branchSelection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/FinalSelection.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Final_weighted_fixed_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/FinalCurveBranch.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Final_components_of_selected_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/FinalCurve.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Final_curve_of_interpolant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Terminal.exists_exactV7Final_curve_of_valid_challenges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/Terminal.lean`:
+
+```text
+'AspisWide.Terminal.exactV7FinalDegreeThreeCurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Terminal.exactV7FinalPublishedOneFoldCurveDecodability' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/InitialRoot.lean`:
+
+```text
+'AspisWide.Terminal.challengeCandidateHom_curveTrivariatePolynomial_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Terminal.exactInitial_challengeCandidateHom_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/InitialBranch.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Initial_components_of_branchSelection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/InitialSelection.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Initial_weighted_fixed_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/InitialCurveBranch.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Initial_components_of_selected_branch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/InitialCurve.lean`:
+
+```text
+'AspisWide.Terminal.exists_exactV7Initial_curve_of_interpolant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Terminal.exists_exactV7Initial_curve_of_valid_challenges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`Wide/Initial.lean`:
+
+```text
+'AspisWide.Terminal.exactV7InitialWidth29CurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Terminal.exactV7InitialPublishedWidth29CurveDecodability' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+```
+
+`WideTower.lean`:
+
+```text
+'AspisWideTower.qm31_wideU_not_isSquare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWideTower.wideExact_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWideTower.wideExact_natCast_ne_zero_of_pos_of_lt_characteristic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWideTower.wideExact_two_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWideTower.qm31_to_wide_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`Wide/Instances.lean`:
+
+```text
+'AspisWide.Instances.wideInitialWidth29CurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Instances.wideFinalDegreeThreeCurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Instances.unchangedChallengeCaps' does not depend on any axioms
+```
+
+`Wide/Regression.lean`:
+
+```text
+'AspisWide.Regression.qm31InitialWidth29CurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Regression.qm31FinalDegreeThreeCurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Regression.initialResult_eq_v7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Regression.finalResult_eq_v7' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+</details>
+
+### Part B1: heartbeat provenance
+
+There are **25** `set_option maxHeartbeats` directives in the 47 committed
+Wide files, including all ten identified in the replay request. Nineteen
+have literal same-declaration counterparts in V7. Six attach to new final
+helper declarations and are listed as **new**, even where their value matches
+an Initial-helper analogue. No setting changed during this replay.
+
+V7 paths in the table are relative to
+`/Users/dominic/ZK/AspisFormal/AspisFormal/K1/`; Wide paths are relative to
+this research directory’s `lean/`. Each quoted instruction is the exact
+line at the cited location.
+
+| Wide location | Exact instruction | V7 counterpart or finding |
+|---|---|---|
+| `Wide/Agreement.lean:105` | `set_option maxHeartbeats 1000000 in` | `V7ExactCorrelatedAgreement.lean:315` — identical line |
+| `Wide/Agreement.lean:162` | `set_option maxHeartbeats 1000000 in` | `V7ExactCorrelatedAgreement.lean:372` — identical line |
+| `Wide/BranchEvaluation.lean:16` | `set_option maxHeartbeats 2000000` | `V7ExactCorrelatedAgreementBranchEvaluation.lean:16` — identical line |
+| `Wide/ConcreteBranch.lean:48` | `set_option maxHeartbeats 2000000 in` | `V7ExactCorrelatedAgreementConcreteBranch.lean:43` — identical line |
+| `Wide/ConcreteBranch.lean:213` | `set_option maxHeartbeats 2000000 in` | `V7ExactCorrelatedAgreementConcreteBranch.lean:208` — identical line |
+| `Wide/FinalBranch.lean:41` | `set_option maxHeartbeats 300000 in` | **New final declaration**; no same-declaration V7 counterpart. Initial analogue: `V7ExactCorrelatedAgreementInitialBranch.lean:37`, `set_option maxHeartbeats 1000000 in`. |
+| `Wide/FinalCurve.lean:47` | `set_option maxHeartbeats 300000 in` | **New final declaration**; no same-declaration V7 counterpart. Initial analogue: `V7ExactCorrelatedAgreementInitialCurve.lean:43`, `set_option maxHeartbeats 300000 in`. |
+| `Wide/FinalCurve.lean:89` | `set_option maxHeartbeats 300000 in` | **New final declaration**; no same-declaration V7 counterpart. Initial analogue: `V7ExactCorrelatedAgreementInitialCurve.lean:85`, `set_option maxHeartbeats 300000 in`. |
+| `Wide/FinalCurveBranch.lean:44` | `set_option maxHeartbeats 300000 in` | **New final declaration**; no same-declaration V7 counterpart. Initial analogue: `V7ExactCorrelatedAgreementInitialCurveBranch.lean:39`, `set_option maxHeartbeats 300000 in`. |
+| `Wide/FinalRoot.lean:62` | `set_option maxHeartbeats 300000 in` | **New final declaration**; no same-declaration V7 counterpart. Initial analogue: `V7ExactCorrelatedAgreementInitialRoot.lean:87`, `set_option maxHeartbeats 2000000 in`. |
+| `Wide/FinalSelection.lean:39` | `set_option maxHeartbeats 300000 in` | **New final declaration**; no same-declaration V7 counterpart. Initial analogue: `V7ExactCorrelatedAgreementInitialSelection.lean:35`, `set_option maxHeartbeats 300000 in`. |
+| `Wide/HenselSpecialization.lean:15` | `set_option maxHeartbeats 2000000` | `V7ExactCorrelatedAgreementHenselSpecialization.lean:15` — identical line |
+| `Wide/Initial.lean:46` | `set_option maxHeartbeats 300000 in` | `V7ExactCorrelatedAgreementInitial.lean:42` — identical line |
+| `Wide/InitialBranch.lean:41` | `set_option maxHeartbeats 1000000 in` | `V7ExactCorrelatedAgreementInitialBranch.lean:37` — identical line |
+| `Wide/InitialCurve.lean:47` | `set_option maxHeartbeats 300000 in` | `V7ExactCorrelatedAgreementInitialCurve.lean:43` — identical line |
+| `Wide/InitialCurve.lean:89` | `set_option maxHeartbeats 300000 in` | `V7ExactCorrelatedAgreementInitialCurve.lean:85` — identical line |
+| `Wide/InitialCurveBranch.lean:44` | `set_option maxHeartbeats 300000 in` | `V7ExactCorrelatedAgreementInitialCurveBranch.lean:39` — identical line |
+| `Wide/InitialRoot.lean:91` | `set_option maxHeartbeats 2000000 in` | `V7ExactCorrelatedAgreementInitialRoot.lean:87` — identical line |
+| `Wide/InitialSelection.lean:39` | `set_option maxHeartbeats 300000 in` | `V7ExactCorrelatedAgreementInitialSelection.lean:35` — identical line |
+| `Wide/MultiplicityThreeGS.lean:834` | `set_option maxHeartbeats 800000 in` | `V7Tag73ExactMultiplicityThreeGS.lean:830` — identical line |
+| `Wide/MultiplicityThreeGS.lean:1016` | `set_option maxHeartbeats 800000 in` | `V7Tag73ExactMultiplicityThreeGS.lean:1012` — identical line |
+| `Wide/OuterSelection.lean:234` | `set_option maxHeartbeats 2000000 in` | `V7ExactCorrelatedAgreementOuterSelection.lean:230` — identical line |
+| `Wide/RegularWeights.lean:621` | `set_option maxHeartbeats 1000000 in` | `V7ExactCorrelatedAgreementRegularWeights.lean:617` — identical line |
+| `Wide/Smooth.lean:306` | `set_option maxHeartbeats 1000000 in` | `V7ExactCorrelatedAgreementSmooth.lean:302` — identical line |
+| `Wide/Terminal.lean:99` | `set_option maxHeartbeats 300000 in` | `V7ExactCorrelatedAgreementTerminal.lean:95` — identical line |
+
+In particular, of the ten specifically requested directives, five have
+literal V7 counterparts (HenselSpecialization, Initial, RegularWeights,
+OuterSelection, Terminal), while five belong to the new FinalRoot,
+FinalBranch, FinalCurveBranch and two FinalCurve declarations.
+FinalSelection contributes the sixth new directive outside that ten-item
+subset. The original monolithic final theorem had its own 300000 setting
+at `V7ExactCorrelatedAgreementTerminal.lean:95`; that does not make every
+new helper directive an inherited same-declaration line. The earlier log’s
+explicit statement that the new final helpers use local 300000 settings is
+accurate; any blanket interpretation that all settings were inherited is not.
+
+### Part B2: normalized port diff
+
+Read-only comparison of the 47 files in `docs/research/v8-wide-reference-20261005/lean/Wide/` against their V7 sources. Imports were omitted in normalized diffs; namespace redirects and `QM31Exact` → target field (`E` or `K`) were normalized. All 43 mapped modules add a generic field context: `{E : Type} [Field E] [Fintype E] [DecidableEq E] [Algebra (ZMod AspisCircleGroupOrder.P) E]` (named `K` in the three encoder/GRS modules). Originally generic declarations keep their own binders; unused outer binders do not become premises. Tower namespace openings are removed or replaced by `open AspisCircleGroupOrder (P)`, and `M31Exact` is expanded to `ZMod P` where needed. No additional cardinality assumption is introduced. The normalized diffs were inspected against the sources and the successful Part A replay.
+
+Artifacts are retained under the replay workspace’s `evidence/B2/`: `full-diffs/<Name>.diff` retains the whole normalized file comparison (including module setup, comments, attributes, and commands); `matched-diffs/<Name>.diff` compares same-named declaration bodies, with source and target line numbers in the headers. `declaration-inventory.tsv` records matching, changed, added, and source-only names per mapped file. Four port-only files have no source counterpart, so no diff is emitted for them. A zero-byte matched diff means the matched declarations are identical after normalization.
+
+#### File-by-file declaration inventory
+
+“Changed” below means a matched declaration has a textual statement/body difference after the allowed normalizations. Every other matched declaration in that file is text-identical. Full diff files also show non-declaration text and module-level settings.
+
+| Wide file | V7 source | Matched declarations with differences |
+|---|---|---|
+| Agreement | `K1/V7ExactCorrelatedAgreement.lean` | `exactFinalValidCandidate_substitute_eq_zero`, `exactInitialNormalizedLanes`, `exactInitialValidCandidate_substitute_eq_zero`, `exists_exactFinalCurveInterpolation`, `exists_exactInitialCurveInterpolation` |
+| AmbientCurve | `K1/V7ExactCorrelatedAgreementAmbientCurve.lean` | none |
+| BranchEvaluation | `K1/V7ExactCorrelatedAgreementBranchEvaluation.lean` | none |
+| Cardinality | new | — |
+| ConcreteBranch | `K1/V7ExactCorrelatedAgreementConcreteBranch.lean` | `exists_exactFinal_components_of_fixed_branch`, `exists_exactInitial_components_of_fixed_branch` |
+| EncoderLinearity | `K1/V7ExactCorrelatedAgreement.lean` | none |
+| EncoderRegression | new | — |
+| FactorBudgets | `K1/V7ExactCorrelatedAgreementFactorBudgets.lean` | none |
+| Factors | `K1/V7ExactCorrelatedAgreementFactors.lean` | `trivariateCoefficient_natCast_ne_zero_of_pos_of_lt_characteristic` |
+| FinalBranch | `K1/V7ExactCorrelatedAgreementTerminal.lean` | no same-named source declaration; see split-helper map below |
+| FinalCurve | same Terminal source | no same-named source declaration; see split-helper map below |
+| FinalCurveBranch | same Terminal source | no same-named source declaration; see split-helper map below |
+| FinalEncoder | `K1/V7Tag73ExactOneFoldEncoderBinding.lean` | `exactFinalEncoder_injective`, `exactFinalEvaluationIdentity`, `exactInitialEncoder_eq_circleLift` |
+| FinalRoot | same Terminal source | no same-named source declaration; see split-helper map below |
+| FinalSelection | same Terminal source | no same-named source declaration; see split-helper map below |
+| FiniteBranch | `K1/V7ExactCorrelatedAgreementFiniteBranch.lean` | none |
+| FixedBranchCurve | `K1/V7ExactCorrelatedAgreementFixedBranchCurve.lean` | none |
+| FunctionField | `K1/V7ExactCorrelatedAgreementFunctionField.lean` | `bivariateCoefficient_natCast_ne_zero_of_pos_of_lt_characteristic` |
+| GRSConversion | `K1/V7Tag73ExactGRSConversion.lean` | `exactCircleDenominator_ne_zero`, `exactCircleGRSMultiplier_ne_zero`, `exactCircleGRSPoint`, `exactCircleGRSPoint_injective`, `exactCircleGRSPolynomial`, `exactCircleGRSPolynomial_injective`, `exactFinalGRSConversion`, `exactFinalMessagePolynomial_complete`, `exactInitialEncoder_coordinate_grs`, `exactInitialGRSConversion` |
+| Hensel | `K1/V7ExactCorrelatedAgreementHensel.lean` | none |
+| HenselCombinatorics | `K1/V7ExactCorrelatedAgreementHenselCombinatorics.lean` | none |
+| HenselIntegralLift | `K1/V7ExactCorrelatedAgreementHenselIntegralLift.lean` | none |
+| HenselRecurrence | `K1/V7ExactCorrelatedAgreementHenselRecurrence.lean` | none |
+| HenselSpecialization | `K1/V7ExactCorrelatedAgreementHenselSpecialization.lean` | none |
+| HenselWeights | `K1/V7ExactCorrelatedAgreementHenselWeights.lean` | `nonsaturatedLinearBranch_generator_ceiling_ne_leading_add_one`, `nonsaturatedLinearBranch_irreducible`, `nonsaturatedLinearBranch_iteratedWeight`, `nonsaturatedLinearBranch_monic` |
+| Initial | `K1/V7ExactCorrelatedAgreementInitial.lean` | `exactV7InitialPublishedWidth29CurveDecodability`, `exactV7InitialWidth29CurveDecodable` |
+| InitialBranch | `K1/V7ExactCorrelatedAgreementInitialBranch.lean` | `exists_exactV7Initial_components_of_branchSelection` |
+| InitialCurve | `K1/V7ExactCorrelatedAgreementInitialCurve.lean` | `exists_exactV7Initial_curve_of_interpolant` |
+| InitialCurveBranch | `K1/V7ExactCorrelatedAgreementInitialCurveBranch.lean` | `exists_exactV7Initial_components_of_selected_branch` |
+| InitialEncoder | `Pool/V7C1ConcreteProjectionBinding.lean` | `exactInitialEncoder`, `exactInitialEncoderCircleRealization` |
+| InitialRoot | `K1/V7ExactCorrelatedAgreementInitialRoot.lean` | `exactInitial_challengeCandidateHom_eq_zero` |
+| InitialSelection | `K1/V7ExactCorrelatedAgreementInitialSelection.lean` | `exists_exactV7Initial_weighted_fixed_branch` |
+| Instances | new | — |
+| Interpolation | `K1/V7ExactCorrelatedAgreementInterpolation.lean` | none |
+| LocalFactors | `K1/V7ExactCorrelatedAgreementLocalFactors.lean` | none |
+| MultiplicityThreeGS | `K1/V7Tag73ExactMultiplicityThreeGS.lean` | explicit field arguments on the conversion, interpolation, candidate, decoder and boundary declarations; encoder namespace redirects and `M31Exact` → `ZMod P` in `qm31ExactTwoNeZero` (complete names below) |
+| OuterSelection | `K1/V7ExactCorrelatedAgreementOuterSelection.lean` | none |
+| PowerSeriesLift | `K1/V7ExactCorrelatedAgreementPowerSeriesLift.lean` | none |
+| Regression | new | — |
+| RegularEvaluation | `K1/V7ExactCorrelatedAgreementRegularEvaluation.lean` | none |
+| RegularHensel | `K1/V7ExactCorrelatedAgreementRegularHensel.lean` | none |
+| RegularRing | `K1/V7ExactCorrelatedAgreementRegularRing.lean` | none |
+| RegularWeights | `K1/V7ExactCorrelatedAgreementRegularWeights.lean` | none |
+| RegularZeroCount | `K1/V7ExactCorrelatedAgreementRegularZeroCount.lean` | none |
+| ReleasedLift | `K1/V7ExactCorrelatedAgreementReleasedLift.lean` | none |
+| Smooth | `K1/V7ExactCorrelatedAgreementSmooth.lean` | `exists_exactV7_uniformSmoothEvaluationPoint` |
+| Terminal | `K1/V7ExactCorrelatedAgreementTerminal.lean` | `exactV7FinalDegreeThreeCurveDecodable`, `exactV7FinalPublishedOneFoldCurveDecodability` |
+
+#### Difference details
+
+The matched differences in Agreement, ConcreteBranch, FinalEncoder, HenselWeights, Initial, InitialBranch, InitialCurve, InitialRoot, InitialSelection, and most MultiplicityThreeGS declarations are explicit `(K := E)` / `(K := K)` applications for field-generic structures and definitions. These changes make field instantiations explicit. FinalEncoder also expands the base-field alias in the injectivity proof. In MultiplicityThreeGS, all 25 changed entries are field-parameter applications and redirected references to the generic encoders; the exact per-declaration text is in its diff.
+
+Factors and FunctionField replace the hard-coded `qm31Exact_natCast_ne_zero_of_pos_of_lt_characteristic` call with the port’s generic `field_natCast_ne_zero_of_pos_of_lt_characteristic (E := E)` call. The field-specific source helper is correspondingly replaced by a generic helper declaration.
+
+The non-mechanical matched proof changes are:
+
+- `GRSConversion.lean`: the point denominator proof uses `ZMod P` as its parameter domain and changes the injectivity/map-zero step (source declaration at line 144; target declaration at line 128). `exactCircleGRSPolynomial_eq_released` changes from `rfl` to a `simp only` proof (target line 106), and `exactFinalMessagePolynomial_complete` adds an explicit `n := 256` and unfolds the generic conversion (source line 90; target line 72). The source-specific `qm31Exact_two_ne_zero` helper is replaced by `m31_neg_one_not_isSquare` over `ZMod P` (target lines 19–22); generic odd-characteristic facts come from the ported encoder.
+- `InitialEncoder.lean`: the evaluator body is unchanged after field substitution; its apparent matched diff is only a trailing source comment. The circle realization makes `(K := K)` explicit (source declaration at line 237; target at line 57). The generic `two_ne_zero` lemma and exported `neZeroTwo` instance replace the source’s private theorem/local instance. Source projection and decoder packaging are omitted as listed below.
+- `InitialCurveBranch.lean`: the selected-cardinality proof replaces `rw [Fintype.card_fin]; omega` with `AspisWide.Cardinality.card_fin_lt_of_budget`, supplying explicit dimension, degree, budget, and count (source proof at lines 86–89; target proof at lines 90–100).
+- `Smooth.lean`: the smooth evaluation-point proof replaces the fixed `qm31Exact_card` rewrite with the generic lower bound `P ≤ Fintype.card E` proved using injectivity of the base-field algebra map (source declaration at line 499, old cardinality step at line 538; target declaration at line 503, new lower bound at line 542).
+- `Terminal.lean`: final decodability now calls `exists_exactV7Final_curve_of_valid_challenges` after the same good-challenge packaging and outer-count steps; published-interface statement applications are explicit in `E` (source lines 99–209; target lines 103–134).
+
+There are four port-only modules: `Cardinality.lean` adds `card_fin_of_fintype` and `card_fin_lt_of_budget`; `EncoderRegression.lean` adds `initialEncoder_eq_v7` and `finalEncoder_eq_v7`; `Instances.lean` adds `wideInitialWidth29CurveDecodable`, `wideFinalDegreeThreeCurveDecodable`, and `unchangedChallengeCaps`; `Regression.lean` adds `qm31InitialWidth29CurveDecodable`, `qm31FinalDegreeThreeCurveDecodable`, `initialResult_eq_v7`, and `finalResult_eq_v7`.
+
+`EncoderLinearity.lean` adds `exactInitialEncoder_injective` (target line 221), proved from the existing overlap cap. Its other declaration blocks are split from the original Agreement module into `Agreement.lean` and `EncoderLinearity.lean`; the source-only declaration names reported per file are relocations, not removals. `Factors.lean` adds the generic field helper `field_natCast_ne_zero_of_pos_of_lt_characteristic` (target line 469). `GRSConversion.lean` adds `m31_neg_one_not_isSquare` (target line 19) and drops the source-only `qm31Exact_two_ne_zero` theorem and `qm31ExactNeZeroTwo` local instance; the generic encoder module supplies the field-level `two_ne_zero` fact used by the port.
+
+Four source declarations are not carried into `FinalEncoder.lean`: `ExactOneFoldInverseTables`, `exactOneFoldAlgebraBinding`, `qm31ExactNeZeroTwo`, and `qm31ExactTwoNeZero` (source-only names in declaration-inventory.tsv). The field-specific nonzero-2 support is replaced by the generic encoder lemma; the inverse-table declarations are excluded by the target module comment. `InitialEncoder.lean` omits source projection/transcript packaging declarations in `Pool/V7C1ConcreteProjectionBinding.lean`: `projectBaseAddHom` (line 76), `doubledFactor_algebraMap` (106), `naturalLineValue_algebraMap` (117), `projectBase_naturalCoefficientPolynomial_eval` (131), `projectBase_initialP0_eval` (157), `projectBase_initialP1_eval` (177), `exactInitialEncoder_commutes` (213), and `initialProjectionBinding_of_initialEncoder_eq` (278); it carries the evaluator and distance facts selected for the generic encoder module. The source scanner’s `needed` entry is comment text, not a declaration, and is excluded from this list. InitialEncoder also replaces the source’s `qm31Exact_two_ne_zero` and `qm31ExactNeZeroTwo`; Agreement/EncoderLinearity omit the duplicate `qm31ExactTwoNeZero` and `qm31ExactNeZeroTwo` in favor of the imported generic instance.
+
+#### Final helper split from the monolithic source Terminal
+
+These are new declaration names extracted from proof blocks inside source `K1/V7ExactCorrelatedAgreementTerminal.lean`’s `exactV7FinalDegreeThreeCurveDecodable` theorem. Source references are line numbers in that original theorem; target references identify each helper.
+
+| Added declaration | Target location | Corresponding source block |
+|---|---|---|
+| `final_challengeCandidateHom_curveTrivariatePolynomial_eq_zero` | `FinalRoot.lean:42` | Candidate-root construction at source lines 116–134 |
+| `exactFinal_challengeCandidateHom_eq_zero` | `FinalRoot.lean:67` | Same candidate-root construction, packaged as the helper theorem |
+| `exists_exactV7Final_weighted_fixed_branch` | `FinalSelection.lean:42` | Weighted fixed-branch selection at source lines 144–161 |
+| `exists_exactV7Final_components_of_branchSelection` | `FinalBranch.lean:44` | Selected-branch Hensel and component lift at source lines 162–195 |
+| `exists_strengthen` | `FinalCurveBranch.lean:36` | Existential/cardinality strengthening used after selected-branch extraction; source lines 196–203 provide the original existential assembly |
+| `exists_exactV7Final_components_of_selected_branch` | `FinalCurveBranch.lean:47` | Selected tuple extraction and branch-to-components assembly at source lines 162–203 |
+| `exists_four_elim` | `FinalCurve.lean:39` | Generic four-witness elimination helper; the original proof used direct `obtain`/`refine` around source lines 144–203 |
+| `exists_exactV7Final_curve_of_interpolant` | `FinalCurve.lean:51` | Interpolation, root selection, and component assembly in source lines 107–203 |
+| `exists_exactV7Final_curve_of_valid_challenges` | `FinalCurve.lean:94` | Source lines 107–203, with interpolation packaged into the preceding helper |
+
+The source’s final public theorem remains in `Terminal.lean`; its body delegates through these extracted helpers. This mapping is structural correspondence, not a judgment about proof premises.
+
+#### Options and audit commands
+
+The per-file full diffs retain every option and command. All files retain `autoImplicit false`. The separate heartbeat inventory records all 25 heartbeat directives. Other observed option deltas are: the two source Agreement heartbeat scopes leave `EncoderLinearity` as their declarations are separated; `FinalEncoder` drops module `maxRecDepth 100000` and `maxHeartbeats 1000000`; `GRSConversion` drops module `maxRecDepth 100000`; `FinalBranch`, `FinalCurveBranch`, `FinalRoot`, and `FinalSelection` omit source Terminal’s scoped `linter.constructorNameAsVariable false`; `FinalCurve` adds a second scoped `maxRecDepth 1048576` / `maxHeartbeats 300000` pair for its second extracted theorem. The split modules add `#print axioms` commands for extracted declarations; those are visible in the full diffs.
+
+The generic GRS source currently has no `maxRecDepth` override. The earlier failed-attempt narrative about locally retaining that option does not describe the final committed file; the final file passed this replay at the default recursion setting.
+
+The exact changed MultiplicityThreeGS declarations are: `ExactInitialCloseCandidate`, `exactFinalAmbientDegreeConvention`, `exactFinalCloseCandidate_substitute_eq_zero`, `exactFinalDecodedCandidates`, `exactFinalInterpolationCoefficients_kernel`, `exactFinalMultiplicityThreeGS`, `exactFinalPolynomialAgreement_card_eq`, `exactFinalRootCandidates`, `exactFinalRootCandidates_mem_iff`, `exactInitialAmbientDegreeConvention`, `exactInitialCloseCandidate_card_lt_101`, `exactInitialCloseCandidate_substitute_eq_zero`, `exactInitialCloseCandidates`, `exactInitialDecodedCandidates`, `exactInitialGSDecode_mem_iff`, `exactInitialInterpolationCoefficients_kernel`, `exactInitialMultiplicityThreeGS`, `exactInitialNormalizedReceived`, `exactInitialPolynomialAgreement_card_eq`, `exactInitialRootCandidates`, `exactInitialRootCandidates_complete`, `exactInitialRootCandidates_mem_iff`, `exists_exactFinalInterpolation`, `exists_exactInitialInterpolation`, `qm31ExactTwoNeZero`.
+
+### Part B3: statement identity, not only proof irrelevance
+
+The exact type of both
+`AspisWide.Regression.qm31InitialWidth29CurveDecodable` and
+`AspisK1.V7ExactCorrelatedAgreementTerminal.exactV7InitialWidth29CurveDecodable`
+is:
+
+```lean
+AspisV6Width29CorrelatedAgreement.Width29CurveDecodable
+  AspisPool.V7C1ConcreteProjectionBinding.exactInitialEncoder
+  38229 AspisV6PublishedTheoremInterfaces.initialBatchChallengeCap
+```
+
+The exact type of both
+`AspisWide.Regression.qm31FinalDegreeThreeCurveDecodable` and
+`AspisK1.V7ExactCorrelatedAgreementTerminal.exactV7FinalDegreeThreeCurveDecodable`
+is:
+
+```lean
+AspisV5FriDegreeThreeCorrelatedAgreement.DegreeThreeCurveDecodable
+  AspisK1.V7Tag73ExactOneFoldEncoderBinding.exactFinalEncoder
+  9557 AspisV6PublishedTheoremInterfaces.foldChallengeCap
+```
+
+The replayed `EncoderRegression` theorems prove equality of the generic QM31
+encoders with the V7 encoders by `rfl`. After unfolding those encoder
+equalities, the statement types are syntactically identical. More strongly,
+the two closed `Regression` declarations already use the V7 encoder names:
+a scratch compiler command compared their actual environment `Expr` types
+with those of the original declarations using `==`, and both comparisons
+returned true. It printed both types with `pp.fullNames=true`.
+
+The same scratch target kernel-checked proposition equalities between the
+generic-QM31 and original V7 statement types by `rfl`. Both axiom outputs were
+`[propext, Classical.choice, Quot.sound]`. Thus the original proof-term
+identities by `Subsingleton.elim` are accompanied by a direct statement check;
+proof irrelevance alone is not being used to infer a semantic match.
+
+| Scratch audit | SHA-256 | Exit | Wall | Peak RSS KiB | Swaps | Axioms |
+|---|---|---:|---|---:|---:|---|
+| `B-StatementAudit` | `28c0e635e51b0f5778b4fc4ad888742fc9f55a5ec96446f6988f445e23a7539e` | 1 | 0:02.85 | 6867728 | 0 | Failed target; not proof evidence |
+| `B-StatementAudit-02` | `5ab2ae4059ed4fe6a4cab7972f9e2e2ba83c6f71d012fce5836fee01e5fd9bf3` | 0 | 0:02.95 | 6904520 | 0 | Two reports, PCQ only |
+
+Both use the replayed Wide objects, the same dependency set and the fixed
+`-M7000`/7 GiB setting. Scratch source and output are external evidence only.
+
+Part B is complete: all normalized changes are accounted for; the six new
+helper heartbeat directives are explicitly distinguished; endpoint types and
+encoder identities are checked. No original source, theorem statement,
+threshold, cap or heartbeat setting was changed in this replay.
+
+### Part C: Phase 5
+
+Parts A and B were completed before Phase 5 source work began. All six new
+modules below compile from source at the same measured `-M7000` setting,
+with `-j1 -DElab.async=false`, one 7 GiB no-swap scope at a time, and the same
+search path and pinned dependency sets. No original Wide source was edited.
+The new sources use the default heartbeat setting. All cardinality and
+root-count arguments are symbolic; no challenge field is enumerated.
+
+#### C1: matched degree-three response bound
+
+`AspisWide.DegreeThreeMatched.degreeThree_bad_response_challenges_card_le`
+is generic over a finite field, finite domain and arbitrary message type.
+Its sole decodability premise is
+`DegreeThreeCurveDecodable encoder agreementThreshold challengeThreshold`.
+`BadResponse` means a valid response for which there is no tuple of four
+messages whose joint agreement contains the response support and whose
+encoded curve equals the response candidate. `badStrategy` retains the
+original candidate and masks every other support to the empty set.
+
+The proof follows `width29_bad_response_challenges_card_le`: if there were
+more than `challengeThreshold` bad challenges, apply curve decodability to
+the masked strategy, choose a selected challenge outside the resolving
+roots, and use `support_subset_jointAgreement` to obtain a matching tuple,
+contradicting badness. `mem_badStrategy_good_iff` identifies the counted set
+exactly with the original strategy's bad responses. All challenges,
+including zero, are counted in this degree-three formulation.
+
+`AspisWide.MatchedInstances.final_matchingDecomposition_iff` proves that,
+for the injective linear exact final encoder, the encoded-curve condition
+is equivalent to the candidate message being
+`exactFinalMessageCurve components z`.
+`exactFinal_bad_response_challenges_card_le` applies the replayed generic
+terminal theorem with strict agreement threshold **9557** (at least 9558
+points) and the unchanged `foldChallengeCap` **9396508281246**.
+`wideFinal_bad_response_challenges_card_le` instantiates it at `WideExact`.
+
+#### C2: joint list of 29 codewords
+
+The prerequisite was located before constructing the new proof:
+`AspisWide.MultiplicityThreeGS.exactInitialCloseCandidate_card_lt_101`
+(`lean/Wide/MultiplicityThreeGS.lean:1134`), ported from
+`AspisK1.V7Tag73ExactMultiplicityThreeGS.exactInitialCloseCandidate_card_lt_101`
+(`AspisFormal/AspisFormal/K1/V7Tag73ExactMultiplicityThreeGS.lean:1130`).
+It was compiled from source in Part A and states:
+
+```lean
+Nat.card (ExactInitialCloseCandidate received) < 101
+```
+
+Here `ExactInitialCloseCandidate received` consists of initial messages
+whose exact encoded words agree with `received` on at least **38230**
+points. This supplies the usable theorem for F3, rather than an audit-only
+reference.
+
+`AspisWide.BatchSeparation.exists_nonzero_injective_batch` separates a
+finite family of 29-tuples whenever
+`family.card.choose 2 * 28 < Fintype.card K - 1`. For each unordered pair,
+one differing coordinate gives a nonzero polynomial of degree at most 28;
+`width29_nonzero_collision_card_le` bounds its nonzero roots. The union
+has at most `choose(card family,2)*28` elements. For 101 tuples this is
+**141400**, and the prime-field embedding already gives enough nonzero
+challenges; no extra size premise is added to the joint-list theorem.
+
+`AspisWide.JointList.jointInitialList_card_le_100` batches a chosen
+101-element subfamily of message tuples with this challenge. Linearity
+preserves their joint 38230-point agreements with the batched received
+word. Injective batching would produce 101 distinct single-word close
+candidates, contradicting the located theorem.
+
+The literal codeword-tuple form is
+`AspisWide.JointList.jointInitialCodewords_card_le_100`. Its statement, with
+`{K : Type} [Field K] [Fintype K] [DecidableEq K]`
+and `[Algebra (ZMod AspisCircleGroupOrder.P) K]`, is:
+
+```lean
+(lanes : Fin 29 → InitialWord K)
+(family : Finset (Fin 29 → InitialWord K))
+(codewords : ∀ words ∈ family, ∀ i,
+  ∃ message : InitialMessage K, exactInitialEncoder message = words i)
+(close : ∀ words ∈ family,
+  38230 ≤ (Finset.univ.filter fun x => ∀ i, lanes i x = words i x).card) :
+family.card ≤ 100
+```
+
+`wideJointInitialList_card_le_100` and
+`wideJointInitialCodewords_card_le_100` instantiate both forms at WideExact.
+The given words are arbitrary, so the same theorem covers either list in
+R0 §5 step 1 when its words are supplied. This does not establish the
+remaining steps of that paper argument.
+
+#### C3: subfield descent by conjugation and distance
+
+The prerequisite distance theorem was located and replayed in Part A:
+`AspisWide.InitialEncoder.exactInitialEncoder_overlap_cap`
+(`lean/Wide/InitialEncoder.lean:74`). Distinct initial messages have exact
+codewords agreeing on at most **1024** points; it applies the existing
+`AspisV5FriCircleEncoderDistance.agreementSet_card_le_1024` theorem to the
+exact stored circle realization.
+
+`AspisWide.EncoderConjugation.map_initialEncoder` proves that every ring
+endomorphism of K commutes with the exact initial encoder. The proof first
+commutes the doubled-factor recurrence, natural-basis products and
+coefficient-polynomial evaluation. Every such map fixes `ZMod P`, by
+uniqueness of its ring homomorphism into K, so it fixes the stored
+coordinates. This verifies the needed encoder symmetry directly.
+
+`initialMessage_fixed_of_agreement` applies the distance bound: if a
+conjugation fixes the received word, a conjugated codeword and the original
+codeword agree throughout the given support. More than 1024 such points
+forces the conjugated message to equal the original.
+`initialCodeword_descends` then uses Mathlib's
+`IsGalois.mem_range_algebraMap_iff_fixed` for an arbitrary field F embedded
+in K. Finite dimensionality and the Galois instance follow from K being a
+finite field; neither is an added theorem premise.
+
+The subfield form
+`AspisWide.SubfieldDescent.initialCodeword_subfield_descent`, under the
+same generic field context as the joint-list theorem, is:
+
+```lean
+(S : Subfield K) (received : InitialWord K) (message : InitialMessage K)
+(support : Finset (Fin 1048576)) (large : 1024 < support.card)
+(agrees : ∀ x ∈ support, exactInitialEncoder message x = received x)
+(subfieldValued : ∀ x, received x ∈ S) :
+∀ x, exactInitialEncoder message x ∈ S
+```
+
+`wideInitialCodeword_subfield_descent` instantiates this result for every
+subfield of WideExact. The conclusion concerns the entire exact initial
+codeword, not merely its agreeing coordinates.
+
+#### Phase 5 compile and axiom evidence
+
+The source revision is `1aa58a9e9dac2c9c9cc6b6b09998e4a38d25a2c4` plus the
+six added source files identified by their full hashes below. Those exact
+bytes are the final Lean sources in this replay commit. The scratch
+`Phase5Audit.lean` imports all three results together, the original
+instances, and both regression modules. It adds no theorem or assumption.
+Its successful final check is an integration audit for the new modules;
+the unchanged 48-file replay was not repeated.
+
+For the first six rows, paths are relative to `lean/`; the last row is
+external scratch. Tags are the corresponding `evidence/<tag>.json` stems.
+All rows have zero cgroup swap peak and zero OOM events. PCQ means only
+`propext`, `Classical.choice`, `Quot.sound` (or a subset).
+
+| Target | Tag | SHA-256 | Exit | Wall | Peak RSS KiB | Swaps | Axiom reports |
+|---|---|---|---:|---|---:|---:|---|
+| `Wide/DegreeThreeMatched.lean` | `C1-DegreeThreeMatched-01` | `3e89ec947768d5302138199238791a6fb7028183dc2037c45eb898175a069cd8` | 0 | 0:02.96 | 6718644 | 0 | 2, PCQ only |
+| `Wide/MatchedInstances.lean` | `C1-MatchedInstances-01` | `6e9e16b392db18fe60d8f9fa3abbf11f0472c698d3f1f3fb7033933d8babb376` | 0 | 0:03.07 | 6763680 | 0 | 3, PCQ only |
+| `Wide/BatchSeparation.lean` | `C2-BatchSeparation-02` | `55c39326ad6d1952a127f67138bf3d67c11a4d49b2b5b2c2aea10f24c15649f5` | 0 | 0:03.09 | 6728308 | 0 | 2, PCQ only |
+| `Wide/JointList.lean` | `C2-JointList-02` | `762657e7cb378837efb33304ad5bfbc4849a152fe19358e8eb706edcdf894066` | 0 | 0:03.51 | 6758536 | 0 | 5, PCQ only |
+| `Wide/EncoderConjugation.lean` | `C3-EncoderConjugation-01` | `6132a51edc5fd82194037416bfe2c2d4b8114d3125630ee9a822ef3a25686ee1` | 0 | 0:03.27 | 6736948 | 0 | 5, PCQ only |
+| `Wide/SubfieldDescent.lean` | `C3-SubfieldDescent-02` | `118fbd048cc9f3ec02efbab9a35732e4b4aa6dcfadc0e87daf284ee9eecac697` | 0 | 0:03.46 | 6748772 | 0 | 4, PCQ only |
+| `Phase5Audit.lean` | `C-Phase5Audit` | `167e18e373ede279a7c3da2ca3076a1ce0691db32d7b07a8064e6142361423f5` | 0 | 0:02.73 | 6871988 | 0 | 13, PCQ only |
+
+The six new source files produce 21 clean reports. Literal axiom output:
+
+```text
+C1-DegreeThreeMatched-01
+'AspisWide.DegreeThreeMatched.mem_badStrategy_good_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.DegreeThreeMatched.degreeThree_bad_response_challenges_card_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+C1-MatchedInstances-01
+'AspisWide.MatchedInstances.final_matchingDecomposition_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.MatchedInstances.exactFinal_bad_response_challenges_card_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MatchedInstances.wideFinal_bad_response_challenges_card_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+C2-BatchSeparation-02
+'AspisWide.BatchSeparation.pairCollisions_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.BatchSeparation.exists_nonzero_injective_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+C2-JointList-02
+'AspisWide.JointList.jointInitialCodewords_card_le_100' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.JointList.wideJointInitialCodewords_card_le_100' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.JointList.initialMessageCurve_eq_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.JointList.jointInitialList_card_le_100' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.JointList.wideJointInitialList_card_le_100' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+C3-EncoderConjugation-01
+'AspisWide.EncoderConjugation.map_doubledFactor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.EncoderConjugation.map_naturalLineValue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.EncoderConjugation.map_naturalCoefficientPolynomial_eval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.EncoderConjugation.map_primeField' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.EncoderConjugation.map_initialEncoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+C3-SubfieldDescent-02
+'AspisWide.SubfieldDescent.initialMessage_fixed_of_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.SubfieldDescent.initialCodeword_descends' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.SubfieldDescent.initialCodeword_subfield_descent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.SubfieldDescent.wideInitialCodeword_subfield_descent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+C-Phase5Audit
+'AspisWide.DegreeThreeMatched.degreeThree_bad_response_challenges_card_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.MatchedInstances.wideFinal_bad_response_challenges_card_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.JointList.jointInitialCodewords_card_le_100' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.JointList.wideJointInitialCodewords_card_le_100' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.SubfieldDescent.initialCodeword_subfield_descent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.SubfieldDescent.wideInitialCodeword_subfield_descent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisWide.Instances.wideInitialWidth29CurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Instances.wideFinalDegreeThreeCurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Instances.unchangedChallengeCaps' does not depend on any axioms
+'AspisWide.Regression.qm31InitialWidth29CurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.Regression.qm31FinalDegreeThreeCurveDecodable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.EncoderRegression.initialEncoder_eq_v7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisWide.EncoderRegression.finalEncoder_eq_v7' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+```
+
+### Failed attempts during this replay
+
+Each failing compiler invocation stopped before the next target. None was
+a memory failure, and no cap or existing theorem statement was changed.
+The failed output is retained but is not proof evidence; any `sorryAx`
+printed after an elaboration error is Lean's error recovery, not an admitted
+source theorem. The final sources contain no `sorry`, `axiom` declaration,
+or `native_decide`.
+
+- `B-StatementAudit` — SHA-256 `28c0e635e51b0f5778b4fc4ad888742fc9f55a5ec96446f6988f445e23a7539e`; exit 1; wall 0:02.85; peak RSS 6867728 KiB; swaps 0; Scratch command used unqualified `logInfo`; changed it to `Lean.logInfo`, then `B-StatementAudit-02` passed.
+- `C2-BatchSeparation-01` — SHA-256 `fda78ff899891219dae0533f9201794f0ed54503881630245d3d21e7ee9ab07e`; exit 1; wall 0:02.96; peak RSS 6694692 KiB; swaps 0; `unfold width29CurveValue` also targeted a goal without that constant; replaced it with `simp only [width29CurveValue, width29Batch]` at the hypothesis and goal, and replaced deprecated `push_neg` with `push Not`; unchanged statement passed as `C2-BatchSeparation-02`.
+- `C2-JointList-01` — SHA-256 `5e339c9ce04bf33bcc99e28e6795834c99682c2111d4456faaad8666b07dd769`; exit 1; wall 0:03.15; peak RSS 6724688 KiB; swaps 0; Two redundant tactic tails ran after `simp only` and `rw [Nat.choose_two_right]` had closed their goals; removed the unused `sum_congr`/`mul_comm` and `norm_num` steps. Added the requested literal codeword-tuple wrappers; `C2-JointList-02` passed.
+- `C3-SubfieldDescent-01` — SHA-256 `93da391e347327e8e2e9604a765384b4014266c87bfdca682db6387a343c3dab`; exit 1; wall 0:03.06; peak RSS 6716736 KiB; swaps 0; Rewriting under an unreduced lambda missed the left-side received value; inserted an explicit `change` after `map_initialEncoder` to expose the application. The same statements passed as `C3-SubfieldDescent-02`.
+
+Part A had no failing source targets and required no proof diff. The
+independent pre-replay `-M4500` import failures reported in the task are
+historical input to this investigation, not additional attempts made here.
+
+### Replay conclusion and limits
+
+- **Part A complete:** all 47 committed Wide files plus WideTower compiled
+  from source in the fresh object directory, with 303 clean axiom reports,
+  at the import-measured `-M7000` / 7 GiB no-swap setting.
+- **Part B complete:** all 47 source comparisons are accounted for; of 25
+  heartbeat directives, 19 have literal V7 counterparts and six are new
+  final-helper settings. Both QM31 endpoint statement types match V7
+  syntactically, with the encoder identities checked by `rfl`.
+- **Part C complete:** the generic matched degree-three bound, 100-tuple
+  joint-list bound at 38230 points, and subfield descent above 1024 points
+  are proved from source, including WideExact instances, with clean audits.
+- The historical successful `-M4500` footprint remains unexplained. The
+  measured replay setting and object-set hashes provide a reproducible
+  successful source result without claiming a cause for that discrepancy.
+- The R0 paper proof remains **unreviewed and unestablished as a whole**.
+  No Fiat–Shamir theorem, semantic-layer bound, privacy result, source-to-R0
+  correspondence, or full 100-bit soundness result is established here.
+  No protocol, parameter, Rust, SBF, CU, frozen V7 or other research change
+  was made. The earlier Phase 4 checkpoint status is historical and is
+  superseded only by the specific source results recorded in this section.
