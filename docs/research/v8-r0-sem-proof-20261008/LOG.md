@@ -491,6 +491,104 @@ inspection pin.
 | 42–45 | Four positivity links | `46ffb4e8785c6d6745b071256f1fd5750aed526da9dffff30ba40f67df398e9e` |
 
 
+### Continuation G4′ — complete challenge-dependent row equivalence
+
+Resumed from `dae112e8f7f8f08d8b06272464a7daefb978dffe` after
+fetch/fast-forward. The lead's `CFamily`/`CHolds` resolves the original
+Copy interface stop: lambda and chi are explicit parameters and H1 is
+exactly the same trace's `A 26 b`. `copyFamily` now emits the sole literal
+`active * copyResidual row h1 chi` from T:910–972,1048,1068–1072.
+The existing explicit-input helpers, five constant tables, positivity
+links, Core, CoreExt and all G1/G2 files remain unchanged.
+
+`copy_holds_iff pub lam chi A` proves the complete pointwise condition:
+on each literal active row, with producer slots `p0,p1`, consumer slots
+`c0,c1` and their accumulated weights, define
+`Dp=(chi-p0)*(chi-p1)`, `Dc=(chi-c0)*(chi-c1)`,
+`Np=pw0*(chi-p1)+pw1*(chi-p0)` and
+`Nc=cw0*(chi-c1)+cw1*(chi-c0)`. The plain field equation is
+`Dp*(A26(b)*Dc+Nc)=Dc*Np`. Each slot value is the source-order sum over
+its link endpoints of `tag + Σ_j lambda^(j+1)*tuple_j`; the tuples use
+those endpoints' trace cells, pattern offsets and prescribed zero lanes.
+The list retains multiplicity and values remain present even when a link's
+weight is zero. No uniqueness assumption or denominator nonzero premise is
+introduced, and no division is performed.
+
+Symbolic fold lemmas establish iterative powers, pattern compression and
+producer/consumer accumulation before rewriting the row equation. The
+active-mask proof uses arbitrary-mask bit facts, nodup filtered selectors
+and a single selected high block. It evaluates no mask table, large range
+or concrete finite universe. The existing G2 high/low adapter is reused
+only on Boolean rows. `copy_inactive_residuals` proves that inactive rows
+emit exactly `[0]`, without imposing H1=0 there.
+
+The two aggregate identities refer to the actual pair-forest semantic
+terminal, `pair_forest_semantic_terminal.rs:1307–1308`:
+
+- `copy_mu_helper_sum`: `Σ_b mu*H1(b) = mu*(Σ_b H1(b))`.
+- `copy_mu_inactive_helper_sum`:
+  `Σ_b mu*mu*((1-active(b))*H1(b)) = mu*mu*(Σ_{b∈I} H1(b))`,
+  where `I=copyInactiveRows` is the literal inactive mask set.
+
+These identify the sums checked through the mu terms; they do not assert
+either sum vanishes. No tuple equality, multiset balance, challenge
+soundness or full SEM closure is derived. There is no remaining G4′
+source/interface stop within this requested scope.
+
+The coordinator rechecked T:910–972,1048,1068–1072 and the terminal's mu
+terms against inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`.
+Those Rust files and Copy constants are byte-identical at the lead revision.
+The earlier table/source-region hashes above remain applicable. CoreExt
+matches lead build 606 SHA-256
+`de191f5bf4ca0389c7b9e0ee613982888a97ec9810072913c19054882364e56b`;
+its cached object was reused without rebuilding dependencies.
+
+Final `Copy.lean` SHA-256:
+`28a37fcfab1c2a6235e42932d44156c7952e6311958317ce843adb9737709d0f`.
+All continuation builds target only `R0P/Copy`, on
+`dombarker@100.108.41.90` in
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006/`, using pinned
+Lean 4.32.0 and `run2.sh N R0P/Copy 7000 7`. The existing objects2/R0P
+symlink/cache was reused. Scopes set MemoryHigh=5G, MemoryMax=7G,
+MemorySwapMax=0, TasksMax=128; Lean uses `-j1 -M7000 -DElab.async=false`
+and timeout 900 s. Each reservation admitted 24+7 GiB below 55; one G4 job
+at a time, no cap changes, local builds or package/dependency rebuilds.
+
+| Attempt | Scope/Lean exit | Wall s | Peak RSS KiB | Swaps | Result/change before next attempt |
+|---:|---:|---:|---:|---:|---|
+| 1006 | 1 | 2.28 | 3334484 | 0 | Signed-fold rewrite order, mask indicator rewrite, sum definitional closure and active conditional; proofs corrected. |
+| 1007 | 1 | 2.31 | 3331708 | 0 | Nonzero-mask conditional needed explicit rewrite. |
+| 1008 | 1 | 2.38 | 3332596 | 0 | Removed redundant closure; update-at-self branch needed `if_true`. |
+| 1009 | 1 | 2.49 | 3335436 | 0 | Four projection applications needed explicit higher-order arguments. |
+| 1010 | 0 | 2.70 | 3358280 | 0 | 24 audits, symbolic helpers green; final bridge and sums added next. |
+| 1011 | 1 | 2.87 | 3339300 | 0 | Generic `congr 1` hit recursion depth in aggregate proof; replaced by explicit `congrArg`, removed unused field instance. |
+| 1012 | 1 | 2.88 | 3341652 | 0 | Aggregate branch simplification made no progress; replaced with explicit conditional rewrites. |
+| 1013 | 0 | 2.95 | 3365140 | 0 | Complete file, 32 audits, no warnings. |
+| 1098 | 0 | 2.99 | 3365140 | 0 | Frozen coordinator check, 32 audits, no warnings. |
+
+Attempt source SHA-256s (1013 and 1098 use the final hash above):
+
+| Attempt | SHA-256 |
+|---:|---|
+| 1006 | `b921a38c8c0045d77845502bf52e0dc9085cbb1849bde2fa9ee4958d269009b7` |
+| 1007 | `e41b70ed507ba6db84c766f9d98409dbff9038b759cdb4bacb635e69e0a5478d` |
+| 1008 | `28e62c395028cda24631bff911f47a84d6f4c85e2c96fd157323ea4826785eee` |
+| 1009 | `d21cd73f9edc7467abf71bf149a4072f1e6acb5a153372e99679ad194395c2dc` |
+| 1010 | `7aa83bea0de19818818bf4249281f55045cfd43c1a4fc9adcf488e0444ac92c7` |
+| 1011 | `6a4c97d9e151e79e42c53c2b59d25698730f97d3b610b740d83287e9afd7e601` |
+| 1012 | `3b98a39550349aada9d5a60c59016b925f0906c1b0cfdaf665c963afa266141d` |
+
+Raw evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt` in the
+host workspace; final sources are also preserved as `source-1013.lean`
+and `source-1098.lean`. Actual scope/Lean and time exit statuses were
+inspected; the outer runner's success was not used to classify failures.
+No unchanged failing attempt was rerun and no failed elaboration was used
+as proof evidence. All 32 theorem declarations, including private helpers,
+have matching `#print axioms` commands and use only subsets of `propext`,
+`Classical.choice`, `Quot.sound`. The final diff has no forbidden proof
+terms/options or warnings. Coordinator source review, frozen focused check
+and `git diff --check` passed; unrelated untracked work was preserved.
+
 ## G2
 
 **Completed scalar row equivalences.** Inspection pin
