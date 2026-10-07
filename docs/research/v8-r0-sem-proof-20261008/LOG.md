@@ -41,6 +41,25 @@ at branch revision `30793447d`.
    Under Q2 they become explicit public predicates enforced by the on-chain
    program. The FS/SEM theorems hold *given* them; they do not establish them.
 
+## Finding 2 resolved (positivity) — `R0P.positivity`
+
+The copy registry (`COPY_LINKS`, tags 1124073486–1124073489, all weight kind
+0 = enabled for every variant) links `(1008,10)→(1014,0)`, `(1010,10)→(1014,1)`,
+`(1012,10)→(1015,1)` and `(1014,2)→(1015,0)`. With the value-row equations,
+conservation and slot 94, `R0P.positivity` proves: input = recipient + change
+**as integers**, all three below 2^30, recipient ≥ 1 and change ≥ 1. It uses
+only `CharP K (2^31−1)`, so it holds in QM31 with no typing premise. Its
+hypotheses are exactly what the G1 row lemmas and the copy-relation equalities
+must deliver; the copy equalities themselves come from the LogUp argument,
+which is probabilistic (λ/χ bad sets in the SEM ledger), not deterministic.
+
+So Q1 delivers what was intended — **conditional on** (i) G1's literal port
+matching the `ValueRow`/conservation/slot-94 interfaces stated in
+`Positivity.lean`, and (ii) copy-relation soundness for these four links.
+
 ## Compile record
 
-(none yet)
+| Target | SHA-256 | exit | wall | peak RSS KiB | swaps | axioms |
+|---|---|---:|---:|---:|---:|---|
+| `lean/R0P/Core.lean` | `eba6bb784803b5f00922724efc9997a8d5ab6bc55cd8c100bffd8a397dabe1f9` | 0 | 1.49 s | 3,327,872 | 0 | definitions only |
+| `lean/R0P/Positivity.lean` | `0a7eaab784bc129b9995e3b7f18efde393e7d383686d1798bbe9fa7893a6ad1c` | 0 | 1.80 s | 3,327,496 | 0 | `positivity`: propext, Classical.choice, Quot.sound |
