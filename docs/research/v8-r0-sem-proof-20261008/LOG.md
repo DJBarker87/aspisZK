@@ -867,3 +867,66 @@ Attempt 607, `run2.sh 607 R0P/PositivityChain 7000 7`, exit 0, 1.40 s,
 3319408 KiB, swap 0, reservation 24+7 GiB. SHA-256 `b45ab3872fa710e44b24119d5d0db24d3aeec41de8791965d4f2cea1d45590f2`.
 Axioms: copy_balance_cell, positivity_copy_cells [propext, Quot.sound];
 positivity_of_balance [propext, Classical.choice, Quot.sound].
+
+### PositivityChain: weighted balance (attempt 608)
+
+`CopyLinkBalance pub A` now quantifies only over links with
+`copyLinkWeight link pub.nextPairIndex pub.variant ≠ 0`; weight-zero links
+impose nothing (T:359–377), so the unweighted form was stronger than LogUp
+delivers. The four positivity links have weight 1 for every variant/index
+(`copy_positivity_links`). Attempt 608, exit 0, 1.38 s, 3319404 KiB,
+swap 0, 24+7 GiB. SHA-256 `480aaa1f5393862e55becb598566f85fe54ab6116f729ba11c1f5918440b481c`. Axioms unchanged (standard three).
+
+## Lead: LogUp step design (copy balance from CHolds)
+
+Source: `crates/aspis-statement/src/logup.rs:191–273` (row identity and
+global zero sum) and T:1307–1308 (μ batching of `Σ_b H1(b)` and
+`Σ_{inactive} H1(b)` into the sumcheck target). χ, λ, μ ∈ QM31,
+|QM31| = (2^31−1)^4.
+
+Registry facts (text-checked by the lead on C:27–164, to be proved in Lean
+as G5): 136 links; tags are exactly 1124073472 + index (Nodup); no
+`(row, slot)` carries two producer endpoints or two consumer endpoints.
+Hence on each active row every slot value in `copy_holds_iff` is a single
+compressed value `tag + Σ_j λ^{j+1} tuple_j` with the link's weight, or an
+absent endpoint with weight 0.
+
+Chain (per fixed committed trace A, variant/index fixed by pub):
+
+1. μ: the sumcheck target is `comp + μ·S₁ + μ²·S₂` with S₁ = Σ_b H1(b),
+   S₂ = Σ_{inactive} H1(b). An accepted zero target with S₁ ≠ 0 or S₂ ≠ 0
+   needs μ to be a root of a nonzero degree-≤2 polynomial: Pr ≤ 2/|QM31|.
+   Deterministic content: S₁ = 0 ∧ S₂ = 0 ⇒ Σ_{active} H1(b) = 0.
+2. χ poles: Pr[χ ∈ {all enabled compressed values}] ≤ 272/|QM31|
+   (≤ 2 producers + 2 consumers on ≤ 68 active rows is an upper bound;
+   the exact count is the number of enabled endpoints).
+3. χ off poles: the row identity `Dp(H1·Dc+Nc) = Dc·Np` gives
+   H1(b) = Σ_p w/(χ−v) − Σ_c w/(χ−v), so Σ_{active} H1 = 0 is the value at
+   χ of the signed rational function F(X) = Σ_enabled ±w/(X−v). With D the
+   distinct enabled values and m_v the signed weight at v, F = N'/Π(X−u),
+   N'(X) = Σ_{v∈D} m_v Π_{u∈D∖v}(X−u). If some m_v ≠ 0 then N' ≠ 0 of
+   degree ≤ |D|−1, so Pr[N'(χ)=0] ≤ 271/|QM31|. Else m_v = 0 ∀v
+   (aggregated balance).
+4. λ collisions: the ≤ 272 enabled endpoint polynomials
+   c_e(λ) = tag_e + Σ_j λ^{j+1} t_{e,j} have degree ≤ 16; distinct
+   (tag, tuple) pairs collide at λ with Pr ≤ 16·C(272,2)/|QM31|. Off that
+   event, aggregated balance at value c_p(λ) for an enabled link ℓ with
+   distinct tags forces w_ℓ·[c_c = c_p] = w_ℓ, i.e. tuple equality, which
+   is `CopyLinkBalance pub A`.
+
+Total: ≤ (2 + 272 + 271 + 16·36856)/|QM31| ≈ 2^{19.2}/2^{124}. This is the
+bad-set mass for the (λ, χ, μ) rounds; it enters the FS state function as
+the per-challenge bad sets of SEM, alongside the existing 397030/(p⁴−1)
+ledger. Lead-only; not yet in Lean.
+
+Deterministic Lean obligations (delegable, statements fixed by the lead):
+
+- G5 (registry): `copyLinks.map CopyLink.tag` Nodup via the base+index
+  form; per-side (row, slot) uniqueness; enabled-endpoint count bound.
+- G6 (partial fractions, Mathlib Polynomial): for a Finset D ⊆ K and
+  m : K → K, with N' as above: (a) N' = 0 → ∀ v ∈ D, m v = 0;
+  (b) N' ≠ 0 → N'.natDegree ≤ D.card − 1, so roots ≤ D.card − 1;
+  (c) for χ ∉ D, Σ_{v∈D} m v / (χ − v) = N'.eval χ / Π_{u∈D}(χ − u).
+- G7 (λ compression): for two tagged tuples (t,a), (t',b) ∈ K × (Fin 16 → K),
+  the difference polynomial in λ is zero iff (t,a) = (t',b); its degree
+  ≤ 16.
