@@ -613,3 +613,288 @@ found no prohibited proof placeholders or limit overrides.
 * Successful step-3 circle conditions remain proved from source; the outer
   semantic transcript, rejection handling and state-function integration
   remain to be implemented and proved.
+
+
+## Slack-law integration attempt — 2026-10-07
+
+New user instructions explicitly permit new R0C law/error/state definitions
+and restated scaled round lemmas, while keeping FS/FS2/R0FS and both external
+specifications unchanged. Starting revision 08b4080541ccc34ca86404b5e11b16e77e20f297;
+fetch/fast-forward reports already current. No address-transport changes from
+the earlier tentative continuation were made. A4 expressly requires stopping
+if q22 changes the sampler shape, rather than re-proving its decoder.
+
+### A1 definitions recorded BEFORE proofs
+
+`R0C.SlackStatement.SamplerLawsSlack delta p` has the same deterministic
+sampling interface as `R0FS.SamplerLaws p`. It retains the nonzero and total
+query-cardinality clauses unchanged and scales the five probability clauses
+by `1+delta`: gamma denominator card(E)-1; kappa/tau/alpha denominator card(E);
+query containment bound `(1+delta)*C(card M,22)/C(262144,22)`. This uses the
+requested multiplicative query clause. Nonnegativity of delta is a separate
+arithmetic condition in density theorems, not an assumed sampler property.
+
+`epsilonSlack E delta i := (1+delta)*R0FS.epsilon E i` (Lean uses the original
+Greek epsilon identifier). `rbSlack` retains the original v1 doomed predicate;
+`rb2Slack` retains the original v2 projected doomed predicate. Only their
+error fields change. `SamplerLawsSlackD` applies the law to the existing
+`R0FS.V2.params1 p msg`; it therefore remains a one-squeezed-state law.
+
+The concrete proposed slack is `delta0 = 257*(P^8 : Q)/(256^32 : Q)-1`.
+It is sufficient for BOTH field codomains: the gamma denominator is smaller
+than P^8. The exact q22 source result remains
+`successMass 8 * C(card M,22)/C(262144,22)`, at most the unscaled query ratio.
+However this is a law for the existing bounded program with Except errors,
+not a total function State -> R0FS.Chal. Retaining this distinction is
+mandatory; successful mass does not establish unconditional queryCard.
+
+Statement-only SlackStatement.lean will be compiled and committed alone
+before any new scaled-density proof module is written.
+
+
+Before the next arithmetic proof: q22's one-block obstruction is a 22-factor
+falling factorial, NOT a Pascal recurrence of height 262144. Prove the small
+closed-form inequality `257*P^8 < choose(262144,22)` using
+`Nat.choose_eq_descFactorial_div_factorial` and only the 22 descending factors.
+Together with the positive atom supplied by total queryCard, this disproves
+even the delta0-relaxed law for every one-state duplex sigma. Thus changing
+the exact-uniform law to a small slack alone cannot make A3/A4's total
+one-block specialization true; the retained multi-block error-valued program
+is genuinely necessary. No decoder re-proof will be attempted at this stop.
+
+Attempt 566 (SlackBits): concrete five-row max reduction reached the 7000 MB
+Lean cap (exit 1, 4.96 s, RSS 7170292 KiB, swap 0). Replaced the concrete
+fold reduction with max_five_eq_last over an abstract error function, then
+instantiate. No cap increase, no unchanged failing rerun; failed object unused.
+
+### A1 statement checkpoint and proved results
+
+Statement-only commit: `e50e835652242baf7722019b144eb3c5719c1965`.
+It contains only SlackStatement.lean, compiled first as attempt 560
+(exit 0, 2.98 s, 6783772 KiB RSS, swap 0). The proof modules were written
+only after this commit. Final proof-source commit:
+`7b363636b246ddff6d07874d53a7c61490c73d52`.
+
+| Module | Result and scope |
+|---|---|
+| `SlackDensity` | Five scaled round bounds and `d2`, with exactly the old bad sets, cardinalities and doomed predicate. Requires the new law and nonnegative delta. |
+| `SlackDuplex` | `d1_slack`, `d2_slack` (D2-prime), `d3_slack` and `r0_duplex_fiat_shamir_slack_of_laws`, using the existing concrete duplex theorem and decoder. This is deliberately named **of_laws**: its sampler hypothesis is not discharged. D3 uses only nonzero and queryCard from that hypothesis. |
+| `ConcreteSlack` | `delta0_nonneg`, gamma/ordinary budgets, concrete gamma nonzero and field atom bounds, and the retained q22 program's successful-event bound with the requested multiplicative factor. |
+| `SlackObstruction` | `noSamplerLawsSlackD`: for every WideExact one-state duplex Params and message map, the law at delta0 is false, using only queryCard and queries. |
+| `SlackBits` | Exact rational formula for the largest of the five scaled errors, with the maximum proved over an abstract error function before concrete instantiation. |
+
+The sampler proved here is the design rule recorded in the preceding
+continuation: ALL 32 bytes, X = sum byte[i]*256^i; ordinary rank X mod P^8;
+gamma rank 1 + (X mod (P^8-1)); eight base-P digits decoded through the
+retained field encoding. Gamma's +1 is in the integer rank, not field
+addition. There is no field rejection, default or retry. This is a proposed
+sampler, not a source-refinement claim. Reading only the low 31 bytes and
+retrying zero is a different rule and does not have these proved bounds.
+
+The query sampler remains the retained eight-block, 64-candidate program,
+with successful outputs legal 22-sets and exhaustion preserved as an error.
+The source facts used are R407's candidate-kernel connection and R417's
+uniform_success, already connected in QuerySource/QuerySampler. Its exact
+independent successful containment mass is
+`successMass 8 * choose(card M,22)/choose(262144,22)`.
+Errors contribute zero to this event, so the unscaled ratio, and hence the
+requested scaled ratio, are proved. This is not conditioning on success.
+
+### A3/A4 stop and smallest repair
+
+**A3 stops at total queryCard plus the universal query-containment clause.**
+Choose any state s0. Total queryCard gives a 22-set S0 output at s0; the
+containment event with M=S0 has probability at least 1/2^256. The requested
+upper bound for that same event is `(1+delta0)/choose(262144,22)`. Lean proves
+
+```
+257 * P^8 < choose(262144,22)
+(1+delta0)/choose(262144,22) < 1/2^256
+```
+
+(the first inequality is the arithmetic content of oneblock_gap), giving a
+contradiction. The exact denominator is
+`143459390671643080338858006328548634467103740668941284234642666778199466504034122047364474303283200`.
+It represents about 326.0696 bits of possible sets. A universal one-block
+law would need factor at least `choose(262144,22)/2^256`, about 1.239e21,
+not the field factor 1.0039062463. Field slack alone cannot close item A.
+This is a proved impossibility, not a new premise.
+
+**A4 separately stops at the concrete sampler/decoder shape.**
+FS2/Duplex.lean:142-146 defines one absorb read followed by exactly one
+squeeze cell and its advance cell, returning `(p.sigma i squeezed, advance)`.
+FS2/DuplexDecodes.lean:140 and :205-209 prove decodesSpec for that sampler
+and its completing decoder. QuerySampler.sampler instead has type
+`FS2.Sampler Bytes State (Except Nat (List Nat) x State)` (x denotes product),
+reads up to eight squeeze/advance pairs, and returns the state after the
+last pair. Its trace bound is 16 oracle calls before any surrounding absorb.
+The first advance is not its eventual state; an error is not a normal
+R0FS.Chal.set. Its independent success law therefore cannot be supplied as
+SamplerLawsSlackD for the existing one-block p.sigma. No retry-aware decoder
+or purported sampler-free r0_duplex_fiat_shamir_slack was constructed.
+
+Smallest interface/spec repair, NOT made: instantiate the generic FS2
+Sampler/Protocol interfaces with the actual bounded error-valued q22
+program, reject exhausted runs, carry its eventual state, and count every
+read in Q_tot. Extend the concrete duplex decoder/completion proof to that
+shape and its address framing, or give a separate concrete instance of
+Decodes/INJ/ChainDensity for it. FS2 already supports bounded multi-read
+samplers; its abstract interfaces need not change. FS_GENERIC should name
+error rejection, retry reads and the applicable concrete decoder. R0_SOUNDNESS
+should replace the ideal one-state query rule with this retained-success
+law and explicitly specify the new all-32-byte field rule/slack. Merely
+changing the fifth clause to mention independent success mass while leaving
+its old total sampler and D3 intact would not be a representation change.
+
+### B1 line-by-line correspondence and decision
+
+Paths below are relative to the worktree. `Pool/` abbreviates
+`AspisFormal/AspisFormal/Pool/`; `V6Grammar` is
+`AspisFormal/AspisFormal/V6TranscriptRelationGrammar.lean`.
+The previously recorded SEM theorem inventory remains in force. No theorem
+under the R0 Lean directory bounds its semantic acceptance event.
+
+| Row | R0 specification / V8 source | V7 theorem-side object | Correspondence decision |
+|---|---|---|---|
+| Field and commitments | R0_SOUNDNESS section 2: 26 base-field C1 lanes, lambda/chi in K, then 3 K-valued C2 lanes. | V7FixedWidth29TupleList has QM31 width-29 candidates and a separate base-field C1 list fixed before lambda/chi. | Dimensions agree; the concrete candidate objects and their fixing times still need identification. R0's opening field is WideExact. |
+| Semantic messages | R0 section 2 step 2 says only “as in the V8 baseline before R17”. V8 performance_verifier.rs:40-55 reads an initial claim and 10 blocks of 27 coefficients. R0FS.Stmt has none of these fields. | V6Grammar:317-337: initialClaim, semanticSent : Fin 10 -> Fin 27 -> K; constant plus 26 higher coefficients, omitted linear coefficient carry-2*constant-sum(high). | V8 wire arithmetic agrees. The corresponding R0 semantic message type/acceptance predicate is absent. |
+| Semantic challenges and order | V8 performance_verifier.rs:38-55: lambda, chi; C2; theta, ten zerocheck coordinates, mu; masked-sumcheck eta; ten adaptive round challenges. R0 step 2 leaves this implicit. | AcceptedRun, FixedOracleTenRoundTrace, AdaptiveDegree27MessagePlan and WireUsesAdaptiveDegree27Plan in V7K15FixedFamilyCausalCover:576-619. | Similar schedule is not an equality of transcript objects or a causal-prefix proof. No R0 translation is defined. |
+| Degree/boundary equations | R368WireSemanticCompatibility:13-72 proves degree <=27 and the omitted-linear boundary for source-shaped wire rounds. | V7FixedTupleSemanticSecurity uses ten adaptive degree-27 rounds with the honest fixed oracle. | Arithmetic compatibility is proved, but R368 explicitly excludes execution refinement and a source degree proof for the honest terminal. |
+| Three semantic points | R0FS.Protocol:44 accepts arbitrary `points : Fin 3 -> Fin 10 -> E`. R0 step 2 supplies three points without an equation tying them to sumcheck challenges. | V6AcceptedPathObligations:103: statementPoint point = [point, successorPoint point, xor12Point point]. | Exact mismatch: R0 does not restrict its points to this map. |
+| 87 claims | R0FS.Protocol:45,69-73: arbitrary claims equal dot(eqWeight(points j), t lane) for a Lambda candidate. | V7PointClaimBatchBinding:104-129 and V7K15FixedFamilyCausalCover:620-623: fields.pointClaim equals componentPointClaim of a coherent extraction at statementPoint transcript.point. | Same array dimensions; different defined arguments/evaluation relation. No R0-to-V7 identity is proved. |
+| Terminal claim projection | V8 performance_verifier.rs:57 extracts 3x28 claims from the 3x29 layout before calling payment_terminal. | V6AcceptedPathObligations terminalProjection also excludes precisely lane 28 for the terminal; all 29 lanes still enter point compatibility. | Layout matches at this boundary, but does not identify the underlying trace or terminal equation. |
+| Payment relation | R0FS.Protocol:48 makes semantic an arbitrary Prop. Its Witness:71-73 is list membership, all point claims and subfield descent, with no payment-witness predicate. V8 performance_verifier.rs:78-91 selects transfer/withdrawal terminal evaluators. | V7K15FixedFamilyCausalCover:586-600 requires V5PublicStatement, deployed Poseidon/copy semantics and CoherentTraceExtraction. V5AcceptedSpendRelation:312 defines the exact public statement. | Not a renaming: R0 has no typed semantic/payment relation to instantiate the theorem. |
+| Positive-transfer adapter | R0_SOUNDNESS's source-status item 6 explicitly names the V8 positive-transfer adapter. positive_transfer.rs:43-49 overwrites C1[3][1014]; :64-84 adds a selected-output inverse constraint and its theta^27 packed terminal term. performance_verifier.rs:35,:87-89 conditionally binds/adds it. | The V7 cover requires terminalExact to its extractedFixedTerminalPlan, :614-616. | The adapter changes the relation and terminal expression. Plain G / one channel does not remove it. No equality to the V7 plan is proved. Disabling the adapter would select a different baseline and still require the missing correspondence. |
+| List factor 100 | R0 Lambda is the WideExact joint close list with a proved cap 100, fixed after both commitments. | V7FixedWidth29TupleList:152,277 proves caps 100 for BOTH a QM31 width-29 decoder list and a C1-only list fixed before lambda/chi. | Equal cardinal caps are insufficient: candidate membership, field transport, terminal plans and the pre-lambda C1 fixing condition are not identified. No extra factor 100 is silently inserted. |
+| 396430 bound/event | R0 section 7 SEM: no Lambda candidate extends to a payment witness; semantic acceptance plus some candidate's 87 exact claims has mass <=396430/(card K-1). | V7K15FailureRootInventory:92-118 proves an inventory and numerical inequality. V7K15CausalProbabilityClosure:53-80 bounds the sum of specified ideal experiments by 396430/card K. The deterministic cover requires the typed accepted/extracted objects and causal/terminal equalities above. | The inventory alone is not an acceptance-probability theorem. Replacing the denominator by card K-1 is a safe numerical weakening; the missing event correspondence is the real gap. |
+| What is included in 396430 | R0 labels the whole number SEM, while its later opening rows are separate. | V7 inventory includes 30500 fixed-family semantic, 365900 C1 copy and 30 independent terms; OOD mix 2, relation-alpha 24 and kappa-row 2 are among those 30. | This conservative inventory includes V7 opening events too; it is not literally a single semantic challenge's bad set. A causal multi-round embedding must identify each event. |
+| Step-3 z rows | R0 wants z0, y0, z1, y1, distinct non-rational points. Existing CircleRows/CircleSource prove full-circle counts and retained successful-source conditions. | These are R0 chord conditions, not supplied by the cited V7 SEM theorem. | Previously proved results remain available; no SEM correspondence makes the outer state function complete. |
+
+**B1 is negative; B2 and B3 stop as instructed.** The old SemStatement.lean
+from the initial investigation is left unchanged; its abstract source and
+Props are not presented as a completed V7 instantiation. No new semantic
+assumption is introduced to hide a missing theorem, and no r0_full_fiat_shamir
+is asserted.
+
+Smallest R0_SOUNDNESS change that could make V7 applicable: replace the
+open-ended step 2 reference by the literal V7 semantic relation and accepted
+wire protocol (including the exact public statement, terminal, point map,
+C1-before-lambda list, width-29 candidate list and causal challenge order),
+explicitly excluding the positive-transfer terminal addition. R0's opening
+candidates would then still need proved embeddings into those V7 objects;
+calling two relations equal in prose does not supply them. If the V8
+positive-transfer relation is retained, it needs its own terminal/semantic
+soundness argument. Neither spec choice nor interface change was made.
+
+For z: using the raw full-circle bad-set densities would cost about 93 bits
+per row over K, as established earlier in this log. To retain the intended
+105-bit ledger, the outer protocol must instead preserve the retained
+source's rejection of rational/equal points and reject exhaustion, then
+integrate its successful-output conditions. This continuation does not
+claim that absent state-function integration.
+
+### A5 exact maximum and numerical bit ledger
+
+Lean proves
+
+```
+FS.maxErr (epsilonSlack WideExact delta0) 5
+  = (257*P^8/2^256) * choose(9557,22)/choose(262144,22).
+```
+
+This is the error coefficient of the CONDITIONAL five-round theorem, not a
+closed end-to-end security claim. Decimal values below were computed with
+Python exact integers/Fractions and 80-digit Decimal logarithms; the rational
+identity and dominance of the query row are kernel checked in SlackBits.
+
+* delta0 = 0.00390624626015779240496816845866.
+* Largest scaled error = 2.24268027779366526261003646023e-32.
+* Unscaled q22 bits = 105.14209961940710096046.
+* Scaled q22 bits = **105.13647507558768069426**.
+* Loss = 0.00562454381942026621 bits. Rounded to two decimals both are
+  105.14; 105.13 is the truncated scaled value.
+* Scaled round 0/1/2/3 bits: 199.7351943362, 239.7655567603,
+  240.3505192610, 204.8991135575.
+* The retained successful-query law itself supports the stronger unscaled
+  105.1420996194-bit row. A fully integrated retry protocol has not been
+  proved here, so no final full-protocol bit claim follows.
+
+Q_tot and kappa have not been evaluated: the conditional bound remains
+`Q_tot * maxErr(epsilonSlack) + kappa(Q_tot)`. Its error coefficient's bits
+are not the bits of that entire expression for unspecified Q_tot.
+
+### Environment, final replay and audit
+
+Same local worktree and branch as the start; Linux host
+`dombarker@100.108.41.90`, Linux 6.8.0-142-generic, pinned Lean 4.32.0
+(commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35). Set
+T=/home/dombarker/project-offloads/aspis-fs-generic-20261006 and
+B=/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal.
+The existing captured Lake environment in T/evidence/environment-base.json
+is used by run2.sh; no cold dependency build or package-wide replay ran.
+
+LEAN_PATH order is T/objects2, then B/.lake/packages/{Cli,batteries,Qq,aesop,
+proofwidgets,importGraph,LeanSearchClient,plausible,mathlib}/.lake/build/lib/lean
+in that order, then B/.lake/build/lib/lean, then
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean.
+The objects2 mirror provides FS, FS2, R0FS, R0, Wide, V8 and a real R0C
+directory. No mirror or runner changed this continuation.
+
+Every launch: `run2.sh <attempt> R0C/<Module> 7000 7`, `-j1`,
+`-DElab.async=false`, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0,
+TasksMax=128, timeout 900 seconds. Every reservation admitted populated
+24 GiB + 7 GiB within the 55 GiB safe limit. One Lean job at a time.
+Attempt 566 hit Lean's own memory limit; there was no cap increase or
+unchanged failing rerun. No swap occurred.
+
+After focused checks and proof-source commit 7b363636b246ddff6d07874d53a7c61490c73d52,
+exactly one final six-file replay ran, in dependency order, 570-575.
+All final source SHA values match local files; all exits 0, no warnings,
+all swaps 0. Total final wall time 19.62 s; peak final RSS 6801308 KiB
+(about 6.486 GiB). Existing unchanged R0C modules retain their earlier
+recorded audit and were not rerun. PCQ below means exactly
+`[propext, Classical.choice, Quot.sound]` from each printed theorem audit.
+
+| Attempt / target | SHA-256 | Exit | Wall | Peak RSS KiB | Swaps | Axioms |
+|---|---|---:|---:|---:|---:|---|
+| 570 / R0C/SlackStatement.lean | `2539373feaa6f95699d0d9eeed0d54867e6fad294971e86e0bdf78d335358031` | 0 | 0:02.88 | 6783976 | 0 | definitions / Props only |
+| 571 / R0C/SlackDensity.lean | `5cbb7dd4ba59d5d497a7538a6f99f6d386bceb4327fc27e76642d862aeae39a7` | 0 | 0:03.70 | 6801308 | 0 | PCQ, 6 theorems |
+| 572 / R0C/SlackDuplex.lean | `28518d4e13f358e95c9be2ac8d562cd7cf7662ddfefdb23d520fb53b41fa15a3` | 0 | 0:03.75 | 6793468 | 0 | PCQ, 4 theorems |
+| 573 / R0C/ConcreteSlack.lean | `a716935c3d2ab4cb782e1b2b1e591f43e95db60f68b231c691a89a922a318a19` | 0 | 0:03.03 | 6795896 | 0 | PCQ, 7 theorems |
+| 574 / R0C/SlackObstruction.lean | `1b985a20ae222b944bec9f9fd0eae5c5caf4ac5b5def132921b6b078f970da7b` | 0 | 0:03.26 | 6795496 | 0 | PCQ, 4 theorems |
+| 575 / R0C/SlackBits.lean | `0d43a896fbcad219286e1ebd757256753f66e2cfe969e2ed2c1eca53da0ccfa6` | 0 | 0:03.00 | 6795624 | 0 | PCQ, 5 theorems |
+
+Raw stdout including every `#print axioms` result, `/usr/bin/time -v` and
+source hashes are T/evidence/{out,time,sha}-<attempt>.{log,log,txt}.
+Audited names: SlackDensity.d2_round0..4 and d2; SlackDuplex.d1_slack,
+d2_slack, d3_slack, r0_duplex_fiat_shamir_slack_of_laws;
+ConcreteSlack.delta0_nonneg, ordinary_budget, gamma_budget, gamma_nonzero,
+gamma_mass, ordinary_mass, query_success_mass; SlackObstruction.positive_event_atom,
+query_count, oneblock_gap, noSamplerLawsSlackD; SlackBits.bad_query_count,
+row_le_query, max_five_eq_last, max_error_query, max_error_formula.
+
+Failed attempts (one line each; failed objects never consumed):
+
+| Attempt / target | Exit | Wall | RSS KiB | Swaps | Failure and replacement |
+|---|---:|---:|---:|---:|---|
+| 561 / SlackDensity | 1 | 0:03.56 | 6766728 | 0 | Incorrect named parameter R for Nat.cast_nonneg; replaced by alpha. |
+| 566 / SlackBits | 1 | 0:04.96 | 7170292 | 0 | Concrete five-row max proof hit Lean memory limit; moved fold reduction into abstract max_five_eq_last before instantiation. |
+
+Focused successes: 560, 562-565, 567. Attempts 568-569 unused. No explicit
+Finset.univ occurs in the six new files. State counting is abstract before
+instantiation; WideExact cardinalities are rewritten with wideExact_card;
+choose arithmetic uses 22 falling-factorial factors. Final scan found no
+proof placeholders, added axioms, native_decide or recursion/heartbeat
+limit overrides. git diff --check passed. Only final Lean sources and this
+log were committed; fixed interfaces/specs and unrelated files are untouched.
+
+### Current status
+
+A1 and A2 are proved; A3's concrete field clauses and retained query-success
+law are proved. The requested total one-state A3 instance is disproved,
+and A4 stops at the explicitly forbidden decoder-shape repair. B1 is
+negative, so B2/B3 were not pursued. The original theorem's sampler premise
+remains false; the usable replacement still needs the bounded query sampler,
+error rejection and matching decoder integration. SEM/payment extraction
+and the z-prefix integration remain open. The available final assembly is
+conditional only; the exact scaled opening coefficient has 105.136475 bits.
