@@ -319,6 +319,62 @@ Hashes include the inclusive line ranges and line endings at the inspection pin.
 | F | 946–989 | stopped tower packing | `9af6b08676d1fe345894c9789a515f18530f0567fea6d59c504718ed23e2d183` |
 | T | 211–216 | actual 57-block selector | `5419a950c6b3fa09512bb362bd321ba81277704cdd92d1ee7175e142b4923e0e` |
 
+### Continuation G3′ — endpoint iff obstruction
+
+Resumed from lead interface commit
+`dae112e8f7f8f08d8b06272464a7daefb978dffe` after fetch/fast-forward.
+CoreExt's base typing and independent packing basis resolve the original
+interface gap for the authorized canonical field model. The lead's separate
+Rust-to-model refinement obligation for S:130–357,401–617 remains explicit.
+Core, CoreExt, constants and all preexisting function bodies are unchanged.
+
+**New exact stop:** a round-by-round relation on a fixed committed trace is
+not equivalent to its block endpoint equations alone. S:389–398 adds local
+row 12 into the low eight words of local row 0, applies the external layer,
+then initial full rounds 0 and 1. S:589–615 selects that successor equation
+at local row 0. P:339–352 specifies the full canonical permutation; the
+pair-forest caller uses all 57 blocks (T:211–216).
+
+`poseidonLeadingPair` and `poseidonAbsorbedInput` record those canonical
+field operations. `poseidon_endpoints_do_not_imply_successor` proves an
+explicit counterexample over every field: every block output at local row
+11 is the canonical permutation of its absorbed input, yet block 0's local
+row 1, word 0 differs from the required leading-pair output by one. The
+witness has zero input and absorption rows, opaque `poseidonPermutation 0`
+at output rows, and the perturbed first intermediate cell. No permutation,
+constant table or finite universe is evaluated. Bare local row 0 also needs
+the low-eight-word absorption when stating the endpoint result.
+
+The smallest correction is to request the forward endpoint implication for
+this trace, or an iff with the complete intermediate-round catalogue. An
+endpoint iff could instead quantify existence of appropriate intermediate
+states. Choosing or applying one of these statement changes is left to the
+lead; no Core/CoreExt change is needed for this obstruction. No
+`poseidonScalarFamily`, `poseidon_scalar_holds_iff`, or packed/scalar theorem
+is claimed past this stop. No tuple, multiset or probabilistic claim is made.
+
+Focused development and independent coordinator review both passed on the
+frozen `Poseidon.lean` SHA-256
+`57ab72400b97b7918f08dd1d2ab186dd25dd3c4b61c496b09bf51b050a1a31db`:
+
+| Target | Attempt | Scope/Lean exit | Wall s | Peak RSS KiB | Swaps |
+|---|---:|---:|---:|---:|---:|
+| R0P/Poseidon, focused | 904 | 0 | 2.22 | 3342084 | 0 |
+| R0P/Poseidon, coordinator | 905 | 0 | 2.13 | 3342360 | 0 |
+
+Both runs used the existing host workspace and Lean 4.32.0 cache,
+`run2.sh N R0P/Poseidon 7000 7`, `-j1 -M7000 -DElab.async=false`, timeout
+900 s, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0 and TasksMax=128.
+Reservation admitted 24+7 GiB below 55. Raw evidence is
+`evidence/{out,time}-N.log`, `sha-N.txt`, and `source-N.lean` in
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006/` on
+`dombarker@100.108.41.90`. Actual scope and time exit statuses were inspected.
+There were no failed G3′ attempts or warnings. All six theorems have
+`#print axioms`; every result uses only a subset of `propext`,
+`Classical.choice`, `Quot.sound`, including the new counterexample.
+Coordinator source review and `git diff --check` passed. No cap increase,
+local build, dependency rebuild or replay of unchanged original G3 was used.
+
 ## G4
 
 Inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. Only Copy.lean

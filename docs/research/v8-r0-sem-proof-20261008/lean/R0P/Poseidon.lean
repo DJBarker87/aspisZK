@@ -16,7 +16,14 @@ The field functions below transcribe the canonical field-operation path
 P:137–170,200–218,339–352. They are NOT claimed to be a literal port or a
 proved refinement of the projected raw-limb implementation S:585–617.
 The separate layout facts transcribe the pair-forest caller's 57 blocks,
-not the generic state-only module's 49-block default. -/
+not the generic state-only module's 49-block default.
+
+Continuation after CoreExt / lead decisions: the canonical scalar model and
+base-typed packing interface are now authorized. The requested endpoint-only
+iff nevertheless omits the committed intermediate rows. The final theorem
+below gives a symbolic counterexample: every block has the canonical output,
+but the first selected successor equation fails. No scalar Family or weakened
+Holds equivalence is claimed. -/
 set_option autoImplicit false
 namespace R0P
 variable {K : Type} [Field K]
@@ -193,9 +200,107 @@ theorem poseidon_packing_perturbation (i u : K) (values : Fin 4 → K) :
     values 0 + i * values 1 + u * values 2 + i * u * values 3
   ring
 
+/-- S:389–398 / 401–412, canonical field-level leading pair: absorb exactly
+the eight rate words, apply the leading external layer, then initial rounds
+zero and one. CoreExt and LOG's lead decision authorize this canonical model;
+refinement of S's optimized raw-limb implementation remains a separate
+obligation. No table is evaluated here. -/
+def poseidonLeadingPair (state absorption : Fin 16 → K) : Fin 16 → K :=
+  let state := fun lane =>
+    if lane.val < 8 then state lane + absorption lane else state lane
+  let state := poseidonExternalLinear state
+  poseidonFullRound (poseidonFullRound state (poseidonExternalInitial 0))
+    (poseidonExternalInitial 1)
+
+/-- S:390–393 at a block's local row zero: xor12 reads local row twelve,
+and only lanes zero through seven are absorbed before P:339–352. -/
+def poseidonAbsorbedInput (A : Trace K) (block : Fin 57) : Fin 16 → K :=
+  fun lane => if lane.val < 8 then
+    A (lane.castAdd 13) (poseidonBlockRow block 0) +
+      A (lane.castAdd 13) (poseidonBlockRow block 12)
+    else A (lane.castAdd 13) (poseidonBlockRow block 0)
+
+attribute [local irreducible] poseidonLeadingPair poseidonPermutation
+
+/-- Endpoint correctness does not imply the source's selected successor
+equations for this committed trace. All 57 outputs equal P:339–352 on the
+absorbed inputs, while block zero's first successor word differs from its
+S:389–398 leading pair by one. The permutation and constants stay opaque;
+this is independent of the previously recorded packing obstruction. -/
+theorem poseidon_endpoints_do_not_imply_successor :
+    ∃ A : Trace K,
+      (∀ block : Fin 57, ∀ lane : Fin 16,
+        A (lane.castAdd 13) (poseidonBlockRow block 11) =
+          poseidonPermutation (poseidonAbsorbedInput A block) lane) ∧
+      A 0 (poseidonBlockRow 0 1) ≠
+        poseidonLeadingPair
+          (fun lane => A (lane.castAdd 13) (poseidonBlockRow 0 0))
+          (fun lane => A (lane.castAdd 13) (poseidonBlockRow 0 12)) 0 := by
+  let A : Trace K := fun column row =>
+    if hc : column.val < 16 then
+      if row.val % 16 = 11 then
+        poseidonPermutation (0 : Fin 16 → K) ⟨column.val, hc⟩
+      else if row.val = 1 ∧ column.val = 0 then
+        poseidonLeadingPair (0 : Fin 16 → K) 0 0 + 1
+      else 0
+    else 0
+  have hinput (block : Fin 57) :
+      (fun lane : Fin 16 => A (lane.castAdd 13) (poseidonBlockRow block 0)) = 0 := by
+    funext lane
+    have hrow : (16 * block.val + 0) % 16 ≠ 11 := by omega
+    have hfirst : ¬ (16 * block.val + 0 = 1 ∧ lane.val = 0) := by omega
+    change (if hc : lane.val < 16 then
+      if (16 * block.val + 0) % 16 = 11 then
+        poseidonPermutation (0 : Fin 16 → K) ⟨lane.val, hc⟩
+      else if 16 * block.val + 0 = 1 ∧ lane.val = 0 then
+        poseidonLeadingPair (0 : Fin 16 → K) 0 0 + 1
+      else 0
+      else 0) = 0
+    simp only [dif_pos lane.isLt, if_neg hrow, if_neg hfirst]
+  have habsorption (block : Fin 57) :
+      (fun lane : Fin 16 => A (lane.castAdd 13) (poseidonBlockRow block 12)) = 0 := by
+    funext lane
+    have hrow : (16 * block.val + 12) % 16 ≠ 11 := by omega
+    have hfirst : ¬ (16 * block.val + 12 = 1 ∧ lane.val = 0) := by omega
+    change (if hc : lane.val < 16 then
+      if (16 * block.val + 12) % 16 = 11 then
+        poseidonPermutation (0 : Fin 16 → K) ⟨lane.val, hc⟩
+      else if 16 * block.val + 12 = 1 ∧ lane.val = 0 then
+        poseidonLeadingPair (0 : Fin 16 → K) 0 0 + 1
+      else 0
+      else 0) = 0
+    simp only [dif_pos lane.isLt, if_neg hrow, if_neg hfirst]
+  have habsorbed (block : Fin 57) : poseidonAbsorbedInput A block = 0 := by
+    funext lane
+    have hz := congrFun (hinput block) lane
+    have ha := congrFun (habsorption block) lane
+    change A (lane.castAdd 13) (poseidonBlockRow block 0) = 0 at hz
+    change A (lane.castAdd 13) (poseidonBlockRow block 12) = 0 at ha
+    simp only [poseidonAbsorbedInput, hz, ha, zero_add, ite_self, Pi.zero_apply]
+  refine ⟨A, ?_, ?_⟩
+  · intro block lane
+    rw [habsorbed block]
+    have hrow : (16 * block.val + 11) % 16 = 11 := by omega
+    change (if hc : lane.val < 16 then
+      if (16 * block.val + 11) % 16 = 11 then
+        poseidonPermutation (0 : Fin 16 → K) ⟨lane.val, hc⟩
+      else if 16 * block.val + 11 = 1 ∧ lane.val = 0 then
+        poseidonLeadingPair (0 : Fin 16 → K) 0 0 + 1
+      else 0
+      else 0) = poseidonPermutation (0 : Fin 16 → K) lane
+    simp only [dif_pos lane.isLt, if_pos hrow, Fin.eta]
+  · rw [hinput 0, habsorption 0]
+    change poseidonLeadingPair (0 : Fin 16 → K) 0 0 + 1 ≠
+      poseidonLeadingPair (0 : Fin 16 → K) 0 0
+    intro h
+    have hzero : (1 : K) = 0 := add_left_cancel
+      (h.trans (add_zero (poseidonLeadingPair (0 : Fin 16 → K) 0 0)).symm)
+    exact one_ne_zero hzero
+
 #print axioms poseidon_pow5_eq
 #print axioms poseidon_block_layout
 #print axioms poseidon_round_pair_layout
 #print axioms poseidon_packing_kernel
 #print axioms poseidon_packing_perturbation
+#print axioms poseidon_endpoints_do_not_imply_successor
 end R0P
