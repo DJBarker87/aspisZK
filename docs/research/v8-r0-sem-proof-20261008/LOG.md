@@ -658,3 +658,17 @@ with the Rust source by the lead.
 | poseidon2.rs | 465 tweak | `2c2adc7778bb03513bc2ec9a345df83fd3fc176e582c97edf2deed0c74f8f070` |
 | spend.rs | 14–16 domain constants | `c97a9c8dcca562266fb18cfcf96b9eb4a1dcd3334d04237b363e60e1acbe9159` |
 | aspis-core/src/field.rs | 55–59 M31.add | `a51f7929c9d6db66d1596dd2a49bad1cfbfafbf1f3d2f84e5cee6e33d212e8d5` |
+
+## Lead decisions after G3/G4 (2026-10-08)
+
+`lean/R0P/CoreExt.lean` (attempt 606, exit 0, `pack4_eq_zero_iff`: propext,
+Classical.choice, Quot.sound). `Core.lean` is unchanged, so G1/G2 are unaffected.
+
+- **G4 (Copy):** families that read H1 and λ, χ use `CFamily`/`CHolds`
+  (`A 26 b` is H1 at the current row; λ, χ are explicit parameters).
+- **G3 (Poseidon), option (a):** the relation is the *unpacked* canonical
+  permutation per base limb (P:137–352). `pack4_eq_zero_iff` gives packed = 0 ⇔
+  every limb = 0 on base-typed cells under `PackBasis`; `BaseTyped` comes from
+  Q11 subfield descent. **That the projected raw-limb code (S:130–357, 401–617)
+  computes the canonical permutation is a Rust-to-model refinement obligation,
+  recorded here and not proved in this job.**
