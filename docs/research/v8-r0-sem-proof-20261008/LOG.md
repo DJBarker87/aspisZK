@@ -195,3 +195,126 @@ revision. All scalar constants are ordinary K casts; no extension basis is fixed
 | P | 64–70 | residual and selector | `922e71797b43ae9663bcc587320b688094a8ba301655989f4045d6c9264bd499` |
 
 `git diff --check` and the per-theorem audit-command inventory passed.
+
+## G3
+
+Inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. Source aliases:
+P = `crates/aspis-statement/src/poseidon2.rs`;
+S = `crates/aspis-statement/src/state_only_poseidon.rs`;
+T = `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs`;
+F = `crates/aspis-core/src/field.rs`. Core and all other family files were unchanged.
+
+### Result and literal scope
+
+`PoseidonConstants.lean` transcribes P:83–104 EXTERNAL_INITIAL (4×16),
+P:106–127 EXTERNAL_FINAL (4×16), P:129–132 INTERNAL (14), and P:134
+INTERNAL_SHIFTS (15). All 142 field constants are casts into arbitrary
+`[Field K]`. A text-level ordered literal comparison with the exact Rust
+regions passed. No table was evaluated by a proof.
+
+`Poseidon.lean` preserves the canonical field-operation path P:137–170
+(sbox, local matrix and external layer), P:200–218 (full round/internal
+layer), and P:339–352 (the explicit 16-word, 4+14+4 permutation evaluation).
+It also records P:62–68,239–253,294–308 round classes/pairs and the source
+block layout. These are useful algebraic components, explicitly not a
+claimed literal port or proved refinement of the projected raw-limb
+implementation. A permutation evaluation function is defined; bijectivity
+over arbitrary fields is not asserted.
+
+Five proved results: `poseidon_pow5_eq`, `poseidon_block_layout`,
+`poseidon_round_pair_layout`, `poseidon_packing_kernel`, and
+`poseidon_packing_perturbation`. Layout uses the actual pair-forest 57 blocks
+from T:211–216, not S:28's generic 49-block default. Each block's local rows
+0–10 hold inputs to rounds `(2r,2r+1)`, row 11 the final output, and row 12
+absorption; local row 0 includes the source leading absorption/external
+layer. Local rows 0/1 correspond to external-initial pairs 0–1/2–3, local
+rows 2–8 to internal pairs 0–13, and local rows 9/10 to external-final pairs
+0–1/2–3. Tables stay opaque in these proofs.
+
+### Findings — family stopped
+
+1. **Literal projected Family is outside fixed Core.** T:1253–1255 calls
+   `evaluate_state_only_poseidon_oracle_projected` (S:585–617)
+   unconditionally, without an audit alternative. It uses `qm31_pack_base4`
+   at S:602–603 and raw-limb projected branches S:401–412,504–521.
+   `extension_limbs` / `extension_from_raw_limbs` (S:130–140),
+   `external_linear_lazy` (S:144–191), `external_local_packed_raw`
+   (S:217–267), `internal_linear_lazy` (S:303–329), and base-limb constant
+   updates (S:347–357) access a concrete QM31 representation and M31
+   reductions. Arbitrary `[Field K]` and Core have no such operations.
+   Replacing these by field formulas without a refinement proof is not a
+   literal port.
+2. **The requested complete component successor iff is false without
+   typing.** F:946–989 packs `(v0,v1,v2,v3)` as
+   `v0+i*v1+u*v2+i*u*v3`; Core's `Trace K` has unrestricted K-valued cells.
+   The nonzero vector `(-i,1,0,0)` has packed value zero, proved by
+   `poseidon_packing_kernel`, and adding it preserves any packed output,
+   proved by `poseidon_packing_perturbation`. This is a defect in the
+   unrestricted requested statement, not a claimed attack on the
+   base-typed Rust trace.
+
+Global Poseidon row quantification does not remove the obstruction. Start
+with a trace satisfying the ordinary round recurrence and alter columns
+0/1 at block 0's final local row 11 by `-i` / `+1`. Row 10's packed successor
+remains unchanged; row 11 has no active selector. Row 7 can read row 11
+through xor12 only in the leading branch, whose local-0 weight is zero at
+row 7. No other selected successor reads row 11. Thus the packed family
+remains satisfied while row 10's sixteen-word successor equality fails.
+This support argument is source inspection; no nonexistent Core Family
+theorem is asserted.
+
+Smallest interface alternatives, for the lead only: (a) explicitly choose
+an unpacked scalar Family and separately prove its base-typed equivalence
+to the source packed terminal; or (b) supply a concrete tower/packing and
+limb-refinement interface plus base-subfield typing and packing injectivity
+on that subfield. Adding a basis alone is insufficient for arbitrary
+K-valued traces. Neither alternative was added as a premise or selected
+here. `poseidonFamily` and `poseidon_holds_iff` are intentionally absent.
+
+### Build evidence
+
+Same pinned host/lake environment and LEAN_PATH as G1; `run.sh` using
+`objects/`, `-j1 -M4500 -DElab.async=false`, MemoryHigh=5G, MemoryMax=7G,
+MemorySwapMax=0, TasksMax=128, timeout 900 s. Before each run the exact
+populated-scope reservation loop from run2.sh was applied with
+`+7 GiB <= 55 GiB`; each admitted 24+7. One G3 job at a time, no cap
+increase, no dependency rebuild. Raw records are workspace
+`evidence/{out,time}-900/901/902/903.log` and `sha-N.txt`.
+
+| File | Attempt | SHA-256 | Exit | Wall s | Peak RSS KiB | Swaps | Axioms |
+|---|---:|---|---:|---:|---:|---:|---|
+| PoseidonConstants.lean | 900 | `c87e94b63a575b96cecff98eea6a84385945d5481054a688d24ba162452340b0` | 0 | 1.50 | 3310196 | 0 | definitions only |
+| Poseidon.lean, group focused pass | 902 | `b936cb8249d536849387622b837af2042a457eafbdfb2d9a703470b64649178a` | 0 | 1.93 | 3335184 | 0 | permitted subset below |
+| Poseidon.lean, coordinator check | 903 | `b936cb8249d536849387622b837af2042a457eafbdfb2d9a703470b64649178a` | 0 | 1.93 | 3335040 | 0 | permitted subset below |
+
+`poseidon_pow5_eq` and `poseidon_packing_perturbation` use
+`[propext, Quot.sound]`. The other three theorems use
+`[propext, Classical.choice, Quot.sound]`. Each theorem has its own
+`#print axioms`; final builds have no warnings. No concrete Finset.univ or
+1024-row enumeration; only symbolic Fin bounds and small round-number
+arithmetic. The coordinator independently compared the source constants
+in order (64+64+14 match), inspected the canonical field-operation
+definitions, and ran the focused lead audit 903 required by AGENTS.md.
+
+Failed attempts:
+
+- 901 Poseidon: exit 1, 1.84 s, 3322904 KiB, swap 0; reserved word `local` used as a binder and final Nat addition association left open; renamed the binder, used Fin.val_castLE and omega. Failed elaboration was not accepted and no failed object was consumed. Attempt 902 followed this source change.
+
+`git diff --check` passed.
+
+### Exact source-region SHA-256s
+
+Hashes include the inclusive line ranges and line endings at the inspection pin.
+
+| Source | Lines | Region | SHA-256 |
+|---|---|---|---|
+| P | 83–104 | EXTERNAL_INITIAL | `52abaf623026228d1b36fa76087eb2602cd61b0e98631777786c4a7c4bd08454` |
+| P | 106–127 | EXTERNAL_FINAL | `e275b74c1f8a96cd2379cb1b1d7f786dffae4144668b602199334485e922c9a1` |
+| P | 129–132 | INTERNAL | `f149c66e7e6ab405edc31af5bd85b11afdbc872fe64d46aa26fff497b8fae323` |
+| P | 134 | INTERNAL_SHIFTS | `0498beff372384d7b4fb3a2739789fa0d53ec0700aa26d92f239a61f2e7f2534` |
+| P | 137–170 | canonical sbox/external layer | `088789848cad15005cc002ccffd39c05886f3a87cd36ea7dda057733ec344aac` |
+| P | 200–218 | canonical full/internal layers | `65e75e9d75b9600a0485f715ba8f67c370a9fffb5bfc5f33ef329a5e908d4cca` |
+| P | 339–352 | canonical permutation | `5edb9f05a8a0627912cacf8a164b1d33c44f5c0ac115efe4edac6f26255f779d` |
+| S | 585–617 | stopped projected evaluator | `3e5ea528ddaf46ce11d5034f2481b11dde13085b77ce5671dee8cfe26b4e90c6` |
+| F | 946–989 | stopped tower packing | `9af6b08676d1fe345894c9789a515f18530f0567fea6d59c504718ed23e2d183` |
+| T | 211–216 | actual 57-block selector | `5419a950c6b3fa09512bb362bd321ba81277704cdd92d1ee7175e142b4923e0e` |
