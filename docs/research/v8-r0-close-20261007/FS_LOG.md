@@ -898,3 +898,79 @@ remains false; the usable replacement still needs the bounded query sampler,
 error rejection and matching decoder integration. SEM/payment extraction
 and the z-prefix integration remain open. The available final assembly is
 conditional only; the exact scaled opening coefficient has 105.136475 bits.
+
+---
+
+# Addendum 2026-10-07 (lead): the q22 round integrated — `r0_q22_fiat_shamir`
+
+Closes the A3/A4 stop above. `R0C.V3.DQ.r0_q22_fiat_shamir` (`lean/R0C/V3/R0Q.lean`):
+R0's opening layer compiled with the duplex of `AspisV8R19.DuplexFrames`, the
+concrete 32-byte field sampler (`ModuloField.gamma`/`ordinary`) for γ, κ, τ, α₀,
+the tree's q22 query sampler (`Q22SamplerProgram.challengeProgram`, all eight
+chain blocks read, failure rejected), and the chain-running verifier:
+
+```
+Pr_H[V accepts ∧ no witness] ≤ Q_tot · (1+δ₀)·C(9557,22)/C(262144,22) + 2·Q_tot²/2^256
+```
+
+(`r0_q22_fiat_shamir_closed`, ≈ Q_tot·2^-105.136 + κ). Hypotheses: `p.rounds = 5`,
+`p.σ i = σQ i` for i < 4 (the concrete rule), and the Q_tot bound. **No sampler
+premise.** Premise SEM and the step-3 challenge conditions remain inside the
+statement `x`. All `#print axioms` are `propext, Classical.choice, Quot.sound`
+(`before_traceFrom` uses only `propext, Quot.sound`); no `sorry`/`axiom`/
+`native_decide`/`admit`/`maxRecDepth`/`maxHeartbeats` (grep).
+
+## Why a new sampler type, and what it is
+
+In the q22 chain, step k+1's addresses (`squeeze`/`advance` of `s_{k+1}`)
+are fixed once step k's advance is read, while the stop rule reads step k's
+squeeze. A prover may read step k+1's squeeze before step k's. FS2's
+`Sampler` (ask / multi) cannot express that order: a step's `multi` must be
+complete before the next step's cells are read. `R0C.V3.BS` adds
+`spawn c`: `c` joins a background set, first-read any time later, answered
+by position. The completing sampler asks the absorb and the chain's
+advances in order and spawns every squeeze; earlier rounds' missing
+squeezes are the initial background set. The verifier reads all eight q22
+pairs (extra reads after the stop are harmless; Q_tot counts them; the
+challenge value is unchanged).
+
+## Proof structure
+
+| File | Content |
+|---|---|
+| `V3/BS.lean` | `BS`, `bfollow`, `blaw`; `chainB`: Pr[followed ∧ bad] ≤ fully independent law |
+| `V3/Gen.lean` | `lemmaA3`, `lemmaB3`, `theorem43`: FS2's protocol/transcript/verifier with a BS-valued decoder |
+| `V3/BSOk.lean` | `bfollow_ok`: distinct, fresh, read, ask-ordered cells ⇒ follow completes with the oracle's values; `blaw_split` |
+| `V3/Q22Law.lean` | `chainE_scanOut`: full-read chain law = tree loop law; `q22_bound`: success ∧ 22-subset of ≤9557 fibres ≤ C(9557,22)/C(262144,22) (via Codex's `QuerySource.successful_subset_le`) |
+| `V3/DuplexQ.lean` | protocol (`sampQ`, `chainS`), decoder (`decQ`, `chainBS`), `blaw_chainBS`, `flip_roundBad`, `round_field_bound` (Codex's `OpeningSamplerBounds` at δ₀), `round_q22_bound` |
+| `V3/DuplexQDensity.lean` | `chainDensityQ`: ChainDensity3 for `decQ` |
+| `V3/DQChain.lean` | chain states, events, reads, outputs; trace order inside `traceFrom` |
+| `V3/DQDecodes.lean` | `decodesQ`: (INJ) for the q22 duplex outside the collision event |
+| `V3/R0Q.lean` | `d1Q`, `d3Q` (decision also rejects a non-22 query set), `chainsReadQ`, `readsChainsQ`, `r0_q22_fiat_shamir`, `_closed` |
+
+## Evidence (NUC, clean replay attempts 540–548; `-M7000` for files importing R0, scope `MemoryHigh=5G MemoryMax=7G MemorySwapMax=0`; the reservation check admitted every launch; zero swaps; no cap raised)
+
+| Target | SHA-256 | exit | wall | peak RSS KiB |
+|---|---|---:|---:|---:|
+| `lean/R0C/V3/BS.lean` | `c587ee0f1386f294159397a17639828541136a4595b603c5b182ff5ff50aa93e` | 0 | 2.27 s | 3,358,112 |
+| `lean/R0C/V3/Gen.lean` | `0a6aff242cde2900929ccc098322ecf06911747781d444fd0b0f41750101691f` | 0 | 2.84 s | 3,358,144 |
+| `lean/R0C/V3/BSOk.lean` | `d273fcd424c6467cb9fa3f08856b5033bf3cba2e6a0b9a891a38a1ebf5e40b44` | 0 | 2.15 s | 3,355,960 |
+| `lean/R0C/V3/Q22Law.lean` | `5c3e8c5f697e69ccc66db343c874bc1e15587f1a14ff3eac2f58572891267d5e` | 0 | 1.71 s | 3,339,940 |
+| `lean/R0C/V3/DuplexQ.lean` | `4ff443a61b6ab1873bd31b498128eed3c3f49ccdd043767912d1b6655e27a453` | 0 | 7.92 s | 6,826,232 |
+| `lean/R0C/V3/DuplexQDensity.lean` | `d5f5b08b86fdc99aed58a67bbda3caa21bf4abd9b281884b8b390092dec52494` | 0 | 4.53 s | 6,807,876 |
+| `lean/R0C/V3/DQChain.lean` | `68bfc32c20d9333be9660652b6bf217b7090942dcf195c41a17b1c672505f8c0` | 0 | 3.79 s | 6,799,008 |
+| `lean/R0C/V3/DQDecodes.lean` | `5dc040b0d21b5080fbf33c9191c07a98024771482eca459e55a27a17925de2a3` | 0 | 10.75 s | 6,857,204 |
+| `lean/R0C/V3/R0Q.lean` | `e1bdb96a86c81b143c6962f904ccc2c4f291ec7f81dcdc0f54534cfa83ba0fb9` | 0 | 7.07 s | 6,812,300 |
+
+Attempts 500–535: all failures were elaboration-level (names, rewrites, a
+`set` variable defeating inference, `rfl`/`rcases` triggering evaluation of
+a `decide`-defined decision — replaced by a Bool lemma). No probability
+statement or premise was changed to make a proof go through.
+
+## Remaining premises of the R0 result
+
+1. **SEM** (semantic phase) — open; R0's semantic relation is not defined in
+   the tree (B1 stop above). Statement work is the next step.
+2. **Step-3 challenge conditions** (`z₀ ≠ z₁`, non-rational) — circle bounds
+   proved by Codex (`CircleRows`); not yet rounds of the state function.
+3. **Rust-to-model refinement** — deferred by design.
