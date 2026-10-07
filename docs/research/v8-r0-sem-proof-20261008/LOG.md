@@ -375,6 +375,131 @@ There were no failed G3′ attempts or warnings. All six theorems have
 Coordinator source review and `git diff --check` passed. No cap increase,
 local build, dependency rebuild or replay of unchanged original G3 was used.
 
+### Continuation G3″ — complete canonical transition port
+
+Resumed after fetch/fast-forward at lead decision
+`1814662d1f51467a7493b573d6d7678819cd0887`. The corrected statement is
+implemented without changing Core, CoreExt, constant files or other groups.
+Concurrent lead commits `d207e848f` and `99790ae53` added positivity/LogUp
+material during this work; their tracked additions are preserved. The
+Poseidon imports and reviewed Rust sources are unchanged by those commits.
+Every preexisting Poseidon definition and theorem body, including
+`poseidonLeadingPair`, `poseidonAbsorbedInput`, `poseidonRoundPair`,
+`poseidonRoundKind`, `poseidonBlockRow`, all round functions and
+`poseidon_endpoints_do_not_imply_successor`, is preserved byte-for-byte.
+
+**Proved deliverables:**
+
+- `poseidonScalarFamily` emits sixteen unpacked canonical residual lanes.
+  It retains T:211–216's ordered block selector over 0..57, S:589–615's
+  leading/full/internal selector sums, the three weighted successor
+  differences, and the outer block factor. Local row zero uses the existing
+  leading pair with the xor12 opening (S:389–398); the other selected rows
+  use the canonical interpolated full/internal pairs (S:416–535).
+- `poseidon_scalar_holds_iff pub A` is exactly the complete catalogue:
+  every block in Fin 57, local transition row in Fin 11 and word in Fin 16
+  satisfies its successor equation. `poseidonTransition` reads the existing
+  round-pair numbers and dispatches the same initial/internal/final ranges
+  as `poseidonRoundKind` (P:239–253,294–308). It selects `poseidonLeadingPair`
+  at row zero. The Boolean-row proof identifies xor12 with local row 12,
+  successor with local row r+1, and all inactive scalar lanes with zero.
+  No off-domain equivalence of arbitrary high/low selector inputs is claimed.
+- `poseidon_scalar_holds_output pub A` proves, forward only, that every
+  block's local row 11 state equals `poseidonPermutation` applied to
+  `poseidonAbsorbedInput`. Generic fold lemmas split the 4+14+4 schedule,
+  group all 22 rounds into consecutive pairs, and compose the eleven
+  transition equations. The leading external layer and low-eight-word
+  absorption are accounted for before the first pair. No permutation value
+  or constant table is evaluated.
+- `poseidon_packed_iff_scalar F B pub A hA` proves
+  `Holds (poseidonPackedFamily B) pub A ↔ Holds poseidonScalarFamily pub A`
+  under exactly `B : PackBasis F` and `hA : BaseTyped F A`. The packed
+  family groups consecutive scalar limbs as 4*group+limb (T:1253–1255,
+  S:600–615) and uses `pack4_eq_zero_iff`. All scalar residuals are proved
+  to lie in F, including inactive zeros; no extra relation/extraction
+  premise is introduced.
+
+The subfield proof traverses only vector constructors with generic predicate
+lemmas and discharges each literal cast with `natCast_mem`. No table index
+or numeral value is evaluated. Shift-derived diagonal membership uses the
+entire opaque Nat shift expression as a cast. Round and table functions
+remain locally irreducible during selector simplification. Only the eleven
+local-row cases and seven local selector terms are normalized; neither the
+57-block range, 1024-row range nor a concrete finite universe is evaluated.
+
+**Stopped:** none within G3″'s corrected scope. **Findings:** no new source
+mismatch. The lead's existing Rust-to-model refinement obligation for the
+optimized raw-limb implementation S:130–357,401–617 remains explicit.
+The field-level packed residual is the specifically authorized substitution;
+this job does not prove that Rust refinement, a converse endpoint theorem,
+bijectivity over arbitrary fields, or an extraction/security result.
+
+The coordinator reviewed the literal selected successor branches, block and
+lane layout, absorption, interpolation indices and round schedule against
+inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. P, S, T and F
+are byte-identical at the lead revision; prior source-region hashes remain
+valid. Whole-source SHA-256s for this review:
+
+| Source | SHA-256 |
+|---|---|
+| P | `3f1d60cf5feb48e56fa3c9379a74f2ccb9b2a7ea78365abf0e06e36e562d54cb` |
+| S | `4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe` |
+| T | `efbc5be87e271419d7b09e1bb6e3a83984d42795bc20067ea039814fb89ffa58` |
+| F | `5795495e2fa9ad85e097c2ad96ffc826aaad3c16afc0e0bd00459f9f51068cd8` |
+
+Final `Poseidon.lean` SHA-256:
+`faeeefd8f3a6c25e1896eb827d9bd12d9bda901ff0171675186064baa5c369c8`.
+All focused runs used `dombarker@100.108.41.90`, workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006/`, pinned Lean
+4.32.0 and its existing objects2/R0P cache, with
+`run2.sh N R0P/Poseidon 7000 7`. Each scope used MemoryHigh=5G,
+MemoryMax=7G, MemorySwapMax=0, TasksMax=128, timeout 900 s and
+`-j1 -M7000 -DElab.async=false`. Reservation admitted 24+7 GiB below 55.
+One G3 job ran at a time. No cap changes, local builds, dependency rebuilds
+or unchanged failing reruns occurred.
+
+| Attempt | Scope/Lean exit | Wall s | Peak RSS KiB | Swaps | Result/change before next attempt |
+|---:|---:|---:|---:|---:|---|
+| 906 | 1 | 05.91 | 3381808 | 0 | Selector Fin numerals and inactive simplification; added explicit projection facts. |
+| 907 | 1 | 06.28 | 3381528 | 0 | Row-zero Fin equality, xor arithmetic/casts, list quantifier proof and layout syntax; corrected. |
+| 908 | 1 | 06.36 | 3381736 | 0 | Remaining row-zero Fin 9/10 comparisons; supplied tiny selector inequality facts. |
+| 909 | 0 | 06.48 | 3387736 | 0 | Complete scalar catalogue green, 15 audits; forward composition added next. |
+| 910 | 1 | 06.65 | 3383912 | 0 | Generic fold casts, dependent conditionals and lambda inference; corrected explicitly. |
+| 911 | 1 | 06.63 | 3383492 | 0 | Final-round Fin projection needed explicit Nat arithmetic. |
+| 912 | 1 | 07.38 | 3381956 | 0 | Subfield cast lemma namespace, opacity and introduced lane binders; corrected; forward proof elaborated. |
+| 913 | 1 | 07.47 | 3383852 | 0 | Nested-vector predicate needed explicit instantiation for the two external tables. |
+| 914 | 0 | 09.22 | 3423824 | 0 | Complete four-deliverable file green, 39 audits, no warnings. |
+| 915 | 0 | 09.17 | 3423984 | 0 | Final frozen coordinator check after header update, 39 audits, no warnings. |
+
+Attempt source SHA-256s (915 uses the final hash above):
+
+| Attempt | SHA-256 |
+|---:|---|
+| 906 | `60f65dffca05ec7cb9f99375c7925ba4659f05304621fba42d28053aabe7b17d` |
+| 907 | `05702dad779c5f78ad14af9c636997f0044bcd2864861cdeda448ca917b67c41` |
+| 908 | `587e3cd2d1898567277c1c0b90d95b074d642be6581a13ca1301d16925d74a8e` |
+| 909 | `e38e5ee37da60e63c6a00760acd4c9ee36c6dbd8adccf25570d3ba94ae138b5c` |
+| 910 | `9d84e58efaf71cad4075ce89f86345139cd29aec3f6102b2d6fb5f037f5f3300` |
+| 911 | `f0b739e1fc65072436e350bd01f35cdac8c0617f5819559bf1b3c29197fb4c4e` |
+| 912 | `18017846d8afb438c3e42638be78384f02562d46e12cf4c1875037765a3467d1` |
+| 913 | `b08c0d50cd721023f55db9ac99e414da606f1ed9e10c5980f4879bdad295cf9b` |
+| 914 | `250f906979dc5618ad92da801d4ab373fc5c4f79e6b6ded13f428b3a12df567c` |
+
+Raw evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt` and
+`source-N.lean` in that host workspace for every attempt 906–915. The actual
+scope/Lean exit and `/usr/bin/time` exit were inspected; outer runner shell
+success was not used to classify a Lean failure. Failed elaborations were
+not consumed as proof evidence. The complete development pass 914 and
+frozen coordinator pass 915 have zero warnings, errors and swaps.
+
+All 39 theorem declarations (including every private helper) have distinct
+`#print axioms` commands. Every audit in 914/915 uses only subsets of
+`propext`, `Classical.choice`, `Quot.sound`; `poseidon_vec_nil` uses none.
+The new public catalogue, forward-output and packing theorems each use all
+three permitted axioms. No forbidden proof term or resource override is
+present. Source review, mechanical preservation/audit checks and
+`git diff --check` passed. Unrelated untracked work was preserved.
+
 ## G4
 
 Inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. Only Copy.lean

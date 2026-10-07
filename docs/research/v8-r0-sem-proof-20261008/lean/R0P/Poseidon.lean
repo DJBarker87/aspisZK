@@ -1,29 +1,23 @@
 import R0P.PoseidonConstants
+import R0P.CoreExt
+import R0P.Path
 
-/-! G3 partial result, inspection pin e4d68a70d3f6beb215c9f6dd418f4a2a3740c809.
+/-! G3 canonical scalar port, inspection pin e4d68a70d3f6beb215c9f6dd418f4a2a3740c809.
 P = crates/aspis-statement/src/poseidon2.rs;
 S = crates/aspis-statement/src/state_only_poseidon.rs;
 T = crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs;
 F = crates/aspis-core/src/field.rs.
 
-STOP: no poseidonFamily or poseidon_holds_iff is declared. S:585–617 calls
-QM31 limb operations and the tower packing F:946–989. Core supplies neither
-that representation nor base-field typing of Trace K. The packing-kernel
-lemma below prevents claiming sixteen successor equations from four packed
-ones on unrestricted extension-valued traces.
+The field functions transcribe P:137–170,200–218,339–352. The lead's
+CoreExt and G3″ decisions authorize the unpacked canonical relation and its
+base-typed packing equivalence. Refinement of the optimized raw-limb code
+S:130–357,401–617 to this model remains a separate obligation.
 
-The field functions below transcribe the canonical field-operation path
-P:137–170,200–218,339–352. They are NOT claimed to be a literal port or a
-proved refinement of the projected raw-limb implementation S:585–617.
-The separate layout facts transcribe the pair-forest caller's 57 blocks,
-not the generic state-only module's 49-block default.
-
-Continuation after CoreExt / lead decisions: the canonical scalar model and
-base-typed packing interface are now authorized. The requested endpoint-only
-iff nevertheless omits the committed intermediate rows. The final theorem
-below gives a symbolic counterexample: every block has the canonical output,
-but the first selected successor equation fails. No scalar Family or weakened
-Holds equivalence is claimed. -/
+The original unrestricted packing-kernel witness and the accepted G3′
+endpoint counterexample are retained. The corrected G3″ iff characterizes
+all committed transition rows; its endpoint theorem is forward only.
+The block layout is the pair-forest caller's 57 blocks, not the generic
+state-only module's 49-block default. No permutation or table is evaluated. -/
 set_option autoImplicit false
 namespace R0P
 variable {K : Type} [Field K]
@@ -296,6 +290,557 @@ theorem poseidon_endpoints_do_not_imply_successor :
     have hzero : (1 : K) = 0 := add_left_cancel
       (h.trans (add_zero (poseidonLeadingPair (0 : Fin 16 → K) 0 0)).symm)
     exact one_ne_zero hzero
+
+/-! ## Continuation G3″: canonical scalar transitions
+
+The lead decision after G3′ authorizes this field-level canonical relation.
+S:130–357,401–617 raw-limb refinement remains the recorded separate obligation.
+The definitions retain the selected three-branch residual and source ordering;
+only lemmas restrict its selectors to Boolean rows. -/
+attribute [local irreducible] poseidonExternalInitial poseidonExternalFinal
+  poseidonInternalConstants poseidonInternalShifts poseidonPow5 poseidonMat4
+  poseidonExternalLinear poseidonInternalLinear poseidonFullRound poseidonInternalRound
+
+/-- P:294–308,200–218,339–352: apply the descriptor's canonical round.
+The bounded round number makes the descriptor's out-of-range case impossible. -/
+def poseidonApplyRound (round : Fin 22) (state : Fin 16 → K) : Fin 16 → K :=
+  if h : round.val < 4 then
+    poseidonFullRound state (poseidonExternalInitial ⟨round.val, h⟩)
+  else if h' : round.val < 4 + 14 then
+    poseidonInternalRound state (poseidonInternalConstants ⟨round.val - 4, by omega⟩)
+  else poseidonFullRound state (poseidonExternalFinal ⟨round.val - 4 - 14, by omega⟩)
+
+/-- S:389–398 and P:239–253,294–308: the selected canonical two-round step.
+Only local row zero absorbs xor12 and applies the leading external layer. -/
+def poseidonTransition (localRow : Fin 11) (state absorption : Fin 16 → K) : Fin 16 → K :=
+  if localRow.val = 0 then poseidonLeadingPair state absorption else
+    let pair := poseidonRoundPair localRow
+    poseidonApplyRound ⟨pair.2, by dsimp [poseidonRoundPair, pair]; omega⟩
+      (poseidonApplyRound ⟨pair.1, by dsimp [poseidonRoundPair, pair]; omega⟩ state)
+
+/-- S:416–431,485–521, canonical field form of the ordered three-column
+constant interpolation, under the lead's recorded raw-limb refinement boundary. -/
+def poseidonInterpolatedFullPair (state : Fin 16 → K) (low : Fin 16 → K) : Fin 16 → K :=
+  let even := fun lane =>
+    (low 1 * poseidonExternalInitial 2 lane + low 9 * poseidonExternalFinal 0 lane) +
+      low 10 * poseidonExternalFinal 2 lane
+  let odd := fun lane =>
+    (low 1 * poseidonExternalInitial 3 lane + low 9 * poseidonExternalFinal 1 lane) +
+      low 10 * poseidonExternalFinal 3 lane
+  poseidonFullRound (poseidonFullRound state even) odd
+
+/-- S:524–535: local rows 2 through 8, ordered even/odd constant dot products.
+Field operations are the lead-authorized canonical model of the limb code. -/
+def poseidonInterpolatedInternalPair (state : Fin 16 → K) (low : Fin 16 → K) : Fin 16 → K :=
+  let even := (List.ofFn (fun i : Fin 7 =>
+    low ⟨i.val + 2, by omega⟩ * poseidonInternalConstants ⟨2 * i.val, by omega⟩)).foldl (· + ·) 0
+  let odd := (List.ofFn (fun i : Fin 7 =>
+    low ⟨i.val + 2, by omega⟩ * poseidonInternalConstants ⟨2 * i.val + 1, by omega⟩)).foldl (· + ·) 0
+  poseidonInternalRound (poseidonInternalRound state even) odd
+
+/-- S:589–615: unpacked canonical three-branch successor residual. The
+leading/full/internal weights, block factor and lane order are retained.
+F:606–630's prepared dot is represented by its ordered field products. -/
+def poseidonScalarResidual (o : Openings K) (block : K) (low : Fin 16 → K) (lane : Fin 16) : K :=
+  let leadingLow := low 0
+  let fullLow := ([1, 9, 10] : List (Fin 16)).foldl (fun sum row => sum + low row) 0
+  let internalLow := (List.ofFn (fun i : Fin 7 => low ⟨i.val + 2, by omega⟩)).foldl (· + ·) 0
+  let leading := poseidonLeadingPair o.z o.xor12
+  let full := poseidonInterpolatedFullPair o.z low
+  let internal := poseidonInterpolatedInternalPair o.z low
+  block * (((0 + leadingLow * (o.succ lane - leading lane)) +
+    fullLow * (o.succ lane - full lane)) + internalLow * (o.succ lane - internal lane))
+
+/-- T:211–216,1253–1255 and S:589–615, unpacked canonical relation.
+Sixteen residuals are emitted, including prescribed inactive zeros. -/
+def poseidonScalarFamily : Family K where
+  residuals := fun _ o sel => List.ofFn (poseidonScalarResidual o
+    (g2SumHigh sel 0 57 (by omega)) (g2Low sel))
+
+private theorem poseidon_scalar_low (o : Openings K) (row : Fin 11) (lane : Fin 16) :
+    poseidonScalarResidual o 1 (fun i => if i.val = row.val then 1 else 0) lane =
+      o.succ lane - poseidonTransition row o.z o.xor12 lane := by
+  fin_cases row <;>
+    norm_num [poseidonScalarResidual, poseidonInterpolatedFullPair,
+      poseidonInterpolatedInternalPair, poseidonTransition, poseidonApplyRound,
+      poseidonRoundPair, List.ofFn_succ, List.foldl_cons, List.foldl_nil,
+      show (9 : Fin 16).val = 9 from rfl, show (10 : Fin 16).val = 10 from rfl]
+  all_goals first | rfl | (left; simp only [
+    show (9 : Fin 16) ≠ 0 from by decide, show (10 : Fin 16) ≠ 0 from by decide,
+    if_false, zero_add])
+
+private theorem poseidon_scalar_low_inactive (o : Openings K) (block : K)
+    (row : Fin 16) (hr : 11 ≤ row.val) (lane : Fin 16) :
+    poseidonScalarResidual o block (fun i => if i.val = row.val then 1 else 0) lane = 0 := by
+  have h0 : (0 : Nat) ≠ row.val := by omega
+  have h1 : (1 : Nat) ≠ row.val := by omega
+  have h9 : (9 : Nat) ≠ row.val := by omega
+  have h10 : (10 : Nat) ≠ row.val := by omega
+  have hi : (List.ofFn (fun i : Fin 7 =>
+      (if (i.val + 2) = row.val then (1 : K) else 0))).foldl (· + ·) 0 = 0 := by
+    have he : (fun i : Fin 7 => if i.val + 2 = row.val then (1 : K) else 0) = fun _ => 0 := by
+      funext i; rw [if_neg (by omega)]
+    rw [he, g2_fold_add]
+    simp only [zero_add, List.sum_ofFn, Finset.sum_const_zero]
+  simp only [poseidonScalarResidual, Fin.val_zero, Fin.val_one,
+    show (9 : Fin 16).val = 9 from rfl, show (10 : Fin 16).val = 10 from rfl,
+    if_neg h0, if_neg h1, if_neg h9, if_neg h10, List.foldl_cons, List.foldl_nil,
+    zero_add, zero_mul, add_zero]
+  rw [hi, zero_mul, mul_zero]
+
+private theorem poseidon_scalar_block_zero (o : Openings K) (low : Fin 16 → K) (lane : Fin 16) :
+    poseidonScalarResidual o 0 low lane = 0 := by
+  exact zero_mul _
+
+/-- Trace state notation; every word remains at its literal column and row. -/
+abbrev poseidonState (A : Trace K) (block : Fin 57) (row : Fin 16) : Fin 16 → K :=
+  fun lane => A (lane.castAdd 13) (poseidonBlockRow block row)
+
+private theorem poseidon_xor12 (block : Fin 57) :
+    xor12Row (poseidonBlockRow block 0) = poseidonBlockRow block 12 := by
+  apply Fin.ext
+  change (16 * block.val + 0) ^^^ 12 = 16 * block.val + 12
+  have hd : ((16 * block.val) ^^^ 12) / 16 = block.val := by
+    change ((2^4 * block.val) ^^^ 12) / 2^4 = block.val
+    rw [Nat.xor_div_two_pow]
+    simp
+  have hm : ((16 * block.val) ^^^ 12) % 16 = 12 := by
+    change ((2^4 * block.val) ^^^ 12) % 2^4 = 12
+    rw [Nat.xor_mod_two_pow]
+    simp
+  rw [Nat.add_zero]
+  omega
+
+private theorem poseidon_transition_openings (A : Trace K) (block : Fin 57) (row : Fin 11) :
+    poseidonTransition row (rowOpenings A (poseidonBlockRow block (row.castLE (by omega)))).z
+      (rowOpenings A (poseidonBlockRow block (row.castLE (by omega)))).xor12 =
+      poseidonTransition row (poseidonState A block (row.castLE (by omega)))
+        (poseidonState A block 12) := by
+  by_cases hr : row.val = 0
+  · have he : row = 0 := Fin.ext hr
+    subst row
+    change poseidonLeadingPair (poseidonState A block 0)
+      (fun lane => A (lane.castAdd 13) (xor12Row (poseidonBlockRow block 0))) = _
+    rw [poseidon_xor12]
+    rfl
+  · simp only [poseidonTransition, if_neg hr]
+    rfl
+
+private theorem poseidon_scalar_at (A : Trace K) (block : Fin 57) (row : Fin 11) (lane : Fin 16) :
+    poseidonScalarResidual (rowOpenings A (poseidonBlockRow block (row.castLE (by omega))))
+      (g2SumHigh (rowSel (poseidonBlockRow block (row.castLE (by omega)))) 0 57 (by omega))
+      (g2Low (rowSel (poseidonBlockRow block (row.castLE (by omega))))) lane =
+      poseidonState A block ⟨row.val + 1, by omega⟩ lane -
+        poseidonTransition row (poseidonState A block (row.castLE (by omega)))
+          (poseidonState A block 12) lane := by
+  have hh : (poseidonBlockRow block (row.castLE (by omega))).val / 16 = block.val := by
+    dsimp [poseidonBlockRow]; omega
+  have hl : (poseidonBlockRow block (row.castLE (by omega))).val % 16 = row.val := by
+    dsimp [poseidonBlockRow]; omega
+  have hlow : g2Low (rowSel (K := K) (poseidonBlockRow block (row.castLE (by omega)))) =
+      (fun i => if i.val = row.val then 1 else 0) := by
+    funext i; rw [g2_low_row, hl]
+  rw [g2_sum_high_row, hh, if_pos (by omega), hlow, poseidon_scalar_low,
+    poseidon_transition_openings]
+  change A (lane.castAdd 13) (succRow (poseidonBlockRow block (row.castLE (by omega)))) - _ = _
+  rw [(poseidon_block_layout block row).2.1]
+
+private theorem poseidon_scalar_inactive (A : Trace K) (b : Fin 1024)
+    (hb : ¬ (b.val / 16 < 57 ∧ b.val % 16 < 11)) (lane : Fin 16) :
+    poseidonScalarResidual (rowOpenings A b) (g2SumHigh (rowSel b) 0 57 (by omega))
+      (g2Low (rowSel b)) lane = 0 := by
+  rw [g2_sum_high_row]
+  by_cases hh : b.val / 16 < 57
+  · rw [if_pos (by omega)]
+    have hl : 11 ≤ b.val % 16 := by omega
+    have hlow : g2Low (rowSel (K := K) b) =
+        (fun i => if i.val = (⟨b.val % 16, Nat.mod_lt _ (by omega)⟩ : Fin 16).val then 1 else 0) := by
+      funext i; exact g2_low_row b i
+    rw [hlow]
+    exact poseidon_scalar_low_inactive _ _ _ hl _
+  · rw [if_neg (by omega), poseidon_scalar_block_zero]
+
+private theorem poseidon_holds_lanes (pub : Public K) (A : Trace K) :
+    Holds poseidonScalarFamily pub A ↔ ∀ b : Fin 1024, ∀ lane : Fin 16,
+      poseidonScalarResidual (rowOpenings A b) (g2SumHigh (rowSel b) 0 57 (by omega))
+        (g2Low (rowSel b)) lane = 0 := by
+  constructor
+  · intro h b lane
+    exact h b _ (List.mem_ofFn.mpr ⟨lane, rfl⟩)
+  · intro h b r hr
+    obtain ⟨lane, rfl⟩ := List.mem_ofFn.mp hr
+    exact h b lane
+
+/-- Complete transition catalogue, including all committed intermediate rows.
+S:389–398,589–615; P:239–253,294–308,339–352; T:211–216.
+Only Boolean-row selector restriction is claimed. -/
+theorem poseidon_scalar_holds_iff (pub : Public K) (A : Trace K) :
+    Holds poseidonScalarFamily pub A ↔
+      ∀ block : Fin 57, ∀ row : Fin 11, ∀ lane : Fin 16,
+        poseidonState A block ⟨row.val + 1, by omega⟩ lane =
+          poseidonTransition row (poseidonState A block (row.castLE (by omega)))
+            (poseidonState A block 12) lane := by
+  rw [poseidon_holds_lanes]
+  constructor
+  · intro h block row lane
+    have hh := h (poseidonBlockRow block (row.castLE (by omega))) lane
+    rw [poseidon_scalar_at] at hh
+    exact sub_eq_zero.mp hh
+  · intro h b lane
+    by_cases hb : b.val / 16 < 57 ∧ b.val % 16 < 11
+    · let block : Fin 57 := ⟨b.val / 16, hb.1⟩
+      let row : Fin 11 := ⟨b.val % 16, hb.2⟩
+      have he : b = poseidonBlockRow block (row.castLE (by omega)) := by
+        apply Fin.ext; dsimp [poseidonBlockRow, block, row]; omega
+      rw [he, poseidon_scalar_at]
+      exact sub_eq_zero.mpr (h block row lane)
+    · exact poseidon_scalar_inactive A b hb lane
+
+omit [Field K] in
+private theorem poseidon_fold_indices {α σ : Type} {n : Nat}
+    (f : Fin n → α) (step : σ → α → σ) (a : σ) :
+    (List.ofFn f).foldl step a =
+      (List.ofFn (fun i : Fin n => i)).foldl (fun acc i => step acc (f i)) a := by
+  calc
+    (List.ofFn f).foldl step a =
+        ((List.ofFn (fun i : Fin n => i)).map f).foldl step a := by rw [List.map_ofFn]; rfl
+    _ = _ := List.foldl_map
+
+omit [Field K] in
+private theorem poseidon_fold_pairs {α σ : Type} {n : Nat}
+    (f : Fin (2 * n) → α) (step : σ → α → σ) (a : σ) :
+    (List.ofFn f).foldl step a =
+      (List.ofFn (fun i : Fin n => i)).foldl
+        (fun acc i => step (step acc (f ⟨2 * i.val, by omega⟩))
+          (f ⟨2 * i.val + 1, by omega⟩)) a := by
+  rw [List.ofFn_mul' f, List.foldl_flatten, poseidon_fold_indices]
+  apply congrArg (fun g : σ → Fin n → σ => (List.ofFn (fun i : Fin n => i)).foldl g a)
+  funext acc i
+  simp only [List.ofFn_succ, List.ofFn_zero, List.foldl_cons, List.foldl_nil,
+    Fin.val_zero, Fin.val_succ, Nat.add_zero, Nat.zero_add]
+
+omit [Field K] in
+private theorem poseidon_compose_steps {σ : Type} {n : Nat}
+    (states : Fin (n + 1) → σ) (steps : Fin n → σ → σ)
+    (h : ∀ i : Fin n, states i.succ = steps i (states i.castSucc)) :
+    (List.ofFn steps).foldl (fun state step => step state) (states 0) = states (Fin.last n) := by
+  induction n with
+  | zero => simp only [List.ofFn_zero, List.foldl_nil, Fin.last_zero]
+  | succ n ih =>
+    rw [List.ofFn_succ, List.foldl_cons]
+    have hz := h 0
+    change states (Fin.succ 0) = steps 0 (states 0) at hz
+    rw [← hz]
+    exact ih (fun i => states i.succ) (fun i => steps i.succ) (fun i => h i.succ)
+
+private theorem poseidon_rounds_split (state : Fin 16 → K) :
+    (List.ofFn (fun r : Fin 22 => r)).foldl (fun s r => poseidonApplyRound r s) state =
+      (List.ofFn (fun r : Fin 4 => poseidonExternalFinal (K := K) r)).foldl poseidonFullRound
+        ((List.ofFn (fun r : Fin 14 => poseidonInternalConstants (K := K) r)).foldl poseidonInternalRound
+          ((List.ofFn (fun r : Fin 4 => poseidonExternalInitial (K := K) r)).foldl
+            poseidonFullRound state)) := by
+  rw [List.ofFn_add (n := 4) (m := 18), List.foldl_append,
+    List.ofFn_add (n := 14) (m := 4), List.foldl_append]
+  simp only [poseidon_fold_indices]
+  have hfirst : (fun (s : Fin 16 → K) (r : Fin 4) =>
+      poseidonApplyRound (r.castLE (by omega)) s) =
+      (fun s r => poseidonFullRound s (poseidonExternalInitial r)) := by
+    funext s r
+    simp only [poseidonApplyRound, Fin.val_castLE, dif_pos r.isLt]
+  have hmiddle : (fun (s : Fin 16 → K) (r : Fin 14) =>
+      poseidonApplyRound ((r.castLE (by omega) : Fin 18).natAdd 4) s) =
+      (fun s r => poseidonInternalRound s (poseidonInternalConstants r)) := by
+    funext s r
+    have h0 : ¬ 4 + r.val < 4 := by omega
+    have h1 : 4 + r.val < 4 + 14 := by omega
+    simp only [poseidonApplyRound, Fin.val_natAdd, Fin.val_castLE, dif_neg h0, dif_pos h1]
+    congr 2
+    apply Fin.ext
+    simp
+  have hlast : (fun (s : Fin 16 → K) (r : Fin 4) =>
+      poseidonApplyRound ((r.natAdd 14).natAdd 4) s) =
+      (fun s r => poseidonFullRound s (poseidonExternalFinal r)) := by
+    funext s r
+    have h0 : ¬ 4 + (14 + r.val) < 4 := by omega
+    have h1 : ¬ 4 + (14 + r.val) < 4 + 14 := by omega
+    simp only [poseidonApplyRound, Fin.val_natAdd, dif_neg h0, dif_neg h1]
+    congr 2
+    apply Fin.ext
+    change 4 + (14 + r.val) - 4 - 14 = r.val
+    omega
+  rw [hfirst, hmiddle, hlast]
+
+private theorem poseidon_permutation_pairs (state : Fin 16 → K) :
+    poseidonPermutation state =
+      (List.ofFn (fun r : Fin 11 => r)).foldl (fun s r =>
+        poseidonApplyRound ⟨2*r.val+1, by omega⟩
+          (poseidonApplyRound ⟨2*r.val, by omega⟩ s)) (poseidonExternalLinear state) := by
+  unfold poseidonPermutation
+  rw [← poseidon_rounds_split]
+  exact poseidon_fold_pairs (n := 11) (fun r => r)
+    (fun s r => poseidonApplyRound r s) (poseidonExternalLinear state)
+
+private theorem poseidon_transition_composition (state absorption : Fin 16 → K) :
+    (List.ofFn (fun r : Fin 11 => fun s => poseidonTransition r s absorption)).foldl
+      (fun state step => step state) state =
+      poseidonPermutation (fun lane => if lane.val < 8 then state lane + absorption lane else state lane) := by
+  rw [poseidon_permutation_pairs]
+  rw [List.ofFn_succ, List.foldl_cons]
+  conv => rhs; rw [List.ofFn_succ, List.foldl_cons]
+  have hleading : poseidonApplyRound ⟨1, by omega⟩
+      (poseidonApplyRound ⟨0, by omega⟩ (poseidonExternalLinear
+        (fun lane => if lane.val < 8 then state lane + absorption lane else state lane))) =
+      poseidonLeadingPair state absorption := by
+    unfold poseidonLeadingPair
+    simp only [poseidonApplyRound, dif_pos (show (1 : Nat) < 4 by omega),
+      dif_pos (show (0 : Nat) < 4 by omega)]
+    rfl
+  change (List.ofFn (fun r : Fin 10 => fun s => poseidonTransition r.succ s absorption)).foldl
+      (fun state step => step state) (poseidonLeadingPair state absorption) = _
+  simp only [Fin.val_zero, Nat.mul_zero, zero_add] at *
+  rw [hleading]
+  conv => lhs; rw [poseidon_fold_indices]
+  conv => rhs; rw [poseidon_fold_indices]
+  apply congrArg (fun step : (Fin 16 → K) → Fin 10 → (Fin 16 → K) =>
+    (List.ofFn (fun i : Fin 10 => i)).foldl step (poseidonLeadingPair state absorption))
+  funext s r
+  simp only [poseidonTransition, Fin.val_succ, Nat.add_one_ne_zero, if_false, poseidonRoundPair]
+
+/-- Forward endpoint corollary of the complete transition catalogue. The
+11 equations compose symbolically into P:339–352; no permutation value or
+constant table is evaluated, and the accepted G3′ counterexample is retained. -/
+theorem poseidon_scalar_holds_output (pub : Public K) (A : Trace K)
+    (h : Holds poseidonScalarFamily pub A) :
+    ∀ block : Fin 57, poseidonState A block 11 =
+      poseidonPermutation (poseidonAbsorbedInput A block) := by
+  intro block
+  have ht := (poseidon_scalar_holds_iff pub A).mp h block
+  have hc := poseidon_compose_steps
+    (fun r : Fin 12 => poseidonState A block (r.castLE (by omega)))
+    (fun r : Fin 11 => fun s => poseidonTransition r s (poseidonState A block 12))
+    (fun r => funext (ht r))
+  rw [poseidon_transition_composition] at hc
+  exact hc.symm
+
+omit [Field K] in
+private theorem poseidon_vec_cons {α : Type} {n : Nat} (P : α → Prop)
+    (head : α) (tail : Fin n → α) (hh : P head) (ht : ∀ i, P (tail i)) :
+    ∀ i, P (Matrix.vecCons head tail i) := by
+  intro i; exact Fin.cases hh ht i
+
+omit [Field K] in
+private theorem poseidon_vec_nil {α : Type} (P : α → Prop) :
+    ∀ i, P (Matrix.vecEmpty (α := α) i) := by
+  intro i; exact Fin.elim0 i
+
+/-- Structural subfield closure of the literal vectors: only vector
+constructors are traversed. Each numeral is discharged by the generic
+natCast_mem theorem, without evaluating any table index or field value. -/
+private theorem poseidon_initial_mem (F : Subfield K) :
+    ∀ r lane, poseidonExternalInitial (K := K) r lane ∈ F := by
+  unfold poseidonExternalInitial
+  repeat' first
+    | apply poseidon_vec_cons (fun row : Fin 16 → K => ∀ lane, row lane ∈ F)
+    | apply poseidon_vec_nil (fun row : Fin 16 → K => ∀ lane, row lane ∈ F)
+    | apply poseidon_vec_cons
+    | apply poseidon_vec_nil
+    | exact natCast_mem F _
+
+private theorem poseidon_final_mem (F : Subfield K) :
+    ∀ r lane, poseidonExternalFinal (K := K) r lane ∈ F := by
+  unfold poseidonExternalFinal
+  repeat' first
+    | apply poseidon_vec_cons (fun row : Fin 16 → K => ∀ lane, row lane ∈ F)
+    | apply poseidon_vec_nil (fun row : Fin 16 → K => ∀ lane, row lane ∈ F)
+    | apply poseidon_vec_cons
+    | apply poseidon_vec_nil
+    | exact natCast_mem F _
+
+private theorem poseidon_internal_constants_mem (F : Subfield K) :
+    ∀ r, poseidonInternalConstants (K := K) r ∈ F := by
+  unfold poseidonInternalConstants
+  repeat' first
+    | apply poseidon_vec_cons
+    | apply poseidon_vec_nil
+    | exact natCast_mem F _
+
+private theorem poseidon_pow5_mem (F : Subfield K) (x : K) (hx : x ∈ F) :
+    poseidonPow5 x ∈ F := by
+  unfold poseidonPow5
+  exact F.mul_mem (F.mul_mem (F.mul_mem hx hx) (F.mul_mem hx hx)) hx
+
+private theorem poseidon_mat4_mem (F : Subfield K) (v : Fin 4 → K) (hv : ∀ i, v i ∈ F) :
+    ∀ i, poseidonMat4 v i ∈ F := by
+  unfold poseidonMat4
+  repeat' first
+    | apply poseidon_vec_cons
+    | apply poseidon_vec_nil
+    | apply F.add_mem
+    | exact hv _
+
+private theorem poseidon_external_mem (F : Subfield K) (v : Fin 16 → K) (hv : ∀ i, v i ∈ F) :
+    ∀ i, poseidonExternalLinear v i ∈ F := by
+  intro i
+  unfold poseidonExternalLinear
+  repeat' first
+    | apply F.add_mem
+    | exact F.zero_mem
+    | apply poseidon_mat4_mem F
+    | intro j
+    | exact hv _
+
+private theorem poseidon_internal_mem (F : Subfield K) (v : Fin 16 → K) (hv : ∀ i, v i ∈ F) :
+    ∀ i, poseidonInternalLinear v i ∈ F := by
+  have hs : (List.ofFn (fun i : Fin 15 => v i.succ)).foldl (· + ·) 0 ∈ F := by
+    rw [g2_fold_add, zero_add]
+    apply F.list_sum_mem
+    intro x hx
+    obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hx
+    exact hv i.succ
+  intro i
+  unfold poseidonInternalLinear
+  split_ifs
+  · exact F.sub_mem hs (hv 0)
+  · exact F.add_mem (F.add_mem hs (hv 0))
+      (F.mul_mem (hv i) (natCast_mem F _))
+
+private theorem poseidon_full_round_mem (F : Subfield K) (v c : Fin 16 → K)
+    (hv : ∀ i, v i ∈ F) (hc : ∀ i, c i ∈ F) :
+    ∀ i, poseidonFullRound v c i ∈ F := by
+  unfold poseidonFullRound
+  apply poseidon_external_mem F
+  intro i
+  exact poseidon_pow5_mem F _ (F.add_mem (hv i) (hc i))
+
+private theorem poseidon_internal_round_mem (F : Subfield K) (v : Fin 16 → K) (c : K)
+    (hv : ∀ i, v i ∈ F) (hc : c ∈ F) :
+    ∀ i, poseidonInternalRound v c i ∈ F := by
+  unfold poseidonInternalRound
+  apply poseidon_internal_mem F
+  intro i
+  split_ifs
+  · exact poseidon_pow5_mem F _ (F.add_mem (hv 0) hc)
+  · exact hv i
+
+private theorem poseidon_leading_mem (F : Subfield K) (v a : Fin 16 → K)
+    (hv : ∀ i, v i ∈ F) (ha : ∀ i, a i ∈ F) :
+    ∀ i, poseidonLeadingPair v a i ∈ F := by
+  unfold poseidonLeadingPair
+  apply poseidon_full_round_mem F
+  · apply poseidon_full_round_mem F
+    · apply poseidon_external_mem F
+      intro i; split_ifs
+      · exact F.add_mem (hv i) (ha i)
+      · exact hv i
+    · exact poseidon_initial_mem F 0
+  · exact poseidon_initial_mem F 1
+
+private theorem poseidon_apply_round_mem (F : Subfield K) (r : Fin 22) (v : Fin 16 → K)
+    (hv : ∀ i, v i ∈ F) : ∀ i, poseidonApplyRound r v i ∈ F := by
+  unfold poseidonApplyRound
+  split_ifs
+  · exact poseidon_full_round_mem F _ _ hv (poseidon_initial_mem F _)
+  · exact poseidon_internal_round_mem F _ _ hv (poseidon_internal_constants_mem F _)
+  · exact poseidon_full_round_mem F _ _ hv (poseidon_final_mem F _)
+
+private theorem poseidon_transition_mem (F : Subfield K) (r : Fin 11) (v a : Fin 16 → K)
+    (hv : ∀ i, v i ∈ F) (ha : ∀ i, a i ∈ F) :
+    ∀ i, poseidonTransition r v a i ∈ F := by
+  unfold poseidonTransition
+  split_ifs
+  · exact poseidon_leading_mem F v a hv ha
+  · exact poseidon_apply_round_mem F _ _ (poseidon_apply_round_mem F _ v hv)
+
+private theorem poseidon_state_mem (F : Subfield K) (A : Trace K) (hA : BaseTyped F A)
+    (block : Fin 57) (row : Fin 16) : ∀ lane, poseidonState A block row lane ∈ F := by
+  intro lane
+  exact hA (lane.castAdd 13) (by simp only [Fin.val_castAdd]; omega) _
+
+private theorem poseidon_scalar_residual_mem (F : Subfield K) (A : Trace K) (hA : BaseTyped F A)
+    (b : Fin 1024) (lane : Fin 16) :
+    poseidonScalarResidual (rowOpenings A b) (g2SumHigh (rowSel b) 0 57 (by omega))
+      (g2Low (rowSel b)) lane ∈ F := by
+  by_cases hb : b.val / 16 < 57 ∧ b.val % 16 < 11
+  · let block : Fin 57 := ⟨b.val / 16, hb.1⟩
+    let row : Fin 11 := ⟨b.val % 16, hb.2⟩
+    have he : b = poseidonBlockRow block (row.castLE (by omega)) := by
+      apply Fin.ext; dsimp [poseidonBlockRow, block, row]; omega
+    rw [he, poseidon_scalar_at]
+    exact F.sub_mem (poseidon_state_mem F A hA block _ lane)
+      (poseidon_transition_mem F row _ _ (poseidon_state_mem F A hA block _)
+        (poseidon_state_mem F A hA block 12) lane)
+  · rw [poseidon_scalar_inactive A b hb lane]
+    exact F.zero_mem
+
+/-- T:1253–1255, S:600–615: four consecutive base-limb residuals packed in
+source lane order. This is the authorized field-level packed model; the
+S:130–357,401–617 optimized raw-limb refinement remains a separate obligation. -/
+def poseidonPackedFamily {F : Subfield K} (B : PackBasis F) : Family K where
+  residuals := fun _ o sel => List.ofFn (fun group : Fin 4 =>
+    pack4 B (fun limb : Fin 4 => poseidonScalarResidual o
+      (g2SumHigh sel 0 57 (by omega)) (g2Low sel) ⟨4*group.val+limb.val, by omega⟩))
+
+/-- Independent packing is injective on these base-typed successor residuals.
+No raw-limb refinement, endpoint-only iff, or additional extraction premise
+is asserted. All inactive packed/scalar lanes remain present and zero. -/
+theorem poseidon_packed_iff_scalar (F : Subfield K) (B : PackBasis F)
+    (pub : Public K) (A : Trace K) (hA : BaseTyped F A) :
+    Holds (poseidonPackedFamily B) pub A ↔ Holds poseidonScalarFamily pub A := by
+  rw [poseidon_holds_lanes]
+  constructor
+  · intro h b lane
+    let group : Fin 4 := ⟨lane.val / 4, by omega⟩
+    let limb : Fin 4 := ⟨lane.val % 4, Nat.mod_lt _ (by omega)⟩
+    have hp := h b _ (List.mem_ofFn.mpr ⟨group, rfl⟩)
+    have hs := (pack4_eq_zero_iff B _ (fun j =>
+      poseidon_scalar_residual_mem F A hA b ⟨4*group.val+j.val, by omega⟩)).mp hp limb
+    have he : (⟨4*group.val+limb.val, by omega⟩ : Fin 16) = lane := by
+      apply Fin.ext; dsimp [group, limb]; omega
+    rw [he] at hs
+    exact hs
+  · intro h b r hr
+    obtain ⟨group, rfl⟩ := List.mem_ofFn.mp hr
+    exact (pack4_eq_zero_iff B _ (fun j =>
+      poseidon_scalar_residual_mem F A hA b ⟨4*group.val+j.val, by omega⟩)).mpr
+      (fun j => h b ⟨4*group.val+j.val, by omega⟩)
+
+#print axioms poseidon_state_mem
+#print axioms poseidon_scalar_residual_mem
+#print axioms poseidon_packed_iff_scalar
+
+#print axioms poseidon_vec_cons
+#print axioms poseidon_vec_nil
+#print axioms poseidon_initial_mem
+#print axioms poseidon_final_mem
+#print axioms poseidon_internal_constants_mem
+#print axioms poseidon_pow5_mem
+#print axioms poseidon_mat4_mem
+#print axioms poseidon_external_mem
+#print axioms poseidon_internal_mem
+#print axioms poseidon_full_round_mem
+#print axioms poseidon_internal_round_mem
+#print axioms poseidon_leading_mem
+#print axioms poseidon_apply_round_mem
+#print axioms poseidon_transition_mem
+
+#print axioms poseidon_fold_indices
+#print axioms poseidon_fold_pairs
+#print axioms poseidon_compose_steps
+#print axioms poseidon_rounds_split
+#print axioms poseidon_permutation_pairs
+#print axioms poseidon_transition_composition
+#print axioms poseidon_scalar_holds_output
+
+#print axioms poseidon_xor12
+#print axioms poseidon_transition_openings
+#print axioms poseidon_scalar_at
+#print axioms poseidon_scalar_inactive
+#print axioms poseidon_holds_lanes
+#print axioms poseidon_scalar_holds_iff
+
+#print axioms poseidon_scalar_low
+#print axioms poseidon_scalar_low_inactive
+#print axioms poseidon_scalar_block_zero
 
 #print axioms poseidon_pow5_eq
 #print axioms poseidon_block_layout
