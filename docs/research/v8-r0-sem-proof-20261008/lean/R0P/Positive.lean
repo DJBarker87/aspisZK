@@ -12,6 +12,12 @@ variable {K : Type} [Field K]
 def positiveResidual (claims : Fin 84 → K) : K :=
   claims 1 * claims (28 + 1) * claims 3 - 1
 
+/-- P:67–70: selector's ten ordered multiply steps, starting at ONE.
+The Nat shift/and reads the literal ROW bits in the source's order. -/
+def positiveSelector (z : Fin 10 → K) : K :=
+  (List.ofFn (fun j : Fin 10 =>
+    if ((1014 >>> (9-j.val)) &&& 1) = 1 then z j else 1-z j)).foldl (· * ·) 1
+
 /-- Source terminal:28–34,1185–1191, P:64–66: three blocks of 28
 selected claims. At Boolean rows these are the trace's three Core openings. -/
 def positiveRowClaims (A : Trace K) (b : Fin 1024) (i : Fin 84) : K :=
@@ -26,6 +32,12 @@ def positiveFamily : Family K where
 theorem positive_claim_indices (A : Trace K) (b : Fin 1024) :
     positiveResidual (positiveRowClaims A b) =
       A 1 b * A 1 (succRow b) * A 3 b - 1 := by
+  rfl
+
+theorem positive_family_row_claims (pub : Public K) (A : Trace K) (b : Fin 1024) :
+    positiveFamily.residuals pub (rowOpenings A b) (rowSel b) =
+      [rowSel b 1014 * positiveResidual (positiveRowClaims A b)] := by
+  rw [positive_claim_indices]
   rfl
 
 theorem positive_holds_iff (pub : Public K) (A : Trace K) :
@@ -45,5 +57,6 @@ theorem positive_holds_iff (pub : Public K) (A : Trace K) :
     · rw [rowSel_ne b 1014 hb, zero_mul]
 
 #print axioms positive_claim_indices
+#print axioms positive_family_row_claims
 #print axioms positive_holds_iff
 end R0P

@@ -31,14 +31,16 @@ def occupancyFamily : Family K where
   residuals := fun pub o sel => occupancyLanesLiteral
     (sel (63*16+9)) (sel (63*16+10)) (occupancyExpected pub.variant) o.z
 
- theorem occupancy_lanes_zero_iff (input output expected : K) (o : Fin 16 → K) :
+theorem occupancy_lanes_zero_iff (input output expected : K) (o : Fin 16 → K) :
     (∀ r ∈ occupancyLanesLiteral input output expected o, r = 0) ↔
       (input+output) * (o 0 * (o 0-1)) = 0 ∧
       (input+output) * (o 9 * o 1-o 0) = 0 ∧
       (input+output) * ((1-o 0)*o 1) = 0 ∧
       (∀ lane : Fin 8, (input+output)*((1-o 0)*o ⟨2+lane.val, by omega⟩) = 0) ∧
       input*(o 10*(1-o 0)) + output*(o 0-expected) = 0 := by
-  simp [occupancyLanesLiteral, List.forall_mem_ofFn_iff, and_assoc]
+  simp only [occupancyLanesLiteral, List.forall_mem_append, List.forall_mem_cons,
+    List.not_mem_nil, false_implies, implies_true, List.forall_mem_ofFn_iff,
+    and_true, and_assoc]
 
 theorem occupancy_holds_iff (pub : Public K) (A : Trace K) :
     Holds occupancyFamily pub A ↔
@@ -56,7 +58,9 @@ theorem occupancy_holds_iff (pub : Public K) (A : Trace K) :
   · intro h
     have hi := h 1017
     have ho := h 1018
-    simp [rowSel, rowOpenings] at hi ho
+    simp only [rowSel_self, rowSel_ne _ _ (by decide : (1018 : Fin 1024) ≠ 1017),
+      rowSel_ne _ _ (by decide : (1017 : Fin 1024) ≠ 1018), rowOpenings,
+      zero_add, add_zero, zero_mul, one_mul] at hi ho
     refine ⟨?_, hi.2.2.2.2, ?_⟩
     · intro b hb
       rcases hb with rfl | rfl
