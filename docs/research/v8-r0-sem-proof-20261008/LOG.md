@@ -433,3 +433,228 @@ inspection pin.
 | 10–25 | COPY_PATTERNS | `049361cce80ce94b016e40afabba2db28e396ee090659609e7880735abd86737` |
 | 27–164 | COPY_LINKS | `46187e7618fcba23fabf27f20e7f892ca5e4df38ab619ad84f238bf10ffc4e71` |
 | 42–45 | Four positivity links | `46ffb4e8785c6d6745b071256f1fd5750aed526da9dffff30ba40f67df398e9e` |
+
+
+## G2
+
+**Completed scalar row equivalences.** Inspection pin
+`e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. Schedule, Path and Digest now have
+complete, compiled `Holds` equivalences; EmptyRoots compiles. Schedule retains
+all initial and absorption residuals and all prescribed zero cells. Core,
+G1, G3 and G4 are unchanged; the recorded Poseidon/Copy stops remain in force.
+
+The prior session lost SSH access (`Operation not permitted`) and GitHub DNS
+after failed820. This resume verified ordinary SSH and GitHub access before
+any build. No alternate network route or local compilation was used. Final
+coordinator checks898/899 passed sequentially after the sources were frozen.
+The final source snapshot is base revision
+`cd91bc7946e27985abce1c204c52cfa93f99d2ae` plus the four G2 sources identified
+by their SHA-256s below; this log is committed with that exact G2 snapshot.
+
+### Literal ports and source correspondence
+
+T = `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs`;
+C = `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs`;
+E = `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal_constants.rs`.
+
+| File / family | Source ranges | Status and complete condition |
+|---|---|---|
+| Path / `pathFamily` | T:156–164,394–427; C:138–176 for high/low selector layout | **Proved** `path_holds_iff`: blocks 57–62, local rows 1,5,9,13; bit Boolean residual and all eight left plus eight right successor equations. The source's 17 lane order and multiplication order are retained. |
+| Schedule / `scheduleFamily` | T:218–334,382–391; `spend.rs`:14–16; `poseidon2.rs`:57 | **Proved** `schedule_holds_iff`: initial rows (local0) impose the complete domain/length/zero catalogue on full-initial blocks and all eight rate zeros on node blocks; absorption rows (local12) impose every zero cell selected by `ScheduleAbsorbs`, for both variants. All32 scalar slots are retained. |
+| EmptyRoots | E:2–24; T:175–178,654–661; `poseidon2.rs`:465; `aspis-core/src/field.rs`:55–59 | All 21×8 constants transcribed as Nat literals. Table remains irreducible in proofs. Right-target preprocessing preserves source M31 addition before the K cast. |
+| Digest / `digestFamily` | T:364–380,609–694; `pair_tree_profile.rs`:401 for public u64 index | **Proved** `digest_holds_iff`: anchor at row907, nullifier427, present recipient475, change523; all20 frontier levels at `(34+level)*16+0` columns8–15 on zero append bits, or local row12 columns0–7 on one bits; next root859; conditional carry frontier at `(33+carry)*16+11`. |
+
+The selected production paths are the literal non-semantic-factor-audit and
+non-packed-digest-audit paths. The alternative factored paths T:336–359 and
+429–463, and packed digest path from T:696, are not selected. The scalar
+Family outputs are before extension packing; these files establish neither
+packing equivalence nor extraction.
+
+Core.Sel contains row weights only, while the Rust Schedule and Path routines
+also read high[64] and low[16]. The lead approved a Boolean-row adapter:
+`g2High sel h = sum_l sel(16*h+l)` and
+`g2Low sel l = sum_h sel(16*h+l)`. The compiled symbolic lemmas prove that at
+`rowSel b` these are respectively `[h=b/16]` and `[l=b%16]`. The literal
+high/low multiplications are retained. This is not an assertion of equivalence
+for arbitrary off-domain selector inputs. The ordered sum_high loop is a
+left fold; Schedule's node selector uses one accumulator over the concatenated
+ranges 4..25 followed by 33..57, rather than two independently reset sums.
+Off-support proofs ultimately use `rowSel_ne`. No table or 1024-row range is
+evaluated by a proof, and no concrete State/Addr/Wide finite universe occurs.
+
+Digest preserves the eight-lane accumulator's call order, including the
+20-level loop and the final conditional carry call. `digest_rows_pairwise`
+proves distinct enabled calls have distinct Boolean rows, so the accumulated
+residual cannot cancel between separate public bindings. It does not establish
+any probabilistic relation. The carry adapter scans at most twenty low bits
+of Core's Nat index; this is the observed part of the source's
+`min(u64.trailing_ones(index),20)`. Its bound is proved symbolically. No new
+append-index validity premise or UInt overflow assumption is introduced.
+
+### Findings retained without changing the source
+
+1. **Recipient presence is the literal guard.** T:631 tests
+   `public.recipient: Option<Digest>`, not `public.variant`. Core permits a
+   present recipient in either variant. `digest_holds_iff` therefore uses the
+   exact Option-presence condition. The brief's wording “for transfer” requires
+   a separate public-constructor invariant, which is not assumed here.
+2. **M31 right-tweak addition precedes lifting.** T:375 adds the tweak
+   `0x41531005 = 1095962629` to the last digest limb as M31. A K-level addition
+   of the cast literals would be wrong over an arbitrary Field K when the sum
+   wraps. The actual true-tweak calls use only frozen empty roots; the port
+   specializes those calls and preserves `let s := root+tweak; if s >= p then
+   s-p else s` in Nat before casting. Levels 0,2,3,4,9,10,11,12,14,15,16,17 wrap.
+   Other lanes are cast unchanged, with no extra reduction. No CharP premise
+   is added, and no generic right-tweak operation on arbitrary Digest K is
+   claimed to represent the unavailable M31 representation.
+3. **Schedule has no established source obstruction.** The full row catalogue
+   is proved without changing any literal definition or original theorem
+   statement. `schedule_low_zero` and `schedule_low_twelve` reduce tiny Fin
+   selector projections to Nat truth facts. The final exceptional initial
+   proofs precompute high-selector values and the zero node selector, then
+   split the low-row and lane cases before simplifying the field formulas.
+   Absorption uses explicit lane regions below2, below8, and the remaining
+   lanes. The final proofs use no broad `simp_all`, trace-cell arithmetic search, new premise,
+   limit increase, table normalization or row enumeration.
+
+The coordinator compared all original definition and theorem headers with
+the failed820 snapshot: every literal/catalogue definition and original
+statement is unchanged. The two new selector helper statements add no
+premises. Frozen Path/Digest/EmptyRoots hashes and all non-G2 Lean files were
+also checked unchanged. The complete Schedule proof diff was reviewed before
+coordinator898; the source formulas and ordered residual catalogue were
+checked against the inspection pin.
+
+### Build environment and final evidence
+
+Host/workspace, pinned Lean4.32.0 and captured lake environment are as in G1.
+Pre-resume G2 attempts used `run.sh N R0P/File`, reusing Core/Mathlib and the
+small group dependency objects in the existing `objects/` mirror. Each launch
+was preceded by an explicit populated-cgroup MemoryMax reservation check
+against 55 GiB (observed reservations 24 or26 GiB plus7 GiB). The runner used
+`-j1 -M4500 -DElab.async=false`, MemoryHigh5G, MemoryMax7G,
+MemorySwapMax0, TasksMax128, timeout900s. One G2 Lean job at a time; no cap
+increase and no unchanged failed job rerun. LEAN_PATH composition is the G1
+`objects/` mirror plus the captured pinned lake paths.
+
+Resumed development821–832 and final lead checks898/899 use the prescribed
+`run2.sh N R0P/File 7000 7`: `-j1 -M7000 -DElab.async=false`, MemoryHigh5G,
+MemoryMax7G, MemorySwapMax0, TasksMax128, timeout900s. `objects2/R0P` was
+verified to point to the existing `objects/R0P`; no dependencies were rebuilt.
+Every resumed launch admitted 24+7 GiB under the 55 GiB reservation ceiling.
+Final832,898,899 all have zero warnings.
+
+| File | Attempt | SHA-256 | Exit | Wall s | Peak RSS KiB | Swaps | Axioms / status |
+|---|---:|---|---:|---:|---:|---:|---|
+| Path.lean | 805 | `bb8ecd5b7b3880bd6cdf71ec06c6066195ce9a25b532111a21b861cc5833cb79` | 0 | 4.78 | 3340740 | 0 | all6 audits permitted; no warnings |
+| EmptyRoots.lean | 803 | `648c9aaccf1691b634b2a91f46348ecb1e2d7382a982dcbddff1dcc786b77cbc` | 0 | 1.48 | 3310664 | 0 | definitions only |
+| Digest.lean | 819 | `928d531c7ae80fdb2a3865bf3b2eac2d1dea84c2892c413f5c4a63709947d26b` | 0 | 8.47 | 3382096 | 0 | all13 audits permitted; no warnings |
+| Schedule.lean, final development | 832 | `393e5edd57671f64647056130ea5b184a65dabb2b0069c45b1cf9afa1f058fb6` | 0 | 13.81 | 3435624 | 0 | all31 audits permitted; no warnings |
+| Schedule.lean, coordinator check | 898 | `393e5edd57671f64647056130ea5b184a65dabb2b0069c45b1cf9afa1f058fb6` | 0 | 13.81 | 3433612 | 0 | all31 audits permitted; no warnings |
+| Digest.lean, coordinator check | 899 | `928d531c7ae80fdb2a3865bf3b2eac2d1dea84c2892c413f5c4a63709947d26b` | 0 | 08.09 | 3381620 | 0 | all13 audits permitted; no warnings |
+
+Path's `g2_fold_add` uses `[propext, Quot.sound]`; its other five theorems use
+`[propext, Classical.choice, Quot.sound]`. Digest's
+`digest_trailing_ones_le`, `digest_carry_le`, `g2_row_sum_off`,
+`g2_row_sum_at`, `g2_row_sum_iff`, and `digest_fold_eq` use
+`[propext, Quot.sound]`; its other seven use
+`[propext, Classical.choice, Quot.sound]`. Every theorem has an explicit
+`#print axioms` command. All31 Schedule theorems, including every private
+helper, use exactly `[propext, Classical.choice, Quot.sound]`. Thus all50 G2
+theorem declarations have matching explicit audits. Failed compiler-generated
+error terms and failed audits are not proof evidence; no failed object was
+used as a dependency. No source contains a placeholder or custom axiom.
+
+Raw evidence remains at the build workspace's
+`evidence/{out,time}-N.log` and `evidence/sha-N.txt`. Exit status is the Lean/
+scope status, not the runner's outer shell status. The coordinator reconciled
+both the scope `exit=` and `/usr/bin/time` exit fields with local/remote source
+hashes. Schedule is frozen at832/898's hash, and Digest remains at819/899's
+hash. The previously handed-off Schedule hash
+`d53513e65b28c6054755dd964092316c7b28d4e0da7698cbe207c8db196b9323`
+was exactly failed820 and was not rerun unchanged.
+
+### Failed attempts (one line each)
+
+- 800 Path: exit1,3.80s,3318884KiB,swap0; missing decidability for the PathRow conditional; changed it to an abbreviation.
+- 801 Path: exit1,4.56s,3323256KiB,swap0; final conjunction association and Fin casts did not match the plain-cell statement.
+- 802 Path: exit1,4.62s,3321944KiB,swap0; association was corrected, but definitional cast conversion remained.
+- 804 Path: exit1,4.59s,3323196KiB,swap0; convert generated tiny cast/association goals; added explicit definitional closure.
+- 806 Schedule: exit1,21.54s,3414728KiB,swap0; simultaneous conditional simplification reached default heartbeats; separated selector/proof structure.
+- 807 Schedule: exit1,36.77s,4689732KiB,swap0; unsupported progress tactic and excessive elaboration normalization hit the existing kernel memory check; replaced tactic and made selector definitions locally irreducible.
+- 808 Schedule: exit1,1.62s,3314732KiB,swap0; dsimp did not unfold locally irreducible definitions and conjunction proofs needed type annotations; used explicit unfolding.
+- 809 Digest: exit1,6.55s,3339788KiB,swap0; list membership/nodup, row injectivity, induction binder and final equation packaging needed explicit proofs.
+- 810 Schedule: exit1,22.58s,3395144KiB,swap0; broad scalar conditional proof still reached default heartbeats; split the support cases.
+- 811 Schedule: exit1,24.03s,3429824KiB,swap0; combined support case proof remained over the default heartbeat budget; introduced separate named row-block helpers.
+- 812 Schedule: exit1,75.22s,3420128KiB,swap0; symbolic casts and unresolved impossible branches remained, and variable-range helpers reached default limits; narrowed simplification.
+- 813 Digest: exit1,5.86s,3344464KiB,swap0; tiny row numerals, no-progress simp, and final Fin/zero-add casts remained; normalized only small indices and rewrote the final proof by cases.
+- 814 Schedule: exit1,72.80s,3439040KiB,swap0; restricted simplification left contradictory not-True branches and further default-limit failures; isolated a focused diagnostic target.
+- 815 Digest: exit1,8.20s,3353824KiB,swap0; only final castLE wrappers remained; explicitly simplified those small constructors.
+- 816 Schedule: exit1,4.48s,3331100KiB,swap0; focused block1 diagnostic exposed not-True branches; no partial diagnostic source was retained.
+- 818 Schedule: exit1,73.01s,3435464KiB,swap0; variable node/off proofs still reached default limits; replaced them by symbolic high=0 and nodes=1/0 facts.
+- 820 Schedule: exit1,27.54s,3408972KiB,swap0; node/off default-limit failures were removed, but low-selector numeral projections, selected absorption equations and initial block0 simplification remain unresolved; next check blocked by changed network permissions.
+- 821 Schedule: exit1,24.95s,3411272KiB,swap0; a new helper incorrectly inferred local row0 from block0; replaced by a modulo-row case split.
+- 822 Schedule: exit1,25.23s,3414972KiB,swap0; low-selector Nat equality orientation/casts and lane goals remained.
+- 823 Schedule: exit1,25.18s,3413828KiB,swap0; block0 repaired, initial-node low selector and absorption lane cases remained.
+- 824 Schedule: exit1,25.39s,3414656KiB,swap0; initial-row proof passed, absorption lane-support cases remained; replaced broad tails by explicit lane regions.
+- 826 Schedule: exit1,21.67s,3402160KiB,swap0; warning cleanup removed necessary Fin/support simplification; repaired in827.
+- 829 Schedule: exit1,22.07s,3402664KiB,swap0; another warning trim left impossible initial-block25/27/30 branches. The worker's purported green828 backup actually had829's hash. Coordinator rejected that label, reconciled raw evidence, and replaced all seven exceptional initial proofs with explicit selector facts in830.
+
+### Resumed development hashes and superseded passes
+
+All rows below target `R0P/Schedule` using run2 and the base revision above.
+Swaps were0 throughout; exit is the Lean/scope result. Raw `sha-N.txt` and
+`out-N.log` identify each exact source and audit output. Failed rows are not
+accepted proofs.
+
+| Attempt | SHA-256 | Exit | Wall s | Peak RSS KiB | Audits | Warnings |
+|---:|---|---:|---:|---:|---:|---:|
+| 821 | `62d18b473bd44668ea6adbc1e5ee01cd43ed795bc9769d873c976dad0fd2e54c` | 1 | 24.95 | 3411272 | 29 | 197 |
+| 822 | `803bd9900cde6f73e33316ed3e7eae6cdd9bfdfc0cca6922ca359828bd5c456f` | 1 | 25.23 | 3414972 | 29 | 202 |
+| 823 | `994d2057dcfcaa4d4df8fc3266dceec1b8f247f2927b61c44975ef7f8be681db` | 1 | 25.18 | 3413828 | 29 | 202 |
+| 824 | `3edef1d353474608cfcff806d3c9c14643ccd3c5cd0917720b857a383f413e2a` | 1 | 25.39 | 3414656 | 29 | 175 |
+| 825 | `c632897d29228a9eb05fae70b3ea019b8b92c71b43516154ae3610c93a22aae8` | 0 | 22.55 | 3438032 | 29 | 144 |
+| 826 | `56d6bdd0218eb69e2eaf02ba176f68be1fc3782b4c7be51a515e9ccab38f3cbe` | 1 | 21.67 | 3402160 | 31 | 22 |
+| 827 | `310cff9ed242318503fc5d3d851b59913a7cf253b3f3be836f7a334875d1f352` | 0 | 22.58 | 3444136 | 31 | 127 |
+| 828 | `a1f6eeb29443daa8d10f718f443197f4fd66ac6a6ee431e71d683334e78a4dbe` | 0 | 22.64 | 3446504 | 31 | 117 |
+| 829 | `3fd3d01ec7b71efc14cd2cafe3fa19278b0f9979b94c7df32f8f4a3a0508253a` | 1 | 22.07 | 3402664 | 31 | 4 |
+| 830 | `19b7689937b54452155bc9b7f9c600e89e224f4fb0a240191c6c400f037a451e` | 0 | 14.22 | 3434532 | 31 | 5 |
+| 831 | `19b7689937b54452155bc9b7f9c600e89e224f4fb0a240191c6c400f037a451e` | 0 | 13.82 | 3436168 | 31 | 5 |
+
+825 was green with29 explicit audits; the two new selector helpers still
+needed their own print commands. 827/828 were green with31 audits but were
+superseded during warning cleanup. Their evidence does not certify the
+subsequently edited829 source. 830 was the coordinator's repaired green
+source with31 audits and five unused-argument warnings. The attempted830→831
+text edit did not match a line-ending form, so831 accidentally repeated the
+unchanged successful focused file; it supplies no distinct source evidence.
+The coordinator then asserted an actual before/after hash change, removed
+only the five flagged arguments, and obtained warning-free832. No unchanged
+failed attempt was rerun, no package/full regression was started, and no
+limit was raised. 898/899 are the user-reserved independent coordinator
+checks, not new development retries.
+
+Intermediate green817 (Digest,8.55s,3382212KiB,swap0) was superseded by819
+after removing two unused-variable/tactic warnings. No failed compilation was
+rerun unchanged. Failed compiler-generated error terms were not accepted as
+proofs.
+
+### Source-region SHA-256
+
+Hashes cover the exact inclusive source lines with original line endings at
+the inspection pin; the empty-root table was independently compared in full
+with the Rust source by the lead.
+
+| Source | Lines / region | SHA-256 |
+|---|---|---|
+| T | 156–164 sum_high | `621e9f8efb577377e5e38ed71a401a26c5124f7f16c23f509174b9a2f471d24a` |
+| T | 175–178 empty_root | `0e2d77b6fb4bd25e7d1ba8f203af29ef280f2e2ac4b6497c8dd41c14ecb7ca25` |
+| T | 218–334 initial/absorption | `9ea397f3abc4b9fcfaee64fc499c9aedd8ccc0f4246190fc5aa78e0b947efc6a` |
+| T | 362–391 add_digest_binding / schedule caller | `aa425a44b13eef1160932f4f68708811dd399fd6efab003cfda2cb8162a83570` |
+| T | 394–427 literal path | `464faa35b333a280210ceb70be141acffdb8913e9b6dd70b591a98d92c6a5fb0` |
+| T | 609–694 public digest accumulator | `b312a79ceb4cd4468d24655891e8a2a8ad0dc43ed79f89685019f8b6cd032054` |
+| C | 138–177 high/low selector layout | `06f7aa6e8e482817818250154eb5a7024262f87a3bc1c7938c54838a1d8168ee` |
+| E | 2–24 all21 empty-root rows | `3c1f74daf4ee9847948c2ae0f1559af1efa8506a8b0e90ee4b298a168d335b52` |
+| poseidon2.rs | 465 tweak | `2c2adc7778bb03513bc2ec9a345df83fd3fc176e582c97edf2deed0c74f8f070` |
+| spend.rs | 14–16 domain constants | `c97a9c8dcca562266fb18cfcf96b9eb4a1dcd3334d04237b363e60e1acbe9159` |
+| aspis-core/src/field.rs | 55–59 M31.add | `a51f7929c9d6db66d1596dd2a49bad1cfbfafbf1f3d2f84e5cee6e33d212e8d5` |
