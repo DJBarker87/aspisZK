@@ -852,3 +852,18 @@ f90a42327 are kept):
 The forward corollary is what the nullifier/membership extraction consumes;
 the iff is the literal-port obligation. G4′ (9bdd242f4) is accepted as
 complete for its scope.
+
+## Lead: positivity reduced to copy balance (PositivityChain.lean)
+
+`CopyLinkBalance A := ∀ link ∈ copyLinks, producer tuple = consumer tuple`
+is the deterministic content of the LogUp argument. `positivity_of_balance`
+derives integer positivity from `Holds valueFamily`, `Holds positiveFamily`
+and `CopyLinkBalance`; the four cell equalities come from
+`copy_positivity_links` at tuple index 0. The sole remaining hypothesis on
+this chain is the probabilistic step `CHolds copyFamily lam chi A ⇒
+CopyLinkBalance A` (random λ, χ), which is not claimed here.
+
+Attempt 607, `run2.sh 607 R0P/PositivityChain 7000 7`, exit 0, 1.40 s,
+3319408 KiB, swap 0, reservation 24+7 GiB. SHA-256 `b45ab3872fa710e44b24119d5d0db24d3aeec41de8791965d4f2cea1d45590f2`.
+Axioms: copy_balance_cell, positivity_copy_cells [propext, Quot.sound];
+positivity_of_balance [propext, Classical.choice, Quot.sound].
