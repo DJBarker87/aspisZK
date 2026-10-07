@@ -55,8 +55,9 @@ def record (l : I) (a : A) : List (I × Option A) → List (I × Option A)
   | (c, some b) :: rest => (c, some b) :: record l a rest
 
 def ownCell : BS I A X → Option I
+  | .done _ => none
   | .ask i _ => some i
-  | _ => none
+  | .spawn _ _ => none
 
 def stepAsk : BS I A X → A → BS I A X
   | .ask _ k, a => k a
