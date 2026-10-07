@@ -318,3 +318,118 @@ Hashes include the inclusive line ranges and line endings at the inspection pin.
 | S | 585–617 | stopped projected evaluator | `3e5ea528ddaf46ce11d5034f2481b11dde13085b77ce5671dee8cfe26b4e90c6` |
 | F | 946–989 | stopped tower packing | `9af6b08676d1fe345894c9789a515f18530f0567fea6d59c504718ed23e2d183` |
 | T | 211–216 | actual 57-block selector | `5419a950c6b3fa09512bb362bd321ba81277704cdd92d1ee7175e142b4923e0e` |
+
+## G4
+
+Inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. Only Copy.lean
+and CopyConstants.lean changed; Core and other groups were untouched.
+Source T is `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs`;
+C is `pair_forest_copy_terminal_constants.rs` in the same directory.
+All definitions are over arbitrary `[Field K]`, with M31 constants cast from
+naturals. No extraction or LogUp-to-tuple-equality implication is asserted.
+
+### Port and finding
+
+**The Copy Family and complete Holds equivalence stop at Core's input
+interface.** T:910–918 explicitly receives H1 (`h1_z`), lambda and chi;
+T:1068–1071 uses `active * copy_residual(row,h1_z,chi)`. Core.Openings
+exposes only columns 0–15 at three points, although Trace has 29 columns
+and H1 is column 26. Core.Public contains no lambda/chi. Fixing these
+inputs, capturing an arbitrary helper trace, or replacing the source
+residual by endpoint equality would not be a literal Family on the same
+Trace. No `copyFamily` or `copy_holds_iff` is claimed. Smallest interface
+direction for the lead: add a current-row H1 opening read from `A 26 b`,
+and expose lambda/chi explicitly in the Family/Holds challenge context
+(or explicitly parameterize the family by fixed challenges). Neither the
+interface nor relation was changed.
+
+Independent deliverables are complete: literal full constant arrays;
+producer/consumer tagged 16-tuples for every generated link, including
+offsets and zero limbs; source linkWeight; explicit-input selector/active,
+compression, endpoint accumulation, denominator/numerator residual and
+evaluator helpers. `copy_positivity_links` proves the actual registry
+contains the four named entries, enabled for every variant and append
+index, with exact cells `(1008,10)→(1014,0)`, `(1010,10)→(1014,1)`,
+`(1012,10)→(1015,1)`, `(1014,2)→(1015,0)` and all remaining 15 limbs zero.
+It does not assert endpoints equal or infer equality from LogUp.
+
+Production selection: all audit optimizations off. Ported `active_literal`,
+not `active_mask_basis`; `pattern_values_literal`, not
+`pattern_values_windowed`; literal endpoint accumulation, not selector-cache,
+binary-weight, pattern-basis, selector-tensor or finish-dot audit variants.
+Source ranges: T:79–103 descriptor structures; T:118–135 mask-sum loop;
+T:137–141,173–191 selector and active; T:232–263 compression; T:331–377
+row residual and link weights; T:423–450 endpoint accumulation;
+T:910–972,1048,1068–1072 evaluation. Selector expansion from an off-domain
+point is outside the explicit-selector evaluator's interface and is not
+claimed here.
+
+`COPY_LINKS` is represented as original prefix ++ named four-entry block ++
+original suffix, retaining every record's source order. Membership treats
+the large neighboring blocks abstractly. Patterns 6–9 are literal singleton
+arrays stored as first-cell/zero-tail functions; their exact arrays are
+documented beside the definitions. The dispatch exposes those named entries
+before other cases. Thus all pattern proofs are symbolic in limb i, and no
+global array, 16-element vector, 1024-row range or finite-field universe is
+evaluated by tactics. The `rfl` steps close only tiny Fin casts and record
+fields after symbolic rewriting. Mask bit iteration and link iteration
+retain increasing/source order; residual field operations are unsimplified.
+
+A read-only Python comparison matched all 64 active masks, 64 inactive
+groups, 7 inactive masks, 14×3×16 pattern entries and 136 link records
+(order, tags, weights, levels and endpoint fields). The lead independently
+repeated the comparison: all 64+64+7 array entries, 672 pattern cells and
+136 original-order links match. These are transcription checks, not Lean
+proofs of runtime refinement. The lead also completed source review of the
+explicit-input helpers and four-link theorem, including value accumulation
+when link weight is zero and the active-mask complement branch.
+
+### Final compile evidence
+
+Same pinned host/lake environment and captured LEAN_PATH as G1.
+CopyConstants uses run.sh (`objects/`, `-j1 -M4500 -DElab.async=false`);
+Copy uses run2.sh ... 7000 7 (`objects2/`, `-j1 -M7000 -DElab.async=false`).
+The existing `objects2/R0P` symlink points to `objects/R0P`. Both scopes use
+MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128 and timeout 900 s.
+The explicit populated-finite-cap reservation before run.sh and the runner
+reservation for run2 admitted 24+7 GiB under 55. One G4 job at a time;
+no cap changes or dependency rebuilds.
+
+| File | Attempt | SHA-256 | Exit | Wall s | Peak RSS KiB | Swaps | Axioms |
+|---|---:|---|---:|---:|---:|---:|---|
+| CopyConstants.lean | 1001 | `cca9bdd0d2988693652d23010e068155abe0bc52fe36d030dbd8c163fe4f4f68` | 0 | 1.96 | 3348732 | 0 | definitions only |
+| Copy.lean, group focused pass | 1004 | `98c98df8e2b2c545cf47ead0c5f47a77fe7da5170399f4d98cfdbcdf0e9e0352` | 0 | 1.90 | 3333608 | 0 | permitted subset below |
+| Copy.lean, coordinator check | 1005 | `98c98df8e2b2c545cf47ead0c5f47a77fe7da5170399f4d98cfdbcdf0e9e0352` | 0 | 1.81 | 3333544 | 0 | permitted subset below |
+
+`copy_linkWeight_zero`, `copy_singleton_patterns` and
+`copy_positivity_links` use `[propext, Quot.sound]`;
+`copy_positivity_mem` uses `[propext]`. Every theorem has `#print axioms`;
+final files have no warnings or placeholders. The coordinator check 1005
+used run.sh at the lower -M4500 limit, with the same 7 GiB scope and admitted
+24+7 reservation; it supplies the focused lead check required by AGENTS.md.
+Raw records are workspace `evidence/{out,time}-100N.log` and `sha-100N.txt`.
+Lean exit is taken from scope output, not the outer runner shell exit.
+`git diff --check` passed.
+
+### Attempts
+
+- 1000 CopyConstants: green, 2.02 s, 3349004 KiB, swap 0; superseded by the sparse pattern representation before any dependent proof.
+- 1002 Copy: exit 1, 1.90 s, 3318140 KiB, swap 0; symbolic tuple rewrites left tiny Fin casts; added only small definitional closure and removed an unused simp entry.
+- 1003 Copy: exit 1, 1.77 s, 3318492 KiB, swap 0; four-entry membership left the final empty-list alternative; added List.not_mem_nil/or_false and removed an unused simp entry.
+
+No unchanged failed job was rerun; no failed elaboration was consumed as
+evidence.
+
+### Constant-region SHA-256
+
+Hashes are exact inclusive source lines with original line endings at the
+inspection pin.
+
+| C lines | Region | SHA-256 |
+|---|---|---|
+| 5 | ACTIVE_ROW_MASKS | `a084c4322be561781f1ae55e7634a33cbff18df6c082a486ada0985b11b762b2` |
+| 7 | INACTIVE_ROW_GROUPS | `e9bc8dceaa5ea0402bb41abad7b395b167769792b94540a5ae45de463c5cac7b` |
+| 8 | INACTIVE_GROUP_MASKS | `60b45c4077023530f7ca899e81c09a93edf492929f2b862d4e79faec5992bee5` |
+| 10–25 | COPY_PATTERNS | `049361cce80ce94b016e40afabba2db28e396ee090659609e7880735abd86737` |
+| 27–164 | COPY_LINKS | `46187e7618fcba23fabf27f20e7f892ca5e4df38ab619ad84f238bf10ffc4e71` |
+| 42–45 | Four positivity links | `46ffb4e8785c6d6745b071256f1fd5750aed526da9dffff30ba40f67df398e9e` |
