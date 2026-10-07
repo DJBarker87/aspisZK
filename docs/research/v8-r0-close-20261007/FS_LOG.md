@@ -386,3 +386,230 @@ after import repair), 518 (CircleCard). Attempt 519 was unused.
 Only the seven final Lean sources and this log are committed. No fixed
 interface/specification, generated object, runner, evidence dump or existing
 untracked repository file was changed or added to the commits.
+
+
+## Continuation 2026-10-07 — accepted direction and sampling rules
+
+User accepted the correction and asked to continue. Preserve choice (b):
+R0's specified V8 relation, with no substitution of V7's relation. Work stays
+inside this directory; FS2/R0FS and their existing laws remain unchanged.
+Starting revision c12e3761da403e948ea52799ec3f56a044636405; fetch/fast-forward
+reported already up to date. Existing untracked work outside this directory
+is untouched.
+
+**Rules recorded before new proofs (design decisions for the lead):**
+
+* Proposed replacement field rule: use ALL 32 bytes, little endian,
+  X = sum_i byte[i] * 256^i. For ordinary challenges, take X mod P^8,
+  express it in eight base-P digits, and decode the first/last four through
+  the source's R599/R601 canonical QM31 encoding into WideExact. This is a
+  new rejection-free design, not a claim about the retained implementation.
+* Gamma: reduce X modulo P^8-1, add one to the INTEGER rank, and decode that
+  rank by the same canonical field encoding. Rank zero is field zero, so
+  this samples only nonzero elements without retries or a default atom.
+* Query sampling: retain Q22SamplerProgram.challengeProgram exactly: at
+  most eight squeezed blocks, each with eight masked 18-bit candidates;
+  skip duplicates, stop on 22 distinct indices, preserve the 64-draw limit
+  and the source's Except.error exhaustion result. Errors must reject the
+  verifier; they are neither conditioned away nor mapped to a normal set.
+  The successful ordered-injection law is R417.uniform_success, and the
+  source-independent execution connection is R407.challenge_candidate_kernel.
+  Any new result about this law is explicitly independent-answer semantics;
+  it does not claim the existing one-block duplex decoder handles retries.
+
+The target field atom bounds are (floor(B/n)+1)/B <= 1/n+1/B, with
+B=256^32, n=P^8 or P^8-1. Counting must be generic before instantiation.
+A repaired law/D2/epsilon would require an interface revision outside the
+currently permitted edit scope; prove reusable sampler facts here, without
+restating the fixed laws or reporting the original impossible premise closed.
+
+
+### Continuation results
+
+Six new compiled modules; existing seven files and every FS/FS2/R0/R0FS
+interface are unchanged.
+
+| File | Proved result and boundary |
+|---|---|
+| `ModuloCounting.lean` | Abstract residue-fiber injection; encoded atom bound `(floor(B/n)+1)/B <= 1/n+1/B`; event bounds by summing atoms. The input/output encodings are equivalences, not unproved probability hypotheses. |
+| `ModuloField.lean` | Explicit all-32-byte little-endian integer equivalence; eight base-P digits decoded through R599's two QM31 coordinates; positive integer ranks for gamma; nonzero guarantee; ordinary/nonzero atom slack bounds and the sharper common upper bound `257/256^32`; finite bad-set bounds. |
+| `QueryCounting.lean` | Abstract ordered injections and restricted injections counted by descending factorials; cancellation gives `C(card M,q)/C(card A,q)`, including `card M < q`. |
+| `QuerySource.lean` | R407 + R417 give the retained program's EXACT successful-containment mass `successMass 8 * C(card M,22)/C(262144,22)`. Proved `successMass n <= 1`; errors have event weight zero. No conditioning on success. |
+| `QuerySampler.lean` | Literal trace-preserving lift of the retained Program to FS2.Sampler using ask; actual successful executions yield 22-element sets; successful containment has the ideal upper bound; every execution has at most 16 oracle calls. Both squeeze and advance count. This is not a completing decoder or freshness theorem. |
+| `OpeningSamplerBounds.lean` | Concrete gamma/kappa/tau/alpha bad-set mass bounds using the existing R0 definitions and cardinality theorems. Query sampling with errors contributes at most the EXISTING `R0FS.ε WideExact 4`. No sampler-law structure, D2, state function or epsilon is restated/replaced. |
+
+The rule in ModuloField is now a **proved proposed sampler**, still not a
+refinement of a deployed 32-byte reduce-mod implementation. The original
+Sampling.lean remains the earlier rejection/default design and its negative
+result. The two modules have distinct namespaces and are not substituted
+silently.
+
+Numerical consequence, checked separately with exact Python fractions and
+integer binomial coefficients (the logarithms are not Lean theorems):
+
+| Row | Upper bound | Negative log2 |
+|---|---|---:|
+| gamma | `(336869026605739+14000)*257/256^32` | 199.7351943362 |
+| kappa | `300*257/256^32` | 239.7655567603 |
+| tau | `200*257/256^32` | 240.3505192610 |
+| alpha | `(9396508281246+600)*257/256^32` | 204.8991135575 |
+| successful q22 query | `C(9557,22)/C(262144,22)` | 105.1420996194 |
+
+The field relative bound is `257*P^8/256^32`, and gamma's is
+`257*(P^8-1)/256^32`, both approximately 1.0039062462601578 (0.00562454
+bits lost in those field rows). All four remain below the query error.
+There is no 105.14-to-105.13 loss in the largest opening-row bound from this
+field repair. This is not yet a repaired end-to-end Fiat-Shamir theorem.
+
+### Continuation stops and smallest required interface changes
+
+**Sampler integration:** the fixed `SamplerLawsD` remains refuted.
+`ModuloField` discharges the PROPOSED biased atom bounds, and `QuerySampler`
+discharges the independent-answer successful-query probability bound. It
+cannot discharge the old exact-uniform, total one-state law.
+
+To complete integration, the smallest deliberate next changes are:
+
+1. Replace the field atom budgets in the sampler-law interface by explicit
+   rational upper bounds (or relative slack), and derive field-row budgets
+   from them. Re-prove the affected D2 estimates using the existing bad sets;
+   do not multiply the query error by the field slack. The present actual
+   R0 bad-set estimates provide that probability input.
+2. Generalize the concrete duplex sampler/decoder instance to retain bounded
+   retry programs, their final state and their error outcomes. At the q22
+   boundary errors reject and successful outputs have cardinality 22. The
+   current `FS2.Duplex.Params.σ : Nat -> State -> Cv` and its decoder's one
+   squeeze/advance pair do not describe this program. FS2.Statement itself
+   already has the needed sampler-program vocabulary, so it need not change.
+3. Prove the retry-aware completing decoder, Decodes/INJ/ChainDensity
+   obligations, preserving any allowed read ordering and late cells. The
+   source sampler here has Bytes addresses; the finite Addr L framing and
+   embedding belong to that integration proof. Do not transfer its fresh-
+   answer law to a shared oracle without this step. Charge every actual read
+   in Q_tot; the q22 subprogram contributes at most 16 before any surrounding
+   message absorption. No claim about an unchanged collision term is made.
+4. FS_GENERIC must document rejecting sampler outcomes and retry-read
+   accounting. R0_SOUNDNESS must state the proposed byte/rank rule, the
+   bounded source query rule, and the recalculated ledger. These external
+   documents/interfaces were not edited under the original scope restriction.
+
+**SEM, choice (b):** a new inspection of all R0 modules and R0FS still finds
+only the opening relation. In `R0FS.Protocol`, the statement's semantic field
+is an arbitrary Prop; `R0.OpeningDefinitions.Accept` takes that Prop as an
+argument. There is no source semantic verifier or payment-witness predicate
+for the requested R0 theorem. The earlier inventory and exact V7/R0 relation
+mismatch remain applicable. Choosing (b) does not create these definitions.
+
+The first required work is to specify the actual pre-R17 V8 semantic
+messages, verifier equations, public payment relation, 87-claim layout and
+extraction-to-trace map, preserving C1/lambda/chi/C2 timing. Only then can
+R0's coverage theorem and per-prefix root bounds be proved. No V7 theorem
+was bridged and no replacement SEM hypothesis was installed. The earlier
+SemStatement remains an open statement, not an instantiated R0 protocol.
+
+**Step 3:** the earlier source-success proofs remain valid. The outer
+protocol must retain successful circle outputs and reject exhaustion/errors;
+charging the ideal full-circle bad rows instead would introduce about
+93-bit errors. This continuation does not assert the absent outer semantic
+state-function integration has been completed.
+
+### Continuation environment and final replay
+
+Source revision: `967deba47fcacedbbc7ee694a8c3f99380cc9bdc`.
+The exact six final source hashes were compared to the host's SHA evidence.
+Same host, pinned Lean 4.32.0, captured Lake environment, LEAN_PATH ordering
+and real `objects2/R0C/` directory as above; no import dependency was rebuilt
+or mirror root changed. Host inspection: Linux 6.8.0-142-generic, MemTotal
+65,135,416 KiB. Every launch was `run2.sh <attempt> R0C/<Module> 7000 7`,
+with `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, one Lean process,
+`-j1 -DElab.async=false`, and the unchanged 900-second timeout.
+Every continuation reservation check admitted populated 24 GiB + 7 GiB.
+No cap increase, OOM or swap occurred.
+
+Focused dependency order: ModuloCounting, ModuloField, QueryCounting,
+QuerySource, QuerySampler, OpeningSamplerBounds. After focused checks and
+source commit, exactly one six-file final replay ran (550-555). Existing
+seven-file results were not rerun because their sources did not change.
+No unrelated package-wide, runtime or manifest rebuild ran.
+All final exits 0, no warnings, all swaps 0; total wall 14.14 s; maximum RSS
+6,782,000 KiB (about 6.468 GiB), below the unchanged 7 GiB cap.
+
+| Attempt / target | SHA-256 | Exit | Wall | Peak RSS KiB | Swaps | Axioms |
+|---|---|---:|---:|---:|---:|---|
+| 550 / `R0C/ModuloCounting.lean` | `94cffa0534e283b86dff89dea50119cbbc85f415f19531f3b78ca3db57172a3b` | 0 | 0:01.85 | 3334732 | 0 | PCQ |
+| 551 / `R0C/ModuloField.lean` | `b37fdc5f9fa6f83c068566448964a9f168578c23164d8a02a14ae931e3db09f0` | 0 | 0:03.32 | 6753596 | 0 | PCQ; quotients: propext only |
+| 552 / `R0C/QueryCounting.lean` | `41730b102f39ee63212277c005de50ce393eb16f5d7ebb62f13d5ddb918c8c18` | 0 | 0:01.40 | 3321036 | 0 | PCQ |
+| 553 / `R0C/QuerySource.lean` | `9f86914a2c8ec2e27d58add33561b70ccff674bb226787f1cf9894f7c37deb96` | 0 | 0:01.44 | 3333592 | 0 | PCQ |
+| 554 / `R0C/QuerySampler.lean` | `0cf87d764787674524b94d94383e99ff2d07c078f33a2bea77832d53693592d4` | 0 | 0:01.61 | 3339316 | 0 | PCQ; liftProgram_exact: Quot.sound only |
+| 555 / `R0C/OpeningSamplerBounds.lean` | `4aa4b225462c59174d6836441cc15c9b412e8b326204718c6c5ca2cccd1dea35` | 0 | 0:04.52 | 6782000 | 0 | PCQ |
+
+Final axioms audit (PCQ is exactly propext, Classical.choice, Quot.sound):
+
+```text
+'R0C.ModuloCounting.fiber_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloCounting.encoded_mass_slack' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloCounting.event_mass_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.blockRank_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.digitsField_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.fieldRank_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.gamma_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.ordinary_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.gamma_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.quotients' depends on axioms: [propext]
+'R0C.ModuloField.ordinary_mass_257' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.gamma_mass_257' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.ordinary_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.ModuloField.gamma_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QueryCounting.ordered_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QueryCounting.restricted_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QueryCounting.subset_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QuerySource.successful_subset_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QuerySource.successMass_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QuerySource.successful_subset_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QuerySampler.liftProgram_exact' depends on axioms: [Quot.sound]
+'R0C.QuerySampler.sampler_success_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QuerySampler.sampler_subset_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.QuerySampler.sampler_reads_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.OpeningSamplerBounds.gamma_bad_density' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.OpeningSamplerBounds.kappa_bad_density' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.OpeningSamplerBounds.tau_bad_density' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.OpeningSamplerBounds.alpha_bad_density' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0C.OpeningSamplerBounds.query_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+Failed development attempts, one line each; raw SHA/stdout/time evidence
+remains in the same host evidence directory. No failing object was consumed.
+The failure at 541 followed a changed imported QueryCounting source; it was
+not an unchanged failing rerun. No limit options were used to address any
+recursion failure.
+
+| Attempt / target | Exit | Wall | RSS KiB | Swaps | Failure and replacement |
+|---|---:|---:|---:|---:|---|
+| 530 / `ModuloCounting.lean` | 1 | 0:01.72 | 3320952 | 0 | Quotient injection arithmetic and mean/sum rearrangement; replaced omega by mod_add_div equality and distributed division explicitly. |
+| 532 / `ModuloField.lean` | 1 | 0:02.95 | 6717096 | 0 | Fin.append inverse and zero in abstract Fin n; used coordinate proof and explicit zero constructor. |
+| 534 / `QueryCounting.lean` | 1 | 0:01.33 | 3302944 | 0 | Fintype-card rewrite failed on hidden instance arguments; made target arguments explicit. |
+| 535 / `QueryCounting.lean` | 1 | 0:01.39 | 3302336 | 0 | Explicit arguments did not resolve hidden Fintype instances; changed counting rewrite to Nat.card and cardinal equivalences. |
+| 536 / `QueryCounting.lean` | 1 | 0:01.35 | 3306244 | 0 | Remaining ordered-card Fintype rewrite mismatch; used the embedding equivalence directly at Nat.card. |
+| 538 / `QuerySource.lean` | 1 | 0:01.44 | 3316980 | 0 | Fin.val type inference, unreduced match, and concrete cardinal reduction; annotated Fin domain, reduced only the match, composed equalities explicitly. |
+| 539 / `QuerySource.lean` | 1 | 0:01.40 | 3318120 | 0 | Recursion at the concrete LegalQuery mean/count endpoint; generalized the counting theorem over its Fintype instance. |
+| 541 / `QuerySource.lean` | 1 | 0:01.41 | 3318960 | 0 | After changed QueryCounting dependency, endpoint still tried to reduce card (Fin (2^18)); rewrote card_fin symbolically in a named fact before composing it. |
+| 543 / `ModuloField.lean` | 1 | 0:03.08 | 6720692 | 0 | Cast of Nat (256+1) did not match rational 257; reduced the small Nat addition explicitly. |
+| 546 / `OpeningSamplerBounds.lean` | 1 | 0:07.39 | 6747884 | 0 | Nat/rational sums and channels namespace; normalized casts and opened AspisR0.Fold. |
+
+Focused green attempts: 531, 533, 537, 540, 542, 544, 545, 547.
+Attempts 548-549 unused. The sole explicit new Finset.univ is over Fin 22
+in querySet_enum, never State or Addr L. Abstract counting and symbolic
+card_fin rewriting precede concrete mean comparisons. Final source scan
+found no prohibited proof placeholders or limit overrides.
+
+### Continuation status of the original requested theorem
+
+* The original SamplerLawsD is still false. The proposed field sampler and
+  retained successful-query distribution now have proved usable bounds,
+  including their application to R0's opening bad sets; fixed-interface
+  sampler/decoder/D2 integration is not discharged.
+* SEM/payment extraction remains undefined/unproved for R0; choice (b) is
+  preserved, without substituting V7's relation.
+* Successful step-3 circle conditions remain proved from source; the outer
+  semantic transcript, rejection handling and state-function integration
+  remain to be implemented and proved.
