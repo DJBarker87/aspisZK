@@ -826,3 +826,29 @@ Classical.choice, Quot.sound). `Core.lean` is unchanged, so G1/G2 are unaffected
   Q11 subfield descent. **That the projected raw-limb code (S:130–357, 401–617)
   computes the canonical permutation is a Rust-to-model refinement obligation,
   recorded here and not proved in this job.**
+
+## Lead decision after G3′ (endpoint iff)
+
+`poseidon_endpoints_do_not_imply_successor` (f90a42327) is accepted. The
+requested G3′ statement was wrong as posed by the lead: a transition family
+over a committed trace constrains every local row 0–10, so it cannot be
+equivalent to the 57 endpoint equations alone. No Core/CoreExt change.
+
+Corrected statements for G3″ (statement change only; definitions from
+f90a42327 are kept):
+
+1. `poseidon_scalar_holds_iff`: `Holds poseidonScalarFamily pub A` ↔
+   the complete transition catalogue: for every block and local row
+   r ∈ 0..10, the state at local row r+1 equals the row's round pair
+   (`poseidonLeadingPair` at r = 0 with the row-12 absorption; the
+   `poseidonRoundPair` kinds from `poseidon_round_pair_layout` otherwise)
+   applied to the state at local row r.
+2. `poseidon_scalar_holds_output` (forward only): `Holds` →
+   ∀ block, state at local row 11 = `poseidonPermutation
+   (poseidonAbsorbedInput A block)`. Proved by composing the 11 transition
+   equations; the permutation and constant tables stay opaque.
+3. `poseidon_packed_iff_scalar` as before, against statement 1.
+
+The forward corollary is what the nullifier/membership extraction consumes;
+the iff is the literal-port obligation. G4′ (9bdd242f4) is accepted as
+complete for its scope.
