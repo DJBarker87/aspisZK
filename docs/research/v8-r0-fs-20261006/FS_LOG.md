@@ -150,3 +150,47 @@ No `sorry`, `axiom`, `native_decide`, `admit`, `maxRecDepth` or
 - (INJ) deferred to a separate job; `SamplerLaws` stated as a premise rather
   than proved (no 𝔼 sampler in the tree — finding 1 above).
 - `z0 ≠ z1`, non-rational carried as statement hypotheses (finding 3).
+
+---
+
+# Addendum 2026-10-07: R0 on the duplex (v2)
+
+`lean/R0FS/V2.lean` — `R0FS.V2.r0_duplex_fiat_shamir`: for R0's opening
+layer compiled with the duplex of `AspisV8R19.DuplexFrames` and the chain-
+running verifier, with the sampler laws (`SamplerLawsD`, v1's laws on the
+32-byte squeezed state) and `p.rounds = 5`,
+
+```
+Pr_H[V accepts ∧ no witness] ≤ Q_tot · max_{i<5} ε_i + 2·Q_tot²/2^256,
+```
+
+`max_i ε_i = 2^-105.14` at q = 22.  Every `#print axioms` is `propext,
+Classical.choice, Quot.sound`; no `sorry`/`axiom`/`native_decide`/`admit`
+(grep). (INJ) is discharged by `FS2.Duplex.decodesSpec`; the remaining
+premises are `SamplerLawsD` (the 𝔼 sampler law) and, inside the statement,
+premise SEM and the step-3 challenge conditions.
+
+Construction: `proj` drops the duplex states from a v2 prefix;
+`rb2.doomed := doomed ∘ proj`; `params1` is the v1 parameter object with
+`k_i = 32`, `sampler i := p.σ i`, so v1's `d1`/`d2` apply verbatim (`samp_mean`
+turns the round's law into the law of the squeezed state through `σ_i`);
+(D3) is factored into the sampler-free core `accept_not_doomed`
+(`Hypotheses.lean`) and `d3_at`/`d3₂` transport it to the v2 transcript via
+`transcript_congr` (the transcript depends on the protocol only through
+`msg` and `samp`).
+
+Evidence (NUC, `-M7000`, `MemoryHigh=5G MemoryMax=7G MemorySwapMax=0`; the
+9 GiB scope was refused by the reservation check at 48 GiB populated, and
+7 GiB — admitted by the policy and sufficient for the 6.8 GB peak — was used
+instead; no cap raised):
+
+| Target | SHA-256 | exit | wall | peak RSS KiB | swaps | axioms |
+|---|---|---:|---:|---:|---:|---|
+| `lean/R0FS/Hypotheses.lean` | `5c72a7439b787ac0f4d4b48202270b0b22375cad93fb6c44c22e85c5fef0c2e8` | 0 | 5.61 s | 6,826,524 | 0 | (audited in Main) |
+| `lean/R0FS/Main.lean` | `7e68a8b1320f266bfacb6eeb2d5905c2aacdd77b6c6c33735f127ce842e849e6` | 0 | 3.06 s | 6,770,560 | 0 | 6 reports, PCQ |
+| `lean/R0FS/V2.lean` | `0a9ee117ea525400c1bd6ddf2725f084c929b6bba0e8164a0bbbf597a108f9c8` | 0 | 4.30 s | 6,795,472 | 0 | `r0_duplex_fiat_shamir`, `d1₂`, `d2₂`, `d3₂`: PCQ |
+
+Attempts 400–414; failures were name clashes between the v1 `R0FS` and
+`FS2` namespaces (qualified), the inferred `W` of the extractor (named
+`extr`), and the simp-flattened round equations (replaced by `injection`
+on the explicit five-element list).

@@ -448,6 +448,33 @@ theorem d3 [Fintype B] (p : Params E Sfield Pf I B Kw) (hs : SamplerLaws p) :
     h3.1 h3.2 large
   exact hw ⟨t, ht, hpt, hsf⟩
 
+/-- The core of (D3), sampler-free: an accepted complete transcript whose
+first challenge is nonzero and whose query set has 22 fibres is not doomed. -/
+theorem accept_not_doomed (x : Stmt E Sfield) (y : Fin 29 → Fin 2 → E) (γ v κ τ α : E)
+    (Q : E[X]) (F : FinalMessage E) (S : Finset (Fin 262144)) {I A : Type} (T : Table I A)
+    (hγ : γ ≠ 0) (hScard : S.card = 22)
+    (hacc : Accept (data x y) γ v κ τ α Q F S x.semantic True) :
+    ¬ doomed (⟨x, [(.values y, .field γ), (.scalar v, .field κ), (.unit, .field τ),
+      (.poly Q, .field α), (.final F, .set S)]⟩ : Prefix (Stmt E Sfield) (Msg E) (Chal E)) T := by
+  rintro ⟨hw, hg⟩
+  simp only [good, goodFrom, List.nil_append, List.cons_append,
+    rb0, rb1, rb2, rb3, rb4, Chal.field.injEq, Chal.set.injEq, exists_eq_left', or_false,
+    not_or] at hg
+  obtain ⟨h0, h1, h2, h3, h4⟩ := hg
+  have hdeg : Q.natDegree ≤ 6 := hacc.2.2.1
+  simp only [bad0, bad3, bad4, Finset.mem_union, hdeg, if_true, not_or] at h0 h3 h4
+  have hsub : S ⊆ matchingFibres (data x y) γ α F := by
+    intro u hu
+    simp only [matchingFibres, Finset.mem_filter, Finset.mem_univ, true_and]
+    exact hacc.2.2.2.2.1 u hu
+  have large : 9558 ≤ (matchingFibres (data x y) γ α F).card := by
+    by_contra hlt
+    exact h4 ⟨by omega, hScard, hsub⟩
+  obtain ⟨t, ht, _, hpt, _, hsf⟩ := binding (data x y) x.hne x.h0 x.h1 Sfield
+    (fun l i => x.base l i) γ v κ τ α hγ Q F S x.semantic True hacc h0.1.1 h0.1.2 h0.2 h1 h2
+    h3.1 h3.2 large
+  exact hw ⟨t, ht, hpt, hsf⟩
+
 theorem readsChallenges (p : Params E Sfield Pf I B Kw) :
     ReadsChallenges (protocol p) (verifierR0 p) :=
   verifier_readsChallenges (protocol p) decision
