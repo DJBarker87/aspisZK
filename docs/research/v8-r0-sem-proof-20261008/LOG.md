@@ -53,9 +53,11 @@ hypotheses are exactly what the G1 row lemmas and the copy-relation equalities
 must deliver; the copy equalities themselves come from the LogUp argument,
 which is probabilistic (λ/χ bad sets in the SEM ledger), not deterministic.
 
-So Q1 delivers what was intended — **conditional on** (i) G1's literal port
-matching the `ValueRow`/conservation/slot-94 interfaces stated in
-`Positivity.lean`, and (ii) copy-relation soundness for these four links.
+So Q1 delivers what was intended — **conditional on** copy-relation soundness
+for these four links. Condition (i) is discharged: `positivity_of_families`
+(`PositivityWired.lean`) derives the interface from G1's literal
+`value_holds_iff` and `positive_holds_iff`. G1's finding 1 (two extra padding
+equations) only strengthens the hypotheses and does not affect this proof.
 
 ## Compile record
 
@@ -63,6 +65,7 @@ matching the `ValueRow`/conservation/slot-94 interfaces stated in
 |---|---|---:|---:|---:|---:|---|
 | `lean/R0P/Core.lean` | `eba6bb784803b5f00922724efc9997a8d5ab6bc55cd8c100bffd8a397dabe1f9` | 0 | 1.49 s | 3,327,872 | 0 | definitions only |
 | `lean/R0P/Positivity.lean` | `0a7eaab784bc129b9995e3b7f18efde393e7d383686d1798bbe9fa7893a6ad1c` | 0 | 1.80 s | 3,327,496 | 0 | `positivity`: propext, Classical.choice, Quot.sound |
+| `lean/R0P/PositivityWired.lean` | `9d601f1920c4700f2f08566cef66c9e43b5d3e9fceb9f9d9cc1ef4ce4471c7f2` | 0 | 0:01.79 | 3,328,412 | 0 | `positivity_of_families`: propext, Classical.choice, Quot.sound |
 
 ## G1
 
