@@ -2861,3 +2861,29 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2006 | `R0P/SemAccept` | 0 / 0 | 0:02.81 | 6811528 | 0 | 2 | `02a046a9703bf95c8f5fa3cb489084e0862379ae6f020a48f0a4374b542019b4` |
 
 Source revision(s): `eb8df067e84ff6bdec264b53f7440073f5dac54a`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Overnight Step 2 — SemHonest complete
+
+Proved the requested selector, dot, successor, XOR-12, honest-claims, equality-weight, active-selector and `honestRows` bridges. Every requested predecessor was host-checked before adding the next. The successor route uses a general binary-digit/carry-product induction and modulo-bit identity; it closed on its second attempt (2011). No rows, blocks, constant tables or permutations were enumerated. G2 layout inspection confirms `g2Row h l = 16*h.val+l.val`, with high coordinates 0–5 and low coordinates 6–9. 2007–2008 repaired the public row-bijection access and index reductions; 2010–2011 repaired the binary-helper elaboration; 2012/2014–2016 repaired Bool namespace and decision-instance transport in XOR; 2017–2018 repaired a forbidden reverse-def simp syntax; 2019–2020 removed an unused tactic and checked activeAt. 2021 is the complete module: 14 audits using subsets of the standard three axioms, no error or warning. Process deviation: 2013 accidentally repeated the 2012 source because a failed exploratory file lookup skipped the chained edit. The 3.09-second failed run is retained, not counted as progress; the local runner now rejects any previously attempted target/source hash before launching. No other unchanged rerun or cap increase occurred.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 GiB. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2007 | `R0P/SemHonest` | 1 / 1 | 0:02.73 | 6774176 | 0 | 2 | `276183c86d7defa24a7da783449e8c33723c0f4d621771635ef6c422128f0eba` |
+| 2008 | `R0P/SemHonest` | 0 / 0 | 0:02.87 | 6808996 | 0 | 2 | `cc9dc6609c862f75e8e9ec97846a3b3996d6f1e377a8a5800190be7fd00486b9` |
+| 2009 | `R0P/SemHonest` | 0 / 0 | 0:03.03 | 6805392 | 0 | 3 | `a5c6b2c6da4a66faac7933d49b70d1dcae551ea3819e4f57f3172610d19aae55` |
+| 2010 | `R0P/SemHonest` | 1 / 1 | 0:02.92 | 6783872 | 0 | 7 | `440b098b1e18134848dc621ee113b301169e444a9dabd03e6e3bce12afd303fd` |
+| 2011 | `R0P/SemHonest` | 0 / 0 | 0:03.26 | 6822628 | 0 | 7 | `160a20301bc4daf1ab4b7ce64650e04e10fa3196157232072eb81716298d6053` |
+| 2012 | `R0P/SemHonest` | 1 / 1 | 0:03.07 | 6786864 | 0 | 8 | `4002d918cdb0c0a19fd1fd29244596354b8144f5faed1c3d8e4f4c8b25db2778` |
+| 2013 | `R0P/SemHonest` | 1 / 1 | 0:03.09 | 6787632 | 0 | 8 | `4002d918cdb0c0a19fd1fd29244596354b8144f5faed1c3d8e4f4c8b25db2778` |
+| 2014 | `R0P/SemHonest` | 1 / 1 | 0:03.08 | 6789520 | 0 | 8 | `214f1e77baf6d332d670b11f7189b19f2842aebba868deae4f36e02c939ba297` |
+| 2015 | `R0P/SemHonest` | 1 / 1 | 0:03.11 | 6789860 | 0 | 8 | `25f0a4777cc19b2299585a298a9fb01bd576bc58696fb5cb323e6fc8ab107fe1` |
+| 2016 | `R0P/SemHonest` | 0 / 0 | 0:03.22 | 6824840 | 0 | 8 | `0b696d178d81d2835fbe9d48d171caaf5f1763eaa34268c837ae2b989486d654` |
+| 2017 | `R0P/SemHonest` | 1 / 1 | 0:03.18 | 6792120 | 0 | 10 | `3ac5fd2a801061fa12b4fa9b595b4dd5d7f153a6b1fcef5744e9b14b03de3036` |
+| 2018 | `R0P/SemHonest` | 0 / 0 | 0:03.50 | 6827096 | 0 | 10 | `5b487a9e473678fae2bde6a9f69a003a01eb5d7cbb469a7a47f37a1564e3c8cc` |
+| 2019 | `R0P/SemHonest` | 0 / 0 | 0:03.49 | 6827308 | 0 | 12 | `cb6f46b026e1bdf3b0a5ae6c7a937ca9604e2f5474310d6c6b1a7aad2dd33b67` |
+| 2020 | `R0P/SemHonest` | 0 / 0 | 0:03.44 | 6826760 | 0 | 13 | `fecde7beb62a8d6e620dc3c84b94df06ba15dff03064e454645ebb559c75fb32` |
+| 2021 | `R0P/SemHonest` | 0 / 0 | 0:03.52 | 6830688 | 0 | 14 | `63c890ceebfe82d2ef16e73aed51b4acac0e6bc0af8c5fb3b0d5eca05034234f` |
+
+Source revision(s): `2e002ad58598de04eec8179f73227b6cd2655048`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
