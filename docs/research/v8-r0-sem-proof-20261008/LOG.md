@@ -1552,3 +1552,70 @@ Resource-argument deviation: attempt 1606 mistakenly passed Lean `-M7000` instea
 Before final coordinator check 1699, the sole unused simplifier argument was removed and provenance/method comments plus 13 public `#check` commands were added. This produced a distinct source hash. Final 1699 passed with matching scope/time exits zero, 4.64 seconds wall time, 2,162,908 KiB peak RSS, zero swap, no warnings, and 41 matching permitted axiom audits. The 33 new named declarations and all eight retained declarations are audited, including private helpers. Only `propext`, `Classical.choice`, and `Quot.sound` occur; some declarations need fewer or no axioms.
 
 Final frozen source SHA-256: `b74e1d7adfaaf6ad0c4973b96461b6359d23b62d6cadb6e2983646d3e5b40b5d`. Each host `evidence/source-N.lean` matches `evidence/sha-N.txt`; raw `evidence/out-N.log` and `evidence/time-N.log` retain actual scope/Lean status, independent of the outer runner's return code. Local mirrors are `/tmp/r0-composition-20261008/SemBadSets-N.lean` and `/tmp/r0-composition-20261008/evidence/`. Coordinator and independent attempt inventories are retained there. All nine attempt hashes are distinct. G10 has no remaining mathematical stop; no production lane equivalence or probability claim follows from these lemmas alone.
+
+## G11 source audit: semantic scalar and packed theta lanes
+
+Read-only source audit at worktree HEAD `573bde72536f96ea6645ddd1fae7ad838932ade8`; Rust inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. Pinned source SHA-256 values:
+
+- `pair_forest_semantic_terminal.rs`: `efbc5be87e271419d7b09e1bb6e3a83984d42795bc20067ea039814fb89ffa58`
+- `pair_forest_copy_terminal.rs`: `50062fff8b6afbffad3ddbb8eda09992353a9171c4955151cece26a654c6a6d5`
+- `pair_forest_hiding.rs`: `61bcd59a22c9c02fe3f9ba69cda43bfa8fe02ea14f15da9b761e976fe48798bf`
+
+### Scalar slots and packed groups
+
+The terminal declares 94 indexed semantic source lanes (pair-forest terminal line 35) and 24 packed semantic groups (line 36). The ordered scalar contributions are:
+
+| Scalar slots | Count | Family/source construction | Destination packed groups |
+| --- | ---: | --- | --- |
+| 0–15 | 16 | Initial schedule residuals | 0–3 |
+| 16–31 | 16 | Schedule absorption residuals | 4–7 |
+| 32–48 | 17 | Path residuals | 8–12 |
+| 49–83 | 35 | Value residuals: 33 range plus 2 conservation | 12–20 |
+| 84–91 | 8 | Public digest binding residuals | 21–22 |
+| 92–93 | 2 | Scalar/asset residuals returned by `scalar_lanes` | 23 |
+
+Thus the broad family intervals are contiguous: schedule 0–31, path 32–48, value 49–83, digest 84–91, scalar/asset 92–93. The source calls show these starts and lengths: schedule initial at offset 0 and absorption at 16 (`:381–391`); path array length 17 at offset 32 (`:394–427`); value range length 33 at offset 49 and conservation length 2 at offset 82 (`:466–519`); digest length 8 at offset 84 and scalar length 2 at offset 92 (`:1143–1182`). Range and conservation are one broad value family here.
+
+The final scalar contributions at offsets 0–11 also receive occupancy residuals. `add_schedule_lanes` accumulates `initial[0..15]` at offset 0, and `add_occupancy_lanes` separately accumulates `occupancy[0..11]` at that same offset (`:381–391`, `:529–554`). Therefore for each scalar position `j ∈ 0..11`, the contributions are `initial[j] + occupancy[j]`; their four-lane packed group receives both `qm31_pack_base4(initial[4g..4g+4])` and `qm31_pack_base4(occupancy[4g..4g+4])`, where `g = j / 4`. Occupancy does not extend the indexed 94-slot source interval; it is an additional summand on final slots 0–11.
+
+The packed group map is:
+
+| Packed group | Scalar contributions |
+| ---: | --- |
+| 0 | initial 0–3 plus occupancy 0–3 |
+| 1 | initial 4–7 plus occupancy 4–7 |
+| 2 | initial 8–11 plus occupancy 8–11 |
+| 3 | initial 12–15 |
+| 4–7 | absorption 16–31 |
+| 8–11 | path 32–47 |
+| 12 | path 48 plus value 49–51 |
+| 13–19 | value 52–79 |
+| 20 | value 80–83 |
+| 21–22 | digest 84–91 |
+| 23 | scalar 92–93 plus zero padding in component positions 2–3 |
+
+`add_preweighted` maps scalar source `4 * group + slot` to component `slot` of `qm31_pack_base4`, zero-padding positions outside each interval (pair-forest terminal `:106–124`). `semantic_packed` accumulates schedule, path, value, occupancy, digest, then scalar contributions (`:1143–1182`). Its path call covers scalar 32–48 (`:394–427`); the value calls cover 49–83 (`:466–519`). The concrete cross-family group is group 12: it contains path slot 48 and value slots 49–51. Groups 0–2 also combine occupancy and schedule. This is the requested mixed-family stop condition; no `LaneMap.lean` definition or proof was written.
+
+### Selector bit order
+
+At the pinned `pair_forest_copy_terminal.rs:143–177`, `Selectors::expand` processes coordinates in order and splits each parent weight into `(1-coordinate)` at `2*index` and `coordinate` at `2*index+1` (`:144–158`). The first coordinate therefore becomes the most significant bit of the resulting array index; later coordinates append lower-order bits. `at_point` passes `point[0..6]` to the 64-entry high selector and `point[6..10]` to the 16-entry low selector (`:161–166`); `boxed_at_point` is exactly `Box::new(Self::at_point(point))` (`:168–171`). Row lookup is `high[row >> 4] * low[row & 15]` (`:173–177`). Thus Boolean coordinates `point[0]..point[5]` are block bits 5 down to 0, and `point[6]..point[9]` are local-row bits 3 down to 0: the 10-bit row index is big-endian in coordinate order.
+
+The pinned `pair_forest_hiding.rs` uses rows as `block * 16 + local` for path/value bounds (`:41–46`); active-row masks select block by `row >> 4` and local bit by `1 << (row & 15)` (`:190–196`). This agrees with the selector's high/low split and confirms the row/column layout relevant to G11.
+
+### Theta coefficient powers
+
+`composition_parts` initializes the accumulator to `copy.residual`, then traverses semantic lanes in reverse and Poseidon lanes in reverse with `composition := theta * composition + lane` (pair-forest terminal `:1267–1274`). Expanding the Horner fold gives Poseidon lanes 0–3 powers θ⁰–θ³, semantic packed groups 0–23 powers θ⁴–θ²⁷, and copy residual power θ²⁸. This matches `lanesComp`'s increasing-power definition (`Zerocheck.lean:84–85`). A proposed `lane0copy` assignment conflicts with both the Rust fold and Lean definition.
+
+### Separate proposal-only Positive adapter
+
+`Positive.lean:3–7` labels `Positive.lean` as a research-only G1 adapter, not asserted to be enabled by a production feature, with no packing or extraction claim. Its comment cites proposal witness `ROW=1014, COL=3, LANE=94` (`:11–12`). The `positiveResidual`/`positiveRowClaims` adapter is at `:14–25`; the standalone `positiveFamily` is at `:27–30`. Production instead declares 94 source semantic positions 0–93 and `semantic_packed` constructs only its 24 packed outputs (`pair_forest_semantic_terminal.rs:35–36,1143–1182`). Proposal lane 94 is not a 95th production scalar input and does not establish a production `positiveFamily` lane.
+
+### Smallest proposed interface corrections (not enacted)
+
+- Define the production theta-lane interface in source order: Poseidon indices 0–3, semantic packed indices 4–27, and copy index 28. Do not call copy `lane0`.
+- State the scalar-to-packed interface at the 24-group level, including the additive occupancy contribution to groups 0–2 and the mixed path/value contribution to group 12. With base-typed components, packing injectivity could separate the distinct Path and Value component positions in group 12, but the explicit mixed-family stop instruction applies. At scalar slots 0–11, packing injectivity gives zeros of the schedule-plus-occupancy sums; separating those summands additionally needs the source selector facts. The lead must authorize a mixed-group interface before this proof continues.
+- Keep proposal `positiveFamily`/lane 94 separate from the production lane map; do not extend the production scalar catalogue to 95 based on that proposal citation.
+
+No build was run. The coordinator reviewed the source ranges independently; all three files match the inspection pin. No existing Lean source was edited. This is a source mapping, not a lane-map theorem or a proof that packed lane zero implies each source-family residual vanishes.
+
+The coordinator source review, including hashes of each cited range, is retained at `/tmp/r0-composition-20261008/G11-source-review.json`. No Lean target was needed for this source-stop finding; attempts 17xx remain unused.
