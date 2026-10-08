@@ -2908,3 +2908,50 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2031 | `R0P/SemDeg` | 0 / 0 | 0:09.64 | 6874700 | 0 | 47 | `ed059e7d1a94b7f3819398fb7f03762c743ab04d51d0ccd1ba795e8f5d96294e` |
 
 Source revision(s): `c19010238025addba901b094440bfd24538712ce`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Overnight G14′ Step 4 — scalar and copy family audit
+
+Value (2038), occupancy (2039), asset (2040), schedule (2041, warning cleanup in 2042), path (2042), digest (2044), and copy (2050) are host-checked at coordinate degree 26. Copy has the stronger bound 10; its active selector has degree one, its mask sum preserves the low-coordinate degree, and patterns are linear. The source scalarLaneAt does not include positiveFamily. Lists, copy masks, pattern descriptors, link registries, and digest targets are treated symbolically. Early 2032–2037 failures were projection elaboration, tactic quotation, and arithmetic-goal plumbing; making honestClaims/openingsOf/selector helpers locally opaque and separating degree construction from the Nat inequality resolved them. 2045 needed let reduction before splitting fixed guards; 2046 is green. No theorem premise or lane statement was weakened. Successful audits contain only propext, Classical.choice, Quot.sound (pointwise_foldl has no axioms); failed audit lines containing sorryAx are retained only as diagnostics.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2032 | `R0P/SemDegFamilies` | 1 / 1 | 0:02.82 | 6775164 | 0 | 7 | `852e24f25b7200b6a8539c9da288312a59a77861a8c06070be973a54502afb6a` |
+| 2033 | `R0P/SemDegFamilies` | 1 / 1 | 0:03.02 | 6777840 | 0 | 8 | `d1263bb11323ee8baafd7707e1d32d21b4baa71cc8cb1c2ad7d7267ab4d1a8d1` |
+| 2034 | `R0P/SemDegFamilies` | 0 / 0 | 0:03.37 | 6811300 | 0 | 11 | `0ed35b4690341628d51e25f089000fae336774c4d812e8ad2e98a06007d93a57` |
+| 2035 | `R0P/SemDegFamilies` | 1 / 1 | 0:03.26 | 6785400 | 0 | 13 | `10450a74dbcd6835de226da9ae51236b8ed9fbd94986746fed6615d28e43255c` |
+| 2036 | `R0P/SemDegFamilies` | 1 / 1 | 0:09.70 | 6788620 | 0 | 13 | `6c68ba85eead9bd1931783dd50562605a777c73fdf7a7bd98a085bac3ebad57c` |
+| 2037 | `R0P/SemDegFamilies` | 1 / 1 | 0:03.36 | 6791252 | 0 | 13 | `5e02332a9f5bf96141ca8a87445f9c23936c56908204f6b9495703a8ce49237c` |
+| 2038 | `R0P/SemDegFamilies` | 0 / 0 | 0:03.59 | 6826260 | 0 | 13 | `d436fdaff20774558c27122aba914d4cb4fc729477cc917538a85d74f070d724` |
+| 2039 | `R0P/SemDegFamilies` | 0 / 0 | 0:03.93 | 6832668 | 0 | 14 | `e6c1effe63b6a177eaea31b3ccfe2db2c1a118755d47314d67d879972743f34c` |
+| 2040 | `R0P/SemDegFamilies` | 0 / 0 | 0:04.66 | 6841404 | 0 | 15 | `8e69685b184a965fa4c02eb71a9d30a7d03f28472e905c0148f0711f014615d9` |
+| 2041 | `R0P/SemDegFamilies` | 0 / 0 | 0:09.94 | 6971984 | 0 | 17 | `5e40f398143ce3c09507496b07639c1b42ea73d55ce565639c52500ffe27cee4` |
+| 2042 | `R0P/SemDegFamilies` | 0 / 0 | 0:10.34 | 6971692 | 0 | 18 | `2cd817ae9a5df07afd9e48993ea47f2cd6d06aa24a6818812ecb8bee65712159` |
+| 2043 | `R0P/SemDegFamilies` | 0 / 0 | 0:10.34 | 6971888 | 0 | 19 | `904b93ceb954db187203b90a3f906f5867329374360b779b7126e2f0fe1afd37` |
+| 2044 | `R0P/SemDegFamilies` | 0 / 0 | 0:10.30 | 6973812 | 0 | 21 | `07985384f3daf09eff2f9f980cb373e3f28f690808ebea8b0640f5f8029538d4` |
+| 2045 | `R0P/SemDegFamilies` | 1 / 1 | 0:10.17 | 6915568 | 0 | 25 | `b8b65697168fc1d15aee05b66808cbb33bf3f9d1ac01ed007b022a8459700602` |
+| 2046 | `R0P/SemDegFamilies` | 0 / 0 | 0:10.53 | 6976212 | 0 | 25 | `8790fd352f1353d5f5fb7a323e3c27a1834330111e0b36c76651dc51fbc91f78` |
+| 2047 | `R0P/SemDegFamilies` | 0 / 0 | 0:10.99 | 6978428 | 0 | 26 | `e764c326ae15f0da4c8bb20a32de52a9628e0e060515a068a7b5602cfdcb6410` |
+| 2048 | `R0P/SemDegFamilies` | 0 / 0 | 0:10.89 | 6984464 | 0 | 28 | `2afe852b415a487379b9b8b421892f5096a184e0a0ff63d67b2ad05af1458080` |
+| 2049 | `R0P/SemDegFamilies` | 0 / 0 | 0:11.40 | 6998592 | 0 | 30 | `cd4d19c59342274d94287acc2427e3987068fb2f362bf15ffd87ff487164c84d` |
+| 2050 | `R0P/SemDegFamilies` | 0 / 0 | 0:11.51 | 7000132 | 0 | 32 | `59b1338531e9af0efb58ec27de54716b6e9aa4ceedf284fe3410aa5c9767b231` |
+
+Source revision(s): `692dd8e05dc535d420cbcf1b5a502ca300517cfd`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Overnight G14′ Step 4 — Poseidon and all 29 lanes closed
+
+SemDegFamilies now proves vdeg_laneAt for every production lane and every coordinate at bound 26, with no additional premise. The three Poseidon two-round branches have degree 25 (2054); the high and low selector supports are disjoint, so the scalar and packed families have degree 26 (2055). The linear maps were handled symbolically; only the four outputs of the small linear Mat4 expression were selected, and no row range, round constant table, or permutation was evaluated. Attempt 2051 needed an explicit group index for the final linear-map projection; 2052 fixed that and removed unused simp arguments. Full lane assembly passes at 2056, exit 0 with no errors or warnings and 44 axiom lines, all within the standard set. No completeness obstruction was found among the literal lanes. The source was reviewed for forbidden evaluation and added premises before commit.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2051 | `R0P/SemDegFamilies` | 1 / 1 | 0:11.48 | 6939040 | 0 | 34 | `72ec5a9633d1aed5a7dd6fa9359e725ffa7e2850eebec7c4f803476af8d913f0` |
+| 2052 | `R0P/SemDegFamilies` | 0 / 0 | 0:11.58 | 7000748 | 0 | 34 | `a7f12bf9cc511186e4b59edd302277a275941796a909707cdb61e45561c453c3` |
+| 2053 | `R0P/SemDegFamilies` | 0 / 0 | 0:11.86 | 7001816 | 0 | 37 | `359cdd212edf4af0aab5dc296138b3b7388a68bb63a1eaeef3051fbf39d3e317` |
+| 2054 | `R0P/SemDegFamilies` | 0 / 0 | 0:12.22 | 6993968 | 0 | 40 | `8c833325f463ac64fd46b4a0fcdc0ae46958bf9284d508775c9998af1b52185e` |
+| 2055 | `R0P/SemDegFamilies` | 0 / 0 | 0:12.77 | 7002972 | 0 | 42 | `476e1ee560b725aebc3ee430e2f92f6f7286853b25819f7e4223410aa67bb3c2` |
+| 2056 | `R0P/SemDegFamilies` | 0 / 0 | 0:13.15 | 7002080 | 0 | 44 | `60daa294e557252938f4d87fb9eb93df7aca5eff51795abf595c140a3b15c3e1` |
+
+Source revision(s): `692dd8e05dc535d420cbcf1b5a502ca300517cfd`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
