@@ -2369,6 +2369,33 @@ Both coordinator checks used pinned Lean 4.32.0 and `run2.sh N R0P/SemD3Glue 700
 
 2111 is the frozen source: all 16 declaration audits use only the permitted axioms (some use fewer or none), with no warnings or errors. No failed G15 attempt, unchanged rerun, cap change, package rebuild, or forbidden evaluation occurred. Raw evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`, with verified copies under `/tmp/r0-sem-continuation-20261008/g15-evidence/`. Lead dependency sources match the green 659/660/661/663 artifacts. The coordinator reviewed the new definitions, the restricted payload statements and the final source independently and ran the focused checks. G15 stops at the unconditional early-round degree guard.
 
+### Continuation G15 — alpha-only guard; checked candidate bridge and pending D3 assembly
+
+Resumed against lead `7d3aa4864` and the cached 664–670 objects. The obsolete unconditional early-degree findings were removed: the corrected classifier requires `degreeOK` only for rounds 14–23. Existing parser invariance lemmas about unused inner payloads remain valid. `SemPad` was recompiled unchanged as 2408 (Lean/time exit 0/0, 3.59 s, 6,830,940 KiB RSS, zero swaps, 24 permitted-axiom audits, no warnings; SHA `2734705552a97a2ef29f0a4c6c4a36fda6e2f7653fe972c7152f9896c91f13c1`).
+
+Attempt 2120 checked the complete no-hit-to-candidate bridge, including C2-aware candidate membership, padding before C2, and current alpha-polynomial lookup. `no_hit_candidate_rounds` uses G18's `mem_Lambda_pad`, lambda/chi invariance and `polysOf_prefix`. `prefix_degreeOK` obtains the sole alpha guard from `sumcheckChecks`' degree conjunct. The full-prefix/opening restriction is proved by `opening_good_hitFrom`; the literal `sourceData` uses the prefix-based `semanticBad`. `witness_baseTyped` consumes `Witness.2.2` on encoder coordinates through G17's `initialMessage_subfield_descent` and `x.lanesF`. All 42 declaration audits in 2120 use only the standard three axioms, with no warnings or errors.
+
+The pending final assembly derives the opening witness from `R0FS.decision_true`, `cardOK`, `R0FS.accept_not_doomed` and the opening-hit restriction; it derives nonzero gamma from the actual round-26 decoder `DQ.σQ` and `ModuloField.gamma_ne_zero`. It keeps the three named G14 obligations `HonestRows`, `VirtualDeg`, and `ChecksAccept` as hypotheses, exactly as `d3_core` does. This is not an unconditional completion of G14. The mixed sampler retains the full prefix's duplex state; row 30 is the literal q22 chain, with a pending symbolic equality to `DQ.sampQ` at local round 4, including its entire oracle-read trace.
+
+| Attempt | Source SHA-256 | Lean / time exit | Wall | Peak RSS KiB | Swaps |
+|---:|---|---:|---:|---:|---:|
+| 2112 | `035cfbdb7e149045c7878c853eb507777b79234896d5f406f99f3cc1ae41d848` | 0 / 0 | 0:03.42 | 6838196 | 0 |
+| 2113 | `6ca14b0f3aa8c4841df067ce027d9e31124e305cfc06b6ebe404b4f849ddeb5f` | 1 / 1 | 0:05.57 | 6780400 | 0 |
+| 2114 | `e509964e28d161ae1f9ad0ec4d0c206d9df63268fc94fef70b4299ecbf18def9` | 1 / 1 | 0:04.52 | 6813832 | 0 |
+| 2115 | `e692a0411b512912c503c6c8f66691f7f7d550e645c5a73034ecd67263e45ceb` | 1 / 1 | 0:05.88 | 6783032 | 0 |
+| 2116 | `d52ae59f5e044c4011ed8d3e5d72230046eb68bbaa63fe8c3b15147085669aa8` | 1 / 1 | 0:05.81 | 6825996 | 0 |
+| 2117 | `f17c552a07e1d3acd99357670d43610834c5dee1a08ad97371928f6cd0d7d007` | 1 / 1 | 0:05.64 | 6825692 | 0 |
+| 2118 | `b83c30bcafd3554eed58e4ed782317d9126e8ba41d369e4425a45a110ff485f6` | 0 / 0 | 0:06.13 | 6874856 | 0 |
+| 2119 | `6ba421783dbb8258b6fea5e0a15dc292a1ce6f0ec75ae5ab55d29078eae7aa15` | 1 / 1 | 0:06.09 | 6833320 | 0 |
+| 2120 | `8cdd2b7fd002595d2736ddb620c81aee808d87447ff9a65fcb606e887782fc0d` | 0 / 0 | 0:06.44 | 6886784 | 0 |
+| 2121 | `8ae2d638f986335bbde36f49681dee7ba23e01a552358707e83dc8e4f84bb6e4` | 1 / 1 | 0:07.89 | 6,848,240 | 0 |
+
+2113–2114 corrected list-map/take and empty-parser option equalities. 2115–2117 corrected natural-number successor/C2 parser reductions and placement of `omit` before doc comments; 2118 was green. 2119 corrected dependent prefix lookups and C2-prefix length transport; 2120 was green. 2121 added the final assembly and failed on the `Table` namespace, the numerical opening offset, and cascading gamma/protocol elaboration; its failed audits are not proof evidence. Every failed rerun changed source; no cap was raised.
+
+The corrected 2122 source is queued but **not compiled**, SHA `e0afd10de6252e6e1d2e7c31e9103581e5331cfc3ebeeb8460627570c6b4f545`. Host access failed before the next run: SSH to the Tailscale address timed out; direct Tailscale pings and `tailscale ssh` failed, and `tailscale debug ts2021` reported `x509: certificate signed by unknown authority`. The last checked whole-source milestone remains 2120, not the queued final D3 draft. No complete `FS2.D3` result is claimed yet.
+
+All jobs used `run2.sh N R0P/SemD3Glue 7000 7`, MemoryHigh 5 GiB / MemoryMax 7 GiB / MemorySwapMax 0 and the host reservation check. Raw evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; local copies for 2112–2120 have matching snapshot hashes under `/tmp/r0-sem-rounds-continuation-20261008/g15-evidence/`. 2121's actual exit/timing were received from the runner before access failed; its raw files remain on the host pending copy. No local build, package rebuild, forbidden evaluation, new semantic premise, or security-setting bypass was used.
+
 ## G16: SemD2Glue pre-challenge degree-invariant stop
 
 Reviewed the fixed semantic density theorem at lead `f1af33ad5`, B2 `SourceData`/state definitions, the duplex and q22 samplers, and the circle bounds. G15 currently supplies interface findings rather than the requested instance, so that dependency is also open. The independent blocking mismatch is the missing pre-challenge degree invariant for the generic D2 statement. No `FS2.D2` theorem, assembled 31-round protocol, new state predicate, or modified bad-round event is claimed.
@@ -2417,6 +2444,23 @@ All coordinator runs targeted only `R0P/SemD2Glue`, pinned Lean 4.32.0, `run2.sh
 | 2206 | `099cbfcb813cd89a0c412074e97d2d8d04c3c90fde3ba4b481236f62f8edde6e` | 0 / 0 | 5.31 s | 6,840,092 | 0 |
 
 2202 corrected the state namespace, singleton-hit disjunction and round offsets; 2203 corrected the challenge type and made the sampler-law predicate explicit; 2204 isolated the three constant-zero mean branches; 2205 corrected a parenthesis in their nested mean expressions. Every failure was followed by a source change. Frozen 2206 has six theorem audits, all using only `propext`, `Classical.choice`, `Quot.sound`, and no warnings or errors. Raw artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; SHA-verified copies are under `/tmp/r0-sem-continuation-20261008/g16-evidence/`. The coordinator independently reviewed the event containment, decoder identity, mean calculation, source interfaces and final diff, and ran all focused checks. No cap increase, unchanged failing rerun, package rebuild or forbidden evaluation occurred.
+
+### Continuation G16 — opening-row integration and pending 31-row check
+
+Resumed against lead `7d3aa4864` and cached 664–670. Attempt 2207 recompiles the existing six semantic-row declarations cleanly. The pending continuation relates the literal q22 sampler's `independentMean` to `DQ.Q22.chainE` by induction on the chain length, and contains the four field-opening row bridge and the q22 row bridge using `DQ.round_field_bound` and `DQ.round_q22_bound`. Their parser-shape premises are internal helper inputs; the final draft handles malformed prefixes/messages by proving the flip event empty.
+
+The final scratch assembly uses exactly the authorized budgets: `(1+deltaQ) * (100*semRoundBudget i)/P^4` for semantic rounds 0–23; `2/P^2` for circle rounds 24–25; `epsilonSlack WideExact delta0 (i-26)` for opening rounds 26–30. Its only sampler hypotheses fix the source decoders (QM31 semantic reduction, `circleSample`, and `DQ.σQ`); no degree, density, accepted-prefix or witness premise is added. Row 30 uses the literal q22 chain directly. The alpha degree guard is already inside `semanticBad`, hence no extra degree premise remains in D2.
+
+| Attempt | Source SHA-256 | Lean / time exit | Wall | Peak RSS KiB | Swaps |
+|---:|---|---:|---:|---:|---:|
+| 2207 | `099cbfcb813cd89a0c412074e97d2d8d04c3c90fde3ba4b481236f62f8edde6e` | 0 / 0 | 0:05.27 | 6837688 | 0 |
+| 2208 | `cf6b7da1fb8c3779b41061b7b3f333a2caa810e3bd46fc8e0ea28c07aa15a312` | 1 / 1 | 0:06.75 | 6811920 | 0 |
+| 2209 | `e17f0be8656e7a5dd223941f35f9cc8999b976ef7548f7c7a4838d78fd067a18` | 1 / 1 | 0:07.36 | 6817024 | 0 |
+
+2208–2209 failed on namespace qualification, parser-structure projections, mean congruence and q22 output transport. The fixes are queued as unused attempt 2210, production SHA `cf446ca0547237dc38d09180482bd4bd6308019bd4b89e50aa6eb2c024416c01`. The 18 additional circle/malformed-prefix/final-assembly declarations are preserved separately at `/tmp/r0-semd2glue-20261008/D2Rows.lean`, SHA `da72a539eae4e684ba1ca210167c4f78320b624696c29d649073ef617b5bea86`; they remain uncompiled and require G19's mass theorems. Their final statement is `combinedProtocol_D2` on all 31 rows, but no full D2 result is claimed before checking it.
+
+Jobs used `run2.sh N R0P/SemD2Glue 7000 7` with unchanged 5/7/0 GiB high/max/swap limits and reservation checks. Every failure was followed by source changes. Raw artifacts and hash-verified local copies are under the host `evidence/` and `/tmp/r0-sem-rounds-continuation-20261008/g16-evidence/`. Build-host Tailscale access failed before 2210; no local compilation or uncapped fallback was substituted.
+
 
 ## Lead decisions after G15 stop (context typing facts, q22 guard)
 
@@ -2605,3 +2649,115 @@ WideExact`, `OnCircle` from `point_on_circle`), `circleSample_z0_mass ≤
 `event_mass_le`, `parameter_not_rational`, injectivity of the parameter
 map — `t = y/(1+x)` — and a CM31 count `P^2`); then G16 completes the two
 circle rows with decoder `.circle (circleSample a)`.
+
+## G19: One-block circle sampler — checked definitions, mass proofs pending
+
+Started from lead `7d3aa4864`. The sampler implements the authorized total one-block model: sample the source `qm31Sample` parameter; on `t.im ≠ 0`, embed `SamplerCirclePolicy.point t` into `WideExact`; otherwise return exactly `CircleRows.baseLift (1,0)`. This sentinel is the lead's counted rejection branch, not an additional challenge fallback. The source retry-loop refinement remains the separately recorded lead obligation.
+
+Attempt 2506 checked the definitions `circleRejectPoint`, `embedCirclePoint`, `circleSampleParameter`, `circleSample`, and `embedCirclePoint_injective`: all five audits use only permitted axioms, no warnings/errors. The canonical `AspisV5ComponentCQM31TowerExact.QM31Exact` alias is required for the existing wide algebra instance. The similarly named older `ExactTowerBase.QM31Exact` exposed an instance mismatch; an attempted local algebra bridge was removed. No interface or new premise was introduced.
+
+The remaining proof route is symbolic: the imaginary-zero parameter subtype is equivalent to CM31, whose cardinal is `P^2`; an accepted point cannot be base-rational; injectivity through `t = y/(1+x)` bounds each accepted point fiber by one; `event_mass_le`, `qm31Sample_mass_slack` and `deltaQ_small` give both requested `2/P^2` mass bounds. Neither mass theorem is currently checked. No mathematical/source obstruction has been established for this route.
+
+| Attempt | Source SHA-256 | Lean / time exit | Wall | Peak RSS KiB | Swaps |
+|---:|---|---:|---:|---:|---:|
+| 2500 | `6569f6af18027cff6d5fbabd7d37d0ef5eecbd381359234bbb28a359fad5075b` | 1 / 1 | 0:00.95 | 2044296 | 0 |
+| 2501 | `132a3dfe5cd2dca2a6c0e4226ac8e542d5b42f12b1afbd58551cfff29a2f70b3` | 134 / 0 | 0:13.83 | 7172932 | 0 |
+| 2502 | `ea72feada8491895f869496cd8b4b7f45ea84acbaf70caf4d949b1bd8987be51` | 1 / 1 | 0:03.85 | 7128444 | 0 |
+| 2503 | `2163f66dd212d321eeb46712f535e8158ad567c9edd139eadd0936506fc69f40` | 134 / 0 | 0:05.65 | 7172320 | 0 |
+| 2504 | `fe4333b9a00cc715c5ea9a5f69229ecaba73566fcdac3d94cace2fb7c1869a45` | 134 / 0 | 0:05.12 | 7173052 | 0 |
+| 2505 | `bf101e8f68e87fd42e5c555ba57b10e836dea6a9034de4c091b11b2982b0c547` | 1 / 1 | 0:04.48 | 7162272 | 0 |
+| 2506 | `11c39b84e81191499d8bef0993eec7649250f7af88d8c603c0081161eb9e4c01` | 0 / 0 | 0:04.79 | 7200708 | 0 |
+| 2507 | `65b73e09af93c606208f203008c800e21a4648fe3c81e47e2a46d26f1e5e808c` | 134 / 0 | 0:04.88 | 7170744 | 0 |
+| 2508 | `b710c708b4d833ec338f380733110dee3916c67642884368ae44f5e8d27eeb8e` | 134 / 0 | 0:04.83 | 7170540 | 0 |
+| 2509 | `ff60f57fcd07a110281b602289315d40ba6100f24117cd13e79d56993fd7f945` | 134 / 0 | 0:04.82 | 7171304 | 0 |
+
+2500 exposed a missing optional cached import and was replaced by a local symbolic cardinality argument, without rebuilding dependencies. 2501–2503 exposed namespace/point/field-algebra mismatches; 2501 and 2503 then aborted for memory. 2504's local algebra-instance bridge also aborted and was removed. 2505 narrowed to sampler definitions and corrected the `baseLift` namespace; 2506 passed. 2507 restored the mass draft and aborted; 2508–2509 narrowed the cardinality work and removed local instance overrides but still aborted. The exact offending declaration is not yet isolated: empty captured output on an abort is not evidence that the first declaration failed, because output may be buffered. No unchanged failure was rerun and no memory/heartbeat/recursion cap was raised.
+
+For the aborts, the runner's inner `exit=134` is authoritative: `/usr/bin/time` reported 0 for the wrapper despite the Lean abort. All swaps were zero. Each job used `run2.sh N R0P/CircleSampler 7000 7`, MemoryHigh 5 GiB / MemoryMax 7 GiB / MemorySwapMax 0 and the reservation check. Raw logs remain unmodified (2501 ends with a partial UTF-8 character); all local source snapshots match their `sha-N.txt` records under `/tmp/r0-sem-rounds-continuation-20261008/g19-evidence/`.
+
+At the network stop, the proposed attempt 2510 source was frozen at SHA `bad7f533a55367837aca68ab4dc3e9bb5f6631c92c67605ea2a108b5ad3497ac`: it is the exact green 2506 source with only the fully qualified symbolic `cm31_card` lemma/audit appended, to isolate one declaration. The full canonical mass draft is separately preserved at `/tmp/CircleSampler-full-canonical-2507.lean`, SHA `4cccc38b9a9a13edfcb404aaa9022d97d90f5e642fb2516bb8cdf83aa759a89e`. Neither draft was compiled before the local continuation below. Tailscale peer pings and SSH timed out; its control-plane diagnostic failed certificate verification. No TLS verification bypass, local build, package replay, or source/interface change was attempted. G19 remains incomplete pending host access and focused proof checks.
+
+### Continuation G19 — authorized local predecessor checks
+
+The owner then instructed: “do what you can locally.” The coordinator reused the native macOS Lean 4.32.0 executable (commit `8c9756b28d64dab099da31a4c09229a9e6a2ef35`) and pinned Mathlib cache at `81a5d257c8e410db227a6665ed08f64fea08e997`. No package or dependency rebuild was started. Current `R0P`, `R0C` and `FS2` dependency objects are absent locally, so the full G15, G16 and G19 targets cannot be checked from that cache.
+
+Four isolated mathematical predecessors now pass. `LocalCircleCount` checks `cm31_card`, the imaginary-zero subtype equivalence, and its `P^2` cardinality. `LocalCircleAlgebra` checks uniqueness/composition of maps out of `ZMod` (`RingHom.ext_zmod`), injective pullback of base-field equalities, and the generic rational inequality used to close the mass bound. This avoids requiring an extra scalar-tower instance. `LocalCircleGeometry` checks the actual canonical QM31-to-WideExact embedding, accepted-point non-rationality, and injectivity of the accepted parameter map. Non-rationality uses the same coordinate argument as `CircleSource.parameter_not_rational`, via `SamplerCirclePolicy.outside_point`; injectivity uses `point_injective`, hence the proved recovery formula `t = y/(1+x)`. `LocalCircleFiber` checks predicate-iff cardinality transport and the rejected-region plus one-fiber bound for arbitrary finite input types. No concrete universe is evaluated, and no new premise is added to either requested public mass theorem.
+
+The exact cached geometry source hashes were reviewed against the prior source-pin and successful-build records: `R0/Chord` and `R0/ChordGeometry` match `/tmp/aspis-r0-resume/final/evidence/Final-*.json`; `WideTower` matches the committed `PORT_SCOPE`/`PORT_LOG` pins; `SamplerCirclePolicy` matches `r78-sampler-circle/SOURCE_PINS.json` and the R729 direct-import manifest. These are read-only caches; no earlier completed group was rebuilt.
+
+| Attempt | Focused target | SHA-256 | Exit | Wall s | Peak aggregate RSS KiB | Child swaps |
+|---:|---|---|---:|---:|---:|---:|
+| 2510 | `LocalCircleCount` | `e65a1255ebb6d2c1a28f6b6ae0f060d600e10224df9e109484ef12b657d9c776` | 1 | 75.58 | 4051504 | 0 |
+| 2511 | `LocalCircleCount` | `b781657979f4489afa31abc9d64bc22e8d7f1e606e329c748ccc49ddf4388766` | 0 | 69.05 | 4380720 | 0 |
+| 2512 | `LocalCircleAlgebra` | `58da0c1328cff37ae35a2aa6fdb8217b405ee28df1afb65aa01e084d675fae9f` | 1 | 12.71 | 3375184 | 0 |
+| 2513 | `LocalCircleAlgebra` | `2f729707ea4807c37aec170b13752488441471702da51bb933fa9a94930d2142` | 1 | 20.40 | 3333616 | 0 |
+| 2514 | `LocalCircleAlgebra` | `72bba93bc10830853f75f35acc74fd83c38286a8f4a899b30fa507a2fd2104a4` | 0 | 21.05 | 3353760 | 0 |
+| 2515 | `LocalCircleGeometry` | `10f6d81997eab2388f5624ab26950f2868c58a2e29eb2d6d0fdb1772fcc49752` | 0 | 66.43 | 4305552 | 0 |
+| 2516 | `LocalCircleFiber` | `64e64c34865223938fdc77e584b1af3e808f859c1a8c1eb0b0d8020ebe25cf97` | 0 | 10.28 | 1899440 | 0 |
+| 2517 | `LocalCircleHelpers` | `5a801348b06a097e6c8adcb112f494f7645fdf5cf071ca83d16c6791a851c0c6` | 0 | 76.91 | 4123088 | 0 |
+
+2510 isolated a maximum-recursion-depth failure at `congrArg₂ Nat.mul` in the CM31 cardinal proof. 2511 replaces that elaboration with a named `ZMod.card` equality and a controlled rewrite; the three declarations pass with the default recursion limit. 2512 exposed two elementary division/association elaboration errors in the rational inequality. 2513 fixed the association but used an unavailable rewrite name; 2514 uses `div_eq_mul_inv` and passes. The inequality explicitly multiplies the bounds by nonnegative factors, rather than relying on nonlinear automation to discover these products. 2515 and 2516 passed first try. All four successful targets have only `propext`, `Classical.choice`, and `Quot.sound` in their 15 declaration audits, with no Lean warnings or errors.
+
+Checks were serialized by the coordinator with `lake env lean -M7000 -j1`; a local watchdog stops the process group at 7 GiB aggregate RSS or 900 seconds. The runner later gained an explicit lock before the geometry check. No Lean memory, heartbeat, or recursion cap was raised. macOS has no Linux cgroup or per-job `MemorySwapMax=0`, so these are explicitly local development checks, not Linux scope evidence. Child resource records report zero swaps; system-wide swap usage was also recorded before/after and is not presented as a per-job guarantee. The largest measured aggregate RSS was 4,380,720 KiB. The empty scratch Lake manifest has no package dependencies; `lake env` was used only to launch the focused file checks.
+
+Raw local evidence is `/tmp/r0-sem-local-20261008/evidence/{out-N.log,time-N.json,sha-N.txt,source-N.lean}`; all source snapshots were checked against their hashes. The coordinator reviewed and assembled the checked pieces into the literal `CircleSampler.lean`, SHA `bb3aa6e094298fd890f07c406bc00eda2725fd5e129a518f74171f0fb61d326d`. The five sampler/map definitions from 2506 remain byte-for-byte unchanged; the explicit sampler-policy import and pinned Rust source citations were added. The complete file, branch/cardinality composition, and final two mass-theorem instantiations remain unverified until the current R0P closure is available. This continuation does not claim full G19, D2, or D3 completion. The next unused G19 attempt is 2518.
+
+A final focused compatibility check, 2517, copied 11 actual declarations verbatim from the assembled file into the cached tower/chord/policy environment. This was needed because the isolated cardinality test had imported only the canonical tower, while the real sampler also imports the older exact-tower namespaces. The combined check passed all 11 audits with the standard three axioms and no warnings, at 76.91 s and 4,123,088 KiB aggregate RSS. Together with 2506's unchanged literal definitions, this covers the mathematical helpers and sampler construction. The seven remaining declarations (branch rationality equivalence, bad-set definition/cardinality composition, specialized numerical bound, and two final mass theorems) are still unverified in the complete module. There was no package/dependency rebuild or unchanged failing rerun. A final five-second SSH access check still timed out. Sources and evidence remain uncommitted; no push or formal completion is claimed.
+
+## Lead: G19 closed locally (CircleSampler.lean); the concrete-instance hazard
+
+The build host was unreachable (Tailscale relay up, ssh/ping timing out),
+so the lead built the FS/FS2/R0FS/R0C/R0P object chain locally
+(`/tmp/r0-sem-local-20261008/build_chain.py`: one `lake env lean -M7000 -j1`
+at a time, 7 GiB aggregate-RSS watchdog, 900 s cap, pinned Lean 4.32.0 and
+Mathlib `81a5d257`; 87 modules, every one exit 0, peak 5,295,712 KiB,
+swaps 0) except the Aeneas-dependent ones: no Lean 4.32 Aeneas objects
+exist locally, so `R0C.CircleSource`, `R0C.V3.DuplexQ` and their dependents
+(`SemD2Glue`) cannot be checked here. These are macOS development checks,
+not Linux-scope evidence; the host runs are still required before commit.
+
+Codex's assembled `CircleSampler.lean` (G19, uncommitted, host-unverified
+beyond its 2506 definitions) failed locally at five places. Three were
+mechanical (an `.elim`, `open FS` for `indicator_iff`, the unused
+`R0C.CircleSource` import, which also pulls Aeneas). Two were
+maximum-recursion failures with a single root cause, found by probes:
+for a concrete predicate on `QM31Exact`/`Point WideExact` such as
+`t.im = 0 ∨ (t.im ≠ 0 ∧ circleSampleParameter t = z0)`, instance search
+builds a concrete `Decidable` term (`instDecidableOr`, M31/wide
+`DecidableEq`) rather than the classical one; whenever the unifier must
+compare such a term with the classical instance of another statement
+(a `Fintype.card_subtype` rewrite, a generic helper whose own filter
+instance is `instDecidableOr (propDecidable _) (propDecidable _)`, or a
+`∈ Finset.univ` membership goal), it unfolds the decision procedure on
+2³¹-sized `Fin` arithmetic (diagnostics: `Nat.rec`, `Fin.mul`, `point`,
+`px`, `qm31R`). Rule adopted for every concrete-field file: predicates
+are wrapped as `def`s (`rejectedPred`, `fiberPred`, so only
+`Classical.propDecidable` applies), generic set lemmas take every filter
+predicate as an atomic variable (`card_filter_le_add_of_cover`,
+`card_filter_le_one_of_inj`), cardinalities go through explicit
+equivalences (`Finset.card_eq_of_equiv_fintype`, `imZeroEquiv`,
+`cm31_card`), and `circleSampleParameter` is `irreducible`. Codex's
+definitions (`circleRejectPoint`, `embedCirclePoint`,
+`circleSampleParameter`, `circleSample`), `cm31_card`, `imZeroEquiv`, the
+`ZMod` pullback lemmas, `embedCirclePoint_not_rational`,
+`circleSampleParameter_rational_iff`, `circleBadZ0_card`,
+`circle_mass_bound_generic` and the two mass theorems' statements are
+unchanged; `circleBadZ1_card` is restructured as above.
+
+Local result: `R0P.CircleSampler` exit 0, 37.9 s, 5,114,800 KiB, 24 audits
+with exactly the standard three axioms and two (`zmod_algebraMap_comp`,
+`zmod_algebraMap_pullback`) with fewer; no warnings. Source SHA-256
+`cab19ed14584dbc360bac56e419cd4df61d3c558fab4edfef46ed532d0f9b3f1`.
+Host result (attempt 671, `sh run2.sh 671 R0P/CircleSampler 7000 7`,
+source SHA identical): `exit=0`, wall 0:11.09, peak RSS 6,844,848 KiB,
+swaps 0, no `error`/`warning` lines, the same 26 `#print axioms` lines as
+locally. The host peak (6.5 GiB under `MemoryMax=7G`) is well above the
+local 5.1 GiB; any later edit to this module should be re-measured with a
+focused predecessor before the cap is relied upon, and the cap is not to be
+raised.
+
+Also found locally: Codex's uncommitted `SemD3Glue.lean` fails against
+the current chain at `:901` (`AspisR0.RoundNormalization.dot` vs
+`AspisR0.LinearDual.dot` in `honestClaims`; the glue must use
+`LinearDual.dot` as `SemD3` does) and `:1017`/`:1012` (an unsynthesised
+placeholder `w` and its unsolved goal in the protocol instance).
