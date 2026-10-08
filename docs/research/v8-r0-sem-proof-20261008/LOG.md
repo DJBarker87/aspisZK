@@ -1952,3 +1952,29 @@ instance with budget `rowBudget` replaced by the table above and the
 opening rows unchanged, giving the end-to-end bound
 `Q_tot · max_i ε_i + 2Q_tot²/2^256` with the semantic rows ≤ 2⁻¹⁰⁵ each
 and the q22 row 2⁻¹⁰⁵·¹⁴ still the maximum.
+
+## G13: Semantic-round interface stop
+
+Started at lead design commit `fa6bb2a22eff6ae877bc1954cd4de8ba52951666`, after fetch/fast-forward verification. The closed theorem and cached sources were inspected before defining the requested 24-round classifier. The fixed coverage target cannot be obtained from the prescribed local alpha events: its `¬ BadAlpha 27 10 α` conclusion is impossible over every field. Work stopped at that statement as instructed. `SemRounds.lean` contains only four checked finding lemmas; no `semRoundBad`, `semRoundBad_card`, `semRounds_cover`, or `semantic_sound_rounds` is claimed. No existing Lean file was edited.
+
+### Alpha quantifier finding: checked obstruction
+
+`Zerocheck.lean:88–89` defines `BadAlpha d n α` as `∃ i, ∃ p : K[X], p ≠ 0 ∧ p.natDegree ≤ d ∧ p.eval (α i) = 0`. The existential polynomial is unrestricted and can depend on the sampled coordinate. For any nonempty challenge vector and `1 ≤ d`, choose `i = 0` and `p = X - C (α i)`. Its coefficient at 1 is 1, its degree is at most 1, and its evaluation at that coordinate is zero. Thus every challenge vector satisfies the existing event; this holds over finite fields too.
+
+The new file proves `badAlpha_all_rounds`, specializes it to `badAlpha_27_10`, and proves `badAlpha_27_10_negation_impossible`. `equal_round_polynomials_do_not_exclude_badAlpha` also proves that when every prover round polynomial equals its honest polynomial, all prescribed nonzero-difference root events are false while the existing `BadAlpha` is still true. These are symbolic polynomial proofs; the only concrete decisions are the small Nat inequalities `0 < 10` and `1 ≤ 27`.
+
+The impossible negation is required by `Zerocheck.compose` at `Zerocheck.lean:109`, `semantic_sound` at `SemAssembly.lean:57`, and `semantic_sound_closed`/its extraction wrapper at `SemClosed.lean:33,62`. Those conditional theorems remain valid Lean theorems, but their current alpha premise is uninhabited. In contrast, `SemBadSets.badAlphaStrategy` (`SemBadSets.lean:929–931`) is the event that the fixed adaptive strategy is accepted with a false initial claim; `adaptive_strategy_bad_card` (`:991–996`) and `badAlpha_strategy` (`:1147–1154`) bound that strategy-specific event. They do not bound or identify the unrestricted `BadAlpha` event.
+
+Smallest required interface repair, not enacted: the composition/closed-theorem alpha premise must use the actual prefix-fixed prover/honest difference event (with the verified round degree bound), or consume `bsum 10 G = 0` obtained from its avoidance and acceptance. The corresponding G13 coverage conclusion must target that event rather than `¬ BadAlpha`. This requires a lead decision and edits outside G13's allowed files. No root-count claim for the existing universal event is made.
+
+### Lambda coefficient selection: additional quantifier gap
+
+The exact lambda branch of `BadLogUp` (`LogUpAssembly.lean:64–72`, repeated in `LogUpL4` at `:104–111`) is `S ≠ T ∧ ∃ k, (Q.coeff k) ≠ 0 ∧ (Q.coeff k).eval lam = 0`, where `Q` is the difference of the producer and consumer outer-polynomial products. It is a union over all nonzero coefficient root sets, with the witness allowed to vary with lambda. `product_difference_coeff` (`SemBadSets.lean:227–235`) supplies one nonzero coefficient of degree at most `16 * max S.card T.card`; a root bound for that one coefficient does not establish the requested 2176 bound for the existing existential union.
+
+This is an additional missing quantifier bridge, not a checked counterexample to the concrete registry's 2176 bound. To use the cited single-polynomial root-count route, a nonzero coefficient must be selected from the fixed candidate before lambda is sampled and used consistently in the bad-set and LogUp interfaces; alternatively, the full union needs its own proof of the stated bound. Neither change was made. The alpha obstruction already requires stopping, so no table, trace, candidate registry, or field universe was evaluated to explore the lambda issue.
+
+### Focused evidence
+
+Coordinator check `run2.sh 1900 R0P/SemRounds 7000 7` on the pinned Lean 4.32.0 host/cache passed: actual Lean/scope exit 0, time exit 0, wall 1.43 seconds, peak RSS 3,336,204 KiB, swaps 0. Reservation 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. All four theorem audits contain only `propext`, `Classical.choice`, `Quot.sound`; no warnings or errors. No failed G13 attempt or unchanged rerun occurred. The exact frozen 70-line file has SHA-256 `82136911d0a0ce31c21a8c3d7a39dfa04277905fbf40d573fb90da0318b3bb5b`.
+
+The host `SemClosed` source matches current repository SHA-256 `0ff01dadc3fb6a33a0d5692e5825c4dbbb9dc1b62700f371be3e15168f99ab1a`; its existing compiled object and direct dependency objects were reused. `SemBadSets` source SHA-256 is `b74e1d7adfaaf6ad0c4973b96461b6359d23b62d6cadb6e2983646d3e5b40b5d`. No dependency rebuild was needed. Raw host evidence is `evidence/out-1900.log`, `time-1900.log`, `sha-1900.txt`, `source-1900.lean`; verified local copies are under `/tmp/r0-semrounds-20261008/evidence/`. The coordinator reviewed the finding proof and fixed interfaces; independent source reviews confirmed the alpha and lambda quantifier differences. No forbidden proof terms/options, probability claims, or requested completion claim was introduced.
