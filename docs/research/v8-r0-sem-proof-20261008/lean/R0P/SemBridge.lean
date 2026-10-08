@@ -1,4 +1,5 @@
 import R0P.SemDecision
+import R0P.SemD3
 import R0P.SemBadSets
 
 /-! G14 stop finding: the literal successor opening need not be affine in
@@ -73,5 +74,54 @@ theorem successor_product_not_affine (h2 : (2 : K) ≠ 0) :
   exact h2 (neg_eq_zero.mp hneg)
 
 #print axioms successor_product_not_affine
+
+end R0P.SemBridge
+
+/-! G14′ stop finding for the independent-input weighted-degree criterion.
+
+`Poseidon.lean:31–53` gives the two linear-layer identities below, without
+using any round-constant entry. `Poseidon.lean:202–207,344–352` and
+`state_only_poseidon.rs:389–398,589–615` then give the source-audit route:
+two quintic rounds have a degree-25 leading part, and the literal leading
+residual multiplies that part by both block and low-row selector factors.
+
+The identification of the actual leadingPair coefficient with 35^31 remains
+a symbolic source-audit finding here; it is not a theorem about the actual
+round constants in this module. The final theorem certifies the degree of
+the stated monomial once its nonzero coefficient is supplied. No constant
+table, permutation or trace is evaluated. No `VirtualDeg` theorem, actual
+challenge-coordinate counterexample, or implementation bridge is claimed. -/
+
+
+namespace R0P.SemBridge
+open Polynomial
+
+variable {K : Type} [Field K]
+
+/-- The literal four-word matrix sends a constant vector to seven times it. -/
+theorem poseidonMat4_constant (x : K) :
+    poseidonMat4 (fun _ : Fin 4 => x) = fun _ => 7 * x := by
+  funext lane
+  fin_cases lane <;> simp [poseidonMat4] <;> ring
+
+#print axioms poseidonMat4_constant
+
+/-- Four local groups and their column sum multiply a constant vector by 35. -/
+theorem poseidonExternalLinear_constant (x : K) :
+    poseidonExternalLinear (fun _ : Fin 16 => x) = fun _ => 35 * x := by
+  funext lane
+  simp only [poseidonExternalLinear, poseidonMat4_constant]
+  ring
+
+#print axioms poseidonExternalLinear_constant
+
+/-- The candidate weighted-degree witness, with its coefficient kept symbolic.
+Both selector factors and the current-opening factor have weight one. -/
+theorem weighted_witness_degree (h35 : (35 : K) ≠ 0) :
+    (C (-((35 : K) ^ 31)) * (X : K[X]) ^ 27).natDegree = 27 := by
+  exact Polynomial.natDegree_C_mul_X_pow 27 (-((35 : K) ^ 31))
+    (neg_ne_zero.mpr (pow_ne_zero 31 h35))
+
+#print axioms weighted_witness_degree
 
 end R0P.SemBridge

@@ -2167,6 +2167,26 @@ Coordinator attempt `run2.sh 2000 R0P/SemBridge 7000 7` passed on the pinned Lea
 
 Cached dependency sources match the repository: `SemDecision.lean` SHA-256 `2222c13112711d546abe18e524be3ae5c1d67b95f8be0ad59d2ad22226c47727`; `SemView.lean` SHA-256 `5fd27a6dd3d645fa02286c54faca51785f25e3295fc35a24fe71c60bfe63ac6d`. Raw host evidence and snapshot are `evidence/out-2000.log`, `time-2000.log`, `sha-2000.txt`, `source-2000.lean`; verified local copies are under `/tmp/r0-sembridge-20261008/evidence/`. The coordinator independently reviewed the source calculation, worker proofs and final diff and ran the focused check. G14 is stopped at this exact degree-route assertion; existing model and family files remain unchanged.
 
+### Continuation G14′ — independent-input weighted-degree stop
+
+Resumed from lead commits `5db2ea394` and `853bc5568`, preserving the six accepted G14 finding lemmas. The new fixed criterion assigns weight 1 to current/xor12 openings and every selector input, weight 10 to successor openings, and requires every residual monomial to have weighted degree at most 26. The literal Poseidon leading branch has a nonzero weight-27 term under exactly this criterion. This is a completeness-audit finding against the prescribed criterion; it does **not** establish that the source's actual per-challenge-coordinate degree exceeds 26 or that `VirtualDeg` is false.
+
+`Poseidon.lean:202–207` applies the leading external layer and two quintic full rounds. Its literal residual at `:344–352` contains `-block * low 0 * poseidonLeadingPair o.z o.xor12 lane`, with the two separate selector factors retained. Rust `state_only_poseidon.rs:389–398,589–615` has the same leading pair and selectors. Take `o.z` to be the constant vector x, xor12 and successor openings zero, `block = a`, `low 0 = b`, and all other low weights zero. The matrix in `Poseidon.lean:31–41` sends a constant vector x to 7x; the external layer at `:45–53` sends it to 35x. The leading coefficients through the three linear layers and two powers are therefore
+
+```
+x → 35*x → 35^6*x^5 → 35^31*x^25.
+```
+
+Round constants contribute only lower-degree terms and were not evaluated. The residual thus contains `-35^31 * a * b * x^25`, of prescribed weighted degree `1 + 1 + 25 = 27`. Its coefficient is nonzero in characteristic `2^31 - 1`. Equivalently, a selector vector supported only at row 0 makes both selector factors the same variable s, giving `-35^31 * s^2 * x^25`. Other local-row branches vanish in this specialization. Constant linear packing cannot erase its four equal nonzero base coefficients under `PackBasis.indep`.
+
+The distinction from the actual coordinate bound matters: at `selAt v`, high and low selectors depend on disjoint groups of coordinates. In a fixed source coordinate, only one of the two outer selector factors varies. The uniform independent-input weight 1 assigned to both factors loses this fact. The smallest source-preserving correction is a coordinate-sensitive audit (or a proved high/low selector-support rule) rather than the current single scalar weight for every selector input. No such correction has been applied. The listed fixture `examples/v8_intrinsic_degree_audit.rs:1–14,35–58,138–188` checks an atomic-v3 affine-column family and explicitly calls itself a lower-bound witness together with a separate source upper bound; it is not a universal proof of this pair-forest independent-input criterion.
+
+`SemBridge.lean` adds three checked support lemmas: `poseidonMat4_constant`, `poseidonExternalLinear_constant`, and `weighted_witness_degree` for `C (-35^31) * X^27`, with the coefficient kept symbolic under `35 ≠ 0`. Identification of the actual leading-pair coefficient above is a symbolic source audit, not a newly claimed Lean coefficient theorem for the constant tables. No `HonestRows`, `VirtualDeg`, or `ChecksAccept` completion is claimed. Work stops at the fixed criterion; no model, family, constant or lead file was edited.
+
+Coordinator attempt `run2.sh 2001 R0P/SemBridge 7000 7` passed on the pinned Lean 4.32.0 build host/cache: actual Lean exit 0, scope/time exit 0, wall 3.27 s, peak RSS 6,810,576 KiB, swaps 0. Reservation 24 + 7 GiB; MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. All nine declaration audits, including the six unchanged earlier lemmas, use only `propext`, `Classical.choice`, `Quot.sound`. No warnings, errors, failed attempts, cap changes, dependency rebuilds, or trace/row/universe/table/permutation evaluation. Frozen source SHA-256: `fe026af913107a06834976b53f2545644d8babad418872e758b4a332b10d2217`.
+
+The cached `SemD3` source matches lead `853bc5568`, SHA-256 `4341beac41c7e7826ca88385a48bb8b10977ffa43a87cbc910243c4e6595c7fc`. Raw host evidence is `evidence/out-2001.log`, `time-2001.log`, `sha-2001.txt`, `source-2001.lean`, with verified local copies under `/tmp/r0-sembridge-20261008/evidence/`. The coordinator independently reviewed the scalar specialization, linear-layer arithmetic, source scopes, frozen diff and focused check. G14′ remains stopped at this exact criterion.
+
 ## Lead decision after G14 stop: weighted individual degree
 
 G13′ (9bc5f6b34) and G12′ (`SemClosed` recompiled) accepted. G14's
