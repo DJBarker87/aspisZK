@@ -66,11 +66,6 @@ def candidateRoundBad (pub : Public K) {F : Subfield K} (B : PackBasis F) (t : T
     (polys : Fin 10 → K[X]) (r : Fin 24 → K) (i : Fin 24) : Prop :=
   semRoundBad t pub B (fun pre => virtualPoly pub B t pre) (fixedStrat polys) i (semPrefix r i) (r i)
 
-/-- B2's `semanticBad` at round i: some candidate of the committed words is bad. -/
-def semanticBadAt (x : TypedContext K Sfield) {F : Subfield K} (B : PackBasis F)
-    (polys : Fin 10 → K[X]) (r : Fin 24 → K) (i : Fin 24) : Prop :=
-  ∃ t ∈ Lambda x.W, candidateRoundBad x.pub B t polys r i
-
 omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in
 theorem strategyPolys_fixed (polys : Fin 10 → K[X]) (pre : Fin 14 → K) (α : Fin 10 → K) :
     SemBadSets.strategyPolys (fixedStrat polys pre) α = polys := by

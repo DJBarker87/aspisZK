@@ -2432,3 +2432,69 @@ Exact Mathlib citations, at pinned revision `81a5d257c8e410db227a6665ed08f64fea0
 Coordinator attempt `run2.sh 2300 R0P/MessageDescent 7000 7` passed first try: actual Lean exit 0, scope/time exit 0, wall 2.91 s, peak RSS 6,749,632 KiB, swaps 0. Reservation 24 + 7 GiB; MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. The sole theorem's audit contains only `propext`, `Classical.choice`, `Quot.sound`; no warnings or errors. Frozen source SHA-256: `d3cb1623aeb04289250ed3f5bc2a9c532b62da2c5465933f2240fca47da856c3`.
 
 Raw evidence: `evidence/out-2300.log`, `time-2300.log`, `sha-2300.txt`, `source-2300.lean`; verified copies under `/tmp/r0-messagedescent-20261008/evidence/`. The coordinator reviewed the proof and the exact pinned Mathlib lemmas independently and ran the focused check. No failed attempt, unchanged rerun, cap change, package rebuild, forbidden evaluation, or new finding. G17 closes the recorded encoder-to-message descent gap; G15 can consume it without adding a premise.
+
+## Lead decisions after G15 message-shape stop: semantic tags and the C2 commitment
+
+Accepted (3e46e7c00): `decision` did not validate the message tags of the
+semantic rounds, so `roundBad`'s semantic branch was unreachable from an
+accepted parse. Reviewing the fix exposed a second, more serious lead
+omission: the source commits `(h1, G)` (lanes 26 and 27, the C2 fiber,
+state_only_candidate_prefix.rs:506–524) *after* λ and χ, but `TypedContext.W`
+fixed all 29 words in the initial context, `openingStmt` used `x.W`, and the
+candidate list `Lambda x.W` was taken as if lanes 26/27 were committed with
+the trace. A prover choosing H1 after χ was outside the modelled protocol.
+`Lambda` is a joint width-29 list (`JointList.jointInitialList_card_le_100`),
+so lanes cannot be separated per word; the λ/χ rounds therefore need a
+candidate set determined before the C2 words.
+
+Corrections (lead, attempts 659 SemView, 660 SemDecision, 661 SemD3, 663
+SemD2; exit 0, no warnings, axioms the standard three; 662 was a first
+SemD2 attempt with an `omega` context and two elaboration timeouts on an
+untyped `⟨P.rounds.length, h⟩`, fixed by `h14'` and `Fin 24` ascriptions):
+
+1. `SemMsg.h1 (h g : InitialWord K)` carries the two C2 words; `c2Of rounds`
+   reads them from the message of round 2 (θ's round); `c2Words x h g` is
+   `x.W` with lanes 26/27 replaced; `c2Base Sfield h g` (membership in
+   `Sfield 26`/`Sfield 27`) with `c2Words_base`.
+2. `semChals` requires `(.semantic _, .semantic c)` at every semantic
+   round. `openingView` additionally requires `c2Of sem = some (h, g)` and
+   `c2Base`, and builds the opening statement on `c2Words x h g`. Hence an
+   accepted parse fixes the message tags of rounds 0–23 and the C2 words,
+   and `R0FS.Witness` on the view's statement gives `t ∈ Lambda (c2Words x h g)`.
+3. `SemD2.candidates x rounds sm : Finset (Trace K)` is the per-round
+   candidate set: for `rounds.length < 2` the list of `c2Words x padWord
+   padWord` (`padWord := exactInitialEncoder 0`) filtered to `t 26 = 0 ∧
+   t 27 = 0`; at length 2 the list of the words with the *current* message's
+   C2 words; afterwards the list of the words with `c2Of rounds`; `∅` when
+   malformed. `candidates_card ≤ 100` in every case (filter of a `Lambda`).
+4. `polysOf rounds sm : Fin 10 → K[X]` (round polynomials from the prefix's
+   `roundPoly` messages at rounds 14 + j and from the current message);
+   `degreeOK sm` (current `roundPoly` has natDegree ≤ 27);
+   `degreeChecked_of_degreeOK` discharges G13′'s `semRoundDegreeChecked`
+   for `fixedStrat (polysOf rounds sm)` at round `rounds.length`. This
+   resolves G16's `degree_check_not_automatic`: a round polynomial of
+   degree > 27 is rejected by `sumcheckChecks`, so it is not a bad event.
+5. `semanticBad B P sm c` (B2's `SourceData.semanticBad`, prefix form):
+   `∃ h : P.rounds.length < 24, ∃ cs, semChals P.rounds = some cs ∧ degreeOK sm
+   ∧ ∃ t ∈ candidates P.statement P.rounds sm, semRoundBad t … (fixedStrat
+   (polysOf P.rounds sm)) ⟨P.rounds.length, h⟩ (cs.getD · 0) c`.
+   `semanticBad_card ≤ 100 · semRoundBudget ⟨P.rounds.length, h⟩` and
+   `semantic_round_density` restated on it, for every prefix and message
+   (no degree premise). `SemD3.semanticBadAt` (over `Lambda x.W`) is removed;
+   `candidateRoundBad`/`d3_core` are unchanged.
+
+Open for G18 (lemmas of the fixed objects, no new premises):
+`lambdaRoundBad`/`chiRoundBad` read only columns < 26 (so they are invariant
+under replacing columns 26/27 of `t` by 0), and padded membership:
+`t ∈ Lambda (c2Words x h g) → Function.update (Function.update t 26 0) 27 0
+∈ Lambda (c2Words x padWord padWord)` (the width-29 joint agreement set of
+the padded tuple contains that of `t`: lanes 26/27 agree everywhere since
+`padWord = exactInitialEncoder 0`). With `semRoundBad` at round 14 + j
+depending on `strat` only through component j (`polysOf (prefix_i) sm_i j
+= semPolys … j`), G15's D3 glue maps "no hit" to `¬ candidateRoundBad` for
+the extracted t at every round. Lane 28 (D) remains in the initial context.
+
+SemView SHA-256 `0186862718963200…`, SemD2 `fb7dba2dd9808721…`; 659
+3.15 s / 6,816,140 KiB, 660 3.09 s / 6,806,912, 661 3.20 s / 6,810,340,
+663 4.22 s / 6,841,244; swaps 0; 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax
+7 GiB, MemorySwapMax 0.
