@@ -1902,3 +1902,53 @@ integration (replace `R0FS.Stmt.semantic`; discharge `PublicBase` from the
 M31 public fields and `BaseTyped` from `Stmt.base`; union over the ≤ 100
 candidates; add the ledger to the state function) and the deferred
 Rust-to-model refinement of the raw-limb Poseidon implementation.
+
+## Lead: FS integration design (semantic rounds)
+
+Challenge order (aspis-prover v6_onefold_prover.rs:596–600, 604–612;
+aspis-core state_only_sumcheck.rs:96–105, 241): trace commitment →
+λ → χ → H1 commitment → θ → zc₁…zc₁₀ → μ → ten sumcheck rounds α₁…α₁₀
+(each after the round polynomial) → point claims → z₀, z₁ → opening
+layer. μ is sampled last among the batching challenges, so `BadMu`'s
+coefficients (mle(comp θ)(zc), ΣH1, Σinact) are fixed before it, as
+`Zerocheck.compose` assumes.
+
+Instantiation of `R0C.SemStatement.SourceData` (B2) for the pair forest:
+`semanticRounds = 24` scalar rounds in this order, with `semanticBad`
+quantified over the candidate list `Λ(W)` of the committed words
+(`Lambda_card ≤ 100`), and per-round budgets (over |K|, K = QM31):
+
+| round | challenge | bad set (per candidate t) | per-trace | ×100 |
+|---|---|---|---:|---:|
+| 0 | λ | coefficient-root branch of `BadLogUp` | 2176 | 217600 |
+| 1 | χ | χ = 0 ∨ χ ∈ poleSet ∨ numer root | 544 | 54400 |
+| 2 | θ | `BadTheta (laneOf t) θ` | 28 | 2800 |
+| 3–12 | zc_j | partial `mle` nonzero in z_j and z_j its root | 1 each | 100 each |
+| 13 | μ | `BadMu` | 2 | 200 |
+| 14–23 | α_j | round j's `polys j − honest j ≠ 0` with root α_j | 27 each | 2700 each |
+| | | total | 3030 | 303000 |
+
+The zc and α rounds use the round-by-round forms already proved in
+`SemBadSets` (`mle_bad_card`'s induction step is the per-coordinate
+statement; `adaptive_strategy_bad_card`/`badAlpha_strategy` the
+per-round sumcheck statement). The doomed state after the semantic rounds
+is "no candidate t ∈ Λ(W) satisfies `ProductionHolds ∧ CopyLinkBalance`
+for the sampled (λ, χ) and no semantic round was bad"; `semantic_sound_closed`
+is the D3 content (acceptance of a doomed complete prefix is impossible),
+and the ×100 union over Λ(W) is the D2 content per round.
+`paymentWitness x w` := `InputNoteExtracted` for the extracted candidate,
+with the proposal positivity kept outside (Finding 1). `BaseTyped` is
+discharged from `Stmt.base` (C1 lanes in M31) and `PublicBase` from the
+M31 public fields; `IndDeg 27 10 G` from `SemBadSets.mlDeg_*` applied to
+the terminal's polynomial structure; `hG` from the ports' Boolean-row
+evaluation (`rowOpenings`/`rowSel`).
+
+Remaining jobs, in order: (G13) `SemRounds.lean`: the 24-round
+classifier, the per-round doomed predicate, and the deterministic D1/D3
+lemmas from `semantic_sound_closed`; (G14) per-round density D2 for the
+24 rounds from the card lemmas, under the duplex sampler law already
+used in R0C/V3 (`DuplexQ`); (lead) the combined protocol's Theorem-4
+instance with budget `rowBudget` replaced by the table above and the
+opening rows unchanged, giving the end-to-end bound
+`Q_tot · max_i ε_i + 2Q_tot²/2^256` with the semantic rows ≤ 2⁻¹⁰⁵ each
+and the q22 row 2⁻¹⁰⁵·¹⁴ still the maximum.
