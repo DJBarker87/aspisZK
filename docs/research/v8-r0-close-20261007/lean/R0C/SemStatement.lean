@@ -55,11 +55,15 @@ def z0Bad (z : Point K) : Prop := BaseRational z
 
 def z1Bad (z0 z1 : Point K) : Prop := BaseRational z1 ∨ z1 = z0
 
-/-- The SEM positions, then z0 and z1, then the existing five opening rows. -/
+/-- The SEM positions, then z0 and z1, then the existing five opening rows.
+The circle rows use the source's one-block parameter sampler
+(`challenge_qm31`, then the rational map of circle.rs:55, rejecting a
+CM31 parameter): a rejected block is counted as a bad outcome, so each
+circle row is bounded by `(1+δ)(P²+1)/P⁴ ≤ 2/P²`. -/
 def rowBudget (s : SourceData (K := K) X SM W Sfield) (i : Nat) : ℚ :=
   if i < s.semanticRounds then 396430 / ((Fintype.card K : ℚ) - 1)
-  else if i = s.semanticRounds then (2^31 : ℚ) / Fintype.card (Point K)
-  else if i = s.semanticRounds + 1 then (2^31+1 : ℚ) / Fintype.card (Point K)
+  else if i = s.semanticRounds then 2 / (AspisCircleGroupOrder.P : ℚ) ^ 2
+  else if i = s.semanticRounds + 1 then 2 / (AspisCircleGroupOrder.P : ℚ) ^ 2
   else R0FS.ε E (i - (s.semanticRounds + 2))
 
 /-- The unproved ideal SEM density target at a fixed pre-challenge prefix.

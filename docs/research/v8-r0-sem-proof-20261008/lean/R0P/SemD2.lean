@@ -93,7 +93,7 @@ def degreeOK : SemMsg K → Prop
 
 omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in
 theorem degreeChecked_of_degreeOK (rounds : List (Msg K K (SemMsg K) × Chal K K))
-    (sm : SemMsg K) (hok : degreeOK sm) (h : rounds.length < 24)
+    (sm : SemMsg K) (hok : 14 ≤ rounds.length → degreeOK sm) (h : rounds.length < 24)
     (pref : Fin rounds.length → K) :
     semRoundDegreeChecked (fixedStrat (polysOf rounds sm)) ⟨rounds.length, h⟩ pref := by
   unfold semRoundDegreeChecked
@@ -106,16 +106,17 @@ theorem degreeChecked_of_degreeOK (rounds : List (Msg K K (SemMsg K) × Chal K K
     cases sm with
     | none => simp
     | h1 a b => simp
-    | roundPoly p => exact hok
+    | roundPoly p => exact hok h14'
   · trivial
 
 /-- B2's `semanticBad` for the pair forest: with the prefix's challenges
-`cs` and its C2 words, some candidate is bad at the current round. A current
-round polynomial of degree > 27 is rejected by the verifier and is not a
-bad event. -/
+`cs` and its C2 words, some candidate is bad at the current round. In the
+α phase a current round polynomial of degree > 27 is rejected by the
+verifier and is not a bad event; earlier rounds carry no degree guard. -/
 def semanticBad {F : Subfield K} (B : PackBasis F)
     (P : Prefix K K (TypedContext K Sfield) (SemMsg K)) (sm : SemMsg K) (c : K) : Prop :=
-  ∃ (h : P.rounds.length < 24) (cs : List K), semChals P.rounds = some cs ∧ degreeOK sm ∧
+  ∃ (h : P.rounds.length < 24) (cs : List K), semChals P.rounds = some cs ∧
+    (14 ≤ P.rounds.length → degreeOK sm) ∧
     ∃ t ∈ candidates P.statement P.rounds sm,
       semRoundBad t P.statement.pub B (fun pre => virtualPoly P.statement.pub B t pre)
         (fixedStrat (polysOf P.rounds sm)) ⟨P.rounds.length, h⟩ (fun j => cs.getD j.val 0) c
@@ -134,7 +135,7 @@ theorem semanticBad_card {F : Subfield K} (B : PackBasis F)
       exact hcs ⟨cs, hc⟩
     rw [hempty, Finset.card_empty]
     exact Nat.zero_le _
-  by_cases hok : degreeOK sm
+  by_cases hok : 14 ≤ P.rounds.length → degreeOK sm
   swap
   · have hempty : Finset.univ.filter (semanticBad B P sm) = ∅ := by
       rw [Finset.filter_eq_empty_iff]

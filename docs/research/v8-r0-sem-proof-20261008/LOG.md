@@ -2566,3 +2566,42 @@ The coordinator reviewed every final proof and independently checked the endpoin
 2400–2402 corrected tuple/function congruence, update lemmas, placement of `omit`, and dependent list lookup rewrites; 2401/2402 also exposed unnecessary unfolding of `Lambda`, corrected by local irreducibility in 2403. 2403/2404 isolated a `signedCount` filter rewrite blocked by its hidden decision instance. The attempted Prop-predicate replacement in 2405 was ill-typed; 2406 instead proves equality of the producer/consumer value functions before rewriting inside the filter. 2406 was green with three unused-instance warnings; 2407 removes those unused binders (and the dependent χ theorem's binders). Every failing rerun changed source; no cap or recursion limit was raised.
 
 Frozen 2407 has 24 declaration audits (23 theorems, including private helpers, and the padding definition), only `propext`, `Classical.choice`, `Quot.sound`, with no warnings or errors. Actual Lean and scope exits were inspected; the outer runner shell is not used as success evidence. Raw artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified copies are under `/tmp/r0-sem-continuation-20261008/g18-evidence/`. No package/dependency rebuild, unchanged failing rerun, forbidden evaluation or source/interface obstruction occurred. G18 is complete; it does not claim to close the independent G15/G16 integration stops.
+
+## Lead decisions after G15/G16 continuation stops (early degree guard, circle sampler)
+
+1. Early degree guard (8f3799d30): accepted. `semanticBad`'s guard is now
+   `14 ≤ P.rounds.length → degreeOK sm`: only the α phase has a verifier
+   degree check (`sumcheckChecks`), so only there may a bad event be
+   suppressed by it; earlier `.roundPoly` payloads (never parsed) carry no
+   guard. `degreeChecked_of_degreeOK` takes the implication; the α-phase
+   discharge in G15's glue is unchanged (`polysOf_prefix`, G18).
+2. Circle rows (e335e8560): the source samples z₀, z₁ by
+   `challenge_secure_circle_point` (transcript.rs:453–465): a `challenge_qm31`
+   parameter t, mapped by circle.rs:55 (`secure_ood_circle_point_from_parameter`),
+   rejecting t ∈ CM31 and retrying. The B2 instance models one block
+   (`qm31Sample`, as the semantic rounds): with t.im ≠ 0 the point is
+   `SamplerCirclePolicy.point t` embedded in WideExact (never BaseRational:
+   `CircleSource.parameter_not_rational`); a rejected block is mapped to the
+   base-rational sentinel `baseLift (1, 0)`, i.e. counted as `z0Bad`. This
+   total one-block sampler is conservative for the source's retry loop
+   (a rejection there is an error outcome); the retry-law bridge is the
+   open item already recorded for the opening layer in the close job's
+   FS_LOG. Masses: z₀ row ≤ (1+δ_q)·P²/P⁴; z₁ row ≤ (1+δ_q)(P² + 1)/P⁴
+   (rejection, or the injective map hitting z₀); both ≤ 2/P².
+   `R0C.SemStatement.rowBudget` rows `semanticRounds`, `+1` are now
+   `2 / P^2` (lead skeleton edit; `CircleRows`' uniform-law lemmas are
+   unaffected and recompiled).
+
+Attempts 664 SemStatement, 665 CircleRows, 666 SemSource, 667 SemView,
+668 SemDecision, 669 SemD3, 670 SemD2: exit 0, no warnings, standard
+axioms; walls 2.8–4.1 s, peak RSS ≤ 6,839,896 KiB, swaps 0, 24 + 7 GiB.
+Codex objects (SemPad, SemD3Glue, SemD2Glue) are stale against 664 and
+must be recompiled in their next attempts.
+
+G19 (Codex): `CircleSampler.lean` over WideExact: `circleSample : State →
+Point WideExact` as above (embedding of `point t` by `algebraMap QM31Exact
+WideExact`, `OnCircle` from `point_on_circle`), `circleSample_z0_mass ≤
+2/P^2` and `circleSample_z1_mass (z0) ≤ 2/P^2` (via `qm31Sample_mass_slack`,
+`event_mass_le`, `parameter_not_rational`, injectivity of the parameter
+map — `t = y/(1+x)` — and a CM31 count `P^2`); then G16 completes the two
+circle rows with decoder `.circle (circleSample a)`.
