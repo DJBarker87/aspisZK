@@ -2845,3 +2845,19 @@ Its conditional `d3` is an honest checkpoint: the three G14 hypotheses are
 explicit Props, not premises added to `SemStatement.Obligations`. The 2123
 host result and audits above remain the evidence; no unchanged rerun. Only
 the Lean source and LOG are included in this checkpoint; evidence is excluded.
+
+### Overnight Step 1 — SemAccept complete
+
+Proved `Sumcheck.accept_of_checks` for arbitrary nonempty dimension by induction, then `SemSource.checksAccept` for every public input, packed basis and trace, with no semantic hypothesis. 2002 removed redundant dependent generalization; 2003 checked the generic lemma. 2004–2005 exposed the final list/slice and definitional-index transport, repaired by named slice equalities and `convert`/`rfl` on indices (not rows). 2006 is the complete frozen module: exit 0, no errors or warnings; `accept_of_checks` uses `[propext, Quot.sound]`, `checksAccept` uses `[propext, Classical.choice, Quot.sound]`. No unchanged rerun.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 GiB. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2002 | `R0P/SemAccept` | 1 / 1 | 0:02.78 | 6770824 | 0 | 1 | `d82d408e6842f55ab1b2b97c05629e1d0ecc7c376784ce727716cab33b078f8f` |
+| 2003 | `R0P/SemAccept` | 0 / 0 | 0:02.79 | 6803960 | 0 | 1 | `03d0174b33a0214644178acb345c38cb8337acd6e76ebf91df27464855748d4b` |
+| 2004 | `R0P/SemAccept` | 1 / 1 | 0:03.10 | 6772848 | 0 | 2 | `c7fce4daa83ad4455f9cceeac5151d31c8f1cfc0bb669eab6812ca27650a6941` |
+| 2005 | `R0P/SemAccept` | 1 / 1 | 0:02.65 | 6772588 | 0 | 2 | `1b147e4060d78bfb78ce78302c3aeb4d2c13704d9d07489221d1c20f03f580c4` |
+| 2006 | `R0P/SemAccept` | 0 / 0 | 0:02.81 | 6811528 | 0 | 2 | `02a046a9703bf95c8f5fa3cb489084e0862379ae6f020a48f0a4374b542019b4` |
+
+Source revision(s): `eb8df067e84ff6bdec264b53f7440073f5dac54a`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
