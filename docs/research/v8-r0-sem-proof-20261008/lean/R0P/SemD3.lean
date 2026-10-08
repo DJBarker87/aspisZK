@@ -88,8 +88,8 @@ theorem preZc_semSlice (r : Fin 24 → K) : preZc (semSlice r 0 14) = semSlice r
   funext j
   simp only [preZc, semSlice, semPrefixVal, Nat.zero_add]
 
-/-- The D3 core. -/
 omit [Fintype K] [DecidableEq K] in
+/-- The D3 core. -/
 theorem d3_core (P : Nat) [CharP K P] (hP : P = 2 ^ 31 - 1)
     (F : Subfield K) (B : PackBasis F) (x : TypedContext K Sfield) (t : Trace K)
     (hA : BaseTyped F t) (hpub : PublicBase F x.pub)

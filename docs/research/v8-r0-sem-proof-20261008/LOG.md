@@ -2227,3 +2227,5 @@ has honest claims; and `BaseTyped` from `Witness`'s subfield descent with
 `Sfield l = F` for C1 lanes) — G15. D2 per round: `semRoundBad_card`
 over `Lambda` (×100) under the duplex sampler law — G16, after the lead
 fixes the sampler statement against R0C/V3/DuplexQ.
+
+Correction: 4c785f9a6 was committed with a misplaced `omit` (attempt 647 exit 1, syntax); attempt 648 on the corrected file exit 0, no warnings. SHA-256 `26c5a9b3ba1d78052565929c92e6e257e63b58eab2695ea95936a41210c82c7f`.
