@@ -1772,3 +1772,25 @@ Lean exit; attempt 625 had exit 1 (a substitution error in the glue's
 lemma application). Attempt 626 on the corrected file: exit 0, 1.81 s,
 3339780 KiB, swap 0, 24+7 GiB, no warnings. SHA-256 `1f2aa23fce266027f8d0c4af639d0d9c98439500ab4d07c984afa64a8ac5f157`.
 `logup_step_of` axioms: propext, Classical.choice, Quot.sound.
+
+## G12: LogUp chain source/interface review
+
+Started against `e1b73deae8e8f00a153d04ca8ed8f44478da77c0`; resumed after `ce62ca555` with the corrected `poleSet`. No existing Lean file was edited and no `LogUpChain.lean` theorem has been claimed.
+
+### L1 denominator finding, accepted and resolved by the lead
+
+The original L1 excluded only enabled endpoint values. The literal Copy fold accumulates compressed values even when their weights are zero (`Copy.lean:98–108,447–458`; pinned `pair_forest_copy_terminal.rs:424–449,943–970`). Registry index 3, tag 1124073475, has weight kind 1 and active endpoint rows 443/448 (`CopyConstants.lean:142–147`); under withdrawal its weight is zero but its values still enter the slot denominators. Excluding only `valueSet` therefore did not justify dividing all four factors. The lead's `poleSet t lam` now includes both endpoints of every link, with `valueSet_subset_poleSet` for the enabled-value steps. The corrected L1 and glue were reviewed; this finding is resolved by commits `714de1bbf` and `ce62ca555`, not by changing the literal Copy port.
+
+### Remaining L5 tag-cast gap
+
+`LogUpL5` remains stated over an arbitrary `Field K` (`LogUpAssembly.lean:20,113–115`). The requested route uses distinct tags to identify the same enabled link on both sides of equal polynomial multisets. However, `copy_tags_indexed` and `copy_tags_nodup` prove distinctness in `Nat` (`CopyRegistry.lean:245–286`), while `copyEndpointTuple` casts each tag to `K` (`Copy.lean:79–81`). `compressPoly_eq_iff` recovers equality of pairs in `K × (Fin 16 → K)` (`LogUpCompress.lean:55–66`); it does not recover equality of the original Nat tags.
+
+In characteristic 2, distinct registry tags 1124073472 and 1124073474 both cast to zero. These are always-enabled indices 0 and 2, both with the full-state pattern (`CopyConstants.lean:143,145`). Thus the Nat-nodup theorem does not provide the field-tag injectivity required by L5's stated proof route. This is a source/interface finding, not a newly kernel-checked counterexample to the full L5 proposition. The user authorized `[CharP K (2^31 - 1)]` specifically for `logupL4`; no corresponding premise was added to `logupL5` here.
+
+Smallest proposed repair, not enacted: require injectivity of the tag casts on the enabled registry, or authorize an appropriate characteristic hypothesis for `logupL5` too. The M31 characteristic instance already requested for L4 suffices, using `copy_tags_indexed` and the tag interval bounds. The frozen definitions and statements were not changed. G12 stops on this remaining missing bridge as instructed; G11 proceeds independently.
+
+The L3 route was independently checked against `numer_partial_fraction` and `numer_eq_zero_imp`; L4's route is available with its authorized characteristic hypothesis and the existing 136-link multiplicity bound. These are feasibility reviews, not completed new Lean proofs.
+
+### Dependency build evidence
+
+The requested focused rebuild used `run2.sh 1800 R0P/LogUpAssembly 7000 7` on the pinned host/cache after synchronizing the corrected lead source. Scope/Lean exit 0, time exit 0, wall 1.62 seconds, peak RSS 3,340,220 KiB, swaps 0; reservation 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. SHA-256 `1f2aa23fce266027f8d0c4af639d0d9c98439500ab4d07c984afa64a8ac5f157`. The existing `logup_step_of` audit reports only `propext`, `Classical.choice`, and `Quot.sound`; no warnings. This is a dependency check, not evidence for L1–L5. No G12 development failure or new theorem audit occurred; the next unused development attempt is 1801. Raw host evidence is `evidence/out-1800.log`, `time-1800.log`, `sha-1800.txt`, and `source-1800.lean`; local evidence and source hashes are under `/tmp/r0-logupchain-20261008/`.
