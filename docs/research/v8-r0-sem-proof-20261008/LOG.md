@@ -1362,3 +1362,126 @@ Work started at `523cd4af9ca79cd0568932109e26b2d308c6a022`; the lead added concu
 | 1498 | `7575812a8719c53c74a7736037a0f109dc34420f69709e0cf41f0de96a84ff95` | 0 | 5.06 s | 3,414,580 KiB | 0 | 43 | Coordinator final pass; no warnings; both public signatures independently printed and reviewed. |
 
 Before final check 1498, the coordinator removed the unused `CopyRegistry` import and added precise provenance/method comments and two `#check` interface commands. The proof statements and proof terms were unchanged. This produced a distinct final source snapshot; no unchanged source was rerun. Final local and build-host SHA-256 is `7575812a8719c53c74a7736037a0f109dc34420f69709e0cf41f0de96a84ff95`. It has 43 named declarations and 43 matching axiom audits, all permitted. All archived attempt snapshots match their SHA records, and scope/time exits agree. No package/dependency rebuild, local Lean compilation, source discrepancy, or cap change occurred.
+
+## G9: Input-note extraction
+
+`lean/R0P/Extraction.lean` proves the lead's exact
+`input_note_extracted` theorem. Its assumptions are Holds of Schedule, Path,
+Digest, Asset and the canonical scalar Poseidon family, plus
+`CopyLinkBalance pub A`; its conclusion is the unchanged
+`InputNoteExtracted pub A`. The existential witnesses are exactly
+`traceSk A`, `traceSalt A`, and `tracePath A`. No assumption or model
+definition was added or weakened. Existing Lean files were not edited by G9.
+
+The proof first turns `poseidon_scalar_holds_output` into a rate-eight
+`spongeStep` equation without evaluating the permutation. Schedule supplies
+the domain/length states for blocks 0, 1 and 25 and the final note chunk's
+zero rate lanes 2–7. G8's fixed links supply continuation states, the owner
+chunk, the shared secret key, both salt segments, the value cell and the
+commitment-to-leaf connection. Asset supplies `A 1 44 = pub.assetId`.
+This proves the owner hash, three-block note commitment and two-block
+nullifier for the prescribed cells.
+
+For each symbolic path level, the Path Boolean equation gives either a zero
+bit and left=current or a nonzero bit, hence bit=1 and right=current. G8's
+left/right links and Schedule's zero rate state identify the node input. The
+capacity lane 15 equation moves the registry's `+1051521018` offset to
+`right 7 - 1051521018`, exactly the lead's existing `nodeCompress` model.
+No characteristic premise or reinterpretation of that model is introduced.
+A Nat induction, with the bound `n < 24`, relates `merkleRootAux` to each
+successive path-row current digest. The final recurrence step at level 23
+ends at node block 56, row 907; Digest binds it to `pub.anchor`. Digest also
+binds block 26's output row 427 to `pub.nullifier`.
+
+The permutation and `merkleRootAux` are locally irreducible in the proof.
+Only explicit recurrence equations are rewritten: no permutation, constant
+table, concrete trace, row range, or concrete finite universe is evaluated.
+The induction does not unroll the 24-level path. No source/model discrepancy
+was found. Runtime freshness and the separate raw-limb refinement boundary
+are not newly claimed by this deterministic theorem.
+
+### Source and dependency records
+
+Rust inspection pin: `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`.
+The worktree began this job at `523cd4af9ca79cd0568932109e26b2d308c6a022`;
+the coordinator preserved and fast-forwarded concurrent lead work to
+`a22519dc846c64f3fb84906b367032b5d47c51a9`, the shared revision at the final
+development check. The exact new source is identified by its final hash.
+
+The immutable `Semantics.lean` model has SHA-256
+`9309c5faa3de30d4f35bfe46509fe335a821d89a43051201a97232c0b89dc615`.
+The final G8 dependency, checked by the coordinator at 1498, has SHA-256
+`7575812a8719c53c74a7736037a0f109dc34420f69709e0cf41f0de96a84ff95`.
+The coordinator's source inspection is recorded in
+`/tmp/r0-extraction-20261008/source-review.json`: the requested 80 links
+match the source and all have weight kind zero, with 24 path levels and 23
+interlevel output links. G9 consumes G8's proved cell equalities, not the
+text inspection as a premise.
+
+| Source | Inclusive region | SHA-256 |
+|---|---|---|
+| `poseidon2.rs` | 511–529, sponge trace | `2d043dfeb6d3a630b8fdd904f127bdb4247d8e8f78bf2aa67f14ccecb14f8409` |
+| `poseidon2.rs` | 464–465, node tweak | `87215a38c95bf136df138d82f492232ae3b792565b7cfccdabac95d5edb092cb` |
+| `spend.rs` | 14–16, domains | `c97a9c8dcca562266fb18cfcf96b9eb4a1dcd3334d04237b363e60e1acbe9159` |
+| `spend.rs` | 146–167, note layout | `a628803f938a35464d645a59fd46a7c92df5dd968933be77adb5f2aaa7f29f97` |
+| `pair_forest_trace.rs` | 121–195, path/node trace | `c55d0915b981008e31ff2caa529d3cf62d82c94055d683276756dc015f9837e6` |
+| `pair_forest_hiding.rs` | 38–74, private path cells | `fce8e1db72056efe46c842b974b12668a73b2d9618c7583da35937417555dc74` |
+| `pair_forest_copy_terminal_constants.rs` | 10–25, patterns | `049361cce80ce94b016e40afabba2db28e396ee090659609e7880735abd86737` |
+| same | 28–39, fixed input links | `39ace0508638f8e9e53d0ae63149bf06d48e0b78fb00aa58607a96321732f74e` |
+| same | 92–163, leaf/path links | `1366eb517cfe9e5f5884df83a450c99d8f2827fe0b7ea49991f2bea270391e15` |
+
+### Build evidence
+
+All attempts targeted `R0P/Extraction` on `dombarker@100.108.41.90`,
+workspace `/home/dombarker/project-offloads/aspis-fs-generic-20261006/`,
+pinned Lean 4.32.0 and existing cached objects. Commands were
+`run2.sh N R0P/Extraction 7000 7`: one Lean job per G9 group, `-j1 -M7000
+-DElab.async=false`, MemoryHigh=5 GiB, MemoryMax=7 GiB, MemorySwapMax=0,
+TasksMax=128, timeout=900 seconds. Each admission reported 24+7 GiB against
+the 55 GiB reservation ceiling. No local/dependency/package build or cap
+change occurred. All attempted source hashes are distinct; no unchanged
+successful or failing source was rerun.
+
+| Attempt | Source SHA-256 | Lean/scope exit | Wall s | Peak RSS KiB | Swaps | Status |
+|---:|---|---:|---:|---:|---:|---|
+| 1500 | `eb80665e213b96b5b320190ed0721e9260d072047bd65cc5b0d2a6cd03502d15` | 1 | 1.66 | 3323440 | 0 | Independent layer: conditional and Fin-cast elaboration errors; one unused simp warning |
+| 1501 | `b4bf0982e088c42335913c3b6af0caee640130e1d4ceda0413f550e5216cfc50` | 1 | 1.67 | 3323116 | 0 | Two remaining explicit Fin/cell conversion goals |
+| 1502 | `01f4517d1a10119cf48b5db6192e220445d7efa155c66105e38bf94a6e0f5184` | 0 | 1.65 | 3332864 | 0 | Independent layer green; 11 theorem and 5 abbreviation audits; no warnings |
+| 1503 | `7ebb799fe838a9e50459d9e3b2c99b69b3a77c5849a01047a62c2952e8226370` | 1 | 1.81 | 3329044 | 0 | Added fixed-link chain; nullifier salt-tail Fin conversion remained |
+| 1504 | `5ade1ed6f87ee3f2140ecdf80e04e0d50d64d8b25452808c5afd36713ac7815c` | 0 | 1.91 | 3340988 | 0 | Owner/commitment/nullifier and generic node-input layer green; one unused simp argument |
+| 1505 | `43cc90483c01df3911bd7c5dbcfe8333b85d209388f552193d66e7940b4f08fd` | 1 | 2.14 | 3334164 | 0 | Complete theorem added; two node row-zero Fin projections and one induction-bound projection remained |
+| 1506 | `a6ebcab070726508d50eb24837ae74633f00de18841d8614d5cf8b1625138e0e` | 0 | 2.17 | 3351676 | 0 | Complete frozen development pass against final G8 object; 24 permitted audits, no warnings |
+| 1598 | `1b0f05c9252142fb659e2eaad2d528c42c9dbc405668e1e982d891ba424ca019` | 0 | 2.18 | 3351276 | 0 | Coordinator final pass after adding provenance and explicit interface audit; 24 permitted audits, no warnings |
+
+The coordinator authorized an early independent-helper check while G8 was
+being built. Accordingly, attempts 1500–1502 omit the still-unused
+`CopyInputLinks` import and its two dependent hash-chain helpers; the full
+draft was saved before that focused stage. Attempts 1503 onward restore the
+dependency and helpers. Green 1502 and 1504 are intermediate evidence only;
+1506 checks the complete final theorem against G8's finalized 1498 object.
+G9 paused new builds during the G8 finalization hold.
+
+All 19 theorems, including every private helper, have explicit axiom audits,
+as do all five new abbreviation helpers. At 1506 every theorem uses exactly
+`[propext, Classical.choice, Quot.sound]`; `extractionChunk`,
+`extractionOutput`, and `extractionCurrent` use `[propext, Quot.sound]`, and
+the remaining two abbreviations use the three permitted axioms. There are
+24 named declarations and 24 distinct audit commands, with no missing or
+extra entries. No prohibited proof construct or trailing whitespace was
+found. Compiler error terms from failed attempts are rejected as evidence.
+
+Each run retained exact `evidence/source-N.lean`, `evidence/sha-N.txt`,
+`evidence/out-N.log`, and `evidence/time-N.log` records on the build host,
+plus `/tmp/r0-extraction-20261008/Extraction-N.lean` locally. The actual
+scope status and `/usr/bin/time` status agree for every run; classification
+does not use the outer runner's shell success. Final local and remote
+source hashes match. After independent full source review, the coordinator
+added only precise provenance/model-hash/method comments and
+`#check @input_note_extracted`, producing the distinct 1598 source snapshot;
+no theorem statement or proof changed. Final check 1598 admitted 24+7 GiB,
+passed with matching scope/time exits zero, and confirmed exactly the six
+requested hypotheses and `InputNoteExtracted pub A` conclusion without
+extra premises. Its `source-1598.lean`, `sha-1598.txt`, `out-1598.log` and
+`time-1598.log` are retained in the same evidence directory. The final frozen
+source SHA is `1b0f05c9252142fb659e2eaad2d528c42c9dbc405668e1e982d891ba424ca019`;
+no further G9 build is needed.
