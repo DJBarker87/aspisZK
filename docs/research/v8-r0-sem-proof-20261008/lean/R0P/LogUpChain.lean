@@ -837,20 +837,30 @@ theorem logupL4 (P : Nat) [CharP K P] (hP : P = 2^31-1)
     change q ∈ (enabledLinks pub).map (fun l => compressPoly (copyConsumerTuple t l)) at hq
     obtain ⟨l, _, rfl⟩ := List.mem_map.mp hq
     exact logup_compress_degree _
-  obtain ⟨_, k, hk, _⟩ := SemBadSets.product_difference_coeff
+  have hrootdiff := SemBadSets.product_difference_coeff
     (prodPolys pub t) (consPolys pub t) hne hprod hcons
+  let diff : (K[X])[X] :=
+    ((prodPolys pub t).map (fun q => (X : (K[X])[X]) - C q)).prod -
+      ((consPolys pub t).map (fun q => X - C q)).prod
+  have hdiff : diff ≠ 0 := by
+    apply sub_ne_zero.mpr
+    exact hrootdiff.1
   have hvals : (prodPolys pub t).map (fun q => q.eval lam) =
       (consPolys pub t).map (fun q => q.eval lam) := by
     rw [logup_prodPolys_eval, logup_consPolys_eval]
     exact logup_value_multisets P hP pub t lam hbal
-  have hmap : ((((prodPolys pub t).map (fun q => (X : (K[X])[X]) - C q)).prod -
-      ((consPolys pub t).map (fun q => X - C q)).prod).map (evalRingHom lam)) = 0 := by
+  have hmap : diff.map (evalRingHom lam) = 0 := by
+    dsimp [diff]
     rw [Polynomial.map_sub, logup_root_product_map, logup_root_product_map, hvals, sub_self]
-  have hc := congrArg (fun q : K[X] => q.coeff k) hmap
-  have heval : ((((prodPolys pub t).map (fun q => (X : (K[X])[X]) - C q)).prod -
-      ((consPolys pub t).map (fun q => X - C q)).prod).coeff k).eval lam = 0 := by
-    simpa only [Polynomial.coeff_map, Polynomial.coe_evalRingHom, Polynomial.coeff_zero] using hc
-  exact hbad ⟨hne, k, hk, heval⟩
+  have _hlead : diff.leadingCoeff ≠ 0 := Polynomial.leadingCoeff_ne_zero.mpr hdiff
+  have hc := congrArg (fun q : K[X] => q.coeff diff.natDegree) hmap
+  have heval : diff.leadingCoeff.eval lam = 0 := by
+    simpa only [Polynomial.leadingCoeff, Polynomial.coeff_map,
+      Polynomial.coe_evalRingHom, Polynomial.coeff_zero] using hc
+  have heval' : (productDifference pub t).leadingCoeff.eval lam = 0 := by
+    change diff.leadingCoeff.eval lam = 0
+    exact heval
+  exact hbad ⟨hne, heval'⟩
 
 #print axioms logupL4
 

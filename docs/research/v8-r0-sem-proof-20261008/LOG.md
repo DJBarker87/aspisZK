@@ -1864,6 +1864,20 @@ All jobs used the pinned Lean 4.32.0/cache on `dombarker@100.108.41.90`, workspa
 
 Failed development logs include Lean's error-recovery `sorryAx` and were rejected; none is present in a green audit or the final source. Raw evidence and exact source snapshots are retained on the host as `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`, and copied locally under `/tmp/r0-logupchain-20261008/evidence/`; every copied snapshot matches its recorded SHA. Final static review found no `sorry`, `axiom`, `admit`, `native_decide`, recursion/heartbeat option change, or prohibited normalization. The previous pole and tag-cast findings are resolved by the lead's corrections; the endpoint-support bridge is proved with the user's bounded-check authorization. G12 has no remaining stop.
 
+### Continuation G12′ — leading-coefficient L4
+
+After lead commit `63ffcd341`, only the proof of `logupL4` was changed in `LogUpChain.lean`; the signatures, L1–L3, L5 and all helpers are byte-for-byte unchanged. Equal signed counts still give equal value multisets at lambda under the authorized `(P : Nat) [CharP K P] (hP : P = 2 ^ 31 - 1)`. Mapping the outer product difference through `evalRingHom lam` therefore gives zero. Taking its coefficient at the difference's `natDegree` shows that its leading coefficient evaluates to zero. The proof also derives nonzero product difference from `product_difference_coeff`'s monic-root-product inequality and derives its nonzero leading coefficient. It contradicts exactly the lead's new leading-coefficient bad event; no existential coefficient branch remains in L4.
+
+The coordinator reviewed the isolated proof diff and compiled the frozen source, then rebuilt the unchanged lead `SemClosed.lean` in the same objects directory. Attempt 1813 failed because the final constructor still used the previous existential shape; 1814 corrected that application and passed. All jobs used pinned Lean 4.32.0, `run2.sh N R0P/<target> 7000 7`, reservation 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0, one G12 job at a time. No unchanged failure was rerun.
+
+| Attempt | Target | SHA-256 | Lean / time exit | Wall s | RSS KiB | Swaps | Audits |
+|---|---|---|---:|---:|---:|---:|---|
+| 1813 | LogUpChain | `ab98502d5ee3cd44e7c7180d4e8145e33f5d4e571811f63012dd201354bd7a36` | 1 / 1 | 4.33 | 3,365,344 | 0 | Rejected error-recovery L4 audit; old constructor shape. |
+| 1814 | LogUpChain | `a9b0e52dd73026f356c16237d4b29527a70a479fc14cb0d59c178e1d94ff1fb6` | 0 / 0 | 4.24 | 3,386,880 | 0 | 57 permitted audits, no warnings. |
+| 1815 | SemClosed | `05ed018167483ebe6cb14b4064d2dd7aa4a4ec8da950592bc88ee7ab4f30f7cf` | 0 / 0 | 1.42 | 3,332,880 | 0 | Both closed soundness/extraction audits permitted, no warnings. |
+
+The green audits contain only `propext`, `Classical.choice`/Lean's printed `choice`, and `Quot.sound`. The final LogUpChain source exactly matches attempt 1814. `SemClosed` source was synchronized but not edited; its exit is **0**. Raw host evidence and exact snapshots are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified copies are under `/tmp/r0-logupchain-20261008/evidence/`. No forbidden proof terms, cap changes or table/trace/row evaluation were introduced. G12′ is complete; G13′ proceeds separately with the corrected interfaces.
+
 ## Lead decision after G12 L5 stop: characteristic premise for L4 and L5
 
 Accepted: `copy_tags_nodup` is Nat-level; in characteristic 2 the casts of
