@@ -3014,3 +3014,54 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2221 | `R0P/SemD2Glue` | 0 / 0 | 0:16.99 | 6901280 | 0 | 28 | `71de3ca82cc1329e598d87b50a2e985115bd626db36cda1aedef487d2e71dc46` |
 
 Source revision(s): `da49d26614e991db31fdc6d615ebd07285d0f8e3`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+## Lead review of the overnight G14′/G15/G16 closure; G20 decision
+
+Reviewed commits `eb8df067e`–`1f97f75c4` (2026-10-09). Checked against
+host evidence (not Codex's report): each committed source's SHA-256 equals
+`sha-N.txt` of its accepted attempt (2006, 2021, 2031, 2056, 2057, 2126,
+2221); every `depends on axioms` line in those logs is a subset of
+`propext, Classical.choice, Quot.sound`; no `sorryAx`, no `error`; no
+`decide`/`native_decide`/`maxRecDepth`/`maxHeartbeats`; the only
+`fin_cases` are over `Fin 3`/`Fin 4`; `Finset.univ` occurs only inside
+symbolic `vdeg_sum`/`vdeg_prod` applications. Accepted:
+
+- `SemAccept.checksAccept`, `SemHonest.honestRows`, `SemVirtualDeg.virtualDeg`
+  discharge the three G14′ Props with no premise. The degree audit
+  (`SemDeg.VDeg`, coordinate-vector degrees with the high/low selector
+  factorisation `selAt_g2Row`, `eqHigh_sum`, `eqLow_sum`) is the
+  coordinate-sensitive criterion the lead prescribed; all 29 lanes are at
+  bound 26, the terminal at 27. No completeness finding against the
+  source's degree constant.
+- `SemD3Glue.d3`: `FS2.D3 (combinedProtocol B p msg decode) (duplexRows B budget) (verifier … (combinedDecision B))`
+  with premises `[CharP SemE prime]`, `prime = 2^31-1`, and
+  `hσ26 : ∀ s, p.σ 26 s = .opening (σQ 0 s)`. These are instance facts
+  (the field's characteristic; the source-fixed decoder of the first
+  opening row), not weakenings. `SemStatement.Obligations` unchanged.
+- `SemD2Glue.combinedProtocol_D2`: `FS2.D2` for all 31 rows under
+  `combinedD2Budget` (rows 0–23: `(1+δQ)·100·semRoundBudget i / P⁴`;
+  rows 24–25: `2/P²`; rows 26–30: the existing slack rows), with the four
+  σ-decoder identities as premises. Budgets are the lead-authorised ones.
+
+D1 is definitional for the semantic source: `extract s x T = none` is
+`¬ ∃ w, paymentWitness x w`, and `doomed s (emptyPrefix x) T` is that
+conjunct together with `¬ hitFrom s x [] []` (= `¬ False`).
+
+What remains for the theorem43 instance (`R0C.V3.theorem43`, Gen.lean:251):
+`ChainDensity3` and `Inj3.decodes` for the combined protocol, i.e. the
+31-round analogue of `R0C.V3.DQ.decQ` with `chainDensityQ` and `decodesQ`.
+The FS2 decoder infrastructure (`parseAbsorb`, `walk`, `Rec`,
+`completePrefix`, `Coll`, `coll_mass`, `absC`) is generic in the message
+and challenge types; only `DuplexQ`/`DQChain`/`DQDecodes`/`DuplexQDensity`
+are specialised to R0's five rounds (`i < 4` one-block rows, chain at 4,
+`recs.length < 5`, `out4`). Decision (G20): Codex ports those four modules
+into the job directory for the combined types (`Msg SemE SemE (SemMsg SemE)`,
+`Duplex.Chal (Chal SemE SemE)`, 30 one-block rows, chain at row 30 with
+`openingChallenge ∘ out4`, `recs.length < 31`), proving chain density from
+`combinedProtocol_D2` row by row (one-block rows by the single-squeeze
+mean, row 30 by `Q22.chainE`), and assembles `combined_fiat_shamir` via
+`theorem43` with `Inj3 := ⟨Coll p Qtot, coll_mass …, decodes⟩`. The
+`CharP SemE (2^31-1)` premise is discharged by the lead
+(`charP_of_injective_algebraMap` from the existing
+`Algebra (ZMod AspisCircleGroupOrder.P) WideExact` instance). The closed
+form of `maxErr combinedD2Budget 31` is lead accounting (G21), after G20.
