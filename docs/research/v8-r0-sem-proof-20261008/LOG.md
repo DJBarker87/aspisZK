@@ -2761,3 +2761,87 @@ the current chain at `:901` (`AspisR0.RoundNormalization.dot` vs
 `AspisR0.LinearDual.dot` in `honestClaims`; the glue must use
 `LinearDual.dot` as `SemD3` does) and `:1017`/`:1012` (an unsynthesised
 placeholder `w` and its unsolved goal in the protocol instance).
+
+### G15 continuation — checked glue; fixed D3 obligation stops at G14
+
+Source revision `04ada5752974bfe45bf665f6ddb21df6df653831`, plus the existing
+uncommitted G15/G16 drafts. The honest-claims transport now explicitly changes
+the witness equality to `AspisR0.LinearDual.dot` before applying `hα`; it does
+not rely on namespace resolution. The explicit state witness `a` in
+`combined_chal26` was already present in the resumed draft and is verified by
+2123. Its value is the squeeze response after absorbing the global round-26
+message, so `hσ26 a` supplies the literal `DQ.σQ 0 a` gamma output.
+
+The checked file includes `candidate_mem_before_c2`, `candidate_mem_after_c2`,
+`candidate_bad_to_prefix`, `no_hit_candidate_rounds`, and the q22 trace/output
+bridge `combined_round30_sampQ`. The candidate proof uses the prefix's actual
+`candidates`, G18's padding/strategy congruence, and `polysOf_prefix`. The only
+filter-membership proof in this file is polymorphic in `K`; no new concrete
+QM31/point filter predicate or concrete decision-instance comparison was
+introduced. The existing G19 rule remains in force.
+
+Both focused attempts ran on `dombarker@100.108.41.90`, in the existing pinned
+workspace `/home/dombarker/project-offloads/aspis-fs-generic-20261006`, using
+Lean 4.32.0 and the unchanged compiled dependency cache. `run_g15_lake.sh` is
+the existing `run2.sh` scope/reservation wrapper with a separate runner that
+invokes `lake env lean -j1 -M7000 -DElab.async=false`. Its minimal Lake project
+has no dependencies; no package or dependency build ran. Reservations were
+24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0, timeout 900 s.
+
+| Attempt | Exact target | Lean / scope-time exit | Wall | Peak RSS KiB | Swaps | Axiom lines |
+|---:|---|---:|---:|---:|---:|---:|
+| 2123 | `R0P/SemD3Glue.lean` | 0 / 0 | 0:21.82 | 6,934,508 | 0 | 55 |
+| 2124 | `R0P/D3ObligationStop.lean` (diagnostic) | 1 / 1 | 0:02.82 | 6,783,964 | 0 | 0 |
+
+2123 source SHA-256:
+`bf90c82dd174e4bbbf9c9145da8850ee05685378255e762c49510478da4d9a41`.
+All 55 declaration audits use subsets of `propext`, `Classical.choice`, and
+`Quot.sound`; no `sorryAx`, errors, or warnings. In particular:
+
+```text
+'R0P.SemD3Glue.accepted_no_hit_extracted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemD3Glue.combined_chal26' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemD3Glue.d3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemD3Glue.combined_round30_sampQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+2124 source SHA-256:
+`c0cb64816f4ae5d4f8d8d77ea85151a1e51cbbf6055c88a588b5e7f2e560a2f6`.
+This isolated diagnostic imports the green glue and applies `d3` without
+assuming the three G14 bridge Props. Lean stops at exactly:
+
+```text
+case hrows
+⊢ ∀ (x : TypedContext SemE Sfield) (t : Trace SemE), HonestRows x.pub B t
+
+case hdeg
+⊢ ∀ (x : TypedContext SemE Sfield) (t : Trace SemE), VirtualDeg x.pub B t
+
+case hchk
+⊢ ∀ (x : TypedContext SemE Sfield) (t : Trace SemE), ChecksAccept x.pub B t
+```
+
+The complete context is retained in `out-2124.log`: it contains the fixed
+characteristic, `B`, the mixed sampler parameters, messages, decoder, budget,
+and `hσ26`, but none of these three semantic assumptions. The fixed
+`SemStatement.Obligations` D3 conjunct does not supply them either. `SemD3`
+defines them as Props and takes them as hypotheses of `d3_core`; `SemBridge`
+contains the documented G14/G14′ findings, not proofs of those Props. Thus
+2123 is a checked conditional assembly, not closure of the requested D3
+obligation. This is a missing proof, not a claim that `VirtualDeg` is false.
+No new premise, changed obligation, or claimed G15 closure was introduced.
+
+Stopped per the owner's instruction. G16 was not started or edited; no final
+manifest replay and no commit were made. No unchanged regression was rerun.
+Verified snapshots, SHA records, complete axiom/goal logs, time logs and the
+focused runner are retained in
+`evidence/g15-stop-2123-2124/`; host originals remain in `evidence/`.
+
+## Overnight G14′ — Step 0: verified conditional G15 checkpoint
+
+The owner authorized committing the exact 2123-green `SemD3Glue.lean`
+(SHA `bf90c82dd174e4bbbf9c9145da8850ee05685378255e762c49510478da4d9a41`).
+Its conditional `d3` is an honest checkpoint: the three G14 hypotheses are
+explicit Props, not premises added to `SemStatement.Obligations`. The 2123
+host result and audits above remain the evidence; no unchanged rerun. Only
+the Lean source and LOG are included in this checkpoint; evidence is excluded.
