@@ -2305,6 +2305,27 @@ New `SemD3Glue.lean` imports exactly `R0P.SemD3`, `R0C.SemStatement`, and `R0FS.
 
 Frozen source SHA-256: `4aeba7e579d17e36f496416355fe87b894430a7e4e8517e298c0897f89c1ad90`. Cached `SemD3` source matches SHA-256 `4341beac41c7e7826ca88385a48bb8b10977ffa43a87cbc910243c4e6595c7fc`. Raw host evidence is `evidence/out-2100.log`, `time-2100.log`, `sha-2100.txt`, `source-2100.lean`; verified local copies are under `/tmp/r0-semd3glue-20261008/evidence/`. The coordinator independently reviewed the interfaces, the exact q22 guard, the three proofs and frozen diff and ran the focused check. G15 is stopped pending those interface decisions.
 
+### Continuation G15 — encoder-to-message descent stop
+
+Resumed at lead `a3c82f3d3`. `TypedContext.pubBase` now supplies public typing, and `SemDecision.decision` includes `cardOK Q = true`. The earlier context counterexample is superseded and removed from the current module; its original source and evidence remain in commit `6e9d1bd6d` and attempt 2100. The two still-valid finding helpers are retained.
+
+The explicit continuation stop condition applies: `R0FS.Witness` (`R0FS/Protocol.lean:71–74`) gives `exactInitialEncoder (t l) i ∈ Sfield l`, with `i : Fin 1048576`. `AspisR0.Opening.tuple_descent` (`R0/Binding.lean:105–115`), `binding` (`:129–133`), and `AspisWide.SubfieldDescent.initialCodeword_subfield_descent` (`Wide/SubfieldDescent.lean:58–69`) all conclude encoder membership. In contrast, `R0P.BaseTyped` (`CoreExt.lean:27–28`) requires `t l b ∈ F` for `b : Fin 1024`. `InitialMessage K` already is `Fin 1024 → K`, so this is a missing message-cell descent theorem, not an index conversion. The new checked `witness_c1_encoder_mem` proves exactly the encoder membership obtainable from `Witness` and `x.lanesF`.
+
+No existing generic R0 lemma supplies the requested message membership. The closest result is `AspisWide.SubfieldDescent.initialMessage_fixed_of_agreement` (`:16–35`), which gives automorphism fixedness of the message from a sufficiently large agreement support. The smallest missing result is a message-level subfield-descent lemma with the existing support/agreement/received-subfield premises, concluding `∀ b, message b ∈ S`; the fixed-point lemma and Galois fixed-field criterion provide an apparent route, not a checked bridge here. The older `V7C1SubfieldRecovery.message_fixed_by_base_projection_of_large_shared_support` is specific to `QM31Exact` and assumes `InitialProjectionBinding`; it is not a generic replacement. Per the user's explicit stop rule, no new descent premise, model change, or bridge theorem was introduced.
+
+The authorized opening sampler route remains `sampQ` at combined rounds 26–30, with `chalQ_lt`, `σQ`, and `gamma_ne_zero` as in `R0C.V3.DQ.d3Q`; it has not been instantiated in a combined `SourceData` proof after this earlier stop. No `FS2.D3`, full-prefix hit restriction, or `InputNoteExtracted` conclusion is claimed. G14′'s separately recorded bridge obligations remain open.
+
+The coordinator recompiled the three requested dependencies sequentially, then checked the updated finding module. All jobs used pinned Lean 4.32.0, `run2.sh N R0P/<target> 7000 7`, reservation 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0.
+
+| Attempt | Target | Source SHA-256 | Lean / scope exit | Wall | Peak RSS KiB | Swaps |
+|---:|---|---|---:|---:|---:|---:|
+| 2101 | SemView | `d9eac6192f5627b8c58c0af0f492e36785de2f914264cca2156b781f8ef65e2a` | 0 / 0 | 3.05 s | 6,807,600 | 0 |
+| 2102 | SemDecision | `cf8c98e1bf6d5da3a2e725efd3790c4efc7e75fc32b0c650c310d875bf1f8971` | 0 / 0 | 3.04 s | 6,807,036 | 0 |
+| 2103 | SemD3 | `aa7b294e89dd8d2ba377f4b03e56efc22df7cb7793e80be6f222361dc774a68b` | 0 / 0 | 3.21 s | 6,810,380 | 0 |
+| 2104 | SemD3Glue | `616cbd18178b2f3a773b03302127e0d50455309a2cd445a093718723c7d92e14` | 0 / 0 | 2.73 s | 6,804,512 | 0 |
+
+All emitted audits use only `propext`, `Classical.choice`, `Quot.sound`; 2104 audits all three finding theorems. No warnings, errors, failed attempts, unchanged failing reruns, cap increases, package rebuilds, or forbidden evaluations occurred. Raw host artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified copies are under `/tmp/r0-semd3glue-20261008/continuation-2104/`. The coordinator independently reviewed the descent interfaces and final source diff and ran the focused checks. G15 stops at encoder-to-message descent as instructed.
+
 ## G16: SemD2Glue pre-challenge degree-invariant stop
 
 Reviewed the fixed semantic density theorem at lead `f1af33ad5`, B2 `SourceData`/state definitions, the duplex and q22 samplers, and the circle bounds. G15 currently supplies interface findings rather than the requested instance, so that dependency is also open. The independent blocking mismatch is the missing pre-challenge degree invariant for the generic D2 statement. No `FS2.D2` theorem, assembled 31-round protocol, new state predicate, or modified bad-round event is claimed.

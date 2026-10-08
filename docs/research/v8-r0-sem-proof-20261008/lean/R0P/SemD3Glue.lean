@@ -3,13 +3,14 @@ import R0C.SemStatement
 import R0FS.Hypotheses
 
 /-!
-Bounded interface findings for G15.  These facts identify missing hypotheses in
-the current abstraction; they do not claim that the full D3 statement is false.
-In particular, `d3_core` requires `PublicBase`, while `TypedContext` contains no
-such field.  The old opening theorem `accept_not_doomed` requires nonzero gamma
-and a 22-element query set; the old protocol D3 obtains those from
-`SamplerLaws.nonzero` and `SamplerLaws.queryCard`, neither of which is part of
-B2 `SourceData`.
+Bounded interface findings for G15.  Lead a3c82f3d3 supplies public-field typing
+and the q22 cardinality guard.  The remaining descent boundary is literal:
+`R0FS.Witness` (Protocol.lean:71–74) and `AspisR0.Opening.tuple_descent`
+(R0/Binding.lean:105–115) type `exactInitialEncoder (t l) i`, whereas
+`BaseTyped` types the message cells `t l b`.  The theorem below records exactly
+what `Witness` and `TypedContext.lanesF` yield.  No message-descent premise or
+full D3 result is installed.  The two earlier, still-valid finding helpers are
+retained; the old untyped-context counterexample is superseded by `pubBase`.
 -/
 set_option autoImplicit false
 namespace R0P.SemD3Glue
@@ -30,25 +31,19 @@ theorem packBasis_i_not_mem {F : Subfield K} (B : PackBasis F) : B.i ∉ F := by
 
 #print axioms packBasis_i_not_mem
 
-/-- An arbitrary public record can be placed in a `TypedContext` with zero
-words while violating `PublicBase`, by setting `assetId` to the basis element.
-This witnesses why `TypedContext`'s word typing alone cannot discharge the
-`hpub` argument required by `d3_core`. -/
-theorem exists_zero_context_not_publicBase
-    {Sfield : Fin 29 → Subfield K} (F : Subfield K) (B : PackBasis F)
-    (pub : Public K) :
-    ∃ x : TypedContext K Sfield,
-      x.W = (fun _ _ => (0 : K)) ∧ x.pub.assetId = B.i ∧ ¬ PublicBase F x.pub := by
-  let x : TypedContext K Sfield :=
-    { pub := { pub with assetId := B.i }
-      W := fun _ _ => (0 : K)
-      base := fun l _ => zero_mem (Sfield l) }
-  refine ⟨x, rfl, rfl, ?_⟩
-  intro hpub
-  have hi : B.i ∈ F := by simpa [x] using hpub.2.2.1
-  exact packBasis_i_not_mem B hi
+/-- Witness descent gives base-typed C1 *codeword* coordinates.  Its index is
+`Fin 1048576`, not the `Fin 1024` index of the candidate message cells. -/
+theorem witness_c1_encoder_mem
+    [Fintype K] [DecidableEq K]
+    [Algebra (ZMod AspisCircleGroupOrder.P) K]
+    {Sfield : Fin 29 → Subfield K} (x : TypedContext K Sfield)
+    (q : R0FS.Stmt K Sfield) (t : Trace K) (hw : R0FS.Witness q t)
+    (l : Fin 29) (hl : l.val < 26) (i : Fin 1048576) :
+    AspisWide.InitialEncoder.exactInitialEncoder (t l) i ∈ x.F := by
+  rw [← x.lanesF l hl]
+  exact hw.2.2 l i
 
-#print axioms exists_zero_context_not_publicBase
+#print axioms witness_c1_encoder_mem
 
 /-- The `bad4` condition cannot hold for an empty query set because it requires
 exactly 22 queries. -/
