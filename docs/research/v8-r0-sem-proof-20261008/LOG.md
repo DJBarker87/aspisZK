@@ -1289,3 +1289,47 @@ exit and `/usr/bin/time` exit agree; the outer runner's exit is not used to
 classify a Lean failure. Each development attempt also has a local exact source backup
 at `/tmp/r0-logup-20261008/LogUpCompress-N.lean`. The final local and remote
 source hashes match. Coordinator check 1398 passed after independent source and statement review at shared HEAD `1074cbc4915fcd36dbfeee3b45c88808d7cc5770`; all seven audits use only the three permitted axioms and the scope/time exits both equal zero. No source obstruction was found.
+
+## Lead: sumcheck soundness and zerocheck composition (Sumcheck.lean, Zerocheck.lean)
+
+`Sumcheck.lean`: `bsum` (hypercube sum by recursion on the leading
+coordinate), `IndDeg d n G` (every round's honest polynomial exists with
+degree ≤ d, for every prefix), `accept d n G c polys α` (boundary check
+`p(0)+p(1)` = running claim, degree check, final `G α = claim`), and
+`sound`: an accepted false claim makes some `α i` a root of a nonzero
+polynomial of degree ≤ d (`polys i − honest i`), by induction on n.
+Attempt 615, exit 0, 0.89 s, 1944912 KiB, swap 0. SHA-256 `4d14c4f8e6488e39e0a8c50ada54f6116c489214bc0e0e7c827b4aedab2a599a`.
+
+`Zerocheck.lean`: `ofBool`, `bsumB`, `eqwB` (Boolean eq weight),
+`mle` (recursive multilinear extension), with `bsum_eq_bsumB`,
+`bsumB_smul`, `bsumB_add`, `bsumB_eqw : Σ_b eq(z,b)·f(b) = mle f z`;
+`lanesComp θ lanes b = Σ_{i<29} θ^i lane_i(b)`; the four bad-set
+definitions `BadAlpha 27 10`, `BadMu`, `BadZc`, `BadTheta` (ledger
+branches sumcheckRounds, muBatch, zerocheckPoint, thetaLane), and
+`compose`: if G's Boolean values are
+`eq(zc,b)·lanesComp θ lanes b + μ·H1 b + μ²·inact b` (T:1303–1308),
+`IndDeg 27 10 G`, the sumcheck accepts claim 0, and α, μ, zc, θ avoid
+their bad sets, then every lane vanishes on every row and
+`Σ_b H1 b = 0 ∧ Σ_b inact b = 0`. Attempts 616–617 were an import name
+and a Fin 0 base case; 618 exit 0, 1.35 s, 1964792 KiB, swap 0, 24+7 GiB.
+SHA-256 `6e6b88599348de3f314a074e1396f5034d019ef4210d06a3ecce65a6ff53d14f`. Axioms: standard three.
+
+Remaining for the SEM composition:
+1. Bad-set cardinalities on these function-level definitions (re-scoped
+   G10): `BadMu` ≤ 2, `BadTheta` ≤ 28 (at a witnessing row the lane
+   vector is nonzero, so θ is a root of a nonzero degree-≤28 univariate),
+   `BadZc` ≤ 10·|K|^9 by induction on `mle` (DeMillo–Lipton–
+   Schwartz–Zippel on the degree-1 leading coordinate), and `BadAlpha` at
+   strategy level: with `polys i` a function of `α 0..i−1`, the event
+   has mass ≤ 10·27/|K| (the per-round root set is fixed before `α i`).
+2. The lane map (G11): `lanes i b` for a trace `t` is the terminal's
+   i-th θ-lane at row b: 4 packed Poseidon lanes, 24 packed semantic lanes
+   from the 94 source lanes (T:1253–1255, `semantic_packed`), and the copy
+   residual; with `pack4_eq_zero_iff` under `BaseTyped` this gives
+   `Holds f pub t` for every ported family and `CHolds copyFamily λ χ t`.
+3. `IndDeg 27 10 G` for the actual virtual polynomial: the terminal's
+   per-variable degree bound (POOL_V1_PAIR_FOREST_SEMANTIC_ZEROCHECK_INDIVIDUAL_DEGREE_V1 = 27);
+   and `hG`, that the terminal evaluated at Boolean openings equals the
+   batched row value (the three opened points at a Boolean row are the row,
+   its successor and its xor-12 row, which is what the ports' `rowOpenings`
+   and `rowSel` encode).
