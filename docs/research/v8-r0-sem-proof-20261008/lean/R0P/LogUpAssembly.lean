@@ -125,7 +125,7 @@ theorem logup_step_of (pub : Public K) (t : Trace K)
   intro lam chi hbad hc hs1 hs2
   simp only [BadLogUp, not_or] at hbad
   obtain ⟨h0, hP, hnum, hlam⟩ := hbad
-  have hD : chi ∉ valueSet pub t lam := fun h => hP (valueSet_subset_poleSet t lam h)
+  have hD : chi ∉ valueSet pub t lam := fun h => hP (valueSet_subset_poleSet pub t lam h)
   rw [hS1] at hs1
   rw [hS2] at hs2
   have hrows := h1 lam chi h0 hP hc

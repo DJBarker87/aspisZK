@@ -1766,3 +1766,9 @@ values), and `valueSet_subset_poleSet` bridges them in the glue. The
 pole count is unchanged (≤ 272 values, 273 with χ = 0); the ledger stands.
 Attempt 624 green with an unused-binder lint; 625 after dropping the
 binder: exit 0 (see evidence/out-625.log). SHA-256 `a6169f9bfddbc51f56f741bd61991cfc1336d326963a9fa02c5c7751891d6bdc`.
+
+Correction: 714de1bbf was committed on the runner's shell exit, not the
+Lean exit; attempt 625 had exit 1 (a substitution error in the glue's
+lemma application). Attempt 626 on the corrected file: exit 0, 1.81 s,
+3339780 KiB, swap 0, 24+7 GiB, no warnings. SHA-256 `1f2aa23fce266027f8d0c4af639d0d9c98439500ab4d07c984afa64a8ac5f157`.
+`logup_step_of` axioms: propext, Classical.choice, Quot.sound.
