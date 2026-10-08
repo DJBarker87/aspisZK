@@ -1055,3 +1055,42 @@ Deterministic Lean obligations (delegable, statements fixed by the lead):
 - G7 (λ compression): for two tagged tuples (t,a), (t',b) ∈ K × (Fin 16 → K),
   the difference polynomial in λ is zero iff (t,a) = (t',b); its degree
   ≤ 16.
+
+## Lead: input-note semantic model and extraction obligation (Semantics.lean)
+
+G3″ (50c7201b5) accepted; `poseidon_scalar_holds_output` is the interface.
+
+Wiring, read from C:27–164 with pair_forest_trace.rs:121–195,
+pair_forest_hiding.rs:38–72, poseidon2.rs:464–465,511–529 and
+spend.rs:14–16,146–167 (all column indices are C1 columns 0–15; the ports'
+`Fin.castAdd` does not shift):
+
+- owner key: block 0, domain 0x4153_0001 length 8, absorbs sk = (0,12) lanes
+  0–7; output (0,11) lanes 0–7 → (1,12) (link 7).
+- commitment: blocks 1–3, domain 0x4153_0003 length 18, chunks
+  pk ‖ (value, asset, salt 0–5) ‖ (salt 6–7); value = (2,12) lane 0 = (63,0)
+  lane 10 (link 11), asset = A 1 44 (`asset_holds_iff`); output (3,11) →
+  leaf (57,1) cols 1–8 (link 64).
+- nullifier: blocks 25–26, domain 0x4153_0002 length 16, chunks sk (link 8)
+  ‖ salt (links 9, 10); output row 427 = pub.nullifier (`digest_holds_iff`).
+- membership: 24 levels; level k path row 16·(57+k/4)+1+4·(k%4), bit at
+  col 0, current cols 1–8, left/right at row+1 cols 0–7/8–15; node block
+  4+k (k<21) or 54+(k−21); node = permutation of (left ‖ right) with lane 15
+  = right 7 − 1051521018 (= right 7 + 0x4153_1005 in M31; registry offset
+  C:21 and MERKLE_NODE_COMPRESSION_V3_TWEAK agree); root (56,11) = anchor.
+
+`Semantics.lean` defines spongeInit/absorb/spongeStep/digestOf, ownerKey,
+nullifierHash, noteCommitment, nodeCompress, merkleStep/merkleRoot, the
+obligation `InputNoteExtracted pub A` and the trace witnesses traceSk,
+traceSalt, pathBaseRow, nodeBlock, tracePath, with `pathBaseRow_mem` and
+`nodeBlock_node`. Attempts 609–612 were elaboration fixes (chunk bound
+hypothesis, missing Schedule/Digest imports, noncomputable classical bit,
+Fin.val reduction); 613 exit 0, 1.66 s, 3341880 KiB, swap 0, 24+7 GiB.
+SHA-256 `9309c5faa3de30d4f35bfe46509fe335a821d89a43051201a97232c0b89dc615`. Axioms: standard three.
+
+Next: G8 proves the named link cell equalities from `CopyLinkBalance`
+(links 0–2, 7–11, 64–135, in the style of `copy_positivity_links`); G9
+proves `InputNoteExtracted pub A` from Holds of schedule, path, digest,
+asset, poseidonScalar and `CopyLinkBalance pub A`, via the per-block
+lemmas: owner block, three commitment blocks, two nullifier blocks, and the
+24-level induction on `merkleRootAux`.
