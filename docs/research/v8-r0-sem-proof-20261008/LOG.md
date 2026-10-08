@@ -2136,3 +2136,33 @@ D3 (`semantic_sound_closed` + the honest-claims bridge: for the extracted
 candidate t, `pointClaims j = MLE of t at openingPoints j` from the
 opening layer's `Witness`, so `terminalValue` at Boolean rows is the
 batched row value, `hG`) and D2 (per-round densities).
+
+## G14: SemBridge degree-route stop
+
+Started from `9bc5f6b34`, with the lead's fixed `SemDecision.lean` and `SemView.lean`. The prescribed auxiliary claim in obligation 5, that **each** `honestClaims t v j l` has `MLDeg 1`, is false for the successor opening `j = 1`. Per the stop rule, no definitions or requested bridge statements were changed. Obligations 1–6 are not claimed complete, and no `virtual_indDeg` theorem is asserted. This finding refutes that auxiliary multilinearity assertion; it does not establish that the final `IndDeg 27` statement itself is false.
+
+### Exact construct and symbolic witness
+
+`SemView.lean:33–39` defines the literal polynomial carry and successor, matching `crates/aspis-statement/src/state_only_poseidon.rs:95–103` at Rust inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. `SemView.lean:45–51` reverses the coordinates and uses `toR0 (successorPoint v)` at opening index 1. `v8-wide-reference-20261005/lean/R0/OpeningDefinitions.lean:31–32` defines the Boolean product `eqWeight`; `R0/RoundNormalization.lean:28` defines the opening layer's `dot` as the weighted sum. `LaneMap.lean:78–83` identifies source coordinates 8 and 9 with the row's low bits 1 and 0.
+
+Take a trace column whose Boolean row value is the product of those two low bits. Symbolically factoring the equality-weight sum gives the product of point coordinates 8 and 9: every other coordinate contributes `(1-u)+u = 1`, while each selected low bit contributes `u`. This is a source-level algebraic calculation, not a newly claimed Lean dot/trace bridge; no trace, row list, or universe was evaluated.
+
+For `v 8 = y` and `v 9 = x`, the literal successor gives
+
+```
+q 8 = y + x - 2*y*x
+q 9 = 1 - x
+q 8 * q 9 = y + (1 - 3*y)*x + (2*y - 1)*x^2.
+```
+
+At `y = 0`, that honest successor-opening coordinate is `x*(1-x)`. It is not affine as a field-valued function when `2 ≠ 0`, in particular in characteristic `2^31 - 1`: values at 0 and 1 force both affine coefficients to zero, while the value at 2 is `-2 ≠ 0`. `SemBadSets.MLDeg` (`:299–303`) requires an affine polynomial on every such coordinate line when its bound is 1. Thus multilinearity in the opening point does not imply multilinearity after the source's polynomial successor substitution.
+
+The smallest source-preserving statement repair is to separate opening indices: current and xor12 openings can retain the multilinearity claim, while the successor opening needs its actual composition-degree bound (the direct ten-factor estimate gives at most 10). The terminal's degree-27 proof must then account for the successor opening separately and verify the aggregate bound. No such repair or bound substitution has been made; that is a lead decision. No family residual exceeding degree 26 has been established by this finding.
+
+### Checked finding and evidence
+
+New `SemBridge.lean` imports the two requested modules and proves six audited symbolic lemmas: carry 0, carry 1, successor coordinates 8 and 9, their product under `v 8 = 0` and `v 9 = x`, and the absence of an affine representation of `x*(1-x)` under `2 ≠ 0`. These inspect only the first two carry steps and field arithmetic. They do not claim `eqWeight_bool`, `terminalValue_bool`, an honest-claims degree theorem, `virtual_indDeg`, or the acceptance bridge.
+
+Coordinator attempt `run2.sh 2000 R0P/SemBridge 7000 7` passed on the pinned Lean 4.32.0 build host/cache: actual Lean exit 0, scope/time exit 0, wall 2.95 s, peak RSS 6,802,040 KiB, swaps 0. Reservation 24 + 7 GiB; MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. All six audits use only `propext`, `Classical.choice`, `Quot.sound`; no warnings or errors. There was no failed attempt, unchanged rerun, cap increase, or dependency rebuild. The checked frozen source SHA-256 is `ea764ba59885f4c824d470032d53540ff005c5b4c238eb539f5721c93d560cdd`.
+
+Cached dependency sources match the repository: `SemDecision.lean` SHA-256 `2222c13112711d546abe18e524be3ae5c1d67b95f8be0ad59d2ad22226c47727`; `SemView.lean` SHA-256 `5fd27a6dd3d645fa02286c54faca51785f25e3295fc35a24fe71c60bfe63ac6d`. Raw host evidence and snapshot are `evidence/out-2000.log`, `time-2000.log`, `sha-2000.txt`, `source-2000.lean`; verified local copies are under `/tmp/r0-sembridge-20261008/evidence/`. The coordinator independently reviewed the source calculation, worker proofs and final diff and ran the focused check. G14 is stopped at this exact degree-route assertion; existing model and family files remain unchanged.
