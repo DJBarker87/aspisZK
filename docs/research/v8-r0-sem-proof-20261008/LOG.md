@@ -1993,6 +1993,46 @@ Coordinator check `run2.sh 1900 R0P/SemRounds 7000 7` on the pinned Lean 4.32.0 
 
 The host `SemClosed` source matches current repository SHA-256 `0ff01dadc3fb6a33a0d5692e5825c4dbbb9dc1b62700f371be3e15168f99ab1a`; its existing compiled object and direct dependency objects were reused. `SemBadSets` source SHA-256 is `b74e1d7adfaaf6ad0c4973b96461b6359d23b62d6cadb6e2983646d3e5b40b5d`. No dependency rebuild was needed. Raw host evidence is `evidence/out-1900.log`, `time-1900.log`, `sha-1900.txt`, `source-1900.lean`; verified local copies are under `/tmp/r0-semrounds-20261008/evidence/`. The coordinator reviewed the finding proof and fixed interfaces; independent source reviews confirmed the alpha and lambda quantifier differences. No forbidden proof terms/options, probability claims, or requested completion claim was introduced.
 
+### Continuation G13′ — completed literal semantic rounds
+
+Resumed after the lead's `63ffcd341` corrections and `e5d8519bb` degree-premise decision, on source revision `de0fe30a0`. The accepted earlier counterexamples remain recorded above and in commit `4e8c68399`; their obsolete-interface proof file is replaced by the completed round module.
+
+`SemRounds.lean` now defines `semRoundBad` on `Fin 24`, an earlier-challenge prefix, a candidate trace/public input/packing basis, and the current challenge. Its order is λ (0), χ (1), θ (2), ten zerocheck coordinates (3–12), μ (13), and ten alpha challenges (14–23). This matches `v6_onefold_prover.rs:596–600,604–612` and `state_only_sumcheck.rs:96–105,241` at the recorded Rust inspection pin. The virtual polynomial depends on the first fourteen challenges; each strategy polynomial depends on those and its strictly earlier alpha prefix. No branch reads the current challenge from its prefix.
+
+The module proves:
+
+- `semRoundBad_card`: per-candidate bounds 2176, 544, 28, 1, 2, 27 in that order. The alpha case alone uses `semRoundDegreeChecked`, precisely the already-checked `(polys j).natDegree ≤ 27`. This premise is absent from the round predicate, recursive bridge, coverage theorem, and semantic implication. `accept_polys_degree` derives every such observed degree bound from acceptance.
+- `badAlpha_iff_exists_round`: the literal recursive `Sumcheck.badAlpha` is exactly the union of its prefix-fixed round disjuncts. `badAlphaStrategy_imp_exists_round` connects an accepted false adaptive claim via `Sumcheck.sound`; it makes no converse assertion about accepted false claims.
+- `zc_rounds_iff`: a nonzero Boolean function has zero MLE at the full point iff one prefix restriction first collapses to the zero Boolean-tail function. Symbolic dimension induction and one nonzero Boolean witness give the per-coordinate bound 1.
+- `semRounds_cover`: absence of all round events excludes the five joint events consumed by `semantic_sound_closed`.
+- `semantic_sound_rounds`: the closed semantic implication with the five exclusions replaced by absence of bad rounds, retaining the same characteristic, base typing, public typing, terminal identity, degree, and acceptance premises.
+
+The λ proof uses the fixed leading coefficient, a symbolic multiset-product coefficient-degree induction, the existing registry length bound, and nonzero univariate root counting. The χ proof counts at most 272 poles, at most 271 numerator roots, and zero. It uses all-link `poleSet` and enabled-link `valueSet` exactly as fixed. No list/trace/row/universe/table/permutation evaluation, source reinterpretation, probability claim, cap change, or dependency rebuild was introduced.
+
+All development used the pinned Lean 4.32.0 build host/cache and `run2.sh N R0P/SemRounds 7000 7`: MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. Reservations were 26 + 7 GiB for 1901–1902 and 24 + 7 GiB thereafter. Each row below records actual Lean/scope exits (not the runner shell status); swaps were zero throughout. Every failed source was changed before retry. Components were checked separately before the combined bridge; 1999 is the reserved final coordinator audit of the frozen repository file.
+
+| Attempt | SHA-256 | Lean / scope exit | Wall | Peak RSS KiB | Result |
+|---:|---|---:|---:|---:|---|
+| 1901 | `6655d5c320faeabf786671d34564e16a149a7bdd11a312bfd75dd5314a6b32aa` | 1 / 1 | 0:00.91 | 2,084,700 | Alpha parser rejected reserved `prefix`; cascading declarations. |
+| 1902 | `21981a885bef11802f3d711122bc6ad58286a9dd81e6e96cb4ed30f0c91ad318` | 1 / 1 | 0:00.98 | 2,091,100 | Alpha Fin projection/definitional equality and empty-filter lemma. |
+| 1903 | `d54697af34e763e4eba59d023d1377d7d3437af138a9b56291c6544a8dbb4812` | 1 / 1 | 0:01.30 | 2,098,728 | ZC dependent recursion, missing tactics/instances and MLE rewrites. |
+| 1904 | `3db3877888b75317f53ec14101e4d000745196faf90c9c4364e010a89cb2bc91` | 1 / 1 | 0:02.06 | 3,331,356 | LogUp classical/noncomputable declarations, coefficient-degree and union-bound elaboration. |
+| 1905 | `c9a4ce4dc7b7edc00a5a5f9d96bfefa1520361a46999e16c1731de87a3bfa29d` | 0 / 0 | 0:00.98 | 2,101,732 | Alpha helpers green; 7 audits, no warnings. |
+| 1906 | `37486c176d8e79d8b9b77a0ca7ca218cd90eea22e23a8d8d0be1a6dfd4591934` | 1 / 1 | 0:01.31 | 2,105,020 | ZC recursion pattern, instances, witness rewrites and card binder order. |
+| 1907 | `a05f48af6b534894d7f07cde1435d6333f68d25d829775014046a1f8338cc924` | 1 / 1 | 0:01.75 | 3,334,200 | LogUp noncomputable instances and wrong outer-union bound; default recursion limit reached, no limit changed. |
+| 1908 | `1980ee6367a7de8b2d50a4a7afb8dc414dad04f4dbbb257fe1cd90a1043ef963` | 1 / 1 | 0:01.39 | 2,104,116 | ZC zero-equation arity, zero rewrite, typed event projection and scope closure. |
+| 1909 | `9435b787adc24049d9434e3fdcd7b26556c23a0d69726f7b043839bb306c4c4c` | 0 / 0 | 0:01.81 | 3,349,224 | LogUp bounds green; 14 audits, no warnings. |
+| 1910 | `9a34d1267f9f991f770f3870064c82f1c8b163b7e2e813d0eff18ec470735848` | 0 / 0 | 0:01.03 | 2,101,968 | Alpha acceptance/adaptive bridge added; 9 audits, no warnings. |
+| 1911 | `483a57a6ea607cfc231c6ae1105a4c8658fb5cc419551ff18434e5b0a8c7f3d4` | 1 / 1 | 0:01.54 | 2,106,456 | ZC last `Fin.cases 0` simplification mismatch. |
+| 1912 | `b32ebb842b2ba7bc85f5fe7dbef7267aa079876c238805146989b2e5edfbfcfe` | 0 / 0 | 0:01.57 | 2,117,780 | ZC green; 14 audits, no warnings. |
+| 1913 | `17666f971023f22a864ba837863a7c5f2b0d7ec5d7ca8502e94831f2213a9490` | 1 / 1 | 0:03.97 | 3,370,480 | Combined cardinality theorem green; four prefix-cast/dependent-index errors in RoundCover. |
+| 1914 | `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4` | 0 / 0 | 0:04.02 | 3,395,856 | Full module green; 55 audits, no warnings. |
+| 1999 | `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4` | 0 / 0 | 0:04.02 | 3,396,240 | Final coordinator audit green; 55 audits, no warnings. |
+
+Final SHA-256: `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4`. Attempts 1914 and 1999 match that frozen source. The final 55 declaration audits (including all private helpers) contain only `propext`, `Classical.choice`/Lean's printed `choice`, and `Quot.sound`, or no axioms. Final actual Lean and scope exits are 0, wall 4.02 s, peak RSS 3,396,240 KiB, swaps 0; no warnings or errors.
+
+Raw host artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, and `source-N.lean`; verified copies are under `/tmp/r0-semrounds-20261008/evidence/`. The coordinator reviewed the exact events, source challenge order, prefix causality, all three component proofs, the final diff, and final build evidence. G13′ is complete. Its earlier λ/alpha interface stops are resolved by the lead's changes; the alpha count remains conditional only on the authorized pre-challenge degree check. No remaining G13 finding.
+
 ## Lead corrections after G13 stop (badAlpha, λ coefficient)
 
 Both G13 findings (4e8c68399) are accepted; both were lead definition
