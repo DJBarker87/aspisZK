@@ -1,4 +1,4 @@
-import R0P.SemD3
+import R0P.SemD2
 import R0P.MessageDescent
 import R0C.SemStatement
 import R0FS.Hypotheses
@@ -7,8 +7,9 @@ import R0FS.Hypotheses
 G15 integration and bounded interface findings.  Lead a3c82f3d3 supplies
 public-field typing and the q22 cardinality guard.  G17's proved message
 descent now turns the encoder membership in `R0FS.Witness` into `BaseTyped`.
-The earlier, still-valid finding helpers are retained.  No full D3 result is
-claimed here.
+The earlier tag-invariance findings are superseded by lead 84a2dce11 and
+removed: semantic parsing now requires semantic message tags and the C2
+commitment.  The remaining integration uses the prefix-based `semanticBad`.
 -/
 set_option autoImplicit false
 namespace R0P.SemD3Glue
@@ -72,61 +73,92 @@ theorem bad4_empty_false
 
 #print axioms bad4_empty_false
 
-open R0C.SemStatement
+/-- The pair-forest B2 operations, using the lead's literal prefix classifier. -/
+def sourceData [Fintype K] [DecidableEq K]
+    [Algebra (ZMod AspisCircleGroupOrder.P) K]
+    {Sfield : Fin 29 → Subfield K} {F : Subfield K} (B : PackBasis F) :
+    R0C.SemStatement.SourceData (K := K) (E := K)
+      (TypedContext K Sfield) (SemMsg K) (Trace K) Sfield where
+  semanticRounds := 24
+  semanticBad := SemSource.semanticBad B
+  paymentWitness := fun x t => InputNoteExtracted x.pub t
+  openingView := SemSource.openingView
+  decision := SemSource.decision B
 
-/-- `semChals` reads a semantic challenge without inspecting its message. -/
-theorem semChals_head_message
-    (m₁ m₂ : Msg K K (SemMsg K)) (c : K)
+#print axioms sourceData
+
+/-- Forget the duplex state while retaining every message and challenge value. -/
+def valuePrefix {X M C S : Type} (p : FS.Prefix X M (C × S)) : FS.Prefix X M C :=
+  ⟨p.statement, p.rounds.map (fun r => (r.1, r.2.1))⟩
+
+#print axioms valuePrefix
+
+theorem valuePrefix_ext {X M C S : Type} (p : FS.Prefix X M (C × S))
+    (m : M) (c : C × S) :
+    valuePrefix (p.ext m c) = (valuePrefix p).ext m c.1 := by
+  simp only [valuePrefix, FS.Prefix.ext, List.map_append, List.map_singleton]
+
+#print axioms valuePrefix_ext
+
+theorem valuePrefix_round {X M C S : Type} (p : FS.Prefix X M (C × S)) :
+    (valuePrefix p).round = p.round := by
+  simp only [valuePrefix, FS.Prefix.round, List.length_map]
+
+#print axioms valuePrefix_round
+
+/-- The B2 state predicate on a transcript that also retains sampler state.
+The error schedule is data: D3 depends only on the doomed predicate. -/
+def duplexRows [Fintype K] [DecidableEq K]
+    [Algebra (ZMod AspisCircleGroupOrder.P) K]
+    {Sfield : Fin 29 → Subfield K} {F : Subfield K} (B : PackBasis F)
+    {S I A : Type} (budget : Nat → ℚ) :
+    FS2.RoundByRound' (TypedContext K Sfield) (R0C.SemStatement.Msg K K (SemMsg K))
+      (R0C.SemStatement.Chal K K × S) I A where
+  doomed := fun p table => R0C.SemStatement.doomed (sourceData B) (valuePrefix p) table
+  ε := budget
+
+#print axioms duplexRows
+
+open R0C.SemStatement Polynomial
+
+theorem semChals_semantic_head (sm₁ sm₂ : SemMsg K) (c : K)
     (rest : List (Msg K K (SemMsg K) × Chal K K)) :
-    semChals ((m₁, Chal.semantic c) :: rest) =
-      semChals ((m₂, Chal.semantic c) :: rest) := by
+    semChals ((Msg.semantic sm₁, Chal.semantic c) :: rest) =
+      semChals ((Msg.semantic sm₂, Chal.semantic c) :: rest) := by
   rfl
 
-#print axioms semChals_head_message
+#print axioms semChals_semantic_head
 
-/-- Every `semPolys` lookup has offset `14+j`, so the first message is unused.
-The argument is uniform in `j`; it does not enumerate the 24-round prefix. -/
-theorem semPolys_head_message
-    (m₁ m₂ : Msg K K (SemMsg K)) (c : Chal K K)
+/-- The C2 parser reads index 2, independently of the first inner payload. -/
+theorem c2Of_head (sm₁ sm₂ : SemMsg K) (c : Chal K K)
     (rest : List (Msg K K (SemMsg K) × Chal K K)) :
-    semPolys ((m₁, c) :: rest) = semPolys ((m₂, c) :: rest) := by
+    c2Of ((Msg.semantic sm₁, c) :: rest) =
+      c2Of ((Msg.semantic sm₂, c) :: rest) := by
+  rfl
+
+#print axioms c2Of_head
+
+theorem semPolys_semantic_head (sm₁ sm₂ : SemMsg K) (c : Chal K K)
+    (rest : List (Msg K K (SemMsg K) × Chal K K)) :
+    semPolys ((Msg.semantic sm₁, c) :: rest) =
+      semPolys ((Msg.semantic sm₂, c) :: rest) := by
   have hindex (j : Fin 10) : 14 + j.val ≠ 0 := by omega
   by_cases hlen : rest.length + 1 = 24
   · simp only [semPolys, List.length_cons, dif_pos hlen, List.getElem_cons,
       hindex, ↓reduceDIte]
   · simp only [semPolys, List.length_cons, dif_neg hlen]
 
-#print axioms semPolys_head_message
+#print axioms semPolys_semantic_head
 
 variable [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
-/-- The mismatched `beforeZ1`/semantic pair belongs to none of the four
-current `roundBad` branches, independently of the prefix's round number. -/
-theorem beforeZ1_semantic_not_roundBad {X W : Type} {Sfield : Fin 29 → Subfield K}
-    (s : SourceData (K := K) (E := K) X (SemMsg K) W Sfield)
-    (P : Prefix K K X (SemMsg K)) (y₀ : Fin 29 → K) (c : K) :
-    ¬ R0C.SemStatement.roundBad s P (.beforeZ1 y₀) (.semantic c) := by
-  intro hbad
-  rcases hbad with hsem | hz₀ | hz₁ | hopen
-  · obtain ⟨sm, k, _hround, hmsg, _hchal, _hbad⟩ := hsem
-    cases hmsg
-  · obtain ⟨y, z, _hround, hmsg, _hchal, _hbad⟩ := hz₀
-    cases hmsg
-  · obtain ⟨y, y₀', z₀, z₁, _hround, _hprev, _hmsg, hchal, _hbad⟩ := hz₁
-    cases hchal
-  · obtain ⟨Q, om, oc, _hview, hmsg, _hchal, _hround, _hbad⟩ := hopen
-    cases hmsg
-
-#print axioms beforeZ1_semantic_not_roundBad
-
 omit [Fintype K] in
-/-- The first message is outside the two-circle/opening suffix and does not
-affect the semantic challenge list used by the opening view. -/
-theorem openingView_first_message_eq {Sfield : Fin 29 → Subfield K}
-    (x : TypedContext K Sfield) (m₁ m₂ : Msg K K (SemMsg K)) (c : Chal K K)
+theorem openingView_semantic_head {Sfield : Fin 29 → Subfield K}
+    (x : TypedContext K Sfield) (sm₁ sm₂ : SemMsg K) (c : Chal K K)
     (rest : List (Msg K K (SemMsg K) × Chal K K)) :
-    openingView ⟨x, (m₁, c) :: rest⟩ = openingView ⟨x, (m₂, c) :: rest⟩ := by
+    openingView ⟨x, (Msg.semantic sm₁, c) :: rest⟩ =
+      openingView ⟨x, (Msg.semantic sm₂, c) :: rest⟩ := by
   simp only [openingView, List.splitAt_eq, List.take_succ_cons, List.drop_succ_cons]
   generalize htail : rest.drop 23 = tail
   cases tail with
@@ -141,28 +173,48 @@ theorem openingView_first_message_eq {Sfield : Fin 29 → Subfield K}
       cases m₀ <;> cases c₀ <;> try rfl
       cases c <;> rfl
 
-#print axioms openingView_first_message_eq
+#print axioms openingView_semantic_head
 
-/-- The current decision is invariant under changing only the first message.
-This is a parser equality, with no acceptance or witness premise. -/
-theorem decision_first_message_eq {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (B : PackBasis F) (x : TypedContext K Sfield)
-    (m₁ m₂ : Msg K K (SemMsg K)) (c : Chal K K)
+theorem decision_semantic_head {Sfield : Fin 29 → Subfield K} {F : Subfield K}
+    (B : PackBasis F) (x : TypedContext K Sfield) (sm₁ sm₂ : SemMsg K) (c : Chal K K)
     (rest : List (Msg K K (SemMsg K) × Chal K K)) (finalMsg : Msg K K (SemMsg K)) :
-    SemSource.decision B ⟨x, (m₁, c) :: rest⟩ finalMsg =
-      SemSource.decision B ⟨x, (m₂, c) :: rest⟩ finalMsg := by
-  have hview := openingView_first_message_eq x m₁ m₂ c rest
-  have hchals : semChals (((m₁, c) :: rest).take 24) =
-      semChals (((m₂, c) :: rest).take 24) := by
+    SemSource.decision B ⟨x, (Msg.semantic sm₁, c) :: rest⟩ finalMsg =
+      SemSource.decision B ⟨x, (Msg.semantic sm₂, c) :: rest⟩ finalMsg := by
+  have hview := openingView_semantic_head x sm₁ sm₂ c rest
+  have hchals : semChals (((Msg.semantic sm₁, c) :: rest).take 24) =
+      semChals (((Msg.semantic sm₂, c) :: rest).take 24) := by
     simp only [List.take_succ_cons]
     cases c <;> rfl
-  have hpolys : semPolys (((m₁, c) :: rest).take 24) =
-      semPolys (((m₂, c) :: rest).take 24) := by
-    simpa only [List.take_succ_cons] using semPolys_head_message m₁ m₂ c (rest.take 23)
+  have hpolys : semPolys (((Msg.semantic sm₁, c) :: rest).take 24) =
+      semPolys (((Msg.semantic sm₂, c) :: rest).take 24) := by
+    simpa only [List.take_succ_cons] using semPolys_semantic_head sm₁ sm₂ c (rest.take 23)
   unfold SemSource.decision
   rw [hview, hchals, hpolys]
 
-#print axioms decision_first_message_eq
+#print axioms decision_semantic_head
+
+/-- The current semantic classifier suppresses every event for a high-degree
+roundPoly payload, even when the current round is before the alpha rounds. -/
+theorem semanticBad_roundPoly_high_false {Sfield : Fin 29 → Subfield K} {F : Subfield K}
+    (B : PackBasis F) (P : Prefix K K (TypedContext K Sfield) (SemMsg K))
+    (p : K[X]) (hp : 27 < p.natDegree) (c : K) :
+    ¬ semanticBad B P (.roundPoly p) c := by
+  rintro ⟨_hlen, _cs, _hparse, hdeg, _hrest⟩
+  change p.natDegree ≤ 27 at hdeg
+  exact (Nat.not_le_of_gt hp) hdeg
+
+#print axioms semanticBad_roundPoly_high_false
+
+/-- A concrete inner semantic payload that suppresses the current bad event;
+the degree calculation is symbolic and uses no trace or field enumeration. -/
+theorem semanticBad_X28_false {Sfield : Fin 29 → Subfield K} {F : Subfield K}
+    (B : PackBasis F) (P : Prefix K K (TypedContext K Sfield) (SemMsg K)) (c : K) :
+    ¬ semanticBad B P (.roundPoly ((X : K[X]) ^ 28)) c := by
+  apply semanticBad_roundPoly_high_false B P _ _ c
+  rw [Polynomial.natDegree_X_pow]
+  omega
+
+#print axioms semanticBad_X28_false
 
 end
 end R0P.SemD3Glue

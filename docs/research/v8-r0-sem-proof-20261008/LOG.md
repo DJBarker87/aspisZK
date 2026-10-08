@@ -2348,6 +2348,27 @@ All focused G15 jobs used pinned Lean 4.32.0, `run2.sh N R0P/SemD3Glue 7000 7`, 
 
 The final audits use only `propext`, `Classical.choice`, `Quot.sound`. Raw artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified copies are under `/tmp/r0-semd3glue-20261008/continuation-2109/`. Each failed attempt was followed by a source correction; no cap increase, unchanged failing rerun, package rebuild, or forbidden evaluation occurred. The coordinator reviewed the literal interfaces, theorem statements, final diff and hashes independently and ran every focused check. G15 stops at the newly recorded semantic message-shape gap.
 
+### Continuation G15 — C2-aware instance and early degree-guard stop
+
+Resumed at lead `84a2dce11`. Deleted all five previous tag-invariance finding lemmas as requested; the corrected `semChals` validates outer semantic tags and `openingView` reads and checks the round-2 C2 words. The earlier findings remain historical evidence only. The G17-based `witness_baseTyped` remains valid for a witness on the new C2-aware opening statement.
+
+Added `sourceData B` with exactly the requested operations: 24 semantic rounds, `SemSource.semanticBad B`, `InputNoteExtracted`, `SemSource.openingView`, and `SemSource.decision B`. Added the value projection of a transcript carrying duplex states, its extension/round lemmas, and `duplexRows B budget`, which applies B2's doomed predicate to that projection. The budget is data for the separate row assembly; no probability or degree premise is installed.
+
+The next literal gap occurs before the α phase. `SemD2.semanticBad` (`:116–120`) requires `degreeOK sm` at **every** round. `degreeOK (.roundPoly p)` requires `p.natDegree ≤ 27`. However, `semChals` accepts every inner `SemMsg` under the `.semantic` tag, `c2Of` inspects only index 2, and `semPolys`/`sumcheckChecks` inspect polynomial messages and degrees only at indices 14–23. Thus the proposed discharge of `degreeOK` from the α checks does not apply to an early `.roundPoly` payload, which the accepted-prefix parsers do not reject.
+
+Seven new checked facts isolate this narrower issue. `semChals_semantic_head`, `c2Of_head`, `semPolys_semantic_head`, `openingView_semantic_head`, and `decision_semantic_head` retain the outer semantic tag and prove invariance under changing only its first inner payload. `semanticBad_roundPoly_high_false` proves that a payload of degree greater than 27 suppresses the event at every prefix; `semanticBad_X28_false` instantiates it with `X^28`, using only the symbolic degree theorem. These facts prove a parser/event mismatch; no complete accepted-transcript or D3 counterexample is asserted.
+
+The smallest necessary correction is to justify the guard at early rounds: for example, apply the degree guard only in the α phase (where the stated count and acceptance checks need it), or enforce the actual inner-message schedule at the parser/decision boundary. This requires a lead decision. No existing definition or theorem premise was changed. Full D3, the opening-suffix `sampQ` integration, and the final no-hit-to-candidate bridge are not claimed. G18's padding lemmas and G16's semantic density work are independent of this stop; G14′'s separately recorded bridge obligations remain open.
+
+Both coordinator checks used pinned Lean 4.32.0 and `run2.sh N R0P/SemD3Glue 7000 7`; MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. Each runner recorded reservation 24 + 7 GiB; 2111 ran alongside the independent 2401 scope, below the host reservation limit.
+
+| Attempt | Source SHA-256 | Lean / scope exit | Wall | Peak RSS KiB | Swaps |
+|---:|---|---:|---:|---:|---:|
+| 2110 | `af8f169cdd9405f43689583e76e1b0e15b5dca705d7892739f8d7a09703a5223` | 0 / 0 | 3.08 s | 6,814,900 | 0 |
+| 2111 | `2ddf15efa9bfeabe759b89abc6dc05af247ce43e449b45640a1a8234ff5f3b54` | 0 / 0 | 3.71 s | 6,559,868 | 0 |
+
+2111 is the frozen source: all 16 declaration audits use only the permitted axioms (some use fewer or none), with no warnings or errors. No failed G15 attempt, unchanged rerun, cap change, package rebuild, or forbidden evaluation occurred. Raw evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`, with verified copies under `/tmp/r0-sem-continuation-20261008/g15-evidence/`. Lead dependency sources match the green 659/660/661/663 artifacts. The coordinator reviewed the new definitions, the restricted payload statements and the final source independently and ran the focused checks. G15 stops at the unconditional early-round degree guard.
+
 ## G16: SemD2Glue pre-challenge degree-invariant stop
 
 Reviewed the fixed semantic density theorem at lead `f1af33ad5`, B2 `SourceData`/state definitions, the duplex and q22 samplers, and the circle bounds. G15 currently supplies interface findings rather than the requested instance, so that dependency is also open. The independent blocking mismatch is the missing pre-challenge degree invariant for the generic D2 statement. No `FS2.D2` theorem, assembled 31-round protocol, new state predicate, or modified bad-round event is claimed.
