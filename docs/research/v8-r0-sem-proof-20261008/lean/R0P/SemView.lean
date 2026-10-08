@@ -55,6 +55,11 @@ structure TypedContext (K : Type) [Field K] (Sfield : Fin 29 → Subfield K) whe
   pub : Public K
   W : Fin 29 → InitialWord K
   base : ∀ l i, W l i ∈ Sfield l
+  /-- the common field of definition of the C1 lanes (M31 in the source) -/
+  F : Subfield K
+  lanesF : ∀ l : Fin 29, l.val < 26 → Sfield l = F
+  /-- the public fields are M31 values (CoreExt.PublicBase) -/
+  pubBase : PublicBase F pub
 
 /-- Challenges of a semantic round list, all scalar. -/
 def semChals : List (Msg K K (SemMsg K) × Chal K K) → Option (List K)

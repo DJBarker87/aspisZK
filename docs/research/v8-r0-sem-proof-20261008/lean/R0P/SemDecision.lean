@@ -11,7 +11,8 @@ instance (`laneOf_eq_laneAt`, by unfolding). `terminalValue` is
 `terminal_parts(...).0` (T:1285–1310): `eq(zc, point)·Σθⁱ laneᵢ + μ·h1 +
 μ²·(1 − active)·h1`. `decision` checks the ten sumcheck rounds against
 claim 0 with the terminal as the final value, then the opening decision
-through `openingView`. -/
+through `openingView`, with the q22 cardinality guard of the close job's
+`decisionQ` (`R0C.V3.DQ.cardOK`). -/
 set_option autoImplicit false
 namespace R0P.SemSource
 open FS FS2 R0C.SemStatement Polynomial Sumcheck
@@ -107,6 +108,12 @@ def semPolys : List (Msg K K (SemMsg K) × Chal K K) → Option (Fin 10 → K[X]
       if hall : ∀ j, (get j).isSome then some (fun j => (get j).get (hall j)) else Option.none
     else Option.none
 
+/-- The q22 round's set has 22 fibres (close job `R0C.V3.DQ.cardOK`, generic field). -/
+def cardOK (Q : FS.Prefix (R0FS.Stmt K Sfield) (R0FS.Msg K) (R0FS.Chal K)) : Bool :=
+  match Q.rounds.getLast? with
+  | some (_, .set S) => S.card == 22
+  | _ => false
+
 /-- B2's `decision`: the semantic checks and the opening decision. -/
 def decision {F : Subfield K} (B : PackBasis F)
     (P : Prefix K K (TypedContext K Sfield) (SemMsg K)) (m : Msg K K (SemMsg K)) : Bool := by
@@ -116,7 +123,7 @@ def decision {F : Subfield K} (B : PackBasis F)
     openingView P = some Q ∧ semChals (P.rounds.take 24) = some cs ∧
     semPolys (P.rounds.take 24) = some polys ∧
     sumcheckChecks P.statement.pub B cs hcs polys Q.statement.pointClaims ∧
-    m = .opening om ∧ R0FS.decision Q om = true)
+    m = .opening om ∧ R0FS.decision Q om = true ∧ cardOK Q = true)
 
 #print axioms laneOf_eq_laneAt
 #print axioms decision

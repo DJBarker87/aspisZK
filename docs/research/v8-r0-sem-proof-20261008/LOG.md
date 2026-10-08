@@ -2333,3 +2333,22 @@ The complete prefix parse/hit bridge was not claimed in the absence of G15's ins
 | 2201 | `2570bc04d986db67bb05e7d4f73cafc5ff24d6b31642058cb73e2755a741c4a7` | 0 / 0 | 2.70 s | 6,814,436 | 0 | Final finding green; one permitted-axiom audit, no warnings or errors. |
 
 The frozen source matches 2201. Its audit contains only `propext`, `Classical.choice`, `Quot.sound`. No unchanged failing rerun, cap change, dependency rebuild, or evaluation of traces, row ranges, field universes, or tables occurred. Cached `SemD2` source matches the lead file, SHA-256 `b362eb6071084137f96cbf76258ad6915204f054ee1a89f160f16580de14b4ce`; the host's green G15 object from 2100 was reused. Raw host evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified local copies are under `/tmp/r0-semd2glue-20261008/evidence/`. The coordinator independently reviewed the decoder, D2 quantifiers, state predicate, count premise, finding proof and final diff and ran the focused checks. G16 is stopped at the missing rejected-prefix/degree-validity bridge and the recorded G15 dependency.
+
+## Lead decisions after G15 stop (context typing facts, q22 guard)
+
+Both gaps (6e9d1bd6d) were lead interface omissions.
+
+1. `TypedContext` now carries `F : Subfield K`, `lanesF : ∀ l < 26,
+   Sfield l = F` and `pubBase : PublicBase F pub`: the statement's typing
+   facts (C1 lanes and public fields are M31). `d3_core` takes
+   `B : PackBasis x.F`, `hA : BaseTyped x.F t` and uses `x.pubBase`; G15
+   obtains `BaseTyped` from `Witness`'s subfield descent via `lanesF`.
+2. `SemDecision.decision` now requires `cardOK Q = true` (the q22 fibre
+   count, the close job's `decisionQ` guard restated generically), so
+   `accept_not_doomed`'s `S.card = 22` is available; `γ ≠ 0` is derived
+   from the σQ sampler of the opening rounds exactly as `R0Q.d3Q` does
+   (`chalQ_lt`, `σQ`, `gamma_ne_zero`), which fixes the B2 instance's
+   opening-round samplers to `R0C.V3.DQ.sampQ`.
+
+Attempts 654 SemView, 655 SemDecision, 656 SemD3, 657 SemD2: exit 0,
+no warnings; axioms unchanged (standard three).

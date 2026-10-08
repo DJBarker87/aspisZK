@@ -91,8 +91,8 @@ theorem preZc_semSlice (r : Fin 24 → K) : preZc (semSlice r 0 14) = semSlice r
 omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in
 /-- The D3 core. -/
 theorem d3_core (P : Nat) [CharP K P] (hP : P = 2 ^ 31 - 1)
-    (F : Subfield K) (B : PackBasis F) (x : TypedContext K Sfield) (t : Trace K)
-    (hA : BaseTyped F t) (hpub : PublicBase F x.pub)
+    (x : TypedContext K Sfield) (B : PackBasis x.F) (t : Trace K)
+    (hA : BaseTyped x.F t)
     (hrows : HonestRows x.pub B t) (hdeg : VirtualDeg x.pub B t) (hchk : ChecksAccept x.pub B t)
     (r : Fin 24 → K) (polys : Fin 10 → K[X])
     (hsum : sumcheckChecks x.pub B (List.ofFn r) List.length_ofFn polys
@@ -113,7 +113,7 @@ theorem d3_core (P : Nat) [CharP K P] (hP : P = 2 ^ 31 - 1)
     rw [hrows, preZc_semSlice, semSlice_zero_apply, semSlice_zero_apply, semSlice_zero_apply,
       semSlice_zero_apply]
     rfl
-  exact semantic_sound_rounds P hP F B x.pub t hA hpub r (fun pre => virtualPoly x.pub B t pre)
+  exact semantic_sound_rounds P hP x.F B x.pub t hA x.pubBase r (fun pre => virtualPoly x.pub B t pre)
     (fixedStrat polys) hG (hdeg _) hacc' hgood
 
 #print axioms strategyPolys_fixed
