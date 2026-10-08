@@ -1646,6 +1646,42 @@ Source review uses Rust inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809
 
 Stopped as instructed on this further source/interface mismatch. No `LaneMap.lean` file, new theorem, Lean build, or local substitute build was created; no 17xx attempt was consumed. Build exit, wall time, RSS, swap and new axiom audits are therefore not applicable. No existing Lean source was edited. Coordinator range hashes and the independent public-input inventory are retained at `/tmp/r0-lanemap-20261008/source-review.json` and `/tmp/r0-lanemap-20261008/public-typing-audit.md`.
 
+### Continuation G11′: completed lane map with PublicBase
+
+Resumed after lead commit `0d8ed6e63`, with the authorized `hpub : PublicBase F pub`; source base through `e91642e9c`. The earlier public-input typing stop is resolved by that lead definition. No existing Lean source was edited. The new `LaneMap.lean` imports the production families, CoreExt and Zerocheck, and implements the exact agreed lane catalogue.
+
+- `rowOf` encodes coordinates most-significant first. `rowCode_testBit`, the explicit `rowBits` inverse, and `rowOf_bijective` establish the address convention without enumerating rows. Coordinates 0–5 give block bits 5..0 and 6–9 give local bits 3..0 (`pair_forest_copy_terminal.rs:143–177`; `pair_forest_hiding.rs:41–46,190–196`).
+- `scalarLane t pub : Fin 94 → (Fin 10 → Bool) → K` reads the ported residual lists in source order: Schedule 0–31, Path 32–48, Value 49–83, Digest 84–91, Asset 92–93; Occupancy is added at 0–11. The private proof bridges retain all entries, including prescribed zero cells. `scalarLaneRow` supplies the explicit zero padding at 94–95.
+- `laneOf t pub lam chi B` has Poseidon packed indices 0–3, semantic packed indices 4–27, and Copy at 28 with H1 = trace column 26. This is the exact power order of the source's reversed Horner folds (`T:1267–1274`); packing uses consecutive source slots (`T:106–124,1143–1182`).
+- `schedule_occupancy_separate` proves both directions of separation over every row and each of the first twelve scalar positions, using local-row-zero schedule support and occupancy rows 1017/1018. The other mixed group (Path 48, Value 49–51) is separated by distinct pack4 components.
+- `lanes_zero_iff_holds` proves exactly the eight production-family conjunction under `BaseTyped F t`, `B : PackBasis F`, and `PublicBase F pub`: Value, Occupancy, Asset, Schedule, Path, Digest, Poseidon scalar, and Copy via CHolds. Each semantic residual is shown to belong to F using the trace and public typing contracts, before applying `pack4_eq_zero_iff`. The existing Poseidon packed/scalar equivalence handles its four groups. No Positive hypothesis or conclusion is added.
+- `bsumB_rowOf`, `lane_h1_sum`, and `lane_inactive_sum` provide the Boolean-coordinate/Fin-1024 correspondences requested by the LogUp glue. The inactive helper retains the literal `(1 - active) * H1` form (`T:1307–1308`). These identify sums; they do not assert vanishing.
+
+All packed trace inputs are columns 0–15. Column 26 is used only by the unpacked Copy lane and helper sums. The Poseidon raw-limb-to-canonical-field refinement obligation remains as recorded; this lane theorem uses the already-proved field-level packed family. No probability claim, tuple-extraction premise, or reinterpretation of source lanes was introduced. Coordinator and independent reviews checked the final statement, offsets, selector bit order, padding, source operations and public typing.
+
+#### Focused builds and audits
+
+All jobs used the pinned Lean 4.32.0 build host/cache and `run2.sh N R0P/<target> 7000 7`, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. Each reservation was 24 + 7 GiB. Attempt 1700 was the explicitly requested CoreExt rebuild into the shared R0P objects directory; subsequent targets were R0P/LaneMap. No local build, dependency rebuild, cap increase, unchanged failing rerun, or simultaneous G11 job occurred.
+
+| Attempt | Scope/Lean exit | Time exit | Wall | Peak RSS KiB | Swaps | Source SHA-256 |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| 1700 | 0 | 0 | 0:01.43 | 3327464 | 0 | `7b0a6820f1f6d446943447509edd40babf84801eb1f06aeabd868ff033d41188` |
+| 1701 | 1 | 1 | 0:03.58 | 3332340 | 0 | `f3b7afdbf1942083b1fc9331e7b8e567e0eafad6d4f31a76ece7a20fb8c75798` |
+| 1702 | 1 | 1 | 0:04.90 | 3327048 | 0 | `ac0c6e80db0d9e3b09f39b9cd8ac455db06c9f03b268cdbbfb041bb9d1fc3dc7` |
+| 1703 | 1 | 1 | 0:03.26 | 3332972 | 0 | `7725ed7acd8a70dd75c57133f78de8e0770d26cec5f9f9a5c3cacea69f83271e` |
+| 1704 | 1 | 1 | 0:09.19 | 3374052 | 0 | `d1f0c507624b2e39c62b9e7fd85b0b165aae0c9c18e68dc903e8aba5d0911160` |
+| 1705 | 1 | 1 | 0:09.77 | 3380940 | 0 | `d2354154191eeb0bd9031c868f5621360f77f0b2fe8ef20624a731b9c1b07cec` |
+| 1706 | 1 | 1 | 0:03.37 | 3334464 | 0 | `6bfb10a9d651f8404366e97049f59764fb84fce9d6050003390e4f5d2e50d17b` |
+| 1707 | 1 | 1 | 0:09.20 | 3383004 | 0 | `f346d646d1f2cfd378cfabe9c4182420ed71aab2382de6cfe800b7d3136ae5f5` |
+| 1708 | 0 | 0 | 0:09.27 | 3411784 | 0 | `7f27bb9e3ece27b76316bb61a9219ebf10452d5365d7f5f44e08a1387f67d95e` |
+| 1799 | 0 | 0 | 0:09.38 | 3412060 | 0 | `122aa0b15111da62ae6672051c43a1cfe792e6cd240974669af87732539f6e17` |
+
+Attempts 1701/1703 checked the row/support layer: the rejected errors were Fin case/bit APIs, selector numeral projections, and a missing rowOf unfolding. Attempt 1702 checked family membership: zero-target membership and using a known selector fact before decomposing its product required corrections. Attempts 1704/1705/1707 checked the combined file and were rejected for list-index transport, explicit finite-index bounds, zero padding, and tactic indentation. Attempt 1706 separately checked the symbolic helper-sum bridge and was rejected for an already-closed goal and an implicit reindexing function. Failed elaborations emitted `sorryAx` through error terms; none was accepted and no placeholder was authored. All source hashes are distinct.
+
+Attempt 1708 passed the complete combined implementation. The coordinator then froze the repository source with provenance comments and one namespace, and ran final focused check 1799. Final scope/Lean and time exits are zero, wall 9.38 seconds, peak RSS 3,412,060 KiB, swaps zero, no warnings. All 44 named declarations have matching `#print axioms` commands; every theorem, including private helpers, is covered. The final audits contain only `propext`, `Classical.choice`, and `Quot.sound` (some declarations need fewer or none). The source scan found no prohibited proof terms/options, and no normalization of a trace, row universe, constant table, or permutation.
+
+Final frozen `LaneMap.lean` SHA-256: `122aa0b15111da62ae6672051c43a1cfe792e6cd240974669af87732539f6e17`. Raw host evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, and `source-N.lean`; matching local snapshots and the attempt inventory are under `/tmp/r0-lanemap-20261008/`. Every recorded snapshot hash was checked against its evidence. G11 has no remaining source/interface stop after the lead's PublicBase correction.
+
 ## Lead decisions after G10/G11
 
 G10 (9c387d8bb) accepted: all five function-level bad-set and degree
