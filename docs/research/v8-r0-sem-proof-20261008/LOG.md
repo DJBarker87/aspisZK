@@ -2026,3 +2026,13 @@ Remaining for the B2 instance: `semanticBad` from G13′'s
 (construct the R0FS `Stmt` from the semantic transcript's point claims
 and z₀, z₁), `decision`; then D3 from `semantic_sound_closed` and D2
 per round from `semRoundBad_card` under the duplex sampler law.
+
+## Lead decision: degree premise for the α-round count (G13′)
+
+`badAlpha` bounds the honest polynomial's degree but not the prover's.
+`accept` checks `(polys j).natDegree ≤ 27` at round j, before α_j is
+sampled, so a transcript violating it is rejected independently of α_j.
+The α-round cardinality lemma may therefore take `(polys j).natDegree ≤ 27`
+as a premise (counting only); the round predicate and the recursive
+bridge to `badAlpha` stay literal. In the D2 application the premise is
+discharged from the accepted prefix. Per-round bound 27 is unchanged.
