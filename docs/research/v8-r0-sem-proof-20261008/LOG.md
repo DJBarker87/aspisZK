@@ -2398,6 +2398,26 @@ The complete prefix parse/hit bridge was not claimed in the absence of G15's ins
 
 The frozen source matches 2201. Its audit contains only `propext`, `Classical.choice`, `Quot.sound`. No unchanged failing rerun, cap change, dependency rebuild, or evaluation of traces, row ranges, field universes, or tables occurred. Cached `SemD2` source matches the lead file, SHA-256 `b362eb6071084137f96cbf76258ad6915204f054ee1a89f160f16580de14b4ce`; the host's green G15 object from 2100 was reused. Raw host evidence is `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified local copies are under `/tmp/r0-semd2glue-20261008/evidence/`. The coordinator independently reviewed the decoder, D2 quantifiers, state predicate, count premise, finding proof and final diff and ran the focused checks. G16 is stopped at the missing rejected-prefix/degree-validity bridge and the recorded G15 dependency.
 
+### Continuation G16 — semantic row bounds proved; circle sampler interface open
+
+Resumed at lead `84a2dce11` with the new `SemSource.semanticBad B`, including its internal current-message degree guard. Removed the superseded external-degree finding from `SemD2Glue.lean`; its earlier evidence remains above. The semantic decoder is exactly `semChal`, the lead's QM31 reduction embedded in `WideExact`. `Duplex.Params` is already parameterized by its challenge type and decoder, so no decoder parameterization change is needed.
+
+Proved `hitFrom_append` and `doomed_ext_roundBad`: when a doomed prefix becomes not doomed on one extension, its new message/challenge pair has the current `roundBad`. `early_roundBad_semantic` isolates the semantic branch for indices below 24, and `early_nonsemantic_stay` excludes a flip for nonsemantic outgoing messages. `semantic_row_D2_semantic` then applies the exact `Duplex.samp_mean` one-block law, pointwise event containment, and `semantic_round_density`. `semantic_row_D2` covers every outgoing message, with zero flip mass for the other message constructors. The bound is `(1 + deltaQ) * (100 * semRoundBudget i / P^4)` for each semantic index, with the decoder identity `p.σ i a = .semantic (semChal a)` specifying the prescribed sampler. There is no external degree premise: `semanticBad`'s guard supplies the premise used by the lead's counting lemma. The independent early-degree coverage finding in G15 does not invalidate this density statement.
+
+This is the 24 semantic-row component, not the full 31-round `FS2.D2` instance. The concrete remaining source interface is at circle rows 24/25: `R0C/CircleRows.lean:59–71` proves event densities for a **uniform `Point K`**, and its header explicitly excludes byte-state/source sampler laws. `R0C/CircleSource.lean:30–77` proves non-rationality/distinctness only for successful bounded source outcomes; error outcomes remain explicit. Neither interface defines the total mixed byte sampler needed here. A source-faithful mixed sampler with explicit abort treatment and the corresponding two circle event-density/refinement lemmas is the smallest missing bridge; no uniform-byte law or default challenge was assumed. `R0C/V3/DuplexQ.lean:35–59` supplies four field rounds and the q22 completion chain, not circle challenges. Reusing its opening law at offsets 26–30 and connecting the projected suffix remains assembly/proof work; it is not asserted to be a separate impossibility. Full D2 is stopped at the circle sampler interface, and no existing definition or premise was changed.
+
+All coordinator runs targeted only `R0P/SemD2Glue`, pinned Lean 4.32.0, `run2.sh N R0P/SemD2Glue 7000 7`, MemoryHigh 5 GiB / MemoryMax 7 GiB / MemorySwapMax 0, with populated reservation 24 + 7 GiB.
+
+| Attempt | Source SHA-256 | Lean / scope exit | Wall | Peak RSS KiB | Swaps |
+|---:|---|---:|---:|---:|---:|
+| 2202 | `8a3503dd93e4d71afb80f224841b49370af62fdd26e4e40746f53a4980ef0050` | 1 / 1 | 4.49 s | 6,798,380 | 0 |
+| 2203 | `f66b4b095f8aef1dd68feca2e73a3618bc5d6ac25c015e5e2fa1a679a216735f` | 1 / 1 | 4.72 s | 6,797,040 | 0 |
+| 2204 | `ac0a6d527059a44c082f2ab9cc4420a4995e9fd54b7db287a7d09a3eeb633986` | 1 / 1 | 5.54 s | 6,804,192 | 0 |
+| 2205 | `a4dc21f0a5fe9a083febdd2d60efe56859ef33a07bc91a1eec0341872470244c` | 1 / 1 | 4.71 s | 6,802,636 | 0 |
+| 2206 | `099cbfcb813cd89a0c412074e97d2d8d04c3c90fde3ba4b481236f62f8edde6e` | 0 / 0 | 5.31 s | 6,840,092 | 0 |
+
+2202 corrected the state namespace, singleton-hit disjunction and round offsets; 2203 corrected the challenge type and made the sampler-law predicate explicit; 2204 isolated the three constant-zero mean branches; 2205 corrected a parenthesis in their nested mean expressions. Every failure was followed by a source change. Frozen 2206 has six theorem audits, all using only `propext`, `Classical.choice`, `Quot.sound`, and no warnings or errors. Raw artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; SHA-verified copies are under `/tmp/r0-sem-continuation-20261008/g16-evidence/`. The coordinator independently reviewed the event containment, decoder identity, mean calculation, source interfaces and final diff, and ran all focused checks. No cap increase, unchanged failing rerun, package rebuild or forbidden evaluation occurred.
+
 ## Lead decisions after G15 stop (context typing facts, q22 guard)
 
 Both gaps (6e9d1bd6d) were lead interface omissions.
