@@ -2231,3 +2231,38 @@ fixes the sampler statement against R0C/V3/DuplexQ.
 Correction: 4c785f9a6 was committed with a misplaced `omit` (attempt 647 exit 1, syntax); attempt 648 on the corrected file exit 0, no warnings. SHA-256 `26c5a9b3ba1d78052565929c92e6e257e63b58eab2695ea95936a41210c82c7f`.
 
 Attempt 649: unused Algebra instance omitted; exit 0, no warnings.
+
+## Lead: D2 rows for the semantic rounds (SemD2.lean)
+
+Correction to the B2 instance: the semantic challenges are
+`challenge_qm31` (aspis-core transcript.rs:378–392: four accepted limbs
+< P), not the opening layer's 32-byte WideExact sampler. The SEM field is
+therefore QM31 embedded in E = WideExact (K = E for the Lean objects,
+challenges in the image of `algebraMap QM31Exact WideExact`), and the
+ledger's denominator P⁴ is the right one.
+
+`SemD2.lean`: `semanticBadRound x B polys i pref c` (some candidate of
+`Lambda x.W` is round-i bad at fresh challenge c, earlier challenges
+`pref` fixed); `semanticBadRound_card ≤ 100 · semRoundBudget i` (union
+over `Lambda`, `Lambda_card`, `semRoundBad_card`; `Lambda` kept
+irreducible). QM31 sampler model mirroring `R0C.ModuloField.ordinary`:
+`qm31Rank : Fin (P⁴) ≃ QM31Exact` (`tupleFieldEquiv`), `qm31Sample`
+(rejection-free reduction of one 32-byte block mod P⁴; the retained
+retry implementation's law bridge is the same open item as the opening
+layer's, close-job FS_LOG), per-element mass ≤ 1/P⁴ + 1/256³² =
+(1+δ_q)/P⁴ with `deltaQ = P⁴/256³² ≤ 2⁻¹³¹` (`deltaQ_small`);
+`semChal = algebraMap … ∘ qm31Sample` with `semChal_mass`
+(injectivity) and `semChal_event` (`event_mass_le`);
+`semantic_round_density`: mass of round i's bad set ≤
+(1+δ_q)·100·semRoundBudget(i)/P⁴, with the α-round degree premise
+`semRoundDegreeChecked` (authorized earlier). Attempts 650–652 were
+instance binders, the `P` ambiguity (AspisCircleGroupOrder vs
+AspisV5ComponentCQM31TowerExact) and qualified names; 653 exit 0, 3.69 s,
+6836192 KiB, swap 0, 24+7 GiB. SHA-256 `b362eb6071084137f96cbf76258ad6915204f054ee1a89f160f16580de14b4ce`. Axioms: standard three.
+
+With this, every per-row D2 bound for the 24 semantic rounds is proved
+(sum 303000·(1+δ_q)/P⁴ ≤ 2⁻¹⁰⁵). Remaining: G16 assembles FS2.D2 for the
+B2 instance from these rows under the duplex sampler program (one
+squeeze per scalar round, as `R0C/V3/DuplexQ.round_field_bound` does
+for the opening rounds), and the circle rows z₀, z₁ reuse
+`R0C/CircleRows`.
