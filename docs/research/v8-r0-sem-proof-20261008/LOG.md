@@ -1620,6 +1620,32 @@ No build was run. The coordinator reviewed the source ranges independently; all 
 
 The coordinator source review, including hashes of each cited range, is retained at `/tmp/r0-composition-20261008/G11-source-review.json`. No Lean target was needed for this source-stop finding; attempts 17xx remain unused.
 
+### Continuation G11′: public-input base-typing stop
+
+Resumed after the accepted lead decisions at `d43cf35be120f0fce7be494b5b86e3a17de712d6`. Fetch/fast-forward found the branch current; subsequent lead commits through `e1b73deae8e8f00a153d04ca8ed8f44478da77c0` were present at the final source review. The approved theta order, mixed groups, and production-family list above are retained. A further interface mismatch prevents the requested proof that every packed scalar residual belongs to the base subfield.
+
+`BaseTyped F t` quantifies only over trace cells in columns below 26 (`CoreExt.lean:26–28`). `Public K` instead stores `assetId`, optional withdrawal amount, and all digest coordinates as arbitrary elements of `K` (`Core.lean:47–67`); its comment about embedded base-field digests is not a membership hypothesis. `pack4_eq_zero_iff` requires each of its four components to belong to `F` (`CoreExt.lean:41–42`). No public-input base-typing predicate or corresponding premise is supplied by the fixed interface.
+
+A single failing component is scalar source slot 92, semantic packed group 23, component 0, hence theta lane 27. At row 44 its value is exactly `t 1 44 - pub.assetId`: `assetFamily` selects row `2*16+12` in its first residual (`Asset.lean:21–30`). Base typing supplies `t 1 44 ∈ F`; it cannot supply `pub.assetId ∈ F`. In fact, for any `B : PackBasis F`, `B.i ∉ F`: otherwise its `indep` property applied to `(-B.i, 1, 0, 0)` would force `1 = 0`. Taking the zero trace and `pub.assetId = B.i` therefore gives a base-typed trace whose slot-92 residual at row 44 is `-B.i ∉ F`. This is a mathematical counterexample to the requested unconditional scalar-membership obligation, independently reviewed against the definitions; it is not a newly kernel-checked theorem or a counterexample to the entire global vanishing equivalence.
+
+The source does supply the missing property before abstraction. At the pinned terminal, `SemanticPublic.asset_id` has type `M31` and the amount has type `Option<u32>` (`T:87–98`); `lift_m31` embeds into QM31 (`T:100–103`). The asset and withdrawal residuals explicitly subtract these lifted base values (`T:1165–1181`), with amount validation at `T:1234–1239`. Rust `Digest` is `[M31; DIGEST_ELEMS]`, with eight elements (`poseidon2.rs:58–60`); digest binding subtracts `lift_m31(target)` after any M31 right-tweak addition (`T:364–377`). The Lean public record retains the lifted values but no proof of their membership in the chosen subfield `F`.
+
+The missing public-field coverage also includes the enabled targets in packed slots 84–91 (`Digest.lean:65–88`): anchor, nullifier, change and next root; recipient whenever its Option is present, independently of variant; snapshot-frontier coordinates on the nonzero append-bit branch; and next-frontier coordinates at the carry entry when carry is below 20. The withdrawal amount is needed when the variant is withdrawal and the Option is present. The empty-root branch remains the frozen integer-constant target and needs no new public premise.
+
+Smallest proposed interface change, not enacted: supply public base membership for `assetId`, the enabled withdrawal amount, and each enabled digest target coordinate, or supply a base-typed public representation with a proved conversion to the existing `Public K`. For the displayed counterexample alone, `pub.assetId ∈ F` is necessary and sufficient to repair the missing component membership. Choosing the complete public-typing contract and adding it to the lane-map theorem remains a lead interface decision; no premise was added or weakened here.
+
+No packed semantic input reads a trace column at or above 26. `rowOpenings` has `Fin 16` input columns (`Core.lean:30–43`), and the Poseidon state columns are likewise 0–15 (`Poseidon.lean:754–757`). H1 at column 26 belongs only to the separate, unpacked Copy lane 28. The new stop is public-input typing, not a trace-column, mixed-family, selector-order, or Positive-lane issue.
+
+Source review uses Rust inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`; all inspected Rust files match that pin. Relevant unchanged SHA-256 values:
+
+- `Core.lean`: `eba6bb784803b5f00922724efc9997a8d5ab6bc55cd8c100bffd8a397dabe1f9`.
+- `CoreExt.lean`: `de191f5bf4ca0389c7b9e0ee613982888a97ec9810072913c19054882364e56b`.
+- `Asset.lean`: `2c36ba0a589d2e982ca55716f5093e6c5da4152454f24de26c71f9ad9d9ef424`.
+- `Digest.lean`: `928d531c7ae80fdb2a3865bf3b2eac2d1dea84c2892c413f5c4a63709947d26b`.
+- `pair_forest_semantic_terminal.rs`: `efbc5be87e271419d7b09e1bb6e3a83984d42795bc20067ea039814fb89ffa58`.
+
+Stopped as instructed on this further source/interface mismatch. No `LaneMap.lean` file, new theorem, Lean build, or local substitute build was created; no 17xx attempt was consumed. Build exit, wall time, RSS, swap and new axiom audits are therefore not applicable. No existing Lean source was edited. Coordinator range hashes and the independent public-input inventory are retained at `/tmp/r0-lanemap-20261008/source-review.json` and `/tmp/r0-lanemap-20261008/public-typing-audit.md`.
+
 ## Lead decisions after G10/G11
 
 G10 (9c387d8bb) accepted: all five function-level bad-set and degree
