@@ -2204,3 +2204,26 @@ family's residual exceeds weighted degree 26, stop and record it: that is
 a completeness finding against the source's degree constant, not a
 soundness finding, since `accept` enforces degree ≤ 27 on the prover.
 Items 1–4 and 6 of G14 are unchanged.
+
+## Lead: D3 core (SemD3.lean)
+
+`honestClaims t v` (MLE of t at the three opening points of v, via R0's
+`dot`/`eqWeight`), `preZc`, `virtualPoly pub B t pre` (the terminal at
+the honest claims), the three G14′ bridge Props `HonestRows`,
+`VirtualDeg`, `ChecksAccept` (over the challenge vector r), `fixedStrat`,
+`candidateRoundBad` (G13′'s `semRoundBad` for one candidate with the
+transcript's polynomials) and `semanticBadAt` (some candidate of
+`Lambda x.W` is bad: B2's `semanticBad`); `d3_core`: a parsed transcript
+passing `sumcheckChecks` with honest claims for a base-typed candidate t,
+with no semantic round bad for t, gives `ProductionHolds ∧ CopyLinkBalance`
+via `semantic_sound_rounds`. Attempts 643–646 were defeq/namespace fixes
+(`0 + n`, `dot`, `List.length_ofFn`); 647 exit 0, ≈3 s, ≈6.8 GB (R0C
+imports), swap 0, 24+7 GiB. SHA-256 `0b46c2e4d2622326276a28c07a73a484939a41a0a0a28ac415575a8f828e2dc2`. Axioms: standard three.
+
+Remaining for B2's D3: the parse glue (`decision = true` ⇒ `openingView`
+= some Q, `R0FS.decision Q om` ⇒ by `decision_true`/`accept_not_doomed`
+with no opening round bad a `Witness` t, which is in `Lambda x.W` and
+has honest claims; and `BaseTyped` from `Witness`'s subfield descent with
+`Sfield l = F` for C1 lanes) — G15. D2 per round: `semRoundBad_card`
+over `Lambda` (×100) under the duplex sampler law — G16, after the lead
+fixes the sampler statement against R0C/V3/DuplexQ.
