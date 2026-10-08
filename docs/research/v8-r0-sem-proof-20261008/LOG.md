@@ -2955,3 +2955,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2056 | `R0P/SemDegFamilies` | 0 / 0 | 0:13.15 | 7002080 | 0 | 44 | `60daa294e557252938f4d87fb9eb93df7aca5eff51795abf595c140a3b15c3e1` |
 
 Source revision(s): `692dd8e05dc535d420cbcf1b5a502ca300517cfd`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Overnight G14′ Step 5 — unconditional VirtualDeg
+
+SemVirtualDeg proves the literal terminal and virtualPoly coordinate bounds at 27, then applies vdeg_mlDeg and SemBadSets.mlDeg_indDeg to discharge the original VirtualDeg Prop. Equality weighting contributes one to the audited lane bound 26; the honest helper and inactive-copy term are bounded using the proved activeAt degree one. Attempt 2057 passes on its first focused run with no errors or warnings; all three axiom lines are [propext, Classical.choice, Quot.sound]. No premise was added.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2057 | `R0P/SemVirtualDeg` | 0 / 0 | 0:03.07 | 6813452 | 0 | 3 | `c7660c31f4d9c72d6b8b654450ffb6d4e6dc180de99b158c84e79d4f4874f4ee` |
+
+Source revision(s): `278fd3cd7f38dcf9a52ac5761ce7f522ac97d0f6`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
