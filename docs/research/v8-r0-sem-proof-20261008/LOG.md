@@ -2887,3 +2887,24 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2021 | `R0P/SemHonest` | 0 / 0 | 0:03.52 | 6830688 | 0 | 14 | `63c890ceebfe82d2ef16e73aed51b4acac0e6bc0af8c5fb3b0d5eca05034234f` |
 
 Source revision(s): `2e002ad58598de04eec8179f73227b6cd2655048`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Overnight Step 3 — SemDeg complete
+
+Implemented VDeg with pointwise max/add calculus, scalar/negative/subtraction/power/sum/product/list closure, coordinate functions, and VDeg-to-MLDeg. Proved the source selector product by coordinate reversal, the general rowCode bijection and partition of unity, factorisation at `16*h+l`, and high/low marginal identities with disjoint support vectors. Proved the exact successor claim vector `c.val+1`, current/XOR claim vector 1, equality-value vector 1 and linear pack4 preservation. 2024 checked the generic calculus; 2026 the selector input; 2029 the factorisation/marginals; 2031 the complete input module. Failures were explicit function/index ascriptions, product-sum instantiation, reversed equality predicates, local unfolding and two cast/field annotations. Every retry changed source. 2031 has 47 clean axiom lines, all subsets of the standard three, no warning or error. Reservations were 26+7 GiB for 2022–2024, 24+7 thereafter. The generic successor proof and carry recurrence stayed symbolic; no row or constant-table evaluation.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2022 | `R0P/SemDeg` | 1 / 1 | 0:03.03 | 6777620 | 0 | 16 | `3b50b6a8ae9ffaa4ba074b65948684cdbe390ce4b1b9cfc7a01fd4292ccec9ee` |
+| 2023 | `R0P/SemDeg` | 1 / 1 | 0:02.99 | 6778100 | 0 | 16 | `9c670a7690203e30d58bbc7ac5b62e29ee1d704863b4d8fa8a320071ecbb7b85` |
+| 2024 | `R0P/SemDeg` | 0 / 0 | 0:03.09 | 6812860 | 0 | 16 | `2f511e86971e18325f531a376939df253e147d0990974119ccc7cc58c1b4316f` |
+| 2025 | `R0P/SemDeg` | 1 / 1 | 0:03.11 | 6786568 | 0 | 22 | `52cd3b16122b1f45751561c93edff795e74a09d36158a73fa795d2c8019b5e66` |
+| 2026 | `R0P/SemDeg` | 0 / 0 | 0:03.35 | 6822652 | 0 | 22 | `a48223a7c9d3ca5a96d9b811342a745773caa4cd9c0520fcaff213be7f248ab0` |
+| 2027 | `R0P/SemDeg` | 1 / 1 | 0:03.77 | 6792624 | 0 | 35 | `db78bee88d6dcbd7d62f1aecdd74d23269000be8d34001c54de1d61765c4ae97` |
+| 2028 | `R0P/SemDeg` | 1 / 1 | 0:03.62 | 6799276 | 0 | 35 | `815f7d228f5283459018b45bd3239c5ad29ef7cb49f2950d05f7bcc733467916` |
+| 2029 | `R0P/SemDeg` | 0 / 0 | 0:03.78 | 6836212 | 0 | 35 | `9c73c7ff496c1ef9b1bc07a8121fcb641dce7539778eae53992e70f868433509` |
+| 2030 | `R0P/SemDeg` | 1 / 1 | 0:09.41 | 6834156 | 0 | 47 | `5c5d4fb4007ea232f217305db68fe3537dc6c315d7f33f226b720983bc247cc4` |
+| 2031 | `R0P/SemDeg` | 0 / 0 | 0:09.64 | 6874700 | 0 | 47 | `ed059e7d1a94b7f3819398fb7f03762c743ab04d51d0ccd1ba795e8f5d96294e` |
+
+Source revision(s): `c19010238025addba901b094440bfd24538712ce`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
