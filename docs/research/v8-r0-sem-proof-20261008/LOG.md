@@ -1671,3 +1671,36 @@ Open obligations, each a single instantiation when it lands: G11′
 `BadLogUp`), G8/G9 (`ExtractionStep`). After those, the FS integration:
 replace `R0FS.Stmt.semantic` by the semantic acceptance predicate and add
 the ledger's 302900/(P⁴−1) to the state function.
+
+## Lead: extraction step closed; LogUp assembly objects (LogUpAssembly.lean)
+
+G5–G9 (through f91637b81) accepted. `SemAssembly.extraction_step`
+instantiates `ExtractionStep` with G9's `input_note_extracted`.
+Attempt 620, exit 0, 1.42 s, 3328404 KiB, swap 0. SHA-256 `4acc8671740fe4753b3f25e08aa4b0681257637c9bd8612085970c120950dfa4`.
+
+`LogUpAssembly.lean` fixes the LogUp step's objects for a trace t and
+pub: `enabledLinks` (weight ≠ 0), `prodVal`/`consVal` (compressed
+endpoint values at λ), `valueSet` D, `signedCount` m (producers minus
+consumers at a value, cast to K), `prodPolys`/`consPolys` (multisets
+of `compressPoly` of the tagged tuples), and `BadLogUp pub t lam chi`:
+χ = 0 (empty slots carry the factor χ − 0) ∨ χ ∈ D ∨ χ a root of a
+nonzero `numer D m` ∨ (S ≠ T ∧ λ a root of a nonzero coefficient of
+Π(X − P) − Π(X − Q)). The ledger's activePole count becomes 273.
+The chain is five named Props L1–L5; `logup_step_of` glues them, with
+the Boolean-sum/Finset-sum correspondences for H1 and the inactive
+helper as hypotheses (a G11′ item). Attempt 621, exit 0, 1.69 s,
+3338700 KiB, swap 0. SHA-256 `79de485b1c2a3cea7f2a3290be6a9b9e82bd5f6186a843a3656b33c060ee2236`. Axioms: standard three.
+
+G12 proves L1–L5 (statements in the file):
+L1 from `copy_holds_iff` with `copy_producer_slots_nodup` /
+`copy_consumer_slots_nodup` (one endpoint per slot, so each
+`copyRowValues` is a single compressed value or 0 with weight 0) and
+field division off poles; L2 by splitting Σ_b over active/inactive rows
+and regrouping the double sum by value (`Finset.sum_fiberwise`); L3
+from `numer_partial_fraction`, `numer_nonzero_bounds`,
+`numer_eq_zero_imp`; L4 from `product_difference_coeff`, with
+`signedCount = 0` on D giving equal value multisets (counts are < P so
+the K-cast is faithful: this needs `CharP K P` with P > 136, or
+char 0; state the hypothesis), and evaluation at λ commuting with the
+products; L5 from `copy_tags_nodup`, `compressPoly_eq_iff` and
+`copy_balance_cell`'s pattern.

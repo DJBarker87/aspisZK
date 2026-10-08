@@ -3,6 +3,7 @@ import R0P.PositivityChain
 import R0P.Semantics
 import R0P.Occupancy
 import R0P.Asset
+import R0P.Extraction
 
 /-! Lead: the SEM assembly.
 
@@ -81,6 +82,13 @@ theorem semantic_extraction (pub : Public K) (t : Trace K) (lam chi : K)
     (hext : ExtractionStep pub lam chi t) : InputNoteExtracted pub t :=
   hext h.1 h.2
 
+/-- G9 instantiates the extraction step. -/
+theorem extraction_step (pub : Public K) (lam chi : K) (t : Trace K) :
+    ExtractionStep pub lam chi t :=
+  fun h hb => input_note_extracted pub t h.2.2.2.1 h.2.2.2.2.1 h.2.2.2.2.2.1 h.2.2.1
+    h.2.2.2.2.2.2.1 hb
+
+#print axioms extraction_step
 #print axioms semantic_sound
 #print axioms semantic_positivity
 #print axioms semantic_extraction
