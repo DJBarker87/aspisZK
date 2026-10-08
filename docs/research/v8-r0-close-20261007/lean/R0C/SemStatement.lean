@@ -19,7 +19,9 @@ variable (K E : Type) [Field K] [Field E]
 
 inductive Msg (SM : Type)
   | semantic (m : SM)
-  | beforeZ0
+  /-- the step-3 claimed values at the three opening points, sent after the
+  last sumcheck challenge -/
+  | beforeZ0 (y : Fin 3 → Fin 29 → K)
   | beforeZ1 (y0 : Fin 29 → K)
   | opening (m : R0FS.Msg E)
 
@@ -71,9 +73,9 @@ def roundBad (s : SourceData (K := K) X SM W Sfield)
     (P : Prefix K E X SM) (m : Msg K E SM) (c : Chal K E) : Prop :=
   (∃ sm k, P.round < s.semanticRounds ∧ m = .semantic sm ∧ c = .semantic k ∧
     s.semanticBad P sm k) ∨
-  (∃ z, P.round = s.semanticRounds ∧ m = .beforeZ0 ∧ c = .circle z ∧ z0Bad z) ∨
-  (∃ y0 z0 z1, P.round = s.semanticRounds + 1 ∧
-    P.rounds.getLast? = some (.beforeZ0, .circle z0) ∧
+  (∃ y z, P.round = s.semanticRounds ∧ m = .beforeZ0 y ∧ c = .circle z ∧ z0Bad z) ∨
+  (∃ y y0 z0 z1, P.round = s.semanticRounds + 1 ∧
+    P.rounds.getLast? = some (.beforeZ0 y, .circle z0) ∧
     m = .beforeZ1 y0 ∧ c = .circle z1 ∧ z1Bad z0 z1) ∨
   (∃ Q om oc, s.openingView P = some Q ∧ m = .opening om ∧ c = .opening oc ∧
     P.round = s.semanticRounds + 2 + Q.round ∧ R0FS.roundBad Q.statement Q.rounds om oc)

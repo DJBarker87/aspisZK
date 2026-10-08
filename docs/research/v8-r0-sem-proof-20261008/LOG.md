@@ -2036,3 +2036,29 @@ The α-round cardinality lemma may therefore take `(polys j).natDegree ≤ 27`
 as a premise (counting only); the round predicate and the recursive
 bridge to `badAlpha` stay literal. In the D2 application the premise is
 discharged from the accepted prefix. Per-round bound 27 is unchanged.
+
+## Lead: B2 instance, part 2 — semantic messages and opening view (SemView.lean)
+
+B2 interface fix (v8-r0-close lean/R0C/SemStatement.lean): `Msg.beforeZ0`
+now carries the step-3 point claims `y : Fin 3 → Fin 29 → K`, which the
+prover sends after α₁₀ (v6_onefold_prover.rs:568); `roundBad`'s z₀/z₁
+clauses updated. Attempt 636 (SemStatement) and 639 (CircleRows, its only
+dependent) exit 0, axioms unchanged. SHA-256 `85158bd62f64f189bd098424caee2b92abaf6808ab5cdd0d3b81f0f51eee0e57`.
+
+`SemView.lean`: `SemMsg` (none / h1 commitment / round polynomial);
+`succCarry`, `successorPoint` (state_only_poseidon.rs:95–105, polynomial
+binary increment from coordinate 9), `xor12Point` (:109–117, coordinates
+7 and 6); `toR0` (source MSB-first → R0 `eqWeight` LSB-first);
+`openingPoints α`; `TypedContext` (public input, words, subfield typing);
+`semChals`, `openingRounds` parsers; `openingStmt` (R0FS.Stmt with
+`points := openingPoints α`, `pointClaims := y`,
+`inactive := copyInactiveRows`, `semantic := True`); `openingView`
+(24 semantic rounds, `(beforeZ0 y, circle z0)`, `(beforeZ1 _, circle z1)`,
+opening rounds; none when malformed, z₀ = z₁, or a circle point is
+base-rational). Attempts 637 SemSource (2.77 s), 638 (lint on a dropped
+sanity example), 640 SemView exit 0, 3.01 s, 6807524 KiB, swap 0, 24+7 GiB.
+SHA-256 `5fd27a6dd3d645fa02286c54faca51785f25e3295fc35a24fe71c60bfe63ac6d`. Axioms: standard three.
+
+Remaining for the B2 instance: `semanticBad` (G13′), `decision` (the
+sumcheck checks on the 24 rounds plus the opening decision through
+`openingView`), then D3 and D2.
