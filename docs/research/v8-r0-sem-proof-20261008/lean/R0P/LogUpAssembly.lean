@@ -33,6 +33,21 @@ def consVal (t : Trace K) (lam : K) (link : CopyLink) : K :=
 def valueSet (pub : Public K) (t : Trace K) (lam : K) : Finset K :=
   ((enabledLinks pub).map (prodVal t lam) ++ (enabledLinks pub).map (consVal t lam)).toFinset
 
+/-- All endpoint values, enabled or not: a disabled slot still contributes
+its factor `χ − value` to the row residual (logup.rs:228–252), so it is a
+pole. -/
+def poleSet (t : Trace K) (lam : K) : Finset K :=
+  (copyLinks.map (prodVal t lam) ++ copyLinks.map (consVal t lam)).toFinset
+
+theorem valueSet_subset_poleSet (pub : Public K) (t : Trace K) (lam : K) :
+    valueSet pub t lam ⊆ poleSet t lam := by
+  intro v hv
+  simp only [valueSet, poleSet, List.mem_toFinset, List.mem_append, List.mem_map,
+    enabledLinks, List.mem_filter] at hv ⊢
+  rcases hv with ⟨l, ⟨hl, _⟩, rfl⟩ | ⟨l, ⟨hl, _⟩, rfl⟩
+  · exact Or.inl ⟨l, hl, rfl⟩
+  · exact Or.inr ⟨l, hl, rfl⟩
+
 /-- Producers minus consumers at value `v`. -/
 def signedCount (pub : Public K) (t : Trace K) (lam : K) (v : K) : K :=
   ((((enabledLinks pub).filter (fun l => prodVal t lam l = v)).length : Nat) : K) -
@@ -47,7 +62,7 @@ def consPolys (pub : Public K) (t : Trace K) : Multiset K[X] :=
 tupleCompression. The λ branch is the root set of a nonzero coefficient of
 `Π(X − P) − Π(X − Q)` over K[λ]. -/
 def BadLogUp (pub : Public K) (t : Trace K) (lam chi : K) : Prop :=
-  chi = 0 ∨ chi ∈ valueSet pub t lam ∨
+  chi = 0 ∨ chi ∈ poleSet t lam ∨
   (numer (valueSet pub t lam) (signedCount pub t lam) ≠ 0 ∧
     (numer (valueSet pub t lam) (signedCount pub t lam)).eval chi = 0) ∨
   (prodPolys pub t ≠ consPolys pub t ∧
@@ -58,7 +73,7 @@ def BadLogUp (pub : Public K) (t : Trace K) (lam chi : K) : Prop :=
 
 /-- L1: off poles, the row identity is the helper's fraction form. -/
 def LogUpL1 (pub : Public K) (t : Trace K) (lam chi : K) : Prop :=
-  chi ≠ 0 → chi ∉ valueSet pub t lam → CHolds copyFamily pub lam chi t →
+  chi ≠ 0 → chi ∉ poleSet t lam → CHolds copyFamily pub lam chi t →
     ∀ b : Fin 1024, CopyActiveRow b →
       t 26 b = ((enabledLinks pub).filter (fun l => l.producer.row = b)).foldr
           (fun l acc => acc + 1 / (chi - prodVal t lam l)) 0 -
@@ -109,10 +124,11 @@ theorem logup_step_of (pub : Public K) (t : Trace K)
     LogUpStep pub t (BadLogUp pub t) H1 inact := by
   intro lam chi hbad hc hs1 hs2
   simp only [BadLogUp, not_or] at hbad
-  obtain ⟨h0, hD, hnum, hlam⟩ := hbad
+  obtain ⟨h0, hP, hnum, hlam⟩ := hbad
+  have hD : chi ∉ valueSet pub t lam := fun h => hP (valueSet_subset_poleSet t lam h)
   rw [hS1] at hs1
   rw [hS2] at hs2
-  have hrows := h1 lam chi h0 hD hc
+  have hrows := h1 lam chi h0 hP hc
   have hfrac := h2 lam chi hD hrows hs1 hs2
   have hbal := h3 lam chi hD hnum hfrac
   exact h5 (h4 lam hbal hlam)

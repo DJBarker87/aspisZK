@@ -1753,3 +1753,16 @@ G11′ resumes with `hpub : PublicBase F pub` as a hypothesis of
 hypothesis at instantiation time (it is a parameter there, unchanged).
 In the FS integration, `PublicBase` is discharged from the statement's
 M31 public fields, not assumed of the prover.
+
+## Lead decision after G12 L1 stop: poles over all links
+
+Accepted: `copy_logup_residual` (logup.rs:228–252) multiplies all four
+slot denominators whether or not the slot's link is enabled, so a disabled
+endpoint value equal to χ zeroes the row residual for any H1 (registry
+index 3 under withdrawal, rows 443/448). `LogUpAssembly` now has
+`poleSet t lam` over all 136 links' producer and consumer values;
+`BadLogUp` and L1 use `chi ∉ poleSet`, L2/L3 keep `valueSet` (enabled
+values), and `valueSet_subset_poleSet` bridges them in the glue. The
+pole count is unchanged (≤ 272 values, 273 with χ = 0); the ledger stands.
+Attempt 624 green with an unused-binder lint; 625 after dropping the
+binder: exit 0 (see evidence/out-625.log). SHA-256 `a6169f9bfddbc51f56f741bd61991cfc1336d326963a9fa02c5c7751891d6bdc`.
