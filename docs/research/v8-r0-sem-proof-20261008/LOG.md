@@ -1876,3 +1876,29 @@ tags < P). `logupL4` and `logupL5` both take `(P : Nat) [CharP K P]
 no definition or L-statement in `LogUpAssembly.lean` changes, and
 `logup_step_of` is applied with those instances in scope. The glue's
 hypotheses `h4`, `h5` are quantified so this is a plain instantiation.
+
+## Lead: closed SEM theorem (SemClosed.lean)
+
+G11′ (0773ff34e) and G12 (f026c447f) accepted. `semantic_sound_closed`
+instantiates `semantic_sound` with `lanes_zero_iff_holds` (lane map,
+under `BaseTyped F t`, `PublicBase F pub`, `B : PackBasis F`) and
+`logup_step_of` with `logupL1`–`logupL5` (characteristic P for L4/L5),
+with `lane_h1_sum`/`lane_inactive_sum` for the helper sums.
+
+Statement: for a trace t and public input pub, if the sumcheck's Boolean
+row values are the terminal's `eq(zc,b)·Σθⁱ laneᵢ + μ·H1 + μ²(1−active)H1`,
+the virtual polynomial has individual degree ≤ 27, the verifier accepts
+claim 0, and (α, μ, zc, θ) and (λ, χ) are outside the ledger's bad sets,
+then every production family holds on t and the copy links balance.
+`semantic_extraction_closed` then gives `InputNoteExtracted pub t`; with
+the proposal's positivity lane, `semantic_positivity` gives the integer
+split. Attempt 627, exit 0, 1.43 s, 3332580 KiB, swap 0, 24+7 GiB.
+SHA-256 `0ff01dadc3fb6a33a0d5692e5825c4dbbb9dc1b62700f371be3e15168f99ab1a`. Axioms: propext, Classical.choice, Quot.sound.
+
+This closes SEM for one candidate at the deterministic level, with the
+bad-set masses in `SemLedger` (303000/(P⁴−1) ≤ 2⁻¹⁰⁵) and their per-branch
+cardinalities in `SemBadSets`/`LogUpChain`. Remaining: the FS
+integration (replace `R0FS.Stmt.semantic`; discharge `PublicBase` from the
+M31 public fields and `BaseTyped` from `Stmt.base`; union over the ≤ 100
+candidates; add the ledger to the state function) and the deferred
+Rust-to-model refinement of the raw-limb Poseidon implementation.
