@@ -2539,3 +2539,30 @@ SemView SHA-256 `0186862718963200…`, SemD2 `fb7dba2dd9808721…`; 659
 3.15 s / 6,816,140 KiB, 660 3.09 s / 6,806,912, 661 3.20 s / 6,810,340,
 663 4.22 s / 6,841,244; swaps 0; 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax
 7 GiB, MemorySwapMax 0.
+
+## G18: Semantic padding and prefix-polynomial plumbing
+
+Completed `SemPad.lean` against lead `84a2dce11`, importing only `R0P.SemD2`. `padC2Trace` is literally `Function.update (Function.update t 26 0) 27 0`. No new semantic, probability, typing or interpretation premise was introduced.
+
+`lambdaRoundBad_pad` and `chiRoundBad_pad` prove the requested equivalences. The source inspection is stronger than the requested column bound: `Copy.lean:79–88` defines each endpoint tuple through a `Fin 16` column, hence every observed trace column is below 16, and in particular below 26. `LogUpAssembly.lean:27–64` obtains producer/consumer compressed values, `poleSet`, `valueSet`, `signedCount`, the polynomial multisets and `productDifference` from these tuples. The proof propagates the endpoint equality through these definitions symbolically; it never evaluates the pattern or link tables. `enabledLinks` depends only on `pub`. Neither event reads columns 26 or 27.
+
+`mem_Lambda_pad` preserves every original `width29JointAgreementSet` position. Other lanes retain their original agreement; lanes 26/27 agree everywhere because `exactInitialLinear.map_zero` proves the zero message encodes to `padWord`. `Finset.card_le_card` then preserves the existing `mem_Lambda` threshold. `Lambda` is locally irreducible to keep elaboration and linting from unfolding its large representation; the proof uses its membership theorem. No agreement set, trace or row universe is evaluated.
+
+`semRoundBad_strat_congr` rewrites only the strategy's current component at index `i−14` in the α phase, retaining the actual fixed prefix arguments. `polysOf_prefix` uses a parsed 24-round transcript and its current semantic message to identify `polysOf (rounds.take i) sm (i−14)` with `polys (i−14)` for `14 ≤ i < 24`. Substitution `i = 14+j` gives the requested slot statement. Its private `semPolys_getElem` helper extracts the parser fact symbolically for arbitrary `j : Fin 10`; no transcript-range enumeration is used. The statements require neither acceptance beyond the stated parse nor any probability claim.
+
+The coordinator reviewed every final proof and independently checked the endpoint read boundary and event definitions. All runs used pinned Lean 4.32.0 and `run2.sh N R0P/SemPad 7000 7`, MemoryHigh 5 GiB / MemoryMax 7 GiB / MemorySwapMax 0. The runner recorded reservation 24 + 7 GiB; independent group scopes, where overlapping, remained below the host limit.
+
+| Attempt | Source SHA-256 | Lean / scope exit | Wall | Peak RSS KiB | Swaps |
+|---:|---|---:|---:|---:|---:|
+| 2400 | `6357868c857067dbcf4e50b37dd408f364f8264224b3d0f254f38d4e94ffa941` | 1 / 1 | 3.20 s | 6,792,176 | 0 |
+| 2401 | `b94e81e15a5f0dd5886353c5915d6ccfa7caaed9bbaa225a474db59b015cc8c1` | 1 / 1 | 3.42 s | 6,491,784 | 0 |
+| 2402 | `7b131377e322f6fb232ef7a96fd27a7922eb345e17f4e9d8a1ddc44e9206c4f2` | 1 / 1 | 3.41 s | 6,792,116 | 0 |
+| 2403 | `f87666b56597652983c9f7dabaf13262343aaeae145ae802ce8a4f9f8320ec1a` | 1 / 1 | 3.44 s | 6,793,544 | 0 |
+| 2404 | `edb50e32ddb937a4c60f556a6f8c07c560fbc150e1b6b837ea92cb67e6dd1913` | 1 / 1 | 3.44 s | 6,793,684 | 0 |
+| 2405 | `1cafa66bf6b7ad149d2a09bf08e713bfe3201c4abb6e3ccb30cb1397702e94e4` | 1 / 1 | 3.37 s | 6,794,128 | 0 |
+| 2406 | `88ba6fe8fd0f7ce6f1510dcbdbe145735d18fbc1e49acef20f33bb95d73b2c43` | 0 / 0 | 3.57 s | 6,827,760 | 0 |
+| 2407 | `2734705552a97a2ef29f0a4c6c4a36fda6e2f7653fe972c7152f9896c91f13c1` | 0 / 0 | 3.65 s | 6,831,112 | 0 |
+
+2400–2402 corrected tuple/function congruence, update lemmas, placement of `omit`, and dependent list lookup rewrites; 2401/2402 also exposed unnecessary unfolding of `Lambda`, corrected by local irreducibility in 2403. 2403/2404 isolated a `signedCount` filter rewrite blocked by its hidden decision instance. The attempted Prop-predicate replacement in 2405 was ill-typed; 2406 instead proves equality of the producer/consumer value functions before rewriting inside the filter. 2406 was green with three unused-instance warnings; 2407 removes those unused binders (and the dependent χ theorem's binders). Every failing rerun changed source; no cap or recursion limit was raised.
+
+Frozen 2407 has 24 declaration audits (23 theorems, including private helpers, and the padding definition), only `propext`, `Classical.choice`, `Quot.sound`, with no warnings or errors. Actual Lean and scope exits were inspected; the outer runner shell is not used as success evidence. Raw artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified copies are under `/tmp/r0-sem-continuation-20261008/g18-evidence/`. No package/dependency rebuild, unchanged failing rerun, forbidden evaluation or source/interface obstruction occurred. G18 is complete; it does not claim to close the independent G15/G16 integration stops.
