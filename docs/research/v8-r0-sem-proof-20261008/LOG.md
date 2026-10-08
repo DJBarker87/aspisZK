@@ -2166,3 +2166,41 @@ New `SemBridge.lean` imports the two requested modules and proves six audited sy
 Coordinator attempt `run2.sh 2000 R0P/SemBridge 7000 7` passed on the pinned Lean 4.32.0 build host/cache: actual Lean exit 0, scope/time exit 0, wall 2.95 s, peak RSS 6,802,040 KiB, swaps 0. Reservation 24 + 7 GiB; MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. All six audits use only `propext`, `Classical.choice`, `Quot.sound`; no warnings or errors. There was no failed attempt, unchanged rerun, cap increase, or dependency rebuild. The checked frozen source SHA-256 is `ea764ba59885f4c824d470032d53540ff005c5b4c238eb539f5721c93d560cdd`.
 
 Cached dependency sources match the repository: `SemDecision.lean` SHA-256 `2222c13112711d546abe18e524be3ae5c1d67b95f8be0ad59d2ad22226c47727`; `SemView.lean` SHA-256 `5fd27a6dd3d645fa02286c54faca51785f25e3295fc35a24fe71c60bfe63ac6d`. Raw host evidence and snapshot are `evidence/out-2000.log`, `time-2000.log`, `sha-2000.txt`, `source-2000.lean`; verified local copies are under `/tmp/r0-sembridge-20261008/evidence/`. The coordinator independently reviewed the source calculation, worker proofs and final diff and ran the focused check. G14 is stopped at this exact degree-route assertion; existing model and family files remain unchanged.
+
+## Lead decision after G14 stop: weighted individual degree
+
+G13′ (9bc5f6b34) and G12′ (`SemClosed` recompiled) accepted. G14's
+finding (828cf122a) is accepted and the lead's item 5 was wrong as posed.
+
+Facts: prover and verifier both use the composed successor claim
+`MLE_t(successor_point(X))` (state_only_candidate_prefix.rs:255–262;
+state_only_verify.rs:282–285), and `MLE_t ∘ successorPoint` is not
+multilinear: in source coordinate c it has individual degree up to the
+number of coordinates whose carry chain reaches c (10 for the LSB; for
+n = 2 the term `(2X₁−1)(t₀₀−t₀₁−t₁₀+t₁₁)·X₀²` survives). `xor12Point` is a
+coordinate-wise affine map, so `MLE_t ∘ xor12Point` is multilinear.
+
+Why the bound 27 still holds: individual degree of a sum is the maximum
+over terms, and the successor opening enters each family additively or in
+low-degree products (Poseidon `next − f(cur)`: max(10, 25); path
+`(1−bit)(succ−cur)`: 11; value range bits on `succ`: 20; schedule: 10).
+The source's audit (`v8_intrinsic_degree_audit.rs`) measures exactly this
+composed degree and asserts 26/27.
+
+Corrected criterion for `IndDeg 27 10 G`: assign weights 1 to z-openings,
+xor12-openings, selector weights and `eqValue`, and **10 to successor
+openings**; every monomial of every lane's residual, as a polynomial in
+these inputs, must have weighted degree ≤ 26. Then `MLDeg` closure
+(`mlDeg_mul` adds, `mlDeg_add` takes max) with `MLDeg 10` for each
+`honestClaims · 1` coordinate and `MLDeg 1` for the others gives
+`MLDeg 27` for the virtual polynomial, hence `IndDeg 27 10 G`.
+
+G14′ item 5 becomes: (a) `MLDeg 10` for `v ↦ dot (eqWeight (toR0 (successorPoint v))) (t l)`
+and `MLDeg 1` for the z and xor12 claims and for `eqValue zc`;
+(b) a per-family weighted-degree audit of the ported residual lists
+(value, occupancy, asset, schedule, path, digest, poseidonPacked, copy,
+and the μ terms), each monomial ≤ 26; (c) the closure argument. If any
+family's residual exceeds weighted degree 26, stop and record it: that is
+a completeness finding against the source's degree constant, not a
+soundness finding, since `accept` enforces degree ≤ 27 on the prover.
+Items 1–4 and 6 of G14 are unchanged.
