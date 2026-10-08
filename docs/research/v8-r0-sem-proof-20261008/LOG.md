@@ -1651,3 +1651,23 @@ corrects the lead's brief in three places.
 G11′ statement: `lanes_zero_iff_holds` as before but with the production
 family list (value, occupancy, asset, schedule, path, digest,
 poseidonScalar, copy via `CHolds`), without `positiveFamily`.
+
+## Lead: SEM assembly (SemAssembly.lean)
+
+`ProductionHolds pub lam chi t` (the eight production families, copy via
+`CHolds`); `LaneInterface` (G11′'s `lanes_zero_iff_holds`, as a
+parameter); `LogUpStep` (the deterministic LogUp assembly for (λ, χ)
+outside a parameter bad set `BadLogUp`, to be defined from G5–G7);
+`semantic_sound`: via `Zerocheck.compose`, acceptance outside the α, μ,
+zc, θ and LogUp bad sets gives `ProductionHolds ∧ CopyLinkBalance`;
+`semantic_positivity`: with the proposal lane `Holds positiveFamily` as a
+labelled hypothesis (Finding 1), `positivity_of_balance`'s conclusion;
+`ExtractionStep` (G9's statement) and `semantic_extraction`.
+Attempt 619, exit 0, 1.42 s, 3326492 KiB, swap 0, 24+7 GiB. SHA-256
+`6b3aa44535a857adf8829f77d0cb0f006da6fc6fa4bf195739e4c95a5887f6e5`. Axioms: standard three.
+
+Open obligations, each a single instantiation when it lands: G11′
+(`LaneInterface`), G5–G7 plus the lead LogUp assembly (`LogUpStep` and
+`BadLogUp`), G8/G9 (`ExtractionStep`). After those, the FS integration:
+replace `R0FS.Stmt.semantic` by the semantic acceptance predicate and add
+the ledger's 302900/(P⁴−1) to the state function.
