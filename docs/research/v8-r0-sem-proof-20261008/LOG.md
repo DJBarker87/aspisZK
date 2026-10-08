@@ -1619,3 +1619,35 @@ The pinned `pair_forest_hiding.rs` uses rows as `block * 16 + local` for path/va
 No build was run. The coordinator reviewed the source ranges independently; all three files match the inspection pin. No existing Lean source was edited. This is a source mapping, not a lane-map theorem or a proof that packed lane zero implies each source-family residual vanishes.
 
 The coordinator source review, including hashes of each cited range, is retained at `/tmp/r0-composition-20261008/G11-source-review.json`. No Lean target was needed for this source-stop finding; attempts 17xx remain unused.
+
+## Lead decisions after G10/G11
+
+G10 (9c387d8bb) accepted: all five function-level bad-set and degree
+obligations proved. G11's source audit (7f1d92225) is accepted and
+corrects the lead's brief in three places.
+
+1. **θ order.** The Horner fold (T:1267–1274) gives Poseidon lanes θ⁰–θ³,
+   semantic packed groups 0–23 θ⁴–θ²⁷, copy residual θ²⁸. `laneOf` must
+   use indices 0–3 Poseidon, 4–27 semantic, 28 copy. The brief's
+   "copy first" was wrong; `lanesComp` is unchanged.
+2. **Mixed groups are authorized, with the separation proved from row
+   support.** Groups 0–2: scalar slots 0–11 carry
+   `scheduleInitial[j] + occupancy[j]`. Every `scheduleInitial` residual
+   has the factor `g2Low sel 0` (local row 0: `schedule_low_zero`), and
+   every occupancy residual has the factor `rowSel b 1017` or
+   `rowSel b 1018` (local rows 9 and 10 of block 63). The supports are
+   disjoint, so on Boolean rows the sum vanishes everywhere iff each
+   summand vanishes everywhere. G11′ proves this as
+   `schedule_occupancy_separate` and then applies `pack4_eq_zero_iff`.
+   Group 12 mixes path slot 48 with value slots 49–51 as distinct
+   `pack4` components; `pack4_eq_zero_iff` separates them directly.
+3. **Positivity is not a production lane.** Slot 94 is the research-only
+   adapter already recorded under Q1 (Positive.lean:3–12). The SEM
+   assembly derives `Holds` for the production families only;
+   `Holds positiveFamily` enters `positivity_of_balance` as an explicit,
+   separately labelled hypothesis of the proposal, never as a consequence
+   of production acceptance. This is the standing Finding 1.
+
+G11′ statement: `lanes_zero_iff_holds` as before but with the production
+family list (value, occupancy, asset, schedule, path, digest,
+poseidonScalar, copy via `CHolds`), without `positiveFamily`.
