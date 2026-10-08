@@ -1094,3 +1094,44 @@ proves `InputNoteExtracted pub A` from Holds of schedule, path, digest,
 asset, poseidonScalar and `CopyLinkBalance pub A`, via the per-block
 lemmas: owner block, three commitment blocks, two nullifier blocks, and the
 24-level induction on `merkleRootAux`.
+
+## Lead: pair-forest SEM ledger (SemLedger.lean)
+
+Challenge timing (aspis-prover/src/state_only_candidate_prefix.rs:503–548,
+same driver shape for pair forest): trace commitment → λ, χ → H1 commitment
+→ θ, μ, zerocheck point → 10 sumcheck rounds (degree 27,
+POOL_V1_PAIR_FOREST_MASKED_TERMINAL_DEGREE_V1) → point claims → opening
+layer (γ, κ, τ, α, q22). The opening layer selects the trace from
+`Lambda W` (`R0.ListsResponses.Lambda_card`: ≤ 100 candidates), after
+every semantic challenge, so each semantic branch's bad set is unioned over
+candidates: factor 100, as in V7K15 `fixedFamilyCausalRootCap`.
+
+The LogUp λ branch is sharpened from the earlier pairwise-collision count
+(16·C(272,2)) to the V7 argument: compression is injective on tagged tuples
+as polynomials in λ (G7), so if the enabled producer and consumer tuple
+multisets differ, Π(X − c_p(λ)) − Π(X − c_c(λ)) is a nonzero element of
+K[λ][X] with some coefficient of λ-degree ≤ 16·136; bad λ ≤ 2176.
+
+| Branch | single trace | ×100 | obligation |
+|---|---:|---:|---|
+| tupleCompression (λ) | 2176 | 217600 | G7 + unique factorisation lemma (G10a) |
+| activePole (χ) | 272 | 27200 | G5 endpoint count |
+| copyChi (χ) | 271 | 27100 | G6(b) |
+| muBatch (μ) | 2 | 200 | univariate degree 2 |
+| thetaLane (θ) | 28 | 2800 | univariate degree 28 (G10b) |
+| zerocheckPoint | 10 | 1000 | Mathlib SchwartzZippel, 10 vars (G10c) |
+| sumcheckRounds | 270 | 27000 | 10 × degree 27 (G10d) |
+| total | 3029 | 302900 | |
+
+302900/(P⁴−1) ≤ 2⁻¹⁰⁵ (`causal_le_two_pow_neg_105`), and 302900 ≤ 396430 so
+the V7 reporting figures cover this circuit. Attempt 614,
+`run2.sh 614 R0P/SemLedger 7000 7`, exit 0, 1.40 s, 3327444 KiB, swap 0,
+24+7 GiB. SHA-256 `21b0896f52defd0d7115a5a2075d85e9bc4405060719596522e6d036f92b1084`. Axioms: standard three or fewer.
+
+Composition target (lead, next): for a fixed candidate t with the opened
+claims, semantic acceptance at (λ, χ, θ, μ, zc, α₁..α₁₀) outside the
+ledger's bad sets implies `Holds f pub t` for every family f and
+`CHolds copyFamily λ χ t`, hence `CopyLinkBalance pub t`, hence
+`positivity_of_balance` and (after G9) `InputNoteExtracted pub t`. The
+Mathlib `Mathlib.Algebra.MvPolynomial.SchwartzZippel` module is present
+in the pinned workspace for the zerocheck branch.
