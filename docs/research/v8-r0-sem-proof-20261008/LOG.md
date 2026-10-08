@@ -1200,3 +1200,92 @@ IDs 1200–1206 have no G6 runner artifacts (`sha/out/time`) in the host evidenc
 | 1298 | `f4d1c635188c74aeb5e2150e94b8627c22439e0bf1a482a173c0a5b38566b0b2` | 0 | 0 | 1.20 s | 2,087,160 | 0 | Lead's frozen-source final check; 8 audits, no warnings; reservation 24+7=31≤55 GiB. |
 
 Workflow deviation: attempt 1217 reran exactly the same source SHA and unchanged failing source as attempt 1214 (`db2409328314fc01b5df384b05aa308bd1f1c2c6a7464283871d66baa548b682`). Both logs show the same unsolved `v - v = 0` goal at the same line, with outer/time exits 1/1. This was an accidental repeat while exploring proof-term variants; it violated the no-unchanged-failing-rerun rule. The repeat used the unchanged 5G/7G/0 scope, lasted 1.18 s, peaked at 2,076,716 KiB, and swapped 0. Evidence is retained. No cap was raised. The final frozen-source check is attempt 1298 above. The coordinator reviewed the complete source and raw evidence; all failed compiler error-term audits are rejected. No source obstruction or probability claim is recorded.
+
+## G7
+
+### Tagged compression polynomial
+
+`lean/R0P/LogUpCompress.lean` implements the lead's fixed G7 statements from
+"Lead: LogUp step design". Source inspection pin:
+`e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`. The development source snapshot is
+base revision `26a11aee35691c84da29cf955ea133d6d72eb66e` plus the new file at
+the final SHA-256 below. Existing Core, CoreExt, Copy and other groups' files
+are unchanged by G7.
+
+The exact definition is
+`compressPoly p = C p.1 + sum_j C (p.2 j) * X^(j.val+1)`, with `j : Fin 16`.
+The tag therefore occupies coefficient zero, and all sixteen tuple limbs
+occupy coefficients one through sixteen. `noncomputable` is required for
+Mathlib's polynomial construction over an arbitrary field and changes no
+formula or premise.
+
+Proved, over arbitrary `[Field K]`:
+
+- `compressPoly_eq_iff`: two compression polynomials are equal iff their
+  complete tagged tuples are equal.
+- `compressPoly_sub_eq_zero_iff`: their difference is the zero polynomial
+  iff their complete tagged tuples are equal.
+- `compressPoly_sub_natDegree_le`: every such difference has natural degree
+  at most sixteen, including a zero difference.
+- `compressPoly_eval`: evaluation at `lam` equals the tag plus
+  `sum_j copyPowers lam j * p.2 j`.
+
+The private coefficient helpers isolate coefficient zero and coefficient
+`j.val+1`. The latter uses `Finset.sum_eq_single` and injectivity of the Nat
+limb exponent; it does not enumerate the sixteen indices. The private
+degree helper uses the generic finite-sum degree bound. Evaluation invokes
+the already proved `copy_powers_eq`, then field multiplication commutativity
+inside a lemma. No source table, concrete finite universe, or 1024-row range
+is evaluated. No fixed-lambda evaluated-value injectivity, probability,
+root-counting claim, extraction implication, or copy balance is asserted.
+
+Source correspondence: `crates/aspis-statement/src/logup.rs:75–83` starts
+with the lifted tag, initializes the running power to lambda, adds each
+power times its tuple limb, then multiplies the power by lambda once.
+`pool_v1/pair_forest_copy_terminal.rs:237–244` constructs the same sixteen
+powers; `Copy.lean:46–47,367–368` supplies the literal loop and its power
+identity. No non-literal construct or additional premise was needed.
+
+| Source | Region | SHA-256 |
+|---|---|---|
+| `logup.rs` | Whole file; unchanged from inspection pin, independently reviewed by lead | `c6e84617e6473f014fc53c704dd26b04667046211985ea6ddca8f66f496bea65` |
+| `logup.rs` | Lines 75–83 | `cc365a8cfca6f12d2ce23aa2690dce1cf86bd2f3be77415a7a7efbcb2981dbbb` |
+| `pair_forest_copy_terminal.rs` | Lines 237–244 | `fde6c5814e11fe7c99981145659bd60c5c49c838af792db57731ed14bf81a17b` |
+
+### Build evidence
+
+Host `dombarker@100.108.41.90`, workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006/`, pinned Lean
+4.32.0 and existing object cache. Every attempt used
+`run2.sh N R0P/LogUpCompress 7000 7`: `-j1 -M7000 -DElab.async=false`,
+MemoryHigh=5 GiB, MemoryMax=7 GiB, MemorySwapMax=0, TasksMax=128,
+timeout=900 seconds. The runner's reservation admitted 24+7 GiB against its
+55 GiB ceiling on all development attempts and final check 1398. One G7 job at a time, no cap change,
+local compilation, dependency rebuild, or unchanged failed rerun.
+
+| Attempt | SHA-256 | Lean/scope exit | Wall s | Peak RSS KiB | Swaps | Status |
+|---:|---|---:|---:|---:|---:|---|
+| 1300 | `dd5b387d3429e62c15f65187fa687506e8beda10617ce15dd0743aeb2a390361` | 1 | 2.63 | 6679480 | 0 | Failed: polynomial definition needed `noncomputable`; secondary realization errors and compiler error terms rejected |
+| 1301 | `c1fa19babf90e5f5168d9843693c7075611dfd7716fd583cbd44fd34d14a25ad` | 0 | 2.88 | 6720188 | 0 | Green, seven permitted audits, no warnings; superseded by narrow imports |
+| 1302 | `2a8ee84dbbc341e899441847ef68ed4f91c1a25d308a2124966bf3c587a32c4e` | 0 | 1.53 | 3323484 | 0 | Frozen development pass, seven permitted audits, no warnings |
+| 1398 | `2a8ee84dbbc341e899441847ef68ed4f91c1a25d308a2124966bf3c587a32c4e` | 0 | 1.48 | 3323492 | 0 | Coordinator frozen-source check; seven permitted audits, no warnings |
+
+1301 followed the actual `noncomputable` declaration correction. After the
+lead recommended narrower cached imports, 1302 replaced only `import
+Mathlib` with `import Mathlib.Algebra.Polynomial.BigOperators`; every
+definition, theorem statement and proof is otherwise identical to 1301.
+The needed `.olean` was verified present before the import change, and the
+peak RSS fell to roughly 3.17 GiB. No failed object was used as proof evidence.
+
+All seven theorem declarations, including the three private helpers, have
+explicit `#print axioms` commands. At 1302 every theorem uses exactly
+`[propext, Classical.choice, Quot.sound]`. Declaration/audit counts match
+without duplicates. Source scanning found no prohibited proof constructs;
+the whitespace check emitted no diagnostics.
+
+Raw evidence is `evidence/source-N.lean`, `evidence/sha-N.txt`,
+`evidence/out-N.log`, and `evidence/time-N.log` for N=1300,1301,1302,1398. Scope
+exit and `/usr/bin/time` exit agree; the outer runner's exit is not used to
+classify a Lean failure. Each development attempt also has a local exact source backup
+at `/tmp/r0-logup-20261008/LogUpCompress-N.lean`. The final local and remote
+source hashes match. Coordinator check 1398 passed after independent source and statement review at shared HEAD `1074cbc4915fcd36dbfeee3b45c88808d7cc5770`; all seven audits use only the three permitted axioms and the scope/time exits both equal zero. No source obstruction was found.
