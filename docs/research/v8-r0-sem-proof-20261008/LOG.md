@@ -2062,3 +2062,23 @@ SHA-256 `5fd27a6dd3d645fa02286c54faca51785f25e3295fc35a24fe71c60bfe63ac6d`. Axio
 Remaining for the B2 instance: `semanticBad` (G13′), `decision` (the
 sumcheck checks on the 24 rounds plus the opening decision through
 `openingView`), then D3 and D2.
+
+## Lead: B2 instance, part 3 — terminal at a point and decision (SemDecision.lean)
+
+`scalarLaneAt`/`laneAt` (the 29 θ-lanes at explicit openings, h1 and
+selector, in `laneOf`'s order) with `laneOf_eq_laneAt` by unfolding;
+`eqValue` (T:1201–1213); `selAt α := eqWeight (toR0 α)` (the point's
+selector vector), `activeAt`; `terminalValue` = `terminal_parts(...).0`
+(T:1285–1310) at claims y and point α; `sumcheckChecks` (degrees ≤ 27,
+boundary from claim 0, chaining, final value = terminal); `semPolys`
+(round polynomials from rounds 14–23); `decision` (B2's decision: parsed
+semantic checks ∧ `R0FS.decision` on `openingView`). Attempt 641 green
+with lints, 642 exit 0, 3.03 s, 6804168 KiB, swap 0, 24+7 GiB. SHA-256
+`2222c13112711d546abe18e524be3ae5c1d67b95f8be0ad59d2ad22226c47727`. Axioms: standard three.
+
+B2 data now fixed: context, witness, messages, openingView, decision.
+Open: `semanticBad` (G13′'s `semRoundBad` over `Lambda x.W`), then
+D3 (`semantic_sound_closed` + the honest-claims bridge: for the extracted
+candidate t, `pointClaims j = MLE of t at openingPoints j` from the
+opening layer's `Witness`, so `terminalValue` at Boolean rows is the
+batched row value, `hG`) and D2 (per-round densities).
