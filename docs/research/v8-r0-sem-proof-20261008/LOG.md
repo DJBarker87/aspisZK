@@ -1704,3 +1704,7 @@ the K-cast is faithful: this needs `CharP K P` with P > 136, or
 char 0; state the hypothesis), and evaluation at λ commuting with the
 products; L5 from `copy_tags_nodup`, `compressPoly_eq_iff` and
 `copy_balance_cell`'s pattern.
+
+Ledger update: activePole 273 (χ = 0 included), totals 3030 / 303000;
+`causal_le_two_pow_neg_105` and `causal_le_v7` unchanged in force.
+Attempt 622 (see evidence/out-622.log).

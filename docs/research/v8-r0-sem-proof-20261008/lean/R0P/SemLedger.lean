@@ -19,7 +19,7 @@ namespace R0P.SemLedger
 
 inductive Branch
   | tupleCompression   -- λ: a nonzero coefficient of Π(X−c_p(λ)) − Π(X−c_c(λ)), degree ≤ 16·136
-  | activePole         -- χ equals an enabled compressed endpoint value
+  | activePole         -- χ equals an enabled compressed endpoint value, or χ = 0 (empty slots)
   | copyChi            -- χ is a root of the nonzero partial-fraction numerator, degree ≤ 271
   | muBatch            -- μ is a root of the nonzero degree-2 batching polynomial
   | thetaLane          -- θ is a root of a nonzero 29-lane row composition, degree ≤ 28
@@ -33,7 +33,7 @@ def branches : List Branch :=
 /-- Bad values for one fixed trace. -/
 def singleTraceCap : Branch → Nat
   | .tupleCompression => 16 * 136
-  | .activePole => 272
+  | .activePole => 273
   | .copyChi => 271
   | .muBatch => 2
   | .thetaLane => 28
@@ -43,20 +43,20 @@ def singleTraceCap : Branch → Nat
 /-- Every branch depends on the candidate trace, so each is charged ×100. -/
 def causalCap (b : Branch) : Nat := 100 * singleTraceCap b
 
-theorem singleTrace_sum : (branches.map singleTraceCap).sum = 3029 := by decide
+theorem singleTrace_sum : (branches.map singleTraceCap).sum = 3030 := by decide
 
-theorem causal_sum : (branches.map causalCap).sum = 302900 := by decide
+theorem causal_sum : (branches.map causalCap).sum = 303000 := by decide
 
 def P : Nat := 2 ^ 31 - 1
 
 /-- The pair-forest SEM mass is below `2^-105` over `|QM31| − 1`. -/
 theorem causal_le_two_pow_neg_105 :
-    (302900 : ℚ) / ((P ^ 4 - 1 : Nat) : ℚ) ≤ 1 / 2 ^ 105 := by
+    (303000 : ℚ) / ((P ^ 4 - 1 : Nat) : ℚ) ≤ 1 / 2 ^ 105 := by
   norm_num [P]
 
 /-- It is also below the V7 K1.5 figure 396430, so the existing ledger's
 reporting bounds remain valid for this circuit. -/
-theorem causal_le_v7 : 302900 ≤ 396430 := by decide
+theorem causal_le_v7 : 303000 ≤ 396430 := by decide
 
 #print axioms singleTrace_sum
 #print axioms causal_sum
