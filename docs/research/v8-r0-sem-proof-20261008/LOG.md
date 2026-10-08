@@ -1794,3 +1794,16 @@ The L3 route was independently checked against `numer_partial_fraction` and `num
 ### Dependency build evidence
 
 The requested focused rebuild used `run2.sh 1800 R0P/LogUpAssembly 7000 7` on the pinned host/cache after synchronizing the corrected lead source. Scope/Lean exit 0, time exit 0, wall 1.62 seconds, peak RSS 3,340,220 KiB, swaps 0; reservation 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. SHA-256 `1f2aa23fce266027f8d0c4af639d0d9c98439500ab4d07c984afa64a8ac5f157`. The existing `logup_step_of` audit reports only `propext`, `Classical.choice`, and `Quot.sound`; no warnings. This is a dependency check, not evidence for L1–L5. No G12 development failure or new theorem audit occurred; the next unused development attempt is 1801. Raw host evidence is `evidence/out-1800.log`, `time-1800.log`, `sha-1800.txt`, and `source-1800.lean`; local evidence and source hashes are under `/tmp/r0-logupchain-20261008/`.
+
+## Lead decision after G12 L5 stop: characteristic premise for L4 and L5
+
+Accepted: `copy_tags_nodup` is Nat-level; in characteristic 2 the casts of
+tags 1124073472 and 1124073474 coincide. The SEM field is QM31, of
+characteristic P = 2^31 − 1, and every registry tag is < P
+(`copy_tags_indexed`: 1124073472 + i, i < 136), so under `[CharP K P]` the
+cast is injective on the registry (`CharP.natCast_eq_natCast` with both
+tags < P). `logupL4` and `logupL5` both take `(P : Nat) [CharP K P]
+(hP : P = 2 ^ 31 - 1)`, in the form already used by `positivity_of_balance`;
+no definition or L-statement in `LogUpAssembly.lean` changes, and
+`logup_step_of` is applied with those instances in scope. The glue's
+hypotheses `h4`, `h5` are quantified so this is a plain instantiation.
