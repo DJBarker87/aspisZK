@@ -2326,6 +2326,28 @@ The coordinator recompiled the three requested dependencies sequentially, then c
 
 All emitted audits use only `propext`, `Classical.choice`, `Quot.sound`; 2104 audits all three finding theorems. No warnings, errors, failed attempts, unchanged failing reruns, cap increases, package rebuilds, or forbidden evaluations occurred. Raw host artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified copies are under `/tmp/r0-semd3glue-20261008/continuation-2104/`. The coordinator independently reviewed the descent interfaces and final source diff and ran the focused checks. G15 stops at encoder-to-message descent as instructed.
 
+### Continuation G15 — message descent closed; semantic message-shape stop
+
+Resumed after G17 at lead `ecb3118be`. The new `witness_baseTyped` applies `AspisWide.SubfieldDescent.initialMessage_subfield_descent` to each C1 lane using `witness_c1_encoder_mem` (the literal `R0FS.Witness.2.2` and `TypedContext.lanesF` projections). It proves `BaseTyped x.F t` with no new premise. The previous encoder-to-message stop is closed; `pubBase` and `cardOK` remain supplied by the lead's prior corrections.
+
+The next source/interface mismatch is the semantic message shape needed by the `hitFrom` bridge. `SemView.semChals` (`:65–68`) reads the semantic challenge while ignoring the message. `openingView` (`:87–101`) uses that parser for the first 24 rounds, and `SemDecision.semPolys` (`:100–109`) inspects messages only at indices `14+j`. `SemDecision.decision` (`:117–126`) consequently does not validate the message tags of rounds 0–13. The source's schedule is documented in `SemView:4–12`, but no concrete source-indexed B2 `msg` definition or accepted-shape theorem enforces it. The generic `SourceData.protocol` takes an arbitrary `msg : Pf → Nat → Msg`; `Duplex.samp` also has no message-tag rejection check.
+
+In contrast, `R0C.SemStatement.roundBad` (`:72–81`) can register a semantic event only when the current message is `.semantic sm`. Five new checked facts expose the precise mismatch without evaluating any trace or round range: `semChals_head_message`, `semPolys_head_message`, `openingView_first_message_eq`, and `decision_first_message_eq` prove that changing the first message leaves the parsers, opening view, and decision unchanged; `beforeZ1_semantic_not_roundBad` proves that a `.beforeZ1` message paired with a `.semantic` challenge misses all four `roundBad` branches, for every prefix and every `SourceData`.
+
+Thus the proposed route from an accepted parse and no full-prefix hit to the `.semantic` tag required for each candidate's no-bad-round premise lacks a shape guarantee. This is a checked parser/classifier mismatch, not a claimed counterexample to the complete numerical or D3 statement. The smallest necessary lead correction is to connect an exact source-indexed message schedule to the protocol, or validate that schedule in the semantic-prefix parser/decision. No message-schedule hypothesis was added to D3, and no parser, event, sampler, or existing lead file was changed. The `sampQ`/nonzero-γ opening route remains authorized but is not claimed assembled after this stop. No `SourceData` instance, `FS2.D3`, or full-prefix/opening-hit restriction is claimed; G14′'s recorded bridge obligations also remain open.
+
+All focused G15 jobs used pinned Lean 4.32.0, `run2.sh N R0P/SemD3Glue 7000 7`, reservation 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. G17's green object from 2300 was reused.
+
+| Attempt | Source SHA-256 | Lean / scope exit | Wall | Peak RSS KiB | Swaps | Result |
+|---:|---|---:|---:|---:|---:|---|
+| 2105 | `6b19b2c49352b56198503c7309950678f27dcaa31e06724043264618b040bc68` | 0 / 0 | 2.81 s | 6,804,564 | 0 | Message-cell `BaseTyped` bridge green; four audits, no warnings. |
+| 2106 | `d104f0906df1ab1f7c68c515f43870dc103180581cbecac827c890ef1dc5adca` | 1 / 1 | 3.16 s | 6,786,356 | 0 | Opening-view equality needed explicit suffix constructor cases; `decision` also needed namespace qualification. |
+| 2107 | `7e2cef8b41939c1021455ab2382e8b7b8111de456db12805ca5eb16483116a8e` | 0 / 0 | 3.46 s | 6,825,028 | 0 | All nine theorems green; one unused `Fintype` instance warning. |
+| 2108 | `984b1c03c943f5b32153bb65dcdea6a27655fd0a29730836d7202cc619e72ea1` | 1 / 1 | 3.18 s | 6,788,360 | 0 | The warning fix placed `omit` after the doc comment; moved it before the comment. |
+| 2109 | `d42e808cff39273fa5f068f27d8efde024637721bfc5fa04b1d34dca68bd83ba` | 0 / 0 | 3.30 s | 6,825,116 | 0 | Frozen final source; nine permitted-axiom audits, no warnings or errors. |
+
+The final audits use only `propext`, `Classical.choice`, `Quot.sound`. Raw artifacts are `evidence/out-N.log`, `time-N.log`, `sha-N.txt`, `source-N.lean`; verified copies are under `/tmp/r0-semd3glue-20261008/continuation-2109/`. Each failed attempt was followed by a source correction; no cap increase, unchanged failing rerun, package rebuild, or forbidden evaluation occurred. The coordinator reviewed the literal interfaces, theorem statements, final diff and hashes independently and ran every focused check. G15 stops at the newly recorded semantic message-shape gap.
+
 ## G16: SemD2Glue pre-challenge degree-invariant stop
 
 Reviewed the fixed semantic density theorem at lead `f1af33ad5`, B2 `SourceData`/state definitions, the duplex and q22 samplers, and the circle bounds. G15 currently supplies interface findings rather than the requested instance, so that dependency is also open. The independent blocking mismatch is the missing pre-challenge degree invariant for the generic D2 statement. No `FS2.D2` theorem, assembled 31-round protocol, new state predicate, or modified bad-round event is claimed.
