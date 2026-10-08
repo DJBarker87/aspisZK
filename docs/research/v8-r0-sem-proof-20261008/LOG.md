@@ -1734,3 +1734,22 @@ products; L5 from `copy_tags_nodup`, `compressPoly_eq_iff` and
 Ledger update: activePole 273 (χ = 0 included), totals 3030 / 303000;
 `causal_le_two_pow_neg_105` and `causal_le_v7` unchanged in force.
 Attempt 622 (see evidence/out-622.log).
+
+## Lead decision after G11′ stop: public-input base typing
+
+Codex's counterexample is accepted: with a zero trace and
+`pub.assetId = B.i`, the asset residual at row 44 is `−B.i ∉ F`, so
+`pack4_eq_zero_iff` cannot be applied to groups holding asset,
+withdrawal or digest targets without typing the public input. In the
+source every public field is M31 (`pair_forest_semantic_terminal.rs:88–96`,
+read via `lift_m31`), so the typing is a fact of the statement type.
+`CoreExt.PublicBase F pub` records it (anchor, nullifier, assetId,
+recipient, change, withdrawalAmount, snapshot/next frontier, nextRoot).
+Appended only; no existing declaration changed. Attempt 623, exit 0,
+1.45 s, 3327052 KiB, swap 0. SHA-256 `7b0a6820f1f6d446943447509edd40babf84801eb1f06aeabd868ff033d41188`.
+
+G11′ resumes with `hpub : PublicBase F pub` as a hypothesis of
+`lanes_zero_iff_holds`; `SemAssembly.LaneInterface` gains the same
+hypothesis at instantiation time (it is a parameter there, unchanged).
+In the FS integration, `PublicBase` is discharged from the statement's
+M31 public fields, not assumed of the prover.

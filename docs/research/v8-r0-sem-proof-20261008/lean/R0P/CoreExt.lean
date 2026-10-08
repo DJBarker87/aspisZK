@@ -49,3 +49,21 @@ theorem pack4_eq_zero_iff {F : Subfield K} (B : PackBasis F) (v : Fin 4 → K)
 
 #print axioms pack4_eq_zero_iff
 end R0P
+
+namespace R0P
+variable {K : Type} [Field K]
+
+/-- The public statement's field values lie in the base field. In the source
+every public field is M31 (`pair_forest_semantic_terminal.rs:88–96`:
+`anchor_root`, `nullifier`, `recipient`, `change`, frontier and root digests
+are `[M31; 8]`, `asset_id: M31`, `withdrawal_amount: Option<u32>`, all read
+through `lift_m31`), so this holds for every statement the verifier accepts
+and is a typing fact, not an assumption on the prover. -/
+def PublicBase (F : Subfield K) (pub : Public K) : Prop :=
+  (∀ i, pub.anchor i ∈ F) ∧ (∀ i, pub.nullifier i ∈ F) ∧ pub.assetId ∈ F ∧
+  (∀ r, pub.recipient = some r → ∀ i, r i ∈ F) ∧ (∀ i, pub.change i ∈ F) ∧
+  (∀ a, pub.withdrawalAmount = some a → a ∈ F) ∧
+  (∀ l i, pub.snapshotFrontier l i ∈ F) ∧ (∀ i, pub.nextRoot i ∈ F) ∧
+  (∀ l i, pub.nextFrontier l i ∈ F)
+
+end R0P
