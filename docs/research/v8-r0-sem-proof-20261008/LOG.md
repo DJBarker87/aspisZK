@@ -1978,3 +1978,34 @@ This is an additional missing quantifier bridge, not a checked counterexample to
 Coordinator check `run2.sh 1900 R0P/SemRounds 7000 7` on the pinned Lean 4.32.0 host/cache passed: actual Lean/scope exit 0, time exit 0, wall 1.43 seconds, peak RSS 3,336,204 KiB, swaps 0. Reservation 24 + 7 GiB, MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. All four theorem audits contain only `propext`, `Classical.choice`, `Quot.sound`; no warnings or errors. No failed G13 attempt or unchanged rerun occurred. The exact frozen 70-line file has SHA-256 `82136911d0a0ce31c21a8c3d7a39dfa04277905fbf40d573fb90da0318b3bb5b`.
 
 The host `SemClosed` source matches current repository SHA-256 `0ff01dadc3fb6a33a0d5692e5825c4dbbb9dc1b62700f371be3e15168f99ab1a`; its existing compiled object and direct dependency objects were reused. `SemBadSets` source SHA-256 is `b74e1d7adfaaf6ad0c4973b96461b6359d23b62d6cadb6e2983646d3e5b40b5d`. No dependency rebuild was needed. Raw host evidence is `evidence/out-1900.log`, `time-1900.log`, `sha-1900.txt`, `source-1900.lean`; verified local copies are under `/tmp/r0-semrounds-20261008/evidence/`. The coordinator reviewed the finding proof and fixed interfaces; independent source reviews confirmed the alpha and lambda quantifier differences. No forbidden proof terms/options, probability claims, or requested completion claim was introduced.
+
+## Lead corrections after G13 stop (badAlpha, λ coefficient)
+
+Both G13 findings (4e8c68399) are accepted; both were lead definition
+errors.
+
+1. `BadAlpha` as "∃ nonzero degree-≤d polynomial with root α_i" is
+   satisfied by `X − C (α i)`, so `compose`, `semantic_sound` and
+   `semantic_sound_closed` carried an unsatisfiable hypothesis. Replaced
+   by `Sumcheck.badAlpha d n G polys α`, recursive on rounds: at some
+   round the prover's `polys 0` differs from an honest polynomial `h`
+   (degree ≤ d, `h.eval x = bsum n (G ∘ Fin.cons x)`) and `α 0` is a root
+   of `polys 0 − h`; otherwise recurse on the prefix-restricted G.
+   `sound` now concludes `badAlpha` with the same proof (its witness was
+   already `polys 0 − h`). `Zerocheck.BadAlpha` is an abbreviation;
+   `compose`, `semantic_sound`, `semantic_sound_closed` take
+   `¬ BadAlpha 27 10 G polys α`. For a fixed prefix the round event is the
+   root set of one nonzero degree-≤27 polynomial, so the per-round count
+   27 stands; G10's `badAlpha_strategy` is the adaptive-prefix form and
+   its bridge to `badAlpha` is a G13′ item.
+2. The λ branch quantified over every coefficient of
+   `Π(X − P) − Π(X − Q)`; the ledger's 2176 is for one coefficient.
+   `LogUpAssembly.productDifference` names the difference and the branch
+   is now `productDifference.leadingCoeff.eval lam = 0` (nonzero iff
+   S ≠ T; λ-degree ≤ 16·136). `LogUpL4` changed accordingly;
+   `logupL4` must be re-proved (G12′), after which `SemClosed` recompiles
+   unchanged.
+
+Attempts 628 Sumcheck, 629 Zerocheck, 630 SemAssembly, 631 LogUpAssembly:
+all exit 0 (0.91/1.35/1.42/1.51 s; ≤ 3340248 KiB; swap 0). `SemClosed`
+is pending `LogUpChain`.

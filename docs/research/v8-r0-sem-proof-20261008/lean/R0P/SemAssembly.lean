@@ -54,7 +54,7 @@ theorem semantic_sound (pub : Public K) (t : Trace K) (lam chi θ μ : K) (zc : 
     (G : (Fin 10 → K) → K) (polys : Fin 10 → Polynomial K) (α : Fin 10 → K)
     (hG : ∀ b, G (ofBool b) = eqwB 10 zc b * lanesComp θ laneOf b + μ * H1 b + μ ^ 2 * inact b)
     (hdeg : IndDeg 27 10 G) (hacc : accept 27 10 G 0 polys α)
-    (hα : ¬ BadAlpha 27 10 α)
+    (hα : ¬ BadAlpha 27 10 G polys α)
     (hμ : ¬ BadMu (mle 10 (lanesComp θ laneOf) zc) (bsumB 10 H1) (bsumB 10 inact) μ)
     (hzc : ¬ BadZc (lanesComp θ laneOf) zc) (hθ : ¬ BadTheta laneOf θ) :
     ProductionHolds pub lam chi t ∧ CopyLinkBalance pub t := by

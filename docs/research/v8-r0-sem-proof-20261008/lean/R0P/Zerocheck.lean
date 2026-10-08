@@ -84,9 +84,10 @@ theorem bsumB_eqw : ∀ (n : Nat) (z : Fin n → K) (f : (Fin n → Bool) → K)
 def lanesComp (θ : K) (lanes : Fin 29 → (Fin 10 → Bool) → K) (b : Fin 10 → Bool) : K :=
   ∑ i : Fin 29, θ ^ i.val * lanes i b
 
-/-- Ledger branch sumcheckRounds: `Sumcheck.sound`'s witness event. -/
-def BadAlpha (d n : Nat) (α : Fin n → K) : Prop :=
-  ∃ i : Fin n, ∃ p : K[X], p ≠ 0 ∧ p.natDegree ≤ d ∧ p.eval (α i) = 0
+/-- Ledger branch sumcheckRounds is `Sumcheck.badAlpha` (the transcript's
+round-wise honest-difference root event). -/
+abbrev BadAlpha (d n : Nat) (G : (Fin n → K) → K) (polys : Fin n → K[X]) (α : Fin n → K) :
+    Prop := badAlpha d n G polys α
 
 /-- Ledger branch muBatch: μ is a root of a nonzero degree-≤2 polynomial. -/
 def BadMu (a s1 s2 μ : K) : Prop :=
@@ -106,7 +107,7 @@ theorem compose (lanes : Fin 29 → (Fin 10 → Bool) → K) (H1 inact : (Fin 10
     (θ μ : K) (zc : Fin 10 → K) (G : (Fin 10 → K) → K) (polys : Fin 10 → K[X]) (α : Fin 10 → K)
     (hG : ∀ b, G (ofBool b) = eqwB 10 zc b * lanesComp θ lanes b + μ * H1 b + μ ^ 2 * inact b)
     (hdeg : IndDeg 27 10 G) (hacc : accept 27 10 G 0 polys α)
-    (hα : ¬ BadAlpha 27 10 α)
+    (hα : ¬ BadAlpha 27 10 G polys α)
     (hμ : ¬ BadMu (mle 10 (lanesComp θ lanes) zc) (bsumB 10 H1) (bsumB 10 inact) μ)
     (hzc : ¬ BadZc (lanesComp θ lanes) zc) (hθ : ¬ BadTheta lanes θ) :
     (∀ i b, lanes i b = 0) ∧ bsumB 10 H1 = 0 ∧ bsumB 10 inact = 0 := by

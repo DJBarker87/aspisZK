@@ -30,7 +30,7 @@ theorem semantic_sound_closed (P : Nat) [CharP K P] (hP : P = 2 ^ 31 - 1)
       μ * t 26 (rowOf b) +
       μ ^ 2 * ((1 - copyActiveLiteral (copySelectors (rowSel (rowOf b)))) * t 26 (rowOf b)))
     (hdeg : IndDeg 27 10 G) (hacc : accept 27 10 G 0 polys α)
-    (hα : ¬ BadAlpha 27 10 α)
+    (hα : ¬ BadAlpha 27 10 G polys α)
     (hμ : ¬ BadMu (mle 10 (lanesComp θ (laneOf t pub lam chi B)) zc)
       (bsumB 10 (fun b => t 26 (rowOf b)))
       (bsumB 10 (fun b =>
@@ -59,7 +59,7 @@ theorem semantic_extraction_closed (P : Nat) [CharP K P] (hP : P = 2 ^ 31 - 1)
       μ * t 26 (rowOf b) +
       μ ^ 2 * ((1 - copyActiveLiteral (copySelectors (rowSel (rowOf b)))) * t 26 (rowOf b)))
     (hdeg : IndDeg 27 10 G) (hacc : accept 27 10 G 0 polys α)
-    (hα : ¬ BadAlpha 27 10 α)
+    (hα : ¬ BadAlpha 27 10 G polys α)
     (hμ : ¬ BadMu (mle 10 (lanesComp θ (laneOf t pub lam chi B)) zc)
       (bsumB 10 (fun b => t 26 (rowOf b)))
       (bsumB 10 (fun b =>

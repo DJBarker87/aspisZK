@@ -58,18 +58,21 @@ def prodPolys (pub : Public K) (t : Trace K) : Multiset K[X] :=
 def consPolys (pub : Public K) (t : Trace K) : Multiset K[X] :=
   ((enabledLinks pub).map (fun l => compressPoly (copyConsumerTuple t l)) : List K[X])
 
+/-- `Π(X − P) − Π(X − Q)` in `K[λ][X]`; nonzero iff the multisets differ,
+with every coefficient of λ-degree ≤ 16·136. Its leading coefficient is the
+one canonical nonzero coefficient the λ branch charges (2176 roots). -/
+def productDifference (pub : Public K) (t : Trace K) : Polynomial K[X] :=
+  ((prodPolys pub t).map (fun q => X - C q)).prod - ((consPolys pub t).map (fun q => X - C q)).prod
+
 /-- Ledger branches activePole (with χ = 0 for empty slots), copyChi and
-tupleCompression. The λ branch is the root set of a nonzero coefficient of
-`Π(X − P) − Π(X − Q)` over K[λ]. -/
+tupleCompression. The λ branch is the root set of the leading coefficient of
+`productDifference` over K[λ]. -/
 def BadLogUp (pub : Public K) (t : Trace K) (lam chi : K) : Prop :=
   chi = 0 ∨ chi ∈ poleSet t lam ∨
   (numer (valueSet pub t lam) (signedCount pub t lam) ≠ 0 ∧
     (numer (valueSet pub t lam) (signedCount pub t lam)).eval chi = 0) ∨
   (prodPolys pub t ≠ consPolys pub t ∧
-    ∃ k, ((((prodPolys pub t).map (fun q => X - C q)).prod -
-      ((consPolys pub t).map (fun q => X - C q)).prod).coeff k) ≠ 0 ∧
-      ((((prodPolys pub t).map (fun q => X - C q)).prod -
-        ((consPolys pub t).map (fun q => X - C q)).prod).coeff k).eval lam = 0)
+    (productDifference pub t).leadingCoeff.eval lam = 0)
 
 /-- L1: off poles, the row identity is the helper's fraction form. -/
 def LogUpL1 (pub : Public K) (t : Trace K) (lam chi : K) : Prop :=
@@ -104,10 +107,7 @@ equality of the tuple-polynomial multisets. -/
 def LogUpL4 (pub : Public K) (t : Trace K) (lam : K) : Prop :=
   (∀ v ∈ valueSet pub t lam, signedCount pub t lam v = 0) →
     ¬ (prodPolys pub t ≠ consPolys pub t ∧
-      ∃ k, ((((prodPolys pub t).map (fun q => X - C q)).prod -
-        ((consPolys pub t).map (fun q => X - C q)).prod).coeff k) ≠ 0 ∧
-        ((((prodPolys pub t).map (fun q => X - C q)).prod -
-          ((consPolys pub t).map (fun q => X - C q)).prod).coeff k).eval lam = 0) →
+      (productDifference pub t).leadingCoeff.eval lam = 0) →
     prodPolys pub t = consPolys pub t
 
 /-- L5 (G5, G7): equal multisets with distinct tags give per-link equality. -/
