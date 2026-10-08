@@ -1157,3 +1157,46 @@ On green 1103 the public declarations are `copy_tags_indexed`, `copy_tags_nodup`
 The coordinator reviewed the complete final source and independently read the raw attempt records. Failed attempts 1100–1102 contain compiler error-term axioms and are rejected as proof evidence. Every theorem (30), including private helpers, is audited; the four additional audits cover helper definitions. Actual scope and time exits agree for all five runs. Rust C whole-file SHA-256: `cfce7ec499d3cfd54cf91eb88675e45d89ada5ce073fe00c78be5211204fbc50`; C:27–164 SHA-256: `46187e7618fcba23fabf27f20e7f892ca5e4df38ab619ad84f238bf10ffc4e71`.
 
 Raw artifacts are `evidence/source-{1100..1103}.lean`, `evidence/sha-{1100..1103}.txt`, `evidence/out-{1100..1103}.log`, and `evidence/time-{1100..1103}.log` in the pinned build workspace. Final worktree/build-host source SHA matches `42a78275bbe6dccebc1a7843e7260b2591c25ed5add271c79e1db99d4e820906`. No Lean job or build scope remained active after 1103. Coordinator check 1198 then passed with the same source hash and reservation 24+7 GiB. Its `source-1198.lean`, `sha-1198.txt`, `out-1198.log`, and `time-1198.log` are retained under `evidence/`. No source obstruction or probability claim is recorded.
+
+## G6: LogUp partial fractions
+
+- Target: `R0P/LogUpFrac`, tested on host `dombarker@100.108.41.90` (`nuc`), workspace `/home/dombarker/project-offloads/aspis-fs-generic-20261006`.
+- Pinned Lean: `leanprover/lean4:v4.32.0` (`LEAN_GITHASH=8c9756b28d64dab099da31a4c09229a9e6a2ef35`). `evidence/run.py` invokes Lean with `-j1 -M4500 -DElab.async=false`; `run.sh` scopes the run at `MemoryHigh=5G`, `MemoryMax=7G`, `MemorySwapMax=0`, `TasksMax=128`, timeout 900 s. `run.sh` SHA-256: `0fdf22312034806a22f95ae2f30583c9fc5ea63b142cd98cee76f79fcfbc348b`.
+- Reservation before final run: populated capped reservation 24 GiB, thus 24+7=31 GiB ≤ 55 GiB. Development attempt 1220: runner/scope exit 0; `/usr/bin/time` exit 0; 1.22 s wall; peak RSS 2,087,128 KiB; swap 0. No host cap was changed.
+- Source HEAD during final check: `1074cbc4915fcd36dbfeee3b45c88808d7cc5770`; final source SHA-256 `f4d1c635188c74aeb5e2150e94b8627c22439e0bf1a482a173c0a5b38566b0b2`.
+- Raw evidence: host `evidence/source-N.lean`, `evidence/sha-N.txt`, `evidence/out-N.log`, `evidence/time-N.log`, for all run IDs below, including final coordinator check 1298.
+- Rust source context from lead, inspection pin `e4d68a70d3f6beb215c9f6dd418f4a2a3740c809`: `logup.rs` whole-file SHA-256 `c6e84617e6473f014fc53c704dd26b04667046211985ea6ddca8f66f496bea65`. Its lines 191–273 SHA-256 `14ff810b91e426ff0974134f8be73eddebb85eb52f3d4581b441b24e193da661`. The proved `numer` is the lead-specified polynomial model; it is not asserted as a direct definition of Rust `logup.rs`.
+- Audits: all 8 theorem/private-helper `#print axioms` checks in final output contain only `[propext, Classical.choice, Quot.sound]`; no warnings in attempt 1220.
+
+The file defines `numer D m` as the specified finite sum of `C (m v)` times the erased-support polynomial product. It proves numerator vanishing implies every coefficient on `D` vanishes; the requested public nonzero theorem gives both the natDegree and multiplicity-counted roots bounds; and `numer_partial_fraction` assumes only `chi ∉ D`. There is no nonemptiness premise and no table/range evaluation.
+
+### Attempt inventory and final check
+
+IDs 1200–1206 have no G6 runner artifacts (`sha/out/time`) in the host evidence directory; the lead's initial check confirmed 1200 was unused before this work, so these IDs were not run for G6. IDs 1207–1220 below are every G6 development attempt; 1298 is the coordinator check. “Runner” is the outer status appended by `run.sh`; “time” is `/usr/bin/time`'s `Exit status` (the inner command result). Every run used the fixed scope above and reported zero swap.
+
+| ID | Source SHA-256 | Runner | time | Wall | Peak RSS KiB | Swap | Finding |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 1200 | not run; no artifact | — | — | — | — | — | Confirmed unused before work. |
+| 1201 | not run; no artifact | — | — | — | — | — | No G6 run. |
+| 1202 | not run; no artifact | — | — | — | — | — | No G6 run. |
+| 1203 | not run; no artifact | — | — | — | — | — | No G6 run. |
+| 1204 | not run; no artifact | — | — | — | — | — | No G6 run. |
+| 1205 | not run; no artifact | — | — | — | — | — | No G6 run. |
+| 1206 | not run; no artifact | — | — | — | — | — | No G6 run. |
+| 1207 | `21cf3c2800dabdbc2e69406f17b6ed044c9e098ce7b30b44da2324542fa1e1a9` | 134 | 0, signal 6 | 2.99 s | 6,152,596 | 0 | `import Mathlib` triggered Lean interpreter `memory_exception`; changed imports, no cap increase. |
+| 1208 | `3e3e869205a19645f518af2fcc92732082040c650d8ac6642ddae8c3ed15c6bd` | 1 | 1 | 1.52 s | 2,067,392 | 0 | Missing `open Polynomial`; corrected. |
+| 1209 | `94a6215da898226482be6e7205c2acbfbc533ccbbd43eb54262acd942a1ce0c6` | 1 | 1 | 1.43 s | 2,069,092 | 0 | Elaboration and degree/root application errors; repaired. |
+| 1210 | `8f582dc0f6bb0ac1967c3f09e99478712bf783481f0335872dd1be451dcfff9b` | 1 | 1 | 1.10 s | 2,069,148 | 0 | Classical decidable equality/noncomputable scope and remaining proof errors; repaired. |
+| 1211 | `d25a08595adecae08e2bc943ad77b3a99750d643bfa536fbd77bddb9e55a5d25` | 1 | 1 | 1.21 s | 2,077,560 | 0 | Singleton-sum proof shape and product factorization; repaired. |
+| 1212 | `96395c9797db93cb3f7e012fd5a1d242790b452a6f683e8d9cd74a3ee2abc70c` | 1 | 1 | 1.21 s | 2,076,616 | 0 | Singleton-sum side-condition order; repaired. |
+| 1213 | `fdb4eced2f344a6ad45cc0c077a166a29c37810719178c9e0563e64317bf1931` | 1 | 1 | 1.17 s | 2,076,080 | 0 | Off-term product-zero proof; repaired. |
+| 1214 | `db2409328314fc01b5df384b05aa308bd1f1c2c6a7464283871d66baa548b682` | 1 | 1 | 1.20 s | 2,076,812 | 0 | Product-zero target shape; refined. |
+| 1215 | `9824b95dfe5dd025e4bcd72cc155f8fa492c45f587620854de6000f5733b1c8f` | 1 | 1 | 1.17 s | 2,076,880 | 0 | Product-zero proof target; refined. |
+| 1216 | `d19640d65b367ccf5f186686432b78d7d534d6cae8e254858019f44394061018` | 1 | 1 | 1.16 s | 2,076,280 | 0 | Product-zero proof target; refined. |
+| 1217 | `db2409328314fc01b5df384b05aa308bd1f1c2c6a7464283871d66baa548b682` | 1 | 1 | 1.18 s | 2,076,716 | 0 | Product-zero proof target; refined. |
+| 1218 | `f6648b94ef0bc51f33a9379e5d75705c3fde6fe6694a659ec75ae93161a51b48` | 1 | 1 | 1.20 s | 2,077,196 | 0 | Confirmed `Finset.prod_eq_zero` requires the vanishing-factor proof. |
+| 1219 | `588dae03c8931ac97fcb28adb6d3e88086e0bca928f348f3f16d05a2fecdfe26` | 0 | 0 | 1.23 s | 2,087,648 | 0 | Green; unused-premise warning remained. |
+| 1220 | `f4d1c635188c74aeb5e2150e94b8627c22439e0bf1a482a173c0a5b38566b0b2` | 0 | 0 | 1.22 s | 2,087,128 | 0 | Final green; nonzero premise explicitly used, no warnings. |
+| 1298 | `f4d1c635188c74aeb5e2150e94b8627c22439e0bf1a482a173c0a5b38566b0b2` | 0 | 0 | 1.20 s | 2,087,160 | 0 | Lead's frozen-source final check; 8 audits, no warnings; reservation 24+7=31≤55 GiB. |
+
+Workflow deviation: attempt 1217 reran exactly the same source SHA and unchanged failing source as attempt 1214 (`db2409328314fc01b5df384b05aa308bd1f1c2c6a7464283871d66baa548b682`). Both logs show the same unsolved `v - v = 0` goal at the same line, with outer/time exits 1/1. This was an accidental repeat while exploring proof-term variants; it violated the no-unchanged-failing-rerun rule. The repeat used the unchanged 5G/7G/0 scope, lasted 1.18 s, peaked at 2,076,716 KiB, and swapped 0. Evidence is retained. No cap was raised. The final frozen-source check is attempt 1298 above. The coordinator reviewed the complete source and raw evidence; all failed compiler error-term audits are rejected. No source obstruction or probability claim is recorded.
