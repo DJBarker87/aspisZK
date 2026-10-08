@@ -2398,3 +2398,15 @@ Galois correspondence for finite fields; cite the exact Mathlib lemma
 then obtains `BaseTyped x.F t` from `Witness` and `x.lanesF`. If K is not
 assumed finite in the Wide modules' statements, state the lemma with
 `[Fintype K]` (the SEM field is QM31/WideExact).
+
+## G17: Message-cell subfield descent
+
+Completed `MessageDescent.lean` at lead `ecb3118be`, importing exactly `Wide.InitialEncoder`, `Wide.SubfieldDescent`, `Wide.EncoderLinearity`, and `Mathlib`. `AspisWide.SubfieldDescent.initialMessage_subfield_descent` proves the requested statement: subfield membership of every exact encoder coordinate implies membership of every message cell. Its instances are the existing Wide interfaces' `[Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K]`; no additional descent or cryptographic premise is used.
+
+For each `S`-algebra automorphism of `K`, `σ.commutes` fixes every codeword coordinate in `S`. `initialMessage_fixed_of_agreement` then fixes the message, using the full encoder support. The support-size proof rewrites `Finset.card_univ` and `Fintype.card_fin`, then proves the scalar numeral inequality `1024 < 1048576` with `norm_num`; it never evaluates the universe. Finally `IsGalois.mem_range_algebraMap_iff_fixed` gives membership in the range of `algebraMap S K`, and unpacking its subtype witness gives membership in `S`.
+
+Exact Mathlib citations, at pinned revision `81a5d257c8e410db227a6665ed08f64fea08e997`: `Mathlib/FieldTheory/Galois/Basic.lean:343–345`, theorem `IsGalois.mem_range_algebraMap_iff_fixed` (through `mem_bot_iff_fixed` and `fixedField_top`); and the finite-target-field `IsGalois` instance at `Mathlib/FieldTheory/Finite/GaloisField.lean:197–206`. Applying that instance to the subfield type `S` and extension field `K` closes the transport with the canonical subfield algebra; `[Fintype K]` supplies finiteness, and the finite-dimensional instance is inferred. No `IntermediateField` conversion premise is needed.
+
+Coordinator attempt `run2.sh 2300 R0P/MessageDescent 7000 7` passed first try: actual Lean exit 0, scope/time exit 0, wall 2.91 s, peak RSS 6,749,632 KiB, swaps 0. Reservation 24 + 7 GiB; MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0. The sole theorem's audit contains only `propext`, `Classical.choice`, `Quot.sound`; no warnings or errors. Frozen source SHA-256: `d3cb1623aeb04289250ed3f5bc2a9c532b62da2c5465933f2240fca47da856c3`.
+
+Raw evidence: `evidence/out-2300.log`, `time-2300.log`, `sha-2300.txt`, `source-2300.lean`; verified copies under `/tmp/r0-messagedescent-20261008/evidence/`. The coordinator reviewed the proof and the exact pinned Mathlib lemmas independently and ran the focused check. No failed attempt, unchanged rerun, cap change, package rebuild, forbidden evaluation, or new finding. G17 closes the recorded encoder-to-message descent gap; G15 can consume it without adding a premise.
