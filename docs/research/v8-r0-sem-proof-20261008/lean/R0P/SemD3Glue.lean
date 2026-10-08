@@ -1,4 +1,7 @@
 import R0P.SemD2
+import R0P.SemAccept
+import R0P.SemHonest
+import R0P.SemVirtualDeg
 import R0P.SemPad
 import R0C.V3.R0Q
 import R0P.MessageDescent
@@ -15,8 +18,9 @@ commitment.  Lead 7d3aa4864 restricts the degree guard to the alpha phase;
 the superseded unconditional-guard findings are removed.  The integration
 uses the literal prefix-based `semanticBad`.
 
-The final `d3` below is conditional on the three G14 bridge obligations.
-It does not close the premise-free D3 component of `SemStatement.Obligations`.
+The final `d3` discharges the three G14 bridges with SemHonest,
+SemVirtualDeg, and SemAccept. It proves the fixed D3 component without
+adding semantic premises to `SemStatement.Obligations`.
 -/
 set_option autoImplicit false
 namespace R0P.SemD3Glue
@@ -1028,9 +1032,8 @@ theorem combined_chal26 {Sfield : Fin 29 → Subfield SemE} {Pf : Type} {L : Nat
 
 #print axioms combined_chal26
 
-/-- Conditional D3 assembly for the mixed protocol. Its semantic assumptions are
-exactly the three named G14 bridge obligations, which this theorem does not
-claim to discharge. The decoder identity specifies the existing gamma sampler. -/
+/-- D3 for the mixed protocol, with the three G14 bridges discharged.
+The decoder identity specifies the existing gamma sampler. -/
 theorem d3 (prime : Nat) [CharP SemE prime] (hprime : prime = 2^31-1)
     {Sfield : Fin 29 → Subfield SemE} {Pf : Type} {L : Nat}
     (B : PackBasis (Sfield 0))
@@ -1041,10 +1044,7 @@ theorem d3 (prime : Nat) [CharP SemE prime] (hprime : prime = 2^31-1)
         (Duplex.Chal (Chal SemE SemE)) × Msg SemE SemE (SemMsg SemE) ×
           Duplex.Chal (Chal SemE SemE))))
     (budget : Nat → ℚ)
-    (hσ26 : ∀ s, p.σ 26 s = .opening (R0C.V3.DQ.σQ 0 s))
-    (hrows : ∀ (x : TypedContext SemE Sfield) (t : Trace SemE), HonestRows x.pub B t)
-    (hdeg : ∀ (x : TypedContext SemE Sfield) (t : Trace SemE), VirtualDeg x.pub B t)
-    (hchk : ∀ (x : TypedContext SemE Sfield) (t : Trace SemE), ChecksAccept x.pub B t) :
+    (hσ26 : ∀ s, p.σ 26 s = .opening (R0C.V3.DQ.σQ 0 s)) :
     FS2.D3 (combinedProtocol B p msg decode) (duplexRows B budget)
       (FS2.verifier (combinedProtocol B p msg decode) (combinedDecision B)) := by
   intro H x π T hd
@@ -1056,7 +1056,9 @@ theorem d3 (prime : Nat) [CharP SemE prime] (hprime : prime = 2^31-1)
   let P := valuePrefix ((combinedProtocol B p msg decode).transcript H x π 31)
   have hd' : (¬ ∃ t, InputNoteExtracted P.statement.pub t) ∧
       ¬ hitFrom (sourceData B) P.statement [] P.rounds := hd
-  obtain ⟨t, ht⟩ := accepted_no_hit_extracted prime hprime B hrows hdeg hchk P
+  obtain ⟨t, ht⟩ := accepted_no_hit_extracted prime hprime B
+    (fun x t => honestRows x.pub B t) (fun x t => virtualDeg x.pub B t)
+    (fun x t => checksAccept x.pub B t) P
     (msg π 31) hdec hd'.2 (by
       intro Q hview y γ hhead
       have hparsed := opening_head_at_26 P Q hview

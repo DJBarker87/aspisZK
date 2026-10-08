@@ -2967,3 +2967,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2057 | `R0P/SemVirtualDeg` | 0 / 0 | 0:03.07 | 6813452 | 0 | 3 | `c7660c31f4d9c72d6b8b654450ffb6d4e6dc180de99b158c84e79d4f4874f4ee` |
 
 Source revision(s): `278fd3cd7f38dcf9a52ac5761ce7f522ac97d0f6`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Overnight G14′ Step 6 / G15 — D3 closed
+
+The unchanged D3 target from diagnostic 2124 now closes in 2125 by supplying honestRows, virtualDeg, and checksAccept; no goals remain. SemD3Glue.d3 now calls these proofs internally and has none of the three G14 Props as hypotheses. Its characteristic and concrete gamma-decoder identity parameters are unchanged, and SemStatement.Obligations is unchanged. The complete focused SemD3Glue host run 2126 passes with no errors or warnings and 55 standard axiom lines. In particular: 'R0P.SemD3Glue.d3' depends on axioms: [propext, Classical.choice, Quot.sound]. The independent obligation diagnostic has the same axiom set. This closes the requested mixed-protocol D3 component. Each preceding bridge module was committed and pushed after its successful focused run. Only Lean sources and LOG are included; evidence snapshots remain uncommitted.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2125 | `R0P/D3ObligationCheck` | 0 / 0 | 0:03.05 | 6821920 | 0 | 1 | `d451e44571a2b1c6c99e268cf184e8cd64f7392bf40dde5b703f5d8f4d39e78d` |
+| 2126 | `R0P/SemD3Glue` | 0 / 0 | 0:21.78 | 6939620 | 0 | 55 | `26f6c39987de422e0b38779db55e8c26ce728d4c6a01a9061ff9f4157b16bf17` |
+
+Source revision(s): `aee0c74d9a69ffdfe99431c966edf89242f53f9d`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
