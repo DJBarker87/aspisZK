@@ -2980,3 +2980,37 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2126 | `R0P/SemD3Glue` | 0 / 0 | 0:21.78 | 6939620 | 0 | 55 | `26f6c39987de422e0b38779db55e8c26ce728d4c6a01a9061ff9f4157b16bf17` |
 
 Source revision(s): `aee0c74d9a69ffdfe99431c966edf89242f53f9d`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G16 continuation after G15 closure — prime, circle, and opening sub-bounds
+
+Resumed the previously authorized G16 job only after D3 was green and pushed. The canonical-prime bridge P_eq compiled first in isolation at 2210 using the requested norm_num proof. The existing opening draft was checked at 2211–2213: q22 needed the forward challenge rewrite, the explicit round-30 branch, and explicit observer arguments to chainS_independentMean; 2213 passes the semantic, four field-opening, and q22 sub-bounds. Row 24 passes at 2214 using circleSample_z0_mass; row 25 passes at 2216 using circleSample_z1_mass. Both bounds use P_eq to obtain the exact 2/P² budget. Attempt 2215 reached a simplifier timeout while unnecessarily expanding a prefix in the missing-previous-challenge case; 2216 uses the existing no-flip lemma directly with an atomic hypothesis and the generic zero-mean lemma. The cap was unchanged. Concrete bad predicates remain existing defs, and no filter/cardinality or DecidableEq unification was introduced. Successful axiom audits use only the standard three; failed outputs are diagnostic only. Full 31-row assembly follows only after each arbitrary-message sub-bound is checked.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2210 | `R0P/SemD2Prime` | 0 / 0 | 0:02.85 | 6811536 | 0 | 1 | `a4ae4410a15c985fc7280f58dfdc0f4ce32b9b64c9ce9edef10a0dd5273db82a` |
+| 2211 | `R0P/SemD2Glue` | 1 / 1 | 0:07.34 | 6821552 | 0 | 9 | `cf446ca0547237dc38d09180482bd4bd6308019bd4b89e50aa6eb2c024416c01` |
+| 2212 | `R0P/SemD2Glue` | 1 / 1 | 0:07.47 | 6822760 | 0 | 9 | `2e19d3f1e158c41eaa52df885b54143bfcb0cfa8b951176ca608634c786a8d91` |
+| 2213 | `R0P/SemD2Glue` | 0 / 0 | 0:07.96 | 6859936 | 0 | 9 | `9f814f34bf16c1a9eb50fad68e64dc53d382e46d1245dac1545084789a5bf4d2` |
+| 2214 | `R0P/SemD2Glue` | 0 / 0 | 0:11.19 | 6873652 | 0 | 17 | `cf7312df06420a1317c06adc3f8baaf7e71837c9f26ce911d0c0207fe15a4ad2` |
+| 2215 | `R0P/SemD2Glue` | 1 / 1 | 0:21.27 | 6847148 | 0 | 21 | `91f1c695b7384410501129a45be425d5a25a27cfd4d420f16254fcd7c6c6a781` |
+| 2216 | `R0P/SemD2Glue` | 0 / 0 | 0:13.40 | 6883220 | 0 | 21 | `47f37bee1757306859250308649a86f6cd78ecc68ddeb027f1b1c77add40ae92` |
+
+Source revision(s): `da49d26614e991db31fdc6d615ebd07285d0f8e3`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G16 — full 31-row D2 closed
+
+Every sub-bound was green before assembly: semantic and parsed opening rows at 2213, circle row 24 at 2214 (lint cleanup included in 2216), circle row 25 at 2216, arbitrary-message field rows at 2218, and arbitrary-message q22 at 2219. Attempt 2217 removed four no-op dsimp calls. Attempt 2220 exposed an assembly-only substitution issue: subst i chose the prefix-round equality rather than the desired local row equation. Attempt 2221 rewrites the selected row equations explicitly and transports hround by transitivity. It proves FS2.D2 for all 31 rows of combinedProtocol with combinedD2Budget: the lead-authorized ×100 semantic table, 2/P² for each circle row, and the existing opening slack bounds. The four source-fixed sigma identity clauses are unchanged from the draft; no probability, degree, candidate, or parser premise was added. The final run has exit 0, no errors or warnings, 28 axiom audits, and no sorryAx. In particular: 'R0P.SemSource.combinedProtocol_D2' depends on axioms: [propext, Classical.choice, Quot.sound]. Source and final diff were reviewed; this closes Job B. Only SemD2Glue.lean and LOG are committed, with evidence excluded.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g14-overnight-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2217 | `R0P/SemD2Glue` | 1 / 1 | 0:14.31 | 6845860 | 0 | 23 | `6658d9af642a46c90e572425fbcd90f522e080f720f29c47146fb641cb8faa4f` |
+| 2218 | `R0P/SemD2Glue` | 0 / 0 | 0:14.73 | 6886916 | 0 | 23 | `24e96da1ee921f971bf6d28ae20a79f4f147fe4586ce61131247bf69ef5887f9` |
+| 2219 | `R0P/SemD2Glue` | 0 / 0 | 0:16.01 | 6892892 | 0 | 26 | `250d496bbabd1c857689f3fde1b95841174f6353a98faf7bac909f46bca17972` |
+| 2220 | `R0P/SemD2Glue` | 1 / 1 | 0:16.48 | 6857552 | 0 | 28 | `7bf928f53d4577b19abc57025a62ed6c38f32bcbf0c499ffe71b69763d2d5997` |
+| 2221 | `R0P/SemD2Glue` | 0 / 0 | 0:16.99 | 6901280 | 0 | 28 | `71de3ca82cc1329e598d87b50a2e985115bd626db36cda1aedef487d2e71dc46` |
+
+Source revision(s): `da49d26614e991db31fdc6d615ebd07285d0f8e3`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
