@@ -2373,3 +2373,28 @@ Both gaps (6e9d1bd6d) were lead interface omissions.
 
 Attempts 654 SemView, 655 SemDecision, 656 SemD3, 657 SemD2: exit 0,
 no warnings; axioms unchanged (standard three).
+
+## Lead decision after G15 descent stop: message descent lemma (G17)
+
+Accepted (356e07e66): `R0FS.Witness` types the encoder coordinates,
+`BaseTyped` needs the message cells. No premise is added; the gap is a
+true lemma of the encoder. `Wide/InitialEncoder.exactInitialEncoder`
+evaluates the message's two polynomials at circle points whose
+coordinates are `algebraMap (ZMod P) K` images, so it commutes with every
+ring automorphism of K (`map_initialEncoder`), and
+`Wide/SubfieldDescent.initialMessage_fixed_of_agreement` already shows
+that an automorphism fixing the codeword on > 1024 coordinates fixes the
+message. For finite K and a subfield S, the fixed field of the
+automorphisms of K fixing S pointwise is S (finite extensions of finite
+fields are Galois), so:
+
+`initialMessage_subfield_descent (S : Subfield K) (m : InitialMessage K)
+  (h : ∀ x, exactInitialEncoder m x ∈ S) : ∀ r, m r ∈ S`.
+
+G17 proves it (new file in the sem-proof directory importing the Wide
+modules), with support := `Finset.univ` (card 2²⁰ > 1024) and Mathlib's
+Galois correspondence for finite fields; cite the exact Mathlib lemma
+(fixed field of the full automorphism group over S equals S). G15's D3
+then obtains `BaseTyped x.F t` from `Witness` and `x.lanesF`. If K is not
+assumed finite in the Wide modules' statements, state the lemma with
+`[Fintype K]` (the SEM field is QM31/WideExact).
