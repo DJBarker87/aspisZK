@@ -2009,3 +2009,20 @@ errors.
 Attempts 628 Sumcheck, 629 Zerocheck, 630 SemAssembly, 631 LogUpAssembly:
 all exit 0 (0.91/1.35/1.42/1.51 s; ≤ 3340248 KiB; swap 0). `SemClosed`
 is pending `LogUpChain`.
+
+## Lead: B2 instance, part 1 (SemSource.lean)
+
+`SemSource.lean` imports `R0C.SemStatement` (the B2 skeleton of the
+close job) with K = E. `Context K` = pair-forest public input plus the
+committed words; `paymentWitness x t := InputNoteExtracted x.pub t`;
+`d1_of_sourceData`: FS2.D1 for every semantic `SourceData` (no witness ⇒
+doomed at the empty prefix, since `hitFrom [] [] = False`). Attempts
+632–634 were namespace lookups (`InitialWord`, `Table`) and the
+classical `dite` split; 635 exit 0, 2.95 s, 6795812 KiB (R0C imports),
+swap 0, 24+7 GiB. SHA-256 `e79ce46d3ce2dc99e65aa99c78581f5069c66eec3dba4dae0dce09ec86f7a024`. Axioms: standard three.
+
+Remaining for the B2 instance: `semanticBad` from G13′'s
+`semRoundBad` (quantified over `Lambda x.W`), `openingView`
+(construct the R0FS `Stmt` from the semantic transcript's point claims
+and z₀, z₁), `decision`; then D3 from `semantic_sound_closed` and D2
+per round from `semRoundBad_card` under the duplex sampler law.
