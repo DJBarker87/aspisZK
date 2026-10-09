@@ -105,11 +105,11 @@ theorem claimOf_getElem (rs : List (MsgZ K × ChalZ K)) (claim : K)
   | opening om => cases hp
 
 theorem no_hit_roundZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskPoly : (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
-    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskPoly B) x [] (rs ++ tail))
+    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail))
     (i : Fin rs.length) :
-    ¬ roundBad (sourceDataWithFallbackZ fallback1 maskPoly B) ⟨x,rs.take i.val⟩
+    ¬ roundBad (sourceDataWithFallbackZ fallback1 maskClaims B) ⟨x,rs.take i.val⟩
       (rs[i.val]).1 (rs[i.val]).2 := by
   intro hb
   apply hno
