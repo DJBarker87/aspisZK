@@ -3713,3 +3713,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3222 | `R0P/MaskD2` | 0 / 0 | 0:03.84 | 6840780 | 0 | 12 | `fa86046d9800c581b22bd068c64b8a9fbe98a2049cc20e05dc38c66bd3a03b8a` |
 
 Source revision(s): `2363f469444bd383a352d5a5f43016cc98e2044d`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24 continuation: masked semantic core (3223)
+
+MaskSemantics proves honestRowsZ with literal mask values at Boolean rows, checksAcceptZ for the masked target, and originalTotal_zero_of_masked_accept. The latter applies the existing virtualPolyZ_indDeg from hMask, Sumcheck.sound, virtualPolyZ_total, and the eta exclusion; it handles eta=0 without dividing by eta or adding a mask premise. semantic_of_total_zero reuses the downstream zerocheck, lane and LogUp arguments of SemD3.d3_core/SemClosed after replacing the original sumcheck step by the recovered zero sum. All four audits pass at 3223 with standard axioms, no errors or warnings. Prefix parsing and no-hit transport still have to discharge these local semantic hypotheses in masked D3.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3223 | `R0P/MaskSemantics` | 0 / 0 | 0:03.11 | 6835164 | 0 | 4 | `e0159b7d5cbfa65b1b784d794f16673ca01b5384e82dc7841011091a7c8a078c` |
+
+Source revision(s): `2abe95fa7ffd51ff0f390400c433618438c92ceb`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
