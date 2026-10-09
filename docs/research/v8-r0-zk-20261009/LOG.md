@@ -1663,3 +1663,28 @@ recurrence. No new file contains a sorry, axiom, unsafe declaration, or native
 evaluation. Commit scope is the four new modules, the old MaskImage docstring,
 and this LOG. Concurrent Rust/spec work is untouched; no wallet operation,
 co-author trailer, or rank-proof claim. Z3b stops at the D11 correction above.
+
+### Lead decision D12 — remainder depends on all multiplied coordinates (corrects D11)
+
+Z3b's finding is accepted: the copy residual multiplies H1 by trace cells, so
+with both in the tape the original's last round polynomial has a bilinear
+term in (H1 padding, eligible noise); D11's `g w e` was too narrow. Fix:
+
+- Partition the tape `T = M ⊕ N`. `M` ("pure-linear") are the coordinates
+  that no payload component ever multiplies by another tape coordinate or by
+  the trace: the ten mask-only columns and D; G belongs to `M` iff the
+  original terminal never multiplies lane 27 by a tape-dependent value (Z3b
+  decides from the algebra and records it); H1 padding and the eligible
+  noise are in `N`.
+- `view x w ch (m,n) = c + A (m,n) + (g w n, 0)` with `c := view (0,0)`,
+  `A` linear, `g w n` the remainder in the round-polynomial component only,
+  `g w 0 = 0`; it may be any polynomial in `n`.
+- `MaskImage x :=`
+  (i) `∀ w n, public w = x → (g w n, 0) ∈ range (A ∘ inl_M)`;
+  (ii) `∀ w w', … → c w − c w' ∈ range A`.
+- Theorem: `MaskImage x → HVZK_perfect x`, same proof: for fixed `n`,
+  `m ↦ view` is uniform on `c + A(0,n) + range(A∘inl_M)` by (i); the
+  mixture over uniform `n` is the pushforward of uniform `(m,n)` under
+  `c + A`, uniform on `c + range A`; (ii) gives instance-independence.
+  (i) is still the rank statement of the Rust gate: the mask-only columns'
+  round-polynomial image must cover the round-polynomial displacement space.
