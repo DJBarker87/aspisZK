@@ -111,12 +111,12 @@ open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 noncomputable section
 variable {Sfield : Fin 29 → Subfield WideExact} {Pf : Type} {L : Nat}
-variable (maskPoly : (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskPoly)
+variable (maskClaims : (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskClaims)
 variable (B : PackBasis (Sfield 0))
 variable (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
 variable (msg : Pf → Nat → MsgZ WideExact)
 local notation "prZ" => combinedProtocolZ B p msg (fun _ _ => none)
-local notation "VZ" => FS2.verifier (prZ) (combinedDecisionZ maskPoly B)
+local notation "VZ" => FS2.verifier (prZ) (combinedDecisionZ maskClaims B)
 
 include hMask in
 /-- Closed theorem43 instance. MaskDegree is the only mask-polynomial premise. -/
@@ -134,10 +134,10 @@ theorem combined_fiat_shamirZ (x : TypedContext WideExact Sfield) (hr32 : p.roun
         FS2.extractFails (prZ) x (eval H (FS2.experiment P (VZ) x)))) ≤
       (Qtot : ℚ) * maxErr combinedD2BudgetZ 32 + κ Qtot := by
   exact combined_fiat_shamir_of_obligations B p x msg (fun _ _ => none) 30 hr32
-    (combinedDecisionZ maskPoly B) (duplexRowsZ maskPoly B combinedD2BudgetZ)
-    (combinedD1Z maskPoly B p msg (fun _ _ => none) combinedD2BudgetZ)
-    (combinedProtocolZ_D2 maskPoly B p msg (fun _ _ => none) hσsem hσz0 hσz1 hσopen)
-    (d3Z AspisCircleGroupOrder.P semE_prime_eq maskPoly hMask B p msg (fun _ _ => none)
+    (combinedDecisionZ maskClaims B) (duplexRowsZ maskClaims B combinedD2BudgetZ)
+    (combinedD1Z maskClaims B p msg (fun _ _ => none) combinedD2BudgetZ)
+    (combinedProtocolZ_D2 maskClaims B p msg (fun _ _ => none) hσsem hσz0 hσz1 hσopen)
+    (d3Z AspisCircleGroupOrder.P semE_prime_eq maskClaims hMask B p msg (fun _ _ => none)
       combinedD2BudgetZ (hσopen 0)) P Qtot hQ
 
 #print axioms combined_fiat_shamirZ
