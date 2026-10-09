@@ -578,3 +578,46 @@ mod tests {
         assert_eq!(STATE_ONLY_VERIFY_M31_MULS, 2_660);
     }
 }
+
+/// R0 uses 32-byte E coefficients and P1 framing. Legacy 16-byte K wire stays
+/// pinned. The one-block semantic challenges are embedded K values in E.
+#[cfg(feature = "r0")]
+pub mod r0 {
+    use crate::field::{WideExact, QM31};
+    use crate::state_only_prefix::r0::{decode_values, Error, Prefix, SemanticTranscript};
+    pub type Polynomial = [WideExact; 28];
+    pub fn boundary(poly: &Polynomial) -> WideExact {
+        poly.iter().copied().fold(poly[0], WideExact::add)
+    }
+    pub fn evaluate(poly: &Polynomial, alpha: QM31) -> WideExact {
+        let x = WideExact::from_qm31(alpha);
+        poly.iter()
+            .rev()
+            .fold(WideExact::ZERO, |acc, c| acc.mul(x).add(*c))
+    }
+    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+    pub struct Verification {
+        pub alpha: [QM31; 10],
+        pub terminal_claim: WideExact,
+    }
+    pub fn verify(
+        prefix: &Prefix<'_>,
+        transcript: &mut SemanticTranscript,
+    ) -> Result<Verification, Error> {
+        let mut running = decode_values::<1>(14, prefix.payload(14)?)?[0];
+        let mut alpha = [QM31::ZERO; 10];
+        for (round, challenge) in alpha.iter_mut().enumerate() {
+            let row = 15 + round as u8;
+            let poly = decode_values::<28>(row, prefix.payload(row)?)?;
+            if boundary(&poly) != running {
+                return Err(Error::Boundary { round });
+            }
+            *challenge = transcript.semantic(row, prefix.record(row)?)?;
+            running = evaluate(&poly, *challenge);
+        }
+        Ok(Verification {
+            alpha,
+            terminal_claim: running,
+        })
+    }
+}

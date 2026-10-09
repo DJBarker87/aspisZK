@@ -1180,3 +1180,37 @@ mod tests {
         );
     }
 }
+
+#[cfg(feature = "r0")]
+pub mod r0 {
+    use crate::field::{WideExact, QM31};
+    use crate::state_only_prefix::r0::{PointClaims, LANES};
+    /// MaskValue is K-linear in the claims at fixed alpha. Preserve arbitrary
+    /// E claims (including their v component); D has exactly zero mask factor.
+    pub fn mask_value(claims: &[WideExact; LANES], alpha: &[QM31; 10]) -> WideExact {
+        let component = |high: bool| {
+            let part = |lane: usize| {
+                if high {
+                    claims[lane].c1()
+                } else {
+                    claims[lane].c0()
+                }
+            };
+            super::state_only_selected_mask_value(
+                &core::array::from_fn(part),
+                &core::array::from_fn(|i| part(16 + i)),
+                part(27),
+                alpha,
+            )
+        };
+        WideExact::new(component(false), component(true))
+    }
+    pub fn masked_terminal(
+        claims: &PointClaims,
+        alpha: &[QM31; 10],
+        eta: QM31,
+        terminal: WideExact,
+    ) -> WideExact {
+        mask_value(&claims[0], alpha).add(WideExact::from_qm31(eta).mul(terminal))
+    }
+}
