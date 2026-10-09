@@ -41,55 +41,56 @@ variable {K : Type} [Field K]
 /-- Atomic degree hypothesis, using the existing coordinate-wise degree API.
 There is no SemBadSets.VDeg in the frozen tree: its coordinate-wise version
 is SemDegree.VDeg, with dimension and degree vector explicit. -/
-def MaskDegree (maskPoly : (Fin 10 → K) → K) : Prop :=
-  VDeg 10 (fun _ => 27) maskPoly
+def MaskDegree (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) : Prop :=
+  ∀ t : Trace K, VDeg 10 (fun _ => 27)
+    (fun alpha => maskClaims (fun l => honestClaims t alpha 0 l) alpha)
 
-/-- The source terminal with an arbitrary fixed mask polynomial. -/
-def terminalZ (maskPoly : (Fin 10 → K) → K)
+/-- The source terminal with an arbitrary mask function evaluated on the opened claims. -/
+def terminalZ (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (pub : Public K) (lam chi theta mu eta : K) (zc : Fin 10 → K)
     {F : Subfield K} (B : PackBasis F) (y : Fin 3 → Fin 29 → K) (alpha : Fin 10 → K) : K :=
-  maskPoly alpha + eta * terminalValue pub lam chi theta mu zc B y alpha
+  maskClaims (y 0) alpha + eta * terminalValue pub lam chi theta mu zc B y alpha
 
-def virtualPolyZ (maskPoly : (Fin 10 → K) → K)
+def virtualPolyZ (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (pub : Public K) {F : Subfield K} (B : PackBasis F) (t : Trace K)
     (pre : Fin 14 → K) (eta : K) : (Fin 10 → K) → K :=
-  fun alpha => maskPoly alpha + eta * virtualPoly pub B t pre alpha
+  fun alpha => maskClaims (fun l => honestClaims t alpha 0 l) alpha + eta * virtualPoly pub B t pre alpha
 
 /-- Boolean hypercube summation is the same bsumB used by SemRounds
 790-795 and SemBadSets' adaptive sumcheck lemmas; no row enumeration. -/
-def maskTotal (maskPoly : (Fin 10 → K) → K) : K :=
-  bsumB 10 (fun b => maskPoly (ofBool b))
+def maskTotal (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (t : Trace K) : K :=
+  bsumB 10 (fun b => maskClaims (fun l => honestClaims t (ofBool b) 0 l) (ofBool b))
 
 def originalTotal (pub : Public K) {F : Subfield K} (B : PackBasis F)
     (t : Trace K) (pre : Fin 14 → K) : K :=
   bsumB 10 (fun b => virtualPoly pub B t pre (ofBool b))
 
-theorem virtualPolyZ_total (maskPoly : (Fin 10 → K) → K)
+theorem virtualPolyZ_total (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (pub : Public K) {F : Subfield K} (B : PackBasis F) (t : Trace K)
     (pre : Fin 14 → K) (eta : K) :
-    bsumB 10 (fun b => virtualPolyZ maskPoly pub B t pre eta (ofBool b)) =
-      maskTotal maskPoly + eta * originalTotal pub B t pre := by
+    bsumB 10 (fun b => virtualPolyZ maskClaims pub B t pre eta (ofBool b)) =
+      maskTotal maskClaims t + eta * originalTotal pub B t pre := by
   unfold virtualPolyZ maskTotal originalTotal
   rw [bsumB_add, bsumB_smul]
 
 /-- Addition takes the maximum of the two degree bounds; eta is fixed
 before all alpha rows. The original terminal already has degree 27. -/
-theorem virtualPolyZ_vdeg (maskPoly : (Fin 10 → K) → K) (hMask : MaskDegree maskPoly)
+theorem virtualPolyZ_vdeg (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (hMask : MaskDegree maskClaims)
     (pub : Public K) {F : Subfield K} (B : PackBasis F) (t : Trace K)
     (pre : Fin 14 → K) (eta : K) :
-    VDeg 10 (fun _ => 27) (virtualPolyZ maskPoly pub B t pre eta) := by
-  exact vdeg_add hMask (vdeg_smul eta (vdeg_virtualPoly pub B t pre))
+    VDeg 10 (fun _ => 27) (virtualPolyZ maskClaims pub B t pre eta) := by
+  exact vdeg_add (hMask t) (vdeg_smul eta (vdeg_virtualPoly pub B t pre))
 
-theorem virtualPolyZ_indDeg (maskPoly : (Fin 10 → K) → K) (hMask : MaskDegree maskPoly)
+theorem virtualPolyZ_indDeg (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (hMask : MaskDegree maskClaims)
     (pub : Public K) {F : Subfield K} (B : PackBasis F) (t : Trace K)
     (pre : Fin 14 → K) (eta : K) :
-    IndDeg 27 10 (virtualPolyZ maskPoly pub B t pre eta) :=
+    IndDeg 27 10 (virtualPolyZ maskClaims pub B t pre eta) :=
   SemBadSets.mlDeg_indDeg
-    (vdeg_mlDeg (virtualPolyZ_vdeg maskPoly hMask pub B t pre eta) (fun _ => le_rfl))
+    (vdeg_mlDeg (virtualPolyZ_vdeg maskClaims hMask pub B t pre eta) (fun _ => le_rfl))
 
 /-- Same four checks as SemDecision.sumcheckChecks (97-109), now with
 claim m' and the masked terminal. The original target is zero. -/
-def sumcheckChecksZ (maskPoly : (Fin 10 → K) → K)
+def sumcheckChecksZ (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (pub : Public K) {F : Subfield K} (B : PackBasis F)
     (pre : Fin 14 → K) (eta claim : K) (alpha : Fin 10 → K)
     (polys : Fin 10 → K[X]) (y : Fin 3 → Fin 29 → K) : Prop :=
@@ -98,7 +99,7 @@ def sumcheckChecksZ (maskPoly : (Fin 10 → K) → K)
   (∀ j : Fin 9, (polys j.succ).eval 0 + (polys j.succ).eval 1 =
     (polys j.castSucc).eval (alpha j.castSucc)) ∧
   (polys 9).eval (alpha 9) =
-    terminalZ maskPoly pub (pre 0) (pre 1) (pre 2) (pre 13) eta (preZc pre) B y alpha
+    terminalZ maskClaims pub (pre 0) (pre 1) (pre 2) (pre 13) eta (preZc pre) B y alpha
 end Polynomial
 
 /-- Generic opening offset, shared by the old and new schedules. -/

@@ -4041,3 +4041,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3259 | `R0P/MaskValue` | 0 / 0 | 0:03.49 | 6818840 | 0 | 8 | `d87305635d05e315d4da28acdc334a0e1d057cee5bfbe7cc706cf02a3d1e2861` |
 
 Source revision(s): `dd621ba6244ec7eeb37d12d52cc72397b5ec1aae`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskProtocol (host attempt 3260)
+
+MaskProtocol now takes maskClaims : (Fin 29 → K) → (Fin 10 → K) → K. MaskDegree universally quantifies the degree bound after substituting every trace MLE. terminalZ uses maskClaims (y 0), virtualPolyZ uses the candidate honest claims, and maskTotal takes that candidate trace. The total identity and VDeg/IndDeg lemmas are reproved. Schedule, combined sampler, and protocol plumbing remain unchanged. Attempt 3260 is green with twelve standard-axiom audits.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3260 | `R0P/MaskProtocol` | 0 / 0 | 0:04.28 | 6843716 | 0 | 12 | `d6a529886eee9fa43e5b7bfd3e509e2403476b9c50487916dcd4f1899a81c5a8` |
+
+Source revision(s): `0df523ddf356d9a045218afd7071f331a5f9e692`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
