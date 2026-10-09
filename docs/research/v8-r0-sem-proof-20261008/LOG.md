@@ -4065,3 +4065,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3261 | `R0P/MaskD2` | 0 / 0 | 0:03.83 | 6840276 | 0 | 12 | `22af138da175023e657cd78ca98c15468b7c29ca166d5d14e3d02abb687e1041` |
 
 Source revision(s): `a67b432c6183e8ce2778b14e26f185ded7ded267`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskSemantics (host attempt 3262)
+
+Honest rows and sumcheck acceptance now use the mask evaluated at the candidate honest claims. The masked Boolean sum equals maskTotal maskClaims t plus eta times the original total. Excluding that same candidate etaBad recovers the original zero sum. The mask degree premise is instantiated at t, with no additional premise. Attempt 3262 passes four standard-axiom audits.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3262 | `R0P/MaskSemantics` | 0 / 0 | 0:03.22 | 6836028 | 0 | 4 | `a3c75e02262ac723e1f598effa4c5438224eaa64c3d5945e7f2c22baf60e3f00` |
+
+Source revision(s): `f7737692d1df4827f7b65b156294eeaa0cc266ef`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
