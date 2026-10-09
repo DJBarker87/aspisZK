@@ -150,15 +150,37 @@ fn markers(logs: &[String]) -> Vec<Value> {
     result
 }
 
-fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path) -> Result<()> {
+fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path, reject: bool) -> Result<()> {
     fs::create_dir_all(out)?;
     let elf = fs::read(elf_path)?;
-    let proof = fs::read(fixture_dir.join("rate512-q16.proof.bin"))?;
+    let mut proof = fs::read(fixture_dir.join("rate512-q16.proof.bin"))?;
     let public = fs::read(fixture_dir.join("rate512-q16.public.bin"))?;
     ensure!(public.len() == 216);
     let fixture: Value = serde_json::from_slice(&fs::read(fixture_dir.join("fixture.json"))?)?;
     ensure!(fixture["proof_sha256"] == sha(&proof));
     ensure!(fixture["public_sha256"] == sha(&public));
+    let original_proof_sha256 = sha(&proof);
+    let mutation = if reject {
+        // The suffix begins with a u16 leaf count, then slot-major C1 leaves.
+        // Flip only the low bit of the first opened leaf's first M31 limb.
+        let offset = aspis_core::state_only_prefix::STATE_ONLY_PREFIX_OFFSETS.openings_start + 2;
+        ensure!(u16::from_le_bytes(proof[offset - 2..offset].try_into()?) > 0);
+        let before = proof[offset];
+        proof[offset] ^= 1;
+        let limb_after = u32::from_le_bytes(proof[offset..offset + 4].try_into()?);
+        ensure!(
+            limb_after < aspis_core::field::P,
+            "mutation must remain canonical"
+        );
+        Some(
+            json!({"kind": "first opened C1 leaf, first M31 limb, low-bit flip",
+            "proof_byte_offset": offset, "byte_before": before, "byte_after": proof[offset],
+            "changed_bytes": 1, "limb_after": limb_after, "canonical_after": true,
+            "layout_source": "crates/aspis-prover/src/circle_candidate_openings.rs:250-252"}),
+        )
+    } else {
+        None
+    };
     let program = Address::new_from_array([0x81; 32]);
     let proof_key = Address::new_from_array([0x82; 32]);
     // The in-memory payer has no network funds/authority. Persist its key securely anyway.
@@ -190,14 +212,19 @@ fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path) -> Result<()> {
         data,
     };
     let mut first = None;
-    for run in 1..=5 {
+    for run in 1..=if reject { 1 } else { 5 } {
+        let filename = if reject {
+            "rate512-q16-reject-1.json".to_owned()
+        } else {
+            format!("rate512-q16-run-{run}.json")
+        };
         let start = Instant::now();
         let mut svm = LiteSVM::new();
         svm.airdrop(&payer.pubkey(), 1_000_000_000)
             .map_err(|e| anyhow!("airdrop: {e:?}"))?;
         if let Err(error) = svm.add_program(program, &elf) {
             write_json(
-                &out.join(format!("rate512-q16-run-{run}.json")),
+                &out.join(&filename),
                 &json!({
                     "label": LABEL, "run": run, "load_error": format!("{error:?}"),
                     "elf_sha256": sha(&elf), "verifier_cu": null,
@@ -267,6 +294,9 @@ fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path) -> Result<()> {
             "schema": "aspis.v8-state-only-cu.run.v1", "label": LABEL, "run": run,
             "shape": "STATE_ONLY_RATE512_SHAPE", "query_count": 16, "proof_bytes": proof.len(),
             "proof_sha256": sha(&proof), "public_sha256": sha(&public), "elf_sha256": sha(&elf),
+            "original_proof_sha256": original_proof_sha256, "mutation": mutation,
+            "expected_rejection": reject,
+            "elf_source_revision": env::var("ASPIS_ELF_SOURCE_REVISION").unwrap_or(env::var("ASPIS_SOURCE_REVISION")?),
             "source_revision": env::var("ASPIS_SOURCE_REVISION")?,
             "runtime": {"litesvm": "0.16.0", "agave": "4.2.1", "limit_cu": LIMIT,
                 "heap_bytes": 262144, "execution_wire": "legacy", "release_build": !cfg!(debug_assertions)},
@@ -282,11 +312,27 @@ fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path) -> Result<()> {
             "wall_seconds": start.elapsed().as_secs_f64(),
             "excluded": ["pool CPI", "receipts", "settlement", "proof upload", "network execution"],
         });
-        write_json(&out.join(format!("rate512-q16-run-{run}.json")), &record)?;
+        write_json(&out.join(&filename), &record)?;
         ensure!(
             agree && unchanged && identical,
             "measurement disagreement: run {run}"
         );
+        if reject {
+            ensure!(
+                execution.0.as_deref() == Some("InstructionError(2, InvalidInstructionData)"),
+                "expected checked verifier rejection, got {:?}",
+                execution.0
+            );
+            ensure!(
+                phase_markers
+                    .iter()
+                    .any(|p| p["phase"] == "relation-final-polynomial")
+                    && !phase_markers
+                        .iter()
+                        .any(|p| p["phase"] == "merkle-openings"),
+                "corrupted leaf must reach and fail opening authentication"
+            );
+        }
         println!(
             "run {run}: {LABEL}; verifier CU {verifier_cu:?}; error {:?}",
             execution.0
@@ -300,13 +346,14 @@ fn main() -> Result<()> {
     let args: Vec<_> = env::args().collect();
     match args.get(1).map(String::as_str) {
         Some("fixture") if args.len() == 3 => fixture(Path::new(&args[2])),
-        Some("measure") if args.len() == 5 => measure(
+        Some("measure" | "reject") if args.len() == 5 => measure(
             Path::new(&args[2]),
             Path::new(&args[3]),
             Path::new(&args[4]),
+            args[1] == "reject",
         ),
         _ => Err(anyhow!(
-            "usage: v8-state-only-cu-probe fixture DIR | measure ELF FIXTURE_DIR RESULTS_DIR"
+            "usage: v8-state-only-cu-probe fixture DIR | measure|reject ELF FIXTURE_DIR RESULTS_DIR"
         )),
     }
 }
