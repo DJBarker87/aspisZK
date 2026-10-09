@@ -202,3 +202,72 @@ impl OpeningProof {
         Ok(out)
     }
 }
+
+/// Verifier view of P1. Canonicality is checked for every scalar up front,
+/// exactly as OpeningProof::parse; values and authentication paths stay in
+/// the input account. No decoded 256/1024-element array is returned by value.
+pub struct OpeningView<'a> {
+    pub y0: &'a [u8],
+    pub y: &'a [u8],
+    pub v: E,
+    pub coefficients: [E; 6],
+    pub final_message: &'a [u8],
+    openings: &'a [u8],
+}
+impl<'a> OpeningView<'a> {
+    pub fn parse(bytes: &'a [u8]) -> Result<Self, Error> {
+        if bytes.len()!=PROOF_BYTES {return Err(Error::Parse);}
+        let mut r=Reader{bytes,at:0};
+        fn canonical<'b>(r:&mut Reader<'b>, count:usize) -> Result<&'b [u8],Error> {
+            let start=r.at;
+            for _ in 0..count {r.field(32)?;}
+            Ok(&r.bytes[start..r.at])
+        }
+        r.record(5,29*32)?; let y0=canonical(&mut r,29)?;
+        r.record(6,58*32)?; let y=canonical(&mut r,58)?;
+        r.record(7,32)?;let v=r.field(32)?;
+        r.record(9,6*32)?;let coefficients=r.fields()?;
+        r.record(10,256*32)?;let final_message=canonical(&mut r,256)?;
+        r.record(11,22*FIBRE_BYTES)?;
+        let start=r.at;
+        for _ in 0..22 {
+            for _ in 0..4 {for l in 0..29 {r.field(if l<26 {4}else{16})?;}}
+            r.take(2*PATH_BYTES)?;
+        }
+        if r.at!=bytes.len(){return Err(Error::Parse);}
+        Ok(Self{y0,y,v,coefficients,final_message,openings:&bytes[start..]})
+    }
+    pub fn opening_count(&self)->usize {self.openings.len()/FIBRE_BYTES}
+    pub fn endpoint(&self,lane:usize,point:usize)->E {canonical_e(self.y,2*lane+point)}
+    pub fn final_coefficient(&self,j:usize)->E {canonical_e(self.final_message,j)}
+    pub fn fibre(&self,i:usize)->FibreView<'a> {
+        FibreView{bytes:&self.openings[i*FIBRE_BYTES..(i+1)*FIBRE_BYTES]}
+    }
+}
+fn canonical_e(bytes:&[u8],i:usize)->E {
+    E::from_le_bytes(&bytes[32*i..32*(i+1)]).expect("canonical P1 view")
+}
+pub struct FibreView<'a>{bytes:&'a [u8]}
+impl FibreView<'_> {
+    pub fn value(&self,slot:usize,lane:usize)->E {
+        let start=slot*152+if lane<26 {lane*4}else{104+(lane-26)*16};
+        let n=if lane<26 {4}else{16};
+        let mut b=[0;32];b[..n].copy_from_slice(&self.bytes[start..start+n]);
+        E::from_le_bytes(&b).expect("canonical P1 fibre")
+    }
+    pub fn leaf_hashes(&self,hash:HashFn)->Result<[[u8;32];2],Error>{
+        let mut c1=[0;480];let mut c2=[0;128];let(mut a,mut b)=(0,0);
+        // Preserve the existing leaf layout and lane field check.
+        for s in 0..4 {for l in 0..29 {
+            let bytes=lane_bytes(self.value(s,l),l)?;let n=if l<26 {4}else{16};
+            if l==26 || l==27 {c2[b..b+n].copy_from_slice(&bytes[..n]);b+=n;}
+            else {c1[a..a+n].copy_from_slice(&bytes[..n]);a+=n;}
+        }}
+        Ok([merkle::leaf(hash,merkle::C1_TAG,&c1),merkle::leaf(hash,merkle::C2_TAG,&c2)])
+    }
+    pub fn paths(&self)->&[Path;2] {
+        let bytes=&self.bytes[FIBRE_VALUE_BYTES..];
+        // Path is nested u8 arrays (alignment 1), with exactly this size.
+        unsafe {&*(bytes.as_ptr() as *const [Path;2])}
+    }
+}
