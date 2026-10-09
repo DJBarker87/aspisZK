@@ -158,19 +158,16 @@ cargo check -p aspis-verifier --no-default-features \
 SBF build (run on Linux in a bounded scope):
 
 ```text
-ssh dombarker@nuc.local systemd-run --user --wait --collect --pipe \
+systemd-run --user --wait --collect --pipe \
   --unit=aspis-v8-sbf-current-eb652911-r1 \
   -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p OOMPolicy=stop \
   /usr/bin/time -v env NO_DNA=1 RUSTC_BOOTSTRAP=1 \
   RUSTFLAGS=-Zemit-stack-sizes \
-  PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/releases/2.3.0/solana-release/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-  /home/dombarker/.local/share/solana/install/releases/2.3.0/solana-release/bin/cargo-build-sbf \
-  --manifest-path /home/dombarker/project-offloads/aspis-v8-sbf-current-eb652911-20260907-r1/source/programs/aspis-verifier/Cargo.toml \
+  cargo-build-sbf \
+  --manifest-path programs/aspis-verifier/Cargo.toml \
   --no-default-features --features v8-deep-cu-probe --arch v0 --offline \
-  --skip-tools-install --tools-version v1.48 \
-  --sbf-sdk /home/dombarker/.local/share/solana/install/releases/2.3.0/solana-release/bin/platform-tools-sdk/sbf \
-  --sbf-out-dir /home/dombarker/project-offloads/aspis-v8-sbf-current-eb652911-20260907-r1/sbf-probe \
-  -- --locked
+  --skip-tools-install --tools-version v1.48 --sbf-sdk <SBF_SDK> \
+  --sbf-out-dir <OUTPUT> -- --locked
 ```
 
 Stack records:
@@ -185,16 +182,9 @@ llvm-readobj --stack-sizes \
 LiteSVM probe (also run in the same bounded scope):
 
 ```text
-ssh dombarker@nuc.local systemd-run --user --wait --collect --pipe \
-  --unit=aspis-v8-deep-litesvm-eb652911-r1 \
-  -p MemoryHigh=5G -p MemoryMax=7G -p MemorySwapMax=0 -p OOMPolicy=stop \
-  /usr/bin/time -v env \
-  CARGO_TARGET_DIR=/home/dombarker/project-offloads/aspis-v8-sbf-baseline-e8627859-20260907-r1/source-complete/results/v7-pair-forest-combined-rejection-litesvm-20260828/harness/target \
-  PATH=/home/dombarker/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-  /home/dombarker/.cargo/bin/cargo run --release --locked --offline \
-  --manifest-path /home/dombarker/project-offloads/aspis-v8-sbf-current-eb652911-20260907-r1/source/results/v8-a100-q22/sbf-deep-probe-harness/Cargo.toml -- \
-  /home/dombarker/project-offloads/aspis-v8-sbf-current-eb652911-20260907-r1/sbf-probe/aspis_verifier.so \
-  /home/dombarker/project-offloads/aspis-v8-sbf-current-eb652911-20260907-r1/deep-cu.json
+cargo run --release --locked --offline \
+  --manifest-path results/v8-a100-q22/sbf-deep-probe-harness/Cargo.toml -- \
+  <aspis_verifier.so> <output.json>
 ```
 
 ## Failure classification and next action

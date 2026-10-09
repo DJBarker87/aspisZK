@@ -5,14 +5,15 @@
 //! Instruction byte zero selects one of two equivalent implementations:
 //! heap-backed batch inversion or pointwise streaming inversion.
 
-use aspis_core::circle::secure_ood_circle_point_from_parameter;
 use aspis_core::field::{CM31, M31, QM31};
+use aspis_core::transcript::{label, Transcript};
 use aspis_core::v8_a100::{
     V8A100Wire, V8_A100_FRONTIER_MAX_PER_TREE, V8_A100_MAX_FRONTIER_FIXTURE,
+    V8_A100_PROFILE_BINDING,
 };
 use aspis_core::v8_deep::{
-    v8_deep_quotients_heap_batched_in_place, v8_deep_quotients_pointwise_in_place,
-    V8A100TwoPointChallenges, V8_A100_FIBRE_SLOTS,
+    derive_v8_a100_ood_prefix, v8_deep_quotients_heap_batched_in_place,
+    v8_deep_quotients_pointwise_in_place, V8A100TwoPointChallenges, V8_A100_FIBRE_SLOTS,
 };
 use solana_program::{
     account_info::AccountInfo,
@@ -28,6 +29,7 @@ solana_program::entrypoint!(process_v8_deep_cu_probe_instruction);
 
 pub const V8_DEEP_HEAP_BATCHED_MODE: u8 = 0;
 pub const V8_DEEP_POINTWISE_MODE: u8 = 1;
+pub const V8_DEEP_CANONICAL_PARSE_MODE: u8 = 2;
 
 fn q(values: [u32; 4]) -> QM31 {
     QM31 {
@@ -37,26 +39,40 @@ fn q(values: [u32; 4]) -> QM31 {
 }
 
 #[inline(never)]
-fn run_probe(proof: &[u8], mode: u8) -> ProgramResult {
-    let wire = V8A100Wire::parse_for_schedule(
+fn derive_probe_challenges(
+    wire: &V8A100Wire<'_>,
+) -> Result<V8A100TwoPointChallenges, ProgramError> {
+    let component_evaluations = wire
+        .component_ood_vectors()
+        .ok_or(ProgramError::InvalidAccountData)?;
+    let mut transcript = Transcript::new(crate::verify::sbf_hashv);
+    transcript.absorb(label::PROFILE, &V8_A100_PROFILE_BINDING);
+    transcript.absorb(label::STATEMENT, &[0x5a; 32]);
+    let prefix = derive_v8_a100_ood_prefix(&transcript, &component_evaluations)
+        .map_err(|_| ProgramError::InvalidArgument)?;
+    Ok(prefix.challenges(q([101, 307, 509, 701])))
+}
+
+#[inline(never)]
+fn run_canonical_parse_probe(proof: &[u8]) -> ProgramResult {
+    msg!("aspis-v8-deep:canonical-parse-start");
+    sol_log_compute_units();
+    V8A100Wire::parse_for_schedule(
         proof,
         V8_A100_MAX_FRONTIER_FIXTURE,
         V8_A100_FRONTIER_MAX_PER_TREE,
     )
     .map_err(|_| ProgramError::InvalidAccountData)?;
-    let component_evaluations = wire
-        .component_ood_vectors()
-        .ok_or(ProgramError::InvalidAccountData)?;
-    let challenges = V8A100TwoPointChallenges {
-        points: [
-            secure_ood_circle_point_from_parameter(q([17, 29, 43, 71]))
-                .map_err(|_| ProgramError::InvalidArgument)?,
-            secure_ood_circle_point_from_parameter(q([19, 31, 47, 73]))
-                .map_err(|_| ProgramError::InvalidArgument)?,
-        ],
-        component_evaluations,
-        gamma: q([101, 307, 509, 701]),
-    };
+    sol_log_compute_units();
+    sol_log_data(&[&[0u8; 16]]);
+    Ok(())
+}
+
+#[inline(never)]
+fn run_deep_probe(proof: &[u8], mode: u8) -> ProgramResult {
+    let wire = V8A100Wire::parse_deferred_canonicality(proof, V8_A100_FRONTIER_MAX_PER_TREE)
+        .map_err(|_| ProgramError::InvalidAccountData)?;
+    let challenges = derive_probe_challenges(&wire)?;
     let mut output: Vec<[QM31; V8_A100_FIBRE_SLOTS]> = vec![[QM31::ZERO; V8_A100_FIBRE_SLOTS]; 22];
 
     msg!("aspis-v8-deep:kernel-start");
@@ -90,6 +106,15 @@ fn run_probe(proof: &[u8], mode: u8) -> ProgramResult {
     checksum.write_le_bytes(&mut checksum_bytes);
     sol_log_data(&[&checksum_bytes]);
     Ok(())
+}
+
+#[inline(never)]
+fn run_probe(proof: &[u8], mode: u8) -> ProgramResult {
+    match mode {
+        V8_DEEP_HEAP_BATCHED_MODE | V8_DEEP_POINTWISE_MODE => run_deep_probe(proof, mode),
+        V8_DEEP_CANONICAL_PARSE_MODE => run_canonical_parse_probe(proof),
+        _ => Err(ProgramError::InvalidInstructionData),
+    }
 }
 
 pub fn process_v8_deep_cu_probe_instruction(
