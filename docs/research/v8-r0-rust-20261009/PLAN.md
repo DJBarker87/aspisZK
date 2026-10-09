@@ -446,3 +446,56 @@ T2: step 8 (κ, τ to K; arithmetic ledger only; removes the E×K weighting and
 most remaining E×E in V2), then step 2 (relation rounds replacing V2's dot
 product; +18/|E|; V7 analogue in the tree), then step 1 (ρ-batched queries).
 Step 5 last, and only with its joint-list argument.
+
+## Lead decision after user direction (2026-10-09): target one transaction; the reference closes first; gate G_ref; optimisation sequence
+
+**Direction (user).** The target is one transaction: "otherwise v7 is
+actually better". The process comes first: a reference known to be 100-bit
+sound and privacy-preserving before any protocol optimisation. Both are now
+fixed; neither is re-asked.
+
+**Gate G_ref — the reference is closed when all of these hold at the model
+level, with standard axioms and recorded replays:**
+- (S) `combined_fiat_shamir_masked` replayed with D13′, D14′, D14″ (T1); the
+  constant recorded exactly (B3 16,800, B4 400) and ≥ 100 bits at the stated
+  Q.
+- (P1) `MaskImageOn Good` proved (T2: structured mask family, Ψ_ch,
+  containment (i′) and (ii′) under D15) and `hvzk_stat` with the 21/|K_α|
+  term.
+- (P2) ZF1: ZK_FS from HVZK in the adopted ROM definition (privacy LOG,
+  "Adopted ZK_FS definition and explicit ZF1 composition"), with every ledger
+  term (seed, salt, commit, algebraic bad, FS conflict, sampler abort, source)
+  either proved or carried as an explicit named assumption with its value.
+- (P3) Abort accounting at the model level: every honest-prover abort or
+  retry event is a function of statement and challenges alone, or its
+  witness dependence is bounded by a stated mass (ZR1, ZR2 masses), so that
+  visible aborts do not leak.
+Source refinement (G14, G18, ZR1–ZR3) is proved against the **deployed**
+verifier and prover after optimisation, not against the reference; the fact
+G_ref certifies is about the protocol.
+
+**After G_ref: §8 in this order, each step Lean-first (statement, ledger,
+replay), then Rust built to it, then exact kernel work with equality gates.**
+1. §8 step 8: κ, τ in K (ledger re-evaluation only). V2's E×K weighting and
+   its remaining E×E become K arithmetic.
+2. §8 step 2: relation rounds 1–3 in place of V2's direct 1024-length dot
+   (three degree-6 rounds, +18/|E|; V7 analogue in the tree). This is the
+   step that removes V2's size.
+3. §8 step 1: ρ-batch the 22 query equations into the relation (+22/|E|,
+   `badCombinedChallenges_card`).
+4. §8 step 3: eight-way Merkle (proved, R552). §8 step 4: two-swap order.
+5. §8 step 6: channel fold (`quadratic_dot_product`). §8 step 5 last and
+   only with its joint-list argument (the note's "not routine").
+Lead estimate after steps 1–5 above, on R-E3's measurement: Semantic ≈ 0.7M,
+ChordClaims ≈ 0.3M, Merkle ≈ 0.25M, V1 ≈ 0.4M, V2 ≈ 0.3M, total ≈ 2M. That
+is below the measured 19.3M by an order of magnitude and still above 1.4M.
+Closing the last factor needs a further parameter step (fold count, final
+length, or the field of α₀ and F), designed and ledgered as a §8 step 9 when
+the measured numbers after step 2 are in. **One transaction is not yet shown
+reachable; this sequence is how it is found out, re-estimating after each
+step.**
+
+**Running now.** T1 (Lean; the only Lean job). R-E4 (Rust A) continues: it is
+byte-preserving kernel work gated against the retained reference path, uses
+no Lean capacity and incurs no proof debt; it is held only if the user says
+so. T2 is specified when T1 lands; ZF1 after T2.

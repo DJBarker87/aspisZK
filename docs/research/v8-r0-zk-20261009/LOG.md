@@ -2416,3 +2416,14 @@ are authorised; against ≈ Q·2⁻¹⁰⁵ the change is ≈ 2⁻²³⁶ per qu
 item "any change to the soundness bound other than the B4 term" reads "other
 than the B3 and B4 terms above". Everything else in D13′, D14′ and the T1
 paragraph stands. T1 is re-issued on the head carrying this section.
+
+### Lead note — reference-closure gate G_ref and the order of the remaining privacy work
+
+User direction (2026-10-09): the reference is proved 100-bit sound and
+privacy-preserving before any protocol optimisation; the optimisation target
+is one transaction via `R0_SOUNDNESS.md` §8. The gate G_ref is defined in the
+Rust PLAN ("Lead decision after user direction"). For this LOG it fixes the
+order: T1 (D13′, D14′, D14″) → T2 (D15 `MaskImageOn Good`, `hvzk_stat`) →
+ZF1 (ZK_FS composition with the ledger terms named) → the model-level abort
+accounting (P3). ZR1–ZR3 are source refinement and are proved against the
+deployed prover and verifier after §8.
