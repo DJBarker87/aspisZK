@@ -81,9 +81,9 @@ record = {
     'measured_elf_sha256': sha(measured), 'unstripped_elf_sha256': sha(unstripped),
     'identical_text_sections': True, 'text_section_sha256': sha(text_section(measured)),
     'source_sites': {
-        'batch': 'crates/aspis-core/src/state_only_prefix.rs:656',
-        'folds': 'crates/aspis-core/src/state_only_prefix.rs:913',
-        'final': 'crates/aspis-core/src/state_only_prefix.rs:934',
+        'batch': 'crates/aspis-core/src/state_only_prefix.rs::begin_schedule_with_context (batch_ok)',
+        'folds': 'crates/aspis-core/src/state_only_prefix.rs::run_full_with_context (fold_ok)',
+        'final': 'crates/aspis-core/src/state_only_prefix.rs::run_full_with_context (final_ok)',
         'predicate': 'crates/aspis-core/src/transcript.rs:52',
         'hash_input': 'crates/aspis-core/src/transcript.rs:593',
     },

@@ -1,4 +1,202 @@
-# M1: state-only reference verifier CU
+# M2: Rate256/q22 Rust reference verifier CU
+
+**1,125,014 verifier CU — unmined diagnostic path (PoW rejection disabled).**
+Five identical release SBF runs accepted; simulation and execution agree on
+status, CU and every log. Both M1 and M2 have a single-byte opened-leaf
+rejection witness under the same diagnostic tag used for their acceptance runs.
+
+This is a **shape-only measurement of the Rust reference**, not a measurement
+of an implementation established to refine the proved model. R1's structural
+correspondence obligation remains open:
+
+| Dimension | Measured Rate256 Rust reference | Proved-model target described in R1 |
+| --- | --- | --- |
+| Width | 28 columns | 29 lanes |
+| Opening protocol | Four arity-four FRI folds | One fold |
+| Evaluation points | 2^18 | Does not by itself identify the query universe |
+| Sampled query universe | 2^16 fibres (four points per fibre) | `Fin (2^18)` |
+| Queries | 22 | 22 |
+
+The four-point grouping does **not** establish a conservative abstraction.
+R1 must determine whether a refinement argument transfers the model's bound,
+or whether the real protocol requires a new soundness derivation. **Neither
+model correspondence nor the q22/9557 budget is established by M2.** No Lean
+or research-document changes are part of these commits.
+
+Base: `7fcda8577`; measured source:
+`5e2b0270cd517f74b548859bf9f72308f44197a7`.
+New profile ID **24**, log blowup **8**, q**22**, batch grinding **36**, fold
+work **[39,35,31,27]**, final work **36**. The shared maximum remains **36**
+to preserve Rate16/q36 and Rate32/q29, as explicitly agreed. Opening depths
+are **16 / [14,12,10]**. Trace rows, field, four-fold count, final-polynomial
+length, lane selection, degrees, candidate bound and fallback code are unchanged.
+
+## Side-by-side measurements
+
+**All V8 numbers below: unmined diagnostic path (PoW rejection disabled).**
+These are verifier-only CU, including account/public parsing and checkpoint
+logging. The M1 row preserves its original ELF and fixture; it was not rerun
+for acceptance under the new binary.
+
+| Shape | Queries | Proof bytes | Verifier CU | Headroom to 1.3M | Headroom to 1.4M | Signed verifier-only TxV1 proposal bytes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| M1 Rate512, atomic v3 | 16 | 54,604 | 987,814 | 312,186 | 412,186 | 444 |
+| **M2 Rate256, atomic v3** | **22** | **68,364** | **1,125,014** | **174,986** | **274,986** | **444** |
+| M2 minus M1 | +6 | +13,760 | +137,200 | −137,200 | −137,200 | 0 |
+| V7 historical strict Tag-73 comparison | 16 | not specified at cited anchor | 1,084,738 | 215,262 | 315,262 | 1,043 |
+
+V7's explicit comparison is **1,084,738 verifier / 1,218,972 transaction CU**,
+from [the historical cutoff measurement](../../docs/research/v7-first-cap203-scan-cu-fix-20260902.md#cutoff-measurement)
+(lines 82–83), not rerun here. M2 is 40,276 verifier CU above that V7 figure;
+profiles and workloads differ, so this is not a like-for-like speed comparison.
+
+| Phase | M1 Rate512/q16 CU | M2 Rate256/q22 CU | M2 − M1 CU |
+| --- | ---: | ---: | ---: |
+| Transcript / sumcheck replay | 140,757 | 141,511 | +754 |
+| Terminal excluding mask | 272,768 | 272,758 | −10 |
+| Mask terminal | 13,945 | 13,915 | −30 |
+| Relation / final polynomial | 149,891 | 149,914 | +23 |
+| Merkle / opening authentication | 176,047 | 227,197 | +51,150 |
+| FRI query arithmetic | 231,316 | 316,613 | +85,297 |
+| Account/public parsing, return, other checkpoints | 3,090 | 3,106 | +16 |
+| **Total** | **987,814** | **1,125,014** | **+137,200** |
+
+Terminal including mask is 286,673 CU for M2 (M1: 286,713; delta −40).
+All finer terminal checkpoint deltas are retained in each run JSON.
+Opening authentication and FRI query arithmetic account for **136,447 CU,
+99.45% of the increase**. FRI query arithmetic is now the largest individual
+interval (28.14%); the whole terminal is 25.48%, opening authentication 20.20%,
+and relation/final-polynomial arithmetic 13.33%. The isolated mask terminal
+is 1.24%. Cost growth sits in the query-dependent PCS work, not the mask terminal.
+The Merkle interval includes decoding and bookkeeping, and the terminal and
+transcript mix hashing and arithmetic; these checkpoints do not isolate the
+cost of every hash from every field operation. The profiles also change
+domain size, profile binding and transcript-derived queries, so the phase
+delta is not a controlled per-query marginal cost.
+
+M2 fits one verifier-only instruction at the runtime limit. It does not force
+a two-transaction split for this measured reference path. A decision for the
+proved/refined protocol or a complete Pool transaction remains open. **No
+transaction-level CU for Pool CPI, receipts, settlement, proof upload or
+network execution is measured.** The harness total (1,125,370 CU) contains
+only the diagnostic verifier plus compute-budget/heap overhead. TxV1 itself
+was serialized, not executed. Its 444 bytes leave **3,652 bytes** of the 4,096
+budget; the 68,364-byte proof is in a **68,404-byte sealed ASPU account**,
+with 216 public-input bytes and a 217-byte instruction.
+
+## Rejection witnesses and PoW allowance
+
+- **M1** [rate512-q16-reject-1.json](rate512-q16-reject-1.json): the original
+  measured ELF rejects byte offset 6,738, 52 → 53 in the first opened C1 leaf,
+  at **628,047 verifier CU — unmined diagnostic path (PoW rejection disabled)**.
+  This run completed before adding the new shape.
+- **M2** [rate256-q22-reject-1.json](rate256-q22-reject-1.json): the M2 measured
+  ELF rejects byte offset 6,738, 171 → 170 at **643,656 verifier CU — unmined
+  diagnostic path (PoW rejection disabled)**. The changed limb is 1,471,045,034,
+  still canonical.
+
+Both are exactly one changed byte, both reach relation/final-polynomial
+completion and fail opening authentication with
+`InstructionError(2, InvalidInstructionData)`. Simulation and execution agree
+and the sealed proof account is unchanged. Neither is a CU-limit rejection.
+
+The new ELF has its own [PoW disassembly audit](rate256-q22-pow-omission-audit.json).
+Strict replay logically checks six SHA-256 hashes of 41 bytes (32+1+8) and
+six 64-bit threshold comparisons. The diagnostic binary **already performs
+all six hashes and two comparisons**; enabling rejection adds **zero hashes
+and four comparisons**, bounded by **24 ordinary SBF instructions / 24 CU**.
+The resulting accounting allowance is **1,125,038 verifier CU — unmined
+diagnostic path (PoW rejection disabled), plus static PoW allowance**. This
+bounds the omitted check logic for this compiled replay, not a mined-proof
+total: mining changes the transcript and queries. Strict native verification
+rejects the unmined fixture with `BatchGrindingRejected`.
+
+## Verification-crate change inventory
+
+**No algorithmic verification changes beyond shape plumbing were required.**
+The full inventory, including tests, is:
+
+| File | Change and reason |
+| --- | --- |
+| `aspis-core/src/state_only_prefix.rs` | Add profile 24 constants/shape and header recognition; extend existing header/schedule tests to it. Shared capacity stays 36; transcript logic is unchanged. |
+| `aspis-core/src/circle_line_merkle.rs` | Add the four-fold geometry for the smaller domain. |
+| `aspis-core/build.rs` | Add domain log 18 to the existing table generator; formulas are unchanged. |
+| `aspis-core/src/circle_openings.rs` | Select the six Rate256 tables at layer-zero depth 16 in both geometry dispatches; authentication and transition algorithms are unchanged. |
+| `aspis-core/src/circle_fri.rs` | Tests only: compare generated Rate256 tables to random-access coordinate arithmetic, including boundary indices. |
+| `aspis-statement/src/state_only_verify.rs` | Select Rate256 geometry; allow its exact shape in the structural probe, terminal cost probe, and atomic-v3 verifier guards. |
+| `aspis-prover/src/state_only_candidate_prefix.rs` | Allow the exact Rate256 shape in the atomic-v3 front builder; statement-digest equality remains mandatory. |
+| `aspis-prover/tests/state_only_full_proof.rs` | Add requested release round-trip, legacy relation agreement, claim corruption and serialized corruption teeth (including opened leaf and final polynomial). |
+| `aspis-prover/tests/atomic_state_only_full_proof.rs` | Add atomic round-trip, query-universe assertions, public-statement binding and eight proof-corruption checks. |
+
+Outside those crates, the host driver now selects either profile and supports
+the one-byte rejection mode. Summary/audit scripts collect evidence for each
+ELF. `programs/aspis-verifier/src/dispatch.rs`, the diagnostic tag/gate and
+program probe source are unchanged from M1. No optimization was attempted.
+
+## M2 reproducibility and resources
+
+Runs [1](rate256-q22-run-1.json), [2](rate256-q22-run-2.json),
+[3](rate256-q22-run-3.json), [4](rate256-q22-run-4.json),
+[5](rate256-q22-run-5.json), [fixture](rate256-q22-fixture.json),
+[summary](rate256-q22-summary.json), [source manifest](rate256-q22-source-manifest.json),
+[environment](rate256-q22-environment.json), and
+[test/build log excerpts](rate256-q22-build-log-excerpts.json) pin the evidence.
+All 339 source-manifest hashes match the build host. Runtime remains
+**LiteSVM 0.16.0 / Agave 4.2.1**, with the same committed lockfile. Builder is
+**Agave CLI 3.1.13 / platform-tools 1.52 / SBF rustc 1.89.0**; native
+rustc/cargo **1.94.1**. All builds are optimized release builds.
+
+Host: **nuc, dombarker@100.108.41.90**, Intel Core Ultra 7 155H, ~62 GiB RAM.
+Every build/test/fixture job used a separate scope with **MemoryHigh=8 GiB,
+MemoryMax=12 GiB, MemorySwapMax=0**; measurement/rejection used **4/6 GiB,
+swap max 0**. Own simultaneous reservation never exceeded **24 GiB**, with
+~50 GiB available before starting; all own scopes report zero swap.
+
+| Job (resource JSON) | Exit | Wall seconds | Sampled aggregate RSS MiB | Cgroup peak MiB |
+| --- | ---: | ---: | ---: | ---: |
+| [Release non-atomic round-trip](rate256-q22-roundtrip.json) | 0 | 119.113 | 901.48 | 750.61 |
+| [Release atomic tests (4 passed)](rate256-q22-atomic-tests.json) | 0 | 14.012 | 300.60 | 300.36 |
+| [Release prefix tests (8 passed)](rate256-q22-core-profiles.json) | 0 | 18.516 | 706.51 | 581.00 |
+| [Generated table check (1 passed)](rate256-q22-core-tables.json) | 0 | 0.501 | 12.94 | 54.74 |
+| [Release driver build](rate256-q22-driver-build.json) | 0 | 38.040 | 958.53 | 786.95 |
+| [Atomic fixture + native checks](rate256-q22-fixture-generation.json) | 0 | 13.511 | 88.53 | 89.09 |
+| [Release SBF build](rate256-q22-sbf-build.json) | 0 | 21.519 | 1115.24 | 865.31 |
+| [Five paired LiteSVM runs](rate256-q22-measurement.json) | 0 | 0.501 | 12.64 | 36.26 |
+| [Opened-leaf rejection](rate256-q22-rejection.json) | 0 | 0.501 | 12.69 | 33.50 |
+
+Resource records contain exact commands, caps and source revisions. The
+recorder samples every 0.5 s, so the short LiteSVM jobs can finish between
+samples; cgroup peaks and child `ru_maxrss` are also retained. The non-atomic
+test took 85.07 s after 33.98 s compilation; no unchanged full suite was repeated.
+
+The private build-host root is
+`/home/dombarker/project-offloads/aspis-v8-state-only-cu-20261009`.
+M2 artifacts are under `m2/sbf`, `m2/fixtures`, `m2/runs`, `m2/evidence`;
+M1's measured ELF/fixture and keys remain retained. Its unstripped ELF is
+also retained at `sbf/aspis_verifier.unstripped.so` before cache reuse.
+No binaries, proof blobs or keys are committed. No network transactions were sent.
+
+From the pinned source, these are command payloads for separate capped
+build-host scopes (set `ASPIS_SOURCE_REVISION` to the measured revision):
+
+```text
+cargo run --release --locked -p aspis-xtask -- v8-state-only-cu-probe fixture FIXTURE_DIR rate256-q22
+cargo run --release --locked -p aspis-xtask -- v8-state-only-cu-probe measure ELF FIXTURE_DIR RESULTS_DIR rate256-q22
+cargo run --release --locked -p aspis-xtask -- v8-state-only-cu-probe reject ELF FIXTURE_DIR RESULTS_DIR rate256-q22
+python3 scripts/v8_state_only_cu_summarize.py results/v8-state-only-cu-20261009 rate256-q22
+```
+
+Every Cargo/build/measurement command must run in its own capped scope
+as recorded in the resource JSON. The actual recorded measurement invokes
+the already-built release driver directly. The PoW audit requires the
+matching unstripped ELF and measured ELF; see its script usage.
+
+---
+
+# M1 historical measurement (before M2 shape addition)
+
+The profile-availability and unchanged-crate statements below describe M1's
+source revision only. M2's changes and open structural obligations are above.
 
 **987,814 verifier CU — unmined diagnostic path (PoW rejection disabled).**
 All five identical Rate512/q16 runs succeeded. Simulation and execution agree

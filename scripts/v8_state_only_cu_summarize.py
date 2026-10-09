@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Validate the five paired runs and derive the reported verifier-only table."""
+"""Validate five paired runs. Usage: script RESULTS_DIR [rate256-q22]."""
 import json
 from pathlib import Path
 import sys
 
 directory = Path(sys.argv[1])
+profile = sys.argv[2] if len(sys.argv) > 2 else 'rate512-q16'
+assert profile in ('rate512-q16', 'rate256-q22')
 label = 'unmined diagnostic path (PoW rejection disabled)'
-runs = [json.loads((directory / f'rate512-q16-run-{i}.json').read_text()) for i in range(1, 6)]
+runs = [json.loads((directory / f'{profile}-run-{i}.json').read_text()) for i in range(1, 6)]
 first = runs[0]
 for i, run in enumerate(runs, 1):
     assert run['run'] == i and run['label'] == label
@@ -36,6 +38,11 @@ phases = {
 }
 phases['account_public_parse_return_and_other_markers'] = first['verifier_cu'] - sum(phases.values())
 assert sum(phases.values()) == first['verifier_cu']
+audit_name = 'pow-omission-audit.json' if profile == 'rate512-q16' else f'{profile}-pow-omission-audit.json'
+audit = json.loads((directory / audit_name).read_text())
+assert audit['measured_elf_sha256'] == first['elf_sha256']
+assert audit['identical_text_sections']
+pow_allowance = audit['omission_upper_bound_cu']
 summary = {
     'label': label, 'source_revision': first['source_revision'], 'runs': 5,
     'all_simulations_and_executions_accepted_and_agreed': True,
@@ -46,8 +53,8 @@ summary = {
     'terminal_including_mask_cu': terminal,
     'headroom_to_1300000_cu': 1_300_000 - first['verifier_cu'],
     'headroom_to_1400000_cu': 1_400_000 - first['verifier_cu'],
-    'pow_omission_upper_bound_cu_same_compiled_replay': 24,
-    'verifier_plus_pow_omission_upper_bound_cu': first['verifier_cu'] + 24,
+    'pow_omission_upper_bound_cu_same_compiled_replay': pow_allowance,
+    'verifier_plus_pow_omission_upper_bound_cu': first['verifier_cu'] + pow_allowance,
     'instrumentation_included': True,
     'raw_diagnostic_harness_cu': first['execution']['cu'],
     'production_transaction_cu': None,
@@ -57,5 +64,24 @@ summary = {
         'remeasured': False, 'same_profile': False,
     },
 }
-(directory / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
+if profile == 'rate256-q22':
+    rejection = json.loads((directory / f'{profile}-reject-1.json').read_text())
+    assert rejection['expected_rejection']
+    assert rejection['simulation'] == rejection['execution']
+    assert rejection['execution']['error'] == 'InstructionError(2, InvalidInstructionData)'
+    assert rejection['elf_sha256'] == first['elf_sha256']
+    assert rejection['original_proof_sha256'] == first['proof_sha256']
+    assert rejection['mutation']['changed_bytes'] == 1 and rejection['mutation']['canonical_after']
+    rejected_phases = {p['phase'] for p in rejection['phase_markers']}
+    assert 'relation-final-polynomial' in rejected_phases and 'merkle-openings' not in rejected_phases
+    previous = json.loads((directory / 'summary.json').read_text())
+    summary['delta_from_m1_rate512_q16'] = {
+        'proof_bytes': first['proof_bytes'] - previous['proof_bytes'],
+        'verifier_cu': first['verifier_cu'] - previous['verifier_cu'],
+        'phase_cu': {k: v - previous['phase_cu'][k] for k, v in phases.items()},
+    }
+    summary['model_correspondence_established'] = False
+    summary['rejection_witness_verified'] = True
+name = 'summary.json' if profile == 'rate512-q16' else f'{profile}-summary.json'
+(directory / name).write_text(json.dumps(summary, indent=2) + '\n')
 print(json.dumps(summary, indent=2))
