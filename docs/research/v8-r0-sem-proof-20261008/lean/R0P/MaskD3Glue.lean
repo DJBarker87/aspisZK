@@ -94,3 +94,52 @@ theorem accepted_no_hit_extractedZ (prime : Nat) [CharP K prime]
 #print axioms accepted_no_hit_extractedZ
 end
 end R0P.Mask
+
+namespace R0P.Mask
+open FS FS2 FS2.Duplex R0P R0P.SemSource R0P.SemD3Glue R0C.SemStatement
+open AspisWideTower AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8PairedCommitment
+noncomputable section
+attribute [local instance] Classical.propDecidable
+
+theorem d3Z (prime : Nat) [CharP WideExact prime] (hprime : prime = 2^31-1)
+    {Sfield : Fin 29 → Subfield WideExact} {Pf : Type} {L : Nat}
+    (maskPoly : (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskPoly)
+    (B : PackBasis (Sfield 0))
+    (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
+    (msg : Pf → Nat → MsgZ WideExact)
+    (decode : Addr L → Table (Addr L) State → Option (FS2.Sampler (Addr L) State
+      (FS.Prefix (TypedContext WideExact Sfield) (MsgZ WideExact)
+        (Duplex.Chal (ChalZ WideExact)) × MsgZ WideExact ×
+          Duplex.Chal (ChalZ WideExact))))
+    (budget : Nat → ℚ)
+    (hσ27 : ∀ s, p.σ 27 s = .opening (R0C.V3.DQ.σQ 0 s)) :
+    FS2.D3 (combinedProtocolZ B p msg decode) (duplexRowsZ maskPoly B budget)
+      (FS2.verifier (combinedProtocolZ B p msg decode) (combinedDecisionZ maskPoly B)) := by
+  intro H x π T hd
+  rw [FS2.verifier_eval]
+  by_contra hfalse
+  have hdec : combinedDecisionZ maskPoly B
+      ((combinedProtocolZ B p msg decode).transcript H x π 32) (msg π 32) = true := by
+    exact R0C.V3.DQ.bool_true_of_ne_false hfalse
+  let P := valuePrefix ((combinedProtocolZ B p msg decode).transcript H x π 32)
+  have hd' : (¬ ∃ t, InputNoteExtracted P.statement.pub t) ∧
+      ¬ hitFrom (sourceDataZ maskPoly B) P.statement [] P.rounds := hd
+  obtain ⟨t, ht⟩ := accepted_no_hit_extractedZ prime hprime circleFallback1 maskPoly hMask B P
+    (msg π 32) hdec hd'.2 (by
+      intro Q hview y γ hhead
+      have hparsed := opening_head_at_27 P Q hview
+      simp only [hhead, Option.map_some] at hparsed
+      have hactual := transcript_value_getElem (combinedProtocolZ B p msg decode) H x π 32 27 (by omega)
+      have hc := congrArg Prod.snd (Option.some.inj (hparsed.symm.trans hactual))
+      obtain ⟨a, ha⟩ := combined_chal27 B p msg decode hσ27 H x π
+      rw [ha] at hc
+      have hγ : γ = R0C.ModuloField.gamma a := R0FS.Chal.field.inj (Chal.opening.inj hc)
+      rw [hγ]
+      exact R0C.ModuloField.gamma_ne_zero a)
+  exact hd'.1 ⟨t, ht⟩
+
+
+#print axioms d3Z
+end
+end R0P.Mask

@@ -3920,3 +3920,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3253 | `R0P/MaskD3Glue` | 0 / 0 | 0:03.18 | 6842856 | 0 | 1 | `a85d48935156749b277950e8200f824210c81f897dace5571ad5528f798b0d47` |
 
 Source revision(s): `cb8252868a0ebc83429c1711b442cebe6e12fe79`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: masked FS2.D3 closed
+
+d3Z discharges FS2.D3 for the literal 32-round protocol and masked decision. Its first opening premise is hσ27; combined_chal27 supplies the actual nonzero gamma challenge with an explicit duplex-state witness. The final semantic hypothesis is only MaskDegree maskPoly, plus the characteristic premise already discharged by SemCharP. Attempt 3254 is green with the standard three axioms.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3254 | `R0P/MaskD3Glue` | 0 / 0 | 0:03.73 | 6845364 | 0 | 2 | `300f772dbc0df584bb6fe44daffb1418de62657dea4cb8c82e317e4ad7501d61` |
+
+Source revision(s): `7056d78d6ef1418fbe4e1afab31ab128486e7da3`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
