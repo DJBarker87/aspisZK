@@ -21,7 +21,7 @@ for stage in ['re3','s1','s2','s3','s4','s5d']:
 resources=[]
 for p in sorted(out.glob('*.json')):
     r=json.loads(p.read_text())
-    if r.get('schema')=='aspis.v8-state-only-cu.resources.v1':resources.append(dict(label=p.stem,**r))
+    if isinstance(r,dict) and r.get('schema')=='aspis.v8-state-only-cu.resources.v1':resources.append(dict(label=p.stem,**r))
 (out/'resources-4.json').write_text(json.dumps(resources,indent=2)+'\n')
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 fixtures={}
