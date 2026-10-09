@@ -111,3 +111,66 @@ fn x_transpose_by(mut at: impl FnMut(usize) -> E, output: &mut [E]) -> Result<()
     }
     Ok(())
 }
+
+/// Apply C to G, the exact transpose of `quotient_weights`. The input and
+/// output share storage; the three half-vector buffers preserve dependencies.
+pub fn chord_weights(
+    line: Secant<QM31>,
+    g: &mut [E],
+    even: &mut [E],
+    odd: &mut [E],
+    twice: &mut [E],
+) -> Result<(), Error> {
+    if g.len() != 1024 || even.len() != 512 || odd.len() != 512 || twice.len() != 512 {
+        return Err(Error::WrongLength);
+    }
+    for j in 0..512 {
+        twice[j] = g[2 * j + 1];
+    }
+    x_forward_by(|j| twice[j], odd)?;
+    x_forward_by(|j| odd[j], twice)?;
+    x_forward_by(|j| g[2 * j], even)?;
+    for j in 0..512 {
+        let ge = g[2 * j];
+        let go = g[2 * j + 1];
+        g[2 * j] = ge
+            .mul_qm31(line.a)
+            .add(even[j].mul_qm31(line.b))
+            .add(go.sub(twice[j]).mul_qm31(line.c));
+        g[2 * j + 1] = go
+            .mul_qm31(line.a)
+            .add(odd[j].mul_qm31(line.b))
+            .add(ge.mul_qm31(line.c));
+    }
+    Ok(())
+}
+fn x_forward_by(mut at: impl FnMut(usize) -> E, output: &mut [E]) -> Result<(), Error> {
+    if output.len() != 512 {
+        return Err(Error::WrongLength);
+    }
+    output.fill(E::ZERO);
+    for j in 0..512 {
+        let value = at(j);
+        let (mut rest, mut bit, mut factor) = (j, 1, M31::ONE);
+        loop {
+            if bit == 512 {
+                let overflow = value.mul_m31(factor);
+                for (k, &c) in table::TOP_OVERFLOW.iter().enumerate() {
+                    if c != 0 {
+                        output[k] = output[k].add(overflow.mul_m31(M31(c)));
+                    }
+                }
+                break;
+            }
+            if rest & bit == 0 {
+                output[rest | bit] = output[rest | bit].add(value.mul_m31(factor));
+                break;
+            }
+            rest ^= bit;
+            factor = factor.mul(M31(1_073_741_824));
+            output[rest] = output[rest].add(value.mul_m31(factor));
+            bit *= 2;
+        }
+    }
+    Ok(())
+}
