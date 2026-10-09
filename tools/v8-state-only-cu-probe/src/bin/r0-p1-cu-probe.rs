@@ -1,5 +1,6 @@
 //! Build-host-only reference verifier measurement, never a network client.
 use anyhow::{anyhow, ensure, Result};
+use aspis_core::field::{CM31, M31, QM31};
 use litesvm::LiteSVM;
 use serde_json::{json, Value};
 use sha2::{Digest as _, Sha256};
