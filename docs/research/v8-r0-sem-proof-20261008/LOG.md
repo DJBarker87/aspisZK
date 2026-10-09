@@ -3603,3 +3603,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3213 | `R0P/MaskDuplexDensity` | 0 / 0 | 0:04.63 | 6847468 | 0 | 4 | `fd14411944ba5458d288ab93918a1d1a3619b43ee19d55d01a189c3c8f91eeab` |
 
 Source revision(s): `5a4b88db392469689ce6c1eea09d47628d118b31`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: generic chain and trace-order helpers (3214)
+
+MaskDuplexChain ports the chain state, run output, cell-read, and traceFrom order lemmas with an arbitrary inner semantic message type. No schedule count occurs in these lemmas. Attempt 3214 passes seven audits, all within the standard three axioms, with no errors or warnings; it is the focused predecessor for generic decoding.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3214 | `R0P/MaskDuplexChain` | 0 / 0 | 0:03.80 | 6842600 | 0 | 7 | `e4c2d092dda27b2b517a03ff2885dfd37789621c6ca489e726601ea5f5227956` |
+
+Source revision(s): `045635fe67362b5a235f6cf9e821b71f0049d53b`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
