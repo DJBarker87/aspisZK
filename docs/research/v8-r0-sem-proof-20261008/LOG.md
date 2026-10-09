@@ -3087,3 +3087,17 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2600 | `R0P/SemDuplexDecoder` | 0 / 0 | 0:04.56 | 6834532 | 0 | 3 | `cc8dc9b73d6f98a43ba8a41771e1cf356cac5ad3a7e87b062f031e4e0ba86236` |
 
 Source revision(s): `5f4ad4aee9d14cd7994121845407f839d0c4a146`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G20 — combined chain density
+
+Proved the flip-to-source-roundBad bridge and an exact equality between the completing sampler law and the combined sampler law. For rows below 30 this uses the single-squeeze mean; the final row uses Q22.chainE, with the absorb state still averaged. Splitting off earlier missing squeezes then applies the existing full combinedProtocol_D2 with exactly its four sigma identities. Attempt 2601 checks the law first; 2602 exposed only an unspecified existential table type, fixed by its explicit annotation in 2603. Final exit 0, no errors or warnings, all four axiom audits standard. No density premise, concrete finite enumeration, or accounting change was introduced.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g20-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2601 | `R0P/SemDuplexDensity` | 0 / 0 | 0:03.53 | 6833764 | 0 | 2 | `93d74fbe77c1aecd90e33a2879a37358a0a83bdafd64e51189a4f17a39ea28a3` |
+| 2602 | `R0P/SemDuplexDensity` | 1 / 1 | 0:04.55 | 6810324 | 0 | 4 | `e6e9059437f5a5ec99c49059e2939130d58f42a0df7ad07ba9f3b571a859cb25` |
+| 2603 | `R0P/SemDuplexDensity` | 0 / 0 | 0:05.10 | 6847344 | 0 | 4 | `64562fc7187cfe8e64c1face96c195f6beeb2446714a02239f4c6c9587bd5b72` |
+
+Source revision(s): `da1caa9ef36b9064244e2e791a7ba9601128a422`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
