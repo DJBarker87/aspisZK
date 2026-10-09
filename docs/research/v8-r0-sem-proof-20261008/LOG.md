@@ -3776,3 +3776,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3230 | `R0P/MaskDensity` | 0 / 0 | 0:04.66 | 6855604 | 0 | 1 | `4431e71d58235625a8bc758c689e0c715c2b05d6e4b7975acb144b0c04893a5c` |
 
 Source revision(s): `8f4194458620d41dd89bbd03c6fcf9dec28d6739`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: masked source and definitional D1
+
+MaskSource supplies the masked SourceData, the definitional D1 instance, the no-hit row bridge, and the explicit duplex-state witness for the opening challenge at row 27. Attempt 3231 exposed a predicate-wrapper rewrite mismatch; 3232 fixes it by making the paymentWitness proposition explicit. The accepted audit has only the standard axioms.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3231 | `R0P/MaskSource` | 1 / 1 | 0:04.58 | 6805752 | 0 | 6 | `17f857cad5d88c220777227314d9ca47432ff82692a0e563e913afb466ece4c6` |
+| 3232 | `R0P/MaskSource` | 0 / 0 | 0:04.71 | 6841572 | 0 | 6 | `511dcd8fbe119ba242aa2be3fadd501f479155e719516bcef409ce7b2427b3ac` |
+
+Source revision(s): `d4070150ea84f2c410f69467468398a3037e048c`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
