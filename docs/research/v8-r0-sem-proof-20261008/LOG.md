@@ -3700,3 +3700,16 @@ masked protocol, MaskD3Glue/d3Z, combined_fiat_shamirZ, or combined_maxErrZ.
 The explicit-obligation adapter and the coefficient-parameterized accounting
 are auxiliary results only. Either proposed eta coefficient preserves the
 query-row maximum by attempt 3217. No host Lean job remains from this worker.
+
+### G24 continuation: authorized eta union and 32-row budget (3221–3222)
+
+Fetched base 2363f469444bd383a352d5a5f43016cc98e2044d on v8-reference. The lead authorizes eta coefficient 100. etaCandidates_semChal_mass applies etaSomeBad_semChal_mass directly with SemD2.candidates_card, without uniqueness or trace-sum hypotheses. combinedD2BudgetZ is now fixed: rows 0–13 retain their frozen budgets; row 14 is 100*(1+deltaQ)/P⁴; alpha rows 15–24 are 2700*(1+deltaQ)/P⁴ (100 candidates times degree 27); circle rows 25–26 use the explicitly requested 2/P⁴ envelope; opening rows 27–31 retain the five existing epsilonSlack rows. The frozen alpha bound is already 27, despite the prompt referring to 26; frozen circle budgets are (1+deltaQ)/P⁴, below the new envelope. Attempt 3221 needed the delta0 namespace; 3222 passes all twelve audits with standard axioms and no errors or warnings. This replaces the prior budget-choice stop; full masked D2/D3 assembly is in progress.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3221 | `R0P/MaskD2` | 1 / 1 | 0:03.58 | 6806772 | 0 | 12 | `8ef11e92cad973a46bead623620c042da986258c2655d3b635ad6dda3f00f2b4` |
+| 3222 | `R0P/MaskD2` | 0 / 0 | 0:03.84 | 6840780 | 0 | 12 | `fa86046d9800c581b22bd068c64b8a9fbe98a2049cc20e05dc38c66bd3a03b8a` |
+
+Source revision(s): `2363f469444bd383a352d5a5f43016cc98e2044d`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.

@@ -1,4 +1,5 @@
 import R0P.MaskProtocol
+import R0P.SemD2Glue
 import R0C.Counting
 
 /-! G24: the one-root eta event. Uniform wide-field density and the
@@ -8,6 +9,7 @@ namespace R0P.Mask
 open FS R0P.SemSource R0P.SemD3Glue
 open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
 open AspisV8R19.SourceDuplexStep AspisWideTower
+open R0C.SlackStatement
 open scoped BigOperators
 noncomputable section
 attribute [local instance] Classical.propDecidable
@@ -125,5 +127,33 @@ theorem etaBad_two_roots {K : Type} [Field K] [NeZero (2 : K)] :
 #print axioms etaSomeBad_card
 #print axioms etaSomeBad_semChal_mass
 #print axioms etaBad_two_roots
+
+/-- The lead-authorized union over the committed-word list, bounded by 100. -/
+theorem etaCandidates_semChal_mass {Sfield : Fin 29 → Subfield SemE}
+    (x : TypedContext SemE Sfield)
+    (rounds : List (R0C.SemStatement.Msg SemE SemE (SemMsg SemE) ×
+      R0C.SemStatement.Chal SemE SemE))
+    (total : Trace SemE → SemE) (claim M : SemE) :
+    mean (fun s : State => indicator
+      (etaSomeBad (candidates x rounds .none) total claim M (semChal s))) ≤
+      100 * ((1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4) := by
+  apply (etaSomeBad_semChal_mass (candidates x rounds .none) total claim M).trans
+  apply mul_le_mul_of_nonneg_right
+  · exact_mod_cast candidates_card x rounds .none
+  · exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+      (pow_nonneg (Nat.cast_nonneg _) _)
+
+/-- The masked schedule: eta at 14, alpha at 15--24 (degree 27), circle
+at 25--26 with the authorized 2/P^4 envelope, then the five opening rows. -/
+def combinedD2BudgetZ (i : Nat) : ℚ :=
+  if i < 14 then combinedD2Budget i
+  else if i = 14 then 100 * ((1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4)
+  else if i < 25 then (1 + deltaQ) * (2700 / (AspisCircleGroupOrder.P : ℚ)^4)
+  else if i < 27 then 2 / (AspisCircleGroupOrder.P : ℚ)^4
+  else if i < 31 then R0C.SlackStatement.epsilonSlack WideExact delta0 (i - 27)
+  else R0C.SlackStatement.epsilonSlack WideExact delta0 4
+
+#print axioms etaCandidates_semChal_mass
+#print axioms combinedD2BudgetZ
 end
 end R0P.Mask
