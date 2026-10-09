@@ -3590,3 +3590,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3211 | `R0P/MaskDuplexDecoder` | 0 / 0 | 0:04.91 | 6838708 | 0 | 6 | `17b1b947a0e15271565d9c956aabaeccd5a9d3ce58ad75f4b0b6b63fd7aafc6c` |
 
 Source revision(s): `046dc1f2d2f7240865a10f72cc2832a2128c9640`, `365ca4808bf8383f0f4438e96685a3fe41166566`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: generic protocol and chain-density transfer (3212–3213)
+
+MaskDuplexDensity provides combinedProtocolAt for arbitrary inner messages and total rounds, with checked definitional reinstantiations of the frozen 31-round protocol and combinedProtocolZ at 32. combinedOwn_law treats a single-squeeze row or the final q22 chain. combinedChainDensity_of_D2 transfers any supplied FS2.D2 for any RoundByRound predicate; it does not assume the pending masked D2 obligation. Attempt 3212 lacked the import supplying the existing chainS_independentMean lemma; 3213 imports SemD2Glue and passes all four audits with standard axioms, no errors or warnings. The generic result has no hard-coded 31/32 count and makes no change to a frozen source.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3212 | `R0P/MaskDuplexDensity` | 1 / 1 | 0:04.36 | 6810024 | 0 | 4 | `0681afbb7deb554c20e839b08d90bd09ad6b27d39780cd9fe6b4240811d42774` |
+| 3213 | `R0P/MaskDuplexDensity` | 0 / 0 | 0:04.63 | 6847468 | 0 | 4 | `fd14411944ba5458d288ab93918a1d1a3619b43ee19d55d01a189c3c8f91eeab` |
+
+Source revision(s): `5a4b88db392469689ce6c1eea09d47628d118b31`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
