@@ -722,3 +722,178 @@ Rust run, source edit outside this directory, or axioms audit to report.
 Validation is pinned-source inspection and the symbolic calculation above,
 not a new formal result. `git diff --check` passes. Commit scope is this
 LOG only, with no co-author trailer; concurrent soundness work is untouched.
+
+
+## Z3 continued — split tape and H1 affinity (2026-10-09)
+
+Read D4″ at requested base **`c67262d0453bda8cf7817d83008d9a1fe5e160c9`**
+after fetching. The prior Z3 report above is historical: D4″ resolves its
+full-tape non-affinity stop by fixing eligible noise in the honest instance.
+The soundness worker continued advancing this shared worktree during this
+run. Only this privacy directory was edited by this worker.
+
+### Lead clarifications received during this continuation
+
+1. **H1 stays in the affine tape.** The user selected: “Keep H1 padding in
+   the affine tape; prove the original affine in it.” The three extension
+   slots are G, H1 padding and D. The corrected D4″ item 2 above now records
+   this. No independence of the original from H1, or of A from the instance,
+   is assumed.
+2. **Public metadata is constant in the instance and tape.** The user fixed
+   `metadata : Statement → Challenges → Meta`, independent of instance and
+   tape by definition (D1 ideal handles; positions from challenges), and
+   `View := Meta × Payload`. Only `Payload` is a vector space. The eventual
+   HVZK law is the law of the **pair**; the coset lemma applies to the payload
+   and transports through `p ↦ (metadata x ch, p)`. No arithmetic is assigned
+   to handles or query indices. This is an accepted definition decision,
+   not an outstanding question.
+
+### Implemented and checked
+
+`MaskLayout.lean` now defines the index type
+`AffCoordinate := (Fin 10 × Fin 1024) ⊕ (Fin 3 × Fin 1024 × Fin 4)`,
+`AffTape K F := AffCoordinate → F`, and
+`EligibleNoise K F := EligibleCell → F`. Thus the tape is the F-valued
+vector on the requested coordinate set; the index set itself is not the
+random vector. This preserves D3/D5's base-field law inside extension K.
+`MaskTape` retains the original combined coordinates for an exact bridge.
+
+`applyEligible t e` changes the sixteen semantic columns and balances each
+at row 1023. **That balance reads fixed semantic cells and eligible noise
+only; it reads no affine-tape coordinate.** `applyAff B t r` preserves those
+sixteen columns, replaces mask-only/G/D columns, and adds H1 padding. The
+mask-only, G, D and H1-padding dependent coordinates remain at row 0.
+`applyMask` is now their composition. `applyMask_eq_port` proves equality
+with the original Z2 cellwise port, including all dependent coordinates;
+there is no distributional approximation or changed balancing policy.
+`applyAff_affine` proves affinity over F. The additional coordinatewise
+linear map `traceLinear`, zero-tape baseline `traceBase`, and theorem
+`applyAff_eq_base_add` package the actual port as `traceAffine` for the
+pending view composition. No affinity certificate is accepted as a premise.
+
+`ViewAffine.lean` proves `copyResidual_affine`, `copyEvaluate_affine`,
+`laneAt_affine`, `originalAt_affine`, and `originalAt_decomp` for arbitrary
+fixed semantic openings. `terminalValue_eq_originalAt` connects this
+algebra directly to the soundness terminal. Its copy term is
+`active * (PD * (h * CD + CN) - CD * PN)`, so the H1 coefficient includes
+`active * PD * CD`, in addition to the two mu terms after theta/equality
+batching. PD/CD depend on the fixed semantic openings. This is why this
+continuation does not assert `A_instance_independent`. The large copy
+registry is opaque in these proofs, and all sums remain symbolic.
+
+### Citation inventory
+
+Rust line citations below are at **c67262d04** (read with `git show` where
+necessary); the mask port's original pin and detailed layout citations
+remain in the Z2 table above. The referenced arithmetic is unchanged.
+
+| Definition / check | Source |
+|---|---|
+| Eligible cells and sixteen-column restriction | `crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs:221–253`; Z2 layout citations above. |
+| Negative-sum dependent coordinates | `crates/aspis-prover/src/state_only_hiding.rs:169–196,448–472,676–722`; semantic row-1023 balance at 700–715. |
+| G, H1 padding and D limb interpretation | `state_only_hiding.rs:460–472`; `crates/aspis-prover/src/state_only_entropy.rs:634–674,703–715`. |
+| Apply H1 padding only after helper construction | `state_only_hiding.rs:248–272,297–302`; `crates/aspis-prover/src/v6_onefold_prover.rs:1244–1257,1279–1307`. |
+| Copy term is affine in H1 | `docs/research/v8-r0-sem-proof-20261008/lean/R0P/Copy.lean:111–142,234–238`; source `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:339–357,910–972,1048,1068–1072`. |
+| Original terminal and theta ordering | `R0P/SemDecision.lean:43–49,73–80` under the preceding soundness path; `ViewAffine.terminalValue_eq_originalAt` is the exact identity. |
+| Actual H1 builder can fail at active poles | `crates/aspis-statement/src/logup.rs:192–224`, producer failure at 199–204 and consumer failure at 212–217; forest adapter `crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs:168–179`. |
+| Forest prover propagates helper failure before C2 | `crates/aspis-prover/src/v6_onefold_prover.rs:1279–1290`; H1 padding and helper-sum check follow at 1292–1310; C2 at 1311–1312. |
+| Verifier message type, not an honest H1 constructor | `R0P/SemView.lean:30–34`: `SemMsg.h1` receives arbitrary H1/G words. D2 deliberately leaves the instance builder uninstantiated. |
+
+### Lead decision needed — current stop
+
+1. **Total ideal honest H1 at active poles.** The proposed view is total for
+   every `ch`, but the cited source's helper uses fallible inverses and
+   returns `ActivePole` when a nonzero-weight tuple equals chi. Its caller
+   propagates this error before committing C2. This branch depends on the
+   instance's compressed tuples, not solely on the public statement and
+   challenges. D5 assigns sampler/abort losses to later FS/refinement work;
+   it does not specify the ideal helper value on this branch. D4″ establishes
+   affinity once the fixed helper table is supplied, but also does not
+   construct that table on failed source inputs.
+
+   The lead must choose the ideal totalization (for example the source's
+   weighted reciprocal formula interpreted using field inverse, with
+   `0⁻¹ = 0`, and source pole aborts left to later refinement), or retain a
+   failure outcome and specify its place in the interactive view. The latter
+   cannot silently be placed in `metadata x ch`, now fixed to be independent
+   of the instance. No restriction to good challenges, success conditioning,
+   or epsilon value was introduced. This question was sent to the user and
+   remains pending at this stop. An exploratory, uncompiled view draft was
+   removed; no totalization has been installed as the model.
+
+The stop is required by the user's “Stop on anything D4′/D4″ doesn't
+determine” rule, not an approval requirement. It occurs before the full
+honest-view definition. `ZkStatement.lean` remains the Z1 source (SHA below),
+and `view_affine`, the coset-law module, marginalisation and
+`hvzk_perfect_of_maskImage` are not claimed. `MaskImage` itself was not
+attempted. The earlier FS/ROM correspondence stop remains separate and
+unchanged; no computational assumption or weakened ZK_FS was added.
+
+### Host validation
+
+Same pinned host/workspace and `run_g15_lake.sh` run2 adapter as Z2:
+`dombarker@100.108.41.90`,
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`.
+Lean 4.32.0 / `8c9756b28d64dab099da31a4c09229a9e6a2ef35`, Mathlib
+`81a5d257c8e410db227a6665ed08f64fea08e997`. Each launched job used
+`lake env lean -j1 -M7000 -DElab.async=false`, MemoryHigh=5G,
+MemoryMax=7G, MemorySwapMax=0, TasksMax=128, timeout 900 s. The runner
+admitted 24+7 GiB below its 55 GiB ceiling. Host process prechecks delayed
+3108 and 3110 while a soundness Lean job was active; those busy preflights
+created no SHA receipt or compiler attempt. Only one privacy Lean job ran
+at a time. **Final host interval audit found two cross-worker overlaps:**
+3104 (09:37:06.747–09:37:13.279 UTC) overlapped soundness 3229
+(09:37:08.922–09:37:15.839); 3108 (09:51:04.418–09:51:12.866) overlapped
+soundness 3237 (09:51:07.016–09:51:12.052). In each case the other worker
+started after this worker's process precheck. The private
+`/tmp/aspis-r0-z1-lean.lock` did not serialize that worker's run2 launches.
+This is a deviation from the host-wide one-job rule, not an assertion of
+compliance: all jobs retained their individual caps and zero reported swap,
+but host-wide serialization needs a common lock or exclusive build window
+before further launches. No other overlap with 3104–3110 was found in the
+SHA/output timestamp audit. No new launch or unchanged replay was made
+after this discovery. No package replay or larger cap was used.
+
+Source revision in this table is the requested base **c67262d04 plus the
+exact privacy source snapshot identified below**. Accepted 3110 imports
+the accepted 3108 MaskLayout. The moving shared branch HEAD is not used
+as a claim that uncommitted source was already present in a commit.
+
+| Exact target | Attempt | Exit | Wall | Peak RSS (KiB) | Swap | Axioms / result |
+|---|---:|---:|---:|---:|---:|---|
+| `R0Z/MaskLayout.lean` initial split | 3104 | 0 | 6.50 s | 6,831,300 | 0 | 17 audits, standard only. |
+| `R0Z/MaskLayout.lean` linear packaging | 3105 | 1 | 8.13 s | 6,803,860 | 0 | Scalar-coercion/conditional goals; rejected. |
+| `R0Z/MaskLayout.lean` linear packaging | 3106 | 1 | 8.09 s | 6,802,784 | 0 | Local reduction hit the default recursion limit; rejected. |
+| `R0Z/MaskLayout.lean` linear packaging | 3107 | 1 | 8.13 s | 6,802,628 | 0 | Invalid irreducibility attribute on an abbrev; rejected. |
+| **`R0Z/MaskLayout.lean` final** | **3108** | **0** | **8.42 s** | **6,838,224** | **0** | **19 audits, standard only**, including `applyAff_affine`, `applyAff_eq_base_add`, `traceAffine_apply`. |
+| `R0Z/ViewAffine.lean` | 3109 | 1 | 2.92 s | 6,786,760 | 0 | Extra tactic after a closed goal; rejected. |
+| **`R0Z/ViewAffine.lean` final** | **3110** | **0** | **3.18 s** | **6,819,472** | **0** | **5 audits, standard only**, including `originalAt_affine`, `originalAt_decomp`, `terminalValue_eq_originalAt`. |
+| `R0Z/ZkStatement.lean`: `view_affine` | — | — | — | — | — | Stopped at the honest-H1 definition boundary. |
+| `R0Z/AffineLaw.lean`: coset lemma | — | — | — | — | — | Not created after the stop. |
+| `R0Z/Hvzk.lean`: HVZK/marginalisation | — | — | — | — | — | Not created after the stop. |
+
+“Standard only” means a subset of `propext`, `Classical.choice`,
+`Quot.sound`. Failed elaborations' compiler-generated `sorryAx` audit
+output was rejected; no such output is a proof result or dependency of
+an accepted audit. No source `sorry`, `axiom`, `admit`, `native_decide`,
+recursion/heartbeat-limit override, or concrete finite-universe evaluation
+was introduced. The 3106 replacement is symbolic balancing plus a named
+pointwise H1-padding lemma, keeping `copyInactiveRows` opaque; 3107's
+invalid abbrev attribute was removed without an unsafe reducibility option.
+Unused-simp warnings in the final MaskLayout are non-fatal.
+
+| Attempt | Source SHA-256 (also the exact host snapshot SHA) |
+|---|---|
+| 3104 | `7796f93ed55fca3c86bb80b4a46fbe36232d43a3ef9f56facd6dd94c0b0f75b1` |
+| 3105 | `9598f14cd9b619a716bcb5794f0e8d5f21a6f9f2dc8c4290c3e152391d2c89ff` |
+| 3106 | `39fe14d256dd83a4c533a7492b6fa31c67c505a2c92ccf4d288bf63552455122` |
+| 3107 | `4f61eed64272e453b3a3a9770053faf6f7ed971c8dd224cf85bfc8378cef26d2` |
+| 3108 | `4f0615a66f8abe90b80d1cdff56961356cff13628c85dbd3456f43d9f425b43a` |
+| 3109 | `f1d277c691c1be05dd710f3b8ca8f4b84282115ea967de14e4e57bb7c4a22324` |
+| 3110 | `7719f782cf4a3326f27373d59f378d130e035f3698c6ea0d3379da69fabbe33a` |
+| Unchanged `ZkStatement.lean` | `2a2a21f955083a3da6b1f7fe3d7f5ba4a98edf79d5905df03f21229103c614ae` |
+
+Every `evidence/source-N.lean` snapshot was hash-checked against its
+`sha-N.txt` receipt. Raw scope/output/time/SHA/source records remain on the
+host. The two final local sources equal the accepted snapshots. Commit
+scope is these two Lean sources and this LOG only, with no co-author trailer.

@@ -47,7 +47,16 @@ abbrev EligibleCell := {cell : Fin 29 × Fin 1024 // eligible cell.1 cell.2}
 The independent inputs include overwritten dependent samples for C1,
 mask-only, G and D, as in M:448-471 and E:656-673. Unused H1 samples
 are harmless redundant ideal coordinates; only inactive nonzero rows enter. -/
-abbrev MaskCoordinate := EligibleCell ⊕ ((Fin 10 × Fin 1024) ⊕ (Fin 3 × Fin 1024 × Fin 4))
+abbrev AffCoordinate := (Fin 10 × Fin 1024) ⊕ (Fin 3 × Fin 1024 × Fin 4)
+
+abbrev MaskCoordinate := EligibleCell ⊕ AffCoordinate
+
+abbrev EligibleNoise (K : Type) [Field K] (F : Subfield K) := EligibleCell → F
+
+/-- D4″, with the user's H1 correction: the three extension slots remain
+G, H1 padding, D. `AffCoordinate` is the index type; the tape is its F-valued
+coordinate vector, not a uniformly selected index. -/
+abbrev AffTape (K : Type) [Field K] (F : Subfield K) := AffCoordinate → F
 
 abbrev MaskTape (K : Type) [Field K] (F : Subfield K) := MaskCoordinate → F
 
@@ -88,40 +97,62 @@ operation only applies its padding to the H1 table supplied in `t`. -/
 def h1Padding (B : PackBasis F) (tape : MaskTape K F) : Fin 1024 → K :=
   balance 0 (fun r => if CopyActiveRow r then 0 else extensionRaw B tape 1 r)
 
-/-- M:676-722,762-773: add at eligible cells, then balance each semantic
-column at its last eligible inactive row (1023). F:221-253 and the literal
-active masks give this same row for all 16 columns. Install the separately
-balanced mask-only, G and D words; pad the supplied adaptive H1 table. -/
-def applyMask (B : PackBasis F) (t : Trace K) (tape : MaskTape K F) : Trace K :=
-  fun c r =>
-    if c.val < 16 then balance 1023 (fun s => t c s + semanticNoise tape c s) r
-    else if h : c.val < 26 then maskOnlyColumns tape ⟨c.val - 16, by omega⟩ r
-    else if c.val = 26 then t c r + h1Padding B tape r
-    else if c.val = 27 then balance 0 (extensionRaw B tape 0) r
-    else dWord B tape r
+/-- Eligible masks and row-1023 balancing read only fixed semantic C1
+cells and eligible noise. No affine-tape coordinate is read here. -/
+def applyEligible (t : Trace K) (e : EligibleNoise K F) : Trace K :=
+  fun c r => if c.val < 16 then
+    balance 1023 (fun s => t c s + semanticNoise (Sum.elim e 0) c s) r
+  else t c r
 
-/-- Affinity in the base-field tape for every fixed input trace. No honesty,
-rank, mask-image or privacy premise is used. The symbolic sum lemma avoids
-reducing the 1024-row inactive set. -/
-theorem applyMask_affine (B : PackBasis F) (t : Trace K)
-    (p q : MaskTape K F) (a : F) :
-    applyMask B t (a • p + (1 - a) • q) =
-      a • applyMask B t p + (1 - a) • applyMask B t q := by
+/-- Full-domain mask-only, G/H1-padding/D operations, preserving semantic
+C1 cells exactly. H1 padding remains in this tape by the Z3 correction. -/
+def applyAff (B : PackBasis F) (t : Trace K) (tape : AffTape K F) : Trace K :=
+  let full : MaskTape K F := Sum.elim 0 tape
+  fun c r =>
+    if c.val < 16 then t c r
+    else if h : c.val < 26 then maskOnlyColumns full ⟨c.val - 16, by omega⟩ r
+    else if c.val = 26 then t c r + h1Padding B full r
+    else if c.val = 27 then balance 0 (extensionRaw B full 0) r
+    else dWord B full r
+
+/-- The original tape is split without changing its coordinates or balances. -/
+def applyMask (B : PackBasis F) (t : Trace K) (tape : MaskTape K F) : Trace K :=
+  applyAff B (applyEligible t (fun cell => tape (.inl cell)))
+    (fun cell => tape (.inr cell))
+
+/-- The composition has the same cellwise behavior as the Z2 port. -/
+theorem applyMask_eq_port (B : PackBasis F) (t : Trace K) (tape : MaskTape K F) :
+    applyMask B t tape = fun c r =>
+      if c.val < 16 then balance 1023 (fun s => t c s + semanticNoise tape c s) r
+      else if h : c.val < 26 then maskOnlyColumns tape ⟨c.val - 16, by omega⟩ r
+      else if c.val = 26 then t c r + h1Padding B tape r
+      else if c.val = 27 then balance 0 (extensionRaw B tape 0) r
+      else dWord B tape r := by
+  funext c r
+  simp only [applyMask, applyAff, applyEligible, semanticNoise, maskOnlyColumns,
+    h1Padding, extensionRaw, dWord, Sum.elim_inl, Sum.elim_inr]
+  split_ifs <;> rfl
+
+/-- Affinity over F in the remaining tape, for every fixed semantic trace.
+The row-1023 balance is already in `applyEligible`, not in this operation. -/
+theorem applyAff_affine (B : PackBasis F) (t : Trace K)
+    (p q : AffTape K F) (a : F) :
+    applyAff B t (a • p + (1 - a) • q) =
+      a • applyAff B t p + (1 - a) • applyAff B t q := by
   classical
+  let p' : MaskTape K F := Sum.elim 0 p
+  let q' : MaskTape K F := Sum.elim 0 q
+  have join : (Sum.elim 0 (a • p + (1 - a) • q) : MaskTape K F) =
+      a • p' + (1 - a) • q' := by
+    funext coord
+    cases coord <;> simp [p', q', Pi.smul_apply, smul_eq_mul]
   have raw (coord : MaskCoordinate) :
-      ((a • p + (1 - a) • q) coord : K) =
-        (a : K) * (p coord : K) + (1 - (a : K)) * (q coord : K) := by
+      ((a • p' + (1 - a) • q') coord : K) =
+        (a : K) * (p' coord : K) + (1 - (a : K)) * (q' coord : K) := by
     simp [Pi.smul_apply, smul_eq_mul]
-  have sem (c : Fin 29) (r : Fin 1024) :
-      semanticNoise (a • p + (1 - a) • q) c r =
-        (a : K) * semanticNoise p c r + (1 - (a : K)) * semanticNoise q c r := by
-    unfold semanticNoise
-    split_ifs
-    · exact raw _
-    · ring
   have ext (lane : Fin 3) (r : Fin 1024) :
-      extensionRaw B (a • p + (1 - a) • q) lane r =
-        (a : K) * extensionRaw B p lane r + (1 - (a : K)) * extensionRaw B q lane r := by
+      extensionRaw B (a • p' + (1 - a) • q') lane r =
+        (a : K) * extensionRaw B p' lane r + (1 - (a : K)) * extensionRaw B q' lane r := by
     simp only [extensionRaw, pack4, raw]
     ring
   have bal (d : Fin 1024) (u v : Fin 1024 → K) (r : Fin 1024) :
@@ -133,47 +164,111 @@ theorem applyMask_affine (B : PackBasis F) (t : Trace K)
       ring
     · rfl
   have pad (r : Fin 1024) :
-      h1Padding B (a • p + (1 - a) • q) r =
-        (a : K) * h1Padding B p r + (1 - (a : K)) * h1Padding B q r := by
+      h1Padding B (a • p' + (1 - a) • q') r =
+        (a : K) * h1Padding B p' r + (1 - (a : K)) * h1Padding B q' r := by
     unfold h1Padding
     have eq : (fun s => if CopyActiveRow s then 0 else
-        extensionRaw B (a • p + (1 - a) • q) 1 s) =
-        (fun s => (a : K) * (if CopyActiveRow s then 0 else extensionRaw B p 1 s) +
-          (1 - (a : K)) * (if CopyActiveRow s then 0 else extensionRaw B q 1 s)) := by
+        extensionRaw B (a • p' + (1 - a) • q') 1 s) =
+        (fun s => (a : K) * (if CopyActiveRow s then 0 else extensionRaw B p' 1 s) +
+          (1 - (a : K)) * (if CopyActiveRow s then 0 else extensionRaw B q' 1 s)) := by
       funext s
       split_ifs
       · ring
       · exact ext 1 s
     rw [eq, bal]
   funext c r
-  change applyMask B t (a • p + (1 - a) • q) c r =
-    (a : K) * applyMask B t p c r + (1 - (a : K)) * applyMask B t q c r
-  unfold applyMask
+  change applyAff B t (a • p + (1 - a) • q) c r =
+    (a : K) * applyAff B t p c r + (1 - (a : K)) * applyAff B t q c r
+  unfold applyAff
+  rw [join]
   split_ifs
-  · have eq : (fun s => t c s + semanticNoise (a • p + (1 - a) • q) c s) =
-        (fun s => (a : K) * (t c s + semanticNoise p c s) +
-          (1 - (a : K)) * (t c s + semanticNoise q c s)) := by
-      funext s
-      rw [sem]
-      ring
-    rw [eq, bal]
+  · ring
   · unfold maskOnlyColumns maskOnlyRaw
     simp only [raw]
     exact bal _ _ _ _
   · rw [pad]
     ring
-  · rw [show extensionRaw B (a • p + (1 - a) • q) 0 =
-        (fun r => (a : K) * extensionRaw B p 0 r +
-          (1 - (a : K)) * extensionRaw B q 0 r) from funext (ext 0)]
+  · rw [show extensionRaw B (a • p' + (1 - a) • q') 0 =
+        (fun r => (a : K) * extensionRaw B p' 0 r +
+          (1 - (a : K)) * extensionRaw B q' 0 r) from funext (ext 0)]
     exact bal _ _ _ _
   · unfold dWord
-    rw [show extensionRaw B (a • p + (1 - a) • q) 2 =
-        (fun r => (a : K) * extensionRaw B p 2 r +
-          (1 - (a : K)) * extensionRaw B q 2 r) from funext (ext 2)]
+    rw [show extensionRaw B (a • p' + (1 - a) • q') 2 =
+        (fun r => (a : K) * extensionRaw B p' 2 r +
+          (1 - (a : K)) * extensionRaw B q' 2 r) from funext (ext 2)]
     exact bal _ _ _ _
 
+/-- A base-coordinate read, embedded in the extension field. -/
+def readAff (coord : AffCoordinate) : AffTape K F →ₗ[F] K where
+  toFun r := r coord
+  map_add' p q := by simp
+  map_smul' a p := by
+    change ((a * p coord : F) : K) = (a : K) * (p coord : K)
+    exact map_mul F.subtype a (p coord)
+
+/-- Tower packing is a linear operation on the four base coordinates. -/
+def extensionAff (B : PackBasis F) (lane : Fin 3) (r : Fin 1024) :
+    AffTape K F →ₗ[F] K :=
+  readAff (.inr (lane, r, 0)) + B.i • readAff (.inr (lane, r, 1)) +
+    B.u • readAff (.inr (lane, r, 2)) + (B.i * B.u) • readAff (.inr (lane, r, 3))
+
+/-- Symbolic balancing of a family of linear maps. -/
+def balanceAff (d : Fin 1024) (f : Fin 1024 → AffTape K F →ₗ[F] K)
+    (r : Fin 1024) : AffTape K F →ₗ[F] K :=
+  if r = d then -(∑ s ∈ copyInactiveRows.erase d, f s) else f r
+
+/-- The linear part of the masked trace. -/
+def traceLinear (B : PackBasis F) : AffTape K F →ₗ[F] Trace K :=
+  LinearMap.pi fun c => LinearMap.pi fun r =>
+    if c.val < 16 then 0
+    else if h : c.val < 26 then
+      balanceAff 0 (fun s => readAff (.inl (⟨c.val - 16, by omega⟩, s))) r
+    else if c.val = 26 then
+      balanceAff 0 (fun s => if CopyActiveRow s then 0 else extensionAff B 1 s) r
+    else if c.val = 27 then balanceAff 0 (extensionAff B 0) r
+    else balanceAff 0 (extensionAff B 2) r
+
+/-- The surviving trace at zero affine tape. -/
+def traceBase (t : Trace K) : Trace K :=
+  fun c r => if c.val < 16 ∨ c.val = 26 then t c r else 0
+
+attribute [local irreducible] copyInactiveRows
+
+/-- A coordinate proof of the actual port, without a message-affinity premise. -/
+theorem applyAff_eq_base_add (B : PackBasis F) (t : Trace K) (r : AffTape K F) :
+    applyAff B t r = traceBase t + traceLinear B r := by
+  have he (lane : Fin 3) (s : Fin 1024) :
+      extensionAff B lane s r = extensionRaw B (Sum.elim 0 r) lane s := by
+    simp only [extensionAff, readAff, extensionRaw, pack4, LinearMap.add_apply,
+      LinearMap.smul_apply, LinearMap.coe_mk, AddHom.coe_mk, smul_eq_mul, Sum.elim_inr]
+  have hb (d : Fin 1024) (f : Fin 1024 → AffTape K F →ₗ[F] K) (s : Fin 1024) :
+      balanceAff d f s r = balance d (fun u => f u r) s := by
+    simp only [balanceAff, balance]
+    split_ifs <;> simp only [LinearMap.neg_apply, LinearMap.sum_apply]
+  have hp (s : Fin 1024) :
+      (if CopyActiveRow s then (0 : AffTape K F →ₗ[F] K) else extensionAff B 1 s) r =
+        if CopyActiveRow s then 0 else extensionRaw B (Sum.elim 0 r) 1 s := by
+    split_ifs <;> simp only [LinearMap.zero_apply, he]
+  funext c s
+  simp only [applyAff, traceBase, traceLinear, Pi.add_apply, LinearMap.pi_apply]
+  split_ifs <;> simp_all only [hb, he, hp, LinearMap.zero_apply, add_zero, zero_add,
+    maskOnlyColumns, maskOnlyRaw, readAff, LinearMap.coe_mk, AddHom.coe_mk,
+    Sum.elim_inr, h1Padding, dWord, ite_apply, true_or, false_or, or_true,
+    not_true_eq_false, not_false_eq_true]
+  all_goals first | rfl | omega
+
+/-- The actual masking operation packaged as an affine map. -/
+def traceAffine (B : PackBasis F) (t : Trace K) : AffTape K F →ᵃ[F] Trace K :=
+  AffineMap.const F (AffTape K F) (traceBase t) + (traceLinear B).toAffineMap
+
+theorem traceAffine_apply (B : PackBasis F) (t : Trace K) (r : AffTape K F) :
+    traceAffine B t r = applyAff B t r := (applyAff_eq_base_add B t r).symm
+
 #print axioms eligible
+#print axioms AffCoordinate
 #print axioms MaskCoordinate
+#print axioms EligibleNoise
+#print axioms AffTape
 #print axioms MaskTape
 #print axioms semanticNoise
 #print axioms extensionRaw
@@ -181,6 +276,11 @@ theorem applyMask_affine (B : PackBasis F) (t : Trace K)
 #print axioms maskOnlyColumns
 #print axioms dWord
 #print axioms h1Padding
+#print axioms applyEligible
+#print axioms applyAff
 #print axioms applyMask
-#print axioms applyMask_affine
+#print axioms applyMask_eq_port
+#print axioms applyAff_affine
+#print axioms applyAff_eq_base_add
+#print axioms traceAffine_apply
 end R0Z.MaskLayout
