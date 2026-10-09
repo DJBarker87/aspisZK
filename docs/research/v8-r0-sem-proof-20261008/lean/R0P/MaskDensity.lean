@@ -12,15 +12,15 @@ attribute [local instance] Classical.propDecidable
 
 /-- The literal prefix classifier has the authorized per-row sampler bound. -/
 theorem semantic_round_densityZ {Sfield : Fin 29 → Subfield SemE} {F : Subfield SemE}
-    (maskPoly : (Fin 10 → SemE) → SemE) (B : PackBasis F)
+    (maskClaims : (Fin 29 → SemE) → (Fin 10 → SemE) → SemE) (B : PackBasis F)
     (P : Prefix SemE SemE (TypedContext SemE Sfield) (SemMsgZ SemE)) (sm : SemMsgZ SemE)
     (hi : P.rounds.length < 25) :
-    mean (fun s : State => indicator (semanticBadZ maskPoly B P sm (semChal s))) ≤
+    mean (fun s : State => indicator (semanticBadZ maskClaims B P sm (semChal s))) ≤
       combinedD2BudgetZ P.rounds.length := by
   have hq : 0 ≤ (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4 :=
     div_nonneg (add_nonneg zero_le_one deltaQ_nonneg) (pow_nonneg (Nat.cast_nonneg _) _)
-  have hz (h : ∀ c, ¬ semanticBadZ maskPoly B P sm c) :
-      mean (fun s : State => indicator (semanticBadZ maskPoly B P sm (semChal s))) = 0 := by
+  have hz (h : ∀ c, ¬ semanticBadZ maskClaims B P sm c) :
+      mean (fun s : State => indicator (semanticBadZ maskClaims B P sm (semChal s))) = 0 := by
     rw [mean_congr (fun s => indicator_iff (iff_false_intro (h (semChal s))))]
     simp only [indicator_false, mean_const]
   by_cases h14 : P.rounds.length < 14
@@ -50,7 +50,7 @@ theorem semantic_round_densityZ {Sfield : Fin 29 → Subfield SemE} {F : Subfiel
           | some cs =>
               apply le_trans _ (etaCandidates_semChal_mass P.statement (baseRoundsZ P.rounds)
                 (fun t => originalTotal P.statement.pub B t (fun j => cs.getD j.val 0))
-                claim (maskTotal maskPoly))
+                claim (maskTotal maskClaims))
               apply mean_mono
               intro s
               apply indicator_mono
@@ -76,7 +76,7 @@ theorem semantic_round_densityZ {Sfield : Fin 29 → Subfield SemE} {F : Subfiel
               positivity
           | some claim =>
               let ts := candidates P.statement (baseRoundsZ P.rounds) .none
-              let G := fun t => virtualPolyZ maskPoly P.statement.pub B t
+              let G := fun t => virtualPolyZ maskClaims P.statement.pub B t
                 (fun j => cs.getD j.val 0) (cs.getD 14 0)
               let j : Fin 10 := ⟨P.rounds.length - 15, by omega⟩
               let pref : Fin j.val → SemE := fun k => cs.getD (15 + k.val) 0

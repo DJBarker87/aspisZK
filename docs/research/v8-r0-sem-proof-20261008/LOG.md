@@ -4101,3 +4101,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3264 | `R0P/MaskBadSets` | 0 / 0 | 0:03.35 | 6840252 | 0 | 4 | `dd47cc108b03b073164f559b5c675edda7bd1ee14fdf25fec073f2aeff281906` |
 
 Source revision(s): `45337c6bc0eab7a8b55e5f4b4250c42531d327c0`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskDensity (host attempt 3265)
+
+All semantic sampler bounds are rechecked against the candidate-specific eta mask sum. etaCandidates_semChal_mass is applied directly with maskTotal maskClaims; no mask property is needed for D2. The budgets remain unchanged. Attempt 3265 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3265 | `R0P/MaskDensity` | 0 / 0 | 0:04.72 | 6855840 | 0 | 1 | `53870eae1b30540163d7d492af8d031ffb87cf6a85ceb64e8a934c44913dffc6` |
+
+Source revision(s): `ea79e467399bab333165d51750593f26cd1277d0`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
