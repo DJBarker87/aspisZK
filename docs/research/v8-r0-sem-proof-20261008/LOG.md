@@ -3763,3 +3763,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3228 | `R0P/MaskMaxErr` | 0 / 0 | 0:03.28 | 6845092 | 0 | 6 | `0f07ce9581f079a56d57c2e07acfdcccc824d3e4706d63951556673797fd9264` |
 
 Source revision(s): `1b49bf79be2f11b5254d96270b591872ee4c5a5e`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24 continuation: all semantic sampler densities (3229–3230)
+
+semantic_round_densityZ proves the authorized combinedD2BudgetZ bound for every semantic prefix below 25. Rows 0–13 transfer the frozen semantic density through baseRoundsZ; eta applies etaCandidates_semChal_mass directly; alpha applies the degree-27 candidate union bound and candidates_card. Failed degree checks and failed parsers produce empty classifier events. Attempt 3229 needed the mapped-prefix length and frozen budget normalized before transitivity in the early branch; 3230 passes its standard-axiom audit with no errors or warnings. No hMask or other polynomial fact is needed by root counting; hMask remains for masked sumcheck soundness.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3229 | `R0P/MaskDensity` | 1 / 1 | 0:06.88 | 6820636 | 0 | 1 | `4ebb9305fd7bc079ba98d0e60ae877875cd13eb4b13c08da023429f8e02a1658` |
+| 3230 | `R0P/MaskDensity` | 0 / 0 | 0:04.66 | 6855604 | 0 | 1 | `4431e71d58235625a8bc758c689e0c715c2b05d6e4b7975acb144b0c04893a5c` |
+
+Source revision(s): `8f4194458620d41dd89bbd03c6fcf9dec28d6739`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
