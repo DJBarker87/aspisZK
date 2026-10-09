@@ -124,6 +124,20 @@ instruction. These data do not justify a two-transaction split for this shape.
 The intended q22 schedule and any complete Pool transaction still need their
 own measurements before making that scope decision.
 
+### M1 rejection witness (M2 prerequisite)
+
+[rate512-q16-reject-1.json](rate512-q16-reject-1.json) uses the **same M1 ELF
+and diagnostic tag 240** as the five acceptance runs. Exactly one byte was
+flipped at proof offset 6,738, inside the first opened C1 leaf (52 → 53).
+The changed M31 limb remains canonical (70,641,973). Both simulation and
+execution reject with `InstructionError(2, InvalidInstructionData)`, with
+identical logs and **628,047 verifier CU — unmined diagnostic path (PoW
+rejection disabled)**. Replay, terminal and relation checks complete; Merkle
+authentication does not. This is an authentication rejection, not malformed
+field encoding or CU exhaustion. The sealed account remains unchanged.
+[Driver build](m1-reject-driver-build.json) and [rejection resources](m1-rejection.json)
+record the separate capped, zero-swap scopes; the existing SBF was not rebuilt.
+
 ## PoW omission: operation count and additive bound
 
 The fixture is deliberately unmined (`UnminedZero`). Native diagnostic
