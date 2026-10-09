@@ -3881,3 +3881,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3247 | `R0P/MaskNoHit` | 0 / 0 | 0:03.23 | 6842872 | 0 | 3 | `97ad4f5e20491354ec2ab0d4b3f087af66c77b316b49538a8892434e547600b4` |
 
 Source revision(s): `51be9ce5b0994fe2c390de05ac614c584e0b5d61`, `9257f54ea2738e8e00ba460cde4f0ea39f1c3e45`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: early candidate events preserve the frozen classifier
+
+MaskEarly transfers each candidate event before row 14 into semanticBadZ. Before C2 it uses the frozen padC2Trace argument; after C2 it uses the same committed candidate list. The strategy is irrelevant in these rows. Attempt 3248 exposed dependent index transport; 3249 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3248 | `R0P/MaskEarly` | 1 / 1 | 0:02.79 | 6802080 | 0 | 1 | `2c037481e25cc1cb08c246266af84a7d50bafb9edc5723180d5c479d9a82c8fc` |
+| 3249 | `R0P/MaskEarly` | 0 / 0 | 0:03.01 | 6835832 | 0 | 1 | `f88b1c356d0e1dc68c87c9147192c72de43a4753950bfbdb3ed360f7188505cc` |
+
+Source revision(s): `47c1241c9267992a2efa145e5804f72d82a0b119`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
