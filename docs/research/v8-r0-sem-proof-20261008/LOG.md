@@ -3738,3 +3738,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3225 | `R0P/MaskView` | 0 / 0 | 0:04.61 | 6872088 | 0 | 19 | `17dc48a803d28ec18bc3c6c5f0dfeee5ee0207d8f69cdb3207dcdfb65e643b11` |
 
 Source revision(s): `2d4ff9bab76ba7b6514570b38ebe1349d8fd4434`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24 continuation: shifted semantic classifier and alpha counts (3226)
+
+MaskBadSets defines semanticBadZ with the exact guard 15≤P.rounds.length → degreeOK (unmaskSem sm). Within the semantic schedule the guard is active precisely on rows 15–24, the ten alpha rows whose current polynomial is degree-checked by the verifier. It is vacuous on rows 0–14. Row 14 instead requires a parsed .maskSum claim and uses etaSomeBad over the committed-word candidates; no verifier polynomial degree check suppresses this eta event. Earlier rows reuse semanticBad through the inner-message projection; alpha rows use the masked virtual polynomial, the already sampled eta, and alphaSomeBad. The degree-27 alpha root count is multiplied by candidate cardinality symbolically and transferred through semChal. Every predicate used at a concrete filter is def-wrapped. Attempt 3226 passes four standard-axiom audits without errors or warnings.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3226 | `R0P/MaskBadSets` | 0 / 0 | 0:03.40 | 6839732 | 0 | 4 | `cbe7c19b7d3e153f5ff782795181b709015bb9f316d56159b8701e7f650780cb` |
+
+Source revision(s): `1098cee2cb58d8d3c78842f8accb48b1ae5c0d80`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
