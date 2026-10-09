@@ -3364,3 +3364,21 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2717 | `R0P/CircleSampler` | 0 / 0 | 0:12.09 | 6832504 | 0 | 20 | `ee0e9a4be9447d043fbcf19fa2ff583f04456dd62bd8c27d9fd622781accde1d` |
 
 Source revision(s): `ab6bbce28a64f8d208c49097ea64713af711321f`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G22 continuation: D3 and semantic dependency rebuild (2718–2724)
+
+All unchanged semantic dependencies passed against the new R0C interface. SemD3Glue imports CircleSampler and sets the concrete sourceData.circleFallback1 to the checked second fallback. Generic source lemmas use sourceDataWithFallback with the fallback supplied as data; the concrete d3 obligation has no added premise. Attempt 2724 passes all 56 axiom lines with only standard axioms, no errors or warnings.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-cont-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2718 | `R0P/SemAccept` | 0 / 0 | 0:02.87 | 6812844 | 0 | 2 | `02a046a9703bf95c8f5fa3cb489084e0862379ae6f020a48f0a4374b542019b4` |
+| 2719 | `R0P/SemHonest` | 0 / 0 | 0:03.62 | 6830820 | 0 | 14 | `63c890ceebfe82d2ef16e73aed51b4acac0e6bc0af8c5fb3b0d5eca05034234f` |
+| 2720 | `R0P/SemDeg` | 0 / 0 | 0:09.84 | 6874348 | 0 | 47 | `ed059e7d1a94b7f3819398fb7f03762c743ab04d51d0ccd1ba795e8f5d96294e` |
+| 2721 | `R0P/SemDegFamilies` | 0 / 0 | 0:13.19 | 7002012 | 0 | 44 | `60daa294e557252938f4d87fb9eb93df7aca5eff51795abf595c140a3b15c3e1` |
+| 2722 | `R0P/SemVirtualDeg` | 0 / 0 | 0:03.17 | 6813124 | 0 | 3 | `c7660c31f4d9c72d6b8b654450ffb6d4e6dc180de99b158c84e79d4f4874f4ee` |
+| 2723 | `R0P/MessageDescent` | 0 / 0 | 0:03.01 | 6748832 | 0 | 1 | `d3cb1623aeb04289250ed3f5bc2a9c532b62da2c5465933f2240fca47da856c3` |
+| 2724 | `R0P/SemD3Glue` | 0 / 0 | 0:22.47 | 6942000 | 0 | 56 | `6e17304965d8d6771475e85b38796d044abe1f2a634f336efdbad4b2f310475d` |
+
+Source revision(s): `b583f7b39a4e58fd3f652b58a94be101d7c6cf0c`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.

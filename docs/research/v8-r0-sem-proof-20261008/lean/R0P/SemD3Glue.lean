@@ -1,4 +1,5 @@
 import R0P.SemD2
+import R0P.CircleSampler
 import R0P.SemAccept
 import R0P.SemHonest
 import R0P.SemVirtualDeg
@@ -84,18 +85,34 @@ theorem bad4_empty_false
 
 #print axioms bad4_empty_false
 
-/-- The pair-forest B2 operations, using the lead's literal prefix classifier. -/
-def sourceData [Fintype K] [DecidableEq K]
+/-- Generic source operations with the reserved fallback supplied as data. -/
+def sourceDataWithFallback [Fintype K] [DecidableEq K]
     [Algebra (ZMod AspisCircleGroupOrder.P) K]
+    (fallback1 : AspisR0.ChordGeometry.Point K)
     {Sfield : Fin 29 → Subfield K} {F : Subfield K} (B : PackBasis F) :
     R0C.SemStatement.SourceData (K := K) (E := K)
       (TypedContext K Sfield) (SemMsg K) (Trace K) Sfield where
   semanticRounds := 24
+  circleFallback1 := fallback1
   semanticBad := SemSource.semanticBad B
   paymentWitness := fun x t => InputNoteExtracted x.pub t
   openingView := SemSource.openingView
   decision := SemSource.decision B
 
+/-- The concrete source fixes the second-row fallback to the checked G22 point. -/
+def sourceData {Sfield : Fin 29 → Subfield AspisWideTower.WideExact}
+    {F : Subfield AspisWideTower.WideExact} (B : PackBasis F) :
+    R0C.SemStatement.SourceData (K := AspisWideTower.WideExact) (E := AspisWideTower.WideExact)
+      (TypedContext AspisWideTower.WideExact Sfield) (SemMsg AspisWideTower.WideExact)
+      (Trace AspisWideTower.WideExact) Sfield where
+  semanticRounds := 24
+  circleFallback1 := R0P.SemSource.circleFallback1
+  semanticBad := SemSource.semanticBad B
+  paymentWitness := fun x t => InputNoteExtracted x.pub t
+  openingView := SemSource.openingView
+  decision := SemSource.decision B
+
+#print axioms sourceDataWithFallback
 #print axioms sourceData
 
 /-- Forget the duplex state while retaining every message and challenge value. -/
@@ -119,12 +136,14 @@ theorem valuePrefix_round {X M C S : Type} (p : FS.Prefix X M (C × S)) :
 
 /-- The B2 state predicate on a transcript that also retains sampler state.
 The error schedule is data: D3 depends only on the doomed predicate. -/
-def duplexRows [Fintype K] [DecidableEq K]
-    [Algebra (ZMod AspisCircleGroupOrder.P) K]
-    {Sfield : Fin 29 → Subfield K} {F : Subfield K} (B : PackBasis F)
+def duplexRows
+    {Sfield : Fin 29 → Subfield AspisWideTower.WideExact}
+    {F : Subfield AspisWideTower.WideExact} (B : PackBasis F)
     {S I A : Type} (budget : Nat → ℚ) :
-    FS2.RoundByRound' (TypedContext K Sfield) (R0C.SemStatement.Msg K K (SemMsg K))
-      (R0C.SemStatement.Chal K K × S) I A where
+    FS2.RoundByRound' (TypedContext AspisWideTower.WideExact Sfield)
+      (R0C.SemStatement.Msg AspisWideTower.WideExact AspisWideTower.WideExact
+        (SemMsg AspisWideTower.WideExact))
+      (R0C.SemStatement.Chal AspisWideTower.WideExact AspisWideTower.WideExact × S) I A where
   doomed := fun p table => R0C.SemStatement.doomed (sourceData B) (valuePrefix p) table
   ε := budget
 
@@ -778,14 +797,14 @@ theorem candidate_bad_to_prefix {Sfield : Fin 29 → Subfield K} {F : Subfield K
 
 /-- No hit in the containing transcript excludes every candidate round event. -/
 theorem no_hit_candidate_rounds {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (B : PackBasis F) (x : TypedContext K Sfield)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (B : PackBasis F) (x : TypedContext K Sfield)
     (rs tail : List (Msg K K (SemMsg K) × Chal K K)) (hlen : rs.length = 24)
     (r : Fin 24 → K) (hparse : semChals rs = some (List.ofFn r))
     (hw gw : InitialWord K) (hc2 : c2Of rs = some (hw,gw))
     (polys : Fin 10 → K[X]) (hpolys : semPolys rs = some polys)
     (hdegree : ∀ j, (polys j).natDegree ≤ 27)
     (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
-    (hno : ¬ hitFrom (sourceData B) x [] (rs ++ tail)) :
+    (hno : ¬ hitFrom (sourceDataWithFallback fallback1 B) x [] (rs ++ tail)) :
     ∀ i : Fin 24, ¬ candidateRoundBad x.pub B t polys r i := by
   intro i hbad
   obtain ⟨sm, hslot⟩ := semChals_getElem rs (List.ofFn r) hparse ⟨i.val, by omega⟩
@@ -795,7 +814,7 @@ theorem no_hit_candidate_rounds {Sfield : Fin 29 → Subfield K} {F : Subfield K
   have hb := candidate_bad_to_prefix B x rs hlen r hparse hw gw hc2 polys hpolys hdegree
     t ht i sm hcurrent hbad
   apply hno
-  apply roundBad_hitFrom (sourceData B) x (rs ++ tail) [] i.val (by simp only [List.length_append]; omega)
+  apply roundBad_hitFrom (sourceDataWithFallback fallback1 B) x (rs ++ tail) [] i.val (by simp only [List.length_append]; omega)
   have htake : (rs ++ tail).take i.val = rs.take i.val :=
     List.take_append_of_le_length (by omega)
   have hget : ((rs ++ tail)[i.val]'(by simp only [List.length_append]; omega)) = rs[i.val]'(by omega) :=
@@ -864,13 +883,13 @@ three named G14 obligations. The first opening challenge premise is discharged
 from the concrete round-26 sampler in `d3`, below. -/
 theorem accepted_no_hit_extracted (prime : Nat) [CharP K prime]
     (hprime : prime = 2^31-1) {Sfield : Fin 29 → Subfield K}
-    (B : PackBasis (Sfield 0))
+    (fallback1 : Point K) (B : PackBasis (Sfield 0))
     (hrows : ∀ (x : TypedContext K Sfield) (t : Trace K), HonestRows x.pub B t)
     (hdeg : ∀ (x : TypedContext K Sfield) (t : Trace K), VirtualDeg x.pub B t)
     (hchk : ∀ (x : TypedContext K Sfield) (t : Trace K), ChecksAccept x.pub B t)
     (P : Prefix K K (TypedContext K Sfield) (SemMsg K)) (m : Msg K K (SemMsg K))
     (hdec : SemSource.decision B P m = true)
-    (hno : ¬ hitFrom (sourceData B) P.statement [] P.rounds)
+    (hno : ¬ hitFrom (sourceDataWithFallback fallback1 B) P.statement [] P.rounds)
     (hfirst : ∀ (Q : FS.Prefix (R0FS.Stmt K Sfield) (R0FS.Msg K) (R0FS.Chal K)),
       openingView P = some Q → ∀ (y : Fin 29 → Fin 2 → K) (γ : K),
         Q.rounds.head? = some (.values y, .field γ) → γ ≠ 0) :
@@ -880,7 +899,7 @@ theorem accepted_no_hit_extracted (prime : Nat) [CharP K prime]
     of_decide_eq_true hdec
   have hnogood : ¬ R0FS.good Q.statement Q.rounds := by
     intro hg
-    exact hno (opening_good_hitFrom (sourceData B) rfl rfl P Q hview hg)
+    exact hno (opening_good_hitFrom (sourceDataWithFallback fallback1 B) rfl rfl P Q hview hg)
   obtain ⟨t, ht⟩ := opening_decision_witness Q om hodec hcard hnogood (hfirst Q hview)
   obtain ⟨sem, cs', hw, gw, y, y₀, z₀, z₁, hcs', hb, hne, h₀, h₁, os,
     hsem, hparse', hc2, hrounds, hQ⟩ := openingView_some_structure P Q hview
@@ -915,7 +934,7 @@ theorem accepted_no_hit_extracted (prime : Nat) [CharP K prime]
   have hparsenorm : semChals sem = some (List.ofFn r) := by rw [hrList]; exact hparse
   have hdegree : ∀ j, (polys j).natDegree ≤ 27 := hsum.1
   have hgood : ∀ i : Fin 24, ¬ candidateRoundBad P.statement.pub B t polys r i := by
-    apply no_hit_candidate_rounds B P.statement sem _ hsem r hparsenorm hw gw hc2
+    apply no_hit_candidate_rounds fallback1 B P.statement sem _ hsem r hparsenorm hw gw hc2
       polys hpolys hdegree t ht.1
     simpa only [hrounds] using hno
   have hA := witness_baseTyped P.statement _ t ht
@@ -1056,7 +1075,7 @@ theorem d3 (prime : Nat) [CharP SemE prime] (hprime : prime = 2^31-1)
   let P := valuePrefix ((combinedProtocol B p msg decode).transcript H x π 31)
   have hd' : (¬ ∃ t, InputNoteExtracted P.statement.pub t) ∧
       ¬ hitFrom (sourceData B) P.statement [] P.rounds := hd
-  obtain ⟨t, ht⟩ := accepted_no_hit_extracted prime hprime B
+  obtain ⟨t, ht⟩ := accepted_no_hit_extracted prime hprime circleFallback1 B
     (fun x t => honestRows x.pub B t) (fun x t => virtualDeg x.pub B t)
     (fun x t => checksAccept x.pub B t) P
     (msg π 31) hdec hd'.2 (by
