@@ -4161,3 +4161,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3269 | `R0P/MaskOpeningDensity` | 0 / 0 | 0:05.37 | 6843356 | 0 | 3 | `5a3b115836cf2ccf8d97a535bba9233b0092125a09a169b20b968c9b49579e48` |
 
 Source revision(s): `98d78d5017208624a8e40f06e4a3bb0abe58eb2e`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskD2Instance (host attempt 3270)
+
+The complete 32-row FS2.D2 instance now quantifies maskClaims and uses the candidate-specific eta union. All constituent bounds were recompiled first. No hMask or other property of maskClaims is needed for the D2 density statement. Attempt 3270 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3270 | `R0P/MaskD2Instance` | 0 / 0 | 0:03.44 | 6838004 | 0 | 1 | `f7b8f055ee3ad2692b823322c6199383fdf8e94cdf84d567c2f41e6e54bb593e` |
+
+Source revision(s): `b45b9b85cf57881e6b25635a650e9f49f2bed81c`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
