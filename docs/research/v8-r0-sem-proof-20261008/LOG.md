@@ -3528,3 +3528,16 @@ Final manifest audit output:
 ```
 
 Raw attempt logs, time reports, source snapshots, and SHA receipts remain uncommitted in host `evidence/`; this continuation’s verified copies are in `/tmp/r0-g22-cont-20261009/evidence/`. Source/hash and axiom preflight inventories are retained beside them. No Lean source outside the job directory was edited.
+
+### G24: masked protocol foundation (3200–3201)
+
+Base d2b7413259a75100db9d1c722d88932bfea28fb9, v8-reference. Fixed privacy LOG D3 (238–252) supplies the 32-row schedule: C2 is sent before theta at index 2, eta at 14, alpha at 15–24, circles at 25–26, opening at 27–31. New MaskProtocol extends only the inner semantic message type and keeps the R0C outer tags. Its parameterized sampler covers both schedules; combinedSamplerAt_31 proves exact equality with the frozen 31-row sampler. combinedProtocolZ has r=32 and retains the existing extraction function. The terminal and sumcheck checks use maskPoly + eta*original and the claim m′. MaskDegree is the atomic wrapper for the existing SemDegree.VDeg 10 (fun _ => 27): SemBadSets.VDeg does not exist in this base. virtualPolyZ_vdeg/indDeg use SemVirtualDeg.vdeg_virtualPoly (38–42), vdeg_smul, and vdeg_add. The frozen alpha degree was already 27 (SemD3:44–56, SemDecision:97–109, SemRounds:757–760), not 26. Totals reuse Zerocheck.bsumB (32–35,59–72), the same sum in SemRounds:790–795; SemD2 supplies candidate aggregation rather than a separate trace-sum function. Attempt 3200 lacked named dependent-if guards in schedule bounds; 3201 supplies them and passes with standard axioms only, no errors or warnings. The user explicitly corrected the eta sampler denominator to P⁴ during this run; ideal uniform SemE density still uses card SemE=P⁸. This checkpoint does not claim D2, D3Z, or a masked FS theorem. No frozen soundness source, R0C source, R0Z source, or Rust file was edited.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3200 | `R0P/MaskProtocol` | 1 / 1 | 0:04.02 | 6805392 | 0 | 12 | `b49097e4f325a3c9664872726b822c89f11d342d2c5625d1ebfb0f39554f1478` |
+| 3201 | `R0P/MaskProtocol` | 0 / 0 | 0:04.20 | 6841932 | 0 | 12 | `c00c51800d7895c38aa079d747e509e61137a3aaaeb500d656c5acd7d61796d0` |
+
+Source revision(s): `d2b7413259a75100db9d1c722d88932bfea28fb9`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
