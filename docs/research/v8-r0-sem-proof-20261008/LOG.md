@@ -3574,3 +3574,19 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3206 | `R0P/MaskD2` | 0 / 0 | 0:03.42 | 6833744 | 0 | 10 | `1adbf173b5ed4d92157f8ffe13e1d79d98cd8df370377848007b19780f064cba` |
 
 Source revision(s): `8e879d8d4f3ab8dfee1e23d378609add64aa9719`, `91af84ab4a6b88f7274ea34e1b26354e5cb19035`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: round-parameterized completing decoder (3207–3211)
+
+MaskDuplexDecoder parameterizes the inner semantic message type and total round count, keeps the last eight-pair opening chain, and supplies combinedDecZ at 32. The chain law is proved by induction. combinedChainBS_31 and combinedDec_31 recover the frozen chain and decoder exactly; no frozen module was modified. Attempts 3207–3210 exposed match-elaboration and helper-unfolding differences in the reinstantiation proof. The final proof explicitly eliminates parse/decode/walk cases, rewrites their equations, and reuses the existing combinedAccFrom helper. Attempt 3211 is exit=0 with no errors or warnings and six standard-axiom audit lines. The opening-chain comparison is generic in the opening offset. This is independent of the pending global eta candidate budget.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3207 | `R0P/MaskDuplexDecoder` | 1 / 1 | 0:04.72 | 6804684 | 0 | 6 | `36f144fec760015f852e37459368b3f4fbfa41b7bf120c4f7ab9961be943df4d` |
+| 3208 | `R0P/MaskDuplexDecoder` | 1 / 1 | 0:04.85 | 6804488 | 0 | 6 | `8ffe4f935fa9d89a592684564a37e2ed86243d3fbc7a4caa4f984cb97c905e91` |
+| 3209 | `R0P/MaskDuplexDecoder` | 1 / 1 | 0:04.85 | 6804196 | 0 | 6 | `34e98c68fd04bc88f6f28a11bd043cca2e30c3f862739fc22626e7fd6047107a` |
+| 3210 | `R0P/MaskDuplexDecoder` | 1 / 1 | 0:04.89 | 6805420 | 0 | 6 | `6f3c59c367448f0abaaa26724027970a48b925e9c080da3fb866b7b1c5f40857` |
+| 3211 | `R0P/MaskDuplexDecoder` | 0 / 0 | 0:04.91 | 6838708 | 0 | 6 | `17b1b947a0e15271565d9c956aabaeccd5a9d3ce58ad75f4b0b6b63fd7aafc6c` |
+
+Source revision(s): `046dc1f2d2f7240865a10f72cc2832a2128c9640`, `365ca4808bf8383f0f4438e96685a3fe41166566`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
