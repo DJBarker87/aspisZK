@@ -13,6 +13,10 @@ use std::{fs, path::Path};
 fn main() -> Result<()> {
     ensure!(!cfg!(debug_assertions));
     let args: Vec<_> = std::env::args().collect();
+    ensure!(
+        !Path::new(&args[3]).exists(),
+        "unchanged measurement rerun forbidden"
+    );
     let elf = fs::read(&args[1])?;
     let keypath = Path::new(&args[2]);
     let payer = if keypath.exists() {
@@ -60,6 +64,9 @@ fn main() -> Result<()> {
     ];
     let mut records = Vec::new();
     for (op, name) in names.iter().enumerate() {
+        if args.get(4).is_some_and(|selected| selected != name) {
+            continue;
+        }
         for n in [64u32, 128] {
             let mut costs = [0u64; 2];
             let mut runs = Vec::new();

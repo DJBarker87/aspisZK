@@ -4,7 +4,7 @@ import hashlib, json, subprocess
 from pathlib import Path
 root=Path(__file__).resolve().parent.parent
 files={}
-for folder in ['crates','programs','audit/poseidon-pair-probe/program','xtask','tools/v8-state-only-cu-probe']:
+for folder in ['crates','programs','audit/poseidon-pair-probe/program','audit/r0-primitive-probe','xtask','tools/v8-state-only-cu-probe']:
     for p in (root/folder).rglob('*'):
         if p.is_file() and p.suffix in ['.rs','.toml','.lock'] and 'target' not in p.parts:
             files[str(p.relative_to(root))]=hashlib.sha256(p.read_bytes()).hexdigest()

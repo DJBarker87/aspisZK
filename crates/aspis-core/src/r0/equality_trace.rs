@@ -12,3 +12,17 @@ pub fn fields(values: &[WideExact]) {
 pub fn take() -> Vec<[u8; 32]> {
     TRACE.with(|v| core::mem::take(&mut *v.borrow_mut()))
 }
+
+std::thread_local! { static REFERENCE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
+pub fn is_reference() -> bool {
+    REFERENCE.with(|x| x.get())
+}
+pub struct ReferenceGuard(bool);
+pub fn reference() -> ReferenceGuard {
+    ReferenceGuard(REFERENCE.with(|x| x.replace(true)))
+}
+impl Drop for ReferenceGuard {
+    fn drop(&mut self) {
+        REFERENCE.with(|x| x.set(self.0));
+    }
+}

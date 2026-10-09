@@ -255,6 +255,7 @@ pub fn r0_verify_re3(
     hash: HashFn,
     trace: Option<fn(Phase)>,
 ) -> Result<verifier::Challenges, Error> {
+    let _reference = aspis_core::r0::equality_trace::reference();
     let emit = |p| {
         if let Some(trace) = trace {
             trace(p);
@@ -305,4 +306,3 @@ pub fn r0_verify_re3(
     emit(Phase::V2);
     Ok(prepared.challenges)
 }
-
