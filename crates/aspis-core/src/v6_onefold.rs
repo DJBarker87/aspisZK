@@ -353,7 +353,9 @@ impl<'a> PackedM31Reader<'a> {
 /// layout and the `P` rejection.  The V6/V7 query sections have fixed widths
 /// 104 and 48, so both are exact multiples of eight with no padding bits.
 #[inline(always)]
-fn decode_packed_m31_eight_aligned<const N: usize>(bytes: &[u8]) -> Result<[u32; N], V6WireError> {
+pub(crate) fn decode_packed_m31_eight_aligned<const N: usize>(
+    bytes: &[u8],
+) -> Result<[u32; N], V6WireError> {
     if N == 0 || N % 8 != 0 || bytes.len() != (N / 8) * 31 {
         return Err(V6WireError::WrongLength);
     }

@@ -237,6 +237,10 @@ pub mod label {
     /// record. The profile-specific domain and complete 1,520-byte record are
     /// absorbed before the C1 root and before lambda/chi.
     pub const V7_PAIR_LIVE_APPEND_SNAPSHOT: u8 = 61;
+    /// V8 research profile: `sample || 29 canonical QM31 values`.  Sample
+    /// zero is absorbed before deriving the second OOD point, so its complete
+    /// component fingerprint is fixed before that independent challenge.
+    pub const V8_COMPONENT_OOD_VECTOR: u8 = 62;
 }
 
 const DOM_ABSORB: u8 = 0x00;

@@ -1,5 +1,5 @@
 use aspis_core::{
-    circle::SecureCirclePoint,
+    circle::{secure_ood_circle_point_from_parameter, SecureCirclePoint},
     field::{CM31, M31, QM31},
     state_only_prefix::{
         StateOnlyPrefixScheduleResult, StateOnlyTranscriptScheduleResult,
@@ -8,7 +8,10 @@ use aspis_core::{
     statement_sumcheck::PaymentConstraintChallenges,
 };
 use aspis_prover::state_only_hiding_rank::{
-    probe_pool_v1_pair_forest_root_message_hiding_rank, probe_pool_v1_pair_root_message_hiding_rank,
+    probe_pool_v1_pair_forest_root_message_hiding_rank,
+    probe_pool_v1_pair_root_message_hiding_rank,
+    probe_v8_a100_pool_v1_pair_forest_root_message_hiding_rank,
+    probe_v8_a100_pool_v1_pair_root_message_hiding_rank,
 };
 
 fn pseudorandom_m31(seed: u64) -> M31 {
@@ -69,6 +72,17 @@ fn fixed_full_field_witness_schedule() -> StateOnlyTranscriptScheduleResult {
         query_count: 16,
         state_after_queries: [0u8; 32],
     }
+}
+
+fn fixed_v8_a100_q22_schedule() -> StateOnlyTranscriptScheduleResult {
+    let mut schedule = fixed_full_field_witness_schedule();
+    schedule.queries[..22].copy_from_slice(&aspis_core::v8_a100::V8_A100_MAX_FRONTIER_FIXTURE);
+    schedule.query_count = 22;
+    schedule.circle_ood_points = [
+        secure_ood_circle_point_from_parameter(qm31(101)).unwrap(),
+        secure_ood_circle_point_from_parameter(qm31(103)).unwrap(),
+    ];
+    schedule
 }
 
 #[test]
@@ -136,4 +150,63 @@ fn pool_pair_forest_exact_layout_spans_complete_root_message_view() {
     assert!(report.witness_h_zero_sumcheck_terminal_guard);
     assert!(report.witness_mask_sumcheck_equals_terminal_kernel);
     assert!(report.witness_semantic_sparse_dense_guard);
+}
+
+#[test]
+fn v8_a100_q22_two_ood_pair_layout_rank_witness() {
+    let report =
+        probe_v8_a100_pool_v1_pair_root_message_hiding_rank(&fixed_v8_a100_q22_schedule()).unwrap();
+    println!(
+        "V8 pair hiding rank: pcs={} q={} raw={} c1_raw={} g_raw={} sc={}/{} pcs={}/{} ambient_deficit={} physical={:?} legal={:?} helper={:?} elapsed_ms={}",
+        report.pcs_schedule,
+        report.query_count,
+        report.raw_opening_minor.source_columns.len(),
+        report.c1_raw_m31,
+        report.g_raw_m31,
+        report.masked_sumcheck_rank,
+        report.masked_sumcheck_m31,
+        report.joint_pcs_rank,
+        report.joint_pcs_declared_rank,
+        report.baseline_ambient_deficit_m31,
+        report.witness_coupled_physical_contained,
+        report.witness_coupled_legal_contained,
+        report.witness_coupled_helper_contained,
+        report.elapsed_millis,
+    );
+    assert_eq!(report.query_count, 22);
+    assert_eq!(report.c1_raw_m31, 108);
+    assert_eq!(report.g_raw_m31, 372);
+    assert_eq!(report.witness_coupled_physical_contained, Some(true));
+    assert_eq!(report.witness_coupled_legal_contained, Some(true));
+    assert_eq!(report.witness_coupled_helper_contained, Some(true));
+}
+
+#[test]
+fn v8_a100_q22_two_ood_pair_forest_layout_rank_witness() {
+    let report =
+        probe_v8_a100_pool_v1_pair_forest_root_message_hiding_rank(&fixed_v8_a100_q22_schedule())
+            .unwrap();
+    println!(
+        "V8 pair-forest hiding rank: pcs={} q={} raw={} c1_raw={} g_raw={} sc={}/{} pcs={}/{} ambient_deficit={} physical={:?} legal={:?} helper={:?} elapsed_ms={}",
+        report.pcs_schedule,
+        report.query_count,
+        report.raw_opening_minor.source_columns.len(),
+        report.c1_raw_m31,
+        report.g_raw_m31,
+        report.masked_sumcheck_rank,
+        report.masked_sumcheck_m31,
+        report.joint_pcs_rank,
+        report.joint_pcs_declared_rank,
+        report.baseline_ambient_deficit_m31,
+        report.witness_coupled_physical_contained,
+        report.witness_coupled_legal_contained,
+        report.witness_coupled_helper_contained,
+        report.elapsed_millis,
+    );
+    assert_eq!(report.query_count, 22);
+    assert_eq!(report.c1_raw_m31, 108);
+    assert_eq!(report.g_raw_m31, 372);
+    assert_eq!(report.witness_coupled_physical_contained, Some(true));
+    assert_eq!(report.witness_coupled_legal_contained, Some(true));
+    assert_eq!(report.witness_coupled_helper_contained, Some(true));
 }

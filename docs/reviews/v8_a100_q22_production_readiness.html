@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aspis V8-A100 q22 production-readiness review</title>
+  <style>
+    :root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+    body { max-width: 980px; margin: 0 auto; padding: 2rem; line-height: 1.5; }
+    h1, h2 { line-height: 1.15; }
+    .verdict { border-left: .4rem solid #d97706; padding: .7rem 1rem; background: color-mix(in srgb, #d97706 12%, transparent); }
+    .score { display: inline-block; margin-right: 1rem; padding: .25rem .55rem; border: 1px solid currentColor; border-radius: .35rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; vertical-align: top; padding: .55rem; border-bottom: 1px solid #8886; }
+    code { font-size: .92em; }
+    .critical { color: #dc2626; font-weight: 700; }
+    .high { color: #d97706; font-weight: 700; }
+    .medium { color: #2563eb; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>Aspis V8-A100 q22 production-readiness review</h1>
+  <p class="verdict"><strong>Classification C — promising but not established.</strong>
+    The 39,934-byte q22/208-bit/two-OOD profile is the best candidate, but it is
+    not ready for a production instruction or mainnet release.</p>
+  <p><span class="score">Security: C</span><span class="score">Quality: B</span>
+    <span class="score">Ready for mainnet: no</span></p>
+
+  <h2>Decisive evidence</h2>
+  <table>
+    <tr><th>Area</th><th>Result</th></tr>
+    <tr><td>Wire</td><td>Exact maximum body 39,934 bytes; complete pair-verifier account 40,662 bytes.</td></tr>
+    <tr><td>Frontier</td><td>Exact q22 maximum 296, attained by a committed fixture.</td></tr>
+    <tr><td>Security arithmetic</td><td>Lean proves the corrected scalar-DEEP named-envelope ledger is at most 2<sup>-104</sup> and not at most 2<sup>-105</sup>; 104.26208146248575 displayed bits.</td></tr>
+    <tr><td>Prototype</td><td>Direct schedule and corrected affine-chord no-new-tree quotient pass reference/optimized tests.</td></tr>
+    <tr><td>Hiding</td><td>A legal Frobenius-conjugate pair refutes ambient rank 108 (actual 104) in both layouts. All 1,022 conservative directions per each of 16 columns pass a focused containment fixture; Lean proves the legal-image criterion, but universal source containment remains open.</td></tr>
+    <tr><td>SBF</td><td>Fresh Linux V7 canonical-fixed audit baseline: 1,153,267 CU same-page and 1,218,981 CU rollover; its wire is exactly +320 bytes over packed V7. The refactored isolated V8 kernels have 2,176/2,112-byte frames and cost 807,012/791,539 CU; canonical parsing alone costs 634,879 CU. No complete V8 transaction measurement exists.</td></tr>
+  </table>
+
+  <h2>Findings and exact fixes</h2>
+  <table>
+    <tr><th>Severity</th><th>Finding</th><th>Required fix</th></tr>
+    <tr><td class="critical">Critical</td><td>Exact q22/two-OOD hiding is not source-closed; ambient surjectivity is a false target.</td><td>Translate the actual q22 row maps, pair-forest inventory, raw difference, and balancing helper, then prove witness-image containment for every legal schedule, including conjugate pairs.</td></tr>
+    <tr><td class="good">Closed</td><td>The affine chord is connected to the actual circle polynomial and natural-basis message representation in both adaptive branches.</td><td>Use the new width-29 message theorem in the source translation; the existing circle-to-line fold commutation applies.</td></tr>
+    <tr><td class="critical">Critical</td><td>The replay provider is constructed, but production types remain V7/q16 and the verifier checks scalar gamma dots rather than full vectors.</td><td>Translate a V8 parsed message and scalar-check classifier, then compose it with the proved at-most-2,800 bad-gamma family event across compiler replay.</td></tr>
+    <tr><td class="high">High</td><td>The research probe is stack-safe and measured, but the production wrapper remains 4,736 bytes and the straightforward combined parser/DEEP probe exhausted 1.4M CU. No complete V8 verifier or Pool transaction exists.</td><td>Fuse canonical parsing with streaming quotient preparation, refactor the production wrapper, and integrate an honest V8 verifier/prover fixture before measuring same-page and rollover transactions.</td></tr>
+    <tr><td class="medium">Medium</td><td>No complete Rust/Lean byte-level proof KAT exists.</td><td>Freeze one deterministic proof and compare transcript states, OOD values, gamma, q22 positions, frontiers, quotient values, body, and final result.</td></tr>
+  </table>
+
+  <h2>Best next task</h2>
+  <p>Translate the V8 parsed message and scalar-check classifier into the
+    existing replay, prove legal-image hiding containment, and fuse canonical
+    parsing with the stack-safe streaming DEEP kernel. Only after the honest
+    V8 transcript/Merkle fixture exists should the maximum-frontier
+    rollover transaction be measured. The full investigation and reproduction
+    commands are in <code>docs/research/v8_a100_q22_feasibility.md</code>.</p>
+</body>
+</html>

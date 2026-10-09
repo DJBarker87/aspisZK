@@ -64,6 +64,7 @@ mod state_only_native_full_x_affine_rank;
 mod state_only_reduced_high_switch_rank;
 mod state_only_two_variable_slice_rank;
 mod state_only_variable_permutation_rank;
+mod v8_per_c1_image_containment;
 pub use spend_polynomial_kernel_rank::{
     probe_spend_common_tail_polynomial_kernel_rank, probe_spend_mixed_polynomial_kernel_rank,
     probe_spend_root_neutral_polynomial_kernel_rank, SpendMixedPolynomialKernelRankReport,
@@ -111,6 +112,10 @@ pub use state_only_two_variable_slice_rank::{
 };
 pub use state_only_variable_permutation_rank::{
     AtomicProfile21VariablePermutationP0Probe, AtomicProfile21VariablePermutationP0RankReport,
+};
+pub use v8_per_c1_image_containment::{
+    probe_v8_a100_pool_pair_forest_per_c1_image_containment,
+    probe_v8_a100_pool_pair_per_c1_image_containment, V8PerC1ImageContainmentReport,
 };
 
 const TRACE_ROWS: usize = 1 << STATE_ONLY_HIDING_SUMCHECK_ROUNDS;
@@ -826,11 +831,17 @@ enum PcsSchedule {
     /// `RootMessage`, but the q16 raw openings are evaluated on V6's log-20
     /// circle domain rather than the legacy log-19 q16 diagnostic domain.
     RootMessageV6Log20,
+    /// V8-A100 exact-sequence target. Relative to V6, the raw view grows to
+    /// q22 and includes two component-wise pre-gamma circle evaluations.
+    RootMessageV8Log20,
 }
 
 impl PcsSchedule {
     fn is_root_message(self) -> bool {
-        matches!(self, Self::RootMessage | Self::RootMessageV6Log20)
+        matches!(
+            self,
+            Self::RootMessage | Self::RootMessageV6Log20 | Self::RootMessageV8Log20
+        )
     }
 }
 
@@ -1753,6 +1764,11 @@ impl CarryEchelon {
 struct RowPublicMaps {
     layer0_m31: Vec<M31>,
     terminal: [QM31; 3],
+    /// Component-wise circle evaluations disclosed before gamma. Existing
+    /// profiles leave this empty; V8-A100 carries two independent values for
+    /// every C1/C2 component and must condition on them separately from the
+    /// later gamma-combined PCS image.
+    pre_gamma_circle_ood: Vec<QM31>,
     pcs_tail: Vec<QM31>,
 }
 
@@ -1774,6 +1790,12 @@ fn row_public_maps_linear_combination(
                 .mul_m31(left_scale)
                 .add(right.terminal[point].mul_m31(right_scale))
         }),
+        pre_gamma_circle_ood: left
+            .pre_gamma_circle_ood
+            .iter()
+            .zip(&right.pre_gamma_circle_ood)
+            .map(|(&left, &right)| left.mul_m31(left_scale).add(right.mul_m31(right_scale)))
+            .collect(),
         pcs_tail: left
             .pcs_tail
             .iter()
@@ -2505,6 +2527,16 @@ fn row_public_maps(
     let inactive_dependent = (0..TRACE_ROWS)
         .find(|row| !active[*row])
         .ok_or(StateOnlyHidingRankGateError::Layout)?;
+    let mut pre_gamma_circle_ood_weights = Vec::new();
+    if pcs_schedule == PcsSchedule::RootMessageV8Log20 {
+        for point in schedule.circle_ood_points {
+            let mut weights = WeightAccumulator::empty(STATE_ONLY_LOG_ROWS);
+            weights
+                .add_circle_tensor(QM31::ONE, point)
+                .map_err(|_| StateOnlyHidingRankGateError::Relation)?;
+            pre_gamma_circle_ood_weights.push(weights);
+        }
+    }
     let mut rows = Vec::with_capacity(TRACE_ROWS);
     for row in 0..TRACE_ROWS {
         let mut layer0_m31 = Vec::with_capacity(indices.layer0.len() * FIBER_SLOTS);
@@ -2528,6 +2560,10 @@ fn row_public_maps(
         rows.push(RowPublicMaps {
             layer0_m31,
             terminal: core::array::from_fn(|point| eq_weight(&terminal_points[point], row)),
+            pre_gamma_circle_ood: pre_gamma_circle_ood_weights
+                .iter()
+                .map(|weights| weights.weight_at(row as u32))
+                .collect(),
             pcs_tail: match pcs_schedule {
                 PcsSchedule::Arity4x4 => row_pcs_tail(
                     encoder,
@@ -2549,7 +2585,9 @@ fn row_public_maps(
                     &hybrid_later_indices,
                     layout,
                 )?,
-                PcsSchedule::RootMessage | PcsSchedule::RootMessageV6Log20 => {
+                PcsSchedule::RootMessage
+                | PcsSchedule::RootMessageV6Log20
+                | PcsSchedule::RootMessageV8Log20 => {
                     let mut message = vec![QM31::ZERO; TRACE_ROWS];
                     if row != inactive_dependent {
                         message[row] = QM31::ONE;
@@ -3292,6 +3330,7 @@ fn extended_row_public_maps(
         rows.push(RowPublicMaps {
             layer0_m31,
             terminal: core::array::from_fn(|point| eq_weight_slice(&terminal_points[point], row)),
+            pre_gamma_circle_ood: Vec::new(),
             pcs_tail: extended_row_pcs_tail(
                 domain_log,
                 row,
@@ -3528,6 +3567,7 @@ fn extended_row_public_maps_sparse_atomic_profile21_at(
         rows.push(RowPublicMaps {
             layer0_m31,
             terminal: core::array::from_fn(|point| eq_weight_slice(&terminal_points[point], row)),
+            pre_gamma_circle_ood: Vec::new(),
             pcs_tail: extended_row_pcs_tail_sparse_at(
                 encoder,
                 domain_log,
@@ -3565,6 +3605,12 @@ fn c1_raw_difference(rows: &[RowPublicMaps], row: usize, dependent: Option<usize
         });
         raw.extend_from_slice(&qm31_coordinates(value));
     }
+    for (index, value) in rows[row].pre_gamma_circle_ood.iter().copied().enumerate() {
+        let value = dependent.map_or(value, |dependent| {
+            value.sub(rows[dependent].pre_gamma_circle_ood[index])
+        });
+        raw.extend_from_slice(&qm31_coordinates(value));
+    }
     raw
 }
 
@@ -3574,7 +3620,9 @@ fn qm31_raw_difference(
     dependent: Option<usize>,
     basis: QM31,
 ) -> Vec<M31> {
-    let mut raw = Vec::with_capacity(4 * (rows[row].layer0_m31.len() + 3));
+    let mut raw = Vec::with_capacity(
+        4 * (rows[row].layer0_m31.len() + 3 + rows[row].pre_gamma_circle_ood.len()),
+    );
     for (index, value) in rows[row].layer0_m31.iter().copied().enumerate() {
         let value = dependent.map_or(value, |dependent| {
             value.sub(rows[dependent].layer0_m31[index])
@@ -3584,6 +3632,12 @@ fn qm31_raw_difference(
     for point in 0..3 {
         let value = dependent.map_or(rows[row].terminal[point], |dependent| {
             rows[row].terminal[point].sub(rows[dependent].terminal[point])
+        });
+        raw.extend_from_slice(&qm31_coordinates(basis.mul(value)));
+    }
+    for (index, value) in rows[row].pre_gamma_circle_ood.iter().copied().enumerate() {
+        let value = dependent.map_or(value, |dependent| {
+            value.sub(rows[dependent].pre_gamma_circle_ood[index])
         });
         raw.extend_from_slice(&qm31_coordinates(basis.mul(value)));
     }
@@ -3637,6 +3691,10 @@ fn h_pcs_image(
         let difference = rows[row].terminal[point].sub(rows[dependent].terminal[point]);
         image.extend_from_slice(&qm31_coordinates(basis.mul(difference)));
     }
+    for (index, value) in rows[row].pre_gamma_circle_ood.iter().copied().enumerate() {
+        let difference = value.sub(rows[dependent].pre_gamma_circle_ood[index]);
+        image.extend_from_slice(&qm31_coordinates(basis.mul(difference)));
+    }
     let scale = basis.mul(h_scale);
     image.extend_from_slice(&scaled_qm31_difference(
         &rows[row].pcs_tail,
@@ -3660,6 +3718,9 @@ fn h_pcs_single_image(
     }
     for point in 0..3 {
         image.extend_from_slice(&qm31_coordinates(basis.mul(rows[row].terminal[point])));
+    }
+    for value in rows[row].pre_gamma_circle_ood.iter().copied() {
+        image.extend_from_slice(&qm31_coordinates(basis.mul(value)));
     }
     image.extend_from_slice(&scaled_qm31_difference(
         &rows[row].pcs_tail,
@@ -3719,6 +3780,7 @@ fn root_neutral_raw_rows(
         rows.push(RowPublicMaps {
             layer0_m31,
             terminal: core::array::from_fn(|point| eq_weight(&terminal_points[point], row)),
+            pre_gamma_circle_ood: Vec::new(),
             pcs_tail: Vec::new(),
         });
     }
@@ -4656,6 +4718,49 @@ pub fn probe_pool_v1_pair_forest_root_message_hiding_rank(
     )
 }
 
+/// V8-A100 hiding stress gate for the pair-tree layout. This extends the
+/// exact V6 root-message quotient by six four-symbol queries and by both
+/// component-wise pre-gamma circle evaluations. A passing concrete replay is
+/// a nonzero-minor witness only; it is not the required all-schedule theorem.
+pub fn probe_v8_a100_pool_v1_pair_root_message_hiding_rank(
+    schedule: &StateOnlyTranscriptScheduleResult,
+) -> Result<StateOnlyHidingRankGateReport, StateOnlyHidingRankGateError> {
+    if schedule.query_count != 22 {
+        return Err(StateOnlyHidingRankGateError::Shape);
+    }
+    check_state_only_complete_hiding_rank_inner_for_layout(
+        schedule,
+        false,
+        FactorSchedule::Production,
+        None,
+        LateSwitchSupport::WitnessDifferenceSuperset,
+        PcsSchedule::RootMessageV8Log20,
+        true,
+        RankLayout::PoolPairV1,
+    )
+}
+
+/// V8-A100 hiding stress gate for the selected eight-lane pair-forest
+/// layout. See [`probe_v8_a100_pool_v1_pair_root_message_hiding_rank`] for the
+/// proof boundary.
+pub fn probe_v8_a100_pool_v1_pair_forest_root_message_hiding_rank(
+    schedule: &StateOnlyTranscriptScheduleResult,
+) -> Result<StateOnlyHidingRankGateReport, StateOnlyHidingRankGateError> {
+    if schedule.query_count != 22 {
+        return Err(StateOnlyHidingRankGateError::Shape);
+    }
+    check_state_only_complete_hiding_rank_inner_for_layout(
+        schedule,
+        false,
+        FactorSchedule::Production,
+        None,
+        LateSwitchSupport::WitnessDifferenceSuperset,
+        PcsSchedule::RootMessageV8Log20,
+        true,
+        RankLayout::PoolPairForestV1,
+    )
+}
+
 /// Project one concrete atomic-v3 semantic-trace difference and its exact
 /// unmasked degree-27 sumcheck-observation difference through the same frozen
 /// q16 mask quotient used by the conservative witness audit.
@@ -5406,8 +5511,13 @@ fn check_state_only_complete_hiding_rank_inner_for_layout_and_delta_and_projecti
     {
         return Err(StateOnlyHidingRankGateError::Shape);
     }
-    let domain_log = if pcs_schedule == PcsSchedule::RootMessageV6Log20 {
-        if schedule.query_count != 16 {
+    let domain_log = if matches!(
+        pcs_schedule,
+        PcsSchedule::RootMessageV6Log20 | PcsSchedule::RootMessageV8Log20
+    ) {
+        if (pcs_schedule == PcsSchedule::RootMessageV6Log20 && schedule.query_count != 16)
+            || (pcs_schedule == PcsSchedule::RootMessageV8Log20 && schedule.query_count != 22)
+        {
             return Err(StateOnlyHidingRankGateError::Shape);
         }
         STATE_ONLY_LOG_ROWS + 10
@@ -5426,10 +5536,11 @@ fn check_state_only_complete_hiding_rank_inner_for_layout_and_delta_and_projecti
     let encoder = CircleEncoder::new_for_domain_log(domain_log);
     let rows = row_public_maps(&encoder, domain_log, schedule, pcs_schedule, layout)?;
     let layer0_m31 = rows[0].layer0_m31.len();
-    let c1_raw_m31 = layer0_m31 + 12;
-    let g_raw_m31 = 4 * (layer0_m31 + 3);
+    let pre_gamma_circle_ood = rows[0].pre_gamma_circle_ood.len();
+    let c1_raw_m31 = layer0_m31 + 12 + 4 * pre_gamma_circle_ood;
+    let g_raw_m31 = 4 * (layer0_m31 + 3 + pre_gamma_circle_ood);
     let pcs_tail_qm31 = rows[0].pcs_tail.len();
-    let h_raw_qm31 = layer0_m31 + 3;
+    let h_raw_qm31 = layer0_m31 + 3 + pre_gamma_circle_ood;
     let joint_pcs_m31 = 4 * (h_raw_qm31 + pcs_tail_qm31);
     let sc_m31 = 4 * STATE_ONLY_HIDING_SUMCHECK_QM31_OBSERVATIONS;
     let aux_m31 = sc_m31 + joint_pcs_m31;
@@ -8317,6 +8428,9 @@ fn check_state_only_complete_hiding_rank_inner_for_layout_and_delta_and_projecti
             PcsSchedule::Arity4ThenArity8 => "arity4_then_arity8_final32",
             PcsSchedule::RootMessage => "root_message_exact_sequence",
             PcsSchedule::RootMessageV6Log20 => "v6_log20_root_message_exact_sequence",
+            PcsSchedule::RootMessageV8Log20 => {
+                "v8_log20_q22_two_component_ood_root_message_exact_sequence"
+            }
         },
         tail_qm31_probe: !tail_qm31_mask_factors.is_empty(),
         tail_qm31_mask_factor: match tail_qm31_mask_factors {

@@ -1,0 +1,86 @@
+{
+  "schema": "aspis.v8-a100.hiding-per-c1-source-gap.v1",
+  "observed_date": "2026-09-07",
+  "source_revision": "2aaca2bc3459a8be3c1c140282d0d8a2afb24a76",
+  "result": {
+    "positive": "A new focused source probe exhaustively reduced all 1,022 conservative physical semantic basis directions in each of 16 C1 columns against the exact relation-free mask image for the explicit legal Frobenius-conjugate q22 schedule. Containment passed for both the pair rank model and deployed pair-forest layout even though every ambient 108-coordinate raw block had rank 104.",
+    "remaining": "This is a fixed-schedule finite-field computation, not the required universal Lean theorem over every legal q22 schedule and OOD pair.",
+    "lean_status": "The exact Rust maps needed to state a source-connected theorem are absent from both AspisFormal and the checked-in Aeneas outputs. No theorem was claimed in their absence."
+  },
+  "probe": {
+    "source": "crates/aspis-prover/src/state_only_hiding_rank/v8_per_c1_image_containment.rs",
+    "test": "crates/aspis-prover/tests/v8_hiding_galois_rank.rs::v8_conjugate_pair_per_c1_physical_image_is_contained",
+    "command": "/usr/bin/time -l cargo test --locked --release -p aspis-prover --test v8_hiding_galois_rank v8_conjugate_pair_per_c1_physical_image_is_contained -- --exact --nocapture",
+    "exit_status": 0,
+    "wall_seconds_cached_incremental": 1.82,
+    "test_seconds": 0.30,
+    "maximum_resident_set_bytes": 121913344,
+    "peak_footprint_bytes": 64061992,
+    "swap_outs": 0,
+    "cold_incremental_compile_and_test": {
+      "wall_seconds": 13.23,
+      "maximum_resident_set_bytes": 518881280,
+      "swap_outs": 0
+    },
+    "common": {
+      "query_count": 22,
+      "ambient_raw_m31": 108,
+      "mask_rank_m31_all_16_columns": 104,
+      "physical_superset_generators_all_16_columns": 1022,
+      "physical_superset_contained": true
+    },
+    "pool_pair_v1_rank_model": {
+      "mask_generators_by_column": [245, 245, 246, 247, 247, 247, 247, 247, 268, 289, 290, 300, 300, 300, 300, 300]
+    },
+    "pool_pair_forest_v1": {
+      "mask_generators_by_column": [221, 221, 222, 223, 223, 223, 223, 223, 223, 247, 248, 258, 258, 258, 258, 258]
+    }
+  },
+  "exact_source_predicate": {
+    "notation": [
+      "R_s(r) is c1_raw_difference(row_public_maps(s), r, none): the q22 layer-zero evaluations, three terminal QM31 evaluations expanded to M31, and two pre-gamma circle OOD QM31 evaluations expanded to M31.",
+      "A_L is rank_active_rows(L).",
+      "d(L,c) is the last inactive row in relation_free_mask_cells(L) for column c, exactly as selected by apply_mask_material_for_layout and the rank gate.",
+      "D_s,L,c(r) = R_s(r) for r in A_L, and R_s(r)-R_s(d(L,c)) otherwise.",
+      "MaskRows(L,c) is the relation-free inventory for c with d(L,c) removed.",
+      "PhysicalRows(L,c) is {1,...,1023} with d(L,c) removed; row zero is the same-statement public constant."
+    ],
+    "first_gate": "forall L in {PoolPairV1, PoolPairForestV1}, forall valid V8 schedule s, forall c < 16: span_M31 { D_s,L,c(r) | r in PhysicalRows(L,c) } <= span_M31 { D_s,L,c(r) | r in MaskRows(L,c) }",
+    "lean_signature_after_translation": "theorem v8_perC1_physical_range_le_mask_range (layout : V8PoolLayout) (schedule : StateOnlyTranscriptScheduleResult) (hSchedule : ValidV8A100Schedule schedule) (column : Fin 16) : LinearMap.range (perC1PhysicalView layout schedule column) <= LinearMap.range (perC1MaskView layout schedule column)",
+    "strength": "PhysicalRows is the conservative source superset used at state_only_hiding_rank.rs:6634-6660. Therefore the theorem is stronger than containment of only legal same-statement witness differences."
+  },
+  "actual_source_connections": {
+    "public_row_map": "state_only_hiding_rank.rs:2495-2580 constructs RowPublicMaps from the actual CircleEncoder, derived query indices, three terminal points, and two circle OOD WeightAccumulator covectors.",
+    "raw_serialization": "state_only_hiding_rank.rs:3590-3609 defines c1_raw_difference and expands each QM31 value into four M31 coordinates.",
+    "mask_inventory_selection": "state_only_hiding_rank.rs:5593-5613 selects the pair/pair-forest relation-free cells and the same last inactive dependent used for balancing.",
+    "mask_application": "state_only_hiding.rs:668-705 applies relation-free cell masks and then balances every inactive copy class; pair-forest calls it at state_only_hiding.rs:754-765.",
+    "deployed_pair_forest_call": "v6_onefold_prover.rs:1193-1219 compiles the pair-forest trace and applies apply_pool_v1_pair_forest_mask_material_v1 before C1 encoding.",
+    "physical_superset": "state_only_hiding_rank.rs:6634-6660 enumerates row-zero-excluded active e_r and inactive e_r-e_d(c) directions and rejects any direction outside the frozen raw mask echelon."
+  },
+  "pair_vs_pair_forest_scope": {
+    "pair_forest": "Source connected through build_pool_v1_pair_forest_mask_material_v1, apply_pool_v1_pair_forest_mask_material_v1, and the OneFoldRelation::PoolForest* prover branches.",
+    "pair": "PoolPairV1 is an exact host rank layout using pool_v1_pair_relation_free_mask_cells_v1 and pool_v1_pair_copy_active_rows_v1, but there is no build_pool_v1_pair_mask_material_v1 or apply_pool_v1_pair_mask_material_v1 API and no OneFoldRelation pair-tree prover branch. It must be labelled a rank model, not a deployed mask path."
+  },
+  "translation_search": {
+    "command": "rg -l 'row_public_maps|c1_raw_difference|pool_v1_pair_relation_free_mask_cells_v1|pool_v1_pair_forest_relation_free_mask_cells_v1|apply_mask_material_for_layout|probe_v8_a100_pool_v1_pair_root_message_hiding_rank' AspisFormal aeneas-verif --glob '*.lean' --glob '*.json' --glob '*.md' --glob '*.txt' | wc -l",
+    "matching_files": 0,
+    "nearby_but_insufficient": "AspisFormal/Pool/V7PairTreeTraceGeometry.lean formalises pair row geometry, but not the complete relation-free inventory, active-row balancing map, q22 RowPublicMaps, or the physical/mask linear maps. Existing translated aspis_core::state_only_hiding functions cover selected mask arithmetic, not these aspis-prover/aspis-statement source functions."
+  },
+  "minimal_translation_boundary": {
+    "required_source_items": [
+      "aspis_statement::pool_v1::pool_v1_pair_forest_relation_free_mask_cells_v1",
+      "aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_rows_v1",
+      "aspis_prover::state_only_hiding::apply_mask_material_for_layout or a pure fixed-array balancing helper factored from it",
+      "aspis_prover::state_only_hiding_rank::row_public_maps or a pure fixed-array q22 C1 raw row-map helper factored from it",
+      "aspis_prover::state_only_hiding_rank::c1_raw_difference",
+      "aspis_prover::state_only_hiding_rank::probe_v8_a100_pool_pair_forest_per_c1_image_containment"
+    ],
+    "recommended_refactor": "Factor two pure fixed-array free functions: per_c1_mask_direction(schedule, layout, column, row) and per_c1_physical_direction(schedule, layout, column, row). Translate those functions plus the inventory/active-row predicates. Keep CarryEchelon out of the semantic theorem; prove span containment algebraically, and retain the optimized Rust echelon only as a certificate generator/checker.",
+    "next_proof_step": "Translate the pair-forest functions first because that is the actual prover path. Define perC1MaskView and perC1PhysicalView over M31 from the translations, prove their coordinate equality to D_s,L,c, then prove v8_perC1_physical_range_le_mask_range universally. Only after this first gate is source-connected should H, masked-sumcheck, PCS-tail, folds, and serialization be added by image_containment_postcomp."
+  },
+  "formal_audit": {
+    "lean_files_changed": 0,
+    "axioms_check": "not applicable: no new Lean theorem was claimed",
+    "reason_no_lean_placeholder": "Introducing handwritten maps or an unproved bridge assumption would not satisfy the requested source connection and would obscure the exact missing translation."
+  }
+}
