@@ -3945,3 +3945,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3256 | `R0P/MaskFiatShamir` | 0 / 0 | 0:06.87 | 6854088 | 0 | 7 | `63215b8a379cbb755ebcb0cd363a074d57c1bfea69586f19598d33aeaca1a553` |
 
 Source revision(s): `d0c7da05a3124f9d4dc9302596b32a6523ad2e63`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: masked closed form and numeric accounting
+
+MaskMaxErr closes combined_fiat_shamirZ_closed and re-audits combined_maxErrZ. The exact maximum is the final q22 row, (1+delta0)*C(9557,22)/C(262144,22). With P=2147483647 and deltaQ=P^4/2^256, the eta term 100(1+deltaQ)/P^4 is approximately 4.701977412047265e-36 = 2^(-117.356143807538); each alpha term 2700(1+deltaQ)/P^4 is approximately 1.269533901252762e-34 = 2^(-112.601256305375). Circle rows are 2/P^4 ≈ 9.403954824094531e-38. With delta0=257*P^8/2^256-1, q22 is approximately 2.242680277793665e-32 = 2^(-105.136475075588). Decimal values are presentation-only calculations from exact rational expressions; the inequality and equality are Lean-proved. No exponent change occurs relative to the actual frozen model, whose alpha degree was already 27. Attempt 3257 is green with seven standard-axiom audit lines.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3257 | `R0P/MaskMaxErr` | 0 / 0 | 0:05.05 | 6864464 | 0 | 7 | `1a80de334311f078851d12b2453e224033a8890eca48ad16e92d916f4f62fa40` |
+
+Source revision(s): `e756823dd6c244cdd11d43b7a0f2d12a7c323032`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
