@@ -6,7 +6,7 @@ use super::{
     domain::{self, FibreIndex, SlotIndex},
     fold, heap,
     opening::{self, OpeningData, COPY_ACTIVE_ROW_MASKS},
-    structured,
+    structured_re3 as structured,
     transcript::{OpeningTranscript, SemanticBoundary},
     transport::COEFFICIENT_TO_ROW,
     verifier::Challenges,

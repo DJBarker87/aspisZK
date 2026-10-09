@@ -18,7 +18,7 @@ use aspis_statement::{
 use serde_json::json;
 
 // Every end-to-end case compares exact result bytes/errors and phase order.
-#[cfg(feature = "r0-hoist-reference")]
+#[cfg(feature = "r0-e4-reference")]
 fn verify_both(
     public: aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,
     bytes: &[u8],
@@ -30,10 +30,17 @@ fn verify_both(
         PHASES.with(|v| v.borrow_mut().push(p));
     }
     PHASES.with(|v| v.borrow_mut().clear());
+    aspis_core::r0::equality_trace::take();
     let actual = r0::r0_verify(public, bytes, hash, Some(trace));
     let phases = PHASES.with(|v| std::mem::take(&mut *v.borrow_mut()));
-    let reference = r0::r0_verify_unhoisted(public, bytes, hash, Some(trace));
+    let actual_fields = aspis_core::r0::equality_trace::take();
+    let reference = r0::r0_verify_re3(public, bytes, hash, Some(trace));
     let reference_phases = PHASES.with(|v| std::mem::take(&mut *v.borrow_mut()));
+    assert_eq!(
+        actual_fields,
+        aspis_core::r0::equality_trace::take(),
+        "field bytes changed"
+    );
     assert_eq!(phases, reference_phases, "check/phase order changed");
     match (&actual, &reference) {
         (Ok(a), Ok(b)) => {
@@ -53,7 +60,7 @@ fn verify_both(
     actual
 }
 
-#[cfg(not(feature = "r0-hoist-reference"))]
+#[cfg(not(feature = "r0-e4-reference"))]
 fn verify_both(
     public: aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,
     bytes: &[u8],
@@ -105,7 +112,14 @@ fn both_variants_roundtrip_and_corruption_teeth() {
             shaped.v1.gamma_powers,
             aspis_core::r0::opening::powers::<29>(prepared.challenges.gamma)
         );
-        assert_eq!(shaped.v1.line, prepared.data.line());
+        assert_eq!(
+            [shaped.v1.line.a, shaped.v1.line.b, shaped.v1.line.c].map(E::from_qm31),
+            [
+                prepared.data.line().a,
+                prepared.data.line().b,
+                prepared.data.line().c
+            ]
+        );
         assert_eq!(
             shaped.v1.alpha_powers,
             aspis_core::r0::opening::powers::<4>(prepared.challenges.alpha)
@@ -272,22 +286,28 @@ fn both_variants_roundtrip_and_corruption_teeth() {
         altered_proof.openings[0] = opening;
         let altered_bytes = altered_proof.encode().unwrap();
         let altered_view = OpeningView::parse(&altered_bytes).unwrap();
+        #[cfg(feature = "r0-e4-reference")]
+        let frozen = aspis_core::r0::onchain_re3::prepare(HOST_HASH, &boundary, &view).unwrap();
+        #[cfg(feature = "r0-e4-reference")]
+        aspis_core::r0::equality_trace::take();
         assert_eq!(
             onchain::check_v1(&shaped.v1, &altered_view, u, &altered_view.fibre(0)),
             Err(OError::V1)
         );
-        #[cfg(feature = "r0-hoist-reference")]
+        #[cfg(feature = "r0-e4-reference")]
+        let fields = aspis_core::r0::equality_trace::take();
+        #[cfg(feature = "r0-e4-reference")]
         assert_eq!(
-            aspis_core::r0::onchain_unhoisted::check_v1(
-                &shaped.data,
-                c.gamma,
-                c.alpha,
+            aspis_core::r0::onchain_re3::check_v1(
+                &frozen.v1,
                 &altered_view,
                 u,
                 &altered_view.fibre(0)
             ),
             Err(OError::V1)
         );
+        #[cfg(feature = "r0-e4-reference")]
+        assert_eq!(fields, aspis_core::r0::equality_trace::take());
         onchain::check_v2(
             &shaped.data,
             c.kappa,
@@ -316,13 +336,17 @@ fn both_variants_roundtrip_and_corruption_teeth() {
                 ),
                 Err(OError::V2)
             );
+            #[cfg(feature = "r0-e4-reference")]
+            aspis_core::r0::equality_trace::take();
             assert_eq!(
                 onchain::check_v2(&shaped.data, c.kappa, c.tau, c.alpha, &polynomial, &view),
                 Err(OError::V2)
             );
-            #[cfg(feature = "r0-hoist-reference")]
+            #[cfg(feature = "r0-e4-reference")]
+            let fields = aspis_core::r0::equality_trace::take();
+            #[cfg(feature = "r0-e4-reference")]
             assert_eq!(
-                aspis_core::r0::onchain_unhoisted::check_v2(
+                aspis_core::r0::onchain_re3::check_v2(
                     &shaped.data,
                     c.kappa,
                     c.tau,
@@ -332,6 +356,8 @@ fn both_variants_roundtrip_and_corruption_teeth() {
                 ),
                 Err(OError::V2)
             );
+            #[cfg(feature = "r0-e4-reference")]
+            assert_eq!(fields, aspis_core::r0::equality_trace::take());
             records.push(json!({"variant":name,"mutation":format!("fixed-challenge coefficient {i}"),"rejection":"V2"}));
         }
         for i in 0..22 {

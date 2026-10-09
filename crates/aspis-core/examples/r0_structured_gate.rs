@@ -45,9 +45,9 @@ fn main() {
             c: E::ONE,
         },
         Secant {
-            a: random(&mut seed),
-            b: random(&mut seed),
-            c: random(&mut seed),
+            a: E::from_qm31(random(&mut seed).c0()),
+            b: E::from_qm31(random(&mut seed).c0()),
+            c: E::from_qm31(random(&mut seed).c0()),
         },
     ];
     let mut even = vec![E::ZERO; 512];
@@ -59,8 +59,18 @@ fn main() {
             input[j] = E::ONE;
             let expected = chord::quotient_weights(&basis, line, &input).unwrap();
             let mut actual = input.to_vec();
-            structured::quotient_weights(line, &mut actual, &mut even, &mut odd, &mut twice)
-                .unwrap();
+            structured::quotient_weights(
+                Secant {
+                    a: line.a.c0(),
+                    b: line.b.c0(),
+                    c: line.c.c0(),
+                },
+                &mut actual,
+                &mut even,
+                &mut odd,
+                &mut twice,
+            )
+            .unwrap();
             assert_eq!(actual, expected, "unit vector {j}, line {l}");
             input[j] = E::ZERO;
         }
@@ -70,8 +80,18 @@ fn main() {
             }
             let expected = chord::quotient_weights(&basis, line, &input).unwrap();
             let mut actual = input.to_vec();
-            structured::quotient_weights(line, &mut actual, &mut even, &mut odd, &mut twice)
-                .unwrap();
+            structured::quotient_weights(
+                Secant {
+                    a: line.a.c0(),
+                    b: line.b.c0(),
+                    c: line.c.c0(),
+                },
+                &mut actual,
+                &mut even,
+                &mut odd,
+                &mut twice,
+            )
+            .unwrap();
             assert_eq!(actual, expected, "random {trial}, line {l}");
         }
         println!(
