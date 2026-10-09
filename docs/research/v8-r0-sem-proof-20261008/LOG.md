@@ -3101,3 +3101,19 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2603 | `R0P/SemDuplexDensity` | 0 / 0 | 0:05.10 | 6847344 | 0 | 4 | `64562fc7187cfe8e64c1face96c195f6beeb2446714a02239f4c6c9587bd5b72` |
 
 Source revision(s): `da1caa9ef36b9064244e2e791a7ba9601128a422`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G20 — combined decoder correctness
+
+Ported DQChain and DQDecodes into SemDuplexDecodes, retaining the generic FS2 collision and backward-walk lemmas. The mixed transcript agrees with the generic duplex through prefix 30; rows below 30 use one pair and row 30 reads all eight opening pairs. combinedDecodes proves exactly the Inj3 output/follow shape from hr31, the total-read cap and absence of Coll. Focused chain/transcript checks passed at 2605 after replacing an over-eager congr tactic (2604); ordering helpers passed at 2606. Full assembly passed at 2607, with unused simp arguments cleaned in 2608. Final exit 0, no errors or warnings; all nine axiom lines use only subsets of propext, Classical.choice, Quot.sound. No premise was added or weakened, and R0C is untouched.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g20-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2604 | `R0P/SemDuplexDecodes` | 1 / 1 | 0:07.52 | 6815804 | 0 | 5 | `98203be1630b580e325fdb0f0851d66a3b5a0070fb755bfc9064a82d9830ac3b` |
+| 2605 | `R0P/SemDuplexDecodes` | 0 / 0 | 0:07.69 | 6851836 | 0 | 5 | `07e99e3c016baca2b651ecb624806f538241ad0d887e4bfe1cea705427a8f7b6` |
+| 2606 | `R0P/SemDuplexDecodes` | 0 / 0 | 0:08.79 | 6856560 | 0 | 7 | `f6e28e41fec67cdb74f208ba0705cc502d7fd33447211c861600d5ee6261a4c1` |
+| 2607 | `R0P/SemDuplexDecodes` | 0 / 0 | 0:11.94 | 6901828 | 0 | 9 | `3b29bf9dff46bfc983831d2868056f46767d4faf5a3077cc2ef86de52500c1c2` |
+| 2608 | `R0P/SemDuplexDecodes` | 0 / 0 | 0:11.35 | 6910704 | 0 | 9 | `f885ebfe138c092810c4bb0bd39d4dc7567a4aa4f93148a944edb06c421aa7d6` |
+
+Source revision(s): `c590062644bba3ce921614a0aa27ef9c645b1321`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
