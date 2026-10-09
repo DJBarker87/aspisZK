@@ -54,7 +54,7 @@ variable [Fintype K] [DecidableEq K]
 
 /-- All data in each branch is fixed before the current challenge. -/
 def semanticBadZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (maskPoly : (Fin 10 → K) → K) (B : PackBasis F)
+    (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (B : PackBasis F)
     (P : Prefix K K (TypedContext K Sfield) (SemMsgZ K)) (sm : SemMsgZ K) (c : K) : Prop :=
   (15 ≤ P.rounds.length → degreeOK (unmaskSem sm)) ∧
   if h14 : P.rounds.length < 14 then
@@ -64,13 +64,13 @@ def semanticBadZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
     | .maskSum claim, some cs =>
         etaSomeBad (candidates P.statement (baseRoundsZ P.rounds) .none)
           (fun t => originalTotal P.statement.pub B t (fun j => cs.getD j.val 0))
-          claim (maskTotal maskPoly) c
+          claim (maskTotal maskClaims) c
     | _, _ => False
   else if h25 : P.rounds.length < 25 then
     match semChalsZ P.rounds, claimOf P.rounds with
     | some cs, some _ =>
         alphaSomeBad (candidates P.statement (baseRoundsZ P.rounds) .none)
-          (fun t => virtualPolyZ maskPoly P.statement.pub B t
+          (fun t => virtualPolyZ maskClaims P.statement.pub B t
             (fun j => cs.getD j.val 0) (cs.getD 14 0))
           (currentPolyZ sm) ⟨P.rounds.length - 15, by omega⟩
           (fun j => cs.getD (15 + j.val) 0) c

@@ -4089,3 +4089,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3263 | `R0P/MaskView` | 0 / 0 | 0:04.49 | 6867872 | 0 | 19 | `a4da0f8fbf523d472f4eeec18671497cef4a738f74e8cb84a6a1897b497fe15e` |
 
 Source revision(s): `8870138608dc9f34e354218bf74d85e886da48ec`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskBadSets (host attempt 3264)
+
+The eta disjunct now passes maskTotal maskClaims as a function of each decoded candidate; the alpha disjunct uses the corresponding claim-dependent virtual polynomial. The guard still starts at row 15, and the root-count proof is unchanged. Attempt 3264 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3264 | `R0P/MaskBadSets` | 0 / 0 | 0:03.35 | 6840252 | 0 | 4 | `dd47cc108b03b073164f559b5c675edda7bd1ee14fdf25fec073f2aeff281906` |
+
+Source revision(s): `45337c6bc0eab7a8b55e5f4b4250c42531d327c0`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
