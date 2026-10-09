@@ -499,3 +499,46 @@ step.**
 byte-preserving kernel work gated against the retained reference path, uses
 no Lean capacity and incurs no proof debt; it is held only if the user says
 so. T2 is specified when T1 lands; ZF1 after T2.
+
+## Lead decision after user direction (2026-10-09, later): cost probe P1 of R0 + §8 before further Lean beyond T1
+
+**Direction (user).** "We can't go from single tx to 10s of tx." v7 is one
+transaction (≈ 1.08M CU, grinding, audited PCS argument, no full-view
+privacy). If the compressed R0 cannot reach one transaction, R0 is the wrong
+bet. This must be found out before further Lean spend, not after.
+
+**Decision.** T1 continues (already launched; needed on every continuing
+path). **No T2 or ZF1 is issued until P1 reports.** R-E4 is folded into P1 as
+its first configuration. P1 is a **cost probe**: unproved Rust implementing
+R0 with §8 steps applied, with a matching probe prover so the verifier runs
+real arithmetic on real proofs; it lives beside the reference, never replaces
+it, and makes no soundness or privacy claim. Its output is one table: for each
+configuration, native acceptance, SBF validity (stack, heap), DIAGNOSTIC CU
+per phase, and total. The decision rule: if no configuration fits
+≤ 1,400,000 (target ≤ 1,300,000), R0 stops and v7 stands; if one fits, its
+§8 steps are what T2-onward and the ledger prove, in that order.
+
+Configurations (cumulative; measure each):
+- C0: R-E3 + the exact savings (subfield chord coefficients, tensor builder,
+  Karatsuba, K inversions in V1, M1 semantic kernels). Byte-preserving;
+  equality-gated against the R-E3 path.
+- C1: §8 step 8 — κ, τ sampled in K (ledger: arithmetic).
+- C2: §8 step 2 — relation rounds 1–3 replacing V2's 1024-length dot (three
+  degree-6 rounds; prover sends round polynomials; v7 analogue).
+- C3: §8 step 1 — ρ-batched query equations injected into the relation (v7
+  analogue; the 22 V1 checks and the 22 final-message evaluations collapse).
+- C4: §8 step 3 — eight-way Merkle (proved R552), and step 4 two-swap order
+  if it changes cost.
+- C5 (what-ifs for a §8 step 9, each separately on top of C4): a second
+  4-to-1 fold with a 64-coefficient final message; α₀ and F in K; both.
+Each configuration: generated honest proofs for both fixtures, native
+acceptance, the existing rejection corpus adapted where the wire changes,
+SBF build with zero reachable stack diagnostics, heap ≤ 256 KiB, acceptance
+runs at 1.4M, DIAGNOSTIC per-phase CU. Report per-phase and total for all
+configurations in one table, with the proof size and the number of E, K and
+F multiplications per phase.
+
+**What P1 is not.** Not the reference, not merged into `r0/onchain.rs` or the
+prover, not evidence of soundness or privacy for any configuration, not a
+decision about which steps are adopted. Those are the lead's, from §8, after
+the numbers.
