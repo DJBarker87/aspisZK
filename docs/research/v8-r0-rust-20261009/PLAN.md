@@ -116,3 +116,33 @@ remaining rows in increasing order) is applied before the encoder:
 `W_l = Enc(t_l ∘ π⁻¹)`; `eqWeight`, `indicator(I)` and the opening weights are
 stated in coefficient space (composed with π). Reason: the privacy LOG,
 "Lead decisions after Z4a". Job R-G below; the Lean glue change is Z-side.
+
+## Lead acceptance of R-G (c005349eb, evidence 9789ea8b6): D13 transport in Rust
+
+Reviewed `crates/aspis-core/src/r0/{transport,transport_pads,opening,prover}.rs`
+against the historical order rule
+(`v8-full-view-zk-20260912/tools/r16_basis_transport.rs:10–63`) and D13.
+π⁻¹ lists the first 89 rows `r < 1023, r ≠ 1014` that are copy-inactive and
+relation-free in all sixteen semantic columns (rows 13…478, three per
+sixteen-row block), then the remaining rows increasing, then pivot 1023; the
+historical pivot-sum overwrite is correctly absent. `to_coefficients t = t ∘ π⁻¹`.
+C1 and C2 commitments encode `t_l ∘ π⁻¹`; endpoints and honest quotients are
+evaluated on coefficients; `eq_weight` and `indicator` are coefficient-indexed,
+so `OpeningData::weights`, `claim_prime`, quotient/total weights and V2 inherit
+π without further change; the 87 semantic claims and `honest_claims` stay over
+rows (`row_eq_weight`); `v_honest` equals the row inactive sum (tested).
+Table hash `f80af2ab…2213` (π[row], 1024 × u16 LE) in `transport-kat.json`.
+
+Evidence (`results/r0-opening-20261009/TRANSPORT.md`): six gates on `nuc`,
+each in its own scope at 4/6 GiB with zero swap, all exit 0; bijection, both
+tables, pairing invariance, every Boolean row's weight, every indicator entry,
+87 arbitrary claims; statement test re-derives the pads from the live
+inventories; full-size round-trip plus all existing corruption teeth; no_std.
+The fixture still uses a synthetic semantic boundary (not an end-to-end
+payment proof). **Accepted.**
+
+Consequences for R-E: pass row-indexed lane messages to `Commitment::new` and
+`prove`; take the before-z1 endpoint record from R-D's `prove` (transported),
+not from R-F's raw-row diagnostic builder, which must either be transported or
+not reused; semantic row claims unchanged. The Lean side of D13 is decision
+D13′ in the privacy LOG (`v8-r0-zk-20261009/LOG.md`).

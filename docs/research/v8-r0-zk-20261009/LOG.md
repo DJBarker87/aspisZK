@@ -2006,7 +2006,7 @@ result is complete; Z4 stops at maps, target statements and dimension counts.
 
 ### Lead decisions after Z4a — D13 (transport reinstated), Z4b (remainder containment)
 
-Z4a (`z4/FINDINGS.md`) is accepted as computation. Two findings, two decisions.
+Z4a (`z4/z4a/FINDINGS.md`) is accepted as computation. Two findings, two decisions.
 
 **D13 — the message-index transport returns.** The C1 opening map's rank
 collapse on structured fibre sets (`{0,…,21}`: residues 1,2 at rank 6) is
@@ -2040,3 +2040,165 @@ columns with the missing leading degrees, D14); if it holds, Z4's route is the
 structured family of Z4a plus a containment lemma. The θ = 0 obstruction is a
 degenerate-challenge event: D8's ε = 0 becomes ε ≤ mass of an explicit
 bad-challenge set (θ = 0 at least), to be fixed once Z4b reports.
+
+### Lead acceptance of Z4b (`z4/FINDINGS-B.md`); decision D14
+
+Accepted as computation (host `nuc`, capped 3/4 GiB, swap 0: build 4.0 s,
+probe 400 s, peak child RSS 102 MiB, cgroup peak 151 MB, 187 source hashes
+checked, exit 0). Ten genuine same-statement pair-forest instances, twenty
+challenge vectors, one hundred tests per condition: D12's (i) fails for both
+remainder definitions, (ii) fails, and the 26-column repair leaves exactly a
+four-dimensional excess at the last round's value in every case.
+
+**Reading.** The excess is the linear functional
+Φ(rounds, claims) = p₉(α₉) − Σ_c f_c(α)·y_c. It vanishes on every linear
+mask displacement with zero claims (a silent mask has p₉(α₉) = 0), and on the
+honest view it equals η·O(y(α)), the original terminal evaluated on the
+*disclosed* current-point claims. That is the verifier's terminal-consistency
+check: a deterministic function of other disclosed coordinates, which carries
+no information beyond them and which a simulator computes. D12 asked for it to
+lie in a linear image, which no linear mask can provide, so Z4b's "no column
+count repairs this" is a statement about D12's wording, not a hiding failure.
+Two consequences.
+
+**(a) D12 restated (supersedes its clauses (i), (ii)).** Fix the round-9
+direction d(X) = X − ½; d(0) + d(1) = 0, so adding a multiple of d preserves
+the sumcheck boundary chain, and d(α₉) ≠ 0 iff α₉ ≠ ½. Let
+Φ₀(v) := p₉ᵛ(α₉) − maskLinear(yᵛ), linear in the payload v and zero on silent
+masks. Define the payload bijection Ψ_ch(v) := v + η·O(yᵛ)·d/d(α₉) on the
+round-9 coefficients; it depends only on ch and on v's claim coordinates, and
+its inverse subtracts the same term. From D12's exact decomposition,
+view(w,m,n) = Ψ_ch(c̃(w) + A(m,n) + (s(w,n), 0)) with
+c̃(w) := c(w) − η·O(y_w(0))·d/d(α₉) and
+s(w,n) := g(w,n) − Φ₀(g(w,n))·d/d(α₉). New MaskImage:
+(i′) ∀ w n, (s(w,n), 0) ∈ range(A ∘ inl_M);
+(ii′) ∀ w w′, c̃(w) − c̃(w′) ∈ range A.
+HVZK_perfect follows by the D12 proof (absorption, mixture, coset) followed by
+pushforward under the fixed bijection Ψ_ch; α₉ = ½ joins D8's bad-challenge
+set (ε ≤ |bad|/|K|). Z4b's data support (i′) and (ii′) exactly where the only
+excess was Φ: for the 26-column mask in all one hundred tests; for the current
+ten-column mask, not.
+
+**(b) The real deficiency is 88 dimensions in rounds 8–9**, not Φ: the silent
+pure image has rank 988 of the 1076 that (i′) needs. Each mask column adds one
+K-dimension to the last round (its slice is λ(X − α₉)), so a column-only repair
+needs 26 M31 columns plus G: width 45, every `Fin 29`/`width29` in R0, R0P and
+R0Z, sixteen more committed lanes, about +55 % prover work and opening size.
+Decision: add a **Libra tail** to the mask instead. Two univariates
+h₈, h₉ ∈ K[X] of degree ≤ 27, coefficients stored in lane 28 (D, K-valued) at
+coefficient indices 0–27 and 28–55 (rows π⁻¹(0..55) under D13; D is mask-only,
+so every row is free). The masked terminal gains + h₈(a₈) + h₉(a₉); the
+hypercube total 2⁹·Σ_j (h_j(0) + h_j(1)) enters the mask total already
+disclosed in the mask-sum round; the verifier reads h₈(α₈) + h₉(α₉) through a
+**fourth opening weight row** w_h, w_h(j) = α₈^j for j ≤ 27, α₉^(j−28) for
+28 ≤ j ≤ 55, 0 otherwise, applied to all 29 lanes like the three point rows
+(29 more disclosed claims; the terminal reads lane 28's only). Soundness: the
+terminal stays of degree 27 in every variable (the existing VDeg-27 bound), and
+the new claim is bound to the commitment by the same quotient argument as the
+point claims (B4's polynomial becomes degree 4, card ≤ 400). Privacy: rounds 8
+and 9 each gain up to 27 silent dimensions, less the shared Φ₀ and mask-total
+constraints; the target is silent rank 1076 and (i′), (ii′) on Z4b's tests.
+Width, lane roles 16–27, the eligible-noise design and D13 are unchanged.
+**This choice is provisional on Z4c.** If Z4c fails, the fallback is the
+26-column design, for which Z4b already shows 1076 and (i′), (ii′) on all
+samples.
+
+**Z4c (privacy Codex; computation; no Lean; no production Rust).** Base: the
+current `origin/v8-reference` head, which includes R-G's transport. Extend
+`z4/probe.rs`: (1) opened-symbol and OOD observations through
+`aspis_core::r0::transport` (coefficient space, D13); (2) the Libra tail in
+lane 28 as above, with the fourth weight row's 29 claims as observations and
+the mask total including the h terms; (3) Φ₀ and Ψ_ch as in (a). Report, for
+Z4b's twenty challenge vectors × five pairs: the silent mask image rank (target
+1076); (i′) and (ii′) pass counts; the (i′) excess support if any; C1 rank per
+semantic column with the extra row, on the random fibre set and on {0,…,21}
+(the transport should make both full: 112 per column); the 26-column control
+(expected 1076, (i′) and (ii′) 100/100); Z4b's degenerate controls under (i′)
+and (ii′); the α₉ = ½ event. Same caps (≤ 4 GiB, swap 0), same evidence
+format (`FINDINGS-C.md`, `evidence-C.json`, `summary-C.json`, `probe-C.log`),
+commit on `codex/z4c-libra-20261009`. Stop list: any pass count below 100/100
+for the Libra design (report the excess coordinates and stop); any C1 rank
+below 112 per column on the random set; any helper-pole abort; any change to
+Lean or production Rust.
+
+### Lead decision D13′ — exact form of the transport in the Lean model (job T1)
+
+D13 located the Lean change in the glue. Inspection shows it must enter the
+opening layer, because the verifier's point-claim and inactive weights are
+themselves transported and `R0FS.Witness` states them. The design below fixes
+the statements; the proofs are reindexing and linearity.
+
+1. `R0/OpeningDefinitions.lean`: `Data` gains `transport : Fin 1024 ≃ Fin 1024`
+   (π). New `coeffWeight (π) (w : InitialMessage K) : InitialMessage K :=
+   fun j => w (π.symm j)`, a row-stated weight in coefficient space.
+   `discrepancy D t j l := D.pointClaims j l −
+   dot (coeffWeight D.transport (eqWeight (D.points j))) (t l)`;
+   `inactiveDefect D γ v t := v −
+   dot (coeffWeight D.transport (indicator D.inactive)) (curve t γ)`;
+   `weights D κ := coeffWeight D.transport
+   ((∑ j, κ^(j+1) • eqWeight (D.points j)) + indicator D.inactive)`.
+   `eqWeight`, `indicator`, `claim`, `claimPrime`, `qWeights`, `totalWeights`,
+   B1–B7, V1, V2 and `Accept` are unchanged in text. Lemmas:
+   `coeffWeight_add`, `coeffWeight_smul`, `coeffWeight_sum`,
+   `dot_coeffWeight_left : dot (coeffWeight π w) m = dot w (fun r => m (π r))`
+   (`Equiv.sum_comp`), `dot_coeffWeight_indicator :
+   dot (coeffWeight π (indicator I)) m = ∑ r ∈ I, m (π r)`.
+   If Z4c adopts the Libra tail, the same job adds
+   `extraWeight : InitialMessage K` (already coefficient-indexed) and
+   `extraClaims : Fin 29 → K`, the term `κ^4 • extraWeight` in `weights`,
+   `κ^4 · width29Batch extraClaims γ` in `claim`, a fourth discrepancy row,
+   `pointPolynomial` of degree 4 and `B4_card ≤ 400`.
+2. `R0/OpeningAlgebra.lean`, `R0/Binding.lean`, `R0/BadSetBounds.lean`: adapt.
+   `binding`'s conclusion becomes
+   `D.pointClaims j l = dot (coeffWeight D.transport (eqWeight (D.points j))) (t l)`
+   and `v = ∑ r ∈ D.inactive, exactInitialMessageCurve t γ (D.transport r)`.
+   `wideBinding` is unchanged (`type_of%`).
+3. `R0FS/Protocol.lean`: `Stmt` gains `transport`; `data` passes it; `Witness`
+   clause 2 uses `coeffWeight x.transport`. `Hypotheses.accept_not_doomed` keeps
+   its statement.
+4. R0P: `SemView.TypedContext` gains `transport`; `openingStmt` sets
+   `transport := x.transport`. New in `SemView`:
+   `coeffsOf (π) (t : Trace K) : Fin 29 → InitialMessage K := fun c j => t c (π.symm j)`,
+   `rowsOf (π) m : Trace K := fun c r => m c (π r)`, their inverse lemmas,
+   `coeffsOf_padC2Trace`, `dot_coeffWeight_coeffsOf :
+   dot (coeffWeight π w) (coeffsOf π t c) = dot w (t c)`, and
+   `LambdaRows (π) (W) : Finset (Trace K) := (Lambda W).map (rowsEquiv π)` with
+   `mem_LambdaRows : t ∈ LambdaRows π W ↔ coeffsOf π t ∈ Lambda W` and
+   `card_LambdaRows`. Every semantic candidate quantification
+   `t ∈ Lambda (c2Words x h g)` (SemD2 `candidates`, SemD3Glue, SemPad,
+   MaskNoHit, MaskPrefix, MaskEarly, MaskD3Glue) becomes
+   `t ∈ LambdaRows x.transport (c2Words x h g)`. In the two glue theorems the
+   opening witness `m` yields `t := rowsOf x.transport m`; `hy` uses
+   `dot_coeffWeight_coeffsOf`; `witness_baseTyped` descends through `coeffsOf`.
+   Row-space uses of `eqWeight` (`SemHonest`, `SemDeg`, `honestClaims`) are
+   untouched. `combined_fiat_shamir_masked` changes only through the new field
+   of `TypedContext`.
+5. R0Z: `HonestView.openingWeights`, `batchLinear`, `linearPayload`,
+   `payloadAffine`, `run` take an explicit `(π : Fin 1024 ≃ Fin 1024)`. With
+   `coeffsLinear π : InitialMessage K →ₗ[K] InitialMessage K`
+   (`LinearMap.funLeft K K π.symm`): `.ood j c ↦ oodLinear (ch.circle j) ∘
+   coeffsLinear π ∘ proj c`; `.opened q s c ↦ proj (childIndex q s) ∘
+   exactInitialLinear ∘ coeffsLinear π ∘ proj c`; quotients on
+   `coeffsLinear π ∘ proj c`; `.pointClaim` and `.inactiveSum` unchanged (row
+   space; equal by `dot_coeffWeight_coeffsOf`);
+   `openingWeights π ch := totalWeights ⟨0, z₀, z₁, 0, openingPoints (alpha ch),
+   0, copyInactiveRows, π⟩ …`. `ZkStatement.HonestProver` gains `transport`;
+   `payload`, `view` and `proverOutput` pass `h.transport`; the words are
+   `exactInitialEncoder (coeffsOf h.transport t c)`.
+   `D12.hvzk_perfect_of_maskImage` keeps its statement with π threaded. State
+   `D13Order (π) : Prop` in R0Z (for k < 89: `π.symm k ∈ copyInactiveRows` and
+   `∀ c < 16, eligible c (π.symm k)`; `π 1023 = 1023`; the remaining rows in
+   increasing order) for Z4's later use; no concrete instance is proved (that is
+   a Rust refinement fact, witnessed by R-G's statement test).
+6. Replay: stage `R0/*.lean` into `sources/R0/` on the host; compile the import
+   closure of the changed modules in dependency order with
+   `sh run2.sh N Module 7000 7` from attempt 3282; final targets `R0P/MaskAll`
+   and `R0Z/Z4Maps` (the closure of `R0Z/D12`); `#print axioms` for
+   `wideBinding`, `combined_fiat_shamir_masked`, `hvzk_perfect_of_maskImage`.
+   Stop list: any statement change beyond those listed; any proof needing more
+   than linearity and reindexing facts about `coeffWeight`; any module above
+   the cap or 900 s; `sorry`, `axiom`, `native_decide`, `maxHeartbeats`, and
+   concrete `Finset.univ` over rows are forbidden.
+
+**T1 is held until Z4c reports**, so that `Data` is changed once, with or
+without the fourth weight row. Two full chain replays would otherwise follow.

@@ -1,0 +1,15 @@
+[package]
+name = "aspis-z4b-probe"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[dependencies]
+aspis-core = { path = "../../../../crates/aspis-core", features = ["r0"] }
+aspis-statement = { path = "../../../../crates/aspis-statement", features = ["r0"] }
+aspis-prover = { path = "../../../../crates/aspis-prover", features = ["r0"] }
+[[bin]]
+name = "probe"
+path = "probe.rs"
+[profile.release]
+opt-level = 3
+overflow-checks = true
