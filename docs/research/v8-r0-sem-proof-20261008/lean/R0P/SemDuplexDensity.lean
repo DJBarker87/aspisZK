@@ -119,8 +119,8 @@ theorem combinedChainDensity (x : CX Sfield) (msg : Pf → Nat → CM)
     (decode : CombinedDecode Sfield L) (_hr31 : p.rounds = 31)
     (hσsem : ∀ (i : Nat) (_hi : i < 24) (s : State),
       p.σ i s = R0C.SemStatement.Chal.semantic (semChal s))
-    (hσz0 : ∀ s : State, p.σ 24 s = R0C.SemStatement.Chal.circle (circleSample s))
-    (hσz1 : ∀ s : State, p.σ 25 s = R0C.SemStatement.Chal.circle (circleSample s))
+    (hσz0 : ∀ s : State, p.σ 24 s = R0C.SemStatement.Chal.circle (circleSample0 s))
+    (hσz1 : ∀ s : State, p.σ 25 s = R0C.SemStatement.Chal.circle (circleSample1 s))
     (hσopen : ∀ (j : Fin 4) (s : State),
       p.σ (26 + j.val) s = R0C.SemStatement.Chal.opening (R0C.V3.DQ.σQ j.val s)) :
     ChainDensity3 (combinedProtocol B p msg decode) (duplexRows B combinedD2Budget)

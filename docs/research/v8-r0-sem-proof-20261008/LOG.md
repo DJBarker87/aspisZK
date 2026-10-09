@@ -3398,3 +3398,17 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2729 | `R0P/SemD2Glue` | 0 / 0 | 0:16.38 | 6902268 | 0 | 29 | `196a197121ee0e86f9f6407c2f6557d5a894a5b9b43072e63dd299393ba609c9` |
 
 Source revision(s): `113ecd8851404cde8f84632b194496cc39ad4b27`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G22 continuation: combined decoder density (2730–2732)
+
+Recompiled unchanged SemCharP and SemDuplexDecoder against the new concrete source. SemDuplexDensity carries the updated circleSample0/1 sigma clauses and reuses the now-checked D2 bound. All three targets pass with standard axioms only, no errors or warnings.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-cont-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2730 | `R0P/SemCharP` | 0 / 0 | 0:02.95 | 6827908 | 0 | 2 | `e31f972835a430f019d8d05995add7923e65282cf71ba957f4534bcaad10aa42` |
+| 2731 | `R0P/SemDuplexDecoder` | 0 / 0 | 0:04.59 | 6835232 | 0 | 3 | `cc8dc9b73d6f98a43ba8a41771e1cf356cac5ad3a7e87b062f031e4e0ba86236` |
+| 2732 | `R0P/SemDuplexDensity` | 0 / 0 | 0:04.46 | 6847828 | 0 | 4 | `b5a853dd2e9deff895cf7aff3ef5c322c039928e4506a92f30b8cd3366138dac` |
+
+Source revision(s): `ec9da0e3bf365df360dc9457343097cd76fd64e7`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
