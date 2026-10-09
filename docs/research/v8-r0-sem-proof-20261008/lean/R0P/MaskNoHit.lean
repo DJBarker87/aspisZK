@@ -22,14 +22,14 @@ theorem semSlotZ (rs : List (MsgZ K × ChalZ K)) (cs : List K)
   simpa only [List.getD_eq_getElem?_getD, List.getElem?_eq_getElem hi, Option.getD_some] using hs
 
 theorem no_hit_eta {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskPoly : (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
     (hlen : rs.length = 25) (cs : List K) (hparse : semChalsZ rs = some cs)
     (claim : K) (hclaim : claimOf rs = some claim)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
     (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
-    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskPoly B) x [] (rs ++ tail)) :
-    ¬ etaBad claim (maskTotal maskPoly)
+    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail)) :
+    ¬ etaBad claim (maskTotal maskClaims t)
       (originalTotal x.pub B t (fun j => cs.getD j.val 0)) (cs.getD 14 0) := by
   intro hb
   have htlen : (rs.take 14).length = 14 := by simp only [List.length_take, hlen]; omega
@@ -40,7 +40,7 @@ theorem no_hit_eta {Sfield : Fin 29 → Subfield K} {F : Subfield K}
   rw [hslot] at hm
   have hsm : sm = .maskSum claim := Msg.semantic.inj hm
   subst sm
-  apply no_hit_roundZ fallback1 maskPoly B x rs tail hno ⟨14,by omega⟩
+  apply no_hit_roundZ fallback1 maskClaims B x rs tail hno ⟨14,by omega⟩
   rw [hslot]
   apply Or.inl
   refine ⟨.maskSum claim, cs.getD 14 0, ?_, rfl, rfl, ?_⟩
@@ -57,7 +57,7 @@ theorem no_hit_eta {Sfield : Fin 29 → Subfield K} {F : Subfield K}
 #print axioms no_hit_eta
 
 theorem no_hit_alpha {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskPoly : (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
     (hlen : rs.length = 25) (cs : List K) (hparse : semChalsZ rs = some cs)
     (claim : K) (hclaim : claimOf rs = some claim)
@@ -65,9 +65,9 @@ theorem no_hit_alpha {Sfield : Fin 29 → Subfield K} {F : Subfield K}
     (hdegree : ∀ j, (polys j).natDegree ≤ 27)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
     (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
-    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskPoly B) x [] (rs ++ tail)) :
+    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail)) :
     ¬ badAlpha 27 10
-      (virtualPolyZ maskPoly x.pub B t (fun j => cs.getD j.val 0) (cs.getD 14 0))
+      (virtualPolyZ maskClaims x.pub B t (fun j => cs.getD j.val 0) (cs.getD 14 0))
       polys (fun j => cs.getD (15+j.val) 0) := by
   intro hb
   obtain ⟨j,hj⟩ := (badAlpha_iff_exists_round 27 10 _ polys _).mp hb
@@ -87,7 +87,7 @@ theorem no_hit_alpha {Sfield : Fin 29 → Subfield K} {F : Subfield K}
       alphaRoundPrefix (fun k : Fin 10 => cs.getD (15+k.val) 0) j := by
     funext k
     exact getD_take_lt cs n (15+k.val) (by dsimp [n]; omega)
-  apply no_hit_roundZ fallback1 maskPoly B x rs tail hno ⟨n,hn⟩
+  apply no_hit_roundZ fallback1 maskClaims B x rs tail hno ⟨n,hn⟩
   rw [hslot]
   apply Or.inl
   refine ⟨.base (.roundPoly (polys j)), cs.getD n 0, ?_, rfl, rfl, ?_⟩
@@ -107,7 +107,7 @@ theorem no_hit_alpha {Sfield : Fin 29 → Subfield K} {F : Subfield K}
       refine ⟨t, candidate_memZ x rs hw gw hc2 t ht n (by dsimp [n]; omega) (by omega), ?_⟩
       have lift (k : Fin 10) (he : k = j) :
           alphaRound 27 10
-            (virtualPolyZ maskPoly x.pub B t (fun k => cs.getD k.val 0) (cs.getD 14 0))
+            (virtualPolyZ maskClaims x.pub B t (fun k => cs.getD k.val 0) (cs.getD 14 0))
             (fun _ => polys j) k (fun l : Fin k.val => (cs.take n).getD (15+l.val) 0)
             (cs.getD n 0) := by
         subst k

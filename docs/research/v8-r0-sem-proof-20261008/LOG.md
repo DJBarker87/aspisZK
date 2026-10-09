@@ -4185,3 +4185,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3271 | `R0P/MaskPrefix` | 0 / 0 | 0:03.35 | 6846100 | 0 | 7 | `5ec6a1f3c6c289ffb1fd0fa62e4f6e922df8078c0c34d75626ceaa9d8eae9f4a` |
 
 Source revision(s): `380b14285499e535299492f88443bb18da940d9b`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskNoHit (host attempt 3272)
+
+No-hit eta exclusion now identifies etaBad claim (maskTotal maskClaims t) (originalTotal t) for the candidate trace; alpha exclusion uses that same candidate mask polynomial. The existing parsed-claim and candidate-membership proofs need no additional premise. Attempt 3272 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3272 | `R0P/MaskNoHit` | 0 / 0 | 0:03.32 | 6842932 | 0 | 3 | `8f9791c013d96d4da9b2ce7ea175814262dc31f67ca2a8f831bd6a59e4b91fd3` |
+
+Source revision(s): `ba13d37284dcbf43046106df86d003d6d8408501`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
