@@ -3075,3 +3075,15 @@ Host attempt 672 (`run2.sh 672 R0P/SemCharP 7000 7`): `exit=0`, wall
 0:02.86, peak RSS 6,827,176 KiB, swaps 0, no errors or warnings, axioms
 standard. With these, `SemD3Glue.d3` is applicable at
 `prime := AspisCircleGroupOrder.P` with `hprime := semE_prime_eq`.
+
+### G20 — combined decoder
+
+Ported the completing decoder to the mixed message/challenge types: single-pair rows below 30 and the literal eight-pair q22 output at row 30, with a 31-row guard. The generic chain law and the equality with the opening-parameter chain are proved symbolically. The decoder definition needs no round-count premise; consumers retain p.rounds = 31 for the backward walk. Host 2600 is exit 0, no errors or warnings, and all three audited declarations use only propext, Classical.choice, Quot.sound. R0C and maxErr accounting are unchanged.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g20-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2600 | `R0P/SemDuplexDecoder` | 0 / 0 | 0:04.56 | 6834532 | 0 | 3 | `cc8dc9b73d6f98a43ba8a41771e1cf356cac5ad3a7e87b062f031e4e0ba86236` |
+
+Source revision(s): `5f4ad4aee9d14cd7994121845407f839d0c4a146`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
