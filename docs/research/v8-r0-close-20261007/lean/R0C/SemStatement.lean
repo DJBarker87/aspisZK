@@ -44,6 +44,10 @@ No such refinement is claimed here. X is the public initial context; committed
 words may occur in SM, so later commitments are not moved before lambda/chi. -/
 structure SourceData (X SM W : Type) (Sfield : Fin 29 → Subfield E) where
   semanticRounds : Nat
+  /-- The second circle row's fixed fallback point (the reference sampler's
+  output on a rejected parameter); supplied by the concrete source instance.
+  The first row counts hitting it as a bad outcome. -/
+  circleFallback1 : Point K
   semanticBad : Prefix K E X SM → SM → K → Prop
   paymentWitness : X → W → Prop
   openingView : Prefix K E X SM →
@@ -51,19 +55,21 @@ structure SourceData (X SM W : Type) (Sfield : Fin 29 → Subfield E) where
   decision : Prefix K E X SM → Msg K E SM → Bool
 
 /-- A challenge event, not a side condition on the initial statement. -/
-def z0Bad (z : Point K) : Prop := BaseRational z
+def z0Bad (fallback1 z : Point K) : Prop := BaseRational z ∨ z = fallback1
 
 def z1Bad (z0 z1 : Point K) : Prop := BaseRational z1 ∨ z1 = z0
 
 /-- The SEM positions, then z0 and z1, then the existing five opening rows.
-The circle rows use the source's one-block parameter sampler
-(`challenge_qm31`, then the rational map of circle.rs:55, rejecting a
-CM31 parameter): a rejected block is counted as a bad outcome, so each
-circle row is bounded by `(1+δ)(P²+1)/P⁴ ≤ 2/P²`. -/
+The circle rows use the reference's one-block parameter sampler
+(`challenge_qm31`, then the rational map of circle.rs:55); a CM31 parameter
+yields a fixed non-rational fallback point (`f0` at the first row, `f1 =
+circleFallback1` at the second). The first row is bad only on the fibre
+of `f1`, the second (for a prefix whose `z0 ≠ f1`) only on the fibre of
+`z0`: one parameter each, so each row is bounded by `(1+δ)/P⁴ ≤ 2/P⁴`. -/
 def rowBudget (s : SourceData (K := K) X SM W Sfield) (i : Nat) : ℚ :=
   if i < s.semanticRounds then 396430 / ((Fintype.card K : ℚ) - 1)
-  else if i = s.semanticRounds then 2 / (AspisCircleGroupOrder.P : ℚ) ^ 2
-  else if i = s.semanticRounds + 1 then 2 / (AspisCircleGroupOrder.P : ℚ) ^ 2
+  else if i = s.semanticRounds then 2 / (AspisCircleGroupOrder.P : ℚ) ^ 4
+  else if i = s.semanticRounds + 1 then 2 / (AspisCircleGroupOrder.P : ℚ) ^ 4
   else R0FS.ε E (i - (s.semanticRounds + 2))
 
 /-- The unproved ideal SEM density target at a fixed pre-challenge prefix.
@@ -77,7 +83,8 @@ def roundBad (s : SourceData (K := K) X SM W Sfield)
     (P : Prefix K E X SM) (m : Msg K E SM) (c : Chal K E) : Prop :=
   (∃ sm k, P.round < s.semanticRounds ∧ m = .semantic sm ∧ c = .semantic k ∧
     s.semanticBad P sm k) ∨
-  (∃ y z, P.round = s.semanticRounds ∧ m = .beforeZ0 y ∧ c = .circle z ∧ z0Bad z) ∨
+  (∃ y z, P.round = s.semanticRounds ∧ m = .beforeZ0 y ∧ c = .circle z ∧
+    z0Bad s.circleFallback1 z) ∨
   (∃ y y0 z0 z1, P.round = s.semanticRounds + 1 ∧
     P.rounds.getLast? = some (.beforeZ0 y, .circle z0) ∧
     m = .beforeZ1 y0 ∧ c = .circle z1 ∧ z1Bad z0 z1) ∨

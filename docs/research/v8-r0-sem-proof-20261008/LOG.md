@@ -3324,3 +3324,24 @@ new premise to combined_fiat_shamir_closed.
 Snapshot revision before the obstruction commit: `437c018e58212e61be24702235ca150221f4e938`.
 Final source bytes match the accepted host snapshots 2703/2709. No source
 outside the semantic job directory was edited, and evidence remains uncommitted.
+
+## Lead: G22 obstruction accepted; R0C interface applied (673, 675)
+
+Codex's `CircleMassObstruction` (`56a8e2315`) is correct: `qm31Sample` is
+the modulo reduction of a 256-byte block, so a single parameter's mass is
+up to `(1+δQ)/P⁴`, not `1/P⁴`. The lead's G22 targets were mis-stated by
+the `(1+δQ)` factor already carried by the semantic rows; the design is
+unchanged. Corrected targets: `circleSample0_mass ≤ (1+δQ)/P⁴` and
+`circleSample1_mass (hz0 : z0 ≠ circleFallback1) ≤ (1+δQ)/P⁴`, via
+`qm31Sample_mass_slack` on the one-parameter fibres.
+
+R0C interface applied (lead edits, Codex's proposed shape):
+`SourceData.circleFallback1 : Point K`; `z0Bad fallback1 z := BaseRational z
+∨ z = fallback1`; `roundBad` passes `s.circleFallback1`; circle
+`rowBudget` rows `2/P⁴` (an upper bound for `(1+δQ)/P⁴`, kept free of the
+job-directory `δQ`); `CircleRows.z0_density_le` replaces `z0_density`;
+`chord_conditions` takes `fallback1`. Host: 673 `R0C/SemStatement`
+exit 0, 3.10 s, 6,799,044 KiB; 674 failed on a stale `#print axioms
+z0_density` line; 675 `R0C/CircleRows` exit 0, 3.27 s, 6,788,544 KiB;
+standard axioms, no warnings. Dependent R0P modules must be recompiled
+against 673/675 (Codex, continuing G22).

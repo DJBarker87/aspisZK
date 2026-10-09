@@ -55,12 +55,14 @@ def rationalEquiv : C ≃ {z : Point K // BaseRational z} :=
 theorem baseRational_card : Fintype.card {z : Point K // BaseRational z} = 2^31 :=
   (Fintype.card_congr (rationalEquiv (K := K))).symm.trans card_C_eq
 
-/-- Exact first-row density under the uniform law on the full circle. -/
-theorem z0_density : mean (fun z : Point K => indicator (SemStatement.z0Bad z)) =
-    (2^31 : ℚ) / Fintype.card (Point K) := by
-  simp only [SemStatement.z0Bad]
-  rw [Counting.mean_indicator_card, baseRational_card]
-  simp only [Nat.cast_pow, Nat.cast_ofNat]
+/-- First-row upper bound under the uniform law on the full circle: the
+rational points and the second row's fallback. -/
+theorem z0_density_le (fallback1 : Point K) :
+    mean (fun z : Point K => indicator (SemStatement.z0Bad fallback1 z)) ≤
+      (2^31+1 : ℚ) / Fintype.card (Point K) := by
+  letI : Nonempty (Point K) := ⟨fallback1⟩
+  have h := Counting.mean_or_eq_le (BaseRational (K := K)) fallback1
+  simpa only [SemStatement.z0Bad, baseRational_card, Nat.cast_pow, Nat.cast_ofNat] using h
 
 /-- Second-row upper bound, including equality with the preceding challenge. -/
 theorem z1_density_le (z0 : Point K) :
@@ -72,13 +74,13 @@ theorem z1_density_le (z0 : Point K) :
 
 omit [Fintype K] in
 /-- Absence of the two counted events supplies precisely the old Stmt fields. -/
-theorem chord_conditions (z0 z1 : Point K)
-    (h0 : ¬ SemStatement.z0Bad z0) (h1 : ¬ SemStatement.z1Bad z0 z1) :
+theorem chord_conditions (fallback1 z0 z1 : Point K)
+    (h0 : ¬ SemStatement.z0Bad fallback1 z0) (h1 : ¬ SemStatement.z1Bad z0 z1) :
     z0 ≠ z1 ∧ ¬ BaseRational z0 ∧ ¬ BaseRational z1 := by
-  exact ⟨fun h => h1 (Or.inr h.symm), h0, fun h => h1 (Or.inl h)⟩
+  exact ⟨fun h => h1 (Or.inr h.symm), fun h => h0 (Or.inl h), fun h => h1 (Or.inl h)⟩
 
 #print axioms baseRational_card
-#print axioms z0_density
+#print axioms z0_density_le
 #print axioms z1_density_le
 #print axioms chord_conditions
 end
