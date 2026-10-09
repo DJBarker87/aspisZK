@@ -57,18 +57,24 @@ impl M31 {
 
     #[inline(always)]
     pub fn add(self, rhs: M31) -> M31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FAdd);
         let s = self.0 + rhs.0;
         M31(if s >= P { s - P } else { s })
     }
 
     #[inline(always)]
     pub fn sub(self, rhs: M31) -> M31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FSub);
         let s = self.0 + P - rhs.0;
         M31(if s >= P { s - P } else { s })
     }
 
     #[inline(always)]
     pub fn neg(self) -> M31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FNeg);
         if self.0 == 0 {
             M31(0)
         } else {
@@ -78,6 +84,8 @@ impl M31 {
 
     #[inline(always)]
     pub fn mul(self, rhs: M31) -> M31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);
         M31(reduce_u64(self.0 as u64 * rhs.0 as u64))
     }
 
@@ -118,6 +126,8 @@ impl M31 {
     /// value below 2^61 for a canonical input.
     #[inline(always)]
     pub fn mul_pow2(self, shift: u8) -> M31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMulPow2);
         debug_assert!(shift <= 30);
         M31(reduce_u64((self.0 as u64) << shift))
     }
@@ -133,6 +143,8 @@ impl M31 {
     /// multiply and an input-dependent branch.
     #[inline(always)]
     pub fn half(self) -> M31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FHalf);
         M31((self.0 >> 1) | ((self.0 & 1) << 30))
     }
 
@@ -152,6 +164,8 @@ impl M31 {
     /// Multiplicative inverse via a fixed addition chain for `P - 2`.
     /// Panics on zero.
     pub fn inv(self) -> M31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);
         assert!(self.0 != 0, "inverse of zero");
 
         // Build x^(2^k - 1) at k = 2, 4, 8, 16, 24, 28, 29.
@@ -825,6 +839,8 @@ impl QM31 {
 
     #[inline(always)]
     pub fn add(self, rhs: QM31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KAdd);
         QM31 {
             c0: self.c0.add(rhs.c0),
             c1: self.c1.add(rhs.c1),
@@ -833,6 +849,8 @@ impl QM31 {
 
     #[inline(always)]
     pub fn sub(self, rhs: QM31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSub);
         QM31 {
             c0: self.c0.sub(rhs.c0),
             c1: self.c1.sub(rhs.c1),
@@ -841,6 +859,8 @@ impl QM31 {
 
     #[inline(always)]
     pub fn neg(self) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KNeg);
         QM31 {
             c0: self.c0.neg(),
             c1: self.c1.neg(),
@@ -858,6 +878,8 @@ impl QM31 {
     /// Karatsuba extension multiplication: 3 CM31 muls + one mul-by-R.
     #[inline(always)]
     pub fn mul(self, rhs: QM31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);
         let m0 = self.c0.mul(rhs.c0);
         let m1 = self.c1.mul(rhs.c1);
         let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));
@@ -872,6 +894,8 @@ impl QM31 {
     /// multiplication: seven M31 products rather than nine.
     #[inline(always)]
     pub fn square(self) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);
         let c0_square = self.c0.square();
         let c1_square = self.c1.square();
         QM31 {
@@ -883,6 +907,8 @@ impl QM31 {
     /// Late-lift kernel: QM31 * CM31 costs 2 CM31 muls instead of 3.
     #[inline(always)]
     pub fn mul_cm31(self, rhs: CM31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulC);
         QM31 {
             c0: self.c0.mul(rhs),
             c1: self.c1.mul(rhs),
@@ -892,6 +918,8 @@ impl QM31 {
     /// Late-lift kernel: QM31 * M31 costs 2 scalar CM31 scalings.
     #[inline(always)]
     pub fn mul_m31(self, rhs: M31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulF);
         QM31 {
             c0: self.c0.mul_m31(rhs),
             c1: self.c1.mul_m31(rhs),
@@ -919,6 +947,8 @@ impl QM31 {
     /// Inverse in the quadratic extension over CM31:
     /// `(a + bu)^-1 = (a - bu) / (a^2 - (2+i)b^2)`.
     pub fn try_inv(self) -> Option<QM31> {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KInv);
         if self.is_zero() {
             return None;
         }

@@ -75,6 +75,8 @@ impl WideExact {
     }
 
     pub fn add(self, rhs: Self) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EAdd);
         Self {
             c0: self.c0.add(rhs.c0),
             c1: self.c1.add(rhs.c1),
@@ -82,6 +84,8 @@ impl WideExact {
     }
 
     pub fn sub(self, rhs: Self) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ESub);
         Self {
             c0: self.c0.sub(rhs.c0),
             c1: self.c1.sub(rhs.c1),
@@ -89,6 +93,8 @@ impl WideExact {
     }
 
     pub fn neg(self) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ENeg);
         Self {
             c0: self.c0.neg(),
             c1: self.c1.neg(),
@@ -97,6 +103,8 @@ impl WideExact {
 
     /// `(a+b*v)(c+d*v) = (ac+u*bd) + (ad+bc)*v`.
     pub fn mul(self, rhs: Self) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMul);
         Self {
             c0: self.c0.mul(rhs.c0).add(mul_u(self.c1.mul(rhs.c1))),
             c1: self.c0.mul(rhs.c1).add(self.c1.mul(rhs.c0)),
@@ -105,6 +113,8 @@ impl WideExact {
 
     /// `(a+b*v)^2 = (a^2+u*b^2) + (2ab)*v`.
     pub fn square(self) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ESquare);
         let cross = self.c0.mul(self.c1);
         Self {
             c0: self.c0.square().add(mul_u(self.c1.square())),
@@ -115,6 +125,8 @@ impl WideExact {
     /// `(a+b*v)^-1 = (a-b*v)/(a^2-u*b^2)`. Returns `None` at zero.
     /// Since u is a nonsquare in QM31, the norm is nonzero for nonzero self.
     pub fn try_inv(self) -> Option<Self> {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EInv);
         let norm = self.c0.square().sub(mul_u(self.c1.square()));
         let inverse_norm = norm.try_inv()?;
         Some(Self {
@@ -139,10 +151,23 @@ impl WideExact {
 
     /// Mixed multiplication `(a+b*v)*r = ar + br*v`, for `r` in QM31.
     pub fn mul_qm31(self, rhs: QM31) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulK);
         let rhs = canonical_qm31(rhs);
         Self {
             c0: self.c0.mul(rhs),
             c1: self.c1.mul(rhs),
+        }
+    }
+
+    /// Scalar multiplication without lifting to a full E product.
+    pub fn mul_m31(self, rhs: M31) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulF);
+        let rhs = M31(rhs.0 % P);
+        Self {
+            c0: self.c0.mul_m31(rhs),
+            c1: self.c1.mul_m31(rhs),
         }
     }
 

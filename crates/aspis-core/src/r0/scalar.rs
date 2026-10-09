@@ -44,6 +44,8 @@ impl CodeField for M31 {
         M31(value.0 % P)
     }
     fn try_inv(self) -> Option<Self> {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FInvGeneric);
         if self == Self::ZERO {
             None
         } else {
@@ -71,6 +73,8 @@ impl CodeField for QM31 {
         QM31::from_cm31(<CM31 as CodeField>::from_m31(value))
     }
     fn try_inv(self) -> Option<Self> {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KInvGeneric);
         let r = CM31::new(M31(2), M31::ONE);
         let norm = self.c0.mul(self.c0).sub(r.mul(self.c1.mul(self.c1)));
         let inverse = <CM31 as CodeField>::try_inv(norm)?;
@@ -86,6 +90,8 @@ impl CodeField for WideExact {
         Self::from_qm31(<QM31 as CodeField>::from_m31(value))
     }
     fn try_inv(self) -> Option<Self> {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EInvGeneric);
         let norm = self
             .c0()
             .mul(self.c0())
