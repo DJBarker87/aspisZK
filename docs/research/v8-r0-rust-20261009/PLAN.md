@@ -146,3 +146,89 @@ Consequences for R-E: pass row-indexed lane messages to `Commitment::new` and
 not from R-F's raw-row diagnostic builder, which must either be transported or
 not reused; semantic row claims unchanged. The Lean side of D13 is decision
 D13′ in the privacy LOG (`v8-r0-zk-20261009/LOG.md`).
+
+## Lead review of R-E (7ba72efd1, 805c4eb63, 40d509084): integration accepted; CU not yet measurable
+
+Accepted: `aspis_prover::r0::r0_prove` and `aspis_statement::r0::r0_verify`
+compose the R-F semantic rows with the R-D/R-G opening layer on one P1 wire
+(95,712 bytes; semantic prefix 12,903, opening view 83,742 overlapping the
+row-26 record). C1 commits lanes 0–25 and D before λ/χ, C2 commits H1/G
+afterwards, the before-z1 endpoint comes from R-D's transported path (the
+R-G handoff requirement), and the two row-26 records are checked equal before
+emission. Genuine transfer and withdrawal proofs round-trip natively with
+1,894 recorded rejections; strict acceptance, no PoW, no disabled checks.
+Prover 5.1 s / 193 MiB; native verifier 61 ms. Evidence
+`results/r0-e2e-20261009/REPORT.md`, all jobs capped 4/6 GiB, swap 0.
+
+**Correction to the headline.** "Does not fit one transaction as implemented"
+is not established. The SBF binary is invalid: the compiler reports frames of
+32–394 KiB against the 4 KiB limit because `Message<E>` (1024 × 32 B) and
+`[E; 512]` are passed and returned by value throughout the opening path
+(`eq_weight`, `indicator`, `OpeningData::weights/q_weights/total_weights`,
+`chord::*`, `check_v1`, `check_v2`), and `NaturalBasis::new(Initial)` holds
+two dense 512×512 M31 matrices (2 MiB) against a 256 KiB heap. Every SBF run
+died at 17.6k CU in frame 5. The report itself says no CU or split conclusion
+follows; the summary sentence overstated it. The verifier's completed CU is
+**unmeasured**, as it was before R-E.
+
+**Risk, as an estimate and not a measurement.** V2 applies a 1024-dimensional
+weight computation in E = P⁸ (eq weights for three points, the chord-quotient
+transpose, the dual fold, the dot with F), and V1 performs 22 fibre folds with
+88 E inversions; with E×E at several hundred CU this is plausibly above 1.4M
+even after the memory fix. A dense quotient-weight transpose (four 512×512
+passes) would alone be tens of millions of CU and is not a candidate on-chain
+algorithm. The decision between a CU campaign and a two-transaction split is
+the user's; it needs numbers first. Hence R-E2 below measures before it
+refactors deeply.
+
+### R-E2 (Rust A): on-chain-shaped verifier and real CU numbers
+
+Base: `origin/v8-reference` ≥ `40d509084`. Verifier-side only: the wire,
+the prover's outputs (both fixture proofs byte-identical), the semantic layer
+and every check are unchanged; no check is weakened, reordered across the
+phase boundary, or made conditional.
+
+1. **Op counts and primitive costs first.** Instrument `r0_verify` natively
+   (feature-gated counters or a counting `CodeField` wrapper) to report, per
+   phase (semantic, chord/claims, authentication, V1 per fibre, V2): E×E
+   multiplications, E×QM31, E×M31, E additions, E inversions, QM31 and M31
+   operations, SHA-256 compressions. Measure each primitive's CU in SBF with a
+   small loop probe (N operations minus an empty loop), including
+   `WideExact::mul`, `mul_qm31`, scalar-by-M31, `try_inv`, QM31 mul, and one
+   SHA-256 compression. Report the product as a predicted CU per phase with
+   the headroom to 1.3M/1.4M **before** step 3, in `results/r0-e2e-20261009/
+   CU-ESTIMATE.md`. If the prediction exceeds 1.4M, continue; the numbers are
+   the deliverable.
+2. **Memory shape.** No `Message<E>`, `[E; 512]` or `FinalMessage<E>` by value
+   on the verifier path: heap (`Box`/`Vec` with `try_reserve_exact`, total
+   ≤ 256 KiB with `request_heap_frame`) or streaming per coefficient; frames
+   ≤ 4 KiB, and `cargo build-sbf` must report no stack diagnostics for any
+   function reachable from the verifier entry. The dense `NaturalBasis` is
+   forbidden on the verifier path. `indicator` becomes a constant bit table;
+   `eq_weight` is computed by tensor doubling in QM31 (the points are QM31
+   values lifted to E) and lifted once.
+3. **Structured quotient weights.** Replace the dense `C[a,b,c]ᵀ` by the
+   transpose of multiplication by `L = a + bX + cY` expressed in the natural
+   basis: `X·N_j` sets bit 0 of `j` when clear and otherwise carries through
+   `X² = (D₁+1)/2`, `D_b² = (D_{b+1}+1)/2`; `Y` swaps the parity halves with
+   `Y² = 1 − X²`; the monomial truncation of SPEC §5 is a rank-one correction
+   from the overflow of the top factor, with a fixed 512-entry M31 table.
+   `row(e1)` and `row(e2)` need only rows 510 and 511 of `M_512`, computed
+   from the recurrence without the matrix. Equality with the dense reference
+   must be tested on **all 1024 unit vectors** (both maps are linear, so this
+   is a complete check) and on random inputs, for several `(a,b,c)`; the
+   prover may keep the dense path off-chain.
+4. **Measure.** Rebuild the `r0-cu-probe` ELF, rerun both fixtures five
+   times with phase markers at the 1.4M limit; report completed CU per phase,
+   headroom, proof/account sizes. If a complete run needs a higher limit to
+   finish, label such runs explicitly as diagnostic and also report the
+   natural split points (after semantics; after k fibres; before V2) with the
+   state each would carry across transactions. Standard evidence (caps, RSS,
+   swap, manifests, logs), `REPORT-2.md`, branch `codex/r0-e2e-re2-20261009`.
+
+Stop list: any wire, prover-output, semantic-layer or check change; heap
+above 256 KiB; a reachable function with a stack diagnostic; a unit-vector
+mismatch against the dense reference; raising a memory cap; rerunning an
+unchanged measurement. D14 (privacy LOG) will later add a sparse fourth
+opening weight row and 29 claims; keep `weights` extensible but do not add it
+now.
