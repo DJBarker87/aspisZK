@@ -3908,3 +3908,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3252 | `R0P/MaskEarly` | 0 / 0 | 0:03.58 | 6847680 | 0 | 11 | `cea263723fdbe27f997f1704c43f04a7ea3c35149c886cc4b0b0b2816117a4b5` |
 
 Source revision(s): `96e476d943c67642afb33244eb0790377207c675`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: complete parsed masked semantic extraction
+
+MaskD3Glue proves accepted_no_hit_extractedZ. A sound opening supplies a list-decoded trace with honest claims. Masked sumcheck and the alpha exclusion identify the masked Boolean sum; the eta exclusion forces the original sum to zero, including eta=0. The early exclusions then reuse the production/LogUp part of the original D3 core and semantic extraction. The only mask premise is MaskDegree; no sum or uniqueness premise was added. Attempt 3253 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3253 | `R0P/MaskD3Glue` | 0 / 0 | 0:03.18 | 6842856 | 0 | 1 | `a85d48935156749b277950e8200f824210c81f897dace5571ad5528f798b0d47` |
+
+Source revision(s): `cb8252868a0ebc83429c1711b442cebe6e12fe79`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
