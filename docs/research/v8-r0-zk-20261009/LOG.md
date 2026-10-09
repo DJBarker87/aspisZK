@@ -539,7 +539,9 @@ Decision:
    claims (MaskedProtocol), the mask-sum claim is linear, OOD/zerocheck
    claims are MLE evaluations (linear in cells), opened positions are
    codeword symbols (linear in cells), and the original's round polynomials
-   do not depend on the affine tape at all.
+   are independent of the mask-only/G/D coordinates and affine in the
+   H1-padding coordinates (`μ·H1`, `μ²·(1−active)·H1`, `active` tape-free).
+   (Corrected after Z3's check; the first draft said "independent".)
 3. `MaskImage x` keeps the D4′ form, quantified over honest instances of the
    new type (so over `e` as well). `A` is expected to be independent of the
    instance (the mask factors depend only on α) — Z3 may prove and use
@@ -548,3 +550,175 @@ Decision:
    law; `e` is uniform and instance-independent (D5), so equal conditional
    laws give equal joint laws. The simulator still runs the honest prover on
    `Classical.choice` of an instance (now including an `e`) for `x`.
+
+## Z3 — stopped by the semantic sumcheck affinity check (2026-10-09)
+
+Ran `git fetch` first and read D4′ from the requested base
+**`9a9a2b3ff`** before inspecting other sources. D4′ resolves both Z2
+questions; neither is reopened here. The worktree had already advanced to
+`2363f469444bd383a352d5a5f43016cc98e2044d` (the eta-budget correction).
+All source citations below refer to git objects at **9a9a2b3ff**, not to
+concurrent soundness edits. This task changes only this LOG.
+
+**Stop: the last semantic sumcheck polynomial, message `roundPoly p₉`
+at global round 24, is not affine in the full `MaskLayout.MaskTape`.**
+Its dependence on one eligible semantic C1 mask coordinate has degree 25.
+`applyMask_affine` is valid, but composition with the semantic oracle is
+not affine. Thus the requested `view_affine` cannot be obtained by the
+proposed argument for the actual disclosed messages. The instruction was:
+“if some message is not affine in the trace … stop and name it.” No
+unproved affinity premise, assumed linear map, or replacement transcript
+has been installed. No claim of a privacy attack or failure of HVZK is made;
+this obstructs the proposed affine-map reduction.
+
+### Message-by-message audit
+
+Abbreviations in this section: **Z** = this directory's `lean/R0Z/`;
+**S** = `docs/research/v8-r0-sem-proof-20261008/lean/R0P/`;
+**O** = `docs/research/v8-wide-reference-20261005/lean/R0/`;
+**P** = `crates/aspis-prover/src/`. “Linear” below describes the inspected
+field-payload formulas at fixed challenges, not a new kernel-checked theorem.
+
+| Disclosed component | Affinity check and source |
+|---|---|
+| Empty semantic messages / ideal commitment handles | Empty messages are constant. D1 treats handles as opaque metadata; this is not a claim that a Rust Merkle hash is affine. The source word-valued C2 message must still be projected to handles in the eventual ideal view. S/SemView.lean:30–34,58–76; D1 above. |
+| Mask-sum claim, row 14 | Linear in the trace: each mask factor at each Boolean row is fixed; the claim is a sum of factor times cell value. Z/MaskedProtocol.lean:69–84; P/state_only_hiding.rs:845–882. Composition with the affine mask operation stays affine. |
+| **Semantic round polynomials, rows 15–24** | **Fails.** These are partial Boolean sums of `mask + eta * original`, interpolated in the current challenge coordinate. The original oracle has nonlinear Poseidon trace expressions. The final round has no remaining Boolean sum, so evaluating its message at 1 exposes the explicit degree-25 dependence below. Z/MaskedProtocol.lean:123–148; S/SemD3.lean:28–38; S/Sumcheck.lean:19–30; P/state_only_zerocheck.rs:79–121 and P/state_only_hiding.rs:900–931. |
+| Three point-claim vectors, row 25 | Linear functionals of the trace at fixed alpha, successor(alpha), xor12(alpha). S/SemD3.lean:28–30; S/SemView.lean:36–56. Nonlinearity of the successor **in alpha** is irrelevant when challenges are fixed. |
+| Circle OOD claims, rows 26/27 | Polynomial evaluation at fixed circle points is linear in the encoded message. O/Chord.lean:34–35,51–63,83–100. This does not claim linearity in the circle points. |
+| Opening-layer inactive-sum scalar / unit, rows 28/29 | The scalar is a fixed weighted sum of the batched trace; the unit message is constant. O/OpeningDefinitions.lean:34,50–67; `docs/research/v8-r0-fs-20261006/lean/R0FS/Protocol.lean:9–15,50–60`. |
+| Opening-layer degree-6 polynomial, row 30 | Its kernel is bilinear in quotient coefficients and dual weights, but the latter depend only on fixed challenges/positions, not trace values. It is therefore linear in the quotient coefficients. O/RoundNormalization.lean:24–34; O/OpeningDefinitions.lean:53–67,96–97. This is a different polynomial from the nonlinear semantic degree-27 messages. |
+| Final folded message and q22 fibre values, row 31 and final response | Fixed-point chord division, batching, radix-four transforms and folding are linear in the word; restriction to the fixed queried positions is linear. O/OpeningDefinitions.lean:36–40,99–106; O/Fold.lean:55–72; O/RoundNormalization.lean:36–40. Salts/handles/authentication metadata still require D1/D5's ideal projection; no Rust commitment theorem is asserted. |
+
+The honest builder remains uninstantiated. This audit does not assume its
+completeness or prove H1 construction. The obstruction below holds for
+**any fixed input trace** and removes H1 from the terminal with `mu = 0`
+and the copy lane with `theta = 0`, so neither missing operation can repair
+this message's tape dependence.
+
+### Symbolic obstruction using one permitted mask coordinate
+
+This is a source-level algebraic calculation, **not a new Lean theorem**,
+numerical rank probe, or evaluation of a concrete universe. Work in the
+reference M31 base field F and extension field K, with the existing
+`PackBasis F`. Write the basis elements as `i = B.i`, `u = B.u`; the tape
+scalar below is `s : F`.
+
+1. Let `r_s` have exactly one nonzero coordinate: the semantic mask for
+   **column 0, row 13**, with value `s`. Set every other tape coordinate to
+   zero. This cell is eligible Poseidon padding: Z/MaskLayout.lean:36–58;
+   `crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs:233–249`.
+   Row 13 is copy-inactive (the first active-row mask is 6144, with only
+   bits 11 and 12 set; S/CopyConstants.lean:30–31). Balancing at row 1023
+   gives, for every fixed trace `t`,
+   `applyMask B t r_s - applyMask B t 0 = s*e_(0,13) - s*e_(0,1023)`.
+   This follows directly from the negative-sum replacement in
+   Z/MaskLayout.lean:69–73,91–101; all other changes are tape-independent.
+2. Fix the MSB-first point
+   `a = (0,0,0,0,0,0,2,1,0,1)` and zerocheck point
+   `zc = (0,0,0,0,0,0,0,1,0,1)` (the Boolean row 5).
+   The multilinear weights at `a` are supported on **rows 5 and 13**,
+   with weights `-1` and `2`. Hence the current column-0 opening is
+   `c + 2*s`, while all other current columns are independent of `s`.
+   The balancing row 1023 has zero weight because its high bits are 1.
+   At `successorPoint a` the support is rows 6/14; at `xor12Point a` it
+   is rows 1/9. Neither opening reads the perturbation. These are sparse
+   bit-weight identities from S/SemDeg.lean:220–242 and
+   S/SemView.lean:36–56; no row sum is expanded.
+3. The block selector is 1; `low 5 = -1`, `low 13 = 2`, all other low
+   weights vanish. Therefore `leadingLow = fullLow = 0` and
+   `internalLow = -1` in S/Poseidon.lean:334–352. Only the internal pair
+   contributes. Its interpolated round constants are independent of `s`.
+4. A first internal round sends the leading degree-5 contribution from
+   input lane 0 to `(- (2*s)^5, (2*s)^5, …, (2*s)^5)`. Applying the
+   second fifth power and internal linear layer gives degree-25 leading
+   contributions `((2*s)^25, -(2*s)^25, …, -(2*s)^25)`.
+   This uses exactly `poseidonPow5`, `poseidonInternalLinear`, and
+   `poseidonInternalRound` at S/Poseidon.lean:25–28,55–71. Arbitrary
+   fixed trace values, shift constants and round constants contribute
+   lower-degree terms only.
+5. Take `theta = 0`, `mu = 0`, `eta = 1`. Theta selects packed Poseidon
+   group 0 alone (S/SemDecision.lean:44–49,74–80); the two H1 terms vanish.
+   At these points `eqValue zc a = -1`. Multiplying the internal residual
+   by `internalLow = -1`, then by this equality weight, and packing the
+   first four lanes yields the coefficient
+   **`2^25 * (-1 + i + u + i*u)` of `s^25`** in the original terminal.
+   Packing order is S/Poseidon.lean:775–781 and S/CoreExt.lean:30–39.
+   This coefficient is nonzero: 2 is nonzero in M31 and `PackBasis.indep`
+   forbids `-1 + i + u + i*u = 0` with base coefficients `(-1,1,1,1)`.
+6. The added mask is only affine in `s` at this fixed point, by
+   Z/MaskedProtocol.lean:69–84. It cannot cancel the degree-25 coefficient.
+   Fix alpha₀…alpha₈ to `a`'s first nine coordinates. The last honest
+   sumcheck polynomial `p₉(X)` is the oracle at that prefix and X, with
+   **no remaining Boolean variables to sum** (S/Sumcheck.lean:19–30;
+   the explicit source loop is P/state_only_zerocheck.rs:95–111).
+   Consequently **`p₉(1)` has this same nonzero degree-25 coefficient
+   in `s`**. Evaluation of a disclosed polynomial at 1 is a linear
+   observable of its coefficients. If the disclosed polynomial were
+   affine in the tape, this observable along the line `r_s` would have
+   degree at most 1. A nonzero polynomial of degree 25 cannot agree with
+   an affine function on all of F, since `|F| = 2^31-1 > 25`.
+
+This uses the task's unrestricted `forall ch` target; it neither discards
+bad challenges nor invokes a challenge-probability bound. Lambda/chi and
+later opening challenges do not enter the displayed term. Relation-free
+padding means the Boolean-row constraints survive masking; it does **not**
+make the off-Boolean semantic oracle linear in those masks. Likewise Z2's
+`maskValue_mldeg` bounds degree in **alpha**, whereas the failed assertion
+here concerns degree in the **mask tape**.
+
+### Lead decision needed — Z3 stop list
+
+1. **Lead decision needed: replace the full-tape affinity step.** The
+   requested `A x w ch` cannot describe this full disclosed view in its
+   message coordinates. A different privacy proof is needed before the
+   statement can be wired to the actual protocol: for example a conditional
+   affine argument after fixing semantic C1 masks, with a separately proved
+   mixture/coupling step, or a direct argument for the nonlinear pushforward.
+   These are possible research routes, not implemented choices or premises.
+   Omitting semantic polynomials, setting eta to zero, or declaring affinity
+   as a field would change the task and has not been done. D4′'s equal-coset
+   lemma remains mathematically valid **for affine maps**; it cannot supply
+   the missing affinity of these messages. No MaskImage/layout rank work
+   was attempted.
+2. **Lead decision needed: retain ZK_FS and add a real ROM bridge.**
+   Independently, Z1's `FSExperiments.real` and `.ideal` are arbitrary data
+   with no law tying them to the interactive views
+   (Z/ZkStatement.lean:143–173). Even equal interactive laws cannot bound
+   arbitrary experiments: one can distinguish two constant, unequal ROM
+   outputs. D5's ideal tape choice does not supply commitment hiding,
+   chronological oracle programming, or game correspondence. The minimal
+   proposed repair is to **leave the ZK_FS definition intact**, and make
+   `zkfs_of_hvzk_perfect` require a separately established ROM correspondence
+   bridge: the real and ideal observer views arise from a common,
+   witness-independent randomized postprocessing of the respective joint
+   interactive views, up to explicitly budgeted game-hop losses. Equality
+   of laws then transfers through the common postprocessing and the losses
+   bound the original ZK_FS advantage. The bridge must be proved for the
+   actual FS/ROM games; assuming it is not a derivation from D5. No bridge,
+   loss values, computational assumptions, or weakened ZK_FS was added.
+
+The existing tape uses the base scalar field F (`MaskTape K F`), with K the
+extension field. Any eventual affine formulation must respect that scalar
+field (restrict the view's scalars to F, or rename the generic lemma's
+scalar parameter). Replacing the C1 tape by uniform K-coordinates would
+change D3/D5; no such replacement was made.
+
+### Z3 validation and attempt status
+
+The explicit stop occurs before creating or modifying Lean definitions.
+`ZkStatement.lean`, `MaskedProtocol.lean`, `MaskLayout.lean`, and
+`StatisticalDistance.lean` remain byte-identical to the requested base.
+No `AffineLaw.lean` or `Hvzk.lean` was created. There was no Lean process,
+new 31xx attempt, host reservation, concrete field/row/state enumeration,
+Rust run, source edit outside this directory, or axioms audit to report.
+
+| Target / requested audit | Attempt | Exit | Wall | Peak RSS | Swap | Source revision | Axioms / status |
+|---|---|---|---|---|---|---|---|
+| `R0Z/ZkStatement.lean`, `view_affine` | — | — | — | — | — | 9a9a2b3ff, unchanged | Not attempted: semantic `roundPoly p₉` is non-affine. |
+| `R0Z/AffineLaw.lean`, equal-coset law corollary | — | — | — | — | — | no new file | Not attempted after the item-1 stop. |
+| `R0Z/Hvzk.lean`, `hvzk_perfect_of_maskImage` | — | — | — | — | — | no new file | Not attempted after the item-1 stop. |
+
+Validation is pinned-source inspection and the symbolic calculation above,
+not a new formal result. `git diff --check` passes. Commit scope is this
+LOG only, with no co-author trailer; concurrent soundness work is untouched.
