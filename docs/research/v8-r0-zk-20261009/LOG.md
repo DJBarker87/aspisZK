@@ -2391,3 +2391,28 @@ MemorySwapMax=0 and timeout 900 s. No sources were staged and no build scope
 was started. All Lean and Rust sources, including both lead-only R0C files,
 remain unchanged. This commit contains only this stop report and its JSON
 evidence; no binaries or co-author trailer.
+
+### Lead amendment D14″ — the extra row enters B3 (T1 re-issued)
+
+T1 stopped correctly before any edit or replay (`t1/evidence.json`,
+b11f5a644). D14′ item 3 bound the extra claims through B4 only. B4 forces
+the γ-batch `width29Batch (extraDiscrepancy D t) γ = 0`, not the per-lane
+equalities; the three point rows obtain per-lane equality from `γ ∉ B3`, and
+I left the extra row out of B3. The worker's example is exact: discrepancies
+e₀ = 1, e₂₈ = −1 have batch polynomial 1 − γ²⁸, which is zero at γ = 1.
+
+**Decision.** B3 gains the extra row:
+`B3 D := (Lambda D.W).biUnion fun t =>
+  (Finset.univ.biUnion fun j : Fin 3 =>
+    if discrepancy D t j = 0 then ∅ else width29NonzeroCollisionSet (discrepancy D t j)) ∪
+  (if extraDiscrepancy D t = 0 then ∅ else width29NonzeroCollisionSet (extraDiscrepancy D t))`.
+`B3_card ≤ 11200` (four rows × 100 candidates × 28 collision roots).
+`B3_outside` gets the extra-row counterpart; `binding` concludes
+`∀ l, extraDiscrepancy D t l = 0` from `h3bad` and the extra B4 clause, as
+for the point rows. Soundness constant: the γ-group addend goes from 14,000
+to 16,800 (+2,800/(|E|−1)) and the B4 card from 300 to 400 (+100/|E|). Both
+are authorised; against ≈ Q·2⁻¹⁰⁵ the change is ≈ 2⁻²³⁶ per query.
+`combined_fiat_shamir_masked` records the new constant exactly. T1's stop
+item "any change to the soundness bound other than the B4 term" reads "other
+than the B3 and B4 terms above". Everything else in D13′, D14′ and the T1
+paragraph stands. T1 is re-issued on the head carrying this section.
