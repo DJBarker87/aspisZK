@@ -4269,3 +4269,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3278 | `R0P/MaskFiatShamir` | 0 / 0 | 0:06.80 | 6854572 | 0 | 7 | `ea3112c7e186d24e08e2bed4eac99d4592e069489a5b59d99fb2b5f5c4e4108c` |
 
 Source revision(s): `a2f0bcbd197b97aebfa438199579018219ef21da`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskMaxErr (host attempt 3279)
+
+combined_fiat_shamirZ_closed is rechecked for claim-dependent masks. The error budget, combined_maxErrZ proof and exact q22 closed form are unchanged. Eta is 100(1+deltaQ)/P^4 and alpha is 2700(1+deltaQ)/P^4; the maximum remains (1+delta0)*C(9557,22)/C(262144,22). Attempt 3279 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3279 | `R0P/MaskMaxErr` | 0 / 0 | 0:05.05 | 6863724 | 0 | 7 | `6f6c05b4a0084b49d3d4a98c644d843b320383d8602a618973134f2e423bcfa7` |
+
+Source revision(s): `630d81ebdb20fc58ad1ba26c7964463a6c2cc767`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.

@@ -102,12 +102,12 @@ open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 noncomputable section
 variable {Sfield : Fin 29 → Subfield WideExact} {Pf : Type} {L : Nat}
-variable (maskPoly : (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskPoly)
+variable (maskClaims : (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskClaims)
 variable (B : PackBasis (Sfield 0))
 variable (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
 variable (msg : Pf → Nat → MsgZ WideExact)
 local notation "prZ" => combinedProtocolZ B p msg (fun _ _ => none)
-local notation "VZ" => FS2.verifier (prZ) (combinedDecisionZ maskPoly B)
+local notation "VZ" => FS2.verifier (prZ) (combinedDecisionZ maskClaims B)
 
 include hMask in
 /-- Exact q22 closed form of the masked theorem43 instance. -/
@@ -125,7 +125,7 @@ theorem combined_fiat_shamirZ_closed (x : TypedContext WideExact Sfield) (hr32 :
         FS2.extractFails (prZ) x (eval H (FS2.experiment P (VZ) x)))) ≤
       (Qtot : ℚ) * ((1 + delta0) *
         ((Nat.choose 9557 22 : ℚ) / (Nat.choose 262144 22 : ℚ))) + κ Qtot := by
-  have h := combined_fiat_shamirZ maskPoly hMask B p msg x hr32 hσsem hσz0 hσz1 hσopen P Qtot hQ
+  have h := combined_fiat_shamirZ maskClaims hMask B p msg x hr32 hσsem hσz0 hσz1 hσopen P Qtot hQ
   rw [combined_maxErrZ] at h
   exact h
 
