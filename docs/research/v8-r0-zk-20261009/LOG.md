@@ -514,3 +514,37 @@ questions are answered as follows; this replaces the prose of D4.
    (Z4) is the rank statement that the Rust q29 rank gate measures
    (`state_only_hiding.rs:555–560`); it is the only privacy obligation that
    depends on the layout.
+
+### Lead decision D4″ — tape split (resolves the Z3 affinity stop)
+
+Finding accepted: the honest sumcheck round polynomials are not affine in the
+eligible-cell noise. `g_j(X) = Σ_b V(α_{<j}, X, b)` evaluates the virtual
+polynomial at non-Boolean prefixes, where selector MLEs are nonzero and
+`MLE(succ(X))` is a combination of every row, so a relation-free cell such as
+(column 0, row 13) enters `g_j` polynomially (degree ≤ 25 through the pow5
+chain). This is a property of sumcheck, present in the Rust prover too; it
+does not affect completeness or soundness (Boolean-row constraints are
+untouched) and it is not what the mask-only design relies on.
+
+Decision:
+1. `MaskLayout.MaskCoordinate = EligibleCell ⊕ (maskOnly ⊕ GD)` is split.
+   The **affine tape** is `AffTape := (Fin 10 × Fin 1024) ⊕ (Fin 3 × Fin 1024 × Fin 4)`
+   (mask-only columns, G and D). The **eligible-cell noise**
+   `e : EligibleCell → F` becomes part of the honest instance:
+   `HonestInstance := Instance × (EligibleCell → F)`, with `public (w, e) = public w`
+   and `build (w, e) := applyEligible (build w) e`.
+2. `view x (w,e) ch : AffTape → View K` is the object D4′ decomposes:
+   `view = b + A r` with `A` linear in the affine tape. Every disclosed
+   component is affine in it: `maskValue` is linear in the mask-only and G
+   claims (MaskedProtocol), the mask-sum claim is linear, OOD/zerocheck
+   claims are MLE evaluations (linear in cells), opened positions are
+   codeword symbols (linear in cells), and the original's round polynomials
+   do not depend on the affine tape at all.
+3. `MaskImage x` keeps the D4′ form, quantified over honest instances of the
+   new type (so over `e` as well). `A` is expected to be independent of the
+   instance (the mask factors depend only on α) — Z3 may prove and use
+   `A x (w,e) ch = A x (w',e') ch` but must not assume it.
+4. HVZK: for each fixed `e`, the uniform-coset lemma gives the conditional
+   law; `e` is uniform and instance-independent (D5), so equal conditional
+   laws give equal joint laws. The simulator still runs the honest prover on
+   `Classical.choice` of an instance (now including an `e`) for `x`.
