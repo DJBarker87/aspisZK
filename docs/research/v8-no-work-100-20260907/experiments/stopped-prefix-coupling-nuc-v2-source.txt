@@ -1,0 +1,197 @@
+import NestedCircleMass
+import NestedCircleRunRefinement
+
+/-! Local finite-tape coupling at an actual successful ordinary stopping
+prefix. The full unread suffix is an explicit coordinate equivalence on
+each fixed consumed-prefix fibre. No oracle-table freshness or aggregation
+over the controller's variable-length histories is assumed or proved. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.StoppedPrefixCoupling
+noncomputable section
+local instance decision (p : Prop) : Decidable p := Classical.propDecidable p
+open Finset AspisV8.JointImageGame
+
+namespace Generic
+variable {B : Type*} {k : Nat}
+
+/-- All full tapes with this literal already-consumed prefix. -/
+def PrefixFibre (headBlocks : Fin k → B) (n : Nat) :=
+  {tape : Fin (k+n) → B // ((Fin.appendEquiv k n).symm tape).1=headBlocks}
+
+instance [Fintype B] (headBlocks : Fin k → B) (n : Nat) :
+    Fintype (PrefixFibre headBlocks n) := by unfold PrefixFibre; infer_instance
+
+def prefixEquiv (headBlocks : Fin k → B) (n : Nat) :
+    PrefixFibre headBlocks n ≃ (Fin n → B) where
+  toFun tape := ((Fin.appendEquiv k n).symm tape.val).2
+  invFun unread := ⟨Fin.appendEquiv k n (headBlocks,unread),
+    congrArg Prod.fst ((Fin.appendEquiv k n).symm_apply_apply (headBlocks,unread))⟩
+  left_inv tape := by
+    apply Subtype.ext
+    apply (Fin.appendEquiv k n).symm.injective
+    rw [(Fin.appendEquiv k n).symm_apply_apply]
+    exact Prod.ext tape.property.symm rfl
+  right_inv unread :=
+    congrArg Prod.snd ((Fin.appendEquiv k n).symm_apply_apply (headBlocks,unread))
+
+theorem fibre_list (headBlocks : Fin k → B) (n : Nat) (tape : PrefixFibre headBlocks n) :
+    List.ofFn tape.val = List.ofFn headBlocks ++ List.ofFn (prefixEquiv headBlocks n tape) := by
+  have same := congrArg Subtype.val ((prefixEquiv headBlocks n).symm_apply_apply tape)
+  change Fin.append headBlocks (prefixEquiv headBlocks n tape)=tape.val at same
+  rw [←same, List.ofFn_fin_append]
+
+theorem fibre_take (headBlocks : Fin k → B) (n : Nat) (tape : PrefixFibre headBlocks n) :
+    (List.ofFn tape.val).take k=List.ofFn headBlocks := by
+  rw [fibre_list]
+  exact List.take_left' (List.length_ofFn)
+
+theorem fibre_drop (headBlocks : Fin k → B) (n : Nat) (tape : PrefixFibre headBlocks n) :
+    (List.ofFn tape.val).drop k=List.ofFn (prefixEquiv headBlocks n tape) := by
+  rw [fibre_list]
+  exact List.drop_left' (List.length_ofFn)
+
+theorem avg_equiv {A C : Type*} [Fintype A] [Fintype C]
+    (e : A ≃ C) (f : C → ℚ) :
+    avg univ (fun a => f (e a))=avg univ f := by
+  simp only [avg, Finset.card_univ]
+  rw [e.sum_comp, Fintype.card_congr e]
+
+theorem unread_uniform [Fintype B] (headBlocks : Fin k → B) (n : Nat)
+    (reward : (Fin n → B) → ℚ) :
+    avg univ (fun tape : PrefixFibre headBlocks n => reward (prefixEquiv headBlocks n tape)) =
+      avg univ reward := avg_equiv (prefixEquiv headBlocks n) reward
+
+theorem avg_prod_first {A C : Type*} [Fintype A] [Fintype C] [Nonempty C]
+    (f : A → ℚ) : avg univ (fun pair : A×C => f pair.1)=avg univ f := by
+  have nonzero : (Fintype.card C : ℚ)≠0 := by exact_mod_cast Fintype.card_ne_zero
+  simp only [avg, Finset.card_univ, Fintype.card_prod, Fintype.sum_prod_type,
+    Finset.sum_const, nsmul_eq_mul, Nat.cast_mul, ←Finset.mul_sum]
+  field_simp [nonzero]
+
+def takeVector (blocks : List B) (k : Nat) (available : k≤blocks.length) : Fin k → B :=
+  fun i => blocks[i.val]'(i.isLt.trans_le available)
+
+theorem takeVector_list (blocks : List B) (k : Nat) (available : k≤blocks.length) :
+    List.ofFn (takeVector blocks k available)=blocks.take k := by
+  apply List.ext_getElem
+  · simp only [List.length_ofFn, List.length_take, Nat.min_eq_left available]
+  · intro i hi hj
+    simp only [List.getElem_ofFn, List.getElem_take, takeVector]
+
+def freshFourEquiv (headBlocks : Fin k → B) (r : Nat) :
+    PrefixFibre headBlocks (4+r) ≃ (Fin 4 → B) × (Fin r → B) :=
+  (prefixEquiv headBlocks (4+r)).trans (Fin.appendEquiv 4 r).symm
+
+theorem unread_split (headBlocks : Fin k → B) (r : Nat)
+    (tape : PrefixFibre headBlocks (4+r)) :
+    List.ofFn (prefixEquiv headBlocks (4+r) tape) =
+      List.ofFn (freshFourEquiv headBlocks r tape).1 ++
+      List.ofFn (freshFourEquiv headBlocks r tape).2 := by
+  have same := (Fin.appendEquiv 4 r).apply_symm_apply (prefixEquiv headBlocks (4+r) tape)
+  change Fin.append (freshFourEquiv headBlocks r tape).1
+    (freshFourEquiv headBlocks r tape).2=prefixEquiv headBlocks (4+r) tape at same
+  rw [←same, List.ofFn_fin_append]
+end Generic
+
+open AspisK1.V7Tag73TranscriptSchedule AspisK1.V7Tag73SamplerDecoder
+open AspisK1.V7Tag73DeterministicRefinement AspisK1.V7Tag73IncrementalSamplerControl
+open AspisK1.V7Tag73SecureCircleMap AspisV5ComponentCQM31TowerExact
+open AspisV8.NestedCircleRouting AspisV8.NestedCircleSourceRefinement
+open AspisV8.NestedCircleStatusRefinement
+
+/-- Construct the consumed coordinate prefix from a literal successful
+decode, using its proved source bound rather than a proposed stopping cut. -/
+def consumedPrefix (blocks : List Digest256) (decoded : OrdinaryPrefixDecode)
+    (source : decodeOrdinaryPrefix blocks=some decoded) : Fin decoded.blocksUsed → Digest256 :=
+  Generic.takeVector blocks decoded.blocksUsed (ordinary_source_tail blocks decoded source).2.2.1
+
+theorem consumed_prefix_list (blocks : List Digest256) (decoded : OrdinaryPrefixDecode)
+    (source : decodeOrdinaryPrefix blocks=some decoded) :
+    List.ofFn (consumedPrefix blocks decoded source)=blocks.take decoded.blocksUsed :=
+  Generic.takeVector_list _ _ _
+
+/-- The entire fibre has the same stopping record with only unread whole
+blocks replaced. Conditioning on the original returned suffix is NOT used. -/
+theorem source_fibre (blocks : List Digest256) (decoded : OrdinaryPrefixDecode)
+    (source : decodeOrdinaryPrefix blocks=some decoded) (n : Nat)
+    (tape : Generic.PrefixFibre (consumedPrefix blocks decoded source) n) :
+    decodeOrdinaryPrefix (List.ofFn tape.val)=some {decoded with remainingBlocks :=
+      List.ofFn (Generic.prefixEquiv (consumedPrefix blocks decoded source) n tape)} := by
+  have headBlocks : (List.ofFn tape.val).take decoded.blocksUsed=blocks.take decoded.blocksUsed := by
+    rw [Generic.fibre_take, consumed_prefix_list]
+  have changed := decodeOrdinaryPrefix_of_matching_consumed_prefix blocks
+    (List.ofFn tape.val) decoded source headBlocks
+  simpa only [Generic.fibre_drop] using changed
+
+def ordinaryValue (blocks : List Digest256) : Option QM31Exact :=
+  (decodeOrdinaryPrefix blocks).bind (fun decoded => decodeTagQM31ExactLE decoded.value)
+
+/-- Four blocks already decide the ordinary call, including hard failure.
+Unread whole blocks cannot repair an abort or change its successful value. -/
+theorem ordinary_value_append_four (blocks : OrdinaryPrefixMass.FourBlocks)
+    (unread : List Digest256) :
+    ordinaryValue (List.ofFn blocks++unread)=OrdinaryPrefixMass.value blocks := by
+  obtain failed | ⟨decoded,accepted⟩ := ordinary_four_blocks_decisive
+    (List.ofFn blocks) (by simp only [List.length_ofFn, le_refl])
+  · have extended := ordinary_hard_failure_append (List.ofFn blocks) unread failed
+    have before := ordinaryStatus_forget (List.ofFn blocks)
+    have after := ordinaryStatus_forget (List.ofFn blocks++unread)
+    rw [failed] at before
+    rw [extended] at after
+    simp only [PrefixStatus.forget] at before after
+    simp only [ordinaryValue, OrdinaryPrefixMass.value, ←before, ←after, Option.bind_none]
+  · have source : decodeOrdinaryPrefix (List.ofFn blocks)=some decoded := by
+      rw [←ordinaryStatus_forget, accepted]
+      rfl
+    have extended := decodeOrdinaryPrefix_append_of_some (List.ofFn blocks) unread decoded source
+    simp only [ordinaryValue, OrdinaryPrefixMass.value, source, extended,
+      Option.bind_some, appendOrdinaryRemaining]
+
+def nextValue {k : Nat} (headBlocks : Fin k → Digest256) (r : Nat)
+    (tape : Generic.PrefixFibre headBlocks (4+r)) : Option QM31Exact :=
+  ordinaryValue (List.ofFn (Generic.prefixEquiv headBlocks (4+r) tape))
+
+theorem next_value_coordinates {k : Nat} (headBlocks : Fin k → Digest256) (r : Nat)
+    (tape : Generic.PrefixFibre headBlocks (4+r)) :
+    nextValue headBlocks r tape=OrdinaryPrefixMass.value (Generic.freshFourEquiv headBlocks r tape).1 := by
+  rw [nextValue, Generic.unread_split]
+  exact ordinary_value_append_four _ _
+
+/-- Exact next-call value mass in the uniform consumed-prefix fibre. The
+draw is the literal decoder on the FULL unread suffix, not a resampled or
+four-block-advanced source cursor. This is a local stopped-history theorem. -/
+theorem stopped_next_value_mass (blocks : List Digest256) (decoded : OrdinaryPrefixDecode)
+    (source : decodeOrdinaryPrefix blocks=some decoded) (r : Nat) (target : QM31Exact) :
+    avg univ (fun tape : Generic.PrefixFibre (consumedPrefix blocks decoded source) (4+r) =>
+      if nextValue (consumedPrefix blocks decoded source) r tape=some target then 1 else 0) =
+      FiniteOptionMass.successMass OrdinaryPrefixMass.value / ((P^4 : Nat) : ℚ) := by
+  simp only [next_value_coordinates]
+  rw [Generic.avg_equiv (Generic.freshFourEquiv (consumedPrefix blocks decoded source) r),
+    Generic.avg_prod_first]
+  exact OrdinaryPrefixMass.unconditional_mass target
+
+/-- The same fibre decomposition feeds the already checked literal nested
+controller. This is pointwise source refinement, not a new probability law. -/
+theorem controller_fibre {k : Nat} (circleMap : SecureCircleParameterMap)
+    (headBlocks : Fin k → Digest256) (n : Nat) (tape : Generic.PrefixFibre headBlocks n) :
+    NestedCircleRunRefinement.sourcePair circleMap (List.ofFn tape.val) =
+      NestedCircleRunRefinement.acceptedResult (NestedCircleRunRefinement.run circleMap
+        (NestedCircleRunRefinement.run circleMap NestedCircleRunRefinement.initial
+          (List.ofFn headBlocks)) (List.ofFn (Generic.prefixEquiv headBlocks n tape))) := by
+  rw [NestedCircleRunRefinement.source_pair_refines, Generic.fibre_list]
+  simp only [NestedCircleRunRefinement.run, List.foldl_append]
+
+#print axioms Generic.fibre_list
+#print axioms Generic.unread_uniform
+#print axioms consumed_prefix_list
+#print axioms source_fibre
+#print axioms ordinary_value_append_four
+#print axioms next_value_coordinates
+#print axioms stopped_next_value_mass
+#print axioms controller_fibre
+end
+end AspisV8.StoppedPrefixCoupling
