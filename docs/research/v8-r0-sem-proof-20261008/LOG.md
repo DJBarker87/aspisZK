@@ -4362,3 +4362,52 @@ mask from opened claims, η row, fixed circle fallbacks — is proved sound at
 this side is the Rust↔model refinement (ZR1 pole abort, `challenge_qm31`
 per-limb law vs `qm31Sample`, the `[H1,G,D]` C2 tuple, the retry-law bridge
 for the opening layer).
+
+### R1 — Rust↔model refinement inventory (2026-10-09; documentation only)
+
+Base inspected: `dbef015571ba584dea349ef518428a7478390c31` (`dbef01557`).
+Added [REFINEMENT.md](REFINEMENT.md): all 32 `R0P.Mask.schedule` rows;
+`combinedDecisionZ`/`decisionZ` parsers; ten degree guards and ten semantic
+boundary/chain checks; `checksAcceptZ`, opening `Accept` and cardinality
+checks; terminal lane families, selected mask and claimed mask total; C2
+`[H1,G,D]`, ZR1 pole abort, samplers, PoW and constant/const-assertion pins.
+Each correspondence is classified exact, conservative or gap. Nineteen
+gap groups have prose theorem targets, without selecting premises or
+starting a bridge proof.
+
+The pinned sources do not supply one Rust path equal to the model. In
+particular, the named generic state-only path is width 28/four folds with
+profile-dependent queries, while the model is width 29/one chord-quotient
+fold/q22 on 2^18 fibres with wide-field opening challenges. The semantic
+port's matching residual registry is the pair-forest terminal; its
+inactive-H1 term is absent from the generic Spend terminal. The inventory
+also records nonzero source eta versus `semChal`, per-limb retries versus
+whole-block modulo sampling, initial-model D versus source C2 timing,
+and the distinction between `DQ.σQ` and the separate q22 scan. `9557` and
+`100` are analytic bounds, not Rust verifier constants. No source-release
+closure follows from the prior G25 model result.
+
+Validation: pinned-source/citation inspection; all schedule indices 0–31
+present exactly once; all ten individual degree and boundary rows present;
+each gap ID has a prose target; citation paths/ranges checked against the
+base; Markdown table shape and whitespace checked. No Lean/Rust source
+edits, builds, tests, manifest replay or axiom audit were performed by R1.
+Formal-release time/RSS/swap/axiom receipts are not applicable to this
+documentation-only result. Unrelated in-progress R0Z files were left intact.
+Stopped at the completed inventory; no proof work started.
+
+### Lead decision — proved profile becomes a Rust shape (after M1)
+
+M1 (`97280b145`, `results/v8-state-only-cu-20261009/`) measured the atomic-v3
+state-only verifier at 987,814 CU on the only shape it accepts, rate512
+(q16 over 2¹⁹, 36-bit grinding). The proved profile — 22 queries without
+replacement from `Fin (2^18)`, bad set ≤ 9557 (`R0C/OpeningSamplerBounds.lean:63`,
+`SlackBits.lean`), 1024 rows, i.e. log blowup 8 — exists in no Rust shape.
+That was a lead oversight at the close job. Decision (user-approved
+2026-10-09): add the proved profile to Rust as a new state-only shape
+(log_blowup 8, query_count 22, new profile id, grinding bits kept at the
+rate512 value as defence in depth — the proof does not use them), accepted by
+the atomic-v3 verifier and prover, and measure it (M2). Expected verifier
+cost from the M1 phase split: ≈ +150k CU on the query-scaled phases, ≈ 1.14M.
+The alternative (re-instantiating the model at q16/2¹⁹) is rejected: the FS
+model has no grinding term and the bound would drop to ≈ 2⁻⁹².
