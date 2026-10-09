@@ -1,5 +1,5 @@
-//! Z4a exact computational probe. No Lean and no proof certificate claim.
-//! rustc --edition=2021 -C opt-level=3 -C overflow-checks=yes probe.rs -o probe
+//! Z4a/Z4b/Z4c exact computational probes. No Lean or production changes.
+//! Build with the isolated Cargo.toml: release + overflow checks; run.py records evidence.
 #![allow(dead_code)]
 use aspis_core::{field, r0};
 use field::{CM31, M31, P, QM31};
@@ -1844,7 +1844,7 @@ fn last_coeff(v: &[QM31], a: &[QM31; 10]) -> Vec<QM31> {
     }
     co
 }
-fn main() {
+fn z4b_main() {
     if std::env::args().any(|x| x == "--z4a") {
         return z4a_main();
     }
@@ -2190,5 +2190,684 @@ fn exact_repair(a: &[QM31; 10], z: &[Point<QM31>; 2], qs: &[usize], targets: &[T
             .iter()
             .map(|t| flatten(&t.derivative))
             .collect::<Vec<_>>(),
+    );
+}
+
+// Z4c: D13 coefficient observations and D14 Libra tail. All code below is
+// research-only; production terminal/encoder code is called, never edited.
+fn h_weight(a: &[QM31; 10], coefficient: usize) -> QM31 {
+    if coefficient < 28 {
+        a[8].pow(coefficient as u64)
+    } else if coefficient < 56 {
+        a[9].pow((coefficient - 28) as u64)
+    } else {
+        QM31::ZERO
+    }
+}
+fn raw_c(
+    a: &[QM31; 10],
+    z: &[Point<QM31>; 2],
+    queries: &[usize],
+) -> (Vec<Vec<M31>>, Vec<Vec<QM31>>) {
+    use r0::transport::ROW_TO_COEFFICIENT;
+    let pts = points(a);
+    let mut base = Vec::new();
+    let mut ext = Vec::new();
+    for r in 0..N {
+        let co = usize::from(ROW_TO_COEFFICIENT[r]);
+        let mut b = vec![if inactive(r) { M31::ONE } else { M31::ZERO }];
+        let mut e = vec![if inactive(r) { QM31::ONE } else { QM31::ZERO }];
+        for p in pts {
+            let x = eq(&p, r);
+            b.extend(limbs(x));
+            e.push(x);
+        }
+        let h = h_weight(a, co);
+        b.extend(limbs(h));
+        e.push(h);
+        for p in z {
+            let x = evalrow(co, *p);
+            b.extend(limbs(x));
+            e.push(x);
+        }
+        for &u in queries {
+            for slot in 0..4 {
+                let point = stored_point::<M31>(child_index(
+                    FibreIndex::new(u).unwrap(),
+                    SlotIndex::new(slot).unwrap(),
+                ));
+                let x = evalrow(co, point);
+                b.push(x);
+                e.push(QM31::from_m31(x));
+            }
+        }
+        assert_eq!(b.len(), 113);
+        assert_eq!(e.len(), 95);
+        base.push(b);
+        ext.push(e);
+    }
+    (base, ext)
+}
+fn tail_row(a: &[QM31; 10], row: usize) -> Vec<QM31> {
+    let co = usize::from(r0::transport::ROW_TO_COEFFICIENT[row]);
+    let mut out = vec![QM31::ZERO; 271];
+    if co >= 56 {
+        return out;
+    }
+    let m = if co < 28 { 8 } else { 9 };
+    let d = co % 28;
+    let endpoint_sum = q(if d == 0 { 2 } else { 1 });
+    out[0] = endpoint_sum.mul_m31(M31(512));
+    for j in 0..10 {
+        if j < m {
+            out[1 + 27 * j] = endpoint_sum.mul_m31(M31(1 << (8 - j)));
+        } else if j == m {
+            if d != 1 {
+                out[1 + 27 * j + if d == 0 { 0 } else { d - 1 }] = q(1 << (9 - j));
+            }
+        } else {
+            out[1 + 27 * j] = a[m].pow(d as u64).mul_m31(M31(1 << (9 - j)));
+        }
+    }
+    out
+}
+fn final_value(v: &[QM31], a: &[QM31; 10]) -> QM31 {
+    last_coeff(v, a)
+        .iter()
+        .rev()
+        .fold(QM31::ZERO, |sum, x| sum.mul(a[9]).add(*x))
+}
+fn phi0(v: &[QM31], explicit_mask_at_alpha: QM31, extra_d_claim: QM31, a: &[QM31; 10]) -> QM31 {
+    final_value(v, a)
+        .sub(explicit_mask_at_alpha)
+        .sub(extra_d_claim)
+}
+fn normalize_d(v: &[QM31], phi: QM31, a: &[QM31; 10]) -> Option<Vec<QM31>> {
+    let half = QM31::from_m31(M31(2).inv());
+    let inv = a[9].sub(half).try_inv()?;
+    let mut out = v.to_vec();
+    out[244] = out[244].add(phi.mul(inv).mul(half));
+    assert_eq!(final_value(&out, a), final_value(v, a).sub(phi));
+    Some(out)
+}
+fn normalized(
+    t: &Targets,
+    a: &[QM31; 10],
+    w: &Trace,
+    wp: &Trace,
+    ch: &Challenges,
+    public: Public<'_>,
+) -> Targets {
+    let y = point_claims(w, a);
+    let yp = point_claims(wp, a);
+    let md = mask_value(&y, a).sub(mask_value(&yp, a));
+    assert_eq!(phi0(&t.pinned, QM31::ZERO, QM31::ZERO, a), t.terminal[0]);
+    assert_eq!(phi0(&t.difference, md, QM31::ZERO, a), t.terminal[2]);
+    let pinned = normalize_d(&t.pinned, t.terminal[0], a).expect("alpha9=1/2");
+    let derivative = normalize_d(&t.derivative, t.terminal[1], a).expect("alpha9=1/2");
+    let difference = normalize_d(&t.difference, t.terminal[2], a).expect("alpha9=1/2");
+    assert_eq!(phi0(&difference, md, QM31::ZERO, a), QM31::ZERO);
+    // Psi and its inverse use the same unchanged claim coordinates. Reapply
+    // their known original-terminal difference to recover the exact old payload.
+    let original = public
+        .terminal_qm31(&y, a, ch)
+        .unwrap()
+        .sub(public.terminal_qm31(&yp, a, ch).unwrap())
+        .mul(ch.eta);
+    assert_eq!(
+        normalize_d(&difference, original.neg(), a).unwrap(),
+        t.difference
+    );
+    assert_eq!(
+        normalize_d(&pinned, t.terminal[0].neg(), a).unwrap(),
+        t.pinned
+    );
+    Targets {
+        pinned,
+        derivative,
+        difference,
+        terminal: [QM31::ZERO; 3],
+    }
+}
+fn c1_c(trial: usize, a: &[QM31; 10], z: &[Point<QM31>; 2], qs: &[usize]) -> bool {
+    let mut all = true;
+    for (name, qset) in [("random", qs.to_vec()), ("consecutive", (0..22).collect())] {
+        let (raw, _) = raw_c(a, z, &qset);
+        let mut ranks = Vec::new();
+        for c in 0..16 {
+            let mut e = Ech::new(112);
+            for r in 0..N {
+                if r == 1023 || !eligible(c, r) {
+                    continue;
+                }
+                e.insert(
+                    raw[r][1..]
+                        .iter()
+                        .zip(&raw[1023][1..])
+                        .map(|(x, d)| if inactive(r) { x.sub(*d) } else { *x })
+                        .collect(),
+                );
+            }
+            ranks.push(e.rank);
+        }
+        println!("C1_C trial={trial} pattern={name} ranks={ranks:?} want_each=112");
+        if name == "random" && ranks.iter().any(|&r| r < 112) {
+            all = false;
+        }
+    }
+    all
+}
+fn copied_ech(e: &Ech<M31>) -> Ech<M31> {
+    Ech {
+        p: e.p.clone(),
+        rank: e.rank,
+    }
+}
+fn initial_zero(mut e: Ech<M31>) -> Ech<M31> {
+    for i in 0..4 {
+        if e.p[i].take().is_some() {
+            e.rank -= 1;
+        }
+    }
+    e
+}
+fn compensated_rows(
+    a: &[QM31; 10],
+    c: Option<usize>,
+    physical_lane: usize,
+    tail: &[Vec<QM31>],
+    libra: bool,
+) -> Vec<Vec<QM31>> {
+    let coefficient = if libra {
+        q(7).pow(physical_lane as u64)
+            .mul(q(7).pow(28).try_inv().unwrap())
+    } else {
+        QM31::ZERO
+    };
+    (0..N)
+        .map(|r| {
+            let base = c
+                .map(|c| round_row(a, r, c))
+                .unwrap_or_else(|| vec![QM31::ZERO; 271]);
+            base.iter()
+                .zip(&tail[r])
+                .map(|(b, h)| b.sub(coefficient.mul(*h)))
+                .collect()
+        })
+        .collect()
+}
+fn pure_c(
+    a: &[QM31; 10],
+    br: &[Vec<M31>],
+    gr: &[Vec<QM31>],
+    tail: &[Vec<QM31>],
+    libra: bool,
+) -> Ech<M31> {
+    let mut image = Ech::new(1084);
+    let cols: Vec<_> = if libra {
+        (0..11).collect()
+    } else {
+        (12..38).chain(std::iter::once(10)).collect()
+    };
+    for (position, c) in cols.into_iter().enumerate() {
+        let lane = if c == 10 { 27 } else { 16 + position };
+        let rr = compensated_rows(a, Some(c), lane, tail, libra);
+        if c == 10 {
+            lane_eliminate(gr, &rr, &[], true, &mut image);
+        } else {
+            lane_eliminate(br, &rr, &[], false, &mut image);
+        }
+    }
+    image
+}
+fn full_c(
+    a: &[QM31; 10],
+    br: &[Vec<M31>],
+    gr: &[Vec<QM31>],
+    tail: &[Vec<QM31>],
+    traces: &[Trace],
+    targets: &[Targets],
+    pure: &Ech<M31>,
+    libra: bool,
+) -> (Ech<M31>, Vec<Vec<M31>>) {
+    let mut all = copied_ech(pure);
+    let pairs = targets.len();
+    let mut residuals: Vec<_> = targets.iter().map(|t| t.difference.clone()).collect();
+    // Target batch offset: after every lane's raw target is matched, D's word
+    // = gamma^-28 * batch(target - chosen sources), so all its own raw claims
+    // (including w_h) are zero. Account for its tail instead of discarding it.
+    if libra {
+        for pair in 0..pairs {
+            for c in 0..17 {
+                let lane = if c == 16 { 26 } else { c };
+                let factor = q(7).pow(lane as u64).mul(q(7).pow(28).try_inv().unwrap());
+                for r in 0..N {
+                    let d = traces[2 * pair][c][r]
+                        .sub(traces[2 * pair + 1][c][r])
+                        .mul(factor);
+                    if d == QM31::ZERO {
+                        continue;
+                    }
+                    for i in 0..271 {
+                        residuals[pair][i] = residuals[pair][i].sub(d.mul(tail[r][i]));
+                    }
+                }
+            }
+        }
+    }
+    for c in 0..16 {
+        let allowed: Vec<_> = (0..N).filter(|&r| r != 1023 && eligible(c, r)).collect();
+        let raw: Vec<Vec<M31>> = allowed
+            .iter()
+            .map(|&r| {
+                br[r]
+                    .iter()
+                    .zip(&br[1023])
+                    .map(|(x, d)| if inactive(r) { x.sub(*d) } else { *x })
+                    .collect()
+            })
+            .collect();
+        let rr_all = compensated_rows(a, Some(38 + c), c, tail, libra);
+        let rr: Vec<_> = allowed
+            .iter()
+            .map(|&r| {
+                rr_all[r]
+                    .iter()
+                    .zip(&rr_all[1023])
+                    .map(|(x, d)| if inactive(r) { x.sub(*d) } else { *x })
+                    .collect()
+            })
+            .collect();
+        let tg: Vec<_> = (0..pairs)
+            .map(|p| {
+                let left: Vec<_> = traces[2 * p][c].iter().map(|x| x.c0.a).collect();
+                let right: Vec<_> = traces[2 * p + 1][c].iter().map(|x| x.c0.a).collect();
+                difference_raw(br, &left, &right)
+            })
+            .collect();
+        let solutions = lane_eliminate(&raw, &rr, &tg, false, &mut all);
+        for p in 0..pairs {
+            for i in 0..271 {
+                residuals[p][i] = residuals[p][i].sub(solutions[p][i]);
+            }
+        }
+    }
+    let allowed: Vec<_> = (1..N).filter(|&r| inactive(r)).collect();
+    let raw: Vec<Vec<QM31>> = allowed
+        .iter()
+        .map(|&r| gr[r].iter().zip(&gr[0]).map(|(x, d)| x.sub(*d)).collect())
+        .collect();
+    let rr_all = compensated_rows(a, None, 26, tail, libra);
+    let rr: Vec<_> = allowed
+        .iter()
+        .map(|&r| {
+            rr_all[r]
+                .iter()
+                .zip(&rr_all[0])
+                .map(|(x, d)| x.sub(*d))
+                .collect()
+        })
+        .collect();
+    let tg: Vec<_> = (0..pairs)
+        .map(|p| difference_raw(gr, &traces[2 * p][16], &traces[2 * p + 1][16]))
+        .collect();
+    let solutions = lane_eliminate(&raw, &rr, &tg, true, &mut all);
+    for p in 0..pairs {
+        for i in 0..271 {
+            residuals[p][i] = residuals[p][i].sub(solutions[p][i]);
+        }
+    }
+    (all, residuals.iter().map(|v| flatten(v)).collect())
+}
+fn pass_count(e: &Ech<M31>, t: &[Vec<M31>]) -> usize {
+    t.iter()
+        .filter(|v| e.residual((*v).clone()).iter().all(|x| *x == M31::ZERO))
+        .count()
+}
+fn gate_c(
+    label: &str,
+    a: &[QM31; 10],
+    z: &[Point<QM31>; 2],
+    qs: &[usize],
+    traces: &[Trace],
+    targets: &[Targets],
+    control: bool,
+) -> bool {
+    let (br, gr) = raw_c(a, z, qs);
+    let tail: Vec<_> = (0..N).map(|r| tail_row(a, r)).collect();
+    let design = if control { "columns26" } else { "libra" };
+    let pure = pure_c(a, &br, &gr, &tail, !control);
+    let silent = initial_zero(copied_ech(&pure));
+    let i: Vec<_> = targets.iter().map(|t| flatten(&t.pinned)).collect();
+    let derivative: Vec<_> = targets.iter().map(|t| flatten(&t.derivative)).collect();
+    let (all, ii) = full_c(a, &br, &gr, &tail, traces, targets, &pure, !control);
+    summarize(&format!("{label} {design}_i_prime"), &silent, &i);
+    summarize(
+        &format!("{label} {design}_derivative_diagnostic"),
+        &silent,
+        &derivative,
+    );
+    summarize(&format!("{label} {design}_ii_prime"), &all, &ii);
+    let ip = pass_count(&silent, &i);
+    let iip = pass_count(&all, &ii);
+    println!("GATE_C {label} design={design} silent_rank={} initial_retained_rank={} full_conditioned_rank={} i_pass={ip} ii_pass={iip} attempted={} batch_word_matched=true gamma=7 fourth_claims_all_lanes=true",silent.rank,pure.rank,all.rank,targets.len());
+    // Achieving the boundary/terminal upper bound proves this sufficient
+    // zero-batched-word subspace equals the entire silent round image.
+    ip == targets.len() && iip == targets.len()
+}
+fn check_tail_and_transport(a: &[QM31; 10], z: &[Point<QM31>; 2]) {
+    use r0::transport::{to_coefficients, to_rows, COEFFICIENT_TO_ROW, ROW_TO_COEFFICIENT};
+    let rows: [M31; 1024] = std::array::from_fn(|r| M31((r + 1) as u32));
+    assert_eq!(to_rows(&to_coefficients(&rows)), rows);
+    assert_eq!(ROW_TO_COEFFICIENT[1023], 1023);
+    for j in 0..89 {
+        let r = usize::from(COEFFICIENT_TO_ROW[j]);
+        assert!(inactive(r));
+        assert!((0..16).all(|c| eligible(c, r)));
+    }
+    // Actual R0 eval_message on transported coefficients versus direct rows.
+    let co = to_coefficients(&rows).map(QM31::from_m31);
+    for &p in z {
+        let actual = r0::encoder::eval_message(&co, p);
+        let direct = (0..N).fold(QM31::ZERO, |v, r| {
+            v.add(evalrow(usize::from(ROW_TO_COEFFICIENT[r]), p).mul_m31(rows[r]))
+        });
+        assert_eq!(actual, direct);
+    }
+    for coefficient in 0..56 {
+        let row = usize::from(COEFFICIENT_TO_ROW[coefficient]);
+        let v = tail_row(a, row);
+        assert_eq!(final_value(&v, a), h_weight(a, coefficient));
+        let m = if coefficient < 28 { 8 } else { 9 };
+        let d = coefficient % 28;
+        let mut previous = v[0];
+        for j in 0..10 {
+            let mut co = [QM31::ZERO; 28];
+            co[0] = v[1 + 27 * j];
+            co[2..].copy_from_slice(&v[2 + 27 * j..28 + 27 * j]);
+            co[1] = previous
+                .sub(co[0].add(co[0]))
+                .sub(co[2..].iter().fold(QM31::ZERO, |s, x| s.add(*x)));
+            for x in [0, 1, 2, 29] {
+                let got = co.iter().rev().fold(QM31::ZERO, |v, c| v.mul(q(x)).add(*c));
+                let expected = if j < m {
+                    q(1 << (8 - j)).mul(q(if d == 0 { 2 } else { 1 }))
+                } else if j == m {
+                    q(1 << (9 - j)).mul(q(x).pow(d as u64))
+                } else {
+                    q(1 << (9 - j)).mul(a[m].pow(d as u64))
+                };
+                assert_eq!(got, expected);
+            }
+            previous = co.iter().rev().fold(QM31::ZERO, |v, c| v.mul(a[j]).add(*c));
+        }
+    }
+    println!("TAIL_TRANSPORT_CHECKS 56 monomials x 10 rounds x 4 evaluation_points; transported encoder identity passed");
+}
+
+fn controls_c(
+    public: Public<'_>,
+    a: &[QM31; 10],
+    ch: &Challenges,
+    w: &Trace,
+    wp: &Trace,
+    n: &Trace,
+    z: &[Point<QM31>; 2],
+    qs: &[usize],
+) {
+    let mut cases = Vec::new();
+    for name in ["theta=0", "mu=0", "eta=0", "theta=mu=0"] {
+        let mut c = *ch;
+        if name.contains("theta") {
+            c.theta = QM31::ZERO;
+        }
+        if name.contains("mu") {
+            c.mu = QM31::ZERO;
+        }
+        if name == "eta=0" {
+            c.eta = QM31::ZERO;
+        }
+        cases.push((name.to_string(), *a, c));
+    }
+    for j in 0..10 {
+        for bit in 0..2 {
+            let mut p = *a;
+            p[j] = q(bit);
+            cases.push((format!("alpha_{j}={bit}"), p, *ch));
+        }
+    }
+    cases.push(("alpha=all_zero".to_string(), [QM31::ZERO; 10], *ch));
+    cases.push(("alpha=all_one".to_string(), [QM31::ONE; 10], *ch));
+    for (name, p, c) in cases {
+        println!("CONTROL_START name={name}");
+        let original = compute_targets(public, &p, &c, w, wp, n, 0);
+        let t = normalized(&original, &p, w, wp, &c, public);
+        let pass = gate_c(
+            &format!("control={name}"),
+            &p,
+            z,
+            qs,
+            &[w.clone(), wp.clone()],
+            &[t],
+            false,
+        );
+        println!("CONTROL_DONE name={name} all_pass={pass}");
+    }
+    let mut p = *a;
+    p[9] = QM31::from_m31(M31(2).inv());
+    let b = point_claims(w, &p);
+    let np = point_claims(n, &p);
+    let bp = point_claims(wp, &p);
+    let (f0, f1, _) = terminal_jet(public, &b, &np, &p, ch, &interp_weights(6), true);
+    let g = f1.sub(f0).mul(ch.eta);
+    let ii = f0
+        .sub(public.terminal_qm31(&bp, &p, ch).unwrap())
+        .mul(ch.eta);
+    assert!(normalize_d(&vec![QM31::ZERO; 271], g, &p).is_none());
+    println!("ALPHA9_HALF denominator_zero=true psi_undefined=true normalization_undefined=true pinned_phi={:?} ii_phi={:?}",limbs(g).map(|x|x.0),limbs(ii).map(|x|x.0));
+}
+fn main() {
+    let args: Vec<_> = std::env::args().collect();
+    if args.iter().any(|x| x == "--z4b") {
+        return z4b_main();
+    }
+    if args.iter().any(|x| x == "--z4a") {
+        return z4a_main();
+    }
+    let trials = args
+        .windows(2)
+        .find(|x| x[0] == "--trials")
+        .map(|x| x[1].parse::<usize>().unwrap())
+        .unwrap_or(20);
+    let seed = args
+        .windows(2)
+        .find(|x| x[0] == "--seed")
+        .map(|x| u64::from_str_radix(x[1].trim_start_matches("0x"), 16).unwrap())
+        .unwrap_or(0x5348f0b9a87835d0);
+    assert_eq!(seed, 0x5348f0b9a87835d0, "Z4c must replay the Z4b seed");
+    use aspis_statement::pool_v1::pair_forest_hiding::{
+        pool_v1_pair_forest_copy_active_row_masks_v1,
+        pool_v1_pair_forest_relation_free_mask_cells_v1,
+    };
+    assert_eq!(
+        pool_v1_pair_forest_copy_active_row_masks_v1().unwrap(),
+        ACTIVE
+    );
+    let cells = pool_v1_pair_forest_relation_free_mask_cells_v1().unwrap();
+    for c in 0..16 {
+        for r in 0..N {
+            assert_eq!(
+                eligible(c, r),
+                cells
+                    .iter()
+                    .any(|x| x.column as usize == c && x.row as usize == r)
+            );
+        }
+    }
+    let (pubdata, instances) = real::instances();
+    println!("Z4C seed={seed:#x} trials={trials} pairs=5 base=a17cd72f8 D13_transport=true fourth_claim_all_lanes=true gamma=7 optimized_overflow_checks=true");
+    let mut control_data = None;
+    // Sequential admission obeys the explicit stop list: no later challenge
+    // or control is computed after a failed generic Libra containment gate.
+    for trial in 0..trials {
+        let start = Instant::now();
+        let trial_seed = seed.wrapping_add((trial as u64 + 1).wrapping_mul(0x9e3779b97f4a7c15));
+        let mut rng = Rng(trial_seed);
+        let a = std::array::from_fn(|_| rng.q());
+        let z = [circle(rng.q()), circle(rng.q())];
+        let sets = query_sets(&mut rng);
+        let ch = Challenges {
+            lambda: rng.q(),
+            chi: rng.q(),
+            theta: rng.q(),
+            zc: std::array::from_fn(|_| rng.q()),
+            mu: rng.q(),
+            eta: rng.q(),
+        };
+        assert!(a.iter().all(|x| *x != QM31::ZERO && *x != QM31::ONE));
+        assert!(ch.theta != QM31::ZERO && ch.mu != QM31::ZERO && ch.eta != QM31::ZERO);
+        println!("TRIAL_SEED trial={trial} seed={trial_seed:#x}");
+        println!(
+            "CHALLENGE trial={trial} alpha={a:?} semantic={ch:?} circle={z:?} queries={:?}",
+            sets[0].1
+        );
+        if trial == 0 {
+            check_tail_and_transport(&a, &z);
+        }
+        if args.iter().any(|x| x == "--preflight") {
+            println!("PREFLIGHT_DONE no_containment_gate_run=true");
+            return;
+        }
+        if !c1_c(trial, &a, &z, &sets[0].1) {
+            println!("STOP reason=random_C1_rank_below_112 trial={trial}");
+            std::process::exit(21);
+        }
+        let traces: Vec<Trace> = instances
+            .iter()
+            .map(|w| {
+                let mut t: Trace = w
+                    .compilation
+                    .semantic_c1
+                    .c1
+                    .iter()
+                    .map(|col| col.iter().map(|x| QM31::from_m31(*x)).collect())
+                    .collect();
+                match build_pool_v1_pair_forest_copy_helper_v1(
+                    &w.compilation.trace,
+                    w.compilation.public_statement.live_snapshot.next_pair_index,
+                    ch.lambda,
+                    ch.chi,
+                ) {
+                    Ok(h) => t.push(h),
+                    Err(error) => {
+                        println!(
+                            "STOP reason=helper_pole_or_helper_abort trial={trial} error={error:?}"
+                        );
+                        std::process::exit(22);
+                    }
+                }
+                balance_trace(&mut t);
+                t
+            })
+            .collect();
+        let mut targets = Vec::new();
+        for pair in 0..5 {
+            let mut noise: Trace = (0..17)
+                .map(|c| {
+                    (0..N)
+                        .map(|r| {
+                            if c < 16 && eligible(c, r) {
+                                QM31::from_m31(rng.m())
+                            } else if c == 16 && inactive(r) {
+                                rng.q()
+                            } else {
+                                QM31::ZERO
+                            }
+                        })
+                        .collect()
+                })
+                .collect();
+            balance_trace(&mut noise);
+            let public =
+                Public::Transfer(&pubdata, &instances[2 * pair].compilation.public_statement);
+            let original = compute_targets(
+                public,
+                &a,
+                &ch,
+                &traces[2 * pair],
+                &traces[2 * pair + 1],
+                &noise,
+                pair,
+            );
+            println!(
+                "Z4B_REPLAY trial={trial} pair={pair} pinned={:?} derivative={:?} ii={:?}",
+                limbs(original.terminal[0]).map(|v| v.0),
+                limbs(original.terminal[1]).map(|v| v.0),
+                limbs(original.terminal[2]).map(|v| v.0)
+            );
+            let t = normalized(
+                &original,
+                &a,
+                &traces[2 * pair],
+                &traces[2 * pair + 1],
+                &ch,
+                public,
+            );
+            targets.push(t);
+            if trial == 0 && pair == 0 {
+                control_data = Some((
+                    a,
+                    z,
+                    ch,
+                    traces[0].clone(),
+                    traces[1].clone(),
+                    noise,
+                    sets[0].1.clone(),
+                ));
+            }
+        }
+        if !gate_c(
+            &format!("trial={trial}"),
+            &a,
+            &z,
+            &sets[0].1,
+            &traces,
+            &targets,
+            false,
+        ) {
+            println!("STOP reason=Libra_containment_failure trial={trial} required_i_pass=100/100 required_ii_pass=100/100");
+            std::process::exit(23);
+        }
+        gate_c(
+            &format!("trial={trial}"),
+            &a,
+            &z,
+            &sets[0].1,
+            &traces,
+            &targets,
+            true,
+        );
+        println!(
+            "TRIAL_DONE trial={trial} wall_seconds={:.3}",
+            start.elapsed().as_secs_f64()
+        );
+    }
+    if trials == 20 {
+        let (a, z, ch, w, wp, n, qs) = control_data.unwrap();
+        controls_c(
+            Public::Transfer(&pubdata, &instances[0].compilation.public_statement),
+            &a,
+            &ch,
+            &w,
+            &wp,
+            &n,
+            &z,
+            &qs,
+        );
+    }
+    println!(
+        "Z4C_DONE trials={trials} i_pass={} ii_pass={}",
+        5 * trials,
+        5 * trials
     );
 }
