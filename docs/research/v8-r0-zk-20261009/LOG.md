@@ -897,3 +897,25 @@ Every `evidence/source-N.lean` snapshot was hash-checked against its
 `sha-N.txt` receipt. Raw scope/output/time/SHA/source records remain on the
 host. The two final local sources equal the accepted snapshots. Commit
 scope is these two Lean sources and this LOG only, with no co-author trailer.
+
+### Lead decision D9 — ideal honest H1 at active poles (resolves the Z3 stop)
+
+Totalise. The ideal honest helper is the source's weighted-reciprocal formula
+read with the field inverse, `0⁻¹ = 0` (Lean's `Field` inverse), so
+`view x (w,e) ch` is total for every challenge vector and `HVZK_perfect`
+stays the ε = 0 statement of D8 for the ideal model. The source's
+`ActivePole` abort (`logup.rs:192–224`, propagated before C2 by
+`v6_onefold_prover.rs:1279–1290`) is a refinement term, recorded here as the
+obligation **ZR1**: the real honest prover's view equals the ideal view except
+on the event `∃ weighted tuple of the instance equal to χ`, whose mass under
+the semantic χ sampler is ≤ (number of nonzero-weight tuples)·(1+δQ)/P⁴; the
+statistical distance of the real system from the ideal one is bounded by that
+mass (the bound is instance-dependent through the tuple count only, which is
+bounded by the trace size, 1024·(columns), so a public bound suffices). No
+good-challenge restriction or success conditioning enters the ideal model.
+
+Host rule: `run2.sh` and `run_g15_lake.sh` now take `flock
+/tmp/aspis-r0-lean.lock` around the scoped job, so the host-wide one-job rule
+is enforced by the launcher rather than by each worker's private lock. The
+two recorded overlaps (3104/3229, 3108/3237) were each within their own caps
+with zero swap; the affected results stand, and the condition cannot recur.
