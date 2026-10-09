@@ -4233,3 +4233,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3275 | `R0P/MaskDuplexDensity` | 0 / 0 | 0:04.74 | 6846744 | 0 | 4 | `fd14411944ba5458d288ab93918a1d1a3619b43ee19d55d01a189c3c8f91eeab` |
 
 Source revision(s): `1ebb444f7f874046c4a90f3daafdfcb9a2010600`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskDuplexChain (host attempt 3276)
+
+Dependency refresh only: MaskDuplexChain source is byte-identical to dd621ba62. Recompiled after its imported decoder/density dependency chain changed. Generic transcript, chain, and first-read proofs are unchanged. Attempt 3276 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3276 | `R0P/MaskDuplexChain` | 0 / 0 | 0:03.94 | 6842808 | 0 | 7 | `e4c2d092dda27b2b517a03ff2885dfd37789621c6ca489e726601ea5f5227956` |
+
+Source revision(s): `926f7f15d1e6c39be60539218e6ac6f5e0d6250d`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
