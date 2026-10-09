@@ -12,6 +12,8 @@ import R0P.MaskDuplexDensity
 import R0P.MaskEarly
 import R0P.MaskFiatShamir
 import R0P.MaskMaxErr
+import R0P.MaskValue
+import R0P.MaskInstance
 import R0P.MaskNoHit
 import R0P.MaskOpeningDensity
 import R0P.MaskPrefix
@@ -20,7 +22,7 @@ import R0P.MaskSemantics
 import R0P.MaskSource
 import R0P.MaskView
 
-/-! G24 final manifest: masked chain plus the unchanged frozen SemAll imports. -/
+/-! G25 final manifest: claim-dependent masked chain plus the unchanged frozen SemAll imports. -/
 
 #print axioms R0P.Mask.combined_fiat_shamirZ
 #print axioms R0P.Mask.combined_fiat_shamirZ_closed
@@ -32,3 +34,7 @@ import R0P.MaskView
 #print axioms R0P.Mask.virtualPolyZ_indDeg
 #print axioms R0P.MaskDuplex.combinedInj31
 #print axioms R0P.SemDuplex.combined_fiat_shamir_closed
+
+#print axioms R0P.Mask.maskValue_vdeg
+#print axioms R0P.Mask.maskValueClaims_degree
+#print axioms R0P.Mask.combined_fiat_shamir_masked

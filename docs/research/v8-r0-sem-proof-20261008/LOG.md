@@ -4293,3 +4293,53 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3280 | `R0P/MaskInstance` | 0 / 0 | 0:04.79 | 6849648 | 0 | 3 | `91bd9dff26d9da521f083ff737d533029dcc279c67fa2620d6130cea0fe3f1e7` |
 
 Source revision(s): `8161d244da220960fa1e56654dc3549558e644c5`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25 Freeze: claim-dependent concrete mask
+
+All attempts 3259–3281 are exit=0 with no error or warning, swaps=0, and only propext/Classical.choice/Quot.sound in every audit. The single final manifest replay is MaskAll (3281), importing the corrected chain, MaskValue, MaskInstance and the unchanged frozen SemAll. Every module was host-checked before its dependent consumer. The common launcher flock /tmp/aspis-r0-lean.lock enforces one host Lean job at a time; all runs used sh run2.sh N Module 7000 7 with the existing 5G/7G/zero-swap caps and pinned cache.
+
+The corrected mask is maskClaims (y 0) alpha at the verifier and maskClaims (honestClaims t alpha 0) alpha at candidate t. Each eta event uses that candidate's maskTotal t. The D3 equality hy, obtained from the opening witness, identifies both terminals without an extra premise. The concrete theorem R0P.Mask.combined_fiat_shamir_masked instantiates R0P.Mask.maskValueClaims and discharges MaskDegree using maskValue_vdeg; no mask-degree assumption remains in this theorem. The generic HR/sigma/read-bound assumptions retain their existing shape.
+
+The factorExponent-through-maskValue definition block is byte-identical to R0Z/MaskedProtocol.lean at base dd621ba62 (block SHA-256 f3828e5f019a92c667c44f4bd88fe277c14fd344e2ca1eb79c9068319d3a9e85). It is now available as R0P.Mask.maskValue from R0P/MaskValue.lean, without importing R0Z. The frozen 31-round sources and the four generic MaskDuplex source files are unchanged. Those generic files were recompiled solely because their imported MaskProtocol dependency changed, as recorded in the individual receipts.
+
+| Attempt | Target | Exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3259 | `R0P/MaskValue` | 0 | 0:03.49 | 6818840 | 0 | 8 | `d87305635d05e315d4da28acdc334a0e1d057cee5bfbe7cc706cf02a3d1e2861` |
+| 3260 | `R0P/MaskProtocol` | 0 | 0:04.28 | 6843716 | 0 | 12 | `d6a529886eee9fa43e5b7bfd3e509e2403476b9c50487916dcd4f1899a81c5a8` |
+| 3261 | `R0P/MaskD2` | 0 | 0:03.83 | 6840276 | 0 | 12 | `22af138da175023e657cd78ca98c15468b7c29ca166d5d14e3d02abb687e1041` |
+| 3262 | `R0P/MaskSemantics` | 0 | 0:03.22 | 6836028 | 0 | 4 | `a3c75e02262ac723e1f598effa4c5438224eaa64c3d5945e7f2c22baf60e3f00` |
+| 3263 | `R0P/MaskView` | 0 | 0:04.49 | 6867872 | 0 | 19 | `a4da0f8fbf523d472f4eeec18671497cef4a738f74e8cb84a6a1897b497fe15e` |
+| 3264 | `R0P/MaskBadSets` | 0 | 0:03.35 | 6840252 | 0 | 4 | `dd47cc108b03b073164f559b5c675edda7bd1ee14fdf25fec073f2aeff281906` |
+| 3265 | `R0P/MaskDensity` | 0 | 0:04.72 | 6855840 | 0 | 1 | `53870eae1b30540163d7d492af8d031ffb87cf6a85ceb64e8a934c44913dffc6` |
+| 3266 | `R0P/MaskDuplexDecoder` | 0 | 0:05.14 | 6838104 | 0 | 6 | `17b1b947a0e15271565d9c956aabaeccd5a9d3ce58ad75f4b0b6b63fd7aafc6c` |
+| 3267 | `R0P/MaskSource` | 0 | 0:04.72 | 6842024 | 0 | 6 | `cd048a0eacceda3802cf9977ded2b91f47ce578ae6ad844cc3f14e2e8eb4a882` |
+| 3268 | `R0P/MaskD2Glue` | 0 | 0:08.15 | 6864644 | 0 | 5 | `56d5150da2a9d4c0eff548166c867b651554d5bd7d86c30848042a30914a89b7` |
+| 3269 | `R0P/MaskOpeningDensity` | 0 | 0:05.37 | 6843356 | 0 | 3 | `5a3b115836cf2ccf8d97a535bba9233b0092125a09a169b20b968c9b49579e48` |
+| 3270 | `R0P/MaskD2Instance` | 0 | 0:03.44 | 6838004 | 0 | 1 | `f7b8f055ee3ad2692b823322c6199383fdf8e94cdf84d567c2f41e6e54bb593e` |
+| 3271 | `R0P/MaskPrefix` | 0 | 0:03.35 | 6846100 | 0 | 7 | `5ec6a1f3c6c289ffb1fd0fa62e4f6e922df8078c0c34d75626ceaa9d8eae9f4a` |
+| 3272 | `R0P/MaskNoHit` | 0 | 0:03.32 | 6842932 | 0 | 3 | `8f9791c013d96d4da9b2ce7ea175814262dc31f67ca2a8f831bd6a59e4b91fd3` |
+| 3273 | `R0P/MaskEarly` | 0 | 0:03.53 | 6847800 | 0 | 11 | `f01f9fb6778f6effc79bec1698efd8014bcd9405ac58c59952b48c46bf52f88d` |
+| 3274 | `R0P/MaskD3Glue` | 0 | 0:03.61 | 6845100 | 0 | 2 | `6295bee37227b213975ef201b36eca08d3527c973441bca8bbd3fec4a9fd1016` |
+| 3275 | `R0P/MaskDuplexDensity` | 0 | 0:04.74 | 6846744 | 0 | 4 | `fd14411944ba5458d288ab93918a1d1a3619b43ee19d55d01a189c3c8f91eeab` |
+| 3276 | `R0P/MaskDuplexChain` | 0 | 0:03.94 | 6842808 | 0 | 7 | `e4c2d092dda27b2b517a03ff2885dfd37789621c6ca489e726601ea5f5227956` |
+| 3277 | `R0P/MaskDuplexDecodes` | 0 | 0:10.53 | 6916556 | 0 | 6 | `b542e082c2dc2a1f364aacd518b7523faab507d4a5ac6cd5aa5f97b2457555f2` |
+| 3278 | `R0P/MaskFiatShamir` | 0 | 0:06.80 | 6854572 | 0 | 7 | `ea3112c7e186d24e08e2bed4eac99d4592e069489a5b59d99fb2b5f5c4e4108c` |
+| 3279 | `R0P/MaskMaxErr` | 0 | 0:05.05 | 6863724 | 0 | 7 | `6f6c05b4a0084b49d3d4a98c644d843b320383d8602a618973134f2e423bcfa7` |
+| 3280 | `R0P/MaskInstance` | 0 | 0:04.79 | 6849648 | 0 | 3 | `91bd9dff26d9da521f083ff737d533029dcc279c67fa2620d6130cea0fe3f1e7` |
+| 3281 | `R0P/MaskAll` | 0 | 0:02.63 | 6805616 | 0 | 13 | `fc555066b2278c8caf9933012eb965d7f64e651a7efc9fe27f7a9e67b9729dca` |
+
+`git rev-parse HEAD` before the final manifest commit: `feb127395e03263b534197de449429ebfe7d7714`, plus the MaskAll source snapshot in attempt 3281. Raw evidence remains uncommitted in the host evidence directory and /tmp/r0-g25-20261009/evidence. Each green changed module was committed and pushed separately with LOG; dependency-only recompiles were recorded without source edits. No privacy-tree or Rust edits were made by this job.
+
+Final bound: `Pr[accepts ∧ extractFails] ≤ Qtot * (1+delta0) * C(9557,22)/C(262144,22) + κ(Qtot)` for the concrete claim-dependent reference mask. The budgets and maximum are unchanged: eta row 14 is `100(1+deltaQ)/P^4`, alpha rows 15–24 are `2700(1+deltaQ)/P^4`, and q22 row 31 attains the exact maximum, approximately `2^(-105.136475075588)` per query. No genuine obstruction or new security premise was encountered.
+
+### G25: MaskAll (host attempt 3281)
+
+The single final manifest replay imports every corrected Mask module, the concrete MaskInstance and the unchanged frozen SemAll. All thirteen requested and compatibility axiom audits pass with only propext, Classical.choice and Quot.sound. Exit=0, no error or warning, zero swaps. The complete G25 source/evidence manifest appears above.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3281 | `R0P/MaskAll` | 0 / 0 | 0:02.63 | 6805616 | 0 | 13 | `fc555066b2278c8caf9933012eb965d7f64e651a7efc9fe27f7a9e67b9729dca` |
+
+Source revision(s): `feb127395e03263b534197de449429ebfe7d7714`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
