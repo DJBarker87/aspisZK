@@ -4343,3 +4343,22 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3281 | `R0P/MaskAll` | 0 / 0 | 0:02.63 | 6805616 | 0 | 13 | `fc555066b2278c8caf9933012eb965d7f64e651a7efc9fe27f7a9e67b9729dca` |
 
 Source revision(s): `feb127395e03263b534197de449429ebfe7d7714`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Lead acceptance of G25 (57b789749): masked reference soundness closed
+
+Reviewed `MaskInstance.lean`: `maskValueClaims B y α` reads the sixteen C1
+claims, the ten mask-only claims (lanes 16–25) and lane 27 from the opened
+claims `y 0`, as the Rust terminal does; `MaskDegree` is the per-trace VDeg-27
+premise discharged by `maskValue_vdeg`; `maskTotal maskClaims t` and the
+per-candidate `etaSomeBad … (M t)` give each candidate its own mask sum; the
+`MaskValue` definitions are byte-identical to the R0Z port (diff empty).
+`combined_fiat_shamir_masked` has no premise about the mask beyond the
+discharged degree fact and concludes the unchanged closed form
+`Qtot·(1+δ0)·C(9557,22)/C(262144,22) + κ Qtot`, standard axioms only.
+
+Status: the reference verifier model as the Rust computes it — 32 rounds,
+mask from opened claims, η row, fixed circle fallbacks — is proved sound at
+≈ Q·2⁻¹⁰⁵ + 2Q²/2²⁵⁶. The soundness model track is closed; remaining work on
+this side is the Rust↔model refinement (ZR1 pole abort, `challenge_qm31`
+per-limb law vs `qm31Sample`, the `[H1,G,D]` C2 tuple, the retry-law bridge
+for the opening layer).
