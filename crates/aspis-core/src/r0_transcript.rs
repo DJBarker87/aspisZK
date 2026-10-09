@@ -299,5 +299,23 @@ impl Transcript {
     }
 }
 
+/// SPEC §2 adapter for callers that materialize all eight squeeze/advance
+/// pairs before scanning. Returns scanOut's selected state, which can precede
+/// the eighth advance. The sampler and its stop test are shared with R-B.
+pub fn queries_from_pairs(
+    blocks: &[[u8; 32]; 8],
+    advances: &[[u8; 32]; 8],
+) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {
+    let mut scan = QueryScan::default();
+    let mut state = advances[7];
+    for k in 0..8 {
+        if scan.scan(&blocks[k]) {
+            state = advances[k];
+            break;
+        }
+    }
+    Ok((scan.finish()?, state))
+}
+
 #[cfg(test)]
 mod tests;
