@@ -7,9 +7,8 @@ use alloc::vec::Vec;
 use aspis_core::{
     field::WideExact,
     r0::{
-        onchain,
         domain::FibreIndex,
-        merkle,
+        merkle, onchain,
         transcript::SemanticBoundary,
         verifier,
         wire::{OpeningProof, OpeningView},
@@ -101,17 +100,25 @@ pub fn semantic_handoff(checked: &VerifiedSemantics) -> Result<SemanticBoundary,
 
 /// Same handoff checks with a directly initialized heap boundary.
 #[inline(never)]
-fn semantic_handoff_heap(checked: &VerifiedSemanticsHeap) -> Result<alloc::boxed::Box<SemanticBoundary>,Error> {
-    let boundary=SemanticBoundary::boxed_from_verified_parts(
-        checked.state_before_z0,[checked.c1_root,checked.c2_root],
-        &checked.challenges.with_alphas(&checked.alpha),&checked.claims,true)?;
-    let semantic_points=semantic_wire::statement_points(&checked.alpha);
-    let opening_points=boundary.points();
-    for p in 0..3 {for b in 0..10 {
-        if opening_points[p][b]!=WideExact::from_qm31(semantic_points[p][9-b]) {
-            return Err(OpeningError::Semantic.into());
+fn semantic_handoff_heap(
+    checked: &VerifiedSemanticsHeap,
+) -> Result<alloc::boxed::Box<SemanticBoundary>, Error> {
+    let boundary = SemanticBoundary::boxed_from_verified_parts(
+        checked.state_before_z0,
+        [checked.c1_root, checked.c2_root],
+        &checked.challenges.with_alphas(&checked.alpha),
+        &checked.claims,
+        true,
+    )?;
+    let semantic_points = semantic_wire::statement_points(&checked.alpha);
+    let opening_points = boundary.points();
+    for p in 0..3 {
+        for b in 0..10 {
+            if opening_points[p][b] != WideExact::from_qm31(semantic_points[p][9 - b]) {
+                return Err(OpeningError::Semantic.into());
+            }
         }
-    }}
+    }
     Ok(boundary)
 }
 
@@ -147,7 +154,7 @@ pub fn r0_verify(
     emit(Phase::ChordClaims);
     let c = &prepared.challenges;
     for (i, u) in c.queries.sorted().into_iter().enumerate() {
-        let opening=proof.fibre(i);
+        let opening = proof.fibre(i);
         let u = FibreIndex::new(u as usize)?;
         if !merkle::verify_pair(
             hash,
@@ -159,7 +166,66 @@ pub fn r0_verify(
             return Err(OpeningError::Authentication.into());
         }
         emit(Phase::Merkle(i));
-        onchain::check_v1(
+        onchain::check_v1(&prepared.v1, &proof, u, &opening)?;
+        emit(Phase::V1(i));
+    }
+    onchain::check_v2(
+        &prepared.data,
+        c.kappa,
+        c.tau,
+        c.alpha,
+        &prepared.polynomial,
+        &proof,
+    )?;
+    emit(Phase::V2);
+    Ok(prepared.challenges)
+}
+
+/// Frozen pre-hoist path for native differential evidence, never SBF.
+#[cfg(all(feature = "r0-hoist-reference", not(target_os = "solana")))]
+pub fn r0_verify_unhoisted(
+    public: Public<'_>,
+    bytes: &[u8],
+    hash: HashFn,
+    trace: Option<fn(Phase)>,
+) -> Result<verifier::Challenges, Error> {
+    let emit = |p| {
+        if let Some(trace) = trace {
+            trace(p);
+        }
+    };
+    let wire = Proof::parse(bytes)?;
+    emit(Phase::Parsed);
+    let checked = verify_semantics_heap(public, wire.semantic, hash)?;
+    let boundary = semantic_handoff_heap(&checked)?;
+    emit(Phase::Semantic);
+    let proof = OpeningView::parse(wire.opening)?;
+    let prepared = aspis_core::r0::onchain_unhoisted::prepare(hash, &boundary, &proof)?;
+    // Both views must replay exactly the same row-25/26 records.
+    if prepared.data.z
+        != checked.z.map(|z| aspis_core::r0::domain::Point {
+            x: WideExact::from_qm31(z.x),
+            y: WideExact::from_qm31(z.y),
+        })
+    {
+        return Err(OpeningError::Schedule.into());
+    }
+    emit(Phase::ChordClaims);
+    let c = &prepared.challenges;
+    for (i, u) in c.queries.sorted().into_iter().enumerate() {
+        let opening = proof.fibre(i);
+        let u = FibreIndex::new(u as usize)?;
+        if !merkle::verify_pair(
+            hash,
+            &prepared.data.roots,
+            u,
+            opening.leaf_hashes(hash)?,
+            opening.paths(),
+        ) {
+            return Err(OpeningError::Authentication.into());
+        }
+        emit(Phase::Merkle(i));
+        aspis_core::r0::onchain_unhoisted::check_v1(
             &prepared.data,
             c.gamma,
             c.alpha,
@@ -169,7 +235,7 @@ pub fn r0_verify(
         )?;
         emit(Phase::V1(i));
     }
-    onchain::check_v2(
+    aspis_core::r0::onchain_unhoisted::check_v2(
         &prepared.data,
         c.kappa,
         c.tau,
