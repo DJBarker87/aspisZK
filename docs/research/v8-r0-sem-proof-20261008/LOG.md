@@ -3894,3 +3894,17 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3249 | `R0P/MaskEarly` | 0 / 0 | 0:03.01 | 6835832 | 0 | 1 | `f88b1c356d0e1dc68c87c9147192c72de43a4753950bfbdb3ed360f7188505cc` |
 
 Source revision(s): `47c1241c9267992a2efa145e5804f72d82a0b119`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: no-hit early semantic consequences
+
+MaskEarly now derives the four frozen early exclusions: LogUp, theta, zerocheck, and mu. Private helper proofs in SemRounds are ported locally because they are not exported; only their small index arithmetic changes to omega. Attempts 3250–3251 isolate visibility and Fin-coercion issues; 3252 passes all eleven axiom audits.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3250 | `R0P/MaskEarly` | 1 / 1 | 0:03.42 | 6805376 | 0 | 3 | `b44ac49ccd3f42f160f1d815f24cecd99278b70f1402411946ec657de1653589` |
+| 3251 | `R0P/MaskEarly` | 1 / 1 | 0:03.39 | 6810916 | 0 | 11 | `1fb5d8483aed2ed379c9496e9e015db71f5142f0b0a4958eb0c8a617d002d72f` |
+| 3252 | `R0P/MaskEarly` | 0 / 0 | 0:03.58 | 6847680 | 0 | 11 | `cea263723fdbe27f997f1704c43f04a7ea3c35149c886cc4b0b0b2816117a4b5` |
+
+Source revision(s): `96e476d943c67642afb33244eb0790377207c675`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
