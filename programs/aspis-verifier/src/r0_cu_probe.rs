@@ -5,8 +5,12 @@ use aspis_statement::{
         decode_pool_v1_pair_forest_terminal_statement_v1,
         pair_forest_semantic_terminal::r0::Public, PoolV1PairForestTerminalStatementV1,
     },
-    r0::{r0_verify, Phase},
+    r0::Phase,
 };
+#[cfg(not(feature="r0-cost-probe"))]
+use aspis_statement::r0::r0_verify;
+#[cfg(feature="r0-cost-probe")]
+use aspis_statement::r0_probe::r0_verify;
 use solana_program::{
     account_info::AccountInfo, entrypoint::ProgramResult, hash::hashv, log::sol_log_compute_units,
     msg, program_error::ProgramError, pubkey::Pubkey,

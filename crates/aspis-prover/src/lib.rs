@@ -1608,3 +1608,6 @@ pub mod r0;
 
 #[cfg(all(feature = "r0", feature = "insecure-spend-fixture"))]
 pub mod r0_fixture;
+
+#[cfg(feature="r0-cost-probe")]
+pub mod r0_probe;

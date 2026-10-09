@@ -55,20 +55,67 @@ impl M31 {
     pub const ZERO: M31 = M31(0);
     pub const ONE: M31 = M31(1);
 
-    #[inline(always)]
+    // R91 adds raw-input fallback branches. An explicit call boundary keeps
+    // them within SBF's signed branch displacement.
+    #[cfg_attr(feature = "r0-cost-probe", inline(never))]
+    #[cfg_attr(not(feature = "r0-cost-probe"), inline(always))]
     pub fn add(self, rhs: M31) -> M31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FAdd);
-        let s = self.0 + rhs.0;
-        M31(if s >= P { s - P } else { s })
+        #[cfg(feature = "r0-cost-probe")]
+        {
+            #[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+            if crate::r0_probe::equality_trace::is_reference() {
+                return r0_add_fallback(self.0, rhs.0);
+            }
+            // R91: widen the bounded fast path; preserve the original raw
+            // operation in the cold branch, including its overflow behavior.
+            let s = u64::from(self.0) + u64::from(rhs.0);
+            if s > u64::from(u32::MAX) {
+                return r0_add_fallback(self.0, rhs.0);
+            }
+            M31((if s >= u64::from(P) {
+                s - u64::from(P)
+            } else {
+                s
+            }) as u32)
+        }
+        #[cfg(not(feature = "r0-cost-probe"))]
+        {
+            let s = self.0 + rhs.0;
+            M31(if s >= P { s - P } else { s })
+        }
     }
 
-    #[inline(always)]
+    // R91 adds raw-input fallback branches. An explicit call boundary keeps
+    // them within SBF's signed branch displacement.
+    #[cfg_attr(feature = "r0-cost-probe", inline(never))]
+    #[cfg_attr(not(feature = "r0-cost-probe"), inline(always))]
     pub fn sub(self, rhs: M31) -> M31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FSub);
-        let s = self.0 + P - rhs.0;
-        M31(if s >= P { s - P } else { s })
+        #[cfg(feature = "r0-cost-probe")]
+        {
+            #[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+            if crate::r0_probe::equality_trace::is_reference() {
+                return r0_sub_fallback(self.0, rhs.0);
+            }
+            let left = u64::from(self.0) + u64::from(P);
+            if left > u64::from(u32::MAX) || left < u64::from(rhs.0) {
+                return r0_sub_fallback(self.0, rhs.0);
+            }
+            let s = left - u64::from(rhs.0);
+            M31((if s >= u64::from(P) {
+                s - u64::from(P)
+            } else {
+                s
+            }) as u32)
+        }
+        #[cfg(not(feature = "r0-cost-probe"))]
+        {
+            let s = self.0 + P - rhs.0;
+            M31(if s >= P { s - P } else { s })
+        }
     }
 
     #[inline(always)]
@@ -3193,4 +3240,21 @@ mod tests {
             );
         }
     }
+}
+
+// Keep fallback blocks near their caller: cold layout can place an SBF
+// branch target beyond its signed displacement in large compiled functions.
+// Frozen checked-u32 expressions preserve the old behavior on public
+// noncanonical raw representatives under the selected overflow-check profile.
+#[cfg(feature = "r0-cost-probe")]
+#[inline(never)]
+fn r0_add_fallback(a: u32, b: u32) -> M31 {
+    let s = a + b;
+    M31(if s >= P { s - P } else { s })
+}
+#[cfg(feature = "r0-cost-probe")]
+#[inline(never)]
+fn r0_sub_fallback(a: u32, b: u32) -> M31 {
+    let s = a + P - b;
+    M31(if s >= P { s - P } else { s })
 }

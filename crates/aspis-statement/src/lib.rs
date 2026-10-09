@@ -207,3 +207,6 @@ pub use wide_v4::{
 
 #[cfg(feature = "r0")]
 pub mod r0;
+
+#[cfg(feature="r0-cost-probe")]
+pub mod r0_probe;
