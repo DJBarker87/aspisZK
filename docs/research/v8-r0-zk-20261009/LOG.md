@@ -206,3 +206,66 @@ Final obligation audits:
 These are audits of **definitions of goals**, not proofs of those goals. The only new mathematical proofs are the three requested distance properties and their two support helpers. Source scan found no authored `sorry`, `axiom`, `native_decide`, `admit`, `maxRecDepth`, `maxHeartbeats`, `#eval`, or `#reduce`; the only explicit `Finset.univ` is the generic symbolic image support. Neither core nor generated source was edited. `git diff --check` passes.
 
 Raw `out-N.log`, `time-N.log`, `sha-N.txt`, and exact `source-N.lean` snapshots remain in the host `evidence/` and hash-verified copies at `/tmp/r0-z1-20261009/evidence/`. Every copied snapshot matches its SHA receipt. Both final local Lean files match their accepted host snapshots byte-for-byte. Z1 evidence stays outside the repository. A concurrent archive operation captured the two final Lean sources and Phase 0/1 report in `052ac60b8b77acf9a6552c485c21b9e426acee6c` while this task was finishing validation. This worker did not create or amend that archive commit or its unrelated contents. The final Z1 commit only completes this LOG; no co-author trailer is added. The archived Lean source hashes equal the accepted snapshots above.
+
+## Lead decisions after Z1 (2026-10-09)
+
+Z1 accepted (host 3000/3003, standard axioms; report and 12-item stop list
+reviewed against the cited sources).
+
+Finding driving everything below: the historical reference terminal is
+`mask(α) + η · original(α)` (`state_only_terminal.rs:797–812, 844–871`;
+mask polynomial `state_only_mask_value` from ten mask-only C1 columns and
+the explicit G word, `aspis-core/src/state_only_hiding.rs:612–657`). The
+frozen R0 model (Route A) has no η row and no mask-only columns, so its ten
+sumcheck round polynomials are degree-27 functions of the trace MLEs and
+disclose witness information; only their degree-≤1 part is covered by the
+μ·H1 term. The R0 model as proven sound is not expected to be HVZK.
+
+D1 (statement). The privacy statement is `Public K` together with the
+commitment handles; the words `W` are **prover output**, not statement.
+`TypedContext` remains the soundness-side object derived from the
+commitment. In the interactive model the commitment is ideal: the verifier
+view contains roots as opaque handles plus exactly the opened positions
+(OOD claims, the q22 fibres). Hiding of the ROM Merkle commitment with
+salts is a `ZK_FS` term (`ε_commit`), not an interactive premise.
+
+D2 (witness). `witness` := an honest transfer instance; the honest trace
+is the reference builder applied to it (plus the mask tape, D3).
+`valid x w` := the built trace satisfies `InputNoteExtracted x.pub`
+(soundness relation unchanged); this is a completeness lemma to prove, not
+a premise. HVZK quantifies over honest instances.
+
+D3 (masking — reference change). The reference protocol regains the
+historical masking: ten mask-only C1 columns and the explicit G word
+(mask tape uniform over M31 coordinates on the eligible cells of
+`pair_forest_hiding.rs:221–253`, with the inactive-sum balancing of
+`state_only_hiding.rs:676–773`); a message carrying the mask's hypercube
+sum claim, then a fresh challenge η drawn after μ; the sumcheck target
+becomes `maskSum + η·0` and the virtual polynomial `mask + η·original`,
+with `mask` of individual degree ≤ 27 (`state_only_mask_factors`).
+Global rounds become 32 (η at the new index 14, α at 15–24, circle 25–26,
+opening 27–31). D stays in the initial context (it is derived from the
+seed before λ, χ; commit timing affects binding, not the law) — the Rust
+`[H1,G,D]` C2 tuple is a refinement item. Soundness extension (G24, after
+Z2): one η row with budget `(1+δQ)/P⁴` (a nonzero degree-1 polynomial in
+η), `VirtualDeg` for `mask + η·original`, `HonestRows` with the mask's
+Boolean-row values; the FS2 instance grows by one one-block row.
+
+D4 (mask image — the main theorem, Z3). For every fixed public statement,
+honest instance and challenge sequence, the disclosed view is
+`f(public, challenges) + L(maskTape)` with `L` affine and its image
+containing the witness-dependent displacement between any two honest
+instances with the same public statement. Stated as `MaskImage : Prop` in
+Z2; proved in Z3 from the encoder's linear structure and the mask cell
+layout. No raw-rank or tested-seed argument is accepted as its proof.
+
+D5 (tapes). Interactive model: ideal uniform mask/salt/D tapes over the
+field coordinates; byte-expansion bias and bounded retries are `ZK_FS`
+terms (`ε_seed`, `ε_sampler_abort`), stated, not folded into HVZK.
+
+D8 (notion). Statistical HVZK with target `ε_zk = 0` (equal laws) under
+D1–D5; the simulator samples the view's affine part directly. Efficiency
+is not a requirement of the interactive statement.
+
+D6, D7, D9–D12: retained exactly as Z1 states them; deferred to the FS/ROM
+and refinement phases. No value is assigned to any ledger term.
