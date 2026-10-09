@@ -30,6 +30,7 @@ pub mod merkle;
 pub mod params;
 pub mod proof;
 pub mod r0;
+pub mod r0_transcript;
 pub mod state_only_hiding;
 pub mod state_only_masked_switch;
 pub mod state_only_masked_switch_basis;
