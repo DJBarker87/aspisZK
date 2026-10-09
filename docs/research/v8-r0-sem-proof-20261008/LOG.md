@@ -3789,3 +3789,17 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3232 | `R0P/MaskSource` | 0 / 0 | 0:04.71 | 6841572 | 0 | 6 | `511dcd8fbe119ba242aa2be3fadd501f479155e719516bcef409ce7b2427b3ac` |
 
 Source revision(s): `d4070150ea84f2c410f69467468398a3037e048c`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: semantic and circle D2 sub-bounds
+
+MaskD2Glue proves the doomed-prefix flip containment and the semantic rows 0–24, circle row 25, and circle row 26 separately. Row 26 obtains z0 ≠ fallback1 from the absence of the row-25 hit. The sampler bounds (1+deltaQ)/P^4 are enlarged to the authorized 2/P^4 circle envelope. Attempts 3233–3234 exposed concrete field elaboration and wrapper mismatches; explicit WideExact types, sampler names and predicates resolve them without raising any limit. Attempt 3235 passes with the standard three axioms.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3233 | `R0P/MaskD2Glue` | 1 / 1 | 0:50.26 | 6824656 | 0 | 4 | `d5e2eb565832d94209bb0ffee759340f642095bb45eac255789883a7a56d266d` |
+| 3234 | `R0P/MaskD2Glue` | 1 / 1 | 0:50.12 | 6822188 | 0 | 4 | `7f242c89bcaec8d2487352108203090beac8214e1041b709228902118f8f7c68` |
+| 3235 | `R0P/MaskD2Glue` | 0 / 0 | 0:08.28 | 6863968 | 0 | 5 | `b7ca10cd73187792cd8461ab6e5cb73403ddf84118ab630e679fb65b53e77dc7` |
+
+Source revision(s): `ba8572b564459a7bb67f06d8a6b5b893c82ff740`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
