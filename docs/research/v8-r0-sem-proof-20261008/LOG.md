@@ -3725,3 +3725,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3223 | `R0P/MaskSemantics` | 0 / 0 | 0:03.11 | 6835164 | 0 | 4 | `e0159b7d5cbfa65b1b784d794f16673ca01b5384e82dc7841011091a7c8a078c` |
 
 Source revision(s): `2abe95fa7ffd51ff0f390400c433618438c92ceb`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24 continuation: masked transcript and opening parsers (3224–3225)
+
+MaskView parses 25 semantic rows, the maskSum claim at index 14, alpha polynomials at indices 15–24, two circle rows, and the existing five-row opening suffix. openingViewZ reuses openingStmt and its unchanged points/claims, with alpha read at the shifted indices. Parser structure/take lemmas and opening-good-to-hitFrom transport are proved with the semantic round count 25. decisionZ checks the parsed scalar claim and masked sumcheck target; it does not add an eta polynomial degree check. Attempt 3224 needed an explicit option-pattern type, a missing Sfield binder, SourceData field-name preservation, and folding the mapped-list induction hypothesis; 3225 passes nineteen standard-axiom audits with no errors or warnings. No frozen parser was modified.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3224 | `R0P/MaskView` | 1 / 1 | 0:03.99 | 6812032 | 0 | 15 | `25f8f8878bea3a65c3c95c9ad6d3154ff9140496a2dc2f6acfe3bc76c03e35ea` |
+| 3225 | `R0P/MaskView` | 0 / 0 | 0:04.61 | 6872088 | 0 | 19 | `17dc48a803d28ec18bc3c6c5f0dfeee5ee0207d8f69cdb3207dcdfb65e643b11` |
+
+Source revision(s): `2d4ff9bab76ba7b6514570b38ebe1349d8fd4434`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
