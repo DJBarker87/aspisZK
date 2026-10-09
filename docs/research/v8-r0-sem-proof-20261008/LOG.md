@@ -3345,3 +3345,22 @@ exit 0, 3.10 s, 6,799,044 KiB; 674 failed on a stale `#print axioms
 z0_density` line; 675 `R0C/CircleRows` exit 0, 3.27 s, 6,788,544 KiB;
 standard axioms, no warnings. Dependent R0P modules must be recompiled
 against 673/675 (Codex, continuing G22).
+
+### G22 continuation: corrected fallback masses (2710–2717)
+
+Recompiled unchanged prerequisites in import order against the lead’s R0C.SemStatement 673 and R0C.CircleRows 675. CircleSampler now exposes only the two nonrational fallback samplers; both corrected mass theorems follow from the one-parameter fibers and qm31Sample_mass_slack. Attempt 2716 exposed the two prime-name mismatch; 2717 adds the explicit rational prime equality and is green, with standard axioms only, no error, warning, or sorryAx. Deleted CircleMassObstruction.lean as requested after these bounds passed; its accepted modulo-bias finding remains recorded above. SemView needs no chord-condition edit: openingView already tests the same explicit three chord conditions and passed 2711 unchanged.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-cont-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2710 | `R0P/SemSource` | 0 / 0 | 0:02.86 | 6796108 | 0 | 1 | `e79ce46d3ce2dc99e65aa99c78581f5069c66eec3dba4dae0dce09ec86f7a024` |
+| 2711 | `R0P/SemView` | 0 / 0 | 0:03.10 | 6816232 | 0 | 2 | `01868627189632007beaac02e9036d71d4f268dfe9c3f4d8b51ee9964de528e1` |
+| 2712 | `R0P/SemDecision` | 0 / 0 | 0:03.06 | 6806904 | 0 | 2 | `cf8c98e1bf6d5da3a2e725efd3790c4efc7e75fc32b0c650c310d875bf1f8971` |
+| 2713 | `R0P/SemD3` | 0 / 0 | 0:03.01 | 6811444 | 0 | 2 | `68cd2542aff4f20ead2f5855663cf3e743817725f2714cc3400a21b0f651c74b` |
+| 2714 | `R0P/SemD2` | 0 / 0 | 0:04.07 | 6841668 | 0 | 5 | `ef7b48c25eefa272398f78472ecbcbc9f5221a8465ef2f414cf711ba79af99d9` |
+| 2715 | `R0P/SemPad` | 0 / 0 | 0:03.60 | 6830748 | 0 | 24 | `2734705552a97a2ef29f0a4c6c4a36fda6e2f7653fe972c7152f9896c91f13c1` |
+| 2716 | `R0P/CircleSampler` | 1 / 1 | 0:12.08 | 6794448 | 0 | 19 | `9cd01db0ffbe9ecbb9cc9cf728f62fad891cb0c02636d42ffc94d1a1ef87d7a2` |
+| 2717 | `R0P/CircleSampler` | 0 / 0 | 0:12.09 | 6832504 | 0 | 20 | `ee0e9a4be9447d043fbcf19fa2ff583f04456dd62bd8c27d9fd622781accde1d` |
+
+Source revision(s): `ab6bbce28a64f8d208c49097ea64713af711321f`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
