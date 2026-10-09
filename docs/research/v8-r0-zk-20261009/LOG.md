@@ -1413,3 +1413,253 @@ current `HonestProver`, simulator and 32-round `View`, Boolean observer,
 symbolic `ε_fs`. The ROM reduction `HVZK_perfect → ROMReduction ε_fs →
 ZK_FS ε_fs` is obligation **ZF1**, deferred until after Z4; no value is
 assigned to `ε_fs` and `Z1.ZK_FS` stays as history.
+
+## Z3b — joint-tape experiment and FS interface; D11 mixed-H1 stop (2026-10-09)
+
+Fetched base **`41d8f6120993b7d13a43ae4785b48059c1c21a02`** and read D11.
+The accepted Z3 modules are retained. The old `ZkStatement.MaskImage`
+definition is unchanged except for a docstring marking it superseded.
+`JointView.lean` installs `HonestInstance := h.Instance`, the joint uniform
+tape `AffTape K F × EligibleNoise K F`, the actual honest view and its
+zero-tape payload `c`, and a simulator using a classically chosen instance
+while sampling both tapes. The product represents the binary vector-space
+direct sum: both components are sampled, rather than choosing one summand.
+`view_eq_z3` proves exact equality with the accepted view at `(w,e),r`.
+
+**Items 1–2 stop before defining the claimed linear A and eligible-only g.**
+The source has a mixed H1-padding/eligible-noise term. Being affine in `r`
+for each fixed `e` does not imply that its nonlinear remainder is a function
+of `e` alone. No assumed decomposition, unproved linear map, replacement
+honest view, or altered MaskImage was installed. The requested
+`hvzk_perfect_of_maskImage'` and the Z4 maps derived from that A are therefore
+not claimed. The independent FS interface work is complete below.
+
+### Sparse mixed-term obstruction to D11 as written
+
+D11 asks for `payload(r,e) = c + A(r,e) + (g(e),0)`. Any such expression
+satisfies the necessary identity
+
+```text
+payload(r,e) - payload(0,e) - payload(r,0) + payload(0,0) = 0.
+```
+
+`D11Obstruction.separated_mixed_difference` proves this for arbitrary modules
+and a linear A. The condition `g(0)=0` is not even needed for this identity.
+The source-level sparse instantiation below gives a nonzero mixed difference
+in a linear observable of the final semantic round-polynomial coefficients.
+This is an obstruction to the proposed decomposition, not a privacy attack.
+
+1. Let `s : F` be the eligible mask at **semantic column 0, row 13**, with all
+   other eligible coordinates zero. It changes that trace cell by `s` and
+   its balancing cell, row 1023, by `-s`.
+2. Let `h : F` be the **first limb of H1 padding at row 13**, with all other
+   affine coordinates zero. H1 padding changes row 13 by `h` and its balancing
+   row 0 by `-h`. Rows 0, 13 and 1023 are copy-inactive; row 12 is active.
+3. Choose the MSB-first evaluation point
+   `a = (0,0,0,0,0,0,1,1,0,2)` and zerocheck point
+   `zc = (0,0,0,0,0,0,1,1,0,0)` (Boolean row 12). The MLE support at `a` is
+   exactly rows **12 and 13**, with weights **-1 and 2**. Thus the C1 opening
+   changes by `2*s` and the H1 opening changes by `2*h`. Both balancing rows
+   have zero evaluation weight. These are ten-factor sparse weight identities,
+   not an expansion or evaluation of a 1024-row matrix.
+4. Set `lambda = chi = theta = eta = 1`, `mu = 0`. The only copy endpoint at
+   either row in that support is the producer at row 12, slot 0, pattern 1,
+   tag **1124073480**, weight 1. Pattern 1 reads columns 0–7 with coefficient
+   one at lambda 1. The producer value at this point is
+   `-(tag + offset + 2*s)`, its weight is `-1`, and every other producer or
+   consumer slot has zero value and weight. `offset` contains the fixed
+   trace contributions. The equality and active selectors are both `-1`,
+   whose product is one.
+5. The unpadded helper at row 12 reads the unchanged Boolean-row semantic
+   cells; row 13 has no endpoints and its weighted reciprocal helper is zero.
+   Hence the base H1 opening, denoted `H`, is fixed as s varies. The actual
+   copy residual at `a` is consequently
+
+   ```text
+   (1 + tag + offset + 2*s) * (H + 2*h) + 1.
+   ```
+
+   Its rectangular difference in s and h is **`4*s*h`**. All other terminal
+   lanes and the mask term are independent of H1 padding; their rectangular
+   differences are zero. The mu terms vanish by the chosen challenge.
+6. Fix the first nine alpha challenges to the first nine coordinates of `a`.
+   The last round polynomial has no remaining Boolean tail, and its
+   interpolation sample at **X = 2** is exactly this terminal value. Evaluation
+   at 2 is a linear function of its 28 disclosed coefficients. Taking
+   `s = h = 1` therefore yields mixed difference **4**, nonzero in M31 and
+   its extension. This contradicts the necessary zero identity above.
+
+**Proof boundary:** `sparse_copy_mixed_difference` and
+`sparse_copy_not_separated` are host-compiled symbolic lemmas for the displayed
+four-slot copy row. The latter takes the explicit premise `(4 : K) ≠ 0`.
+The full sparse-support/registry/interpolation instantiation above is a
+source-level algebraic audit, not a newly claimed kernel-checked theorem about
+`HonestView.run`. The source inventory checks the exact endpoint and active
+bits; it performs no field, encoder, matrix, or rank computation.
+
+Source citations at the base:
+`MaskLayout.lean` (`eligible`, `balance`, `h1Padding`, `applyEligible`,
+`applyAff`); `HonestView.lean` (`helper`, `prepare`, `original`, `roundPoly`,
+`run`); `R0P/Copy.lean` (`copyResidual`, `copyEvaluateWithSelectors`,
+`copyRowsAt`); `R0P/CopyConstants.lean:150–151` (rows 11 and 12 endpoints),
+`:30–31` (active masks), `copyPattern1`; `R0P/SemDecision.lean`
+(`laneAt`, `eqValue`, `activeAt`, `terminalValue`); and
+`R0P/SemDeg.lean` (`selAt_eq_bitWeight`, `g2High_selAt`, `g2Low_selAt`). The Rust
+row-12 record is `pair_forest_copy_terminal_constants.rs:36`. These source
+formulas are the same ones cited in the accepted Z3 H1-slope analysis.
+
+A clarification was requested while independent FS work continued. A possible
+repair is to let the round remainder depend on eligible noise **and H1
+padding**, then absorb it using independent mask-only/G randomness (retaining
+all tape coordinates). That requires a different conditional translation
+argument; merely changing `g(e)` to an arbitrary `g(r,e)` would not justify
+uniformity because the translation could depend on the same randomness used
+to absorb it. No repair was adopted without a lead decision. Any repaired
+argument must also prove a common affine image across instances; the old
+`ViewAffine` theorem does not assert an instance-independent H1 slope.
+
+### Adopted ZK_FS definition and explicit ZF1 composition
+
+`FsStatement.lean` installs the current `ROMView`, `FSExperiments` and
+`ZK_FS` in namespace `R0Z.FsStatement`. The view contains the current complete
+32-round disclosed view and the observer's own queries with full 32-byte
+answers. The advantage is the absolute difference of the real and ideal
+Boolean-observer means, with symbolic `epsilon_fs`. The real experiment takes
+the current `HonestProver`, basis, public output projection and instance; the
+ideal experiment takes the current chosen-instance simulator. `Z1.ZK_FS`
+remains historical and unchanged.
+
+`ROMReduction ... epsilon_fs : Prop` requires an explicit common randomized
+extension, with finite nonempty coins independent of the joint prover tape.
+Its challenge draw and extension cannot read the honest instance. It also
+requires nonnegative comparison errors `epsilon_real`, `epsilon_ideal`,
+whose sum is at most `epsilon_fs`, and proofs of both real-game comparison
+bounds. These are the places where commitment/programming conflicts, seed
+replacement, sampler abort and source/refinement errors must be justified.
+No reduction certificate, oracle semantics, query bound, or error value is
+supplied by this module.
+
+`LawTransport.lean` proves equal expectations under equal finite laws for
+arbitrary output types, and product-coin marginalisation. They give
+`middle_means_eq` from the current fixed-challenge HVZK statement. The triangle
+inequality then proves the requested purely compositional theorem:
+
+```lean
+R0Z.FsStatement.zkfs_of_hvzk_perfect ... :
+  R0Z.JointView.HVZK_perfect h B outputs x →
+  ROMReduction h B outputs fs x epsilon_fs →
+  ZK_FS h B outputs fs x epsilon_fs
+```
+
+ZF1's substantive game/reduction proof remains open. No implication from D5
+alone, no efficiency property, and no actual FS privacy result is asserted.
+
+### Z4 coordinate inventory; map statements blocked by the D11 decomposition
+
+The following counts inventory the current types/layout, not their ranks.
+The local script `/tmp/aspis-z3b/layout_inventory.py` and its source-hashed
+JSON result are retained in `/tmp/aspis-z3b/evidence/layout-inventory.json`.
+It only counts the natural-number eligibility predicate and literal active
+bits. No concrete linear matrix was constructed or evaluated, and no Lean
+cardinality or surjectivity proof is claimed.
+
+| Tape block | Raw independent F coordinates |
+|---|---:|
+| Ten mask-only columns | 10 × 1024 = 10,240 |
+| G, H1 padding, D (four limbs each) | 3 × 1024 × 4 = 12,288 |
+| AffTape total | 22,528 |
+| EligibleNoise | 3,803 |
+| Joint tape total | 26,331 |
+
+Eligible-cell counts for columns 0–15 are
+`222, 222, 223, 224, 224, 224, 224, 224, 224, 248, 249, 259, 259, 259, 259, 259`.
+The copy registry has 214 active and 810 inactive rows. Overwritten balance
+samples and unused H1 active-row samples are retained in the raw tape; these
+raw dimensions must not be read as the ranks of its image.
+
+Writing `q := ch.queries.card`, the disclosed field-coordinate inventory is:
+
+| Field payload projection | K slots | At q = 22 |
+|---|---:|---:|
+| Semantic round-polynomial coefficients | 10 × 28 | 280 |
+| Semantic C1 columns' three point claims, two OOD values, and opened symbols | 16 × (5 + 4q) | 1,488 |
+| Remaining 13 columns' direct claims and opened symbols | 13 × (5 + 4q) | 1,209 |
+| Mask-sum, inactive sum, seven opening coefficients, 256 final coefficients | 1 + 1 + 7 + 256 | 265 |
+| Total | 690 + 116q | 3,242 |
+
+Thus the complement of semantic C1 claims/openings has `610 + 52q` K slots,
+or 1,754 at q22, including the 280 round coefficients. Metadata carries no
+vector-space dimension. To compare with F-coordinate tapes, ambient K-slot
+counts must be multiplied by `[K:F]`; `PackBasis F` alone does not identify
+all of K with four F coordinates. These are ambient counts and do not remove
+sumcheck/encoder consistency relations or subfield restrictions. Surjectivity
+onto an unrestricted ambient array must not be substituted for surjectivity
+onto the required displacement subspace.
+
+The current `Challenges` type admits arbitrary query sets. The q22 column is
+an explicitly labelled specialization, not an added premise or a silent
+restriction of `∀ ch`. The fixed, zero-extended Payload type itself has
+30,409,394 K coordinates; only the queried positions are used in the counts
+above.
+
+**No A-composed Z4 maps or closing surjectivity lemmas were installed:** doing
+so as though D11's A existed would conceal the decomposition obstruction.
+The next action is the lead's remainder/absorption decision, followed by those
+map definitions and goal statements. No Z4 rank argument has begun.
+
+### Host validation
+
+Host/workspace and toolchain are unchanged from Z3: `dombarker@100.108.41.90`,
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`, Lean 4.32.0
+(`8c9756b28d64dab099da31a4c09229a9e6a2ef35`), pinned Mathlib
+`81a5d257c8e410db227a6665ed08f64fea08e997`. The existing shared-lock adapter
+and Python Lake launcher were reread before use. Each attempt used the common
+`/tmp/aspis-r0-lean.lock` across source installation and compile, one Lean
+process, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128, 900 s timeout,
+and `lake env lean -j1 -M7000 -DElab.async=false`. Each admission was 24+7 GiB
+under the 55 GiB reservation ceiling. No resource or elaboration limit was
+raised. No package-wide replay, cold build, finite-field gate, or concrete rank
+computation ran.
+
+Source revision for every receipt is **41d8f6120 plus its exact source snapshot
+SHA below**. Attempts 3151–3153 reuse the docstring-only ZkStatement change
+compiled in 3149. Unchanged accepted dependencies are reused. Source, SHA,
+output and GNU-time receipts remain on the host and in
+`/tmp/aspis-z3b/evidence/`; none are added to the commit. Every final source was
+matched byte-for-byte to its accepted snapshot. “Standard” denotes only
+`propext`, `Classical.choice`, `Quot.sound` (or a subset). Failed audit outputs
+are rejected, even when other declarations in that file printed successfully.
+
+| Attempt | Exact target | Exit | Wall | Peak RSS (KiB) | Swap | Result / axioms |
+|---|---|---:|---:|---:|---:|---|
+| 3144 | `R0Z/JointView.lean` | 1 | 0:02.74 | 6,794,840 | 0 | Rejected: missing classical decidability for the eligible-cell finite type. |
+| 3145 | `R0Z/LawTransport.lean` | 0 | 0:02.80 | 6,713,784 | 0 | Standard; expectation transport and product means. |
+| 3146 | `R0Z/JointView.lean` | 0 | 0:02.83 | 6,828,768 | 0 | Standard; exact joint-view bridge and new HVZK definition. |
+| 3147 | `R0Z/FsStatement.lean` | 0 | 0:03.06 | 6,844,508 | 0 | Standard; FS definition, reduction obligation, composition theorem. |
+| 3148 | `R0Z/D11Obstruction.lean` | 1 | 0:07.94 | 6,792,192 | 0 | Rejected: four-slot vector projections not fully simplified. |
+| 3149 | `R0Z/ZkStatement.lean` | 0 | 0:04.31 | 6,886,748 | 0 | Standard; old MaskImage docstring marked superseded, definitions unchanged. |
+| 3150 | `R0Z/D11Obstruction.lean` | 0 | 0:03.23 | 6,819,492 | 0 | propext/Quot.sound only; sparse mixed-term algebra. |
+| 3151 | `R0Z/Hvzk.lean` | 0 | 0:03.10 | 6,833,340 | 0 | Standard; preserved Z3 theorem after imported docstring change. |
+| 3152 | `R0Z/JointView.lean` | 0 | 0:02.88 | 6,828,124 | 0 | Standard; final joint-view dependent check. |
+| 3153 | `R0Z/FsStatement.lean` | 0 | 0:03.12 | 6,844,096 | 0 | Standard; final FS dependent check. |
+
+| Attempt | Exact source SHA-256 |
+|---|---|
+| 3144 | `15818c1465abc7fbe9fea490e5335d8769e2e0118d530e2b175d4897a1095272` |
+| 3145 | `dcb5c119d30f86bf9479db73924cc466fc67348dcd4093f92094f85050711a90` |
+| 3146 | `a46749539ce3237da99950ad08ced4df72d8433c5e6f327e21850d08f1d07182` |
+| 3147 | `3c42085757381a4bb065615c14f40cc989c5c52e2e60e79486508713ed311cdf` |
+| 3148 | `80128f23781709fc0a284051fa0aa1fba80658b0d08e12a8c46f167ba124fc83` |
+| 3149 | `bb50e02cee78677adbe9fc88cf2f6f40b15a2385d445c62230b3ec2950da6d39` |
+| 3150 | `426b645e41e0ce779a6194213b5f52707edd2108c3730f7c7a6df0c62819ca14` |
+| 3151 | `5c8c2abc96eb2e2a7049e2cf0d947856076667dbc7ab00de2758227c0ff904f5` |
+| 3152 | `a46749539ce3237da99950ad08ced4df72d8433c5e6f327e21850d08f1d07182` |
+| 3153 | `3c42085757381a4bb065615c14f40cc989c5c52e2e60e79486508713ed311cdf` |
+
+The final scoped diff/forbidden-declaration/evaluation/limit-override checks
+pass. The only simplification in the new copy obstruction expands a fixed
+four-slot row and a ring identity, never the large registry or a concrete
+recurrence. No new file contains a sorry, axiom, unsafe declaration, or native
+evaluation. Commit scope is the four new modules, the old MaskImage docstring,
+and this LOG. Concurrent Rust/spec work is untouched; no wallet operation,
+co-author trailer, or rank-proof claim. Z3b stops at the D11 correction above.

@@ -360,7 +360,9 @@ theorem view_affine (h : HonestProver K) (B : PackBasis F)
       (metadata outputs x ch, b h B x w ch + A h B x w ch r) := by
   exact congrArg (fun p => (metadata outputs x ch, p)) (payload_affine h B x w ch r)
 
-/-- D4′ verbatim on payloads, over the augmented instance (w,e). The public
+/-- Historical D4′/D4″ statement, superseded by lead decision D11. Kept with
+its accepted Z3 theorem; D11's joint-tape experiment is in R0Z.JointView.
+This old definition quantifies over augmented instances (w,e). The public
 comparison uses x.1 because x.2 is the ideal public handle namespace. -/
 def MaskImage (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) : Prop :=
   ∀ w w' ch, «public» h w = x.1 → «public» h w' = x.1 →
