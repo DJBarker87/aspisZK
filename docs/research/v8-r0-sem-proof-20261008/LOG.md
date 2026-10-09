@@ -3840,3 +3840,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3239 | `R0P/MaskPrefix` | 0 / 0 | 0:03.39 | 6844928 | 0 | 7 | `0ad1edbee3aee5dd29db05f250dd912437c813329a46ce4c9f794b7949dddea2` |
 
 Source revision(s): `e9517cc9a2e1585b6ed88c0fe467a58012ff7733`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: full masked FS2.D2
+
+MaskD2Instance assembles the 32 rows only after all sub-bounds passed independently: semantic 0–24, circle 25–26, field openings 27–30, and q22 at 31. The degree guard is 15 ≤ prefix length, active on alpha rows 15–24 only. It is vacuous on rows 0–14: eta parses its scalar mask-sum claim, and no verifier polynomial degree check suppresses the eta bad event. The four source sigma clauses are the only sampler premises. Attempt 3240 closes FS2.D2 with the standard three axioms.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3240 | `R0P/MaskD2Instance` | 0 / 0 | 0:03.56 | 6838764 | 0 | 1 | `17ff2ad7d727e2d3a99f9ab4f9462302304c1e050cb66e9067916dc4c734715b` |
+
+Source revision(s): `19348bc078df122c4ace5e8ecd98897caf7051a4`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
