@@ -269,3 +269,206 @@ is not a requirement of the interactive statement.
 
 D6, D7, D9–D12: retained exactly as Z1 states them; deferred to the FS/ROM
 and refinement phases. No value is assigned to any ledger term.
+
+## Z2 — masked reference modules; stop at D4 (2026-10-09)
+
+Read “Lead decisions after Z1” first. Base and all Rust citations in this
+section are **`d2b7413259a75100db9d1c722d88932bfea28fb9`**. Worktree:
+`/Users/dominic/ZK/.worktrees/ZK-v8-reference`. Other workers advanced the
+branch and edited Rust / the soundness tree during this task; none of those
+changes was made, staged, or reverted by this worker. Only the two new Lean
+modules below and this LOG are this task's changes. The pinned Rust files
+listed below were checked byte-for-byte against the worktree when reviewed.
+
+**Status: items 1 and 2 implemented and host-checked. Item 3 is stopped at
+the unresolved formal meaning of D4 below. `ZkStatement.lean` remains the
+accepted Z1 file; it is not a 32-round privacy statement and has not been
+recompiled or presented as one. No MaskImage, HVZK, completeness, FS privacy,
+or extended soundness theorem is claimed.**
+
+### Implemented definitions and exact source boundary
+
+`lean/R0Z/MaskedProtocol.lean` keeps the existing outer
+`R0C.SemStatement.Msg` / `Chal` types and extends the inner message with
+`SemMsgZ.base` and `SemMsgZ.maskSum`. Its `schedule : Fin 32 → RoundKind` is:
+
+| Round | Message / challenge |
+|---|---|
+| 0, 1 | empty semantic message / λ, χ |
+| 2 | C2 (`h1 h g`) / θ |
+| 3–12 | empty semantic message / zc₀…zc₉ |
+| 13 | empty semantic message / μ |
+| 14 | mask-sum claim / η |
+| 15–24 | sumcheck polynomial / α₀…α₉ |
+| 25, 26 | point claims then first OOD claims / z₀, z₁ |
+| 27–31 | the five opening rows |
+
+C2 is a message before θ, not an additional challenge round. The terminal
+opening response remains after the last challenge. This module gives the
+schedule and algebraic checks, not a new sampler, commitment projection,
+honest prover implementation, or replacement `combinedProtocol` theorem.
+`terminalZ` deliberately wraps the **R0** `terminalValue`, including its
+μ² inactive-H1 term, with the historical `mask + η·original` form. It does
+not replace the R0 terminal with the historical Rust terminal's shorter
+`original`. `sumcheckChecksZ` takes a mask claim and 25 semantic challenges,
+checks degree ≤ 27, starts at `maskSum + η·0`, and ends at `terminalZ`.
+
+`maskValue_mldeg` proves `SemBadSets.MLDeg 27 10` **after substitution of
+the committed trace MLEs** (`honestClaims t α 0` in lanes 0–25 and 27).
+The proof bounds each dense linear form by degree 1, its powers by degree
+26, and multiplies by the existing degree-1 MLE bound. It uses the `VDeg`
+calculus symbolically. A proof only holding the column evaluations constant
+would miss the extra MLE degree needed by the virtual polynomial.
+The tower coefficients reuse `PackBasis.i/u`, exactly the soundness model's
+abstract `(1,i,u,iu)` interface; no new tower equation or Rust arithmetic
+refinement is assumed.
+
+`lean/R0Z/MaskLayout.lean` defines the literal eligibility predicate for
+semantic columns 0–15, a separate full-domain tape for columns 16–25, and
+four base-field tape coordinates for each G/H1-padding/D sample. Thus the
+tape has type `MaskTape K F` for the base subfield `F : Subfield K`;
+semantic masks are not silently sampled over the larger extension field.
+Salts do not affect `applyMask` and are outside this trace-mask tape.
+The ideal tape includes redundant coordinates that balancing discards,
+and unused H1 coordinates that the active-row projection discards. It is
+not a byte-seed expansion claim.
+
+`applyMask B t tape` adds eligible C1 masks then balances each semantic
+column, installs the ten separately balanced mask-only columns and G/D,
+and adds the inactive H1 padding. Here `t 26` is the **supplied adaptive
+H1 table**: `applyMask` does not construct H1 before λ/χ. `dWord` is a
+separate operation available for initial lane 28 before those challenges,
+as D3 requires. All row sums remain symbolic.
+`applyMask_affine` proves preservation of the affine combination
+`a • p + (1-a) • q` over **F**, for every fixed trace and every `a : F`.
+It is an affinity theorem for this operation, not a mask-image or honest
+trace preservation theorem.
+
+### Citation ledger (all at the Z2 base)
+
+Abbreviations here: **C** = `crates/aspis-core/src/state_only_hiding.rs`;
+**M** = `crates/aspis-prover/src/state_only_hiding.rs`;
+**E** = `crates/aspis-prover/src/state_only_entropy.rs`;
+**F** = `crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs`;
+**H** = `crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs`;
+**P** = `crates/aspis-statement/src/pool_v1/pair_tree_profile.rs`;
+**S** = `docs/research/v8-r0-sem-proof-20261008/lean/R0P/`.
+
+| Definition / fact | Citation |
+|---|---|
+| Inner semantic constructors; outer tags; C2 timing | S/SemView.lean:30–34,53–67,83–91; `docs/research/v8-r0-close-20261007/lean/R0C/SemStatement.lean:18–33`; fixed D3 above supplies the extra row and shifted indices. |
+| 29-lane trace, lane allocation, public type | S/Core.lean:20–23,55–67. |
+| Abstract tower coefficients `(1,i,u,iu)` | S/CoreExt.lean:30–39; C:436–465,535–552 (`mul_tower_basis`, basis). |
+| Semantic exponent schedule | C:391–393: family 0, exponents `[0,2,4,6,8,10,12,14,16,18,20,22,24,26,13,25]`. |
+| Ten mask-only exponents | C:394–395: `[1,3,5,7,9,11,15,17,19,21]`. |
+| G family / exponent | C:396–397,528–533: family 16, exponent 26, factor `1 + L16^26`. |
+| Linear forms, power table, factors | C:472–492,494–512,561–580. `maskLinear family α = Σ_j (3+22j+family(17+8j)) α_j`. |
+| Mask value, selected mask-only terms, optimized selected evaluator | C:612–643,647–674. Horner's implementation uses the same exponent/tower coefficients; no operational equivalence theorem is claimed here. |
+| Historical wrapper and mask-only lane selection | `crates/aspis-statement/src/state_only_terminal.rs:797–812,824–871`. |
+| Original R0 terminal and sumcheck checks | S/SemDecision.lean:73–98. New challenge indices are D3's, not the old `14+j`. |
+| Functional degree machinery and honest MLE bound | S/SemDeg.lean:13–144 (VDeg/constant/monotonicity/add/multiply/powers/sums/MLDeg), :473–481 (`vdeg_honestClaims_zero`); S/SemD3.lean:29–31 (`honestClaims`). |
+| Forest geometry and used path cells | F:36–45,54–75,204–218: 57 Poseidon blocks; 24 private directions, path bases at local rows 1,5,9,13; value block 63. |
+| Exact eligibility | F:221–253; H:23 (padding begins at local row 13); P:223–225 (16 semantic columns, 1024 rows, 16-row blocks). |
+| Translated value/occupancy auxiliary predicate, including legacy path helper | H:289–334; P:230–265,343–354. The forest subtracts 48 before calling it (F:228–229). |
+| Copy-active registry for balancing | F:179–201; `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal_constants.rs:4–5` (fingerprint `0xdf394a5a8554d09c`, active masks); S/CopyConstants.lean:30–31 and S/Copy.lean:238–246 reuse it. |
+| Dependent-row selection and balancing | M:169–196,448–472,699–715. First inactive row is 0 (first active mask 6144 has bit 0 clear); last eligible inactive row in every semantic column is 1023 (F:221–253/H:289–334 leave it unused; last active mask 1749 has bit 15 clear). These two endpoint checks do not enumerate rows. |
+| C1 addition, mask-only/G outputs, forest adapter | M:676–722,762–773. |
+| H1 padding support and application | M:465–472,297–302 (forest adapter). |
+| D word and forest adapter | E:634–674,703–715: separate domain from the source seed, four-limb samples, first-inactive negative-sum balance. D3 fixes its model timing; the source C2 timing remains a refinement item. |
+
+Pinned SHA-256 for the Rust sources used above:
+
+| Source | SHA-256 |
+|---|---|
+| C | `18058112db3108a18f9d11f8d9ffb6f9c1b310b90b333010fd0f98cac480237f` |
+| M | `48dddafce0ea55d5df2f6b670cd8c571cd182e446ce34ea8b3d42aa313b32d3f` |
+| E | `78ebbb3176daf23935243452992548ff9d877aaaf853d73e5ee46b60d8cb3ec0` |
+| F | `61bcd59a22c9c02fe3f9ba69cda43bfa8fe02ea14f15da9b761e976fe48798bf` |
+| H | `3dfe485fc2e9a643a15e0bc7ef0d9fed20b1fa43984bb1d0997d38a380a90ab6` |
+| P | `8a7a4c7bdd3fe0ecd14d6fc920182be434ab92536924de22d269d906be3387b2` |
+| Forest copy constants | `cfce7ec499d3cfd54cf91eb88675e45d89ada5ce073fe00c78be5211204fbc50` |
+| Historical terminal | `1e4ae2058a92c0c8fb6217144ac0c092e233ab4dd8f4e63a85cdab7b2ae121a5` |
+
+### Lead decision needed — D4 formalization stop
+
+These are unresolved quantifiers/objects in the fixed D4 text, not a request
+to reopen the accepted D1/D2/D3/D5/D8 choices. D4 says the disclosed view is
+`f(public, challenges) + L(maskTape)` for each fixed public statement,
+honest instance and challenge sequence, and asks for a witness displacement
+in its image. Before writing `MaskImage : Prop`, the following need an
+explicit choice:
+
+1. **Lead decision needed: witness dependence of the affine map and offset.**
+   Is there one `L(public, challenges)` shared by every same-public honest
+   instance, or an `L(public, instance, challenges)` for each instance?
+   With both `f` and `L` independent of the instance, the stated identity
+   requires equality of the views for the *same tape*, stronger than equal
+   laws and leaving no witness displacement. Allowing an instance-dependent
+   affine `L` has a different quantifier order and allows its linear part
+   (and resulting distribution) to vary with the instance. A formulation
+   with a witness-dependent offset and a shared linear mask map,
+   `view(w,r) = b(w) + A(r)`, would make the usual displacement explicit,
+   but changes the written `f(public, challenges)` dependence. This worker
+   has not selected any of these propositions.
+2. **Lead decision needed: define the displacement and the relevant image.**
+   For an affine `L`, `Set.range L` and the range of its linear part
+   `r ↦ L(r) - L(0)` are different objects. For example, the affine image
+   `{(r,1)}` does not contain the zero displacement, whereas its direction
+   space `{(r,0)}` does. D4 does not say whether the displacement is the
+   difference of zero-tape views, unmasked views, or views after a specified
+   conditioning, nor whether “image” means the affine image itself or its
+   direction space. This distinction determines the exact Lean goal; it
+   cannot be silently resolved by an assumption or a rank condition.
+
+Per Z2's explicit stop rule, item 3 has not been partially rewritten around
+one interpretation. `ZkStatement.lean` and `StatisticalDistance.lean` are
+byte-identical to Z1 (hashes in its table above). D8's target remains perfect
+HVZK (`ε_zk = 0`); no ledger error, computational assumption, sampler law,
+or source refinement was chosen. The next step is the lead's precise D4
+formula, followed by the requested statement restructuring and its focused
+31xx host check. This is a definition boundary, not a failed privacy proof.
+
+### Z2 host validation
+
+Host/workspace and runner are the same as Z1:
+`dombarker@100.108.41.90:/home/dombarker/project-offloads/aspis-fs-generic-20261006`.
+Reinspected `run_g15_lake.sh` and its Python launcher before use: the
+`run2.sh` reservation/scope adapter invokes `lake env lean -j1 -M7000
+-DElab.async=false`, with MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0,
+TasksMax=128 and timeout 900 s. Each attempt reserved 24+7 GiB below 55 GiB.
+The same `/tmp/aspis-r0-z1-lean.lock` serialized this worker's Lean jobs.
+Initial process inspection found no competing Lean process; an end-of-task
+comparison of the host's `sha-N.txt`/`out-N.log` timestamp intervals found
+no overlap of these four attempts with any other recorded attempt.
+
+Reverified Lean 4.32.0 Linux release,
+`8c9756b28d64dab099da31a4c09229a9e6a2ef35`, and Mathlib
+`81a5d257c8e410db227a6665ed08f64fea08e997`. Existing cached dependencies
+were reused. Host source copies of `SemDeg`, `SemD3`, `SemDecision`,
+`SemView`, `SemSource`, `CoreExt`, `Copy`, `CopyConstants`, and `Core`
+were compared byte-for-byte with the Z2 base and local files; all matched.
+No dependency build or full manifest replay was run.
+
+| Attempt | Exact target | Lean/scope exit | time exit | Wall s | Peak RSS KiB | Swaps | Source SHA-256 | Result / axioms |
+|---:|---|---:|---:|---:|---:|---:|---|---|
+| 3100 | `R0Z/MaskedProtocol.lean` | 1 | 1 | 3.11 | 6,793,420 | 0 | `d56dbbf5e90e687ec69b2d822e2c4edf3b08ea919a2584d3adc8001f1708bcd0` | `vdeg_add` could not infer both degree vectors from the constant result bound; fixed explicit vectors. Failed error-term audit rejected. |
+| 3101 | `R0Z/MaskedProtocol.lean` | 0 | 0 | 3.82 | 6,826,908 | 0 | `e2d41ab912aa178f4c24636ce6fde0e9c18e2f4715ac4b138d4b7eb3f4fed84f` | 14 audits standard; no warnings/errors. |
+| 3102 | `R0Z/MaskLayout.lean` | 1 | 1 | 5.21 | 6,793,136 | 0 | `bd08b3b45b196569d05efb5adab8d6990f906bf8ca19971cf0ff711b5c6d9843` | Pointwise rewrite did not rewrite an unapplied word under `balance`; fixed by function extensionality. Failed error-term audit rejected. |
+| 3103 | `R0Z/MaskLayout.lean` | 0 | 0 | 5.84 | 6,827,388 | 0 | `2c2db6335f1eb0288826fffa541c1826ea760516de2f946c624dabbaa928759d` | 11 audits standard; no warnings/errors. |
+| — | `R0Z/ZkStatement.lean` (Z2 restructuring) | — | — | — | — | — | unchanged Z1 hash | Not attempted: D4 stop above. |
+
+Exact proof audits:
+
+```text
+'R0Z.MaskedProtocol.maskValue_mldeg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.MaskLayout.applyMask_affine' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+Raw `out-N.log`, `time-N.log`, `sha-N.txt`, and `source-N.lean` snapshots
+remain in the host `evidence/` directory. Each snapshot's SHA matches its
+receipt; final local sources match the accepted 3101/3103 hashes. No cap
+increase or unchanged retry. The only explicit `Finset.univ` uses in the
+new source are symbolic VDeg sums over coordinates/columns, never evaluated
+row/state/trace universes. The inactive-row sum is kept abstract under
+`balance`. No authored prohibited proof command or option, `#eval`, or
+`#reduce` occurs. `git diff --check` passes.
