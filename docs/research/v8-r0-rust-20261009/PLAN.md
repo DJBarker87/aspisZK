@@ -361,3 +361,88 @@ their cost by track (lead view; the choice is the user's):
 Rust A is held until the user decides. R-H (D14 in Rust: lane-28 h cells,
 fourth weight row, 29 extra claims, terminal h-terms) follows T1 regardless
 of the choice.
+
+## Lead correction after review of the R-E3 options: R0 §8 is the roadmap, not a re-target; exact savings missed; R-E4
+
+The options paragraph above framed any change to the opening layer as "a
+re-target of the proof". That was wrong. `R0_SOUNDNESS.md` §1: R0 "is
+deliberately uncompressed. It is the ancestor that later optimisations must be
+shown to preserve (§8). Size and compute are not constraints here." §8, "What
+each later optimisation must prove", lists the planned steps with their
+obligations: (1) ρ-batch the q query equations into the relation (+q/|E|,
+`badCombinedChallenges_card`); (2) relation rounds 1–3 in place of the direct
+dot product in V2 (three degree-6 rounds, +18/|E|; V7 has the analogue);
+(3) eight-way Merkle (proved, R552); (4) two-swap order (`inverse_transport`,
+`inverseTransport_dot`); (5) sparse-coded G and a second channel ("not
+routine": the joint list must not become a product of two lists or the
+semantic row falls to ≈ 98.8 bits); (6) channel fold (`quadratic_dot_product`);
+(7) native kernels (source refinement); (8) narrow κ, τ to K and 24 → 22
+queries (re-evaluate the ledger). "v8 is R0" means the Lean reference is what
+the optimised verifier is proved against; it never meant the reference
+verifier is the deployed one. Option (B) is the planned path with named
+obligations. The user's decision is sequencing: a multi-transaction interim
+(A), or straight to §8 after T1/T2.
+
+**Exact, byte-preserving savings missed by R-E2/R-E3 and by the lead
+estimate.** None changes challenges, bytes, check order or any check.
+- z₀, z₁ are QM31 points embedded in E (`transcript.rs`, `E::from_qm31`), so
+  a = x₀y₁ − x₁y₀, b = y₀ − y₁, c = x₁ − x₀ lie in the K subfield by
+  construction. `structured.rs` multiplies them with generic E×E (3,072
+  products in the quotient transpose); E×K instead saves ≈ 3,072 × 800 ≈ 2.5M
+  CU. `Line::line_word` at an M31 domain point is K-valued, so V1's 88
+  inversions are K inversions (942 vs 2,120 CU) and the following products
+  E×K: ≈ 0.17M.
+- The eq tensor builder computes v·x and v·(1−x); r = v·x, ℓ = v − r saves
+  3,069 K multiplications ≈ 0.9M.
+- Karatsuba at the outer layer of `WideExact::mul` (three QM31 products
+  instead of four) on the ≈ 1,900 E×E products that remain: ≈ 0.5–0.7M.
+- Semantic phase: R0's semantic phase is "the V8 baseline before R17"; M1 ran
+  transcript, terminal and relation in ≈ 580k CU in QM31. R0's measured 2.69M
+  is ≈ 1.2M field arithmetic plus parse, handoff and control; porting M1's
+  kernels (R60 inverse chain, R218 norm algebra, R91 bounded-width arithmetic)
+  behind equality gates plausibly recovers ≥ 1M.
+- V2 evaluation order: with a, b, c ∈ K, L^T eq_p and L^T ind are K-vectors
+  and the only E scalars are κ^{p+1}, τ, τ²; moving them outside the pairings
+  leaves six E×K dots of 1,024 plus K-side work. Several orders land near
+  6.5–7M for V2 (from 11.5M); the choice is made by counting every product,
+  reduction and memory pass, not one loop.
+Exact-work floor after all of these: ≈ 10–12M CU. That is the figure §8
+steps 8, 2 and 1 exist to remove.
+
+**R-E4 (Rust A): exact byte-preserving savings with equality gates.** Base:
+`origin/v8-reference` at the head carrying this section. Branch
+`codex/r0-e2e-re4-20261009`. Verifier-side only; wire, prover outputs,
+challenges, check order and every check unchanged; both fixtures
+byte-identical; the 1,894 rejection cases reject identically; every change is
+gated by a native differential against the R-E3 path (bitwise, both fixtures
+and all rejection cases) before it is measured.
+1. Subfield chord coefficients: carry `Line{a,b,c}` as QM31 (assert c1 = 0 at
+   construction; fail closed otherwise), multiply with `mul_qm31` in
+   `structured::quotient_weights` and `check_v2`'s rows 1021–1023; in
+   `check_v1` invert `line_word` in QM31 and multiply E×K. Keep the generic E
+   path behind the reference feature.
+2. Tensor builder: r = v·x, ℓ = v − r.
+3. Karatsuba at `WideExact::mul`'s outer layer; equality on 10⁶ random pairs
+   and all limb unit-vector pairs natively; SBF primitive measurement as in
+   R-E2 (N = 64/128).
+4. V2 evaluation order: count E×E, E×K, E×F, K×K, adds, reductions and memory
+   passes for at least three orders (current; scalars outside the pairings;
+   transpose onto F with G = dF^T F) and report the counts before
+   implementing; implement the lowest.
+5. Semantic phase: port the M1 kernels that apply unchanged (R60, R218, R91)
+   behind equality gates against the current semantic path; no formula or
+   order change.
+6. Measure: acceptance 5× at 1.4M; DIAGNOSTIC per phase as in R-E3; table
+   measured vs R-E3 per phase and per change (one build per change,
+   cumulative). `REPORT-4.md`, `re4/`. No co-author trailer.
+Stop and report if: any change would alter challenges, bytes, check order or
+a check; a differential mismatch; a subfield assertion fails on either
+fixture; heap > 256 KiB or any reachable stack diagnostic; a memory cap would
+have to be raised; an unchanged measurement would be rerun. No §8 protocol
+step (ρ batching, relation rounds, κ/τ narrowing): those are Lean-first.
+
+**Sequencing proposal for §8 (lead view; the user's call).** After T1 and
+T2: step 8 (κ, τ to K; arithmetic ledger only; removes the E×K weighting and
+most remaining E×E in V2), then step 2 (relation rounds replacing V2's dot
+product; +18/|E|; V7 analogue in the tree), then step 1 (ρ-batched queries).
+Step 5 last, and only with its joint-list argument.
