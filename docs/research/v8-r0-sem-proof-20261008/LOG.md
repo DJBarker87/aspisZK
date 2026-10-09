@@ -4053,3 +4053,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3260 | `R0P/MaskProtocol` | 0 / 0 | 0:04.28 | 6843716 | 0 | 12 | `d6a529886eee9fa43e5b7bfd3e509e2403476b9c50487916dcd4f1899a81c5a8` |
 
 Source revision(s): `0df523ddf356d9a045218afd7071f331a5f9e692`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskD2 (host attempt 3261)
+
+etaSomeBad now accepts M : T → K and tests etaBad claim (M t) (total t) for each candidate t. The same one-root proof gives each candidate at most one bad eta, and the same symbolic union plus candidates_card gives coefficient 100. The uniform and modulo-sampler denominators and every combinedD2BudgetZ row are unchanged. Attempt 3261 passes twelve standard-axiom audits.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3261 | `R0P/MaskD2` | 0 / 0 | 0:03.83 | 6840276 | 0 | 12 | `22af138da175023e657cd78ca98c15468b7c29ca166d5d14e3d02abb687e1041` |
+
+Source revision(s): `a67b432c6183e8ce2778b14e26f185ded7ded267`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.

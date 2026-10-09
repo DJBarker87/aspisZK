@@ -14,7 +14,7 @@ open scoped BigOperators
 noncomputable section
 attribute [local instance] Classical.propDecidable
 
-/-- M = maskTotal; S = originalTotal, both fixed before eta is sampled. -/
+/-- M = maskTotal t; S = originalTotal t, fixed for each candidate before eta is sampled. -/
 def etaBad {K : Type} [Field K] (claim M S eta : K) : Prop :=
   S ≠ 0 ∧ claim = M + eta * S
 
@@ -80,15 +80,16 @@ theorem etaBad_semChal_mass (claim M S : SemE) :
 #print axioms etaBad_semChal_mass
 
 /-- The trace is selected by the opening proof from the committed-word list;
-an eta event at the earlier prefix must cover every such candidate. -/
+an eta event at the earlier prefix must cover every such candidate,
+including its own mask sum M t. -/
 def etaSomeBad {K T : Type} [Field K] (ts : Finset T) (total : T → K)
-    (claim M eta : K) : Prop := ∃ t ∈ ts, etaBad claim M (total t) eta
+    (claim : K) (M : T → K) (eta : K) : Prop := ∃ t ∈ ts, etaBad claim (M t) (total t) eta
 
 theorem etaSomeBad_card {K T : Type} [Field K] [Fintype K]
-    (ts : Finset T) (total : T → K) (claim M : K) :
+    (ts : Finset T) (total : T → K) (claim : K) (M : T → K) :
     (Finset.univ.filter (etaSomeBad ts total claim M)).card ≤ ts.card := by
   classical
-  let per : T → Finset K := fun t => Finset.univ.filter (etaBad claim M (total t))
+  let per : T → Finset K := fun t => Finset.univ.filter (etaBad claim (M t) (total t))
   have hsub : Finset.univ.filter (etaSomeBad ts total claim M) ⊆ ts.biUnion per := by
     intro eta he
     obtain ⟨t, ht, hb⟩ := (Finset.mem_filter.mp he).2
@@ -96,11 +97,11 @@ theorem etaSomeBad_card {K T : Type} [Field K] [Fintype K]
   calc
     _ ≤ (ts.biUnion per).card := Finset.card_le_card hsub
     _ ≤ ∑ t ∈ ts, (per t).card := Finset.card_biUnion_le
-    _ ≤ ∑ _t ∈ ts, 1 := Finset.sum_le_sum (fun t _ => etaBad_card claim M (total t))
+    _ ≤ ∑ _t ∈ ts, 1 := Finset.sum_le_sum (fun t _ => etaBad_card claim (M t) (total t))
     _ = ts.card := by simp
 
 theorem etaSomeBad_semChal_mass {T : Type} (ts : Finset T) (total : T → SemE)
-    (claim M : SemE) :
+    (claim : SemE) (M : T → SemE) :
     mean (fun s : State => indicator (etaSomeBad ts total claim M (semChal s))) ≤
       ts.card * ((1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4) := by
   let bad : Finset SemE := Finset.univ.filter (etaSomeBad ts total claim M)
@@ -133,7 +134,7 @@ theorem etaCandidates_semChal_mass {Sfield : Fin 29 → Subfield SemE}
     (x : TypedContext SemE Sfield)
     (rounds : List (R0C.SemStatement.Msg SemE SemE (SemMsg SemE) ×
       R0C.SemStatement.Chal SemE SemE))
-    (total : Trace SemE → SemE) (claim M : SemE) :
+    (total : Trace SemE → SemE) (claim : SemE) (M : Trace SemE → SemE) :
     mean (fun s : State => indicator
       (etaSomeBad (candidates x rounds .none) total claim M (semChal s))) ≤
       100 * ((1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4) := by
