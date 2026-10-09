@@ -3615,3 +3615,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3214 | `R0P/MaskDuplexChain` | 0 / 0 | 0:03.80 | 6842600 | 0 | 7 | `e4c2d092dda27b2b517a03ff2885dfd37789621c6ca489e726601ea5f5227956` |
 
 Source revision(s): `045635fe67362b5a235f6cf9e821b71f0049d53b`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: generic transcript and collision decoding (3215–3216)
+
+MaskDuplexDecodes proves combinedDecodes for n+2 rounds and arbitrary inner semantic messages, using p.rounds=n+2. The former row-29/30 argument now uses predecessor n and final row n+1; all earlier rounds are single squeezes and the final row uses the eight-pair chain. Attempt 3215 required the symbolic identity n+2-1=n+1 in the branch reductions; 3216 uses this named arithmetic fact and passes all six audits with standard axioms, no errors or warnings. The proof does not depend on the mask polynomial, semantic bad sets, or eta budget. It supplies the decodes part of Inj3; the full masked D2/D3 and FS instance are not asserted here.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3215 | `R0P/MaskDuplexDecodes` | 1 / 1 | 0:09.97 | 6870284 | 0 | 6 | `73f7bcf5865ecd6851cf6b7c9757d56dac2b6cdceb510f8beff583263273611a` |
+| 3216 | `R0P/MaskDuplexDecodes` | 0 / 0 | 0:10.43 | 6917028 | 0 | 6 | `b542e082c2dc2a1f364aacd518b7523faab507d4a5ac6cd5aa5f97b2457555f2` |
+
+Source revision(s): `530f93ad3857327171f17a4e56a4eca6d34a6b77`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
