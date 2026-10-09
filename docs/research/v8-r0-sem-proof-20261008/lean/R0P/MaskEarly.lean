@@ -14,14 +14,14 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
 theorem early_candidate_to_prefixZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (maskPoly : (Fin 10 → K) → K) (B : PackBasis F) (x : TypedContext K Sfield)
+    (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (B : PackBasis F) (x : TypedContext K Sfield)
     (rs : List (MsgZ K × ChalZ K)) (hlen : rs.length = 25)
     (cs : List K) (hparse : semChalsZ rs = some cs)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
     (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw)) (i : Fin 24) (hi : i.val < 14)
     (sm : SemMsgZ K) (hcurrent : (rs[i.val]'(by omega)).1 = .semantic sm)
     (hbad : candidateRoundBad x.pub B t (fun _ => 0) (fun j => cs.getD j.val 0) i) :
-    semanticBadZ maskPoly B ⟨x,rs.take i.val⟩ sm (cs.getD i.val 0) := by
+    semanticBadZ maskClaims B ⟨x,rs.take i.val⟩ sm (cs.getD i.val 0) := by
   have htake : (rs.take i.val).length = i.val := List.length_take_of_le (by omega)
   have hblen : (baseRoundsZ rs).length = 25 := by simp only [baseRoundsZ, List.length_map, hlen]
   have hbcur : ((baseRoundsZ rs)[i.val]'(by omega)).1 = .semantic (unmaskSem sm) := by
@@ -35,7 +35,7 @@ theorem early_candidate_to_prefixZ {Sfield : Fin 29 → Subfield K} {F : Subfiel
       (hb : semRoundBad u x.pub B (fun pre => virtualPoly x.pub B u pre)
         (fixedStrat (polysOf (baseRoundsZ (rs.take i.val)) (unmaskSem sm))) i
         (semPrefix (fun j : Fin 24 => cs.getD j.val 0) i) (cs.getD i.val 0)) :
-      semanticBadZ maskPoly B ⟨x,rs.take i.val⟩ sm (cs.getD i.val 0) := by
+      semanticBadZ maskClaims B ⟨x,rs.take i.val⟩ sm (cs.getD i.val 0) := by
     constructor
     · intro h; change 15 ≤ (rs.take i.val).length at h; omega
     · rw [dif_pos (show (rs.take i.val).length < 14 by omega)]
@@ -67,19 +67,19 @@ theorem early_candidate_to_prefixZ {Sfield : Fin 29 → Subfield K} {F : Subfiel
 #print axioms early_candidate_to_prefixZ
 
 theorem no_hit_early {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskPoly : (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
     (hlen : rs.length = 25) (cs : List K) (hparse : semChalsZ rs = some cs)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
     (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
-    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskPoly B) x [] (rs ++ tail)) :
+    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail)) :
     ∀ i : Fin 24, i.val < 14 →
       ¬ candidateRoundBad x.pub B t (fun _ => 0) (fun j => cs.getD j.val 0) i := by
   intro i hi hb
   obtain ⟨sm,hslot⟩ := semSlotZ rs cs hparse ⟨i.val,by omega⟩
-  have hbad := early_candidate_to_prefixZ maskPoly B x rs hlen cs hparse hw gw hc2 t ht i hi sm
+  have hbad := early_candidate_to_prefixZ maskClaims B x rs hlen cs hparse hw gw hc2 t ht i hi sm
     (congrArg Prod.fst hslot) hb
-  apply no_hit_roundZ fallback1 maskPoly B x rs tail hno ⟨i.val,by omega⟩
+  apply no_hit_roundZ fallback1 maskClaims B x rs tail hno ⟨i.val,by omega⟩
   rw [hslot]
   apply Or.inl
   refine ⟨sm,cs.getD i.val 0,?_,rfl,rfl,hbad⟩
