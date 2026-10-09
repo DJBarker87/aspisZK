@@ -3,6 +3,7 @@ use super::{
     basis::NaturalBasis,
     chord::{self, FunctionalWeights, Secant},
     domain::Point,
+    transport::COEFFICIENT_TO_ROW,
     Error, Message,
 };
 use crate::field::WideExact as E;
@@ -25,8 +26,10 @@ pub fn inactive(r: usize) -> Result<bool, Error> {
     }
     Ok((COPY_ACTIVE_ROW_MASKS[r / 16] >> (r % 16)) & 1 == 0)
 }
+/// D13's inactive indicator in coefficient space: 1_I(π⁻¹(j)).
 pub fn indicator() -> Message<E> {
-    core::array::from_fn(|r| {
+    core::array::from_fn(|j| {
+        let r = usize::from(COEFFICIENT_TO_ROW[j]);
         if (COPY_ACTIVE_ROW_MASKS[r / 16] >> (r % 16)) & 1 == 0 {
             E::ONE
         } else {
@@ -53,7 +56,8 @@ pub fn points_from_alphas(a: &[E; 10]) -> Points {
     });
     [p0, p1, p2]
 }
-pub fn eq_weight(p: &[E; 10]) -> Message<E> {
+/// Semantic multilinear weights remain indexed by rows.
+pub fn row_eq_weight(p: &[E; 10]) -> Message<E> {
     core::array::from_fn(|r| {
         (0..10).fold(E::ONE, |v, b| {
             v.mul(if (r >> b) & 1 == 0 {
@@ -63,6 +67,10 @@ pub fn eq_weight(p: &[E; 10]) -> Message<E> {
             })
         })
     })
+}
+/// D13: eq(p, π⁻¹(j)), paired with t ∘ π⁻¹ throughout the opening layer.
+pub fn eq_weight(p: &[E; 10]) -> Message<E> {
+    super::transport::to_coefficients(&row_eq_weight(p))
 }
 pub fn dot<const N: usize>(a: &[E; N], b: &[E; N]) -> E {
     a.iter().zip(b).fold(E::ZERO, |v, (&x, &y)| v.add(x.mul(y)))

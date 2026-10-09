@@ -1,6 +1,7 @@
 //! Literal R0 code/chord formulas: SPEC.md §§3–5, snapshot 783aa3f97.
 //!
-//! Natural coefficients go directly into the encoders (no R16 transport).
+//! Encoders consume natural coefficients. D13's fixed permutation transports
+//! semantic rows to those coefficients at the opening/commitment boundary.
 //! This is a `no_std` arithmetic API, not a verifier or a Rust/Lean proof.
 //! Matrices use fallible heap allocation; messages have fixed lengths. All
 //! externally supplied indices/lengths and operational inverses are checked.
@@ -15,6 +16,7 @@ pub mod opening;
 pub mod prover;
 pub mod scalar;
 pub mod transcript;
+pub mod transport;
 pub mod verifier;
 pub mod wire;
 

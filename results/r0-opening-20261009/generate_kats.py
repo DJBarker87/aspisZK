@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Extend the independent R-B/R-C oracles with adopted P1 rows 0–31.
 
-No Rust is invoked/read. Includes the contextual c4 reconstruction and every
+No Rust arithmetic is invoked/read. D13's inventory KAT supplies the fixed
+pad rows; this oracle reconstructs π independently. Includes c4 and every
 returned state. Synthetic canonical semantic records test transcript plumbing,
 not the payment semantic relation. Full-size authentic proofs are Rust tests.
 """
@@ -45,6 +46,14 @@ def eq(p,r):
     for j,x in enumerate(p): out=f.mul(out,x if (r>>j)&1 else f.sub(f.ONE,x))
     return out
 def build():
+    inventory = json.loads((HERE / 'transport-kat.json').read_text())
+    pads = inventory['pads']
+    assert len(pads) == len(set(pads)) == 89
+    order = pads + [r for r in range(1023) if r not in pads] + [1023]
+    pi = [0] * 1024
+    for j, r in enumerate(order): pi[r] = j
+    assert pi == inventory['pi'] and order == inventory['inverse']
+    assert hashlib.sha256(b''.join(j.to_bytes(2, 'little') for j in pi)).hexdigest() == inventory['sha256']
     # Valid all-zero privateTransfer public data per P1: variant, 3 digests,
     # assetId, two None options, u64 index, frontier/root/frontier.
     public=bytes(1+32+32+4+1+32+1+8+640+32+640)
@@ -67,7 +76,7 @@ def build():
             ps=points(challenges[15:25]); kp=[f.power(kappa,j) for j in range(1,4)]
             gp=[f.power(gamma,l) for l in range(29)]
             weights=[]
-            for r in range(1024):
+            for r in order: # coefficient j has semantic row π⁻¹(j)
                 base=f.ZERO if (MASKS[r//16]>>(r%16))&1 else f.ONE
                 weights.append(f.add(base,dot(kp,[eq(p,r) for p in ps])))
             claim=f.add(v,dot(kp,[dot(gp,claims[29*j:29*j+29]) for j in range(3)]))

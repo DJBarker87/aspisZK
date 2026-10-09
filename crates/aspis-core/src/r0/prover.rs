@@ -7,6 +7,7 @@ use super::{
     merkle::{self, filled, Tree},
     opening::{self, Claims, Endpoints, LANES},
     transcript::{OpeningTranscript, SemanticBoundary},
+    transport,
     wire::{FibreOpening, OpeningProof},
     CodeField, Error, Message, FIBRE_COUNT, WORD_LEN,
 };
@@ -153,10 +154,13 @@ impl Commitment {
             }) {
                 return Err(Error::WrongField);
             }
+            // API inputs and retained matching data are semantic rows; only
+            // Enc consumes coefficients. W_l = Enc(t_l ∘ π⁻¹), D13.
+            let coefficients = transport::to_coefficients(&messages[l]);
             words.push(if l < 26 {
-                Word::Base(domain.encode(&messages[l].map(|x| M31(x.to_limbs()[0])))?)
+                Word::Base(domain.encode(&coefficients.map(|x| M31(x.to_limbs()[0])))?)
             } else {
-                Word::Secure(domain.encode(&messages[l].map(|x| x.c0()))?)
+                Word::Secure(domain.encode(&coefficients.map(|x| x.c0()))?)
             });
             saved.push(messages[l]);
         }
@@ -267,6 +271,7 @@ fn insert(mut row: Row, pivots: &mut [Option<Row>]) -> Result<(), Error> {
     }
 }
 /// Solve C*q=t−I, e1(q)=e2(q)=0 over E, with §5's M matrices.
+/// Both input t and output q are natural coefficients (after D13 transport).
 /// Rejects inconsistent/off-image inputs; there is no total decoder fallback.
 pub fn quotient(
     basis: &NaturalBasis,
@@ -329,12 +334,13 @@ pub fn quotient(
     }
     Ok(q)
 }
+/// Semantic claims over rows; D13 does not alter these claims or points.
 pub fn honest_claims(messages: &[Message<E>], points: &opening::Points) -> Result<Claims, Error> {
     if messages.len() != 29 {
         return Err(Error::WrongLength);
     }
     Ok(points.map(|p| {
-        let w = opening::eq_weight(&p);
+        let w = opening::row_eq_weight(&p);
         core::array::from_fn(|l| opening::dot(&messages[l], &w))
     }))
 }
@@ -345,7 +351,7 @@ pub fn v_honest(messages: &[Message<E>], gamma: E) -> Result<E, Error> {
     let g = opening::powers::<29>(gamma);
     let w = opening::indicator();
     Ok((0..29).fold(E::ZERO, |v, l| {
-        v.add(g[l].mul(opening::dot(&messages[l], &w)))
+        v.add(g[l].mul(opening::dot(&transport::to_coefficients(&messages[l]), &w)))
     }))
 }
 /// SPEC §7 coefficient table, including quarter exactly once.
@@ -380,11 +386,17 @@ pub fn prove(
     {
         return Err(Error::Commitment);
     }
+    let mut coefficients = Vec::new();
+    coefficients
+        .try_reserve_exact(LANES)
+        .map_err(|_| Error::Allocation)?;
+    coefficients.extend(messages.iter().map(transport::to_coefficients));
     let mut transcript = OpeningTranscript::new(hash, boundary);
     let z0 = transcript.z0(&boundary.claims)?;
-    let y0 = core::array::from_fn(|l| encoder::eval_message(&messages[l], z0));
+    let y0 = core::array::from_fn(|l| encoder::eval_message(&coefficients[l], z0));
     let z1 = transcript.z1(&y0)?;
-    let y: Endpoints = core::array::from_fn(|l| [y0[l], encoder::eval_message(&messages[l], z1)]);
+    let y: Endpoints =
+        core::array::from_fn(|l| [y0[l], encoder::eval_message(&coefficients[l], z1)]);
     let data = opening::OpeningData {
         roots: boundary.roots(),
         z: [z0, z1],
@@ -400,7 +412,7 @@ pub fn prove(
     let mut q = [E::ZERO; 1024];
     let g = opening::powers::<29>(gamma);
     for l in 0..29 {
-        let lane = quotient(basis, data.z, &messages[l], y[l])?;
+        let lane = quotient(basis, data.z, &coefficients[l], y[l])?;
         for r in 0..1024 {
             q[r] = q[r].add(g[l].mul(lane[r]));
         }

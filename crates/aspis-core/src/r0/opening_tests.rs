@@ -7,7 +7,7 @@ use super::{
     opening::{self, OpeningData},
     prover::{self, Commitment, CommitmentTime, EncodingDomain},
     transcript::{OpeningTranscript, SemanticBoundary, SemanticMessage, SemanticTranscript},
-    verifier,
+    transport, verifier,
     wire::{OpeningProof, PROOF_BYTES},
     Error, Message,
 };
@@ -67,6 +67,51 @@ fn semantic(hashfn: crate::HashFn, roots: [[u8; 32]; 2]) -> SemanticTranscript {
     t
 }
 #[test]
+fn transport_bijection_pairing_and_table_kat() {
+    let mut seen = [false; 1024];
+    for (r, &j) in transport::ROW_TO_COEFFICIENT.iter().enumerate() {
+        assert!(!seen[usize::from(j)]);
+        seen[usize::from(j)] = true;
+        assert_eq!(
+            usize::from(transport::COEFFICIENT_TO_ROW[usize::from(j)]),
+            r
+        );
+    }
+    assert!(seen.into_iter().all(|x| x));
+    assert_eq!(transport::COEFFICIENT_TO_ROW[1023], 1023);
+    assert_eq!(transport::ROW_TO_COEFFICIENT[1023], 1023);
+    assert_eq!(&transport::COEFFICIENT_TO_ROW[..89], &transport::PAD_ROWS);
+    let t = fields::<1024>(13);
+    let w = fields::<1024>(17);
+    let coefficients = transport::to_coefficients(&t);
+    assert_eq!(transport::to_rows(&coefficients), t);
+    assert_eq!(coefficients[1023], t[1023]); // no historical pivot-sum overwrite
+    assert_eq!(
+        opening::dot(&t, &w),
+        opening::dot(&coefficients, &transport::to_coefficients(&w))
+    );
+    let kat: serde_json::Value = serde_json::from_str(include_str!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../results/r0-opening-20261009/transport-kat.json"
+    )))
+    .unwrap();
+    let bytes: Vec<_> = transport::ROW_TO_COEFFICIENT
+        .iter()
+        .flat_map(|x| x.to_le_bytes())
+        .collect();
+    assert_eq!(hex(&hash(&[&bytes])), kat["sha256"].as_str().unwrap());
+    for r in 0..1024 {
+        assert_eq!(
+            u64::from(transport::ROW_TO_COEFFICIENT[r]),
+            kat["pi"][r].as_u64().unwrap()
+        );
+        assert_eq!(
+            u64::from(transport::COEFFICIENT_TO_ROW[r]),
+            kat["inverse"][r].as_u64().unwrap()
+        );
+    }
+}
+#[test]
 fn data_bit_order_masks_and_claims() {
     let indicator = opening::indicator();
     assert_eq!(indicator.iter().filter(|&&x| x == E::ONE).count(), 810);
@@ -91,7 +136,13 @@ fn data_bit_order_masks_and_claims() {
             for (b, &x) in p.iter().enumerate() {
                 assert_eq!(x, if (n >> b) & 1 == 0 { E::ZERO } else { E::ONE });
             }
+            let w = opening::eq_weight(p);
+            let j = usize::from(transport::ROW_TO_COEFFICIENT[n]);
+            assert_eq!(w[j], E::ONE);
+            assert_eq!(w.iter().filter(|&&v| v != E::ZERO).count(), 1);
         }
+        let j = usize::from(transport::ROW_TO_COEFFICIENT[r]);
+        assert_eq!(indicator[j] == E::ONE, opening::inactive(r).unwrap());
     }
     let p = fields::<10>(57);
     let w = opening::eq_weight(&p);
@@ -120,9 +171,28 @@ fn data_bit_order_masks_and_claims() {
     let batch =
         core::array::from_fn(|r| (0..29).fold(E::ZERO, |s, l| s.add(g[l].mul(messages[l][r]))));
     let v = prover::v_honest(&messages, gamma).unwrap();
+    let row_v = (0..1024)
+        .filter(|&r| opening::inactive(r).unwrap())
+        .fold(E::ZERO, |v, r| v.add(batch[r]));
+    assert_eq!(v, row_v);
+    for (j, p) in points.iter().enumerate() {
+        for l in 0..29 {
+            assert_eq!(
+                claims[j][l],
+                opening::dot(&messages[l], &opening::row_eq_weight(p))
+            );
+            assert_eq!(
+                claims[j][l],
+                opening::dot(
+                    &transport::to_coefficients(&messages[l]),
+                    &opening::eq_weight(p)
+                )
+            );
+        }
+    }
     assert_eq!(
         data.claim(gamma, v, kappa),
-        opening::dot(&batch, &data.weights(kappa))
+        opening::dot(&transport::to_coefficients(&batch), &data.weights(kappa))
     );
 }
 #[test]
@@ -475,10 +545,11 @@ fn full_size_roundtrip_corruption_and_domain_identity() {
     );
     let p = verifier::prepare(hash, &boundary, &proof).unwrap();
     let c = &p.challenges;
+    let coefficients: Vec<_> = messages.iter().map(transport::to_coefficients).collect();
     let mut q = [E::ZERO; 1024];
     let gp = opening::powers::<29>(c.gamma);
     for l in 0..29 {
-        let ql = prover::quotient(&basis, p.data.z, &messages[l], proof.y[l]).unwrap();
+        let ql = prover::quotient(&basis, p.data.z, &coefficients[l], proof.y[l]).unwrap();
         for r in 0..1024 {
             q[r] = q[r].add(gp[l].mul(ql[r]));
         }
@@ -487,10 +558,10 @@ fn full_size_roundtrip_corruption_and_domain_identity() {
     // Full-domain equation (every point) for a full-support K message.
     let domain_start = Instant::now();
     let lane = 28;
-    let ql = prover::quotient(&basis, p.data.z, &messages[lane], proof.y[lane]).unwrap();
+    let ql = prover::quotient(&basis, p.data.z, &coefficients[lane], proof.y[lane]).unwrap();
     let iw = chord::interpolant(p.data.z[0], p.data.z[1], proof.y[lane]).unwrap();
     let wq = domain.encode(&ql.map(|x| x.c0())).unwrap();
-    let wt = domain.encode(&messages[lane].map(|x| x.c0())).unwrap();
+    let wt = domain.encode(&coefficients[lane].map(|x| x.c0())).unwrap();
     let line = p.data.line();
     for u in 0..super::FIBRE_COUNT {
         let u = FibreIndex::new(u).unwrap();
@@ -513,7 +584,7 @@ fn full_size_roundtrip_corruption_and_domain_identity() {
     for idx in [0, 1, 2, 3, 4, 4097, 1048575] {
         assert_eq!(
             E::from_qm31(wt[idx]),
-            encoder::exact_initial_encoder(&messages[lane], InitialIndex::new(idx).unwrap())
+            encoder::exact_initial_encoder(&coefficients[lane], InitialIndex::new(idx).unwrap())
         );
     }
     println!(
