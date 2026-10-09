@@ -3541,3 +3541,20 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3201 | `R0P/MaskProtocol` | 0 / 0 | 0:04.20 | 6841932 | 0 | 12 | `c00c51800d7895c38aa079d747e509e61137a3aaaeb500d656c5acd7d61796d0` |
 
 Source revision(s): `d2b7413259a75100db9d1c722d88932bfea28fb9`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### Lead — G22 source change applied (circle fallback in the reference Rust)
+
+`Transcript::challenge_reference_circle_point(sample)` (aspis-core transcript.rs)
+replaces the retry loop for the R0 reference schedule: one `challenge_qm31`
+parameter, the secure rational map, and on rejection the fixed row fallback
+`CIRCLE_FALLBACK_PARAMETERS = [(0,1), (1,1)]` in `(c0,c1)` tower order, i.e.
+`R0P.CircleSampler.circleFallbackParameter0/1`. Call sites switched: verifier
+`state_only_prefix.rs` (both schedule paths), prover `state_only_proof.rs` and
+`state_only_spend.rs`. The legacy `challenge_secure_circle_point` is retained
+for callers outside the model. Tests: transcript unit tests (fallback points
+accepted, distinct, outside CM31; one block per row on a CM31-only backend;
+accepted draws identical to the legacy sampler) and release
+`state_only_full_proof` rate16/rate32 round-trips pass. Refinement item: Rust
+`challenge_qm31` is per-limb rejection (exactly uniform), whereas `qm31Sample`
+models a one-block modulo law with slack δQ; the bridge is for the refinement
+block.

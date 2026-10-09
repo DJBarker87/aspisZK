@@ -776,7 +776,7 @@ where
         for sample in 0..CANDIDATE_OOD_SAMPLES {
             if round == 0 {
                 let point = transcript
-                    .challenge_secure_circle_point()
+                    .challenge_reference_circle_point(sample)
                     .map_err(CandidatePrefixBuildError::from)?;
                 let value = relation.evaluate_circle_ood(point)?;
                 absorb_ood(

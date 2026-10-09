@@ -876,7 +876,7 @@ fn run_full_with_context(
     let mut alpha = [QM31::ZERO; CANDIDATE_ROUND_COUNT];
     for sample in 0..CANDIDATE_OOD_SAMPLES {
         circle_ood_points[sample] = transcript
-            .challenge_secure_circle_point()
+            .challenge_reference_circle_point(sample)
             .map_err(CandidateTranscriptScheduleError::from)?;
         absorb_ood(
             &mut transcript,
@@ -979,7 +979,7 @@ fn run_atomic_profile21_full(
     // The base codeword and relation are unchanged through round zero.
     for sample in 0..CANDIDATE_OOD_SAMPLES {
         circle_ood_points[sample] = transcript
-            .challenge_secure_circle_point()
+            .challenge_reference_circle_point(sample)
             .map_err(CandidateTranscriptScheduleError::from)?;
         absorb_ood(
             &mut transcript,
