@@ -44,12 +44,17 @@ pub const STATE_ONLY_PROFILE22_PRIVATE_PROFILE_ID: u8 = 22;
 /// Quarantined zero-factor-D successor. It is never selected by the frozen
 /// profile-22 entry points or program tags.
 pub const STATE_ONLY_SPEND_ZERO_FACTOR_PROFILE_ID: u8 = 23;
+/// CU research shape only: 2^18 evaluation points and 2^16 arity-four
+/// query fibres. This does not establish correspondence to the proved model.
+pub const STATE_ONLY_RATE256_PROFILE_ID: u8 = 24;
 pub const STATE_ONLY_LOG_ROWS: u32 = 10;
 pub const STATE_ONLY_RATE16_LOG_BLOWUP: u32 = 4;
 pub const STATE_ONLY_RATE32_LOG_BLOWUP: u32 = 5;
+pub const STATE_ONLY_RATE256_LOG_BLOWUP: u32 = 8;
 pub const STATE_ONLY_RATE512_LOG_BLOWUP: u32 = 9;
 pub const STATE_ONLY_RATE16_QUERY_COUNT: u16 = 36;
 pub const STATE_ONLY_RATE32_QUERY_COUNT: u16 = 29;
+pub const STATE_ONLY_RATE256_QUERY_COUNT: u16 = 22;
 pub const STATE_ONLY_RATE512_QUERY_COUNT: u16 = 16;
 /// Spend spends two additional queries to reduce the honest-prover PoW
 /// schedule without changing the frozen Profile 20/21/22 rate-1/512 wires.
@@ -59,6 +64,7 @@ pub const STATE_ONLY_GRINDING_BITS: u8 = 36;
 pub const STATE_ONLY_RATE16_BATCH_GRINDING_BITS: u8 = 24;
 pub const STATE_ONLY_RATE32_BATCH_GRINDING_BITS: u8 = 26;
 pub const STATE_ONLY_RATE512_BATCH_GRINDING_BITS: u8 = 36;
+pub const STATE_ONLY_RATE256_BATCH_GRINDING_BITS: u8 = STATE_ONLY_RATE512_BATCH_GRINDING_BITS;
 pub const STATE_ONLY_PROFILE21_GRINDING_BITS: u8 = MASKED_SWITCH_FINAL_WORK_BITS;
 pub const STATE_ONLY_PROFILE21_BATCH_GRINDING_BITS: u8 = 38;
 /// Profile-22 work factors are deliberately independent of profile 20 so the
@@ -99,6 +105,12 @@ pub const STATE_ONLY_RATE32_SHAPE: StateOnlyProfileShape = StateOnlyProfileShape
     log_blowup: STATE_ONLY_RATE32_LOG_BLOWUP,
     query_count: STATE_ONLY_RATE32_QUERY_COUNT,
     batch_grinding_bits: STATE_ONLY_RATE32_BATCH_GRINDING_BITS,
+};
+pub const STATE_ONLY_RATE256_SHAPE: StateOnlyProfileShape = StateOnlyProfileShape {
+    profile_id: STATE_ONLY_RATE256_PROFILE_ID,
+    log_blowup: STATE_ONLY_RATE256_LOG_BLOWUP,
+    query_count: STATE_ONLY_RATE256_QUERY_COUNT,
+    batch_grinding_bits: STATE_ONLY_RATE256_BATCH_GRINDING_BITS,
 };
 pub const STATE_ONLY_RATE512_SHAPE: StateOnlyProfileShape = StateOnlyProfileShape {
     profile_id: STATE_ONLY_RATE512_PROFILE_ID,
@@ -271,6 +283,7 @@ fn shape_from_header(header: &Header) -> Option<StateOnlyProfileShape> {
     [
         STATE_ONLY_RATE16_SHAPE,
         STATE_ONLY_RATE32_SHAPE,
+        STATE_ONLY_RATE256_SHAPE,
         STATE_ONLY_RATE512_SHAPE,
         STATE_ONLY_PROFILE21_SHAPE,
         STATE_ONLY_PROFILE22_PRIVATE_SHAPE,
@@ -1245,6 +1258,7 @@ mod tests {
         for shape in [
             STATE_ONLY_RATE16_SHAPE,
             STATE_ONLY_RATE32_SHAPE,
+            STATE_ONLY_RATE256_SHAPE,
             STATE_ONLY_RATE512_SHAPE,
             STATE_ONLY_PROFILE22_PRIVATE_SHAPE,
         ] {
@@ -1297,6 +1311,7 @@ mod tests {
         for shape in [
             STATE_ONLY_RATE16_SHAPE,
             STATE_ONLY_RATE32_SHAPE,
+            STATE_ONLY_RATE256_SHAPE,
             STATE_ONLY_RATE512_SHAPE,
             STATE_ONLY_PROFILE22_PRIVATE_SHAPE,
         ] {

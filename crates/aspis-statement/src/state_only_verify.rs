@@ -9,7 +9,7 @@ use alloc::{boxed::Box, vec::Vec};
 use aspis_core::circle_fri::FIXED_TRACE_LOG_SIZE;
 use aspis_core::circle_line_merkle::{
     CircleOpeningGeometry, RATE16_CIRCLE_OPENING_GEOMETRY, RATE32_CIRCLE_OPENING_GEOMETRY,
-    RATE512_CIRCLE_OPENING_GEOMETRY,
+    RATE256_CIRCLE_OPENING_GEOMETRY, RATE512_CIRCLE_OPENING_GEOMETRY,
 };
 use aspis_core::circle_openings::{
     verify_state_only_circle_openings_for_geometry, CircleOpeningsError, CircleQuerySegment,
@@ -24,8 +24,8 @@ use aspis_core::state_only_prefix::{
     run_atomic_state_only_transcript_schedule_host_unmined_for_diagnostics_v3,
     run_atomic_state_only_transcript_schedule_host_v3, run_state_only_transcript_schedule_host,
     StateOnlyCandidatePrefix, StateOnlyTranscriptError, StateOnlyTranscriptScheduleResult,
-    STATE_ONLY_RATE16_SHAPE, STATE_ONLY_RATE32_SHAPE, STATE_ONLY_RATE512_SHAPE,
-    STATE_ONLY_STATEMENT_VALUE_COUNT,
+    STATE_ONLY_RATE16_SHAPE, STATE_ONLY_RATE32_SHAPE, STATE_ONLY_RATE256_SHAPE,
+    STATE_ONLY_RATE512_SHAPE, STATE_ONLY_STATEMENT_VALUE_COUNT,
 };
 use aspis_core::state_only_query::StateOnlyQueryPowers;
 use aspis_core::state_only_relation::{prepare_state_only_relation, StateOnlyRelationPrepared};
@@ -177,6 +177,8 @@ pub const fn state_only_geometry(
         Some(RATE16_CIRCLE_OPENING_GEOMETRY)
     } else if prefix.shape.profile_id == STATE_ONLY_RATE32_SHAPE.profile_id {
         Some(RATE32_CIRCLE_OPENING_GEOMETRY)
+    } else if prefix.shape.profile_id == STATE_ONLY_RATE256_SHAPE.profile_id {
+        Some(RATE256_CIRCLE_OPENING_GEOMETRY)
     } else if prefix.shape.profile_id == STATE_ONLY_RATE512_SHAPE.profile_id {
         Some(RATE512_CIRCLE_OPENING_GEOMETRY)
     } else {
@@ -377,7 +379,7 @@ pub fn verify_state_only_relation_structural_probe_unmined_traced(
     trace: StateOnlyRelationStructuralTrace,
 ) -> Result<(), StateOnlyCandidateVerifyError> {
     let (prefix, _) = StateOnlyCandidatePrefix::parse_from_proof(proof)?;
-    if prefix.shape != STATE_ONLY_RATE512_SHAPE {
+    if prefix.shape != STATE_ONLY_RATE512_SHAPE && prefix.shape != STATE_ONLY_RATE256_SHAPE {
         return Err(StateOnlyRelationVerifyError::PrefixShape.into());
     }
     trace(StateOnlyRelationStructuralPhase::Parsed);
@@ -721,7 +723,7 @@ pub fn verify_state_only_atomic_terminal_cost_candidate_unmined_traced<'a>(
     trace: StateOnlyVerifyTrace,
 ) -> Result<VerifiedStateOnlyCandidate<'a>, StateOnlyCandidateVerifyError> {
     let (prefix, suffix) = StateOnlyCandidatePrefix::parse_from_proof(proof)?;
-    if prefix.shape != STATE_ONLY_RATE512_SHAPE {
+    if prefix.shape != STATE_ONLY_RATE512_SHAPE && prefix.shape != STATE_ONLY_RATE256_SHAPE {
         return Err(StateOnlyRelationVerifyError::PrefixShape.into());
     }
     let geometry = state_only_geometry(&prefix).ok_or(StateOnlyRelationVerifyError::PrefixShape)?;
@@ -796,7 +798,7 @@ fn verify_atomic_state_only_candidate_inner_v3<'a>(
     let statement_digest = crate::atomic_payment_statement_digest_v4(statement, hash)
         .map_err(|_| StateOnlyCandidateVerifyError::StatementValues)?;
     let (prefix, suffix) = StateOnlyCandidatePrefix::parse_from_proof(proof)?;
-    if prefix.shape != STATE_ONLY_RATE512_SHAPE {
+    if prefix.shape != STATE_ONLY_RATE512_SHAPE && prefix.shape != STATE_ONLY_RATE256_SHAPE {
         return Err(StateOnlyRelationVerifyError::PrefixShape.into());
     }
     let geometry = state_only_geometry(&prefix).ok_or(StateOnlyRelationVerifyError::PrefixShape)?;

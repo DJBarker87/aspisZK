@@ -2,7 +2,7 @@ use aspis_core::field::{CM31, M31, P, QM31};
 use aspis_core::state_only_hiding::STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS;
 use aspis_core::state_only_prefix::{
     STATE_ONLY_PREFIX_OFFSETS, STATE_ONLY_RATE16_SHAPE, STATE_ONLY_RATE32_SHAPE,
-    STATE_ONLY_RATE512_SHAPE,
+    STATE_ONLY_RATE256_SHAPE, STATE_ONLY_RATE512_SHAPE,
 };
 use aspis_prover::state_only_candidate_prefix::{
     build_state_only_prefix_front_selected, StateOnlyPowMode,
@@ -240,6 +240,69 @@ fn rate512_q16_width28_full_serialized_roundtrip() {
     }
 
     for offset in [
+        STATE_ONLY_PREFIX_OFFSETS.statement_evaluations_start,
+        STATE_ONLY_PREFIX_OFFSETS.rounds[0].ood_values_start,
+        STATE_ONLY_PREFIX_OFFSETS.rounds[1].sumcheck_start,
+    ] {
+        let mut corrupt = proof.clone();
+        corrupt[offset] ^= 1;
+        assert!(
+            verify_state_only_candidate_unmined_for_diagnostics(
+                &corrupt,
+                &public,
+                &[0x51; 32],
+                HOST_HASH,
+            )
+            .is_err(),
+            "optimized production relation accepted corruption at {offset}"
+        );
+    }
+}
+
+#[test]
+fn rate256_q22_width28_full_serialized_roundtrip() {
+    let (public, proof) = build_with_private_entropy(STATE_ONLY_RATE256_SHAPE);
+    let verified = verify_state_only_candidate_unmined_for_diagnostics(
+        &proof,
+        &public,
+        &[0x51; 32],
+        HOST_HASH,
+    )
+    .unwrap();
+    assert_eq!(verified.schedule.query_count, 22);
+    assert_eq!(verified.prefix.shape, STATE_ONLY_RATE256_SHAPE);
+
+    assert_eq!(
+        verify_state_only_relation_with_inactive_masks_legacy_reference(
+            &verified.prefix,
+            &verified.schedule,
+            &verified.relation,
+            state_only_copy_inactive_row_masks_v4(),
+        ),
+        Ok(())
+    );
+    for claim in 0..3 {
+        let mut corrupted = *verified.relation;
+        corrupted.claims[claim] = corrupted.claims[claim].add(QM31::ONE);
+        let optimized =
+            verify_state_only_relation(&verified.prefix, &verified.schedule, &corrupted);
+        let legacy = verify_state_only_relation_with_inactive_masks_legacy_reference(
+            &verified.prefix,
+            &verified.schedule,
+            &corrupted,
+            state_only_copy_inactive_row_masks_v4(),
+        );
+        assert_eq!(optimized, legacy, "claim corruption {claim} diverged");
+        assert!(optimized.is_err(), "accepted claim corruption {claim}");
+    }
+
+    assert!(verified.schedule.queries[..22]
+        .iter()
+        .all(|&q| q < (1 << 16)));
+
+    for offset in [
+        STATE_ONLY_PREFIX_OFFSETS.final_polynomial_start,
+        STATE_ONLY_PREFIX_OFFSETS.openings_start + 2,
         STATE_ONLY_PREFIX_OFFSETS.statement_evaluations_start,
         STATE_ONLY_PREFIX_OFFSETS.rounds[0].ood_values_start,
         STATE_ONLY_PREFIX_OFFSETS.rounds[1].sumcheck_start,

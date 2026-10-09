@@ -1,6 +1,12 @@
 //! Build-host-only reference verifier measurement, never a network client.
 use anyhow::{anyhow, ensure, Result};
-use aspis_core::{field::M31, state_only_prefix::STATE_ONLY_RATE512_SHAPE};
+use aspis_core::{
+    field::M31,
+    state_only_prefix::{
+        state_only_final_grinding_bits, state_only_fold_grinding_bits, StateOnlyProfileShape,
+        STATE_ONLY_LOG_ROWS, STATE_ONLY_RATE256_SHAPE, STATE_ONLY_RATE512_SHAPE,
+    },
+};
 use aspis_prover::{
     state_only_candidate_prefix::StateOnlyPowMode,
     state_only_hiding::InMemoryStateOnlyMaskNonceStore,
@@ -30,6 +36,30 @@ const LABEL: &str = "unmined diagnostic path (PoW rejection disabled)";
 const LIMIT: u32 = 1_400_000;
 const TAG: u8 = 240;
 
+#[derive(Clone, Copy)]
+struct Profile {
+    stem: &'static str,
+    name: &'static str,
+    shape: StateOnlyProfileShape,
+}
+impl Profile {
+    fn parse(name: Option<&String>) -> Result<Self> {
+        Ok(match name.map(String::as_str).unwrap_or("rate512-q16") {
+            "rate512-q16" => Self {
+                stem: "rate512-q16",
+                name: "STATE_ONLY_RATE512_SHAPE",
+                shape: STATE_ONLY_RATE512_SHAPE,
+            },
+            "rate256-q22" => Self {
+                stem: "rate256-q22",
+                name: "STATE_ONLY_RATE256_SHAPE",
+                shape: STATE_ONLY_RATE256_SHAPE,
+            },
+            other => return Err(anyhow!("unknown profile {other}")),
+        })
+    }
+}
+
 fn sha(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
@@ -42,7 +72,7 @@ fn digest(seed: u32) -> Digest {
 }
 
 // Same deterministic witness as atomic_state_only_full_proof.rs; private fixture only.
-fn fixture(dir: &Path) -> Result<()> {
+fn fixture(dir: &Path, profile: Profile) -> Result<()> {
     fs::create_dir_all(dir)?;
     let nullifier_key = digest(101);
     let input_salt = digest(301);
@@ -88,10 +118,10 @@ fn fixture(dir: &Path) -> Result<()> {
     let proof = build_hiding_atomic_state_only_proof_v3(
         &statement,
         &witness,
-        [20; 32],
+        [profile.shape.profile_id; 32],
         [0xd3; 32],
         &mut InMemoryStateOnlyMaskNonceStore::default(),
-        STATE_ONLY_RATE512_SHAPE,
+        profile.shape,
         HOST_HASH,
         StateOnlyPowMode::UnminedZero,
     )
@@ -108,15 +138,22 @@ fn fixture(dir: &Path) -> Result<()> {
     let strict_error = verify_atomic_state_only_candidate_v3(&proof.bytes, &statement, HOST_HASH)
         .expect_err("unmined fixture must not pass strict acceptance");
     let public = encode_atomic_payment_statement_v4(&statement).map_err(|e| anyhow!("{e:?}"))?;
-    fs::write(dir.join("rate512-q16.proof.bin"), &proof.bytes)?;
-    fs::write(dir.join("rate512-q16.public.bin"), public)?;
+    fs::write(
+        dir.join(format!("{}.proof.bin", profile.stem)),
+        &proof.bytes,
+    )?;
+    fs::write(dir.join(format!("{}.public.bin", profile.stem)), public)?;
     write_json(
         &dir.join("fixture.json"),
         &json!({
-            "label": LABEL, "shape": "STATE_ONLY_RATE512_SHAPE", "profile_id": 20,
-            "query_count": 16, "log_rows": 10, "log_blowup": 9, "domain_points": 524288,
-            "query_fibres": 131072, "batch_grinding_bits": 36,
-            "fold_grinding_bits": [39,35,31,27], "final_grinding_bits": 36,
+            "label": LABEL, "shape": profile.name, "profile_id": profile.shape.profile_id,
+            "query_count": profile.shape.query_count, "log_rows": STATE_ONLY_LOG_ROWS,
+            "log_blowup": profile.shape.log_blowup,
+            "domain_points": 1u32 << (STATE_ONLY_LOG_ROWS + profile.shape.log_blowup),
+            "query_fibres": 1u32 << (STATE_ONLY_LOG_ROWS + profile.shape.log_blowup - 2),
+            "batch_grinding_bits": profile.shape.batch_grinding_bits,
+            "fold_grinding_bits": state_only_fold_grinding_bits(profile.shape),
+            "final_grinding_bits": state_only_final_grinding_bits(profile.shape),
             "proof_bytes": proof.bytes.len(), "proof_sha256": sha(&proof.bytes),
             "public_bytes": public.len(), "public_sha256": sha(&public),
             "host_diagnostic_accepted": true, "strict_host_rejection": format!("{strict_error:?}"),
@@ -150,13 +187,21 @@ fn markers(logs: &[String]) -> Vec<Value> {
     result
 }
 
-fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path, reject: bool) -> Result<()> {
+fn measure(
+    elf_path: &Path,
+    fixture_dir: &Path,
+    out: &Path,
+    reject: bool,
+    profile: Profile,
+) -> Result<()> {
     fs::create_dir_all(out)?;
     let elf = fs::read(elf_path)?;
-    let mut proof = fs::read(fixture_dir.join("rate512-q16.proof.bin"))?;
-    let public = fs::read(fixture_dir.join("rate512-q16.public.bin"))?;
+    let mut proof = fs::read(fixture_dir.join(format!("{}.proof.bin", profile.stem)))?;
+    let public = fs::read(fixture_dir.join(format!("{}.public.bin", profile.stem)))?;
     ensure!(public.len() == 216);
     let fixture: Value = serde_json::from_slice(&fs::read(fixture_dir.join("fixture.json"))?)?;
+    ensure!(fixture["shape"] == profile.name);
+    ensure!(fixture["query_count"] == profile.shape.query_count);
     ensure!(fixture["proof_sha256"] == sha(&proof));
     ensure!(fixture["public_sha256"] == sha(&public));
     let original_proof_sha256 = sha(&proof);
@@ -214,9 +259,9 @@ fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path, reject: bool) -> Res
     let mut first = None;
     for run in 1..=if reject { 1 } else { 5 } {
         let filename = if reject {
-            "rate512-q16-reject-1.json".to_owned()
+            format!("{}-reject-1.json", profile.stem)
         } else {
-            format!("rate512-q16-run-{run}.json")
+            format!("{}-run-{run}.json", profile.stem)
         };
         let start = Instant::now();
         let mut svm = LiteSVM::new();
@@ -292,7 +337,7 @@ fn measure(elf_path: &Path, fixture_dir: &Path, out: &Path, reject: bool) -> Res
         first.get_or_insert(signature);
         let record = json!({
             "schema": "aspis.v8-state-only-cu.run.v1", "label": LABEL, "run": run,
-            "shape": "STATE_ONLY_RATE512_SHAPE", "query_count": 16, "proof_bytes": proof.len(),
+            "shape": profile.name, "query_count": profile.shape.query_count, "proof_bytes": proof.len(),
             "proof_sha256": sha(&proof), "public_sha256": sha(&public), "elf_sha256": sha(&elf),
             "original_proof_sha256": original_proof_sha256, "mutation": mutation,
             "expected_rejection": reject,
@@ -345,15 +390,16 @@ fn main() -> Result<()> {
     ensure!(!cfg!(debug_assertions), "release build required");
     let args: Vec<_> = env::args().collect();
     match args.get(1).map(String::as_str) {
-        Some("fixture") if args.len() == 3 => fixture(Path::new(&args[2])),
-        Some("measure" | "reject") if args.len() == 5 => measure(
+        Some("fixture") if (3..=4).contains(&args.len()) => fixture(Path::new(&args[2]), Profile::parse(args.get(3))?),
+        Some("measure" | "reject") if (5..=6).contains(&args.len()) => measure(
             Path::new(&args[2]),
             Path::new(&args[3]),
             Path::new(&args[4]),
             args[1] == "reject",
+            Profile::parse(args.get(5))?,
         ),
         _ => Err(anyhow!(
-            "usage: v8-state-only-cu-probe fixture DIR | measure|reject ELF FIXTURE_DIR RESULTS_DIR"
+            "usage: v8-state-only-cu-probe fixture DIR [PROFILE] | measure|reject ELF FIXTURE_DIR RESULTS_DIR [PROFILE]"
         )),
     }
 }

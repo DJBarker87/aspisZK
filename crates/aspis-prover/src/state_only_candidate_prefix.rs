@@ -17,8 +17,8 @@ use aspis_core::state_only_prefix::{
     run_atomic_state_only_prefix_schedule_host_v3, run_state_only_prefix_schedule_host,
     state_only_final_grinding_bits, StateOnlyCandidatePrefix, StateOnlyPrefixScheduleResult,
     StateOnlyProfileShape, StateOnlyTranscriptError, STATE_ONLY_FLAGS, STATE_ONLY_LOG_ROWS,
-    STATE_ONLY_PREFIX_LEN, STATE_ONLY_PREFIX_OFFSETS, STATE_ONLY_RATE512_SHAPE,
-    STATE_ONLY_STATEMENT_VALUE_COUNT, STATE_ONLY_VALUES_PER_POINT,
+    STATE_ONLY_PREFIX_LEN, STATE_ONLY_PREFIX_OFFSETS, STATE_ONLY_RATE256_SHAPE,
+    STATE_ONLY_RATE512_SHAPE, STATE_ONLY_STATEMENT_VALUE_COUNT, STATE_ONLY_VALUES_PER_POINT,
 };
 use aspis_core::state_only_query::{STATE_ONLY_C1_LEAF_BYTES, STATE_ONLY_C2_LEAF_BYTES};
 use aspis_core::state_only_sumcheck::{begin_state_only_zerocheck, STATE_ONLY_SUMCHECK_BYTES};
@@ -404,7 +404,7 @@ pub fn build_atomic_state_only_prefix_front_selected_with_h1_padding_v3(
     hash: HashFn,
     pow_mode: StateOnlyPowMode,
 ) -> Result<BuiltStateOnlyPrefixFront, StateOnlyPrefixBuildError> {
-    if shape != STATE_ONLY_RATE512_SHAPE
+    if (shape != STATE_ONLY_RATE512_SHAPE && shape != STATE_ONLY_RATE256_SHAPE)
         || atomic_payment_statement_digest_v4(statement, hash)
             .map_err(|_| StateOnlyPrefixBuildError::Shape)?
             != statement_digest
