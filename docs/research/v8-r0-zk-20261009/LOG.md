@@ -247,8 +247,9 @@ Global rounds become 32 (η at the new index 14, α at 15–24, circle 25–26,
 opening 27–31). D stays in the initial context (it is derived from the
 seed before λ, χ; commit timing affects binding, not the law) — the Rust
 `[H1,G,D]` C2 tuple is a refinement item. Soundness extension (G24, after
-Z2): one η row with budget `(1+δQ)/P⁴` (a nonzero degree-1 polynomial in
-η), `VirtualDeg` for `mask + η·original`, `HonestRows` with the mask's
+Z2): one η row with budget `100·(1+δQ)/P⁴` (a nonzero degree-1 polynomial in
+η per list-decoded candidate trace, ≤ 100 candidates; corrected 2026-10-09 from
+the coefficient-1 figure first written here), `VirtualDeg` for `mask + η·original`, `HonestRows` with the mask's
 Boolean-row values; the FS2 instance grows by one one-block row.
 
 D4 (mask image — the main theorem, Z3). For every fixed public statement,
