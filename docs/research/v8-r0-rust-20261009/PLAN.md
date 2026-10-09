@@ -106,3 +106,13 @@ Stopped: M2 (q22 shape on the four-fold PCS) — wrong target.
   records. The Lean `Duplex.Params` full-word/unbounded-polynomial encoding
   is route A's abstraction; the bridge is the authentication and parser
   refinement (REFINEMENT.md G14/G07), not a change to either side.
+
+## Decision D13 (2026-10-09, after Z4a): message-index transport reinstated
+
+The "no R16 transport" line above is withdrawn. A fixed permutation
+`π : row → coefficient index` (historical rule: pivot 1023 last; the first 89
+inactive rows legal in all sixteen semantic columns at indices 0–88; the
+remaining rows in increasing order) is applied before the encoder:
+`W_l = Enc(t_l ∘ π⁻¹)`; `eqWeight`, `indicator(I)` and the opening weights are
+stated in coefficient space (composed with π). Reason: the privacy LOG,
+"Lead decisions after Z4a". Job R-G below; the Lean glue change is Z-side.
