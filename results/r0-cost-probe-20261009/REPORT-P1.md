@@ -1,9 +1,9 @@
-# P1 arithmetic cost probe — C0 measured
+# P1 arithmetic cost probe — C0 and C1 measured
 
 Base `origin/v8-reference` at `f1e5ca9de668110f80c548abe5e80b43f838099f`.
 Branch `codex/r0-cost-probe-p1-20261009`. This is an unproved Rust cost experiment.
 C0 completes at **22,525,606 CU (transfer)** and **22,523,592 CU (withdrawal)**.
-Neither fits 1,400,000 CU. C1–C5 are pending; no first fitting configuration exists yet.
+Neither fits 1,400,000 CU. C2–C5 are pending; no first fitting configuration exists yet.
 
 Every cell below contains measured DIAGNOSTIC CU and inclusive multiplication
 counts `[E/K/F]` from `r0-op-count`. E counts EMul, EMulK, EMulF and ESquare;
@@ -20,6 +20,8 @@ are outside these measurements.
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | C0 / transfer | 3,400,620 [311/2,592/16,330] | 1,226,148 [269/899/5,561] | 641,089 [0/0/0] | 4,019,047 [8,690/18,018/95,274] | 13,230,198 [11,023/26,156/143,148] | 8,504 [0/0/0] | 22,525,606 | 95,712 | -21,225,606 |
 | C0 / withdrawal | 3,394,676 [311/2,583/16,276] | 1,225,569 [269/899/5,561] | 641,253 [0/0/0] | 4,016,281 [8,690/18,018/95,154] | 13,237,361 [11,023/26,156/143,148] | 8,452 [0/0/0] | 22,523,592 | 95,712 | -21,223,592 |
+| C1 / transfer | 3,400,620 [311/2,592/16,330] | 1,211,448 [252/862/5,339] | 641,084 [0/0/0] | 4,015,524 [8,690/18,018/95,040] | 7,986,121 [1,038/15,404/86,312] | 8,504 [0/0/0] | 17,263,301 | 95,712 | -15,963,301 |
+| C1 / withdrawal | 3,394,676 [311/2,583/16,276] | 1,210,939 [252/862/5,339] | 640,983 [0/0/0] | 4,015,822 [8,690/18,018/95,100] | 7,986,859 [1,038/15,404/86,312] | 8,452 [0/0/0] | 17,257,731 | 95,712 | -15,957,731 |
 
 C0 implementation: checked subfield secant coefficients; E×K structured transpose
 and image rows; K denominators/inverses in V1; tensor right = v×x and left = v−right;
@@ -63,3 +65,17 @@ revision; `c0-sbf-source-manifest.json` identifies the exact ELF inputs. The ori
 unchanged. Probe paths are opt-in; default arithmetic retains the schoolbook formula.
 Task key files remain on nuc with mode 0600; none were deleted or copied into this
 report. No network transaction was sent. `#print axioms`: not applicable.
+
+C1 samples κ and τ with `qm31_sample` from the unchanged row-28/29 blocks.
+Its weight tensor, chord transpose and image terms run in K, with the final
+folded pairing in E. Both new proofs have 95,712 bytes and accept natively.
+The prefix through v and transcript states through row 29 equal C0 bitwise;
+the squeezed K values equal the low K components of C0's E samples. Shared
+field traces and rejection outcomes match the full-width arithmetic oracle.
+The 1,894-case corpus is retained. Heap is 90,072 bytes, all 276 linked functions
+are conservatively reachable, and none has a stack diagnostic (41 diagnosed
+functions are absent). All ten 1.4M runs exhaust in Semantic. Completed CU:
+17,263,301 transfer / 17,257,731 withdrawal; neither fits. The source and exact
+K-power helper fix are pinned in per-job manifests; the initial C1 type-check
+failure and changed replacement are retained. Peak aggregate RSS across C0/C1
+is 1,251,962,880 bytes, with every scope at zero swap.

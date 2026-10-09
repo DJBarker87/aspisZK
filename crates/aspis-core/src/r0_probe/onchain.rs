@@ -317,7 +317,7 @@ fn claim_prime(data: &OpeningData, gamma: E, v: E, kappa: E, i: &[E; 3]) -> Resu
     if kappa.c1() != QM31::ZERO {
         return Err(Error::WrongField);
     }
-    let k = opening::powers::<4>(kappa.c0());
+    let k = powers_k(kappa.c0());
     let g = opening::powers::<29>(gamma);
     let mut claim = v;
     for j in 0..3 {
@@ -339,7 +339,7 @@ fn weights_k(data: &OpeningData, kappa: QM31) -> Result<Vec<QM31>, Error> {
     for j in 0..1024 {
         w[j] = indicator(j).c0();
     }
-    let k = opening::powers::<4>(kappa);
+    let k = powers_k(kappa);
     let mut eq = heap::filled(1024, QM31::ZERO)?;
     for p in 0..3 {
         eq[0] = QM31::ONE;
@@ -403,4 +403,10 @@ pub fn check_v2(
         return Err(Error::V2);
     }
     Ok(())
+}
+
+#[cfg(feature = "r0-probe-c1")]
+fn powers_k(x: QM31) -> [QM31; 4] {
+    let x2 = x.mul(x);
+    [QM31::ONE, x, x2, x2.mul(x)]
 }
