@@ -246,3 +246,63 @@ pub fn r0_verify_unhoisted(
     emit(Phase::V2);
     Ok(prepared.challenges)
 }
+
+/// Native differential reference at the R-E3 base.
+#[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+pub fn r0_verify_re3(
+    public: Public<'_>,
+    bytes: &[u8],
+    hash: HashFn,
+    trace: Option<fn(Phase)>,
+) -> Result<verifier::Challenges, Error> {
+    let emit = |p| {
+        if let Some(trace) = trace {
+            trace(p);
+        }
+    };
+    let wire = Proof::parse(bytes)?;
+    emit(Phase::Parsed);
+    let checked = verify_semantics_heap(public, wire.semantic, hash)?;
+    let boundary = semantic_handoff_heap(&checked)?;
+    emit(Phase::Semantic);
+    let proof = OpeningView::parse(wire.opening)?;
+    let prepared = aspis_core::r0::onchain_re3::prepare(hash, &boundary, &proof)?;
+    // Both views must replay exactly the same row-25/26 records.
+    if prepared.data.z
+        != checked.z.map(|z| aspis_core::r0::domain::Point {
+            x: WideExact::from_qm31(z.x),
+            y: WideExact::from_qm31(z.y),
+        })
+    {
+        return Err(OpeningError::Schedule.into());
+    }
+    emit(Phase::ChordClaims);
+    let c = &prepared.challenges;
+    for (i, u) in c.queries.sorted().into_iter().enumerate() {
+        let opening = proof.fibre(i);
+        let u = FibreIndex::new(u as usize)?;
+        if !merkle::verify_pair(
+            hash,
+            &prepared.data.roots,
+            u,
+            opening.leaf_hashes(hash)?,
+            opening.paths(),
+        ) {
+            return Err(OpeningError::Authentication.into());
+        }
+        emit(Phase::Merkle(i));
+        aspis_core::r0::onchain_re3::check_v1(&prepared.v1, &proof, u, &opening)?;
+        emit(Phase::V1(i));
+    }
+    aspis_core::r0::onchain_re3::check_v2(
+        &prepared.data,
+        c.kappa,
+        c.tau,
+        c.alpha,
+        &prepared.polynomial,
+        &proof,
+    )?;
+    emit(Phase::V2);
+    Ok(prepared.challenges)
+}
+

@@ -61,3 +61,12 @@ mod opening_tests;
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+pub mod onchain_re3;
+
+#[cfg(all(any(feature = "r0-e4-reference", feature = "r0-hoist-reference"), not(target_os = "solana")))]
+pub mod structured_re3;
+
+#[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+pub mod equality_trace;

@@ -1,7 +1,7 @@
 //! Verifier-only structured transpose of SPEC §5 monomial-truncated L*q.
 //! Prover/reference formulas remain in chord.rs. Work buffers are caller-owned.
 use super::{chord::Secant, Error};
-use crate::field::{WideExact as E, M31, QM31};
+use crate::field::{WideExact as E, M31};
 mod table {
     include!("top_overflow.rs");
 }
@@ -43,7 +43,7 @@ pub fn x_transpose(input: &[E], output: &mut [E]) -> Result<(), Error> {
 /// of input claim rows. w is interleaved (even, odd) and overwritten in place.
 /// Scratch: three 512-entry E slices, 48 KiB total; no dense basis.
 pub fn quotient_weights(
-    line: Secant<QM31>,
+    line: Secant<E>,
     w: &mut [E],
     even: &mut [E],
     odd: &mut [E],
@@ -66,14 +66,12 @@ pub fn quotient_weights(
     for j in 0..512 {
         let we = w[2 * j];
         let wo = w[2 * j + 1];
-        w[2 * j] = we
-            .mul_qm31(line.a)
-            .add(even[j].mul_qm31(line.b))
-            .add(wo.mul_qm31(line.c));
-        w[2 * j + 1] = wo
-            .mul_qm31(line.a)
-            .add(odd[j].mul_qm31(line.b))
-            .add(we.sub(twice[j]).mul_qm31(line.c));
+        w[2 * j] = line.a.mul(we).add(line.b.mul(even[j])).add(line.c.mul(wo));
+        w[2 * j + 1] = line
+            .a
+            .mul(wo)
+            .add(line.b.mul(odd[j]))
+            .add(line.c.mul(we.sub(twice[j])));
     }
     Ok(())
 }

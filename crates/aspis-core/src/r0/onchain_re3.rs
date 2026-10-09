@@ -1,4 +1,4 @@
-// Frozen R-E2 implementation for native differential tests.
+//! Frozen R-E3 at 5770f37ae; only passive equality trace hooks added.
 //! SBF-shaped representation of the existing verifier equations. The owned
 //! dense implementation remains the off-chain reference and prover path.
 use super::{
@@ -22,6 +22,26 @@ pub struct Prepared {
     pub data: Box<OpeningData>,
     pub challenges: Challenges,
     pub polynomial: [E; 7],
+    pub v1: Box<V1Invariants>,
+}
+/// Fibre-independent values, owned by prepare and borrowed by every V1.
+pub struct V1Invariants {
+    pub gamma_powers: [E; 29],
+    pub interpolant: [E; 3],
+    pub line: chord::Secant<E>,
+    pub alpha_powers: [E; 4],
+}
+#[inline(never)]
+fn v1_invariants(data: &OpeningData, gamma: E) -> Result<Box<V1Invariants>, Error> {
+    let mut out = heap::uninit::<V1Invariants>()?;
+    unsafe {
+        let p = out.as_mut_ptr();
+        core::ptr::addr_of_mut!((*p).gamma_powers).write(opening::powers::<29>(gamma));
+        core::ptr::addr_of_mut!((*p).interpolant).write(interpolant(data, &(*p).gamma_powers)?);
+        core::ptr::addr_of_mut!((*p).line).write(data.line());
+        core::ptr::addr_of_mut!((*p).alpha_powers).write([E::ZERO; 4]);
+        Ok(out.assume_init())
+    }
 }
 #[inline(never)]
 fn data(
@@ -66,13 +86,23 @@ pub fn prepare(
     let gamma = t.gamma(&data.y)?;
     let kappa = t.kappa(proof.v)?;
     let tau = t.tau()?;
+    let mut v1 = v1_invariants(&data, gamma)?;
     let [c0, c1, c2, c3, c5, c6] = proof.coefficients;
     let c4 = fold::quarter::<E>()
-        .mul(claim_prime(&data, gamma, proof.v, kappa)?)
+        .mul(claim_prime(&data, gamma, proof.v, kappa, &v1.interpolant)?)
         .sub(c0);
     let polynomial = [c0, c1, c2, c3, c4, c5, c6];
     let alpha = t.alpha(&polynomial)?;
     let queries = t.queries_canonical_bytes(proof.final_message)?;
+    v1.alpha_powers = opening::powers::<4>(alpha);
+    #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    {
+        super::equality_trace::fields(&[z0.x, z0.y, z1.x, z1.y, gamma, kappa, tau, alpha]);
+        super::equality_trace::fields(&polynomial);
+        super::equality_trace::fields(&v1.gamma_powers);
+        super::equality_trace::fields(&v1.interpolant);
+        super::equality_trace::fields(&v1.alpha_powers);
+    }
     Ok(Prepared {
         data,
         challenges: Challenges {
@@ -83,12 +113,12 @@ pub fn prepare(
             queries,
         },
         polynomial,
+        v1,
     })
 }
 /// Only coefficients 0,1,2 can be nonzero in liftLinear(interpolationPair).
 #[inline(never)]
-fn interpolant(data: &OpeningData, gamma: E) -> Result<[E; 3], Error> {
-    let g = opening::powers::<29>(gamma);
+fn interpolant(data: &OpeningData, g: &[E; 29]) -> Result<[E; 3], Error> {
     let y = core::array::from_fn(|j| (0..29).fold(E::ZERO, |s, l| s.add(g[l].mul(data.y[l][j]))));
     let p = chord::interpolation_pair(data.z[0], data.z[1], y)?;
     Ok([p.p0[0], p.p1, p.p0[1]])
@@ -130,26 +160,23 @@ fn weight_at(data: &OpeningData, k: &[E; 4], j: usize) -> E {
     })
 }
 #[inline(never)]
-fn claim_prime(data: &OpeningData, gamma: E, v: E, kappa: E) -> Result<E, Error> {
+fn claim_prime(data: &OpeningData, gamma: E, v: E, kappa: E, i: &[E; 3]) -> Result<E, Error> {
     let claim = data.claim(gamma, v, kappa);
     let k = opening::powers::<4>(kappa);
-    let i = interpolant(data, gamma)?;
     // Exactly the dense dot product with its 1021 zero terms omitted.
     let dot = (0..3).fold(E::ZERO, |v, j| v.add(weight_at(data, &k, j).mul(i[j])));
     Ok(claim.sub(dot))
 }
 #[inline(never)]
 pub fn check_v1(
-    data: &OpeningData,
-    gamma: E,
-    alpha: E,
+    invariants: &V1Invariants,
     proof: &OpeningView<'_>,
     u: FibreIndex,
     opening: &FibreView<'_>,
 ) -> Result<(), Error> {
-    let g = opening::powers::<29>(gamma);
-    let i = interpolant(data, gamma)?;
-    let line = data.line();
+    let g = &invariants.gamma_powers;
+    let i = &invariants.interpolant;
+    let line = &invariants.line;
     let mut r = [E::ZERO; 4];
     for s in 0..4 {
         let index = domain::child_index(u, SlotIndex::new(s)?);
@@ -169,7 +196,25 @@ pub fn check_v1(
                 .ok_or(Error::ZeroDenominator)?,
         );
     }
-    if fold::fold_fibre(alpha, u, r)? != final_encoder(proof, u) {
+    #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    super::equality_trace::fields(&r);
+    let point = domain::fibre_point(u);
+    let h = fold::phi(point.x, point.y, r)?;
+    let a = &invariants.alpha_powers;
+    // The same degree-three fold polynomial, using the prepared powers.
+    let lhs = h[0]
+        .add(a[1].mul(h[1]))
+        .add(a[2].mul(h[2]))
+        .add(a[3].mul(h[3]));
+    let rhs = final_encoder(proof, u);
+    #[cfg(all(feature = "r0-hoist-reference", not(target_os = "solana")))]
+    assert_eq!(
+        lhs.to_le_bytes(),
+        fold::fold_fibre(a[1], u, r)?.to_le_bytes()
+    );
+    #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    super::equality_trace::fields(&[lhs, rhs]);
+    if lhs != rhs {
         return Err(Error::V1);
     }
     Ok(())
@@ -238,6 +283,8 @@ pub fn check_v2(
         dot = dot.add(proof.final_coefficient(j).mul(dual));
     }
     let rhs = fold::quarter::<E>().mul(dot);
+    #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    super::equality_trace::fields(&[lhs, rhs]);
     if lhs != rhs {
         return Err(Error::V2);
     }
