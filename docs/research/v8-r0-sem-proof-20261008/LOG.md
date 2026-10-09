@@ -3180,3 +3180,147 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2703 | `R0P/CircleSampler` | 0 / 0 | 0:18.08 | 6848900 | 0 | 36 | `6a702fddefcd2f74ee883e34e46c8d32dcdd9af8a505869ef58b05e5407a00cc` |
 
 Source revision(s): `d7ce72ab61862d8611afa6bd4d1d9dd8d98410d7`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G22 — formal mass obstruction; stop before R0C handoff, G21 and G23
+
+CircleMassObstruction proves not_circleSample0_mass and circleSample1_mass_counterexample, the latter including circleFallback0 != circleFallback1. The generic proof injects Fin (B/n+1) into a heavy modulo fiber, transfers the count across the input/output equivalences, and proves its mass strictly exceeds 1/n. It is checked before the concrete fallback ranks. The rank computation is symbolic over four limbs; the only numeric checks compare P^2 and P^2+1 with 256^32 mod P^4. There is no finite enumeration, decide, native_decide, or axiom addition. Attempt 2704 had a looping generic modulo simp and a multiplication normalization error; 2705 needed zero_mod; 2706 passes the generic count. Attempt 2707 needed explicit M31 projections for the rank; 2708 proves the first-row obstruction. The full two-row obstruction passes at 2709, exit 0, no errors/warnings, all 12 axiom lines standard. The requested mass statements have not been weakened or replaced by slack versions. R0C, SemD2Glue and combinedD2Budget are unchanged. No 28xx or 29xx attempt or final manifest replay was launched, because the requested G22 bounds are false and the source/budget decision is pending.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2704 | `R0P/CircleMassObstruction` | 1 / 1 | 0:04.21 | 6792612 | 0 | 3 | `f9cc97a9d9f57b8465478079bc376ffdc2ace98e956cb0392c3b766db3c60a74` |
+| 2705 | `R0P/CircleMassObstruction` | 1 / 1 | 0:03.93 | 6755972 | 0 | 3 | `c81fb4e62f7d283bbfba9d8d851c2073c5bcfbee65b93607f900608061db7ac9` |
+| 2706 | `R0P/CircleMassObstruction` | 0 / 0 | 0:03.80 | 6796644 | 0 | 3 | `f948e8a3dcd5f66fd87e8cbde9b2cd2cd50d2bef44aba09342e850966de2d83b` |
+| 2707 | `R0P/CircleMassObstruction` | 1 / 1 | 0:03.76 | 6789824 | 0 | 8 | `f6d9bce3dfa5430eb613535f8db2e36dcb7d5ab4da8568f63d8e1d3e6de624bc` |
+| 2708 | `R0P/CircleMassObstruction` | 0 / 0 | 0:03.72 | 6820924 | 0 | 8 | `508ebaffcc4aa655f796f0ee20a63a03eff507e3622b114bf721a36037eab9e1` |
+| 2709 | `R0P/CircleMassObstruction` | 0 / 0 | 0:03.84 | 6823284 | 0 | 12 | `7bb9a6f7d7d6e73aca67b3073e7ae01cbe8cf8d9a6fa2da67dcffee1c6710511` |
+
+Source revision(s): `437c018e58212e61be24702235ca150221f4e938`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+#### Exact stopped obligations
+
+The requested goals, with `P := AspisV5ComponentCQM31TowerExact.P`, are:
+
+```lean
+⊢ mean (fun s : State => indicator (z0Bad' (circleSample0 s))) ≤ 1 / (P ^ 4 : ℚ)
+
+z0 : Point WideExact
+hz0 : z0 ≠ circleFallback1
+⊢ mean (fun s : State => indicator (z1Bad z0 (circleSample1 s))) ≤ 1 / (P ^ 4 : ℚ)
+```
+
+The first goal is negated by `R0P.CircleMassObstruction.not_circleSample0_mass`.
+For the second, `circleSample1_mass_counterexample` supplies `z0 = circleFallback0`,
+proves the stated `hz0`, and negates the goal. These are checked theorems, not
+failure-to-find-proof claims.
+
+Write `N = P^4`, `B = 256^32`, `q = B / N`, `r = B % N`. Here
+`r = 141976867060278866133163874180352`, while the two accepted fallback
+parameter ranks are `P^2 = 4611686014132420609` and
+`P^2+1 = 4611686014132420610`. Both are below `r`. Their masses are at least
+`(q+1)/B > 1/N` by the generic heavy-fiber proof. Replacing rejected parameters
+with a fallback does not change these accepted-parameter fibers.
+
+The sampler in `SemD2.lean:183` is modulo reduction, not uniform QM31 sampling.
+Its existing law is `qm31Sample_mass_slack`, with `(1+deltaQ)/P^4`.
+Retaining that small slack, or changing the sampler, requires a lead decision;
+neither alternative is silently installed in the requested theorem or budget.
+The `1/P^4` rowBudget edit requested in G22 therefore cannot be supplied as a
+sound integration patch for the current sampler.
+
+#### Exact unapplied R0C event-interface diff
+
+This is the event/interface portion only, for lead review after the mass/budget
+decision. It has **not** been applied or host-checked. The current two circle
+budgets are deliberately unchanged. A concrete `Point WideExact` cannot serve
+the generic `Point K` interface directly, and `CircleRows` already imports
+`SemStatement`; importing CircleRows back into SemStatement would form a cycle.
+Instead, keep the proved concrete fallback in `R0P.CircleSampler` and carry it
+as `SourceData.circleFallback1 : Point K` (data, not an extra proof premise).
+The subsequent job-directory integration would import CircleSampler in
+SemD3Glue and fill `circleFallback1 := R0P.SemSource.circleFallback1` in
+`sourceData`, then update consumers and D2 after the lead recompiles R0C.
+
+```diff
+--- a/R0C/SemStatement.lean
++++ b/R0C/SemStatement.lean
+@@ -44,6 +44,8 @@
+ words may occur in SM, so later commitments are not moved before lambda/chi. -/
+ structure SourceData (X SM W : Type) (Sfield : Fin 29 → Subfield E) where
+   semanticRounds : Nat
++  /-- Reserved second-row fallback, supplied by the concrete source instance. -/
++  circleFallback1 : Point K
+   semanticBad : Prefix K E X SM → SM → K → Prop
+   paymentWitness : X → W → Prop
+   openingView : Prefix K E X SM →
+@@ -51,7 +53,7 @@
+   decision : Prefix K E X SM → Msg K E SM → Bool
+ 
+ /-- A challenge event, not a side condition on the initial statement. -/
+-def z0Bad (z : Point K) : Prop := BaseRational z
++def z0Bad (fallback1 z : Point K) : Prop := BaseRational z ∨ z = fallback1
+ 
+ def z1Bad (z0 z1 : Point K) : Prop := BaseRational z1 ∨ z1 = z0
+ 
+@@ -77,7 +79,7 @@
+     (P : Prefix K E X SM) (m : Msg K E SM) (c : Chal K E) : Prop :=
+   (∃ sm k, P.round < s.semanticRounds ∧ m = .semantic sm ∧ c = .semantic k ∧
+     s.semanticBad P sm k) ∨
+-  (∃ y z, P.round = s.semanticRounds ∧ m = .beforeZ0 y ∧ c = .circle z ∧ z0Bad z) ∨
++  (∃ y z, P.round = s.semanticRounds ∧ m = .beforeZ0 y ∧ c = .circle z ∧ z0Bad s.circleFallback1 z) ∨
+   (∃ y y0 z0 z1, P.round = s.semanticRounds + 1 ∧
+     P.rounds.getLast? = some (.beforeZ0 y, .circle z0) ∧
+     m = .beforeZ1 y0 ∧ c = .circle z1 ∧ z1Bad z0 z1) ∨
+--- a/R0C/CircleRows.lean
++++ b/R0C/CircleRows.lean
+@@ -55,12 +55,13 @@
+ theorem baseRational_card : Fintype.card {z : Point K // BaseRational z} = 2^31 :=
+   (Fintype.card_congr (rationalEquiv (K := K))).symm.trans card_C_eq
+ 
+-/-- Exact first-row density under the uniform law on the full circle. -/
+-theorem z0_density : mean (fun z : Point K => indicator (SemStatement.z0Bad z)) =
+-    (2^31 : ℚ) / Fintype.card (Point K) := by
+-  simp only [SemStatement.z0Bad]
+-  rw [Counting.mean_indicator_card, baseRational_card]
+-  simp only [Nat.cast_pow, Nat.cast_ofNat]
++/-- The first-row event also includes the reserved second-row fallback. -/
++theorem z0_density_le (fallback1 : Point K) :
++    mean (fun z : Point K => indicator (SemStatement.z0Bad fallback1 z)) ≤
++      (2^31+1 : ℚ) / Fintype.card (Point K) := by
++  letI : Nonempty (Point K) := ⟨fallback1⟩
++  have h := Counting.mean_or_eq_le (BaseRational (K := K)) fallback1
++  simpa only [SemStatement.z0Bad, baseRational_card, Nat.cast_pow, Nat.cast_ofNat] using h
+ 
+ /-- Second-row upper bound, including equality with the preceding challenge. -/
+ theorem z1_density_le (z0 : Point K) :
+@@ -72,13 +73,13 @@
+ 
+ omit [Fintype K] in
+ /-- Absence of the two counted events supplies precisely the old Stmt fields. -/
+-theorem chord_conditions (z0 z1 : Point K)
+-    (h0 : ¬ SemStatement.z0Bad z0) (h1 : ¬ SemStatement.z1Bad z0 z1) :
++theorem chord_conditions (fallback1 z0 z1 : Point K)
++    (h0 : ¬ SemStatement.z0Bad fallback1 z0) (h1 : ¬ SemStatement.z1Bad z0 z1) :
+     z0 ≠ z1 ∧ ¬ BaseRational z0 ∧ ¬ BaseRational z1 := by
+-  exact ⟨fun h => h1 (Or.inr h.symm), h0, fun h => h1 (Or.inl h)⟩
++  exact ⟨fun h => h1 (Or.inr h.symm), fun h => h0 (Or.inl h), fun h => h1 (Or.inl h)⟩
+ 
+ #print axioms baseRational_card
+-#print axioms z0_density
++#print axioms z0_density_le
+ #print axioms z1_density_le
+ #print axioms chord_conditions
+ end
+```
+
+G21 and G23 remain pending. No Freeze claim is made. For the later generic
+maxErr helper, note that its fold includes 0: `maxErr_eq_of_le` also needs the
+selected value to be nonnegative, or should first prove equality to
+`max (e j) 0`. This is an internal generic-lemma issue; the concrete budgets'
+nonnegativity should be proved inside the requested result, not added as a
+new premise to combined_fiat_shamir_closed.
+
+Snapshot revision before the obstruction commit: `437c018e58212e61be24702235ca150221f4e938`.
+Final source bytes match the accepted host snapshots 2703/2709. No source
+outside the semantic job directory was edited, and evidence remains uncommitted.
