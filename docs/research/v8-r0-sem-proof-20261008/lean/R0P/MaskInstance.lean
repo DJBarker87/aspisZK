@@ -8,15 +8,12 @@ open R0P R0P.SemSource R0P.SemDegree
 noncomputable section
 variable {K : Type} [Field K] {F : Subfield K}
 
-/-- The verifier reads sixteen C1 columns, ten mask-only columns, and lane 27.
-Lane 28 has zero mask factor, as in MaskValue's source citations. -/
-def maskValueClaims (B : PackBasis F) (y : Fin 29 → K) (alpha : Fin 10 → K) : K :=
-  maskValue B (fun c => y (Fin.castLE (by omega) c))
-    (fun c => y ⟨16+c.val,by omega⟩) (y 27) alpha
+/-- The verifier reads the original point mask and lane 28's extra Libra claim. -/
+abbrev maskValueClaims (B : PackBasis F) := maskClaimsR0 B
 
 theorem maskValueClaims_degree (B : PackBasis F) : MaskDegree (maskValueClaims B) := by
-  intro t
-  exact maskValue_vdeg B t
+  intro π t
+  exact maskClaimsR0_vdeg B π t
 
 #print axioms maskValueClaims
 #print axioms maskValueClaims_degree
@@ -36,6 +33,13 @@ variable (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
 variable (msg : Pf → Nat → MsgZ WideExact)
 local notation "prZ" => combinedProtocolZ B p msg (fun _ _ => none)
 local notation "VZ" => FS2.verifier (prZ) (combinedDecisionZ (maskValueClaims B) B)
+
+/-- D14″ and D14′ opening budgets, recorded before taking the q22 maximum. -/
+theorem masked_opening_budget_exact :
+    R0FS.ε WideExact 0 = (336869026605739 + 16800 : ℚ) / ((Fintype.card WideExact : ℚ) - 1) ∧
+    R0FS.ε WideExact 1 = (400 : ℚ) / (Fintype.card WideExact : ℚ) := ⟨rfl, rfl⟩
+
+#print axioms masked_opening_budget_exact
 
 /-- The reference mask evaluated from the opened claims, with its degree obligation discharged. -/
 theorem combined_fiat_shamir_masked (x : TypedContext WideExact Sfield) (hr32 : p.rounds = 32)

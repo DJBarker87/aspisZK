@@ -44,12 +44,32 @@ theorem B2_card (D : Data K) : (B2 D).card ≤ 5600 := by
   simp only [Fintype.card_fin] at h
   omega
 
-theorem B3_card (D : Data K) : (B3 D).card ≤ 8400 := by
-  have h := batch_union_bound (Lambda D.W) (discrepancy D)
-  have hc := Lambda_card D.W
-  change (B3 D).card ≤ _ at h
-  simp only [Fintype.card_fin] at h
-  omega
+theorem B3_card (D : Data K) : (B3 D).card ≤ 11200 := by
+  classical
+  have points (t : Fin 29 → InitialMessage K) :
+      (Finset.univ.biUnion fun j : Fin 3 =>
+        if discrepancy D t j = 0 then ∅ else width29NonzeroCollisionSet (discrepancy D t j)).card ≤ 84 := by
+    simpa using batch_union_bound {t} (discrepancy D)
+  have extra (t : Fin 29 → InitialMessage K) :
+      (if extraDiscrepancy D t = 0 then ∅ else
+        width29NonzeroCollisionSet (extraDiscrepancy D t)).card ≤ 28 := by
+    split_ifs with h
+    · simp
+    · exact width29_nonzero_collision_card_le _ h
+  calc
+    (B3 D).card ≤ ∑ t ∈ Lambda D.W,
+        ((Finset.univ.biUnion fun j : Fin 3 =>
+          if discrepancy D t j = 0 then ∅ else width29NonzeroCollisionSet (discrepancy D t j)) ∪
+          (if extraDiscrepancy D t = 0 then ∅ else
+            width29NonzeroCollisionSet (extraDiscrepancy D t))).card := Finset.card_biUnion_le
+    _ ≤ ∑ _t ∈ Lambda D.W, 112 := by
+      apply Finset.sum_le_sum
+      intro t _
+      exact (Finset.card_union_le _ _).trans (Nat.add_le_add (points t) (extra t))
+    _ ≤ 11200 := by
+      have hc := Lambda_card D.W
+      simp only [Finset.sum_const, smul_eq_mul]
+      omega
 
 theorem B2_outside (D : Data K) (gamma : K) (hnz : gamma ≠ 0) (hg : gamma ∉ B2 D)
     (t : Fin 29 → InitialMessage K) (ht : t ∈ LambdaR (virtual D)) (i : Fin 2)
@@ -70,12 +90,23 @@ theorem B3_outside (D : Data K) (gamma : K) (hnz : gamma ≠ 0) (hg : gamma ∉ 
   by_contra h
   apply hg
   simp only [B3, Finset.mem_biUnion]
-  refine ⟨t, ht, j, Finset.mem_univ j, ?_⟩
+  refine ⟨t, ht, Finset.mem_union_left _ (Finset.mem_biUnion.mpr ⟨j, Finset.mem_univ j, ?_⟩)⟩
   rw [if_neg h]
   simpa [width29NonzeroCollisionSet, hnz, pointDefect] using zero
 
+theorem B3_extra_outside (D : Data K) (gamma : K) (hnz : gamma ≠ 0) (hg : gamma ∉ B3 D)
+    (t : Fin 29 → InitialMessage K) (ht : t ∈ Lambda D.W)
+    (zero : extraDefect D gamma t = 0) : extraDiscrepancy D t = 0 := by
+  classical
+  by_contra h
+  apply hg
+  apply Finset.mem_biUnion.mpr
+  refine ⟨t, ht, Finset.mem_union_right _ ?_⟩
+  rw [if_neg h]
+  simpa [width29NonzeroCollisionSet, hnz, extraDefect] using zero
+
 theorem pointPolynomial_degree (D : Data K) (gamma v : K) (t : Fin 29 → InitialMessage K) :
-    (pointPolynomial D gamma v t).natDegree ≤ 3 := by
+    (pointPolynomial D gamma v t).natDegree ≤ 4 := by
   simp only [pointPolynomial, Fin.sum_univ_succ]
   compute_degree
 
@@ -83,7 +114,11 @@ theorem pointPolynomial_coeff (D : Data K) (gamma v : K) (t : Fin 29 → Initial
     (pointPolynomial D gamma v t).coeff (j.val+1) = pointDefect D gamma t j := by
   fin_cases j <;> simp [pointPolynomial, Fin.sum_univ_succ, coeff_monomial]
 
-theorem B4_card (D : Data K) (gamma v : K) : (B4 D gamma v).card ≤ 300 := by
+theorem pointPolynomial_extra_coeff (D : Data K) (gamma v : K) (t : Fin 29 → InitialMessage K) :
+    (pointPolynomial D gamma v t).coeff 4 = extraDefect D gamma t := by
+  simp [pointPolynomial, Fin.sum_univ_succ, coeff_monomial]
+
+theorem B4_card (D : Data K) (gamma v : K) : (B4 D gamma v).card ≤ 400 := by
   classical
   have subset : B4 D gamma v ⊆ (Lambda D.W).biUnion (fun t => badRoots (pointPolynomial D gamma v t)) := by
     intro k hk
@@ -91,21 +126,29 @@ theorem B4_card (D : Data K) (gamma v : K) : (B4 D gamma v).card ≤ 300 := by
     apply Finset.mem_biUnion.mpr
     refine ⟨t,ht,(mem_badRoots _ _).mpr ⟨?_,he⟩⟩
     intro hz
-    apply hd
-    funext j
-    have hc := congrArg (fun p : K[X] => p.coeff (j.val+1)) hz
-    simpa only [pointPolynomial_coeff, coeff_zero, Pi.zero_apply] using hc
-  have bound := union_bound (Lambda D.W) (pointPolynomial D gamma v) 3
+    rcases hd with hd | hd
+    · apply hd
+      funext j
+      have hc := congrArg (fun p : K[X] => p.coeff (j.val+1)) hz
+      simpa only [pointPolynomial_coeff, coeff_zero, Pi.zero_apply] using hc
+    · apply hd
+      have hc := congrArg (fun p : K[X] => p.coeff 4) hz
+      simpa only [pointPolynomial_extra_coeff, coeff_zero] using hc
+  have bound := union_bound (Lambda D.W) (pointPolynomial D gamma v) 4
     (fun t _ => pointPolynomial_degree D gamma v t)
   have hc := Lambda_card D.W
   exact (Finset.card_le_card subset).trans (bound.trans (by omega))
 
 theorem B4_outside (D : Data K) (gamma v kappa : K) (hg : kappa ∉ B4 D gamma v)
     (t : Fin 29 → InitialMessage K) (ht : t ∈ Lambda D.W)
-    (he : (pointPolynomial D gamma v t).eval kappa = 0) : pointDefect D gamma t = 0 := by
+    (he : (pointPolynomial D gamma v t).eval kappa = 0) :
+    pointDefect D gamma t = 0 ∧ extraDefect D gamma t = 0 := by
   classical
-  by_contra hd
-  exact hg (Finset.mem_filter.mpr ⟨Finset.mem_univ _,t,ht,hd,he⟩)
+  constructor
+  · by_contra hd
+    exact hg (Finset.mem_filter.mpr ⟨Finset.mem_univ _,t,ht,Or.inl hd,he⟩)
+  · by_contra hd
+    exact hg (Finset.mem_filter.mpr ⟨Finset.mem_univ _,t,ht,Or.inr hd,he⟩)
 
 theorem imagePolynomial_degree (D : Data K) (gamma v kappa : K) (q : InitialMessage K) :
     (imagePolynomial D gamma v kappa q).natDegree ≤ 2 := by
@@ -181,6 +224,7 @@ theorem mem_B7_iff (D : Data K) (gamma kappa tau alpha : K) (P : K[X]) :
 #print axioms B5_card
 #print axioms B7_card
 #print axioms B2_outside
+#print axioms B3_extra_outside
 #print axioms B3_outside
 #print axioms B4_outside
 #print axioms B5_outside

@@ -11,7 +11,7 @@ noncomputable section
 attribute [local instance] Classical.propDecidable
 
 theorem combinedProtocolZ_D2 {Sfield : Fin 29 → Subfield WideExact} {Pf : Type} {L : Nat}
-    (maskClaims : (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (B : PackBasis (Sfield 0))
+    (maskClaims : (Fin 29 → WideExact) → (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (B : PackBasis (Sfield 0))
     (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
     (msg : Pf → Nat → MsgZ WideExact)
     (decode : R0P.MaskDuplex.CombinedDecode (SemMsgZ WideExact) Sfield L)

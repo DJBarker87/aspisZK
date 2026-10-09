@@ -13,8 +13,8 @@ attribute [local irreducible] Close Lambda LambdaR
 theorem bad_set_cardinalities (D : Data K) (gamma v kappa tau : K) (P : K[X])
     (hp : P.natDegree ≤ 6) :
     (B1 (virtual D)).card ≤ 336869026605739 ∧
-    (B2 D).card ≤ 5600 ∧ (B3 D).card ≤ 8400 ∧
-    (B4 D gamma v).card ≤ 300 ∧ (B5 D gamma v kappa).card ≤ 200 ∧
+    (B2 D).card ≤ 5600 ∧ (B3 D).card ≤ 11200 ∧
+    (B4 D gamma v).card ≤ 400 ∧ (B5 D gamma v kappa).card ≤ 200 ∧
     (B6 (channels (batch D gamma))).card ≤ 9396508281246 ∧
     (B7 D gamma kappa tau P).card ≤ 600 :=
   ⟨B1_card _, B2_card D, B3_card D, B4_card D gamma v, B5_card D gamma v kappa,
@@ -22,8 +22,8 @@ theorem bad_set_cardinalities (D : Data K) (gamma v kappa tau : K) (P : K[X])
 
 theorem grouped_cardinalities (D : Data K) (gamma v kappa tau : K) (P : K[X])
     (hp : P.natDegree ≤ 6) :
-    (B1 (virtual D) ∪ B2 D ∪ B3 D).card ≤ 336869026605739+14000 ∧
-    (B4 D gamma v).card ≤ 300 ∧ (B5 D gamma v kappa).card ≤ 200 ∧
+    (B1 (virtual D) ∪ B2 D ∪ B3 D).card ≤ 336869026605739+16800 ∧
+    (B4 D gamma v).card ≤ 400 ∧ (B5 D gamma v kappa).card ≤ 200 ∧
     (B6 (channels (batch D gamma)) ∪ B7 D gamma kappa tau P).card ≤ 9396508281246+600 := by
   obtain ⟨h1,h2,h3,h4,h5,h6,h7⟩ := bad_set_cardinalities D gamma v kappa tau P hp
   refine ⟨?_,h4,h5,?_⟩

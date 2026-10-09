@@ -128,8 +128,9 @@ theorem binding (D : Data K) (hne : D.z0 ≠ D.z1)
     (large : 9558 ≤ (matchingFibres D gamma alpha F).card) :
     ∃ t ∈ Lambda D.W,
       (∀ l, evalMessage (t l) D.z0 = D.y l 0 ∧ evalMessage (t l) D.z1 = D.y l 1) ∧
-      (∀ j l, D.pointClaims j l = dot (eqWeight (D.points j)) (t l)) ∧
-      v = ∑ r ∈ D.inactive, exactInitialMessageCurve t gamma r ∧
+      (∀ j l, D.pointClaims j l = dot (coeffWeight D.transport (eqWeight (D.points j))) (t l)) ∧
+      (∀ l, D.extraClaims l = dot D.extraWeight (t l)) ∧
+      v = ∑ r ∈ D.inactive, exactInitialMessageCurve t gamma (D.transport r) ∧
       (∀ l i, exactInitialEncoder (t l) i ∈ Sfield l) := by
   obtain ⟨q,hq,hclaim⟩ := quotient_from_final D gamma v kappa tau alpha P F
     accept.2.2.2.1 accept.2.2.2.2.2 large h6bad h7bad
@@ -164,14 +165,15 @@ theorem binding (D : Data K) (hne : D.z0 ≠ D.z1)
   have defects := B4_outside D gamma v kappa h4bad (recovered D t) hc hpoly
   have hI : inactiveDefect D gamma v (recovered D t) = 0 := by
     simpa only [pointPolynomial, eval_add, eval_C, eval_finsetSum, eval_monomial,
-      congrFun defects, Pi.zero_apply, zero_mul, Finset.sum_const_zero, add_zero] using hpoly
-  refine ⟨recovered D t,hc,recovered_values D hne t tails,?_,?_,tuple_descent D Sfield base _ hc⟩
+      congrFun defects.1, defects.2, Pi.zero_apply, zero_mul, Finset.sum_const_zero, add_zero] using hpoly
+  refine ⟨recovered D t,hc,recovered_values D hne t tails,?_,?_,?_,tuple_descent D Sfield base _ hc⟩
   · intro j l
-    have hz := congrFun (B3_outside D gamma hnz h3bad _ hc j (congrFun defects j)) l
+    have hz := congrFun (B3_outside D gamma hnz h3bad _ hc j (congrFun defects.1 j)) l
     exact sub_eq_zero.mp hz
+  · intro l
+    exact sub_eq_zero.mp (congrFun (B3_extra_outside D gamma hnz h3bad _ hc defects.2) l)
   · have hi := sub_eq_zero.mp hI
-    simpa only [inactiveDefect, indicator, dot, ite_mul, one_mul, zero_mul, ← Finset.sum_filter,
-      Finset.filter_mem_eq_inter, Finset.univ_inter] using hi
+    simpa only [inactiveDefect, dot_coeffWeight_indicator] using hi
 
 theorem wideBinding : type_of% (@binding AspisWideTower.WideExact _ _ (Classical.decEq _) _) :=
   @binding AspisWideTower.WideExact _ _ (Classical.decEq _) _

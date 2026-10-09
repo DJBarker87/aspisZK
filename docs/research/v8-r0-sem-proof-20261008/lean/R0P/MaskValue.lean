@@ -93,6 +93,63 @@ theorem maskValue_vdeg (B : PackBasis F) (t : Trace K) :
     exact vdeg_mul (hfactor (maskOnlyFactorExponent c) _) (vdeg_honestClaims_zero t _)
 
 
+/-- The two degree-27 univariates stored in coefficient cells 0–55. -/
+def libraTail (m : Fin 1024 → K) (alpha : Fin 10 → K) : K :=
+  (∑ j : Fin 28, m ⟨j.val, by omega⟩ * alpha 8 ^ j.val) +
+    ∑ j : Fin 28, m ⟨28 + j.val, by omega⟩ * alpha 9 ^ j.val
+
+theorem dot_libraWeight (m : Fin 1024 → K) (alpha : Fin 10 → K) :
+    AspisR0.RoundNormalization.dot (SemSource.libraWeight alpha) m = libraTail m alpha := by
+  unfold AspisR0.RoundNormalization.dot
+  rw [Fin.sum_univ_add (a := 28) (b := 996), Fin.sum_univ_add (a := 28) (b := 968)]
+  have h0 (j : Fin 28) :
+      SemSource.libraWeight alpha (Fin.castAdd 996 j) * m (Fin.castAdd 996 j) =
+        m ⟨j.val, by omega⟩ * alpha 8 ^ j.val := by
+    simp only [SemSource.libraWeight, Fin.val_castAdd, if_pos j.isLt]
+    exact mul_comm _ _
+  have h1 (j : Fin 28) :
+      SemSource.libraWeight alpha (Fin.natAdd 28 (Fin.castAdd 968 j)) *
+          m (Fin.natAdd 28 (Fin.castAdd 968 j)) =
+        m ⟨28 + j.val, by omega⟩ * alpha 9 ^ j.val := by
+    simp only [SemSource.libraWeight, Fin.val_natAdd, Fin.val_castAdd,
+      if_neg (show ¬ 28 + j.val < 28 by omega), if_pos (show 28 + j.val < 56 by omega),
+      Nat.add_sub_cancel_left]
+    exact mul_comm _ _
+  have hz (j : Fin 968) :
+      SemSource.libraWeight alpha (Fin.natAdd 28 (Fin.natAdd 28 j)) *
+        m (Fin.natAdd 28 (Fin.natAdd 28 j)) = 0 := by
+    simp only [SemSource.libraWeight, Fin.val_natAdd,
+      if_neg (show ¬ 28 + (28 + j.val) < 28 by omega),
+      if_neg (show ¬ 28 + (28 + j.val) < 56 by omega), zero_mul]
+  simp only [h0, h1, hz, Finset.sum_const_zero, add_zero, libraTail]
+
+theorem libraTail_vdeg (m : Fin 1024 → K) : VDeg 10 (fun _ => 27) (libraTail m) := by
+  classical
+  unfold libraTail
+  apply vdeg_add (d := fun _ => 27) (e := fun _ => 27)
+  all_goals
+    apply vdeg_sum Finset.univ
+    intro j _
+    apply vdeg_mono (vdeg_smul _ (vdeg_pow (vdeg_proj _) j.val))
+    intro i
+    simp only [Pi.single_apply]
+    split_ifs <;> have := j.isLt <;> omega
+
+/-- D14′: the original mask value plus the disclosed lane-28 Libra claim. -/
+def maskClaimsR0 (B : PackBasis F) (y0 yx : Fin 29 → K) (alpha : Fin 10 → K) : K :=
+  maskValue B (fun c => y0 (Fin.castLE (by omega) c))
+    (fun c => y0 ⟨16 + c.val, by omega⟩) (y0 27) alpha + yx 28
+
+theorem maskClaimsR0_vdeg (B : PackBasis F) (π : Fin 1024 ≃ Fin 1024) (t : Trace K) :
+    VDeg 10 (fun _ => 27) (fun alpha => maskClaimsR0 B (honestClaims t alpha 0)
+      (fun l => AspisR0.RoundNormalization.dot (SemSource.libraWeight alpha) (coeffsOf π t l)) alpha) := by
+  simp only [maskClaimsR0, dot_libraWeight]
+  exact vdeg_add (maskValue_vdeg B t) (libraTail_vdeg (coeffsOf π t 28))
+
+#print axioms dot_libraWeight
+#print axioms libraTail_vdeg
+#print axioms maskClaimsR0_vdeg
+
 #print axioms factorExponent
 #print axioms maskOnlyFactorExponent
 #print axioms towerBasis

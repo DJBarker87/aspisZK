@@ -27,17 +27,17 @@ variable {Sfield : Fin 29 → Subfield WideExact}
 
 theorem gamma_bad_density :
     mean (fun s => indicator (ModuloField.gamma s ∈ bad0 x y)) ≤
-      (336869026605739+14000 : ℚ) * (257 / (256^32 : ℚ)) := by
-  have hc : (bad0 x y).card ≤ 336869026605739+14000 := by
+      (336869026605739+16800 : ℚ) * (257 / (256^32 : ℚ)) := by
+  have hc : (bad0 x y).card ≤ 336869026605739+16800 := by
     exact (grouped_cardinalities (data x y) 0 0 0 0 0 (by simp)).1
   simpa only [Nat.cast_add, Nat.cast_ofNat] using
     (ModuloField.gamma_event _).trans (card_scale _ _ hc)
 
 theorem kappa_bad_density (γ v : WideExact) :
     mean (fun s => indicator (ModuloField.ordinary s ∈ bad1 x y γ v)) ≤
-      300 * (257 / (256^32 : ℚ)) := by
+      400 * (257 / (256^32 : ℚ)) := by
   exact (ModuloField.ordinary_event _).trans
-    (card_scale _ 300 (B4_card (data x y) γ v))
+    (card_scale _ 400 (B4_card (data x y) γ v))
 
 theorem tau_bad_density (γ v κ : WideExact) :
     mean (fun s => indicator (ModuloField.ordinary s ∈ bad2 x y γ v κ)) ≤

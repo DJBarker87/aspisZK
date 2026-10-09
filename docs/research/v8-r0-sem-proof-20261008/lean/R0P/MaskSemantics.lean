@@ -10,10 +10,10 @@ noncomputable section
 variable {K : Type} [Field K]
 
 /-- Honest Boolean rows include the mask's literal Boolean-row value. -/
-theorem honestRowsZ (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (pub : Public K)
+theorem honestRowsZ (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K) (π : Fin 1024 ≃ Fin 1024) (pub : Public K)
     {F : Subfield K} (B : PackBasis F) (t : Trace K)
     (pre : Fin 14 → K) (eta : K) (b : Fin 10 → Bool) :
-    virtualPolyZ maskClaims pub B t pre eta (ofBool b) = maskClaims (fun l => honestClaims t (ofBool b) 0 l) (ofBool b) + eta *
+    virtualPolyZ maskClaims π pub B t pre eta (ofBool b) = maskClaims (fun l => honestClaims t (ofBool b) 0 l) (honestExtra π t (ofBool b)) (ofBool b) + eta *
       (eqwB 10 (preZc pre) b * lanesComp (pre 2) (laneOf t pub (pre 0) (pre 1) B) b +
         pre 13 * t 26 (rowOf b) + (pre 13)^2 *
           ((1 - copyActiveLiteral (copySelectors (rowSel (rowOf b)))) * t 26 (rowOf b))) := by
@@ -21,28 +21,28 @@ theorem honestRowsZ (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (pub 
   rw [honestRows pub B t pre b]
 
 /-- The masked boundary, chain and terminal checks give recursive acceptance. -/
-theorem checksAcceptZ (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (pub : Public K)
+theorem checksAcceptZ (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K) (π : Fin 1024 ≃ Fin 1024) (pub : Public K)
     {F : Subfield K} (B : PackBasis F) (t : Trace K)
     (pre : Fin 14 → K) (eta claim : K) (alpha : Fin 10 → K)
     (polys : Fin 10 → K[X])
-    (h : sumcheckChecksZ maskClaims pub B pre eta claim alpha polys (honestClaims t alpha)) :
-    accept 27 10 (virtualPolyZ maskClaims pub B t pre eta) claim polys alpha := by
+    (h : sumcheckChecksZ maskClaims pub B pre eta claim alpha polys (honestClaims t alpha) (honestExtra π t alpha)) :
+    accept 27 10 (virtualPolyZ maskClaims π pub B t pre eta) claim polys alpha := by
   exact accept_of_checks 27 9 _ claim polys alpha h.1 h.2.1 h.2.2.1 h.2.2.2
 
 /-- Neither the eta argument nor its zero-slope branch requires a property
 of maskClaims. Its degree bound is used only by sumcheck soundness. -/
-theorem originalTotal_zero_of_masked_accept (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
-    (hMask : MaskDegree maskClaims) (pub : Public K) {F : Subfield K}
+theorem originalTotal_zero_of_masked_accept (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K)
+    (hMask : MaskDegree maskClaims) (π : Fin 1024 ≃ Fin 1024) (pub : Public K) {F : Subfield K}
     (B : PackBasis F) (t : Trace K) (pre : Fin 14 → K) (eta claim : K)
     (alpha : Fin 10 → K) (polys : Fin 10 → K[X])
-    (hacc : accept 27 10 (virtualPolyZ maskClaims pub B t pre eta) claim polys alpha)
-    (hAlpha : ¬ badAlpha 27 10 (virtualPolyZ maskClaims pub B t pre eta) polys alpha)
-    (hEta : ¬ etaBad claim (maskTotal maskClaims t) (originalTotal pub B t pre) eta) :
+    (hacc : accept 27 10 (virtualPolyZ maskClaims π pub B t pre eta) claim polys alpha)
+    (hAlpha : ¬ badAlpha 27 10 (virtualPolyZ maskClaims π pub B t pre eta) polys alpha)
+    (hEta : ¬ etaBad claim (maskTotal maskClaims π t) (originalTotal pub B t pre) eta) :
     originalTotal pub B t pre = 0 := by
-  have hsum : bsum 10 (virtualPolyZ maskClaims pub B t pre eta) = claim := by
+  have hsum : bsum 10 (virtualPolyZ maskClaims π pub B t pre eta) = claim := by
     by_contra hne
     exact hAlpha (sound 27 10 _ claim polys alpha
-      (virtualPolyZ_indDeg maskClaims hMask pub B t pre eta) hacc hne)
+      (virtualPolyZ_indDeg maskClaims hMask π pub B t pre eta) hacc hne)
   rw [bsum_eq_bsumB, virtualPolyZ_total] at hsum
   by_contra hs
   exact hEta ⟨hs, hsum.symm⟩

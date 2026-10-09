@@ -209,11 +209,11 @@ theorem d2_round0 (p : Params E Sfield Pf I B Kw) (hs : SamplerLaws p) (x : Stmt
       _ ≤ ((bad0 x y).card : ℚ) * (1 / ((Fintype.card E : ℚ) - 1)) :=
           mean_exists_field_le _ _ _ hs.gamma
       _ ≤ ε E 0 := by
-          have hc : (bad0 x y).card ≤ 336869026605739 + 14000 := by
+          have hc : (bad0 x y).card ≤ 336869026605739 + 16800 := by
             have := (grouped_cardinalities (data x y) 0 0 0 0 0 (by simp)).1
             simpa [bad0] using this
           have hpos := card_E_pos (E := E)
-          show _ ≤ (336869026605739 + 14000 : ℚ) / ((Fintype.card E : ℚ) - 1)
+          show _ ≤ (336869026605739 + 16800 : ℚ) / ((Fintype.card E : ℚ) - 1)
           rw [mul_one_div]
           apply div_le_div_of_nonneg_right _ hpos.le
           exact_mod_cast hc
@@ -237,8 +237,8 @@ theorem d2_round1 (p : Params E Sfield Pf I B Kw) (hs : SamplerLaws p) (x : Stmt
       _ ≤ ((bad1 x y γ v).card : ℚ) * (1 / (Fintype.card E : ℚ)) :=
           mean_exists_field_le _ _ _ hs.kappa
       _ ≤ ε E 1 := by
-          have hc : (bad1 x y γ v).card ≤ 300 := B4_card (data x y) γ v
-          show _ ≤ (300 : ℚ) / (Fintype.card E : ℚ)
+          have hc : (bad1 x y γ v).card ≤ 400 := B4_card (data x y) γ v
+          show _ ≤ (400 : ℚ) / (Fintype.card E : ℚ)
           rw [mul_one_div]
           apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)
           exact_mod_cast hc
@@ -443,10 +443,10 @@ theorem d3 [Fintype B] (p : Params E Sfield Pf I B Kw) (hs : SamplerLaws p) :
   have large : 9558 ≤ (matchingFibres (data x y) γ α F).card := by
     by_contra hlt
     exact h4 ⟨by omega, hScard, hsub⟩
-  obtain ⟨t, ht, _, hpt, _, hsf⟩ := binding (data x y) x.hne x.h0 x.h1 Sfield
+  obtain ⟨t, ht, _, hpt, hextra, _, hsf⟩ := binding (data x y) x.hne x.h0 x.h1 Sfield
     (fun l i => x.base l i) γ v κ τ α hγ Q F S x.semantic True hacc h0.1.1 h0.1.2 h0.2 h1 h2
     h3.1 h3.2 large
-  exact hw ⟨t, ht, hpt, hsf⟩
+  exact hw ⟨t, ht, hpt, hextra, hsf⟩
 
 /-- The core of (D3), sampler-free: an accepted complete transcript whose
 first challenge is nonzero and whose query set has 22 fibres is not doomed. -/
@@ -470,10 +470,10 @@ theorem accept_not_doomed (x : Stmt E Sfield) (y : Fin 29 → Fin 2 → E) (γ v
   have large : 9558 ≤ (matchingFibres (data x y) γ α F).card := by
     by_contra hlt
     exact h4 ⟨by omega, hScard, hsub⟩
-  obtain ⟨t, ht, _, hpt, _, hsf⟩ := binding (data x y) x.hne x.h0 x.h1 Sfield
+  obtain ⟨t, ht, _, hpt, hextra, _, hsf⟩ := binding (data x y) x.hne x.h0 x.h1 Sfield
     (fun l i => x.base l i) γ v κ τ α hγ Q F S x.semantic True hacc h0.1.1 h0.1.2 h0.2 h1 h2
     h3.1 h3.2 large
-  exact hw ⟨t, ht, hpt, hsf⟩
+  exact hw ⟨t, ht, hpt, hextra, hsf⟩
 
 theorem readsChallenges (p : Params E Sfield Pf I B Kw) :
     ReadsChallenges (protocol p) (verifierR0 p) :=

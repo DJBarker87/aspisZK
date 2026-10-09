@@ -24,8 +24,8 @@ def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle
 
 abbrev c := @JointView.c
 
-def A (B : PackBasis F) (ch : Challenges K) : T K F →ₗ[F] Payload K :=
-  ((PayloadSplit.L B ch).restrictScalars F).comp (JointTrace.tapeLinear B)
+def A (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : T K F →ₗ[F] Payload K :=
+  ((PayloadSplit.L π B ch).restrictScalars F).comp (JointTrace.tapeLinear B)
 
 abbrev roundInclusion : PayloadSplit.RoundPayload K →ₗ[F] Payload K :=
   PayloadSplit.roundInclusion.restrictScalars F
@@ -42,28 +42,28 @@ theorem g_zero (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHan
 theorem M_pure (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : h.Instance) (ch : Challenges K) (m : M K F) (n : N K F) :
     payload h B x w ch (m,n) = payload h B x w ch (0,n) +
-      (A B ch).comp inlM m := by
-  have ha : (A B ch).comp inlM m = PayloadSplit.pureLinear B ch m := by
-    change PayloadSplit.L B ch (JointTrace.tapeLinear B (m,0)) = _
+      (A h.transport B ch).comp inlM m := by
+  have ha : (A h.transport B ch).comp inlM m = PayloadSplit.pureLinear h.transport B ch m := by
+    change PayloadSplit.L h.transport B ch (JointTrace.tapeLinear B (m,0)) = _
     rw [JointTrace.tapeLinear_pure]
     rfl
   rw [ha]
-  exact PayloadSplit.M_pure x.1 B (h.build w) ch m n
+  exact PayloadSplit.M_pure h.transport x.1 B (h.build w) ch m n
 
 /-- The zero-tape payload is the existing JointView.c, and the remainder
 has support only in the ten round-polynomial arrays. -/
 theorem decomposition (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : h.Instance) (ch : Challenges K) (t : T K F) :
-    payload h B x w ch t = c h B x w ch + A B ch t + roundInclusion (F := F) (g h B x w ch t.2) := by
+    payload h B x w ch t = c h B x w ch + A h.transport B ch t + roundInclusion (F := F) (g h B x w ch t.2) := by
   let u := PayloadSplit.actual x.1 B (h.build w) ch
   have hs (r : T K F) : payload h B x w ch r =
-      PayloadSplit.L B ch (u r) + PayloadSplit.O x.1 B ch (u r) :=
-    PayloadSplit.run_split x.1 B (applyEligible (h.build w) r.2.2) ch (aff r)
+      PayloadSplit.L h.transport B ch (u r) + PayloadSplit.O x.1 B ch (u r) :=
+    PayloadSplit.run_split h.transport x.1 B (applyEligible (h.build w) r.2.2) ch (aff r)
   have hz : payload h B x w ch 0 = c h B x w ch :=
     congrArg (JointView.payload h B x w ch) (map_zero Partition.equiv)
-  have hc : c h B x w ch = PayloadSplit.L B ch (u 0) + PayloadSplit.O x.1 B ch (u 0) :=
+  have hc : c h B x w ch = PayloadSplit.L h.transport B ch (u 0) + PayloadSplit.O x.1 B ch (u 0) :=
     hz.symm.trans (hs 0)
-  have hl : PayloadSplit.L B ch (u t) = PayloadSplit.L B ch (u 0) + A B ch t := by
+  have hl : PayloadSplit.L h.transport B ch (u t) = PayloadSplit.L h.transport B ch (u 0) + A h.transport B ch t := by
     dsimp only [u]
     rw [JointTrace.actual_affine, map_add]
     rfl
@@ -92,7 +92,7 @@ same coefficients for every instance. -/
 theorem other_components_affine (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) :
     nonRound (F := F) (payload h B x w ch t) = nonRound (F := F) (c h B x w ch) +
-      nonRound (F := F) (A B ch t) := by
+      nonRound (F := F) (A h.transport B ch t) := by
   rw [decomposition, map_add, map_add, nonRound_roundInclusion, add_zero]
 
 /-- D12 verbatim, with the universally fixed challenge made explicit and
@@ -100,15 +100,15 @@ theorem other_components_affine (h : HonestProver K) (B : PackBasis F)
 helper-invariance, affinity, validity or rank premise hidden here. -/
 def MaskImage (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) : Prop :=
   (∀ ch w n, h.public w = x.1 →
-    roundInclusion (F := F) (g h B x w ch n) ∈ LinearMap.range ((A B ch).comp inlM)) ∧
+    roundInclusion (F := F) (g h B x w ch n) ∈ LinearMap.range ((A h.transport B ch).comp inlM)) ∧
   (∀ ch w w', h.public w = x.1 → h.public w' = x.1 →
-    c h B x w ch - c h B x w' ch ∈ LinearMap.range (A B ch))
+    c h B x w ch - c h B x w' ch ∈ LinearMap.range (A h.transport B ch))
 
 theorem payload_law (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) (hm : MaskImage h B x)
     (w : h.Instance) (ch : Challenges K) (hw : h.public w = x.1) :
-    EqualLaws (payload h B x w ch) (fun t => c h B x w ch + A B ch t) := by
-  have hh := AbsorptionLaw.mixture (A B ch) (c h B x w ch)
+    EqualLaws (payload h B x w ch) (fun t => c h B x w ch + A h.transport B ch t) := by
+  have hh := AbsorptionLaw.mixture (A h.transport B ch) (c h B x w ch)
     (fun n => roundInclusion (F := F) (g h B x w ch n)) (fun n => hm.1 ch w n hw)
   intro v
   simpa only [← decomposition] using hh v
@@ -123,7 +123,7 @@ theorem hvzk_perfect_of_maskImage (h : HonestProver K) (B : PackBasis F)
   intro hm hx w ch hw
   let w' := Classical.choose hx
   have hw' : h.public w' = x.1 := Classical.choose_spec hx
-  have hlinear := AffineLaw.equal_laws_of_mask_image (A B ch) (A B ch)
+  have hlinear := AffineLaw.equal_laws_of_mask_image (A h.transport B ch) (A h.transport B ch)
     (c h B x w ch) (c h B x w' ch) rfl (hm.2 ch w w' hw hw')
   have hpart : EqualLaws (payload h B x w ch) (payload h B x w' ch) := by
     intro v

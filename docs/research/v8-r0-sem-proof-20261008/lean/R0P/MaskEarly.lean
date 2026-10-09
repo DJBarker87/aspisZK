@@ -9,16 +9,16 @@ open R0P.SemRounds
 open AspisPool.AlgorithmicCircleDecoderV7 AspisR0.ListsResponses
 noncomputable section
 attribute [local instance] Classical.propDecidable
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
 theorem early_candidate_to_prefixZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (B : PackBasis F) (x : TypedContext K Sfield)
+    (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K) (B : PackBasis F) (x : TypedContext K Sfield)
     (rs : List (MsgZ K × ChalZ K)) (hlen : rs.length = 25)
     (cs : List K) (hparse : semChalsZ rs = some cs)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw)) (i : Fin 24) (hi : i.val < 14)
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw)) (i : Fin 24) (hi : i.val < 14)
     (sm : SemMsgZ K) (hcurrent : (rs[i.val]'(by omega)).1 = .semantic sm)
     (hbad : candidateRoundBad x.pub B t (fun _ => 0) (fun j => cs.getD j.val 0) i) :
     semanticBadZ maskClaims B ⟨x,rs.take i.val⟩ sm (cs.getD i.val 0) := by
@@ -67,11 +67,11 @@ theorem early_candidate_to_prefixZ {Sfield : Fin 29 → Subfield K} {F : Subfiel
 #print axioms early_candidate_to_prefixZ
 
 theorem no_hit_early {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
     (hlen : rs.length = 25) (cs : List K) (hparse : semChalsZ rs = some cs)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail)) :
     ∀ i : Fin 24, i.val < 14 →
       ¬ candidateRoundBad x.pub B t (fun _ => 0) (fun j => cs.getD j.val 0) i := by

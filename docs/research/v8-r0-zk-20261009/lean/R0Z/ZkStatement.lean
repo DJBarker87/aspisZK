@@ -295,6 +295,7 @@ abbrev Payload (K : Type) := HonestView.Payload K
 affinity, mask-image, privacy or completeness fact is a structure field. -/
 structure HonestProver (K : Type) where
   Instance : Type
+  transport : Fin 1024 ≃ Fin 1024
   «public» : Instance → Public K
   build : Instance → Trace K
 
@@ -327,7 +328,7 @@ def metadata (outputs : Statement K CommitHandle → Challenges K → Aux)
 
 def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : HonestInstance h F) (ch : Challenges K) : AffTape K F → Payload K :=
-  HonestView.run x.1 B (build h w) ch
+  HonestView.run h.transport x.1 B (build h w) ch
 
 def view (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
@@ -338,7 +339,7 @@ def view (h : HonestProver K) (B : PackBasis F)
 /-- A and b are payload-valued: Meta has no fictitious vector-space instance. -/
 def A (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : HonestInstance h F) (ch : Challenges K) : AffTape K F →ₗ[F] Payload K :=
-  (payloadAffine x.1 B (build h w) ch).linear
+  (payloadAffine h.transport x.1 B (build h w) ch).linear
 
 def b (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : HonestInstance h F) (ch : Challenges K) : Payload K := payload h B x w ch 0
@@ -347,7 +348,7 @@ theorem payload_affine (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K)
     (r : AffTape K F) : payload h B x w ch r = b h B x w ch + A h B x w ch r := by
   simp only [payload, b, A, HonestView.run_eq_payloadAffine]
-  have he := congrFun (AffineMap.decomp (payloadAffine x.1 B (build h w) ch)) r
+  have he := congrFun (AffineMap.decomp (payloadAffine h.transport x.1 B (build h w) ch)) r
   exact he.trans (add_comm _ _)
 
 /-- Actual trace affinity is established by MaskLayout, and the only nonlinear
@@ -428,8 +429,8 @@ def proverOutput (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K)
     (r : AffTape K F) : ProverOutput K CommitHandle Aux :=
   let t := applyAff B (prepare x.1 (build h w) ch) r
-  ⟨fun c => if c.val = 26 ∨ c.val = 27 then 0 else exactInitialEncoder (t c),
-    fun j => exactInitialEncoder (t (if j.val = 0 then 26 else 27)),
+  ⟨fun c => if c.val = 26 ∨ c.val = 27 then 0 else exactInitialEncoder (coeffsOf h.transport t c),
+    fun j => exactInitialEncoder (coeffsOf h.transport t (if j.val = 0 then 26 else 27)),
     view h B outputs x w ch r⟩
 
 inductive IdealSemMsg (K CommitHandle : Type) [Field K]

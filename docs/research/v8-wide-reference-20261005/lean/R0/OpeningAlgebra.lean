@@ -21,6 +21,10 @@ theorem dot_add_right {n : Nat} (w a b : Fin n → K) : dot w (a+b) = dot w a+do
 theorem dot_smul_left {n : Nat} (k : K) (w q : Fin n → K) : dot (k • w) q = k*dot w q := smul_dotProduct _ _ _
 theorem dot_smul_right {n : Nat} (k : K) (w q : Fin n → K) : dot w (k • q) = k*dot w q := dotProduct_smul _ _ _
 
+theorem dot_sum_left {ι : Type*} (s : Finset ι) (w : ι → InitialMessage K)
+    (m : InitialMessage K) : dot (∑ i ∈ s, w i) m = ∑ i ∈ s, dot (w i) m :=
+  sum_dotProduct _ _ _
+
 theorem dot_curve (w : InitialMessage K) (t : Fin 29 → InitialMessage K) (gamma : K) :
     dot w (exactInitialMessageCurve t gamma) = width29Batch (fun l => dot w (t l)) gamma := by
   unfold exactInitialMessageCurve
@@ -39,22 +43,23 @@ theorem functional_curve (e : InitialMessage K →ₗ[K] K) (t : Fin 29 → Init
 
 theorem pointDefect_eq (D : Data K) (gamma : K) (t : Fin 29 → InitialMessage K) (j : Fin 3) :
     pointDefect D gamma t j = width29Batch (D.pointClaims j) gamma-
-      dot (eqWeight (D.points j)) (exactInitialMessageCurve t gamma) := by
+      dot (coeffWeight D.transport (eqWeight (D.points j))) (exactInitialMessageCurve t gamma) := by
   rw [dot_curve]
   simp only [pointDefect, width29Batch, discrepancy, sub_mul, Finset.sum_sub_distrib]
+
+theorem extraDefect_eq (D : Data K) (gamma : K) (t : Fin 29 → InitialMessage K) :
+    extraDefect D gamma t = width29Batch D.extraClaims gamma-
+      dot D.extraWeight (exactInitialMessageCurve t gamma) := by
+  rw [dot_curve]
+  simp only [extraDefect, width29Batch, extraDiscrepancy, sub_mul, Finset.sum_sub_distrib]
 
 theorem pointPolynomial_eval (D : Data K) (gamma v kappa : K) (t : Fin 29 → InitialMessage K) :
     (pointPolynomial D gamma v t).eval kappa =
       claim D gamma v kappa-dot (weights D kappa) (exactInitialMessageCurve t gamma) := by
-  have hd : dot (∑ j : Fin 3, kappa^(j.val+1) • eqWeight (D.points j))
-      (exactInitialMessageCurve t gamma) =
-      ∑ j : Fin 3, kappa^(j.val+1)*dot (eqWeight (D.points j)) (exactInitialMessageCurve t gamma) := by
-    rw [show dot (∑ j : Fin 3, kappa^(j.val+1) • eqWeight (D.points j))
-        (exactInitialMessageCurve t gamma) = ∑ j : Fin 3, dot (kappa^(j.val+1) • eqWeight (D.points j))
-        (exactInitialMessageCurve t gamma) from sum_dotProduct _ _ _]
-    simp only [dot_smul_left]
-  simp only [pointPolynomial, eval_add, eval_C, eval_finsetSum, eval_monomial, pointDefect_eq,
-    claim, weights, dot_add_left, hd, inactiveDefect, mul_sub, sub_mul, Finset.sum_sub_distrib]
+  simp only [pointPolynomial, eval_add, eval_C, eval_finsetSum, eval_monomial,
+    pointDefect_eq, extraDefect_eq, claim, weights, coeffWeight_add, coeffWeight_sum,
+    coeffWeight_smul, dot_add_left, dot_sum_left, dot_smul_left, inactiveDefect,
+    mul_sub, sub_mul, Finset.sum_sub_distrib]
   simp_rw [mul_comm (width29Batch _ gamma), mul_comm (dot _ _)]
   ring
 

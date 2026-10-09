@@ -111,7 +111,7 @@ open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 noncomputable section
 variable {Sfield : Fin 29 → Subfield WideExact} {Pf : Type} {L : Nat}
-variable (maskClaims : (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskClaims)
+variable (maskClaims : (Fin 29 → WideExact) → (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskClaims)
 variable (B : PackBasis (Sfield 0))
 variable (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
 variable (msg : Pf → Nat → MsgZ WideExact)

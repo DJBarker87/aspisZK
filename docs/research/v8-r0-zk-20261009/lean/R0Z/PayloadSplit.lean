@@ -14,19 +14,19 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 
 abbrev PointFunction (K : Type) := (Fin 10 → K) → K
 
-def maskLinear (B : PackBasis F) (a : Fin 10 → K) : Trace K →ₗ[K] K :=
+def maskLinear (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (a : Fin 10 → K) : Trace K →ₗ[K] K :=
   (∑ c : Fin 16, (MaskedProtocol.maskFactors B a).c1 c •
     claimsLinear a 0 (Fin.castLE (by omega) c)) +
     (MaskedProtocol.maskFactors B a).explicitG • claimsLinear a 0 27 +
-    ∑ c : Fin 10, (MaskedProtocol.maskFactors B a).maskOnly c •
-      claimsLinear a 0 ⟨16+c.val, by omega⟩
+    (∑ c : Fin 10, (MaskedProtocol.maskFactors B a).maskOnly c •
+      claimsLinear a 0 ⟨16+c.val, by omega⟩) + extraLinear π a 28
 
-theorem maskLinear_apply (B : PackBasis F) (a : Fin 10 → K) (t : Trace K) :
-    maskLinear B a t = MaskedProtocol.maskValue B
+theorem maskLinear_apply (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (a : Fin 10 → K) (t : Trace K) :
+    maskLinear π B a t = MaskedProtocol.maskValue B
       (fun c => honestClaims t a 0 (Fin.castLE (by omega) c))
-      (fun c => honestClaims t a 0 ⟨16+c.val, by omega⟩) (honestClaims t a 0 27) a := by
+      (fun c => honestClaims t a 0 ⟨16+c.val, by omega⟩) (honestClaims t a 0 27) a + R0P.Mask.honestExtra π t a 28 := by
   simp only [maskLinear, LinearMap.add_apply, LinearMap.sum_apply,
-    LinearMap.smul_apply, smul_eq_mul, claimsLinear_apply, MaskedProtocol.maskValue]
+    LinearMap.smul_apply, smul_eq_mul, claimsLinear_apply, extraLinear_apply, MaskedProtocol.maskValue]
 
 def rounds (ch : Challenges K) (j : Fin 10) : PointFunction K →ₗ[K] K[X] :=
   (Lagrange.interpolate Finset.univ (fun k : Fin 28 => (k.val : K))).comp
@@ -44,12 +44,12 @@ theorem rounds_apply (ch : Challenges K) (j : Fin 10) (f : PointFunction K) :
 
 /-- All mask contributions, including the round masks, and all direct linear
 observations. This map does not read the instance or either tape. -/
-def L (B : PackBasis F) (ch : Challenges K) : Trace K →ₗ[K] Payload K :=
+def L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Trace K →ₗ[K] Payload K :=
   LinearMap.pi fun coord => match coord with
-  | .maskSum => ∑ bits : Fin 10 → Bool, maskLinear B (fun i => if bits i then 1 else 0)
+  | .maskSum => ∑ bits : Fin 10 → Bool, maskLinear π B (fun i => if bits i then 1 else 0)
   | .semanticCoeff j i => (Polynomial.lcoeff K i.val).comp
-      ((rounds ch j).comp (LinearMap.pi (maskLinear B)))
-  | coord => (LinearMap.proj coord).comp (linearPayload ch)
+      ((rounds ch j).comp (LinearMap.pi (maskLinear π B)))
+  | coord => (LinearMap.proj coord).comp (linearPayload π ch)
 
 abbrev RoundPayload (K : Type) := Fin 10 → Fin 28 → K
 
@@ -71,13 +71,13 @@ def actual (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K)
     (r : T K F) : Trace K :=
   applyAff B (prepare pub (applyEligible t r.2.2) ch) (aff r)
 
-def payload (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K)
+def payload (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K)
     (r : T K F) : Payload K :=
-  run pub B (applyEligible t r.2.2) ch (aff r)
+  run π pub B (applyEligible t r.2.2) ch (aff r)
 
-theorem L_round (B : PackBasis F) (ch : Challenges K) (t : Trace K)
+theorem L_round (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K)
     (j : Fin 10) (i : Fin 28) :
-    L B ch t (.semanticCoeff j i) = (rounds ch j (fun a => maskLinear B a t)).coeff i.val := rfl
+    L π B ch t (.semanticCoeff j i) = (rounds ch j (fun a => maskLinear π B a t)).coeff i.val := rfl
 
 theorem O_round (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K)
     (j : Fin 10) (i : Fin 28) :
@@ -87,47 +87,56 @@ attribute [local irreducible] prepare helper applyAff traceAffine batchLinear
   quotientLinear openingWeights honestClaims MaskedProtocol.terminalZ MaskedProtocol.maskValue
   claimsLinear dotLinear relationLinear
 
-private theorem run_split_maskSum (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_maskSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) :
-    run pub B t ch r (.maskSum) = L B ch (applyAff B (prepare pub t ch) r) (.maskSum) +
+    run π pub B t ch r (.maskSum) = L π B ch (applyAff B (prepare pub t ch) r) (.maskSum) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.maskSum) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.sum_apply,
     maskLinear_apply, Pi.add_apply, LinearMap.zero_apply, add_zero]
 
-private theorem run_split_semanticCoeff (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_semanticCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 10) (i : Fin 28) :
-    run pub B t ch r (.semanticCoeff j i) = L B ch (applyAff B (prepare pub t ch) r) (.semanticCoeff j i) +
+    run π pub B t ch r (.semanticCoeff j i) = L π B ch (applyAff B (prepare pub t ch) r) (.semanticCoeff j i) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.semanticCoeff j i) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [Pi.add_apply, L_round, O_round]
-  change _ = (rounds ch j (fun a => maskLinear B a u)).coeff i.val +
+  change _ = (rounds ch j (fun a => maskLinear π B a u)).coeff i.val +
     (rounds ch j (fun a => ch.sem 14 * terminalValue pub (ch.sem 0) (ch.sem 1)
       (ch.sem 2) (ch.sem 13) (zc ch) B (honestClaims u a) a)).coeff i.val
   rw [← Polynomial.coeff_add, ← map_add]
   simp only [rounds_apply, Pi.add_apply, maskLinear_apply, run, MaskedProtocol.terminalZ, u]
 
-private theorem run_split_pointClaim (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 3) (c : Fin 29) :
-    run pub B t ch r (.pointClaim j c) = L B ch (applyAff B (prepare pub t ch) r) (.pointClaim j c) +
+    run π pub B t ch r (.pointClaim j c) = L π B ch (applyAff B (prepare pub t ch) r) (.pointClaim j c) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.pointClaim j c) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, claimsLinear_apply, Pi.add_apply,
     LinearMap.zero_apply, add_zero]
 
-private theorem run_split_ood (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_extraClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K)
+    (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (c : Fin 29) :
+    run π pub B t ch r (.extraClaim c) = L π B ch (applyAff B (prepare pub t ch) r) (.extraClaim c) +
+      O pub B ch (applyAff B (prepare pub t ch) r) (.extraClaim c) := by
+  simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.comp_apply,
+    LinearMap.proj_apply, linearPayload, extraLinear_apply, Pi.add_apply,
+    LinearMap.zero_apply, add_zero]
+
+private theorem run_split_ood (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 2) (c : Fin 29) :
-    run pub B t ch r (.ood j c) = L B ch (applyAff B (prepare pub t ch) r) (.ood j c) +
+    run π pub B t ch r (.ood j c) = L π B ch (applyAff B (prepare pub t ch) r) (.ood j c) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.ood j c) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.comp_apply,
-    LinearMap.proj_apply, linearPayload, oodLinear_apply, Pi.add_apply,
+    LinearMap.proj_apply, linearPayload, coeffsLinear_apply, oodLinear_apply, Pi.add_apply,
     LinearMap.zero_apply, add_zero]
+  rfl
 
-private theorem run_split_inactiveSum (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) :
-    run pub B t ch r (.inactiveSum) = L B ch (applyAff B (prepare pub t ch) r) (.inactiveSum) +
+    run π pub B t ch r (.inactiveSum) = L π B ch (applyAff B (prepare pub t ch) r) (.inactiveSum) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.inactiveSum) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.comp_apply,
@@ -135,49 +144,51 @@ private theorem run_split_inactiveSum (pub : Public K) (B : PackBasis F) (t : Tr
     dotLinear, smul_eq_mul, AspisR0.LinearDual.dot, Pi.add_apply,
     LinearMap.zero_apply, add_zero]
 
-private theorem run_split_openingCoeff (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_openingCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (i : Fin 7) :
-    run pub B t ch r (.openingCoeff i) = L B ch (applyAff B (prepare pub t ch) r) (.openingCoeff i) +
+    run π pub B t ch r (.openingCoeff i) = L π B ch (applyAff B (prepare pub t ch) r) (.openingCoeff i) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.openingCoeff i) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, Polynomial.lcoeff_apply, relationLinear_apply,
     Pi.add_apply, LinearMap.zero_apply, add_zero]
 
-private theorem run_split_finalCoeff (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_finalCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (i : Fin 256) :
-    run pub B t ch r (.finalCoeff i) = L B ch (applyAff B (prepare pub t ch) r) (.finalCoeff i) +
+    run π pub B t ch r (.finalCoeff i) = L π B ch (applyAff B (prepare pub t ch) r) (.finalCoeff i) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.finalCoeff i) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, foldLinear_apply, Pi.add_apply,
     LinearMap.zero_apply, add_zero]
 
-private theorem run_split_opened (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_split_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) :
-    run pub B t ch r (.opened q s c) = L B ch (applyAff B (prepare pub t ch) r) (.opened q s c) +
+    run π pub B t ch r (.opened q s c) = L π B ch (applyAff B (prepare pub t ch) r) (.opened q s c) +
       O pub B ch (applyAff B (prepare pub t ch) r) (.opened q s c) := by
   let u := applyAff B (prepare pub t ch) r
   simp only [run, L, O, roundInclusion, LinearMap.pi_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, Pi.add_apply, LinearMap.zero_apply, add_zero]
   split_ifs <;> simp only [LinearMap.comp_apply, LinearMap.proj_apply,
-    AspisWide.Agreement.exactInitialLinear_apply, LinearMap.zero_apply]
+    AspisWide.Agreement.exactInitialLinear_apply, LinearMap.zero_apply, coeffsLinear_apply]
+  rfl
 
 /-- Componentwise equality to the existing honest view, without layout assumptions. -/
-theorem run_split (pub : Public K) (B : PackBasis F) (t : Trace K)
+theorem run_split (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) :
-    run pub B t ch r = L B ch (applyAff B (prepare pub t ch) r) +
+    run π pub B t ch r = L π B ch (applyAff B (prepare pub t ch) r) +
       O pub B ch (applyAff B (prepare pub t ch) r) := by
   funext coord
   cases coord with
-  | maskSum => exact run_split_maskSum pub B t ch r
-  | semanticCoeff j i => exact run_split_semanticCoeff pub B t ch r j i
-  | pointClaim j c => exact run_split_pointClaim pub B t ch r j c
-  | ood j c => exact run_split_ood pub B t ch r j c
-  | inactiveSum => exact run_split_inactiveSum pub B t ch r
-  | openingCoeff i => exact run_split_openingCoeff pub B t ch r i
-  | finalCoeff i => exact run_split_finalCoeff pub B t ch r i
-  | opened q s c => exact run_split_opened pub B t ch r q s c
+  | maskSum => exact run_split_maskSum π pub B t ch r
+  | semanticCoeff j i => exact run_split_semanticCoeff π pub B t ch r j i
+  | pointClaim j c => exact run_split_pointClaim π pub B t ch r j c
+  | extraClaim c => exact run_split_extraClaim π pub B t ch r c
+  | ood j c => exact run_split_ood π pub B t ch r j c
+  | inactiveSum => exact run_split_inactiveSum π pub B t ch r
+  | openingCoeff i => exact run_split_openingCoeff π pub B t ch r i
+  | finalCoeff i => exact run_split_finalCoeff π pub B t ch r i
+  | opened q s c => exact run_split_opened π pub B t ch r q s c
 
 theorem actual_add_pure (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (m : M K F) (n : N K F) :
@@ -219,17 +230,17 @@ theorem O_add_pure (pub : Public K) (B : PackBasis F) (t : Trace K)
   rw [terminal_add_pure]
 
 /-- Common slope: independent of the honest instance and all of N. -/
-def pureLinear (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] Payload K :=
-  ((L B ch).restrictScalars F).comp (pureTrace B)
+def pureLinear (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] Payload K :=
+  ((L π B ch).restrictScalars F).comp (pureTrace B)
 
-theorem M_pure (pub : Public K) (B : PackBasis F) (t : Trace K)
+theorem M_pure (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (m : M K F) (n : N K F) :
-    payload pub B t ch (m,n) = payload pub B t ch (0,n) + pureLinear B ch m := by
+    payload π pub B t ch (m,n) = payload π pub B t ch (0,n) + pureLinear π B ch m := by
   simp only [payload, run_split]
-  change L B ch (actual pub B t ch (m,n)) + O pub B ch (actual pub B t ch (m,n)) =
-    L B ch (actual pub B t ch (0,n)) + O pub B ch (actual pub B t ch (0,n)) + _
+  change L π B ch (actual pub B t ch (m,n)) + O pub B ch (actual pub B t ch (m,n)) =
+    L π B ch (actual pub B t ch (0,n)) + O pub B ch (actual pub B t ch (0,n)) + _
   rw [actual_add_pure, map_add, O_add_pure]
-  change _ = _ + L B ch (pureTrace B m)
+  change _ = _ + L π B ch (pureTrace B m)
   abel
 
 #print axioms run_split

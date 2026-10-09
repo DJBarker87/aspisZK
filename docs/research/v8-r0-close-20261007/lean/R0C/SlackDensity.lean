@@ -46,11 +46,11 @@ theorem d2_round0 (p : Params E Sfield Pf I B Kw) (hδ : 0 ≤ δ) (hs : Sampler
       _ ≤ ((bad0 x y).card : ℚ) * ((1+δ) / ((Fintype.card E : ℚ) - 1)) :=
           mean_exists_field_le _ _ _ hs.gamma
       _ ≤ epsilonSlack E δ 0 := by
-          have hc : (bad0 x y).card ≤ 336869026605739 + 14000 := by
+          have hc : (bad0 x y).card ≤ 336869026605739 + 16800 := by
             have := (grouped_cardinalities (data x y) 0 0 0 0 0 (by simp)).1
             simpa [bad0] using this
           have hpos := card_E_pos (E := E)
-          change _ ≤ (1+δ) * ((336869026605739 + 14000 : ℚ) / ((Fintype.card E : ℚ)-1))
+          change _ ≤ (1+δ) * ((336869026605739 + 16800 : ℚ) / ((Fintype.card E : ℚ)-1))
           simpa only [Nat.cast_add, Nat.cast_ofNat] using scaled_card_le hc hpos.le hδ
   · rw [mean_roundBad_zero]
     · exact epsilonSlack_nonneg hδ 0
@@ -72,8 +72,8 @@ theorem d2_round1 (p : Params E Sfield Pf I B Kw) (hδ : 0 ≤ δ) (hs : Sampler
       _ ≤ ((bad1 x y γ v).card : ℚ) * ((1+δ) / (Fintype.card E : ℚ)) :=
           mean_exists_field_le _ _ _ hs.kappa
       _ ≤ epsilonSlack E δ 1 := by
-          have hc : (bad1 x y γ v).card ≤ 300 := B4_card (data x y) γ v
-          change _ ≤ (1+δ) * ((300 : ℚ) / (Fintype.card E : ℚ))
+          have hc : (bad1 x y γ v).card ≤ 400 := B4_card (data x y) γ v
+          change _ ≤ (1+δ) * ((400 : ℚ) / (Fintype.card E : ℚ))
           simpa only [Nat.cast_add, Nat.cast_ofNat] using
             scaled_card_le hc (Nat.cast_nonneg (α := ℚ) (Fintype.card E)) hδ
   · rw [mean_roundBad_zero]

@@ -43,17 +43,17 @@ words with the prefix's C2 message. Malformed prefixes have no candidates. -/
 def candidates (x : TypedContext K Sfield) (rounds : List (Msg K K (SemMsg K) × Chal K K))
     (sm : SemMsg K) : Finset (Trace K) :=
   if rounds.length < 2 then
-    (Lambda (c2Words x padWord padWord)).filter (fun t => t 26 = 0 ∧ t 27 = 0)
+    (LambdaRows x.transport (c2Words x padWord padWord)).filter (fun t => t 26 = 0 ∧ t 27 = 0)
   else if rounds.length = 2 then
     match sm with
-    | .h1 h g => Lambda (c2Words x h g)
+    | .h1 h g => LambdaRows x.transport (c2Words x h g)
     | _ => ∅
   else
     match c2Of rounds with
-    | some (h, g) => Lambda (c2Words x h g)
+    | some (h, g) => LambdaRows x.transport (c2Words x h g)
     | Option.none => ∅
 
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 
 theorem candidates_card (x : TypedContext K Sfield)
     (rounds : List (Msg K K (SemMsg K) × Chal K K)) (sm : SemMsg K) :
@@ -61,16 +61,16 @@ theorem candidates_card (x : TypedContext K Sfield)
   classical
   unfold candidates
   split_ifs
-  · exact (Finset.card_filter_le _ _).trans (Lambda_card _)
+  · exact (Finset.card_filter_le _ _).trans (LambdaRows_card x.transport _)
   · cases sm with
     | none => simp
-    | h1 h g => exact Lambda_card _
+    | h1 h g => exact LambdaRows_card x.transport _
     | roundPoly p => simp
   · cases hc : c2Of rounds with
     | none => simp
     | some p =>
       rcases p with ⟨h, g⟩
-      exact Lambda_card _
+      exact LambdaRows_card x.transport _
 
 /-- The round polynomials visible at a round: the prefix's `roundPoly`
 messages at rounds 14 + j, the current message at the current round. -/

@@ -13,17 +13,13 @@ open R0P R0C.SemStatement AspisPool.AlgorithmicCircleDecoderV7
   AspisR0.ListsResponses AspisWide.InitialEncoder AspisWide.Agreement
   AspisV6Width29CorrelatedAgreement Polynomial
 
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 
 noncomputable section
 attribute [local instance] Classical.propDecidable
 
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {Sfield : Fin 29 → Subfield K}
-
-/-- The pre-C2 trace, with the two not-yet-committed message lanes zeroed. -/
-def padC2Trace (t : Trace K) : Trace K :=
-  Function.update (Function.update t 26 0) 27 0
 
 #print axioms padC2Trace
 
@@ -211,7 +207,7 @@ private theorem padAgreement_lane27 (x : TypedContext K Sfield) (t : Trace K)
 
 /-- Padding both not-yet-committed lanes preserves every original joint
 agreement position with the C2 words, so it preserves Lambda membership. -/
-theorem mem_Lambda_pad (x : TypedContext K Sfield) (h g : InitialWord K)
+private theorem mem_Lambda_pad_coeffs (x : TypedContext K Sfield) (h g : InitialWord K)
     (t : Trace K) (ht : t ∈ Lambda (c2Words x h g)) :
     padC2Trace t ∈ Lambda (c2Words x padWord padWord) := by
   have hbound : 38230 ≤
@@ -246,6 +242,13 @@ theorem mem_Lambda_pad (x : TypedContext K Sfield) (h g : InitialWord K)
         exact hrl
   apply (mem_Lambda _ _).mpr
   exact hbound.trans (Finset.card_le_card hincl)
+
+theorem mem_Lambda_pad (x : TypedContext K Sfield) (h g : InitialWord K)
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x h g)) :
+    padC2Trace t ∈ LambdaRows x.transport (c2Words x padWord padWord) := by
+  rw [mem_LambdaRows] at ht ⊢
+  rw [coeffsOf_padC2Trace]
+  exact mem_Lambda_pad_coeffs x h g (coeffsOf x.transport t) ht
 
 #print axioms mem_Lambda_pad
 

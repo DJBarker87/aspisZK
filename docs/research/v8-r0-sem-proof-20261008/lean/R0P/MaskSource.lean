@@ -14,7 +14,7 @@ attribute [local instance] Classical.propDecidable
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
-def sourceDataWithFallbackZ (fallback1 : Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
+def sourceDataWithFallbackZ (fallback1 : Point K) (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K)
     {Sfield : Fin 29 → Subfield K} {F : Subfield K} (B : PackBasis F) :
     SourceData (K := K) (E := K) (TypedContext K Sfield) (SemMsgZ K) (Trace K) Sfield where
   semanticRounds := 25
@@ -24,29 +24,29 @@ def sourceDataWithFallbackZ (fallback1 : Point K) (maskClaims : (Fin 29 → K) �
   openingView := openingViewZ
   decision := decisionZ maskClaims B
 
-def sourceDataZ (maskClaims : (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
+def sourceDataZ (maskClaims : (Fin 29 → SemE) → (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
     {Sfield : Fin 29 → Subfield SemE} {F : Subfield SemE} (B : PackBasis F) :=
   sourceDataWithFallbackZ (Sfield := Sfield) circleFallback1 maskClaims B
 
-def duplexRowsZ (maskClaims : (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
+def duplexRowsZ (maskClaims : (Fin 29 → SemE) → (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
     {Sfield : Fin 29 → Subfield SemE} {F : Subfield SemE} (B : PackBasis F)
     {S I A : Type} (budget : Nat → ℚ) :
     FS2.RoundByRound' (TypedContext SemE Sfield) (MsgZ SemE) (ChalZ SemE × S) I A where
   doomed := fun P T => doomed (sourceDataZ maskClaims B) (valuePrefix P) T
   ε := budget
 
-def combinedDecisionZ (maskClaims : (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
+def combinedDecisionZ (maskClaims : (Fin 29 → SemE) → (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
     {Sfield : Fin 29 → Subfield SemE} (B : PackBasis (Sfield 0))
     (P : FS.Prefix (TypedContext SemE Sfield) (MsgZ SemE) (Duplex.Chal (ChalZ SemE)))
     (m : MsgZ SemE) : Bool := decisionZ maskClaims B (valuePrefix P) m
 
 /-- The outer source extension leaves the payment extractor unchanged. -/
-theorem extractZ_eq (maskClaims : (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
+theorem extractZ_eq (maskClaims : (Fin 29 → SemE) → (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
     {Sfield : Fin 29 → Subfield SemE} {F : Subfield SemE} (B : PackBasis F)
     {I A : Type} (x : TypedContext SemE Sfield) (T : Table I A) :
     extract (sourceDataZ maskClaims B) x T = extract (sourceData B) x T := by rfl
 
-theorem combinedD1Z (maskClaims : (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
+theorem combinedD1Z (maskClaims : (Fin 29 → SemE) → (Fin 29 → SemE) → (Fin 10 → SemE) → SemE)
     {Sfield : Fin 29 → Subfield SemE} {Pf : Type} {L : Nat} (B : PackBasis (Sfield 0))
     (p : Duplex.Params (MsgZ SemE) (ChalZ SemE) L) (msg : Pf → Nat → MsgZ SemE)
     (decode : R0P.MaskDuplex.CombinedDecode (SemMsgZ SemE) Sfield L) (budget : Nat → ℚ) :

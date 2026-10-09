@@ -2427,3 +2427,85 @@ order: T1 (D13′, D14′, D14″) → T2 (D15 `MaskImageOn Good`, `hvzk_stat`) 
 ZF1 (ZK_FS composition with the ledger terms named) → the model-level abort
 accounting (P3). ZR1–ZR3 are source refinement and are proved against the
 deployed prover and verifier after §8.
+### T1 completed — transport π, Libra tail, and fourth-row B3 (2026-10-09)
+
+Implemented D13′, D14′ and D14″ on
+`codex/t1-transport-libra-20261009`, based on
+`fcb5701990e14ebab3c00c24729ddfea88517eb9`. The prior statement-level stop
+remains recorded above and in `t1/evidence.json.previous_stop`; D14″ supplies
+the missing extra-row gamma collision set.
+
+The opening data and FS witness now carry π and the coefficient-indexed
+extra row. `coeffWeight` transports the point and inactive weights;
+`coeffsOf`/`rowsOf` and `LambdaRows` connect coefficient candidates to semantic
+rows. Binding uses `B3_extra_outside` after the extra B4 clause to establish
+every extra-claim equality. The fourth term gives `pointPolynomial` degree at
+most 4. The concrete mask is the previous value plus `yx 28`, with the two
+degree-27 univariates in coefficient cells 0–55. Its degree proof splits the
+symbolic coefficient sum into two 28-cell sums and a zero remainder, then
+uses the existing VDeg operations.
+
+R0Z threads π through coefficients, quotient batching, OOD/opened symbols,
+the honest prover and the payload maps. The `.extraClaim` coordinate is
+disclosed and retained by `nonRound`; the tail enters the mask total and
+round polynomials. `D13Order` is stated without a concrete instance.
+`D12.MaskImage` and `hvzk_perfect_of_maskImage` retain their form with π
+threaded. D15's `Good` was not added.
+
+Two placement details avoid import cycles without changing the specified
+definitions: `padC2Trace` moved unchanged from SemPad to SemView, and the
+shared `libraWeight` is defined in SemView for `openingStmt`, with the
+`R0P.Mask.libraWeight` abbreviation in MaskProtocol. Row-space `honestClaims`
+and the semantic weights remain unchanged.
+
+**Exact soundness accounting.** `B3_card` is 11,200 (formerly 8,400), the
+gamma-group addend is 16,800 (formerly 14,000), and `B4_card` is 400
+(formerly 300). `R0P.Mask.masked_opening_budget_exact`, adjacent to
+`combined_fiat_shamir_masked`, records
+`ε WideExact 0 = (336869026605739 + 16800) / (|E| - 1)` and
+`ε WideExact 1 = 400 / |E|`. Thus the gamma numerator is exactly
+336,869,026,622,539 and the opening union-bound increase is exactly
+`2800 / (|E| - 1) + 100 / |E|`. The closed combined bound remains
+`Qtot * ((1 + delta0) * (choose(9557,22) / choose(262144,22))) + κ Qtot`:
+the existing q22 term still dominates the updated individual errors. No
+other soundness term changed.
+
+**Replay evidence.** All R0 sources were staged into `sources/R0/` on
+`dombarker@100.108.41.90`, using the pinned
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006` workspace and its
+compiled cache. Attempts **3282–3366** used `sh run2.sh N Module 7000 7`,
+one module at a time under `/tmp/aspis-r0-lean.lock`, in dependency order.
+The adapter uses MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0, and a 900 s
+timeout. The reservation was 24 GiB populated plus this job's 7 GiB, below
+55 GiB. Lean is v4.32.0; Mathlib is
+`81a5d257c8e410db227a6665ed08f64fea08e997`.
+
+There were 85 attempts: 78 successful distinct targets and seven local
+elaboration failures, all preserved in [t1/evidence.json](t1/evidence.json).
+The repairs were explicit dot/sum rewrites, `Finset.mem_map` reindexing with
+Lambda kept locally irreducible, and definitional coefficient-function
+equalities. No limit was raised. Failed elaboration logs contain Lean's own
+placeholder diagnostics and option suggestions; no forbidden declaration,
+proof escape or option was added to a source. Every changed Lean file has a
+successful replay at its final SHA-256, and all host-staged hashes match.
+No unchanged successful target was replayed. Total compiler wall time was
+492.14 s; the longest module was 23.18 s; peak RSS was 7,042,772 KiB; every
+attempt used zero swap and stayed below the resource/time limits.
+
+| Final target | Attempt | Exit | Wall (s) | Peak RSS (KiB) | Swap |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `R0P/MaskAll` | 3365 | 0 | 2.76 | 6,805,328 | 0 |
+| `R0Z/Z4Maps` | 3366 | 0 | 4.21 | 6,850,240 | 0 |
+
+The required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]` for all three declarations:
+`AspisR0.Opening.wideBinding` (3286),
+`R0P.Mask.combined_fiat_shamir_masked` (3348, also final target 3365), and
+`R0Z.D12.hvzk_perfect_of_maskImage` (3362). The JSON records every attempt's
+target, exit, wall, RSS, swap, base revision, exact source hash and raw audit
+output, plus the final source manifest and dependency order.
+
+The final source scan is clean for the prohibited proof escapes/options;
+no concrete row universe was introduced. `R0C/SemStatement.lean` and
+`R0C/CircleRows.lean` are byte-for-byte unchanged. The commit contains Lean
+sources, this LOG section and the evidence JSON; no binaries.

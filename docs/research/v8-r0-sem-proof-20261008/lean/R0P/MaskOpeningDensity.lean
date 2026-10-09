@@ -11,7 +11,7 @@ open AspisR0.ChordGeometry R0C.SlackStatement AspisWideTower
 noncomputable section
 attribute [local instance] Classical.propDecidable
 variable {Sfield : Fin 29 → Subfield WideExact} {F : Subfield WideExact} {L : Nat}
-variable (maskClaims : (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (B : PackBasis F) (budget : Nat → ℚ)
+variable (maskClaims : (Fin 29 → WideExact) → (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (B : PackBasis F) (budget : Nat → ℚ)
 
 
 
