@@ -3130,3 +3130,38 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2610 | `R0P/SemFiatShamir` | 0 / 0 | 0:05.50 | 6842688 | 0 | 4 | `96b7f16931cb8ceedfdaaeca19182fa8311671b351a943410b1b6eba0e4917e0` |
 
 Source revision(s): `6e15b229b6af6a7a530f05b4c51ed8098631d18e`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+## Lead: G20 accepted; G21 accounting; G22 decision (circle fallback point)
+
+G20 (`da1caa9ef`–`6a9702365`) verified against host evidence (SHA match for
+2600/2603/2608/2610, no `sorryAx`, standard axioms, no errors/warnings, no
+forbidden constructs). `combined_fiat_shamir` has exactly the intended
+premises: `p.rounds = 31`, the four σ-decoder identities, the query bound.
+
+G21 accounting of `maxErr combinedD2Budget 31`:
+- rows 0–23: `(1+δQ)·100·semRoundBudget i / P⁴`, max at row 0
+  (`2176` → `217600·(1+δQ)/P⁴` ≈ 2^-106.3);
+- rows 24–25: `2/P²` ≈ 2^-61;
+- rows 26–30: `(1+δ0)·R0FS.ε i`, max the q22 row ≈ 2^-105.1
+  (`SlackBits.max_error_query`).
+So the maximum is the circle rows' `2/P²`, and the final bound would be
+`Q·2/P² + 2Q²/2^256`. That term is entirely the one-block sentinel model
+of the source's rejection loop (a CM31 draw, probability `1/P²`, counted
+as bad), not an attack.
+
+Decision (G22). The reference verifier is ours to fix; the retry loop buys
+nothing and costs either this 2^-61 term or a variable-length decoder.
+The reference sampler becomes: squeeze `t`; if `t.im ≠ 0` the point is
+`embedCirclePoint (point t)`; otherwise a **fixed fallback point**, `f0`
+for row 24 and `f1 ≠ f0` for row 25, both non-base-rational (embedded
+images of fixed parameters). Bad sets become: row 24 `z0Bad z0 :=
+BaseRational z0 ∨ z0 = f1`; row 25 `z1Bad z0 z1 := z1 = z0 ∨ BaseRational
+z1` as now. Then row 24 is bad only on the ≤ 1 parameter with
+`circleSampleParameter t = f1` (the rejected set maps to `f0 ≠ f1`, never
+rational): budget `1/P⁴`. For a doomed prefix at row 25, `z0 ≠ f1`, so
+row 25 is bad only on the ≤ 1-parameter fiber of `z0`: budget `1/P⁴`.
+`maxErr` is then the q22 row, `(1+δ0)·C(9557,22)/C(262144,22)` ≈ 2^-105.1.
+Required source change (reference Rust, `transcript.rs:453–465`): replace
+the retry with the fallback; recorded here, to be applied with the lead's
+sign-off before the refinement job. `rowBudget` for circle rows in
+`R0C.SemStatement` becomes `1/P⁴`; `z0Bad` gains the `= f1` disjunct.
