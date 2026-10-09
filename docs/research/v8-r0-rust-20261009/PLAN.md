@@ -33,7 +33,7 @@ recorded in SPEC.md.
 
 Codes (`Wide/InitialEncoder.lean`, `Wide/FinalEncoder.lean`,
 `R0/Fold`, `R0/RoundNormalization`): initial encoder `K¹⁰²⁴ → K^{2²⁰}`
-(circle encoder ∘ R16 basis transport, blowup 2¹⁰), 2¹⁸ fibres of four
+(the Lean `exactInitialEncoder` directly: message indexed by trace row, Chebyshev-product natural basis, blowup 2¹⁰ — **no R16 transport**; corrected after S1), 2¹⁸ fibres of four
 points; `foldWord α` (φ on each fibre, powers of α); final encoder
 `E²⁵⁶ → E^{2¹⁸}` (`exactCircleX/Y`); `citedDualFold` with the explicit
 quarter.
@@ -94,3 +94,15 @@ immaterial to the proof; reuse the proved eight-way tree (R552).
   (composition).
 
 Stopped: M2 (q22 shape on the four-fold PCS) — wrong target.
+
+## Decisions after S1 (2026-10-09)
+
+- Encoder: implement `Wide/InitialEncoder.exactInitialEncoder` literally
+  (SPEC §3); no R16 transport. Chord/quotient arithmetic converts natural ↔
+  monomial coefficients with `M_n` (SPEC §3, `CircleNaturalBasis.lean:41–68`).
+- Wire format: SPEC §9 proposal P1 is adopted (domain `aspis:r0:20261009:v1`,
+  row labels `0xa0+i`, `tag ‖ len_u32le ‖ payload`, E/K/F as 8/4/1 LE limbs).
+  Commitments are absorbed as roots; polynomials as fixed 28/6-coefficient
+  records. The Lean `Duplex.Params` full-word/unbounded-polynomial encoding
+  is route A's abstraction; the bridge is the authentication and parser
+  refinement (REFINEMENT.md G14/G07), not a change to either side.
