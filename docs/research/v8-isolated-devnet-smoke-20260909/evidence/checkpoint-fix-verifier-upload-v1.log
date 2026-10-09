@@ -1,0 +1,40 @@
+{"name": "verifier-loader-buffer-create", "simulation_error": null, "units": 2520, "bytes": 386}
+{"name": "verifier-loader-buffer-create", "signature": "j594s4LziunfUkZfnxFDywboQJ2vPycsm3EBRJS9gyrvjKURNfdp88vCm1yHsRJQJPcpg79PuKFLLJanEZnktey", "slot": 495671478, "fee": 20000, "units_consumed": 2520, "declared_cu": 1200000, "wire_bytes": 386, "explorer": "https://explorer.solana.com/tx/j594s4LziunfUkZfnxFDywboQJ2vPycsm3EBRJS9gyrvjKURNfdp88vCm1yHsRJQJPcpg79PuKFLLJanEZnktey?cluster=devnet"}
+{"name": "verifier-loader-batch-0", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-3600", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-7200", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-10800", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-18000", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-14400", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-25200", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-21600", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-28800", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-32400", "simulation_error": null, "units": 7110, "bytes": 3888}
+{"name": "verifier-loader-batch-36000", "simulation_error": null, "units": 7110, "bytes": 3888}
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/ZK-v8-isolated-devnet-smoke-20260909/docs/research/v8-isolated-devnet-smoke-20260909/upload_program.py", line 34, in <module>
+    pending=list(workers.map(submit_batch,batches))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/ZK-v8-isolated-devnet-smoke-20260909/docs/research/v8-isolated-devnet-smoke-20260909/upload_program.py", line 29, in submit_batch
+    result=d.transaction(name+'-loader-batch-'+str(batch[0][0]),[i for _,i in batch],wait=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/ZK-v8-isolated-devnet-smoke-20260909/docs/research/v8-isolated-devnet-smoke-20260909/devnet.py", line 154, in transaction
+    result=rpc('sendTransaction',[encoded,{'encoding':'base64','skipPreflight':False,'preflightCommitment':'finalized','maxRetries':20}])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/ZK-v8-isolated-devnet-smoke-20260909/docs/research/v8-isolated-devnet-smoke-20260909/devnet.py", line 50, in rpc
+    raise RuntimeError(message) from None
+RuntimeError: HTTP Error 429: Too Many Requests
