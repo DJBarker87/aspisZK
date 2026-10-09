@@ -5,7 +5,7 @@ use crate::state_only_candidate_prefix::r0::{build_pair_forest_transported, Colu
 use aspis_core::r0::CodeField;
 use aspis_core::{
     field::{WideExact as E, M31, QM31},
-    r0::{
+    r0_probe::{
         basis::{BasisSize, NaturalBasis},
         prover::{self, Commitment, CommitmentTime, EncodingDomain},
         transcript::SemanticBoundary,

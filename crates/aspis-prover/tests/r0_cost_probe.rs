@@ -2,7 +2,7 @@
 use aspis_core::r0_probe::onchain;
 use aspis_core::{
     field::WideExact as E,
-    r0::{
+    r0_probe::{
         basis::{BasisSize, NaturalBasis},
         domain::FibreIndex,
         verifier,
@@ -36,10 +36,12 @@ fn verify_both(
     let phases = PHASES.with(|v| std::mem::take(&mut *v.borrow_mut()));
     let actual_fields = aspis_core::r0_probe::equality_trace::take();
     let reference = r0::r0_verify_re3(public, bytes, hash, Some(trace));
+    #[cfg(not(feature = "r0-probe-c1"))]
     let frozen = {
         let _guard = aspis_core::r0_probe::equality_trace::reference();
         aspis_statement::r0::r0_verify(public, bytes, hash, None)
     };
+    #[cfg(not(feature = "r0-probe-c1"))]
     assert_eq!(format!("{reference:?}"), format!("{frozen:?}"));
     let reference_phases = PHASES.with(|v| std::mem::take(&mut *v.borrow_mut()));
     assert_eq!(
@@ -140,6 +142,37 @@ fn both_variants_roundtrip_and_corruption_teeth() {
         assert_eq!(checked.queries, prepared.challenges.queries);
         assert_eq!(boundary.roots(), [semantic.c1_root, semantic.c2_root]);
         assert_eq!(boundary.claims, semantic.claims);
+        #[cfg(feature = "r0-probe-c1")]
+        {
+            let previous = std::fs::read(
+                dir.parent()
+                    .unwrap()
+                    .join("c0-fixtures")
+                    .join(format!("{name}.proof.bin")),
+            )
+            .unwrap();
+            let shared_end = r0::OPENING_OFFSET + 5 + 29 * 32 + 5 + 58 * 32 + 5 + 32;
+            assert_eq!(
+                &bytes[..shared_end],
+                &previous[..shared_end],
+                "shared proof prefix changed"
+            );
+            let b0 = aspis_statement::r0::semantic_handoff(&semantic).unwrap();
+            let mut t0 = aspis_core::r0::transcript::OpeningTranscript::new(HOST_HASH, &b0);
+            let mut t1 =
+                aspis_core::r0_probe::transcript::OpeningTranscript::new(HOST_HASH, &boundary);
+            assert_eq!(t0.z0(&boundary.claims), t1.z0(&boundary.claims));
+            assert_eq!(t0.z1(&proof.y0), t1.z1(&proof.y0));
+            assert_eq!(t0.gamma(&proof.y), t1.gamma(&proof.y));
+            assert_eq!(
+                E::from_qm31(t0.kappa(proof.v).unwrap().c0()),
+                t1.kappa(proof.v).unwrap()
+            );
+            assert_eq!(t0.state(), t1.state());
+            assert_eq!(E::from_qm31(t0.tau().unwrap().c0()), t1.tau().unwrap());
+            assert_eq!(t0.state(), t1.state());
+        }
+
         let mut reject = |label: String, changed: Vec<u8>| {
             let error = verify_both(public, &changed, HOST_HASH, None).unwrap_err();
             records.push(json!({"variant":name,"mutation":label,"rejection":format!("{error:?}")}));

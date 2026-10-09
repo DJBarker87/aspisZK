@@ -6,7 +6,7 @@ use crate::{
 use aspis_core::r0_probe::onchain;
 use aspis_core::{
     field::WideExact,
-    r0::{
+    r0_probe::{
         domain::FibreIndex, merkle, transcript::SemanticBoundary, verifier, wire::OpeningView,
         Error as OpeningError,
     },

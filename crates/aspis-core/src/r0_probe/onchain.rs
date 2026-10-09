@@ -169,12 +169,14 @@ fn eq_at(p: &[E; 10], row: usize) -> QM31 {
         })
     })
 }
+#[cfg(not(feature = "r0-probe-c1"))]
 fn weight_at(data: &OpeningData, k: &[E; 4], j: usize) -> E {
     (0..3).fold(indicator(j), |v, p| {
         v.add(k[p + 1].mul_qm31(eq_at(&data.points[p], COEFFICIENT_TO_ROW[j] as usize)))
     })
 }
 #[inline(never)]
+#[cfg(not(feature = "r0-probe-c1"))]
 fn claim_prime(data: &OpeningData, gamma: E, v: E, kappa: E, i: &[E; 3]) -> Result<E, Error> {
     let claim = data.claim(gamma, v, kappa);
     let k = opening::powers::<4>(kappa);
@@ -244,6 +246,7 @@ fn final_encoder(proof: &OpeningView<'_>, u: FibreIndex) -> E {
     })
 }
 #[inline(never)]
+#[cfg(not(feature = "r0-probe-c1"))]
 fn weights(data: &OpeningData, kappa: E) -> Result<Vec<E>, Error> {
     let mut w = heap::filled(1024, E::ZERO)?;
     for j in 0..1024 {
@@ -271,6 +274,7 @@ fn weights(data: &OpeningData, kappa: E) -> Result<Vec<E>, Error> {
     Ok(w)
 }
 #[inline(never)]
+#[cfg(not(feature = "r0-probe-c1"))]
 pub fn check_v2(
     data: &OpeningData,
     kappa: E,
@@ -297,6 +301,99 @@ pub fn check_v2(
     for j in 0..256 {
         let h = &w[4 * j..4 * j + 4];
         let dual = h[0].add(alpha.mul(h[3].add(alpha.mul(h[2].add(alpha.mul(h[1]))))));
+        dot = dot.add(proof.final_coefficient(j).mul(dual));
+    }
+    let rhs = fold::quarter::<E>().mul(dot);
+    #[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+    super::equality_trace::fields(&[lhs, rhs]);
+    if lhs != rhs {
+        return Err(Error::V2);
+    }
+    Ok(())
+}
+
+#[cfg(feature = "r0-probe-c1")]
+fn claim_prime(data: &OpeningData, gamma: E, v: E, kappa: E, i: &[E; 3]) -> Result<E, Error> {
+    if kappa.c1() != QM31::ZERO {
+        return Err(Error::WrongField);
+    }
+    let k = opening::powers::<4>(kappa.c0());
+    let g = opening::powers::<29>(gamma);
+    let mut claim = v;
+    for j in 0..3 {
+        let batch = (0..29).fold(E::ZERO, |s, l| s.add(g[l].mul(data.claims[j][l])));
+        claim = claim.add(batch.mul_qm31(k[j + 1]));
+    }
+    let dot = (0..3).fold(E::ZERO, |s, j| {
+        let mut w = indicator(j).c0();
+        for p in 0..3 {
+            w = w.add(k[p + 1].mul(eq_at(&data.points[p], COEFFICIENT_TO_ROW[j] as usize)));
+        }
+        s.add(i[j].mul_qm31(w))
+    });
+    Ok(claim.sub(dot))
+}
+#[cfg(feature = "r0-probe-c1")]
+fn weights_k(data: &OpeningData, kappa: QM31) -> Result<Vec<QM31>, Error> {
+    let mut w = heap::filled(1024, QM31::ZERO)?;
+    for j in 0..1024 {
+        w[j] = indicator(j).c0();
+    }
+    let k = opening::powers::<4>(kappa);
+    let mut eq = heap::filled(1024, QM31::ZERO)?;
+    for p in 0..3 {
+        eq[0] = QM31::ONE;
+        let mut width = 1;
+        for b in 0..10 {
+            let x = data.points[p][b].c0();
+            for j in 0..width {
+                let v = eq[j];
+                let r = v.mul(x);
+                eq[j + width] = r;
+                eq[j] = v.sub(r);
+            }
+            width *= 2;
+        }
+        for j in 0..1024 {
+            w[j] = w[j].add(k[p + 1].mul(eq[COEFFICIENT_TO_ROW[j] as usize]));
+        }
+    }
+    Ok(w)
+}
+#[cfg(feature = "r0-probe-c1")]
+#[inline(never)]
+pub fn check_v2(
+    data: &OpeningData,
+    kappa: E,
+    tau: E,
+    alpha: E,
+    c: &[E; 7],
+    proof: &OpeningView<'_>,
+) -> Result<(), Error> {
+    if kappa.c1() != QM31::ZERO || tau.c1() != QM31::ZERO {
+        return Err(Error::WrongField);
+    }
+    let lhs = c.iter().rev().fold(E::ZERO, |v, &c| v.mul(alpha).add(c));
+    let mut w = weights_k(data, kappa.c0())?;
+    let mut even = heap::filled(512, QM31::ZERO)?;
+    let mut odd = heap::filled(512, QM31::ZERO)?;
+    let mut twice = heap::filled(512, QM31::ZERO)?;
+    let line = subfield_line(data)?;
+    super::structured_k::quotient_weights(line, &mut w, &mut even, &mut odd, &mut twice)?;
+    let tau = tau.c0();
+    let tau2 = tau.mul(tau);
+    let top = structured::top_rows(511)[1];
+    w[1023] = w[1023].add(tau.mul_m31(top));
+    w[1022] = w[1022].add(tau2.mul(line.b.mul_m31(top)));
+    w[1021] = w[1021].add(tau2.mul(line.c.neg().mul_m31(structured::top_rows(510)[0])));
+    let a = opening::powers::<4>(alpha);
+    let mut dot = E::ZERO;
+    for j in 0..256 {
+        let h = &w[4 * j..4 * j + 4];
+        let dual = E::from_qm31(h[0])
+            .add(a[1].mul_qm31(h[3]))
+            .add(a[2].mul_qm31(h[2]))
+            .add(a[3].mul_qm31(h[1]));
         dot = dot.add(proof.final_coefficient(j).mul(dual));
     }
     let rhs = fold::quarter::<E>().mul(dot);
