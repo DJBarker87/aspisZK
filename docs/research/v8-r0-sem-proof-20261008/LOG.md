@@ -3412,3 +3412,17 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2732 | `R0P/SemDuplexDensity` | 0 / 0 | 0:04.46 | 6847828 | 0 | 4 | `b5a853dd2e9deff895cf7aff3ef5c322c039928e4506a92f30b8cd3366138dac` |
 
 Source revision(s): `ec9da0e3bf365df360dc9457343097cd76fd64e7`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G22 complete: decoder and theorem43 instance (2733–2735)
+
+Unchanged SemDuplexDecodes and SemBridge recompiled against their updated import closure. SemFiatShamir now carries the two fallback sampler identities through the theorem43 instance; no other theorem premise changed. All requested R0P dependency-chain recompiles against R0C 673/675 are green. All 2733–2735 axiom audits use standard axioms only and contain no errors or warnings. G22 is complete; next is G21 accounting.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-cont-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2733 | `R0P/SemDuplexDecodes` | 0 / 0 | 0:11.32 | 6901972 | 0 | 9 | `f885ebfe138c092810c4bb0bd39d4dc7567a4aa4f93148a944edb06c421aa7d6` |
+| 2734 | `R0P/SemBridge` | 0 / 0 | 0:03.31 | 6812280 | 0 | 9 | `fe026af913107a06834976b53f2545644d8babad418872e758b4a332b10d2217` |
+| 2735 | `R0P/SemFiatShamir` | 0 / 0 | 0:05.41 | 6839320 | 0 | 4 | `a9272da739c89b2aa4046cf8be1a7d3c3bc95c2f2edf2a52bdff4f56f1bcee72` |
+
+Source revision(s): `19e6daaf4edadc243ddf93b68ea34bbb0a4957b8`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
