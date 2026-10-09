@@ -256,11 +256,11 @@ fn weights(data: &OpeningData, kappa: E) -> Result<Vec<E>, Error> {
         let mut width = 1;
         for b in 0..10 {
             let x = data.points[p][b].c0();
-            let complement = QM31::ONE.sub(x);
             for j in 0..width {
                 let v = eq[j];
-                eq[j + width] = v.mul(x);
-                eq[j] = v.mul(complement);
+                let right = v.mul(x);
+                eq[j + width] = right;
+                eq[j] = v.sub(right);
             }
             width *= 2;
         }
