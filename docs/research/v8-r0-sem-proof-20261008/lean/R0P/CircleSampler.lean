@@ -434,5 +434,171 @@ theorem circleSample_z1_mass (z0 : Point WideExact) :
 
 #print axioms circleSample_z1_mass
 
+
+/-! ## G22: distinct non-rational fallback points
+
+The legacy sentinel API above remains the accepted G20 checkpoint while the
+new row-specific sampler and its proposed mass bounds are checked. -/
+
+def circleFallbackParameter0 : CircleParam := ⟨0, 1⟩
+def circleFallbackParameter1 : CircleParam := ⟨1, 1⟩
+
+theorem circleFallbackParameter0_im : circleFallbackParameter0.im ≠ 0 := one_ne_zero
+theorem circleFallbackParameter1_im : circleFallbackParameter1.im ≠ 0 := one_ne_zero
+
+theorem circleFallbackParameter_ne : circleFallbackParameter0 ≠ circleFallbackParameter1 := by
+  intro h
+  exact zero_ne_one (congrArg (fun t : CircleParam => t.re) h)
+
+def circleFallback0 : Point WideExact :=
+  embedCirclePoint ⟨point circleFallbackParameter0,
+    point_on_circle _ (outside_has_denominator _ circleFallbackParameter0_im)⟩
+
+def circleFallback1 : Point WideExact :=
+  embedCirclePoint ⟨point circleFallbackParameter1,
+    point_on_circle _ (outside_has_denominator _ circleFallbackParameter1_im)⟩
+
+theorem circleFallback_not_rational :
+    ¬ BaseRational circleFallback0 ∧ ¬ BaseRational circleFallback1 :=
+  ⟨embedCirclePoint_not_rational _ circleFallbackParameter0_im,
+    embedCirclePoint_not_rational _ circleFallbackParameter1_im⟩
+
+/-- Symbolic recovery is applied before specializing the parameter values. -/
+theorem embedCirclePoint_parameter_injective (t u : CircleParam)
+    (ht : t.im ≠ 0) (hu : u.im ≠ 0)
+    (h : embedCirclePoint ⟨point t, point_on_circle t (outside_has_denominator t ht)⟩ =
+      embedCirclePoint ⟨point u, point_on_circle u (outside_has_denominator u hu)⟩) : t = u := by
+  have he := embedCirclePoint_injective h
+  exact point_injective t u (outside_has_denominator t ht) (outside_has_denominator u hu)
+    (congrArg (fun z : Point CircleParam => z.val) he)
+
+theorem circleFallback_ne : circleFallback0 ≠ circleFallback1 := by
+  intro h
+  exact circleFallbackParameter_ne
+    (embedCirclePoint_parameter_injective circleFallbackParameter0 circleFallbackParameter1
+      circleFallbackParameter0_im circleFallbackParameter1_im h)
+
+#print axioms circleFallbackParameter0_im
+#print axioms circleFallbackParameter1_im
+#print axioms circleFallbackParameter_ne
+#print axioms circleFallback_not_rational
+#print axioms circleFallback_ne
+
+/-- Total map with an explicit row-specific fallback; the accepted branch
+is unchanged from the source circle parameter map. -/
+def circleSampleParameterWith (fallback : Point WideExact) (t : CircleParam) : Point WideExact :=
+  if h : t.im ≠ 0 then
+    embedCirclePoint ⟨point t, point_on_circle t (outside_has_denominator t h)⟩
+  else fallback
+
+attribute [irreducible] circleSampleParameterWith
+
+def circleSampleParameter0 (t : CircleParam) : Point WideExact :=
+  circleSampleParameterWith circleFallback0 t
+
+def circleSampleParameter1 (t : CircleParam) : Point WideExact :=
+  circleSampleParameterWith circleFallback1 t
+
+def circleSample0 (s : State) : Point WideExact := circleSampleParameter0 (qm31Sample s)
+def circleSample1 (s : State) : Point WideExact := circleSampleParameter1 (qm31Sample s)
+
+theorem circleSampleParameterWith_rejected (f : Point WideExact) (t : CircleParam)
+    (ht : t.im = 0) : circleSampleParameterWith f t = f := by
+  simp only [circleSampleParameterWith, ht, ne_eq, not_true_eq_false, ↓reduceDIte]
+
+theorem circleSampleParameterWith_accepted (f : Point WideExact) (t : CircleParam)
+    (ht : t.im ≠ 0) : circleSampleParameterWith f t =
+      embedCirclePoint ⟨point t, point_on_circle t (outside_has_denominator t ht)⟩ := by
+  simp only [circleSampleParameterWith, dif_pos ht]
+
+theorem circleSampleParameterWith_not_rational (f : Point WideExact) (hf : ¬ BaseRational f)
+    (t : CircleParam) : ¬ BaseRational (circleSampleParameterWith f t) := by
+  by_cases ht : t.im = 0
+  · rw [circleSampleParameterWith_rejected f t ht]
+    exact hf
+  · rw [circleSampleParameterWith_accepted f t ht]
+    exact embedCirclePoint_not_rational t ht
+
+theorem circleSampleParameter0_not_rational (t : CircleParam) :
+    ¬ BaseRational (circleSampleParameter0 t) :=
+  circleSampleParameterWith_not_rational _ circleFallback_not_rational.1 t
+
+theorem circleSampleParameter1_not_rational (t : CircleParam) :
+    ¬ BaseRational (circleSampleParameter1 t) :=
+  circleSampleParameterWith_not_rational _ circleFallback_not_rational.2 t
+
+theorem circleSampleParameterWith_inj (f : Point WideExact) (t u : CircleParam)
+    (ht : t.im ≠ 0) (hu : u.im ≠ 0)
+    (h : circleSampleParameterWith f t = circleSampleParameterWith f u) : t = u := by
+  rw [circleSampleParameterWith_accepted f t ht, circleSampleParameterWith_accepted f u hu] at h
+  exact embedCirclePoint_parameter_injective t u ht hu h
+
+/-- Proposed first-row event, kept local until the lead changes SourceData. -/
+def z0Bad' (z : Point WideExact) : Prop := BaseRational z ∨ z = circleFallback1
+
+/-- Atomic predicates for all concrete filter and cardinality expressions. -/
+def circleBad0Pred (t : CircleParam) : Prop := z0Bad' (circleSampleParameter0 t)
+def circleBad1Pred (z0 : Point WideExact) (t : CircleParam) : Prop :=
+  z1Bad z0 (circleSampleParameter1 t)
+
+theorem circleBad0_fiber (t : CircleParam) (h : circleBad0Pred t) :
+    t.im ≠ 0 ∧ circleSampleParameter0 t = circleFallback1 := by
+  rcases h with hr | he
+  · exact (circleSampleParameter0_not_rational t hr).elim
+  · refine ⟨?_, he⟩
+    intro ht
+    change circleSampleParameterWith circleFallback0 t = circleFallback1 at he
+    rw [circleSampleParameterWith_rejected _ t ht] at he
+    exact circleFallback_ne he
+
+theorem circleBad1_fiber (z0 : Point WideExact) (hz0 : z0 ≠ circleFallback1)
+    (t : CircleParam) (h : circleBad1Pred z0 t) :
+    t.im ≠ 0 ∧ circleSampleParameter1 t = z0 := by
+  rcases h with hr | he
+  · exact (circleSampleParameter1_not_rational t hr).elim
+  · refine ⟨?_, he⟩
+    intro ht
+    change circleSampleParameterWith circleFallback1 t = z0 at he
+    rw [circleSampleParameterWith_rejected _ t ht] at he
+    exact hz0 he.symm
+
+theorem circleBad0_card : (Finset.univ.filter circleBad0Pred).card ≤ 1 := by
+  apply card_filter_le_one_of_inj circleBad0Pred
+  intro t u ht hu
+  obtain ⟨ht, he⟩ := circleBad0_fiber t ht
+  obtain ⟨hu, he'⟩ := circleBad0_fiber u hu
+  exact circleSampleParameterWith_inj circleFallback0 t u ht hu (he.trans he'.symm)
+
+theorem circleBad1_card (z0 : Point WideExact) (hz0 : z0 ≠ circleFallback1) :
+    (Finset.univ.filter (circleBad1Pred z0)).card ≤ 1 := by
+  apply card_filter_le_one_of_inj (circleBad1Pred z0)
+  intro t u ht hu
+  obtain ⟨ht, he⟩ := circleBad1_fiber z0 hz0 t ht
+  obtain ⟨hu, he'⟩ := circleBad1_fiber z0 hz0 u hu
+  exact circleSampleParameterWith_inj circleFallback1 t u ht hu (he.trans he'.symm)
+
+theorem circleSampleParameter0_f1 :
+    circleSampleParameter0 circleFallbackParameter1 = circleFallback1 := by
+  exact circleSampleParameterWith_accepted _ _ circleFallbackParameter1_im
+
+theorem circleBad0_iff (t : CircleParam) : circleBad0Pred t ↔ t = circleFallbackParameter1 := by
+  constructor
+  · intro ht
+    obtain ⟨ht, he⟩ := circleBad0_fiber t ht
+    exact circleSampleParameterWith_inj circleFallback0 t circleFallbackParameter1
+      ht circleFallbackParameter1_im (he.trans circleSampleParameter0_f1.symm)
+  · rintro rfl
+    exact Or.inr circleSampleParameter0_f1
+
+theorem circleSample0_bad_iff (s : State) :
+    z0Bad' (circleSample0 s) ↔ qm31Sample s = circleFallbackParameter1 :=
+  circleBad0_iff (qm31Sample s)
+
+#print axioms circleSampleParameter0_not_rational
+#print axioms circleSampleParameter1_not_rational
+#print axioms circleBad0_card
+#print axioms circleBad1_card
+#print axioms circleSample0_bad_iff
+
 end
 end R0P.SemSource

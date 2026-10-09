@@ -3165,3 +3165,18 @@ Required source change (reference Rust, `transcript.rs:453–465`): replace
 the retry with the fallback; recorded here, to be applied with the lead's
 sign-off before the refinement job. `rowBudget` for circle rows in
 `R0C.SemStatement` becomes `1/P⁴`; `z0Bad` gains the `= f1` disjunct.
+
+### G22 — fallback and fiber checkpoint; ideal mass obstruction
+
+Added circleFallback0/1 from the explicit QM31 parameters (0,1)/(1,1), proved their non-rationality and inequality by symbolic parameter recovery, and defined the row-specific circleSampleParameter0/1 and circleSample0/1. Concrete bad predicates remain defs; circleBad0_card and circleBad1_card are at most one using the generic atomic-predicate cardinality lemma. circleSample0_bad_iff identifies the first-row event exactly with qm31Sample = circleFallbackParameter1. The requested 1/P^4 mass target is not accepted: the existing sampler is modulo reduction and has only the (1+deltaQ)/P^4 law. In particular the selected fallback1 rank P^2+1 is below 256^32 mod P^4 and has an overweight fiber; a focused obstruction proof follows. The accepted G20 sentinel interfaces are retained while this finding is reviewed, so the checkpoint does not silently change the proved G20 protocol. Attempts 2700/2701 exposed concrete point reduction during unification; 2702 moved recovery into a generic symbolic helper without raising any cap. Samplers and cardinalities pass at 2703, exit 0, no errors/warnings, all 36 axiom lines standard. No 1/P^4 mass theorem or changed R0C budget is asserted.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2700 | `R0P/CircleSampler` | 1 / 1 | 0:11.89 | 6812668 | 0 | 31 | `5fa646e37ee392a69bb2e1a54e7be4f73b189f052390ca991f153eb29aaf6348` |
+| 2701 | `R0P/CircleSampler` | 1 / 1 | 0:11.91 | 6812204 | 0 | 31 | `ce8fb9d03aac7874218f75393a26e2bad04a71ae19ce021b7f4667b235180d5a` |
+| 2702 | `R0P/CircleSampler` | 0 / 0 | 0:14.67 | 6844708 | 0 | 31 | `bfdc713c5186a133a13157b77370723f79f56ffff0707a4d5bcb9b8e0454f707` |
+| 2703 | `R0P/CircleSampler` | 0 / 0 | 0:18.08 | 6848900 | 0 | 36 | `6a702fddefcd2f74ee883e34e46c8d32dcdd9af8a505869ef58b05e5407a00cc` |
+
+Source revision(s): `d7ce72ab61862d8611afa6bd4d1d9dd8d98410d7`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
