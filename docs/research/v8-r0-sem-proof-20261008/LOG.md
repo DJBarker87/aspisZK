@@ -4281,3 +4281,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3279 | `R0P/MaskMaxErr` | 0 / 0 | 0:05.05 | 6863724 | 0 | 7 | `6f6c05b4a0084b49d3d4a98c644d843b320383d8602a618973134f2e423bcfa7` |
 
 Source revision(s): `630d81ebdb20fc58ad1ba26c7964463a6c2cc767`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskInstance (host attempt 3280)
+
+The concrete maskValueClaims uses lanes 0–15 via castLE, lanes 16–25, and lane 27, exactly as the reference selected mask. maskValueClaims_degree discharges the universal MaskDegree using maskValue_vdeg for each trace. combined_fiat_shamir_masked instantiates combined_fiat_shamirZ_closed with this mask and its proved degree, leaving no mask-degree assumption in the concrete theorem. Attempt 3280 is green, with an explicit axiom audit of combined_fiat_shamir_masked.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3280 | `R0P/MaskInstance` | 0 / 0 | 0:04.79 | 6849648 | 0 | 3 | `91bd9dff26d9da521f083ff737d533029dcc279c67fa2620d6130cea0fe3f1e7` |
+
+Source revision(s): `8161d244da220960fa1e56654dc3549558e644c5`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
