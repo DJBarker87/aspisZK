@@ -472,3 +472,44 @@ new source are symbolic VDeg sums over coordinates/columns, never evaluated
 row/state/trace universes. The inactive-row sum is kept abstract under
 `balance`. No authored prohibited proof command or option, `#eval`, or
 `#reduce` occurs. `git diff --check` passes.
+
+### Lead decision D4′ — exact form of `MaskImage` (resolves the Z2 stop)
+
+Z2's `MaskedProtocol` and `MaskLayout` are accepted (port checked against
+`state_only_hiding.rs` 392–395, 484–512, 561–580, 612–645). The two D4
+questions are answered as follows; this replaces the prose of D4.
+
+1. **Instance-dependent affine map, shared nothing.** For a public statement
+   `x`, an honest instance `w` with `public w = x`, and a challenge vector
+   `ch`, the honest disclosed view as a function of the mask tape is affine:
+   `view x w ch r = b x w ch + A x w ch r`, where
+   `A x w ch : MaskTape K →ₗ[K] View K` is a linear map and
+   `b x w ch := view x w ch 0` (the zero-tape view). Both `A` and `b` may
+   depend on `w`. No identity between views of different instances at the
+   *same* tape is asserted anywhere; only laws are compared.
+2. **Image = range of the linear part; displacement = zero-tape difference.**
+   ```
+   MaskImage x : Prop :=
+     ∀ w w' ch, public w = x → public w' = x →
+       LinearMap.range (A x w ch) = LinearMap.range (A x w' ch) ∧
+       b x w ch - b x w' ch ∈ LinearMap.range (A x w ch)
+   ```
+   Equivalently: for every challenge vector, all same-public honest instances
+   have the same affine coset `b + range A` of views.
+3. **Why this is the right statement.** With the tape uniform on the finite
+   space `MaskTape K` (D5), the law of `view x w ch` is the uniform law on the
+   coset `b + range A` (every fibre of an affine map is a translate of
+   `ker A`, so all fibres over the coset have equal size). Equal cosets give
+   equal laws; hence `MaskImage x → HVZK_perfect x` is a generic finite
+   linear-algebra lemma (no sampler or source fact), and the simulator is the
+   honest prover run on any instance `w₀` with `public w₀ = x`
+   (`Classical.choice`; if no such instance exists the statement is outside
+   the language and HVZK is vacuous). Conditioning on `ch` is what the
+   `∀ ch` quantifier does; D5 makes the challenge law instance-independent, so
+   equal conditional laws give equal joint laws.
+4. **Obligations.** `Obligations x := MaskImage x ∧ Completeness x`, with
+   `HVZK_perfect x` and `ZK_FS x` *derived* (`hvzk_perfect_of_maskImage`,
+   and ZK_FS from HVZK_perfect under the ROM view of D5). `MaskImage` itself
+   (Z4) is the rank statement that the Rust q29 rank gate measures
+   (`state_only_hiding.rs:555–560`); it is the only privacy obligation that
+   depends on the layout.
