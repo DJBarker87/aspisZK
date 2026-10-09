@@ -73,6 +73,7 @@ pub fn prepare(
     boundary: &SemanticBoundary,
     proof: &OpeningView<'_>,
 ) -> Result<Prepared, Error> {
+    let _reference = super::equality_trace::reference();
     // Retain the prepare-time fibre-count check after canonical parsing.
     if proof.opening_count() != 22 {
         return Err(Error::Parse);
@@ -174,6 +175,7 @@ pub fn check_v1(
     u: FibreIndex,
     opening: &FibreView<'_>,
 ) -> Result<(), Error> {
+    let _reference = super::equality_trace::reference();
     let g = &invariants.gamma_powers;
     let i = &invariants.interpolant;
     let line = &invariants.line;
@@ -262,6 +264,7 @@ pub fn check_v2(
     c: &[E; 7],
     proof: &OpeningView<'_>,
 ) -> Result<(), Error> {
+    let _reference = super::equality_trace::reference();
     let lhs = c.iter().rev().fold(E::ZERO, |v, &c| v.mul(alpha).add(c));
     let mut w = weights(data, kappa)?;
     let mut even = heap::filled(512, E::ZERO)?;

@@ -105,6 +105,22 @@ impl WideExact {
     pub fn mul(self, rhs: Self) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMul);
+        #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+        if crate::r0::equality_trace::is_reference() {
+            return self.mul_re3(rhs);
+        }
+        let ac = self.c0.mul(rhs.c0);
+        let bd = self.c1.mul(rhs.c1);
+        let cross = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));
+        Self {
+            c0: ac.add(mul_u(bd)),
+            c1: cross.sub(ac).sub(bd),
+        }
+    }
+
+    /// Frozen schoolbook outer layer for the native R-E3 equality gate.
+    #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    pub fn mul_re3(self, rhs: Self) -> Self {
         Self {
             c0: self.c0.mul(rhs.c0).add(mul_u(self.c1.mul(rhs.c1))),
             c1: self.c0.mul(rhs.c1).add(self.c1.mul(rhs.c0)),
