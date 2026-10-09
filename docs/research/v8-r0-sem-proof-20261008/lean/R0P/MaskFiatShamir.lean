@@ -1,7 +1,10 @@
 import R0P.MaskDuplexDecodes
+import R0P.MaskD2Instance
+import R0P.MaskD3Glue
+import R0P.SemCharP
 
-/-! Generic theorem43 plumbing for the round-parameterized sampler. This
-module does not discharge the masked semantic D2 or D3 obligations. -/
+/-! Generic theorem43 plumbing and the closed 32-round masked instance.
+The frozen 31-round specialization is retained without modifying its sources. -/
 set_option autoImplicit false
 namespace R0P.MaskDuplex
 open FS FS2 FS2.Duplex R0C.V3 R0P.SemSource R0P.SemD3Glue R0P.Mask
@@ -100,3 +103,43 @@ def combinedInj32 {Sfield : Fin 29 → Subfield SemE} {Pf : Type} {L : Nat}
 #print axioms combinedInj32
 end
 end R0P.MaskDuplex
+
+namespace R0P.Mask
+open FS FS2 FS2.Duplex R0C.V3 R0P.SemSource R0P.SemD3Glue R0P.MaskDuplex AspisWideTower
+open AspisV8R19.MemoizedProgramLaw AspisV8PairedCommitment
+open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+noncomputable section
+variable {Sfield : Fin 29 → Subfield WideExact} {Pf : Type} {L : Nat}
+variable (maskPoly : (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskPoly)
+variable (B : PackBasis (Sfield 0))
+variable (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
+variable (msg : Pf → Nat → MsgZ WideExact)
+local notation "prZ" => combinedProtocolZ B p msg (fun _ _ => none)
+local notation "VZ" => FS2.verifier (prZ) (combinedDecisionZ maskPoly B)
+
+include hMask in
+/-- Closed theorem43 instance. MaskDegree is the only mask-polynomial premise. -/
+theorem combined_fiat_shamirZ (x : TypedContext WideExact Sfield) (hr32 : p.rounds = 32)
+    (hσsem : ∀ (i : Nat) (_hi : i < 25) (s : State),
+      p.σ i s = R0C.SemStatement.Chal.semantic (semChal s))
+    (hσz0 : ∀ s : State, p.σ 25 s = R0C.SemStatement.Chal.circle (circleSample0 s))
+    (hσz1 : ∀ s : State, p.σ 26 s = R0C.SemStatement.Chal.circle (circleSample1 s))
+    (hσopen : ∀ (j : Fin 4) (s : State),
+      p.σ (27+j.val) s = R0C.SemStatement.Chal.opening (R0C.V3.DQ.σQ j.val s))
+    (P : Program (Addr L) State Pf) (Qtot : Nat)
+    (hQ : ∀ H, FS2.distinctFirstReads (eval H (FS2.experiment P (VZ) x)) ≤ Qtot) :
+    mean (fun H : Addr L → State =>
+      indicator (FS2.accepts (eval H (FS2.experiment P (VZ) x)) ∧
+        FS2.extractFails (prZ) x (eval H (FS2.experiment P (VZ) x)))) ≤
+      (Qtot : ℚ) * maxErr combinedD2BudgetZ 32 + κ Qtot := by
+  exact combined_fiat_shamir_of_obligations B p x msg (fun _ _ => none) 30 hr32
+    (combinedDecisionZ maskPoly B) (duplexRowsZ maskPoly B combinedD2BudgetZ)
+    (combinedD1Z maskPoly B p msg (fun _ _ => none) combinedD2BudgetZ)
+    (combinedProtocolZ_D2 maskPoly B p msg (fun _ _ => none) hσsem hσz0 hσz1 hσopen)
+    (d3Z AspisCircleGroupOrder.P semE_prime_eq maskPoly hMask B p msg (fun _ _ => none)
+      combinedD2BudgetZ (hσopen 0)) P Qtot hQ
+
+#print axioms combined_fiat_shamirZ
+end
+end R0P.Mask
