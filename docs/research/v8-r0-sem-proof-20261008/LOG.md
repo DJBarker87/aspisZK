@@ -3803,3 +3803,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3235 | `R0P/MaskD2Glue` | 0 / 0 | 0:08.28 | 6863968 | 0 | 5 | `b7ca10cd73187792cd8461ab6e5cb73403ddf84118ab630e679fb65b53e77dc7` |
 
 Source revision(s): `ba8572b564459a7bb67f06d8a6b5b893c82ff740`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: four shifted opening field rows
+
+MaskOpeningDensity proves the all-message field opening bounds at rows 27–30. The roundBad opening disjunct identifies the local opening row; malformed messages or absent views have no flip event. Each uses the existing DQ.round_field_bound at local index 0–3. Attempt 3236 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3236 | `R0P/MaskOpeningDensity` | 0 / 0 | 0:04.23 | 6835876 | 0 | 2 | `e1b9fec9b1f1aae352ad5c75f00268ce917dcd0aea8111c5f19b1c8b189201ef` |
+
+Source revision(s): `92e16f14288ae22b7a187c5176f9b40b7098c068`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
