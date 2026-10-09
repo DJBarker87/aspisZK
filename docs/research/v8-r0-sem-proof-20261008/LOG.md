@@ -4001,3 +4001,31 @@ Accepted G24 source manifest (prior green attempts are reused where source is un
 Final bound: `Pr[accepts ∧ extractFails] ≤ Qtot * (1+delta0) * C(9557,22)/C(262144,22) + κ(Qtot)` for the 32-round masked protocol, with `hr32`, the four source sigma clauses, the first-read bound, and only `MaskDegree maskPoly` as the mask premise. The per-query coefficient is approximately `2^(-105.136475075588)`. Eta row 14 is `100(1+deltaQ)/P^4`, alpha rows 15–24 are `2700(1+deltaQ)/P^4`; the final q22 row 31 attains the exact maximum.
 
 Final source audit: no forbidden tactic, new axiom, cap override, or R0Z import occurs in Mask*.lean. Git comparison to base 2363f4694 confirms that the frozen Sem*.lean and CircleSampler.lean sources are unchanged. The concurrently committed privacy-tree work belongs to the lead/privacy worker and was not edited or staged by this job.
+
+### Lead review of G24 (d04dc6f3f): generic chain accepted; mask shape corrected (G25)
+
+Accepted as proved: the 32-round protocol/decoder/Inj3/theorem43 adapter,
+`etaBad` one-root density, `combinedD2BudgetZ` rows (η row `100(1+δQ)/P⁴`,
+α rows `2700(1+δQ)/P⁴`), `combined_maxErrZ`, and the MaskAll manifest, all
+with standard axioms. Not accepted as the reference statement: the mask in
+`MaskProtocol.terminalZ`/`virtualPolyZ`/`maskTotal`/`etaBad` is a fixed
+`maskPoly : (Fin 10 → K) → K`, independent of the opened claims. That was the
+lead's G24 specification error. The reference verifier evaluates the mask from
+the opened claims, `maskValue B (y 0) α` (`state_only_hiding.rs:612–645`;
+R0Z `MaskedProtocol.terminalZ`), so under D3 the mask polynomial and its cube
+sum depend on the extracted candidate `t`: `mask_t α = maskClaims (MLE_t α) α`,
+`M_t = bsumB (fun b => maskClaims (claims_t b) b)`.
+
+G25 (lead-specified): replace `maskPoly` by
+`maskClaims : (Fin 29 → K) → (Fin 10 → K) → K` (claims-at-point, α) with the
+atomic premise `hMask : ∀ t : Trace K, VDeg 10 (fun _ => 27)
+(fun α => maskClaims (fun l => honestClaims t α 0 l) α)`; `terminalZ` uses
+`maskClaims (y 0) α`; `virtualPolyZ … t` uses `mask_t`; `maskTotal t`;
+`etaBad claim (maskTotal t) (originalTotal t)` per candidate (the
+`etaSomeBad` union already ranges over candidates, so the budget is
+unchanged). The mask-sum claim remains a prover message; the D3 bridge
+identifies `y 0 = MLE_t` for the extracted candidate exactly as it does for
+`terminalValue`. The concrete instance is then `maskClaims := fun y α =>
+R0Z.MaskedProtocol.maskValue B (y ∘ castLE) (y ∘ (16+·)) (y 27) α`, whose
+`hMask` is the VDeg fact inside `maskValue_mldeg`; the port of `maskValue`
+moves to `R0P/MaskValue.lean` (soundness tree) and R0Z imports it.
