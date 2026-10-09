@@ -4,8 +4,8 @@ use aspis_core::{
     r0::{
         basis::{BasisSize, NaturalBasis},
         domain::FibreIndex,
-        verifier,
-        wire::OpeningProof,
+        verifier, onchain,
+        wire::{OpeningProof, OpeningView},
         Error as OError,
     },
     state_only_prefix::r0::{self as sw, Error as SError},
@@ -52,6 +52,10 @@ fn both_variants_roundtrip_and_corruption_teeth() {
         let boundary = r0::semantic_handoff(&semantic).unwrap();
         let proof = OpeningProof::parse(wire.opening).unwrap();
         let prepared = verifier::prepare(HOST_HASH, &boundary, &proof).unwrap();
+        let view = OpeningView::parse(wire.opening).unwrap();
+        let shaped = onchain::prepare(HOST_HASH, &boundary, &view).unwrap();
+        assert_eq!(shaped.polynomial, prepared.polynomial);
+        assert_eq!(shaped.challenges.queries, prepared.challenges.queries);
         assert_eq!(checked.queries, prepared.challenges.queries);
         assert_eq!(boundary.roots(), [semantic.c1_root, semantic.c2_root]);
         assert_eq!(boundary.claims, semantic.claims);
@@ -203,6 +207,12 @@ fn both_variants_roundtrip_and_corruption_teeth() {
             &proof.final_message,
         )
         .unwrap();
+        let mut altered_proof=proof.clone();
+        altered_proof.openings[0]=opening;
+        let altered_bytes=altered_proof.encode().unwrap();
+        let altered_view=OpeningView::parse(&altered_bytes).unwrap();
+        assert_eq!(onchain::check_v1(&shaped.data,c.gamma,c.alpha,&altered_view,u,&altered_view.fibre(0)),Err(OError::V1));
+        onchain::check_v2(&shaped.data,c.kappa,c.tau,c.alpha,&prepared.polynomial,&view).unwrap();
         records.push(json!({"variant":name,"mutation":"fixed-challenge D leaf","rejection":"V1; V2 remains true"}));
         for i in [0, 1, 2, 3, 5, 6] {
             let mut polynomial = prepared.polynomial;
@@ -222,6 +232,7 @@ fn both_variants_roundtrip_and_corruption_teeth() {
                 ),
                 Err(OError::V2)
             );
+            assert_eq!(onchain::check_v2(&shaped.data,c.kappa,c.tau,c.alpha,&polynomial,&view),Err(OError::V2));
             records.push(json!({"variant":name,"mutation":format!("fixed-challenge coefficient {i}"),"rejection":"V2"}));
         }
         for i in 0..22 {

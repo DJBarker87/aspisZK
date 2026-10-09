@@ -1205,4 +1205,60 @@ pub mod r0 {
             transcript,
         })
     }
+    // Representation-only verifier variant. The checks and their sequence
+    // deliberately match verify_semantics above.
+    pub struct VerifiedSemanticsHeap {
+        pub c1_root: [u8; 32],
+        pub c2_root: [u8; 32],
+        pub challenges: Challenges,
+        pub alpha: [QM31; 10],
+        pub claims: alloc::boxed::Box<PointClaims>,
+        pub before_z1: [WideExact; 29],
+        /// Pass this state, both roots, challenges.with_alphas(&alpha), and
+        /// claims to R-D's SemanticBoundary::from_verified_parts. R-D replays
+        /// rows 25/26 itself; passing the row-27 state would double-absorb.
+        pub state_before_z0: [u8; 32],
+        pub z: [SecureCirclePoint; 2],
+        /// State immediately before opening row 27. No extra gamma, delta,
+        /// OOD mixing, statement-point or work-nonce absorbs/squeezes.
+        pub transcript: SemanticTranscript,
+    }
+    pub fn verify_semantics_heap(
+        public: Public<'_>,
+        bytes: &[u8],
+        hash: HashFn,
+    ) -> Result<VerifiedSemanticsHeap, Error> {
+        let prefix = Prefix::parse(bytes)?;
+        let mut transcript =
+            SemanticTranscript::new(hash, &public.public_bytes()?, prefix.c1_root)?;
+        let challenges = wire::begin(&prefix, &mut transcript)?;
+        let checked = sumcheck::verify(&prefix, &mut transcript)?;
+        let claims = prefix.point_claims_boxed()?;
+        let terminal = public.terminal(&claims, &checked.alpha, &challenges)?;
+        if checked.terminal_claim
+            != masked_terminal(&claims, &checked.alpha, challenges.eta, terminal)
+        {
+            return Err(Error::Terminal);
+        }
+        let state_before_z0 = transcript.state();
+        let z0 = transcript.challenge_reference_circle_point(25, prefix.record(25)?)?;
+        let before_z1 = wire::decode_values::<29>(26, prefix.payload(26)?)?;
+        let z1 = transcript.challenge_reference_circle_point(26, prefix.record(26)?)?;
+        if z0 == z1 {
+            return Err(Error::EqualCirclePoints);
+        }
+        // Retain beforeZ1 literally. The model does not compare this message
+        // to the repeated Y0 in row 27; that record belongs to R-D.
+        Ok(VerifiedSemanticsHeap {
+            c1_root: *prefix.c1_root,
+            c2_root: prefix.payload(2)?.try_into().unwrap(),
+            challenges,
+            alpha: checked.alpha,
+            claims,
+            before_z1,
+            state_before_z0,
+            z: [z0, z1],
+            transcript,
+        })
+    }
 }

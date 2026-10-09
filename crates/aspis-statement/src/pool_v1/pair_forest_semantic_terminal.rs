@@ -2077,14 +2077,14 @@ pub mod r0 {
             c: &Challenges,
         ) -> Result<WideExact, Error> {
             if claims.iter().flatten().all(|x| x.c1() == QM31::ZERO) {
-                let values = claims.map(|row| row.map(WideExact::c0));
+                let values = terminal_values(claims, None);
                 return self
                     .terminal_qm31(&values, alpha, c)
                     .map(WideExact::from_qm31);
             }
             let mut total = WideExact::ZERO;
             for i in 0..26u32 {
-                let values = claims.map(|row| row.map(|x| x.c0().add(x.c1().mul_m31(M31(i)))));
+                let values = terminal_values(claims, Some(M31(i)));
                 let value = self.terminal_qm31(&values, alpha, c)?;
                 let mut numerator = WideExact::ONE;
                 let mut denominator = M31::ONE;
@@ -2101,4 +2101,15 @@ pub mod r0 {
             Ok(total)
         }
     }
+    // Isolate the 87 K values in one small frame; arithmetic is unchanged.
+    #[inline(never)]
+    fn terminal_values(claims: &PointClaims, t: Option<M31>) -> [[QM31;29];3] {
+        let mut values=[[QM31::ZERO;29];3];
+        for p in 0..3 {for l in 0..29 {
+            let x=claims[p][l];
+            values[p][l]=match t {None=>x.c0(),Some(t)=>x.c0().add(x.c1().mul_m31(t))};
+        }}
+        values
+    }
+
 }

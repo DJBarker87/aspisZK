@@ -157,6 +157,24 @@ impl SemanticBoundary {
             claims,
         })
     }
+    pub fn boxed_from_verified_parts(
+        state: [u8;32], roots: Roots, challenges: &[E;25], claims: &Claims,
+        semantic_accepted: bool,
+    ) -> Result<alloc::boxed::Box<Self>, Error> {
+        if !semantic_accepted { return Err(Error::Semantic); }
+        if challenges.iter().any(|c| c.c1()!=crate::field::QM31::ZERO) {return Err(Error::WrongField);}
+        let mut out=super::heap::uninit::<Self>()?;
+        // Every member is initialized before assume_init. Array copies go
+        // directly to their final heap address; no full Self temporary.
+        unsafe {
+            let p=out.as_mut_ptr();
+            core::ptr::addr_of_mut!((*p).state).write(state);
+            core::ptr::addr_of_mut!((*p).roots).write(roots);
+            core::ptr::addr_of_mut!((*p).challenges).copy_from_nonoverlapping(challenges,1);
+            core::ptr::addr_of_mut!((*p).claims).copy_from_nonoverlapping(claims,1);
+            Ok(out.assume_init())
+        }
+    }
     pub fn state(&self) -> [u8; 32] {
         self.state
     }
@@ -248,9 +266,12 @@ impl OpeningTranscript {
     }
     pub fn queries(&mut self, f: &FinalMessage<E>) -> Result<QuerySet, Error> {
         // F is absorbed once before EVERY pair, including unselected pairs.
-        let mut state = self
-            .duplex
-            .absorb(31, 10, &fields(f.iter().copied(), 256)?)?;
+        self.queries_canonical_bytes(&fields(f.iter().copied(), 256)?)
+    }
+    /// Canonical field bytes, already validated by OpeningView. Same row-31
+    /// absorb and sampler as the owned proof path, without a final array.
+    pub(crate) fn queries_canonical_bytes(&mut self, bytes: &[u8]) -> Result<QuerySet, Error> {
+        let mut state = self.duplex.absorb(31, 10, bytes)?;
         let mut blocks = [[0u8; 32]; 8];
         let mut advances = blocks;
         for k in 0..8 {

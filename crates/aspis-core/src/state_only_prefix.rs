@@ -1628,6 +1628,7 @@ pub mod r0 {
 
     #[derive(Clone, Copy, Debug, PartialEq, Eq)]
     pub enum Error {
+        Allocation,
         RowOrder { expected: u8, actual: u8 },
         InvalidRow,
         Tag { row: u8 },
@@ -1809,6 +1810,19 @@ pub mod r0 {
         }
         pub fn payload(&self, row: u8) -> Result<&'a [u8], Error> {
             parse_record(row, self.record(row)?)
+        }
+        /// Same row-25 decoder, with direct initialization of heap storage.
+        pub fn point_claims_boxed(&self) -> Result<alloc::boxed::Box<PointClaims>, Error> {
+            let payload=self.payload(25)?;
+            if payload.len()!=32*CLAIMS {return Err(Error::Length{row:25});}
+            let mut out=crate::r0::heap::uninit::<PointClaims>().map_err(|_|Error::Allocation)?;
+            unsafe {
+                let p=out.as_mut_ptr().cast::<WideExact>();
+                for j in 0..CLAIMS {
+                    p.add(j).write(WideExact::from_le_bytes(&payload[j*32..(j+1)*32]).ok_or(Error::NonCanonical{row:25,value:j})?);
+                }
+                Ok(out.assume_init())
+            }
         }
         pub fn point_claims(&self) -> Result<PointClaims, Error> {
             let flat = decode_values::<CLAIMS>(25, self.payload(25)?)?;
