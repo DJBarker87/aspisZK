@@ -3065,3 +3065,13 @@ mean, row 30 by `Q22.chainE`), and assembles `combined_fiat_shamir` via
 (`charP_of_injective_algebraMap` from the existing
 `Algebra (ZMod AspisCircleGroupOrder.P) WideExact` instance). The closed
 form of `maxErr combinedD2Budget 31` is lead accounting (G21), after G20.
+
+## Lead: `SemCharP.lean` — the characteristic premise discharged
+
+`semE_charP : CharP SemE AspisCircleGroupOrder.P` by
+`charP_of_injective_algebraMap` from the `Algebra (ZMod P) SemE` instance
+`TypedContext` already uses; `semE_prime_eq : P = 2^31 - 1` by `norm_num`.
+Host attempt 672 (`run2.sh 672 R0P/SemCharP 7000 7`): `exit=0`, wall
+0:02.86, peak RSS 6,827,176 KiB, swaps 0, no errors or warnings, axioms
+standard. With these, `SemD3Glue.d3` is applicable at
+`prime := AspisCircleGroupOrder.P` with `hprime := semE_prime_eq`.
