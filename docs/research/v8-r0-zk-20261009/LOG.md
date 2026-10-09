@@ -2509,3 +2509,98 @@ The final source scan is clean for the prohibited proof escapes/options;
 no concrete row universe was introduced. `R0C/SemStatement.lean` and
 `R0C/CircleRows.lean` are byte-for-byte unchanged. The commit contains Lean
 sources, this LOG section and the evidence JSON; no binaries.
+
+### Lead acceptance of T1 — D13′, D14′, D14″ replayed; decision D16 (2026-10-09)
+
+**Verdict: accepted.** Reviewed as the diff `fcb570199 → 56872d637`
+(`codex/t1-transport-libra-20261009`), landed on `v8-reference` as
+`5ab6dcb5d` (cherry-picked on top of R-E4; the only conflict was this LOG's
+tail, resolved by keeping the G_ref note and the worker's section in order).
+
+Statements, checked line by line against D13′ items 1–6, D14′ items 1–7 and
+D14″:
+
+- `R0/OpeningDefinitions`: `Data.transport`, `Data.extraWeight`,
+  `Data.extraClaims`; `coeffWeight π w j := w (π.symm j)` with
+  `coeffWeight_add/smul/sum`, `dot_coeffWeight_left`,
+  `dot_coeffWeight_indicator`; `discrepancy`, `inactiveDefect`, `weights`
+  (`coeffWeight π (∑ κ^(j+1) • eqWeight + indicator) + κ^4 • extraWeight`),
+  `claim` (`+ κ^4 * width29Batch extraClaims γ`), `extraDiscrepancy`,
+  `extraDefect`, `pointPolynomial` with `monomial 4 (extraDefect …)`, `B3` with
+  the extra-row clause (D14″), `B4` filtering on
+  `pointDefect ≠ 0 ∨ extraDefect ≠ 0`. `eqWeight`, `indicator`, `claimPrime`,
+  `qWeights`, `totalWeights`, B1, B2, B5–B7, V1, V2, `Accept` unchanged in text.
+- `R0/BadSetBounds`: `B3_card ≤ 11200` (per-candidate 84 + 28 = 112, times
+  `Lambda_card ≤ 100`), `B3_extra_outside`, `pointPolynomial_degree ≤ 4`,
+  `pointPolynomial_extra_coeff`, `B4_card ≤ 400` (`union_bound … 4`),
+  `B4_outside` giving both defects. `R0/Ledger`: grouped γ addend 16,800, B4
+  400. `R0/Binding`: conclusion gains `∀ l, D.extraClaims l = dot D.extraWeight (t l)`
+  and reads `v = ∑ r ∈ D.inactive, exactInitialMessageCurve t γ (D.transport r)`;
+  the extra clause is closed by `B3_extra_outside` after `B4_outside`;
+  `wideBinding` by `type_of%`.
+- `R0FS/Protocol`: `Stmt.transport/extraWeight/extraClaims`, `data`, `Witness`
+  with the `coeffWeight` clause and the extra clause; `ε E 0`, `ε E 1` updated;
+  `Hypotheses.d3`/`accept_not_doomed` destructure the new conclusion, statements
+  unchanged. `R0C/OpeningSamplerBounds`, `R0C/SlackDensity`, `R0C/V3/DuplexQ`:
+  constants only. `R0C/SemStatement.lean`, `R0C/CircleRows.lean` byte-identical.
+- `R0P/SemView`: `TypedContext.transport/extraClaims`; `coeffsOf`, `rowsOf`,
+  `rowsEquiv`, `coeffsOf_padC2Trace`, `dot_coeffWeight_coeffsOf`, `LambdaRows`,
+  `mem_LambdaRows`, `card_LambdaRows`, `LambdaRows_card ≤ 100`; `openingStmt`
+  sets `transport`, `extraWeight := libraWeight α`, `extraClaims`. All
+  semantic candidate quantifications use `LambdaRows x.transport`; the two glue
+  theorems take `t := rowsOf … m` and carry `hyx` through `honestExtra`;
+  `witness_baseTyped` descends through `coeffsOf`.
+- `R0P/MaskProtocol`: `maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K`;
+  `honestExtra π t α l := dot (libraWeight α) (coeffsOf π t l)`; `MaskDegree`
+  quantified over `π` and `t`; `terminalZ`, `virtualPolyZ`, `maskTotal`,
+  `sumcheckChecksZ` carry `yx`; `virtualPolyZ_total/vdeg/indDeg` keep their
+  form. `R0P/MaskValue`: `libraTail`, `dot_libraWeight`, `libraTail_vdeg`,
+  `maskClaimsR0 B y0 yx α := maskValue … + yx 28`, `maskClaimsR0_vdeg`.
+  `R0P/MaskInstance`: `maskValueClaims := maskClaimsR0`,
+  `masked_opening_budget_exact`. `decisionZ` passes `P.statement.extraClaims`.
+- R0Z: `PayloadCell.extraClaim`, `coeffsLinear`, `extraLinear`
+  (`dotLinear (libraWeight) ∘ coeffsLinear π ∘ proj c`), `extraCell`;
+  `.ood` and `.opened` through `coeffsLinear π`; `openingWeights π ch` with
+  `libraWeight (alpha ch)` and zero extra claims; `mask` gains
+  `extraCell π B t a 28`; `HonestProver.transport`; `proverOutput` encodes
+  `coeffsOf h.transport t`; `D13Order` stated, no instance; `D12.MaskImage`
+  and `hvzk_perfect_of_maskImage` unchanged in form; `nonRound` retains the
+  new coordinate by its catch-all clause. D15's `Good` not added.
+- No theorem gained a hypothesis beyond the explicit `π`/`yx` arguments.
+
+Two placement deviations are accepted as placement, not statement changes:
+`padC2Trace` moved unchanged from `SemPad` to `SemView`, and `libraWeight` is
+defined in `SemView` (`SemSource.libraWeight`) with the `R0P.Mask.libraWeight`
+abbreviation, both to avoid an import cycle.
+
+**Soundness constant.** `ε E 0 = (336869026605739 + 16800)/(|E| − 1)`,
+`ε E 1 = 400/|E|`, recorded exactly by `masked_opening_budget_exact` (`rfl`).
+The increase over the pre-T1 constant is exactly `2800/(|E|−1) + 100/|E|`
+(≈ 2⁻²³⁶·⁵ + 2⁻²⁴¹·⁴ per query), both terms authorised (D14′ item 7, D14″). The
+closed bound of `combined_fiat_shamir_masked` is textually unchanged because
+its `max` is the q22 term. No other term changed.
+
+**Evidence** (`t1/evidence.json`): attempts 3282–3366, 85 attempts, 78
+distinct successful targets, 7 local elaboration failures repaired in source
+and preserved; max wall 23.18 s; peak RSS 7,042,772 KiB under MemoryMax 7G;
+swap 0 throughout; no unchanged target replayed; Lean v4.32.0, Mathlib
+`81a5d257`. `#print axioms` for `wideBinding` (3286),
+`combined_fiat_shamir_masked` (3348, 3365), `hvzk_perfect_of_maskImage`
+(3362): `[propext, Classical.choice, Quot.sound]`. My own scan of the 38
+changed Lean files finds no `sorry`/`axiom`/`native_decide`/`admit`/
+`maxRecDepth`/`maxHeartbeats`; the `decide` occurrences are pre-existing small
+numeral facts. No co-author trailer; no binaries.
+
+**Gate G_ref status.** (S) is closed: the masked soundness statement now
+carries D13′, D14′ and D14″ with its constant recorded. (P1) T2, (P2) ZF1 and
+(P3) remain open and are **held**.
+
+**Decision D16 — hold on all D14 follow-up work until the cost probe reports.**
+The Rust PLAN's P1 decision already holds T2 and ZF1. D16 extends the hold to
+**R-H** (Rust D14 in the reference prover/verifier: lane-28 h cells, fourth
+weight row, 29 extra claims, terminal h-terms). Reason: if the probe shows no
+configuration fits one transaction, R-H is wasted; if one fits, the D14 row's
+cost is ≈ 56 E×K products and one 29-claim batch, which cannot change the
+probe's answer. The Lean Codex is idle by decision. Order after the probe
+reports a fit: T2 → R-H → ZF1 → P3, then the §8 steps the probe selected,
+Lean-first.

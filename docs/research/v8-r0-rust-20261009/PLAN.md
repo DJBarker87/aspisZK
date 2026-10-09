@@ -542,3 +542,113 @@ F multiplications per phase.
 prover, not evidence of soundness or privacy for any configuration, not a
 decision about which steps are adopted. Those are the lead's, from §8, after
 the numbers.
+
+## Lead acceptance of R-E4 (= P1 configuration C0): 15.08M CU measured; probe re-ordered as P1′ (2026-10-09)
+
+**Verdict: accepted.** `codex/r0-e2e-re4-20261009` has six commits
+(`3a2800bf8`, `589617d1d`, `61f27bf21`, `f4e1d419b`, `52df8fc21`, `87377ca78`;
+the report named only the head), landed on `v8-reference` as
+`ce0eeccca … 16ada04e4`. Report: `results/r0-e2e-20261009/REPORT-4.md`.
+
+**Measured, DIAGNOSTIC at 200M, transfer (withdrawal in brackets for totals):**
+
+| Stage | Semantic | ChordClaims | Merkle ×22 | V1 ×22 | V2 | Total | Δ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| R-E3 | 2,693,892 | 1,008,549 | 641,001 | 3,476,468 | 11,507,624 | 19,335,682 | — |
+| S1 subfield chord | 2,693,892 | 1,008,644 | 641,001 | 3,047,614 | 9,082,171 | 16,481,470 | −2,854,212 |
+| S2 tensor v−r | 2,693,892 | 1,008,644 | 641,001 | 3,047,614 | 8,300,336 | 15,699,635 | −781,835 |
+| S3 outer Karatsuba | 2,647,122 | 968,572 | 641,001 | 3,010,106 | 8,137,088 | 15,412,037 | −287,598 |
+| **S4 V2 transpose (selected)** | 2,647,122 | 968,572 | 641,001 | 3,010,106 | 7,803,350 | **15,078,299** (15,070,869) | −333,738 |
+| S5d R91 (deselected) | 3,400,620 | 1,226,117 | 641,001 | 4,019,047 | 12,743,485 | 22,038,418 | +6,960,119 |
+
+Per fibre at S4: Merkle ≈ 30K, V1 ≈ 137K. Heap 131,032 B. Zero reachable stack
+diagnostics. Both fixtures and the 1,894-case corpus byte-identical to R-E3.
+Acceptance runs still exhaust 1.4M inside Semantic.
+
+**What I checked.** `subfield_line` asserts the high QM31 limb of a, b, c is
+zero (it never fires: z0, z1 are `from_qm31` embeddings and the secant is a
+rational function of their coordinates; `WrongField` is kept as a defensive
+error). `quotient_weights`/`chord_weights` use `mul_qm31`; `chord_weights` is
+the exact transpose (C applied to G = D·F in channel order [0,3,2,1]; the τ
+image rows are taken from G before the in-place map, matching the original
+order in which τ rows were added after Cᵀ). `eq_tensor` computes `r = v·x`,
+`ℓ = v − r`. Karatsuba replaces the outer layer of `WideExact::mul`; the
+schoolbook `mul_re3` is frozen under the native-only `r0-e4-reference` feature
+and its thread-local guard is `cfg`'d out of SBF. R91 sits behind the
+default-off `r0-r91-audit` feature in the core, statement, prover and verifier
+manifests. The native differential `r0_verify_re3` compares phase order, exact
+errors, query sets and passive field-byte traces (circle points, challenges,
+polynomial, powers, interpolant, every V1 fibre result, V1/V2 sides). The
+op-counter matches every counted primitive on both fixtures. EMul calibrated
+1,466.6 → 1,312.2 CU (N = 128).
+
+**Estimate vs measurement.** My exact-savings estimate was 5–6M; measured
+4.26M. Chord 2.85M (est. ≈ 2.67M) and tensor 0.78M (est. 0.9M) held. Karatsuba
+0.29M (est. 0.5–0.7M): only 1,039 E×E remain in V2 after S1. The V2 reorder
+saved 0.33M against the "≈ 6.5–7M" V2 figure in the R-E4 spec; that figure
+assumed the dense form's E×K/E×F mix and is superseded by the worker's
+four-schedule count ledger (`re4/V2-ORDERS.md`). Semantic kernels: R60 is
+already the `M31::inv` chain; R218 has no matching call shape in R0's semantic
+verifier; R91 regresses by 7M on SBF because the raw-input fallbacks need
+`inline(never)` boundaries to stay within branch displacement. The spec's
+"≥ 1M semantic recovery" line is withdrawn; the negative result is accepted as
+reported.
+
+**Process correction (evidence size).** R-E4 committed 46.6 MB under `re4/`,
+including six ELF images, an unstripped ELF, `.text` dumps and six 3.7 MB
+disassemblies (R-E3 set the precedent at 9.5 MB). Accepted this once. **Rule
+from P1′ on:** no ELF/`.so`/`.text`/disassembly files in commits; record each
+artifact's SHA-256 and size in the artifact manifest and keep the files on the
+build host under the results path; commit JSON/MD/log evidence only; one
+stack-audit JSON per configuration.
+
+**What the measured base says about one transaction.** Semantic alone,
+2,647,122 CU, is 1.9× the 1.4M budget. M1 (`results/v8-state-only-cu-20261009`,
+the same state-only rows in QM31, a 24-round sumcheck) measured
+transcript/sumcheck replay 140,757 + terminal incl. mask 286,713 = **427,470 CU**
+for its semantic work; R0's semantic phase is **6.2×** that. R0 adds mask lanes
+16–25, η, the 32-round schedule, three point-claim evaluations and 29-lane
+claims, which do not account for 6×; the remainder is overhead to be located
+(wire decoding and canonical checks of E values, transcript hashing of a ~95 KB
+proof, heap). ChordClaims at 968,572 for `prepare()` is likewise about four
+times its priced arithmetic (interpolant 58 E×E, `claim` 87 E×E, chord pair,
+squeezes, query sampling). Per fibre, V1 measures 137K against roughly 85K of
+priced arithmetic. **Updated lead estimate after §8 on the measured base
+(estimate, not a result):** Semantic → 0.5M if M1-class overhead is reached;
+ChordClaims → 0.2M; Merkle 8-way → 0.45M; V1 with ρ-batch → 0.5M (the
+22×4×29 opened-value products, ≈ 0.37M, stay unless steps 5/6 reduce lanes);
+V2 by relation rounds → 0.6M (F at a point 256 E×K, the inactive indicator at a
+point ≈ 890 K-mults unless structured, eq 30 K-mults, chord weight at a point
+structured). Total ≈ 2.25M. One transaction therefore needs the step-9
+what-ifs **and** semantic overhead at M1 level. P1′ tests exactly this.
+
+**P1′ (revision of P1; Rust A).** Base: the `origin/v8-reference` head
+carrying this section. Branch `codex/r0-cost-probe-p1-20261009`; report
+`results/r0-cost-probe-20261009/REPORT-P1.md`. Decision rule, labelling,
+caps and gates as in the P1 section above; changes:
+
+1. **C0 := R-E4 S4** (15,078,299 / 15,070,869). Not re-measured.
+2. **B — breakdown, reported alone first.** Fine-grained DIAGNOSTIC markers
+   inside Semantic (parse + canonical checks; transcript absorb/squeeze; the 25
+   round checks; the 10 α-round polynomial evaluations; terminal incl. mask;
+   point/extra-claim handling; handoff), inside `prepare` (transcript, data
+   copy, `validate_points`, interpolant, chord pair, `claim_prime`, query
+   sampling), one fibre's V1 (value decode, four dots, four inversions, fold,
+   `final_encoder`) and V2 (G, `chord_weights`, indicator sum, 3 × tensor +
+   pairing, images). One table against M1's phases; name where the ≈ 2.2M
+   semantic excess and ≈ 0.77M prepare excess sit. No optimisation in B.
+3. **C0′ — byte-preserving overhead removal** guided by B, with R-E4's
+   equality gates (both fixtures, 1,894 rejections, field-byte traces); no
+   wire, transcript, check-order or predicate change. Per-change table.
+4. **C2** §8 step 2 (relation rounds replacing V2's dot) → **C3** §8 step 1
+   (ρ-batched query equations) → **C4** §8 step 3 (eight-way Merkle; step 4
+   two-swap if cost-relevant) → **C5** what-ifs on C4: (a) second 4-to-1 fold
+   with a 64-coefficient final message; (b) α₀ and F in K; (c) both.
+5. **C1 (κ, τ in K) is dropped from measurement.** After S4, κ enters V2 as
+   three E×E products (`k[p+1].mul(pairing)`) plus its powers, τ as two; with
+   `claim_prime` the whole κ/τ footprint is under 30K CU by inspection. §8
+   step 8 stays a ledger decision, not a cost item.
+6. Report each configuration as it completes; the lead may stop after any.
+   Evidence rule above applies.
+
+**R-H is held** with T2/ZF1 until P1′ reports (privacy LOG, D16).
