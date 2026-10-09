@@ -1380,3 +1380,36 @@ MaskedProtocol and this LOG only; no co-author trailer. Z3's conditional
 interactive theorem and D10 image lemma are complete. The FS decision above,
 MaskImage itself (Z4), builder completeness, and source/ROM refinement remain
 open. Report and stop.
+
+### Lead decision D11 — MaskImage restated (corrects D4″); ZK_FS interface adopted
+
+Z3 is accepted as proved. The compiled `MaskImage` (eligible noise `e` in the
+instance, D4″) is however not provable for the layout: `b(w,e) − b(w',e')`
+contains the C1 semantic columns' opened symbols and point claims, which the
+affine tape never touches. The eligible noise is what hides those; it belongs
+in the tape. Its nonlinear entry into the original's round polynomials is
+absorbed by the mask's linear part. Statement:
+
+- `HonestInstance := Instance` (no noise). Tape `T := AffTape ⊕ EligibleNoise`,
+  uniform (D5). `view x w ch (r,e) = c + A (r,e) + (g w e, 0)` where
+  `c := view x w ch (0,0)`, `A : T →ₗ Payload` is the linear part
+  (every component is affine in `(r,e)` except the original's round
+  polynomials, which are affine in `r` and polynomial in `e`; `g w e` is that
+  remainder, in the round-polynomial component only, `g w 0 = 0`).
+- `MaskImage x :=`
+  (i) `∀ w e, public w = x → (g w e, 0) ∈ range (A ∘ inl)`
+      (the mask-only/G/H1/D part alone absorbs the remainder), and
+  (ii) `∀ w w', public w = x → public w' = x → c w − c w' ∈ range A`.
+- Theorem (Z3b): `MaskImage x → HVZK_perfect x`. For fixed `e`, `r ↦ view`
+  is uniform on `c + A(0,e) + range(A∘inl)` by (i); mixing over uniform `e`
+  gives the pushforward of uniform `(r,e)` under `c + A`, uniform on
+  `c + range A` (AffineLaw); (ii) makes it instance-independent.
+- Z4 then proves (i) and (ii) for the layout. (i) is the rank statement the
+  Rust q29 gate measures; (ii) is the hiding of C1 openings/claims by the
+  eligible cells (an encoder-restriction surjectivity) plus the mask lanes.
+
+ZK_FS: the Z3 proposal is adopted as the definition — `ZK_FS` over the
+current `HonestProver`, simulator and 32-round `View`, Boolean observer,
+symbolic `ε_fs`. The ROM reduction `HVZK_perfect → ROMReduction ε_fs →
+ZK_FS ε_fs` is obligation **ZF1**, deferred until after Z4; no value is
+assigned to `ε_fs` and `Z1.ZK_FS` stays as history.
