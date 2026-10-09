@@ -1150,3 +1150,233 @@ most that mass; it joins ZR1 in the real-vs-ideal distance. Z3 should prove
 the on-image lemma (`z0 ≠ z1 → quotient word ∈ encoder image`) so the
 extension's irrelevance off that event is a theorem, not prose. No
 good-challenge restriction or conditioning enters the ideal model.
+
+## Z3 finish — D10 on-image decoder and conditional perfect HVZK (2026-10-09)
+
+Fetched and used base **`fdd2a61c0a978f3c83284531ce361d3503dc35c5`**, including
+D10. Work was confined to the privacy Lean tree and this LOG in the existing
+`v8-reference` worktree. Concurrent Rust/measurement changes and the untracked
+soundness refinement document were left to their owners. No Z4 rank/image
+proof, builder completeness proof, source refinement, Rust build, or wallet/key
+operation was attempted.
+
+### D10 is now a theorem
+
+`R0Z/KernelImage.lean` proves a generic rank-nullity fact: for maps `f,g : V →ₗ[k] W`
+with `g` onto, an injection `ker f →ₗ[k] ker g` is onto. The proof compares
+symbolic finranks; it does not compute any concrete dimension or enumerate a
+finite type.
+
+`R0Z/QuotientImage.lean` applies it to the exact message space. The two maps are
+`(e1,e2)` and evaluation at the two circle endpoints. Interpolation makes the
+latter onto. `Chord.product_eval` sends chord multiplication on `ker (e1,e2)`
+into the evaluation kernel. `Chord.no_domain_zero` and exact encoder
+injectivity make that restricted map injective. Consequently every message
+minus its endpoint interpolant has an exact encoded chord quotient. This
+supplies the image step in addition to nonvanishing; nonvanishing alone would
+only justify pointwise division.
+
+The checked declarations are:
+
+- `quotient_mem_image_of_nonrational`: for arbitrary distinct non-base-rational
+  endpoints, the honest `quotientWord` belongs to `Set.range exactInitialEncoder`.
+- `quotient_mem_image`: for `z0 := circleSample0 s0`, `z1 := circleSample1 s1`,
+  the only premise is `hz : z0 ≠ z1`. Nonrationality follows from the existing
+  `circleSampleParameter0_not_rational` and `circleSampleParameter1_not_rational`
+  applied to the sampler parameters (these are the source names at this pin).
+- `quotientLinear_eq_decode` identifies the word with the input of the adopted
+  linear left inverse. `quotientLinear_eq_of_encode_eq` and
+  `quotientLinear_unique_preimage` show that its output agrees with the unique
+  encoded preimage, using the accepted `decode_encoded` theorem.
+- `quotient_off_image_only_eq` is the requested implication from an off-image
+  quotient to `z1 = z0`. It asserts a necessary event, not that an off-image
+  quotient must occur when the endpoints coincide.
+
+No restriction was added to `Challenges`, `view`, or `MaskImage`. The generic
+nonrational premises are discharged in the actual-sampler theorem, not inserted
+into HVZK. No event probability or ZR2 source-distance bound is proved here.
+
+### Perfect interactive HVZK, conditional on the unchanged MaskImage
+
+`R0Z/Hvzk.lean` runs the accepted `AffineLaw.equal_laws_of_mask_image`
+corollary of `equal_cosets_law` at each fixed augmented instance and challenge
+vector. It carries the constant public metadata alongside the payload. The
+simulator is the existing honest view on `Classical.choose hx`, where `hx`
+provides an augmented instance for the public statement; no witness is supplied
+to it by the real execution. `conditional_marginalisation` then uses
+`AffineLaw.marginalisation` on the independent uniform eligible-noise tape.
+Thus the checked theorem is exactly:
+
+```lean
+hvzk_perfect_of_maskImage (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) :
+  MaskImage h B x → HVZK_perfect h B outputs x
+```
+
+`hvzk_zero_of_maskImage` also discharges the retained distance formulation at
+zero. Completeness is a separate obligation, and no premise about it, map
+independence, ROM security, or layout rank enters these proofs.
+
+The final `#print R0Z.ZkStatement.MaskImage` in attempt **3143** reports the
+following definition (implicit field/finite/algebra parameters omitted here):
+
+```lean
+MaskImage h B x :=
+  ∀ (w w' : HonestInstance h F) (ch : Challenges K),
+    «public» h w = x.1 → «public» h w' = x.1 →
+      (A h B x w ch).range = (A h B x w' ch).range ∧
+      b h B x w ch - b h B x w' ch ∈ (A h B x w ch).range
+```
+
+Here `HonestInstance h F = h.Instance × EligibleNoise K F`,
+`EligibleNoise K F = EligibleCell → F`, and
+`A h B x w ch : AffTape K F →ₗ[F] Payload K`.
+Both eligible-noise components and every challenge vector are universally
+quantified. This is the existing D4′/D4″ statement, unchanged and unproved;
+Z4 is not started.
+
+### FS interface stop — minimal proposed change, not adopted
+
+The only existing `ZK_FS` is the preserved **`ZkStatement.Z1.ZK_FS`**, whose
+`FSExperiments.real` and `.ideal` are arbitrary functions returning the old
+31-round `ROMView`. It is not parameterized by the current prover/view types.
+D5 fixes ideal tapes and defers seed/abort terms; it does not specify a ROM
+compiler or a law relating either arbitrary function to the interactive
+experiment. Even identical interactive views allow these functions to return
+different constant observer-visible outcomes, with distinguishing advantage
+one. Therefore `zkfs_of_hvzk_perfect` for that definition cannot follow from D5.
+
+The minimal proposed current interface is to preserve Z1 as historical, keep
+its Boolean-observer distinguishing-advantage expression and symbolic
+`epsilon_fs`, and replace only its inputs/view with the current
+`HonestProver`, chosen simulator, and full 32-round disclosed `View`. The ROM
+view must still add the observer's own queries and complete 256-bit answers.
+In schematic form, with the current `h,B,outputs,x` passed to the experiments:
+
+```lean
+ZK_FS ... x epsilon_fs :=
+  ∀ hx adv w, h.public w = x.1 →
+    |mean (fun r => if fs.observe adv (fs.real h B outputs adv x w r) then 1 else 0) -
+     mean (fun r => if fs.observe adv
+       (fs.ideal (simulator h B outputs x hx) adv x r) then 1 else 0)| ≤ epsilon_fs
+```
+
+An additional, separately proved **ROM reduction** is required. Its ideal
+middle experiments must be the same randomized extension of the honest and
+simulated interactive views, with the chosen instance-independent challenge
+law and independent observer coins. HVZK supplies equality of those middle
+laws. The real/ideal ROM games must then be connected to them with the actual
+commitment/programming, seed, sampler-abort and source/refinement errors.
+The eventual bridge would consequently have the explicit shape
+`HVZK_perfect ... → ROMReduction ... epsilon_fs → ZK_FS ... epsilon_fs`.
+This is a proposed obligation, not an assumed theorem or a replacement of FS
+security by interactive equality. No epsilon term is assigned a value.
+
+**Stop at the FS model decision:** the compiler, shared memoized oracle,
+programming/conflict semantics, adversary/query bounds, and these reduction
+proofs are not fixed by D5. The proposed interface has not been implemented;
+`Z1.ZK_FS` is byte-for-byte unchanged. This uses the user's explicit
+“minimal proposed change to ZK_FS with a stop” alternative. It does not block
+the independently requested shared-mask cleanup below.
+
+### Shared mask source and host evidence
+
+After the first green quotient/HVZK checks, `R0Z/MaskedProtocol.lean` imports
+`R0P.MaskValue`, deletes the eight duplicate mask definitions/structure, and
+exports their existing names as aliases of `R0P.Mask`. The degree wrapper now
+uses `R0P.Mask.maskValue_vdeg`. No consumer needed a source edit. The accepted
+shared module is G25 attempt **3259**, source
+`d87305635d05e315d4da28acdc334a0e1d057cee5bfbe7cc706cf02a3d1e2861`, matched
+against both the local base source and the host. The changed module was checked
+first, followed by one successful dependency-order pass through MaskLayout,
+ViewAffine, HonestView, ZkStatement, QuotientImage and Hvzk (3138–3143).
+
+Host: `dombarker@100.108.41.90`; pinned workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`.
+Lean **4.32.0**, commit `8c9756b28d64dab099da31a4c09229a9e6a2ef35`;
+Mathlib **`81a5d257c8e410db227a6665ed08f64fea08e997`**.
+Each command was `lake env lean -j1 -M7000 -DElab.async=false -R sources
+-o objects2/<module>.olean sources/<module>.lean`, through the existing pinned
+`evidence/run_g15_lake.py` adapter. The inspected run2 reservation adapter was
+copied to `evidence/run_z3_finish_locked.sh`, retaining its resource settings;
+its shared `flock /tmp/aspis-r0-lean.lock` was moved outside the wrapper so it
+covered source installation, snapshot creation, and compilation together.
+Attempts refuse to overwrite an existing SHA receipt. Every scope used
+MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128, timeout 900 s and a
+unique `aspis-z3-<attempt>` unit. Every admission reported **24 + 7 GiB** below
+the **55 GiB** reservation ceiling. No cap, recursion, or heartbeat limit was
+raised. There was no cold dependency build, generated certificate, package-wide
+or frozen-manifest replay, arithmetic gate, or unrelated regression suite.
+
+Source revision for every row below is **fdd2a61c0 plus the exact source
+snapshot SHA-256 in the second table**, with 3137's shared-mask import change
+in the dependency closure for 3138–3143. The concurrently advancing Rust HEAD
+does not change this source pin. The unchanged dependency sources were checked
+against the base. Host copies of CircleSampler, SemD3Glue, MaskValue,
+EncoderLinearity, AffineLaw and StatisticalDistance match those sources;
+the already configured R0 cache was reused and its three chord object hashes
+inventoried. No inherited cache was rebuilt merely to check a downstream lemma.
+
+Raw host `evidence/source-N.lean`, `sha-N.txt`, `out-N.log` and `time-N.log`
+are retained. Hash-verified local copies and the dependency inventory are in
+`/tmp/aspis-z3-finish/evidence/`; raw evidence is excluded from commits, as in
+the preceding runs. Every final local source equals its accepted snapshot.
+
+“Standard” below means a subset of `propext`, `Classical.choice`, `Quot.sound`.
+Failed elaborations' audit output is rejected, even if individual declarations
+printed standard axioms. All final requested theorem audits show exactly the
+three standard axioms and no `sorryAx`.
+
+| Attempt | Exact target | Exit | Wall | Peak RSS (KiB) | Swap | Result / axioms |
+|---|---|---:|---:|---:|---:|---|
+| 3129 | `R0Z/KernelImage.lean` | 1 | 0:02.82 | 6,677,712 | 0 | Rejected: incorrect finrank theorem namespace. |
+| 3130 | `R0Z/KernelImage.lean` | 0 | 0:02.93 | 6,713,864 | 0 | Standard; generic kernel lemma. |
+| 3131 | `R0Z/QuotientImage.lean` | 1 | 0:03.56 | 6,795,268 | 0 | Rejected: product coercions and excessive definitional reduction. |
+| 3132 | `R0Z/QuotientImage.lean` | 1 | 0:03.80 | 6,792,412 | 0 | Rejected: endpoint simplification and unresolved chord coefficient. |
+| 3133 | `R0Z/QuotientImage.lean` | 0 | 0:04.08 | 6,825,448 | 0 | Standard; four quotient audits, before shared-mask refactor. |
+| 3134 | `R0Z/Hvzk.lean` | 0 | 0:03.33 | 6,832,960 | 0 | Standard; four HVZK audits, before shared-mask refactor. |
+| 3135 | `R0Z/MaskedProtocol.lean` | 1 | 0:03.04 | 6,783,976 | 0 | Rejected: documentation comment immediately before export. |
+| 3136 | `R0Z/MaskLayout.lean` | 0 | 0:08.32 | 6,840,032 | 0 | Standard output, but premature dependent run; not accepted as post-refactor evidence. |
+| 3137 | `R0Z/MaskedProtocol.lean` | 0 | 0:03.15 | 6,819,204 | 0 | Standard; shared-mask import/aliases and degree wrapper. |
+| 3138 | `R0Z/MaskLayout.lean` | 0 | 0:08.54 | 6,840,028 | 0 | Standard; final MaskLayout dependent check. |
+| 3139 | `R0Z/ViewAffine.lean` | 0 | 0:03.18 | 6,820,548 | 0 | Standard; final ViewAffine dependent check. |
+| 3140 | `R0Z/HonestView.lean` | 0 | 0:13.37 | 7,037,472 | 0 | Standard; final HonestView dependent check. |
+| 3141 | `R0Z/ZkStatement.lean` | 0 | 0:04.74 | 6,886,148 | 0 | Standard; final ZkStatement dependent check. |
+| 3142 | `R0Z/QuotientImage.lean` | 0 | 0:04.25 | 6,824,964 | 0 | Standard; final four quotient audits. |
+| 3143 | `R0Z/Hvzk.lean` | 0 | 0:03.26 | 6,833,488 | 0 | Standard; final four HVZK audits and printed MaskImage. |
+
+The 3131 recursion-depth failure was replaced by explicit product projection,
+opaque encoder/interpolant boundaries and explicit subtype projections; no
+limit was increased. The later coefficient was named explicitly, and endpoint
+conditionals were simplified directly. 3135 was a parser-only failure; 3136
+was inadvertently launched before reading that failure, so it is not counted
+as final dependent validation. The local orchestrator now propagates the
+recorded inner exit status. After the corrected 3137 predecessor was green,
+3138–3143 completed once in dependency order. Nonfatal warnings remain in
+unchanged MaskLayout/HonestView; both new final proof modules are warning-free.
+
+| Attempt | Exact source SHA-256 |
+|---|---|
+| 3129 | `29c61406f4ff00565558ad9b6ca0e2c0a7ed95f0da5b0c2eda94e0c6425bb8c6` |
+| 3130 | `60a7df59579170c177c636feac85be504457a4b165a8a8c489014a24d1ac6722` |
+| 3131 | `4b150a5d490d0631f9891271ee8d68489ae65e235f7e8a6a05bddd7c7a6f5f68` |
+| 3132 | `983c3abf21e29b728dc3fb71147b4a3b7e12736c3b7aadbcab9ee7367918f894` |
+| 3133 | `a2c303da28842f0b20c4b51372a21fbe7a14b859fddb34957282badb88ff84cb` |
+| 3134 | `c955ed87adf647cc5fe94ff577632f5f9534555d5566dcedab2e6f5b101b97d4` |
+| 3135 | `07dace2242446610a921d278b468ac8d0e58aa5f181e3aee1d7458d389457917` |
+| 3136 | `4f0615a66f8abe90b80d1cdff56961356cff13628c85dbd3456f43d9f425b43a` |
+| 3137 | `5efc4563c936eb7d7a4da9e70a1d2782e759868c1709fc477c3580c03914a4a8` |
+| 3138 | `4f0615a66f8abe90b80d1cdff56961356cff13628c85dbd3456f43d9f425b43a` |
+| 3139 | `7719f782cf4a3326f27373d59f378d130e035f3698c6ea0d3379da69fabbe33a` |
+| 3140 | `566ba2db7fee7053b1a6562ee0ae6b09cbaf0fcfa8131dff81fc9eb77b5013c1` |
+| 3141 | `b8a583bb76a1a7b8afcc6aaca68c5810cc2a1a89fd5075accb7bb5c14eb3fb84` |
+| 3142 | `c380622230deaef7db8769351ccf8a44989c36b13895d71169f314fc49dc08c9` |
+| 3143 | `5c8c2abc96eb2e2a7049e2cf0d947856076667dbc7ab00de2758227c0ff904f5` |
+
+The final forbidden-declaration/evaluation/limit-override scan and scoped
+`git diff --check` pass. Commit scope is KernelImage, QuotientImage, Hvzk,
+MaskedProtocol and this LOG only; no co-author trailer. Z3's conditional
+interactive theorem and D10 image lemma are complete. The FS decision above,
+MaskImage itself (Z4), builder completeness, and source/ROM refinement remain
+open. Report and stop.
