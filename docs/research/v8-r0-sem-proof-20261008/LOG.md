@@ -3957,3 +3957,47 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3257 | `R0P/MaskMaxErr` | 0 / 0 | 0:05.05 | 6864464 | 0 | 7 | `1a80de334311f078851d12b2453e224033a8890eca48ad16e92d916f4f62fa40` |
 
 Source revision(s): `e756823dd6c244cdd11d43b7a0f2d12a7c323032`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24 Freeze: final masked-chain manifest
+
+The single final manifest replay is R0P/MaskAll, attempt 3258. It imports every Mask module and the unchanged frozen R0P/SemAll, and audits both the new closed theorem and the frozen closed theorem. All ten axiom lines contain only propext, Classical.choice and Quot.sound; exit=0, no error, no warning, swaps=0. D1, all 32 D2 rows, D3 with hσ27, the generic decoder/density/decodes/Inj3 bridge, combined_fiat_shamirZ and combined_maxErrZ are closed. No facts about maskPoly beyond MaskDegree are required. No frozen 31-round or R0C source was edited. No additional manifest run is needed.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3258 | `R0P/MaskAll` | 0 / 0 | 0:02.60 | 6803744 | 0 | 10 | `90a9398e0ed84c4d0c630106957baf173f9d2ac60fb82fe921ac310c21702d49` |
+
+Source revision(s): `9e7ab5ac0801c76a5e51b474662a98af5556485a`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+Accepted G24 source manifest (prior green attempts are reused where source is unchanged):
+
+| Module | Accepted attempt | exit | Wall | Peak RSS KiB | Swaps | Axiom lines | SHA-256 |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `MaskAll` | 3258 | 0 | 0:02.60 | 6803744 | 0 | 10 | `90a9398e0ed84c4d0c630106957baf173f9d2ac60fb82fe921ac310c21702d49` |
+| `MaskBadSets` | 3226 | 0 | 0:03.40 | 6839732 | 0 | 4 | `cbe7c19b7d3e153f5ff782795181b709015bb9f316d56159b8701e7f650780cb` |
+| `MaskD2` | 3222 | 0 | 0:03.84 | 6840780 | 0 | 12 | `fa86046d9800c581b22bd068c64b8a9fbe98a2049cc20e05dc38c66bd3a03b8a` |
+| `MaskD2Glue` | 3235 | 0 | 0:08.28 | 6863968 | 0 | 5 | `b7ca10cd73187792cd8461ab6e5cb73403ddf84118ab630e679fb65b53e77dc7` |
+| `MaskD2Instance` | 3240 | 0 | 0:03.56 | 6838764 | 0 | 1 | `17ff2ad7d727e2d3a99f9ab4f9462302304c1e050cb66e9067916dc4c734715b` |
+| `MaskD3Glue` | 3254 | 0 | 0:03.73 | 6845364 | 0 | 2 | `300f772dbc0df584bb6fe44daffb1418de62657dea4cb8c82e317e4ad7501d61` |
+| `MaskDensity` | 3230 | 0 | 0:04.66 | 6855604 | 0 | 1 | `4431e71d58235625a8bc758c689e0c715c2b05d6e4b7975acb144b0c04893a5c` |
+| `MaskDuplexChain` | 3214 | 0 | 0:03.80 | 6842600 | 0 | 7 | `e4c2d092dda27b2b517a03ff2885dfd37789621c6ca489e726601ea5f5227956` |
+| `MaskDuplexDecoder` | 3211 | 0 | 0:04.91 | 6838708 | 0 | 6 | `17b1b947a0e15271565d9c956aabaeccd5a9d3ce58ad75f4b0b6b63fd7aafc6c` |
+| `MaskDuplexDecodes` | 3216 | 0 | 0:10.43 | 6917028 | 0 | 6 | `b542e082c2dc2a1f364aacd518b7523faab507d4a5ac6cd5aa5f97b2457555f2` |
+| `MaskDuplexDensity` | 3213 | 0 | 0:04.63 | 6847468 | 0 | 4 | `fd14411944ba5458d288ab93918a1d1a3619b43ee19d55d01a189c3c8f91eeab` |
+| `MaskEarly` | 3252 | 0 | 0:03.58 | 6847680 | 0 | 11 | `cea263723fdbe27f997f1704c43f04a7ea3c35149c886cc4b0b0b2816117a4b5` |
+| `MaskFiatShamir` | 3256 | 0 | 0:06.87 | 6854088 | 0 | 7 | `63215b8a379cbb755ebcb0cd363a074d57c1bfea69586f19598d33aeaca1a553` |
+| `MaskMaxErr` | 3257 | 0 | 0:05.05 | 6864464 | 0 | 7 | `1a80de334311f078851d12b2453e224033a8890eca48ad16e92d916f4f62fa40` |
+| `MaskNoHit` | 3247 | 0 | 0:03.23 | 6842872 | 0 | 3 | `97ad4f5e20491354ec2ab0d4b3f087af66c77b316b49538a8892434e547600b4` |
+| `MaskOpeningDensity` | 3238 | 0 | 0:05.22 | 6843520 | 0 | 3 | `efafabc1129c354576f83da5fde493395c063ce42efe54ff81c79b0ec3a0d6be` |
+| `MaskPrefix` | 3239 | 0 | 0:03.39 | 6844928 | 0 | 7 | `0ad1edbee3aee5dd29db05f250dd912437c813329a46ce4c9f794b7949dddea2` |
+| `MaskProtocol` | 3201 | 0 | 0:04.20 | 6841932 | 0 | 12 | `c00c51800d7895c38aa079d747e509e61137a3aaaeb500d656c5acd7d61796d0` |
+| `MaskSemantics` | 3223 | 0 | 0:03.11 | 6835164 | 0 | 4 | `e0159b7d5cbfa65b1b784d794f16673ca01b5384e82dc7841011091a7c8a078c` |
+| `MaskSource` | 3232 | 0 | 0:04.71 | 6841572 | 0 | 6 | `511dcd8fbe119ba242aa2be3fadd501f479155e719516bcef409ce7b2427b3ac` |
+| `MaskView` | 3225 | 0 | 0:04.61 | 6872088 | 0 | 19 | `17dc48a803d28ec18bc3c6c5f0dfeee5ee0207d8f69cdb3207dcdfb65e643b11` |
+
+`git rev-parse HEAD` before this manifest commit: `9e7ab5ac0801c76a5e51b474662a98af5556485a`. The final audit source snapshot adds MaskAll.lean at the SHA above. Each green source was committed separately with LOG; all pushes use origin HEAD:v8-reference. Raw evidence remains uncommitted.
+
+Final bound: `Pr[accepts ∧ extractFails] ≤ Qtot * (1+delta0) * C(9557,22)/C(262144,22) + κ(Qtot)` for the 32-round masked protocol, with `hr32`, the four source sigma clauses, the first-read bound, and only `MaskDegree maskPoly` as the mask premise. The per-query coefficient is approximately `2^(-105.136475075588)`. Eta row 14 is `100(1+deltaQ)/P^4`, alpha rows 15–24 are `2700(1+deltaQ)/P^4`; the final q22 row 31 attains the exact maximum.
+
+Final source audit: no forbidden tactic, new axiom, cap override, or R0Z import occurs in Mask*.lean. Git comparison to base 2363f4694 confirms that the frozen Sem*.lean and CircleSampler.lean sources are unchanged. The concurrently committed privacy-tree work belongs to the lead/privacy worker and was not edited or staged by this job.
