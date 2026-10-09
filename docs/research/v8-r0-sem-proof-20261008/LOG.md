@@ -3628,3 +3628,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3216 | `R0P/MaskDuplexDecodes` | 0 / 0 | 0:10.43 | 6917028 | 0 | 6 | `b542e082c2dc2a1f364aacd518b7523faab507d4a5ac6cd5aa5f97b2457555f2` |
 
 Source revision(s): `530f93ad3857327171f17a4e56a4eca6d34a6b77`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: accounting independent of the eta coefficient (3217)
+
+MaskMaxErr inserts a parameter etaBudget at index 14 and shifts the remaining frozen rows. The frozen alpha budgets were already 27. combined_maxErrWithEta proves the exact 32-row maximum is epsilonSlack WideExact delta0 4 whenever etaBudget is at most that query row. combined_maxErrWithEta_coefficient supplies this comparison for every coefficient 0≤c≤217600 in (1+deltaQ)*c/P⁴, including 1 and 100, without choosing the global eta coefficient. It reuses the accepted symbolic numeric bound rather than expanding binomial recurrences. Consequently the closed maximum, conditional on the remaining semantic obligations and either proposed coefficient, is unchanged: (1+delta0)*C(9557,22)/C(262144,22), with counts 3204816658150512709790016143025871214703406297554365823658832464480 and 143459390671643080338858006328548634467103740668941284234642666778199466504034122047364474303283200. No new exponent is claimed. Attempt 3217 passes three standard-axiom audits with no errors or warnings. This generic accounting theorem is not combined_maxErrZ for a finalized masked D2 budget and is not a closed masked FS theorem.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3217 | `R0P/MaskMaxErr` | 0 / 0 | 0:02.97 | 6833280 | 0 | 3 | `4377fc7c1b32616d4f53c20220b5e47dda2f940c22403c8073f1e6e6259fef35` |
+
+Source revision(s): `63371a3d1909bec3ff4b16a2aea23568a3fe8d26`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
