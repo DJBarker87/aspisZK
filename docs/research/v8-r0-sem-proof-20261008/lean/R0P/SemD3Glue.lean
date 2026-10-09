@@ -52,7 +52,7 @@ theorem witness_c1_encoder_mem
     (l : Fin 29) (hl : l.val < 26) (i : Fin 1048576) :
     AspisWide.InitialEncoder.exactInitialEncoder (t l) i ∈ x.F := by
   rw [← x.lanesF l hl]
-  exact hw.2.2 l i
+  exact hw.2.2.2 l i
 
 #print axioms witness_c1_encoder_mem
 
@@ -62,11 +62,12 @@ theorem witness_baseTyped
     [Fintype K] [DecidableEq K]
     [Algebra (ZMod AspisCircleGroupOrder.P) K]
     {Sfield : Fin 29 → Subfield K} (x : TypedContext K Sfield)
-    (q : R0FS.Stmt K Sfield) (t : Trace K) (hw : R0FS.Witness q t) :
+    (q : R0FS.Stmt K Sfield) (t : Trace K) (hw : R0FS.Witness q (coeffsOf x.transport t)) :
     BaseTyped x.F t := by
   intro l hl r
-  exact AspisWide.SubfieldDescent.initialMessage_subfield_descent x.F (t l)
-    (witness_c1_encoder_mem x q t hw l hl) r
+  simpa only [coeffsOf, Equiv.symm_apply_apply] using
+    AspisWide.SubfieldDescent.initialMessage_subfield_descent x.F (coeffsOf x.transport t l)
+    (witness_c1_encoder_mem x q (coeffsOf x.transport t) hw l hl) (x.transport r)
 
 #print axioms witness_baseTyped
 
@@ -575,7 +576,7 @@ open R0P R0P.SemSource R0C.SemStatement Polynomial
 open AspisPool.AlgorithmicCircleDecoderV7 AspisR0.ListsResponses
 noncomputable section
 attribute [local instance] Classical.propDecidable
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
@@ -695,7 +696,7 @@ open R0P R0P.SemSource R0C.SemStatement Polynomial
 open AspisPool.AlgorithmicCircleDecoderV7 AspisR0.ListsResponses
 noncomputable section
 attribute [local instance] Classical.propDecidable
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
@@ -713,7 +714,7 @@ theorem ofFn_prefix_getD (r : Fin 24 → K) (i : Fin 24) :
 theorem candidate_mem_after_c2 {Sfield : Fin 29 → Subfield K}
     (x : TypedContext K Sfield) (rs : List (Msg K K (SemMsg K) × Chal K K))
     (hlen : rs.length = 24) (hw gw : InitialWord K) (hc2 : c2Of rs = some (hw,gw))
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (i : Fin 24) (hi : 2 ≤ i.val) (sm : SemMsg K)
     (hcurrent : (rs[i.val]'(by omega)).1 = .semantic sm) :
     t ∈ candidates x (rs.take i.val) sm := by
@@ -736,7 +737,7 @@ theorem candidate_mem_after_c2 {Sfield : Fin 29 → Subfield K}
 theorem candidate_mem_before_c2 {Sfield : Fin 29 → Subfield K}
     (x : TypedContext K Sfield) (rs : List (Msg K K (SemMsg K) × Chal K K))
     (hlen : rs.length = 24) (hw gw : InitialWord K)
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (i : Fin 24) (hi : i.val < 2) (sm : SemMsg K) :
     padC2Trace t ∈ candidates x (rs.take i.val) sm := by
   have htake : (rs.take i.val).length = i.val := by simp only [List.length_take, hlen]; omega
@@ -762,7 +763,7 @@ theorem candidate_bad_to_prefix {Sfield : Fin 29 → Subfield K} {F : Subfield K
     (hw gw : InitialWord K) (hc2 : c2Of rs = some (hw,gw))
     (polys : Fin 10 → K[X]) (hpolys : semPolys rs = some polys)
     (hdegree : ∀ j, (polys j).natDegree ≤ 27)
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw)) (i : Fin 24)
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw)) (i : Fin 24)
     (sm : SemMsg K) (hcurrent : (rs[i.val]'(by omega)).1 = .semantic sm)
     (hbad : candidateRoundBad x.pub B t polys r i) :
     semanticBad B ⟨x, rs.take i.val⟩ sm (r i) := by
@@ -803,7 +804,7 @@ theorem no_hit_candidate_rounds {Sfield : Fin 29 → Subfield K} {F : Subfield K
     (hw gw : InitialWord K) (hc2 : c2Of rs = some (hw,gw))
     (polys : Fin 10 → K[X]) (hpolys : semPolys rs = some polys)
     (hdegree : ∀ j, (polys j).natDegree ≤ 27)
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (hno : ¬ hitFrom (sourceDataWithFallback fallback1 B) x [] (rs ++ tail)) :
     ∀ i : Fin 24, ¬ candidateRoundBad x.pub B t polys r i := by
   intro i hbad
@@ -835,7 +836,7 @@ open R0P R0P.SemSource R0C.SemStatement Polynomial
 open AspisPool.AlgorithmicCircleDecoderV7 AspisR0.ListsResponses AspisR0.Chord AspisR0.ChordGeometry
 noncomputable section
 attribute [local instance] Classical.propDecidable
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
@@ -900,7 +901,10 @@ theorem accepted_no_hit_extracted (prime : Nat) [CharP K prime]
   have hnogood : ¬ R0FS.good Q.statement Q.rounds := by
     intro hg
     exact hno (opening_good_hitFrom (sourceDataWithFallback fallback1 B) rfl rfl P Q hview hg)
-  obtain ⟨t, ht⟩ := opening_decision_witness Q om hodec hcard hnogood (hfirst Q hview)
+  obtain ⟨mcoeff, hmcoeff⟩ := opening_decision_witness Q om hodec hcard hnogood (hfirst Q hview)
+  let t := rowsOf P.statement.transport mcoeff
+  have ht : R0FS.Witness Q.statement (coeffsOf P.statement.transport t) := by
+    simpa only [t, coeffsOf_rowsOf] using hmcoeff
   obtain ⟨sem, cs', hw, gw, y, y₀, z₀, z₁, hcs', hb, hne, h₀, h₁, os,
     hsem, hparse', hc2, hrounds, hQ⟩ := openingView_some_structure P Q hview
   have htake : P.rounds.take 24 = sem := by
@@ -924,10 +928,12 @@ theorem accepted_no_hit_extracted (prime : Nat) [CharP K prime]
   have hy : y = honestClaims t (semSlice r 14 10) := by
     funext j l
     have h := ht.2.1 j l
-    change y j l = AspisR0.LinearDual.dot
-      (AspisR0.Opening.eqWeight (openingPoints (fun j => cs[14 + j.val]'(by omega)) j))
-      (t l) at h
-    simpa only [honestClaims, hα] using h
+    change y j l = AspisR0.RoundNormalization.dot
+      (AspisR0.Opening.coeffWeight P.statement.transport
+        (AspisR0.Opening.eqWeight (openingPoints (fun j => cs[14 + j.val]'(by omega)) j)))
+      (coeffsOf P.statement.transport t l) at h
+    rw [dot_coeffWeight_coeffsOf] at h
+    simpa only [honestClaims, hα, AspisR0.RoundNormalization.dot, AspisR0.LinearDual.dot] using h
   have hsum' : sumcheckChecks P.statement.pub B (List.ofFn r) List.length_ofFn polys
       (honestClaims t (semSlice r 14 10)) := by
     simpa only [openingStmt, hrList, hy] using hsum
@@ -935,7 +941,7 @@ theorem accepted_no_hit_extracted (prime : Nat) [CharP K prime]
   have hdegree : ∀ j, (polys j).natDegree ≤ 27 := hsum.1
   have hgood : ∀ i : Fin 24, ¬ candidateRoundBad P.statement.pub B t polys r i := by
     apply no_hit_candidate_rounds fallback1 B P.statement sem _ hsem r hparsenorm hw gw hc2
-      polys hpolys hdegree t ht.1
+      polys hpolys hdegree t ((mem_LambdaRows _ _ _).mpr ht.1)
     simpa only [hrounds] using hno
   have hA := witness_baseTyped P.statement _ t ht
   have hprod := d3_core prime hprime P.statement (contextBasis P.statement B) t hA

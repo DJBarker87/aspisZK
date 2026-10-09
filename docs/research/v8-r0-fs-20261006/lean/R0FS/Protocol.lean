@@ -44,6 +44,9 @@ structure Stmt (E : Type) [Field E] [Algebra (ZMod AspisCircleGroupOrder.P) E]
   points : Fin 3 → Fin 10 → E
   pointClaims : Fin 3 → Fin 29 → E
   inactive : Finset (Fin 1024)
+  transport : Fin 1024 ≃ Fin 1024
+  extraWeight : InitialMessage E
+  extraClaims : Fin 29 → E
   /-- the semantic phase's acceptance, abstract (premise SEM) -/
   semantic : Prop
 
@@ -64,12 +67,13 @@ theorem Chal.field_injective : Function.Injective (Chal.field : E → Chal E) :=
   intro a b h; cases h; rfl
 
 def data (x : Stmt E Sfield) (y : Fin 29 → Fin 2 → E) : Data E :=
-  ⟨x.W, x.z0, x.z1, y, x.points, x.pointClaims, x.inactive⟩
+  ⟨x.W, x.z0, x.z1, y, x.points, x.pointClaims, x.inactive, x.transport, x.extraWeight, x.extraClaims⟩
 
 /-- Witness: a list candidate matching the point claims, with subfield
 descent in the lanes' fields of definition. -/
 def Witness (x : Stmt E Sfield) (t : Fin 29 → InitialMessage E) : Prop :=
-  t ∈ Lambda x.W ∧ (∀ j l, x.pointClaims j l = dot (eqWeight (x.points j)) (t l)) ∧
+  t ∈ Lambda x.W ∧ (∀ j l, x.pointClaims j l = dot (coeffWeight x.transport (eqWeight (x.points j))) (t l)) ∧
+    (∀ l, x.extraClaims l = dot x.extraWeight (t l)) ∧
     ∀ l i, exactInitialEncoder (t l) i ∈ Sfield l
 
 /-- The extractor (route A): the table is not consulted. -/
@@ -163,8 +167,8 @@ def protocol (p : Params E Sfield Pf I B Kw) :
 
 /-- Round errors of §6 (0-based), with `max` giving 105.14 bits at q = 22. -/
 def ε (E : Type) [Fintype E] : Nat → ℚ
-  | 0 => (336869026605739 + 14000 : ℚ) / ((Fintype.card E : ℚ) - 1)
-  | 1 => (300 : ℚ) / (Fintype.card E : ℚ)
+  | 0 => (336869026605739 + 16800 : ℚ) / ((Fintype.card E : ℚ) - 1)
+  | 1 => (400 : ℚ) / (Fintype.card E : ℚ)
   | 2 => (200 : ℚ) / (Fintype.card E : ℚ)
   | 3 => (9396508281246 + 600 : ℚ) / (Fintype.card E : ℚ)
   | 4 => (Nat.choose 9557 22 : ℚ) / (Nat.choose 262144 22 : ℚ)

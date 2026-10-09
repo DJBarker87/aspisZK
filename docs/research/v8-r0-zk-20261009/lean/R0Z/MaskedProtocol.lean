@@ -1,4 +1,5 @@
 import R0P.MaskValue
+import R0P.MaskProtocol
 
 /-! Z2 masked reference, source pin d2b7413259a75100db9d1c722d88932bfea28fb9.
 C = crates/aspis-core/src/state_only_hiding.rs. The tower coefficients use
@@ -56,16 +57,16 @@ theorem maskValue_mldeg (B : PackBasis F) (t : Trace K) :
 /-- D3, terminal source crates/aspis-statement/src/state_only_terminal.rs:
 797-812,844-871: mask + eta * original. All 29 claims stay available. -/
 def terminalZ (pub : Public K) (lam chi θ μ η : K) (zc : Fin 10 → K)
-    (B : PackBasis F) (y : Fin 3 → Fin 29 → K) (α : Fin 10 → K) : K :=
+    (B : PackBasis F) (y : Fin 3 → Fin 29 → K) (yx : Fin 29 → K) (α : Fin 10 → K) : K :=
   maskValue B (fun c => y 0 (Fin.castLE (by omega) c))
-    (fun c => y 0 ⟨16 + c.val, by omega⟩) (y 0 27) α +
+    (fun c => y 0 ⟨16 + c.val, by omega⟩) (y 0 27) α + yx 28 +
     η * terminalValue pub lam chi θ μ zc B y α
 
 /-- The new claim and eta are separate inputs to the sumcheck checks.
 Semantic challenges 0..24 follow `schedule`; no old round indices reused. -/
 def sumcheckChecksZ (pub : Public K) (B : PackBasis F) (maskSum : K)
     (cs : List K) (hcs : cs.length = 25) (polys : Fin 10 → K[X])
-    (y : Fin 3 → Fin 29 → K) : Prop :=
+    (y : Fin 3 → Fin 29 → K) (yx : Fin 29 → K) : Prop :=
   let lam := cs[0]'(by omega)
   let chi := cs[1]'(by omega)
   let θ := cs[2]'(by omega)
@@ -77,7 +78,7 @@ def sumcheckChecksZ (pub : Public K) (B : PackBasis F) (maskSum : K)
   (polys 0).eval 0 + (polys 0).eval 1 = maskSum + η * 0 ∧
   (∀ j : Fin 9, (polys j.succ).eval 0 + (polys j.succ).eval 1 =
     (polys j.castSucc).eval (α j.castSucc)) ∧
-  (polys 9).eval (α 9) = terminalZ pub lam chi θ μ η zc B y α
+  (polys 9).eval (α 9) = terminalZ pub lam chi θ μ η zc B y yx α
 
 #print axioms SemMsgZ
 #print axioms Msg

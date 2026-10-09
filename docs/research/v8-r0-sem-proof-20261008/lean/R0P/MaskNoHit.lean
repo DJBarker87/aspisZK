@@ -8,7 +8,7 @@ open R0P R0P.SemSource R0P.SemD3Glue R0C.SemStatement Polynomial R0P.Sumcheck
 open AspisPool.AlgorithmicCircleDecoderV7 AspisR0.ListsResponses
 noncomputable section
 attribute [local instance] Classical.propDecidable
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
@@ -22,14 +22,14 @@ theorem semSlotZ (rs : List (MsgZ K × ChalZ K)) (cs : List K)
   simpa only [List.getD_eq_getElem?_getD, List.getElem?_eq_getElem hi, Option.getD_some] using hs
 
 theorem no_hit_eta {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
     (hlen : rs.length = 25) (cs : List K) (hparse : semChalsZ rs = some cs)
     (claim : K) (hclaim : claimOf rs = some claim)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail)) :
-    ¬ etaBad claim (maskTotal maskClaims t)
+    ¬ etaBad claim (maskTotal maskClaims x.transport t)
       (originalTotal x.pub B t (fun j => cs.getD j.val 0)) (cs.getD 14 0) := by
   intro hb
   have htlen : (rs.take 14).length = 14 := by simp only [List.length_take, hlen]; omega
@@ -57,17 +57,17 @@ theorem no_hit_eta {Sfield : Fin 29 → Subfield K} {F : Subfield K}
 #print axioms no_hit_eta
 
 theorem no_hit_alpha {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
     (hlen : rs.length = 25) (cs : List K) (hparse : semChalsZ rs = some cs)
     (claim : K) (hclaim : claimOf rs = some claim)
     (polys : Fin 10 → K[X]) (hpolys : semPolysZ rs = some polys)
     (hdegree : ∀ j, (polys j).natDegree ≤ 27)
     (hw gw : InitialWord K) (hc2 : c2OfZ rs = some (hw,gw))
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail)) :
     ¬ badAlpha 27 10
-      (virtualPolyZ maskClaims x.pub B t (fun j => cs.getD j.val 0) (cs.getD 14 0))
+      (virtualPolyZ maskClaims x.transport x.pub B t (fun j => cs.getD j.val 0) (cs.getD 14 0))
       polys (fun j => cs.getD (15+j.val) 0) := by
   intro hb
   obtain ⟨j,hj⟩ := (badAlpha_iff_exists_round 27 10 _ polys _).mp hb
@@ -107,7 +107,7 @@ theorem no_hit_alpha {Sfield : Fin 29 → Subfield K} {F : Subfield K}
       refine ⟨t, candidate_memZ x rs hw gw hc2 t ht n (by dsimp [n]; omega) (by omega), ?_⟩
       have lift (k : Fin 10) (he : k = j) :
           alphaRound 27 10
-            (virtualPolyZ maskClaims x.pub B t (fun k => cs.getD k.val 0) (cs.getD 14 0))
+            (virtualPolyZ maskClaims x.transport x.pub B t (fun k => cs.getD k.val 0) (cs.getD 14 0))
             (fun _ => polys j) k (fun l : Fin k.val => (cs.take n).getD (15+l.val) 0)
             (cs.getD n 0) := by
         subst k

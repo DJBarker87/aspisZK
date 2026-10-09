@@ -8,14 +8,14 @@ open R0P R0P.SemSource R0P.SemD3Glue R0C.SemStatement Polynomial
 open AspisPool.AlgorithmicCircleDecoderV7 AspisR0.ListsResponses
 noncomputable section
 attribute [local instance] Classical.propDecidable
-attribute [local irreducible] Lambda
+attribute [local irreducible] Lambda LambdaRows
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K]
 
 theorem candidate_mem_after_c2N {Sfield : Fin 29 → Subfield K}
     (x : TypedContext K Sfield) (rs : List (Msg K K (SemMsg K) × Chal K K))
     (n : Nat) (hlen : rs.length = n) (hw gw : InitialWord K) (hc2 : c2Of rs = some (hw,gw))
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (i : Fin n) (hi : 2 ≤ i.val) (sm : SemMsg K)
     (hcurrent : (rs[i.val]'(by omega)).1 = .semantic sm) :
     t ∈ candidates x (rs.take i.val) sm := by
@@ -38,7 +38,7 @@ theorem candidate_mem_after_c2N {Sfield : Fin 29 → Subfield K}
 theorem candidate_mem_before_c2N {Sfield : Fin 29 → Subfield K}
     (x : TypedContext K Sfield) (rs : List (Msg K K (SemMsg K) × Chal K K))
     (n : Nat) (hlen : rs.length = n) (hw gw : InitialWord K)
-    (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (i : Fin n) (hi : i.val < 2) (sm : SemMsg K) :
     padC2Trace t ∈ candidates x (rs.take i.val) sm := by
   have htake : (rs.take i.val).length = i.val := by simp only [List.length_take, hlen]; omega
@@ -105,7 +105,7 @@ theorem claimOf_getElem (rs : List (MsgZ K × ChalZ K)) (claim : K)
   | opening om => cases hp
 
 theorem no_hit_roundZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K)
+    (fallback1 : AspisR0.ChordGeometry.Point K) (maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K)
     (B : PackBasis F) (x : TypedContext K Sfield) (rs tail : List (MsgZ K × ChalZ K))
     (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) x [] (rs ++ tail))
     (i : Fin rs.length) :
@@ -119,7 +119,7 @@ theorem no_hit_roundZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
 
 theorem candidate_memZ {Sfield : Fin 29 → Subfield K} (x : TypedContext K Sfield)
     (rs : List (MsgZ K × ChalZ K)) (hw gw : InitialWord K)
-    (hc2 : c2OfZ rs = some (hw,gw)) (t : Trace K) (ht : t ∈ Lambda (c2Words x hw gw))
+    (hc2 : c2OfZ rs = some (hw,gw)) (t : Trace K) (ht : t ∈ LambdaRows x.transport (c2Words x hw gw))
     (n : Nat) (hn : 2 < n) (hnlen : n ≤ rs.length) :
     t ∈ candidates x (baseRoundsZ (rs.take n)) .none := by
   have hc : c2Of (baseRoundsZ (rs.take n)) = some (hw,gw) :=

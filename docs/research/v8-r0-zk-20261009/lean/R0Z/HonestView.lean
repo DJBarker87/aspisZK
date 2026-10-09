@@ -20,6 +20,13 @@ attribute [local irreducible] copyLinks copyPatterns copyActiveRowMasks copyInac
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
 
+/-- D13's transport order; its concrete Rust instance is a refinement obligation. -/
+def D13Order (π : Fin 1024 ≃ Fin 1024) : Prop :=
+  (∀ k : Fin 1024, k.val < 89 → π.symm k ∈ copyInactiveRows ∧
+    ∀ c : Fin 29, c.val < 16 → eligible c (π.symm k)) ∧
+  π 1023 = 1023 ∧
+  ∀ i j : Fin 1024, 89 ≤ i.val → i < j → π.symm i < π.symm j
+
 /-- Grouped challenge values: 25 semantic, two circle, four opening scalars,
 then the q22 set. Empty/other sets are retained; no good-challenge restriction. -/
 structure Challenges (K : Type) [Field K] where
@@ -47,6 +54,7 @@ inductive PayloadCell
   | maskSum
   | semanticCoeff (round : Fin 10) (coefficient : Fin 28)
   | pointClaim (point : Fin 3) (column : Fin 29)
+  | extraClaim (column : Fin 29)
   | ood (point : Fin 2) (column : Fin 29)
   | inactiveSum
   | openingCoeff (coefficient : Fin 7)
@@ -68,6 +76,31 @@ theorem claimsLinear_apply (a : Fin 10 → K) (j : Fin 3) (c : Fin 29) (t : Trac
   simp only [claimsLinear, dotLinear, LinearMap.comp_apply, LinearMap.sum_apply,
     LinearMap.smul_apply, LinearMap.proj_apply, smul_eq_mul, honestClaims,
     AspisR0.LinearDual.dot]
+
+def coeffsLinear (π : Fin 1024 ≃ Fin 1024) : InitialMessage K →ₗ[K] InitialMessage K :=
+  LinearMap.funLeft K K π.symm
+
+@[simp] theorem coeffsLinear_apply (π : Fin 1024 ≃ Fin 1024) (m : InitialMessage K) :
+    coeffsLinear π m = fun j => m (π.symm j) := rfl
+
+def extraLinear (π : Fin 1024 ≃ Fin 1024) (a : Fin 10 → K) (c : Fin 29) : Trace K →ₗ[K] K :=
+  (dotLinear (libraWeight a)).comp ((coeffsLinear π).comp (LinearMap.proj c))
+
+theorem extraLinear_apply (π : Fin 1024 ≃ Fin 1024) (a : Fin 10 → K)
+    (c : Fin 29) (t : Trace K) : extraLinear π a c t = R0P.Mask.honestExtra π t a c := by
+  simp only [extraLinear, dotLinear, LinearMap.comp_apply, LinearMap.sum_apply,
+    LinearMap.smul_apply, LinearMap.proj_apply, smul_eq_mul, coeffsLinear_apply,
+    R0P.Mask.honestExtra, R0P.Mask.libraWeight, coeffsOf, AspisR0.RoundNormalization.dot]
+
+def extraCell (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (t : Trace K)
+    (a : Fin 10 → K) (c : Fin 29) : AffTape K F →ᵃ[F] K :=
+  ((extraLinear π a c).restrictScalars F).toAffineMap.comp (traceAffine B t)
+
+theorem extraCell_apply (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (t : Trace K)
+    (a : Fin 10 → K) (c : Fin 29) (r : AffTape K F) :
+    extraCell π B t a c r = R0P.Mask.honestExtra π (applyAff B t r) a c := by
+  simp only [extraCell, AffineMap.comp_apply, LinearMap.coe_toAffineMap,
+    LinearMap.restrictScalars_apply, traceAffine_apply, extraLinear_apply]
 
 /-- R0/Chord.evalMessage in the exact natural coefficient basis. -/
 def oodLinear (z : Point K) : InitialMessage K →ₗ[K] K :=
@@ -121,16 +154,16 @@ theorem original_apply (pub : Public K) (B : PackBasis F) (t : Trace K)
   simp only [AffineMap.const_apply]
   ring
 
-def mask (B : PackBasis F) (t : Trace K) (a : Fin 10 → K) : AffTape K F →ᵃ[F] K :=
+def mask (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (t : Trace K) (a : Fin 10 → K) : AffTape K F →ᵃ[F] K :=
   (∑ c : Fin 16, (MaskedProtocol.maskFactors B a).c1 c •
     cell B t a 0 (Fin.castLE (by omega) c)) +
     (MaskedProtocol.maskFactors B a).explicitG • cell B t a 0 27 +
-    ∑ c : Fin 10, (MaskedProtocol.maskFactors B a).maskOnly c •
-      cell B t a 0 ⟨16+c.val, by omega⟩
+    (∑ c : Fin 10, (MaskedProtocol.maskFactors B a).maskOnly c •
+      cell B t a 0 ⟨16+c.val, by omega⟩) + extraCell π B t a 28
 
-def oracle (pub : Public K) (B : PackBasis F) (t : Trace K)
+def oracle (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (a : Fin 10 → K) : AffTape K F →ᵃ[F] K :=
-  mask B t a + ch.sem 14 • original pub B t ch a
+  mask π B t a + ch.sem 14 • original pub B t ch a
 
 /-- Prefix/variable/Boolean-tail point for round j, big-endian coordinates. -/
 def roundPoint (ch : Challenges K) (j : Fin 10) (z : K)
@@ -139,11 +172,11 @@ def roundPoint (ch : Challenges K) (j : Fin 10) (z : K)
   else if tail ⟨i.val-j.val-1, by omega⟩ then 1 else 0
 
 /-- state_only_zerocheck.rs:95–128: interpolate the partial Boolean sums. -/
-def roundPoly (pub : Public K) (B : PackBasis F) (t : Trace K)
+def roundPoly (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (j : Fin 10) : AffTape K F →ᵃ[F] K[X] :=
   ((Lagrange.interpolate Finset.univ (fun i : Fin 28 => (i.val : K))).restrictScalars F).toAffineMap.comp
     (AffineMap.pi fun i => ∑ tail : Fin (9-j.val) → Bool,
-      oracle pub B t ch (roundPoint ch j (i.val : K) tail))
+      oracle π pub B t ch (roundPoint ch j (i.val : K) tail))
 
 /-- Chord subtraction and pointwise division are linear at fixed circle points.
 The exact encoder's linear left inverse decodes its image uniquely. Its
@@ -155,13 +188,13 @@ def quotientLinear (z0 z1 : Point K) : InitialMessage K →ₗ[K] InitialMessage
   let word := LinearMap.pi fun i => (L z0 z1 i)⁻¹ • ((LinearMap.proj i).comp numerator)
   exactInitialLinear.leftInverse.comp word
 
-def batchLinear (ch : Challenges K) : Trace K →ₗ[K] InitialMessage K :=
+def batchLinear (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →ₗ[K] InitialMessage K :=
   ∑ c : Fin 29, ch.opening 0 ^ c.val •
-    (quotientLinear (ch.circle 0) (ch.circle 1)).comp (LinearMap.proj c)
+    (quotientLinear (ch.circle 0) (ch.circle 1)).comp ((coeffsLinear π).comp (LinearMap.proj c))
 
 /-- OpeningDefinitions.totalWeights never reads the zeroed word/claim fields. -/
-def openingWeights (ch : Challenges K) : InitialMessage K :=
-  totalWeights ⟨0, ch.circle 0, ch.circle 1, 0, openingPoints (alpha ch), 0, copyInactiveRows⟩
+def openingWeights (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : InitialMessage K :=
+  totalWeights ⟨0, ch.circle 0, ch.circle 1, 0, openingPoints (alpha ch), 0, copyInactiveRows, π, libraWeight (alpha ch), 0⟩
     (ch.opening 1) (ch.opening 2)
 
 def relationLinear (w : InitialMessage K) : InitialMessage K →ₗ[K] K[X] :=
@@ -172,27 +205,28 @@ def relationLinear (w : InitialMessage K) : InitialMessage K →ₗ[K] K[X] :=
 def foldLinear (a : K) : InitialMessage K →ₗ[K] (Fin 256 → K) :=
   LinearMap.pi fun d => ∑ s : Fin 4, a^s.val • LinearMap.proj (childIndex d s)
 
-def linearPayload (ch : Challenges K) : Trace K →ₗ[K] Payload K :=
+def linearPayload (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →ₗ[K] Payload K :=
   LinearMap.pi fun coord => match coord with
   | .maskSum | .semanticCoeff _ _ => 0
   | .pointClaim j c => claimsLinear (alpha ch) j c
-  | .ood j c => (oodLinear (ch.circle j)).comp (LinearMap.proj c)
+  | .extraClaim c => extraLinear π (alpha ch) c
+  | .ood j c => (oodLinear (ch.circle j)).comp ((coeffsLinear π).comp (LinearMap.proj c))
   | .inactiveSum => ∑ c : Fin 29, ch.opening 0 ^ c.val •
       (dotLinear (indicator copyInactiveRows)).comp (LinearMap.proj c)
   | .openingCoeff i => (Polynomial.lcoeff K i.val).comp
-      ((relationLinear (openingWeights ch)).comp (batchLinear ch))
-  | .finalCoeff i => (LinearMap.proj i).comp ((foldLinear (ch.opening 3)).comp (batchLinear ch))
+      ((relationLinear (openingWeights π ch)).comp (batchLinear π ch))
+  | .finalCoeff i => (LinearMap.proj i).comp ((foldLinear (ch.opening 3)).comp (batchLinear π ch))
   | .opened q s c => if q ∈ ch.queries then
-      (LinearMap.proj (childIndex q s)).comp (exactInitialLinear.comp (LinearMap.proj c)) else 0
+      (LinearMap.proj (childIndex q s)).comp (exactInitialLinear.comp ((coeffsLinear π).comp (LinearMap.proj c))) else 0
 
-def payloadAffine (pub : Public K) (B : PackBasis F) (t : Trace K)
+def payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) : AffTape K F →ᵃ[F] Payload K :=
   let t := prepare pub t ch
   AffineMap.pi fun coord => match coord with
-  | .maskSum => ∑ bits : Fin 10 → Bool, mask B t (fun i => if bits i then 1 else 0)
+  | .maskSum => ∑ bits : Fin 10 → Bool, mask π B t (fun i => if bits i then 1 else 0)
   | .semanticCoeff j i => ((Polynomial.lcoeff K i.val).restrictScalars F).toAffineMap.comp
-      (roundPoly pub B t ch j)
-  | coord => (((LinearMap.proj coord).comp (linearPayload ch)).restrictScalars F).toAffineMap.comp
+      (roundPoly π pub B t ch j)
+  | coord => (((LinearMap.proj coord).comp (linearPayload π ch)).restrictScalars F).toAffineMap.comp
       (traceAffine B t)
 
 /-- Evaluation of an affine-map sum, proved on an abstract finite index set. -/
@@ -203,19 +237,19 @@ theorem affine_sum_apply {T V I : Type} [AddCommGroup T] [Module F T]
     { toFun := fun f => f r, map_zero' := rfl, map_add' := fun _ _ => rfl }
   exact map_sum ev f s
 
-theorem mask_apply (B : PackBasis F) (t : Trace K) (a : Fin 10 → K) (r : AffTape K F) :
-    mask B t a r = MaskedProtocol.maskValue B
+theorem mask_apply (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (t : Trace K) (a : Fin 10 → K) (r : AffTape K F) :
+    mask π B t a r = MaskedProtocol.maskValue B
       (fun c => honestClaims (applyAff B t r) a 0 (Fin.castLE (by omega) c))
       (fun c => honestClaims (applyAff B t r) a 0 ⟨16+c.val, by omega⟩)
-      (honestClaims (applyAff B t r) a 0 27) a := by
+      (honestClaims (applyAff B t r) a 0 27) a + R0P.Mask.honestExtra π (applyAff B t r) a 28 := by
   simp only [mask, AffineMap.coe_add, Pi.add_apply, affine_sum_apply,
-    AffineMap.coe_smul, Pi.smul_apply, smul_eq_mul, cell_apply, MaskedProtocol.maskValue]
+    AffineMap.coe_smul, Pi.smul_apply, smul_eq_mul, cell_apply, extraCell_apply, MaskedProtocol.maskValue]
 
-theorem oracle_apply (pub : Public K) (B : PackBasis F) (t : Trace K)
+theorem oracle_apply (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (a : Fin 10 → K) (r : AffTape K F) :
-    oracle pub B t ch a r = MaskedProtocol.terminalZ pub
+    oracle π pub B t ch a r = MaskedProtocol.terminalZ pub
       (ch.sem 0) (ch.sem 1) (ch.sem 2) (ch.sem 13) (ch.sem 14) (zc ch) B
-      (honestClaims (applyAff B t r) a) a := by
+      (honestClaims (applyAff B t r) a) (R0P.Mask.honestExtra π (applyAff B t r) a) a := by
   simp only [oracle, AffineMap.coe_add, Pi.add_apply, AffineMap.coe_smul,
     Pi.smul_apply, smul_eq_mul, mask_apply, original_apply, MaskedProtocol.terminalZ]
 
@@ -252,14 +286,14 @@ theorem decode_encoded (q : InitialMessage K) :
 /-- The ten round messages are interpolation of the actual masked terminal's
 partial Boolean sums. This also shows that H1 affinity passes through the
 round-polynomial construction, with earlier alphas fixed. -/
-theorem roundPoly_apply (pub : Public K) (B : PackBasis F) (t : Trace K)
+theorem roundPoly_apply (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (j : Fin 10) (r : AffTape K F) :
-    roundPoly pub B t ch j r =
+    roundPoly π pub B t ch j r =
       Lagrange.interpolate Finset.univ (fun i : Fin 28 => (i.val : K))
         (fun i => ∑ tail : Fin (9-j.val) → Bool,
           let a := roundPoint ch j (i.val : K) tail
           MaskedProtocol.terminalZ pub (ch.sem 0) (ch.sem 1) (ch.sem 2)
-            (ch.sem 13) (ch.sem 14) (zc ch) B (honestClaims (applyAff B t r) a) a) := by
+            (ch.sem 13) (ch.sem 14) (zc ch) B (honestClaims (applyAff B t r) a) (R0P.Mask.honestExtra π (applyAff B t r) a) a) := by
   simp only [roundPoly, AffineMap.comp_apply, LinearMap.coe_toAffineMap,
     LinearMap.restrictScalars_apply]
   congr 1
@@ -267,9 +301,9 @@ theorem roundPoly_apply (pub : Public K) (B : PackBasis F) (t : Trace K)
   simp only [AffineMap.pi_apply, affine_sum_apply, oracle_apply]
 
 /-- The public zero extension reveals no symbol at an unqueried position. -/
-theorem unqueried_zero (pub : Public K) (B : PackBasis F) (t : Trace K)
+theorem unqueried_zero (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29)
-    (hq : q ∉ ch.queries) : payloadAffine pub B t ch r (.opened q s c) = 0 := by
+    (hq : q ∉ ch.queries) : payloadAffine π pub B t ch r (.opened q s c) = 0 := by
   simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
     LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, LinearMap.pi_apply, if_neg hq, LinearMap.zero_apply]
@@ -277,7 +311,7 @@ theorem unqueried_zero (pub : Public K) (B : PackBasis F) (t : Trace K)
 /-- Direct honest payload: first apply the ported mask to the prepared trace,
 then evaluate the semantic/oracle/opening expressions. The affine packaging is
 proved equal to this function below, not required as an interface premise. -/
-def run (pub : Public K) (B : PackBasis F) (t : Trace K)
+def run (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) : Payload K :=
   let t := applyAff B (prepare pub t ch) r
   fun coord => match coord with
@@ -285,42 +319,43 @@ def run (pub : Public K) (B : PackBasis F) (t : Trace K)
       let a := fun i => if bits i then (1 : K) else 0
       MaskedProtocol.maskValue B
         (fun c => honestClaims t a 0 (Fin.castLE (by omega) c))
-        (fun c => honestClaims t a 0 ⟨16+c.val, by omega⟩) (honestClaims t a 0 27) a
+        (fun c => honestClaims t a 0 ⟨16+c.val, by omega⟩) (honestClaims t a 0 27) a + R0P.Mask.honestExtra π t a 28
   | .semanticCoeff j i =>
       (Lagrange.interpolate Finset.univ (fun k : Fin 28 => (k.val : K))
         (fun k => ∑ tail : Fin (9-j.val) → Bool,
           let a := roundPoint ch j (k.val : K) tail
           MaskedProtocol.terminalZ pub (ch.sem 0) (ch.sem 1) (ch.sem 2)
-            (ch.sem 13) (ch.sem 14) (zc ch) B (honestClaims t a) a)).coeff i.val
+            (ch.sem 13) (ch.sem 14) (zc ch) B (honestClaims t a) (R0P.Mask.honestExtra π t a) a)).coeff i.val
   | .pointClaim j c => honestClaims t (alpha ch) j c
-  | .ood j c => evalMessage (t c) (ch.circle j)
+  | .extraClaim c => R0P.Mask.honestExtra π t (alpha ch) c
+  | .ood j c => evalMessage (coeffsOf π t c) (ch.circle j)
   | .inactiveSum => ∑ c : Fin 29, ch.opening 0 ^ c.val *
       AspisR0.LinearDual.dot (indicator copyInactiveRows) (t c)
-  | .openingCoeff i => (roundPolynomial (batchLinear ch t) (openingWeights ch)).coeff i.val
-  | .finalCoeff i => foldMessage (ch.opening 3) (batchLinear ch t) i
-  | .opened q s c => if q ∈ ch.queries then exactInitialEncoder (t c) (childIndex q s) else 0
+  | .openingCoeff i => (roundPolynomial (batchLinear π ch t) (openingWeights π ch)).coeff i.val
+  | .finalCoeff i => foldMessage (ch.opening 3) (batchLinear π ch t) i
+  | .opened q s c => if q ∈ ch.queries then exactInitialEncoder (coeffsOf π t c) (childIndex q s) else 0
 
 attribute [local irreducible] prepare helper applyAff traceAffine batchLinear
   quotientLinear openingWeights honestClaims MaskedProtocol.terminalZ MaskedProtocol.maskValue
   mask claimsLinear dotLinear relationLinear
 
-private theorem run_maskSum (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_maskSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) :
-    run pub B t ch r (.maskSum) = payloadAffine pub B t ch r (.maskSum) := by
+    run π pub B t ch r (.maskSum) = payloadAffine π pub B t ch r (.maskSum) := by
   simp only [payloadAffine, AffineMap.pi_apply]
   rw [affine_sum_apply]
   simp only [run, mask_apply]
 
-private theorem run_semanticCoeff (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_semanticCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 10) (i : Fin 28) :
-    run pub B t ch r (.semanticCoeff j i) = payloadAffine pub B t ch r (.semanticCoeff j i) := by
-  change _ = (roundPoly pub B (prepare pub t ch) ch j r).coeff i.val
+    run π pub B t ch r (.semanticCoeff j i) = payloadAffine π pub B t ch r (.semanticCoeff j i) := by
+  change _ = (roundPoly π pub B (prepare pub t ch) ch j r).coeff i.val
   exact (congrArg (fun p : K[X] => p.coeff i.val)
-    (roundPoly_apply pub B (prepare pub t ch) ch j r)).symm
+    (roundPoly_apply π pub B (prepare pub t ch) ch j r)).symm
 
-private theorem run_pointClaim (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 3) (c : Fin 29) :
-    run pub B t ch r (.pointClaim j c) = payloadAffine pub B t ch r (.pointClaim j c) := by
+    run π pub B t ch r (.pointClaim j c) = payloadAffine π pub B t ch r (.pointClaim j c) := by
   simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
     LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, LinearMap.pi_apply]
@@ -328,16 +363,23 @@ private theorem run_pointClaim (pub : Public K) (B : PackBasis F) (t : Trace K)
   rw [traceAffine_apply, claimsLinear_apply]
   rfl
 
-private theorem run_ood (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_extraClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K)
+    (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (c : Fin 29) :
+    run π pub B t ch r (.extraClaim c) = payloadAffine π pub B t ch r (.extraClaim c) := by
+  change _ = extraLinear π (alpha ch) c (traceAffine B (prepare pub t ch) r)
+  rw [traceAffine_apply, extraLinear_apply]
+  rfl
+
+private theorem run_ood (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 2) (c : Fin 29) :
-    run pub B t ch r (.ood j c) = payloadAffine pub B t ch r (.ood j c) := by
-  change _ = oodLinear (ch.circle j) ((traceAffine B (prepare pub t ch) r) c)
+    run π pub B t ch r (.ood j c) = payloadAffine π pub B t ch r (.ood j c) := by
+  change _ = oodLinear (ch.circle j) (coeffsLinear π ((traceAffine B (prepare pub t ch) r) c))
   rw [traceAffine_apply, oodLinear_apply]
   rfl
 
-private theorem run_inactiveSum (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) :
-    run pub B t ch r (.inactiveSum) = payloadAffine pub B t ch r (.inactiveSum) := by
+    run π pub B t ch r (.inactiveSum) = payloadAffine π pub B t ch r (.inactiveSum) := by
   simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
     LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, LinearMap.pi_apply]
@@ -348,50 +390,52 @@ private theorem run_inactiveSum (pub : Public K) (B : PackBasis F) (t : Trace K)
   simp only [run, LinearMap.sum_apply, LinearMap.smul_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, smul_eq_mul, dotLinear, AspisR0.LinearDual.dot]
 
-private theorem run_openingCoeff (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_openingCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (i : Fin 7) :
-    run pub B t ch r (.openingCoeff i) = payloadAffine pub B t ch r (.openingCoeff i) := by
+    run π pub B t ch r (.openingCoeff i) = payloadAffine π pub B t ch r (.openingCoeff i) := by
   simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
     LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, LinearMap.pi_apply, Polynomial.lcoeff_apply]
-  change _ = (relationLinear (openingWeights ch)
-    (batchLinear ch (traceAffine B (prepare pub t ch) r))).coeff i.val
+  change _ = (relationLinear (openingWeights π ch)
+    (batchLinear π ch (traceAffine B (prepare pub t ch) r))).coeff i.val
   rw [traceAffine_apply, relationLinear_apply]
   rfl
 
-private theorem run_finalCoeff (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_finalCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (i : Fin 256) :
-    run pub B t ch r (.finalCoeff i) = payloadAffine pub B t ch r (.finalCoeff i) := by
+    run π pub B t ch r (.finalCoeff i) = payloadAffine π pub B t ch r (.finalCoeff i) := by
   change _ = foldLinear (ch.opening 3)
-    (batchLinear ch (traceAffine B (prepare pub t ch) r)) i
+    (batchLinear π ch (traceAffine B (prepare pub t ch) r)) i
   rw [traceAffine_apply, foldLinear_apply]
   rfl
 
-private theorem run_opened (pub : Public K) (B : PackBasis F) (t : Trace K)
+private theorem run_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) :
-    run pub B t ch r (.opened q s c) = payloadAffine pub B t ch r (.opened q s c) := by
+    run π pub B t ch r (.opened q s c) = payloadAffine π pub B t ch r (.opened q s c) := by
   change _ = (if q ∈ ch.queries then
-    (LinearMap.proj (childIndex q s)).comp (exactInitialLinear.comp (LinearMap.proj c))
+    (LinearMap.proj (childIndex q s)).comp (exactInitialLinear.comp ((coeffsLinear π).comp (LinearMap.proj c)))
     else 0) (traceAffine B (prepare pub t ch) r)
   rw [traceAffine_apply]
   simp only [run]
   split_ifs <;> simp only [LinearMap.comp_apply, LinearMap.proj_apply,
-    exactInitialLinear_apply, LinearMap.zero_apply]
+    exactInitialLinear_apply, LinearMap.zero_apply, coeffsLinear_apply]
+  rfl
 
 /-- Componentwise equality to the actual ported expressions. The eight small
 component lemmas keep the kernel from expanding one aggregate proof. -/
-theorem run_eq_payloadAffine (pub : Public K) (B : PackBasis F) (t : Trace K)
-    (ch : Challenges K) (r : AffTape K F) : run pub B t ch r = payloadAffine pub B t ch r := by
+theorem run_eq_payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
+    (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r = payloadAffine π pub B t ch r := by
   funext coord
   cases coord with
-  | maskSum => exact run_maskSum pub B t ch r
-  | semanticCoeff j i => exact run_semanticCoeff pub B t ch r j i
-  | pointClaim j c => exact run_pointClaim pub B t ch r j c
-  | ood j c => exact run_ood pub B t ch r j c
-  | inactiveSum => exact run_inactiveSum pub B t ch r
-  | openingCoeff i => exact run_openingCoeff pub B t ch r i
-  | finalCoeff i => exact run_finalCoeff pub B t ch r i
-  | opened q s c => exact run_opened pub B t ch r q s c
+  | maskSum => exact run_maskSum π pub B t ch r
+  | semanticCoeff j i => exact run_semanticCoeff π pub B t ch r j i
+  | pointClaim j c => exact run_pointClaim π pub B t ch r j c
+  | extraClaim c => exact run_extraClaim π pub B t ch r c
+  | ood j c => exact run_ood π pub B t ch r j c
+  | inactiveSum => exact run_inactiveSum π pub B t ch r
+  | openingCoeff i => exact run_openingCoeff π pub B t ch r i
+  | finalCoeff i => exact run_finalCoeff π pub B t ch r i
+  | opened q s c => exact run_opened π pub B t ch r q s c
 
 #print axioms helper
 #print axioms original_apply

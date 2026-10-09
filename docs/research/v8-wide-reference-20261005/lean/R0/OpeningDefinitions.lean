@@ -26,12 +26,43 @@ structure Data (K : Type) [Field K] where
   points : Fin 3 → Fin 10 → K
   pointClaims : Fin 3 → Fin 29 → K
   inactive : Finset (Fin 1024)
+  transport : Fin 1024 ≃ Fin 1024
+  extraWeight : InitialMessage K
+  extraClaims : Fin 29 → K
 
 /-- The Boolean multilinear equality weights, indexed by the ten bits. -/
 def eqWeight (p : Fin 10 → K) : InitialMessage K := fun r =>
   ∏ b : Fin 10, if r.val / 2^b.val % 2 = 0 then 1-p b else p b
 
 def indicator (I : Finset (Fin 1024)) : InitialMessage K := fun r => if r ∈ I then 1 else 0
+
+/-- A row-space weight reindexed into coefficient space. -/
+def coeffWeight (π : Fin 1024 ≃ Fin 1024) (w : InitialMessage K) : InitialMessage K :=
+  fun j => w (π.symm j)
+
+theorem coeffWeight_add (π : Fin 1024 ≃ Fin 1024) (w v : InitialMessage K) :
+    coeffWeight π (w + v) = coeffWeight π w + coeffWeight π v := rfl
+
+theorem coeffWeight_smul (π : Fin 1024 ≃ Fin 1024) (a : K) (w : InitialMessage K) :
+    coeffWeight π (a • w) = a • coeffWeight π w := rfl
+
+theorem coeffWeight_sum {ι : Type*} (π : Fin 1024 ≃ Fin 1024)
+    (s : Finset ι) (w : ι → InitialMessage K) :
+    coeffWeight π (∑ i ∈ s, w i) = ∑ i ∈ s, coeffWeight π (w i) := by
+  funext j
+  simp only [coeffWeight, Finset.sum_apply]
+
+theorem dot_coeffWeight_left (π : Fin 1024 ≃ Fin 1024) (w m : InitialMessage K) :
+    dot (coeffWeight π w) m = dot w (fun r => m (π r)) := by
+  simpa only [dot, coeffWeight, Equiv.symm_apply_apply] using
+    (Equiv.sum_comp π (fun j => w (π.symm j) * m j)).symm
+
+theorem dot_coeffWeight_indicator (π : Fin 1024 ≃ Fin 1024)
+    (I : Finset (Fin 1024)) (m : InitialMessage K) :
+    dot (coeffWeight π (indicator I)) m = ∑ r ∈ I, m (π r) := by
+  rw [dot_coeffWeight_left]
+  simp only [indicator, dot, ite_mul, one_mul, zero_mul, ← Finset.sum_filter,
+    Finset.filter_mem_eq_inter, Finset.univ_inter]
 
 def interpolants (D : Data K) : Fin 29 → InitialMessage K := fun l => interpolant D.z0 D.z1 (D.y l)
 def virtual (D : Data K) : Fin 29 → InitialWord K := fun l i =>
@@ -43,18 +74,27 @@ def imageFunctional (D : Data K) (i : Fin 2) : InitialMessage K →ₗ[K] K :=
   if i = 0 then e1 else e2 (secantB D.z0 D.z1) (secantC D.z0 D.z1)
 
 def discrepancy (D : Data K) (t : Fin 29 → InitialMessage K) (j : Fin 3) (l : Fin 29) : K :=
-  D.pointClaims j l-dot (eqWeight (D.points j)) (t l)
+  D.pointClaims j l-dot (coeffWeight D.transport (eqWeight (D.points j))) (t l)
 def pointDefect (D : Data K) (gamma : K) (t : Fin 29 → InitialMessage K) (j : Fin 3) : K :=
   width29Batch (discrepancy D t j) gamma
 
+def extraDiscrepancy (D : Data K) (t : Fin 29 → InitialMessage K) (l : Fin 29) : K :=
+  D.extraClaims l-dot D.extraWeight (t l)
+
+def extraDefect (D : Data K) (gamma : K) (t : Fin 29 → InitialMessage K) : K :=
+  width29Batch (extraDiscrepancy D t) gamma
+
 def inactiveDefect (D : Data K) (gamma v : K) (t : Fin 29 → InitialMessage K) : K :=
-  v-dot (indicator D.inactive) (exactInitialMessageCurve t gamma)
+  v-dot (coeffWeight D.transport (indicator D.inactive)) (exactInitialMessageCurve t gamma)
 
 def weights (D : Data K) (kappa : K) : InitialMessage K :=
-  (∑ j : Fin 3, kappa^(j.val+1) • eqWeight (D.points j))+indicator D.inactive
+  coeffWeight D.transport
+    ((∑ j : Fin 3, kappa^(j.val+1) • eqWeight (D.points j))+indicator D.inactive) +
+    kappa^4 • D.extraWeight
 
 def claim (D : Data K) (gamma v kappa : K) : K :=
-  (∑ j : Fin 3, kappa^(j.val+1)*width29Batch (D.pointClaims j) gamma)+v
+  (∑ j : Fin 3, kappa^(j.val+1)*width29Batch (D.pointClaims j) gamma)+v +
+    kappa^4 * width29Batch D.extraClaims gamma
 
 def claimPrime (D : Data K) (gamma v kappa : K) : K :=
   claim D gamma v kappa-dot (weights D kappa) (exactInitialMessageCurve (interpolants D) gamma)
@@ -75,16 +115,20 @@ def B2 (D : Data K) : Finset K := by
 
 def B3 (D : Data K) : Finset K := by
   classical
-  exact (Lambda D.W).biUnion fun t => Finset.univ.biUnion fun j : Fin 3 =>
-    if discrepancy D t j = 0 then ∅ else width29NonzeroCollisionSet (discrepancy D t j)
+  exact (Lambda D.W).biUnion fun t =>
+    (Finset.univ.biUnion fun j : Fin 3 =>
+      if discrepancy D t j = 0 then ∅ else width29NonzeroCollisionSet (discrepancy D t j)) ∪
+    (if extraDiscrepancy D t = 0 then ∅ else width29NonzeroCollisionSet (extraDiscrepancy D t))
 
 def pointPolynomial (D : Data K) (gamma v : K) (t : Fin 29 → InitialMessage K) : K[X] :=
-  C (inactiveDefect D gamma v t)+∑ j : Fin 3, monomial (j.val+1) (pointDefect D gamma t j)
+  C (inactiveDefect D gamma v t)+(∑ j : Fin 3, monomial (j.val+1) (pointDefect D gamma t j)) +
+    monomial 4 (extraDefect D gamma t)
 
 def B4 (D : Data K) (gamma v : K) : Finset K := by
   classical
   exact Finset.univ.filter fun kappa => ∃ t ∈ Lambda D.W,
-    pointDefect D gamma t ≠ 0 ∧ (pointPolynomial D gamma v t).eval kappa = 0
+    (pointDefect D gamma t ≠ 0 ∨ extraDefect D gamma t ≠ 0) ∧
+      (pointPolynomial D gamma v t).eval kappa = 0
 
 def imagePolynomial (D : Data K) (gamma v kappa : K) (q : InitialMessage K) : K[X] :=
   C (dot (qWeights D kappa) q-claimPrime D gamma v kappa)+

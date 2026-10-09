@@ -172,15 +172,15 @@ theorem round_field_bound (x : Stmt E Sfield) (l : List (Msg E × R0FS.Chal E)) 
             = mean (fun b : State => indicator (R0C.ModuloField.gamma b ∈ bad0 x y)) := by
               apply mean_congr; intro b; apply indicator_iff
               rw [R0FS.rb0]; simp [σQ]
-          _ ≤ (336869026605739+14000 : ℚ) * (257 / (256^32 : ℚ)) :=
+          _ ≤ (336869026605739+16800 : ℚ) * (257 / (256^32 : ℚ)) :=
               R0C.OpeningSamplerBounds.gamma_bad_density x y
           _ ≤ (1 + R0C.SlackStatement.delta0) * ε E 0 := by
               change _ ≤ (1 + R0C.SlackStatement.delta0) *
-                ((336869026605739 + 14000 : ℚ) / ((Fintype.card E : ℚ) - 1))
-              have := mul_le_mul_of_nonneg_left hg (by norm_num : (0 : ℚ) ≤ 336869026605739 + 14000)
+                ((336869026605739 + 16800 : ℚ) / ((Fintype.card E : ℚ) - 1))
+              have := mul_le_mul_of_nonneg_left hg (by norm_num : (0 : ℚ) ≤ 336869026605739 + 16800)
               have e2 : (1 + R0C.SlackStatement.delta0) *
-                  ((336869026605739 + 14000 : ℚ) / ((Fintype.card E : ℚ) - 1)) =
-                  (336869026605739 + 14000 : ℚ) *
+                  ((336869026605739 + 16800 : ℚ) / ((Fintype.card E : ℚ) - 1)) =
+                  (336869026605739 + 16800 : ℚ) *
                     ((1 + R0C.SlackStatement.delta0) / ((Fintype.card E : ℚ) - 1)) := by ring
               rw [e2]
               exact this
@@ -195,9 +195,9 @@ theorem round_field_bound (x : Stmt E Sfield) (l : List (Msg E × R0FS.Chal E)) 
             = mean (fun b : State => indicator (R0C.ModuloField.ordinary b ∈ bad1 x y γ v)) := by
               apply mean_congr; intro b; apply indicator_iff
               rw [R0FS.rb1]; simp [σQ]
-          _ ≤ 300 * (257 / (256^32 : ℚ)) := R0C.OpeningSamplerBounds.kappa_bad_density x y γ v
+          _ ≤ 400 * (257 / (256^32 : ℚ)) := R0C.OpeningSamplerBounds.kappa_bad_density x y γ v
           _ = (1 + R0C.SlackStatement.delta0) * ε E 1 := by
-              change _ = (1 + R0C.SlackStatement.delta0) * ((300 : ℚ) / (Fintype.card E : ℚ))
+              change _ = (1 + R0C.SlackStatement.delta0) * ((400 : ℚ) / (Fintype.card E : ℚ))
               rw [ho]; ring
           _ ≤ _ := le_rfl
       · exact hz 1 fun c h => by

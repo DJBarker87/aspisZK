@@ -25,7 +25,7 @@ variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
 
 def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : HonestInstance h) (ch : Challenges K) (t : Tape K F) : Payload K :=
-  HonestView.run x.1 B (applyEligible (h.build w) t.2) ch t.1
+  HonestView.run h.transport x.1 B (applyEligible (h.build w) t.2) ch t.1
 
 def view (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)

@@ -15,18 +15,18 @@ def roundProjection : Payload K →ₗ[F] PayloadSplit.RoundPayload K :=
   LinearMap.pi fun j => LinearMap.pi fun i => LinearMap.proj (.semanticCoeff j i)
 
 /-- A ∘ inl_M observed on the round-polynomial component. -/
-def roundMaskMap (B : PackBasis F) (ch : Challenges K) :
+def roundMaskMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) :
     M K F →ₗ[F] PayloadSplit.RoundPayload K :=
-  roundProjection.comp ((A B ch).comp inlM)
+  roundProjection.comp ((A π B ch).comp inlM)
 
 /-- (i) requires zero change to every non-round disclosure. Projection alone
 would forget that requirement, so its lift must lie in this kernel. -/
-def silentMasks (B : PackBasis F) (ch : Challenges K) : Submodule F (M K F) :=
-  LinearMap.ker (nonRound.comp ((A B ch).comp inlM))
+def silentMasks (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Submodule F (M K F) :=
+  LinearMap.ker (nonRound.comp ((A π B ch).comp inlM))
 
-def silentRoundMaskMap (B : PackBasis F) (ch : Challenges K) :
-    silentMasks B ch →ₗ[F] PayloadSplit.RoundPayload K :=
-  (roundMaskMap B ch).comp (silentMasks B ch).subtype
+def silentRoundMaskMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) :
+    silentMasks π B ch →ₗ[F] PayloadSplit.RoundPayload K :=
+  (roundMaskMap π B ch).comp (silentMasks π B ch).subtype
 
 inductive C1Cell
   | point (j : Fin 3) (c : Fin 16)
@@ -42,15 +42,15 @@ def c1Projection : Payload K →ₗ[F] (C1Cell → K) :=
   | .opened q s c => LinearMap.proj (.opened q s (Fin.castLE (by omega) c))
 
 /-- Full joint tape observed in the C1 components that the pure masks cannot hide. -/
-def c1Map (B : PackBasis F) (ch : Challenges K) : T K F →ₗ[F] (C1Cell → K) :=
-  c1Projection.comp (A B ch)
+def c1Map (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : T K F →ₗ[F] (C1Cell → K) :=
+  c1Projection.comp (A π B ch)
 
 /-- Z4 lemma statement for (i), including the zero-complement constraint.
 Only the actual remainder displacements are targets, not the entire ambient array. -/
 def roundMask_surjectivity (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) : Prop :=
   ∀ ch w n, h.public w = x.1 →
-    ∃ m : silentMasks B ch, silentRoundMaskMap B ch m = g h B x w ch n
+    ∃ m : silentMasks h.transport B ch, silentRoundMaskMap h.transport B ch m = g h B x w ch n
 
 /-- Z4 encoder-restriction lemma statement needed for (ii) beyond the mask
 lanes. This is the C1 part only: a proof still needs a compatible lift for the
@@ -58,7 +58,7 @@ remaining components before it can establish full-payload clause (ii). -/
 def c1_surjectivity (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) : Prop :=
   ∀ ch w w', h.public w = x.1 → h.public w' = x.1 →
-    c1Projection (F := F) (c h B x w ch - c h B x w' ch) ∈ LinearMap.range (c1Map B ch)
+    c1Projection (F := F) (c h B x w ch - c h B x w' ch) ∈ LinearMap.range (c1Map h.transport B ch)
 
 #print roundMask_surjectivity
 #print c1_surjectivity
