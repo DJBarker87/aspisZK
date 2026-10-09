@@ -1,0 +1,17 @@
+[package]
+name = "r0-primitive-probe"
+version = "0.1.0"
+edition = "2021"
+publish = false
+[lib]
+crate-type = ["cdylib", "lib"]
+[workspace]
+[dependencies]
+aspis-core = { path = "../../crates/aspis-core", features = ["r0"] }
+solana-program = "=2.3.0"
+[features]
+no-entrypoint = []
+custom-heap = []
+custom-panic = []
+[profile.release]
+opt-level = 3

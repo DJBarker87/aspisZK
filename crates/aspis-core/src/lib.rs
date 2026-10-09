@@ -92,3 +92,6 @@ mod tests {
         assert_eq!(half.mul(half), CM31::ONE);
     }
 }
+
+#[cfg(feature = "r0-op-count")]
+pub mod r0_op_count;
