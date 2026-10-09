@@ -3440,3 +3440,91 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2802 | `R0P/SemMaxErr` | 0 / 0 | 0:04.91 | 6851348 | 0 | 12 | `c17943a39ffd541de55d5c0d7aed2c1f975a8b8352ffc57dfd3037777f9f3069` |
 
 Source revision(s): `b0b89d6edebb77fa0e1a091791e4130e71376f0b`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+## Freeze
+
+G22, G21, and G23 are complete. The final manifest `R0P/SemAll` imports all 55 other current R0P modules. Its single host replay, attempt 2900, returned Lean/scope exit=0 and time exit=0, wall 2.62 s, peak RSS 6,795,512 KiB, swaps 0, with no errors or warnings. No second final-manifest replay was run. The eight requested audits all report exactly `[propext, Classical.choice, Quot.sound]`; no sorryAx or additional axiom.
+
+Final bound, under the unchanged round-count, four source decoder identities, and distinct-first-read bound of the theorem43 instance:
+
+`Pr[accepts ∧ extractFails] ≤ Qtot · (1+delta0) · C(9557,22)/C(262144,22) + κ(Qtot)`.
+
+`git rev-parse HEAD` immediately before this Freeze commit: `a1b0d583a926c774cc724dc2f08f6cf09fe388cf`. The manifest is the new source in this commit; its exact SHA is in the table. All other source bytes are already committed at that revision.
+
+Preflight matched every current local source SHA to an accepted exit=0 host attempt, checked equality with the current host source, checked that its cached object exists, and reviewed all 766 supporting axiom lines. All are standard axioms or no axioms. The one historical warning is Core attempt 600’s style suggestion “try simp instead of simpa”; it is unchanged and does not occur in the final manifest run. The obsolete CircleMassObstruction source was deleted locally and from the host source directory; its finding and raw evidence remain recorded.
+
+Host `dombarker@100.108.41.90`, pinned workspace `/home/dombarker/project-offloads/aspis-fs-generic-20261006`, Lean 4.32.0 and compiled cache. Final command: `sh run_g15_lake.sh 2900 R0P/SemAll 7000 7` (invokes `lake env lean`). Reservation 24+7 GiB; MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, timeout 900 s, one Lean job at a time. No cap increase or package/dependency build. Accepted attempts below include the unchanged independent modules’ prior focused runs and the updated R0C-import closure’s G22 recompiles.
+
+| Module | Accepted attempt | exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `Asset` | 710 | 0 | 0:01.60 | 3323420 | 0 | 3 | `2c36ba0a589d2e982ca55716f5093e6c5da4152454f24de26c71f9ad9d9ef424` |
+| `CircleSampler` | 2717 | 0 | 0:12.09 | 6832504 | 0 | 20 | `ee0e9a4be9447d043fbcf19fa2ff583f04456dd62bd8c27d9fd622781accde1d` |
+| `Copy` | 1098 | 0 | 0:02.99 | 3365140 | 0 | 32 | `28a37fcfab1c2a6235e42932d44156c7952e6311958317ce843adb9737709d0f` |
+| `CopyConstants` | 1001 | 0 | 0:01.96 | 3348732 | 0 | 0 | `cca9bdd0d2988693652d23010e068155abe0bc52fe36d030dbd8c163fe4f4f68` |
+| `CopyInputLinks` | 1498 | 0 | 0:05.06 | 3414580 | 0 | 43 | `7575812a8719c53c74a7736037a0f109dc34420f69709e0cf41f0de96a84ff95` |
+| `CopyRegistry` | 1198 | 0 | 0:07.84 | 3620576 | 0 | 34 | `42a78275bbe6dccebc1a7843e7260b2591c25ed5add271c79e1db99d4e820906` |
+| `Core` | 600 | 0 | 0:01.49 | 3327872 | 0 | 0 | `eba6bb784803b5f00922724efc9997a8d5ab6bc55cd8c100bffd8a397dabe1f9` |
+| `CoreExt` | 1700 | 0 | 0:01.43 | 3327464 | 0 | 1 | `7b0a6820f1f6d446943447509edd40babf84801eb1f06aeabd868ff033d41188` |
+| `Digest` | 899 | 0 | 0:08.09 | 3381620 | 0 | 13 | `928d531c7ae80fdb2a3865bf3b2eac2d1dea84c2892c413f5c4a63709947d26b` |
+| `EmptyRoots` | 803 | 0 | 0:01.48 | 3310664 | 0 | 0 | `648c9aaccf1691b634b2a91f46348ecb1e2d7382a982dcbddff1dcc786b77cbc` |
+| `Extraction` | 1598 | 0 | 0:02.18 | 3351276 | 0 | 24 | `1b0f05c9252142fb659e2eaad2d528c42c9dbc405668e1e982d891ba424ca019` |
+| `LaneMap` | 1799 | 0 | 0:09.38 | 3412060 | 0 | 44 | `122aa0b15111da62ae6672051c43a1cfe792e6cd240974669af87732539f6e17` |
+| `LogUpAssembly` | 631 | 0 | 0:01.51 | 3340248 | 0 | 1 | `ccd2282e2da4669ed9f7c48d8260e38fda2361b8af3e69592e4ffcc38ce20a24` |
+| `LogUpChain` | 1814 | 0 | 0:04.24 | 3386880 | 0 | 57 | `a9b0e52dd73026f356c16237d4b29527a70a479fc14cb0d59c178e1d94ff1fb6` |
+| `LogUpCompress` | 1398 | 0 | 0:01.48 | 3323492 | 0 | 7 | `2a8ee84dbbc341e899441847ef68ed4f91c1a25d308a2124966bf3c587a32c4e` |
+| `LogUpFrac` | 1298 | 0 | 0:01.20 | 2087160 | 0 | 8 | `f4d1c635188c74aeb5e2150e94b8627c22439e0bf1a482a173c0a5b38566b0b2` |
+| `MessageDescent` | 2723 | 0 | 0:03.01 | 6748832 | 0 | 1 | `d3cb1623aeb04289250ed3f5bc2a9c532b62da2c5465933f2240fca47da856c3` |
+| `Occupancy` | 712 | 0 | 0:01.79 | 3325912 | 0 | 2 | `2e12accc73c539ef79731f59f0a2b6ee760412afb90d5275c8ddedd36b77059d` |
+| `Path` | 805 | 0 | 0:04.78 | 3340740 | 0 | 6 | `bb8ecd5b7b3880bd6cdf71ec06c6066195ce9a25b532111a21b861cc5833cb79` |
+| `Poseidon` | 915 | 0 | 0:09.17 | 3423984 | 0 | 39 | `faeeefd8f3a6c25e1896eb827d9bd12d9bda901ff0171675186064baa5c369c8` |
+| `PoseidonConstants` | 900 | 0 | 0:01.50 | 3310196 | 0 | 0 | `c87e94b63a575b96cecff98eea6a84385945d5481054a688d24ba162452340b0` |
+| `Positive` | 713 | 0 | 0:01.57 | 3318348 | 0 | 3 | `7c318b973fcda478a003fb302d75eb75b6af318cca6d8e572ca66cd17dcfba3a` |
+| `Positivity` | 602 | 0 | 0:01.80 | 3327496 | 0 | 1 | `0a7eaab784bc129b9995e3b7f18efde393e7d383686d1798bbe9fa7893a6ad1c` |
+| `PositivityChain` | 608 | 0 | 0:01.38 | 3319404 | 0 | 3 | `480aaa1f5393862e55becb598566f85fe54ab6116f729ba11c1f5918440b481c` |
+| `PositivityWired` | 604 | 0 | 0:01.79 | 3328412 | 0 | 1 | `9d601f1920c4700f2f08566cef66c9e43b5d3e9fceb9f9d9cc1ef4ce4471c7f2` |
+| `Schedule` | 898 | 0 | 0:13.81 | 3433612 | 0 | 31 | `393e5edd57671f64647056130ea5b184a65dabb2b0069c45b1cf9afa1f058fb6` |
+| `SemAccept` | 2718 | 0 | 0:02.87 | 6812844 | 0 | 2 | `02a046a9703bf95c8f5fa3cb489084e0862379ae6f020a48f0a4374b542019b4` |
+| `SemAll` | 2900 | 0 | 0:02.62 | 6795512 | 0 | 8 | `6a7101dc97f8c720a07041d241ef43116c77a757a164332cfb07b16cdfee5f0d` |
+| `SemAssembly` | 630 | 0 | 0:01.42 | 3328224 | 0 | 4 | `7ef49bd9a94338bc5b8aeda48fa08f415bdb57cf14bd483e4475ceff0b6c17fc` |
+| `SemBadSets` | 1699 | 0 | 0:04.64 | 2162908 | 0 | 41 | `b74e1d7adfaaf6ad0c4973b96461b6359d23b62d6cadb6e2983646d3e5b40b5d` |
+| `SemBridge` | 2734 | 0 | 0:03.31 | 6812280 | 0 | 9 | `fe026af913107a06834976b53f2545644d8babad418872e758b4a332b10d2217` |
+| `SemCharP` | 2730 | 0 | 0:02.95 | 6827908 | 0 | 2 | `e31f972835a430f019d8d05995add7923e65282cf71ba957f4534bcaad10aa42` |
+| `SemClosed` | 1815 | 0 | 0:01.42 | 3332880 | 0 | 2 | `05ed018167483ebe6cb14b4064d2dd7aa4a4ec8da950592bc88ee7ab4f30f7cf` |
+| `SemD2` | 2714 | 0 | 0:04.07 | 6841668 | 0 | 5 | `ef7b48c25eefa272398f78472ecbcbc9f5221a8465ef2f414cf711ba79af99d9` |
+| `SemD2Glue` | 2729 | 0 | 0:16.38 | 6902268 | 0 | 29 | `196a197121ee0e86f9f6407c2f6557d5a894a5b9b43072e63dd299393ba609c9` |
+| `SemD3` | 2713 | 0 | 0:03.01 | 6811444 | 0 | 2 | `68cd2542aff4f20ead2f5855663cf3e743817725f2714cc3400a21b0f651c74b` |
+| `SemD3Glue` | 2724 | 0 | 0:22.47 | 6942000 | 0 | 56 | `6e17304965d8d6771475e85b38796d044abe1f2a634f336efdbad4b2f310475d` |
+| `SemDecision` | 2712 | 0 | 0:03.06 | 6806904 | 0 | 2 | `cf8c98e1bf6d5da3a2e725efd3790c4efc7e75fc32b0c650c310d875bf1f8971` |
+| `SemDeg` | 2720 | 0 | 0:09.84 | 6874348 | 0 | 47 | `ed059e7d1a94b7f3819398fb7f03762c743ab04d51d0ccd1ba795e8f5d96294e` |
+| `SemDegFamilies` | 2721 | 0 | 0:13.19 | 7002012 | 0 | 44 | `60daa294e557252938f4d87fb9eb93df7aca5eff51795abf595c140a3b15c3e1` |
+| `SemDuplexDecoder` | 2731 | 0 | 0:04.59 | 6835232 | 0 | 3 | `cc8dc9b73d6f98a43ba8a41771e1cf356cac5ad3a7e87b062f031e4e0ba86236` |
+| `SemDuplexDecodes` | 2733 | 0 | 0:11.32 | 6901972 | 0 | 9 | `f885ebfe138c092810c4bb0bd39d4dc7567a4aa4f93148a944edb06c421aa7d6` |
+| `SemDuplexDensity` | 2732 | 0 | 0:04.46 | 6847828 | 0 | 4 | `b5a853dd2e9deff895cf7aff3ef5c322c039928e4506a92f30b8cd3366138dac` |
+| `SemFiatShamir` | 2735 | 0 | 0:05.41 | 6839320 | 0 | 4 | `a9272da739c89b2aa4046cf8be1a7d3c3bc95c2f2edf2a52bdff4f56f1bcee72` |
+| `SemHonest` | 2719 | 0 | 0:03.62 | 6830820 | 0 | 14 | `63c890ceebfe82d2ef16e73aed51b4acac0e6bc0af8c5fb3b0d5eca05034234f` |
+| `SemLedger` | 622 | 0 | 0:01.56 | 3327488 | 0 | 4 | `12c257ec303dda29a2dd30b87b3c4f440e934ad1a5efd43cf9c26a29a2b0ad9b` |
+| `SemMaxErr` | 2802 | 0 | 0:04.91 | 6851348 | 0 | 12 | `c17943a39ffd541de55d5c0d7aed2c1f975a8b8352ffc57dfd3037777f9f3069` |
+| `SemPad` | 2715 | 0 | 0:03.60 | 6830748 | 0 | 24 | `2734705552a97a2ef29f0a4c6c4a36fda6e2f7653fe972c7152f9896c91f13c1` |
+| `SemRounds` | 1999 | 0 | 0:04.02 | 3396240 | 0 | 55 | `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4` |
+| `SemSource` | 2710 | 0 | 0:02.86 | 6796108 | 0 | 1 | `e79ce46d3ce2dc99e65aa99c78581f5069c66eec3dba4dae0dce09ec86f7a024` |
+| `SemView` | 2711 | 0 | 0:03.10 | 6816232 | 0 | 2 | `01868627189632007beaac02e9036d71d4f268dfe9c3f4d8b51ee9964de528e1` |
+| `SemVirtualDeg` | 2722 | 0 | 0:03.17 | 6813124 | 0 | 3 | `c7660c31f4d9c72d6b8b654450ffb6d4e6dc180de99b158c84e79d4f4874f4ee` |
+| `Semantics` | 613 | 0 | 0:01.66 | 3341880 | 0 | 2 | `9309c5faa3de30d4f35bfe46509fe335a821d89a43051201a97232c0b89dc615` |
+| `Sumcheck` | 628 | 0 | 0:00.91 | 1944708 | 0 | 1 | `c47147f826d471b479004d70328ea549c06d07f0b05d976f57bee3563d8c267d` |
+| `Value` | 711 | 0 | 0:02.43 | 3339316 | 0 | 6 | `90afff5dd9c8b70c6c183f6b3f2322d85d57fbcb548b530a98f69a91f1bccc12` |
+| `Zerocheck` | 629 | 0 | 0:01.35 | 1964756 | 0 | 3 | `ca1cbef230abd8829f89deb5638658a0b9c38b0c788fe3c34792e3bdc185a41b` |
+
+Final manifest audit output:
+
+```text
+'R0P.SemDuplex.combined_fiat_shamir_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemSource.combinedProtocol_D2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemD3Glue.d3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemSource.virtualDeg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemSource.honestRows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemSource.checksAccept' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemSource.circleSample0_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemSource.circleSample1_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+Raw attempt logs, time reports, source snapshots, and SHA receipts remain uncommitted in host `evidence/`; this continuation’s verified copies are in `/tmp/r0-g22-cont-20261009/evidence/`. Source/hash and axiom preflight inventories are retained beside them. No Lean source outside the job directory was edited.
