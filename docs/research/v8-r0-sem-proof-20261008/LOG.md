@@ -4029,3 +4029,15 @@ identifies `y 0 = MLE_t` for the extracted candidate exactly as it does for
 R0Z.MaskedProtocol.maskValue B (y ∘ castLE) (y ∘ (16+·)) (y 27) α`, whose
 `hMask` is the VDeg fact inside `maskValue_mldeg`; the port of `maskValue`
 moves to `R0P/MaskValue.lean` (soundness tree) and R0Z imports it.
+
+### G25: MaskValue (host attempt 3259)
+
+Fetched base dd621ba6244ec7eeb37d12d52cc72397b5ec1aae and read the fixed Lead review of G24. MaskValue ports the definitions factorExponent through maskValue byte-for-byte from R0Z/MaskedProtocol.lean, retaining source pin d2b7413259a75100db9d1c722d88932bfea28fb9 and citations in crates/aspis-core/src/state_only_hiding.rs:392–395 (exponents), 446–465 and 535–552 (tower basis), 484–512 (linear forms), 561–580 (factors), and 612–643/647–674 (selected mask). maskValue_vdeg is the existing degree proof before its final conversion to MLDeg: degree 26 factors times degree 1 trace MLEs, hence coordinate degree 27. Definitions match by byte comparison; no R0Z import or privacy-tree edit. Host run2.sh now enforces the common flock /tmp/aspis-r0-lean.lock. Attempt 3259 passes all eight standard-axiom audits.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3259 | `R0P/MaskValue` | 0 / 0 | 0:03.49 | 6818840 | 0 | 8 | `d87305635d05e315d4da28acdc334a0e1d057cee5bfbe7cc706cf02a3d1e2861` |
+
+Source revision(s): `dd621ba6244ec7eeb37d12d52cc72397b5ec1aae`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
