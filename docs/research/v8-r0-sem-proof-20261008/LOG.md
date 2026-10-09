@@ -3852,3 +3852,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3240 | `R0P/MaskD2Instance` | 0 / 0 | 0:03.56 | 6838764 | 0 | 1 | `17ff2ad7d727e2d3a99f9ab4f9462302304c1e050cb66e9067916dc4c734715b` |
 
 Source revision(s): `19348bc078df122c4ace5e8ecd98897caf7051a4`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: candidate eta exclusion from no hit
+
+MaskNoHit proves that a no-hit transcript excludes etaBad for every candidate in its parsed C2 list. The scalar claim is identified at slot 14, and the candidate belongs to the already fixed prefix list. No candidate uniqueness, trace-sum invariance, or additional mask premise is used. Attempt 3241 required an explicit prefix-length reduction; 3242 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3241 | `R0P/MaskNoHit` | 1 / 1 | 0:02.91 | 6804804 | 0 | 2 | `49f74bc2c3bfe3cfc8ffa7d54e309cefe746e1c9d8d0f3548b947a5b43d5e9e3` |
+| 3242 | `R0P/MaskNoHit` | 0 / 0 | 0:03.22 | 6838424 | 0 | 2 | `4f0bf23b9babbd2f05454b9919c17448d61fe168b2fa849a3ac69cedb0733841` |
+
+Source revision(s): `b9f679cff77d85a9d2d98a667fc0e7df6aa12d9e`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
