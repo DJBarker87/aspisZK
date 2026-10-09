@@ -1,0 +1,113 @@
+{
+  "job": "T1: D13-prime transport and D14-prime Libra tail",
+  "recorded_at_utc": "2026-10-09T18:31:38Z",
+  "branch": "codex/t1-transport-libra-20261009",
+  "base_revision": "41603fce0ca204804748a3ccad03c65f6eb536c1",
+  "source_revision": "41603fce0ca204804748a3ccad03c65f6eb536c1",
+  "status": "stopped_before_implementation_and_replay",
+  "stop_conditions": [
+    "Per-lane extra-claim binding needs gamma-collision coverage absent from the specified B3.",
+    "The direct extension changes B3 and its soundness contribution beyond the authorized B4 change."
+  ],
+  "obstruction": {
+    "required_conclusion": "For every lane l, extraDiscrepancy D t l = 0.",
+    "available_from_new_B4": "width29Batch (extraDiscrepancy D t) gamma = 0",
+    "missing_step": "An extra-row counterpart of B3_outside, with gamma outside that row's nonzero collision set.",
+    "current_B3_rows": 3,
+    "fixed_discrepancy_example": {
+      "lane_0": "1",
+      "lane_28": "-1",
+      "other_lanes": "0",
+      "batch_polynomial": "1 - gamma^28",
+      "gamma": "1",
+      "batch_value": "0",
+      "vector_nonzero": true
+    },
+    "example_scope": "Algebraic obstruction to the per-lane lifting step; not a Lean-checked counterexample to the entire binding theorem.",
+    "direct_repair_not_applied": {
+      "B3_old_bound": 8400,
+      "B3_four_row_bound": 11200,
+      "gamma_group_old_addend": 14000,
+      "gamma_group_four_row_addend": 16800,
+      "additional_gamma_error": "2800 / (|E| - 1)",
+      "authorized_B4_error_increase": "100 / |E|",
+      "qualification": "Bounds from the existing union-bound proof, not a claim of optimality."
+    }
+  },
+  "base_source_sha256": {
+    "docs/research/v8-r0-zk-20261009/LOG.md": "ebeaebae8e0b6077edc6d5f267920f361e57d6c8d1c8f70b8c9e176be23de296",
+    "docs/research/v8-wide-reference-20261005/lean/R0/OpeningDefinitions.lean": "6368b282b28ff076b54dae55fd53556c8f09c5cae8710ac9e4782c64ef57138a",
+    "docs/research/v8-wide-reference-20261005/lean/R0/OpeningAlgebra.lean": "07d47e9bcb0c6322e4d3da97485e6188cec4ea12b400e0003113fb541ad778a4",
+    "docs/research/v8-wide-reference-20261005/lean/R0/BadSetBounds.lean": "5a9af89ca089c0367f322685a10259b9935306435256bbfdfe1a1ce001562d72",
+    "docs/research/v8-wide-reference-20261005/lean/R0/Binding.lean": "21a81a23a7cee4086d3e24959520990c9074f5cb8c0944b8330fa44d5059d4f9",
+    "docs/research/v8-wide-reference-20261005/lean/R0/Ledger.lean": "31ce33bfc0e4754eb28ad1230eb9fc30b9ce5c581acae0b4ec52ef78d5fd608c",
+    "docs/research/v8-r0-fs-20261006/lean/R0FS/Protocol.lean": "9dafea6fee491c22141f37898aca3d31750dd590847c6ad73048639004379ebf",
+    "AspisFormal/AspisFormal/V6Width29CorrelatedAgreement.lean": "764d79d83b6d5a38e63aa483c8fc6708adf7d22606bc7a31403fdbf21929452a"
+  },
+  "host_preflight": {
+    "mode": "read_only",
+    "host": "dombarker@100.108.41.90",
+    "workspace": "/home/dombarker/project-offloads/aspis-fs-generic-20261006",
+    "adapter": "run2.sh",
+    "command_template_not_executed": "sh run2.sh N Module 7000 7",
+    "first_requested_attempt": 3282,
+    "attempt_3282_consumed_by_this_job": false,
+    "lock": "/tmp/aspis-r0-lean.lock",
+    "adapter_config": {
+      "MemoryHigh": "5G",
+      "MemoryMax": "7G",
+      "MemorySwapMax": 0,
+      "lean_memory_limit_MB": 7000,
+      "timeout_seconds": 900,
+      "aggregate_reservation_limit_GiB": 55
+    },
+    "sources_staged": false,
+    "build_scope_started": false,
+    "reservation_checked_at_launch": null
+  },
+  "attempts": [],
+  "attempt_count": 0,
+  "attempt_record_fields_for_future_runs": [
+    "attempt",
+    "target",
+    "exit_status",
+    "wall_seconds",
+    "peak_rss_kib",
+    "swap",
+    "source_revision",
+    "source_sha256",
+    "print_axioms_result"
+  ],
+  "final_targets": [
+    {
+      "target": "R0P/MaskAll",
+      "status": "not_run"
+    },
+    {
+      "target": "R0Z/Z4Maps",
+      "status": "not_run"
+    }
+  ],
+  "axioms_audit": [
+    {
+      "target": "wideBinding",
+      "status": "not_run",
+      "result": null
+    },
+    {
+      "target": "combined_fiat_shamir_masked",
+      "status": "not_run",
+      "result": null
+    },
+    {
+      "target": "hvzk_perfect_of_maskImage",
+      "status": "not_run",
+      "result": null
+    }
+  ],
+  "lean_source_edits": [],
+  "rust_source_edits": [],
+  "binaries_added": [],
+  "release_gate_closed": false,
+  "resume_requirement": "Lead amendment authorizing extra-row gamma-collision coverage and its ledger effect, or another exact statement resolving the missing per-lane step."
+}

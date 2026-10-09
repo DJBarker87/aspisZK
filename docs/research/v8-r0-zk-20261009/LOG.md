@@ -2334,3 +2334,60 @@ with the 21/|K_α| term, then the structured mask family, Ψ_ch and
 containment. Specified when T1 lands. **Rust R-H** (D14 in R-D/R-F/transcript:
 lane-28 h cells, fourth weight row, 29 extra claims, terminal h-terms) follows
 T1 so that the Rust is built to the replayed statement.
+
+### T1 stop — fourth-row gamma collision is absent from B3 (2026-10-09)
+
+**Status: stopped at statement inspection, before source edits or replay.**
+Branch `codex/t1-transport-libra-20261009`, base
+`41603fce0ca204804748a3ccad03c65f6eb536c1`. Read D13′ items 1–6 and
+D14′ items 1–7 / Job T1 at that revision. Evidence:
+[`t1/evidence.json`](t1/evidence.json). No Lean compilation attempts were
+launched; attempt 3282 was not consumed by this job. No final-target or
+axioms-audit result is claimed.
+
+**Obstruction.** D14′ item 3 requires per-lane extra-claim equality, but its
+new B4 predicate only yields `extraDefect D gamma t = 0`, i.e.
+`width29Batch (extraDiscrepancy D t) gamma = 0`. Passing from this batched
+equality to `extraDiscrepancy D t = 0` requires excluding the extra row's
+gamma collisions. D13′ item 1 leaves B3 unchanged, and D14′ item 3 only
+amends B4. The unchanged B3 ranges over the three point discrepancies and
+does not inspect `extraClaims`.
+
+The existing proof makes the missing step explicit:
+`R0/Binding.lean:164` obtains batched defects from `B4_outside`, then
+`:170` uses `B3_outside` to obtain per-lane point equality.
+`R0/BadSetBounds.lean:66` restricts that latter lemma to `j : Fin 3`;
+`R0/OpeningDefinitions.lean:76` likewise restricts B3 to those three rows.
+All citations here refer to
+`docs/research/v8-wide-reference-20261005/lean/` at the base revision.
+
+For a fixed extra-discrepancy vector, take `e 0 = 1`, `e 28 = -1`, and
+all other entries zero. The definition in
+`AspisFormal/AspisFormal/V6Width29CorrelatedAgreement.lean:25` gives
+`width29Batch e gamma = 1 - gamma^28`, so at the permitted nonzero
+challenge `gamma = 1` the batch vanishes although `e ≠ 0` and the terminal's
+lane 28 is wrong. This vector is fixed before gamma. Multiplication by
+`kappa^4` cannot expose a zero batch. This is an algebraic obstruction to
+the specified per-lane proof step, not a Lean-checked counterexample to the
+entire binding theorem.
+
+**Lead amendment required.** The direct extension of the existing argument
+would add the extra row's nonzero collision set to B3. With the current
+`batch_union_bound` and `Lambda_card` bounds, four rows give
+`100 * 4 * 28 = 11200` instead of B3's 8400. The grouped gamma numerator's
+14000 would become 16800, an additional `2800 / (|E| - 1)` term, alongside
+the authorized B4 change `300 → 400` contributing `100 / |E|`.
+These are the bounds of that proposed extension, not an implemented repair
+or a claim of optimality. Changing B3 and its ledger exceeds the issued
+statement and the instruction allowing only the B4 bound change, so no such
+change was made. A new lead decision is needed before implementation resumes.
+
+Read-only host preflight inspected `run2.sh` in
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006` on
+`dombarker@100.108.41.90`: it invokes the shared
+`flock /tmp/aspis-r0-lean.lock`, checks the 55 GiB aggregate reservation,
+and for arguments `7000 7` specifies MemoryHigh=5G, MemoryMax=7G,
+MemorySwapMax=0 and timeout 900 s. No sources were staged and no build scope
+was started. All Lean and Rust sources, including both lead-only R0C files,
+remain unchanged. This commit contains only this stop report and its JSON
+evidence; no binaries or co-author trailer.
