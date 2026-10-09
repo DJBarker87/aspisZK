@@ -41,3 +41,71 @@ fn karatsuba_million_pairs_and_all_limb_units() {
     }
     eprintln!("PASS: 1000000 deterministic random pairs, 64 limb-unit pairs, 9 boundary pairs; bitwise equality with frozen R-E3 schoolbook");
 }
+
+#[test]
+#[cfg(feature = "r0-r91-audit")]
+fn r91_add_sub_and_raw_outcomes() {
+    use aspis_core::{field::M31, r0::equality_trace};
+    assert!(cfg!(feature = "r0"));
+    let mut seed = 0x91_20261009u64;
+    for _ in 0..1_000_000 {
+        let mut next = || {
+            seed ^= seed << 13;
+            seed ^= seed >> 7;
+            seed ^= seed << 17;
+            M31((seed % u64::from(P)) as u32)
+        };
+        let (a, b) = (next(), next());
+        let actual = (a.add(b), a.sub(b));
+        let _reference = equality_trace::reference();
+        assert_eq!(actual, (a.add(b), a.sub(b)));
+        assert_eq!(
+            actual.0 .0,
+            ((u64::from(a.0) + u64::from(b.0)) % u64::from(P)) as u32
+        );
+        assert_eq!(
+            actual.1 .0,
+            ((u64::from(a.0) + u64::from(P) - u64::from(b.0)) % u64::from(P)) as u32
+        );
+    }
+    for a in [
+        0,
+        1,
+        P - 1,
+        P,
+        P + 1,
+        u32::MAX / 2 + 2,
+        u32::MAX - 1,
+        u32::MAX,
+    ] {
+        for b in [
+            0,
+            1,
+            P - 1,
+            P,
+            P + 1,
+            u32::MAX / 2 + 2,
+            u32::MAX - 1,
+            u32::MAX,
+        ] {
+            for sub in [false, true] {
+                let operation = || {
+                    if sub {
+                        M31(a).sub(M31(b))
+                    } else {
+                        M31(a).add(M31(b))
+                    }
+                };
+                let actual = std::panic::catch_unwind(operation);
+                let _reference = equality_trace::reference();
+                let expected = std::panic::catch_unwind(operation);
+                match (actual, expected) {
+                    (Ok(a), Ok(b)) => assert_eq!(a, b),
+                    (Err(_), Err(_)) => (),
+                    _ => panic!("R91 raw outcome changed"),
+                }
+            }
+        }
+    }
+    eprintln!("PASS: R91 million canonical add/sub pairs and 128 raw outcomes equal frozen R-E3 and independent modular arithmetic");
+}
