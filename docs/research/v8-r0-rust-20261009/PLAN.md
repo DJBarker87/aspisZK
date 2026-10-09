@@ -232,3 +232,81 @@ mismatch against the dense reference; raising a memory cap; rerunning an
 unchanged measurement. D14 (privacy LOG) will later add a sparse fourth
 opening weight row and 29 claims; keep `weights` extensible but do not add it
 now.
+
+## Lead review of R-E2 (1b65149d6, 46ff7f35c; on `v8-reference` as 6841515e6, ad5b9a0f4): stop accepted; shaped-path estimate; the one-transaction question; R-E3
+
+**Accepted.** (1) The primitive calibration (27 primitives at N=64 and
+N=128, 108 transactions, simulation = execution) and the dense-baseline
+estimate of 1.034 G CU, correctly labelled explanatory and not a measurement.
+(2) The structured quotient transpose: 4,096 unit-vector and 32 random
+comparisons against the dense reference for four (a,b,c), rows 510/511 by
+recurrence; accepted as the on-chain quotient-weight algorithm. (3) The
+shaped verifier (`r0/onchain.rs`, `OpeningView` over the P1 bytes, bit-table
+indicator, QM31 tensor eq-weights, modelled heap 121,720 B): both fixtures
+accepted natively, the 1,894 rejection cases preserved, the dense path kept
+off-chain as reference. (4) The stop was correct: `verify_semantics_heap`
+(4,416 B) and `r0_verify` (4,160 B) are reachable frames, the ELF is invalid
+and was rightly not executed. Both commits are cherry-picked onto
+`v8-reference`; R-E3 bases on that head.
+
+**Lead estimate for the shaped path (an estimate, not a measurement).** I ran
+the worker's `r0-counts` natively on the shaped candidate (46ff7f35c, both
+fixtures) and priced the exclusive counts with the worker's N=128 SBF
+primitive costs: `re2/lead-shaped-counts-{transfer,withdrawal}.json`,
+`re2/lead-price-shaped-counts.py`.
+
+| Phase | Shaped CU (transfer) | Dominant terms |
+|---|---:|---|
+| Semantic | 1,212,821 | 311 E×E, 1,199 K×K, 306 SHA compressions |
+| ChordClaims | 475,090 | 254 E×E, 256 SHA compressions |
+| Merkle × 22 | 213,982 | 1,562 SHA compressions |
+| V1 × 22 | 7,982,741 (362,852 per fibre) | 3,146 E×E (143 per fibre: γ powers and interpolant recomputed per fibre, hoistable to ≈ 10), 8,096 E×F (26 lanes × 4 slots + 256 final coefficients per fibre), 66 E inversions |
+| V2 | 11,873,991 | 4,113 E×E (3,072 for the a, b, c scaling of the 1024 quotient weights + 1,024 for the dual-fold dot), 6,138 K×K (eq tensor tables), 3,072 E×K (κ-weighting), 3,840 E×F |
+| **Total** | **21,758,623 ≈ 15.5 × 1.4M** | withdrawal 21,748,168 |
+
+With V1's hoisting and nothing else: ≈ 17.5M, about 12.5 transactions. With
+a Karatsuba E×E (≈ 1,000 CU) as well: ≈ 14M, about 10. What remains is the
+protocol's own arithmetic. V2 is three E×E scalings and one E×E dot over
+1024-coefficient E weight vectors (κ, τ, a, b, c ∈ E). V1 is 22 × (104 E×F
+lane terms + 256 E×F final-message terms + 4 E inversions). The Semantic
+phase alone is 1.2M. Nothing on the verifier side removes these; they change
+only with the opening layer's parameters (message length 1024, E-valued
+opening challenges, 22 queries, 256 final coefficients), which are the
+Lean's. **The verifier of R0 as specified is a 10–16 transaction verifier;
+one transaction is not reachable by implementation work.** The choice between
+a multi-transaction verifier for R0 as it stands and a change to the
+opening-layer parameters (a re-target of the proof) is the user's. R-E3
+measures the real numbers so that the choice is made on measurements.
+
+**R-E3 (Rust A): valid SBF build and measured phases.** Base:
+`origin/v8-reference` at the head carrying this section. Branch
+`codex/r0-e2e-re3-20261009`. Verifier-side only; wire, prover outputs,
+semantic formulas, check order and every check unchanged; both fixtures
+byte-identical; the 1,894 rejection cases reject identically.
+1. Stack: remove the `verify_semantics_heap` and `r0_verify` frames (box or
+   split; no arithmetic change). Then classify every remaining stack
+   diagnostic by the call graph from `process_r0_cu_probe_instruction`, not by
+   name: the reachable set must be empty; list the unreachable ones with the
+   reason. `cargo build-sbf` with zero reachable diagnostics is the gate.
+2. Hoist per-fibre invariants out of `onchain::check_v1`:
+   `powers::<29>(gamma)`, `interpolant(data, gamma)`, the line, α powers;
+   compute once in `prepare`, pass by reference. Results bitwise unchanged
+   (assert natively against the unhoisted path on both fixtures and the
+   rejection cases).
+3. Acceptance runs: both fixtures × 5 at the 1,400,000 limit with phase
+   markers; report the last completed phase and the CU at abort.
+4. Diagnostic runs, labelled DIAGNOSTIC: the same ELF with LiteSVM's compute
+   budget raised far enough to complete, one run per fixture (more if they
+   differ); report CU per phase (Semantic, ChordClaims, each Merkle(i)/V1(i),
+   V2), the total, the SBF heap high-water mark, and measured/predicted
+   against the table above. This raises a CU limit for a measurement, not a
+   memory cap, and is not an acceptance claim.
+5. Standard evidence (own scopes MemoryHigh 4G / MemoryMax 6G / swap 0, RSS,
+   cgroup, manifests, logs) under `re3/`, `REPORT-3.md`. No co-author trailer.
+Stop and report if: any wire, prover-output, semantic or check change would
+be needed; a reachable frame cannot be brought under 4,096 B without changing
+arithmetic; runtime heap > 256 KiB; the hoisted path differs bitwise from the
+unhoisted; a memory cap would have to be raised; an unchanged measurement
+would be rerun. Do not implement multi-transaction continuation; do not add
+D14's fourth row (R-H follows T1); do not change E multiplication (Karatsuba
+is a separate decision).

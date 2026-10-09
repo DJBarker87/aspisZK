@@ -2202,3 +2202,135 @@ the statements; the proofs are reindexing and linearity.
 
 **T1 is held until Z4c reports**, so that `Data` is changed once, with or
 without the fourth weight row. Two full chain replays would otherwise follow.
+
+### Lead acceptance of Z4c (`z4/FINDINGS-C.md`); decisions D15 and D14′; job T1 issued
+
+**Verdict.** Z4c is accepted and D14 is confirmed. The Libra tail (h₈, h₉ in
+lane 28, coefficient cells 0–55, read through the fourth weight row w_h) gives
+silent mask rank 1076 on all 20 challenge vectors. 1076 is the upper bound
+(1080 from the initial-zero boundary chain, less one K equation for the
+terminal), so the computed rank is exact, not a lower bound. (i′) and (ii′)
+pass 100/100; the derivative diagnostic 100/100; every semantic column has C1
+rank 112 on both the random fibre set and {0,…,21}, so D13's transport makes
+the consecutive set full rank as intended; the 26-column control matches
+(1076, 100/100). Receipts in `z4/evidence-C.json`: probe exit 0, 2423.5 s,
+peak child RSS 39.3 MiB, cgroup peak 51.4 MiB, swap 0, MemoryHigh 3G /
+MemoryMax 4G; 189 compiled-source and 15 decision-source hashes verified; an
+exact replay of Z4b's 100 targets. The 26-column fallback (width 45) is
+retired; the width stays 29. Evidence is on `v8-reference` as 52a538c48.
+
+**Degenerate controls.** 24 of the 26 controls (θ=0, μ=0, η=0, θ=μ=0, each
+α_j ∈ {0,1} alone) pass with exact rank 1076. The two fully Boolean vectors
+α = 0¹⁰ and α = 1¹⁰ give constructed ranks 1022 and 1038, one excess (i′)
+dimension each (and one for (ii′) at α = 1¹⁰), supported in round 7 degrees
+12–27 and round 8 degrees 2 and 27. The report is right to call these
+unresolved rather than counterexamples: the probe's subspace is the
+zero-batched-word lift and is only known to equal the full silent image when
+it attains the bound. The mechanism is nevertheless clear. With a Boolean α
+the eq-weights select rows instead of mixing them and the X(1−X) freedom of
+every round vanishes at once; a single Boolean coordinate leaves the other
+rounds' freedom intact, and those controls pass. α₉ = ½ is the pole of Ψ_ch's
+direction d(X) = X − ½ (D14) and is confirmed undefined there.
+
+**Decision D15 — generic-position hypothesis for MaskImage.** The Z4 Lean
+route states MaskImage only on
+`Good ch := (∀ j, alpha ch j ≠ 0 ∧ alpha ch j ≠ 1) ∧ alpha ch 9 ≠ 1/2`
+(`MaskImageOn Good h B x`), and `hvzk_perfect_of_maskImage` becomes
+statistical: the two laws are equal on `Good` (the D12 proof is pointwise in
+`ch`, so this is a restriction of the quantifier, not a new argument) and the
+distance is bounded by Pr[¬Good] ≤ 21/|K_α|, K_α the field the α rows are
+sampled from: 2^−119.6 for QM31, 2^−243.6 for WideExact. The exclusion is
+deliberately larger than the two observed failures so that the preimage
+construction may divide by α_j(1−α_j) in any round. If the containment proof
+needs a further nonvanishing condition it is added by a numbered decision with
+the probability recomputed; nothing else about D14 changes. The probe's other
+qualifications (helper pole χ = compressed_tuple(λ), γ = 0, singular or
+coincident OOD points) are honest-prover abort or FS sampling events already
+in the FS layer's bad sets and are not part of `Good`.
+
+**Refinement note ZR3.** `SPEC.md` line 7 instantiates Lean's `K` with E,
+while the Rust reads the semantic α rows as QM31 embeddings (`onchain.rs`
+`eq_at`, "K embeddings from the checked semantic alphas"). The Lean FS theorem
+thus quantifies over a larger challenge space than the Rust samples. This is a
+Lean↔Rust correspondence obligation for the refinement block (with G14/G18),
+recorded here and not acted on in T1.
+
+**Decision D14′ — exact Lean form of the Libra tail.** D13′ item 1 placed the
+fourth row in the opening layer. `R0P/MaskProtocol.lean` shows the mask enters
+the semantic terminal through the abstract
+`maskClaims : (Fin 29 → K) → (Fin 10 → K) → K` applied to the first point's
+claims `y 0` and `alpha`, with `MaskDegree` (VDeg 27 per variable) and
+`maskTotal` by `bsumB`. h₈(α₈) + h₉(α₉) is not a function of `y 0` (which is
+multilinear in α), so the tail needs the extra claims as an argument:
+
+1. `R0P/MaskProtocol.lean`:
+   `maskClaims : (Fin 29 → K) → (Fin 29 → K) → (Fin 10 → K) → K`
+   (first point claims, extra claims, alpha).
+   `terminalZ maskClaims pub lam chi theta mu eta zc B y yx alpha :=
+   maskClaims (y 0) yx alpha + eta * terminalValue pub lam chi theta mu zc B y alpha`.
+   `libraWeight (alpha : Fin 10 → K) : InitialMessage K := fun j =>
+   if j.val < 28 then alpha 8 ^ j.val else if j.val < 56 then alpha 9 ^ (j.val − 28) else 0`
+   (coefficient-indexed; no transport).
+   `honestExtra (π) (t : Trace K) (alpha) (l) : K := dot (libraWeight alpha) (coeffsOf π t l)`.
+   `virtualPolyZ`, `maskTotal` and `MaskDegree` pass `honestExtra π t alpha`
+   as the second argument; `virtualPolyZ_total` and `virtualPolyZ_vdeg` keep
+   their form.
+2. `R0P/MaskValue.lean` (concrete instance):
+   `maskClaimsR0 y0 yx alpha := (current value) y0 alpha + yx 28`.
+   `MaskDegree`: the current proof plus
+   `VDeg 10 (fun _ => 27) (fun alpha => ∑ j : Fin 28, c j * alpha 8 ^ j.val + ∑ j : Fin 28, c' j * alpha 9 ^ j.val)`
+   (degree ≤ 27 in variables 8 and 9, constant in the others). The hypercube
+   total 2⁹·(h₈(0)+h₈(1)+h₉(0)+h₉(1)) is `maskTotal` by definition; no
+   separate statement.
+3. Opening layer (D13′ item 1, second paragraph, made exact):
+   `Data.extraWeight : InitialMessage K`, `Data.extraClaims : Fin 29 → K`;
+   `weights D κ := coeffWeight D.transport ((∑ j, κ^(j+1) • eqWeight (D.points j)) + indicator D.inactive) + κ^4 • D.extraWeight`;
+   `claim` gains `+ κ^4 * width29Batch D.extraClaims γ`;
+   `extraDiscrepancy D t l := D.extraClaims l − dot D.extraWeight (t l)`,
+   `extraDefect D γ t := width29Batch (extraDiscrepancy D t) γ`;
+   `pointPolynomial := C (inactiveDefect …) + ∑ j : Fin 3, monomial (j+1) (pointDefect …) + monomial 4 (extraDefect …)`;
+   `B4` filters on `pointDefect D γ t ≠ 0 ∨ extraDefect D γ t ≠ 0`;
+   `B4_card ≤ 400`; `binding` concludes in addition
+   `∀ l, D.extraClaims l = dot D.extraWeight (t l)`. `wideBinding` by `type_of%`.
+4. `R0FS/Protocol.lean`: `Stmt.extraWeight`, `Stmt.extraClaims`; `data`
+   passes them; `Witness` gains `∀ l, x.extraClaims l = dot x.extraWeight (t l)`.
+   The extra claims are disclosed with the point claims (before the circle
+   rows) and absorbed as they are.
+5. R0P glue: `TypedContext.extraClaims : Fin 29 → K`; `openingStmt` sets
+   `extraWeight := libraWeight (alpha ch)` and `extraClaims := x.extraClaims`;
+   the semantic verifier's terminal is `terminalZ … y x.extraClaims alpha`;
+   the two glue theorems carry `honestExtra` through `witness_baseTyped`
+   (coefficient space via `coeffsOf`; no `coeffWeight`).
+6. R0Z: payload coordinate `.extraClaim (c : Fin 29)` with
+   `linearPayload … (.extraClaim c) := dotLinear (libraWeight (alpha ch)) ∘ coeffsLinear π ∘ proj c`;
+   `HonestProver.payload`, `view`, `proverOutput` disclose it; `nonRound`
+   keeps it (not a round coordinate); `D13Order` unchanged. `D12.MaskImage`
+   and `hvzk_perfect_of_maskImage` keep their form; D15's `Good` belongs to
+   the Z4 route (T2), not to T1.
+7. Soundness constant: B4's card 300 → 400 changes the opening-layer union
+   bound by 100/|E|. `combined_fiat_shamir_masked` records the new constant
+   exactly; it is reported, not rounded away.
+
+**Job T1 (Lean Codex) = D13′ + D14′: one job, one replay.** Base: the
+`origin/v8-reference` head carrying this section. Branch
+`codex/t1-transport-libra-20261009`. Order of work: `R0/OpeningDefinitions`
+→ `R0/OpeningAlgebra`, `R0/Binding`, `R0/BadSetBounds` → `R0FS/Protocol` →
+`R0P/SemView` (D13′ item 4: `transport`, `coeffsOf`, `rowsOf`, `LambdaRows`,
+`dot_coeffWeight_coeffsOf`, `openingStmt`) → `R0P/MaskProtocol` →
+`R0P/MaskValue` → the Mask*/SemD* glue (`LambdaRows` quantification;
+`honestExtra` via `coeffsOf`) → `R0P/MaskInstance` (new constant) → R0Z
+(D13′ item 5 and D14′ item 6). Proof route: reindexing (`Equiv.sum_comp`),
+linearity of `coeffWeight`/`coeffsOf`, and the degree lemma for the two
+univariates; nothing else. Replay per D13′ item 6 from attempt 3282, one
+module at a time under `flock /tmp/aspis-r0-lean.lock`; final targets
+`R0P/MaskAll` and `R0Z/Z4Maps`; `#print axioms` for `wideBinding`,
+`combined_fiat_shamir_masked`, `hvzk_perfect_of_maskImage`. Stop list: D13′
+item 6's list; any statement change beyond D13′/D14′; any change to the
+soundness bound other than the B4 term; any edit to `R0C/SemStatement.lean`
+or `R0C/CircleRows.lean` (lead-only).
+
+**After T1: T2 (Z4 Lean route)** — `Good`, `MaskImageOn`, statistical HVZK
+with the 21/|K_α| term, then the structured mask family, Ψ_ch and
+containment. Specified when T1 lands. **Rust R-H** (D14 in R-D/R-F/transcript:
+lane-28 h cells, fourth weight row, 29 extra claims, terminal h-terms) follows
+T1 so that the Rust is built to the replayed statement.
