@@ -9,7 +9,7 @@ import R0C.V3.DuplexQ
 G16 complete 31-row D2 bridge. The degree check is internal to the lead's
 `semanticBad`: invalid current sumcheck polynomials are not bad events.
 The semantic rows use the `semChal` density, both circle rows use the proved
-one-block `circleSample` masses, and opening rows use the existing field and
+one-block `circleSample0`/`circleSample1` masses, and opening rows use the existing field and
 q22 chain bounds. Malformed message tags or parser failure give empty flip
 events. The final theorem uses only the source-fixed decoder identities and
 the authorized per-round budget; all row bounds are proved here.
@@ -599,6 +599,33 @@ theorem P_eq : (AspisV5ComponentCQM31TowerExact.P : ℚ) =
 
 #print axioms P_eq
 
+/-- A doomed prefix at row 25 has avoided the reserved fallback at row 24. -/
+theorem no_hit_last_circle_ne_fallback
+    (B : PackBasis F)
+    (Q : Prefix WideExact WideExact (TypedContext WideExact Sfield) (SemMsg WideExact))
+    (y : Fin 3 → Fin 29 → WideExact) (z0 : Point WideExact)
+    (hr : Q.round = 25)
+    (hprev : Q.rounds.getLast? = some (.beforeZ0 y, .circle z0))
+    (hno : ¬ hitFrom (R0P.SemD3Glue.sourceData B) Q.statement [] Q.rounds) :
+    z0 ≠ circleFallback1 := by
+  obtain ⟨rs, hrs⟩ := List.getLast?_eq_some_iff.mp hprev
+  have hlen : rs.length = 24 := by
+    change Q.rounds.length = 25 at hr
+    rw [hrs, List.length_append, List.length_singleton] at hr
+    omega
+  intro heq
+  apply hno
+  rw [hrs, hitFrom_append]
+  apply Or.inr
+  simp only [List.nil_append, hitFrom]
+  apply Or.inl
+  apply Or.inr
+  apply Or.inl
+  refine ⟨y, z0, ?_, rfl, rfl, Or.inr heq⟩
+  exact hlen
+
+#print axioms no_hit_last_circle_ne_fallback
+
 private theorem roundBad24_shape
     {Sfield : Fin 29 → Subfield WideExact} {F : Subfield WideExact}
     (B : PackBasis F)
@@ -606,7 +633,7 @@ private theorem roundBad24_shape
     (m : Msg WideExact WideExact (SemMsg WideExact)) (c : Chal WideExact WideExact)
     (hround : Q.round = 24)
     (hbad : roundBad (R0P.SemD3Glue.sourceData B) Q m c) :
-    ∃ y z, m = .beforeZ0 y ∧ c = .circle z ∧ z0Bad z := by
+    ∃ y z, m = .beforeZ0 y ∧ c = .circle z ∧ z0Bad circleFallback1 z := by
   simp only [roundBad, R0P.SemD3Glue.sourceData] at hbad
   rcases hbad with hsem | hrest
   · rcases hsem with ⟨_, _, hlt, _, _, _⟩
@@ -744,11 +771,11 @@ theorem circle_row24_D2
     (T' T : Table (Duplex.Addr L) State)
     (hr : P.round = 24)
     (hd : (R0P.SemD3Glue.duplexRows B budget).doomed P T')
-    (hσ : ∀ s : State, p.σ 24 s = Chal.circle (circleSample s)) :
+    (hσ : ∀ s : State, p.σ 24 s = Chal.circle (circleSample0 s)) :
     independentMean (Duplex.samp p 24 P (.beforeZ0 y)).toProgram
       (fun w => indicator (¬ (R0P.SemD3Glue.duplexRows B budget).doomed
         (P.ext (.beforeZ0 y) w.2) T)) ≤
-      2 / (AspisCircleGroupOrder.P : ℚ)^2 := by
+      (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4 := by
   let Q : Prefix WideExact WideExact (TypedContext WideExact Sfield) (SemMsg WideExact) :=
     R0P.SemD3Glue.valuePrefix P
   have hQr : Q.round = 24 := by
@@ -761,7 +788,7 @@ theorem circle_row24_D2
   have hpoint (a b : State) :
       ¬ (R0P.SemD3Glue.duplexRows B budget).doomed
           (P.ext (.beforeZ0 y) (p.σ 24 a, b)) T →
-        z0Bad (circleSample a) := by
+        z0Bad' (circleSample0 a) := by
     intro hflip
     have hnot : ¬ doomed (R0P.SemD3Glue.sourceData B)
         (R0P.SemD3Glue.valuePrefix (P.ext (.beforeZ0 y) (p.σ 24 a, b))) T := hflip
@@ -791,21 +818,21 @@ theorem circle_row24_D2
     mean (fun a : State => mean (fun b : State =>
         indicator (¬ (R0P.SemD3Glue.duplexRows B budget).doomed
           (P.ext (.beforeZ0 y) (p.σ 24 a, b)) T)))
-        ≤ mean (fun a : State => indicator (z0Bad (circleSample a))) := by
+        ≤ mean (fun a : State => indicator (z0Bad' (circleSample0 a))) := by
           apply mean_mono
           intro a
           calc
             mean (fun b : State => indicator (¬
                 (R0P.SemD3Glue.duplexRows B budget).doomed
                   (P.ext (.beforeZ0 y) (p.σ 24 a, b)) T))
-                ≤ mean (fun _ : State => indicator (z0Bad (circleSample a))) := by
+                ≤ mean (fun _ : State => indicator (z0Bad' (circleSample0 a))) := by
                   apply mean_mono
                   intro b
                   apply indicator_mono
                   exact hpoint a b
-            _ = indicator (z0Bad (circleSample a)) := mean_const _
-    _ ≤ 2 / (AspisCircleGroupOrder.P : ℚ)^2 := by
-      simpa only [P_eq] using circleSample_z0_mass
+            _ = indicator (z0Bad' (circleSample0 a)) := mean_const _
+    _ ≤ (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4 := by
+      simpa only [P_eq] using circleSample0_mass
 
 #print axioms circle_row24_D2
 
@@ -822,11 +849,11 @@ theorem circle_row24_all_D2
     (T' T : Table (Duplex.Addr L) State)
     (hr : P.round = 24)
     (hd : (R0P.SemD3Glue.duplexRows B budget).doomed P T')
-    (hσ : ∀ s : State, p.σ 24 s = Chal.circle (circleSample s)) :
+    (hσ : ∀ s : State, p.σ 24 s = Chal.circle (circleSample0 s)) :
     independentMean (Duplex.samp p 24 P m).toProgram
       (fun w => indicator (¬ (R0P.SemD3Glue.duplexRows B budget).doomed
         (P.ext m w.2) T)) ≤
-      2 / (AspisCircleGroupOrder.P : ℚ)^2 := by
+      (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4 := by
   cases m with
   | semantic sm =>
       have hz := duplex_samp_zero_of_stay p 24 P (.semantic sm)
@@ -834,7 +861,8 @@ theorem circle_row24_all_D2
         (circle24_no_flip B p budget P (.semantic sm) T' T hr hd
           (by intro y h; cases h))
       rw [hz]
-      positivity
+      exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+        (pow_nonneg (Nat.cast_nonneg _) _)
   | beforeZ0 y => exact circle_row24_D2 B p budget P y T' T hr hd hσ
   | beforeZ1 y0 =>
       have hz := duplex_samp_zero_of_stay p 24 P (.beforeZ1 y0)
@@ -842,14 +870,16 @@ theorem circle_row24_all_D2
         (circle24_no_flip B p budget P (.beforeZ1 y0) T' T hr hd
           (by intro y h; cases h))
       rw [hz]
-      positivity
+      exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+        (pow_nonneg (Nat.cast_nonneg _) _)
   | opening om =>
       have hz := duplex_samp_zero_of_stay p 24 P (.opening om)
         (R0P.SemD3Glue.duplexRows B budget).doomed T
         (circle24_no_flip B p budget P (.opening om) T' T hr hd
           (by intro y h; cases h))
       rw [hz]
-      positivity
+      exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+        (pow_nonneg (Nat.cast_nonneg _) _)
 
 #print axioms circle_row24_all_D2
 
@@ -871,11 +901,11 @@ theorem circle_row25_D2
     (hprev : (R0P.SemD3Glue.valuePrefix P).rounds.getLast? =
       some (.beforeZ0 y, .circle z0))
     (hd : (R0P.SemD3Glue.duplexRows B budget).doomed P T')
-    (hσ : ∀ s : State, p.σ 25 s = Chal.circle (circleSample s)) :
+    (hσ : ∀ s : State, p.σ 25 s = Chal.circle (circleSample1 s)) :
     independentMean (Duplex.samp p 25 P (.beforeZ1 y0)).toProgram
       (fun w => indicator (¬ (R0P.SemD3Glue.duplexRows B budget).doomed
         (P.ext (.beforeZ1 y0) w.2) T)) ≤
-      2 / (AspisCircleGroupOrder.P : ℚ)^2 := by
+      (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4 := by
   let Q : Prefix WideExact WideExact (TypedContext WideExact Sfield) (SemMsg WideExact) :=
     R0P.SemD3Glue.valuePrefix P
   have hQr : Q.round = 25 := by
@@ -885,10 +915,12 @@ theorem circle_row25_D2
     change doomed (R0P.SemD3Glue.sourceData B)
       (R0P.SemD3Glue.valuePrefix P) T'
     exact hd
+  have hz0 : z0 ≠ circleFallback1 :=
+    no_hit_last_circle_ne_fallback B Q y z0 hQr hprev hQd.2
   have hpoint (a b : State) :
       ¬ (R0P.SemD3Glue.duplexRows B budget).doomed
           (P.ext (.beforeZ1 y0) (p.σ 25 a, b)) T →
-        z1Bad z0 (circleSample a) := by
+        z1Bad z0 (circleSample1 a) := by
     intro hflip
     have hnot : ¬ doomed (R0P.SemD3Glue.sourceData B)
         (R0P.SemD3Glue.valuePrefix (P.ext (.beforeZ1 y0) (p.σ 25 a, b))) T := hflip
@@ -909,7 +941,7 @@ theorem circle_row25_D2
       have hz : z0 = z0' := Chal.circle.inj (congrArg Prod.snd heq)
       subst z0'
       rw [hσ a] at hc
-      have hc' : circleSample a = z1 := Chal.circle.inj hc
+      have hc' : circleSample1 a = z1 := Chal.circle.inj hc
       rw [hc']
       exact hb
     · rcases hopen with ⟨_, _, _, _, _, _, hround, _⟩
@@ -923,21 +955,21 @@ theorem circle_row25_D2
     mean (fun a : State => mean (fun b : State =>
         indicator (¬ (R0P.SemD3Glue.duplexRows B budget).doomed
           (P.ext (.beforeZ1 y0) (p.σ 25 a, b)) T)))
-        ≤ mean (fun a : State => indicator (z1Bad z0 (circleSample a))) := by
+        ≤ mean (fun a : State => indicator (z1Bad z0 (circleSample1 a))) := by
           apply mean_mono
           intro a
           calc
             mean (fun b : State => indicator (¬
                 (R0P.SemD3Glue.duplexRows B budget).doomed
                   (P.ext (.beforeZ1 y0) (p.σ 25 a, b)) T))
-                ≤ mean (fun _ : State => indicator (z1Bad z0 (circleSample a))) := by
+                ≤ mean (fun _ : State => indicator (z1Bad z0 (circleSample1 a))) := by
                   apply mean_mono
                   intro b
                   apply indicator_mono
                   exact hpoint a b
-            _ = indicator (z1Bad z0 (circleSample a)) := mean_const _
-    _ ≤ 2 / (AspisCircleGroupOrder.P : ℚ)^2 := by
-      simpa only [P_eq] using circleSample_z1_mass z0
+            _ = indicator (z1Bad z0 (circleSample1 a)) := mean_const _
+    _ ≤ (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4 := by
+      simpa only [P_eq] using circleSample1_mass z0 hz0
 
 #print axioms circle_row25_D2
 
@@ -1030,11 +1062,11 @@ theorem circle_row25_all_D2
     (T' T : Table (Duplex.Addr L) State)
     (hr : P.round = 25)
     (hd : (R0P.SemD3Glue.duplexRows B budget).doomed P T')
-    (hσ : ∀ s : State, p.σ 25 s = Chal.circle (circleSample s)) :
+    (hσ : ∀ s : State, p.σ 25 s = Chal.circle (circleSample1 s)) :
     independentMean (Duplex.samp p 25 P m).toProgram
       (fun w => indicator (¬ (R0P.SemD3Glue.duplexRows B budget).doomed
         (P.ext m w.2) T)) ≤
-      2 / (AspisCircleGroupOrder.P : ℚ)^2 := by
+      (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4 := by
   let Q : Prefix WideExact WideExact (TypedContext WideExact Sfield) (SemMsg WideExact) :=
     R0P.SemD3Glue.valuePrefix P
   by_cases hprev : ∃ y : Fin 3 → Fin 29 → WideExact, ∃ z : Point WideExact,
@@ -1055,7 +1087,8 @@ theorem circle_row25_all_D2
             indicator_iff (iff_false_intro (fun h => h (hstay a b)))))]
           rw [indicator_false, mean_const, mean_const]
         rw [hzero]
-        positivity
+        exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+          (pow_nonneg (Nat.cast_nonneg _) _)
     | beforeZ0 y0 =>
         have hstay := circle25_no_flip_of_wrong_message B p budget P (.beforeZ0 y0)
           T' T hr hd (by intro z h; cases h)
@@ -1070,7 +1103,8 @@ theorem circle_row25_all_D2
             indicator_iff (iff_false_intro (fun h => h (hstay a b)))))]
           rw [indicator_false, mean_const, mean_const]
         rw [hzero]
-        positivity
+        exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+          (pow_nonneg (Nat.cast_nonneg _) _)
     | beforeZ1 y0 => exact circle_row25_D2 B p budget P y y0 z0 T' T hr hprev hd hσ
     | opening om =>
         have hstay := circle25_no_flip_of_wrong_message B p budget P (.opening om)
@@ -1086,12 +1120,14 @@ theorem circle_row25_all_D2
             indicator_iff (iff_false_intro (fun h => h (hstay a b)))))]
           rw [indicator_false, mean_const, mean_const]
         rw [hzero]
-        positivity
+        exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+          (pow_nonneg (Nat.cast_nonneg _) _)
   · have hstay := circle25_no_flip_of_no_previous B p budget P m T' T hr hd hprev
     have hz := duplex_samp_zero_of_stay p 25 P m
       (R0P.SemD3Glue.duplexRows B budget).doomed T hstay
     rw [hz]
-    positivity
+    exact div_nonneg (add_nonneg zero_le_one deltaQ_nonneg)
+      (pow_nonneg (Nat.cast_nonneg _) _)
 
 #print axioms circle_row25_all_D2
 
@@ -1375,7 +1411,7 @@ def combinedD2Budget (i : Nat) : ℚ :=
     (1 + deltaQ) * ((100 * semRoundBudget (⟨i, h⟩ : Fin 24) : Nat) /
       (AspisCircleGroupOrder.P ^ 4 : ℚ))
   else if i < 26 then
-    2 / (AspisCircleGroupOrder.P : ℚ)^2
+    (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4
   else if i < 30 then
     R0C.SlackStatement.epsilonSlack WideExact
       R0C.SlackStatement.delta0 (i - 26)
@@ -1400,8 +1436,8 @@ theorem combinedProtocol_D2
           Duplex.Chal (Chal WideExact WideExact))))
     (hσsem : ∀ (i : Nat) (_hi : i < 24) (s : State),
       p.σ i s = Chal.semantic (semChal s))
-    (hσz0 : ∀ s : State, p.σ 24 s = Chal.circle (circleSample s))
-    (hσz1 : ∀ s : State, p.σ 25 s = Chal.circle (circleSample s))
+    (hσz0 : ∀ s : State, p.σ 24 s = Chal.circle (circleSample0 s))
+    (hσz1 : ∀ s : State, p.σ 25 s = Chal.circle (circleSample1 s))
     (hσopen : ∀ (j : Fin 4) (s : State),
       p.σ (26 + j.val) s = Chal.opening (R0C.V3.DQ.σQ j.val s)) :
     FS2.D2 (R0P.SemD3Glue.combinedProtocol B p msg decode)

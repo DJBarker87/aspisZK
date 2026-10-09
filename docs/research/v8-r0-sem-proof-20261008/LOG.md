@@ -3382,3 +3382,19 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2724 | `R0P/SemD3Glue` | 0 / 0 | 0:22.47 | 6942000 | 0 | 56 | `6e17304965d8d6771475e85b38796d044abe1f2a634f336efdbad4b2f310475d` |
 
 Source revision(s): `b583f7b39a4e58fd3f652b58a94be101d7c6cf0c`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G22 continuation: circle rows and full D2 (2725–2729)
+
+Focused prefix snapshots passed first for the new no-hit helper (2725), row 24 (2727), and row 25 (2728), before the complete SemD2Glue assembly (2729). Attempt 2726 failed on the concrete z0Bad versus z0Bad′ indicator instance and positivity recursion; the replacement keeps z0Bad′ atomic and uses explicit div_nonneg, with no cap or recursion-limit increase. The row-25 mass premise is derived from doomed: split off the last transcript pair, and equality with circleFallback1 would create a row-24 hit. combinedD2Budget now uses (1+deltaQ)/P⁴ for rows 24–25, and the sigma clauses select circleSample0/1. No new obligation premise. Final 2729: standard axioms only, no errors or warnings; the checked full source matches its SHA below.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-cont-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2725 | `R0P/SemD2Glue` | 0 / 0 | 0:08.01 | 6864488 | 0 | 11 | `0fd5afb4f8582f008502cbdcd4e9494a909e35dffda81d1df95fc1eed3cdede0` |
+| 2726 | `R0P/SemD2Glue` | 1 / 1 | 0:10.97 | 6838888 | 0 | 18 | `e558677c819817d0d1942225ae65c0b4a70f940ffadd6c26dc019d93b0a59e83` |
+| 2727 | `R0P/SemD2Glue` | 0 / 0 | 0:11.03 | 6875168 | 0 | 18 | `72b737585faa8dbf8c4612501d5c5253d8310a060312023c2171a62be0da1d57` |
+| 2728 | `R0P/SemD2Glue` | 0 / 0 | 0:13.26 | 6887608 | 0 | 22 | `2af5e4cecb7b941ce760835dcd49354f914c22b92669caddf6c41f98c6ec6c7a` |
+| 2729 | `R0P/SemD2Glue` | 0 / 0 | 0:16.38 | 6902268 | 0 | 29 | `196a197121ee0e86f9f6407c2f6557d5a894a5b9b43072e63dd299393ba609c9` |
+
+Source revision(s): `113ecd8851404cde8f84632b194496cc39ad4b27`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
