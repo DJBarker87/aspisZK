@@ -128,6 +128,20 @@ compile_error!("V7_CU_PROBE_FORBIDS_OTHER_PROBES: select exactly one local probe
 compile_error!("V7_POOL_CU_PROFILE_FORBIDS_OTHER_ENTRYPOINTS: select only the local Pool profiler");
 
 pub mod atomic_payment;
+#[cfg(all(
+    feature = "v8-state-only-cu-probe",
+    not(feature = "no-entrypoint"),
+    any(
+        feature = "spend-production",
+        feature = "v5-cu-probe",
+        feature = "v6-cu-probe",
+        feature = "v7-cu-probe",
+        feature = "v7-pool-cu-profile"
+    )
+))]
+compile_error!("V8_STATE_ONLY_CU_PROBE_FORBIDS_OTHER_ENTRYPOINTS");
+#[cfg(feature = "v8-state-only-cu-probe")]
+pub mod v8_state_only_cu_probe;
 pub mod dispatch;
 pub mod lifecycle;
 #[cfg(any(feature = "v5-cu-probe", feature = "v5-production-tag67"))]

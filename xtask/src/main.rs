@@ -38,6 +38,19 @@ fn stage2_results_dir() -> Result<PathBuf> {
 fn main() -> Result<()> {
     let mut args = std::env::args().skip(1);
     match args.next().as_deref() {
+        Some("v8-state-only-cu-probe") => {
+            // A separate locked workspace keeps the pinned LiteSVM/Agave 4.2
+            // dependencies out of the production Solana 2.x dependency graph.
+            let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+            let status = std::process::Command::new("cargo")
+                .current_dir(root)
+                .args(["run", "--release", "--locked", "--manifest-path",
+                    "tools/v8-state-only-cu-probe/Cargo.toml", "--"])
+                .args(args)
+                .status()?;
+            anyhow::ensure!(status.success(), "v8-state-only-cu-probe failed: {status}");
+            Ok(())
+        }
         Some("v5-component-c-obstruction") => {
             let dir = stage2_results_dir()?;
             let outcome = v5_component_c_obstruction::run(&dir)?;
