@@ -1,0 +1,110 @@
+Warning: Permanently added '100.108.41.90' (ED25519) to the list of known hosts.
+Running as unit: aspis-focus-1791113946437043000.service; invocation ID: cf6ed3e7e8524e0492e07199a0969791
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R661TwoSwapMaskAddition.lean:23:2: error: unsolved goals
+case pos
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half a b c u v : F
+q s : ℕ → F
+r : Fin 1024
+h✝ : r = 1023
+⊢ u * sourceChord half q a b c ↑((Equiv.symm TwoSwapSourceTable.order) 1023) +
+          v * sourceChord half s a b c ↑((Equiv.symm TwoSwapSourceTable.order) 1023) -
+        ∑ x ∈ TwoSwapSourceTable.inactive.erase 1023,
+          u * sourceChord half q a b c ↑((Equiv.symm TwoSwapSourceTable.order) x) -
+      ∑ x ∈ TwoSwapSourceTable.inactive.erase 1023,
+        v * sourceChord half s a b c ↑((Equiv.symm TwoSwapSourceTable.order) x) =
+    u * sourceChord half q a b c ↑((Equiv.symm TwoSwapSourceTable.order) 1023) -
+          u *
+            ∑ x ∈ TwoSwapSourceTable.inactive.erase 1023,
+              sourceChord half q a b c ↑((Equiv.symm TwoSwapSourceTable.order) x) +
+        v * sourceChord half s a b c ↑((Equiv.symm TwoSwapSourceTable.order) 1023) -
+      v *
+        ∑ x ∈ TwoSwapSourceTable.inactive.erase 1023,
+          sourceChord half s a b c ↑((Equiv.symm TwoSwapSourceTable.order) x)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R661TwoSwapMaskAddition.lean:23:39: warning: This simp argument is unused:
+  Finset.mul_sum
+
+Hint: Omit it from the simp argument list.
+  simp only [Finset.sum_add_distrib,̵ ̵F̵i̵n̵s̵e̵t̵.̵m̵u̵l̵_̵s̵u̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R661TwoSwapMaskAddition.lean:34:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq F (fullMask half a b c (fun i => q i + NormalizedGCore.flatten s i) r)
+    (fullMask half a b c q r + fullMask half a b c (NormalizedGCore.flatten s) r)
+but is expected to have type
+  @Eq F (fullMask half a b c (fun i => q i + NormalizedGCore.flatten s i) r)
+    (fullMask half a b c q r + actualMask half a b c s r)
+/home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R661TwoSwapMaskAddition.lean:83:61: error: unsolved goals
+F : Type u_1
+inst✝¹ : Field F
+inst✝ : NeZero 2
+half a b c : F
+q : ℕ → F
+s : Index 32 → F
+point : Fin 10 → F
+hp : sourcePointFunctional point (actualMask half a b c s) = 0
+⊢ sourcePointFunctional point (fullMask half a b c q) = ∑ x, sourcePointBasis point ↑x * fullMask half a b c q x
+'AspisV8R19.R661TwoSwapMaskAddition.full_mask_linear' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R661TwoSwapMaskAddition.full_mask_add_correction' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R661TwoSwapMaskAddition.combined_sparse_coins_preserved' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R661TwoSwapMaskAddition.combined_sparse_pairing_preserved' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R661TwoSwapMaskAddition.combined_balance_preserved' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R661TwoSwapMaskAddition.combined_point_preserved' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/bin/lake --dir /home/dombarker/project-offloads/aspis-r126-release-20260930-a/focus-workspace env lean -j1 -M4500 -R /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a -o /home/dombarker/project-offloads/aspis-r126-release-20260930-a/lib/AspisV8R19/R661TwoSwapMaskAddition.olean /home/dombarker/project-offloads/aspis-r57-lean-src-20260929-a/AspisV8R19/R661TwoSwapMaskAddition.lean"
+	User time (seconds): 1.15
+	System time (seconds): 0.30
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.45
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3291084
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 77404
+	Voluntary context switches: 817
+	Involuntary context switches: 49
+	Swaps: 0
+	File system inputs: 32
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 1.486s
+CPU time consumed: 1.498s
+Memory peak: 516.0K
+Memory swap peak: 0B
