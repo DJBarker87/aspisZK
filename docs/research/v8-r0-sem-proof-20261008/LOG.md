@@ -3426,3 +3426,17 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2735 | `R0P/SemFiatShamir` | 0 / 0 | 0:05.41 | 6839320 | 0 | 4 | `a9272da739c89b2aa4046cf8be1a7d3c3bc95c2f2edf2a52bdff4f56f1bcee72` |
 
 Source revision(s): `19e6daaf4edadc243ddf93b68ea34bbb0a4957b8`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G21 complete: combined maximum and closed bound (2800–2802)
+
+SemMaxErr first checks the generic fold bound and attained-maximum lemma (2800), including the necessary bound on the zero seed. The semantic, circle, and opening inequalities then pass separately from the assembly (2801). The semantic coefficient bound is symbolic by the semRoundBudget branches; the numerical comparison 435200/P⁴ ≤ C(9557,22)/C(262144,22) reuses SlackBits.bad_query_count and SlackObstruction.query_count, whose proofs use only 22 descending factors. No Pascal recurrence, finite-field enumeration, decide/native_decide, or cap increase is used. Final 2802 proves combined_maxErr and combined_fiat_shamir_closed; the latter retains exactly the checked theorem43 instance premises. All three runs are green with standard axioms only, no errors or warnings. Closed bound: Pr[accepts ∧ extractFails] ≤ Qtot · (1+delta0) · C(9557,22)/C(262144,22) + κ(Qtot).
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g22-cont-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2800 | `R0P/SemMaxErr` | 0 / 0 | 0:02.83 | 6826932 | 0 | 2 | `57f86cd6f47d965c3a8a5d8d9f99732f53fda1a37c7374812696c4b5202862f5` |
+| 2801 | `R0P/SemMaxErr` | 0 / 0 | 0:03.29 | 6843504 | 0 | 9 | `31240710df3211d97e40df6beadc288f380114a49a75b4e5004699fc86cd78de` |
+| 2802 | `R0P/SemMaxErr` | 0 / 0 | 0:04.91 | 6851348 | 0 | 12 | `c17943a39ffd541de55d5c0d7aed2c1f975a8b8352ffc57dfd3037777f9f3069` |
+
+Source revision(s): `b0b89d6edebb77fa0e1a091791e4130e71376f0b`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
