@@ -4149,3 +4149,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3268 | `R0P/MaskD2Glue` | 0 / 0 | 0:08.15 | 6864644 | 0 | 5 | `56d5150da2a9d4c0eff548166c867b651554d5bd7d86c30848042a30914a89b7` |
 
 Source revision(s): `f4d73ec55451f7d40193ed4224920d2609e21c02`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskOpeningDensity (host attempt 3269)
+
+Rechecked the four field opening rows and final q22 row with the claim-dependent source predicate. Their local opening bounds and budgets are unchanged. Attempt 3269 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3269 | `R0P/MaskOpeningDensity` | 0 / 0 | 0:05.37 | 6843356 | 0 | 3 | `5a3b115836cf2ccf8d97a535bba9233b0092125a09a169b20b968c9b49579e48` |
+
+Source revision(s): `98d78d5017208624a8e40f06e4a3bb0abe58eb2e`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.

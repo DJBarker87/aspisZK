@@ -11,13 +11,13 @@ open AspisR0.ChordGeometry R0C.SlackStatement AspisWideTower
 noncomputable section
 attribute [local instance] Classical.propDecidable
 variable {Sfield : Fin 29 → Subfield WideExact} {F : Subfield WideExact} {L : Nat}
-variable (maskPoly : (Fin 10 → WideExact) → WideExact) (B : PackBasis F) (budget : Nat → ℚ)
+variable (maskClaims : (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (B : PackBasis F) (budget : Nat → ℚ)
 
 
 
 theorem late_roundBadZ (Q : Prefix WideExact WideExact (TypedContext WideExact Sfield) (SemMsgZ WideExact))
     (m : MsgZ WideExact) (c : ChalZ WideExact) (hi : 27 ≤ Q.round)
-    (h : roundBad (sourceDataZ maskPoly B) Q m c) :
+    (h : roundBad (sourceDataZ maskClaims B) Q m c) :
     ∃ O om oc, openingViewZ Q = some O ∧ m = .opening om ∧ c = .opening oc ∧
       Q.round = 27 + O.round ∧ R0FS.roundBad O.statement O.rounds om oc := by
   simp only [roundBad, sourceDataZ, sourceDataWithFallbackZ] at h
@@ -29,21 +29,21 @@ theorem late_roundBadZ (Q : Prefix WideExact WideExact (TypedContext WideExact S
 
 theorem opening_fieldZ_D2 (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
     (j : Fin 4) (P : DP (Sfield := Sfield)) (m : MsgZ WideExact) (T' T : Table (Addr L) State)
-    (hr : P.round = 27 + j.val) (hd : (duplexRowsZ maskPoly B budget).doomed P T')
+    (hr : P.round = 27 + j.val) (hd : (duplexRowsZ maskClaims B budget).doomed P T')
     (hσ : ∀ a, p.σ (27 + j.val) a = .opening (R0C.V3.DQ.σQ j.val a)) :
     independentMean (Duplex.samp p (27 + j.val) P m).toProgram
-      (fun w => indicator (¬ (duplexRowsZ maskPoly B budget).doomed (P.ext m w.2) T)) ≤
+      (fun w => indicator (¬ (duplexRowsZ maskClaims B budget).doomed (P.ext m w.2) T)) ≤
       epsilonSlack WideExact delta0 j.val := by
   let Q := valuePrefix P
   have hQr : Q.round = 27 + j.val := (valuePrefix_round P).trans hr
   by_cases hp : ∃ O om, openingViewZ Q = some O ∧ m = .opening om ∧ O.round = j.val
   · obtain ⟨O,om,hview,rfl,hlen⟩ := hp
-    apply one_row_bound maskPoly B budget p (27 + j.val) P (.opening om) T
+    apply one_row_bound maskClaims B budget p (27 + j.val) P (.opening om) T
       (fun a => R0FS.roundBad O.statement O.rounds om (R0C.V3.DQ.σQ j.val a)) _
     · intro a b hf
-      obtain ⟨O',om',oc,hview',hm,hc,_,hb⟩ := late_roundBadZ maskPoly B Q (.opening om)
+      obtain ⟨O',om',oc,hview',hm,hc,_,hb⟩ := late_roundBadZ maskClaims B Q (.opening om)
         (p.σ (27 + j.val) a) (by omega)
-        (flipZ maskPoly B budget P (.opening om) (p.σ (27+j.val) a,b) T' T hd hf)
+        (flipZ maskClaims B budget P (.opening om) (p.σ (27+j.val) a,b) T' T hd hf)
       have hO : O' = O := Option.some.inj (hview'.symm.trans hview)
       have hom : om' = om := (Msg.opening.inj hm).symm
       subst O'; subst om'
@@ -51,11 +51,11 @@ theorem opening_fieldZ_D2 (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) 
       rw [Chal.opening.inj hc]
       exact hb
     · exact R0C.V3.DQ.round_field_bound O.statement O.rounds om j.val j.isLt hlen
-  · apply one_row_bound maskPoly B budget p (27+j.val) P m T (fun _ => False) _
+  · apply one_row_bound maskClaims B budget p (27+j.val) P m T (fun _ => False) _
     · intro a b hf
-      obtain ⟨O,om,oc,hview,hm,_,hlen,_⟩ := late_roundBadZ maskPoly B Q m
+      obtain ⟨O,om,oc,hview,hm,_,hlen,_⟩ := late_roundBadZ maskClaims B Q m
         (p.σ (27+j.val) a) (by omega)
-        (flipZ maskPoly B budget P m (p.σ (27+j.val) a,b) T' T hd hf)
+        (flipZ maskClaims B budget P m (p.σ (27+j.val) a,b) T' T hd hf)
       exact hp ⟨O,om,hview,hm,by omega⟩
     · simp only [indicator_false, mean_const]
       exact R0C.SlackDensity.epsilonSlack_nonneg R0C.ConcreteSlack.delta0_nonneg j.val
@@ -79,22 +79,22 @@ private theorem independentMean_zero_of_pointwise_zero
 
 theorem opening_q22Z_D2 (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
     (P : DP (Sfield := Sfield)) (m : MsgZ WideExact) (T' T : Table (Addr L) State)
-    (hr : P.round = 31) (hd : (duplexRowsZ maskPoly B budget).doomed P T') :
+    (hr : P.round = 31) (hd : (duplexRowsZ maskClaims B budget).doomed P T') :
     independentMean (combinedSamplerAt 31 p 31 P m).toProgram
-      (fun w => indicator (¬ (duplexRowsZ maskPoly B budget).doomed (P.ext m w.2) T)) ≤
+      (fun w => indicator (¬ (duplexRowsZ maskClaims B budget).doomed (P.ext m w.2) T)) ≤
       epsilonSlack WideExact delta0 4 := by
   let Q := valuePrefix P
   have hQr : Q.round = 31 := (valuePrefix_round P).trans hr
   by_cases hp : ∃ O om, openingViewZ Q = some O ∧ m = .opening om ∧ O.round = 4
   · obtain ⟨O,om,hview,rfl,hlen⟩ := hp
     have hpoint (s' : State) (bs xs : List State) :
-        ¬ (duplexRowsZ maskPoly B budget).doomed
+        ¬ (duplexRowsZ maskClaims B budget).doomed
           (P.ext (.opening om) (openingChallenge (R0C.V3.DQ.out4 s' bs xs))) T →
         R0FS.roundBad O.statement O.rounds om (R0C.V3.DQ.out4 s' bs xs).1 := by
       intro hf
-      obtain ⟨O',om',oc,hview',hm,hc,_,hb⟩ := late_roundBadZ maskPoly B Q (.opening om)
+      obtain ⟨O',om',oc,hview',hm,hc,_,hb⟩ := late_roundBadZ maskClaims B Q (.opening om)
         (openingChallenge (R0C.V3.DQ.out4 s' bs xs)).1 (by omega)
-        (flipZ maskPoly B budget P (.opening om)
+        (flipZ maskClaims B budget P (.opening om)
           (openingChallenge (R0C.V3.DQ.out4 s' bs xs)) T' T hd hf)
       have hO : O' = O := Option.some.inj (hview'.symm.trans hview)
       have hom : om' = om := (Msg.opening.inj hm).symm
@@ -107,14 +107,14 @@ theorem opening_q22Z_D2 (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
       mean (fun s' : State => independentMean
         (R0C.V3.DQ.chainS (openingParamsAt 27 p s')
           (fun bs xs => openingChallenge (R0C.V3.DQ.out4 s' bs xs)) 8 s' [] []).toProgram
-        (fun w => indicator (¬ (duplexRowsZ maskPoly B budget).doomed
+        (fun w => indicator (¬ (duplexRowsZ maskClaims B budget).doomed
           (P.ext (.opening om) w.2) T)))
           ≤ mean (fun _ : State => epsilonSlack WideExact delta0 4) := by
         apply mean_mono
         intro s'
         rw [chainS_independentMean (openingParamsAt 27 p s')
           (fun bs xs => openingChallenge (R0C.V3.DQ.out4 s' bs xs))
-          (fun c => indicator (¬ (duplexRowsZ maskPoly B budget).doomed
+          (fun c => indicator (¬ (duplexRowsZ maskClaims B budget).doomed
             (P.ext (.opening om) c) T)) 8 s' [] []]
         simp only [List.nil_append]
         apply le_trans _ (R0C.V3.DQ.round_q22_bound O.statement O.rounds om hlen s')
@@ -126,8 +126,8 @@ theorem opening_q22Z_D2 (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
       intro w
       apply (indicator_iff (iff_false_intro ?_)).trans indicator_false
       intro hf
-      obtain ⟨O,om,oc,hview,hm,_,hlen,_⟩ := late_roundBadZ maskPoly B Q m w.2.1 (by omega)
-        (flipZ maskPoly B budget P m w.2 T' T hd hf)
+      obtain ⟨O,om,oc,hview,hm,_,hlen,_⟩ := late_roundBadZ maskClaims B Q m w.2.1 (by omega)
+        (flipZ maskClaims B budget P m w.2 T' T hd hf)
       exact hp ⟨O,om,hview,hm,by omega⟩)]
     exact R0C.SlackDensity.epsilonSlack_nonneg R0C.ConcreteSlack.delta0_nonneg 4
 
