@@ -1,0 +1,212 @@
+import SelectedWireOpeningTerminal
+import SuccessfulSelectedVerifierRun
+
+/-!
+The complete typed opening terminal and parsed selected program use the SAME
+phase-fixed words, chord, corrected ordinary rows and causal decoded bodies.
+No oracle, strategy, or raw-batch correspondence is assumed by this adapter.
+
+Parser success, checked OOD geometry and nonzero challenges are separate
+actual-path checks: a scalar relation equality cannot imply them. The final
+alternative retains raw hash collisions and both phase-specific late targets.
+Rust byte-loop refinement, source prefix timing, challenge probabilities and
+payment-witness extraction are not claimed here.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.SelectedAuthenticatedSuccessfulRun
+open AspisPool.V7MerkleQueryGrammar AspisPool.V7MerkleQueryExtractor
+open AspisPool.V7MerkleOpeningBinding
+open AspisV8.AuthenticatedEarlyC1Prefix
+open AspisV8.SuccessfulSelectedVerifierRun
+open AspisV8.MinimalMultiproofPaths
+open AspisV8.SelectedMultiproofOpeningEquality
+open AspisV8.FixedWordQueryTerminal
+open AspisV8.CausalCoveredRecovery
+noncomputable section
+
+abbrev K := AspisV5ComponentCQM31TowerExact.QM31Exact
+abbrev M31 := AspisV5ComponentCQM31TowerExact.M31Exact
+abbrev Byte := AspisPool.V7MerkleQueryGrammar.Byte
+abbrev Digest208 := AspisPool.V7MerkleQueryGrammar.Digest208
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+
+-- These large coordinate maps are unchanged arguments, not proof targets.
+attribute [local irreducible] SelectedReceivedOracle.oracle
+  SelectedQuotientOriginal.virtual NearGammaSelectedC1.rawBatch
+
+/-- Replace only the previously open C2 boundary by its literal post-C2
+prefix completion. C1, OOD data, claims and all causal byte bodies are kept. -/
+def phaseProgram {q : Nat} (p : Program q)
+    (c2Prefix : AnswerPrefix) (c2Root : Digest208) : Program q :=
+  { p with c2 := AuthenticatedPhaseWords.fixedC2 c2Prefix c2Root }
+
+def roots {q : Nat} (p : Program q) (c2Root : Digest208) : Digests :=
+  ![p.c1Root, c2Root]
+
+def fields {q : Nat} (p : Program q) (gamma kappa : K) :
+    TypedRelationTerminal.Fields SelectedReceivedOracle.domain q :=
+  (p.bodies gamma kappa).fields gamma kappa
+
+/-- This object is constructed before tau/alpha/query continuation, rather
+than an independently supplied FixedInput with a coherence premise. -/
+def fixedInput {q : Nat} (p : Program q) (gamma kappa : K) : FixedInput where
+  chord := GammaComponentGame.atGamma p.data gamma
+  word := NearGammaSelectedC1.rawBatch
+    (fixedC1 p.earlyRecords p.c1Root) p.c2 gamma
+  ordinary := (p.baseExecution.rows gamma).transportedWeight kappa
+  referenceQ := 0
+  claim := (p.baseExecution.rows gamma).correctedClaim kappa
+  quarter := p.quarter
+
+theorem fixed_before {q : Nat} (p : Program q) (gamma kappa : K) :
+    (fixedInput p gamma kappa).before = (p.baseExecution.rows gamma).before kappa := rfl
+
+theorem fixed_oracle {q : Nat} (p : Program q) (gamma kappa : K) :
+    (fixedInput p gamma kappa).oracle =
+      SelectedReceivedOracle.oracle 0 (p.baseExecution.raw gamma) := rfl
+
+theorem fixed_phase_word {q : Nat} (p : Program q)
+    (c2Prefix : AnswerPrefix) (c2Root : Digest208) (gamma kappa : K) :
+    (fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa).word =
+      NearGammaSelectedC1.rawBatch
+        (AspisPool.V7ExtractedLaneWords.c1Received
+          (prefixWords p.earlyRecords (roots p c2Root 0)))
+        (AspisPool.V7ExtractedLaneWords.c2Received
+          (prefixWords c2Prefix (roots p c2Root 1)))
+        (fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa).chord.gamma := rfl
+
+/-- The relation terminal is the actual callback scalar terminal, with no
+equality to an arbitrary strategy or received word among the hypotheses. -/
+theorem source_of_causal {q : Nat} (p : Program q)
+    (gamma kappa tau alpha : K)
+    (queries : OrderedQueryGame.Schedule SelectedReceivedOracle.domain q)
+    (rho a1 a2 a3 : K)
+    (accepted : CausalOrderedRelation.accepts (fixedInput p gamma kappa).before
+      (fixedInput p gamma kappa).oracle (fields p gamma kappa).strategy
+      tau alpha queries rho [a1,a2,a3]) :
+    p.sourceAccepts gamma kappa tau alpha queries rho a1 a2 a3 := by
+  have source := (TypedRelationTerminal.source_accepts_iff
+    (fixedInput p gamma kappa).before (fixedInput p gamma kappa).oracle
+    (fields p gamma kappa) tau alpha queries rho a1 a2 a3).mpr accepted
+  rw [fixed_before, fixed_oracle] at source
+  exact source
+
+/-- Nonterminal source checks are not consequences of a scalar equality.
+In particular this records successful canonical parsing, not getD fallback. -/
+structure PathChecks {q : Nat} (p : Program q)
+    (gamma kappa tau alpha : K)
+    (queries : OrderedQueryGame.Schedule SelectedReceivedOracle.domain q)
+    (rho a1 a2 : K) : Prop where
+  parsed : ParsedAt (p.bodies gamma kappa) tau alpha queries rho a1 a2 p.c1Root
+  dataChecked : p.data.Checked
+  circles : p.data.x0^2 + p.data.y0^2 = 1 ∧ p.data.x1^2 + p.data.y1^2 = 1
+  west : ∀ r, ComponentOODBinding.pointX p.data r ≠ -1
+  gammaNonzero : gamma ≠ 0
+  kappaNonzero : kappa ≠ 0
+  tauNonzero : tau ≠ 0
+  rhoNonzero : rho ≠ 0
+
+theorem successful_of_causal {q : Nat} (p : Program q)
+    (gamma kappa tau alpha : K)
+    (queries : OrderedQueryGame.Schedule SelectedReceivedOracle.domain q)
+    (rho a1 a2 a3 : K)
+    (checks : PathChecks p gamma kappa tau alpha queries rho a1 a2)
+    (accepted : CausalOrderedRelation.accepts (fixedInput p gamma kappa).before
+      (fixedInput p gamma kappa).oracle (fields p gamma kappa).strategy
+      tau alpha queries rho [a1,a2,a3]) :
+    SuccessfulAt p gamma kappa tau alpha queries rho a1 a2 a3 where
+  parsed := checks.parsed
+  dataChecked := checks.dataChecked
+  circles := checks.circles
+  west := checks.west
+  gammaNonzero := checks.gammaNonzero
+  kappaNonzero := checks.kappaNonzero
+  tauNonzero := checks.tauNonzero
+  rhoNonzero := checks.rhoNonzero
+  terminal := source_of_causal p gamma kappa tau alpha queries rho a1 a2 a3 accepted
+
+/-- Direct reuse of the existing successful-run endpoint. The entire fixed
+classifier/partition package remains available from that endpoint too. -/
+theorem ideal_of_successful {q : Nat} (p : Program q)
+    (gamma kappa tau alpha : K)
+    (queries : OrderedQueryGame.Schedule SelectedReceivedOracle.domain q)
+    (rho a1 a2 a3 : K)
+    (success : SuccessfulAt p gamma kappa tau alpha queries rho a1 a2 a3) :
+    SelectedAcceptedPrefixPartition.idealAccepts p.execution
+      gamma kappa tau alpha queries rho [a1,a2,a3] := by
+  obtain ⟨e, same, accepted, _rest⟩ :=
+    successful_selected_verifier_run_constructs_ideal_execution p ∅
+      gamma kappa tau alpha queries rho a1 a2 a3 success
+  exact same ▸ accepted
+
+/-- Complete typed q22 openings plus the literal opened-value terminal give
+SuccessfulAt AND its SAME ideal execution, or the original authentication
+failure union. No arbitrary C2 total word or source/ideal equality is supplied. -/
+theorem wire_success_or_authentication_failure
+    (p : Program 22) (c2Prefix : AnswerPrefix) (c2Root : Digest208)
+    (view : RawHashInput → Digest208) (fullLog : OrderedRawQueryLog)
+    (gamma kappa tau alpha : K)
+    (queries : OrderedQueryGame.Schedule SelectedReceivedOracle.domain 22)
+    (rho a1 a2 a3 : K)
+    (rawRecords : Fin 22 → List Byte)
+    (decoded : Fin 22 → PackedQueryRecord.Decoded)
+    (frontier : List Digests) (nodeLog : OrderedRawQueryLog)
+    (c1Answers : ∀ record ∈ p.earlyRecords, view record.1 = record.2)
+    (c2Answers : ∀ record ∈ c2Prefix, view record.1 = record.2)
+    (c1Included : TraceIncludedInLog (rawPrefix p.earlyRecords) fullLog)
+    (c2Included : TraceIncludedInLog (rawPrefix c2Prefix) fullLog)
+    (callsIncluded : TraceIncludedInLog
+      (leafLog (indices queries) (fun i => recordOfBytes (rawRecords i)) ++ nodeLog) fullLog)
+    (parsed : ∀ i, PackedQueryRecord.parse (rawRecords i) = some (decoded i))
+    (multiproof : Accepted view (roots p c2Root) (indices queries)
+      (fun i => recordOfBytes (rawRecords i)) frontier nodeLog)
+    (checks : PathChecks (phaseProgram p c2Prefix c2Root)
+      gamma kappa tau alpha queries rho a1 a2)
+    (out : List K × List M31)
+    (inverse : LineNormBuffer.inverseLines
+      (fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa).chord.a
+      (fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa).chord.b
+      (fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa).chord.c
+      (SelectedQueryBuffer.points (indices queries)) = some out)
+    (terminal : acceptsValues
+      ((fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa).before.snapshot
+        tau ((fields (phaseProgram p c2Prefix c2Root) gamma kappa).firstResponse tau) alpha)
+      ((fields (phaseProgram p c2Prefix c2Root) gamma kappa).final tau alpha)
+      (fun j => (queries j : K))
+      (openedValues (fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa)
+        decoded queries out alpha) rho
+      ((fields (phaseProgram p c2Prefix c2Root) gamma kappa).later tau alpha queries rho)
+      a1 a2 a3) :
+    AuthenticationFailure view p.earlyRecords c2Prefix (roots p c2Root)
+        fullLog (indices queries) ∨
+      (SuccessfulAt (phaseProgram p c2Prefix c2Root)
+        gamma kappa tau alpha queries rho a1 a2 a3 ∧
+       SelectedAcceptedPrefixPartition.idealAccepts
+        (phaseProgram p c2Prefix c2Root).execution
+        gamma kappa tau alpha queries rho [a1,a2,a3]) := by
+  rcases SelectedWireOpeningTerminal.accepted_terminal_or_authentication_failure
+      view (roots p c2Root) p.earlyRecords c2Prefix fullLog queries rawRecords decoded
+      frontier nodeLog c1Answers c2Answers c1Included c2Included callsIncluded parsed
+      multiproof (fixedInput (phaseProgram p c2Prefix c2Root) gamma kappa)
+      (fixed_phase_word p c2Prefix c2Root gamma kappa)
+      (fields (phaseProgram p c2Prefix c2Root) gamma kappa)
+      tau alpha rho a1 a2 a3 out inverse terminal with bad | accepted
+  · exact Or.inl bad
+  · have success := successful_of_causal (phaseProgram p c2Prefix c2Root)
+      gamma kappa tau alpha queries rho a1 a2 a3 checks accepted
+    exact Or.inr ⟨success, ideal_of_successful (phaseProgram p c2Prefix c2Root)
+      gamma kappa tau alpha queries rho a1 a2 a3 success⟩
+
+#print axioms fixed_before
+#print axioms fixed_oracle
+#print axioms fixed_phase_word
+#print axioms source_of_causal
+#print axioms successful_of_causal
+#print axioms ideal_of_successful
+#print axioms wire_success_or_authentication_failure
+end
+end AspisV8.SelectedAuthenticatedSuccessfulRun

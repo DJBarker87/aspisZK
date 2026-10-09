@@ -1,0 +1,99 @@
+theorem AspisV8.SameBodyAuthenticatedResidual.same_body_authenticated_residual_or_failure : ∀
+  (view : RawHashInput → Digest208) (body : List Byte) (query : Fin 22 → Position)
+  (merkle : SuccessfulMerkleRun view query body) (c1Prefix c2Prefix : AnswerPrefix) (fullLog : OrderedRawQueryLog),
+  (∀ record ∈ c1Prefix, view record.1 = record.2) →
+    (∀ record ∈ c2Prefix, view record.1 = record.2) →
+      TraceIncludedInLog (rawPrefix c1Prefix) fullLog →
+        TraceIncludedInLog (rawPrefix c2Prefix) fullLog →
+          TraceIncludedInLog (MinimalMultiproofPaths.leafLog query (wireRecords merkle.wire) ++ merkle.trace) fullLog →
+            (parseRecords merkle.wire).isSome = true →
+              ∀ (d : Data) (out : List K × List M31Exact),
+                LineNormBuffer.inverseLines d.a d.b d.c (SelectedQueryBuffer.points query) = some out →
+                  ∀ (alpha prior rho : K) (final : Fin 256 → K),
+                    AuthenticationFailure view c1Prefix c2Prefix (wireRoots merkle.wire) fullLog query ∨
+                      ∃ decoded,
+                        parseRecords merkle.wire = some decoded ∧
+                          (∀ (i : Fin 22), merkle.wire.record i = bodyRecord body i) ∧
+                            (∀ (i : Fin 22),
+                                recordResidual d decoded query out alpha final i =
+                                  PostQueryFunctional.residual final (fun j => storedPoint (query j))
+                                    (fixedFold d c1Prefix c2Prefix merkle.wire alpha) i) ∧
+                              prior - rho * ∑ i, recordResidual d decoded query out alpha final i * rho ^ ↑i =
+                                prior -
+                                  rho *
+                                    ∑ i,
+                                      PostQueryFunctional.residual final (fun j => storedPoint (query j))
+                                          (fixedFold d c1Prefix c2Prefix merkle.wire alpha) i *
+                                        rho ^ ↑i :=
+fun view body query merkle c1Prefix c2Prefix fullLog c1Answers c2Answers c1Included c2Included callsIncluded canonical d
+    out inverse alpha prior rho final =>
+  Or.casesOn
+    (same_body_authenticated_fold_or_failure view body query merkle c1Prefix c2Prefix fullLog c1Answers c2Answers
+      c1Included c2Included callsIncluded canonical d out inverse alpha)
+    (fun bad => Or.inl bad) fun good =>
+    Exists.casesOn good fun decoded h =>
+      And.casesOn h fun parsed right =>
+        And.casesOn right fun bodyRecords folds =>
+          have residuals := fun i =>
+            id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      exactFinalLinear final (query i) - _a =
+                        PostQueryFunctional.residual final (fun j => storedPoint (query j))
+                          (fixedFold d c1Prefix c2Prefix merkle.wire alpha) i)
+                    (folds i)))
+                (of_eq_true
+                  (eq_self
+                    (exactFinalLinear final (query i) -
+                      (SelectedReceivedOracle.oracle 0
+                            (SelectedQuotientOriginal.virtual d
+                              (prefixBatch c1Prefix c2Prefix merkle.wire d.gamma))).folded
+                        alpha (storedPoint (query i))))));
+          Or.inr
+            (Exists.intro decoded
+              ⟨parsed,
+                ⟨bodyRecords,
+                  ⟨residuals,
+                    congrArg (fun s => prior - rho * s)
+                      (Finset.sum_congr rfl fun i a =>
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a * rho ^ ↑i =
+                                  PostQueryFunctional.residual final (fun j => storedPoint (query j))
+                                      (fixedFold d c1Prefix c2Prefix merkle.wire alpha) i *
+                                    rho ^ ↑i)
+                              (residuals i)))
+                          (Eq.refl
+                            (PostQueryFunctional.residual final (fun j => storedPoint (query j))
+                                (fixedFold d c1Prefix c2Prefix merkle.wire alpha) i *
+                              rho ^ ↑i)))⟩⟩⟩)
+'AspisV8.SameBodyAuthenticatedResidual.same_body_authenticated_residual_or_failure' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -R /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr -o /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/residual-v1/SameBodyAuthenticatedResidual.olean /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/SameBodyAuthenticatedResidual.lean"
+	User time (seconds): 2.08
+	System time (seconds): 0.92
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.02
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6675840
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 3
+	Minor (reclaiming a frame) page faults: 142498
+	Voluntary context switches: 398
+	Involuntary context switches: 186
+	Swaps: 0
+	File system inputs: 760
+	File system outputs: 192
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

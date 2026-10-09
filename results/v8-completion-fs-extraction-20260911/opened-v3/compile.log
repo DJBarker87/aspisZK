@@ -1,0 +1,76 @@
+theorem AspisV8.SameBodyOpenedRun.run_authenticated_opened_or_failure : ∀ (view : RawHashInput → Digest208)
+  (body : List Byte) (query : Fin 22 → Position) (d : Data) (result : Output),
+  run view body query d = some result →
+    ∀ (c1Prefix c2Prefix : AnswerPrefix) (fullLog : OrderedRawQueryLog),
+      (∀ record ∈ c1Prefix, view record.1 = record.2) →
+        (∀ record ∈ c2Prefix, view record.1 = record.2) →
+          TraceIncludedInLog (rawPrefix c1Prefix) fullLog →
+            TraceIncludedInLog (rawPrefix c2Prefix) fullLog →
+              TraceIncludedInLog (MinimalMultiproofPaths.leafLog query (wireRecords result.wire) ++ result.trace)
+                  fullLog →
+                ∀ (alpha : K),
+                  AuthenticationFailure view c1Prefix c2Prefix (wireRoots result.wire) fullLog query ∨
+                    ∀ (i : Fin 22),
+                      opened result d query alpha i =
+                        (SelectedReceivedOracle.oracle 0
+                              (SelectedQuotientOriginal.virtual d
+                                (prefixBatch c1Prefix c2Prefix result.wire d.gamma))).folded
+                          alpha (storedPoint (query i)) :=
+fun view body query d result success c1Prefix c2Prefix fullLog c1Answers c2Answers c1Included c2Included callsIncluded
+    alpha =>
+  have checks := run_checks view body query d result success;
+  have canonical :=
+    Eq.mpr (id (congrArg (fun _a => _a.isSome = true) checks.right.left)) (Eq.refl (some result.decoded).isSome);
+  Or.casesOn
+    (same_body_authenticated_fold_or_failure view body query (merkleRun view body query d result success) c1Prefix
+      c2Prefix fullLog c1Answers c2Answers c1Included c2Included callsIncluded canonical d result.inverses
+      checks.right.right.left alpha)
+    (fun bad => Or.inl bad) fun good =>
+    Exists.casesOn good fun decoded h =>
+      And.casesOn h fun parsed right =>
+        And.casesOn right fun left folds =>
+          have same := Option.some.inj (Eq.trans (Eq.symm parsed) checks.right.left);
+          Eq.ndrec (motive := fun decoded =>
+            parseRecords (merkleRun view body query d result success).wire = some decoded →
+              (∀ (i : Fin 22),
+                  SelectedPackedQueryBridge.recordFold d decoded query result.inverses alpha i =
+                    (SelectedReceivedOracle.oracle 0
+                          (SelectedQuotientOriginal.virtual d
+                            (prefixBatch c1Prefix c2Prefix (merkleRun view body query d result success).wire
+                              d.gamma))).folded
+                      alpha (storedPoint (query i))) →
+                AuthenticationFailure view c1Prefix c2Prefix (wireRoots result.wire) fullLog query ∨
+                  ∀ (i : Fin 22),
+                    opened result d query alpha i =
+                      (SelectedReceivedOracle.oracle 0
+                            (SelectedQuotientOriginal.virtual d
+                              (prefixBatch c1Prefix c2Prefix result.wire d.gamma))).folded
+                        alpha (storedPoint (query i)))
+            (fun parsed folds => Or.inr folds) (Eq.symm same) parsed folds
+'AspisV8.SameBodyOpenedRun.run_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SameBodyOpenedRun.run_authenticated_opened_or_failure' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -R /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr -o /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/opened-v3/SameBodyOpenedRun.olean /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/SameBodyOpenedRun.lean"
+	User time (seconds): 1.97
+	System time (seconds): 0.90
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.88
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6683860
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 141959
+	Voluntary context switches: 329
+	Involuntary context switches: 176
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 400
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

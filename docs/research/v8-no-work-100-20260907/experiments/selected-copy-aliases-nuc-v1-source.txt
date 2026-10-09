@@ -1,0 +1,243 @@
+import SelectedCopyAliasCore
+import SelectedCopyLinkBalance
+
+/-! Exact selected weighted aliases or explicit lambda/chi polynomial roots.
+The lambda witness is fixed by the table and public active-link set before
+lambda; the chi witness is fixed after lambda. No sampled zero is promoted
+to a polynomial identity. The source's value gathers and all slot poles are
+retained through the existing constructed-row bridge. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.SelectedCopyAliases
+open scoped BigOperators
+open Polynomial
+open AspisV8.SelectedWeightedCopyCore AspisV8.SelectedWeightedCopyRows
+open AspisV8.SelectedCopyLayout AspisV8.SelectedCopyLayoutRows
+open AspisV8.SelectedCopyLinkBalance AspisV8.SelectedCopyAliasCore
+noncomputable section
+variable {K : Type*} [Field K]
+
+def activeLinks (variant : Variant) (appendIndex : Nat) : Finset (Fin 136) :=
+  Finset.univ.filter fun index => weightBit variant appendIndex (selectedKind index)
+
+def tuplePolynomial (table : Table K) (index : Fin 136) (endpoint : Endpoint) : K[X] :=
+  C (selectedTag index : K) + ∑ limb : Fin 16,
+    C (patternLimb table endpoint limb) * X^(limb.val+1)
+
+theorem tuplePolynomial_eval (table : Table K) (index : Fin 136)
+    (endpoint : Endpoint) (lambda : K) :
+    (tuplePolynomial table index endpoint).eval lambda =
+      compressed table lambda index endpoint := by
+  simp only [tuplePolynomial,compressed,Polynomial.eval_add,Polynomial.eval_C,
+    Polynomial.eval_finsetSum,Polynomial.eval_mul,Polynomial.eval_pow,Polynomial.eval_X]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro limb _
+  exact mul_comm _ _
+
+theorem tuplePolynomial_degree (table : Table K) (index : Fin 136) (endpoint : Endpoint) :
+    (tuplePolynomial table index endpoint).natDegree≤16 := by
+  apply (Polynomial.natDegree_add_le _ _).trans
+  apply max_le
+  · simp
+  · apply Polynomial.natDegree_sum_le_of_forall_le
+    intro limb _
+    exact (Polynomial.natDegree_C_mul_X_pow_le _ _).trans (by omega)
+
+theorem tuplePolynomial_coeff_zero (table : Table K) (index : Fin 136)
+    (endpoint : Endpoint) :
+    (tuplePolynomial table index endpoint).coeff 0=(selectedTag index:K) := by
+  simp [tuplePolynomial]
+
+theorem tuplePolynomial_coeff_limb (table : Table K) (index : Fin 136)
+    (endpoint : Endpoint) (limb : Fin 16) :
+    (tuplePolynomial table index endpoint).coeff (limb.val+1)=patternLimb table endpoint limb := by
+  classical
+  rw [tuplePolynomial,Polynomial.coeff_add,Polynomial.coeff_C,
+    if_neg (by omega),zero_add,Polynomial.finsetSum_coeff]
+  rw [Finset.sum_eq_single limb]
+  · rw [Polynomial.coeff_C_mul_X_pow,if_pos rfl]
+  · intro other _ different
+    rw [Polynomial.coeff_C_mul_X_pow,if_neg]
+    intro equal
+    apply different
+    apply Fin.ext
+    omega
+  · simp
+
+def polyMultiset (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (endpoint : Fin 136 → Endpoint) : Multiset K[X] :=
+  (activeLinks variant appendIndex).val.map fun index => tuplePolynomial table index (endpoint index)
+
+def valueMultiset (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (endpoint : Fin 136 → Endpoint) (lambda : K) : Multiset K :=
+  (polyMultiset table variant appendIndex endpoint).map (Polynomial.evalRingHom lambda)
+
+def producer (index : Fin 136) : Endpoint := (sourceLinks index).producer
+def consumer (index : Fin 136) : Endpoint := (sourceLinks index).consumer
+
+theorem polyMultiset_card (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (endpoint : Fin 136 → Endpoint) :
+    (polyMultiset table variant appendIndex endpoint).card=(activeLinks variant appendIndex).card := by
+  simp [polyMultiset]
+
+theorem valueMultiset_card (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (endpoint : Fin 136 → Endpoint) (lambda : K) :
+    (valueMultiset table variant appendIndex endpoint lambda).card=
+      (activeLinks variant appendIndex).card := by
+  simp [valueMultiset,polyMultiset_card]
+
+theorem polyMultiset_degree (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (endpoint : Fin 136 → Endpoint) :
+    ∀ p∈polyMultiset table variant appendIndex endpoint,p.natDegree≤16 := by
+  intro p member
+  obtain ⟨index,_,rfl⟩ := Multiset.mem_map.mp member
+  exact tuplePolynomial_degree table index (endpoint index)
+
+theorem source_balance_eq (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (lambda chi : K) :
+    rationalBalance (valueMultiset table variant appendIndex producer lambda)
+      (valueMultiset table variant appendIndex consumer lambda) chi =
+      activeLinkBalance table lambda chi variant appendIndex := by
+  classical
+  simp only [rationalBalance,valueMultiset,polyMultiset,Multiset.map_map,
+    Function.comp_apply,Polynomial.coe_evalRingHom,tuplePolynomial_eval]
+  change (∑ index∈activeLinks variant appendIndex,
+      (chi-compressed table lambda index (producer index))⁻¹) -
+    (∑ index∈activeLinks variant appendIndex,
+      (chi-compressed table lambda index (consumer index))⁻¹) = _
+  rw [←Finset.sum_sub_distrib]
+  simp only [activeLinks,Finset.sum_filter,activeLinkBalance,producer,consumer]
+
+theorem source_value_poles (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (lambda chi : K)
+    (noPole : ∀ row,rowActive row →
+      NoSlotPole (sourceRows table lambda variant appendIndex row) chi) :
+    chi∉valueMultiset table variant appendIndex producer lambda ∧
+      chi∉valueMultiset table variant appendIndex consumer lambda := by
+  constructor
+  · intro member
+    obtain ⟨p,member,equal⟩ := Multiset.mem_map.mp member
+    obtain ⟨index,_,rfl⟩ := Multiset.mem_map.mp member
+    have h := (noPole (producer index).row (source_endpoints_active index).1).1
+      (producer index).slot
+    change chi-gather producer (fun i => compressed table lambda i (producer i))
+      (producer index).row (producer index).slot ≠ 0 at h
+    rw [gather_at_placement producer producer_placement_injective] at h
+    rw [Polynomial.coe_evalRingHom,tuplePolynomial_eval] at equal
+    exact h (sub_eq_zero.mpr equal.symm)
+  · intro member
+    obtain ⟨p,member,equal⟩ := Multiset.mem_map.mp member
+    obtain ⟨index,_,rfl⟩ := Multiset.mem_map.mp member
+    have h := (noPole (consumer index).row (source_endpoints_active index).2).2
+      (consumer index).slot
+    change chi-gather consumer (fun i => compressed table lambda i (consumer i))
+      (consumer index).row (consumer index).slot ≠ 0 at h
+    rw [gather_at_placement consumer consumer_placement_injective] at h
+    rw [Polynomial.coe_evalRingHom,tuplePolynomial_eval] at equal
+    exact h (sub_eq_zero.mpr equal.symm)
+
+def WeightedAliases (table : Table K) (variant : Variant) (appendIndex : Nat) : Prop :=
+  ∀ index limb, selectedWeight variant appendIndex index *
+    (patternLimb table (producer index) limb-patternLimb table (consumer index) limb)=0
+
+/-- Field-cast tags, not merely natural tags, must be injective. No alias,
+decoder, or compiler-success assumption is hidden in this prerequisite. -/
+theorem aliases_of_polyMultiset_equal (table : Table K) (variant : Variant)
+    (appendIndex : Nat)
+    (tags : Function.Injective (fun index : Fin 136 => (selectedTag index:K)))
+    (equal : polyMultiset table variant appendIndex producer=
+      polyMultiset table variant appendIndex consumer) :
+    WeightedAliases table variant appendIndex := by
+  classical
+  intro index limb
+  by_cases active : weightBit variant appendIndex (selectedKind index)=true
+  · have member : tuplePolynomial table index (producer index) ∈
+        polyMultiset table variant appendIndex producer := by
+      apply Multiset.mem_map.mpr
+      exact ⟨index,by simp [activeLinks,active],rfl⟩
+    rw [equal] at member
+    obtain ⟨other,_,polyEqual⟩ := Multiset.mem_map.mp member
+    have tagEqual := congrArg (fun p : K[X] => p.coeff 0) polyEqual
+    rw [tuplePolynomial_coeff_zero,tuplePolynomial_coeff_zero] at tagEqual
+    have same := tags tagEqual
+    subst other
+    have limbEqual := congrArg (fun p : K[X] => p.coeff (limb.val+1)) polyEqual
+    rw [tuplePolynomial_coeff_limb,tuplePolynomial_coeff_limb] at limbEqual
+    rw [limbEqual,sub_self,mul_zero]
+  · simp only [selectedWeight,publicWeight,active,if_false,zero_mul]
+
+def lambdaWitness (table : Table K) (variant : Variant) (appendIndex : Nat) : K[X] :=
+  lambdaError (polyMultiset table variant appendIndex producer)
+    (polyMultiset table variant appendIndex consumer)
+
+def chiWitness (table : Table K) (variant : Variant) (appendIndex : Nat) (lambda : K) : K[X] :=
+  chiError (valueMultiset table variant appendIndex producer lambda)
+    (valueMultiset table variant appendIndex consumer lambda)
+
+/-- The actual selected source partition. The lambda witness is independent
+of lambda/chi; the chi witness is independent of chi. The hypotheses still
+require the C1 table/public context to be fixed at their legal causal prefix. -/
+theorem source_roots_or_aliases (table : Table K) (variant : Variant) (appendIndex : Nat)
+    (lambda chi : K) (helper : Fin 1024 → K)
+    (tags : Function.Injective (fun index : Fin 136 => (selectedTag index:K)))
+    (small : ∀ n : Nat,0<n → n≤(activeLinks variant appendIndex).card → (n:K)≠0)
+    (localZero : ∀ row,selectedBooleanResidual
+      (sourceRows table lambda variant appendIndex) helper chi row=0)
+    (totalZero : (∑ row,helper row)=0)
+    (inactiveZero : (∑ row,inactiveHelper rowActive helper row)=0)
+    (noPole : ∀ row,rowActive row →
+      NoSlotPole (sourceRows table lambda variant appendIndex row) chi) :
+    WeightedAliases table variant appendIndex ∨
+      (lambdaWitness table variant appendIndex≠0 ∧
+        (lambdaWitness table variant appendIndex).eval lambda=0 ∧
+        (lambdaWitness table variant appendIndex).natDegree≤
+          16*(activeLinks variant appendIndex).card) ∨
+      (chiWitness table variant appendIndex lambda≠0 ∧
+        (chiWitness table variant appendIndex lambda).eval chi=0 ∧
+        (chiWitness table variant appendIndex lambda).natDegree<
+          2*(activeLinks variant appendIndex).card) := by
+  classical
+  have sourceZero := source_active_links_zero table lambda chi variant appendIndex
+    helper localZero totalZero inactiveZero noPole
+  have poles := source_value_poles table variant appendIndex lambda chi noPole
+  have balance : rationalBalance (valueMultiset table variant appendIndex producer lambda)
+      (valueMultiset table variant appendIndex consumer lambda) chi=0 := by
+    rw [source_balance_eq]
+    exact sourceZero
+  obtain equal | collision := chi_root_or_equal
+    (valueMultiset table variant appendIndex producer lambda)
+    (valueMultiset table variant appendIndex consumer lambda) chi
+    (by rw [valueMultiset_card,valueMultiset_card])
+    (by simpa only [valueMultiset_card] using small) balance poles.1 poles.2
+  · by_cases polynomialEqual : polyMultiset table variant appendIndex producer=
+        polyMultiset table variant appendIndex consumer
+    · exact Or.inl (aliases_of_polyMultiset_equal table variant appendIndex tags polynomialEqual)
+    · right; left
+      refine ⟨lambdaError_nonzero _ _ polynomialEqual,lambdaError_eval_zero _ _ lambda equal,?_⟩
+      have degree := lambdaError_degree
+        (polyMultiset table variant appendIndex producer)
+        (polyMultiset table variant appendIndex consumer) 16
+        (polyMultiset_degree table variant appendIndex producer)
+        (polyMultiset_degree table variant appendIndex consumer)
+      simpa only [polyMultiset_card,max_self] using degree
+  · right; right
+    refine ⟨collision.1,collision.2.1,?_⟩
+    simpa only [valueMultiset_card,two_mul] using collision.2.2
+
+#print axioms tuplePolynomial_eval
+#print axioms tuplePolynomial_degree
+#print axioms tuplePolynomial_coeff_zero
+#print axioms tuplePolynomial_coeff_limb
+#print axioms polyMultiset_card
+#print axioms valueMultiset_card
+#print axioms polyMultiset_degree
+#print axioms source_balance_eq
+#print axioms source_value_poles
+#print axioms aliases_of_polyMultiset_equal
+#print axioms source_roots_or_aliases
+end
+end AspisV8.SelectedCopyAliases

@@ -1,0 +1,111 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=SelectedQuadraticCover
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+044500bae31370349cf436036dccde0b4cced74d402e153b37261630c2620c5d  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/selected-quadratic-cover-nuc-v1-manifest.json
+095f807c91b8cc343b141de4c4047b6a5a7c79bd5a0ffc2facf17a46cc163668  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean
+095f807c91b8cc343b141de4c4047b6a5a7c79bd5a0ffc2facf17a46cc163668  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/selected-quadratic-cover-nuc-v1-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=845
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-selected-quadratic-cover-nuc-v1.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:37:48: error: Application type mismatch: The argument
+  h
+has type
+  predicate a
+of sort `Prop` but is expected to have type
+  Multiset ?m.36
+of sort `Type ?u.28` in the application
+  Multiset.filter_cons_of_pos h
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:37:8: error: Type mismatch: After simplification, term
+  Nat.add_le_add_left ih (weight a)
+ has type
+  weight a + (Multiset.map weight (Multiset.filter predicate s)).sum ≤ weight a + (Multiset.map weight s).sum
+but is expected to have type
+  (Multiset.map weight (Multiset.filter predicate (a ::ₘ s))).sum ≤ weight a + (Multiset.map weight s).sum
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:39:48: error: Application type mismatch: The argument
+  h
+has type
+  ¬predicate a
+of sort `Prop` but is expected to have type
+  Multiset ?m.44
+of sort `Type ?u.34` in the application
+  Multiset.filter_cons_of_neg h
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:39:8: error: Type mismatch: After simplification, term
+  LE.le.trans ih (Nat.le_add_left (Multiset.map weight s).sum ?m.51)
+ has type
+  (Multiset.map weight (Multiset.filter predicate s)).sum ≤ ?m.51 + (Multiset.map weight s).sum
+but is expected to have type
+  (Multiset.map weight (Multiset.filter predicate (a ::ₘ s))).sum ≤ weight a + (Multiset.map weight s).sum
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:61:51: error: Function expected at
+  points
+but this term has type
+  ?m.159 F E
+
+Note: Expected a function because this term is being applied to the argument
+  r
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:61:62: error: Function expected at
+  answers
+but this term has type
+  ?m.160 F E points
+
+Note: Expected a function because this term is being applied to the argument
+  r
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:62:23: error: Function expected at
+  points
+but this term has type
+  ?m.159 F E
+
+Note: Expected a function because this term is being applied to the argument
+  r
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean:52:62: error: unsolved goals
+c1 : C1Received
+c2 : C2Received
+xw : TrivariatePolynomial K → ℕ := fun F => ((trivariateXOuterEquiv K) F).natDegree
+gw : TrivariatePolynomial K → ℕ := fun F => 8 * trivariateYZWeight 28 F
+nonzero : parent c1 c2 ≠ 0
+⊢ ∃ E exceptional,
+    E ≠ 0 ∧
+      E.natDegree ≤ 114687 ∧
+        exceptional.card ≤ 936616 ∧
+          ∀ (points : Fin 2 → K) (answers : Fin 2 → K[X]) (gamma : K) (U : K[X]),
+            (∃ F ∈ curvePrimeFactors (parent c1 c2),
+                natDegree F = 2 ∧
+                  (∀ (r : Fin 2), (FactorCoherence.pointSubstitution (points r) (answers r)) F = 0) ∧
+                    (challengeCandidateHom gamma U) F = 0) →
+              (∀ (r : Fin 2), eval (points r) E = 0) ∨ gamma ∈ exceptional
+'_private.SelectedQuadraticCover.0.AspisV8.SelectedQuadraticCover.filtered_weight_le' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]
+'AspisV8.SelectedQuadraticCover.fixed_cover' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/SelectedQuadraticCover.lean"
+	User time (seconds): 1.99
+	System time (seconds): 1.07
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.07
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6829764
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 141726
+	Voluntary context switches: 322
+	Involuntary context switches: 172
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1

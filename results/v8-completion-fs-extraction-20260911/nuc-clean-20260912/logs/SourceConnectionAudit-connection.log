@@ -1,0 +1,889 @@
+theorem AspisV8Completion.SameBodyPublicCorrection.correction_constructed.{u} : ∀ {K : Type u} [inst : DecidableEq K]
+  (ops : AspisV8Completion.SameBodyOrdinary.Arithmetic K) (w : AspisV8Completion.SameBodyRelation.Word K)
+  (gamma kappa : K) (p0 p1 : AspisV8Completion.SameBodyOrdinary.Point K) (z : Fin 10 → K)
+  (out : AspisV8Completion.SameBodyPublicCorrection.Corrected K),
+  AspisV8Completion.SameBodyPublicCorrection.correct ops w gamma kappa p0 p1 z = some out →
+    AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1 = some out.prepared ∧
+      out.publicPair = AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa out.prepared.useX ∧
+        out.claim =
+          ops.sub (ops.sub out.prepared.uncorrectedClaim (ops.mul out.prepared.intercept out.publicPair.fst))
+            (ops.mul out.prepared.slope out.publicPair.snd) :=
+fun {K} [DecidableEq K] ops w gamma kappa p0 p1 z out success =>
+  Option.casesOn (motive := fun t =>
+    AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1 = t →
+      AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1 = some out.prepared ∧
+        out.publicPair = AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa out.prepared.useX ∧
+          out.claim =
+            ops.sub (ops.sub out.prepared.uncorrectedClaim (ops.mul out.prepared.intercept out.publicPair.fst))
+              (ops.mul out.prepared.slope out.publicPair.snd))
+    (AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1)
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1 = x →
+          x = some out.prepared ∧
+            out.publicPair = AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa out.prepared.useX ∧
+              out.claim =
+                ops.sub (ops.sub out.prepared.uncorrectedClaim (ops.mul out.prepared.intercept out.publicPair.fst))
+                  (ops.mul out.prepared.slope out.publicPair.snd))
+        (fun h =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg
+                      (Option.map fun prepared =>
+                        { prepared := prepared,
+                          publicPair := AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa prepared.useX,
+                          claim :=
+                            ops.sub
+                              (ops.sub prepared.uncorrectedClaim
+                                (ops.mul prepared.intercept
+                                  (AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa prepared.useX).fst))
+                              (ops.mul prepared.slope
+                                (AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa prepared.useX).snd) })
+                      h))
+                  (some out))
+                (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+              success))
+        (Eq.symm h) (Eq.refl (AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1)))
+    (fun p h =>
+      Eq.ndrec (motive := fun x =>
+        AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1 = x →
+          x = some out.prepared ∧
+            out.publicPair = AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa out.prepared.useX ∧
+              out.claim =
+                ops.sub (ops.sub out.prepared.uncorrectedClaim (ops.mul out.prepared.intercept out.publicPair.fst))
+                  (ops.mul out.prepared.slope out.publicPair.snd))
+        (fun h =>
+          Eq.mp
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg
+                      (Option.map fun prepared =>
+                        { prepared := prepared,
+                          publicPair := AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa prepared.useX,
+                          claim :=
+                            ops.sub
+                              (ops.sub prepared.uncorrectedClaim
+                                (ops.mul prepared.intercept
+                                  (AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa prepared.useX).fst))
+                              (ops.mul prepared.slope
+                                (AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa prepared.useX).snd) })
+                      h))
+                  (some out))
+                (Option.some.injEq
+                  { prepared := p, publicPair := AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa p.useX,
+                    claim :=
+                      ops.sub
+                        (ops.sub p.uncorrectedClaim
+                          (ops.mul p.intercept
+                            (AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa p.useX).fst))
+                        (ops.mul p.slope (AspisV8Completion.SameBodyPublicCorrection.pair ops z kappa p.useX).snd) }
+                  out))
+              success ▸
+            ⟨rfl, ⟨rfl, rfl⟩⟩)
+        (Eq.symm h) (Eq.refl (AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1)))
+    (Eq.refl (AspisV8Completion.SameBodyOrdinary.prepare ops w gamma kappa p0 p1))
+theorem AspisV8Completion.SameBodyQueryClaim.produced_terminal.{u, v} : ∀ {K : Type u} {Schedule : Type v}
+  (ops : AspisV8Completion.SameBodyQueryClaim.Arithmetic K) (early : Fin 417 → K)
+  (strategy : AspisV8Completion.SameBodyRelation.Strategy K Schedule) (tau alpha0 rho : K) (queries : Schedule)
+  (coins : Fin 3 → K) (c : K),
+  AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+      (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries rho coins) coins c =
+    AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+      (((strategy tau).afterAlpha0 alpha0).afterQueries queries rho) coins c :=
+fun {K} {Schedule} ops early strategy tau alpha0 rho queries coins c =>
+  AspisV8Completion.SameBodyRelation.Tail.casesOn (motive := fun a t =>
+    3 = a →
+      ((strategy tau).afterAlpha0 alpha0).afterQueries queries rho ≍ t →
+        AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+            (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries rho coins) coins c =
+          AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+            (((strategy tau).afterAlpha0 alpha0).afterQueries queries rho) coins c)
+    (((strategy tau).afterAlpha0 alpha0).afterQueries queries rho)
+    (fun h => False.elim (noConfusion_of_Nat Nat.ctorIdx h))
+    (fun {n} m1 n1 h =>
+      Nat.Internal.elimOffset (0 + 2) n 1 h fun x =>
+        Eq.ndrec (motive := fun {n} =>
+          ∀ (n1 : K → AspisV8Completion.SameBodyRelation.Tail K n),
+            ((strategy tau).afterAlpha0 alpha0).afterQueries queries rho ≍
+                AspisV8Completion.SameBodyRelation.Tail.round m1 n1 →
+              AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                  (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries rho coins) coins c =
+                AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+                  (((strategy tau).afterAlpha0 alpha0).afterQueries queries rho) coins c)
+          (fun n1 h =>
+            Eq.ndrec (motive := fun tail =>
+              ((strategy tau).afterAlpha0 alpha0).afterQueries queries rho = tail →
+                AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                    (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries rho coins) coins c =
+                  AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic tail coins c)
+              (fun h =>
+                AspisV8Completion.SameBodyRelation.Tail.casesOn (motive := fun a t =>
+                  0 + 2 = a →
+                    n1 (coins 0) ≍ t →
+                      AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                          (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries rho coins) coins
+                          c =
+                        AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+                          (AspisV8Completion.SameBodyRelation.Tail.round m1 n1) coins c)
+                  (n1 (coins 0)) (fun h => False.elim (noConfusion_of_Nat Nat.ctorIdx h))
+                  (fun {n} m2 n2 h_1 =>
+                    Nat.Internal.elimOffset (0 + 1) n 1 h_1 fun x =>
+                      Eq.ndrec (motive := fun {n} =>
+                        ∀ (n2 : K → AspisV8Completion.SameBodyRelation.Tail K n),
+                          n1 (coins 0) ≍ AspisV8Completion.SameBodyRelation.Tail.round m2 n2 →
+                            AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                                (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries rho coins)
+                                coins c =
+                              AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+                                (AspisV8Completion.SameBodyRelation.Tail.round m1 n1) coins c)
+                        (fun n2 h_2 =>
+                          Eq.ndrec (motive := fun t1 =>
+                            n1 (coins 0) = t1 →
+                              AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                                  (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries rho
+                                    coins)
+                                  coins c =
+                                AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+                                  (AspisV8Completion.SameBodyRelation.Tail.round m1 n1) coins c)
+                            (fun h1 =>
+                              AspisV8Completion.SameBodyRelation.Tail.casesOn (motive := fun a t =>
+                                0 + 1 = a →
+                                  n2 (coins 1) ≍ t →
+                                    AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                                        (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0 queries
+                                          rho coins)
+                                        coins c =
+                                      AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+                                        (AspisV8Completion.SameBodyRelation.Tail.round m1 n1) coins c)
+                                (n2 (coins 1)) (fun h => False.elim (noConfusion_of_Nat Nat.ctorIdx h))
+                                (fun {n} m3 n3 h_3 =>
+                                  Nat.Internal.elimOffset 0 n 1 h_3 fun x =>
+                                    Eq.ndrec (motive := fun {n} =>
+                                      ∀ (n3 : K → AspisV8Completion.SameBodyRelation.Tail K n),
+                                        n2 (coins 1) ≍ AspisV8Completion.SameBodyRelation.Tail.round m3 n3 →
+                                          AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                                              (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0
+                                                queries rho coins)
+                                              coins c =
+                                            AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+                                              (AspisV8Completion.SameBodyRelation.Tail.round m1 n1) coins c)
+                                      (fun n3 h_4 =>
+                                        Eq.ndrec (motive := fun t2 =>
+                                          n2 (coins 1) = t2 →
+                                            AspisV8Completion.SameBodyQueryClaim.terminalClaim ops
+                                                (AspisV8Completion.SameBodyRelation.produce early strategy tau alpha0
+                                                  queries rho coins)
+                                                coins c =
+                                              AspisV8Completion.SameBodyRelation.tailClaim ops.toArithmetic
+                                                (AspisV8Completion.SameBodyRelation.Tail.round m1 n1) coins c)
+                                          (fun h2 =>
+                                            have h3 :=
+                                              AspisV8Completion.SameBodyRelation.Tail.casesOn (motive := fun a t =>
+                                                0 = a →
+                                                  n3 (coins 2) ≍ t →
+                                                    n3 (coins 2) = AspisV8Completion.SameBodyRelation.Tail.done)
+                                                (n3 (coins 2))
+                                                (fun h h_5 =>
+                                                  Eq.symm (eq_of_heq h_5) ▸
+                                                    Eq.refl AspisV8Completion.SameBodyRelation.Tail.done)
+                                                (fun {n} sent next h => False.elim (noConfusion_of_Nat Nat.ctorIdx h))
+                                                (Eq.refl 0) (HEq.refl (n3 (coins 2)));
+                                            of_eq_true
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg Eq
+                                                    (congrFun'
+                                                      (congrArg ops.evaluate7
+                                                        (congr
+                                                          (congrArg
+                                                            (AspisV8Completion.SameBodyRelation.compact
+                                                              ops.toArithmetic)
+                                                            (congrFun'
+                                                              (congrArg ops.evaluate7
+                                                                (congr
+                                                                  (congrArg
+                                                                    (AspisV8Completion.SameBodyRelation.compact
+                                                                      ops.toArithmetic)
+                                                                    (congrFun'
+                                                                      (congrArg ops.evaluate7
+                                                                        (congrArg
+                                                                          (AspisV8Completion.SameBodyRelation.compact
+                                                                            ops.toArithmetic c)
+                                                                          (Eq.trans
+                                                                            (Eq.trans
+                                                                              (congrFun'
+                                                                                (congrArg
+                                                                                  AspisV8Completion.SameBodyRelation.response
+                                                                                  (congrFun'
+                                                                                    (congrArg
+                                                                                      (AspisV8Completion.SameBodyRelation.assemble
+                                                                                        early)
+                                                                                      (Eq.trans
+                                                                                        (congrArg
+                                                                                          (fun x =>
+                                                                                            match (motive :=
+                                                                                              AspisV8Completion.SameBodyRelation.Tail
+                                                                                                  K 3 →
+                                                                                                Fin 4 →
+                                                                                                  AspisV8Completion.SameBodyRelation.Sent
+                                                                                                    K)
+                                                                                              x with
+                                                                                            |
+                                                                                            AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                                m1 n1 =>
+                                                                                              ⋯)
+                                                                                          h)
+                                                                                        (Eq.trans
+                                                                                          (AspisV8Completion.SameBodyRelation.roundsOfTail.match_5.eq_1✝
+                                                                                            (fun tail =>
+                                                                                              Fin 4 →
+                                                                                                AspisV8Completion.SameBodyRelation.Sent
+                                                                                                  K)
+                                                                                            m1 n1 fun m1 n1 => ⋯)
+                                                                                          (Eq.trans (congrArg ⋯ h1)
+                                                                                            (Eq.trans ⋯ ⋯)))))
+                                                                                    ((strategy tau).afterAlpha0
+                                                                                        alpha0).final256))
+                                                                                1)
+                                                                              (AspisV8Completion.SameBodyRelation.assembled_responses
+                                                                                early
+                                                                                (fun r =>
+                                                                                  if r = 0 then (strategy tau).response0
+                                                                                  else
+                                                                                    if ↑r = 1 then m1
+                                                                                    else if ↑r = 2 then m2 else m3)
+                                                                                ((strategy tau).afterAlpha0
+                                                                                    alpha0).final256
+                                                                                1))
+                                                                            (Eq.trans
+                                                                              (ite_cond_eq_false
+                                                                                (strategy tau).response0
+                                                                                (if ↑1 = 1 then m1
+                                                                                else if ↑1 = 2 then m2 else m3)
+                                                                                (Eq.trans Fin.one_eq_zero_iff._simp_1
+                                                                                  (eq_false_of_decide (Eq.refl false))))
+                                                                              (ite_cond_eq_true m1
+                                                                                (if ↑1 = 2 then m2 else m3)
+                                                                                (eq_self 1))))))
+                                                                      (coins 0)))
+                                                                  (Eq.trans
+                                                                    (Eq.trans
+                                                                      (congrFun'
+                                                                        (congrArg
+                                                                          AspisV8Completion.SameBodyRelation.response
+                                                                          (congrFun'
+                                                                            (congrArg
+                                                                              (AspisV8Completion.SameBodyRelation.assemble
+                                                                                early)
+                                                                              (Eq.trans
+                                                                                (congrArg
+                                                                                  (fun x =>
+                                                                                    match (motive :=
+                                                                                      AspisV8Completion.SameBodyRelation.Tail
+                                                                                          K 3 →
+                                                                                        Fin 4 →
+                                                                                          AspisV8Completion.SameBodyRelation.Sent
+                                                                                            K)
+                                                                                      x with
+                                                                                    |
+                                                                                    AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                        m1 n1 =>
+                                                                                      match (motive :=
+                                                                                        AspisV8Completion.SameBodyRelation.Tail
+                                                                                            K 2 →
+                                                                                          Fin 4 →
+                                                                                            AspisV8Completion.SameBodyRelation.Sent
+                                                                                              K)
+                                                                                        n1 (coins 0) with
+                                                                                      |
+                                                                                      AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                          m2 n2 =>
+                                                                                        match (motive :=
+                                                                                          AspisV8Completion.SameBodyRelation.Tail
+                                                                                              K 1 →
+                                                                                            Fin 4 →
+                                                                                              AspisV8Completion.SameBodyRelation.Sent
+                                                                                                K)
+                                                                                          n2 (coins 1) with
+                                                                                        |
+                                                                                        AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                            m3 next =>
+                                                                                          fun r =>
+                                                                                          if ↑r = 0 then
+                                                                                            (strategy tau).response0
+                                                                                          else ⋯)
+                                                                                  h)
+                                                                                (Eq.trans
+                                                                                  (AspisV8Completion.SameBodyRelation.roundsOfTail.match_5.eq_1✝
+                                                                                    (fun tail =>
+                                                                                      Fin 4 →
+                                                                                        AspisV8Completion.SameBodyRelation.Sent
+                                                                                          K)
+                                                                                    m1 n1 fun m1 n1 =>
+                                                                                    match (motive :=
+                                                                                      AspisV8Completion.SameBodyRelation.Tail
+                                                                                          K 2 →
+                                                                                        Fin 4 →
+                                                                                          AspisV8Completion.SameBodyRelation.Sent
+                                                                                            K)
+                                                                                      n1 (coins 0) with
+                                                                                    |
+                                                                                    AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                        m2 n2 =>
+                                                                                      match (motive :=
+                                                                                        AspisV8Completion.SameBodyRelation.Tail
+                                                                                            K 1 →
+                                                                                          Fin 4 →
+                                                                                            AspisV8Completion.SameBodyRelation.Sent
+                                                                                              K)
+                                                                                        n2 (coins 1) with
+                                                                                      |
+                                                                                      AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                          m3 next =>
+                                                                                        fun r =>
+                                                                                        if ↑r = 0 then
+                                                                                          (strategy tau).response0
+                                                                                        else ⋯)
+                                                                                  (Eq.trans
+                                                                                    (congrArg
+                                                                                      (fun x =>
+                                                                                        match (motive :=
+                                                                                          AspisV8Completion.SameBodyRelation.Tail
+                                                                                              K 2 →
+                                                                                            Fin 4 →
+                                                                                              AspisV8Completion.SameBodyRelation.Sent
+                                                                                                K)
+                                                                                          x with
+                                                                                        |
+                                                                                        AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                            m2 n2 =>
+                                                                                          match (motive :=
+                                                                                            AspisV8Completion.SameBodyRelation.Tail
+                                                                                                K 1 →
+                                                                                              Fin 4 →
+                                                                                                AspisV8Completion.SameBodyRelation.Sent
+                                                                                                  K)
+                                                                                            n2 (coins 1) with
+                                                                                          |
+                                                                                          AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                              m3 next =>
+                                                                                            fun r => ⋯)
+                                                                                      h1)
+                                                                                    (Eq.trans
+                                                                                      (AspisV8Completion.SameBodyRelation.roundsOfTail.match_3.eq_1✝
+                                                                                        (fun x =>
+                                                                                          Fin 4 →
+                                                                                            AspisV8Completion.SameBodyRelation.Sent
+                                                                                              K)
+                                                                                        m2 n2 fun m2 n2 =>
+                                                                                        match (motive :=
+                                                                                          AspisV8Completion.SameBodyRelation.Tail
+                                                                                              K 1 →
+                                                                                            Fin 4 →
+                                                                                              AspisV8Completion.SameBodyRelation.Sent
+                                                                                                K)
+                                                                                          n2 (coins 1) with
+                                                                                        |
+                                                                                        AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                            m3 next =>
+                                                                                          fun r => ⋯)
+                                                                                      (Eq.trans
+                                                                                        (congrArg
+                                                                                          (fun x =>
+                                                                                            match (motive :=
+                                                                                              AspisV8Completion.SameBodyRelation.Tail
+                                                                                                  K 1 →
+                                                                                                Fin 4 →
+                                                                                                  AspisV8Completion.SameBodyRelation.Sent
+                                                                                                    K)
+                                                                                              x with
+                                                                                            |
+                                                                                            AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                                m3 next =>
+                                                                                              ⋯)
+                                                                                          h2)
+                                                                                        (Eq.trans
+                                                                                          (AspisV8Completion.SameBodyRelation.roundsOfTail.match_1.eq_1✝
+                                                                                            (fun x =>
+                                                                                              Fin 4 →
+                                                                                                AspisV8Completion.SameBodyRelation.Sent
+                                                                                                  K)
+                                                                                            m3 n3 fun m3 next r => ⋯)
+                                                                                          (funext fun r => ⋯))))))))
+                                                                            ((strategy tau).afterAlpha0
+                                                                                alpha0).final256))
+                                                                        2)
+                                                                      (AspisV8Completion.SameBodyRelation.assembled_responses
+                                                                        early
+                                                                        (fun r =>
+                                                                          if r = 0 then (strategy tau).response0
+                                                                          else
+                                                                            if ↑r = 1 then m1
+                                                                            else if ↑r = 2 then m2 else m3)
+                                                                        ((strategy tau).afterAlpha0 alpha0).final256 2))
+                                                                    (Eq.trans
+                                                                      (ite_cond_eq_false (strategy tau).response0
+                                                                        (if ↑2 = 1 then m1
+                                                                        else if ↑2 = 2 then m2 else m3)
+                                                                        (eq_false_of_decide (Eq.refl false)))
+                                                                      (Eq.trans
+                                                                        (ite_cond_eq_false m1
+                                                                          (if ↑2 = 2 then m2 else m3)
+                                                                          (Nat.succ_ne_self._simp_1 1))
+                                                                        (ite_cond_eq_true m2 m3 (eq_self 2)))))))
+                                                              (coins 1)))
+                                                          (Eq.trans
+                                                            (Eq.trans
+                                                              (congrFun'
+                                                                (congrArg AspisV8Completion.SameBodyRelation.response
+                                                                  (congrFun'
+                                                                    (congrArg
+                                                                      (AspisV8Completion.SameBodyRelation.assemble
+                                                                        early)
+                                                                      (Eq.trans
+                                                                        (congrArg
+                                                                          (fun x =>
+                                                                            match (motive :=
+                                                                              AspisV8Completion.SameBodyRelation.Tail K
+                                                                                  3 →
+                                                                                Fin 4 →
+                                                                                  AspisV8Completion.SameBodyRelation.Sent
+                                                                                    K)
+                                                                              x with
+                                                                            |
+                                                                            AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                m1 n1 =>
+                                                                              match (motive :=
+                                                                                AspisV8Completion.SameBodyRelation.Tail
+                                                                                    K 2 →
+                                                                                  Fin 4 →
+                                                                                    AspisV8Completion.SameBodyRelation.Sent
+                                                                                      K)
+                                                                                n1 (coins 0) with
+                                                                              |
+                                                                              AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                  m2 n2 =>
+                                                                                match (motive :=
+                                                                                  AspisV8Completion.SameBodyRelation.Tail
+                                                                                      K 1 →
+                                                                                    Fin 4 →
+                                                                                      AspisV8Completion.SameBodyRelation.Sent
+                                                                                        K)
+                                                                                  n2 (coins 1) with
+                                                                                |
+                                                                                AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                    m3 next =>
+                                                                                  fun r =>
+                                                                                  if ↑r = 0 then
+                                                                                    (strategy tau).response0
+                                                                                  else
+                                                                                    if ↑r = 1 then m1
+                                                                                    else if ↑r = 2 then m2 else m3)
+                                                                          h)
+                                                                        (Eq.trans
+                                                                          (AspisV8Completion.SameBodyRelation.roundsOfTail.match_5.eq_1✝
+                                                                            (fun tail =>
+                                                                              Fin 4 →
+                                                                                AspisV8Completion.SameBodyRelation.Sent
+                                                                                  K)
+                                                                            m1 n1 fun m1 n1 =>
+                                                                            match (motive :=
+                                                                              AspisV8Completion.SameBodyRelation.Tail K
+                                                                                  2 →
+                                                                                Fin 4 →
+                                                                                  AspisV8Completion.SameBodyRelation.Sent
+                                                                                    K)
+                                                                              n1 (coins 0) with
+                                                                            |
+                                                                            AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                m2 n2 =>
+                                                                              match (motive :=
+                                                                                AspisV8Completion.SameBodyRelation.Tail
+                                                                                    K 1 →
+                                                                                  Fin 4 →
+                                                                                    AspisV8Completion.SameBodyRelation.Sent
+                                                                                      K)
+                                                                                n2 (coins 1) with
+                                                                              |
+                                                                              AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                  m3 next =>
+                                                                                fun r =>
+                                                                                if ↑r = 0 then (strategy tau).response0
+                                                                                else
+                                                                                  if ↑r = 1 then m1
+                                                                                  else if ↑r = 2 then m2 else m3)
+                                                                          (Eq.trans
+                                                                            (congrArg
+                                                                              (fun x =>
+                                                                                match (motive :=
+                                                                                  AspisV8Completion.SameBodyRelation.Tail
+                                                                                      K 2 →
+                                                                                    Fin 4 →
+                                                                                      AspisV8Completion.SameBodyRelation.Sent
+                                                                                        K)
+                                                                                  x with
+                                                                                |
+                                                                                AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                    m2 n2 =>
+                                                                                  match (motive :=
+                                                                                    AspisV8Completion.SameBodyRelation.Tail
+                                                                                        K 1 →
+                                                                                      Fin 4 →
+                                                                                        AspisV8Completion.SameBodyRelation.Sent
+                                                                                          K)
+                                                                                    n2 (coins 1) with
+                                                                                  |
+                                                                                  AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                      m3 next =>
+                                                                                    fun r =>
+                                                                                    if ↑r = 0 then
+                                                                                      (strategy tau).response0
+                                                                                    else
+                                                                                      if ↑r = 1 then m1
+                                                                                      else if ↑r = 2 then m2 else m3)
+                                                                              h1)
+                                                                            (Eq.trans
+                                                                              (AspisV8Completion.SameBodyRelation.roundsOfTail.match_3.eq_1✝
+                                                                                (fun x =>
+                                                                                  Fin 4 →
+                                                                                    AspisV8Completion.SameBodyRelation.Sent
+                                                                                      K)
+                                                                                m2 n2 fun m2 n2 =>
+                                                                                match (motive :=
+                                                                                  AspisV8Completion.SameBodyRelation.Tail
+                                                                                      K 1 →
+                                                                                    Fin 4 →
+                                                                                      AspisV8Completion.SameBodyRelation.Sent
+                                                                                        K)
+                                                                                  n2 (coins 1) with
+                                                                                |
+                                                                                AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                    m3 next =>
+                                                                                  fun r =>
+                                                                                  if ↑r = 0 then
+                                                                                    (strategy tau).response0
+                                                                                  else
+                                                                                    if ↑r = 1 then m1
+                                                                                    else if ↑r = 2 then m2 else m3)
+                                                                              (Eq.trans
+                                                                                (congrArg
+                                                                                  (fun x =>
+                                                                                    match (motive :=
+                                                                                      AspisV8Completion.SameBodyRelation.Tail
+                                                                                          K 1 →
+                                                                                        Fin 4 →
+                                                                                          AspisV8Completion.SameBodyRelation.Sent
+                                                                                            K)
+                                                                                      x with
+                                                                                    |
+                                                                                    AspisV8Completion.SameBodyRelation.Tail.round
+                                                                                        m3 next =>
+                                                                                      fun r =>
+                                                                                      if ↑r = 0 then
+                                                                                        (strategy tau).response0
+                                                                                      else
+                                                                                        if ↑r = 1 then m1
+                                                                                        else if ↑r = 2 then m2 else m3)
+                                                                                  h2)
+                                                                                (Eq.trans
+                                                                                  (AspisV8Completion.SameBodyRelation.roundsOfTail.match_1.eq_1✝
+                                                                                    (fun x =>
+                                                                                      Fin 4 →
+                                                                                        AspisV8Completion.SameBodyRelation.Sent
+                                                                                          K)
+                                                                                    m3 n3 fun m3 next r =>
+                                                                                    if ↑r = 0 then
+                                                                                      (strategy tau).response0
+                                                                                    else
+                                                                                      if ↑r = 1 then m1
+                                                                                      else if ↑r = 2 then m2 else m3)
+                                                                                  (funext fun r =>
+                                                                                    ite_congr
+                                                                                      Fin.val_eq_zero_iff._simp_1
+                                                                                      (fun a =>
+                                                                                        Eq.refl
+                                                                                          (strategy tau).response0)
+                                                                                      fun a =>
+                                                                                      Eq.refl
+                                                                                        (if ↑r = 1 then m1
+                                                                                        else
+                                                                                          if ↑r = 2 then m2
+                                                                                          else m3)))))))))
+                                                                    ((strategy tau).afterAlpha0 alpha0).final256))
+                                                                3)
+                                                              (AspisV8Completion.SameBodyRelation.assembled_responses
+                                                                early
+                                                                (fun r =>
+                                                                  if r = 0 then (strategy tau).response0
+                                                                  else if ↑r = 1 then m1 else if ↑r = 2 then m2 else m3)
+                                                                ((strategy tau).afterAlpha0 alpha0).final256 3))
+                                                            (Eq.trans
+                                                              (ite_cond_eq_false (strategy tau).response0
+                                                                (if ↑3 = 1 then m1 else if ↑3 = 2 then m2 else m3)
+                                                                (eq_false_of_decide (Eq.refl false)))
+                                                              (Eq.trans
+                                                                (ite_cond_eq_false m1 (if ↑3 = 2 then m2 else m3)
+                                                                  (Eq.trans
+                                                                    (congrFun'
+                                                                      (congrArg Eq
+                                                                        (have this := rfl;
+                                                                        this))
+                                                                      1)
+                                                                    (eq_false_of_decide (Eq.refl false))))
+                                                                (ite_cond_eq_false m2 m3
+                                                                  (Eq.trans
+                                                                    (congrFun'
+                                                                      (congrArg Eq
+                                                                        (have this := rfl;
+                                                                        this))
+                                                                      2)
+                                                                    (Nat.succ_ne_self._simp_1 2))))))))
+                                                      (coins 2)))
+                                                  (Eq.trans
+                                                    (AspisV8Completion.SameBodyRelation.tailClaim.eq_2 ops.toArithmetic
+                                                      c (0 + 2) m1 n1 coins)
+                                                    (Eq.trans
+                                                      (Eq.trans
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrArg
+                                                              (AspisV8Completion.SameBodyRelation.tailClaim
+                                                                ops.toArithmetic)
+                                                              h1)
+                                                            fun i => coins i.succ)
+                                                          (ops.evaluate7
+                                                            (AspisV8Completion.SameBodyRelation.compact ops.toArithmetic
+                                                              c m1)
+                                                            (coins 0)))
+                                                        (AspisV8Completion.SameBodyRelation.tailClaim.eq_2
+                                                          ops.toArithmetic
+                                                          (ops.evaluate7
+                                                            (AspisV8Completion.SameBodyRelation.compact ops.toArithmetic
+                                                              c m1)
+                                                            (coins 0))
+                                                          (0 + 1) m2 n2 fun i => coins i.succ))
+                                                      (Eq.trans
+                                                        (Eq.trans
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrArg
+                                                                (AspisV8Completion.SameBodyRelation.tailClaim
+                                                                  ops.toArithmetic)
+                                                                h2)
+                                                              fun i => coins i.succ.succ)
+                                                            (ops.evaluate7
+                                                              (AspisV8Completion.SameBodyRelation.compact
+                                                                ops.toArithmetic
+                                                                (ops.evaluate7
+                                                                  (AspisV8Completion.SameBodyRelation.compact
+                                                                    ops.toArithmetic c m1)
+                                                                  (coins 0))
+                                                                m2)
+                                                              (coins 1)))
+                                                          (AspisV8Completion.SameBodyRelation.tailClaim.eq_2
+                                                            ops.toArithmetic
+                                                            (ops.evaluate7
+                                                              (AspisV8Completion.SameBodyRelation.compact
+                                                                ops.toArithmetic
+                                                                (ops.evaluate7
+                                                                  (AspisV8Completion.SameBodyRelation.compact
+                                                                    ops.toArithmetic c m1)
+                                                                  (coins 0))
+                                                                m2)
+                                                              (coins 1))
+                                                            0 m3 n3 fun i => coins i.succ.succ))
+                                                        (Eq.trans
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrArg
+                                                                (AspisV8Completion.SameBodyRelation.tailClaim
+                                                                  ops.toArithmetic)
+                                                                h3)
+                                                              fun i => coins i.succ.succ.succ)
+                                                            (ops.evaluate7
+                                                              (AspisV8Completion.SameBodyRelation.compact
+                                                                ops.toArithmetic
+                                                                (ops.evaluate7
+                                                                  (AspisV8Completion.SameBodyRelation.compact
+                                                                    ops.toArithmetic
+                                                                    (ops.evaluate7
+                                                                      (AspisV8Completion.SameBodyRelation.compact
+                                                                        ops.toArithmetic c m1)
+                                                                      (coins 0))
+                                                                    m2)
+                                                                  (coins 1))
+                                                                m3)
+                                                              (coins 2)))
+                                                          (AspisV8Completion.SameBodyRelation.tailClaim.eq_1
+                                                            ops.toArithmetic
+                                                            (ops.evaluate7
+                                                              (AspisV8Completion.SameBodyRelation.compact
+                                                                ops.toArithmetic
+                                                                (ops.evaluate7
+                                                                  (AspisV8Completion.SameBodyRelation.compact
+                                                                    ops.toArithmetic
+                                                                    (ops.evaluate7
+                                                                      (AspisV8Completion.SameBodyRelation.compact
+                                                                        ops.toArithmetic c m1)
+                                                                      (coins 0))
+                                                                    m2)
+                                                                  (coins 1))
+                                                                m3)
+                                                              (coins 2))
+                                                            fun i => coins i.succ.succ.succ))))))
+                                                (eq_self
+                                                  (ops.evaluate7
+                                                    (AspisV8Completion.SameBodyRelation.compact ops.toArithmetic
+                                                      (ops.evaluate7
+                                                        (AspisV8Completion.SameBodyRelation.compact ops.toArithmetic
+                                                          (ops.evaluate7
+                                                            (AspisV8Completion.SameBodyRelation.compact ops.toArithmetic
+                                                              c m1)
+                                                            (coins 0))
+                                                          m2)
+                                                        (coins 1))
+                                                      m3)
+                                                    (coins 2)))))
+                                          (Eq.symm (eq_of_heq h_4)) (Eq.refl (n2 (coins 1))))
+                                      x n3)
+                                (Eq.refl (0 + 1)) (HEq.refl (n2 (coins 1))))
+                            (Eq.symm (eq_of_heq h_2)) (Eq.refl (n1 (coins 0))))
+                        x n2)
+                  (Eq.refl (0 + 2)) (HEq.refl (n1 (coins 0))))
+              (Eq.symm (eq_of_heq h)) (Eq.refl (((strategy tau).afterAlpha0 alpha0).afterQueries queries rho)))
+          x n1)
+    (Eq.refl 3) (HEq.refl (((strategy tau).afterAlpha0 alpha0).afterQueries queries rho))
+theorem AspisV8Completion.FSTranscriptScript.run_challenge : ∀ (tape : AspisV8Completion.FSBoundedTranscript.Tape)
+  (s : AspisV8Completion.FSBoundedTranscript.Transcript),
+  AspisV8Completion.FSOracleExecution.run tape (AspisV8Completion.FSTranscriptScript.challengeScript s.digest)
+      s.oracle =
+    (some
+        ((AspisV8Completion.FSBoundedTranscript.challenge tape s).fst,
+          (AspisV8Completion.FSBoundedTranscript.challenge tape s).snd.digest),
+      (AspisV8Completion.FSBoundedTranscript.challenge tape s).snd.oracle) :=
+fun tape s =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (AspisV8Completion.FSTranscriptScript.run_bind tape
+              (AspisV8Completion.FSTranscriptScript.squeezeScript s.digest)
+              (fun block =>
+                AspisV8Completion.FSTranscriptScript.map (fun result => (result.fst, result.snd.fst))
+                  (AspisV8Completion.FSTranscriptScript.limbsScript 4 block.snd
+                    (AspisV8Completion.FSBoundedTranscript.words block.fst)))
+              s.oracle)
+            (AspisV8Completion.FSTranscriptScript.run_map tape (fun result => (result.fst, result.snd.fst))
+              (AspisV8Completion.FSTranscriptScript.limbsScript 4
+                (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd.digest
+                (AspisV8Completion.FSBoundedTranscript.words
+                  (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst))
+              (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd.oracle)))
+        (some
+            ((AspisV8Completion.FSBoundedTranscript.challenge tape s).fst,
+              (AspisV8Completion.FSBoundedTranscript.challenge tape s).snd.digest),
+          (AspisV8Completion.FSBoundedTranscript.challenge tape s).snd.oracle)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (Option.map (fun result => (result.fst, result.snd.fst)) _a.fst, _a.snd) =
+              (some
+                  ((AspisV8Completion.FSBoundedTranscript.challenge tape s).fst,
+                    (AspisV8Completion.FSBoundedTranscript.challenge tape s).snd.digest),
+                (AspisV8Completion.FSBoundedTranscript.challenge tape s).snd.oracle))
+          (AspisV8Completion.FSTranscriptScript.run_limbs tape 4
+            { transcript := (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd,
+              remaining :=
+                AspisV8Completion.FSBoundedTranscript.words
+                  (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst })))
+      (Eq.refl
+        (Option.map (fun result => (result.fst, result.snd.fst))
+            (some
+                  ((AspisV8Completion.FSBoundedTranscript.limbs tape 4
+                        { transcript := (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd,
+                          remaining :=
+                            AspisV8Completion.FSBoundedTranscript.words
+                              (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst }).fst,
+                    AspisV8Completion.FSTranscriptScript.projectStream
+                      (AspisV8Completion.FSBoundedTranscript.limbs tape 4
+                          { transcript := (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd,
+                            remaining :=
+                              AspisV8Completion.FSBoundedTranscript.words
+                                (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst }).snd),
+                (AspisV8Completion.FSBoundedTranscript.limbs tape 4
+                        { transcript := (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd,
+                          remaining :=
+                            AspisV8Completion.FSBoundedTranscript.words
+                              (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst }).snd.transcript.oracle).fst,
+          (some
+                ((AspisV8Completion.FSBoundedTranscript.limbs tape 4
+                      { transcript := (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd,
+                        remaining :=
+                          AspisV8Completion.FSBoundedTranscript.words
+                            (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst }).fst,
+                  AspisV8Completion.FSTranscriptScript.projectStream
+                    (AspisV8Completion.FSBoundedTranscript.limbs tape 4
+                        { transcript := (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd,
+                          remaining :=
+                            AspisV8Completion.FSBoundedTranscript.words
+                              (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst }).snd),
+              (AspisV8Completion.FSBoundedTranscript.limbs tape 4
+                      { transcript := (AspisV8Completion.FSBoundedTranscript.squeeze tape s).snd,
+                        remaining :=
+                          AspisV8Completion.FSBoundedTranscript.words
+                            (AspisV8Completion.FSBoundedTranscript.squeeze tape s).fst }).snd.transcript.oracle).snd)))
+theorem AspisV8Completion.FSTranscriptScript.constructBoth_valid_from_empty : ∀ {n m : Nat}
+  (tape : AspisV8Completion.FSBoundedTranscript.Tape) (digest : AspisV8Completion.FSBoundedTranscript.Block)
+  (producerC1 :
+    AspisV8Completion.FSBoundedTranscript.Transcript →
+      AspisV8Completion.FSOracleExecution.Script (List UInt8) AspisV8Completion.FSBoundedTranscript.Block
+        AspisV8Completion.FSBoundedTranscript.Root n)
+  (producerC2 :
+    AspisV8Completion.FSBoundedTranscript.Oracle →
+      List Nat →
+        List Nat →
+          AspisV8Completion.FSOracleExecution.Script (List UInt8) AspisV8Completion.FSBoundedTranscript.Block
+            AspisV8Completion.FSBoundedTranscript.Root m),
+  AspisV8Completion.FSFirstFresh.ValidHistory
+    (AspisV8Completion.FSBoundedTranscript.constructBoth tape
+          { digest := digest, oracle := AspisV8Completion.FSFirstFresh.empty } producerC1 producerC2).snd.oracle :=
+fun {n m} tape digest producerC1 producerC2 =>
+  AspisV8Completion.FSTranscriptScript.constructBoth_valid tape
+    { digest := digest, oracle := AspisV8Completion.FSFirstFresh.empty } producerC1 producerC2
+    AspisV8Completion.FSFirstFresh.empty_valid
+'AspisV8Completion.SameBodyPublicCorrection.correction_preserved' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.SameBodyQueryClaim.produced_after_query' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.SameBodyQueryClaim.produced_terminal' depends on axioms: [propext, Quot.sound]
+'AspisV8Completion.FSTranscriptScript.run_challenge' depends on axioms: [propext]
+'AspisV8Completion.FSTranscriptScript.constructBoth_first_fresh' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+	Command being timed: "lake env lean -j1 -M2048 -o /home/dombarker/aspis-v8-clean-20260912.nFTrRf/certification/artifacts/SourceConnectionAudit.olean /home/dombarker/aspis-v8-clean-20260912.nFTrRf/lean/SourceConnectionAudit.lean"
+	User time (seconds): 0.26
+	System time (seconds): 0.11
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.37
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 777892
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 21201
+	Voluntary context switches: 41
+	Involuntary context switches: 17
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 160
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

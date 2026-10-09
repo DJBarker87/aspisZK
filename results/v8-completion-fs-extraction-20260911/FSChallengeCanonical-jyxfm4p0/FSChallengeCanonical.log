@@ -1,0 +1,46 @@
+FSChallengeCanonical.lean:20:8: error: Type mismatch
+  valid x
+    (of_eq_true
+      (Eq.trans (Eq.trans (congrFun' (congrArg Membership.mem hs) x) List.mem_cons._simp_1)
+        (Eq.trans (congrFun' (congrArg Or (eq_self x)) (x ∈ xs)) (true_or (x ∈ xs)))))
+has type
+  x < 2147483648
+but is expected to have type
+  (nextWord tape s).fst < 2147483648
+FSChallengeCanonical.lean:21:35: error: unsolved goals
+tape : Tape
+s : FSBoundedTranscript.Stream
+valid : WordsValid s.remaining
+x : Nat
+xs : List Nat
+hs : s.remaining = x :: xs
+y : Nat
+hy : y ∈ (nextWord tape s).snd.remaining
+⊢ y = x ∨ y ∈ xs
+FSChallengeCanonical.lean:28:39: error(lean.unknownIdentifier): Unknown constant `List.head!_cons`
+FSChallengeCanonical.lean:21:48: warning: This simp argument is unused:
+  hy
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisV8Completion.FSChallengeCanonical.challenge_canonical' depends on axioms: [propext, sorryAx, Quot.sound]
+        0.36 real         0.20 user         0.15 sys
+           667140096  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               46567  page reclaims
+                  48  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   1  voluntary context switches
+                 648  involuntary context switches
+           320481034  instructions retired
+           118580869  cycles elapsed
+            11289296  peak memory footprint

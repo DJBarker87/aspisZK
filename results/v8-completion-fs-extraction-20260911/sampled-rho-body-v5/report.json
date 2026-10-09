@@ -1,0 +1,26 @@
+{
+  "status": "PASS_FOCUSED_HISTORICAL_LEAVES",
+  "claim_scope": "The exact three-attempt nonzero-QM31 control flow retains every candidate, cache/log update and exhaustion. The same-body query join now executes final256/nonce absorption, q22 schedule sampling, PROFILE AV8/query-batch/v1 absorption, bounded nonzero rho, and the authenticated opening script in source order; success constructs nonzero rho, an injective schedule and both-root Merkle evidence for the exact positions.",
+  "source_revision": "d5fc7315aa3fb1a3caac50b2ac93ab12b65da98b plus uncommitted scoped source",
+  "sources": {
+    "FSNonzeroQM31.lean": "8b5c6db5ae7fdfc1c856bb41e78d1bb406efcba82382637223d46309d5da5bf6",
+    "FSV7SampledRhoBodyScript.lean": "48c143819df8282b7d2207ba8950157f989afbd58472c744518c724fbcaee5e3"
+  },
+  "artifacts": {
+    "FSNonzeroQM31.olean": "a950e2f524797eee1a2bff7d84b218bdf162349867ff6f4af05a7d34bebab8fe",
+    "FSV7SampledRhoBodyScript.olean": "597b91bf6b69c5b842a3640404522f3dc8ad101fd0f11bab89f17764e778691f"
+  },
+  "toolchain": "Lean 4.32.0 historical pinned binary",
+  "commands": [
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -o FSNonzeroQM31.olean FSNonzeroQM31.lean",
+    "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -o FSV7SampledRhoBodyScript.olean FSV7SampledRhoBodyScript.lean"
+  ],
+  "cgroup": {"memory_high":"8G","memory_max":"10G","memory_swap_max":"0","runtime_max_seconds":600},
+  "successful_runs": [
+    {"unit":"aspis-fs-nonzero-v2.scope","target":"FSNonzeroQM31.lean","exit_code":0,"wall_seconds":2.91,"maximum_resident_set_kib":6495108,"swaps":0},
+    {"unit":"aspis-sampled-rho-body-v5.scope","target":"FSV7SampledRhoBodyScript.lean","exit_code":0,"wall_seconds":5.34,"maximum_resident_set_kib":6681196,"swaps":0}
+  ],
+  "retained_failures": ["FSNonzeroQM31 v1: inner assembly split and impossible error equality not exposed", "sampled-rho-body v1: checked dependency artifact absent from search path", "v2-v4: product projection and namespace elaboration errors"],
+  "axioms": ["propext","Classical.choice","Quot.sound"],
+  "limitations": ["historical dependency artifacts reused", "incoming pre-query transcript not source-constructed", "explicit profile byte list not yet refined against literal Rust slice", "no schedule/rho uniformity or FS probability theorem", "literal Rust refinement and fresh kernel replay not run"]
+}

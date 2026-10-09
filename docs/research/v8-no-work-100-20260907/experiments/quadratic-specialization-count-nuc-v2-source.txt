@@ -1,0 +1,53 @@
+import QuadraticSpecializationDeterminant
+import AspisFormal.K1.V7ExactCorrelatedAgreementSmooth
+import Mathlib.Tactic.Linarith
+
+/-! Quantitative consumer of the specialization multiplicity theorem.
+The resultant must be nonzero and the multiplicity must be established.
+This does not assert that arbitrary accepted candidates satisfy either
+premise. It reuses the pinned V7 coefficientwise resultant degree theorem.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.QuadraticSpecializationCount
+noncomputable section
+open Polynomial
+
+theorem derivative_coefficient_bound
+    {K : Type*} [Field K] (R : Polynomial K[X]) (delta : Nat)
+    (coefficients : ∀ i, (R.coeff i).natDegree ≤ delta) :
+    ∀ i, (R.derivative.coeff i).natDegree ≤ delta := by
+  intro i
+  rw [Polynomial.coeff_derivative]
+  have productBound := Polynomial.natDegree_mul_le
+    (p := R.coeff (i+1)) (q := ((i+1 : Nat) : K[X]))
+  simp only [Polynomial.natDegree_natCast, Nat.add_zero] at productBound
+  exact productBound.trans (coefficients (i+1))
+
+theorem square_specializations_card_le
+    {K : Type*} [Field K] (R : Polynomial K[X]) (m delta : Nat)
+    (positive : 0 < m)
+    (coefficients : ∀ i, (R.coeff i).natDegree ≤ delta)
+    (nonzero : R.resultant R.derivative (2*m) (2*m-1) ≠ 0)
+    (G : Finset K)
+    (multiplicity : ∀ gamma ∈ G,
+      (X - C gamma)^m ∣ R.resultant R.derivative (2*m) (2*m-1)) :
+    G.card ≤ 4*delta := by
+  have count := QuadraticSpecializationDeterminant.multiplicity_card_bound
+    (R.resultant R.derivative (2*m) (2*m-1)) nonzero G m multiplicity
+  have degreeBound :=
+    AspisK1.V7ExactCorrelatedAgreementSmooth.resultant_natDegree_le_of_coeff_natDegree_le
+      R R.derivative (2*m) (2*m-1) delta coefficients
+      (derivative_coefficient_bound R delta coefficients)
+  have combined := count.trans degreeBound
+  have indexBound : 2*m + (2*m-1) ≤ 4*m := by omega
+  have upper := combined.trans (Nat.mul_le_mul_right delta indexBound)
+  nlinarith
+
+#print axioms derivative_coefficient_bound
+#print axioms square_specializations_card_le
+end
+end AspisV8.QuadraticSpecializationCount

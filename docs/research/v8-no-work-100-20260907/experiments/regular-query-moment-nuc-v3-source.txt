@@ -1,0 +1,242 @@
+import SelectedRegularQueryBridge
+
+/-! Exact normalized finite alpha / ORDERED DISTINCT query moments.
+The generic matrix bound partitions full schedules and all other schedules;
+the latter retain up to three matching alphas. The selected adapter uses
+regular uniqueness only on the actual adaptive event. Gamma is fixed here:
+no gamma-marginal multiplication or sampler/source coupling is asserted.
+Source-review draft only.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.RegularQueryMoment
+open Finset Polynomial
+open AspisV8.JointImageGame AspisV8.RelationCompatibleMoment
+open AspisV8.OrderedQueryGame
+noncomputable section
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+namespace Generic
+
+theorem avg_indicator {I : Type*} (S : Finset I) (predicate : I → Prop) :
+    avg S (fun i => if predicate i then 1 else 0) =
+      ((S.filter predicate).card : ℚ)/S.card := by
+  classical
+  simp [avg]
+
+/-- Pure finite Fubini, not a probabilistic independence assumption. The
+consumer explicitly uses the product of the two finite uniform means. -/
+theorem avg_commute {I J : Type*} (S : Finset I) (T : Finset J) (f : I → J → ℚ) :
+    avg S (fun i => avg T (f i)) = avg T (fun j => avg S (fun i => f i j)) := by
+  simp only [avg, ← Finset.sum_div, div_div]
+  rw [Finset.sum_comm]
+  ring
+
+theorem weighted_split {I : Type*} [DecidableEq I]
+    (S C : Finset I) (nonempty : S.Nonempty) (subset : C ⊆ S)
+    (f : I → ℚ) (epsilon : ℚ)
+    (common : ∀ i ∈ C, f i ≤ 1)
+    (other : ∀ i ∈ S, i ∉ C → f i ≤ epsilon) :
+    avg S f ≤ (C.card : ℚ)/S.card+(1-(C.card : ℚ)/S.card)*epsilon := by
+  have bound := avg_mono S f (fun i => if i ∈ C then 1 else epsilon) (by
+    intro i member
+    by_cases inside : i ∈ C
+    · simpa only [if_pos inside] using common i inside
+    · simpa only [if_neg inside] using other i member inside)
+  have representation : (fun i => if i ∈ C then (1 : ℚ) else epsilon) =
+      (fun i => epsilon+(1-epsilon)*(if i ∈ C then 1 else 0)) := by
+    funext i
+    by_cases inside : i ∈ C <;> simp only [inside, if_true, if_false] <;> ring
+  have scale : avg S (fun i => (1-epsilon)*(if i ∈ C then 1 else 0)) =
+      (1-epsilon)*avg S (fun i => if i ∈ C then 1 else 0) := by
+    simp only [avg, ← Finset.mul_sum, mul_div_assoc]
+  have filtered : S.filter (fun i => i ∈ C)=C := by
+    ext i
+    simp only [Finset.mem_filter]
+    exact ⟨And.right, fun member => ⟨subset member, member⟩⟩
+  have indicatorValue : avg S (fun i => if i ∈ C then (1 : ℚ) else 0) =
+      (C.card : ℚ)/S.card := by
+    calc
+      avg S (fun i => if i ∈ C then (1 : ℚ) else 0) =
+          ((S.filter fun i => i ∈ C).card : ℚ)/S.card :=
+        by simpa only [] using avg_indicator S (fun i => i ∈ C)
+      _ = (C.card : ℚ)/S.card := by rw [filtered]
+  rw [representation, avg_add, avg_constant S nonempty, scale, indicatorValue] at bound
+  convert bound using 1 <;> ring
+
+variable {K : Type*} [Field K] [DecidableEq K]
+
+/-- Exact ratio of matching embeddings, retaining all q! first-occurrence
+orders. No permutation-invariance of a continuation is needed. -/
+theorem ordered_average (D : Finset K) (q : Nat) (predicate : K → Prop) :
+    avg (univ : Finset (Schedule D q))
+      (fun s => if ∀ j, predicate (s j : K) then 1 else 0) =
+      ((D.filter predicate).card.choose q : ℚ)/D.card.choose q := by
+  calc
+    avg (univ : Finset (Schedule D q))
+        (fun s => if ∀ j, predicate (s j : K) then 1 else 0) =
+        ((matching D q predicate).card : ℚ) /
+          (univ : Finset (Schedule D q)).card := by
+      simpa only [matching] using avg_indicator (univ : Finset (Schedule D q))
+        (fun s => ∀ j, predicate (s j : K))
+    _ = ((D.filter predicate).card.choose q : ℚ)/D.card.choose q := by
+      rw [Finset.card_univ]
+      exact ordered_matching_ratio D q predicate
+
+/-- The full-schedule mass is counted exactly. All other schedules use
+their actual alpha fibre cardinal, bounded by min(|A|,d). This includes
+q=0, small A, and an empty full-support set without a side condition d≤|A|. -/
+theorem ordered_joint_bound (D : Finset K) (q : Nat) (A : Finset K)
+    (nonempty : A.Nonempty) (count : q ≤ D.card)
+    (full : K → Prop) (matched : K → K → Prop) (d : Nat)
+    (bad : ∀ s : Schedule D q, (¬∀ j, full (s j : K)) →
+      (A.filter fun alpha => ∀ j, matched alpha (s j : K)).card ≤ d) :
+    avg A (fun alpha => ((D.filter (matched alpha)).card.choose q : ℚ)/D.card.choose q) ≤
+      ((D.filter full).card.choose q : ℚ)/D.card.choose q+
+        (1-((D.filter full).card.choose q : ℚ)/D.card.choose q)*min 1 ((d : ℚ)/A.card) := by
+  let S : Finset (Schedule D q) := univ
+  let C := matching D q full
+  let fibre := fun s : Schedule D q => avg A
+    (fun alpha => if ∀ j, matched alpha (s j : K) then (1 : ℚ) else 0)
+  have unit : ∀ s : Schedule D q, fibre s ≤ 1 := by
+    intro s
+    exact avg_le A nonempty _ 1 (fun _ _ => by split_ifs <;> norm_num)
+  have noncommon : ∀ s ∈ S, s ∉ C → fibre s ≤ min 1 ((d : ℚ)/A.card) := by
+    intro s _ outside
+    apply le_min (unit s)
+    have notFull : ¬∀ j, full (s j : K) := by
+      intro fullSchedule
+      exact outside (Finset.mem_filter.mpr ⟨Finset.mem_univ _, fullSchedule⟩)
+    have cap := bad s notFull
+    calc
+      avg A (fun alpha => if ∀ j, matched alpha (s j : K) then (1 : ℚ) else 0) =
+          ((A.filter fun alpha => ∀ j, matched alpha (s j : K)).card : ℚ) /
+            A.card := by
+        simpa only [] using avg_indicator A
+          (fun alpha => ∀ j, matched alpha (s j : K))
+      _ ≤ (d : ℚ)/A.card := by
+        apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)
+        exact_mod_cast cap
+  have bound := weighted_split S C (schedules_nonempty D q count) (subset_univ _)
+    fibre (min 1 ((d : ℚ)/A.card)) (fun s _ => unit s) noncommon
+  calc
+    avg A (fun alpha => ((D.filter (matched alpha)).card.choose q : ℚ)/D.card.choose q) =
+        avg A (fun alpha => avg S
+          (fun s => if ∀ j, matched alpha (s j : K) then 1 else 0)) := by
+      apply congrArg (avg A)
+      funext alpha
+      exact (ordered_average D q (matched alpha)).symm
+    _ = avg S fibre := avg_commute A S _
+    _ ≤ (C.card : ℚ)/S.card+(1-(C.card : ℚ)/S.card)*min 1 ((d : ℚ)/A.card) := bound
+    _ = _ := by
+      change ((matching D q full).card : ℚ)/(univ : Finset (Schedule D q)).card+
+        (1-((matching D q full).card : ℚ)/(univ : Finset (Schedule D q)).card)*
+          min 1 ((d : ℚ)/A.card) = _
+      rw [Finset.card_univ, ordered_matching_ratio]
+
+end Generic
+
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedRegularQueryBridge
+open AspisV8.FoldSupportClosure AspisV8.CausalCoveredRecovery
+open AspisV8.CausalHigherYClassification AspisV8.SelectedHigherYBranch
+open AspisV8.SelectedOODGate AspisV8.CausalOrderedRelation
+open AspisV8.OODInterpolant
+open AspisV8.ComponentOODBinding
+open AspisV8.PostQueryFunctional
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisV5ComponentCConcreteFoldLinearity
+open AspisV5FriConcreteEncoderCommutation
+noncomputable section
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+
+/-- Full quotient fibres represented on the actual field query domain.
+The existing point/index inverse transports the same support, not a new
+query domain or a resampled nonpole subset. -/
+def fullQueryMass (received : Fin 1048576 → K) (Q : Fin 1024 → K) (q : Nat) : ℚ :=
+  ((domain.filter fun x => FullSlots received Q (index x)).card.choose q : ℚ)/
+    domain.card.choose q
+
+theorem fixed_fold_moment (received : Fin 1048576 → K) (Q : Fin 1024 → K)
+    (q : Nat) (A : Finset K) (nonempty : A.Nonempty) (count : q ≤ 262144) :
+    avg A (fun alpha => matchingRatio domain q (coefficientFoldLayer 256 alpha Q)
+      ((oracle 0 received).folded alpha)) ≤
+    fullQueryMass received Q q+(1-fullQueryMass received Q q)*min 1 ((3 : ℚ)/A.card) := by
+  have domainCount : q ≤ domain.card := by simpa only [domain_card] using count
+  apply Generic.ordered_joint_bound domain q A nonempty domainCount
+    (fun x => FullSlots received Q (index x))
+    (fun alpha x => lineEval (coefficientFoldLayer 256 alpha Q) x=
+      (oracle 0 received).folded alpha x) 3
+  intro queries notFull
+  obtain ⟨j, bad⟩ : ∃ j, ¬FullSlots received Q (index (queries j : K)) := by
+    simpa only [not_forall] using notFull
+  apply (Finset.card_le_card ?_).trans (nonfull_schedule_alphas_le_three received Q A
+    (fun j => index (queries j : K)) ⟨j, bad⟩)
+  intro alpha member
+  refine Finset.mem_filter.mpr ⟨(Finset.mem_filter.mp member).1, ?_⟩
+  intro j
+  have matched := (Finset.mem_filter.mp member).2 j
+  have coordinate := point_index (queries j : K) (queries j).property
+  rw [← coordinate, final_evaluation, oracle_folded] at matched
+  exact matched
+
+/-- All actual final choices remain under their regular event indicator.
+The fixed quotient is justified by the existing regular-uniqueness bridge;
+it need not agree with the received word on every fibre. -/
+theorem adaptive_regular_moment {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r ≠ -1) (F : TrivariatePolynomial K)
+    (r : Fin 2) (gamma : K) (Q : Fin 1024 → K)
+    (qualified : Qualified e.c1 e.c2 e.data F gamma Q) (kappa tau : K)
+    (A : Finset K) (nonempty : A.Nonempty) (count : q ≤ 262144) :
+    avg A (fun alpha => if fixedRegularPrefix e F r gamma kappa tau alpha then
+      compatibleMoment (atFold ((e.rows gamma).before kappa)
+        (e.strategy gamma kappa) tau alpha) ((e.strategy gamma kappa).final tau alpha)
+        ((oracle 0 (e.raw gamma)).folded alpha) domain q else 0) ≤
+      fullQueryMass (e.raw gamma) Q q+
+        (1-fullQueryMass (e.raw gamma) Q q)*min 1 ((3 : ℚ)/A.card) := by
+  apply (avg_mono A _ _ ?_).trans (fixed_fold_moment (e.raw gamma) Q q A nonempty count)
+  intro alpha _
+  by_cases selected : fixedRegularPrefix e F r gamma kappa tau alpha
+  · rw [if_pos selected]
+    exact regular_matching_moment_bound e checked circles west F r gamma Q qualified
+      kappa tau alpha selected
+  · rw [if_neg selected]
+    unfold matchingRatio
+    exact div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _)
+
+/-- Optional direct compact-suffix consumer. Repair terms are added once;
+no regular-gamma marginal is multiplied into this fixed-gamma moment. -/
+theorem regular_suffix_bound {q : Nat} (e : Execution q)
+    (checked : e.data.Checked)
+    (circles : e.data.x0^2+e.data.y0^2=1 ∧ e.data.x1^2+e.data.y1^2=1)
+    (west : ∀ r, pointX e.data r ≠ -1) (F : TrivariatePolynomial K)
+    (r : Fin 2) (gamma : K) (Q : Fin 1024 → K)
+    (qualified : Qualified e.c1 e.c2 e.data F gamma Q) (kappa : K)
+    (A G : Finset K) (ha : A.Nonempty) (hg : G.Nonempty)
+    (positive : 0 < q) (count : q ≤ 262144) :
+    avg G (fun tau => avg A (fun alpha =>
+      if fixedRegularPrefix e F r gamma kappa tau alpha then
+        suffix e gamma kappa tau alpha A G else 0)) ≤
+      fullQueryMass (e.raw gamma) Q q+
+        (1-fullQueryMass (e.raw gamma) Q q)*min 1 ((3 : ℚ)/A.card)+
+        (q : ℚ)/G.card+18/A.card := by
+  have suffixBound := fixed_regular_suffix_bound e checked circles west F r gamma Q qualified
+    kappa A G ha hg positive count
+  have momentBound := fixed_fold_moment (e.raw gamma) Q q A ha count
+  exact suffixBound.trans (add_le_add (add_le_add momentBound (le_refl _)) (le_refl _))
+
+#print axioms Generic.avg_indicator
+#print axioms Generic.avg_commute
+#print axioms Generic.weighted_split
+#print axioms Generic.ordered_average
+#print axioms Generic.ordered_joint_bound
+#print axioms fixed_fold_moment
+#print axioms adaptive_regular_moment
+#print axioms regular_suffix_bound
+end
+end
+end AspisV8.RegularQueryMoment

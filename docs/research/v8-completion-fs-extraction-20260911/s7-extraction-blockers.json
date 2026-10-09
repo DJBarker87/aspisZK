@@ -1,0 +1,121 @@
+{
+  "schema": "aspis-v8-s7-extraction-blockers-v1",
+  "audit_base": "9f161d6ba1c34adb93ab8ed0b95d26c1fac95db3",
+  "wave": "E",
+  "status": "BLOCKED_BEFORE_OPERATIONAL_EXTRACTION",
+  "summary": "The checked operational replay family constructs same-body staged transcript and authentication records with actual gamma and alpha0 values, but that staged verifier does not execute the compact relation terminal. Therefore its success cannot currently produce the RecoveredMiddleFork, selected semantic residual, or checked-payment premises consumed by the existing 29-by-4 recovery chain.",
+  "available_producers": [
+    {
+      "module": "ExtractionCollectorActualAlphaConfigurationFamily",
+      "theorem": "complete_constructs_successful_family_with_actual_alpha_configuration",
+      "produces": [
+        "116 pointwise SuccessfulReplay witnesses from a supplied complete matrix",
+        "same-body equality for each selected cell",
+        "actual decoded gamma and alpha0 labels",
+        "ActualAlphaRun for each selected cell",
+        "AlphaConfigurationDisposition for each selected cell"
+      ],
+      "does_not_produce": [
+        "a complete matrix from a bounded number of attempts",
+        "common pre-gamma history across all cells",
+        "RecoveredMiddleFork",
+        "relation-terminal acceptance",
+        "payment-validator success"
+      ]
+    },
+    {
+      "module": "FSV8S7DynamicSelectedRoot",
+      "theorem": "successful_run_constructs_dynamic_context",
+      "produces": [
+        "one same-body canonical parse",
+        "dynamic semantic z",
+        "semantic digest",
+        "same-body roots used by the selected authentication suffix"
+      ],
+      "does_not_produce": [
+        "selected semantic-terminal acceptance",
+        "compact relation-terminal acceptance",
+        "literal Rust refinement"
+      ],
+      "reason": "The module explicitly defines a guard-relaxed source root and states that the selected semantic terminal is not executed."
+    },
+    {
+      "module": "ExtractionCollectorVerifiedBodySource",
+      "theorem": "selected_attempt_checked_constructs_functional_run",
+      "produces": [
+        "successful wholeStagedScript return on the replay-returned body"
+      ],
+      "does_not_produce": [
+        "later relation-terminal acceptance"
+      ],
+      "reason": "selectedCheck accepts every `.ok record` returned by wholeStagedScript; it does not check the compact terminal equation."
+    },
+    {
+      "module": "RecoveredHighForkExtraction",
+      "theorem": "recovered_components_mem_family",
+      "produces": [
+        "a computed 29-by-4 interpolation tuple in the fixed family"
+      ],
+      "requires_unproduced": [
+        "for every one of 29 gamma nodes and four alpha nodes, RecoveredMiddleFork for the same Execution and family"
+      ]
+    },
+    {
+      "module": "RecoveredSameC1Transfer",
+      "theorem": "recovered_transfer_facts_or_copy_collision",
+      "produces": [
+        "transfer transition, membership, nullifier, anchor and raw-input decoder facts, or an explicit copy collision"
+      ],
+      "requires_unproduced": [
+        "the full 29-by-4 RecoveredMiddleFork family",
+        "RowsVanish for the recovered semantic table",
+        "PoseidonChecks for the recovered semantic table",
+        "CopyConditions for the recovered tuple helper",
+        "source comparisons and carry correspondence"
+      ],
+      "does_not_produce": [
+        "literal recovered_witness.rs::extract_checked success"
+      ]
+    }
+  ],
+  "missing_bridges_in_order": [
+    {
+      "id": "terminal_source",
+      "needed": "Extend the same-body dynamic selected source execution through the actual compact relation terminal and construct its accepted result from that run.",
+      "must_not_be_replaced_by": "A caller-supplied terminal-success or RecoveredHigh premise."
+    },
+    {
+      "id": "accepted_to_middle_fork",
+      "needed": "For each legally restored accepted continuation, derive RecoveredMiddleFork or an explicitly bounded alternative, while proving one common fixed execution/family and causal prefix across the matrix.",
+      "must_not_be_replaced_by": "Assuming every checked transcript record is usable or testing the noncomputable RecoveredHigh predicate."
+    },
+    {
+      "id": "collector_progress",
+      "needed": "Prove that the bounded permitted-access replay collector obtains all 116 distinct usable cells, or charge every rejection, duplicate, authentication failure and resource exhaustion event.",
+      "must_not_be_replaced_by": "Supplying Progress or CurrentComplete to the endpoint."
+    },
+    {
+      "id": "semantic_enforcement",
+      "needed": "Connect accepted semantic-terminal execution on the recovered tuple to RowsVanish, PoseidonChecks, CopyConditions and the source comparisons, with repair/collision alternatives retained.",
+      "must_not_be_replaced_by": "Supplying residual predicates directly."
+    },
+    {
+      "id": "literal_checked_extraction",
+      "needed": "Refine the deterministic Lean payment facts to the literal recovered_witness.rs decode and extract_checked validator on the same public/context/transition inputs, within declared access and resource limits.",
+      "must_not_be_replaced_by": "Assuming decoder success, a valid witness, or extract_checked returning Ok."
+    }
+  ],
+  "strongest_current_chain": [
+    "complete_constructs_successful_family_with_actual_alpha_configuration",
+    "[OPEN: terminal_source + accepted_to_middle_fork + collector_progress]",
+    "RecoveredHighForkExtraction.recovered_components_mem_family",
+    "RecoveredHighForkExtraction.recovered_components_family_facts",
+    "RecoveredHighForkExtraction.recovered_components_claims_exact",
+    "RecoveredSameC1Transfer.recovered_table_and_c1_claims",
+    "[OPEN: semantic_enforcement]",
+    "RecoveredSameC1Transfer.recovered_transfer_facts_or_copy_collision",
+    "[OPEN: literal_checked_extraction]"
+  ],
+  "lean_added": false,
+  "rationale_for_no_lean_bridge": "Every apparent bridge from operational staged success to the existing recovery consumers would need at least one of relation-terminal acceptance, RecoveredMiddleFork, collector Progress, selected residual enforcement, or checked-validator success as a new premise. None is produced by the current source execution. Adding such a theorem would only rename an open obligation and would not advance soundness."
+}

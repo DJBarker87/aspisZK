@@ -1,0 +1,124 @@
+SameBodySelectedSemanticSource.lean:57:8: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.SameBodySelectedSemanticSource.sourceWord_initial_mask`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+theorem AspisV8Completion.SameBodySelectedSemanticSource.source_execution_constructs_selected_bindings.{u_1, u_2} : ∀
+  {K : Type u_1} {Schedule : Type u_2} [inst : Field K] [inst_1 : DecidableEq K] (mask : Fin 1024 → K)
+  (early : Fin 417 → K) (strategy : Strategy K Schedule) (tau alpha : K) (queries : Schedule) (rho : K)
+  (coins : Fin 3 → K) (rest : FixedFieldView K) (point : Fin 10 → K) (callback : SelectedTerminalCallback K)
+  {table : Fin 1024 → K} (reference : ReferenceTrace table point) (computed : K),
+  runSelectedTerminal callback
+        (semanticFieldsFromWord (sourceWord mask early strategy tau alpha queries rho coins) rest) point =
+      some computed →
+    callback
+          (terminalProjection
+            (semanticFieldsFromWord (sourceWord mask early strategy tau alpha queries rho coins) rest).pointClaim)
+          point =
+        some (referenceClaim (∑ row, table row) reference.messages point (Fin.last 10)) →
+      have fields := semanticFieldsFromWord (sourceWord mask early strategy tau alpha queries rho coins) rest;
+      fields.initialClaim = ∑ row, mask row ∧
+        semanticTerminalClaim fields point = referenceClaim (∑ row, table row) reference.messages point (Fin.last 10) :=
+fun {K} {Schedule} [Field K] [DecidableEq K] mask early strategy tau alpha queries rho coins rest point callback {table}
+    reference computed success callbackExact =>
+  id
+    (have result :=
+      runSelectedTerminal_success callback
+        (semanticFieldsFromWord (sourceWord mask early strategy tau alpha queries rho coins) rest) point computed
+        success;
+    have computedExact := Option.some.inj (Eq.trans (Eq.symm result.left) callbackExact);
+    ⟨semanticFields_sourceWord_mask_bound mask early strategy tau alpha queries rho coins rest,
+      Eq.trans result.right computedExact⟩)
+theorem AspisV8Completion.SameBodySelectedSemanticSource.source_execution_constructs_residuals_or_repair.{u_2} : ∀
+  {Schedule : Type u_2} (T M S : Finset Q) (rc : RoundConstants) (pub : AspisV8.SelectedSemanticRows.Public)
+  (tuple : Fin 29 → Fin 1024 → Q) (lambda chi : Q) (active mask : Fin 1024 → Q) (theta : Q) (equalityPoint : Fin 10 → Q)
+  (mu eta : Q),
+  theta ∈ T →
+    mu ∈ M →
+      eta ≠ 0 →
+        ∀ (early : Fin 417 → Q) (strategy : Strategy Q Schedule) (tau relationAlpha : Q) (queries : Schedule) (rho : Q)
+          (relationCoins : Fin 3 → Q) (rest : FixedFieldView Q) (point : Fin 10 → Q)
+          (callback : SelectedTerminalCallback Q)
+          (reference :
+            ReferenceTrace
+              (maskedTable eta
+                (AspisV8.SelectedSemanticTerminalAlternative.realTable
+                  (AspisV8.SelectedConcreteRowLanes.tupleLanes rc pub tuple lambda chi) (tuple 26) active theta
+                  equalityPoint mu)
+                mask)
+              point)
+          (plan : AspisV8.SelectedSemanticTerminalAlternative.Plan Q),
+          AspisV8.SelectedSemanticTerminalAlternative.FollowsPlan
+              (semanticFieldsFromWord (sourceWord mask early strategy tau relationAlpha queries rho relationCoins) rest)
+              point reference plan →
+            (∀ (round : Fin 10), point round ∈ S) →
+              ∀ (computed : Q),
+                runSelectedTerminal callback
+                      (semanticFieldsFromWord
+                        (sourceWord mask early strategy tau relationAlpha queries rho relationCoins) rest)
+                      point =
+                    some computed →
+                  callback
+                        (terminalProjection
+                          (semanticFieldsFromWord
+                              (sourceWord mask early strategy tau relationAlpha queries rho relationCoins)
+                              rest).pointClaim)
+                        point =
+                      some
+                        (referenceClaim
+                          (∑ row,
+                            maskedTable eta
+                              (AspisV8.SelectedSemanticTerminalAlternative.realTable
+                                (AspisV8.SelectedConcreteRowLanes.tupleLanes rc pub tuple lambda chi) (tuple 26) active
+                                theta equalityPoint mu)
+                              mask row)
+                          reference.messages point (Fin.last 10)) →
+                    AspisV8.SelectedConcreteTerminal.ConcreteOutcome T M rc pub tuple lambda chi active theta
+                        equalityPoint mu ∨
+                      AspisV8.SelectedSemanticTerminalAlternative.RepairHit S plan point :=
+fun {Schedule} T M S rc pub tuple lambda chi active mask theta equalityPoint mu eta thetaInside muInside etaNonzero
+    early strategy tau relationAlpha queries rho relationCoins rest point callback reference plan causal inside computed
+    success callbackExact =>
+  have bindings :=
+    source_execution_constructs_selected_bindings mask early strategy tau relationAlpha queries rho relationCoins rest
+      point callback reference computed success callbackExact;
+  AspisV8.SelectedConcreteTerminal.bound_terminal_constructs_residuals_or_named_exceptions T M S rc pub tuple lambda chi
+    (semanticFieldsFromWord (sourceWord mask early strategy tau relationAlpha queries rho relationCoins) rest) point
+    active mask theta equalityPoint mu eta thetaInside muInside etaNonzero reference plan causal inside bindings.left
+    bindings.right
+'AspisV8Completion.SameBodySelectedSemanticSource.sourceWord_initial_mask' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.SameBodySelectedSemanticSource.runSelectedTerminal_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.SameBodySelectedSemanticSource.source_execution_constructs_selected_bindings' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.SameBodySelectedSemanticSource.source_execution_constructs_residuals_or_repair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -M8192 SameBodySelectedSemanticSource.lean -o SameBodySelectedSemanticSource.olean"
+	User time (seconds): 2.27
+	System time (seconds): 0.94
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.20
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6576248
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 140790
+	Voluntary context switches: 1382
+	Involuntary context switches: 113
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 464
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

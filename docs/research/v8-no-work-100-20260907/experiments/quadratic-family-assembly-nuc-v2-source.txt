@@ -1,0 +1,76 @@
+import QuadraticSourceDichotomy
+import MonicFactorOOD
+
+/-! Assemble fixed factor alternatives into ONE fixed OOD polynomial and
+ONE fixed exceptional-gamma set, charging additive degrees rather than a
+factor-count multiplier. No OOD-dependent family is used. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.QuadraticFamilyAssembly
+noncomputable section
+open Polynomial
+variable {K I : Type*} [Field K] [Fintype K]
+
+theorem assemble (factors : Multiset I)
+    (xWeight gammaWeight : I → Nat)
+    (ood : I → (Fin 2 → K) → (Fin 2 → K[X]) → Prop)
+    (root : I → K → Prop)
+    (alternatives : ∀ F ∈ factors,
+      (∃ E : K[X], E ≠ 0 ∧ E.natDegree ≤ xWeight F ∧
+        ∀ points answers, ood F points answers → ∀ r, E.eval (points r) = 0) ∨
+      (∀ G : Finset K, (∀ gamma ∈ G, root F gamma) → G.card ≤ gammaWeight F)) :
+    ∃ E : K[X], ∃ exceptional : Finset K,
+      E ≠ 0 ∧ E.natDegree ≤ (factors.map xWeight).sum ∧
+      exceptional.card ≤ (factors.map gammaWeight).sum ∧
+      ∀ points answers gamma,
+        (∃ F ∈ factors, ood F points answers ∧ root F gamma) →
+        (∀ r, E.eval (points r) = 0) ∨ gamma ∈ exceptional := by
+  classical
+  induction factors using Multiset.induction_on with
+  | empty =>
+      refine ⟨1, ∅, one_ne_zero, ?_, ?_, ?_⟩
+      · simp
+      · simp
+      · intro points answers gamma witness
+        obtain ⟨F, member, _⟩ := witness
+        simp at member
+  | @cons F rest ih =>
+      obtain ⟨E, exceptional, en, ed, ec, covered⟩ :=
+        ih (fun H member => alternatives H (Multiset.mem_cons_of_mem member))
+      rcases alternatives F (Multiset.mem_cons_self F rest) with obstructed | sparse
+      · obtain ⟨H, hn, hd, forces⟩ := obstructed
+        refine ⟨H*E, exceptional, mul_ne_zero hn en, ?_, ?_, ?_⟩
+        · simp only [Multiset.map_cons, Multiset.sum_cons]
+          exact Polynomial.natDegree_mul_le.trans (Nat.add_le_add hd ed)
+        · simpa only [Multiset.map_cons, Multiset.sum_cons] using
+            ec.trans (Nat.le_add_left _ _)
+        · intro points answers gamma witness
+          obtain ⟨J, member, jo, jr⟩ := witness
+          rcases Multiset.mem_cons.mp member with same | member
+          · subst J
+            exact Or.inl (fun r => by rw [Polynomial.eval_mul, forces points answers jo r, zero_mul])
+          · rcases covered points answers gamma ⟨J, member, jo, jr⟩ with zeros | bad
+            · exact Or.inl (fun r => by rw [Polynomial.eval_mul, zeros r, mul_zero])
+            · exact Or.inr bad
+      · let bad : Finset K := Finset.univ.filter (root F)
+        have bd : bad.card ≤ gammaWeight F := sparse bad (by simp [bad])
+        refine ⟨E, bad ∪ exceptional, en, ?_, ?_, ?_⟩
+        · simpa only [Multiset.map_cons, Multiset.sum_cons] using
+            ed.trans (Nat.le_add_left _ _)
+        · simp only [Multiset.map_cons, Multiset.sum_cons]
+          exact (Finset.card_union_le bad exceptional).trans (Nat.add_le_add bd ec)
+        · intro points answers gamma witness
+          obtain ⟨J, member, jo, jr⟩ := witness
+          rcases Multiset.mem_cons.mp member with same | member
+          · subst J
+            exact Or.inr (Finset.mem_union_left _ (by simp [bad, jr]))
+          · rcases covered points answers gamma ⟨J, member, jo, jr⟩ with zeros | badGamma
+            · exact Or.inl zeros
+            · exact Or.inr (Finset.mem_union_right _ badGamma)
+
+#print axioms assemble
+end
+end AspisV8.QuadraticFamilyAssembly

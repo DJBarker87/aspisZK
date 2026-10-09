@@ -1,0 +1,221 @@
+import AspisFormal.K1.V7Tag73SecureCircleMap
+import AspisFormal.K1.V7ExactCorrelatedAgreementFactors
+
+/-! Recover the actual secure-circle parameter from the two returned coordinate
+encodings. The final byte-level injectivity theorem assumes only two successful
+runs of the literal V7 map: it does not assume a canonical input, a supplied
+coordinate formula, or a separately successful inverse. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.SecureCircleParameterInverse
+noncomputable section
+
+namespace Generic
+variable {K : Type*} [Field K] [NeZero (2 : K)]
+
+theorem one_add_x (t : K) (denominator : 1+t^2 ≠ 0) :
+    1 + (1-t^2)/(1+t^2) = 2/(1+t^2) := by
+  field_simp [denominator]
+  <;> ring
+
+theorem parameter_inverse (t : K) (denominator : 1+t^2 ≠ 0) :
+    ((t+t)/(1+t^2)) / (1+(1-t^2)/(1+t^2)) = t := by
+  rw [one_add_x t denominator]
+  field_simp [denominator, NeZero.ne (2 : K)]
+  <;> ring
+
+theorem coordinate_injective (s t : K)
+    (sden : 1+s^2 ≠ 0) (tden : 1+t^2 ≠ 0)
+    (sameX : (1-s^2)/(1+s^2) = (1-t^2)/(1+t^2))
+    (sameY : (s+s)/(1+s^2) = (t+t)/(1+t^2)) : s = t := by
+  rw [← parameter_inverse s sden, sameX, sameY, parameter_inverse t tden]
+end Generic
+
+open AspisV5ComponentCQM31TowerExact
+open AspisK1.V7Tag73TranscriptSchedule
+open AspisK1.V7Tag73DeterministicRefinement
+open AspisK1.V7Tag73SecureCircleMap
+
+namespace Codec
+open AspisV5ComponentCRejectionSampler
+open AspisV5ComponentCQM31Representation
+
+/- These four proof bodies are reused from V7Tag73SemanticTranscriptBridge
+lines 437--505 at borrowed pin 26a9cd4718aae9f9de7ef1c3394fb74a229085d5.
+Only their narrow codec dependencies are imported; the unrelated accepted-path
+closure and its different native cache variants are not imported. -/
+theorem encodeWordLE_decodeWordLE (wordBytes : WordBytes) :
+    encodeWordLE (decodeWordLE wordBytes) = wordBytes := by
+  have injective : Function.Injective encodeWordLE :=
+    Function.LeftInverse.injective decodeWordLE_encodeWordLE
+  have sameCard : Fintype.card RawWord = Fintype.card WordBytes := by
+    simp [RawWord, WordBytes, rawWordCount]
+  have surjective : Function.Surjective encodeWordLE :=
+    ((Fintype.bijective_iff_injective_and_card encodeWordLE).2
+      ⟨injective, sameCard⟩).2
+  obtain ⟨word, encoded⟩ := surjective wordBytes
+  rw [← encoded, decodeWordLE_encodeWordLE]
+
+theorem encodeQM31LE_of_decodeQM31LE
+    (encoded : AspisV5ComponentCQM31Representation.QM31Bytes)
+    (limbs : QM31Limbs) (decoded : decodeQM31LE encoded = some limbs) :
+    encodeQM31LE limbs = encoded := by
+  unfold decodeQM31LE at decoded
+  split at decoded
+  next canonical =>
+    have limbsEq := Option.some.inj decoded
+    rw [← limbsEq]
+    funext offset
+    let position : Fin 4 × Fin 4 := finProdFinEquiv.symm offset
+    have rawEq :
+        m31AsRawWord
+            ⟨decodeWordLE (qm31LimbBytes encoded position.1),
+              canonical position.1⟩ =
+          decodeWordLE (qm31LimbBytes encoded position.1) := by
+      apply Fin.ext
+      rfl
+    change encodeM31LE
+        ⟨decodeWordLE (qm31LimbBytes encoded position.1),
+          canonical position.1⟩ position.2 = encoded offset
+    rw [encodeM31LE, rawEq, encodeWordLE_decodeWordLE]
+    change encoded (limbByteIndex position.1 position.2) = encoded offset
+    congr 1
+    exact (finProdFinEquiv (m := 4) (n := 4)).apply_symm_apply offset
+  next noncanonical => simp at decoded
+
+theorem encodeTagQM31ExactLE_of_decode
+    (encoded : Qm31Bytes) (value : QM31Exact)
+    (decoded : decodeTagQM31ExactLE encoded = some value) :
+    encodeTagQM31ExactLE value = encoded := by
+  unfold decodeTagQM31ExactLE at decoded
+  unfold decodeQM31ExactLE at decoded
+  cases lower : decodeQM31LE (tagQm31BytesToExact encoded) with
+  | none => simp [lower] at decoded
+  | some limbs =>
+      rw [lower] at decoded
+      have valueEq := Option.some.inj decoded
+      rw [← valueEq]
+      unfold encodeTagQM31ExactLE encodeQM31ExactLE
+      rw [Equiv.symm_apply_apply]
+      apply congrArg exactQm31BytesToTag
+      exact encodeQM31LE_of_decodeQM31LE
+        (tagQm31BytesToExact encoded) limbs lower
+
+theorem decodeTagQM31ExactLE_injective_on_success
+    (left right : Qm31Bytes) (value : QM31Exact)
+    (leftDecoded : decodeTagQM31ExactLE left = some value)
+    (rightDecoded : decodeTagQM31ExactLE right = some value) :
+    left = right := by
+  rw [← encodeTagQM31ExactLE_of_decode left value leftDecoded,
+    ← encodeTagQM31ExactLE_of_decode right value rightDecoded]
+end Codec
+
+local instance : NeZero (2 : QM31Exact) := ⟨by
+  exact AspisK1.V7ExactCorrelatedAgreementFactors.
+    qm31Exact_natCast_ne_zero_of_pos_of_lt_characteristic 2 (by omega) (by
+      unfold P
+      omega)⟩
+
+/-- This uses the actual canonical coordinate decoders, then y/(1+x). -/
+def recoverParameter (point : SecureCirclePointBytes) : Option QM31Exact := do
+  let x ← decodeTagQM31ExactLE point.x
+  let y ← decodeTagQM31ExactLE point.y
+  pure (y / (1+x))
+
+theorem recover_encoded_output (t inverse : QM31Exact)
+    (invertible : qm31TryInv (1+qm31Square t) = some inverse) :
+    recoverParameter (encodeExactSecureCirclePoint t (qm31Square t) inverse) =
+      some t := by
+  have nonzero : (1 : QM31Exact)+qm31Square t ≠ 0 := by
+    intro zero
+    simpa [qm31TryInv_eq, zero] using invertible
+  have inverseEq := successful_qm31TryInv_is_inverse _ _ invertible
+  have denominator : (1 : QM31Exact)+t^2 ≠ 0 := by
+    simpa only [qm31Square_eq_sq, ← pow_two] using nonzero
+  simp only [recoverParameter, decode_encodeExactSecureCirclePoint_x,
+    decode_encodeExactSecureCirclePoint_y, Option.bind_some, pure,
+    qm31Karatsuba_eq_mul, inverseEq, qm31Square_eq_sq, ← pow_two]
+  apply congrArg some
+  simpa only [div_eq_mul_inv] using Generic.parameter_inverse t denominator
+
+/-- Source inversion success and both source output formulas are derived from
+the actual run, not provided as an interface premise. -/
+theorem recover_success (t : QM31Exact) (point : SecureCirclePointBytes)
+    (success : exactSecureCirclePointFromDecoded t = some point) :
+    recoverParameter point = some t := by
+  classical
+  cases invertible : qm31TryInv ((1 : QM31Exact)+qm31Square t) with
+  | none => simp [exactSecureCirclePointFromDecoded, invertible] at success
+  | some inverse =>
+      by_cases excluded : t.im = (0 : CM31Exact)
+      · simp [exactSecureCirclePointFromDecoded, invertible, excluded] at success
+      · have output : encodeExactSecureCirclePoint t (qm31Square t) inverse = point := by
+          simpa only [exactSecureCirclePointFromDecoded, invertible, if_neg excluded,
+            Option.some.injEq] using success
+        rw [← output]
+        exact recover_encoded_output t inverse invertible
+
+theorem successful_decoded_parameters_equal (s t : QM31Exact)
+    (point : SecureCirclePointBytes)
+    (left : exactSecureCirclePointFromDecoded s = some point)
+    (right : exactSecureCirclePointFromDecoded t = some point) : s = t := by
+  exact Option.some.inj ((recover_success s point left).symm.trans
+    (recover_success t point right))
+
+/-- A successful byte-level run itself supplies the decoded parameter. -/
+theorem successful_map_recovers (bytes : Qm31Bytes) (point : SecureCirclePointBytes)
+    (success : exactSecureCircleParameterMap bytes = some point) :
+    ∃ t, decodeTagQM31ExactLE bytes = some t ∧ recoverParameter point = some t := by
+  cases decoded : decodeTagQM31ExactLE bytes with
+  | none => simp [exactSecureCircleParameterMap, decoded] at success
+  | some t =>
+      refine ⟨t, decoded, recover_success t point ?_⟩
+      simpa only [exactSecureCircleParameterMap, decoded] using success
+
+/-- Byte equality and point equality are equivalent on actual successful runs.
+The reverse direction consumes V7's canonical-codec right inverse. -/
+theorem successful_points_eq_iff (left right : Qm31Bytes)
+    (first second : SecureCirclePointBytes)
+    (leftRun : exactSecureCircleParameterMap left = some first)
+    (rightRun : exactSecureCircleParameterMap right = some second) :
+    first = second ↔ left = right := by
+  constructor
+  · intro same
+    obtain ⟨s, leftDecoded, leftRecovered⟩ := successful_map_recovers left first leftRun
+    obtain ⟨t, rightDecoded, rightRecovered⟩ := successful_map_recovers right second rightRun
+    have parameters : s = t := by
+      rw [same] at leftRecovered
+      exact Option.some.inj (leftRecovered.symm.trans rightRecovered)
+    subst t
+    exact Codec.decodeTagQM31ExactLE_injective_on_success left right s leftDecoded rightDecoded
+  · intro same
+    subst right
+    exact exactSecureCircleParameterMap_functional left first second leftRun rightRun
+
+/-- The actual distinct-point comparison can equivalently compare successful
+parameter bytes. This is only the comparison, not a bounded-retry or FS law. -/
+theorem successful_points_ne_iff (left right : Qm31Bytes)
+    (first second : SecureCirclePointBytes)
+    (leftRun : exactSecureCircleParameterMap left = some first)
+    (rightRun : exactSecureCircleParameterMap right = some second) :
+    first ≠ second ↔ left ≠ right :=
+  not_congr (successful_points_eq_iff left right first second leftRun rightRun)
+
+#print axioms Generic.one_add_x
+#print axioms Generic.parameter_inverse
+#print axioms Generic.coordinate_injective
+#print axioms Codec.encodeWordLE_decodeWordLE
+#print axioms Codec.encodeQM31LE_of_decodeQM31LE
+#print axioms Codec.encodeTagQM31ExactLE_of_decode
+#print axioms Codec.decodeTagQM31ExactLE_injective_on_success
+#print axioms recover_encoded_output
+#print axioms recover_success
+#print axioms successful_decoded_parameters_equal
+#print axioms successful_map_recovers
+#print axioms successful_points_eq_iff
+#print axioms successful_points_ne_iff
+end
+end AspisV8.SecureCircleParameterInverse

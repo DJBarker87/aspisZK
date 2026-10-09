@@ -1,0 +1,250 @@
+import FactorCoherence
+import AspisFormal.K1.V7ExactCorrelatedAgreementFactorBudgets
+
+/-! A finite pre-gamma identity-factor cover, including singular parents.
+Each excluded positive-Y factor supplies one nonzero OOD polynomial; each
+Y-constant factor supplies one nonzero X-coefficient polynomial. Their product
+has degree at most the parent's additive Y/Z weight. No separate content or
+zero-specialization charge is added. Retained factors have both OOD identities;
+they are not component tuples or efficient extractor outputs. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.FactorIdentityCover
+open Polynomial
+open scoped Polynomial.Bivariate
+open AspisV8.FactorCoherence
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementSmooth
+open AspisK1.V7ExactCorrelatedAgreementRegularWeights
+open AspisK1.V7ExactCorrelatedAgreementFactorBudgets
+noncomputable section
+variable {K : Type*} [Field K]
+
+def Retained (points : Fin 2 → K) (answers : Fin 2 → K[X])
+    (F : TrivariatePolynomial K) : Prop :=
+  0 < F.natDegree ∧ ∀ r, pointSubstitution (points r) (answers r) F = 0
+
+theorem eval_degree_le_weight (curveDegree : Nat)
+    (P : BivariatePolynomial K) (answer : K[X])
+    (degree : answer.natDegree ≤ curveDegree) :
+    (P.eval answer).natDegree ≤ localBivariateWeight curveDegree P := by
+  classical
+  have expanded : P.eval answer =
+      ∑ i ∈ P.support, P.coeff i * answer^i := by
+    calc
+      P.eval answer = (∑ i ∈ P.support, monomial i (P.coeff i)).eval answer :=
+        congrArg (fun Q : BivariatePolynomial K => Q.eval answer) P.as_sum_support
+      _ = _ := by simp only [Polynomial.eval_finsetSum, Polynomial.eval_monomial]
+  rw [expanded]
+  apply Polynomial.natDegree_sum_le_of_forall_le
+  intro i member
+  exact Polynomial.natDegree_mul_le.trans <|
+    (Nat.add_le_add_left (Polynomial.natDegree_pow_le.trans
+      (Nat.mul_le_mul_left i degree)) _).trans
+      (coeff_weight_le_localBivariateWeight curveDegree P i member)
+
+theorem point_degree_le_weight (curveDegree : Nat)
+    (F : TrivariatePolynomial K) (x : K) (answer : K[X])
+    (degree : answer.natDegree ≤ curveDegree) :
+    (pointSubstitution x answer F).natDegree ≤ trivariateYZWeight curveDegree F :=
+  (eval_degree_le_weight curveDegree (specializeEvaluationPoint x F) answer degree).trans
+    (localBivariateWeight_specializeEvaluationPoint_le curveDegree F x)
+
+/-- Reorder to outer X, choose its leading coefficient in Z. This is a
+nonzero challenge polynomial whenever the original coefficient is nonzero. -/
+def contentPolynomial (F : TrivariatePolynomial K) : K[X] :=
+  (Polynomial.Bivariate.swap (F.coeff 0)).leadingCoeff
+
+theorem coeff_swap_eval (P : BivariatePolynomial K) (i : Nat) (gamma : K) :
+    ((Polynomial.Bivariate.swap P).coeff i).eval gamma =
+      (P.eval (C gamma)).coeff i := by
+  have swapped : P.eval (C gamma) =
+      (Polynomial.Bivariate.swap P).map (Polynomial.evalRingHom gamma) := by
+    simpa [Polynomial.aeval_def] using
+      (Polynomial.Bivariate.aveal_eq_map_swap (R := K) gamma P)
+  rw [swapped, Polynomial.coeff_map]
+  rfl
+
+theorem content_properties (curveDegree : Nat)
+    (F : TrivariatePolynomial K) (nonzero : F ≠ 0) (constantDegree : F.natDegree = 0) :
+    contentPolynomial F ≠ 0 ∧
+      (contentPolynomial F).natDegree ≤ trivariateYZWeight curveDegree F ∧
+      ∀ gamma (U : K[X]), challengeCandidateHom gamma U F = 0 →
+        (contentPolynomial F).eval gamma = 0 := by
+  have constant : F = C (F.coeff 0) := Polynomial.eq_C_of_natDegree_eq_zero constantDegree
+  have coefficientNonzero : F.coeff 0 ≠ 0 := by
+    intro zero
+    apply nonzero
+    rw [constant, zero, Polynomial.C_0]
+  have swapNonzero : Polynomial.Bivariate.swap (F.coeff 0) ≠ 0 := by
+    simpa only [map_zero] using
+      (Polynomial.Bivariate.swap (R := K)).injective.ne coefficientNonzero
+  refine ⟨Polynomial.leadingCoeff_ne_zero.mpr swapNonzero, ?_, ?_⟩
+  · have coefficientBound := coeff_natDegree_le_bivariate_swap_natDegree
+      (Polynomial.Bivariate.swap (F.coeff 0))
+      (Polynomial.Bivariate.swap (F.coeff 0)).natDegree
+    rw [Polynomial.Bivariate.swap_swap_apply] at coefficientBound
+    have weight := coeff_weight_le_localBivariateWeight curveDegree F 0
+      (Polynomial.mem_support_iff.mpr coefficientNonzero)
+    change ((Polynomial.Bivariate.swap (F.coeff 0)).coeff
+      (Polynomial.Bivariate.swap (F.coeff 0)).natDegree).natDegree ≤ _
+    exact Nat.le_trans coefficientBound
+      (by simpa only [trivariateYZWeight, zero_mul, add_zero] using weight)
+  · intro gamma U root
+    have coefficientRoot : (F.coeff 0).eval (C gamma) = 0 := by
+      rw [constant] at root
+      simpa only [challengeCandidateHom, RingHom.coe_comp, Function.comp_apply,
+        specializeChallenge, Polynomial.coe_mapRingHom, Polynomial.map_C,
+        substituteCandidate, Polynomial.coe_evalRingHom, Polynomial.eval_C] using root
+    unfold contentPolynomial Polynomial.leadingCoeff
+    rw [coeff_swap_eval, coefficientRoot, Polynomial.coeff_zero]
+
+/-- No caller-supplied beta polynomial: content or the first excluded OOD
+row constructs it. All choices depend only on fixed F/points/answer curves. -/
+theorem exists_factor_exception (curveDegree : Nat)
+    (points : Fin 2 → K) (answers : Fin 2 → K[X])
+    (degrees : ∀ r, (answers r).natDegree ≤ curveDegree)
+    (F : TrivariatePolynomial K) (nonzero : F ≠ 0) :
+    ∃ beta : K[X], beta ≠ 0 ∧ beta.natDegree ≤ trivariateYZWeight curveDegree F ∧
+      ∀ gamma (U : K[X]), challengeCandidateHom gamma U F = 0 →
+        (∀ r, U.eval (points r) = (answers r).eval gamma) →
+        Retained points answers F ∨ beta.eval gamma = 0 := by
+  classical
+  by_cases retained : Retained points answers F
+  · refine ⟨1, one_ne_zero, ?_, ?_⟩
+    · simp only [Polynomial.natDegree_one]
+      exact Nat.zero_le _
+    · intro gamma U root point
+      exact Or.inl retained
+  · by_cases positive : 0 < F.natDegree
+    · have excluded : ∃ r, pointSubstitution (points r) (answers r) F ≠ 0 := by
+        by_contra none
+        apply retained
+        refine ⟨positive, ?_⟩
+        intro r
+        by_contra nonzero
+        exact none ⟨r, nonzero⟩
+      obtain ⟨r, nonidentity⟩ := excluded
+      refine ⟨pointSubstitution (points r) (answers r) F, nonidentity,
+        point_degree_le_weight curveDegree F (points r) (answers r) (degrees r), ?_⟩
+      intro gamma U root point
+      right
+      rw [pointSubstitution_eval, ← point r,
+        specializeEvaluationPointChallenge_eval_candidate, root, Polynomial.eval_zero]
+    · obtain ⟨contentNonzero, contentDegree, contentRoot⟩ :=
+        content_properties curveDegree F nonzero (by omega)
+      exact ⟨contentPolynomial F, contentNonzero, contentDegree,
+        fun gamma U root _ => Or.inr (contentRoot gamma U root)⟩
+
+/-- The old positive-factor weighted-budget proof already establishes this
+all-factor inequality internally; expose the same multiplicative argument so
+Y-constant factors consume their own weight instead of a second global cap. -/
+theorem all_factor_weights_le (curveDegree : Nat)
+    (P : TrivariatePolynomial K) (nonzero : P ≠ 0) :
+    ((curvePrimeFactors P).map (trivariateYZWeight curveDegree)).sum ≤
+      trivariateYZWeight curveDegree P := by
+  classical
+  let factors := curvePrimeFactors P
+  have associated := curvePrimeFactors_product_associated P nonzero
+  have zeroNotMem : (0 : TrivariatePolynomial K) ∉ factors := by
+    intro member
+    exact (curvePrimeFactors_prime P nonzero 0 member).ne_zero rfl
+  have productNonzero : factors.prod ≠ 0 :=
+    fun zero => nonzero (associated.eq_zero_iff.mp zero)
+  obtain ⟨Q, product⟩ := associated.dvd
+  have qNonzero : Q ≠ 0 := by
+    intro zero
+    rw [zero, mul_zero] at product
+    exact nonzero product
+  change (factors.map (localBivariateWeight curveDegree)).sum ≤ _
+  rw [← localBivariateWeight_multiset_prod_eq curveDegree factors zeroNotMem]
+  calc
+    localBivariateWeight curveDegree factors.prod ≤
+      localBivariateWeight curveDegree factors.prod + localBivariateWeight curveDegree Q :=
+        Nat.le_add_right _ _
+    _ = trivariateYZWeight curveDegree P := by
+      rw [← localBivariateWeight_mul_eq curveDegree factors.prod Q productNonzero qNonzero,
+        product]
+      rfl
+
+private theorem product_degree_le {I : Type*} (factors : Multiset I)
+    (beta : I → K[X]) (weight : I → Nat)
+    (bounds : ∀ F ∈ factors, (beta F).natDegree ≤ weight F) :
+    (factors.map beta).prod.natDegree ≤ (factors.map weight).sum := by
+  induction factors using Multiset.induction_on with
+  | empty => simp
+  | @cons F rest induction =>
+    simp only [Multiset.map_cons, Multiset.prod_cons, Multiset.sum_cons]
+    exact Polynomial.natDegree_mul_le.trans <| Nat.add_le_add
+      (bounds F (Multiset.mem_cons_self F rest))
+      (induction fun H member => bounds H (Multiset.mem_cons_of_mem member))
+
+/-- One nonzero exception polynomial, fixed before gamma, covers the entire
+adaptive union outside the literal both-identity factor family. Repeated
+prime factors and Y-constant content are accounted for in the same weight. -/
+theorem exists_identity_factor_cover (curveDegree : Nat)
+    (P : TrivariatePolynomial K) (nonzero : P ≠ 0)
+    (points : Fin 2 → K) (answers : Fin 2 → K[X])
+    (degrees : ∀ r, (answers r).natDegree ≤ curveDegree) :
+    ∃ exception : K[X], exception ≠ 0 ∧
+      exception.natDegree ≤ trivariateYZWeight curveDegree P ∧
+      ∀ gamma (U : K[X]), challengeCandidateHom gamma U P = 0 →
+        (∀ r, U.eval (points r) = (answers r).eval gamma) →
+        exception.eval gamma = 0 ∨
+          ∃ F ∈ curvePrimeFactors P,
+            Retained points answers F ∧ challengeCandidateHom gamma U F = 0 := by
+  classical
+  let factors := curvePrimeFactors P
+  let beta : TrivariatePolynomial K → K[X] := fun F =>
+    if nz : F ≠ 0 then
+      Classical.choose (exists_factor_exception curveDegree points answers degrees F nz)
+    else 1
+  have properties : ∀ F ∈ factors,
+      beta F ≠ 0 ∧ (beta F).natDegree ≤ trivariateYZWeight curveDegree F ∧
+      ∀ gamma (U : K[X]), challengeCandidateHom gamma U F = 0 →
+        (∀ r, U.eval (points r) = (answers r).eval gamma) →
+        Retained points answers F ∨ (beta F).eval gamma = 0 := by
+    intro F member
+    have nz := (curvePrimeFactors_prime P nonzero F member).ne_zero
+    simp only [beta, dif_pos nz]
+    exact Classical.choose_spec
+      (exists_factor_exception curveDegree points answers degrees F nz)
+  let exception := (factors.map beta).prod
+  have exceptionNonzero : exception ≠ 0 := by
+    apply Multiset.prod_ne_zero
+    intro member
+    obtain ⟨F, member, zero⟩ := Multiset.mem_map.mp member
+    exact (properties F member).1 zero
+  refine ⟨exception, exceptionNonzero,
+    (product_degree_le factors beta (trivariateYZWeight curveDegree)
+      (fun F member => (properties F member).2.1)).trans
+        (all_factor_weights_le curveDegree P nonzero), ?_⟩
+  intro gamma U root point
+  have associated := curvePrimeFactors_product_associated P nonzero
+  have mapped := associated.map (challengeCandidateHom gamma U)
+  have productZero : (factors.map (challengeCandidateHom gamma U)).prod = 0 := by
+    rw [← map_multiset_prod]
+    exact mapped.eq_zero_iff.mpr root
+  have zeroMem : (0 : K[X]) ∈ factors.map (challengeCandidateHom gamma U) :=
+    Multiset.prod_eq_zero_iff.mp productZero
+  obtain ⟨F, member, factorRoot⟩ := Multiset.mem_map.mp zeroMem
+  rcases (properties F member).2.2 gamma U factorRoot point with retained | bad
+  · exact Or.inr ⟨F, member, retained, factorRoot⟩
+  · left
+    have divides : beta F ∣ exception := Multiset.dvd_prod
+      (Multiset.mem_map.mpr ⟨F, member, rfl⟩)
+    obtain ⟨rest, product⟩ := divides
+    rw [product, Polynomial.eval_mul, bad, zero_mul]
+
+#print axioms eval_degree_le_weight
+#print axioms point_degree_le_weight
+#print axioms coeff_swap_eval
+#print axioms content_properties
+#print axioms exists_factor_exception
+#print axioms all_factor_weights_le
+#print axioms exists_identity_factor_cover
+end
+end AspisV8.FactorIdentityCover

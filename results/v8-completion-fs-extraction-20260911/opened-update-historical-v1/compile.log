@@ -1,0 +1,60 @@
+/home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/SameBodyOpenedQueryUpdate.lean:85:4: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (250000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+theorem AspisV8.SameBodyOpenedQueryUpdate.successful_opened_query_update_or_failure : ∀
+  (view : RawHashInput → Digest208) (body : List Byte) (query : Fin 22 → Position) (d : Data) (result : Output),
+  run view body query d = some result →
+    ∀ (c1Prefix c2Prefix : AnswerPrefix) (fullLog : OrderedRawQueryLog),
+      (∀ record ∈ c1Prefix, view record.1 = record.2) →
+        (∀ record ∈ c2Prefix, view record.1 = record.2) →
+          TraceIncludedInLog (rawPrefix c1Prefix) fullLog →
+            TraceIncludedInLog (rawPrefix c2Prefix) fullLog →
+              TraceIncludedInLog (MinimalMultiproofPaths.leafLog query (wireRecords result.wire) ++ result.trace)
+                  fullLog →
+                ∀ (alpha prior rho : K),
+                  AuthenticationFailure view c1Prefix c2Prefix (wireRoots result.wire) fullLog query ∨
+                    positiveUpdate result d query alpha prior rho -
+                        ∑ i, rho ^ (↑i + 1) * exactFinalLinear (finalFromWire result) (query i) =
+                      prior -
+                        rho *
+                          ∑ i,
+                            PostQueryFunctional.residual (finalFromWire result) (fun j => storedPoint (query j))
+                                (fixedReceived result d c1Prefix c2Prefix alpha) i *
+                              rho ^ ↑i :=
+fun view body query d result success c1Prefix c2Prefix fullLog c1Answers c2Answers c1Included c2Included callsIncluded
+    alpha prior rho =>
+  Or.casesOn
+    (run_authenticated_opened_or_failure view body query d result success c1Prefix c2Prefix fullLog c1Answers c2Answers
+      c1Included c2Included callsIncluded alpha)
+    (fun bad => Or.inl bad) fun values => sorry
+'AspisV8.SameBodyOpenedQueryUpdate.finalFromWire_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.SameBodyOpenedQueryUpdate.successful_opened_query_update_or_failure' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9000 -R /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr -o /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/opened-update-v1/SameBodyOpenedQueryUpdate.olean /home/dombarker/aspis-v8-auth-slots-20260912.gAEiwr/SameBodyOpenedQueryUpdate.lean"
+	User time (seconds): 12.21
+	System time (seconds): 1.04
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:13.26
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6647180
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 142034
+	Voluntary context switches: 317
+	Involuntary context switches: 287
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

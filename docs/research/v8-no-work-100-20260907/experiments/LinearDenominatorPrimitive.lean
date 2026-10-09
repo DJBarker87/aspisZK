@@ -1,0 +1,86 @@
+import Mathlib.RingTheory.Polynomial.GaussLemma
+import Mathlib.RingTheory.Polynomial.Resultant.Basic
+
+/-! Primitivity of AY+B derives a nonzero resultant of A and B.
+The coefficient ring R need not be Bezout: the proof descends a hypothetical
+fraction-field common divisor through primitive integer normalization. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.LinearDenominatorPrimitive
+open Polynomial
+open scoped nonZeroDivisors
+open IsLocalization
+noncomputable section
+variable {R L : Type*} [CommRing R] [IsDomain R] [NormalizedGCDMonoid R]
+    [Field L] [Algebra R L] [IsFractionRing R L]
+
+theorem common_divisor_unit (A B : R[X])
+    (primitive : (C A * X + C B : Polynomial R[X]).IsPrimitive)
+    (q : R[X]) (left : q ∣ A) (right : q ∣ B) : IsUnit q := by
+  apply Polynomial.isPrimitive_iff_isUnit_of_C_dvd.mp primitive q
+  obtain ⟨a, ha⟩ := left
+  obtain ⟨b, hb⟩ := right
+  refine ⟨C a * X + C b, ?_⟩
+  rw [ha, hb, Polynomial.C_mul, Polynomial.C_mul]
+  ring
+
+theorem fraction_coprime (A B : R[X]) (nonzero : A ≠ 0)
+    (primitive : (C A * X + C B : Polynomial R[X]).IsPrimitive) :
+    IsCoprime (A.map (algebraMap R L)) (B.map (algebraMap R L)) := by
+  apply isRelPrime_iff_isCoprime.mp
+  intro h left right
+  have mapInjective := IsFractionRing.injective R L
+  have hNonzero : h ≠ 0 := by
+    intro zero
+    rw [zero, zero_dvd_iff] at left
+    apply nonzero
+    exact (Polynomial.map_injective (algebraMap R L) mapInjective)
+      (left.trans (Polynomial.map_zero _).symm)
+  let integral : R[X] := integerNormalization R⁰ h
+  let q : R[X] := integral.primPart
+  have qPrimitive : q.IsPrimitive := integral.isPrimitive_primPart
+  obtain ⟨c, cNonzero, normalized⟩ := integerNormalization_spec R⁰ h
+  have normalizedEq : integral.map (algebraMap R L) =
+      C (algebraMap R L c) * h := by
+    simpa only [integral, Algebra.smul_def, Polynomial.algebraMap_apply] using normalized
+  have cMappedNonzero : algebraMap R L c ≠ 0 := by
+    intro zero
+    apply nonZeroDivisors.ne_zero cNonzero
+    exact mapInjective (zero.trans (map_zero _).symm)
+  have qMapsDivides : q.map (algebraMap R L) ∣ h := by
+    have baseDivisor : q ∣ integral := by
+      exact ⟨C integral.content, by
+        rw [mul_comm]
+        exact integral.eq_C_content_mul_primPart⟩
+    have mappedDivisor := Polynomial.map_dvd (algebraMap R L) baseDivisor
+    rw [normalizedEq] at mappedDivisor
+    exact (Polynomial.isUnit_C.mpr (isUnit_iff_ne_zero.mpr cMappedNonzero)).dvd_mul_left.mp
+      mappedDivisor
+  have qLeft : q ∣ A := qPrimitive.dvd_of_fraction_map_dvd_fraction_map
+    (qMapsDivides.trans left)
+  have qRight : q ∣ B := qPrimitive.dvd_of_fraction_map_dvd_fraction_map
+    (qMapsDivides.trans right)
+  exact Polynomial.isUnit_or_eq_zero_of_isUnit_integerNormalization_primPart
+    hNonzero (common_divisor_unit A B primitive q qLeft qRight)
+
+include L in
+theorem resultant_ne_zero (A B : R[X]) (nonzero : A ≠ 0)
+    (primitive : (C A * X + C B : Polynomial R[X]).IsPrimitive) :
+    Polynomial.resultant A B ≠ 0 := by
+  have mappedNonzero := Polynomial.resultant_ne_zero
+    (A.map (algebraMap R L)) (B.map (algebraMap R L))
+      (fraction_coprime (L := L) A B nonzero primitive)
+  intro zero
+  apply mappedNonzero
+  rw [Polynomial.natDegree_map_eq_of_injective (IsFractionRing.injective R L),
+    Polynomial.natDegree_map_eq_of_injective (IsFractionRing.injective R L),
+    Polynomial.resultant_map_map, zero, map_zero]
+
+#print axioms common_divisor_unit
+#print axioms fraction_coprime
+#print axioms resultant_ne_zero
+end
+end AspisV8.LinearDenominatorPrimitive

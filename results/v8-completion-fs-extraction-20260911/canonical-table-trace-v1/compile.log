@@ -1,0 +1,91 @@
+CanonicalTableReferenceTrace.lean:36:8: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.CanonicalTableReferenceTrace.prefixWeight_succ`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+CanonicalTableReferenceTrace.lean:66:8: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.CanonicalTableReferenceTrace.eval_bitPolynomial`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+CanonicalTableReferenceTrace.lean:88:0: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.CanonicalTableReferenceTrace.restrictionMessage_degree`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+CanonicalTableReferenceTrace.lean:108:0: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.CanonicalTableReferenceTrace.restrictionMessage_boundary`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+CanonicalTableReferenceTrace.lean:131:0: warning: automatically included section variable(s) unused in theorem `AspisV8Completion.CanonicalTableReferenceTrace.prefixClaim_zero`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+theorem AspisV8Completion.CanonicalTableReferenceTrace.canonicalReferenceTrace_terminal.{u_1} : ∀ {K : Type u_1}
+  [inst : Field K] [inst_1 : DecidableEq K] (table : Fin 1024 → K) (point : Fin 10 → K),
+  referenceClaim (∑ row, table row) (canonicalReferenceTrace table point).messages point (Fin.last 10) =
+    tableMLEValue point table :=
+fun {K} [Field K] [DecidableEq K] table point =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = tableMLEValue point table)
+        (referenceClaim.eq_1 (∑ row, table row) (canonicalReferenceTrace table point).messages point (Fin.last 10))))
+    (id
+      (Eq.mpr (id (congrArg (fun _a => _a = tableMLEValue point table) (restrictionMessage_eval table point 9)))
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq (congrArg (prefixClaim table point) (congrFun' (congrArg HAdd.hAdd (Nat.mod_succ 9)) 1)))
+              (tableMLEValue point table)))
+          (prefixClaim_ten_eq_tableMLEValue table point))))
+'AspisV8Completion.CanonicalTableReferenceTrace.restrictionMessage_prefix_independent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.CanonicalTableReferenceTrace.restrictionMessage_degree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.CanonicalTableReferenceTrace.restrictionMessage_boundary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.CanonicalTableReferenceTrace.restrictionMessage_eval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.CanonicalTableReferenceTrace.canonicalReferenceTrace' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.CanonicalTableReferenceTrace.canonicalReferenceTrace_terminal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisV8Completion.CanonicalTableReferenceTrace.callback_exact_of_canonical_table' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+	Command being timed: "systemd-run --user --scope --quiet -p MemoryHigh=9G -p MemoryMax=10G -p MemorySwapMax=0 -p RuntimeMaxSec=600 /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M8192 -o CanonicalTableReferenceTrace.olean CanonicalTableReferenceTrace.lean"
+	User time (seconds): 11.71
+	System time (seconds): 1.34
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:13.09
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6682568
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 191139
+	Voluntary context switches: 925
+	Involuntary context switches: 250
+	Swaps: 0
+	File system inputs: 24
+	File system outputs: 808
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

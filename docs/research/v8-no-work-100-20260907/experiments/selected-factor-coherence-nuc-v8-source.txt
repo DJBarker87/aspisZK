@@ -1,0 +1,157 @@
+import CurveOODDerivative
+import FactorCoherence
+import SelectedOODGate
+
+/-! Connect pre-gamma factor selection to the actual arbitrary received
+word and adaptive covered quotient. The chosen factor and exceptional roots
+depend only on C1/C2 and the actual OOD prefix. They do not depend on gamma,
+alpha, queries, or a supplied successful decoder. Repeated-parent/singular
+identities remain explicit; a fixed factor is not yet a component tuple.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+namespace AspisV8.SelectedFactorCoherence
+open Polynomial Finset
+open AspisV8.CurveOODGate AspisV8.FactorCoherence
+open AspisK1.V7ExactCorrelatedAgreementInterpolation
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementSmooth
+open AspisK1.V7Tag73ExactMultiplicityThreeGS
+noncomputable section
+
+theorem pointSubstitution_eq_gate {K : Type*} [Field K]
+    {maximumDegree curveDegree xBound yRows zBound : Nat}
+    (coefficients : CurveMonomialIndex maximumDegree curveDegree xBound yRows zBound → K)
+    (x : K) (answers : Fin (curveDegree+1) → K) :
+    pointSubstitution x (answerCurve answers) (curveTrivariatePolynomial coefficients) =
+      curveConstraintPolynomial (fun _ : Fin 1 => x)
+        (fun lane (_ : Fin 1) => answers lane) coefficients 0 0 := by
+  classical
+  simp only [pointSubstitution,RingHom.coe_comp,Function.comp_apply,
+    specializeEvaluationPoint,evaluateInnerVariable,curveTrivariatePolynomial,
+    Polynomial.coe_mapRingHom,Polynomial.map_sum,Polynomial.map_monomial,
+    Polynomial.coe_evalRingHom,Polynomial.eval_finsetSum,Polynomial.eval_monomial,
+    curveConstraintPolynomial,hasseXOrder_zero,hasseYOrder_zero,
+    Nat.choose_zero_right,Nat.cast_one,mul_one,Nat.sub_zero,answerCurve]
+  apply Finset.sum_congr rfl
+  intro m _
+  simp only [←Polynomial.C_mul_X_pow_eq_monomial,Polynomial.C_mul,Polynomial.C_pow]
+  ring
+
+theorem derivativeCurve_eq_gate {K : Type*} [Field K]
+    {maximumDegree curveDegree xBound yRows zBound : Nat}
+    (coefficients : CurveMonomialIndex maximumDegree curveDegree xBound yRows zBound → K)
+    (x : K) (answers : Fin (curveDegree+1) → K) :
+    derivativeCurve (curveTrivariatePolynomial coefficients) x (answerCurve answers) =
+      CurveOODDerivative.atPoint coefficients x answers := by
+  classical
+  rw [CurveOODDerivative.atPoint_sum]
+  simp only [derivativeCurve,pointSubstitution,RingHom.coe_comp,Function.comp_apply,
+    specializeEvaluationPoint,evaluateInnerVariable,curveTrivariatePolynomial,
+    Polynomial.derivative_sum,Polynomial.derivative_monomial,
+    Polynomial.coe_mapRingHom,Polynomial.map_sum,Polynomial.map_monomial,
+    Polynomial.coe_evalRingHom,Polynomial.eval_finsetSum,Polynomial.eval_monomial,
+    Polynomial.map_mul,Polynomial.map_natCast]
+  apply Finset.sum_congr rfl
+  intro m _
+  simp only [←Polynomial.C_mul_X_pow_eq_monomial,Polynomial.C_mul,map_natCast]
+  ring
+
+/-- Keep construction of nested existential/membership interfaces generic.
+The selected instance supplies the literal candidate transport below. -/
+theorem bounded_factor_transport {K : Type*} [Field K]
+    (P : TrivariatePolynomial K) (nonzero : P≠0) (x : K) (answer D : K[X])
+    (identity : pointSubstitution x answer P=0)
+    (equal : derivativeCurve P x answer=D) (n : Nat) (degree : D.natDegree≤n)
+    (Tail : TrivariatePolynomial K → Finset K → Prop)
+    (transport : ∀ F B,
+      (∀ gamma U, challengeCandidateHom gamma U P=0 → U.eval x=answer.eval gamma →
+        (derivativeCurve P x answer).eval gamma≠0 → challengeCandidateHom gamma U F=0) →
+      (∀ gamma∉B, D.eval gamma≠0) → Tail F B) :
+    D=0 ∨ ∃ F∈curvePrimeFactors P, 0<F.natDegree ∧ pointSubstitution x answer F=0 ∧
+      ∃ B : Finset K, B.card≤n ∧ Tail F B := by
+  classical
+  by_cases singular : D=0
+  · exact Or.inl singular
+  · right
+    obtain singular' | ⟨F,member,positive,factorIdentity,coherent⟩ :=
+      fixed_factor_or_singular P nonzero x answer identity
+    · exact (singular (equal.symm.trans singular')).elim
+    · let B := D.roots.toFinset
+      refine ⟨F,member,positive,factorIdentity,B,?_,?_⟩
+      · exact (Multiset.toFinset_card_le _).trans
+          ((Polynomial.card_roots' _).trans degree)
+      · apply transport F B coherent
+        intro gamma notBad rootZero
+        exact notBad (Multiset.mem_toFinset.mpr ((Polynomial.mem_roots singular).mpr rootZero))
+
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedOODGate
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.ComponentOODBinding AspisV8.GammaComponentGame
+open AspisV8.OODInterpolant AspisV8.QuotientFamilySelected
+open AspisK1.V7Tag73ExactGRSConversion
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+def parent (c1 : C1Received) (c2 : C2Received) : TrivariatePolynomial K :=
+  curveTrivariatePolynomial (fixedInterpolant c1 c2)
+
+def derivativeGate (c1 : C1Received) (c2 : C2Received)
+    (d : Data (K := K)) (r : Fin 2) : K[X] :=
+  CurveOODDerivative.atPoint (fixedInterpolant c1 c2) (point d r) (answers d r)
+
+/-- Fixed before gamma, selected from the whole actual OOD identity. In
+the regular branch EVERY later covered image-valid quotient follows F away
+from a single explicit root set. No candidate or factor union is charged. -/
+theorem selected_fixed_factor
+    (c1 : C1Received) (c2 : C2Received) (d : Data (K := K)) (r : Fin 2)
+    (identity : gate c1 c2 d r=0) :
+    derivativeGate c1 c2 d r=0 ∨
+      ∃ F ∈ curvePrimeFactors (parent c1 c2), 0<F.natDegree ∧
+        pointSubstitution (point d r) (answerCurve (answers d r)) F=0 ∧
+        ∃ B : Finset K, B.card≤117049 ∧
+          ∀ (checked : d.Checked)
+            (circles : d.x0^2+d.y0^2=1 ∧ d.x1^2+d.y1^2=1)
+            (west : ∀ j, pointX d j≠-1) (gamma : K) (Q : Fin 1024 → K),
+            gamma∉B →
+            Q∈literalFamily (SelectedComponentGame.received c1 c2 d gamma) →
+            (Q 1023=0 ∧ d.b*Q 1022-d.c*Q 1021=0) →
+            challengeCandidateHom gamma
+              (exactCircleGRSPolynomial ((atGamma d gamma).original Q)) F=0 := by
+  have equal : derivativeCurve (parent c1 c2) (point d r)
+      (answerCurve (answers d r))=derivativeGate c1 c2 d r :=
+    derivativeCurve_eq_gate _ _ _
+  have actualIdentity : pointSubstitution (point d r) (answerCurve (answers d r))
+      (parent c1 c2)=0 := by
+    rw [parent,pointSubstitution_eq_gate]
+    exact identity
+  have nonzero : parent c1 c2≠0 :=
+    curveTrivariatePolynomial_ne_zero _ (fixedInterpolant_nonzero c1 c2)
+  apply bounded_factor_transport (parent c1 c2) nonzero (point d r)
+    (answerCurve (answers d r)) (derivativeGate c1 c2 d r) actualIdentity equal
+    117049 (CurveOODDerivative.selected_degree _ _ _)
+  intro F B coherent outside checked circles west gamma Q notBad qmember image
+  -- The SAME literal candidate supplies both interfaces.
+  have valid := CoveredOriginalSymbols.selected_width29_valid c1 c2 d checked
+    (fun _ => Q) gamma image qmember
+  have root := AspisK1.V7ExactCorrelatedAgreement.exactInitialValidCandidate_substitute_eq_zero
+    (received29 c1 c2) (CoveredOriginalSymbols.originalStrategy c1 c2 d (fun _ => Q))
+    (fixedInterpolant c1 c2) (fixedInterpolant_kernel c1 c2) gamma valid
+  apply coherent gamma _
+  · simpa only [parent,challengeCandidateHom,RingHom.coe_comp,Function.comp_apply,
+      specializeChallenge_curveTrivariatePolynomial lastRow,
+      substituteCandidate_weightedBivariatePolynomial] using root
+  · rw [answers_eval]
+    simpa only [point,factor,pointX,pointY,atGamma] using
+      CoveredOODGRS.original_grs_at_ood (atGamma d gamma) checked Q image circles r (west r)
+  · rw [equal]
+    exact outside gamma notBad
+
+#print axioms pointSubstitution_eq_gate
+#print axioms derivativeCurve_eq_gate
+#print axioms bounded_factor_transport
+#print axioms selected_fixed_factor
+end
+end AspisV8.SelectedFactorCoherence

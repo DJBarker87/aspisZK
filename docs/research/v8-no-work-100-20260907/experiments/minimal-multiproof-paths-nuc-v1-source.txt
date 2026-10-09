@@ -1,0 +1,293 @@
+import AspisFormal.Pool.V7MerkleOpeningBinding
+
+/-!
+# Typed execution of the selected binary minimal-multiproof merge
+
+SOURCE-REVIEW DRAFT: no compiler result yet.
+
+`Pass` is the successful small-step semantics of one Rust level: consume two
+adjacent even/odd entries without a frontier item, or consume one entry and
+one aligned C1/C2 frontier pair. It records exactly C1 then C2 node calls.
+`Levels` sequences the passes and retains unused frontier items explicitly.
+Paths and their call coverage are conclusions, not execution premises.
+
+Scope boundary: decoded fixed-width frontier blocks and immutable leaf
+records are inputs. This is not a translation/refinement of Rust byte slices,
+the mutable Vec loop, sort_unstable, or an arbitrary stateful HashFn. Hashing
+here is a single function of the V7 serialized byte string. The selected q22
+model uses the actual descriptor key and original record ordinal.
+-/
+
+set_option autoImplicit false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.MinimalMultiproofPaths
+
+open AspisPool.V7MerkleQueryGrammar
+open AspisPool.V7MerkleQueryExtractor
+open AspisPool.V7MerkleOpeningBinding
+
+abbrev Digests := Fin 2 → Digest208
+
+structure Entry where
+  position : Nat
+  digest : Digests
+
+def nodeCalls (position : Nat) (current sibling : Digests) : OrderedRawQueryLog :=
+  [orderedNodeInput position (current 0) (sibling 0),
+   orderedNodeInput position (current 1) (sibling 1)]
+
+def parent (hash : RawHashInput → Digest208)
+    (position : Nat) (current sibling : Digests) : Entry :=
+  ⟨position / 2, fun side => hash (orderedNodeInput position
+    (current side) (sibling side))⟩
+
+def CanPair (head : Entry) : List Entry → Prop
+  | [] => False
+  | next :: _ => head.position % 2 = 0 ∧ next.position = head.position + 1
+
+/-- The source's single-entry branch is forbidden when the adjacent pair
+branch is enabled. Its frontier pair is consumed once for both trees. -/
+inductive Pass (hash : RawHashInput → Digest208) :
+    List Entry → List Digests → List Entry → List Digests → OrderedRawQueryLog → Prop
+  | nil (frontier : List Digests) : Pass hash [] frontier [] frontier []
+  | pair (k : Nat) (left right : Digests)
+      {rest output : List Entry} {frontier remaining : List Digests}
+      {trace : OrderedRawQueryLog}
+      (tail : Pass hash rest frontier output remaining trace) :
+      Pass hash (⟨2*k, left⟩ :: ⟨2*k+1, right⟩ :: rest) frontier
+        (parent hash (2*k) left right :: output) remaining
+        (nodeCalls (2*k) left right ++ trace)
+  | single (head : Entry) (sibling : Digests)
+      {rest output : List Entry} {frontier remaining : List Digests}
+      {trace : OrderedRawQueryLog}
+      (unpaired : ¬ CanPair head rest)
+      (tail : Pass hash rest frontier output remaining trace) :
+      Pass hash (head :: rest) (sibling :: frontier)
+        (parent hash head.position head.digest sibling :: output) remaining
+        (nodeCalls head.position head.digest sibling ++ trace)
+
+inductive Levels (hash : RawHashInput → Digest208) :
+    Nat → List Entry → List Digests → List Entry → List Digests → OrderedRawQueryLog → Prop
+  | zero (entries : List Entry) (frontier : List Digests) :
+      Levels hash 0 entries frontier entries frontier []
+  | succ {depth : Nat} {entries middle output : List Entry}
+      {frontier afterPass remaining : List Digests} {first later : OrderedRawQueryLog}
+      (pass : Pass hash entries frontier middle afterPass first)
+      (tail : Levels hash depth middle afterPass output remaining later) :
+      Levels hash (depth+1) entries frontier output remaining (first ++ later)
+
+theorem canPair_iff (head next : Entry) (rest : List Entry) :
+    CanPair head (next :: rest) ↔
+      ∃ k, head.position = 2*k ∧ next.position = 2*k+1 := by
+  change (head.position % 2 = 0 ∧ next.position = head.position+1) ↔ _
+  constructor
+  · rintro ⟨even, adjacent⟩
+    refine ⟨head.position / 2, ?_, ?_⟩ <;> omega
+  · rintro ⟨k, left, right⟩
+    constructor <;> omega
+
+private theorem nodeCalls_mem (position : Nat) (current sibling : Digests)
+    (side : Fin 2) :
+    orderedNodeInput position (current side) (sibling side) ∈
+      nodeCalls position current sibling := by
+  fin_cases side <;> simp [nodeCalls]
+
+private theorem paired_input (k : Nat) (left right : Digest208) :
+    orderedNodeInput (2*k+1) right left = orderedNodeInput (2*k) left right := by
+  have even : (2*k).testBit 0 = false :=
+    Nat.mod_two_eq_zero_iff_testBit_zero.mp (by omega)
+  have odd : (2*k+1).testBit 0 = true :=
+    Nat.mod_two_eq_one_iff_testBit_zero.mp (by omega)
+  simp [orderedNodeInput, even, odd]
+
+/-- Every consumed entry reaches an actual output parent, with a constructed
+sibling pair and both ordered parent inputs in this pass's exact call log. -/
+theorem pass_parent {hash : RawHashInput → Digest208}
+    {entries output : List Entry} {frontier remaining : List Digests}
+    {trace : OrderedRawQueryLog}
+    (run : Pass hash entries frontier output remaining trace) :
+    ∀ child ∈ entries, ∃ result ∈ output, ∃ sibling : Digests,
+      result.position = child.position / 2 ∧
+      (∀ side, result.digest side = hash (orderedNodeInput child.position
+        (child.digest side) (sibling side))) ∧
+      (∀ side, orderedNodeInput child.position (child.digest side)
+        (sibling side) ∈ trace) := by
+  induction run with
+  | nil frontier =>
+      intro child member
+      simp only [List.not_mem_nil] at member
+  | @pair k left right rest output frontier remaining trace tail ih =>
+      intro child member
+      simp only [List.mem_cons] at member
+      rcases member with rfl | rfl | member
+      · refine ⟨parent hash (2*k) left right, List.mem_cons_self, right,
+          rfl, fun _ => rfl, ?_⟩
+        intro side
+        exact List.mem_append_left _ (nodeCalls_mem (2*k) left right side)
+      · refine ⟨parent hash (2*k) left right, List.mem_cons_self, left,
+          ?_, ?_, ?_⟩
+        · change (2*k)/2 = (2*k+1)/2
+          omega
+        · intro side
+          change hash (orderedNodeInput (2*k) (left side) (right side)) = _
+          rw [paired_input]
+        · intro side
+          change orderedNodeInput (2*k+1) (right side) (left side) ∈ _
+          rw [paired_input]
+          exact List.mem_append_left _ (nodeCalls_mem (2*k) left right side)
+      · obtain ⟨result, found, sibling, position, digest, calls⟩ := ih child member
+        exact ⟨result, List.mem_cons_of_mem _ found, sibling, position, digest,
+          fun side => List.mem_append_right _ (calls side)⟩
+  | @single head sibling rest output frontier remaining trace unpaired tail ih =>
+      intro child member
+      rcases List.mem_cons.mp member with rfl | member
+      · refine ⟨parent hash head.position head.digest sibling,
+          List.mem_cons_self, sibling, rfl, fun _ => rfl, ?_⟩
+        intro side
+        exact List.mem_append_left _ (nodeCalls_mem head.position head.digest sibling side)
+      · obtain ⟨result, found, other, position, digest, calls⟩ := ih child member
+        exact ⟨result, List.mem_cons_of_mem _ found, other, position, digest,
+          fun side => List.mem_append_right _ (calls side)⟩
+
+/-- The central invariant: exactly `depth` siblings for each requested leaf,
+the V7 fold result, and exact raw-input membership in the executed node log. -/
+theorem levels_paths {hash : RawHashInput → Digest208} {depth : Nat}
+    {entries output : List Entry} {frontier remaining : List Digests}
+    {trace : OrderedRawQueryLog}
+    (run : Levels hash depth entries frontier output remaining trace) :
+    ∀ child ∈ entries, ∃ result ∈ output, ∃ paths : Fin 2 → List Digest208,
+      (∀ side, (paths side).length = depth) ∧
+      (∀ side, foldPathAux hash child.position (child.digest side) (paths side) =
+        result.digest side) ∧
+      (∀ side, TraceIncludedInLog
+        (foldPathInputTrace hash child.position (child.digest side) (paths side)) trace) := by
+  induction run with
+  | zero entries frontier =>
+      intro child member
+      refine ⟨child, member, fun _ => [], fun _ => rfl, fun _ => rfl, ?_⟩
+      intro side input found
+      simp only [foldPathInputTrace, List.not_mem_nil] at found
+  | @succ depth entries middle output frontier afterPass remaining first later pass tail ih =>
+      intro child member
+      obtain ⟨next, nextMember, sibling, position, digest, calls⟩ := pass_parent pass child member
+      obtain ⟨result, resultMember, paths, lengths, roots, covered⟩ := ih next nextMember
+      refine ⟨result, resultMember, fun side => sibling side :: paths side, ?_, ?_, ?_⟩
+      · intro side
+        simp only [List.length_cons, lengths]
+      · intro side
+        rw [foldPathAux_cons, ← digest side, ← position]
+        exact roots side
+      · intro side input found
+        change input ∈ orderedNodeInput child.position (child.digest side) (sibling side) ::
+          foldPathInputTrace hash (child.position/2)
+            (hash (orderedNodeInput child.position (child.digest side) (sibling side)))
+            (paths side) at found
+        rcases List.mem_cons.mp found with rfl | found
+        · exact List.mem_append_left _ (calls side)
+        · rw [← digest side, ← position] at found
+          exact List.mem_append_right _ (covered side input found)
+
+/-! ## The original q22 record ordinal survives descriptor sorting -/
+
+structure Record where
+  c1 : C1Value
+  c2 : C2Value
+  salt : Salt32
+
+def leafInput (record : Record) (side : Fin 2) : RawHashInput :=
+  if side = 0 then serialize (.c1Leaf record.c1 record.salt)
+  else serialize (.c2Leaf record.c2 record.salt)
+
+def leafCalls (record : Record) : OrderedRawQueryLog :=
+  [leafInput record 0, leafInput record 1]
+
+def recordEntry (hash : RawHashInput → Digest208)
+    (query : Fin 22 → Position) (records : Fin 22 → Record) (i : Fin 22) : Entry :=
+  ⟨(query i).val, fun side => hash (leafInput (records i) side)⟩
+
+/-- Literal natural-number descriptor from the existing `AuthOrder.pack`.
+Its previously proved uint64/ordinal facts remain reusable; no extra research
+cache import is needed for the permutation/path theorem here. -/
+def packedDescriptor (query : Fin 22 → Position) (i : Fin 22) : Nat :=
+  (query i).val * 4294967296 + i.val
+
+def sortedOrdinals (query : Fin 22 → Position) : List (Fin 22) :=
+  (List.ofFn (fun i : Fin 22 => i)).mergeSort (fun i j =>
+    packedDescriptor query i ≤ packedDescriptor query j)
+
+def sortedEntries (hash : RawHashInput → Digest208)
+    (query : Fin 22 → Position) (records : Fin 22 → Record) : List Entry :=
+  (sortedOrdinals query).map (recordEntry hash query records)
+
+def leafLog (query : Fin 22 → Position) (records : Fin 22 → Record) : OrderedRawQueryLog :=
+  (sortedOrdinals query).flatMap (fun i => leafCalls (records i))
+
+theorem sorted_ordinals_perm (query : Fin 22 → Position) :
+    (sortedOrdinals query).Perm (List.ofFn (fun i : Fin 22 => i)) := by
+  exact List.mergeSort_perm _ _
+
+theorem sorted_entries_perm (hash : RawHashInput → Digest208)
+    (query : Fin 22 → Position) (records : Fin 22 → Record) :
+    (sortedEntries hash query records).Perm (List.ofFn (recordEntry hash query records)) := by
+  have perm := (sorted_ordinals_perm query).map (recordEntry hash query records)
+  simpa only [sortedEntries, List.map_ofFn, Function.comp_def] using perm
+
+private theorem original_ordinal_mem (query : Fin 22 → Position) (i : Fin 22) :
+    i ∈ sortedOrdinals query := by
+  apply (sorted_ordinals_perm query).mem_iff.mpr
+  exact List.mem_ofFn.mpr ⟨i, rfl⟩
+
+theorem leaf_call_covered (query : Fin 22 → Position) (records : Fin 22 → Record)
+    (i : Fin 22) (side : Fin 2) : leafInput (records i) side ∈ leafLog query records := by
+  apply List.mem_flatMap.mpr
+  refine ⟨i, original_ordinal_mem query i, ?_⟩
+  fin_cases side <;> simp [leafCalls]
+
+/-- Typed successful execution: all source initial rejection guards relevant
+at fixed depth 18 are retained, along with exact terminal root/empty-frontier
+checks. Nonemptiness and the 18-bit range follow from the selected types. -/
+def Accepted (hash : RawHashInput → Digest208) (roots : Digests)
+    (query : Fin 22 → Position) (records : Fin 22 → Record)
+    (frontier : List Digests) (nodeLog : OrderedRawQueryLog) : Prop :=
+  (sortedEntries hash query records).Pairwise (fun a b => a.position < b.position) ∧
+  Levels hash 18 (sortedEntries hash query records) frontier [⟨0, roots⟩] [] nodeLog
+
+/-- Success constructs the 18-sibling paths for the *original* query/record
+ordinal and includes the actual leaf call as well as all parent calls.
+No collision exclusion, canonical field decoding, candidate or early-word
+correspondence is required for this deterministic authentication conclusion. -/
+theorem accepted_q22_paths (hash : RawHashInput → Digest208) (roots : Digests)
+    (query : Fin 22 → Position) (records : Fin 22 → Record)
+    (frontier : List Digests) (nodeLog : OrderedRawQueryLog)
+    (accepted : Accepted hash roots query records frontier nodeLog) (i : Fin 22) :
+    ∃ paths : Fin 2 → List Digest208,
+      (∀ side, (paths side).length = 18) ∧
+      (∀ side, foldPathAux hash (query i).val (hash (leafInput (records i) side))
+        (paths side) = roots side) ∧
+      (∀ side, TraceIncludedInLog
+        (leafInput (records i) side :: foldPathInputTrace hash (query i).val
+          (hash (leafInput (records i) side)) (paths side))
+        (leafLog query records ++ nodeLog)) := by
+  have member : recordEntry hash query records i ∈ sortedEntries hash query records :=
+    List.mem_map.mpr ⟨i, original_ordinal_mem query i, rfl⟩
+  obtain ⟨result, resultMember, paths, lengths, rootsExact, covered⟩ :=
+    levels_paths accepted.2 (recordEntry hash query records i) member
+  have resultExact : result = ⟨0, roots⟩ := List.mem_singleton.mp resultMember
+  subst result
+  refine ⟨paths, lengths, rootsExact, ?_⟩
+  intro side input found
+  rcases List.mem_cons.mp found with rfl | found
+  · exact List.mem_append_left _ (leaf_call_covered query records i side)
+  · exact List.mem_append_right _ (covered side input found)
+
+#print axioms canPair_iff
+#print axioms pass_parent
+#print axioms levels_paths
+#print axioms sorted_ordinals_perm
+#print axioms sorted_entries_perm
+#print axioms leaf_call_covered
+#print axioms accepted_q22_paths
+
+end AspisV8.MinimalMultiproofPaths

@@ -1,6 +1,169 @@
 # V8 no-work 100-bit research — decision and reproducible prototypes
 
-Latest formal continuation: [private C1 recovery independent of final distance](private-c1-recovery-review.md).
+Latest compact/source continuation:
+[selected packed query bridge](selected-packed-query-bridge-review.md),
+[selected semantic afterstate checks](selected-semantic-afterstate-checks-review.md),
+[compact semantic repair](selected-compact-semantic-repair-review.md), and
+[selected terminal alternative](selected-semantic-terminal-alternative-review.md).
+The exact canonical 621-byte query record now reaches the typed shifted-q22
+residual with the selected slot/order/sign conventions.  The same selected
+semantic table now derives the two dynamic afterstate bindings in addition to
+the four literal source comparisons.  The compact ten-round recurrence has a
+checked degree-27 repair split, and one prefix-fixed causal plan has the ideal
+adaptive finite-mean ceiling `270/|S|`.  These results do not yet prove Merkle
+root-to-fixed-word authentication, the Rust callback constructor, a global
+accepted-extraction bound, Fiat--Shamir lifting, full-view ZK or matched
+complete-transaction CU parity.  No wire field changed; the body remains
+**40,282 bytes**.
+
+Latest source/semantic continuation:
+[typed relation terminal](typed-relation-terminal-review.md),
+[selected semantic aggregation](selected-semantic-aggregation-review.md), and
+[selected output transition](selected-semantic-output-transition-review.md).
+The compact relation tail is now proved equal to the ideal relation game for
+the same typed adaptive buffers, including sparse image transport and shifted
+query injection.  The selected helper aggregate now uses the actual quadratic
+`mu` term: a false aggregate has at most two ideal challenge roots, so the old
+V7 linear-helper `35/|K|` subtotal is not reused.  On the deterministic payment
+side, one same selected semantic table now yields the checked two-output
+constructor and exact append-afterstate slice.  These results still leave the
+Rust/authentication constructor, the ten-round aggregate-to-row composition,
+caller/input membership, Fiat--Shamir lifting, full-view ZK and complete
+transaction CU parity open.  They do not change the **40,282-byte** body.
+
+The immediate follow-up also closes two narrower premises.  The selected
+29-lane and ten-coordinate aggregation has checked degree-28, degree-10 and
+degree-2 collision alternatives, for a fixed-table `40/|K|` algebraic
+subtotal before compact-round repair and authentication.  All six append
+residual groups are now derived from the same table and literal links 24--63;
+only authoritative direct afterstate checks remain supplied at that endpoint.
+See [selected semantic lane aggregation](selected-semantic-lane-aggregation-review.md)
+and [selected append residuals](selected-semantic-append-residuals-review.md).
+
+Latest higher-degree continuation: [selected HIGH/LOW probability composition](selected-higher-y-probability-review.md).
+For all retained Y-degree-at-least-three factors, the fixed early C1 now feeds
+both a checked high-support incidence cap and a multiplicity-preserving regular
+support-tail sum.  The actual adaptive selected quotient is connected to the
+same indexed q22 matching mass and to that tail, while the rho/later-relation
+suffix is charged once for the union.  One pre-gamma row is now checked to be
+regular for every retained factor outside a single degree-117,049 product root
+set.  The complete multiplicity-preserving finite layer-cake calculation is
+also checked.  This closes the fixed-factor/adaptive-factor, two-row and
+generic finite-integration seams.  The selected source instantiation constructs
+a fixed representative per factor/gamma and bounds the actual union for every
+later kappa/tau.  The outer low-support probability theorem is now checked too:
+it averages over the original gamma space, charges the explicit degree-117,049
+product-root set, and applies the shared rho/later-relation suffix only once.
+The exact HIGH/LOW partition of the same actual adaptive suffix is now checked
+under the fixed early-C1 hypothesis, giving `234126/|Gamma|` plus the integrated
+query budget and one repair term outside the pair-root branch.  The older
+`max(sparse,dense)` shortcut was removed: sparse helper-Good controls only HIGH,
+while LOW remains charged in both cases.  The next seams are the pair-root
+sampler lift, the `earlyC1 = none` residual and the whole-acceptance partition.
+The exact conservative arithmetic screen,
+including the singular and pair-root controls, is **103.847307 bits**, but is
+still labelled a screen rather than a global probability theorem.
+
+For `earlyC1 = none`, a checked support lemma now confines every image-valid
+quotient outside one fixed set of at most 63 gammas to at most 252,847 matching
+fibres.  This is useful but not sufficient: extending the existing layer-cake
+bound mechanically across the remaining 200,808--252,847 band yields only
+**97.187909 bits**.  That naive q22 completion is therefore rejected; this
+branch needs a stronger relation-constrained incidence argument or a proved
+acceptance-to-early-C1 implication.
+
+The same early-C1 table now also supplies the selected input owner, input-note
+and nullifier equations without 72 caller-supplied copy equalities, and the
+typed q22 minimal-multiproof execution constructs all eighteen sibling levels
+for each original query ordinal.  Rust-loop/parser refinement, accepted-prefix
+coupling, complete payment extraction, Fiat--Shamir and full-view ZK remain
+open.  No verifier operation, proof byte or grinding credit changed; the body
+remains **40,282 bytes**.
+
+Latest formal continuation: [nested sequential OOD sampler and root-set mass](nested-ood-sampler-review.md).
+The literal finite-tape controller is now proved equivalent to the source's
+first-circle3 followed by distinct3(circle3), including exact first-hit block
+cuts, unread-tail locality and abort routing. Separately, the history-indexed
+ideal kernel proves exact ordered-pair mass with all decoder/retry failures
+retained. A fixed root set of size `m` therefore has mass at most
+`m(m-1)/(N(N-1))`; the intended `m<=114687` screen is about 214.385 bits.
+The measure-preserving source/oracle coupling and FS freshness theorem are
+still missing, so the old OOD indicator is not yet replaced globally. Six
+focused NUC leaves passed; body, verifier and CU remain unchanged.
+
+Previous formal continuation: [all retained linear factors and early-C1 copy coverage](denominator-continuation.md).
+The selected-model theorem now classifies every retained linear-Y factor into
+a fixed family of at most 111 actual 29-message tuples, a sparse gamma hit
+(at most 3,108 challenges), or a proved double-OOD obstruction. It removes
+the earlier supplied-rational-root premise and preserves the actual adaptive
+candidate. The early-C1 copy collision theorem separately covers adaptive
+selection from the pre-lambda 100-member family. Ten focused NUC leaves passed;
+body and verifier remain unchanged. Higher-Y factors, component own support
+and checked payment extraction are explicit remaining obligations.
+
+Previous formal continuation: [component recovery through the actual OOD constraints](component-ood-continuation.md).
+The same covered quotient now supplies 38,230 original-symbol agreements and
+the actual OOD-to-GRS values, enabling reuse of V7's interpolation theorem.
+Unless both fixed OOD substitutions are polynomial identities, compatible
+gamma values are bounded by 117,077, without a candidate-family union. The
+same-execution composition has a 104.3661-bit local ceiling plus an explicit
+identity-branch remainder. That remainder is not a payment witness. The actual
+136-link layout now discharges the weighted-copy inactive-weight premise.
+Seven focused NUC leaves passed; no verifier, 40,282-byte body or CU change.
+Global component/payment extraction, source/FS and full-view ZK remain open.
+
+Previous formal continuation: [joint relation recovery beyond off-family finals](covered-relation-continuation.md).
+The actual compact relation's no-good-quotient event now has a kernel-checked
+joint bound: approximately 104.5902 bits, with only early collisions unioned
+over the 99-member family and one shared query/repair suffix. The literal
+26+3 wrapper needs no early decoder-success premise and retains an exact
+good-quotient acceptance remainder. A selected weighted-copy row balance
+prerequisite is also proved. Component/payment extraction from that remainder,
+source/FS and full-view ZK remain open. Five focused NUC leaves passed;
+no verifier, profile, 40,282-byte body or measured CU change.
+
+Previous formal continuation: [covered recovery and alternative early C1 candidates](covered-recovery-continuation.md).
+The literal quotient family is now proved to have at most 99 members. An
+unfiltered C1 family fixed before lambda/chi has at most 100 members, with
+the actual late 26+3 projection and own-support base-field descent proved.
+A mixed-C1 control rules out requiring every accepted suffix to describe
+one dominant decoder output; it does not establish a payment forgery.
+Alternative-candidate extraction, covered component/payment recovery,
+source/FS and full-view ZK remain open. Focused checks ran on the NUC;
+no verifier, 40,282-byte body, profile or measured CU change.
+
+Previous formal continuation: [adaptive off-family tails and the actual query/relation suffix](adaptive-tail-continuation.md).
+Two proved agreement tails now bound an arbitrary received quotient's actual
+post-alpha final outside a fixed quotient family. Their selected-code and
+compact-suffix composition is Lean-checked, with an approximately 104.592-bit
+ideal off-family ceiling and no family multiplier on the low-agreement query
+term. Represented quotient-to-component/payment recovery, bounded replay,
+source/FS and full-view ZK remain open. Checks resumed on the NUC at the user's
+request; no verifier, profile, 40,282-byte body or measured CU change.
+
+Previous formal continuation: [fork recovery, row separation and evidence collection](fork-collector-continuation.md).
+The common-support construction now derives all four repaired ordinary row
+claims, including inactive, on the same recovered quotient. A bounded causal
+collector control distinguishes many useful alpha branches from a coherent
+seven-branch group, and a censorship-safe support-growth argument isolates
+one collection failure. Authenticated useful-fork production and global
+accepted witness recovery remain open. Laptop-only focused work; no verifier,
+profile, 40,282-byte body or CU changes.
+
+Previous formal continuation: [fixed early C1 and adaptive far finals](far-final-continuation.md).
+The actual causal suffix now reduces to an explicit relation-compatible
+agreement moment, retaining the quadratic helper curve and degree-28 claim
+error. A checked adaptive-final correction rules out treating the actual prior
+as a fixed-target degree-six error. Polynomial-raw-word quotient/OOD lemmas,
+canonical query-record parsing and the same-table append endpoint also advance.
+The exact restricted F19 search and its limitations are recorded alongside
+the proof evidence. Seven-alpha/three-tau common-support recovery now constructs
+one quotient and derives its ordinary and image constraints in Lean.
+Global far recovery, source/FS and full-view ZK remain open;
+the maximum body stays 40,282 bytes. See the continuation for current fork-proof
+status and the bounded next target.
+
+Previous formal continuation: [private C1 recovery independent of final distance](private-c1-recovery-review.md).
 The fixed early-C1 object now feeds the mathematical common-sample Gao decoder,
 with a kernel-checked private-sample joint failure bound (134.453-bit arithmetic
 display) and no final-distance premise. Same-table sparse payment reads and

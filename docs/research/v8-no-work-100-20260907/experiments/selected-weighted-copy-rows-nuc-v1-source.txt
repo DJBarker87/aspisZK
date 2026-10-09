@@ -1,0 +1,123 @@
+import SelectedWeightedCopyCore
+
+/-! The actual selected 1024-row mask and 136 public weight/tag schedule.
+This specializes the new weighted-row balance theorem, not the older
+78/75/183-link registry. The 136 endpoint placements, fourteen tuple-pattern
+expansions and optimized source evaluation remain a distinct refinement
+boundary; `rows` is the explicit field-level row interface here.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.SelectedWeightedCopyRows
+open scoped BigOperators
+open AspisV8.SelectedWeightedCopyCore
+
+/-- Literal `ACTIVE_ROW_MASKS` in the pinned selected generated source.
+The list access models its bounded public row lookup, not Rust memory. -/
+def activeMasks : List Nat := [
+  6144,6144,6145,6145,6145,6145,6145,6145,
+  6145,6145,6145,6145,6145,6145,6145,6145,
+  6145,6145,6145,6145,6145,6145,6145,6145,
+  6145,6144,4097,2048,6145,2049,2048,6145,
+  2049,6145,6145,6145,6145,6145,6145,6145,
+  6145,6145,6145,6145,6145,6145,6145,6145,
+  6145,6145,6145,6145,6145,4097,6145,6145,
+  4097,26214,26214,26214,26214,26214,26214,1749]
+
+def rowActive (row : Fin 1024) : Prop :=
+  ((activeMasks.getD (row.val / 16) 0).testBit (row.val % 16)) = true
+
+instance rowActive_decidable : DecidablePred rowActive := fun _ => inferInstance
+
+/-- Public link types from the selected generated table. Indices 24..63
+are the twenty append-left/right pairs; indices 64..135 are the 24 private
+pair/lane/forest triples with constant weight one. -/
+def selectedKind (index : Fin 136) : WeightKind :=
+  if index.val = 3 ∨ index.val = 4 ∨ index.val = 12 ∨
+      index.val = 20 ∨ index.val = 21 then .transfer
+  else if index.val = 22 then .withdrawal
+  else if 24 ≤ index.val ∧ index.val < 64 then
+    if index.val % 2 = 0 then .appendLeft ((index.val - 24) / 2)
+    else .appendRight ((index.val - 24) / 2)
+  else .one
+
+def selectedTag (index : Fin 136) : Nat := 1124073472 + index.val
+
+theorem selectedTag_injective : Function.Injective selectedTag := by
+  intro i j same
+  apply Fin.ext
+  exact Nat.add_left_cancel same
+
+variable {K : Type*} [Field K]
+
+def selectedWeight (variant : Variant) (appendIndex : Nat) (index : Fin 136) : K :=
+  publicWeight variant appendIndex (selectedKind index)
+
+theorem selectedWeight_binary (variant : Variant) (appendIndex : Nat)
+    (index : Fin 136) :
+    selectedWeight (K := K) variant appendIndex index = 0 ∨
+      selectedWeight (K := K) variant appendIndex index = 1 :=
+  publicWeight_binary variant appendIndex (selectedKind index)
+
+/-- On a Boolean row the source's selector mask is a public zero/one.
+The separate selector-expansion proof supplies the off-domain-to-Boolean
+lookup interface; no arbitrary field selector is assumed Boolean here. -/
+def selectedBooleanResidual (rows : Fin 1024 → Row K)
+    (helper : Fin 1024 → K) (chi : K) (row : Fin 1024) : K :=
+  (if rowActive row then 1 else 0) * sourceResidual (rows row) (helper row) chi
+
+theorem selectedBooleanResidual_eq_gated (rows : Fin 1024 → Row K)
+    (helper : Fin 1024 → K) (chi : K) (row : Fin 1024) :
+    selectedBooleanResidual rows helper chi row =
+      gatedResidual rowActive rows helper chi row := by
+  by_cases active : rowActive row <;>
+    simp only [selectedBooleanResidual, gatedResidual, active, if_true, if_false,
+      one_mul, zero_mul]
+
+/-- The exact selected mask specialization of the whole-table balance
+theorem. Poles of zero-weight slots remain in `noPole`; the inactive sum
+is the independently carried helper boundary, not an assumed consequence
+of the old unshifted ordinary aggregate. -/
+theorem selected_active_balance_zero
+    (rows : Fin 1024 → Row K) (helper : Fin 1024 → K) (chi : K)
+    (localZero : ∀ row, selectedBooleanResidual rows helper chi row = 0)
+    (totalZero : (∑ row, helper row) = 0)
+    (inactiveZero : (∑ row, inactiveHelper rowActive helper row) = 0)
+    (noPole : ∀ row, rowActive row → NoSlotPole (rows row) chi) :
+    activeBalance rowActive rows chi = 0 := by
+  apply active_balance_zero_of_rows rowActive rows helper chi
+  · intro row
+    rw [← selectedBooleanResidual_eq_gated]
+    exact localZero row
+  · exact totalZero
+  · exact inactiveZero
+  · exact noPole
+
+theorem selected_whole_balance_zero
+    (rows : Fin 1024 → Row K) (helper : Fin 1024 → K) (chi : K)
+    (localZero : ∀ row, selectedBooleanResidual rows helper chi row = 0)
+    (totalZero : (∑ row, helper row) = 0)
+    (inactiveZero : (∑ row, inactiveHelper rowActive helper row) = 0)
+    (noPole : ∀ row, rowActive row → NoSlotPole (rows row) chi)
+    (inactiveWeights : ∀ row, ¬rowActive row →
+      (∀ slot, (rows row).producerWeight slot = 0) ∧
+      ∀ slot, (rows row).consumerWeight slot = 0) :
+    (∑ row, rationalContribution (rows row) chi) = 0 := by
+  apply whole_balance_zero_of_rows rowActive rows helper chi
+  · intro row
+    rw [← selectedBooleanResidual_eq_gated]
+    exact localZero row
+  · exact totalZero
+  · exact inactiveZero
+  · exact noPole
+  · exact inactiveWeights
+
+#print axioms selectedTag_injective
+#print axioms selectedWeight_binary
+#print axioms selectedBooleanResidual_eq_gated
+#print axioms selected_active_balance_zero
+#print axioms selected_whole_balance_zero
+end AspisV8.SelectedWeightedCopyRows

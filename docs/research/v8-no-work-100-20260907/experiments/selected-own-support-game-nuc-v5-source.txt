@@ -1,0 +1,167 @@
+import SelectedOwnSymbol
+import TupleQueryTransport
+import InsufficientOwnSupportFamily
+import SelectedLinearCover
+
+/-! Actual selected covered/image-valid quotient with insufficient tuple
+own support. The adaptive quotient is eliminated by TupleQueryTransport,
+not frozen before alpha. This is a joint geometric query event, not a
+complete scalar verifier, authentication, or Fiat--Shamir theorem. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+namespace AspisV8.SelectedOwnSupportGame
+open Polynomial Finset
+open AspisV5ComponentCQM31TowerExact AspisV5ComponentCConcreteFoldLinearity
+open AspisK1.V7Tag73CanonicalOneFoldSchedule
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.OODInterpolant AspisV8.GammaComponentGame
+open AspisV8.SelectedQuotientOriginal AspisV8.QuotientFamilySelected
+open AspisV8.SelectedReceivedOracle AspisV8.TupleQueryTransport
+open AspisV8.InsufficientOwnSupport AspisV8.InsufficientOwnSupportFamily
+open AspisK1.V7ExactCorrelatedAgreementFactors
+noncomputable section
+abbrev K := QM31Exact
+local instance : NeZero (2 : K) := SelectedReceivedOracle.twoNonzero
+local instance : Fintype (Fin 262144) := EarlyC1Specialization.explicit_instance
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+attribute [local irreducible] SelectedOwnSymbol.badGamma SelectedOwnSymbol.common
+  InsufficientOwnSupport.totalCount
+
+abbrev Tuple := Fin 29 → Fin 1024 → K
+
+def Event (c1 : C1Received) (c2 : C2Received) (data : Data (K := K))
+    (p : Tuple) (S : Finset (Fin 262144)) (gamma alpha : K) : Prop :=
+  (SelectedOwnSymbol.own c1 c2 p).card < 38228 ∧
+    ∃ Q : Fin 1024 → K,
+      Q ∈ literalFamily (SelectedComponentGame.received c1 c2 data gamma) ∧
+      (Q 1023=0 ∧ (atGamma data gamma).b*Q 1022-(atGamma data gamma).c*Q 1021=0) ∧
+      (atGamma data gamma).original Q=ClaimTransport.batch gamma p ∧
+      ∀ i ∈ S, Legal data i ∧
+        exactFinalLinear (coefficientFoldLayer 256 alpha Q) i=
+          circleFoldLayer 262144 alpha (canonicalOneFoldSchedule 0).circleInv2x
+            (canonicalOneFoldSchedule 0).circleInv2y
+            (SelectedComponentGame.received c1 c2 data gamma) i
+
+/-- Actual finals can be selected after alpha. The displayed equality is
+the represented-final branch, not an assumption that every final has one. -/
+theorem of_actual_final (c1 : C1Received) (c2 : C2Received) (data : Data (K := K))
+    (p : Tuple) (S : Finset (Fin 262144)) (gamma alpha : K) (Q : Fin 1024 → K)
+    (small : (SelectedOwnSymbol.own c1 c2 p).card < 38228)
+    (member : Q ∈ literalFamily (SelectedComponentGame.received c1 c2 data gamma))
+    (image : Q 1023=0 ∧ (atGamma data gamma).b*Q 1022-(atGamma data gamma).c*Q 1021=0)
+    (represented : (atGamma data gamma).original Q=ClaimTransport.batch gamma p)
+    (final : Fin 256 → K) (identified : final=coefficientFoldLayer 256 alpha Q)
+    (queries : ∀ i ∈ S, Legal data i ∧ exactFinalLinear final i=
+      circleFoldLayer 262144 alpha (canonicalOneFoldSchedule 0).circleInv2x
+        (canonicalOneFoldSchedule 0).circleInv2y
+        (SelectedComponentGame.received c1 c2 data gamma) i) :
+    Event c1 c2 data p S gamma alpha := by
+  subst final
+  exact ⟨small,Q,member,image,represented,queries⟩
+
+theorem event_pointwise (c1 : C1Received) (c2 : C2Received) (data : Data (K := K))
+    (checked : data.Checked) (p : Tuple) (S : Finset (Fin 262144)) (gamma alpha : K)
+    (event : Event c1 c2 data p S gamma alpha) :
+    ∀ i ∈ S, (FixedTargetQuerySupport.fibreFold exactCircleX exactCircleY
+      (denominators data) (errors c1 c2 p) i gamma).eval alpha=0 := by
+  obtain ⟨small,Q,member,image,represented,queries⟩ := event
+  intro i inside
+  have transported := fold_zero_iff c1 c2 p data checked gamma alpha Q image represented
+    (coefficientFoldLayer 256 alpha Q) rfl i (queries i inside).1
+  exact transported.mp (queries i inside).2
+
+theorem event_poles (c1 : C1Received) (c2 : C2Received) (data : Data (K := K))
+    (p : Tuple) (S : Finset (Fin 262144)) (gamma alpha : K)
+    (event : Event c1 c2 data p S gamma alpha) :
+    ∀ i ∈ S, ∀ j, denominators data i j ≠ 0 := by
+  obtain ⟨small,Q,member,image,represented,queries⟩ := event
+  exact fun i inside => (queries i inside).1
+
+theorem event_exception (c1 : C1Received) (c2 : C2Received) (data : Data (K := K))
+    (checked : data.Checked) (G : Finset K) (p : Tuple) (S : Finset (Fin 262144))
+    (gamma alpha : K) (inside : gamma ∈ G) (event : Event c1 c2 data p S gamma alpha) :
+    gamma ∈ SelectedOwnSymbol.badGamma c1 c2 p G := by
+  obtain ⟨small,Q,member,image,represented,queries⟩ := event
+  exact SelectedOwnSymbol.covered_forces_exception c1 c2 p data checked G gamma inside Q
+    image member represented small
+
+def badFamily (c1 : C1Received) (c2 : C2Received) (family : Finset Tuple) : Finset Tuple :=
+  family.filter fun p => (SelectedOwnSymbol.own c1 c2 p).card < 38228
+
+def actual (c1 : C1Received) (c2 : C2Received) (data : Data (K := K)) (family : Finset Tuple)
+    (S : Finset (Fin 262144)) (gamma alpha : K) : Prop :=
+  ∃ p ∈ family, Event c1 c2 data p S gamma alpha
+
+theorem capture (c1 : C1Received) (c2 : C2Received) (data : Data (K := K)) (family : Finset Tuple)
+    (S : Finset (Fin 262144)) (gamma alpha : K)
+    (hit : actual c1 c2 data family S gamma alpha) :
+    ∃ p ∈ badFamily c1 c2 family, Event c1 c2 data p S gamma alpha := by
+  obtain ⟨p,member,event⟩ := hit
+  exact ⟨p,Finset.mem_filter.mpr ⟨member,event.1⟩,event⟩
+
+/-- All pointwise, degree, nonzero-coordinate, pole and gamma-charge inputs
+are derived for the selected source formulas. No placeholder equalities
+or assumed arbitrary-oracle polynomiality enter this endpoint. -/
+theorem selected_count (c1 : C1Received) (c2 : C2Received) (data : Data (K := K))
+    (checked : data.Checked) (family : Finset Tuple) (size : family.card ≤ 111)
+    (q : Nat) (G A : Finset K) (gammaSize : 28 ≤ G.card) (alphaSize : 3 ≤ A.card) :
+    totalCount (Finset.univ : Finset (Fin 262144)) q G A (actual c1 c2 data family) ≤
+      111*((9556).choose q*(29360128*A.card)+
+        (262144).choose q*(28*A.card+(G.card-28)*3)) := by
+  have fine := family_joint_count (badFamily c1 c2 family)
+    (Finset.univ : Finset (Fin 262144)) q G A
+    (SelectedOwnSymbol.common c1 c2) (fun p => SelectedOwnSymbol.badGamma c1 c2 p G)
+    exactCircleX exactCircleY (denominators data) (errors c1 c2)
+    (actual c1 c2 data family) (Event c1 c2 data) 28 gammaSize alphaSize
+    four_nonzero (fun i _ => ⟨x_nonzero i,y_nonzero i⟩)
+    (fun _ _ => Finset.subset_univ _)
+    (fun p _ i _ j => errors_degree c1 c2 p i j)
+    (fun p _ i _ => SelectedOwnSymbol.common_iff c1 c2 p i)
+    (fun p _ S _ g _ a _ event => event_pointwise c1 c2 data checked p S g a event)
+    (fun p _ S _ g _ a _ event => event_poles c1 c2 data p S g a event)
+    (fun p _ S _ _ g inside a _ event => event_exception c1 c2 data checked G p S g a inside event)
+    (fun S _ g _ a _ event => capture c1 c2 data family S g a event)
+  have coarse := coarsen_family_count (badFamily c1 c2 family)
+    (Finset.univ : Finset (Fin 262144)) q G A
+    (SelectedOwnSymbol.common c1 c2) (fun p => SelectedOwnSymbol.badGamma c1 c2 p G)
+    (actual c1 c2 data family) 28 9556 29360128 111
+    ((Finset.card_filter_le _ _).trans size)
+    (fun p member => SelectedOwnSymbol.common_cap c1 c2 p (Finset.mem_filter.mp member).2)
+    (fun p _ => SelectedOwnSymbol.badGamma_coarse c1 c2 p G) fine
+  have domainSize : (Finset.univ : Finset (Fin 262144)).card=262144 := by
+    rw [Finset.card_univ]
+    exact (@Fintype.card_congr (Fin 262144) (Fin 262144)
+      EarlyC1Specialization.explicit_instance (Fin.fintype 262144)
+      (Equiv.refl (Fin 262144))).trans (Fintype.card_fin 262144)
+  rw [domainSize] at coarse
+  exact coarse
+
+/-- Instantiate the actual pre-OOD message family constructed from the
+fixed received C1/C2 words. Its cardinality is derived, not supplied by
+the caller. No classification of all accepted executions is assumed. -/
+theorem literal_family_count (c1 : C1Received) (c2 : C2Received) (data : Data (K := K))
+    (checked : data.Checked) (q : Nat) (G A : Finset K)
+    (gammaSize : 28 ≤ G.card) (alphaSize : 3 ≤ A.card) :
+    totalCount (Finset.univ : Finset (Fin 262144)) q G A
+      (actual c1 c2 data (LinearMessageFamily.family (SelectedFactorCoherence.parent c1 c2))) ≤
+      111*((9556).choose q*(29360128*A.card)+
+        (262144).choose q*(28*A.card+(G.card-28)*3)) := by
+  have nonzero : SelectedFactorCoherence.parent c1 c2 ≠ 0 :=
+    curveTrivariatePolynomial_ne_zero _ (SelectedOODGate.fixedInterpolant_nonzero c1 c2)
+  exact selected_count c1 c2 data checked
+    (LinearMessageFamily.family (SelectedFactorCoherence.parent c1 c2))
+    ((LinearMessageFamily.family_card _ nonzero).trans
+      (SelectedLinearCover.parent_y_degree c1 c2)) q G A gammaSize alphaSize
+
+#print axioms of_actual_final
+#print axioms event_pointwise
+#print axioms event_poles
+#print axioms event_exception
+#print axioms capture
+#print axioms selected_count
+#print axioms literal_family_count
+end
+end AspisV8.SelectedOwnSupportGame

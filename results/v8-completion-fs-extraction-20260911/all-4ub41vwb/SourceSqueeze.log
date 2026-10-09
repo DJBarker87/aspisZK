@@ -1,0 +1,30 @@
+theorem AspisV8Completion.SourceSqueeze.realised_execution : ∀ (hash : List UInt8 → Block) (s : Block),
+  execute (program s) (realisedCoins hash s) =
+    [(squeezeInput s, (functional hash s).fst), (advanceInput s, (functional hash s).snd)] :=
+fun hash s => Eq.refl (execute (program s) (realisedCoins hash s))
+theorem AspisV8Completion.SourceSqueeze.requests_fixed : ∀ (s : Block) (coins : Fin 2 → Block),
+  List.map Prod.fst (execute (program s) coins) = [squeezeInput s, advanceInput s] :=
+fun s coins => Eq.refl (List.map Prod.fst (execute (program s) coins))
+'AspisV8Completion.SourceSqueeze.realised_execution' depends on axioms: [propext]
+'AspisV8Completion.SourceSqueeze.requests_fixed' depends on axioms: [propext]
+'AspisV8Completion.SourceSqueeze.answers_preserved' depends on axioms: [propext]
+'AspisV8Completion.SourceSqueeze.input_domains_distinct' depends on axioms: [propext]
+'AspisV8Completion.SourceSqueeze.restore_same_oracle' depends on axioms: [propext]
+        0.37 real         0.16 user         0.19 sys
+           673808384  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               46991  page reclaims
+                  37  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   4  voluntary context switches
+                 471  involuntary context switches
+           321944190  instructions retired
+           115022358  cycles elapsed
+            11256528  peak memory footprint

@@ -1,0 +1,31 @@
+{
+  "target": "SameBodySelectedSemanticSource.lean",
+  "status": "PASS",
+  "exit_code": 0,
+  "toolchain": {
+    "lean": "4.32.0",
+    "commit": "8c9756b28d64dab099da31a4c09229a9e6a2ef35"
+  },
+  "runner": "NUC over Tailscale, systemd user scope",
+  "limits": {
+    "lean_memory_mib": 8192,
+    "memory_high_gib": 9,
+    "memory_max_gib": 10,
+    "memory_swap_max": 0,
+    "runtime_max_seconds": 600
+  },
+  "measurement": {
+    "wall_seconds": 3.20,
+    "peak_rss_kib": 6576248,
+    "swap_count": 0
+  },
+  "source_sha256": "435dcc3a00a9bcaee310b37656060a8486b67cebc6030c8b72354ef1efb18865",
+  "artifact_sha256": "c5a9f4341a80bb75d48e62f5dfb4392f25f3f45cdd3a20a73e39fbb54288b0dd",
+  "compile_log_sha256": "dd885819ef341c460a4406aa1f2b382f6c8f0b2cc6388f66ff35c30999ca8fa7",
+  "axioms": ["propext", "Classical.choice", "Quot.sound"],
+  "notes": [
+    "The new bridge is kernel-checked but still consumes an explicit callbackExact source-refinement equality.",
+    "An import-only preflight established that the combined dependency closure exceeds Lean's 6144 MiB allocator threshold; 8192 MiB was then used under the 10 GiB cgroup cap.",
+    "No package-wide replay was run."
+  ]
+}

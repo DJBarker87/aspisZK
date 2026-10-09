@@ -1,0 +1,231 @@
+import SingularOODCoefficient
+import MonicFactorOOD
+
+/-! A fixed pre-OOD product over the actual higher prime-factor MULTISET.
+Outside its pair-root event, one common actual OOD row supplies a nonzero
+derivative product for all retained higher factors. Both degree budgets
+are additive, with multiplicities; no factor-count multiplier is charged.
+Source-review draft only, not a compilation claim.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.SingularOODFamily
+open Polynomial
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementSmooth
+open AspisK1.V7ExactCorrelatedAgreementFactorBudgets
+open AspisV8.FactorCoherence AspisV8.FactorIdentityCover
+open AspisV8.FactorDerivativeWeight AspisV8.SingularOODCoefficient
+open AspisV5ComponentCQM31TowerExact
+noncomputable section
+variable {K : Type*} [Field K]
+local instance decision (P : Prop) : Decidable P := Classical.propDecidable P
+
+private theorem product_degree_le {I : Type*} (s : Multiset I)
+    (polynomial : I → K[X]) (weight : I → Nat)
+    (bounds : ∀ i ∈ s, (polynomial i).natDegree ≤ weight i) :
+    (s.map polynomial).prod.natDegree ≤ (s.map weight).sum := by
+  induction s using Multiset.induction_on with
+  | empty => simp
+  | @cons i s ih =>
+      simp only [Multiset.map_cons, Multiset.prod_cons, Multiset.sum_cons]
+      exact Polynomial.natDegree_mul_le.trans (Nat.add_le_add
+        (bounds i (Multiset.mem_cons_self i s))
+        (ih (fun j member => bounds j (Multiset.mem_cons_of_mem member))))
+
+private theorem filtered_weight_le {I : Type*} (s : Multiset I)
+    (predicate : I → Prop) (weight : I → Nat) :
+    ((s.filter predicate).map weight).sum ≤ (s.map weight).sum := by
+  induction s using Multiset.induction_on with
+  | empty => simp
+  | @cons i s ih =>
+      by_cases h : predicate i
+      · simpa only [Multiset.filter_cons_of_pos s h, Multiset.map_cons, Multiset.sum_cons]
+          using Nat.add_le_add_left ih (weight i)
+      · simpa only [Multiset.filter_cons_of_neg s h, Multiset.map_cons, Multiset.sum_cons]
+          using ih.trans (Nat.le_add_left _ _)
+
+private theorem sum_scaled {I : Type*} (s : Multiset I) (weight : I → Nat) (c : Nat) :
+    (s.map (fun i => c * weight i)).sum = c * (s.map weight).sum := by
+  induction s using Multiset.induction_on with
+  | empty => simp
+  | @cons i s ih =>
+      simp only [Multiset.map_cons, Multiset.sum_cons, ih, Nat.mul_add]
+
+/-- Empty products are covered too: their degree is zero, and both natural
+sums truncate to zero. For a nonempty multiset, remove at least one c. -/
+private theorem shaved_sum_le {I : Type*} (s : Multiset I) (weight : I → Nat)
+    (c : Nat) (lower : ∀ i ∈ s, c ≤ weight i) :
+    (s.map (fun i => weight i-c)).sum ≤ (s.map weight).sum-c := by
+  induction s using Multiset.induction_on with
+  | empty => simp
+  | @cons i s _ =>
+      have first := lower i (Multiset.mem_cons_self i s)
+      have rest : (s.map (fun j => weight j-c)).sum ≤ (s.map weight).sum :=
+        Multiset.sum_map_le_sum_map _ _ (fun _ _ => Nat.sub_le _ _)
+      simp only [Multiset.map_cons, Multiset.sum_cons]
+      omega
+
+private theorem product_eval_zero_of_member {I : Type*} (s : Multiset I)
+    (polynomial : I → K[X]) (i : I) (member : i ∈ s) (x : K)
+    (zero : (polynomial i).eval x=0) : ((s.map polynomial).prod).eval x=0 := by
+  obtain ⟨rest, product⟩ := (Multiset.dvd_prod
+    (Multiset.mem_map.mpr ⟨i, member, rfl⟩) : polynomial i ∣ (s.map polynomial).prod)
+  rw [product, Polynomial.eval_mul, zero, zero_mul]
+
+/-- This filter depends only on the parent, not on either OOD point. No
+toFinset conversion is used in either degree sum or polynomial product. -/
+def higherFactors (P : TrivariatePolynomial K) : Multiset (TrivariatePolynomial K) :=
+  (curvePrimeFactors P).filter fun F => 3 ≤ F.natDegree
+
+def parentObstruction (P : TrivariatePolynomial K) : K[X] :=
+  ((higherFactors P).map obstruction).prod
+
+/-- Existential union over all later factor choices; no disjointness or
+fixed candidate is imposed. It bounds a larger event than actual support. -/
+def singularGammas (P : TrivariatePolynomial K) (points : Fin 2 → K)
+    (answers : Fin 2 → K[X]) (Gamma : Finset K) : Finset K :=
+  Gamma.filter fun gamma => ∃ F ∈ higherFactors P, Retained points answers F ∧
+    ∀ r, (derivativeCurve F (points r) (answers r)).eval gamma=0
+
+theorem positive_weight (c : Nat) (F : TrivariatePolynomial K)
+    (positive : 0 < F.natDegree) : c ≤ trivariateYZWeight c F := by
+  have nonzero : F ≠ 0 := by
+    intro zero
+    simp only [zero, Polynomial.natDegree_zero] at positive
+    omega
+  have leading : F.natDegree ∈ F.support := Polynomial.mem_support_iff.mpr
+    (Polynomial.leadingCoeff_ne_zero.mpr nonzero)
+  have bound := coeff_weight_le_localBivariateWeight c F F.natDegree leading
+  have lower : c ≤ F.natDegree*c := by
+    calc
+      c = 1*c := (Nat.one_mul c).symm
+      _ ≤ F.natDegree*c := Nat.mul_le_mul_right c positive
+  exact lower.trans ((Nat.le_add_left _ _).trans bound)
+
+theorem parent_obstruction_nonzero (P : TrivariatePolynomial K) (nonzero : P ≠ 0)
+    (derivatives : ∀ F ∈ higherFactors P, F.derivative ≠ 0) :
+    parentObstruction P ≠ 0 := by
+  apply Multiset.prod_ne_zero
+  intro member
+  obtain ⟨F, member, zero⟩ := Multiset.mem_map.mp member
+  obtain ⟨factor, higher⟩ := Multiset.mem_filter.mp member
+  exact obstruction_nonzero P F nonzero factor (by omega)
+    (derivatives F (Multiset.mem_filter.mpr ⟨factor, higher⟩)) zero
+
+theorem parent_obstruction_degree (P : TrivariatePolynomial K) (nonzero : P ≠ 0) :
+    (parentObstruction P).natDegree ≤
+      (2*P.natDegree-1)*(trivariateXOuterEquiv K P).natDegree := by
+  let xWeight := fun F : TrivariatePolynomial K => (trivariateXOuterEquiv K F).natDegree
+  have bounds : ∀ F ∈ higherFactors P,
+      (obstruction F).natDegree ≤ (2*P.natDegree-1)*xWeight F := by
+    intro F member
+    obtain ⟨factor, higher⟩ := Multiset.mem_filter.mp member
+    have degree := curvePrimeFactor_natDegree_le P F nonzero factor
+    exact (obstruction_degree F (by omega)).trans
+      (Nat.mul_le_mul_right (xWeight F) (by omega))
+  have productBound := product_degree_le (higherFactors P) obstruction
+    (fun F => (2*P.natDegree-1)*xWeight F) bounds
+  rw [sum_scaled] at productBound
+  have filtered := filtered_weight_le (curvePrimeFactors P)
+    (fun F => 3 ≤ F.natDegree) xWeight
+  have total := filtered.trans (MonicFactorOOD.all_factor_x_degrees_le P nonzero)
+  exact productBound.trans (Nat.mul_le_mul_left _ total)
+
+/-- A single common row works for every retained higher factor. The gamma
+polynomial is formed AFTER OOD, but BEFORE gamma and all later choices.
+Its nonzeroness is derived, including specialization degree drops. -/
+theorem retained_derivative_cover (c : Nat) (P : TrivariatePolynomial K)
+    (nonzero : P ≠ 0) (points : Fin 2 → K) (answers : Fin 2 → K[X])
+    (degrees : ∀ r, (answers r).natDegree ≤ c)
+    (outside : ¬∀ r, (parentObstruction P).eval (points r)=0) :
+    ∃ Z : K[X], Z ≠ 0 ∧ Z.natDegree ≤ trivariateYZWeight c P-c ∧
+      ∀ gamma, (∃ F ∈ higherFactors P, Retained points answers F ∧
+        ∀ r, (derivativeCurve F (points r) (answers r)).eval gamma=0) → Z.eval gamma=0 := by
+  obtain ⟨r, row⟩ : ∃ r, (parentObstruction P).eval (points r) ≠ 0 := by
+    simpa only [not_forall] using outside
+  let retained := (higherFactors P).filter (Retained points answers)
+  let delta := fun F => derivativeCurve F (points r) (answers r)
+  have regular : ∀ F ∈ retained, delta F ≠ 0 := by
+    intro F member
+    obtain ⟨higher, identities⟩ := Multiset.mem_filter.mp member
+    apply derivative_nonzero_of_obstruction F identities.1 (points r) (answers r)
+      (identities.2 r)
+    intro root
+    exact row (product_eval_zero_of_member (higherFactors P) obstruction F higher
+      (points r) root)
+  let Z := (retained.map delta).prod
+  have zn : Z ≠ 0 := by
+    apply Multiset.prod_ne_zero
+    intro member
+    obtain ⟨F, member, zero⟩ := Multiset.mem_map.mp member
+    exact regular F member zero
+  have zd : Z.natDegree ≤ trivariateYZWeight c P-c := by
+    have individual : ∀ F ∈ retained, (delta F).natDegree ≤ trivariateYZWeight c F-c :=
+      fun F _ => derivative_curve_degree c F (points r) (answers r) (degrees r)
+    have productBound := product_degree_le retained delta
+      (fun F => trivariateYZWeight c F-c) individual
+    have shaved := shaved_sum_le retained (trivariateYZWeight c) c
+      (fun F member => positive_weight c F (Multiset.mem_filter.mp member).2.1)
+    have retainedBound := filtered_weight_le (higherFactors P)
+      (Retained points answers) (trivariateYZWeight c)
+    have higherBound := filtered_weight_le (curvePrimeFactors P)
+      (fun F => 3 ≤ F.natDegree) (trivariateYZWeight c)
+    have total := retainedBound.trans (higherBound.trans (all_factor_weights_le c P nonzero))
+    exact (productBound.trans shaved).trans (Nat.sub_le_sub_right total c)
+  refine ⟨Z, zn, zd, ?_⟩
+  intro gamma witness
+  obtain ⟨F, member, identities, singular⟩ := witness
+  exact product_eval_zero_of_member retained delta F
+    (Multiset.mem_filter.mpr ⟨member, identities⟩) gamma (singular r)
+
+theorem singular_count_or (c : Nat) (P : TrivariatePolynomial K)
+    (nonzero : P ≠ 0) (points : Fin 2 → K) (answers : Fin 2 → K[X])
+    (Gamma : Finset K) (degrees : ∀ r, (answers r).natDegree ≤ c) :
+    (∀ r, (parentObstruction P).eval (points r)=0) ∨
+      (singularGammas P points answers Gamma).card ≤ trivariateYZWeight c P-c := by
+  by_cases roots : ∀ r, (parentObstruction P).eval (points r)=0
+  · exact Or.inl roots
+  · right
+    obtain ⟨Z, zn, zd, covers⟩ := retained_derivative_cover c P nonzero
+      points answers degrees roots
+    apply (Polynomial.card_le_degree_of_subset_roots (p := Z) ?_).trans zd
+    intro gamma member
+    exact (Polynomial.mem_roots zn).mpr (covers gamma (Finset.mem_filter.mp member).2)
+
+/-- Literal V7 primes supply the derivative premise through the checked
+characteristic guard. No primeness/squarefreeness of the parent is assumed. -/
+theorem exactV7_parent_obstruction_nonzero (P : TrivariatePolynomial QM31Exact)
+    (nonzero : P ≠ 0) (parentDegree : P.natDegree < 113) :
+    parentObstruction P ≠ 0 := by
+  apply parent_obstruction_nonzero P nonzero
+  intro F member
+  obtain ⟨factor, higher⟩ := Multiset.mem_filter.mp member
+  exact exactV7_curvePrimeFactor_derivative_ne_zero P F nonzero factor (by omega) parentDegree
+
+theorem exactV7_fixed_cover (P : TrivariatePolynomial QM31Exact)
+    (nonzero : P ≠ 0) (parentDegree : P.natDegree < 113) :
+    parentObstruction P ≠ 0 ∧
+      (parentObstruction P).natDegree ≤
+        (2*P.natDegree-1)*(trivariateXOuterEquiv QM31Exact P).natDegree ∧
+      ∀ (points : Fin 2 → QM31Exact) (answers : Fin 2 → QM31Exact[X])
+        (Gamma : Finset QM31Exact), (∀ r, (answers r).natDegree ≤ 28) →
+        (∀ r, (parentObstruction P).eval (points r)=0) ∨
+          (singularGammas P points answers Gamma).card ≤ trivariateYZWeight 28 P-28 := by
+  refine ⟨exactV7_parent_obstruction_nonzero P nonzero parentDegree,
+    parent_obstruction_degree P nonzero, ?_⟩
+  intro points answers Gamma degrees
+  exact singular_count_or 28 P nonzero points answers Gamma degrees
+
+#print axioms positive_weight
+#print axioms parent_obstruction_nonzero
+#print axioms parent_obstruction_degree
+#print axioms retained_derivative_cover
+#print axioms singular_count_or
+#print axioms exactV7_parent_obstruction_nonzero
+#print axioms exactV7_fixed_cover
+end
+end AspisV8.SingularOODFamily

@@ -1,0 +1,132 @@
+import PolynomialParityFactorization
+import Mathlib.RingTheory.Polynomial.GaussLemma
+import Mathlib.RingTheory.Polynomial.UniqueFactorization
+import Mathlib.Algebra.Polynomial.Bivariate
+
+/-! Squarefreeness survives the actual polynomial coefficient fraction
+map. Constant-in-X factors become units; positive-degree factors stay
+irreducible and distinct by primitive Gauss divisibility. The final
+witnesses are literal K[Z][X] polynomials, with exact X/Z degree sums. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.PolynomialParityLocalization
+open Polynomial UniqueFactorizationMonoid
+noncomputable section
+
+section FractionMap
+variable {B L : Type*} [CommRing B] [IsDomain B] [IsGCDMonoid B]
+  [Field L] [Algebra B L] [IsFractionRing B L]
+
+theorem constant_map_isUnit (F : B[X]) (nonzero : F ≠ 0)
+    (degree : F.natDegree = 0) : IsUnit (F.map (algebraMap B L)) := by
+  have coefficient : F.coeff 0 ≠ 0 := by
+    intro zero
+    apply nonzero
+    rw [Polynomial.eq_C_of_natDegree_eq_zero degree, zero, Polynomial.C_0]
+  have mapped : algebraMap B L (F.coeff 0) ≠ 0 := by
+    intro zero
+    apply coefficient
+    exact (IsFractionRing.injective B L)
+      (zero.trans (map_zero (algebraMap B L)).symm)
+  rw [Polynomial.eq_C_of_natDegree_eq_zero degree, Polynomial.map_C]
+  exact Polynomial.isUnit_C.mpr (isUnit_iff_ne_zero.mpr mapped)
+
+theorem positive_irreducible_map (F : B[X]) (irreducible : Irreducible F)
+    (positive : F.natDegree ≠ 0) : Irreducible (F.map (algebraMap B L)) :=
+  ((irreducible.isPrimitive positive).irreducible_iff_irreducible_map_fraction_map).mp
+    irreducible
+
+variable [NormalizationMonoid B[X]] [UniqueFactorizationMonoid B[X]]
+
+/-- Distinct normalized factors cannot coalesce after the coefficient
+fraction map. Constant factors are handled as units, not called primes. -/
+theorem distinct_factors_map_relPrime (D F G : B[X])
+    (left : F ∈ normalizedFactors D) (right : G ∈ normalizedFactors D)
+    (different : F ≠ G) :
+    IsRelPrime (F.map (algebraMap B L)) (G.map (algebraMap B L)) := by
+  have irreducible := irreducible_of_normalized_factor F left
+  by_cases constant : F.natDegree = 0
+  · exact (constant_map_isUnit (L := L) F irreducible.ne_zero constant).isRelPrime_left
+  · apply (positive_irreducible_map (L := L) F irreducible constant).isRelPrime_iff_not_dvd.mpr
+    intro divides
+    have original : F ∣ G :=
+      (irreducible.isPrimitive constant).dvd_of_fraction_map_dvd_fraction_map divides
+    exact different (normalizedFactors_eq_of_dvd D F left G right original)
+
+/-- This is specific to a fraction map, not an arbitrary specialization.
+No primitive/content hypothesis is imposed on the whole squarefree F. -/
+theorem squarefree_fraction_map (F : B[X]) (squarefree : Squarefree F) :
+    Squarefree (F.map (algebraMap B L)) := by
+  classical
+  let factors := normalizedFactors F
+  have nodup : factors.Nodup :=
+    (squarefree_iff_nodup_normalizedFactors squarefree.ne_zero).mp squarefree
+  have product : factors.prod = ∏ P ∈ factors.toFinset, P := by
+    rw [Finset.prod_multiset_count]
+    apply Finset.prod_congr rfl
+    intro P member
+    rw [Multiset.count_eq_one_of_mem nodup (Multiset.mem_toFinset.mp member), pow_one]
+  have mappedSquarefree : Squarefree (∏ P ∈ factors.toFinset, P.map (algebraMap B L)) := by
+    apply Finset.squarefree_prod_of_pairwise_isCoprime
+    · intro P hp Q hq different
+      exact distinct_factors_map_relPrime F P Q
+        (Multiset.mem_toFinset.mp hp) (Multiset.mem_toFinset.mp hq) different
+    · intro P hp
+      have irreducible := irreducible_of_normalized_factor P
+        (Multiset.mem_toFinset.mp hp)
+      by_cases constant : P.natDegree = 0
+      · exact (constant_map_isUnit (L := L) P irreducible.ne_zero constant).squarefree
+      · exact (positive_irreducible_map (L := L) P irreducible constant).squarefree
+  obtain ⟨unit, identity⟩ := prod_normalizedFactors squarefree.ne_zero
+  have mappedIdentity := congrArg (fun P : B[X] => P.map (algebraMap B L)) identity
+  change (factors.prod * (unit : B[X])).map (algebraMap B L) = _ at mappedIdentity
+  rw [Polynomial.map_mul, product, Polynomial.map_prod] at mappedIdentity
+  have mappedUnit : IsUnit ((unit : B[X]).map (algebraMap B L)) :=
+    unit.isUnit.map (Polynomial.mapRingHom (algebraMap B L))
+  rw [← mappedIdentity]
+  exact squarefree_mul_iff.mpr
+    ⟨mappedUnit.isRelPrime_right, mappedSquarefree, mappedUnit.squarefree⟩
+end FractionMap
+
+section Bivariate
+variable {K : Type*} [Field K]
+
+/-- Exact literal polynomial parity witnesses, localized squarefreeness,
+and both degree identities. Outer variable is X, inner variable is Z;
+the second identity uses the actual Bivariate.swap ring equivalence. -/
+theorem bivariate_parity (D : Polynomial K[X]) (nonzero : D ≠ 0) :
+    ∃ H R : Polynomial K[X], H ≠ 0 ∧ R ≠ 0 ∧ D = H^2*R ∧
+      Squarefree R ∧ Squarefree (R.map (algebraMap K[X] (FractionRing K[X]))) ∧
+      D.natDegree = 2*H.natDegree + R.natDegree ∧
+      (Polynomial.Bivariate.swap D).natDegree =
+        2*(Polynomial.Bivariate.swap H).natDegree + (Polynomial.Bivariate.swap R).natDegree := by
+  letI := Classical.arbitrary (NormalizedGCDMonoid (Polynomial K[X]))
+  obtain ⟨H, R, hn, rn, identity, squarefree⟩ :=
+    PolynomialParityFactorization.exists_squarefree_remainder D nonzero
+  refine ⟨H, R, hn, rn, identity, squarefree, squarefree_fraction_map R squarefree, ?_, ?_⟩
+  · rw [identity, Polynomial.natDegree_mul (pow_ne_zero 2 hn) rn,
+      Polynomial.natDegree_pow]
+  · have hs : Polynomial.Bivariate.swap H ≠ 0 := by
+      intro zero
+      apply hn
+      exact Polynomial.Bivariate.swap.injective
+        (zero.trans (map_zero Polynomial.Bivariate.swap).symm)
+    have rs : Polynomial.Bivariate.swap R ≠ 0 := by
+      intro zero
+      apply rn
+      exact Polynomial.Bivariate.swap.injective
+        (zero.trans (map_zero Polynomial.Bivariate.swap).symm)
+    rw [identity, map_mul, map_pow,
+      Polynomial.natDegree_mul (pow_ne_zero 2 hs) rs, Polynomial.natDegree_pow]
+end Bivariate
+
+#print axioms constant_map_isUnit
+#print axioms positive_irreducible_map
+#print axioms distinct_factors_map_relPrime
+#print axioms squarefree_fraction_map
+#print axioms bivariate_parity
+end
+end AspisV8.PolynomialParityLocalization

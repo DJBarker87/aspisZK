@@ -1,0 +1,169 @@
+import NestedCircleMass
+import RetryMassArithmetic
+
+/-! Sum exact ordered-pair masses over a fixed admissible finite set.
+The circle total-success inequality is derived from the ordinary success
+mass in [0,1]. Neither chronological tape routing nor ROM freshness is
+supplied by this finite-kernel composition. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 250000
+
+namespace AspisV8.RootSetPairMass
+noncomputable section
+local instance decision (p : Prop) : Decidable p := Classical.propDecidable p
+open Finset AspisV8.NestedCircleMass AspisV8.SecureCircleParameterDomain
+open AspisV5ComponentCQM31TowerExact AspisV8.JointImageGame
+
+namespace Arithmetic
+
+/-- Pure rational arithmetic; the denominator and rejected-domain size are
+symbolic. No independent total circle-success premise is needed. -/
+theorem circle_success (k a σ : ℚ) (hk : 0<k) (ha : 0≤a)
+    (hσ : 0≤σ) (hσOne : σ≤1) :
+    let u := σ/k
+    let r := a*u
+    let w := u*(1+r+r^2)
+    0≤w ∧ (k-a)*w≤1 := by
+  dsimp only
+  have hu : 0≤σ/k := div_nonneg hσ (le_of_lt hk)
+  have hr : 0≤a*(σ/k) := mul_nonneg ha hu
+  have hg : 0≤1+a*(σ/k)+(a*(σ/k))^2 := by positivity
+  refine ⟨mul_nonneg hu hg, ?_⟩
+  calc
+    (k-a)*(σ/k*(1+a*(σ/k)+(a*(σ/k))^2)) =
+        (σ-a*(σ/k))*(1+a*(σ/k)+(a*(σ/k))^2) := by
+      field_simp [ne_of_gt hk]
+    _ ≤ (1-a*(σ/k))*(1+a*(σ/k)+(a*(σ/k))^2) :=
+      mul_le_mul_of_nonneg_right (sub_le_sub_right hσOne _) hg
+    _ = 1-(a*(σ/k))^3 := by ring
+    _ ≤ 1 := by
+      have cube := pow_nonneg hr 3
+      linarith
+
+theorem pair_count {V : Type*} (S : Finset V) :
+    S.offDiag.card=S.card*(S.card-1) := by
+  rw [Finset.offDiag_card, Nat.mul_sub_left_distrib, Nat.mul_one]
+
+theorem cast_pair_count (m : Nat) :
+    ((m*(m-1) : Nat) : ℚ)=(m : ℚ)*((m : ℚ)-1) := by
+  by_cases zero : m=0
+  · subst m; norm_num
+  · rw [Nat.cast_mul, Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr zero), Nat.cast_one]
+
+/-- Symbolic power comparison, independent of the selected large prime. -/
+theorem domain_bounds (p : Nat) (hp : 2≤p) :
+    p^2≤p^4 ∧ 2≤p^4-p^2 := by
+  have square : 4≤p^2 := by
+    simpa using Nat.pow_le_pow_left hp 2
+  have identity : p^4-p^2=p^2*(p^2-1) := by
+    rw [Nat.mul_sub_left_distrib, Nat.mul_one, ← pow_add]
+  have lessSquare : 3≤p^2-1 := by omega
+  have product : 12≤p^2*(p^2-1) := Nat.mul_le_mul square lessSquare
+  have fourth : p^4=p^2*p^2 := by rw [← pow_add]
+  have leFourth : p^2≤p^4 := by
+    rw [fourth]
+    exact Nat.le_mul_of_pos_right _ (by omega)
+  exact ⟨leFourth, by rw [identity]; omega⟩
+
+theorem option_success_bounds {A V : Type*} [Fintype A] [Nonempty A]
+    (draw : A → Option V) :
+    0≤FiniteOptionMass.successMass draw ∧ FiniteOptionMass.successMass draw≤1 := by
+  constructor
+  · apply avg_nonneg
+    intro coin member
+    split_ifs <;> norm_num
+  · apply avg_le _ Finset.univ_nonempty
+    intro coin member
+    split_ifs <;> norm_num
+end Arithmetic
+
+def domainSize : Nat := P^4-P^2
+
+theorem domain_size_bounds : P^2≤P^4 ∧ 2≤domainSize :=
+  Arithmetic.domain_bounds P (by unfold P; omega)
+
+theorem circle_total_success (σ : ℚ) (hσ : 0≤σ) (hσOne : σ≤1) :
+    0≤circleAtomMass σ ∧ (domainSize : ℚ)*circleAtomMass σ≤1 := by
+  have kPositive : (0 : ℚ)<((P^4 : Nat) : ℚ) := by
+    exact_mod_cast pow_pos (show 0<P by unfold P; omega) 4
+  have bound := Arithmetic.circle_success ((P^4 : Nat) : ℚ) ((P^2 : Nat) : ℚ)
+    σ kPositive (Nat.cast_nonneg _) hσ hσOne
+  simpa only [circleAtomMass, circleRejectMass, ordinaryAtomMass, domainSize,
+    Nat.cast_sub domain_size_bounds.1] using bound
+
+variable {O H : Type*}
+
+/-- The fixed set is chosen before both point draws. Its off-diagonal
+contains ordered pairs, not unordered pairs or independently sampled labels. -/
+def targetMass (coins : Finset O) (draw : H → O → Option (QM31Exact × H))
+    (between : QM31Exact → H → H) (S : Finset QM31Exact) (h : H) : ℚ :=
+  ∑ pair ∈ S.offDiag,
+    NestedCircleMass.Generic.orderedPair coins draw Admissible between pair.1 pair.2 h
+
+theorem target_mass_eq (coins : Finset O) (draw : H → O → Option (QM31Exact × H))
+    (between : QM31Exact → H → H) (σ : ℚ)
+    (law : NestedCircleMass.Generic.Uniform coins draw (ordinaryAtomMass σ))
+    (S : Finset QM31Exact) (admissible : ∀ t∈S, Admissible t) (h : H) :
+    targetMass coins draw between S h =
+      (S.card : ℚ)*((S.card : ℚ)-1)*(circleAtomMass σ)^2*
+        (1+circleAtomMass σ+(circleAtomMass σ)^2) := by
+  unfold targetMass
+  have each : (∑ pair ∈ S.offDiag,
+      NestedCircleMass.Generic.orderedPair coins draw Admissible between pair.1 pair.2 h) =
+      ∑ _pair ∈ S.offDiag,
+        (circleAtomMass σ)^2*(1+circleAtomMass σ+(circleAtomMass σ)^2) := by
+    apply Finset.sum_congr rfl
+    intro pair member
+    obtain ⟨first,second,different⟩ := Finset.mem_offDiag.mp member
+    exact ordered_parameter_mass coins draw between σ law pair.1 pair.2
+      (admissible _ first) (admissible _ second) different h
+  rw [each, Finset.sum_const, nsmul_eq_mul, Arithmetic.pair_count,
+    Arithmetic.cast_pair_count]
+  ring
+
+/-- Abort-preserving without-replacement bound in the history-uniform
+kernel. The total circle-success inequality is proved above, not assumed. -/
+theorem target_mass_le (coins : Finset O) (draw : H → O → Option (QM31Exact × H))
+    (between : QM31Exact → H → H) (σ : ℚ) (hσ : 0≤σ) (hσOne : σ≤1)
+    (law : NestedCircleMass.Generic.Uniform coins draw (ordinaryAtomMass σ))
+    (S : Finset QM31Exact) (admissible : ∀ t∈S, Admissible t) (h : H) :
+    targetMass coins draw between S h ≤
+      (S.card : ℚ)*((S.card : ℚ)-1)/((domainSize : ℚ)*((domainSize : ℚ)-1)) := by
+  rw [target_mass_eq coins draw between σ law S admissible h]
+  by_cases empty : S.card=0
+  · simp only [empty, Nat.cast_zero, zero_mul, zero_div, le_refl]
+  by_cases singleton : S.card=1
+  · simp only [singleton, Nat.cast_one, sub_self, mul_zero, zero_mul, zero_div, le_refl]
+  have wBounds := circle_total_success σ hσ hσOne
+  exact RetryMassArithmetic.target_pair_mass_le _ _ _
+    (by exact_mod_cast domain_size_bounds.2)
+    (by exact_mod_cast (show 1≤S.card by omega)) wBounds.1 wBounds.2
+
+theorem actual_ordinary_success_bounds :
+    0≤FiniteOptionMass.successMass OrdinaryPrefixMass.value ∧
+      FiniteOptionMass.successMass OrdinaryPrefixMass.value≤1 :=
+  Arithmetic.option_success_bounds OrdinaryPrefixMass.value
+
+/-- Only the history-uniform law remains abstract here: its one-call mass
+is the actual checked ordinary decoder's unconditional success mass. -/
+theorem actual_one_call_target_bound (coins : Finset O)
+    (draw : H → O → Option (QM31Exact × H)) (between : QM31Exact → H → H)
+    (law : NestedCircleMass.Generic.Uniform coins draw
+      (ordinaryAtomMass (FiniteOptionMass.successMass OrdinaryPrefixMass.value)))
+    (S : Finset QM31Exact) (admissible : ∀ t∈S, Admissible t) (h : H) :
+    targetMass coins draw between S h ≤
+      (S.card : ℚ)*((S.card : ℚ)-1)/((domainSize : ℚ)*((domainSize : ℚ)-1)) :=
+  target_mass_le coins draw between _ actual_ordinary_success_bounds.1
+    actual_ordinary_success_bounds.2 law S admissible h
+
+#print axioms Arithmetic.circle_success
+#print axioms Arithmetic.pair_count
+#print axioms circle_total_success
+#print axioms target_mass_eq
+#print axioms target_mass_le
+#print axioms actual_ordinary_success_bounds
+#print axioms actual_one_call_target_bound
+end
+end AspisV8.RootSetPairMass

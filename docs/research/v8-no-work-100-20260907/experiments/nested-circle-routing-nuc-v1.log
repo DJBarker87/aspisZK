@@ -1,0 +1,335 @@
+REMOTE_TASK=/home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+TARGET=NestedCircleRouting
+RESEARCH_PIN=289d7356c78a4cd493fe61a54f9548f2a0c11298
+BORROWED_SOURCE_PIN=26a9cd4718aae9f9de7ef1c3394fb74a229085d5
+Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)
+6213d850a4767ef971b504d235aaf572e64687d09f7596b59e81051c41cda516  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/nested-circle-routing-nuc-v1-manifest.json
+08b2c940fedebc146c4cc986991b6112ce1b902e3699984dbbc80747bfd369ca  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean
+08b2c940fedebc146c4cc986991b6112ce1b902e3699984dbbc80747bfd369ca  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/nested-circle-routing-nuc-v1-source.txt
+5780e61b4d286905ab912bb6ab8e103a20908f78c11bea415db40a5fad110e52  /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/run_higher_y_nuc.sh
+OVERLAY_PROVENANCE_PASS=869
+NATIVE_PACKAGE_CACHE_BOUNDARY=pinned revisions; not a replay of package compilation
+CGROUP=/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-higher-y-nested-circle-routing-nuc-v1.scope
+memory.high=8589934592
+memory.max=10737418240
+memory.swap.max=0
+cpu.max=200000 100000
+COMMAND=/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:80:12: error: Type mismatch: After simplification, term
+  ih rest status
+ has type
+  limbStatus fuel (rest ++ suffix) = PrefixStatus.hardFailure
+but is expected to have type
+  (match limbStatus fuel (rest ++ suffix) with
+    | PrefixStatus.accepted decoded =>
+      PrefixStatus.accepted
+        { value := decoded.value, restWords := decoded.restWords, attemptsUsed := decoded.attemptsUsed + 1 }
+    | PrefixStatus.needMore => PrefixStatus.needMore
+    | PrefixStatus.hardFailure => PrefixStatus.hardFailure
+    | PrefixStatus.layoutFailure => PrefixStatus.layoutFailure) =
+    PrefixStatus.hardFailure
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:112:25: error: unsolved goals
+case succ.accepted.needMore
+count : ℕ
+ih : ∀ (words : List ℕ), (limbsStatus count words).forget = decodeLimbs count words
+words : List ℕ
+decoded : LimbDecode
+status : limbStatus 8 words = PrefixStatus.accepted decoded
+first : some decoded = decodeLimb 8 words
+tailStatus : limbsStatus count decoded.restWords = PrefixStatus.needMore
+rest : none = decodeLimbs count decoded.restWords
+⊢ none =
+    none.bind fun rest =>
+      some
+        { limbs := decoded.value :: rest.limbs, restWords := rest.restWords,
+          wordsUsed := decoded.attemptsUsed + rest.wordsUsed }
+
+case succ.accepted.hardFailure
+count : ℕ
+ih : ∀ (words : List ℕ), (limbsStatus count words).forget = decodeLimbs count words
+words : List ℕ
+decoded : LimbDecode
+status : limbStatus 8 words = PrefixStatus.accepted decoded
+first : some decoded = decodeLimb 8 words
+tailStatus : limbsStatus count decoded.restWords = PrefixStatus.hardFailure
+rest : none = decodeLimbs count decoded.restWords
+⊢ none =
+    none.bind fun rest =>
+      some
+        { limbs := decoded.value :: rest.limbs, restWords := rest.restWords,
+          wordsUsed := decoded.attemptsUsed + rest.wordsUsed }
+
+case succ.accepted.layoutFailure
+count : ℕ
+ih : ∀ (words : List ℕ), (limbsStatus count words).forget = decodeLimbs count words
+words : List ℕ
+decoded : LimbDecode
+status : limbStatus 8 words = PrefixStatus.accepted decoded
+first : some decoded = decodeLimb 8 words
+tailStatus : limbsStatus count decoded.restWords = PrefixStatus.layoutFailure
+rest : none = decodeLimbs count decoded.restWords
+⊢ none =
+    none.bind fun rest =>
+      some
+        { limbs := decoded.value :: rest.limbs, restWords := rest.restWords,
+          wordsUsed := decoded.attemptsUsed + rest.wordsUsed }
+
+case succ.accepted.accepted
+count : ℕ
+ih : ∀ (words : List ℕ), (limbsStatus count words).forget = decodeLimbs count words
+words : List ℕ
+decoded : LimbDecode
+status : limbStatus 8 words = PrefixStatus.accepted decoded
+first : some decoded = decodeLimb 8 words
+value✝ : FourLimbDecode
+tailStatus : limbsStatus count decoded.restWords = PrefixStatus.accepted value✝
+rest : some value✝ = decodeLimbs count decoded.restWords
+⊢ some
+      { limbs := decoded.value :: value✝.limbs, restWords := value✝.restWords,
+        wordsUsed := decoded.attemptsUsed + value✝.wordsUsed } =
+    (some value✝).bind fun rest =>
+      some
+        { limbs := decoded.value :: rest.limbs, restWords := rest.restWords,
+          wordsUsed := decoded.attemptsUsed + rest.wordsUsed }
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:131:62: error: unexpected identifier; expected '}'
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:148:16: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case cons.needMore
+block : Digest256
+rest : List Digest256
+status : limbsStatus 4 (flattenedWords (block :: rest)) = PrefixStatus.needMore
+limbs : none = decodeLimbs 4 (flattenedWords (block :: rest))
+⊢ none =
+    none.bind fun decoded =>
+      if
+          0 < blocksNeededForWords decoded.wordsUsed ∧
+            blocksNeededForWords decoded.wordsUsed ≤ 4 ∧ blocksNeededForWords decoded.wordsUsed ≤ rest.length + 1 then
+        some
+          { value := encodeQm31Limbs decoded.limbs, limbs := decoded.limbs, wordsUsed := decoded.wordsUsed,
+            blocksUsed := blocksNeededForWords decoded.wordsUsed,
+            remainingBlocks := List.drop (blocksNeededForWords decoded.wordsUsed) (block :: rest) }
+      else none
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:148:16: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case cons.hardFailure
+block : Digest256
+rest : List Digest256
+status : limbsStatus 4 (flattenedWords (block :: rest)) = PrefixStatus.hardFailure
+limbs : none = decodeLimbs 4 (flattenedWords (block :: rest))
+⊢ none =
+    none.bind fun decoded =>
+      if
+          0 < blocksNeededForWords decoded.wordsUsed ∧
+            blocksNeededForWords decoded.wordsUsed ≤ 4 ∧ blocksNeededForWords decoded.wordsUsed ≤ rest.length + 1 then
+        some
+          { value := encodeQm31Limbs decoded.limbs, limbs := decoded.limbs, wordsUsed := decoded.wordsUsed,
+            blocksUsed := blocksNeededForWords decoded.wordsUsed,
+            remainingBlocks := List.drop (blocksNeededForWords decoded.wordsUsed) (block :: rest) }
+      else none
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:148:16: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case cons.layoutFailure
+block : Digest256
+rest : List Digest256
+status : limbsStatus 4 (flattenedWords (block :: rest)) = PrefixStatus.layoutFailure
+limbs : none = decodeLimbs 4 (flattenedWords (block :: rest))
+⊢ none =
+    none.bind fun decoded =>
+      if
+          0 < blocksNeededForWords decoded.wordsUsed ∧
+            blocksNeededForWords decoded.wordsUsed ≤ 4 ∧ blocksNeededForWords decoded.wordsUsed ≤ rest.length + 1 then
+        some
+          { value := encodeQm31Limbs decoded.limbs, limbs := decoded.limbs, wordsUsed := decoded.wordsUsed,
+            blocksUsed := blocksNeededForWords decoded.wordsUsed,
+            remainingBlocks := List.drop (blocksNeededForWords decoded.wordsUsed) (block :: rest) }
+      else none
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:148:26: error: Tactic `rfl` failed: The left-hand side
+  some value✝
+is not definitionally equal to the right-hand side
+  (some value✝¹).bind fun decoded =>
+    if
+        0 < blocksNeededForWords decoded.wordsUsed ∧
+          blocksNeededForWords decoded.wordsUsed ≤ 4 ∧ blocksNeededForWords decoded.wordsUsed ≤ rest.length + 1 then
+      some
+        { value := encodeQm31Limbs decoded.limbs, limbs := decoded.limbs, wordsUsed := decoded.wordsUsed,
+          blocksUsed := blocksNeededForWords decoded.wordsUsed,
+          remainingBlocks := List.drop (blocksNeededForWords decoded.wordsUsed) (block :: rest) }
+    else none
+
+case h_1
+block : Digest256
+rest : List Digest256
+value✝¹ : FourLimbDecode
+status : limbsStatus 4 (flattenedWords (block :: rest)) = PrefixStatus.accepted value✝¹
+limbs : some value✝¹ = decodeLimbs 4 (flattenedWords (block :: rest))
+x✝ : PrefixStatus OrdinaryPrefixDecode
+value✝ : OrdinaryPrefixDecode
+heq✝ :
+  (if
+        0 < blocksNeededForWords value✝¹.wordsUsed ∧
+          blocksNeededForWords value✝¹.wordsUsed ≤ 4 ∧ blocksNeededForWords value✝¹.wordsUsed ≤ rest.length + 1 then
+      PrefixStatus.accepted
+        { value := encodeQm31Limbs value✝¹.limbs, limbs := sorry, wordsUsed := sorry, blocksUsed := sorry,
+          remainingBlocks := sorry }
+    else sorry ()) =
+    PrefixStatus.accepted value✝
+⊢ some value✝ =
+    (some value✝¹).bind fun decoded =>
+      if
+          0 < blocksNeededForWords decoded.wordsUsed ∧
+            blocksNeededForWords decoded.wordsUsed ≤ 4 ∧ blocksNeededForWords decoded.wordsUsed ≤ rest.length + 1 then
+        some
+          { value := encodeQm31Limbs decoded.limbs, limbs := decoded.limbs, wordsUsed := decoded.wordsUsed,
+            blocksUsed := blocksNeededForWords decoded.wordsUsed,
+            remainingBlocks := List.drop (blocksNeededForWords decoded.wordsUsed) (block :: rest) }
+      else none
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:148:26: error: Tactic `rfl` failed: The left-hand side
+  none
+is not definitionally equal to the right-hand side
+  (some value✝).bind fun decoded =>
+    if
+        0 < blocksNeededForWords decoded.wordsUsed ∧
+          blocksNeededForWords decoded.wordsUsed ≤ 4 ∧ blocksNeededForWords decoded.wordsUsed ≤ rest.length + 1 then
+      some
+        { value := encodeQm31Limbs decoded.limbs, limbs := decoded.limbs, wordsUsed := decoded.wordsUsed,
+          blocksUsed := blocksNeededForWords decoded.wordsUsed,
+          remainingBlocks := List.drop (blocksNeededForWords decoded.wordsUsed) (block :: rest) }
+    else none
+
+case h_2
+block : Digest256
+rest : List Digest256
+value✝ : FourLimbDecode
+status : limbsStatus 4 (flattenedWords (block :: rest)) = PrefixStatus.accepted value✝
+limbs : some value✝ = decodeLimbs 4 (flattenedWords (block :: rest))
+x✝¹ : PrefixStatus OrdinaryPrefixDecode
+x✝ :
+  ∀ (value : OrdinaryPrefixDecode),
+    (if
+            0 < blocksNeededForWords value✝.wordsUsed ∧
+              blocksNeededForWords value✝.wordsUsed ≤ 4 ∧ blocksNeededForWords value✝.wordsUsed ≤ rest.length + 1 then
+          PrefixStatus.accepted
+            { value := encodeQm31Limbs value✝.limbs, limbs := sorry, wordsUsed := sorry, blocksUsed := sorry,
+              remainingBlocks := sorry }
+        else sorry ()) =
+        PrefixStatus.accepted value →
+      False
+⊢ none =
+    (some value✝).bind fun decoded =>
+      if
+          0 < blocksNeededForWords decoded.wordsUsed ∧
+            blocksNeededForWords decoded.wordsUsed ≤ 4 ∧ blocksNeededForWords decoded.wordsUsed ≤ rest.length + 1 then
+        some
+          { value := encodeQm31Limbs decoded.limbs, limbs := decoded.limbs, wordsUsed := decoded.wordsUsed,
+            blocksUsed := blocksNeededForWords decoded.wordsUsed,
+            remainingBlocks := List.drop (blocksNeededForWords decoded.wordsUsed) (block :: rest) }
+      else none
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:145:14: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:171:10: error: unsolved goals
+case neg
+decoded : OrdinaryPrefixDecode
+block : Digest256
+rest : List Digest256
+limbs : FourLimbDecode
+limbsRun : decodeLimbs 4 (flattenedWords (block :: rest)) = some limbs
+valid :
+  ¬(0 < blocksNeededForWords limbs.wordsUsed ∧
+      blocksNeededForWords limbs.wordsUsed ≤ 4 ∧ blocksNeededForWords limbs.wordsUsed ≤ (block :: rest).length)
+run :
+  (0 < blocksNeededForWords limbs.wordsUsed ∧
+      blocksNeededForWords limbs.wordsUsed ≤ 4 ∧ blocksNeededForWords limbs.wordsUsed ≤ rest.length + 1) ∧
+    { value := encodeQm31Limbs limbs.limbs, limbs := limbs.limbs, wordsUsed := limbs.wordsUsed,
+        blocksUsed := blocksNeededForWords limbs.wordsUsed,
+        remainingBlocks := List.drop (blocksNeededForWords limbs.wordsUsed) (block :: rest) } =
+      decoded
+⊢ 0 < decoded.blocksUsed ∧
+    decoded.blocksUsed ≤ 4 ∧
+      decoded.blocksUsed ≤ (block :: rest).length ∧
+        decoded.remainingBlocks = List.drop decoded.blocksUsed (block :: rest)
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:171:50: warning: This simp argument is unused:
+  valid
+
+Hint: Omit it from the simp argument list.
+  simp [decodeOrdinaryPrefix, limbsRun,̵ ̵v̵a̵l̵i̵d̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:247:42: error: unexpected token 'continue'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:263:91: error: unsolved goals
+circleMap : SecureCircleParameterMap
+inner : Fin 3
+pending : List Digest256
+answer : Digest256
+failed : ordinaryStatus (pending ++ [answer]) = PrefixStatus.hardFailure
+⊢ sorry circleMap (State.first inner pending) answer = State.aborted AbortReason.ordinaryHardFailure
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:264:21: warning: This simp argument is unused:
+  failed
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer,̵ ̵f̵a̵i̵l̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:264:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:271:39: error: unsolved goals
+circleMap : SecureCircleParameterMap
+firstPoint : SecureCirclePointBytes
+outer inner : Fin 3
+pending : List Digest256
+answer : Digest256
+failed : ordinaryStatus (pending ++ [answer]) = PrefixStatus.hardFailure
+⊢ sorry circleMap (State.second firstPoint outer inner pending) answer = State.aborted AbortReason.ordinaryHardFailure
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:272:21: warning: This simp argument is unused:
+  failed
+
+Hint: Omit it from the simp argument list.
+  simp [afterAnswer,̵ ̵f̵a̵i̵l̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean:282:24: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.26 = ?m.26
+but is expected to have type
+  afterAnswer circleMap (State.aborted reason) answer = State.aborted reason
+in the application
+  ⟨rfl, rfl⟩
+'AspisV8.NestedCircleRouting.limbStatus_forget' depends on axioms: [propext]
+'AspisV8.NestedCircleRouting.limb_hard_failure_append' depends on axioms: [propext, sorryAx]
+'AspisV8.NestedCircleRouting.limbsStatus_forget' depends on axioms: [propext, sorryAx]
+'AspisV8.NestedCircleRouting.ordinaryStatus_forget' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.NestedCircleRouting.ordinary_source_tail' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.NestedCircleRouting.ordinary_cursor_tail' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.NestedCircleRouting.slot_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8.NestedCircleRouting.hard_failure_aborts_first' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.NestedCircleRouting.hard_failure_aborts_second' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisV8.NestedCircleRouting.halted_padding' depends on axioms: [propext, sorryAx]
+Command exited with non-zero status 1
+	Command being timed: "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M9500 -R /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay -o /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.olean /home/dombarker/project-offloads/aspis-higher-y.fMoMeX/overlay/NestedCircleRouting.lean"
+	User time (seconds): 2.37
+	System time (seconds): 1.07
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.38
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6658852
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 139452
+	Voluntary context switches: 1153
+	Involuntary context switches: 193
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+LEAN_EXIT=1

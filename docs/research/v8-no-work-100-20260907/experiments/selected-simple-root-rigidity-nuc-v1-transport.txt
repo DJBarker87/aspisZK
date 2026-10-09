@@ -1,0 +1,26 @@
+Target: SelectedSimpleRootRigidity
+Intended remote tag: selected-simple-root-rigidity-nuc-v1
+Source SHA256: a2a739eb154338fea0935c9bba6849beb3705b7206075a2ae07cc06f40706753
+Research parent: 289d7356c78a4cd493fe61a54f9548f2a0c11298
+Remote scope: /home/dombarker/project-offloads/aspis-higher-y.fMoMeX
+Runner: run_higher_y_nuc.sh
+
+Source upload completed successfully before launch.
+The local SSH process was session 20297, PID 45220.
+It emitted no runner output, including no REMOTE_TASK/header/version,
+provenance result, compiler command, or Lean result.
+Read-only ps observed elapsed 18:23 and state Ss, triggering the mandatory
+ten-minute review. No compiler retry or cap increase was attempted.
+
+A separate bounded read-only SSH probe (session 6499) terminated with
+exit 255 and exactly this transport error:
+ssh: Could not resolve hostname nuc.local: nodename nor servname provided, or not known
+
+The stalled local SSH PID 45220 was explicitly sent SIGTERM to prevent a
+delayed command start after connectivity returned. Session 20297 then
+terminated exit 143, with no captured output.
+
+This is transport evidence, NOT a Lean failure, a green result, or proof
+that a remote compiler started. Remote process/artifact state needs an
+independent check before any later fresh-tag attempt. The earlier generic
+SimplePolynomialRootRigidity v1 completed green and is separately recorded.

@@ -1,0 +1,102 @@
+import RootSetPairMass
+import SelectedSingularOODFamily
+import AdmissiblePolynomialRoots
+
+/-! The selected higher-Y singular obstruction's two-OOD alternative as one
+fixed admissible root set.  This leaf composes the already checked root-set
+sampler kernel with the selected obstruction degree; it does not provide the
+random-oracle/history-uniform law required by that kernel. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 300
+set_option maxHeartbeats 150000
+
+namespace AspisV8.SelectedSingularPairMass
+open Polynomial Finset
+open AspisV5ComponentCQM31TowerExact
+open AspisV8.RootSetPairMass AspisV8.NestedCircleMass
+open AspisV8.SecureCircleParameterDomain
+open AspisV8.SelectedReceivedOracle AspisV8.SelectedOODGate
+open AspisV8.SelectedSingularOODFamily
+open AspisV8.EarlyC1Projection AspisV8.EarlyC1LateProjection
+open AspisV8.AdmissiblePolynomialRoots
+noncomputable section
+local instance admissibleDecision : DecidablePred Admissible :=
+  fun _ => Classical.propDecidable _
+
+/-- The same set is fixed by C1/C2 before either OOD sample.  Filtering by
+`Admissible` matches the exact accepted parameter domain and does not
+condition away ordinary decode or retry failure. -/
+def admissibleRoots (c1 : C1Received) (c2 : C2Received) : Finset K :=
+  AdmissiblePolynomialRoots.roots Admissible (obstruction c1 c2)
+
+theorem admissibleRoots_card_le (c1 : C1Received) (c2 : C2Received) :
+    (admissibleRoots c1 c2).card ≤ 25345827 := by
+  exact (AdmissiblePolynomialRoots.card_le Admissible (obstruction c1 c2)
+    (SelectedSingularOODFamily.fixed_cover c1 c2).1).trans
+    (SelectedSingularOODFamily.fixed_cover c1 c2).2.1
+
+/-- The literal two parameters belong to the ordered off-diagonal target
+exactly when they are admissible, distinct and both roots.  The theorem says
+nothing about how source bytes or transcript callbacks produced them. -/
+theorem pair_mem_offDiag (c1 : C1Received) (c2 : C2Received) (first second : K)
+    (firstAdmissible : Admissible first) (secondAdmissible : Admissible second)
+    (different : first ≠ second)
+    (firstRoot : (obstruction c1 c2).eval first = 0)
+    (secondRoot : (obstruction c1 c2).eval second = 0) :
+    (first, second) ∈ (admissibleRoots c1 c2).offDiag := by
+  exact AdmissiblePolynomialRoots.pair_mem_offDiag Admissible
+    (obstruction c1 c2) first second firstAdmissible secondAdmissible different
+    firstRoot secondRoot
+
+variable {O H : Type*}
+
+/-- Abort-preserving ideal mass of the complete selected singular pair-root
+alternative.  The only probabilistic premise is the existing history-uniform
+ordinary decoder law, stated for every history. -/
+theorem selected_pair_root_mass_le (coins : Finset O)
+    (draw : H → O → Option (K × H)) (between : K → H → H)
+    (law : NestedCircleMass.Generic.Uniform coins draw
+      (ordinaryAtomMass (FiniteOptionMass.successMass OrdinaryPrefixMass.value)))
+    (c1 : C1Received) (c2 : C2Received) (h : H) :
+    targetMass coins draw between (admissibleRoots c1 c2) h ≤
+      ((admissibleRoots c1 c2).card : ℚ) *
+        ((admissibleRoots c1 c2).card - 1 : ℚ) /
+          ((domainSize : ℚ) * ((domainSize : ℚ) - 1)) := by
+  apply actual_one_call_target_bound coins draw between law
+  intro t member
+  exact AdmissiblePolynomialRoots.admissible_of_mem Admissible
+    (obstruction c1 c2) member
+
+/-- Concrete selected numerator.  No finite field is enumerated: the root
+cardinality is bounded by the polynomial degree and the denominator is the
+checked exact admissible-domain size. -/
+theorem selected_pair_root_mass_numeric_le (coins : Finset O)
+    (draw : H → O → Option (K × H)) (between : K → H → H)
+    (law : NestedCircleMass.Generic.Uniform coins draw
+      (ordinaryAtomMass (FiniteOptionMass.successMass OrdinaryPrefixMass.value)))
+    (c1 : C1Received) (c2 : C2Received) (h : H) :
+    targetMass coins draw between (admissibleRoots c1 c2) h ≤
+      (25345827 : ℚ) * 25345826 /
+        ((domainSize : ℚ) * ((domainSize : ℚ) - 1)) := by
+  refine (selected_pair_root_mass_le coins draw between law c1 c2 h).trans ?_
+  have cardBound : ((admissibleRoots c1 c2).card : ℚ) ≤ 25345827 := by
+    exact_mod_cast admissibleRoots_card_le c1 c2
+  have cardNonnegative : (0 : ℚ) ≤ (admissibleRoots c1 c2).card :=
+    Nat.cast_nonneg _
+  have denominatorPositive :
+      (0 : ℚ) < (domainSize : ℚ) * ((domainSize : ℚ) - 1) := by
+    have domainTwo : (2 : ℚ) ≤ domainSize := by
+      exact_mod_cast domain_size_bounds.2
+    have domainPositive : (0 : ℚ) < domainSize := lt_of_lt_of_le (by norm_num) domainTwo
+    have domainMinusOnePositive : (0 : ℚ) < (domainSize : ℚ) - 1 := by linarith
+    exact mul_pos domainPositive domainMinusOnePositive
+  apply div_le_div_of_nonneg_right _ (le_of_lt denominatorPositive)
+  nlinarith
+
+#print axioms admissibleRoots_card_le
+#print axioms pair_mem_offDiag
+#print axioms selected_pair_root_mass_le
+#print axioms selected_pair_root_mass_numeric_le
+end
+end AspisV8.SelectedSingularPairMass

@@ -1,0 +1,116 @@
+import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.Algebra.Polynomial.FieldDivision
+import Mathlib.Algebra.Polynomial.Roots
+
+/-!
+Determinant multiplicity for the quadratic-specialization route.
+
+This is a symbolic finite-matrix lemma, not a concrete Sylvester-matrix
+enumeration.  The supplied constant matrix B must really be invertible and
+its selected columns must really lie in the specialized kernel.  The later
+Sylvester application must construct that basis data; it is not inferred
+from a single zero determinant.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 200000
+
+namespace AspisV8.QuadraticSpecializationDeterminant
+noncomputable section
+open Polynomial
+
+/-- Divisibility in selected factors multiplies; the other factors need
+not vanish or be nonzero. -/
+theorem selected_product_divisibility
+    {R I : Type*} [CommRing R] [Fintype I] [DecidableEq I]
+    (h : R) (S : Finset I) (v : I → R)
+    (divides : ∀ j ∈ S, h ∣ v j) :
+    h ^ S.card ∣ ∏ j, v j := by
+  have selected : h ^ S.card ∣ ∏ j ∈ S, v j := by
+    simpa only [Finset.prod_const] using
+      (Finset.prod_dvd_prod_of_dvd (fun _ : I => h) v divides)
+  exact selected.trans
+    (Finset.prod_dvd_prod_of_subset S Finset.univ v (Finset.subset_univ S))
+
+/-- The Leibniz expansion gives one factor h for each selected column.
+This establishes multiplicity, not merely determinant vanishing. -/
+theorem selected_columns_pow_dvd_det
+    {R I : Type*} [CommRing R] [Fintype I] [DecidableEq I]
+    (M : Matrix I I R) (h : R) (S : Finset I)
+    (divides : ∀ j ∈ S, ∀ i, h ∣ M i j) :
+    h ^ S.card ∣ M.det := by
+  rw [Matrix.det_apply']
+  apply Finset.dvd_sum
+  intro permutation _
+  have productDivides := selected_product_divisibility h S
+    (fun j => M (permutation j) j) (fun j member => divides j member _)
+  exact productDivides.trans (dvd_mul_left _ _)
+
+/-- Entrywise specialization of a polynomial matrix multiplied by a
+constant matrix is the corresponding product over the coefficient field. -/
+theorem eval_mul_constant
+    {K I : Type*} [Field K] [Fintype I] [DecidableEq I]
+    (M : Matrix I I K[X]) (B : Matrix I I K) (gamma : K) (i j : I) :
+    ((M * (Polynomial.C.mapMatrix B)) i j).eval gamma =
+      ((Polynomial.evalRingHom gamma).mapMatrix M * B) i j := by
+  simp only [Matrix.mul_apply, Polynomial.eval_finsetSum,
+    Polynomial.eval_mul, RingHom.mapMatrix_apply, Matrix.map_apply,
+    Polynomial.eval_C]
+
+/-- A *constructed* invertible constant change of columns turns selected
+specialized kernel vectors into polynomial columns divisible by X-gamma.
+Cancellation uses only that det B is a nonzero field scalar. -/
+theorem kernel_columns_pow_dvd_det
+    {K I : Type*} [Field K] [Fintype I] [DecidableEq I]
+    (M : Matrix I I K[X]) (B : Matrix I I K) (gamma : K) (S : Finset I)
+    (basisNonzero : B.det ≠ 0)
+    (kernelColumns : ∀ j ∈ S, ∀ i,
+      ((Polynomial.evalRingHom gamma).mapMatrix M * B) i j = 0) :
+    (Polynomial.X - Polynomial.C gamma) ^ S.card ∣ M.det := by
+  have transformed : (Polynomial.X - Polynomial.C gamma) ^ S.card ∣
+      (M * Polynomial.C.mapMatrix B).det := by
+    apply selected_columns_pow_dvd_det
+    intro j member i
+    apply Polynomial.dvd_iff_isRoot.mpr
+    change ((M * Polynomial.C.mapMatrix B) i j).eval gamma = 0
+    rw [eval_mul_constant]
+    exact kernelColumns j member i
+  rw [Matrix.det_mul, ← Polynomial.C.map_det] at transformed
+  have scalarUnit : IsUnit (Polynomial.C B.det : K[X]) :=
+    (isUnit_iff_ne_zero.mpr basisNonzero).map Polynomial.C
+  exact scalarUnit.dvd_mul_right.mp transformed
+
+/-- Uniform root multiplicity pays the cardinality divided by the
+multiplicity.  The determinant must be nonzero; a zero resultant gives no
+finite exceptional-set bound. -/
+theorem multiplicity_card_bound
+    {K : Type*} [Field K] (E : K[X]) (nonzero : E ≠ 0)
+    (G : Finset K) (m : Nat)
+    (multiplicity : ∀ gamma ∈ G, (Polynomial.X - Polynomial.C gamma) ^ m ∣ E) :
+    m * G.card ≤ E.natDegree := by
+  classical
+  have whole : (∏ gamma ∈ G, (Polynomial.X - Polynomial.C gamma) ^ m) ∣ E := by
+    apply Finset.prod_dvd_of_coprime
+    · intro a _ b _ different
+      exact (Polynomial.pairwise_coprime_X_sub_C Function.injective_id different).pow
+    · exact multiplicity
+  have degreeBound := Polynomial.natDegree_le_of_dvd whole nonzero
+  have productDegree :
+      (∏ gamma ∈ G, (Polynomial.X - Polynomial.C gamma) ^ m).natDegree =
+        m * G.card := by
+    rw [Polynomial.natDegree_prod_of_monic]
+    · simp only [Polynomial.natDegree_pow, Polynomial.natDegree_X_sub_C,
+        Nat.mul_one, Finset.sum_const, nsmul_eq_mul, Nat.cast_id, Nat.mul_comm]
+    · intro gamma _
+      exact (Polynomial.monic_X_sub_C gamma).pow m
+  rwa [productDegree] at degreeBound
+
+#print axioms selected_product_divisibility
+#print axioms selected_columns_pow_dvd_det
+#print axioms eval_mul_constant
+#print axioms kernel_columns_pow_dvd_det
+#print axioms multiplicity_card_bound
+
+end
+end AspisV8.QuadraticSpecializationDeterminant

@@ -1,0 +1,73 @@
+import AspisFormal.K1.V7Tag73CanonicalOneFoldSchedule
+
+/-! The two purely geometric selected-code interfaces used by off-family
+counting. Their proofs reuse the exact V7 circle/line encoder and overlap
+theorems. Keeping this leaf separate avoids importing the unrelated causal
+relation game merely to identify a final coefficient vector on a support.
+No authentication, prior-zero or received-word polynomiality premise occurs. -/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 300000
+
+namespace AspisV8.SelectedSupportIdentification
+open Finset
+open AspisK1.V7Tag73CanonicalOneFoldSchedule
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisV5ComponentCConcreteFoldLinearity AspisV5ComponentCQM31TowerExact
+open AspisV5FriConcreteEncoderCommutation AspisV5FriConcreteEncoderApplicability
+open AspisV5FriCoherentCandidateExtraction AspisV5FriRelationCandidateBridge
+noncomputable section
+
+/-- Literal selected coefficient-fold/encoder commutation, including the
+canonical inverse tables. This is not a supplied correspondence premise. -/
+theorem selected_fold_commutes (Q : Fin 1024 → QM31Exact) (alpha : QM31Exact) :
+    circleFoldLayer 262144 alpha (canonicalOneFoldSchedule 0).circleInv2x
+      (canonicalOneFoldSchedule 0).circleInv2y (exactInitialEncoder Q)=
+        exactFinalLinear (coefficientFoldLayer 256 alpha Q) := by
+  rw [congrFun exactInitialEncoder_eq_circleLift Q]
+  have inverse := canonical_one_fold_schedule_exact 0
+  have h := congrArg (fun f : (Fin 1024 → QM31Exact) →ₗ[QM31Exact]
+      (Fin 262144 → QM31Exact) => f Q)
+    (circleFoldLayer_circleLiftEncoder exactFinalLinear alpha exactCircleX exactCircleY
+      (canonicalOneFoldSchedule 0).circleInv2x
+      (canonicalOneFoldSchedule 0).circleInv2y inverse.1 inverse.2)
+  simpa only [LinearMap.comp_apply] using h
+
+/-- More than 255 complete matching fibres identify the final coefficient
+vector. Received equality is needed only at the four slots of those fibres. -/
+theorem common_support_identifies (received : Fin 1048576 → QM31Exact)
+    (S : Finset (Fin 262144)) (large : 255<S.card)
+    (Q : Fin 1024 → QM31Exact)
+    (recovered : ∀ i∈S, ∀ slot : Fin 4,
+      exactInitialEncoder Q (childIndex i slot)=received (childIndex i slot))
+    (alpha : QM31Exact) (final : Fin 256 → QM31Exact)
+    (matched : ∀ i∈S, exactFinalLinear final i=circleFoldLayer 262144 alpha
+      (canonicalOneFoldSchedule 0).circleInv2x
+      (canonicalOneFoldSchedule 0).circleInv2y received i) :
+    final=coefficientFoldLayer 256 alpha Q := by
+  by_contra different
+  have inclusion : S⊆agreementSet (exactFinalEncoder final)
+      (exactFinalEncoder (coefficientFoldLayer 256 alpha Q)) := by
+    intro i member
+    have slots : (fun slot => exactInitialEncoder Q (childIndex i slot))=
+        (fun slot => received (childIndex i slot)) := funext (recovered i member)
+    have sameFold : circleFoldLayer 262144 alpha
+          (canonicalOneFoldSchedule 0).circleInv2x
+          (canonicalOneFoldSchedule 0).circleInv2y (exactInitialEncoder Q) i=
+        circleFoldLayer 262144 alpha (canonicalOneFoldSchedule 0).circleInv2x
+          (canonicalOneFoldSchedule 0).circleInv2y received i := by
+      rw [circleFoldLayer_apply,circleFoldLayer_apply,slots]
+    apply Finset.mem_filter.mpr
+    refine ⟨Finset.mem_univ i,?_⟩
+    exact (matched i member).trans
+      (sameFold.symm.trans (congrFun (selected_fold_commutes Q alpha) i))
+  have cap := exactFinalEncoder_overlap_cap final (coefficientFoldLayer 256 alpha Q) different
+  have card := Finset.card_le_card inclusion
+  omega
+
+#print axioms selected_fold_commutes
+#print axioms common_support_identifies
+end
+end AspisV8.SelectedSupportIdentification

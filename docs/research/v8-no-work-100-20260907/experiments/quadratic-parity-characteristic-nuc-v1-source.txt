@@ -1,0 +1,58 @@
+import QuadraticParitySeparable
+import AspisFormal.K1.V7ExactCorrelatedAgreementFactors
+import Mathlib.Algebra.CharP.Basic
+
+/-! Characteristic-aware nonvanishing over arbitrary fields, including
+K(Z). Reuses V7's leading-exponent derivative argument, not perfection.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxRecDepth 200
+set_option maxHeartbeats 150000
+
+namespace AspisV8.QuadraticParityCharacteristic
+noncomputable section
+open Polynomial
+
+theorem positive_small_cast_nonzero
+    {L : Type*} [Field L] (p n : Nat) [CharP L p]
+    (positive : 0 < n) (small : n < p) : (n : L) ≠ 0 := by
+  intro zero
+  have divides := (CharP.cast_eq_zero_iff L p n).mp zero
+  have lower := Nat.le_of_dvd positive divides
+  omega
+
+theorem derivative_degree_of_positive_small
+    {L : Type*} [Field L] (p : Nat) [CharP L p] (R : L[X])
+    (positive : 0 < R.natDegree) (small : R.natDegree < p) :
+    R.derivative.natDegree = R.natDegree - 1 := by
+  have rNonzero : R ≠ 0 := by intro zero; simp [zero] at positive
+  have predecessor : R.natDegree - 1 + 1 = R.natDegree := by omega
+  have coefficientNonzero : R.derivative.coeff (R.natDegree-1) ≠ 0 := by
+    rw [Polynomial.coeff_derivative, predecessor, Polynomial.coeff_natDegree]
+    exact mul_ne_zero (Polynomial.leadingCoeff_ne_zero.mpr rNonzero)
+      (positive_small_cast_nonzero p R.natDegree positive small)
+  exact Nat.le_antisymm (Polynomial.natDegree_derivative_le R)
+    (Polynomial.le_natDegree_of_ne_zero coefficientNonzero)
+
+theorem fixed_resultant_nonzero_of_squarefree_small
+    {L : Type*} [Field L] (p : Nat) [CharP L p] (R : L[X])
+    (positive : 0 < R.natDegree) (small : R.natDegree < p)
+    (squarefree : Squarefree R) :
+    R.resultant R.derivative R.natDegree (R.natDegree-1) ≠ 0 := by
+  have nonzero : R ≠ 0 := by intro zero; simp [zero] at positive
+  have derivatives : ∀ P : L[X], Irreducible P → P ∣ R → P.derivative ≠ 0 := by
+    intro P irreducible divides
+    have pSmall := (Polynomial.natDegree_le_of_dvd divides nonzero).trans_lt small
+    exact AspisK1.V7ExactCorrelatedAgreementFactors.derivative_ne_zero_of_natDegree_pos_of_cast_ne_zero
+      P irreducible.natDegree_pos
+      (positive_small_cast_nonzero p P.natDegree irreducible.natDegree_pos pSmall)
+  have result := QuadraticParitySeparable.resultant_nonzero_of_squarefree_of_factor_derivatives
+    R nonzero squarefree derivatives
+  simpa only [derivative_degree_of_positive_small p R positive small] using result
+
+#print axioms positive_small_cast_nonzero
+#print axioms derivative_degree_of_positive_small
+#print axioms fixed_resultant_nonzero_of_squarefree_small
+end
+end AspisV8.QuadraticParityCharacteristic

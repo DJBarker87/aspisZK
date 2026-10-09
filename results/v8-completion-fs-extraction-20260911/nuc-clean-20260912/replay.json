@@ -1,0 +1,138 @@
+{
+  "stage": "replay",
+  "version": "Lean (version 4.33.1, x86_64-unknown-linux-gnu, commit 819816b2e0a3bf405af45ae5c7af2491d8f5bee6, Release)",
+  "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-v8-fresh-kernel-20260912.service",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0"
+  },
+  "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+  "checker_binary_sha256": "84bc3e7cd6efa5bfecd1e7c37571fed9428fb2b3e16da0ddf62f2163573486d0",
+  "checker_source_sha256": "eb5dee411837629f09c5c18d63cc833d30335a46048bc586642742e90aa65d5f",
+  "Std_import_sha256": "588b5b6ddf35e57a5d542cfb86c8752ddfa5c100eb559e569e90e06a54184f67",
+  "scope": "New ten-module first-party closure only. Toolchain Std reused, not source rebuilt. Same Lean kernel, not independent external validation.",
+  "files": [
+    {
+      "module": "CausalPrograms",
+      "source_sha256": "b9b25e0f5ff73a444c6630881c5e80c7a5e93bfc0d498d8a3ae24bc599af30be",
+      "imports": [
+        "Std"
+      ],
+      "artifacts": {
+        "CausalPrograms.olean": "0b63af3bc46d6c506bf9862759e61c19bc6200e97d96ad0527b3c0d8ae7ba56e"
+      }
+    },
+    {
+      "module": "SourceSqueeze",
+      "source_sha256": "3eb7a9e9bbd8a60faaf02d8284e748f3040deab32bf103a0d990cbd02f1b8bc5",
+      "imports": [
+        "CausalPrograms"
+      ],
+      "artifacts": {
+        "SourceSqueeze.olean": "4601c3c7226c0ff18e413f4679a347b5a5236909cd8851a2775a62eef7053313"
+      }
+    },
+    {
+      "module": "SemanticWireExecution",
+      "source_sha256": "b23fc3c031d181bbd343cd1fa5d088aa1fd638677c4de92368c98d60223120ae",
+      "imports": [
+        "Std"
+      ],
+      "artifacts": {
+        "SemanticWireExecution.olean": "e0b03dfed42bd8a0d3acfd409e9e65697ac05db6dc6f632e775f2f3cce8a3268"
+      }
+    },
+    {
+      "module": "SameBodyRelation",
+      "source_sha256": "d5544c29b3b2474bf399bbb9860ac8d4470867f61dfd591e8f5f86cac1930554",
+      "imports": [
+        "Std"
+      ],
+      "artifacts": {
+        "SameBodyRelation.olean": "cbeb0982d8866f1755adff43015031131cdc2b6f85bdbb966ab7e780a47eeba8"
+      }
+    },
+    {
+      "module": "SameBodyOrdinary",
+      "source_sha256": "8b6aef7e6b95d23860ce7b1b9fe5d4dc8838c57e78904a421f8b511744cd6cf9",
+      "imports": [
+        "SameBodyRelation"
+      ],
+      "artifacts": {
+        "SameBodyOrdinary.olean": "ab4ffc08c26a296953b198a7cb611720d647ef1d7aa875edec6f853195f68c9f"
+      }
+    },
+    {
+      "module": "SameBodyAssembly",
+      "source_sha256": "316dc536c783a641e3472d2704a05681619bc17ca80333ff83306fbb5b09ac9d",
+      "imports": [
+        "SemanticWireExecution",
+        "SameBodyOrdinary"
+      ],
+      "artifacts": {
+        "SameBodyAssembly.olean": "f88ca736fe3e6ebdab346971d0377852c9a58bd04cec7eb893da961a8d329124"
+      }
+    },
+    {
+      "module": "FSOracleExecution",
+      "source_sha256": "aa2928cc4407c0cbe45910d0527a1cffa18e3a941698ee77fbc7910ffefd9806",
+      "imports": [
+        "Std"
+      ],
+      "artifacts": {
+        "FSOracleExecution.olean": "b3784af777e138b540ee33743e68b7d104cebdd8bcc0233d936bd1381dfe6b05"
+      }
+    },
+    {
+      "module": "FSBoundedTranscript",
+      "source_sha256": "3626ba6aae9421b01dcf8c35b767027590e20fbbb91a14d9f4ca3b45e81bd640",
+      "imports": [
+        "FSOracleExecution"
+      ],
+      "artifacts": {
+        "FSBoundedTranscript.olean": "6ea510335254b1e6f47e3630726c08dfe5285d08b4e2c97243fc9cf70099f17c"
+      }
+    },
+    {
+      "module": "FSExposureOrder",
+      "source_sha256": "217e06de6fbd46ca586dd45ccd1ab0f79a10ef68a0cdf0194f7b2349ed6bda95",
+      "imports": [
+        "FSOracleExecution"
+      ],
+      "artifacts": {
+        "FSExposureOrder.olean": "cf41bbeb1d79b5bf7e5208ad4684d01b673b45603e17ddffe88d71ffbbc94527"
+      }
+    },
+    {
+      "module": "CompletionSourceAudit",
+      "source_sha256": "11a27b06212456cce16b861bd5583b0bd5ff7f468480e2fa8b4e259cc3ec979d",
+      "imports": [
+        "SourceSqueeze",
+        "SameBodyAssembly",
+        "FSBoundedTranscript",
+        "FSExposureOrder"
+      ],
+      "artifacts": {
+        "CompletionSourceAudit.olean": "335b05a84585463045e516ac52dcd858ddd113b25cc72bfee69f39c11f0e61bd"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "name": "fresh-kernel",
+      "command": [
+        "lake",
+        "env",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.33.1/bin/leanchecker",
+        "--fresh",
+        "-v",
+        "CompletionSourceAudit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 64.9024059176445,
+      "log_sha256": "e3bb523221557c193210c7317b1b949798ad7353b721ca8bbaaa9ea0ec75d1fd"
+    }
+  ],
+  "status": "PASS"
+}

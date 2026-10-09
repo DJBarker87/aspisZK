@@ -1,0 +1,142 @@
+import SelectedWireMerkleRun
+import PrefixPackedQueryBatch
+
+/-! DRAFT: awaiting exact historical import-variant rebuild before checking.
+This endpoint composes same-body functional authentication and record parsing.
+No FixedInput, supplied total word or assumed word equality is accepted.
+Chronological prefixes, shared hash law/log coverage and literal Rust
+refinement remain explicit external boundaries, not probability-zero errors.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxHeartbeats 250000
+namespace AspisV8.SameBodyAuthenticatedSlots
+open AspisPool.V7MerkleQueryGrammar AspisPool.V7MerkleQueryExtractor
+open AspisPool.V7MerkleOpeningBinding AspisPool.V7ExtractedLaneWords
+open AspisV5ComponentCConcreteFoldLinearity
+open AspisK1.V7Tag73ExactOneFoldEncoderBinding
+open AspisV8.AuthenticatedEarlyC1Prefix AspisV8.AuthenticatedPhaseWords
+open AspisV8.SelectedWireBytes AspisV8.SelectedWireMerkleRun
+open AspisV8.SelectedMultiproofPrefixProjection AspisV8.SelectedMultiproofOpeningEquality
+open AspisV8.PrefixPackedQueryBatch AspisV8.PackedQueryRecord
+noncomputable section
+
+abbrev K := AspisV5ComponentCQM31TowerExact.QM31Exact
+abbrev Byte := AspisPool.V7MerkleQueryGrammar.Byte
+
+/-- Finite Option traversal, preserving the query ordinal rather than sorting
+decoded values with Merkle descriptors. No expected decoded table is input. -/
+def collectFin {A : Type*} : {n : Nat} → (Fin n → Option A) → Option (Fin n → A)
+  | 0, _ => some Fin.elim0
+  | n+1, f => do
+    let first ← f 0
+    let rest ← collectFin (fun i : Fin n => f i.succ)
+    pure (Fin.cases first rest)
+
+theorem collectFin_success {A : Type*} : ∀ {n : Nat} (f : Fin n → Option A)
+    (values : Fin n → A), collectFin f = some values → ∀ i, f i = some (values i) := by
+  intro n
+  induction n with
+  | zero => intro f values success i; exact Fin.elim0 i
+  | succ n ih =>
+    intro f values success
+    cases hf : f 0 with
+    | none => simp [collectFin,hf] at success
+    | some first =>
+      cases hr : collectFin (fun i : Fin n => f i.succ) with
+      | none => simp [collectFin,hf,hr] at success
+      | some rest =>
+        have hv : Fin.cases first rest = values := by
+          simpa [collectFin,hf,hr] using success
+        subst values
+        intro i
+        refine Fin.cases ?_ (fun j => ?_) i
+        · exact hf
+        · exact ih _ rest hr j
+
+def parseRecords (wire : Wire) : Option (Fin 22 → Decoded) :=
+  collectFin (fun i => PackedQueryRecord.parse (wire.record i))
+
+theorem parseRecords_success (wire : Wire) (decoded : Fin 22 → Decoded)
+    (success : parseRecords wire = some decoded) :
+    ∀ i, PackedQueryRecord.parse (wire.record i) = some (decoded i) :=
+  collectFin_success _ decoded success
+
+/-- The total word is constructed only from the two phase-prefix resolvers
+and actual body roots. It is not an observed/post-query extension. Prefix
+chronology itself is not supplied by this definition. -/
+def prefixBatch (c1Prefix c2Prefix : AnswerPrefix) (wire : Wire) (gamma : K) :=
+  NearGammaSelectedC1.rawBatch
+    (c1Received (prefixWords c1Prefix (wire.roots 0)))
+    (c2Received (prefixWords c2Prefix (wire.roots 1))) gamma
+
+/-- Projecting a typed record made from literal bytes is purely a six-field
+constructor identity. Keep prefix resolution and packed arithmetic opaque. -/
+theorem literal_record_projection (first second : ExtractedWords)
+    (fibre : Position) (bytes : List Byte)
+    (h : first.c1[fibre.val]? =
+        some ⟨(recordOfBytes bytes).c1, (recordOfBytes bytes).salt⟩ ∧
+      second.c2[fibre.val]? =
+        some ⟨(recordOfBytes bytes).c2, (recordOfBytes bytes).salt⟩) :
+    PairedProjection first second fibre bytes := by
+  simpa only [recordOfBytes, PairedProjection] using h
+
+theorem wire_paired_projection (c1Prefix c2Prefix : AnswerPrefix) (wire : Wire)
+    (query : Fin 22 → Position) (i : Fin 22)
+    (h : ProjectionsAt c1Prefix c2Prefix (wireRoots wire) query (wireRecords wire) i) :
+    PairedProjection (prefixWords c1Prefix (wire.roots 0))
+      (prefixWords c2Prefix (wire.roots 1)) (query i) (wire.record i) := by
+  apply literal_record_projection
+  simpa only [ProjectionsAt, wireRoots, wireRecords] using h
+
+theorem same_body_authenticated_slots_or_failure
+    (view : RawHashInput → Digest208) (body : List Byte)
+    (query : Fin 22 → Position) (merkle : SuccessfulMerkleRun view query body)
+    (c1Prefix c2Prefix : AnswerPrefix) (fullLog : OrderedRawQueryLog)
+    (c1Answers : ∀ record ∈ c1Prefix, view record.1 = record.2)
+    (c2Answers : ∀ record ∈ c2Prefix, view record.1 = record.2)
+    (c1Included : TraceIncludedInLog (rawPrefix c1Prefix) fullLog)
+    (c2Included : TraceIncludedInLog (rawPrefix c2Prefix) fullLog)
+    (callsIncluded : TraceIncludedInLog
+      (MinimalMultiproofPaths.leafLog query (wireRecords merkle.wire) ++ merkle.trace) fullLog)
+    (canonical : (parseRecords merkle.wire).isSome = true) (gamma : K) :
+    AuthenticationFailure view c1Prefix c2Prefix (wireRoots merkle.wire) fullLog query ∨
+      ∃ decoded : Fin 22 → Decoded,
+        parseRecords merkle.wire = some decoded ∧
+        (∀ i, merkle.wire.record i = PackedQueryRecord.bodyRecord body i) ∧
+        ∀ i slot,
+          prefixBatch c1Prefix c2Prefix merkle.wire gamma
+            (childIndex (query i) slot) = combined gamma (decoded i) slot ∧
+          prefixBatch c1Prefix c2Prefix merkle.wire gamma
+            (childIndex (query i) slot) =
+              rawCombined gamma (merkle.wire.record i) slot := by
+  cases hd : parseRecords merkle.wire with
+  | none => simp [hd] at canonical
+  | some decoded =>
+    have parsed := parseRecords_success merkle.wire decoded hd
+    have accepted := successful_constructs_accepted view query body merkle
+    rcases accepted_all_projections_or_shared_failure view (wireRoots merkle.wire)
+        c1Prefix c2Prefix fullLog query (wireRecords merkle.wire)
+        (RustShapedMinimalMultiproof.frontierPairs
+          (merkle.wire.frontiers 0) (merkle.wire.frontiers 1)) merkle.trace
+        c1Answers c2Answers c1Included c2Included callsIncluded accepted with
+      collision | late1 | late2 | projections
+    · exact Or.inl (Or.inl collision)
+    · exact Or.inl (Or.inr (Or.inl late1))
+    · exact Or.inl (Or.inr (Or.inr late2))
+    · refine Or.inr ⟨decoded,rfl,successful_record_is_body_record view query body merkle,?_⟩
+      intro i slot
+      have projection : PairedProjection
+          (prefixWords c1Prefix (merkle.wire.roots 0))
+          (prefixWords c2Prefix (merkle.wire.roots 1)) (query i) (merkle.wire.record i) :=
+        wire_paired_projection c1Prefix c2Prefix merkle.wire query i (projections i)
+      exact ⟨batch_slots_of_paired_projection _ _ _ _ _ (parsed i) projection gamma slot,
+        raw_slots_of_paired_projection _ _ _ _ _ (parsed i) projection gamma slot⟩
+
+#print same_body_authenticated_slots_or_failure
+#print axioms collectFin_success
+#print axioms literal_record_projection
+#print axioms wire_paired_projection
+#print axioms same_body_authenticated_slots_or_failure
+end
+end AspisV8.SameBodyAuthenticatedSlots

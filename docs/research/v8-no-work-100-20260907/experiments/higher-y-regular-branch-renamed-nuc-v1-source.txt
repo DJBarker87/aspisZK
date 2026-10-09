@@ -1,0 +1,321 @@
+import MonicOODBranch
+import HigherYCurveObstruction
+import SelectedGRSSubmodule
+import AspisFormal.K1.V7ExactCorrelatedAgreementFixedBranchCurve
+import AspisFormal.K1.V7ExactCorrelatedAgreementReleasedLift
+
+/-! One fixed higher-Y factor and one fixed regular OOD row.
+Actual original messages may vary arbitrarily with gamma. A component curve
+is constructed only under the negation of the claimed incidence inequality,
+using the real message encoder and V7's released-image interpolation lemma.
+No received polynomiality beyond the fixed 29 scalar-power lanes is assumed.
+Singular rows and acceptance-to-this-class are separate obligations.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxHeartbeats 300000
+
+namespace AspisV8.HigherYRegularBranch
+open Polynomial Finset
+open AspisV8.FactorCoherence AspisV8.MonicOODBranch
+open AspisK1.V7ExactCorrelatedAgreementFactors
+open AspisK1.V7ExactCorrelatedAgreementSmooth
+open AspisK1.V7ExactCorrelatedAgreementRegularWeights
+open AspisK1.V7ExactCorrelatedAgreementFactorBudgets
+open AspisK1.V7ExactCorrelatedAgreementFunctionField
+open AspisK1.V7ExactCorrelatedAgreementRegularHensel
+open AspisK1.V7ExactCorrelatedAgreementPowerSeriesLift
+open AspisK1.V7ExactCorrelatedAgreementFixedBranchCurve
+open AspisK1.V7ExactCorrelatedAgreementReleasedLift
+open AspisK1.V7ExactCorrelatedAgreementInterpolation
+open AspisK1.V7ExactCorrelatedAgreement
+open AspisK1.V7Tag73ExactGRSConversion
+open AspisK1.V7Tag73ExactMultiplicityThreeGS
+open AspisPool.AlgorithmicCircleDecoderV7
+open AspisPool.V7C1ConcreteProjectionBinding
+open AspisV6Width29CorrelatedAgreement
+open AspisV5ComponentCQM31TowerExact
+noncomputable section
+
+namespace Generic
+variable {k : Type*} [Field k]
+
+theorem polynomial_eq_of_values {I : Type*} [Fintype I] [DecidableEq I]
+    (points : I→k) (injective : Function.Injective points)
+    (P Q : k[X]) (D : Nat) (small : D<Fintype.card I)
+    (left : P.natDegree≤D) (right : Q.natDegree≤D)
+    (values : ∀ i, P.eval (points i)=Q.eval (points i)) : P=Q := by
+  classical
+  apply Polynomial.eq_of_degrees_lt_of_eval_index_eq (univ : Finset I)
+    injective.injOn
+  · calc
+      P.degree≤(P.natDegree : WithBot Nat) := Polynomial.degree_le_natDegree
+      _≤(D : WithBot Nat) := by exact_mod_cast left
+      _<(Fintype.card I : WithBot Nat) := by exact_mod_cast small
+      _=((univ : Finset I).card : WithBot Nat) := by rw [card_univ]
+  · calc
+      Q.degree≤(Q.natDegree : WithBot Nat) := Polynomial.degree_le_natDegree
+      _≤(D : WithBot Nat) := by exact_mod_cast right
+      _<(Fintype.card I : WithBot Nat) := by exact_mod_cast small
+      _=((univ : Finset I).card : WithBot Nat) := by rw [card_univ]
+  · intro i _
+    exact values i
+
+def coefficientCurve {c : Nat} (components : Fin (c+1)→k[X]) : Polynomial k[X] :=
+  ∑ j, Polynomial.monomial j.val (components j)
+
+theorem coefficientCurve_degree {c : Nat} (components : Fin (c+1)→k[X]) :
+    (coefficientCurve components).natDegree≤c := by
+  classical
+  apply Polynomial.natDegree_sum_le_of_forall_le
+  intro j _
+  exact (Polynomial.natDegree_monomial_le _).trans (by omega)
+
+theorem coefficientCurve_eval {c : Nat} (components : Fin (c+1)→k[X]) (z : k) :
+    (coefficientCurve components).eval (C z)=∑ j, z^j.val • components j := by
+  classical
+  simp only [coefficientCurve,Polynomial.eval_finsetSum,Polynomial.eval_monomial,
+    ←map_pow,Polynomial.smul_eq_C_mul,mul_comm]
+
+/-- Evaluate an actual polynomial message encoder, preserving its domain. -/
+def evaluationEncoder {n : Nat} {I : Type*}
+    (E : (Fin n→k)→ₗ[k] k[X]) (points : I→k) : (Fin n→k)→ₗ[k] (I→k) where
+  toFun message i := (E message).eval (points i)
+  map_add' left right := by
+    funext i
+    simp only [map_add,Polynomial.eval_add,Pi.add_apply]
+  map_smul' a message := by
+    funext i
+    simp only [map_smul,Polynomial.eval_smul,Pi.smul_apply,smul_eq_mul,
+      RingHom.id_apply]
+
+/-- Reuse V7 ReleasedLift with the actual message domain, then use the
+injective evaluation grid to identify polynomials, not just ambient words. -/
+theorem actual_curve_of_ambient {n c : Nat} {I : Type*}
+    [Fintype I] [DecidableEq I]
+    (E : (Fin n→k)→ₗ[k] k[X]) (D : Nat)
+    (degree : ∀ message, (E message).natDegree≤D)
+    (points : I→k) (injective : Function.Injective points) (small : D<Fintype.card I)
+    (candidate : k→Fin n→k) (G : Finset k) (many : c<G.card)
+    (ambient : I→k[X]) (ambientDegree : ∀ i, (ambient i).natDegree≤c)
+    (onAmbient : ∀ gamma∈G, ∀ i,
+      (E (candidate gamma)).eval (points i)=(ambient i).eval gamma) :
+    ∃ curve : Polynomial k[X], curve.natDegree≤c ∧
+      ∀ gamma∈G, E (candidate gamma)=curve.eval (C gamma) := by
+  classical
+  obtain ⟨components,represented⟩ := exists_released_components_of_ambient_curve
+    (curveDegree := c) (evaluationEncoder E points) candidate G ambient many
+      ambientDegree onAmbient
+  refine ⟨coefficientCurve (fun j=>E (components j)),coefficientCurve_degree _,?_⟩
+  intro gamma member
+  have equality : E (candidate gamma)=
+      E (∑ j : Fin (c+1), gamma^j.val • components j) := by
+    apply polynomial_eq_of_values points injective _ _ D small
+      (degree _) (degree _)
+    intro i
+    exact congrFun (represented gamma member) i
+  rw [equality,coefficientCurve_eval,map_sum]
+  apply Finset.sum_congr rfl
+  intro j _
+  exact E.map_smul _ _
+
+theorem branch_coefficients (answer : k[X]) (small : answer.natDegree≤28) :
+    ∀ j∈(branch answer).support,
+      ((branch answer).coeff j).natDegree+28*j≤28 := by
+  intro j member
+  have bound := Polynomial.le_natDegree_of_mem_supp j member
+  rw [branch_degree] at bound
+  have alternatives : j=0 ∨ j=1 := by omega
+  rcases alternatives with rfl | rfl
+  · simpa [branch] using small
+  · simp [branch]
+
+theorem branch_weight (answer : k[X]) (small : answer.natDegree≤28) :
+    localBivariateWeight 28 (branch answer)=28 := by
+  apply le_antisymm
+  · apply localBivariateWeight_le_of_coeff
+    intro j member
+    simpa only [Nat.mul_comm] using branch_coefficients answer small j member
+  · have bound := coeff_weight_le_localBivariateWeight 28 (branch answer)
+      (branch answer).natDegree
+      (Polynomial.natDegree_mem_support_of_nonzero (branch_nonzero answer))
+    rw [branch_degree] at bound
+    omega
+
+theorem parent_weight (F : TrivariatePolynomial k) (nonzero : F≠0)
+    (positive : 0<F.natDegree) : 28≤trivariateYZWeight 28 F := by
+  have bound := coeff_weight_le_localBivariateWeight 28 F F.natDegree
+    (Polynomial.natDegree_mem_support_of_nonzero nonzero)
+  change (F.coeff F.natDegree).natDegree+F.natDegree*28≤trivariateYZWeight 28 F at bound
+  omega
+
+theorem source_simple (F : TrivariatePolynomial k) (x gamma : k) (answer U : k[X])
+    (identity : pointSubstitution x answer F=0)
+    (point : U.eval x=answer.eval gamma)
+    (regular : (derivativeCurve F x answer).eval gamma≠0) :
+    SimpleSpecializedRoot F x gamma U := by
+  constructor
+  · change (specializeEvaluationPointChallenge x gamma F).eval (U.eval x)=0
+    rw [point,←pointSubstitution_eval,identity,Polynomial.eval_zero]
+  · change (specializeEvaluationPointChallenge x gamma F).derivative.eval (U.eval x)≠0
+    rw [←specializeEvaluationPointChallenge_derivative,point,←pointSubstitution_eval]
+    exact regular
+
+end Generic
+
+abbrev K := QM31Exact
+abbrev Message := Fin 1024→K
+abbrev Coordinate := Fin 1048576
+
+def budget (F : TrivariatePolynomial K) : Nat :=
+  fixedBranchEvaluationBudget 1024 28 F.natDegree 1 28 (trivariateYZWeight 28 F)
+
+theorem budget_formula (F : TrivariatePolynomial K) :
+    budget F=28+2047*(trivariateYZWeight 28 F-28) := by
+  simp only [budget,fixedBranchEvaluationBudget,
+    AspisK1.V7ExactCorrelatedAgreementHenselCombinatorics.henselDenominatorExponent]
+  omega
+
+theorem weight_le_budget (F : TrivariatePolynomial K) (weight : 28≤trivariateYZWeight 28 F) :
+    trivariateYZWeight 28 F≤budget F := by
+  rw [budget_formula]
+  omega
+
+/-- Exact deployed column-multiplier normalization. -/
+theorem normalized_coordinate (message : Message) (i : Coordinate) :
+    (exactCircleGRSPolynomial message).eval (exactInitialGRSConversion.points i)=
+      (exactInitialGRSConversion.multipliers i)⁻¹*exactInitialEncoder message i := by
+  have encoded := exactInitialEncoder_coordinate_grs message i
+  have multiplierNeZero := exactInitialGRSConversion.multipliers_ne_zero i
+  rw [encoded]
+  unfold generalizedReedSolomonEncode
+  field_simp
+  simp only [exactInitialGRSConversion]
+  ring
+
+theorem normalized_agreement (lanes : Fin 29 → Coordinate → K)
+    (message : Message) (gamma : K) (i : Coordinate)
+    (matched : exactInitialEncoder message i=width29CurveValue lanes gamma i) :
+    (exactCircleGRSPolynomial message).eval (exactInitialGRSConversion.points i)=
+      (receivedCurvePolynomial (exactInitialNormalizedLanes lanes) i).eval gamma := by
+  rw [normalized_coordinate,matched]
+  simpa only [exactInitialNormalizedReceived] using
+    (exactInitialNormalizedLanes_curve lanes gamma i).symm
+
+/-- All interface equalities are derived from actual encoders and the
+literal monic OOD branch. The supplied messages can vary arbitrarily on G. -/
+theorem regular_branch_count
+    (F : TrivariatePolynomial K) (prime : Prime F) (higher : 3≤F.natDegree)
+    (x : K) (answer : K[X]) (answerDegree : answer.natDegree≤28)
+    (identity : pointSubstitution x answer F=0)
+    (lanes : Fin 29 → Coordinate → K) (candidate : K → Message)
+    (support : K → Finset Coordinate) (G : Finset K) (M : Nat)
+    (supportLarge : ∀ gamma∈G, M≤(support gamma).card)
+    (agreement : ∀ gamma∈G, ∀ i∈support gamma,
+      exactInitialEncoder (candidate gamma) i=width29CurveValue lanes gamma i)
+    (root : ∀ gamma∈G,
+      challengeCandidateHom gamma (exactCircleGRSPolynomial (candidate gamma)) F=0)
+    (point : ∀ gamma∈G,
+      (exactCircleGRSPolynomial (candidate gamma)).eval x=answer.eval gamma)
+    (regular : ∀ gamma∈G, (derivativeCurve F x answer).eval gamma≠0) :
+    (M-1024)*G.card≤1048576*budget F := by
+  classical
+  by_contra notBounded
+  have excess : 1048576*budget F<(M-1024)*G.card := by omega
+  have cardPositive : 0<G.card := by
+    by_contra empty
+    have zero : G.card=0 := by omega
+    rw [zero,mul_zero] at excess
+    omega
+  obtain ⟨gamma0,inG⟩ := Finset.card_pos.mp cardPositive
+  have Mbound : M≤1048576 := by
+    have bound := (supportLarge gamma0 inG).trans (Finset.card_le_univ (support gamma0))
+    simpa only [Fintype.card_fin] using bound
+  have positive : 0<F.natDegree := by omega
+  have weight := Generic.parent_weight F prime.ne_zero positive
+  have budgetLarge := weight_le_budget F weight
+  have many : trivariateYZWeight 28 F<G.card := by
+    have cap : M-1024≤1048576 := by omega
+    have bounded := Nat.mul_le_mul_right G.card cap
+    omega
+  have Mlarge : 1024<M := by
+    by_contra small
+    have zero : M-1024=0 := by omega
+    rw [zero,zero_mul] at excess
+    omega
+  have regularPolynomial : derivativeCurve F x answer≠0 := by
+    intro zero
+    apply regular gamma0 inG
+    rw [zero,Polynomial.eval_zero]
+  obtain ⟨hensel,henselEquation,henselConstant⟩ :=
+    exists_source_hensel_root F x answer identity regularPolynomial
+  have eta := derivative_nonzero F x answer regularPolynomial
+  have coefficientBound : ∀ j∈F.support,
+      (F.coeff j).natDegree+28*j≤trivariateYZWeight 28 F := by
+    intro j member
+    simpa only [trivariateYZWeight,Nat.mul_comm] using
+      coeff_weight_le_localBivariateWeight 28 F j member
+  have incidence :
+      1024*G.card+Fintype.card Coordinate*
+        fixedBranchEvaluationBudget 1024 28 F.natDegree (branch answer).natDegree
+          28 (trivariateYZWeight 28 F)<G.card*((M-1)+1) := by
+    rw [Fintype.card_fin,branch_degree]
+    change 1024*G.card+1048576*budget F<G.card*((M-1)+1)
+    calc
+      _<1024*G.card+(M-1024)*G.card := Nat.add_lt_add_left excess _
+      _=G.card*((M-1)+1) := by
+        rw [←add_mul,Nat.add_sub_of_le Mlarge.le,Nat.sub_add_cancel (by omega : 1≤M)]
+        exact Nat.mul_comm _ _
+  obtain ⟨ambient,ambientDegree,onAmbient⟩ :=
+    exists_ambient_curve_of_fixed_branch
+      exactInitialGRSConversion.points exactInitialGRSConversion.points_injective
+      F positive x (branch answer) (branch_nonzero answer)
+      (by rw [branch_degree]; omega) 1024 28 (M-1) 28 (trivariateYZWeight 28 F)
+      weight (Generic.branch_coefficients answer answerDegree) coefficientBound
+      hensel henselEquation henselConstant eta G
+      (fun gamma=>exactCircleGRSPolynomial (candidate gamma)) support
+      (receivedCurvePolynomial (exactInitialNormalizedLanes lanes))
+      (by intro gamma member; have enough:=supportLarge gamma member; omega)
+      (by intro gamma member i inSupport
+          exact normalized_agreement lanes (candidate gamma) gamma i (agreement gamma member i inSupport))
+      (by intro gamma _; exact exactCircleGRSPolynomial_degree_le _)
+      (receivedCurvePolynomial_natDegree_le _)
+      (by intro gamma member; exact branch_local_root answer _ x gamma (point gamma member))
+      root
+      (by intro gamma member
+          exact Generic.source_simple F x gamma answer _ identity (point gamma member) (regular gamma member))
+      (by intro gamma _; rw [branch_poles]; exact Finset.notMem_empty gamma)
+      incidence
+  obtain ⟨curve,curveDegree,candidateCurve⟩ := Generic.actual_curve_of_ambient
+    (c:=28) AspisV8.SelectedGRSSubmodule.encoder 1024
+    (by intro message; rw [AspisV8.SelectedGRSSubmodule.encoder_eq]
+        exact exactCircleGRSPolynomial_degree_le message)
+    exactInitialGRSConversion.points exactInitialGRSConversion.points_injective
+    (by rw [Fintype.card_fin]; norm_num) candidate G (by omega) ambient ambientDegree
+    (by intro gamma member i
+        rw [AspisV8.SelectedGRSSubmodule.encoder_eq]
+        exact onAmbient gamma member i)
+  have bounded := HigherYCurveObstruction.coherent_specializations_card 28 F prime
+    (by omega) curve curveDegree G (by
+      intro gamma member
+      have equality := candidateCurve gamma member
+      rw [AspisV8.SelectedGRSSubmodule.encoder_eq] at equality
+      rw [←equality]
+      exact root gamma member)
+  omega
+
+#print axioms Generic.polynomial_eq_of_values
+#print axioms Generic.coefficientCurve_degree
+#print axioms Generic.coefficientCurve_eval
+#print axioms Generic.actual_curve_of_ambient
+#print axioms Generic.branch_coefficients
+#print axioms Generic.branch_weight
+#print axioms Generic.parent_weight
+#print axioms Generic.source_simple
+#print axioms budget_formula
+#print axioms weight_le_budget
+#print axioms normalized_coordinate
+#print axioms normalized_agreement
+#print axioms regular_branch_count
+end
+end AspisV8.HigherYRegularBranch

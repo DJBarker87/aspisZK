@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+"""Emit a fresh f0f46ffe import manifest after checking frozen sources and outputs.
+
+Metadata-only: no compiler, network operation or filesystem mutation. The
+coordinator installs stdout in a new isolated NUC scope via an explicit patch.
+"""
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+EX = Path(__file__).resolve().parent
+PARENT = "f0f46ffede8812252ac7cee9edf5547f228533d5"
+BORROWED = "26a9cd4718aae9f9de7ef1c3394fb74a229085d5"
+ORIGIN = "9254b2416c3f8c3c488d0475a00d812fee836e00"
+REPO = Path(subprocess.check_output(["git", "-C", str(EX), "rev-parse", "--show-toplevel"], text=True).strip())
+
+
+def digest(path):
+    h = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+oldpath, greenpath = map(Path, sys.argv[1:])
+old, green = json.loads(oldpath.read_text()), json.loads(greenpath.read_text())
+assert old["research"] == ORIGIN
+entries = {entry["overlay"]: dict(entry) for entry in old["files"]}
+assert len(entries) == len(old["files"])
+for module, checked in green.items():
+    assert entries[module + ".lean"]["sha256"] == checked["source"], module
+    for suffix, expected in checked["outputs"].items():
+        path = EX / (module + suffix)
+        assert digest(path) == expected, ("green local output", module, suffix)
+        name = module + suffix
+        if name in entries:
+            assert entries[name]["sha256"] == expected, ("green prior manifest", module, suffix)
+        else:
+            entries[name] = {"module": module, "category": "research", "kind": suffix[1:],
+                "local": str(path), "overlay": name, "remote_cache": None,
+                "sha256": expected, "bytes": path.stat().st_size}
+sources, outputs = 0, 0
+for entry in entries.values():
+    if not entry.get("local"):
+        entry["local"] = str(EX / entry["overlay"])
+    if entry["category"] == "new_checked":
+        entry["category"] = "research"
+    if entry["kind"] != "source":
+        assert digest(Path(entry["local"])) == entry["sha256"], ("compiled cache", entry["module"])
+        outputs += 1
+        continue
+    borrowed = entry["module"].startswith("AspisFormal.")
+    revision = BORROWED if borrowed else PARENT
+    relative = ("AspisFormal/" + entry["overlay"] if borrowed else
+                "docs/research/v8-no-work-100-20260907/experiments/" + entry["overlay"])
+    pinned = subprocess.check_output(["git", "-C", str(REPO), "show", revision + ":" + relative])
+    assert hashlib.sha256(pinned).hexdigest() == entry["sha256"], ("pinned source", entry["module"], revision)
+    sources += 1
+manifest = dict(old)
+manifest.update(research=PARENT, borrowed=BORROWED, pending_no_olean=[], targets=[],
+    files=list(entries.values()),
+    counts={"pinned_source_blobs": sources, "compiled_artifacts": outputs},
+    origin={"research": old["research"], "manifest_sha256": digest(oldpath),
+            "green_outputs_sha256": digest(greenpath), "manifest_name": oldpath.name,
+            "prior_origin": old["origin"]},
+    bootstrap={"source_sha256": digest(Path(__file__).resolve()),
+        "scope": "Exact source/blob and compiled-byte validation; inherited source-to-olean evidence and pinned native package cache, not a compilation replay."})
+print(json.dumps(manifest, indent=2))

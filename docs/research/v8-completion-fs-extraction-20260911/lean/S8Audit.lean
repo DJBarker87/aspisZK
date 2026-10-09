@@ -1,0 +1,26 @@
+import S8RunLevelBind
+import S8SemanticSegments
+import S8ConcreteCommitmentCuts
+import S8BufferedPotential
+import S8SemanticPathBudget
+import S8CutBaseCovector
+import S8FourRoundFirstDrop
+import FSV8S8SelectedOrdinaryTerminal
+import FSV8S8TerminalExecutionCuts
+
+/-!
+# S8 focused axiom audit
+
+This aggregate audits only the source-cut, path-budget and executed ordinary
+terminal endpoints introduced in S8.  It is not a global soundness theorem.
+-/
+
+#print axioms AspisV8Completion.S8SemanticSegments.actual_semantic_run_factorises
+#print axioms AspisV8Completion.S8ConcreteCommitmentCuts.successful_semantic_constructs_execution_cuts
+#print axioms AspisV8Completion.S8BufferedPotential.source_challenge_log_length_le_eight
+#print axioms AspisV8Completion.S8SemanticPathBudget.selected_semanticScript_logBound_234
+#print axioms AspisV8Completion.S8CutBaseCovector.baseChunks_length
+#print axioms AspisV8Completion.S8FourRoundFirstDrop.vanishing_discrepancy_is_listed
+#print axioms AspisV8Completion.FSV8S8SelectedOrdinaryTerminal.successful_run_constructs_terminal_equation
+#print axioms AspisV8Completion.FSV8S8SelectedOrdinaryTerminal.run_root_trace_is_erased_exposure_trace
+#print axioms AspisV8Completion.FSV8S8TerminalExecutionCuts.successful_run_constructs_terminal_execution_cuts

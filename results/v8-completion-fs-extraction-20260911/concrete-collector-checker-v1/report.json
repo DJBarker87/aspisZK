@@ -1,0 +1,39 @@
+{
+  "status": "PASS_FOCUSED_LOCAL_LEAF",
+  "claim_scope": "The checker accepts only the actual Some SameBodyRelation.Result returned by the current consume function, preserves its final256 vector, and constructs a same-tape origin whose current source program is visibly pure. It proves no restoration success, RecoveredHigh event, matrix progress probability, payment acceptance, or global security statement.",
+  "source_revision": "dcedc230c4fda105af5b970e169fd93890fab64f",
+  "base_revision": "d5fc7315aa3fb1a3caac50b2ac93ab12b65da98b",
+  "collector_interface_revision": "53d0e3c7638c79c645db647ac8f5bc817cb0c098",
+  "source": "docs/research/v8-completion-fs-extraction-20260911/lean/ExtractionCollectorConcreteChecker.lean",
+  "source_sha256": "036b351517f4880cb85dc84cd2b47ebadbeefe40d9610d36c7d7730a4bc728c2",
+  "toolchain": "Lean 4.32.0, arm64-apple-darwin24.6.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+  "command": "dep_path=$(cd /Users/dominic/ZK/AspisFormal && lake env printenv LEAN_PATH) && LEAN_PATH=\".:$dep_path\" /usr/bin/time -lp /Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean ExtractionCollectorConcreteChecker.lean",
+  "environment": "Isolated detached worktree based on d5fc7315; existing pinned local AspisFormal 4.32 dependency cache plus focused local ExtractionCollectorSource.olean and SameBodyRelation.olean; no package-wide replay.",
+  "exit_code": 0,
+  "wall_seconds": 11.03,
+  "user_seconds": 1.69,
+  "system_seconds": 2.22,
+  "maximum_resident_set_bytes": 5438865408,
+  "peak_memory_footprint_bytes": 851734288,
+  "swaps": 0,
+  "axioms": {
+    "checkCurrentSameBody_accepted": ["propext"],
+    "accepted_final_is_returned": ["propext"],
+    "current_origin_start_is_pure": ["propext", "Quot.sound"],
+    "labelled_record_is_returned": []
+  },
+  "checked_declarations": [
+    "AspisV8Completion.ExtractionCollectorConcreteChecker.checkCurrentSameBody_accepted",
+    "AspisV8Completion.ExtractionCollectorConcreteChecker.accepted_final_is_returned",
+    "AspisV8Completion.ExtractionCollectorConcreteChecker.current_origin_start_is_pure",
+    "AspisV8Completion.ExtractionCollectorConcreteChecker.labelled_record_is_returned"
+  ],
+  "obstruction": "SameBodyRelation.consume is evaluated before currentSameBodyBlackBox returns OracleMachine.pure. The V7 constructLegalReplay layer therefore sees no source OracleMachine.query at which it can pause and program gamma or alpha. The separate selected Merkle result is not integrated with the relation result, and neither current returned type carries body, gamma and alpha together.",
+  "minimal_interface_change": "The causal source producer, not the checker, must return gamma, alpha, body and the checked SameBodyRelation.Result together, then expose its hash calls through the replayable V7 oracle machine. Authentication/body provenance remains a source-refinement theorem rather than an unverified record field.",
+  "limitations": [
+    "The dependency cache was reused; this was not a clean first-party closure rebuild.",
+    "No cgroup was used because this was a focused local job below the 8 GiB policy threshold.",
+    "The selected Merkle slice and same-body relation result remain separate source programs.",
+    "No unchanged compile or full manifest replay was run after this receipt was written."
+  ]
+}

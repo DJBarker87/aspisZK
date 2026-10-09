@@ -1,0 +1,125 @@
+import SupportQualifiedRootIncidence
+
+/-! Exact support bottleneck for the singular cubic control.
+
+The fixed received coordinate is Z^28 + Z^26*h*q(Z), deg q <= 2.
+This has fixed zero C1 and a genuine three-helper curve: the helper
+polynomial is Z^2 + h*q(Z). The component/answer degree remains 28.
+The cubic root equation is (U_gamma - gamma^28)^3 = (gamma-1)*h^3.
+Adaptive matching forces a fixed nonzero degree-84 pullback root.
+
+This is a generic algebraic control, not actual selected circle-code,
+authenticated-word, interpolant-selection or accepted-suffix coverage.
+-/
+set_option autoImplicit false
+set_option Elab.async false
+set_option maxHeartbeats 200000
+set_option maxRecDepth 200
+
+namespace AspisV8.CubicSupportControl
+open Polynomial Finset
+noncomputable section
+variable {K : Type*} [Field K]
+
+def helper (h : K) (q : K[X]) : K[X] := X^2 + C h * q
+def raw (h : K) (q : K[X]) : K[X] := X^28 + X^26 * C h * q
+def pullback (h : K) (q : K[X]) : K[X] :=
+  C (h^3) * (X^78 * q^3 - X + 1)
+
+theorem helper_degree (h : K) (q : K[X]) (degree : q.natDegree ≤ 2) :
+    (helper h q).natDegree ≤ 2 := by
+  apply Polynomial.natDegree_add_le_of_degree_le
+  · exact Polynomial.natDegree_X_pow_le 2
+  · exact (Polynomial.natDegree_C_mul_le h q).trans degree
+
+theorem raw_helper (h : K) (q : K[X]) : raw h q = X^26 * helper h q := by
+  unfold raw helper
+  ring
+
+theorem raw_degree (h : K) (q : K[X]) (degree : q.natDegree ≤ 2) :
+    (raw h q).natDegree ≤ 28 := by
+  rw [raw_helper]
+  have hd := Polynomial.natDegree_mul_le (p := (X : K[X])^26) (q := helper h q)
+  have first := Polynomial.natDegree_X_pow_le (R := K) 26
+  have second := helper_degree h q degree
+  omega
+
+theorem pullback_identity (h : K) (q : K[X]) :
+    (raw h q - X^28)^3 - (X-1) * C (h^3) = pullback h q := by
+  unfold raw pullback
+  rw [add_sub_cancel_left, mul_pow, mul_pow, ← pow_mul]
+  simp only [Nat.reduceMul, ← Polynomial.C_pow]
+  ring
+
+theorem pullback_nonzero (h : K) (q : K[X]) (nonzero : h ≠ 0) :
+    pullback h q ≠ 0 := by
+  intro zero
+  have atZero := congrArg (fun p : K[X] => p.eval 0) zero
+  have cube : h^3 = 0 := by
+    simpa only [pullback, Polynomial.eval_mul, Polynomial.eval_add,
+      Polynomial.eval_sub, Polynomial.eval_pow, Polynomial.eval_X,
+      Polynomial.eval_C, Polynomial.eval_one, Polynomial.eval_zero,
+      zero_pow (by decide : (78 : Nat) ≠ 0), zero_mul, sub_self,
+      zero_add, mul_one] using atZero
+  exact pow_ne_zero 3 nonzero cube
+
+theorem pullback_degree (h : K) (q : K[X]) (degree : q.natDegree ≤ 2) :
+    (pullback h q).natDegree ≤ 84 := by
+  have cube : (q^3).natDegree ≤ 6 :=
+    (Polynomial.natDegree_pow_le (p := q) (n := 3)).trans (by omega)
+  have product : ((X : K[X])^78 * q^3).natDegree ≤ 84 := by
+    have bound := Polynomial.natDegree_mul_le (p := (X : K[X])^78) (q := q^3)
+    have left := Polynomial.natDegree_X_pow_le (R := K) 78
+    omega
+  apply (Polynomial.natDegree_C_mul_le _ _).trans
+  apply Polynomial.natDegree_add_le_of_degree_le
+  · apply (Polynomial.natDegree_sub_le _ _).trans
+    exact max_le product (by simp)
+  · simp
+
+/-- The root implication is derived from the literal received value and
+cubic equation; it is not a supplied pullback correspondence premise. -/
+theorem matching_forces_root (h gamma u : K) (q : K[X])
+    (candidate : (u-gamma^28)^3 = (gamma-1)*h^3)
+    (matching : u = (raw h q).eval gamma) :
+    (pullback h q).eval gamma = 0 := by
+  have identity := congrArg (fun p : K[X] => p.eval gamma) (pullback_identity h q)
+  simp only [Polynomial.eval_sub, Polynomial.eval_pow, Polynomial.eval_X,
+    Polynomial.eval_mul, Polynomial.eval_one, Polynomial.eval_C] at identity
+  rw [← matching, candidate, sub_self] at identity
+  exact identity.symm
+
+/-- Source-shaped fixed helper control with arbitrary gamma-adaptive
+candidate values and support choices. The nonvanishing h condition excludes
+the two OOD roots of H from the coordinate domain when h=H(x_i). -/
+theorem adaptive_cubic_card_le_2303 {I : Type*} [DecidableEq I] [DecidableEq K]
+    (D : Finset I) (G : Finset K) (h : I → K) (q : I → K[X])
+    (U : K → I → K) (S : K → Finset I) (size : D.card = 1048576)
+    (nonzero : ∀ i ∈ D, h i ≠ 0) (degree : ∀ i ∈ D, (q i).natDegree ≤ 2)
+    (inside : ∀ g ∈ G, S g ⊆ D) (large : ∀ g ∈ G, 38230 ≤ (S g).card)
+    (candidate : ∀ g ∈ G, ∀ i ∈ S g,
+      (U g i-g^28)^3 = (g-1)*(h i)^3)
+    (matching : ∀ g ∈ G, ∀ i ∈ S g, U g i = (raw (h i) (q i)).eval g) :
+    G.card ≤ 2303 := by
+  apply SupportQualifiedRootIncidence.degree84_card_le_2303 D G
+    (fun i => pullback (h i) (q i)) S size
+  · intro i hi
+    exact pullback_nonzero (h i) (q i) (nonzero i hi)
+  · intro i hi
+    exact pullback_degree (h i) (q i) (degree i hi)
+  · exact inside
+  · exact large
+  · intro g hg i hi
+    exact matching_forces_root (h i) g (U g i) (q i)
+      (candidate g hg i hi) (matching g hg i hi)
+
+#print axioms helper_degree
+#print axioms raw_helper
+#print axioms raw_degree
+#print axioms pullback_identity
+#print axioms pullback_nonzero
+#print axioms pullback_degree
+#print axioms matching_forces_root
+#print axioms adaptive_cubic_card_le_2303
+end
+end AspisV8.CubicSupportControl
