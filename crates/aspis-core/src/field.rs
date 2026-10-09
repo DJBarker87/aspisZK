@@ -1,4 +1,4 @@
-//! M31 -> CM31 -> QM31 field tower.
+//! M31 -> CM31 -> QM31 -> WideExact field tower.
 //!
 //! Kernel choices are the Phase 2 winners, built in from the start:
 //! - M31 reduction: `reference_canonical` (mask/shift double-fold, canonical output)
@@ -11,6 +11,9 @@
 // arithmetic explicit and identical in `no_std` host/SBF builds without
 // introducing operator-trait dispatch into CU-sensitive call sites.
 #![allow(clippy::should_implement_trait)]
+
+mod wide_exact;
+pub use wide_exact::WideExact;
 
 /// The Mersenne prime 2^31 - 1.
 pub const P: u32 = 0x7fff_ffff;
