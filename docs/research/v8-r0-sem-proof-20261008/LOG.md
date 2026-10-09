@@ -3815,3 +3815,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3236 | `R0P/MaskOpeningDensity` | 0 / 0 | 0:04.23 | 6835876 | 0 | 2 | `e1b9fec9b1f1aae352ad5c75f00268ce917dcd0aea8111c5f19b1c8b189201ef` |
 
 Source revision(s): `92e16f14288ae22b7a187c5176f9b40b7098c068`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: shifted final q22 opening row
+
+MaskOpeningDensity now includes the all-message final q22 bound at row 31. It averages DQ.round_q22_bound over the absorbed state via chainS_independentMean; no new sigma hypothesis is introduced. Malformed opening views have zero flip mass. Attempt 3237 used an unavailable indicator lemma; 3238 uses the existing indicator_iff API and is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3237 | `R0P/MaskOpeningDensity` | 1 / 1 | 0:05.00 | 6804908 | 0 | 3 | `80dc39b3a0320db8cf19cde6b69c52b58d3c10e8632c2376973f4f11cd0138b2` |
+| 3238 | `R0P/MaskOpeningDensity` | 0 / 0 | 0:05.22 | 6843520 | 0 | 3 | `efafabc1129c354576f83da5fde493395c063ce42efe54ff81c79b0ec3a0d6be` |
+
+Source revision(s): `48a7e8bfe4a948d5fef06c91cd72aade2b9c0f28`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
