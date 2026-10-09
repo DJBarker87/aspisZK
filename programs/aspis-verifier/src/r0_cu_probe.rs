@@ -15,10 +15,11 @@ use solana_program::{
 /// Matched by request_heap_frame(256 KiB) in the local measurement harness.
 #[cfg(target_os = "solana")]
 #[global_allocator]
-static ALLOCATOR: solana_program::entrypoint::BumpAllocator = solana_program::entrypoint::BumpAllocator {
-    start: solana_program::entrypoint::HEAP_START_ADDRESS as usize,
-    len: 256 * 1024,
-};
+static ALLOCATOR: solana_program::entrypoint::BumpAllocator =
+    solana_program::entrypoint::BumpAllocator {
+        start: solana_program::entrypoint::HEAP_START_ADDRESS as usize,
+        len: 256 * 1024,
+    };
 
 pub const R0_CU_PROBE_TAG: u8 = 241;
 #[cfg(not(feature = "no-entrypoint"))]
@@ -85,8 +86,17 @@ pub fn process_r0_cu_probe_instruction(
     })?;
     #[cfg(target_os = "solana")]
     unsafe {
-        let cursor=*(solana_program::entrypoint::HEAP_START_ADDRESS as *const usize);
-        msg!("r0:heap-used:{}", solana_program::entrypoint::HEAP_START_ADDRESS as usize + 256*1024 - cursor);
+        let cursor = *(solana_program::entrypoint::HEAP_START_ADDRESS as *const usize);
+        // Non-allocating logging preserves the final bump high-water mark.
+        msg!("r0:heap-high-water");
+        solana_program::log::sol_log_64(
+            (solana_program::entrypoint::HEAP_START_ADDRESS as usize + 256 * 1024 - cursor
+                + core::mem::size_of::<usize>()) as u64,
+            0,
+            0,
+            0,
+            0,
+        );
     }
     msg!("r0:done");
     sol_log_compute_units();

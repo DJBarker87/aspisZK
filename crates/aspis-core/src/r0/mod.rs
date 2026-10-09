@@ -13,6 +13,8 @@ pub mod encoder;
 pub mod fold;
 pub mod heap;
 pub mod onchain;
+#[cfg(all(feature = "r0-hoist-reference", not(target_os = "solana")))]
+pub mod onchain_unhoisted;
 pub mod merkle;
 pub mod opening;
 pub mod prover;

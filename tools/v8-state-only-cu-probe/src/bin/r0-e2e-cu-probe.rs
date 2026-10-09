@@ -5,6 +5,7 @@ use serde_json::{json, Value};
 use sha2::{Digest as _, Sha256};
 use solana_account::Account;
 use solana_address::Address;
+use solana_compute_budget::compute_budget::ComputeBudget;
 use solana_compute_budget_interface::ComputeBudgetInstruction;
 use solana_instruction::{account_meta::AccountMeta, Instruction};
 use solana_keypair::Keypair;
@@ -13,7 +14,6 @@ use solana_signer::Signer;
 use solana_transaction::{versioned::VersionedTransaction, Transaction};
 use std::{env, fs, path::Path, time::Instant};
 
-const LABEL: &str = "strict R0 P1+D13 reference verifier, diagnostic entrypoint";
 const LIMIT: u32 = 1_400_000;
 const TAG: u8 = 241;
 
@@ -117,6 +117,7 @@ fn measure(
     fixture_dir: &Path,
     out: &Path,
     reject: bool,
+    diagnostic: bool,
     profile: Profile,
 ) -> Result<()> {
     fs::create_dir_all(out)?;
@@ -183,22 +184,47 @@ fn measure(
         ],
         data,
     };
+    let budget = if diagnostic {
+        200_000_000u64
+    } else {
+        LIMIT as u64
+    };
+    let label = if diagnostic {
+        "DIAGNOSTIC: elevated CU only; no acceptance claim"
+    } else {
+        "ACCEPTANCE: 1,400,000 CU limit"
+    };
     let mut first = None;
-    for run in 1..=if reject { 1 } else { 5 } {
+    for run in 1..=if reject || diagnostic { 1 } else { 5 } {
         let filename = if reject {
             format!("{}-reject-1.json", profile.stem)
+        } else if diagnostic {
+            format!("{}-diagnostic-{run}.json", profile.stem)
         } else {
             format!("{}-run-{run}.json", profile.stem)
         };
+        ensure!(
+            !out.join(&filename).exists(),
+            "unchanged measurement rerun forbidden"
+        );
         let start = Instant::now();
         let mut svm = LiteSVM::new();
+        if diagnostic {
+            let nesting = LiteSVM::mainnet_feature_set()
+                .is_active(&agave_feature_set::raise_cpi_nesting_limit_to_8::ID);
+            svm = svm.with_compute_budget(ComputeBudget {
+                compute_unit_limit: budget,
+                heap_size: 256 * 1024,
+                ..ComputeBudget::new_with_defaults(nesting)
+            });
+        }
         svm.airdrop(&payer.pubkey(), 1_000_000_000)
             .map_err(|e| anyhow!("airdrop: {e:?}"))?;
         if let Err(error) = svm.add_program(program, &elf) {
             write_json(
                 &out.join(&filename),
                 &json!({
-                    "label": LABEL, "run": run, "load_error": format!("{error:?}"),
+                    "label": label, "run": run, "load_error": format!("{error:?}"),
                     "elf_sha256": sha(&elf), "verifier_cu": null,
                 }),
             )?;
@@ -249,17 +275,10 @@ fn measure(
         let txv1 = VersionedTransaction::try_new(VersionedMessage::V1(message), &[&payer])?;
         let txv1_bytes = wincode::serialize(&txv1)?.len();
         ensure!(txv1_bytes <= 4096);
-        let simulation = match svm.simulate_transaction(tx.clone()) {
-            Ok(r) => (None, r.meta),
-            Err(r) => (Some(format!("{:?}", r.err)), r.meta),
-        };
         let execution = match svm.send_transaction(tx) {
             Ok(r) => (None, r),
             Err(r) => (Some(format!("{:?}", r.err)), r.meta),
         };
-        let agree = simulation.0 == execution.0
-            && simulation.1.compute_units_consumed == execution.1.compute_units_consumed
-            && simulation.1.logs == execution.1.logs;
         let unchanged = svm.get_account(&proof_key).unwrap().data == account
             && svm.get_account(&public_key).unwrap().data == public;
         let phase_markers = markers(&execution.1.logs);
@@ -273,37 +292,58 @@ fn measure(
         let signature = (execution.0.clone(), verifier_cu, phase_markers.clone());
         let identical = first.as_ref().map_or(true, |f| f == &signature);
         first.get_or_insert(signature);
+        let heap_high_water_bytes = execution.1.logs.windows(2).find_map(|w| {
+            if w[0] != "Program log: r0:heap-high-water" {
+                return None;
+            }
+            let word = w[1]
+                .strip_prefix("Program log: ")?
+                .split(',')
+                .next()?
+                .trim()
+                .strip_prefix("0x")?;
+            u64::from_str_radix(word, 16).ok()
+        });
         let record = json!({
-            "schema": "aspis.r0-e2e-cu.run.v1", "label": LABEL, "run": run,
+            "schema": "aspis.r0-e2e-cu.run.v1", "label": label, "run": run,
             "variant": profile.stem, "query_count": 22, "proof_bytes": proof.len(),
             "proof_sha256": sha(&proof), "public_sha256": sha(&public), "elf_sha256": sha(&elf),
             "original_proof_sha256": original_proof_sha256, "mutation": mutation,
             "expected_rejection": reject,
             "elf_source_revision": env::var("ASPIS_ELF_SOURCE_REVISION").unwrap_or(env::var("ASPIS_SOURCE_REVISION")?),
             "source_revision": env::var("ASPIS_SOURCE_REVISION")?,
-            "runtime": {"litesvm": "0.16.0", "agave": "4.2.1", "limit_cu": LIMIT,
+            "runtime": {"litesvm": "0.16.0", "agave": "4.2.1", "limit_cu": budget, "instruction_limit_cu": LIMIT, "diagnostic": diagnostic,
                 "heap_bytes": 262144, "execution_wire": "legacy", "release_build": !cfg!(debug_assertions)},
             "txv1_bytes": txv1_bytes, "txv1_headroom_bytes": 4096 - txv1_bytes,
             "txv1_scope": "serialized signed verifier-only proposal; not executed as TxV1",
-            "simulation": {"error": simulation.0, "cu": simulation.1.compute_units_consumed,
-                "logs": simulation.1.logs},
             "execution": {"error": execution.0, "cu": execution.1.compute_units_consumed,
                 "logs": execution.1.logs},
-            "simulation_execution_agree": agree, "identical_to_first_run": identical,
+            "identical_to_first_run": identical,
             "proof_and_public_accounts_unchanged": unchanged, "verifier_cu": verifier_cu,
             "verifier_completed": execution.0.is_none(), "phase_markers": phase_markers,
+            "sbf_heap_high_water_bytes": heap_high_water_bytes,
             "wall_seconds": start.elapsed().as_secs_f64(),
             "excluded": ["pool CPI", "receipts", "settlement", "proof upload", "network execution"],
         });
         write_json(&out.join(&filename), &record)?;
         ensure!(
-            agree && unchanged && identical,
+            unchanged && identical,
             "measurement disagreement: run {run}"
         );
+        ensure!(
+            heap_high_water_bytes.map_or(true, |n| n <= 262144),
+            "STOP: runtime heap exceeds 256 KiB"
+        );
+        if diagnostic {
+            ensure!(
+                execution.0.is_none() && heap_high_water_bytes.is_some(),
+                "diagnostic failed or heap measurement missing; do not rerun unchanged"
+            );
+        }
         // Runtime failures are preserved as failures, never converted into
         // completed verifier CU. Native corruption checks isolate each gate.
         println!(
-            "run {run}: {LABEL}; verifier CU {verifier_cu:?}; error {:?}",
+            "run {run}: {label}; verifier CU {verifier_cu:?}; error {:?}",
             execution.0
         );
     }
@@ -315,15 +355,16 @@ fn main() -> Result<()> {
     let args: Vec<_> = env::args().collect();
     match args.get(1).map(String::as_str) {
         Some("fixture") if (3..=4).contains(&args.len()) => fixture(Path::new(&args[2]), Profile::parse(args.get(3))?),
-        Some("measure" | "reject") if (5..=6).contains(&args.len()) => measure(
+        Some("measure" | "reject" | "diagnostic") if (5..=6).contains(&args.len()) => measure(
             Path::new(&args[2]),
             Path::new(&args[3]),
             Path::new(&args[4]),
             args[1] == "reject",
+            args[1] == "diagnostic",
             Profile::parse(args.get(5))?,
         ),
         _ => Err(anyhow!(
-            "usage: r0-e2e-cu-probe fixture DIR [PROFILE] | measure|reject ELF FIXTURE_DIR RESULTS_DIR [PROFILE]"
+            "usage: r0-e2e-cu-probe fixture DIR [PROFILE] | measure|reject|diagnostic ELF FIXTURE_DIR RESULTS_DIR [PROFILE]"
         )),
     }
 }

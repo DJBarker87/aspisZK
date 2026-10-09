@@ -1213,7 +1213,7 @@ pub mod r0 {
         pub challenges: Challenges,
         pub alpha: [QM31; 10],
         pub claims: alloc::boxed::Box<PointClaims>,
-        pub before_z1: [WideExact; 29],
+        pub before_z1: alloc::boxed::Box<[WideExact; 29]>,
         /// Pass this state, both roots, challenges.with_alphas(&alpha), and
         /// claims to R-D's SemanticBoundary::from_verified_parts. R-D replays
         /// rows 25/26 itself; passing the row-27 state would double-absorb.
@@ -1223,6 +1223,15 @@ pub mod r0 {
         /// OOD mixing, statement-point or work-nonce absorbs/squeezes.
         pub transcript: SemanticTranscript,
     }
+    #[inline(never)]
+    fn before_z1_heap(payload: &[u8]) -> Result<alloc::boxed::Box<[WideExact; 29]>, Error> {
+        let mut out = aspis_core::r0::heap::uninit::<[WideExact; 29]>()
+            .map_err(|_| Error::Allocation)?;
+        // The same decoder and canonicality checks, with only storage changed.
+        out.write(wire::decode_values::<29>(26, payload)?);
+        Ok(unsafe { out.assume_init() })
+    }
+    #[inline(never)]
     pub fn verify_semantics_heap(
         public: Public<'_>,
         bytes: &[u8],
@@ -1242,7 +1251,7 @@ pub mod r0 {
         }
         let state_before_z0 = transcript.state();
         let z0 = transcript.challenge_reference_circle_point(25, prefix.record(25)?)?;
-        let before_z1 = wire::decode_values::<29>(26, prefix.payload(26)?)?;
+        let before_z1 = before_z1_heap(prefix.payload(26)?)?;
         let z1 = transcript.challenge_reference_circle_point(26, prefix.record(26)?)?;
         if z0 == z1 {
             return Err(Error::EqualCirclePoints);

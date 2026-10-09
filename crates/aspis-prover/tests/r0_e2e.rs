@@ -4,7 +4,7 @@ use aspis_core::{
     r0::{
         basis::{BasisSize, NaturalBasis},
         domain::FibreIndex,
-        verifier, onchain,
+        onchain, verifier,
         wire::{OpeningProof, OpeningView},
         Error as OError,
     },
@@ -16,6 +16,52 @@ use aspis_statement::{
     state_only_verify::r0::verify_semantics,
 };
 use serde_json::json;
+
+// Every end-to-end case compares exact result bytes/errors and phase order.
+#[cfg(feature = "r0-hoist-reference")]
+fn verify_both(
+    public: aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,
+    bytes: &[u8],
+    hash: aspis_core::HashFn,
+    _: Option<fn(r0::Phase)>,
+) -> Result<verifier::Challenges, Error> {
+    std::thread_local! { static PHASES: std::cell::RefCell<Vec<r0::Phase>> = const { std::cell::RefCell::new(Vec::new()) }; }
+    fn trace(p: r0::Phase) {
+        PHASES.with(|v| v.borrow_mut().push(p));
+    }
+    PHASES.with(|v| v.borrow_mut().clear());
+    let actual = r0::r0_verify(public, bytes, hash, Some(trace));
+    let phases = PHASES.with(|v| std::mem::take(&mut *v.borrow_mut()));
+    let reference = r0::r0_verify_unhoisted(public, bytes, hash, Some(trace));
+    let reference_phases = PHASES.with(|v| std::mem::take(&mut *v.borrow_mut()));
+    assert_eq!(phases, reference_phases, "check/phase order changed");
+    match (&actual, &reference) {
+        (Ok(a), Ok(b)) => {
+            for (x, y) in [
+                (a.gamma, b.gamma),
+                (a.kappa, b.kappa),
+                (a.tau, b.tau),
+                (a.alpha, b.alpha),
+            ] {
+                assert_eq!(x.to_le_bytes(), y.to_le_bytes());
+            }
+            assert_eq!(a.queries, b.queries);
+        }
+        (Err(a), Err(b)) => assert_eq!(a, b),
+        _ => panic!("hoisted and unhoisted acceptance differ"),
+    }
+    actual
+}
+
+#[cfg(not(feature = "r0-hoist-reference"))]
+fn verify_both(
+    public: aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,
+    bytes: &[u8],
+    hash: aspis_core::HashFn,
+    trace: Option<fn(r0::Phase)>,
+) -> Result<verifier::Challenges, Error> {
+    r0::r0_verify(public, bytes, hash, trace)
+}
 
 #[test]
 fn fixed_wire_size_and_exact_parser() {
@@ -45,7 +91,7 @@ fn both_variants_roundtrip_and_corruption_teeth() {
         )
         .unwrap();
         let public = r0_fixture::statement_public(&statement);
-        let checked = r0::r0_verify(public, &bytes, HOST_HASH, None).unwrap();
+        let checked = verify_both(public, &bytes, HOST_HASH, None).unwrap();
         let wire = r0::Proof::parse(&bytes).unwrap();
         assert_eq!(wire.encode().unwrap(), bytes);
         let semantic = verify_semantics(public, wire.semantic, HOST_HASH).unwrap();
@@ -55,12 +101,27 @@ fn both_variants_roundtrip_and_corruption_teeth() {
         let view = OpeningView::parse(wire.opening).unwrap();
         let shaped = onchain::prepare(HOST_HASH, &boundary, &view).unwrap();
         assert_eq!(shaped.polynomial, prepared.polynomial);
+        assert_eq!(
+            shaped.v1.gamma_powers,
+            aspis_core::r0::opening::powers::<29>(prepared.challenges.gamma)
+        );
+        assert_eq!(shaped.v1.line, prepared.data.line());
+        assert_eq!(
+            shaped.v1.alpha_powers,
+            aspis_core::r0::opening::powers::<4>(prepared.challenges.alpha)
+        );
+        let dense_i = prepared
+            .data
+            .interpolant_batch(prepared.challenges.gamma)
+            .unwrap();
+        assert_eq!(&shaped.v1.interpolant, &dense_i[..3]);
+        assert!(dense_i[3..].iter().all(|x| *x == E::ZERO));
         assert_eq!(shaped.challenges.queries, prepared.challenges.queries);
         assert_eq!(checked.queries, prepared.challenges.queries);
         assert_eq!(boundary.roots(), [semantic.c1_root, semantic.c2_root]);
         assert_eq!(boundary.claims, semantic.claims);
         let mut reject = |label: String, changed: Vec<u8>| {
-            let error = r0::r0_verify(public, &changed, HOST_HASH, None).unwrap_err();
+            let error = verify_both(public, &changed, HOST_HASH, None).unwrap_err();
             records.push(json!({"variant":name,"mutation":label,"rejection":format!("{error:?}")}));
             error
         };
@@ -207,12 +268,35 @@ fn both_variants_roundtrip_and_corruption_teeth() {
             &proof.final_message,
         )
         .unwrap();
-        let mut altered_proof=proof.clone();
-        altered_proof.openings[0]=opening;
-        let altered_bytes=altered_proof.encode().unwrap();
-        let altered_view=OpeningView::parse(&altered_bytes).unwrap();
-        assert_eq!(onchain::check_v1(&shaped.data,c.gamma,c.alpha,&altered_view,u,&altered_view.fibre(0)),Err(OError::V1));
-        onchain::check_v2(&shaped.data,c.kappa,c.tau,c.alpha,&prepared.polynomial,&view).unwrap();
+        let mut altered_proof = proof.clone();
+        altered_proof.openings[0] = opening;
+        let altered_bytes = altered_proof.encode().unwrap();
+        let altered_view = OpeningView::parse(&altered_bytes).unwrap();
+        assert_eq!(
+            onchain::check_v1(&shaped.v1, &altered_view, u, &altered_view.fibre(0)),
+            Err(OError::V1)
+        );
+        #[cfg(feature = "r0-hoist-reference")]
+        assert_eq!(
+            aspis_core::r0::onchain_unhoisted::check_v1(
+                &shaped.data,
+                c.gamma,
+                c.alpha,
+                &altered_view,
+                u,
+                &altered_view.fibre(0)
+            ),
+            Err(OError::V1)
+        );
+        onchain::check_v2(
+            &shaped.data,
+            c.kappa,
+            c.tau,
+            c.alpha,
+            &prepared.polynomial,
+            &view,
+        )
+        .unwrap();
         records.push(json!({"variant":name,"mutation":"fixed-challenge D leaf","rejection":"V1; V2 remains true"}));
         for i in [0, 1, 2, 3, 5, 6] {
             let mut polynomial = prepared.polynomial;
@@ -232,7 +316,22 @@ fn both_variants_roundtrip_and_corruption_teeth() {
                 ),
                 Err(OError::V2)
             );
-            assert_eq!(onchain::check_v2(&shaped.data,c.kappa,c.tau,c.alpha,&polynomial,&view),Err(OError::V2));
+            assert_eq!(
+                onchain::check_v2(&shaped.data, c.kappa, c.tau, c.alpha, &polynomial, &view),
+                Err(OError::V2)
+            );
+            #[cfg(feature = "r0-hoist-reference")]
+            assert_eq!(
+                aspis_core::r0::onchain_unhoisted::check_v2(
+                    &shaped.data,
+                    c.kappa,
+                    c.tau,
+                    c.alpha,
+                    &polynomial,
+                    &view
+                ),
+                Err(OError::V2)
+            );
             records.push(json!({"variant":name,"mutation":format!("fixed-challenge coefficient {i}"),"rejection":"V2"}));
         }
         for i in 0..22 {
@@ -258,7 +357,7 @@ fn both_variants_roundtrip_and_corruption_teeth() {
                 ..
             } => public.amount += 1,
         }
-        assert!(r0::r0_verify(
+        assert!(verify_both(
             r0_fixture::statement_public(&changed),
             &bytes,
             HOST_HASH,
