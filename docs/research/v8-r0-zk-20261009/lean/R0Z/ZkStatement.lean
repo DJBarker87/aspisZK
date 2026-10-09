@@ -1,7 +1,11 @@
+import R0Z.HonestView
 import R0Z.StatisticalDistance
 import R0P.SemD3Glue
 
-/-! Z1: open privacy obligations for the 31-round interactive R0 model.
+/-! Historical Z1 interface retained under `Z1`, including the unchanged
+FS/ROM distinguishing experiment. It is not the current privacy statement.
+
+Z1: open privacy obligations for the 31-round interactive R0 model.
 
 This file supplies data interfaces and goals, not an honest prover, simulator,
 mask-image premise, error budget, or FS compiler theorem. `SourceData` is the
@@ -14,7 +18,7 @@ A source caller that stops before completing these rows needs an explicit
 partial-transcript refinement; this file does not condition it on success.
 -/
 set_option autoImplicit false
-namespace R0Z.ZkStatement
+namespace R0Z.ZkStatement.Z1
 noncomputable section
 
 abbrev Bytes := List UInt8
@@ -273,5 +277,210 @@ def R0Obligations {Sfield : Fin 29 → Subfield SemE} {L : Nat} {R : Type}
 #print axioms Msg
 #print axioms Chal
 #print axioms Obligations
+end
+end R0Z.ZkStatement.Z1
+
+/-! Current D1/D2/D4′/D4″/D9 interactive statement. -/
+namespace R0Z.ZkStatement
+noncomputable section
+open R0P R0P.SemSource R0Z.MaskLayout R0Z.HonestView Polynomial
+open AspisWide.InitialEncoder AspisWide.Agreement AspisPool.AlgorithmicCircleDecoderV7
+attribute [local instance] Classical.propDecidable
+
+abbrev Statement (K CommitHandle : Type) := Public K × CommitHandle
+abbrev Challenges (K : Type) [Field K] := HonestView.Challenges K
+abbrev Payload (K : Type) := HonestView.Payload K
+
+/-- The transfer-instance builder is deliberately uninstantiated. No relation,
+affinity, mask-image, privacy or completeness fact is a structure field. -/
+structure HonestProver (K : Type) where
+  Instance : Type
+  «public» : Instance → Public K
+  build : Instance → Trace K
+
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+
+abbrev HonestInstance (h : HonestProver K) (F : Subfield K) :=
+  h.Instance × EligibleNoise K F
+
+def «public» (h : HonestProver K) (w : HonestInstance h F) : Public K := h.public w.1
+
+def build (h : HonestProver K) (w : HonestInstance h F) : Trace K :=
+  applyEligible (h.build w.1) w.2
+
+/-- Handles are nominal names derived from the public commitment namespace.
+All auxiliary outputs/encodings are public data, parameterised only by x,ch.
+Their source byte/account refinement is D7, outside this interactive model. -/
+structure Meta (K CommitHandle Aux : Type) [Field K] where
+  statement : Statement K CommitHandle
+  challenges : Challenges K
+  handles : Fin 2 → CommitHandle × Fin 2
+  publicOutputs : Aux
+
+abbrev View (K CommitHandle Aux : Type) [Field K] := Meta K CommitHandle Aux × Payload K
+
+/-- The type itself excludes any dependency on instance, eligible noise or tape. -/
+def metadata (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (ch : Challenges K) : Meta K CommitHandle Aux :=
+  ⟨x, ch, fun i => (x.2, i), outputs x ch⟩
+
+def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
+    (w : HonestInstance h F) (ch : Challenges K) : AffTape K F → Payload K :=
+  HonestView.run x.1 B (build h w) ch
+
+def view (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K)
+    (r : AffTape K F) : View K CommitHandle Aux :=
+  (metadata outputs x ch, payload h B x w ch r)
+
+/-- A and b are payload-valued: Meta has no fictitious vector-space instance. -/
+def A (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
+    (w : HonestInstance h F) (ch : Challenges K) : AffTape K F →ₗ[F] Payload K :=
+  (payloadAffine x.1 B (build h w) ch).linear
+
+def b (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
+    (w : HonestInstance h F) (ch : Challenges K) : Payload K := payload h B x w ch 0
+
+theorem payload_affine (h : HonestProver K) (B : PackBasis F)
+    (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K)
+    (r : AffTape K F) : payload h B x w ch r = b h B x w ch + A h B x w ch r := by
+  simp only [payload, b, A, HonestView.run_eq_payloadAffine]
+  have he := congrFun (AffineMap.decomp (payloadAffine x.1 B (build h w) ch)) r
+  exact he.trans (add_comm _ _)
+
+/-- Actual trace affinity is established by MaskLayout, and the only nonlinear
+semantic operation in the fixed instance is split by ViewAffine.originalAt_affine.
+All later evaluations, sums, interpolation, encoding and opening maps are linear. -/
+theorem view_affine (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K)
+    (r : AffTape K F) : view h B outputs x w ch r =
+      (metadata outputs x ch, b h B x w ch + A h B x w ch r) := by
+  exact congrArg (fun p => (metadata outputs x ch, p)) (payload_affine h B x w ch r)
+
+/-- D4′ verbatim on payloads, over the augmented instance (w,e). The public
+comparison uses x.1 because x.2 is the ideal public handle namespace. -/
+def MaskImage (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) : Prop :=
+  ∀ w w' ch, «public» h w = x.1 → «public» h w' = x.1 →
+    LinearMap.range (A h B x w ch) = LinearMap.range (A h B x w' ch) ∧
+    b h B x w ch - b h B x w' ch ∈ LinearMap.range (A h B x w ch)
+
+def InLanguage (h : HonestProver K) (x : Statement K CommitHandle) : Prop :=
+  ∃ w : HonestInstance h F, «public» h w = x.1
+
+/-- Classical choice is used only for a statement in the language. Outside it
+all privacy quantifiers are vacuous; no default witness is assumed. -/
+def simulator (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (hx : InLanguage (F := F) h x) (ch : Challenges K) :
+    AffTape K F → View K CommitHandle Aux :=
+  view h B outputs x (Classical.choose hx) ch
+
+/-- The real ideal-tape experiment includes independent eligible noise. -/
+def honestLawRun (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K)
+    (tape : EligibleNoise K F × AffTape K F) : View K CommitHandle Aux :=
+  view h B outputs x (w, tape.1) ch tape.2
+
+def HVZK_conditional (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) : Prop :=
+  ∀ (hx : InLanguage (F := F) h x) w ch, «public» h w = x.1 →
+    EqualLaws (view h B outputs x w ch) (simulator h B outputs x hx ch)
+
+/-- D8, epsilon = 0: equality of laws of the complete (metadata,payload) pair.
+Challenges are fixed first and universally quantified, not conditioned good. -/
+def HVZK_perfect (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) : Prop :=
+  ∀ (hx : InLanguage (F := F) h x) (w : h.Instance) ch, h.public w = x.1 →
+    EqualLaws (honestLawRun h B outputs x w ch) (simulator h B outputs x hx ch)
+
+/-- General distance notation is retained; the target used here is exactly 0. -/
+def HVZK (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (epsilon : ℚ) : Prop :=
+  ∀ (hx : InLanguage (F := F) h x) (w : h.Instance) ch, h.public w = x.1 →
+    dist (honestLawRun h B outputs x w ch) (simulator h B outputs x hx ch) ≤ epsilon
+
+/-- D2's relation is literally sourceData.paymentWitness (SemD3Glue:98,111).
+This is an obligation on the uninstantiated builder, not a witness premise. -/
+def Completeness (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) : Prop :=
+  ∀ (w : HonestInstance h F) ch r, «public» h w = x.1 →
+    InputNoteExtracted x.1 (applyAff B (prepare x.1 (build h w) ch) r)
+
+def Obligations (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) : Prop :=
+  MaskImage h B x ∧ Completeness h B x
+
+/-- Word-valued outputs belong to the prover; View has no trace or whole word. -/
+structure ProverOutput (K CommitHandle Aux : Type) [Field K] where
+  W : Fin 29 → InitialWord K
+  C2 : Fin 2 → InitialWord K
+  disclosed : View K CommitHandle Aux
+
+def proverOutput (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K)
+    (r : AffTape K F) : ProverOutput K CommitHandle Aux :=
+  let t := applyAff B (prepare x.1 (build h w) ch) r
+  ⟨fun c => if c.val = 26 ∨ c.val = 27 then 0 else exactInitialEncoder (t c),
+    fun j => exactInitialEncoder (t (if j.val = 0 then 26 else 27)),
+    view h B outputs x w ch r⟩
+
+inductive IdealSemMsg (K CommitHandle : Type) [Field K]
+  | none
+  | c2 (handle : CommitHandle × Fin 2)
+  | maskSum (s : K)
+  | roundPoly (p : K[X])
+
+abbrev Msg (K CommitHandle : Type) [Field K] :=
+  R0C.SemStatement.Msg K K (IdealSemMsg K CommitHandle)
+abbrev Chal (K : Type) [Field K] := MaskedProtocol.Chal K
+
+def coefficientPolynomial {n : Nat} (p : Fin n → K) : K[X] :=
+  ∑ i : Fin n, monomial i.val (p i)
+
+/-- The actual 32-row schedule, with only the ideal C2 word-to-handle projection
+changed from the soundness outer message tags. Repeated disclosures use the
+same payload coordinates; query openings are the final response projection. -/
+def messages (x : Statement K CommitHandle) (p : Payload K) (i : Fin 32) : Msg K CommitHandle :=
+  match MaskedProtocol.schedule i with
+  | .lambda | .chi | .zerocheck _ | .mu => .semantic .none
+  | .c2Theta => .semantic (.c2 (x.2, 1))
+  | .maskSumEta => .semantic (.maskSum (p .maskSum))
+  | .sumcheck j => .semantic (.roundPoly (coefficientPolynomial (fun k => p (.semanticCoeff j k))))
+  | .circle j => if j.val = 0 then .beforeZ0 (fun j c => p (.pointClaim j c))
+      else .beforeZ1 (fun c => p (.ood 0 c))
+  | .opening j => if j.val = 0 then .opening (.values (fun c z => p (.ood z c)))
+      else if j.val = 1 then .opening (.scalar (p .inactiveSum))
+      else if j.val = 2 then .opening .unit
+      else if j.val = 3 then .opening (.poly (coefficientPolynomial (fun k => p (.openingCoeff k))))
+      else .opening (.final (fun k => p (.finalCoeff k)))
+
+def honestMessages (h : HonestProver K) (B : PackBasis F)
+    (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K)
+    (r : AffTape K F) (i : Fin 32) : Msg K CommitHandle :=
+  messages x (payload h B x w ch r) i
+
+/-- The nullary opening tag is accompanied by exactly the query-gated symbols
+in Payload.opened; it never includes the rest of the committed words. -/
+def finalMessage : Msg K CommitHandle := .opening .opening
+
+def challengeAt (ch : Challenges K) (i : Fin 32) : Chal K :=
+  if h : i.val < 25 then .semantic (ch.sem ⟨i.val, h⟩)
+  else if h : i.val < 27 then .circle (ch.circle ⟨i.val-25, by omega⟩)
+  else if h : i.val < 31 then .opening (.field (ch.opening ⟨i.val-27, by omega⟩))
+  else .opening (.set ch.queries)
+
+#print axioms view_affine
+#print axioms MaskImage
+#print axioms HVZK_perfect
+#print axioms Completeness
+#print axioms Obligations
+#print axioms proverOutput
+#print axioms messages
 end
 end R0Z.ZkStatement

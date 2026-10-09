@@ -919,3 +919,215 @@ Host rule: `run2.sh` and `run_g15_lake.sh` now take `flock
 is enforced by the launcher rather than by each worker's private lock. The
 two recorded overlaps (3104/3229, 3108/3237) were each within their own caps
 with zero swap; the affected results stand, and the condition cannot recur.
+
+
+## Z3 continued after D9 — disclosed view and uniform affine laws (2026-10-09)
+
+Fetched first and read D9 at the requested base
+**`2f9124bb86757d5010eafc6dca41147f10b92021`**. All citations in this section
+are to that git object. The shared branch continued advancing with soundness
+work; this worker neither edited nor staged those sources or logs. The older
+Z3 stop reports above are historical. D9 resolves the honest-H1 stop.
+
+### Definitions and checked algebra
+
+`HonestView.helper` is the source's weighted-reciprocal sum, using Lean's
+field inverse, including `0⁻¹ = 0`. It is not the copy residual divided by
+its H1 coefficient. Zero weights contribute zero. `prepare` installs this
+helper in lane 26 after lambda/chi, before `applyAff` adds H1 padding. The
+source `ActivePole` branch has no element in the ideal model. D9's **ZR1**
+remains a refinement obligation: the real and ideal views may differ when
+chi equals a nonzero-weight tuple; its symbolic bound is the tuple count
+multiplied by `(1 + δQ) / P⁴`. This work proves neither that coupling nor its
+probability bound and assigns no numerical error budget.
+
+The statement is `Public K × CommitHandle`; `HonestProver` contains only an
+instance type, its public projection, and its uninstantiated trace builder.
+`HonestInstance = Instance × EligibleNoise`, with build applying
+`applyEligible`. The unchanged MaskLayout split then applies the affine tape
+(mask-only, G, H1 padding, D). The row-1023 semantic balancing reads only
+semantic cells and eligible noise, never the affine tape. H1's original
+oracle contribution is affine, including the copy-denominator slope proved
+in ViewAffine; it is not claimed independent of H1 padding.
+
+`View = Meta × Payload`. `metadata : Statement → Challenges → Meta`
+(by fixing the public `outputs` adapter) contains the statement, all
+challenges, nominal initial/C2 handles, positions and public auxiliary
+outputs. Its type forbids instance/tape inputs. `Payload` is a finite
+coordinate vector of field values: the mask claim, ten 28-coefficient
+semantic polynomials, three MLE claim vectors, two OOD claim vectors,
+inactive sum, seven opening-polynomial coefficients, 256 final coefficients,
+and queried four-child symbols for each lane. Symbols at unqueried
+positions are zero by `unqueried_zero`; that public zero extension supplies
+a fixed vector space without disclosing the rest of a word. Full words are
+only in `ProverOutput.W/C2`, never in the view. `messages` reconstructs the
+32 scheduled message tags from the payload; `challengeAt` supplies the
+25 semantic, two circle and five opening challenges (four scalars then the
+query set), and the final opening response uses the query-gated symbols.
+
+The payload's direct `run` applies the mask and evaluates its components.
+`run_eq_payloadAffine` is proved from eight component lemmas. The semantic
+oracle proof uses `ViewAffine.originalAt_affine` through
+`originalAt_decomp`; all later sums, evaluations, interpolation, encoding,
+relation polynomial and fold are affine/linear. `A` is the resulting
+payload map's linear part over the **base subfield F**, and `b` is the actual
+zero-tape payload. `view_affine` carries constant metadata alongside
+`b + A r`. There is no affinity proof field in HonestProver. `MaskImage`
+is D4′'s exact equal-range and zero-tape-displacement formula, over augmented
+instances. No instance-independence of A is assumed or asserted.
+
+`Completeness` is the builder obligation for `InputNoteExtracted`, literally
+the relation selected by `sourceData.paymentWitness`. It is not a validity
+premise, nor a claim of full verifier acceptance. `Obligations` contains
+exactly `MaskImage ∧ Completeness`. The general distance statement is
+retained, with perfect HVZK comparing laws of the complete pair for every
+fixed challenge vector. The honest law uses the product of uniform eligible
+noise and uniform affine tape; the simulator uses affine tape and a
+classically chosen augmented instance for the public statement. No default
+instance outside the language is required.
+
+`AffineLaw.lean` is independent of the protocol. For abstract finite vector
+spaces it identifies each nonempty affine fibre with `ker A`, translates the
+coset to `range A`, and obtains the cardinality product through
+`LinearMap.quotKerEquivRange`. `uniform_coset` and `equal_cosets_law` give the
+uniform pushforward and equal-coset corollary, including different source
+tape spaces. Additional generic lemmas carry constant metadata and
+marginalise a product uniform tape when every fixed-noise conditional law
+is equal. All cardinalities and finite sums stay symbolic on atomic types.
+
+The old Z1 FS/ROM experiment is preserved under `ZkStatement.Z1`, including
+its original `ZK_FS` definition. No ROM bridge, commitment assumption,
+source refinement, or weakened FS claim is introduced. MaskImage itself
+and completeness are still unproved obligations.
+
+### Citation ledger
+
+Abbreviations: **S** = `docs/research/v8-r0-sem-proof-20261008/lean/R0P/`;
+**O** = `docs/research/v8-wide-reference-20261005/lean/R0/`.
+
+| Definition or correspondence | Pinned source |
+|---|---|
+| Honest weighted reciprocals; source ActivePole | `crates/aspis-statement/src/logup.rs:192–224`; forest adapter `crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs:168–179`; S/Copy.lean:454–463 (`copyRowsAt`). D9 specifies the ideal inverse at zero. |
+| Adaptive helper and C2 order | `crates/aspis-prover/src/v6_onefold_prover.rs:1244–1257,1279–1312`: lambda/chi, helper error, padding, sum check, C2. D3 keeps D in the initial commitment. |
+| Mask application / balancing | `crates/aspis-prover/src/state_only_hiding.rs:676–773`; eligibility `crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs:221–253`; H1 padding `state_only_hiding.rs:465–472`. Exact port and row-1023 boundary are in the preceding Z2/Z3 reports and unchanged MaskLayout. |
+| Mask Boolean-sum claim and eta wrapper | `crates/aspis-prover/src/state_only_hiding.rs:845–883,900–952`; existing R0Z/MaskedProtocol wraps the R0 terminal, not a different historical terminal. |
+| Semantic round polynomial construction | `crates/aspis-prover/src/state_only_zerocheck.rs:95–128`: 28 samples, remaining Boolean assignments, interpolation, challenge prefix update. This is a formula port; byte/error-path refinement is deferred. |
+| Original terminal and H1 dependence | S/SemDecision.lean:43–49,73–80; S/Copy.lean:111–142,234–238; accepted R0Z/ViewAffine.originalAt_affine and terminalValue_eq_originalAt. |
+| MLE claims and bit order | S/SemD3.lean:29–37; S/SemView.lean:36–57; O/OpeningDefinitions.lean:29–34. |
+| OOD evaluation / linear interpolant | O/Chord.lean:35–36,51–64,83–99. |
+| Opening virtual word, batching and weights | O/OpeningDefinitions.lean:36–40,53–69. `totalWeights` reads neither W nor the point-claim fields filled with zero in its public-data adapter. |
+| Exact encoder linearity and injection | `docs/research/v8-wide-reference-20261005/lean/Wide/EncoderLinearity.lean:97–114,221–224`. `decode_encoded` proves that the proposed linear decoder is inverse on the encoded image. |
+| Opening relation polynomial and final fold | O/RoundNormalization.lean:22–37; degree at most six at :43–53. |
+| Outer message tags / schedule | `docs/research/v8-r0-close-20261007/lean/R0C/SemStatement.lean:18–33`; S/SemView.lean:30–34; accepted MaskedProtocol.schedule and D3. |
+| Completeness relation | S/SemD3Glue.lean:88–111 (`paymentWitness := InputNoteExtracted`); S/Semantics.lean:77–81. |
+
+### Lead decision needed — opening decoder stop
+
+1. **Lead decision needed: ideal decoding off the encoder image.**
+A review after the full view's local host checks identified a definition not
+explicitly fixed by D4′/D4″/D9. The candidate `quotientLinear` forms the
+pointwise chord quotient, then uses the exact encoder's linear left inverse.
+The checked `decode_encoded` lemma fixes its value on encoded words, but the
+linear extension off that image is a choice. All circle points are admitted
+by the current `Challenges` type. For domain-intersecting secants, division
+at zero need not produce an encoded word. The soundness model's
+O/Chord.lean:28–33,112–124 supplies nonvanishing under distinct non-base
+points, not for every point pair. D9 expressly fixes H1 at poles and does not
+expressly select this opening extension.
+
+The current view/statement checks below validate this **candidate**; they do
+not settle that model choice. The lead has been asked whether to retain its
+linear-left-inverse totalization. Dependent HVZK compilation stopped while
+that required definition is unresolved. The uncompiled `Hvzk.lean` draft was
+removed; no HVZK theorem is claimed. No good-challenge restriction or
+conditioning has been added. The candidate sources are retained explicitly
+for review and reuse if the lead adopts this extension; their compilation
+is not acceptance of a new model decision. This stop follows the user's
+“Stop on anything D4′/D4″/D9 doesn't determine” instruction, not an approval
+rule or a resource failure.
+
+### Host validation after D9
+
+Host/workspace: `dombarker@100.108.41.90`,
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`. The inspected
+`run_g15_lake.sh` run2 adapter takes the shared
+`flock /tmp/aspis-r0-lean.lock` around the scope. Every launch also had a
+busy preflight; a busy 3114 preflight consumed no attempt/SHA receipt.
+No private lock was used. The runner admitted 24 + 7 GiB beneath its
+55 GiB reservation ceiling and used MemoryHigh=5G, MemoryMax=7G,
+MemorySwapMax=0, TasksMax=128 and a 900-second timeout.
+The command was `lake env lean -j1 -M7000 -DElab.async=false`.
+Lean: 4.32.0 / `8c9756b28d64dab099da31a4c09229a9e6a2ef35`;
+Mathlib: `81a5d257c8e410db227a6665ed08f64fea08e997`.
+
+Source revision for every row is **2f9124bb8 plus the exact source snapshot
+SHA below**. Source/time/output/SHA receipts remain in host `evidence/`;
+every snapshot was checked against its receipt. No package-wide replay was
+run. Unchanged accepted dependencies were reused: MaskLayout 3108,
+ViewAffine 3110 and StatisticalDistance 3000. Their local and host source
+hashes match the earlier tables. SemD3Glue, SemDecision and SemD3 sources
+also match both the host and the D9 base.
+
+| Exact target | Attempt | Exit | Wall | Peak RSS (KiB) | Swap | Axioms / result |
+|---|---:|---:|---:|---:|---:|---|
+| `R0Z/HonestView.lean` | 3111 | 1 | 0:06.82 | 6,847,596 | 0 | Namespace/coercion and conditional goals; rejected. |
+| `R0Z/HonestView.lean` | 3112 | 1 | 0:05.98 | 6,846,968 | 0 | Dot namespace / local reduction; rejected. |
+| `R0Z/HonestView.lean` | 3113 | 0 | 0:06.24 | 6,867,748 | 0 | Initial four audits standard only; extended later. |
+| `R0Z/ZkStatement.lean` | 3114 | 1 | 0:04.10 | 6,839,048 | 0 | Reserved public identifier / word namespace; rejected. |
+| `R0Z/HonestView.lean` | 3115 | 1 | 0:07.36 | 7,016,880 | 0 | Evaluation homomorphism fields / decoder type inference; rejected. |
+| `R0Z/HonestView.lean` | 3116 | 0 | 0:07.47 | 7,054,268 | 0 | Ten audits standard only; extended later. |
+| `R0Z/ZkStatement.lean` | 3117 | 1 | 0:04.13 | 6,841,256 | 0 | Missing explicit augmented-instance binder; rejected. |
+| `R0Z/ZkStatement.lean` | 3118 | 0 | 0:04.42 | 6,880,416 | 0 | 27 audits standard only; later switched to direct run. |
+| `R0Z/AffineLaw.lean` | 3119 | 1 | 0:04.12 | 6,687,908 | 0 | Fibre membership hypothesis consumed by destructuring; rejected. |
+| `R0Z/AffineLaw.lean` | 3120 | 0 | 0:04.06 | 6,720,292 | 0 | Six audits standard only, including equal_cosets_law. |
+| `R0Z/HonestView.lean` | 3121 | 0 | 0:09.38 | 6,996,916 | 0 | 12 audits standard only; direct run bridge added later. |
+| `R0Z/HonestView.lean` | 3122 | 1 | 0:08.83 | 7,012,328 | 0 | Aggregate simplification hit default recursion limit; rejected. |
+| `R0Z/HonestView.lean` | 3123 | 1 | 0:08.90 | 7,013,724 | 0 | Same remaining aggregate reduction after opacity changes; rejected. |
+| `R0Z/HonestView.lean` | 3124 | 1 | 0:09.85 | 7,013,896 | 0 | Four component changes still over-reduced; rejected. |
+| `R0Z/HonestView.lean` | 3125 | 1 | 0:11.29 | 7,109,604 | 0 | One sum/coercion change still over-reduced; rejected. |
+| `R0Z/HonestView.lean` | 3126 | 1 | 0:11.20 | 7,168,576 | 0 | Kernel memory guard on aggregate proof; rejected. |
+| `R0Z/HonestView.lean` | 3127 | 0 | 0:11.52 | 7,039,316 | 0 | 13 audits standard only, including run_eq_payloadAffine. |
+| `R0Z/ZkStatement.lean` | 3128 | 0 | 0:04.28 | 6,885,832 | 0 | 27 audits standard only, including view_affine; candidate definition review above. |
+
+"Standard only" means a subset of `propext`, `Classical.choice`,
+`Quot.sound`. The ZkStatement audit counts include 20 preserved historical
+Z1 definitions and seven current declarations. Failed elaborations' audit
+output is not accepted evidence; in particular 3126's kernel rejected the
+aggregate bridge even though its elaboration reached the audit commands.
+
+No cap or recursion/heartbeat limit was raised. After 3126 the replacement
+was **eight separately kernel-checked component lemmas**, followed by a
+small case-dispatch bridge, not an unchanged replay or larger cap. The
+accepted 3127 source uses named affine-sum and component lemmas, with no
+concrete row/tape/trace universe evaluation. Unused-section-variable warnings
+are non-fatal. MaskLayout's previously accepted `applyAff_affine` audit was
+reused rather than rerun unchanged.
+
+| Attempt | Exact source SHA-256 |
+|---|---|
+| 3111 | `1f754df51376a0d17fd622abddba340ca3d81b1dda31e06ab261ffe9394b9a0d` |
+| 3112 | `0def01c3fc2c387097524cc2f62a4bab18e9054e665a2e193bdb344e50f46042` |
+| 3113 | `1db869ff5335149755b95788d5b106b2f3cfb5e5afc51d6d43d07e0043100e46` |
+| 3114 | `ea29448370dc570feb4e9235d28b84bbe686131e6037a95661b9ca93df51853f` |
+| 3115 | `a7c39086eaa0f3d8d07eb447dcaf172504c721fb60b478709e1938372248791e` |
+| 3116 | `923e3c05fd4eca92d872cd07b34cfd83a856bfd91a467a67a1e7201233bc99c9` |
+| 3117 | `24e1eeb16b4e797529c0a3b2816c9909b34f4fef32f814b78bb11aee96d500f3` |
+| 3118 | `6a3b07fd7d77d805f98c6900cdd5cfc71a0ce4aafcce06622c2510ded3a3b360` |
+| 3119 | `141051e376d8524d21df4451c5a9ceb3bd6521024a44e2a3ee83c8f5c12aeafb` |
+| 3120 | `f680a0d4c8dab8f22f638c6aaad8c677a4ad973b327eb1908633e722a0707325` |
+| 3121 | `5df882adefe627eccc47245c18605a2dd31510afe4d81532f08ddbd5662b6a68` |
+| 3122 | `dda5805c51e7b9d1c295dedd903a0559d72624dadbab1f87bfef1fe35e5be699` |
+| 3123 | `2c79d3d916bea54eaf678afb304f6a4fbe2d3b8d2f18349883dc4d6e1754083d` |
+| 3124 | `0b6cb2bb2fefa5437287e64ee11cff6bd1fcf8f2166548fe4e435d3b3bdaf855` |
+| 3125 | `aa0da2fb5a7e197ee47910161947262754fbdd250acd1f71f1de0b0b8b52218c` |
+| 3126 | `509d6685e208553da68b677bbb4145095e4e21ba4f3ce0bbbc61b237abc28f3b` |
+| 3127 | `566ba2db7fee7053b1a6562ee0ae6b09cbaf0fcfa8131dff81fc9eb77b5013c1` |
+| 3128 | `b8a583bb76a1a7b8afcc6aaca68c5810cc2a1a89fd5075accb7bb5c14eb3fb84` |
+
+The final current HonestView, ZkStatement and AffineLaw sources equal 3127,
+3128 and 3120 byte-for-byte. `Hvzk.lean` was not host-compiled or retained.
+The forbidden-declaration/evaluation/limit-override scan and scoped
+`git diff --check` pass. Commit scope is HonestView, ZkStatement, AffineLaw
+and this LOG only; no co-author trailer. The unchanged MaskLayout and
+ViewAffine results are reused. No edits were made to Rust, the soundness
+tree, or the historical extraction directory.
