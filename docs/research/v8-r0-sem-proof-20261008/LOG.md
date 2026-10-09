@@ -3640,3 +3640,63 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3217 | `R0P/MaskMaxErr` | 0 / 0 | 0:02.97 | 6833280 | 0 | 3 | `4377fc7c1b32616d4f53c20220b5e47dda2f940c22403c8073f1e6e6259fef35` |
 
 Source revision(s): `63371a3d1909bec3ff4b16a2aea23568a3fe8d26`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: Inj3 instances and theorem43 adapter (3218–3220)
+
+MaskFiatShamir closes ChainsRead and ReadsChains for arbitrary inner semantic messages and n+2 rounds, builds the full generic Inj3, and re-instantiates it against the unchanged frozen protocol/decoder at 31 and the masked protocol/decoder at 32. The generic combined_fiat_shamir_of_obligations adapter proves theorem43 already exposes the needed round count; its D1/D2/D3 arguments are explicitly unclosed obligations, not premises added to a claimed combined_fiat_shamirZ. Attempt 3218 used theorem for the Type-valued Inj3 structure; 3219 changes these constructors to defs but needed numeral addition normalization at the two instances; 3220 passes all six audits with standard axioms and no errors or warnings. No frozen source or R0C source was edited.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3218 | `R0P/MaskFiatShamir` | 1 / 1 | 0:04.55 | 6802664 | 0 | 3 | `6025e417edafa957dbdafe44d1feb62c2091c6205c00b879864fe0a0c3044b53` |
+| 3219 | `R0P/MaskFiatShamir` | 1 / 1 | 0:04.57 | 6807652 | 0 | 6 | `f2059af30cb04f24044496819124f5e1472f99e51c44d134e57cfa2a00b7115b` |
+| 3220 | `R0P/MaskFiatShamir` | 0 / 0 | 0:04.97 | 6841980 | 0 | 6 | `b119bbaa399868764c079869d639585af68050fe1ab3cbaa5181841e5475e438` |
+
+Source revision(s): `a76fa643a87c119a3ad7d913ac3eb6267a3030b5`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24 stop: the global eta-row coefficient is unresolved
+
+The user confirmed P⁴ for the actual sampler denominator. The checked
+fixed-trace etaBad_semChal_mass is (1+deltaQ)/P⁴ and needs no assumption
+about maskPoly. The independent generic decoder, density transfer, decoding,
+Inj3 instances, theorem43 adapter, and parameterized maximum accounting are
+now green and committed module by module. Every accepted local source was
+rehashed against its host receipt (3201, 3206, 3211, 3213, 3214, 3216, 3217,
+3220). The changed R0P files are exclusively new Mask* files. The frozen
+31-round sources are byte-for-byte unchanged from base d2b741325; the generic
+protocol/decoder equalities and Inj3 reinstantiation check their reuse.
+No unchanged frozen-manifest replay was launched. No evidence file is staged.
+
+The remaining fixed-budget assembly target, written in normalized notation
+rather than presented as an emitted Lean error, is:
+
+```lean
+-- x : TypedContext SemE Sfield
+-- rounds : List (Msg SemE SemE (SemMsg SemE) × Chal SemE SemE)
+-- pre : Fin 14 → SemE; claim : SemE
+-- maskPoly : (Fin 10 → SemE) → SemE
+-- ts := candidates x rounds .none
+-- total := fun t => originalTotal x.pub B t pre
+-- M := maskTotal maskPoly
+⊢ mean (fun s : State =>
+    indicator (etaSomeBad ts total claim M (semChal s))) ≤
+    (1 + deltaQ) / (AspisCircleGroupOrder.P : ℚ)^4
+```
+
+SemD2.candidates_card supplies ts.card≤100. The proved
+etaSomeBad_semChal_mass supplies ts.card*(1+deltaQ)/P⁴; therefore the available
+aggregate bound is 100*(1+deltaQ)/P⁴. A coefficient-1 bound for the concrete
+candidate union, possibly exploiting the existing doomed-prefix conditions,
+has not been proved. The generic two-root diagnostic is not a concrete
+counterexample for Lambda. No trace-sum invariance or candidate uniqueness
+premise has been introduced.
+
+The fixed privacy LOG D3 budget is coefficient 1. The lead was asked whether
+to use the candidate factor 100 or stop at this aggregation gap; that separate
+question remains unanswered. Dependent global budget and semantic assembly
+are stopped. There is no claimed combinedD2BudgetZ, complete FS2.D2 for the
+masked protocol, MaskD3Glue/d3Z, combined_fiat_shamirZ, or combined_maxErrZ.
+The explicit-obligation adapter and the coefficient-parameterized accounting
+are auxiliary results only. Either proposed eta coefficient preserves the
+query-row maximum by attempt 3217. No host Lean job remains from this worker.
