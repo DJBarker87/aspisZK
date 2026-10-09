@@ -2003,3 +2003,40 @@ recurrence or rank matrix is normalized. Commit scope is these seven new
 privacy modules and this LOG. No soundness/Rust/FS file, wallet, account,
 key or authority was changed. No co-author trailer. Z3b's D12 conditional
 result is complete; Z4 stops at maps, target statements and dimension counts.
+
+### Lead decisions after Z4a — D13 (transport reinstated), Z4b (remainder containment)
+
+Z4a (`z4/FINDINGS.md`) is accepted as computation. Two findings, two decisions.
+
+**D13 — the message-index transport returns.** The C1 opening map's rank
+collapse on structured fibre sets (`{0,…,21}`: residues 1,2 at rank 6) is
+caused by the padding rows sitting in one natural-basis residue class
+(`N_{4k+3}(T) = T·D₁(T)·N_k(D₂(T))`). The historical R16 transport
+(`v8-full-view-zk-20260912/tools/r16_basis_transport.rs`: pivot 1023, the
+first 89 inactive rows legal in all sixteen semantic columns at coefficient
+indices 0–88, remaining rows in order, pivot last) places the free rows at
+the lowest natural indices of every residue class, so the eligible-cell
+restriction spans the same polynomial-degree prefix as the full message at
+every fibre set. The lead withdrew the transport on 2026-10-09 ("no R16
+transport") in error. Decision: reinstate it as a fixed permutation
+`π : rows → coefficient index` with that generating rule, in both the Rust
+(`Enc(t ∘ π⁻¹)`, weights/indicator/eqWeight composed with π) and the Lean
+glue (`SemD3Glue`, `MaskView`, `R0Z.HonestView`: words are `Enc (π t)`,
+`Data.points/inactive` are stated in coefficient space). The agreement,
+chord and fold theorems concern the code and messages and are unchanged.
+Twin fibres (equal `T_u`) are not a hiding failure: the honest symbols
+satisfy the same dependency, so the displacement space shrinks with the
+image. The C1 part of (ii) is then provable structurally: eligible
+restriction and full restriction have the same image at every `S`.
+
+**Z4b — the remainder must be tested against the 988-dimensional pure
+image with real traces.** Z4a's `M` excludes the sixteen semantic columns'
+eligible cells, which the Rust gate counted as mask sources (even-exponent
+factors). Under D12 those cells are in `N` because the original multiplies
+them. Whether `(g w n, 0) ∈ range (A ∘ inl_M)` for actual honest traces and
+generic challenges is therefore an open computation, as is the round-polynomial
+part of (ii). If containment fails, the mask design changes (more mask-only
+columns with the missing leading degrees, D14); if it holds, Z4's route is the
+structured family of Z4a plus a containment lemma. The θ = 0 obstruction is a
+degenerate-challenge event: D8's ε = 0 becomes ε ≤ mass of an explicit
+bad-challenge set (θ = 0 at least), to be fixed once Z4b reports.
