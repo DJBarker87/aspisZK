@@ -3828,3 +3828,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3238 | `R0P/MaskOpeningDensity` | 0 / 0 | 0:05.22 | 6843520 | 0 | 3 | `efafabc1129c354576f83da5fde493395c063ce42efe54ff81c79b0ec3a0d6be` |
 
 Source revision(s): `48a7e8bfe4a948d5fef06c91cd72aade2b9c0f28`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G24: symbolic candidate and parser prefixes
+
+MaskPrefix generalizes the existing candidate membership lemmas to an arbitrary transcript length, and proves the eta claim slot, shifted alpha polynomial slots, prefix getD identity, and no-hit implication for a selected row. All proofs are symbolic in the row index. Attempt 3239 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3239 | `R0P/MaskPrefix` | 0 / 0 | 0:03.39 | 6844928 | 0 | 7 | `0ad1edbee3aee5dd29db05f250dd912437c813329a46ce4c9f794b7949dddea2` |
+
+Source revision(s): `e9517cc9a2e1585b6ed88c0fe467a58012ff7733`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
