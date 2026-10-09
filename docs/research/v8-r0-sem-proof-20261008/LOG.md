@@ -3117,3 +3117,16 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 2608 | `R0P/SemDuplexDecodes` | 0 / 0 | 0:11.35 | 6910704 | 0 | 9 | `f885ebfe138c092810c4bb0bd39d4dc7567a4aa4f93148a944edb06c421aa7d6` |
 
 Source revision(s): `c590062644bba3ce921614a0aa27ef9c645b1321`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G20 — theorem43 instance closed
+
+SemFiatShamir proves combinedChainsRead, combinedReadsChains, and the definitional combinedD1 (focused attempt 2609), then combined_fiat_shamir via R0C.V3.theorem43 (2610). The theorem uses the requested none decoder field, hr31, the four unchanged source sigma identities, and the total distinct-first-read bound. D3 is instantiated at AspisCircleGroupOrder.P using SemCharP.semE_prime_eq; hσopen 0 is definitionally the required sigma-26 identity. Inj3 uses Coll, coll_mass, and combinedDecodes. The conclusion is exactly Qtot * maxErr combinedD2Budget 31 + κ Qtot; the G21 closed form is untouched. Final exit 0, no errors or warnings, all four axiom lines are [propext, Classical.choice, Quot.sound]. Final source files were hash-matched to the successful host snapshots (2600, 2603, 2608, 2610), and reviewed for admitted proofs, forbidden finite evaluation, and altered premises. No obstruction remains in G20. Each module is committed and pushed separately with sources plus LOG only; R0C and evidence are excluded.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The existing `run_g15_lake.sh` adapter retains run2’s reservation and scope limits and invokes `lake env lean`: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g20-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 2609 | `R0P/SemFiatShamir` | 0 / 0 | 0:03.83 | 6832584 | 0 | 3 | `8ece4f13312d662065385a939c795cd716cca08b1cae724a8ce7eff5a9cf1830` |
+| 2610 | `R0P/SemFiatShamir` | 0 / 0 | 0:05.50 | 6842688 | 0 | 4 | `96b7f16931cb8ceedfdaaeca19182fa8311671b351a943410b1b6eba0e4917e0` |
+
+Source revision(s): `6e15b229b6af6a7a530f05b4c51ed8098631d18e`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
