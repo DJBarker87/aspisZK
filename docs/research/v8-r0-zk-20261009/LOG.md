@@ -1688,3 +1688,318 @@ term in (H1 padding, eligible noise); D11's `g w e` was too narrow. Fix:
   `c + A`, uniform on `c + range A`; (ii) gives instance-independence.
   (i) is still the rank statement of the Rust gate: the mask-only columns'
   round-polynomial image must cover the round-polynomial displacement space.
+
+## Z3b continued — D12 partition, decomposition and perfect HVZK (2026-10-09)
+
+Fetched and read base **`01920c65827981a56ef10b7af3e3e7fdaae6fef4`**.
+`a4399872c9d4c5d5e26dc86b86ee56096f840937` was already an ancestor of
+`origin/v8-reference`, so its requested push was already satisfied. Work
+remained in this privacy directory in `.worktrees/ZK-v8-reference`.
+The concurrent Rust SPEC commit `783aa3f97` did not change these proof inputs.
+Old Z3/D11 results and the current `JointView`/`FsStatement` experiments are
+preserved. The new current conditional theorem is in **`R0Z.D12`**.
+
+### Partition and G verdict
+
+**G belongs to M.** At the requested base,
+`R0P/SemDecision.lean:74–80` constructs `terminalValue` solely from claims in
+semantic columns 0–15 and the H1 claim at lane 26. Its `laneAt` function
+(`:45–49`) takes exactly those semantic openings, H1 and selectors. The
+29 theta lanes here are residual lanes, not 29 trace-column reads. In
+particular there is no read of G/lane 27 in the original terminal.
+`R0P/Copy.lean:111–123,126–142` multiplies H1 by products of semantic
+copy-denominator values, explaining D11's H1/noise mixed term; it does not
+multiply G. `R0P/MaskValue.lean:42–56` reads G only as
+`(1 + maskLinear 16 alpha ^ 26) * G(alpha)`. That coefficient depends on
+fixed alpha, never on the instance or tape. The ten mask-only columns also
+have point-only coefficients; D is absent from `maskValue`. The remaining
+observations in `HonestView.run` are the already ported linear claims,
+encoding, quotient, relation and folding maps.
+
+`Partition.lean` therefore uses:
+
+- M = ten mask-only column tapes, G limbs and D limbs;
+- N = H1-padding limbs and eligible semantic-cell noise;
+- T = M × N, representing the binary vector-space direct sum.
+
+`Partition.equiv` is a proved linear equivalence to the **unchanged**
+`JointView.Tape = AffTape × EligibleNoise`. Every raw input coordinate,
+including overwritten balance samples and unused H1 active-row samples,
+is retained. `pureTrace_fixed` proves that changing M leaves all semantic
+columns and H1 untouched. `PayloadSplit.terminal_add_pure` applies that
+fact to the actual terminal. `D12.M_pure` proves for all w, n and m:
+
+```text
+payload(w,(m,n)) = payload(w,(0,n)) + (A ∘ inl_M)(m).
+```
+
+A depends only on the basis and fixed challenges. Thus the slope of every
+payload component is independent of both n and w, including all round
+coefficients. Public metadata is constant in both tapes and the instance.
+These are unconditional algebraic theorems, not MaskImage premises.
+
+### Joint affinity and the supported remainder
+
+The other necessary source fact is now also proved:
+`HelperInvariant.helper_eligible` says the unpadded honest H1 helper is
+unchanged by **every** eligible-noise tape. `protected_registry` verifies
+that both endpoints of every literal copy link read only non-eligible
+cells and never row 1023, the overwritten semantic balance row. The
+certificate consists of bounded checks of at most four existing registry
+records per declaration, examining only natural-number rows and pattern
+limbs. A first four-record chunk was checked before the complete set.
+The endpoint-tuple equality, row-sum equality and reciprocal-helper equality
+are then symbolic proofs; no field or trace universe is enumerated.
+The equality includes the D9 total inverse at poles without a new condition.
+
+`JointTrace.actual_affine` proves the complete prepared/masked trace is its
+zero-tape trace plus one common F-linear map of T. This uses the helper
+invariance above, linear balancing, and the accepted `applyAff` identity.
+`PayloadSplit.run_split` proves equality to the existing honest payload:
+
+```text
+run = L(actual trace) + O(actual trace),
+```
+
+where L contains every linear mask observation (mask-sum and round masks
+included) and all other linear observations; O contains precisely eta times
+the original terminal's round-polynomial coefficients, zero elsewhere.
+The exact interpolation and ported `HonestView.run` are retained.
+
+The decomposition is made explicit, with no choice of a witness-dependent
+slope: **A = L ∘ tapeLinear**; **c = JointView.c**; **g(w,n)** is the change
+in O's round arrays between `(0,n)` and `(0,0)`. This choice assigns the
+original terminal's entire change, including any terms linear in n, to g.
+D12 does not require g to have zero derivative or to be homogeneous of degree
+at least two. `g_zero` proves g(w,0)=0. `D12.decomposition` proves:
+
+```text
+payload(w,(m,n)) = c(w) + A(m,n) + roundInclusion(g(w,n)).
+```
+
+`roundInclusion` is exactly `(g,0)` in D12. In particular,
+`other_components_affine` proves all non-round components jointly affine in
+(m,n) with the same common A. This includes H1 claims/openings, the mask-sum,
+inactive sum, and the opening/final polynomial coefficients. The view's
+metadata remains the existing constant `ZkStatement.metadata outputs x ch`;
+it is not assigned an artificial vector-space structure.
+
+### D12 MaskImage and HVZK
+
+`D12.MaskImage` is D12 verbatim, with challenges universally quantified and
+`h.public w = x.1` following the existing ideal-handle convention:
+
+```text
+(i)  ∀ ch w n, public w = x → (g(w,n),0) ∈ range(A ∘ inl_M)
+(ii) ∀ ch w w', public w = x → public w' = x → c(w)-c(w') ∈ range A.
+```
+
+There is no extra affinity, helper, equality-of-ranges, good-challenge,
+completeness or rank assumption. `AbsorptionLaw.fixed_n` invokes the accepted
+finite affine-coset theorem with clause (i), so each conditional law is that
+of `c + A(0,n) + (A ∘ inl_M)(m)`. `mixture` averages over independent uniform
+n to obtain exactly the pushforward of uniform `(m,n)` under `c + A`.
+`uniform_coset` identifies its law as uniform on `c + range A`.
+Clause (ii) makes these cosets equal across honest instances. The proved
+coordinate equivalence transports this law to the original joint tape and
+the constant metadata pair is restored. The resulting theorem is:
+
+```lean
+R0Z.D12.hvzk_perfect_of_maskImage :
+  D12.MaskImage h B x → JointView.HVZK_perfect h B outputs x
+```
+
+The conclusion is the existing experiment and chosen-instance simulator,
+not a new or conditioned privacy notion. `MaskImage` itself, Z4, builder
+completeness, ZF1 and source/ROM refinement remain open.
+
+### Z4 opening move — maps, lemma targets and dimensions
+
+`Z4Maps.roundMaskMap` is the round-polynomial projection of `A ∘ inl_M`.
+Because (i) specifies zero in **all other** components, `silentMasks` is the
+kernel of its non-round observation and `silentRoundMaskMap` restricts the
+round map to that kernel. The first surjectivity-type target is:
+
+```text
+∀ ch w n, public w = x →
+  ∃ m ∈ silentMasks, silentRoundMaskMap(m) = g(w,n).
+```
+
+`Z4Maps.c1Map` is A projected to semantic C1 columns 0–15: three point
+claims, two OOD claims, and query-gated opened symbols. Its target is:
+
+```text
+∀ ch w w', public w = x → public w' = x →
+  c1Projection(c(w)-c(w')) ∈ range c1Map.
+```
+
+These are named **Prop definitions** `roundMask_surjectivity` and
+`c1_surjectivity`, exposing the two future lemma statements without asserting
+or assuming their proofs. The C1 statement is the encoder-restriction part
+needed beyond the mask lanes; it alone is not a proof of full-payload (ii).
+The remaining components must admit a compatible lift. Similarly,
+surjectivity of the unrestricted round projection alone would not establish
+(i). No unrestricted ambient-surjectivity or rank theorem has been claimed.
+
+| Tape block | Raw independent F coordinates |
+|---|---:|
+| Ten mask-only columns | 10 × 1024 = 10,240 |
+| G and D | 2 × 1024 × 4 = 8,192 |
+| **M** | **18,432** |
+| H1-padding samples | 1024 × 4 = 4,096 |
+| Eligible noise | 3,803 |
+| **N** | **7,899** |
+| **T = M ⊕ N** | **26,331** |
+
+These are dimensions of the raw tape spaces, not ranks after balancing or
+observation, and not a claimed dimension of `silentMasks`. The unchanged
+eligible counts by semantic column are
+`222,222,223,224,224,224,224,224,224,248,249,259,259,259,259,259`.
+There are 214 copy-active and 810 copy-inactive rows. The natural-number
+inventory is retained in `/tmp/aspis-d12/evidence/d12-layout-inventory.json`.
+
+Writing q for the arbitrary challenge query set's cardinality:
+
+| Disclosed projection | Ambient K slots | At q = 22 |
+|---|---:|---:|
+| Round-polynomial arrays | 280 | 280 |
+| Semantic C1 claims and openings (`c1Map`) | 16 × (5 + 4q) | 1,488 |
+| Other 13 columns' claims and openings | 13 × (5 + 4q) | 1,209 |
+| Mask-sum, inactive sum, opening/final coefficients | 265 | 265 |
+| Complete payload | 690 + 116q | 3,242 |
+| Non-round payload | 410 + 116q | 2,962 |
+
+The fixed zero-extended payload type still has 30,409,394 K coordinates.
+Unqueried slots disclose zero. q22 is only a labelled count, not a restriction
+of the universally quantified Challenges type. Compare these ambient K-slot
+counts to F-coordinate dimensions only after multiplying by `[K:F]`;
+`PackBasis F` alone does not assert that K has dimension four. Encoder,
+sumcheck, subfield and balance constraints have not been subtracted as ranks.
+
+### Host checks and exact evidence
+
+Host/workspace: `dombarker@100.108.41.90`,
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`.
+Lean 4.32.0 (`8c9756b28d64dab099da31a4c09229a9e6a2ef35`) and Mathlib
+`81a5d257c8e410db227a6665ed08f64fea08e997` were rechecked. The existing
+shared-lock launcher was read before use. Each source installation and
+focused `lake env lean` invocation held `/tmp/aspis-r0-lean.lock`.
+One process per attempt, `-j1 -M7000 -DElab.async=false`, 900-second timeout,
+MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, TasksMax=128. Every admission
+was 24+7 GiB under the 55 GiB reservation ceiling. No limit was raised.
+
+No package-wide replay, cold dependency build, SBF/Rust gate, finite-field
+elimination or rank computation ran. The early premature dependent attempt
+3155 returned immediately because the partition object did not yet exist;
+subsequent dependent checks used green predecessors. Affected sources were
+recompiled after the checker-instance correction and final whitespace fix;
+no unchanged full regression was repeated.
+
+Kernel-memory failures 3157/3158 were isolated to evaluation of the H1
+padding's concrete finite-set sum. The replacement proves balancing of a
+zero family with the finite set abstract, then applies the named theorem.
+Failure 3164 was the aggregate `run_split`; eight separately proved payload
+components replace the aggregate reduction. Recursion failures in the final
+HVZK wrapper were traced to a private-but-global decidability instance in
+the helper checker: it changed the inferred finite tape construction. The
+replacement makes both checker instances **local**, preserving the existing
+`JointView` finite law. No statement, field premise, or resource limit was
+weakened to fix these failures.
+
+Source revision for every receipt is the requested base **01920c658** plus
+its exact target snapshot SHA below and the latest preceding accepted
+snapshots of its new imports. The twelve inherited critical source files
+were matched byte-for-byte with the host, recorded in
+`/tmp/aspis-d12/evidence/dependency-hashes.json`; unchanged compiled caches
+were reused. Source snapshots, SHA receipts, outputs, GNU-time logs, the
+attempt inventory and natural layout inventory are retained on the host
+and in `/tmp/aspis-d12/evidence/`, outside the commit. Final local sources
+match their accepted host snapshots byte-for-byte.
+
+“Standard” means only `propext`, `Classical.choice`, `Quot.sound`, or a
+subset. Failed attempts are rejected in full, irrespective of partial
+`#print axioms` output. The final requested declarations
+`R0Z.D12.M_pure`, `R0Z.D12.decomposition`, and
+`R0Z.D12.hvzk_perfect_of_maskImage` each print **exactly those three standard
+axioms** in attempt 3184. `g_zero` and `other_components_affine` do as well.
+
+| Attempt | Exact target | Exit | Wall | Peak RSS (KiB) | Swap | Result / axioms |
+|---|---|---:|---:|---:|---:|---|
+| 3154 | `R0Z/Partition.lean` | 1 | 0:05.76 | 6,813,040 | 0 | Rejected: partition projection/if proof plumbing. |
+| 3155 | `R0Z/PayloadSplit.lean` | 1 | 0:00.12 | 189,188 | 0 | Rejected before elaboration: predecessor object absent. |
+| 3156 | `R0Z/Partition.lean` | 1 | 0:05.64 | 6,816,432 | 0 | Rejected: dependent-if/projection proof plumbing. |
+| 3157 | `R0Z/Partition.lean` | 1 | 0:07.00 | 7,169,696 | 0 | Rejected: kernel memory limit in pureTrace_fixed. |
+| 3158 | `R0Z/Partition.lean` | 1 | 0:07.08 | 7,170,664 | 0 | Rejected: isolated padding proof still normalized the concrete set. |
+| 3159 | `R0Z/Partition.lean` | 0 | 0:05.81 | 6,847,276 | 0 | Standard; abstract-set balance lemma fixes kernel reduction. |
+| 3160 | `R0Z/PayloadSplit.lean` | 1 | 0:04.31 | 6,822,344 | 0 | Rejected: round projection type and component equality plumbing. |
+| 3161 | `R0Z/HelperInvariant.lean` | 0 | 0:02.99 | 6,821,672 | 0 | propext/Quot.sound; first four-record helper preflight. |
+| 3162 | `R0Z/PayloadSplit.lean` | 1 | 0:07.68 | 7,158,920 | 0 | Rejected: excessive definitional unfolding in aggregate payload proof. |
+| 3163 | `R0Z/HelperInvariant.lean` | 1 | 0:08.11 | 6,813,000 | 0 | Rejected: endpoint-tuple Prod.ext plumbing. |
+| 3164 | `R0Z/PayloadSplit.lean` | 1 | 0:08.41 | 7,169,744 | 0 | Rejected: kernel memory limit in aggregate run_split. |
+| 3165 | `R0Z/HelperInvariant.lean` | 0 | 0:08.29 | 6,825,424 | 0 | Standard; complete helper/endpoint invariance. |
+| 3166 | `R0Z/PayloadSplit.lean` | 0 | 0:09.59 | 7,009,360 | 0 | Standard; eight component lemmas, run_split and M_pure. |
+| 3167 | `R0Z/JointTrace.lean` | 1 | 0:04.54 | 6,813,408 | 0 | Rejected: missing explicit base field on zero noise. |
+| 3168 | `R0Z/AbsorptionLaw.lean` | 1 | 0:03.03 | 6,691,188 | 0 | Rejected: explicit equivalence sum needed. |
+| 3169 | `R0Z/JointTrace.lean` | 1 | 0:04.08 | 6,815,884 | 0 | Rejected: conditional/zero-projection normalization. |
+| 3170 | `R0Z/AbsorptionLaw.lean` | 0 | 0:03.19 | 6,721,648 | 0 | Standard; fixed-N law and uniform mixture. |
+| 3171 | `R0Z/JointTrace.lean` | 0 | 0:04.30 | 6,850,460 | 0 | Standard; joint trace affinity. |
+| 3172 | `R0Z/D12.lean` | 1 | 0:04.76 | 6,807,328 | 0 | Rejected: explicit field/wrapper elaboration. |
+| 3173 | `R0Z/D12.lean` | 1 | 0:05.05 | 6,812,812 | 0 | Rejected: finite-tape instance mismatch at metadata wrapper. |
+| 3174 | `R0Z/D12.lean` | 1 | 0:04.95 | 6,812,520 | 0 | Rejected: finite-tape instance mismatch, limits unchanged. |
+| 3175 | `R0Z/AbsorptionLaw.lean` | 0 | 0:03.31 | 6,721,664 | 0 | Standard; generic law transport added. |
+| 3176 | `R0Z/D12.lean` | 1 | 0:04.90 | 6,814,592 | 0 | Rejected: unsaturated wrapper unfolding and finite-tape instance mismatch. |
+| 3177 | `R0Z/D12.lean` | 1 | 0:04.93 | 6,812,372 | 0 | Rejected: finite-tape instance mismatch remains. |
+| 3178 | `R0Z/D12.lean` | 1 | 0:04.88 | 6,811,444 | 0 | Rejected diagnostic: identical displayed goals exposed instance mismatch. |
+| 3179 | `R0Z/HelperInvariant.lean` | 0 | 0:08.37 | 6,843,688 | 0 | Standard; checker instances made local. |
+| 3180 | `R0Z/JointTrace.lean` | 0 | 0:04.40 | 6,848,784 | 0 | Standard; dependent trace check after instance-scope correction. |
+| 3181 | `R0Z/D12.lean` | 0 | 0:05.26 | 6,847,864 | 0 | Standard; D12 decomposition and perfect HVZK. |
+| 3182 | `R0Z/PayloadSplit.lean` | 0 | 0:08.66 | 7,037,904 | 0 | Standard; final PayloadSplit after whitespace-only cleanup. |
+| 3183 | `R0Z/JointTrace.lean` | 0 | 0:04.26 | 6,849,252 | 0 | Standard; dependent trace check against final payload source. |
+| 3184 | `R0Z/D12.lean` | 0 | 0:05.13 | 6,847,672 | 0 | Standard; final D12 and requested axioms audit. |
+| 3185 | `R0Z/Z4Maps.lean` | 0 | 0:03.93 | 6,849,016 | 0 | Standard; Z4 maps and unproved target statements. |
+
+| Attempt | Exact target source SHA-256 |
+|---|---|
+| 3154 | `b82f6491b265cd8f9eb5e17e9f78dfe37cf0ad7661d5fdfa43b1b17f51821d94` |
+| 3155 | `00d3c9fba7321825d8557336f3b1995c71424002cb54e2a1398ff43e7452f953` |
+| 3156 | `66de3a7b386df646693ccc49a21f5a90d1ac26bce491f68643fc8819b0fbf85a` |
+| 3157 | `71d554f68b56eecbe9fbfd647ad6f6c7c90b79ca48c9a718e37c34e450741a70` |
+| 3158 | `09d83c7f0e8afb24b1b166a8c7fe38c75e67ce4d39be12376eaa22aa6daa2d59` |
+| 3159 | `138e2bdce877cfc8d962e11cb1e0110eeb23c0c9623182d927c38dc07ad95c0f` |
+| 3160 | `00d3c9fba7321825d8557336f3b1995c71424002cb54e2a1398ff43e7452f953` |
+| 3161 | `617a5cc949e6cace14e913c0f610ff35672eabbea3277cce6f1c367b3b1792c1` |
+| 3162 | `eeff8507bbfa57db568d340b53ff05533000157711be31d8fb184e6170793a08` |
+| 3163 | `36e58f219d20b4bfbe929a5ef9998110a7d942a94a225f952c05742323d67ec7` |
+| 3164 | `b9042750ec24388dfec276fd0f61fc56098f577d6b06266907a5d29923b19902` |
+| 3165 | `3f276710896725b4637f226e9c0aed3804563ea41f013ad26cd85f97c0e4d60e` |
+| 3166 | `2c42c149a4a3f6c678d114aa1417fe115838ace9516c09bb4232e20077e22b3d` |
+| 3167 | `d34fcbd58dd834df952648bacb32e703bf72369902576bda797ff1d75b658b0c` |
+| 3168 | `f0c6469fc08e128850c22414703971d90ebbab5ef9ce6c6f63d84842e318abfe` |
+| 3169 | `c6cc0cb0b31f6af8abb35d0d083598bfcecbfa9d169a4fbfc9d4f868ec545194` |
+| 3170 | `8049fe8fb2d0a461f629707967178f2232b5fe0689e1cef5476f9f42581c3b43` |
+| 3171 | `4ce83bf414496872279fe3558e467fb4c57eaa3e143b8acc15ec43169c1fe8f4` |
+| 3172 | `895658c44ffa3460d27c0b9cd8ea9075919bb9d93e4dc82c89943ec8543f3ab6` |
+| 3173 | `f1060e6368f566f310f71f8dcffd40964d565df31606a7ac83950951070b342a` |
+| 3174 | `727566fcde985543481b1f0b788f305f6138c5fdc0648451574b7dfc9595b3d9` |
+| 3175 | `17765d9354db921f467e0d01087ad9f1ef8b4e10977a8d7e5028f50d17072c52` |
+| 3176 | `452fd91ed9d71dc78dc290cc21958dcb96d2d3e81b87a619ae46f23751ab9d2a` |
+| 3177 | `bbfe5543d3ff118112c405892583afcfee40c79ca5e5333101198830dd546585` |
+| 3178 | `33efe65189a78ce8f9c67e93daa250f986ee3670efd95e3b7f005a58364c6831` |
+| 3179 | `60f50f7df9c4981ec38d5eb32da57f19f7af6a007b1e771368a4a31abf01d6e3` |
+| 3180 | `4ce83bf414496872279fe3558e467fb4c57eaa3e143b8acc15ec43169c1fe8f4` |
+| 3181 | `ea3dce2090059f9b657b85cdd0fc518d238535e13752b70049f83b29a6b6f4bf` |
+| 3182 | `0ee03c1176b261b6aba55e09e08f99476ecbe375dd13bb08412caf39cff605a3` |
+| 3183 | `4ce83bf414496872279fe3558e467fb4c57eaa3e143b8acc15ec43169c1fe8f4` |
+| 3184 | `ea3dce2090059f9b657b85cdd0fc518d238535e13752b70049f83b29a6b6f4bf` |
+| 3185 | `5bfcf18abda146c643aabaf1795fa920ac71e2628126e4ec1a40c59c8ea8bc52` |
+
+Final accepted target attempts: Partition 3159, PayloadSplit 3182, HelperInvariant 3179, JointTrace 3183, AbsorptionLaw 3175, D12 3184, Z4Maps 3185.
+
+The scoped forbidden-token and whitespace/diff checks pass. There is no
+new sorry, axiom, unsafe declaration, native evaluation, or elaboration-limit
+override. Literal reduction is confined to the small natural endpoint
+checks and the three-slot tape permutation; no trace, field, encoder,
+recurrence or rank matrix is normalized. Commit scope is these seven new
+privacy modules and this LOG. No soundness/Rust/FS file, wallet, account,
+key or authority was changed. No co-author trailer. Z3b's D12 conditional
+result is complete; Z4 stops at maps, target statements and dimension counts.
