@@ -3558,3 +3558,19 @@ accepted draws identical to the legacy sampler) and release
 `challenge_qm31` is per-limb rejection (exactly uniform), whereas `qm31Sample`
 models a one-block modulo law with slack δQ; the bridge is for the refinement
 block.
+
+### G24: eta one-root density and candidate aggregation (3202–3206)
+
+MaskD2 proves etaBad_root, the generic atom-bound transfer, uniform density 1/card K, and the authorized semantic-sampler bound (1+deltaQ)/P⁴. None needs any property of maskPoly or hMask. The zero-slope branch is the empty event; the other branch is contained in the singleton {(m′−M)/S}. Generic finite counting stays symbolic. Attempt 3202 needed the FS namespace and an unused section-variable omission; 3203 found mean_const’s unnecessary Nonempty requirement, removed by proving the zero mean directly; 3204 passes the focused one-root part. Attempt 3205 needed an explicit field proof of 2≠1 in the aggregation diagnostic; 3206 passes all ten audits. The candidate-union lemmas establish cardinality ≤ number of candidates and the corresponding sampler bound. etaBad_two_roots proves, over any field with 2≠0, that claim 2 and mask sum 0 have distinct roots eta=2 for original sum 1 and eta=1 for original sum 2. This is a generic aggregation diagnostic, not a constructed counterexample inside the concrete Lambda list. SemD2:38–64 bounds that list by 100; :111–164 unions per-candidate events. Thus the one-root theorem alone does not justify a coefficient-1 global eta budget. The lead was asked whether the aggregate eta budget should carry the existing candidate factor 100; no new premise or silently weakened global D2 theorem is introduced. All green audits use only the standard three axioms. This module is the checked local density/aggregation checkpoint, not full FS2.D2.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g24-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3202 | `R0P/MaskD2` | 1 / 1 | 0:02.88 | 6796580 | 0 | 7 | `34ee92114c4fe8cf26d1e75e7096a48982515be81d76c060ab41ddeb5d0b6a05` |
+| 3203 | `R0P/MaskD2` | 1 / 1 | 0:03.02 | 6798508 | 0 | 7 | `687e5b84c68a13b15d82e8ec59e0e579ece80c170b7cbe005bf39f88396204ce` |
+| 3204 | `R0P/MaskD2` | 0 / 0 | 0:03.05 | 6832960 | 0 | 7 | `4e7134d95b86afe0b8a130a711d5aabbcf6ea8930fe31ea1372bca3235782520` |
+| 3205 | `R0P/MaskD2` | 1 / 1 | 0:03.26 | 6800572 | 0 | 10 | `00e7a2c6096081949430c79f109fbed443cb6a7cef545fa310ef935037b60ffd` |
+| 3206 | `R0P/MaskD2` | 0 / 0 | 0:03.42 | 6833744 | 0 | 10 | `1adbf173b5ed4d92157f8ffe13e1d79d98cd8df370377848007b19780f064cba` |
+
+Source revision(s): `8e879d8d4f3ab8dfee1e23d378609add64aa9719`, `91af84ab4a6b88f7274ea34e1b26354e5cb19035`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
