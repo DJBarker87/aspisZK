@@ -4077,3 +4077,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3262 | `R0P/MaskSemantics` | 0 / 0 | 0:03.22 | 6836028 | 0 | 4 | `a3c75e02262ac723e1f598effa4c5438224eaa64c3d5945e7f2c22baf60e3f00` |
 
 Source revision(s): `f7737692d1df4827f7b65b156294eeaa0cc266ef`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskView (host attempt 3263)
+
+The masked decision now passes maskClaims into the terminal checks. All transcript and opening parsers and the 32-round schedule retain their G24 definitions. The changed imported MaskProtocol was checked first. Attempt 3263 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3263 | `R0P/MaskView` | 0 / 0 | 0:04.49 | 6867872 | 0 | 19 | `a4da0f8fbf523d472f4eeec18671497cef4a738f74e8cb84a6a1897b497fe15e` |
+
+Source revision(s): `8870138608dc9f34e354218bf74d85e886da48ec`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.

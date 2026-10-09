@@ -374,13 +374,13 @@ theorem openingZ_good_hitFrom {W : Type} {Sfield : Fin 29 → Subfield K}
 /-- No degree guard occurs on the eta claim. Only the ten alpha messages
 are polynomial messages whose degrees the verifier checks. -/
 def decisionZ {Sfield : Fin 29 → Subfield K} {F : Subfield K}
-    (maskPoly : (Fin 10 → K) → K) (B : PackBasis F)
+    (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (B : PackBasis F)
     (P : Prefix K K (TypedContext K Sfield) (SemMsgZ K)) (m : MsgZ K) : Bool :=
   if ∃ (Q : FS.Prefix (R0FS.Stmt K Sfield) (R0FS.Msg K) (R0FS.Chal K))
     (cs : List K) (hcs : cs.length = 25) (polys : Fin 10 → K[X]) (claim : K) (om : R0FS.Msg K),
     openingViewZ P = some Q ∧ semChalsZ (P.rounds.take 25) = some cs ∧
     semPolysZ (P.rounds.take 25) = some polys ∧ claimOf P.rounds = some claim ∧
-    sumcheckChecksZ maskPoly P.statement.pub B
+    sumcheckChecksZ maskClaims P.statement.pub B
       (fun j => cs[j.val]'(by omega)) (cs[14]'(by omega)) claim
       (fun j => cs[15 + j.val]'(by omega)) polys Q.statement.pointClaims ∧
     m = .opening om ∧ R0FS.decision Q om = true ∧ cardOK Q = true
