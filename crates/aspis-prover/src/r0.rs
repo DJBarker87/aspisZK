@@ -1,6 +1,6 @@
 //! Host R0 prover: real C1/C2 commitments at the semantic callback times,
 //! then R-G's transported opening. Inputs remain semantic row indexed.
-use crate::state_only_candidate_prefix::r0::{build_pair_forest, Column, Commitments};
+use crate::state_only_candidate_prefix::r0::{build_pair_forest_transported, Column, Commitments};
 use aspis_core::r0::CodeField;
 use aspis_core::{
     field::{WideExact as E, M31, QM31},
@@ -83,7 +83,15 @@ pub fn r0_prove(
         c2: None,
         error: None,
     };
-    let semantic = match build_pair_forest(public, compiled, mask_only, d, g, &mut backend, hash) {
+    let semantic = match build_pair_forest_transported(
+        public,
+        compiled,
+        mask_only,
+        d,
+        g,
+        &mut backend,
+        hash,
+    ) {
         Ok(s) => s,
         Err(e) => {
             return Err(backend
@@ -109,8 +117,10 @@ pub fn r0_prove(
         backend.c2.as_ref().ok_or(OpeningError::Commitment)?,
     )?
     .encode()?;
-    // R-F's row-26 diagnostic used raw row coefficients. The opening owns
-    // row 26 here and computes it after D13 transport, exactly once on wire.
+    // One shared row-26 record; both prover layers must use exactly D13.
+    if semantic.bytes[OPENING_OFFSET..] != opening[..semantic.bytes.len() - OPENING_OFFSET] {
+        return Err(OpeningError::Schedule.into());
+    }
     let mut bytes = Vec::with_capacity(PROOF_BYTES);
     bytes.extend_from_slice(&semantic.bytes[..OPENING_OFFSET]);
     bytes.extend_from_slice(&opening);

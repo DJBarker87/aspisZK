@@ -772,6 +772,20 @@ pub mod r0 {
         commitments: &mut impl Commitments,
         hash: HashFn,
     ) -> Result<BuiltSemantics, Error> {
+        build_with_helper_mode(public, c1, d, g, helper, commitments, hash, false)
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn build_with_helper_mode(
+        public: Public<'_>,
+        c1: &[Vec<M31>; 26],
+        d: &[QM31; 1024],
+        g: &[QM31; 1024],
+        helper: impl FnOnce(QM31, QM31) -> Result<Vec<QM31>, Error>,
+        commitments: &mut impl Commitments,
+        hash: HashFn,
+        transported_endpoints: bool,
+    ) -> Result<BuiltSemantics, Error> {
         // Reject raw noncanonical constructors rather than normalize their
         // commitment representation. D is supplied before any challenge.
         if c1
@@ -883,6 +897,13 @@ pub mod r0 {
         bytes.extend_from_slice(&before_z0);
         let endpoint = columns.iter().map(|col| {
             let message: &[QM31; 1024] = col.as_slice().try_into().unwrap();
+            let coefficients;
+            let message = if transported_endpoints {
+                coefficients = aspis_core::r0::transport::to_coefficients(message);
+                &coefficients
+            } else {
+                message
+            };
             WideExact::from_qm31(eval_message(message, Point { x: z0.x, y: z0.y }))
         });
         let before_z1 = wire::record(26, &wire::encode_values(endpoint))?;
@@ -915,6 +936,37 @@ pub mod r0 {
         commitments: &mut impl Commitments,
         hash: HashFn,
     ) -> Result<BuiltSemantics, Error> {
+        build_pair_forest_mode(public, compiled, mask_only, d, g, commitments, hash, false)
+    }
+
+    /// R-E continuation: row 26 evaluates the committed D13 coefficients.
+    /// This avoids an unused raw-row z1 (and its possible equality abort)
+    /// before the actual opening transcript. Historical semantic KATs retain
+    /// the original diagnostic builder above.
+    #[allow(clippy::too_many_arguments)]
+    pub fn build_pair_forest_transported(
+        public: Public<'_>,
+        compiled: &PoolV1PairForestMergedC1CompilationV1,
+        mask_only: &[Vec<M31>; 10],
+        d: &[QM31; 1024],
+        g: &[QM31; 1024],
+        commitments: &mut impl Commitments,
+        hash: HashFn,
+    ) -> Result<BuiltSemantics, Error> {
+        build_pair_forest_mode(public, compiled, mask_only, d, g, commitments, hash, true)
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn build_pair_forest_mode(
+        public: Public<'_>,
+        compiled: &PoolV1PairForestMergedC1CompilationV1,
+        mask_only: &[Vec<M31>; 10],
+        d: &[QM31; 1024],
+        g: &[QM31; 1024],
+        commitments: &mut impl Commitments,
+        hash: HashFn,
+        transported_endpoints: bool,
+    ) -> Result<BuiltSemantics, Error> {
         if compiled.semantic_c1.c1.len() != 16 || &compiled.public_statement != public.transition()
         {
             return Err(Error::Public);
@@ -926,7 +978,7 @@ pub mod r0 {
                 mask_only[i - 16].clone()
             }
         });
-        build_with_helper(
+        build_with_helper_mode(
             public,
             &c1,
             d,
@@ -942,6 +994,7 @@ pub mod r0 {
             },
             commitments,
             hash,
+            transported_endpoints,
         )
     }
 }

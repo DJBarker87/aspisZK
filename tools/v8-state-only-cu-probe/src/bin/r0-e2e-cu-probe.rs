@@ -46,6 +46,17 @@ fn fixture(dir: &Path, profile: Profile) -> Result<()> {
     let start = Instant::now();
     let proof = f.prove().map_err(|e| anyhow!("prove: {e:?}"))?;
     let prover_seconds = start.elapsed().as_secs_f64();
+    // Linux VmHWM is sampled before native verification, so verifier work
+    // cannot inflate the prover-process peak. Includes fixture preparation.
+    let prover_process_peak_rss_bytes = fs::read_to_string("/proc/self/status")?
+        .lines()
+        .find_map(|line| {
+            line.strip_prefix("VmHWM:")
+                .and_then(|v| v.split_whitespace().next()?.parse::<u64>().ok())
+        })
+        .ok_or_else(|| anyhow!("missing Linux VmHWM"))?
+        * 1024;
+
     let start = Instant::now();
     let checked = aspis_statement::r0::r0_verify(f.public(), &proof, aspis_prover::HOST_HASH, None)
         .map_err(|e| anyhow!("verify: {e:?}"))?;
@@ -65,7 +76,9 @@ fn fixture(dir: &Path, profile: Profile) -> Result<()> {
     let metadata = json!({"schema":"aspis.r0-e2e.fixture.v1", "variant":profile.stem,
   "source_revision":env::var("ASPIS_SOURCE_REVISION")?, "proof_bytes":proof.len(),
   "proof_sha256":sha(&proof),"public_bytes":public.len(),"public_sha256":sha(&public),
-  "prover_seconds":prover_seconds,"native_verifier_seconds":verifier_seconds,
+  "prover_seconds":prover_seconds,"prover_process_peak_rss_bytes":prover_process_peak_rss_bytes,
+      "prover_rss_scope":"process high-water mark after preparation+prove, before native verify",
+      "native_verifier_seconds":verifier_seconds,
   "query_count":22,"query_fibres":checked.queries.ordered(),"strict_native_accepted":true,
   "roundtrip":true,"release":!cfg!(debug_assertions),"fixture_entropy":"deterministic, insecure test fixture"});
     write_json(
