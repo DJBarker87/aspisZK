@@ -1131,3 +1131,22 @@ The forbidden-declaration/evaluation/limit-override scan and scoped
 and this LOG only; no co-author trailer. The unchanged MaskLayout and
 ViewAffine results are reused. No edits were made to Rust, the soundness
 tree, or the historical extraction directory.
+
+### Lead decision D10 — opening decoder off the encoder image (resolves the Z3 stop)
+
+Retain the candidate: the ideal honest opening quotient is the pointwise
+chord quotient followed by the exact encoder's **linear left inverse**
+(`Wide/EncoderLinearity.lean:97–114,221–224`, `decode_encoded`). The linear
+extension off the image is the ideal model's totalisation, in the same spirit
+as D9: it keeps `view_affine` exact for every challenge vector and assigns a
+value where the source has an abort. Where it is exercised: both circle
+points are non-base-rational by the fallback design (`circleSample0/1_not_rational`),
+so by `O/Chord.lean:28–33,112–124` the chord is nonvanishing on the domain
+whenever `z0 ≠ z1`; the extension is therefore reached only on the event
+`z1 = z0` (the soundness `z1Bad` fibre), of mass ≤ (1+δQ)/P⁴ under the ideal
+samplers. Refinement obligation **ZR2**: the real prover's behaviour on
+`z1 = z0` (abort or otherwise) differs from the ideal view on an event of at
+most that mass; it joins ZR1 in the real-vs-ideal distance. Z3 should prove
+the on-image lemma (`z0 ≠ z1 → quotient word ∈ encoder image`) so the
+extension's irrelevance off that event is a theorem, not prose. No
+good-challenge restriction or conditioning enters the ideal model.
