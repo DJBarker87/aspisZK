@@ -1602,3 +1602,9 @@ pub fn seeded_coeffs(log_rows: u32, seed: u64) -> Vec<M31> {
         })
         .collect()
 }
+
+#[cfg(feature = "r0")]
+pub mod r0;
+
+#[cfg(all(feature = "r0", feature = "insecure-spend-fixture"))]
+pub mod r0_fixture;

@@ -246,3 +246,11 @@ pub(crate) mod test_support {
         )
     }
 }
+
+#[cfg(all(feature = "r0-cu-probe", not(feature = "no-entrypoint"), any(
+    feature = "spend-production", feature = "v5-cu-probe", feature = "v6-cu-probe",
+    feature = "v7-cu-probe", feature = "v7-pool-cu-profile", feature = "v8-state-only-cu-probe"
+)))]
+compile_error!("R0_CU_PROBE_FORBIDS_OTHER_ENTRYPOINTS");
+#[cfg(feature = "r0-cu-probe")]
+pub mod r0_cu_probe;

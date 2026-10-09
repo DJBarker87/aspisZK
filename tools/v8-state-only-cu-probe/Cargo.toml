@@ -3,14 +3,15 @@ name = "aspis-v8-state-only-cu-probe"
 version = "0.1.0"
 edition = "2021"
 publish = false
+default-run = "aspis-v8-state-only-cu-probe"
 
 [workspace]
 
 [dependencies]
 anyhow = "1.0.100"
-aspis-core = { path = "../../crates/aspis-core" }
-aspis-prover = { path = "../../crates/aspis-prover" }
-aspis-statement = { path = "../../crates/aspis-statement" }
+aspis-core = { path = "../../crates/aspis-core", features = ["r0"] }
+aspis-prover = { path = "../../crates/aspis-prover", features = ["r0", "insecure-spend-fixture"] }
+aspis-statement = { path = "../../crates/aspis-statement", features = ["r0"] }
 litesvm = "=0.16.0"
 agave-feature-set = "=4.2.1"
 solana-program-runtime = "=4.2.1"
