@@ -1,0 +1,108 @@
+{
+  "label": "unmined diagnostic path (PoW rejection disabled)",
+  "measured_elf_sha256": "ed367d304db36e0b629161c3f4a74e35cfd893ae17eaebce34f0119e132ba3b7",
+  "unstripped_elf_sha256": "802fee5089e5afd8f38d7f11d13348aedd737e4c96c31600ff818d75269a3b28",
+  "identical_text_sections": true,
+  "text_section_sha256": "98910e74d2376985f0da03fe7c8e5539d6359496722141a937b0e15725eed12f",
+  "source_sites": {
+    "batch": "crates/aspis-core/src/state_only_prefix.rs:656",
+    "folds": "crates/aspis-core/src/state_only_prefix.rs:913",
+    "final": "crates/aspis-core/src/state_only_prefix.rs:934",
+    "predicate": "crates/aspis-core/src/transcript.rs:52",
+    "hash_input": "crates/aspis-core/src/transcript.rs:593"
+  },
+  "logical_full_replay_hashes": 6,
+  "hash_input_bytes_each": 41,
+  "hash_input_slices": [
+    32,
+    1,
+    8
+  ],
+  "logical_64bit_threshold_comparisons": 6,
+  "hashes_present_in_diagnostic_binary": 6,
+  "additional_hashes_for_strict_replay": 0,
+  "additional_64bit_comparisons_for_strict_replay": 4,
+  "skipped_instructions_per_fold": 6,
+  "fold_count": 4,
+  "omission_upper_bound_cu": 24,
+  "bound_scope": "PoW-only successful-path instruction difference in this compiled replay; not a mined-proof total prediction",
+  "explanation": "Batch/final already hash and compare; their successful paths are no longer than the diagnostic paths. Each of four folds retains its hash but skips the six listed instructions when check_pow is false. These are ordinary one-CU SBF instructions, with no syscall. Schedule wrappers have equal instruction counts. Nonce absorption is unchanged.",
+  "fold_block_including_unconditional_hash": [
+    "0x9e3f0: callx r4",
+    "0x9e3f8: jeq r9, 0x0, +0x8 <aspis_core::state_only_prefix::run_full_with_context::hf6f8dbf0a35dbee6+0x1500>",
+    "0x9e400: ldxdw r1, [r10 - 0x688]",
+    "0x9e408: jeq r1, 0x0, +0x6 <aspis_core::state_only_prefix::run_full_with_context::hf6f8dbf0a35dbee6+0x1500>",
+    "0x9e410: ldxdw r1, [r10 - 0x280]",
+    "0x9e418: be64 r1",
+    "0x9e420: neg64 r9",
+    "0x9e428: and64 r9, 0x3f",
+    "0x9e430: rsh64 r1, r9",
+    "0x9e438: jne r1, 0x0, +0x4a <aspis_core::state_only_prefix::run_full_with_context::hf6f8dbf0a35dbee6+0x1750>"
+  ],
+  "omitted_fold_block": [
+    "0x9e410: ldxdw r1, [r10 - 0x280]",
+    "0x9e418: be64 r1",
+    "0x9e420: neg64 r9",
+    "0x9e428: and64 r9, 0x3f",
+    "0x9e430: rsh64 r1, r9",
+    "0x9e438: jne r1, 0x0, +0x4a <aspis_core::state_only_prefix::run_full_with_context::hf6f8dbf0a35dbee6+0x1750>"
+  ],
+  "batch_call": [
+    "0x9c7d8: call 0x9f6e"
+  ],
+  "final_call": [
+    "0x9e738: call 0x9b82"
+  ],
+  "grinding_ok_function": [
+    "0xec350: mov64 r6, r3",
+    "0xec358: ldxdw r4, [r1 + 0x0]",
+    "0xec360: mov64 r3, r10",
+    "0xec368: add64 r3, -0x8",
+    "0xec370: stxdw [r10 - 0x18], r3",
+    "0xec378: lddw r3, 0x292ccf",
+    "0xec388: stxdw [r10 - 0x28], r3",
+    "0xec390: add64 r1, 0x8",
+    "0xec398: stxdw [r10 - 0x38], r1",
+    "0xec3a0: stxdw [r10 - 0x8], r2",
+    "0xec3a8: stdw [r10 - 0x10], 0x8",
+    "0xec3b0: stdw [r10 - 0x20], 0x1",
+    "0xec3b8: stdw [r10 - 0x30], 0x20",
+    "0xec3c0: mov64 r1, r10",
+    "0xec3c8: add64 r1, -0x58",
+    "0xec3d0: mov64 r2, r10",
+    "0xec3d8: add64 r2, -0x38",
+    "0xec3e0: mov64 r3, 0x3",
+    "0xec3e8: callx r4",
+    "0xec3f0: mov64 r1, r6",
+    "0xec3f8: and64 r1, 0xff",
+    "0xec400: jeq r1, 0x0, +0x9 <aspis_core::transcript::Transcript::grinding_ok::h5c2a43ab7a93c078+0x100>",
+    "0xec408: ldxdw r1, [r10 - 0x58]",
+    "0xec410: be64 r1",
+    "0xec418: neg64 r6",
+    "0xec420: and64 r6, 0x3f",
+    "0xec428: rsh64 r1, r6",
+    "0xec430: mov64 r0, 0x1",
+    "0xec438: jeq r1, 0x0, +0x3 <aspis_core::transcript::Transcript::grinding_ok::h5c2a43ab7a93c078+0x108>",
+    "0xec440: mov64 r0, 0x0",
+    "0xec448: ja +0x1 <aspis_core::transcript::Transcript::grinding_ok::h5c2a43ab7a93c078+0x108>",
+    "0xec450: mov64 r0, 0x1",
+    "0xec458: and64 r0, 0x1",
+    "0xec460: exit"
+  ],
+  "strict_schedule_wrapper": [
+    "0x9ec30: stdw [r10 - 0xff0], 0x0",
+    "0x9ec38: stdw [r10 - 0xff8], 0x1",
+    "0x9ec40: stdw [r10 - 0x1000], 0x1",
+    "0x9ec48: mov64 r5, r10",
+    "0x9ec50: call -0x3a3",
+    "0x9ec58: exit"
+  ],
+  "diagnostic_schedule_wrapper": [
+    "0x9ec60: stdw [r10 - 0xff0], 0x0",
+    "0x9ec68: stdw [r10 - 0xff8], 0x1",
+    "0x9ec70: stdw [r10 - 0x1000], 0x0",
+    "0x9ec78: mov64 r5, r10",
+    "0x9ec80: call -0x3a9",
+    "0x9ec88: exit"
+  ]
+}
