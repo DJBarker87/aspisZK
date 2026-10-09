@@ -1,7 +1,7 @@
 import R0P.MaskEarly
 import R0P.MaskNoHit
 
-/-! The complete 32-round masked D3 bridge, generic over maskPoly of degree 27. -/
+/-! The complete 32-round masked D3 bridge, generic over maskClaims of degree 27. -/
 set_option autoImplicit false
 namespace R0P.Mask
 open R0P R0P.SemSource R0P.SemD3Glue R0C.SemStatement Polynomial R0P.Sumcheck
@@ -16,11 +16,11 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 
 theorem accepted_no_hit_extractedZ (prime : Nat) [CharP K prime]
     (hprime : prime = 2^31-1) {Sfield : Fin 29 → Subfield K}
-    (fallback1 : Point K) (maskPoly : (Fin 10 → K) → K) (hMask : MaskDegree maskPoly)
+    (fallback1 : Point K) (maskClaims : (Fin 29 → K) → (Fin 10 → K) → K) (hMask : MaskDegree maskClaims)
     (B : PackBasis (Sfield 0))
     (P : Prefix K K (TypedContext K Sfield) (SemMsgZ K)) (m : MsgZ K)
-    (hdec : decisionZ maskPoly B P m = true)
-    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskPoly B) P.statement [] P.rounds)
+    (hdec : decisionZ maskClaims B P m = true)
+    (hno : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) P.statement [] P.rounds)
     (hfirst : ∀ (Q : FS.Prefix (R0FS.Stmt K Sfield) (R0FS.Msg K) (R0FS.Chal K)),
       openingViewZ P = some Q → ∀ (y : Fin 29 → Fin 2 → K) (γ : K),
         Q.rounds.head? = some (.values y, .field γ) → γ ≠ 0) :
@@ -30,7 +30,7 @@ theorem accepted_no_hit_extractedZ (prime : Nat) [CharP K prime]
     of_decide_eq_true hdec
   have hnogood : ¬ R0FS.good Q.statement Q.rounds := by
     intro hg
-    exact hno (openingZ_good_hitFrom (sourceDataWithFallbackZ fallback1 maskPoly B)
+    exact hno (openingZ_good_hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B)
       rfl rfl P Q hview hg)
   obtain ⟨t,ht⟩ := opening_decision_witness Q om hodec hcard hnogood (hfirst Q hview)
   obtain ⟨sem,cs',hw,gw,y,y0,z0,z1,hcs',hb,hne,h0,h1,os,hsem,hparse',hc2,hrounds,hQ⟩ :=
@@ -65,20 +65,20 @@ theorem accepted_no_hit_extractedZ (prime : Nat) [CharP K prime]
   have heta14 : (cs[14]'(by omega)) = cs.getD 14 0 := by
     simp only [List.getD_eq_getElem?_getD,
       List.getElem?_eq_getElem (show 14 < cs.length by omega), Option.getD_some]
-  have hsum' : sumcheckChecksZ maskPoly P.statement.pub B pre (cs.getD 14 0) claim alpha polys
+  have hsum' : sumcheckChecksZ maskClaims P.statement.pub B pre (cs.getD 14 0) claim alpha polys
       (honestClaims t alpha) := by
     simpa only [openingStmt,hy,hpre,heta14,hα] using hsum
-  have hn : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskPoly B) P.statement []
+  have hn : ¬ hitFrom (sourceDataWithFallbackZ fallback1 maskClaims B) P.statement []
       (sem ++ ((Msg.beforeZ0 y,Chal.circle z0) :: (Msg.beforeZ1 y0,Chal.circle z1) :: openingPairsZ os)) := by
     simpa only [hrounds] using hno
-  have heta := no_hit_eta fallback1 maskPoly B P.statement sem _ hsem cs hparse claim hclaimsem
+  have heta := no_hit_eta fallback1 maskClaims B P.statement sem _ hsem cs hparse claim hclaimsem
     hw gw hc2 t ht.1 hn
-  have halpha := no_hit_alpha fallback1 maskPoly B P.statement sem _ hsem cs hparse claim hclaimsem
+  have halpha := no_hit_alpha fallback1 maskClaims B P.statement sem _ hsem cs hparse claim hclaimsem
     polys hpolys hsum'.1 hw gw hc2 t ht.1 hn
-  have htotal := originalTotal_zero_of_masked_accept maskPoly hMask P.statement.pub B t pre
-    (cs.getD 14 0) claim alpha polys (checksAcceptZ maskPoly P.statement.pub B t pre
+  have htotal := originalTotal_zero_of_masked_accept maskClaims hMask P.statement.pub B t pre
+    (cs.getD 14 0) claim alpha polys (checksAcceptZ maskClaims P.statement.pub B t pre
       (cs.getD 14 0) claim alpha polys hsum') halpha heta
-  have hearly := no_hit_early fallback1 maskPoly B P.statement sem _ hsem cs hparse hw gw hc2 t ht.1 hn
+  have hearly := no_hit_early fallback1 maskClaims B P.statement sem _ hsem cs hparse hw gw hc2 t ht.1 hn
   obtain ⟨hlc,hth,hzc,hmu⟩ := earlyRounds_cover t P.statement.pub B r hearly
   have hzcpre : semSlice r 3 10 = preZc pre := by
     funext j
@@ -104,7 +104,7 @@ attribute [local instance] Classical.propDecidable
 
 theorem d3Z (prime : Nat) [CharP WideExact prime] (hprime : prime = 2^31-1)
     {Sfield : Fin 29 → Subfield WideExact} {Pf : Type} {L : Nat}
-    (maskPoly : (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskPoly)
+    (maskClaims : (Fin 29 → WideExact) → (Fin 10 → WideExact) → WideExact) (hMask : MaskDegree maskClaims)
     (B : PackBasis (Sfield 0))
     (p : Duplex.Params (MsgZ WideExact) (ChalZ WideExact) L)
     (msg : Pf → Nat → MsgZ WideExact)
@@ -114,18 +114,18 @@ theorem d3Z (prime : Nat) [CharP WideExact prime] (hprime : prime = 2^31-1)
           Duplex.Chal (ChalZ WideExact))))
     (budget : Nat → ℚ)
     (hσ27 : ∀ s, p.σ 27 s = .opening (R0C.V3.DQ.σQ 0 s)) :
-    FS2.D3 (combinedProtocolZ B p msg decode) (duplexRowsZ maskPoly B budget)
-      (FS2.verifier (combinedProtocolZ B p msg decode) (combinedDecisionZ maskPoly B)) := by
+    FS2.D3 (combinedProtocolZ B p msg decode) (duplexRowsZ maskClaims B budget)
+      (FS2.verifier (combinedProtocolZ B p msg decode) (combinedDecisionZ maskClaims B)) := by
   intro H x π T hd
   rw [FS2.verifier_eval]
   by_contra hfalse
-  have hdec : combinedDecisionZ maskPoly B
+  have hdec : combinedDecisionZ maskClaims B
       ((combinedProtocolZ B p msg decode).transcript H x π 32) (msg π 32) = true := by
     exact R0C.V3.DQ.bool_true_of_ne_false hfalse
   let P := valuePrefix ((combinedProtocolZ B p msg decode).transcript H x π 32)
   have hd' : (¬ ∃ t, InputNoteExtracted P.statement.pub t) ∧
-      ¬ hitFrom (sourceDataZ maskPoly B) P.statement [] P.rounds := hd
-  obtain ⟨t, ht⟩ := accepted_no_hit_extractedZ prime hprime circleFallback1 maskPoly hMask B P
+      ¬ hitFrom (sourceDataZ maskClaims B) P.statement [] P.rounds := hd
+  obtain ⟨t, ht⟩ := accepted_no_hit_extractedZ prime hprime circleFallback1 maskClaims hMask B P
     (msg π 32) hdec hd'.2 (by
       intro Q hview y γ hhead
       have hparsed := opening_head_at_27 P Q hview

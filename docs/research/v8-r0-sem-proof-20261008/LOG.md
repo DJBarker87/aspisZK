@@ -4209,3 +4209,15 @@ Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean 
 | 3273 | `R0P/MaskEarly` | 0 / 0 | 0:03.53 | 6847800 | 0 | 11 | `f01f9fb6778f6effc79bec1698efd8014bcd9405ac58c59952b48c46bf52f88d` |
 
 Source revision(s): `1983dda3c508d0d64b335cdad105451943728417`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
+
+### G25: MaskD3Glue (host attempt 3274)
+
+The D3 opening witness establishes y = honestClaims t alpha using the existing hy proof. Rewriting by hy now identifies both maskClaims (y 0) alpha and the original terminal at that candidate, so no new identification premise is introduced. The candidate-specific maskTotal t, alpha exclusion, and eta exclusion recover the original zero sum. d3Z retains hσ27 and only the new universal MaskDegree premise. Attempt 3274 is green.
+
+Host `dombarker@100.108.41.90`; pinned Lean 4.32.0 and existing cache, one Lean job at a time, enforced by the shared launcher flock /tmp/aspis-r0-lean.lock. The user-requested `sh run2.sh N Module 7000 7` invokes the pinned Lean executable with -j1 and asynchronous elaboration disabled: MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, 900 s timeout, reservation 24+7 or 26+7 GiB as recorded by each raw host log. No cap increase or dependency build. Raw host artifacts remain in `evidence/`; hash-verified local copies are at `/tmp/r0-g25-20261009/evidence/`. Evidence files are excluded from commits.
+
+| Attempt | Target | exit / time exit | Wall | Peak RSS KiB | Swaps | Axiom lines | Source SHA-256 |
+|---:|---|---:|---:|---:|---:|---:|---|
+| 3274 | `R0P/MaskD3Glue` | 0 / 0 | 0:03.61 | 6845100 | 0 | 2 | `6295bee37227b213975ef201b36eca08d3527c973441bca8bbd3fec4a9fd1016` |
+
+Source revision(s): `6c94433298c5c3ebda6b7f15c44015df186bb0f6`, plus the recorded source snapshots. Failed-attempt audit output is not accepted proof evidence.
