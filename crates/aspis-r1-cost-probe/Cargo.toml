@@ -1,0 +1,22 @@
+[package]
+name = "aspis-r1-cost-probe"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+description = "UNPROVED R1 COST PROBE, isolated P2 experiments"
+
+[features]
+default = []
+prover = ["dep:aspis-prover", "dep:serde_json", "dep:sha2"]
+r0-op-count = ["aspis-core/r0-op-count"]
+
+[dependencies]
+aspis-core = { path = "../aspis-core", features = ["r0"] }
+aspis-statement = { path = "../aspis-statement", features = ["r0", "pool-v1-kernel"] }
+aspis-prover = { path = "../aspis-prover", features = ["r0", "insecure-spend-fixture"], optional = true }
+serde_json = { workspace = true, optional = true }
+sha2 = { workspace = true, optional = true }
+
+[[example]]
+name = "semantic_gate"
+required-features = ["prover"]
