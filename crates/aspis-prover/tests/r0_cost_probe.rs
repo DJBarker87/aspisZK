@@ -80,7 +80,15 @@ fn verify_both(
 
 #[test]
 fn fixed_wire_size_and_exact_parser() {
-    assert_eq!(r0::PROOF_BYTES, 95_712);
+    assert_eq!(
+        r0::PROOF_BYTES,
+        95_712
+            + if cfg!(feature = "r0-probe-c2") {
+                672
+            } else {
+                0
+            }
+    );
     assert!(r0::Proof::parse(&vec![0; r0::PROOF_BYTES - 1]).is_err());
     assert!(r0::Proof::parse(&vec![0; r0::PROOF_BYTES + 1]).is_err());
 }
@@ -107,6 +115,22 @@ fn both_variants_roundtrip_and_corruption_teeth() {
         .unwrap();
         let public = r0_fixture::statement_public(&statement);
         let checked = verify_both(public, &bytes, HOST_HASH, None).unwrap();
+        #[cfg(feature = "r0-probe-c2")]
+        {
+            let previous = std::fs::read(
+                dir.parent()
+                    .unwrap()
+                    .join("c1-fixtures")
+                    .join(format!("{name}.proof.bin")),
+            )
+            .unwrap();
+            assert_eq!(
+                &bytes[..previous.len()],
+                previous.as_slice(),
+                "C2 shared proof bytes changed"
+            );
+        }
+
         let wire = r0::Proof::parse(&bytes).unwrap();
         assert_eq!(wire.encode().unwrap(), bytes);
         let semantic = verify_semantics(public, wire.semantic, HOST_HASH).unwrap();
@@ -277,6 +301,21 @@ fn both_variants_roundtrip_and_corruption_teeth() {
             for slot in 0..4 {
                 for lane in 0..29 {
                     if fibre == 0 || (slot == 0 && lane == 0) {
+                        #[cfg(feature = "r0-probe-c2")]
+                        if fibre > 0 {
+                            let mut changed = bytes.clone();
+                            let coefficient = fibre - 1;
+                            add_field(
+                                &mut changed,
+                                aspis_statement::r0::PROOF_BYTES + 32 * coefficient,
+                            );
+                            assert_eq!(
+                                reject(format!("relation coefficient {coefficient}"), changed),
+                                Error::Opening(OError::V2)
+                            );
+                            at += if lane < 26 { 4 } else { 16 };
+                            continue;
+                        }
                         let mut changed = bytes.clone();
                         let v = u32::from_le_bytes(changed[at..at + 4].try_into().unwrap());
                         changed[at..at + 4]

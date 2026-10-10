@@ -14,7 +14,45 @@ use aspis_core::{
     HashFn,
 };
 
-pub use crate::r0::{Error, Phase, Proof, OPENING_OFFSET, PROOF_BYTES, SEMANTIC_BYTES};
+pub use crate::r0::{Error, Phase, OPENING_OFFSET, SEMANTIC_BYTES};
+#[cfg(not(feature = "r0-probe-c2"))]
+pub use crate::r0::{Proof, PROOF_BYTES};
+#[cfg(feature = "r0-probe-c2")]
+pub const PROOF_BYTES: usize = crate::r0::PROOF_BYTES + aspis_core::r0_probe::relation::BYTES;
+#[cfg(feature = "r0-probe-c2")]
+pub struct Proof<'a> {
+    pub semantic: &'a [u8],
+    pub opening: &'a [u8],
+    pub relation: &'a [u8],
+}
+#[cfg(feature = "r0-probe-c2")]
+impl<'a> Proof<'a> {
+    pub fn parse(bytes: &'a [u8]) -> Result<Self, Error> {
+        if bytes.len() != PROOF_BYTES {
+            return Err(OpeningError::Parse.into());
+        }
+        let split = crate::r0::PROOF_BYTES;
+        let wire = crate::r0::Proof::parse(&bytes[..split])?;
+        for x in bytes[split..].chunks_exact(32) {
+            WideExact::from_le_bytes(x).ok_or(OpeningError::NonCanonical)?;
+        }
+        Ok(Self {
+            semantic: wire.semantic,
+            opening: wire.opening,
+            relation: &bytes[split..],
+        })
+    }
+    pub fn encode(&self) -> Result<alloc::vec::Vec<u8>, Error> {
+        let mut out = crate::r0::Proof {
+            semantic: self.semantic,
+            opening: self.opening,
+        }
+        .encode()?;
+        out.extend_from_slice(self.relation);
+        Self::parse(&out)?;
+        Ok(out)
+    }
+}
 
 /// Called only with the output of successful semantic verification. In
 /// particular, neither a proof-supplied boolean nor a caller-supplied point
@@ -106,13 +144,30 @@ pub fn r0_verify(
         onchain::check_v1(&prepared.v1, &proof, u, &opening)?;
         emit(Phase::V1(i));
     }
-    onchain::check_v2(
+    #[cfg(any(not(feature = "r0-probe-c2"), feature = "r0-probe-reference"))]
+    let direct = onchain::check_v2(
         &prepared.data,
         c.kappa,
         c.tau,
         c.alpha,
         &prepared.polynomial,
         &proof,
+    );
+    #[cfg(not(feature = "r0-probe-c2"))]
+    direct?;
+    #[cfg(all(feature = "r0-probe-c2", feature = "r0-probe-reference"))]
+    let _ = direct;
+    #[cfg(feature = "r0-probe-c2")]
+    aspis_core::r0_probe::relation::verify(
+        hash,
+        prepared.relation_state,
+        &prepared.data,
+        c.kappa,
+        c.tau,
+        c.alpha,
+        &prepared.polynomial,
+        &proof,
+        wire.relation,
     )?;
     emit(Phase::V2);
     Ok(prepared.challenges)
@@ -173,6 +228,18 @@ pub fn r0_verify_re3(
         c.alpha,
         &prepared.polynomial,
         &proof,
+    )?;
+    #[cfg(feature = "r0-probe-c2")]
+    aspis_core::r0_probe::relation::verify(
+        hash,
+        prepared.relation_state,
+        &prepared.data,
+        c.kappa,
+        c.tau,
+        c.alpha,
+        &prepared.polynomial,
+        &proof,
+        wire.relation,
     )?;
     emit(Phase::V2);
     Ok(prepared.challenges)

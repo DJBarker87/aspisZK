@@ -367,6 +367,10 @@ pub fn round_polynomial(q: &Message<E>, w: &Message<E>) -> [E; 7] {
     }
     c.map(|v| v.mul(fold::quarter()))
 }
+#[cfg(not(feature = "r0-probe-c2"))]
+type OutputProof = OpeningProof;
+#[cfg(feature = "r0-probe-c2")]
+type OutputProof = super::relation::Proof;
 pub fn prove(
     hash: HashFn,
     basis: &NaturalBasis,
@@ -374,7 +378,7 @@ pub fn prove(
     messages: &[Message<E>],
     c1: &Commitment,
     c2: &Commitment,
-) -> Result<OpeningProof, Error> {
+) -> Result<OutputProof, Error> {
     if messages.len() != 29 {
         return Err(Error::WrongLength);
     }
@@ -436,12 +440,29 @@ pub fn prove(
         c2.fill_opening(u, &mut opening);
         openings.push(opening);
     }
-    Ok(OpeningProof {
+    let opening = OpeningProof {
         y0,
         y,
         v,
         coefficients: [c[0], c[1], c[2], c[3], c[5], c[6]],
         final_message,
         openings,
-    })
+    };
+    #[cfg(feature = "r0-probe-c2")]
+    {
+        let incoming = c.iter().rev().fold(E::ZERO, |v, &x| v.mul(alpha).add(x));
+        let rounds = super::relation::prove(
+            hash,
+            transcript.state(),
+            alpha,
+            &w,
+            &opening.final_message,
+            incoming,
+        )?;
+        Ok(OutputProof { opening, rounds })
+    }
+    #[cfg(not(feature = "r0-probe-c2"))]
+    {
+        Ok(opening)
+    }
 }

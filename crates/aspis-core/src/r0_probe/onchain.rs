@@ -21,6 +21,8 @@ pub struct Prepared {
     pub data: Box<OpeningData>,
     pub challenges: Challenges,
     pub polynomial: [E; 7],
+    #[cfg(feature = "r0-probe-c2")]
+    pub relation_state: [u8; 32],
     pub v1: Box<V1Invariants>,
 }
 /// Fibre-independent values, owned by prepare and borrowed by every V1.
@@ -32,7 +34,7 @@ pub struct V1Invariants {
 }
 /// The transcript supplies K embeddings. Never silently discard a high limb.
 #[inline(never)]
-fn subfield_line(data: &OpeningData) -> Result<chord::Secant<QM31>, Error> {
+pub(super) fn subfield_line(data: &OpeningData) -> Result<chord::Secant<QM31>, Error> {
     let line = data.line();
     if [line.a, line.b, line.c]
         .iter()
@@ -119,6 +121,8 @@ pub fn prepare(
         super::equality_trace::fields(&v1.alpha_powers);
     }
     Ok(Prepared {
+        #[cfg(feature = "r0-probe-c2")]
+        relation_state: t.state(),
         data,
         challenges: Challenges {
             gamma,
@@ -334,7 +338,7 @@ fn claim_prime(data: &OpeningData, gamma: E, v: E, kappa: E, i: &[E; 3]) -> Resu
     Ok(claim.sub(dot))
 }
 #[cfg(feature = "r0-probe-c1")]
-fn weights_k(data: &OpeningData, kappa: QM31) -> Result<Vec<QM31>, Error> {
+pub(super) fn weights_k(data: &OpeningData, kappa: QM31) -> Result<Vec<QM31>, Error> {
     let mut w = heap::filled(1024, QM31::ZERO)?;
     for j in 0..1024 {
         w[j] = indicator(j).c0();

@@ -22,6 +22,8 @@ pub struct Prepared {
     pub data: Box<OpeningData>,
     pub challenges: Challenges,
     pub polynomial: [E; 7],
+    #[cfg(feature = "r0-probe-c2")]
+    pub relation_state: [u8; 32],
     pub v1: Box<V1Invariants>,
 }
 /// Fibre-independent values, owned by prepare and borrowed by every V1.
@@ -105,6 +107,8 @@ pub fn prepare(
         super::equality_trace::fields(&v1.alpha_powers);
     }
     Ok(Prepared {
+        #[cfg(feature = "r0-probe-c2")]
+        relation_state: t.state(),
         data,
         challenges: Challenges {
             gamma,

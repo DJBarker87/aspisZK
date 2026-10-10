@@ -18,3 +18,6 @@ pub mod verifier;
 pub use crate::r0::{encoder, merkle, CodeField, FinalMessage, Message, FIBRE_COUNT, WORD_LEN};
 #[cfg(feature = "r0-probe-c1")]
 pub mod structured_k;
+
+#[cfg(feature = "r0-probe-c2")]
+pub mod relation;
