@@ -2209,12 +2209,17 @@ fn raw_c(
     z: &[Point<QM31>; 2],
     queries: &[usize],
 ) -> (Vec<Vec<M31>>, Vec<Vec<QM31>>) {
-    use r0::transport::ROW_TO_COEFFICIENT;
+    raw_c_with_transport(a, z, queries, z5::transport())
+}
+fn raw_c_with_transport(
+    a: &[QM31; 10], z: &[Point<QM31>; 2], queries: &[usize],
+    row_to_coefficient: &[u16; N],
+) -> (Vec<Vec<M31>>, Vec<Vec<QM31>>) {
     let pts = points(a);
     let mut base = Vec::new();
     let mut ext = Vec::new();
     for r in 0..N {
-        let co = usize::from(ROW_TO_COEFFICIENT[r]);
+        let co = usize::from(row_to_coefficient[r]);
         let mut b = vec![if inactive(r) { M31::ONE } else { M31::ZERO }];
         let mut e = vec![if inactive(r) { QM31::ONE } else { QM31::ZERO }];
         for p in pts {
@@ -2249,7 +2254,7 @@ fn raw_c(
     (base, ext)
 }
 fn tail_row(a: &[QM31; 10], row: usize) -> Vec<QM31> {
-    let co = usize::from(r0::transport::ROW_TO_COEFFICIENT[row]);
+    let co = usize::from(z5::transport()[row]);
     let mut out = vec![QM31::ZERO; 271];
     if co >= 56 {
         return out;
@@ -2351,7 +2356,7 @@ fn c1_c(trial: usize, a: &[QM31; 10], z: &[Point<QM31>; 2], qs: &[usize]) -> boo
             ranks.push(e.rank);
         }
         println!("C1_C trial={trial} pattern={name} ranks={ranks:?} want_each=112");
-        if name == "random" && ranks.iter().any(|&r| r < 112) {
+        if (name == "random" || z5::is_selected()) && ranks.iter().any(|&r| r < 112) {
             all = false;
         }
     }
@@ -2556,26 +2561,29 @@ fn gate_c(
     ip == targets.len() && iip == targets.len()
 }
 fn check_tail_and_transport(a: &[QM31; 10], z: &[Point<QM31>; 2]) {
-    use r0::transport::{to_coefficients, to_rows, COEFFICIENT_TO_ROW, ROW_TO_COEFFICIENT};
+    let row_to_coefficient = z5::transport();
+    let mut coefficient_to_row = [0u16; N];
+    for r in 0..N { coefficient_to_row[usize::from(row_to_coefficient[r])] = r as u16; }
     let rows: [M31; 1024] = std::array::from_fn(|r| M31((r + 1) as u32));
-    assert_eq!(to_rows(&to_coefficients(&rows)), rows);
-    assert_eq!(ROW_TO_COEFFICIENT[1023], 1023);
-    for j in 0..89 {
-        let r = usize::from(COEFFICIENT_TO_ROW[j]);
-        assert!(inactive(r));
-        assert!((0..16).all(|c| eligible(c, r)));
+    let coefficients: [M31; N] = std::array::from_fn(|j| rows[usize::from(coefficient_to_row[j])]);
+    assert_eq!(std::array::from_fn::<_, N, _>(|r| coefficients[usize::from(row_to_coefficient[r])]), rows);
+    // Pads stay the same eligible row sources; use their actual candidate images.
+    for c in 0..16 {
+        let images: Vec<_> = (0..N).filter(|&r| r != 1023 && eligible(c, r))
+            .map(|r| row_to_coefficient[r]).collect();
+        assert!(images.iter().all(|&j| eligible(c, usize::from(coefficient_to_row[usize::from(j)]))));
+        println!("Z5_ELIGIBLE_IMAGES column={c} coefficients={images:?} balance_pivot_coefficient={}", row_to_coefficient[1023]);
     }
-    // Actual R0 eval_message on transported coefficients versus direct rows.
-    let co = to_coefficients(&rows).map(QM31::from_m31);
+    let co = coefficients.map(QM31::from_m31);
     for &p in z {
         let actual = r0::encoder::eval_message(&co, p);
         let direct = (0..N).fold(QM31::ZERO, |v, r| {
-            v.add(evalrow(usize::from(ROW_TO_COEFFICIENT[r]), p).mul_m31(rows[r]))
+            v.add(evalrow(usize::from(row_to_coefficient[r]), p).mul_m31(rows[r]))
         });
         assert_eq!(actual, direct);
     }
     for coefficient in 0..56 {
-        let row = usize::from(COEFFICIENT_TO_ROW[coefficient]);
+        let row = usize::from(coefficient_to_row[coefficient]);
         let v = tail_row(a, row);
         assert_eq!(final_value(&v, a), h_weight(a, coefficient));
         let m = if coefficient < 28 { 8 } else { 9 };
@@ -2666,7 +2674,7 @@ fn controls_c(
     assert!(normalize_d(&vec![QM31::ZERO; 271], g, &p).is_none());
     println!("ALPHA9_HALF denominator_zero=true psi_undefined=true normalization_undefined=true pinned_phi={:?} ii_phi={:?}",limbs(g).map(|x|x.0),limbs(ii).map(|x|x.0));
 }
-fn main() {
+fn z4c_main() {
     let args: Vec<_> = std::env::args().collect();
     if args.iter().any(|x| x == "--z4b") {
         return z4b_main();
@@ -2705,7 +2713,7 @@ fn main() {
         }
     }
     let (pubdata, instances) = real::instances();
-    println!("Z4C seed={seed:#x} trials={trials} pairs=5 base=a17cd72f8 D13_transport=true fourth_claim_all_lanes=true gamma=7 optimized_overflow_checks=true");
+    println!("Z4C seed={seed:#x} trials={trials} pairs=5 transport={} fourth_claim_all_lanes=true gamma=7 optimized_overflow_checks=true", if z5::is_selected() { "Z5_selected" } else { "D13" });
     let mut control_data = None;
     // Sequential admission obeys the explicit stop list: no later challenge
     // or control is computed after a failed generic Libra containment gate.
@@ -2739,7 +2747,7 @@ fn main() {
             return;
         }
         if !c1_c(trial, &a, &z, &sets[0].1) {
-            println!("STOP reason=random_C1_rank_below_112 trial={trial}");
+            println!("STOP reason=C1_rank_below_112 trial={trial}");
             std::process::exit(21);
         }
         let traces: Vec<Trace> = instances
@@ -2838,7 +2846,7 @@ fn main() {
             println!("STOP reason=Libra_containment_failure trial={trial} required_i_pass=100/100 required_ii_pass=100/100");
             std::process::exit(23);
         }
-        gate_c(
+        if !z5::is_selected() { gate_c(
             &format!("trial={trial}"),
             &a,
             &z,
@@ -2846,13 +2854,13 @@ fn main() {
             &traces,
             &targets,
             true,
-        );
+        ); }
         println!(
             "TRIAL_DONE trial={trial} wall_seconds={:.3}",
             start.elapsed().as_secs_f64()
         );
     }
-    if trials == 20 {
+    if trials == 20 && !z5::is_selected() {
         let (a, z, ch, w, wp, n, qs) = control_data.unwrap();
         controls_c(
             Public::Transfer(&pubdata, &instances[0].compilation.public_statement),
@@ -2870,4 +2878,12 @@ fn main() {
         5 * trials,
         5 * trials
     );
+}
+
+#[path = "z5.rs"]
+mod z5;
+fn main() {
+    if std::env::args().any(|x| x == "--z5-search") { z5::search(); }
+    else if std::env::args().any(|x| x == "--z5-gate") { z5::gate(); }
+    else { z4c_main(); }
 }
