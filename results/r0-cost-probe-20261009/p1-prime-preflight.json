@@ -1,0 +1,117 @@
+{
+  "schema": "aspis.r0-p1-prime.preflight.v1",
+  "label": "COST PROBE: unproved",
+  "recorded_at_utc": "2026-10-10 06:18:49 UTC",
+  "status": "blocked_before_B",
+  "requested_base": "bedd0420705bb13e3b1c5a45f308762a736aa260",
+  "requested_branch": "codex/r0-cost-probe-p1-20261009",
+  "existing_branch_head": "db0577b9f23e585941b4239aaeb3287fc7f8f5f5",
+  "existing_branch_common_ancestor_with_requested_base": "f1e5ca9de668110f80c548abe5e80b43f838099f",
+  "existing_worktree_initially_clean": true,
+  "blockers": [
+    {
+      "kind": "network_access",
+      "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 dombarker@nuc 'hostname; free -h'",
+      "exit_status": 255,
+      "stderr": "ssh: Could not resolve hostname nuc: nodename nor servname provided, or not known",
+      "note": "The actual first read-only remote command requested hostname and free -h; it failed during hostname resolution."
+    },
+    {
+      "kind": "network_access",
+      "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 dombarker@100.108.41.90 hostname",
+      "exit_status": 255,
+      "stderr": "ssh: connect to host 100.108.41.90 port 22: Operation not permitted"
+    },
+    {
+      "kind": "git_metadata_read_only",
+      "source": "session filesystem permission profile",
+      "path": "/Users/dominic/ZK/.git",
+      "effect": "Cannot update the existing branch to the requested base or commit evidence in this session; no metadata write attempted."
+    }
+  ],
+  "base_measurements": [
+    {
+      "fixture": "transfer",
+      "evidence_kind": "imported existing R-E4 S4; not remeasured",
+      "verifier_cu": 15078299,
+      "transaction_cu": 15078655,
+      "phases": {
+        "Semantic": 2647122,
+        "prepare": 968572,
+        "Merkle": 641001,
+        "V1": 3010106,
+        "V2": 7803350
+      },
+      "other_cu": 8148,
+      "first_fibre_v1_cu": 136724,
+      "semantic_excess_over_m1_cu": 2219652,
+      "prepare_excess_over_estimated_200000_cu": 768572,
+      "heap_bytes": 131032,
+      "proof_sha256": "31e7706cd23a58e57832ff54126ed78548cdc502733daafb7d82bbceade77858",
+      "public_sha256": "d2241c5432fa3d5b34084c06e9c3f510cc61542a793287aad471287563761557",
+      "source_file": "results/r0-e2e-20261009/re4/s4-diagnostic/transfer-diagnostic-1.json",
+      "source_sha256": "5db40b65a3ef498bc4950aa2268e5cdc9bb9aa1dd397a25d602849ac421fb440",
+      "source_size_bytes": 12070
+    },
+    {
+      "fixture": "withdrawal",
+      "evidence_kind": "imported existing R-E4 S4; not remeasured",
+      "verifier_cu": 15070869,
+      "transaction_cu": 15071225,
+      "phases": {
+        "Semantic": 2642844,
+        "prepare": 967918,
+        "Merkle": 641165,
+        "V1": 3008755,
+        "V2": 7802091
+      },
+      "other_cu": 8096,
+      "first_fibre_v1_cu": 136657,
+      "semantic_excess_over_m1_cu": 2215374,
+      "prepare_excess_over_estimated_200000_cu": 767918,
+      "heap_bytes": 131032,
+      "proof_sha256": "ad7ba69ea1b97af9eb4a657b71036ecccda8df5797ea0d0be740809ba7ae12e3",
+      "public_sha256": "aacd276edc3cdfedfb8bcba5ebb443305b6c8be72a4262704181fd2b6ffaac01",
+      "source_file": "results/r0-e2e-20261009/re4/s4-diagnostic/withdrawal-diagnostic-1.json",
+      "source_sha256": "e9bb26ba3ff3e32bd6944444e0a06e755d7ee2e5c03d69d4f00266014b0f09ac",
+      "source_size_bytes": 12072
+    }
+  ],
+  "m1_reference_cu": {
+    "transcript_sumcheck": 140757,
+    "terminal_including_mask": 286713,
+    "sum": 427470
+  },
+  "sequence": [
+    "B",
+    "C0-prime",
+    "C2",
+    "C3",
+    "C4",
+    "C5a",
+    "C5b",
+    "C5c"
+  ],
+  "C1": "excluded from measurement",
+  "new_measurements": 0,
+  "new_builds": 0,
+  "B_marker_reconciliation": "not run; no gate result",
+  "native_equality_gate": "not run; no gate result",
+  "stack_audit": "not run; no new artifact",
+  "resource_limits_for_resumption": {
+    "MemoryHigh": "4G",
+    "MemoryMax": "6G",
+    "MemorySwapMax": 0,
+    "heap_max_bytes": 262144
+  },
+  "modified_implementation_files": [],
+  "lean_touched": false,
+  "reference_prover_touched": false,
+  "reference_onchain_touched": false,
+  "fixtures_touched": false,
+  "legacy_report": {
+    "path": "results/r0-cost-probe-20261009/REPORT-P1-PRE-PRIME.md",
+    "sha256": "9d632236355444e379d9831077272580d77dc0673ee881f4f443df77e3fe7219",
+    "size_bytes": 6305
+  }
+}
