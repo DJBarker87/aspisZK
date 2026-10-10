@@ -742,3 +742,115 @@ to the old session; the two parallel runs cost one full probe. (b) Stop rules
 must carry tolerances. (c) The pre-prime branch committed ELF/stack binaries
 under the original P1 text; the P1′ branch followed the new rule. Both stay on
 their branches.
+
+## Lead decision after user direction (2026-10-10): two transactions accepted if R1 fits; R1 outline; fit gate = Z5 + P2
+
+**User direction.** Work-normalised security (grinding) is rejected: the
+per-query error must be ≤ 2⁻¹⁰⁰ as a probability, with no credit for prover
+hash work. **Two transactions are acceptable if the verifier can be made to
+fit.** R0 stays stopped as a deployment target (previous section); its proofs
+are the base of the successor.
+
+**Why the field is fixed.** Only two challenges fail 100 bits over QM31, and
+both are proved degree caps that do not depend on the field: the lane-batching
+challenge γ (bad set ≤ 336,869,026,605,739 ≈ 2⁴⁸·³, F1,
+`width29_bad_response_challenges_card_le`) and the fold challenge (≤
+9,396,508,281,246 ≈ 2⁴³·¹, F2, `goodChallenges_card_le_of_no_jointAgreement`).
+Over QM31 these are 2⁻⁷⁵·⁷ and 2⁻⁸⁰·⁹; both need a field ≥ 2¹⁴⁸, hence E for
+γ and every fold challenge, hence an E-valued batched word, fold, final
+message and per-query arithmetic. Everything else (semantic α rows, η, z0, z1,
+κ, τ, the opening polynomial, the semantic sumcheck's degree-27 rounds) is
+already ≤ 2⁻¹⁰⁵ over QM31.
+
+**R1 outline (the protocol to be ledgered; not yet a spec).**
+- Semantic layer, mask, η row, Libra tail, 29 lanes, the proved semantic
+  sumcheck: unchanged from R0.
+- Commitment: unchanged from R0 (29 lanes, domain 2²⁰, fibres of 4, two
+  eight-way Merkle trees); leaves packed by lane field (M31 lanes 4 bytes).
+- Opening layer: **no chord quotient.** The batched trace f_γ = Σ_l γ^l W_l
+  (γ ∈ E) is folded directly. Every claim on it is a linear functional with
+  product-form weights over the base-4 digits of the coefficient index: the
+  three point claims (eq tensors at α_j ∈ K), the two OOD claims (natural-basis
+  values N_j(z_i) at z_i ∈ K, which the N_{4k+t} recurrence makes a product over
+  digits), the inactive sum (0/1 weight; its dual fold is sums of challenge
+  powers) and the Libra row (56 K entries). They are batched with powers of
+  κ ∈ E and verified through **two 4-to-1 folds** (α₀, α₁ ∈ E), each with R0's
+  degree-6 relation polynomial and boundary check, ending in a 64-coefficient
+  final message whose pairing with the dual-folded weights costs ≈ 7 × 64 E×K.
+  The 22 queries follow the fibre chain through both oracles; the 22
+  final-message evaluations are ρ-batched into one.
+- Soundness over E: γ term 2⁻²⁰⁰, two fold terms 2⁻²⁰⁵ each, OOD
+  list-to-unique at z ∈ K ≈ 100·1024/2¹²⁴ ≈ 2⁻¹⁰⁷, query term at rate 2⁻¹⁰ with
+  22 queries ≈ 2⁻¹⁰⁵ (the second round's proximity at domain 2¹⁶, same rate,
+  needs its own instance of F2). Target per-query ≤ 2⁻¹⁰⁰ without grinding.
+- Two transactions: tx1 = parse, semantic, prepare, first k queries, write a
+  checkpoint (transcript state, ρ accumulator, counters); tx2 = remaining
+  queries, relation rounds, final check. k chosen to balance.
+
+**The crux: the transport.** R-E4's V2 is 7.8M, of which the chord map is
+3.2M and **3.5M is the point-claim weights pulled through the D13 transport π**
+(tensor 1.09M + pairing 2.37M): π is the identity with 89 pad rows moved to
+coefficients 0–88 (`transport.rs`), so eq(α, π⁻¹ j) has no product form and
+must be materialised and paired at length 1,024 in every design. R1 fits only
+if π is **digit-structured**: a permutation of the five base-4 digit positions
+composed with per-digit permutations of {0,1,2,3}. Such a π keeps every weight
+in product form (eq, N_j(z), the Libra row) and the dual fold then costs O(1)
+per constraint. Whether a digit-structured π has the C1 full-rank property
+that D13 was reinstated for (rank 112 per semantic column on both fibre sets,
+Z4a/Z4c) is a numerical question the existing Z4 probe answers. If none does,
+R1's relation is ≥ 3.5M more and two transactions do not fit either.
+
+**Lead estimate for R1 with a digit-structured π (estimate, not a result):**
+
+| Phase | CU | Basis |
+| --- | ---: | --- |
+| Semantic (sampler and K fixes) | 0.45M | M1 anchor 427K |
+| Prepare / transcript | 0.25M | B's intervals minus sampler and parse waste |
+| Merkle, 22 queries, two oracles, packed leaves | 0.22M | 2 × 2.9K paths + 1.4K leaves + folded oracle ≈ 10K per query |
+| Per-query arithmetic (29-lane dots, two folds; no inversions) | 0.77M | ≈ 35K per query |
+| Relation rounds and final pairing (final64, 7 constraints) | 0.32M | 2 × ≈ 10K + 448 E×K |
+| Checkpoint write/read | 0.05M | |
+| **Total** | **≈ 2.05M** | ≈ 1.0M per transaction at an even split |
+
+**Fit gate, two jobs, both unproved probes, issued now in parallel:**
+
+- **Z5 (privacy Codex, computation only).** On the Z4c probe, test
+  digit-structured transports for the D13 rank property. Candidate family:
+  π(r) = Σ_d σ_d(digit_{τ(d)}(r))·4^d with τ a permutation of the five digit
+  positions and σ_d ∈ S₄ per digit. Order: all 120 τ with σ = id; then τ × σ
+  on the lowest coefficient digit (2,880); then up to 100,000 random (τ, σ).
+  Criterion per candidate: C1 rank 112 for all 16 semantic columns on the
+  random 22-fibre set and on {0,…,21}, with the fourth weight row, exactly as
+  Z4c's C1 test. Report every passing candidate; for the first passing one run
+  Z4c's full gate (silent rank, (i′), (ii′), 100 targets) with that π. Also
+  report the identity π and D13's π as controls. Branch
+  `codex/z5-digit-transport-20261010`, `z4/FINDINGS-Z5.md`, standard caps and
+  evidence, no Lean, no production Rust.
+- **P2 (Rust A, cost pre-check).** Build R1's verifier shape as a probe from
+  the R0 Rust (probe crate, probe prover, never the reference paths): semantic
+  layer with the sampler rewrite and K arithmetic on K-valued data
+  (byte-identical outputs, gated against S4's semantic phase), commitment as
+  R0 with packed leaves, the opening layer above with two folds and final64,
+  ρ-batched final evaluations, OOD-as-weights, no quotient. Two weight
+  variants: **S** (a digit-structured π, placeholder τ = digit reversal,
+  σ = id; cost does not depend on which structured π) and **D** (the current
+  D13 π with materialised eq tensors). Two-transaction split with a checkpoint
+  account; find k; measure both transactions on SBF: acceptance at 1.4M each
+  (×5), DIAGNOSTIC per-phase CU, heap ≤ 256 KiB, zero reachable stack
+  diagnostics, proof bytes. Native acceptance on both fixtures; a dense native
+  evaluator of the same relation as a self-consistency oracle; a small mutation
+  corpus (≥ 200 cases: every message type) must reject. One table: phase ×
+  variant × transaction. Report S first, then D. Branch
+  `codex/r1-precheck-p2-20261010`, `results/r1-precheck-20261010/REPORT-P2.md`,
+  evidence rule (no binaries), labelled unproved, no claim language.
+
+**Decision rule.** R1 proceeds to the ledger only if Z5 finds a passing
+digit-structured π **and** P2's variant S fits two transactions with ≥ 0.2M
+headroom in each. Then: R1_SOUNDNESS ledger (lead), then Lean (reuse map:
+semantic/mask proofs, width-29 and degree-three correlated agreement, FS
+framework, fold lemmas, privacy clause (i′); new: two-fold binding without the
+quotient, OOD-as-constraint collision set, second F2 instance at 2¹⁶, privacy
+(ii′)'s PCS half, the structured π in Lean), then Rust to the proved spec. If
+either gate fails, the accurate statement is that a non-work-normalised
+100-bit proved and private verifier does not fit two transactions with the
+theorems we have, and v7 stands.
