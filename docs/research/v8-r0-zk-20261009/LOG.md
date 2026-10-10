@@ -2604,3 +2604,159 @@ cost is ≈ 56 E×K products and one 29-claim batch, which cannot change the
 probe's answer. The Lean Codex is idle by decision. Order after the probe
 reports a fit: T2 → R-H → ZF1 → P3, then the §8 steps the probe selected,
 Lean-first.
+
+### Lead decision D17 — exact Lean form of D14 (a) and D15; T2 split into T2a (issued) and T2b (2026-10-10)
+
+**User direction (2026-10-10): T2 is issued now.** D16's hold therefore
+covers R-H and ZF1 only. The cost probe P1′ continues in parallel.
+
+**What is and is not in Lean today.** `R0Z.D12.MaskImage` still states D12's
+clauses (i), (ii) (with π threaded by T1). D14 (a) restated them as (i′), (ii′)
+through the payload bijection Ψ_ch, and D15 restricted them to `Good`. Neither
+is in Lean. Z4c verified (i′), (ii′) numerically on 100/100 samples for the
+Libra design; the Lean theorem is open. T2 is split so that every statement
+downstream of that theorem is proved now, and the theorem itself gets a
+lead-designed route afterwards.
+
+**D17.1 — definitions (new module `R0Z/Shift.lean`, importing `R0Z.D12`).**
+With `ch : Challenges K`, `α := alpha ch`, `η := ch.sem 14`, `pub := x.1`:
+
+- `GoodAlpha (a : Fin 10 → K) : Prop := (∀ j, a j ≠ 0 ∧ a j ≠ 1) ∧ a 9 ≠ 1/2`;
+  `Good ch := GoodAlpha (alpha ch)` (D15, verbatim).
+- `round9Poly : Payload K →ₗ[K] K[X]`, the polynomial with coefficients
+  `v (.semanticCoeff 9 i)`, `i : Fin 28`; `evalRound9 ch := (Polynomial.leval
+  (alpha ch 9)).comp round9Poly`.
+- `claimMask B a : Payload K →ₗ[K] K :=
+  (∑ c : Fin 16, (maskFactors B a).c1 c • proj (.pointClaim 0 (castLE c))) +
+  (maskFactors B a).explicitG • proj (.pointClaim 0 27) +
+  (∑ c : Fin 10, (maskFactors B a).maskOnly c • proj (.pointClaim 0 ⟨16+c, _⟩)) +
+  proj (.extraClaim 28)`, with
+  `claimMask_apply : claimMask B a v = R0P.Mask.maskClaimsR0 B (fun c => v (.pointClaim 0 c)) (fun c => v (.extraClaim c)) a`.
+- `Phi0 B ch : Payload K →ₗ[K] K := evalRound9 ch − claimMask B (alpha ch)` (Z4c's Φ₀).
+- `dir : Payload K := roundInclusion (fun j i => if j = 9 then (X − C (1/2 : K)).coeff i.val else 0)`
+  (D14's direction d(X) = X − ½ in round 9; zero elsewhere). Lemmas
+  `evalRound9_dir : evalRound9 ch dir = alpha ch 9 − 1/2`, `claimMask_dir = 0`,
+  `Phi0_dir : Phi0 B ch dir = alpha ch 9 − 1/2`, `nonRound_dir : nonRound dir = 0`.
+- `originalOf pub B ch v : K := ch.sem 14 * terminalValue pub (ch.sem 0) (ch.sem 1) (ch.sem 2) (ch.sem 13) (zc ch) B (fun j c => v (.pointClaim j c)) (alpha ch)`
+  (η·O read from a payload's three point claims; `terminalValue` reads lanes
+  0–15 and 26 only, `Partition.lean` header).
+- `shift pub B ch v := v + (originalOf pub B ch v * (alpha ch 9 − 1/2)⁻¹) • dir`,
+  `unshift … := v − (…) • dir`; `originalOf_add_smul_dir : originalOf pub B ch (v + k • dir) = originalOf pub B ch v`
+  (dir has no claim coordinate); `unshift_shift`, `shift_unshift`;
+  `shiftEquiv pub B ch : Payload K ≃ Payload K`. This is Ψ_ch. It is defined
+  for every `ch` through the field inverse; nothing below needs
+  `alpha ch 9 ≠ 1/2` except the terminal-zero lemma `Phi0_sRem`.
+- `sRem h B x w ch n : Payload K := roundInclusion (g h B x w ch n) − (Phi0 B ch (roundInclusion (g h B x w ch n)) * (alpha ch 9 − 1/2)⁻¹) • dir`
+  (D14's s(w,n)); `cTilde h B x w ch : Payload K := c h B x w ch − (originalOf x.1 B ch (c h B x w ch) * (alpha ch 9 − 1/2)⁻¹) • dir`
+  (D14's c̃(w)).
+- `MaskImageOn (P : Challenges K → Prop) (h) (B) (x) : Prop :=
+  (∀ ch, P ch → ∀ w n, h.public w = x.1 → sRem h B x w ch n ∈ LinearMap.range ((A h.transport B ch).comp inlM)) ∧
+  (∀ ch, P ch → ∀ w w', h.public w = x.1 → h.public w' = x.1 → cTilde h B x w ch − cTilde h B x w' ch ∈ LinearMap.range (A h.transport B ch))`.
+  **`MaskImageOn Good h B x` is the privacy obligation from now on** (D14 (a)
+  with D15). `D12.MaskImage` and `hvzk_perfect_of_maskImage` stay as proved
+  theorems about D12's wording; they are no longer the target.
+
+**D17.2 — theorems of T2a (all routine: Lagrange, linearity, the existing
+`vdeg_*` and `*_add_pure` lemmas).**
+
+1. `rounds_eval_of_vdeg (ch) (j : Fin 10) (f) (hf : VDeg 10 (fun _ => 27) f) (z : K) :
+   (rounds ch j f).eval z = ∑ tail : Fin (9−j.val) → Bool, f (roundPoint ch j z tail)`.
+   Route: from `VDeg` (SemDeg.lean: the `∃ p, natDegree ≤ 27 ∧ ∀ x, p.eval x = G (cons x v)`
+   clause, reached through the first nine coordinates), the map
+   `z ↦ ∑ tail f (roundPoint ch j z tail)` is a polynomial of degree ≤ 27,
+   and `Lagrange.eq_interpolate` on the 28 nodes `k : Fin 28` gives equality.
+   Needed instance: `roundPoint ch 9 z tail = Function.update (alpha ch) 9 z`
+   (`roundPoint_nine`).
+2. `Phi0_A (t : T K F) : Phi0 B ch (A h.transport B ch t) = 0`. Route:
+   `L_round` at j = 9, `rounds_eval_of_vdeg` with `maskClaimsR0_vdeg`
+   (through `maskLinear_apply`), then `claimsLinear_apply`,
+   `extraLinear_apply`, `claimMask_apply`. (Silent masks lie in `ker Φ₀`.)
+3. `Phi0_roundInclusion_g : Phi0 B ch (roundInclusion (g h B x w ch n)) =
+   originalOf x.1 B ch (payload h B x w ch (0,n)) − originalOf x.1 B ch (c h B x w ch)`.
+   Route: `claimMask` vanishes on round-only payloads (definitional);
+   `g = originalRounds (actual (0,n)) − originalRounds (actual 0)`;
+   `rounds_eval_of_vdeg` at j = 9 with `vdeg_smul`/`vdeg_terminalValue`; the
+   point claims of `payload … (0,n)` are `honestClaims (actual … (0,n)) α`
+   by definition of `run`.
+4. `Phi0_sRem (hgood : alpha ch 9 ≠ 1/2) : Phi0 B ch (sRem h B x w ch n) = 0`
+   (linearity and `Phi0_dir`).
+5. `payload_eq_shift (t : T K F) :
+   payload h B x w ch t = shift x.1 B ch (cTilde h B x w ch + A h.transport B ch t + sRem h B x w ch t.2)`.
+   Route: `D12.decomposition`; `originalOf_add_smul_dir`; the point claims of
+   `payload … (m,n)` equal those of `payload … (0,n)` by `actual_add_pure`
+   and `terminal_add_pure`; item 3; the three `(alpha ch 9 − 1/2)⁻¹`
+   terms cancel identically, so no `Good` hypothesis.
+6. `equalLaws_comp {R S V W} [Fintype R] [Fintype S] (Ψ : V → W) {f : R → V} {g : S → V}
+   (h : EqualLaws f g) : EqualLaws (Ψ ∘ f) (Ψ ∘ g)` (from
+   `LawTransport.mean_eq_of_equalLaws` with the indicator test).
+7. `HVZK_on (P : Challenges K → Prop) h B outputs x : Prop :=
+   ∀ (hx : InLanguage h x) w ch, P ch → h.public w = x.1 →
+   EqualLaws (JointView.view h B outputs x w ch) (JointView.simulator h B outputs x hx ch)`;
+   `hvzk_on_good : MaskImageOn Good h B x → HVZK_on Good h B outputs x`.
+   Route: D12's proof with `payload_eq_shift` in place of `decomposition`:
+   `AbsorptionLaw.mixture` with `g' n := sRem … n` (clause (i′)) gives
+   `EqualLaws (fun t => cTilde + A t + sRem t.2) (fun t => cTilde + A t)`;
+   `equalLaws_comp (shift …)`; `AffineLaw.equal_laws_of_mask_image` with
+   clause (ii′); `equalLaws_comp` again; transport through `Partition.equiv`
+   and `equal_laws_const_pair` exactly as in `hvzk_perfect_of_maskImage`.
+8. Density (module `R0Z/GoodDensity.lean`, no protocol imports):
+   `badAlpha_card : ((Finset.univ : Finset (Fin 10 → K)).filter (fun a => ¬ GoodAlpha a)).card ≤ 21 * Fintype.card K ^ 9`
+   (union of 21 coordinate-fixing sets, each of card `|K|^9` by
+   `Equiv.piFinSuccAbove`), and
+   `badAlpha_density : (… .card : ℚ) / (Fintype.card K : ℚ) ^ 10 ≤ 21 / Fintype.card K`.
+9. FS ledger (module `R0Z/FsGood.lean`, importing `R0Z.FsStatement` and
+   `R0Z.Shift`): `badMass (P) (bridge : ROMBridge …) (adv) (x) : ℚ :=
+   mean (fun coin => if P (bridge.draw adv x coin) then 0 else 1)`;
+   `middle_means_close (hh : HVZK_on P h B outputs x) :
+   |mean (middleReal …) − mean (middleIdeal …)| ≤ badMass P bridge adv x`
+   (as `middle_means_eq` through `LawTransport.mean_product`; on coins with
+   `P ch` the inner means are equal, otherwise they differ by at most 1
+   because `bit` is 0/1-valued);
+   `zkfs_of_hvzk_on (hh : HVZK_on P …) (hr : ROMReduction … ε_fs)
+   (hmass : ∀ bridge adv, badMass P bridge adv x ≤ ε_bad) : ZK_FS … (ε_fs + ε_bad)`;
+   `zkfs_of_maskImageOn_good : MaskImageOn Good h B x → ROMReduction … ε_fs →
+   (∀ bridge adv, badMass Good bridge adv x ≤ ε_bad) → ZK_FS … (ε_fs + ε_bad)`.
+   Identifying `ε_bad` with `21/|K_α|` is ZF1's obligation (it needs the FS
+   draw's α-row law); item 8 is the count it will use. This is the Lean form
+   of "statistical HVZK with the 21/|K_α| term": perfect on `Good`, plus one
+   named ledger term.
+10. `R0Z/Z4Maps.lean`: restate the two targets on `Good` and after Ψ_ch:
+    `roundMask_surjectivity := ∀ ch, Good ch → ∀ w n, h.public w = x.1 →
+    ∃ m : silentMasks …, silentRoundMaskMap … m = roundProjection (sRem h B x w ch n)`;
+    `c1_surjectivity` unchanged except `∀ ch, Good ch →` (its C1 projection
+    does not see `dir`). Props only, as before.
+
+Nothing in T2a asserts `MaskImageOn Good`. No `sorry`, no axiom, no new
+hypothesis on any existing theorem; `D12.lean` is not edited.
+
+**D17.3 — T2b (route to be fixed by the lead after T2a lands; not issued).**
+(i′) decomposes as (a) `sRem ∈ Chain₀ ch`, where `Chain₀ ch` is the
+K-subspace of round-only payloads with zero initial sum, the nine
+boundary-chain equalities at `alpha ch`, and zero terminal value at α₉
+(269 K-dimensions = Z4c's 1076 over M31), proved from the honest sumcheck
+identities of `rounds` (Lagrange, as in item 1) and `Phi0_sRem`; and (b)
+`Chain₀ ch ⊆ roundProjection (silent image)` on `Good`, proved by an explicit
+spanning family of silent masks built as Z4c's lifts (a kernel tape in a
+mask-only lane or G paired with `−γ^(c−28)·t` in D so the batched word is
+zero; the Libra cells of D for rounds 8–9), hitting each round-j monomial
+X^d after normalisation; the family's rank depends on `α_j(1−α_j) ≠ 0`,
+which is why `Good` is the hypothesis. (ii′) decomposes as the C1
+encoder-restriction statement (`c1_surjectivity`, structural under D13: the
+eligible restriction and the full restriction have the same image at every
+fibre set) plus a compatible lift of the remaining components. T2b will be
+several Lean jobs; each gets its own numbered statement before issue.
+
+**Job T2a (Lean Codex).** Base: the `origin/v8-reference` head carrying this
+section. Branch `codex/t2a-shift-good-20261010`. New modules
+`R0Z/Shift.lean`, `R0Z/GoodDensity.lean`, `R0Z/FsGood.lean`; edit
+`R0Z/Z4Maps.lean` (item 10) only. No R0P/R0/R0FS/R0C edit; `D12.lean`
+untouched. Replay on the host from attempt 3367, one module at a time; final
+targets `R0Z/FsGood` and `R0Z/Z4Maps`; `#print axioms` for `payload_eq_shift`,
+`Phi0_A`, `Phi0_sRem`, `hvzk_on_good`, `badAlpha_density`, `zkfs_of_hvzk_on`,
+`zkfs_of_maskImageOn_good`. Stop list: any statement differing from D17.1–D17.2
+(report the exact mismatch and stop); any proof of items 1–9 needing more
+than Lagrange interpolation, linearity, `VDeg` unfolding and the named
+existing lemmas; any attempt to prove or assume `MaskImageOn Good`; any
+module above the cap or 900 s; `sorry`/`axiom`/`native_decide`/`admit`/
+`maxRecDepth`/`maxHeartbeats`; concrete `Finset.univ` over rows, states or
+`Fin 262144`; any edit outside the four files named.
