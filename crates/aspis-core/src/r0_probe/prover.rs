@@ -426,7 +426,14 @@ pub fn prove(
     if c[0].add(c[4]) != fold::quarter::<E>().mul(data.claim_prime(gamma, v, kappa)?) {
         return Err(Error::Semantic);
     }
+    #[cfg(feature = "r0-probe-narrow-preflight")]
+    let alpha_k = transcript.clone().alpha_k_preflight(&c)?;
     let alpha = transcript.alpha(&c)?;
+    #[cfg(feature = "r0-probe-narrow-preflight")]
+    {
+        assert_eq!(alpha_k, E::from_qm31(alpha.c0()));
+        super::narrow_preflight::inspect(&q, gamma, alpha, alpha_k);
+    }
     let final_message = fold::fold_message(alpha, &q);
     let queries = transcript.queries(&final_message)?;
     let mut openings = Vec::new();

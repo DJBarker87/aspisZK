@@ -210,6 +210,7 @@ impl QuerySet {
         s
     }
 }
+#[derive(Clone)]
 pub struct OpeningTranscript {
     duplex: Duplex,
 }
@@ -276,6 +277,14 @@ impl OpeningTranscript {
             9,
             &fields(c.iter().copied(), 7)?,
         )?))
+    }
+    #[cfg(feature = "r0-probe-narrow-preflight")]
+    pub fn alpha_k_preflight(&mut self, c: &[E; 7]) -> Result<E, Error> {
+        Ok(E::from_qm31(rb::qm31_sample(&self.duplex.block(
+            30,
+            9,
+            &fields(c.iter().copied(), 7)?,
+        )?)))
     }
     pub fn queries(&mut self, f: &FinalMessage<E>) -> Result<QuerySet, Error> {
         // F is absorbed once before EVERY pair, including unselected pairs.

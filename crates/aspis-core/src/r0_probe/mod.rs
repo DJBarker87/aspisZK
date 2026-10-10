@@ -21,3 +21,6 @@ pub mod structured_k;
 
 #[cfg(feature = "r0-probe-c2")]
 pub mod relation;
+
+#[cfg(feature="r0-probe-narrow-preflight")]
+pub mod narrow_preflight;
