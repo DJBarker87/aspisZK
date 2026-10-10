@@ -1,8 +1,13 @@
 # P1 arithmetic cost probe — stopped at C5 field preflight
 
 Unproved Rust cost experiment from `origin/v8-reference` at
-`f1e5ca9de668110f80c548abe5e80b43f838099f`, on
-`codex/r0-cost-probe-p1-20261009`.
+`f1e5ca9de668110f80c548abe5e80b43f838099f`. The requested branch was
+`codex/r0-cost-probe-p1-20261009`; a parallel P1′ workstream renamed this
+checkout during execution. This P1 result is retained on
+**`codex/r0-cost-probe-p1-pre-prime-20261010`**, in
+`/Users/dominic/ZK/.worktrees/r0-cost-probe-p1`
+([branch location](branch-location.json)). The P1′ worktree was not changed
+when finalizing this report.
 
 **No measured configuration fits 1,400,000 CU.** The lowest completed totals
 are C3/C4: **16,824,071 transfer / 16,819,235 withdrawal**, with headroom to
