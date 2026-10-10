@@ -854,3 +854,36 @@ quotient, OOD-as-constraint collision set, second F2 instance at 2¹⁶, privacy
 either gate fails, the accurate statement is that a non-work-normalised
 100-bit proved and private verifier does not fit two transactions with the
 theorems we have, and v7 stands.
+
+### P2 clarification — the Libra row in the probe (2026-10-10)
+
+The base Rust has no D14 content (R-H is held). The probe implements the Lean
+form from T1 (`R0/OpeningDefinitions.lean`, `R0P/SemView.lean`,
+`R0P/MaskValue.lean`), as protocol content on top of the gated semantic
+rewrites:
+
+- Weight, coefficient-indexed, no transport applied:
+  `w_extra(j) = α₈^j` for `j < 28`, `α₉^(j−28)` for `28 ≤ j < 56`, `0` otherwise,
+  with α₈, α₉ the ninth and tenth semantic sumcheck challenges (K-valued).
+  Sparse: 56 entries; its dual fold has 14 nonzero entries after the first
+  fold and 4 after the second. No product form is needed.
+- Per-lane claim: `extraClaims_l = Σ_{j<56} w_extra(j) · m_l(j)`, `m_l` the
+  committed coefficient vector of lane l (coefficient order, i.e. after the
+  transport), for all 29 lanes; K-valued.
+- As a functional of the batched coefficient vector `f_j = Σ_l γ^l m_l(j)`:
+  `Σ_j w_extra(j) f_j = Σ_l γ^l extraClaims_l` (`width29Batch extraClaims γ`),
+  entering the κ-batch with weight κ⁴ (the three point claims carry κ¹…κ³, the
+  inactive sum 1; for the probe the two OOD constraints take κ⁵, κ⁶).
+- Honest prover: lane 28 coefficient cells 0–27 hold h₈ and 28–55 hold h₉,
+  two degree-27 univariates with uniformly random K coefficients drawn with the
+  other mask samples; the masked terminal gains `+ extraClaims_28 = h₈(α₈) + h₉(α₉)`;
+  the mask-sum claim gains `2⁹·(h₈(0)+h₈(1)+h₉(0)+h₉(1))`; the ten round
+  polynomials need no separate handling when they are interpolated from the
+  terminal over the hypercube (Z4c's table is what falls out).
+- Disclosure: the 29 extra claims travel in the same message as the three
+  point-claim rows, before z0 is squeezed, absorbed as they are (D14′ item 4).
+- Gate order: the sampler rewrite and the K-arithmetic rewrite are gated
+  byte-identical against S4 on the **unmodified** semantic layer first; the
+  D14 content is then added as a protocol change and is covered by the dense
+  native oracle, honest acceptance and the mutation corpus, not by byte
+  identity with S4.
