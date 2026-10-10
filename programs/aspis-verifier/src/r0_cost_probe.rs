@@ -73,6 +73,10 @@ pub fn process_r0_cu_probe_instruction(
             Public::Withdrawal(public, &common.lane_transition)
         }
     };
+    // Consecutive equal markers calibrate the fixed passive logging cost.
+    aspis_core::r0_probe::mark("r0:b:calibration");
+    aspis_core::r0_probe::mark("r0:b:calibration");
+    aspis_core::r0_probe::mark("r0:b:calibration");
     msg!("r0:begin");
     sol_log_compute_units();
     r0_verify(
