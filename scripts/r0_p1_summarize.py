@@ -28,6 +28,8 @@ table='| Configuration / fixture | Semantic CU [E/K/F] | ChordClaims CU [E/K/F] 
 for r in rows:
  cells=[r['configuration']+' / '+r['fixture']]+[f"{r['cu'][g]:,} [{'/'.join(format(n,',') for n in r['multiplications_inclusive'][g])}]" for g in groups]+[f"{r['total']:,}",f"{r['proof_bytes']:,}",f"{r['headroom_to_1300000']:,}"]
  table+='| '+' | '.join(cells)+' |\n'
+for label in ['C5(a), both fixtures: not run after stop', 'C5(b), both fixtures: field preflight stop', 'C5(c), both fixtures: not run after stop']:
+ table+='| '+label+' | '+' | '.join(['—']*9)+' |\n'
 old=(out/'phase-table.md').read_text();p=out/'REPORT-P1.md';p.write_text(p.read_text().replace(old,table));(out/'phase-table.md').write_text(table)
 resources=[]
 for p in sorted(out.glob('*.json')):
