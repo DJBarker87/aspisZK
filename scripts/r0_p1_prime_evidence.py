@@ -26,7 +26,7 @@ if sys.argv[1]=='equality':
     assert len(actual)==len(reference)==1894 and actual==reference
 elif sys.argv[1]=='artifacts':
     artifacts=[];retained_keys=[]
-    for folder in ['b-elf','b-stack','fixtures','b-bin']:
+    for folder in ['b-elf','b-stack','b-elf-isolated','b-stack-isolated','fixtures','b-bin']:
         for p in sorted((out/folder).rglob('*')):
             if not p.is_file(): continue
             if 'payer' in p.name or 'keypair' in p.name:

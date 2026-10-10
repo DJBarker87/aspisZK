@@ -27,7 +27,7 @@ assert sum(int(r['MemoryMax']) for r in reservations)+cap <= 50*2**30,reservatio
 (out/(label+'-reservations.json')).write_text(json.dumps(dict(active=reservations,new_memory_max=cap,safe_limit=50*2**30,meminfo=Path('/proc/meminfo').read_text()),indent=2)+'\n')
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin:'+os.environ['PATH'],
     CARGO_BUILD_JOBS='2',ASPIS_SOURCE_REVISION=manifest['source_revision'],
-    R0_E2E_FIXTURE_DIR=str(out/'fixtures'), CARGO_TARGET_DIR=os.environ.get('R0_TARGET_DIR','/home/dombarker/project-offloads/aspis-r0-semantics-20261009/target'))
+    R0_E2E_FIXTURE_DIR=str(out/'fixtures'), CARGO_TARGET_DIR=os.environ.get('R0_TARGET_DIR',str(root/'target')))
 args=['systemd-run','--user','--scope','--unit=aspis-r0-p1-prime-'+label,'-p','MemoryHigh=4G','-p','MemoryMax=6G','-p','MemorySwapMax=0',
     'env']+[k+'='+env[k] for k in ['PATH','CARGO_BUILD_JOBS','CARGO_TARGET_DIR','ASPIS_SOURCE_REVISION','R0_E2E_FIXTURE_DIR']]+[
     'python3','scripts/v8_state_only_cu_record.py',str(out/label)]+command
