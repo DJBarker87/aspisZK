@@ -104,3 +104,19 @@ lower bound on an alternative tensor-contraction implementation. No complete
 reachability conclusion is drawn from this schedule. The initial driver build
 failed on an encoder-validation borrow lifetime; its changed replacement and
 all resource receipts are retained.
+
+C3 samples ρ in E after the original query set, computes the sum of 22 opened
+fold values with powers ρ¹…ρ²², absorbs that computed scalar, and injects the
+corresponding query functional into round 1. It removes the 22 comparisons
+against separate final-message evaluations from the SBF path. Query-functional
+terminal weights are evaluated as three four-entry tensor contractions per
+query, followed by a four-entry terminal contribution. The native gate compares
+these with the dense 256-entry functional and compares the opened batch with
+all 22 direct evaluations. A fixed-challenge changed D leaf changes the batched
+claim and rejects at the relation. The 1,894-case corpus and both native
+acceptances pass. Shared bytes before the new relation tail remain identical.
+
+C3 totals: 16,824,071 / 16,819,235 CU; proof 96,384 bytes; heap 106,456 bytes.
+All ten 1.4M runs exhaust in Semantic; 286 linked/reachable functions have zero
+reachable stack diagnostics. This schedule still pays C2's explicit primary
+weight construction. The table reports that implemented schedule only.
