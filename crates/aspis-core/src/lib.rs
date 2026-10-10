@@ -95,3 +95,7 @@ mod tests {
 
 #[cfg(feature = "r0-op-count")]
 pub mod r0_op_count;
+
+/// Unproved COST PROBE, not a reference entrypoint.
+#[cfg(feature = "r0-cost-probe")]
+pub mod r0_probe;

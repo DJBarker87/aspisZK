@@ -6,6 +6,7 @@ publish = false
 default-run = "aspis-v8-state-only-cu-probe"
 
 [features]
+r0-cost-probe = ["aspis-core/r0-cost-probe", "aspis-prover/r0-cost-probe", "aspis-statement/r0-cost-probe"]
 r0-op-count = ["aspis-core/r0-op-count"]
 
 [workspace]
@@ -33,3 +34,13 @@ wincode = "=0.5.5"
 
 [profile.release]
 opt-level = 3
+
+[[bin]]
+name = "r0-p1-prime-cu-probe"
+path = "src/bin/r0-p1-prime-cu-probe.rs"
+required-features = ["r0-cost-probe"]
+
+[[bin]]
+name = "r0-p1-prime-counts"
+path = "src/bin/r0-p1-prime-counts.rs"
+required-features = ["r0-cost-probe", "r0-op-count"]

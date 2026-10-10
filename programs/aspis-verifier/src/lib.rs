@@ -252,5 +252,7 @@ pub(crate) mod test_support {
     feature = "v7-cu-probe", feature = "v7-pool-cu-profile", feature = "v8-state-only-cu-probe"
 )))]
 compile_error!("R0_CU_PROBE_FORBIDS_OTHER_ENTRYPOINTS");
-#[cfg(feature = "r0-cu-probe")]
+#[cfg(all(feature = "r0-cu-probe", not(feature = "r0-cost-probe")))]
 pub mod r0_cu_probe;
+#[cfg(feature = "r0-cost-probe")]
+pub mod r0_cost_probe;
