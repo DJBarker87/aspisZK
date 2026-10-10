@@ -83,6 +83,7 @@ pub fn prove(
     w: &[E; 1024],
     f: &[E; 256],
     incoming: E,
+    queries: &[u32; 22],
 ) -> Result<Vec<[E; 7]>, Error> {
     let mut q = f.to_vec();
     let mut w = w.to_vec();
@@ -94,6 +95,17 @@ pub fn prove(
         return Err(Error::V2);
     }
     let mut claim = incoming;
+    #[cfg(feature = "r0-probe-c3")]
+    {
+        let mut batch = QueryBatch::new(hash, state);
+        for &u in queries {
+            batch.add(final_at(f, u)?);
+        }
+        add_dense_queries(&mut w, queries, batch.rho)?;
+        claim = claim.add(batch.claim);
+        state = batch.bind_claim(hash);
+    }
+
     let mut rounds = Vec::with_capacity(3);
     for round in 0..3 {
         let c = polynomial(&q, &w);
@@ -154,12 +166,22 @@ pub fn verify(
     p0: &[E; 7],
     proof: &OpeningView<'_>,
     bytes: &[u8],
+    queries: &[u32; 22],
+    query: Option<&QueryBatch>,
 ) -> Result<(), Error> {
     if bytes.len() != BYTES {
         return Err(Error::Parse);
     }
     let mut claim = eval(p0, alpha0);
     let mut w = initial_weights(data, kappa, tau, alpha0)?;
+    #[cfg(feature = "r0-probe-c3")]
+    {
+        let batch = query.ok_or(Error::Schedule)?;
+        claim = claim.add(batch.claim);
+        state = batch.bind_claim(hash);
+    }
+    #[cfg(feature = "r0-probe-c3")]
+    let mut alphas = [E::ZERO; 3];
     let mut q = heap::filled(256, E::ZERO)?;
     for j in 0..256 {
         q[j] = proof.final_coefficient(j);
@@ -175,11 +197,134 @@ pub fn verify(
         }
         let a = challenge(hash, &mut state, round, &c);
         claim = eval(&c, a);
+        #[cfg(feature = "r0-probe-c3")]
+        {
+            alphas[round] = a;
+        }
         fold_values(&mut q, a, false);
         fold_values(&mut w, a, true);
+    }
+    #[cfg(feature = "r0-probe-c3")]
+    {
+        let batch = query.ok_or(Error::Schedule)?;
+        let extra = folded_queries(queries, batch.rho, &alphas)?;
+        #[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+        {
+            let mut dense = heap::filled(256, E::ZERO)?;
+            add_dense_queries(&mut dense, queries, batch.rho)?;
+            for &a in &alphas {
+                fold_values(&mut dense, a, true);
+            }
+            assert_eq!(
+                extra.as_slice(),
+                dense.as_slice(),
+                "query tensor differs from dense predecessor coefficients"
+            );
+        }
+        for j in 0..4 {
+            w[j] = w[j].add(extra[j]);
+        }
     }
     if q.len() != 4 || w.len() != 4 || dot(&q, &w) != claim {
         return Err(Error::V2);
     }
     Ok(())
+}
+
+/// P1 C3 batch state, sampled after F and the query set.
+pub struct QueryBatch {
+    state: [u8; 32],
+    pub rho: E,
+    pub claim: E,
+    next: E,
+}
+impl QueryBatch {
+    pub fn new(hash: HashFn, state: [u8; 32]) -> Self {
+        let absorbed = hash(&[&state, &[0, 0xb0], &[0x30], &0u32.to_le_bytes()]);
+        let block = hash(&[&absorbed, &[1]]);
+        let state = hash(&[&absorbed, &[2]]);
+        let rho = r0_transcript::ordinary_sample(&block);
+        Self {
+            state,
+            rho,
+            claim: E::ZERO,
+            next: rho,
+        }
+    }
+    pub fn add(&mut self, value: E) {
+        self.claim = self.claim.add(self.next.mul(value));
+        self.next = self.next.mul(self.rho);
+    }
+    fn bind_claim(&self, hash: HashFn) -> [u8; 32] {
+        hash(&[
+            &self.state,
+            &[0, 0xb1],
+            &[0x31],
+            &32u32.to_le_bytes(),
+            &self.claim.to_le_bytes(),
+        ])
+    }
+}
+fn final_at(f: &[E; 256], u: u32) -> Result<E, Error> {
+    let u = super::domain::FibreIndex::new(u as usize)?;
+    let b = super::basis::values::<crate::field::M31, 256>(super::domain::line_node(u));
+    Ok(f.iter()
+        .zip(b)
+        .fold(E::ZERO, |s, (&f, b)| s.add(f.mul_m31(b))))
+}
+fn add_dense_queries(w: &mut [E], queries: &[u32; 22], rho: E) -> Result<(), Error> {
+    let mut scale = rho;
+    for &u in queries {
+        let u = super::domain::FibreIndex::new(u as usize)?;
+        let b = super::basis::values::<crate::field::M31, 256>(super::domain::line_node(u));
+        for j in 0..256 {
+            w[j] = w[j].add(scale.mul_m31(b[j]));
+        }
+        scale = scale.mul(rho);
+    }
+    Ok(())
+}
+#[inline(never)]
+fn folded_queries(queries: &[u32; 22], rho: E, alphas: &[E; 3]) -> Result<[E; 4], Error> {
+    use crate::field::M31;
+    let powers = alphas.map(powers::<4>);
+    let mut out = [E::ZERO; 4];
+    let mut scale = rho;
+    for &u in queries {
+        let mut x = super::domain::line_node::<M31>(super::domain::FibreIndex::new(u as usize)?);
+        let mut s = scale;
+        for a in &powers {
+            let y = super::basis::double(x);
+            let factor = E::ONE
+                .add(a[3].mul_m31(x))
+                .add(a[2].mul_m31(y))
+                .add(a[1].mul_m31(x.mul(y)));
+            s = s.mul(factor);
+            x = super::basis::double(y);
+        }
+        let y = super::basis::double(x);
+        for (j, b) in [M31::ONE, x, y, x.mul(y)].into_iter().enumerate() {
+            out[j] = out[j].add(s.mul_m31(b));
+        }
+        scale = scale.mul(rho);
+    }
+    Ok(out)
+}
+#[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+pub fn reference_query_batch(
+    hash: HashFn,
+    state: [u8; 32],
+    proof: &OpeningView<'_>,
+    queries: &[u32; 22],
+) -> Result<QueryBatch, Error> {
+    let mut batch = QueryBatch::new(hash, state);
+    for &u in queries {
+        let u = super::domain::FibreIndex::new(u as usize)?;
+        let b = super::basis::values::<crate::field::M31, 256>(super::domain::line_node(u));
+        let value = (0..256).fold(E::ZERO, |s, j| {
+            s.add(proof.final_coefficient(j).mul_m31(b[j]))
+        });
+        batch.add(value);
+    }
+    Ok(batch)
 }

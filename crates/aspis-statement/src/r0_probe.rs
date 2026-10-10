@@ -126,6 +126,8 @@ pub fn r0_verify(
     {
         return Err(OpeningError::Schedule.into());
     }
+    #[cfg(feature = "r0-probe-c3")]
+    let mut batch = aspis_core::r0_probe::relation::QueryBatch::new(hash, prepared.relation_state);
     emit(Phase::ChordClaims);
     let c = &prepared.challenges;
     for (i, u) in c.queries.sorted().into_iter().enumerate() {
@@ -141,7 +143,10 @@ pub fn r0_verify(
             return Err(OpeningError::Authentication.into());
         }
         emit(Phase::Merkle(i));
+        #[cfg(not(feature = "r0-probe-c3"))]
         onchain::check_v1(&prepared.v1, &proof, u, &opening)?;
+        #[cfg(feature = "r0-probe-c3")]
+        batch.add(onchain::query_value(&prepared.v1, &proof, u, &opening)?);
         emit(Phase::V1(i));
     }
     #[cfg(any(not(feature = "r0-probe-c2"), feature = "r0-probe-reference"))]
@@ -168,6 +173,17 @@ pub fn r0_verify(
         &prepared.polynomial,
         &proof,
         wire.relation,
+        &c.queries.sorted(),
+        {
+            #[cfg(feature = "r0-probe-c3")]
+            {
+                Some(&batch)
+            }
+            #[cfg(not(feature = "r0-probe-c3"))]
+            {
+                None
+            }
+        },
     )?;
     emit(Phase::V2);
     Ok(prepared.challenges)
@@ -203,6 +219,13 @@ pub fn r0_verify_re3(
     {
         return Err(OpeningError::Schedule.into());
     }
+    #[cfg(feature = "r0-probe-c3")]
+    let batch = aspis_core::r0_probe::relation::reference_query_batch(
+        hash,
+        prepared.relation_state,
+        &proof,
+        &prepared.challenges.queries.sorted(),
+    )?;
     emit(Phase::ChordClaims);
     let c = &prepared.challenges;
     for (i, u) in c.queries.sorted().into_iter().enumerate() {
@@ -240,6 +263,17 @@ pub fn r0_verify_re3(
         &prepared.polynomial,
         &proof,
         wire.relation,
+        &c.queries.sorted(),
+        {
+            #[cfg(feature = "r0-probe-c3")]
+            {
+                Some(&batch)
+            }
+            #[cfg(not(feature = "r0-probe-c3"))]
+            {
+                None
+            }
+        },
     )?;
     emit(Phase::V2);
     Ok(prepared.challenges)

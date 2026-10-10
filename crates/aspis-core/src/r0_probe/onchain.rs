@@ -414,3 +414,57 @@ fn powers_k(x: QM31) -> [QM31; 4] {
     let x2 = x.mul(x);
     [QM31::ONE, x, x2, x2.mul(x)]
 }
+
+#[cfg(feature = "r0-probe-c3")]
+#[inline(never)]
+pub fn query_value(
+    invariants: &V1Invariants,
+    proof: &OpeningView<'_>,
+    u: FibreIndex,
+    opening: &FibreView<'_>,
+) -> Result<E, Error> {
+    let g = &invariants.gamma_powers;
+    let i = &invariants.interpolant;
+    let line = &invariants.line;
+    let mut r = [E::ZERO; 4];
+    for s in 0..4 {
+        let index = domain::child_index(u, SlotIndex::new(s)?);
+        let point = domain::stored_point::<M31>(index);
+        let dot = (0..29).fold(E::ZERO, |v, l| {
+            let x = opening.value(s, l);
+            v.add(if l < 26 {
+                g[l].mul_m31(M31(x.to_limbs()[0]))
+            } else {
+                g[l].mul_qm31(x.c0())
+            })
+        });
+        let numerator = dot.sub(i[0].add(i[2].mul_m31(point.x)).add(i[1].mul_m31(point.y)));
+        r[s] = numerator.mul_qm31(
+            line.a
+                .add(line.b.mul_m31(point.x))
+                .add(line.c.mul_m31(point.y))
+                .try_inv()
+                .ok_or(Error::ZeroDenominator)?,
+        );
+    }
+    #[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+    super::equality_trace::fields(&r);
+    let point = domain::fibre_point(u);
+    let h = fold::phi(point.x, point.y, r)?;
+    let a = &invariants.alpha_powers;
+    // The same degree-three fold polynomial, using the prepared powers.
+    let lhs = h[0]
+        .add(a[1].mul(h[1]))
+        .add(a[2].mul(h[2]))
+        .add(a[3].mul(h[3]));
+    #[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+    let rhs = final_encoder(proof, u);
+    #[cfg(all(feature = "r0-hoist-reference", not(target_os = "solana")))]
+    assert_eq!(
+        lhs.to_le_bytes(),
+        fold::fold_fibre(a[1], u, r)?.to_le_bytes()
+    );
+    #[cfg(all(feature = "r0-probe-reference", not(target_os = "solana")))]
+    super::equality_trace::fields(&[lhs, rhs]);
+    Ok(lhs)
+}

@@ -458,6 +458,7 @@ pub fn prove(
             &w,
             &opening.final_message,
             incoming,
+            &queries.sorted(),
         )?;
         Ok(OutputProof { opening, rounds })
     }

@@ -25,6 +25,8 @@ for line in units.splitlines():
 cap=6*2**30
 assert sum(int(r['MemoryMax']) for r in reservations)+cap <= 50*2**30,reservations
 (out/(label+'-reservations.json')).write_text(json.dumps(dict(active=reservations,new_memory_max=cap,safe_limit=50*2**30,meminfo=Path('/proc/meminfo').read_text()),indent=2)+'\n')
+expected = 'compilation' if command[0]=='cargo' and command[1] in ['build','build-sbf'] else 'optimized probe proof generation' if 'fixture' in command else 'native equality/rejection arithmetic' if command[0]=='cargo' else 'SBF verifier arithmetic or read-only evidence audit'
+(out/(label+'-plan.json')).write_text(json.dumps({'expected_time':expected,'command':command},indent=2)+'\n')
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin:'+os.environ['PATH'],
     CARGO_BUILD_JOBS='2',ASPIS_SOURCE_REVISION=manifest['source_revision'],
     R0_E2E_FIXTURE_DIR=str(out/(label.split('-')[0]+'-fixtures')), CARGO_TARGET_DIR=os.environ.get('R0_TARGET_DIR','/home/dombarker/project-offloads/aspis-r0-semantics-20261009/target'))

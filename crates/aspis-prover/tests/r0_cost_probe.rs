@@ -397,6 +397,50 @@ fn both_variants_roundtrip_and_corruption_teeth() {
         )
         .unwrap();
         records.push(json!({"variant":name,"mutation":"fixed-challenge D leaf","rejection":"V1; V2 remains true"}));
+        #[cfg(feature = "r0-probe-c3")]
+        {
+            use aspis_core::r0_probe::relation;
+            let mut batch = relation::reference_query_batch(
+                HOST_HASH,
+                shaped.relation_state,
+                &view,
+                &c.queries.sorted(),
+            )
+            .unwrap();
+            let expected = batch.claim;
+            let mut actual = relation::QueryBatch::new(HOST_HASH, shaped.relation_state);
+            for n in 0..22 {
+                let u = FibreIndex::new(c.queries.sorted()[n] as usize).unwrap();
+                actual.add(onchain::query_value(&shaped.v1, &view, u, &view.fibre(n)).unwrap());
+            }
+            assert_eq!(
+                actual.claim.to_le_bytes(),
+                expected.to_le_bytes(),
+                "batched opened values differ from 22 direct final evaluations"
+            );
+            let delta = onchain::query_value(&shaped.v1, &altered_view, u, &altered_view.fibre(0))
+                .unwrap()
+                .sub(onchain::query_value(&shaped.v1, &view, u, &view.fibre(0)).unwrap());
+            batch.claim = batch.claim.add(batch.rho.mul(delta));
+            assert_ne!(batch.claim, expected);
+            assert_eq!(
+                relation::verify(
+                    HOST_HASH,
+                    shaped.relation_state,
+                    &shaped.data,
+                    c.kappa,
+                    c.tau,
+                    c.alpha,
+                    &shaped.polynomial,
+                    &view,
+                    wire.relation,
+                    &c.queries.sorted(),
+                    Some(&batch)
+                ),
+                Err(OError::V2)
+            );
+        }
+
         for i in [0, 1, 2, 3, 5, 6] {
             let mut polynomial = prepared.polynomial;
             polynomial[i] = polynomial[i].add(E::ONE);
