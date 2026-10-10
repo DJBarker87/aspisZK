@@ -652,3 +652,93 @@ caps and gates as in the P1 section above; changes:
    Evidence rule above applies.
 
 **R-H is held** with T2/ZF1 until P1′ reports (privacy LOG, D16).
+
+## Lead review of P1 (pre-prime) and P1′ (B): the probe closes; R0 does not reach one transaction (2026-10-10)
+
+Two workers ran in parallel on the same branch name: one completed the
+original P1 (C0–C4, stopped at C5(b)) from `f1e5ca9de`, the other ran P1′ from
+`bedd04207` and stopped at B's reconciliation gate. Both branches are pushed
+(`codex/r0-cost-probe-p1-pre-prime-20261010` @ `24db293e8`;
+`codex/r0-cost-probe-p1-20261009` @ `70544d55a`); the two reports are copied
+to `results/r0-cost-probe-20261009/`. Neither is merged into reference paths.
+
+**P1′ B — accepted as the breakdown measurement.** The stop rule I wrote
+("markers must sum to the S4 phase totals within logging cost") was read as
+exact; the residuals after calibrated logging are Semantic −363, ChordClaims
++175, Merkle −350, V1 +18,066 (0.6 % of the phase; 779 CU per fibre of guard
+code), V2 −1,537 CU. A tolerance of 1 % per phase was the intent; B passes it.
+The 14 fixed-challenge rejection cases that still call reference helpers do
+not affect B (B changes no arithmetic). B's figures (transfer, raw, including
+≈38K of marker cost):
+
+| Where | CU | Note |
+| --- | ---: | --- |
+| Semantic: rows 0–14 sampling/orchestration | 817,145 | `qm31_sample`: 256-bit binary long division + eight base-P divisions per sample |
+| Semantic: ten α samplers/orchestration | 552,037 | same sampler |
+| Semantic: ten α-round polynomial evaluations | 393,528 | evaluated in E; the data is K-valued |
+| Semantic: terminal incl. mask | 641,100 | M1: 286,713 |
+| Semantic: claims/handoff/parse/hash/checks | 281,265 | hashing itself only 24,400 |
+| Prepare: opening parse + canonical | 231,439 | |
+| Prepare: z0/z1/batch/α transcript + samplers | 325,503 | same sampler |
+| Prepare: `claim_prime` | 217,290 | 145 E×E on K-valued claims |
+| V1 per fibre: value decode | 33,084 | 116 `E::from_le_bytes` for M31/K data |
+| V1 per fibre: `final_encoder` | 64,532 | 22 of these; ρ-batching removes 21 |
+| V2: G / chord_weights / tensor / pairing | 1,047,619 / 3,163,882 / 1,090,356 / 2,367,456 | structural |
+
+**P1 pre-prime — accepted as computation; its baseline is not comparable.**
+Its C0 (22.5M) includes R91, which R-E4 measured at +7M, and excludes the V2
+transpose, so its absolute totals and its C1 saving (−5.2M, mostly R91 and
+pre-transpose κ products) do not transfer to S4. Four facts do transfer:
+(1) **R0's Merkle is already eight-way** (`Path = [[Digest; 7]; 6]`), so §8
+step 3 is implemented and C4 is a no-op; (2) **relation rounds added on top of
+the explicit 1,024-entry weight construction cost more, not less** (V2 +0.83M),
+so §8 step 2 saves nothing without a compact evaluator of the weight functional
+at a point — which no one has designed for the natural-basis chord map; that
+design is §8 steps 4–6 (two-swap transport, channel fold, sparse G), the
+"not routine" ones; (3) **ρ-batching (§8 step 1) works as expected**: it
+removes 21 of the 22 final-message evaluations, ≈ −1.35M on S4; (4) **F in K
+is not a parameter change**: the batched word Σ γ^c W_c is E-valued because
+γ ∈ E, so F ∈ K needs γ ∈ K, and then the γ collision term becomes
+336,869,026,622,539/(2¹²⁴ − 1) ≈ 2⁻⁷⁵·⁷, i.e. ≈ 75-bit soundness. C5(b) is
+closed as a field change, not a what-if.
+
+**Where the numbers lead.** From S4 = 15,078,299:
+
+| Step | Kind | Estimated total after |
+| --- | --- | ---: |
+| C0′ byte-preserving: sampler rewrite (same outputs), M31/K decodes, K arithmetic on K-valued semantic data, E×K in `claim_prime` | implementation | ≈ 12.3M |
+| C3 ρ-batched queries | §8 step 1 | ≈ 11.0M |
+| V2 with a compact evaluator, if one exists for the natural basis (my MLE sketch: ≈ 4–5M for V2) | §8 steps 2, 4–6 | ≈ 8M |
+
+Independent anchor: M1 (`results/v8-state-only-cu-20261009`) spent 557K on its
+whole PCS (relation 150K, Merkle 176K, queries 231K) in K at 16 queries.
+R0's opening layer in E at 22 queries and 29 lanes costs at least
+557K × 22/16 × 29/25 × (2 to 3 for E over K) ≈ 1.8–2.7M even at M1's
+implementation quality, plus ≈ 0.45M semantic and ≈ 0.3M prepare at the same
+quality: **≈ 2.5–3.2M is R0's floor before any proof work, 1.8–2.3× the
+budget.** Moving the opening field to K would cost the 100-bit target
+(≈ 75 bits, above). Recovering the old v8's 1.21M needs its verifier shape
+(four folds, channel fold, sparse G, QM31 opening field) — a different protocol
+with its own soundness ledger, not an optimisation of R0.
+
+**Verdict under the decision rule (PLAN "Lead decision … cost probe P1").**
+No measured configuration is ≤ 1.4M; the best measured is S4 at 15.08M. The
+unmeasured steps that remain byte-preserving or routine reach ≈ 11M; the
+structural steps cannot take R0 below ≈ 2.5M on any estimate. **R0 stops as
+the deployment target; v7 stands.** The probe is closed: no C0′, C2–C5, no
+further Rust job is issued. The lead asks the user to confirm.
+
+**What R0 remains.** A protocol with a proved 100-bit soundness model
+(`combined_fiat_shamir_masked`, T1 constants) and a privacy model one theorem
+from closure (`MaskImageOn Good`; T2a issued today on the user's direction;
+T2b route in the privacy LOG D17.3). That is research value, not a deployment
+path. R-H, ZF1 and the refinement block stay held. If a one-transaction proved
+design is wanted later, it starts from the old v8 verifier shape as a new
+protocol (call it R1) with R0's semantic layer, mask and proof techniques
+reused, and a soundness ledger written before any Rust.
+
+**Process notes.** (a) Superseding a prompt in flight needs an explicit stop
+to the old session; the two parallel runs cost one full probe. (b) Stop rules
+must carry tolerances. (c) The pre-prime branch committed ELF/stack binaries
+under the original P1 text; the P1′ branch followed the new rule. Both stay on
+their branches.
