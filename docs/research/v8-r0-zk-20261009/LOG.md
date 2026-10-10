@@ -2760,3 +2760,17 @@ existing lemmas; any attempt to prove or assume `MaskImageOn Good`; any
 module above the cap or 900 s; `sorry`/`axiom`/`native_decide`/`admit`/
 `maxRecDepth`/`maxHeartbeats`; concrete `Finset.univ` over rows, states or
 `Fin 262144`; any edit outside the four files named.
+
+### Lead amendment D17′ — placement of `GoodAlpha` (T2a stop resolved, 2026-10-10)
+
+The T2a worker stopped before editing: D17.1 places `GoodAlpha` in
+`R0Z/Shift.lean` (which imports `R0Z.D12`), while D17.2 item 8 requires
+`R0Z/GoodDensity.lean` to state `badAlpha_card`/`badAlpha_density` about
+that same declaration with Mathlib as its only import. Correct. Amendment:
+`GoodAlpha (a : Fin 10 → K) : Prop := (∀ j, a j ≠ 0 ∧ a j ≠ 1) ∧ a 9 ≠ 1/2`
+is defined in `R0Z/GoodDensity.lean` (namespace `R0Z.Shift`, over
+`{K : Type} [Field K]`, so the name is the one D17.1 uses), and
+`R0Z/Shift.lean` imports `R0Z.GoodDensity` and defines `Good ch := GoodAlpha
+(alpha ch)` there. Type and body unchanged; no duplicate declaration. Everything
+else in D17 and the T2a job stands; T2a is re-issued on the head carrying this
+section.
