@@ -120,3 +120,13 @@ C3 totals: 16,824,071 / 16,819,235 CU; proof 96,384 bytes; heap 106,456 bytes.
 All ten 1.4M runs exhaust in Semantic; 286 linked/reachable functions have zero
 reachable stack diagnostics. This schedule still pays C2's explicit primary
 weight construction. The table reports that implemented schedule only.
+
+C4 uses C3's exact artifact and evidence (`c4-reuse.json`); it has **zero new
+executions**. Eight-way Merkle was already present at the specified base:
+`Path = [[Digest; 7]; 6]` and `parent` hashes eight ordered children. Merely
+replacing the transport table with the two-swap order leaves the current
+explicit-vector loops, buffer sizes and field-operation counts unchanged.
+The optional transport-only change is therefore omitted. No compact two-swap
+contraction from the older sparse-G/channel profile is substituted into this
+probe. The C4 table rows explicitly identify reused C3 evidence, avoiding an
+unchanged build or measurement rerun.
