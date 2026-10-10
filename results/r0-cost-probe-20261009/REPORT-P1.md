@@ -85,3 +85,22 @@ C2 → C3 → C4 → C5(a), C5(b), C5(c), subject to the specified stop rules.
 **C1 is excluded from measurement.** New binaries, text dumps, and
 disassemblies stay on the build host; record their SHA-256 and size, and
 retain one stack-audit JSON per configuration. No new artifact exists yet.
+
+C2 adds three full degree-six records (672 bytes) after the C1 wire. Labels
+0xc1–0xc3 bind the seven canonical coefficients before each E challenge.
+The initial dual weight carries R0's quarter; later rounds use unscaled dual
+folds, so each boundary is c0+c4=incoming and the terminal dot has four terms.
+The native prover checks the dot identity after every fold. Every C1 proof byte
+is preserved. All 21 new coefficient mutations replace 21 redundant later-fibre
+leaf mutations per fixture; the total remains 1,894 rejections. Both fixtures
+accept, and the shared field/phase gates pass. The SBF call graph has 283 linked
+functions with zero reachable diagnostics.
+
+C2 completed totals are 18,091,187 / 18,089,626 CU, heap 106,456 bytes.
+All ten 1.4M runs exhaust in Semantic. This first relation implementation still
+constructs the 1,024 K weights and folds them explicitly; the four-term terminal
+does not eliminate that construction cost. Its measured increase is not a
+lower bound on an alternative tensor-contraction implementation. No complete
+reachability conclusion is drawn from this schedule. The initial driver build
+failed on an encoder-validation borrow lifetime; its changed replacement and
+all resource receipts are retained.

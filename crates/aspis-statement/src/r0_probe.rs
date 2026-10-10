@@ -49,7 +49,7 @@ impl<'a> Proof<'a> {
         }
         .encode()?;
         out.extend_from_slice(self.relation);
-        Self::parse(&out)?;
+        Proof::parse(&out)?;
         Ok(out)
     }
 }
