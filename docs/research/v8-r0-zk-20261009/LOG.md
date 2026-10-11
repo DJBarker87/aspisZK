@@ -2774,3 +2774,52 @@ is defined in `R0Z/GoodDensity.lean` (namespace `R0Z.Shift`, over
 (alpha ch)` there. Type and body unchanged; no duplicate declaration. Everything
 else in D17 and the T2a job stands; T2a is re-issued on the head carrying this
 section.
+
+### Lead acceptance of Z5 (`z4/FINDINGS-Z5.md`); decision D18 — the R1 transport (2026-10-11)
+
+**Verdict: accepted as computation.** Z5 (`codex/z5-digit-transport-20261010`
+@ `ce904954b`, cherry-picked here) tested all 120 digit-position permutations
+τ with identity digit maps against Z4c's C1 criterion (rank 112 for every one
+of the 16 semantic columns on the random 22-fibre set and on {0,…,21}, all 20
+challenge vectors, fourth weight row included). Three pass: τ = [3,4,2,0,1],
+[4,2,3,0,1], [4,3,2,0,1]; all 117 others fail first at column 0 on the
+consecutive set (ranks 54–111). Controls: identity π fails on the consecutive
+set exactly as Z4a found (ranks 80–99); D13's π passes. The first pass was run
+through Z4c's full gate: silent rank 1,076 on every vector, initial-retained
+and conditioned rank 1,080, (i′) 100/100, (ii′) 100/100, derivative diagnostic
+100/100, empty excess supports, all 20 challenge records and 100 terminal
+diagnostics identical to `probe-C.log`. Receipts: gate 1,235.5 s, peak child
+RSS 39,704 KiB, cgroup 51.8 MiB, swap 0, caps 3G/4G; 203 compiled-source
+hashes verified; elimination routines byte-identical to the base; two staging
+failures preserved and repaired; no Lean or production Rust change; no
+binaries; no trailer. Stages 2–3 of the search were not run (the user agreed
+to stop after the first exhaustive stage); nothing in R1 needs them.
+
+**Decision D18 — the R1 transport.** For R1 the transport is the fixed digit
+permutation
+```
+π_R1(r) = digit₃(r) + 4·digit₄(r) + 16·digit₂(r) + 64·digit₀(r) + 256·digit₁(r)
+```
+(base-4 digits of the row index, least significant first; coefficient digit d
+takes row digit τ(d) with τ = [3,4,2,0,1]; all σ_d identity). Consequences:
+1. Every weight the R1 verifier evaluates stays in product form over the five
+   coefficient digits: `eq(α, π_R1⁻¹ j) = ∏_d eq₂(α-bit-pair τ(d), digit_d(j))`,
+   the OOD weights `N_j(z)` are already digit-structured, the inactive
+   indicator and the Libra row are 0/1 and sparse. The dual folds of all
+   weights cost O(1) per constraint; the 3.5M "transport" component of R-E4's
+   V2 disappears by construction.
+2. D13's π (89 pads to the front) and `D13Order` remain R0's; R1's Lean states
+   `π_R1` as an explicit `Equiv` built from the digit permutation (no
+   generating rule, no order clause). The privacy rank property that D13 was
+   reinstated for holds for π_R1 on the Z4c vectors by this computation; its
+   structural proof belongs to T2b clause (ii′) and is expected to be simpler
+   for a digit permutation than for D13's.
+3. P2's variant S uses π_R1 (its placeholder was cost-equivalent; the probe
+   should now be the design). The semantic layer, the mask and the fourth
+   weight row are unaffected: the Libra weight is coefficient-indexed with no
+   transport, as D14′ states.
+4. The two other passing τ are recorded as alternates; the choice among the
+   three is cost-neutral and is not revisited unless T2b needs it.
+
+Half of the fit gate (PLAN, 2026-10-10 decision) is passed. The other half is
+P2's variant S fitting two transactions with ≥ 0.2M headroom each.
