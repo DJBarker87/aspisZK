@@ -2882,8 +2882,11 @@ fn z4c_main() {
 
 #[path = "z5.rs"]
 mod z5;
+#[path = "z6.rs"]
+mod z6;
 fn main() {
-    if std::env::args().any(|x| x == "--z5-search") { z5::search(); }
+    if std::env::args().any(|x| x == "--z6") { z6::main(); }
+    else if std::env::args().any(|x| x == "--z5-search") { z5::search(); }
     else if std::env::args().any(|x| x == "--z5-gate") { z5::gate(); }
     else { z4c_main(); }
 }
