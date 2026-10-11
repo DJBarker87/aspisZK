@@ -3055,3 +3055,78 @@ lies in the chain-consistent, terminal-zero space). A read-only check of the
 completeness facts available in R0P/R0Z is running; T2b-1 is specified when
 it reports. These results carry over to R1 unchanged (the mask and round
 analysis is PCS-independent).
+
+### Lead acceptance of Z6 (`z4/FINDINGS-Z6.md`); T2b-1 specified and HELD (2026-10-11)
+
+**Accepted as computation.** Z6 (`codex/z6-noise-rows-20261011`,
+cherry-picked here) shows on all 1,000 (witness, tape, challenge-prefix)
+combinations that the original terminal is unchanged by eligible noise **at
+every Boolean row**, that `balance` (row 1023) and the helper (H1) are
+invisible to every terminal row, and it derives the rule from source for the
+2,736 Poseidon padding cells (read only through terms whose selector weight
+is identically 0); the remaining 1,067 eligible cells in rows 912–1023 pass a
+randomized dependence test (miss probability ≈ 25/2³¹ per test) but were not
+audited from source. Receipts: own scopes 3G/4G/swap 0, no cap raised, 204
+source hashes verified, one preflight assertion failure retained. This is
+exactly the fact the T2a acceptance said was missing: the remainder g has
+zero initial sum because each honest original row is noise-invariant, so
+clause (i′) is not false for the reason I feared.
+
+**Why the Lean form is an audit, not a definition.** `eligible c r`
+(`R0Z/MaskLayout.lean:38–42`) is an explicit cell list (local rows 13–15
+below 912; rows ≥ 912 not used by `forestPathUsed`/`pairAuxUsed`), not "not
+read by any lane". So the Lean fact must be proved family by family, in the
+style of `HelperInvariant.helper_eligible` (`row_values_eligible` with
+`protected_registry`), which already does it for the helper's reads.
+
+**Job T2b-1 (Lean; HELD until the user decides whether the privacy work
+continues as research).** Base: the head carrying this section. New module
+`R0Z/TerminalEligible.lean` and additions to `R0Z/Shift.lean`
+(or a new `R0Z/Chain.lean`); `D12.lean`, `Shift.lean`'s existing statements
+and all R0P/R0/R0FS/R0C files untouched.
+
+1. **Lemma A (noise invariance of the original rows).**
+   `terminal_row_eligible (pub) (t : Trace K) (e : EligibleNoise K F) (ch) (b : Fin 10 → Bool) :
+   terminalValue pub (ch.sem 0) (ch.sem 1) (ch.sem 2) (ch.sem 13) (zc ch) B
+     (honestClaims (prepare pub (applyEligible t e) ch) (ofBool b)) (ofBool b) =
+   terminalValue … (honestClaims (prepare pub t ch) (ofBool b)) (ofBool b)`.
+   Route: `honestClaims` at a Boolean point reads `rowOpenings` (existing
+   `honestClaims_ofBool`/`honestRows`); lane 26 by `helper_eligible`; for
+   C1 lanes, every cell that `laneAt … (rowOpenings u b)` reads with a
+   nonzero coefficient at a Boolean row is non-eligible and ≠ 1023 —
+   proved per family from the Copy*/LogUp*/Positivity*/Path/Value/Digest/
+   Asset/Schedule/Occupancy definitions, the Poseidon padding case by the
+   selector-weight argument in FINDINGS-Z6. Also `applyAff_zero :
+   applyAff B u 0 = u` (or the terminal-level equivalent), so that
+   `actual … (0,n)` and `actual … 0` differ only by the noise tape.
+   Stop list: any family whose reads cannot be shown non-eligible from its
+   definition (report the family, the cell and the row).
+2. **Lemma B (honest sumcheck identities of `rounds`).** For
+   `VDeg 10 (fun _ => 27) f`: `rounds_initial : (rounds ch 0 f).eval 0 +
+   (rounds ch 0 f).eval 1 = bsumB 10 f` and `rounds_chain (j : Fin 9) :
+   (rounds ch j.succ f).eval 0 + (rounds ch j.succ f).eval 1 =
+   (rounds ch j.castSucc f).eval (alpha ch j.castSucc)`. Route:
+   `rounds_eval_of_vdeg` plus `roundPoint` lemmas re-indexing the Boolean
+   tail with `Fin.cons` against `bsumB`'s leading-coordinate recursion
+   (`Zerocheck.lean`).
+3. **`Chain0 ch : Submodule K (Payload K)`**: payloads v with
+   `nonRound v = 0`, `p₀ᵛ(0) + p₀ᵛ(1) = 0`, `p_{j+1}ᵛ(0) + p_{j+1}ᵛ(1) =
+   p_jᵛ(α_j)` for j = 0..8, and `p₉ᵛ(α₉) = 0`, where `p_jᵛ` is the round-j
+   polynomial read from the `.semanticCoeff j ·` cells (generalise
+   `round9Poly` to `roundPoly j`). All conditions are K-linear.
+4. **`sRem_mem_chain0 (hgood : alpha ch 9 ≠ 1/2) : sRem h B x w ch n ∈ Chain0 ch`.**
+   Initial sum: `g`'s two `originalRounds` have initial sums
+   `η · bsumB 10 (fOrig … (actual … (0,n)))` and `η · bsumB 10 (fOrig … (actual … 0))`,
+   equal by Lemma A row by row; chain by Lemma B for each, hence for the
+   difference, and `dir` is chain-consistent (rounds 0–8 zero, p₉ = X − ½);
+   terminal by `Phi0_sRem` and `claimMask_roundInclusion`; `nonRound` by
+   `nonRound_dir` and the round-only shape of `g`.
+   Replay on the host from attempt 3377, one module at a time, final target
+   the new module(s); `#print axioms` for `terminal_row_eligible`,
+   `rounds_initial`, `rounds_chain`, `sRem_mem_chain0`; standard caps and
+   stop list; nothing may assume or weaken `MaskImageOn Good`.
+
+**After T2b-1: T2b-2** is the spanning half — `Chain0 ch ⊆ roundProjection
+(silent image)` on `Good` — from Z4c/Z5's lift family; its statement is
+written when T2b-1 lands. Both are research under the current verdict
+(PLAN, 2026-10-11): R0 and R1 have no deployment path; v7 stands.
