@@ -4,3 +4,21 @@ extern crate alloc;
 pub mod sampler;
 pub mod semantic_wire;
 pub mod semantic;
+
+#[cfg(feature = "prover")]
+extern crate std;
+pub mod r1_wire;
+pub mod r1_semantic;
+pub mod trace;
+pub mod transport;
+pub mod weights;
+pub mod transcript;
+pub mod verifier;
+#[cfg(feature = "prover")]
+pub mod prover;
+#[cfg(feature = "prover")]
+pub mod dense;
+
+#[cfg(feature="prover")] mod host_sumcheck;
+#[cfg(feature="prover")] mod host_semantic;
+#[cfg(feature="prover")] mod host_commitment;
