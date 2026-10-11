@@ -2996,3 +2996,62 @@ evaluated. Per-attempt data, raw audit lines, caps, toolchain lines and the
 final source manifest are in [t2a/evidence.json](t2a/evidence.json). The
 commit contains the four Lean sources, this LOG section and the evidence JSON;
 no binaries.
+
+### Lead acceptance of T2a (2026-10-11)
+
+**Verdict: accepted.** `codex/t2a-shift-good-20261010` @ `6eef05520`
+(cherry-picked here; the only conflict was this LOG's tail, resolved by
+keeping the D18 section and then the worker's section). Reviewed line by
+line against D17.1, D17.2 items 1–10 and D17′:
+
+- `R0Z/GoodDensity.lean` (Mathlib only): `GoodAlpha` verbatim; `badAlpha_card
+  ≤ 21·|K|⁹` by 21 coordinate-pinning sets each in bijection with `Fin 9 → K`
+  (`Fin.insertNth`/`removeNth`, the components of what Mathlib now calls
+  `Fin.insertNthEquiv`); `badAlpha_density ≤ 21/|K|`. No field element is
+  enumerated.
+- `R0Z/Shift.lean`: `Good`, `round9Poly`, `evalRound9`, `claimMask` (+
+  `claimMask_apply` to `maskClaimsR0`), `Phi0`, `dir` (through
+  `PayloadSplit.roundInclusion`, the same function as D12's restricted one),
+  `evalRound9_dir`, `claimMask_dir`, `Phi0_dir`, `nonRound_dir`,
+  `originalOf`, `shift`/`unshift`/`shiftEquiv`, `originalOf_add_smul_dir`,
+  `sRem`, `cTilde`, `MaskImageOn` — each with D17.1's type and body. Items
+  1–7: `rounds_eval_of_vdeg` (general z; node distinctness derived from the
+  ambient `ZMod P` algebra, so no new hypothesis), `roundPoint_nine`,
+  `Phi0_A`, `Phi0_roundInclusion_g`, `Phi0_sRem` (needs only
+  `alpha ch 9 ≠ 1/2`), `payload_eq_shift` (no `Good` hypothesis, as
+  predicted), `equalLaws_comp`, `HVZK_on`, `hvzk_on_good` (D12's proof shape
+  with the shift). Nothing asserts, assumes or weakens `MaskImageOn Good`.
+- `R0Z/FsGood.lean`: `badMass`, `middle_means_close`, `zkfs_of_hvzk_on`,
+  `zkfs_of_maskImageOn_good` as D17.2 item 9.
+- `R0Z/Z4Maps.lean`: both targets on `Good`, the round target on
+  `roundProjection (sRem …)` (item 10). `D12.lean` and every R0P/R0/R0FS/R0C
+  file untouched.
+- Scan: no `sorry`/`axiom`/`native_decide`/`admit`/`maxRecDepth`/
+  `maxHeartbeats`/`decide`; `Finset.univ` only over `Fin 10`, `Fin 28`,
+  `Fin 10 → K` (symbolically) and the bridge coin type.
+
+**Evidence** (`t2a/evidence.json`): attempts 3367–3376; 3367 never compiled
+(my prompt wrapped the launcher in an outer `flock` on the lock `run2.sh`
+already takes; killed after ten minutes, number not reused — a prompt
+defect, recorded); 3368–3370 and 3372, 3374 were elaboration failures
+repaired in source; final targets `R0Z/GoodDensity` 3371, `R0Z/Shift` 3373,
+`R0Z/Z4Maps` 3375, `R0Z/FsGood` 3376, all exit 0; max wall 10.46 s; peak RSS
+6,880,060 KiB under MemoryMax 7G; swap 0; no cap raised; the 100 staged
+unchanged R0Z/R0P sources were hash-checked against the worktree first.
+`#print axioms` exactly `[propext, Classical.choice, Quot.sound]` for
+`payload_eq_shift`, `Phi0_A`, `Phi0_sRem`, `hvzk_on_good`,
+`rounds_eval_of_vdeg`, `Phi0_roundInclusion_g`, `equalLaws_comp`,
+`badAlpha_card`, `badAlpha_density`, `middle_means_close`,
+`zkfs_of_hvzk_on`, `zkfs_of_maskImageOn_good`. No trailer, no binaries.
+
+**Where privacy stands.** The chain is now
+`MaskImageOn Good h B x → HVZK_on Good → ZK_FS (ε_fs + badMass Good)`, all
+proved; `badAlpha_density` is the count ZF1 will use to pin `badMass Good`
+to `21/|K_α|` from the FS draw's α-row law. The one open theorem is
+`MaskImageOn Good` (T2b, route D17.3). Its first job needs one fact I have
+not located in the trees: that the honest original's hypercube total is
+unchanged by eligible noise (so that `g`'s initial sum vanishes and `sRem`
+lies in the chain-consistent, terminal-zero space). A read-only check of the
+completeness facts available in R0P/R0Z is running; T2b-1 is specified when
+it reports. These results carry over to R1 unchanged (the mask and round
+analysis is PCS-independent).
