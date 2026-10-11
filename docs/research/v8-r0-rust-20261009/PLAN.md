@@ -887,3 +887,49 @@ rewrites:
   D14 content is then added as a protocol change and is covered by the dense
   native oracle, honest acceptance and the mutation corpus, not by byte
   identity with S4.
+
+### Lead note after the Lean reuse inventory (2026-10-11): fold count is decided by P2, one fold preferred
+
+`docs/research/v8-r1-20261011/REUSE-INVENTORY.md` classifies all 212 Lean
+modules for R1: 120 reuse as they are (the whole semantic layer and mask, the
+GS/Hensel machinery, the initial-code chain F1/F3, the FS/duplex lemmas, the
+abstract ZK laws), 39 re-instance with new parameters, 12 rewrite, 5 retire
+(the four Chord modules and `R0Z/QuotientImage`), and 32 are reusable for the
+first fold but would need a second copy for a second fold. Three findings
+change the R1 outline:
+
+1. **A second fold is cheap on-chain and expensive in Lean.** The proved
+   final-code chain (`Wide/Final*`, `Terminal`, `MatchedInstances`,
+   `GRSConversion`, `Interpolation`, `FactorBudgets`, F4 in `R0/Fold`, F5 in
+   `R0/Round`) is hard-wired to one 4-to-1 fold landing in the 256-coefficient
+   code on 2¹⁸ points with threshold 9557 and `foldChallengeCap`. Two folds
+   need a new instance of all of it for a 64-coefficient code on 2¹⁶ points
+   (new encoder, GRS conversion, interpolation budget, cap, and an unverified
+   Hensel Y-degree < 113 condition) and a fold identity on the line domain
+   that has no Lean analogue in these trees. That is weeks of Lean for ≈ 0.6M
+   CU: with one fold the final pairing costs ≈ 0.86M instead of ≈ 0.3M
+   (3 point claims 3 × 256 E×K, 2 OOD claims 2 × 256 E×K, the inactive sum
+   almost free because under π_R1 the active rows are a function of the top
+   two coefficient digits, the Libra row 14 E×K after the fold). One-fold R1
+   estimate ≈ 2.35M, i.e. ≈ 1.2M per transaction with ≈ 0.2M headroom each:
+   at the rule's threshold. **P2 measures both: variant S1 = one fold + final256
+   (R0's proved fold), variant S2 = two folds + final64. One fold is chosen if
+   S1 fits the rule; two folds only if S1 does not and S2 does.**
+2. **OOD points stay circle points over K** (z0, z1 sampled as now), so
+   `R0C/Circle*`, `R0P/CircleSampler` and `ChordGeometry.Point` are reused; the
+   OOD functional is `evalMessage` salvaged from `R0/Chord` (the natural-basis
+   values N_j(z), product form over digits). The chord conditions (rational /
+   equal points) are replaced by one OOD list-to-unique collision row: two
+   distinct list elements agree at z for at most 1,024 circle points, so with
+   list ≤ 100 the bad set is ≤ 4,950 × 1,024 ≈ 2²²·³, i.e. ≈ 2⁻¹⁰¹·⁷ per OOD
+   round over K. Both OOD rounds are kept.
+3. **Queries stay uniform 22-subsets of the 2¹⁸ fibres** with one fold
+   (`QueryLaw`, `Q22Law`, `QuerySampler` reuse). The ρ-batch challenge is
+   sampled after the query set, so the FS round list becomes γ, κ, α₀, S, ρ
+   (τ is gone, ρ is new): 33 rounds; the `MaskDuplex*` chain is re-instanced
+   mechanically.
+
+Every transport use takes π as a parameter except `R0Z/HonestView.D13Order`,
+so π_R1 (D18) plugs in. Over QM31 only the γ and fold terms fall short of 100
+bits (75.74 and 80.90); all semantic terms are ≥ 105.27 bits over |K|; the
+query term (105.14) is field-independent — consistent with the R1 outline.
