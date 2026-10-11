@@ -933,3 +933,63 @@ Every transport use takes π as a parameter except `R0Z/HonestView.D13Order`,
 so π_R1 (D18) plugs in. Over QM31 only the γ and fold terms fall short of 100
 bits (75.74 and 80.90); all semantic terms are ≥ 105.27 bits over |K|; the
 query term (105.14) is field-independent — consistent with the R1 outline.
+
+## Lead review of P2 (2026-10-11): R1 does not fit two transactions; the fit gate fails; v7 stands
+
+**Accepted as computation.** `codex/r1-precheck-p2-20261010` @ `d2197e355`
+(pushed; report copied to `results/r1-precheck-20261010/REPORT-P2.md`; no
+binaries committed). Gates: the sampler and K-arithmetic rewrites were
+byte-identical to S4 on the unmodified semantic layer before the D14 content
+was added; every emitted challenge, weight and check value agrees bitwise with
+a dense native evaluator (20,465 values per fixture for S1, 10,699 for S2/D);
+1,422 / 898 mutation cases reject; zero reachable stack diagnostics; heap
+≤ 56,148 B; caps 4G/6G/swap 0, none raised. One retention defect disclosed:
+S1's native-gate executable was overwritten before archival (its result JSON,
+trace hash, corpus, logs and exact source are retained); it does not affect
+the CU figures. The worker's round count (32 for S1, 33 for S2) is right and
+my "33 FS rounds" note was off by one for S1.
+
+**Measured, DIAGNOSTIC, worst fixture (CU):**
+
+| Variant | Split k | Tx1 | Tx2 | Pair total | Rule (≤ 1.2M each) |
+| --- | ---: | ---: | ---: | ---: | --- |
+| S1 one fold, final256, π_R1 | 14 | 3,331,310 | 3,439,672 | 6.77M | fails |
+| S2 two folds, final64, π_R1 | 10 | 2,441,407 | 2,414,242 | 4.85M | fails |
+| D two folds, D13 π | 22 | 3,542,936 | 5,716,002 | 9.26M | fails |
+
+All 60 capped attempts at 1.4M failed. Per phase (S2, transfer): parse 57K +
+36K; semantic 903K; prepare 489K; checkpoint 68K + 115K; Merkle 100K + 120K;
+query folds and ρ accumulation 822K + 984K (≈ 82K per query); relation rounds
+and pairing 1,059K; final pairing 94K.
+
+**Reading.** The probe is a first-cut implementation and runs about 2× my
+arithmetic-floor estimate in every phase (semantic 0.90M vs 0.45M, prepare
+0.49M vs 0.25M, per-query 82K vs 35K, relation 1.06M vs 0.30M, checkpoint
+0.19M vs 0.05M); that factor has been the pattern of every probe in this
+programme and I no longer discount it. But the verdict does not rest on it.
+Two structural facts close the question:
+
+1. **Semantic plus prepare alone exceed one transaction** (1.39M measured;
+   ≈ 1.0M at the floor, since the terminal in K ≈ 0.30M matches M1's 287K and
+   the four claim rows, handoff and α evaluations are R0 content, not waste).
+   Transaction 1 therefore carries no query before it is nearly full.
+2. **The design's arithmetic floor sits on the two-transaction budget line.**
+   Floor: semantic 0.75M + prepare 0.25M + parse 0.06M + checkpoints 0.17M +
+   Merkle 0.22M + 22 queries × 35K + relation 0.30M + final 0.10M ≈ 2.6M,
+   i.e. ≈ 1.3M per transaction with zero implementation overhead. The rule
+   asks for ≤ 1.2M each. No implementation reaches below its own arithmetic
+   floor.
+
+**Verdict under the gate (PLAN, 2026-10-10 decision).** Z5 passed; P2 fails:
+R1 does not fit two transactions. **R1 does not proceed to the ledger; v7
+stands.** No further Rust job is issued. For the record: as measured, R1
+needs four transactions (≈ 4.85M / 1.2M); with an optimisation programme of
+the old v8's kind (R17–R91, months) it might reach three; two is excluded by
+the floor, one was excluded by the field. The D variant confirms D18's point
+by contrast: the D13 transport alone adds ≈ 4.4M to the relation phase.
+
+**What stands.** R0: a proved 100-bit soundness model and a privacy model one
+theorem from closure, both with research value and no deployment path. The
+old v8 verifier shape remains the only measured one-transaction design, and
+its security is work-normalised and unproved. The Lean privacy work in flight
+(T2b-1 after Z6) continues only if the user wants it as research.
