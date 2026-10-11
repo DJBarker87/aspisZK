@@ -2774,3 +2774,177 @@ is defined in `R0Z/GoodDensity.lean` (namespace `R0Z.Shift`, over
 (alpha ch)` there. Type and body unchanged; no duplicate declaration. Everything
 else in D17 and the T2a job stands; T2a is re-issued on the head carrying this
 section.
+
+### T2a completed — D17 shift Ψ_ch, `Good`, statistical HVZK ledger term (2026-10-11)
+
+Implemented D17.1, D17.2 items 1–10 and the D17′ placement on
+`codex/t2a-shift-good-20261010`, based on
+`bb44131caf6293417602b74655a77081e05143b1`. Three new modules and one edit:
+`R0Z/GoodDensity.lean` (Mathlib only), `R0Z/Shift.lean` (imports `R0Z.D12`,
+`R0Z.GoodDensity`, `R0Z.LawTransport`), `R0Z/FsGood.lean` (imports
+`R0Z.FsStatement`, `R0Z.Shift`), and `R0Z/Z4Maps.lean` (item 10 only; it now
+imports `R0Z.Shift`). No R0P/R0/R0FS/R0C file and no other R0Z file changed;
+`D12.lean` is untouched. Nothing proves, assumes or weakens `MaskImageOn Good`.
+
+**Placements.** `GoodAlpha` is in `R0Z/GoodDensity.lean`, namespace
+`R0Z.Shift`, over `{K : Type} [Field K]` (D17′); `Good ch := GoodAlpha (alpha ch)`
+is in `R0Z/Shift.lean`. Items 1–7 are in `R0Z.Shift`, item 8 in
+`R0Z.Shift` (GoodDensity), item 9 in namespace `R0Z.FsGood`, item 10 in
+`R0Z.Z4Maps`. Two representation details, neither a statement change:
+`dir` is written with `PayloadSplit.roundInclusion` (the K-linear map whose
+`restrictScalars F` is `D12.roundInclusion`; the two agree as functions, and
+`nonRound_dir` is proved by the same `cases coord <;> rfl` as D12's lemma),
+while `sRem` uses `D12.roundInclusion (F := F)` exactly as `decomposition`
+does; and the `Equiv.piFinSuccAbove` named in item 8 is `Fin.insertNthEquiv`
+in Mathlib `81a5d257` — the bijection is built from its two components
+`Fin.insertNth`/`Fin.removeNth` with `insertNth_apply_same`,
+`insertNth_self_removeNth`, `removeNth_insertNth`.
+
+**Statements (D17.1).** `GoodAlpha a := (∀ j, a j ≠ 0 ∧ a j ≠ 1) ∧ a 9 ≠ 1/2`;
+`Good ch := GoodAlpha (alpha ch)`. `round9Poly : Payload K →ₗ[K] K[X] :=
+∑ i : Fin 28, (monomial i.val).comp (proj (.semanticCoeff 9 i))` with
+`round9Poly_apply`; `evalRound9 ch := (Polynomial.leval (alpha ch 9)).comp round9Poly`.
+`claimMask B a` is the displayed sum of `proj (.pointClaim 0 _)` reads plus
+`proj (.extraClaim 28)`, with `claimMask_apply : claimMask B a v =
+R0P.Mask.maskClaimsR0 B (fun c => v (.pointClaim 0 c)) (fun c => v (.extraClaim c)) a`.
+`Phi0 B ch := evalRound9 ch - claimMask B (alpha ch)`. `dir := roundInclusion
+(fun j i => if j = 9 then (X - C (1/2 : K)).coeff i.val else 0)` with
+`evalRound9_dir : evalRound9 ch dir = alpha ch 9 - 1/2`, `claimMask_dir = 0`,
+`Phi0_dir : Phi0 B ch dir = alpha ch 9 - 1/2`, `nonRound_dir : nonRound dir = 0`.
+`originalOf pub B ch v := ch.sem 14 * terminalValue pub (ch.sem 0) (ch.sem 1)
+(ch.sem 2) (ch.sem 13) (zc ch) B (fun j c => v (.pointClaim j c)) (alpha ch)`;
+`shift pub B ch v := v + (originalOf pub B ch v * (alpha ch 9 - 1/2)⁻¹) • dir`,
+`unshift` with `-`; `originalOf_add_smul_dir`, `originalOf_sub_smul_dir`,
+`unshift_shift`, `shift_unshift`, `shiftEquiv : Payload K ≃ Payload K`.
+`sRem h B x w ch n := roundInclusion (g h B x w ch n) - (Phi0 B ch (roundInclusion
+(g h B x w ch n)) * (alpha ch 9 - 1/2)⁻¹) • dir`; `cTilde h B x w ch := c h B x w ch -
+(originalOf x.1 B ch (c h B x w ch) * (alpha ch 9 - 1/2)⁻¹) • dir`.
+`MaskImageOn P h B x := (∀ ch, P ch → ∀ w n, h.public w = x.1 → sRem h B x w ch n ∈
+LinearMap.range ((A h.transport B ch).comp inlM)) ∧ (∀ ch, P ch → ∀ w w',
+h.public w = x.1 → h.public w' = x.1 → cTilde h B x w ch - cTilde h B x w' ch ∈
+LinearMap.range (A h.transport B ch))`.
+
+**Theorems (D17.2).**
+1. `rounds_eval_of_vdeg (ch) (j) (f) (hf : VDeg 10 (fun _ => 27) f) (z) :
+   (PayloadSplit.rounds ch j f).eval z = ∑ tail : Fin (9-j.val) → Bool, f (roundPoint ch j z tail)`.
+   Route as specified: `vdeg_update` extracts the coordinate-`j` univariate of
+   degree ≤ 27 from `VDeg` by induction through the leading coordinates
+   (`Fin.cons_update`, `Fin.update_cons_zero`, `Fin.cons_self_tail`);
+   `roundPoint_update` rewrites the round point as `Function.update`; the
+   tail-sum polynomial has `natDegree < 28` (`natDegree_sum_le_of_forall_le`);
+   `Lagrange.eq_interpolate` on the 28 nodes and
+   `Lagrange.interpolate_eq_of_values_eq_on` close it. Node injectivity
+   (`nodes_injOn`) is derived from the ambient `[Algebra (ZMod P) K]` exactly as
+   `R0P.SemD3Glue.semE_charP` does (`charP_of_injective_algebraMap`, then
+   `CharP.natCast_injOn_Iio` with `28 ≤ P` by `norm_num`); no hypothesis was
+   added to the statement. `roundPoint_nine : roundPoint ch 9 z tail =
+   Function.update (alpha ch) 9 z`; `eval_rounds_nine : (rounds ch 9 f).eval
+   (alpha ch 9) = f (alpha ch)`.
+2. `Phi0_A (h) (B) (ch) (t : T K F) : Phi0 B ch (A h.transport B ch t) = 0`, through
+   `Phi0_L` on `PayloadSplit.L`: `L_round`, `sum_monomial_coeff` (a polynomial
+   of `natDegree < 28` is the sum of its 28 monomials, `as_sum_range'`),
+   `eval_rounds_nine` with `maskClaimsR0_vdeg` transported through
+   `maskLinear_apply`, and `claimsLinear_apply`/`extraLinear_apply`/`claimMask_apply`.
+3. `Phi0_roundInclusion_g : Phi0 B ch (roundInclusion (g h B x w ch n)) =
+   originalOf x.1 B ch (payload h B x w ch (0,n)) - originalOf x.1 B ch (c h B x w ch)`:
+   `claimMask_roundInclusion` (definitional zero), `g` as a difference of
+   `originalRounds`, `vdeg_smul`/`vdeg_terminalValue`, `eval_rounds_nine`;
+   `payload_pointClaim` and `originalOf_payload` are `rfl`, and `originalOf_c`
+   uses D12's `map_zero Partition.equiv` identification of `c` with `payload 0`.
+4. `Phi0_sRem (hgood : alpha ch 9 ≠ 1/2) : Phi0 B ch (sRem h B x w ch n) = 0`
+   (linearity, `Phi0_dir`, `inv_mul_cancel₀`).
+5. `payload_eq_shift (t : T K F) : payload h B x w ch t = shift x.1 B ch (cTilde h B x w ch +
+   A h.transport B ch t + sRem h B x w ch t.2)`, with no `Good` hypothesis:
+   `decomposition`, `originalOf_payload_pure` (`actual_add_pure`,
+   `terminal_add_pure`), item 3, `add_smul`, `abel`, then
+   `originalOf_sub_smul_dir` and `sub_add_cancel`.
+6. `equalLaws_comp {R S V W} [Fintype R] [Fintype S] (Ψ : V → W) {f g} (h : EqualLaws f g) :
+   EqualLaws (Ψ ∘ f) (Ψ ∘ g)` from `LawTransport.mean_eq_of_equalLaws` with the
+   indicator test.
+7. `HVZK_on P h B outputs x := ∀ (hx : InLanguage h x) w ch, P ch → h.public w = x.1 →
+   EqualLaws (JointView.view h B outputs x w ch) (JointView.simulator h B outputs x hx ch)`;
+   `hvzk_on_good : MaskImageOn Good h B x → HVZK_on Good h B outputs x`, following
+   `D12.hvzk_perfect_of_maskImage` with `payload_law_on` (`AbsorptionLaw.mixture`
+   on `sRem`, `equalLaws_comp (shift …)`, `payload_eq_shift`) in place of
+   `payload_law`, `AffineLaw.equal_laws_of_mask_image` on `cTilde`,
+   `equalLaws_comp (shift …)` again, then `equal_laws_of_equiv Partition.equiv`
+   and `equal_laws_const_pair` verbatim.
+8. `badAlpha_card : ((Finset.univ : Finset (Fin 10 → K)).filter (fun a => ¬ GoodAlpha a)).card ≤
+   21 * Fintype.card K ^ 9` (21 pinned sets, `card_pinned : (pinned j c).card =
+   Fintype.card K ^ 9` through `pinnedEquiv`, `Finset.card_biUnion_le`,
+   `Finset.card_union_le`) and `badAlpha_density : (… .card : ℚ) / (Fintype.card K : ℚ) ^ 10 ≤
+   21 / Fintype.card K`.
+9. `badMass P bridge adv x := mean (fun coin => if P (bridge.draw adv x coin) then 0 else 1)`;
+   `middle_means_close (hh : HVZK_on P h B outputs x) : |mean (middleReal …) − mean (middleIdeal …)|
+   ≤ badMass P bridge adv x` (`mean_product` twice, `mean_sub`, `abs_mean_le`,
+   `mean_le_mean`; on good coins `mean_eq_of_equalLaws`, otherwise both inner
+   means lie in [0,1] because `bit` is 0/1-valued); `zkfs_of_hvzk_on (hh) (hr :
+   ROMReduction … ε_fs) (hmass : ∀ bridge adv, badMass P bridge adv x ≤ ε_bad) :
+   ZK_FS … (ε_fs + ε_bad)`; `zkfs_of_maskImageOn_good : MaskImageOn Good h B x →
+   ROMReduction … ε_fs → (∀ bridge adv, badMass Good bridge adv x ≤ ε_bad) →
+   ZK_FS … (ε_fs + ε_bad)`. Identifying `ε_bad` with `21/|K_α|` remains ZF1's.
+10. `Z4Maps.roundMask_surjectivity := ∀ ch, Good ch → ∀ w n, h.public w = x.1 →
+    ∃ m : silentMasks …, silentRoundMaskMap … m = roundProjection (sRem h B x w ch n)`;
+    `c1_surjectivity` gains only `∀ ch, Good ch →`. Both remain `Prop`s.
+
+**Replay evidence.** Before the first attempt the SHA-256 of all 100 worktree
+`R0Z/*.lean` and `R0P/*.lean` sources matched the staged copies in
+`sources/R0Z` and `sources/R0P` on `dombarker@100.108.41.90`, pinned workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006` with its compiled
+cache. Attempts **3367–3376** used `sh run2.sh N Module 7000 7`, one module at
+a time, in the order GoodDensity → Shift → FsGood → Z4Maps (Z4Maps depends on
+Shift only and was replayed before the FsGood repair). The adapter uses
+MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0 and a 900 s timeout; the
+reservation printed by the launcher was 24–26 GiB populated plus this job's
+7 GiB. Lean is v4.32.0 (commit `8c9756b2`); Mathlib is `81a5d257`. Attempt
+3367 did not compile: it was wrapped in an outer `flock` on the lock that
+run2.sh already takes internally, deadlocked, and was killed after about ten
+minutes with an empty `out-3367.log` and no time log; it is kept in the
+record and the number was not reused.
+
+| Attempt | Target | Exit | Wall (s) | Peak RSS (KiB) | Swap | Result |
+| ---: | --- | ---: | ---: | ---: | ---: | --- |
+| 3367 | `R0Z/GoodDensity` | — | — | — | — | launch deadlock, no compile |
+| 3368 | `R0Z/GoodDensity` | 1 | 3.85 | 6,664,236 | 0 | 3 elaboration errors |
+| 3369 | `R0Z/GoodDensity` | 1 | 3.18 | 6,689,372 | 0 | 2 elaboration errors |
+| 3370 | `R0Z/GoodDensity` | 1 | 3.36 | 6,688,828 | 0 | 1 elaboration error |
+| 3371 | `R0Z/GoodDensity` | 0 | 3.12 | 6,717,604 | 0 | green |
+| 3372 | `R0Z/Shift` | 1 | 10.46 | 6,870,664 | 0 | elaboration errors |
+| 3373 | `R0Z/Shift` | 0 | 7.48 | 6,880,060 | 0 | green |
+| 3374 | `R0Z/FsGood` | 1 | 3.06 | 6,821,240 | 0 | 1 elaboration error |
+| 3375 | `R0Z/Z4Maps` | 0 | 3.77 | 6,852,540 | 0 | green (final target) |
+| 3376 | `R0Z/FsGood` | 0 | 3.17 | 6,857,500 | 0 | green (final target) |
+
+The repairs were: beta-reducing `change`s and the explicit dependent family
+`(α := fun _ => K)` for `Fin.insertNth`/`removeNth`; explicit set arguments so
+`Finset.card_union_le`'s `DecidableEq` instance is determined;
+`Nat.add_le_add_right` for the summand order; `div_eq_div_iff` + `ring` for the
+density identity; qualifying `PayloadSplit.rounds` and importing
+`R0Z.LawTransport`; a `Payload K` ascription on `dir`; two rewrites whose
+motive was not type correct because of `↑(9 : Fin 10)` in dependent positions,
+replaced by `dif_pos` on a hypothesis stated at `(9 : Fin 10).val` and by
+`Fin.elim0 (Fin.cast h0 i)`; `PayloadSplit.L` reads by `simp only
+[PayloadSplit.L, LinearMap.pi_apply, …]` with `claimsLinear extraLinear
+dotLinear honestClaims` locally irreducible (the PayloadSplit pattern) instead
+of `change`; an explicit `originalRounds_eq` rewrite; and naming the cast in
+`abs_of_nonneg`. Failed logs contain Lean's own recursion-depth diagnostic
+text; no `maxRecDepth`, `maxHeartbeats`, `sorry`, `axiom`, `native_decide`,
+`admit` or `decide` appears in any source, and no limit was raised. Total
+compiler wall time was 41.45 s over the nine compiled attempts; the longest
+module was 10.46 s; peak RSS was 6,880,060 KiB; every attempt used zero swap.
+Every changed Lean file has a successful replay at its final SHA-256 and all
+four staged hashes match the worktree.
+
+The required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]` for `payload_eq_shift`, `Phi0_A`,
+`Phi0_sRem`, `hvzk_on_good` (3373), `badAlpha_density` (3371; also
+`badAlpha_card`, `card_pinned`), `zkfs_of_hvzk_on`, `zkfs_of_maskImageOn_good`
+(3376; also `middle_means_close`), together with `rounds_eval_of_vdeg`,
+`Phi0_roundInclusion_g`, `equalLaws_comp` (3373) and the three Z4Maps maps
+(3375). `GoodAlpha`, a definition, reports `[propext, Quot.sound]`. The source
+scan finds `Finset.univ` only over `Fin 10`, `Fin 10 → K`, the 28 Lagrange
+nodes and the bridge coin type; no row, state or `Fin 262144` universe is
+evaluated. Per-attempt data, raw audit lines, caps, toolchain lines and the
+final source manifest are in [t2a/evidence.json](t2a/evidence.json). The
+commit contains the four Lean sources, this LOG section and the evidence JSON;
+no binaries.

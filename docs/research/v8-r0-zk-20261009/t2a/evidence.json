@@ -1,0 +1,302 @@
+{
+ "job": "T2a — D17 shift (Ψ_ch), Good, statistical HVZK ledger term (D17.1, D17.2 items 1–10, D17′ placement)",
+ "base_revision": "bb44131caf6293417602b74655a77081e05143b1",
+ "branch": "codex/t2a-shift-good-20261010",
+ "host": "dombarker@100.108.41.90",
+ "workspace": "/home/dombarker/project-offloads/aspis-fs-generic-20261006 (sources/<Tree>/<Module>.lean -> objects2/, run2.sh, pinned compiled cache)",
+ "toolchain": {
+  "ELAN_TOOLCHAIN": "leanprover/lean4:v4.32.0",
+  "lean_version_line": "Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)",
+  "LEAN_GITHASH": "8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+  "mathlib_commit": "81a5d257c8e410db227a6665ed08f64fea08e997",
+  "mathlib_lean_toolchain": "leanprover/lean4:v4.32.0"
+ },
+ "caps": {
+  "MemoryHigh": "5G",
+  "MemoryMax": "7G",
+  "MemorySwapMax": "0",
+  "TasksMax": 128,
+  "timeout_seconds": 900,
+  "lean_M_limit_MB": 7000,
+  "lean_flags": "-j1 -M7000 -DElab.async=false",
+  "reservation_lines_observed": [
+   "reservation: populated 24 GiB + 7 GiB (attempts 3368-3371, 3374-3376 as printed by run2.sh)",
+   "reservation: populated 26 GiB + 7 GiB (attempt 3372-3373)"
+  ],
+  "limit_raised": false
+ },
+ "staging_check": "sha256 of all 100 worktree R0Z/*.lean and R0P/*.lean sources equal the staged copies in sources/R0Z and sources/R0P before the first attempt (host has three extra R0P files not in the worktree; irrelevant to this job).",
+ "dependency_order": [
+  "R0Z/GoodDensity",
+  "R0Z/Shift",
+  "R0Z/FsGood",
+  "R0Z/Z4Maps"
+ ],
+ "attempts": [
+  {
+   "attempt": 3367,
+   "target": "R0Z/GoodDensity",
+   "source_sha256": "d93a144e079c06b0305fa2177f1a87bbaffb29d6149972c75fa8611d46273553",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && flock /tmp/aspis-r0-lean.lock sh run2.sh 3367 R0Z/GoodDensity 7000 7",
+   "exit": null,
+   "time_exit_status": null,
+   "wall_seconds": null,
+   "peak_rss_kib": null,
+   "swaps": null,
+   "success": false,
+   "repair_made_if_failed": "Launch failure, no compilation: the launcher was wrapped in an outer `flock /tmp/aspis-r0-lean.lock`, but run2.sh takes the same lock internally, so the inner flock waited on the outer one. Killed after ~10 min; out-3367.log is empty and no time log exists. sha-3367.txt records the staged GoodDensity.lean (same hash as 3368). Rerun as 3368 without the outer flock.",
+   "axioms_output": []
+  },
+  {
+   "attempt": 3368,
+   "target": "R0Z/GoodDensity",
+   "source_sha256": "d93a144e079c06b0305fa2177f1a87bbaffb29d6149972c75fa8611d46273553",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3368 R0Z/GoodDensity 7000 7",
+   "exit": 1,
+   "time_exit_status": 1,
+   "wall_seconds": 3.85,
+   "peak_rss_kib": 6664236,
+   "swaps": 0,
+   "success": false,
+   "repair_made_if_failed": "Three local elaboration errors in GoodDensity.lean: (a) `right_inv` term needed `change` to beta-reduce the Equiv lambdas before `Fin.removeNth_insertNth`; (b) `Finset.card_union_le _ _` under `add_le_add_right` left the element type and its `DecidableEq` instance undetermined; (c) `field_simp` already closed the density goal, so the following `ring` had no goal. Repaired by `change`, explicit set arguments, and `div_eq_div_iff`+`ring`.",
+   "axioms_output": [
+    "'R0Z.Shift.GoodAlpha' depends on axioms: [propext, Quot.sound]",
+    "'R0Z.Shift.card_pinned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_density' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3369,
+   "target": "R0Z/GoodDensity",
+   "source_sha256": "6c35734f2a1c773b0bd96b7459681c46d01af4ea8fb4e4b6c7c508a290e7be1f",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3369 R0Z/GoodDensity 7000 7",
+   "exit": 1,
+   "time_exit_status": 1,
+   "wall_seconds": 3.18,
+   "peak_rss_kib": 6689372,
+   "swaps": 0,
+   "success": false,
+   "repair_made_if_failed": "Two residual errors: `Fin.insertNth`/`Fin.removeNth` needed the dependent family given explicitly (`(α := fun _ => K)`); the `card_union_le` instance problem persisted because the named-argument form was applied to the wrong lemma (the stuck call was the second `card_union_le`, not `card_biUnion_le`). Repaired by explicit `α` and explicit biUnion arguments.",
+   "axioms_output": [
+    "'R0Z.Shift.GoodAlpha' depends on axioms: [propext, Quot.sound]",
+    "'R0Z.Shift.card_pinned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_density' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3370,
+   "target": "R0Z/GoodDensity",
+   "source_sha256": "3ad1a65069785d1c3788e970855f86bb9f4dff1647b8474c960d99f7dd059a4e",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3370 R0Z/GoodDensity 7000 7",
+   "exit": 1,
+   "time_exit_status": 1,
+   "wall_seconds": 3.36,
+   "peak_rss_kib": 6688828,
+   "swaps": 0,
+   "success": false,
+   "repair_made_if_failed": "One error: `add_le_add_right` in this Mathlib adds on the left; replaced by `Nat.add_le_add_right`.",
+   "axioms_output": [
+    "'R0Z.Shift.GoodAlpha' depends on axioms: [propext, Quot.sound]",
+    "'R0Z.Shift.card_pinned' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_density' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3371,
+   "target": "R0Z/GoodDensity",
+   "source_sha256": "a4624e603bc89ad8761f6a2df6a50aecc45f7efa0c9d8abac535158beb90322f",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3371 R0Z/GoodDensity 7000 7",
+   "exit": 0,
+   "time_exit_status": 0,
+   "wall_seconds": 3.12,
+   "peak_rss_kib": 6717604,
+   "swaps": 0,
+   "success": true,
+   "repair_made_if_failed": null,
+   "axioms_output": [
+    "'R0Z.Shift.GoodAlpha' depends on axioms: [propext, Quot.sound]",
+    "'R0Z.Shift.card_pinned' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_card' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.badAlpha_density' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3372,
+   "target": "R0Z/Shift",
+   "source_sha256": "cd22c234be07bc77c7a0e6193319cbf050bb3f2e977182e9a164e0f2513f8ecf",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3372 R0Z/Shift 7000 7",
+   "exit": 1,
+   "time_exit_status": 1,
+   "wall_seconds": 10.46,
+   "peak_rss_kib": 6870664,
+   "swaps": 0,
+   "success": false,
+   "repair_made_if_failed": "Shift.lean first replay: `rounds` must be qualified as `PayloadSplit.rounds` (unknown identifier under autoImplicit false); `R0Z.LawTransport` must be imported for `mean_eq_of_equalLaws`; `dir` needed a `Payload K` ascription inside a lambda; two `rw` motives were not type correct because `↑(9 : Fin 10)` appears in dependent proof terms (`roundPoint_nine`) and in the implicit bound of `Fin.val` (`IsEmpty (Fin (9 - ↑9))`); `change`-based defeq unfolding of `PayloadSplit.L` and a term-mode unification against `originalRounds` hit Lean's recursion-depth diagnostic. Repaired by qualification, the import, the ascription, `dif_pos` with the hypothesis stated at `(9 : Fin 10).val`, `Fin.elim0 (Fin.cast h0 i)`, `simp only [PayloadSplit.L, LinearMap.pi_apply, ...]` with `claimsLinear extraLinear dotLinear honestClaims` locally irreducible (the PayloadSplit pattern), and an explicit `originalRounds_eq` rewrite. Lean's own `maxRecDepth` diagnostic text appears in out-3372.log; no option was added to any source.",
+   "axioms_output": [
+    "'R0Z.Shift.rounds_eval_of_vdeg' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.Phi0_A' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.Phi0_roundInclusion_g' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.Phi0_sRem' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.payload_eq_shift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.equalLaws_comp' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.hvzk_on_good' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3373,
+   "target": "R0Z/Shift",
+   "source_sha256": "253d7afbcc38f1295d5bd3231916762595bc2174cbd77ec57b7f153b91ed3b4a",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3373 R0Z/Shift 7000 7",
+   "exit": 0,
+   "time_exit_status": 0,
+   "wall_seconds": 7.48,
+   "peak_rss_kib": 6880060,
+   "swaps": 0,
+   "success": true,
+   "repair_made_if_failed": null,
+   "axioms_output": [
+    "'R0Z.Shift.rounds_eval_of_vdeg' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.Phi0_A' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.Phi0_roundInclusion_g' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.Phi0_sRem' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.payload_eq_shift' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.equalLaws_comp' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Shift.hvzk_on_good' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3374,
+   "target": "R0Z/FsGood",
+   "source_sha256": "e6b837115e0b40aff6867302a73ff571e1f7426ccc15cee9071cce4908e2e30a",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3374 R0Z/FsGood 7000 7",
+   "exit": 1,
+   "time_exit_status": 1,
+   "wall_seconds": 3.06,
+   "peak_rss_kib": 6821240,
+   "swaps": 0,
+   "success": false,
+   "repair_made_if_failed": "One error: `abs_of_nonneg (Nat.cast_nonneg _)` rewrote the numerator's absolute value instead of the denominator's; fixed by naming the cast `(Nat.cast_nonneg (α := ℚ) (Fintype.card R))`.",
+   "axioms_output": [
+    "'R0Z.FsGood.middle_means_close' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.FsGood.zkfs_of_hvzk_on' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R0Z.FsGood.zkfs_of_maskImageOn_good' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3375,
+   "target": "R0Z/Z4Maps",
+   "source_sha256": "5e92064e8f9f0f71a5da98a139f1dba8fa3b4463e40831e317f22246e0c63ceb",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3375 R0Z/Z4Maps 7000 7",
+   "exit": 0,
+   "time_exit_status": 0,
+   "wall_seconds": 3.77,
+   "peak_rss_kib": 6852540,
+   "swaps": 0,
+   "success": true,
+   "repair_made_if_failed": null,
+   "axioms_output": [
+    "'R0Z.Z4Maps.roundMaskMap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Z4Maps.silentRoundMaskMap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.Z4Maps.c1Map' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ]
+  },
+  {
+   "attempt": 3376,
+   "target": "R0Z/FsGood",
+   "source_sha256": "90633e6894255c957e53f1d930e539d86f9381b54578bf073312596a82850f1a",
+   "command": "cd /home/dombarker/project-offloads/aspis-fs-generic-20261006 && sh run2.sh 3376 R0Z/FsGood 7000 7",
+   "exit": 0,
+   "time_exit_status": 0,
+   "wall_seconds": 3.17,
+   "peak_rss_kib": 6857500,
+   "swaps": 0,
+   "success": true,
+   "repair_made_if_failed": null,
+   "axioms_output": [
+    "'R0Z.FsGood.middle_means_close' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.FsGood.zkfs_of_hvzk_on' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R0Z.FsGood.zkfs_of_maskImageOn_good' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ]
+  }
+ ],
+ "final_targets": [
+  {
+   "module": "R0Z/GoodDensity",
+   "attempt": 3371,
+   "exit": 0,
+   "wall_seconds": 3.12,
+   "peak_rss_kib": 6717604,
+   "swaps": 0
+  },
+  {
+   "module": "R0Z/Shift",
+   "attempt": 3373,
+   "exit": 0,
+   "wall_seconds": 7.48,
+   "peak_rss_kib": 6880060,
+   "swaps": 0
+  },
+  {
+   "module": "R0Z/Z4Maps",
+   "attempt": 3375,
+   "exit": 0,
+   "wall_seconds": 3.77,
+   "peak_rss_kib": 6852540,
+   "swaps": 0
+  },
+  {
+   "module": "R0Z/FsGood",
+   "attempt": 3376,
+   "exit": 0,
+   "wall_seconds": 3.17,
+   "peak_rss_kib": 6857500,
+   "swaps": 0
+  }
+ ],
+ "axioms_audit": {
+  "required": "[propext, Classical.choice, Quot.sound]",
+  "R0Z/GoodDensity@3371": [
+   "'R0Z.Shift.GoodAlpha' depends on axioms: [propext, Quot.sound]",
+   "'R0Z.Shift.card_pinned' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.badAlpha_card' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.badAlpha_density' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "R0Z/Shift@3373": [
+   "'R0Z.Shift.rounds_eval_of_vdeg' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.Phi0_A' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.Phi0_roundInclusion_g' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.Phi0_sRem' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.payload_eq_shift' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.equalLaws_comp' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Shift.hvzk_on_good' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "R0Z/Z4Maps@3375": [
+   "'R0Z.Z4Maps.roundMaskMap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Z4Maps.silentRoundMaskMap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.Z4Maps.c1Map' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "R0Z/FsGood@3376": [
+   "'R0Z.FsGood.middle_means_close' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.FsGood.zkfs_of_hvzk_on' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "'R0Z.FsGood.zkfs_of_maskImageOn_good' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "note": "GoodAlpha is a definition using only propext and Quot.sound; every required theorem (payload_eq_shift, Phi0_A, Phi0_sRem, hvzk_on_good, badAlpha_density, zkfs_of_hvzk_on, zkfs_of_maskImageOn_good) reports exactly [propext, Classical.choice, Quot.sound]."
+ },
+ "warnings_in_final_logs": {
+  "3371": "1 (unused section variable [Field K] in card_pinned)",
+  "3373": "24 (unused section variables, one unused simp argument, one never-executed fallback tactic in roundPoint_update); 0 errors",
+  "3375": 0,
+  "3376": 0
+ },
+ "source_scan": "grep for sorry|axiom|native_decide|admit|maxRecDepth|maxHeartbeats|decide over the four changed files: no occurrence. Finset.univ occurs only over Fin 10, Fin 10 → K (symbolic cardinalities), Fin 28 (Lagrange nodes) and the bridge coin type; no concrete row/state/Fin 262144/Fin 1024 universe is evaluated.",
+ "final_source_manifest": {
+  "docs/research/v8-r0-zk-20261009/lean/R0Z/GoodDensity.lean": "a4624e603bc89ad8761f6a2df6a50aecc45f7efa0c9d8abac535158beb90322f",
+  "docs/research/v8-r0-zk-20261009/lean/R0Z/Shift.lean": "253d7afbcc38f1295d5bd3231916762595bc2174cbd77ec57b7f153b91ed3b4a",
+  "docs/research/v8-r0-zk-20261009/lean/R0Z/FsGood.lean": "90633e6894255c957e53f1d930e539d86f9381b54578bf073312596a82850f1a",
+  "docs/research/v8-r0-zk-20261009/lean/R0Z/Z4Maps.lean": "5e92064e8f9f0f71a5da98a139f1dba8fa3b4463e40831e317f22246e0c63ceb"
+ },
+ "staged_hashes_match_manifest": true
+}

@@ -1,4 +1,5 @@
 import R0Z.D12
+import R0Z.Shift
 
 /-! Z4 opening move only: observation maps and unproved surjectivity targets.
 The targets below are propositions, not asserted theorems or certificates.
@@ -6,7 +7,7 @@ No rank computation or unrestricted ambient-surjectivity claim is made. -/
 set_option autoImplicit false
 noncomputable section
 namespace R0Z.Z4Maps
-open R0P R0Z.MaskLayout R0Z.HonestView R0Z.Partition R0Z.D12
+open R0P R0Z.MaskLayout R0Z.HonestView R0Z.Partition R0Z.D12 R0Z.Shift
 attribute [local instance] Classical.propDecidable
 variable {K CommitHandle : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
@@ -45,19 +46,22 @@ def c1Projection : Payload K →ₗ[F] (C1Cell → K) :=
 def c1Map (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : T K F →ₗ[F] (C1Cell → K) :=
   c1Projection.comp (A π B ch)
 
-/-- Z4 lemma statement for (i), including the zero-complement constraint.
-Only the actual remainder displacements are targets, not the entire ambient array. -/
+/-- Z4 lemma statement for (i′) on `Good`, including the zero-complement
+constraint: the target is the round projection of D14's remainder s(w,n) after
+Ψ_ch, not the entire ambient array. -/
 def roundMask_surjectivity (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) : Prop :=
-  ∀ ch w n, h.public w = x.1 →
-    ∃ m : silentMasks h.transport B ch, silentRoundMaskMap h.transport B ch m = g h B x w ch n
+  ∀ ch, Good ch → ∀ w n, h.public w = x.1 →
+    ∃ m : silentMasks h.transport B ch,
+      silentRoundMaskMap h.transport B ch m = roundProjection (F := F) (sRem h B x w ch n)
 
 /-- Z4 encoder-restriction lemma statement needed for (ii) beyond the mask
 lanes. This is the C1 part only: a proof still needs a compatible lift for the
-remaining components before it can establish full-payload clause (ii). -/
+remaining components before it can establish full-payload clause (ii′). Its C1
+projection does not see `dir`, so only the `Good` restriction is added. -/
 def c1_surjectivity (h : HonestProver K) (B : PackBasis F)
     (x : Statement K CommitHandle) : Prop :=
-  ∀ ch w w', h.public w = x.1 → h.public w' = x.1 →
+  ∀ ch, Good ch → ∀ w w', h.public w = x.1 → h.public w' = x.1 →
     c1Projection (F := F) (c h B x w ch - c h B x w' ch) ∈ LinearMap.range (c1Map h.transport B ch)
 
 #print roundMask_surjectivity
