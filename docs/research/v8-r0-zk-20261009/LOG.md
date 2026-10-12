@@ -3130,3 +3130,67 @@ and all R0P/R0/R0FS/R0C files untouched.
 (silent image)` on `Good` — from Z4c/Z5's lift family; its statement is
 written when T2b-1 lands. Both are research under the current verdict
 (PLAN, 2026-10-11): R0 and R1 have no deployment path; v7 stands.
+
+### User direction (2026-10-12): privacy continues as research — T2b-1 released; T2b-2a specified
+
+The user: "let's get privacy all the way through". The hold on T2b-1 (section
+above) is lifted; T2b-1 is issued as written there, attempts from 3377. The
+remaining sequence is T2b-2a (below) → T2b-2b (the spanning argument;
+statement written when 2a lands) → ZF1 (the ROM reduction and the `badMass
+Good ≤ 21/|K_α|` identification) → the closed privacy theorem for R0. One
+Lean job at a time on the host; the deployment verdict (PLAN, 2026-10-11)
+is unchanged.
+
+**Job T2b-2a (Lean; issued after T2b-1 lands).** Closed forms for pure-mask
+round images and the easy inclusion. New module `R0Z/PureRounds.lean`
+(imports `R0Z.Shift` and T2b-1's module); nothing else edited.
+
+1. **Easy inclusion.** `silent_mem_chain0 (m : M K F)
+   (hs : nonRound (F := F) ((A h.transport B ch).comp inlM m) = 0) :
+   (A h.transport B ch).comp inlM m ∈ Chain0 ch`. Route: the `.maskSum`
+   coordinate of `L (pureTrace m)` is `∑ bits, maskLinear π B (ofBool bits) (pureTrace m)`
+   and `rounds_initial` (T2b-1 Lemma B) identifies it with `p₀(0)+p₀(1)`,
+   so silence gives zero initial sum; `rounds_chain` for
+   `f := fun a => maskLinear π B a (pureTrace m)` (`maskLinear_vdeg`);
+   terminal by `Phi0_A` with `claimMask (A (m,0)) = 0` from silence
+   (`claimMask` reads only `.pointClaim 0 ·` and `.extraClaim 28`, which
+   `nonRound` retains).
+2. **Closed form for a mask-only lane.** With `w j := (3 + 22*j : K)` (the
+   coefficients of `maskLinear 0`), `e_c := maskOnlyFactorExponent c`,
+   `τ_c := towerBasis B ⟨(16+c) mod 4⟩`, and for a row `r : Fin 1024`
+   (bits `r_i`), `β_j(r) := ∑_{i<j} w i * alpha ch i + ∑_{i>j} w i * (r_i : K)`:
+   `pureRound_maskOnly (c : Fin 10) (u : Fin 1024 → K) (j : Fin 10) :
+   PayloadSplit.rounds ch j (fun a => τ_c * maskLinear 0 a ^ e_c * ∑ r, eq(a, r) * u r) =
+   ∑ r, u r • (τ_c * eqPrefix(alpha ch, r, j)) • ((if r_j then X else 1 − X) * (C (w j) * X + C (β_j r)) ^ e_c)`
+   where `eqPrefix(α, r, j) = ∏_{i<j} (if r_i then α_i else 1 − α_i)` and
+   `eq(a, r)` is the Boolean selector `honestClaims`/`eqwB` uses. Route:
+   `rounds_eval_of_vdeg` (degree ≤ e_c + 1 ≤ 22) and the Boolean tail sum
+   collapsing to the single tail equal to `r`'s high bits; then polynomial
+   extensionality on 28 nodes (`nodes_injOn`). State and prove the same for
+   G (`pureRound_G`: factor `1 + maskLinear 16 a ^ 26`, `w' j := 275 + 150*j`)
+   and for the Libra cells of D (`pureRound_libra (d : Fin 56)`: Z4c's table —
+   mask total `512·(2 if d=0 else 1)`; round j<m constant `2^(8−j)·(2 if d=0 else 1)`;
+   round j=m `2^(9−j)·X^d`; round j>m constant `2^(9−j)·α_m^d`, m = 8 for
+   d < 28 and 9 otherwise). Connect each to the honest view: the round-j
+   coordinates of `L π B ch (pureTrace B m)` for the tape `m` supported on
+   that lane equal the corresponding closed form applied to the lane's
+   balanced word (`maskOnlyColumns`/`dWord` apply `balance 0`; `h1Padding` is
+   not a mask lane; state the lemmas for the word after balance).
+3. **Silence in per-lane terms.** `mem_silentMasks_iff`: `nonRound (A (m,0)) = 0`
+   iff for every lane the four claim rows, the two OOD values and the opened
+   symbols at the queried fibres of that lane's word vanish and the
+   `.inactiveSum`, `.openingCoeff`, `.finalCoeff` coordinates vanish — stated
+   through the existing `linearPayload` cases, no new definitions.
+   Final target: the new module; `#print axioms` for the three closed forms
+   and `silent_mem_chain0`; standard caps and stop list.
+
+**T2b-2b (route, not yet a statement).** On `Good`, `Chain0 ch ⊆
+roundProjection (silent image)`: per round, the polynomials
+`(X or 1−X)·(w_j X + β)^{e}` over the available β (the tails) and e (ten
+exponents) together with G's degree-27 term and the Libra monomials span the
+degree-≤27 space, Vandermonde-style in β, with the leading coefficients
+nonzero because `w j ≠ 0` in characteristic 2³¹ − 1 and `α_j ∉ {0,1}`; the
+silence constraints are then satisfied by solving inside each lane's kernel
+(912-dimensional per M31 lane). Whether the argument is per round or global
+is decided from the closed forms; a numeric probe of the per-round
+triangular structure may precede the statement.
