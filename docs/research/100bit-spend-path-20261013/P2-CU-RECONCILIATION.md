@@ -72,6 +72,11 @@ The table CU columns are the one-run S2 transfer diagnostic program costs from `
 
 ## Reproduction and limits
 
+Run `python3 docs/research/100bit-spend-path-20261013/validate_p2_cu.py`
+from the worktree root. The root-reviewed script reconstructs every phase
+from the four raw remaining-CU marker streams and checks the published JSON,
+program subtotals, transaction totals and savings. This check passes.
+
 Baseline raw diagnostic receipts are copied at [`P2 tx1`](evidence/p2-cu-reconciliation/p2-transfer-tx1.json) and [`P2 tx2`](evidence/p2-cu-reconciliation/p2-transfer-tx2.json); pairing receipts are [`pairing tx1`](evidence/p2-cu-reconciliation/pairing-transfer-tx1.json) and [`pairing tx2`](evidence/p2-cu-reconciliation/pairing-transfer-tx2.json). Fixture metadata is copied alongside them. The original P2 report is retained at [`REPORT-P2 copy`](evidence/p2-cu-reconciliation/REPORT-P2.md); the S2 SBF build and diagnostic-command receipts are copied alongside it. The pairing diagnostic receipt records the exact remote command and NUC path. No new builds or measurements were run.
 
 This is a diagnostic cost reconciliation, not a capped acceptance outcome. It records no settlement, privacy, soundness, or release-gate conclusion.
