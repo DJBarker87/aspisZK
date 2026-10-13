@@ -3643,3 +3643,126 @@ give it; (4) the `badMass Good` identification — per α-round mass of
 `ordinary_mass`/`combinedOwn_law`, naming which `Params.σ` the semantic rounds
 14–23 use in `R0Obligations` and what is data there. List every gap or
 mismatch found. The lead fixes the ZF1 statements from this report.
+
+### Lead decision D20′ (2026-10-13) — ZF1-0 accepted; α lives in the QM31 subfield; the probes' batching field does not match the proved protocol; composition theorem to be restated
+
+ZF1-0 (`7aead2702` on `codex/zf1-inventory-20261013`, cherry-picked as
+`0120ebd64`; `zf1/INVENTORY-ZF1.txt`) is accepted as an inventory. Its two
+substantive findings were checked against the sources and both hold.
+
+**D20′.1 (the α-row field; corrects D20.2).** The semantic challenges are
+decoded by `semChal s = algebraMap QM31Exact WideExact (qm31Sample s)`
+(SemD2.lean:206), fixed for rows 0–24 by `hσsem` in `combined_fiat_shamirZ`
+(MaskFiatShamir.lean:124–125). So in the proved protocol `K = SemE =
+WideExact` but every semantic challenge, including the α-row (rows 15–24,
+`alpha ch i = ch.sem (15+i)`), lies in the QM31 subfield `K₄ ⊂ K`
+(`[K : K₄] = 2`, `[K₄ : F] = 4` for `F` the M31 pack field). D20.2's
+`span_F {1, α_0, …, α_4} = K` is therefore never satisfied and is withdrawn.
+The corrected picture: the mask words are `F`-valued (mask-only lanes) or
+`K₄`-valued (`pack4 B`: G, H1, D), the tower factors `τ_c ∈ K₄`, and with
+`α ∈ K₄^10` every round polynomial of the mask image has coefficients in
+`K₄`; `sRem` is `K₄`-valued too (all semantic challenges and trace values
+are). The spanning target is therefore
+`Chain0₄ ch := { v ∈ Chain0 ch : ∀ cell, v cell ∈ K₄ }`, an `F`-subspace of
+dimension `4·269 = 1076` — Z4c's number — and the refined predicate is
+`Good₂ ch := Good ch ∧ (∀ i, alpha ch i ∈ K₄) ∧ span_F {1, α_0, …, α_4} = K₄`
+(with the `Λ_5 = K₄` variant including the products `α_0 α_i` if the density
+must be sharper). Densities are over `K₄`, not `K`: the simple span condition
+fails with mass ≤ `(|F|²+|F|+1)·|F|^15/|K₄|^5 ≈ 2^-93`; the product-refined
+condition fails with mass `O(|F|^-4) ≈ 2^-124` (a 3-dimensional `F`-subspace
+of `K₄` containing 1 is never a subalgebra, so each product condition costs a
+factor `≈ 2/|F|`); the exact form is fixed in D21 after Z7. The α-law bound
+is `semChal_event` (SemD2.lean:225): `|bad|·(1+δ_Q)/P^4` with
+`δ_Q = P^4/256^32`; `badAlpha_density` (`21/|K|`) is the uniform-decoder
+idealisation and is not the protocol's bound. D20's row numbering
+("rounds 14–23") was the historical 31-row protocol's; the current 32-row
+`combinedProtocolZ` has η at row 14 and α at rows 15–24.
+
+**D20′.2 (batching field — a modelling gap in Z4b/Z4c/Z5 and Z7).** The
+opening challenges are `ch.opening j`, rows 27–30, decoded by
+`R0C.V3.DQ.σQ` (`gamma`/`ordinary`, ModuloField.lean:75–81) into
+`WideExact`, and `linearPayload` weights the PCS coordinates with them:
+`batchLinear π ch = ∑_c ch.opening 0 ^ c • …` (HonestView.lean:191),
+`.openingCoeff` through `relationLinear (openingWeights π ch)` with
+`ch.opening 1, 2`, `.finalCoeff` through `foldLinear (ch.opening 3)`, and
+`.inactiveSum` with `ch.opening 0 ^ c`. These functionals are `K`-valued on
+`K₄`-valued words: over `F` each is 8 conditions (2 over `K₄`). The Rust
+probes set `gamma = 7 ∈ QM31` (probe.rs:2387, 2448, 2558, 2716) and cancel
+the batched word with the D-lift `T_D = −γ^{c−28} t`, which is `K₄`-valued
+and cannot cancel a `WideExact`-weighted combination; with `γ ∈ K ∖ K₄` a
+zero batched word needs two `K₄`-valued lanes per row (G and D), which would
+consume G's round contributions. So the Z4c/Z5 silent-rank gate (1,076) and
+the (i′)/(ii′) passes certify a QM31-batching variant, not the proved
+protocol's payload. This does not touch T2a, T2b-1 or T2b-2a (stated for any
+`K`), but no spanning statement for the proved protocol is credible until the
+gate is redone. **Z8 (numeric; after Z7 reports):** re-run the silent-rank
+gate with `WideExact` batching challenges (aspis-core's `WideExact`
+arithmetic; `K`-valued functionals eliminated over `F` as 8 coordinates),
+with silence defined by the actual coordinates — `.openingCoeff` (7),
+`.finalCoeff` (256), `.inactiveSum`, and per lane `.pointClaim`,
+`.extraClaim`, `.ood`, `.opened` — not by the zero-batched-word proxy; report
+the silent rank against 1,076 = `dim_F Chain0₄` and the (i′)/(ii′) passes on
+5 vectors. **T2b-2b is HELD until Z7 and Z8 report**; D21 writes its
+statement from both.
+
+**D20′.3 (composition theorem; ZF1-0 gap G2).** `zkfs_of_hvzk_on` and
+`zkfs_of_maskImageOn_good` (FsGood.lean:97–98, 120–121) require
+`badMass P bridge adv x ≤ ε_bad` for **every** bridge; a constant-draw bridge
+at a bad challenge has `badMass = 1`, so the hypothesis forces `ε_bad ≥ 1`
+and the theorems are vacuous for the intended use. They are true but
+superseded. **Job ZF-A (Lean; after T2b-2a lands; one job at a time):** in
+`R0Z/FsStatement.lean` add
+
+```
+def ROMReductionWith (bridge : ROMBridge K CommitHandle Aux fs.Adversary)
+    (x) (ε_real ε_ideal : ℚ) : Prop :=
+  0 ≤ ε_real ∧ 0 ≤ ε_ideal ∧
+  ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
+    |mean (realTest h B outputs fs adv x w) - mean (middleReal h B outputs fs bridge adv x w)| ≤ ε_real ∧
+    |mean (middleIdeal h B outputs fs bridge adv x hx) - mean (idealTest h B outputs fs adv x hx)| ≤ ε_ideal
+theorem romReduction_iff : ROMReduction h B outputs fs x ε ↔
+  ∃ bridge ε_real ε_ideal, ROMReductionWith … bridge x ε_real ε_ideal ∧ ε_real + ε_ideal ≤ ε
+```
+
+and in `R0Z/FsGood.lean`
+
+```
+theorem zkfs_of_hvzk_on_bridge (P) (hh : HVZK_on P h B outputs x) (bridge) (ε_real ε_ideal ε_bad : ℚ)
+    (hr : ROMReductionWith h B outputs fs bridge x ε_real ε_ideal)
+    (hmass : ∀ adv, badMass P bridge adv x ≤ ε_bad) :
+    ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+theorem zkfs_of_maskImageOn_good_bridge : MaskImageOn Good h B x →
+    ROMReductionWith … bridge x ε_real ε_ideal → (∀ adv, badMass Good bridge adv x ≤ ε_bad) →
+    ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+```
+
+(the existing proofs transfer; `middle_means_close` is unchanged). The old
+theorems stay with a docstring "superseded by the `_bridge` forms (D20′.3)".
+
+**D20′.4 (ZF1 plan, from the inventory; statements fixed in D22).** The
+target protocol is the 32-row `combinedProtocolZ` with the four σ
+hypotheses of `combined_fiat_shamirZ` and `p.rounds = 32`
+(`R0Obligations` is the historical Z1 object). The FS experiments are built
+from `JointView.view`/`HonestView.run` and `ZkStatement.messages` (not from
+Z1's `honestRows`); the adversary is a deterministic post-proof oracle program
+`View → Program (Addr L) State Bool` (randomised adversaries follow by
+averaging over their coins outside `ZK_FS`, which quantifies over all
+adversaries — resolves G5). The bridge coins are the per-row absorb/squeeze/
+advance states, the row-31 chain states and a fresh table for the adversary's
+other reads; `draw` applies the row decoders to the squeeze coins; `extend`
+recomputes the prover's addresses from the view's messages and answers from
+the recorded states, else the fresh table. `ε_real = ε_ideal` is the mass of
+a repeated prover address (110 reads: 31·3 + 1 + 16), bounded through
+`lazyMean_eq_independentMean` on a collision-free variant plus an
+identical-until-bad step (G10); `complete_oracle_eq_independentMean` is not
+the right lemma because the adversary's re-reads break `FreshFrom` by design.
+`badMass Good ≤ 21·(1+δ_Q)/P^4` by `semChal_event` and independence of the
+bridge coins. Gaps to be closed inside ZF1: G3 (causality of `messages … i`
+in the challenge rows `< i`), G6 (a ZK duplex `Params` over
+`ZkStatement.Msg` with its own `enc`; statement binding and source bytes are
+D7, outside), G7 (`toChallenges` projection), G8 (byte/`Fin 256`
+conversions), G9 (`absorbA` injectivity), G10, G11 (`R0Z.mean` vs
+`OracleResampling.mean`). Order after T2b-2a: ZF-A → (Z7, Z8 → D21 →
+T2b-2b) → ZF1a (definitions, bridge, G3/G6/G7) → ZF1b (ε via freshness) →
+ZF1c (badMass). Research under the current verdict (PLAN, 2026-10-11): v7
+stands.
