@@ -4129,3 +4129,57 @@ co-author trailer or push.
 This closes T2b-2a only. Nothing proves, assumes or weakens `MaskImageOn
 Good`; no spanning or deployment claim follows. The deployment verdict is
 unchanged: v7 stands.
+
+### Lead acceptance of T2b-2a (2026-10-13); ZF-A released
+
+T2b-2a (`700dd4b4a` on `codex/t2b2a-purerounds-20261013`, one commit on
+`5ff677bf3`, cherry-picked as `1cdcbd22b`) is accepted. Reviewed against the
+statements fixed in "User direction (2026-10-12)" items 1–3 with T2b-2a′
+(mask-sum coordinate) and T2b-2a″ (Libra local degree):
+
+- **Statements.** `silent_mem_chain0` with exactly the non-round-silence
+  premise and no `Good`; `mem_silentMasks_iff` at coordinate level with
+  `.maskSum` and the eight retained groups; `pureRound_maskOnly`
+  (`τ_c = towerBasis ((16+c) mod 4)`, exponent `maskOnlyFactorExponent c`,
+  `w 0 j = 3+22j`, `β`, `eqPrefix` in the source's MSB-first `rowBits`
+  order, selector `selAt a r`); `pureRound_G` (`1 + maskLinear 16 ^ 26`,
+  `w 16 j = 275+150j`); `pureRound_libra` with `k = 8/9` and `e = d % 28`
+  for the point function `a ↦ a k ^ e`, plus `pureLibra_maskSum`
+  (`512·(2 if e = 0 else 1)`); and the honest-view bridges
+  `L_pure_maskOnly_coeff`, `L_pure_G_coeff`, `L_pure_libra_coeff`,
+  `L_pure_libra_maskSum`, stated for the words after `balance 0`
+  (`maskOnlyColumns`, balanced packed G, `dWord`), with the Libra unit
+  condition imposed on the transported word after balancing. Only `w`, `β`,
+  `eqPrefix` are new definitions. `Z4Maps` is imported only for `silentMasks`.
+- **Proof substance (lead inspection).** `power_rounds` is the generic closed
+  form: `rounds_eval_of_vdeg`, the symbolic tail collapse
+  (`selector_round_match/mismatch`, `tail_sum_selector`), the split
+  `w_j X + β_j(r)` (`linear_round_match`), and identification on the 28 nodes
+  (`polynomial_ext28`, `nodes_injOn`); degrees `e_c + 1 ≤ 22`
+  (`maskOnly_degree`) and 27 for G. The Libra form isolates one Boolean
+  coordinate by a tuple equivalence with symbolic cube cardinalities. Support
+  lemmas derive the trace support from the tape components rather than
+  assuming it. H1 padding is never a pure mask lane.
+- **Hard rules.** No `sorry`/`axiom`/`native_decide`/`admit`/`maxRecDepth`/
+  `maxHeartbeats`; one `decide` on `(28 : Fin 29) ≠ 27`; the only explicit
+  `Finset.univ` is over `Fin 10`; all row and cube sums symbolic. Only
+  `R0Z/PureRounds.lean`, the LOG section and `t2b2a/evidence.json` changed.
+- **Replay evidence (verified on the host).** Attempts 3395–3407, one module
+  at a time, `run2.sh` run directly, caps 5G/7G/swap 0/900 s, no cap raised;
+  105 unchanged modules hash-checked before 3395. Final attempt 3407: exit 0,
+  9.40 s, peak RSS 7,080,048 KiB, swaps 0; `evidence/sha-3407.txt` and the
+  staged copy match the committed source (`227c7f58…b704c4`); `out-3407.log`
+  carries nine `#print axioms` lines, each exactly
+  `[propext, Classical.choice, Quot.sound]`. Host counter: next 3408.
+
+**State of D17.3 (i′).** Proved: `sRem ∈ Chain0` (T2b-1, `alpha ch 9 ≠ 1/2`)
+and `A(silentMasks) ⊆ Chain0` (T2b-2a). Open: `Chain0₄ ⊆ A(silentMasks)` on
+`Good₂` (T2b-2b; design in progress per D20⁗) and clause (ii′). The numeric
+record (Z4c, Z5, Z7, Z8, Z8b) supports both on generic challenges for the
+proved protocol's payload.
+
+**ZF-A is released** as specified in D20′.3 (`ROMReductionWith`,
+`romReduction_iff`, `zkfs_of_hvzk_on_bridge`, `zkfs_of_maskImageOn_good_bridge`),
+base the commit carrying this section, attempts from 3408. Research under the
+current verdict (PLAN, 2026-10-13): v7 stands; R1 is a live candidate under
+G_R1.
