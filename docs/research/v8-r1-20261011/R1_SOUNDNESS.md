@@ -78,3 +78,88 @@ The lead writes each job's statement after reading the sources it touches;
 workers stop on any mismatch (the fixed-statement rule). No row is reported
 closed without the axiom audit and host receipts. No security claim is made
 in any artifact until G_R1.4 closes.
+
+### L1 completed — repeated-lift encoder lemmas (2026-10-13)
+
+Branch `codex/r1-l1-repeated-lift`, base
+`0782fa3a7a0e91092121ddc7dcb612b2beee92b5` (the completed ZF-A commit).
+The user explicitly authorized this base after a fresh fetch still placed
+`origin/v8-reference` at `4edacd5bd`, without the requested lead ZF-A
+acceptance. This job does not supply or infer that acceptance.
+
+The new [lean/R1/RepeatedLift.lean](lean/R1/RepeatedLift.lean) proves the
+statements L1.1–L1.6 fixed in `L1-L2-REPEATED-LIFT.md`, including the final
+`exactFinalLinear_descent_lift` witness, with no added or weakened premise.
+The five definitions and two abbreviations have the prescribed meanings:
+64 coefficients and 65,536 parent nodes; lift into coefficient slots divisible
+by four; projection onto those slots; natural-polynomial evaluation on
+`storedLine16X`; repetition on stored children; and the four-child average.
+
+The bit-shift proof uses `Nat.bitIndices_two_pow_mul` and `Chebyshev.T_mul`.
+The existing polynomial-level `naturalCoefficientPolynomial_eq_basisSum`
+and symbolic `fibreIndexEquiv 64` reindexing give the lift identity. The
+geometry uses `reverseBits_childIndex` and the existing `g_pow_2_31` to
+identify each child point's fourth power with its log-16 parent. `X_pow_four`
+then gives the embedded `T4` identity and `exactFinalLinear_lift`.
+
+For projection, the two opposite stored pairs follow from
+`X_zpow_add_halfTurn`; squaring the quarter-turn gives the opposite `T2`
+values. A generic ring identity cancels the three nonconstant low factors.
+Applying the existing `naturalCoefficientPolynomial_eval_radix4` at these
+nodes proves `exactFinalLinear_project`. Descent counts the image of
+`S × Fin 4` under `fibreIndexEquiv`: its size is `4 * S.card`, at least 256.
+Constancy and projection place this support in the agreement set, contradicting
+`exactFinalEncoder_overlap_cap`'s bound 255 unless the messages are equal.
+The witness is the zero coefficient lane. No large coordinate universe is
+enumerated.
+
+**Host setup and replay.** Used `dombarker@100.108.41.90`, workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`, Lean v4.32.0
+and the existing pinned Mathlib/cache. All 88 checked Wide/R0 modules and
+directly used AspisFormal source modules matched the authorized base before
+the first attempt and remained unchanged at the end. Before 3410, the new
+R1 tree was registered in a new host-root `lakefile.toml` with Wide, R0 and
+the path dependency AspisFormal; no root lakefile previously existed. The
+final registration selects submodules and explicitly qualifies the external
+library target as `AspisFormal/AspisFormal`. Both configuration versions and
+hashes are recorded in the evidence. The direct `run2.sh` environment and
+the existing `g15-lake-focus` configuration were unchanged.
+
+Attempts 3410–3421 ran `sh run2.sh N R1/RepeatedLift 7000 7` directly, one
+module at a time; the launcher took its own lock. Caps stayed at MemoryHigh
+5G, MemoryMax 7G, MemorySwapMax 0, TasksMax 128, timeout 900 s, Lean
+`-j1 -M7000 -DElab.async=false`. Every launch reported 24 GiB populated plus
+7 GiB, below 55 GiB. No package or dependency rebuild was started.
+
+3410 found a missing cached `V5FriReleasedLineGeometry.olean`; it was restored
+from an existing successful host build with identical source bytes and the
+same toolchain, with the source/object/receipt hashes recorded. 3416 reached
+Lean's internal memory limit while checking the concrete quartet calculation
+(peak RSS 7,169,228 KiB), and concrete coordinate doubling hit the heartbeat
+limit. The replacement isolates `doubledFactor_X_sq`, `doubledFactor_map` and
+`quartet_low_sum_generic` before applying them to the stored nodes. No cap
+was raised. Other failed attempts were local proof syntax, conditional
+rewriting, exponent coercion or finite-set notation repairs; no fixed
+statement changed.
+
+Focused stages passed at 3412 (L1.1–L1.2), 3415 (L1.3–L1.4), 3418 (L1.5)
+and 3420 (complete L1). Final attempt **3421** checks the exact committed
+source after making the specified source imports explicit: **exit 0,
+8.61 s wall, peak RSS 6,794,228 KiB, swaps 0**, with no diagnostics or
+warnings. Next host attempt: **3422**. No unchanged full regression was
+repeated.
+
+All three required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]`: `exactFinalLinear_lift`,
+`exactFinalLinear_project`, `exactFinalLinear_descent`. The five additional
+printed lift/geometry/witness lemmas have exactly the same axioms. The new
+source contains no `sorry`, `axiom` declaration, `native_decide`, `admit`,
+`maxRecDepth`, `maxHeartbeats` or `decide`. Its only explicit `Finset.univ`
+is over `Fin 4`. [r1/l1/evidence.json](r1/l1/evidence.json), in the T2b-1
+format, records every attempt, source identities, metrics, diagnostics,
+repairs, axioms and host receipt hashes. Only the new Lean file, this section
+and that evidence JSON are committed; no binaries, co-author trailer or push.
+
+L1 alone closes no ledger row. L2's matched-response wrapper, the round
+comparisons and all other pending obligations remain open. Verdict unchanged:
+v7 stands; R1 is a live candidate under G_R1.
