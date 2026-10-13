@@ -1,4 +1,5 @@
 import Mathlib.Data.Fintype.Card
+import Mathlib.AlgebraicTopology.SimplexCategory.Basic
 
 set_option autoImplicit false
 
@@ -7,6 +8,9 @@ namespace AspisWide.Cardinality
 /-- The cardinality of `Fin` is independent of the chosen enumeration.
 The full import environment can select a SimplexCategory enumeration for
 concrete dimensions; compare it symbolically with the standard instance. -/
+/- The cached exact decoder interfaces retain this enumeration in concrete
+`Fin` dimensions. Keep its defining module explicit here; the theorem below
+abstracts the resulting cardinality through its supplied `Fintype` instance. -/
 theorem card_fin_of_fintype (n : Nat) [finiteDomain : Fintype (Fin n)] :
     Fintype.card (Fin n) = n :=
   (@Fintype.card_congr (Fin n) (Fin n) finiteDomain (Fin.fintype n)

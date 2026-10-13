@@ -2,6 +2,7 @@ import Wide.BatchSeparation
 import Wide.MultiplicityThreeGS
 import Wide.EncoderLinearity
 import WideTower
+import Wide.Cardinality
 
 /-! Joint width-29 list bound, derived from the single-word theorem
 `exactInitialCloseCandidate_card_lt_101` by separating 101 tuples with one

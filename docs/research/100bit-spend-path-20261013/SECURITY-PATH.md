@@ -173,7 +173,10 @@ and bad-set-exclusion premises. Identifying the actual Rust functionals and
 verifier equations with this model, and composing semantic/query/Fiat--Shamir
 results, remain open. No uniqueness premise or conjectural OOD error is used.
 See `CONCRETE-BINDING.md` and `QUERY-BINDING.md` for the exact scope and
-NUC receipts. The query/residual field equations and independent-answer laws
+NUC receipts. The subsequent `LEAN-REUSE.md` checkpoint derives candidate
+subfield typing and the original point/extra/codeword-typing witness interface
+from the concrete opening, with explicit E-valued rows. Its full masked
+semantic and source instantiation is still pending. The query/residual field equations and independent-answer laws
 now compose, while semantic and shared-oracle instantiation remain open.
 
 ## Two-transaction settlement architecture

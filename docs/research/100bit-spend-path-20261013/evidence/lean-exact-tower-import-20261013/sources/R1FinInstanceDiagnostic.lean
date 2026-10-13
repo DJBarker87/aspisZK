@@ -1,0 +1,3 @@
+import Mathlib.AlgebraicTopology.SimplexCategory.Basic
+#check SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+#print axioms SimplexCategory.instFintypeToTypeOrderHomFinHAddNatLenOfNat

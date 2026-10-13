@@ -30,3 +30,11 @@ tensor weights with the explicit Boolean row functional, and proves the
 two-pad determinant/cancellation in a rootless quadratic extension. These
 strengthen components of the argument; the source, semantic, Fiat--Shamir
 and full privacy obligations listed above remain open.
+
+The next reuse checkpoint (`LEAN-REUSE.md`) derives field typing for every
+literal R1 candidate using the unchanged historical descent proofs, connects
+the D18 point rows to the original named R0 weights, and derives the
+point/extra/codeword-typing witness interface. The UInt64/UInt32 sampler pass
+also matches the Nat division model. These are checked component bridges;
+the complete masked semantic, source, shared-oracle and privacy conclusions
+remain open.

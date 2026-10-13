@@ -1,0 +1,171 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWordPass.lean:24:29: error: Application type mismatch: The argument
+  ih (UInt64.ofNat (machineStep r digit).2.toNat)
+has type
+  (machineProcess (UInt64.ofNat (machineStep r digit).2.toNat) digits).2.length = digits.length
+but is expected to have type
+  (machineProcess (machineStep r digit).2.toUInt64 digits).2 = digits
+in the application
+  congrArg List.length (ih (UInt64.ofNat (machineStep r digit).2.toNat))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWordPass.lean:89:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map ?m.245 (?m.246 :: ?m.247)
+in the target expression
+  r.toNat * B ^ (digits.length + 1) + numeral B (digit.toNat :: List.map UInt32.toNat digits) =
+    (r.toNat * B + digit.toNat) * B ^ digits.length + numeral B (List.map UInt32.toNat digits)
+
+digit : UInt32
+digits : List UInt32
+ih :
+  ∀ (r : UInt64),
+    r.toNat < P →
+      let output := machineProcess r digits;
+      output.1.toNat = (r.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+        numeral B (List.map UInt32.toNat output.2) =
+          (r.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+r : UInt64
+hr : r.toNat < P
+step : UInt32 × UInt32 := machineStep r digit
+next : UInt64 := UInt64.ofNat step.2.toNat
+hquot : (machineStep r digit).1.toNat = (r.toNat * 2 ^ 32 + digit.toNat) / P
+hrem : (machineStep r digit).2.toNat = (r.toNat * 2 ^ 32 + digit.toNat) % P
+hnext : next.toNat = step.2.toNat
+hnext_lt : next.toNat < P
+htail :
+  let output := machineProcess next digits;
+  output.1.toNat = (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+    numeral B (List.map UInt32.toNat output.2) =
+      (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+chunk : ℕ := r.toNat * B + digit.toNat
+tailInput : ℕ := step.2.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)
+total : ℕ := r.toNat * B ^ (digits.length + 1) + numeral B (List.map UInt32.toNat (digit :: digits))
+⊢ r.toNat * B ^ (digits.length + 1) + numeral B (digit.toNat :: List.map UInt32.toNat digits) =
+    (r.toNat * B + digit.toNat) * B ^ digits.length + numeral B (List.map UInt32.toNat digits)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWordPass.lean:116:55: error: unsolved goals
+digit : UInt32
+digits : List UInt32
+ih :
+  ∀ (r : UInt64),
+    r.toNat < P →
+      let output := machineProcess r digits;
+      output.1.toNat = (r.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+        numeral B (List.map UInt32.toNat output.2) =
+          (r.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+r : UInt64
+hr : r.toNat < P
+step : UInt32 × UInt32 := machineStep r digit
+next : UInt64 := UInt64.ofNat step.2.toNat
+hquot : (machineStep r digit).1.toNat = (r.toNat * 2 ^ 32 + digit.toNat) / P
+hrem : (machineStep r digit).2.toNat = (r.toNat * 2 ^ 32 + digit.toNat) % P
+hnext : next.toNat = step.2.toNat
+hnext_lt : next.toNat < P
+htail :
+  let output := machineProcess next digits;
+  output.1.toNat = (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+    numeral B (List.map UInt32.toNat output.2) =
+      (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+chunk : ℕ := r.toNat * B + digit.toNat
+tailInput : ℕ := step.2.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)
+total : ℕ := r.toNat * B ^ (digits.length + 1) + numeral B (List.map UInt32.toNat (digit :: digits))
+htotal : total = chunk * B ^ digits.length + numeral B (List.map UInt32.toNat digits)
+hquotChunk : step.1.toNat = chunk / P
+hremChunk : step.2.toNat = chunk % P
+hchunk : chunk = P * step.1.toNat + step.2.toNat
+htail_correct :
+  let output := machineProcess next digits;
+  output.1.toNat = (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+    numeral B (List.map UInt32.toNat output.2) =
+      (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+htailR : (machineProcess next digits).1.toNat = tailInput % P
+htailQ : numeral B (List.map UInt32.toNat (machineProcess next digits).2) = tailInput / P
+htailDiv : tailInput = P * (tailInput / P) + tailInput % P
+⊢ P * (step.1.toNat * B ^ digits.length) + (P * (tailInput / P) + tailInput % P) =
+    P * (step.1.toNat * B ^ digits.length) +
+      (P * ((P * (tailInput / P) + tailInput % P) / P) + (P * (tailInput / P) + tailInput % P) % P)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWordPass.lean:137:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  q ≥ 0
+  p ≥ 0
+  p - q ≥ 1
+  o ≥ 0
+  n - o ≥ 0
+  m ≥ 0
+  l ≥ 0
+  k ≥ 0
+  k - l - p ≤ 0
+  k - l + m ≥ 0
+  j ≥ 0
+  i ≥ 0
+  g ≥ 0
+  g + i - j ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e - m - p ≤ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+  a - g - i + j ≥ 1
+  a - p ≥ 1
+where
+ a := ↑P
+ b := ↑r.toNat
+ c := ↑(r.toNat * 2 ^ 32 + digit.toNat) / ↑P
+ d := ↑(r.toNat * 2 ^ 32 + digit.toNat) % ↑P
+ e := ↑(numeral B (List.map UInt32.toNat (digit :: digits)))
+ f := ↑chunk / ↑P
+ g := ↑r.toNat * ↑B
+ i := ↑digit.toNat
+ j := ↑P * ↑step.1.toNat
+ k := ↑step.2.toNat * ↑(B ^ digits.length)
+ l := ↑P * ↑(tailInput / P)
+ m := ↑P * ↑(step.1.toNat * B ^ digits.length + tailInput / P)
+ n := ↑total / ↑P
+ o := ↑step.1.toNat * ↑(B ^ digits.length)
+ p := ↑(P * (step.1.toNat * B ^ digits.length + tailInput / P) + tailInput % P) % ↑P
+ q := ↑total % ↑P
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWordPass.lean:140:6: error: unsolved goals
+case cons.right
+digit : UInt32
+digits : List UInt32
+ih :
+  ∀ (r : UInt64),
+    r.toNat < P →
+      let output := machineProcess r digits;
+      output.1.toNat = (r.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+        numeral B (List.map UInt32.toNat output.2) =
+          (r.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+r : UInt64
+hr : r.toNat < P
+step : UInt32 × UInt32 := machineStep r digit
+next : UInt64 := UInt64.ofNat step.2.toNat
+hquot : (machineStep r digit).1.toNat = (r.toNat * 2 ^ 32 + digit.toNat) / P
+hrem : (machineStep r digit).2.toNat = (r.toNat * 2 ^ 32 + digit.toNat) % P
+hnext : next.toNat = step.2.toNat
+hnext_lt : next.toNat < P
+htail :
+  let output := machineProcess next digits;
+  output.1.toNat = (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+    numeral B (List.map UInt32.toNat output.2) =
+      (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+chunk : ℕ := r.toNat * B + digit.toNat
+tailInput : ℕ := step.2.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)
+total : ℕ := r.toNat * B ^ (digits.length + 1) + numeral B (List.map UInt32.toNat (digit :: digits))
+htotal : total = chunk * B ^ digits.length + numeral B (List.map UInt32.toNat digits)
+hquotChunk : step.1.toNat = chunk / P
+hremChunk : step.2.toNat = chunk % P
+hchunk : chunk = P * step.1.toNat + step.2.toNat
+htail_correct :
+  let output := machineProcess next digits;
+  output.1.toNat = (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) % P ∧
+    numeral B (List.map UInt32.toNat output.2) =
+      (next.toNat * B ^ digits.length + numeral B (List.map UInt32.toNat digits)) / P
+htailR : (machineProcess next digits).1.toNat = tailInput % P
+htailQ : numeral B (List.map UInt32.toNat (machineProcess next digits).2) = tailInput / P
+htailDiv : tailInput = P * (tailInput / P) + tailInput % P
+htotalDiv : total = P * (step.1.toNat * B ^ digits.length + tailInput / P) + tailInput % P
+hremBound : tailInput % P < P
+totalQuotient : ℕ := step.1.toNat * B ^ digits.length + tailInput / P
+hquotTotal : total / P = totalQuotient
+hmodTotal : total % P = tailInput % P
+⊢ chunk / P * B ^ digits.length + tailInput / P = step.1.toNat * B ^ digits.length + tailInput / P
+exit=1

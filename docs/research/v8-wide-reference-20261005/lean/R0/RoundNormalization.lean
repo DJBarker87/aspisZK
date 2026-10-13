@@ -1,4 +1,5 @@
 import R0.Fold
+import R0.Dot
 
 /-! Historical counterexamples below refute only the unscaled form, corrected
 by owner decision in cd5eb4226. The quarter-scaled identities are current F5.
@@ -24,8 +25,6 @@ def quarter : K := (4 : K)⁻¹
 /-- The dual fold in the cited R370 theorem, without an added factor. -/
 def citedDualFold (alpha : K) (w : InitialMessage K) (d : Fin 256) : K :=
   ∑ t : Fin 4, w (childIndex d t) * alpha ^ ((4 - t.val) % 4)
-
-def dot {n : Nat} (q w : Fin n → K) : K := ∑ i, q i * w i
 
 /-- The polynomial with the source-kernel coefficients of R370/R653. -/
 def roundPolynomial (q w : InitialMessage K) : K[X] :=

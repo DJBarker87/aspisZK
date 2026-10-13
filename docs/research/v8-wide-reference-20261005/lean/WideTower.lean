@@ -1,4 +1,4 @@
-import AspisFormal.V5ComponentCQM31TowerExact
+import AspisV8R15.ExactTowerFinite
 
 /-!
 The wide challenge field for the R0 reference design: one more quadratic layer
@@ -8,7 +8,7 @@ Nothing here concerns a protocol, a sampler or an encoder.
 -/
 set_option autoImplicit false
 namespace AspisWideTower
-open AspisV5ComponentCQM31TowerExact
+open AspisV8R15.ExactTowerBase AspisV8R15.ExactTowerFinite
 
 /-- The generator `u` of QM31 over CM31. -/
 def wideU : QM31Exact := ⟨0, 1⟩

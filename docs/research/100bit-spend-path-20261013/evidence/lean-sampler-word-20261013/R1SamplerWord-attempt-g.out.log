@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:41:49: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:49:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:64:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.68 % ?m.69
+in the target expression
+  (UInt32.ofNat ((machineWord r d).toNat / (UInt64.ofNat P).toNat)).toNat = (r.toNat * 2 ^ 32 + d.toNat) / P
+
+r : UInt64
+d : UInt32
+hr : r.toNat < P
+hd : d.toNat < 2 ^ 32
+hq : (r.toNat * B + d.toNat) / P < B
+⊢ (UInt32.ofNat ((machineWord r d).toNat / (UInt64.ofNat P).toNat)).toNat = (r.toNat * 2 ^ 32 + d.toNat) / P
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:63:44: warning: This simp argument is unused:
+  UInt64.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [machineStep, UInt64.toNat_div,̵ ̵U̵I̵n̵t̵6̵4̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:78:4: error: Type mismatch: After simplification, term
+  hm32
+ has type
+  (r.toNat * 4294967296 + d.toNat) % P < 4294967296
+but is expected to have type
+  d.toNat = (r.toNat * 4294967296 + d.toNat) % P
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:79:4: error: Type mismatch
+  hm32
+has type
+  (r.toNat * B + d.toNat) % P < 2 ^ 32
+but is expected to have type
+  (machineWord r d).toNat < (UInt64.ofNat P).toNat
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:75:44: warning: This simp argument is unused:
+  UInt64.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [machineStep, UInt64.toNat_mod,̵ ̵U̵I̵n̵t̵6̵4̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SamplerWord.packNat_of_lt' depends on axioms: [propext, Quot.sound]
+'AspisR1.SamplerWord.packNat' depends on axioms: [propext, Quot.sound]
+'AspisR1.SamplerWord.packNat_lt_two63' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SamplerWord.machineWord_toNat' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SamplerWord.machineStep_quotient_toNat' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SamplerWord.machineStep_remainder_toNat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+UInt32.toNat_ofNat {n : ℕ} : (OfNat.ofNat n).toNat = n % 2 ^ 32
+UInt32.toNat_ofNat' {n : ℕ} : (UInt32.ofNat n).toNat = n % 2 ^ 32
+def UInt32.ofNat : ℕ → UInt32 :=
+fun n => { toBitVec := BitVec.ofNat 32 n }
+def UInt32.toNat : UInt32 → ℕ :=
+fun n => n.toBitVec.toNat
+exit=1

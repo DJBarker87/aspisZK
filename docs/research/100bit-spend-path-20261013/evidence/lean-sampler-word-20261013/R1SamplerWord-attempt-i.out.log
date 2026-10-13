@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:41:49: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  r.toNat % 2 ^ 64
+in the target expression
+  r.toNat <<< 32 % 18446744073709551616 ||| d.toNat = r.toNat * 4294967296 + d.toNat
+
+r : UInt64
+d : UInt32
+hr : r.toNat < P
+hd : d.toNat < 2 ^ 32
+hr64 : r.toNat < 2 ^ 64
+hd64 : d.toNat < 2 ^ 64
+hmul : r.toNat * 2 ^ 32 < 2 ^ 63
+hshift : r.toNat.shiftLeft 32 < 2 ^ 64
+⊢ r.toNat <<< 32 % 18446744073709551616 ||| d.toNat = r.toNat * 4294967296 + d.toNat
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:70:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerWord.lean:84:2: error: No goals to be solved
+'AspisR1.SamplerWord.packNat_of_lt' depends on axioms: [propext, Quot.sound]
+'AspisR1.SamplerWord.packNat' depends on axioms: [propext, Quot.sound]
+'AspisR1.SamplerWord.packNat_lt_two63' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SamplerWord.machineWord_toNat' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SamplerWord.machineStep_quotient_toNat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SamplerWord.machineStep_remainder_toNat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

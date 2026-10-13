@@ -31,7 +31,9 @@ theorem domain_circle (i : Fin 1048576) : (domainX (K := K) i)^2+(domainY (K := 
 theorem encoder_pair (q : InitialMessage K) : exactInitialEncoder q = pairWord (initialP0 q) (initialP1 q) := rfl
 
 theorem pairWord_zero (p r : K[X]) (u : Fin 262144) :
-    pairWord p r (childIndex u 0) = p.eval (exactCircleX u)+exactCircleY u*r.eval (exactCircleX u) := rfl
+    pairWord p r (childIndex u 0) = p.eval (exactCircleX u)+exactCircleY u*r.eval (exactCircleX u) := by
+  simp only [pairWord, domainX, domainY, exactCircleX, exactCircleY,
+    storedInitialCirclePoint20_child_zero]
 
 theorem pairWord_one (p r : K[X]) (u : Fin 262144) :
     pairWord p r (childIndex u 1) = p.eval (exactCircleX u)-exactCircleY u*r.eval (exactCircleX u) := by
