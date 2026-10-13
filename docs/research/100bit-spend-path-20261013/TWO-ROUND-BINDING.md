@@ -42,3 +42,19 @@ therefore 9396508281246 + 600 each, sampled in WideExact. The earlier first
 and second round source boundary identities, encoder/fold commutation,
 matching extraction, and full FS row instantiation remain to be connected.
 No work or grinding factor is used in these caps.
+
+## Focused formal progress
+
+`lean/RoundPairing.lean` now proves the generic degree-six, evaluation and
+coefficient-boundary identities for the exact quarter-scaled primal/dual
+formulas, including the `[0,3,2,1]` source permutation and Horner orders.
+`lean/TwoRoundComparison.lean` proves both finite-family 600-root bounds and
+the deterministic backward comparison using one candidate in the fixed
+family. Its final-evaluation, boundary and candidate premises remain explicit.
+Both compile on the NUC with only standard axioms; receipts are in
+`evidence/lean-round-pairing-20261013/` and
+`evidence/lean-two-round-comparison-20261013/`.
+
+This replaces those generic algebraic steps with checked lemmas. It does
+not supply the extracted candidate, the runtime-to-formula correspondence,
+prefix causality, or the Fiat--Shamir instantiation.

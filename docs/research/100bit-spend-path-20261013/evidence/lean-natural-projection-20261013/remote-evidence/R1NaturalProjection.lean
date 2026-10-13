@@ -1,0 +1,130 @@
+import AspisFormal.V5FriConcreteEncoderApplicability
+
+/-! Exact natural-basis identities for a four-lane sparse lift and its fibre
+mean projection. These are field/evaluator algebra only; they do not establish
+any protocol or encoder security property. -/
+
+set_option autoImplicit false
+
+noncomputable section
+
+namespace AspisR1
+
+open scoped BigOperators
+open AspisCircleTensorBinding
+open AspisV5FriConcreteEncoderCommutation
+open AspisV5FriConcreteEncoderApplicability
+
+variable {K : Type*} [Field K] [NeZero (2 : K)]
+
+/-- Embed an `n`-entry natural-basis vector into the low coefficient lane of a
+four-lane vector of width `4*n`, setting its other three lanes to zero. -/
+def sparseLift {n : Nat} (m : Fin n → K) : Fin (4 * n) → K := fun k =>
+  if slotIndex k = 0 then m (parentIndex k) else 0
+
+@[simp] theorem coefficientLane_sparseLift {n : Nat} (m : Fin n → K)
+    (slot : Fin 4) :
+    coefficientLane n slot (sparseLift m) =
+      if slot = 0 then m else 0 := by
+  funext i
+  simp [sparseLift, coefficientLane_apply]
+
+theorem sparseLift_injective {n : Nat} :
+    Function.Injective (sparseLift (K := K) (n := n)) := by
+  intro m₁ m₂ h
+  have h0 := congrArg (coefficientLane n 0) h
+  simpa using h0
+
+theorem sparseLift_add {n : Nat} (m₁ m₂ : Fin n → K) :
+    sparseLift (m₁ + m₂) = sparseLift m₁ + sparseLift m₂ := by
+  funext k
+  by_cases h : slotIndex k = 0 <;> simp [sparseLift, h]
+
+theorem sparseLift_smul {n : Nat} (c : K) (m : Fin n → K) :
+    sparseLift (c • m) = c • sparseLift m := by
+  funext k
+  by_cases h : slotIndex k = 0 <;> simp [sparseLift, h]
+
+theorem naturalCoefficientPolynomial_zero_eval {n : Nat}
+    (hn : 0 < n) (x : K) :
+    (naturalCoefficientPolynomial (fun _ : Fin n => (0 : K))).eval x = 0 := by
+  rw [naturalCoefficientPolynomial_eval_eq_sum hn]
+  simp
+
+/-- The polynomial of the sparse lift evaluates as the original polynomial
+at the twice-doubled point. -/
+theorem sparseLift_eval {n : Nat} (hn : 0 < n) (m : Fin n → K) (x : K) :
+    (naturalCoefficientPolynomial (sparseLift m)).eval x =
+      (naturalCoefficientPolynomial m).eval (doubledFactor x 2) := by
+  rw [naturalCoefficientPolynomial_eval_radix4 hn (sparseLift m) x]
+  simp_rw [coefficientLane_sparseLift]
+  rw [Fin.sum_univ_four]
+  simp [naturalCoefficientPolynomial_zero_eval hn]
+
+/-- Sum of the four natural-basis evaluations on a child fibre. The four
+child points have a common doubled parent, and the low-lane weights sum to
+four while the other three lane weights sum to zero. -/
+theorem natural_fibre_sum {n : Nat} (hn : 0 < n)
+    (a : Fin (4 * n) → K) (x0 x1 x2 parent : K)
+    (h0 : doubledFactor x0 1 = x2)
+    (h1 : doubledFactor x1 1 = -x2)
+    (h2 : doubledFactor x2 1 = parent) :
+    (∑ s : Fin 4,
+      (naturalCoefficientPolynomial a).eval (radix4ChildPoint x0 x1 s)) =
+      4 * (naturalCoefficientPolynomial (coefficientLane n 0 a)).eval parent := by
+  have hweight_sum (lane : Fin 4) :
+      (∑ s : Fin 4,
+        ![1, radix4ChildPoint x0 x1 s,
+          doubledFactor (radix4ChildPoint x0 x1 s) 1,
+          radix4ChildPoint x0 x1 s *
+            doubledFactor (radix4ChildPoint x0 x1 s) 1] lane) =
+        (if lane = 0 then (4 : K) else 0) := by
+    simp_rw [radix4ChildPoint_t2 x0 x1 x2 h0 h1]
+    fin_cases lane <;>
+      simp [Fin.sum_univ_four, radix4ChildPoint] <;> ring
+  simp_rw [naturalCoefficientPolynomial_eval_radix4 hn a]
+  simp_rw [radix4ChildPoint_t4 x0 x1 x2 parent h0 h1 h2]
+  rw [Finset.sum_comm]
+  simp_rw [← Finset.sum_mul, hweight_sum]
+  rw [Fin.sum_univ_four]
+  simp
+
+/-- The sparse lift of lane zero evaluates at each child point as the mean of
+the original polynomial's four child evaluations. The divisor is justified
+only by the explicit field hypothesis that four is nonzero. -/
+theorem naturalProjection_eval_fibre_mean {n : Nat} (hn : 0 < n)
+    (h4 : (4 : K) ≠ 0) (a : Fin (4 * n) → K)
+    (x0 x1 x2 parent : K)
+    (h0 : doubledFactor x0 1 = x2)
+    (h1 : doubledFactor x1 1 = -x2)
+    (h2 : doubledFactor x2 1 = parent) (slot : Fin 4) :
+    (naturalCoefficientPolynomial
+      (sparseLift (coefficientLane n 0 a))).eval (radix4ChildPoint x0 x1 slot) =
+      (∑ s : Fin 4,
+        (naturalCoefficientPolynomial a).eval (radix4ChildPoint x0 x1 s)) / 4 := by
+  calc
+    (naturalCoefficientPolynomial
+        (sparseLift (coefficientLane n 0 a))).eval (radix4ChildPoint x0 x1 slot) =
+        (naturalCoefficientPolynomial (coefficientLane n 0 a)).eval
+          (doubledFactor (radix4ChildPoint x0 x1 slot) 2) :=
+      sparseLift_eval hn _ _
+    _ = (naturalCoefficientPolynomial (coefficientLane n 0 a)).eval parent := by
+      rw [radix4ChildPoint_t4 x0 x1 x2 parent h0 h1 h2]
+    _ = (4 * (naturalCoefficientPolynomial (coefficientLane n 0 a)).eval parent) / 4 := by
+      field_simp [h4]
+    _ = (∑ s : Fin 4,
+        (naturalCoefficientPolynomial a).eval (radix4ChildPoint x0 x1 s)) / 4 := by
+      rw [natural_fibre_sum hn a x0 x1 x2 parent h0 h1 h2]
+
+#print axioms coefficientLane_sparseLift
+#print axioms sparseLift_injective
+#print axioms sparseLift_add
+#print axioms sparseLift_smul
+#print axioms naturalCoefficientPolynomial_zero_eval
+#print axioms sparseLift_eval
+#print axioms natural_fibre_sum
+#print axioms naturalProjection_eval_fibre_mean
+
+end AspisR1
+
+end

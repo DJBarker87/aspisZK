@@ -3,18 +3,18 @@ use alloc::{vec,vec::Vec};
 use aspis_core::{HashFn,field::{WideExact as E,M31,QM31 as K,CM31},r0::{self,CodeField,domain::{Point,FibreIndex},merkle,wire::FibreOpening,Message},state_only_hiding::StateOnlyHidingContext};
 use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
 use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
-use aspis_prover::{state_only_entropy::StateOnlyAttemptSecrets,state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore}};
-use crate::{transport::Variant,verifier::{Error,View},weights::{Weights,QUARTER,PERM},transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain},host_semantic::{BuiltSemantics,Column,Commitments},r1_wire::Error as SError};
-pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>}
+use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskNonceStore}};
+use crate::{transport::Variant,verifier::{Error,View},weights::{Weights,QUARTER,PERM},transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Column,Commitments},r1_wire::Error as SError};
+pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
 impl Commitments for Backend {
     fn c1(&mut self,columns:[Column<'_>;27])->Result<[u8;32],SError>{
         for (i,c) in columns.into_iter().enumerate(){self.messages[if i<26{i}else{28}]=match c {Column::Base(v)=>v.map(E::from_m31),Column::Extension(v)=>v.map(E::from_qm31)};}
-        let c=Commitment::new(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant).map_err(|_|SError::Public)?;
+        let c=if let Some(salts)=self.c1_salts.take(){Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant,salts)}else{Commitment::new(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant)}.map_err(|_|SError::Public)?;
         let root=c.root();self.c1=Some(c);Ok(root)
     }
     fn c2(&mut self,columns:[&[K;1024];2])->Result<[u8;32],SError>{
         for (i,c) in columns.into_iter().enumerate(){self.messages[26+i]=c.map(E::from_qm31);}
-        let c=Commitment::new(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant).map_err(|_|SError::Public)?;
+        let c=if let Some(salts)=self.c2_salts.take(){Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant,salts)}else{Commitment::new(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant)}.map_err(|_|SError::Public)?;
         let root=c.root();self.c2=Some(c);Ok(root)
     }
 }
@@ -42,14 +42,22 @@ fn tail_samples(hash:HashFn,seed:&[u8;32])->[K;56] {
     };
     core::array::from_fn(|_|K{c0:CM31::new(limb(),limb()),c1:CM31::new(limb(),limb())})
 }
+#[cfg(not(feature="private-leaf-salts"))]
 pub fn prove(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,variant:Variant,hash:HashFn,seed:&[u8;32])->Result<Vec<u8>,Error> {
     let masks=core::array::from_fn(|l|(0..1024).map(|r|M31(((l+16)*103+r*7+19)as u32)).collect());
     let mut dc=core::array::from_fn(|r|K{c0:CM31::new(M31(r as u32+3),M31(11)),c1:CM31::new(M31(17),M31(19))});
     dc[..56].copy_from_slice(&tail_samples(hash,seed));let d=variant.rows(&dc);
     let g=core::array::from_fn(|r|K::from_m31(M31(r as u32+5)));
-    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None};
+    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts:None,c2_salts:None};
     let sem=crate::host_semantic::build(public,compiled,&masks,&d,&g,&mut backend,hash,variant).map_err(|_|Error::Semantic)?;
-    prove_from_semantics(public,variant,hash,backend,sem)
+    prove_from_semantics(public,variant,hash,backend,sem,None)
+}
+
+/// Feature-enabled convenience API is deliberately fixture-only: it always
+/// emits fully masked P3 proofs and cannot fall back to the unsalted P2 path.
+#[cfg(feature="private-leaf-salts")]
+pub fn prove(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,variant:Variant,hash:HashFn,seed:&[u8;32])->Result<Vec<u8>,Error> {
+    prove_masked_fixture(public,compiled,variant,hash,seed).map(|(proof,_)|proof)
 }
 
 /// Checks describing the fixture mask constraints exercised before proving.
@@ -88,14 +96,49 @@ pub fn prove_masked_fixture(
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
     let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),fixture_secret(hash,b"UNPROVED:R1:fixture-mask-nonce",fixture_seed,&public_bytes,variant)?);
+    #[cfg(not(feature="private-leaf-salts"))]
     let binding=hash(&[b"UNPROVED:R1:full-mask-fixture",&public_bytes,&[variant.tag()],&context.encode()]);
+    #[cfg(feature="private-leaf-salts")]
+    let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
     let attempt=StateOnlyAttemptSecrets::deterministic_spend_fixture(
         context.mask_nonce,
         fixture_secret(hash,b"UNPROVED:R1:fixture-field-entropy",fixture_seed,&public_bytes,variant)?,
         fixture_secret(hash,b"UNPROVED:R1:fixture-leaf-seed",fixture_seed,&public_bytes,variant)?,
     );
     let mut nonce_store=InMemoryStateOnlyMaskNonceStore::default();
-    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,&mut nonce_store).map_err(|_|Error::Semantic)?;
+    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,&mut nonce_store)
+}
+
+/// Secure-source P3 host API. Callers must supply OS-generated attempt
+/// secrets and a durable nonce ledger; successful reservations happen before
+/// mask derivation and leaf-salt derivation. This is still an UNPROVED
+/// protocol: fresh entropy alone does not establish zero knowledge.
+#[cfg(feature="private-leaf-salts")]
+pub fn prove_masked_attempt(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    attempt:StateOnlyAttemptSecrets,
+    nonce_store:&mut DurableStateOnlyMaskNonceStore,
+)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
+    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+    let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
+    let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
+    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)
+}
+
+fn prove_masked_with_attempt(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    context:StateOnlyHidingContext,
+    binding:[u8;32],
+    attempt:StateOnlyAttemptSecrets,
+    nonce_store:&mut impl StateOnlyMaskNonceStore,
+)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
+    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(|_|Error::Semantic)?;
     let mut noised_c1=compiled.semantic_c1.clone();
     let applied=apply_pool_v1_pair_forest_mask_material_v1(&mut noised_c1,material).map_err(|_|Error::Semantic)?;
     let masks=pool_v1_pair_forest_copy_active_row_masks_v1().map_err(|_|Error::Semantic)?;
@@ -119,15 +162,32 @@ pub fn prove_masked_fixture(
         || !audit.g_inactive_balanced
         || !audit.h1_padding_inactive_balanced
     { return Err(Error::Semantic); }
-    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None};
+    #[cfg(feature="private-leaf-salts")]
+    let (c1_salts,c2_salts)=(Some(derive_private_salts(&reserved,context,hash,merkle::C1_TAG)?),Some(derive_private_salts(&reserved,context,hash,merkle::C2_TAG)?));
+    #[cfg(not(feature="private-leaf-salts"))]
+    let (c1_salts,c2_salts)=(None,None);
+    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};
     let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,hash,variant).map_err(|_|Error::Semantic)?;
     let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
     if !h1_total_balanced { return Err(Error::Semantic); }
     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
-    Ok((prove_from_semantics(public,variant,hash,backend,sem)?,audit))
+    #[cfg(feature="private-leaf-salts")]
+    let proof=prove_from_semantics(public,variant,hash,backend,sem,Some((&reserved,context)))?;
+    #[cfg(not(feature="private-leaf-salts"))]
+    let proof=prove_from_semantics(public,variant,hash,backend,sem,None)?;
+    Ok((proof,audit))
 }
 
-fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics)->Result<Vec<u8>,Error> {
+#[cfg(feature="private-leaf-salts")]
+fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8)->Result<PrivateSalts,Error> {
+    let mut salts=Vec::new();salts.try_reserve_exact(aspis_core::r0::FIBRE_COUNT).map_err(|_|Error::Allocation)?;
+    for index in 0..aspis_core::r0::FIBRE_COUNT {
+        salts.push(reserved.derive_pool_v1_leaf_salt(hash,context,tag,index as u32).map_err(|_|Error::Semantic)?);
+    }
+    Ok(PrivateSalts::new(salts))
+}
+
+fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics,salts:Option<(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext)>)->Result<Vec<u8>,Error> {
     let coefficients:Vec<Message<E>>=backend.messages.iter().map(|m|variant.coefficients(m)).collect();
     let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
     let y1=encoded(coefficients.iter().map(|m|r0::encoder::eval_message(m,z1)));
@@ -140,11 +200,26 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
     let weights=w.materialize(kappa)?;
     let c0=round(&q,&weights);let c0bytes=encoded(c0);
     let alpha0=t.scalar(29,&c0bytes,false);let q1=fold(&q,alpha0,false);let w1=fold(&weights,alpha0,true);
-    let mut folded_tree=None;let mut folded_word=Vec::new();let mut root=[0;32];let mut c1bytes=Vec::new();
+    let mut folded_tree=None;let mut folded_word=Vec::new();
+    #[cfg(feature="private-leaf-salts")]
+    let mut folded_salts=None;
+    let mut root=[0;32];let mut c1bytes=Vec::new();
     let final_message=if variant.folds()==2 {
         folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
         let mut leaves=Vec::with_capacity(1<<18);
-        for u in 0..1<<18 {let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};leaves.push(merkle::leaf(hash,0x72,&values));}
+        #[cfg(feature="private-leaf-salts")]
+        let (reserved,context)=salts.ok_or(Error::Semantic)?;
+        #[cfg(feature="private-leaf-salts")]
+        let folded_salts_value=derive_private_salts(reserved,context,hash,0x72)?;
+        for u in 0..1<<18 {let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};
+            #[cfg(feature="private-leaf-salts")]
+            let leaf=aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,folded_salts_value.get(u));
+            #[cfg(not(feature="private-leaf-salts"))]
+            let leaf=merkle::leaf(hash,0x72,&values);
+            leaves.push(leaf);
+        }
+        #[cfg(feature="private-leaf-salts")]
+        {folded_salts=Some(folded_salts_value);}
         let tree=merkle::Tree::new(hash,leaves).map_err(|_|Error::Allocation)?;root=tree.root();folded_tree=Some(tree);
         let c1=round(&q1,&w1);c1bytes=encoded(c1);
         let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
@@ -152,7 +227,12 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
     }else{q1};
     let fbytes=encoded(final_message.iter().copied());let row=if variant.folds()==1 {30}else{31};
     let queries=t.queries(row,&fbytes)?;let _rho=t.scalar_k(row+1,&[]);
-    let mut out=Vec::with_capacity(View::proof_bytes(variant));out.extend_from_slice(b"R1P2COST");out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
+    let mut out=Vec::with_capacity(View::proof_bytes(variant));
+    #[cfg(not(feature="private-leaf-salts"))]
+    out.extend_from_slice(b"R1P2COST");
+    #[cfg(feature="private-leaf-salts")]
+    out.extend_from_slice(b"R1P3COST");
+    out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
     assert_eq!(sem.bytes.len(),crate::verifier::SEMANTIC_BYTES);out.extend_from_slice(&sem.bytes);out.extend_from_slice(&y1);out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);
     if variant.folds()==2 {out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);}
     out.extend_from_slice(&fbytes);
@@ -162,9 +242,16 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
         backend.c1.as_ref().unwrap().fill_opening(u,&mut opening);backend.c2.as_ref().unwrap().fill_opening(u,&mut opening);
         for s in 0..4 {for l in (0..26).chain(core::iter::once(28)){out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..if l<26 {4}else{16}]);}}
         for s in 0..4 {for l in 26..28 {out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..16]);}}
+        #[cfg(feature="private-leaf-salts")]
+        {
+            out.extend_from_slice(backend.c1.as_ref().unwrap().opening_salt(u).unwrap());
+            out.extend_from_slice(backend.c2.as_ref().unwrap().opening_salt(u).unwrap());
+        }
         for path in opening.paths {for level in path {for digest in level {out.extend_from_slice(&digest);}}}
         if variant.folds()==2 {
             out.extend_from_slice(&encoded(folded_word[4*(u.get()/4)..4*(u.get()/4)+4].iter().copied()));
+            #[cfg(feature="private-leaf-salts")]
+            out.extend_from_slice(folded_salts.as_ref().unwrap().get(u.get()/4));
             for level in folded_tree.as_ref().unwrap().path(FibreIndex::new(u.get()/4).unwrap()){for digest in level{out.extend_from_slice(&digest);}}
         }
     }

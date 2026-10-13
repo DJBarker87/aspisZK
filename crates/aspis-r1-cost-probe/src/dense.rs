@@ -73,7 +73,11 @@ pub fn verify(public:Public<'_>,proof:&[u8],hash:HashFn)->Result<(),Error> {
     let b1=semantic_block(hash,&mut state,26,prefix.record(26).unwrap());let z1=sample::circle_sample(&b1,sample::CircleRow::Second);
     if z0==z1{return Err(Error::Semantic);}let z=[z0,z1];
     for (i,x) in [z0.x,z0.y,z1.x,z1.y].into_iter().enumerate(){trace::value(3,i,E::from_qm31(x));}
-    state=hash(&[b"UNPROVED:R1:COST-PROBE:P2",&[v.variant.tag()],&state]);
+    #[cfg(not(feature="private-leaf-salts"))]
+    let transcript_domain: &[u8]=b"UNPROVED:R1:COST-PROBE:P2";
+    #[cfg(feature="private-leaf-salts")]
+    let transcript_domain: &[u8]=b"UNPROVED:R1:PRIVATE-SALTED:P3";
+    state=hash(&[transcript_domain,&[v.variant.tag()],&state]);
     let gamma=scalar(hash,&mut state,27,v.y1,true);let kappa=scalar(hash,&mut state,28,&v.inactive.to_le_bytes(),false);
     let mut folding=vec![scalar(hash,&mut state,29,v.round0,false)];
     if v.variant.folds()==2 {let mut b=v.folded_root.unwrap().to_vec();b.extend_from_slice(v.round1);folding.push(scalar(hash,&mut state,30,&b,false));}
@@ -90,8 +94,19 @@ pub fn verify(public:Public<'_>,proof:&[u8],hash:HashFn)->Result<(),Error> {
     let mut batch_weights=vec![E::ZERO;final_message.len()];let mut rhs=E::ZERO;let mut rho_power=E::ONE;
     let roots=[*prefix.c1_root,prefix.payload(2).unwrap().try_into().unwrap()];
     for (i,&u) in queries.iter().enumerate() {
-        let q=v.query(i);let paths=core::array::from_fn(|t|core::array::from_fn(|d|core::array::from_fn(|s|q[608+t*1344+d*224+s*32..608+t*1344+d*224+s*32+32].try_into().unwrap())));
+        let q=v.query(i);
+        #[cfg(not(feature = "private-leaf-salts"))]
+        let path_start=608;
+        #[cfg(feature = "private-leaf-salts")]
+        let path_start=672;
+        let paths=core::array::from_fn(|t|core::array::from_fn(|d|core::array::from_fn(|s|q[path_start+t*1344+d*224+s*32..path_start+t*1344+d*224+s*32+32].try_into().unwrap())));
+        #[cfg(not(feature = "private-leaf-salts"))]
         let leaf=[merkle::leaf(hash,merkle::C1_TAG,&q[..480]),merkle::leaf(hash,merkle::C2_TAG,&q[480..608])];
+        #[cfg(feature = "private-leaf-salts")]
+        let leaf=[
+            hash(&[&[0x10,merkle::C1_TAG],&q[..480],&q[608..640]]),
+            hash(&[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]]),
+        ];
         if !merkle::verify_pair(hash,&roots,FibreIndex::new(u as usize).unwrap(),leaf,&paths){return Err(Error::Merkle);}
         let mut values=[E::ZERO;4];
         for s in 0..4 {
@@ -106,8 +121,11 @@ pub fn verify(public:Public<'_>,proof:&[u8],hash:HashFn)->Result<(),Error> {
         let mut folded=r0::fold::fold_fibre(folding[0],FibreIndex::new(u as usize).unwrap(),values).unwrap();trace::value(10,2*i,folded);
         if v.variant.folds()==2 {
             let b=&q[INITIAL_QUERY_BYTES..];let values=core::array::from_fn(|s|value(b,s));
-            let path=core::array::from_fn(|d|core::array::from_fn(|s|b[128+d*224+s*32..128+d*224+s*32+32].try_into().unwrap()));
-            let leaf=merkle::leaf(hash,0x72,&b[..128]);
+            #[cfg(not(feature = "private-leaf-salts"))]
+            let (path_at,leaf)=(128,merkle::leaf(hash,0x72,&b[..128]));
+            #[cfg(feature = "private-leaf-salts")]
+            let (path_at,leaf)=(160,hash(&[&[0x10,0x72],&b[..128],&b[128..160]]));
+            let path=core::array::from_fn(|d|core::array::from_fn(|s|b[path_at+d*224+s*32..path_at+d*224+s*32+32].try_into().unwrap()));
             if !merkle::verify_pair(hash,&[*v.folded_root.unwrap();2],FibreIndex::new(u as usize/4).unwrap(),[leaf;2],&[path;2])||values[u as usize%4]!=folded{return Err(Error::Query);}
             folded=second_fold(folding[1],u as usize,values);trace::value(10,2*i+1,folded);
         }

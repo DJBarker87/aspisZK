@@ -53,13 +53,25 @@ const ASPU_AUTHORITY: core::ops::Range<usize> = 8..40;
 const CHECKPOINT_TAIL_BYTES: usize = 1_768;
 const ASRU_MAGIC: [u8; 4] = *b"ASRU";
 const ASRU_BODY_BYTES: usize = POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES;
+#[cfg(not(feature = "private-leaf-salts"))]
 const PROFILE_BINDING: [u8; 32] = [
     0x78, 0x17, 0x1b, 0x56, 0x9e, 0xa7, 0xbc, 0xe5, 0x97, 0x63, 0xa2, 0xb5, 0x78, 0x81, 0x06, 0xa7,
     0x49, 0xbe, 0xd7, 0x47, 0x75, 0x6c, 0xf2, 0xd2, 0x00, 0x69, 0x99, 0x37, 0x92, 0x19, 0x13, 0xe9,
 ];
+#[cfg(not(feature = "private-leaf-salts"))]
 const RELEASE_BINDING: [u8; 32] = [
     0x45, 0x90, 0xcd, 0x06, 0x35, 0x37, 0xb3, 0xb0, 0x2f, 0xae, 0xb1, 0x0d, 0x9a, 0x7f, 0x39, 0x99,
     0x3f, 0xbe, 0x4b, 0xb6, 0x20, 0x30, 0x53, 0x32, 0x8d, 0x60, 0x0d, 0xbd, 0x48, 0x1c, 0xe0, 0x34,
+];
+#[cfg(feature = "private-leaf-salts")]
+const PROFILE_BINDING: [u8; 32] = [
+    0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,
+    0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3,
+];
+#[cfg(feature = "private-leaf-salts")]
+const RELEASE_BINDING: [u8; 32] = [
+    0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,
+    0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a,
 ];
 const AUDIT_POOL_PROGRAM: [u8; 32] = [0x41; 32];
 const AUDIT_REGISTRY_PROGRAM: [u8; 32] = [0x44; 32];
@@ -854,7 +866,7 @@ fn emit_result(statement: &PoolV1PairForestTerminalStatementV1) -> ProgramResult
 
 #[inline(never)]
 fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
-    if data != &[3, 10] || accounts.len() != 2 {
+    if data != &[3, 11] || accounts.len() != 2 {
         return Err(ProgramError::InvalidInstructionData);
     }
     let proof_account = &accounts[0];
@@ -914,7 +926,7 @@ fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
     {
         return Err(ProgramError::InvalidAccountData);
     }
-    let checkpoint = super::first(public_bytes, &proof_data[proof_start..proof_end], 10)?;
+    let checkpoint = super::first(public_bytes, &proof_data[proof_start..proof_end], 11)?;
     if checkpoint.len() != CHECKPOINT_TAIL_BYTES {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -976,7 +988,7 @@ pub(super) fn process(
         Some(4) => lifecycle_init(program_id, accounts, data),
         Some(5) => lifecycle_write(program_id, accounts, data),
         Some(6) => lifecycle_finalize(program_id, accounts, data),
-        _ if data == &[3, 10] => stage1(program_id, accounts, data),
+        _ if data == &[3, 11] => stage1(program_id, accounts, data),
         _ => stage2(program_id, accounts, data),
     }
 }

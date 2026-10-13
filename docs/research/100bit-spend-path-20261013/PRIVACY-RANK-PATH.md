@@ -108,10 +108,14 @@ soundness and verifier work unchanged. However it is not a complete shortcut:
 5. Commitment hiding and oracle-programming failure probabilities still need
    explicit bounds. A rank test alone does not make hash commitments hiding.
 
-The current cost harness deliberately uses reproducible insecure fixture
-entropy. It is unsuitable for a live private spend. Existing secure entropy
-and durable reservation APIs can be reused, but their integration here is
-not yet complete.
+The cost harness retains an explicitly insecure deterministic fixture mode.
+The default-off salted P3 path now also integrates OS-generated
+`StateOnlyAttemptSecrets` with durable nonce reservation. Fresh full-mask
+proofs have passed the native and actual Pool paths. The existing rank gate
+also passes on one such P3 proof using its actual transcript challenges:
+see `evidence/privacy-wide/proof-rank-gate-p3/`. Neither the publication rank
+guard nor the efficient simulator and abort-aware ROM proof is complete;
+the fresh entropy API does not make this a released private-spend protocol.
 
 The methodological warning about accepted and aborted transcripts is also
 consistent with [A Detailed Analysis of Fiat-Shamir with Aborts](https://eprint.iacr.org/2023/245.pdf).

@@ -87,3 +87,13 @@ compile in `lean/RepeatedLift.lean` (five standard-axiom audits). Its mean
 identity and encoder overlap remain explicit hypotheses; the concrete E256
 instantiation listed above is still pending. The exhaustive source lift gate
 is recorded in `evidence/second-fold-lift-v2/`.
+
+`lean/NaturalProjection.lean` now proves sparse-lift injectivity and
+linearity, the natural-basis radix-four evaluator identity, and the complete
+quartet mean identity. `lean/ParentSupport.lean` proves that the flat union
+of complete quartets has cardinality four times its parent support, contains
+the original support, and sends 9558 original coordinates to at least 2390
+parents. Both compile with standard axioms. Concrete stored-domain geometry,
+the polynomial-evaluator bridge, encoder overlap instantiation and the
+matched-response wrapper remain to be connected; the generic proofs do not
+silently assume those steps are complete.

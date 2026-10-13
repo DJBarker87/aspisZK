@@ -1,0 +1,2 @@
+import AspisFormal.V5FriConcreteEncoderApplicability
+#check AspisV5FriConcreteEncoderApplicability.naturalCoefficientPolynomial

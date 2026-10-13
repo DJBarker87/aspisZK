@@ -102,6 +102,25 @@ pub struct Commitment {
     messages: Vec<Message<E>>,
     words: Vec<Word>,
     tree: Tree,
+    private_salts: Option<PrivateSalts>,
+}
+/// Host-only secret salts retained until queried openings have been emitted.
+/// Drop overwrites the full salt buffer so salts for unopened leaves are not
+/// left in the allocator after proof construction.
+pub struct PrivateSalts(Vec<[u8; 32]>);
+impl PrivateSalts {
+    pub fn new(values: Vec<[u8; 32]>) -> Self { Self(values) }
+    pub fn get(&self, index: usize) -> &[u8; 32] { &self.0[index] }
+    fn len(&self) -> usize { self.0.len() }
+}
+impl Drop for PrivateSalts {
+    fn drop(&mut self) {
+        for salt in &mut self.0 {
+            // SAFETY: this buffer is uniquely owned while Drop runs.
+            unsafe { core::ptr::write_volatile(salt, [0; 32]); }
+        }
+        core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
+    }
 }
 impl Commitment {
     pub fn new(
@@ -111,7 +130,30 @@ impl Commitment {
         messages: &[Message<E>],
         variant: crate::transport::Variant,
     ) -> Result<Self, Error> {
+        Self::build(hash, domain, time, messages, variant, None)
+    }
+    pub fn new_salted(
+        hash: HashFn,
+        domain: &EncodingDomain,
+        time: CommitmentTime,
+        messages: &[Message<E>],
+        variant: crate::transport::Variant,
+        salts: PrivateSalts,
+    ) -> Result<Self, Error> {
+        Self::build(hash, domain, time, messages, variant, Some(salts))
+    }
+    fn build(
+        hash: HashFn,
+        domain: &EncodingDomain,
+        time: CommitmentTime,
+        messages: &[Message<E>],
+        variant: crate::transport::Variant,
+        private_salts: Option<PrivateSalts>,
+    ) -> Result<Self, Error> {
         if messages.len() != LANES {
+            return Err(Error::WrongLength);
+        }
+        if private_salts.as_ref().is_some_and(|salts| salts.len() != FIBRE_COUNT) {
             return Err(Error::WrongLength);
         }
         let indices: &[usize] = match time {
@@ -161,15 +203,12 @@ impl Commitment {
                     at += width;
                 }
             }
-            *digest = merkle::leaf(
-                hash,
-                if time == CommitmentTime::C1 {
-                    merkle::C1_TAG
-                } else {
-                    merkle::C2_TAG
-                },
-                &bytes[..at],
-            );
+            let tag = if time == CommitmentTime::C1 { merkle::C1_TAG } else { merkle::C2_TAG };
+            *digest = if let Some(salts) = private_salts.as_ref() {
+                aspis_core::state_only_private_merkle::private_leaf_hash(hash, tag, &bytes[..at], salts.get(u))
+            } else {
+                merkle::leaf(hash, tag, &bytes[..at])
+            };
         }
         Ok(Self {
             time,
@@ -177,6 +216,7 @@ impl Commitment {
             messages: saved,
             words,
             tree: Tree::new(hash, leaves)?,
+            private_salts,
         })
     }
     pub fn root(&self) -> [u8; 32] {
@@ -199,6 +239,9 @@ impl Commitment {
         } else {
             1
         }] = self.tree.path(u);
+    }
+    pub(crate) fn opening_salt(&self, u: FibreIndex) -> Option<&[u8; 32]> {
+        self.private_salts.as_ref().map(|salts| salts.get(u.get()))
     }
 }
 

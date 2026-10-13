@@ -16,6 +16,8 @@ use aspis_pool::{
     pool_v1_root_page_address, pool_v1_vault_authority_address,
     pool_v1_vault_token_account_address, POOL_V1_PAIR_EMPTY_ROOTS,
 };
+#[cfg(feature = "private-leaf-salts")]
+use aspis_prover::state_only_entropy::{DurableStateOnlyMaskNonceStore, StateOnlyAttemptSecrets};
 use aspis_prover::{
     r0_fixture::statement_public,
     v7_pair_forest_fixture::prepare_v7_pair_forest_transfer_fixture_v1, HOST_HASH,
@@ -106,13 +108,25 @@ const WRONG_RELEASE_BINDING: [u8; 32] = [0xee; 32];
 const R1_CHECKPOINT_BYTES: usize = 1_768;
 const LIFECYCLE_UPLOAD_CHUNK_BYTES: usize = 900;
 const TXV0_UPLOAD_CHUNK_BYTES: usize = 800;
+#[cfg(not(feature = "private-leaf-salts"))]
 const PROFILE_BINDING: [u8; 32] = [
     0x78, 0x17, 0x1b, 0x56, 0x9e, 0xa7, 0xbc, 0xe5, 0x97, 0x63, 0xa2, 0xb5, 0x78, 0x81, 0x06, 0xa7,
     0x49, 0xbe, 0xd7, 0x47, 0x75, 0x6c, 0xf2, 0xd2, 0x00, 0x69, 0x99, 0x37, 0x92, 0x19, 0x13, 0xe9,
 ];
+#[cfg(not(feature = "private-leaf-salts"))]
 const RELEASE_BINDING: [u8; 32] = [
     0x45, 0x90, 0xcd, 0x06, 0x35, 0x37, 0xb3, 0xb0, 0x2f, 0xae, 0xb1, 0x0d, 0x9a, 0x7f, 0x39, 0x99,
     0x3f, 0xbe, 0x4b, 0xb6, 0x20, 0x30, 0x53, 0x32, 0x8d, 0x60, 0x0d, 0xbd, 0x48, 0x1c, 0xe0, 0x34,
+];
+#[cfg(feature = "private-leaf-salts")]
+const PROFILE_BINDING: [u8; 32] = [
+    0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,
+    0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3,
+];
+#[cfg(feature = "private-leaf-salts")]
+const RELEASE_BINDING: [u8; 32] = [
+    0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,
+    0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a,
 ];
 
 struct Args {
@@ -122,6 +136,7 @@ struct Args {
     evidence: PathBuf,
     task_dir: PathBuf,
     reuse: Option<(PathBuf, PathBuf)>,
+    mask_entropy: MaskEntropy,
     scenario: Scenario,
     runtime_compute_limit: u64,
     transport: Transport,
@@ -179,6 +194,28 @@ enum Operation {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum MaskEntropy {
+    Fixture,
+    Os,
+}
+
+impl MaskEntropy {
+    fn label(self) -> &'static str {
+        match self {
+            Self::Fixture => "fixture",
+            Self::Os => "os",
+        }
+    }
+
+    fn source_label(self) -> &'static str {
+        match self {
+            Self::Fixture => "deterministic-fixture-source",
+            Self::Os => "OS getrandom via StateOnlyAttemptSecrets::generate",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum Scenario {
     Success,
     ProofRejection,
@@ -225,6 +262,7 @@ fn parse_args() -> Result<Args> {
          <evidence.json> <fresh-output-dir> <transfer|withdrawal> \
          [success|proof-rejection|wrong-release|stale-lane|replay|withdrawal-cpi-failure] \
          [--pairs N] [--reuse proof.bin public.bin] [--tx-version v0|v1] \
+         [--mask-entropy fixture|os] \
          (options may follow in either order)"
     );
     let operation = match args[5].as_str() {
@@ -234,6 +272,8 @@ fn parse_args() -> Result<Args> {
     };
     let mut scenario = None;
     let mut reuse = None;
+    let mut mask_entropy = MaskEntropy::Fixture;
+    let mut saw_mask_entropy = false;
     let mut pairs = 13u32;
     let mut saw_pairs = false;
     let mut tx_version = TxVersion::V1;
@@ -252,6 +292,23 @@ fn parse_args() -> Result<Args> {
                     PathBuf::from(&args[next_arg + 2]),
                 ));
                 next_arg += 3;
+            }
+            "--mask-entropy" => {
+                ensure!(
+                    !saw_mask_entropy,
+                    "--mask-entropy may be specified only once"
+                );
+                ensure!(
+                    next_arg + 1 < args.len(),
+                    "expected --mask-entropy fixture|os"
+                );
+                mask_entropy = match args[next_arg + 1].as_str() {
+                    "fixture" => MaskEntropy::Fixture,
+                    "os" => MaskEntropy::Os,
+                    _ => bail!("--mask-entropy must be fixture or os"),
+                };
+                saw_mask_entropy = true;
+                next_arg += 2;
             }
             "--pairs" => {
                 ensure!(!saw_pairs, "--pairs may be specified only once");
@@ -294,6 +351,15 @@ fn parse_args() -> Result<Args> {
         scenario != Scenario::WithdrawalCpiFailure || operation == Operation::Withdrawal,
         "withdrawal-cpi-failure requires withdrawal operation"
     );
+    ensure!(
+        mask_entropy != MaskEntropy::Os || reuse.is_none(),
+        "--mask-entropy os cannot be combined with --reuse"
+    );
+    #[cfg(not(feature = "private-leaf-salts"))]
+    ensure!(
+        mask_entropy != MaskEntropy::Os,
+        "--mask-entropy os requires the private-leaf-salts feature"
+    );
     let evidence = PathBuf::from(&args[3]);
     let task_dir = PathBuf::from(&args[4]);
     let runtime_compute_limit = u64::from(COMPUTE_UNIT_LIMIT);
@@ -306,6 +372,7 @@ fn parse_args() -> Result<Args> {
         evidence,
         task_dir,
         reuse,
+        mask_entropy,
         scenario,
         runtime_compute_limit,
         transport,
@@ -1372,6 +1439,8 @@ fn main() -> Result<()> {
         "refusing to overwrite R1 proof/public sidecars in {}",
         task_dir.display()
     );
+    #[allow(unused_mut)]
+    let mut mask_nonce_ledger_path: Option<PathBuf> = None;
     let (proof_body, masked_audit, fixture_kind) = if let Some((reuse_proof, reuse_public)) =
         &args.reuse
     {
@@ -1388,18 +1457,51 @@ fn main() -> Result<()> {
         write_new_file(&public_sidecar, &old_public)?;
         (old_proof, None, "explicit-reuse")
     } else {
-        let seed = [0x51; 32];
-        let (proof, audit) = prover::prove_masked_fixture(
-            statement_public(&terminal_statement),
-            &compiled,
-            Variant::S2,
-            HOST_HASH,
-            &seed,
-        )
-        .map_err(|error| anyhow!("generate deterministic masked S2 fixture: {error:?}"))?;
+        let (proof, audit, fixture_kind) = match args.mask_entropy {
+            MaskEntropy::Fixture => {
+                let seed = [0x51; 32];
+                let (proof, audit) = prover::prove_masked_fixture(
+                    statement_public(&terminal_statement),
+                    &compiled,
+                    Variant::S2,
+                    HOST_HASH,
+                    &seed,
+                )
+                .map_err(|error| anyhow!("generate deterministic masked S2 fixture: {error:?}"))?;
+                (proof, audit, "generated-masked-s2")
+            }
+            MaskEntropy::Os => {
+                #[cfg(feature = "private-leaf-salts")]
+                {
+                    let ledger_path = args.task_dir.join("mask-nonce-ledger");
+                    let mut nonce_store = DurableStateOnlyMaskNonceStore::open(&ledger_path)
+                        .with_context(|| {
+                            format!("open durable mask nonce ledger {}", ledger_path.display())
+                        })?;
+                    let attempt = StateOnlyAttemptSecrets::generate().map_err(|error| {
+                        anyhow!("generate fresh OS attempt secrets for masked S2 proof: {error:?}")
+                    })?;
+                    let (proof, audit) = prover::prove_masked_attempt(
+                        statement_public(&terminal_statement),
+                        &compiled,
+                        Variant::S2,
+                        HOST_HASH,
+                        attempt,
+                        &mut nonce_store,
+                    )
+                    .map_err(|error| anyhow!("generate OS-masked S2 attempt: {error:?}"))?;
+                    mask_nonce_ledger_path = Some(ledger_path);
+                    (proof, audit, "generated-os-masked-s2")
+                }
+                #[cfg(not(feature = "private-leaf-salts"))]
+                {
+                    bail!("--mask-entropy os requires the private-leaf-salts feature")
+                }
+            }
+        };
         write_new_file(&proof_sidecar, &proof)?;
         write_new_file(&public_sidecar, &full_public_bytes)?;
-        (proof, Some(audit), "generated-masked-s2")
+        (proof, Some(audit), fixture_kind)
     };
     ensure!(!proof_body.is_empty(), "R1 proof body is empty");
     ensure!(
@@ -1883,7 +1985,7 @@ fn main() -> Result<()> {
         let unsealed_stage1 = Instruction {
             program_id: address(&verifier_program),
             accounts: vec![meta(proof_key, true), meta(unsealed_public_key, false)],
-            data: vec![3, 10],
+            data: vec![3, 11],
         };
         let measure = failed_lifecycle_instruction_unchanged(
             &mut svm,
@@ -1916,7 +2018,7 @@ fn main() -> Result<()> {
     let stage1_instruction = Instruction {
         program_id: address(&verifier_program),
         accounts: vec![meta(proof_key, true), meta(public_key, false)],
-        data: vec![3, 10],
+        data: vec![3, 11],
     };
     let stage1_tx = transaction(&svm, &payer, stage1_instruction, args.tx_version)?;
     let stage1_bytes = wincode::serialize(&stage1_tx)?.len();
@@ -2322,6 +2424,18 @@ fn main() -> Result<()> {
         "scenario": args.scenario.label(),
         "fixture": {
             "kind": fixture_kind,
+            "mask_entropy_option": args.mask_entropy.label(),
+            "entropy_source": if fixture_kind == "explicit-reuse" {
+                "unknown-original-entropy"
+            } else {
+                args.mask_entropy.source_label()
+            },
+            "mask_mode": if fixture_kind == "explicit-reuse" {
+                "unknown-from-reused-proof"
+            } else {
+                "full-mask"
+            },
+            "mask_nonce_ledger_path": mask_nonce_ledger_path,
             "external_path": args.reuse.as_ref().map(|(proof, _)| proof),
             "proof_sidecar": proof_sidecar,
             "public_sidecar": public_sidecar,
@@ -2413,7 +2527,7 @@ fn main() -> Result<()> {
                 "stage1_reads_finalized_asru": true,
                 "negative_checks": lifecycle_negative_checks,
             },
-            "stage1_instruction_data": [3, 10],
+            "stage1_instruction_data": [3, 11],
             "stage1_serialized_transaction_bytes": stage1_bytes,
             "stage1_compute_units": stage1_measurement.compute_units,
             "stage1_error": stage1_measurement.error,

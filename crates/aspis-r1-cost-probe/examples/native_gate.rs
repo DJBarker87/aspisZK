@@ -3,6 +3,10 @@ use aspis_r1_cost_probe::{prover,dense,trace,transport::Variant,verifier::{self,
 use aspis_prover::HOST_HASH;
 use serde_json::json;
 use sha2::{Digest,Sha256};
+#[cfg(not(feature="private-leaf-salts"))]
+const FIXTURE_ENTROPY_LABEL: &str = "deterministic fixture-only K tail samples via rejection sampling";
+#[cfg(feature="private-leaf-salts")]
+const FIXTURE_ENTROPY_LABEL: &str = "deterministic fixture-only full-mask entropy and private leaf-salt seed; insecure fixture entropy";
 use std::{path::Path,fs};
 fn sha(b:&[u8])->String {format!("{:x}",Sha256::digest(b))}
 fn write(p:&Path,j:serde_json::Value){assert!(!p.exists());fs::write(p,serde_json::to_string_pretty(&j).unwrap()+"\n").unwrap();}
@@ -34,6 +38,7 @@ fn main(){
         assert!(!out.join("fixtures").join(format!("{name}.public.bin")).exists());
         fs::write(out.join("fixtures").join(format!("{name}.proof.bin")),&proof).unwrap();
         fs::write(out.join("fixtures").join(format!("{name}.public.bin")),&public).unwrap();
+        #[cfg(not(feature="private-leaf-salts"))]
         if v==Variant::S2&&fixture_source.is_none() {
             let prior=fs::read(out.parent().unwrap().join("S1/fixtures").join(format!("{name}.proof.bin"))).unwrap();
             assert_eq!(&proof[HEADER..HEADER+verifier::SEMANTIC_BYTES],&prior[HEADER..HEADER+verifier::SEMANTIC_BYTES],"shared semantic bytes changed");
@@ -67,8 +72,17 @@ fn main(){
         for i in 0..v.final_len() {offsets.push((format!("final-{i}"),offset+i*32));}offset+=v.final_len()*32;
         let width=(proof.len()-offset)/22;
         for i in 0..22 {
-            for (label,j) in [("c1-base",0),("c1-k",104),("c2-k",480),("c1-path",608),("c2-path",608+1344)]{offsets.push((format!("query-{i}-{label}"),offset+i*width+j));}
-            if v.folds()==2 {for (label,j) in [("folded-value",INITIAL_QUERY_BYTES),("folded-path",INITIAL_QUERY_BYTES+128)]{offsets.push((format!("query-{i}-{label}"),offset+i*width+j));}}
+            for (label,j) in [("c1-base",0),("c1-k",104),("c2-k",480)]{offsets.push((format!("query-{i}-{label}"),offset+i*width+j));}
+            #[cfg(not(feature="private-leaf-salts"))]
+            for (label,j) in [("c1-path",608),("c2-path",608+1344)]{offsets.push((format!("query-{i}-{label}"),offset+i*width+j));}
+            #[cfg(feature="private-leaf-salts")]
+            for (label,j) in [("c1-salt",608),("c2-salt",640),("c1-path",672),("c2-path",672+1344)]{offsets.push((format!("query-{i}-{label}"),offset+i*width+j));}
+            if v.folds()==2 {
+                #[cfg(not(feature="private-leaf-salts"))]
+                for (label,j) in [("folded-value",INITIAL_QUERY_BYTES),("folded-path",INITIAL_QUERY_BYTES+128)]{offsets.push((format!("query-{i}-{label}"),offset+i*width+j));}
+                #[cfg(feature="private-leaf-salts")]
+                for (label,j) in [("folded-value",INITIAL_QUERY_BYTES),("folded-salt",INITIAL_QUERY_BYTES+128),("folded-path",INITIAL_QUERY_BYTES+160)]{offsets.push((format!("query-{i}-{label}"),offset+i*width+j));}
+            }
         }
         for (label,offset) in offsets {
             let mut bad=proof.clone();bad[offset]^=1;
@@ -81,10 +95,16 @@ fn main(){
         let mut wrong_public=public.clone();wrong_public[0]^=1;assert!(verifier::tx2(&wrong_public,&proof,&checkpoint,HOST_HASH,None).is_err());
         cases.push(json!({"case":"checkpoint-public-binding","error":"rejected"}));
         assert!(cases.len()>=200);
+        #[cfg(feature="private-leaf-salts")]
+        {
+            let mut old_magic=proof.clone();old_magic[..8].copy_from_slice(b"R1P2COST");
+            assert!(verifier::tx1(fixture.public(),&public,&old_magic,11,HOST_HASH,None).is_err());
+            cases.push(json!({"case":"P2-magic-rejected","error":"rejected"}));
+        }
         write(&out.join(format!("{name}-mutations.json")),json!({"label":"UNPROVED COST PROBE","count":cases.len(),"cases":cases}));
-        write(&out.join("fixtures").join(format!("{name}.fixture.json")),json!({"label":"UNPROVED COST PROBE","fixture_mode":if fixture_source.is_some(){"reused"}else{"generated"},"fixture_source_dir":fixture_source.map(|p|p.display().to_string()),"proof_bytes":proof.len(),"proof_sha256":sha(&proof),"public_bytes":public.len(),"public_sha256":sha(&public),"entropy":"deterministic fixture-only K tail samples via rejection sampling","prover_seconds":prover_seconds}));
+        write(&out.join("fixtures").join(format!("{name}.fixture.json")),json!({"label":"UNPROVED COST PROBE","fixture_mode":if fixture_source.is_some(){"reused"}else{"generated"},"fixture_source_dir":fixture_source.map(|p|p.display().to_string()),"proof_bytes":proof.len(),"proof_sha256":sha(&proof),"public_bytes":public.len(),"public_sha256":sha(&public),"entropy":FIXTURE_ENTROPY_LABEL,"prover_seconds":prover_seconds}));
         records.push(json!({"fixture":name,"native_acceptance":true,"dense_acceptance":true,"all_challenge_weight_check_bytes_equal":true,"trace_count":actual_trace.len(),"trace_bytes":trace_bytes.len(),"trace_sha256":sha(&trace_bytes),"checkpoint_roundtrip":true,"checkpoint_bytes":checkpoint.len(),"proof_bytes":proof.len(),"mutations_rejected":cases.len(),"fixture_mode":if fixture_source.is_some(){"reused"}else{"generated"},"prover_seconds":prover_seconds}));
         std::println!("{}: honest acceptance, dense trace agreement, {} mutations rejected",name,cases.len());
     }
-    write(&out.join("native-gate.json"),json!({"label":"UNPROVED R1 COST PROBE","variant":args[1],"source_revision":std::env::var("ASPIS_SOURCE_REVISION").unwrap(),"fixture_mode":if fixture_source.is_some(){"reused"}else{"generated"},"fixture_source_dir":fixture_source.map(|p|p.display().to_string()),"fixtures":records}));
+    write(&out.join("native-gate.json"),json!({"label":if cfg!(feature="private-leaf-salts"){"UNPROVED P3 full-mask cost probe"}else{"UNPROVED R1 COST PROBE"},"variant":args[1],"source_revision":std::env::var("ASPIS_SOURCE_REVISION").unwrap(),"fixture_mode":if fixture_source.is_some(){"reused"}else{"generated"},"fixture_source_dir":fixture_source.map(|p|p.display().to_string()),"fixtures":records}));
 }

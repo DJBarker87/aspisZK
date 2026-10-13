@@ -7,8 +7,14 @@ use crate::{transport::Variant,weights::{self,Weights,field,powers,QUARTER},tran
 
 pub const SEMANTIC_BYTES:usize=12903+29*32;
 pub const HEADER:usize=16;
+#[cfg(not(feature = "private-leaf-salts"))]
 pub const INITIAL_QUERY_BYTES:usize=480+128+2*6*7*32;
+#[cfg(feature = "private-leaf-salts")]
+pub const INITIAL_QUERY_BYTES:usize=480+128+64+2*6*7*32;
+#[cfg(not(feature = "private-leaf-salts"))]
 pub const SECOND_QUERY_BYTES:usize=4*32+6*7*32;
+#[cfg(feature = "private-leaf-salts")]
+pub const SECOND_QUERY_BYTES:usize=4*32+32+6*7*32;
 pub const CHECKPOINT_FIXED:usize=16+32*3+64+32*4+16+88+160+64+32*2+16+32;
 #[derive(Debug,Clone,Copy,PartialEq,Eq)]
 pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation }
@@ -31,7 +37,11 @@ impl<'a> View<'a> {
     pub fn proof_bytes(v:Variant)->usize {HEADER+SEMANTIC_BYTES+29*32+32+7*32+if v.folds()==2 {32+7*32}else{0}+v.final_len()*32+22*(INITIAL_QUERY_BYTES+if v.folds()==2 {SECOND_QUERY_BYTES}else{0})}
     #[inline(never)]
     fn parse_shape(bytes:&'a[u8])->Result<Self,Error> {
-        if bytes.len()<HEADER||&bytes[..8]!=b"R1P2COST"||bytes[9..16].iter().any(|&x|x!=0) {return Err(Error::Parse);}
+        #[cfg(not(feature = "private-leaf-salts"))]
+        let magic = b"R1P2COST";
+        #[cfg(feature = "private-leaf-salts")]
+        let magic = b"R1P3COST";
+        if bytes.len()<HEADER||&bytes[..8]!=magic||bytes[9..16].iter().any(|&x|x!=0) {return Err(Error::Parse);}
         let v=Variant::from_tag(bytes[8]).ok_or(Error::Parse)?;
         if bytes.len()!=Self::proof_bytes(v) {return Err(Error::Parse);}
         let mut at=HEADER;
@@ -231,11 +241,25 @@ pub fn query(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:HashFn,ob
 #[inline(never)]
 fn query_with_geometry(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:HashFn,obs:Observer,geometry:&QueryGeometry)->Result<(),Error> {
     let i=a.next;let u=p.queries[i] as usize;let q=v.query(i);
-    let c1=merkle::leaf(hash,merkle::C1_TAG,&q[..480]);let c2=merkle::leaf(hash,merkle::C2_TAG,&q[480..608]);
-    if !merkle_path(hash,&p.roots[0],u,c1,&q[608..608+1344])||!merkle_path(hash,&p.roots[1],u,c2,&q[608+1344..INITIAL_QUERY_BYTES]) {return Err(Error::Merkle);}
+    #[cfg(not(feature = "private-leaf-salts"))]
+    let (c1,c2,path_at) = (merkle::leaf(hash,merkle::C1_TAG,&q[..480]),merkle::leaf(hash,merkle::C2_TAG,&q[480..608]),608);
+    #[cfg(feature = "private-leaf-salts")]
+    let (c1,c2,path_at) = (
+        aspis_core::state_only_private_merkle::private_leaf_hash(hash,merkle::C1_TAG,&q[..480],q[608..640].try_into().unwrap()),
+        aspis_core::state_only_private_merkle::private_leaf_hash(hash,merkle::C2_TAG,&q[480..608],q[640..672].try_into().unwrap()),
+        672,
+    );
+    if !merkle_path(hash,&p.roots[0],u,c1,&q[path_at..path_at+1344])||!merkle_path(hash,&p.roots[1],u,c2,&q[path_at+1344..INITIAL_QUERY_BYTES]) {return Err(Error::Merkle);}
     if p.variant.folds()==2 {
         let folded=&q[INITIAL_QUERY_BYTES..INITIAL_QUERY_BYTES+128];
-        if !merkle_path(hash,v.folded_root.unwrap(),u/4,merkle::leaf(hash,0x72,folded),&q[INITIAL_QUERY_BYTES+128..]) {return Err(Error::Merkle);}
+        #[cfg(not(feature = "private-leaf-salts"))]
+        let (leaf,path_offset)=(merkle::leaf(hash,0x72,folded),INITIAL_QUERY_BYTES+128);
+        #[cfg(feature = "private-leaf-salts")]
+        let (leaf,path_offset)=(
+            aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,folded,q[INITIAL_QUERY_BYTES+128..INITIAL_QUERY_BYTES+160].try_into().unwrap()),
+            INITIAL_QUERY_BYTES+160,
+        );
+        if !merkle_path(hash,v.folded_root.unwrap(),u/4,leaf,&q[path_offset..]) {return Err(Error::Merkle);}
     }
     mark(obs,Phase::Merkle(i));
     let dots=crate::fast_dots::four_dots(q,g);#[cfg(feature="detail-phases")]mark(obs,Phase::QueryPart(i,0));for s in 0..4 {crate::trace::value(9,4*i+s,dots[s]);}

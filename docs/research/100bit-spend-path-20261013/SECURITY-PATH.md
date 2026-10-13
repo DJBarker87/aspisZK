@@ -3,9 +3,10 @@
 This is a research candidate, not a released 100-bit private spend. The selected
 NUC k11 binary now fits two verification-and-settlement transactions for the
 tested ordinary and rollover Pool paths (13, 255 and 1,023 populated pairs).
-These runs use full masks with deterministic fixture entropy. The optional
-P3 salted-commitment path and fresh OS-entropy runtime measurements are still
-being checked. R1 soundness and actual-field privacy remain separate
+The optional P3 salted-commitment path also passes all six cases with fresh
+OS-generated full masks. Three independent mask draws for the same transfer
+statement fit, with a measured 284 CU stage-one spread and 171 CU terminal
+spread; these are finite measurements, not a constant-cost theorem. R1 soundness and actual-field privacy remain separate
 outstanding gates; a roughly 105-bit proposed per-oracle-query coefficient is
 not an implemented security theorem.
 
@@ -74,8 +75,11 @@ so the measured lift does not directly inhabit the actual mask tape. This is
 an additional reason not to treat the older rank experiments as a private-spend
 proof. The existing D19 spanning and witness-difference image obligations also
 remain open. The original cost prover uses deterministic partial fixture masks.
-The new `prove_masked_fixture` exercises the complete eligible-noise/H1-padding
-tape and full balanced D word, still with explicitly insecure fixture entropy.
+`prove_masked_fixture` exercises the complete eligible-noise/H1-padding tape
+and full balanced D word with explicitly insecure fixture entropy. The P3
+`prove_masked_attempt` path now uses reserved OS-generated attempt secrets
+and a durable nonce ledger; actual Pool runs exercise that path. Neither API
+contains a proved rank/publication guard or a full zero-knowledge theorem.
 
 Root's candidate repair uses the existing K-valued G and D jointly. Write
 Gcoef=gamma^27, Dcoef=gamma^28, and gc=gamma^c in the quadratic K-basis of E.
@@ -99,7 +103,8 @@ The fresh full-mask native gate passes transfer and withdrawal for S1/S2,
 including dense-verifier acceptance and all C1, G, D, and H1 balancing checks.
 Neither finite experiment establishes zero knowledge for arbitrary histories.
 
-The proof-driven rank gate also passes on the actual Pool transfer proof:
+The proof-driven rank gate also passes on the actual fresh-OS, salted P3
+Pool transfer proof (`evidence/privacy-wide/proof-rank-gate-p3/`):
 all 16 eligible C1 ranks 112, H1 padding rank 94/95, and silent-round rank
 1076. `PRIVACY-RANK-PATH.md` gives a universal lifting construction to pursue
 and records the additional obligations for an optional fail-closed honest
@@ -188,6 +193,24 @@ measured terminal CU at 13/255/1,023 pairs is respectively
 1,387,210 to 1,388,644 CU. These concrete cases fit the 1.4M cap; they do not
 prove a uniform maximum over all statements, masks or account histories.
 
-No live program was deployed and no funds were moved here. Task keys remain
-retained on the NUC; all measured proof entropy is deterministic fixture
-entropy and unsuitable for a private live spend.
+The default-off P3 feature adds private leaf salts and distinct proof,
+transcript, profile and release identities. Fresh-OS full-mask runs, on one
+frozen P3 ELF, report the following actual v0 transaction CU:
+
+| Populated pairs | Transfer tx1 | Transfer settle | Withdrawal tx1 | Withdrawal settle |
+|---|---:|---:|---:|---:|
+| 13 | 1,390,049 | 1,293,584 | 1,388,879 | 1,309,815 |
+| 255 | 1,389,907 | 1,359,784 | 1,388,574 | 1,375,920 |
+| 1,023 | 1,389,978 | 1,356,607 | 1,388,652 | 1,372,691 |
+
+Two additional independent OS draws for transfer/13 reach at most
+1,390,333 / 1,293,755 CU. The tightest observed headroom is 9,667 CU in tx1
+and 24,080 CU in settlement. The deterministic full-mask control is inside
+the observed OS-draw ranges. Proof mutation and a failed withdrawal CPI
+reject with byte-exact rollback. See the frozen source/artifact/run index in
+`evidence/p3-private-leaf-salts-20261013/RESULTS.json`.
+
+These measurements establish fit for the tested paths, including rollovers;
+they do not prove a uniform CU bound over all statements or a private-spend
+security claim. No live program was deployed and no funds were moved. Task
+keys and nonce ledgers remain retained on the NUC.

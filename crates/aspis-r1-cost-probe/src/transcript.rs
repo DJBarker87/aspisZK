@@ -5,7 +5,11 @@ use crate::transport::Variant;
 pub struct Transcript { pub state:[u8;32], hash:HashFn }
 impl Transcript {
     pub fn new(hash:HashFn, semantic_state:[u8;32], variant:Variant) -> Self {
-        Self { state:hash(&[b"UNPROVED:R1:COST-PROBE:P2",&[variant.tag()],&semantic_state]), hash }
+        #[cfg(not(feature = "private-leaf-salts"))]
+        let domain: &[u8] = b"UNPROVED:R1:COST-PROBE:P2";
+        #[cfg(feature = "private-leaf-salts")]
+        let domain: &[u8] = b"UNPROVED:R1:PRIVATE-SALTED:P3";
+        Self { state:hash(&[domain,&[variant.tag()],&semantic_state]), hash }
     }
     pub fn absorb(&mut self, row:u8, payload:&[u8]) {
         self.state=(self.hash)(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);

@@ -76,11 +76,11 @@ fn main() {
             fs::write(&proof_path, &proof).unwrap();
             fs::write(&public_path, &public_bytes).unwrap();
             let metadata = json!({
-                "label": "UNPROVED R1 COST PROBE; deterministic insecure masked fixture",
+                "label": if cfg!(feature = "private-leaf-salts") { "UNPROVED P3 full-mask deterministic fixture" } else { "UNPROVED R1 COST PROBE; deterministic insecure masked fixture" },
                 "variant": if variant == Variant::S1 { "S1" } else { "S2" },
                 "fixture": name,
-                "entropy": "deterministic fixture-only nonce, field entropy, and leaf seed; not production entropy",
-                "mask_binding": "host-only public derivation; not a production transcript binding",
+                "entropy": if cfg!(feature = "private-leaf-salts") { "deterministic fixture-only nonce, field entropy, and leaf-salt seed; not OS entropy" } else { "deterministic fixture-only nonce, field entropy, and leaf seed; not production entropy" },
+                "mask_binding": if cfg!(feature = "private-leaf-salts") { "P3 private-attempt binding; UNPROVED protocol" } else { "host-only public derivation; not a production transcript binding" },
                 "native_acceptance": true,
                 "dense_acceptance": true,
                 "mask_audit": {
@@ -105,10 +105,44 @@ fn main() {
         }
     }
 
+    #[cfg(feature = "private-leaf-salts")]
+    {
+        let fixture = aspis_prover::r0_fixture::prepare(false);
+        let public_bytes = aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1(
+            &fixture.statement,
+        ).unwrap();
+        let nonce = hash(&[b"UNPROVED:R1:P3:nonce-reuse-test", &public_bytes]);
+        let context = aspis_core::state_only_hiding::StateOnlyHidingContext::pool_v1_pair_forest_v1(
+            hash(&[&public_bytes]), nonce,
+        );
+        let binding = hash(&[
+            b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",
+            &public_bytes,
+            &[Variant::S1.tag()],
+            &context.encode(),
+        ]);
+        let field_entropy = hash(&[b"UNPROVED:R1:P3:nonce-reuse-field", &public_bytes]);
+        let leaf_seed = hash(&[b"UNPROVED:R1:P3:nonce-reuse-leaf", &public_bytes]);
+        let mut store = aspis_prover::state_only_hiding::InMemoryStateOnlyMaskNonceStore::default();
+        let first = aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::deterministic_spend_fixture(
+            nonce, field_entropy, leaf_seed,
+        );
+        first.reserve_and_build_pool_v1_pair_forest_mask_material_v1(
+            hash, binding, context, &mut store,
+        ).expect("first reservation builds mask material");
+        let replay = aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::deterministic_spend_fixture(
+            nonce, field_entropy, leaf_seed,
+        );
+        assert!(matches!(
+            replay.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash, binding, context, &mut store),
+            Err(aspis_prover::state_only_hiding::StateOnlyMaskBuildError::ReusedMaskNonce),
+        ), "replayed nonce is rejected before a second proof's mask material exists");
+    }
+
     write_new(
         &out.join("masked-fixture-gate.json"),
         &json!({
-            "label": "UNPROVED R1 COST PROBE; deterministic insecure masked fixtures",
+            "label": if cfg!(feature = "private-leaf-salts") { "UNPROVED P3 full-mask deterministic fixtures" } else { "UNPROVED R1 COST PROBE; deterministic insecure masked fixtures" },
             "fixture_count": records.len(),
             "fixtures": records,
         }),
