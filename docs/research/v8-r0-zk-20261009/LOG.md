@@ -4032,3 +4032,82 @@ to `L π B ch (pureTrace B m)` after `balance 0`) and items 1 and 3 (as
 corrected by T2b-2a′) are unchanged. Check: `d = 28` gives `e = 0`, `m = 9`,
 mask total `1024`, round-9 polynomial `1`, matching the counterexample.
 Research under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### T2b-2a completed — pure-mask round forms and the easy inclusion (2026-10-13)
+
+Implemented on `codex/t2b2a-purerounds-20261013`, rebased before the first
+commit onto `5ff677bf36be5af137b29f9bf09c819bfb29073c`. The accepted stops and
+corrections T2b-2a′ (retain the mask sum) and T2b-2a″ (Libra local degree)
+are recorded above and in `t2b2a/evidence.json.previous_stops`. The only new
+source is `R0Z/PureRounds.lean`. It imports `Shift` and `Chain`, plus
+`Z4Maps` solely to use its existing `silentMasks` submodule. No existing
+Lean module changed.
+
+**Easy inclusion and silence.** `silent_mem_chain0` has exactly the specified
+non-round-silence premise, with no `Good` premise. `A_pure` identifies the
+payload with `L (pureTrace m)`; `L_maskSum` and `rounds_initial` give its zero
+initial boundary, `rounds_chain` gives the nine internal boundaries, and
+`Phi0_A` with the silent point/extra claims gives the zero terminal value.
+`mem_silentMasks_iff` is T2b-2a′'s coordinate-level equivalence, including
+`.maskSum` and all eight listed groups of retained coordinates. Its proof
+only projects or reconstructs the existing non-round map.
+
+**Closed forms.** The only new definitions are `w`, `β` and `eqPrefix`.
+`w` is parameterized by the source family: `w_zero` gives `3+22j` and
+`w_sixteen` gives `275+150j`. `selector_round_match` and
+`selector_round_mismatch` prove that each row's equality selector leaves
+exactly its matching Boolean tail. `linear_round_match` splits the weighted
+linear form into `w_j X + β_j(r)`. `power_rounds` applies
+`rounds_eval_of_vdeg`, collapses the tail sum symbolically, and identifies
+the polynomial on the 28 distinct nodes using `nodes_injOn`.
+`pureRound_maskOnly` and `pureRound_G` specialize this formula, including
+G's added constant 1. The mask-only functional and polynomial degree is
+at most `e_c+1`, and `maskOnly_degree` proves `e_c+1 ≤ 22`; G's bound is 27.
+
+`pureRound_libra` uses coordinate 8 or 9 and local degree `d.val % 28`.
+A generic tuple equivalence isolates one Boolean coordinate; symbolic cube
+cardinality supplies the powers of two. `pureLibra_maskSum` proves the
+`512*(if e=0 then 2 else 1)` total. No Boolean cube, row universe, field or
+literal registry is enumerated.
+
+**Connection to the honest view.** The word lemmas identify `pureTrace`'s
+mask-only, G and D lanes with `maskOnlyColumns`, balanced packed G, and
+`dWord`, respectively. Raw-support lemmas prove the required trace support
+from the tape components, including zero G/D or mask-only components as
+appropriate; support is not an unproved premise of the final bridges.
+`L_pure_maskOnly_coeff`, `L_pure_G_coeff` and `L_pure_libra_coeff` identify
+the actual `.semanticCoeff j i` coordinates with the closed forms. For
+Libra the unit-coefficient condition is imposed on the transported word
+**after** `balance 0`; `L_pure_libra_maskSum` connects its total as well.
+H1 padding is never treated as a pure mask lane.
+
+**Replay.** Before attempt 3395, all 105 unchanged R0Z/R0P modules matched
+the staged host hashes, including `TerminalEligible` and `Chain`. All 13
+attempts (3395–3407) ran one module at a time in the pinned host workspace,
+with `sh run2.sh N R0Z/PureRounds 7000 7` run directly, never under an outer
+flock. Caps: MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0, TasksMax 128,
+timeout 900 s, Lean `-j1 -M7000 -DElab.async=false`. The reported populated
+reservation was 24 GiB plus this job's 7 GiB, below the 55 GiB safe limit.
+No cap changed. Lean v4.32.0 and the pinned cache were reused.
+
+Nine attempts failed during elaboration; four stages passed. Repairs were
+local projection/unfolding control, dependent-index normalization, or proof
+syntax; no statement or premise was weakened. Final attempt 3407: exit 0,
+9.40 s wall, peak RSS 7,080,048 KiB, swaps 0. Across all attempts the maximum
+wall time was 16.97 s and maximum RSS was 7,080,048 KiB; every attempt had
+zero swaps. [t2b2a/evidence.json](t2b2a/evidence.json) records source hashes,
+commands, metrics, diagnostics, repairs and host receipt hashes. No unchanged
+full regression was repeated.
+
+All four required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]`: `silent_mem_chain0`,
+`pureRound_maskOnly`, `pureRound_G`, `pureRound_libra`. The corrected silence
+equivalence and all four final honest-view bridges were also audited with
+exactly those axioms. No prohibited proof escape or resource option occurs;
+the sole `decide` is `(28 : Fin 29) ≠ 27`; the sole explicit `Finset.univ`
+is over `Fin 10` in the weighted linear-form degree lemma. No binaries,
+co-author trailer or push.
+
+This closes T2b-2a only. Nothing proves, assumes or weakens `MaskImageOn
+Good`; no spanning or deployment claim follows. The deployment verdict is
+unchanged: v7 stands.
