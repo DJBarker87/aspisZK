@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:29:0: warning: automatically included section variable(s) unused in theorem `AspisR1.TwoRoundPairing.round0_bad_card_le_600`:
+  [Fintype T]
+  [DecidableEq T]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype T] [DecidableEq T] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:41:0: warning: automatically included section variable(s) unused in theorem `AspisR1.TwoRoundPairing.round1_bad_card_le_600`:
+  [Fintype T]
+  [DecidableEq T]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype T] [DecidableEq T] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:81:18: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Field ℕ
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:83:4: error: Type mismatch
+  inv_ne_zero h4
+has type
+  Ne.{u_1 + 1} 4⁻¹ 0
+but is expected to have type
+  Ne.{1} 4⁻¹ 0
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:125:47: error(lean.unknownIdentifier): Unknown identifier `hquarter`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:134:27: error(lean.unknownIdentifier): Unknown identifier `hquarter`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:142:8: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Field.mk` has 12 explicit field, but only 2 were provided
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:142:9: error: Application type mismatch: The argument
+  hcomp.left
+has type
+  p0 = round0Truth q w t
+but is expected to have type
+  autoParam (∀ (a b : ℕ), a / b = a * b⁻¹) DivInvMonoid.div_eq_mul_inv._autoParam
+in the application
+  @Field.mk ℕ ?m.460 ?m.461 ?m.462 ?m.463 ⋯
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:142:18: error: Invalid `⟨...⟩` notation: The expected type `∀ (a : ℕ), a ^ 0 = 1` is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:142:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  CommRing ℕ
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1TwoRoundPairing.lean:80:50: error: unsolved goals
+case refine_2
+K : Type u_1
+T : Type u_2
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Fintype T
+inst✝ : DecidableEq T
+n : ℕ
+h4 : 4 ≠ 0
+ts : Finset T
+q : T → Fin (4 * (4 * n)) → K
+w : Fin (4 * (4 * n)) → K
+t : T
+ht : t ∈ ts
+p0 p1 : K[X]
+alpha0 alpha1 claim : K
+f : Fin n → K
+hgood0 : alpha0 ∉ TwoRoundComparison.comparisonBad ts p0 (round0Truth q w)
+hgood1 : alpha1 ∉ TwoRoundComparison.comparisonBad ts p1 (round1Truth alpha0 q w)
+hextract : f = RoundPairing.primalFold alpha1 (RoundPairing.primalFold alpha0 (q t))
+hfinal : eval alpha1 p1 = RoundPairing.dot f (RoundPairing.dualFold alpha1 (RoundPairing.dualFold alpha0 w))
+haccepted1 : TwoRoundComparison.boundary p1 = RoundPairing.quarter * eval alpha0 p0
+haccepted0 : TwoRoundComparison.boundary p0 = RoundPairing.quarter * claim
+hquarter : RoundPairing.quarter ≠ 0
+⊢ p0 = round0Truth q w t ∧ p1 = round1Truth alpha0 q w t ∧ claim = RoundPairing.dot (q t) w
+'AspisR1.TwoRoundPairing.round0_bad_card_le_600' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.TwoRoundPairing.round1_bad_card_le_600' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.TwoRoundPairing.two_round_pairing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

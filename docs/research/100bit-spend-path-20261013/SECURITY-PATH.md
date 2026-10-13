@@ -145,9 +145,14 @@ therefore matches t. Circle points enter as arbitrary fixed functionals:
 no list-to-unique collision probability is charged. Subfield descent and
 the existing list-aware semantic extraction then apply to t.
 
-This is a proof design, not yet a compiled R1 binding theorem. It still needs
-the exact second-fold code/commutation/restoration instance, both round
-polynomial comparisons, and the source/Fiat--Shamir re-instance. It avoids
+The generic direct-functional comparison now compiles in
+`lean/JointFunctionalBinding.lean`: it derives the discrepancy polynomials
+and all per-lane consequences, with the 16,800/600 bounds.
+`lean/TwoRoundPairing.lean` also derives both true round boundaries from
+the specified folds and performs the two comparisons. This is not yet a
+compiled R1 binding theorem: it still needs the exact second-fold
+code/commutation/restoration instance, identification with the concrete joint
+list and functionals, and the source/Fiat--Shamir re-instance. It avoids
 assuming a unique decoded message or charging a conjectural OOD error.
 
 ## Two-transaction settlement architecture

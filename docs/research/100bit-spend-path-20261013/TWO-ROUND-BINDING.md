@@ -58,3 +58,13 @@ Both compile on the NUC with only standard axioms; receipts are in
 This replaces those generic algebraic steps with checked lemmas. It does
 not supply the extracted candidate, the runtime-to-formula correspondence,
 prefix causality, or the Fiat--Shamir instantiation.
+
+`lean/TwoRoundPairing.lean` now composes those lemmas with the specified
+primal and quarter-scaled dual folds. It derives the true boundaries and
+final evaluation identity internally, and recovers the original pairing
+from a final vector extracted by two folds. Extraction itself remains a
+premise. `lean/JointFunctionalBinding.lean` proves the subsequent gamma/kappa
+comparison for six linear functionals on 29-entry tuples, including the
+actual discrepancy-polynomial construction, coefficient identities and
+16,800/600 bounds. The tuple family is an explicit input; identifying it
+with the concrete committed-word list is the remaining instantiation.
