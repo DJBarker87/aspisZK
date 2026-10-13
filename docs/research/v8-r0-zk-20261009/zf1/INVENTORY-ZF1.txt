@@ -1,0 +1,956 @@
+ZF1-0 — inventory and proposal (no proofs)
+==========================================
+
+Specification: LOG.md, "### Lead decision D20 (2026-10-13)", paragraph "ZF1-0".
+Base: 70d116093 (origin/v8-reference). Branch codex/zf1-inventory-20261013.
+Method: source reading only. No Lean was run, no Lean file was edited.
+"Axioms" below means: whether the file contains a `#print axioms` line for
+the object, and, where the LOG records the replay result, that result. I did
+not re-run any audit.
+
+Path abbreviations
+  R0Z  = docs/research/v8-r0-zk-20261009/lean/R0Z
+  FS2  = docs/research/v8-fs-generic-20261006/lean/FS2
+  FS   = docs/research/v8-fs-generic-20261006/lean/FS
+  R19  = docs/research/v8-full-view-zk-20260912/lean/AspisV8R19
+  APC  = docs/research/v8-full-view-zk-20260912/lean/AspisV8PairedCommitment
+  R0C  = docs/research/v8-r0-close-20261007/lean/R0C
+  R0P  = docs/research/v8-r0-sem-proof-20261008/lean/R0P
+  R0FS = docs/research/v8-r0-fs-20261006/lean/R0FS
+
+
+######################################################################
+PART 1 — INVENTORY
+######################################################################
+
+----------------------------------------------------------------------
+1.A  Headline answers
+----------------------------------------------------------------------
+
+(i) Field of the semantic alpha-row, and which Params.sigma decodes it.
+
+  * The challenge TYPE is SemE := WideExact (R0P/SemD3Glue.lean:528,
+    `abbrev SemE := WideExact`), |WideExact| = P^8 (R0C/ModuloField.lean:34,
+    `digitsField : (Fin 8 → Fin P) ≃ WideExact`), P = 2^31-1.
+
+  * The challenge VALUES of every semantic row are NOT uniform over
+    WideExact. In every proved soundness theorem the semantic decoder is fixed
+    by hypothesis to `semChal`, whose image is the QM31 subfield:
+      R0P/SemD2.lean:206
+        def semChal (s : State) : WideExact :=
+          algebraMap AspisV5ComponentCQM31TowerExact.QM31Exact WideExact (qm31Sample s)
+      R0P/SemD2.lean:183-184
+        def qm31Sample (s : State) : AspisV5ComponentCQM31TowerExact.QM31Exact :=
+          qm31Rank (R0C.ModuloCounting.reduce (by norm_num [P]) (blockRank s))
+    Masked 32-row protocol (the current schedule), R0P/MaskFiatShamir.lean:123-129
+    (`combined_fiat_shamirZ`) and R0P/MaskD2Instance.lean:18 (`combinedProtocolZ_D2`):
+        (hσsem : ∀ (i : Nat) (_hi : i < 25) (s : State),
+          p.σ i s = R0C.SemStatement.Chal.semantic (semChal s))
+        (hσz0 : ∀ s : State, p.σ 25 s = R0C.SemStatement.Chal.circle (circleSample0 s))
+        (hσz1 : ∀ s : State, p.σ 26 s = R0C.SemStatement.Chal.circle (circleSample1 s))
+        (hσopen : ∀ (j : Fin 4) (s : State),
+          p.σ (27+j.val) s = R0C.SemStatement.Chal.opening (R0C.V3.DQ.σQ j.val s))
+    Old 31-row protocol, R0P/SemDuplexDensity.lean:120-125 (`combinedChainDensity`):
+    the same with `i < 24`, circle at 24/25, opening at 26+j.
+    So alpha rows (masked rows 15..24; old rows 14..23) are decoded by
+    `semChal`, i.e. they lie in the image of QM31 → WideExact (P^4 elements).
+    R0P/MaskD2.lean:66 says this explicitly: "is P^4, as in SemD2.semChal_mass
+    (208-223), not card SemE = P^8."
+    The circle samplers are also QM31-parameterised
+    (R0P/CircleSampler.lean:188-189, `circleSampleParameter0/1 (qm31Sample s)`).
+
+  * `R0C.V3.DQ.σQ` / `R0C.ModuloField.ordinary` / `gamma` decode ONLY the
+    opening scalar rows: σQ 0 = gamma (nonzero, WideExact) at masked row 27
+    (old 26), σQ (k+1) = ordinary (WideExact) at masked rows 28..30
+    (old 27..29). They also appear as the `σ` of `openingParams(At)` used
+    inside the final q22 chain, whose output is computed by `out4`, not by σ.
+    They never decode a semantic row.
+
+  * `Duplex.Params.σ` is a free structure field (FS2/Duplex.lean:69,
+    `σ : Nat → State → Cv`). In `ZkStatement.Z1.combinedSamplers`
+    (R0Z/ZkStatement.lean:228-236) and `ZkStatement.Z1.R0Obligations`
+    (R0Z/ZkStatement.lean:243-257) the whole `p : FS2.Duplex.Params …` is a
+    parameter with NO σ identity imposed; the identities exist only as
+    hypotheses (hσsem, hσz0, hσz1, hσopen) of the soundness theorems above.
+    Further: R0Obligations is the historical Z1 object over the 31-row
+    `combinedSampler` (= `combinedSamplerAt 30`, R0P/MaskProtocol.lean:141-144),
+    whose semantic rows are 0..23 with alpha at 14..23 (no eta). This is the
+    origin of D20's "semantic rounds 14–23". The current masked 32-row
+    duplex protocol is `R0P.Mask.combinedProtocolZ` (R0P/MaskProtocol.lean:146)
+    with `samp := combinedSamplerAt 31 p`, alpha at rows 15..24.
+
+  * Consequence for D20.2 (stated as fact about the sources, not a theorem):
+    D20.2 says "In the proved protocol the α-row is drawn in K = SemE =
+    WideExact (SemD3Glue.lean:528), where this is negligible". The type is
+    WideExact but the values are in QM31 ⊂ WideExact. If the privacy model is
+    instantiated at K = SemE (needed to share challenges with the soundness
+    sampler), then for every alpha-row span_F{1, α_0..α_4} ⊆ QM31 ⊊ K, so
+    `Good₂` as written is never satisfied (dim count: [WideExact : QM31] = 2).
+    If F is M31 (the source's base field), additionally a span of 6 elements
+    cannot fill an 8-dimensional K. See gap G1.
+
+(ii) ZkStatement.lean "actual 32-row schedule" → HonestView.Challenges.
+
+  R0Z/ZkStatement.lean:449-464 (`messages`) dispatches on
+  `MaskedProtocol.schedule` (R0Z/MaskedProtocol.lean:30-39); the challenge of
+  row i is `challengeAt` (R0Z/ZkStatement.lean:475-479):
+
+    def challengeAt (ch : Challenges K) (i : Fin 32) : Chal K :=
+      if h : i.val < 25 then .semantic (ch.sem ⟨i.val, h⟩)
+      else if h : i.val < 27 then .circle (ch.circle ⟨i.val-25, by omega⟩)
+      else if h : i.val < 31 then .opening (.field (ch.opening ⟨i.val-27, by omega⟩))
+      else .opening (.set ch.queries)
+
+  Row table (schedule kind / message sent in row i before challenge i /
+  challenge / soundness decoder from combined_fiat_shamirZ):
+
+    row  kind (MaskedProtocol.schedule) message (ZkStatement.messages)              challenge                 decoder σ_i
+    0    lambda                         .semantic .none                              sem 0  (λ)                semChal
+    1    chi                            .semantic .none                              sem 1  (χ)                semChal
+    2    c2Theta                        .semantic (.c2 (x.2, 1))                     sem 2  (θ)                semChal
+    3-12 zerocheck (i-3)                .semantic .none                              sem i  (zc (i-3))         semChal
+    13   mu                             .semantic .none                              sem 13 (μ)                semChal
+    14   maskSumEta                     .semantic (.maskSum (p .maskSum))            sem 14 (η)                semChal
+    15-24 sumcheck j=i-15               .semantic (.roundPoly (coeffs semanticCoeff j)) sem i = alpha j        semChal
+    25   circle 0                       .beforeZ0 (fun j c => p (.pointClaim j c))   circle 0                  circleSample0
+    26   circle 1                       .beforeZ1 (fun c => p (.ood 0 c))            circle 1                  circleSample1
+    27   opening 0                      .opening (.values (fun c z => p (.ood z c))) opening 0 (.field)        σQ 0 = gamma
+    28   opening 1                      .opening (.scalar (p .inactiveSum))          opening 1 (.field)        σQ 1 = ordinary
+    29   opening 2                      .opening .unit                               opening 2 (.field)        σQ 2 = ordinary
+    30   opening 3                      .opening (.poly (coeffs openingCoeff))       opening 3 (.field)        σQ 3 = ordinary
+    31   opening 4                      .opening (.final (fun k => p (.finalCoeff k))) queries (.set)          q22 chain (combinedSamplerAt 31, row ≥ 31)
+    final (no challenge)                finalMessage := .opening .opening (ZkStatement.lean:473)
+
+  `alpha ch i := ch.sem ⟨15+i⟩` (R0Z/HonestView.lean:38), `zc ch i := ch.sem ⟨3+i⟩`
+  (:39); `originalOf` uses `ch.sem 14` as η and `ch.sem 13` as μ
+  (Shift.lean, T2a statement). The FS2 duplex row count is 32 (`r := 32`,
+  MaskProtocol.lean:146-157; rows 0..30 one block each, row 31 the 8-pair
+  q22 chain). D20's text "31-round" refers to the Z1/old protocol.
+
+
+----------------------------------------------------------------------
+1.B  R0Z.FsStatement  (R0Z/FsStatement.lean)
+----------------------------------------------------------------------
+Axioms: file prints ZK_FS, ROMReduction, middle_means_eq, zkfs_of_hvzk_perfect
+(:140-143). LOG attempts 3147/3153: "Standard" ([propext, Classical.choice,
+Quot.sound]).
+
+  :14-15  abbrev Bytes := List UInt8 ; abbrev OracleAnswer := Fin 32 → UInt8
+
+  :19-21  structure ROMView (K CommitHandle Aux : Type) [Field K] where
+            disclosed : View K CommitHandle Aux
+            observerOracle : List (Bytes × OracleAnswer)
+
+  :23-32  structure FSExperiments (K CommitHandle Aux : Type) [Field K] (F : Subfield K) where
+            Adversary : Type
+            RealRand : Type
+            IdealRand : Type
+            real : (h : HonestProver K) → PackBasis F →
+              (Statement K CommitHandle → Challenges K → Aux) → Adversary →
+              Statement K CommitHandle → h.Instance → RealRand → ROMView K CommitHandle Aux
+            ideal : (Challenges K → Tape K F → View K CommitHandle Aux) → Adversary →
+              Statement K CommitHandle → IdealRand → ROMView K CommitHandle Aux
+            observe : Adversary → ROMView K CommitHandle Aux → Bool
+
+  :37     def bit (b : Bool) : ℚ := if b then 1 else 0
+  :39-43  realTest h B outputs fs adv x w : fs.RealRand → ℚ :=
+            fun r => bit (fs.observe adv (fs.real h B outputs adv x w r))
+  :45-49  idealTest h B outputs fs adv x hx : fs.IdealRand → ℚ :=
+            fun r => bit (fs.observe adv (fs.ideal (simulator h B outputs x hx) adv x r))
+
+  :53-60  def ZK_FS (h) (B) (outputs) (fs) [Fintype fs.RealRand] [Nonempty fs.RealRand]
+            [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x) (epsilon_fs : ℚ) : Prop :=
+            ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
+              |mean (realTest h B outputs fs adv x w) - mean (idealTest h B outputs fs adv x hx)| ≤ epsilon_fs
+
+  :65-71  structure ROMBridge (K CommitHandle Aux Adv : Type) [Field K] where
+            Coins : Type
+            finiteCoins : Fintype Coins
+            nonemptyCoins : Nonempty Coins
+            draw : Adv → Statement K CommitHandle → Coins → Challenges K
+            extend : Adv → Statement K CommitHandle → Coins →
+              View K CommitHandle Aux → ROMView K CommitHandle Aux
+
+  :75-81  def middleReal … (bridge) (adv) (x) (w) : bridge.Coins × Tape K F → ℚ :=
+            fun t => bit (fs.observe adv (bridge.extend adv x t.1
+              (view h B outputs x w (bridge.draw adv x t.1) t.2)))
+  :83-89  def middleIdeal … (hx) : bridge.Coins × Tape K F → ℚ :=
+            fun t => bit (fs.observe adv (bridge.extend adv x t.1
+              (simulator h B outputs x hx (bridge.draw adv x t.1) t.2)))
+
+  :94-107 def ROMReduction (h) (B) (outputs) (fs) [...] (x) (epsilon_fs : ℚ) : Prop :=
+            ∃ bridge : ROMBridge K CommitHandle Aux fs.Adversary,
+              ∃ epsilon_real epsilon_ideal : ℚ,
+                0 ≤ epsilon_real ∧ 0 ≤ epsilon_ideal ∧ epsilon_real + epsilon_ideal ≤ epsilon_fs ∧
+                ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
+                  |mean (realTest h B outputs fs adv x w) -
+                    mean (middleReal h B outputs fs bridge adv x w)| ≤ epsilon_real ∧
+                  |mean (middleIdeal h B outputs fs bridge adv x hx) -
+                    mean (idealTest h B outputs fs adv x hx)| ≤ epsilon_ideal
+
+  :109-122 theorem middle_means_eq … (hw : h.public w = x.1) (hh : HVZK_perfect h B outputs x) :
+            mean (middleReal h B outputs fs bridge adv x w) =
+              mean (middleIdeal h B outputs fs bridge adv x hx)
+
+  :126-133 theorem zkfs_of_hvzk_perfect (h) (B) (outputs) (fs) [...] (x) (epsilon_fs : ℚ) :
+            HVZK_perfect h B outputs x → ROMReduction h B outputs fs x epsilon_fs →
+              ZK_FS h B outputs fs x epsilon_fs
+
+----------------------------------------------------------------------
+1.C  R0Z.FsGood  (R0Z/FsGood.lean)
+----------------------------------------------------------------------
+Axioms: file prints `#print badMass` and axioms of middle_means_close,
+zkfs_of_hvzk_on, zkfs_of_maskImageOn_good (:126-129). LOG (T2a, attempt
+3376): standard three axioms.
+
+  :53-55  def badMass {Adv : Type} (P : Challenges K → Prop) (bridge : ROMBridge K CommitHandle Aux Adv)
+            (adv : Adv) (x : Statement K CommitHandle) : ℚ :=
+            mean (fun coin => if P (bridge.draw adv x coin) then 0 else 1)
+
+  :58-65  theorem middle_means_close … (hw : h.public w = x.1) (P : Challenges K → Prop)
+            (hh : HVZK_on P h B outputs x) :
+            |mean (middleReal h B outputs fs bridge adv x w) -
+              mean (middleIdeal h B outputs fs bridge adv x hx)| ≤ badMass P bridge adv x
+
+  :90-99  theorem zkfs_of_hvzk_on (h) (B) (outputs) (fs) [...] (x) (P : Challenges K → Prop)
+            (epsilon_fs epsilon_bad : ℚ)
+            (hh : HVZK_on P h B outputs x) (hr : ROMReduction h B outputs fs x epsilon_fs)
+            (hmass : ∀ (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary),
+              badMass P bridge adv x ≤ epsilon_bad) :
+            ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad)
+
+  :113-122 theorem zkfs_of_maskImageOn_good (h) (B) (outputs) (fs) [...] (x) (epsilon_fs epsilon_bad : ℚ) :
+            MaskImageOn Good h B x → ROMReduction h B outputs fs x epsilon_fs →
+            (∀ (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary),
+              badMass Good bridge adv x ≤ epsilon_bad) →
+            ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad)
+
+  NOTE (gap G2): `hmass` quantifies over ALL bridges. A bridge with
+  `Coins := Unit` and constant `draw` at a challenge with `alpha ch 0 = 0`
+  has badMass Good = 1, so `hmass` forces epsilon_bad ≥ 1 (whenever
+  fs.Adversary is inhabited). As stated, zkfs_of_hvzk_on /
+  zkfs_of_maskImageOn_good only yield ZK_FS with ε ≥ 1. The bridge chosen
+  inside ROMReduction is existentially hidden, so badMass cannot be bounded
+  for "that" bridge without restating.
+
+----------------------------------------------------------------------
+1.D  R0Z.ZkStatement  (R0Z/ZkStatement.lean)
+----------------------------------------------------------------------
+Axioms: file prints axioms for ProverOperations, proverForSource,
+combinedSamplers, R0Obligations, PublicOutputs … Obligations (:259-279),
+view_affine, MaskImage, HVZK_perfect, Completeness, Obligations,
+proverOutput, messages (:481-487). LOG lines 200-203 record standard axioms
+for Z1 HVZK, ZK_FS, Obligations, R0Obligations; attempt 3149 "Standard".
+
+  Namespace R0Z.ZkStatement.Z1 (historical, "not the current privacy statement", :5-6):
+
+  :81-84  structure ModelSamplers (Statement M C Internal I A Coins : Type) where
+            samp : Nat → FS.Prefix Statement M Internal → M → FS2.Sampler I A Internal
+            draw : Round → FS.Prefix Statement M Internal → M → Coins → Internal
+            project : Internal → C
+
+  :91-97  def SamplerLaw [DecidableEq I] [Inhabited A] [Fintype A] [Nonempty A]
+            [Fintype Coins] [Nonempty Coins] (v : ModelSamplers X M C Internal I A Coins) : Prop :=
+            ∀ (i : Round) (p : FS.Prefix X M Internal) (m : M) (test : Internal → ℚ),
+              R0Z.mean (fun r => test (v.draw i p m r)) =
+                AspisV8R19.AdaptiveFirstReadLaw.independentMean (v.samp i.val p m).toProgram
+                  (fun result => test result.2)
+
+  :104-114 def honestRows (h : HonestProver X M C) (v : ModelSamplers X M C Internal I A Coins)
+            (x : X) (w : h.witness) (r : h.rand) (tape : VerifierTape Coins) :
+            (n : Nat) → n ≤ 31 → Rows M Internal n
+            | 0, _ => Fin.elim0
+            | n + 1, hn =>
+              let prev := honestRows h v x w r tape n (by omega)
+              let i : Round := ⟨n, by omega⟩
+              let m := h.messages x w r i (fun j => v.project (prev j).2)
+              let c := v.draw i ⟨x, List.ofFn prev⟩ m (tape i)
+              Fin.snoc prev (m, c)
+
+  :118-124 def honestView (h : HonestProver X M C) (v : ModelSamplers X M C Internal I A Coins)
+            (x : X) (w : h.witness) (tape : h.rand × VerifierTape Coins) : PublicView X M C :=
+            let rs := honestRows h v x w tape.1 tape.2 31 (Nat.le_refl 31)
+            let publicRows : Rows M C 31 := fun i => ((rs i).1, v.project (rs i).2)
+            let final := h.finish x w tape.1 publicRows
+            ⟨x, publicRows, final.1, final.2⟩
+
+  :228-236 def combinedSamplers {Sfield : Fin 29 → Subfield SemE} {L : Nat}
+            (p : FS2.Duplex.Params (Msg SemE) (Chal SemE) L)
+            (draw : Round → FS.Prefix (Statement SemE Sfield) (Msg SemE)
+              (FS2.Duplex.Chal (Chal SemE)) → Msg SemE → Coins → FS2.Duplex.Chal (Chal SemE)) :
+            ModelSamplers (Statement SemE Sfield) (Msg SemE) (Chal SemE)
+              (FS2.Duplex.Chal (Chal SemE)) (FS2.Duplex.Addr L) State Coins where
+            samp := combinedSampler p
+            draw := draw
+            project := Prod.fst
+
+  :243-257 def R0Obligations {Sfield} {L} {R} (B : R0P.PackBasis (Sfield 0))
+            (p : FS2.Duplex.Params (Msg SemE) (Chal SemE) L)
+            (ops : ProverOperations (Statement SemE Sfield) (Msg SemE) (Chal SemE) (R0P.Trace SemE) R)
+            (draw : …) (sim : Simulator …) (fs : FSExperiments …) [...] (epsilon_zk epsilon_fs : ℚ) : Prop :=
+            Obligations (proverForSource (sourceData B) ops) (sourceData B)
+              (combinedSamplers p draw) sim fs epsilon_zk epsilon_fs
+     (Z1 `Msg K := R0C.SemStatement.Msg K K (R0P.SemSource.SemMsg K)`, 31 rows,
+      `combinedSampler` = old 31-row sampler; p, σ and draw are free data.)
+
+  Namespace R0Z.ZkStatement (current):
+  :290-292 abbrev Statement (K CommitHandle) := Public K × CommitHandle ;
+           Challenges K := HonestView.Challenges K ; Payload K := HonestView.Payload K
+  :296-300 structure HonestProver (K : Type) where
+             Instance : Type ; transport : Fin 1024 ≃ Fin 1024 ;
+             «public» : Instance → Public K ; build : Instance → Trace K
+  :322    abbrev View (K CommitHandle Aux : Type) [Field K] := Meta K CommitHandle Aux × Payload K
+  :325-327 def metadata outputs x ch : Meta := ⟨x, ch, fun i => (x.2, i), outputs x ch⟩
+  :436-444 IdealSemMsg (none | c2 handle | maskSum s | roundPoly p);
+           abbrev Msg K CommitHandle := R0C.SemStatement.Msg K K (IdealSemMsg K CommitHandle);
+           abbrev Chal K := MaskedProtocol.Chal K  (= R0C.SemStatement.Chal K K)
+  :449-464 def messages (x) (p : Payload K) (i : Fin 32) : Msg K CommitHandle  (table in 1.A(ii))
+  :466-469 def honestMessages h B x w ch r i := messages x (payload h B x w ch r) i
+  :473    def finalMessage : Msg K CommitHandle := .opening .opening
+  :475-479 def challengeAt (copied in 1.A(ii))
+
+----------------------------------------------------------------------
+1.E  R0Z.JointView, HonestView, Shift, GoodDensity, LawTransport, StatisticalDistance, Hvzk, MaskedProtocol
+----------------------------------------------------------------------
+  R0Z/JointView.lean (prints view_eq_z3, HVZK_perfect; attempts 3146/3152 Standard)
+  :20-21  abbrev Tape (K) [Field K] (F : Subfield K) := AffTape K F × EligibleNoise K F
+  :26-28  def payload h B x w ch (t : Tape K F) : Payload K :=
+            HonestView.run h.transport x.1 B (applyEligible (h.build w) t.2) ch t.1
+  :30-34  def view h B outputs x w ch (t : Tape K F) : View K CommitHandle Aux :=
+            (ZkStatement.metadata outputs x ch, payload h B x w ch t)
+  :40-41  def InLanguage h x : Prop := ∃ w : HonestInstance h, h.public w = x.1
+  :45-49  def simulator h B outputs x hx ch : Tape K F → View := view h B outputs x (Classical.choose hx) ch
+  :51-55  def HVZK_perfect … := ∀ hx w ch, h.public w = x.1 →
+            EqualLaws (view h B outputs x w ch) (simulator h B outputs x hx ch)
+
+  R0Z/HonestView.lean
+  :32-36  structure Challenges (K) [Field K] where
+            sem : Fin 25 → K ; circle : Fin 2 → Point K ; opening : Fin 4 → K ;
+            queries : Finset (Fin 262144)
+  :38     def alpha (ch : Challenges K) : Fin 10 → K := fun i => ch.sem ⟨15+i.val, by omega⟩
+  :314-…  def run (π) (pub) (B) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : Payload K
+          (a function of the WHOLE challenge record; no per-round/prefix form exists)
+
+  R0Z/Shift.lean (prints MaskImageOn, HVZK_on, hvzk_on_good …; T2a attempt 3373 standard)
+  :21     def Good (ch : Challenges K) : Prop := GoodAlpha (alpha ch)
+  :186-191 def MaskImageOn (P) h B x : Prop := (∀ ch, P ch → ∀ w n, h.public w = x.1 →
+            sRem h B x w ch n ∈ LinearMap.range ((A h.transport B ch).comp inlM)) ∧
+            (∀ ch, P ch → ∀ w w', h.public w = x.1 → h.public w' = x.1 →
+            cTilde h B x w ch - cTilde h B x w' ch ∈ LinearMap.range (A h.transport B ch))
+  :480-485 def HVZK_on (P : Challenges K → Prop) h B outputs x : Prop :=
+            ∀ (hx : JointView.InLanguage h x) (w : h.Instance) (ch : Challenges K), P ch →
+              h.public w = x.1 →
+              EqualLaws (JointView.view h B outputs x w ch) (JointView.simulator h B outputs x hx ch)
+  :507-509 theorem hvzk_on_good h B outputs x : MaskImageOn Good h B x → HVZK_on Good h B outputs x
+
+  R0Z/GoodDensity.lean (namespace R0Z.Shift; prints GoodAlpha, card_pinned, badAlpha_card,
+  badAlpha_density; attempt 3371 standard, GoodAlpha [propext, Quot.sound])
+  :16     def GoodAlpha (a : Fin 10 → K) : Prop := (∀ j, a j ≠ 0 ∧ a j ≠ 1) ∧ a 9 ≠ 1/2
+  :71-73  theorem badAlpha_card [Fintype K] [DecidableEq K] :
+            ((Finset.univ : Finset (Fin 10 → K)).filter (fun a => ¬ GoodAlpha a)).card ≤
+              21 * Fintype.card K ^ 9
+  :86-88  theorem badAlpha_density [Fintype K] [DecidableEq K] :
+            (((Finset.univ : Finset (Fin 10 → K)).filter (fun a => ¬ GoodAlpha a)).card : ℚ) /
+              (Fintype.card K : ℚ) ^ 10 ≤ 21 / Fintype.card K
+
+  R0Z/StatisticalDistance.lean (namespace R0Z)
+  :14     def mean [Fintype R] (f : R → ℚ) : ℚ := (∑ r, f r) / Fintype.card R
+  :16-18  def law [Fintype R] (f : R → V) (v : V) : ℚ := mean (fun r => if f r = v then 1 else 0)
+  :34-36  def dist [Fintype R] [Fintype T] (f : R → V) (g : T → V) : ℚ :=
+            (∑ v ∈ support f ∪ support g, |law f v - law g v|) / 2
+  :38-39  def EqualLaws [Fintype R] [Fintype T] (f : R → V) (g : T → V) : Prop := ∀ v, law f v = law g v
+  (No #print axioms for these definitions in the lines read.)
+
+  R0Z/LawTransport.lean (prints both; attempt 3145 Standard)
+  :20-22  theorem mean_eq_of_equalLaws {R S V : Type} [Fintype R] [Fintype S]
+            (f : R → V) (g : S → V) (test : V → ℚ) (h : EqualLaws f g) :
+            mean (fun r => test (f r)) = mean (fun s => test (g s))
+  :32-33  theorem mean_product {C R : Type} [Fintype C] [Fintype R] (f : C × R → ℚ) :
+            mean f = mean (fun c => mean (fun r => f (c,r)))
+
+  R0Z/MaskedProtocol.lean (prints schedule etc.)
+  :24-27  inductive RoundKind | lambda | chi | c2Theta | zerocheck (j : Fin 10) | mu | maskSumEta
+            | sumcheck (j : Fin 10) | circle (j : Fin 2) | opening (j : Fin 5)
+  :30-39  def schedule (i : Fin 32) : RoundKind  (0 λ, 1 χ, 2 c2Theta, 3–12 zerocheck, 13 μ,
+            14 maskSumEta, 15–24 sumcheck, 25–26 circle, 27–31 opening). Identical row
+            assignment to R0P.Mask.schedule (R0P/MaskProtocol.lean:31-36), which names
+            row 14 `eta` and rows 15–24 `alpha`.
+
+----------------------------------------------------------------------
+1.F  FS2.Duplex  (FS2/Duplex.lean)   — answers (v)
+----------------------------------------------------------------------
+Axioms: the file prints only `coll_mass` (:335). The address lemmas below
+have no #print in this file.
+
+  :35     abbrev Addr (L : Nat) := List.Vector (Option Byte) L
+  :48-51  theorem Addr.ofBytes_injective (b b' : Bytes) (h : b.length ≤ L) (h' : b'.length ≤ L)
+            (e : ofBytes b h = ofBytes b' h') : b = b'
+  :61-72  structure Params (M Cv : Type) (L : Nat) where
+            D : Nat ; hL : 34 + D ≤ L ; enc : M → Bytes ; encLen : ∀ m, (enc m).length ≤ D ;
+            dec : Bytes → Option M ; decEnc : ∀ m, dec (enc m) = some m ; lbl : Nat → Byte ;
+            σ : Nat → State → Cv ; iv : State ; rounds : Nat
+  :76-79  def absorbA (p) (s : State) (l : Byte) (data : Bytes) (h : data.length ≤ p.D) : Addr L :=
+            Addr.ofBytes (absorb (bytes s) l data) _
+  :81-82  def squeezeA (p) (s : State) : Addr L := Addr.ofBytes (squeeze (bytes s)) _
+  :84-85  def advanceA (p) (s : State) : Addr L := Addr.ofBytes (advance (bytes s)) _
+  :87     theorem squeezeA_ne_advanceA' (p) (s t : State) : squeezeA p s ≠ advanceA p t
+  :91     theorem squeezeA_ne_advanceA (p) (s : State) : squeezeA p s ≠ advanceA p s
+  :94     theorem squeezeA_injective (p) : Function.Injective (squeezeA p)
+  :98     theorem advanceA_injective (p) : Function.Injective (advanceA p)
+  :102    theorem toBytes_squeezeA (p) (s) : (squeezeA p s).toBytes.take 32 = bytes s
+  :107    theorem toBytes_advanceA (p) (s) : (advanceA p s).toBytes.take 32 = bytes s
+  :112    theorem toBytes_absorbA (p) (s) (l) (data) (h) : (absorbA p s l data h).toBytes.take 32 = bytes s
+  :117    theorem squeezeA_ne_absorbA (p) (s s' : State) (l) (data) (h) : squeezeA p s ≠ absorbA p s' l data h
+  :124    theorem advanceA_ne_absorbA (p) (s s' : State) (l) (data) (h) : advanceA p s ≠ absorbA p s' l data h
+          (No absorbA injectivity lemma in (s, l, data) exists here; see G9.)
+  :132    abbrev Chal (Cv : Type) := Cv × State
+  :135-138 def stateOf {X : Type} (p : Params M Cv L) (P : Prefix X M (Chal Cv)) : State :=
+            match P.rounds.getLast? with
+            | none => p.iv
+            | some (_, c) => c.2
+  :142-146 def samp {X : Type} (p : Params M Cv L) (i : Nat) (P : Prefix X M (Chal Cv)) (m : M) :
+            Sampler (Addr L) State (Chal Cv) :=
+            .ask (absorbA p (stateOf p P) (p.lbl i) (p.enc m) (p.encLen m)) fun s' =>
+              .multi (squeezeA p s') [advanceA p s'] (by simp [squeezeA_ne_advanceA]) fun acc =>
+                .done (p.σ i (acc (squeezeA p s')), acc (advanceA p s'))
+  :238-241 def badColl (p) (Qtot : Nat) (a : Addr L) (T : Table (Addr L) State) (f : State) : Prop :=
+            (dom T).card < Qtot ∧ (f = p.iv ∨ (∃ b, T b = some f) ∨
+              ∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f)
+  :256-258 theorem badColl_density (p) (Qtot) (a) (T) :
+            mean (fun f : State => indicator (badColl p Qtot a T f)) ≤ (2 * Qtot : ℚ) / (Fintype.card State : ℚ)
+  :305-306 def Coll (p) (Qtot) (v : View (Addr L) State (Pf × Bool)) : Prop := hitsBad (badColl p Qtot) emptyTable v.1
+  :309    def κ (Qtot : Nat) : ℚ := (Qtot : ℚ) * ((2 * Qtot : ℚ) / (256 ^ 32 : ℚ))
+  :311-315 theorem coll_mass (p) (Qtot) (P : Program (Addr L) State Pf) (V : X → Pf → Program (Addr L) State Bool) (x)
+            (hQ : ∀ H, distinctFirstReads (eval H (experiment P V x)) ≤ Qtot) :
+            mean (fun H : Addr L → State => indicator (Coll p Qtot (eval H (experiment P V x)))) ≤ κ Qtot
+
+  Underlying frames (R19/DuplexFrames.lean): Byte := Fin 256 (:8); squeeze s = s ++ [1] (:10);
+  advance s = s ++ [2] (:11); absorb s l d = s ++ [0, l] ++ d (:12); squeeze_injective (:19),
+  advance_injective (:23), cross_disjoint (:27), absorb_disjoint (:64-68).
+  State := Fin 32 → Byte (R19/SourceDuplexStep.lean:11); bytes_injective
+  (R19/UniformStateFirstHit.lean:14); state_card : Fintype.card State = 256 ^ 32 (:32).
+
+  FS2/DuplexDensity.lean:94-97 (answer (vi)):
+    theorem samp_mean {X : Type} (p : Params M Cv L) (i : Nat) (P : Prefix X M (Chal Cv)) (m : M)
+        (bad : Chal Cv → Prop) :
+        independentMean (samp p i P m).toProgram (fun w => indicator (bad w.2)) =
+          mean (fun a => mean (fun b => indicator (bad (p.σ i a, b))))
+  FS2/LemmaA.lean:54-56:
+    theorem independentMean_ask (i : I) (k : A → Sampler I A C) (bad : C → Prop) :
+        independentMean (Sampler.ask i k).toProgram (fun w => indicator (bad w.2)) =
+          mean (fun a => independentMean (k a).toProgram (fun w => indicator (bad w.2)))
+
+----------------------------------------------------------------------
+1.G  FS2.Statement, FS  (FS2/Statement.lean, FS/Statement.lean)
+----------------------------------------------------------------------
+  FS2/Statement.lean
+  :40-43  inductive Sampler (I A C : Type)
+            | done (c : C)
+            | ask (i : I) (k : A → Sampler I A C)
+            | multi (c : I) (cs : List I) (nd : (c :: cs).Nodup) (k : (I → A) → Sampler I A C)
+  :49-51  def multiProg : List I → ((I → A) → Program I A C) → Program I A C
+  :54-57  def Sampler.toProgram : Sampler I A C → Program I A C
+            | .done c => .done c
+            | .ask i k => .ask i fun a => (k a).toProgram
+            | .multi c cs _ k => multiProg (c :: cs) (fun acc => (k acc).toProgram)
+  :94-99  structure Protocol (X M C W Pf I A : Type) (r, msg, samp, decode, extract)
+  :106-111 Protocol.transcript ; :119-120 Protocol.chal
+  :129-131 def experiment (P : Program I A Pf) (V : X → Pf → Program I A Bool) (x : X) :
+            Program I A (Pf × Bool) := bind P (fun π => bind (V x π) (fun b => .done (π, b)))
+  :133    def distinctFirstReads (v : View I A (Pf × Bool)) : Nat := firstReads emptyTable v.1
+
+  FS/Statement.lean
+  :43-45  def firstReads (t : Table I A) : List (I × A) → Nat
+  :55-57  def hitsBad (bad : I → Table I A → A → Prop) : Table I A → List (I × A) → Prop
+  :60     def emptyTable : Table I A := fun _ => none
+  :64-69  def FirstReadsBound : Program I A O → Table I A → Nat → Prop
+  :78-80  structure Prefix (X M C : Type) where statement : X ; rounds : List (M × C)
+  :85-86  def Prefix.ext (P) (m) (c) := ⟨P.statement, P.rounds ++ [(m, c)]⟩
+  :89     def emptyPrefix (x : X) : Prefix X M C := ⟨x, []⟩
+  :274-281 def LemmaA : Prop := ∀ {I A O : Type} [DecidableEq I] [Fintype A] [Nonempty A]
+            (p : Program I A O) (t : Table I A) (N : Nat) (bad : I → Table I A → A → Prop) (ε : ℚ),
+            0 ≤ ε → (∀ (i : I) (t : Table I A), mean (fun a => indicator (bad i t a)) ≤ ε) →
+            FirstReadsBound p t N →
+            lazyMean p t (fun v => indicator (hitsBad bad t v.1)) ≤ (N : ℚ) * ε
+  FS/LemmaA.lean:121 theorem lemmaA : LemmaA
+  FS/Theorem.lean:114-117 theorem firstReadsBound_of_traces (p) : ∀ (t) (N),
+            (∀ H : I → A, firstReads t (eval (complete t H) p).1 ≤ N) → FirstReadsBound p t N
+
+----------------------------------------------------------------------
+1.H  AspisV8R19.MemoizedProgramLaw, OracleProgramOps, OracleResampling, Table
+----------------------------------------------------------------------
+  R19/MemoizedProgramLaw.lean (prints all theorems :98-106)
+  :13-15  inductive Program (I A O : Type) | done (outcome : O) | ask (input : I) (next : A → Program I A O)
+  :17     abbrev View (I A O : Type) := List (I × A) × O
+  :19-23  def eval (H : I → A) : Program I A O → View I A O
+            | .done o => ([],o)
+            | .ask i next => let tail := eval H (next (H i)); ((i,H i)::tail.1,tail.2)
+  :25     def complete (t : Table I A) (H : I → A) : I → A := fun i => (t i).getD (H i)
+  :27-34  noncomputable def lazyMean [Fintype A] [DecidableEq I] :
+            Program I A O → Table I A → (View I A O → ℚ) → ℚ
+            | .done o, _, observe => observe ([],o)
+            | .ask i next, t, observe => match t i with
+              | some a => lazyMean (next a) t (fun r => observe ((i,a)::r.1,r.2))
+              | none => mean (fun a => lazyMean (next a) (put t i a) (fun r => observe ((i,a)::r.1,r.2)))
+  :61-63  theorem exact_oracle_law [Fintype I] [Fintype A] [Nonempty A] [DecidableEq I]
+            (p : Program I A O) (t : Table I A) (observe : View I A O → ℚ) :
+            mean (fun H => observe (eval (complete t H) p)) = lazyMean p t observe
+  :87-89  theorem empty_oracle_law … : mean (fun H => observe (eval H p)) = lazyMean p (fun _ => none) observe
+
+  APC/Table.lean:12  abbrev Table (Input Answer : Type*) := Input → Option Answer
+  APC/Table.lean:20-22 def put (table) (input) (answer) : Table Input Answer :=
+            fun query => if query = input then some answer else table query
+
+  R19/OracleProgramOps.lean:8-11 def bind (p : Program I A O) (next : O → Program I A R) : Program I A R
+  :13-17  theorem eval_bind ; :22-24 def rename ; :41-45 theorem lazy_rename (prints :60-63)
+
+  R19/OracleResampling.lean:11 def mean [Fintype X] (f : X → ℚ) : ℚ := (∑ x, f x) / Fintype.card X
+          (a SECOND `mean`, distinct constant from R0Z.mean; same body; see G11)
+  :54-56  theorem resample_cell
+
+----------------------------------------------------------------------
+1.I  AspisV8R19.AdaptiveFirstReadLaw (R19/AdaptiveFirstReadLaw.lean) — answers (iii)
+----------------------------------------------------------------------
+Axioms: prints the five theorems (:85-89).
+
+  :21-23  def FreshFrom [DecidableEq I] : Program I A O → Table I A → Prop
+            | .done _, _ => True
+            | .ask i next, t => t i = none ∧ ∀ a, FreshFrom (next a) (put t i a)
+  :25-30  noncomputable def independentMean [Fintype A] : Program I A O → (View I A O → ℚ) → ℚ
+            | .done o, observe => observe ([],o)
+            | .ask i next, observe => mean (fun a => independentMean (next a) (fun r => observe ((i,a)::r.1,r.2)))
+  :32-35  theorem lazyMean_eq_independentMean [Fintype A] [DecidableEq I]
+            (p : Program I A O) (t : Table I A) (fresh : FreshFrom p t)
+            (observe : View I A O → ℚ) :
+            lazyMean p t observe = independentMean p observe
+  :46-49  theorem complete_oracle_eq_independentMean [Fintype I] [Fintype A]
+            [Nonempty A] [DecidableEq I] (p : Program I A O) (t : Table I A)
+            (fresh : FreshFrom p t) (observe : View I A O → ℚ) :
+            mean (fun H => observe (eval (complete t H) p)) = independentMean p observe
+  :53-56  theorem empty_oracle_eq_independentMean [Fintype I] [Fintype A]
+            [Nonempty A] [DecidableEq I] (p : Program I A O)
+            (fresh : FreshFrom p (fun _ => none)) (observe : View I A O → ℚ) :
+            mean (fun H => observe (eval H p)) = independentMean p observe
+  :60-65  theorem independentMean_bind [Fintype A] (p : Program I A O)
+            (next : O → Program I A R) (observe : View I A R → ℚ) :
+            independentMean (bind p next) observe =
+              independentMean p (fun first =>
+                independentMean (next first.2) (fun second =>
+                  observe (first.1 ++ second.1,second.2)))
+  :79-82  theorem squeezeProgram_fresh_iff [DecidableEq I]
+            (i j : I) (next : A → A → Program I A O) (t : Table I A) :
+            FreshFrom (.ask i (fun a => .ask j (next a))) t ↔
+              t i = none ∧ ∀ a, (put t i a) j = none ∧ ∀ b, FreshFrom (next a b) (put (put t i a) j b)
+
+----------------------------------------------------------------------
+1.J  Decoders — answers (iv)
+----------------------------------------------------------------------
+  R0C/ModuloField.lean (prints :133-143)
+  :75-76  def ordinary (s : State) : WideExact := fieldRank (ModuloCounting.reduce _ (blockRank s))
+  :81     def gamma (s : State) : WideExact := (gammaNZ s).val ; :83 gamma_ne_zero
+  :85-87  theorem ordinary_mass (y : WideExact) :
+            mean (fun s => indicator (ordinary s = y)) ≤ 1 / (P^8 : ℚ) + 1 / (256^32 : ℚ)
+  :103-104 theorem ordinary_mass_257 (y : WideExact) :
+            mean (fun s => indicator (ordinary s = y)) ≤ 257 / (256^32 : ℚ)
+  :109-110 theorem gamma_mass_257 (y : WideExact) :
+            mean (fun s => indicator (gamma s = y)) ≤ 257 / (256^32 : ℚ)
+  :125-126 theorem ordinary_event (bad : Finset WideExact) :
+            mean (fun s => indicator (ordinary s ∈ bad)) ≤ bad.card * (257 / (256^32 : ℚ))
+  :129-130 theorem gamma_event (bad : Finset WideExact) :
+            mean (fun s => indicator (gamma s ∈ bad)) ≤ bad.card * (257 / (256^32 : ℚ))
+  (`mean` here is AspisV8R19.OracleResampling.mean; `indicator` is
+   AspisV8R19.CausalFirstHitUnionBound.indicator.)
+
+  R0C/V3/DuplexQ.lean:35-37
+    def σQ : Nat → State → R0FS.Chal E
+      | 0, s => .field (R0C.ModuloField.gamma s)
+      | _ + 1, s => .field (R0C.ModuloField.ordinary s)
+  (E := WideExact, :30. No #print axioms for σQ; file prints blaw_chainBS,
+   flip_roundBad, round_field_bound, round_q22_bound.)
+
+  The SEMANTIC decoder (the one that actually decodes alpha), R0P/SemD2.lean:
+  :186-189 theorem qm31Sample_mass (y : QM31Exact) :
+            mean (fun s => indicator (qm31Sample s = y)) ≤ 1 / (P ^ 4 : ℚ) + 1 / (256 ^ 32 : ℚ)
+  :193    def deltaQ : ℚ := (P ^ 4 : ℚ) / (256 ^ 32 : ℚ) ; :197 deltaQ_small : deltaQ ≤ 1 / 2 ^ 131
+  :206    def semChal (s : State) : WideExact := algebraMap QM31Exact WideExact (qm31Sample s)
+  :208-209 theorem semChal_mass (y : WideExact) :
+            mean (fun s => indicator (semChal s = y)) ≤ (1 + deltaQ) / (P ^ 4 : ℚ)
+  :225-226 theorem semChal_event (bad : Finset WideExact) :
+            mean (fun s => indicator (semChal s ∈ bad)) ≤ bad.card * ((1 + deltaQ) / (P ^ 4 : ℚ))
+  (I did not check whether SemD2.lean prints axioms for these.)
+
+----------------------------------------------------------------------
+1.K  R0P combined samplers and combinedOwn_law — answers (vi)
+----------------------------------------------------------------------
+  R0P/SemD3Glue.lean
+  :528    abbrev SemE := WideExact   (#print axioms SemE :529)
+  :533-547 def openingParams (p) (s : State) : Duplex.Params (R0FS.Msg SemE) (R0FS.Chal SemE) L
+            (… lbl := fun j => p.lbl (26 + j) ; σ := R0C.V3.DQ.σQ ; iv := s ; rounds := 5)
+  :560-568 def combinedSampler (p) (i : Nat) (P) (m) : FS2.Sampler (Addr L) State (Duplex.Chal (Chal SemE SemE)) :=
+            if i < 30 then Duplex.samp p i P m
+            else .ask (absorbA p (stateOf p P) (p.lbl i) (p.enc m) (p.encLen m)) fun s' =>
+              R0C.V3.DQ.chainS (openingParams p s')
+                (fun bs xs => openingChallenge (R0C.V3.DQ.out4 s' bs xs)) 8 s' [] []
+  :965-979 def combinedProtocol … : FS2.Protocol … where r := 31 ; samp := combinedSampler p ; …
+
+  R0P/MaskProtocol.lean (masked, current)
+  :31-36  def schedule (i : Fin 32) : RoundKind (lam chi c2Theta zc×10 mu eta alpha×10 circle×2 opening×5)
+  :113-128 def openingParamsAt (firstOpening) (p) (s) : … σ := R0C.V3.DQ.σQ ; iv := s ; rounds := 5
+  :130-138 def combinedSamplerAt (last : Nat) (p) (i) (P) (m) :=
+            if i < last then Duplex.samp p i P m
+            else .ask (absorbA p (stateOf p P) (p.lbl i) (p.enc m) (p.encLen m)) fun s' =>
+              R0C.V3.DQ.chainS (openingParamsAt (last - 4) p s')
+                (fun bs xs => openingChallenge (R0C.V3.DQ.out4 s' bs xs)) 8 s' [] []
+  :146-157 def combinedProtocolZ … : FS2.Protocol (TypedContext SemE Sfield) (MsgZ SemE)
+            (Duplex.Chal (ChalZ SemE)) (Trace SemE) Pf (Addr L) State where
+            r := 32 ; samp := combinedSamplerAt 31 p ; …
+
+  R0P/SemDuplexDensity.lean:29-33 (prints :52)
+    theorem combinedOwn_law (i : Nat) (P : Prefix (CX Sfield) CM CC) (m : CM)
+        (a : Addr L) (bad : CC → Prop) :
+        blaw (fun xs bs => combinedOutFor p i bs xs) (fun c => indicator (bad c))
+          (.ask a fun s' => combinedChainBS p (combinedNsteps i) s' [s']) [] =
+        independentMean (combinedSampler p i P m).toProgram (fun w => indicator (bad w.2))
+    Proof route: for i < 30 it is `(samp_mean p i P m bad).symm` (:40); for the
+    q22 row it is `independentMean_ask` + `chainS_independentMean` (:43-48).
+  R0P/MaskDuplexDensity.lean:45-49 (prints :67) — the round-parameterised version:
+    theorem combinedOwn_law (i : Nat) (P : Prefix (CX Sfield) (CM SM) CC) (m : CM SM)
+        (a : Addr L) (bad : CC → Prop) :
+        blaw (fun xs bs => combinedOutFor p rounds i bs xs) (fun c => indicator (bad c))
+          (.ask a fun s' => combinedChainBS p (combinedNsteps rounds i) s' [s']) [] =
+        independentMean (combinedSamplerAt (rounds - 1) p i P m).toProgram (fun w => indicator (bad w.2))
+    :35-38 theorem combinedProtocolAt_32 … : combinedProtocolAt B p 32 msg decode = combinedProtocolZ B p msg decode := by rfl
+  What combinedOwn_law says for ZF1: on fresh answers, one round's challenge
+  value has the law `mean_a mean_b [bad (p.σ i a, b)]` with a = squeeze
+  answer, b = advance answer (samp_mean). It is a per-round law; it gives
+  nothing about the whole alpha-row jointly. A union bound over the ten alpha
+  rows needs only the per-row marginals, so it suffices for item (4) when the
+  coins are independent by construction (bridge coins), see Part 2 (4).
+
+  R0P/SemDecision.lean: `decision` (:118), `terminalValue` (:74), `sumcheckChecks`
+  (:85); prints laneOf_eq_laneAt, decision (:128-129). Not needed by ZF1
+  except as the soundness verifier; listed for completeness.
+
+
+######################################################################
+PART 2 — PROPOSAL (no proofs; every assumption marked [A#])
+######################################################################
+
+Global choices this proposal needs from the lead.
+  [A1] K := SemE (= WideExact), so that HonestView challenges share the type of
+       the soundness sampler's challenges. F := Sfield 0 with B : PackBasis F.
+       (Alternative K := QM31Exact is discussed in G1; no 32-row duplex
+       protocol over QM31 exists.)
+  [A2] L, p : FS2.Duplex.Params (ZkStatement.Msg SemE CommitHandle) (Chal SemE) L
+       with p.rounds = 32 and the four σ identities of combined_fiat_shamirZ
+       (hσsem i<25 → semChal, hσz0, hσz1, hσopen j<4 → σQ j). The message
+       type differs from the soundness MsgZ (G6); enc is new data.
+  [A3] Deterministic adversary (coins fixed inside the adversary value); see
+       G5 for why a randomized adversary cannot be expressed through `observe`.
+
+(1) Concrete FSExperiments K CommitHandle Aux F
+------------------------------------------------
+  Adversary := View K CommitHandle Aux → Program (Addr L) State Bool
+      -- view-dependent oracle program run AFTER the proof is output [A3].
+      -- A pre-proof query phase is WLOG absent: H is a fixed function, so a
+      -- non-view-dependent pre-phase can be replayed after the proof.
+
+  RealRand  := (Addr L → State) × Tape K F
+  IdealRand := (Addr L → State) × Tape K F
+
+  New definitions needed (none exist):
+    def chPad : (i : Fin 33) → (rows < i of a challenge record) → Challenges K
+        -- fills rows ≥ i with fixed defaults [A4: Inhabited (Point K)]
+    def proverProg (V : Challenges K → Tape K F → View K CommitHandle Aux)
+        (x : Statement K CommitHandle) (t : Tape K F) :
+        Program (Addr L) State (View K CommitHandle Aux × List (Addr L))
+      -- rows 0..30: m_i := ZkStatement.messages x (V (chPad i ch_<i) t).2 i ;
+      --   the program is (Duplex.samp p i P_i m_i).toProgram (equivalently
+      --   (combinedSamplerAt 31 p i P_i m_i).toProgram), P_i the duplex prefix ;
+      --   ch_i := decode row i of the σ output (toChallenges, G7).
+      -- row 31: combinedSamplerAt 31 p 31 P_31 m_31 (absorb + 8-pair chain) ;
+      --   queries := (out4 …).1 projected.
+      -- returns (V ch t, list of prover addresses).
+    def realProg h B outputs x w t := proverProg (JointView.view h B outputs x w) x t
+    def idealProg sim x t          := proverProg sim x t
+    def logOf (adv) (v : View) (H) : List (Bytes × OracleAnswer) :=
+        (eval H (adv v)).1 mapped through toBytesFS : Addr L → List UInt8 and
+        State → (Fin 32 → UInt8)   (G8)
+
+  real h B outputs adv x w (H, t) :=
+      let v := (eval H (realProg h B outputs x w t)).2.1
+      ⟨v, logOf adv v H⟩
+  ideal sim adv x (H, t) :=
+      let v := (eval H (idealProg sim x t)).2.1
+      ⟨v, logOf adv v H⟩
+  observe adv r := (eval (replayOracle r.observerOracle) (adv r.disclosed)).2
+      -- replayOracle answers from the log (first match; default otherwise).
+      -- Needs lemma `eval_replay : eval (replayOracle (eval H q).1) q = eval H q` (G5).
+
+  Which existing definitions the real experiment is built from:
+  JointView.view / JointView.payload (= HonestView.run at applyEligible (h.build w) t.2)
+  for the disclosed view and the payload; ZkStatement.messages for the absorbed
+  per-row messages; ZkStatement.metadata via JointView.view;
+  FS2.Duplex.samp / R0P.Mask.combinedSamplerAt for the oracle reads.
+  NOT Z1.honestRows / Z1.honestView: they are over the historical
+  Z1.HonestProver (messages from ChallengePrefix, abstract `rand`) and a
+  per-round VerifierTape via ModelSamplers.draw, not oracle reads; their
+  SamplerLaw is conceptually the "independent coins" side, not the ROM side.
+
+  Can the current FSExperiments.real signature express it?  Yes:
+  `real h B outputs adv x w r` receives every input (h, B, outputs, adv, x,
+  w : h.Instance, r = (H, t)). `ideal` receives the simulator function
+  `Challenges K → Tape K F → View` and x, which is exactly what idealProg
+  needs. Instances required: Fintype/Nonempty of (Addr L → State) × Tape K F
+  (Addr L = List.Vector (Option (Fin 256)) L is finite with DecidableEq).
+  The only expressiveness limit is the adversary's coins (G5).
+
+  Causality requirement (G3): the definition above produces the honest view
+  only if `ZkStatement.messages x (payload … ch t) i` depends on ch only
+  through rows < i. Needed lemma:
+    theorem messages_causal (x) (w) (t) (i : Fin 32) (ch ch' : Challenges K)
+      (h : rowsBelow i ch = rowsBelow i ch') :
+      ZkStatement.messages x (JointView.payload h B x w ch t) i =
+      ZkStatement.messages x (JointView.payload h B x w ch' t) i
+  and the program-level consequence
+    theorem proverProg_view : (eval H (realProg …)).2.1 =
+      JointView.view h B outputs x w (drawH H) t
+  where drawH reads the challenge record off the trace. By inspection of
+  HonestView.run/payloadAffine the dependency pattern is causal (rows 15+j use
+  alpha_<j via roundPoint; row 25/26 use alpha and circle 0; rows 27–31 use the
+  preceding circle/opening scalars), but this is not proved anywhere.
+
+(2) ROMBridge
+-------------
+  Coins := (Fin 31 → State × State × State)        -- rows 0..30: (absorb s'_i, squeeze b_i, advance x_i)
+         × (State × (Fin 8 → State × State))        -- row 31: absorb s'_31, chain (b_k, x_k)
+         × (Addr L → State)                         -- fresh table for all other adversary reads
+      (finite, nonempty; no dependence on h, w or the tapes.)
+
+  draw adv x c : Challenges K :=
+      toChallenges (fun i => if i < 31 then p.σ i (b_i) else .opening (out4 s'_31 bs xs).1)
+      -- with [A2]: sem i = semChal b_i (i<25); circle j = circleSample_j b_{25+j};
+      --   opening 0 = gamma b_27; opening k = ordinary b_{27+k} (k=1..3);
+      --   queries = chalSet of the q22 scan of the 8 chain pairs from s'_31.
+      -- Uses no instance, no messages: absorb answers s'_i do not enter σ.
+      --   (In the one-block rows σ reads the squeeze answer only, samp :146.)
+
+  extend adv x c v : ROMView :=
+      let m_i := ZkStatement.messages x v.2 i                         -- recomputed from the view
+      let st_0 := p.iv ; st_{i+1} := x_i                              -- stateOf along the coin chain
+      let T_P : Table (Addr L) State :=
+        put* [ (absorbA p st_i (p.lbl i) (p.enc m_i) (p.encLen m_i), s'_i),
+               (squeezeA p s'_i, b_i), (advanceA p s'_i, x_i)  for i < 31,
+               (absorbA p x_30 (p.lbl 31) (p.enc m_31) _, s'_31),
+               (squeezeA p y_k, b_k), (advanceA p y_k, x_k) for k < 8, y_0 = s'_31, y_{k+1} = x_k ]
+      ⟨v, logOf adv v (complete T_P Hfresh)⟩
+      -- i.e. the adversary's oracle is MemoizedProgramLaw.complete T_P Hfresh:
+      -- recorded prover states at prover addresses, the fresh table elsewhere.
+  The absorb address uses stateOf (previous advance coin, or p.iv), the label
+  p.lbl i and p.enc m_i, exactly as Duplex.samp :144. With FreshFrom on the
+  prover's reads (no address repeat), T_P is the table left by the real
+  prover's trace.
+
+  Bridge-to-middle identity to prove (no instance read): for every coin c,
+  middleReal at (c, t) = bit(observe adv (extend adv x c (JointView.view … (draw c) t))),
+  which is the definition; the work is in (3).
+
+(3) ε_real, ε_ideal
+-------------------
+  Shape. Write the prover program as P_w (real) or P_sim (ideal); both have
+  exactly N_P = 31·3 + 1 + 8·2 = 110 reads on every path.
+  realTest mean  = mean_H bit(observe (eval H (bind P_w (fun v => adv v.1))))   (after eval_bind)
+                 = lazyMean (bind P_w …) ∅ …                                    (empty_oracle_law)
+  middleReal mean = mean_{c,t} … = mean over prover coins of
+                   lazyMean (adv v) T_P(c) …                                   (exact_oracle_law with t := T_P)
+  On paths where every prover read is a first read, the lazy prover phase
+  equals the independent-coin phase (lazyMean_eq_independentMean, path-wise),
+  and the adversary phase is lazyMean from the same table T_P on both sides.
+  Hence (proposed, unproved):
+      |mean realTest − mean middleReal| ≤ Pr_lazy[some prover read is a repeat]
+                                      ≤ mean_H indicator (Coll-type event on P_w)
+                                      ≤ κ(N_P) = 2·N_P² / 256^32 = 2·110²/2^256 = 24200/2^256
+  and the same for ideal vs middleIdeal (P_sim has the same read shape).
+  So ε_real = ε_ideal = 24200/2^256, independent of the adversary's query
+  count Q_A, under [A3] (post-proof adversary). If the lead wants an explicit
+  pre-proof adversary phase (adaptive statement, or queries before the proof
+  that are charged), the first-hit term appears: lemmaA with badColl density
+  2·Qtot/|State| and Qtot = Q_A + N_P gives κ(Q_A + N_P) = 2(Q_A+N_P)²/2^256
+  (the shape of FS2.Duplex.coll_mass), |State| = 256^32 (state_card).
+  Collision event: FS2.Duplex.badColl (fresh state = iv, = an earlier output,
+  or = the 32-byte prefix of an address read so far) is exactly the event
+  whose absence makes every later squeeze/advance/absorb address fresh
+  (via squeezeA/advanceA injectivity, cross-disjointness and toBytes_*), with
+  absorb addresses of different rows distinguished by their 32-byte state
+  prefix.
+
+  Lemmas used: MemoizedProgramLaw.empty_oracle_law, exact_oracle_law;
+  OracleProgramOps.eval_bind; AdaptiveFirstReadLaw.lazyMean_eq_independentMean,
+  independentMean_bind; FS.lemmaA + FS.firstReadsBound_of_traces;
+  FS2.Duplex.badColl_density (or coll_mass if the experiment is put in its
+  `experiment P V x` shape); state_card; the Duplex address lemmas of 1.F.
+  Missing: lazyMean_bind (G10), an identical-until-bad lemma (G10), a lemma
+  that independentMean of the fixed-shape prover program is mean over Coins
+  (G10), absorbA injectivity/prefix lemma for "different state ⇒ different
+  absorb address" (G9; derivable from toBytes_absorbA).
+
+  Which bridge lemma. complete_oracle_eq_independentMean is the wrong tool for
+  the adversary phase: the adversary may re-read prover addresses, so
+  FreshFrom fails there by design; that phase is handled by exact_oracle_law
+  with t := T_P (no freshness needed). For the prover phase,
+  FreshFrom P ∅ does NOT hold universally (some answer sequences make an
+  absorb answer equal an earlier one), so empty_oracle_eq_independentMean /
+  complete_oracle_eq_independentMean cannot be applied to the raw prover
+  program. The right bridge is lazyMean_eq_independentMean applied to a
+  collision-free variant of the prover program (e.g. P renamed onto
+  round-tagged addresses with OracleProgramOps.rename, whose FreshFrom from
+  the empty table is structural, transported back by lazy_rename), plus the
+  identical-until-bad comparison with the raw program. squeezeProgram_fresh_iff
+  is the one-step unfolding for each row's two-cell multi read.
+
+(4) badMass Good identification
+-------------------------------
+  With the bridge of (2), badMass Good bridge adv x
+    = mean_c [¬ GoodAlpha (fun j => semChal (b_{15+j}))]
+    ≤ Σ_{j<9} mean_b [semChal b ∈ {0,1}] + mean_b [semChal b ∈ {0,1,1/2}]   (union bound over the 10 rows;
+                                                                           coins independent by construction)
+    ≤ (9·2 + 3) · m_σ = 21 · m_σ        via R0P.SemSource.semChal_event (SemD2.lean:225)
+  with  m_σ = (1 + deltaQ) / P^4 = 1/P^4 + 1/256^32   (semChal_mass, qm31Sample_mass),
+  deltaQ = P^4/256^32 ≤ 2^-131. Numerically 21·m_σ ≈ 21·2^-124.
+  (Card bound: {0,1} has card 2 and {0,1,1/2} card ≤ 3; 1/2 lies in the M31
+  image, so the row-9 term is genuinely 3·m_σ.)
+
+  The requested route "through ordinary_mass/ordinary_mass_257" does not apply
+  to alpha: those lemmas are for `ordinary`, which decodes opening rows 28–30
+  only. Their numerical form is ordinary_mass_257 : ≤ 257/256^32 per point
+  (≈ 1.004·2^-248) and ordinary_mass : ≤ 1/P^8 + 1/256^32. If (contrary to
+  the soundness hypotheses) σ_i for alpha rows were `ordinary`, the bound would
+  be 21·257/256^32.
+
+  combinedOwn_law / samp_mean are not needed for badMass on bridge coins
+  (independence is by construction); they are what identifies the per-row law
+  of the REAL experiment's fresh reads with the bridge's coin law, i.e. they
+  belong to (3): samp_mean says the round-i challenge under fresh answers is
+  `(p.σ i a, b)` with a, b independent uniform — exactly draw's row i.
+
+  GoodDensity.badAlpha_density (21/|K|) is the uniform-decoder idealisation:
+  at K = SemE it would read 21/P^8, which is smaller than the true 21·(1+δQ)/P^4
+  by a factor ≈ P^4; it is not a bound for the protocol's alpha law.
+  The q22 row, circle rows and opening rows play no role in Good.
+
+  Statement shape after G2 is repaired (proposal only):
+    theorem zkfs_of_hvzk_on_bridge (hh : HVZK_on P h B outputs x)
+      (bridge : ROMBridge …) (er ei eb : ℚ)
+      (hreal : ∀ hx adv w, h.public w = x.1 → |mean realTest − mean middleReal| ≤ er)
+      (hideal : ∀ hx adv w, h.public w = x.1 → |mean middleIdeal − mean idealTest| ≤ ei)
+      (hmass : ∀ adv, badMass P bridge adv x ≤ eb) :
+      ZK_FS h B outputs fs x (er + ei + eb)
+  (or ROMReduction restated to expose its bridge and a badMass field).
+
+
+######################################################################
+GAPS, MISMATCHES, MISSING LEMMAS
+######################################################################
+
+G1  Alpha field. The alpha-row values lie in QM31 ⊂ SemE = WideExact
+    (semChal, SemD2.lean:206; hypotheses hσsem in MaskFiatShamir.lean:124-125,
+    MaskD2Instance.lean:18, SemDuplexDensity.lean:120-121). D20.2's premise
+    "α-row drawn in K = SemE = WideExact" is not what the soundness model
+    draws. At K = SemE, Good₂ (span_F{1,α_0..α_4} = K) is never satisfied
+    ([WideExact : QM31] = 2; with F = M31 also 6 < 8). Whether
+    MaskImageOn Good can hold at K = SemE with alpha ∈ QM31 is open; by the
+    D20.1 mechanism (mask-only lanes gain K-multiples only through
+    Λ_j ⊆ QM31) I would expect a further obstruction, but I have not checked
+    it. Alternative K = QM31Exact would match the source field but there is no
+    32-row duplex protocol, soundness theorem or σ identity over QM31; the
+    existing ones are all over SemE. Lead decision needed. I did not check
+    which field Z4/Z7's Rust probe uses.
+
+G2  FsGood.zkfs_of_hvzk_on / zkfs_of_maskImageOn_good quantify `hmass` over
+    ALL bridges (FsGood.lean:97-98, :120-121). A constant-draw bridge at a
+    bad challenge has badMass = 1, so the hypotheses force ε_bad ≥ 1 and the
+    theorems are vacuous. ROMReduction hides its bridge existentially
+    (FsStatement.lean:100), so the fix needs a restated composition (Part 2
+    (4) shape) or a ROMReduction that exposes the bridge.
+
+G3  Causality. HonestView.run / JointView.payload take the whole
+    Challenges record; no lemma shows ZkStatement.messages … i depends only on
+    rows < i. Required to define the real/ideal FS programs from the view
+    (Part 2 (1)). Also needed for the simulator (same function at the chosen
+    instance).
+
+G4  R0Obligations / combinedSamplers (ZkStatement.lean:228-257) are Z1
+    (historical, 31-row, unmasked; alpha at old rows 14–23, no eta) with p,
+    σ and draw free. They do not expose the semantic σ. The 32-row masked
+    sampler is R0P.Mask.combinedSamplerAt 31 / combinedProtocolZ; the σ
+    identities exist only as hypotheses of combined_fiat_shamirZ(_closed).
+    ZF1 should take the same four σ hypotheses and p.rounds = 32.
+
+G5  Adversary coins. FSExperiments.observe : Adversary → ROMView → Bool sees
+    no randomness, and ROMView has no coin field, so a randomized adversary
+    whose decision depends on private coins cannot be expressed unless its
+    coins are fixed inside `Adversary` (deterministic; fine for ZK_FS since it
+    quantifies ∀ adv, but D20 asks for "its own finite coins") or the
+    structure changes. Also `observe` must replay the adversary's program from
+    its log; lemma `eval_replay` does not exist. Universe note: making
+    `Adversary` a structure with a `Coins : Type` field would put it in Type 1,
+    which FSExperiments.Adversary : Type rejects.
+
+G6  Message types. The ZK messages are ZkStatement.Msg K CommitHandle =
+    R0C.SemStatement.Msg K K (IdealSemMsg K CommitHandle) (C2 replaced by a
+    nominal handle). The soundness duplex absorbs MsgZ SemE =
+    Msg SemE SemE (SemMsgZ SemE). They are different types; the FS-ZK duplex
+    needs its own `enc` (new Params over ZkStatement.Msg), and no lemma relates
+    it to the soundness encoding or to source bytes (D7 refinement). The
+    statement x is not absorbed in either model (p.iv is a constant); statement
+    binding is outside both.
+
+G7  Challenge projection. No function maps a row list of
+    Duplex.Chal (Chal SemE SemE) to HonestView.Challenges SemE (the
+    soundness side parses with semChalsZ etc. in MaskView). `toChallenges`
+    with constructor checks/defaults is needed, and a lemma that under the
+    σ hypotheses it inverts `challengeAt`.
+
+G8  Oracle encodings. ROMView.observerOracle : List (List UInt8 × (Fin 32 → UInt8))
+    while the duplex uses Addr L = List.Vector (Option (Fin 256)) L and
+    State = Fin 32 → Fin 256. A fixed UInt8 ≃ Fin 256 conversion and Addr→Bytes
+    (Addr.toBytes) map are needed; no lemma packages them.
+
+G9  absorbA injectivity. Duplex.lean has squeezeA/advanceA injectivity and
+    the cross-disjointness lemmas but no lemma that absorbA p s l d =
+    absorbA p s' l' d' → s = s' (∧ l = l' ∧ d = d'). toBytes_absorbA (:112)
+    gives s = s' via bytes_injective; the label/data part is not packaged.
+    Params has no label-injectivity field; not needed if the collision event
+    of badColl is used.
+
+G10 Oracle-law lemmas missing: lazyMean_bind (lazy analogue of
+    independentMean_bind); identical-until-bad for lazyMean vs
+    independentMean when FreshFrom fails on a bounded event; "independentMean
+    of a fixed-shape N-read program = mean over Fin N → State coins" (or
+    over the Coins product of Part 2 (2)); lazyMean of a program from table
+    T_P equals the adversary-phase mean in extend (exact_oracle_law gives
+    it once the oracle is written as complete T_P Hfresh).
+
+G11 Two `mean`s. R0Z.mean (StatisticalDistance.lean:14) and
+    AspisV8R19.OracleResampling.mean (OracleResampling.lean:11) are distinct
+    constants with the same body; the decoder mass lemmas and
+    AdaptiveFirstReadLaw use the latter, FsStatement/FsGood the former. A
+    `R0Z.mean f = OracleResampling.mean f := rfl` lemma is needed (Z1.SamplerLaw
+    already mixes them, ZkStatement.lean:95-96). Same for the two
+    `indicator`s vs `bit`/`if … then 1 else 0`.
+
+G12 Row count wording. D20's "31-round" honest program and "semantic rounds
+    14–23" match the old Z1/combinedProtocol schedule; the current masked
+    schedule is 32 rows with alpha at 15–24 and eta at 14. The FS2 program
+    for ZF1 should be combinedSamplerAt 31 (32 rows).
+
+G13 GoodDensity.badAlpha_density (21/|K|) assumes a uniform alpha-row over K;
+    the protocol's law is per-row semChal with mass (1+δQ)/P^4, giving
+    21·(1+δQ)/P^4. badAlpha_density is not the bound ZF1 should cite.
+
+Unsure / not checked
+  - #print axioms results for FS2, R19, R0C, R0P declarations were not looked
+    up in those directories' logs; only "printed in file" is reported.
+  - I did not verify that ZkStatement.messages is actually causal; the row
+    dependencies in G3 are from reading HonestView.lean, not a proof.
+  - I did not check Z4/Z7 probe field choice (relevant to G1).
