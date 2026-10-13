@@ -175,3 +175,19 @@ scope and receipts. The source-only inventories
 [`APPEND-REUSE-NEXT.md`](APPEND-REUSE-NEXT.md) and
 [`FS-REUSE-NEXT.md`](FS-REUSE-NEXT.md) distinguish reusable generic results
 from the current append-gate and 33-round protocol obligations still open.
+
+## Literal append connection
+
+The next bridge reuses the old pair-occupancy theorem and existing
+schedule/Poseidon interfaces to derive the ordered output pair, twenty
+append nodes, next root, and carry frontier entry from the production
+gates. A separately named non-carry public-check premise supplies the
+remaining frontier cells. It strengthens the same extracted R1 candidate.
+
+The combined checkpoint passed in 1.37 s at 3,570,308 KiB peak RSS with
+zero swap and twelve standard-only axiom audits. The only historical
+source change narrows an import in `V7PairLeafOccupancy`; its theorem
+statements and proof bodies are unchanged. See
+[APPEND-GATE-BRIDGE.md](APPEND-GATE-BRIDGE.md). The frozen-table recurrence,
+chronological tree correspondence including the final full-capacity
+insertion, Rust refinement, shared-oracle law, and privacy remain open.

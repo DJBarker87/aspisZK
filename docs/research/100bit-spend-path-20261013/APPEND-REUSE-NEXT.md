@@ -52,3 +52,12 @@ The modelâ€™s source boundary is explicit: `IncrementalMerkleV1.lean` lines 825â
 | `AspisFormal/AspisFormal/Pool/IncrementalMerkleV1.lean` | `930aa1fb6aee6bbcba746b37397253d9f96bdf9d2fd96e6cfe3102da80e4f0dc` |
 | `AspisFormal/AspisFormal/Pool/V7PairForestLaneInvariant.lean` | `9bac4ad614af759e46ab0fea2a348f88430ed056e2249cc3de67c8b0b955eea0` |
 | `AspisFormal/AspisFormal/Pool/V7EightLaneForestTerminal.lean` | `745eb77b3a15f0abd816c7f95e1bba34e70df264fb63e7c9f6490f0d4f111b00` |
+## Later checked checkpoint
+
+The literal production append path is now connected in
+[APPEND-GATE-BRIDGE.md](APPEND-GATE-BRIDGE.md): output-pair occupancy,
+twenty nodes, next root, and carry frontier binding, with an explicit
+non-carry public-check premise for the full frontier. This does not yet
+establish `ExactPairAppendTransition`. The frozen-table recurrence and
+the `.full` capacity branch require the separate bridge described in
+[APPEND-TABLE-BOUNDARY.md](APPEND-TABLE-BOUNDARY.md).

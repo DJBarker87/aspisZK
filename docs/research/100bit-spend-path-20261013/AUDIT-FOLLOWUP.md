@@ -67,3 +67,12 @@ theorem or constraint was changed. Append correctness, source correspondence,
 shared-oracle accounting, and privacy remain open. `APPEND-REUSE-NEXT.md`
 and `FS-REUSE-NEXT.md` identify the next reusable abstract results and the
 specific current-protocol premises they still require.
+## Later append-gate checkpoint
+
+The [append bridge](APPEND-GATE-BRIDGE.md) now derives the output pair,
+twenty append nodes, public next root, and carry frontier entry from the
+production gates, and connects those facts to the literal R1 candidate.
+All nine focused final targets passed on the capped NUC; the combined
+checkpoint reports twelve standard-only axiom audits. This advances the
+semantic bridge without closing frozen-table recurrence, chronological
+tree/source correspondence, shared-oracle soundness, or privacy.

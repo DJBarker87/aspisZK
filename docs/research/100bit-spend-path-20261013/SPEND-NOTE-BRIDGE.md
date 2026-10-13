@@ -118,3 +118,9 @@ Source base: `65d5de037cf0acae9b15545ef88d9d5bb6800e0a`, plus the six
 new source files pinned in the evidence manifest. Historical dependencies
 were reused unchanged from the compiled cache. This is a focused component
 checkpoint, not a new replay of the entire historical release manifest.
+## Later append extension
+
+[APPEND-GATE-BRIDGE.md](APPEND-GATE-BRIDGE.md) strengthens the same R1
+candidate with the ordered output pair and literal append path. The
+chronological tree, frozen-table recurrence, source refinement,
+shared-oracle reduction, and privacy remain separate obligations.

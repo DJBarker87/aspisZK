@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.Tactic
 
 /-!
 # Algebraic occupancy for V7 Pool pair leaves

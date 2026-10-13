@@ -263,3 +263,11 @@ These measurements establish fit for the tested paths, including rollovers;
 they do not prove a uniform CU bound over all statements or a private-spend
 security claim. No live program was deployed and no funds were moved. Task
 keys and nonce ledgers remain retained on the NUC.
+
+The subsequent [literal append checkpoint](APPEND-GATE-BRIDGE.md) derives
+the ordered output pair, twenty append nodes, next root, and carry frontier
+entry from the production gates on the same extracted R1 candidate. Its
+complete-frontier result retains an explicit non-carry public-check premise.
+The focused NUC import/axioms checkpoint passed with standard axioms only.
+It does not close frozen-table generation, chronological tree correctness,
+Rust correspondence, the shared-oracle reduction, or privacy.

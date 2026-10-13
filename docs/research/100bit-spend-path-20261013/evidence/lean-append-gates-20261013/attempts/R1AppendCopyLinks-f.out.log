@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendCopyLinks.lean:121:2: error: unsolved goals
+K : Type
+inst✝ : Field K
+pub : Public K
+A : Trace K
+hb : CopyLinkBalance pub A
+level : Fin 20
+hbit : pub.nextPairIndex >>> ↑level &&& 1 = 1
+i : Fin 8
+hlink :
+  (copyPatternTuple (copyPatterns (afterAt ⟨7 + 2 * ↑level, ⋯⟩).producer.pattern) fun c =>
+      A (Fin.castLE ⋯ c) (afterAt ⟨7 + 2 * ↑level, ⋯⟩).producer.row) =
+    copyPatternTuple (copyPatterns (afterAt ⟨7 + 2 * ↑level, ⋯⟩).consumer.pattern) fun c =>
+      A (Fin.castLE ⋯ c) (afterAt ⟨7 + 2 * ↑level, ⋯⟩).consumer.row
+hi :
+  A (Fin.castAdd 21 i) ⟨539 + 16 * ↑level, ⋯⟩ = A ⟨8 + ↑i, ⋯⟩ ⟨544 + 16 * ↑level, ⋯⟩ + if ↑i = 7 then 1051521018 else 0
+⊢ (A ⟨8 + ↑i, ⋯⟩ ⟨544 + 16 * ↑level, ⋯⟩ + if ↑i = 7 then 1051521018 else 0) =
+    A ⟨8 + ↑i, ⋯⟩ ⟨544 + 16 * ↑level, ⋯⟩ + if ↑i = 7 then 1051521018 else 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendCopyLinks.lean:130:6: warning: This simp argument is unused:
+  leftRow
+
+Hint: Omit it from the simp argument list.
+  simp only [rightSpec, copyPatterns1, copyPatterns10, copyPattern1_tuple, copyPattern10_tuple,
+  ̲  ̲ ̲ ̲ ̲ ̲Fin.val_castAdd, if_pos i.isLt, dif_pos i.isLt, castLE_fin8, castLE_fin8_shift,
+        l̵e̵f̵t̵R̵o̵w̵,̵ ̵rightRow0] at hi
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendCopyLinks.lean:130:15: warning: This simp argument is unused:
+  rightRow0
+
+Hint: Omit it from the simp argument list.
+  simp only [rightSpec, copyPatterns1, copyPatterns10, copyPattern1_tuple, copyPattern10_tuple,
+  ̲  ̲ ̲ ̲ ̲ ̲Fin.val_castAdd, if_pos i.isLt, dif_pos i.isLt, castLE_fin8, castLE_fin8_shift, l̵e̵f̵t̵R̵o̵w̵,̵ ̵r̵i̵g̵h̵t̵R̵o̵w̵0̵]̵l̲e̲f̲t̲R̲o̲w̲]̲ at hi
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AppendCopyLinks.append_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
