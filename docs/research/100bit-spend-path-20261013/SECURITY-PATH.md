@@ -170,14 +170,19 @@ restoration/extraction, the literal joint list and its cap, both comparisons,
 and weights derived from the six linear functionals. It proves a deterministic
 field-level binding theorem with explicit matching-support, accepted-equation
 and bad-set-exclusion premises. Identifying the actual Rust functionals and
-verifier equations with this model, and composing semantic/query/Fiat--Shamir
-results, remain open. No uniqueness premise or conjectural OOD error is used.
+verifier equations with this model, and the complete transcript/query/Fiat--Shamir
+instantiation, remain open. No uniqueness premise or conjectural OOD error is used.
 See `CONCRETE-BINDING.md` and `QUERY-BINDING.md` for the exact scope and
 NUC receipts. The subsequent `LEAN-REUSE.md` checkpoint derives candidate
 subfield typing and the original point/extra/codeword-typing witness interface
-from the concrete opening, with explicit E-valued rows. Its full masked
-semantic and source instantiation is still pending. The query/residual field equations and independent-answer laws
-now compose, while semantic and shared-oracle instantiation remain open.
+from the concrete opening, with explicit E-valued rows.
+`MaskedSemantic.large_matching_extracts` now also connects that candidate
+to the existing masked semantic core and input-note extraction, under the
+explicit list-wide semantic bad-event exclusions. The query/residual field
+equations and independent-answer laws compose at the model level. Source
+correspondence, supplying and bounding those exclusions for the new
+transcript, and the shared-oracle instantiation remain open. See
+`MASKED-SEMANTIC-BRIDGE.md`; this does not establish full settlement or privacy.
 
 ## Two-transaction settlement architecture
 

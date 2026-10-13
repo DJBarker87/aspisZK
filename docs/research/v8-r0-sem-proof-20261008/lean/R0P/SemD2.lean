@@ -177,13 +177,13 @@ end Generic
 /-! ## The QM31 challenge sampler -/
 
 /-- Base-P positional rank of a four-limb QM31 element. -/
-def qm31Rank : Fin (P ^ 4) ≃ AspisV5ComponentCQM31TowerExact.QM31Exact := finFunctionFinEquiv.symm.trans tupleFieldEquiv
+def qm31Rank : Fin (P ^ 4) ≃ AspisV8R15.ExactTowerBase.QM31Exact := finFunctionFinEquiv.symm.trans tupleFieldEquiv
 
 /-- The rejection-free model of `challenge_qm31` on one duplex block. -/
-def qm31Sample (s : State) : AspisV5ComponentCQM31TowerExact.QM31Exact :=
+def qm31Sample (s : State) : AspisV8R15.ExactTowerBase.QM31Exact :=
   qm31Rank (R0C.ModuloCounting.reduce (by norm_num [P]) (blockRank s))
 
-theorem qm31Sample_mass (y : AspisV5ComponentCQM31TowerExact.QM31Exact) :
+theorem qm31Sample_mass (y : AspisV8R15.ExactTowerBase.QM31Exact) :
     mean (fun s => indicator (qm31Sample s = y)) ≤ 1 / (P ^ 4 : ℚ) + 1 / (256 ^ 32 : ℚ) := by
   simpa only [qm31Sample, Nat.cast_pow, Nat.cast_ofNat] using
     R0C.ModuloCounting.encoded_mass_slack (by positivity : 0 < 256 ^ 32)
@@ -196,22 +196,22 @@ theorem deltaQ_nonneg : 0 ≤ deltaQ := by unfold deltaQ; positivity
 
 theorem deltaQ_small : deltaQ ≤ 1 / 2 ^ 131 := by norm_num [deltaQ, P]
 
-theorem qm31Sample_mass_slack (y : AspisV5ComponentCQM31TowerExact.QM31Exact) :
+theorem qm31Sample_mass_slack (y : AspisV8R15.ExactTowerBase.QM31Exact) :
     mean (fun s => indicator (qm31Sample s = y)) ≤ (1 + deltaQ) / (P ^ 4 : ℚ) := by
   refine (qm31Sample_mass y).trans (le_of_eq ?_)
   unfold deltaQ
   field_simp
 
 /-- The challenge in the wide field. -/
-def semChal (s : State) : WideExact := algebraMap AspisV5ComponentCQM31TowerExact.QM31Exact WideExact (qm31Sample s)
+def semChal (s : State) : WideExact := algebraMap AspisV8R15.ExactTowerBase.QM31Exact WideExact (qm31Sample s)
 
 theorem semChal_mass (y : WideExact) :
     mean (fun s => indicator (semChal s = y)) ≤ (1 + deltaQ) / (P ^ 4 : ℚ) := by
-  by_cases hy : ∃ q : AspisV5ComponentCQM31TowerExact.QM31Exact, algebraMap AspisV5ComponentCQM31TowerExact.QM31Exact WideExact q = y
+  by_cases hy : ∃ q : AspisV8R15.ExactTowerBase.QM31Exact, algebraMap AspisV8R15.ExactTowerBase.QM31Exact WideExact q = y
   · obtain ⟨q, rfl⟩ := hy
-    have he : ∀ s, (semChal s = algebraMap AspisV5ComponentCQM31TowerExact.QM31Exact WideExact q) ↔ qm31Sample s = q := by
+    have he : ∀ s, (semChal s = algebraMap AspisV8R15.ExactTowerBase.QM31Exact WideExact q) ↔ qm31Sample s = q := by
       intro s
-      exact (algebraMap AspisV5ComponentCQM31TowerExact.QM31Exact WideExact).injective.eq_iff
+      exact (algebraMap AspisV8R15.ExactTowerBase.QM31Exact WideExact).injective.eq_iff
     rw [mean_congr (fun s => indicator_iff (he s))]
     exact qm31Sample_mass_slack q
   · have he : ∀ s, (semChal s = y) ↔ False := by

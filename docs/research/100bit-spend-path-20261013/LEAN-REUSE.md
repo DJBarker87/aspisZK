@@ -13,7 +13,7 @@ order, field embeddings, and transcript schedule must be discharged again.
 | Stopped, bounded 22-query sampling law | `BoundedQueries`, `RawQueryBound` | The checked independent-answer law includes sampler exhaustion; it is not yet the new shared-oracle Fiat–Shamir instantiation. |
 | Four codeword/message subfield-descent theorems | `Wide/SubfieldDescentCore`, `CandidateDescent` | Every candidate in the literal R1 list has the required lane field types when the committed words are typed. |
 | Original R0 Boolean weights and coefficient reindexing | `R0/OpeningWeights`, `D18OpeningWeights`, `SemanticOpening` | The D18 point rows give exactly the older transported point functionals; the derived candidate satisfies the point/extra/codeword-typing interface. |
-| Masked semantic sumcheck and extraction | Existing `R0P.Mask` and `R0P.SemD3Glue` | Available to reuse, but the complete R1 composition has not been checked. The old 32-round masked D3 theorem cannot be applied unchanged to the new 33-round schedule. |
+| Masked semantic sumcheck and extraction | `SemanticTransport`, `MaskedSemantic` apply existing `R0P.Mask` and extraction theorems | The deterministic R1 candidate-to-input-note connection is checked, with explicit bad-event exclusions. The old 32-round masked D3 theorem cannot be applied unchanged to the new 33-round schedule. |
 
 ## New typed-candidate connection
 
@@ -63,11 +63,20 @@ module rather than restored through the entire legacy tower import chain.
 
 ## What remains
 
-The old masked semantic algebra is substantial reusable work. Its application
-still requires exact point and Libra construction/embedding, BaseTyped and
-public-input premises, the accepted masked sumcheck equations, and the
-correct early/eta/alpha bad-event exclusions for the new transcript. The
-source-only inventory is `SEMANTIC-TERMINAL-INVENTORY.md`.
+The field-level semantic connection is now checked. `SemanticTransport`
+identifies the actual three semantic point functions and the Libra row,
+and derives `BaseTyped` from the recovered candidate's descent.
+`MaskedSemantic.large_matching_extracts` applies the existing concrete
+mask-degree, masked sumcheck, eta, zerocheck, lane, LogUp, and extraction
+results to that candidate. Its conclusion retains literal R1 list membership,
+production constraints, copy balance, and `InputNoteExtracted`.
+
+Source construction/embedding, public-input and committed-word typing,
+accepted parsed checks, and the early/eta/alpha exclusions with the new
+transcript's timing still need correspondence and probability arguments.
+The semantic relation is the existing input-note relation, not full
+settlement, output-range, or privacy security. See
+[`MASKED-SEMANTIC-BRIDGE.md`](MASKED-SEMANTIC-BRIDGE.md).
 
 The new `SamplerWord` and `SamplerWordPass` proofs connect actual Lean
 UInt64 shift/or/div/mod and UInt32 casts to the previously checked Nat/list
@@ -75,11 +84,17 @@ arithmetic. They do not claim Rust refinement. Byte order, array traversal,
 repeated division, carry branches, and field construction are inventoried in
 `SAMPLER-SOURCE-INVENTORY.md`.
 
+`SamplerByteWord` now applies the existing extracted `source_word` and
+array round-trip theorems to one actual four-byte read. `SamplerBytePass`
+composes those reads, in reversed eight-word order, with the checked machine
+division pass. The remaining 32-byte rank identity and mutable/repeated
+sampler execution are not asserted by these theorems.
+
 The shared-oracle Fiat–Shamir instantiation, complete source correspondence,
 universal masking/simulator argument, and final private-spend security claim
 remain open. No grinding or work-normalization credit is added by this reuse.
 
-## Checked reuse checkpoint
+## Earlier checked reuse checkpoint
 
 The final combined import/axioms target `R1ReuseCheckpoint` passed on the NUC
 in 1.35 s with peak RSS 3,501,880 KiB and zero swap, in its own 4G/6G/0-swap
@@ -101,9 +116,25 @@ This is a focused component checkpoint using the pinned compiled cache, not
 a from-scratch replay of the entire historical release manifest. The final
 semantic/source/Fiat–Shamir/privacy conclusions above remain open.
 
-Further existing sampler components are available: `R0C.ModuloField` proves
-the little-endian 32-byte rank and constructs the eight-digit WideExact
-bijection; `AspisV8R19.SamplerWordBridge.source_word` proves an extracted
-four-byte read equals the retained integer word model. These are reuse
-candidates for the remaining byte/field connections, not newly discharged
-Rust-refinement obligations.
+## Semantic and byte-sampler checkpoint
+
+`R1SemanticReuseCheckpoint` imports both new connections and passed on the
+NUC in 1.65 s, with peak RSS 4,041,956 KiB and zero swap in its own
+4G/6G/0-swap scope. All six combined axiom audits contain only `propext`,
+`Classical.choice`, and `Quot.sound`. The final semantic theorem itself
+passed in 1.63 s at 3,587,236 KiB. Evidence is retained in
+`evidence/lean-masked-semantic-20261013/`; the lower import refresh and
+four-byte bridge have separate evidence directories.
+
+The import refresh retains the old theorems. `ModuloField` now explicitly
+imports `CircleGroupOrder`; three old R0P modules refer to the same extracted
+tower via `ExactTowerBase` instead of the old namespace. All other changes
+to the historical dependency chain are compiled-object refreshes. The
+old D3 and density results were rebuilt as dependencies, not applied as
+an R1 Fiat–Shamir theorem.
+
+The newer `R0Z.PureRounds` branch also contains reusable closed forms and
+sumcheck-chain identities. Its payload-dependent statements use the old
+one-fold output, so they require a separate R1 correspondence; surjectivity
+definitions are not proofs of the required mask rank. The pinned source-only
+inventory is [`PURE-ROUND-REUSE.md`](PURE-ROUND-REUSE.md).

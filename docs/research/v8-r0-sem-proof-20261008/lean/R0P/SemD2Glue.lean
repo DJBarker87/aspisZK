@@ -593,9 +593,9 @@ attribute [local instance] Classical.propDecidable
 variable {Sfield : Fin 29 → Subfield WideExact} {F : Subfield WideExact}
 
 /-- The canonical tower and circle interfaces name the same M31 prime. -/
-theorem P_eq : (AspisV5ComponentCQM31TowerExact.P : ℚ) =
+theorem P_eq : (AspisV8R15.ExactTowerBase.P : ℚ) =
     AspisCircleGroupOrder.P := by
-  norm_num [AspisV5ComponentCQM31TowerExact.P, AspisCircleGroupOrder.P]
+  norm_num [AspisV8R15.ExactTowerBase.P, AspisCircleGroupOrder.P]
 
 #print axioms P_eq
 

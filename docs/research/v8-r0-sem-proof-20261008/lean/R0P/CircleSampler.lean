@@ -23,7 +23,7 @@ attribute [local instance] Classical.propDecidable
 
 universe u v
 
-abbrev CircleParam := AspisV5ComponentCQM31TowerExact.QM31Exact
+abbrev CircleParam := AspisV8R15.ExactTowerBase.QM31Exact
 
 /-- The scalar extension of a QM31 circle point into the wide field. -/
 def embedCirclePoint (z : Point CircleParam) : Point WideExact :=
@@ -78,15 +78,15 @@ theorem embedCirclePoint_not_rational (t : CircleParam) (ht : t.im ≠ 0) :
       point_on_circle t (outside_has_denominator t ht)⟩) := by
   intro hz
   obtain ⟨⟨x, hx⟩, ⟨y, hy⟩⟩ := hz
-  have hx' : algebraMap (ZMod AspisV5ComponentCQM31TowerExact.P) CircleParam x =
+  have hx' : algebraMap (ZMod AspisV8R15.ExactTowerBase.P) CircleParam x =
       (point t).1 := by
     exact zmod_algebraMap_pullback
-      (p := AspisV5ComponentCQM31TowerExact.P) (S := CircleParam) (R := WideExact)
+      (p := AspisV8R15.ExactTowerBase.P) (S := CircleParam) (R := WideExact)
       (algebraMap CircleParam WideExact).injective x (point t).1 hx
-  have hy' : algebraMap (ZMod AspisV5ComponentCQM31TowerExact.P) CircleParam y =
+  have hy' : algebraMap (ZMod AspisV8R15.ExactTowerBase.P) CircleParam y =
       (point t).2 := by
     exact zmod_algebraMap_pullback
-      (p := AspisV5ComponentCQM31TowerExact.P) (S := CircleParam) (R := WideExact)
+      (p := AspisV8R15.ExactTowerBase.P) (S := CircleParam) (R := WideExact)
       (algebraMap CircleParam WideExact).injective y (point t).2 hy
   have hxi : (point t).1.im = 0 := by
     rw [← hx']
@@ -288,16 +288,16 @@ theorem circleSample0_bad_iff (s : State) :
 
 
 /-- The two imported prime constants denote the same rational number. -/
-theorem circlePrime_eq : (AspisV5ComponentCQM31TowerExact.P : ℚ) =
+theorem circlePrime_eq : (AspisV8R15.ExactTowerBase.P : ℚ) =
     AspisCircleGroupOrder.P := by
-  norm_num [AspisV5ComponentCQM31TowerExact.P, AspisCircleGroupOrder.P]
+  norm_num [AspisV8R15.ExactTowerBase.P, AspisCircleGroupOrder.P]
 
 #print axioms circlePrime_eq
 
 /-- The first row's single bad parameter, including the modulo slack. -/
 theorem circleSample0_mass :
     mean (fun s : State => indicator (z0Bad' (circleSample0 s))) ≤
-      (1 + deltaQ) / (AspisV5ComponentCQM31TowerExact.P : ℚ)^4 := by
+      (1 + deltaQ) / (AspisV8R15.ExactTowerBase.P : ℚ)^4 := by
   let bad : Finset CircleParam := Finset.univ.filter circleBad0Pred
   have hmem : ∀ s : State, z0Bad' (circleSample0 s) ↔ qm31Sample s ∈ bad := by
     intro s
@@ -307,14 +307,14 @@ theorem circleSample0_mass :
   have hm := event_mass_le qm31Sample _ qm31Sample_mass_slack bad
   rw [← circlePrime_eq] at hm
   have hc : (bad.card : ℚ) ≤ 1 := by exact_mod_cast circleBad0_card
-  have hn : 0 ≤ (1 + deltaQ) / (AspisV5ComponentCQM31TowerExact.P : ℚ)^4 :=
+  have hn : 0 ≤ (1 + deltaQ) / (AspisV8R15.ExactTowerBase.P : ℚ)^4 :=
     div_nonneg (add_nonneg zero_le_one deltaQ_nonneg) (pow_nonneg (Nat.cast_nonneg _) _)
   exact hm.trans (by simpa only [one_mul] using mul_le_mul_of_nonneg_right hc hn)
 
 /-- The second row's fiber bound; the preceding non-bad row excludes f1. -/
 theorem circleSample1_mass (z0 : Point WideExact) (hz0 : z0 ≠ circleFallback1) :
     mean (fun s : State => indicator (z1Bad z0 (circleSample1 s))) ≤
-      (1 + deltaQ) / (AspisV5ComponentCQM31TowerExact.P : ℚ)^4 := by
+      (1 + deltaQ) / (AspisV8R15.ExactTowerBase.P : ℚ)^4 := by
   let bad : Finset CircleParam := Finset.univ.filter (circleBad1Pred z0)
   have hmem : ∀ s : State, z1Bad z0 (circleSample1 s) ↔ qm31Sample s ∈ bad := by
     intro s
@@ -324,7 +324,7 @@ theorem circleSample1_mass (z0 : Point WideExact) (hz0 : z0 ≠ circleFallback1)
   have hm := event_mass_le qm31Sample _ qm31Sample_mass_slack bad
   rw [← circlePrime_eq] at hm
   have hc : (bad.card : ℚ) ≤ 1 := by exact_mod_cast circleBad1_card z0 hz0
-  have hn : 0 ≤ (1 + deltaQ) / (AspisV5ComponentCQM31TowerExact.P : ℚ)^4 :=
+  have hn : 0 ≤ (1 + deltaQ) / (AspisV8R15.ExactTowerBase.P : ℚ)^4 :=
     div_nonneg (add_nonneg zero_le_one deltaQ_nonneg) (pow_nonneg (Nat.cast_nonneg _) _)
   exact hm.trans (by simpa only [one_mul] using mul_le_mul_of_nonneg_right hc hn)
 

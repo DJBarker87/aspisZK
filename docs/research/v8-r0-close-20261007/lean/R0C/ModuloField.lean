@@ -1,6 +1,7 @@
 import R0C.ModuloCounting
 import AspisV8R19.R599CanonicalFieldTuple
 import WideTower
+import AspisFormal.CircleGroupOrder
 import Mathlib.Algebra.BigOperators.Fin
 
 /-! Proposed 32-byte rejection-free field sampler. See FS_LOG before use.

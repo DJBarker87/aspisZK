@@ -10,7 +10,7 @@ obligations.
 | Removed tx2 strict field scan | `AUTHENTICATED-PARSER-AUDIT.md` covers every arithmetic encoding and every account writer. Tx1 scans all 22 records, then its checkpoint binds the exact proof and public bytes. | The checksum is unkeyed; authentic checkpoint provenance, trusted deployment history and hash binding are required. This is a source audit, not compiled source correspondence. |
 | Random full masks | P3 fresh-OS full masks pass transfer and withdrawal at 13, 255 and 1,023 populated pairs. The same transfer statement has three independent OS draws and a deterministic full-mask control. | CU varies: 284 CU in tx1 and 171 CU in tx2 across those four cases. Observed headroom is positive, but there is no uniform cost bound over all inputs. |
 | Actual-field privacy | The fresh salted P3 proof passes the actual-challenge rank gate: 16 C1 ranks 112, H1 rank 94/95, silent rank 1076, pure image rank 1080, all 29 two-pad identities. | Finite rank evidence does not prove an efficient simulator, universal rank/density, publication/abort behavior or the ROM hybrid. |
-| Soundness | `ConcreteBinding.binding` now composes actual stored-domain geometry, both fold restorations, extraction into the literal 100-entry joint list, both round comparisons and six per-lane functional claims. | The field-level query/rho connection and independent-answer sampler bounds now also compile; see `QUERY-BINDING.md`. Actual Rust functional/verifier correspondence, semantic composition, shared-oracle Fiat--Shamir and zero knowledge remain open. |
+| Soundness | `ConcreteBinding.binding` composes stored-domain geometry, both fold restorations, literal joint-list extraction, both round comparisons and six per-lane claims. `MaskedSemantic.large_matching_extracts` now connects the recovered candidate to the old masked semantic/input-note relation, with explicit exclusions. | The field-level query/rho connection and independent-answer sampler bounds also compile; see `QUERY-BINDING.md`. Actual Rust correspondence, new-transcript exclusions and probability accounting, shared-oracle Fiat--Shamir and zero knowledge remain open. |
 
 P3 is a separate default-off research profile. It adds 32-byte private salts
 to all three committed trees, a reserved OS-attempt API, and separate proof,
@@ -36,5 +36,16 @@ literal R1 candidate using the unchanged historical descent proofs, connects
 the D18 point rows to the original named R0 weights, and derives the
 point/extra/codeword-typing witness interface. The UInt64/UInt32 sampler pass
 also matches the Nat division model. These are checked component bridges;
-the complete masked semantic, source, shared-oracle and privacy conclusions
+the protocol-level semantic, source, shared-oracle and privacy conclusions
 remain open.
+
+The subsequent `MASKED-SEMANTIC-BRIDGE.md` checkpoint applies the old masked
+semantic theorems to the literal R1 candidate after deriving its point/Libra
+claims and base typing. It proves the conditional production/copy/input-note
+conclusion. The new transcript must still justify its six semantic exclusion
+families with correct prefix timing; source and full settlement/privacy
+claims do not follow from the deterministic implication. The combined Lean
+import and six axiom audits pass with standard axioms only. The same
+checkpoint composes the existing extracted four-byte decoder with the
+eight-word machine division pass; full mutable/repeated sampler refinement
+is still open.
