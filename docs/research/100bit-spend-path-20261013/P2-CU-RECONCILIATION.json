@@ -1,0 +1,449 @@
+{
+  "schema": "aspis.r1.p2-first-stage-cu-reconciliation.v1",
+  "measurement_scope": "one-run transfer S2 variant=2, k=10 diagnostic; raw phase-marker interval deltas; verifier program CU and whole transaction CU",
+  "measurement_comparison_only": true,
+  "no_crypto_equivalence_claim": true,
+  "baseline": {
+    "worktree": "/Users/dominic/ZK/.worktrees/r1-precheck-p2",
+    "branch": "codex/r1-precheck-p2-20261010",
+    "git_commit": "d2197e35589ee075a61c2a22aa9b88300f464517",
+    "source_revision": "19d8f2023c615954ff0ad2fa981c6c03e96bf506",
+    "source_manifest_file": "evidence/p2-cu-reconciliation/p2-source-manifest.json",
+    "source_manifest_file_sha256": "36310a183acd32c8b6ffdac6292ab6f77e43a0406bf8e279c714256c7e5312ef",
+    "reported_build_profile": "REPORT-P2.md says optimized release binaries; diagnostic measurement records SBF runtime and source/ELF hashes, not a Cargo profile field",
+    "elf_sha256": "1ec08e2381f401900f7d78fadb688e28b50ffd25395d3d478164b82436283457",
+    "runtime": {
+      "agave": "4.2.1",
+      "heap_bytes": 262144,
+      "instruction_limit_cu": 1400000,
+      "limit_cu": 200000000,
+      "litesvm": "0.16.0"
+    },
+    "variant": 2,
+    "k": 10,
+    "diagnostics": {
+      "1": "evidence/p2-cu-reconciliation/p2-transfer-tx1.json",
+      "2": "evidence/p2-cu-reconciliation/p2-transfer-tx2.json"
+    },
+    "report": "evidence/p2-cu-reconciliation/REPORT-P2.md",
+    "sbf_build_receipt": "evidence/p2-cu-reconciliation/p2-s2-sbf-build.json",
+    "diagnostic_command_receipt": "evidence/p2-cu-reconciliation/p2-s2-diagnostic-command.json"
+  },
+  "candidate": {
+    "stage": "pairing (first named optimization stage)",
+    "source_revision": "7742957648c33cf045eb6a672e7c7cc796b61087+pairing+a7c365534f43f5c508adf4d5b598d5af9059d0cfe74d0f95eff9bc6a4932b16c",
+    "source_manifest_sha256": "a7c365534f43f5c508adf4d5b598d5af9059d0cfe74d0f95eff9bc6a4932b16c",
+    "source_manifest_file": "evidence/latest/results/100bit-path-20261013/pairing/source-manifest.json",
+    "elf_sha256": "9f0ea93e3aea66cf47d5561893ead22203d7cba4b4f2d3d4abeb60b3aa4d5004",
+    "runtime": {
+      "agave": "4.2.1",
+      "heap_bytes": 262144,
+      "instruction_limit_cu": 1400000,
+      "limit_cu": 200000000,
+      "litesvm": "0.16.0"
+    },
+    "variant": 2,
+    "k": 10,
+    "build_command": [
+      "cargo",
+      "build-sbf",
+      "--manifest-path",
+      "programs/r1-cost-probe/Cargo.toml",
+      "--sbf-out-dir",
+      "<pairing>/bin",
+      "--",
+      "--locked",
+      "-j",
+      "2"
+    ],
+    "diagnostic_command": [
+      "/home/dombarker/project-offloads/aspis-r1-p2-20261010/target/release/aspis-r1-cu-probe",
+      "diagnostic",
+      "<pairing ELF>",
+      "<pairing>/S2",
+      "transfer",
+      "10"
+    ],
+    "diagnostic_receipt": "evidence/latest/results/100bit-path-20261013/pairing-diagnostic.json",
+    "diagnostics": {
+      "1": "evidence/p2-cu-reconciliation/pairing-transfer-tx1.json",
+      "2": "evidence/p2-cu-reconciliation/pairing-transfer-tx2.json"
+    }
+  },
+  "fixture_and_shape": {
+    "baseline_fixture_file": "evidence/p2-cu-reconciliation/p2-transfer-fixture.json",
+    "candidate_fixture_file": "evidence/p2-cu-reconciliation/pairing-transfer-fixture.json",
+    "fixture_type": "deterministic fixture-only K-tail samples via rejection sampling; not production entropy",
+    "proof_bytes": 122231,
+    "proof_sha256": "123480a04a2da763351ab3ef779e7cf8a9ffd0c91169d5b0674e5751b73ca080",
+    "candidate_proof_bytes": 122231,
+    "candidate_proof_sha256": "123480a04a2da763351ab3ef779e7cf8a9ffd0c91169d5b0674e5751b73ca080",
+    "public_bytes": 1880,
+    "public_sha256": "d2241c5432fa3d5b34084c06e9c3f510cc61542a793287aad471287563761557",
+    "candidate_public_bytes": 1880,
+    "candidate_public_sha256": "d2241c5432fa3d5b34084c06e9c3f510cc61542a793287aad471287563761557",
+    "proof_and_public_hashes_match": true,
+    "variant": "S2 (numeric value 2)",
+    "folds": 2,
+    "final_coefficients": 64,
+    "query_split_k": 10,
+    "query_count": 22,
+    "checkpoint_bytes": 2824,
+    "candidate_checkpoint_bytes": 2824,
+    "checkpoint_sha256_tx1": {
+      "p2": "b1cd7f5e78a15e8807ec59e598f13bd1570e88a073819af3517ae50ef72bdebc",
+      "pairing": "b1cd7f5e78a15e8807ec59e598f13bd1570e88a073819af3517ae50ef72bdebc"
+    },
+    "checkpoint_hashes_match": true,
+    "field_implementation_file": "crates/aspis-core/src/field/wide_exact.rs",
+    "field_implementation_sha256": {
+      "p2": "a262dfa32003f1661ee95d44de29ac885e745070fb88b41552d2b4cac31a1a96",
+      "pairing": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea",
+      "changed": true
+    },
+    "feature_manifest_comparison": {
+      "crates/aspis-r1-cost-probe/Cargo.toml": {
+        "p2": "462553eb5faccf514d5738942b9656e173c3d348095f3f64441c5dc99ac46897",
+        "pairing": "462553eb5faccf514d5738942b9656e173c3d348095f3f64441c5dc99ac46897",
+        "same_sha256": true
+      },
+      "programs/r1-cost-probe/Cargo.toml": {
+        "p2": "eaa61ac4d284e9e0fce8d0bd2ec0c55ced35bc390798705291b5ff93db284d73",
+        "pairing": "eaa61ac4d284e9e0fce8d0bd2ec0c55ced35bc390798705291b5ff93db284d73",
+        "same_sha256": true
+      },
+      "crates/aspis-statement/Cargo.toml": {
+        "p2": "5d224defee78910cdc7e5dd12532be81da3dd75c70de71498c900b595b3c7290",
+        "pairing": "5d224defee78910cdc7e5dd12532be81da3dd75c70de71498c900b595b3c7290",
+        "same_sha256": true
+      }
+    },
+    "cargo_features_passed_to_build_command": [
+      "none explicitly in cargo build-sbf invocation"
+    ],
+    "base_field_module_source_sha256": {
+      "p2": "3046536d04e84357c7df7bd742ec9839d1e1dc47ccc0ecaa59eb79ddec453c68",
+      "pairing": "3046536d04e84357c7df7bd742ec9839d1e1dc47ccc0ecaa59eb79ddec453c68",
+      "same_sha256": true
+    },
+    "exact_build_feature_selection": {
+      "cargo_build_sbf_explicit_features": [],
+      "program_default_features": [
+        "custom-heap"
+      ],
+      "aspis_r1_cost_probe_features": [
+        "none (default features empty)"
+      ],
+      "aspis_core_dependency_features": [
+        "r0"
+      ],
+      "aspis_statement_dependency_features": [
+        "r0",
+        "pool-v1-kernel"
+      ],
+      "optimized_terminal_enabled": false,
+      "probe_and_program_cargo_manifests_equal_to_p2": true,
+      "optimized_terminal_added_at": "pairing -> terminal stage (Cargo.toml changes in probe and program manifests; exact bundle listed in RESULTS-FIT.md)"
+    },
+    "checkpoint_sha256_after_tx2": {
+      "p2": "a6f0464f7d58e1acbed1b3369f9f900506a85640267382a80f19b835b1f8d6bd",
+      "pairing": "a6f0464f7d58e1acbed1b3369f9f900506a85640267382a80f19b835b1f8d6bd"
+    },
+    "checkpoint_hash_semantics": "The diagnostic records checkpoint account bytes after each transaction; tx2 changes status and checksum."
+  },
+  "phase_comparison": {
+    "1": {
+      "p2": {
+        "Parse": 56875,
+        "Semantic": 903170,
+        "Prepare": 489141,
+        "Checkpoint read": 0,
+        "Merkle": 100280,
+        "Query folds and rho accumulation": 822065,
+        "Relation rounds and pairing": 0,
+        "Final rho evaluation": 0,
+        "Checkpoint write": 68211,
+        "Entry/exit and other overhead": 1309,
+        "Program subtotal CU": 2441051,
+        "Other transaction overhead CU": 356,
+        "Total transaction CU": 2441407
+      },
+      "pairing": {
+        "Parse": 51123,
+        "Semantic": 808024,
+        "Prepare": 156408,
+        "Checkpoint read": 0,
+        "Merkle": 100300,
+        "Query folds and rho accumulation": 576776,
+        "Relation rounds and pairing": 0,
+        "Final rho evaluation": 0,
+        "Checkpoint write": 67611,
+        "Entry/exit and other overhead": 1309,
+        "Program subtotal CU": 1761551,
+        "Other transaction overhead CU": 356,
+        "Total transaction CU": 1761907
+      },
+      "p2_minus_pairing": {
+        "Parse": 5752,
+        "Semantic": 95146,
+        "Prepare": 332733,
+        "Checkpoint read": 0,
+        "Merkle": -20,
+        "Query folds and rho accumulation": 245289,
+        "Relation rounds and pairing": 0,
+        "Final rho evaluation": 0,
+        "Checkpoint write": 600,
+        "Entry/exit and other overhead": 0,
+        "Program subtotal CU": 679500,
+        "Other transaction overhead CU": 0,
+        "Total transaction CU": 679500
+      }
+    },
+    "2": {
+      "p2": {
+        "Parse": 36136,
+        "Semantic": 0,
+        "Prepare": 0,
+        "Checkpoint read": 114865,
+        "Merkle": 120355,
+        "Query folds and rho accumulation": 983707,
+        "Relation rounds and pairing": 1059165,
+        "Final rho evaluation": 94175,
+        "Checkpoint write": 1783,
+        "Entry/exit and other overhead": 1306,
+        "Program subtotal CU": 2411492,
+        "Other transaction overhead CU": 356,
+        "Total transaction CU": 2411848
+      },
+      "pairing": {
+        "Parse": 30384,
+        "Semantic": 0,
+        "Prepare": 0,
+        "Checkpoint read": 108629,
+        "Merkle": 120391,
+        "Query folds and rho accumulation": 692073,
+        "Relation rounds and pairing": 527554,
+        "Final rho evaluation": 36015,
+        "Checkpoint write": 1786,
+        "Entry/exit and other overhead": 1306,
+        "Program subtotal CU": 1518138,
+        "Other transaction overhead CU": 356,
+        "Total transaction CU": 1518494
+      },
+      "p2_minus_pairing": {
+        "Parse": 5752,
+        "Semantic": 0,
+        "Prepare": 0,
+        "Checkpoint read": 6236,
+        "Merkle": -36,
+        "Query folds and rho accumulation": 291634,
+        "Relation rounds and pairing": 531611,
+        "Final rho evaluation": 58160,
+        "Checkpoint write": -3,
+        "Entry/exit and other overhead": 0,
+        "Program subtotal CU": 893354,
+        "Other transaction overhead CU": 0,
+        "Total transaction CU": 893354
+      }
+    }
+  },
+  "phase_aggregate_tx1_tx2": {
+    "Parse": {
+      "p2_sum_tx1_tx2": 93011,
+      "pairing_sum_tx1_tx2": 81507,
+      "p2_minus_pairing_sum": 11504
+    },
+    "Semantic": {
+      "p2_sum_tx1_tx2": 903170,
+      "pairing_sum_tx1_tx2": 808024,
+      "p2_minus_pairing_sum": 95146
+    },
+    "Prepare": {
+      "p2_sum_tx1_tx2": 489141,
+      "pairing_sum_tx1_tx2": 156408,
+      "p2_minus_pairing_sum": 332733
+    },
+    "Checkpoint read": {
+      "p2_sum_tx1_tx2": 114865,
+      "pairing_sum_tx1_tx2": 108629,
+      "p2_minus_pairing_sum": 6236
+    },
+    "Merkle": {
+      "p2_sum_tx1_tx2": 220635,
+      "pairing_sum_tx1_tx2": 220691,
+      "p2_minus_pairing_sum": -56
+    },
+    "Query folds and rho accumulation": {
+      "p2_sum_tx1_tx2": 1805772,
+      "pairing_sum_tx1_tx2": 1268849,
+      "p2_minus_pairing_sum": 536923
+    },
+    "Relation rounds and pairing": {
+      "p2_sum_tx1_tx2": 1059165,
+      "pairing_sum_tx1_tx2": 527554,
+      "p2_minus_pairing_sum": 531611
+    },
+    "Final rho evaluation": {
+      "p2_sum_tx1_tx2": 94175,
+      "pairing_sum_tx1_tx2": 36015,
+      "p2_minus_pairing_sum": 58160
+    },
+    "Checkpoint write": {
+      "p2_sum_tx1_tx2": 69994,
+      "pairing_sum_tx1_tx2": 69397,
+      "p2_minus_pairing_sum": 597
+    },
+    "Entry/exit and other overhead": {
+      "p2_sum_tx1_tx2": 2615,
+      "pairing_sum_tx1_tx2": 2615,
+      "p2_minus_pairing_sum": 0
+    },
+    "Program subtotal CU": {
+      "p2_sum_tx1_tx2": 4852543,
+      "pairing_sum_tx1_tx2": 3279689,
+      "p2_minus_pairing_sum": 1572854
+    },
+    "Other transaction overhead CU": {
+      "p2_sum_tx1_tx2": 712,
+      "pairing_sum_tx1_tx2": 712,
+      "p2_minus_pairing_sum": 0
+    },
+    "Total transaction CU": {
+      "p2_sum_tx1_tx2": 4853255,
+      "pairing_sum_tx1_tx2": 3280401,
+      "p2_minus_pairing_sum": 1572854
+    }
+  },
+  "aggregate_accounting": {
+    "p2_program_cu_tx1_tx2": 4852543,
+    "pairing_program_cu_tx1_tx2": 3279689,
+    "program_cu_saved_pair": 1572854,
+    "p2_total_transaction_cu_tx1_tx2": 4853255,
+    "pairing_total_transaction_cu_tx1_tx2": 3280401,
+    "total_transaction_cu_saved_pair": 1572854,
+    "transaction_overhead_cu_per_tx_both": 356,
+    "per_transaction_savings": {
+      "1": 679500,
+      "2": 893354
+    },
+    "is_approx_1100000_per_transaction_observed": false
+  },
+  "source_delta_by_stage": {
+    "pairing": {
+      "changed_manifest_paths_total": 124,
+      "changed_probe_and_core_paths": [
+        "crates/aspis-core/src/field/wide_exact.rs",
+        "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+        "crates/aspis-r1-cost-probe/src/fast_dots.rs",
+        "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+        "crates/aspis-r1-cost-probe/src/lib.rs",
+        "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+        "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+        "crates/aspis-r1-cost-probe/src/sampler.rs",
+        "crates/aspis-r1-cost-probe/src/transcript.rs",
+        "crates/aspis-r1-cost-probe/src/verifier.rs",
+        "crates/aspis-r1-cost-probe/src/weights.rs",
+        "crates/aspis-r1-cost-probe/tests/domain_equivalence.rs",
+        "crates/aspis-r1-cost-probe/tests/dots_equivalence.rs",
+        "crates/aspis-r1-cost-probe/tests/pairing_equivalence.rs",
+        "crates/aspis-r1-cost-probe/tests/sampler_equivalence.rs",
+        "crates/aspis-r1-cost-probe/tests/validated_prefix.rs",
+        "crates/aspis-r1-cost-probe/tests/weights_equivalence.rs",
+        "programs/r1-cost-probe/src/lib.rs"
+      ],
+      "source_manifest_sha256_label": "a7c365534f43f5c508adf4d5b598d5af9059d0cfe74d0f95eff9bc6a4932b16c",
+      "diagnostic_tx1_cu": 1761551,
+      "diagnostic_tx2_cu": 1518138,
+      "delta_vs_prior_stage": null
+    },
+    "terminal": {
+      "changed_manifest_paths_total": 2,
+      "changed_probe_and_core_paths": [
+        "crates/aspis-r1-cost-probe/Cargo.toml",
+        "programs/r1-cost-probe/Cargo.toml"
+      ],
+      "source_manifest_sha256_label": "cd609c835f17d17fae4eb88fd8f21c7702d2c5d76bb9036d2946a507b7dd151b",
+      "diagnostic_tx1_cu": 1523042,
+      "diagnostic_tx2_cu": 1518138,
+      "delta_vs_prior_stage": {
+        "from": "pairing",
+        "tx1_saved": 238509,
+        "tx2_saved": 0
+      }
+    },
+    "rho-clean": {
+      "changed_manifest_paths_total": 8,
+      "changed_probe_and_core_paths": [
+        "crates/aspis-r1-cost-probe/Cargo.toml",
+        "crates/aspis-r1-cost-probe/examples/native_gate.rs",
+        "crates/aspis-r1-cost-probe/src/dense.rs",
+        "crates/aspis-r1-cost-probe/src/prover.rs",
+        "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+        "crates/aspis-r1-cost-probe/src/transcript.rs",
+        "crates/aspis-r1-cost-probe/src/verifier.rs"
+      ],
+      "source_manifest_sha256_label": "13650c67bae5f0cadf511241e6433cbade00156f22a7881a924dcb2f2ddf2850",
+      "diagnostic_tx1_cu": 1411984,
+      "diagnostic_tx2_cu": 1379425,
+      "delta_vs_prior_stage": {
+        "from": "terminal",
+        "tx1_saved": 111058,
+        "tx2_saved": 138713
+      }
+    },
+    "geometry-dots": {
+      "changed_manifest_paths_total": 4,
+      "changed_probe_and_core_paths": [
+        "crates/aspis-r1-cost-probe/src/fast_dots.rs",
+        "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+        "crates/aspis-r1-cost-probe/src/verifier.rs",
+        "crates/aspis-r1-cost-probe/tests/dots_equivalence.rs"
+      ],
+      "source_manifest_sha256_label": "2c2bf97c3ee5db2e58c62a7902d9a3d1de6eb8752f376e08e607716d5db5ebe1",
+      "diagnostic_tx1_cu": 1331527,
+      "diagnostic_tx2_cu": 1282676,
+      "delta_vs_prior_stage": {
+        "from": "rho-clean",
+        "tx1_saved": 80457,
+        "tx2_saved": 96749
+      }
+    },
+    "d18": {
+      "changed_manifest_paths_total": 5,
+      "changed_probe_and_core_paths": [
+        "crates/aspis-r1-cost-probe/src/dense.rs",
+        "crates/aspis-r1-cost-probe/src/transport.rs",
+        "crates/aspis-r1-cost-probe/src/weights.rs",
+        "crates/aspis-r1-cost-probe/tests/transport_equivalence.rs"
+      ],
+      "source_manifest_sha256_label": "f75e70d832444fd562d3ffb000f37e2f0b1c06f7940a2334f04457011e17e8be",
+      "diagnostic_tx1_cu": 1331210,
+      "diagnostic_tx2_cu": 1281989,
+      "delta_vs_prior_stage": {
+        "from": "geometry-dots",
+        "tx1_saved": 317,
+        "tx2_saved": 687
+      }
+    },
+    "fast-accumulator-rejected": {
+      "diagnostic_tx1_cu": 1341002,
+      "diagnostic_tx2_cu": 1294080,
+      "delta_vs_prior_stage": {
+        "from": "d18",
+        "tx1_saved": -9792,
+        "tx2_saved": -12091
+      },
+      "source_manifest_sha256_label": "2fb031f563182ef6cb96ce39a146f83e363b8584f7764075e6e045a3abd2bfb9"
+    }
+  },
+  "caveats": [
+    "P2 and pairing are different source revisions; CU deltas are measured on the exact same proof/public bytes, S2 split, runtime version, heap, and diagnostic CU limit, but no cryptographic or source-semantics equivalence is asserted here.",
+    "The phase buckets are reconstructed from successive remaining-CU marker differences. P2 and pairing both sum exactly to recorded verifier_cu after assigning account-write to Checkpoint write and retaining 1309/1306 CU as entry/exit overhead.",
+    "No pairing measurement is a capped 1.4M acceptance run; the diagnostic profile limit is 200M while runtime metadata also records an instruction_limit_cu of 1.4M.",
+    "The record set supports P2-to-pairing savings of 679500 CU in tx1 and 893354 CU in tx2 (1572854 across both), not approximately 1100000 per transaction. A different baseline/stage/fixture comparison would need its own receipts."
+  ],
+  "p2_to_final_d18_program_cu_saved": {
+    "tx1": 1109841,
+    "tx2": 1129503
+  }
+}

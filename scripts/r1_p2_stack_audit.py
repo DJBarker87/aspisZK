@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Audit the final linked call graph, including conservative indirect edges."""
-import hashlib, json, re, subprocess, sys
+import hashlib, json, re, subprocess, sys, tempfile
 from pathlib import Path
 log, linked, stripped, out = map(Path, sys.argv[1:])
+input_hashes = {tag: hashlib.sha256(p.read_bytes()).hexdigest()
+    for tag, p in [('linked', linked), ('measured', stripped)]}
 llvm = Path('/home/dombarker/.cache/solana/v1.52/platform-tools/llvm/bin')
 syms = subprocess.check_output([str(llvm/'llvm-readelf'), '-s', str(linked)], text=True)
 dis = subprocess.check_output([str(llvm/'llvm-objdump'), '-d', '--no-show-raw-insn', str(linked)], text=True)
@@ -51,13 +53,21 @@ for name, messages in sorted(diags.items()):
     records.append({'symbol':name,'diagnostics':messages,'present_in_linked_elf':present,
         'reachable':reachable,'reason':('not in root call-graph closure' if present else
         'absent from complete unstripped linked symbol table and function bodies; linker removed it, so no direct or indirect edge from the entrypoint can reach it')})
-# Strip only debug/symbol metadata: show the executable text is identical.
+# Compare executable text without rewriting either input. llvm-objcopy may
+# rewrite its input in place when no output path is supplied, even for dumps.
+with tempfile.TemporaryDirectory(prefix='aspis-stack-audit-') as scratch:
+    for tag,p in [('linked',linked),('measured',stripped)]:
+        copy = Path(scratch) / (tag + '.so')
+        subprocess.run([str(llvm/'llvm-objcopy'),'--dump-section',
+            f'.text={out/(tag+".text")}',str(p),str(copy)],check=True)
 for tag,p in [('linked',linked),('measured',stripped)]:
-    subprocess.run([str(llvm/'llvm-objcopy'),'--dump-section',f'.text={out/(tag+".text")}',str(p)],check=True)
+    assert hashlib.sha256(p.read_bytes()).hexdigest() == input_hashes[tag], \
+        f'stack audit mutated {tag} input'
 text_hashes={tag:hashlib.sha256((out/(tag+'.text')).read_bytes()).hexdigest() for tag in ['linked','measured']}
 assert len(set(text_hashes.values()))==1
 record={'root':root,'root_address':functions[root]['address'],'method':'direct SBF relative calls plus every linked function as a conservative target of each callx',
-    'linked_sha256':hashlib.sha256(linked.read_bytes()).hexdigest(),'measured_elf_sha256':hashlib.sha256(stripped.read_bytes()).hexdigest(),
+    'linked_sha256':input_hashes['linked'],'measured_elf_sha256':input_hashes['measured'],
+    'input_hashes_unchanged':True,
     'text_sha256':text_hashes,'linked_function_count':len(functions),'reachable_function_count':len(seen),
     'reachable_functions':sorted(seen),'direct_and_conservative_edges':{k:sorted(v) for k,v in edges.items()},
     'indirect_calls':indirect,'external_calls':external,'diagnostic_lines':len(lines),'diagnostic_functions':len(records),

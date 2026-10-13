@@ -1,10 +1,13 @@
 # Candidate security and settlement path
 
 This is a research candidate, not a released 100-bit private spend. The selected
-NUC binary now fits two verification-and-settlement transactions for the
-ordinary Pool path. The root-history rollover case exceeds the cap with the
-v2 adapter and is being optimized. R1 soundness and actual-field privacy
-remain separate outstanding gates.
+NUC k11 binary now fits two verification-and-settlement transactions for the
+tested ordinary and rollover Pool paths (13, 255 and 1,023 populated pairs).
+These runs use full masks with deterministic fixture entropy. The optional
+P3 salted-commitment path and fresh OS-entropy runtime measurements are still
+being checked. R1 soundness and actual-field privacy remain separate
+outstanding gates; a roughly 105-bit proposed per-oracle-query coefficient is
+not an implemented security theorem.
 
 ## Selected protocol
 
@@ -149,7 +152,7 @@ historical reusable anchors; source accepts retained anchors after newer
 checkpoints exist. A 703K-CU checkpoint is not intrinsically required per spend.
 
 Transaction one should authenticate a finalized, verifier-owned proof buffer,
-verify the semantic prefix and first ten queries, and store progress bound to
+verify the semantic prefix and first eleven queries, and store progress bound to
 the exact proof and full ASF8 public statement. Transaction two should keep
 the existing Pool ASQ8 flow: authenticate current accounts and registry,
 CPI into the selected R1 verifier to finish, authenticate its exact ASR8
@@ -166,15 +169,24 @@ statement, not trust an uploaded statement without account checks. Such a
 buffer can also avoid redundant work by using a proved immutability and
 identity invariant. The Pool adapter and protected uploader lifecycle are
 now implemented. The v2 adapter retains the full proof/public digest checks
-and repeats canonical proof parsing in stage two.
+and repeats canonical proof parsing in stage two. The subsequent adapter
+skips the redundant field scan only under the checkpoint provenance and
+byte-identity invariant audited in `AUTHENTICATED-PARSER-AUDIT.md`. This
+includes an explicit deployment-history premise; an unkeyed checkpoint
+checksum does not establish provenance.
 
 Actual v2 Pool execution on a lane with 13 pairs passes at 1342257/1374214 CU
 for transfer and 1340896/1390507 CU for withdrawal. These are measured first
 verification / finish-and-settle transactions under the actual 1.4M cap.
 Sealing/tail-write/authority/malformed-upload checks, altered-proof, wrong
 release, stale-lane, and nullifier replay cases pass with rollback. The
-255-pair transfer rollover fails at the CU cap, so ordinary-case fit is not
-a universal spend-fit claim. Evidence is in `evidence/pool-v2/`.
+255-pair transfer rollover fails at the CU cap in v2. Evidence is in
+`evidence/pool-v2/`. The later k11 adapter moves one query into stage one:
+measured terminal CU at 13/255/1,023 pairs is respectively
+1,295,281/1,361,386/1,357,996 for transfer and
+1,311,593/1,377,495/1,374,341 for withdrawal. Stage one ranges from
+1,387,210 to 1,388,644 CU. These concrete cases fit the 1.4M cap; they do not
+prove a uniform maximum over all statements, masks or account histories.
 
 No live program was deployed and no funds were moved here. Task keys remain
 retained on the NUC; all measured proof entropy is deterministic fixture

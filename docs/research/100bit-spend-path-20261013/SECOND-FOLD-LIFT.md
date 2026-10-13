@@ -81,3 +81,9 @@ Relevant existing sources are `Wide/FinalEncoder.lean`,
 `AspisFormal/V5FriConcreteEncoderApplicability.lean` (natural coefficient
 radix-four expansion). These are mathematical dependencies, not evidence that
 the final R1 theorem has already been compiled.
+
+The abstract repeated-support cardinality and projection-descent steps now
+compile in `lean/RepeatedLift.lean` (five standard-axiom audits). Its mean
+identity and encoder overlap remain explicit hypotheses; the concrete E256
+instantiation listed above is still pending. The exhaustive source lift gate
+is recorded in `evidence/second-fold-lift-v2/`.
