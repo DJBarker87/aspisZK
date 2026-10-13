@@ -3481,3 +3481,41 @@ the closed forms; T2b-2b: spanning), and (ii′) `cTilde w − cTilde w' ∈ ran
 T2b-2a is released as specified in "User direction (2026-10-12)", base this
 commit, attempts from 3395. Research under the current verdict (PLAN,
 2026-10-11): v7 stands.
+
+### Lead decision T2b-2a′ (2026-10-13) — item 3 corrected: silence includes the mask sum; the stop is accepted
+
+The T2b-2a worker stopped under the fixed-statement rule: item 3
+(`mem_silentMasks_iff`) is false as written. `nonRound` (D12.lean:80) zeroes
+only the `.semanticCoeff` coordinates and retains `.maskSum`; the right-hand
+side I listed omitted that coordinate. The worker's counterexample stands:
+`π = Equiv.refl`, all field challenges zero, both circle points `(1,0)`,
+`queries = ∅`, tape supported on mask-only lane 0 with word `δ₅₁₃ − δ₅₁₅`
+(both rows inactive, so `balance 0` leaves it unchanged); every listed
+condition holds, yet the mask sum is `(w₀+w₉) − (w₀+w₈+w₉) = −w₈ = −179 ≠ 0`
+and the round-0 polynomial is `−179·X`. The stop is correct.
+
+**T2b-2a′.1 (item 3, corrected statement).** Writing `v := (A h.transport B ch).comp inlM m`:
+
+```
+mem_silentMasks_iff (m : M K F) :
+  m ∈ silentMasks h.transport B ch ↔
+    v .maskSum = 0 ∧
+    (∀ j c, v (.pointClaim j c) = 0) ∧ (∀ c, v (.extraClaim c) = 0) ∧
+    (∀ j c, v (.ood j c) = 0) ∧ v .inactiveSum = 0 ∧
+    (∀ i, v (.openingCoeff i) = 0) ∧ (∀ i, v (.finalCoeff i) = 0) ∧
+    (∀ q s c, v (.opened q s c) = 0)
+```
+
+Each coordinate unfolds through `L` (PayloadSplit.lean:47–52): `.maskSum` is
+`∑ bits : Fin 10 → Bool, maskLinear π B (ofBool bits) (pureTrace B m)` and the
+others are the `linearPayload` cases (`claimsLinear`, `extraLinear`,
+`oodLinear ∘ coeffsLinear`, the inactive-sum dot, `openingCoeff`/`finalCoeff`
+through `batchLinear`, and `opened` gated by `q ∈ ch.queries`). The lemma is
+stated at the coordinate level as above; the per-lane reading in the original
+item 3 is its unfolding, not a separate statement. No new definitions.
+
+**T2b-2a′.2 (items 1 and 2 unchanged).** Item 1's route already uses the
+`.maskSum` coordinate: silence gives `v .maskSum = 0`, which `rounds_initial`
+identifies with `p₀(0) + p₀(1)`. This is consistent with the corrected item 3
+(the mask sum is exactly the initial-sum coordinate) and nothing in items 1–2
+moves. Research under the current verdict (PLAN, 2026-10-11): v7 stands.
