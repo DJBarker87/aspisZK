@@ -4000,3 +4000,35 @@ numbers and asked to restructure accordingly, keeping the
 STRUCTURAL/CONDITIONAL tagging and naming the numeric check that would
 confirm each restructured lemma. D21 waits for the revised design. Research
 under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Lead decision T2b-2a″ (2026-10-13) — item 2's Libra table restated in the local degree; the third stop is accepted
+
+The T2b-2a worker stopped on item 2's Libra formula: the table in "User
+direction (2026-10-12)" item 2 is written with `d : Fin 56` as both the
+coefficient index and the exponent, but `libraWeight` (SemView.lean:65) is
+`if j < 28 then alpha 8 ^ j else if j < 56 then alpha 9 ^ (j − 28) else 0`,
+so for cells 28–55 the exponent is the local degree `d − 28`. The worker's
+counterexample stands: `π = Equiv.refl`, D's limb 0 at row 28 equal to 1
+(row 28 is copy-active, mask `6144` bit 12, so `balance 0` leaves the word
+`δ₂₈` unchanged), `d = 28`, round 9: the actual polynomial is `1`
+(`α₉^(28−28)`), the table said `X^28`; the actual mask total is `1024`, the
+table said `512`. The stop is correct; Z4c's table used "degree `d` in `hm`"
+in the local sense and I transcribed it as the coefficient index.
+
+**T2b-2a″.1 (item 2, Libra, corrected).** For `d : Fin 56` let
+`m := if d.val < 28 then 8 else 9` and `e := d.val % 28` (the local degree).
+`pureRound_libra (d : Fin 56)`: for a tape supported on D's coefficient `d`
+with balanced word value 1 there —
+
+```
+mask total        512 · (if e = 0 then 2 else 1)
+round j < m       C (2^(8−j) · (if e = 0 then 2 else 1))        (a constant)
+round j = m       C (2^(9−j)) * X^e
+round j > m       C (2^(9−j) · (alpha ch m)^e)                   (a constant)
+```
+
+Everything else in item 2 (the mask-only and G closed forms, the connection
+to `L π B ch (pureTrace B m)` after `balance 0`) and items 1 and 3 (as
+corrected by T2b-2a′) are unchanged. Check: `d = 28` gives `e = 0`, `m = 9`,
+mask total `1024`, round-9 polynomial `1`, matching the counterexample.
+Research under the current verdict (PLAN, 2026-10-11): v7 stands.
